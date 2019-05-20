@@ -52,7 +52,7 @@
 #include <symbol_lib_table.h>
 #include <dialog_symbol_remap.h>
 #include <dialog_migrate_buses.h>
-#include <worksheet_shape_builder.h>
+#include <ws_draw_item.h>
 #include <connection_graph.h>
 
 

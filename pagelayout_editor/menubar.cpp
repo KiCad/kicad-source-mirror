@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2013 CERN
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
@@ -23,16 +23,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pagelayout_editor/menubar.cpp
- * @brief (Re)Create the main menubar for Pl_Editor
- */
-
-
 #include <kiface_i.h>
 #include <menus_helpers.h>
 #include <pgm_base.h>
-
+#include <tool/conditional_menu.h>
+#include <tool/tool_manager.h>
+#include <tool/selection.h>
+#include <tools/pl_actions.h>
+#include <tools/pl_selection_tool.h>
 #include "hotkeys.h"
 #include "pl_editor_frame.h"
 #include "pl_editor_id.h"
@@ -40,6 +38,7 @@
 
 void PL_EDITOR_FRAME::ReCreateMenuBar()
 {
+    PL_SELECTION_TOOL* selTool = m_toolManager->GetTool<PL_SELECTION_TOOL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar*  oldMenuBar = GetMenuBar();
@@ -103,72 +102,57 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
 
     // Edit Menu:
-    wxMenu* editMenu = new wxMenu;
+    CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
 
-    msg = AddHotkeyName( _( "Undo" ), PlEditorHotkeysDescr, HK_UNDO );
-    AddMenuItem( editMenu, wxID_UNDO, msg, wxEmptyString, KiBitmap( undo_xpm ) );
+    auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
+        return GetScreen() && GetScreen()->GetUndoCommandCount() != 0;
+    };
+    auto enableRedoCondition = [ this ] ( const SELECTION& sel ) {
+        return GetScreen() && GetScreen()->GetRedoCommandCount() != 0;
+    };
 
-    msg = AddHotkeyName( _( "Redo" ), PlEditorHotkeysDescr, HK_REDO );
-    AddMenuItem( editMenu, wxID_REDO, msg, wxEmptyString, KiBitmap( redo_xpm ) );
+    editMenu->AddItem( ACTIONS::undo,         enableUndoCondition );
+    editMenu->AddItem( ACTIONS::redo,         enableRedoCondition );
 
-    editMenu->AppendSeparator();
-
-    msg = AddHotkeyName( _( "Delete" ), PlEditorHotkeysDescr, HK_DELETE_ITEM );
-    AddMenuItem( editMenu, wxID_DELETE, msg, wxEmptyString, KiBitmap( delete_xpm ) );
+    editMenu->AddSeparator();
+    editMenu->AddItem( PL_ACTIONS::doDelete,  SELECTION_CONDITIONS::MoreThan( 0 ) );
 
 
     // View Menu:
-    wxMenu* viewMenu = new wxMenu;
+    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
 
-    msg = AddHotkeyName( _( "Zoom In" ), PlEditorHotkeysDescr, HK_ZOOM_IN, IS_ACCELERATOR );
-    AddMenuItem( viewMenu, ID_ZOOM_IN, msg, wxEmptyString, KiBitmap( zoom_in_xpm ) );
+    auto whiteBackgroundCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetDrawBgColor() == WHITE;
+    };
+    auto gridShownCondition = [ this ] ( const SELECTION& aSel ) {
+        return IsGridVisible();
+    };
+    auto fullCrosshairCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetGalDisplayOptions().m_fullscreenCursor;
+    };
 
-    msg = AddHotkeyName( _( "Zoom Out" ), PlEditorHotkeysDescr, HK_ZOOM_OUT, IS_ACCELERATOR );
-    AddMenuItem( viewMenu, ID_ZOOM_OUT, msg, wxEmptyString, KiBitmap( zoom_out_xpm ) );
+    viewMenu->AddSeparator();
+    viewMenu->AddItem( ACTIONS::zoomInCenter,                SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomOutCenter,               SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomFitScreen,               SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomTool,                    SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomRedraw,                  SELECTION_CONDITIONS::ShowAlways );
 
-    msg = AddHotkeyName( _( "Zoom to Fit" ), PlEditorHotkeysDescr, HK_ZOOM_AUTO );
-    AddMenuItem( viewMenu, ID_ZOOM_PAGE, msg, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ) );
-
-    msg = AddHotkeyName( _( "Zoom to Selection" ), PlEditorHotkeysDescr, HK_ZOOM_SELECTION );
-    AddMenuItem( viewMenu, ID_ZOOM_SELECTION, msg, wxEmptyString, KiBitmap( zoom_area_xpm ), wxITEM_CHECK );
-
-    viewMenu->AppendSeparator();
-
-    AddMenuItem( viewMenu, ID_MENU_SWITCH_BGCOLOR,
-                 GetDrawBgColor() == WHITE ?  _( "&Background Black" ) : _( "&Background White" ),
-                 wxEmptyString, KiBitmap( palette_xpm ) );
-
-    AddMenuItem( viewMenu, ID_MENU_GRID_ONOFF,
-                 IsGridVisible() ? _( "Hide &Grid" ) :  _( "Show &Grid" ),
-                 wxEmptyString, KiBitmap( grid_xpm ) );
-
-    viewMenu->AppendSeparator();
-
-    msg = AddHotkeyName( _( "Redraw View" ), PlEditorHotkeysDescr, HK_ZOOM_REDRAW );
-    AddMenuItem( viewMenu, ID_ZOOM_REDRAW, msg, wxEmptyString, KiBitmap( zoom_redraw_xpm ) );
-
+    viewMenu->AddSeparator();
+    viewMenu->AddCheckItem( PL_ACTIONS::toggleBackground,    whiteBackgroundCondition );
+    viewMenu->AddCheckItem( ACTIONS::toggleGrid,             gridShownCondition );
+    viewMenu->AddCheckItem( ACTIONS::toggleCursorStyle,      fullCrosshairCondition );
 
     // Place Menu:
-    wxMenu* placeMenu = new wxMenu;
+    CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
 
-    AddMenuItem( placeMenu, ID_POPUP_ITEM_ADD_LINE, _( "&Line..." ),
-                 wxEmptyString, KiBitmap( add_dashed_line_xpm ) );
+    placeMenu->AddItem( PL_ACTIONS::drawLine,                SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PL_ACTIONS::drawRectangle,           SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PL_ACTIONS::placeText,               SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PL_ACTIONS::placeImage,              SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( placeMenu, ID_POPUP_ITEM_ADD_RECT, _( "&Rectangle..." ),
-                 wxEmptyString, KiBitmap( add_rectangle_xpm ) );
-
-    AddMenuItem( placeMenu, ID_POPUP_ITEM_ADD_TEXT, _( "&Text..." ),
-                 wxEmptyString, KiBitmap( text_xpm ) );
-
-    AddMenuItem( placeMenu, ID_POPUP_ITEM_ADD_BITMAP, _( "&Bitmap..." ),
-                 wxEmptyString, KiBitmap( image_xpm ) );
-
-    placeMenu->AppendSeparator();
-
-    AddMenuItem( placeMenu, ID_APPEND_DESCR_FILE, _( "&Append Existing Page Layout Design File..." ),
-                 _( "Append an existing page layout design file to current file" ),
-                 KiBitmap( pagelayout_load_xpm ) );
-
+    placeMenu->AddSeparator();
+    placeMenu->AddItem( PL_ACTIONS::appendImportedWorksheet, SELECTION_CONDITIONS::ShowAlways );
 
     // Menu for preferences
     wxMenu* preferencesMenu = new wxMenu;

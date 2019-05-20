@@ -400,7 +400,7 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     if( aHotKey == 0 )
         return false;
 
-    wxCommandEvent     cmd( wxEVT_COMMAND_MENU_SELECTED );
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
 
     /* Convert lower to upper case (the usual toupper function has problem
      * with non ascii codes like function keys */

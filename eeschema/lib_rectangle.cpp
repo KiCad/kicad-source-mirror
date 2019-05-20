@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file lib_rectangle.cpp
- */
-
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <macros.h>
@@ -47,9 +43,6 @@ LIB_RECTANGLE::LIB_RECTANGLE( LIB_PART*      aParent ) :
     m_Width                = 0;
     m_Fill                 = NO_FILL;
     m_isFillable           = true;
-    m_isHeightLocked       = false;
-    m_isWidthLocked        = false;
-    m_isStartPointSelected = false;
 }
 
 
@@ -173,13 +166,10 @@ int LIB_RECTANGLE::GetPenSize() const
 void LIB_RECTANGLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                                  void* aData, const TRANSFORM& aTransform )
 {
-    wxPoint pt1, pt2;
-
     COLOR4D color   = GetLayerColor( LAYER_DEVICE );
     COLOR4D bgColor = GetLayerColor( LAYER_DEVICE_BACKGROUND );
-
-    pt1 = aTransform.TransformCoordinate( m_Pos ) + aOffset;
-    pt2 = aTransform.TransformCoordinate( m_End ) + aOffset;
+    wxPoint pt1 = aTransform.TransformCoordinate( m_Pos ) + aOffset;
+    wxPoint pt2 = aTransform.TransformCoordinate( m_End ) + aOffset;
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
 
@@ -195,11 +185,9 @@ void LIB_RECTANGLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoin
 
 void LIB_RECTANGLE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 {
-    wxString msg;
-
     LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
 
-    msg = MessageTextFromValue( aUnits, m_Width, true );
+    wxString msg = MessageTextFromValue( aUnits, m_Width, true );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
 }
@@ -277,39 +265,13 @@ BITMAP_DEF LIB_RECTANGLE::GetMenuImage() const
 }
 
 
-void LIB_RECTANGLE::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
+void LIB_RECTANGLE::BeginEdit( const wxPoint aPosition )
 {
-    LIB_ITEM::BeginEdit( aEditMode, aPosition );
-
-    if( aEditMode == IS_NEW )
-    {
-        m_Pos = m_End = aPosition;
-    }
-    else if( aEditMode == IS_MOVED )
-    {
-        m_initialPos = m_Pos;
-        m_initialCursorPos = aPosition;
-    }
-}
-
-
-void LIB_RECTANGLE::EndEdit( const wxPoint& aPosition )
-{
-    LIB_ITEM::EndEdit( aPosition );
-
-    m_isHeightLocked = false;
-    m_isWidthLocked  = false;
+    m_Pos = m_End = aPosition;
 }
 
 
 void LIB_RECTANGLE::CalcEdit( const wxPoint& aPosition )
 {
-    if( IsNew() )
-    {
-        m_End = aPosition;
-    }
-    else if( IsMoving() )
-    {
-        MoveTo( m_initialPos + aPosition - m_initialCursorPos );
-    }
+    m_End = aPosition;
 }

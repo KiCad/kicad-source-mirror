@@ -35,7 +35,7 @@
 #include <class_drawpanel.h>
 #include <title_block.h>
 #include <draw_frame.h>
-#include <worksheet_shape_builder.h>
+#include <ws_draw_item.h>
 #include <base_screen.h>
 #include <wildcards_and_files_ext.h>
 
@@ -47,7 +47,7 @@
 #include <general.h>
 #endif
 
-#include <worksheet.h>
+#include <worksheet_painter.h>
 #include <dialog_page_settings.h>
 
 #define MAX_PAGE_EXAMPLE_SIZE 200
@@ -665,7 +665,7 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         DrawPageLayout( &memDC, NULL, pageDUMMY,
                         emptyString, emptyString,
                         m_tb, m_screen->m_NumberOfScreens,
-                        m_screen->m_ScreenNumber, 1, 1, DARKGRAY, RED );
+                        m_screen->m_ScreenNumber, 1, 1, DARKGRAY );
 
         memDC.SelectObject( wxNullBitmap );
         m_PageLayoutExampleBitmap->SetBitmap( *m_page_bitmap );

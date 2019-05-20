@@ -40,22 +40,15 @@
 #include <pl_editor_id.h>
 #include <dialog_helpers.h>
 #include <menus_helpers.h>
-#include <worksheet_shape_builder.h>
+#include <ws_draw_item.h>
 #include <worksheet_dataitem.h>
-#include <design_tree_frame.h>
-#include <properties_frame.h>
 #include <dialog_page_settings.h>
 #include <invoke_pl_editor_dialog.h>
+#include <properties_frame.h>
 
 
 BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_CLOSE( PL_EDITOR_FRAME::OnCloseWindow )
-
-    // Desing tree event:
-    EVT_TREE_SEL_CHANGED( ID_DESIGN_TREE_FRAME, PL_EDITOR_FRAME::OnTreeSelection )
-    EVT_TREE_ITEM_MIDDLE_CLICK( ID_DESIGN_TREE_FRAME, PL_EDITOR_FRAME::OnTreeMiddleClick )
-    EVT_TREE_ITEM_RIGHT_CLICK( ID_DESIGN_TREE_FRAME, PL_EDITOR_FRAME::OnTreeRightClick )
-
     // Menu Files:
     EVT_MENU( wxID_NEW, PL_EDITOR_FRAME::Files_io )
     EVT_MENU( wxID_OPEN, PL_EDITOR_FRAME::Files_io )
@@ -73,36 +66,21 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     // menu Preferences
     EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, PL_EDITOR_FRAME::Process_Config )
     EVT_MENU( wxID_PREFERENCES, PL_EDITOR_FRAME::Process_Config )
-    EVT_MENU( ID_MENU_SWITCH_BGCOLOR, PL_EDITOR_FRAME::Process_Config )
-    EVT_MENU( ID_MENU_GRID_ONOFF, PL_EDITOR_FRAME::Process_Config )
 
     EVT_TOOL( wxID_DELETE, PL_EDITOR_FRAME::Process_Special_Functions )
-    EVT_TOOL( wxID_UNDO, PL_EDITOR_FRAME::GetLayoutFromUndoList )
-    EVT_TOOL( wxID_REDO, PL_EDITOR_FRAME::GetLayoutFromRedoList )
     EVT_TOOL( wxID_PRINT, PL_EDITOR_FRAME::ToPrinter )
     EVT_TOOL( wxID_PREVIEW, PL_EDITOR_FRAME::ToPrinter )
     EVT_TOOL( ID_SHEET_SET, PL_EDITOR_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_SHOW_REAL_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
     EVT_TOOL( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
-    EVT_TOOL( ID_NO_TOOL_SELECTED, PL_EDITOR_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_ZOOM_SELECTION, PL_EDITOR_FRAME::Process_Special_Functions )
     EVT_CHOICE( ID_SELECT_COORDINATE_ORIGIN, PL_EDITOR_FRAME::OnSelectCoordOriginCorner)
     EVT_CHOICE( ID_SELECT_PAGE_NUMBER, PL_EDITOR_FRAME::Process_Special_Functions)
-
-    // the ID_NO_TOOL_SELECTED id TOOL does not existing currently, but the right click
-    // popup menu can generate this event.
-    EVT_TOOL( ID_NO_TOOL_SELECTED, PL_EDITOR_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_POPUP_CANCEL_CURRENT_COMMAND, PL_EDITOR_FRAME::Process_Special_Functions )
 
     EVT_MENU_RANGE( ID_POPUP_START_RANGE, ID_POPUP_END_RANGE,
                     PL_EDITOR_FRAME::Process_Special_Functions )
 
-    EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, PL_EDITOR_FRAME::OnUpdateSelectTool )
-
-    EVT_UPDATE_UI( ID_ZOOM_SELECTION, PL_EDITOR_FRAME::OnUpdateSelectTool )
     EVT_UPDATE_UI( ID_SHOW_REAL_MODE, PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayNormalMode )
     EVT_UPDATE_UI( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnUpdateTitleBlockDisplaySpecialMode )
-
 END_EVENT_TABLE()
 
 
@@ -110,28 +88,11 @@ END_EVENT_TABLE()
  */
 void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
-    int id = event.GetId();
-    int idx;
-    wxString msg;
-    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-    WORKSHEET_DATAITEM* item = NULL;
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
-    switch( id )
+    switch( event.GetId() )
     {
-    case ID_NO_TOOL_SELECTED:
-        SetNoToolSelected();
-        break;
-
-    case ID_ZOOM_SELECTION:
-        // This tool is located on the main toolbar: switch it on or off on click
-        if( GetToolId() != ID_ZOOM_SELECTION )
-            SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
-        else
-            SetNoToolSelected();
-        break;
-
     case ID_SELECT_PAGE_NUMBER:
         m_canvas->Refresh();
         break;
@@ -149,192 +110,15 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
-    case ID_POPUP_CANCEL_CURRENT_COMMAND:
-        if( m_canvas->IsMouseCaptured() )
-        {
-            m_canvas->EndMouseCapture();
-            SetToolID( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString );
-        }
-        else
-        {
-            SetNoToolSelected();
-        }
-        break;
-
-    case ID_POPUP_DESIGN_TREE_ITEM_DELETE:
-    case ID_POPUP_ITEM_DELETE:
-    case wxID_DELETE:
-        // Delete item, and select the previous item
-        item = m_treePagelayout->GetPageLayoutSelectedItem();
-
-        if( item == NULL )
-            break;
-
-        SaveCopyInUndoList();
-        idx = pglayout.GetItemIndex( item );
-        pglayout.Remove( item );
-        RebuildDesignTree();
-
-        if( id == ID_POPUP_DESIGN_TREE_ITEM_DELETE )
-        {
-            item = pglayout.GetItem( (unsigned) (idx-1) );
-
-            if( item )
-                m_treePagelayout->SelectCell( item );
-        }
-
-        item = NULL;
-        OnModify();
-        m_canvas->Refresh();
-        break;
-
-    case ID_POPUP_ITEM_ADD_LINE:
-        SaveCopyInUndoList();
-        idx =  m_treePagelayout->GetSelectedItemIndex();
-        item = AddPageLayoutItem( WORKSHEET_DATAITEM::WS_SEGMENT, idx );
-
-        if( InvokeDialogNewItem( this, item ) == wxID_CANCEL )
-        {
-            RemoveLastCommandInUndoList();
-            pglayout.Remove( item );
-            RebuildDesignTree();
-            item = NULL;
-        }
-        else
-        {
-            // Put the new item in move mode, after putting the cursor
-            // on the start point:
-            wxPoint position = item->GetStartPosUi();
-            SetCrossHairPosition( position, false );
-            position = GetCrossHairPosition();
-
-            if( m_canvas->IsPointOnDisplay( position ) )
-                m_canvas->MoveCursorToCrossHair();
-            else
-                RedrawScreen( position, true );
-
-            item->SetFlags( NEW_ITEM );
-            MoveItem( item );
-        }
-        break;
-
-    case ID_POPUP_ITEM_ADD_RECT:
-        SaveCopyInUndoList();
-        idx =  m_treePagelayout->GetSelectedItemIndex();
-        item = AddPageLayoutItem( WORKSHEET_DATAITEM::WS_RECT, idx );
-
-        if( InvokeDialogNewItem( this, item ) == wxID_CANCEL )
-        {
-            RemoveLastCommandInUndoList();
-            pglayout.Remove( item );
-            RebuildDesignTree();
-            item = NULL;
-        }
-        else
-        {
-            // Put the new item in move mode, after putting the cursor
-            // on the start point:
-            wxPoint position = item->GetStartPosUi();
-            SetCrossHairPosition( position, false );
-            position = GetCrossHairPosition();
-
-            if( m_canvas->IsPointOnDisplay( position ) )
-                m_canvas->MoveCursorToCrossHair();
-            else
-                RedrawScreen( position, true );
-
-            item->SetFlags( NEW_ITEM );
-            MoveItem( item );
-        }
-        break;
-
-    case ID_POPUP_ITEM_ADD_TEXT:
-        SaveCopyInUndoList();
-        idx =  m_treePagelayout->GetSelectedItemIndex();
-        item = AddPageLayoutItem( WORKSHEET_DATAITEM::WS_TEXT, idx );
-        if( InvokeDialogNewItem( this, item ) == wxID_CANCEL )
-        {
-            RemoveLastCommandInUndoList();
-            pglayout.Remove( item );
-            RebuildDesignTree();
-            item = NULL;
-        }
-        else
-        {
-            // Put the new text in move mode:
-            item->SetFlags( NEW_ITEM | LOCATE_STARTPOINT );
-            MoveItem( item );
-        }
-        break;
-
-    case ID_POPUP_ITEM_ADD_BITMAP:
-        SaveCopyInUndoList();
-        idx =  m_treePagelayout->GetSelectedItemIndex();
-        item = AddPageLayoutItem( WORKSHEET_DATAITEM::WS_BITMAP, idx );
-        if( item && InvokeDialogNewItem( this, item ) == wxID_CANCEL )
-        {
-            RemoveLastCommandInUndoList();
-            pglayout.Remove( item );
-            RebuildDesignTree();
-            item = NULL;
-        }
-        if( item )
-        {
-            // Put the new text in move mode:
-            item->SetFlags( NEW_ITEM | LOCATE_STARTPOINT );
-            MoveItem( item );
-        }
-        break;
-
     case ID_POPUP_ITEM_APPEND_PAGE_LAYOUT:
         cmd.SetId( ID_APPEND_DESCR_FILE );
         wxPostEvent( this, cmd );
-        break;
-
-    case ID_POPUP_ITEM_PLACE:
-        item = GetScreen()->GetCurItem();
-        PlaceItem( item );
-        break;
-
-    case ID_POPUP_ITEM_PLACE_CANCEL:
-        if(  m_canvas->IsMouseCaptured() )
-             m_canvas->EndMouseCapture();
-        break;
-
-    case ID_POPUP_ITEM_MOVE_START_POINT:
-        item = m_treePagelayout->GetPageLayoutSelectedItem();
-        // Ensure flags are properly set
-        item->ClearFlags( LOCATE_ENDPOINT );
-        item->SetFlags( LOCATE_STARTPOINT );
-        MoveItem( item );
-        break;
-
-    case ID_POPUP_ITEM_MOVE_END_POINT:
-        item = m_treePagelayout->GetPageLayoutSelectedItem();
-        // Ensure flags are properly set
-        item->ClearFlags( LOCATE_STARTPOINT );
-        item->SetFlags( LOCATE_ENDPOINT );
-        MoveItem( item );
-        break;
-
-    case ID_POPUP_ITEM_MOVE:
-        item = m_treePagelayout->GetPageLayoutSelectedItem();
-        item->ClearFlags( LOCATE_ENDPOINT|LOCATE_STARTPOINT );
-        MoveItem( item );
         break;
 
     default:
         wxMessageBox( wxT( "PL_EDITOR_FRAME::Process_Special_Functions error" ) );
         break;
     }
-
-    if( item )
-    {
-        OnModify();
-        m_propertiesPagelayout->CopyPrmsFromItemToPanel( item );
-        m_treePagelayout->SelectCell( item );
-    }
-
 }
 
 
@@ -342,7 +126,6 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
  * Function moveItem: called when the mouse cursor is moving
  * moves the item currently selected (or the start point or the end point)
  * to the cursor position
- */
 DPOINT initialPosition;         // The initial position of the item to move, in mm
 wxPoint initialPositionUi;      // The initial position of the item to move, in Ui
 wxPoint initialCursorPosition;  // The initial position of the cursor
@@ -382,11 +165,9 @@ static void moveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositio
 }
 
 
-/*
  * Function abortMoveItem: called when an item is currently moving,
  * and when the user aborts the move command.
  * Restores the initial position of the item
- */
 static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 {
     PL_EDITOR_SCREEN* screen = (PL_EDITOR_SCREEN*) aPanel->GetScreen();
@@ -398,7 +179,6 @@ static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
         plframe->RemoveLastCommandInUndoList();
         WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
         pglayout.Remove( item );
-        plframe->RebuildDesignTree();
     }
     else
     {
@@ -454,10 +234,8 @@ void PL_EDITOR_FRAME::MoveItem( WORKSHEET_DATAITEM* aItem )
 }
 
 
-/**
 * Save in Undo list the layout, and place an item being moved.
 * @param aItem is the item moved
-*/
 void PL_EDITOR_FRAME::PlaceItem( WORKSHEET_DATAITEM* aItem )
 {
     DPOINT currStartPos = aItem->GetStartPos();
@@ -486,6 +264,7 @@ void PL_EDITOR_FRAME::PlaceItem( WORKSHEET_DATAITEM* aItem )
     m_canvas->SetMouseCapture( NULL, NULL );
     GetScreen()->SetCurItem( NULL );
 }
+*/
 
 
 /* called when the user select one of the 4 page corner as corner
@@ -563,40 +342,6 @@ void PL_EDITOR_FRAME::ToPrinter(wxCommandEvent& event)
 }
 
 
-void PL_EDITOR_FRAME::OnTreeSelection( wxTreeEvent& event )
-{
-    WORKSHEET_DATAITEM* item = GetSelectedItem();
-
-    if( item )
-        m_propertiesPagelayout->CopyPrmsFromItemToPanel( item );
-
-    m_canvas->Refresh();
-}
-
-
-void PL_EDITOR_FRAME::OnTreeMiddleClick( wxTreeEvent& event )
-{
-}
-
-
-extern void AddNewItemsCommand( wxMenu* aMainMenu );
-
-
-void PL_EDITOR_FRAME::OnTreeRightClick( wxTreeEvent& event )
-{
-    m_treePagelayout->SelectCell( event.GetItem() );
-
-    wxMenu popMenu;
-    AddNewItemsCommand( &popMenu );
-
-    popMenu.AppendSeparator();
-    AddMenuItem( &popMenu, ID_POPUP_DESIGN_TREE_ITEM_DELETE, _( "Delete" ),
-                 KiBitmap( delete_xpm ) );
-
-    PopupMenu( &popMenu );
-}
-
-
 void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayNormalMode( wxUpdateUIEvent& event )
 {
     event.Check( WORKSHEET_DATAITEM::m_SpecialMode == false );
@@ -609,7 +354,3 @@ void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplaySpecialMode( wxUpdateUIEvent& eve
 }
 
 
-void PL_EDITOR_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( GetToolId() == aEvent.GetId() );
-}

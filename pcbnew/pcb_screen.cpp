@@ -40,10 +40,8 @@
 
 
 #define ZOOM_FACTOR( x )       ( x * IU_PER_MILS / 10 )
-#define DMIL_GRID( x )         wxRealPoint( x * IU_PER_MILS / 10,\
-                                            x * IU_PER_MILS / 10 )
-#define MM_GRID( x )           wxRealPoint( x * IU_PER_MM,\
-                                            x * IU_PER_MM )
+#define DMIL_GRID( x )         wxRealPoint( x * IU_PER_MILS / 10, x * IU_PER_MILS / 10 )
+#define MM_GRID( x )           wxRealPoint( x * IU_PER_MM, x * IU_PER_MM )
 
 
 /**
@@ -56,8 +54,6 @@
     Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic
     functions )
 */
-#define DEFAULT_ZOOM ZOOM_FACTOR( 120 )
-
 static const double pcbZoomList[] =
 {
     ZOOM_FACTOR( 0.035 ),
@@ -160,11 +156,11 @@ static GRID_TYPE pcbGridList[] =
 PCB_SCREEN::PCB_SCREEN( const wxSize& aPageSizeIU ) :
     BASE_SCREEN( SCREEN_T )
 {
-    for( unsigned i = 0; i < arrayDim( pcbZoomList );  ++i )
-        m_ZoomList.push_back( pcbZoomList[i] );
+    for( double zoom : pcbZoomList )
+        m_ZoomList.push_back( zoom );
 
-    for( unsigned i = 0; i < arrayDim( pcbGridList );  ++i )
-        AddGrid( pcbGridList[i] );
+    for( GRID_TYPE grid : pcbGridList )
+        AddGrid( grid );
 
     // Set the working grid size to a reasonable value (in 1/10000 inch)
     SetGrid( DMIL_GRID( 500 ) );
@@ -172,8 +168,6 @@ PCB_SCREEN::PCB_SCREEN( const wxSize& aPageSizeIU ) :
     m_Active_Layer       = F_Cu;     // default active layer = front layer
     m_Route_Layer_TOP    = F_Cu;     // default layers pair for vias (bottom to top)
     m_Route_Layer_BOTTOM = B_Cu;
-
-    SetZoom( DEFAULT_ZOOM );             // a default value for zoom
 
     InitDataPoints( aPageSizeIU );
 }

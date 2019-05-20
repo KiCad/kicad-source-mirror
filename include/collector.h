@@ -55,36 +55,35 @@ class EDA_ITEM;
 class COLLECTOR
 {
 protected:
-    /// a class common bridge into the polymorphic Inspect()
-    INSPECTOR_FUNC m_inspector;
-
-    /// Which object types to scan
-    const KICAD_T* m_ScanTypes;
-
-    /// A place to hold collected objects without taking ownership of their memory.
     std::vector<EDA_ITEM*> m_List;
 
-    /// A point to test against, and that was used to make the collection.
-    wxPoint m_RefPos;
+    const KICAD_T* m_ScanTypes;
+    INSPECTOR_FUNC m_inspector;
+    wxPoint        m_RefPos;            // Reference position used to generate the collection.
+    EDA_RECT       m_RefBox;            // Selection rectangle used to generate the collection.
 
-    /// A bounding box to test against, and that was used to make the collection.
-    EDA_RECT m_RefBox;
+    timestamp_t    m_TimeAtCollection;  // The time at which the collection was made.
 
-    /// The time at which the collection was made.
-    timestamp_t m_TimeAtCollection;
+public:
+    int            m_Threshold;         // Hit-test threshold in internal units.
+
+    wxString       m_MenuTitle;         // The title of selection disambiguation menu (if needed)
+    bool           m_MenuCancelled;     // Indicates selection disambiguation menu was cancelled
 
 public:
     COLLECTOR() :
+        m_ScanTypes( 0 ),
         // Inspect() is virtual so calling it from a class common inspector preserves polymorphism.
-        m_inspector( [=] ( EDA_ITEM* aItem, void* aTestData ) { return this->Inspect( aItem, aTestData ); } )
+        m_inspector( [=] ( EDA_ITEM* aItem, void* aTestData ) { return this->Inspect( aItem, aTestData ); } ),
+        m_TimeAtCollection( 0 ),
+        m_Threshold( 0 ),
+        m_MenuCancelled( false )
     {
-        m_ScanTypes = 0;
-        m_TimeAtCollection = 0;
     }
 
     virtual ~COLLECTOR() {}
 
-    virtual SEARCH_RESULT Inspect( EDA_ITEM* aItem, void* aTestData ) = 0;
+    virtual SEARCH_RESULT Inspect( EDA_ITEM* aItem, void* aTestData ) { return SEARCH_QUIT; };
 
     using ITER = std::vector<EDA_ITEM*>::iterator;
     using CITER = std::vector<EDA_ITEM*>::const_iterator;

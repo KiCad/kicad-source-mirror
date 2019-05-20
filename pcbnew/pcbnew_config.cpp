@@ -41,13 +41,13 @@
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
 #include <plotter.h>
-#include <worksheet.h>
+#include <worksheet_painter.h>
 #include <panel_hotkeys_editor.h>
 #include <panel_pcbnew_settings.h>
 #include <panel_pcbnew_display_options.h>
 #include <panel_pcbnew_action_plugins.h>
 #include <fp_lib_table.h>
-#include <worksheet_shape_builder.h>
+#include <ws_draw_item.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <pcbplot.h>

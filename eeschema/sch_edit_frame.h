@@ -300,7 +300,7 @@ public:
     void LoadSettings( wxConfigBase* aCfg ) override;
     void SaveSettings( wxConfigBase* aCfg ) override;
 
-    void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
+    void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override { /* OBSOLETE */ }
 
     void CreateScreens();
     void ReCreateHToolbar() override;
@@ -331,7 +331,6 @@ public:
 
     void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
 
-    bool OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu ) override { return true; }
     double BestZoom() override;
 
     /**

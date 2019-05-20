@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "edit_constraints.h"
+#include "tool/edit_constraints.h"
 #include "tool/edit_points.h"
 
 #include <geometry/seg.h>

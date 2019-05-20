@@ -1,8 +1,3 @@
-/**
- * @file worksheet_dataitem.cpp
- * @brief description of graphic items and texts to build a title block
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -57,35 +52,86 @@
 #include <fctsys.h>
 #include <draw_graphic_text.h>
 #include <eda_rect.h>
-#include <worksheet.h>
+#include <worksheet_painter.h>
 #include <title_block.h>
-#include <worksheet_shape_builder.h>
+#include <ws_draw_item.h>
 #include <worksheet_dataitem.h>
+#include <view/view.h>
 
 using KIGFX::COLOR4D;
 
 
 // Static members of class WORKSHEET_DATAITEM:
-double WORKSHEET_DATAITEM::m_WSunits2Iu = 1.0;
+double WORKSHEET_DATAITEM::m_WSunits2Iu = 1000.0;
 DPOINT WORKSHEET_DATAITEM::m_RB_Corner;
 DPOINT WORKSHEET_DATAITEM::m_LT_Corner;
 double WORKSHEET_DATAITEM::m_DefaultLineWidth = 0.0;
 DSIZE  WORKSHEET_DATAITEM::m_DefaultTextSize( TB_DEFAULT_TEXTSIZE, TB_DEFAULT_TEXTSIZE );
 double WORKSHEET_DATAITEM::m_DefaultTextThickness = 0.0;
 bool WORKSHEET_DATAITEM::m_SpecialMode = false;
-COLOR4D WORKSHEET_DATAITEM::m_Color = COLOR4D( RED );            // the default color to draw items
-COLOR4D WORKSHEET_DATAITEM::m_AltColor = COLOR4D( RED );         // an alternate color to draw items
-COLOR4D WORKSHEET_DATAITEM::m_SelectedColor = COLOR4D( BROWN );  // the color to draw selected items
 
 
 // The constructor:
-WORKSHEET_DATAITEM::WORKSHEET_DATAITEM( WS_ItemType aType )
+WORKSHEET_DATAITEM::WORKSHEET_DATAITEM( WS_ITEM_TYPE aType )
 {
+    m_pageOption = ALL_PAGES;
     m_type = aType;
-    m_flags = 0;
     m_RepeatCount = 1;
     m_IncrementLabel = 1;
     m_LineWidth = 0;
+}
+
+
+void WORKSHEET_DATAITEM::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView )
+{
+    int pensize = GetPenSizeUi();
+
+    if( pensize == 0 )
+        pensize = aCollector ? aCollector->GetDefaultPenSize() : 0;
+
+    for( WS_DRAW_ITEM_BASE* item : m_drawItems )
+    {
+        if( aCollector )
+            aCollector->Remove( item );
+
+        if( aView )
+            aView->Remove( item );
+
+        delete item;
+    }
+
+    m_drawItems.clear();
+
+    for( int jj = 0; jj < m_RepeatCount; jj++ )
+    {
+        if( jj && ! IsInsidePage( jj ) )
+            continue;
+
+        if( m_type == WS_SEGMENT )
+        {
+            auto line = new WS_DRAW_ITEM_LINE( this, GetStartPosUi( jj ), GetEndPosUi( jj ),
+                                               pensize );
+            m_drawItems.push_back( line );
+
+            if( aCollector )
+                aCollector->Append( line );
+
+            if( aView )
+                aView->Add( line );
+        }
+        else if( m_type == WS_RECT )
+        {
+            auto rect = new WS_DRAW_ITEM_RECT( this, GetStartPosUi( jj ), GetEndPosUi( jj ),
+                                               pensize );
+            m_drawItems.push_back( rect );
+
+            if( aCollector )
+                aCollector->Append( rect );
+
+            if( aView )
+                aView->Add( rect );
+        }
+    }
 }
 
 
@@ -112,6 +158,16 @@ void WORKSHEET_DATAITEM::MoveTo( DPOINT aPosition )
 
     MoveStartPointTo( aPosition );
     MoveEndPointTo( endpos );
+
+    for( int jj = 0; jj < m_RepeatCount; jj++ )
+    {
+        if( jj && !IsInsidePage( jj ) )
+            continue;
+
+        WS_DRAW_ITEM_BASE* drawItem = m_drawItems[ jj ];
+        drawItem->SetPosition( GetStartPosUi( jj ) );
+        drawItem->SetEnd( GetEndPosUi( jj ) );
+    }
 }
 
 
@@ -331,46 +387,12 @@ const wxString WORKSHEET_DATAITEM::GetClassName() const
     {
         case WS_TEXT: name = wxT( "Text" ); break;
         case WS_SEGMENT: name = wxT( "Line" ); break;
-        case WS_RECT: name = wxT( "Rect" ); break;
-        case WS_POLYPOLYGON: name = wxT( "Poly" ); break;
-        case WS_BITMAP: name = wxT( "Bitmap" ); break;
+        case WS_RECT: name = wxT( "Rectangle" ); break;
+        case WS_POLYPOLYGON: name = wxT( "Imported Shape" ); break;
+        case WS_BITMAP: name = wxT( "Image" ); break;
     }
 
     return name;
-}
-
-
-/* return 0 if the item has no specific option for page 1
- * 1  if the item is only on page 1
- * -1  if the item is not on page 1
- */
-int WORKSHEET_DATAITEM::GetPage1Option()
-{
-    if(( m_flags & PAGE1OPTION) == PAGE1OPTION_NOTONPAGE1 )
-        return -1;
-
-    if(( m_flags & PAGE1OPTION) == PAGE1OPTION_PAGE1ONLY )
-        return 1;
-
-    return 0;
-}
-
-
-/* Set the option for page 1
- * aChoice = 0 if the item has no specific option for page 1
- * > 0  if the item is only on page 1
- * < 0  if the item is not on page 1
- */
-void WORKSHEET_DATAITEM::SetPage1Option( int aChoice )
-{
-    ClearFlags( PAGE1OPTION );
-
-    if( aChoice > 0 )
-        SetFlags( PAGE1OPTION_PAGE1ONLY );
-
-    else if( aChoice < 0 )
-        SetFlags( PAGE1OPTION_NOTONPAGE1 );
-
 }
 
 
@@ -381,8 +403,45 @@ WORKSHEET_DATAITEM_POLYPOLYGON::WORKSHEET_DATAITEM_POLYPOLYGON() :
 }
 
 
-const DPOINT WORKSHEET_DATAITEM_POLYPOLYGON::GetCornerPosition( unsigned aIdx,
-                                                                int aRepeat ) const
+void WORKSHEET_DATAITEM_POLYPOLYGON::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector,
+                                                    KIGFX::VIEW* aView )
+{
+    for( WS_DRAW_ITEM_BASE* item : m_drawItems )
+        delete item;
+
+    m_drawItems.clear();
+
+    for( int jj = 0; jj < m_RepeatCount; jj++ )
+    {
+        if( jj && !IsInsidePage( jj ) )
+            continue;
+
+        for( int kk = 0; kk < GetPolyCount(); kk++ )
+        {
+            const bool fill = true;
+            int pensize = GetPenSizeUi();
+            auto poly = new WS_DRAW_ITEM_POLYGON( this, GetStartPosUi( jj ), fill, pensize );
+            m_drawItems.push_back( poly );
+
+            if( aCollector )
+                aCollector->Append( poly );
+
+            if( aView )
+                aView->Add( poly );
+
+            // Create polygon outline
+            unsigned ist = GetPolyIndexStart( kk );
+            unsigned iend = GetPolyIndexEnd( kk );
+
+            while( ist <= iend )
+                poly->m_Corners.push_back( GetCornerPositionUi( ist++, jj ) );
+
+        }
+    }
+}
+
+
+const DPOINT WORKSHEET_DATAITEM_POLYPOLYGON::GetCornerPosition( unsigned aIdx, int aRepeat ) const
 {
     DPOINT pos = m_Corners[aIdx];
 
@@ -461,16 +520,67 @@ WORKSHEET_DATAITEM_TEXT::WORKSHEET_DATAITEM_TEXT( const wxString& aTextBase ) :
     m_IncrementLabel = 1;
     m_Hjustify = GR_TEXT_HJUSTIFY_LEFT;
     m_Vjustify = GR_TEXT_VJUSTIFY_CENTER;
+    m_Italic = false;
+    m_Bold = false;
     m_Orient = 0.0;
-    m_LineWidth = 0.0;      // 0.0 means use default value
+    m_LineWidth = 0.0;      // 0 means use default value
 }
 
 
-void WORKSHEET_DATAITEM_TEXT::TransfertSetupToGraphicText( WS_DRAW_ITEM_TEXT* aGText )
+void WORKSHEET_DATAITEM_TEXT::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView )
 {
-    aGText->SetHorizJustify( m_Hjustify ) ;
-    aGText->SetVertJustify( m_Vjustify );
-    aGText->SetTextAngle( m_Orient * 10 );    // graphic text orient unit = 0.1 degree
+    int   pensize = GetPenSizeUi();
+    bool  multilines = false;
+
+    if( m_SpecialMode )
+        m_FullText = m_TextBase;
+    else
+    {
+        m_FullText = aCollector ? aCollector->BuildFullText( m_TextBase ) : wxEmptyString;
+        multilines = ReplaceAntiSlashSequence();
+    }
+
+    if( pensize == 0 )
+        pensize = aCollector ? aCollector->GetDefaultPenSize() : 1;
+
+    SetConstrainedTextSize();
+    wxSize textsize;
+
+    textsize.x = KiROUND( m_ConstrainedTextSize.x * WORKSHEET_DATAITEM::m_WSunits2Iu );
+    textsize.y = KiROUND( m_ConstrainedTextSize.y * WORKSHEET_DATAITEM::m_WSunits2Iu );
+
+    if( m_Bold )
+        pensize = GetPenSizeForBold( std::min( textsize.x, textsize.y ) );
+
+    for( WS_DRAW_ITEM_BASE* item : m_drawItems )
+        delete item;
+
+    m_drawItems.clear();
+
+    for( int jj = 0; jj < m_RepeatCount; ++jj )
+    {
+        if( jj > 0 && !IsInsidePage( jj ) )
+            continue;
+
+        auto text = new WS_DRAW_ITEM_TEXT( this, m_FullText, GetStartPosUi( jj ), textsize,
+                                           pensize, m_Italic, m_Bold );
+        m_drawItems.push_back( text );
+
+        if( aCollector )
+            aCollector->Append( text );
+
+        if( aView )
+            aView->Add( text );
+
+        text->SetHorizJustify( m_Hjustify ) ;
+        text->SetVertJustify( m_Vjustify );
+        text->SetTextAngle( m_Orient * 10 );    // graphic text orient unit = 0.1 degree
+        text->SetMultilineAllowed( multilines );
+
+        // Increment label for the next text (has no meaning for multiline texts)
+        if( m_RepeatCount > 1 && !multilines )
+            IncrementLabel( ( jj + 1 ) * m_IncrementLabel );
+    }
 }
 
 
@@ -549,13 +659,12 @@ void WORKSHEET_DATAITEM_TEXT::SetConstrainedTextSize()
         int linewidth = 0;
         size_micron.x = KiROUND( m_ConstrainedTextSize.x * FSCALE );
         size_micron.y = KiROUND( m_ConstrainedTextSize.y * FSCALE );
-        WS_DRAW_ITEM_TEXT dummy( WS_DRAW_ITEM_TEXT( this, this->m_FullText,
-                                               wxPoint(0,0),
-                                               size_micron,
-                                               linewidth, BLACK,
-                                               IsItalic(), IsBold() ) );
+        WS_DRAW_ITEM_TEXT dummy( WS_DRAW_ITEM_TEXT( this, this->m_FullText, wxPoint( 0, 0 ),
+                                 size_micron, linewidth, m_Italic, m_Bold ) );
         dummy.SetMultilineAllowed( true );
-        TransfertSetupToGraphicText( &dummy );
+        dummy.SetHorizJustify( m_Hjustify ) ;
+        dummy.SetVertJustify( m_Vjustify );
+        dummy.SetTextAngle( m_Orient * 10 );
 
         EDA_RECT rect = dummy.GetTextBox();
         DSIZE size;
@@ -567,6 +676,30 @@ void WORKSHEET_DATAITEM_TEXT::SetConstrainedTextSize()
 
         if( m_BoundingBoxSize.y &&  size.y > m_BoundingBoxSize.y )
             m_ConstrainedTextSize.y *= m_BoundingBoxSize.y / size.y;
+    }
+}
+
+
+void WORKSHEET_DATAITEM_BITMAP::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView )
+{
+    for( WS_DRAW_ITEM_BASE* item : m_drawItems )
+        delete item;
+
+    m_drawItems.clear();
+
+    for( int jj = 0; jj < m_RepeatCount; jj++ )
+    {
+        if( jj && !IsInsidePage( jj ) )
+            continue;
+
+        auto bitmap = new WS_DRAW_ITEM_BITMAP( this, GetStartPosUi( jj ) );
+        m_drawItems.push_back( bitmap );
+
+        if( aCollector )
+            aCollector->Append( bitmap );
+
+        if( aView )
+            aView->Add( bitmap );
     }
 }
 

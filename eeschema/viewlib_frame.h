@@ -84,14 +84,13 @@ public:
     bool ReCreateListCmp();
 
     void DisplayLibInfos();
-    void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
+    void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override { /* OBSOLETE */ }
     void OnCloseWindow( wxCloseEvent& Event );
     void CloseLibraryViewer( wxCommandEvent& event );
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;
     void ReCreateMenuBar() override;
 
-    void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
     double BestZoom() override;
     void ClickOnLibList( wxCommandEvent& event );
     void ClickOnCmpList( wxCommandEvent& event );
@@ -162,7 +161,6 @@ private:
      */
     virtual void OnActivate( wxActivateEvent& event ) override;
 
-    bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override;
     void DClickOnCmpList( wxCommandEvent& event );
 
     void onUpdateAltBodyStyleButton( wxUpdateUIEvent& aEvent );

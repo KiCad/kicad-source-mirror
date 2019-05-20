@@ -52,9 +52,9 @@
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <draw_graphic_text.h>
-#include <worksheet.h>
+#include <worksheet_painter.h>
 #include <title_block.h>
-#include <worksheet_shape_builder.h>
+#include <ws_draw_item.h>
 #include <worksheet_dataitem.h>
 
 
@@ -121,43 +121,23 @@ void WORKSHEET_LAYOUT::SetBottomMargin( double aMargin )
 
 void WORKSHEET_LAYOUT::ClearList()
 {
-    for( unsigned ii = 0; ii < m_list.size(); ii++ )
-        delete m_list[ii];
+    for( WORKSHEET_DATAITEM* item : m_list )
+        delete item;
+
     m_list.clear();
 }
 
 
-void WORKSHEET_LAYOUT::Insert( WORKSHEET_DATAITEM* aItem, unsigned aIdx )
+void WORKSHEET_LAYOUT::Append( WORKSHEET_DATAITEM* aItem )
 {
-    if ( aIdx >= GetCount() )
-        Append( aItem );
-    else
-        m_list.insert(  m_list.begin() + aIdx, aItem );
+    m_list.push_back( aItem );
 }
 
 
-bool WORKSHEET_LAYOUT::Remove( unsigned aIdx )
+void WORKSHEET_LAYOUT::Remove( WORKSHEET_DATAITEM* aItem )
 {
-    if ( aIdx >= GetCount() )
-        return false;
-    m_list.erase( m_list.begin() + aIdx );
-    return true;
-}
-
-
-bool WORKSHEET_LAYOUT::Remove( WORKSHEET_DATAITEM* aItem )
-{
-    unsigned idx = 0;
-
-    while( idx < m_list.size() )
-    {
-        if( m_list[idx] == aItem )
-            break;
-
-        idx++;
-    }
-
-    return Remove( idx );
+    auto newEnd = std::remove( m_list.begin(), m_list.end(), aItem );
+    m_list.erase( newEnd, m_list.end() );
 }
 
 

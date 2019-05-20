@@ -327,22 +327,6 @@ void DISPLAY_FOOTPRINTS_FRAME::ApplyDisplaySettingsToGAL()
 }
 
 
-void DISPLAY_FOOTPRINTS_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
-{
-}
-
-
-void DISPLAY_FOOTPRINTS_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
-{
-}
-
-
-bool DISPLAY_FOOTPRINTS_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
-{
-    return true;
-}
-
-
 bool DISPLAY_FOOTPRINTS_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition,
         EDA_KEY aHotKey )
 {

@@ -6,21 +6,7 @@
 #include <gr_basic.h>
 #include <eda_rect.h>
 
-/**
- * Mouse capture callback function prototype.
- */
-
 class BASE_SCREEN;
-
-class EDA_DRAW_PANEL;
-
-typedef void ( *MOUSE_CAPTURE_CALLBACK )( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                                          const wxPoint& aPosition, bool aErase );
-
-/**
- * End mouse capture callback function prototype.
- */
-typedef void ( *END_MOUSE_CAPTURE_CALLBACK )( EDA_DRAW_PANEL* aPanel, wxDC* aDC );
 
 
 class EDA_DRAW_PANEL
@@ -55,30 +41,9 @@ protected:
      */
     bool    m_ignoreNextLeftButtonRelease;  ///< Ignore the next mouse left button release when true.
 
-    bool    m_enableBlockCommands;          ///< True enables block commands.
-
-    /**
-     * Count the drag events. Used to filter mouse moves before starting a
-     * block command.  A block command can be started only if
-     * MinDragEventCount > MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND in order to avoid
-     * spurious block commands.
-     */
-    int     m_minDragEventCount;
-
     /// True when drawing in mirror mode. Used by the draw arc function, because arcs
     /// are oriented, and in mirror mode, orientations are reversed.
     bool    m_PrintIsMirrored;
-
-    /// Mouse capture move callback function.
-    MOUSE_CAPTURE_CALLBACK m_mouseCaptureCallback;
-
-    /// Abort mouse capture callback function.
-    END_MOUSE_CAPTURE_CALLBACK m_endMouseCaptureCallback;
-
-    /// useful to avoid false start block in certain cases
-    /// (like switch from a sheet to another sheet
-    /// >= 0 (or >= n) if a block can start
-    int     m_canStartBlock;
 
     int     m_doubleClickInterval;
 
@@ -95,12 +60,7 @@ public:
         m_enableAutoPan( false ),
         m_ignoreMouseEvents( false ),
         m_ignoreNextLeftButtonRelease( false ),
-        m_enableBlockCommands( true ),
-        m_minDragEventCount( 5 ),
         m_PrintIsMirrored( false ),
-        m_mouseCaptureCallback( nullptr ),
-        m_endMouseCaptureCallback( nullptr ),
-        m_canStartBlock( true ),
         m_doubleClickInterval( 0 )
     {};
 
@@ -145,12 +105,8 @@ public:
 
     void SetIgnoreLeftButtonReleaseEvent( bool aIgnore ) { m_ignoreNextLeftButtonRelease = aIgnore; }
 
-    void SetEnableBlockCommands( bool aEnable ) { m_enableBlockCommands = aEnable; }
-
     bool GetPrintMirrored() const               { return m_PrintIsMirrored; }
     void SetPrintMirrored( bool aMirror )       { m_PrintIsMirrored = aMirror; }
-
-    void SetCanStartBlock( int aStartBlock ) { m_canStartBlock = aStartBlock; }
 
     /**
      * Function DrawBackGround
@@ -190,18 +146,6 @@ public:
      * @param aGridOrigin = the absolute coordinate of grid origin for snap.
      */
     virtual void DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoint& aGridOrigin ) { printf("EDA_DRAW_PANEL:Unimplemented4\n");  };
-
-        /**
-     * Function DeviceToLogical
-     * converts \a aRect from device to drawing (logical) coordinates.
-     * <p>
-     * \a aRect must be in scrolled device units.
-     * </p>
-     * @param aRect The rectangle to convert.
-     * @param aDC The device context used for the conversion.
-     * @return A rectangle converted to drawing units.
-     */
-    virtual wxRect DeviceToLogical( const wxRect& aRect, wxDC& aDC ) { printf("EDA_DRAW_PANEL:Unimplemented5\n");wxASSERT(false); return wxRect(); };
 
     /* Mouse and keys events */
 
@@ -294,84 +238,6 @@ public:
      * @param aPosition The position in logical units to move the cursor.
      */
     virtual void MoveCursor( const wxPoint& aPosition ) { printf("EDA_DRAW_PANEL:Unimplemented17\n");  };;
-
-    /* Cursor functions */
-    /**
-     * Function DrawCrossHair
-     * draws the user cross hair.
-     * <p>
-     * The user cross hair is not the mouse cursor although they may be at the same screen
-     * position.  The mouse cursor is still render by the OS.  This is a drawn cross hair
-     * that is used to snap to grid when grid snapping is enabled.  This is as an indicator
-     * to where the next user action will take place.
-     * </p>
-     * @param aDC - the device context to draw the cursor
-     * @param aColor - the color to draw the cursor
-     */
-    virtual void DrawCrossHair( wxDC* aDC=nullptr, COLOR4D aColor = COLOR4D::WHITE ) { printf("EDA_DRAW_PANEL:Unimplemented18\n"); };;
-
-    // Hide the cross hair.
-    virtual void CrossHairOff( wxDC* DC=nullptr ) { printf("EDA_DRAW_PANEL:Unimplemented19\n");  };;
-
-    // Show the cross hair.
-    virtual void CrossHairOn( wxDC* DC=nullptr ) { printf("EDA_DRAW_PANEL:Unimplemented20\n");  };;
-
-    /**
-     * Function SetMouseCapture
-     * sets the mouse capture and end mouse capture callbacks to \a aMouseCaptureCallback
-     * and \a aEndMouseCaptureCallback respectively.
-     */
-    virtual void SetMouseCapture( MOUSE_CAPTURE_CALLBACK aMouseCaptureCallback,
-                          END_MOUSE_CAPTURE_CALLBACK aEndMouseCaptureCallback )
-    {
-        m_mouseCaptureCallback = aMouseCaptureCallback;
-        m_endMouseCaptureCallback = aEndMouseCaptureCallback;
-    }
-
-
-    virtual void SetMouseCaptureCallback( MOUSE_CAPTURE_CALLBACK aMouseCaptureCallback )
-    {
-        m_mouseCaptureCallback = aMouseCaptureCallback;
-    }
-
-
-    /**
-     * Function EndMouseCapture
-     * ends mouse a capture.
-     *
-     * Check to see if the cursor is being managed for block or editing commands and release it.
-     * @param aId The command ID to restore or -1 to keep the current command ID.
-     * @param aCursorId The wxWidgets stock cursor ID to set the cursor to or -1 to keep the
-     *                  current cursor.
-     * @param aTitle The tool message to display in the status bar or wxEmptyString to clear
-     *               the message.
-     * @param aCallEndFunc Call the abort mouse capture callback if true.
-     */
-    virtual void EndMouseCapture( int aId = -1, int aCursorId = -1,
-                          const wxString& aTitle = wxEmptyString,
-                          bool aCallEndFunc = true ) { printf("EDA_DRAW_PANEL:Unimplemented21\n"); wxASSERT(false); };;
-
-    inline bool IsMouseCaptured() const { return m_mouseCaptureCallback != NULL; }
-
-    /**
-     * Function CallMouseCapture
-     * calls the mouse capture callback.
-     *
-     * @param aDC A point to a wxDC object to perform any drawing upon.
-     * @param aPosition A referecnce to a wxPoint object containing the current cursor
-     *                  position.
-     * @param aErase True indicates the item being drawn should be erase before drawing
-     *               it a \a aPosition.
-     */
-    virtual void CallMouseCapture( wxDC* aDC, const wxPoint& aPosition, bool aErase ) { printf("EDA_DRAW_PANEL:Unimplemented22\n"); wxASSERT(false); };;
-
-    /**
-     * Function CallEndMouseCapture
-     * calls the end mouse capture callback.
-     *
-     * @param aDC A point to a wxDC object to perform any drawing upon.
-     */
-    virtual void CallEndMouseCapture( wxDC* aDC ) { printf("EDA_DRAW_PANEL:Unimplemented23\n"); wxASSERT(false); };;
 
     virtual void Refresh( bool eraseBackground = true, const wxRect* rect = NULL ) {}
 

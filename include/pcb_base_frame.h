@@ -200,9 +200,6 @@ public:
     virtual void OnCloseWindow( wxCloseEvent& Event ) = 0;
     virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override { }
     virtual void ReCreateOptToolbar() { }
-    virtual void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override = 0;
-    virtual void OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) override = 0;
-    virtual bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override = 0;
     virtual void ShowChangedLanguage() override;
     virtual void ReCreateMenuBar() override;
     virtual void SetToolID( int aId, int aCursor, const wxString& aToolMsg ) override;

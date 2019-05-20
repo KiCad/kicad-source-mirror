@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file lib_field.cpp
- */
-
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <gr_basic.h>
@@ -74,7 +70,7 @@ LIB_FIELD::~LIB_FIELD()
 }
 
 
-void LIB_FIELD::operator=( const LIB_FIELD& field )
+LIB_FIELD& LIB_FIELD::operator=( const LIB_FIELD& field )
 {
     m_id = field.m_id;
     m_Text = field.m_Text;
@@ -82,6 +78,8 @@ void LIB_FIELD::operator=( const LIB_FIELD& field )
     m_Parent = field.m_Parent;
 
     SetEffects( field );
+
+    return *this;
 }
 
 
@@ -93,9 +91,6 @@ void LIB_FIELD::Init( int id )
     SetTextHeight( GetDefaultTextSize() );
 
     SetTextAngle( TEXT_ANGLE_HORIZ );    // constructor already did this.
-
-    m_rotate = false;
-    m_updateText = false;
 
     // fields in RAM must always have names, because we are trying to get
     // less dependent on field ids and more dependent on names.
@@ -303,7 +298,7 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
     /* Calculate the text orientation, according to the component
      * orientation/mirror */
-    int orient = GetTextAngle();
+    int orient = (int) GetTextAngle();
 
     if( aTransform.y1 )  // Rotate component 90 deg.
     {
@@ -394,14 +389,7 @@ COLOR4D LIB_FIELD::GetDefaultColor()
 
 void LIB_FIELD::Rotate()
 {
-    if( InEditMode() )
-    {
-        m_rotate = true;
-    }
-    else
-    {
-        SetTextAngle( GetTextAngle() == TEXT_ANGLE_VERT ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT );
-    }
+    SetTextAngle( GetTextAngle() == TEXT_ANGLE_VERT ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT );
 }
 
 
@@ -452,22 +440,7 @@ void LIB_FIELD::SetName( const wxString& aName )
 
 void LIB_FIELD::SetText( const wxString& aText )
 {
-    if( aText == GetText() )
-        return;
-
-    wxString oldValue( m_Text );
-    wxString newValue( aText );
-
-    if( InEditMode() )
-    {
-        m_Text = oldValue;
-        m_savedText = newValue;
-        m_updateText = true;
-    }
-    else
-    {
-        m_Text = newValue;
-    }
+    m_Text = aText;
 }
 
 
@@ -477,53 +450,15 @@ wxString LIB_FIELD::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 }
 
 
-void LIB_FIELD::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
+void LIB_FIELD::BeginEdit( const wxPoint aPosition )
 {
-    LIB_ITEM::BeginEdit( aEditMode, aPosition );
-
-    if( aEditMode == IS_MOVED )
-    {
-        m_initialPos = GetTextPos();
-        m_initialCursorPos = aPosition;
-    }
-    else
-    {
-        SetTextPos( aPosition );
-    }
-}
-
-
-void LIB_FIELD::EndEdit( const wxPoint& aPosition )
-{
-    LIB_ITEM::EndEdit( aPosition );
-
-    m_rotate = false;
-    m_updateText = false;
+    SetTextPos( aPosition );
 }
 
 
 void LIB_FIELD::CalcEdit( const wxPoint& aPosition )
 {
-    if( m_rotate )
-    {
-        SetTextAngle( GetTextAngle() == TEXT_ANGLE_VERT ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT );
-        m_rotate = false;
-    }
-
-    if( m_updateText )
-    {
-        std::swap( m_Text, m_savedText );
-        m_updateText = false;
-    }
-
-    if( IsNew() )
-    {
-        SetTextPos( aPosition );
-    }
-    else if( IsMoving() )
-    {
-        MoveTo( m_initialPos + aPosition - m_initialCursorPos );
-    }
+    SetTextPos( aPosition );
 }
 
 

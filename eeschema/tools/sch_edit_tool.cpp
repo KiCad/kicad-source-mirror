@@ -154,7 +154,7 @@ TOOL_ACTION EE_ACTIONS::pinTable( "eeschema.InteractiveEdit.pinTable",
         _( "Pin Table..." ), _( "Displays pin table for bulk editing of pins" ),
         pin_table_xpm );
 
-TOOL_ACTION EE_ACTIONS::doDelete( "eeschema.InteractiveEdit.doDelete",
+TOOL_ACTION EE_ACTIONS::doDelete( "eeschema.InteractiveEdit.delete",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
         _( "Delete" ), _( "Deletes selected item(s)" ),
         delete_xpm );

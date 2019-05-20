@@ -1,12 +1,8 @@
-/**
- * @file pl_editor_undo_redo.cpp
- * @brief page layout editor: undo and redo functions
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -30,7 +26,7 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <macros.h>
-#include <worksheet_shape_builder.h>
+#include <ws_draw_item.h>
 
 #include <pl_editor_frame.h>
 
@@ -87,7 +83,7 @@ void PL_EDITOR_FRAME::SaveCopyInUndoList()
  * - Place the current edited layout in undo list
  * - Get previous version of the current edited layput
  */
-void PL_EDITOR_FRAME::GetLayoutFromRedoList( wxCommandEvent& event )
+void PL_EDITOR_FRAME::GetLayoutFromRedoList()
 {
     if ( GetScreen()->GetRedoCommandCount() <= 0 )
         return;
@@ -110,7 +106,6 @@ void PL_EDITOR_FRAME::GetLayoutFromRedoList( wxCommandEvent& event )
     delete copyItem;
 
     OnModify();
-    RebuildDesignTree();
     m_canvas->Refresh();
 }
 
@@ -119,7 +114,7 @@ void PL_EDITOR_FRAME::GetLayoutFromRedoList( wxCommandEvent& event )
  * - Place the current layout in Redo list
  * - Get previous version of the current edited layout
  */
-void PL_EDITOR_FRAME::GetLayoutFromUndoList( wxCommandEvent& event )
+void PL_EDITOR_FRAME::GetLayoutFromUndoList()
 {
     if ( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
@@ -141,14 +136,13 @@ void PL_EDITOR_FRAME::GetLayoutFromUndoList( wxCommandEvent& event )
     delete copyItem;
 
     OnModify();
-    RebuildDesignTree();
     m_canvas->Refresh();
 }
 
 /* Remove the last command in Undo List.
  * Used to clean the uUndo stack after a cancel command
  */
-void PL_EDITOR_FRAME::RemoveLastCommandInUndoList()
+void PL_EDITOR_FRAME::RollbackFromUndo()
 {
     if ( GetScreen()->GetUndoCommandCount() <= 0 )
         return;

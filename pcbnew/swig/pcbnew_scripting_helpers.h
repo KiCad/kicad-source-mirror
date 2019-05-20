@@ -92,8 +92,6 @@ bool ArchiveModulesOnBoard(
  */
 void    Refresh();
 
-void    WindowZoom( int xl, int yl, int width, int height );
-
 /**
  * Update the layer manager and other widgets from the board setup
  * (layer and items visibility, colors ...)

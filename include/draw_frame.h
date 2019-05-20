@@ -715,9 +715,6 @@ public:
      */
     virtual void Zoom_Automatique( bool aWarpPointer );
 
-    /* Set the zoom level to show the area Rect */
-    virtual void Window_Zoom( EDA_RECT& Rect );
-
     /** Return the zoom level which displays the full page on screen */
     virtual double BestZoom() = 0;
 
@@ -755,7 +752,7 @@ public:
     virtual void    RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;
     virtual void    OnLeftClick( wxDC* DC, const wxPoint& MousePos ) {}
     virtual void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) {}
-    virtual bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
+    virtual bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) { return true; }
     virtual void    ToolOnRightClick( wxCommandEvent& event );
     void            AdjustScrollBars( const wxPoint& aCenterPosition );
 

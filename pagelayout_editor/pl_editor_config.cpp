@@ -47,24 +47,6 @@ void PL_EDITOR_FRAME::Process_Config( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_MENU_SWITCH_BGCOLOR:
-        if( GetDrawBgColor() == WHITE )
-            SetDrawBgColor( BLACK );
-        else
-            SetDrawBgColor( WHITE );
-
-        GetMenuBar()->SetLabel( ID_MENU_SWITCH_BGCOLOR,
-                                GetDrawBgColor() == WHITE ? _( "&Background Black" ) : _( "&Background White" ) );
-        m_canvas->Refresh();
-        break;
-
-    case ID_MENU_GRID_ONOFF:
-        SetGridVisibility( ! IsGridVisible() );
-        GetMenuBar()->SetLabel( ID_MENU_GRID_ONOFF,
-                                IsGridVisible() ? _( "Hide &Grid" ) : _( "Show &Grid" ) );
-        m_canvas->Refresh();
-        break;
-
     case wxID_PREFERENCES:
         ShowPreferences( PlEditorHotkeysDescr, PlEditorHotkeysDescr, wxT( "pl_editor" ) );
         break;

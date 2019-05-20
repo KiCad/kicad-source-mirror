@@ -310,12 +310,6 @@ public:
                                                        const LIB_ID& aPreselectedLibid,
                                                        int aUnit, int aConvert );
 
-
-    virtual void Zoom_Automatique( bool aWarpPointer ) override;
-
-                                       /* Set the zoom level to show the area Rect */
-    virtual void Window_Zoom( EDA_RECT& aRect ) override;
-
     virtual void RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer ) override;
 
     virtual void RedrawScreen2( const wxPoint& posBefore ) override;

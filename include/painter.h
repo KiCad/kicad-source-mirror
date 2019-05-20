@@ -31,7 +31,7 @@
 #include <set>
 
 #include <gal/color4d.h>
-#include <worksheet_shape_builder.h>
+#include <ws_draw_item.h>
 #include <layers_id_colors_and_visibility.h>
 #include <memory>
 
@@ -64,7 +64,7 @@ public:
      * Loads a list of color settings for layers.
      * @param aSettings is a list of color settings.
      */
-    virtual void ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSettings ) = 0;
+    virtual void ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSettings ) { }
 
     /**
      * Function SetActiveLayer

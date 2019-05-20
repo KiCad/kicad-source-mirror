@@ -1,7 +1,3 @@
-/**
- * @file invoke_pl_editor_dialog.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *

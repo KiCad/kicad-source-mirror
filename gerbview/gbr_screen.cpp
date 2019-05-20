@@ -33,10 +33,8 @@
 #include <gerbview_id.h>
 
 
-#define MIL_GRID( x ) wxRealPoint( x * IU_PER_MILS,\
-                                    x * IU_PER_MILS)
-#define MM_GRID( x )   wxRealPoint( x * IU_PER_MM,\
-                                    x * IU_PER_MM )
+#define MIL_GRID( x ) wxRealPoint( x * IU_PER_MILS, x * IU_PER_MILS)
+#define MM_GRID( x )   wxRealPoint( x * IU_PER_MM, x * IU_PER_MM )
 
 
 /**

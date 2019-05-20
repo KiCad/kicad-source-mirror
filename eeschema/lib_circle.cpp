@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file lib_circle.cpp
- * @brief LIB_CIRCLE class implementation.
- */
-
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <macros.h>
@@ -249,8 +244,11 @@ void LIB_CIRCLE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
     msg = MessageTextFromValue( aUnits, GetRadius(), true );
     aList.push_back( MSG_PANEL_ITEM( _( "Radius" ), msg, RED ) );
 
-    msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
-                bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
+    msg.Printf( wxT( "(%d, %d, %d, %d)" ),
+                bBox.GetOrigin().x,
+                bBox.GetOrigin().y,
+                bBox.GetEnd().x,
+                bBox.GetEnd().y );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Bounding Box" ), msg, BROWN ) );
 }
@@ -271,30 +269,13 @@ BITMAP_DEF LIB_CIRCLE::GetMenuImage() const
 }
 
 
-void LIB_CIRCLE::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
+void LIB_CIRCLE::BeginEdit( const wxPoint aPosition )
 {
-    LIB_ITEM::BeginEdit( aEditMode, aPosition );
-
-    if( aEditMode == IS_NEW )
-    {
-        m_Pos = m_initialPos = aPosition;
-    }
-    else if( aEditMode == IS_MOVED )
-    {
-        m_initialPos = m_Pos;
-        m_initialCursorPos = aPosition;
-    }
+    m_Pos = m_initialPos = aPosition;
 }
 
 
 void LIB_CIRCLE::CalcEdit( const wxPoint& aPosition )
 {
-    if( IsNew() )
-    {
-        SetEnd( aPosition );
-    }
-    else if( IsMoving() )
-    {
-        MoveTo( m_initialPos + aPosition - m_initialCursorPos );
-    }
+    SetEnd( aPosition );
 }

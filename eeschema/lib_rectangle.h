@@ -22,12 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file lib_rectangle.h
- */
-
-#ifndef _LIB_RECTANGLE_H_
-#define _LIB_RECTANGLE_H_
+#ifndef LIB_RECTANGLE_H
+#define LIB_RECTANGLE_H
 
 #include <lib_draw_item.h>
 
@@ -37,9 +33,6 @@ class LIB_RECTANGLE  : public LIB_ITEM
     wxPoint m_End;                  // Rectangle end point.
     wxPoint m_Pos;                  // Rectangle start point.
     int     m_Width;                // Line width
-    bool    m_isWidthLocked;        // Flag: Keep width locked
-    bool    m_isHeightLocked;       // Flag: Keep height locked
-    bool    m_isStartPointSelected; // Flag: is the upper left edge selected?
 
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
                       const TRANSFORM& aTransform ) override;
@@ -71,9 +64,8 @@ public:
 
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint ) override;
+    void BeginEdit( const wxPoint aStartPoint ) override;
     void CalcEdit( const wxPoint& aPosition ) override;
-    void EndEdit( const wxPoint& aPosition ) override;
 
     void Offset( const wxPoint& aOffset ) override;
 
@@ -117,4 +109,4 @@ private:
 };
 
 
-#endif    // _LIB_RECTANGLE_H_
+#endif    // LIB_RECTANGLE_H

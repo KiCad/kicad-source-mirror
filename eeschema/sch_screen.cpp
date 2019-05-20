@@ -110,11 +110,11 @@ SCH_SCREEN::SCH_SCREEN( KIWAY* aKiway ) :
 
     SetZoom( 32 );
 
-    for( unsigned i = 0; i < arrayDim( SchematicZoomList ); i++ )
-        m_ZoomList.push_back( SchematicZoomList[i] );
+    for( unsigned zoom : SchematicZoomList )
+        m_ZoomList.push_back( zoom );
 
-    for( unsigned i = 0; i < arrayDim( SchematicGridList ); i++ )
-        AddGrid( SchematicGridList[i] );
+    for( GRID_TYPE grid : SchematicGridList )
+        AddGrid( grid );
 
     // Set the default grid size, now that the grid list is populated
     SetGrid( wxRealPoint( 50, 50 ) );

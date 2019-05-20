@@ -237,8 +237,8 @@ void PCB_DRAW_PANEL_GAL::SetHighContrastLayer( PCB_LAYER_ID aLayer )
                 LAYER_RATSNEST, LAYER_CURSOR
         };
 
-        for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
-            rSettings->SetActiveLayer( layers[i] );
+        for( unsigned int i : layers )
+            rSettings->SetActiveLayer( i );
 
         // Pads should be shown too
         if( aLayer == B_Cu )

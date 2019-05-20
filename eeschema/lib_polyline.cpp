@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file lib_polyline.cpp
- */
-
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <macros.h>
@@ -41,13 +37,12 @@
 #include <transform.h>
 
 
-LIB_POLYLINE::LIB_POLYLINE( LIB_PART*      aParent ) :
+LIB_POLYLINE::LIB_POLYLINE( LIB_PART* aParent ) :
     LIB_ITEM( LIB_POLYLINE_T, aParent )
 {
     m_Fill  = NO_FILL;
     m_Width = 0;
     m_isFillable = true;
-    m_ModifyIndex = 0;
 }
 
 
@@ -81,16 +76,16 @@ int LIB_POLYLINE::compare( const LIB_ITEM& aOther ) const
 
 void LIB_POLYLINE::Offset( const wxPoint& aOffset )
 {
-    for( size_t i = 0; i < m_PolyPoints.size(); i++ )
-        m_PolyPoints[i] += aOffset;
+    for( wxPoint& point : m_PolyPoints )
+        point += aOffset;
 }
 
 
 bool LIB_POLYLINE::Inside( EDA_RECT& aRect ) const
 {
-    for( size_t i = 0; i < m_PolyPoints.size(); i++ )
+    for( const wxPoint& point : m_PolyPoints )
     {
-        if( aRect.Contains( m_PolyPoints[i].x, -m_PolyPoints[i].y ) )
+        if( aRect.Contains( point.x, -point.y ) )
             return true;
     }
 
@@ -106,35 +101,28 @@ void LIB_POLYLINE::MoveTo( const wxPoint& aPosition )
 
 void LIB_POLYLINE::MirrorHorizontal( const wxPoint& aCenter )
 {
-    size_t i, imax = m_PolyPoints.size();
-
-    for( i = 0; i < imax; i++ )
+    for( wxPoint& point : m_PolyPoints )
     {
-        m_PolyPoints[i].x -= aCenter.x;
-        m_PolyPoints[i].x *= -1;
-        m_PolyPoints[i].x += aCenter.x;
+        point.x -= aCenter.x;
+        point.x *= -1;
+        point.x += aCenter.x;
     }
 }
 
 void LIB_POLYLINE::MirrorVertical( const wxPoint& aCenter )
 {
-    size_t i, imax = m_PolyPoints.size();
-
-    for( i = 0; i < imax; i++ )
+    for( wxPoint& point : m_PolyPoints )
     {
-        m_PolyPoints[i].y -= aCenter.y;
-        m_PolyPoints[i].y *= -1;
-        m_PolyPoints[i].y += aCenter.y;
+        point.y -= aCenter.y;
+        point.y *= -1;
+        point.y += aCenter.y;
     }
 }
 
 void LIB_POLYLINE::Rotate( const wxPoint& aCenter, bool aRotateCCW )
 {
-    int    rot_angle = aRotateCCW ? -900 : 900;
-    size_t i, imax = m_PolyPoints.size();
-
-    for( i = 0; i < imax; i++ )
-        RotatePoint( &m_PolyPoints[i], aCenter, rot_angle );
+    for( wxPoint& point : m_PolyPoints )
+        RotatePoint( &point, aCenter, aRotateCCW ? -900 : 900 );
 }
 
 
@@ -146,9 +134,8 @@ void LIB_POLYLINE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     static std::vector< wxPoint > cornerList;
     cornerList.clear();
 
-    for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
+    for( wxPoint pos : m_PolyPoints )
     {
-        wxPoint pos = m_PolyPoints[ii];
         pos = aTransform.TransformCoordinate( pos ) + aOffset;
         cornerList.push_back( pos );
     }
@@ -372,127 +359,35 @@ BITMAP_DEF LIB_POLYLINE::GetMenuImage() const
 }
 
 
-void LIB_POLYLINE::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
+void LIB_POLYLINE::BeginEdit( const wxPoint aPosition )
 {
-    LIB_ITEM::BeginEdit( aEditMode, aPosition );
-
-    if( aEditMode == IS_NEW )
-    {
-        m_PolyPoints.push_back( aPosition );    // Start point of first segment.
-        m_PolyPoints.push_back( aPosition );    // End point of first segment.
-    }
-    else if( aEditMode == IS_RESIZED )
-    {
-        // Drag one edge point of the polyline
-        // Find the nearest edge point to be dragged
-        wxPoint startPoint = m_PolyPoints[0];
-
-        // Begin with the first list point as nearest point
-        int     index = 0;
-        m_ModifyIndex = 0;
-        m_initialPos  = startPoint;
-
-        // First distance is the current minimum distance
-        int     distanceMin = (aPosition - startPoint).x * (aPosition - startPoint).x
-                              + (aPosition - startPoint).y * (aPosition - startPoint).y;
-
-        wxPoint prevPoint = startPoint;
-
-        // Find the right index of the point to be dragged
-        for( wxPoint point : m_PolyPoints )
-        {
-            int distancePoint = (aPosition - point).x * (aPosition - point).x +
-                                (aPosition - point).y * (aPosition - point).y;
-
-            if( distancePoint < distanceMin )
-            {
-                // Save point.
-                m_initialPos  = point;
-                m_ModifyIndex = index;
-                distanceMin   = distancePoint;
-            }
-
-            // check middle of an edge
-            wxPoint offset = ( aPosition + aPosition - point - prevPoint );
-            distancePoint = ( offset.x * offset.x + offset.y * offset.y ) / 4 + 1;
-
-            if( distancePoint < distanceMin )
-            {
-                // Save point.
-                m_initialPos  = point;
-                m_ModifyIndex = -index;  // negative indicates new vertex is to be inserted
-                distanceMin   = distancePoint;
-            }
-
-            prevPoint = point;
-            index++;
-        }
-    }
-    else if( aEditMode == IS_MOVED )
-    {
-        m_initialCursorPos = aPosition;
-        m_initialPos = m_PolyPoints[0];
-    }
+    m_PolyPoints.push_back( aPosition );    // Start point of first segment.
+    m_PolyPoints.push_back( aPosition );    // End point of first segment.
 }
 
 
 bool LIB_POLYLINE::ContinueEdit( const wxPoint aPosition )
 {
-    if( IsNew() )
-    {
-        // do not add zero length segments
-        if( m_PolyPoints[m_PolyPoints.size() - 2] != m_PolyPoints.back() )
-            m_PolyPoints.push_back( aPosition );
+    // do not add zero length segments
+    if( m_PolyPoints[m_PolyPoints.size() - 2] != m_PolyPoints.back() )
+        m_PolyPoints.push_back( aPosition );
 
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 
-void LIB_POLYLINE::EndEdit( const wxPoint& aPosition )
+void LIB_POLYLINE::EndEdit()
 {
-    LIB_ITEM::EndEdit( aPosition );
-
     // do not include last point twice
-    if( m_Flags == IS_NEW && 2 < m_PolyPoints.size() )
+    if( m_PolyPoints.size() > 2 )
     {
         if( m_PolyPoints[ m_PolyPoints.size() - 2 ] == m_PolyPoints.back() )
             m_PolyPoints.pop_back();
-    }
-
-    if( (m_Flags == IS_RESIZED) && (m_PolyPoints.size() > 2) ) // do not delete last two points... keep it alive
-    {
-        if( ( m_ModifyIndex > 0 && m_PolyPoints[ m_ModifyIndex ] ==
-              m_PolyPoints[ m_ModifyIndex - 1 ] )
-          || ( m_ModifyIndex < (int) m_PolyPoints.size() - 1
-             && m_PolyPoints[ m_ModifyIndex ] == m_PolyPoints[ m_ModifyIndex + 1 ] ) )
-        {
-            m_PolyPoints.erase( m_PolyPoints.begin() + m_ModifyIndex ); // delete a point on this
-        }
     }
 }
 
 
 void LIB_POLYLINE::CalcEdit( const wxPoint& aPosition )
 {
-    if( IsNew() )
-    {
-        m_PolyPoints[ GetCornerCount() - 1 ] = aPosition;
-    }
-    else if( IsResized() )
-    {
-        if( m_ModifyIndex < 0 ) // negative indicates new vertex is to be inserted
-        {
-            m_ModifyIndex = -m_ModifyIndex;
-            m_PolyPoints.insert( m_PolyPoints.begin() + m_ModifyIndex, aPosition );
-        }
-
-        m_PolyPoints[ m_ModifyIndex ] = aPosition;
-    }
-    else if( IsMoving() )
-    {
-        MoveTo( m_initialPos + aPosition - m_initialCursorPos );
-    }
+    m_PolyPoints[ GetCornerCount() - 1 ] = aPosition;
 }

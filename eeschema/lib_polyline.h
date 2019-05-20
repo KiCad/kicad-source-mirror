@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file lib_polyline.h
- */
-
 #ifndef _LIB_POLYLINE_H_
 #define _LIB_POLYLINE_H_
 
@@ -36,8 +32,6 @@ class LIB_POLYLINE : public LIB_ITEM
 {
     int m_Width;                              // Line width
     std::vector<wxPoint> m_PolyPoints;        // list of points (>= 2)
-
-    int m_ModifyIndex;                        // Index of the polyline point to modify
 
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
                       const TRANSFORM& aTransform ) override;
@@ -87,10 +81,10 @@ public:
 
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint ) override;
+    void BeginEdit( const wxPoint aStartPoint ) override;
     void CalcEdit( const wxPoint& aPosition ) override;
     bool ContinueEdit( const wxPoint aNextPoint ) override;
-    void EndEdit( const wxPoint& aPosition ) override;
+    void EndEdit() override;
 
     void Offset( const wxPoint& aOffset ) override;
 

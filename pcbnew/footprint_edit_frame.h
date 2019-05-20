@@ -133,12 +133,6 @@ public:
      */
     void OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) override;
 
-    /**
-     * Handle the right mouse click in the footprint editor.
-     *
-     * Create the pop up menu.  After this menu is built, the standard ZOOM menu is added
-     */
-    bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override;
 
     /**
      * @brief (Re)Create the menubar for the module editor frame

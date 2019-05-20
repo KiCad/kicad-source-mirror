@@ -34,7 +34,7 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <macros.h>
-#include <worksheet_shape_builder.h>
+#include <ws_draw_item.h>
 
 #include <pl_editor_frame.h>
 #include <properties_frame.h>
@@ -70,7 +70,7 @@ void PL_EDITOR_FRAME::OnFileHistory( wxCommandEvent& event )
             }
         }
 
-        m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
+        m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT );
         ::wxSetWorkingDirectory( ::wxPathOnly( filename ) );
 
         if( LoadPageLayoutDescrFile( filename ) )
@@ -133,7 +133,6 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         else
         {
             GetScreen()->SetModify();
-            RebuildDesignTree();
             m_canvas->Refresh();
             msg.Printf( _( "File \"%s\" inserted" ), GetChars( filename ) );
             SetStatusText( msg );

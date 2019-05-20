@@ -74,7 +74,7 @@
 #include "tools/pcbnew_control.h"
 #include "tools/footprint_editor_tools.h"
 #include "tools/placement_tool.h"
-#include "tools/picker_tool.h"
+#include "tools/pcbnew_picker_tool.h"
 #include "tools/pad_tool.h"
 #include "tools/pcb_actions.h"
 
@@ -275,9 +275,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     GetScreen()->m_Active_Layer = F_SilkS;
     m_Layers->SelectLayer( F_SilkS );
     m_Layers->OnLayerSelected();
-
-    if( m_canvas )
-        m_canvas->SetEnableBlockCommands( true );
 
     m_auimgr.SetManagedWindow( this );
     m_auimgr.SetArtProvider( new EDA_DOCKART( this ) );
@@ -974,7 +971,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new PCBNEW_CONTROL );
     m_toolManager->RegisterTool( new MODULE_EDITOR_TOOLS );
     m_toolManager->RegisterTool( new ALIGN_DISTRIBUTE_TOOL );
-    m_toolManager->RegisterTool( new PICKER_TOOL );
+    m_toolManager->RegisterTool( new PCBNEW_PICKER_TOOL );
     m_toolManager->RegisterTool( new POSITION_RELATIVE_TOOL );
 
     m_toolManager->GetTool<PAD_TOOL>()->SetEditModules( true );

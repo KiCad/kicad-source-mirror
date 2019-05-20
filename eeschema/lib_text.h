@@ -22,12 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file lib_text.h
- */
-
-#ifndef _LIB_TEXT_H_
-#define _LIB_TEXT_H_
+#ifndef LIB_TEXT_H
+#define LIB_TEXT_H
 
 #include <eda_text.h>
 #include <lib_draw_item.h>
@@ -43,10 +39,6 @@
  */
 class LIB_TEXT : public LIB_ITEM, public EDA_TEXT
 {
-    wxString m_savedText;         ///< Temporary storage for the string when editing.
-    bool m_rotate;                ///< Flag to indicate a rotation occurred while editing.
-    bool m_updateText;            ///< Flag to indicate text change occurred while editing.
-
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
                       const TRANSFORM& aTransform ) override;
 
@@ -97,9 +89,8 @@ public:
 
     void Rotate() override;
 
-    void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint ) override;
+    void BeginEdit( const wxPoint aStartPoint ) override;
     void CalcEdit( const wxPoint& aPosition ) override;
-    void EndEdit( const wxPoint& aPosition ) override;
 
     void Offset( const wxPoint& aOffset ) override;
 
@@ -144,4 +135,4 @@ private:
 };
 
 
-#endif    // _LIB_TEXT_H_
+#endif    // LIB_TEXT_H

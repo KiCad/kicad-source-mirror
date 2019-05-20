@@ -31,8 +31,8 @@
 
 #include <fctsys.h>
 #include <base_struct.h>
-#include <worksheet.h>
-#include <worksheet_shape_builder.h>
+#include <worksheet_painter.h>
+#include <ws_draw_item.h>
 #include <worksheet_dataitem.h>
 #include <math/vector2d.h>
 #include <page_layout_reader_lexer.h>
@@ -240,7 +240,7 @@ void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_TEXT* aItem, int aNestLevel
     bool write_size = aItem->m_TextSize.x != 0.0 || aItem->m_TextSize.y != 0.0;
     bool write_thickness = aItem->m_LineWidth != 0.0;
 
-    if( write_thickness || write_size || aItem->IsBold() || aItem->IsItalic() )
+    if( write_thickness || write_size || aItem->m_Bold || aItem->m_Italic )
     {
         m_out->Print( 0, " (%s", getTokenName( T_font ) );
 
@@ -256,10 +256,10 @@ void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_TEXT* aItem, int aNestLevel
                           double2Str(aItem->m_TextSize.x ).c_str(),
                           double2Str(aItem->m_TextSize.y ).c_str() );
         }
-        if( aItem->IsBold() )
+        if( aItem->m_Bold )
             m_out->Print( 0, " %s", getTokenName( T_bold ) );
 
-        if( aItem->IsItalic() )
+        if( aItem->m_Italic )
             m_out->Print( 0, " %s", getTokenName( T_italic ) );
 
         m_out->Print( 0, ")" );
@@ -453,19 +453,8 @@ void WORKSHEET_LAYOUT_IO::formatRepeatParameters( WORKSHEET_DATAITEM* aItem ) co
 
 void WORKSHEET_LAYOUT_IO::formatOptions( WORKSHEET_DATAITEM* aItem ) const
 {
-    switch( aItem->GetPage1Option() )
-    {
-        default:
-        case 0:
-            break;
-
-        case 1:
-            m_out->Print( 0, " (%s %s)", getTokenName( T_option ),
-                          getTokenName(T_page1only ) );
-            break;
-
-        case -1:
-            m_out->Print( 0, " (%s %s)", getTokenName( T_option ), getTokenName( T_notonpage1 ) );
-            break;
-    }
+    if( aItem->GetPage1Option() == FIRST_PAGE_ONLY )
+        m_out->Print( 0, " (%s %s)", getTokenName( T_option ), getTokenName(T_page1only ) );
+    else if( aItem->GetPage1Option() == SUBSEQUENT_PAGES )
+        m_out->Print( 0, " (%s %s)", getTokenName( T_option ), getTokenName( T_notonpage1 ) );
 }

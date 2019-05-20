@@ -22,12 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file lib_circle.h
- */
-
-#ifndef _LIB_CIRCLE_H_
-#define _LIB_CIRCLE_H_
+#ifndef LIB_CIRCLE_H
+#define LIB_CIRCLE_H
 
 #include <lib_draw_item.h>
 
@@ -67,7 +63,7 @@ public:
 
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint ) override;
+    void BeginEdit( const wxPoint aStartPoint ) override;
     void CalcEdit( const wxPoint& aPosition ) override;
 
     void Offset( const wxPoint& aOffset ) override;
@@ -83,7 +79,6 @@ public:
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
     void MirrorVertical( const wxPoint& aCenter ) override;
-
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
@@ -115,4 +110,4 @@ private:
 };
 
 
-#endif    // _LIB_CIRCLE_H_
+#endif    // LIB_CIRCLE_H

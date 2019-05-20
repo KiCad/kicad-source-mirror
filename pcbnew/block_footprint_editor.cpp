@@ -259,10 +259,6 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         OnModify();
         break;
 
-    case BLOCK_ZOOM:     // Window Zoom
-        Window_Zoom( GetScreen()->m_BlockLocate );
-        break;
-
     case BLOCK_ABORT:
         break;
 

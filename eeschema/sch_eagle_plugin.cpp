@@ -30,7 +30,7 @@
 #include <sch_junction.h>
 #include <sch_sheet.h>
 #include <sch_edit_frame.h>
-#include <worksheet_shape_builder.h>
+#include <ws_draw_item.h>
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
 #include <sch_screen.h>

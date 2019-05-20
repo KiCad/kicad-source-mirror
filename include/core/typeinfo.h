@@ -165,7 +165,7 @@ enum KICAD_T
     LIB_FIELD_T,
 
     /*
-     * For GerbView: items type:
+     * For GerbView: item types:
      */
     GERBER_LAYOUT_T,
     GERBER_DRAW_ITEM_T,
@@ -173,8 +173,15 @@ enum KICAD_T
     GERBER_IMAGE_T,
 
     /*
-     * for Pl_Editor, in undo/redo commands
+     * For Pl_Editor: item types:
      */
+    WSG_LINE_T,
+    WSG_RECT_T,
+    WSG_POLY_T,
+    WSG_TEXT_T,
+    WSG_BITMAP_T,
+
+    // serialized layout used in undo/redo commands
     TYPE_PL_EDITOR_LAYOUT,
 
     /*

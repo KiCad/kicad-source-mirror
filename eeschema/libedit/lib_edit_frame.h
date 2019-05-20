@@ -313,18 +313,12 @@ public:
      */
     void RedrawComponent( wxDC* aDC, wxPoint aOffset );
 
-    /**
-     * Redraw the current component loaded in library editor, an axes
-     * Display reference like in schematic (a reference U is shown U? or U?A)
-     * update status bar and info shown in the bottom of the window
-     */
-    void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
+    void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override { /* OBSOLETE */ }
 
     void OnCloseWindow( wxCloseEvent& Event );
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;
     void ReCreateOptToolbar();
-    bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override { return true; }
     double BestZoom() override;         // Returns the best zoom
 
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()

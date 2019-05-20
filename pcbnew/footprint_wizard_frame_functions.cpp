@@ -76,25 +76,6 @@ void FOOTPRINT_WIZARD_FRAME::Process_Special_Functions( wxCommandEvent& event )
 }
 
 
-/* Function OnLeftClick
- * Captures a left click event in the dialog
- *
- */
-void FOOTPRINT_WIZARD_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
-{
-}
-
-
-/* Function OnRightClick
- * Captures a right click event in the dialog
- *
- */
-bool FOOTPRINT_WIZARD_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
-{
-    return true;
-}
-
-
 /* Displays the name of the current opened library in the caption */
 void FOOTPRINT_WIZARD_FRAME::DisplayWizardInfos()
 {

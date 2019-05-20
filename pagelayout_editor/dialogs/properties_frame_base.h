@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,17 +17,17 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/textctrl.h>
-#include <wx/sizer.h>
 #include <wx/choice.h>
+#include <wx/sizer.h>
 #include <wx/statline.h>
+#include <wx/textctrl.h>
 #include <wx/checkbox.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/combobox.h>
 #include <wx/scrolwin.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/notebook.h>
 #include <wx/panel.h>
 
@@ -44,8 +44,6 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxNotebook* m_notebook;
 		wxScrolledWindow* m_swItemProperties;
 		wxStaticText* m_staticTextType;
-		wxTextCtrl* m_textCtrlType;
-		wxStaticText* m_staticTextPageOpt;
 		wxChoice* m_choicePageOpt;
 		wxStaticLine* m_staticline5;
 		wxBoxSizer* m_SizerTextOptions;
@@ -57,21 +55,19 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_staticTextVjust;
 		wxChoice* m_choiceVjustify;
 		wxCheckBox* m_checkBoxItalic;
-		wxStaticLine* m_staticline81;
-		wxStaticText* m_staticTextSizeInfo;
 		wxStaticText* m_staticTexTsizeX;
 		wxStaticText* m_staticTextTsizeY;
 		wxTextCtrl* m_textCtrlTextSizeX;
 		wxStaticText* m_units1;
 		wxTextCtrl* m_textCtrlTextSizeY;
 		wxStaticText* m_units11;
-		wxStaticText* m_staticTextConstraints;
 		wxStaticText* m_staticTextConstraintX;
 		wxStaticText* m_staticTextConstraintY;
 		wxTextCtrl* m_textCtrlConstraintX;
 		wxStaticText* m_units111;
 		wxTextCtrl* m_textCtrlConstraintY;
 		wxStaticText* m_units1111;
+		wxStaticText* m_staticTextSizeInfo;
 		wxStaticLine* m_staticline6;
 		wxButton* m_buttonOK;
 		wxStaticLine* m_staticline8;
@@ -106,7 +102,6 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_staticTextBitmapPPI;
 		wxTextCtrl* m_textCtrlBitmapPPI;
 		wxStaticLine* m_staticline4;
-		wxStaticText* m_staticTextRepeatPrms;
 		wxStaticText* m_staticTextRepeatCnt;
 		wxStaticText* m_staticTextInclabel;
 		wxTextCtrl* m_textCtrlRepeatCount;
@@ -155,7 +150,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 	
 	public:
 		
-		PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 371,864 ), long style = wxTAB_TRAVERSAL ); 
+		PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 340,775 ), long style = wxTAB_TRAVERSAL ); 
 		~PANEL_PROPERTIES_BASE();
 	
 };

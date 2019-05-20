@@ -31,13 +31,13 @@
 #include <base_struct.h>
 #include <page_info.h>
 #include <title_block.h>
+#include <ws_draw_item.h>
 
 class EDA_DRAW_PANEL;
 
 
 /**
  * Class PL_EDITOR_LAYOUT
- * holds list of GERBER_DRAW_ITEM currently loaded.
  */
 class PL_EDITOR_LAYOUT
 {
@@ -45,6 +45,8 @@ private:
     EDA_RECT                m_BoundingBox;
     PAGE_INFO               m_paper;
     TITLE_BLOCK             m_titles;
+
+    WS_DRAW_ITEM_LIST       m_drawItemList;
 
 public:
     PL_EDITOR_LAYOUT();
@@ -56,7 +58,7 @@ public:
         m_paper = aPageSettings;
     }
 
-    const wxPoint&      GetAuxOrigin() const
+    const wxPoint& GetAuxOrigin() const
     {
         static wxPoint zero( 0, 0 );
         return zero;
@@ -65,6 +67,11 @@ public:
     const TITLE_BLOCK& GetTitleBlock() const
     {
         return m_titles;
+    }
+
+    WS_DRAW_ITEM_LIST& GetDrawItems()
+    {
+        return m_drawItemList;
     }
 
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock )
@@ -90,7 +97,6 @@ public:
 
 #if defined(DEBUG)
     void    Show( int nestLevel, std::ostream& os ) const;
-
 #endif
 };
 

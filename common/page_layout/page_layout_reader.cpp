@@ -31,8 +31,8 @@
 
 #include <fctsys.h>
 #include <base_struct.h>
-#include <worksheet.h>
-#include <worksheet_shape_builder.h>
+#include <worksheet_painter.h>
+#include <ws_draw_item.h>
 #include <worksheet_dataitem.h>
 #include <page_layout_reader_lexer.h>
 
@@ -115,16 +115,11 @@ PAGE_LAYOUT_READER_PARSER::PAGE_LAYOUT_READER_PARSER( const char* aLine, const w
 
 void PAGE_LAYOUT_READER_PARSER::Parse( WORKSHEET_LAYOUT* aLayout )
 {
-    T token;
-    WORKSHEET_DATAITEM * item;
+    WORKSHEET_DATAITEM* item;
+    LOCALE_IO           toggle;
 
-    LOCALE_IO toggle;
-
-    while( ( token = NextTok() ) != T_RIGHT )
+    for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
-        if( token == T_EOF)
-           break;
-
         if( token == T_LEFT )
             token = NextTok();
 
@@ -177,12 +172,8 @@ void PAGE_LAYOUT_READER_PARSER::Parse( WORKSHEET_LAYOUT* aLayout )
 
 void PAGE_LAYOUT_READER_PARSER::parseSetup( WORKSHEET_LAYOUT* aLayout )
 {
-    T token;
-    while( ( token = NextTok() ) != T_RIGHT )
+    for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
-        if( token == T_EOF)
-           break;
-
         switch( token )
         {
         case T_LEFT:
@@ -233,13 +224,8 @@ void PAGE_LAYOUT_READER_PARSER::parseSetup( WORKSHEET_LAYOUT* aLayout )
 
 void PAGE_LAYOUT_READER_PARSER::parsePolygon( WORKSHEET_DATAITEM_POLYPOLYGON * aItem )
 {
-    T token;
-
-    while( ( token = NextTok() ) != T_RIGHT )
+    for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
-        if( token == T_EOF)
-           break;
-
         if( token == T_LEFT )
             token = NextTok();
 
@@ -307,13 +293,9 @@ void PAGE_LAYOUT_READER_PARSER::parsePolygon( WORKSHEET_DATAITEM_POLYPOLYGON * a
 void PAGE_LAYOUT_READER_PARSER::parsePolyOutline( WORKSHEET_DATAITEM_POLYPOLYGON * aItem )
 {
     DPOINT corner;
-    T token;
 
-    while( ( token = NextTok() ) != T_RIGHT )
+    for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
-        if( token == T_EOF)
-           break;
-
         if( token == T_LEFT )
             token = NextTok();
 
@@ -336,15 +318,11 @@ void PAGE_LAYOUT_READER_PARSER::parsePolyOutline( WORKSHEET_DATAITEM_POLYPOLYGON
 
 void PAGE_LAYOUT_READER_PARSER::parseBitmap( WORKSHEET_DATAITEM_BITMAP * aItem )
 {
-    T token;
     BITMAP_BASE* image = new BITMAP_BASE;
     aItem->m_ImageBitmap = image;
 
-    while( ( token = NextTok() ) != T_RIGHT )
+    for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
-        if( token == T_EOF)
-           break;
-
         if( token == T_LEFT )
             token = NextTok();
 
@@ -403,28 +381,24 @@ void PAGE_LAYOUT_READER_PARSER::parseBitmap( WORKSHEET_DATAITEM_BITMAP * aItem )
 void PAGE_LAYOUT_READER_PARSER::readPngdata( WORKSHEET_DATAITEM_BITMAP * aItem )
 {
     std::string tmp;
-    T token;
 
-    while( ( token = NextTok() ) != T_RIGHT )
+    for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
-        if( token == T_EOF)
-           break;
-
         if( token == T_LEFT )
             token = NextTok();
 
         switch( token )
         {
-            case T_data:
-                NeedSYMBOLorNUMBER();
-                tmp += CurStr();
-                tmp += "\n";
-                NeedRIGHT();
-                break;
+        case T_data:
+            NeedSYMBOLorNUMBER();
+            tmp += CurStr();
+            tmp += "\n";
+            NeedRIGHT();
+            break;
 
-            default:
-                Unexpected( CurText() );
-                break;
+        default:
+            Unexpected( CurText() );
+            break;
         }
     }
 
@@ -434,34 +408,19 @@ void PAGE_LAYOUT_READER_PARSER::readPngdata( WORKSHEET_DATAITEM_BITMAP * aItem )
     STRING_LINE_READER str_reader( tmp, wxT("Png kicad_wks data") );
 
     if( ! aItem->m_ImageBitmap->LoadData( str_reader, msg ) )
-    {
         wxLogMessage(msg);
-    }
 }
 
 
 void PAGE_LAYOUT_READER_PARSER::readOption( WORKSHEET_DATAITEM * aItem )
 {
-    T token;
-
-    while( ( token = NextTok() ) != T_RIGHT )
+    for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
-        if( token == T_EOF)
-           break;
-
         switch( token )
         {
-        case T_page1only:
-            aItem->SetPage1Option( 1 );
-            break;
-
-        case T_notonpage1:
-            aItem->SetPage1Option( -1 );
-            break;
-
-        default:
-            Unexpected( CurText() );
-            break;
+        case T_page1only:  aItem->SetPage1Option( FIRST_PAGE_ONLY );  break;
+        case T_notonpage1: aItem->SetPage1Option( SUBSEQUENT_PAGES ); break;
+        default:           Unexpected( CurText() ); break;
         }
     }
 }
@@ -469,13 +428,8 @@ void PAGE_LAYOUT_READER_PARSER::readOption( WORKSHEET_DATAITEM * aItem )
 
 void PAGE_LAYOUT_READER_PARSER::parseGraphic( WORKSHEET_DATAITEM * aItem )
 {
-    T token;
-
-    while( ( token = NextTok() ) != T_RIGHT )
+    for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
-        if( token == T_EOF)
-           break;
-
         if( token == T_LEFT )
             token = NextTok();
         else
@@ -544,13 +498,8 @@ void PAGE_LAYOUT_READER_PARSER::parseGraphic( WORKSHEET_DATAITEM * aItem )
 
 void PAGE_LAYOUT_READER_PARSER::parseText( WORKSHEET_DATAITEM_TEXT* aItem )
 {
-    T token;
-
-    while( ( token = NextTok() ) != T_RIGHT )
+    for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
-        if( token == T_EOF)
-           break;
-
         if( token == T_LEFT )
             token = NextTok();
 
@@ -607,22 +556,19 @@ void PAGE_LAYOUT_READER_PARSER::parseText( WORKSHEET_DATAITEM_TEXT* aItem )
             break;
 
         case T_font:
-            while( ( token = NextTok() ) != T_RIGHT )
+            for( token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
             {
-                if( token == T_EOF)
-                   break;
-
                 switch( token )
                 {
                 case T_LEFT:
                     break;
 
                 case T_bold:
-                    aItem->SetBold( true );
+                    aItem->m_Bold = true;
                     break;
 
                 case T_italic:
-                    aItem->SetItalic( true );
+                    aItem->m_Italic = true;
                     break;
 
                 case T_size:
@@ -644,11 +590,8 @@ void PAGE_LAYOUT_READER_PARSER::parseText( WORKSHEET_DATAITEM_TEXT* aItem )
             break;
 
         case T_justify:
-            while( ( token = NextTok() ) != T_RIGHT )
+            for( token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
             {
-                if( token == T_EOF)
-                   break;
-
                 switch( token )
                 {
                 case T_center:
@@ -694,34 +637,18 @@ void PAGE_LAYOUT_READER_PARSER::parseText( WORKSHEET_DATAITEM_TEXT* aItem )
 // parse an expression like " 25 1 ltcorner)"
 void PAGE_LAYOUT_READER_PARSER::parseCoordinate( POINT_COORD& aCoord)
 {
-    T token;
-
     aCoord.m_Pos.x = parseDouble();
     aCoord.m_Pos.y = parseDouble();
 
-    while( ( token = NextTok() ) != T_RIGHT )
+    for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
         switch( token )
         {
-            case T_ltcorner:
-                aCoord.m_Anchor = LT_CORNER;   // left top corner
-                break;
-
-            case T_lbcorner:
-                aCoord.m_Anchor = LB_CORNER;      // left bottom corner
-                break;
-
-            case T_rbcorner:
-                aCoord.m_Anchor = RB_CORNER;      // right bottom corner
-                break;
-
-            case T_rtcorner:
-                aCoord.m_Anchor = RT_CORNER;      // right top corner
-                break;
-
-            default:
-                Unexpected( CurText() );
-                break;
+        case T_ltcorner: aCoord.m_Anchor = LT_CORNER; break;
+        case T_lbcorner: aCoord.m_Anchor = LB_CORNER; break;
+        case T_rbcorner: aCoord.m_Anchor = RB_CORNER; break;
+        case T_rtcorner: aCoord.m_Anchor = RT_CORNER; break;
+        default:         Unexpected( CurText() ); break;
         }
     }
 }

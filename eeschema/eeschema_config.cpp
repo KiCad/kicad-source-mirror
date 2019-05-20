@@ -37,7 +37,7 @@
 #include <lib_edit_frame.h>
 #include <eeschema_config.h>
 #include <ee_hotkeys.h>
-#include <worksheet_shape_builder.h>
+#include <ws_draw_item.h>
 #include <class_library.h>
 #include <symbol_lib_table.h>
 #include <dialog_erc.h>

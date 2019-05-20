@@ -738,17 +738,6 @@ void FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList( wxCommandEvent& event )
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
-{
-}
-
-
-bool FOOTPRINT_VIEWER_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
-{
-    return true;
-}
-
-
 void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
 {
     wxString title;

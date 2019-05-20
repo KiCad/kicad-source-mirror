@@ -23,36 +23,40 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pl_editor_frame.cpp
- */
-
 #include <fctsys.h>
 #include <kiface_i.h>
-#include <class_drawpanel.h>
-#include <build_version.h>
-#include <macros.h>
 #include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
 #include <eda_dockart.h>
-
 #include <pl_editor_frame.h>
 #include <pl_editor_id.h>
+#include <pl_draw_panel_gal.cpp>
 #include <hotkeys.h>
 #include <pl_editor_screen.h>
-#include <worksheet_shape_builder.h>
+#include <ws_draw_item.h>
 #include <worksheet_dataitem.h>
-#include <design_tree_frame.h>
 #include <properties_frame.h>
-
+#include <view/view.h>
 #include <wildcards_and_files_ext.h>
 #include <confirm.h>
+#include <tool/selection.h>
+#include <tool/tool_dispatcher.h>
+#include <tool/tool_manager.h>
+#include <tool/common_tools.h>
+#include <tool/zoom_tool.h>
+#include <tools/pl_actions.h>
+#include <tools/pl_selection_tool.h>
+#include <tools/pl_drawing_tools.h>
+#include <tools/pl_edit_tool.h>
+#include <tools/pl_point_editor.h>
+#include <tools/pl_picker_tool.h>
 
 
 PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
-    EDA_DRAW_FRAME( aKiway, aParent, FRAME_PL_EDITOR, wxT( "PlEditorFrame" ),
-            wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, PL_EDITOR_FRAME_NAME )
+        EDA_DRAW_FRAME( aKiway, aParent, FRAME_PL_EDITOR, wxT( "PlEditorFrame" ),
+                        wxDefaultPosition, wxDefaultSize,
+                        KICAD_DEFAULT_DRAWFRAME_STYLE, PL_EDITOR_FRAME_NAME )
 {
     m_UserUnits = MILLIMETRES;
     m_zoomLevelCoeff = 290.0;   // Adjusted to roughly displays zoom level = 1
@@ -63,35 +67,47 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_showAxis = false;                 // true to show X and Y axis on screen
     m_showGridAxis = true;
     m_showBorderAndTitleBlock   = true; // true for reference drawings.
-    m_hotkeysDescrList   = PlEditorHotkeysDescr;
+    m_hotkeysDescrList = PlEditorHotkeysDescr;
     m_originSelectChoice = 0;
     SetDrawBgColor( WHITE );            // default value, user option (WHITE/BLACK)
+    WORKSHEET_DATAITEM::m_SpecialMode = true;
     SetShowPageLimits( true );
     m_AboutTitle = "PlEditor";
 
-    m_designTreeWidth = 150;
     m_propertiesFrameWidth = 200;
-
-    if( m_canvas )
-        m_canvas->SetEnableBlockCommands( true );
 
     // Give an icon
     wxIcon icon;
     icon.CopyFromBitmap( KiBitmap( icon_pagelayout_editor_xpm ) );
     SetIcon( icon );
-    wxSize pageSizeIU = GetPageLayout().GetPageSettings().GetSizeIU();
-    SetScreen( new PL_EDITOR_SCREEN( pageSizeIU ) );
+
+    // Create GAL canvas
+#ifdef __WXMAC__
+    // Cairo renderer doesn't handle Retina displays
+    m_canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+#else
+    m_canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+#endif
+
+    auto* drawPanel = new PL_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                             GetGalDisplayOptions(), m_canvasType );
+    SetGalCanvas( drawPanel );
 
     LoadSettings( config() );
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
-    if( ! GetScreen()->GridExists( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 ) )
+    wxSize pageSizeIU = GetPageLayout().GetPageSettings().GetSizeIU();
+    SetScreen( new PL_EDITOR_SCREEN( pageSizeIU ) );
+
+    if( !GetScreen()->GridExists( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 ) )
         m_LastGridSizeId = ID_POPUP_GRID_LEVEL_1MM - ID_POPUP_GRID_LEVEL_1000;
 
     GetScreen()->SetGrid( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 );
 
+    setupTools();
     ReCreateMenuBar();
     ReCreateHToolbar();
+    ReCreateVToolbar();
 
     wxWindow* stsbar = GetStatusBar();
     int dims[] = {
@@ -124,19 +140,22 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.SetArtProvider( new EDA_DOCKART( this ) );
 
     m_propertiesPagelayout = new PROPERTIES_FRAME( this );
-    m_treePagelayout = new DESIGN_TREE_FRAME( this );
 
+    // Horizontal items; layers 4 - 6
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
-    m_auimgr.AddPane( m_treePagelayout, EDA_PANE().Palette().Name( "Design" ).Left().Layer(1)
-                      .Caption( _( "Design" ) ).MinSize( m_treePagelayout->GetMinSize() )
-                      .BestSize( m_designTreeWidth, -1 ) );
-    m_auimgr.AddPane( m_propertiesPagelayout, EDA_PANE().Palette().Name( "Props" ).Right().Layer(1)
+    // Vertical items; layers 1 - 3
+    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(1) );
+
+    m_auimgr.AddPane( m_propertiesPagelayout, EDA_PANE().Palette().Name( "Props" ).Right().Layer(2)
                       .Caption( _( "Properties" ) ).MinSize( m_propertiesPagelayout->GetMinSize() )
                       .BestSize( m_propertiesFrameWidth, -1 ) );
 
     m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrameGal" ).Center().Hide() );
+
+    UseGalCanvas( true );
 
     m_auimgr.Update();
 
@@ -152,8 +171,29 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 }
 
 
-PL_EDITOR_FRAME::~PL_EDITOR_FRAME()
+void PL_EDITOR_FRAME::setupTools()
 {
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( nullptr, GetGalCanvas()->GetView(),
+                                   GetGalCanvas()->GetViewControls(), this );
+    m_actions = new PL_ACTIONS();
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+
+    GetGalCanvas()->SetEventDispatcher( m_toolDispatcher );
+
+    // Register tools
+    m_toolManager->RegisterTool( new COMMON_TOOLS );
+    m_toolManager->RegisterTool( new ZOOM_TOOL );
+    m_toolManager->RegisterTool( new PL_SELECTION_TOOL );
+    m_toolManager->RegisterTool( new PL_DRAWING_TOOLS );
+    m_toolManager->RegisterTool( new PL_EDIT_TOOL );
+    m_toolManager->RegisterTool( new PL_POINT_EDITOR );
+    m_toolManager->RegisterTool( new PL_PICKER_TOOL );
+    m_toolManager->InitTools();
+
+    // Run the selection tool, it is supposed to be always active
+    m_toolManager->InvokeTool( "plEditor.InteractiveSelection" );
 }
 
 
@@ -163,12 +203,7 @@ bool PL_EDITOR_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, i
 
     if( !LoadPageLayoutDescrFile( fn ) )
     {
-        wxString msg = wxString::Format(
-            _( "Error when loading file \"%s\"" ),
-            GetChars( fn )
-            );
-
-        wxMessageBox( msg );
+        wxMessageBox( wxString::Format( _( "Error when loading file \"%s\"" ), fn ) );
         return false;
     }
     else
@@ -205,11 +240,18 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
 }
 
 
+const BOX2I PL_EDITOR_FRAME::GetDocumentExtents() const
+{
+    BOX2I rv( VECTOR2I( 0, 0 ), GetPageLayout().GetPageSettings().GetSizeIU() );
+    return rv;
+}
+
+
 double PL_EDITOR_FRAME::BestZoom()
 {
     double  sizeX = (double) GetPageLayout().GetPageSettings().GetWidthIU();
     double  sizeY = (double) GetPageLayout().GetPageSettings().GetHeightIU();
-    wxPoint centre( sizeX / 2, sizeY / 2 );
+    wxPoint centre( KiROUND( sizeX / 2 ), KiROUND( sizeY / 2 ) );
 
     // The sheet boundary already affords us some margin, so add only an
     // additional 5%.
@@ -219,7 +261,6 @@ double PL_EDITOR_FRAME::BestZoom()
 }
 
 
-static const wxChar designTreeWidthKey[] = wxT( "DesignTreeWidth" );
 static const wxChar propertiesFrameWidthKey[] = wxT( "PropertiesFrameWidth" );
 static const wxChar cornerOriginChoiceKey[] = wxT( "CornerOriginChoice" );
 static const wxChar blackBgColorKey[] = wxT( "BlackBgColor" );
@@ -229,7 +270,6 @@ void PL_EDITOR_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    aCfg->Read( designTreeWidthKey, &m_designTreeWidth, 100);
     aCfg->Read( propertiesFrameWidthKey, &m_propertiesFrameWidth, 150);
     aCfg->Read( cornerOriginChoiceKey, &m_originSelectChoice );
     bool tmp;
@@ -242,10 +282,8 @@ void PL_EDITOR_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::SaveSettings( aCfg );
 
-    m_designTreeWidth = m_treePagelayout->GetSize().x;
     m_propertiesFrameWidth = m_propertiesPagelayout->GetSize().x;
 
-    aCfg->Write( designTreeWidthKey, m_designTreeWidth);
     aCfg->Write( propertiesFrameWidthKey, m_propertiesFrameWidth);
     aCfg->Write( cornerOriginChoiceKey, m_originSelectChoice );
     aCfg->Write( blackBgColorKey, GetDrawBgColor() == BLACK );
@@ -377,29 +415,18 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
 
     switch( GetUserUnits() )
     {
-    case INCHES:        // Should not be used in page layout editor
-        SetStatusText( _("inches"), 5 );
-        break;
-
-    case MILLIMETRES:
-        SetStatusText( _("mm"), 5 );
-        break;
-
-    case UNSCALED_UNITS:
-        SetStatusText( wxEmptyString, 5 );
-        break;
-
-    case DEGREES:
-        wxASSERT( false );
-        break;
+    case INCHES:         SetStatusText( _("inches"), 5 );   break;
+    case MILLIMETRES:    SetStatusText( _("mm"), 5 );       break;
+    case UNSCALED_UNITS: SetStatusText( wxEmptyString, 5 ); break;
+    case DEGREES:        wxASSERT( false );                 break;
     }
 
     wxString line;
 
     // Display page size
-    #define milsTomm (25.4/1000)
+    #define MILS_TO_MM (25.4/1000)
     DSIZE size = GetPageSettings().GetSizeMils();
-    size = size * milsTomm;
+    size = size * MILS_TO_MM;
     line.Printf( pagesizeformatter, size.x, size.y );
     SetStatusText( line, 0 );
 
@@ -424,8 +451,7 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
 }
 
 
-void PL_EDITOR_FRAME::PrintPage( wxDC* aDC, LSET aPrintMasklayer,
-                           bool aPrintMirrorMode, void * aData )
+void PL_EDITOR_FRAME::PrintPage( wxDC* aDC, LSET , bool , void *  )
 {
     GetScreen()-> m_ScreenNumber = GetPageNumberOption() ? 1 : 2;
     DrawWorkSheet( aDC, GetScreen(), 0, IU_PER_MILS, wxEmptyString );
@@ -434,7 +460,7 @@ void PL_EDITOR_FRAME::PrintPage( wxDC* aDC, LSET aPrintMasklayer,
 
 void PL_EDITOR_FRAME::RedrawActiveWindow( wxDC* aDC, bool aEraseBg )
 {
-
+    // JEY TODO: probably obsolete unless called for print....
     GetScreen()-> m_ScreenNumber = GetPageNumberOption() ? 1 : 2;
 
     if( aEraseBg )
@@ -442,26 +468,18 @@ void PL_EDITOR_FRAME::RedrawActiveWindow( wxDC* aDC, bool aEraseBg )
 
     m_canvas->DrawBackGround( aDC );
 
-    const WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-    WORKSHEET_DATAITEM* selecteditem = GetSelectedItem();
+    WS_DRAW_ITEM_LIST& drawList = GetPageLayout().GetDrawItems();
 
-    // the color to draw selected items
-    if( GetDrawBgColor() == WHITE )
-        WORKSHEET_DATAITEM::m_SelectedColor = DARKCYAN;
-    else
-        WORKSHEET_DATAITEM::m_SelectedColor = YELLOW;
+    drawList.SetDefaultPenSize( 0 );
+    drawList.SetMilsToIUfactor( IU_PER_MILS );
+    drawList.SetSheetNumber( GetScreen()->m_ScreenNumber );
+    drawList.SetSheetCount( GetScreen()->m_NumberOfScreens );
+    drawList.SetFileName( GetCurrFileName() );
+    drawList.SetSheetName( GetScreenDesc() );
+    drawList.SetSheetLayer( wxEmptyString );
 
-    for( unsigned ii = 0; ; ii++ )
-    {
-        WORKSHEET_DATAITEM* item = pglayout.GetItem( ii );
-
-        if( item == NULL )
-            break;
-
-        item->SetSelected( item == selecteditem );
-    }
-
-    DrawWorkSheet( aDC, GetScreen(), 0, IU_PER_MILS, GetCurrFileName() );
+    // Draw item list
+    drawList.Draw( m_canvas->GetClipBox(), aDC, DARKMAGENTA );
 
 #ifdef USE_WX_OVERLAY
     if( IsShown() )
@@ -482,52 +500,15 @@ void PL_EDITOR_FRAME::RedrawActiveWindow( wxDC* aDC, bool aEraseBg )
 }
 
 
-void PL_EDITOR_FRAME::RebuildDesignTree()
+void PL_EDITOR_FRAME::HardRedraw()
 {
-    const WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-    int rectId = 0;
-    int lineId = 0;
-    int textId = 0;
-    int polyId = 0;
-    int bitmapId = 0;
-
-    for( unsigned ii = 0; ii < pglayout.GetCount(); ii++ )
-    {
-        WORKSHEET_DATAITEM* item = pglayout.GetItem( ii );
-        switch( item->GetType() )
-        {
-            case WORKSHEET_DATAITEM::WS_TEXT:
-                item->m_Name = wxString::Format( wxT( "text%d:%s" ), ++textId,
-                                                 GetChars(item->GetClassName()) );
-                break;
-
-            case WORKSHEET_DATAITEM:: WS_SEGMENT:
-                item->m_Name = wxString::Format( wxT( "segm%d:%s" ), ++lineId,
-                                                 GetChars(item->GetClassName()) );
-                break;
-
-            case WORKSHEET_DATAITEM::WS_RECT:
-                item->m_Name = wxString::Format( wxT( "rect%d:%s" ), ++rectId,
-                                                 GetChars(item->GetClassName()) );
-                break;
-
-            case WORKSHEET_DATAITEM::WS_POLYPOLYGON:
-                item->m_Name = wxString::Format( wxT( "poly%d:%s" ), ++polyId,
-                                                 GetChars(item->GetClassName()) );
-                break;
-
-            case WORKSHEET_DATAITEM::WS_BITMAP:
-                item->m_Name = wxString::Format( wxT( "bm%d:%s" ), ++bitmapId,
-                                                 GetChars(item->GetClassName()) );
-                break;
-        }
-    }
-
-    m_treePagelayout->ReCreateDesignTree();
+    static_cast<PL_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayWorksheet();
+    m_propertiesPagelayout->CopyPrmsFromGeneralToPanel();
+    m_canvas->Refresh();
 }
 
 
-WORKSHEET_DATAITEM * PL_EDITOR_FRAME::AddPageLayoutItem( int aType, int aIdx )
+WORKSHEET_DATAITEM* PL_EDITOR_FRAME::AddPageLayoutItem( int aType )
 {
     WORKSHEET_DATAITEM * item = NULL;
 
@@ -552,8 +533,7 @@ WORKSHEET_DATAITEM * PL_EDITOR_FRAME::AddPageLayoutItem( int aType, int aIdx )
     case WORKSHEET_DATAITEM::WS_BITMAP:
     {
         wxFileDialog fileDlg( this, _( "Choose Image" ), wxEmptyString, wxEmptyString,
-                              _( "Image Files " ) + wxImage::GetImageExtWildcard(),
-                              wxFD_OPEN );
+                              _( "Image Files " ) + wxImage::GetImageExtWildcard(), wxFD_OPEN );
 
         if( fileDlg.ShowModal() != wxID_OK )
             return NULL;
@@ -562,7 +542,7 @@ WORKSHEET_DATAITEM * PL_EDITOR_FRAME::AddPageLayoutItem( int aType, int aIdx )
 
         if( !wxFileExists( fullFilename ) )
         {
-            wxMessageBox( _( "Couldn't load image from \"%s\"" ), GetChars( fullFilename ) );
+            wxMessageBox( _( "Couldn't load image from \"%s\"" ), fullFilename );
             break;
         }
 
@@ -570,8 +550,7 @@ WORKSHEET_DATAITEM * PL_EDITOR_FRAME::AddPageLayoutItem( int aType, int aIdx )
 
         if( !image->ReadImageFile( fullFilename ) )
         {
-            wxMessageBox( _( "Couldn't load image from \"%s\"" ),
-                          GetChars( fullFilename ) );
+            wxMessageBox( _( "Couldn't load image from \"%s\"" ), fullFilename );
             delete image;
             break;
         }
@@ -584,102 +563,8 @@ WORKSHEET_DATAITEM * PL_EDITOR_FRAME::AddPageLayoutItem( int aType, int aIdx )
     if( item == NULL )
         return NULL;
 
-    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-    pglayout.Insert( item, aIdx );
-    RebuildDesignTree();
-
-    return item;
-}
-
-
-WORKSHEET_DATAITEM * PL_EDITOR_FRAME::GetSelectedItem()
-{
-    WORKSHEET_DATAITEM* item =  m_treePagelayout->GetPageLayoutSelectedItem();
-    return item;
-}
-
-
-WORKSHEET_DATAITEM* PL_EDITOR_FRAME::Locate( wxDC* aDC, const wxPoint& aPosition )
-{
-    const PAGE_INFO&    pageInfo = GetPageSettings();
-    TITLE_BLOCK         t_block = GetTitleBlock();
-    COLOR4D             color = COLOR4D( RED );    // Needed, not used
-    PL_EDITOR_SCREEN*   screen = (PL_EDITOR_SCREEN*) GetScreen();
-
-    screen-> m_ScreenNumber = GetPageNumberOption() ? 1 : 2;
-
-    WS_DRAW_ITEM_LIST drawList;
-    drawList.SetPenSize( 0 );
-    drawList.SetMilsToIUfactor( IU_PER_MILS );
-    drawList.SetSheetNumber( screen->m_ScreenNumber );
-    drawList.SetSheetCount( screen->m_NumberOfScreens );
-    drawList.SetFileName( GetCurrFileName() );
-    // GetScreenDesc() returns a temporary string. Store it to avoid issues.
-    wxString descr = GetScreenDesc();
-    drawList.SetSheetName( descr );
-
-    drawList.BuildWorkSheetGraphicList( pageInfo, t_block, color, color );
-
-    // locate items.
-    // We do not use here the COLLECTOR classes in use in pcbnew and eeschema
-    // because the locate requirements are very basic.
-    std::vector <WS_DRAW_ITEM_BASE*> list;
-    drawList.Locate( aDC, list, aPosition );
-
-    if( list.size() == 0 )
-        return NULL;
-
-    WS_DRAW_ITEM_BASE* drawitem = list[0];
-
-    // Choose item in list if more than 1 item
-    if( list.size() > 1 )
-    {
-        wxArrayString choices;
-        wxString text;
-        wxPoint cursPos = GetCrossHairPosition();
-
-        for( unsigned ii = 0; ii < list.size(); ++ii )
-        {
-            drawitem = list[ii];
-            text = drawitem->GetParent()->m_Name;
-
-            if( (drawitem->m_Flags & (LOCATE_STARTPOINT|LOCATE_ENDPOINT))
-                == (LOCATE_STARTPOINT|LOCATE_ENDPOINT) )
-                text << wxT( " " ) << _( "(start or end point)" );
-            else
-            {
-                if( (drawitem->m_Flags & LOCATE_STARTPOINT) )
-                    text << wxT( " " ) << _( "(start point)" );
-
-                if( (drawitem->m_Flags & LOCATE_ENDPOINT) )
-                    text << wxT( " " ) << _( "(end point)" );
-            }
-
-            if( ! drawitem->GetParent()->m_Info.IsEmpty() )
-                text << wxT( " \"" ) << drawitem->GetParent()->m_Info << wxT( "\"" );
-
-            choices.Add( text );
-        }
-
-        int selection = wxGetSingleChoiceIndex ( wxEmptyString,
-                                                _( "Selection Clarification" ),
-                                                choices, this );
-        if( selection < 0 )
-            return NULL;
-
-        SetCrossHairPosition( cursPos );
-        m_canvas->MoveCursorToCrossHair();
-        drawitem = list[selection];
-    }
-
-    WORKSHEET_DATAITEM* item = drawitem->GetParent();
-    item->ClearFlags( LOCATE_STARTPOINT|LOCATE_ENDPOINT );
-
-    if( (drawitem->m_Flags & LOCATE_STARTPOINT) )
-        item->SetFlags( LOCATE_STARTPOINT );
-
-    if( (drawitem->m_Flags & LOCATE_ENDPOINT) )
-        item->SetFlags( LOCATE_ENDPOINT );
+    WORKSHEET_LAYOUT::GetTheInstance().Append( item );
+    item->SyncDrawItems( nullptr, GetGalCanvas()->GetView() );
 
     return item;
 }
@@ -689,9 +574,11 @@ void PL_EDITOR_FRAME::OnNewPageLayout()
 {
     GetScreen()->ClearUndoRedoList();
     GetScreen()->ClrModify();
+
+    static_cast<PL_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayWorksheet();
+
     m_propertiesPagelayout->CopyPrmsFromGeneralToPanel();
-    RebuildDesignTree();
-    Zoom_Automatique( false );
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     m_canvas->Refresh();
 }
 

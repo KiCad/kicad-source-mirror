@@ -22,12 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file lib_arc.h
- */
-
-#ifndef _LIB_ARC_H_
-#define _LIB_ARC_H_
+#ifndef LIB_ARC_H
+#define LIB_ARC_H
 
 #include <lib_draw_item.h>
 
@@ -89,10 +85,10 @@ public:
 
     int GetPenSize() const override;
 
-    void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint ) override;
+    void BeginEdit( const wxPoint aStartPoint ) override;
     void CalcEdit( const wxPoint& aPosition ) override;
     bool ContinueEdit( const wxPoint aNextPoint ) override;
-    void EndEdit( const wxPoint& aPosition ) override;
+    void EndEdit() override;
 
     void Offset( const wxPoint& aOffset ) override;
 
@@ -104,7 +100,6 @@ public:
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
     void MirrorVertical( const wxPoint& aCenter ) override;
-
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
@@ -155,4 +150,4 @@ private:
 };
 
 
-#endif    // _LIB_ARC_H_
+#endif    // LIB_ARC_H

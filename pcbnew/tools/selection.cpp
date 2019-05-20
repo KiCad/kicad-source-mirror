@@ -123,12 +123,6 @@ EDA_ITEM* SELECTION::GetTopLeftItem( bool onlyModules ) const
 }
 
 
-EDA_ITEM* SELECTION::GetTopLeftModule() const
-{
-    return GetTopLeftItem( true );
-}
-
-
 const BOX2I SELECTION::ViewBBox() const
 {
     BOX2I r;

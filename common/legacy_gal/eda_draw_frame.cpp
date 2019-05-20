@@ -45,7 +45,7 @@
 #include <tool/action_menu.h>
 #include <tool/actions.h>
 #include <wx/clipbrd.h>
-#include <worksheet_shape_builder.h>
+#include <ws_draw_item.h>
 #include <page_info.h>
 #include <title_block.h>
 #include <advanced_config.h>
@@ -728,6 +728,7 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     }
 
     galCanvas->SetEvtHandlerEnabled( aEnable );
+    galCanvas->StartDrawing();
 
     // Reset current tool on switch();
     SetNoToolSelected();
@@ -1030,12 +1031,6 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 }
 
 
-void EDA_DRAW_FRAME::Window_Zoom( EDA_RECT& Rect )
-{
-    wxFAIL_MSG( "Obsolete!  Should go through COMMON_TOOLS." );
-}
-
-
 void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
 {
     wxFAIL_MSG( "Obsolete!  Should go through COMMON_TOOLS." );
@@ -1196,19 +1191,22 @@ bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
 
 static const wxString productName = wxT( "KiCad E.D.A.  " );
 
-void DrawPageLayout( wxDC* aDC, EDA_RECT* aClipBox,
+void DrawPageLayout( wxDC*            aDC,
+                     EDA_RECT*        aClipBox,
                      const PAGE_INFO& aPageInfo,
-                     const wxString &aFullSheetName,
-                     const wxString& aFileName,
-                     TITLE_BLOCK& aTitleBlock,
-                     int aSheetCount, int aSheetNumber,
-                     int aPenWidth, double aScalar,
-                     COLOR4D aColor, COLOR4D aAltColor,
-                     const wxString& aSheetLayer )
+                     const wxString&  aFullSheetName,
+                     const wxString&  aFileName,
+                     TITLE_BLOCK&     aTitleBlock,
+                     int              aSheetCount,
+                     int              aSheetNumber,
+                     int              aPenWidth,
+                     double           aScalar,
+                     COLOR4D          aColor,
+                     const wxString&  aSheetLayer )
 {
     WS_DRAW_ITEM_LIST drawList;
 
-    drawList.SetPenSize( aPenWidth );
+    drawList.SetDefaultPenSize( aPenWidth );
     drawList.SetMilsToIUfactor( aScalar );
     drawList.SetSheetNumber( aSheetNumber );
     drawList.SetSheetCount( aSheetCount );
@@ -1216,10 +1214,10 @@ void DrawPageLayout( wxDC* aDC, EDA_RECT* aClipBox,
     drawList.SetSheetName( aFullSheetName );
     drawList.SetSheetLayer( aSheetLayer );
 
-    drawList.BuildWorkSheetGraphicList( aPageInfo, aTitleBlock, aColor, aAltColor );
+    drawList.BuildWorkSheetGraphicList( aPageInfo, aTitleBlock );
 
     // Draw item list
-    drawList.Draw( aClipBox, aDC );
+    drawList.Draw( aClipBox, aDC, aColor );
 }
 
 
@@ -1254,7 +1252,7 @@ void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWi
 
     DrawPageLayout( aDC, m_canvas->GetClipBox(), pageInfo, GetScreenDesc(), aFilename, t_block,
                     aScreen->m_NumberOfScreens, aScreen->m_ScreenNumber, aLineWidth, aScalar,
-                    color, color, aSheetLayer );
+                    color, aSheetLayer );
 
     if( aScreen->m_IsPrinting && origin.y > 0 )
     {

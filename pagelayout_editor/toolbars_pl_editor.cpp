@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2013 CERN
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
@@ -19,21 +19,17 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @file toolbars_pl_editor.cpp
- * @brief Build tool bars
- */
-
 #include <fctsys.h>
 
 #include <common.h>
 #include <macros.h>
 #include <bitmaps.h>
+#include <tools/pl_actions.h>
 #include <pl_editor_id.h>
 #include <pl_editor_frame.h>
 #include <hotkeys.h>
 
-void PL_EDITOR_FRAME::ReCreateHToolbar( void )
+void PL_EDITOR_FRAME::ReCreateHToolbar()
 {
     if( m_mainToolBar )
         m_mainToolBar->Clear();
@@ -61,38 +57,15 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
                             _( "Print page layout" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( wxID_DELETE, wxEmptyString, KiScaledBitmap( delete_xpm, this ),
-                            _( "Delete selected item" ) );
+    m_mainToolBar->Add( ACTIONS::undo );
+    m_mainToolBar->Add( ACTIONS::redo );
 
     KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString,
-                            KiScaledBitmap( undo_xpm, this ), _( "Undo" ) );
-
-    m_mainToolBar->AddTool( wxID_REDO, wxEmptyString,
-                            KiScaledBitmap( redo_xpm, this ), _( "Redo" ) );
-
-    // Standard Zoom controls:
-    // JEY TODO: move to COMMON_TOOLS....
-    m_mainToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "Redraw view" ), PlEditorHotkeysDescr, HK_ZOOM_REDRAW,  IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
-                            KiScaledBitmap( zoom_redraw_xpm, this ), msg );
-
-    msg = AddHotkeyName( _( "Zoom in" ), PlEditorHotkeysDescr, HK_ZOOM_IN,  IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiScaledBitmap( zoom_in_xpm, this ), msg );
-
-    msg = AddHotkeyName( _( "Zoom out" ), PlEditorHotkeysDescr, HK_ZOOM_OUT,  IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiScaledBitmap( zoom_out_xpm, this ), msg );
-
-    msg = AddHotkeyName( _( "Zoom to fit page" ), PlEditorHotkeysDescr, HK_ZOOM_AUTO,  IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
-                            KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
-
-    // Zoom-to-selection
-    m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiScaledBitmap( zoom_area_xpm, this ),
-                            _( "Zoom to selection" ), wxITEM_CHECK );
+    m_mainToolBar->Add( ACTIONS::zoomRedraw );
+    m_mainToolBar->Add( ACTIONS::zoomInCenter );
+    m_mainToolBar->Add( ACTIONS::zoomOutCenter );
+    m_mainToolBar->Add( ACTIONS::zoomFitScreen );
+    m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE );
 
     // Display mode switch
     KiScaledSeparator( m_mainToolBar, this );
@@ -119,8 +92,7 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
     };
 
     m_originSelectBox = new wxChoice( m_mainToolBar, ID_SELECT_COORDINATE_ORIGIN,
-                                      wxDefaultPosition, wxDefaultSize,
-                                      5, choiceList );
+                                      wxDefaultPosition, wxDefaultSize, 5, choiceList );
     m_mainToolBar->AddControl( m_originSelectBox );
     m_originSelectBox->SetToolTip( _("Origin of coordinates displayed to the status bar") );
 
@@ -140,8 +112,7 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
     };
 
     m_pageSelectBox = new wxChoice( m_mainToolBar, ID_SELECT_PAGE_NUMBER,
-                                    wxDefaultPosition, wxDefaultSize,
-                                    2, pageList );
+                                    wxDefaultPosition, wxDefaultSize, 2, pageList );
     m_mainToolBar->AddControl( m_pageSelectBox );
     m_pageSelectBox->SetToolTip( _("Simulate page 1 or other pages to show how items\n"\
                                  "which are not on all page are displayed") );
@@ -153,7 +124,7 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
 }
 
 
-void PL_EDITOR_FRAME::ReCreateVToolbar( void )
+void PL_EDITOR_FRAME::ReCreateVToolbar()
 {
     if( m_drawToolBar )
         m_drawToolBar->Clear();
@@ -161,15 +132,38 @@ void PL_EDITOR_FRAME::ReCreateVToolbar( void )
         m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    // Set up toolbar
-    m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString,
-                            KiScaledBitmap( cursor_xpm, this ) );
+    m_drawToolBar->Add( PL_ACTIONS::selectionTool,     ACTION_TOOLBAR::TOGGLE );
+
     KiScaledSeparator( m_drawToolBar, this );
+    m_drawToolBar->Add( PL_ACTIONS::drawLine,          ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PL_ACTIONS::drawRectangle,     ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PL_ACTIONS::placeText,         ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PL_ACTIONS::placeImage,        ACTION_TOOLBAR::TOGGLE );
+
+    KiScaledSeparator( m_drawToolBar, this );
+    m_drawToolBar->Add( PL_ACTIONS::deleteItemCursor,  ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->Realize();
 }
 
 
-void PL_EDITOR_FRAME::ReCreateOptToolbar( void )
+void PL_EDITOR_FRAME::ReCreateOptToolbar()
 {
+}
+
+
+void PL_EDITOR_FRAME::SyncMenusAndToolbars()
+{
+    m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
+    m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
+    m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
+    m_mainToolBar->Refresh();
+
+    m_drawToolBar->Toggle( PL_ACTIONS::selectionTool,    GetToolId() == ID_NO_TOOL_SELECTED );
+    m_drawToolBar->Toggle( PL_ACTIONS::drawLine,         GetToolId() == ID_PL_LINE_TOOL );
+    m_drawToolBar->Toggle( PL_ACTIONS::drawRectangle,    GetToolId() == ID_PL_RECTANGLE_TOOL );
+    m_drawToolBar->Toggle( PL_ACTIONS::placeText,        GetToolId() == ID_PL_TEXT_TOOL );
+    m_drawToolBar->Toggle( PL_ACTIONS::placeImage,       GetToolId() == ID_PL_IMAGE_TOOL );
+    m_drawToolBar->Toggle( PL_ACTIONS::deleteItemCursor, GetToolId() == ID_PL_DELETE_TOOL );
+    m_drawToolBar->Refresh();
 }

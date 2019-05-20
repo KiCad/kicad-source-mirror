@@ -22,12 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file lib_bezier.h
- */
-
-#ifndef _LIB_BEZIER_H_
-#define _LIB_BEZIER_H_
+#ifndef LIB_BEZIER_H
+#define LIB_BEZIER_H
 
 #include <lib_draw_item.h>
 
@@ -73,10 +69,7 @@ public:
      */
     unsigned GetCornerCount() const { return m_PolyPoints.size(); }
 
-    const std::vector< wxPoint >& GetPoints() const
-    {
-        return m_BezierPoints;
-    }
+    const std::vector< wxPoint >& GetPoints() const { return m_BezierPoints; }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
@@ -91,7 +84,6 @@ public:
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
     void MirrorVertical( const wxPoint& aCenter ) override;
-
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
@@ -119,4 +111,4 @@ private:
 };
 
 
-#endif     // _LIB_BEZIER_H_
+#endif     // LIB_BEZIER_H

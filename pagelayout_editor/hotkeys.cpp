@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2016-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -23,10 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pagelayout_editor/hotkeys.cpp
- */
-
 #include <fctsys.h>
 #include <common.h>
 #include <kicad_device_context.h>
@@ -34,7 +30,6 @@
 
 #include <class_drawpanel.h>
 #include <pl_editor_frame.h>
-#include <design_tree_frame.h>
 #include <worksheet_dataitem.h>
 #include <hotkeys.h>
 #include <pl_editor_id.h>
@@ -70,24 +65,17 @@ static EDA_HOTKEY HkMouseLeftClick( _HKI( "Mouse Left Click" ), HK_LEFT_CLICK, W
 static EDA_HOTKEY HkMouseLeftDClick( _HKI( "Mouse Left Double Click" ), HK_LEFT_DCLICK,
                                      WXK_END, 0 );
 
-static EDA_HOTKEY    HkResetLocalCoord( _HKI( "Reset Local Coordinates" ),
-                                        HK_RESET_LOCAL_COORD, ' ' );
-static EDA_HOTKEY    HkZoomAuto( _HKI( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME, ID_ZOOM_PAGE );
-static EDA_HOTKEY    HkZoomCenter( _HKI( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4,
-                                   ID_POPUP_ZOOM_CENTER );
-static EDA_HOTKEY    HkZoomRedraw( _HKI( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3, ID_ZOOM_REDRAW );
-static EDA_HOTKEY    HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2, ID_KEY_ZOOM_OUT );
-static EDA_HOTKEY    HkZoomIn( _HKI( "Zoom In" ), HK_ZOOM_IN, WXK_F1, ID_KEY_ZOOM_IN );
-static EDA_HOTKEY    HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTION,
-                                      GR_KB_CTRL + WXK_F5, ID_ZOOM_SELECTION );
-static EDA_HOTKEY    HkHelp( _HKI( "List Hotkeys" ), HK_HELP, GR_KB_CTRL + WXK_F1 );
-static EDA_HOTKEY    HkMoveItem( _HKI( "Move Item" ), HK_MOVE_ITEM, 'M', ID_POPUP_ITEM_MOVE );
-static EDA_HOTKEY    HkPlaceItem( _HKI( "Place Item" ), HK_PLACE_ITEM, 'P', ID_POPUP_ITEM_PLACE );
-static EDA_HOTKEY    HkMoveStartPoint( _HKI( "Move Start Point" ), HK_MOVE_START_POINT, 'S',
-                                       ID_POPUP_ITEM_MOVE_START_POINT );
-static EDA_HOTKEY    HkMoveEndPoint( _HKI( "Move End Point" ), HK_MOVE_END_POINT, 'E',
-                                     ID_POPUP_ITEM_MOVE_END_POINT );
-static EDA_HOTKEY    HkDeleteItem( _HKI( "Delete Item" ), HK_DELETE_ITEM, WXK_DELETE, (int) wxID_DELETE );
+static EDA_HOTKEY HkResetLocalCoord( _HKI( "Reset Local Coordinates" ), HK_RESET_LOCAL_COORD, ' ' );
+static EDA_HOTKEY HkZoomAuto( _HKI( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
+static EDA_HOTKEY HkZoomCenter( _HKI( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
+static EDA_HOTKEY HkZoomRedraw( _HKI( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
+static EDA_HOTKEY HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
+static EDA_HOTKEY HkZoomIn( _HKI( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
+static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTION,
+                                   GR_KB_CTRL + WXK_F5 );
+static EDA_HOTKEY HkHelp( _HKI( "List Hotkeys" ), HK_HELP, GR_KB_CTRL + WXK_F1 );
+static EDA_HOTKEY HkMoveItem( _HKI( "Move Item" ), HK_MOVE, 'M' );
+static EDA_HOTKEY HkDeleteItem( _HKI( "Delete Item" ), HK_DELETE_ITEM, WXK_DELETE );
 
 // Common: hotkeys_basic.h
 static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
@@ -115,9 +103,7 @@ EDA_HOTKEY* s_Common_Hotkey_List[] =
 
 EDA_HOTKEY* s_PlEditor_Hotkey_List[] =
 {
-    &HkMoveItem,    &HkMoveStartPoint,
-    &HkMoveEndPoint,
-    &HkPlaceItem,
+    &HkMoveItem,
     &HkDeleteItem,
     NULL
 };
@@ -149,10 +135,9 @@ EDA_HOTKEY* PL_EDITOR_FRAME::GetHotKeyDescription( int aCommand ) const
 }
 
 
-bool PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
-                                const wxPoint& aPosition, EDA_ITEM* aItem )
+bool PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition,
+                                EDA_ITEM* aItem )
 {
-    bool busy = GetScreen()->GetCurItem() != NULL;
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
@@ -168,8 +153,6 @@ bool PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
 
     if( HK_Descr == NULL )
         return false;
-
-    WORKSHEET_DATAITEM* item;
 
     switch( HK_Descr->m_Idcommand )
     {
@@ -210,44 +193,6 @@ bool PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
         GetEventHandler()->ProcessEvent( cmd );
         break;
 
-    case HK_UNDO:
-    case HK_REDO:
-        if( busy )
-            break;
-        cmd.SetId( HK_Descr->m_IdMenuEvent );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_IN:
-        cmd.SetId( ID_POPUP_ZOOM_IN );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_OUT:
-        cmd.SetId( ID_POPUP_ZOOM_OUT );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_REDRAW:
-        cmd.SetId( ID_ZOOM_REDRAW );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_CENTER:
-        cmd.SetId( ID_POPUP_ZOOM_CENTER );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_AUTO:
-        cmd.SetId( ID_ZOOM_PAGE );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_SELECTION:
-        cmd.SetId( ID_ZOOM_SELECTION );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
     case HK_RESET_LOCAL_COORD:      // Reset the relative coord
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
         break;
@@ -263,35 +208,6 @@ bool PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
 
     case HK_SET_GRID_ORIGIN:
         SetGridOrigin( GetCrossHairPosition() );
-        break;
-
-    case HK_MOVE_ITEM:
-    case HK_MOVE_START_POINT:
-    case HK_MOVE_END_POINT:
-    case HK_DELETE_ITEM:
-        if( busy )
-            break;
-
-        if( (item = Locate( aDC, aPosition ) ) == NULL )
-            break;
-
-        // Only rect and lines have a end point.
-        if( HK_Descr->m_Idcommand == HK_MOVE_END_POINT && !item->HasEndPoint() )
-            break;
-
-        if( m_treePagelayout->GetPageLayoutSelectedItem() != item )
-            m_treePagelayout->SelectCell( item );
-
-        cmd.SetId( HK_Descr->m_IdMenuEvent );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_PLACE_ITEM:
-        if( busy )
-        {
-            cmd.SetId( HK_Descr->m_IdMenuEvent );
-            GetEventHandler()->ProcessEvent( cmd );
-        }
         break;
 
     default:

@@ -31,11 +31,11 @@
 /**
  * @brief Generic tool for picking a point.
  */
-class PICKER_TOOL : public PCB_TOOL_BASE
+class PCBNEW_PICKER_TOOL : public PCB_TOOL_BASE
 {
 public:
-    PICKER_TOOL();
-    ~PICKER_TOOL() {}
+    PCBNEW_PICKER_TOOL();
+    ~PCBNEW_PICKER_TOOL() {}
 
     ///> Event handler types.
     typedef std::function<bool(const VECTOR2D&)> CLICK_HANDLER;

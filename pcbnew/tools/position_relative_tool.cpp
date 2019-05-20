@@ -28,7 +28,7 @@ using namespace std::placeholders;
 #include "pcb_actions.h"
 #include "selection_tool.h"
 #include "edit_tool.h"
-#include "picker_tool.h"
+#include "pcbnew_picker_tool.h"
 
 #include <dialogs/dialog_position_relative.h>
 #include <status_popup.h>
@@ -140,7 +140,7 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
 {
     Activate();
 
-    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
     STATUS_TEXT_POPUP statusPopup( frame() );
     bool picking = true;
 

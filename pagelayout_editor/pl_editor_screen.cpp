@@ -1,10 +1,8 @@
-/**
- * @file pl_editor_screen.cpp
- */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -33,7 +31,7 @@
 #include <pl_editor_id.h>
 
 
-#define MM_GRID( x ) wxRealPoint( x * IU_PER_MM, x * IU_PER_MM )
+#define MM_GRID( x )      wxRealPoint( x * IU_PER_MM, x * IU_PER_MM )
 #define ZOOM_FACTOR( x )  ( x * IU_PER_MM / 1000 )
 
 
@@ -80,19 +78,17 @@ static GRID_TYPE pl_editorGridList[] =
 PL_EDITOR_SCREEN::PL_EDITOR_SCREEN( const wxSize& aPageSizeIU ) :
     BASE_SCREEN( SCREEN_T )
 {
-    for( unsigned i = 0; i < arrayDim( pl_editorZoomList );  ++i )
-        m_ZoomList.push_back( pl_editorZoomList[i] );
+    for( double zoom : pl_editorZoomList )
+        m_ZoomList.push_back( zoom );
 
-    for( unsigned i = 0; i < arrayDim( pl_editorGridList );  ++i )
-        AddGrid( pl_editorGridList[i] );
+    for( GRID_TYPE grid : pl_editorGridList )
+        AddGrid( grid );
 
     // pl_editor uses the same frame position as schematic and board editors
     m_Center = false;
 
     // Set the working grid size to a reasonable value
     SetGrid( MM_GRID( 1.0 ) );
-
-    SetZoom( ZOOM_FACTOR( 350 ) );            // a default value for zoom
 
     InitDataPoints( aPageSizeIU );
     m_NumberOfScreens = 2;
@@ -105,18 +101,13 @@ PL_EDITOR_SCREEN::~PL_EDITOR_SCREEN()
 }
 
 
-// virtual function
 int PL_EDITOR_SCREEN::MilsToIuScalar()
 {
     return (int)IU_PER_MILS;
 }
 
 
-/* Virtual function needed by classes derived from BASE_SCREEN
- * this is a virtual pure function in BASE_SCREEN
- */
-void PL_EDITOR_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList,
-                                            int aItemCount )
+void PL_EDITOR_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount )
 {
     if( aItemCount == 0 )
         return;

@@ -108,9 +108,6 @@ public:
      */
     COLOR4D GetGridColor() override;
 
-    void    OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
-    void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) override;
-    bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override;
     bool    GeneralControl( wxDC* DC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
     void    InstallOptionsDisplay( wxCommandEvent& event );
     MODULE* Get_Module( const wxString& CmpName );

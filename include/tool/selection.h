@@ -142,7 +142,6 @@ public:
 
     EDA_RECT    GetBoundingBox() const;
     EDA_ITEM*   GetTopLeftItem( bool onlyModules = false ) const;
-    EDA_ITEM*   GetTopLeftModule() const;
 
     EDA_ITEM* operator[]( const size_t aIdx ) const
     {

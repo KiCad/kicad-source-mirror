@@ -130,51 +130,34 @@ public:
     virtual wxString GetTypeName() = 0;
 
     /**
-     * Begin an editing a component library draw item in \a aEditMode at \a aPosition.
+     * Begin drawing a component library draw item at \a aPosition.
      *
-     * This is used to start an editing action such as resize or move a draw object.
      * It typically would be called on a left click when a draw tool is selected in
-     * the component library editor and one of the graphics tools is selected.  It
-     * allows the draw item to maintain it's own internal state while it is being
-     * edited. Call AbortEdit() to quit the editing mode.
+     * the component library editor and one of the graphics tools is selected.
      *
-     * @param aEditMode The editing mode being performed.  See base_struct.h for a list
-     *                  of mode flags.
-     * @param aPosition The position in drawing coordinates where the editing mode was
-     *                  started.  This may or may not be required depending on the item
-     *                  being edited and the edit mode.
+     * @param aPosition The position in drawing coordinates where the drawing was started.
+     *                  May or may not be required depending on the item being drawn.
      */
-    virtual void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
-    {
-        SetFlags( aEditMode );
-    }
+    virtual void BeginEdit( const wxPoint aPosition ) {}
 
     /**
      * Continue an edit in progress at \a aPosition.
      *
-     * This is used to perform the next action while editing a draw item.  This would be
+     * This is used to perform the next action while drawing an item.  This would be
      * called for each additional left click when the mouse is captured while the item
-     * is being edited.
+     * is being drawn.
      *
      * @param aPosition The position of the mouse left click in drawing coordinates.
      * @return True if additional mouse clicks are required to complete the edit in progress.
      */
-    virtual bool ContinueEdit( const wxPoint aPosition )
-    {
-        return false;
-    }
+    virtual bool ContinueEdit( const wxPoint aPosition ) { return false; }
 
     /**
      * End an object editing action.
      *
      * This is used to end or abort an edit action in progress initiated by BeginEdit().
-     *
-     * @param aPosition The position of the last edit event in drawing coordinates.
      */
-    virtual void EndEdit( const wxPoint& aPosition )
-    {
-        ClearEditFlags();
-    }
+    virtual void EndEdit() {}
 
     /**
      * Calculates the attributes of an item at \a aPosition when it is being edited.

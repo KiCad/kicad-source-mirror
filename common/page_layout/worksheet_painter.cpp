@@ -1,14 +1,7 @@
-/**
- * @file worksheet.cpp
- * @brief Common code to draw the title block and frame references
- * @note it should include title_block_shape_gost.h or title_block_shape.h
- * which defines most of draw shapes, and contains a part of the draw code
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -36,14 +29,46 @@
 #include <common.h>
 #include <base_screen.h>
 #include <draw_frame.h>
-#include <worksheet.h>
 #include <title_block.h>
 #include <build_version.h>
+#include <ws_draw_item.h>
+#include <gal/graphics_abstraction_layer.h>
 
-#include <worksheet_shape_builder.h>
+#include <worksheet_painter.h>
+#include <worksheet_dataitem.h>
 
+using namespace KIGFX;
 
 static const wxString productName = wxT( "KiCad E.D.A.  " );
+
+WS_RENDER_SETTINGS::WS_RENDER_SETTINGS()
+{
+    m_backgroundColor = COLOR4D( 1.0, 1.0, 1.0, 1.0 );
+    m_normalColor =     RED;
+    m_selectedColor =   m_normalColor.Brightened( 0.5 );
+    m_brightenedColor = COLOR4D( 0.0, 1.0, 0.0, 0.9 );
+
+    update();
+}
+
+
+const COLOR4D& WS_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
+{
+    const EDA_ITEM* item = dynamic_cast<const EDA_ITEM*>( aItem );
+
+    if( item )
+    {
+        // Selection disambiguation
+        if( item->IsBrightened() )
+            return m_brightenedColor;
+
+        if( item->IsSelected() )
+            return m_selectedColor;
+    }
+
+    return m_normalColor;
+}
+
 
 // returns the full text corresponding to the aTextbase,
 // after replacing format symbols by the corresponding value
@@ -208,4 +233,116 @@ void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aCont
 
         aFormatter->Print( aNestLevel, ")\n\n" );
     }
+}
+
+
+bool KIGFX::WORKSHEET_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
+{
+    auto item = static_cast<const EDA_ITEM*>( aItem );
+
+    switch( item->Type() )
+    {
+    case WSG_LINE_T:   draw( (WS_DRAW_ITEM_LINE*) item, aLayer );         break;
+    case WSG_POLY_T:   draw( (WS_DRAW_ITEM_POLYGON*) item, aLayer );      break;
+    case WSG_RECT_T:   draw( (WS_DRAW_ITEM_RECT*) item, aLayer );         break;
+    case WSG_TEXT_T:   draw( (WS_DRAW_ITEM_TEXT*) item, aLayer );         break;
+    case WSG_BITMAP_T: draw( (WS_DRAW_ITEM_BITMAP*) item, aLayer );       break;
+    default:           return false;
+    }
+
+    return true;
+}
+
+
+void KIGFX::WORKSHEET_PAINTER::draw( const WS_DRAW_ITEM_LINE* aItem, int aLayer ) const
+{
+    m_gal->SetIsStroke( true );
+    m_gal->SetIsFill( false );
+    m_gal->SetStrokeColor( m_renderSettings.GetColor( aItem, aLayer ) );
+    m_gal->SetLineWidth( aItem->GetPenWidth() );
+    m_gal->DrawLine( VECTOR2D( aItem->GetStart() ), VECTOR2D( aItem->GetEnd() ) );
+}
+
+
+void KIGFX::WORKSHEET_PAINTER::draw( const WS_DRAW_ITEM_RECT* aItem, int aLayer ) const
+{
+    m_gal->SetIsStroke( true );
+    m_gal->SetIsFill( false );
+    m_gal->SetStrokeColor( m_renderSettings.GetColor( aItem, aLayer ) );
+    m_gal->SetLineWidth( aItem->GetPenWidth() );
+    m_gal->DrawRectangle( VECTOR2D( aItem->GetStart() ), VECTOR2D( aItem->GetEnd() ) );
+}
+
+
+void KIGFX::WORKSHEET_PAINTER::draw( const WS_DRAW_ITEM_POLYGON* aItem, int aLayer ) const
+{
+    std::deque<VECTOR2D> corners;
+    for( wxPoint point : aItem->m_Corners )
+    {
+        corners.push_back( VECTOR2D( point ) );
+    }
+
+    if( aItem->IsFilled() )
+    {
+        m_gal->SetFillColor( m_renderSettings.GetColor( aItem, aLayer ) );
+        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( false );
+        m_gal->DrawPolygon( corners );
+    }
+    else
+    {
+        m_gal->SetStrokeColor( m_renderSettings.GetColor( aItem, aLayer ) );
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        m_gal->SetLineWidth( aItem->GetPenWidth() );
+        m_gal->DrawPolyline( corners );
+    }
+}
+
+
+void KIGFX::WORKSHEET_PAINTER::draw( const WS_DRAW_ITEM_TEXT* aItem, int aLayer ) const
+{
+    VECTOR2D position( aItem->GetTextPos().x, aItem->GetTextPos().y );
+
+    m_gal->Save();
+    m_gal->Translate( position );
+    m_gal->Rotate( -aItem->GetTextAngle() * M_PI / 1800.0 );
+    m_gal->SetStrokeColor( m_renderSettings.GetColor( aItem, aLayer ) );
+    m_gal->SetLineWidth( aItem->GetThickness() );
+    m_gal->SetTextAttributes( aItem );
+    m_gal->StrokeText( aItem->GetShownText(), VECTOR2D( 0, 0 ), 0.0 );
+    m_gal->Restore();
+}
+
+
+void KIGFX::WORKSHEET_PAINTER::draw( const WS_DRAW_ITEM_BITMAP* aItem, int aLayer ) const
+{
+    m_gal->Save();
+    VECTOR2D position = aItem->GetPosition();
+    m_gal->Translate( position );
+    auto* bitmap = static_cast<WORKSHEET_DATAITEM_BITMAP*>( aItem->GetPeer() );
+
+    // When the image scale factor is not 1.0, we need to modify the actual scale
+    // as the image scale factor is similar to a local zoom
+    double img_scale = bitmap->m_ImageBitmap->GetScale();
+
+    if( img_scale != 1.0 )
+        m_gal->Scale( VECTOR2D( img_scale, img_scale ) );
+
+    m_gal->DrawBitmap( *bitmap->m_ImageBitmap );
+    m_gal->Restore();
+}
+
+
+void KIGFX::WORKSHEET_PAINTER::DrawBorder( const PAGE_INFO* aPageInfo, int aScaleFactor ) const
+{
+    VECTOR2D origin = VECTOR2D( 0.0, 0.0 );
+    VECTOR2D end = VECTOR2D( aPageInfo->GetWidthMils() * aScaleFactor,
+                             aPageInfo->GetHeightMils() * aScaleFactor );
+
+    m_gal->SetIsStroke( true );
+    // Use a gray color for the border color
+    m_gal->SetStrokeColor( COLOR4D( 0.4, 0.4, 0.4, 1.0 ) );
+    m_gal->SetIsFill( false );
+    m_gal->DrawRectangle( origin, end );
 }

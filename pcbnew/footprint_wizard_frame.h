@@ -179,7 +179,6 @@ private:
     void                OnCloseWindow( wxCloseEvent& Event ) override;
     void                ReCreateHToolbar() override;
     void                ReCreateVToolbar() override;
-    void                OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
     void                ClickOnPageList( wxCommandEvent& event );
     void                OnSetRelativeOffset( wxCommandEvent& event );
 
@@ -218,8 +217,6 @@ private:
      */
     void                ParametersUpdated( wxGridEvent& event );
 
-    bool                OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override;
-
     /**
      * Function Show3D_Frame (virtual)
      * displays 3D view of the footprint (module) being edited.
@@ -239,7 +236,6 @@ private:
      * Virtual functions, not used here, but needed by PCB_BASE_FRAME
      * (virtual pure functions )
      */
-    void OnLeftDClick( wxDC*, const wxPoint& ) override {}
     void SaveCopyInUndoList( BOARD_ITEM*, UNDO_REDO_T, const wxPoint& ) override {}
     void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO_T, const wxPoint& ) override {}
 

@@ -207,11 +207,6 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
-{
-    return true;
-}
-
 /*
  * Called on a mouse left button double click
  */

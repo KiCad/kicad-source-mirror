@@ -47,8 +47,6 @@ LIB_TEXT::LIB_TEXT( LIB_PART * aParent ) :
     EDA_TEXT()
 {
     SetTextSize( wxSize( 50, 50 ) );
-    m_rotate     = false;
-    m_updateText = false;
 }
 
 
@@ -303,27 +301,13 @@ const EDA_RECT LIB_TEXT::GetBoundingBox() const
 
 void LIB_TEXT::Rotate()
 {
-    if( InEditMode() )
-        m_rotate = true;
-    else
-        SetTextAngle( GetTextAngle() == TEXT_ANGLE_VERT ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT );
+    SetTextAngle( GetTextAngle() == TEXT_ANGLE_VERT ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT );
 }
 
 
 void LIB_TEXT::SetText( const wxString& aText )
 {
-    if( aText == m_Text )
-        return;
-
-    if( InEditMode() )
-    {
-        m_savedText = aText;
-        m_updateText = true;
-    }
-    else
-    {
-        m_Text = aText;
-    }
+    m_Text = aText;
 }
 
 
@@ -339,56 +323,13 @@ BITMAP_DEF LIB_TEXT::GetMenuImage() const
 }
 
 
-void LIB_TEXT::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
+void LIB_TEXT::BeginEdit( const wxPoint aPosition )
 {
-    LIB_ITEM::BeginEdit( aEditMode, aPosition );
-
-    if( aEditMode == IS_MOVED )
-    {
-        m_initialPos = GetTextPos();
-        m_initialCursorPos = aPosition;
-    }
-    else
-    {
-        SetTextPos( aPosition );
-    }
-}
-
-
-void LIB_TEXT::EndEdit( const wxPoint& aPosition )
-{
-    LIB_ITEM::EndEdit( aPosition );
-
-    m_rotate = false;
-    m_updateText = false;
+    SetTextPos( aPosition );
 }
 
 
 void LIB_TEXT::CalcEdit( const wxPoint& aPosition )
 {
-    DBG(printf("textCalcEdit %d %d\n", aPosition.x, aPosition.y );)
-
-    if( m_rotate )
-    {
-        SetTextAngle( GetTextAngle() == TEXT_ANGLE_VERT ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT );
-        m_rotate = false;
-    }
-
-    if( m_updateText )
-    {
-        std::swap( m_Text, m_savedText );
-        m_updateText = false;
-    }
-
-    if( IsNew() )
-    {
-        SetTextPos( aPosition );
-    }
-    else if( IsMoving() )
-    {
-        MoveTo( m_initialPos + aPosition - m_initialCursorPos );
-        DBG(printf("%p: move %d %d\n", this, GetPosition().x, GetPosition().y );)
-    }
-
-    DBG(printf("%p: move2 %d %d\n", this, GetPosition().x, GetPosition().y );)
+    SetTextPos( aPosition );
 }

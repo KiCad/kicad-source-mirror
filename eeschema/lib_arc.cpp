@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file lib_arc.cpp
- */
-
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <macros.h>
@@ -434,73 +430,28 @@ BITMAP_DEF LIB_ARC::GetMenuImage() const
 }
 
 
-void LIB_ARC::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
+void LIB_ARC::BeginEdit( const wxPoint aPosition )
 {
-    LIB_ITEM::BeginEdit( aEditMode, aPosition );
-
-    if( aEditMode == IS_NEW )
-    {
-        m_ArcStart  = m_ArcEnd = aPosition;
-        m_editState = m_lastEditState = 1;
-    }
-    else if( aEditMode == IS_MOVED )
-    {
-        m_initialPos = m_Pos;
-        m_initialCursorPos = aPosition;
-    }
-    else
-    {
-        // The arc center point has to be rotated with while adjusting the
-        // start or end point, determine the side of this point and the distance
-        // from the start / end point
-        wxPoint middlePoint = wxPoint( (m_ArcStart.x + m_ArcEnd.x) / 2,
-                                       (m_ArcStart.y + m_ArcEnd.y) / 2 );
-        wxPoint centerVector   = m_Pos - middlePoint;
-        wxPoint startEndVector = twoPointVector( m_ArcStart, m_ArcEnd );
-        m_editCenterDistance = EuclideanNorm( centerVector );
-
-        // Determine on which side is the center point
-        m_editDirection = CrossProduct( startEndVector, centerVector ) ? 1 : -1;
-
-        // Drag either the start, end point or the outline
-        if( HitTestPoints( m_ArcStart, aPosition, MINIMUM_SELECTION_DISTANCE ) )
-        {
-            m_editSelectPoint = ARC_STATUS_START;
-        }
-        else if( HitTestPoints( m_ArcEnd, aPosition, MINIMUM_SELECTION_DISTANCE ) )
-        {
-            m_editSelectPoint = ARC_STATUS_END;
-        }
-        else
-        {
-            m_editSelectPoint = ARC_STATUS_OUTLINE;
-        }
-
-        m_editState = 0;
-    }
+    m_ArcStart  = m_ArcEnd = aPosition;
+    m_editState = m_lastEditState = 1;
 }
 
 
 bool LIB_ARC::ContinueEdit( const wxPoint aPosition )
 {
-    if( IsNew() )
+    if( m_editState == 1 )        // Second position yields the arc segment length.
     {
-        if( m_editState == 1 )        // Second position yields the arc segment length.
-        {
-            m_ArcEnd = aPosition;
-            m_editState = 2;
-            return true;              // Need third position to calculate center point.
-        }
+        m_ArcEnd = aPosition;
+        m_editState = 2;
+        return true;              // Need third position to calculate center point.
     }
 
     return false;
 }
 
 
-void LIB_ARC::EndEdit( const wxPoint& aPosition )
+void LIB_ARC::EndEdit()
 {
-    LIB_ITEM::EndEdit( aPosition );
-
     m_lastEditState = 0;
     m_editState = 0;
 }
@@ -508,47 +459,39 @@ void LIB_ARC::EndEdit( const wxPoint& aPosition )
 
 void LIB_ARC::CalcEdit( const wxPoint& aPosition )
 {
-    if( IsNew() )
+    if( m_editState == 1 )
     {
-        if( m_editState == 1 )
-        {
-            m_ArcEnd = aPosition;
-        }
-
-        if( m_editState != m_lastEditState )
-            m_lastEditState = m_editState;
-
-        // Keep the arc center point up to date.  Otherwise, there will be edit graphic
-        // artifacts left behind from the initial draw.
-        int dx, dy;
-        int cX, cY;
-        double angle;
-
-        cX = aPosition.x;
-        cY = aPosition.y;
-
-        dx = m_ArcEnd.x - m_ArcStart.x;
-        dy = m_ArcEnd.y - m_ArcStart.y;
-        cX -= m_ArcStart.x;
-        cY -= m_ArcStart.y;
-        angle = ArcTangente( dy, dx );
-        RotatePoint( &dx, &dy, angle );     /* The segment dx, dy is horizontal
-                                             * -> Length = dx, dy = 0 */
-        RotatePoint( &cX, &cY, angle );
-        cX = dx / 2;           /* cX, cY is on the median segment 0.0 a dx, 0 */
-
-        RotatePoint( &cX, &cY, -angle );
-        cX += m_ArcStart.x;
-        cY += m_ArcStart.y;
-        m_Pos.x = cX;
-        m_Pos.y = cY;
-        CalcRadiusAngles();
-
+        m_ArcEnd = aPosition;
     }
-    else if( IsMoving() )
-    {
-        MoveTo( m_initialPos + aPosition - m_initialCursorPos );
-    }
+
+    if( m_editState != m_lastEditState )
+        m_lastEditState = m_editState;
+
+    // Keep the arc center point up to date.  Otherwise, there will be edit graphic
+    // artifacts left behind from the initial draw.
+    int dx, dy;
+    int cX, cY;
+    double angle;
+
+    cX = aPosition.x;
+    cY = aPosition.y;
+
+    dx = m_ArcEnd.x - m_ArcStart.x;
+    dy = m_ArcEnd.y - m_ArcStart.y;
+    cX -= m_ArcStart.x;
+    cY -= m_ArcStart.y;
+    angle = ArcTangente( dy, dx );
+    RotatePoint( &dx, &dy, angle );     /* The segment dx, dy is horizontal
+                                         * -> Length = dx, dy = 0 */
+    RotatePoint( &cX, &cY, angle );
+    cX = dx / 2;           /* cX, cY is on the median segment 0.0 a dx, 0 */
+
+    RotatePoint( &cX, &cY, -angle );
+    cX += m_ArcStart.x;
+    cY += m_ArcStart.y;
+    m_Pos.x = cX;
+    m_Pos.y = cY;
+    CalcRadiusAngles();
 }
 
 

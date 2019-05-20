@@ -20,12 +20,9 @@ set( PL_EDITOR_SRCS
     dialogs/dialog_new_dataitem.cpp
     pl_editor_screen.cpp
     pl_editor_layout.cpp
-    design_tree_frame.cpp
     events_functions.cpp
     controle.cpp
     files.cpp
-    onleftclick.cpp
-    onrightclick.cpp
     page_layout_writer.cpp
     pl_editor_config.cpp
     pl_editor_frame.cpp
@@ -34,7 +31,14 @@ set( PL_EDITOR_SRCS
     hotkeys.cpp
     menubar.cpp
     toolbars_pl_editor.cpp
-    block.cpp
+
+    tools/pl_actions.cpp
+    tools/pl_selection_tool.cpp
+    tools/pl_drawing_tools.cpp
+    tools/pl_edit_tool.cpp
+    tools/pl_picker_tool.cpp
+    tools/pl_point_editor.cpp
+    tools/selection.cpp
     )
 
 set( PL_EDITOR_EXTRA_SRCS

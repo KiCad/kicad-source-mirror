@@ -33,38 +33,29 @@
 #include <math/vector2d.h>
 #include <eda_text.h>
 #include <bitmap_base.h>
+#include <view/view.h>
+#include "ws_draw_item.h"
 
 class WS_DRAW_ITEM_TEXT;            // Forward declaration
 
 #define TB_DEFAULT_TEXTSIZE 1.5     // default worksheet text size in mm
 
-// Text attributes set in m_flags (ORed bits)
-#define USE_BOLD 1                  // has meaning for texts
-#define USE_THICK_LINE 1            // equivalent to bold for lines
-#define USE_ITALIC (1<<1)           // has meaning for texts
-#define USE_ALT_COLOR (1<<2)
-#define SELECTED_STATE (1<<3)       // When set, use the hight light color to draw item
-#define NEW_ITEM (1<<4)             // Set for new items which can be deleted
-                                    // by an abort command
-#define LOCATE_STARTPOINT (1<<5)    // Used in locate function:set by locate function
-                                    // if the start point is located
-#define LOCATE_ENDPOINT (1<<6)      // Used in locate function:set by locate function
-                                    // if the end point is located
-#define PAGE1OPTION (3<<7)          // flag to manage items drawn or not drawn only
-                                    // on page 1: NONE = item on all pages
-#define PAGE1OPTION_NONE (0<<7)     //  NONE = item on all pages
-#define PAGE1OPTION_PAGE1ONLY   (1<<7)     //  = item only on page 1
-#define PAGE1OPTION_NOTONPAGE1  (2<<7)     //  = item on all pages but page 1
-
 // A coordinate is relative to a page corner.
 // Any of the 4 corners can be a reference.
 // The default is the right bottom corner
-enum corner_anchor
+enum CORNER_ANCHOR
 {
     RB_CORNER,      // right bottom corner
     RT_CORNER,      // right top corner
     LB_CORNER,      // left bottom corner
     LT_CORNER,      // left top corner
+};
+
+enum PAGE_OPTION
+{
+    ALL_PAGES,
+    FIRST_PAGE_ONLY,
+    SUBSEQUENT_PAGES
 };
 
 // a coordinate point
@@ -78,7 +69,8 @@ public:
     int               m_Anchor;
 public:
     POINT_COORD() { m_Anchor = RB_CORNER; }
-    POINT_COORD( DPOINT aPos, enum corner_anchor aAnchor = RB_CORNER )
+
+    POINT_COORD( DPOINT aPos, enum CORNER_ANCHOR aAnchor = RB_CORNER )
     {
         m_Pos = aPos;
         m_Anchor = aAnchor;
@@ -96,7 +88,7 @@ public:
 class WORKSHEET_DATAITEM
 {
 public:
-    enum WS_ItemType {
+    enum WS_ITEM_TYPE {
         WS_TEXT,
         WS_SEGMENT,
         WS_RECT,
@@ -105,8 +97,10 @@ public:
     };
 
 protected:
-    WS_ItemType    m_type;
-    int            m_flags;
+    WS_ITEM_TYPE   m_type;
+    PAGE_OPTION    m_pageOption;
+
+    std::vector<WS_DRAW_ITEM_BASE*> m_drawItems;
 
 public:
     wxString       m_Name;                  // a item name used in page layout
@@ -140,25 +134,23 @@ public:
     static bool    m_SpecialMode;           // Used in page layout editor
                                             // When set to true, base texts
                                             // instead of full texts are displayed
-    static COLOR4D m_Color;                 // the default color to draw items
-    static COLOR4D m_AltColor;              // an alternate color to draw items
-    static COLOR4D m_SelectedColor;         // the color to draw selected items
-                                            // (used in page layout editor
-
-
 public:
-    WORKSHEET_DATAITEM( WS_ItemType aType );
+    WORKSHEET_DATAITEM( WS_ITEM_TYPE aType );
 
     virtual ~WORKSHEET_DATAITEM() {}
 
-    void SetStart( double aPosx, double aPosy, enum corner_anchor aAnchor = RB_CORNER )
+    const std::vector<WS_DRAW_ITEM_BASE*>& GetDrawItems() const { return m_drawItems; }
+
+    virtual void SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView );
+
+    void SetStart( double aPosx, double aPosy, enum CORNER_ANCHOR aAnchor = RB_CORNER )
     {
         m_Pos.m_Pos.x = aPosx;
         m_Pos.m_Pos.y = aPosy;
         m_Pos.m_Anchor = aAnchor;
     }
 
-    void SetEnd( double aPosx, double aPosy, enum corner_anchor aAnchor = RB_CORNER )
+    void SetEnd( double aPosx, double aPosy, enum CORNER_ANCHOR aAnchor = RB_CORNER )
     {
         m_End.m_Pos.x = aPosx;
         m_End.m_Pos.y = aPosy;
@@ -166,10 +158,7 @@ public:
     }
 
     // Accessors:
-    WS_ItemType GetType() const { return m_type; }
-    int GetFlags() const { return m_flags; }
-    void SetFlags( int aMask ) { m_flags |= aMask; }
-    void ClearFlags( int aMask ) { m_flags &= ~aMask; }
+    WS_ITEM_TYPE GetType() const { return m_type; }
 
     /**
      * @return true if the item has a end point (segment; rect)
@@ -177,20 +166,8 @@ public:
      */
     virtual bool HasEndPoint() { return true; }
 
-    /**
-     * @return 0 if the item has no specific option for page 1
-     * 1  if the item is only on page 1
-     * -1  if the item is not on page 1
-     */
-    int GetPage1Option();
-
-    /**
-     * Set the option for page 1
-     * @param aChoice = 0 if the item has no specific option for page 1
-     * > 0  if the item is only on page 1
-     * < 0  if the item is not on page 1
-     */
-    void SetPage1Option( int aChoice );
+    PAGE_OPTION GetPage1Option() const { return m_pageOption; }
+    void SetPage1Option( PAGE_OPTION aChoice ) { m_pageOption = aChoice; }
 
     // Coordinate handling
     const wxPoint GetStartPosUi( int ii = 0 ) const;
@@ -203,17 +180,6 @@ public:
             return KiROUND( m_LineWidth * m_WSunits2Iu );
         else
             return KiROUND( m_DefaultLineWidth * m_WSunits2Iu );
-    }
-
-    /** @return the size of markers used in page layout editor to draw
-     * the anchor points of selected items.
-     * @param aZoomScale is a scaling factor that can be used to adjust
-     * the final marker size depending on zoom level
-     */
-    static int GetMarkerSizeUi( double aZoomScale = 1.0 )
-    {
-        #define MARKER_DRAW_SIZE 0.5    // Is a value choosen for a suitable size on screen
-        return KiROUND( MARKER_DRAW_SIZE * m_WSunits2Iu * aZoomScale );
     }
 
     /**
@@ -264,53 +230,24 @@ public:
     virtual bool IsInsidePage( int ii ) const;
 
     const wxString GetClassName() const;
-
-    /**
-     * @return true if the selected state on ON
-     */
-    bool IsSelected() { return (m_flags & SELECTED_STATE) != 0; }
-
-    /**
-     * Function SetSelected
-     * Toggles on/off the selected flag (used in editing functions)
-     * @param aState = the flag value
-     */
-    void SetSelected( bool aState )
-    {
-        if( aState )
-            m_flags |= SELECTED_STATE;
-        else
-            m_flags &= ~SELECTED_STATE;
-    }
-
-    bool UseAltColor() {return m_flags & USE_ALT_COLOR; }
-
-    COLOR4D GetItemColor()
-    {
-        if( IsSelected() )
-            return m_SelectedColor;
-
-        if( UseAltColor() )
-            return m_AltColor;
-
-        return m_Color;
-    }
 };
 
 
 class WORKSHEET_DATAITEM_POLYPOLYGON : public WORKSHEET_DATAITEM
 {
 public:
-    double            m_Orient;             //  Orientation in degrees
-    std::vector<DPOINT> m_Corners;          // corner list
+    double                m_Orient;         //  Orientation in degrees
+    std::vector<DPOINT>   m_Corners;        // corner list
 
 private:
     std::vector<unsigned> m_polyIndexEnd;   // index of the last point of each polygon
-    DPOINT            m_minCoord;           // min coord of corners, relative to m_Pos
-    DPOINT            m_maxCoord;           // max coord of corners, relative to m_Pos
+    DPOINT                m_minCoord;       // min coord of corners, relative to m_Pos
+    DPOINT                m_maxCoord;       // max coord of corners, relative to m_Pos
 
 public:
     WORKSHEET_DATAITEM_POLYPOLYGON( );
+
+    void SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView ) override;
 
     virtual int GetPenSizeUi() override
     {
@@ -395,6 +332,8 @@ public:
     double              m_Orient;               //  Orientation in degrees
     EDA_TEXT_HJUSTIFY_T m_Hjustify;
     EDA_TEXT_VJUSTIFY_T m_Vjustify;
+    bool                m_Italic;
+    bool                m_Bold;
     DSIZE               m_TextSize;
     DSIZE               m_BoundingBoxSize;      // When not null, this is the max
                                                 // size of the full text.
@@ -407,6 +346,8 @@ public:
 
 public:
     WORKSHEET_DATAITEM_TEXT( const wxString& aTextBase );
+
+    void SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView ) override;
 
     /**
      * @return false  (no end point)
@@ -426,12 +367,6 @@ public:
      * @param aPosition = the new position of item
      */
     void MoveTo( DPOINT aPosition );
-
-    /**
-     * transfert the text justification and orientation
-     * to aGText
-     */
-    void TransfertSetupToGraphicText(  WS_DRAW_ITEM_TEXT* aGText );
 
     /**
      * Try to build text wihich is an increment of m_TextBase
@@ -461,42 +396,6 @@ public:
      * @return true if the EOL symbol is found or is inserted (multiline text)
      */
     bool ReplaceAntiSlashSequence();
-
-    /**
-     * @return true is a bold font should be selected
-     */
-    bool IsBold() { return (m_flags & USE_BOLD) != 0; }
-
-    /**
-     * Function SetBold
-     * Toggles on/off the bold option flag
-     * @param aState = the bold option value
-     */
-    void SetBold( bool aState )
-    {
-        if( aState )
-            m_flags |= USE_BOLD;
-        else
-            m_flags &= ~USE_BOLD;
-    }
-
-    /**
-     * @return true is an italic font should be selected
-     */
-    bool IsItalic() const { return (m_flags & USE_ITALIC) != 0; }
-
-    /**
-     * Function SetItalic
-     * Toggles on/off the italic option flag
-     * @param aState = the italic option value
-     */
-    void SetItalic( bool aState )
-    {
-        if( aState )
-            m_flags |= USE_ITALIC;
-        else
-            m_flags &= ~USE_ITALIC;
-    }
 };
 
 
@@ -512,6 +411,8 @@ public:
     {
         m_ImageBitmap = aImage;
     }
+
+    void SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView ) override;
 
     /**
      * @return false  (no end point)

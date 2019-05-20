@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 CERN
- * @author Maciej Suminski <maciej.suminski@cern.ch>
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,39 +21,61 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "picker_tool.h"
-#include "pcb_actions.h"
-#include "grid_helper.h"
-#include <view/view_controls.h>
 #include <tool/tool_manager.h>
-#include "tool_event_utils.h"
-#include "selection_tool.h"
+#include <tool/selection_conditions.h>
+#include <tools/pl_picker_tool.h>
+#include <tools/pl_actions.h>
+#include <view/view_controls.h>
+#include <pl_editor_frame.h>
 
-TOOL_ACTION PCB_ACTIONS::pickerTool( "pcbnew.Picker", AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );
+TOOL_ACTION PL_ACTIONS::pickerTool( "plEditor.Picker", AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );
 
 
-PICKER_TOOL::PICKER_TOOL()
-    : PCB_TOOL_BASE( "pcbnew.Picker" )
+PL_PICKER_TOOL::PL_PICKER_TOOL() :
+        TOOL_INTERACTIVE( "plEditor.Picker" ),
+        m_frame( nullptr ),
+        m_menu( *this ),
+        m_cursorCapture( false ),
+        m_autoPanning( false )
 {
-    reset();
+    resetPicker();
 }
 
 
-int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
+bool PL_PICKER_TOOL::Init()
+{
+    m_frame = getEditFrame<PL_EDITOR_FRAME>();
+
+    auto& ctxMenu = m_menu.GetMenu();
+
+    // cancel current tool goes in main context menu at the top if present
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, SELECTION_CONDITIONS::ShowAlways, 1 );
+    ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1 );
+
+    // Finally, add the standard zoom/grid items
+    m_menu.AddStandardSubMenus( m_frame );
+
+    return true;
+}
+
+
+void PL_PICKER_TOOL::Reset( RESET_REASON aReason )
+{
+    m_cursorCapture = false;
+    m_autoPanning = false;
+}
+
+
+int PL_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    GRID_HELPER grid( frame() );
     int finalize_state = WAIT_CANCEL;
 
     setControls();
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
-        controls->SetSnapping( !evt->Modifier( MD_ALT ) );
-        VECTOR2I cursorPos = grid.BestSnapAnchor( controls->GetMousePosition(), nullptr );
-        controls->ForceCursorPosition(true, cursorPos );
+        VECTOR2I cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( evt->IsClick( BUT_LEFT ) )
         {
@@ -70,7 +91,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 catch( std::exception& e )
                 {
-                    std::cerr << "PICKER_TOOL click handler error: " << e.what() << std::endl;
+                    std::cerr << "PL_PICKER_TOOL click handler error: " << e.what() << std::endl;
                     finalize_state = EXCEPTION_CANCEL;
                     break;
                 }
@@ -85,7 +106,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 setControls();
         }
 
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
             if( m_cancelHandler )
             {
@@ -95,7 +116,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 catch( std::exception& e )
                 {
-                    std::cerr << "PICKER_TOOL cancel handler error: " << e.what() << std::endl;
+                    std::cerr << "PL_PICKER_TOOL cancel handler error: " << e.what() << std::endl;
                 }
             }
 
@@ -107,15 +128,15 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
             break;
         }
-
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            SELECTION dummy;
-            m_menu.ShowContextMenu( dummy );
+            // TODO...
+            // m_menu.ShowContextMenu();
         }
-
         else
+        {
             m_toolMgr->PassEvent();
+        }
     }
 
     if( m_finalizeHandler )
@@ -126,29 +147,28 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         catch( std::exception& e )
         {
-            std::cerr << "PICKER_TOOL finalize handler error: " << e.what() << std::endl;
+            std::cerr << "PL_PICKER_TOOL finalize handler error: " << e.what() << std::endl;
         }
     }
 
-    reset();
+    resetPicker();
     controls->ForceCursorPosition( false );
-    getEditFrame<PCB_BASE_FRAME>()->SetNoToolSelected();
+    getEditFrame<PL_EDITOR_FRAME>()->SetNoToolSelected();
 
     return 0;
 }
 
 
-void PICKER_TOOL::setTransitions()
+void PL_PICKER_TOOL::setTransitions()
 {
-    Go( &PICKER_TOOL::Main, PCB_ACTIONS::pickerTool.MakeEvent() );
+    Go( &PL_PICKER_TOOL::Main, PL_ACTIONS::pickerTool.MakeEvent() );
 }
 
 
-void PICKER_TOOL::reset()
+void PL_PICKER_TOOL::resetPicker()
 {
     m_cursorCapture = false;
     m_autoPanning = false;
-    m_layerMask = LSET::AllLayersMask();
 
     m_picked = NULLOPT;
     m_clickHandler = NULLOPT;
@@ -157,12 +177,9 @@ void PICKER_TOOL::reset()
 }
 
 
-void PICKER_TOOL::setControls()
+void PL_PICKER_TOOL::setControls()
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-
-    // Ensure that the view controls do not handle our snapping as we use the GRID_HELPER
-    controls->SetSnapping( false );
 
     controls->CaptureCursor( m_cursorCapture );
     controls->SetAutoPan( m_autoPanning );

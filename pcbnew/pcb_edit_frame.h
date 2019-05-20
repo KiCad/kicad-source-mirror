@@ -660,7 +660,6 @@ public:
     /* mouse functions events: */
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
     void OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) override;
-    bool OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu ) override { return true; }
 
     void OnSelectOptionToolbar( wxCommandEvent& event );
     void OnFlipPcbView( wxCommandEvent& event );

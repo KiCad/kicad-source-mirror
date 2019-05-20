@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -23,10 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pl_editor_frame.h
- */
-
 #ifndef  _PL_EDITOR_FRAME_H
 #define  _PL_EDITOR_FRAME_H
 
@@ -38,7 +34,6 @@
 #include <pl_editor_layout.h>
 
 class PROPERTIES_FRAME;
-class DESIGN_TREE_FRAME;
 class WORKSHEET_DATAITEM;
 
 
@@ -51,7 +46,6 @@ class PL_EDITOR_FRAME : public EDA_DRAW_FRAME
 {
     PL_EDITOR_LAYOUT m_pageLayout;
 
-    int         m_designTreeWidth;      // the last width (in pixels) of m_treePagelayout
     int         m_propertiesFrameWidth; // the last width (in pixels) of m_propertiesPagelayout
 
     wxChoice*   m_originSelectBox;      // Corner origin choice for coordinates
@@ -65,7 +59,6 @@ class PL_EDITOR_FRAME : public EDA_DRAW_FRAME
 protected:
     /// The last filename chosen to be proposed to the user
     wxString                m_lastFileName;
-    DESIGN_TREE_FRAME*      m_treePagelayout;
     PROPERTIES_FRAME*       m_propertiesPagelayout;
 
 private:
@@ -74,7 +67,9 @@ private:
 
 public:
     PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent );
-    ~PL_EDITOR_FRAME();
+    ~PL_EDITOR_FRAME() {}
+
+    PROPERTIES_FRAME* GetPropertiesFrame() { return m_propertiesPagelayout; }
 
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl ) override;
 
@@ -101,6 +96,9 @@ public:
     bool InsertPageLayoutDescrFile( const wxString& aFullFileName );
 
     void    OnCloseWindow( wxCloseEvent& Event );
+
+    // The Tool Framework initalization
+    void setupTools();
 
     // Virtual basic functions:
     void    RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
@@ -163,17 +161,14 @@ public:
     void    ReCreateOptToolbar();
 
     void    ReCreateMenuBar() override;
-    void    OnLeftClick( wxDC* aDC, const wxPoint& aMousePos ) override;
-    void    OnLeftDClick( wxDC* aDC, const wxPoint& aMousePos ) override;
-    bool    OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu ) override;
     double  BestZoom() override;
 
-    // Events created by clicking on the design tree list:
-    void OnTreeSelection( wxTreeEvent& event );
-    void OnTreeMiddleClick( wxTreeEvent& event );
-    void OnTreeRightClick( wxTreeEvent& event );
+    void    SyncMenusAndToolbars() override;
 
     const PL_EDITOR_LAYOUT& GetPageLayout() const { return m_pageLayout; }
+    PL_EDITOR_LAYOUT& GetPageLayout() { return m_pageLayout; }
+
+    const BOX2I GetDocumentExtents() const override;
 
     /**
      * Page layout editor can show the title block using a page number
@@ -192,7 +187,7 @@ public:
      * Displays the short filename (if exists) loaded file
      * on the caption of the main window
      */
-    void                UpdateTitleAndInfo();
+    void UpdateTitleAndInfo();
 
     /**
      * Populates the applicatios settings list.
@@ -202,20 +197,19 @@ public:
      * source code (mainly in dialogs).  If you need to define a configuration
      * setting that need to be loaded at run time, this is the place to define it.
      */
-    PARAM_CFG_ARRAY&    GetConfigurationSettings( void );
+    PARAM_CFG_ARRAY& GetConfigurationSettings();
 
     void LoadSettings( wxConfigBase* aCfg ) override;
 
     void SaveSettings( wxConfigBase* aCfg ) override;
 
-    void                Process_Special_Functions( wxCommandEvent& event );
-    void                OnSelectOptionToolbar( wxCommandEvent& event );
+    void Process_Special_Functions( wxCommandEvent& event );
 
     /**
      * called when the user select one of the 4 page corner as corner
      * reference (or the left top paper corner)
      */
-    void                OnSelectCoordOriginCorner( wxCommandEvent& event );
+    void OnSelectCoordOriginCorner( wxCommandEvent& event );
 
     /**
      * Toggle the display mode between the normal mode and the editor mode:
@@ -225,53 +219,16 @@ public:
      * In editor mode, the format symbols in texts are not replaced
      * by the actual text, and therefore format symbols are displayed.
      */
-    void                OnSelectTitleBlockDisplayMode( wxCommandEvent& event );
+    void OnSelectTitleBlockDisplayMode( wxCommandEvent& event );
 
     void OnUpdateTitleBlockDisplayNormalMode( wxUpdateUIEvent& event );
     void OnUpdateTitleBlockDisplaySpecialMode( wxUpdateUIEvent& event );
-    void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
-
-    /**
-     * Function BlockCommand
-     * returns the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
-     * the \a aKey (ALT, SHIFT ALT ..)
-     */
-    virtual int         BlockCommand( EDA_KEY key ) override;
-
-    /**
-     * Function HandleBlockPlace
-     * handles the block place command.
-     */
-    virtual void        HandleBlockPlace( wxDC* DC ) override;
-
-    /**
-     * Function HandleBlockEnd( )
-     * handles the end of a block command,
-     * It is called at the end of the definition of the area of a block.
-     * Depending on the current block command, this command is executed
-     * or parameters are initialized to prepare a call to HandleBlockPlace
-     * in GetScreen()->m_BlockLocate
-     *
-     * @return false if no item selected, or command finished,
-     *         true if some items found and HandleBlockPlace must be called later.
-     */
-    virtual bool        HandleBlockEnd( wxDC* DC ) override;
-
-    /**
-     * Function Block_Move
-     * moves all items within the selected block.
-     * New location is determined by the current offset from the selected
-     * block's original location.
-     *
-     * @param DC A device context to draw on.
-     */
-    void                Block_Move( wxDC* DC );
 
     /**
      * Function OnQuit
      * called on request of application quit
      */
-    void                OnQuit( wxCommandEvent& event );
+    void OnQuit( wxCommandEvent& event );
 
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
     EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
@@ -285,26 +242,26 @@ public:
      * @param aPosition The cursor position in logical (drawing) units.
      * @param aItem = NULL or pointer on a EDA_ITEM under the mouse cursor
      */
-    bool OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition, EDA_ITEM* aItem = NULL ) override;
+    bool OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition,
+                   EDA_ITEM* aItem = NULL ) override;
 
-    void                Process_Settings( wxCommandEvent& event );
-    void                Process_Config( wxCommandEvent& event );
+    void Process_Config( wxCommandEvent& event );
 
     /**
      * Function ToPlotter
      * Open a dialog frame to create plot and drill files
      * relative to the current board
      */
-    void                ToPlotter( wxCommandEvent& event );
+    void ToPlotter( wxCommandEvent& event );
 
     /**
      * Function ToPrinter
      * Open a dialog frame to print layers
      */
-    void                ToPrinter( wxCommandEvent& event );
+    void ToPrinter( wxCommandEvent& event );
 
-    void                Files_io( wxCommandEvent& event );
-    bool                GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
+    void Files_io( wxCommandEvent& event );
+    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
 
     /** Virtual function PrintPage
      * used to print a page
@@ -313,8 +270,8 @@ public:
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void    PrintPage( wxDC* aDC, LSET aPrintMasklayer,
-                               bool aPrintMirrorMode, void * aData ) override;
+    virtual void PrintPage( wxDC* aDC, LSET aPrintMasklayer, bool aPrintMirrorMode,
+                            void * aData ) override;
 
     void OnFileHistory( wxCommandEvent& event );
 
@@ -331,11 +288,9 @@ public:
     void SetCurrFileName( const wxString& aName );
 
     /**
-     * Function RebuildDesignTree
-     * Re creates the design graphic tree list items,
-     * and ensures each item has an unique name
+     * Refresh the library tree and redraw the window
      */
-    void RebuildDesignTree();
+    void HardRedraw() override;
 
     /**
      * Function AddPageLayoutItem
@@ -345,32 +300,7 @@ public:
      * @param aIdx = the position in list to insert the new item.
      * @return a reference to the new item
      */
-    WORKSHEET_DATAITEM * AddPageLayoutItem( int aType, int aIdx = -1 );
-
-    /**
-     * Function GetSelectedItem
-     * @return the current selected item, or NULL
-     */
-    WORKSHEET_DATAITEM * GetSelectedItem();
-
-    /**
-     * Function Locate
-     * @return the page layout item found at position aPosition
-     * @param aPosition = the position (in user units) of the reference point
-     */
-    WORKSHEET_DATAITEM *Locate( wxDC* aDC, const wxPoint& aPosition );
-
-    /**
-     * Initialize a move item command
-     * @param aItem is the item to move
-     */
-    void MoveItem( WORKSHEET_DATAITEM* aItem );
-
-    /**
-     * Save in Undo list the layout, and place an item being moved.
-     * @param aItem is the item moved
-     */
-    void PlaceItem( WORKSHEET_DATAITEM* aItem );
+    WORKSHEET_DATAITEM* AddPageLayoutItem( int aType );
 
     /**
      * Must be called after a change
@@ -391,19 +321,19 @@ public:
      * - Place the current edited layout in undo list
      * - Get the previous version of the current edited layput
      */
-    void GetLayoutFromRedoList( wxCommandEvent& event );
+    void GetLayoutFromRedoList();
 
     /** Undo the last edit:
      * - Place the current layout in Redo list
      * - Get the previous version of the current edited layout
      */
-    void GetLayoutFromUndoList( wxCommandEvent& event );
+    void GetLayoutFromUndoList();
 
     /**
      * Remove the last command in Undo List.
      * Used to clean the Undo stack after a cancel command
      */
-    void RemoveLastCommandInUndoList();
+    void RollbackFromUndo();
 
 protected:
     bool saveCurrentPageLayout();

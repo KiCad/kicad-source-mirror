@@ -21,10 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file lib_bezier.cpp
- */
-
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <macros.h>
@@ -104,9 +100,7 @@ bool LIB_BEZIER::Inside( EDA_RECT& aRect ) const
 void LIB_BEZIER::MoveTo( const wxPoint& aPosition )
 {
     if ( !m_PolyPoints.size() )
-    {
         m_PolyPoints.push_back( wxPoint(0, 0) );
-    }
 
     Offset( aPosition - m_PolyPoints[ 0 ] );
 }
@@ -114,9 +108,7 @@ void LIB_BEZIER::MoveTo( const wxPoint& aPosition )
 const wxPoint LIB_BEZIER::GetOffset() const
 {
     if ( !m_PolyPoints.size() )
-    {
         return wxPoint(0, 0);
-    }
 
     return m_PolyPoints[0];
 }
@@ -167,19 +159,11 @@ void LIB_BEZIER::Rotate( const wxPoint& aCenter, bool aRotateCCW )
 {
     int rot_angle = aRotateCCW ? -900 : 900;
 
-    size_t i, imax = m_PolyPoints.size();
+    for( wxPoint& point : m_PolyPoints )
+        RotatePoint( &point, aCenter, rot_angle );
 
-    for( i = 0; i < imax; i++ )
-    {
-        RotatePoint( &m_PolyPoints[i], aCenter, rot_angle );
-    }
-
-    imax = m_BezierPoints.size();
-
-    for( i = 0; i < imax; i++ )
-    {
-        RotatePoint( &m_BezierPoints[i], aCenter, rot_angle );
-    }
+    for( wxPoint& bezierPoint : m_BezierPoints )
+        RotatePoint( &bezierPoint, aCenter, rot_angle );
 }
 
 
@@ -191,9 +175,8 @@ void LIB_BEZIER::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     static std::vector< wxPoint > cornerList;
     cornerList.clear();
 
-    for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
+    for( wxPoint pos : m_PolyPoints )
     {
-        wxPoint pos = m_PolyPoints[ii];
         pos = aTransform.TransformCoordinate( pos ) + aOffset;
         cornerList.push_back( pos );
     }
@@ -211,7 +194,7 @@ void LIB_BEZIER::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     {
         pen_size = std::max( 0, pen_size );
         aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
-        aPlotter->PlotPoly( cornerList, already_filled ? NO_FILL : m_Fill, GetPenSize() );
+        aPlotter->PlotPoly( cornerList, already_filled ? NO_FILL : m_Fill, pen_size );
     }
 }
 
@@ -240,9 +223,8 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 
     PolyPointsTraslated.clear();
 
-    for( unsigned int i = 0; i < m_PolyPoints.size() ; i++ )
-        PolyPointsTraslated.push_back( aTransform.TransformCoordinate( m_PolyPoints[i] ) +
-                                       aOffset );
+    for( wxPoint& point : m_PolyPoints )
+        PolyPointsTraslated.push_back( aTransform.TransformCoordinate( point ) + aOffset );
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
 
@@ -250,17 +232,17 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
     {
-        GRPoly( clipbox, aDC, m_PolyPoints.size(), &PolyPointsTraslated[0], 1, GetPenSize(),
+        GRPoly( clipbox, aDC, m_PolyPoints.size(), &PolyPointsTraslated[0], true, GetPenSize(),
                 bgColor, bgColor );
     }
     else if( fill == FILLED_SHAPE  )
     {
-        GRPoly( clipbox, aDC, m_PolyPoints.size(), &PolyPointsTraslated[0], 1, GetPenSize(),
+        GRPoly( clipbox, aDC, m_PolyPoints.size(), &PolyPointsTraslated[0], true, GetPenSize(),
                 color, color );
     }
     else
     {
-        GRPoly( clipbox, aDC, m_PolyPoints.size(), &PolyPointsTraslated[0], 0, GetPenSize(),
+        GRPoly( clipbox, aDC, m_PolyPoints.size(), &PolyPointsTraslated[0], false, GetPenSize(),
                 color, color );
     }
 }
@@ -363,8 +345,11 @@ void LIB_BEZIER::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITE
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
 
-    msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
-                bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
+    msg.Printf( wxT( "(%d, %d, %d, %d)" ),
+                bBox.GetOrigin().x,
+                bBox.GetOrigin().y,
+                bBox.GetEnd().x,
+                bBox.GetEnd().y );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Bounding Box" ), msg, BROWN ) );
 }

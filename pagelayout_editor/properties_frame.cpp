@@ -1,11 +1,8 @@
-/**
- * @file properties_frame.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -28,20 +25,28 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
-#include <worksheet_shape_builder.h>
+#include <ws_draw_item.h>
 #include <worksheet_dataitem.h>
 #include <properties_frame.h>
+#include <tool/tool_manager.h>
+#include <tools/pl_selection_tool.h>
 
 PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ):
     PANEL_PROPERTIES_BASE( aParent )
 {
     m_parent = aParent;
+
+    wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    m_staticTextSizeInfo->SetFont( infoFont );
+    m_staticTextInfoThickness->SetFont( infoFont );
 }
 
 
 PROPERTIES_FRAME::~PROPERTIES_FRAME()
 {
 }
+
 
 wxSize PROPERTIES_FRAME::GetMinSize() const
 {
@@ -113,29 +118,22 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToGeneral()
     return true;
 }
 
+
 // Data transfert from item to widgets in properties frame
 void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
 {
     wxString msg;
 
     // Set parameters common to all WORKSHEET_DATAITEM types
-    m_textCtrlType->SetValue( aItem->GetClassName() );
+    m_staticTextType->SetLabel( aItem->GetClassName() );
     m_textCtrlComment->SetValue( aItem->m_Info );
 
     switch( aItem->GetPage1Option() )
     {
-       default:
-        case 0:
-            m_choicePageOpt->SetSelection( 0 );
-            break;
-
-        case 1:
-            m_choicePageOpt->SetSelection( 1 );
-            break;
-
-        case -1:
-            m_choicePageOpt->SetSelection( 2 );
-            break;
+    default:
+    case ALL_PAGES:        m_choicePageOpt->SetSelection( 0 ); break;
+    case FIRST_PAGE_ONLY:  m_choicePageOpt->SetSelection( 1 ); break;
+    case SUBSEQUENT_PAGES: m_choicePageOpt->SetSelection( 2 ); break;
     }
 
     // Position/ start point
@@ -146,14 +144,10 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
 
     switch(  aItem->m_Pos.m_Anchor )
     {
-        case RB_CORNER:      // right bottom corner
-            m_comboBoxCornerPos->SetSelection( 2 ); break;
-        case RT_CORNER:      // right top corner
-            m_comboBoxCornerPos->SetSelection( 0 ); break;
-        case LB_CORNER:      // left bottom corner
-            m_comboBoxCornerPos->SetSelection( 3 ); break;
-        case LT_CORNER:      // left top corner
-            m_comboBoxCornerPos->SetSelection( 1 ); break;
+    case RB_CORNER: m_comboBoxCornerPos->SetSelection( 2 ); break;
+    case RT_CORNER: m_comboBoxCornerPos->SetSelection( 0 ); break;
+    case LB_CORNER: m_comboBoxCornerPos->SetSelection( 3 ); break;
+    case LT_CORNER: m_comboBoxCornerPos->SetSelection( 1 ); break;
     }
 
     // End point
@@ -164,14 +158,10 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
 
     switch( aItem->m_End.m_Anchor )
     {
-        case RB_CORNER:      // right bottom corner
-            m_comboBoxCornerEnd->SetSelection( 2 ); break;
-        case RT_CORNER:      // right top corner
-            m_comboBoxCornerEnd->SetSelection( 0 ); break;
-        case LB_CORNER:      // left bottom corner
-            m_comboBoxCornerEnd->SetSelection( 3 ); break;
-        case LT_CORNER:      // left top corner
-            m_comboBoxCornerEnd->SetSelection( 1 ); break;
+    case RB_CORNER: m_comboBoxCornerEnd->SetSelection( 2 ); break;
+    case RT_CORNER: m_comboBoxCornerEnd->SetSelection( 0 ); break;
+    case LB_CORNER: m_comboBoxCornerEnd->SetSelection( 3 ); break;
+    case LT_CORNER: m_comboBoxCornerEnd->SetSelection( 1 ); break;
     }
 
     msg.Printf( wxT("%.3f"), aItem->m_LineWidth );
@@ -206,19 +196,21 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
         m_textCtrlConstraintY->SetValue( msg );
 
         // Font Options
-		m_checkBoxBold->SetValue( item->IsBold() );
-		m_checkBoxItalic->SetValue( item->IsItalic() );
+		m_checkBoxBold->SetValue( item->m_Bold );
+		m_checkBoxItalic->SetValue( item->m_Italic );
+
         switch( item->m_Hjustify )
         {
-            case GR_TEXT_HJUSTIFY_LEFT: m_choiceHjustify->SetSelection( 0 ); break;
-            case GR_TEXT_HJUSTIFY_CENTER: m_choiceHjustify->SetSelection( 1 ); break;
-            case GR_TEXT_HJUSTIFY_RIGHT: m_choiceHjustify->SetSelection( 2 ); break;
+        case GR_TEXT_HJUSTIFY_LEFT:   m_choiceHjustify->SetSelection( 0 ); break;
+        case GR_TEXT_HJUSTIFY_CENTER: m_choiceHjustify->SetSelection( 1 ); break;
+        case GR_TEXT_HJUSTIFY_RIGHT:  m_choiceHjustify->SetSelection( 2 ); break;
         }
+
         switch( item->m_Vjustify )
         {
-            case GR_TEXT_VJUSTIFY_TOP: m_choiceVjustify->SetSelection( 0 ); break;
-            case GR_TEXT_VJUSTIFY_CENTER: m_choiceVjustify->SetSelection( 1 ); break;
-            case GR_TEXT_VJUSTIFY_BOTTOM: m_choiceVjustify->SetSelection( 2 ); break;
+        case GR_TEXT_VJUSTIFY_TOP:    m_choiceVjustify->SetSelection( 0 ); break;
+        case GR_TEXT_VJUSTIFY_CENTER: m_choiceVjustify->SetSelection( 1 ); break;
+        case GR_TEXT_VJUSTIFY_BOTTOM: m_choiceVjustify->SetSelection( 2 ); break;
         }
 
         // Text size
@@ -306,18 +298,24 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
     m_swItemProperties->Refresh();
 }
 
+
 // Event function called by clicking on the OK button
 void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
 {
+    PL_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<PL_SELECTION_TOOL>();
+    SELECTION&         selection = selTool->GetSelection();
+
     m_parent->SaveCopyInUndoList();
 
-    WORKSHEET_DATAITEM* item = m_parent->GetSelectedItem();
-    if( item )
+    WS_DRAW_ITEM_BASE* drawItem = (WS_DRAW_ITEM_BASE*) selection.Front();
+
+    if( drawItem )
     {
-        CopyPrmsFromPanelToItem( item );
+        WORKSHEET_DATAITEM* dataItem = drawItem->GetPeer();
+        CopyPrmsFromPanelToItem( dataItem );
         // Be sure what is displayed is what is set for item
         // (mainly, texts can be modified if they contain "\n")
-        CopyPrmsFromItemToPanel( item );
+        CopyPrmsFromItemToPanel( dataItem );
     }
 
     CopyPrmsFromPanelToGeneral();
@@ -328,6 +326,7 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
     m_parent->OnModify();
     m_parent->GetCanvas()->Refresh();
 }
+
 
 void PROPERTIES_FRAME::OnSetDefaultValues( wxCommandEvent& event )
 {
@@ -355,18 +354,10 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem )
 
     switch( m_choicePageOpt->GetSelection() )
     {
-        default:
-        case 0:
-            aItem->SetPage1Option( 0 );
-            break;
-
-        case 1:
-            aItem->SetPage1Option( 1 );
-            break;
-
-        case 2:
-            aItem->SetPage1Option( -1 );
-            break;
+    default:
+    case 0: aItem->SetPage1Option( ALL_PAGES );        break;
+    case 1: aItem->SetPage1Option( FIRST_PAGE_ONLY );  break;
+    case 2: aItem->SetPage1Option( SUBSEQUENT_PAGES ); break;
     }
 
     // Import thickness
@@ -382,10 +373,10 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem )
 
     switch( m_comboBoxCornerPos->GetSelection() )
     {
-        case 2: aItem->m_Pos.m_Anchor = RB_CORNER; break;
-        case 0: aItem->m_Pos.m_Anchor = RT_CORNER; break;
-        case 3: aItem->m_Pos.m_Anchor = LB_CORNER; break;
-        case 1: aItem->m_Pos.m_Anchor = LT_CORNER; break;
+    case 2: aItem->m_Pos.m_Anchor = RB_CORNER; break;
+    case 0: aItem->m_Pos.m_Anchor = RT_CORNER; break;
+    case 3: aItem->m_Pos.m_Anchor = LB_CORNER; break;
+    case 1: aItem->m_Pos.m_Anchor = LT_CORNER; break;
     }
 
     // Import End point
@@ -397,10 +388,10 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem )
 
     switch( m_comboBoxCornerEnd->GetSelection() )
     {
-        case 2: aItem->m_End.m_Anchor = RB_CORNER; break;
-        case 0: aItem->m_End.m_Anchor = RT_CORNER; break;
-        case 3: aItem->m_End.m_Anchor = LB_CORNER; break;
-        case 1: aItem->m_End.m_Anchor = LT_CORNER; break;
+    case 2: aItem->m_End.m_Anchor = RB_CORNER; break;
+    case 0: aItem->m_End.m_Anchor = RT_CORNER; break;
+    case 3: aItem->m_End.m_Anchor = LB_CORNER; break;
+    case 1: aItem->m_End.m_Anchor = LT_CORNER; break;
     }
 
     // Import Repeat prms
@@ -425,20 +416,21 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem )
         msg.ToLong( &itmp );
         item->m_IncrementLabel = itmp;
 
-        item->SetBold( m_checkBoxBold->IsChecked() );
-        item->SetItalic( m_checkBoxItalic->IsChecked() );
+        item->m_Bold = m_checkBoxBold->IsChecked();
+        item->m_Italic = m_checkBoxItalic->IsChecked();
 
         switch( m_choiceHjustify->GetSelection() )
         {
-            case 0: item->m_Hjustify = GR_TEXT_HJUSTIFY_LEFT; break;
-            case 1: item->m_Hjustify = GR_TEXT_HJUSTIFY_CENTER; break;
-            case 2: item->m_Hjustify = GR_TEXT_HJUSTIFY_RIGHT; break;
+        case 0: item->m_Hjustify = GR_TEXT_HJUSTIFY_LEFT; break;
+        case 1: item->m_Hjustify = GR_TEXT_HJUSTIFY_CENTER; break;
+        case 2: item->m_Hjustify = GR_TEXT_HJUSTIFY_RIGHT; break;
         }
+
         switch( m_choiceVjustify->GetSelection() )
         {
-            case 0: item->m_Vjustify = GR_TEXT_VJUSTIFY_TOP; break;
-            case 1: item->m_Vjustify = GR_TEXT_VJUSTIFY_CENTER; break;
-            case 2: item->m_Vjustify = GR_TEXT_VJUSTIFY_BOTTOM; break;
+        case 0: item->m_Vjustify = GR_TEXT_VJUSTIFY_TOP; break;
+        case 1: item->m_Vjustify = GR_TEXT_VJUSTIFY_CENTER; break;
+        case 2: item->m_Vjustify = GR_TEXT_VJUSTIFY_BOTTOM; break;
         }
 
         msg = m_textCtrlRotation->GetValue();

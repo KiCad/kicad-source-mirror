@@ -308,8 +308,6 @@ bool SCH_FIELD::IsVoid() const
 
 void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
-    frame->GetCanvas()->SetMouseCapture( NULL, NULL );
-
     SCH_COMPONENT* component = (SCH_COMPONENT*) GetParent();
 
     // save old cmp in undo list

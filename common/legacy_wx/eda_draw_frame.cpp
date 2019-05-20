@@ -67,7 +67,7 @@
 #include <menus_helpers.h>
 #include <page_info.h>
 #include <title_block.h>
-#include <worksheet_shape_builder.h>
+#include <ws_draw_item.h>
 
 /**
  * Definition for enabling and disabling scroll bar setting trace output.  See the
@@ -519,24 +519,9 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
     if( id < 0 || !( id < (int)m_zoomSelectBox->GetCount() ) )
         return;
 
-    if( IsGalCanvasActive() )
-    {
-        m_toolManager->RunAction( "common.Control.zoomPreset", true, id );
-        UpdateStatusBar();
-        m_galCanvas->Refresh();
-    }
-    else if( id == 0 )                      // Auto zoom (Fit in Page)
-    {
-        Zoom_Automatique( true );
-        m_canvas->Refresh();
-    }
-    else
-    {
-        double selectedZoom = GetScreen()->m_ZoomList[id-1];
-
-        if( GetScreen()->SetZoom( selectedZoom ) )
-            RedrawScreen( GetScrollCenterPosition(), false );
-    }
+    m_toolManager->RunAction( "common.Control.zoomPreset", true, id );
+    UpdateStatusBar();
+    m_galCanvas->Refresh();
 }
 
 
@@ -847,8 +832,8 @@ void EDA_DRAW_FRAME::SetMsgPanel( const MSG_PANEL_ITEMS& aList )
 
     ClearMsgPanel();
 
-    for( unsigned i = 0;  i < aList.size();  i++ )
-        m_messagePanel->AppendMessage( aList[i] );
+    for( MSG_PANEL_ITEM item : aList )
+        m_messagePanel->AppendMessage( item );
 }
 
 
@@ -1215,6 +1200,11 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 
     m_canvas->SetEvtHandlerEnabled( !aEnable );
     GetGalCanvas()->SetEvtHandlerEnabled( aEnable );
+
+    if( aEnable )
+        GetGalCanvas()->StartDrawing();
+    else
+        GetGalCanvas()->StopDrawing();
 
     // Switch panes
     m_auimgr.GetPane( "DrawFrame" ).Show( !aEnable );
@@ -1624,6 +1614,7 @@ double EDA_DRAW_FRAME::bestZoom( double sizeX, double sizeY, double scaleFactor,
 }
 
 
+// JEY TODO: Obsolete; replace with ACTIONS::zoomFitScreen
 void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 {
     BASE_SCREEN* screen = GetScreen();
@@ -1643,24 +1634,6 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
         RedrawScreen( GetScrollCenterPosition(), aWarpPointer );
     else
         m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
-}
-
-
-void EDA_DRAW_FRAME::Window_Zoom( EDA_RECT& Rect )
-{
-    // Compute the best zoom
-    Rect.Normalize();
-
-    wxSize size = m_canvas->GetClientSize();
-
-    // Use ceil to at least show the full rect
-    double scalex    = (double) Rect.GetSize().x / size.x;
-    double bestscale = (double) Rect.GetSize().y / size.y;
-
-    bestscale = std::max( bestscale, scalex );
-
-    GetScreen()->SetScalingFactor( bestscale );
-    RedrawScreen( Rect.Centre(), true );
 }
 
 
@@ -2040,19 +2013,22 @@ bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
 }
 
 
-void DrawPageLayout( wxDC* aDC, EDA_RECT* aClipBox,
+void DrawPageLayout( wxDC*            aDC,
+                     EDA_RECT*        aClipBox,
                      const PAGE_INFO& aPageInfo,
-                     const wxString &aFullSheetName,
-                     const wxString& aFileName,
-                     TITLE_BLOCK& aTitleBlock,
-                     int aSheetCount, int aSheetNumber,
-                     int aPenWidth, double aScalar,
-                     COLOR4D aColor, COLOR4D aAltColor,
-                     const wxString& aSheetLayer )
+                     const wxString&  aFullSheetName,
+                     const wxString&  aFileName,
+                     TITLE_BLOCK&     aTitleBlock,
+                     int              aSheetCount,
+                     int              aSheetNumber,
+                     int              aPenWidth,
+                     double           aScalar,
+                     COLOR4D          aColor,
+                     const wxString&  aSheetLayer )
 {
     WS_DRAW_ITEM_LIST drawList;
 
-    drawList.SetPenSize( aPenWidth );
+    drawList.SetDefaultPenSize( aPenWidth );
     drawList.SetMilsToIUfactor( aScalar );
     drawList.SetSheetNumber( aSheetNumber );
     drawList.SetSheetCount( aSheetCount );
@@ -2060,11 +2036,10 @@ void DrawPageLayout( wxDC* aDC, EDA_RECT* aClipBox,
     drawList.SetSheetName( aFullSheetName );
     drawList.SetSheetLayer( aSheetLayer );
 
-    drawList.BuildWorkSheetGraphicList( aPageInfo,
-                               aTitleBlock, aColor, aAltColor );
+    drawList.BuildWorkSheetGraphicList( aPageInfo, aTitleBlock );
 
     // Draw item list
-    drawList.Draw( aClipBox, aDC );
+    drawList.Draw( aClipBox, aDC, aColor );
 }
 
 
@@ -2101,7 +2076,7 @@ void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWi
     DrawPageLayout( aDC, m_canvas->GetClipBox(), pageInfo,
                     GetScreenDesc(), aFilename, t_block,
                     aScreen->m_NumberOfScreens, aScreen->m_ScreenNumber,
-                    aLineWidth, aScalar, color, color, aSheetLayer );
+                    aLineWidth, aScalar, color, aSheetLayer );
 
     if( aScreen->m_IsPrinting && origin.y > 0 )
     {

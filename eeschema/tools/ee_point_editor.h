@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SCH_POINT_EDITOR_H
-#define SCH_POINT_EDITOR_H
+#ifndef EE_POINT_EDITOR_H
+#define EE_POINT_EDITOR_H
 
 #include <tools/ee_tool_base.h>
 #include <tool/edit_points.h>
@@ -32,7 +32,7 @@ class EE_SELECTION_TOOL;
 class SCH_BASE_FRAME;
 
 /**
- * Class SCH_POINT_EDITOR
+ * Class EE_POINT_EDITOR
  *
  * Tool that displays edit points allowing to modify items by dragging the points.
  */
@@ -101,4 +101,4 @@ private:
     std::shared_ptr<EDIT_POINTS> m_editPoints;
 };
 
-#endif  // SCH_POINT_EDITOR_H
+#endif  // EE_POINT_EDITOR_H

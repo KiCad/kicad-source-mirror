@@ -285,6 +285,8 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         m_frame->SetToolID( ID_LIBEDIT_BODY_LINE_BUTT, wxCURSOR_PENCIL, _( "Draw Lines" ) );
     else if( aEvent.IsAction( &EE_ACTIONS::drawSymbolRectangle ) )
         m_frame->SetToolID( ID_LIBEDIT_BODY_RECT_BUTT, wxCURSOR_PENCIL, _( "Draw Rectangle" ) );
+    else
+        wxCHECK_MSG( false, 0, "Unknown action in LIB_DRAWING_TOOLS::DrawShape()" );
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
@@ -329,12 +331,12 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             case ID_LIBEDIT_BODY_CIRCLE_BUTT: item = new LIB_CIRCLE( part );    break;
             case ID_LIBEDIT_BODY_LINE_BUTT:   item = new LIB_POLYLINE( part );  break;
             case ID_LIBEDIT_BODY_RECT_BUTT:   item = new LIB_RECTANGLE( part ); break;
-            default: wxFAIL_MSG( "LIB_DRAWING_TOOLS:DrawShape(): unknown tool" );
             }
 
             item->SetWidth( LIB_EDIT_FRAME::g_LastLineWidth );
             item->SetFillMode( LIB_EDIT_FRAME::g_LastFillStyle );
-            item->BeginEdit( IS_NEW, wxPoint( cursorPos.x, -cursorPos.y ) );
+            item->SetFlags( IS_NEW );
+            item->BeginEdit( wxPoint( cursorPos.x, -cursorPos.y ) );
 
             if( m_frame->m_DrawSpecificUnit )
                 item->SetUnit( m_frame->GetUnit() );
@@ -353,7 +355,8 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
              || evt->IsAction( &EE_ACTIONS::finishDrawing )
              || !item->ContinueEdit( wxPoint( cursorPos.x, -cursorPos.y ) ) )
             {
-                item->EndEdit( wxPoint( cursorPos.x, -cursorPos.y ) );
+                item->EndEdit();
+                item->ClearEditFlags();
                 m_view->ClearPreview();
 
                 m_frame->SaveCopyInUndoList( part );

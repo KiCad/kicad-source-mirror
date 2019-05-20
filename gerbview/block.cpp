@@ -134,9 +134,6 @@ bool GERBVIEW_FRAME::HandleBlockEnd( wxDC* DC )
                                    false );
     }
 
-    if( zoom_command )
-        Window_Zoom( GetScreen()->m_BlockLocate );
-
     return nextcmd ;
 }
 

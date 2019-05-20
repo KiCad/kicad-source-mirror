@@ -52,11 +52,6 @@ public:
     BASE_SCREEN* GetScreen() override;
     virtual EDA_DRAW_FRAME* GetParent() const override;
 
-    virtual void CrossHairOff( wxDC* DC=nullptr ) override;
-
-                          // Show the cross hair.
-    virtual void CrossHairOn( wxDC* DC=nullptr ) override;
-
     virtual void MoveCursorToCrossHair() override;
 
     KIGFX::SCH_VIEW* GetView() const { return view(); }

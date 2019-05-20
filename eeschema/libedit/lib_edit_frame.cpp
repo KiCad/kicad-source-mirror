@@ -196,9 +196,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
-    if( m_canvas )
-        m_canvas->SetEnableBlockCommands( true );
-
     m_libMgr = new LIB_MANAGER( *this );
     SyncLibraries( true );
     m_treePane = new SYMBOL_TREE_PANE( this, m_libMgr );
@@ -1072,16 +1069,8 @@ bool LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
     if( aHotKey )
         keyHandled = GeneralControlKeyMovement( aHotKey, &pos, true );
 
-    if( GetToolId() == ID_NO_TOOL_SELECTED )
-        m_canvas->CrossHairOff( aDC );
-    else
-        m_canvas->CrossHairOn( aDC );
-
     GetGalCanvas()->GetViewControls()->SetSnapping( false );
     SetCrossHairPosition( pos, false );
-
-    if( m_canvas->IsMouseCaptured() )
-        m_canvas->CallMouseCapture( aDC, aPosition, true );
 
     if( aHotKey && OnHotKey( aDC, aHotKey, aPosition, NULL ) )
         keyHandled = true;

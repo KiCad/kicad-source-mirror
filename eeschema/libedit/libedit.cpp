@@ -289,34 +289,6 @@ void LIB_EDIT_FRAME::RedrawComponent( wxDC* aDC, wxPoint aOffset  )
 }
 
 
-void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
-{
-    if( GetScreen() == NULL )
-        return;
-
-    m_canvas->DrawBackGround( DC );
-
-    RedrawComponent( DC, wxPoint( 0, 0 ) );
-
-#ifdef USE_WX_OVERLAY
-    if( IsShown() )
-    {
-        m_overlay.Reset();
-        wxDCOverlay overlaydc( m_overlay, (wxWindowDC*)DC );
-        overlaydc.Clear();
-    }
-#endif
-
-    if( m_canvas->IsMouseCaptured() )
-        m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
-
-    m_canvas->DrawCrossHair( DC );
-
-    updateTitle();
-    UpdateStatusBar();
-}
-
-
 void LIB_EDIT_FRAME::OnSaveAll( wxCommandEvent& event )
 {
     saveAllLibraries( false );

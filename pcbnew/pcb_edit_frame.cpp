@@ -68,7 +68,7 @@
 #include <tool/common_tools.h>
 #include <tool/zoom_tool.h>
 #include <tools/selection_tool.h>
-#include <tools/picker_tool.h>
+#include <tools/pcbnew_picker_tool.h>
 #include <tools/point_editor.h>
 #include <tools/edit_tool.h>
 #include <tools/drawing_tool.h>
@@ -333,9 +333,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     GetScreen()->AddGrid( m_UserGridSize, EDA_UNITS_T::UNSCALED_UNITS, ID_POPUP_GRID_USER );
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
-    if( m_canvas )
-        m_canvas->SetEnableBlockCommands( true );
-
     setupTools();
     ReCreateMenuBar();
     ReCreateHToolbar();
@@ -534,7 +531,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new SELECTION_TOOL );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
-    m_toolManager->RegisterTool( new PICKER_TOOL );
+    m_toolManager->RegisterTool( new PCBNEW_PICKER_TOOL );
     m_toolManager->RegisterTool( new ROUTER_TOOL );
     m_toolManager->RegisterTool( new LENGTH_TUNER_TOOL );
     m_toolManager->RegisterTool( new EDIT_TOOL );

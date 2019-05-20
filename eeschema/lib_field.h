@@ -61,10 +61,6 @@ class LIB_FIELD : public LIB_ITEM, public EDA_TEXT
     int      m_id;           ///< @see enum NumFieldType
     wxString m_name;         ///< Name (not the field text value itself, that is .m_Text)
 
-    wxString m_savedText;    ///< Temporary storage for the string when editing.
-    bool     m_rotate;       ///< Flag to indicate a rotation occurred while editing.
-    bool     m_updateText;   ///< Flag to indicate text change occurred while editing.
-
     /**
      * Draw the field.
      * <p>
@@ -137,7 +133,6 @@ public:
     void SetName( const wxString& aName );
 
     int GetId() const { return m_id; }
-
     void SetId( int aId ) { m_id = aId; }
 
     int GetPenSize( ) const override;
@@ -159,18 +154,13 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    /**
-     * @return true is this field is visible, false if flagged invisible
-     */
-    bool IsVisible() const { return EDA_TEXT::IsVisible(); }  // why needed?
-
     const EDA_RECT GetBoundingBox() const override;
 
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
-    void operator=( const LIB_FIELD& field );
+    LIB_FIELD& operator=( const LIB_FIELD& field );
 
     /**
      * Return the text of a field.
@@ -188,8 +178,7 @@ public:
 
     COLOR4D GetDefaultColor() override;
 
-    void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint ) override;
-    void EndEdit( const wxPoint& aPosition ) override;
+    void BeginEdit( const wxPoint aStartPoint ) override;
 
     void Rotate() override;
 

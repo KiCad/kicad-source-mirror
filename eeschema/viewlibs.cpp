@@ -156,17 +156,6 @@ void LIB_VIEW_FRAME::onSelectSymbolUnit( wxCommandEvent& aEvent )
 }
 
 
-void LIB_VIEW_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
-{
-}
-
-
-bool LIB_VIEW_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
-{
-    return true;
-}
-
-
 void LIB_VIEW_FRAME::DisplayLibInfos()
 {
     if( m_libList && !m_libList->IsEmpty() && !m_libraryName.IsEmpty() )
@@ -179,9 +168,3 @@ void LIB_VIEW_FRAME::DisplayLibInfos()
     }
 }
 
-
-void LIB_VIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
-{
-    DisplayLibInfos();
-    UpdateStatusBar();
-}

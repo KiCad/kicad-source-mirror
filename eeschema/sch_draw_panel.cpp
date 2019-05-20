@@ -98,12 +98,6 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
     // launching a editor from a double click made in another frame)
     m_ignoreNextLeftButtonRelease = true;
 
-    m_mouseCaptureCallback = NULL;
-    m_endMouseCaptureCallback = NULL;
-
-    m_enableBlockCommands = false;
-    m_minDragEventCount = 0;
-
     m_cursorLevel = 0;
     m_PrintIsMirrored = false;
 
@@ -243,18 +237,6 @@ BASE_SCREEN* SCH_DRAW_PANEL::GetScreen()
 EDA_DRAW_FRAME* SCH_DRAW_PANEL::GetParent() const
 {
     return static_cast<EDA_DRAW_FRAME*>(m_parent); // static_cast<SCH_EDIT_FRAME*> (m_parent);
-}
-
-
-void SCH_DRAW_PANEL::CrossHairOff( wxDC* DC )
-{
-    m_viewControls->ShowCursor( false );
-}
-
-
-void SCH_DRAW_PANEL::CrossHairOn( wxDC* DC )
-{
-    m_viewControls->ShowCursor( true );
 }
 
 

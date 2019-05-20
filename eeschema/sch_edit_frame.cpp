@@ -324,9 +324,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
-    if( m_canvas )
-        m_canvas->SetEnableBlockCommands( true );
-
     setupTools();
     ReCreateMenuBar();
     ReCreateHToolbar();
@@ -423,23 +420,11 @@ void SCH_EDIT_FRAME::SaveCopyForRepeatItem( SCH_ITEM* aItem )
     // that item may be deleted, such as part of a line concatonation or other.
     // So simply always keep a copy of the object which is to be repeated.
 
-    SCH_ITEM*   old = m_item_to_repeat;
-    SCH_ITEM*   cur = aItem;
+    delete m_item_to_repeat;
 
-    if( cur != old )
-    {
-        if( cur )
-        {
-            aItem = (SCH_ITEM*) cur->Clone();
-
-            // Clone() preserves the flags, we want 'em cleared.
-            aItem->ClearFlags();
-        }
-
-        m_item_to_repeat = aItem;
-
-        delete old;
-    }
+    m_item_to_repeat = (SCH_ITEM*) aItem->Clone();
+    // Clone() preserves the flags, we want 'em cleared.
+    m_item_to_repeat->ClearFlags();
 }
 
 
@@ -461,20 +446,16 @@ void SCH_EDIT_FRAME::SetSheetNumberAndCount()
     {
         wxString sheetpath = sheetList[i].Path();
 
-        if( sheetpath == current_sheetpath )    // Current sheet path found
+        if( sheetpath == current_sheetpath )   // Current sheet path found
             break;
 
-        SheetNumber++;                          /* Not found, increment sheet
-                                                 * number before this current
-                                                 * path */
+        SheetNumber++;                         // Not found, increment before this current path
     }
 
     g_CurrentSheet->SetPageNumber( SheetNumber );
 
     for( screen = s_list.GetFirst(); screen != NULL; screen = s_list.GetNext() )
-    {
         screen->m_NumberOfScreens = sheet_count;
-    }
 
     GetScreen()->m_ScreenNumber = SheetNumber;
 }
@@ -503,9 +484,7 @@ wxString SCH_EDIT_FRAME::GetScreenDesc() const
 void SCH_EDIT_FRAME::CreateScreens()
 {
     if( g_RootSheet == NULL )
-    {
         g_RootSheet = new SCH_SHEET();
-    }
 
     if( g_RootSheet->GetScreen() == NULL )
     {
@@ -558,30 +537,11 @@ void SCH_EDIT_FRAME::HardRedraw()
 }
 
 
-/*
- * Redraws only the active window which is assumed to be whole visible.
- */
-void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
-{
-    if( GetScreen() == NULL )
-        return;
-
-    if( m_canvas->IsMouseCaptured() )
-        m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
-
-    // Display the sheet filename, and the sheet path, for non root sheets
-    UpdateTitle();
-}
-
-
 void SCH_EDIT_FRAME::SaveUndoItemInUndoList( SCH_ITEM* aItem, bool aAppend )
 {
-    wxCHECK_RET( aItem != NULL,
-                 wxT( "Cannot swap undo item structures.  Bad programmer!." ) );
-    wxCHECK_RET( m_undoItem != NULL,
-                 wxT( "Cannot swap undo item structures.  Bad programmer!." ) );
-    wxCHECK_RET( aItem->Type() == m_undoItem->Type(),
-                 wxT( "Cannot swap undo item structures.  Bad programmer!." ) );
+    wxCHECK_RET( aItem != NULL, wxT( "Cannot swap undo item structures." ) );
+    wxCHECK_RET( m_undoItem != NULL, wxT( "Cannot swap undo item structures." ) );
+    wxCHECK_RET( aItem->Type() == m_undoItem->Type(), wxT( "Cannot swap undo item structures." ) );
 
     aItem->SwapData( m_undoItem );
     SaveCopyInUndoList( aItem, UR_CHANGED, aAppend );
@@ -940,8 +900,7 @@ void SCH_EDIT_FRAME::OnNewProject( wxCommandEvent& event )
 {
     wxString pro_dir = m_mruPath;
 
-    wxFileDialog dlg( this, _( "New Schematic" ), pro_dir,
-                      wxEmptyString, SchematicFileWildcard(),
+    wxFileDialog dlg( this, _( "New Schematic" ), pro_dir, wxEmptyString, SchematicFileWildcard(),
                       wxFD_SAVE );
 
     if( dlg.ShowModal() != wxID_CANCEL )
@@ -971,8 +930,7 @@ void SCH_EDIT_FRAME::OnLoadProject( wxCommandEvent& event )
 {
     wxString pro_dir = m_mruPath;
 
-    wxFileDialog dlg( this, _( "Open Schematic" ), pro_dir,
-                      wxEmptyString, SchematicFileWildcard(),
+    wxFileDialog dlg( this, _( "Open Schematic" ), pro_dir, wxEmptyString, SchematicFileWildcard(),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() != wxID_CANCEL )
@@ -992,8 +950,10 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
         kicad_board.SetExt( PcbFileExtension );
         wxFileName legacy_board( kicad_board );
         legacy_board.SetExt( LegacyPcbFileExtension );
-        wxFileName& boardfn = ( !legacy_board.FileExists() || kicad_board.FileExists() ) ?
-                                    kicad_board : legacy_board;
+        wxFileName& boardfn = legacy_board;
+
+        if( !legacy_board.FileExists() || kicad_board.FileExists() )
+            boardfn = kicad_board;
 
         if( Kiface().IsSingle() )
         {
