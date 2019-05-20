@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -124,14 +124,6 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
 }
 
 
-/*
- * OnConvertTextType is a command event handler to change a text type to another one.
- * The new text, label, hierarchical label, or global label is created from the old text
- * The old text is deleted.
- * A tricky case is when the 'old" text is being edited (i.e. moving)
- * because we must create a new text, and prepare the undo/redo command data for this
- * change and the current move/edit command
- */
 void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
 {
     SCH_SCREEN* screen = GetScreen();
@@ -169,7 +161,18 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
 
     SCH_TEXT* newtext = nullptr;
     const wxPoint &position = text->GetPosition();
-    const wxString &txt = text->GetText();
+    wxString txt = text->GetText();
+
+    // There can be characters in a SCH_TEXT object that can break labels so we have to
+    // fix them here.
+    if( text->Type() == SCH_TEXT_T )
+    {
+        txt.Replace( "\n", "_" );
+        txt.Replace( "\r", "_" );
+        txt.Replace( "\t", "_" );
+        txt.Replace( " ", "_" );
+        txt.Replace( "/", "_" );
+    }
 
     switch( type )
     {

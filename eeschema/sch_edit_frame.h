@@ -985,6 +985,10 @@ private:
      *
      * The new text, label, hierarchical label, or global label is created from the old text
      * and the old text object is deleted.
+     *
+     * A tricky case is when the 'old" text is being edited (i.e. moving) because we must
+     * create a new text, and prepare the undo/redo command data for this change and the
+     * current move/edit command
      */
     void OnConvertTextType( wxCommandEvent& aEvent );
 
