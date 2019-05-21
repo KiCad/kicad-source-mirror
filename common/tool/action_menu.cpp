@@ -401,7 +401,7 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
 #endif
 
             // Handling non-action menu entries (e.g. items in clarification list)
-            if( !evt && m_selected < wxID_LOWEST )
+            if( !evt && ( m_selected < wxID_LOWEST || m_selected > wxID_HIGHEST ) )
             {
                 menuText = GetLabelText( aEvent.GetId() );
                 evt = TOOL_EVENT( TC_COMMAND, TA_CONTEXT_MENU_CHOICE, m_selected, AS_GLOBAL,
