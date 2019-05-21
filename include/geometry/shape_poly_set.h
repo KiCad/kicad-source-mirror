@@ -826,14 +826,24 @@ class SHAPE_POLY_SET : public SHAPE
         void BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
                                   POLYGON_MODE aFastMode );
 
-        /** Performs outline inflation/deflation, using round corners.
-         * Polygons cna have holes, but not linked holes with main outlines,
+        /**
+         * Performs outline inflation/deflation, using (optionally) round corners.
+         * Polygons can have holes, but not linked holes with main outlines,
          * if aFactor < 0.
          * When aFactor is < 0 a bad shape can result from these extra-segments used to
          * link holes to main outlines
          * Use InflateWithLinkedHoles for these polygons, especially if aFactor < 0
+         *
+         * @param aFactor - number of units to offset edges
+         * @param aCircleSegmentsCount - number of segments per 360° to use in curve approx
+         * @param aPreseveCorners - If true, use square joints to keep angles preserved
          */
-        void Inflate( int aFactor, int aCircleSegmentsCount );
+        void Inflate( int aFactor, int aCircleSegmentsCount, bool aPreseveCorners = false );
+
+        void Inflate( int aFactor, bool aPreseveCorners )
+        {
+            Inflate( aFactor, 32, aPreseveCorners );
+        }
 
         ///> Performs outline inflation/deflation, using round corners.
         ///> Polygons can have holes, and/or linked holes with main outlines.

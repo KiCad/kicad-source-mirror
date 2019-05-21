@@ -1135,12 +1135,15 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
 
     vertices.push_back( vertices[0] );
 
+    SHAPE_POLY_SET polygon;
+    polygon.NewOutline();
+
     for( size_t i = 0; i < vertices.size() - 1; i++ )
     {
         EVERTEX v1 = vertices[i];
 
         // Append the corner
-        zone->AppendCorner( wxPoint( kicad_x( v1.x ), kicad_y( v1.y ) ), -1 );
+        polygon.Append( kicad_x( v1.x ), kicad_y( v1.y ) );
 
         if( v1.curve )
         {
@@ -1164,13 +1167,21 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
                     fabs( a - end_angle ) > fabs( delta_angle );
                     a -= delta_angle )
             {
-                zone->AppendCorner(
-                        wxPoint( KiROUND( radius * cos( a ) ),
-                                    KiROUND( radius * sin( a ) ) ) + center,
-                        -1 );
+                polygon.Append( KiROUND( radius * cos( a ) ) + center.x,
+                        KiROUND( radius * sin( a ) ) + center.y );
             }
         }
     }
+
+    // Eagle traces the zone such that half of the pen width is outside the polygon.
+    // We trace the zone such that the copper is completely inside.
+    if( p.width.ToPcbUnits() > 0 )
+    {
+        polygon.Inflate( p.width.ToPcbUnits() / 2, true );
+        polygon.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    }
+
+    zone->AddPolygon( polygon.COutline( 0 ) );
 
     // If the pour is a cutout it needs to be set to a keepout
     if( p.pour == EPOLYGON::CUTOUT )
@@ -1187,13 +1198,13 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
         zone->SetHatch( ZONE_CONTAINER::DIAGONAL_EDGE, zone->GetDefaultHatchPitch(), true );
 
     // clearances, etc.
-    zone->SetArcSegmentCount( ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );     // @todo: should be a constructor default?
-    zone->SetMinThickness( std::max<int>(
-            ZONE_THICKNESS_MIN_VALUE_MIL*IU_PER_MILS, p.width.ToPcbUnits() ) );
+    zone->SetArcSegmentCount( ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
 
-    // FIXME: KiCad zones have very rounded corners compared to eagle.
-    //        This means that isolation amounts that work well in eagle
-    //        tend to make copper intrude in soldermask free areas around pads.
+    // We divide the thickness by half because we are tracing _inside_ the zone outline
+    // This means the radius of curvature will be twice the size for an equivalent EAGLE zone
+    zone->SetMinThickness(
+            std::max<int>( ZONE_THICKNESS_MIN_VALUE_MIL * IU_PER_MILS, p.width.ToPcbUnits() / 2 ) );
+
     if( p.isolate )
         zone->SetZoneClearance( p.isolate->ToPcbUnits() );
     else
@@ -1709,8 +1720,6 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
     dwg->SetTimeStamp( EagleTimeStamp( aTree ) );
 
     std::vector<wxPoint> pts;
-    // TODO: I think there's no way to know a priori the number of children in wxXmlNode :()
-    // pts.reserve( aTree.size() );
 
     // Get the first vertex and iterate
     wxXmlNode* vertex = aTree->GetChildren();
