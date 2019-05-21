@@ -272,10 +272,12 @@ KIGFX::SCH_VIEW* SCH_DRAW_PANEL::view() const
     return static_cast<KIGFX::SCH_VIEW*>( m_view );
 }
 
+
 BASE_SCREEN* SCH_DRAW_PANEL::GetScreen()
 {
     return GetParent()->GetScreen();
 }
+
 
 EDA_DRAW_FRAME* SCH_DRAW_PANEL::GetParent() const
 {
@@ -386,13 +388,13 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         m_PanStartEventPosition = event.GetPosition();
 
           CrossHairOff( );
-          SetCurrentCursor( wxCURSOR_SIZING );
+          SetCursor( wxCURSOR_SIZING );
     }
 
     if( event.ButtonUp( wxMOUSE_BTN_MIDDLE ) )
     {
          CrossHairOn();
-         SetDefaultCursor();
+         SetCursor( m_currentCursor );
     }
 
     if( event.MiddleIsDown() )
@@ -559,6 +561,7 @@ bool SCH_DRAW_PANEL::OnRightClick( wxMouseEvent& event )
     return true;
 }
 
+
 void SCH_DRAW_PANEL::CallMouseCapture( wxDC* aDC, const wxPoint& aPosition, bool aErase )
 {
     wxCHECK_RET( m_mouseCaptureCallback != NULL, wxT( "Mouse capture callback not set." ) );
@@ -594,6 +597,7 @@ void SCH_DRAW_PANEL::EndMouseCapture( int id, int cursor, const wxString& title,
         GetParent()->SetToolID( id, cursor, title );
     }
 }
+
 
 void SCH_DRAW_PANEL::CrossHairOff( wxDC* DC )
 {
