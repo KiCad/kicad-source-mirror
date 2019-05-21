@@ -162,7 +162,9 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aType )
     if( selected )
         m_toolManager->RunAction( EE_ACTIONS::addItemToSel, true, newtext );
 
-    delete aText;
+    // Otherwise, pointer is owned by the undo stack
+    if( aText->IsNew() )
+        delete aText;
 
     OnModify();
 }
