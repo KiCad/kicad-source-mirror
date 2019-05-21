@@ -1298,6 +1298,9 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
 
         int align = ETEXT::BOTTOM_LEFT;     // bottom-left is eagle default
 
+        if( a.align )
+            align = a.align;
+
         // The "rot" in a EATTR seems to be assumed to be zero if it is not
         // present, and this zero rotation becomes an override to the
         // package's text field.  If they did not want zero, they specify
@@ -1324,12 +1327,12 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
         {
             orient = 0 - m->GetOrientation() / 10;
             txt->SetTextAngle( sign * orient * 10 );
-            align = ETEXT::TOP_RIGHT;
+            align = -align;
         }
         else if( degrees == 270 )
         {
             orient = 90 - m->GetOrientation() / 10;
-            align = ETEXT::TOP_RIGHT;
+            align = -align;
             txt->SetTextAngle( sign * orient * 10 );
         }
         else
@@ -1347,6 +1350,26 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
 
         case ETEXT::BOTTOM_LEFT:
             txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+            txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            break;
+
+        case ETEXT::TOP_LEFT:
+            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+            txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+            break;
+
+        case ETEXT::BOTTOM_RIGHT:
+            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            break;
+
+        case ETEXT::TOP_CENTER:
+            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+            txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+            break;
+
+        case ETEXT::BOTTOM_CENTER:
+            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
             txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
             break;
 
