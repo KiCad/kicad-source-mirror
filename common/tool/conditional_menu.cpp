@@ -82,8 +82,12 @@ void CONDITIONAL_MENU::AddCheckItem( int aId, const wxString& aText, const wxStr
 {
     wxMenuItem* item = new wxMenuItem( nullptr, aId, aText, aTooltip, wxITEM_CHECK );
 
+#if !defined(__WXGTK__)  // wxGTK does not support bitmaps on checkable menu items
+
     if( aIcon )
         item->SetBitmap( KiBitmap( aIcon ) );
+
+#endif
 
     addEntry( ENTRY( item, aCondition, aOrder, true ) );
 }
