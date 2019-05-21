@@ -40,8 +40,6 @@ PANEL_MODEDIT_SETTINGS::PANEL_MODEDIT_SETTINGS( FOOTPRINT_EDIT_FRAME* aFrame,
 
 bool PANEL_MODEDIT_SETTINGS::TransferDataToWindow()
 {
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
-
     // Display options
     m_PolarDisplay->SetSelection( m_frame->GetShowPolarCoords() ? 1 : 0 );
     m_UnitsSelection->SetSelection( m_frame->GetUserUnits() == INCHES ? 0 : 1 );

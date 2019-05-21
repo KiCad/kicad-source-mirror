@@ -495,7 +495,6 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     wxCommandEvent     cmd( wxEVT_COMMAND_MENU_SELECTED );
     EE_SELECTION_TOOL* selTool = GetToolManager()->GetTool<EE_SELECTION_TOOL>();
-    SELECTION&         selection = selTool->GetSelection();
 
     cmd.SetEventObject( this );
 

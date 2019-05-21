@@ -41,8 +41,6 @@ PANEL_PCBNEW_SETTINGS::PANEL_PCBNEW_SETTINGS( PCB_EDIT_FRAME* aFrame, PAGED_DIAL
 
 bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
 {
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)m_Frame->GetDisplayOptions();
-
     /* Set display options */
     m_PolarDisplay->SetSelection( m_Frame->GetShowPolarCoords() ? 1 : 0 );
     m_UnitsSelection->SetSelection( m_Frame->GetUserUnits() == INCHES ? 0 : 1 );
