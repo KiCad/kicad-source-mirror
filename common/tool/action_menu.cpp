@@ -70,6 +70,14 @@ static void set_wxMenuIcon( wxMenuItem* aMenu, const BITMAP_OPAQUE* aIcon )
     if( !Pgm().CommonSettings() )
         return;
 
+#if defined(__WXGTK__)
+
+    // wxGTK doesn't support this for non-normal menu items
+    if( aMenu->GetKind() != wxITEM_NORMAL )
+        return;
+
+#endif
+
     // Retrieve the global applicaton show icon option:
     bool useImagesInMenus;
     Pgm().CommonSettings()->Read( USE_ICONS_IN_MENUS_KEY, &useImagesInMenus );
