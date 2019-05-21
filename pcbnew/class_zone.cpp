@@ -993,6 +993,18 @@ ZoneConnection ZONE_CONTAINER::GetPadConnection( D_PAD* aPad ) const
 }
 
 
+void ZONE_CONTAINER::AddPolygon( const SHAPE_LINE_CHAIN& aPolygon )
+{
+    wxASSERT( aPolygon.IsClosed() );
+
+    // Add the outline as a new polygon in the polygon set
+    if( m_Poly->OutlineCount() == 0 )
+        m_Poly->AddOutline( aPolygon );
+    else
+        m_Poly->AddHole( aPolygon );
+}
+
+
 void ZONE_CONTAINER::AddPolygon( std::vector< wxPoint >& aPolygon )
 {
     if( aPolygon.empty() )

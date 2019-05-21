@@ -599,6 +599,8 @@ public:
      */
     void AddPolygon( std::vector< wxPoint >& aPolygon );
 
+    void AddPolygon( const SHAPE_LINE_CHAIN& aPolygon );
+
     void SetFillSegments( const ZONE_SEGMENT_FILL& aSegments )
     {
         m_FillSegmList = aSegments;
