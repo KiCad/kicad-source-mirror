@@ -54,7 +54,7 @@ static void prepareExportMenu( wxMenu* aParentMenu );
 static void preparePlaceMenu( CONDITIONAL_MENU* aPlaceMenu, SELECTION_TOOL* aSelectionTool );
 
 // Build the edit submenu
-static void prepareEditMenu( CONDITIONAL_MENU* aEditMenu, SELECTION_TOOL* aSelectionTool );
+static void prepareEditMenu( PCB_EDIT_FRAME * aFrame, CONDITIONAL_MENU* aEditMenu, SELECTION_TOOL* aSelectionTool );
 
 // Build the route menu
 static void prepareRouteMenu( wxMenu* aParentMenu );
@@ -89,58 +89,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     //----- Edit menu -----------------------------------------------------------
     CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
-    prepareEditMenu( editMenu, selTool );
+    prepareEditMenu( this, editMenu, selTool );
 
-    auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
-        return GetScreen() && GetScreen()->GetUndoCommandCount() > 0;
-    };
-    auto enableRedoCondition = [ this ] ( const SELECTION& sel ) {
-        return GetScreen() && GetScreen()->GetRedoCommandCount() > 0;
-    };
-    auto noActiveToolCondition = [ this ] ( const SELECTION& aSelection ) {
-        return GetToolId() == ID_NO_TOOL_SELECTED;
-    };
-
-    editMenu->AddItem( ACTIONS::undo,                   enableUndoCondition );
-    editMenu->AddItem( ACTIONS::redo,                   enableRedoCondition );
-
-    editMenu->AddSeparator();
-    editMenu->AddItem( ACTIONS::cut,                    SELECTION_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::copy,                   SELECTION_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::paste,                  noActiveToolCondition );
-
-    editMenu->AddSeparator();
-    editMenu->AddItem( PCB_ACTIONS::deleteTool,         SELECTION_CONDITIONS::ShowAlways );
-
-    editMenu->AddSeparator();
-    editMenu->AddItem( ACTIONS::find,                   SELECTION_CONDITIONS::ShowAlways );
-
-    editMenu->AddSeparator();
-    editMenu->AddItem( ID_PCB_EDIT_TRACKS_AND_VIAS,
-                       _( "Edit &Track && Via Properties..." ), "",
-                       width_track_via_xpm,             SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( ID_MENU_PCB_EDIT_TEXT_AND_GRAPHICS,
-                       _( "Edit Text && &Graphic Properties..." ), "",
-                       reset_text_xpm,                  SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( PCB_ACTIONS::exchangeFootprints, SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( ID_MENU_PCB_SWAP_LAYERS,
-                       _( "&Swap Layers..." ),
-                       _( "Move tracks or drawings from a layer to another layer" ),
-                       swap_layer_xpm,                  SELECTION_CONDITIONS::ShowAlways );
-
-    editMenu->AddSeparator();
-    editMenu->AddItem( PCB_ACTIONS::zoneFillAll,        SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( PCB_ACTIONS::zoneUnfillAll,      SELECTION_CONDITIONS::ShowAlways );
-
-    editMenu->AddSeparator();
-    editMenu->AddItem( ID_PCB_GLOBAL_DELETE,
-                       _( "Glo&bal Deletions..." ),
-                       _( "Delete tracks, footprints and graphic items from board" ),
-                       general_deletions_xpm, SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( ID_MENU_PCB_CLEAN,
-                       _( "C&leanup Tracks and Vias..." ),
-                       _( "Clean stubs, vias, delete break points or unconnected tracks" ),
-                       delete_xpm, SELECTION_CONDITIONS::ShowAlways );
 
     //----- View menu -----------------------------------------------------------
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
@@ -316,8 +266,58 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 }
 
 
-void prepareEditMenu( CONDITIONAL_MENU* aEditMenu, SELECTION_TOOL* aSelectionTool )
+void prepareEditMenu( PCB_EDIT_FRAME * aFrame, CONDITIONAL_MENU* aEditMenu, SELECTION_TOOL* aSelectionTool )
 {
+    auto enableUndoCondition = [ aFrame ] ( const SELECTION& sel ) {
+        return aFrame->GetScreen() && aFrame->GetScreen()->GetUndoCommandCount() > 0;
+    };
+    auto enableRedoCondition = [ aFrame ] ( const SELECTION& sel ) {
+        return aFrame->GetScreen() && aFrame->GetScreen()->GetRedoCommandCount() > 0;
+    };
+    auto noActiveToolCondition = [ aFrame ] ( const SELECTION& aSelection ) {
+        return aFrame->GetToolId() == ID_NO_TOOL_SELECTED;
+    };
+
+    aEditMenu->AddItem( ACTIONS::undo,                   enableUndoCondition );
+    aEditMenu->AddItem( ACTIONS::redo,                   enableRedoCondition );
+
+    aEditMenu->AddSeparator();
+    aEditMenu->AddItem( ACTIONS::cut,                    SELECTION_CONDITIONS::NotEmpty );
+    aEditMenu->AddItem( ACTIONS::copy,                   SELECTION_CONDITIONS::NotEmpty );
+    aEditMenu->AddItem( ACTIONS::paste,                  noActiveToolCondition );
+
+    aEditMenu->AddSeparator();
+    aEditMenu->AddItem( PCB_ACTIONS::deleteTool,         SELECTION_CONDITIONS::ShowAlways );
+
+    aEditMenu->AddSeparator();
+    aEditMenu->AddItem( ACTIONS::find,                   SELECTION_CONDITIONS::ShowAlways );
+
+    aEditMenu->AddSeparator();
+    aEditMenu->AddItem( ID_PCB_EDIT_TRACKS_AND_VIAS,
+                       _( "Edit &Track && Via Properties..." ), "",
+                       width_track_via_xpm,             SELECTION_CONDITIONS::ShowAlways );
+    aEditMenu->AddItem( ID_MENU_PCB_EDIT_TEXT_AND_GRAPHICS,
+                       _( "Edit Text && &Graphic Properties..." ), "",
+                       reset_text_xpm,                  SELECTION_CONDITIONS::ShowAlways );
+    aEditMenu->AddItem( PCB_ACTIONS::exchangeFootprints, SELECTION_CONDITIONS::ShowAlways );
+    aEditMenu->AddItem( ID_MENU_PCB_SWAP_LAYERS,
+                       _( "&Swap Layers..." ),
+                       _( "Move tracks or drawings from a layer to another layer" ),
+                       swap_layer_xpm,                  SELECTION_CONDITIONS::ShowAlways );
+
+    aEditMenu->AddSeparator();
+    aEditMenu->AddItem( PCB_ACTIONS::zoneFillAll,        SELECTION_CONDITIONS::ShowAlways );
+    aEditMenu->AddItem( PCB_ACTIONS::zoneUnfillAll,      SELECTION_CONDITIONS::ShowAlways );
+
+    aEditMenu->AddSeparator();
+    aEditMenu->AddItem( ID_PCB_GLOBAL_DELETE,
+                       _( "Glo&bal Deletions..." ),
+                       _( "Delete tracks, footprints and graphic items from board" ),
+                       general_deletions_xpm, SELECTION_CONDITIONS::ShowAlways );
+    aEditMenu->AddItem( ID_MENU_PCB_CLEAN,
+                       _( "C&leanup Tracks and Vias..." ),
+                       _( "Clean stubs, vias, delete break points or unconnected tracks" ),
+                       delete_xpm, SELECTION_CONDITIONS::ShowAlways );
 }
 
 
