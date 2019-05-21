@@ -82,7 +82,7 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
     // Don't use wxFileDialog here.  On GTK builds, the default path is returned unless a
     // file is actually selected.
-    wxDirDialog prodlg( this, protitle, pro.GetPath(), wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+    wxDirDialog prodlg( this, protitle, pro.GetPath(), wxDD_DEFAULT_STYLE );
 
     if( prodlg.ShowModal() == wxID_CANCEL )
         return;
