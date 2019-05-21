@@ -289,6 +289,10 @@ enum main_id
     ID_KICAD_PANEL_PREV_MODEL_START,
     ID_KICAD_PANEL_PREV_MODEL_END = ID_KICAD_PANEL_PREV_MODEL_START + ROOM_FOR_PANEL_PREV_MODEL,
 
+    // Reseve ID for popup menus, when we need to know a menu item is inside a popup menu
+    ID_POPUP_MENU_START,
+    ID_POPUP_MENU_END = ID_POPUP_MENU_START + 1000,
+
     ID_END_LIST
 };
 

@@ -94,18 +94,6 @@ enum id_eeschema_frm
     ID_PLACE_IMAGE_TOOL,
     ID_DELETE_TOOL,
 
-    // Dynamically bound in AddMenusForBus()
-    ID_POPUP_SCH_UNFOLD_BUS,
-    ID_POPUP_SCH_UNFOLD_BUS_END = ID_POPUP_SCH_UNFOLD_BUS + 64,
-
-    // Unit select context menus command IDs.
-    ID_POPUP_SCH_SELECT_UNIT_CMP,
-    ID_POPUP_SCH_SELECT_UNIT1,
-    // ... leave room for MAX_UNIT_COUNT_PER_PACKAGE IDs ,
-    // to select one unit among MAX_UNIT_COUNT_PER_PACKAGE in popup menu
-    ID_POPUP_SCH_SELECT_UNIT_CMP_MAX = ID_POPUP_SCH_SELECT_UNIT1
-                                       + MAX_UNIT_COUNT_PER_PACKAGE,
-
     ID_SCH_MOVE,
     ID_SCH_DRAG,
     ID_SCH_UNFOLD_BUS,
@@ -180,7 +168,24 @@ enum id_eeschema_frm
     ID_SIM_ADD_SIGNALS,
     ID_SIM_SHOW,
 
-    ID_END_EESCHEMA_ID_LIST
+    ID_END_EESCHEMA_ID_LIST,    // End of IDs specific to Eeschema
+
+    // These ID are used in context menus,
+    // and must not clash with any other menu ID inside Kicad
+    // So used ID inside the reserved popup ID
+    //
+    // Dynamically bound in AddMenusForBus():
+    ID_POPUP_SCH_UNFOLD_BUS = ID_POPUP_MENU_START,
+    ID_POPUP_SCH_UNFOLD_BUS_END = ID_POPUP_SCH_UNFOLD_BUS + 128,
+
+    // Unit select context menus command IDs.
+    ID_POPUP_SCH_SELECT_UNIT_CMP,
+    ID_POPUP_SCH_SELECT_UNIT1,
+    // ... leave room for MAX_UNIT_COUNT_PER_PACKAGE IDs ,
+    // to select one unit among MAX_UNIT_COUNT_PER_PACKAGE in popup menu
+    ID_POPUP_SCH_SELECT_UNIT_CMP_MAX = ID_POPUP_SCH_SELECT_UNIT1
+                                       + MAX_UNIT_COUNT_PER_PACKAGE
+
 };
 
 

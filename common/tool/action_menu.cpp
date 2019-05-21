@@ -32,6 +32,7 @@
 #include <tool/action_menu.h>
 #include <wx/log.h>
 #include <pgm_base.h>
+#include <id.h>
 
 
 using namespace std::placeholders;
@@ -401,7 +402,13 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
 #endif
 
             // Handling non-action menu entries (e.g. items in clarification list)
-            if( !evt && ( m_selected < wxID_LOWEST || m_selected > wxID_HIGHEST ) )
+            // in some context menus, that have IDs explicitly chosen between
+            // ID_POPUP_MENU_START and ID_POPUP_MENU_END
+            if( !evt && ( m_selected < wxID_LOWEST ||
+                          ( m_selected >= ID_POPUP_MENU_START &&
+                            m_selected <= ID_POPUP_MENU_END )
+                        )
+              )
             {
                 menuText = GetLabelText( aEvent.GetId() );
                 evt = TOOL_EVENT( TC_COMMAND, TA_CONTEXT_MENU_CHOICE, m_selected, AS_GLOBAL,
