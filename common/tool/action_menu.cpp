@@ -31,7 +31,7 @@
 #include <tool/tool_interactive.h>
 #include <tool/action_menu.h>
 #include <wx/log.h>
-#include <pgm_base.h>
+#include <menus_helpers.h>
 #include <id.h>
 
 
@@ -59,32 +59,6 @@ ACTION_MENU::~ACTION_MENU()
 
     if( parent )
         parent->m_submenus.remove( this );
-}
-
-/*
- * Helper function.
- * Assigns an icon to the wxMenuItem aMenu.
- * aIcon is the icon to be assigned can be NULL.
- */
-static void set_wxMenuIcon( wxMenuItem* aMenu, const BITMAP_OPAQUE* aIcon )
-{
-    if( !Pgm().CommonSettings() )
-        return;
-
-#if defined(__WXGTK__)
-
-    // wxGTK doesn't support this for non-normal menu items
-    if( aMenu->GetKind() != wxITEM_NORMAL )
-        return;
-
-#endif
-
-    // Retrieve the global applicaton show icon option:
-    bool useImagesInMenus;
-    Pgm().CommonSettings()->Read( USE_ICONS_IN_MENUS_KEY, &useImagesInMenus );
-
-    if( aIcon && useImagesInMenus )
-        aMenu->SetBitmap( KiBitmap( aIcon ) );
 }
 
 
@@ -144,7 +118,7 @@ void ACTION_MENU::DisplayTitle( bool aDisplay )
             Insert( 0, new wxMenuItem( this, wxID_NONE, m_title, wxEmptyString, wxITEM_NORMAL ) );
 
             if( m_icon )
-                set_wxMenuIcon( FindItemByPosition( 0 ), m_icon );
+                AddBitmapToMenuItem( FindItemByPosition( 0 ), KiBitmap( m_icon ) );
 
             m_titleDisplayed = true;
         }
@@ -157,7 +131,9 @@ wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, int aId, const BITMAP_OPAQ
     wxASSERT_MSG( FindItem( aId ) == nullptr, "Duplicate menu IDs!" );
 
     wxMenuItem* item = new wxMenuItem( this, aId, aLabel, wxEmptyString, wxITEM_NORMAL );
-    set_wxMenuIcon( item, aIcon );
+
+    if( aIcon )
+        AddBitmapToMenuItem( item, KiBitmap( aIcon ) );
 
     return Append( item );
 }
@@ -169,7 +145,9 @@ wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, const wxString& aTooltip, 
     wxASSERT_MSG( FindItem( aId ) == nullptr, "Duplicate menu IDs!" );
 
     wxMenuItem* item = new wxMenuItem( this, aId, aLabel, aTooltip, wxITEM_NORMAL );
-    set_wxMenuIcon( item, aIcon );
+
+    if( aIcon )
+        AddBitmapToMenuItem( item, KiBitmap( aIcon ) );
 
     return Append( item );
 }
@@ -184,7 +162,8 @@ wxMenuItem* ACTION_MENU::Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry
                                        aAction.GetDescription(),
                                        aIsCheckmarkEntry ? wxITEM_CHECK : wxITEM_NORMAL );
 
-    set_wxMenuIcon( item, icon );
+    if( icon )
+        AddBitmapToMenuItem( item, KiBitmap( icon ) );
 
     m_toolActions[getMenuId( aAction )] = &aAction;
 
@@ -203,7 +182,7 @@ wxMenuItem* ACTION_MENU::Add( ACTION_MENU* aMenu )
     if( aMenu->m_icon )
     {
         wxMenuItem* newItem = new wxMenuItem( this, -1, menuCopy->m_title );
-        set_wxMenuIcon( newItem, aMenu->m_icon );
+        AddBitmapToMenuItem( newItem, KiBitmap( aMenu->m_icon ) );
         newItem->SetSubMenu( menuCopy );
         return Append( newItem );
     }
@@ -502,11 +481,7 @@ wxMenuItem* ACTION_MENU::appendCopy( const wxMenuItem* aSource )
     wxMenuItem* newItem = new wxMenuItem( this, aSource->GetId(), aSource->GetItemLabel(),
                                           aSource->GetHelp(), aSource->GetKind() );
 
-    bool useImagesInMenus;
-    Pgm().CommonSettings()->Read( USE_ICONS_IN_MENUS_KEY, &useImagesInMenus );
-
-    if( aSource->GetKind() == wxITEM_NORMAL && useImagesInMenus )
-        newItem->SetBitmap( aSource->GetBitmap() );
+    AddBitmapToMenuItem( newItem, aSource->GetBitmap() );
 
     if( aSource->IsSubMenu() )
     {

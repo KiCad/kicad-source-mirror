@@ -117,7 +117,7 @@ private:
     public:
         ENTRY( const TOOL_ACTION* aAction, SELECTION_CONDITION aCondition, int aOrder,
                bool aCheckmark ) :
-            m_type( ACTION ),
+            m_type( ACTION ), m_icon(nullptr),
             m_condition( aCondition ),
             m_order( aOrder ),
             m_isCheckmarkEntry( aCheckmark )
@@ -126,7 +126,7 @@ private:
         }
 
         ENTRY( ACTION_MENU* aMenu, SELECTION_CONDITION aCondition, int aOrder ) :
-            m_type( MENU ),
+            m_type( MENU ), m_icon(nullptr),
             m_condition( aCondition ),
             m_order( aOrder ),
             m_isCheckmarkEntry( false )
@@ -134,8 +134,9 @@ private:
             m_data.menu = aMenu;
         }
 
-        ENTRY( wxMenuItem* aItem, SELECTION_CONDITION aCondition, int aOrder, bool aCheckmark ) :
-            m_type( WXITEM ),
+        ENTRY( wxMenuItem* aItem, const BITMAP_OPAQUE* aWxMenuBitmap,
+                SELECTION_CONDITION aCondition, int aOrder, bool aCheckmark ) :
+            m_type( WXITEM ), m_icon( aWxMenuBitmap ),
             m_condition( aCondition ),
             m_order( aOrder ),
             m_isCheckmarkEntry( aCheckmark )
@@ -145,7 +146,7 @@ private:
 
         // Separator
         ENTRY( SELECTION_CONDITION aCondition, int aOrder ) :
-            m_type( SEPARATOR ),
+            m_type( SEPARATOR ), m_icon(nullptr),
             m_condition( aCondition ),
             m_order( aOrder ),
             m_isCheckmarkEntry( false )
@@ -163,6 +164,11 @@ private:
         inline ENTRY_TYPE Type() const
         {
             return m_type;
+        }
+
+        inline const BITMAP_OPAQUE* GetIcon() const
+        {
+            return m_icon;
         }
 
         inline const TOOL_ACTION* Action() const
@@ -205,6 +211,7 @@ private:
 
     private:
         ENTRY_TYPE m_type;
+        const BITMAP_OPAQUE* m_icon;
 
         union {
             const TOOL_ACTION* action;

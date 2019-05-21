@@ -25,6 +25,7 @@
 
 #include <tool/conditional_menu.h>
 #include <tool/action_menu.h>
+#include <menus_helpers.h>
 
 
 CONDITIONAL_MENU::CONDITIONAL_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool ) :
@@ -70,9 +71,9 @@ void CONDITIONAL_MENU::AddItem( int aId, const wxString& aText, const wxString& 
     wxMenuItem* item = new wxMenuItem( nullptr, aId, aText, aTooltip, wxITEM_NORMAL );
 
     if( aIcon )
-        item->SetBitmap( KiBitmap( aIcon ) );
+        AddBitmapToMenuItem( item, KiBitmap( aIcon ) );
 
-    addEntry( ENTRY( item, aCondition, aOrder, false ) );
+    addEntry( ENTRY( item, aIcon, aCondition, aOrder, false ) );
 }
 
 
@@ -82,14 +83,10 @@ void CONDITIONAL_MENU::AddCheckItem( int aId, const wxString& aText, const wxStr
 {
     wxMenuItem* item = new wxMenuItem( nullptr, aId, aText, aTooltip, wxITEM_CHECK );
 
-#if !defined(__WXGTK__)  // wxGTK does not support bitmaps on checkable menu items
-
     if( aIcon )
-        item->SetBitmap( KiBitmap( aIcon ) );
+        AddBitmapToMenuItem( item, KiBitmap( aIcon ) );
 
-#endif
-
-    addEntry( ENTRY( item, aCondition, aOrder, true ) );
+    addEntry( ENTRY( item, aIcon, aCondition, aOrder, true ) );
 }
 
 
@@ -144,8 +141,15 @@ void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
                 break;
 
             case ENTRY::WXITEM:
-                menuItem = Append( entry.wxItem()->GetId(), entry.wxItem()->GetItemLabel(),
+                menuItem = new wxMenuItem( this, entry.wxItem()->GetId(), entry.wxItem()->GetItemLabel(),
                                    entry.wxItem()->GetHelp(), entry.wxItem()->GetKind() );
+
+                if( entry.GetIcon() )
+                    AddBitmapToMenuItem( menuItem, KiBitmap( entry.GetIcon() ) );
+
+                // the wxMenuItem must be append only after the bitmap is set:
+                Append( menuItem );
+
                 menu_count++;
                 break;
 
