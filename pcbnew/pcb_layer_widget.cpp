@@ -99,9 +99,11 @@ static int s_allowed_in_FpEditor[] =
     LAYER_PADS_TH,
     LAYER_PAD_FR,
     LAYER_PAD_BK,
-    LAYER_GRID,
     LAYER_MOD_VALUES,
     LAYER_MOD_REFERENCES,
+    LAYER_CURSOR,
+    LAYER_AUX_ITEMS,
+    LAYER_GRID,
     LAYER_PCB_BACKGROUND
 };
 
