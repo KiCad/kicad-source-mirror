@@ -24,6 +24,7 @@
 
 #include <sch_edit_frame.h>
 #include <sch_sheet.h>
+#include <sch_validators.h>
 #include <dialog_sch_edit_sheet_pin.h>
 
 
@@ -52,8 +53,8 @@ DIALOG_SCH_EDIT_SHEET_PIN::DIALOG_SCH_EDIT_SHEET_PIN( SCH_EDIT_FRAME* parent, SC
     m_sdbSizerOK->SetDefault();
 
     // Set invalid label characters list:
-    wxTextValidator* validator = static_cast<wxTextValidator*>( m_textName->GetValidator() );
-    validator->SetCharExcludes( " /" );
+    SCH_NETNAME_VALIDATOR validator;
+    m_textName->SetValidator( validator );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
@@ -107,10 +108,5 @@ bool DIALOG_SCH_EDIT_SHEET_PIN::TransferDataFromWindow()
 
 void DIALOG_SCH_EDIT_SHEET_PIN::onOKButton( wxCommandEvent& event )
 {
-    // Disable wxWidgets message if a pin name has not allowed chars
-    // (It happens only when editing a old sheet pin name that can contains not allowed chars)
-    wxTextValidator* validator = static_cast<wxTextValidator*>( m_textName->GetValidator() );
-    validator->SetCharExcludes( "" );
-
     event.Skip();
 }

@@ -31,7 +31,7 @@
 #include <fctsys.h>
 #include <sch_edit_frame.h>
 #include <base_units.h>
-#include <validators.h>
+#include <sch_validators.h>
 
 #include <sch_draw_panel.h>
 #include <general.h>
@@ -87,7 +87,7 @@ private:
     wxWindow*       m_activeTextCtrl;
     wxTextEntry*    m_activeTextEntry;
     UNIT_BINDER     m_textSize;
-    REGEX_VALIDATOR m_netNameValidator;
+    SCH_NETNAME_VALIDATOR m_netNameValidator;
 };
 
 
@@ -110,8 +110,7 @@ const int MAX_TEXTSIZE = INT_MAX;
 DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTextItem ) :
     DIALOG_LABEL_EDITOR_BASE( aParent ),
     m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, false ),
-    // first part matches single nets and bus vector, the second part matches complex buses
-    m_netNameValidator( "([^/ ]+)|({[^/]+})" )
+    m_netNameValidator()
 {
     m_Parent = aParent;
     m_CurrentText = aTextItem;
@@ -119,7 +118,7 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
     switch( m_CurrentText->Type() )
     {
     case SCH_GLOBAL_LABEL_T:       SetTitle( _( "Global Label Properties" ) );           break;
-    case SCH_HIER_LABEL_T: SetTitle( _( "Hierarchical Label Properties" ) );     break;
+    case SCH_HIER_LABEL_T:         SetTitle( _( "Hierarchical Label Properties" ) );     break;
     case SCH_LABEL_T:              SetTitle( _( "Label Properties" ) );                  break;
     case SCH_SHEET_PIN_T:          SetTitle( _( "Hierarchical Sheet Pin Properties" ) ); break;
     default:                       SetTitle( _( "Text Properties" ) );                   break;
@@ -142,6 +141,8 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
 
         m_labelSingleLine->Show( false );  m_valueSingleLine->Show( false );
         m_labelMultiLine->Show( false );   m_valueMultiLine->Show( false );
+
+        m_valueCombo->SetValidator( m_netNameValidator );
     }
     else
     {
@@ -150,6 +151,9 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
 
         m_labelCombo->Show( false );       m_valueCombo->Show( false );
         m_labelMultiLine->Show( false );   m_valueMultiLine->Show( false );
+
+        if( m_CurrentText->Type() != SCH_TEXT_T )
+            m_valueSingleLine->SetValidator( m_netNameValidator );
     }
 
     SetInitialFocus( m_activeTextCtrl );

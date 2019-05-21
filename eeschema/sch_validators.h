@@ -67,4 +67,30 @@ public:
 };
 
 
+class SCH_NETNAME_VALIDATOR : public wxValidator
+{
+public:
+    SCH_NETNAME_VALIDATOR( wxString *aVal = nullptr );
+
+    SCH_NETNAME_VALIDATOR( const SCH_NETNAME_VALIDATOR& aValidator );
+
+    bool Copy( const SCH_NETNAME_VALIDATOR& val );
+
+    virtual wxObject* Clone() const override { return new SCH_NETNAME_VALIDATOR( *this ); }
+
+    virtual bool TransferToWindow() override { return true; }
+
+    virtual bool TransferFromWindow() override { return true; }
+
+    wxTextEntry* GetTextEntry();
+
+    virtual bool Validate( wxWindow *aParent ) override;
+
+protected:
+
+    // returns the error message if the contents of 'val' are invalid
+    virtual wxString IsValid( const wxString& aVal ) const;
+
+};
+
 #endif // _SCH_VALIDATORS_H_

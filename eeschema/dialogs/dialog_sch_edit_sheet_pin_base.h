@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_SCH_EDIT_SHEET_PIN_BASE_H__
-#define __DIALOG_SCH_EDIT_SHEET_PIN_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -19,7 +18,6 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/valtext.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
@@ -35,7 +33,7 @@
 class DIALOG_SCH_EDIT_SHEET_PIN_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxStaticText* m_staticText1;
 		wxTextCtrl* m_textName;
@@ -51,17 +49,15 @@ class DIALOG_SCH_EDIT_SHEET_PIN_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void onOKButton( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		wxString m_labelString; 
-		
-		DIALOG_SCH_EDIT_SHEET_PIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Sheet Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_SCH_EDIT_SHEET_PIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Sheet Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_SCH_EDIT_SHEET_PIN_BASE();
-	
+
 };
 
-#endif //__DIALOG_SCH_EDIT_SHEET_PIN_BASE_H__
