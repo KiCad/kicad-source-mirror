@@ -990,12 +990,21 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
                         switch( *a.display )
                         {
                         case EATTR::VALUE :
-                            nameAttr->name = e.name;
-                            m->SetReference( e.name );
+                        {
+                            wxString reference = e.name;
+
+                            // EAGLE allows references to be single digits.  This breaks KiCad netlisting, which requires
+                            // parts to have non-digit + digit annotation.  If the reference begins with a number,
+                            // we prepend 'UNK' (unknown) for the symbol designator
+                            if( reference.find_first_not_of( "0123456789" ) == wxString::npos )
+                                reference.Prepend( "UNK" );
+
+                            nameAttr->name = reference;
+                            m->SetReference( reference );
                             if( refanceNamePresetInPackageLayout )
                                 m->Reference().SetVisible( true );
                             break;
-
+                        }
                         case EATTR::NAME :
                             if( refanceNamePresetInPackageLayout )
                             {
