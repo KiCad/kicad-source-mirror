@@ -88,7 +88,7 @@ TOOL_ACTION EE_ACTIONS::editWithLibEdit( "eeschema.EditorControl.editWithSymbolE
 
 TOOL_ACTION EE_ACTIONS::showLibraryBrowser( "eeschema.EditorControl.showLibraryBrowser",
         AS_GLOBAL, 0,
-        _( "Symbol Library Browser" ), "",
+        _( "Symbol Library Browser" ), _( "Browse symbol libraries" ),
         library_browse_xpm );
 
 TOOL_ACTION EE_ACTIONS::enterSheet( "eeschema.EditorControl.enterSheet",

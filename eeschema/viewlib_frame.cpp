@@ -136,6 +136,10 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     GetScreen()->m_Center = true;      // Axis origin centered on screen.
     LoadSettings( config() );
 
+    // Ensure axis are always drawn (initial default display was not drawn)
+    KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = GetGalDisplayOptions();
+    gal_opts.m_axesEnabled = true;
+
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     setupTools();

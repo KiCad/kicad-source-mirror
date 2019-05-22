@@ -183,6 +183,10 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     LoadSettings( config() );
 
+    // Ensure axis are always drawn
+    KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = GetGalDisplayOptions();
+    gal_opts.m_axesEnabled = true;
+
     m_dummyScreen = new SCH_SCREEN( aKiway );
     SetScreen( m_dummyScreen );
     GetScreen()->m_Center = true;
