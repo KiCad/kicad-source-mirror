@@ -216,6 +216,9 @@ public:
      */
     double GetIUsPerDecimil() const { return m_IUsPerDecimil; }
 
+    int GetPlotterArcLowDef() const { return m_IUsPerDecimil * 8; }
+    int GetPlotterArcHighDef() const { return m_IUsPerDecimil * 2; }
+
     // Low level primitives
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
                        int width = USE_DEFAULT_LINE_WIDTH ) = 0;

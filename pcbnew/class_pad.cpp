@@ -937,15 +937,13 @@ bool D_PAD::HitTest( const wxPoint& aPosition, int aAccuracy ) const
         {
         // Check for hit in polygon
         SHAPE_POLY_SET outline;
-        int            segmentToCircleCount = std::max<int>(
-                GetArcToSegmentCount( GetRoundRectCornerRadius(), ARC_HIGH_DEF, 360.0 ), 3 );
         bool doChamfer = GetShape() == PAD_SHAPE_CHAMFERED_RECT;
 
         TransformRoundChamferedRectToPolygon( outline, wxPoint(0,0), GetSize(), m_Orient,
                                               GetRoundRectCornerRadius(),
                                               doChamfer ? GetChamferRectRatio() : 0.0,
                                               doChamfer ? GetChamferPositions() : 0,
-                                              segmentToCircleCount );
+                                              ARC_HIGH_DEF );
 
         const SHAPE_LINE_CHAIN &poly = outline.COutline( 0 );
         return TestPointInsidePolygon( (const wxPoint*)&poly.CPoint(0), poly.PointCount(), delta );

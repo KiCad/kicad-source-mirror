@@ -324,8 +324,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
     // Output the outline perimeter as polygon.
     if( graphic->GetShape() == S_CIRCLE )
     {
-        int steps = std::max<int>( 4, GetArcToSegmentCount( graphic->GetRadius(), aTolerance, 360.0 ) );
-        TransformCircleToPolygon( aPolygons, graphic->GetCenter(), graphic->GetRadius(), steps );
+        TransformCircleToPolygon( aPolygons, graphic->GetCenter(), graphic->GetRadius(), aTolerance );
     }
     else if( graphic->GetShape() == S_POLYGON )
     {

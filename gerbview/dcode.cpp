@@ -289,7 +289,7 @@ void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent,
     GRClosedPoly( aClipBox, aDC, pointCount, &points[0], aFilled, aColor, aColor );
 }
 
-
+// TODO(snh): Remove the hard-coded count
 #define SEGS_CNT 64     // number of segments to approximate a circle
 
 
@@ -310,7 +310,7 @@ void D_CODE::ConvertShapeToPolygon()
     switch( m_Shape )
     {
     case APT_CIRCLE:        // creates only a circle with rectangular hole
-        TransformCircleToPolygon( m_Polygon, initialpos, m_Size.x >> 1, SEGS_CNT );
+        TransformCircleToPolygon( m_Polygon, initialpos, m_Size.x >> 1, ARC_HIGH_DEF );
         addHoleToPolygon( &m_Polygon, m_DrillShape, m_Drill, initialpos );
         break;
 
@@ -435,7 +435,7 @@ static void addHoleToPolygon( SHAPE_POLY_SET*       aPolygon,
 
     if( aHoleShape == APT_DEF_ROUND_HOLE )
     {
-        TransformCircleToPolygon( holeBuffer, wxPoint( 0, 0 ), aSize.x / 2, SEGS_CNT );
+        TransformCircleToPolygon( holeBuffer, wxPoint( 0, 0 ), aSize.x / 2, ARC_HIGH_DEF );
     }
     else if( aHoleShape == APT_DEF_RECT_HOLE )
     {

@@ -7,7 +7,7 @@
  *
  * Copyright (C) 1992-2017 Jean-Pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@
 #include <common.h>
 #include <macros.h>
 #include <trigo.h>
+#include <convert_to_biu.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <gr_basic.h>
 
@@ -92,6 +93,7 @@ bool AM_PRIMITIVE::IsAMPrimitiveExposureOn( const GERBER_DRAW_ITEM* aParent ) co
     }
 }
 
+// TODO(snh): Remove hard coded count
 const int seg_per_circle = 64;   // Number of segments to approximate a circle
 
 void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent,
@@ -313,13 +315,11 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent,
             if( outerDiam <= penThickness )
             {   // No room to draw a ring (no room for the hole):
                 // draw a circle instead (with no hole), with the right diameter
-                TransformCircleToPolygon( aShapeBuffer, center,
-                                          outerDiam / 2, seg_per_circle );
+                TransformCircleToPolygon( aShapeBuffer, center, outerDiam / 2, ARC_HIGH_DEF );
             }
             else
-                TransformRingToPolygon( aShapeBuffer, center,
-                                        (outerDiam - penThickness) / 2,
-                                        seg_per_circle, penThickness );
+                TransformRingToPolygon( aShapeBuffer, center, ( outerDiam - penThickness ) / 2,
+                        ARC_HIGH_DEF, penThickness );
         }
 
         // Draw the cross:

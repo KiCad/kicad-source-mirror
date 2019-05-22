@@ -841,9 +841,8 @@ void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
     // Currently, a Pad RoundRect is plotted as polygon.
     // TODO: use Aperture macro and flash it
     SHAPE_POLY_SET outline;
-    const int segmentToCircleCount = 64;
     TransformRoundChamferedRectToPolygon( outline, aPadPos, aSize, aOrient,
-                                 aCornerRadius, 0.0, 0, segmentToCircleCount );
+                                 aCornerRadius, 0.0, 0, GetPlotterArcHighDef() );
 
     if( aTraceMode != FILLED )
         outline.Inflate( -GetCurrentLineWidth()/2, 16 );

@@ -414,15 +414,11 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
                     const int holediameter = via->GetDrillValue();
                     const int hole_outer_radius = (holediameter / 2) + GetCopperThicknessBIU();
 
-                    TransformCircleToPolygon( *layerOuterHolesPoly,
-                                              via->GetStart(),
-                                              hole_outer_radius,
-                                              GetNrSegmentsCircle( hole_outer_radius * 2 ) );
+                    TransformCircleToPolygon( *layerOuterHolesPoly, via->GetStart(),
+                            hole_outer_radius, ARC_HIGH_DEF );
 
-                    TransformCircleToPolygon( *layerInnerHolesPoly,
-                                              via->GetStart(),
-                                              holediameter / 2,
-                                              GetNrSegmentsCircle( holediameter ) );
+                    TransformCircleToPolygon( *layerInnerHolesPoly, via->GetStart(),
+                            holediameter / 2, ARC_HIGH_DEF );
                 }
                 else if( lIdx == 0 ) // it only adds once the THT holes
                 {
@@ -431,22 +427,16 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
                     // Add through hole contourns
                     // /////////////////////////////////////////////////////////
-                    TransformCircleToPolygon( m_through_outer_holes_poly,
-                                              via->GetStart(),
-                                              hole_outer_radius,
-                                              GetNrSegmentsCircle( hole_outer_radius * 2 ) );
+                    TransformCircleToPolygon( m_through_outer_holes_poly, via->GetStart(),
+                            hole_outer_radius, ARC_HIGH_DEF );
 
-                    TransformCircleToPolygon( m_through_inner_holes_poly,
-                                              via->GetStart(),
-                                              holediameter / 2,
-                                              GetNrSegmentsCircle( holediameter ) );
+                    TransformCircleToPolygon( m_through_inner_holes_poly, via->GetStart(),
+                            holediameter / 2, ARC_HIGH_DEF );
 
                     // Add samething for vias only
 
-                    TransformCircleToPolygon( m_through_outer_holes_vias_poly,
-                                              via->GetStart(),
-                                              hole_outer_radius,
-                                              GetNrSegmentsCircle( hole_outer_radius * 2 ) );
+                    TransformCircleToPolygon( m_through_outer_holes_vias_poly, via->GetStart(),
+                            hole_outer_radius, ARC_HIGH_DEF );
 
                     //TransformCircleToPolygon( m_through_inner_holes_vias_poly,
                     //                          via->GetStart(),

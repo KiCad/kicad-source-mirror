@@ -823,13 +823,12 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     {
         SHAPE_POLY_SET polySet;
         wxSize prsize( size.x * 2, size.y * 2 );    // size is the half pad area size)
-        const int segmentToCircleCount = 64;
         const int corner_radius = aPad->GetRoundRectCornerRadius( prsize );
         bool doChamfer = shape == PAD_SHAPE_CHAMFERED_RECT;
 
         TransformRoundChamferedRectToPolygon( polySet, wxPoint( 0, 0 ), prsize,
                 0.0, corner_radius, aPad->GetChamferRectRatio(),
-                doChamfer ? aPad->GetChamferPositions() : 0, segmentToCircleCount );
+                doChamfer ? aPad->GetChamferPositions() : 0, ARC_HIGH_DEF );
         m_gal->DrawPolygon( polySet );
         break;
     }

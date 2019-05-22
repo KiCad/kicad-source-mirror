@@ -496,7 +496,6 @@ void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
     // polygon and its thick outline
     SHAPE_POLY_SET  bufferOutline;
     SHAPE_POLY_SET  bufferPolybase;
-    const int circleToSegmentsCount = 16;
 
     bufferPolybase.NewOutline();
 
@@ -504,7 +503,7 @@ void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
     for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
     {
         TransformRoundedEndsSegmentToPolygon( bufferOutline,
-            aCornerList[ii-1], aCornerList[ii], circleToSegmentsCount, aWidth );
+            aCornerList[ii-1], aCornerList[ii], GetPlotterArcHighDef(), aWidth );
     }
 
     // enter the initial polygon:
@@ -591,7 +590,7 @@ void DXF_PLOTTER::ThickSegment( const wxPoint& aStart, const wxPoint& aEnd, int 
         std::vector<wxPoint> cornerList;
         SHAPE_POLY_SET outlineBuffer;
         TransformOvalClearanceToPolygon( outlineBuffer,
-                aStart, aEnd, aWidth, 32 , 1.0 );
+                aStart, aEnd, aWidth, GetPlotterArcHighDef() );
         const SHAPE_LINE_CHAIN& path = outlineBuffer.COutline(0 );
 
         for( int jj = 0; jj < path.PointCount(); jj++ )
@@ -748,7 +747,7 @@ void DXF_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize
     SHAPE_POLY_SET outline;
     const int segmentToCircleCount = 64;
     TransformRoundChamferedRectToPolygon( outline, aPadPos, aSize, aOrient,
-                                 aCornerRadius, 0.0, 0, segmentToCircleCount );
+                                 aCornerRadius, 0.0, 0, GetPlotterArcHighDef() );
 
     // TransformRoundRectToPolygon creates only one convex polygon
     SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );

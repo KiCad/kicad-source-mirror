@@ -502,7 +502,7 @@ void CINFO3D_VISU::createNewPadWithClearance( const D_PAD* aPad,
         int corner_radius = aPad->GetRoundRectCornerRadius( shapesize );
         TransformRoundChamferedRectToPolygon( polyList, PadShapePos, shapesize, aPad->GetOrientation(),
                                          corner_radius, aPad->GetChamferRectRatio(),
-                                         aPad->GetChamferPositions(), 32 );
+                                         aPad->GetChamferPositions(), ARC_HIGH_DEF );
 
         // Add the PAD polygon
         Convert_shape_line_polygon_to_triangles( polyList, *aDstContainer, m_biuTo3Dunits, *aPad );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,11 +111,8 @@ void CINFO3D_VISU::buildPadShapeThickOutlineAsPolygon( const D_PAD* aPad,
 {
     if( aPad->GetShape() == PAD_SHAPE_CIRCLE )    // Draw a ring
     {
-        unsigned int nr_sides_per_circle = GetNrSegmentsCircle( ( aPad->GetSize().x / 2 +
-                                                                  aWidth / 2 ) * 2 );
-
         TransformRingToPolygon( aCornerBuffer, aPad->ShapePos(),
-                                aPad->GetSize().x / 2, nr_sides_per_circle, aWidth );
+                                aPad->GetSize().x / 2, ARC_HIGH_DEF, aWidth );
         return;
     }
 
@@ -123,8 +120,6 @@ void CINFO3D_VISU::buildPadShapeThickOutlineAsPolygon( const D_PAD* aPad,
     // For other shapes, draw polygon outlines
     SHAPE_POLY_SET corners;
 
-    auto nr_sides_per_circle =
-            GetNrSegmentsCircle( std::min( aPad->GetSize().x, aPad->GetSize().y ) );
     buildPadShapePolygon( aPad, corners, wxSize( 0, 0 ) );
 
     // Add outlines as thick segments in polygon buffer
@@ -136,11 +131,8 @@ void CINFO3D_VISU::buildPadShapeThickOutlineAsPolygon( const D_PAD* aPad,
         const VECTOR2I& a = path.CPoint( ii );
         const VECTOR2I& b = path.CPoint( ii + 1 );
 
-        TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
-                                              wxPoint( a.x, a.y ),
-                                              wxPoint( b.x, b.y ),
-                                              nr_sides_per_circle,
-                                              aWidth );
+        TransformRoundedEndsSegmentToPolygon( aCornerBuffer, wxPoint( a.x, a.y ),
+                wxPoint( b.x, b.y ), ARC_HIGH_DEF, aWidth );
     }
 }
 

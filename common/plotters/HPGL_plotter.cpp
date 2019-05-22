@@ -625,7 +625,6 @@ void HPGL_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSiz
                                         EDA_DRAW_MODE_T aTraceMode, void* aData )
 {
     SHAPE_POLY_SET outline;
-    const int segmentToCircleCount = 32;
 
     wxSize size = aSize;
 
@@ -643,11 +642,10 @@ void HPGL_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSiz
     }
 
     TransformRoundChamferedRectToPolygon( outline, aPadPos, size, aOrient,
-                                 aCornerRadius, 0.0, 0, segmentToCircleCount );
+                                 aCornerRadius, 0.0, 0, GetPlotterArcHighDef() );
 
     // TransformRoundRectToPolygon creates only one convex polygon
     std::vector< wxPoint > cornerList;
-    cornerList.reserve( segmentToCircleCount + 5 );
     SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
 
     for( int ii = 0; ii < poly.PointCount(); ++ii )

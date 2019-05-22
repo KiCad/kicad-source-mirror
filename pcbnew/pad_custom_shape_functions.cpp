@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -220,40 +220,33 @@ bool D_PAD::buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError )
 
             for( unsigned ii = 1; ii < poly.size(); ii++ )
             {
-                int numSegs = std::max(
-                        GetArcToSegmentCount( bshape.m_Thickness / 2, aError, 360.0 ), 6 );
                 TransformRoundedEndsSegmentToPolygon(
-                        aux_polyset, poly[ii - 1], poly[ii], numSegs, bshape.m_Thickness );
+                        aux_polyset, poly[ii - 1], poly[ii], aError, bshape.m_Thickness );
             }
             break;
         }
 
         case S_SEGMENT:         // usual segment : line with rounded ends
         {
-            int numSegs =
-                    std::max( GetArcToSegmentCount( bshape.m_Thickness / 2, aError, 360.0 ), 6 );
             TransformRoundedEndsSegmentToPolygon(
-                    aux_polyset, bshape.m_Start, bshape.m_End, numSegs, bshape.m_Thickness );
+                    aux_polyset, bshape.m_Start, bshape.m_End, aError, bshape.m_Thickness );
             break;
         }
 
         case S_ARC:             // Arc with rounded ends
         {
-            int radius = KiROUND( EuclideanNorm( ( bshape.m_Start - bshape.m_End ) ) );
-            int numSegs = std::max( GetArcToSegmentCount( radius, aError, 360.0 ), 6 );
             TransformArcToPolygon( aux_polyset, bshape.m_Start, bshape.m_End, bshape.m_ArcAngle,
-                    numSegs, bshape.m_Thickness );
+                    aError, bshape.m_Thickness );
             break;
         }
 
         case S_CIRCLE:          //  ring or circle
         {
-            int numSegs = std::max( GetArcToSegmentCount( bshape.m_Radius, aError, 360.0 ), 6 );
             if( bshape.m_Thickness )    // ring
                 TransformRingToPolygon(
-                        aux_polyset, bshape.m_Start, bshape.m_Radius, numSegs, bshape.m_Thickness );
+                        aux_polyset, bshape.m_Start, bshape.m_Radius, aError, bshape.m_Thickness );
             else                // Filled circle
-                TransformCircleToPolygon( aux_polyset, bshape.m_Start, bshape.m_Radius, numSegs );
+                TransformCircleToPolygon( aux_polyset, bshape.m_Start, bshape.m_Radius, aError );
             break;
         }
 
@@ -325,12 +318,8 @@ bool D_PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon )
     {
     default:
     case PAD_SHAPE_CIRCLE:
-    {
-        int numSegs = std::max( GetArcToSegmentCount( GetSize().x / 2, ARC_HIGH_DEF, 360.0 ), 6 );
-        TransformCircleToPolygon( *aMergedPolygon, wxPoint( 0, 0 ), GetSize().x / 2, numSegs );
-
+        TransformCircleToPolygon( *aMergedPolygon, wxPoint( 0, 0 ), GetSize().x / 2, ARC_HIGH_DEF );
         break;
-    }
 
     case PAD_SHAPE_RECT:
     {

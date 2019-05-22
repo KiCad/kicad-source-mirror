@@ -517,7 +517,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
                                          0, rradius,
                                          aPad->GetChamferRectRatio(),
                                          doChamfer ? aPad->GetChamferPositions() : 0,
-                                         circleToSegmentsCount );
+                                         ARC_HIGH_DEF );
             SHAPE_LINE_CHAIN& polygonal_shape = cornerBuffer.Outline( 0 );
 
             for( int ndx=0; ndx < reportedLayers; ++ndx )

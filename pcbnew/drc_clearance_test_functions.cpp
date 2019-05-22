@@ -989,7 +989,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
             TransformRoundChamferedRectToPolygon( polysetref, wxPoint( 0, 0 ), aRefPad->GetSize(),
                                              aRefPad->GetOrientation(),
                                              padRadius, aRefPad->GetChamferRectRatio(),
-                                             aRefPad->GetChamferPositions(), 64 );
+                                             aRefPad->GetChamferPositions(), ARC_HIGH_DEF );
         }
         else if( aRefPad->GetShape() == PAD_SHAPE_CUSTOM )
         {
@@ -1031,7 +1031,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
                 TransformRoundChamferedRectToPolygon( polysetcompare, relativePadPos, aPad->GetSize(),
                                                  aPad->GetOrientation(),
                                                  padRadius, aPad->GetChamferRectRatio(),
-                                                 aPad->GetChamferPositions(), 64 );
+                                                 aPad->GetChamferPositions(), ARC_HIGH_DEF );
             }
             else if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
             {
@@ -1422,7 +1422,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         TransformRoundChamferedRectToPolygon( polyset, m_padToTestPos, aPad->GetSize(),
                                          aPad->GetOrientation(),
                                          padRadius, aPad->GetChamferRectRatio(),
-                                         aPad->GetChamferPositions(), 64 );
+                                         aPad->GetChamferPositions(), ARC_HIGH_DEF );
         // Rotate also coordinates by m_segmAngle, because the segment orient
         // is m_segmAngle.
         // we are using a horizontal segment for test, because we know here

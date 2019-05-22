@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,13 +59,13 @@ enum RECT_CHAMFER_POSITIONS : int
  * @param aCornerBuffer = a buffer to store the polygon
  * @param aCenter = the center of the circle
  * @param aRadius = the radius of the circle
- * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+ * @param aError = the IU allowed for error in approximation
  * Note: the polygon is inside the circle, so if you want to have the polygon
  * outside the circle, you should give aRadius calculated with a correction factor
  */
 void TransformCircleToPolygon( SHAPE_POLY_SET&  aCornerBuffer,
                                                 wxPoint aCenter, int aRadius,
-                                                int aCircleToSegmentsCount );
+                                                int aError );
 
 
 /**
@@ -80,14 +80,11 @@ void TransformCircleToPolygon( SHAPE_POLY_SET&  aCornerBuffer,
  * @param aStart = the first point of the segment
  * @param aEnd = the second point of the segment
  * @param aWidth = the width of the segment
- * @param aCircleToSegmentsCount = the number of segments to approximate a circle
- * @param aCorrectionFactor = the coefficient to have segments outside the circle
- * if aCorrectionFactor = 1.0, the shape will be the same as
- * TransformRoundedEndsSegmentToPolygon
+ * @param aError = the IU allowed for error in approximation
  */
 void TransformOvalClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                 wxPoint aStart, wxPoint aEnd, int aWidth,
-                                int aCircleToSegmentsCount, double aCorrectionFactor );
+                                int aError );
 
 
 /**
@@ -120,13 +117,13 @@ void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius,
  *  4 = BOTTOM_LEFT
  *  8 = BOTTOM_RIGHT
  * One can have more than one chamfered corner by ORing the corner identifers
- * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+ * @param aError = the IU allowed for error in approximation
  */
 void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                   const wxPoint& aPosition, const wxSize& aSize,
                                   double aRotation, int aCornerRadius,
                                   double aChamferRatio, int aChamferCorners,
-                                  int aCircleToSegmentsCount );
+                                  int aError );
 
 /**
  * Function TransformRoundedEndsSegmentToPolygon
@@ -135,14 +132,14 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
  * @param aCornerBuffer = a buffer to store the polygon
  * @param aStart = the segment start point coordinate
  * @param aEnd = the segment end point coordinate
- * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+ * @param aError = the IU allowed for error in approximation
  * @param aWidth = the segment width
  * Note: the polygon is inside the arc ends, so if you want to have the polygon
  * outside the circle, you should give aStart and aEnd calculated with a correction factor
  */
 void TransformRoundedEndsSegmentToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                            wxPoint aStart, wxPoint aEnd,
-                                           int aCircleToSegmentsCount,
+                                           int aError,
                                            int aWidth );
 
 
@@ -154,12 +151,12 @@ void TransformRoundedEndsSegmentToPolygon( SHAPE_POLY_SET& aCornerBuffer,
  * @param aCentre = centre of the arc or circle
  * @param aStart = start point of the arc, or a point on the circle
  * @param aArcAngle = arc angle in 0.1 degrees. For a circle, aArcAngle = 3600
- * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+ * @param aError = the IU allowed for error in approximation
  * @param aWidth = width (thickness) of the line
  */
 void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                             wxPoint aCentre, wxPoint aStart, double aArcAngle,
-                            int aCircleToSegmentsCount, int aWidth );
+                            int aError, int aWidth );
 
 /**
  * Function TransformRingToPolygon
@@ -168,11 +165,11 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer,
  * @param aCornerBuffer = a buffer to store the polygon
  * @param aCentre = centre of the arc or circle
  * @param aRadius = radius of the circle
- * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+ * @param aError = the IU allowed for error in approximation
  * @param aWidth = width (thickness) of the ring
  */
 void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                             wxPoint aCentre, int aRadius,
-                            int aCircleToSegmentsCount, int aWidth );
+                            int aError, int aWidth );
 
 #endif     // CONVERT_BASIC_SHAPES_TO_POLYGON_H

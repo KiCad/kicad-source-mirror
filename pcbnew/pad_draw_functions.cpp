@@ -450,7 +450,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         TransformRoundChamferedRectToPolygon( outline, shape_pos, size, GetOrientation(),
                                      corner_radius, GetChamferRectRatio(),
                                      doChamfer ? GetChamferPositions() : 0,
-                                     SEGCOUNT );
+                                     ARC_HIGH_DEF );
 
         // Draw the polygon: Inflate creates only one convex polygon
         bool filled = aDrawInfo.m_ShowPadFilled;
@@ -472,7 +472,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             TransformRoundChamferedRectToPolygon( outline, shape_pos, size, GetOrientation(),
                                          corner_radius, GetChamferRectRatio(),
                                          doChamfer ? GetChamferPositions() : 0,
-                                         SEGCOUNT );
+                                         ARC_HIGH_DEF );
 
             // Draw the polygon: Inflate creates only one convex polygon
             SHAPE_LINE_CHAIN& clearance_poly = outline.Outline( 0 );
