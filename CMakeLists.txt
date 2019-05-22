@@ -339,8 +339,9 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
     elseif( NOT APPLE )
         # Thou shalt not link vaporware and tell us it's a valid DSO (apple ld doesn't support it)
-        set( CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined" )
-        set( CMAKE_MODULE_LINKER_FLAGS "-Wl,--no-undefined" )
+        # temporarily disabled due to breaking ASAN-enabled builds - Tom
+        # set( CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined" )
+        # set( CMAKE_MODULE_LINKER_FLAGS "-Wl,--no-undefined" )
 
         set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
     endif()
