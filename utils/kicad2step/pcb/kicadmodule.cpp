@@ -315,12 +315,9 @@ bool KICADMODULE::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
 
         KICADCURVE lcurve = *i;
 
-        if( LAYER_TOP == m_side )
-        {
-            lcurve.m_start.y = -lcurve.m_start.y;
-            lcurve.m_end.y = -lcurve.m_end.y;
-            lcurve.m_angle = -lcurve.m_angle;
-        }
+        lcurve.m_start.y = -lcurve.m_start.y;
+        lcurve.m_end.y   = -lcurve.m_end.y;
+        lcurve.m_angle   = -lcurve.m_angle;
 
         if( m_rotation < -dlim || m_rotation > dlim )
         {
