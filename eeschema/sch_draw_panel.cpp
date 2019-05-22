@@ -278,8 +278,9 @@ void SCH_DRAW_PANEL::OnCharHook( wxKeyEvent& event )
 
 void SCH_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 {
-    int localkey = event.GetKeyCode();
-    bool keyWasHandled = false;
+    SCH_BASE_FRAME* frame = (SCH_BASE_FRAME*) m_parent;
+    int             localkey = event.GetKeyCode();
+    bool            keyWasHandled = false;
 
     if( localkey == WXK_ESCAPE )
     {
@@ -287,12 +288,19 @@ void SCH_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 
         EE_SELECTION_TOOL* selTool = GetParent()->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
 
-        if( EE_CONDITIONS::Idle( selTool->GetSelection() ) )
-            GetParent()->GetToolManager()->RunAction( EE_ACTIONS::selectionActivate, true );
-        else
-            GetParent()->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
+        if( selTool )
+        {
+            if( EE_CONDITIONS::Idle( selTool->GetSelection() ) )
+                GetParent()->GetToolManager()->RunAction( EE_ACTIONS::selectionActivate, true );
+            else
+                GetParent()->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
 
-        keyWasHandled = true;   // The key is captured: the key event will be not skipped
+            keyWasHandled = true;   // The key is captured: the key event will be not skipped
+        }
+        else if( frame->IsModal() )
+        {
+            frame->DismissModal( wxID_CANCEL );
+        }
     }
 
     /* Normalize keys code to easily handle keys from Ctrl+A to Ctrl+Z

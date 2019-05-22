@@ -228,10 +228,8 @@ public:
      */
     bool Destroy() override;
 
-protected:
-
     bool IsModal()                      { return m_modal; }
-    void SetModal( bool aIsModal )       { m_modal = aIsModal; }
+    void SetModal( bool aIsModal )      { m_modal = aIsModal; }
 
     /**
      * Function IsDismissed
@@ -242,6 +240,8 @@ protected:
     bool IsDismissed();
 
     void DismissModal( bool aRetVal, const wxString& aResult = wxEmptyString );
+
+protected:
 
     /// event handler, routes to derivative specific virtual KiwayMailIn()
     void kiway_express( KIWAY_EXPRESS& aEvent );
