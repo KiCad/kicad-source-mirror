@@ -1,0 +1,10 @@
+[alias]
+	# Alias to check the formatting since the last commit and show the issues
+	# that are found. No files will be changed. Only lines changed since the
+	# last commit are considered (and only for files that should be reformatted)
+	check-format = "! f() { tools/check_coding.sh --diff; }; f"
+
+	# Alias to check and fix formatting issues in files changed since the last
+	# commit. Only lines changed since the last commit are considered (and only
+	# for files that should be reformatted)
+	fix-format = "! f() { tools/check_coding.sh; }; f"
