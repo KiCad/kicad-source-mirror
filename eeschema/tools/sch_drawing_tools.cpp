@@ -855,7 +855,6 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             sheet->SetScreen( NULL );
             sizeSheet( sheet, cursorPos );
 
-            m_selectionTool->AddItemToSel( sheet );
             m_view->ClearPreview();
             m_view->AddToPreview( sheet->Clone() );
         }
@@ -866,9 +865,14 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             m_view->ClearPreview();
 
             if( m_frame->EditSheet( (SCH_SHEET*)sheet, g_CurrentSheet, nullptr ) )
+            {
                 m_frame->AddItemToScreenAndUndoList( sheet );
-            else
+                m_selectionTool->AddItemToSel( sheet );
+            }
+            else 
+            {
                 delete sheet;
+            }
 
             sheet = nullptr;
         }
