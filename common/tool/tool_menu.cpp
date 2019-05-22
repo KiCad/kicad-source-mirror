@@ -60,14 +60,14 @@ void TOOL_MENU::ShowContextMenu( SELECTION& aSelection )
 {
     m_menu.Evaluate( aSelection );
     m_menu.UpdateAll();
-    m_menu.m_Dirty = false;
+    m_menu.ClearDirty();
     m_tool.SetContextMenu( &m_menu, CMENU_NOW );
 }
 
 
 void TOOL_MENU::ShowContextMenu()
 {
-    m_menu.m_Dirty = true;
+    m_menu.SetDirty();
     m_tool.SetContextMenu( &m_menu, CMENU_NOW );
 }
 

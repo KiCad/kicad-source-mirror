@@ -39,7 +39,7 @@ using namespace std::placeholders;
 
 
 ACTION_MENU::ACTION_MENU() :
-    m_Dirty( true ),
+    m_dirty( true ),
     m_titleDisplayed( false ),
     m_selected( -1 ),
     m_tool( nullptr ),
@@ -244,6 +244,20 @@ void ACTION_MENU::UpdateAll()
 }
 
 
+void ACTION_MENU::ClearDirty()
+{
+    m_dirty = false;
+    runOnSubmenus( std::bind( &ACTION_MENU::ClearDirty, _1 ) );
+}
+
+
+void ACTION_MENU::SetDirty()
+{
+    m_dirty = true;
+    runOnSubmenus( std::bind( &ACTION_MENU::SetDirty, _1 ) );
+}
+
+
 void ACTION_MENU::SetTool( TOOL_INTERACTIVE* aTool )
 {
     m_tool = aTool;
@@ -319,7 +333,7 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
 
     wxEventType type = aEvent.GetEventType();
 
-    if( type == wxEVT_MENU_OPEN && m_Dirty )
+    if( type == wxEVT_MENU_OPEN && m_dirty )
     {
         if( m_tool )
             getToolManager()->RunAction( ACTIONS::updateMenu, true, this );

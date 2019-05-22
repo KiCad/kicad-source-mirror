@@ -129,6 +129,13 @@ public:
     void UpdateAll();
 
     /**
+     * Function ClearDirty()
+     * Clears the dirty flag on the menu and all descendants.
+     */
+    void ClearDirty();
+    void SetDirty();
+
+    /**
      * Function SetTool()
      * Sets a tool that is the creator of the menu.
      * @param aTool is the tool that created the menu.
@@ -139,10 +146,6 @@ public:
      * Creates a deep, recursive copy of this ACTION_MENU.
      */
     ACTION_MENU* Clone() const;
-
-public:
-    ///> Menu requires updating before display.
-    bool m_Dirty;
 
     ///> The default menu event handler.
     void OnMenuEvent( wxMenuEvent& aEvent );
@@ -205,6 +208,9 @@ protected:
 
     ///> Checks if any of submenus contains a TOOL_ACTION with a specific ID.
     OPT_TOOL_EVENT findToolAction( int aId );
+
+    ///> Menu requires updating before display.
+    bool m_dirty;
 
     ///> Flag indicating that the menu title was set up.
     bool m_titleDisplayed;

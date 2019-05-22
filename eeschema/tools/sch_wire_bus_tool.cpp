@@ -126,6 +126,8 @@ private:
         SELECTION&         selection = selTool->RequestSelection( busType );
         SCH_LINE*          bus = (SCH_LINE*) selection.Front();
 
+        Clear();
+
         // TODO(JE) remove once real-time is enabled
         if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
         {
@@ -166,7 +168,7 @@ private:
 
             if( member->Type() == CONNECTION_BUS )
             {
-                wxMenu* submenu = new ACTION_MENU;
+                ACTION_MENU* submenu = new ACTION_MENU;
                 AppendSubMenu( submenu, name );
 
                 for( const auto& sub_member : member->Members() )
