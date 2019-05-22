@@ -881,6 +881,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
             // Only perform the dangling end test on root sheet.
             GetScreen()->TestDanglingEnds();
+            RecalculateConnections();
 
             GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
             m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
