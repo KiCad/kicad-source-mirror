@@ -30,7 +30,7 @@ usage='usage: check_coding.sh [<options>] [--]
 
      --diff                     Only show proposed changes, do not format files
 
-     --cached                   Re-format changes currently staged for commit
+     --cached                   Re-format changes currently staged for commit (default)
      --amend                    Re-format changes made in the previous commit
 '
 
