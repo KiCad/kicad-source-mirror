@@ -604,7 +604,13 @@ SELECTION& EE_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
 
     if( m_selection.Size() == 1 )
     {
-        VECTOR2I refP = ((SCH_ITEM*) m_selection.GetItem( 0 ))->GetPosition();
+        VECTOR2I refP;
+
+        if( m_isLibEdit )
+            refP = static_cast<LIB_ITEM*>( m_selection.GetItem( 0 ) )->GetPosition();
+        else
+            refP = static_cast<SCH_ITEM*>( m_selection.GetItem( 0 ) )->GetPosition();
+
         m_selection.SetReferencePoint( refP );
     }
 
