@@ -321,7 +321,9 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
 
     if( type == wxEVT_MENU_OPEN && m_Dirty )
     {
-        getToolManager()->RunAction( ACTIONS::updateMenu, true, this );
+        if( m_tool )
+            getToolManager()->RunAction( ACTIONS::updateMenu, true, this );
+
         aEvent.Skip();
         return;
     }
