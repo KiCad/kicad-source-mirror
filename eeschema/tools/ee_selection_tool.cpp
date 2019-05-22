@@ -601,17 +601,17 @@ SELECTION& EE_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
         m_selection.ClearReferencePoint();
     }
 
-    if( m_selection.Size() == 1 )
+    VECTOR2I refP( 0, 0 );
+
+    if( m_selection.Size() > 0 )
     {
-        VECTOR2I refP;
-
         if( m_isLibEdit )
-            refP = static_cast<LIB_ITEM*>( m_selection.GetItem( 0 ) )->GetPosition();
+            refP = static_cast<LIB_ITEM*>( m_selection.GetTopLeftItem() )->GetPosition();
         else
-            refP = static_cast<SCH_ITEM*>( m_selection.GetItem( 0 ) )->GetPosition();
-
-        m_selection.SetReferencePoint( refP );
+            refP = static_cast<SCH_ITEM*>( m_selection.GetTopLeftItem() )->GetPosition();
     }
+
+    m_selection.SetReferencePoint( refP );
 
     return m_selection;
 }
