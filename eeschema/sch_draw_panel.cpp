@@ -394,7 +394,7 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     if( event.ButtonUp( wxMOUSE_BTN_MIDDLE ) )
     {
          CrossHairOn();
-         SetCursor( m_currentCursor );
+         SetCursor( (wxStockCursor) m_currentCursor );
     }
 
     if( event.MiddleIsDown() )
