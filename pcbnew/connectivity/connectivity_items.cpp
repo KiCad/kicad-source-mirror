@@ -330,7 +330,10 @@ void CN_CLUSTER::Add( CN_ITEM* item )
 {
     m_items.push_back( item );
 
-    if( m_originNet < 0 )
+    if( item->Net() <= 0 )
+        return;
+
+    if( m_originNet <= 0 )
     {
         m_originNet = item->Net();
     }

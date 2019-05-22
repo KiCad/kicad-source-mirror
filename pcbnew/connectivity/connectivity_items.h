@@ -482,7 +482,7 @@ public:
 
     bool HasValidNet() const
     {
-        return m_originNet >= 0;
+        return m_originNet > 0;
     }
 
     int OriginNet() const
@@ -503,7 +503,7 @@ public:
 
     bool HasNet() const
     {
-        return m_originNet >= 0;
+        return m_originNet > 0;
     }
 
     bool IsOrphaned() const
