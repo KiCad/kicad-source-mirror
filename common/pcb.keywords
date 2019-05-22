@@ -111,6 +111,7 @@ layers
 left
 links
 locked
+max_error
 micro
 min_thickness
 mirror

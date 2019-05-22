@@ -526,6 +526,9 @@ void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel+1, "(uvia_min_drill %s)\n",
                   FormatInternalUnits( dsnSettings.m_MicroViasMinDrill ).c_str() );
 
+    m_out->Print( aNestLevel+1, "(max_error %s)\n",
+                  FormatInternalUnits( dsnSettings.m_MaxError ).c_str() );
+
     // 6.0 TODO: are we going to update the tokens we save these under?
     // 6.0 TODO: need to save the LAYER_CLASS_OTHERS stuff
     // 6.0 TODO: need to save the TextItalic and TextUpright settings

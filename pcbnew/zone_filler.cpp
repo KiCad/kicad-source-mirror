@@ -425,8 +425,9 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
                         // the pad shape in zone can be its convex hull or
                         // the shape itself
                         SHAPE_POLY_SET outline( pad->GetCustomShapeAsPolygon() );
-                        int            numSegs = std::max(
-                                GetArcToSegmentCount( clearance, ARC_HIGH_DEF, 360.0 ), 6 );
+                        int numSegs = std::max(
+                                GetArcToSegmentCount( clearance,
+                                        m_board->GetDesignSettings().m_MaxError, 360.0 ), 6 );
                         double correction = GetCircletoPolyCorrectionFactor( numSegs );
                         outline.Inflate( KiROUND( clearance * correction ), numSegs );
                         pad->CustomShapeAsPolygonToBoardPosition(
@@ -474,8 +475,9 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
                     {
                         // the pad shape in zone can be its convex hull or
                         // the shape itself
-                        int numSegs =
-                                std::max( GetArcToSegmentCount( gap, ARC_HIGH_DEF, 360.0 ), 6 );
+                        int numSegs = std::max(
+                                GetArcToSegmentCount( gap, m_board->GetDesignSettings().m_MaxError,
+                                        360.0 ), 6 );
                         double         correction = GetCircletoPolyCorrectionFactor( numSegs );
                         SHAPE_POLY_SET outline( pad->GetCustomShapeAsPolygon() );
                         outline.Inflate( KiROUND( gap * correction ), numSegs );
@@ -547,7 +549,8 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
         {
         case PCB_LINE_T:
             static_cast<DRAWSEGMENT*>( aItem )->TransformShapeWithClearanceToPolygon(
-                    aFeatures, zclearance, ARC_HIGH_DEF, ignoreLineWidth );
+                    aFeatures, zclearance, m_board->GetDesignSettings().m_MaxError,
+                    ignoreLineWidth );
             break;
 
         case PCB_TEXT_T:
@@ -557,7 +560,8 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
 
         case PCB_MODULE_EDGE_T:
             static_cast<EDGE_MODULE*>( aItem )->TransformShapeWithClearanceToPolygon(
-                    aFeatures, zclearance, ARC_HIGH_DEF, ignoreLineWidth );
+                    aFeatures, zclearance, m_board->GetDesignSettings().m_MaxError,
+                    ignoreLineWidth );
             break;
 
         case PCB_MODULE_TEXT_T:
@@ -667,7 +671,7 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
             {
                 CreateThermalReliefPadPolygon( aFeatures, *pad, thermalGap,
                         aZone->GetThermalReliefCopperBridge( pad ), aZone->GetMinThickness(),
-                        ARC_HIGH_DEF, s_thermalRot );
+                        m_board->GetDesignSettings().m_MaxError, s_thermalRot );
             }
         }
     }
@@ -717,8 +721,9 @@ void ZONE_FILLER::computeRawFilledAreas( const ZONE_CONTAINER* aZone,
 
     SHAPE_POLY_SET solidAreas = aSmoothedOutline;
 
-    int numSegs =
-            std::max( GetArcToSegmentCount( outline_half_thickness, ARC_HIGH_DEF, 360.0 ), 6 );
+    int numSegs = std::max(
+            GetArcToSegmentCount( outline_half_thickness, m_board->GetDesignSettings().m_MaxError,
+                    360.0 ), 6 );
     double correction = GetCircletoPolyCorrectionFactor( numSegs );
 
     solidAreas.Inflate( -outline_half_thickness, numSegs );
@@ -845,7 +850,8 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPol
     else
     {
         int numSegs = std::max(
-                GetArcToSegmentCount( aZone->GetMinThickness() / 2, ARC_HIGH_DEF, 360.0 ), 6 );
+                GetArcToSegmentCount( aZone->GetMinThickness() / 2,
+                        m_board->GetDesignSettings().m_MaxError, 360.0 ), 6 );
         aFinalPolys.Inflate( -aZone->GetMinThickness() / 2, numSegs );
 
         // Remove the non filled areas due to the hatch pattern

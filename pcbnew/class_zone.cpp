@@ -1317,9 +1317,16 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly ) const
         break;
 
     case ZONE_SETTINGS::SMOOTHING_FILLET:
-        aSmoothedPoly = m_Poly->Fillet( m_cornerRadius, ARC_HIGH_DEF );
-        break;
+    {
+        auto board = GetBoard();
+        int maxError = ARC_HIGH_DEF;
 
+        if( board )
+            maxError = board->GetDesignSettings().m_MaxError;
+
+        aSmoothedPoly = m_Poly->Fillet( m_cornerRadius, maxError );
+        break;
+    }
     default:
         // Acute angles between adjacent edges can create issues in calculations,
         // in inflate/deflate outlines transforms, especially when the angle is very small.
@@ -1362,7 +1369,13 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
     // holes are linked to the main outline, so only one polygon is created.
     if( clearance )
     {
-        int segCount = std::max( GetArcToSegmentCount( clearance, ARC_HIGH_DEF, 360.0 ), 3 );
+        auto board = GetBoard();
+        int maxError = ARC_HIGH_DEF;
+
+        if( board )
+            maxError = board->GetDesignSettings().m_MaxError;
+
+        int segCount = std::max( GetArcToSegmentCount( clearance, maxError, 360.0 ), 3 );
         polybuffer.Inflate( clearance, segCount );
     }
     polybuffer.Fracture( SHAPE_POLY_SET::PM_FAST );

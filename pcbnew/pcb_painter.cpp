@@ -825,10 +825,15 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         wxSize prsize( size.x * 2, size.y * 2 );    // size is the half pad area size)
         const int corner_radius = aPad->GetRoundRectCornerRadius( prsize );
         bool doChamfer = shape == PAD_SHAPE_CHAMFERED_RECT;
+        auto board = aPad->GetBoard();
+        int maxError = ARC_HIGH_DEF;
+
+        if( board )
+            maxError = board->GetDesignSettings().m_MaxError;
 
         TransformRoundChamferedRectToPolygon( polySet, wxPoint( 0, 0 ), prsize,
                 0.0, corner_radius, aPad->GetChamferRectRatio(),
-                doChamfer ? aPad->GetChamferPositions() : 0, ARC_HIGH_DEF );
+                doChamfer ? aPad->GetChamferPositions() : 0, maxError );
         m_gal->DrawPolygon( polySet );
         break;
     }
@@ -843,12 +848,18 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         // for solder paste).
         if( custom_margin )
         {
+            auto board = aPad->GetBoard();
+            int maxError = ARC_HIGH_DEF;
+
+            if( board )
+                maxError = board->GetDesignSettings().m_MaxError;
+
             SHAPE_POLY_SET outline;
             outline.Append( aPad->GetCustomShapeAsPolygon() );
             // outline polygon can have holes linked to the main outline.
             // So use InflateWithLinkedHoles(), not Inflate() that can create
             // bad shapes if custom_margin is < 0
-            int numSegs = std::max( GetArcToSegmentCount( custom_margin, ARC_HIGH_DEF, 360.0 ), 6 );
+            int numSegs = std::max( GetArcToSegmentCount( custom_margin, maxError, 360.0 ), 6 );
             outline.InflateWithLinkedHoles( custom_margin, numSegs, SHAPE_POLY_SET::PM_FAST );
             m_gal->DrawPolygon( outline );
         }

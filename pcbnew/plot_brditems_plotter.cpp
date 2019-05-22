@@ -187,7 +187,7 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
         const int corner_radius = aPad->GetRoundRectCornerRadius( aPad->GetSize() );
         TransformRoundChamferedRectToPolygon( polygons, shape_pos, aPad->GetSize(),
                 aPad->GetOrientation(), corner_radius, aPad->GetChamferRectRatio(),
-                aPad->GetChamferPositions(), ARC_HIGH_DEF );
+                aPad->GetChamferPositions(), m_board->GetDesignSettings().m_MaxError );
 
         if( polygons.OutlineCount() == 0 )
             break;

@@ -745,7 +745,6 @@ void DXF_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize
                                      EDA_DRAW_MODE_T aTraceMode, void* aData )
 {
     SHAPE_POLY_SET outline;
-    const int segmentToCircleCount = 64;
     TransformRoundChamferedRectToPolygon( outline, aPadPos, aSize, aOrient,
                                  aCornerRadius, 0.0, 0, GetPlotterArcHighDef() );
 

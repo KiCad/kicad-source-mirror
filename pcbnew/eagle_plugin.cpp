@@ -1206,9 +1206,6 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     if( p.spacing )
         zone->SetHatch( ZONE_CONTAINER::DIAGONAL_EDGE, zone->GetDefaultHatchPitch(), true );
 
-    // clearances, etc.
-    zone->SetArcSegmentCount( ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
-
     // We divide the thickness by half because we are tracing _inside_ the zone outline
     // This means the radius of curvature will be twice the size for an equivalent EAGLE zone
     zone->SetMinThickness(

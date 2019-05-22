@@ -38,7 +38,8 @@ PANEL_SETUP_FEATURE_CONSTRAINTS::PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* 
         m_uviaMinSize( aFrame, m_uviaMinSizeLabel, m_uviaMinSizeCtrl, m_uviaMinSizeUnits, true ),
         m_uviaMinDrill( aFrame, m_uviaMinDrillLabel, m_uviaMinDrillCtrl, m_uviaMinDrillUnits, true ),
         m_holeToHoleMin( aFrame, m_HoleToHoleTitle, m_SetHoleToHoleCtrl, m_HoleToHoleUnits, true ),
-        m_edgeClearance( aFrame, m_EdgeClearanceLabel, m_EdgeClearanceCtrl, m_EdgeClearanceUnits, true )
+        m_edgeClearance( aFrame, m_EdgeClearanceLabel, m_EdgeClearanceCtrl, m_EdgeClearanceUnits, true ),
+        m_maxError( aFrame, m_maxErrorTitle, m_maxErrorCtrl, m_maxErrorUnits, true )
 {
     m_Frame = aFrame;
     m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
@@ -63,6 +64,8 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataToWindow()
 
     m_OptRequireCourtyards->SetValue( m_BrdSettings->m_RequireCourtyards );
     m_OptOverlappingCourtyards->SetValue( m_BrdSettings->m_ProhibitOverlappingCourtyards );
+
+    m_maxError.SetValue( m_BrdSettings->m_MaxError );
 
     return true;
 }
@@ -90,6 +93,9 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataFromWindow()
 
     m_BrdSettings->SetRequireCourtyardDefinitions( m_OptRequireCourtyards->GetValue() );
     m_BrdSettings->SetProhibitOverlappingCourtyards( m_OptOverlappingCourtyards->GetValue() );
+
+    m_BrdSettings->m_MaxError = Clamp<int>( IU_PER_MM * MINIMUM_ERROR_SIZE_MM,
+            m_maxError.GetValue(), IU_PER_MM * MAXIMUM_ERROR_SIZE_MM );
 
     return true;
 }

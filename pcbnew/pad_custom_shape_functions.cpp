@@ -32,14 +32,15 @@
 
 #include <pcbnew.h>
 
-#include <class_pad.h>
+#include <bezier_curves.h>
+#include <class_board.h>
 #include <class_drawsegment.h>
 #include <class_edge_mod.h>
+#include <class_pad.h>
 #include <convert_basic_shapes_to_polygon.h>
-#include <geometry/shape_rect.h>
 #include <geometry/convex_hull.h>
 #include <geometry/geometry_utils.h>
-#include <bezier_curves.h>
+#include <geometry/shape_rect.h>
 
 
 void PAD_CS_PRIMITIVE::ExportTo( DRAWSEGMENT* aTarget )
@@ -305,6 +306,12 @@ bool D_PAD::buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError )
  */
 bool D_PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon )
 {
+    auto board = GetBoard();
+    int maxError = ARC_HIGH_DEF;
+
+    if( board )
+        maxError = board->GetDesignSettings().m_MaxError;
+
     // if aMergedPolygon == NULL, use m_customShapeAsPolygon as target
 
     if( !aMergedPolygon )
@@ -318,7 +325,7 @@ bool D_PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon )
     {
     default:
     case PAD_SHAPE_CIRCLE:
-        TransformCircleToPolygon( *aMergedPolygon, wxPoint( 0, 0 ), GetSize().x / 2, ARC_HIGH_DEF );
+        TransformCircleToPolygon( *aMergedPolygon, wxPoint( 0, 0 ), GetSize().x / 2, maxError );
         break;
 
     case PAD_SHAPE_RECT:
@@ -330,7 +337,7 @@ bool D_PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon )
     }
     }
 
-    if( !buildCustomPadPolygon( aMergedPolygon, ARC_HIGH_DEF ) )
+    if( !buildCustomPadPolygon( aMergedPolygon, maxError ) )
         return false;
 
     m_boundingRadius = -1;  // The current bouding radius is no more valid.

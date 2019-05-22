@@ -982,6 +982,12 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         }
         else if( aRefPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT )
         {
+            auto board = aRefPad->GetBoard();
+            int maxError = ARC_HIGH_DEF;
+
+            if( board )
+                maxError = board->GetDesignSettings().m_MaxError;
+
             // The reference pad can be rotated. calculate the rotated
             // coordinates ( note, the ref pad position is the origin of
             // coordinates for this drc test)
@@ -989,7 +995,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
             TransformRoundChamferedRectToPolygon( polysetref, wxPoint( 0, 0 ), aRefPad->GetSize(),
                                              aRefPad->GetOrientation(),
                                              padRadius, aRefPad->GetChamferRectRatio(),
-                                             aRefPad->GetChamferPositions(), ARC_HIGH_DEF );
+                                             aRefPad->GetChamferPositions(), maxError );
         }
         else if( aRefPad->GetShape() == PAD_SHAPE_CUSTOM )
         {
@@ -1024,6 +1030,12 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
             }
             else if( aPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT )
             {
+                auto board = aRefPad->GetBoard();
+                int maxError = ARC_HIGH_DEF;
+
+                if( board )
+                    maxError = board->GetDesignSettings().m_MaxError;
+
                 // The reference pad can be rotated. calculate the rotated
                 // coordinates ( note, the ref pad position is the origin of
                 // coordinates for this drc test)
@@ -1031,7 +1043,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
                 TransformRoundChamferedRectToPolygon( polysetcompare, relativePadPos, aPad->GetSize(),
                                                  aPad->GetOrientation(),
                                                  padRadius, aPad->GetChamferRectRatio(),
-                                                 aPad->GetChamferPositions(), ARC_HIGH_DEF );
+                                                 aPad->GetChamferPositions(), maxError );
             }
             else if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
             {
@@ -1413,6 +1425,12 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
 
     case PAD_SHAPE_CHAMFERED_RECT:
         {
+        auto board = aPad->GetBoard();
+        int maxError = ARC_HIGH_DEF;
+
+        if( board )
+            maxError = board->GetDesignSettings().m_MaxError;
+
         SHAPE_POLY_SET polyset;
         // The pad can be rotated. calculate the coordinates
         // relatives to the segment being tested
@@ -1422,7 +1440,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         TransformRoundChamferedRectToPolygon( polyset, m_padToTestPos, aPad->GetSize(),
                                          aPad->GetOrientation(),
                                          padRadius, aPad->GetChamferRectRatio(),
-                                         aPad->GetChamferPositions(), ARC_HIGH_DEF );
+                                         aPad->GetChamferPositions(), maxError );
         // Rotate also coordinates by m_segmAngle, because the segment orient
         // is m_segmAngle.
         // we are using a horizontal segment for test, because we know here

@@ -454,7 +454,9 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 // shape polygon can have holes linked to the main outline.
                 // So use InflateWithLinkedHoles(), not Inflate() that can create
                 // bad shapes if margin.x is < 0
-                int numSegs = std::max( GetArcToSegmentCount( margin.x, ARC_HIGH_DEF, 360.0 ), 6 );
+                int numSegs = std::max(
+                        GetArcToSegmentCount( margin.x, aBoard->GetDesignSettings().m_MaxError,
+                                360.0 ), 6 );
                 shape.InflateWithLinkedHoles( margin.x, numSegs, SHAPE_POLY_SET::PM_FAST );
                 dummy.DeletePrimitivesList();
                 dummy.AddPrimitive( shape, 0 );
@@ -869,8 +871,9 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // is only a very small calculation time for these calculations)
     ZONE_CONTAINER zone( aBoard );
     zone.SetMinThickness( 0 );      // trace polygons only
-    zone.SetLayer ( layer );
-    int numSegs = std::max( GetArcToSegmentCount( inflate, ARC_HIGH_DEF, 360.0 ), 6 );
+    zone.SetLayer( layer );
+    int numSegs = std::max(
+            GetArcToSegmentCount( inflate, aBoard->GetDesignSettings().m_MaxError, 360.0 ), 6 );
 
     areas.BooleanAdd( initialPolys, SHAPE_POLY_SET::PM_FAST );
     areas.Inflate( -inflate, numSegs );

@@ -70,6 +70,9 @@
 #define LEGACY_COPPEREDGECLEARANCE   -0.01    // A flag to indicate the legacy method (based
                                               // on edge cut line thicknesses) should be used.
 
+#define MINIMUM_ERROR_SIZE_MM         0.001
+#define MAXIMUM_ERROR_SIZE_MM         0.1
+
 /**
  * Struct VIA_DIMENSION
  * is a small helper container to handle a stock of specific vias each with
@@ -194,6 +197,9 @@ public:
     int        m_MicroViasMinSize;          ///< micro vias (not vias) min diameter
     int        m_MicroViasMinDrill;         ///< micro vias (not vias) min drill diameter
     int        m_CopperEdgeClearance;
+
+    // Maximum error allowed when approximating circles and arcs to segments
+    int        m_MaxError;
 
     // Global mask margins:
     int        m_SolderMaskMargin;          ///< Solder mask margin

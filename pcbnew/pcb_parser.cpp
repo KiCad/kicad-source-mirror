@@ -1380,6 +1380,11 @@ void PCB_PARSER::parseSetup()
             NeedRIGHT();
             break;
 
+        case T_max_error:
+            designSettings.m_MaxError = parseBoardUnits( T_max_error );
+            NeedRIGHT();
+            break;
+
         case T_pcbplotparams:
             {
                 PCB_PLOT_PARAMS plotParams;
