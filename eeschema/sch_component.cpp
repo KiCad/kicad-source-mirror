@@ -980,6 +980,7 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
 {
     if( PART_SPTR part = m_part.lock() )
     {
+        wxString symbolName;
         LIB_FIELDS fields;
         part->GetFields( fields );
 
@@ -1000,6 +1001,7 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
 
             if( idx == REFERENCE && !aResetRef )
                 continue;
+
             if( (unsigned) idx < MANDATORY_FIELDS )
                 schField = GetField( idx );
             else
@@ -1018,11 +1020,24 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
             }
 
             if( idx == VALUE )
+            {
                 schField->SetText( m_lib_id.GetLibItemName() ); // fetch alias-specific value
+                symbolName = m_lib_id.GetLibItemName();
+            }
             else if( idx == DATASHEET )
+            {
                 schField->SetText( GetDatasheet() );            // fetch alias-specific value
+
+                // Some older libraries may be broken and the alias datasheet information
+                // in the document file for the root part may have been dropped.  This only
+                // happens for the root part.
+                if( schField->GetText().IsEmpty() && symbolName == part->GetName() )
+                    schField->SetText( part->GetField( DATASHEET )->GetText() );
+            }
             else
+            {
                 schField->SetText( field.GetText() );
+            }
         }
     }
 }
