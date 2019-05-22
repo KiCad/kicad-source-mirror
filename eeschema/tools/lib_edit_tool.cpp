@@ -272,6 +272,8 @@ int LIB_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
     saveCopyInUndoList( part, UR_LIBEDIT );
 
+    std::set<LIB_ITEM *> toDelete;
+
     for( EDA_ITEM* item : items )
     {
         if( item->Type() == LIB_PIN_T )
@@ -279,7 +281,7 @@ int LIB_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
             LIB_PIN*  pin = static_cast<LIB_PIN*>( item );
             wxPoint   pos = pin->GetPosition();
 
-            part->RemoveDrawItem( pin );
+            toDelete.insert( pin );
 
             // when pin editing is synchronized, all pins of the same body style are removed:
             if( m_frame->SynchronizePins() )
@@ -298,14 +300,19 @@ int LIB_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
                     if( pin->GetConvert() != curr_convert )
                         continue;
 
-                    part->RemoveDrawItem( pin );
+                    toDelete.insert( pin );
                 }
             }
         }
         else
         {
-            part->RemoveDrawItem( (LIB_ITEM*) item );
+            toDelete.insert( (LIB_ITEM*) item );
         }
+    }
+
+    for( auto item : toDelete )
+    {
+        part->RemoveDrawItem( item );
     }
 
     m_frame->RebuildView();
