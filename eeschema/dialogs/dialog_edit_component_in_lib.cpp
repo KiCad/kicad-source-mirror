@@ -179,8 +179,18 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataToWindow()
     // Push a copy of each field into m_fields
     m_libEntry->GetFields( *m_fields );
 
-    // Datasheet field is special; grab its value from the docfilename
-    m_fields->at( DATASHEET ).SetText( rootAlias->GetDocFileName() );
+    // The datasheet field is special.  Grab its value from the LIB_ALIAS document file
+    // member except for old libraries that saved the root alias document file in the
+    // datasheet field in the LIB_PART object.
+    if( rootAlias->GetDocFileName().IsEmpty() )
+    {
+        m_fields->at( DATASHEET ).SetText( m_libEntry->GetField( DATASHEET )->GetText() );
+        rootAlias->SetDocFileName( m_libEntry->GetField( DATASHEET )->GetText() );
+    }
+    else
+    {
+        m_fields->at( DATASHEET ).SetText( rootAlias->GetDocFileName() );
+    }
 
     // The Y axis for components in lib is from bottom to top while the screen axis is top
     // to bottom: we must change the y coord sign for editing
