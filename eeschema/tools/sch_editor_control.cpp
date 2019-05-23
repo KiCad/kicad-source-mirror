@@ -118,9 +118,6 @@ TOOL_ACTION EE_ACTIONS::toggleForceHV( "eeschema.EditorControl.forceHVLines",
         lines90_xpm );
 
 
-// A timer during which a subsequent FindNext will result in a wrap-around
-static wxTimer           g_wrapAroundTimer;
-
 // A dummy wxFindReplaceData signalling any marker should be found
 static wxFindReplaceData g_markersOnly;
 
@@ -212,6 +209,9 @@ EDA_ITEM* nextMatch( SCH_SCREEN* aScreen, EDA_ITEM* after, wxFindReplaceData* da
 
 int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
 {
+    // A timer during which a subsequent FindNext will result in a wrap-around
+    static wxTimer wrapAroundTimer;
+
     wxFindReplaceData* data = m_frame->GetFindReplaceData();
 
     if( aEvent.IsAction( &ACTIONS::findNextMarker ) )
@@ -232,11 +232,11 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
     EDA_ITEM*   afterItem = selection.Front();
     EDA_ITEM*   item = nullptr;
 
-    if( g_wrapAroundTimer.IsRunning() )
+    if( wrapAroundTimer.IsRunning() )
     {
         afterScreen = nullptr;
         afterItem = nullptr;
-        g_wrapAroundTimer.Stop();
+        wrapAroundTimer.Stop();
         m_frame->ClearFindReplaceStatus();
     }
 
@@ -297,7 +297,7 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
             msg = _( "Reached end of sheet." );
 
         m_frame->ShowFindReplaceStatus( msg + _( "\nFind again to wrap around to the start." ) );
-        g_wrapAroundTimer.StartOnce( 4000 );
+        wrapAroundTimer.StartOnce( 4000 );
     }
 
     return 0;
