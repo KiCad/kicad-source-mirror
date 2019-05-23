@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2013-2019 KiCad Developers, see CHANGELOG.txt for contributors.
+ * Copyright (C) 2013-2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -417,7 +417,8 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
     if( evt && m_tool )
     {
         //aEvent.StopPropagation();
-        m_tool->GetManager()->ProcessEvent( *evt );
+        if( m_tool->GetManager() )
+            m_tool->GetManager()->ProcessEvent( *evt );
     }
     else
     {
