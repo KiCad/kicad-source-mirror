@@ -26,7 +26,7 @@
 #include <functional>
 #include <tool/selection.h>
 #include <sch_item.h>
-
+#include <lib_draw_item.h>
 
 VECTOR2I SELECTION::GetPosition() const
 {
@@ -57,23 +57,28 @@ EDA_RECT SELECTION::GetBoundingBox() const
 
 EDA_ITEM* SELECTION::GetTopLeftItem( bool onlyModules ) const
 {
-    SCH_ITEM* topLeftItem = nullptr;
-    SCH_ITEM* currentItem;
-
-    wxPoint pos;
+    EDA_ITEM* topLeftItem = nullptr;
+    wxPoint   topLeftPos;
+    wxPoint   pos;
 
     // find the leftmost (smallest x coord) and highest (smallest y with the smallest x) item in the selection
     for( auto item : m_items )
     {
-        currentItem = static_cast<SCH_ITEM*>( item );
-        pos = currentItem->GetPosition();
+        SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
+        LIB_ITEM* lib_item = dynamic_cast<LIB_ITEM*>( item );
 
-        if( topLeftItem == nullptr )
-            topLeftItem = currentItem;
-        else if( pos.x < topLeftItem->GetPosition().x )
-            topLeftItem = currentItem;
-        else if( topLeftItem->GetPosition().x == pos.x && pos.y < topLeftItem->GetPosition().y )
-            topLeftItem = currentItem;
+        if( sch_item )
+            pos = sch_item->GetPosition();
+        else if( lib_item )
+            pos = lib_item->GetPosition();
+
+        if( ( topLeftItem == nullptr )
+            || ( pos.x < topLeftPos.x )
+            || ( topLeftPos.x == pos.x && pos.y < topLeftPos.y ) )
+        {
+            topLeftItem = item;
+            topLeftPos = pos;
+        }
     }
 
     return static_cast<EDA_ITEM*>( topLeftItem );
