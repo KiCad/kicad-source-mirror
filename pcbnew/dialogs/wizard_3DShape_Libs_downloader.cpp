@@ -512,10 +512,27 @@ void WIZARD_3DSHAPE_LIBS_DOWNLOADER::setupGithubList()
     m_checkList3Dlibnames->GetCheckedItems( checkedIndices );
     enableNext( checkedIndices.GetCount() > 0 );
 
-    // Update only if necessary
-    if( m_githubLibs.GetCount() == 0 )
+    // Update only if the text has changed or the list is empty
+    if( m_githubLibs.GetCount() == 0 || m_textCtrlGithubURL->IsModified() )
+    {
+        m_githubLibs.Clear();
         getLibsListGithub( m_githubLibs );
 
+        // Populate the list
+        m_checkList3Dlibnames->Clear();
+        for( unsigned int i = 0; i < m_githubLibs.GetCount(); ++i )
+        {
+            const wxString& lib = m_githubLibs[i].AfterLast( '/' );
+            m_checkList3Dlibnames->Append( lib );
+        }
+
+        m_textCtrlGithubURL->SetModified( 0 );
+    }
+
+    if( !m_checkList3Dlibnames->IsEmpty() )
+        m_checkList3Dlibnames->EnsureVisible( 0 );
+
+    // Clear the search box
     m_searchCtrl3Dlibs->Clear();
 
     // Clear the review list so it will be reloaded
