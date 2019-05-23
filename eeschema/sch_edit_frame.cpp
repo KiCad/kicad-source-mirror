@@ -632,11 +632,14 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     {
         m_findStringHistoryList = m_findReplaceDialog->GetFindEntries();
         m_replaceStringHistoryList = m_findReplaceDialog->GetReplaceEntries();
-        m_findReplaceDialog->Destroy();
-        m_findReplaceDialog = nullptr;
 
         m_findReplaceStatusPopup->Destroy();
         m_findReplaceStatusPopup = nullptr;
+
+        // Must destroy statusPopup first as it holds a pointer to the dialog
+
+        m_findReplaceDialog->Destroy();
+        m_findReplaceDialog = nullptr;
     }
 
     SCH_SCREENS screens;
@@ -834,19 +837,16 @@ wxFindReplaceData* SCH_EDIT_FRAME::GetFindReplaceData()
 
 void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
 {
+    if( m_findReplaceStatusPopup )
+        m_findReplaceStatusPopup->Destroy();
+
+    // Must destroy statup popup first as it holds a pointer to the dialog
+
     if( m_findReplaceDialog )
-    {
-        delete m_findReplaceDialog;
-        delete m_findReplaceStatusPopup;
-    }
+        m_findReplaceDialog->Destroy();
 
-    int style = 0;
-
-    if( aReplace )
-        style = wxFR_REPLACEDIALOG;
-
-    m_findReplaceDialog = new DIALOG_SCH_FIND( this, m_findReplaceData, wxDefaultPosition,
-                                            wxDefaultSize, style );
+    m_findReplaceDialog= new DIALOG_SCH_FIND( this, m_findReplaceData, wxDefaultPosition,
+                                              wxDefaultSize, aReplace ? wxFR_REPLACEDIALOG : 0 );
 
     m_findReplaceDialog->SetFindEntries( m_findStringHistoryList );
     m_findReplaceDialog->SetReplaceEntries( m_replaceStringHistoryList );
@@ -877,8 +877,14 @@ void SCH_EDIT_FRAME::OnFindDialogClose()
 {
     m_findStringHistoryList = m_findReplaceDialog->GetFindEntries();
     m_replaceStringHistoryList = m_findReplaceDialog->GetReplaceEntries();
+
+    m_findReplaceStatusPopup->Destroy();
+    m_findReplaceStatusPopup = nullptr;
+
+    // Must destroy statusPopup first as it holds a pointer to the dialog
+
     m_findReplaceDialog->Destroy();
-    m_findReplaceDialog = NULL;
+    m_findReplaceDialog = nullptr;
 }
 
 
