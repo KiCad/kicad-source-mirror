@@ -59,8 +59,15 @@ BITMAP_BASE::BITMAP_BASE( const BITMAP_BASE& aSchBitmap )
     m_scale = aSchBitmap.m_scale;
     m_ppi   = aSchBitmap.m_ppi;
     m_pixelScaleFactor = aSchBitmap.m_pixelScaleFactor;
-    m_image = new wxImage( *aSchBitmap.m_image );
-    m_bitmap = new wxBitmap( *m_image );
+
+    m_image = nullptr;
+    m_bitmap = nullptr;
+
+    if( aSchBitmap.m_image )
+    {
+        m_image = new wxImage( *aSchBitmap.m_image );
+        m_bitmap = new wxBitmap( *m_image );
+    }
 }
 
 

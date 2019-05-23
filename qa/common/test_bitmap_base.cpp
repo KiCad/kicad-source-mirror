@@ -113,9 +113,10 @@ BOOST_AUTO_TEST_CASE( Empty )
 }
 
 
-#ifdef HAVE_EXPECTED_FAILURES
-
-BOOST_AUTO_TEST_CASE( EmptyCopy, *boost::unit_test::expected_failures( 1 ) )
+/**
+ * Check we can validly copy an empty bitmap
+ */
+BOOST_AUTO_TEST_CASE( EmptyCopy )
 {
     BITMAP_BASE empty;
     BITMAP_BASE copied = empty;
@@ -123,8 +124,6 @@ BOOST_AUTO_TEST_CASE( EmptyCopy, *boost::unit_test::expected_failures( 1 ) )
     // should still have nothing in it
     BOOST_CHECK_EQUAL( copied.GetImageData(), nullptr );
 }
-
-#endif
 
 
 struct TEST_PIXEL_CASE
