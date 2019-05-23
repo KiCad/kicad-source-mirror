@@ -30,8 +30,11 @@
 #include <wx/bitmap.h>
 #include <wx/image.h>
 
-
+namespace KIGFX
+{
 class COLOR4D;
+}
+
 class LINE_READER;
 class PLOTTER;
 
@@ -243,7 +246,7 @@ public:
      * @param aDefaultPensize = the pen size used to plot the rectangle when bitmap is not supported
      */
     void PlotImage( PLOTTER* aPlotter, const wxPoint& aPos,
-                    COLOR4D aDefaultColor, int aDefaultPensize );
+                    KIGFX::COLOR4D aDefaultColor, int aDefaultPensize );
 };
 
 
