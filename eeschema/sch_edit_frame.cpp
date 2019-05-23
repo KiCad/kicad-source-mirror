@@ -785,6 +785,23 @@ void SCH_EDIT_FRAME::CloseErc()
 
 void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
 {
+    if( Kiface().IsSingle() )
+    {
+        DisplayError( this,  _( "Cannot update the PCB, because the Schematic Editor is"
+                                " opened in stand-alone mode. In order to create/update"
+                                " PCBs from schematics, you need to launch Kicad shell"
+                                " and create a PCB project." ) );
+        return;
+    }
+
+    KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB, true );
+
+    // On Windows, Raise() does not bring the window on screen, when iconized
+    if( frame->IsIconized() )
+        frame->Iconize( false );
+
+    frame->Raise();
+
     std::string payload;
     Kiway().ExpressMail( FRAME_PCB, MAIL_PCB_UPDATE, payload, this );
 }
