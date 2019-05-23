@@ -286,21 +286,12 @@ void SCH_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
     {
         m_abortRequest = true;
 
-        EE_SELECTION_TOOL* selTool = GetParent()->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
-
-        if( selTool )
-        {
-            if( EE_CONDITIONS::Idle( selTool->GetSelection() ) )
-                GetParent()->GetToolManager()->RunAction( EE_ACTIONS::selectionActivate, true );
-            else
-                GetParent()->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
-
-            keyWasHandled = true;   // The key is captured: the key event will be not skipped
-        }
-        else if( frame->IsModal() )
-        {
+        if( frame->IsModal() )
             frame->DismissModal( wxID_CANCEL );
-        }
+        else
+            GetParent()->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
+
+        keyWasHandled = true;   // The key is captured: the key event will be not skipped
     }
 
     /* Normalize keys code to easily handle keys from Ctrl+A to Ctrl+Z
