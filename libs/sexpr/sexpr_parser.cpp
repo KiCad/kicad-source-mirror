@@ -26,7 +26,9 @@
 #include <fstream>
 #include <streambuf>
 #include <wx/file.h>
+
 #include <macros.h>
+#include <make_unique.h>
 
 namespace SEXPR
 {
@@ -40,13 +42,13 @@ namespace SEXPR
     {
     }
 
-    SEXPR* PARSER::Parse( const std::string &aString )
+    std::unique_ptr<SEXPR> PARSER::Parse( const std::string& aString )
     {
         std::string::const_iterator it = aString.begin();
         return parseString( aString, it );
     }
 
-    SEXPR* PARSER::ParseFromFile( const std::string &aFileName )
+    std::unique_ptr<SEXPR> PARSER::ParseFromFile( const std::string& aFileName )
     {
         std::string str = GetFileContents( aFileName );
 
@@ -76,7 +78,8 @@ namespace SEXPR
         return str;
     }
 
-    SEXPR* PARSER::parseString( const std::string& aString, std::string::const_iterator& it )
+    std::unique_ptr<SEXPR> PARSER::parseString(
+            const std::string& aString, std::string::const_iterator& it )
     {
         for( ; it != aString.end(); ++it )
         {
@@ -90,7 +93,8 @@ namespace SEXPR
             {
                 std::advance( it, 1 );
 
-                SEXPR_LIST* list = new SEXPR_LIST( m_lineNumber );
+                auto list = std::make_unique<SEXPR_LIST>( m_lineNumber );
+
                 while( it != aString.end() && *it != ')' )
                 {
                     //there may be newlines in between atoms of a list, so detect these here
@@ -103,8 +107,8 @@ namespace SEXPR
                         continue;
                     }
 
-                    SEXPR* item = parseString( aString, it );
-                    list->AddChild( item );
+                    std::unique_ptr<SEXPR> item = parseString( aString, it );
+                    list->AddChild( item.release() );
                 }
 
                 if( it != aString.end() )
@@ -131,8 +135,8 @@ namespace SEXPR
 
                 if( closingPos != std::string::npos )
                 {
-                    SEXPR_STRING* str = new SEXPR_STRING(
-                        aString.substr( startPos, closingPos - startPos ),m_lineNumber );
+                    auto str = std::make_unique<SEXPR_STRING>(
+                            aString.substr( startPos, closingPos - startPos ), m_lineNumber );
                     std::advance( it, closingPos - startPos + 2 );
 
                     return str;
@@ -156,17 +160,18 @@ namespace SEXPR
                         ( tmp.size() > 1 && tmp[0] == '-'
                           && tmp.find_first_not_of( "0123456789.", 1 ) == std::string::npos ) )
                     {
-                        SEXPR* res;
+                        std::unique_ptr<SEXPR> res;
 
                         if( tmp.find( '.' ) != std::string::npos )
                         {
-                            res = new SEXPR_DOUBLE( strtod( tmp.c_str(), NULL ), m_lineNumber );
+                            res = std::make_unique<SEXPR_DOUBLE>(
+                                    strtod( tmp.c_str(), nullptr ), m_lineNumber );
                             //floating point type
                         }
                         else
                         {
-                            res = new SEXPR_INTEGER(
-                                strtoll( tmp.c_str(), NULL, 0 ), m_lineNumber );
+                            res = std::make_unique<SEXPR_INTEGER>(
+                                    strtoll( tmp.c_str(), nullptr, 0 ), m_lineNumber );
                         }
 
                         std::advance( it, closingPos - startPos );
@@ -174,7 +179,7 @@ namespace SEXPR
                     }
                     else
                     {
-                        SEXPR_SYMBOL* str = new SEXPR_SYMBOL( tmp, m_lineNumber );
+                        auto str = std::make_unique<SEXPR_SYMBOL>( tmp, m_lineNumber );
                         std::advance( it, closingPos - startPos );
 
                         return str;
@@ -187,6 +192,6 @@ namespace SEXPR
             }
         }
 
-        return NULL;
+        return nullptr;
     }
 }
