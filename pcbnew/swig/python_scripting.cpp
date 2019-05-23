@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,7 +62,9 @@ extern "C" void init_pcbnew( void );
 struct _inittab*    SwigImportInittab;
 static int          SwigNumModules = 0;
 
-static bool wxPythonLoaded = false;      // true if the wxPython scripting layer was successfully loaded
+/// True if the wxPython scripting layer was successfully loaded.
+static bool wxPythonLoaded = false;
+
 
 bool IsWxPythonLoaded()
 {
@@ -70,7 +72,9 @@ bool IsWxPythonLoaded()
 }
 
 
-/* Add a name + initfuction to our SwigImportInittab */
+/**
+ * Add a name + initfuction to our SwigImportInittab
+ */
 
 #if PY_MAJOR_VERSION >= 3
 static void swigAddModule( const char* name, PyObject* (* initfunc)() )
@@ -86,8 +90,9 @@ static void swigAddModule( const char* name, void (* initfunc)() )
 }
 
 
-/* Add the builtin python modules */
-
+/**
+ * Add the builtin python modules
+ */
 static void swigAddBuiltin()
 {
     int i = 0;
@@ -111,12 +116,9 @@ static void swigAddBuiltin()
 }
 
 
-/* Function swigAddModules
- * adds the internal modules we offer to the python scripting, so they will be
- * available to the scripts we run.
- *
+/**
+ * Add the internal modules to the python scripting so they will be available to the scripts.
  */
-
 static void swigAddModules()
 {
 #if PY_MAJOR_VERSION >= 3
@@ -132,27 +134,28 @@ static void swigAddModules()
 }
 
 
-/* Function swigSwitchPythonBuiltin
- * switches python module table to our built one .
- *
+/**
+ * Switch the python module table to the Pcbnew built one.
  */
-
 static void swigSwitchPythonBuiltin()
 {
     PyImport_Inittab = SwigImportInittab;
 }
 
 
-/* Function pcbnewInitPythonScripting
- * Initializes all the python environment and publish our interface inside it
- * initializes all the wxpython interface, and returns the python thread control structure
- *
- */
-
 PyThreadState* g_PythonMainTState;
 
+
+/**
+ * Initialize the python environment and publish the Pcbnew interface inside it.
+ *
+ * This initializes all the wxPython interface and returns the python thread control structure
+ */
 bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
 {
+    int  retv;
+    char cmd[1024];
+
     swigAddBuiltin();           // add builtin functions
     swigAddModules();           // add our own modules
     swigSwitchPythonBuiltin();  // switch the python builtin modules to our new list
@@ -164,20 +167,17 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
     PyEval_InitThreads();
 
 #ifndef KICAD_SCRIPTING_WXPYTHON_PHOENIX
-#ifndef __WINDOWS__     // import wxversion.py currently not working under winbuilder, and not useful.
-    char cmd[1024];
+#ifndef __WINDOWS__   // import wxversion.py currently not working under winbuilder, and not useful.
     // Make sure that that the correct version of wxPython is loaded. In systems where there
     // are different versions of wxPython installed this can lead to select wrong wxPython
     // version being selected.
     snprintf( cmd, sizeof( cmd ), "import wxversion;  wxversion.select( '%s' )", WXPYTHON_VERSION );
 
-    int retv = PyRun_SimpleString( cmd );
+    retv = PyRun_SimpleString( cmd );
 
     if( retv != 0 )
     {
-        wxLogError( wxT( "Python error %d occurred running string `%s`" ), retv, cmd );
-        PyErr_Print();
-        Py_Finalize();
+        wxLogError( "Python error %d occurred running command:\n\n`%s`", retv, cmd );
         return false;
     }
 #endif      // ifndef __WINDOWS__
@@ -187,11 +187,15 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
     // internally by the rest of the API functions.
     if( !wxPyCoreAPI_IMPORT() )
     {
-        wxLogError( wxT( "***** Error importing the wxPython API! *****" ) );
+        wxLogError( "***** Error importing the wxPython API! *****" );
         PyErr_Print();
         Py_Finalize();
         return false;
     }
+#endif
+
+#if defined( DEBUG )
+    RedirectStdio();
 #endif
 
     wxPythonLoaded = true;
@@ -202,15 +206,18 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
 
 #endif  // ifdef KICAD_SCRIPTING_WXPYTHON
 
-    // load pcbnew inside python, and load all the user plugins, TODO: add system wide plugins
+    // Load pcbnew inside Python and load all the user plugins, TODO: add system wide plugins
     {
-        char loadCmd[1024];
         PyLOCK lock;
-        snprintf( loadCmd, sizeof(loadCmd), "import sys, traceback\n"
-                      "sys.path.append(\".\")\n"
-                      "import pcbnew\n"
-                      "pcbnew.LoadPlugins(\"%s\")", aUserScriptingPath );
-        PyRun_SimpleString( loadCmd );
+
+        snprintf( cmd, sizeof( cmd ), "import sys, traceback\n"
+                  "sys.path.append(\".\")\n"
+                  "import pcbnew\n"
+                  "pcbnew.LoadPlugins(\"%s\")", aUserScriptingPath );
+        retv = PyRun_SimpleString( cmd );
+
+        if( retv != 0 )
+            wxLogError( "Python error %d occurred running command:\n\n`%s`", retv, cmd );
     }
 
     return true;
@@ -218,9 +225,10 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
 
 
 /**
- * this function runs a python method from pcbnew module, which returns a string
+ * Run a python method from the pcbnew module.
+ *
  * @param aMethodName is the name of the method (like "pcbnew.myfunction" )
- * @param aNames will contains the returned string
+ * @param aNames will contain the returned string
  */
 static void pcbnewRunPythonMethodWithReturnedString( const char* aMethodName, wxString& aNames )
 {
@@ -253,9 +261,11 @@ static void pcbnewRunPythonMethodWithReturnedString( const char* aMethodName, wx
         PyObject* str = PyDict_GetItemString(localDict, "result" );
 #if PY_MAJOR_VERSION >= 3
         const char* str_res = NULL;
+
         if(str)
         {
             PyObject* temp_bytes = PyUnicode_AsEncodedString( str, "UTF-8", "strict" );
+
             if( temp_bytes != NULL )
             {
                 str_res = PyBytes_AS_STRING( temp_bytes );
@@ -277,7 +287,7 @@ static void pcbnewRunPythonMethodWithReturnedString( const char* aMethodName, wx
     Py_DECREF( localDict );
 
     if( PyErr_Occurred() )
-        wxLogMessage(PyErrStringWithTraceback());
+        wxLogMessage( PyErrStringWithTraceback() );
 }
 
 
@@ -291,6 +301,7 @@ void pcbnewGetScriptsSearchPaths( wxString& aNames )
 {
     pcbnewRunPythonMethodWithReturnedString( "pcbnew.GetWizardsSearchPaths", aNames );
 }
+
 
 void pcbnewGetWizardsBackTrace( wxString& aNames )
 {
@@ -308,7 +319,6 @@ void pcbnewFinishPythonScripting()
 
 
 #if defined( KICAD_SCRIPTING_WXPYTHON )
-
 void RedirectStdio()
 {
     // This is a helpful little tidbit to help debugging and such.  It
@@ -322,7 +332,10 @@ void RedirectStdio()
 
     PyLOCK lock;
 
-    PyRun_SimpleString( python_redirect );
+    int retv = PyRun_SimpleString( python_redirect );
+
+    if( retv != 0 )
+        wxLogError( "Python error %d occurred running command:\n\n`%s`", retv, python_redirect );
 }
 
 
@@ -370,7 +383,8 @@ wxWindow* CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameI
     auto app_ptr = wxTheApp;
 #endif
     // Execute the code to make the makeWindow function we defined above
-    PyObject*   result = PyRun_String( pcbnew_pyshell_one_step.str().c_str(), Py_file_input, globals, globals );
+    PyObject*   result = PyRun_String( pcbnew_pyshell_one_step.str().c_str(), Py_file_input,
+                                       globals, globals );
 
 #ifdef KICAD_SCRIPTING_WXPYTHON_PHOENIX
     // This absolutely ugly hack is to work around the pyshell re-writing the global
@@ -395,7 +409,7 @@ wxWindow* CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameI
     if( !PyInt_Check( result ) )
 #endif
     {
-        wxLogError("creation of scripting window didn't return a number");
+        wxLogError( "creation of scripting window didn't return a number" );
         return NULL;
     }
 
@@ -414,15 +428,14 @@ wxWindow* CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameI
 
     if( !window )
     {
-        wxLogError("unable to find pyshell window with id %d", windowId);
+        wxLogError( "unable to find pyshell window with id %d", windowId );
         return NULL;
     }
 
     return window;
 }
-
-
 #endif
+
 
 wxString PyStringToWx( PyObject* aString )
 {
@@ -434,6 +447,7 @@ wxString PyStringToWx( PyObject* aString )
 #if PY_MAJOR_VERSION >= 3
     const char* str_res = NULL;
     PyObject* temp_bytes = PyUnicode_AsEncodedString( aString, "UTF-8", "strict" );
+
     if( temp_bytes != NULL )
     {
         str_res = PyBytes_AS_STRING( temp_bytes );
@@ -471,6 +485,7 @@ wxArrayString PyArrayStringToWx( PyObject* aArrayString )
 #if PY_MAJOR_VERSION >= 3
             const char* str_res = NULL;
             PyObject* temp_bytes = PyUnicode_AsEncodedString( element, "UTF-8", "strict" );
+
             if( temp_bytes != NULL )
             {
                 str_res = PyBytes_AS_STRING( temp_bytes );
@@ -505,6 +520,7 @@ wxString PyErrStringWithTraceback()
     PyErr_Fetch( &type, &value, &traceback );
 
     PyErr_NormalizeException( &type, &value, &traceback );
+
     if( traceback == NULL )
     {
         traceback = Py_None;
@@ -545,14 +561,15 @@ wxString PyErrStringWithTraceback()
     return err;
 }
 
+
 /**
- * Find the Python scripting path
+ * Find the Python scripting path.
  */
 wxString PyScriptingPath()
 {
     wxString path;
 
-    //TODO should this be a user configurable variable eg KISCRIPT ?
+    //@todo This should this be a user configurable variable eg KISCRIPT?
 #if defined( __WXMAC__ )
     path = GetOSXKicadDataDir() + wxT( "/scripting" );
 #else
@@ -570,6 +587,7 @@ wxString PyScriptingPath()
 
     return path;
 }
+
 
 wxString PyPluginsPath()
 {
