@@ -35,7 +35,7 @@
 #include <template_fieldnames.h>
 
 
-namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
+BOOST_TEST_PRINT_NAMESPACE_OPEN
 {
 template <>
 struct print_log_value<LIB_FIELD>

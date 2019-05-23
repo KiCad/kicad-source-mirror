@@ -224,7 +224,7 @@ inline bool SexprConvertsToString( const SEXPR::SEXPR& aSexpr, const std::string
 
 } // namespace KI_TEST
 
-namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
+BOOST_TEST_PRINT_NAMESPACE_OPEN
 {
 
 /**

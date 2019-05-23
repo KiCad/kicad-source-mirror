@@ -223,7 +223,7 @@ inline SHAPE_POLY_SET FilletPolySet( SHAPE_POLY_SET& aPolySet, int aRadius, int 
 
 } // namespace GEOM_TEST
 
-namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
+BOOST_TEST_PRINT_NAMESPACE_OPEN
 {
 template <>
 struct print_log_value<SHAPE_LINE_CHAIN>

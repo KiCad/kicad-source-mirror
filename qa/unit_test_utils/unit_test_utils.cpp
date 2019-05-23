@@ -23,7 +23,7 @@
 
 #include <unit_test_utils/unit_test_utils.h>
 
-namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
+BOOST_TEST_PRINT_NAMESPACE_OPEN
 {
 
 void print_log_value<wxPoint>::operator()( std::ostream& os, wxPoint const& aPt )
