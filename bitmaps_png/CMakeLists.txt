@@ -131,7 +131,6 @@ set( BMAPS_MID
     add_line_label
     add_line
     add_pcb_target
-    add_polygon
     add_power
     add_rectangle
     add_tracks

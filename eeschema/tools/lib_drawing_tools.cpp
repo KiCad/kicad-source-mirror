@@ -75,7 +75,7 @@ TOOL_ACTION EE_ACTIONS::drawSymbolArc( "libedit.InteractiveDrawing.drawSymbolArc
 TOOL_ACTION EE_ACTIONS::drawSymbolLines( "libedit.InteractiveDrawing.drawSymbolLines",
         AS_GLOBAL, 0,
         _( "Add Lines" ), _( "Add connected graphic lines" ),
-        add_polygon_xpm, AF_ACTIVATE );
+        add_graphical_segments_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeSymbolAnchor( "libedit.InteractiveDrawing.placeSymbolAnchor",
         AS_GLOBAL, 0,
