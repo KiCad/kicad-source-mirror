@@ -51,6 +51,7 @@
 
 #include "zone_filler.h"
 
+#include <advanced_config.h>        // To be removed later, when the zone fill option will be always allowed
 
 class PROGRESS_REPORTER_HIDER
 {
@@ -103,6 +104,12 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
 {
     std::vector<CN_ZONE_ISOLATED_ISLAND_LIST> toFill;
     auto connectivity = m_board->GetConnectivity();
+    bool filledPolyWithOutline = not m_board->GetDesignSettings().m_ZoneUseNoOutlineInFill;
+
+    if( ADVANCED_CFG::GetCfg().m_forceThickOutlinesInZones )
+    {
+        filledPolyWithOutline = true;
+    }
 
     std::unique_lock<std::mutex> lock( connectivity->GetLock(), std::try_to_lock );
 
@@ -111,7 +118,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
 
     if( m_progressReporter )
     {
-        m_progressReporter->Report( _( "Checking zone fills..." ) );
+        m_progressReporter->Report( aCheck ? _( "Checking zone fills..." ) : _( "Building zone fills..." ) );
         m_progressReporter->SetMaxProgress( toFill.size() );
     }
 
@@ -148,6 +155,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
         for( size_t i = nextItem++; i < toFill.size(); i = nextItem++ )
         {
             ZONE_CONTAINER* zone = toFill[i].m_zone;
+            zone->SetFilledPolysUseThickness( filledPolyWithOutline );
             SHAPE_POLY_SET rawPolys, finalPolys;
             fillSingleZone( zone, rawPolys, finalPolys );
 
@@ -343,6 +351,17 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
     int edgeClearance = m_board->GetDesignSettings().m_CopperEdgeClearance;
     int zone_to_edgecut_clearance = std::max( aZone->GetZoneClearance(), edgeClearance );
 
+    // dist_high_def can be used to define a high definition arc to polygon approximation:
+    // (shorter than m_board->GetDesignSettings().m_MaxError and is a better wording here)
+    int dist_high_def = m_board->GetDesignSettings().m_MaxError;
+
+    // dist_low_def can be used to define a low definition arc to polygon approximation:
+    // when converting some pad shapes that can accept lower resolution),
+    // vias and track ends to polygons.
+    // rect pads use dist_low_def to reduce the number of segments. For these shapes a low def
+    // gives a good shape, because the arc is small (90 degrees) and a small part of the shape.
+    int dist_low_def = std::min( ARC_LOW_DEF, int( dist_high_def*1.5 ) );   // Reasonable value
+
     // When removing holes, the holes must be expanded by outline_half_thickness
     // to take in account the thickness of the zone outlines
     int outline_half_thickness = aZone->GetMinThickness() / 2;
@@ -353,7 +372,7 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
      * in a polygon list
      */
 
-    /* items ouside the zone bounding box are skipped
+    /* items outside the zone bounding box are skipped
      * the bounding box is the zone bounding box + the biggest clearance found in Netclass list
      */
     EDA_RECT    item_boundingbox;
@@ -421,8 +440,7 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
                         // the shape itself
                         SHAPE_POLY_SET outline( pad->GetCustomShapeAsPolygon() );
                         int numSegs = std::max(
-                                GetArcToSegmentCount( clearance,
-                                        m_board->GetDesignSettings().m_MaxError, 360.0 ), 6 );
+                                GetArcToSegmentCount( clearance, dist_high_def, 360.0 ), 6 );
                         double correction = GetCircletoPolyCorrectionFactor( numSegs );
                         outline.Inflate( KiROUND( clearance * correction ), numSegs );
                         pad->CustomShapeAsPolygonToBoardPosition(
@@ -442,7 +460,17 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
                             aFeatures.Append( outline );
                     }
                     else
-                        pad->TransformShapeWithClearanceToPolygon( aFeatures, clearance );
+                    {
+                        // Optimizing polygon vertex count: the high definition is used for round and
+                        // oval pads (pads with large arcs) but low def for other shapes (with smal arcs)
+                        if( pad->GetShape() == PAD_SHAPE_CIRCLE ||
+                            pad->GetShape() == PAD_SHAPE_OVAL )
+                            pad->TransformShapeWithClearanceToPolygon( aFeatures, clearance,
+                                                                       dist_high_def );
+                        else
+                            pad->TransformShapeWithClearanceToPolygon( aFeatures, clearance,
+                                                                       dist_low_def );
+                    }
                 }
 
                 continue;
@@ -471,9 +499,8 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
                         // the pad shape in zone can be its convex hull or
                         // the shape itself
                         int numSegs = std::max(
-                                GetArcToSegmentCount( gap, m_board->GetDesignSettings().m_MaxError,
-                                        360.0 ), 6 );
-                        double         correction = GetCircletoPolyCorrectionFactor( numSegs );
+                                GetArcToSegmentCount( gap, dist_high_def, 360.0 ), 6 );
+                        double correction = GetCircletoPolyCorrectionFactor( numSegs );
                         SHAPE_POLY_SET outline( pad->GetCustomShapeAsPolygon() );
                         outline.Inflate( KiROUND( gap * correction ), numSegs );
                         pad->CustomShapeAsPolygonToBoardPosition(
@@ -488,7 +515,15 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
                             aFeatures.Append( convex_hull[ii] );
                     }
                     else
-                        pad->TransformShapeWithClearanceToPolygon( aFeatures, gap );
+                    {
+                        if( pad->GetShape() == PAD_SHAPE_CIRCLE ||
+                            pad->GetShape() == PAD_SHAPE_OVAL )
+                            pad->TransformShapeWithClearanceToPolygon( aFeatures, gap,
+                                                                       dist_high_def );
+                        else
+                            pad->TransformShapeWithClearanceToPolygon( aFeatures, gap,
+                                                                       dist_low_def );
+                    }
                 }
             }
         }
@@ -511,7 +546,8 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
         if( item_boundingbox.Intersects( zone_boundingbox ) )
         {
             int clearance = std::max( zone_clearance, item_clearance );
-            track->TransformShapeWithClearanceToPolygon( aFeatures, clearance );
+            track->TransformShapeWithClearanceToPolygon( aFeatures, clearance,
+                                                         dist_low_def );
         }
     }
 
@@ -798,6 +834,20 @@ void ZONE_FILLER::computeRawFilledAreas( const ZONE_CONTAINER* aZone,
 
         // put these areas in m_FilledPolysList
         SHAPE_POLY_SET th_fractured = solidAreas;
+
+        // Inflate polygon to recreate the polygon (without the too narrow areas)
+        // if the filled polygons have a outline thickness = 0
+        int inflate_value = aZone->GetFilledPolysUseThickness() ? 0 :outline_half_thickness;
+
+        if( inflate_value <= Millimeter2iu( 0.001 ) )    // avoid very small outline thickness
+            inflate_value = 0;
+
+        if( inflate_value )
+        {
+            th_fractured.Simplify( SHAPE_POLY_SET::PM_FAST );
+            th_fractured.Inflate( outline_half_thickness, 16 );
+        }
+
         th_fractured.Fracture( SHAPE_POLY_SET::PM_FAST );
 
         if( s_DumpZonesWhenFilling )
@@ -808,6 +858,20 @@ void ZONE_FILLER::computeRawFilledAreas( const ZONE_CONTAINER* aZone,
     else
     {
         SHAPE_POLY_SET areas_fractured = solidAreas;
+
+        // Inflate polygon to recreate the polygon (without the too narrow areas)
+        // if the filled polygons have a outline thickness = 0
+        int inflate_value = aZone->GetFilledPolysUseThickness() ? 0 : outline_half_thickness;
+
+        if( inflate_value <= Millimeter2iu( 0.001 ) )    // avoid very small outline thickness
+            inflate_value = 0;
+
+        if( inflate_value )
+        {
+            areas_fractured.Simplify( SHAPE_POLY_SET::PM_FAST );
+            areas_fractured.Inflate( outline_half_thickness, 16 );
+        }
+
         areas_fractured.Fracture( SHAPE_POLY_SET::PM_FAST );
 
         if( s_DumpZonesWhenFilling )

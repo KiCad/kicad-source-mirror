@@ -204,7 +204,7 @@ public:
      * moreover when exporting zone filled areas, the excatct shape is exported.
      * the legacy option can really create redraw time issues for large boards.
      */
-    bool       m_ZoneUseNoOutlineInFill;    // true for new filling option
+    bool       m_ZoneUseNoOutlineInFill;    ///< true for new zone filling option
 
     // Maximum error allowed when approximating circles and arcs to segments
     int        m_MaxError;
