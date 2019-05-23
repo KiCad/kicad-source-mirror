@@ -68,12 +68,12 @@ using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 TOOL_ACTION PCB_ACTIONS::drawLine( "pcbnew.InteractiveDrawing.line",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_LINE ),
         _( "Draw Line" ), _( "Draw a line" ),
-        add_polygon_xpm, AF_ACTIVATE );
+        add_graphical_segments_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawPolygon( "pcbnew.InteractiveDrawing.graphicPolygon",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_POLYGON ),
         _( "Draw Graphic Polygon" ), _( "Draw a graphic polygon" ),
-        add_polygon_xpm, AF_ACTIVATE );
+        add_graphical_polygon_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawCircle( "pcbnew.InteractiveDrawing.circle",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_CIRCLE ),
