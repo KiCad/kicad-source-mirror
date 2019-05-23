@@ -303,19 +303,22 @@ static bool scriptingSetup()
 
 void PythonPluginsReloadBase()
 {
-#if defined(KICAD_SCRIPTING)
-    //Reload plugin list: reload Python plugins if they are newer than
+#if defined( KICAD_SCRIPTING )
+    // Reload plugin list: reload Python plugins if they are newer than
     // the already loaded, and load new plugins
     char cmd[1024];
 
-    snprintf( cmd, sizeof(cmd),
-            "pcbnew.LoadPlugins(\"%s\")", TO_UTF8( PyScriptingPath() ) );
+    snprintf( cmd, sizeof( cmd ),
+              "pcbnew.LoadPlugins(\"%s\")", TO_UTF8( PyScriptingPath() ) );
 
     PyLOCK lock;
 
     // ReRun the Python method pcbnew.LoadPlugins
     // (already called when starting Pcbnew)
-    PyRun_SimpleString( cmd );
+    int retv = PyRun_SimpleString( cmd );
+
+    if( retv != 0 )
+        wxLogError( "Python error %d occurred running command:\n\n`%s`", retv, cmd );
 #endif
 }
 

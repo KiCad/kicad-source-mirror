@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,31 +50,30 @@
 #include <wx/string.h>
 #include <wx/arrstr.h>
 
+
 /**
- * Function pcbnewInitPythonScripting
- * Initializes the Python engine inside pcbnew
+ * Initialize the Python engine inside pcbnew.
  */
 bool        pcbnewInitPythonScripting( const char * aUserScriptingPath );
 void        pcbnewFinishPythonScripting();
 
 /**
- * Function pcbnewGetUnloadableScriptNames
- * collects the list of python scripts which could not be loaded because
- * some error (synthax error) happened
+ * Collect the list of python scripts which could not be loaded.
+ *
  * @param aNames is a wxString which will contain the filenames (separated by '\n')
  */
 void        pcbnewGetUnloadableScriptNames( wxString& aNames );
 
 /**
- * Function pcbnewGetScriptsSearchPaths
- * collects the list of paths where python scripts are searched
+ * Collect the list of paths where python scripts are searched.
+ *
  * @param aNames is a wxString which will contain the paths (separated by '\n')
  */
 void        pcbnewGetScriptsSearchPaths( wxString& aNames );
 
 /**
- * Function pcbnewGetWizardsBackTrace
- * returns the backtrace of errors (if any) when wizard python scripts are loaded
+ * Return the backtrace of errors (if any) when wizard python scripts are loaded.
+ *
  * @param aNames is a wxString which will contain the trace
  */
 void        pcbnewGetWizardsBackTrace( wxString& aNames );
@@ -83,7 +82,6 @@ void        pcbnewGetWizardsBackTrace( wxString& aNames );
 void        RedirectStdio();
 wxWindow*   CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameId );
 #endif
-
 
 #if 0 && defined (KICAD_SCRIPTING_WXPYTHON)
 // This definition of PyLOCK crashed Pcbnew under some conditions (JPC),
@@ -98,8 +96,6 @@ public:
     PyLOCK()    { b = wxPyBeginBlockThreads(); }
     ~PyLOCK()   { wxPyEndBlockThreads( b ); }
 };
-
-
 #else
 class PyLOCK
 {
@@ -108,7 +104,6 @@ public:
     PyLOCK()      { gil_state = PyGILState_Ensure(); }
     ~PyLOCK()     { PyGILState_Release( gil_state ); }
 };
-
 #endif
 
 wxString        PyStringToWx( PyObject* str );
