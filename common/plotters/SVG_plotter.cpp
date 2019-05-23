@@ -303,6 +303,8 @@ void SVG_PLOTTER::StartBlock( void* aData )
 void SVG_PLOTTER::EndBlock( void* aData )
 {
     fprintf( outputFile, "</g>\n" );
+
+    m_graphics_changed = true;
 }
 
 
