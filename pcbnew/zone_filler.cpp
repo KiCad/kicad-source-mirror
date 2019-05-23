@@ -218,17 +218,22 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
             }
         }
         // Zones with no net can have areas outside the board cutouts.
-        // By definition, the island has all points outside the outline, so we only
-        // need to check one point for each island
+        // By definition, Zones with no net have no isolated island
+        // (in fact all filled areas are isolated islands)
+        // but they can have some areas outside the board cutouts.
+        // A filled area outside the board cutouts has all points outside cutouts,
+        // so we only need to check one point for each filled polygon.
         else if( clip_to_brd_outlines )
         {
-            for( auto idx : zone.m_islands )
+             for( int idx = 0; idx < poly.OutlineCount(); )
             {
-                if( poly.Polygon( idx ).empty()
-                        || !boardOutline.Contains( poly.Polygon( idx ).front().CPoint( 0 ) ) )
+                if( poly.Polygon( idx ).empty() ||
+                    !boardOutline.Contains( poly.Polygon( idx ).front().CPoint( 0 ) ) )
                 {
                     poly.DeletePolygon( idx );
                 }
+                else
+                     idx++;
             }
         }
 
