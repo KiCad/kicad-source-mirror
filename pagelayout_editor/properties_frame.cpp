@@ -40,11 +40,24 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ):
     infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
     m_staticTextSizeInfo->SetFont( infoFont );
     m_staticTextInfoThickness->SetFont( infoFont );
+
+    m_buttonOK->SetDefault();
 }
 
 
 PROPERTIES_FRAME::~PROPERTIES_FRAME()
 {
+}
+
+
+void PROPERTIES_FRAME::OnPageChanged( wxNotebookEvent& event )
+{
+    if( event.GetSelection() == 0 )
+        m_buttonOK->SetDefault();
+    else
+        m_buttonGeneralOptsOK->SetDefault();
+
+    event.Skip();
 }
 
 

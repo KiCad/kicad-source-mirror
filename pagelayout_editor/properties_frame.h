@@ -47,6 +47,7 @@ public:
     ~PROPERTIES_FRAME();
 
     // Event functions
+    void OnPageChanged( wxNotebookEvent& event ) override;
     void OnAcceptPrms( wxCommandEvent& event ) override;
     void OnSetDefaultValues( wxCommandEvent& event ) override;
 

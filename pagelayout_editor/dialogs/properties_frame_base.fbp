@@ -156,7 +156,7 @@
                         <event name="OnMotion"></event>
                         <event name="OnMouseEvents"></event>
                         <event name="OnMouseWheel"></event>
-                        <event name="OnNotebookPageChanged"></event>
+                        <event name="OnNotebookPageChanged">OnPageChanged</event>
                         <event name="OnNotebookPageChanging"></event>
                         <event name="OnPaint"></event>
                         <event name="OnRightDClick"></event>
