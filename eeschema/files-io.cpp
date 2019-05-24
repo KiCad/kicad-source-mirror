@@ -170,22 +170,16 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
 }
 
 
-void SCH_EDIT_FRAME::Save_File( wxCommandEvent& event )
+void SCH_EDIT_FRAME::Save_File( bool doSaveAs )
 {
-    int id = event.GetId();
-
-    switch( id )
+    if( doSaveAs )
     {
-    case ID_UPDATE_ONE_SHEET:
-        SaveEEFile( NULL );
-        break;
-
-    case ID_SAVE_ONE_SHEET_UNDER_NEW_NAME:
         if( SaveEEFile( NULL, true ) )
-        {
             CreateArchiveLibraryCacheFile( true );
-        }
-        break;
+    }
+    else
+    {
+        SaveEEFile( NULL );
     }
 
     UpdateTitle();
@@ -705,12 +699,6 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
 
     // For now there is only one import plugin
     importFile( dlg.GetPath(), SCH_IO_MGR::SCH_EAGLE );
-}
-
-
-void SCH_EDIT_FRAME::OnSaveProject( wxCommandEvent& aEvent )
-{
-    SaveProject();
 }
 
 

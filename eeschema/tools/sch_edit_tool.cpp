@@ -49,11 +49,6 @@
 #include "sch_drawing_tools.h"
 
 
-TOOL_ACTION EE_ACTIONS::duplicate( "eeschema.InteractiveEdit.duplicate",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE ),
-        _( "Duplicate" ), _( "Duplicates the selected item(s)" ),
-        duplicate_xpm );
-
 TOOL_ACTION EE_ACTIONS::repeatDrawItem( "eeschema.InteractiveEdit.repeatDrawItem",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_REPEAT_LAST ),
         _( "Repeat Last Item" ), _( "Duplicates the last drawn item" ),
@@ -153,11 +148,6 @@ TOOL_ACTION EE_ACTIONS::pinTable( "eeschema.InteractiveEdit.pinTable",
         AS_GLOBAL, 0,
         _( "Pin Table..." ), _( "Displays pin table for bulk editing of pins" ),
         pin_table_xpm );
-
-TOOL_ACTION EE_ACTIONS::doDelete( "eeschema.InteractiveEdit.delete",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
-        _( "Delete" ), _( "Deletes selected item(s)" ),
-        delete_xpm );
 
 TOOL_ACTION EE_ACTIONS::deleteItemCursor( "eeschema.InteractiveEdit.deleteTool",
         AS_GLOBAL, 0,

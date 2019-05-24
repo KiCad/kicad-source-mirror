@@ -44,7 +44,18 @@ public:
 
     virtual ~ACTIONS() {};
 
-    // Generic actions
+    // Generic document actions
+    static TOOL_ACTION doNew;           // sadly 'new' is a reserved word
+    static TOOL_ACTION open;
+    static TOOL_ACTION save;
+    static TOOL_ACTION saveAs;
+    static TOOL_ACTION saveAll;
+    static TOOL_ACTION pageSetup;
+    static TOOL_ACTION print;
+    static TOOL_ACTION plot;
+    static TOOL_ACTION quit;
+
+    // Generic edit actions
     static TOOL_ACTION cancelInteractive;
     static TOOL_ACTION updateMenu;
     static TOOL_ACTION undo;
@@ -52,6 +63,8 @@ public:
     static TOOL_ACTION cut;
     static TOOL_ACTION copy;
     static TOOL_ACTION paste;
+    static TOOL_ACTION duplicate;
+    static TOOL_ACTION doDelete;        // sadly 'delete' is a reserved word
     static TOOL_ACTION activatePointEditor;
 
     // Find and Replace

@@ -42,14 +42,6 @@ class CONDITIONAL_MENU;
 
 // helper functions that build specific submenus:
 
-// Build the files menu. Because some commands are available only if
-// Eeschema is run outside a project (run alone), aIsOutsideProject is false
-// when Eeschema is run from Kicad manager, and true is run as stand alone app.
-static void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject );
-
-// Build the inspect menu
-static void prepareInspectMenu( wxMenu* aParentMenu );
-
 // Build the tools menu
 static void prepareToolsMenu( wxMenu* aParentMenu );
 
@@ -66,11 +58,88 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     wxMenuBar* menuBar = new wxMenuBar();
     wxString   text;
 
+    auto modifiedDocumentCondition = [] ( const SELECTION& sel ) {
+        SCH_SHEET_LIST sheetList( g_RootSheet );
+        return sheetList.IsModified();
+    };
+
     //
     // Menu File:
     //
-    wxMenu* fileMenu = new wxMenu;
-    prepareFilesMenu( fileMenu, Kiface().IsSingle() );
+    CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, selTool );
+    static ACTION_MENU* openRecentMenu;
+
+    if( Kiface().IsSingle() )   // not when under a project mgr
+    {
+        // Add this menu to list menu managed by m_fileHistory
+        // (the file history will be updated when adding/removing files in history)
+        if( openRecentMenu )
+            Kiface().GetFileHistory().RemoveMenu( openRecentMenu );
+
+        openRecentMenu = new ACTION_MENU();
+        openRecentMenu->SetTool( selTool );
+        openRecentMenu->SetTitle( _( "Open Recent" ) );
+        openRecentMenu->SetIcon( recent_xpm );
+
+        Kiface().GetFileHistory().UseMenu( openRecentMenu );
+        Kiface().GetFileHistory().AddFilesToMenu( openRecentMenu );
+
+        fileMenu->AddItem( ACTIONS::doNew,         EE_CONDITIONS::ShowAlways );
+        fileMenu->AddItem( ACTIONS::open,          EE_CONDITIONS::ShowAlways );
+        fileMenu->AddMenu( openRecentMenu,         EE_CONDITIONS::ShowAlways );
+        fileMenu->AddSeparator();
+    }
+
+    fileMenu->AddItem( ACTIONS::save,              modifiedDocumentCondition );
+    fileMenu->AddItem( ACTIONS::saveAs,            EE_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::saveAll,           modifiedDocumentCondition );
+
+    fileMenu->AppendSeparator();
+
+    fileMenu->AddItem( ID_APPEND_PROJECT, _( "Append Schematic Sheet Content..." ),
+                       _( "Append schematic sheet content from another project to the current sheet" ),
+                       add_document_xpm,           EE_CONDITIONS::ShowAlways );
+
+    fileMenu->AddItem( ID_IMPORT_NON_KICAD_SCH, _( "Import Non KiCad Schematic..." ),
+                       _( "Replace current schematic sheet with one imported from another application" ),
+                       import_document_xpm,        EE_CONDITIONS::ShowAlways );
+
+    fileMenu->AddSeparator();
+
+    // Import submenu
+    ACTION_MENU* submenuImport = new ACTION_MENU();
+    submenuImport->SetTool( selTool );
+    submenuImport->SetTitle( _( "Import" ) );
+    submenuImport->SetIcon( import_xpm );
+
+    submenuImport->Add( _( "Footprint Association File..." ), HELP_IMPORT_FOOTPRINTS,
+                        ID_BACKANNO_ITEMS, import_footprint_names_xpm );
+
+    fileMenu->AddMenu( submenuImport,              EE_CONDITIONS::ShowAlways );
+
+
+    // Export submenu
+    ACTION_MENU* submenuExport = new ACTION_MENU();
+    submenuExport->SetTool( selTool );
+    submenuExport->SetTitle( _( "Export" ) );
+    submenuExport->SetIcon( export_xpm );
+
+    submenuExport->Add( _( "Drawing to Clipboard" ), _( "Export drawings to clipboard" ),
+                        ID_GEN_COPY_SHEET_TO_CLIPBOARD, copy_xpm );
+
+    submenuExport->Add( _( "Netlist..." ),  _( "Export netlist file" ),
+                        ID_GET_NETLIST, netlist_xpm );
+
+    fileMenu->AddMenu( submenuExport,              EE_CONDITIONS::ShowAlways );
+
+    fileMenu->AddSeparator();
+    fileMenu->AddItem( ACTIONS::pageSetup,         EE_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::print,             EE_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::plot,              EE_CONDITIONS::ShowAlways );
+
+    // Quit
+    fileMenu->AddSeparator();
+    fileMenu->AddItem( ACTIONS::quit,              EE_CONDITIONS::ShowAlways );
 
     //
     // Menu Edit:
@@ -196,7 +265,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Menu Inspect:
     //
     wxMenu* inspectMenu = new wxMenu;
-    prepareInspectMenu( inspectMenu );
+    AddMenuItem( inspectMenu, ID_GET_ERC, _( "Electrical Rules &Checker" ),
+                 _( "Perform electrical rules check" ), KiBitmap( erc_xpm ) );
 
     //
     // Menu Tools:
@@ -222,130 +292,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     SetMenuBar( menuBar );
     delete oldMenuBar;
-}
-
-
-void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
-{
-    wxString text;
-
-    // @todo: static probably not OK in multiple open projects.
-    // Open Recent submenu
-    static wxMenu* openRecentMenu;
-
-    // Add this menu to list menu managed by m_fileHistory
-    // (the file history will be updated when adding/removing files in history
-    if( openRecentMenu )
-        Kiface().GetFileHistory().RemoveMenu( openRecentMenu );
-
-    openRecentMenu = new wxMenu();
-
-    Kiface().GetFileHistory().UseMenu( openRecentMenu );
-    Kiface().GetFileHistory().AddFilesToMenu( openRecentMenu );
-
-    if( aIsOutsideProject )   // not when under a project mgr
-    {
-        text = AddHotkeyName( _( "&New..." ), g_Schematic_Hotkeys_Descr, HK_NEW );
-        AddMenuItem( aParentMenu, ID_NEW_PROJECT, text,
-                     _( "Start new schematic root sheet" ),
-                     KiBitmap( new_document_xpm ) );
-
-        text = AddHotkeyName( _( "&Open..." ), g_Schematic_Hotkeys_Descr, HK_OPEN );
-        AddMenuItem( aParentMenu, ID_LOAD_PROJECT, text,
-                     _( "Open existing schematic" ),
-                     KiBitmap( open_document_xpm ) );
-
-        AddMenuItem( aParentMenu, openRecentMenu, -1, _( "Open &Recent" ),
-                     _( "Open recently opened schematic" ),
-                     KiBitmap( recent_xpm ) );
-
-        aParentMenu->AppendSeparator();
-    }
-
-    text = AddHotkeyName( _( "&Save" ), g_Schematic_Hotkeys_Descr, HK_SAVE );
-    AddMenuItem( aParentMenu, ID_SAVE_PROJECT, text,
-                 _( "Save changes" ),
-                 KiBitmap( save_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_UPDATE_ONE_SHEET, _( "Save &Current Sheet" ),
-                 _( "Save only the current sheet" ),
-                 KiBitmap( save_xpm ) );
-
-    text = AddHotkeyName( _( "Save C&urrent Sheet As..." ), g_Schematic_Hotkeys_Descr, HK_SAVEAS );
-    AddMenuItem( aParentMenu, ID_SAVE_ONE_SHEET_UNDER_NEW_NAME, text,
-                 _( "Save a copy of the current sheet" ),
-                 KiBitmap( save_as_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, ID_APPEND_PROJECT, _( "App&end Schematic Sheet Content..." ),
-                 _( "Append schematic sheet content from another project to the current sheet" ),
-                 KiBitmap( add_document_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_IMPORT_NON_KICAD_SCH, _( "&Import Non KiCad Schematic..." ),
-                 _( "Replace current schematic sheet with one imported from another application" ),
-                 KiBitmap( import_document_xpm ) );   // TODO needs a different icon
-
-    aParentMenu->AppendSeparator();
-
-    // Import submenu
-    wxMenu* submenuImport = new wxMenu();
-
-    AddMenuItem( submenuImport, ID_BACKANNO_ITEMS, _( "&Footprint Association File..." ),
-                 HELP_IMPORT_FOOTPRINTS,
-                 KiBitmap( import_footprint_names_xpm ) );
-
-    AddMenuItem( aParentMenu, submenuImport, ID_GEN_IMPORT_FILE, _( "&Import" ),
-                 _( "Import files" ),
-                 KiBitmap( import_xpm ) );
-
-
-    // Export submenu
-    wxMenu* submenuExport = new wxMenu();
-
-    AddMenuItem( submenuExport, ID_GEN_COPY_SHEET_TO_CLIPBOARD, _( "Drawing to C&lipboard" ),
-                 _( "Export drawings to clipboard" ),
-                 KiBitmap( copy_xpm ) );
-
-    AddMenuItem( submenuExport, ID_GET_NETLIST, _( "&Netlist..." ),
-                 _( "Export netlist file" ),
-                 KiBitmap( netlist_xpm ) );
-
-    AddMenuItem( aParentMenu, submenuExport, ID_GEN_EXPORT_FILE, _( "E&xport" ),
-                 _( "Export files" ),
-                 KiBitmap( export_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    // Edit page layout:
-    AddMenuItem( aParentMenu, ID_SHEET_SET, _( "Page S&ettings..." ),
-                 _( "Settings for sheet size and frame references" ),
-                 KiBitmap( sheetset_xpm ) );
-
-    text = AddHotkeyName( _( "&Print..." ), g_Schematic_Hotkeys_Descr, HK_PRINT );
-    AddMenuItem( aParentMenu, wxID_PRINT, text,
-                 _( "Print schematic sheet" ),
-                 KiBitmap( print_button_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_GEN_PLOT_SCHEMATIC, _( "P&lot..." ),
-                 _( "Plot schematic sheet in PostScript, PDF, SVG, DXF or HPGL format" ),
-                 KiBitmap( plot_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    // Quit
-    AddMenuItem( aParentMenu, wxID_EXIT, _( "&Exit" ),
-                 _( "Close Eeschema" ),
-                 KiBitmap( exit_xpm ) );
-}
-
-
-void prepareInspectMenu( wxMenu* aParentMenu )
-{
-    AddMenuItem( aParentMenu, ID_GET_ERC,
-                 _( "Electrical Rules &Checker" ),
-                 _( "Perform electrical rules check" ),
-                 KiBitmap( erc_xpm ) );
 }
 
 

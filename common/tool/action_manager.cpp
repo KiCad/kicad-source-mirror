@@ -210,17 +210,7 @@ void ACTION_MANAGER::UpdateHotKeys()
                       it != m_actionHotKeys[hotkey].end(); )
             {
                 if( (*it)->GetScope() == AS_GLOBAL )
-                {
-                    // Users are free to define colliding hotkeys, but we want to know if
-                    // our default set has any collisions.
-                    wxMessageBox( wxString::Format(
-                                            "Duplicate hotkey definitions for '%s': %s and %s",
-                                            KeyNameFromKeyCode( hotkey ),
-                                            actionName.first,
-                                            m_actionHotKeys[hotkey].front()->GetName() ) );
-
                     it = m_actionHotKeys[hotkey].erase( it );
-                }
                 else
                     it++;
             }

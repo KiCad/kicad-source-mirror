@@ -598,7 +598,7 @@ public:
     /**
      * Show the print dialog.
      */
-    void OnPrint( wxCommandEvent& event );
+    void Print();
 
     wxPageSetupDialogData& GetPageSetupData() { return m_pageSetupData; }
 
@@ -608,17 +608,14 @@ public:
     void SetPrintSheetReference( bool aShow ) { m_printSheetReference = aShow; }
 
     // Plot functions:
-    void PlotSchematic( wxCommandEvent& event );
+    void PlotSchematic();
+
+    void NewProject();
+    void LoadProject();
 
     // read and save files
-    void Save_File( wxCommandEvent& event );
+    void Save_File( bool doSaveAs = false );
 
-    /**
-     * Command event handler to save the entire project and create a component library archive.
-     *
-     * The component library archive name is &ltroot_name&gt-cache.lib
-     */
-    void OnSaveProject( wxCommandEvent& aEvent );
     bool SaveProject();
 
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
@@ -754,7 +751,6 @@ private:
     // Sets up the tool framework
     void setupTools();
 
-    void OnExit( wxCommandEvent& event );
     void OnAnnotate( wxCommandEvent& event );
     void OnErc( wxCommandEvent& event );
     void OnCreateNetlist( wxCommandEvent& event );
@@ -767,8 +763,6 @@ private:
     void OnLoadFile( wxCommandEvent& event );
     void OnLoadCmpToFootprintLinkFile( wxCommandEvent& event );
     void OnUpdateFields( wxCommandEvent& event );
-    void OnNewProject( wxCommandEvent& event );
-    void OnLoadProject( wxCommandEvent& event );
     void OnAppendProject( wxCommandEvent& event );
     void OnImportProject( wxCommandEvent& event );
     void OnOpenPcbnew( wxCommandEvent& event );
@@ -784,8 +778,6 @@ private:
     void OnPreferencesOptions( wxCommandEvent& event );
 
     /* User interface update event handlers. */
-    void OnUpdateSave( wxUpdateUIEvent& aEvent );
-    void OnUpdateSaveSheet( wxUpdateUIEvent& aEvent );
     void OnUpdateRemapSymbols( wxUpdateUIEvent& aEvent );
 
     /**

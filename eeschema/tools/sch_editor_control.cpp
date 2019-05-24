@@ -118,6 +118,70 @@ TOOL_ACTION EE_ACTIONS::toggleForceHV( "eeschema.EditorControl.forceHVLines",
         lines90_xpm );
 
 
+int SCH_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
+{
+    m_frame->NewProject();
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::Open( const TOOL_EVENT& aEvent )
+{
+    m_frame->LoadProject();
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::Save( const TOOL_EVENT& aEvent )
+{
+    m_frame->Save_File();
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
+{
+    m_frame->Save_File( true );
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::SaveAll( const TOOL_EVENT& aEvent )
+{
+    m_frame->SaveProject();
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent dummy;
+    m_frame->Process_PageSettings( dummy );
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::Print( const TOOL_EVENT& aEvent )
+{
+    m_frame->Print();
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
+{
+    m_frame->PlotSchematic();
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::Quit( const TOOL_EVENT& aEvent )
+{
+    m_frame->Close( false );
+    return 0;
+}
+
+
 // A dummy wxFindReplaceData signalling any marker should be found
 static wxFindReplaceData g_markersOnly;
 
@@ -1026,6 +1090,15 @@ int SCH_EDITOR_CONTROL::ToggleForceHV( const TOOL_EVENT& aEvent )
 
 void SCH_EDITOR_CONTROL::setTransitions()
 {
+    Go( &SCH_EDITOR_CONTROL::New,                   ACTIONS::doNew.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Open,                  ACTIONS::open.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Save,                  ACTIONS::save.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::SaveAs,                ACTIONS::saveAs.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::PageSetup,             ACTIONS::pageSetup.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Print,                 ACTIONS::print.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Plot,                  ACTIONS::plot.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Quit,                  ACTIONS::quit.MakeEvent() );
+
     Go( &SCH_EDITOR_CONTROL::FindAndReplace,        ACTIONS::find.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::FindAndReplace,        ACTIONS::findAndReplace.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::FindNext,              ACTIONS::findNext.MakeEvent() );

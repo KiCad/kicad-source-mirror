@@ -50,30 +50,16 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     // Set up toolbar
     if( Kiface().IsSingle() )   // not when under a project mgr
     {
-        // These 2 menus have meaning only outside a project, i.e. not under a project manager:
-        m_mainToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString,
-                                KiScaledBitmap( new_document_xpm, this ),
-                                _( "New schematic" ) );
-
-        m_mainToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString,
-                                KiScaledBitmap( open_document_xpm, this ),
-                                _( "Open schematic" ) );
+        m_mainToolBar->Add( ACTIONS::doNew );
+        m_mainToolBar->Add( ACTIONS::open );
     }
 
-    m_mainToolBar->AddTool( ID_SAVE_PROJECT, wxEmptyString,
-                            KiScaledBitmap( save_xpm, this ),
-                            _( "Save (all sheets)" ) );
+    m_mainToolBar->Add( ACTIONS::saveAll );
 
     KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( ID_SHEET_SET, wxEmptyString, KiScaledBitmap( sheetset_xpm, this ),
-                            _( "Edit Page settings" ) );
-
-    m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiScaledBitmap( print_button_xpm, this ),
-                            _( "Print schematic" ) );
-
-    m_mainToolBar->AddTool( ID_GEN_PLOT_SCHEMATIC, wxEmptyString, KiScaledBitmap( plot_xpm, this ),
-                            _( "Plot schematic" ) );
+    m_mainToolBar->Add( ACTIONS::pageSetup );
+    m_mainToolBar->Add( ACTIONS::print );
+    m_mainToolBar->Add( ACTIONS::plot );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->Add( ACTIONS::paste );
@@ -203,7 +189,9 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
 void SCH_EDIT_FRAME::SyncMenusAndToolbars()
 {
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
+    SCH_SHEET_LIST              sheetList( g_RootSheet );
 
+    m_mainToolBar->Toggle( ACTIONS::saveAll, sheetList.IsModified() );
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );

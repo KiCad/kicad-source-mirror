@@ -4,7 +4,52 @@
 
 // These members are static in class ACTIONS: Build them here:
 
-// Generic Actions
+TOOL_ACTION ACTIONS::doNew( "common.Control.new",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_NEW ),
+        _( "New..." ), _( "Create a new document in the editor" ),
+        new_generic_xpm );
+
+TOOL_ACTION ACTIONS::open( "common.Control.open",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_OPEN ),
+        _( "Open..." ), _( "Open existing document" ),
+        directory_xpm );
+
+TOOL_ACTION ACTIONS::save( "common.Control.save",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SAVE ),
+        _( "Save" ), _( "Save changes" ),
+        save_xpm );
+
+TOOL_ACTION ACTIONS::saveAs( "common.Control.saveAs",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SAVEAS ),
+        _( "Save As..." ), _( "Save current document to another location" ),
+        save_as_xpm );
+
+TOOL_ACTION ACTIONS::saveAll( "common.Control.saveAll",
+        AS_GLOBAL, 0,
+        _( "Save All" ), _( "Save all changes" ),
+        save_xpm );
+
+TOOL_ACTION ACTIONS::pageSetup( "common.Control.pageSetup",
+        AS_GLOBAL, 0,
+        _( "Page Settings..." ), _( "Settings for paper size and frame references" ),
+        sheetset_xpm );
+
+TOOL_ACTION ACTIONS::print( "common.Control.print",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_PRINT ),
+        _( "Print..." ), _( "Print" ),
+        print_button_xpm );
+
+TOOL_ACTION ACTIONS::plot( "common.Control.plot",
+        AS_GLOBAL, 0,
+        _( "Plot..." ), _( "Plot" ),
+        plot_xpm );
+
+TOOL_ACTION ACTIONS::quit( "common.Control.quit",
+        AS_GLOBAL, 0,
+        _( "Quit" ), _( "Close the current editor" ),
+        exit_xpm );
+
+// Generic Edit Actions
 TOOL_ACTION ACTIONS::cancelInteractive( "common.Interactive.cancel",
         AS_GLOBAL, 0,   // ESC key is handled in the dispatcher
         _( "Cancel" ), _( "Cancel current tool" ),
@@ -37,6 +82,16 @@ TOOL_ACTION ACTIONS::paste( "common.Interactive.paste",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_PASTE ),
         _( "Paste" ), _( "Paste clipboard into schematic" ),
         paste_xpm );
+
+TOOL_ACTION ACTIONS::duplicate( "common.Interactive.duplicate",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE ),
+        _( "Duplicate" ), _( "Duplicates the selected item(s)" ),
+        duplicate_xpm );
+
+TOOL_ACTION ACTIONS::doDelete( "common.Interactive.delete",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
+        _( "Delete" ), _( "Deletes selected item(s)" ),
+        delete_xpm );
 
 TOOL_ACTION ACTIONS::activatePointEditor( "common.Control.activatePointEditor",
         AS_GLOBAL, 0, "", "" );   // This is an internal event

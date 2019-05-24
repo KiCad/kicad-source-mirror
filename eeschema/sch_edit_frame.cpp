@@ -216,23 +216,12 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_CLOSE( SCH_EDIT_FRAME::OnCloseWindow )
     EVT_SIZE( SCH_EDIT_FRAME::OnSize )
 
-    EVT_MENU( ID_NEW_PROJECT, SCH_EDIT_FRAME::OnNewProject )
-    EVT_MENU( ID_LOAD_PROJECT, SCH_EDIT_FRAME::OnLoadProject )
-
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, SCH_EDIT_FRAME::OnLoadFile )
 
     EVT_MENU( ID_APPEND_PROJECT, SCH_EDIT_FRAME::OnAppendProject )
     EVT_MENU( ID_IMPORT_NON_KICAD_SCH, SCH_EDIT_FRAME::OnImportProject )
 
-    EVT_TOOL( ID_NEW_PROJECT, SCH_EDIT_FRAME::OnNewProject )
-    EVT_TOOL( ID_LOAD_PROJECT, SCH_EDIT_FRAME::OnLoadProject )
-
-    EVT_MENU( ID_SAVE_PROJECT, SCH_EDIT_FRAME::OnSaveProject )
-    EVT_MENU( ID_UPDATE_ONE_SHEET, SCH_EDIT_FRAME::Save_File )
-    EVT_MENU( ID_SAVE_ONE_SHEET_UNDER_NEW_NAME, SCH_EDIT_FRAME::Save_File )
-    EVT_MENU( ID_GEN_PLOT_SCHEMATIC, SCH_EDIT_FRAME::PlotSchematic )
     EVT_MENU( ID_GEN_COPY_SHEET_TO_CLIPBOARD, EDA_DRAW_FRAME::CopyToClipboard )
-    EVT_MENU( wxID_EXIT, SCH_EDIT_FRAME::OnExit )
 
     EVT_MENU( ID_CONFIG_SAVE, SCH_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_CONFIG_READ, SCH_EDIT_FRAME::Process_Config )
@@ -251,9 +240,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
 
     EVT_TOOL( ID_RUN_CVPCB, SCH_EDIT_FRAME::OnOpenCvpcb )
 
-    EVT_TOOL( ID_SHEET_SET, EDA_DRAW_FRAME::Process_PageSettings )
     EVT_TOOL( ID_GET_ANNOTATE, SCH_EDIT_FRAME::OnAnnotate )
-    EVT_TOOL( wxID_PRINT, SCH_EDIT_FRAME::OnPrint )
     EVT_TOOL( ID_GET_ERC, SCH_EDIT_FRAME::OnErc )
     EVT_TOOL( ID_GET_NETLIST, SCH_EDIT_FRAME::OnCreateNetlist )
     EVT_TOOL( ID_UPDATE_PCB_FROM_SCH, SCH_EDIT_FRAME::OnUpdatePCB )
@@ -272,8 +259,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_MENU_CANVAS_OPENGL, SCH_EDIT_FRAME::OnSwitchCanvas )
 
     /* Handle user interface update events. */
-    EVT_UPDATE_UI( ID_SAVE_PROJECT, SCH_EDIT_FRAME::OnUpdateSave )
-    EVT_UPDATE_UI( ID_UPDATE_ONE_SHEET, SCH_EDIT_FRAME::OnUpdateSaveSheet )
     EVT_UPDATE_UI( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnUpdateRemapSymbols )
     EVT_UPDATE_UI( ID_MENU_CANVAS_CAIRO, SCH_EDIT_FRAME::OnUpdateSwitchCanvas )
     EVT_UPDATE_UI( ID_MENU_CANVAS_OPENGL, SCH_EDIT_FRAME::OnUpdateSwitchCanvas )
@@ -692,31 +677,12 @@ void SCH_EDIT_FRAME::OnModify()
 }
 
 
-void SCH_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
-{
-    SCH_SHEET_LIST sheetList( g_RootSheet );
-
-    aEvent.Enable( sheetList.IsModified() );
-}
-
-
 void SCH_EDIT_FRAME::OnUpdateRemapSymbols( wxUpdateUIEvent& aEvent )
 {
     SCH_SCREENS schematic;
 
     // The remapping can only be performed on legacy projects.
     aEvent.Enable( schematic.HasNoFullyDefinedLibIds() );
-}
-
-
-void SCH_EDIT_FRAME::OnUpdateSaveSheet( wxUpdateUIEvent& aEvent )
-{
-    auto screen = GetScreen();
-
-    if( !screen )
-        return;
-
-    aEvent.Enable( screen->IsModify() );
 }
 
 
@@ -909,7 +875,7 @@ void SCH_EDIT_FRAME::OnUpdateFields( wxCommandEvent& event )
 }
 
 
-void SCH_EDIT_FRAME::OnNewProject( wxCommandEvent& event )
+void SCH_EDIT_FRAME::NewProject()
 {
     wxString pro_dir = m_mruPath;
 
@@ -939,7 +905,7 @@ void SCH_EDIT_FRAME::OnNewProject( wxCommandEvent& event )
 }
 
 
-void SCH_EDIT_FRAME::OnLoadProject( wxCommandEvent& event )
+void SCH_EDIT_FRAME::LoadProject()
 {
     wxString pro_dir = m_mruPath;
 
@@ -1101,13 +1067,7 @@ void SCH_EDIT_FRAME::OnEditComponentSymbolsId( wxCommandEvent& event )
 }
 
 
-void SCH_EDIT_FRAME::OnExit( wxCommandEvent& event )
-{
-    Close( false );
-}
-
-
-void SCH_EDIT_FRAME::OnPrint( wxCommandEvent& event )
+void SCH_EDIT_FRAME::Print()
 {
     InvokeDialogPrintUsingPrinter( this );
 

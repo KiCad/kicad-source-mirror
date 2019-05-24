@@ -50,7 +50,7 @@ int DIALOG_PLOT_SCHEMATIC::m_pageSizeSelect = PAGE_SIZE_AUTO;
 int DIALOG_PLOT_SCHEMATIC::m_HPGLPaperSizeSelect = PAGE_SIZE_AUTO;
 
 
-void SCH_EDIT_FRAME::PlotSchematic( wxCommandEvent& event )
+void SCH_EDIT_FRAME::PlotSchematic()
 {
     DIALOG_PLOT_SCHEMATIC dlg( this );
 

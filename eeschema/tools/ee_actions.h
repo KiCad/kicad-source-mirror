@@ -116,7 +116,6 @@ public:
     static TOOL_ACTION moveActivate;
     static TOOL_ACTION move;
     static TOOL_ACTION drag;
-    static TOOL_ACTION duplicate;
     static TOOL_ACTION repeatDrawItem;
     static TOOL_ACTION rotateCW;
     static TOOL_ACTION rotateCCW;
@@ -129,7 +128,6 @@ public:
     static TOOL_ACTION autoplaceFields;
     static TOOL_ACTION convertDeMorgan;
     static TOOL_ACTION editSymbolUnit;
-    static TOOL_ACTION doDelete;
     static TOOL_ACTION addJunction;
     static TOOL_ACTION addLabel;
     static TOOL_ACTION addGlobalLabel;

@@ -46,6 +46,16 @@ public:
 
     ~SCH_EDITOR_CONTROL() { }
 
+    int New( const TOOL_EVENT& aEvent );
+    int Open( const TOOL_EVENT& aEvent );
+    int Save( const TOOL_EVENT& aEvent );
+    int SaveAs( const TOOL_EVENT& aEvent );
+    int SaveAll( const TOOL_EVENT& aEvent );
+    int PageSetup( const TOOL_EVENT& aEvent );
+    int Print( const TOOL_EVENT& aEvent );
+    int Plot( const TOOL_EVENT& aEvent );
+    int Quit( const TOOL_EVENT& aEvent );
+
     int FindAndReplace( const TOOL_EVENT& aEvent );
 
     int FindNext( const TOOL_EVENT& aEvent );
