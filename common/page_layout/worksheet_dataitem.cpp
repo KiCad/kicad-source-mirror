@@ -92,7 +92,7 @@ void WORKSHEET_DATAITEM::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VI
     std::map<int, STATUS_FLAGS> itemFlags;
     WS_DRAW_ITEM_BASE*          item = nullptr;
 
-    for( int ii = 0; ii < m_drawItems.size(); ++ii )
+    for( size_t ii = 0; ii < m_drawItems.size(); ++ii )
     {
         item = m_drawItems[ ii ];
         itemFlags[ ii ] = item->GetFlags();
@@ -404,7 +404,7 @@ void WORKSHEET_DATAITEM_POLYPOLYGON::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollecto
     std::map<int, STATUS_FLAGS> itemFlags;
     WS_DRAW_ITEM_BASE*          item = nullptr;
 
-    for( int ii = 0; ii < m_drawItems.size(); ++ii )
+    for( size_t ii = 0; ii < m_drawItems.size(); ++ii )
     {
         item = m_drawItems[ ii ];
         itemFlags[ ii ] = item->GetFlags();
@@ -546,7 +546,7 @@ void WORKSHEET_DATAITEM_TEXT::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGF
         m_FullText = m_TextBase;
     else
     {
-        m_FullText = aCollector ? aCollector->BuildFullText( m_TextBase ) : wxEmptyString;
+        m_FullText = aCollector ? aCollector->BuildFullText( m_TextBase ) : wxString();
         multilines = ReplaceAntiSlashSequence();
     }
 
@@ -565,7 +565,7 @@ void WORKSHEET_DATAITEM_TEXT::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGF
     std::map<int, STATUS_FLAGS> itemFlags;
     WS_DRAW_ITEM_TEXT*          text = nullptr;
 
-    for( int ii = 0; ii < m_drawItems.size(); ++ii )
+    for( size_t ii = 0; ii < m_drawItems.size(); ++ii )
     {
         text = (WS_DRAW_ITEM_TEXT*) m_drawItems[ ii ];
         itemFlags[ ii ] = text->GetFlags();
@@ -710,7 +710,7 @@ void WORKSHEET_DATAITEM_BITMAP::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KI
     std::map<int, STATUS_FLAGS> itemFlags;
     WS_DRAW_ITEM_BASE*          item = nullptr;
 
-    for( int ii = 0; ii < m_drawItems.size(); ++ii )
+    for( size_t ii = 0; ii < m_drawItems.size(); ++ii )
     {
         item = m_drawItems[ ii ];
         itemFlags[ ii ] = item->GetFlags();
