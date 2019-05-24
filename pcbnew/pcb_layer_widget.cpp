@@ -656,7 +656,9 @@ void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal 
 
         brd->SetVisibleLayers( visibleLayers );
 
-        myframe->OnModify();
+        // Layer visibility is not stored in .kicad_mod files
+        if( !m_fp_editor_mode )
+            myframe->OnModify();
 
         EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
 
