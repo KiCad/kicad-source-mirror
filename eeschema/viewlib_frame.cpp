@@ -231,6 +231,7 @@ void LIB_VIEW_FRAME::setupTools()
     // Register tools
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
+    m_toolManager->RegisterTool( new EE_SELECTION_TOOL );
     m_toolManager->RegisterTool( new LIB_CONTROL );
 
     m_toolManager->InitTools();
