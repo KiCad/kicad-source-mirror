@@ -152,6 +152,12 @@ void WS_DRAW_ITEM_TEXT::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint
 }
 
 
+const EDA_RECT WS_DRAW_ITEM_TEXT::GetBoundingBox() const
+{
+    return EDA_TEXT::GetTextBox( -1 );
+}
+
+
 bool WS_DRAW_ITEM_TEXT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     return EDA_TEXT::TextHitTest( aPosition, aAccuracy );
@@ -195,6 +201,17 @@ void WS_DRAW_ITEM_POLYGON::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPo
 
     GRPoly( aClipBox, aDC, m_Corners.size(), points, IsFilled() ? FILLED_SHAPE : NO_FILL,
             GetPenWidth(), aColor, aColor );
+}
+
+
+const EDA_RECT WS_DRAW_ITEM_POLYGON::GetBoundingBox() const
+{
+    EDA_RECT rect( GetPosition(), wxSize( 0, 0 ) );
+
+    for( wxPoint corner : m_Corners )
+        rect.Merge( corner );
+
+    return rect;
 }
 
 
@@ -261,6 +278,12 @@ void WS_DRAW_ITEM_RECT::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint
 }
 
 
+const EDA_RECT WS_DRAW_ITEM_RECT::GetBoundingBox() const
+{
+    return EDA_RECT( GetStart(), wxSize( GetEnd().x - GetStart().x, GetEnd().y - GetStart().y ) );
+}
+
+
 bool WS_DRAW_ITEM_RECT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     int dist = aAccuracy + ( GetPenWidth() / 2 );
@@ -311,6 +334,12 @@ void WS_DRAW_ITEM_LINE::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint
                                     GR_DRAWMODE aDrawMode, COLOR4D aColor )
 {
     GRLine( aClipBox, aDC, GetStart() + aOffset, GetEnd() + aOffset, GetPenWidth(), aColor );
+}
+
+
+const EDA_RECT WS_DRAW_ITEM_LINE::GetBoundingBox() const
+{
+    return EDA_RECT( GetStart(), wxSize( GetEnd().x - GetStart().x, GetEnd().y - GetStart().y ) );
 }
 
 

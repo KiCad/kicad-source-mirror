@@ -130,16 +130,18 @@ public:
     const wxPoint GetPosition() const override { return GetStart(); }
     void SetPosition( wxPoint aPos ) override { SetStart( aPos ); }
 
-    /** The function to draw a WS_DRAW_ITEM_LINE
-     */
-    void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset, GR_DRAWMODE aDrawMode,
-                     COLOR4D aColor ) override;
+    const EDA_RECT GetBoundingBox() const override;
 
     /**
      * Virtual function
      * return true if the point aPosition is on the line
      */
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+
+    /** The function to draw a WS_DRAW_ITEM_LINE
+     */
+    void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset, GR_DRAWMODE aDrawMode,
+                     COLOR4D aColor ) override;
 
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
@@ -177,10 +179,7 @@ public:
     const wxPoint GetPosition() const override { return m_pos; }
     void SetPosition( wxPoint aPos ) override { m_pos = aPos; }
 
-    /** The function to draw a WS_DRAW_ITEM_POLYGON
-     */
-    void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset, GR_DRAWMODE aDrawMode,
-                     COLOR4D aColor ) override;
+    const EDA_RECT GetBoundingBox() const override;
 
     /**
      * Virtual function
@@ -193,6 +192,11 @@ public:
      * return true if the rect aRect intersects on the item
      */
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
+
+    /** The function to draw a WS_DRAW_ITEM_POLYGON
+     */
+    void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset, GR_DRAWMODE aDrawMode,
+                     COLOR4D aColor ) override;
 
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
@@ -233,6 +237,8 @@ public:
      */
     void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset, GR_DRAWMODE aDrawMode,
                      COLOR4D aColor ) override;
+
+    const EDA_RECT GetBoundingBox() const override;
 
     /**
      * Virtual function
@@ -282,6 +288,8 @@ public:
 
     const wxPoint GetPosition() const override { return GetTextPos(); }
     void SetPosition( wxPoint aPos ) override { SetTextPos( aPos ); }
+
+    const EDA_RECT GetBoundingBox() const override;
 
     /**
      * Virtual function
