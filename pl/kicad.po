@@ -4,9 +4,9 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-13 21:59+0200\n"
 "PO-Revision-Date: 2019-04-13 22:00+0200\n"
-"Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
+"Last-Translator: Marek Ledworowski <fotelpl@gmail.com>\n"
 "Language-Team: Polish KiCad Translators: Mateusz Skowroński, Krzysztof Kawa, "
-"Kerusey Karyu, Daniel Dawid Majewski\n"
+"Kerusey Karyu, Daniel Dawid Majewski, Marek Ledworowski\n"
 "Language: pl_PL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13281,7 +13281,7 @@ msgid ""
 "Bitmap to Component Converter\n"
 "Convert bitmap images to schematic or PCB components"
 msgstr ""
-"Bitmap2Component - Konwertuje obrazy bitmapowe na symbole\n"
+"Bitmap2Component - Konwertuje bitmapy na symbole\n"
 "programu Eeschema lub footprinty programu Pcbnew"
 
 #: kicad/commandframe.cpp:103
@@ -13453,7 +13453,7 @@ msgstr "Edytor bibliotek nie może załadować:\n"
 
 #: kicad/mainframe.cpp:418
 msgid "Footprint library editor failed to load:\n"
-msgstr "Edytor footprintó nie może załadować:\n"
+msgstr "Edytor footprintów nie może załadować:\n"
 
 #: kicad/mainframe.cpp:478
 msgid "Load File to Edit"
@@ -13762,7 +13762,7 @@ msgstr "Nowy folder projektu"
 #: kicad/prjconfig.cpp:366
 #, c-format
 msgid "Cannot write to folder \"%s\"."
-msgstr "Nie można zapisywać do folderu \"%s\"."
+msgstr "Nie można zapisać do folderu \"%s\"."
 
 #: kicad/prjconfig.cpp:367
 msgid "Error!"
@@ -13798,7 +13798,7 @@ msgstr "Nie można otworzyć meta-informacji z folderu tego szablonu!  "
 
 #: kicad/project_template.cpp:63
 msgid "Cound't find the meta HTML information file for this template!"
-msgstr "Nie można odnaleźć pliku HTML z informacji 'meta' dla tego szablonu!"
+msgstr "Nie można odnaleźć pliku HTML z metadanymi dla tego szablonu!"
 
 #: kicad/project_template.cpp:205
 #, c-format
@@ -15133,27 +15133,27 @@ msgstr "Uwaga: Podawane wartości są wartościami minimalnymi"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1298
 msgid "Class 1"
-msgstr "Class 1"
+msgstr "Klasa 1"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1299
 msgid "Class 2"
-msgstr "Class 2"
+msgstr "Klasa 2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1300
 msgid "Class 3"
-msgstr "Class 3"
+msgstr "Klasa 3"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1301
 msgid "Class 4"
-msgstr "Class 4"
+msgstr "Klasa 4"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1302
 msgid "Class 5"
-msgstr "Class 5"
+msgstr "Klasa 5"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1303
 msgid "Class 6"
-msgstr "Class 6"
+msgstr "Klasa 6"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1310
 msgid "Lines width"
@@ -20339,7 +20339,7 @@ msgstr "Naruszenie DRC: podświetlanie przeszkód"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:35
 msgid "DRC violation: shove tracks and vias"
-msgstr "Naruszenie DRC: shove tracks and vias"
+msgstr "Naruszenie DRC: rozsuwanie ścieżek i przelotek"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:36
 msgid "DRC violation: walk around obstacles"
@@ -22795,7 +22795,7 @@ msgstr "Ostrzeżenie: nie można utworzyć pliku zapasowego \"%s\""
 #: pcbnew/files.cpp:702 pcbnew/files.cpp:793
 #, c-format
 msgid "No access rights to write to file \"%s\""
-msgstr "Nie ma uprawnień by zapisywać w pliku \"%s\""
+msgstr "Nie ma uprawnień aby zapisać plik \"%s\""
 
 #: pcbnew/files.cpp:739 pcbnew/files.cpp:818
 #, c-format
