@@ -141,11 +141,14 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         // delta distances
         GetTextSize( wxT( "dx 0234.567  dx 0234.567" ), stsbar ).x + 10,
 
+        // grid size
+        GetTextSize( wxT( "grid 0234.567" ), stsbar ).x + 10,
+
         // Coord origin (use the bigger message)
         GetTextSize( _( "coord origin: Right Bottom page corner" ), stsbar ).x + 10,
 
         // units display, Inches is bigger than mm
-        GetTextSize( _( "Inches" ), stsbar ).x + 10
+        GetTextSize( _( "Inches" ), stsbar ).x + 20
     };
 
     SetStatusWidths( arrayDim( dims ), dims );
@@ -498,6 +501,37 @@ wxPoint PL_EDITOR_FRAME::ReturnCoordOriginCorner() const
 }
 
 
+/*
+ * Display the grid status.
+ */
+void PL_EDITOR_FRAME::DisplayGridMsg()
+{
+    wxString line;
+    wxString gridformatter;
+
+    switch( m_userUnits )
+    {
+    case INCHES:
+        gridformatter = "grid %.3f";
+        break;
+
+    case MILLIMETRES:
+        gridformatter = "grid %.4f";
+        break;
+
+    default:
+        gridformatter = "grid %f";
+        break;
+    }
+
+    wxRealPoint curr_grid_size = GetScreen()->GetGridSize();
+    double grid = To_User_Unit( m_userUnits, curr_grid_size.x );
+    line.Printf( gridformatter, grid );
+
+    SetStatusText( line, 4 );
+}
+
+
 void PL_EDITOR_FRAME::UpdateStatusBar()
 {
     PL_EDITOR_SCREEN* screen = (PL_EDITOR_SCREEN*) GetScreen();
@@ -551,9 +585,9 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
 
     switch( GetUserUnits() )
     {
-    case INCHES:         SetStatusText( _("inches"), 5 );   break;
-    case MILLIMETRES:    SetStatusText( _("mm"), 5 );       break;
-    case UNSCALED_UNITS: SetStatusText( wxEmptyString, 5 ); break;
+    case INCHES:         SetStatusText( _("inches"), 6 );   break;
+    case MILLIMETRES:    SetStatusText( _("mm"), 6 );       break;
+    case UNSCALED_UNITS: SetStatusText( wxEmptyString, 6 ); break;
     case DEGREES:        wxASSERT( false );                 break;
     }
 
@@ -578,10 +612,12 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     line.Printf( locformatter, dXpos, dYpos );
     SetStatusText( line, 3 );
 
+    DisplayGridMsg();
+
     // Display corner reference for coord origin
     line.Printf( _("coord origin: %s"),
                 m_originSelectBox->GetString( m_originSelectChoice ).GetData() );
-    SetStatusText( line, 4 );
+    SetStatusText( line, 5 );
 
     // Display units
 }

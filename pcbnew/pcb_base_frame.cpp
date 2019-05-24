@@ -597,6 +597,42 @@ void PCB_BASE_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 
 
 /*
+ * Display the grid status.
+ */
+void PCB_BASE_FRAME::DisplayGridMsg()
+{
+    wxString line;
+    wxString gridformatter;
+
+    switch( m_userUnits )
+    {
+    case INCHES:
+        gridformatter = "grid X %.6f  Y %.6f";
+        break;
+
+    case MILLIMETRES:
+        gridformatter = "grid X %.6f  Y %.6f";
+        break;
+
+    default:
+        gridformatter = "grid X %f  Y %f";
+        break;
+    }
+
+    BASE_SCREEN* screen = GetScreen();
+    wxArrayString gridsList;
+
+    int icurr = screen->BuildGridsChoiceList( gridsList, m_userUnits != INCHES );
+    GRID_TYPE& grid = screen->GetGrid( icurr );
+    double grid_x = To_User_Unit( m_userUnits, grid.m_Size.x );
+    double grid_y = To_User_Unit( m_userUnits, grid.m_Size.y );
+    line.Printf( gridformatter, grid_x, grid_y );
+
+    SetStatusText( line, 4 );
+}
+
+
+/*
  * Update the status bar information.
  */
 void PCB_BASE_FRAME::UpdateStatusBar()
@@ -675,6 +711,8 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         line.Printf( locformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );
         SetStatusText( line, 3 );
     }
+
+    DisplayGridMsg();
 }
 
 

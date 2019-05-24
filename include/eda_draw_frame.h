@@ -491,6 +491,11 @@ public:
      */
     void DisplayUnitsMsg();
 
+    /**
+     * Display current grid pane on the status bar.
+     */
+    void DisplayGridMsg();
+
     /* interprocess communication */
     void CreateServer( int service, bool local = true );
     void OnSockRequest( wxSocketEvent& evt );
