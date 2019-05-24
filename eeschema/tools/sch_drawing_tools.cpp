@@ -765,6 +765,7 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
             // ... and second click places:
             else
             {
+                item->ClearFlags( IS_MOVED );
                 m_frame->AddItemToScreenAndUndoList( (SCH_ITEM*) item );
                 item = nullptr;
 
