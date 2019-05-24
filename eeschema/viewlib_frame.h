@@ -112,6 +112,11 @@ public:
      */
     bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem ) override;
 
+    /**
+     * Displays the hotkey dialog
+     */
+    void OnDisplayHotkeyList( wxCommandEvent& event );
+
     void LoadSettings( wxConfigBase* aCfg ) override;
     void SaveSettings( wxConfigBase* aCfg ) override;
 

@@ -83,6 +83,7 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_EXIT, LIB_VIEW_FRAME::CloseLibraryViewer )
     EVT_MENU( ID_SET_RELATIVE_OFFSET, LIB_VIEW_FRAME::OnSetRelativeOffset )
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
+    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, LIB_VIEW_FRAME::OnDisplayHotkeyList )
 
     EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, LIB_VIEW_FRAME::onUpdateNormalBodyStyleButton )
     EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, LIB_VIEW_FRAME::onUpdateAltBodyStyleButton )
@@ -870,4 +871,10 @@ bool LIB_VIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
     UpdateStatusBar();    // Display cursor coordinates info.
 
     return eventHandled;
+}
+
+
+void LIB_VIEW_FRAME::OnDisplayHotkeyList( wxCommandEvent& event )
+{
+    DisplayHotkeyList( this, g_Viewlib_Hotkeys_Descr );
 }
