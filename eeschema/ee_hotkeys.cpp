@@ -401,8 +401,6 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         return false;
 
     wxCommandEvent     cmd( wxEVT_COMMAND_MENU_SELECTED );
-    EE_SELECTION_TOOL* selTool = GetToolManager()->GetTool<EE_SELECTION_TOOL>();
-    SELECTION&         selection = selTool->GetSelection();
 
     /* Convert lower to upper case (the usual toupper function has problem
      * with non ascii codes like function keys */
