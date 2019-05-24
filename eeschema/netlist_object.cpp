@@ -271,15 +271,17 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
             if( conn.IsBusVectorLabel( bus_member ) )
             {
                 wxString prefix;
+                std::vector<wxString> members;
                 long begin, end;
 
-                conn.ParseBusVector( bus_member, &prefix, &begin, &end );
+                conn.ParseBusVector( bus_member, &prefix, members );
                 prefix = group_prefix + prefix;
+                begin = conn.VectorStart();
+                end = conn.VectorEnd();
 
                 if( !self_set )
                 {
-                    m_Label = prefix;
-                    m_Label << begin;
+                    m_Label = members[0];
                     m_Member = ( begin++ ) + ( member_offset++ );
 
                     self_set = true;
@@ -319,12 +321,14 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
     {
         // Plain bus vector
         wxString prefix;
+        std::vector<wxString> members;
         long begin, end;
 
-        conn.ParseBusVector( m_Label, &prefix, &begin, &end );
+        conn.ParseBusVector( m_Label, &prefix, members );
+        begin = conn.VectorStart();
+        end = conn.VectorEnd();
 
-        m_Label = prefix;
-        m_Label << begin;
+        m_Label = members[0];
         m_Member = begin;
 
         fillBusVector( aNetListItems, prefix, begin + 1, end, 0 );

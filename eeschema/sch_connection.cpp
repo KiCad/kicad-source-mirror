@@ -57,9 +57,9 @@
  * just USB_DP and USB_DN.
  *
  */
-static std::regex bus_label_re( "^([^[:space:]]+)(\\[[\\d]+\\.+[\\d]+\\])~*$" );
+static std::regex bus_label_re( "^([^[:space:]]+)(\\[[\\d]+\\.+[\\d]+\\])(~?)$" );
 
-static std::regex bus_group_label_re( "^([^[:space:]]+)?\\{((?:[^[:space:]]+(?:\\[[\\d]+\\.+[\\d]+\\])? ?)+)\\}~*$" );
+static std::regex bus_group_label_re( "^([^[:space:]]+)?\\{((?:[^[:space:]]+(?:\\[[\\d]+\\.+[\\d]+\\])? ?)+)\\}$" );
 
 
 SCH_CONNECTION::SCH_CONNECTION( SCH_ITEM* aParent, SCH_SHEET_PATH aPath ) :
@@ -118,17 +118,18 @@ void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
         m_name = aLabel;
         m_type = CONNECTION_BUS;
 
-        ParseBusVector( aLabel, &m_vector_prefix, &m_vector_start, &m_vector_end );
+        std::vector<wxString> members;
 
-        for( long i = m_vector_start; i <= m_vector_end; ++i )
+        ParseBusVector( aLabel, &m_vector_prefix, members );
+        long i = 0;
+
+        for( const auto& vector_member : members )
         {
             auto member = std::make_shared< SCH_CONNECTION >( m_parent, m_sheet );
-            wxString name = m_vector_prefix;
-            name << i;
             member->m_type = CONNECTION_NET;
             member->m_prefix = m_prefix;
-            member->m_name = name;
-            member->m_vector_index = i;
+            member->m_name = vector_member;
+            member->m_vector_index = i++;
             m_members.push_back( member );
         }
     }
@@ -420,27 +421,28 @@ bool SCH_CONNECTION::IsBusGroupLabel( const wxString& aLabel )
 }
 
 
-void SCH_CONNECTION::ParseBusVector( wxString aVector, wxString* aName,
-                                     long* begin, long* end ) const
+bool SCH_CONNECTION::ParseBusVector( wxString aBus, wxString* aName,
+                                     std::vector<wxString>& aMemberList ) const
 {
-    auto ss_vector = std::string( aVector.mb_str() );
+    auto ss_vector = std::string( aBus.mb_str() );
     std::smatch matches;
 
     try
     {
         if( !std::regex_match( ss_vector, matches, bus_label_re ) )
-        {
-            wxFAIL_MSG( wxT( "<" ) + aVector + wxT( "> is not a valid bus vector." ) );
-            return;
-        }
+            return false;
     }
     catch( ... )
     {
-        return;
+        return false;
     }
 
+    long begin = 0, end = 0;
     *aName = wxString( matches[1] );
     wxString numberString( matches[2] );
+
+    // If we have three match groups, it means there was a tilde at the end of the vector
+    bool append_tilde = wxString( matches[3] ).IsSameAs( wxT( "~" ) );
 
     // numberString will include the brackets, e.g. [5..0] so skip the first one
     size_t i = 1, len = numberString.Len();
@@ -452,7 +454,7 @@ void SCH_CONNECTION::ParseBusVector( wxString aVector, wxString* aName,
         i++;
     }
 
-    tmp.ToLong( begin );
+    tmp.ToLong( &begin );
 
     while( i < len && numberString[i] == '.' )
         i++;
@@ -465,16 +467,29 @@ void SCH_CONNECTION::ParseBusVector( wxString aVector, wxString* aName,
         i++;
     }
 
-    tmp.ToLong( end );
+    tmp.ToLong( &end );
 
-    if( *begin < 0 )
-        *begin = 0;
+    if( begin < 0 )
+        begin = 0;
 
-    if( *end < 0 )
-        *end = 0;
+    if( end < 0 )
+        end = 0;
 
-    if( *begin > *end )
-        std::swap( *begin, *end );
+    if( begin > end )
+        std::swap( begin, end );
+
+    for( long idx = begin; idx <= end; ++idx )
+    {
+        wxString str = *aName;
+        str << idx;
+
+        if( append_tilde )
+            str << '~';
+
+        aMemberList.emplace_back( str );
+    }
+
+    return true;
 }
 
 

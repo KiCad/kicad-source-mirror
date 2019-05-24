@@ -262,13 +262,13 @@ public:
      * Parses a bus vector (e.g. A[7..0]) into name, begin, and end.
      * Ensures that begin and end are positive and that end > begin.
      *
-     * @param vector is a bus vector label string
-     * @param name output of the name portion of the label
-     * @param begin is the first entry in the vector
-     * @param end is the last entry in the vector
+     * @param aBus is a bus vector label string
+     * @param aName out is the bus name, e.g. "A"
+     * @param aMemberList is a list of member strings, e.g. "A7", "A6", and so on
+     * @return true if aBus was successfully parsed
      */
-    void ParseBusVector( wxString vector, wxString* name,
-                         long* begin, long* end ) const;
+    bool ParseBusVector( wxString aBus, wxString* aName,
+                         std::vector<wxString>& aMemberList ) const;
 
     /**
      * Parses a bus group label into the name and a list of components
