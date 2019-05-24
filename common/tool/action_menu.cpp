@@ -498,7 +498,13 @@ wxMenuItem* ACTION_MENU::appendCopy( const wxMenuItem* aSource )
     wxMenuItem* newItem = new wxMenuItem( this, aSource->GetId(), aSource->GetItemLabel(),
                                           aSource->GetHelp(), aSource->GetKind() );
 
-    AddBitmapToMenuItem( newItem, aSource->GetBitmap() );
+    // Add the source bitmap if it is not the wxNullBitmap
+    // On Windows, for Checkable Menu items, adding a null bitmap adds also
+    // our predefined checked alternate bitmap
+    const wxBitmap& src_bitmap = aSource->GetBitmap();
+
+    if( src_bitmap.GetHeight() > 1 )    // a null bitmap has a 0 size
+        AddBitmapToMenuItem( newItem, src_bitmap );
 
     if( aSource->IsSubMenu() )
     {
