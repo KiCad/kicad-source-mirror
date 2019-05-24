@@ -89,10 +89,7 @@ void DIALOG_PNS_SETTINGS::onModeChange( wxCommandEvent& aEvent )
     }
     else
     {
-        m_freeAngleMode->SetValue( false );
         m_freeAngleMode->Enable( false );
-
-        m_violateDrc->SetValue( false );
         m_violateDrc->Enable( false );
     }
 }
