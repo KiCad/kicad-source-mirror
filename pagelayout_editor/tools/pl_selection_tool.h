@@ -111,6 +111,12 @@ public:
     void ClearSelection();
 
     /**
+     * Rebuild the selection from the flags in the view items.  Useful after a hard redraw
+     * or an undo or redo operation.
+     */
+    void RebuildSelection();
+
+    /**
      * Function SelectionMenu()
      * Shows a popup menu to trim the COLLECTOR passed as aEvent's parameter down to a single
      * item.

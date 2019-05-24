@@ -30,6 +30,8 @@
 #include <gal/graphics_abstraction_layer.h>
 
 #include <functional>
+#include <tools/pl_selection_tool.h>
+
 using namespace std::placeholders;
 
 
@@ -64,13 +66,17 @@ void PL_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector<MSG_PAN
 
 void PL_DRAW_PANEL_GAL::DisplayWorksheet()
 {
-    m_edaFrame->GetToolManager()->RunAction( PL_ACTIONS::clearSelection, true );
+    PL_SELECTION_TOOL* selTool = m_edaFrame->GetToolManager()->GetTool<PL_SELECTION_TOOL>();
+
+    selTool->GetSelection().Clear();
     m_view->Clear();
 
     WS_DRAW_ITEM_LIST::SetupDrawEnvironment( m_edaFrame->GetPageSettings() );
 
     for( WORKSHEET_DATAITEM* dataItem : WORKSHEET_LAYOUT::GetTheInstance().GetItems() )
         dataItem->SyncDrawItems( nullptr, m_view );
+
+    selTool->RebuildSelection();
 }
 
 

@@ -46,7 +46,7 @@ public:
         m_isHover = aOther.m_isHover;
     }
 
-    const SELECTION& operator= ( const SELECTION& aOther )
+    SELECTION& operator= ( const SELECTION& aOther )
     {
         m_items = aOther.m_items;
         m_isHover = aOther.m_isHover;

@@ -26,9 +26,12 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <macros.h>
+#include <worksheet_dataitem.h>
 #include <ws_draw_item.h>
 
 #include <pl_editor_frame.h>
+#include <tool/tool_manager.h>
+#include <tools/pl_selection_tool.h>
 
 /* Note: the Undo/redo commands use a "brute" method:
  * the full page layout is converted to a S expression, and saved as string.
@@ -43,11 +46,63 @@
 // A helper class used in undo/redo commad:
 class PL_ITEM_LAYOUT: public EDA_ITEM
 {
-public:
-    wxString m_Layout;
+    wxString m_serialization;
+    int      m_selectedDataItem;
+    int      m_selectedDrawItem;
 
 public:
-    PL_ITEM_LAYOUT() : EDA_ITEM( TYPE_PL_EDITOR_LAYOUT ) {}
+    PL_ITEM_LAYOUT() :
+            EDA_ITEM( TYPE_PL_EDITOR_LAYOUT ),
+            m_selectedDataItem( INT_MAX ),
+            m_selectedDrawItem( INT_MAX )
+    {
+        WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+        pglayout.SaveInString( m_serialization );
+
+        for( int ii = 0; ii < pglayout.GetItems().size(); ++ii )
+        {
+            WORKSHEET_DATAITEM* dataItem = pglayout.GetItem( ii );
+
+            for( int jj = 0; jj < dataItem->GetDrawItems().size(); ++jj )
+            {
+                WS_DRAW_ITEM_BASE* drawItem = dataItem->GetDrawItems()[ jj ];
+
+                if( drawItem->IsSelected() )
+                {
+                    m_selectedDataItem = ii;
+                    m_selectedDrawItem = jj;
+                    break;
+                }
+            }
+        }
+    }
+
+    void RestoreLayout( PL_EDITOR_FRAME* aFrame )
+    {
+        WORKSHEET_LAYOUT&  pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+        PL_SELECTION_TOOL* selTool = aFrame->GetToolManager()->GetTool<PL_SELECTION_TOOL>();
+        KIGFX::VIEW*       view = aFrame->GetGalCanvas()->GetView();
+
+        pglayout.SetPageLayout( TO_UTF8( m_serialization ) );
+
+        selTool->ClearSelection();
+        view->Clear();
+
+        for( int ii = 0; ii < pglayout.GetItems().size(); ++ii )
+        {
+            WORKSHEET_DATAITEM* dataItem = pglayout.GetItem( ii );
+
+            dataItem->SyncDrawItems( nullptr, view );
+
+            if( ii == m_selectedDataItem && m_selectedDrawItem < dataItem->GetDrawItems().size() )
+            {
+                WS_DRAW_ITEM_BASE* drawItem = dataItem->GetDrawItems()[ m_selectedDrawItem ];
+                drawItem->SetSelected();
+            }
+        }
+
+        selTool->RebuildSelection();
+    }
 
     // Required to keep compiler happy on debug builds.
 #if defined(DEBUG)
@@ -65,9 +120,7 @@ public:
 
 void PL_EDITOR_FRAME::SaveCopyInUndoList()
 {
-    PL_ITEM_LAYOUT* copyItem = new PL_ITEM_LAYOUT;
-    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-    pglayout.SaveInString( copyItem->m_Layout );
+    PL_ITEM_LAYOUT* copyItem = new PL_ITEM_LAYOUT;  // constructor stores current layout
 
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
     ITEM_PICKER wrapper( copyItem, UR_LIBEDIT );
@@ -89,9 +142,7 @@ void PL_EDITOR_FRAME::GetLayoutFromRedoList()
         return;
 
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-    PL_ITEM_LAYOUT* copyItem = new PL_ITEM_LAYOUT;
-    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-    pglayout.SaveInString( copyItem->m_Layout );
+    PL_ITEM_LAYOUT* copyItem = new PL_ITEM_LAYOUT;  // constructor stores current layout
 
     ITEM_PICKER wrapper( copyItem, UR_LIBEDIT );
 
@@ -102,10 +153,10 @@ void PL_EDITOR_FRAME::GetLayoutFromRedoList()
 
     wrapper = lastcmd->PopItem();
     copyItem = static_cast<PL_ITEM_LAYOUT*>( wrapper.GetItem() );
-    pglayout.SetPageLayout( TO_UTF8(copyItem->m_Layout) );
+    copyItem->RestoreLayout( this );
     delete copyItem;
 
-    HardRedraw();
+    GetCanvas()->Refresh();
     OnModify();
 }
 
@@ -120,9 +171,7 @@ void PL_EDITOR_FRAME::GetLayoutFromUndoList()
         return;
 
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-    PL_ITEM_LAYOUT* copyItem = new PL_ITEM_LAYOUT;
-    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-    pglayout.SaveInString( copyItem->m_Layout );
+    PL_ITEM_LAYOUT* copyItem = new PL_ITEM_LAYOUT;  // constructor stores current layout
 
     ITEM_PICKER wrapper( copyItem, UR_LIBEDIT );
     lastcmd->PushItem( wrapper );
@@ -132,10 +181,10 @@ void PL_EDITOR_FRAME::GetLayoutFromUndoList()
 
     wrapper = lastcmd->PopItem();
     copyItem = static_cast<PL_ITEM_LAYOUT*>( wrapper.GetItem() );
-    pglayout.SetPageLayout( TO_UTF8(copyItem->m_Layout) );
+    copyItem->RestoreLayout( this );
     delete copyItem;
 
-    HardRedraw();
+    GetCanvas()->Refresh();
     OnModify();
 }
 
@@ -147,13 +196,12 @@ void PL_EDITOR_FRAME::RollbackFromUndo()
     if ( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
 
-    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
     PICKED_ITEMS_LIST* lastcmd = GetScreen()->PopCommandFromUndoList();
 
     ITEM_PICKER wrapper = lastcmd->PopItem();
     PL_ITEM_LAYOUT* copyItem = static_cast<PL_ITEM_LAYOUT*>( wrapper.GetItem() );
-    pglayout.SetPageLayout( TO_UTF8(copyItem->m_Layout) );
+    copyItem->RestoreLayout( this );
     delete copyItem;
 
-    HardRedraw();
+    GetCanvas()->Refresh();
 }

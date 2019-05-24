@@ -504,6 +504,21 @@ int PL_SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 }
 
 
+void PL_SELECTION_TOOL::RebuildSelection()
+{
+    m_selection.Clear();
+
+    for( WORKSHEET_DATAITEM* dataItem : WORKSHEET_LAYOUT::GetTheInstance().GetItems() )
+    {
+        for( WS_DRAW_ITEM_BASE* item : dataItem->GetDrawItems() )
+        {
+            if( item->IsSelected() )
+                select( item );
+        }
+    }
+}
+
+
 int PL_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 {
     COLLECTOR* collector = aEvent.Parameter<COLLECTOR*>();

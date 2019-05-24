@@ -89,8 +89,14 @@ void WORKSHEET_DATAITEM::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VI
     if( pensize == 0 )
         pensize = aCollector ? aCollector->GetDefaultPenSize() : 0;
 
-    for( WS_DRAW_ITEM_BASE* item : m_drawItems )
+    std::map<int, STATUS_FLAGS> itemFlags;
+    WS_DRAW_ITEM_BASE*          item = nullptr;
+
+    for( int ii = 0; ii < m_drawItems.size(); ++ii )
     {
+        item = m_drawItems[ ii ];
+        itemFlags[ ii ] = item->GetFlags();
+
         if( aCollector )
             aCollector->Remove( item );
 
@@ -108,29 +114,18 @@ void WORKSHEET_DATAITEM::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VI
             continue;
 
         if( m_type == WS_SEGMENT )
-        {
-            auto line = new WS_DRAW_ITEM_LINE( this, GetStartPosUi( jj ), GetEndPosUi( jj ),
-                                               pensize );
-            m_drawItems.push_back( line );
-
-            if( aCollector )
-                aCollector->Append( line );
-
-            if( aView )
-                aView->Add( line );
-        }
+            item = new WS_DRAW_ITEM_LINE( this, GetStartPosUi( jj ), GetEndPosUi( jj ), pensize );
         else if( m_type == WS_RECT )
-        {
-            auto rect = new WS_DRAW_ITEM_RECT( this, GetStartPosUi( jj ), GetEndPosUi( jj ),
-                                               pensize );
-            m_drawItems.push_back( rect );
+            item = new WS_DRAW_ITEM_RECT( this, GetStartPosUi( jj ), GetEndPosUi( jj ), pensize );
 
-            if( aCollector )
-                aCollector->Append( rect );
+        item->SetFlags( itemFlags[ jj ] );
+        m_drawItems.push_back( item );
 
-            if( aView )
-                aView->Add( rect );
-        }
+        if( aCollector )
+            aCollector->Append( item );
+
+        if( aView )
+            aView->Add( item );
     }
 }
 
@@ -406,8 +401,22 @@ WORKSHEET_DATAITEM_POLYPOLYGON::WORKSHEET_DATAITEM_POLYPOLYGON() :
 void WORKSHEET_DATAITEM_POLYPOLYGON::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector,
                                                     KIGFX::VIEW* aView )
 {
-    for( WS_DRAW_ITEM_BASE* item : m_drawItems )
+    std::map<int, STATUS_FLAGS> itemFlags;
+    WS_DRAW_ITEM_BASE*          item = nullptr;
+
+    for( int ii = 0; ii < m_drawItems.size(); ++ii )
+    {
+        item = m_drawItems[ ii ];
+        itemFlags[ ii ] = item->GetFlags();
+
+        if( aCollector )
+            aCollector->Remove( item );
+
+        if( aView )
+            aView->Remove( item );
+
         delete item;
+    }
 
     m_drawItems.clear();
 
@@ -421,6 +430,7 @@ void WORKSHEET_DATAITEM_POLYPOLYGON::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollecto
             const bool fill = true;
             int pensize = GetPenSizeUi();
             auto poly = new WS_DRAW_ITEM_POLYGON( this, GetStartPosUi( jj ), fill, pensize );
+            item->SetFlags( itemFlags[ jj ] );
             m_drawItems.push_back( poly );
 
             if( aCollector )
@@ -552,8 +562,22 @@ void WORKSHEET_DATAITEM_TEXT::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGF
     if( m_Bold )
         pensize = GetPenSizeForBold( std::min( textsize.x, textsize.y ) );
 
-    for( WS_DRAW_ITEM_BASE* item : m_drawItems )
-        delete item;
+    std::map<int, STATUS_FLAGS> itemFlags;
+    WS_DRAW_ITEM_TEXT*          text = nullptr;
+
+    for( int ii = 0; ii < m_drawItems.size(); ++ii )
+    {
+        text = (WS_DRAW_ITEM_TEXT*) m_drawItems[ ii ];
+        itemFlags[ ii ] = text->GetFlags();
+
+        if( aCollector )
+            aCollector->Remove( text );
+
+        if( aView )
+            aView->Remove( text );
+
+        delete text;
+    }
 
     m_drawItems.clear();
 
@@ -562,8 +586,9 @@ void WORKSHEET_DATAITEM_TEXT::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGF
         if( jj > 0 && !IsInsidePage( jj ) )
             continue;
 
-        auto text = new WS_DRAW_ITEM_TEXT( this, m_FullText, GetStartPosUi( jj ), textsize,
-                                           pensize, m_Italic, m_Bold );
+        text = new WS_DRAW_ITEM_TEXT( this, m_FullText, GetStartPosUi( jj ), textsize, pensize,
+                                      m_Italic, m_Bold );
+        text->SetFlags( itemFlags[ jj ] );
         m_drawItems.push_back( text );
 
         if( aCollector )
@@ -682,8 +707,22 @@ void WORKSHEET_DATAITEM_TEXT::SetConstrainedTextSize()
 
 void WORKSHEET_DATAITEM_BITMAP::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView )
 {
-    for( WS_DRAW_ITEM_BASE* item : m_drawItems )
+    std::map<int, STATUS_FLAGS> itemFlags;
+    WS_DRAW_ITEM_BASE*          item = nullptr;
+
+    for( int ii = 0; ii < m_drawItems.size(); ++ii )
+    {
+        item = m_drawItems[ ii ];
+        itemFlags[ ii ] = item->GetFlags();
+
+        if( aCollector )
+            aCollector->Remove( item );
+
+        if( aView )
+            aView->Remove( item );
+
         delete item;
+    }
 
     m_drawItems.clear();
 
@@ -693,6 +732,7 @@ void WORKSHEET_DATAITEM_BITMAP::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KI
             continue;
 
         auto bitmap = new WS_DRAW_ITEM_BITMAP( this, GetStartPosUi( jj ) );
+        item->SetFlags( itemFlags[ jj ] );
         m_drawItems.push_back( bitmap );
 
         if( aCollector )

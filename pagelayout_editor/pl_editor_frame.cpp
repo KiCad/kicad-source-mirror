@@ -502,7 +502,18 @@ void PL_EDITOR_FRAME::RedrawActiveWindow( wxDC* aDC, bool aEraseBg )
 
 void PL_EDITOR_FRAME::HardRedraw()
 {
-    static_cast<PL_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayWorksheet();
+    PL_DRAW_PANEL_GAL*  drawPanel = static_cast<PL_DRAW_PANEL_GAL*>( GetGalCanvas() );
+
+    drawPanel->DisplayWorksheet();
+
+    PL_SELECTION_TOOL*  selTool = m_toolManager->GetTool<PL_SELECTION_TOOL>();
+    SELECTION&          selection = selTool->GetSelection();
+    WORKSHEET_DATAITEM* item = nullptr;
+
+    if( selection.GetSize() == 1 )
+        item = static_cast<WS_DRAW_ITEM_BASE*>( selection.Front() )->GetPeer();
+
+    m_propertiesPagelayout->CopyPrmsFromItemToPanel( item );
     m_propertiesPagelayout->CopyPrmsFromGeneralToPanel();
     m_canvas->Refresh();
 }
