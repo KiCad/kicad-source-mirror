@@ -983,18 +983,3 @@ bool BOARD_DESIGN_SETTINGS::GetTextUpright( PCB_LAYER_ID aLayer ) const
 {
     return m_TextUpright[ GetLayerClass( aLayer ) ];
 }
-
-
-#ifndef NDEBUG
-struct list_size_check {
-   list_size_check()
-   {
-       // Int (the type used for saving visibility settings) is only 32 bits guaranteed,
-       // be sure that we do not cross the limit
-       assert( GAL_LAYER_INDEX( GAL_LAYER_ID_BITMASK_END ) <= 32 );
-   };
-};
-static list_size_check check;
-#endif
-
-
