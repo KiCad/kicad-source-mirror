@@ -105,8 +105,8 @@ void PL_EDITOR_FRAME::GetLayoutFromRedoList()
     pglayout.SetPageLayout( TO_UTF8(copyItem->m_Layout) );
     delete copyItem;
 
+    HardRedraw();
     OnModify();
-    m_canvas->Refresh();
 }
 
 
@@ -135,8 +135,8 @@ void PL_EDITOR_FRAME::GetLayoutFromUndoList()
     pglayout.SetPageLayout( TO_UTF8(copyItem->m_Layout) );
     delete copyItem;
 
+    HardRedraw();
     OnModify();
-    m_canvas->Refresh();
 }
 
 /* Remove the last command in Undo List.
@@ -147,9 +147,13 @@ void PL_EDITOR_FRAME::RollbackFromUndo()
     if ( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
 
+    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
     PICKED_ITEMS_LIST* lastcmd = GetScreen()->PopCommandFromUndoList();
 
     ITEM_PICKER wrapper = lastcmd->PopItem();
     PL_ITEM_LAYOUT* copyItem = static_cast<PL_ITEM_LAYOUT*>( wrapper.GetItem() );
+    pglayout.SetPageLayout( TO_UTF8(copyItem->m_Layout) );
     delete copyItem;
+
+    HardRedraw();
 }

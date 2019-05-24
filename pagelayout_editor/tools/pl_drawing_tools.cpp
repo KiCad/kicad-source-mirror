@@ -289,8 +289,8 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
             if( item )
             {
-                WORKSHEET_LAYOUT::GetTheInstance().Remove( item->GetPeer() );
                 item = nullptr;
+                m_frame->RollbackFromUndo();
 
                 if( !evt->IsActivate() && !isImmediate )
                     continue;
@@ -303,6 +303,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         {
             if( !item ) // start drawing
             {
+                m_frame->SaveCopyInUndoList();
                 m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
 
                 WORKSHEET_DATAITEM::WS_ITEM_TYPE dataType;
@@ -364,11 +365,12 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 void PL_DRAWING_TOOLS::setTransitions()
 {
     Go( &PL_DRAWING_TOOLS::DrawShape,           PL_ACTIONS::drawLine.MakeEvent() );
-    Go( &PL_DRAWING_TOOLS::DrawShape,           PL_ACTIONS::addLine.MakeEvent() );
     Go( &PL_DRAWING_TOOLS::DrawShape,           PL_ACTIONS::drawRectangle.MakeEvent() );
-    Go( &PL_DRAWING_TOOLS::DrawShape,           PL_ACTIONS::addRectangle.MakeEvent() );
     Go( &PL_DRAWING_TOOLS::PlaceItem,           PL_ACTIONS::placeText.MakeEvent() );
-    Go( &PL_DRAWING_TOOLS::PlaceItem,           PL_ACTIONS::addText.MakeEvent() );
     Go( &PL_DRAWING_TOOLS::PlaceItem,           PL_ACTIONS::placeImage.MakeEvent() );
+
+    Go( &PL_DRAWING_TOOLS::DrawShape,           PL_ACTIONS::addLine.MakeEvent() );
+    Go( &PL_DRAWING_TOOLS::DrawShape,           PL_ACTIONS::addRectangle.MakeEvent() );
+    Go( &PL_DRAWING_TOOLS::PlaceItem,           PL_ACTIONS::addText.MakeEvent() );
     Go( &PL_DRAWING_TOOLS::PlaceItem,           PL_ACTIONS::addImage.MakeEvent() );
 }
