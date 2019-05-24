@@ -36,12 +36,19 @@
 #include <view/view.h>
 #include <pl_editor_frame.h>
 #include <pl_editor_id.h>
+#include <wildcards_and_files_ext.h>
 
 
 TOOL_ACTION PL_ACTIONS::move( "plEditor.InteractiveEdit.move",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE ),
         _( "Move" ), _( "Moves the selected item(s)" ),
         move_xpm, AF_ACTIVATE );
+
+TOOL_ACTION PL_ACTIONS::appendImportedWorksheet( "plEditor.InteractiveEdit.appendWorksheet",
+        AS_GLOBAL, 0,
+        _( "Append Existing Page Layout File..." ),
+        _( "Append an existing page layout design file to current file" ),
+        import_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PL_ACTIONS::deleteItemCursor( "plEditor.InteractiveEdit.deleteTool",
         AS_GLOBAL, 0,
@@ -304,6 +311,17 @@ bool PL_EDIT_TOOL::updateModificationPoint( SELECTION& aSelection )
 }
 
 
+int PL_EDIT_TOOL::ImportWorksheetContent( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent evt( wxEVT_NULL, ID_APPEND_DESCR_FILE );
+    m_frame->Files_io( evt );
+
+    m_frame->SetNoToolSelected();
+
+    return 0;
+}
+
+
 int PL_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 {
     SELECTION& selection = m_selectionTool->RequestSelection();
@@ -387,11 +405,12 @@ int PL_EDIT_TOOL::Redo( const TOOL_EVENT& aEvent )
 
 void PL_EDIT_TOOL::setTransitions()
 {
-    Go( &PL_EDIT_TOOL::Main,              PL_ACTIONS::move.MakeEvent() );
+    Go( &PL_EDIT_TOOL::Main,                   PL_ACTIONS::move.MakeEvent() );
 
-    Go( &PL_EDIT_TOOL::DoDelete,           PL_ACTIONS::doDelete.MakeEvent() );
-    Go( &PL_EDIT_TOOL::DeleteItemCursor,   PL_ACTIONS::deleteItemCursor.MakeEvent() );
+    Go( &PL_EDIT_TOOL::ImportWorksheetContent, PL_ACTIONS::appendImportedWorksheet.MakeEvent() );
+    Go( &PL_EDIT_TOOL::DoDelete,               PL_ACTIONS::doDelete.MakeEvent() );
+    Go( &PL_EDIT_TOOL::DeleteItemCursor,       PL_ACTIONS::deleteItemCursor.MakeEvent() );
 
-    Go( &PL_EDIT_TOOL::Undo,               ACTIONS::undo.MakeEvent() );
-    Go( &PL_EDIT_TOOL::Redo,               ACTIONS::redo.MakeEvent() );
+    Go( &PL_EDIT_TOOL::Undo,                   ACTIONS::undo.MakeEvent() );
+    Go( &PL_EDIT_TOOL::Redo,                   ACTIONS::redo.MakeEvent() );
 }

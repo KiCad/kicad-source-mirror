@@ -132,16 +132,17 @@ void PL_EDITOR_FRAME::ReCreateVToolbar()
         m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    m_drawToolBar->Add( PL_ACTIONS::selectionTool,     ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PL_ACTIONS::selectionTool,           ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_drawToolBar, this );
-    m_drawToolBar->Add( PL_ACTIONS::drawLine,          ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PL_ACTIONS::drawRectangle,     ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PL_ACTIONS::placeText,         ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PL_ACTIONS::placeImage,        ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PL_ACTIONS::drawLine,                ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PL_ACTIONS::drawRectangle,           ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PL_ACTIONS::placeText,               ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PL_ACTIONS::placeImage,              ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PL_ACTIONS::appendImportedWorksheet, ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_drawToolBar, this );
-    m_drawToolBar->Add( PL_ACTIONS::deleteItemCursor,  ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PL_ACTIONS::deleteItemCursor,        ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->Realize();
 }
@@ -165,5 +166,7 @@ void PL_EDITOR_FRAME::SyncMenusAndToolbars()
     m_drawToolBar->Toggle( PL_ACTIONS::placeText,        GetToolId() == ID_PL_TEXT_TOOL );
     m_drawToolBar->Toggle( PL_ACTIONS::placeImage,       GetToolId() == ID_PL_IMAGE_TOOL );
     m_drawToolBar->Toggle( PL_ACTIONS::deleteItemCursor, GetToolId() == ID_PL_DELETE_TOOL );
+
+    m_drawToolBar->Toggle( PL_ACTIONS::appendImportedWorksheet, false );  // Not really a tool
     m_drawToolBar->Refresh();
 }

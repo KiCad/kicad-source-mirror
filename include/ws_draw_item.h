@@ -66,6 +66,8 @@ public:
 
     WORKSHEET_DATAITEM* GetPeer() const { return m_peer; }
 
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
     virtual const wxPoint GetPosition() const = 0;
     virtual void SetPosition( wxPoint aPos ) = 0;
     virtual void SetEnd( wxPoint aPos ) { /* not all types will need this */ }

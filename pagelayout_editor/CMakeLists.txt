@@ -20,11 +20,8 @@ set( PL_EDITOR_SRCS
     dialogs/dialog_new_dataitem.cpp
     pl_editor_screen.cpp
     pl_editor_layout.cpp
-    events_functions.cpp
-    controle.cpp
     files.cpp
     page_layout_writer.cpp
-    pl_editor_config.cpp
     pl_editor_frame.cpp
     pl_editor_undo_redo.cpp
     properties_frame.cpp

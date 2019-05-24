@@ -195,6 +195,8 @@ enum GAL_LAYER_ID: int
     LAYER_VIAS_HOLES,           ///< to draw via holes (pad holes do not use this layer)
     LAYER_DRC,                  ///< drc markers
     LAYER_WORKSHEET,            ///< worksheet frame
+    LAYER_WORKSHEET_PAGE1,      ///< for pageLayout editor previewing
+    LAYER_WORKSHEET_PAGEn,      ///< for pageLayout editor previewing
     LAYER_GP_OVERLAY,           ///< general purpose overlay
     LAYER_SELECT_OVERLAY,       ///< currently selected items overlay
     LAYER_PCB_BACKGROUND,       ///< PCB background color

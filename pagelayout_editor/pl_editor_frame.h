@@ -53,7 +53,6 @@ class PL_EDITOR_FRAME : public EDA_DRAW_FRAME
     wxChoice*   m_pageSelectBox;        // The page number sel'ector (page 1 or other pages
                                         // usefull when there are some items which are
                                         // only on page 1, not on page 1
-
     wxPoint     m_grid_origin;
 
 protected:
@@ -197,7 +196,7 @@ public:
      * source code (mainly in dialogs).  If you need to define a configuration
      * setting that need to be loaded at run time, this is the place to define it.
      */
-    PARAM_CFG_ARRAY& GetConfigurationSettings();
+    PARAM_CFG_ARRAY& GetConfigurationSettings() { return m_configSettings; }
 
     void LoadSettings( wxConfigBase* aCfg ) override;
 
@@ -245,8 +244,6 @@ public:
     bool OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition,
                    EDA_ITEM* aItem = NULL ) override;
 
-    void Process_Config( wxCommandEvent& event );
-
     /**
      * Function ToPlotter
      * Open a dialog frame to create plot and drill files
@@ -261,7 +258,6 @@ public:
     void ToPrinter( wxCommandEvent& event );
 
     void Files_io( wxCommandEvent& event );
-    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
 
     /** Virtual function PrintPage
      * used to print a page

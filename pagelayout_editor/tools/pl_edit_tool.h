@@ -50,6 +50,8 @@ public:
     int Undo( const TOOL_EVENT& aEvent );
     int Redo( const TOOL_EVENT& aEvent );
 
+    int ImportWorksheetContent( const TOOL_EVENT& aEvent );
+
     /**
      * Function DoDelete()
      *

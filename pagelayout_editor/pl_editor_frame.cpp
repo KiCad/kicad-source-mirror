@@ -25,6 +25,7 @@
 
 #include <fctsys.h>
 #include <kiface_i.h>
+#include <pgm_base.h>
 #include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
@@ -34,11 +35,9 @@
 #include <pl_draw_panel_gal.cpp>
 #include <hotkeys.h>
 #include <pl_editor_screen.h>
-#include <ws_draw_item.h>
 #include <worksheet_dataitem.h>
 #include <properties_frame.h>
 #include <view/view.h>
-#include <wildcards_and_files_ext.h>
 #include <confirm.h>
 #include <tool/selection.h>
 #include <tool/tool_dispatcher.h>
@@ -51,6 +50,39 @@
 #include <tools/pl_edit_tool.h>
 #include <tools/pl_point_editor.h>
 #include <tools/pl_picker_tool.h>
+#include <dialog_page_settings.h>
+#include <invoke_pl_editor_dialog.h>
+
+BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
+    EVT_CLOSE( PL_EDITOR_FRAME::OnCloseWindow )
+    // Menu Files:
+    EVT_MENU( wxID_NEW, PL_EDITOR_FRAME::Files_io )
+    EVT_MENU( wxID_OPEN, PL_EDITOR_FRAME::Files_io )
+    EVT_MENU( wxID_SAVE, PL_EDITOR_FRAME::Files_io )
+    EVT_MENU( wxID_SAVEAS, PL_EDITOR_FRAME::Files_io )
+    EVT_MENU( wxID_FILE, PL_EDITOR_FRAME::Files_io )
+
+    EVT_MENU( ID_GEN_PLOT, PL_EDITOR_FRAME::ToPlotter )
+
+    EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, PL_EDITOR_FRAME::OnFileHistory )
+
+    EVT_MENU( wxID_EXIT, PL_EDITOR_FRAME::OnQuit )
+
+    // menu Preferences
+    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, PL_EDITOR_FRAME::Process_Special_Functions )
+    EVT_MENU( wxID_PREFERENCES, PL_EDITOR_FRAME::Process_Special_Functions )
+
+    EVT_TOOL( wxID_PRINT, PL_EDITOR_FRAME::ToPrinter )
+    EVT_TOOL( wxID_PREVIEW, PL_EDITOR_FRAME::ToPrinter )
+    EVT_TOOL( ID_SHEET_SET, PL_EDITOR_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_SHOW_REAL_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
+    EVT_TOOL( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
+    EVT_CHOICE( ID_SELECT_COORDINATE_ORIGIN, PL_EDITOR_FRAME::OnSelectCoordOriginCorner)
+    EVT_CHOICE( ID_SELECT_PAGE_NUMBER, PL_EDITOR_FRAME::Process_Special_Functions)
+
+    EVT_UPDATE_UI( ID_SHOW_REAL_MODE, PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayNormalMode )
+    EVT_UPDATE_UI( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnUpdateTitleBlockDisplaySpecialMode )
+END_EVENT_TABLE()
 
 
 PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
@@ -237,6 +269,139 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
     // before deleting the main frame to avoid a crash when closing
     m_propertiesPagelayout->Destroy();
     Destroy();
+}
+
+
+/* Handles the selection of tools, menu, and popup menu commands.
+ */
+void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
+{
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+    cmd.SetEventObject( this );
+
+    switch( event.GetId() )
+    {
+    case wxID_PREFERENCES:
+        ShowPreferences( PlEditorHotkeysDescr, PlEditorHotkeysDescr, wxT( "pl_editor" ) );
+        break;
+
+    case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
+        DisplayHotkeyList( this, PlEditorHotkeysDescr );
+        break;
+
+    case ID_SELECT_PAGE_NUMBER:
+    {
+        KIGFX::VIEW* view = GetGalCanvas()->GetView();
+        view->SetLayerVisible( LAYER_WORKSHEET_PAGE1, m_pageSelectBox->GetSelection() == 0 );
+        view->SetLayerVisible( LAYER_WORKSHEET_PAGEn, m_pageSelectBox->GetSelection() == 1 );
+        m_canvas->Refresh();
+    }
+        break;
+
+    case ID_SHEET_SET:
+    {
+        DIALOG_PAGES_SETTINGS dlg( this, wxSize( MAX_PAGE_SIZE_EDITORS_MILS,
+                                                 MAX_PAGE_SIZE_EDITORS_MILS ) );
+        dlg.SetWksFileName( GetCurrFileName() );
+        dlg.EnableWksFileNamePicker( false );
+        dlg.ShowModal();
+
+        cmd.SetId( ID_ZOOM_PAGE );
+        wxPostEvent( this, cmd );
+    }
+        break;
+
+    default:
+        wxMessageBox( wxT( "PL_EDITOR_FRAME::Process_Special_Functions error" ) );
+        break;
+    }
+}
+
+
+/* called when the user select one of the 4 page corner as corner
+ * reference (or the left top paper corner)
+ */
+void PL_EDITOR_FRAME::OnSelectCoordOriginCorner( wxCommandEvent& event )
+{
+    m_originSelectChoice = m_originSelectBox->GetSelection();
+    UpdateStatusBar();  // Update grid origin
+    m_canvas->Refresh();
+}
+
+
+void PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode( wxCommandEvent& event )
+{
+    WORKSHEET_DATAITEM::m_SpecialMode = (event.GetId() == ID_SHOW_PL_EDITOR_MODE);
+    m_canvas->Refresh();
+}
+
+
+void PL_EDITOR_FRAME::OnQuit( wxCommandEvent& event )
+{
+    Close( true );
+}
+
+
+void PL_EDITOR_FRAME::ToPlotter(wxCommandEvent& event)
+{
+    wxMessageBox( wxT( "Not yet available" ) );
+}
+
+
+void PL_EDITOR_FRAME::ToPrinter(wxCommandEvent& event)
+{
+    // static print data and page setup data, to remember settings during the session
+    static wxPrintData* s_PrintData;
+    static wxPageSetupDialogData* s_pageSetupData = (wxPageSetupDialogData*) NULL;
+
+    const PAGE_INFO& pageInfo = GetPageSettings();
+
+    if( s_PrintData == NULL )  // First print
+    {
+        s_PrintData = new wxPrintData();
+        s_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGH;
+    }
+
+    if( !s_PrintData->Ok() )
+    {
+        wxMessageBox( _( "Error Init Printer info" ) );
+        return;
+    }
+
+    if( s_pageSetupData == NULL )
+        s_pageSetupData = new wxPageSetupDialogData( *s_PrintData );
+
+    s_pageSetupData->SetPaperId( pageInfo.GetPaperId() );
+    s_pageSetupData->GetPrintData().SetOrientation( pageInfo.GetWxOrientation() );
+
+    if( pageInfo.IsCustom() )
+    {
+        if( pageInfo.IsPortrait() )
+            s_pageSetupData->SetPaperSize( wxSize( Mils2mm( pageInfo.GetWidthMils() ),
+                                                   Mils2mm( pageInfo.GetHeightMils() ) ) );
+        else
+            s_pageSetupData->SetPaperSize( wxSize( Mils2mm( pageInfo.GetHeightMils() ),
+                                                   Mils2mm( pageInfo.GetWidthMils() ) ) );
+    }
+
+    *s_PrintData = s_pageSetupData->GetPrintData();
+
+    if( event.GetId() == wxID_PREVIEW )
+        InvokeDialogPrintPreview( this, s_PrintData );
+    else
+        InvokeDialogPrint( this, s_PrintData, s_pageSetupData );
+}
+
+
+void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayNormalMode( wxUpdateUIEvent& event )
+{
+    event.Check( WORKSHEET_DATAITEM::m_SpecialMode == false );
+}
+
+
+void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplaySpecialMode( wxUpdateUIEvent& event )
+{
+    event.Check( WORKSHEET_DATAITEM::m_SpecialMode == true );
 }
 
 

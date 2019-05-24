@@ -748,10 +748,7 @@ void WORKSHEET_LAYOUT::SetPageLayout( const wxString& aFullFileName, bool Append
         {
             #if 0
             if( !fullFileName.IsEmpty() )
-            {
-                wxLogMessage( wxT("Page layout file <%s> not found"),
-                              fullFileName.GetData() );
-            }
+                wxLogMessage( wxT("Page layout file <%s> not found"), fullFileName.GetData() );
             #endif
             SetDefaultLayout();
             return;
@@ -771,8 +768,7 @@ void WORKSHEET_LAYOUT::SetPageLayout( const wxString& aFullFileName, bool Append
     char * buffer = new char[filelen+10];
 
     if( wksFile.Read( buffer, filelen ) != filelen )
-        wxLogMessage( _("The file \"%s\" was not fully read"),
-                      fullFileName.GetData() );
+        wxLogMessage( _("The file \"%s\" was not fully read"), fullFileName.GetData() );
     else
     {
         buffer[filelen]=0;

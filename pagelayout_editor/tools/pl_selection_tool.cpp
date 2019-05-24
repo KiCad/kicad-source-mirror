@@ -34,10 +34,10 @@
 #include <tool/selection.h>
 #include <tools/pl_actions.h>
 #include <worksheet_dataitem.h>
+#include <worksheet_painter.h>
 #include <ws_draw_item.h>
 #include <collector.h>
 #include <properties_frame.h>
-
 #include "pl_selection_tool.h"
 
 /**
@@ -743,6 +743,9 @@ int PL_SELECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 int PL_SELECTION_TOOL::ToggleBackgroundColor( const TOOL_EVENT& aEvent )
 {
     m_frame->SetDrawBgColor( m_frame->GetDrawBgColor() == WHITE ? BLACK : WHITE );
+    getView()->GetPainter()->GetSettings()->SetBackgroundColor( m_frame->GetDrawBgColor() );
+
+    m_frame->GetGalCanvas()->GetView()->UpdateAllLayersColor();
     m_frame->GetCanvas()->Refresh();
 
     return 0;

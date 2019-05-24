@@ -50,6 +50,10 @@ PL_DRAW_PANEL_GAL::PL_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindo
 
     setDefaultLayerDeps();
 
+    m_view->SetLayerVisible( LAYER_WORKSHEET, true );
+    m_view->SetLayerVisible( LAYER_WORKSHEET_PAGE1, true );
+    m_view->SetLayerVisible( LAYER_WORKSHEET_PAGEn, false );
+
     m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
 }
 

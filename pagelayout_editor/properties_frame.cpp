@@ -288,6 +288,7 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
         // Be sure what is displayed is what is set for item
         // (mainly, texts can be modified if they contain "\n")
         CopyPrmsFromItemToPanel( dataItem );
+        m_parent->GetGalCanvas()->GetView()->Update( drawItem );
     }
 
     CopyPrmsFromPanelToGeneral();

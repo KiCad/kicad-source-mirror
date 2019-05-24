@@ -55,8 +55,24 @@
 #include <worksheet_dataitem.h>
 #include <base_units.h>
 #include <page_info.h>
+#include <layers_id_colors_and_visibility.h>
 
 // ============================ BASE CLASS ==============================
+
+void WS_DRAW_ITEM_BASE::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount = 1;
+
+    WORKSHEET_DATAITEM* dataItem = GetPeer();
+
+    if( dataItem->GetPage1Option() == FIRST_PAGE_ONLY )
+        aLayers[0] = LAYER_WORKSHEET_PAGE1;
+    else if( dataItem->GetPage1Option() == SUBSEQUENT_PAGES )
+        aLayers[0] = LAYER_WORKSHEET_PAGEn;
+    else
+        aLayers[0] = LAYER_WORKSHEET;
+}
+
 
 // A generic HitTest that can be used by some, but not all, sub-classes.
 bool WS_DRAW_ITEM_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const

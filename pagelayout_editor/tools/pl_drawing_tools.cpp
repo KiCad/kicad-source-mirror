@@ -79,12 +79,6 @@ TOOL_ACTION PL_ACTIONS::addImage( "plEditor.InteractiveDrawing.addImage",
         _( "Add Bitmap" ), _( "Add a bitmap image" ),
         image_xpm, AF_ACTIVATE );
 
-TOOL_ACTION PL_ACTIONS::appendImportedWorksheet( "plEditor.InteractiveDrawing.appendWorksheet",
-        AS_GLOBAL, 0,
-        _( "Append Existing Page Layout File..." ), 
-        _( "Append an existing page layout design file to current file" ),
-        pagelayout_load_xpm, AF_ACTIVATE );
-
 
 PL_DRAWING_TOOLS::PL_DRAWING_TOOLS() :
         TOOL_INTERACTIVE( "plEditor.InteractiveDrawing" ),
