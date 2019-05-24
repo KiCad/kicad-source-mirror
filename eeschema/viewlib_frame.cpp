@@ -104,9 +104,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
                     wxDefaultPosition, wxDefaultSize,
                     aFrameType == FRAME_SCH_VIEWER_MODAL ? LIB_VIEW_STYLE_MODAL : LIB_VIEW_STYLE,
                     aFrameType == FRAME_SCH_VIEWER_MODAL ? LIB_VIEW_NAME_MODAL : LIB_VIEW_NAME ),
-    m_libList( nullptr ),
-    m_cmpList( nullptr ),
-    m_previewItem( nullptr )
+        m_libList( nullptr ), m_cmpList( nullptr ), m_previewItem( nullptr )
 {
     wxASSERT( aFrameType == FRAME_SCH_VIEWER || aFrameType == FRAME_SCH_VIEWER_MODAL );
 
@@ -127,7 +125,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_libListWidth = 200;
     m_cmpListWidth = 300;
     m_listPowerCmpOnly = false;
-    SetShowElectricalType( true );
 
     // Initialize grid id to the default value (50 mils):
     m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
@@ -135,6 +132,10 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     SetScreen( new SCH_SCREEN( aKiway ) );
     GetScreen()->m_Center = true;      // Axis origin centered on screen.
     LoadSettings( config() );
+
+    // Synchronize some draw options
+    SetShowElectricalType( true );
+    GetRenderSettings()->m_ShowPinsElectricalType = GetShowElectricalType();
 
     // Ensure axis are always drawn (initial default display was not drawn)
     KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = GetGalDisplayOptions();

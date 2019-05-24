@@ -134,6 +134,10 @@ void LIB_VIEW_FRAME::ReCreateMenuBar()
         return IsGridVisible();
     };
 
+    auto electricalTypesShownCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetShowElectricalType();
+    };
+
     viewMenu->AddItem( ACTIONS::zoomInCenter,             EE_CONDITIONS::ShowAlways );
     viewMenu->AddItem( ACTIONS::zoomOutCenter,            EE_CONDITIONS::ShowAlways );
     viewMenu->AddItem( ACTIONS::zoomFitScreen,            EE_CONDITIONS::ShowAlways );
@@ -144,7 +148,7 @@ void LIB_VIEW_FRAME::ReCreateMenuBar()
     viewMenu->AddItem( ACTIONS::gridProperties,           EE_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
-    viewMenu->AddItem( EE_ACTIONS::showElectricalTypes,   EE_CONDITIONS::ShowAlways );
+    viewMenu->AddCheckItem( EE_ACTIONS::showElectricalTypes, electricalTypesShownCondition );
 
     // Append menus to the menubar
     menuBar->Append( fileMenu, _( "&File" ) );
