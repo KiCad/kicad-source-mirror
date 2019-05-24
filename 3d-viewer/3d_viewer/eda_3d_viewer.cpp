@@ -917,33 +917,12 @@ void EDA_3D_VIEWER::CommonSettingsChanged()
 }
 
 
-void EDA_3D_VIEWER::OnLeftClick( wxDC *DC, const wxPoint &MousePos )
-{
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER::OnLeftClick" );
-    // Do nothing
-}
-
-
-void EDA_3D_VIEWER::OnRightClick( const wxPoint &MousePos, wxMenu *PopMenu )
-{
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER::OnRightClick" );
-    // Do nothing
-}
-
-
 void EDA_3D_VIEWER::OnKeyEvent( wxKeyEvent& event )
 {
     if( m_canvas )
         return m_canvas->OnKeyEvent( event );
 
     event.Skip();
-}
-
-
-void EDA_3D_VIEWER::RedrawActiveWindow( wxDC *DC, bool EraseBg )
-{
-    wxLogTrace( m_logTrace, "EDA_3D_VIEWER::RedrawActiveWindow" );
-    // Do nothing
 }
 
 

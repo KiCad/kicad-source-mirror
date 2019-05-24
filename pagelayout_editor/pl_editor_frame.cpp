@@ -623,48 +623,6 @@ void PL_EDITOR_FRAME::PrintPage( wxDC* aDC, LSET , bool , void *  )
 }
 
 
-void PL_EDITOR_FRAME::RedrawActiveWindow( wxDC* aDC, bool aEraseBg )
-{
-    // JEY TODO: probably obsolete unless called for print....
-    GetScreen()-> m_ScreenNumber = GetPageNumberOption() ? 1 : 2;
-
-    if( aEraseBg )
-        m_canvas->EraseScreen( aDC );
-
-    m_canvas->DrawBackGround( aDC );
-
-    WS_DRAW_ITEM_LIST& drawList = GetPageLayout().GetDrawItems();
-
-    drawList.SetDefaultPenSize( 0 );
-    drawList.SetMilsToIUfactor( IU_PER_MILS );
-    drawList.SetSheetNumber( GetScreen()->m_ScreenNumber );
-    drawList.SetSheetCount( GetScreen()->m_NumberOfScreens );
-    drawList.SetFileName( GetCurrFileName() );
-    drawList.SetSheetName( GetScreenDesc() );
-    drawList.SetSheetLayer( wxEmptyString );
-
-    // Draw item list
-    drawList.Draw( m_canvas->GetClipBox(), aDC, DARKMAGENTA );
-
-#ifdef USE_WX_OVERLAY
-    if( IsShown() )
-    {
-        m_overlay.Reset();
-        wxDCOverlay overlaydc( m_overlay, (wxWindowDC*)aDC );
-        overlaydc.Clear();
-    }
-#endif
-
-    if( m_canvas->IsMouseCaptured() )
-        m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
-
-    m_canvas->DrawCrossHair( aDC );
-
-    // Display the filename
-    UpdateTitleAndInfo();
-}
-
-
 void PL_EDITOR_FRAME::HardRedraw()
 {
     PL_DRAW_PANEL_GAL*  drawPanel = static_cast<PL_DRAW_PANEL_GAL*>( GetGalCanvas() );
@@ -755,6 +713,9 @@ void PL_EDITOR_FRAME::OnNewPageLayout()
 
     m_propertiesPagelayout->CopyPrmsFromItemToPanel( nullptr );
     m_propertiesPagelayout->CopyPrmsFromGeneralToPanel();
+
+    UpdateTitleAndInfo();
+
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     m_canvas->Refresh();
 }
