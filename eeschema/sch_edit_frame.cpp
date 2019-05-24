@@ -745,6 +745,10 @@ void SCH_EDIT_FRAME::CloseErc()
 
 void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
 {
+    wxFileName fn = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
+
+    fn.SetExt( PcbFileExtension );
+
     if( Kiface().IsSingle() )
     {
         DisplayError( this,  _( "Cannot update the PCB, because the Schematic Editor is"
@@ -755,6 +759,15 @@ void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
     }
 
     KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB, true );
+
+    // a pcb frame can be already existing, but not yet used.
+    // this is the case when running the footprint editor, or the footprint viewer first
+    // if the frame is not visible, the board is not yet loaded
+    if( !frame->IsVisible() )
+    {
+        frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
+        frame->Show( true );
+    }
 
     // On Windows, Raise() does not bring the window on screen, when iconized
     if( frame->IsIconized() )
