@@ -588,6 +588,7 @@ void PL_EDITOR_FRAME::OnNewPageLayout()
 
     static_cast<PL_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayWorksheet();
 
+    m_propertiesPagelayout->CopyPrmsFromItemToPanel( nullptr );
     m_propertiesPagelayout->CopyPrmsFromGeneralToPanel();
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     m_canvas->Refresh();

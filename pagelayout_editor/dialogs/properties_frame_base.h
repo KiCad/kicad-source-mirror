@@ -22,8 +22,8 @@
 #include <wx/statline.h>
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
-#include <wx/button.h>
 #include <wx/combobox.h>
+#include <wx/button.h>
 #include <wx/scrolwin.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -43,6 +43,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 	protected:
 		wxNotebook* m_notebook;
 		wxScrolledWindow* m_swItemProperties;
+		wxBoxSizer* m_SizerItemProperties;
 		wxStaticText* m_staticTextType;
 		wxChoice* m_choicePageOpt;
 		wxStaticLine* m_staticline5;
@@ -69,8 +70,6 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_units1111;
 		wxStaticText* m_staticTextSizeInfo;
 		wxStaticLine* m_staticline6;
-		wxButton* m_buttonOK;
-		wxStaticLine* m_staticline8;
 		wxStaticText* m_staticTextComment;
 		wxTextCtrl* m_textCtrlComment;
 		wxStaticLine* m_staticline2;
@@ -95,13 +94,13 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_staticTextThickness;
 		wxTextCtrl* m_textCtrlThickness;
 		wxStaticText* m_staticTextInfoThickness;
-		wxBoxSizer* m_SizerRotAndPPI;
-		wxStaticLine* m_staticline1;
+		wxBoxSizer* m_SizerRotation;
 		wxStaticText* m_staticTextRot;
 		wxTextCtrl* m_textCtrlRotation;
-		wxStaticText* m_staticTextBitmapPPI;
+		wxBoxSizer* m_SizerPPI;
+		wxStaticText* m_staticTextBitmapPPI1;
 		wxTextCtrl* m_textCtrlBitmapPPI;
-		wxStaticLine* m_staticline4;
+		wxStaticLine* m_staticline111;
 		wxStaticText* m_staticTextRepeatCnt;
 		wxStaticText* m_staticTextInclabel;
 		wxTextCtrl* m_textCtrlRepeatCount;
@@ -112,6 +111,8 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_units121111;
 		wxTextCtrl* m_textCtrlStepY;
 		wxStaticText* m_units1211111;
+		wxStaticLine* m_staticline8;
+		wxButton* m_buttonOK;
 		wxScrolledWindow* m_swGeneralOpts;
 		wxStaticText* m_staticTextDefVal;
 		wxStaticText* m_staticTextDefTsX;

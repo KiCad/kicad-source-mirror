@@ -17,8 +17,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_swItemProperties = new wxScrolledWindow( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTAB_TRAVERSAL|wxVSCROLL );
 	m_swItemProperties->SetScrollRate( 5, 5 );
-	wxBoxSizer* bSizerMain;
-	bSizerMain = new wxBoxSizer( wxVERTICAL );
+	m_SizerItemProperties = new wxBoxSizer( wxVERTICAL );
 	
 	wxBoxSizer* bSizerButt;
 	bSizerButt = new wxBoxSizer( wxHORIZONTAL );
@@ -36,10 +35,10 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	bSizerButt->Add( m_choicePageOpt, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizerMain->Add( bSizerButt, 0, wxEXPAND, 5 );
+	m_SizerItemProperties->Add( bSizerButt, 0, wxEXPAND|wxTOP, 5 );
 	
 	m_staticline5 = new wxStaticLine( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline5, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_SizerItemProperties->Add( m_staticline5, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_SizerTextOptions = new wxBoxSizer( wxVERTICAL );
 	
@@ -94,7 +93,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	bSizerFontOpt->Add( fgSizer1, 0, wxEXPAND, 5 );
 	
 	
-	m_SizerTextOptions->Add( bSizerFontOpt, 0, wxEXPAND|wxBOTTOM, 5 );
+	m_SizerTextOptions->Add( bSizerFontOpt, 0, wxEXPAND|wxBOTTOM, 2 );
 	
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 0, 5, 0, 0 );
@@ -141,7 +140,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_staticTextConstraintX->Wrap( -1 );
 	m_staticTextConstraintX->SetToolTip( _("Set to 0 to disable this constraint") );
 	
-	fgSizer2->Add( m_staticTextConstraintX, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_staticTextConstraintX, 0, wxRIGHT|wxLEFT, 5 );
 	
 	
 	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -153,7 +152,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_staticTextConstraintY->Wrap( -1 );
 	m_staticTextConstraintY->SetToolTip( _("Set to 0 to disable this constraint") );
 	
-	fgSizer2->Add( m_staticTextConstraintY, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_staticTextConstraintY, 0, wxRIGHT|wxLEFT, 5 );
 	
 	
 	fgSizer2->Add( 0, 0, 0, wxEXPAND, 5 );
@@ -186,24 +185,17 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_SizerTextOptions->Add( m_staticline6, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizerMain->Add( m_SizerTextOptions, 1, wxEXPAND, 5 );
-	
-	m_buttonOK = new wxButton( m_swItemProperties, wxID_ANY, _("Apply"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonOK->SetDefault(); 
-	bSizerMain->Add( m_buttonOK, 0, wxALL|wxEXPAND, 5 );
-	
-	m_staticline8 = new wxStaticLine( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline8, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_SizerItemProperties->Add( m_SizerTextOptions, 1, wxEXPAND, 5 );
 	
 	m_staticTextComment = new wxStaticText( m_swItemProperties, wxID_ANY, _("Comment:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextComment->Wrap( -1 );
-	bSizerMain->Add( m_staticTextComment, 0, wxRIGHT|wxLEFT, 5 );
+	m_SizerItemProperties->Add( m_staticTextComment, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_textCtrlComment = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerMain->Add( m_textCtrlComment, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_SizerItemProperties->Add( m_textCtrlComment, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_staticline2 = new wxStaticLine( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline2, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_SizerItemProperties->Add( m_staticline2, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizerPos;
 	bSizerPos = new wxBoxSizer( wxHORIZONTAL );
@@ -260,7 +252,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	bSizerPos->Add( bSizer6, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	bSizerMain->Add( bSizerPos, 0, wxEXPAND, 5 );
+	m_SizerItemProperties->Add( bSizerPos, 0, wxEXPAND, 5 );
 	
 	m_SizerEndPosition = new wxBoxSizer( wxHORIZONTAL );
 	
@@ -316,12 +308,14 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_SizerEndPosition->Add( bSizer61, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	bSizerMain->Add( m_SizerEndPosition, 0, wxTOP|wxBOTTOM|wxEXPAND, 5 );
+	m_SizerItemProperties->Add( m_SizerEndPosition, 0, wxTOP|wxBOTTOM|wxEXPAND, 5 );
 	
 	m_SizerLineThickness = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticTextThickness = new wxStaticText( m_swItemProperties, wxID_ANY, _("Line width:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextThickness = new wxStaticText( m_swItemProperties, wxID_ANY, _("Line width:"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_staticTextThickness->Wrap( -1 );
+	m_staticTextThickness->SetMinSize( wxSize( 76,-1 ) );
+	
 	m_SizerLineThickness->Add( m_staticTextThickness, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_textCtrlThickness = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
@@ -332,40 +326,54 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_SizerLineThickness->Add( m_staticTextInfoThickness, 0, wxALIGN_CENTER|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizerMain->Add( m_SizerLineThickness, 0, wxTOP|wxBOTTOM, 5 );
+	m_SizerItemProperties->Add( m_SizerLineThickness, 0, 0, 5 );
 	
-	m_SizerRotAndPPI = new wxBoxSizer( wxVERTICAL );
+	m_SizerRotation = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticline1 = new wxStaticLine( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_SizerRotAndPPI->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
-	wxFlexGridSizer* fgSizerRotAndPPI;
-	fgSizerRotAndPPI = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizerRotAndPPI->SetFlexibleDirection( wxBOTH );
-	fgSizerRotAndPPI->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxFlexGridSizer* fgSizerRotation;
+	fgSizerRotation = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizerRotation->SetFlexibleDirection( wxBOTH );
+	fgSizerRotation->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_staticTextRot = new wxStaticText( m_swItemProperties, wxID_ANY, _("Rotation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRot->Wrap( -1 );
-	fgSizerRotAndPPI->Add( m_staticTextRot, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_staticTextRot->SetMinSize( wxSize( 76,-1 ) );
+	
+	fgSizerRotation->Add( m_staticTextRot, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_textCtrlRotation = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRotAndPPI->Add( m_textCtrlRotation, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerRotation->Add( m_textCtrlRotation, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 	
-	m_staticTextBitmapPPI = new wxStaticText( m_swItemProperties, wxID_ANY, _("Bitmap PPI:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextBitmapPPI->Wrap( -1 );
-	fgSizerRotAndPPI->Add( m_staticTextBitmapPPI, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_SizerRotation->Add( fgSizerRotation, 0, wxEXPAND, 5 );
+	
+	
+	m_SizerItemProperties->Add( m_SizerRotation, 0, wxEXPAND, 5 );
+	
+	m_SizerPPI = new wxBoxSizer( wxVERTICAL );
+	
+	wxFlexGridSizer* fgSizerPPI;
+	fgSizerPPI = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizerPPI->SetFlexibleDirection( wxBOTH );
+	fgSizerPPI->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticTextBitmapPPI1 = new wxStaticText( m_swItemProperties, wxID_ANY, _("Bitmap DPI:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextBitmapPPI1->Wrap( -1 );
+	m_staticTextBitmapPPI1->SetMinSize( wxSize( 76,-1 ) );
+	
+	fgSizerPPI->Add( m_staticTextBitmapPPI1, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_textCtrlBitmapPPI = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRotAndPPI->Add( m_textCtrlBitmapPPI, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerPPI->Add( m_textCtrlBitmapPPI, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 	
 	
-	m_SizerRotAndPPI->Add( fgSizerRotAndPPI, 0, wxEXPAND, 5 );
+	m_SizerPPI->Add( fgSizerPPI, 0, wxEXPAND, 5 );
 	
 	
-	bSizerMain->Add( m_SizerRotAndPPI, 0, wxEXPAND, 5 );
+	m_SizerItemProperties->Add( m_SizerPPI, 0, wxEXPAND, 5 );
 	
-	m_staticline4 = new wxStaticLine( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline4, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_staticline111 = new wxStaticLine( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_SizerItemProperties->Add( m_staticline111, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxFlexGridSizer* fgSizer8;
 	fgSizer8 = new wxFlexGridSizer( 0, 5, 0, 0 );
@@ -441,12 +449,19 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	fgSizer8->Add( m_units1211111, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxRIGHT, 5 );
 	
 	
-	bSizerMain->Add( fgSizer8, 0, wxEXPAND, 5 );
+	m_SizerItemProperties->Add( fgSizer8, 0, wxEXPAND, 5 );
+	
+	m_staticline8 = new wxStaticLine( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_SizerItemProperties->Add( m_staticline8, 0, wxEXPAND|wxALL, 5 );
+	
+	m_buttonOK = new wxButton( m_swItemProperties, wxID_ANY, _("Apply"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonOK->SetDefault(); 
+	m_SizerItemProperties->Add( m_buttonOK, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	m_swItemProperties->SetSizer( bSizerMain );
+	m_swItemProperties->SetSizer( m_SizerItemProperties );
 	m_swItemProperties->Layout();
-	bSizerMain->Fit( m_swItemProperties );
+	m_SizerItemProperties->Fit( m_swItemProperties );
 	m_notebook->AddPage( m_swItemProperties, _("Item Properties"), true );
 	m_swGeneralOpts = new wxScrolledWindow( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTAB_TRAVERSAL|wxVSCROLL );
 	m_swGeneralOpts->SetScrollRate( 5, 5 );

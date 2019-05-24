@@ -731,9 +731,10 @@ int PL_SELECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     else
     {
         m_frame->ClearMsgPanel();
-
-        m_frame->GetPropertiesFrame()->CopyPrmsFromGeneralToPanel();
+        m_frame->GetPropertiesFrame()->CopyPrmsFromItemToPanel( nullptr );
     }
+
+    m_frame->GetPropertiesFrame()->CopyPrmsFromGeneralToPanel();
 
     return 0;
 }

@@ -37,7 +37,7 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ):
     m_parent = aParent;
 
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
     m_staticTextSizeInfo->SetFont( infoFont );
     m_staticTextInfoThickness->SetFont( infoFont );
 }
@@ -122,6 +122,12 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToGeneral()
 // Data transfert from item to widgets in properties frame
 void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
 {
+    if( !aItem )
+    {
+        m_SizerItemProperties->Show( false );
+        return;
+    }
+
     wxString msg;
 
     // Set parameters common to all WORKSHEET_DATAITEM types
@@ -172,10 +178,6 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
     // and be sure widgets which are relevant are enabled
     if( aItem->GetType() == WORKSHEET_DATAITEM::WS_TEXT )
     {
-        m_SizerTextOptions->Show( true );
-        m_staticTextInclabel->Show( true );
-        m_textCtrlTextIncrement->Show( true );
-
         WORKSHEET_DATAITEM_TEXT* item = (WORKSHEET_DATAITEM_TEXT*) aItem;
         item->m_FullText = item->m_TextBase;
         // Replace our '\' 'n' sequence by the EOL char
@@ -219,12 +221,6 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
         msg.Printf( wxT("%.3f"), item->m_TextSize.y );
         m_textCtrlTextSizeY->SetValue( msg );
     }
-    else
-    {
-        m_SizerTextOptions->Show( false );
-        m_staticTextInclabel->Show( false );
-        m_textCtrlTextIncrement->Show( false );
-    }
 
     if( aItem->GetType() == WORKSHEET_DATAITEM::WS_POLYPOLYGON )
     {
@@ -242,48 +238,24 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
         m_textCtrlBitmapPPI->SetValue( msg );
     }
 
-    switch( aItem->GetType() )
-    {
-        case WORKSHEET_DATAITEM::WS_SEGMENT:
-        case WORKSHEET_DATAITEM::WS_RECT:
-            m_SizerRotAndPPI->Show( false );
-            m_SizerLineThickness->Show( true );
-            m_staticTextInfoThickness->Show( true );
-            m_SizerEndPosition->Show(true);
-            break;
+    m_SizerItemProperties->Show( true );
 
-        case WORKSHEET_DATAITEM::WS_TEXT:
-            m_SizerRotAndPPI->Show( true );
-            m_staticTextRot->Show( true );
-            m_textCtrlRotation->Show( true );
-            m_staticTextBitmapPPI->Show( false );
-            m_textCtrlBitmapPPI->Show( false );
-            m_SizerLineThickness->Show( true );
-            m_staticTextInfoThickness->Show( true );
-            m_SizerEndPosition->Show(false);
-            break;
+    m_SizerTextOptions->Show( aItem->GetType() == WORKSHEET_DATAITEM::WS_TEXT );
 
-        case WORKSHEET_DATAITEM::WS_POLYPOLYGON:
-            m_SizerRotAndPPI->Show( true );
-            m_staticTextRot->Show( true );
-            m_textCtrlRotation->Show( true );
-            m_staticTextBitmapPPI->Show( false );
-            m_textCtrlBitmapPPI->Show( false );
-            m_SizerLineThickness->Show( true );
-            m_staticTextInfoThickness->Show( false );   // No defaut value for thickness
-            m_SizerEndPosition->Show(false);
-            break;
+    m_SizerEndPosition->Show( aItem->GetType() == WORKSHEET_DATAITEM::WS_SEGMENT
+                           || aItem->GetType() == WORKSHEET_DATAITEM::WS_RECT );
 
-        case WORKSHEET_DATAITEM::WS_BITMAP:
-            m_SizerRotAndPPI->Show( true );
-            m_staticTextRot->Show( false );
-            m_textCtrlRotation->Show( false );
-            m_staticTextBitmapPPI->Show( true );
-            m_textCtrlBitmapPPI->Show( true );
-            m_SizerLineThickness->Show( false );
-            m_SizerEndPosition->Show(false);
-            break;
-    }
+    m_SizerLineThickness->Show( aItem->GetType() != WORKSHEET_DATAITEM::WS_BITMAP );
+    // Polygons have no defaut value for line width
+    m_staticTextInfoThickness->Show( aItem->GetType() != WORKSHEET_DATAITEM::WS_POLYPOLYGON );
+
+    m_SizerRotation->Show( aItem->GetType() == WORKSHEET_DATAITEM::WS_TEXT
+                        || aItem->GetType() == WORKSHEET_DATAITEM::WS_POLYPOLYGON );
+
+    m_SizerPPI->Show( aItem->GetType() == WORKSHEET_DATAITEM::WS_BITMAP );
+
+    m_staticTextInclabel->Show( aItem->GetType() == WORKSHEET_DATAITEM::WS_TEXT );
+    m_textCtrlTextIncrement->Show( aItem->GetType() == WORKSHEET_DATAITEM::WS_TEXT );
 
     // Repeat parameters
     msg.Printf( wxT("%d"), aItem->m_RepeatCount );
