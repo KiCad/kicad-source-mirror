@@ -160,7 +160,7 @@ BOOST_AUTO_TEST_CASE( Results )
 {
     for( const auto& c : eval_cases_valid )
     {
-        BOOST_TEST_CONTEXT( KI_TEST::InOutString( c.input, c.exp_result ) )
+        BOOST_TEST_CONTEXT( c.input + " -> " + c.exp_result )
         {
             // Clear for new string input
             m_eval.Clear();

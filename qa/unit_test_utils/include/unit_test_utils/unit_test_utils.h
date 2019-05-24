@@ -285,26 +285,6 @@ bool CollectionHasNoDuplicates( const T& aCollection )
 
 
 /**
- * Get a simple string "aIn -> aOut".
- *
- * Useful for BOOST_TEST_CONTEXT blocks as a brief description where a full
- * case name would be a bit too much.
- *
- * @tparam IN   the input type
- * @tparam OUT  the output type
- * @param  aIn  the input
- * @param  aOut the output
- * @return      "aIn -> aOut"
- */
-template<typename IN, typename OUT>
-std::string InOutString( const IN& aIn, const OUT& aOut )
-{
-    std::stringstream ss;
-    ss << aIn << " -> " << aOut;
-    return ss.str();
-}
-
-/**
  * A test macro to check a wxASSERT is thrown.
  *
  * This only happens in DEBUG builds, so prevent test failures in Release builds
