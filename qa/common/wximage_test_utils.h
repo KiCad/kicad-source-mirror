@@ -46,7 +46,7 @@ bool IsImagePixelOfColor( const wxImage& aImage, int aX, int aY, const KIGFX::CO
 } // namespace KI_TEST
 
 
-BOOST_TEST_PRINT_NAMESPACE_OPEN
+namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
 {
 template <>
 struct print_log_value<wxImage>

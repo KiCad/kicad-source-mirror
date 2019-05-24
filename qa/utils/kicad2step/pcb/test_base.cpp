@@ -36,7 +36,7 @@
 #include <cmath>
 
 
-BOOST_TEST_PRINT_NAMESPACE_OPEN
+namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
 {
 template <>
 struct print_log_value<DOUBLET>
