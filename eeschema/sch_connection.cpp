@@ -169,18 +169,6 @@ void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
             }
         }
     }
-    else if( auto alias = g_ConnectionGraph->GetBusAlias( aLabel ) )
-    {
-        m_type = CONNECTION_BUS_GROUP;
-        m_name = aLabel;
-
-        for( auto alias_member : alias->Members() )
-        {
-            auto member = std::make_shared< SCH_CONNECTION >( m_parent );
-            member->ConfigureFromLabel( alias_member );
-            m_members.push_back( member );
-        }
-    }
     else
     {
         m_name = aLabel;
