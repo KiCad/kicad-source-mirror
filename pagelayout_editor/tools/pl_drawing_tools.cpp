@@ -328,7 +328,10 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 m_frame->OnModify();
 
                 if( isImmediate )
+                {
+                    m_toolMgr->RunAction( ACTIONS::activatePointEditor );
                     break;
+                }
             }
         }
 

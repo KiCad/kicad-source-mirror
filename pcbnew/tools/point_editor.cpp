@@ -899,16 +899,6 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
 }
 
 
-void POINT_EDITOR::setTransitions()
-{
-    Go( &POINT_EDITOR::addCorner, PCB_ACTIONS::pointEditorAddCorner.MakeEvent() );
-    Go( &POINT_EDITOR::removeCorner, PCB_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
-    Go( &POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
-    Go( &POINT_EDITOR::OnSelectionChange, EVENTS::SelectedEvent );
-    Go( &POINT_EDITOR::OnSelectionChange, EVENTS::UnselectedEvent );
-}
-
-
 bool POINT_EDITOR::canAddCorner( const EDA_ITEM& aItem )
 {
     const auto type = aItem.Type();
@@ -1206,4 +1196,15 @@ int POINT_EDITOR::modifiedSelection( const TOOL_EVENT& aEvent )
     m_refill = true;  // zone has been modified outside the point editor tool
     updatePoints();
     return 0;
+}
+
+
+void POINT_EDITOR::setTransitions()
+{
+    Go( &POINT_EDITOR::OnSelectionChange, ACTIONS::activatePointEditor.MakeEvent() );
+    Go( &POINT_EDITOR::addCorner,         PCB_ACTIONS::pointEditorAddCorner.MakeEvent() );
+    Go( &POINT_EDITOR::removeCorner,      PCB_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
+    Go( &POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
+    Go( &POINT_EDITOR::OnSelectionChange, EVENTS::SelectedEvent );
+    Go( &POINT_EDITOR::OnSelectionChange, EVENTS::UnselectedEvent );
 }

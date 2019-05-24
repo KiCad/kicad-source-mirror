@@ -154,6 +154,10 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     if( selection.Size() != 1 || !selection.Front()->IsType( pointTypes ) )
         return 0;
 
+    // Wait till drawing tool is done
+    if( selection.Front()->IsNew() )
+        return 0;
+
     Activate();
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
@@ -422,6 +426,7 @@ int PL_POINT_EDITOR::modifiedSelection( const TOOL_EVENT& aEvent )
 void PL_POINT_EDITOR::setTransitions()
 {
     Go( &PL_POINT_EDITOR::Main,                EVENTS::SelectedEvent );
+    Go( &PL_POINT_EDITOR::Main,                ACTIONS::activatePointEditor.MakeEvent() );
     Go( &PL_POINT_EDITOR::modifiedSelection,   EVENTS::SelectedItemsModified );
 }
 

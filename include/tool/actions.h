@@ -52,6 +52,7 @@ public:
     static TOOL_ACTION cut;
     static TOOL_ACTION copy;
     static TOOL_ACTION paste;
+    static TOOL_ACTION activatePointEditor;
 
     // Find and Replace
     static TOOL_ACTION find;

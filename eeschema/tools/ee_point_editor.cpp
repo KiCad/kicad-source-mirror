@@ -257,6 +257,10 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     if( selection.Size() != 1 || !selection.Front()->IsType( pointTypes ) )
         return 0;
 
+    // Wait till drawing tool is done
+    if( selection.Front()->IsNew() )
+        return 0;
+
     Activate();
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
@@ -780,10 +784,11 @@ void EE_POINT_EDITOR::rollbackFromUndo()
 
 void EE_POINT_EDITOR::setTransitions()
 {
+    Go( &EE_POINT_EDITOR::Main,              EVENTS::SelectedEvent );
+    Go( &EE_POINT_EDITOR::Main,              ACTIONS::activatePointEditor.MakeEvent() );
     Go( &EE_POINT_EDITOR::addCorner,         EE_ACTIONS::pointEditorAddCorner.MakeEvent() );
     Go( &EE_POINT_EDITOR::removeCorner,      EE_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
     Go( &EE_POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
-    Go( &EE_POINT_EDITOR::Main,              EVENTS::SelectedEvent );
 }
 
 

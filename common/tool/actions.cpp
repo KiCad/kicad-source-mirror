@@ -38,6 +38,9 @@ TOOL_ACTION ACTIONS::paste( "common.Interactive.paste",
         _( "Paste" ), _( "Paste clipboard into schematic" ),
         paste_xpm );
 
+TOOL_ACTION ACTIONS::activatePointEditor( "common.Control.activatePointEditor",
+        AS_GLOBAL, 0, "", "" );   // This is an internal event
+
 TOOL_ACTION ACTIONS::find( "common.Interactive.find",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_FIND ),
         _( "Find" ), _( "Find text" ),
