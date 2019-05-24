@@ -524,19 +524,10 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
     for( const auto& it : connection_map )
     {
         auto connection_vec = it.second;
-        SCH_ITEM* junction = nullptr;
 
         for( auto primary_it = connection_vec.begin(); primary_it != connection_vec.end(); primary_it++ )
         {
             auto connected_item = *primary_it;
-
-            // Look for junctions.  For points that have a junction, we want all
-            // items to connect to the junction but not to each other.
-
-            if( connected_item->Type() == SCH_JUNCTION_T )
-            {
-                junction = connected_item;
-            }
 
             // Bus entries are special: they can have connection points in the
             // middle of a wire segment, because the junction algo doesn't split
@@ -590,13 +581,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
             {
                 auto test_item = *test_it;
 
-                if( !junction && test_item->Type() == SCH_JUNCTION_T )
-                {
-                    junction = test_item;
-                }
-
                 if( connected_item != test_item &&
-                    connected_item != junction &&
                     connected_item->ConnectionPropagatesTo( test_item ) &&
                     test_item->ConnectionPropagatesTo( connected_item ) )
                 {
