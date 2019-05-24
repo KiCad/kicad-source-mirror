@@ -217,7 +217,7 @@ TOOL_ACTION ACTIONS::toggleGrid( "common.Control.toggleGrid",
 TOOL_ACTION ACTIONS::gridProperties( "common.Control.gridProperties",
         AS_GLOBAL, 0,
         _( "Grid Properties..." ), _( "Set grid dimensions" ),
-        grid_xpm );
+        grid_select_xpm );
 
 TOOL_ACTION ACTIONS::imperialUnits( "common.Control.imperialUnits",
         AS_GLOBAL, 0,
