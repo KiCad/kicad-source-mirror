@@ -81,6 +81,7 @@ static const wxString MaxUndoItemsEntry(wxT( "DevelMaxUndoItems" ) );
 BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
     EVT_CHAR_HOOK( EDA_DRAW_FRAME::OnCharHook )
     EVT_MENU_OPEN( EDA_DRAW_FRAME::OnMenuOpen )
+    EVT_MENU_CLOSE( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_MENU_HIGHLIGHT_ALL( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_MOUSEWHEEL( EDA_DRAW_FRAME::OnMouseEvent )
 END_EVENT_TABLE()
@@ -304,7 +305,7 @@ void EDA_DRAW_FRAME::OnMenuOpen( wxMenuEvent& event )
         if( currentMenu )
             currentMenu->OnMenuEvent( event );
     }
-    else if( event.GetEventType() == wxEVT_MENU_CLOSE )
+    else // if( event.GetEventType() == wxEVT_MENU_CLOSE )
     {
         currentMenu = nullptr;
     }
