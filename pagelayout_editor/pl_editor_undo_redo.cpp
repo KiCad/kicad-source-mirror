@@ -59,11 +59,11 @@ public:
         WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
         pglayout.SaveInString( m_serialization );
 
-        for( int ii = 0; ii < pglayout.GetItems().size(); ++ii )
+        for( size_t ii = 0; ii < pglayout.GetItems().size(); ++ii )
         {
             WORKSHEET_DATAITEM* dataItem = pglayout.GetItem( ii );
 
-            for( int jj = 0; jj < dataItem->GetDrawItems().size(); ++jj )
+            for( size_t jj = 0; jj < dataItem->GetDrawItems().size(); ++jj )
             {
                 WS_DRAW_ITEM_BASE* drawItem = dataItem->GetDrawItems()[ jj ];
 
@@ -88,7 +88,7 @@ public:
         selTool->ClearSelection();
         view->Clear();
 
-        for( int ii = 0; ii < pglayout.GetItems().size(); ++ii )
+        for( size_t ii = 0; ii < pglayout.GetItems().size(); ++ii )
         {
             WORKSHEET_DATAITEM* dataItem = pglayout.GetItem( ii );
 
