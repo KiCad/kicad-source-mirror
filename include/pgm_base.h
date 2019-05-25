@@ -57,10 +57,6 @@
 
 ///@}
 
-/// The default file history size is 9.
-#define DEFAULT_FILE_HISTORY_SIZE 9
-#define MAX_FILE_HISTORY_SIZE 99
-
 class wxConfigBase;
 class wxSingleInstanceChecker;
 class wxApp;
@@ -69,15 +65,6 @@ class wxWindow;
 
 class FILENAME_RESOLVER;
 class EDA_DRAW_FRAME;
-
-
-
-enum FILE_HISTORY_IDS
-{
-    ID_FILE = 4200,
-    ID_FILE1,
-    ID_FILEMAX = ID_FILE + MAX_FILE_HISTORY_SIZE
-};
 
 
 class FILE_HISTORY : public wxFileHistory

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@
 #include <bin_mod.h>
 #include <common.h>
 #include <pgm_base.h>
+#include <id.h>         // for ID_FILE1 and FILE_HISTORY_SIZE
 
 
 BIN_MOD::BIN_MOD( const char* aName ) :
