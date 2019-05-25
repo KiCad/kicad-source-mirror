@@ -70,63 +70,62 @@ wxSize PROPERTIES_FRAME::GetMinSize() const
 // Data transfert from general properties to widgets
 void PROPERTIES_FRAME::CopyPrmsFromGeneralToPanel()
 {
-    wxString msg;
+    WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
+    wxString       msg;
 
     // Set default parameters
-    msg.Printf( wxT("%.3f"),  WS_DATA_ITEM::m_DefaultLineWidth );
+    msg.Printf( wxT("%.3f"),  model.m_DefaultLineWidth );
     m_textCtrlDefaultLineWidth->SetValue( msg );
 
-    msg.Printf( wxT("%.3f"), WS_DATA_ITEM::m_DefaultTextSize.x );
+    msg.Printf( wxT("%.3f"), model.m_DefaultTextSize.x );
     m_textCtrlDefaultTextSizeX->SetValue( msg );
-    msg.Printf( wxT("%.3f"),  WS_DATA_ITEM::m_DefaultTextSize.y );
+    msg.Printf( wxT("%.3f"),  model.m_DefaultTextSize.y );
     m_textCtrlDefaultTextSizeY->SetValue( msg );
 
-    msg.Printf( wxT("%.3f"),  WS_DATA_ITEM::m_DefaultTextThickness );
+    msg.Printf( wxT("%.3f"),  model.m_DefaultTextThickness );
     m_textCtrlDefaultTextThickness->SetValue( msg );
 
     // Set page margins values
-    WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
-    msg.Printf( wxT("%.3f"),  pglayout.GetRightMargin() );
+    msg.Printf( wxT("%.3f"),  model.GetRightMargin() );
     m_textCtrlRightMargin->SetValue( msg );
-    msg.Printf( wxT("%.3f"),  pglayout.GetBottomMargin() );
+    msg.Printf( wxT("%.3f"),  model.GetBottomMargin() );
     m_textCtrlDefaultBottomMargin->SetValue( msg );
 
-    msg.Printf( wxT("%.3f"),  pglayout.GetLeftMargin() );
+    msg.Printf( wxT("%.3f"),  model.GetLeftMargin() );
     m_textCtrlLeftMargin->SetValue( msg );
-    msg.Printf( wxT("%.3f"),  pglayout.GetTopMargin() );
+    msg.Printf( wxT("%.3f"),  model.GetTopMargin() );
     m_textCtrlTopMargin->SetValue( msg );
 }
 
 // Data transfert from widgets to general properties
 bool PROPERTIES_FRAME::CopyPrmsFromPanelToGeneral()
 {
-    wxString msg;
+    WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
+    wxString       msg;
 
     // Import default parameters from widgets
     msg = m_textCtrlDefaultLineWidth->GetValue();
-    WS_DATA_ITEM::m_DefaultLineWidth = DoubleValueFromString( UNSCALED_UNITS, msg );
+    model.m_DefaultLineWidth = DoubleValueFromString( UNSCALED_UNITS, msg );
 
     msg = m_textCtrlDefaultTextSizeX->GetValue();
-    WS_DATA_ITEM::m_DefaultTextSize.x = DoubleValueFromString( UNSCALED_UNITS, msg );
+    model.m_DefaultTextSize.x = DoubleValueFromString( UNSCALED_UNITS, msg );
     msg = m_textCtrlDefaultTextSizeY->GetValue();
-    WS_DATA_ITEM::m_DefaultTextSize.y = DoubleValueFromString( UNSCALED_UNITS, msg );
+    model.m_DefaultTextSize.y = DoubleValueFromString( UNSCALED_UNITS, msg );
 
     msg = m_textCtrlDefaultTextThickness->GetValue();
-    WS_DATA_ITEM::m_DefaultTextThickness = DoubleValueFromString( UNSCALED_UNITS, msg );
+    model.m_DefaultTextThickness = DoubleValueFromString( UNSCALED_UNITS, msg );
 
     // Get page margins values
-    WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
-
     msg = m_textCtrlRightMargin->GetValue();
-    pglayout.SetRightMargin( DoubleValueFromString( UNSCALED_UNITS, msg ) );
+    model.SetRightMargin( DoubleValueFromString( UNSCALED_UNITS, msg ) );
     msg = m_textCtrlDefaultBottomMargin->GetValue();
-    pglayout.SetBottomMargin( DoubleValueFromString( UNSCALED_UNITS, msg ) );
+    model.SetBottomMargin( DoubleValueFromString( UNSCALED_UNITS, msg ) );
 
     // cordinates of the left top corner are the left and top margins
     msg = m_textCtrlLeftMargin->GetValue();
-    pglayout.SetLeftMargin( DoubleValueFromString( UNSCALED_UNITS, msg ) );
+    model.SetLeftMargin( DoubleValueFromString( UNSCALED_UNITS, msg ) );
     msg = m_textCtrlTopMargin->GetValue();
-    pglayout.SetTopMargin( DoubleValueFromString( UNSCALED_UNITS, msg ) );
+    model.SetTopMargin( DoubleValueFromString( UNSCALED_UNITS, msg ) );
 
     return true;
 }
@@ -316,11 +315,11 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
 
 void PROPERTIES_FRAME::OnSetDefaultValues( wxCommandEvent& event )
 {
-    WS_DATA_ITEM::m_DefaultTextSize =
-            DSIZE( TB_DEFAULT_TEXTSIZE, TB_DEFAULT_TEXTSIZE );
-    // default thickness in mm
-    WS_DATA_ITEM::m_DefaultLineWidth = 0.15;
-    WS_DATA_ITEM::m_DefaultTextThickness = 0.15;
+    WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
+
+    model.m_DefaultTextSize = DSIZE( TB_DEFAULT_TEXTSIZE, TB_DEFAULT_TEXTSIZE );
+    model.m_DefaultLineWidth = 0.15;
+    model.m_DefaultTextThickness = 0.15;
 
     CopyPrmsFromGeneralToPanel();
     m_parent->GetCanvas()->Refresh();

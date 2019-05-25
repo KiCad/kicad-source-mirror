@@ -58,7 +58,12 @@
 static WS_DATA_MODEL wksTheInstance;
 static WS_DATA_MODEL* wksAltInstance;
 
-WS_DATA_MODEL::WS_DATA_MODEL()
+WS_DATA_MODEL::WS_DATA_MODEL() :
+        m_WSunits2Iu( 1000.0 ),
+        m_DefaultLineWidth( 0.0 ),
+        m_DefaultTextSize( TB_DEFAULT_TEXTSIZE, TB_DEFAULT_TEXTSIZE ),
+        m_DefaultTextThickness( 0.0 ),
+        m_SpecialMode( false )
 {
     m_allowVoidList = false;
     m_leftMargin = 10.0;    // the left page margin in mm
@@ -90,27 +95,23 @@ void WS_DATA_MODEL::SetAltInstance( WS_DATA_MODEL* aLayout )
 }
 
 
-void WS_DATA_MODEL::SetLeftMargin( double aMargin )
+void WS_DATA_MODEL::SetupDrawEnvironment( const PAGE_INFO& aPageInfo, double aMilsToIU )
 {
-    m_leftMargin = aMargin;    // the left page margin in mm
-}
+#define MILS_TO_MM (25.4/1000)
 
+    m_WSunits2Iu = aMilsToIU / MILS_TO_MM;
 
-void WS_DATA_MODEL::SetRightMargin( double aMargin )
-{
-    m_rightMargin = aMargin;   // the right page margin in mm
-}
+    // Left top corner position
+    DPOINT lt_corner;
+    lt_corner.x = GetLeftMargin();
+    lt_corner.y = GetTopMargin();
+    m_LT_Corner = lt_corner;
 
-
-void WS_DATA_MODEL::SetTopMargin( double aMargin )
-{
-    m_topMargin = aMargin;     // the top page margin in mm
-}
-
-
-void WS_DATA_MODEL::SetBottomMargin( double aMargin )
-{
-    m_bottomMargin = aMargin;  // the bottom page margin in mm
+    // Right bottom corner position
+    DPOINT rb_corner;
+    rb_corner.x = ( aPageInfo.GetSizeMils().x * MILS_TO_MM ) - GetRightMargin();
+    rb_corner.y = ( aPageInfo.GetSizeMils().y * MILS_TO_MM ) - GetBottomMargin();
+    m_RB_Corner = rb_corner;
 }
 
 

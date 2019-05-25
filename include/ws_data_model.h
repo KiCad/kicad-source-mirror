@@ -39,18 +39,30 @@
 class WS_DATA_MODEL
 {
     std::vector <WS_DATA_ITEM*> m_list;
-    bool m_allowVoidList;   // If false, the default page layout
-                            // will be loaded the first time
-                            // WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList
-                            // is run (useful mainly for page layout editor)
-    double m_leftMargin;    // the left page margin in mm
-    double m_rightMargin;   // the right page margin in mm
-    double m_topMargin;     // the top page margin in mm
-    double m_bottomMargin;  // the bottom page margin in mm
+    bool   m_allowVoidList;         // If false, the default page layout will be loaded the
+                                    // first time WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList
+                                    // is run (useful mainly for page layout editor)
+    double m_leftMargin;            // the left page margin in mm
+    double m_rightMargin;           // the right page margin in mm
+    double m_topMargin;             // the top page margin in mm
+    double m_bottomMargin;          // the bottom page margin in mm
+
+public:
+    double m_WSunits2Iu;            // conversion factor between
+    // ws units (mils) and draw/plot units
+    DPOINT m_RB_Corner;             // cordinates of the right bottom corner (in mm)
+    DPOINT m_LT_Corner;             // cordinates of the left top corner (in mm)
+    double m_DefaultLineWidth;      // Used when object line width is 0
+    DSIZE  m_DefaultTextSize;       // Used when object text size is 0
+    double m_DefaultTextThickness;  // Used when object text stroke width is 0
+    bool   m_SpecialMode;           // Used in page layout editor to toggle variable substition
 
 public:
     WS_DATA_MODEL();
-    ~WS_DATA_MODEL() {ClearList(); }
+    ~WS_DATA_MODEL()
+    {
+        ClearList();
+    }
 
     /**
      * static function: returns the instance of WS_DATA_MODEL used in the application
@@ -66,14 +78,18 @@ public:
 
     // Accessors:
     double GetLeftMargin() { return m_leftMargin; }
-    double GetRightMargin() { return m_rightMargin; }
-    double GetTopMargin() { return m_topMargin; }
-    double GetBottomMargin() { return m_bottomMargin; }
+    void SetLeftMargin( double aMargin ) { m_leftMargin = aMargin; }
 
-    void SetLeftMargin( double aMargin );
-    void SetRightMargin( double aMargin );
-    void SetTopMargin( double aMargin );
-    void SetBottomMargin( double aMargin );
+    double GetRightMargin() { return m_rightMargin; }
+    void SetRightMargin( double aMargin ) { m_rightMargin = aMargin; }
+
+    double GetTopMargin() { return m_topMargin; }
+    void SetTopMargin( double aMargin ) { m_topMargin = aMargin; }
+
+    double GetBottomMargin() { return m_bottomMargin; }
+    void SetBottomMargin( double aMargin ) { m_bottomMargin = aMargin; }
+
+    void SetupDrawEnvironment( const PAGE_INFO& aPageInfo, double aMilsToIU );
 
     /**
      * In Kicad applications, a page layout description is needed

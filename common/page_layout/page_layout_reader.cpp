@@ -180,18 +180,18 @@ void PAGE_LAYOUT_READER_PARSER::parseSetup( WS_DATA_MODEL* aLayout )
             break;
 
         case T_linewidth:
-            WS_DATA_ITEM::m_DefaultLineWidth = parseDouble();
+            aLayout->m_DefaultLineWidth = parseDouble();
             NeedRIGHT();
             break;
 
         case T_textsize:
-            WS_DATA_ITEM::m_DefaultTextSize.x = parseDouble();
-            WS_DATA_ITEM::m_DefaultTextSize.y = parseDouble();
+            aLayout->m_DefaultTextSize.x = parseDouble();
+            aLayout->m_DefaultTextSize.y = parseDouble();
             NeedRIGHT();
             break;
 
         case T_textlinewidth:
-            WS_DATA_ITEM::m_DefaultTextThickness = parseDouble();
+            aLayout->m_DefaultTextThickness = parseDouble();
             NeedRIGHT();
             break;
 

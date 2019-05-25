@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2013 Jean-Pierre Charras <jp.charras at wanadoo.fr>.
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -52,23 +52,13 @@
 #include <fctsys.h>
 #include <draw_graphic_text.h>
 #include <eda_rect.h>
+#include <view/view.h>
 #include <ws_painter.h>
 #include <title_block.h>
 #include <ws_draw_item.h>
-#include <ws_data_item.h>
-#include <view/view.h>
+#include <ws_data_model.h>
 
 using KIGFX::COLOR4D;
-
-
-// Static members of class WS_DATA_ITEM:
-double WS_DATA_ITEM::m_WSunits2Iu = 1000.0;
-DPOINT WS_DATA_ITEM::m_RB_Corner;
-DPOINT WS_DATA_ITEM::m_LT_Corner;
-double WS_DATA_ITEM::m_DefaultLineWidth = 0.0;
-DSIZE  WS_DATA_ITEM::m_DefaultTextSize( TB_DEFAULT_TEXTSIZE, TB_DEFAULT_TEXTSIZE );
-double WS_DATA_ITEM::m_DefaultTextThickness = 0.0;
-bool WS_DATA_ITEM::m_SpecialMode = false;
 
 
 // The constructor:
@@ -130,6 +120,17 @@ void WS_DATA_ITEM::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aV
 }
 
 
+int WS_DATA_ITEM::GetPenSizeUi()
+{
+    WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
+
+    if( m_LineWidth != 0 )
+        return KiROUND( m_LineWidth * model.m_WSunits2Iu );
+    else
+        return KiROUND( model.m_DefaultLineWidth * model.m_WSunits2Iu );
+}
+
+
 // move item to aPosition
 // starting point is moved to aPosition
 // the Ending point is moved to a position which keeps the item size
@@ -139,8 +140,8 @@ void WS_DATA_ITEM::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aV
 void WS_DATA_ITEM::MoveToUi( wxPoint aPosition )
 {
     DPOINT pos_mm;
-    pos_mm.x = aPosition.x / m_WSunits2Iu;
-    pos_mm.y = aPosition.y / m_WSunits2Iu;
+    pos_mm.x = aPosition.x / WS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
+    pos_mm.y = aPosition.y / WS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
 
     MoveTo( pos_mm );
 }
@@ -171,7 +172,8 @@ void WS_DATA_ITEM::MoveTo( DPOINT aPosition )
  */
 void WS_DATA_ITEM::MoveStartPointTo( DPOINT aPosition )
 {
-    DPOINT position;
+    WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
+    DPOINT         position;
 
     // Calculate the position of the starting point
     // relative to the reference corner
@@ -179,21 +181,21 @@ void WS_DATA_ITEM::MoveStartPointTo( DPOINT aPosition )
     switch( m_Pos.m_Anchor )
     {
     case RB_CORNER:
-        position = m_RB_Corner - aPosition;
+        position = model.m_RB_Corner - aPosition;
         break;
 
     case RT_CORNER:
-        position.x = m_RB_Corner.x - aPosition.x;
-        position.y = aPosition.y - m_LT_Corner.y;
+        position.x = model.m_RB_Corner.x - aPosition.x;
+        position.y = aPosition.y - model.m_LT_Corner.y;
         break;
 
     case LB_CORNER:
-        position.x = aPosition.x - m_LT_Corner.x;
-        position.y = m_RB_Corner.y - aPosition.y;
+        position.x = aPosition.x - model.m_LT_Corner.x;
+        position.y = model.m_RB_Corner.y - aPosition.y;
         break;
 
     case LT_CORNER:
-        position = aPosition - m_LT_Corner;
+        position = aPosition - model.m_LT_Corner;
         break;
     }
 
@@ -206,9 +208,8 @@ void WS_DATA_ITEM::MoveStartPointTo( DPOINT aPosition )
  */
 void WS_DATA_ITEM::MoveStartPointToUi( wxPoint aPosition )
 {
-    DPOINT pos_mm;
-    pos_mm.x = aPosition.x / m_WSunits2Iu;
-    pos_mm.y = aPosition.y / m_WSunits2Iu;
+    DPOINT pos_mm( aPosition.x / WS_DATA_MODEL::GetTheInstance().m_WSunits2Iu,
+                   aPosition.y / WS_DATA_MODEL::GetTheInstance().m_WSunits2Iu );
 
     MoveStartPointTo( pos_mm );
 }
@@ -222,7 +223,8 @@ void WS_DATA_ITEM::MoveStartPointToUi( wxPoint aPosition )
  */
 void WS_DATA_ITEM::MoveEndPointTo( DPOINT aPosition )
 {
-    DPOINT position;
+    WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
+    DPOINT         position;
 
     // Calculate the position of the starting point
     // relative to the reference corner
@@ -230,21 +232,21 @@ void WS_DATA_ITEM::MoveEndPointTo( DPOINT aPosition )
     switch( m_End.m_Anchor )
     {
     case RB_CORNER:
-        position = m_RB_Corner - aPosition;
+        position = model.m_RB_Corner - aPosition;
         break;
 
     case RT_CORNER:
-        position.x = m_RB_Corner.x - aPosition.x;
-        position.y = aPosition.y - m_LT_Corner.y;
+        position.x = model.m_RB_Corner.x - aPosition.x;
+        position.y = aPosition.y - model.m_LT_Corner.y;
         break;
 
     case LB_CORNER:
-        position.x = aPosition.x - m_LT_Corner.x;
-        position.y = m_RB_Corner.y - aPosition.y;
+        position.x = aPosition.x - model.m_LT_Corner.x;
+        position.y = model.m_RB_Corner.y - aPosition.y;
         break;
 
     case LT_CORNER:
-        position = aPosition - m_LT_Corner;
+        position = aPosition - model.m_LT_Corner;
         break;
     }
 
@@ -270,8 +272,8 @@ void WS_DATA_ITEM::MoveEndPointTo( DPOINT aPosition )
 void WS_DATA_ITEM::MoveEndPointToUi( wxPoint aPosition )
 {
     DPOINT pos_mm;
-    pos_mm.x = aPosition.x / m_WSunits2Iu;
-    pos_mm.y = aPosition.y / m_WSunits2Iu;
+    pos_mm.x = aPosition.x / WS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
+    pos_mm.y = aPosition.y / WS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
 
     MoveEndPointTo( pos_mm );
 }
@@ -279,28 +281,28 @@ void WS_DATA_ITEM::MoveEndPointToUi( wxPoint aPosition )
 
 const DPOINT WS_DATA_ITEM::GetStartPos( int ii ) const
 {
-    DPOINT pos;
-    pos.x = m_Pos.m_Pos.x + ( m_IncrementVector.x * ii );
-    pos.y = m_Pos.m_Pos.y + ( m_IncrementVector.y * ii );
+    WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
+    DPOINT         pos( m_Pos.m_Pos.x + ( m_IncrementVector.x * ii ),
+                        m_Pos.m_Pos.y + ( m_IncrementVector.y * ii ) );
 
     switch( m_Pos.m_Anchor )
     {
         case RB_CORNER:      // right bottom corner
-            pos = m_RB_Corner - pos;
+            pos = model.m_RB_Corner - pos;
             break;
 
         case RT_CORNER:      // right top corner
-            pos.x = m_RB_Corner.x - pos.x;
-            pos.y = m_LT_Corner.y + pos.y;
+            pos.x = model.m_RB_Corner.x - pos.x;
+            pos.y = model.m_LT_Corner.y + pos.y;
             break;
 
         case LB_CORNER:      // left bottom corner
-            pos.x = m_LT_Corner.x + pos.x;
-            pos.y = m_RB_Corner.y - pos.y;
+            pos.x = model.m_LT_Corner.x + pos.x;
+            pos.y = model.m_RB_Corner.y - pos.y;
             break;
 
         case LT_CORNER:      // left top corner
-            pos = m_LT_Corner + pos;
+            pos = model.m_LT_Corner + pos;
             break;
     }
 
@@ -310,37 +312,35 @@ const DPOINT WS_DATA_ITEM::GetStartPos( int ii ) const
 
 const wxPoint WS_DATA_ITEM::GetStartPosUi( int ii ) const
 {
-    DPOINT pos = GetStartPos( ii );
-    pos = pos * m_WSunits2Iu;
-    return wxPoint( KiROUND( pos.x ), KiROUND( pos.y ) );
+    DPOINT pos = GetStartPos( ii ) * WS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
+    return (wxPoint) pos;
 }
 
 
 const DPOINT WS_DATA_ITEM::GetEndPos( int ii ) const
 {
-    DPOINT pos;
-    pos.x = m_End.m_Pos.x + ( m_IncrementVector.x * ii );
-    pos.y = m_End.m_Pos.y + ( m_IncrementVector.y * ii );
+    DPOINT pos( m_End.m_Pos.x + ( m_IncrementVector.x * ii ),
+                m_End.m_Pos.y + ( m_IncrementVector.y * ii ) );
 
     switch( m_End.m_Anchor )
     {
-        case RB_CORNER:      // right bottom corner
-            pos = m_RB_Corner - pos;
-            break;
+    case RB_CORNER:      // right bottom corner
+        pos = WS_DATA_MODEL::GetTheInstance().m_RB_Corner - pos;
+        break;
 
-        case RT_CORNER:      // right top corner
-            pos.x = m_RB_Corner.x - pos.x;
-            pos.y = m_LT_Corner.y + pos.y;
-            break;
+    case RT_CORNER:      // right top corner
+        pos.x = WS_DATA_MODEL::GetTheInstance().m_RB_Corner.x - pos.x;
+        pos.y = WS_DATA_MODEL::GetTheInstance().m_LT_Corner.y + pos.y;
+        break;
 
-        case LB_CORNER:      // left bottom corner
-            pos.x = m_LT_Corner.x + pos.x;
-            pos.y = m_RB_Corner.y - pos.y;
-            break;
+    case LB_CORNER:      // left bottom corner
+        pos.x = WS_DATA_MODEL::GetTheInstance().m_LT_Corner.x + pos.x;
+        pos.y = WS_DATA_MODEL::GetTheInstance().m_RB_Corner.y - pos.y;
+        break;
 
-        case LT_CORNER:      // left top corner
-            pos = m_LT_Corner + pos;
-            break;
+    case LT_CORNER:      // left top corner
+        pos = WS_DATA_MODEL::GetTheInstance().m_LT_Corner + pos;
+        break;
     }
 
     return pos;
@@ -350,21 +350,23 @@ const DPOINT WS_DATA_ITEM::GetEndPos( int ii ) const
 const wxPoint WS_DATA_ITEM::GetEndPosUi( int ii ) const
 {
     DPOINT pos = GetEndPos( ii );
-    pos = pos * m_WSunits2Iu;
+    pos = pos * WS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
     return wxPoint( KiROUND( pos.x ), KiROUND( pos.y ) );
 }
 
 
 bool WS_DATA_ITEM::IsInsidePage( int ii ) const
 {
+    WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
+
     DPOINT pos = GetStartPos( ii );
 
     for( int kk = 0; kk < 1; kk++ )
     {
-        if( m_RB_Corner.x < pos.x || m_LT_Corner.x > pos.x )
+        if( model.m_RB_Corner.x < pos.x || model.m_LT_Corner.x > pos.x )
             return false;
 
-        if( m_RB_Corner.y < pos.y || m_LT_Corner.y > pos.y )
+        if( model.m_RB_Corner.y < pos.y || model.m_LT_Corner.y > pos.y )
             return false;
 
         pos = GetEndPos( ii );
@@ -398,8 +400,7 @@ WS_DATA_ITEM_POLYGONS::WS_DATA_ITEM_POLYGONS() :
 }
 
 
-void WS_DATA_ITEM_POLYGONS::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector,
-                                                    KIGFX::VIEW* aView )
+void WS_DATA_ITEM_POLYGONS::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView )
 {
     std::map<int, STATUS_FLAGS> itemFlags;
     WS_DRAW_ITEM_BASE*          item = nullptr;
@@ -450,6 +451,12 @@ void WS_DATA_ITEM_POLYGONS::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector,
 }
 
 
+int WS_DATA_ITEM_POLYGONS::GetPenSizeUi()
+{
+    return KiROUND( m_LineWidth * WS_DATA_MODEL::GetTheInstance().m_WSunits2Iu );
+}
+
+
 const DPOINT WS_DATA_ITEM_POLYGONS::GetCornerPosition( unsigned aIdx, int aRepeat ) const
 {
     DPOINT pos = m_Corners[aIdx];
@@ -497,16 +504,18 @@ void WS_DATA_ITEM_POLYGONS::SetBoundingBox()
 
 bool WS_DATA_ITEM_POLYGONS::IsInsidePage( int ii ) const
 {
+    WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
+
     DPOINT pos = GetStartPos( ii );
     pos += m_minCoord;  // left top pos of bounding box
 
-    if( m_LT_Corner.x > pos.x || m_LT_Corner.y > pos.y )
+    if( model.m_LT_Corner.x > pos.x || model.m_LT_Corner.y > pos.y )
         return false;
 
     pos = GetStartPos( ii );
     pos += m_maxCoord;  // rignt bottom pos of bounding box
 
-    if( m_RB_Corner.x < pos.x || m_RB_Corner.y < pos.y )
+    if( model.m_RB_Corner.x < pos.x || model.m_RB_Corner.y < pos.y )
         return false;
 
     return true;
@@ -516,7 +525,7 @@ bool WS_DATA_ITEM_POLYGONS::IsInsidePage( int ii ) const
 const wxPoint WS_DATA_ITEM_POLYGONS::GetCornerPositionUi( unsigned aIdx, int aRepeat ) const
 {
     DPOINT pos = GetCornerPosition( aIdx, aRepeat );
-    pos = pos * m_WSunits2Iu;
+    pos = pos * WS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
     return wxPoint( int(pos.x), int(pos.y) );
 }
 
@@ -540,7 +549,7 @@ void WS_DATA_ITEM_TEXT::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
     int   pensize = GetPenSizeUi();
     bool  multilines = false;
 
-    if( m_SpecialMode )
+    if( WS_DATA_MODEL::GetTheInstance().m_SpecialMode )
         m_FullText = m_TextBase;
     else
     {
@@ -554,8 +563,8 @@ void WS_DATA_ITEM_TEXT::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
     SetConstrainedTextSize();
     wxSize textsize;
 
-    textsize.x = KiROUND( m_ConstrainedTextSize.x * WS_DATA_ITEM::m_WSunits2Iu );
-    textsize.y = KiROUND( m_ConstrainedTextSize.y * WS_DATA_ITEM::m_WSunits2Iu );
+    textsize.x = KiROUND( m_ConstrainedTextSize.x * WS_DATA_MODEL::GetTheInstance().m_WSunits2Iu );
+    textsize.y = KiROUND( m_ConstrainedTextSize.y * WS_DATA_MODEL::GetTheInstance().m_WSunits2Iu );
 
     if( m_Bold )
         pensize = GetPenSizeForBold( std::min( textsize.x, textsize.y ) );
@@ -604,6 +613,17 @@ void WS_DATA_ITEM_TEXT::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
         if( m_RepeatCount > 1 && !multilines )
             IncrementLabel( ( jj + 1 ) * m_IncrementLabel );
     }
+}
+
+
+int WS_DATA_ITEM_TEXT::GetPenSizeUi()
+{
+    WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
+
+    if( m_LineWidth != 0 )
+        return KiROUND( m_LineWidth * model.m_WSunits2Iu );
+    else
+        return KiROUND( model.m_DefaultTextThickness * model.m_WSunits2Iu );
 }
 
 
@@ -666,10 +686,10 @@ void WS_DATA_ITEM_TEXT::SetConstrainedTextSize()
     m_ConstrainedTextSize = m_TextSize;
 
     if( m_ConstrainedTextSize.x == 0  )
-        m_ConstrainedTextSize.x = m_DefaultTextSize.x;
+        m_ConstrainedTextSize.x = WS_DATA_MODEL::GetTheInstance().m_DefaultTextSize.x;
 
     if( m_ConstrainedTextSize.y == 0 )
-        m_ConstrainedTextSize.y = m_DefaultTextSize.y;
+        m_ConstrainedTextSize.y = WS_DATA_MODEL::GetTheInstance().m_DefaultTextSize.y;
 
     if( m_BoundingBoxSize.x || m_BoundingBoxSize.y )
     {
@@ -742,26 +762,6 @@ void WS_DATA_ITEM_BITMAP::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::V
 }
 
 
-/* set the pixel scale factor of the bitmap
- * this factor depend on the application internal unit
- * and the PPI bitmap factor
- * the pixel scale factor should be initialized before drawing the bitmap
- */
-void WS_DATA_ITEM_BITMAP::SetPixelScaleFactor()
-{
-    if( m_ImageBitmap )
-    {
-        // m_WSunits2Iu is the page layout unit to application internal unit
-        // i.e. the mm to to application internal unit
-        // however the bitmap definition is always known in pixels per inches
-        double scale = m_WSunits2Iu * 25.4 / m_ImageBitmap->GetPPI();
-        m_ImageBitmap->SetPixelScaleFactor( scale );
-    }
-}
-
-
-/* return the PPI of the bitmap
- */
 int WS_DATA_ITEM_BITMAP::GetPPI() const
 {
     if( m_ImageBitmap )
@@ -771,8 +771,6 @@ int WS_DATA_ITEM_BITMAP::GetPPI() const
 }
 
 
-/*adjust the PPI of the bitmap
- */
 void WS_DATA_ITEM_BITMAP::SetPPI( int aBitmapPPI )
 {
     if( m_ImageBitmap )

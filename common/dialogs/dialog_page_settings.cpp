@@ -127,7 +127,11 @@ DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent, wxSize aMa
     m_tb = m_parent->GetTitleBlock();
     m_customFmt = false;
     m_localPrjConfigChanged = false;
-    m_pagelayout = NULL;
+
+    m_pagelayout = new WS_DATA_MODEL;
+    wxString serialization;
+    WS_DATA_MODEL::GetTheInstance().SaveInString( serialization );
+    m_pagelayout->SetPageLayout( TO_UTF8( serialization ) );
 
     m_PickDate->SetValue( wxDateTime::Now() );
 

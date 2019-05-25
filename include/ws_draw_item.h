@@ -440,11 +440,6 @@ public:
     }
 
     /**
-     * Sets up the WORKSHEET_DATAITEM globals for generating drawItems.
-     */
-    static void SetupDrawEnvironment( const PAGE_INFO& aPageInfo );
-
-    /**
      * Draws the item list created by BuildWorkSheetGraphicList
      * @param aClipBox = the clipping rect, or NULL if no clipping
      * @param aDC = the current Device Context

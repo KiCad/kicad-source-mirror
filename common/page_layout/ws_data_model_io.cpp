@@ -8,6 +8,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
+ * Copyright (C) 2019 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
@@ -63,15 +64,13 @@ protected:
     virtual ~WS_DATA_MODEL_IO() {}
 
 public:
-    void Format( WS_DATA_MODEL* aPageLayout ) const;
+    void Format( WS_DATA_MODEL* aModel ) const;
 
-    void Format( WS_DATA_ITEM* aItem, int aNestLevel ) const;
+    void Format( WS_DATA_MODEL* aModel, WS_DATA_ITEM* aItem, int aNestLevel ) const;
 
 private:
-    void format( WS_DATA_MODEL* aPageLayout ) const;
-
     void format( WS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const;
-    void format( WS_DATA_ITEM* aItem, int aNestLevel ) const;
+    void format( WS_DATA_MODEL* aModel, WS_DATA_ITEM* aItem, int aNestLevel ) const;
     void format( WS_DATA_ITEM_POLYGONS* aItem, int aNestLevel )
                  const;
     void format( WS_DATA_ITEM_BITMAP* aItem, int aNestLevel ) const;
@@ -156,7 +155,7 @@ void WS_DATA_MODEL::SaveInString( wxString& aOutputString )
 }
 
 
-void WS_DATA_MODEL_IO::Format( WS_DATA_ITEM* aItem, int aNestLevel ) const
+void WS_DATA_MODEL_IO::Format( WS_DATA_MODEL* aModel, WS_DATA_ITEM* aItem, int aNestLevel ) const
 {
     switch( aItem->GetType() )
     {
@@ -166,7 +165,7 @@ void WS_DATA_MODEL_IO::Format( WS_DATA_ITEM* aItem, int aNestLevel ) const
 
     case WS_DATA_ITEM::WS_SEGMENT:
     case WS_DATA_ITEM::WS_RECT:
-        format( aItem, aNestLevel );
+        format( aModel, aItem, aNestLevel );
         break;
 
     case WS_DATA_ITEM::WS_POLYPOLYGON:
@@ -194,12 +193,12 @@ void WS_DATA_MODEL_IO::Format( WS_DATA_MODEL* aPageLayout ) const
     // Write default values:
     m_out->Print( nestLevel, "(%s ", getTokenName( T_setup ) );
     m_out->Print( 0, "(textsize %s %s)",
-                  double2Str( WS_DATA_ITEM::m_DefaultTextSize.x ).c_str(),
-                  double2Str( WS_DATA_ITEM::m_DefaultTextSize.y ).c_str() );
+                  double2Str( aPageLayout->m_DefaultTextSize.x ).c_str(),
+                  double2Str( aPageLayout->m_DefaultTextSize.y ).c_str() );
     m_out->Print( 0, "(linewidth %s)",
-                  double2Str( WS_DATA_ITEM::m_DefaultLineWidth ).c_str() );
+                  double2Str( aPageLayout->m_DefaultLineWidth ).c_str() );
     m_out->Print( 0, "(textlinewidth %s)",
-                  double2Str( WS_DATA_ITEM::m_DefaultTextThickness ).c_str() );
+                  double2Str( aPageLayout->m_DefaultTextThickness ).c_str() );
     m_out->Print( 0, "\n" );
 
     // Write margin values
@@ -217,7 +216,7 @@ void WS_DATA_MODEL_IO::Format( WS_DATA_MODEL* aPageLayout ) const
     for( unsigned ii = 0; ii < aPageLayout->GetCount(); ii++ )
     {
         WS_DATA_ITEM* item = aPageLayout->GetItem( ii );
-        Format( item, nestLevel );
+        Format( aPageLayout, item, nestLevel );
     }
 
     m_out->Print( 0, ")\n" );
@@ -304,7 +303,7 @@ void WS_DATA_MODEL_IO::format( WS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const
     m_out->Print( 0, ")\n" );
 }
 
-void WS_DATA_MODEL_IO::format( WS_DATA_ITEM* aItem, int aNestLevel ) const
+void WS_DATA_MODEL_IO::format( WS_DATA_MODEL* aModel, WS_DATA_ITEM* aItem, int aNestLevel ) const
 {
     if( aItem->GetType() == WS_DATA_ITEM::WS_RECT )
         m_out->Print( aNestLevel, "(%s", getTokenName( T_rect ) );
@@ -318,7 +317,7 @@ void WS_DATA_MODEL_IO::format( WS_DATA_ITEM* aItem, int aNestLevel ) const
     formatCoordinate( getTokenName( T_end ), aItem->m_End );
     formatOptions( aItem );
 
-    if( aItem->m_LineWidth && aItem->m_LineWidth != aItem->m_DefaultLineWidth )
+    if( aItem->m_LineWidth && aItem->m_LineWidth != aModel->m_DefaultLineWidth )
         m_out->Print( 0, " (linewidth %s)", double2Str( aItem->m_LineWidth ).c_str() );
 
     formatRepeatParameters( aItem );

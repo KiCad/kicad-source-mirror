@@ -396,47 +396,21 @@ wxString WS_DRAW_ITEM_BITMAP::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 
 // ============================ LIST ==============================
 
-#define MILS_TO_MM (25.4/1000)
-
-
-void WS_DRAW_ITEM_LIST::SetupDrawEnvironment( const PAGE_INFO& aPageInfo )
-{
-    WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
-
-    // Left top corner position
-    DPOINT lt_corner;
-    lt_corner.x = pglayout.GetLeftMargin();
-    lt_corner.y = pglayout.GetTopMargin();
-    WS_DATA_ITEM::m_LT_Corner = lt_corner;
-
-    // Right bottom corner position
-    DPOINT rb_corner;
-    rb_corner.x = ( aPageInfo.GetSizeMils().x * MILS_TO_MM ) - pglayout.GetRightMargin();
-    rb_corner.y = ( aPageInfo.GetSizeMils().y * MILS_TO_MM ) - pglayout.GetBottomMargin();
-    WS_DATA_ITEM::m_RB_Corner = rb_corner;
-}
-
-
 void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( const PAGE_INFO& aPageInfo,
                                                    const TITLE_BLOCK& aTitleBlock )
 {
-    WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
+    WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
 
     m_titleBlock = &aTitleBlock;
     m_paperFormat = &aPageInfo.GetType();
 
-    wxPoint LTmargin( Mm2mils( pglayout.GetLeftMargin() ), Mm2mils( pglayout.GetTopMargin() ) );
-    wxPoint RBmargin( Mm2mils( pglayout.GetRightMargin() ), Mm2mils( pglayout.GetBottomMargin() ) );
-
     // Build the basic layout shape, if the layout list is empty
-    if( pglayout.GetCount() == 0 && !pglayout.VoidListAllowed() )
-        pglayout.SetPageLayout();
+    if( model.GetCount() == 0 && !model.VoidListAllowed() )
+        model.SetPageLayout();
 
-    WS_DATA_ITEM::m_WSunits2Iu = m_milsToIu / MILS_TO_MM;
+    model.SetupDrawEnvironment( aPageInfo, m_milsToIu );
 
-    SetupDrawEnvironment( aPageInfo );
-
-    for( WS_DATA_ITEM* wsItem : pglayout.GetItems() )
+    for( WS_DATA_ITEM* wsItem : model.GetItems() )
     {
         // Generate it only if the page option allows this
         if( wsItem->GetPage1Option() == FIRST_PAGE_ONLY && m_sheetNumber != 1 )

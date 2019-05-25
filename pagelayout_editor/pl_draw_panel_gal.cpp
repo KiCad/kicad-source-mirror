@@ -71,13 +71,14 @@ void PL_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector<MSG_PAN
 void PL_DRAW_PANEL_GAL::DisplayWorksheet()
 {
     PL_SELECTION_TOOL* selTool = m_edaFrame->GetToolManager()->GetTool<PL_SELECTION_TOOL>();
+    WS_DATA_MODEL&     model = WS_DATA_MODEL::GetTheInstance();
 
     selTool->GetSelection().Clear();
     m_view->Clear();
 
-    WS_DRAW_ITEM_LIST::SetupDrawEnvironment( m_edaFrame->GetPageSettings() );
+    model.SetupDrawEnvironment( m_edaFrame->GetPageSettings(), Mils2iu( 1 ) );
 
-    for( WS_DATA_ITEM* dataItem : WS_DATA_MODEL::GetTheInstance().GetItems() )
+    for( WS_DATA_ITEM* dataItem : model.GetItems() )
         dataItem->SyncDrawItems( nullptr, m_view );
 
     selTool->RebuildSelection();

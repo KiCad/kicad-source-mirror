@@ -238,6 +238,7 @@ set( COMMON_WIDGET_SRCS
 set( COMMON_PAGE_LAYOUT_SRCS
     page_layout/ws_data_item.cpp
     page_layout/ws_data_model.cpp
+    page_layout/ws_data_model_io.cpp
     page_layout/page_layout_default_description.cpp
     page_layout/ws_draw_item.cpp
     page_layout/page_layout_reader_keywords.cpp

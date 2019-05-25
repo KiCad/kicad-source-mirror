@@ -115,29 +115,6 @@ public:
                                             // for position increment
     int            m_IncrementLabel;
 
-    // These variables are static, because these values are common to all
-    // instances of WS_DATA_ITEM.
-    // They are default or common values.
-    //==============================================================================
-    // JEY TODO: these globals are death when we try to generate the page setttings preview...
-    // move them to member variables of WS_DATA_MODEL
-    //==============================================================================
-    static double  m_WSunits2Iu;            // conversion factor between
-                                            // ws units (mils) and draw/plot units
-    static DPOINT  m_RB_Corner;             // cordinates of the right bottom corner
-                                            // (ws units)
-    static DPOINT  m_LT_Corner;             // cordinates of the left top corner
-                                            // (ws units)
-    static double  m_DefaultLineWidth;      // Default line width,
-                                            // when not defined inside a line
-                                            // or a rect
-    static DSIZE   m_DefaultTextSize;       // Default text size,
-                                            // when not defined inside a tbtext
-    static double  m_DefaultTextThickness;  // Default text thickness,
-                                            // when not defined inside a tbtext
-    static bool    m_SpecialMode;           // Used in page layout editor
-                                            // When set to true, base texts
-                                            // instead of full texts are displayed
 public:
     WS_DATA_ITEM( WS_ITEM_TYPE aType );
 
@@ -168,8 +145,6 @@ public:
      * @return true if the item has a end point (segment; rect)
      * of false (text, polugon)
      */
-    virtual bool HasEndPoint() { return true; }
-
     PAGE_OPTION GetPage1Option() const { return m_pageOption; }
     void SetPage1Option( PAGE_OPTION aChoice ) { m_pageOption = aChoice; }
 
@@ -178,13 +153,8 @@ public:
     const wxPoint GetEndPosUi( int ii = 0 ) const;
     const DPOINT GetStartPos( int ii = 0 ) const;
     const DPOINT GetEndPos( int ii = 0 ) const;
-    virtual int GetPenSizeUi()
-    {
-        if( m_LineWidth )
-            return KiROUND( m_LineWidth * m_WSunits2Iu );
-        else
-            return KiROUND( m_DefaultLineWidth * m_WSunits2Iu );
-    }
+
+    virtual int GetPenSizeUi();
 
     /**
      * move item to a new position
@@ -253,15 +223,7 @@ public:
 
     void SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView ) override;
 
-    virtual int GetPenSizeUi() override
-    {
-        return KiROUND( m_LineWidth * m_WSunits2Iu );
-    }
-
-   /**
-     * @return false  (no end point)
-     */
-    virtual bool HasEndPoint() override { return false; }
+    virtual int GetPenSizeUi() override;
 
     /**
      * add a corner in corner list
@@ -353,18 +315,7 @@ public:
 
     void SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView ) override;
 
-    /**
-     * @return false  (no end point)
-     */
-    virtual bool HasEndPoint() override { return false; }
-
-    virtual int GetPenSizeUi() override
-    {
-        if( m_LineWidth )
-            return KiROUND( m_LineWidth * m_WSunits2Iu );
-        else
-            return KiROUND( m_DefaultTextThickness * m_WSunits2Iu );
-    }
+    virtual int GetPenSizeUi() override;
 
     /**
      * move item to a new position
@@ -418,30 +369,8 @@ public:
 
     void SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView ) override;
 
-    /**
-     * @return false  (no end point)
-     */
-    virtual bool HasEndPoint() override { return false; }
-
-    /**
-     * @return the PPI of the bitmap
-     */
     int GetPPI() const;
-
-    /**
-     * adjust the PPI of the bitmap
-     * @param aBitmapPPI = the ned PPI for the bitmap
-     */
     void SetPPI( int aBitmapPPI );
-
-    /**
-     * set the pixel scale factor of the bitmap
-     * this factor depend on the application internal unit
-     * and the pixel per inch bitmap factor
-     * the pixel scale factor is the pixel size to application internal unit
-     * and should be initialized before printing or drawing the bitmap
-     */
-    void SetPixelScaleFactor();
 };
 
 

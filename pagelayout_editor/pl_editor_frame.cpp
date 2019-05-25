@@ -92,7 +92,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_hotkeysDescrList = PlEditorHotkeysDescr;
     m_originSelectChoice = 0;
     SetDrawBgColor( WHITE );            // default value, user option (WHITE/BLACK)
-    WS_DATA_ITEM::m_SpecialMode = true;
+    WS_DATA_MODEL::GetTheInstance().m_SpecialMode = true;
     SetShowPageLimits( true );
     m_AboutTitle = "PlEditor";
 
@@ -321,7 +321,7 @@ void PL_EDITOR_FRAME::OnSelectCoordOriginCorner( wxCommandEvent& event )
 
 void PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode( wxCommandEvent& event )
 {
-    WS_DATA_ITEM::m_SpecialMode = (event.GetId() == ID_SHOW_PL_EDITOR_MODE);
+    WS_DATA_MODEL::GetTheInstance().m_SpecialMode = (event.GetId() == ID_SHOW_PL_EDITOR_MODE);
     HardRedraw();
 }
 
@@ -373,13 +373,13 @@ void PL_EDITOR_FRAME::ToPrinter( bool doPreview )
 
 void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayNormalMode( wxUpdateUIEvent& event )
 {
-    event.Check( WS_DATA_ITEM::m_SpecialMode == false );
+    event.Check( WS_DATA_MODEL::GetTheInstance().m_SpecialMode == false );
 }
 
 
 void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplaySpecialMode( wxUpdateUIEvent& event )
 {
-    event.Check( WS_DATA_ITEM::m_SpecialMode == true );
+    event.Check( WS_DATA_MODEL::GetTheInstance().m_SpecialMode == true );
 }
 
 
@@ -505,9 +505,7 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     // Display Zoom level:
     EDA_DRAW_FRAME::UpdateStatusBar();
 
-    // coordinate origin can be the paper Top Left corner,
-    // or each of 4 page corners
-    // We know the origin, and the orientation of axis
+    // coordinate origin can be the paper Top Left corner, or each of 4 page corners
     wxPoint originCoord;
     int Xsign = 1;
     int Ysign = 1;
