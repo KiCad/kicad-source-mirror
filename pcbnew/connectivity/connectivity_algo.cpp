@@ -25,6 +25,7 @@
 #include <connectivity/connectivity_algo.h>
 #include <widgets/progress_reporter.h>
 #include <geometry/geometry_utils.h>
+#include <board_commit.h>
 
 #include <thread>
 #include <mutex>
@@ -449,7 +450,7 @@ void CN_CONNECTIVITY_ALGO::Build( const std::vector<BOARD_ITEM*>& aItems )
 }
 
 
-void CN_CONNECTIVITY_ALGO::propagateConnections()
+void CN_CONNECTIVITY_ALGO::propagateConnections( BOARD_COMMIT* aCommit )
 {
     for( const auto& cluster : m_connClusters )
     {
@@ -476,6 +477,9 @@ void CN_CONNECTIVITY_ALGO::propagateConnections()
                         MarkNetAsDirty( item->Parent()->GetNetCode() );
                         MarkNetAsDirty( cluster->OriginNet() );
 
+                        if( aCommit )
+                            aCommit->Modify( item->Parent() );
+
                         item->Parent()->SetNetCode( cluster->OriginNet() );
                         n_changed++;
                     }
@@ -496,10 +500,10 @@ void CN_CONNECTIVITY_ALGO::propagateConnections()
 }
 
 
-void CN_CONNECTIVITY_ALGO::PropagateNets()
+void CN_CONNECTIVITY_ALGO::PropagateNets( BOARD_COMMIT* aCommit )
 {
     m_connClusters = SearchClusters( CSM_PROPAGATE );
-    propagateConnections();
+    propagateConnections( aCommit );
 }
 
 

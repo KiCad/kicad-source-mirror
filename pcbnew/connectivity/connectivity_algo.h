@@ -155,7 +155,8 @@ private:
     void    searchConnections();
 
     void    update();
-    void    propagateConnections();
+
+    void    propagateConnections( BOARD_COMMIT* aCommit = nullptr );
 
     template <class Container, class BItem>
     void add( Container& c, BItem brditem )
@@ -223,7 +224,12 @@ public:
     const CLUSTERS  SearchClusters( CLUSTER_SEARCH_MODE aMode, const KICAD_T aTypes[], int aSingleNet );
     const CLUSTERS  SearchClusters( CLUSTER_SEARCH_MODE aMode );
 
-    void    PropagateNets();
+    /**
+     * Propagates nets from pads to other items in clusters
+     * @param aCommit is used to store undo information for items modified by the call
+     */
+    void    PropagateNets( BOARD_COMMIT* aCommit = nullptr );
+
     void    FindIsolatedCopperIslands( ZONE_CONTAINER* aZone, std::vector<int>& aIslands );
 
     /**
