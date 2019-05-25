@@ -49,6 +49,7 @@
 #include <tool/common_tools.h>
 #include <tool/zoom_tool.h>
 #include <tools/lib_control.h>
+#include <tools/lib_move_tool.h>
 
 // Save previous component library viewer state.
 wxString LIB_VIEW_FRAME::m_libraryName;
@@ -137,11 +138,12 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     // Synchronize some draw options
     SetShowElectricalType( true );
-    GetRenderSettings()->m_ShowPinsElectricalType = GetShowElectricalType();
-
     // Ensure axis are always drawn (initial default display was not drawn)
     KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = GetGalDisplayOptions();
     gal_opts.m_axesEnabled = true;
+    GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
+    GetRenderSettings()->m_ShowPinsElectricalType = GetShowElectricalType();
+    GetGalCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
@@ -201,8 +203,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     SyncView();
     GetGalCanvas()->GetViewControls()->SetSnapping( true );
-    GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
-    GetGalCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
 
     // Set the working/draw area size to display a symbol to a reasonable value:
     // A 450mm x 450mm with a origin at the area center looks like a large working area
@@ -234,10 +234,15 @@ void LIB_VIEW_FRAME::setupTools()
     // Register tools
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
-    m_toolManager->RegisterTool( new EE_SELECTION_TOOL );
-    m_toolManager->RegisterTool( new LIB_CONTROL );
+    m_toolManager->RegisterTool( new EE_SELECTION_TOOL );   // manage context menu
+    m_toolManager->RegisterTool( new LIB_CONTROL );         // manage show electrical type option
+    m_toolManager->RegisterTool( new LIB_MOVE_TOOL );
 
     m_toolManager->InitTools();
+
+    // Run the selection tool, it is supposed to be always active
+    // It also manages the mouse right click to show the context menu
+    m_toolManager->InvokeTool( "eeschema.InteractiveSelection" );
 
     GetCanvas()->SetEventDispatcher( m_toolDispatcher );
 }

@@ -29,6 +29,7 @@
 #include <sch_base_frame.h>
 #include <sch_edit_frame.h>
 #include <lib_edit_frame.h>
+#include <viewlib_frame.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_field.h>
@@ -161,6 +162,7 @@ EE_SELECTION_TOOL::EE_SELECTION_TOOL() :
         m_multiple( false ),
         m_skip_heuristics( false ),
         m_isLibEdit( false ),
+        m_isLibView( false ),
         m_unit( 0 ),
         m_convert( 0 ),
         m_menu( *this )
@@ -179,6 +181,7 @@ bool EE_SELECTION_TOOL::Init()
 {
     m_frame = getEditFrame<SCH_BASE_FRAME>();
 
+    LIB_VIEW_FRAME* libViewFrame = dynamic_cast<LIB_VIEW_FRAME*>( m_frame );
     LIB_EDIT_FRAME* libEditFrame = dynamic_cast<LIB_EDIT_FRAME*>( m_frame );
 
     if( libEditFrame )
@@ -187,6 +190,9 @@ bool EE_SELECTION_TOOL::Init()
         m_unit = libEditFrame->GetUnit();
         m_convert = libEditFrame->GetConvert();
     }
+    else
+        m_isLibView = libViewFrame != nullptr;
+
 
     static KICAD_T wireOrBusTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
 
@@ -195,10 +201,10 @@ bool EE_SELECTION_TOOL::Init()
     auto wireOrBusSelection = E_C::MoreThan( 0 ) && E_C::OnlyTypes( wireOrBusTypes );
     auto sheetSelection =     E_C::Count( 1 )    && E_C::OnlyType( SCH_SHEET_T );
     auto schEditCondition = [this] ( const SELECTION& aSel ) {
-        return !m_isLibEdit;
+        return !m_isLibEdit && !m_isLibView;
     };
     auto belowRootSheetCondition = [this] ( const SELECTION& aSel ) {
-        return !m_isLibEdit && g_CurrentSheet->Last() != g_RootSheet;
+        return !m_isLibEdit && !m_isLibView && g_CurrentSheet->Last() != g_RootSheet;
     };
     auto havePartCondition = [ this ] ( const SELECTION& sel ) {
         return m_isLibEdit && ( (LIB_EDIT_FRAME*) m_frame )->GetCurPart();
@@ -254,6 +260,7 @@ void EE_SELECTION_TOOL::Reset( RESET_REASON aReason )
         getView()->GetPainter()->GetSettings()->SetHighlight( false );
 
         LIB_EDIT_FRAME* libEditFrame = dynamic_cast<LIB_EDIT_FRAME*>( m_frame );
+        LIB_VIEW_FRAME* libViewFrame = dynamic_cast<LIB_VIEW_FRAME*>( m_frame );
 
         if( libEditFrame )
         {
@@ -261,6 +268,8 @@ void EE_SELECTION_TOOL::Reset( RESET_REASON aReason )
             m_unit = libEditFrame->GetUnit();
             m_convert = libEditFrame->GetConvert();
         }
+        else
+            m_isLibView = libViewFrame != nullptr;
     }
     else
         // Restore previous properties of selected items and remove them from containers

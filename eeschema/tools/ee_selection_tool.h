@@ -232,7 +232,7 @@ private:
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
-    
+
 private:
     SCH_BASE_FRAME* m_frame;    // Pointer to the parent frame
     SELECTION m_selection;      // Current state of selection
@@ -242,7 +242,8 @@ private:
     bool m_multiple;            // Multiple selection mode is active
     bool m_skip_heuristics;     // Heuristics are not allowed when choosing item under cursor
 
-    bool m_isLibEdit;
+    bool m_isLibEdit;           // True when libedit is the parent frame
+    bool m_isLibView;           // True when libview is the parent frame
     int  m_unit;                // Fixed unit filter (for symbol editor)
     int  m_convert;             // Fixed DeMorgan filter (for symbol editor)
 
