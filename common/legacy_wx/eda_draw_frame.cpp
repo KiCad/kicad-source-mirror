@@ -469,20 +469,24 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
         int index = m_gridSelectBox->GetSelection();
         wxASSERT( index != wxNOT_FOUND );
 
-        if( index == int( m_gridSelectBox->GetCount() - 2 ) )
+        // GerbView does not support custom grid
+        if( m_Ident != FRAME_GERBER )
         {
-            // this is the separator
-            wxUpdateUIEvent dummy;
-            OnUpdateSelectGrid( dummy );
-            return;
-        }
-        else if( index == int( m_gridSelectBox->GetCount() - 1 ) )
-        {
-            wxUpdateUIEvent dummy;
-            OnUpdateSelectGrid( dummy );
-            wxCommandEvent dummy2;
-            OnGridSettings( dummy2 );
-            return;
+            if( index == int( m_gridSelectBox->GetCount() - 2 ) )
+            {
+                // this is the separator
+                wxUpdateUIEvent dummy;
+                OnUpdateSelectGrid( dummy );
+                return;
+            }
+            else if( index == int( m_gridSelectBox->GetCount() - 1 ) )
+            {
+                wxUpdateUIEvent dummy;
+                OnUpdateSelectGrid( dummy );
+                wxCommandEvent dummy2;
+                OnGridSettings( dummy2 );
+                return;
+            }
         }
 
         clientData = (int*) m_gridSelectBox->wxItemContainer::GetClientData( index );
@@ -668,7 +672,13 @@ void EDA_DRAW_FRAME::SetPresetGrid( int aIndex )
 
     if( m_gridSelectBox )
     {
-        if( glistIdx < 0 || glistIdx >= (int) m_gridSelectBox->GetCount() - 2 )
+        int highestGrid = ( int )m_gridSelectBox->GetCount();
+
+        // GerbView does not support the user grid setting
+        if( m_Ident != FRAME_GERBER )
+            highestGrid -= 2;
+
+        if( glistIdx < 0 || glistIdx >= highestGrid )
         {
             wxASSERT_MSG( false, "Invalid grid index" );
             return;
