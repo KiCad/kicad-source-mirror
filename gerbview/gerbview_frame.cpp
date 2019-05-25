@@ -353,7 +353,9 @@ void GERBVIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
     // was: wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
     wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
-    aCfg->Read( cfgShowBorderAndTitleBlock, &m_showBorderAndTitleBlock, false );
+    bool tmp;
+    aCfg->Read( cfgShowBorderAndTitleBlock, &tmp, false );
+    SetElementVisibility( LAYER_WORKSHEET, tmp );
 
     PAGE_INFO pageInfo( wxT( "GERBER" ) );
     wxString pageType;
@@ -362,7 +364,6 @@ void GERBVIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
     pageInfo.SetType( pageType );
     SetPageSettings( pageInfo );
 
-    bool tmp;
     aCfg->Read( cfgShowDCodes, &tmp, true );
     SetElementVisibility( LAYER_DCODES, tmp );
     aCfg->Read( cfgShowNegativeObjects, &tmp, false );
@@ -471,6 +472,7 @@ void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
 
     case LAYER_WORKSHEET:
         m_showBorderAndTitleBlock = aNewState;
+        GetGalCanvas()->GetView()->SetLayerVisible( LAYER_WORKSHEET, aNewState );
         break;
 
     case LAYER_GERBVIEW_GRID:
