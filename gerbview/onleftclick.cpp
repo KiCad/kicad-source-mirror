@@ -30,6 +30,7 @@
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include <dialog_helpers.h>
+#include <gerbview_id.h>
 
 /* Process the command triggered by the left button of the mouse
  * currently: just display info in the message panel.

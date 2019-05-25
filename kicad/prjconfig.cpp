@@ -45,6 +45,7 @@
 #include "kicad.h"
 #include "pgm_kicad.h"
 #include "tree_project_frame.h"
+#include "kicad_id.h"
 
 
 #define SEP()   wxFileName::GetPathSeparator()

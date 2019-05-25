@@ -42,6 +42,7 @@
 #include <dialog_edit_library_tables.h>
 #include "pgm_kicad.h"
 #include "tree_project_frame.h"
+#include "kicad_id.h"
 
 #ifdef __WXMAC__
 #include <MacTypes.h>

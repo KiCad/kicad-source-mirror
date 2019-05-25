@@ -37,8 +37,8 @@
 #include "treeprojectfiles.h"
 #include "pgm_kicad.h"
 #include "tree_project_frame.h"
-
 #include "treeproject_item.h"
+#include "kicad_id.h"
 
 
 TREEPROJECT_ITEM::TREEPROJECT_ITEM( enum TreeFileType type, const wxString& data,

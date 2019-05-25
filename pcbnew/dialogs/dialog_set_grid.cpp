@@ -40,6 +40,8 @@
 #include <tools/pcb_actions.h>
 #include <tool/tool_manager.h>
 
+#include <pcbnew_id.h>
+
 // Max values for grid size
 static const int MAX_GRID_SIZE = KiROUND( 1000.0 * IU_PER_MM );
 static const int MIN_GRID_SIZE = KiROUND( 0.001 * IU_PER_MM );

@@ -53,6 +53,7 @@
 #include <sch_view.h>
 #include <sch_painter.h>
 #include "sch_junction.h"
+#include "eeschema_id.h"
 
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum number of find and replace strings.
 

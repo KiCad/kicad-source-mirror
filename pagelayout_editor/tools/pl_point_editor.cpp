@@ -39,6 +39,7 @@ using namespace std::placeholders;
 #include <pl_editor_frame.h>
 #include <ws_draw_item.h>
 #include <widgets/progress_reporter.h>
+#include <pl_editor_id.h>
 
 
 // Few constants to avoid using bare numbers for point indices

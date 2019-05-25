@@ -36,7 +36,6 @@
 #include <undo_redo_container.h>
 #include <block_commande.h>
 #include <common.h>
-#include <id.h>
 
 /**
  * Class GRID_TYPE

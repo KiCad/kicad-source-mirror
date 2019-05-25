@@ -43,7 +43,7 @@ using namespace std::placeholders;
 #include <lib_circle.h>
 #include <lib_rectangle.h>
 #include <lib_polyline.h>
-#include <widgets/progress_reporter.h>
+#include <eeschema_id.h>
 
 
 // Point editor

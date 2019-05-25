@@ -33,6 +33,7 @@
 #include <base_screen.h>
 #include <hotkeys.h>
 #include <tool/common_tools.h>
+#include <id.h>
 
 
 void COMMON_TOOLS::Reset( RESET_REASON aReason )

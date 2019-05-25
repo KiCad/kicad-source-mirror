@@ -32,6 +32,7 @@
 #include <wx/statline.h>
 
 #include "kicad.h"
+#include "kicad_id.h"
 
 // Amount of clearance between tool buttons
 const int BUTTON_SEPARATION = 5;

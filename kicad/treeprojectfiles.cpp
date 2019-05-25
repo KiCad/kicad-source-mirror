@@ -32,8 +32,8 @@
 
 #include "treeproject_item.h"
 #include "tree_project_frame.h"
-
 #include "treeprojectfiles.h"
+#include "kicad_id.h"
 
 
 IMPLEMENT_ABSTRACT_CLASS( TREEPROJECTFILES, wxTreeCtrl )

@@ -31,7 +31,6 @@
 #include <class_board.h>
 #include <mutex>
 #include <draw_frame.h>
-#include <boost/bind.hpp>
 #include <utility>
 #include <make_unique.h>
 #include <colors_design_settings.h>
@@ -39,6 +38,7 @@
 #include <wx/stattext.h>
 #include <pgm_base.h>
 #include <painter.h>
+#include <pcbnew_id.h>
 
 /**
  * Threadsafe interface class between loader thread and panel class.

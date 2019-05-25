@@ -40,6 +40,7 @@
 #include "selection_tool.h"
 #include "pcb_selection_conditions.h"
 #include "edit_tool.h"
+#include "pcbnew_id.h"
 
 // Pad tools
 TOOL_ACTION PCB_ACTIONS::copyPadSettings(

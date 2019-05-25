@@ -35,6 +35,7 @@
 
 #include "kicad.h"
 #include "pgm_kicad.h"
+#include "kicad_id.h"
 
 
 // Menubar and toolbar event table
