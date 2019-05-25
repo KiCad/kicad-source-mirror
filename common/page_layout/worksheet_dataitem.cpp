@@ -430,7 +430,7 @@ void WORKSHEET_DATAITEM_POLYPOLYGON::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollecto
             const bool fill = true;
             int pensize = GetPenSizeUi();
             auto poly = new WS_DRAW_ITEM_POLYGON( this, GetStartPosUi( jj ), fill, pensize );
-            item->SetFlags( itemFlags[ jj ] );
+            poly->SetFlags( itemFlags[ jj ] );
             m_drawItems.push_back( poly );
 
             if( aCollector )
@@ -732,7 +732,7 @@ void WORKSHEET_DATAITEM_BITMAP::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KI
             continue;
 
         auto bitmap = new WS_DRAW_ITEM_BITMAP( this, GetStartPosUi( jj ) );
-        item->SetFlags( itemFlags[ jj ] );
+        bitmap->SetFlags( itemFlags[ jj ] );
         m_drawItems.push_back( bitmap );
 
         if( aCollector )
