@@ -56,7 +56,8 @@ bool IsPointOnSegment( const wxPoint& aSegStart, const wxPoint& aSegEnd,
 
 // Returns true if the segment 1 intersectd the segment 2.
 bool SegmentIntersectsSegment( const wxPoint &a_p1_l1, const wxPoint &a_p2_l1,
-                               const wxPoint &a_p1_l2, const wxPoint &a_p2_l2 )
+                               const wxPoint &a_p1_l2, const wxPoint &a_p2_l2,
+                               wxPoint* aIntersectionPoint )
 {
 
     //We are forced to use 64bit ints because the internal units can oveflow 32bit ints when
@@ -87,10 +88,13 @@ bool SegmentIntersectsSegment( const wxPoint &a_p1_l1, const wxPoint &a_p2_l1,
     num_a = dY_ab * dX_b - dY_b * dX_ab;
     num_b = dY_ab * dX_a - dY_a * dX_ab;
 
-    //We wont calculate directly the u_k of the intersection point to avoid floating point
-    // division but they could be calculated with:
-    // u_a = (float) num_a / (float) den;
-    // u_b = (float) num_b / (float) den;
+    // Only compute the intersection point if requested
+    if( aIntersectionPoint )
+    {
+        *aIntersectionPoint = a_p1_l1;
+        aIntersectionPoint->x += KiROUND( dX_a * ( double )num_a / ( double )den );
+        aIntersectionPoint->y += KiROUND( dY_a * ( double )num_b / ( double )den );
+    }
 
     if( den < 0 )
     {

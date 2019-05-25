@@ -606,8 +606,10 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool aTestPads, bool aTestZ
 
             if( ( segStartPoint.y < 0 ) && ( segEndPoint.y > 0 ) )
             {
-                markers.push_back(
-                        m_markerFactory.NewMarker( aRefSeg, track, seg, DRCE_TRACKS_CROSSING ) );
+                MARKER_PCB* m = m_markerFactory.NewMarker( aRefSeg, track, seg,
+                                                           DRCE_TRACKS_CROSSING );
+                m->SetPosition( wxPoint( track->GetStart().x, aRefSeg->GetStart().y ) );
+                markers.push_back( m );
 
                 if( !handleNewMarker() )
                     return false;
@@ -654,8 +656,22 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool aTestPads, bool aTestZ
 
                 if( !checkLine( segStartPoint, segEndPoint ) )
                 {
-                    markers.push_back(
-                            m_markerFactory.NewMarker( aRefSeg, track, seg, DRCE_ENDS_PROBLEM3 ) );
+                    wxPoint failurePoint;
+                    MARKER_PCB* m;
+
+                    if( SegmentIntersectsSegment( aRefSeg->GetStart(), aRefSeg->GetEnd(),
+                                                  track->GetStart(), track->GetEnd(),
+                                                  &failurePoint ) )
+                    {
+                        m = m_markerFactory.NewMarker( aRefSeg, track, seg, DRCE_TRACKS_CROSSING );
+                        m->SetPosition( failurePoint );
+                    }
+                    else
+                    {
+                        m = m_markerFactory.NewMarker( aRefSeg, track, seg, DRCE_ENDS_PROBLEM3 );
+                    }
+
+                    markers.push_back( m );
 
                     if( !handleNewMarker() )
                         return false;
