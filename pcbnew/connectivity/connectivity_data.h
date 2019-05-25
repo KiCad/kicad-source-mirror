@@ -41,6 +41,7 @@ class CN_CLUSTER;
 class CN_CONNECTIVITY_ALGO;
 class CN_EDGE;
 class BOARD;
+class BOARD_COMMIT;
 class BOARD_CONNECTED_ITEM;
 class BOARD_ITEM;
 class ZONE_CONTAINER;
@@ -157,8 +158,9 @@ public:
     /**
      * Function RecalculateRatsnest()
      * Updates the ratsnest for the board.
+     * @param aCommit is used to save the undo state of items modified by this call
      */
-    void RecalculateRatsnest();
+    void RecalculateRatsnest( BOARD_COMMIT* aCommit = nullptr );
 
     /**
      * Function GetUnconnectedCount()

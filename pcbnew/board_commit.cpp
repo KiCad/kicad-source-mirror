@@ -256,19 +256,48 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     if( itemsToDeselect.size() > 0 )
         m_toolMgr->RunAction( PCB_ACTIONS::unselectItems, true, &itemsToDeselect );
 
+    if ( !m_editModules )
+    {
+        size_t num_changes = m_changes.size();
+
+        auto panel = static_cast<PCB_DRAW_PANEL_GAL*>( frame->GetGalCanvas() );
+        connectivity->RecalculateRatsnest( this );
+        connectivity->ClearDynamicRatsnest();
+        panel->RedrawRatsnest();
+
+        if( m_changes.size() > num_changes )
+        {
+            for( size_t i = num_changes; i < m_changes.size(); ++i )
+            {
+                COMMIT_LINE& ent = m_changes[i];
+
+                // This should only be modifications from the connectivity algo
+                wxASSERT( ( ent.m_type & CHT_TYPE ) == CHT_MODIFY );
+
+                auto boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
+
+                if( aCreateUndoEntry )
+                {
+                    ITEM_PICKER itemWrapper( boardItem, UR_CHANGED );
+                    wxASSERT( ent.m_copy );
+                    itemWrapper.SetLink( ent.m_copy );
+                    undoList.PushItem( itemWrapper );
+                }
+                else
+                {
+                    delete ent.m_copy;
+                }
+
+                view->Update( boardItem );
+            }
+        }
+    }
+
     if( !m_editModules && aCreateUndoEntry )
         frame->SaveCopyInUndoList( undoList, UR_UNSPECIFIED );
 
     if( TOOL_MANAGER* toolMgr = frame->GetToolManager() )
         toolMgr->PostEvent( { TC_MESSAGE, TA_MODEL_CHANGE, AS_GLOBAL } );
-
-    if ( !m_editModules )
-    {
-        auto panel = static_cast<PCB_DRAW_PANEL_GAL*>( frame->GetGalCanvas() );
-        connectivity->RecalculateRatsnest();
-        connectivity->ClearDynamicRatsnest();
-        panel->RedrawRatsnest();
-    }
 
     if( aSetDirtyBit )
         frame->OnModify();

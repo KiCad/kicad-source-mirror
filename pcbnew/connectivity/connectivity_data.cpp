@@ -147,9 +147,9 @@ void CONNECTIVITY_DATA::addRatsnestCluster( const std::shared_ptr<CN_CLUSTER>& a
 }
 
 
-void CONNECTIVITY_DATA::RecalculateRatsnest()
+void CONNECTIVITY_DATA::RecalculateRatsnest( BOARD_COMMIT* aCommit  )
 {
-    m_connAlgo->PropagateNets();
+    m_connAlgo->PropagateNets( aCommit );
 
     int lastNet = m_connAlgo->NetCount();
 
