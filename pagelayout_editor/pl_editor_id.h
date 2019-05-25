@@ -1,7 +1,3 @@
-/**
- * @file pl_editor_id.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -32,11 +28,7 @@
 #include <id.h>
 
 /**
- * Command IDs for the printed circuit board editor.
- *
- * Please add IDs that are unique to the page layout editor (pl_editor) here and not in
- * the global id.h file.  This will prevent the entire project from being rebuilt when
- * adding new commands to the page layout editor.
+ * Page layout editor IDs.
  */
 
 enum pl_editor_ids

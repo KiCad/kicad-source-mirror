@@ -55,11 +55,6 @@ TOOL_ACTION PL_ACTIONS::deleteItemCursor( "plEditor.InteractiveEdit.deleteTool",
         _( "Delete Items" ), _( "Delete clicked items" ),
         delete_xpm, AF_ACTIVATE );
 
-TOOL_ACTION PL_ACTIONS::doDelete( "plEditor.InteractiveEdit.delete",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
-        _( "Delete" ), _( "Deletes selected item(s)" ),
-        delete_xpm );
-
 
 PL_EDIT_TOOL::PL_EDIT_TOOL() :
         TOOL_INTERACTIVE( "plEditor.InteractiveEdit" ),
@@ -408,7 +403,7 @@ void PL_EDIT_TOOL::setTransitions()
     Go( &PL_EDIT_TOOL::Main,                   PL_ACTIONS::move.MakeEvent() );
 
     Go( &PL_EDIT_TOOL::ImportWorksheetContent, PL_ACTIONS::appendImportedWorksheet.MakeEvent() );
-    Go( &PL_EDIT_TOOL::DoDelete,               PL_ACTIONS::doDelete.MakeEvent() );
+    Go( &PL_EDIT_TOOL::DoDelete,               ACTIONS::doDelete.MakeEvent() );
     Go( &PL_EDIT_TOOL::DeleteItemCursor,       PL_ACTIONS::deleteItemCursor.MakeEvent() );
 
     Go( &PL_EDIT_TOOL::Undo,                   ACTIONS::undo.MakeEvent() );

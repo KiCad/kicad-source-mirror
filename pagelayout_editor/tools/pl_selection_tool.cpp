@@ -22,11 +22,9 @@
  */
 
 
-#include <menus_helpers.h>
-#include <hotkeys.h>
+#include <bitmaps.h>
 #include <view/view.h>
 #include <view/view_controls.h>
-#include <view/view_group.h>
 #include <preview_items/selection_area.h>
 #include <pl_editor_frame.h>
 #include <tool/tool_event.h>
@@ -37,7 +35,6 @@
 #include <worksheet_painter.h>
 #include <ws_draw_item.h>
 #include <collector.h>
-#include <properties_frame.h>
 #include "pl_selection_tool.h"
 
 /**
@@ -712,46 +709,6 @@ bool PL_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 }
 
 
-int PL_SELECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
-{
-    PL_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PL_SELECTION_TOOL>();
-    SELECTION&         selection = selTool->GetSelection();
-
-    if( selection.GetSize() == 1 )
-    {
-        EDA_ITEM* item = (EDA_ITEM*) selection.Front();
-
-        MSG_PANEL_ITEMS msgItems;
-        item->GetMsgPanelInfo( m_frame->GetUserUnits(), msgItems );
-        m_frame->SetMsgPanel( msgItems );
-
-        WORKSHEET_DATAITEM* dataItem = static_cast<WS_DRAW_ITEM_BASE*>( item )->GetPeer();
-        m_frame->GetPropertiesFrame()->CopyPrmsFromItemToPanel( dataItem );
-    }
-    else
-    {
-        m_frame->ClearMsgPanel();
-        m_frame->GetPropertiesFrame()->CopyPrmsFromItemToPanel( nullptr );
-    }
-
-    m_frame->GetPropertiesFrame()->CopyPrmsFromGeneralToPanel();
-
-    return 0;
-}
-
-
-int PL_SELECTION_TOOL::ToggleBackgroundColor( const TOOL_EVENT& aEvent )
-{
-    m_frame->SetDrawBgColor( m_frame->GetDrawBgColor() == WHITE ? BLACK : WHITE );
-    getView()->GetPainter()->GetSettings()->SetBackgroundColor( m_frame->GetDrawBgColor() );
-
-    m_frame->GetGalCanvas()->GetView()->UpdateAllLayersColor();
-    m_frame->GetCanvas()->Refresh();
-
-    return 0;
-}
-
-
 void PL_SELECTION_TOOL::setTransitions()
 {
     Go( &PL_SELECTION_TOOL::UpdateMenu,            ACTIONS::updateMenu.MakeEvent() );
@@ -764,13 +721,6 @@ void PL_SELECTION_TOOL::setTransitions()
     Go( &PL_SELECTION_TOOL::RemoveItemFromSel,     PL_ACTIONS::removeItemFromSel.MakeEvent() );
     Go( &PL_SELECTION_TOOL::RemoveItemsFromSel,    PL_ACTIONS::removeItemsFromSel.MakeEvent() );
     Go( &PL_SELECTION_TOOL::SelectionMenu,         PL_ACTIONS::selectionMenu.MakeEvent() );
-
-    Go( &PL_SELECTION_TOOL::UpdateMessagePanel,    EVENTS::SelectedEvent );
-    Go( &PL_SELECTION_TOOL::UpdateMessagePanel,    EVENTS::UnselectedEvent );
-    Go( &PL_SELECTION_TOOL::UpdateMessagePanel,    EVENTS::ClearedEvent );
-    Go( &PL_SELECTION_TOOL::UpdateMessagePanel,    EVENTS::SelectedItemsModified );
-
-    Go( &PL_SELECTION_TOOL::ToggleBackgroundColor, PL_ACTIONS::toggleBackground.MakeEvent() );
 }
 
 

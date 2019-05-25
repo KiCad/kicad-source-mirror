@@ -223,12 +223,6 @@ public:
     void OnUpdateTitleBlockDisplayNormalMode( wxUpdateUIEvent& event );
     void OnUpdateTitleBlockDisplaySpecialMode( wxUpdateUIEvent& event );
 
-    /**
-     * Function OnQuit
-     * called on request of application quit
-     */
-    void OnQuit( wxCommandEvent& event );
-
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
     EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
@@ -245,17 +239,10 @@ public:
                    EDA_ITEM* aItem = NULL ) override;
 
     /**
-     * Function ToPlotter
-     * Open a dialog frame to create plot and drill files
-     * relative to the current board
-     */
-    void ToPlotter( wxCommandEvent& event );
-
-    /**
      * Function ToPrinter
      * Open a dialog frame to print layers
      */
-    void ToPrinter( wxCommandEvent& event );
+    void ToPrinter( bool doPreview );
 
     void Files_io( wxCommandEvent& event );
 

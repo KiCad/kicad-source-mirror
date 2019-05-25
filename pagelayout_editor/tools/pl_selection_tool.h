@@ -125,11 +125,6 @@ public:
      */
     int SelectionMenu( const TOOL_EVENT& aEvent );
 
-    int UpdateMessagePanel( const TOOL_EVENT& aEvent );
-
-    // Move to PL_EDITOR_CONTROL when there are enough control actions to make it worthwhile
-    int ToggleBackgroundColor( const TOOL_EVENT& aEvent );
-
 private:
     /**
      * Function selectMultiple()

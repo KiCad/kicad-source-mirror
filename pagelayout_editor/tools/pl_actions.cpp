@@ -28,15 +28,6 @@
 #include "pl_actions.h"
 
 
-TOOL_ACTION PL_ACTIONS::refreshPreview( "plEditor.EditorControl.refreshPreview",
-        AS_GLOBAL, 0, "", "" );
-
-TOOL_ACTION PL_ACTIONS::toggleBackground( "plEditor.EditorControl.ToggleBackground",
-        AS_GLOBAL, 0,
-        _( "Background White" ), _( "Switch between white and black background" ),
-        palette_xpm );
-
-
 OPT<TOOL_EVENT> PL_ACTIONS::TranslateLegacyId( int aId )
 {
     switch( aId )

@@ -52,28 +52,18 @@
 #include <tools/pl_picker_tool.h>
 #include <dialog_page_settings.h>
 #include <invoke_pl_editor_dialog.h>
+#include <tools/pl_editor_control.h>
 
 BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_CLOSE( PL_EDITOR_FRAME::OnCloseWindow )
-    // Menu Files:
-    EVT_MENU( wxID_NEW, PL_EDITOR_FRAME::Files_io )
-    EVT_MENU( wxID_OPEN, PL_EDITOR_FRAME::Files_io )
-    EVT_MENU( wxID_SAVE, PL_EDITOR_FRAME::Files_io )
-    EVT_MENU( wxID_SAVEAS, PL_EDITOR_FRAME::Files_io )
     EVT_MENU( wxID_FILE, PL_EDITOR_FRAME::Files_io )
 
-    EVT_MENU( ID_GEN_PLOT, PL_EDITOR_FRAME::ToPlotter )
-
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, PL_EDITOR_FRAME::OnFileHistory )
-
-    EVT_MENU( wxID_EXIT, PL_EDITOR_FRAME::OnQuit )
 
     // menu Preferences
     EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, PL_EDITOR_FRAME::Process_Special_Functions )
     EVT_MENU( wxID_PREFERENCES, PL_EDITOR_FRAME::Process_Special_Functions )
 
-    EVT_TOOL( wxID_PRINT, PL_EDITOR_FRAME::ToPrinter )
-    EVT_TOOL( wxID_PREVIEW, PL_EDITOR_FRAME::ToPrinter )
     EVT_TOOL( ID_SHEET_SET, PL_EDITOR_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_SHOW_REAL_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
     EVT_TOOL( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
@@ -218,6 +208,7 @@ void PL_EDITOR_FRAME::setupTools()
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->RegisterTool( new PL_SELECTION_TOOL );
+    m_toolManager->RegisterTool( new PL_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new PL_DRAWING_TOOLS );
     m_toolManager->RegisterTool( new PL_EDIT_TOOL );
     m_toolManager->RegisterTool( new PL_POINT_EDITOR );
@@ -304,10 +295,9 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
                                                  MAX_PAGE_SIZE_EDITORS_MILS ) );
         dlg.SetWksFileName( GetCurrFileName() );
         dlg.EnableWksFileNamePicker( false );
-        dlg.ShowModal();
 
-        cmd.SetId( ID_ZOOM_PAGE );
-        wxPostEvent( this, cmd );
+        if( dlg.ShowModal() == wxID_OK )
+            m_toolManager->RunAction( ACTIONS::zoomFitScreen );
     }
         break;
 
@@ -336,19 +326,7 @@ void PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode( wxCommandEvent& event )
 }
 
 
-void PL_EDITOR_FRAME::OnQuit( wxCommandEvent& event )
-{
-    Close( true );
-}
-
-
-void PL_EDITOR_FRAME::ToPlotter(wxCommandEvent& event)
-{
-    wxMessageBox( wxT( "Not yet available" ) );
-}
-
-
-void PL_EDITOR_FRAME::ToPrinter(wxCommandEvent& event)
+void PL_EDITOR_FRAME::ToPrinter( bool doPreview )
 {
     // static print data and page setup data, to remember settings during the session
     static wxPrintData* s_PrintData;
@@ -386,7 +364,7 @@ void PL_EDITOR_FRAME::ToPrinter(wxCommandEvent& event)
 
     *s_PrintData = s_pageSetupData->GetPrintData();
 
-    if( event.GetId() == wxID_PREVIEW )
+    if( doPreview )
         InvokeDialogPrintPreview( this, s_PrintData );
     else
         InvokeDialogPrint( this, s_PrintData, s_pageSetupData );

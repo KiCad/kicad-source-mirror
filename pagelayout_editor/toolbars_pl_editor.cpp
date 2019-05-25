@@ -39,22 +39,13 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
 
     wxString      msg;
 
-    m_mainToolBar->AddTool( wxID_NEW, wxEmptyString, KiScaledBitmap( new_page_layout_xpm, this ),
-                            _( "New page layout design" ) );
-
-    m_mainToolBar->AddTool( wxID_OPEN, wxEmptyString, KiScaledBitmap( open_page_layout_xpm, this ),
-                            _( "Open an existing page layout design file" ) );
-
-    m_mainToolBar->AddTool( wxID_SAVE, wxEmptyString, KiScaledBitmap( save_xpm, this ),
-                            _( "Save page layout design" ) );
+    m_mainToolBar->Add( ACTIONS::doNew );
+    m_mainToolBar->Add( ACTIONS::open );
+    m_mainToolBar->Add( ACTIONS::save );
 
     KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( ID_SHEET_SET, wxEmptyString, KiScaledBitmap( sheetset_xpm, this ),
-                            _( "Page settings" ) );
-
-    m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiScaledBitmap( print_button_xpm, this ),
-                            _( "Print page layout" ) );
+    m_mainToolBar->Add( ACTIONS::pageSetup );
+    m_mainToolBar->Add( ACTIONS::print );
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->Add( ACTIONS::undo );
@@ -155,6 +146,7 @@ void PL_EDITOR_FRAME::ReCreateOptToolbar()
 
 void PL_EDITOR_FRAME::SyncMenusAndToolbars()
 {
+    m_mainToolBar->Toggle( ACTIONS::save, GetScreen() && GetScreen()->IsModify() );
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );

@@ -73,7 +73,6 @@ public:
 
     // Editing
     static TOOL_ACTION move;
-    static TOOL_ACTION doDelete;  // <<<<<<<< move to actions.h
 
     // Miscellaneous
     static TOOL_ACTION deleteItemCursor;

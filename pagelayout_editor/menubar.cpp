@@ -44,9 +44,13 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     wxMenuBar*  oldMenuBar = GetMenuBar();
     wxMenuBar*  menuBar = new wxMenuBar();
 
+    auto modifiedDocumentCondition = [ this ] ( const SELECTION& sel ) {
+        return GetScreen() && GetScreen()->IsModify();
+    };
+
     wxString msg;
-    static wxMenu* openRecentMenu;  // Open Recent submenu,
-                                    // static to remember this menu
+    static ACTION_MENU* openRecentMenu;  // Open Recent submenu,
+                                         // static to remember this menu
 
     // Before deleting, remove the menus managed by m_fileHistory
     // (the file history will be updated when adding/removing files in history
@@ -55,53 +59,37 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
     // Recreate all menus:
 
+    //
     // File Menu:
-    wxMenu* fileMenu = new wxMenu;
+    //
+    CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, selTool );
 
-    msg = AddHotkeyName( _( "&New" ), PlEditorHotkeysDescr, HK_NEW );
-    AddMenuItem( fileMenu, wxID_NEW, msg,
-                 _( "Create new page layout design" ),
-                 KiBitmap( new_page_layout_xpm ) );
+    openRecentMenu = new ACTION_MENU();
+    openRecentMenu->SetTool( selTool );
+    openRecentMenu->SetTitle( _( "Open Recent" ) );
+    openRecentMenu->SetIcon( recent_xpm );
 
-    msg = AddHotkeyName( _( "&Open..." ), PlEditorHotkeysDescr, HK_OPEN );
-    AddMenuItem( fileMenu, wxID_OPEN, msg,
-                 _( "Open an existing page layout design file" ),
-                 KiBitmap(  open_page_layout_xpm ) );
-
-    openRecentMenu = new wxMenu();
     Kiface().GetFileHistory().UseMenu( openRecentMenu );
     Kiface().GetFileHistory().AddFilesToMenu();
-    AddMenuItem( fileMenu, openRecentMenu, wxID_ANY, _( "Open &Recent" ),
-                 _( "Open recent page layout design file" ),
-                 KiBitmap(  recent_xpm ) );
+
+    fileMenu->AddItem( ACTIONS::doNew,         SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::open,          SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddMenu( openRecentMenu,         SELECTION_CONDITIONS::ShowAlways );
+
+    fileMenu->AddSeparator();
+    fileMenu->AddItem( ACTIONS::save,          modifiedDocumentCondition );
+    fileMenu->AddItem( ACTIONS::saveAs,        SELECTION_CONDITIONS::ShowAlways );
+
+    fileMenu->AddSeparator();
+    fileMenu->AddItem( ACTIONS::pageSetup,     SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::print,         SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AppendSeparator();
+    fileMenu->AddItem( ACTIONS::quit,          SELECTION_CONDITIONS::ShowAlways );
 
-    msg = AddHotkeyName( _( "&Save" ), PlEditorHotkeysDescr, HK_SAVE );
-    AddMenuItem( fileMenu, wxID_SAVE, msg,
-                 _( "Save current page layout design file" ),
-                 KiBitmap( save_xpm ) );
-
-    msg = AddHotkeyName( _( "Save &As..." ), PlEditorHotkeysDescr, HK_SAVEAS );
-    AddMenuItem( fileMenu, wxID_SAVEAS, msg,
-                 _( "Save current page layout design file with a different name" ),
-                 KiBitmap( save_as_xpm ) );
-
-    fileMenu->AppendSeparator();
-
-    msg = AddHotkeyName( _( "&Print..." ), PlEditorHotkeysDescr, HK_PRINT );
-    AddMenuItem( fileMenu, wxID_PRINT, msg, KiBitmap( print_button_xpm ) );
-
-    AddMenuItem( fileMenu, wxID_PREVIEW, _( "Print Pre&view..." ), KiBitmap( print_button_xpm ) );
-
-    fileMenu->AppendSeparator();
-
-    AddMenuItem( fileMenu, wxID_EXIT, _( "&Close" ),
-                 _( "Close Page Layout Editor" ),
-                 KiBitmap( exit_xpm ) );
-
-
+    //
     // Edit Menu:
+    //
     CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
 
     auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
@@ -115,10 +103,11 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     editMenu->AddItem( ACTIONS::redo,         enableRedoCondition );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( PL_ACTIONS::doDelete,  SELECTION_CONDITIONS::MoreThan( 0 ) );
+    editMenu->AddItem( ACTIONS::doDelete,     SELECTION_CONDITIONS::MoreThan( 0 ) );
 
-
+    //
     // View Menu:
+    //
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
 
     auto whiteBackgroundCondition = [ this ] ( const SELECTION& aSel ) {
@@ -143,7 +132,9 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     viewMenu->AddCheckItem( ACTIONS::toggleGrid,             gridShownCondition );
     viewMenu->AddCheckItem( ACTIONS::toggleCursorStyle,      fullCrosshairCondition );
 
+    //
     // Place Menu:
+    //
     CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
 
     placeMenu->AddItem( PL_ACTIONS::drawLine,                SELECTION_CONDITIONS::ShowAlways );
@@ -154,7 +145,9 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     placeMenu->AddSeparator();
     placeMenu->AddItem( PL_ACTIONS::appendImportedWorksheet, SELECTION_CONDITIONS::ShowAlways );
 
+    //
     // Menu for preferences
+    //
     wxMenu* preferencesMenu = new wxMenu;
 
     msg = AddHotkeyName( _( "&Preferences..." ), PlEditorHotkeysDescr, HK_PREFERENCES );
