@@ -436,7 +436,7 @@ void PCB_DRAW_PANEL_GAL::RedrawRatsnest()
 
 BOX2I PCB_DRAW_PANEL_GAL::GetDefaultViewBBox() const
 {
-    if( m_worksheet )
+    if( m_worksheet && m_view->IsLayerVisible( LAYER_WORKSHEET ) )
         return m_worksheet->ViewBBox();
 
     return BOX2I();

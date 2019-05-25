@@ -211,7 +211,7 @@ void GERBVIEW_DRAW_PANEL_GAL::SetTopLayer( int aLayer )
 
 BOX2I GERBVIEW_DRAW_PANEL_GAL::GetDefaultViewBBox() const
 {
-    if( m_worksheet )
+    if( m_worksheet && m_view->IsLayerVisible( LAYER_WORKSHEET ) )
         return m_worksheet->ViewBBox();
 
     return BOX2I();

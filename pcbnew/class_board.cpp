@@ -1122,11 +1122,15 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
 {
     bool hasItems = false;
     EDA_RECT area;
+    LSET visible = GetVisibleLayers();
 
     // Check segments, dimensions, texts, and fiducials
     for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
     {
         if( aBoardEdgesOnly && (item->Type() != PCB_LINE_T || item->GetLayer() != Edge_Cuts ) )
+            continue;
+
+        if( !( item->GetLayerSet() & visible ).any() )
             continue;
 
         if( !hasItems )
@@ -1142,6 +1146,9 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
         // Check modules
         for( MODULE* module = m_Modules; module; module = module->Next() )
         {
+            if( !( module->GetLayerSet() & visible ).any() )
+                continue;
+
             if( !hasItems )
                 area = module->GetBoundingBox();
             else
@@ -1153,6 +1160,9 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
         // Check tracks
         for( TRACK* track = m_Track; track; track = track->Next() )
         {
+            if( !( track->GetLayerSet() & visible ).any() )
+                continue;
+
             if( !hasItems )
                 area = track->GetBoundingBox();
             else
@@ -1164,6 +1174,9 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
         // Check segment zones
         for( TRACK* track = m_SegZoneDeprecated; track; track = track->Next() )
         {
+            if( !( track->GetLayerSet() & visible ).any() )
+                continue;
+
             if( !hasItems )
                 area = track->GetBoundingBox();
             else
@@ -1175,6 +1188,9 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
         // Check polygonal zones
         for( auto aZone : m_ZoneDescriptorList )
         {
+            if( !( aZone->GetLayerSet() & visible ).any() )
+                continue;
+
             if( !hasItems )
                 area = aZone->GetBoundingBox();
             else

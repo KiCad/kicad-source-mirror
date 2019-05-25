@@ -232,12 +232,18 @@ int COMMON_TOOLS::ZoomFitScreen( const TOOL_EVENT& aEvent )
     EDA_BASE_FRAME* frame = getEditFrame<EDA_BASE_FRAME>();
 
     BOX2I bBox = model->ViewBBox();
+    BOX2I defaultBox = galCanvas->GetDefaultViewBBox();
     VECTOR2D scrollbarSize = VECTOR2D( galCanvas->GetSize() - galCanvas->GetClientSize() );
     VECTOR2D screenSize = view->ToWorld( galCanvas->GetClientSize(), false );
 
     if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
     {
-        bBox = galCanvas->GetDefaultViewBBox();
+        bBox = defaultBox;
+    }
+    else if( defaultBox.GetWidth() > 0 && defaultBox.GetHeight() > 0 )
+    {
+        // Ensure worksheet is included in bounding box
+        bBox.Merge( defaultBox );
     }
 
     VECTOR2D vsize = bBox.GetSize();
