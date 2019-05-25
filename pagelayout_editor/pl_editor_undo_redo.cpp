@@ -26,7 +26,7 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <macros.h>
-#include <worksheet_dataitem.h>
+#include <ws_data_model.h>
 #include <ws_draw_item.h>
 
 #include <pl_editor_frame.h>
@@ -56,12 +56,12 @@ public:
             m_selectedDataItem( INT_MAX ),
             m_selectedDrawItem( INT_MAX )
     {
-        WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+        WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
         pglayout.SaveInString( m_serialization );
 
         for( size_t ii = 0; ii < pglayout.GetItems().size(); ++ii )
         {
-            WORKSHEET_DATAITEM* dataItem = pglayout.GetItem( ii );
+            WS_DATA_ITEM* dataItem = pglayout.GetItem( ii );
 
             for( size_t jj = 0; jj < dataItem->GetDrawItems().size(); ++jj )
             {
@@ -79,7 +79,7 @@ public:
 
     void RestoreLayout( PL_EDITOR_FRAME* aFrame )
     {
-        WORKSHEET_LAYOUT&  pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+        WS_DATA_MODEL&     pglayout = WS_DATA_MODEL::GetTheInstance();
         PL_SELECTION_TOOL* selTool = aFrame->GetToolManager()->GetTool<PL_SELECTION_TOOL>();
         KIGFX::VIEW*       view = aFrame->GetGalCanvas()->GetView();
 
@@ -90,7 +90,7 @@ public:
 
         for( size_t ii = 0; ii < pglayout.GetItems().size(); ++ii )
         {
-            WORKSHEET_DATAITEM* dataItem = pglayout.GetItem( ii );
+            WS_DATA_ITEM* dataItem = pglayout.GetItem( ii );
 
             dataItem->SyncDrawItems( nullptr, view );
 

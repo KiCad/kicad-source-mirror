@@ -31,7 +31,7 @@
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <bitmaps.h>
-#include <worksheet_painter.h>
+#include <ws_painter.h>
 #include <sch_sheet.h>
 #include <dialog_plot_schematic.h>
 

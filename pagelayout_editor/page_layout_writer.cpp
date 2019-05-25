@@ -31,9 +31,9 @@
 
 #include <fctsys.h>
 #include <base_struct.h>
-#include <worksheet_painter.h>
+#include <ws_painter.h>
 #include <ws_draw_item.h>
-#include <worksheet_dataitem.h>
+#include <ws_data_model.h>
 #include <math/vector2d.h>
 #include <page_layout_reader_lexer.h>
 #include <macros.h>
@@ -54,41 +54,41 @@ static const char* getTokenName( T aTok )
 // Not used alone, a file writer or a string writer should be
 // derived to use it
 // Therefore the constructor is protected
-class WORKSHEET_LAYOUT_IO
+class WS_DATA_MODEL_IO
 {
 protected:
     OUTPUTFORMATTER* m_out;
 
-    WORKSHEET_LAYOUT_IO() { m_out = NULL; }
-    virtual ~WORKSHEET_LAYOUT_IO() {}
+    WS_DATA_MODEL_IO() { m_out = NULL; }
+    virtual ~WS_DATA_MODEL_IO() {}
 
 public:
-    void Format( WORKSHEET_LAYOUT* aPageLayout ) const;
+    void Format( WS_DATA_MODEL* aPageLayout ) const;
 
-    void Format( WORKSHEET_DATAITEM* aItem, int aNestLevel ) const;
+    void Format( WS_DATA_ITEM* aItem, int aNestLevel ) const;
 
 private:
-    void format( WORKSHEET_LAYOUT* aPageLayout ) const;
+    void format( WS_DATA_MODEL* aPageLayout ) const;
 
-    void format( WORKSHEET_DATAITEM_TEXT* aItem, int aNestLevel ) const;
-    void format( WORKSHEET_DATAITEM* aItem, int aNestLevel ) const;
-    void format( WORKSHEET_DATAITEM_POLYPOLYGON* aItem, int aNestLevel )
+    void format( WS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const;
+    void format( WS_DATA_ITEM* aItem, int aNestLevel ) const;
+    void format( WS_DATA_ITEM_POLYGONS* aItem, int aNestLevel )
                  const;
-    void format( WORKSHEET_DATAITEM_BITMAP* aItem, int aNestLevel ) const;
+    void format( WS_DATA_ITEM_BITMAP* aItem, int aNestLevel ) const;
     void formatCoordinate( const char * aToken, POINT_COORD & aCoord ) const;
-    void formatRepeatParameters( WORKSHEET_DATAITEM* aItem ) const;
-    void formatOptions( WORKSHEET_DATAITEM* aItem ) const;
+    void formatRepeatParameters( WS_DATA_ITEM* aItem ) const;
+    void formatOptions( WS_DATA_ITEM* aItem ) const;
 };
 
 
 // A helper class to write a page layout description to a file
-class WORKSHEET_LAYOUT_FILEIO: public WORKSHEET_LAYOUT_IO
+class WS_DATA_MODEL_FILEIO: public WS_DATA_MODEL_IO
 {
     FILE_OUTPUTFORMATTER * m_fileout;
 
 public:
-    WORKSHEET_LAYOUT_FILEIO( const wxString& aFilename ):
-        WORKSHEET_LAYOUT_IO()
+    WS_DATA_MODEL_FILEIO( const wxString& aFilename ):
+        WS_DATA_MODEL_IO()
     {
         try
         {
@@ -101,7 +101,7 @@ public:
         }
     }
 
-    ~WORKSHEET_LAYOUT_FILEIO()
+    ~WS_DATA_MODEL_FILEIO()
     {
         delete m_fileout;
     }
@@ -109,14 +109,14 @@ public:
 
 
 // A helper class to write a page layout description to a string
-class WORKSHEET_LAYOUT_STRINGIO: public WORKSHEET_LAYOUT_IO
+class WS_DATA_MODEL_STRINGIO: public WS_DATA_MODEL_IO
 {
     STRING_FORMATTER * m_writer;
     wxString & m_output;
 
 public:
-    WORKSHEET_LAYOUT_STRINGIO( wxString& aOutputString ):
-        WORKSHEET_LAYOUT_IO(), m_output( aOutputString )
+    WS_DATA_MODEL_STRINGIO( wxString& aOutputString ):
+        WS_DATA_MODEL_IO(), m_output( aOutputString )
     {
         try
         {
@@ -129,7 +129,7 @@ public:
         }
     }
 
-    ~WORKSHEET_LAYOUT_STRINGIO()
+    ~WS_DATA_MODEL_STRINGIO()
     {
         m_output = FROM_UTF8( m_writer->GetString().c_str() );
         delete m_writer;
@@ -140,41 +140,41 @@ public:
 /*
  * Save the description in a file
  */
-void WORKSHEET_LAYOUT::Save( const wxString& aFullFileName )
+void WS_DATA_MODEL::Save( const wxString& aFullFileName )
 {
-    WORKSHEET_LAYOUT_FILEIO writer( aFullFileName );
+    WS_DATA_MODEL_FILEIO writer( aFullFileName );
     writer.Format( this );
 }
 
 
 /* Save the description in a buffer
  */
-void WORKSHEET_LAYOUT::SaveInString( wxString& aOutputString )
+void WS_DATA_MODEL::SaveInString( wxString& aOutputString )
 {
-    WORKSHEET_LAYOUT_STRINGIO writer( aOutputString );
+    WS_DATA_MODEL_STRINGIO writer( aOutputString );
     writer.Format( this );
 }
 
 
-void WORKSHEET_LAYOUT_IO::Format( WORKSHEET_DATAITEM* aItem, int aNestLevel ) const
+void WS_DATA_MODEL_IO::Format( WS_DATA_ITEM* aItem, int aNestLevel ) const
 {
     switch( aItem->GetType() )
     {
-    case WORKSHEET_DATAITEM::WS_TEXT:
-        format( (WORKSHEET_DATAITEM_TEXT*) aItem, aNestLevel );
+    case WS_DATA_ITEM::WS_TEXT:
+        format( (WS_DATA_ITEM_TEXT*) aItem, aNestLevel );
         break;
 
-    case WORKSHEET_DATAITEM::WS_SEGMENT:
-    case WORKSHEET_DATAITEM::WS_RECT:
+    case WS_DATA_ITEM::WS_SEGMENT:
+    case WS_DATA_ITEM::WS_RECT:
         format( aItem, aNestLevel );
         break;
 
-    case WORKSHEET_DATAITEM::WS_POLYPOLYGON:
-        format( (WORKSHEET_DATAITEM_POLYPOLYGON*) aItem, aNestLevel );
+    case WS_DATA_ITEM::WS_POLYPOLYGON:
+        format( (WS_DATA_ITEM_POLYGONS*) aItem, aNestLevel );
         break;
 
-    case WORKSHEET_DATAITEM::WS_BITMAP:
-        format( (WORKSHEET_DATAITEM_BITMAP*) aItem, aNestLevel );
+    case WS_DATA_ITEM::WS_BITMAP:
+        format( (WS_DATA_ITEM_BITMAP*) aItem, aNestLevel );
         break;
 
     default:
@@ -183,7 +183,7 @@ void WORKSHEET_LAYOUT_IO::Format( WORKSHEET_DATAITEM* aItem, int aNestLevel ) co
 }
 
 
-void WORKSHEET_LAYOUT_IO::Format( WORKSHEET_LAYOUT* aPageLayout ) const
+void WS_DATA_MODEL_IO::Format( WS_DATA_MODEL* aPageLayout ) const
 {
     LOCALE_IO   toggle;     // switch on/off the locale "C" notation
 
@@ -194,10 +194,12 @@ void WORKSHEET_LAYOUT_IO::Format( WORKSHEET_LAYOUT* aPageLayout ) const
     // Write default values:
     m_out->Print( nestLevel, "(%s ", getTokenName( T_setup ) );
     m_out->Print( 0, "(textsize %s %s)",
-                  double2Str( WORKSHEET_DATAITEM::m_DefaultTextSize.x ).c_str(),
-                  double2Str( WORKSHEET_DATAITEM::m_DefaultTextSize.y ).c_str() );
-    m_out->Print( 0, "(linewidth %s)", double2Str( WORKSHEET_DATAITEM::m_DefaultLineWidth ).c_str() );
-    m_out->Print( 0, "(textlinewidth %s)", double2Str( WORKSHEET_DATAITEM::m_DefaultTextThickness ).c_str() );
+                  double2Str( WS_DATA_ITEM::m_DefaultTextSize.x ).c_str(),
+                  double2Str( WS_DATA_ITEM::m_DefaultTextSize.y ).c_str() );
+    m_out->Print( 0, "(linewidth %s)",
+                  double2Str( WS_DATA_ITEM::m_DefaultLineWidth ).c_str() );
+    m_out->Print( 0, "(textlinewidth %s)",
+                  double2Str( WS_DATA_ITEM::m_DefaultTextThickness ).c_str() );
     m_out->Print( 0, "\n" );
 
     // Write margin values
@@ -214,7 +216,7 @@ void WORKSHEET_LAYOUT_IO::Format( WORKSHEET_LAYOUT* aPageLayout ) const
     // Save the graphical items on the page layout
     for( unsigned ii = 0; ii < aPageLayout->GetCount(); ii++ )
     {
-        WORKSHEET_DATAITEM* item = aPageLayout->GetItem( ii );
+        WS_DATA_ITEM* item = aPageLayout->GetItem( ii );
         Format( item, nestLevel );
     }
 
@@ -222,7 +224,7 @@ void WORKSHEET_LAYOUT_IO::Format( WORKSHEET_LAYOUT* aPageLayout ) const
 }
 
 
-void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_TEXT* aItem, int aNestLevel ) const
+void WS_DATA_MODEL_IO::format( WS_DATA_ITEM_TEXT* aItem, int aNestLevel ) const
 {
     m_out->Print( aNestLevel, "(%s", getTokenName( T_tbtext ) );
     m_out->Print( 0, " %s", m_out->Quotew( aItem->m_TextBase ).c_str() );
@@ -302,9 +304,9 @@ void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_TEXT* aItem, int aNestLevel
     m_out->Print( 0, ")\n" );
 }
 
-void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM* aItem, int aNestLevel ) const
+void WS_DATA_MODEL_IO::format( WS_DATA_ITEM* aItem, int aNestLevel ) const
 {
-    if( aItem->GetType() == WORKSHEET_DATAITEM::WS_RECT )
+    if( aItem->GetType() == WS_DATA_ITEM::WS_RECT )
         m_out->Print( aNestLevel, "(%s", getTokenName( T_rect ) );
     else
         m_out->Print( aNestLevel, "(%s", getTokenName( T_line ) );
@@ -325,7 +327,7 @@ void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM* aItem, int aNestLevel ) co
 }
 
 
-void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_POLYPOLYGON* aItem, int aNestLevel ) const
+void WS_DATA_MODEL_IO::format( WS_DATA_ITEM_POLYGONS* aItem, int aNestLevel ) const
 {
     m_out->Print( aNestLevel, "(%s", getTokenName( T_polygon ) );
     m_out->Print( 0, " (%s %s)", getTokenName( T_name ),
@@ -375,7 +377,7 @@ void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_POLYPOLYGON* aItem, int aNe
 }
 
 
-void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_BITMAP* aItem, int aNestLevel ) const
+void WS_DATA_MODEL_IO::format( WS_DATA_ITEM_BITMAP* aItem, int aNestLevel ) const
 {
     m_out->Print( aNestLevel, "(%s", getTokenName( T_bitmap ) );
     m_out->Print( 0, " (%s %s)", getTokenName( T_name ),
@@ -403,7 +405,7 @@ void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_BITMAP* aItem, int aNestLev
 }
 
 
-void WORKSHEET_LAYOUT_IO::formatCoordinate( const char * aToken,
+void WS_DATA_MODEL_IO::formatCoordinate( const char * aToken,
                                             POINT_COORD & aCoord ) const
 {
     m_out->Print( 0, " (%s %s %s", aToken,
@@ -412,27 +414,17 @@ void WORKSHEET_LAYOUT_IO::formatCoordinate( const char * aToken,
 
     switch( aCoord.m_Anchor )
     {
-        case RB_CORNER:
-            break;
-
-        case LT_CORNER:
-            m_out->Print( 0, " %s", getTokenName( T_ltcorner ) );
-            break;
-
-        case LB_CORNER:
-            m_out->Print( 0, " %s", getTokenName( T_lbcorner ) );
-            break;
-
-        case RT_CORNER:
-            m_out->Print( 0, " %s", getTokenName( T_rtcorner ) );
-            break;
+    case RB_CORNER: break;
+    case LT_CORNER: m_out->Print( 0, " %s", getTokenName( T_ltcorner ) ); break;
+    case LB_CORNER: m_out->Print( 0, " %s", getTokenName( T_lbcorner ) ); break;
+    case RT_CORNER: m_out->Print( 0, " %s", getTokenName( T_rtcorner ) ); break;
     }
 
     m_out->Print( 0, ")" );
 }
 
 
-void WORKSHEET_LAYOUT_IO::formatRepeatParameters( WORKSHEET_DATAITEM* aItem ) const
+void WS_DATA_MODEL_IO::formatRepeatParameters( WS_DATA_ITEM* aItem ) const
 {
     if( aItem->m_RepeatCount <= 1 )
         return;
@@ -445,13 +437,12 @@ void WORKSHEET_LAYOUT_IO::formatRepeatParameters( WORKSHEET_DATAITEM* aItem ) co
     if( aItem->m_IncrementVector.y )
         m_out->Print( 0, " (incry %s)", double2Str( aItem->m_IncrementVector.y ).c_str() );
 
-    if( aItem->m_IncrementLabel != 1 &&
-        aItem->GetType() == WORKSHEET_DATAITEM::WS_TEXT )
+    if( aItem->m_IncrementLabel != 1 && aItem->GetType() == WS_DATA_ITEM::WS_TEXT )
         m_out->Print( 0, " (incrlabel %d)", aItem->m_IncrementLabel );
 }
 
 
-void WORKSHEET_LAYOUT_IO::formatOptions( WORKSHEET_DATAITEM* aItem ) const
+void WS_DATA_MODEL_IO::formatOptions( WS_DATA_ITEM* aItem ) const
 {
     if( aItem->GetPage1Option() == FIRST_PAGE_ONLY )
         m_out->Print( 0, " (%s %s)", getTokenName( T_option ), getTokenName(T_page1only ) );

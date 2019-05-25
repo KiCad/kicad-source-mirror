@@ -29,7 +29,7 @@
 #include <math/box2.h>
 
 #include <view/wx_view_controls.h>
-#include <worksheet_viewitem.h>
+#include <ws_view_item.h>
 #include <layers_id_colors_and_visibility.h>
 
 class SCH_SHEET;
@@ -61,7 +61,7 @@ static const LAYER_NUM SCH_LAYER_ORDER[] =
 namespace KIGFX
 {
     class VIEW_GROUP;
-    class WORKSHEET_VIEWITEM;
+    class WS_VIEW_ITEM;
 
     namespace PREVIEW
     {
@@ -105,7 +105,7 @@ public:
 private:
     SCH_BASE_FRAME* m_frame;    // The frame using this view. Can be null. Used mainly
                                 // to know the sheet path name when drawing the page layout
-    std::unique_ptr<WORKSHEET_VIEWITEM> m_worksheet;
+    std::unique_ptr<WS_VIEW_ITEM> m_worksheet;
     std::unique_ptr<KIGFX::PREVIEW::SELECTION_AREA> m_selectionArea;
     std::unique_ptr<KIGFX::VIEW_GROUP> m_preview;
     std::vector<EDA_ITEM *> m_ownedItems;

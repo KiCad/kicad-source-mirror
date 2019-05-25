@@ -24,27 +24,27 @@
  */
 
 /*
- * the class WORKSHEET_DATAITEM (and WORKSHEET_DATAITEM_TEXT) defines
+ * the class WS_DATA_ITEM (and WS_DATA_ITEM_TEXT) defines
  * a basic shape of a page layout ( frame references and title block )
  * Basic shapes are line, rect and texts
- * the WORKSHEET_DATAITEM coordinates units is the mm, and are relative to
+ * the WS_DATA_ITEM coordinates units is the mm, and are relative to
  * one of 4 page corners.
  *
  * These items cannot be drawn or plot "as this". they should be converted
  * to a "draw list" (WS_DRAW_ITEM_BASE and derived items)
 
- * The list of these items is stored in a WORKSHEET_LAYOUT instance.
+ * The list of these items is stored in a WS_DATA_MODEL instance.
  *
  * When building the draw list:
- * the WORKSHEET_LAYOUT is used to create a WS_DRAW_ITEM_LIST
+ * the WS_DATA_MODEL is used to create a WS_DRAW_ITEM_LIST
  *  coordinates are converted to draw/plot coordinates.
  *  texts are expanded if they contain format symbols.
  *  Items with m_RepeatCount > 1 are created m_RepeatCount times
  *
- * the WORKSHEET_LAYOUT is created only once.
+ * the WS_DATA_MODEL is created only once.
  * the WS_DRAW_ITEM_LIST is created each time the page layout is plotted/drawn
  *
- * the WORKSHEET_LAYOUT instance is created from a S expression which
+ * the WS_DATA_MODEL instance is created from a S expression which
  * describes the page layout (can be the default page layout or a custom file).
  */
 
@@ -52,7 +52,7 @@
 #include <eda_rect.h>
 #include <draw_graphic_text.h>
 #include <ws_draw_item.h>
-#include <worksheet_dataitem.h>
+#include <ws_data_model.h>
 #include <base_units.h>
 #include <page_info.h>
 #include <layers_id_colors_and_visibility.h>
@@ -63,7 +63,7 @@ void WS_DRAW_ITEM_BASE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 1;
 
-    WORKSHEET_DATAITEM* dataItem = GetPeer();
+    WS_DATA_ITEM* dataItem = GetPeer();
 
     if( dataItem->GetPage1Option() == FIRST_PAGE_ONLY )
         aLayers[0] = LAYER_WORKSHEET_PAGE1;
@@ -92,28 +92,28 @@ bool WS_DRAW_ITEM_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAc
 void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 {
     wxString            msg;
-    WORKSHEET_DATAITEM* dataItem = GetPeer();
+    WS_DATA_ITEM* dataItem = GetPeer();
 
     switch( dataItem->GetType() )
     {
-    case WORKSHEET_DATAITEM::WS_SEGMENT:
+    case WS_DATA_ITEM::WS_SEGMENT:
         aList.push_back( MSG_PANEL_ITEM( _( "Line" ), msg, DARKCYAN ) );
         break;
 
-    case WORKSHEET_DATAITEM::WS_RECT:
+    case WS_DATA_ITEM::WS_RECT:
         aList.push_back( MSG_PANEL_ITEM( _( "Rectangle" ), msg, DARKCYAN ) );
         break;
 
-    case WORKSHEET_DATAITEM::WS_TEXT:
+    case WS_DATA_ITEM::WS_TEXT:
         msg = static_cast<WS_DRAW_ITEM_TEXT*>( this )->GetShownText();
         aList.push_back( MSG_PANEL_ITEM( _( "Text" ), msg, DARKCYAN ) );
         break;
 
-    case WORKSHEET_DATAITEM::WS_POLYPOLYGON:
+    case WS_DATA_ITEM::WS_POLYPOLYGON:
         aList.push_back( MSG_PANEL_ITEM( _( "Imported Shape" ), msg, DARKCYAN ) );
         break;
 
-    case WORKSHEET_DATAITEM::WS_BITMAP:
+    case WS_DATA_ITEM::WS_BITMAP:
         aList.push_back( MSG_PANEL_ITEM( _( "Image" ), msg, DARKCYAN ) );
         break;
     }
@@ -365,7 +365,7 @@ wxString WS_DRAW_ITEM_LINE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 void WS_DRAW_ITEM_BITMAP::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
                                       GR_DRAWMODE aDrawMode, COLOR4D aColor )
 {
-    WORKSHEET_DATAITEM_BITMAP* bitmap = (WORKSHEET_DATAITEM_BITMAP*) GetPeer();
+    WS_DATA_ITEM_BITMAP* bitmap = (WS_DATA_ITEM_BITMAP*) GetPeer();
 
     if( bitmap->m_ImageBitmap  )
     {
@@ -378,7 +378,7 @@ void WS_DRAW_ITEM_BITMAP::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoi
 
 const EDA_RECT WS_DRAW_ITEM_BITMAP::GetBoundingBox() const
 {
-    auto*    bitmap = static_cast<const WORKSHEET_DATAITEM_BITMAP*>( m_peer );
+    auto*    bitmap = static_cast<const WS_DATA_ITEM_BITMAP*>( m_peer );
     EDA_RECT rect = bitmap->m_ImageBitmap->GetBoundingBox();
 
     rect.Move( m_pos );
@@ -401,26 +401,26 @@ wxString WS_DRAW_ITEM_BITMAP::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 
 void WS_DRAW_ITEM_LIST::SetupDrawEnvironment( const PAGE_INFO& aPageInfo )
 {
-    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+    WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
 
     // Left top corner position
     DPOINT lt_corner;
     lt_corner.x = pglayout.GetLeftMargin();
     lt_corner.y = pglayout.GetTopMargin();
-    WORKSHEET_DATAITEM::m_LT_Corner = lt_corner;
+    WS_DATA_ITEM::m_LT_Corner = lt_corner;
 
     // Right bottom corner position
     DPOINT rb_corner;
     rb_corner.x = ( aPageInfo.GetSizeMils().x * MILS_TO_MM ) - pglayout.GetRightMargin();
     rb_corner.y = ( aPageInfo.GetSizeMils().y * MILS_TO_MM ) - pglayout.GetBottomMargin();
-    WORKSHEET_DATAITEM::m_RB_Corner = rb_corner;
+    WS_DATA_ITEM::m_RB_Corner = rb_corner;
 }
 
 
 void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( const PAGE_INFO& aPageInfo,
                                                    const TITLE_BLOCK& aTitleBlock )
 {
-    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+    WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
 
     m_titleBlock = &aTitleBlock;
     m_paperFormat = &aPageInfo.GetType();
@@ -432,11 +432,11 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( const PAGE_INFO& aPageInfo,
     if( pglayout.GetCount() == 0 && !pglayout.VoidListAllowed() )
         pglayout.SetPageLayout();
 
-    WORKSHEET_DATAITEM::m_WSunits2Iu = m_milsToIu / MILS_TO_MM;
+    WS_DATA_ITEM::m_WSunits2Iu = m_milsToIu / MILS_TO_MM;
 
     SetupDrawEnvironment( aPageInfo );
 
-    for( WORKSHEET_DATAITEM* wsItem : pglayout.GetItems() )
+    for( WS_DATA_ITEM* wsItem : pglayout.GetItems() )
     {
         // Generate it only if the page option allows this
         if( wsItem->GetPage1Option() == FIRST_PAGE_ONLY && m_sheetNumber != 1 )

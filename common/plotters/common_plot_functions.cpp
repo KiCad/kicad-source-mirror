@@ -25,12 +25,12 @@
 #include <fctsys.h>
 #include <base_struct.h>
 #include <plotter.h>
-#include <worksheet_painter.h>
+#include <ws_painter.h>
 #include <base_screen.h>
 #include <draw_graphic_text.h>
 #include <title_block.h>
 #include "ws_draw_item.h"
-#include "worksheet_dataitem.h"
+#include "ws_data_item.h"
 #include <wx/filename.h>
 
 
@@ -126,7 +126,7 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
         case WSG_BITMAP_T:
             {
                 WS_DRAW_ITEM_BITMAP* drawItem = (WS_DRAW_ITEM_BITMAP*) item;
-                auto*                bitmap = (WORKSHEET_DATAITEM_BITMAP*) drawItem->GetPeer();
+                auto*                bitmap = (WS_DATA_ITEM_BITMAP*) drawItem->GetPeer();
 
                 if( bitmap->m_ImageBitmap == NULL )
                     break;

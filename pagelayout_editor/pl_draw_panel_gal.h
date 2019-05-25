@@ -21,8 +21,8 @@
 #define PL_DRAW_PANEL_GAL_H
 
 #include <class_draw_panel_gal.h>
-#include <worksheet_viewitem.h>
-#include <worksheet_painter.h>
+#include <ws_view_item.h>
+#include <ws_painter.h>
 
 
 class PL_DRAW_PANEL_GAL : public EDA_DRAW_PANEL_GAL
@@ -49,7 +49,7 @@ protected:
     void setDefaultLayerDeps();
 
     ///> Currently used worksheet
-    std::unique_ptr<KIGFX::WORKSHEET_VIEWITEM> m_worksheet;
+    std::unique_ptr<KIGFX::WS_VIEW_ITEM> m_worksheet;
 };
 
 

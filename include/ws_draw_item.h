@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,30 +31,26 @@
 #include <bitmap_base.h>
 #include "msgpanel.h"
 
-class WORKSHEET_DATAITEM;
+class WS_DATA_ITEM;
 class TITLE_BLOCK;
 class PAGE_INFO;
 
-#define TB_DEFAULT_TEXTSIZE             1.5  // default worksheet text size in mm
-
 /*
  * Helper classes to handle basic graphic items used to draw/plot
- * title blocks and frame references
- * segments
- * rect
- * polygons (for logos)
- * graphic texts
- * bitmaps, also for logos, but they cannot be plot by SVG, GERBER or HPGL plotters (in
- * which case only the bounding box is plotted)
+ *   title blocks and frame references
+ *   segments
+ *   rect
+ *   polygons (for logos)
+ *   graphic texts
+ *   bitmaps (also for logos, but they cannot be plot by SVG, GERBER or HPGL plotters
+ *            where we just plot the bounding box)
  */
 class WS_DRAW_ITEM_BASE : public EDA_ITEM     // This basic class, not directly usable.
 {
 protected:
-    WORKSHEET_DATAITEM*  m_peer;    // an unique identifier, used as link
-                                    // to the parent WORKSHEET_DATAITEM item,
-                                    // in page layout editor
+    WS_DATA_ITEM*  m_peer;       // the parent WS_DATA_ITEM item in the WS_DATA_MODEL
 
-    WS_DRAW_ITEM_BASE( WORKSHEET_DATAITEM* aPeer, KICAD_T aType ) :
+    WS_DRAW_ITEM_BASE( WS_DATA_ITEM* aPeer, KICAD_T aType ) :
             EDA_ITEM( aType )
     {
         m_peer = aPeer;
@@ -64,7 +60,7 @@ protected:
 public:
     virtual ~WS_DRAW_ITEM_BASE() {}
 
-    WORKSHEET_DATAITEM* GetPeer() const { return m_peer; }
+    WS_DATA_ITEM* GetPeer() const { return m_peer; }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
@@ -72,18 +68,20 @@ public:
     virtual void SetPosition( wxPoint aPos ) = 0;
     virtual void SetEnd( wxPoint aPos ) { /* not all types will need this */ }
 
-    /** The function to draw a WS_DRAW_ITEM
-     */
+    // The function to draw a WS_DRAW_ITEM
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, COLOR4D aColor )
     {
         wxPoint offset( 0, 0 );
         DrawWsItem( aClipBox, aDC, offset, UNSPECIFIED_DRAWMODE, aColor );
     }
 
-    /// More advanced version of DrawWsItem. This is what must be
-    /// defined in the derived type.
+    // More advanced version of DrawWsItem. This is what must be defined in the derived type.
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
                              GR_DRAWMODE aDrawMode, COLOR4D aColor ) = 0;
+
+    // Derived types must define GetBoundingBox() as a minimum, and can then override the
+    // two HitTest() functions if they need something more specific.
+    const EDA_RECT GetBoundingBox() const override = 0;
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override
     {
@@ -92,10 +90,6 @@ public:
         return EDA_ITEM::HitTest( aPosition, aAccuracy );
     }
 
-    /**
-     * Virtual function
-     * return true if the rect aRect intersects on the item
-     */
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList ) override;
@@ -110,7 +104,7 @@ class WS_DRAW_ITEM_LINE : public WS_DRAW_ITEM_BASE
     int     m_penWidth;
 
 public:
-    WS_DRAW_ITEM_LINE( WORKSHEET_DATAITEM* aPeer, wxPoint aStart, wxPoint aEnd, int aPenWidth ) :
+    WS_DRAW_ITEM_LINE( WS_DATA_ITEM* aPeer, wxPoint aStart, wxPoint aEnd, int aPenWidth ) :
         WS_DRAW_ITEM_BASE( aPeer, WSG_LINE_T )
     {
         m_start     = aStart;
@@ -131,15 +125,8 @@ public:
     void SetPosition( wxPoint aPos ) override { SetStart( aPos ); }
 
     const EDA_RECT GetBoundingBox() const override;
-
-    /**
-     * Virtual function
-     * return true if the point aPosition is on the line
-     */
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
-    /** The function to draw a WS_DRAW_ITEM_LINE
-     */
     void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset, GR_DRAWMODE aDrawMode,
                      COLOR4D aColor ) override;
 
@@ -154,7 +141,7 @@ public:
 class WS_DRAW_ITEM_POLYGON : public WS_DRAW_ITEM_BASE
 {
     wxPoint m_pos;      // position of reference point, from the
-                        // WORKSHEET_DATAITEM_POLYPOLYGON parent
+                        // WS_DATA_ITEM_POLYGONS parent
                         // (used only in page layout editor to draw anchors)
     int m_penWidth;
     bool m_fill;
@@ -163,8 +150,8 @@ public:
     std::vector <wxPoint> m_Corners;
 
 public:
-    WS_DRAW_ITEM_POLYGON( WORKSHEET_DATAITEM* aPeer, wxPoint aPos, bool aFill, int aPenWidth ) :
-        WS_DRAW_ITEM_BASE( aPeer, WSG_POLY_T )
+    WS_DRAW_ITEM_POLYGON( WS_DATA_ITEM* aPeer, wxPoint aPos, bool aFill, int aPenWidth ) :
+            WS_DRAW_ITEM_BASE( aPeer, WSG_POLY_T )
     {
         m_penWidth = aPenWidth;
         m_fill = aFill;
@@ -180,21 +167,9 @@ public:
     void SetPosition( wxPoint aPos ) override { m_pos = aPos; }
 
     const EDA_RECT GetBoundingBox() const override;
-
-    /**
-     * Virtual function
-     * return true if the point aPosition is inside one polygon
-     */
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
-
-    /**
-     * Virtual function
-     * return true if the rect aRect intersects on the item
-     */
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    /** The function to draw a WS_DRAW_ITEM_POLYGON
-     */
     void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset, GR_DRAWMODE aDrawMode,
                      COLOR4D aColor ) override;
 
@@ -213,7 +188,7 @@ class WS_DRAW_ITEM_RECT : public WS_DRAW_ITEM_BASE
     int     m_penWidth;
 
 public:
-    WS_DRAW_ITEM_RECT( WORKSHEET_DATAITEM* aPeer, wxPoint aStart, wxPoint aEnd, int aPenWidth ) :
+    WS_DRAW_ITEM_RECT( WS_DATA_ITEM* aPeer, wxPoint aStart, wxPoint aEnd, int aPenWidth ) :
             WS_DRAW_ITEM_BASE( aPeer, WSG_RECT_T )
     {
         m_start     = aStart;
@@ -233,17 +208,10 @@ public:
     const wxPoint GetPosition() const override { return GetStart(); }
     void SetPosition( wxPoint aPos ) override { SetStart( aPos ); }
 
-    /** The function to draw a WS_DRAW_ITEM_RECT
-     */
     void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset, GR_DRAWMODE aDrawMode,
                      COLOR4D aColor ) override;
 
     const EDA_RECT GetBoundingBox() const override;
-
-    /**
-     * Virtual function
-     * return true if the point aPosition is on one edge of the rectangle
-     */
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
@@ -259,7 +227,7 @@ public:
 class WS_DRAW_ITEM_TEXT : public WS_DRAW_ITEM_BASE, public EDA_TEXT
 {
 public:
-    WS_DRAW_ITEM_TEXT( WORKSHEET_DATAITEM* aPeer, wxString& aText, wxPoint aPos, wxSize aSize,
+    WS_DRAW_ITEM_TEXT( WS_DATA_ITEM* aPeer, wxString& aText, wxPoint aPos, wxSize aSize,
                        int aPenWidth, bool aItalic = false, bool aBold = false ) :
             WS_DRAW_ITEM_BASE( aPeer, WSG_TEXT_T),
             EDA_TEXT( aText )
@@ -290,17 +258,7 @@ public:
     void SetPosition( wxPoint aPos ) override { SetTextPos( aPos ); }
 
     const EDA_RECT GetBoundingBox() const override;
-
-    /**
-     * Virtual function
-     * return true if the point aPosition is inside one polygon
-     */
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
-
-    /**
-     * Virtual function
-     * return true if the rect aRect intersects on the item
-     */
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
@@ -316,7 +274,7 @@ class WS_DRAW_ITEM_BITMAP : public WS_DRAW_ITEM_BASE
     wxPoint m_pos;                  // position of reference point
 
 public:
-    WS_DRAW_ITEM_BITMAP( WORKSHEET_DATAITEM* aPeer, wxPoint aPos ) :
+    WS_DRAW_ITEM_BITMAP( WS_DATA_ITEM* aPeer, wxPoint aPos ) :
             WS_DRAW_ITEM_BASE( aPeer, WSG_BITMAP_T )
     {
         m_pos = aPos;
@@ -334,8 +292,6 @@ public:
     const wxPoint GetPosition() const override { return m_pos; }
     void SetPosition( wxPoint aPos ) override { m_pos = aPos; }
 
-    /** The function to draw a WS_DRAW_ITEM_BITMAP
-     */
     void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset, GR_DRAWMODE aDrawMode,
                      COLOR4D aColor ) override;
 
@@ -545,163 +501,5 @@ public:
     wxString BuildFullText( const wxString& aTextbase );
 };
 
-
-/**
- * WORKSHEET_LAYOUT handles the graphic items list to draw/plot
- * the title block and other items (page references ...
- */
-class WORKSHEET_LAYOUT
-{
-    std::vector <WORKSHEET_DATAITEM*> m_list;
-    bool m_allowVoidList;   // If false, the default page layout
-                            // will be loaded the first time
-                            // WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList
-                            // is run (useful mainly for page layout editor)
-    double m_leftMargin;    // the left page margin in mm
-    double m_rightMargin;   // the right page margin in mm
-    double m_topMargin;     // the top page margin in mm
-    double m_bottomMargin;  // the bottom page margin in mm
-
-public:
-    WORKSHEET_LAYOUT();
-    ~WORKSHEET_LAYOUT() {ClearList(); }
-
-    /**
-     * static function: returns the instance of WORKSHEET_LAYOUT used in the application
-     */
-    static WORKSHEET_LAYOUT& GetTheInstance();
-
-    /**
-     * static function: Set an alternate instance of WORKSHEET_LAYOUT
-     * mainly used in page setting dialog
-     * @param aLayout = the alternate page layout; if null restore the basic page layout
-     */
-    static void SetAltInstance( WORKSHEET_LAYOUT* aLayout = NULL );
-
-    // Accessors:
-    double GetLeftMargin() { return m_leftMargin; }
-    double GetRightMargin() { return m_rightMargin; }
-    double GetTopMargin() { return m_topMargin; }
-    double GetBottomMargin() { return m_bottomMargin; }
-
-    void SetLeftMargin( double aMargin );
-    void SetRightMargin( double aMargin );
-    void SetTopMargin( double aMargin );
-    void SetBottomMargin( double aMargin );
-
-    /**
-     * In Kicad applications, a page layout description is needed
-     * So if the list is empty, a default description is loaded,
-     * the first time a page layout is drawn.
-     * However, in page layout editor, an empty list is acceptable.
-     * AllowVoidList allows or not the empty list
-     */
-    void AllowVoidList( bool Allow ) { m_allowVoidList = Allow; }
-
-    /**
-     * @return true if an empty list is allowed
-     * (mainly allowed for page layout editor).
-     */
-    bool VoidListAllowed() { return m_allowVoidList; }
-
-    /**
-     * erase the list of items
-     */
-    void ClearList();
-
-    /**
-     * Save the description in a file
-     * @param aFullFileName the filename of the file to created
-     */
-    void Save( const wxString& aFullFileName );
-
-    /**
-     * Save the description in a buffer
-     * @param aOutputString = a wxString to store the S expr string
-     */
-    void SaveInString( wxString& aOutputString );
-
-    void Append( WORKSHEET_DATAITEM* aItem );
-    void Remove( WORKSHEET_DATAITEM* aItem );
-
-    /**
-     * @return the index of aItem, or -1 if does not exist
-     */
-    int GetItemIndex( WORKSHEET_DATAITEM* aItem ) const;
-
-    /**
-     * @return the item from its index aIdx, or NULL if does not exist
-     */
-    WORKSHEET_DATAITEM* GetItem( unsigned aIdx ) const;
-
-    /**
-     * @return a reference to the items.
-     */
-    std::vector<WORKSHEET_DATAITEM*>& GetItems() { return m_list; }
-
-    /**
-     * @return the item count
-     */
-    unsigned GetCount() const { return m_list.size(); }
-
-    void SetDefaultLayout();
-    void SetEmptyLayout();
-
-    /**
-     * Returns a string containing the empty layout shape
-     */
-    static wxString EmptyLayout();
-
-    /**
-     * Returns a string containing the empty layout shape
-     */
-    static wxString DefaultLayout();
-
-    /**
-     * Populates the list with a custom layout, or
-     * the default layout, if no custom layout available
-     * @param aFullFileName = the custom page layout description file.
-     * if empty, loads the file defined by KICAD_WKSFILE
-     * and if its is not defined, uses the default internal description
-     * @param Append = if true: do not delete old layout, and load only
-       aFullFileName.
-     */
-    void SetPageLayout( const wxString& aFullFileName = wxEmptyString, bool Append = false );
-
-    /**
-     * Populates the list from a S expr description stored in a string
-     * @param aPageLayout = the S expr string
-     * @param aAppend Do not delete old layout if true and append \a aPageLayout
-     *               the existing one.
-       @param aSource is the layout source description.
-     */
-    void SetPageLayout( const char* aPageLayout, bool aAppend = false,
-                        const wxString& aSource = wxT( "Sexpr_string" )  );
-
-    /**
-     * @return a short filename  from a full filename:
-     * if the path is the current project path, or if the path
-     * is the same as kicad.pro (in template), returns the shortname
-     * else do nothing and returns a full filename
-     * @param aFullFileName = the full filename, which can be a relative
-     * @param aProjectPath = the curr project absolute path (can be empty)
-     */
-    static const wxString MakeShortFileName( const wxString& aFullFileName,
-                                             const wxString& aProjectPath );
-
-    /**
-     * Static function
-     * @return a full filename from a short filename.
-     * @param aShortFileName = the short filename, which can be a relative
-     * @param aProjectPath = the curr project absolute path (can be empty)
-     * or absolute path, and can include env variable reference ( ${envvar} expression )
-     * if the short filename path is relative, it is expected relative to the project path
-     * or (if aProjectPath is empty or if the file does not exist)
-     * relative to kicad.pro (in template)
-     * If aShortFileName is absolute return aShortFileName
-     */
-    static const wxString MakeFullFileName( const wxString& aShortFileName,
-                                            const wxString& aProjectPath );
-};
 
 #endif      // WS_DRAW_ITEM_H

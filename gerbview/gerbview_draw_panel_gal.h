@@ -21,11 +21,11 @@
 #define GERBVIEW_DRAW_PANEL_GAL_H_
 
 #include <class_draw_panel_gal.h>
-#include <worksheet_viewitem.h>
+#include <ws_view_item.h>
 
 namespace KIGFX
 {
-    class WORKSHEET_VIEWITEM;
+    class WS_VIEW_ITEM;
 }
 
 class COLORS_DESIGN_SETTINGS;
@@ -69,14 +69,14 @@ public:
      * @param aWorksheet is the worksheet to be used.
      *        The object is then owned by GERBVIEW_DRAW_PANEL_GAL.
      */
-    void SetWorksheet( KIGFX::WORKSHEET_VIEWITEM* aWorksheet );
+    void SetWorksheet( KIGFX::WS_VIEW_ITEM* aWorksheet );
 
 protected:
     ///> Sets rendering targets & dependencies for layers.
     void setDefaultLayerDeps();
 
     ///> Currently used worksheet
-    std::unique_ptr<KIGFX::WORKSHEET_VIEWITEM> m_worksheet;
+    std::unique_ptr<KIGFX::WS_VIEW_ITEM> m_worksheet;
 };
 
 

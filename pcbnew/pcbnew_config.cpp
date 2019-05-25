@@ -41,13 +41,14 @@
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
 #include <plotter.h>
-#include <worksheet_painter.h>
+#include <ws_painter.h>
 #include <panel_hotkeys_editor.h>
 #include <panel_pcbnew_settings.h>
 #include <panel_pcbnew_display_options.h>
 #include <panel_pcbnew_action_plugins.h>
 #include <fp_lib_table.h>
 #include <ws_draw_item.h>
+#include <ws_data_model.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <pcbplot.h>
@@ -114,12 +115,11 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     // Load the page layout decr file, from the filename stored in
     // BASE_SCREEN::m_PageLayoutDescrFileName, read in config project file
     // If empty, or not existing, the default descr is loaded
-    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-    wxString pg_fullfilename = WORKSHEET_LAYOUT::MakeFullFileName(
-                                    BASE_SCREEN::m_PageLayoutDescrFileName,
-                                    Prj().GetProjectPath() );
+    WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
+    wxString filename = WS_DATA_MODEL::MakeFullFileName( BASE_SCREEN::m_PageLayoutDescrFileName,
+                                                         Prj().GetProjectPath() );
 
-    pglayout.SetPageLayout( pg_fullfilename );
+    pglayout.SetPageLayout( filename );
 
     return rc;
 }

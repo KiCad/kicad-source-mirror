@@ -44,7 +44,7 @@
 #include <base_units.h>
 #include <ratsnest_data.h>
 #include <ratsnest_viewitem.h>
-#include <worksheet_viewitem.h>
+#include <ws_view_item.h>
 
 #include <pcbnew.h>
 #include <collectors.h>

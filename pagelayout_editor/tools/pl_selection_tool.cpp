@@ -31,8 +31,8 @@
 #include <tool/tool_manager.h>
 #include <tool/selection.h>
 #include <tools/pl_actions.h>
-#include <worksheet_dataitem.h>
-#include <worksheet_painter.h>
+#include <ws_data_model.h>
+#include <ws_painter.h>
 #include <ws_draw_item.h>
 #include <collector.h>
 #include "pl_selection_tool.h"
@@ -242,7 +242,7 @@ EDA_ITEM* PL_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, bool* aSelecti
     // locate items.
     COLLECTOR collector;
 
-    for( WORKSHEET_DATAITEM* dataItem : WORKSHEET_LAYOUT::GetTheInstance().GetItems() )
+    for( WS_DATA_ITEM* dataItem : WS_DATA_MODEL::GetTheInstance().GetItems() )
     {
         for( WS_DRAW_ITEM_BASE* drawItem : dataItem->GetDrawItems() )
         {
@@ -376,7 +376,7 @@ bool PL_SELECTION_TOOL::selectMultiple()
 
             selectionRect.Normalize();
 
-            for( WORKSHEET_DATAITEM* dataItem : WORKSHEET_LAYOUT::GetTheInstance().GetItems() )
+            for( WS_DATA_ITEM* dataItem : WS_DATA_MODEL::GetTheInstance().GetItems() )
             {
                 for( WS_DRAW_ITEM_BASE* item : dataItem->GetDrawItems() )
                 {
@@ -505,7 +505,7 @@ void PL_SELECTION_TOOL::RebuildSelection()
 {
     m_selection.Clear();
 
-    for( WORKSHEET_DATAITEM* dataItem : WORKSHEET_LAYOUT::GetTheInstance().GetItems() )
+    for( WS_DATA_ITEM* dataItem : WS_DATA_MODEL::GetTheInstance().GetItems() )
     {
         for( WS_DRAW_ITEM_BASE* item : dataItem->GetDrawItems() )
         {

@@ -24,10 +24,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file eeschema/files-io.cpp
- */
-
 #include <fctsys.h>
 #include <sch_draw_panel.h>
 #include <confirm.h>
@@ -52,7 +48,7 @@
 #include <symbol_lib_table.h>
 #include <dialog_symbol_remap.h>
 #include <dialog_migrate_buses.h>
-#include <ws_draw_item.h>
+#include <ws_data_model.h>
 #include <connection_graph.h>
 
 
@@ -804,7 +800,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             g_RootSheet = pi->Load( aFileName, &Kiway() );
 
             // Eagle sheets do not use a worksheet frame by default, so set it to an empty one
-            WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+            WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
             pglayout.SetEmptyLayout();
 
             BASE_SCREEN::m_PageLayoutDescrFileName = "empty.kicad_wks";
@@ -814,7 +810,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
             if( layoutfile.Create( layoutfn.GetFullPath() ) )
             {
-                layoutfile.Write( WORKSHEET_LAYOUT::EmptyLayout() );
+                layoutfile.Write( WS_DATA_MODEL::EmptyLayout() );
                 layoutfile.Close();
             }
 

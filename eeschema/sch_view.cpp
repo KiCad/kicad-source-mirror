@@ -28,7 +28,7 @@
 #include <view/view_group.h>
 #include <view/view_rtree.h>
 #include <view/wx_view_controls.h>
-#include <worksheet_viewitem.h>
+#include <ws_view_item.h>
 #include <layers_id_colors_and_visibility.h>
 #include <class_libentry.h>
 #include <sch_sheet.h>
@@ -85,7 +85,7 @@ void SCH_VIEW::DisplaySheet( SCH_SCREEN *aScreen )
     for( auto item = aScreen->GetDrawItems(); item; item = item->Next() )
         Add( item );
 
-    m_worksheet.reset( new KIGFX::WORKSHEET_VIEWITEM( 1, &aScreen->GetPageSettings(),
+    m_worksheet.reset( new KIGFX::WS_VIEW_ITEM( 1, &aScreen->GetPageSettings(),
                                                       &aScreen->GetTitleBlock() ) );
     m_worksheet->SetSheetNumber( aScreen->m_ScreenNumber );
     m_worksheet->SetSheetCount( aScreen->m_NumberOfScreens );

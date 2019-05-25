@@ -35,7 +35,7 @@
 #include <pl_draw_panel_gal.cpp>
 #include <hotkeys.h>
 #include <pl_editor_screen.h>
-#include <worksheet_dataitem.h>
+#include <ws_data_model.h>
 #include <properties_frame.h>
 #include <view/view.h>
 #include <confirm.h>
@@ -92,7 +92,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_hotkeysDescrList = PlEditorHotkeysDescr;
     m_originSelectChoice = 0;
     SetDrawBgColor( WHITE );            // default value, user option (WHITE/BLACK)
-    WORKSHEET_DATAITEM::m_SpecialMode = true;
+    WS_DATA_ITEM::m_SpecialMode = true;
     SetShowPageLimits( true );
     m_AboutTitle = "PlEditor";
 
@@ -182,7 +182,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.Update();
 
     // Initialize the current page layout
-    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+    WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
 #if 0       //start with empty layout
     pglayout.AllowVoidList( true );
     pglayout.ClearList();
@@ -321,7 +321,7 @@ void PL_EDITOR_FRAME::OnSelectCoordOriginCorner( wxCommandEvent& event )
 
 void PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode( wxCommandEvent& event )
 {
-    WORKSHEET_DATAITEM::m_SpecialMode = (event.GetId() == ID_SHOW_PL_EDITOR_MODE);
+    WS_DATA_ITEM::m_SpecialMode = (event.GetId() == ID_SHOW_PL_EDITOR_MODE);
     HardRedraw();
 }
 
@@ -373,13 +373,13 @@ void PL_EDITOR_FRAME::ToPrinter( bool doPreview )
 
 void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayNormalMode( wxUpdateUIEvent& event )
 {
-    event.Check( WORKSHEET_DATAITEM::m_SpecialMode == false );
+    event.Check( WS_DATA_ITEM::m_SpecialMode == false );
 }
 
 
 void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplaySpecialMode( wxUpdateUIEvent& event )
 {
-    event.Check( WORKSHEET_DATAITEM::m_SpecialMode == true );
+    event.Check( WS_DATA_ITEM::m_SpecialMode == true );
 }
 
 
@@ -512,7 +512,7 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     int Xsign = 1;
     int Ysign = 1;
 
-    WORKSHEET_DATAITEM dummy( WORKSHEET_DATAITEM::WS_SEGMENT );
+    WS_DATA_ITEM dummy( WS_DATA_ITEM::WS_SEGMENT );
 
     switch( m_originSelectChoice )
     {
@@ -609,7 +609,7 @@ void PL_EDITOR_FRAME::HardRedraw()
 
     PL_SELECTION_TOOL*  selTool = m_toolManager->GetTool<PL_SELECTION_TOOL>();
     SELECTION&          selection = selTool->GetSelection();
-    WORKSHEET_DATAITEM* item = nullptr;
+    WS_DATA_ITEM* item = nullptr;
 
     if( selection.GetSize() == 1 )
         item = static_cast<WS_DRAW_ITEM_BASE*>( selection.Front() )->GetPeer();
@@ -620,29 +620,29 @@ void PL_EDITOR_FRAME::HardRedraw()
 }
 
 
-WORKSHEET_DATAITEM* PL_EDITOR_FRAME::AddPageLayoutItem( int aType )
+WS_DATA_ITEM* PL_EDITOR_FRAME::AddPageLayoutItem( int aType )
 {
-    WORKSHEET_DATAITEM * item = NULL;
+    WS_DATA_ITEM * item = NULL;
 
     switch( aType )
     {
-    case WORKSHEET_DATAITEM::WS_TEXT:
-        item = new WORKSHEET_DATAITEM_TEXT( wxT( "Text") );
+    case WS_DATA_ITEM::WS_TEXT:
+        item = new WS_DATA_ITEM_TEXT( wxT( "Text") );
         break;
 
-    case WORKSHEET_DATAITEM::WS_SEGMENT:
-        item = new WORKSHEET_DATAITEM( WORKSHEET_DATAITEM::WS_SEGMENT );
+    case WS_DATA_ITEM::WS_SEGMENT:
+        item = new WS_DATA_ITEM( WS_DATA_ITEM::WS_SEGMENT );
         break;
 
-    case WORKSHEET_DATAITEM::WS_RECT:
-        item = new WORKSHEET_DATAITEM( WORKSHEET_DATAITEM::WS_RECT );
+    case WS_DATA_ITEM::WS_RECT:
+        item = new WS_DATA_ITEM( WS_DATA_ITEM::WS_RECT );
         break;
 
-    case WORKSHEET_DATAITEM::WS_POLYPOLYGON:
-        item = new WORKSHEET_DATAITEM_POLYPOLYGON();
+    case WS_DATA_ITEM::WS_POLYPOLYGON:
+        item = new WS_DATA_ITEM_POLYGONS();
         break;
 
-    case WORKSHEET_DATAITEM::WS_BITMAP:
+    case WS_DATA_ITEM::WS_BITMAP:
     {
         wxFileDialog fileDlg( this, _( "Choose Image" ), wxEmptyString, wxEmptyString,
                               _( "Image Files " ) + wxImage::GetImageExtWildcard(), wxFD_OPEN );
@@ -667,7 +667,7 @@ WORKSHEET_DATAITEM* PL_EDITOR_FRAME::AddPageLayoutItem( int aType )
             break;
         }
 
-        item = new WORKSHEET_DATAITEM_BITMAP( image );
+        item = new WS_DATA_ITEM_BITMAP( image );
     }
     break;
     }
@@ -675,7 +675,7 @@ WORKSHEET_DATAITEM* PL_EDITOR_FRAME::AddPageLayoutItem( int aType )
     if( item == NULL )
         return NULL;
 
-    WORKSHEET_LAYOUT::GetTheInstance().Append( item );
+    WS_DATA_MODEL::GetTheInstance().Append( item );
     item->SyncDrawItems( nullptr, GetGalCanvas()->GetView() );
 
     return item;

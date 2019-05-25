@@ -34,7 +34,7 @@
 #include <tools/pl_drawing_tools.h>
 #include <bitmaps.h>
 #include <ws_draw_item.h>
-#include <worksheet_dataitem.h>
+#include <ws_data_item.h>
 #include <invoke_pl_editor_dialog.h>
 
 
@@ -182,9 +182,9 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 
                 m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
 
-                WORKSHEET_DATAITEM* dataItem;
-                dataItem = m_frame->AddPageLayoutItem( isText ? WORKSHEET_DATAITEM::WS_TEXT
-                                                              : WORKSHEET_DATAITEM::WS_BITMAP );
+                WS_DATA_ITEM* dataItem;
+                dataItem = m_frame->AddPageLayoutItem( isText ? WS_DATA_ITEM::WS_TEXT
+                                                              : WS_DATA_ITEM::WS_BITMAP );
                 item = dataItem->GetDrawItems()[0];
                 item->SetFlags( IS_NEW | IS_MOVED );
                 m_selectionTool->AddItemToSel( item );
@@ -300,14 +300,14 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 m_frame->SaveCopyInUndoList();
                 m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
 
-                WORKSHEET_DATAITEM::WS_ITEM_TYPE dataType;
+                WS_DATA_ITEM::WS_ITEM_TYPE dataType;
 
                 if( isDrawLine )
-                    dataType = WORKSHEET_DATAITEM::WS_SEGMENT;
+                    dataType = WS_DATA_ITEM::WS_SEGMENT;
                 else
-                    dataType = WORKSHEET_DATAITEM::WS_RECT;
+                    dataType = WS_DATA_ITEM::WS_RECT;
 
-                WORKSHEET_DATAITEM* dataItem = m_frame->AddPageLayoutItem( dataType );
+                WS_DATA_ITEM* dataItem = m_frame->AddPageLayoutItem( dataType );
                 dataItem->MoveToUi( (wxPoint) cursorPos );
 
                 item = dataItem->GetDrawItems()[0];

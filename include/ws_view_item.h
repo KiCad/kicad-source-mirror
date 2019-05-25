@@ -22,13 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file worksheet_viewitem.h
- * @brief Class that handles properties and drawing of worksheet layout.
- */
-
-#ifndef WORKSHEET_VIEWITEM_H
-#define WORKSHEET_VIEWITEM_H
+#ifndef WS_VIEW_ITEM_H
+#define WS_VIEW_ITEM_H
 
 #include <base_struct.h>
 
@@ -46,11 +41,10 @@ namespace KIGFX
 class VIEW;
 class GAL;
 
-class WORKSHEET_VIEWITEM : public EDA_ITEM
+class WS_VIEW_ITEM : public EDA_ITEM
 {
 public:
-    WORKSHEET_VIEWITEM( int aMils2IUscalefactor,
-                        const PAGE_INFO* aPageInfo, const TITLE_BLOCK* aTitleBlock );
+    WS_VIEW_ITEM( int aScaleFactor, const PAGE_INFO* aPageInfo,  const TITLE_BLOCK* aTitleBlock );
 
     /**
      * Function SetFileName()
@@ -133,7 +127,7 @@ public:
      */
     virtual wxString GetClass() const override
     {
-        return wxT( "WORKSHEET_VIEWITEM" );
+        return wxT( "WS_VIEW_ITEM" );
     }
 
 protected:
@@ -161,4 +155,4 @@ protected:
 };
 }
 
-#endif /* WORKSHEET_VIEWITEM_H */
+#endif /* WS_VIEW_ITEM_H */

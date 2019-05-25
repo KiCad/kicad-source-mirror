@@ -27,38 +27,38 @@
  * @brief Class that handles properties and drawing of worksheet layout.
  */
 
-#include <worksheet_viewitem.h>
+#include <ws_view_item.h>
 #include <ws_draw_item.h>
-#include <worksheet_dataitem.h>
+#include <ws_data_item.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <painter.h>
 #include <layers_id_colors_and_visibility.h>
 #include <page_info.h>
 #include <view/view.h>
-#include <worksheet_painter.h>
+#include <ws_painter.h>
 
 using namespace KIGFX;
 
-WORKSHEET_VIEWITEM::WORKSHEET_VIEWITEM( int aMils2IUscalefactor,
+WS_VIEW_ITEM::WS_VIEW_ITEM( int aMils2IUscalefactor,
             const PAGE_INFO* aPageInfo, const TITLE_BLOCK* aTitleBlock ) :
     EDA_ITEM( NOT_USED ), // this item is never added to a BOARD so it needs no type
     m_mils2IUscalefactor( aMils2IUscalefactor ),
     m_titleBlock( aTitleBlock ), m_pageInfo( aPageInfo ), m_sheetNumber( 1 ), m_sheetCount( 1 ) {}
 
 
-void WORKSHEET_VIEWITEM::SetPageInfo( const PAGE_INFO* aPageInfo )
+void WS_VIEW_ITEM::SetPageInfo( const PAGE_INFO* aPageInfo )
 {
     m_pageInfo = aPageInfo;
 }
 
 
-void WORKSHEET_VIEWITEM::SetTitleBlock( const TITLE_BLOCK* aTitleBlock )
+void WS_VIEW_ITEM::SetTitleBlock( const TITLE_BLOCK* aTitleBlock )
 {
     m_titleBlock = aTitleBlock;
 }
 
 
-const BOX2I WORKSHEET_VIEWITEM::ViewBBox() const
+const BOX2I WS_VIEW_ITEM::ViewBBox() const
 {
     BOX2I bbox;
 
@@ -77,7 +77,7 @@ const BOX2I WORKSHEET_VIEWITEM::ViewBBox() const
 }
 
 
-void WORKSHEET_VIEWITEM::ViewDraw( int aLayer, VIEW* aView ) const
+void WS_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
 {
     auto gal = aView->GetGAL();
     auto settings = aView->GetPainter()->GetSettings();
@@ -107,7 +107,7 @@ void WORKSHEET_VIEWITEM::ViewDraw( int aLayer, VIEW* aView ) const
         gal->Scale( VECTOR2D( -1.0, 1.0 ) );
     }
 
-    WORKSHEET_PAINTER   ws_painter( gal );
+    WS_PAINTER   ws_painter( gal );
     WS_RENDER_SETTINGS* ws_settings =static_cast<WS_RENDER_SETTINGS*>( ws_painter.GetSettings() );
 
     ws_settings->SetNormalColor( settings->GetLayerColor( LAYER_WORKSHEET ) );
@@ -127,7 +127,7 @@ void WORKSHEET_VIEWITEM::ViewDraw( int aLayer, VIEW* aView ) const
 }
 
 
-void WORKSHEET_VIEWITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+void WS_VIEW_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 1;
     aLayers[0] = LAYER_WORKSHEET;

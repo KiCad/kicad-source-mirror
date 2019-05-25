@@ -27,6 +27,8 @@
 #include <widgets/unit_binder.h>
 #include <dialog_page_settings_base.h>
 
+class WS_DATA_MODEL;
+
 /*!
  * DIALOG_PAGES_SETTINGS class declaration
  */
@@ -46,7 +48,7 @@ private:
     PAGE_INFO       m_pageInfo;         /// Temporary page info.
     bool            m_customFmt;        /// true if the page selection is custom
     TITLE_BLOCK     m_tb;               /// Temporary title block (basic inscriptions).
-    WORKSHEET_LAYOUT *m_pagelayout;     // the alternate and temporary page layout shown by the dialog
+    WS_DATA_MODEL*  m_pagelayout;       // the alternate and temporary page layout shown by the dialog
                                         // when the initial one is replaced by a new one
     UNIT_BINDER     m_customSizeX;
     UNIT_BINDER     m_customSizeY;

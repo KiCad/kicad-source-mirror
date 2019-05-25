@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,8 @@
 
 // For page and paper size, values are in 1/1000 inch
 
-#ifndef WORKSHEET_PAINTER_H
-#define WORKSHEET_PAINTER_H
+#ifndef WS_PAINTER_H
+#define WS_PAINTER_H
 
 #include <gal/color4d.h>
 #include <painter.h>
@@ -47,7 +47,7 @@ namespace KIGFX
 class WS_RENDER_SETTINGS : public RENDER_SETTINGS
 {
 public:
-    friend class WORKSHEET_PAINTER;
+    friend class WS_PAINTER;
 
     WS_RENDER_SETTINGS();
 
@@ -90,13 +90,13 @@ private:
 
 
 /**
- * Class WORKSHEET_PAINTER
+ * Class WS_PAINTER
  * Contains methods for drawing worksheet items.
  */
-class WORKSHEET_PAINTER : public PAINTER
+class WS_PAINTER : public PAINTER
 {
 public:
-    WORKSHEET_PAINTER( GAL* aGal ) :
+    WS_PAINTER( GAL* aGal ) :
             PAINTER( aGal )
     { }
 
@@ -164,4 +164,4 @@ void DrawPageLayout( wxDC*            aDC,
                      const wxString&  aSheetLayer = wxEmptyString );
 
 
-#endif // WORKSHEET_PAINTER_H
+#endif // WS_PAINTER_H

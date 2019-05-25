@@ -27,16 +27,16 @@
 #include <class_drawpanel.h>
 
 #include <pl_editor_frame.h>
-#include <worksheet_dataitem.h>
+#include <ws_data_item.h>
 #include <dialog_new_dataitem_base.h>
 
 
 class DIALOG_NEW_DATAITEM : public DIALOG_NEW_DATAITEM_BASE
 {
-    WORKSHEET_DATAITEM* m_item;
+    WS_DATA_ITEM* m_item;
 
 public:
-    DIALOG_NEW_DATAITEM( PL_EDITOR_FRAME* aCaller, WORKSHEET_DATAITEM* aItem );
+    DIALOG_NEW_DATAITEM( PL_EDITOR_FRAME* aCaller, WS_DATA_ITEM* aItem );
 
 private:
     void OnOKClick( wxCommandEvent& event ) override;
@@ -45,14 +45,14 @@ private:
 };
 
 
-int InvokeDialogNewItem( PL_EDITOR_FRAME* aCaller, WORKSHEET_DATAITEM* aItem )
+int InvokeDialogNewItem( PL_EDITOR_FRAME* aCaller, WS_DATA_ITEM* aItem )
 {
     DIALOG_NEW_DATAITEM dlg( aCaller, aItem );
     return dlg.ShowModal();
 }
 
 
-DIALOG_NEW_DATAITEM::DIALOG_NEW_DATAITEM( PL_EDITOR_FRAME* aCaller, WORKSHEET_DATAITEM* aItem )
+DIALOG_NEW_DATAITEM::DIALOG_NEW_DATAITEM( PL_EDITOR_FRAME* aCaller, WS_DATA_ITEM* aItem )
     : DIALOG_NEW_DATAITEM_BASE( aCaller )
 {
     m_item = aItem;
@@ -65,9 +65,9 @@ DIALOG_NEW_DATAITEM::DIALOG_NEW_DATAITEM( PL_EDITOR_FRAME* aCaller, WORKSHEET_DA
 
 void DIALOG_NEW_DATAITEM::OnOKClick( wxCommandEvent& event )
 {
-    if( m_item->GetType() == WORKSHEET_DATAITEM::WS_TEXT )
+    if( m_item->GetType() == WS_DATA_ITEM::WS_TEXT )
     {
-        WORKSHEET_DATAITEM_TEXT* text = ((WORKSHEET_DATAITEM_TEXT*)m_item);
+        WS_DATA_ITEM_TEXT* text = ((WS_DATA_ITEM_TEXT*)m_item);
         text->m_TextBase = m_textCtrlText->GetValue();
         // For multiline texts, replace the '\n' char by the "\\n" sequence",
         // in internal string
@@ -116,19 +116,19 @@ void DIALOG_NEW_DATAITEM::OnOKClick( wxCommandEvent& event )
 
 void DIALOG_NEW_DATAITEM::initDlg()
 {
-    // Disable useless widgets, depending on WORKSHEET_DATAITEM type
+    // Disable useless widgets, depending on WS_DATA_ITEM type
     switch( m_item->GetType() )
     {
-    case WORKSHEET_DATAITEM::WS_SEGMENT:
-    case WORKSHEET_DATAITEM::WS_RECT:
+    case WS_DATA_ITEM::WS_SEGMENT:
+    case WS_DATA_ITEM::WS_RECT:
         m_textCtrlText->Enable( false );
         break;
 
-    case WORKSHEET_DATAITEM::WS_BITMAP:
-    case WORKSHEET_DATAITEM::WS_POLYPOLYGON:
+    case WS_DATA_ITEM::WS_BITMAP:
+    case WS_DATA_ITEM::WS_POLYPOLYGON:
         m_textCtrlText->Enable( false );
         // fall through
-    case WORKSHEET_DATAITEM::WS_TEXT:
+    case WS_DATA_ITEM::WS_TEXT:
         m_textCtrlEndX->Enable( false );
         m_textCtrlEndY->Enable( false );
         m_choiceCornerEnd->Enable( false );
@@ -165,6 +165,6 @@ void DIALOG_NEW_DATAITEM::initDlg()
     case LT_CORNER: m_choiceCornerEnd->SetSelection( 1 ); break;
     }
 
-    if( m_item->GetType() == WORKSHEET_DATAITEM::WS_TEXT )
-        m_textCtrlText->SetValue( ((WORKSHEET_DATAITEM_TEXT*)m_item)->m_TextBase );
+    if( m_item->GetType() == WS_DATA_ITEM::WS_TEXT )
+        m_textCtrlText->SetValue( ((WS_DATA_ITEM_TEXT*)m_item)->m_TextBase );
 }

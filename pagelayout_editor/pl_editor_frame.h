@@ -34,7 +34,7 @@
 #include <pl_editor_layout.h>
 
 class PROPERTIES_FRAME;
-class WORKSHEET_DATAITEM;
+class WS_DATA_ITEM;
 
 
 /**
@@ -283,7 +283,7 @@ public:
      * @param aIdx = the position in list to insert the new item.
      * @return a reference to the new item
      */
-    WORKSHEET_DATAITEM* AddPageLayoutItem( int aType );
+    WS_DATA_ITEM* AddPageLayoutItem( int aType );
 
     /**
      * Must be called after a change

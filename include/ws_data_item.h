@@ -85,7 +85,7 @@ public:
 // * poly polygon defined by a coordinate, and a set of list of corners
 //   ( because we use it for logos, there are more than one polygon
 //   in this description
-class WORKSHEET_DATAITEM
+class WS_DATA_ITEM
 {
 public:
     enum WS_ITEM_TYPE {
@@ -116,8 +116,12 @@ public:
     int            m_IncrementLabel;
 
     // These variables are static, because these values are common to all
-    // instances of WORKSHEET_DATAITEM.
+    // instances of WS_DATA_ITEM.
     // They are default or common values.
+    //==============================================================================
+    // JEY TODO: these globals are death when we try to generate the page setttings preview...
+    // move them to member variables of WS_DATA_MODEL
+    //==============================================================================
     static double  m_WSunits2Iu;            // conversion factor between
                                             // ws units (mils) and draw/plot units
     static DPOINT  m_RB_Corner;             // cordinates of the right bottom corner
@@ -135,9 +139,9 @@ public:
                                             // When set to true, base texts
                                             // instead of full texts are displayed
 public:
-    WORKSHEET_DATAITEM( WS_ITEM_TYPE aType );
+    WS_DATA_ITEM( WS_ITEM_TYPE aType );
 
-    virtual ~WORKSHEET_DATAITEM() {}
+    virtual ~WS_DATA_ITEM() {}
 
     const std::vector<WS_DRAW_ITEM_BASE*>& GetDrawItems() const { return m_drawItems; }
 
@@ -233,7 +237,7 @@ public:
 };
 
 
-class WORKSHEET_DATAITEM_POLYPOLYGON : public WORKSHEET_DATAITEM
+class WS_DATA_ITEM_POLYGONS : public WS_DATA_ITEM
 {
 public:
     double                m_Orient;         //  Orientation in degrees
@@ -245,7 +249,7 @@ private:
     DPOINT                m_maxCoord;       // max coord of corners, relative to m_Pos
 
 public:
-    WORKSHEET_DATAITEM_POLYPOLYGON( );
+    WS_DATA_ITEM_POLYGONS( );
 
     void SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView ) override;
 
@@ -324,7 +328,7 @@ public:
 };
 
 
-class WORKSHEET_DATAITEM_TEXT : public WORKSHEET_DATAITEM
+class WS_DATA_ITEM_TEXT : public WS_DATA_ITEM
 {
 public:
     wxString            m_TextBase;             // The basic text, with format symbols
@@ -345,7 +349,7 @@ public:
 
 
 public:
-    WORKSHEET_DATAITEM_TEXT( const wxString& aTextBase );
+    WS_DATA_ITEM_TEXT( const wxString& aTextBase );
 
     void SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView ) override;
 
@@ -400,14 +404,14 @@ public:
 
 
 class BITMAP_BASE;
-class WORKSHEET_DATAITEM_BITMAP : public WORKSHEET_DATAITEM
+class WS_DATA_ITEM_BITMAP : public WS_DATA_ITEM
 {
 public:
     BITMAP_BASE* m_ImageBitmap;
 
 public:
-    WORKSHEET_DATAITEM_BITMAP(BITMAP_BASE* aImage)
-        : WORKSHEET_DATAITEM( WS_BITMAP )
+    WS_DATA_ITEM_BITMAP(BITMAP_BASE* aImage)
+        : WS_DATA_ITEM( WS_BITMAP )
     {
         m_ImageBitmap = aImage;
     }

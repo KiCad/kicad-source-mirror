@@ -34,8 +34,8 @@
 #include <ws_draw_item.h>
 #include <gal/graphics_abstraction_layer.h>
 
-#include <worksheet_painter.h>
-#include <worksheet_dataitem.h>
+#include <ws_painter.h>
+#include <ws_data_item.h>
 
 using namespace KIGFX;
 
@@ -236,7 +236,7 @@ void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aCont
 }
 
 
-bool KIGFX::WORKSHEET_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
+bool KIGFX::WS_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 {
     auto item = static_cast<const EDA_ITEM*>( aItem );
 
@@ -254,7 +254,7 @@ bool KIGFX::WORKSHEET_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 }
 
 
-void KIGFX::WORKSHEET_PAINTER::draw( const WS_DRAW_ITEM_LINE* aItem, int aLayer ) const
+void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_LINE* aItem, int aLayer ) const
 {
     m_gal->SetIsStroke( true );
     m_gal->SetIsFill( false );
@@ -264,7 +264,7 @@ void KIGFX::WORKSHEET_PAINTER::draw( const WS_DRAW_ITEM_LINE* aItem, int aLayer 
 }
 
 
-void KIGFX::WORKSHEET_PAINTER::draw( const WS_DRAW_ITEM_RECT* aItem, int aLayer ) const
+void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_RECT* aItem, int aLayer ) const
 {
     m_gal->SetIsStroke( true );
     m_gal->SetIsFill( false );
@@ -274,7 +274,7 @@ void KIGFX::WORKSHEET_PAINTER::draw( const WS_DRAW_ITEM_RECT* aItem, int aLayer 
 }
 
 
-void KIGFX::WORKSHEET_PAINTER::draw( const WS_DRAW_ITEM_POLYGON* aItem, int aLayer ) const
+void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_POLYGON* aItem, int aLayer ) const
 {
     std::deque<VECTOR2D> corners;
     for( wxPoint point : aItem->m_Corners )
@@ -300,7 +300,7 @@ void KIGFX::WORKSHEET_PAINTER::draw( const WS_DRAW_ITEM_POLYGON* aItem, int aLay
 }
 
 
-void KIGFX::WORKSHEET_PAINTER::draw( const WS_DRAW_ITEM_TEXT* aItem, int aLayer ) const
+void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_TEXT* aItem, int aLayer ) const
 {
     VECTOR2D position( aItem->GetTextPos().x, aItem->GetTextPos().y );
 
@@ -315,12 +315,12 @@ void KIGFX::WORKSHEET_PAINTER::draw( const WS_DRAW_ITEM_TEXT* aItem, int aLayer 
 }
 
 
-void KIGFX::WORKSHEET_PAINTER::draw( const WS_DRAW_ITEM_BITMAP* aItem, int aLayer ) const
+void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_BITMAP* aItem, int aLayer ) const
 {
     m_gal->Save();
     VECTOR2D position = aItem->GetPosition();
     m_gal->Translate( position );
-    auto* bitmap = static_cast<WORKSHEET_DATAITEM_BITMAP*>( aItem->GetPeer() );
+    auto* bitmap = static_cast<WS_DATA_ITEM_BITMAP*>( aItem->GetPeer() );
 
     // When the image scale factor is not 1.0, we need to modify the actual scale
     // as the image scale factor is similar to a local zoom
@@ -334,7 +334,7 @@ void KIGFX::WORKSHEET_PAINTER::draw( const WS_DRAW_ITEM_BITMAP* aItem, int aLaye
 }
 
 
-void KIGFX::WORKSHEET_PAINTER::DrawBorder( const PAGE_INFO* aPageInfo, int aScaleFactor ) const
+void KIGFX::WS_PAINTER::DrawBorder( const PAGE_INFO* aPageInfo, int aScaleFactor ) const
 {
     VECTOR2D origin = VECTOR2D( 0.0, 0.0 );
     VECTOR2D end = VECTOR2D( aPageInfo->GetWidthMils() * aScaleFactor,

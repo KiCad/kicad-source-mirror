@@ -21,7 +21,7 @@
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 #include <gerbview_painter.h>
-#include <worksheet_viewitem.h>
+#include <ws_view_item.h>
 
 #include <colors_design_settings.h>
 #include <gerbview_frame.h>
@@ -179,7 +179,7 @@ void GERBVIEW_DRAW_PANEL_GAL::setDefaultLayerDeps()
 }
 
 
-void GERBVIEW_DRAW_PANEL_GAL::SetWorksheet( KIGFX::WORKSHEET_VIEWITEM* aWorksheet )
+void GERBVIEW_DRAW_PANEL_GAL::SetWorksheet( KIGFX::WS_VIEW_ITEM* aWorksheet )
 {
     m_worksheet.reset( aWorksheet );
     m_view->Add( m_worksheet.get() );

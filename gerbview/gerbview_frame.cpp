@@ -960,7 +960,7 @@ void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 
         // Prepare worksheet template
         auto worksheet =
-                new KIGFX::WORKSHEET_VIEWITEM( IU_PER_MILS, &GetPageSettings(), &GetTitleBlock() );
+                new KIGFX::WS_VIEW_ITEM( IU_PER_MILS, &GetPageSettings(), &GetTitleBlock() );
 
         if( screen != NULL )
         {

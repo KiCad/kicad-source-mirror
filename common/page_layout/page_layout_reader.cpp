@@ -31,9 +31,9 @@
 
 #include <fctsys.h>
 #include <base_struct.h>
-#include <worksheet_painter.h>
+#include <ws_painter.h>
 #include <ws_draw_item.h>
-#include <worksheet_dataitem.h>
+#include <ws_data_model.h>
 #include <page_layout_reader_lexer.h>
 
 #include <wx/file.h>
@@ -45,13 +45,13 @@ using namespace TB_READER_T;
 /**
  * Class PAGE_LAYOUT_READER_PARSER
  * holds data and functions pertinent to parsing a S-expression file
- * for a WORKSHEET_LAYOUT.
+ * for a WS_DATA_MODEL.
  */
 class PAGE_LAYOUT_READER_PARSER : public PAGE_LAYOUT_READER_LEXER
 {
 public:
     PAGE_LAYOUT_READER_PARSER( const char* aLine, const wxString& aSource );
-    void Parse( WORKSHEET_LAYOUT* aLayout );
+    void Parse( WS_DATA_MODEL* aLayout );
 
 private:
 
@@ -71,38 +71,38 @@ private:
      */
     double parseDouble();
 
-    void parseSetup( WORKSHEET_LAYOUT* aLayout );
+    void parseSetup( WS_DATA_MODEL* aLayout );
 
     /**
      * parse a graphic item starting by "(line" or "(rect" and read parameters.
      */
-    void parseGraphic( WORKSHEET_DATAITEM * aItem );
+    void parseGraphic( WS_DATA_ITEM * aItem );
 
     /**
      * parse a text item starting by "(tbtext" and read parameters.
      */
-    void parseText( WORKSHEET_DATAITEM_TEXT * aItem );
+    void parseText( WS_DATA_ITEM_TEXT * aItem );
 
     /**
      * parse a polygon item starting by "( polygon" and read parameters.
      * the list of corners included in this description is read by parsePolyOutline
      */
-    void parsePolygon( WORKSHEET_DATAITEM_POLYPOLYGON * aItem );
+    void parsePolygon( WS_DATA_ITEM_POLYGONS * aItem );
 
     /**
      * parse a list of corners starting by "( pts" and read coordinates.
      */
-    void parsePolyOutline( WORKSHEET_DATAITEM_POLYPOLYGON * aItem );
+    void parsePolyOutline( WS_DATA_ITEM_POLYGONS * aItem );
 
 
     /**
      * parse a bitmap item starting by "( bitmap" and read parameters.
      */
-    void parseBitmap( WORKSHEET_DATAITEM_BITMAP * aItem );
+    void parseBitmap( WS_DATA_ITEM_BITMAP * aItem );
 
     void parseCoordinate( POINT_COORD& aCoord);
-    void readOption( WORKSHEET_DATAITEM * aItem );
-    void readPngdata( WORKSHEET_DATAITEM_BITMAP * aItem );
+    void readOption( WS_DATA_ITEM * aItem );
+    void readPngdata( WS_DATA_ITEM_BITMAP * aItem );
 };
 
 // PCB_PLOT_PARAMS_PARSER
@@ -113,9 +113,9 @@ PAGE_LAYOUT_READER_PARSER::PAGE_LAYOUT_READER_PARSER( const char* aLine, const w
 }
 
 
-void PAGE_LAYOUT_READER_PARSER::Parse( WORKSHEET_LAYOUT* aLayout )
+void PAGE_LAYOUT_READER_PARSER::Parse( WS_DATA_MODEL* aLayout )
 {
-    WORKSHEET_DATAITEM* item;
+    WS_DATA_ITEM* item;
     LOCALE_IO           toggle;
 
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
@@ -133,33 +133,33 @@ void PAGE_LAYOUT_READER_PARSER::Parse( WORKSHEET_LAYOUT* aLayout )
             break;
 
         case T_line:
-            item = new WORKSHEET_DATAITEM( WORKSHEET_DATAITEM::WS_SEGMENT );
+            item = new WS_DATA_ITEM( WS_DATA_ITEM::WS_SEGMENT );
             parseGraphic( item );
             aLayout->Append( item );
             break;
 
         case T_rect:
-            item = new WORKSHEET_DATAITEM( WORKSHEET_DATAITEM::WS_RECT );
+            item = new WS_DATA_ITEM( WS_DATA_ITEM::WS_RECT );
             parseGraphic( item );
             aLayout->Append( item );
             break;
 
         case T_polygon:
-            item = new WORKSHEET_DATAITEM_POLYPOLYGON();
-            parsePolygon(  (WORKSHEET_DATAITEM_POLYPOLYGON*) item );
+            item = new WS_DATA_ITEM_POLYGONS();
+            parsePolygon(  (WS_DATA_ITEM_POLYGONS*) item );
             aLayout->Append( item );
             break;
 
         case T_bitmap:
-            item = new WORKSHEET_DATAITEM_BITMAP( NULL );
-            parseBitmap( (WORKSHEET_DATAITEM_BITMAP*) item );
+            item = new WS_DATA_ITEM_BITMAP( NULL );
+            parseBitmap( (WS_DATA_ITEM_BITMAP*) item );
             aLayout->Append( item );
             break;
 
         case T_tbtext:
             NeedSYMBOLorNUMBER();
-            item = new WORKSHEET_DATAITEM_TEXT( FromUTF8() );
-            parseText( (WORKSHEET_DATAITEM_TEXT*) item );
+            item = new WS_DATA_ITEM_TEXT( FromUTF8() );
+            parseText( (WS_DATA_ITEM_TEXT*) item );
             aLayout->Append( item );
             break;
 
@@ -170,7 +170,7 @@ void PAGE_LAYOUT_READER_PARSER::Parse( WORKSHEET_LAYOUT* aLayout )
     }
 }
 
-void PAGE_LAYOUT_READER_PARSER::parseSetup( WORKSHEET_LAYOUT* aLayout )
+void PAGE_LAYOUT_READER_PARSER::parseSetup( WS_DATA_MODEL* aLayout )
 {
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
@@ -180,18 +180,18 @@ void PAGE_LAYOUT_READER_PARSER::parseSetup( WORKSHEET_LAYOUT* aLayout )
             break;
 
         case T_linewidth:
-            WORKSHEET_DATAITEM::m_DefaultLineWidth = parseDouble();
+            WS_DATA_ITEM::m_DefaultLineWidth = parseDouble();
             NeedRIGHT();
             break;
 
         case T_textsize:
-            WORKSHEET_DATAITEM::m_DefaultTextSize.x = parseDouble();
-            WORKSHEET_DATAITEM::m_DefaultTextSize.y = parseDouble();
+            WS_DATA_ITEM::m_DefaultTextSize.x = parseDouble();
+            WS_DATA_ITEM::m_DefaultTextSize.y = parseDouble();
             NeedRIGHT();
             break;
 
         case T_textlinewidth:
-            WORKSHEET_DATAITEM::m_DefaultTextThickness = parseDouble();
+            WS_DATA_ITEM::m_DefaultTextThickness = parseDouble();
             NeedRIGHT();
             break;
 
@@ -222,7 +222,7 @@ void PAGE_LAYOUT_READER_PARSER::parseSetup( WORKSHEET_LAYOUT* aLayout )
     }
 }
 
-void PAGE_LAYOUT_READER_PARSER::parsePolygon( WORKSHEET_DATAITEM_POLYPOLYGON * aItem )
+void PAGE_LAYOUT_READER_PARSER::parsePolygon( WS_DATA_ITEM_POLYGONS * aItem )
 {
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
@@ -290,7 +290,7 @@ void PAGE_LAYOUT_READER_PARSER::parsePolygon( WORKSHEET_DATAITEM_POLYPOLYGON * a
     aItem->SetBoundingBox();
 }
 
-void PAGE_LAYOUT_READER_PARSER::parsePolyOutline( WORKSHEET_DATAITEM_POLYPOLYGON * aItem )
+void PAGE_LAYOUT_READER_PARSER::parsePolyOutline( WS_DATA_ITEM_POLYGONS * aItem )
 {
     DPOINT corner;
 
@@ -316,7 +316,7 @@ void PAGE_LAYOUT_READER_PARSER::parsePolyOutline( WORKSHEET_DATAITEM_POLYPOLYGON
 }
 
 
-void PAGE_LAYOUT_READER_PARSER::parseBitmap( WORKSHEET_DATAITEM_BITMAP * aItem )
+void PAGE_LAYOUT_READER_PARSER::parseBitmap( WS_DATA_ITEM_BITMAP * aItem )
 {
     BITMAP_BASE* image = new BITMAP_BASE;
     aItem->m_ImageBitmap = image;
@@ -378,7 +378,7 @@ void PAGE_LAYOUT_READER_PARSER::parseBitmap( WORKSHEET_DATAITEM_BITMAP * aItem )
     }
 }
 
-void PAGE_LAYOUT_READER_PARSER::readPngdata( WORKSHEET_DATAITEM_BITMAP * aItem )
+void PAGE_LAYOUT_READER_PARSER::readPngdata( WS_DATA_ITEM_BITMAP * aItem )
 {
     std::string tmp;
 
@@ -412,7 +412,7 @@ void PAGE_LAYOUT_READER_PARSER::readPngdata( WORKSHEET_DATAITEM_BITMAP * aItem )
 }
 
 
-void PAGE_LAYOUT_READER_PARSER::readOption( WORKSHEET_DATAITEM * aItem )
+void PAGE_LAYOUT_READER_PARSER::readOption( WS_DATA_ITEM * aItem )
 {
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
@@ -426,7 +426,7 @@ void PAGE_LAYOUT_READER_PARSER::readOption( WORKSHEET_DATAITEM * aItem )
 }
 
 
-void PAGE_LAYOUT_READER_PARSER::parseGraphic( WORKSHEET_DATAITEM * aItem )
+void PAGE_LAYOUT_READER_PARSER::parseGraphic( WS_DATA_ITEM * aItem )
 {
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
@@ -496,7 +496,7 @@ void PAGE_LAYOUT_READER_PARSER::parseGraphic( WORKSHEET_DATAITEM * aItem )
 }
 
 
-void PAGE_LAYOUT_READER_PARSER::parseText( WORKSHEET_DATAITEM_TEXT* aItem )
+void PAGE_LAYOUT_READER_PARSER::parseText( WS_DATA_ITEM_TEXT* aItem )
 {
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {
@@ -688,13 +688,13 @@ double PAGE_LAYOUT_READER_PARSER::parseDouble()
 // see page_layout_default_shape.cpp
 extern const char defaultPageLayout[];
 
-void WORKSHEET_LAYOUT::SetDefaultLayout()
+void WS_DATA_MODEL::SetDefaultLayout()
 {
     SetPageLayout( defaultPageLayout, false, wxT( "default page" ) );
 }
 
 // Returns defaultPageLayout as a string;
-wxString WORKSHEET_LAYOUT::DefaultLayout()
+wxString WS_DATA_MODEL::DefaultLayout()
 {
     return wxString( defaultPageLayout );
 }
@@ -705,19 +705,19 @@ wxString WORKSHEET_LAYOUT::DefaultLayout()
 // see page_layout_empty_description.cpp
 extern const char emptyPageLayout[];
 
-void WORKSHEET_LAYOUT::SetEmptyLayout()
+void WS_DATA_MODEL::SetEmptyLayout()
 {
     SetPageLayout( emptyPageLayout, false, wxT( "empty page" ) );
 }
 
 
-wxString WORKSHEET_LAYOUT::EmptyLayout()
+wxString WS_DATA_MODEL::EmptyLayout()
 {
     return wxString( emptyPageLayout );
 }
 
 
-void WORKSHEET_LAYOUT::SetPageLayout( const char* aPageLayout, bool Append, const wxString& aSource )
+void WS_DATA_MODEL::SetPageLayout( const char* aPageLayout, bool Append, const wxString& aSource )
 {
     if( ! Append )
         ClearList();
@@ -735,7 +735,7 @@ void WORKSHEET_LAYOUT::SetPageLayout( const char* aPageLayout, bool Append, cons
 }
 
 
-void WORKSHEET_LAYOUT::SetPageLayout( const wxString& aFullFileName, bool Append )
+void WS_DATA_MODEL::SetPageLayout( const wxString& aFullFileName, bool Append )
 {
     wxString fullFileName = aFullFileName;
 

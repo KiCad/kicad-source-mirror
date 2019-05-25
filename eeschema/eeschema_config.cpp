@@ -38,6 +38,7 @@
 #include <eeschema_config.h>
 #include <ee_hotkeys.h>
 #include <ws_draw_item.h>
+#include <ws_data_model.h>
 #include <class_library.h>
 #include <symbol_lib_table.h>
 #include <dialog_erc.h>
@@ -285,19 +286,17 @@ bool SCH_EDIT_FRAME::LoadProjectFile()
 
     // Verify some values, because the config file can be edited by hand,
     // and have bad values:
-    LIB_PART::SetSubpartIdNotation(
-            LIB_PART::GetSubpartIdSeparator(),
-            LIB_PART::GetSubpartFirstId() );
+    LIB_PART::SetSubpartIdNotation( LIB_PART::GetSubpartIdSeparator(),
+                                    LIB_PART::GetSubpartFirstId() );
 
     // Load the page layout decr file, from the filename stored in
     // BASE_SCREEN::m_PageLayoutDescrFileName, read in config project file
     // If empty, or not existing, the default descr is loaded
-    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-    wxString pg_fullfilename = WORKSHEET_LAYOUT::MakeFullFileName(
-                                    BASE_SCREEN::m_PageLayoutDescrFileName,
-                                    Prj().GetProjectPath() );
+    WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
+    wxString filename = WS_DATA_MODEL::MakeFullFileName( BASE_SCREEN::m_PageLayoutDescrFileName,
+                                                         Prj().GetProjectPath() );
 
-    pglayout.SetPageLayout( pg_fullfilename );
+    pglayout.SetPageLayout( filename );
 
     return ret;
 }

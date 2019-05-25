@@ -36,7 +36,7 @@ set( GAL_SRCS
     newstroke_font.cpp
     painter.cpp
     text_utils.cpp
-    page_layout/worksheet_viewitem.cpp
+    page_layout/ws_view_item.cpp
     gal/color4d.cpp
     gal/gal_display_options.cpp
     gal/graphics_abstraction_layer.cpp
@@ -236,8 +236,8 @@ set( COMMON_WIDGET_SRCS
     )
 
 set( COMMON_PAGE_LAYOUT_SRCS
-    page_layout/worksheet_dataitem.cpp
-    page_layout/worksheet_layout.cpp
+    page_layout/ws_data_item.cpp
+    page_layout/ws_data_model.cpp
     page_layout/page_layout_default_description.cpp
     page_layout/ws_draw_item.cpp
     page_layout/page_layout_reader_keywords.cpp
@@ -358,7 +358,7 @@ set( COMMON_SRCS
     utf8.cpp
     validators.cpp
     wildcards_and_files_ext.cpp
-    page_layout/worksheet_painter.cpp
+    page_layout/ws_painter.cpp
     wxdataviewctrl_helpers.cpp
     xnode.cpp
     )

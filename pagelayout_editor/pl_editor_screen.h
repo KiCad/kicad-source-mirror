@@ -33,7 +33,7 @@
 #include <base_units.h>
 #include <base_screen.h>
 
-class WORKSHEET_DATAITEM;
+class WS_DATA_ITEM;
 
 
 /* Handle info to display a board */
@@ -62,9 +62,9 @@ public:
      * BASE_SCREEN::GetCurItem().
      * @return WORKSHEET_DATAITEM* - the one selected, or NULL.
      */
-    WORKSHEET_DATAITEM* GetCurItem() const
+    WS_DATA_ITEM* GetCurItem() const
     {
-        return (WORKSHEET_DATAITEM*) BASE_SCREEN::GetCurItem();
+        return (WS_DATA_ITEM*) BASE_SCREEN::GetCurItem();
     }
 
     /**
@@ -72,7 +72,7 @@ public:
      * sets the currently selected object, m_CurrentItem.
      * @param aItem Any object derived from WORKSHEET_DATAITEM
      */
-    void SetCurItem( WORKSHEET_DATAITEM* aItem ) { BASE_SCREEN::SetCurItem( (EDA_ITEM*)aItem ); }
+    void SetCurItem( WS_DATA_ITEM* aItem ) { BASE_SCREEN::SetCurItem( (EDA_ITEM*)aItem ); }
 };
 
 

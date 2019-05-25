@@ -25,54 +25,54 @@
 
 
 /*
- * the class WORKSHEET_DATAITEM (and derived) defines
+ * the class WS_DATA_ITEM (and derived) defines
  * a basic shape of a page layout ( frame references and title block )
  * Basic shapes are line, rect and texts
- * the WORKSHEET_DATAITEM coordinates units is the mm, and are relative to
+ * the WS_DATA_ITEM coordinates units is the mm, and are relative to
  * one of 4 page corners.
  *
  * These items cannot be drawn or plot "as this". they should be converted
  * to a "draw list" (WS_DRAW_ITEM_BASE and derived items)
 
- * The list of these items is stored in a WORKSHEET_LAYOUT instance.
+ * The list of these items is stored in a WS_DATA_MODEL instance.
  *
  * When building the draw list:
- * the WORKSHEET_LAYOUT is used to create a WS_DRAW_ITEM_LIST
+ * the WS_DATA_MODEL is used to create a WS_DRAW_ITEM_LIST
  *  coordinates are converted to draw/plot coordinates.
  *  texts are expanded if they contain format symbols.
  *  Items with m_RepeatCount > 1 are created m_RepeatCount times
  *
- * the WORKSHEET_LAYOUT is created only once.
+ * the WS_DATA_MODEL is created only once.
  * the WS_DRAW_ITEM_LIST is created each time the page layout is plot/drawn
  *
- * the WORKSHEET_LAYOUT instance is created from a S expression which
+ * the WS_DATA_MODEL instance is created from a S expression which
  * describes the page layout (can be the default page layout or a custom file).
  */
 
 #include <fctsys.h>
 #include <draw_graphic_text.h>
 #include <eda_rect.h>
-#include <worksheet_painter.h>
+#include <ws_painter.h>
 #include <title_block.h>
 #include <ws_draw_item.h>
-#include <worksheet_dataitem.h>
+#include <ws_data_item.h>
 #include <view/view.h>
 
 using KIGFX::COLOR4D;
 
 
-// Static members of class WORKSHEET_DATAITEM:
-double WORKSHEET_DATAITEM::m_WSunits2Iu = 1000.0;
-DPOINT WORKSHEET_DATAITEM::m_RB_Corner;
-DPOINT WORKSHEET_DATAITEM::m_LT_Corner;
-double WORKSHEET_DATAITEM::m_DefaultLineWidth = 0.0;
-DSIZE  WORKSHEET_DATAITEM::m_DefaultTextSize( TB_DEFAULT_TEXTSIZE, TB_DEFAULT_TEXTSIZE );
-double WORKSHEET_DATAITEM::m_DefaultTextThickness = 0.0;
-bool WORKSHEET_DATAITEM::m_SpecialMode = false;
+// Static members of class WS_DATA_ITEM:
+double WS_DATA_ITEM::m_WSunits2Iu = 1000.0;
+DPOINT WS_DATA_ITEM::m_RB_Corner;
+DPOINT WS_DATA_ITEM::m_LT_Corner;
+double WS_DATA_ITEM::m_DefaultLineWidth = 0.0;
+DSIZE  WS_DATA_ITEM::m_DefaultTextSize( TB_DEFAULT_TEXTSIZE, TB_DEFAULT_TEXTSIZE );
+double WS_DATA_ITEM::m_DefaultTextThickness = 0.0;
+bool WS_DATA_ITEM::m_SpecialMode = false;
 
 
 // The constructor:
-WORKSHEET_DATAITEM::WORKSHEET_DATAITEM( WS_ITEM_TYPE aType )
+WS_DATA_ITEM::WS_DATA_ITEM( WS_ITEM_TYPE aType )
 {
     m_pageOption = ALL_PAGES;
     m_type = aType;
@@ -82,7 +82,7 @@ WORKSHEET_DATAITEM::WORKSHEET_DATAITEM( WS_ITEM_TYPE aType )
 }
 
 
-void WORKSHEET_DATAITEM::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView )
+void WS_DATA_ITEM::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView )
 {
     int pensize = GetPenSizeUi();
 
@@ -136,7 +136,7 @@ void WORKSHEET_DATAITEM::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VI
 // (if both coordinates have the same corner reference)
 // MoveToUi and MoveTo takes the graphic position (i.e relative to the left top
 // paper corner
-void WORKSHEET_DATAITEM::MoveToUi( wxPoint aPosition )
+void WS_DATA_ITEM::MoveToUi( wxPoint aPosition )
 {
     DPOINT pos_mm;
     pos_mm.x = aPosition.x / m_WSunits2Iu;
@@ -146,7 +146,7 @@ void WORKSHEET_DATAITEM::MoveToUi( wxPoint aPosition )
 }
 
 
-void WORKSHEET_DATAITEM::MoveTo( DPOINT aPosition )
+void WS_DATA_ITEM::MoveTo( DPOINT aPosition )
 {
     DPOINT vector = aPosition - GetStartPos();
     DPOINT endpos = vector + GetEndPos();
@@ -169,7 +169,7 @@ void WORKSHEET_DATAITEM::MoveTo( DPOINT aPosition )
 /* move the starting point of the item to a new position
  * aPosition = the new position of the starting point, in mm
  */
-void WORKSHEET_DATAITEM::MoveStartPointTo( DPOINT aPosition )
+void WS_DATA_ITEM::MoveStartPointTo( DPOINT aPosition )
 {
     DPOINT position;
 
@@ -204,7 +204,7 @@ void WORKSHEET_DATAITEM::MoveStartPointTo( DPOINT aPosition )
 /* move the starting point of the item to a new position
  * aPosition = the new position of the starting point in graphic units
  */
-void WORKSHEET_DATAITEM::MoveStartPointToUi( wxPoint aPosition )
+void WS_DATA_ITEM::MoveStartPointToUi( wxPoint aPosition )
 {
     DPOINT pos_mm;
     pos_mm.x = aPosition.x / m_WSunits2Iu;
@@ -220,7 +220,7 @@ void WORKSHEET_DATAITEM::MoveStartPointToUi( wxPoint aPosition )
  * (segments and rectangles)
  * aPosition = the new position of the ending point, in mm
  */
-void WORKSHEET_DATAITEM::MoveEndPointTo( DPOINT aPosition )
+void WS_DATA_ITEM::MoveEndPointTo( DPOINT aPosition )
 {
     DPOINT position;
 
@@ -267,7 +267,7 @@ void WORKSHEET_DATAITEM::MoveEndPointTo( DPOINT aPosition )
  * (segments and rectangles)
  * aPosition = the new position of the ending point in graphic units
  */
-void WORKSHEET_DATAITEM::MoveEndPointToUi( wxPoint aPosition )
+void WS_DATA_ITEM::MoveEndPointToUi( wxPoint aPosition )
 {
     DPOINT pos_mm;
     pos_mm.x = aPosition.x / m_WSunits2Iu;
@@ -277,7 +277,7 @@ void WORKSHEET_DATAITEM::MoveEndPointToUi( wxPoint aPosition )
 }
 
 
-const DPOINT WORKSHEET_DATAITEM::GetStartPos( int ii ) const
+const DPOINT WS_DATA_ITEM::GetStartPos( int ii ) const
 {
     DPOINT pos;
     pos.x = m_Pos.m_Pos.x + ( m_IncrementVector.x * ii );
@@ -308,7 +308,7 @@ const DPOINT WORKSHEET_DATAITEM::GetStartPos( int ii ) const
 }
 
 
-const wxPoint WORKSHEET_DATAITEM::GetStartPosUi( int ii ) const
+const wxPoint WS_DATA_ITEM::GetStartPosUi( int ii ) const
 {
     DPOINT pos = GetStartPos( ii );
     pos = pos * m_WSunits2Iu;
@@ -316,7 +316,7 @@ const wxPoint WORKSHEET_DATAITEM::GetStartPosUi( int ii ) const
 }
 
 
-const DPOINT WORKSHEET_DATAITEM::GetEndPos( int ii ) const
+const DPOINT WS_DATA_ITEM::GetEndPos( int ii ) const
 {
     DPOINT pos;
     pos.x = m_End.m_Pos.x + ( m_IncrementVector.x * ii );
@@ -347,7 +347,7 @@ const DPOINT WORKSHEET_DATAITEM::GetEndPos( int ii ) const
 }
 
 
-const wxPoint WORKSHEET_DATAITEM::GetEndPosUi( int ii ) const
+const wxPoint WS_DATA_ITEM::GetEndPosUi( int ii ) const
 {
     DPOINT pos = GetEndPos( ii );
     pos = pos * m_WSunits2Iu;
@@ -355,7 +355,7 @@ const wxPoint WORKSHEET_DATAITEM::GetEndPosUi( int ii ) const
 }
 
 
-bool WORKSHEET_DATAITEM::IsInsidePage( int ii ) const
+bool WS_DATA_ITEM::IsInsidePage( int ii ) const
 {
     DPOINT pos = GetStartPos( ii );
 
@@ -374,31 +374,31 @@ bool WORKSHEET_DATAITEM::IsInsidePage( int ii ) const
 }
 
 
-const wxString WORKSHEET_DATAITEM::GetClassName() const
+const wxString WS_DATA_ITEM::GetClassName() const
 {
     wxString name;
 
     switch( GetType() )
     {
-        case WS_TEXT: name = wxT( "Text" ); break;
-        case WS_SEGMENT: name = wxT( "Line" ); break;
-        case WS_RECT: name = wxT( "Rectangle" ); break;
+        case WS_TEXT:        name = wxT( "Text" );           break;
+        case WS_SEGMENT:     name = wxT( "Line" );           break;
+        case WS_RECT:        name = wxT( "Rectangle" );      break;
         case WS_POLYPOLYGON: name = wxT( "Imported Shape" ); break;
-        case WS_BITMAP: name = wxT( "Image" ); break;
+        case WS_BITMAP:      name = wxT( "Image" );          break;
     }
 
     return name;
 }
 
 
-WORKSHEET_DATAITEM_POLYPOLYGON::WORKSHEET_DATAITEM_POLYPOLYGON() :
-    WORKSHEET_DATAITEM( WS_POLYPOLYGON )
+WS_DATA_ITEM_POLYGONS::WS_DATA_ITEM_POLYGONS() :
+    WS_DATA_ITEM( WS_POLYPOLYGON )
 {
     m_Orient = 0.0;
 }
 
 
-void WORKSHEET_DATAITEM_POLYPOLYGON::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector,
+void WS_DATA_ITEM_POLYGONS::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector,
                                                     KIGFX::VIEW* aView )
 {
     std::map<int, STATUS_FLAGS> itemFlags;
@@ -445,13 +445,12 @@ void WORKSHEET_DATAITEM_POLYPOLYGON::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollecto
 
             while( ist <= iend )
                 poly->m_Corners.push_back( GetCornerPositionUi( ist++, jj ) );
-
         }
     }
 }
 
 
-const DPOINT WORKSHEET_DATAITEM_POLYPOLYGON::GetCornerPosition( unsigned aIdx, int aRepeat ) const
+const DPOINT WS_DATA_ITEM_POLYGONS::GetCornerPosition( unsigned aIdx, int aRepeat ) const
 {
     DPOINT pos = m_Corners[aIdx];
 
@@ -462,7 +461,7 @@ const DPOINT WORKSHEET_DATAITEM_POLYPOLYGON::GetCornerPosition( unsigned aIdx, i
 }
 
 
-void WORKSHEET_DATAITEM_POLYPOLYGON::SetBoundingBox()
+void WS_DATA_ITEM_POLYGONS::SetBoundingBox()
 {
     if( m_Corners.size() == 0 )
     {
@@ -496,7 +495,7 @@ void WORKSHEET_DATAITEM_POLYPOLYGON::SetBoundingBox()
 }
 
 
-bool WORKSHEET_DATAITEM_POLYPOLYGON::IsInsidePage( int ii ) const
+bool WS_DATA_ITEM_POLYGONS::IsInsidePage( int ii ) const
 {
     DPOINT pos = GetStartPos( ii );
     pos += m_minCoord;  // left top pos of bounding box
@@ -514,8 +513,7 @@ bool WORKSHEET_DATAITEM_POLYPOLYGON::IsInsidePage( int ii ) const
 }
 
 
-const wxPoint WORKSHEET_DATAITEM_POLYPOLYGON::GetCornerPositionUi( unsigned aIdx,
-                                                                   int aRepeat ) const
+const wxPoint WS_DATA_ITEM_POLYGONS::GetCornerPositionUi( unsigned aIdx, int aRepeat ) const
 {
     DPOINT pos = GetCornerPosition( aIdx, aRepeat );
     pos = pos * m_WSunits2Iu;
@@ -523,8 +521,8 @@ const wxPoint WORKSHEET_DATAITEM_POLYPOLYGON::GetCornerPositionUi( unsigned aIdx
 }
 
 
-WORKSHEET_DATAITEM_TEXT::WORKSHEET_DATAITEM_TEXT( const wxString& aTextBase ) :
-    WORKSHEET_DATAITEM( WS_TEXT )
+WS_DATA_ITEM_TEXT::WS_DATA_ITEM_TEXT( const wxString& aTextBase ) :
+        WS_DATA_ITEM( WS_TEXT )
 {
     m_TextBase = aTextBase;
     m_IncrementLabel = 1;
@@ -537,7 +535,7 @@ WORKSHEET_DATAITEM_TEXT::WORKSHEET_DATAITEM_TEXT( const wxString& aTextBase ) :
 }
 
 
-void WORKSHEET_DATAITEM_TEXT::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView )
+void WS_DATA_ITEM_TEXT::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView )
 {
     int   pensize = GetPenSizeUi();
     bool  multilines = false;
@@ -556,8 +554,8 @@ void WORKSHEET_DATAITEM_TEXT::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGF
     SetConstrainedTextSize();
     wxSize textsize;
 
-    textsize.x = KiROUND( m_ConstrainedTextSize.x * WORKSHEET_DATAITEM::m_WSunits2Iu );
-    textsize.y = KiROUND( m_ConstrainedTextSize.y * WORKSHEET_DATAITEM::m_WSunits2Iu );
+    textsize.x = KiROUND( m_ConstrainedTextSize.x * WS_DATA_ITEM::m_WSunits2Iu );
+    textsize.y = KiROUND( m_ConstrainedTextSize.y * WS_DATA_ITEM::m_WSunits2Iu );
 
     if( m_Bold )
         pensize = GetPenSizeForBold( std::min( textsize.x, textsize.y ) );
@@ -609,7 +607,7 @@ void WORKSHEET_DATAITEM_TEXT::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGF
 }
 
 
-void WORKSHEET_DATAITEM_TEXT::IncrementLabel( int aIncr )
+void WS_DATA_ITEM_TEXT::IncrementLabel( int aIncr )
 {
     int last = m_TextBase.Len() -1;
 
@@ -628,7 +626,7 @@ void WORKSHEET_DATAITEM_TEXT::IncrementLabel( int aIncr )
 // Replace the '\''n' sequence by EOL
 // and the sequence  '\''\' by only one '\' in m_FullText
 // if m_FullText is a multiline text (i.e.contains '\n') return true
-bool WORKSHEET_DATAITEM_TEXT::ReplaceAntiSlashSequence()
+bool WS_DATA_ITEM_TEXT::ReplaceAntiSlashSequence()
 {
     bool multiline = false;
 
@@ -663,7 +661,7 @@ bool WORKSHEET_DATAITEM_TEXT::ReplaceAntiSlashSequence()
 }
 
 
-void WORKSHEET_DATAITEM_TEXT::SetConstrainedTextSize()
+void WS_DATA_ITEM_TEXT::SetConstrainedTextSize()
 {
     m_ConstrainedTextSize = m_TextSize;
 
@@ -705,7 +703,7 @@ void WORKSHEET_DATAITEM_TEXT::SetConstrainedTextSize()
 }
 
 
-void WORKSHEET_DATAITEM_BITMAP::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView )
+void WS_DATA_ITEM_BITMAP::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aView )
 {
     std::map<int, STATUS_FLAGS> itemFlags;
     WS_DRAW_ITEM_BASE*          item = nullptr;
@@ -749,7 +747,7 @@ void WORKSHEET_DATAITEM_BITMAP::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KI
  * and the PPI bitmap factor
  * the pixel scale factor should be initialized before drawing the bitmap
  */
-void WORKSHEET_DATAITEM_BITMAP::SetPixelScaleFactor()
+void WS_DATA_ITEM_BITMAP::SetPixelScaleFactor()
 {
     if( m_ImageBitmap )
     {
@@ -764,7 +762,7 @@ void WORKSHEET_DATAITEM_BITMAP::SetPixelScaleFactor()
 
 /* return the PPI of the bitmap
  */
-int WORKSHEET_DATAITEM_BITMAP::GetPPI() const
+int WS_DATA_ITEM_BITMAP::GetPPI() const
 {
     if( m_ImageBitmap )
         return m_ImageBitmap->GetPPI() / m_ImageBitmap->GetScale();
@@ -775,7 +773,7 @@ int WORKSHEET_DATAITEM_BITMAP::GetPPI() const
 
 /*adjust the PPI of the bitmap
  */
-void WORKSHEET_DATAITEM_BITMAP::SetPPI( int aBitmapPPI )
+void WS_DATA_ITEM_BITMAP::SetPPI( int aBitmapPPI )
 {
     if( m_ImageBitmap )
         m_ImageBitmap->SetScale( (double) m_ImageBitmap->GetPPI() / aBitmapPPI );

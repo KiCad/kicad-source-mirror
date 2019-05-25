@@ -1,12 +1,8 @@
-/**
- * @file pagelayout_editor/files.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
@@ -35,7 +31,7 @@
 #include <gestfich.h>
 #include <macros.h>
 #include <ws_draw_item.h>
-
+#include <ws_data_model.h>
 #include <pl_editor_frame.h>
 #include <properties_frame.h>
 #include <pl_editor_id.h>
@@ -88,10 +84,10 @@ void PL_EDITOR_FRAME::OnFileHistory( wxCommandEvent& event )
 /* File commands. */
 void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 {
-    wxString msg;
-    int        id = event.GetId();
-    wxString   filename = GetCurrFileName();
-    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+    wxString       msg;
+    int            id = event.GetId();
+    wxString       filename = GetCurrFileName();
+    WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
 
     if( filename.IsEmpty() && id == wxID_SAVE )
         id = wxID_SAVEAS;
@@ -223,7 +219,7 @@ bool PL_EDITOR_FRAME::LoadPageLayoutDescrFile( const wxString& aFullFileName )
 {
     if( wxFileExists( aFullFileName ) )
     {
-        WORKSHEET_LAYOUT::GetTheInstance().SetPageLayout( aFullFileName );
+        WS_DATA_MODEL::GetTheInstance().SetPageLayout( aFullFileName );
         SetCurrFileName( aFullFileName );
         UpdateFileHistory( aFullFileName );
         GetScreen()->ClrModify();
@@ -240,7 +236,7 @@ bool PL_EDITOR_FRAME::InsertPageLayoutDescrFile( const wxString& aFullFileName )
     {
         const bool append = true;
         SaveCopyInUndoList();
-        WORKSHEET_LAYOUT::GetTheInstance().SetPageLayout( aFullFileName, append );
+        WS_DATA_MODEL::GetTheInstance().SetPageLayout( aFullFileName, append );
         return true;
     }
 
@@ -252,7 +248,7 @@ bool PL_EDITOR_FRAME::SavePageLayoutDescrFile( const wxString& aFullFileName )
 {
     if( ! aFullFileName.IsEmpty() )
     {
-        WORKSHEET_LAYOUT::GetTheInstance().Save( aFullFileName );
+        WS_DATA_MODEL::GetTheInstance().Save( aFullFileName );
         GetScreen()->ClrModify();
         return true;
     }

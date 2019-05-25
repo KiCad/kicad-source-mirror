@@ -26,7 +26,7 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <ws_draw_item.h>
-#include <worksheet_dataitem.h>
+#include <ws_data_model.h>
 #include <properties_frame.h>
 #include <tool/tool_manager.h>
 #include <tools/pl_selection_tool.h>
@@ -73,19 +73,19 @@ void PROPERTIES_FRAME::CopyPrmsFromGeneralToPanel()
     wxString msg;
 
     // Set default parameters
-    msg.Printf( wxT("%.3f"),  WORKSHEET_DATAITEM::m_DefaultLineWidth );
+    msg.Printf( wxT("%.3f"),  WS_DATA_ITEM::m_DefaultLineWidth );
     m_textCtrlDefaultLineWidth->SetValue( msg );
 
-    msg.Printf( wxT("%.3f"), WORKSHEET_DATAITEM::m_DefaultTextSize.x );
+    msg.Printf( wxT("%.3f"), WS_DATA_ITEM::m_DefaultTextSize.x );
     m_textCtrlDefaultTextSizeX->SetValue( msg );
-    msg.Printf( wxT("%.3f"),  WORKSHEET_DATAITEM::m_DefaultTextSize.y );
+    msg.Printf( wxT("%.3f"),  WS_DATA_ITEM::m_DefaultTextSize.y );
     m_textCtrlDefaultTextSizeY->SetValue( msg );
 
-    msg.Printf( wxT("%.3f"),  WORKSHEET_DATAITEM::m_DefaultTextThickness );
+    msg.Printf( wxT("%.3f"),  WS_DATA_ITEM::m_DefaultTextThickness );
     m_textCtrlDefaultTextThickness->SetValue( msg );
 
     // Set page margins values
-    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+    WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
     msg.Printf( wxT("%.3f"),  pglayout.GetRightMargin() );
     m_textCtrlRightMargin->SetValue( msg );
     msg.Printf( wxT("%.3f"),  pglayout.GetBottomMargin() );
@@ -104,18 +104,18 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToGeneral()
 
     // Import default parameters from widgets
     msg = m_textCtrlDefaultLineWidth->GetValue();
-    WORKSHEET_DATAITEM::m_DefaultLineWidth = DoubleValueFromString( UNSCALED_UNITS, msg );
+    WS_DATA_ITEM::m_DefaultLineWidth = DoubleValueFromString( UNSCALED_UNITS, msg );
 
     msg = m_textCtrlDefaultTextSizeX->GetValue();
-    WORKSHEET_DATAITEM::m_DefaultTextSize.x = DoubleValueFromString( UNSCALED_UNITS, msg );
+    WS_DATA_ITEM::m_DefaultTextSize.x = DoubleValueFromString( UNSCALED_UNITS, msg );
     msg = m_textCtrlDefaultTextSizeY->GetValue();
-    WORKSHEET_DATAITEM::m_DefaultTextSize.y = DoubleValueFromString( UNSCALED_UNITS, msg );
+    WS_DATA_ITEM::m_DefaultTextSize.y = DoubleValueFromString( UNSCALED_UNITS, msg );
 
     msg = m_textCtrlDefaultTextThickness->GetValue();
-    WORKSHEET_DATAITEM::m_DefaultTextThickness = DoubleValueFromString( UNSCALED_UNITS, msg );
+    WS_DATA_ITEM::m_DefaultTextThickness = DoubleValueFromString( UNSCALED_UNITS, msg );
 
     // Get page margins values
-    WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+    WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
 
     msg = m_textCtrlRightMargin->GetValue();
     pglayout.SetRightMargin( DoubleValueFromString( UNSCALED_UNITS, msg ) );
@@ -133,7 +133,7 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToGeneral()
 
 
 // Data transfert from item to widgets in properties frame
-void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
+void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WS_DATA_ITEM* aItem )
 {
     if( !aItem )
     {
@@ -143,7 +143,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
 
     wxString msg;
 
-    // Set parameters common to all WORKSHEET_DATAITEM types
+    // Set parameters common to all WS_DATA_ITEM types
     m_staticTextType->SetLabel( aItem->GetClassName() );
     m_textCtrlComment->SetValue( aItem->m_Info );
 
@@ -186,12 +186,12 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
     msg.Printf( wxT("%.3f"), aItem->m_LineWidth );
     m_textCtrlThickness->SetValue( msg );
 
-    // Now, set prms more specific to WORKSHEET_DATAITEM types
+    // Now, set prms more specific to WS_DATA_ITEM types
     // For a given type, disable widgets which are not relevant,
     // and be sure widgets which are relevant are enabled
-    if( aItem->GetType() == WORKSHEET_DATAITEM::WS_TEXT )
+    if( aItem->GetType() == WS_DATA_ITEM::WS_TEXT )
     {
-        WORKSHEET_DATAITEM_TEXT* item = (WORKSHEET_DATAITEM_TEXT*) aItem;
+        WS_DATA_ITEM_TEXT* item = (WS_DATA_ITEM_TEXT*) aItem;
         item->m_FullText = item->m_TextBase;
         // Replace our '\' 'n' sequence by the EOL char
         item->ReplaceAntiSlashSequence();
@@ -235,17 +235,17 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
         m_textCtrlTextSizeY->SetValue( msg );
     }
 
-    if( aItem->GetType() == WORKSHEET_DATAITEM::WS_POLYPOLYGON )
+    if( aItem->GetType() == WS_DATA_ITEM::WS_POLYPOLYGON )
     {
-        WORKSHEET_DATAITEM_POLYPOLYGON* item = (WORKSHEET_DATAITEM_POLYPOLYGON*) aItem;
+        WS_DATA_ITEM_POLYGONS* item = (WS_DATA_ITEM_POLYGONS*) aItem;
         // Rotation (poly and text)
         msg.Printf( wxT("%.3f"), item->m_Orient );
         m_textCtrlRotation->SetValue( msg );
     }
 
-    if( aItem->GetType() == WORKSHEET_DATAITEM::WS_BITMAP )
+    if( aItem->GetType() == WS_DATA_ITEM::WS_BITMAP )
     {
-        WORKSHEET_DATAITEM_BITMAP* item = (WORKSHEET_DATAITEM_BITMAP*) aItem;
+        WS_DATA_ITEM_BITMAP* item = (WS_DATA_ITEM_BITMAP*) aItem;
         // select definition in PPI
         msg.Printf( wxT("%d"), item->GetPPI() );
         m_textCtrlBitmapPPI->SetValue( msg );
@@ -253,22 +253,22 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
 
     m_SizerItemProperties->Show( true );
 
-    m_SizerTextOptions->Show( aItem->GetType() == WORKSHEET_DATAITEM::WS_TEXT );
+    m_SizerTextOptions->Show( aItem->GetType() == WS_DATA_ITEM::WS_TEXT );
 
-    m_SizerEndPosition->Show( aItem->GetType() == WORKSHEET_DATAITEM::WS_SEGMENT
-                           || aItem->GetType() == WORKSHEET_DATAITEM::WS_RECT );
+    m_SizerEndPosition->Show( aItem->GetType() == WS_DATA_ITEM::WS_SEGMENT
+                           || aItem->GetType() == WS_DATA_ITEM::WS_RECT );
 
-    m_SizerLineThickness->Show( aItem->GetType() != WORKSHEET_DATAITEM::WS_BITMAP );
+    m_SizerLineThickness->Show( aItem->GetType() != WS_DATA_ITEM::WS_BITMAP );
     // Polygons have no defaut value for line width
-    m_staticTextInfoThickness->Show( aItem->GetType() != WORKSHEET_DATAITEM::WS_POLYPOLYGON );
+    m_staticTextInfoThickness->Show( aItem->GetType() != WS_DATA_ITEM::WS_POLYPOLYGON );
 
-    m_SizerRotation->Show( aItem->GetType() == WORKSHEET_DATAITEM::WS_TEXT
-                        || aItem->GetType() == WORKSHEET_DATAITEM::WS_POLYPOLYGON );
+    m_SizerRotation->Show( aItem->GetType() == WS_DATA_ITEM::WS_TEXT
+                        || aItem->GetType() == WS_DATA_ITEM::WS_POLYPOLYGON );
 
-    m_SizerPPI->Show( aItem->GetType() == WORKSHEET_DATAITEM::WS_BITMAP );
+    m_SizerPPI->Show( aItem->GetType() == WS_DATA_ITEM::WS_BITMAP );
 
-    m_staticTextInclabel->Show( aItem->GetType() == WORKSHEET_DATAITEM::WS_TEXT );
-    m_textCtrlTextIncrement->Show( aItem->GetType() == WORKSHEET_DATAITEM::WS_TEXT );
+    m_staticTextInclabel->Show( aItem->GetType() == WS_DATA_ITEM::WS_TEXT );
+    m_textCtrlTextIncrement->Show( aItem->GetType() == WS_DATA_ITEM::WS_TEXT );
 
     // Repeat parameters
     msg.Printf( wxT("%d"), aItem->m_RepeatCount );
@@ -296,7 +296,7 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
 
     if( drawItem )
     {
-        WORKSHEET_DATAITEM* dataItem = drawItem->GetPeer();
+        WS_DATA_ITEM* dataItem = drawItem->GetPeer();
         CopyPrmsFromPanelToItem( dataItem );
         // Be sure what is displayed is what is set for item
         // (mainly, texts can be modified if they contain "\n")
@@ -316,11 +316,11 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
 
 void PROPERTIES_FRAME::OnSetDefaultValues( wxCommandEvent& event )
 {
-    WORKSHEET_DATAITEM::m_DefaultTextSize =
+    WS_DATA_ITEM::m_DefaultTextSize =
             DSIZE( TB_DEFAULT_TEXTSIZE, TB_DEFAULT_TEXTSIZE );
     // default thickness in mm
-    WORKSHEET_DATAITEM::m_DefaultLineWidth = 0.15;
-    WORKSHEET_DATAITEM::m_DefaultTextThickness = 0.15;
+    WS_DATA_ITEM::m_DefaultLineWidth = 0.15;
+    WS_DATA_ITEM::m_DefaultTextThickness = 0.15;
 
     CopyPrmsFromGeneralToPanel();
     m_parent->GetCanvas()->Refresh();
@@ -328,7 +328,7 @@ void PROPERTIES_FRAME::OnSetDefaultValues( wxCommandEvent& event )
 
 
 // Data transfert from  properties frame to item parameters
-bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem )
+bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WS_DATA_ITEM* aItem )
 {
     if( aItem == NULL )
         return false;
@@ -392,9 +392,9 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem )
     msg = m_textCtrlStepY->GetValue();
     aItem->m_IncrementVector.y = DoubleValueFromString( UNSCALED_UNITS, msg );
 
-    if( aItem->GetType() == WORKSHEET_DATAITEM::WS_TEXT )
+    if( aItem->GetType() == WS_DATA_ITEM::WS_TEXT )
     {
-        WORKSHEET_DATAITEM_TEXT* item = (WORKSHEET_DATAITEM_TEXT*) aItem;
+        WS_DATA_ITEM_TEXT* item = (WS_DATA_ITEM_TEXT*) aItem;
 
         item->m_TextBase = m_textCtrlText->GetValue();
 
@@ -437,17 +437,17 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem )
         item->m_BoundingBoxSize.y = DoubleValueFromString( UNSCALED_UNITS, msg );
     }
 
-    if( aItem->GetType() == WORKSHEET_DATAITEM::WS_POLYPOLYGON )
+    if( aItem->GetType() == WS_DATA_ITEM::WS_POLYPOLYGON )
     {
-        WORKSHEET_DATAITEM_POLYPOLYGON* item = (WORKSHEET_DATAITEM_POLYPOLYGON*) aItem;
+        WS_DATA_ITEM_POLYGONS* item = (WS_DATA_ITEM_POLYGONS*) aItem;
 
         msg = m_textCtrlRotation->GetValue();
         item->m_Orient = DoubleValueFromString( UNSCALED_UNITS, msg );
     }
 
-    if( aItem->GetType() == WORKSHEET_DATAITEM::WS_BITMAP )
+    if( aItem->GetType() == WS_DATA_ITEM::WS_BITMAP )
     {
-        WORKSHEET_DATAITEM_BITMAP* item = (WORKSHEET_DATAITEM_BITMAP*) aItem;
+        WS_DATA_ITEM_BITMAP* item = (WS_DATA_ITEM_BITMAP*) aItem;
         // Set definition in PPI
         long value;
         msg = m_textCtrlBitmapPPI->GetValue();

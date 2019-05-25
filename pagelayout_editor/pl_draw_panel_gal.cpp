@@ -22,9 +22,9 @@
 #include <tool/tool_manager.h>
 #include <tools/pl_actions.h>
 #include <view/wx_view_controls.h>
-#include <worksheet_viewitem.h>
-#include <worksheet_dataitem.h>
-#include <worksheet_painter.h>
+#include <ws_view_item.h>
+#include <ws_data_model.h>
+#include <ws_painter.h>
 #include <colors_design_settings.h>
 #include <pl_editor_frame.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -45,7 +45,7 @@ PL_DRAW_PANEL_GAL::PL_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindo
 
     GetGAL()->SetWorldUnitLength( 1.0/IU_PER_MM /* 10 nm */ / 25.4 /* 1 inch in mm */ );
 
-    m_painter.reset( new KIGFX::WORKSHEET_PAINTER( m_gal ) );
+    m_painter.reset( new KIGFX::WS_PAINTER( m_gal ) );
     m_view->SetPainter( m_painter.get() );
 
     setDefaultLayerDeps();
@@ -77,7 +77,7 @@ void PL_DRAW_PANEL_GAL::DisplayWorksheet()
 
     WS_DRAW_ITEM_LIST::SetupDrawEnvironment( m_edaFrame->GetPageSettings() );
 
-    for( WORKSHEET_DATAITEM* dataItem : WORKSHEET_LAYOUT::GetTheInstance().GetItems() )
+    for( WS_DATA_ITEM* dataItem : WS_DATA_MODEL::GetTheInstance().GetItems() )
         dataItem->SyncDrawItems( nullptr, m_view );
 
     selTool->RebuildSelection();

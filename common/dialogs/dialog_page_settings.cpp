@@ -21,10 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file dialog_page_settings.cpp
- */
-
 #include <fctsys.h>
 #include <macros.h>              // arrayDim()
 #include <common.h>
@@ -35,7 +31,7 @@
 #include <class_drawpanel.h>
 #include <title_block.h>
 #include <draw_frame.h>
-#include <ws_draw_item.h>
+#include <ws_data_model.h>
 #include <base_screen.h>
 #include <wildcards_and_files_ext.h>
 
@@ -47,7 +43,7 @@
 #include <general.h>
 #endif
 
-#include <worksheet_painter.h>
+#include <ws_painter.h>
 #include <dialog_page_settings.h>
 
 #define MAX_PAGE_EXAMPLE_SIZE 200
@@ -433,7 +429,7 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 
     if( fileName != BASE_SCREEN::m_PageLayoutDescrFileName )
     {
-        wxString fullFileName = WORKSHEET_LAYOUT::MakeFullFileName( fileName, m_projectPath );
+        wxString fullFileName = WS_DATA_MODEL::MakeFullFileName( fileName, m_projectPath );
 
         if( !fullFileName.IsEmpty() && !wxFileExists( fullFileName ) )
         {
@@ -445,7 +441,7 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
         }
 
         BASE_SCREEN::m_PageLayoutDescrFileName = fileName;
-        WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+        WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
         pglayout.SetPageLayout( fullFileName );
         m_localPrjConfigChanged = true;
     }
@@ -660,7 +656,7 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         wxString emptyString;
         GRResetPenAndBrush( &memDC );
 
-        WORKSHEET_LAYOUT::SetAltInstance( m_pagelayout );
+        WS_DATA_MODEL::SetAltInstance( m_pagelayout );
         GRFilledRect( NULL, &memDC, 0, 0, m_layout_size.x, m_layout_size.y, WHITE, WHITE );
         DrawPageLayout( &memDC, NULL, pageDUMMY,
                         emptyString, emptyString,
@@ -669,7 +665,7 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
 
         memDC.SelectObject( wxNullBitmap );
         m_PageLayoutExampleBitmap->SetBitmap( *m_page_bitmap );
-        WORKSHEET_LAYOUT::SetAltInstance( NULL );
+        WS_DATA_MODEL::SetAltInstance( NULL );
 
         // Refresh the dialog.
         Layout();
@@ -784,7 +780,7 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
 
     // Try to remove the path, if the path is the current working dir,
     // or the dir of kicad.pro (template), and use a relative path
-    wxString shortFileName = WORKSHEET_LAYOUT::MakeShortFileName( fileName, m_projectPath );
+    wxString shortFileName = WS_DATA_MODEL::MakeShortFileName( fileName, m_projectPath );
 
     // For Win/Linux/macOS compatibility, a relative path is a good idea
     if( shortFileName != GetWksFileName() && shortFileName != fileName )
@@ -803,7 +799,7 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
     SetWksFileName( shortFileName );
 
     if( m_pagelayout == NULL )
-        m_pagelayout = new WORKSHEET_LAYOUT;
+        m_pagelayout = new WS_DATA_MODEL;
 
     m_pagelayout->SetPageLayout( fileName );
 

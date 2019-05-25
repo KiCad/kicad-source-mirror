@@ -30,7 +30,6 @@
 
 #include <class_drawpanel.h>
 #include <pl_editor_frame.h>
-#include <worksheet_dataitem.h>
 #include <hotkeys.h>
 #include <pl_editor_id.h>
 

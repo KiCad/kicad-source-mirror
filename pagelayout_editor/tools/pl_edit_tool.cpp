@@ -27,7 +27,7 @@
 #include <tools/pl_actions.h>
 #include <tools/pl_edit_tool.h>
 #include <tools/pl_picker_tool.h>
-#include <worksheet_dataitem.h>
+#include <ws_data_model.h>
 #include <ws_draw_item.h>
 #include <hotkeys.h>
 #include <bitmaps.h>
@@ -270,7 +270,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 void PL_EDIT_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta )
 {
     WS_DRAW_ITEM_BASE*  drawItem = static_cast<WS_DRAW_ITEM_BASE*>( aItem );
-    WORKSHEET_DATAITEM* dataItem = drawItem->GetPeer();
+    WS_DATA_ITEM* dataItem = drawItem->GetPeer();
 
     dataItem->MoveToUi( dataItem->GetStartPosUi() + (wxPoint) aDelta );
 
@@ -329,8 +329,8 @@ int PL_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
     while( selection.Front() )
     {
         WS_DRAW_ITEM_BASE*  drawItem = static_cast<WS_DRAW_ITEM_BASE*>( selection.Front() );
-        WORKSHEET_DATAITEM* dataItem = drawItem->GetPeer();
-        WORKSHEET_LAYOUT::GetTheInstance().Remove( dataItem );
+        WS_DATA_ITEM* dataItem = drawItem->GetPeer();
+        WS_DATA_MODEL::GetTheInstance().Remove( dataItem );
 
         for( WS_DRAW_ITEM_BASE* item : dataItem->GetDrawItems() )
         {

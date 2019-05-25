@@ -55,7 +55,7 @@
 #include <class_track.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <worksheet_viewitem.h>
+#include <ws_view_item.h>
 #include <connectivity/connectivity_data.h>
 #include <ratsnest_viewitem.h>
 #include <wildcards_and_files_ext.h>
@@ -487,8 +487,8 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
         PCB_DRAW_PANEL_GAL* drawPanel = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
 
         // Prepare worksheet template
-        KIGFX::WORKSHEET_VIEWITEM* worksheet;
-        worksheet = new KIGFX::WORKSHEET_VIEWITEM( IU_PER_MILS ,&m_Pcb->GetPageSettings(),
+        KIGFX::WS_VIEW_ITEM* worksheet;
+        worksheet = new KIGFX::WS_VIEW_ITEM( IU_PER_MILS ,&m_Pcb->GetPageSettings(),
                                                    &m_Pcb->GetTitleBlock() );
         worksheet->SetSheetName( std::string( GetScreenDesc().mb_str() ) );
 

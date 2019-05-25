@@ -31,7 +31,7 @@
 
 namespace KIGFX
 {
-    class WORKSHEET_VIEWITEM;
+    class WS_VIEW_ITEM;
     class RATSNEST_VIEWITEM;
     class PCB_VIEW;
 }
@@ -59,7 +59,7 @@ public:
      * @param aWorksheet is the worksheet to be used.
      *        The object is then owned by PCB_DRAW_PANEL_GAL.
      */
-    void SetWorksheet( KIGFX::WORKSHEET_VIEWITEM* aWorksheet );
+    void SetWorksheet( KIGFX::WS_VIEW_ITEM* aWorksheet );
 
     /**
      * Function UseColorScheme
@@ -118,7 +118,7 @@ protected:
     void setDefaultLayerDeps();
 
     ///> Currently used worksheet
-    std::unique_ptr<KIGFX::WORKSHEET_VIEWITEM> m_worksheet;
+    std::unique_ptr<KIGFX::WS_VIEW_ITEM> m_worksheet;
 
     ///> Ratsnest view item
     std::unique_ptr<KIGFX::RATSNEST_VIEWITEM> m_ratsnest;
