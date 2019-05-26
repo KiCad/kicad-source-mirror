@@ -430,18 +430,25 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
 
     GRResetPenAndBrush( dc );
 
-    if( m_parent->GetPrintMonochrome() )
-        GRForceBlackPen( true );
-
     aScreen->m_IsPrinting = true;
 
     COLOR4D bgColor = m_parent->GetDrawBgColor();
+    m_parent->SetDrawBgColor( COLOR4D::WHITE );
+
+    GRSetDrawMode( dc, GR_COPY );
+    GRSFilledRect( nullptr, dc, fitRect.GetX(), fitRect.GetY(),
+                   fitRect.GetRight(), fitRect.GetBottom(),
+                   0, COLOR4D::WHITE, COLOR4D::WHITE );
+
+    if( m_parent->GetPrintMonochrome() )
+        GRForceBlackPen( true );
 
     aScreen->Draw( panel, dc, (GR_DRAWMODE) 0 );
 
     if( printReference )
         m_parent->DrawWorkSheet( dc, aScreen, GetDefaultLineThickness(),
-                IU_PER_MILS, aScreen->GetFileName() );
+                IU_PER_MILS, aScreen->GetFileName(), wxEmptyString,
+                GetLayerColor( ( SCH_LAYER_ID )LAYER_WORKSHEET ) );
 
     m_parent->SetDrawBgColor( bgColor );
     aScreen->m_IsPrinting = false;
