@@ -73,13 +73,17 @@ wxString GetDefaultPlotExtension( PlotFormat aFormat )
 void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
                     const PAGE_INFO& aPageInfo,
                     int aSheetNumber, int aNumberOfSheets,
-                    const wxString &aSheetDesc, const wxString &aFilename )
+                    const wxString &aSheetDesc, const wxString &aFilename, const COLOR4D aColor )
 {
     /* Note: Page sizes values are given in mils
      */
     double   iusPerMil = plotter->GetIUsPerDecimil() * 10.0;
 
-    COLOR4D plotColor = plotter->GetColorMode() ? COLOR4D( RED ) : COLOR4D::BLACK;
+    COLOR4D plotColor = plotter->GetColorMode() ? aColor : COLOR4D::BLACK;
+
+    if( plotColor == COLOR4D::UNSPECIFIED )
+        plotColor = COLOR4D( RED );
+
     plotter->SetColor( plotColor );
     WS_DRAW_ITEM_LIST drawList;
 

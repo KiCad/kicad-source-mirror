@@ -136,7 +136,8 @@ bool DIALOG_PLOT_SCHEMATIC::plotOneSheetSVG( EDA_DRAW_FRAME*    aFrame,
                        aFrame->GetPageSettings(),
                        aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
                        aFrame->GetScreenDesc(),
-                       aScreen->GetFileName() );
+                       aScreen->GetFileName(),
+                       GetLayerColor( ( SCH_LAYER_ID )LAYER_WORKSHEET ) );
     }
 
     aScreen->Plot( plotter );
