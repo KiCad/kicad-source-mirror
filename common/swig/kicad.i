@@ -95,6 +95,7 @@ principle should be easily implemented by adapting the current STL containers.
     #include <marker_base.h>
     #include <eda_text.h>
     #include <convert_to_biu.h>
+    #include <id.h>
 %}
 
 // all the wx wrappers for wxString, wxPoint, wxRect, wxChar ..
