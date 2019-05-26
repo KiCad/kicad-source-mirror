@@ -289,7 +289,7 @@ void LIB_EDIT_FRAME::RedrawComponent( wxDC* aDC, wxPoint aOffset  )
 }
 
 
-void LIB_EDIT_FRAME::OnSaveAll( wxCommandEvent& event )
+void LIB_EDIT_FRAME::OnSaveAll()
 {
     saveAllLibraries( false );
     m_treePane->Refresh();
@@ -383,7 +383,7 @@ void LIB_EDIT_FRAME::OnEditPart( wxCommandEvent& aEvent )
 }
 
 
-void LIB_EDIT_FRAME::OnSave( wxCommandEvent& aEvent )
+void LIB_EDIT_FRAME::OnSave()
 {
     LIB_ID libId = getTargetLibId();
     const wxString& libName = libId.GetLibNickname();
@@ -405,7 +405,7 @@ void LIB_EDIT_FRAME::OnSave( wxCommandEvent& aEvent )
 }
 
 
-void LIB_EDIT_FRAME::OnSaveAs( wxCommandEvent& aEvent )
+void LIB_EDIT_FRAME::OnSaveAs()
 {
     LIB_ID libId = getTargetLibId();
     const wxString& libName = libId.GetLibNickname();

@@ -91,9 +91,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                             KiScaledBitmap( new_component_xpm, this ),
                             _( "Create new symbol" ) );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_SAVE_ALL, wxEmptyString,
-                            KiScaledBitmap( save_xpm, this ),
-                            _( "Save all changes" ) );
+    m_mainToolBar->Add( ACTIONS::saveAll );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->Add( ACTIONS::undo );

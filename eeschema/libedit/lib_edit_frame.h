@@ -252,17 +252,17 @@ public:
     /**
      * Saves the selected part or library.
      */
-    void OnSave( wxCommandEvent& aEvent );
+    void OnSave();
 
     /**
      * Saves the selected part or library to a new name and/or location.
      */
-    void OnSaveAs( wxCommandEvent& aEvent );
+    void OnSaveAs();
 
     /**
      * Saves all modified parts and libraries.
      */
-    void OnSaveAll( wxCommandEvent& aEvent );
+    void OnSaveAll();
 
     /**
      * Reverts unsaved changes in a part, restoring to the last saved state.
@@ -292,7 +292,6 @@ public:
 
     void OnUpdateEditingPart( wxUpdateUIEvent& event );
     void OnUpdateHavePart( wxUpdateUIEvent& aEvent );
-    void OnUpdateSave( wxUpdateUIEvent& aEvent );
     void OnUpdateRevert( wxUpdateUIEvent& aEvent );
     void OnUpdateSyncPinEdit( wxUpdateUIEvent& event );
     void OnUpdatePartNumber( wxUpdateUIEvent& event );

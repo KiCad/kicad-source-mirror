@@ -29,7 +29,7 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
-
+#include <lib_manager.h>
 #include "eeschema_id.h"
 #include "general.h"
 #include "help_common_strings.h"
@@ -46,98 +46,72 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     wxMenuBar* menuBar = new wxMenuBar();
     wxString   text;
 
-    // Recreate all menus:
+    auto modifiedDocumentCondition = [ this ] ( const SELECTION& sel ) {
+        LIB_ID libId = getTargetLibId();
+        const wxString& libName = libId.GetLibNickname();
+        const wxString& partName = libId.GetLibItemName();
+        bool readOnly = libName.IsEmpty() || m_libMgr->IsLibraryReadOnly( libName );
 
+        if( partName.IsEmpty() )
+            return ( !readOnly && m_libMgr->IsLibraryModified( libName ) );
+        else
+            return ( !readOnly && m_libMgr->IsPartModified( partName, libName ) );
+    };
+
+    //
     // Menu File:
-    wxMenu* fileMenu = new wxMenu;
+    //
+    CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, selTool );
 
-    AddMenuItem( fileMenu,
-                 ID_LIBEDIT_NEW_LIBRARY,
-                 _( "New Library..." ),
-                 _( "Creates an empty library" ),
-                 KiBitmap( new_library_xpm ) );
+    fileMenu->AddItem( ID_LIBEDIT_NEW_LIBRARY,
+                       _( "New Library..." ),
+                       _( "Creates an empty library" ),
+                       new_library_xpm,              EE_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ID_LIBEDIT_ADD_LIBRARY,
+                       _( "Add Library..." ),
+                       _( "Adds a previously created library" ),
+                       add_library_xpm,              EE_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ID_LIBEDIT_NEW_PART,
+                       AddHotkeyName( _( "New Symbol..." ), m_hotkeysDescrList, HK_NEW ),
+                       _( "Create a new symbol" ),
+                       new_component_xpm,            EE_CONDITIONS::ShowAlways );
 
-    AddMenuItem( fileMenu,
-                 ID_LIBEDIT_ADD_LIBRARY,
-                 _( "Add Library..." ),
-                 _( "Adds a previously created library" ),
-                 KiBitmap( add_library_xpm ) );
+    fileMenu->AddSeparator();
+    fileMenu->AddItem( ACTIONS::save,                modifiedDocumentCondition );
+    fileMenu->AddItem( ACTIONS::saveAs,              EE_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::saveAll,             EE_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ID_LIBEDIT_REVERT,
+                       _( "Revert" ),
+                       _( "Throw away changes" ),
+                       undo_xpm,                     EE_CONDITIONS::ShowAlways );
 
-    text = AddHotkeyName( _( "&New Symbol..." ), m_hotkeysDescrList, HK_NEW );
-    AddMenuItem( fileMenu,
-                 ID_LIBEDIT_NEW_PART,
-                 text,
-                 _( "Create a new symbol" ),
-                 KiBitmap( new_component_xpm ) );
-
-    fileMenu->AppendSeparator();
-
-    text = AddHotkeyName( _( "&Save" ), g_Libedit_Hotkeys_Descr, HK_SAVE );
-    AddMenuItem( fileMenu,
-                 ID_LIBEDIT_SAVE,
-                 text,
-                 _( "Save changes" ),
-                 KiBitmap( save_xpm ) );
-
-    text = AddHotkeyName( _( "Save &As..." ), g_Libedit_Hotkeys_Descr, HK_SAVEAS );
-    AddMenuItem( fileMenu,
-                 ID_LIBEDIT_SAVE_AS,
-                 text,
-                 _( "Save a copy to a new name and/or location" ),
-                 KiBitmap( save_as_xpm ) );
-
-    AddMenuItem( fileMenu,
-                 ID_LIBEDIT_SAVE_ALL,
-                 _( "Save All" ),
-                 _( "Save all library and symbol changes" ),
-                 KiBitmap( save_xpm ) );
-
-    AddMenuItem( fileMenu,
-                 ID_LIBEDIT_REVERT,
-                 _( "&Revert" ),
-                 _( "Throw away changes" ),
-                 KiBitmap( undo_xpm ) );
-
-    fileMenu->AppendSeparator();
-
-    AddMenuItem( fileMenu,
-                 ID_LIBEDIT_IMPORT_PART,
-                 _( "&Import Symbol..." ),
-                 _( "Import a symbol to the current library" ),
-                 KiBitmap( import_part_xpm ) );
+    fileMenu->AddSeparator();
+    fileMenu->AddItem( ID_LIBEDIT_IMPORT_PART,
+                       _( "Import Symbol..." ),
+                       _( "Import a symbol to the current library" ),
+                       import_part_xpm,              EE_CONDITIONS::ShowAlways );
 
     // Export submenu
-    wxMenu* submenuExport = new wxMenu();
+    ACTION_MENU* submenuExport = new ACTION_MENU();
+    submenuExport->SetTool( selTool );
+    submenuExport->SetTitle( _( "Export" ) );
+    submenuExport->SetIcon( export_xpm );
 
-    AddMenuItem( submenuExport,
-                 ID_LIBEDIT_EXPORT_PART,
-                 _( "S&ymbol..." ),
-                 _( "Create a library file containing only the current symbol" ),
-                 KiBitmap( export_part_xpm ) );
+    submenuExport->Add( _( "Symbol..." ),
+                        _( "Create a new library file containing the current symbol" ),
+                        ID_LIBEDIT_EXPORT_PART, export_part_xpm );
+    submenuExport->Add( _( "View as PNG..." ),
+                        _( "Create a PNG file from the current view" ),
+                        ID_LIBEDIT_GEN_PNG_FILE, plot_xpm );
+    submenuExport->Add( _( "Symbol as SVG..." ),
+                        _( "Create a SVG file from the current symbol" ),
+                        ID_LIBEDIT_GEN_SVG_FILE, plot_svg_xpm );
 
-    AddMenuItem( submenuExport,
-                 ID_LIBEDIT_GEN_PNG_FILE,
-                 _( "View as &PNG..." ),
-                 _( "Create a PNG file from the current view" ),
-                 KiBitmap( plot_xpm ) );
+    fileMenu->AddMenu( submenuExport,              EE_CONDITIONS::ShowAlways );
 
-    AddMenuItem( submenuExport,
-                 ID_LIBEDIT_GEN_SVG_FILE,
-                 _( "Symbol as S&VG..." ),
-                 _( "Create a SVG file from the current symbol" ),
-                 KiBitmap( plot_svg_xpm ) );
-
-    AddMenuItem( fileMenu, submenuExport, ID_GEN_EXPORT_FILE, _( "E&xport" ),
-                 _( "Export files" ),
-                 KiBitmap( export_xpm ) );
-
-    fileMenu->AppendSeparator();
-
-    AddMenuItem( fileMenu,
-                 wxID_EXIT,
-                 _( "&Quit" ),
-                 _( "Quit Library Editor" ),
-                 KiBitmap( exit_xpm ) );
+    fileMenu->AddSeparator();
+    // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
+    fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, EE_CONDITIONS::ShowAlways );
 
     //
     // Edit menu
@@ -224,7 +198,6 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Menu Inspect:
     //
     wxMenu* inspectMenu = new wxMenu;
-
 
     text = AddHotkeyName( _( "Show Datasheet" ), g_Libedit_Hotkeys_Descr, HK_LIBEDIT_VIEW_DOC );
     AddMenuItem( inspectMenu,

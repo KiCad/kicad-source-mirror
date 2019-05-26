@@ -90,9 +90,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     // Actions
     EVT_TOOL( ID_LIBEDIT_NEW_LIBRARY, LIB_EDIT_FRAME::OnCreateNewLibrary )
     EVT_TOOL( ID_LIBEDIT_ADD_LIBRARY, LIB_EDIT_FRAME::OnAddLibrary )
-    EVT_TOOL( ID_LIBEDIT_SAVE, LIB_EDIT_FRAME::OnSave )
-    EVT_MENU( ID_LIBEDIT_SAVE_AS, LIB_EDIT_FRAME::OnSaveAs )
-    EVT_MENU( ID_LIBEDIT_SAVE_ALL, LIB_EDIT_FRAME::OnSaveAll )
     EVT_TOOL( ID_LIBEDIT_REVERT, LIB_EDIT_FRAME::OnRevert )
     EVT_TOOL( ID_LIBEDIT_NEW_PART, LIB_EDIT_FRAME::OnCreateNewPart )
     EVT_TOOL( ID_LIBEDIT_EDIT_PART, LIB_EDIT_FRAME::OnEditPart )
@@ -133,8 +130,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
 
     // Update user interface elements.
     EVT_UPDATE_UI( ID_LIBEDIT_EXPORT_PART, LIB_EDIT_FRAME::OnUpdateHavePart )
-    EVT_UPDATE_UI( ID_LIBEDIT_SAVE, LIB_EDIT_FRAME::OnUpdateSave )
-    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_ALL, LIB_EDIT_FRAME::OnUpdateSave )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE_AS, LIB_EDIT_FRAME::OnUpdateHavePart )
     EVT_UPDATE_UI( ID_LIBEDIT_REVERT, LIB_EDIT_FRAME::OnUpdateRevert )
     EVT_UPDATE_UI( ID_LIBEDIT_CHECK_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
@@ -394,20 +389,6 @@ bool LIB_EDIT_FRAME::IsSearchTreeShown()
 void LIB_EDIT_FRAME::ClearSearchTreeSelection()
 {
     m_treePane->GetLibTree()->Unselect();
-}
-
-
-void LIB_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
-{
-    LIB_ID libId = getTargetLibId();
-    const wxString& libName = libId.GetLibNickname();
-    const wxString& partName = libId.GetLibItemName();
-    bool readOnly = libName.IsEmpty() || m_libMgr->IsLibraryReadOnly( libName );
-
-    if( partName.IsEmpty() )
-        aEvent.Enable( !readOnly && m_libMgr->IsLibraryModified( libName ) );
-    else
-        aEvent.Enable( !readOnly && m_libMgr->IsPartModified( partName, libName ) );
 }
 
 

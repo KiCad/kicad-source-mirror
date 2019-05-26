@@ -41,6 +41,27 @@ TOOL_ACTION EE_ACTIONS::showComponentTree( "eeschema.SymbolLibraryControl.showCo
         search_tree_xpm );
 
 
+int LIB_CONTROL::Save( const TOOL_EVENT& aEvent )
+{
+    m_frame->OnSave();
+    return 0;
+}
+
+
+int LIB_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
+{
+    m_frame->OnSaveAs( true );
+    return 0;
+}
+
+
+int LIB_CONTROL::SaveAll( const TOOL_EVENT& aEvent )
+{
+    m_frame->OnSaveAll();
+    return 0;
+}
+
+
 int LIB_CONTROL::ShowLibraryBrowser( const TOOL_EVENT& aEvent )
 {
     wxCommandEvent dummy;
@@ -79,6 +100,10 @@ int LIB_CONTROL::ShowElectricalTypes( const TOOL_EVENT& aEvent )
 
 void LIB_CONTROL::setTransitions()
 {
+    Go( &LIB_CONTROL::Save,                  ACTIONS::save.MakeEvent() );
+    Go( &LIB_CONTROL::SaveAs,                ACTIONS::saveAs.MakeEvent() );
+    Go( &LIB_CONTROL::SaveAll,               ACTIONS::saveAll.MakeEvent() );
+
     Go( &LIB_CONTROL::ShowLibraryBrowser,    EE_ACTIONS::showLibraryBrowser.MakeEvent() );
     Go( &LIB_CONTROL::ShowElectricalTypes,   EE_ACTIONS::showElectricalTypes.MakeEvent() );
     Go( &LIB_CONTROL::ShowComponentTree,     EE_ACTIONS::showComponentTree.MakeEvent() );
