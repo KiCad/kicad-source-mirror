@@ -60,9 +60,7 @@ public:
 
 #if defined(DEBUG)
     /// @copydoc EDA_ITEM::Show()
-    void Show( int x, std::ostream& st ) const override
-    {
-    }
+    void Show( int x, std::ostream& st ) const override { }
 #endif
 
     /** Get class name

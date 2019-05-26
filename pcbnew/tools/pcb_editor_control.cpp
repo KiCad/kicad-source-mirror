@@ -31,7 +31,7 @@
 #include <tool/tool_manager.h>
 #include <tools/tool_event_utils.h>
 #include <wx/progdlg.h>
-
+#include <ws_proxy_undo_item.h>
 #include "edit_tool.h"
 #include "selection_tool.h"
 #include "drawing_tool.h"
@@ -60,6 +60,7 @@
 #include <profile.h>
 #include <widgets/progress_reporter.h>
 #include <dialogs/dialog_find.h>
+#include <dialogs/dialog_page_settings.h>
 
 using namespace std::placeholders;
 
@@ -354,6 +355,71 @@ bool PCB_EDITOR_CONTROL::Init()
             wxTimerEventHandler( PCB_EDITOR_CONTROL::ratsnestTimer ), NULL, this );
 
     return true;
+}
+
+
+int PCB_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
+{
+    m_frame->Files_io_from_id( ID_NEW_BOARD );
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::Open( const TOOL_EVENT& aEvent )
+{
+    m_frame->Files_io_from_id( ID_LOAD_FILE );
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::Save( const TOOL_EVENT& aEvent )
+{
+    m_frame->Files_io_from_id( ID_SAVE_BOARD );
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
+{
+    m_frame->Files_io_from_id( ID_SAVE_BOARD_AS );
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::SaveCopyAs( const TOOL_EVENT& aEvent )
+{
+    m_frame->Files_io_from_id( ID_COPY_BOARD_AS );
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
+{
+    PICKED_ITEMS_LIST   undoCmd;
+    WS_PROXY_UNDO_ITEM* undoItem = new WS_PROXY_UNDO_ITEM( m_frame );
+    ITEM_PICKER         wrapper( undoItem, UR_PAGESETTINGS );
+
+    undoCmd.PushItem( wrapper );
+    m_frame->SaveCopyInUndoList( undoCmd, UR_PAGESETTINGS );
+
+    DIALOG_PAGES_SETTINGS dlg( m_frame, wxSize( MAX_PAGE_SIZE_PCBNEW_MILS,
+                                                MAX_PAGE_SIZE_PCBNEW_MILS ) );
+    dlg.SetWksFileName( BASE_SCREEN::m_PageLayoutDescrFileName );
+
+    if( dlg.ShowModal() == wxID_OK )
+        m_toolMgr->RunAction( ACTIONS::zoomFitScreen );
+    else
+        m_frame->RollbackFromUndo();
+
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent evt( wxEVT_NULL, ID_GEN_PLOT );
+    m_frame->ToPlotter( evt );
+    return 0;
 }
 
 
@@ -1279,6 +1345,14 @@ void PCB_EDITOR_CONTROL::calculateSelectionRatsnest()
 
 void PCB_EDITOR_CONTROL::setTransitions()
 {
+    Go( &PCB_EDITOR_CONTROL::New,                ACTIONS::doNew.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::Open,               ACTIONS::open.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::Save,               ACTIONS::save.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::SaveAs,             ACTIONS::saveAs.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::SaveCopyAs,         ACTIONS::saveCopyAs.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::PageSettings,       ACTIONS::pageSettings.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::Plot,               ACTIONS::plot.MakeEvent() );
+
     Go( &PCB_EDITOR_CONTROL::Find,               ACTIONS::find.MakeEvent() );
 
     // Track & via size control

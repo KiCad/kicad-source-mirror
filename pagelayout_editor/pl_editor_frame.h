@@ -88,8 +88,7 @@ public:
 
     /**
      * Function InsertPageLayoutDescrFile
-     * Loads a .kicad_wks page layout descr file, and add items
-     * to the current layout list
+     * Loads a .kicad_wks page layout descr file, and add items to the current layout list
      * @param aFullFileName = the filename.
      */
     bool InsertPageLayoutDescrFile( const wxString& aFullFileName );
@@ -109,9 +108,7 @@ public:
 
     /**
      * Function GetZoomLevelIndicator
-     * returns a human readable value which can be displayed as zoom
-     * level indicator in dialogs.
-     * Virtual from the base class
+     * returns a human readable value which can be displayed in dialogs.
      */
     const wxString GetZoomLevelIndicator() const override;
 
@@ -142,14 +139,12 @@ public:
     void UpdateStatusBar() override;
 
     /**
-     * Must be called to initialize parameters when a new page layout
-     * description is loaded
+     * Must be called to initialize parameters when a new page layout description is loaded
      */
     void OnNewPageLayout();
 
     /**
      * creates or updates the right vertical toolbar.
-     * @note This is currently not used.
      */
     void    ReCreateVToolbar() override;
 
@@ -170,11 +165,9 @@ public:
     const BOX2I GetDocumentExtents() const override;
 
     /**
-     * Page layout editor can show the title block using a page number
-     * 1 or another number.
-     * This is because some items can be shown (or not) only on page 1
-     * (a feature  which look like word processing option
-     * "page 1 differs from other pages".
+     * Page layout editor can show the title block using a page number 1 or another number.
+     * This is because some items can be shown (or not) only on page 1 (a feature  which
+     * looks like word processing option "page 1 differs from other pages").
      * @return true if the page 1 is selected, and false if not
      */
     bool GetPageNumberOption() const
@@ -183,8 +176,7 @@ public:
     }
 
     /**
-     * Displays the short filename (if exists) loaded file
-     * on the caption of the main window
+     * Displays the short filename (if exists) loaded file on the caption of the main window
      */
     void UpdateTitleAndInfo();
 
@@ -205,23 +197,22 @@ public:
     void Process_Special_Functions( wxCommandEvent& event );
 
     /**
-     * called when the user select one of the 4 page corner as corner
-     * reference (or the left top paper corner)
+     * called when the user select one of the 4 page corner as corner reference (or the
+     * left top paper corner)
      */
     void OnSelectCoordOriginCorner( wxCommandEvent& event );
 
     /**
      * Toggle the display mode between the normal mode and the editor mode:
-     * In normal mode, title block texts are shown like they will be
-     * shown in other kicad applications: the format symbols in texts
-     * are replaced by the actual text.
-     * In editor mode, the format symbols in texts are not replaced
-     * by the actual text, and therefore format symbols are displayed.
+     * In normal mode, title block texts are shown like they will be shown in other kicad
+     * applications: the format symbols in texts are replaced by the actual text.
+     * In editor mode, the format symbols in texts are not replaced by the actual text,
+     * and therefore format symbols are displayed.
      */
     void OnSelectTitleBlockDisplayMode( wxCommandEvent& event );
 
     void OnUpdateTitleBlockDisplayNormalMode( wxUpdateUIEvent& event );
-    void OnUpdateTitleBlockDisplaySpecialMode( wxUpdateUIEvent& event );
+    void OnUpdateTitleBlockDisplayEditMode( wxUpdateUIEvent& event );
 
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
     EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
@@ -286,8 +277,7 @@ public:
     WS_DATA_ITEM* AddPageLayoutItem( int aType );
 
     /**
-     * Must be called after a change
-     * in order to set the "modify" flag of the current screen
+     * Must be called after a change in order to set the "modify" flag
      */
     void OnModify()
     {
@@ -295,10 +285,10 @@ public:
     }
 
     /**
-     * Save a copy of the description (in a S expr string)
-     * for Undo/redo commands
+     * Save a copy of the description (in a S expr string) for Undo/redo commands.
+     * Optionally save the pageInfo and titleBlock as well.
      */
-    void SaveCopyInUndoList();
+    void SaveCopyInUndoList( bool aSavePageSettingsAndTitleBlock = false );
 
     /** Redo the last edit:
      * - Place the current edited layout in undo list
@@ -313,8 +303,8 @@ public:
     void GetLayoutFromUndoList();
 
     /**
-     * Remove the last command in Undo List.
-     * Used to clean the Undo stack after a cancel command
+     * Apply the last command in Undo List without stacking a Redo. Used to clean the
+     * Undo stack after cancelling a command.
      */
     void RollbackFromUndo();
 

@@ -347,20 +347,6 @@ void EDA_DRAW_FRAME::SkipNextLeftButtonReleaseEvent()
 }
 
 
-void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
-{
-    SetGridVisibility( !IsGridVisible() );
-
-    if( IsGalCanvasActive() )
-    {
-        GetGalCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
-        GetGalCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-    }
-
-    m_canvas->Refresh();
-}
-
-
 bool EDA_DRAW_FRAME::GetToolToggled( int aToolId )
 {
     // Checks all the toolbars and returns true if the given tool id is toggled.
@@ -369,19 +355,6 @@ bool EDA_DRAW_FRAME::GetToolToggled( int aToolId )
              ( m_drawToolBar && m_drawToolBar->GetToolToggled( aToolId ) ) ||
              ( m_auxiliaryToolBar && m_auxiliaryToolBar->GetToolToggled( aToolId ) )
            );
-}
-
-
-void EDA_DRAW_FRAME::OnToggleCrossHairStyle( wxCommandEvent& aEvent )
-{
-    INSTALL_UNBUFFERED_DC( dc, m_canvas );
-    m_canvas->CrossHairOff( &dc );
-
-    auto& galOpts = GetGalDisplayOptions();
-    galOpts.m_fullscreenCursor = !galOpts.m_fullscreenCursor;
-    galOpts.NotifyChanged();
-
-    m_canvas->CrossHairOn( &dc );
 }
 
 
@@ -405,12 +378,6 @@ void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
 
     if( select != m_gridSelectBox->GetSelection() )
         m_gridSelectBox->SetSelection( select );
-}
-
-
-void EDA_DRAW_FRAME::OnUpdateCrossHairStyle( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( GetGalDisplayOptions().m_fullscreenCursor );
 }
 
 
@@ -617,17 +584,6 @@ void EDA_DRAW_FRAME::SetNoToolSelected()
         defaultCursor = m_canvas->GetDefaultCursor();
 
     SetToolID( ID_NO_TOOL_SELECTED, defaultCursor, wxEmptyString );
-}
-
-
-wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition ) const
-{
-    wxPoint pos = aPosition;
-
-    if( m_currentScreen != NULL && m_snapToGrid )
-        pos = GetNearestGridPosition( aPosition );
-
-    return pos;
 }
 
 
@@ -1559,6 +1515,7 @@ bool EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos, bool
 
 void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer )
 {
+    // JEY TODO: OBSOLETE
     if( IsGalCanvasActive() )
         return;
 
@@ -1736,18 +1693,6 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
     }
 
     UpdateStatusBar();
-}
-
-
-void EDA_DRAW_FRAME::SetNextZoom()
-{
-    GetScreen()->SetNextZoom();
-}
-
-
-void EDA_DRAW_FRAME::SetPrevZoom()
-{
-    GetScreen()->SetPreviousZoom();
 }
 
 

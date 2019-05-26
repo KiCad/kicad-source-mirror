@@ -51,6 +51,14 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
+    int New( const TOOL_EVENT& aEvent );
+    int Open( const TOOL_EVENT& aEvent );
+    int Save( const TOOL_EVENT& aEvent );
+    int SaveAs( const TOOL_EVENT& aEvent );
+    int SaveCopyAs( const TOOL_EVENT& aEvent );
+    int PageSettings( const TOOL_EVENT& aEvent );
+    int Plot( const TOOL_EVENT& aEvent );
+
     int Find( const TOOL_EVENT& aEvent );
 
     // Track & via size control

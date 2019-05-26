@@ -22,12 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file worksheet_viewitem.cpp
- * @brief Class that handles properties and drawing of worksheet layout.
- */
-
-#include <ws_view_item.h>
+#include <ws_proxy_view_item.h>
 #include <ws_draw_item.h>
 #include <ws_data_item.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -39,26 +34,31 @@
 
 using namespace KIGFX;
 
-WS_VIEW_ITEM::WS_VIEW_ITEM( int aMils2IUscalefactor,
-            const PAGE_INFO* aPageInfo, const TITLE_BLOCK* aTitleBlock ) :
-    EDA_ITEM( NOT_USED ), // this item is never added to a BOARD so it needs no type
-    m_mils2IUscalefactor( aMils2IUscalefactor ),
-    m_titleBlock( aTitleBlock ), m_pageInfo( aPageInfo ), m_sheetNumber( 1 ), m_sheetCount( 1 ) {}
+WS_PROXY_VIEW_ITEM::WS_PROXY_VIEW_ITEM( int aMils2IUscalefactor, const PAGE_INFO* aPageInfo,
+                                        const TITLE_BLOCK* aTitleBlock ) :
+        EDA_ITEM( NOT_USED ), // this item is never added to a BOARD so it needs no type
+        m_mils2IUscalefactor( aMils2IUscalefactor ),
+        m_titleBlock( aTitleBlock ),
+        m_pageInfo( aPageInfo ),
+        m_sheetNumber( 1 ),
+        m_sheetCount( 1 )
+{
+}
 
 
-void WS_VIEW_ITEM::SetPageInfo( const PAGE_INFO* aPageInfo )
+void WS_PROXY_VIEW_ITEM::SetPageInfo( const PAGE_INFO* aPageInfo )
 {
     m_pageInfo = aPageInfo;
 }
 
 
-void WS_VIEW_ITEM::SetTitleBlock( const TITLE_BLOCK* aTitleBlock )
+void WS_PROXY_VIEW_ITEM::SetTitleBlock( const TITLE_BLOCK* aTitleBlock )
 {
     m_titleBlock = aTitleBlock;
 }
 
 
-const BOX2I WS_VIEW_ITEM::ViewBBox() const
+const BOX2I WS_PROXY_VIEW_ITEM::ViewBBox() const
 {
     BOX2I bbox;
 
@@ -77,7 +77,7 @@ const BOX2I WS_VIEW_ITEM::ViewBBox() const
 }
 
 
-void WS_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
+void WS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
 {
     auto gal = aView->GetGAL();
     auto settings = aView->GetPainter()->GetSettings();
@@ -127,7 +127,7 @@ void WS_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
 }
 
 
-void WS_VIEW_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+void WS_PROXY_VIEW_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 1;
     aLayers[0] = LAYER_WORKSHEET;

@@ -28,7 +28,7 @@
 #include <view/view_group.h>
 #include <view/view_rtree.h>
 #include <view/wx_view_controls.h>
-#include <ws_view_item.h>
+#include <ws_proxy_view_item.h>
 #include <layers_id_colors_and_visibility.h>
 #include <class_libentry.h>
 #include <sch_sheet.h>
@@ -52,9 +52,9 @@ SCH_VIEW::SCH_VIEW( bool aIsDynamic, SCH_BASE_FRAME* aFrame ) :
     // is acceptable for Pcbnew and Gerbview, but too large for Eeschema due to
     // very different internal units.
     // So we have to use a smaller value.
-    // A full size = 3 * MAX_PAGE_SIZE_EDITORS_MILS size allows a wide margin
+    // A full size = 3 * MAX_PAGE_SIZE_MILS size allows a wide margin
     // around the worksheet.
-    double max_size = MAX_PAGE_SIZE_EDITORS_MILS * IU_PER_MILS * 3.0;
+    double max_size = MAX_PAGE_SIZE_MILS * IU_PER_MILS * 3.0;
     m_boundary.SetOrigin( -max_size/4, -max_size/4 );
     m_boundary.SetSize( max_size, max_size );
 
@@ -85,7 +85,7 @@ void SCH_VIEW::DisplaySheet( SCH_SCREEN *aScreen )
     for( auto item = aScreen->GetDrawItems(); item; item = item->Next() )
         Add( item );
 
-    m_worksheet.reset( new KIGFX::WS_VIEW_ITEM( 1, &aScreen->GetPageSettings(),
+    m_worksheet.reset( new KIGFX::WS_PROXY_VIEW_ITEM( 1, &aScreen->GetPageSettings(),
                                                       &aScreen->GetTitleBlock() ) );
     m_worksheet->SetSheetNumber( aScreen->m_ScreenNumber );
     m_worksheet->SetSheetCount( aScreen->m_NumberOfScreens );

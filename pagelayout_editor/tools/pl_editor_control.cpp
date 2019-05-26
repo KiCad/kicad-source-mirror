@@ -35,6 +35,7 @@
 #include <properties_frame.h>
 #include <pl_editor_id.h>
 
+
 TOOL_ACTION PL_ACTIONS::refreshPreview( "plEditor.EditorControl.refreshPreview",
          AS_GLOBAL, 0, "", "" );
 
@@ -92,8 +93,22 @@ int PL_EDITOR_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
 
 int PL_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
 {
-    wxCommandEvent evt( wxEVT_NULL, ID_SHEET_SET );
-    m_frame->Process_Special_Functions( evt );
+    m_frame->SaveCopyInUndoList( true );
+
+    DIALOG_PAGES_SETTINGS dlg( m_frame, wxSize( MAX_PAGE_SIZE_MILS, MAX_PAGE_SIZE_MILS ) );
+    dlg.SetWksFileName( m_frame->GetCurrFileName() );
+    dlg.EnableWksFileNamePicker( false );
+
+    if( dlg.ShowModal() != wxID_OK )
+    {
+        // Nothing to roll back but we have to at least pop the stack
+        m_frame->RollbackFromUndo();
+    }
+    else
+    {
+        m_toolMgr->RunAction( ACTIONS::zoomFitScreen );
+        m_frame->HardRedraw();
+    }
     return 0;
 }
 
@@ -165,7 +180,7 @@ void PL_EDITOR_CONTROL::setTransitions()
     Go( &PL_EDITOR_CONTROL::Open,                  ACTIONS::open.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::Save,                  ACTIONS::save.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::SaveAs,                ACTIONS::saveAs.MakeEvent() );
-    Go( &PL_EDITOR_CONTROL::PageSetup,             ACTIONS::pageSetup.MakeEvent() );
+    Go( &PL_EDITOR_CONTROL::PageSetup,             ACTIONS::pageSettings.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::Print,                 ACTIONS::print.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::Plot,                  ACTIONS::plot.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::Quit,                  ACTIONS::quit.MakeEvent() );

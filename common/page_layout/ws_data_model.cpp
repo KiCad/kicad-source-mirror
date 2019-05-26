@@ -25,23 +25,23 @@
 
 
 /*
- * the class WS_DATA_ITEM (and derived ) defines
- * a basic shape of a page layout ( frame references and title block )
- * The list of these items is stored in a WS_DATA_MODEL instance.
+ * The WS_DATA_ITEM_* classes define the basic shapes of a page layout (frame references
+ * and title block).  The list of these items is stored in a WS_DATA_MODEL instance.
  *
+ * These items cannot be drawn or plotetd "as is".  They must be converted to WS_DRAW_*
+ * types. When building the draw list:
+ *   - the WS_DATA_MODEL is used to create a WS_DRAW_ITEM_LIST
+ *   - coordinates are converted to draw/plot coordinates.
+ *   - texts are expanded if they contain format symbols.
+ *   - items with m_RepeatCount > 1 are created m_RepeatCount times.
  *
- * These items cannot be drawn or plot "as this". they should be converted
- * to a "draw list". When building the draw list:
- * the WS_DATA_MODEL is used to create a WS_DRAW_ITEM_LIST
- *  coordinates are converted to draw/plot coordinates.
- *  texts are expanded if they contain format symbols.
- *  Items with m_RepeatCount > 1 are created m_RepeatCount times
+ * The WS_DATA_MODEL is created only once.
+ * The WS_DRAW_ITEM_*s are created and maintained by the PlEditor, but are created each time
+ * they're needed for drawing by the clients (Eeschema, Pcbnew, etc.)
  *
- * the WS_DATA_MODEL is created only once.
- * the WS_DRAW_ITEM_LIST is created each time the page layout is plot/drawn
- *
- * the WS_DATA_MODEL instance is created from a S expression which
- * describes the page layout (can be the default page layout or a custom file).
+ * The WS_DATA_MODEL instance is created from a S expression which describes the page
+ * layout (can be the default page layout or a custom file).  This format is also used
+ * for undo/redo storage (wrapped in a WS_PROXY_UNDO_ITEM).
  */
 
 #include <fctsys.h>
@@ -63,7 +63,7 @@ WS_DATA_MODEL::WS_DATA_MODEL() :
         m_DefaultLineWidth( 0.0 ),
         m_DefaultTextSize( TB_DEFAULT_TEXTSIZE, TB_DEFAULT_TEXTSIZE ),
         m_DefaultTextThickness( 0.0 ),
-        m_SpecialMode( false )
+        m_EditMode( false )
 {
     m_allowVoidList = false;
     m_leftMargin = 10.0;    // the left page margin in mm
@@ -158,7 +158,7 @@ WS_DATA_ITEM* WS_DATA_MODEL::GetItem( unsigned aIdx ) const
     if( aIdx < m_list.size() )
         return m_list[aIdx];
     else
-        return NULL;
+        return nullptr;
 }
 
 

@@ -44,7 +44,7 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::save );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->Add( ACTIONS::pageSetup );
+    m_mainToolBar->Add( ACTIONS::pageSettings );
     m_mainToolBar->Add( ACTIONS::print );
 
     KiScaledSeparator( m_mainToolBar, this );

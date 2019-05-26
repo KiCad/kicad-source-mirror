@@ -482,7 +482,6 @@ public:
     inline double GetZoomLevelCoeff() const { return m_zoomLevelCoeff; }
 
     void EraseMsgBox();
-    void Process_PageSettings( wxCommandEvent& event );
 
     virtual void ReCreateHToolbar() = 0;
     virtual void ReCreateVToolbar() = 0;
@@ -568,16 +567,6 @@ public:
     }
 
     /**
-     * Return the nearest grid position to \a aPosition if a screen is defined and snap to
-     * grid is enabled.  Otherwise, the original positions is returned.
-     *
-     * @see m_snapToGrid and m_BaseScreen members.
-     * @param aPosition The position to test.
-     * @return The wxPoint of the appropriate cursor position.
-     */
-    wxPoint GetGridPosition( const wxPoint& aPosition ) const;
-
-    /**
      * Change the grid size settings to the next one available.
      */
     virtual void SetNextGrid();
@@ -617,16 +606,9 @@ public:
      */
     virtual void OnSelectZoom( wxCommandEvent& event );
 
-    // Command event handlers shared by all applications derived from EDA_DRAW_FRAME.
-    void OnToggleGridState( wxCommandEvent& aEvent );
-    void OnToggleCrossHairStyle( wxCommandEvent& aEvent );
-
     // Update user interface event handlers shared by all applications derived from
     // EDA_DRAW_FRAME.
-    void OnUpdateUndo( wxUpdateUIEvent& aEvent );
-    void OnUpdateRedo( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );
-    void OnUpdateCrossHairStyle( wxUpdateUIEvent& aEvent );
 
     /**
      * Perform application specific control using \a aDC at \a aPosition in logical units.
@@ -654,11 +636,6 @@ public:
     virtual void OnZoom( wxCommandEvent& event );
 
     /**
-     * Change the zoom to the next one available.
-     */
-    void SetNextZoom();
-
-    /**
      * Change the zoom to the next one available redraws the screen
      * and warp the mouse pointer on request.
      *
@@ -666,11 +643,6 @@ public:
      * @param aWarpPointer = true to move the pointer to the aCenterPoint
      */
     void SetNextZoomAndRedraw( const wxPoint& aCenterPoint, bool aWarpPointer );
-
-    /**
-     * Change the zoom to the previous one available.
-     */
-    void SetPrevZoom();
 
     /**
      * Change the zoom to the previous one available redraws the screen

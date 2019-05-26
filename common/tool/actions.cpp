@@ -24,12 +24,17 @@ TOOL_ACTION ACTIONS::saveAs( "common.Control.saveAs",
         _( "Save As..." ), _( "Save current document to another location" ),
         save_as_xpm );
 
+TOOL_ACTION ACTIONS::saveCopyAs( "common.Control.saveCopyAs",
+        AS_GLOBAL, 0,
+        _( "Save Copy As..." ), _( "Save a copy of the current document to another location" ),
+        save_as_xpm );
+
 TOOL_ACTION ACTIONS::saveAll( "common.Control.saveAll",
         AS_GLOBAL, 0,
         _( "Save All" ), _( "Save all changes" ),
         save_xpm );
 
-TOOL_ACTION ACTIONS::pageSetup( "common.Control.pageSetup",
+TOOL_ACTION ACTIONS::pageSettings( "common.Control.pageSettings",
         AS_GLOBAL, 0,
         _( "Page Settings..." ), _( "Settings for paper size and frame references" ),
         sheetset_xpm );

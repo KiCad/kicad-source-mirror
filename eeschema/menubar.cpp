@@ -94,7 +94,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddItem( ACTIONS::saveAs,            EE_CONDITIONS::ShowAlways );
     fileMenu->AddItem( ACTIONS::saveAll,           modifiedDocumentCondition );
 
-    fileMenu->AppendSeparator();
+    fileMenu->AddSeparator();
 
     fileMenu->AddItem( ID_APPEND_PROJECT, _( "Append Schematic Sheet Content..." ),
                        _( "Append schematic sheet content from another project to the current sheet" ),
@@ -133,7 +133,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddMenu( submenuExport,              EE_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-    fileMenu->AddItem( ACTIONS::pageSetup,         EE_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::pageSettings,         EE_CONDITIONS::ShowAlways );
     fileMenu->AddItem( ACTIONS::print,             EE_CONDITIONS::ShowAlways );
     fileMenu->AddItem( ACTIONS::plot,              EE_CONDITIONS::ShowAlways );
 

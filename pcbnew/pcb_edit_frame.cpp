@@ -55,7 +55,7 @@
 #include <class_track.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <ws_view_item.h>
+#include <ws_proxy_view_item.h>
 #include <connectivity/connectivity_data.h>
 #include <ratsnest_viewitem.h>
 #include <wildcards_and_files_ext.h>
@@ -121,11 +121,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_CLOSE( PCB_EDIT_FRAME::OnCloseWindow )
     EVT_SIZE( PCB_EDIT_FRAME::OnSize )
 
-    EVT_TOOL( ID_LOAD_FILE, PCB_EDIT_FRAME::Files_io )
     EVT_TOOL( ID_MENU_READ_BOARD_BACKUP_FILE, PCB_EDIT_FRAME::Files_io )
     EVT_TOOL( ID_MENU_RECOVER_BOARD_AUTOSAVE, PCB_EDIT_FRAME::Files_io )
-    EVT_TOOL( ID_NEW_BOARD, PCB_EDIT_FRAME::Files_io )
-    EVT_TOOL( ID_SAVE_BOARD, PCB_EDIT_FRAME::Files_io )
     EVT_TOOL( ID_OPEN_MODULE_EDITOR, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_OPEN_MODULE_VIEWER, PCB_EDIT_FRAME::Process_Special_Functions )
 
@@ -134,8 +131,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_MENU_PCB_FLIP_VIEW, PCB_EDIT_FRAME::OnFlipPcbView )
 
     EVT_MENU( ID_APPEND_FILE, PCB_EDIT_FRAME::Files_io )
-    EVT_MENU( ID_SAVE_BOARD_AS, PCB_EDIT_FRAME::Files_io )
-    EVT_MENU( ID_COPY_BOARD_AS, PCB_EDIT_FRAME::Files_io )
     EVT_MENU( ID_IMPORT_NON_KICAD_BOARD, PCB_EDIT_FRAME::Files_io )
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, PCB_EDIT_FRAME::OnFileHistory )
 
@@ -156,8 +151,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
 
     EVT_MENU( ID_MENU_ARCHIVE_MODULES_IN_LIBRARY, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_MENU_CREATE_LIBRARY_AND_ARCHIVE_MODULES, PCB_EDIT_FRAME::Process_Special_Functions )
-
-    EVT_MENU( wxID_EXIT, PCB_EDIT_FRAME::OnQuit )
 
     // menu Config
     EVT_MENU( ID_PCB_LIB_TABLE_EDIT, PCB_EDIT_FRAME::Process_Config )
@@ -197,10 +190,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
 
     // Horizontal toolbar
     EVT_TOOL( ID_RUN_LIBRARY, PCB_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_SHEET_SET, EDA_DRAW_FRAME::Process_PageSettings )
-    EVT_TOOL( wxID_PRINT, PCB_EDIT_FRAME::ToPrinter )
     EVT_TOOL( ID_GEN_PLOT_SVG, PCB_EDIT_FRAME::ExportSVG )
-    EVT_TOOL( ID_GEN_PLOT, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_GET_NETLIST, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_DRC_CONTROL, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, PCB_EDIT_FRAME::Process_Special_Functions )
@@ -253,7 +243,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
                     PCB_EDIT_FRAME::Process_Special_Functions )
 
     // User interface update event handlers.
-    EVT_UPDATE_UI( ID_SAVE_BOARD, PCB_EDIT_FRAME::OnUpdateSave )
     EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, PCB_EDIT_FRAME::OnUpdateLayerPair )
     EVT_UPDATE_UI( ID_TOOLBARH_PCB_SELECT_LAYER, PCB_EDIT_FRAME::OnUpdateLayerSelectBox )
     EVT_UPDATE_UI( ID_TB_OPTIONS_DRC_OFF, PCB_EDIT_FRAME::OnUpdateDrcEnable )
@@ -487,8 +476,8 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
         PCB_DRAW_PANEL_GAL* drawPanel = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
 
         // Prepare worksheet template
-        KIGFX::WS_VIEW_ITEM* worksheet;
-        worksheet = new KIGFX::WS_VIEW_ITEM( IU_PER_MILS ,&m_Pcb->GetPageSettings(),
+        KIGFX::WS_PROXY_VIEW_ITEM* worksheet;
+        worksheet = new KIGFX::WS_PROXY_VIEW_ITEM( IU_PER_MILS ,&m_Pcb->GetPageSettings(),
                                                    &m_Pcb->GetTitleBlock() );
         worksheet->SetSheetName( std::string( GetScreenDesc().mb_str() ) );
 
@@ -568,12 +557,6 @@ void PCB_EDIT_FRAME::ReFillLayerWidget()
         m_auimgr.Update();
     else
         m_Layers->SetSize( bestz );
-}
-
-
-void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
-{
-    Close( false );
 }
 
 

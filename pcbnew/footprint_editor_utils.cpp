@@ -280,10 +280,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_EXIT:
-        Close( true );
-        break;
-
     case ID_OPEN_MODULE_VIEWER:
         {
             FOOTPRINT_VIEWER_FRAME* viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
@@ -576,9 +572,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_ADD_LIBRARY:
         AddLibrary();
-        break;
-
-    case ID_MODEDIT_SHEET_SET:
         break;
 
     case ID_MODEDIT_EDIT_MODULE:

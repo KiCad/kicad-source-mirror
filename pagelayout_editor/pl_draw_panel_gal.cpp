@@ -22,7 +22,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pl_actions.h>
 #include <view/wx_view_controls.h>
-#include <ws_view_item.h>
+#include <ws_proxy_view_item.h>
 #include <ws_data_model.h>
 #include <ws_painter.h>
 #include <colors_design_settings.h>

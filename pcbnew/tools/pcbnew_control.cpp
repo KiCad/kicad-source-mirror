@@ -240,6 +240,14 @@ void PCBNEW_CONTROL::Reset( RESET_REASON aReason )
     }
 }
 
+
+int PCBNEW_CONTROL::Quit( const TOOL_EVENT& aEvent )
+{
+    m_frame->Close( false );
+    return 0;
+}
+
+
 template<class T> void Flip( T& aValue )
 {
     aValue = !aValue;
@@ -1006,6 +1014,9 @@ void PCBNEW_CONTROL::updateGrid()
 
 void PCBNEW_CONTROL::setTransitions()
 {
+    Go( &PCBNEW_CONTROL::Print,               ACTIONS::print.MakeEvent() );
+    Go( &PCBNEW_CONTROL::Quit,                ACTIONS::quit.MakeEvent() );
+
     // Display modes
     Go( &PCBNEW_CONTROL::TrackDisplayMode,    PCB_ACTIONS::trackDisplayMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::ToggleRatsnest,      PCB_ACTIONS::showRatsnest.MakeEvent() );

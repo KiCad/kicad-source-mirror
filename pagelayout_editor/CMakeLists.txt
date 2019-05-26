@@ -21,7 +21,6 @@ set( PL_EDITOR_SRCS
     pl_editor_screen.cpp
     pl_editor_layout.cpp
     files.cpp
-    ../common/page_layout/ws_data_model_io.cpp
     pl_editor_frame.cpp
     pl_editor_undo_redo.cpp
     properties_frame.cpp

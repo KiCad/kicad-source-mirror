@@ -50,7 +50,6 @@
 #include <tools/pl_edit_tool.h>
 #include <tools/pl_point_editor.h>
 #include <tools/pl_picker_tool.h>
-#include <dialog_page_settings.h>
 #include <invoke_pl_editor_dialog.h>
 #include <tools/pl_editor_control.h>
 
@@ -64,14 +63,13 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, PL_EDITOR_FRAME::Process_Special_Functions )
     EVT_MENU( wxID_PREFERENCES, PL_EDITOR_FRAME::Process_Special_Functions )
 
-    EVT_TOOL( ID_SHEET_SET, PL_EDITOR_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_SHOW_REAL_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
     EVT_TOOL( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
     EVT_CHOICE( ID_SELECT_COORDINATE_ORIGIN, PL_EDITOR_FRAME::OnSelectCoordOriginCorner)
     EVT_CHOICE( ID_SELECT_PAGE_NUMBER, PL_EDITOR_FRAME::Process_Special_Functions)
 
     EVT_UPDATE_UI( ID_SHOW_REAL_MODE, PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayNormalMode )
-    EVT_UPDATE_UI( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnUpdateTitleBlockDisplaySpecialMode )
+    EVT_UPDATE_UI( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayEditMode )
 END_EVENT_TABLE()
 
 
@@ -92,7 +90,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_hotkeysDescrList = PlEditorHotkeysDescr;
     m_originSelectChoice = 0;
     SetDrawBgColor( WHITE );            // default value, user option (WHITE/BLACK)
-    WS_DATA_MODEL::GetTheInstance().m_SpecialMode = true;
+    WS_DATA_MODEL::GetTheInstance().m_EditMode = true;
     SetShowPageLimits( true );
     m_AboutTitle = "PlEditor";
 
@@ -289,18 +287,6 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
     }
         break;
 
-    case ID_SHEET_SET:
-    {
-        DIALOG_PAGES_SETTINGS dlg( this, wxSize( MAX_PAGE_SIZE_EDITORS_MILS,
-                                                 MAX_PAGE_SIZE_EDITORS_MILS ) );
-        dlg.SetWksFileName( GetCurrFileName() );
-        dlg.EnableWksFileNamePicker( false );
-
-        if( dlg.ShowModal() == wxID_OK )
-            m_toolManager->RunAction( ACTIONS::zoomFitScreen );
-    }
-        break;
-
     default:
         wxMessageBox( wxT( "PL_EDITOR_FRAME::Process_Special_Functions error" ) );
         break;
@@ -321,7 +307,7 @@ void PL_EDITOR_FRAME::OnSelectCoordOriginCorner( wxCommandEvent& event )
 
 void PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode( wxCommandEvent& event )
 {
-    WS_DATA_MODEL::GetTheInstance().m_SpecialMode = (event.GetId() == ID_SHOW_PL_EDITOR_MODE);
+    WS_DATA_MODEL::GetTheInstance().m_EditMode = (event.GetId() == ID_SHOW_PL_EDITOR_MODE);
     HardRedraw();
 }
 
@@ -373,13 +359,13 @@ void PL_EDITOR_FRAME::ToPrinter( bool doPreview )
 
 void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayNormalMode( wxUpdateUIEvent& event )
 {
-    event.Check( WS_DATA_MODEL::GetTheInstance().m_SpecialMode == false );
+    event.Check( WS_DATA_MODEL::GetTheInstance().m_EditMode == false );
 }
 
 
-void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplaySpecialMode( wxUpdateUIEvent& event )
+void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayEditMode( wxUpdateUIEvent& event )
 {
-    event.Check( WS_DATA_MODEL::GetTheInstance().m_SpecialMode == true );
+    event.Check( WS_DATA_MODEL::GetTheInstance().m_EditMode == true );
 }
 
 

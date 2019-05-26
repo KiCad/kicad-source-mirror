@@ -46,6 +46,8 @@
 #include <confirm.h>
 #include <sch_painter.h>
 #include <status_popup.h>
+#include <ws_proxy_undo_item.h>
+#include <dialogs/dialog_page_settings.h>
 
 TOOL_ACTION EE_ACTIONS::refreshPreview( "eeschema.EditorControl.refreshPreview",
          AS_GLOBAL, 0, "", "" );
@@ -155,8 +157,21 @@ int SCH_EDITOR_CONTROL::SaveAll( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
 {
-    wxCommandEvent dummy;
-    m_frame->Process_PageSettings( dummy );
+    PICKED_ITEMS_LIST   undoCmd;
+    WS_PROXY_UNDO_ITEM* undoItem = new WS_PROXY_UNDO_ITEM( m_frame );
+    ITEM_PICKER         wrapper( undoItem, UR_PAGESETTINGS );
+
+    undoCmd.PushItem( wrapper );
+    m_frame->SaveCopyInUndoList( undoCmd, UR_PAGESETTINGS );
+
+    DIALOG_PAGES_SETTINGS dlg( m_frame, wxSize( MAX_PAGE_SIZE_MILS, MAX_PAGE_SIZE_MILS ) );
+    dlg.SetWksFileName( BASE_SCREEN::m_PageLayoutDescrFileName );
+
+    if( dlg.ShowModal() == wxID_OK )
+        m_toolMgr->RunAction( ACTIONS::zoomFitScreen );
+    else
+        m_frame->RollbackSchematicFromUndo();
+
     return 0;
 }
 
@@ -1094,7 +1109,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::Open,                  ACTIONS::open.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Save,                  ACTIONS::save.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::SaveAs,                ACTIONS::saveAs.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::PageSetup,             ACTIONS::pageSetup.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::PageSetup,             ACTIONS::pageSettings.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Print,                 ACTIONS::print.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Plot,                  ACTIONS::plot.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Quit,                  ACTIONS::quit.MakeEvent() );

@@ -57,10 +57,6 @@ public:
 
     PCB_SCREEN* Next() const { return static_cast<PCB_SCREEN*>( Pnext ); }
 
-    void        SetNextZoom();
-    void        SetPreviousZoom();
-    void        SetLastZoom();
-
     virtual int MilsToIuScalar() override;
 
     /**

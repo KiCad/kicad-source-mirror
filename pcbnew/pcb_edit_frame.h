@@ -300,8 +300,6 @@ public:
      */
     void LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter );
 
-    void OnQuit( wxCommandEvent& event );
-
     /**
      * Reload the Python plugins if they are newer than
      * the already loaded, and load new plugins if any

@@ -549,7 +549,7 @@ void WS_DATA_ITEM_TEXT::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
     int   pensize = GetPenSizeUi();
     bool  multilines = false;
 
-    if( WS_DATA_MODEL::GetTheInstance().m_SpecialMode )
+    if( WS_DATA_MODEL::GetTheInstance().m_EditMode )
         m_FullText = m_TextBase;
     else
     {

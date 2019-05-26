@@ -503,7 +503,7 @@ wxMenuItem* ACTION_MENU::appendCopy( const wxMenuItem* aSource )
     // our predefined checked alternate bitmap
     const wxBitmap& src_bitmap = aSource->GetBitmap();
 
-    if( src_bitmap.GetHeight() > 1 )    // a null bitmap has a 0 size
+    if( src_bitmap.IsOk() && src_bitmap.GetHeight() > 1 )    // a null bitmap has a 0 size
         AddBitmapToMenuItem( newItem, src_bitmap );
 
     if( aSource->IsSubMenu() )

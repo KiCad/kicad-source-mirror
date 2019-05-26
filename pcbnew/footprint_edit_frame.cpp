@@ -1061,3 +1061,9 @@ void FOOTPRINT_EDIT_FRAME::OnSaveFootprintAsPng( wxCommandEvent& event )
     wxYield();
     saveCanvasImageToFile( dlg.GetPath() );
 }
+
+
+void FOOTPRINT_EDIT_FRAME::ToPrinter( wxCommandEvent& event )
+{
+    GetToolManager()->RunAction( ACTIONS::print );
+}

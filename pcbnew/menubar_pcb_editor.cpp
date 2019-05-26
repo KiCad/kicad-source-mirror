@@ -42,19 +42,8 @@
 #include "pcbnew_id.h"
 
 
-// Build the files menu. Because some commands are available only if
-// Pcbnew is run outside a project (run alone), aIsOutsideProject is false
-// when Pcbnew is run from Kicad manager, and true is run as stand alone app.
-static void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject );
-
-// Build the export submenu (inside files menu)
-static void prepareExportMenu( wxMenu* aParentMenu );
-
 // Build the place submenu
 static void preparePlaceMenu( CONDITIONAL_MENU* aPlaceMenu, SELECTION_TOOL* aSelectionTool );
-
-// Build the edit submenu
-static void prepareEditMenu( PCB_EDIT_FRAME * aFrame, CONDITIONAL_MENU* aEditMenu, SELECTION_TOOL* aSelectionTool );
 
 // Build the route menu
 static void prepareRouteMenu( wxMenu* aParentMenu );
@@ -81,16 +70,229 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     wxMenuBar* menuBar = new wxMenuBar();
     wxString   text;
 
+    auto modifiedDocumentCondition = [ this ] ( const SELECTION& sel ) {
+        return GetScreen()->IsModify();
+    };
+
     // Recreate all menus:
 
-    // Create File Menu
-    wxMenu* filesMenu = new wxMenu;
-    prepareFilesMenu( filesMenu, Kiface().IsSingle() );
+    //----- Edit menu -----------------------------------------------------------
+    CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, selTool );
+    static ACTION_MENU* openRecentMenu;
+
+    if( Kiface().IsSingle() )   // not when under a project mgr
+    {
+        // Add this menu to list menu managed by m_fileHistory
+        // (the file history will be updated when adding/removing files in history)
+        if( openRecentMenu )
+            Kiface().GetFileHistory().RemoveMenu( openRecentMenu );
+
+        openRecentMenu = new ACTION_MENU();
+        openRecentMenu->SetTool( selTool );
+        openRecentMenu->SetTitle( _( "Open Recent" ) );
+        openRecentMenu->SetIcon( recent_xpm );
+
+        Kiface().GetFileHistory().UseMenu( openRecentMenu );
+        Kiface().GetFileHistory().AddFilesToMenu( openRecentMenu );
+
+        fileMenu->AddItem( ACTIONS::doNew,         SELECTION_CONDITIONS::ShowAlways );
+        fileMenu->AddItem( ACTIONS::open,          SELECTION_CONDITIONS::ShowAlways );
+        fileMenu->AddMenu( openRecentMenu,         SELECTION_CONDITIONS::ShowAlways );
+        fileMenu->AddSeparator();
+    }
+
+    fileMenu->AddItem( ACTIONS::save,              modifiedDocumentCondition );
+
+    // Save as menu:
+    // under a project mgr we do not want to modify the board filename
+    // to keep consistency with the project mgr which expects files names same as prj name
+    // for main files
+    if( Kiface().IsSingle() )
+        fileMenu->AddItem( ACTIONS::saveAs,        SELECTION_CONDITIONS::ShowAlways );
+    else
+        fileMenu->AddItem( ACTIONS::saveCopyAs,    SELECTION_CONDITIONS::ShowAlways );
+
+    fileMenu->AddSeparator();
+    fileMenu->AddItem( ID_MENU_RECOVER_BOARD_AUTOSAVE,
+                       _( "Resc&ue" ),
+                       _( "Clear board and get last rescue file automatically saved by Pcbnew" ),
+                       rescue_xpm,                 SELECTION_CONDITIONS::ShowAlways );
+
+    if( Kiface().IsSingle() )   // not when under a project mgr
+    {
+        fileMenu->AddItem( ID_APPEND_FILE,
+                           _( "&Append Board..." ),
+                           _( "Append another board to currently loaded board" ),
+                           add_board_xpm,          SELECTION_CONDITIONS::ShowAlways );
+        fileMenu->AddItem( ID_IMPORT_NON_KICAD_BOARD,
+                           _( "Import Non-KiCad Board File..." ),
+                           _( "Import board file from other applications" ),
+                           import_brd_file_xpm,    SELECTION_CONDITIONS::ShowAlways );
+    }
+
+    fileMenu->AddItem( ID_MENU_READ_BOARD_BACKUP_FILE,
+                       _( "Revert to Last Backup" ),
+                       _( "Clear board and get previous backup version of board" ),
+                       undo_xpm,                  SELECTION_CONDITIONS::ShowAlways );
+
+    fileMenu->AddSeparator();
+
+    //----- Import submenu ------------------------------------------------------
+    ACTION_MENU* submenuImport = new ACTION_MENU();
+    submenuImport->SetTool( selTool );
+    submenuImport->SetTitle( _( "Import" ) );
+    submenuImport->SetIcon( import_xpm );
+
+    submenuImport->Add( _( "Netlist..." ), _( "Read netlist and update board connectivity" ),
+                        ID_GET_NETLIST, netlist_xpm );
+    submenuImport->Add( _( "Specctra Session..." ), _( "Import routed Specctra session (*.ses) file" ),
+                        ID_GEN_IMPORT_SPECCTRA_SESSION, import_xpm );
+    submenuImport->Add( _( "Graphics..." ), _( "Import 2D drawing file" ),
+                        ID_GEN_IMPORT_GRAPHICS_FILE, import_vector_xpm );
+
+    fileMenu->AddMenu( submenuImport,            SELECTION_CONDITIONS::ShowAlways );
+
+    //----- Export submenu ------------------------------------------------------
+    ACTION_MENU* submenuExport = new ACTION_MENU();
+    submenuExport->SetTool( selTool );
+    submenuExport->SetTitle( _( "Export" ) );
+    submenuExport->SetIcon( export_xpm );
+
+    submenuExport->Add( _( "Specctra DSN..." ), _( "Export Specctra DSN routing info" ),
+                        ID_GEN_EXPORT_SPECCTRA, export_dsn_xpm );
+    submenuExport->Add( _( "GenCAD..." ), _( "Export GenCAD 3D board representation" ),
+                        ID_GEN_EXPORT_FILE_GENCADFORMAT, export_xpm );
+    submenuExport->Add( _( "VRML..." ), _( "Export VRML 3D board representation" ),
+                        ID_GEN_EXPORT_FILE_VRML, export3d_xpm );
+    submenuExport->Add( _( "IDFv3..." ), _( "Export IDF 3D board representation" ),
+                        ID_GEN_EXPORT_FILE_IDF3, export_idf_xpm );
+    submenuExport->Add( _( "STEP..." ), _( "Export STEP 3D board representation" ),
+                        ID_GEN_EXPORT_FILE_STEP, export_step_xpm );
+    submenuExport->Add( _( "SVG..." ), _( "Export SVG board representation" ),
+                        ID_GEN_PLOT_SVG, plot_svg_xpm );
+    submenuExport->Add( _( "Footprint Association (.cmp) File..." ),
+                        _( "Export footprint association file (*.cmp) for schematic back annotation" ),
+                        ID_PCB_GEN_CMP_FILE, create_cmp_file_xpm );
+    submenuExport->Add( _( "Hyperlynx..." ), "",
+                        ID_GEN_EXPORT_FILE_HYPERLYNX, export_step_xpm );
+
+    fileMenu->AddMenu( submenuExport,            SELECTION_CONDITIONS::ShowAlways );
+
+    //----- Fabrication Outputs submenu -----------------------------------------
+    ACTION_MENU* submenuFabOutputs = new ACTION_MENU();
+    submenuFabOutputs->SetTool( selTool );
+    submenuFabOutputs->SetTitle( _( "Fabrication Outputs" ) );
+    submenuFabOutputs->SetIcon( fabrication_xpm );
+
+    submenuFabOutputs->Add( _( "&Gerbers (.gbr)..." ),
+                            _( "Generate Gerbers for fabrication" ),
+                            ID_GEN_PLOT_GERBER, post_compo_xpm );
+    submenuFabOutputs->Add( _( "&Drill Files (.drl)..." ),
+                            _( "Generate Excellon drill file(s)" ),
+                            ID_PCB_GEN_DRILL_FILE, post_drill_xpm );
+    submenuFabOutputs->Add( _( "Footprint &Positions (.pos)..." ),
+                            _( "Generate footprint position file for pick and place" ),
+                            ID_PCB_GEN_POS_MODULES_FILE, post_compo_xpm );
+    submenuFabOutputs->Add( _( "&Footprint Report (.rpt)..." ),
+                            _( "Create report of all footprints from current board" ),
+                            ID_GEN_EXPORT_FILE_MODULE_REPORT, tools_xpm );
+    submenuFabOutputs->Add( _( "IPC-D-356 Netlist File..." ),
+                            _( "Generate IPC-D-356 netlist file" ),
+                            ID_PCB_GEN_D356_FILE, netlist_xpm );
+    submenuFabOutputs->Add( _( "&BOM..." ),
+                            _( "Create bill of materials from current schematic" ),
+                            ID_PCB_GEN_BOM_FILE_FROM_BOARD, bom_xpm );
+
+    fileMenu->AddMenu( submenuFabOutputs,          SELECTION_CONDITIONS::ShowAlways );
+
+    fileMenu->AddSeparator();
+    fileMenu->AddItem( ID_BOARD_SETUP_DIALOG,
+                       _( "&Board Setup..." ),
+                       _( "Edit board setup including layers, design rules and various defaults" ),
+                       options_board_xpm,          SELECTION_CONDITIONS::ShowAlways );
+
+    fileMenu->AddSeparator();
+    fileMenu->AddItem( ACTIONS::pageSettings,      SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::print,             SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::plot,              SELECTION_CONDITIONS::ShowAlways );
+
+
+    //----- archive submenu -----------------------------------------------------
+    ACTION_MENU* submenuArchive = new ACTION_MENU();
+    submenuArchive->SetTool( selTool );
+    submenuArchive->SetTitle( _( "Archive Footprints" ) );
+    submenuArchive->SetIcon( library_archive_xpm );
+
+    submenuArchive->Add( _( "&Archive Footprints in Existing Library..." ),
+                         _( "Archive all footprints to existing library in footprint Lib table"
+                            "(does not remove other footprints in this library)" ),
+                         ID_MENU_ARCHIVE_MODULES_IN_LIBRARY, library_archive_xpm );
+
+    submenuArchive->Add( _( "&Create New Library and Archive Footprints..." ),
+                         _( "Archive all footprints to a new library\n"
+                            "(if the library already exists it will be replaced)" ),
+                         ID_MENU_CREATE_LIBRARY_AND_ARCHIVE_MODULES, library_archive_as_xpm );
+
+    fileMenu->AddSeparator();
+    fileMenu->AddMenu( submenuArchive,             SELECTION_CONDITIONS::ShowAlways );
+
+    // Quit
+    fileMenu->AddSeparator();
+    fileMenu->AddItem( ACTIONS::quit,              SELECTION_CONDITIONS::ShowAlways );
 
     //----- Edit menu -----------------------------------------------------------
     CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
-    prepareEditMenu( this, editMenu, selTool );
 
+    auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
+        return GetScreen() && GetScreen()->GetUndoCommandCount() > 0;
+    };
+    auto enableRedoCondition = [ this ] ( const SELECTION& sel ) {
+        return GetScreen() && GetScreen()->GetRedoCommandCount() > 0;
+    };
+    auto noActiveToolCondition = [ this ] ( const SELECTION& aSelection ) {
+        return GetToolId() == ID_NO_TOOL_SELECTED;
+    };
+
+    editMenu->AddItem( ACTIONS::undo,                   enableUndoCondition );
+    editMenu->AddItem( ACTIONS::redo,                   enableRedoCondition );
+
+    editMenu->AddSeparator();
+    editMenu->AddItem( ACTIONS::cut,                    SELECTION_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::copy,                   SELECTION_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::paste,                  noActiveToolCondition );
+
+    editMenu->AddSeparator();
+    editMenu->AddItem( PCB_ACTIONS::deleteTool,         SELECTION_CONDITIONS::ShowAlways );
+
+    editMenu->AddSeparator();
+    editMenu->AddItem( ACTIONS::find,                   SELECTION_CONDITIONS::ShowAlways );
+
+    editMenu->AddSeparator();
+    editMenu->AddItem( ID_PCB_EDIT_TRACKS_AND_VIAS,
+                       _( "Edit Track && Via Properties..." ), "",
+                       width_track_via_xpm,             SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( ID_MENU_PCB_EDIT_TEXT_AND_GRAPHICS,
+                       _( "Edit Text && Graphic Properties..." ), "",
+                       reset_text_xpm,                  SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::exchangeFootprints, SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( ID_MENU_PCB_SWAP_LAYERS,
+                       _( "Swap Layers..." ),
+                       _( "Move tracks or drawings from a layer to another layer" ),
+                       swap_layer_xpm,                  SELECTION_CONDITIONS::ShowAlways );
+
+    editMenu->AddSeparator();
+    editMenu->AddItem( PCB_ACTIONS::zoneFillAll,        SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::zoneUnfillAll,      SELECTION_CONDITIONS::ShowAlways );
+
+    editMenu->AddSeparator();
+    editMenu->AddItem( ID_PCB_GLOBAL_DELETE,
+                       _( "Global Deletions..." ),
+                       _( "Delete tracks, footprints and graphic items from board" ),
+                       general_deletions_xpm,          SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( ID_MENU_PCB_CLEAN,
+                       _( "Cleanup Tracks and Vias..." ),
+                       _( "Clean stubs, vias, delete break points or unconnected tracks" ),
+                       delete_xpm,                     SELECTION_CONDITIONS::ShowAlways );
 
     //----- View menu -----------------------------------------------------------
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
@@ -149,17 +351,17 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
                             _( "Show La&yers Manager" ), HELP_SHOW_HIDE_LAYERMANAGER,
-                            layers_manager_xpm, layersPaletteShownCondition );
+                            layers_manager_xpm,             layersPaletteShownCondition );
     viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE,
                             _( "Show Microwa&ve Toolbar" ), HELP_SHOW_HIDE_MICROWAVE_TOOLS,
-                             mw_toolbar_xpm, microwaveToolbarShownCondition );
+                             mw_toolbar_xpm,                microwaveToolbarShownCondition );
     viewMenu->AddItem( ID_OPEN_MODULE_VIEWER,
                        _( "Footprint &Library Browser" ), _( "Browse footprint libraries" ),
-                       modview_icon_xpm, SELECTION_CONDITIONS::ShowAlways );
+                       modview_icon_xpm,                    SELECTION_CONDITIONS::ShowAlways );
     text = AddHotkeyName( _( "&3D Viewer" ), g_Board_Editor_Hotkeys_Descr, HK_3D_VIEWER );
     viewMenu->AddItem( ID_MENU_PCB_SHOW_3D_FRAME,
                        text, _( "Show board in 3D viewer" ),
-                       three_d_xpm, SELECTION_CONDITIONS::ShowAlways );
+                       three_d_xpm,                         SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
     viewMenu->AddItem( ACTIONS::zoomInCenter,               SELECTION_CONDITIONS::ShowAlways );
@@ -245,7 +447,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     preparePreferencesMenu( this, configmenu );
 
     //------ Append all menus to the menuBar ------------------------------------
-    menuBar->Append( filesMenu, _( "&File" ) );
+    menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
@@ -263,61 +465,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     RebuildActionPluginMenus();
 #endif
 
-}
-
-
-void prepareEditMenu( PCB_EDIT_FRAME * aFrame, CONDITIONAL_MENU* aEditMenu, SELECTION_TOOL* aSelectionTool )
-{
-    auto enableUndoCondition = [ aFrame ] ( const SELECTION& sel ) {
-        return aFrame->GetScreen() && aFrame->GetScreen()->GetUndoCommandCount() > 0;
-    };
-    auto enableRedoCondition = [ aFrame ] ( const SELECTION& sel ) {
-        return aFrame->GetScreen() && aFrame->GetScreen()->GetRedoCommandCount() > 0;
-    };
-    auto noActiveToolCondition = [ aFrame ] ( const SELECTION& aSelection ) {
-        return aFrame->GetToolId() == ID_NO_TOOL_SELECTED;
-    };
-
-    aEditMenu->AddItem( ACTIONS::undo,                   enableUndoCondition );
-    aEditMenu->AddItem( ACTIONS::redo,                   enableRedoCondition );
-
-    aEditMenu->AddSeparator();
-    aEditMenu->AddItem( ACTIONS::cut,                    SELECTION_CONDITIONS::NotEmpty );
-    aEditMenu->AddItem( ACTIONS::copy,                   SELECTION_CONDITIONS::NotEmpty );
-    aEditMenu->AddItem( ACTIONS::paste,                  noActiveToolCondition );
-
-    aEditMenu->AddSeparator();
-    aEditMenu->AddItem( PCB_ACTIONS::deleteTool,         SELECTION_CONDITIONS::ShowAlways );
-
-    aEditMenu->AddSeparator();
-    aEditMenu->AddItem( ACTIONS::find,                   SELECTION_CONDITIONS::ShowAlways );
-
-    aEditMenu->AddSeparator();
-    aEditMenu->AddItem( ID_PCB_EDIT_TRACKS_AND_VIAS,
-                       _( "Edit &Track && Via Properties..." ), "",
-                       width_track_via_xpm,             SELECTION_CONDITIONS::ShowAlways );
-    aEditMenu->AddItem( ID_MENU_PCB_EDIT_TEXT_AND_GRAPHICS,
-                       _( "Edit Text && &Graphic Properties..." ), "",
-                       reset_text_xpm,                  SELECTION_CONDITIONS::ShowAlways );
-    aEditMenu->AddItem( PCB_ACTIONS::exchangeFootprints, SELECTION_CONDITIONS::ShowAlways );
-    aEditMenu->AddItem( ID_MENU_PCB_SWAP_LAYERS,
-                       _( "&Swap Layers..." ),
-                       _( "Move tracks or drawings from a layer to another layer" ),
-                       swap_layer_xpm,                  SELECTION_CONDITIONS::ShowAlways );
-
-    aEditMenu->AddSeparator();
-    aEditMenu->AddItem( PCB_ACTIONS::zoneFillAll,        SELECTION_CONDITIONS::ShowAlways );
-    aEditMenu->AddItem( PCB_ACTIONS::zoneUnfillAll,      SELECTION_CONDITIONS::ShowAlways );
-
-    aEditMenu->AddSeparator();
-    aEditMenu->AddItem( ID_PCB_GLOBAL_DELETE,
-                       _( "Glo&bal Deletions..." ),
-                       _( "Delete tracks, footprints and graphic items from board" ),
-                       general_deletions_xpm, SELECTION_CONDITIONS::ShowAlways );
-    aEditMenu->AddItem( ID_MENU_PCB_CLEAN,
-                       _( "C&leanup Tracks and Vias..." ),
-                       _( "Clean stubs, vias, delete break points or unconnected tracks" ),
-                       delete_xpm, SELECTION_CONDITIONS::ShowAlways );
 }
 
 
@@ -546,264 +693,4 @@ void prepareToolsMenu( wxMenu* aParentMenu )
 
     submenuActionPluginsMenu->AppendSeparator();
 #endif
-}
-
-
-// Build the files menu.
-void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
-{
-    wxString text;
-
-    // Some commands are available only if Pcbnew is run outside a project (run alone).
-    // aIsOutsideProject is false when Pcbnew is run from Kicad manager.
-
-    FILE_HISTORY&  fhist = Kiface().GetFileHistory();
-
-    // Load Recent submenu
-    static wxMenu* openRecentMenu;
-
-    // Add this menu to list menu managed by m_fileHistory
-    // (the file history will be updated when adding/removing files in history
-    if( openRecentMenu )
-        fhist.RemoveMenu( openRecentMenu );
-
-    openRecentMenu = new wxMenu();
-
-    fhist.UseMenu( openRecentMenu );
-    fhist.AddFilesToMenu();
-
-    if( aIsOutsideProject )
-    {
-        text = AddHotkeyName( _( "&New" ), g_Board_Editor_Hotkeys_Descr, HK_NEW );
-        AddMenuItem( aParentMenu, ID_NEW_BOARD,
-                     text, _( "Create new board" ),
-                     KiBitmap( new_board_xpm ) );
-
-        text = AddHotkeyName( _( "&Open..." ), g_Board_Editor_Hotkeys_Descr, HK_OPEN );
-        AddMenuItem( aParentMenu, ID_LOAD_FILE, text,
-                     _( "Open existing board" ),
-                     KiBitmap( open_brd_file_xpm ) );
-
-        AddMenuItem( aParentMenu, openRecentMenu,
-                     -1, _( "Open &Recent" ),
-                     _( "Open recently opened board" ),
-                     KiBitmap( recent_xpm ) );
-
-        aParentMenu->AppendSeparator();
-    }
-
-    text = AddHotkeyName( _( "&Save" ), g_Board_Editor_Hotkeys_Descr, HK_SAVE );
-    AddMenuItem( aParentMenu, ID_SAVE_BOARD, text,
-                 _( "Save current board" ),
-                 KiBitmap( save_xpm ) );
-
-    // Save as menu:
-    // under a project mgr we do not want to modify the board filename
-    // to keep consistency with the project mgr which expects files names same as prj name
-    // for main files
-    // when not under a project mgr, we are free to change filenames, cwd ...
-    if( Kiface().IsSingle() )      // not when under a project mgr (pcbnew is run as stand alone)
-    {
-        text = AddHotkeyName( _( "Sa&ve As..." ), g_Board_Editor_Hotkeys_Descr, HK_SAVEAS );
-        AddMenuItem( aParentMenu, ID_SAVE_BOARD_AS, text,
-                     _( "Save current board with new name" ),
-                     KiBitmap( save_as_xpm ) );
-    }
-    // under a project mgr, we can save a copy of the board,
-    // but do not change the current board file name
-    else
-    {
-        text = AddHotkeyName( _( "Sa&ve Copy As..." ), g_Board_Editor_Hotkeys_Descr, HK_SAVEAS );
-        AddMenuItem( aParentMenu, ID_COPY_BOARD_AS, text,
-                     _( "Save copy of the current board" ),
-                     KiBitmap( save_as_xpm ) );
-    }
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, ID_MENU_RECOVER_BOARD_AUTOSAVE,
-                 _( "Resc&ue" ),
-                 _( "Clear board and get last rescue file automatically saved by Pcbnew" ),
-                 KiBitmap( rescue_xpm ) );
-
-    if( aIsOutsideProject )
-    {
-        AddMenuItem( aParentMenu, ID_APPEND_FILE,
-                     _( "&Append Board..." ),
-                     _( "Append another board to currently loaded board" ),
-                     KiBitmap( add_board_xpm ) );
-
-        AddMenuItem( aParentMenu, ID_IMPORT_NON_KICAD_BOARD,
-                     _( "Import Non-KiCad Board File..." ),
-                     _( "Import board file from other applications" ),
-                     KiBitmap( import_brd_file_xpm ) );
-    }
-
-    AddMenuItem( aParentMenu, ID_MENU_READ_BOARD_BACKUP_FILE,
-                 _( "Revert to Las&t Backup" ),
-                 _( "Clear board and get previous backup version of board" ),
-                 KiBitmap( undo_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    //----- Import submenu ------------------------------------------------------
-    wxMenu* submenuImport = new wxMenu();
-
-    AddMenuItem( submenuImport, ID_GET_NETLIST,
-                 _( "&Netlist..." ),
-                 _( "Read netlist and update board connectivity" ),
-                 KiBitmap( netlist_xpm ) );
-
-    AddMenuItem( submenuImport, ID_GEN_IMPORT_SPECCTRA_SESSION,
-                 _( "&Specctra Session..." ),
-                 _( "Import routed \"Specctra Session\" (*.ses) file" ),
-                 KiBitmap( import_xpm ) );
-
-    AddMenuItem( submenuImport, ID_GEN_IMPORT_GRAPHICS_FILE,
-                 _( "&Graphics..." ),
-                 _( "Import 2D Drawing file to Pcbnew on Drawings layer" ),
-                 KiBitmap( import_vector_xpm ) );
-
-    AddMenuItem( aParentMenu, submenuImport,
-                 ID_GEN_IMPORT_FILE, _( "&Import" ),
-                 _( "Import files" ), KiBitmap( import_xpm ) );
-
-
-    //----- Export submenu ------------------------------------------------------
-    wxMenu* submenuexport = new wxMenu();
-    prepareExportMenu( submenuexport );
-
-    AddMenuItem( aParentMenu, submenuexport,
-                 ID_GEN_EXPORT_FILE, _( "E&xport" ),
-                 _( "Export board" ), KiBitmap( export_xpm ) );
-
-
-    //----- Fabrication Outputs submenu -----------------------------------------
-    wxMenu* fabricationOutputsMenu = new wxMenu;
-    AddMenuItem( fabricationOutputsMenu, ID_GEN_PLOT_GERBER,
-                 _( "&Gerbers (.gbr)..." ),
-                 _( "Generate Gerbers for fabrication" ),
-                 KiBitmap( post_compo_xpm ) );
-
-    AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_DRILL_FILE,
-                 _( "&Drill Files (.drl)..." ),
-                 _( "Generate Excellon drill file(s)" ),
-                 KiBitmap( post_drill_xpm ) );
-
-    AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_POS_MODULES_FILE,
-                 _( "Footprint &Positions (.pos)..." ),
-                 _( "Generate footprint position file for pick and place" ),
-                 KiBitmap( post_compo_xpm ) );
-
-    AddMenuItem( fabricationOutputsMenu, ID_GEN_EXPORT_FILE_MODULE_REPORT,
-                 _( "&Footprint Report (.rpt)..." ),
-                 _( "Create report of all footprints from current board" ),
-                 KiBitmap( tools_xpm ) );
-
-    AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_D356_FILE,
-                 _( "IPC-D-356 Netlist File..." ),
-                 _( "Generate IPC-D-356 netlist file" ),
-                 KiBitmap( netlist_xpm ) );
-
-    AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_BOM_FILE_FROM_BOARD,
-                 _( "&BOM..." ),
-                 _( "Create bill of materials from current schematic" ),
-                 KiBitmap( bom_xpm ) );
-
-    AddMenuItem( aParentMenu, fabricationOutputsMenu,
-                 -1, _( "&Fabrication Outputs" ),
-                 _( "Generate files for fabrication" ),
-                 KiBitmap( fabrication_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, ID_BOARD_SETUP_DIALOG,
-                 _( "&Board Setup..." ),
-                 _( "Edit board setup including layers, design rules and various defaults" ),
-                 KiBitmap( options_board_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, ID_SHEET_SET,
-                 _( "Page S&ettings..." ),
-                 _( "Settings for sheet size and frame references" ),
-                 KiBitmap( sheetset_xpm ) );
-
-    text = AddHotkeyName( _( "&Print..." ), g_Board_Editor_Hotkeys_Descr, HK_PRINT );
-    AddMenuItem( aParentMenu, wxID_PRINT, text,
-                 _( "Print board" ),
-                 KiBitmap( print_button_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_GEN_PLOT,
-                 _( "P&lot..." ),
-                 _( "Plot board in HPGL, PostScript or Gerber RS-274X format)" ),
-                 KiBitmap( plot_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    //----- archive submenu -----------------------------------------------------
-    wxMenu* submenuarchive = new wxMenu();
-
-    AddMenuItem( submenuarchive, ID_MENU_ARCHIVE_MODULES_IN_LIBRARY,
-                 _( "&Archive Footprints in Existing Library..." ),
-                 _( "Archive all footprints to existing library in footprint Lib table"
-                    "(does not remove other footprints in this library)" ),
-                 KiBitmap( library_archive_xpm ) );
-
-    AddMenuItem( submenuarchive, ID_MENU_CREATE_LIBRARY_AND_ARCHIVE_MODULES,
-                 _( "&Create New Library and Archive Footprints..." ),
-                 _( "Archive all footprints to a new library\n"
-                    "(if the library already exists it will be replaced)" ),
-                 KiBitmap( library_archive_as_xpm ) );
-
-    AddMenuItem( aParentMenu, submenuarchive,
-                 ID_MENU_ARCHIVE_MODULES,
-                 _( "Arc&hive Footprints" ),
-                 _( "Archive or add all footprints in library file" ),
-                 KiBitmap( library_archive_xpm ) );
-
-    aParentMenu->AppendSeparator();
-    AddMenuItem( aParentMenu, wxID_EXIT, _( "&Exit" ), _( "Close Pcbnew" ), KiBitmap( exit_xpm ) );
-}
-
-
-// Build the import/export submenu (inside files menu)
-void prepareExportMenu( wxMenu* aParentMenu )
-{
-    AddMenuItem( aParentMenu, ID_GEN_EXPORT_SPECCTRA,
-                 _( "S&pecctra DSN..." ),
-                 _( "Export current board to \"Specctra DSN\" file" ),
-                 KiBitmap( export_dsn_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_GEN_EXPORT_FILE_GENCADFORMAT,
-                 _( "&GenCAD..." ), _( "Export GenCAD format" ),
-                 KiBitmap( export_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_GEN_EXPORT_FILE_VRML,
-                 _( "&VRML..." ),
-                 _( "Export VRML board representation" ),
-                 KiBitmap( export3d_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_GEN_EXPORT_FILE_IDF3,
-                 _( "I&DFv3..." ), _( "IDFv3 board and symbol export" ),
-                 KiBitmap( export_idf_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_GEN_EXPORT_FILE_STEP,
-                 _( "S&TEP..." ), _( "STEP export" ),
-                 KiBitmap( export_step_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_GEN_PLOT_SVG,
-                 _( "&SVG..." ),
-                 _( "Export board file in Scalable Vector Graphics format" ),
-                 KiBitmap( plot_svg_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_PCB_GEN_CMP_FILE,
-                 _( "&Footprint Association (.cmp) File..." ),
-                 _( "Export footprint association file (*.cmp) for schematic back annotation" ),
-                 KiBitmap( create_cmp_file_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_GEN_EXPORT_FILE_HYPERLYNX,
-                 _( "&Hyperlynx..." ), _( "Hyperlynx export" ),
-                 KiBitmap( export_step_xpm ) );
-
 }

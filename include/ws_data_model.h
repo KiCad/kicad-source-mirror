@@ -55,7 +55,7 @@ public:
     double m_DefaultLineWidth;      // Used when object line width is 0
     DSIZE  m_DefaultTextSize;       // Used when object text size is 0
     double m_DefaultTextThickness;  // Used when object text stroke width is 0
-    bool   m_SpecialMode;           // Used in page layout editor to toggle variable substition
+    bool   m_EditMode;           // Used in page layout editor to toggle variable substition
 
 public:
     WS_DATA_MODEL();

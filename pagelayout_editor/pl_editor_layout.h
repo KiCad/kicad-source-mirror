@@ -52,11 +52,9 @@ public:
     PL_EDITOR_LAYOUT();
     ~PL_EDITOR_LAYOUT();
 
-    const PAGE_INFO&    GetPageSettings() const { return m_paper; }
-    void SetPageSettings( const PAGE_INFO& aPageSettings )
-    {
-        m_paper = aPageSettings;
-    }
+    PAGE_INFO& GetPageSettings() { return m_paper; }
+    const PAGE_INFO& GetPageSettings() const { return m_paper; }
+    void SetPageSettings( const PAGE_INFO& aPageSettings ) { m_paper = aPageSettings; }
 
     const wxPoint& GetAuxOrigin() const
     {
@@ -64,19 +62,13 @@ public:
         return zero;
     }
 
-    const TITLE_BLOCK& GetTitleBlock() const
-    {
-        return m_titles;
-    }
+    TITLE_BLOCK& GetTitleBlock() { return m_titles; }
+    const TITLE_BLOCK& GetTitleBlock() const { return m_titles; }
+    void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) { m_titles = aTitleBlock; }
 
     WS_DRAW_ITEM_LIST& GetDrawItems()
     {
         return m_drawItemList;
-    }
-
-    void SetTitleBlock( const TITLE_BLOCK& aTitleBlock )
-    {
-        m_titles = aTitleBlock;
     }
 
     /**

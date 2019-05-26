@@ -321,12 +321,6 @@ void EDA_DRAW_FRAME::SkipNextLeftButtonReleaseEvent()
 }
 
 
-void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
-{
-    wxFAIL_MSG( "Obsolete!  Should go through EDITOR_CONTROL." );
-}
-
-
 bool EDA_DRAW_FRAME::GetToolToggled( int aToolId )
 {
     // Checks all the toolbars and returns true if the given tool id is toggled.
@@ -335,26 +329,6 @@ bool EDA_DRAW_FRAME::GetToolToggled( int aToolId )
              ( m_drawToolBar && m_drawToolBar->GetToolToggled( aToolId ) ) ||
              ( m_auxiliaryToolBar && m_auxiliaryToolBar->GetToolToggled( aToolId ) )
            );
-}
-
-
-void EDA_DRAW_FRAME::OnToggleCrossHairStyle( wxCommandEvent& aEvent )
-{
-    wxFAIL_MSG( "Obsolete!  Should go through EDITOR_CONTROL." );
-}
-
-
-void EDA_DRAW_FRAME::OnUpdateUndo( wxUpdateUIEvent& aEvent )
-{
-    if( GetScreen() )
-        aEvent.Enable( GetScreen()->GetUndoCommandCount() > 0 );
-}
-
-
-void EDA_DRAW_FRAME::OnUpdateRedo( wxUpdateUIEvent& aEvent )
-{
-    if( GetScreen() )
-        aEvent.Enable( GetScreen()->GetRedoCommandCount() > 0 );
 }
 
 
@@ -505,13 +479,6 @@ void EDA_DRAW_FRAME::SetNoToolSelected()
         defaultCursor = GetGalCanvas()->GetDefaultCursor();
 
     SetToolID( ID_NO_TOOL_SELECTED, defaultCursor, wxEmptyString );
-}
-
-
-wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition ) const
-{
-    wxFAIL_MSG( "Obsolete!  Should go through COMMON_TOOLS." );
-    return aPosition;
 }
 
 

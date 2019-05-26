@@ -32,99 +32,16 @@
 #include <pl_editor_frame.h>
 #include <tool/tool_manager.h>
 #include <tools/pl_selection_tool.h>
+#include <ws_proxy_undo_item.h>
+#include <tool/actions.h>
 
-/* Note: the Undo/redo commands use a "brute" method:
- * the full page layout is converted to a S expression, and saved as string.
- * When a previous version is needed, the old string is parsed,
- * and the description replaces the current desc, just like reading a new file
- *
- * This is not optimal from the memory point of view, but:
- * - the descriptions are never very long (max few thousand of bytes)
- * - this is very easy to code
- */
-
-// A helper class used in undo/redo commad:
-class PL_ITEM_LAYOUT: public EDA_ITEM
+void PL_EDITOR_FRAME::SaveCopyInUndoList( bool aSavePageSettingsAndTitleBlock )
 {
-    wxString m_serialization;
-    int      m_selectedDataItem;
-    int      m_selectedDrawItem;
+    PICKED_ITEMS_LIST*  lastcmd = new PICKED_ITEMS_LIST();
+    WS_PROXY_UNDO_ITEM* copyItem = new WS_PROXY_UNDO_ITEM( this );
+    ITEM_PICKER         wrapper( copyItem, UR_LIBEDIT );
 
-public:
-    PL_ITEM_LAYOUT() :
-            EDA_ITEM( TYPE_PL_EDITOR_LAYOUT ),
-            m_selectedDataItem( INT_MAX ),
-            m_selectedDrawItem( INT_MAX )
-    {
-        WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
-        pglayout.SaveInString( m_serialization );
-
-        for( size_t ii = 0; ii < pglayout.GetItems().size(); ++ii )
-        {
-            WS_DATA_ITEM* dataItem = pglayout.GetItem( ii );
-
-            for( size_t jj = 0; jj < dataItem->GetDrawItems().size(); ++jj )
-            {
-                WS_DRAW_ITEM_BASE* drawItem = dataItem->GetDrawItems()[ jj ];
-
-                if( drawItem->IsSelected() )
-                {
-                    m_selectedDataItem = ii;
-                    m_selectedDrawItem = jj;
-                    break;
-                }
-            }
-        }
-    }
-
-    void RestoreLayout( PL_EDITOR_FRAME* aFrame )
-    {
-        WS_DATA_MODEL&     pglayout = WS_DATA_MODEL::GetTheInstance();
-        PL_SELECTION_TOOL* selTool = aFrame->GetToolManager()->GetTool<PL_SELECTION_TOOL>();
-        KIGFX::VIEW*       view = aFrame->GetGalCanvas()->GetView();
-
-        pglayout.SetPageLayout( TO_UTF8( m_serialization ) );
-
-        selTool->ClearSelection();
-        view->Clear();
-
-        for( size_t ii = 0; ii < pglayout.GetItems().size(); ++ii )
-        {
-            WS_DATA_ITEM* dataItem = pglayout.GetItem( ii );
-
-            dataItem->SyncDrawItems( nullptr, view );
-
-            if( ii == m_selectedDataItem && m_selectedDrawItem < dataItem->GetDrawItems().size() )
-            {
-                WS_DRAW_ITEM_BASE* drawItem = dataItem->GetDrawItems()[ m_selectedDrawItem ];
-                drawItem->SetSelected();
-            }
-        }
-
-        selTool->RebuildSelection();
-    }
-
-    // Required to keep compiler happy on debug builds.
-#if defined(DEBUG)
-    virtual void Show( int nestLevel, std::ostream& os ) const override {}
-#endif
-
-    /** Get class name
-     * @return  string "PL_ITEM_LAYOUT"
-     */
-    virtual wxString GetClass() const override
-    {
-        return wxT( "PL_ITEM_LAYOUT" );
-    }
-};
-
-void PL_EDITOR_FRAME::SaveCopyInUndoList()
-{
-    PL_ITEM_LAYOUT* copyItem = new PL_ITEM_LAYOUT;  // constructor stores current layout
-
-    PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-    ITEM_PICKER wrapper( copyItem, UR_LIBEDIT );
-    lastcmd->PushItem(wrapper);
+    lastcmd->PushItem( wrapper );
     GetScreen()->PushCommandToUndoList( lastcmd );
 
     // Clear redo list, because after new save there is no redo to do.
@@ -138,25 +55,34 @@ void PL_EDITOR_FRAME::SaveCopyInUndoList()
  */
 void PL_EDITOR_FRAME::GetLayoutFromRedoList()
 {
+    PL_SELECTION_TOOL*  selTool = GetToolManager()->GetTool<PL_SELECTION_TOOL>();
+
     if ( GetScreen()->GetRedoCommandCount() <= 0 )
         return;
 
-    PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-    PL_ITEM_LAYOUT* copyItem = new PL_ITEM_LAYOUT;  // constructor stores current layout
+    ITEM_PICKER         redoWrapper = GetScreen()->PopCommandFromRedoList()->PopItem();
+    WS_PROXY_UNDO_ITEM* redoItem = static_cast<WS_PROXY_UNDO_ITEM*>( redoWrapper.GetItem() );
+    bool                pageSettingsAndTitleBlock = redoItem->Type() == WS_PROXY_UNDO_ITEM_PLUS_T;
 
-    ITEM_PICKER wrapper( copyItem, UR_LIBEDIT );
+    PICKED_ITEMS_LIST*  undoCmd = new PICKED_ITEMS_LIST();
 
-    lastcmd->PushItem( wrapper );
-    GetScreen()->PushCommandToUndoList( lastcmd );
+    undoCmd->PushItem( new WS_PROXY_UNDO_ITEM( pageSettingsAndTitleBlock ? this : nullptr ) );
+    GetScreen()->PushCommandToUndoList( undoCmd );
 
-    lastcmd = GetScreen()->PopCommandFromRedoList();
+    selTool->ClearSelection();
+    redoItem->Restore( this, GetGalCanvas()->GetView() );
+    selTool->RebuildSelection();
 
-    wrapper = lastcmd->PopItem();
-    copyItem = static_cast<PL_ITEM_LAYOUT*>( wrapper.GetItem() );
-    copyItem->RestoreLayout( this );
-    delete copyItem;
+    delete redoItem;
 
-    GetCanvas()->Refresh();
+    if( pageSettingsAndTitleBlock )
+    {
+        GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
+        HardRedraw();   // items based off of corners will need re-calculating
+    }
+    else
+        GetCanvas()->Refresh();
+
     OnModify();
 }
 
@@ -167,41 +93,63 @@ void PL_EDITOR_FRAME::GetLayoutFromRedoList()
  */
 void PL_EDITOR_FRAME::GetLayoutFromUndoList()
 {
+    PL_SELECTION_TOOL*  selTool = GetToolManager()->GetTool<PL_SELECTION_TOOL>();
+
     if ( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
 
-    PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
-    PL_ITEM_LAYOUT* copyItem = new PL_ITEM_LAYOUT;  // constructor stores current layout
+    ITEM_PICKER         undoWrapper = GetScreen()->PopCommandFromUndoList()->PopItem();
+    WS_PROXY_UNDO_ITEM* undoItem = static_cast<WS_PROXY_UNDO_ITEM*>( undoWrapper.GetItem() );
+    bool                pageSettingsAndTitleBlock = undoItem->Type() == WS_PROXY_UNDO_ITEM_PLUS_T;
 
-    ITEM_PICKER wrapper( copyItem, UR_LIBEDIT );
-    lastcmd->PushItem( wrapper );
-    GetScreen()->PushCommandToRedoList( lastcmd );
+    PICKED_ITEMS_LIST*  redoCmd = new PICKED_ITEMS_LIST();
 
-    lastcmd = GetScreen()->PopCommandFromUndoList();
+    redoCmd->PushItem( new WS_PROXY_UNDO_ITEM( pageSettingsAndTitleBlock ? this : nullptr ) );
+    GetScreen()->PushCommandToRedoList( redoCmd );
 
-    wrapper = lastcmd->PopItem();
-    copyItem = static_cast<PL_ITEM_LAYOUT*>( wrapper.GetItem() );
-    copyItem->RestoreLayout( this );
-    delete copyItem;
+    selTool->ClearSelection();
+    undoItem->Restore( this, GetGalCanvas()->GetView() );
+    selTool->RebuildSelection();
 
-    GetCanvas()->Refresh();
+    delete undoItem;
+
+    if( pageSettingsAndTitleBlock )
+    {
+        GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
+        HardRedraw();   // items based off of corners will need re-calculating
+    }
+    else
+        GetCanvas()->Refresh();
+
     OnModify();
 }
+
 
 /* Remove the last command in Undo List.
  * Used to clean the uUndo stack after a cancel command
  */
 void PL_EDITOR_FRAME::RollbackFromUndo()
 {
+    PL_SELECTION_TOOL*  selTool = GetToolManager()->GetTool<PL_SELECTION_TOOL>();
+
     if ( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
 
-    PICKED_ITEMS_LIST* lastcmd = GetScreen()->PopCommandFromUndoList();
+    ITEM_PICKER         undoWrapper = GetScreen()->PopCommandFromUndoList()->PopItem();
+    WS_PROXY_UNDO_ITEM* undoItem = static_cast<WS_PROXY_UNDO_ITEM*>( undoWrapper.GetItem() );
+    bool                pageSettingsAndTitleBlock = undoItem->Type() == WS_PROXY_UNDO_ITEM_PLUS_T;
 
-    ITEM_PICKER wrapper = lastcmd->PopItem();
-    PL_ITEM_LAYOUT* copyItem = static_cast<PL_ITEM_LAYOUT*>( wrapper.GetItem() );
-    copyItem->RestoreLayout( this );
-    delete copyItem;
+    selTool->ClearSelection();
+    undoItem->Restore( this, GetGalCanvas()->GetView() );
+    selTool->RebuildSelection();
 
-    GetCanvas()->Refresh();
+    delete undoItem;
+
+    if( pageSettingsAndTitleBlock )
+    {
+        GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
+        HardRedraw();   // items based off of corners will need re-calculating
+    }
+    else
+        GetCanvas()->Refresh();
 }

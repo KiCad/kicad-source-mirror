@@ -43,7 +43,7 @@ static const int HOTKEY_MIN_WIDTH = 100;
  */
 enum ID_WHKL_MENU_IDS
 {
-    ID_EDIT = 2001,
+    ID_EDIT_HOTKEY = 2001,
     ID_RESET,
     ID_DEFAULT,
     ID_RESET_ALL,
@@ -426,7 +426,7 @@ void WIDGET_HOTKEY_LIST::OnContextMenu( wxTreeListEvent& aEvent )
     // Some actions only apply if the row is hotkey data
     if( hkdata )
     {
-        menu.Append( ID_EDIT, _( "Edit..." ) );
+        menu.Append( ID_EDIT_HOTKEY, _( "Edit..." ) );
         menu.Append( ID_RESET, _( "Undo Changes" ) );
         menu.Append( ID_DEFAULT, _( "Restore Default" ) );
         menu.Append( wxID_SEPARATOR );
@@ -443,7 +443,7 @@ void WIDGET_HOTKEY_LIST::OnMenu( wxCommandEvent& aEvent )
 {
     switch( aEvent.GetId() )
     {
-    case ID_EDIT:
+    case ID_EDIT_HOTKEY:
         EditItem( m_context_menu_item );
         break;
 

@@ -50,6 +50,9 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
+    int Print( const TOOL_EVENT& aEvent );
+    int Quit( const TOOL_EVENT& aEvent );
+
     // Display modes
     int ToggleRatsnest( const TOOL_EVENT& aEvent );
     int ZoneDisplayMode( const TOOL_EVENT& aEvent );

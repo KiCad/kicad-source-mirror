@@ -26,7 +26,7 @@
 #include <pcb_view.h>
 #include <view/wx_view_controls.h>
 #include <pcb_painter.h>
-#include <ws_view_item.h>
+#include <ws_proxy_view_item.h>
 #include <ratsnest_viewitem.h>
 #include <ratsnest_data.h>
 #include <connectivity/connectivity_data.h>
@@ -197,7 +197,7 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
 }
 
 
-void PCB_DRAW_PANEL_GAL::SetWorksheet( KIGFX::WS_VIEW_ITEM* aWorksheet )
+void PCB_DRAW_PANEL_GAL::SetWorksheet( KIGFX::WS_PROXY_VIEW_ITEM* aWorksheet )
 {
     m_worksheet.reset( aWorksheet );
     m_view->Add( m_worksheet.get() );

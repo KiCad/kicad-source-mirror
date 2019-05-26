@@ -182,7 +182,8 @@ enum KICAD_T
     WSG_BITMAP_T,
 
     // serialized layout used in undo/redo commands
-    TYPE_PL_EDITOR_LAYOUT,
+    WS_PROXY_UNDO_ITEM_T,  // serialized layout used in undo/redo commands
+    WS_PROXY_UNDO_ITEM_PLUS_T,   // serialized layout plus page and title block settings
 
     /*
      * FOR PROJECT::_ELEMs

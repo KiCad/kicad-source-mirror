@@ -49,8 +49,9 @@ public:
     static TOOL_ACTION open;
     static TOOL_ACTION save;
     static TOOL_ACTION saveAs;
+    static TOOL_ACTION saveCopyAs;
     static TOOL_ACTION saveAll;
-    static TOOL_ACTION pageSetup;
+    static TOOL_ACTION pageSettings;
     static TOOL_ACTION print;
     static TOOL_ACTION plot;
     static TOOL_ACTION quit;

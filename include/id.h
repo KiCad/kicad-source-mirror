@@ -121,7 +121,6 @@ enum main_id
     ID_GEN_EXPORT_FILE,
     ID_GEN_IMPORT_FILE,
 
-    ID_EXIT,
     ID_OPTIONS_SETUP,
 
     // id for toolbars
@@ -130,7 +129,7 @@ enum main_id
     ID_OPT_TOOLBAR,
     ID_AUX_TOOLBAR,
 
-    ID_EDIT,
+    ID_EDIT_HOTKEY,
     ID_NO_TOOL_SELECTED,
     ID_ZOOM_SELECTION,
     ID_SEL_BG_COLOR,
@@ -165,16 +164,12 @@ enum main_id
     ID_KICAD_SELECT_ICONS_IN_MENUS,
     ID_KICAD_SELECT_ICON_OPTIONS_END,
 
-    ID_SET_REPEAT_OPTION,
-
     // Popup Menu (mouse Right button) (id consecutifs)
 
     ID_POPUP_GENERAL_START_RANGE,   // first number
     ID_POPUP_CANCEL_CURRENT_COMMAND,
     ID_POPUP_CLOSE_CURRENT_TOOL,
     ID_POPUP_GENERAL_END_RANGE, // last number
-
-    ID_POPUP_ENTER_MENU,
 
     ID_ON_ZOOM_SELECT,
     ID_POPUP_ZOOM_START_RANGE,       // first zoom id
@@ -231,7 +226,6 @@ enum main_id
 
     ID_GRID_SETTINGS,
 
-    ID_SHEET_SET,
     ID_COMPONENT_BUTT,
 
     ID_ZOOM_BEGIN,

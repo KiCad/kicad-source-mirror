@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2016 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2018 CERN
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -28,19 +28,15 @@
 #include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <pcb_edit_frame.h>
-#include <footprint_edit_frame.h>
 #include <base_units.h>
 #include <pcbnew.h>
 #include <pcbplot.h>
 #include <class_board.h>
-
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-
+#include <tools/pcbnew_control.h>
 #include <dialog_print_generic.h>
 #include <pcbnew_printout.h>
-
 
 class DIALOG_PRINT_PCBNEW : public DIALOG_PRINT_GENERIC
 {
@@ -329,24 +325,20 @@ void DIALOG_PRINT_PCBNEW::saveSettings()
 }
 
 
-void PCB_EDIT_FRAME::ToPrinter( wxCommandEvent& event )
+int PCBNEW_CONTROL::Print( const TOOL_EVENT& aEvent )
 {
-    // Selection affects the original item visibility
-    GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+    // Selection affects the origin item visibility
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    PCBNEW_PRINTOUT_SETTINGS settings( GetPageSettings() );
-    DIALOG_PRINT_PCBNEW dlg( this, &settings );
+    PCBNEW_PRINTOUT_SETTINGS settings( m_frame->GetPageSettings() );
+    DIALOG_PRINT_PCBNEW dlg( (PCB_BASE_EDIT_FRAME*) m_frame, &settings );
+
+    if( m_editModules )
+        dlg.ForcePrintBorder( false );
+
     dlg.ShowModal();
+
+    return 0;
 }
 
 
-void FOOTPRINT_EDIT_FRAME::ToPrinter( wxCommandEvent& event )
-{
-    // Selection affects the original item visibility
-    GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
-
-    PCBNEW_PRINTOUT_SETTINGS settings( GetPageSettings() );
-    DIALOG_PRINT_PCBNEW dlg( this, &settings );
-    dlg.ForcePrintBorder( false );
-    dlg.ShowModal();
-}

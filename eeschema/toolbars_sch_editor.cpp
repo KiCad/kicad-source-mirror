@@ -57,7 +57,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::saveAll );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->Add( ACTIONS::pageSetup );
+    m_mainToolBar->Add( ACTIONS::pageSettings );
     m_mainToolBar->Add( ACTIONS::print );
     m_mainToolBar->Add( ACTIONS::plot );
 

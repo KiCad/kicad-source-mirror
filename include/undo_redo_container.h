@@ -74,7 +74,8 @@ enum UNDO_REDO_T {
     UR_EXCHANGE_T,          ///< Use for changing the schematic text type where swapping
                             ///< data structure is insufficient to restore the change.
     UR_DRILLORIGIN,         // origin changed (like UR_CHANGED, contains the origin and a copy)
-    UR_GRIDORIGIN           // origin changed (like UR_CHANGED, contains the origin and a copy)
+    UR_GRIDORIGIN,          // origin changed (like UR_CHANGED, contains the origin and a copy)
+    UR_PAGESETTINGS         // page settings or title block changes
 };
 
 

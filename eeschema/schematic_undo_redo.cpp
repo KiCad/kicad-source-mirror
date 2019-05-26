@@ -37,6 +37,8 @@
 #include <sch_bitmap.h>
 #include <sch_view.h>
 #include <tools/ee_selection_tool.h>
+#include <ws_proxy_undo_item.h>
+#include <tool/actions.h>
 
 /* Functions to undo and redo edit commands.
  *  commands to undo are stored in CurrentScreen->m_UndoList
@@ -106,9 +108,9 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
                                          bool           aAppend,
                                          const wxPoint& aTransformPoint )
 {
-    PICKED_ITEMS_LIST* commandToUndo = NULL;
+    PICKED_ITEMS_LIST* commandToUndo = nullptr;
 
-    if( aItem == NULL )
+    if( !aItem )
         return;
 
     // Connectivity may change
@@ -162,11 +164,11 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
 
 
 void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
-                                         UNDO_REDO_T        aTypeCommand,
-                                         bool               aAppend,
-                                         const wxPoint&     aTransformPoint )
+                                         UNDO_REDO_T              aTypeCommand,
+                                         bool                     aAppend,
+                                         const wxPoint&           aTransformPoint )
 {
-    PICKED_ITEMS_LIST* commandToUndo = NULL;
+    PICKED_ITEMS_LIST* commandToUndo = nullptr;
 
     if( !aItemsList.GetCount() )
         return;
@@ -195,11 +197,14 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
     // Verify list, and creates data if needed
     for( unsigned ii = 0; ii < commandToUndo->GetCount(); ii++ )
     {
-        SCH_ITEM* item = (SCH_ITEM*) commandToUndo->GetPickedItem( ii );
-        wxASSERT( item );
+        SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( commandToUndo->GetPickedItem( ii ) );
+
+        // Common items implemented in EDA_DRAW_FRAME will not be SCH_ITEMs.
+        if( !sch_item )
+            continue;
 
         // Connectivity may change
-        item->SetConnectivityDirty();
+        sch_item->SetConnectivityDirty();
 
         UNDO_REDO_T command = commandToUndo->GetPickedItemStatus( ii );
 
@@ -211,14 +216,14 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
 
         switch( command )
         {
-        case UR_CHANGED:        /* Create a copy of item */
+        case UR_CHANGED:
 
             /* If needed, create a copy of item, and put in undo list
              * in the picker, as link
              * If this link is not null, the copy is already done
              */
-            if( commandToUndo->GetPickedItemLink( ii ) == NULL )
-                commandToUndo->SetPickedItemLink( item->Duplicate( true ), ii );
+            if( commandToUndo->GetPickedItemLink( ii ) == nullptr )
+                commandToUndo->SetPickedItemLink( sch_item->Duplicate( true ), ii );
 
             wxASSERT( commandToUndo->GetPickedItemLink( ii ) );
             break;
@@ -230,6 +235,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
         case UR_NEW:
         case UR_DELETED:
         case UR_EXCHANGE_T:
+        case UR_PAGESETTINGS:
             break;
 
         default:
@@ -255,36 +261,44 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
 
 void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand )
 {
-    SCH_ITEM* item;
-    SCH_ITEM* alt_item;
-
     // Undo in the reverse order of list creation: (this can allow stacked changes like the
     // same item can be changed and deleted in the same complex command).
     for( int ii = aList->GetCount() - 1; ii >= 0; ii-- )
     {
         UNDO_REDO_T status = aList->GetPickedItemStatus((unsigned) ii );
-        item = (SCH_ITEM*) aList->GetPickedItem( (unsigned) ii );
-        alt_item = (SCH_ITEM*) aList->GetPickedItemLink( (unsigned) ii );
+        EDA_ITEM*   eda_item = aList->GetPickedItem( (unsigned) ii );
 
-        item->SetFlags( aList->GetPickerFlags( (unsigned) ii ) );
-        item->ClearEditFlags();
-        item->ClearTempFlags();
+        eda_item->SetFlags( aList->GetPickerFlags( (unsigned) ii ) );
+        eda_item->ClearEditFlags();
+        eda_item->ClearTempFlags();
 
         if( status == UR_NEW )
         {
             // new items are deleted on undo
-            RemoveFromScreen( item );
+            RemoveFromScreen( eda_item );
             aList->SetPickedItemStatus( UR_DELETED, (unsigned) ii );
         }
-        else if (status == UR_DELETED )
+        else if( status == UR_DELETED )
         {
             // deleted items are re-inserted on undo
-            AddToScreen( item );
+            AddToScreen( eda_item );
             aList->SetPickedItemStatus( UR_NEW, (unsigned) ii );
         }
-        else
+        else if( status == UR_PAGESETTINGS )
+        {
+            // swap current settings with stored settings
+            WS_PROXY_UNDO_ITEM  alt_item( this );
+            WS_PROXY_UNDO_ITEM* item = (WS_PROXY_UNDO_ITEM*) eda_item;
+            item->Restore( this );
+            *item = alt_item;
+            GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
+        }
+        else if( dynamic_cast<SCH_ITEM*>( eda_item ) )
         {
             // everthing else is modified in place
+
+            SCH_ITEM* item = (SCH_ITEM*) eda_item;
+            SCH_ITEM* alt_item = (SCH_ITEM*) aList->GetPickedItemLink( (unsigned) ii );
             RemoveFromScreen( item );
 
             switch( status )
@@ -318,8 +332,8 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
                 break;
 
             case UR_EXCHANGE_T:
-                alt_item->SetNext( NULL );
-                alt_item->SetBack( NULL );
+                alt_item->SetNext( nullptr );
+                alt_item->SetBack( nullptr );
                 aList->SetPickedItem( alt_item, (unsigned) ii );
                 aList->SetPickedItemLink( item, (unsigned) ii );
                 item = alt_item;

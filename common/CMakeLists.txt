@@ -36,7 +36,6 @@ set( GAL_SRCS
     newstroke_font.cpp
     painter.cpp
     text_utils.cpp
-    page_layout/ws_view_item.cpp
     gal/color4d.cpp
     gal/gal_display_options.cpp
     gal/graphics_abstraction_layer.cpp
@@ -241,6 +240,8 @@ set( COMMON_PAGE_LAYOUT_SRCS
     page_layout/ws_data_model_io.cpp
     page_layout/page_layout_default_description.cpp
     page_layout/ws_draw_item.cpp
+    page_layout/ws_proxy_undo_item.cpp
+    page_layout/ws_proxy_view_item.cpp
     page_layout/page_layout_reader_keywords.cpp
     page_layout/page_layout_reader.cpp
     )

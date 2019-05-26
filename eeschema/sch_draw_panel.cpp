@@ -25,7 +25,7 @@
 
 
 #include <view/wx_view_controls.h>
-#include <ws_view_item.h>
+#include <ws_proxy_view_item.h>
 
 #include <gal/graphics_abstraction_layer.h>
 #include <sch_draw_panel.h>

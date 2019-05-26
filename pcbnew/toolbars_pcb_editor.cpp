@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -250,19 +250,19 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     // Set up toolbar
     if( Kiface().IsSingle() )
     {
-        ADD_TOOL( ID_NEW_BOARD, new_board_xpm, _( "New board" ) );
-        ADD_TOOL( ID_LOAD_FILE, open_brd_file_xpm, _( "Open existing board" ) );
+        m_mainToolBar->Add( ACTIONS::doNew );
+        m_mainToolBar->Add( ACTIONS::open );
     }
 
-    ADD_TOOL( ID_SAVE_BOARD, save_xpm, _( "Save board" ) );
+    m_mainToolBar->Add( ACTIONS::save );
 
     KiScaledSeparator( m_mainToolBar, this );
     ADD_TOOL( ID_BOARD_SETUP_DIALOG, options_board_xpm, _( "Board setup" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-    ADD_TOOL( ID_SHEET_SET, sheetset_xpm, _( "Page settings for paper size and texts" ) );
-    ADD_TOOL( wxID_PRINT, print_button_xpm, _( "Print board" ) );
-    ADD_TOOL( ID_GEN_PLOT, plot_xpm, _( "Plot (HPGL, PostScript, or GERBER format)" ) );
+    m_mainToolBar->Add( ACTIONS::pageSettings );
+    m_mainToolBar->Add( ACTIONS::print );
+    m_mainToolBar->Add( ACTIONS::plot );
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->Add( ACTIONS::undo );
@@ -782,12 +782,6 @@ bool PCB_EDIT_FRAME::MicrowaveToolbarShown()
 }
 
 
-void PCB_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Enable( GetScreen()->IsModify() );
-}
-
-
 void PCB_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
 {
     if( aEvent.GetEventObject() == m_drawToolBar || aEvent.GetEventObject() == m_mainToolBar )
@@ -807,6 +801,7 @@ void PCB_EDIT_FRAME::SyncMenusAndToolbars()
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
     int                         zoneMode = opts->m_DisplayZonesMode;
 
+    m_mainToolBar->Toggle( ACTIONS::save, GetScreen() && GetScreen()->IsModify() );
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );

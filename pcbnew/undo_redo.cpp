@@ -34,7 +34,6 @@ using namespace std::placeholders;
 
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
-
 #include <class_board.h>
 #include <class_track.h>
 #include <class_drawsegment.h>
@@ -45,15 +44,14 @@ using namespace std::placeholders;
 #include <class_zone.h>
 #include <class_edge_mod.h>
 #include <origin_viewitem.h>
-
 #include <connectivity/connectivity_data.h>
-
+#include <tool/tool_manager.h>
+#include <tool/actions.h>
 #include <tools/selection_tool.h>
 #include <tools/pcbnew_control.h>
 #include <tools/pcb_editor_control.h>
-#include <tool/tool_manager.h>
-
 #include <view/view.h>
+#include <ws_proxy_undo_item.h>
 
 /* Functions to undo and redo edit commands.
  *  commands to undo are stored in CurrentScreen->m_UndoList
@@ -208,6 +206,8 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
                                               UNDO_REDO_T aTypeCommand,
                                               const wxPoint& aTransformPoint )
 {
+    static KICAD_T moduleChildren[] = { PCB_MODULE_TEXT_T, PCB_MODULE_EDGE_T, PCB_PAD_T, EOT };
+
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
 
     commandToUndo->m_TransformPoint = aTransformPoint;
@@ -218,11 +218,10 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
         ITEM_PICKER curr_picker = aItemsList.GetItemWrapper(ii);
-        BOARD_ITEM* item        = (BOARD_ITEM*) aItemsList.GetPickedItem( ii );
+        BOARD_ITEM* item        = dynamic_cast<BOARD_ITEM*>( aItemsList.GetPickedItem( ii ) );
 
         // For items belonging to modules, we need to save state of the parent module
-        if( item->Type() == PCB_MODULE_TEXT_T || item->Type() == PCB_MODULE_EDGE_T
-                || item->Type() == PCB_PAD_T )
+        if( item && item->IsType( moduleChildren ) )
         {
             // Item to be stored in the undo buffer is the parent module
             item = item->GetParent();
@@ -281,7 +280,7 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
 
     for( unsigned ii = 0; ii < commandToUndo->GetCount(); ii++ )
     {
-        BOARD_ITEM* item    = (BOARD_ITEM*) commandToUndo->GetPickedItem( ii );
+        EDA_ITEM*   item    = aItemsList.GetPickedItem( ii );
         UNDO_REDO_T command = commandToUndo->GetPickedItemStatus( ii );
 
         if( command == UR_UNSPECIFIED )
@@ -315,6 +314,7 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
         case UR_FLIPPED:
         case UR_NEW:
         case UR_DELETED:
+        case UR_PAGESETTINGS:
             break;
 
         default:
@@ -420,8 +420,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
     // Restore changes in reverse order
     for( int ii = aList->GetCount() - 1; ii >= 0 ; ii-- )
     {
-        item = (BOARD_ITEM*) aList->GetPickedItem( ii );
-        wxASSERT( item );
+        EDA_ITEM* eda_item = aList->GetPickedItem( (unsigned) ii );
 
         /* Test for existence of item on board.
          * It could be deleted, and no more on board:
@@ -434,7 +433,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
         if( status != UR_DELETED
                 && status != UR_DRILLORIGIN     // origin markers never on board
-                && status != UR_GRIDORIGIN )    // origin markers never on board
+                && status != UR_GRIDORIGIN      // origin markers never on board
+                && status != UR_PAGESETTINGS )  // nor are page settings proxy items
         {
             if( build_item_list )
                 // Build list of existing items, for integrity test
@@ -551,12 +551,21 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         }
         break;
 
-        default:
+        case UR_PAGESETTINGS:
         {
-            wxLogDebug( wxT( "PutDataInPreviousState() error (unknown code %X)" ),
-                        aList->GetPickedItemStatus( ii ) );
+            // swap current settings with stored settings
+            WS_PROXY_UNDO_ITEM  alt_item( this );
+            WS_PROXY_UNDO_ITEM* item = (WS_PROXY_UNDO_ITEM*) eda_item;
+            item->Restore( this );
+            *item = alt_item;
+            GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
         }
         break;
+
+        default:
+            wxLogDebug( wxT( "PutDataInPreviousState() error (unknown code %X)" ),
+                        aList->GetPickedItemStatus( ii ) );
+            break;
         }
     }
 
@@ -600,4 +609,16 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
         curr_cmd->ClearListAndDeleteItems();
         delete curr_cmd;    // Delete command
     }
+}
+
+
+void PCB_BASE_EDIT_FRAME::RollbackFromUndo()
+{
+    PICKED_ITEMS_LIST* undo = GetScreen()->PopCommandFromUndoList();
+    PutDataInPreviousState( undo, false );
+
+    undo->ClearListAndDeleteItems();
+    delete undo;
+
+    GetCanvas()->Refresh();
 }

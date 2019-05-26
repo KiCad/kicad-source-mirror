@@ -81,7 +81,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     fileMenu->AddItem( ACTIONS::saveAs,        SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-    fileMenu->AddItem( ACTIONS::pageSetup,     SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::pageSettings,     SELECTION_CONDITIONS::ShowAlways );
     fileMenu->AddItem( ACTIONS::print,         SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AppendSeparator();

@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef WS_VIEW_ITEM_H
-#define WS_VIEW_ITEM_H
+#ifndef WS_PROXY_VIEW_ITEM_H
+#define WS_PROXY_VIEW_ITEM_H
 
 #include <base_struct.h>
 
@@ -41,10 +41,10 @@ namespace KIGFX
 class VIEW;
 class GAL;
 
-class WS_VIEW_ITEM : public EDA_ITEM
+class WS_PROXY_VIEW_ITEM : public EDA_ITEM
 {
 public:
-    WS_VIEW_ITEM( int aScaleFactor, const PAGE_INFO* aPageInfo,  const TITLE_BLOCK* aTitleBlock );
+    WS_PROXY_VIEW_ITEM( int aScaleFactor, const PAGE_INFO* aPageInfo,  const TITLE_BLOCK* aTitleBlock );
 
     /**
      * Function SetFileName()
@@ -117,9 +117,7 @@ public:
 
 #if defined(DEBUG)
     /// @copydoc EDA_ITEM::Show()
-    void Show( int x, std::ostream& st ) const override
-    {
-    }
+    void Show( int x, std::ostream& st ) const override { }
 #endif
 
     /** Get class name
@@ -127,7 +125,7 @@ public:
      */
     virtual wxString GetClass() const override
     {
-        return wxT( "WS_VIEW_ITEM" );
+        return wxT( "WS_PROXY_VIEW_ITEM" );
     }
 
 protected:
@@ -155,4 +153,4 @@ protected:
 };
 }
 
-#endif /* WS_VIEW_ITEM_H */
+#endif /* WS_PROXY_VIEW_ITEM_H */

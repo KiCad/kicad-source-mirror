@@ -22,7 +22,6 @@
  */
 
 #include <fctsys.h>
-#include <macros.h>              // arrayDim()
 #include <common.h>
 #include <project.h>
 #include <confirm.h>
@@ -34,7 +33,7 @@
 #include <ws_data_model.h>
 #include <base_screen.h>
 #include <wildcards_and_files_ext.h>
-
+#include <tool/tool_manager.h>
 #include <wx/valgen.h>
 #include <wx/tokenzr.h>
 
@@ -45,6 +44,7 @@
 
 #include <ws_painter.h>
 #include <dialog_page_settings.h>
+#include <tool/actions.h>
 
 #define MAX_PAGE_EXAMPLE_SIZE 200
 
@@ -74,44 +74,6 @@ static const wxString pageFmts[] =
     _HKI("User (Custom)"),          // size defined by user. The string must contain "Custom"
                                     // to be recognized in code
 };
-
-void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
-{
-    FRAME_T smallSizeFrames[] =
-    {
-        FRAME_PCB, FRAME_PCB_MODULE_EDITOR, FRAME_PCB_MODULE_VIEWER,
-        FRAME_PCB_MODULE_VIEWER_MODAL, FRAME_PCB_FOOTPRINT_WIZARD,
-        FRAME_PCB_FOOTPRINT_PREVIEW,
-        FRAME_CVPCB_DISPLAY
-    };
-
-    // Fix the max page size: it is MAX_PAGE_SIZE_EDITORS
-    // or MAX_PAGE_SIZE_PCBNEW for Pcbnew draw frames, due to the small internal
-    // units that do not allow too large draw areas
-    wxSize maxPageSize( MAX_PAGE_SIZE_EDITORS_MILS, MAX_PAGE_SIZE_EDITORS_MILS );
-
-    for( unsigned ii = 0; ii < arrayDim( smallSizeFrames ); ii++ )
-    {
-        if( IsType( smallSizeFrames[ii] ) )
-        {
-            maxPageSize.x = maxPageSize.y = MAX_PAGE_SIZE_PCBNEW_MILS;
-            break;
-        }
-    }
-
-    DIALOG_PAGES_SETTINGS dlg( this, maxPageSize );
-    dlg.SetWksFileName( BASE_SCREEN::m_PageLayoutDescrFileName );
-
-    if( dlg.ShowModal() == wxID_OK )
-    {
-#ifdef EESCHEMA
-        RedrawScreen( wxPoint( 0, 0 ), false );
-#else
-        GetCanvas()->Refresh();
-#endif
-    }
-}
-
 
 DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent, wxSize aMaxUserSizeMils ) :
     DIALOG_PAGES_SETTINGS_BASE( parent ),
@@ -157,10 +119,10 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     // The first shows translated strings, the second contains not translated strings
     m_paperSizeComboBox->Clear();
 
-    for( unsigned ii = 0; ii < arrayDim(pageFmts); ii++ )
+    for( const wxString& pageFmt : pageFmts )
     {
-        m_pageFmt.Add( pageFmts[ii] );
-        m_paperSizeComboBox->Append( wxGetTranslation( pageFmts[ii] ) );
+        m_pageFmt.Add( pageFmt );
+        m_paperSizeComboBox->Append( wxGetTranslation( pageFmt ) );
     }
 
     // initialize the page layout descr filename
