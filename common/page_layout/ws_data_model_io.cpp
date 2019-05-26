@@ -155,6 +155,15 @@ void WS_DATA_MODEL::SaveInString( wxString& aOutputString )
 }
 
 
+void WS_DATA_MODEL::SaveInString( std::vector<WS_DATA_ITEM*> aItemsList, wxString& aOutputString )
+{
+    WS_DATA_MODEL_STRINGIO writer( aOutputString );
+
+    for( WS_DATA_ITEM* item : aItemsList )
+        writer.Format( this, item, 0 );
+}
+
+
 void WS_DATA_MODEL_IO::Format( WS_DATA_MODEL* aModel, WS_DATA_ITEM* aItem, int aNestLevel ) const
 {
     switch( aItem->GetType() )

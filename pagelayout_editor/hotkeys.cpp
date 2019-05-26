@@ -79,6 +79,11 @@ static EDA_HOTKEY HkDeleteItem( _HKI( "Delete Item" ), HK_DELETE_ITEM, WXK_DELET
 // Common: hotkeys_basic.h
 static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
 static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
+
+static EDA_HOTKEY HkCut( _HKI( "Cut" ), HK_CUT, GR_KB_CTRL + 'X' );
+static EDA_HOTKEY HkCopy( _HKI( "Copy" ), HK_COPY, GR_KB_CTRL + 'C' );
+static EDA_HOTKEY HkPaste( _HKI( "Paste" ), HK_PASTE, GR_KB_CTRL + 'V' );
+
 static EDA_HOTKEY HkNew( _HKI( "New" ), HK_NEW, GR_KB_CTRL + 'N', (int) wxID_NEW );
 static EDA_HOTKEY HkOpen( _HKI( "Open" ), HK_OPEN, GR_KB_CTRL + 'O', (int) wxID_OPEN );
 static EDA_HOTKEY HkSave( _HKI( "Save" ), HK_SAVE, GR_KB_CTRL + 'S', (int) wxID_SAVE );
@@ -90,13 +95,13 @@ static EDA_HOTKEY HkPreferences( _HKI( "Preferences" ), HK_PREFERENCES, GR_KB_CT
 // List of common hotkey descriptors
 EDA_HOTKEY* s_Common_Hotkey_List[] =
 {
-    &HkNew, &HkOpen, &HkSave, &HkSaveAs, &HkPrint,
-    &HkUndo, &HkRedo,
-    &HkZoomIn,    &HkZoomOut,      &HkZoomRedraw, &HkZoomCenter,
-    &HkZoomAuto,  &HkZoomSelection, &HkResetLocalCoord,
-    &HkHelp, &HkPreferences,
-    &HkMouseLeftClick,
-    &HkMouseLeftDClick,
+    &HkNew,            &HkOpen,              &HkSave,              &HkSaveAs,       &HkPrint,
+    &HkUndo,           &HkRedo,
+    &HkCut,            &HkCopy,              &HkPaste,             &HkDeleteItem,
+    &HkZoomIn,         &HkZoomOut,           &HkZoomRedraw,        &HkZoomCenter,
+    &HkZoomAuto,       &HkZoomSelection,     &HkResetLocalCoord,
+    &HkHelp,           &HkPreferences,
+    &HkMouseLeftClick, &HkMouseLeftDClick,
     NULL
 };
 

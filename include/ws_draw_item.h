@@ -49,11 +49,13 @@ class WS_DRAW_ITEM_BASE : public EDA_ITEM     // This basic class, not directly 
 {
 protected:
     WS_DATA_ITEM*  m_peer;       // the parent WS_DATA_ITEM item in the WS_DATA_MODEL
+    int            m_index;      // the index in the parent's repeat count
 
-    WS_DRAW_ITEM_BASE( WS_DATA_ITEM* aPeer, KICAD_T aType ) :
+    WS_DRAW_ITEM_BASE( WS_DATA_ITEM* aPeer, int aIndex, KICAD_T aType ) :
             EDA_ITEM( aType )
     {
         m_peer = aPeer;
+        m_index = aIndex;
         m_Flags = 0;
     }
 
@@ -61,6 +63,7 @@ public:
     virtual ~WS_DRAW_ITEM_BASE() {}
 
     WS_DATA_ITEM* GetPeer() const { return m_peer; }
+    int GetIndexInPeer() const { return m_index; }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
@@ -104,8 +107,9 @@ class WS_DRAW_ITEM_LINE : public WS_DRAW_ITEM_BASE
     int     m_penWidth;
 
 public:
-    WS_DRAW_ITEM_LINE( WS_DATA_ITEM* aPeer, wxPoint aStart, wxPoint aEnd, int aPenWidth ) :
-        WS_DRAW_ITEM_BASE( aPeer, WSG_LINE_T )
+    WS_DRAW_ITEM_LINE( WS_DATA_ITEM* aPeer, int aIndex, wxPoint aStart, wxPoint aEnd,
+                       int aPenWidth ) :
+        WS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_LINE_T )
     {
         m_start     = aStart;
         m_end       = aEnd;
@@ -150,8 +154,9 @@ public:
     std::vector <wxPoint> m_Corners;
 
 public:
-    WS_DRAW_ITEM_POLYGON( WS_DATA_ITEM* aPeer, wxPoint aPos, bool aFill, int aPenWidth ) :
-            WS_DRAW_ITEM_BASE( aPeer, WSG_POLY_T )
+    WS_DRAW_ITEM_POLYGON( WS_DATA_ITEM* aPeer, int aIndex, wxPoint aPos, bool aFill,
+                          int aPenWidth ) :
+            WS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_POLY_T )
     {
         m_penWidth = aPenWidth;
         m_fill = aFill;
@@ -188,8 +193,9 @@ class WS_DRAW_ITEM_RECT : public WS_DRAW_ITEM_BASE
     int     m_penWidth;
 
 public:
-    WS_DRAW_ITEM_RECT( WS_DATA_ITEM* aPeer, wxPoint aStart, wxPoint aEnd, int aPenWidth ) :
-            WS_DRAW_ITEM_BASE( aPeer, WSG_RECT_T )
+    WS_DRAW_ITEM_RECT( WS_DATA_ITEM* aPeer, int aIndex, wxPoint aStart, wxPoint aEnd,
+                       int aPenWidth ) :
+            WS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_RECT_T )
     {
         m_start     = aStart;
         m_end       = aEnd;
@@ -227,9 +233,9 @@ public:
 class WS_DRAW_ITEM_TEXT : public WS_DRAW_ITEM_BASE, public EDA_TEXT
 {
 public:
-    WS_DRAW_ITEM_TEXT( WS_DATA_ITEM* aPeer, wxString& aText, wxPoint aPos, wxSize aSize,
-                       int aPenWidth, bool aItalic = false, bool aBold = false ) :
-            WS_DRAW_ITEM_BASE( aPeer, WSG_TEXT_T),
+    WS_DRAW_ITEM_TEXT( WS_DATA_ITEM* aPeer, int aIndex, wxString& aText, wxPoint aPos,
+                       wxSize aSize, int aPenWidth, bool aItalic = false, bool aBold = false ) :
+            WS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_TEXT_T),
             EDA_TEXT( aText )
     {
         SetTextPos( aPos );
@@ -274,15 +280,10 @@ class WS_DRAW_ITEM_BITMAP : public WS_DRAW_ITEM_BASE
     wxPoint m_pos;                  // position of reference point
 
 public:
-    WS_DRAW_ITEM_BITMAP( WS_DATA_ITEM* aPeer, wxPoint aPos ) :
-            WS_DRAW_ITEM_BASE( aPeer, WSG_BITMAP_T )
+    WS_DRAW_ITEM_BITMAP( WS_DATA_ITEM* aPeer, int aIndex, wxPoint aPos ) :
+            WS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_BITMAP_T )
     {
         m_pos = aPos;
-    }
-
-    WS_DRAW_ITEM_BITMAP() :
-            WS_DRAW_ITEM_BASE( nullptr, WSG_BITMAP_T )
-    {
     }
 
     ~WS_DRAW_ITEM_BITMAP() {}

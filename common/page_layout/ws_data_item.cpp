@@ -82,10 +82,10 @@ void WS_DATA_ITEM::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aV
     std::map<int, STATUS_FLAGS> itemFlags;
     WS_DRAW_ITEM_BASE*          item = nullptr;
 
-    for( size_t ii = 0; ii < m_drawItems.size(); ++ii )
+    for( size_t i = 0; i < m_drawItems.size(); ++i )
     {
-        item = m_drawItems[ ii ];
-        itemFlags[ ii ] = item->GetFlags();
+        item = m_drawItems[ i ];
+        itemFlags[ i ] = item->GetFlags();
 
         if( aCollector )
             aCollector->Remove( item );
@@ -98,17 +98,17 @@ void WS_DATA_ITEM::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIEW* aV
 
     m_drawItems.clear();
 
-    for( int jj = 0; jj < m_RepeatCount; jj++ )
+    for( int j = 0; j < m_RepeatCount; j++ )
     {
-        if( jj && ! IsInsidePage( jj ) )
+        if( j && ! IsInsidePage( j ) )
             continue;
 
         if( m_type == WS_SEGMENT )
-            item = new WS_DRAW_ITEM_LINE( this, GetStartPosUi( jj ), GetEndPosUi( jj ), pensize );
+            item = new WS_DRAW_ITEM_LINE( this, j, GetStartPosUi( j ), GetEndPosUi( j ), pensize );
         else if( m_type == WS_RECT )
-            item = new WS_DRAW_ITEM_RECT( this, GetStartPosUi( jj ), GetEndPosUi( jj ), pensize );
+            item = new WS_DRAW_ITEM_RECT( this, j, GetStartPosUi( j ), GetEndPosUi( j ), pensize );
 
-        item->SetFlags( itemFlags[ jj ] );
+        item->SetFlags( itemFlags[ j ] );
         m_drawItems.push_back( item );
 
         if( aCollector )
@@ -155,14 +155,10 @@ void WS_DATA_ITEM::MoveTo( DPOINT aPosition )
     MoveStartPointTo( aPosition );
     MoveEndPointTo( endpos );
 
-    for( int jj = 0; jj < m_RepeatCount; jj++ )
+    for( WS_DRAW_ITEM_BASE* drawItem : m_drawItems )
     {
-        if( jj && !IsInsidePage( jj ) )
-            continue;
-
-        WS_DRAW_ITEM_BASE* drawItem = m_drawItems[ jj ];
-        drawItem->SetPosition( GetStartPosUi( jj ) );
-        drawItem->SetEnd( GetEndPosUi( jj ) );
+        drawItem->SetPosition( GetStartPosUi( drawItem->GetIndexInPeer() ) );
+        drawItem->SetEnd( GetEndPosUi( drawItem->GetIndexInPeer() ) );
     }
 }
 
@@ -405,10 +401,10 @@ void WS_DATA_ITEM_POLYGONS::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX:
     std::map<int, STATUS_FLAGS> itemFlags;
     WS_DRAW_ITEM_BASE*          item = nullptr;
 
-    for( size_t ii = 0; ii < m_drawItems.size(); ++ii )
+    for( size_t i = 0; i < m_drawItems.size(); ++i )
     {
-        item = m_drawItems[ ii ];
-        itemFlags[ ii ] = item->GetFlags();
+        item = m_drawItems[ i ];
+        itemFlags[ i ] = item->GetFlags();
 
         if( aCollector )
             aCollector->Remove( item );
@@ -421,17 +417,17 @@ void WS_DATA_ITEM_POLYGONS::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX:
 
     m_drawItems.clear();
 
-    for( int jj = 0; jj < m_RepeatCount; jj++ )
+    for( int j = 0; j < m_RepeatCount; j++ )
     {
-        if( jj && !IsInsidePage( jj ) )
+        if( j && !IsInsidePage( j ) )
             continue;
 
         for( int kk = 0; kk < GetPolyCount(); kk++ )
         {
             const bool fill = true;
             int pensize = GetPenSizeUi();
-            auto poly = new WS_DRAW_ITEM_POLYGON( this, GetStartPosUi( jj ), fill, pensize );
-            poly->SetFlags( itemFlags[ jj ] );
+            auto poly = new WS_DRAW_ITEM_POLYGON( this, j, GetStartPosUi( j ), fill, pensize );
+            poly->SetFlags( itemFlags[ j ] );
             m_drawItems.push_back( poly );
 
             if( aCollector )
@@ -445,7 +441,7 @@ void WS_DATA_ITEM_POLYGONS::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX:
             unsigned iend = GetPolyIndexEnd( kk );
 
             while( ist <= iend )
-                poly->m_Corners.push_back( GetCornerPositionUi( ist++, jj ) );
+                poly->m_Corners.push_back( GetCornerPositionUi( ist++, j ) );
         }
     }
 }
@@ -572,10 +568,10 @@ void WS_DATA_ITEM_TEXT::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
     std::map<int, STATUS_FLAGS> itemFlags;
     WS_DRAW_ITEM_TEXT*          text = nullptr;
 
-    for( size_t ii = 0; ii < m_drawItems.size(); ++ii )
+    for( size_t i = 0; i < m_drawItems.size(); ++i )
     {
-        text = (WS_DRAW_ITEM_TEXT*) m_drawItems[ ii ];
-        itemFlags[ ii ] = text->GetFlags();
+        text = (WS_DRAW_ITEM_TEXT*) m_drawItems[ i ];
+        itemFlags[ i ] = text->GetFlags();
 
         if( aCollector )
             aCollector->Remove( text );
@@ -588,14 +584,14 @@ void WS_DATA_ITEM_TEXT::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
 
     m_drawItems.clear();
 
-    for( int jj = 0; jj < m_RepeatCount; ++jj )
+    for( int j = 0; j < m_RepeatCount; ++j )
     {
-        if( jj > 0 && !IsInsidePage( jj ) )
+        if( j > 0 && !IsInsidePage( j ) )
             continue;
 
-        text = new WS_DRAW_ITEM_TEXT( this, m_FullText, GetStartPosUi( jj ), textsize, pensize,
+        text = new WS_DRAW_ITEM_TEXT( this, j, m_FullText, GetStartPosUi( j ), textsize, pensize,
                                       m_Italic, m_Bold );
-        text->SetFlags( itemFlags[ jj ] );
+        text->SetFlags( itemFlags[ j ] );
         m_drawItems.push_back( text );
 
         if( aCollector )
@@ -611,7 +607,7 @@ void WS_DATA_ITEM_TEXT::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
 
         // Increment label for the next text (has no meaning for multiline texts)
         if( m_RepeatCount > 1 && !multilines )
-            IncrementLabel( ( jj + 1 ) * m_IncrementLabel );
+            IncrementLabel(( j + 1 ) * m_IncrementLabel );
     }
 }
 
@@ -702,7 +698,7 @@ void WS_DATA_ITEM_TEXT::SetConstrainedTextSize()
         int linewidth = 0;
         size_micron.x = KiROUND( m_ConstrainedTextSize.x * FSCALE );
         size_micron.y = KiROUND( m_ConstrainedTextSize.y * FSCALE );
-        WS_DRAW_ITEM_TEXT dummy( WS_DRAW_ITEM_TEXT( this, this->m_FullText, wxPoint( 0, 0 ),
+        WS_DRAW_ITEM_TEXT dummy( WS_DRAW_ITEM_TEXT( this, 0, this->m_FullText, wxPoint( 0, 0 ),
                                  size_micron, linewidth, m_Italic, m_Bold ) );
         dummy.SetMultilineAllowed( true );
         dummy.SetHorizJustify( m_Hjustify ) ;
@@ -728,10 +724,10 @@ void WS_DATA_ITEM_BITMAP::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::V
     std::map<int, STATUS_FLAGS> itemFlags;
     WS_DRAW_ITEM_BASE*          item = nullptr;
 
-    for( size_t ii = 0; ii < m_drawItems.size(); ++ii )
+    for( size_t i = 0; i < m_drawItems.size(); ++i )
     {
-        item = m_drawItems[ ii ];
-        itemFlags[ ii ] = item->GetFlags();
+        item = m_drawItems[ i ];
+        itemFlags[ i ] = item->GetFlags();
 
         if( aCollector )
             aCollector->Remove( item );
@@ -744,13 +740,13 @@ void WS_DATA_ITEM_BITMAP::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::V
 
     m_drawItems.clear();
 
-    for( int jj = 0; jj < m_RepeatCount; jj++ )
+    for( int j = 0; j < m_RepeatCount; j++ )
     {
-        if( jj && !IsInsidePage( jj ) )
+        if( j && !IsInsidePage( j ) )
             continue;
 
-        auto bitmap = new WS_DRAW_ITEM_BITMAP( this, GetStartPosUi( jj ) );
-        bitmap->SetFlags( itemFlags[ jj ] );
+        auto bitmap = new WS_DRAW_ITEM_BITMAP( this, j, GetStartPosUi( j ) );
+        bitmap->SetFlags( itemFlags[ j ] );
         m_drawItems.push_back( bitmap );
 
         if( aCollector )

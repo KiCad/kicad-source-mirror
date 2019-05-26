@@ -57,8 +57,6 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     if( openRecentMenu )
         Kiface().GetFileHistory().RemoveMenu( openRecentMenu );
 
-    // Recreate all menus:
-
     //
     // File Menu:
     //
@@ -98,11 +96,17 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     auto enableRedoCondition = [ this ] ( const SELECTION& sel ) {
         return GetScreen() && GetScreen()->GetRedoCommandCount() != 0;
     };
+    auto idleCondition = [] ( const SELECTION& sel ) {
+        return !sel.Front() || sel.Front()->GetEditFlags() == 0;
+    };
 
     editMenu->AddItem( ACTIONS::undo,         enableUndoCondition );
     editMenu->AddItem( ACTIONS::redo,         enableRedoCondition );
 
     editMenu->AddSeparator();
+    editMenu->AddItem( ACTIONS::cut,          SELECTION_CONDITIONS::MoreThan( 0 ) );
+    editMenu->AddItem( ACTIONS::copy,         SELECTION_CONDITIONS::MoreThan( 0 ) );
+    editMenu->AddItem( ACTIONS::paste,        idleCondition );
     editMenu->AddItem( ACTIONS::doDelete,     SELECTION_CONDITIONS::MoreThan( 0 ) );
 
     //

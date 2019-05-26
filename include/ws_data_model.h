@@ -123,6 +123,11 @@ public:
      */
     void SaveInString( wxString& aOutputString );
 
+    /**
+     * Fill the given string with an S-expr serialization of the WS_DATA_ITEMs
+     */
+    void SaveInString( std::vector<WS_DATA_ITEM*> aItemsList, wxString& aOutputString );
+
     void Append( WS_DATA_ITEM* aItem );
     void Remove( WS_DATA_ITEM* aItem );
 

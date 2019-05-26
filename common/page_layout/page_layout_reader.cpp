@@ -116,7 +116,7 @@ PAGE_LAYOUT_READER_PARSER::PAGE_LAYOUT_READER_PARSER( const char* aLine, const w
 void PAGE_LAYOUT_READER_PARSER::Parse( WS_DATA_MODEL* aLayout )
 {
     WS_DATA_ITEM* item;
-    LOCALE_IO           toggle;
+    LOCALE_IO     toggle;
 
     for( T token = NextTok(); token != T_RIGHT && token != EOF; token = NextTok() )
     {

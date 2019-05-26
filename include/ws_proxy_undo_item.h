@@ -32,7 +32,7 @@
 class WS_PROXY_UNDO_ITEM : public EDA_ITEM
 {
 public:
-    explicit WS_PROXY_UNDO_ITEM( const EDA_DRAW_FRAME* aFrame );
+    WS_PROXY_UNDO_ITEM( const EDA_DRAW_FRAME* aFrame );
 
     /*
      * Restores the saved worksheet layout to the global worksheet record, and the saved

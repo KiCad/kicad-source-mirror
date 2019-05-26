@@ -88,6 +88,9 @@ bool PL_EDIT_TOOL::Init()
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
+    selToolMenu.AddItem( PL_ACTIONS::cut,            SELECTION_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( PL_ACTIONS::copy,           SELECTION_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( PL_ACTIONS::paste,          SELECTION_CONDITIONS::ShowAlways, 200 );
     selToolMenu.AddItem( PL_ACTIONS::doDelete,       SELECTION_CONDITIONS::NotEmpty, 200 );
 
     return true;
@@ -276,9 +279,7 @@ void PL_EDIT_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta )
 
     for( WS_DRAW_ITEM_BASE* item : dataItem->GetDrawItems() )
     {
-        // Remove/add is better than update as it handles rtree re-adjustment
-        getView()->Remove( item );
-        getView()->Add( item );
+        getView()->Update( item );
         item->SetFlags( IS_MOVED );
     }
 }
@@ -295,7 +296,7 @@ bool PL_EDIT_TOOL::updateModificationPoint( SELECTION& aSelection )
         WS_DRAW_ITEM_BASE* item =  static_cast<WS_DRAW_ITEM_BASE*>( aSelection.Front() );
         aSelection.SetReferencePoint( item->GetPosition() );
     }
-        // ...otherwise modify items with regard to the grid-snapped cursor position
+    // ...otherwise modify items with regard to the grid-snapped cursor position
     else
     {
         m_cursor = getViewControls()->GetCursorPosition( true );
@@ -398,14 +399,92 @@ int PL_EDIT_TOOL::Redo( const TOOL_EVENT& aEvent )
 }
 
 
+int PL_EDIT_TOOL::Cut( const TOOL_EVENT& aEvent )
+{
+    int retVal = Copy( aEvent );
+
+    if( retVal == 0 )
+        retVal = DoDelete( aEvent );
+
+    return retVal;
+}
+
+
+int PL_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
+{
+    SELECTION&                 selection = m_selectionTool->RequestSelection();
+    std::vector<WS_DATA_ITEM*> items;
+    WS_DATA_MODEL&             model = WS_DATA_MODEL::GetTheInstance();
+    wxString                   sexpr;
+
+    if( selection.GetSize() == 0 )
+        return 0;
+
+    for( EDA_ITEM* item : selection.GetItems() )
+        items.push_back( static_cast<WS_DRAW_ITEM_BASE*>( item )->GetPeer() );
+
+    try
+    {
+        model.SaveInString( items, sexpr );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxMessageBox( ioe.What(), _( "Error writing objects to clipboard" ) );
+    }
+
+    if( m_toolMgr->SaveClipboard( TO_UTF8( sexpr ) ) )
+        return 0;
+    else
+        return -1;
+}
+
+
+int PL_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
+{
+    SELECTION&     selection = m_selectionTool->GetSelection();
+    WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
+    std::string    sexpr = m_toolMgr->GetClipboard();
+
+    m_selectionTool->ClearSelection();
+
+    model.SetPageLayout( sexpr.c_str(), true, wxT( "clipboard" ) );
+
+    // Build out draw items and select the first of each data item
+    for( WS_DATA_ITEM* dataItem : WS_DATA_MODEL::GetTheInstance().GetItems() )
+    {
+        if( dataItem->GetDrawItems().empty() )
+        {
+            dataItem->SyncDrawItems( nullptr, getView() );
+            dataItem->GetDrawItems().front()->SetSelected();
+        }
+    }
+
+    m_selectionTool->RebuildSelection();
+
+    if( !selection.Empty() )
+    {
+        WS_DRAW_ITEM_BASE* item = (WS_DRAW_ITEM_BASE*) selection.GetTopLeftItem();
+
+        selection.SetReferencePoint( item->GetPosition() );
+        m_toolMgr->RunAction( PL_ACTIONS::move, false );
+    }
+
+    return 0;
+}
+
+
 void PL_EDIT_TOOL::setTransitions()
 {
     Go( &PL_EDIT_TOOL::Main,                   PL_ACTIONS::move.MakeEvent() );
 
     Go( &PL_EDIT_TOOL::ImportWorksheetContent, PL_ACTIONS::appendImportedWorksheet.MakeEvent() );
-    Go( &PL_EDIT_TOOL::DoDelete,               ACTIONS::doDelete.MakeEvent() );
     Go( &PL_EDIT_TOOL::DeleteItemCursor,       PL_ACTIONS::deleteItemCursor.MakeEvent() );
 
     Go( &PL_EDIT_TOOL::Undo,                   ACTIONS::undo.MakeEvent() );
     Go( &PL_EDIT_TOOL::Redo,                   ACTIONS::redo.MakeEvent() );
+
+    Go( &PL_EDIT_TOOL::Cut,                    ACTIONS::cut.MakeEvent() );
+    Go( &PL_EDIT_TOOL::Copy,                   ACTIONS::copy.MakeEvent() );
+    Go( &PL_EDIT_TOOL::Paste,                  ACTIONS::paste.MakeEvent() );
+    Go( &PL_EDIT_TOOL::DoDelete,               ACTIONS::doDelete.MakeEvent() );
 }
