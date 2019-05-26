@@ -208,7 +208,8 @@ bool DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   aFileName,
                        m_parent->GetPageSettings(),
                        aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
                        m_parent->GetScreenDesc(),
-                       aScreen->GetFileName() );
+                       aScreen->GetFileName(),
+                       GetLayerColor( ( SCH_LAYER_ID )LAYER_WORKSHEET ) );
 
     aScreen->Plot( plotter );
 

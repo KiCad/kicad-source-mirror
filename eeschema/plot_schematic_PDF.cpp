@@ -31,6 +31,7 @@
 #include <base_units.h>
 #include <sch_sheet_path.h>
 #include <project.h>
+#include <general.h>
 
 #include <reporter.h>
 
@@ -153,7 +154,8 @@ void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter,
                        m_parent->GetPageSettings(),
                        aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens,
                        m_parent->GetScreenDesc(),
-                       aScreen->GetFileName() );
+                       aScreen->GetFileName(),
+                       GetLayerColor( ( SCH_LAYER_ID )LAYER_WORKSHEET ) );
     }
 
     aScreen->Plot( aPlotter );

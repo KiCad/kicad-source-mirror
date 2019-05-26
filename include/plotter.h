@@ -1352,7 +1352,8 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
                     const PAGE_INFO& aPageInfo,
                     int aSheetNumber, int aNumberOfSheets,
                     const wxString &aSheetDesc,
-                    const wxString &aFilename );
+                    const wxString &aFilename,
+                    const COLOR4D aColor = COLOR4D::UNSPECIFIED );
 
 /** Returns the default plot extension for a format
   */
