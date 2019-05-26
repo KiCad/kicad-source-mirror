@@ -1223,7 +1223,7 @@ void DrawPageLayout( wxDC*            aDC,
 
 void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
                                      double aScalar, const wxString &aFilename,
-                                     const wxString &aSheetLayer )
+                                     const wxString &aSheetLayer, COLOR4D aColor )
 {
     if( !m_showBorderAndTitleBlock )
         return;
@@ -1240,7 +1240,7 @@ void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWi
     }
 
     TITLE_BLOCK t_block = GetTitleBlock();
-    COLOR4D color = COLOR4D( RED );
+    COLOR4D color = ( aColor != COLOR4D::UNSPECIFIED ) ? aColor : COLOR4D( RED );
 
     wxPoint origin = aDC->GetDeviceOrigin();
 

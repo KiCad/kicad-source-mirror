@@ -745,7 +745,8 @@ public:
      */
     void DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
                          double aScale, const wxString &aFilename,
-                         const wxString &aSheetLayer = wxEmptyString );
+                         const wxString &aSheetLayer = wxEmptyString,
+                         COLOR4D aColor = COLOR4D::UNSPECIFIED );
 
     void            DisplayToolMsg( const wxString& msg );
     wxString        GetToolMsg() { return m_toolMsg; }
