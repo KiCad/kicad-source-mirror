@@ -222,6 +222,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_IMPORT_NON_KICAD_SCH, SCH_EDIT_FRAME::OnImportProject )
 
     EVT_MENU( ID_GEN_COPY_SHEET_TO_CLIPBOARD, EDA_DRAW_FRAME::CopyToClipboard )
+    EVT_MENU( wxID_EXIT, SCH_EDIT_FRAME::OnExit )
 
     EVT_MENU( ID_CONFIG_SAVE, SCH_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_CONFIG_READ, SCH_EDIT_FRAME::Process_Config )
@@ -1064,6 +1065,12 @@ void SCH_EDIT_FRAME::OnEditComponentSymbolsId( wxCommandEvent& event )
 {
     InvokeDialogEditComponentsLibId( this );
     m_canvas->Refresh( true );
+}
+
+
+void SCH_EDIT_FRAME::OnExit( wxCommandEvent& event )
+{
+    Close( false );
 }
 
 

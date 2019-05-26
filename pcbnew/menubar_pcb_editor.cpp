@@ -236,9 +236,9 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddSeparator();
     fileMenu->AddMenu( submenuArchive,             SELECTION_CONDITIONS::ShowAlways );
 
-    // Quit
     fileMenu->AddSeparator();
-    fileMenu->AddItem( ACTIONS::quit,              SELECTION_CONDITIONS::ShowAlways );
+    // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
+    fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
 
     //----- Edit menu -----------------------------------------------------------
     CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );

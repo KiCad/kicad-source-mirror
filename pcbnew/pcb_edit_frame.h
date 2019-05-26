@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras@wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -16,9 +16,6 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * @file wxPcbStruct.h
  */
 
 #ifndef  WXPCB_STRUCT_H_
@@ -299,6 +296,8 @@ public:
      *           occurs while reading footprint library files.
      */
     void LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter );
+
+    void OnQuit( wxCommandEvent& event );
 
     /**
      * Reload the Python plugins if they are newer than

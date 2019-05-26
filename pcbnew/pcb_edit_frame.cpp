@@ -152,6 +152,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_MENU_ARCHIVE_MODULES_IN_LIBRARY, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_MENU_CREATE_LIBRARY_AND_ARCHIVE_MODULES, PCB_EDIT_FRAME::Process_Special_Functions )
 
+    EVT_MENU( wxID_EXIT, PCB_EDIT_FRAME::OnQuit )
+
     // menu Config
     EVT_MENU( ID_PCB_LIB_TABLE_EDIT, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_PCB_3DSHAPELIB_WIZARD, PCB_EDIT_FRAME::Process_Config )
@@ -557,6 +559,12 @@ void PCB_EDIT_FRAME::ReFillLayerWidget()
         m_auimgr.Update();
     else
         m_Layers->SetSize( bestz );
+}
+
+
+void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
+{
+    Close( false );
 }
 
 

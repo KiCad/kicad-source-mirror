@@ -133,13 +133,13 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddMenu( submenuExport,              EE_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-    fileMenu->AddItem( ACTIONS::pageSettings,         EE_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::pageSettings,      EE_CONDITIONS::ShowAlways );
     fileMenu->AddItem( ACTIONS::print,             EE_CONDITIONS::ShowAlways );
     fileMenu->AddItem( ACTIONS::plot,              EE_CONDITIONS::ShowAlways );
 
-    // Quit
     fileMenu->AddSeparator();
-    fileMenu->AddItem( ACTIONS::quit,              EE_CONDITIONS::ShowAlways );
+    // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
+    fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, EE_CONDITIONS::ShowAlways );
 
     //
     // Menu Edit:
