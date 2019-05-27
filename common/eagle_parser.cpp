@@ -109,7 +109,9 @@ long long int ECOORD::ConvertToNm( int aValue, enum EAGLE_UNIT aUnit )
         case EU_MIL:   ret = (long long) aValue * 25400; break;
     }
 
-    wxASSERT( ( ret > 0 ) == ( aValue > 0 ) );  // check for overflow
+    if( ( ret > 0 ) != ( aValue > 0 ) )
+        wxLogError( _( "Invalid size %lld: too large" ), aValue );
+
     return ret;
 }
 
@@ -283,8 +285,13 @@ wxPoint ConvertArcCenter( const wxPoint& aStart, const wxPoint& aEnd, double aAn
     wxPoint mid = ( aStart + aEnd ) / 2;
 
     double dlen = sqrt( dx*dx + dy*dy );
-    wxASSERT( dlen != 0 );
-    wxASSERT( aAngle != 0 );
+
+    if( !std::isnormal( dlen ) || !std::isnormal( aAngle ) )
+    {
+        THROW_IO_ERROR(
+                wxString::Format( _( "Invalid Arc with radius %f and angle %f" ), dlen, aAngle ) );
+    }
+
     double dist = dlen / ( 2 * tan( DEG2RAD( aAngle ) / 2 ) );
 
     wxPoint center(
@@ -608,7 +615,7 @@ wxSize ETEXT::ConvertSize() const
         }
         else
         {
-            wxASSERT( false );
+            wxLogDebug( "Invalid font name \"%s\"", fontName );
             textsize = wxSize( size.ToSchUnits(), size.ToSchUnits() );
         }
     }

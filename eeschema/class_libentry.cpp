@@ -626,7 +626,8 @@ void LIB_PART::RemoveDrawItem( LIB_ITEM* aItem, EDA_DRAW_PANEL* aPanel, wxDC* aD
 
 void LIB_PART::AddDrawItem( LIB_ITEM* aItem )
 {
-    wxASSERT( aItem != NULL );
+    if( !aItem )
+        return;
 
     m_drawings.push_back( aItem );
 }
