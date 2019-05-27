@@ -71,8 +71,6 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     if( !Kiway().PlayersClose( false ) )
         return;
 
-    SetTitle( wxString( "KiCad " ) + GetBuildVersion() );
-
     // Save the project file for the currently loaded project.
     if( m_active_project )
         Prj().ConfigLoad( PgmTop().SysSearch(), GeneralGroupName, s_KicadManagerParams );
@@ -82,14 +80,8 @@ void KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
     SetProjectFileName( aProjectFileName.GetFullPath() );
     Prj().ConfigLoad( PgmTop().SysSearch(), GeneralGroupName, s_KicadManagerParams );
 
-    wxString title = GetTitle() + " " + aProjectFileName.GetFullPath();
-
-    if( !aProjectFileName.IsDirWritable() )
-        title += _( " [Read Only]" );
-    else
+    if( aProjectFileName.IsDirWritable() )
         SetMruPath( Prj().GetProjectPath() ); // Only set MRU path if we have write access. Why?
-
-    SetTitle( title );
 
     UpdateFileHistory( aProjectFileName.GetFullPath(), &PgmTop().GetFileHistory() );
 

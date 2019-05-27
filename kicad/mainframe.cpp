@@ -137,6 +137,14 @@ void KICAD_MANAGER_FRAME::SetProjectFileName( const wxString& aFullProjectProFil
         fn.MakeAbsolute();
 
     Prj().SetProjectFullName( fn.GetFullPath() );
+
+    SetTitle( wxString( "KiCad " ) + GetBuildVersion() );
+    wxString title = GetTitle() + " " + fn.GetFullPath();
+
+    if( !fn.IsDirWritable() )
+        title += _( " [Read Only]" );
+
+    SetTitle( title );
 }
 
 
