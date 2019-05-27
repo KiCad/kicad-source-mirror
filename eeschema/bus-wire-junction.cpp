@@ -272,15 +272,13 @@ bool SCH_EDIT_FRAME::AddMissingJunctions( SCH_SCREEN* aScreen )
 
 void SCH_EDIT_FRAME::NormalizeSchematicOnFirstLoad( bool recalculateConnections )
 {
-    if( recalculateConnections )
-        RecalculateConnections();
-    else
-        SchematicCleanUp();
-
     SCH_SHEET_LIST list( g_RootSheet );
 
     for( const auto& sheet : list )
-        AddMissingJunctions( sheet.LastScreen() );
+        SchematicCleanUp( sheet.LastScreen() );
+
+    if( recalculateConnections )
+        RecalculateConnections( false );
 }
 
 
