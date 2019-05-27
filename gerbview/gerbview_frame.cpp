@@ -78,10 +78,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
                                              // obviously depends on the monitor,
                                              // but this is an acceptable value
 
-    // Be sure a page info is set. this default value will be overwritten later.
-    PAGE_INFO pageInfo( wxT( "GERBER" ) );
-    SetPageSettings( pageInfo );
-
     m_show_layer_manager_tools = true;
 
     m_showAxis = true;                      // true to show X and Y axis on screen
@@ -117,7 +113,10 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     icon.CopyFromBitmap( KiBitmap( icon_gerbview_xpm ) );
     SetIcon( icon );
 
+    // Be sure a page info is set. this default value will be overwritten later.
+    PAGE_INFO pageInfo( wxT( "GERBER" ) );
     SetLayout( new GBR_LAYOUT() );
+    SetPageSettings( pageInfo );
 
     SetVisibleLayers( LSET::AllLayersMask() );         // All draw layers visible.
 
@@ -212,14 +211,9 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
         m_firstRunDialogSetting = 1;
         SaveSettings( config() );
     }
-    else
-    {
-        GetGalCanvas()->SwitchBackend( canvasType );
-        UseGalCanvas( true );
 
-        wxUpdateUIEvent e;
-        OnUpdateSwitchCanvas( e );
-    }
+    GetGalCanvas()->SwitchBackend( canvasType );
+    UseGalCanvas( true );
 
     // Enable the axes to match legacy draw style
     auto& galOptions = GetGalDisplayOptions();
