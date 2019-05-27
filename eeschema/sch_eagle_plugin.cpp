@@ -533,7 +533,9 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
     while( partNode )
     {
         std::unique_ptr<EPART> epart( new EPART( partNode ) );
-        m_partlist[epart->name] = std::move( epart );
+
+        // N.B. Eagle parts are case-insensitive in matching but we keep the display case
+        m_partlist[epart->name.Upper()] = std::move( epart );
         partNode = partNode->GetNext();
     }
 
@@ -1061,7 +1063,18 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     // Calculate the unit number from the gate entry of the instance
     // Assign the the LIB_ID from deviceset and device names
 
-    EPART* epart = m_partlist[einstance.part].get();
+    auto part_it = m_partlist.find( einstance.part.Upper() );
+
+    if( part_it == m_partlist.end() )
+    {
+        wxLogError( _( "Error parsing Eagle file.  "
+                       "Could not find \"%s\" instance but it is referenced in the schematic." ),
+                einstance.part );
+
+        return;
+    }
+
+    EPART* epart = part_it->second.get();
 
     wxString libraryname = epart->library;
     wxString gatename = epart->deviceset + epart->device + einstance.gate;
@@ -1564,6 +1577,9 @@ LIB_ITEM* SCH_EAGLE_PLUGIN::loadSymbolWire( std::unique_ptr<LIB_PART>& aPart,
     begin.y = ewire.y1.ToSchUnits();
     end.x   = ewire.x2.ToSchUnits();
     end.y   = ewire.y2.ToSchUnits();
+
+    if( begin == end )
+        return nullptr;
 
     // if the wire is an arc
     if( ewire.curve )
