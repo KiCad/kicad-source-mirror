@@ -628,9 +628,7 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
     if( !selection.Empty() )
     {
-        LIB_ITEM* item = (LIB_ITEM*) selection.GetTopLeftItem();
-
-        selection.SetReferencePoint( wxPoint( item->GetPosition().x, -item->GetPosition().y ) );
+        selection.SetReferencePoint( getViewControls()->GetCursorPosition( true ) );
         m_toolMgr->RunAction( EE_ACTIONS::move, false );
     }
 
@@ -672,9 +670,7 @@ int LIB_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
     if( !selection.Empty() )
     {
-        LIB_ITEM* item = (LIB_ITEM*) selection.GetTopLeftItem();
-
-        selection.SetReferencePoint( wxPoint( item->GetPosition().x, -item->GetPosition().y ) );
+        selection.SetReferencePoint( mapCoords( getViewControls()->GetCursorPosition( true ) ) );
         m_toolMgr->RunAction( EE_ACTIONS::move, false );
     }
 
@@ -684,7 +680,13 @@ int LIB_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
 void LIB_EDIT_TOOL::setTransitions()
 {
+    Go( &LIB_EDIT_TOOL::Undo,               ACTIONS::undo.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Redo,               ACTIONS::redo.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Cut,                ACTIONS::cut.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Copy,               ACTIONS::copy.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Paste,              ACTIONS::paste.MakeEvent() );
     Go( &LIB_EDIT_TOOL::Duplicate,          ACTIONS::duplicate.MakeEvent() );
+
     Go( &LIB_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCW.MakeEvent() );
     Go( &LIB_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCCW.MakeEvent() );
     Go( &LIB_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorX.MakeEvent() );
@@ -695,10 +697,4 @@ void LIB_EDIT_TOOL::setTransitions()
     Go( &LIB_EDIT_TOOL::Properties,         EE_ACTIONS::properties.MakeEvent() );
     Go( &LIB_EDIT_TOOL::Properties,         EE_ACTIONS::symbolProperties.MakeEvent() );
     Go( &LIB_EDIT_TOOL::PinTable,           EE_ACTIONS::pinTable.MakeEvent() );
-
-    Go( &LIB_EDIT_TOOL::Undo,               ACTIONS::undo.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Redo,               ACTIONS::redo.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Cut,                ACTIONS::cut.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Copy,               ACTIONS::copy.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Paste,              ACTIONS::paste.MakeEvent() );
 }

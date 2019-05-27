@@ -34,7 +34,7 @@
 #include <bitmaps.h>
 #include <properties_frame.h>
 #include <pl_editor_id.h>
-
+#include <dialog_page_settings.h>
 
 TOOL_ACTION PL_ACTIONS::refreshPreview( "plEditor.EditorControl.refreshPreview",
          AS_GLOBAL, 0, "", "" );

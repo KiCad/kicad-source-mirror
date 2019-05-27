@@ -143,7 +143,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 if( selection.HasReferencePoint() )
                 {
-                    VECTOR2I delta = m_cursor - selection.GetReferencePoint();
+                    VECTOR2I delta = m_cursor - mapCoords( selection.GetReferencePoint() );
 
                     // Drag items to the current cursor position
                     for( EDA_ITEM* item : selection )
