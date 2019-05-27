@@ -158,6 +158,12 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
                 return false;
             }
 
+            if( m_dcEnable1->IsChecked() && m_dcSource1->GetValue() == m_dcSource2->GetValue() )
+            {
+                DisplayError( this, _( "Source 1 and Source 2 must be different" ) );
+                return false;
+            }
+
             /// @todo for some reason it does not trigger the assigned SPICE_VALIDATOR,
             // hence try..catch below
             if( !m_dcStart2->Validate() || !m_dcStop2->Validate() || !m_dcIncr2->Validate() )

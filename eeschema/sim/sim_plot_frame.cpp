@@ -547,6 +547,49 @@ bool SIM_PLOT_FRAME::updatePlot( const TRACE_DESC& aDescriptor, SIM_PLOT_PANEL* 
     if( data_y.size() != size )
         return false;
 
+    // If we did a two-source DC analysis, we need to split the resulting vector and add traces
+    // for each input step
+    SPICE_DC_PARAMS source1, source2;
+
+    if( m_exporter->GetSimType() == ST_DC &&
+        m_exporter->ParseDCCommand( m_exporter->GetUsedSimCommand(), &source1, &source2 ) )
+    {
+        if( !source2.m_source.IsEmpty() )
+        {
+            // Source 1 is the inner loop, so lets add traces for each Source 2 (outer loop) step
+            SPICE_VALUE v = source2.m_vstart;
+            wxString name;
+
+            size_t offset = 0;
+            size_t outer = ( size_t )( ( source2.m_vend - v ) / source2.m_vincrement ).ToDouble();
+            size_t inner = data_x.size() / ( outer + 1 );
+
+            wxASSERT( data_x.size() % ( outer + 1 ) == 0 );
+
+            for( size_t idx = 0; idx <= outer; idx++ )
+            {
+                name = wxString::Format( "%s (%s = %s V)", aDescriptor.GetTitle(),
+                                         source2.m_source, v.ToString() );
+
+                std::vector<double> sub_x( data_x.begin() + offset,
+                                           data_x.begin() + offset + inner );
+                std::vector<double> sub_y( data_y.begin() + offset,
+                                           data_y.begin() + offset + inner );
+
+                if( aPanel->AddTrace( name, inner,
+                                      sub_x.data(), sub_y.data(), aDescriptor.GetType() ) )
+                {
+                    m_plots[aPanel].m_traces.insert( std::make_pair( name, aDescriptor ) );
+                }
+
+                v = v + source2.m_vincrement;
+                offset += inner;
+            }
+
+            return true;
+        }
+    }
+
     if( aPanel->AddTrace( aDescriptor.GetTitle(), size,
                 data_x.data(), data_y.data(), aDescriptor.GetType() ) )
     {
