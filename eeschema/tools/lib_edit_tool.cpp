@@ -628,10 +628,10 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     if( !part )
         return 0;
 
+    SELECTION&          selection = m_selectionTool->GetSelection();
     std::string         text = m_toolMgr->GetClipboard();
     STRING_LINE_READER  reader( text, "Clipboard" );
     LIB_PART*           newPart;
-    EDA_ITEMS           newItems;
 
     try
     {
@@ -645,6 +645,7 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     }
 
     m_frame->SaveCopyInUndoList( part );
+    m_selectionTool->ClearSelection();
 
     for( LIB_ITEM& item : newPart->GetDrawItems() )
     {
@@ -652,8 +653,7 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
             continue;
 
         LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
-        newItem->SetFlags( IS_NEW | IS_PASTED );
-        newItems.push_back( newItem );
+        newItem->SetFlags( IS_NEW | IS_PASTED | SELECTED );
 
         part->GetDrawItems().push_back( newItem );
         getView()->Add( newItem );
@@ -661,9 +661,15 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
     delete newPart;
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    m_toolMgr->RunAction( EE_ACTIONS::addItemsToSel, true, &newItems );
-    m_toolMgr->RunAction( EE_ACTIONS::move, false );
+    m_selectionTool->RebuildSelection();
+
+    if( !selection.Empty() )
+    {
+        LIB_ITEM* item = (LIB_ITEM*) selection.GetTopLeftItem();
+
+        selection.SetReferencePoint( item->GetPosition() );
+        m_toolMgr->RunAction( EE_ACTIONS::move, false );
+    }
 
     return 0;
 }
