@@ -500,39 +500,6 @@ void EDA_DRAW_FRAME::SetPresetGrid( int aIndex )
 }
 
 
-int EDA_DRAW_FRAME::BlockCommand( EDA_KEY key )
-{
-    wxFAIL_MSG( "Obsolete; how'd we get here?" );
-    return 0;
-}
-
-
-void EDA_DRAW_FRAME::InitBlockPasteInfos()
-{
-    wxFAIL_MSG( "Obsolete; how'd we get here?" );
-}
-
-
-bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* , EDA_KEY , const wxPoint& , int  )
-{
-    wxFAIL_MSG( "Obsolete; how'd we get here?" );
-    return false;
-}
-
-
-void EDA_DRAW_FRAME::HandleBlockPlace( wxDC* DC )
-{
-    wxFAIL_MSG( "Obsolete; how'd we get here?" );
-}
-
-
-bool EDA_DRAW_FRAME::HandleBlockEnd( wxDC* DC )
-{
-    wxFAIL_MSG( "Obsolete; how'd we get here?" );
-    return false;
-}
-
-
 void EDA_DRAW_FRAME::UpdateStatusBar()
 {
     SetStatusText( GetZoomLevelIndicator(), 1 );
@@ -1065,16 +1032,7 @@ bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
     wxRect  DrawArea;
     BASE_SCREEN* screen = aFrame->GetCanvas()->GetScreen();
 
-    if( screen->IsBlockActive() )
-    {
-        DrawBlock = true;
-        DrawArea.SetX( screen->m_BlockLocate.GetX() );
-        DrawArea.SetY( screen->m_BlockLocate.GetY() );
-        DrawArea.SetWidth( screen->m_BlockLocate.GetWidth() );
-        DrawArea.SetHeight( screen->m_BlockLocate.GetHeight() );
-    }
-    else
-        DrawArea.SetSize( aFrame->GetPageSizeIU() );
+    DrawArea.SetSize( aFrame->GetPageSizeIU() );
 
     // Calculate a reasonable dc size, in pixels, and the dc scale to fit
     // the drawings into the dc size

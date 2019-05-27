@@ -230,11 +230,9 @@ set( PCBNEW_CLASS_SRCS
     autorouter/autoplacer_tool.cpp
 
     action_plugin.cpp
-    append_board_to_current.cpp
     array_creator.cpp
     array_pad_name_provider.cpp
     attribut.cpp
-    block_footprint_editor.cpp
     board_netlist_updater.cpp
     build_BOM_from_board.cpp
     connect.cpp

@@ -248,13 +248,6 @@ protected:
     void moveExact();
 
     /**
-     * Function duplicateItems
-     * Duplicate selected item if possible and start a move
-     * @param aIncrement increment the item number if appropriate
-     */
-    void duplicateItems( bool aIncrement ) override;
-
-    /**
      * Load the given filename but sets the path to the current project path.
      * @param full filepath of file to be imported.
      * @param aFileType PCB_FILE_T value for filetype

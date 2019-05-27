@@ -10,7 +10,6 @@
 #include <common.h>
 #include <class_drawpanel.h>
 #include <trigo.h>
-#include <block_commande.h>
 #include <pcb_base_frame.h>
 
 #include <class_board.h>

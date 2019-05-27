@@ -276,10 +276,6 @@ bool PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
     if( GetToolId() == ID_PCB_DELETE_ITEM_BUTT )
         snapToGrid = false;
 
-    // Cursor is left off grid if no block in progress
-    if( GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
-        snapToGrid = true;
-
     wxPoint curs_pos = pos;
 
     wxRealPoint gridSize = GetScreen()->GetGridSize();

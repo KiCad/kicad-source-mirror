@@ -70,10 +70,6 @@ using namespace std::placeholders;
  *  - delete item(s) command
  *  - change item(s) command
  *  - add item(s) command
- *  and 3 cases for block:
- *  - move list of items
- *  - mirror (Y) list of items
- *  - Flip list of items
  *
  *  Undo command
  *  - delete item(s) command:

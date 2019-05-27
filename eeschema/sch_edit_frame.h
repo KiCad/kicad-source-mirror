@@ -30,7 +30,6 @@
 #include <config_params.h>
 #include <undo_redo_container.h>
 #include <template_fieldnames.h>
-#include <block_commande.h>
 #include <ee_collectors.h>
 #include <tool/selection.h>
 #include <erc_settings.h>

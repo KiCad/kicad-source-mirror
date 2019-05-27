@@ -763,50 +763,6 @@ public:
      */
     void DisplayUnitsMsg();
 
-    /* Handlers for block commands */
-    virtual void InitBlockPasteInfos();
-
-    /**
-     * Initialize a block command.
-     *
-     * @param aDC is the device context to perform the block command.
-     * @param aKey is the block command key press.
-     * @param aPosition is the logical position of the start of the block command.
-     * @param aExplicitCommand - if this is given, begin with this command, rather
-     *  than looking up the command from \a aKey.
-     */
-    virtual bool HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& aPosition,
-                                   int aExplicitCommand = 0 );
-
-    /**
-     * Return the block command code (BLOCK_MOVE, BLOCK_COPY...) corresponding to the
-     * keys pressed (ALT, SHIFT, SHIFT ALT ..) when block command is started by dragging
-     * the mouse.
-     *
-     * @param aKey = the key modifiers (Alt, Shift ...)
-     * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
-     */
-    virtual int BlockCommand( EDA_KEY aKey );
-
-    /**
-     * Called after HandleBlockEnd, when a block command needs to be
-     * executed after the block is moved to its new place
-     * (bloc move, drag, copy .. )
-     * Parameters must be initialized in GetScreen()->m_BlockLocate
-     */
-    virtual void HandleBlockPlace( wxDC* DC );
-
-    /**
-     * Handle the "end"  of a block command,
-     * i.e. is called at the end of the definition of the area of a block.
-     * depending on the current block command, this command is executed
-     * or parameters are initialized to prepare a call to HandleBlockPlace
-     * in GetScreen()->m_BlockLocate
-     * @return false if no item selected, or command finished,
-     * true if some items found and HandleBlockPlace must be called later
-     */
-    virtual bool HandleBlockEnd( wxDC* DC );
-
     /**
      * Copy the current page or the current block to the clipboard.
      */

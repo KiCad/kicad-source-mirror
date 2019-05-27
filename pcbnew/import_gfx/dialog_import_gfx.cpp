@@ -382,73 +382,7 @@ void DIALOG_IMPORT_GFX::updatePcbImportOffsets_mm()
 // Used only in legacy canvas by the board editor.
 bool InvokeDialogImportGfxBoard( PCB_BASE_FRAME* aCaller )
 {
-    DIALOG_IMPORT_GFX dlg( aCaller );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return false;
-
-    auto& list = dlg.GetImportedItems();
-
-    // Ensure the list is not empty:
-    if( list.empty() )
-    {
-        wxMessageBox( _( "No graphic items found in file to import." ) );
-        return false;
-    }
-
-    PICKED_ITEMS_LIST picklist;         // the pick list for undo command
-    ITEM_PICKER item_picker( nullptr, UR_NEW );
-    BOARD* board = aCaller->GetBoard();
-
-    // Now prepare a block move command to place the new items, if interactive placement,
-    // and prepare the undo command.
-    EDA_RECT bbox;          // the new items bounding box, for block move if interactive placement.
-    bool bboxInit = true;   // true until the bounding box is initialized
-    BLOCK_SELECTOR& blockmove = aCaller->GetScreen()->m_BlockLocate;
-
-    if( dlg.IsPlacementInteractive() )
-        aCaller->HandleBlockBegin( NULL, BLOCK_PRESELECT_MOVE, wxPoint( 0, 0 ) );
-
-    PICKED_ITEMS_LIST& blockitemsList = blockmove.GetItems();
-
-    for( auto it = list.begin(); it != list.end(); ++it )
-    {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->release() );
-
-        if( dlg.IsPlacementInteractive() )
-            item->SetFlags( IS_MOVED );
-
-        board->Add( item );
-
-        item_picker.SetItem( item );
-        picklist.PushItem( item_picker );
-
-        if( dlg.IsPlacementInteractive() )
-        {
-            blockitemsList.PushItem( item_picker );
-
-            if( bboxInit )
-                bbox = item->GetBoundingBox();
-            else
-                bbox.Merge( item->GetBoundingBox() );
-
-            bboxInit = false;
-       }
-    }
-
-    aCaller->SaveCopyInUndoList( picklist, UR_NEW, wxPoint( 0, 0 ) );
-    aCaller->OnModify();
-
-    if( dlg.IsPlacementInteractive() )
-    {
-        // Finish block move command:
-        wxPoint cpos = aCaller->GetNearestGridPosition( bbox.Centre() );
-        blockmove.SetOrigin( bbox.GetOrigin() );
-        blockmove.SetSize( bbox.GetSize() );
-        blockmove.SetLastCursorPosition( cpos );
-        aCaller->HandleBlockEnd( NULL );
-    }
-
+    // Legacy R.I.P.
     return true;
 }
 
@@ -456,70 +390,6 @@ bool InvokeDialogImportGfxBoard( PCB_BASE_FRAME* aCaller )
 // Used only in legacy canvas by the footprint editor.
 bool InvokeDialogImportGfxModule( PCB_BASE_FRAME* aCaller, MODULE* aModule )
 {
-    if( !aModule )
-        return false;
-
-    DIALOG_IMPORT_GFX dlg( aCaller, true );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return false;
-
-    auto& list = dlg.GetImportedItems();
-
-    // Ensure the list is not empty:
-    if( list.empty() )
-    {
-        wxMessageBox( _( "No graphic items found in file to import" ) );
-        return false;
-    }
-
-    aCaller->SaveCopyInUndoList( aModule, UR_CHANGED );
-
-    PICKED_ITEMS_LIST picklist;         // the pick list for undo command
-    ITEM_PICKER item_picker( nullptr, UR_NEW );
-
-    // Now prepare a block move command to place the new items, if interactive placement,
-    // and prepare the undo command.
-    EDA_RECT bbox;          // the new items bounding box, for block move if interactive placement.
-    bool bboxInit = true;   // true until the bounding box is initialized
-    BLOCK_SELECTOR& blockmove = aCaller->GetScreen()->m_BlockLocate;
-
-    if( dlg.IsPlacementInteractive() )
-        aCaller->HandleBlockBegin( nullptr, BLOCK_PRESELECT_MOVE, wxPoint( 0, 0 ) );
-
-    PICKED_ITEMS_LIST& blockitemsList = blockmove.GetItems();
-
-    for( auto it = list.begin(); it != list.end(); ++it )
-    {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->release() );
-        aModule->Add( item );
-
-        if( dlg.IsPlacementInteractive() )
-        {
-            item->SetFlags( IS_MOVED );
-            item_picker.SetItem( item );
-            blockitemsList.PushItem( item_picker );
-
-            if( bboxInit )
-                bbox = item->GetBoundingBox();
-            else
-                bbox.Merge( item->GetBoundingBox() );
-
-            bboxInit = false;
-       }
-    }
-
-    aCaller->OnModify();
-
-    if( dlg.IsPlacementInteractive() )
-    {
-        // Finish block move command:
-        wxPoint cpos = aCaller->GetNearestGridPosition( bbox.Centre() );
-        blockmove.SetOrigin( bbox.GetOrigin() );
-        blockmove.SetSize( bbox.GetSize() );
-        blockmove.SetLastCursorPosition( cpos );
-        aCaller->HandleBlockEnd( NULL );
-    }
-
+    // Legacy R.I.P.
     return true;
 }

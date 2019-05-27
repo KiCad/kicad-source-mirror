@@ -108,32 +108,29 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // to keep consistency with the project mgr which expects files names same as prj name
     // for main files
     if( Kiface().IsSingle() )
-        fileMenu->AddItem( ACTIONS::saveAs,        SELECTION_CONDITIONS::ShowAlways );
+        fileMenu->AddItem( ACTIONS::saveAs,         SELECTION_CONDITIONS::ShowAlways );
     else
-        fileMenu->AddItem( ACTIONS::saveCopyAs,    SELECTION_CONDITIONS::ShowAlways );
+        fileMenu->AddItem( ACTIONS::saveCopyAs,     SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
     fileMenu->AddItem( ID_MENU_RECOVER_BOARD_AUTOSAVE,
                        _( "Resc&ue" ),
                        _( "Clear board and get last rescue file automatically saved by Pcbnew" ),
-                       rescue_xpm,                 SELECTION_CONDITIONS::ShowAlways );
+                       rescue_xpm,                  SELECTION_CONDITIONS::ShowAlways );
 
     if( Kiface().IsSingle() )   // not when under a project mgr
     {
-        fileMenu->AddItem( ID_APPEND_FILE,
-                           _( "&Append Board..." ),
-                           _( "Append another board to currently loaded board" ),
-                           add_board_xpm,          SELECTION_CONDITIONS::ShowAlways );
+        fileMenu->AddItem( PCB_ACTIONS::appendBoard, SELECTION_CONDITIONS::ShowAlways );
         fileMenu->AddItem( ID_IMPORT_NON_KICAD_BOARD,
                            _( "Import Non-KiCad Board File..." ),
                            _( "Import board file from other applications" ),
-                           import_brd_file_xpm,    SELECTION_CONDITIONS::ShowAlways );
+                           import_brd_file_xpm,      SELECTION_CONDITIONS::ShowAlways );
     }
 
     fileMenu->AddItem( ID_MENU_READ_BOARD_BACKUP_FILE,
                        _( "Revert to Last Backup" ),
                        _( "Clear board and get previous backup version of board" ),
-                       undo_xpm,                  SELECTION_CONDITIONS::ShowAlways );
+                       undo_xpm,                     SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
 
@@ -150,7 +147,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuImport->Add( _( "Graphics..." ), _( "Import 2D drawing file" ),
                         ID_GEN_IMPORT_GRAPHICS_FILE, import_vector_xpm );
 
-    fileMenu->AddMenu( submenuImport,            SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddMenu( submenuImport,                SELECTION_CONDITIONS::ShowAlways );
 
     //----- Export submenu ------------------------------------------------------
     ACTION_MENU* submenuExport = new ACTION_MENU();
@@ -176,7 +173,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->Add( _( "Hyperlynx..." ), "",
                         ID_GEN_EXPORT_FILE_HYPERLYNX, export_step_xpm );
 
-    fileMenu->AddMenu( submenuExport,            SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddMenu( submenuExport,                SELECTION_CONDITIONS::ShowAlways );
 
     //----- Fabrication Outputs submenu -----------------------------------------
     ACTION_MENU* submenuFabOutputs = new ACTION_MENU();
@@ -203,13 +200,13 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                             _( "Create bill of materials from current schematic" ),
                             ID_PCB_GEN_BOM_FILE_FROM_BOARD, bom_xpm );
 
-    fileMenu->AddMenu( submenuFabOutputs,          SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddMenu( submenuFabOutputs,              SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
     fileMenu->AddItem( ID_BOARD_SETUP_DIALOG,
                        _( "&Board Setup..." ),
                        _( "Edit board setup including layers, design rules and various defaults" ),
-                       options_board_xpm,          SELECTION_CONDITIONS::ShowAlways );
+                       options_board_xpm,              SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
     fileMenu->AddItem( ACTIONS::pageSettings,      SELECTION_CONDITIONS::ShowAlways );

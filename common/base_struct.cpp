@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,6 @@
  */
 
 /**
- * @file base_struct.cpp
  * @brief Implementation of EDA_ITEM base class for KiCad.
  */
 
@@ -36,6 +35,7 @@
 #include <base_screen.h>
 #include <bitmaps.h>
 #include <trace_helpers.h>
+#include <eda_rect.h>
 
 #include "../eeschema/dialogs/dialog_schematic_find.h"
 

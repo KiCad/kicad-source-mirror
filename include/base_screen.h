@@ -34,7 +34,6 @@
 #include <draw_frame.h>
 #include <base_struct.h>
 #include <undo_redo_container.h>
-#include <block_commande.h>
 #include <common.h>
 
 /**
@@ -208,9 +207,6 @@ public:
     // Undo/redo list of commands
     UNDO_REDO_CONTAINER m_UndoList;         ///< Objects list for the undo command (old data)
     UNDO_REDO_CONTAINER m_RedoList;         ///< Objects list for the redo command (old data)
-
-    // block control
-    BLOCK_SELECTOR      m_BlockLocate;      ///< Block description for block commands
 
     int                 m_ScreenNumber;
     int                 m_NumberOfScreens;
@@ -494,10 +490,6 @@ public:
     {
         return wxT( "BASE_SCREEN" );
     }
-
-    inline bool IsBlockActive() const { return !m_BlockLocate.IsIdle(); }
-
-    void ClearBlockCommand() { m_BlockLocate.Clear(); }
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;

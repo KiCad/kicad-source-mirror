@@ -50,7 +50,7 @@ int LIB_CONTROL::Save( const TOOL_EVENT& aEvent )
 
 int LIB_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
 {
-    m_frame->OnSaveAs( true );
+    m_frame->OnSaveAs();
     return 0;
 }
 

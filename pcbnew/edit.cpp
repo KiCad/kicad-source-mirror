@@ -142,14 +142,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             m_canvas->EndMouseCapture();
         }
 
-        // Should not be executed, just in case
-        if( GetScreen()->m_BlockLocate.GetCommand() != BLOCK_IDLE )
-        {
-            GetScreen()->m_BlockLocate.SetCommand( BLOCK_IDLE );
-            GetScreen()->m_BlockLocate.SetState( STATE_NO_BLOCK );
-            GetScreen()->m_BlockLocate.ClearItemsList();
-        }
-
         if( GetToolId() == ID_NO_TOOL_SELECTED )
             SetNoToolSelected();
         else
@@ -905,11 +897,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         moveExact();
         break;
 
-    case ID_POPUP_PCB_DUPLICATE_ITEM:
-    case ID_POPUP_PCB_DUPLICATE_ITEM_AND_INCREMENT:
-        duplicateItems( id == ID_POPUP_PCB_DUPLICATE_ITEM_AND_INCREMENT );
-        break;
-
     case ID_POPUP_PCB_CREATE_ARRAY:
         createArray();
         break;
@@ -1260,60 +1247,6 @@ void PCB_EDIT_FRAME::moveExact()
     }
 
     m_canvas->MoveCursorToCrossHair();
-}
-
-
-void PCB_EDIT_FRAME::duplicateItems( bool aIncrement )
-{
-    BOARD_ITEM* item = GetScreen()->GetCurItem();
-
-    if( !item )
-        return;
-
-    // In the board editor, the pads or fp texts can be edited
-    // but cannot be duplicated (only the fp editor can do that).
-    // only the footprint can be duplicated
-    if( item->Type() == PCB_PAD_T || item->Type() == PCB_MODULE_TEXT_T )
-        item = static_cast<MODULE*>( item )->GetParent();
-
-    PCB_BASE_EDIT_FRAME::duplicateItem( item, aIncrement );
-}
-
-
-void PCB_BASE_EDIT_FRAME::duplicateItem( BOARD_ITEM* aItem, bool aIncrement )
-{
-    if( !aItem )
-        return;
-
-    // The easiest way to handle a duplicate item command
-    // is to simulate a block copy command, which gives us the undo management
-    // for free
-    if( GetScreen()->m_BlockLocate.GetState() == STATE_NO_BLOCK )
-    {
-        m_canvas->MoveCursorToCrossHair();
-
-        INSTALL_UNBUFFERED_DC( dc, m_canvas );
-
-        wxPoint crossHairPos = GetCrossHairPosition();
-
-        const BLOCK_COMMAND_T blockType = aIncrement ? BLOCK_DUPLICATE_AND_INCREMENT : BLOCK_DUPLICATE;
-
-        if( !HandleBlockBegin( &dc, blockType, crossHairPos ) )
-            return;
-
-        // Add the item to the block copy pick list:
-        PICKED_ITEMS_LIST& itemsList = GetScreen()->m_BlockLocate.GetItems();
-        ITEM_PICKER        picker( NULL, UR_UNSPECIFIED );
-
-        picker.SetItem ( aItem );
-        itemsList.PushItem( picker );
-
-        // Set 2 coordinates updated by the mouse, because our simulation
-        // does not use the mouse to call HandleBlockEnd()
-        GetScreen()->m_BlockLocate.SetLastCursorPosition( crossHairPos );
-        GetScreen()->m_BlockLocate.SetEnd( crossHairPos );
-        HandleBlockEnd( &dc );
-    }
 }
 
 

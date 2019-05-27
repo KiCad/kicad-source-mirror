@@ -196,29 +196,6 @@ protected:
      */
     void createArray();
 
-    /**
-     * Function duplicateItem
-     * Duplicate the specified item
-     * This function is shared between pcbnew and modedit, as it is virtually
-     * the same
-     * @param aItem the item to duplicate
-     * @param aIncrement (has meaning only for pads in footprint editor):
-     * increment pad name if appropriate
-     */
-    void duplicateItem( BOARD_ITEM* aItem, bool aIncrement );
-
-    /**
-     * Function duplicateItems
-     * Find and duplicate the currently selected items
-     * @param aIncrement (has meaning only for pads in footprint editor):
-     * increment pad name if appropriate
-     *
-     * @note The implementer should find the selected item (and do processing
-     * like finding parents when relevant, and then call
-     * duplicateItem(BOARD_ITEM*, bool) above
-     */
-    virtual void duplicateItems( bool aIncrement ) = 0;
-
     void unitsChangeRefresh() override;
 };
 

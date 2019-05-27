@@ -71,13 +71,11 @@ set( GAL_SRCS
     )
 
 set( LEGACY_GAL_SRCS
-    legacy_gal/block.cpp
     legacy_gal/eda_draw_frame.cpp
     legacy_gal/other.cpp
     )
 
 set( LEGACY_WX_SRCS
-    legacy_wx/block.cpp
     legacy_wx/eda_draw_frame.cpp
     legacy_wx/eda_draw_panel.cpp
     legacy_wx/other.cpp

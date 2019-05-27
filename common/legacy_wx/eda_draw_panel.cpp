@@ -1162,24 +1162,6 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         // the call to OnLeftClick(), so do not change it after calling OnLeftClick
         bool ignoreEvt = m_ignoreNextLeftButtonRelease;
         m_ignoreNextLeftButtonRelease = false;
-
-        if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK && !ignoreEvt )
-        {
-            EDA_ITEM* item = screen->GetCurItem();
-            m_CursorClickPos = GetParent()->RefPos( true );
-
-            // If we have an item already selected, or we are using a tool,
-            // we won't use the disambiguation menu so process the click immediately
-            if( ( item && item->GetEditFlags() ) || GetParent()->GetToolId() != ID_NO_TOOL_SELECTED )
-                GetParent()->OnLeftClick( &DC, m_CursorClickPos );
-            else
-            {
-                wxDELETE( m_ClickTimer );
-                m_ClickTimer = new wxTimer(this, ID_MOUSE_DOUBLECLICK);
-                m_ClickTimer->StartOnce( m_doubleClickInterval );
-            }
-        }
-
     }
     else if( !event.LeftIsDown() )
     {
@@ -1255,102 +1237,6 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
          * we must remember this point)
          */
         m_CursorStartPos = GetParent()->GetCrossHairPosition();
-    }
-
-    if( m_enableBlockCommands && !(localbutt & GR_M_DCLICK) )
-    {
-        if( !screen->IsBlockActive() )
-        {
-            screen->m_BlockLocate.SetOrigin( m_CursorStartPos );
-        }
-
-        if( event.LeftDown() )
-        {
-            if( screen->m_BlockLocate.GetState() == STATE_BLOCK_MOVE )
-            {
-                SetAutoPanRequest( false );
-                GetParent()->HandleBlockPlace( &DC );
-                m_ignoreNextLeftButtonRelease = true;
-            }
-        }
-        else if( ( m_canStartBlock >= 0 ) && event.LeftIsDown() && !IsMouseCaptured() )
-        {
-            // Mouse is dragging: if no block in progress,  start a block command.
-            if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK )
-            {
-                //  Start a block command
-                int cmd_type = kbstat;
-
-                // A block command is started if the drag is enough.  A small
-                // drag is ignored (it is certainly a little mouse move when
-                // clicking) not really a drag mouse
-                if( m_minDragEventCount < MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND )
-                    m_minDragEventCount++;
-                else
-                {
-                    auto cmd = (GetParent()->GetToolId() == ID_ZOOM_SELECTION) ? BLOCK_ZOOM : 0;
-
-                    if( !GetParent()->HandleBlockBegin( &DC, cmd_type, m_CursorStartPos, cmd ) )
-                    {
-                        // should not occur: error
-                        GetParent()->DisplayToolMsg(
-                            wxT( "EDA_DRAW_PANEL::OnMouseEvent() Block Error" ) );
-                    }
-                    else
-                    {
-                        SetAutoPanRequest( true );
-                        SetCursor( wxCURSOR_SIZING );
-                    }
-                }
-            }
-        }
-
-        if( event.ButtonUp( wxMOUSE_BTN_LEFT ) )
-        {
-            /* Release the mouse button: end of block.
-             * The command can finish (DELETE) or have a next command (MOVE,
-             * COPY).  However the block command is canceled if the block
-             * size is small because a block command filtering is already
-             * made, this case happens, but only when the on grid cursor has
-             * not moved.
-             */
-            #define BLOCK_MINSIZE_LIMIT 1
-            bool BlockIsSmall =
-                ( std::abs( screen->m_BlockLocate.GetWidth() ) < BLOCK_MINSIZE_LIMIT )
-                && ( std::abs( screen->m_BlockLocate.GetHeight() ) < BLOCK_MINSIZE_LIMIT );
-
-            if( (screen->m_BlockLocate.GetState() != STATE_NO_BLOCK) && BlockIsSmall )
-            {
-                if( m_endMouseCaptureCallback )
-                {
-                    m_endMouseCaptureCallback( this, &DC );
-                    SetAutoPanRequest( false );
-                }
-
-                SetCursor( (wxStockCursor) m_currentCursor );
-           }
-            else if( screen->m_BlockLocate.GetState() == STATE_BLOCK_END )
-            {
-                SetAutoPanRequest( false );
-                GetParent()->HandleBlockEnd( &DC );
-                SetCursor( (wxStockCursor) m_currentCursor );
-                if( screen->m_BlockLocate.GetState() == STATE_BLOCK_MOVE )
-                {
-                    SetAutoPanRequest( true );
-                    SetCursor( wxCURSOR_HAND );
-                }
-           }
-        }
-    }
-
-    // End of block command on a double click
-    // To avoid an unwanted block move command if the mouse is moved while double clicking
-    if( localbutt == (int) ( GR_M_LEFT_DOWN | GR_M_DCLICK ) )
-    {
-        if( !screen->IsBlockActive() && IsMouseCaptured() )
-        {
-            m_endMouseCaptureCallback( this, &DC );
-        }
     }
 
     lastPanel = this;

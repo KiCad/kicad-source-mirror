@@ -125,33 +125,3 @@ bool FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPos
 }
 
 
-BOARD_ITEM* FOOTPRINT_EDIT_FRAME::PrepareItemForHotkey( bool aFailIfCurrentlyEdited )
-{
-    BOARD_ITEM* item = GetCurItem();
-    bool        itemCurrentlyEdited = item && item->GetEditFlags();
-    bool        blockActive = GetScreen()->m_BlockLocate.GetCommand() != BLOCK_IDLE;
-
-    if( aFailIfCurrentlyEdited )
-    {
-        if( itemCurrentlyEdited || blockActive )
-            return NULL;
-
-        item = ModeditLocateAndDisplay();
-    }
-    else
-    {
-        if( blockActive )
-            return NULL;
-
-        if( !itemCurrentlyEdited )
-            item = ModeditLocateAndDisplay();
-    }
-
-    // set item if we can, but don't clear if not
-    if( item )
-        SetCurItem( item );
-
-    return item;
-}
-
-

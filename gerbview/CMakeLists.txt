@@ -27,7 +27,6 @@ set( DIALOGS_SRCS
     )
 
 set( GERBVIEW_SRCS
-    block.cpp
     am_param.cpp
     am_primitive.cpp
     DCodeSelectionbox.cpp

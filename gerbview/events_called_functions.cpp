@@ -151,14 +151,6 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
         m_canvas->EndMouseCapture();
 
-        if( GetScreen()->m_BlockLocate.GetCommand() != BLOCK_IDLE )
-        {
-            /* Should not be executed, except bug */
-            GetScreen()->m_BlockLocate.SetCommand( BLOCK_IDLE );
-            GetScreen()->m_BlockLocate.SetState( STATE_NO_BLOCK );
-            GetScreen()->m_BlockLocate.ClearItemsList();
-        }
-
         if( GetToolId() == ID_NO_TOOL_SELECTED )
             SetNoToolSelected();
         else

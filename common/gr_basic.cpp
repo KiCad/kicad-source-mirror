@@ -305,22 +305,6 @@ void GRLine( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEnd, int aW
 }
 
 
-void GRDashedLine( EDA_RECT* ClipBox, wxDC*     DC,
-                   int x1, int y1, int x2, int  y2,
-                   int       width, COLOR4D Color )
-{
-    GRLine( ClipBox, DC, x1, y1, x2, y2, width, Color, wxPENSTYLE_SHORT_DASH );
-}
-
-
-void GRDottedLine( EDA_RECT* ClipBox, wxDC* DC,
-                   int x1, int y1, int x2, int y2,
-                   int width, COLOR4D Color )
-{
-    GRLine( ClipBox, DC, x1, y1, x2, y2, width, Color, wxPENSTYLE_DOT );
-}
-
-
 /*
  * Move to a new position, in object space.
  */
@@ -339,12 +323,6 @@ void GRLineTo( EDA_RECT* ClipBox, wxDC* DC, int x, int y, int width, COLOR4D Col
     GRLine( ClipBox, DC, GRLastMoveToX, GRLastMoveToY, x, y, width, Color );
 }
 
-
-void GRMixedLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
-                  int width, COLOR4D Color )
-{
-    GRLine( ClipBox, DC, x1, y1, x2, y2, width, Color, wxPENSTYLE_DOT_DASH );
-}
 
 
 

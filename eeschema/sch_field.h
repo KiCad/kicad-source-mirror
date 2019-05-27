@@ -151,8 +151,6 @@ public:
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset ) override;
 
-    // Geometric transforms (used in block operations):
-
     void Move( const wxPoint& aMoveVector ) override
     {
         Offset( aMoveVector );

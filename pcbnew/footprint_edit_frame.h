@@ -95,7 +95,7 @@ public:
      * switches currently used canvas (default / Cairo / OpenGL).
      * It also reinit the layers manager that slightly changes with canvases
      */
-    virtual void OnSwitchCanvas( wxCommandEvent& aEvent ) override;
+    void OnSwitchCanvas( wxCommandEvent& aEvent ) override;
 
     /**
      * Update the layer manager and other widgets from the board setup
@@ -143,7 +143,6 @@ public:
     void setupTools();
 
     void ToolOnRightClick( wxCommandEvent& event ) override;
-    void OnSelectOptionToolbar( wxCommandEvent& event );
     void OnConfigurePaths( wxCommandEvent& aEvent );
     void OnToggleSearchTree( wxCommandEvent& event );
 
@@ -225,7 +224,7 @@ public:
      * and prepare, if needed the refresh of the 3D frame showing the footprint
      * do not forget to call the basic OnModify function to update auxiliary info
      */
-    virtual void OnModify() override;
+    void OnModify() override;
 
     /**
      * Install the print dialog
@@ -240,29 +239,6 @@ public:
      * @param aQuery = true to prompt user for confirmation, false to initialize silently
      */
     bool Clear_Pcb( bool aQuery );
-
-    /* handlers for block commands */
-    virtual int BlockCommand( EDA_KEY key ) override;
-
-    /**
-     * Handle the BLOCK PLACE command.
-     *
-     *  Last routine for block operation for:
-     *  - block move & drag
-     *  - block copy & paste
-     */
-    virtual void HandleBlockPlace( wxDC* DC ) override;
-
-    /**
-     * Handle the "end"  of a block command,
-     * i.e. is called at the end of the definition of the area of a block.
-     * depending on the current block command, this command is executed
-     * or parameters are initialized to prepare a call to HandleBlockPlace
-     * in GetScreen()->m_BlockLocate
-     * @return false if no item selected, or command finished,
-     * true if some items found and HandleBlockPlace must be called later
-     */
-    virtual bool HandleBlockEnd( wxDC* DC ) override;
 
     BOARD_ITEM* ModeditLocateAndDisplay( int aHotKeyCode = 0 );
 
@@ -400,19 +376,19 @@ public:
     /**
      * @return true if the grid must be shown
      */
-    virtual bool IsGridVisible() const override;
+    bool IsGridVisible() const override;
 
     /**
      * It may be overloaded by derived classes
      * if you want to store/retrieve the grid visibility in configuration.
      * @param aVisible = true if the grid must be shown
      */
-    virtual void SetGridVisibility( bool aVisible ) override;
+    void SetGridVisibility( bool aVisible ) override;
 
     /**
      * @return the color of the grid
      */
-    virtual COLOR4D GetGridColor() override;
+    COLOR4D GetGridColor() override;
 
     ///> @copydoc PCB_BASE_FRAME::SetActiveLayer()
     void SetActiveLayer( PCB_LAYER_ID aLayer ) override;
@@ -421,7 +397,7 @@ public:
     void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) override;
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
-    virtual void UseGalCanvas( bool aEnable ) override;
+    void UseGalCanvas( bool aEnable ) override;
 
     /**
      * Load a KiCad board (.kicad_pcb) from \a aFileName.
@@ -528,14 +504,6 @@ private:
      * user the enter the move delta
      */
     void moveExact();
-
-    /**
-     * Duplicate the item under the cursor
-     *
-     * @param aIncrement increment the number of pad (if that is what is selected)
-     */
-    void duplicateItems( bool aIncrement ) override;
-
 };
 
 #endif      // FOOTPRINT_EDIT_FRAME_H

@@ -43,13 +43,6 @@ class PICKED_ITEMS_LIST;
  * If an item is modified, a copy of the "old" item parameters value is held.
  * When an item is deleted or added (new item) the pointer points the item, and there is
  * no other copy.
- *  However, because there are some commands that concern a lot of items
- *  and modify them, but modifications are easy to undo/redo,
- *  so a copy of old items is not necessary. They are block command
- *  Move block
- *  Rotate block
- *  Mirror or Flip block
- * and they are undo/redo by the same command
  */
 
 

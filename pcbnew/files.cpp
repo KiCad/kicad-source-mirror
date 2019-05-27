@@ -289,20 +289,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
         }
 
     case ID_APPEND_FILE:
-        {
-            int         open_ctl;
-            wxString    fileName;
-
-            if( !AskLoadBoardFileName( this, &open_ctl, &fileName, true ) )
-                return false;
-
-            if( AppendBoardFile( fileName, open_ctl ) )
-            {
-                m_canvas->Refresh();
-                return true;
-            }
-            return false;
-        }
+        wxFAIL_MSG( "OBSOLETE!  Should have gone though modern toolset." );
 
     case ID_NEW_BOARD:
     {

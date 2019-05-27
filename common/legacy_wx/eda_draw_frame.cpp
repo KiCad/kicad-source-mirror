@@ -652,30 +652,6 @@ void EDA_DRAW_FRAME::SetPresetGrid( int aIndex )
 }
 
 
-int EDA_DRAW_FRAME::BlockCommand( EDA_KEY key )
-{
-    return 0;
-}
-
-
-void EDA_DRAW_FRAME::InitBlockPasteInfos()
-{
-    GetScreen()->m_BlockLocate.ClearItemsList();
-    m_canvas->SetMouseCaptureCallback( NULL );
-}
-
-
-void EDA_DRAW_FRAME::HandleBlockPlace( wxDC* DC )
-{
-}
-
-
-bool EDA_DRAW_FRAME::HandleBlockEnd( wxDC* DC )
-{
-    return false;
-}
-
-
 void EDA_DRAW_FRAME::UpdateStatusBar()
 {
     SetStatusText( GetZoomLevelIndicator(), 1 );
@@ -829,84 +805,6 @@ void EDA_DRAW_FRAME::PushPreferences( const EDA_DRAW_PANEL* aParentCanvas )
 {
     m_canvas->SetEnableZoomNoCenter( aParentCanvas->GetEnableZoomNoCenter() );
     m_canvas->SetEnableAutoPan( aParentCanvas->GetEnableAutoPan() );
-}
-
-
-bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& aPosition,
-                                       int aExplicitCommand )
-{
-    BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
-
-    if( ( block->GetCommand() != BLOCK_IDLE ) || ( block->GetState() != STATE_NO_BLOCK ) )
-        return false;
-
-    if( aExplicitCommand == 0 )
-        block->SetCommand( (BLOCK_COMMAND_T) BlockCommand( aKey ) );
-    else
-        block->SetCommand( (BLOCK_COMMAND_T) aExplicitCommand );
-
-    if( block->GetCommand() == 0 )
-        return false;
-
-    switch( block->GetCommand() )
-    {
-    case BLOCK_IDLE:
-        break;
-
-    case BLOCK_MOVE:                // Move
-    case BLOCK_DRAG:                // Drag (block defined)
-    case BLOCK_DRAG_ITEM:           // Drag from a drag item command
-    case BLOCK_DUPLICATE:           // Duplicate
-    case BLOCK_DUPLICATE_AND_INCREMENT: // Duplicate and increment relevant references
-    case BLOCK_DELETE:              // Delete
-    case BLOCK_COPY:                // Copy
-    case BLOCK_FLIP:                // Flip
-    case BLOCK_ZOOM:                // Window Zoom
-    case BLOCK_PRESELECT_MOVE:      // Move with preselection list
-        block->InitData( m_canvas, aPosition );
-        break;
-
-    case BLOCK_PASTE:
-        block->InitData( m_canvas, aPosition );
-        block->SetLastCursorPosition( wxPoint( 0, 0 ) );
-        InitBlockPasteInfos();
-
-        if( block->GetCount() == 0 )      // No data to paste
-        {
-            DisplayError( this, wxT( "No block to paste" ), 20 );
-            GetScreen()->m_BlockLocate.SetCommand( BLOCK_IDLE );
-            m_canvas->SetMouseCaptureCallback( NULL );
-            block->SetState( STATE_NO_BLOCK );
-            block->SetMessageBlock( this );
-            return true;
-        }
-
-        if( !m_canvas->IsMouseCaptured() )
-        {
-            block->ClearItemsList();
-            DisplayError( this,
-                          wxT( "EDA_DRAW_FRAME::HandleBlockBegin() Err: m_mouseCaptureCallback NULL" ) );
-            block->SetState( STATE_NO_BLOCK );
-            block->SetMessageBlock( this );
-            return true;
-        }
-
-        block->SetState( STATE_BLOCK_MOVE );
-        m_canvas->CallMouseCapture( aDC, aPosition, false );
-        break;
-
-    default:
-        {
-            wxString msg;
-            msg << wxT( "EDA_DRAW_FRAME::HandleBlockBegin() error: Unknown command " ) <<
-            block->GetCommand();
-            DisplayError( this, msg );
-        }
-        break;
-    }
-
-    block->SetMessageBlock( this );
-    return true;
 }
 
 
@@ -1851,14 +1749,6 @@ static bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame );
 void EDA_DRAW_FRAME::CopyToClipboard( wxCommandEvent& event )
 {
     DrawPageOnClipboard( this );
-
-    if( event.GetId() == ID_GEN_COPY_BLOCK_TO_CLIPBOARD )
-    {
-        if( GetScreen()->IsBlockActive() )
-            m_canvas->SetCursor( wxCursor( (wxStockCursor) m_canvas->GetDefaultCursor() ) );
-
-        m_canvas->EndMouseCapture();
-    }
 }
 
 
@@ -1868,20 +1758,10 @@ void EDA_DRAW_FRAME::CopyToClipboard( wxCommandEvent& event )
  */
 bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
 {
-    bool    DrawBlock = false;
     wxRect  DrawArea;
     BASE_SCREEN* screen = aFrame->GetCanvas()->GetScreen();
 
-    if( screen->IsBlockActive() )
-    {
-        DrawBlock = true;
-        DrawArea.SetX( screen->m_BlockLocate.GetX() );
-        DrawArea.SetY( screen->m_BlockLocate.GetY() );
-        DrawArea.SetWidth( screen->m_BlockLocate.GetWidth() );
-        DrawArea.SetHeight( screen->m_BlockLocate.GetHeight() );
-    }
-    else
-        DrawArea.SetSize( aFrame->GetPageSizeIU() );
+    DrawArea.SetSize( aFrame->GetPageSizeIU() );
 
     // Calculate a reasonable dc size, in pixels, and the dc scale to fit
     // the drawings into the dc size
@@ -1926,13 +1806,7 @@ bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
     screen->m_IsPrinting = true;
     dc.SetUserScale( scale, scale );
 
-    aFrame->GetCanvas()->SetClipBox( EDA_RECT( wxPoint( 0, 0 ),
-                                     wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
-
-    if( DrawBlock )
-    {
-        dc.SetClippingRegion( DrawArea );
-    }
+    aFrame->GetCanvas()->SetClipBox( EDA_RECT( wxPoint( 0, 0 ), wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
 
     dc.Clear();
     aFrame->GetCanvas()->EraseScreen( &dc );

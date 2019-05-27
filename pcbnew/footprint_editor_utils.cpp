@@ -254,14 +254,12 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case wxID_COPY:
     case ID_TOOLBARH_PCB_SELECT_LAYER:
     case ID_MODEDIT_PAD_SETTINGS:
-    case ID_POPUP_PCB_APPLY_PAD_SETTINGS:
     case ID_POPUP_PCB_COPY_PAD_SETTINGS:
     case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
     case ID_POPUP_PCB_STOP_CURRENT_DRAWING:
     case ID_POPUP_MODEDIT_EDIT_BODY_ITEM:
     case ID_POPUP_MODEDIT_EDIT_WIDTH_ALL_EDGE:
     case ID_POPUP_MODEDIT_EDIT_LAYER_ALL_EDGE:
-    case ID_POPUP_PCB_DELETE_EDGE:
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -618,14 +616,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->MoveCursorToCrossHair();
     break;
 
-    case ID_POPUP_PCB_DUPLICATE_ITEM:
-        duplicateItems( false );
-        break;
-
-    case ID_POPUP_PCB_DUPLICATE_ITEM_AND_INCREMENT:
-        duplicateItems( true );
-        break;
-
     case ID_POPUP_PCB_MOVE_EXACT:
         moveExact();
         break;
@@ -634,11 +624,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         createArray();
         break;
 
-    case ID_POPUP_PCB_APPLY_PAD_SETTINGS:
-        SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
-        m_canvas->MoveCursorToCrossHair();
-        Import_Pad_Settings( (D_PAD*) GetScreen()->GetCurItem(), true );
-        break;
+    // JEY TODO: many (most? all?) of these are legacy-only and can be removed.
 
     case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
@@ -675,21 +661,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_MODEDIT_EDIT_LAYER_ALL_EDGE:
         m_canvas->MoveCursorToCrossHair();
         Edit_Edge_Layer( NULL );
-        m_canvas->Refresh();
-        break;
-
-    case ID_POPUP_PCB_DELETE_EDGE:
-        SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
-        m_canvas->MoveCursorToCrossHair();
-        RemoveStruct( GetScreen()->GetCurItem() );
-        SetCurItem( NULL );
-        break;
-
-    case ID_MODEDIT_MODULE_ROTATE:
-    case ID_MODEDIT_MODULE_MIRROR:
-    case ID_MODEDIT_MODULE_MOVE_EXACT:
-        SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
-        Transform( (MODULE*) GetScreen()->GetCurItem(), id );
         m_canvas->Refresh();
         break;
 
@@ -756,62 +727,6 @@ void FOOTPRINT_EDIT_FRAME::moveExact()
     }
 
     m_canvas->MoveCursorToCrossHair();
-}
-
-
-void FOOTPRINT_EDIT_FRAME::duplicateItems( bool aIncrement )
-{
-    BOARD_ITEM* item = GetScreen()->GetCurItem();
-
-    PCB_BASE_EDIT_FRAME::duplicateItem( item, aIncrement );
-}
-
-
-void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
-{
-    switch( transform )
-    {
-    case ID_MODEDIT_MODULE_ROTATE:
-        RotateMarkedItems( module, wxPoint(0,0), true );
-        break;
-
-    case ID_MODEDIT_MODULE_MIRROR:
-        MirrorMarkedItems( module, wxPoint(0,0), true );
-        break;
-
-    case ID_MODEDIT_MODULE_MOVE_EXACT:
-    {
-        wxPoint         translation;
-        double          rotation;
-        ROTATION_ANCHOR rotationAnchor = ROTATE_AROUND_ITEM_ANCHOR;
-
-        DIALOG_MOVE_EXACT dialog( this, translation, rotation, rotationAnchor );
-
-        if( dialog.ShowModal() == wxID_OK )
-        {
-            switch( rotationAnchor )
-            {
-            case ROTATE_AROUND_ITEM_ANCHOR:
-                MoveMarkedItemsExactly( module, module->GetPosition() + translation, translation, rotation, true );
-                break;
-            case ROTATE_AROUND_USER_ORIGIN:
-                MoveMarkedItemsExactly( module, GetScreen()->m_O_Curseur, translation, rotation, true );
-                break;
-            default:
-                wxFAIL_MSG( "Rotation choice shouldn't have been available in this context." );
-            }
-        }
-
-        break;
-    }
-
-    default:
-        DisplayInfoMessage( this, wxT( "Not available" ) );
-        break;
-    }
-
-    module->CalculateBoundingBox();
-    OnModify();
 }
 
 
