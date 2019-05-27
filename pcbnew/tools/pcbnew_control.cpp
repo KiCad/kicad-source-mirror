@@ -492,17 +492,19 @@ int PCBNEW_CONTROL::LayerToggle( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 {
-    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
-    auto settings = painter->GetSettings();
+    auto& settings = m_frame->Settings().Colors();
 
     LAYER_NUM currentLayer = m_frame->GetActiveLayer();
-    KIGFX::COLOR4D currentColor = settings->GetLayerColor( currentLayer );
+    KIGFX::COLOR4D currentColor = settings.GetLayerColor( currentLayer );
 
     if( currentColor.a <= ALPHA_MAX - ALPHA_STEP )
     {
         currentColor.a += ALPHA_STEP;
-        settings->SetLayerColor( currentLayer, currentColor );
-        m_frame->GetGalCanvas()->GetView()->UpdateLayerColor( currentLayer );
+        settings.SetLayerColor( currentLayer, currentColor );
+
+        KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
+        view->GetPainter()->GetSettings()->ImportLegacyColors( &settings );
+        view->UpdateLayerColor( currentLayer );
 
         wxUpdateUIEvent dummy;
         static_cast<PCB_EDIT_FRAME*>( m_frame )->OnUpdateLayerAlpha( dummy );
@@ -516,17 +518,19 @@ int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 {
-    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
-    auto settings = painter->GetSettings();
+    auto& settings = m_frame->Settings().Colors();
 
     LAYER_NUM currentLayer = m_frame->GetActiveLayer();
-    KIGFX::COLOR4D currentColor = settings->GetLayerColor( currentLayer );
+    KIGFX::COLOR4D currentColor = settings.GetLayerColor( currentLayer );
 
     if( currentColor.a >= ALPHA_MIN + ALPHA_STEP )
     {
         currentColor.a -= ALPHA_STEP;
-        settings->SetLayerColor( currentLayer, currentColor );
-        m_frame->GetGalCanvas()->GetView()->UpdateLayerColor( currentLayer );
+        settings.SetLayerColor( currentLayer, currentColor );
+
+        KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
+        view->GetPainter()->GetSettings()->ImportLegacyColors( &settings );
+        view->UpdateLayerColor( currentLayer );
 
         wxUpdateUIEvent dummy;
         static_cast<PCB_BASE_FRAME*>( m_frame )->OnUpdateLayerAlpha( dummy );
