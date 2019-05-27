@@ -1524,14 +1524,6 @@ void CAIRO_GAL_BASE::DrawGrid()
     VECTOR2D worldStartPoint = screenWorldMatrix * VECTOR2D( 0.0, 0.0 );
     VECTOR2D worldEndPoint   = screenWorldMatrix * VECTOR2D( screenSize );
 
-    double gridThreshold = KiROUND( computeMinGridSpacing() / worldScale );
-
-    if( gridStyle == GRID_STYLE::SMALL_CROSS )
-        gridThreshold *= 2.0;
-
-    int gridScreenSizeDense  = gridSize.x;
-    int gridScreenSizeCoarse = KiROUND( gridSize.x * static_cast<double>( gridTick ) );
-
     // Compute the line marker or point radius of the grid
     // Note: generic grids can't handle sub-pixel lines without
     // either losing fine/course distinction or having some dots
@@ -1549,21 +1541,27 @@ void CAIRO_GAL_BASE::DrawGrid()
     if( !gridVisibility )
         return;
 
+    VECTOR2D gridScreenSize( gridSize );
+
+    double gridThreshold = KiROUND( computeMinGridSpacing() / worldScale );
+
+    if( gridStyle == GRID_STYLE::SMALL_CROSS )
+        gridThreshold *= 2.0;
+
     // If we cannot display the grid density, scale down by a tick size and
     // try again.  Eventually, we get some representation of the grid
-    while( std::min( gridScreenSizeDense, gridScreenSizeCoarse ) <= gridThreshold )
+    while( std::min( gridScreenSize.x,  gridScreenSize.y ) <= gridThreshold )
     {
-        gridScreenSizeCoarse *= gridTick;
-        gridScreenSizeDense *= gridTick;
+        gridScreenSize = gridScreenSize * static_cast<double>( gridTick );
     }
 
     // Compute grid starting and ending indexes to draw grid points on the
     // visible screen area
     // Note: later any point coordinate will be offsetted by gridOrigin
-    int gridStartX = KiROUND( ( worldStartPoint.x - gridOrigin.x ) / gridScreenSizeDense );
-    int gridEndX = KiROUND( ( worldEndPoint.x - gridOrigin.x ) / gridScreenSizeDense );
-    int gridStartY = KiROUND( ( worldStartPoint.y - gridOrigin.y ) / gridScreenSizeDense );
-    int gridEndY = KiROUND( ( worldEndPoint.y - gridOrigin.y ) / gridScreenSizeDense );
+    int gridStartX = KiROUND( ( worldStartPoint.x - gridOrigin.x ) / gridScreenSize.x );
+    int gridEndX   = KiROUND( ( worldEndPoint.x - gridOrigin.x ) / gridScreenSize.x );
+    int gridStartY = KiROUND( ( worldStartPoint.y - gridOrigin.y ) / gridScreenSize.y );
+    int gridEndY   = KiROUND( ( worldEndPoint.y - gridOrigin.y ) / gridScreenSize.y );
 
     // Ensure start coordinate > end coordinate
 
@@ -1584,27 +1582,27 @@ void CAIRO_GAL_BASE::DrawGrid()
         // Vertical lines
         for( int j = gridStartY; j <= gridEndY; j++ )
         {
-            const double y = j * gridScreenSizeDense + gridOrigin.y;
+            const double y = j * gridScreenSize.y + gridOrigin.y;
 
-            if( axesEnabled && y == 0 )
+            if( axesEnabled && y == 0.0 )
                 continue;
 
             SetLineWidth( ( j % gridTick ) ? marker : doubleMarker );
-            drawGridLine( VECTOR2D( gridStartX * gridScreenSizeDense + gridOrigin.x, y ),
-                          VECTOR2D( gridEndX * gridScreenSizeDense + gridOrigin.x, y ) );
+            drawGridLine( VECTOR2D( gridStartX * gridScreenSize.x + gridOrigin.x, y ),
+                          VECTOR2D( gridEndX * gridScreenSize.x + gridOrigin.x, y ) );
         }
 
         // Horizontal lines
         for( int i = gridStartX; i <= gridEndX; i++ )
         {
-            const double x = i * gridScreenSizeDense + gridOrigin.x;
+            const double x = i * gridScreenSize.x + gridOrigin.x;
 
-            if( axesEnabled && x == 0 )
+            if( axesEnabled && x == 0.0 )
                 continue;
 
             SetLineWidth( ( i % gridTick ) ? marker : doubleMarker );
-            drawGridLine( VECTOR2D( x, gridStartY * gridScreenSizeDense + gridOrigin.y ),
-                          VECTOR2D( x, gridEndY * gridScreenSizeDense + gridOrigin.y ) );
+            drawGridLine( VECTOR2D( x, gridStartY * gridScreenSize.y + gridOrigin.y ),
+                          VECTOR2D( x, gridEndY * gridScreenSize.y + gridOrigin.y ) );
 
         }
     }
@@ -1618,8 +1616,8 @@ void CAIRO_GAL_BASE::DrawGrid()
             {
                 bool tickX = ( i % gridTick == 0 );
                 SetLineWidth( ( ( tickX && tickY ) ? doubleMarker : marker ) );
-                auto pos = VECTOR2D( i * gridScreenSizeDense + gridOrigin.x,
-                                     j * gridScreenSizeDense + gridOrigin.y );
+                auto pos = VECTOR2D( i * gridScreenSize.x + gridOrigin.x,
+                                     j * gridScreenSize.y + gridOrigin.y );
 
                 if( gridStyle == GRID_STYLE::SMALL_CROSS )
                     drawGridCross( pos );
