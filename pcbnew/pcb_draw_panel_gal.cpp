@@ -62,7 +62,7 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
     LAYER_VIA_MICROVIA, LAYER_PADS_TH,
 
     LAYER_PAD_FR_NETNAMES, LAYER_PAD_FR,
-    NETNAMES_LAYER_INDEX( F_Cu ), F_Cu, F_Mask, F_SilkS, F_Paste, F_Adhes,
+    NETNAMES_LAYER_INDEX( F_Cu ), F_Cu, F_Mask, F_SilkS, F_Paste, F_Adhes, F_CrtYd, F_Fab,
 
     NETNAMES_LAYER_INDEX( In1_Cu ),   In1_Cu,
     NETNAMES_LAYER_INDEX( In2_Cu ),   In2_Cu,
@@ -96,7 +96,7 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
     NETNAMES_LAYER_INDEX( In30_Cu ),  In30_Cu,
 
     LAYER_PAD_BK_NETNAMES, LAYER_PAD_BK,
-    NETNAMES_LAYER_INDEX( B_Cu ), B_Cu, B_Mask, B_Adhes, B_Paste, B_SilkS,
+    NETNAMES_LAYER_INDEX( B_Cu ), B_Cu, B_Mask, B_Adhes, B_Paste, B_SilkS, B_CrtYd, B_Fab,
 
     LAYER_MOD_TEXT_BK,
     LAYER_WORKSHEET
@@ -282,12 +282,12 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
 
     // Extra layers that are brought to the top if a F.* or B.* is selected
     const std::vector<LAYER_NUM> frontLayers = {
-        F_Cu, F_Adhes, F_Paste, F_SilkS, F_Mask, F_Fab, LAYER_PAD_FR,
+        F_Cu, F_Adhes, F_Paste, F_SilkS, F_Mask, F_Fab, F_CrtYd, LAYER_PAD_FR,
         LAYER_PAD_FR_NETNAMES, NETNAMES_LAYER_INDEX( F_Cu )
     };
 
     const std::vector<LAYER_NUM> backLayers = {
-        B_Cu, B_Adhes, B_Paste, B_SilkS, B_Mask, B_Fab, LAYER_PAD_BK,
+        B_Cu, B_Adhes, B_Paste, B_SilkS, B_Mask, B_Fab, B_CrtYd, LAYER_PAD_BK,
         LAYER_PAD_BK_NETNAMES, NETNAMES_LAYER_INDEX( B_Cu )
     };
 
