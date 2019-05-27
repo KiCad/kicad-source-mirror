@@ -723,7 +723,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
             if( footprint )
             {
-                if( aNetlist.IsFindByTimeStamp() )
+                if( m_lookupByTimestamp )
                     match = footprint->GetPath() == component->GetTimeStamp();
                 else
                     match = footprint->GetReference().CmpNoCase( component->GetReference() ) == 0;
