@@ -31,6 +31,16 @@
 #include <vector>
 
 #include "sim_types.h"
+#include "spice_value.h"
+
+
+struct SPICE_DC_PARAMS
+{
+    wxString m_source;
+    SPICE_VALUE m_vstart;
+    SPICE_VALUE m_vend;
+    SPICE_VALUE m_vincrement;
+};
 
 /// Special netlist exporter flavor that allows one to override simulation commands
 class NETLIST_EXPORTER_PSPICE_SIM : public NETLIST_EXPORTER_PSPICE
@@ -83,6 +93,12 @@ public:
     }
 
     /**
+     * Returns the command directive that is in use (either from the sheet or from m_simCommand
+     * @return
+     */
+    wxString GetUsedSimCommand();
+
+    /**
      * @brief Returns simulation type basing on the simulation command directives.
      * Simulation directives set using SetSimCommand() have priority over the ones placed in
      * schematic sheets.
@@ -93,6 +109,15 @@ public:
      * @brief Returns simulation command directives placed in schematic sheets (if any).
      */
     wxString GetSheetSimCommand();
+
+    /**
+     * Parses a two-source .dc command directive into its components
+     *
+     * @param aCmd is the input command string
+     * @return true if the command was parsed successfully
+     */
+    bool ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAMS* aSource1,
+                         SPICE_DC_PARAMS* aSource2 );
 
     /**
      * @brief Determines if a directive is a simulation command.

@@ -23,6 +23,7 @@
  */
 
 #include "netlist_exporter_pspice_sim.h"
+#include <wx/tokenzr.h>
 
 wxString NETLIST_EXPORTER_PSPICE_SIM::GetSpiceVector( const wxString& aName, SIM_PLOT_TYPE aType,
         const wxString& aParam ) const
@@ -101,9 +102,15 @@ wxString NETLIST_EXPORTER_PSPICE_SIM::GetSheetSimCommand()
 }
 
 
+wxString NETLIST_EXPORTER_PSPICE_SIM::GetUsedSimCommand()
+{
+    return m_simCommand.IsEmpty() ? GetSheetSimCommand() : m_simCommand;
+}
+
+
 SIM_TYPE NETLIST_EXPORTER_PSPICE_SIM::GetSimType()
 {
-    return CommandToSimType( m_simCommand.IsEmpty() ? GetSheetSimCommand() : m_simCommand );
+    return CommandToSimType( GetUsedSimCommand() );
 }
 
 
@@ -123,6 +130,38 @@ SIM_TYPE NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( const wxString& aCmd )
     }
 
     return ST_UNKNOWN;
+}
+
+
+bool NETLIST_EXPORTER_PSPICE_SIM::ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAMS* aSource1,
+                                                  SPICE_DC_PARAMS* aSource2 )
+{
+    if( !aCmd.Lower().StartsWith( ".dc" ) )
+        return false;
+
+    wxString cmd = aCmd.Mid( 3 ).Trim().Trim( false );
+
+    wxStringTokenizer tokens( cmd );
+
+    size_t num = tokens.CountTokens();
+
+    if( num != 4 && num != 8 )
+        return false;
+
+    aSource1->m_source = tokens.GetNextToken();
+    aSource1->m_vstart = SPICE_VALUE( tokens.GetNextToken() );
+    aSource1->m_vend = SPICE_VALUE( tokens.GetNextToken() );
+    aSource1->m_vincrement = SPICE_VALUE( tokens.GetNextToken() );
+
+    if( num == 8 )
+    {
+        aSource2->m_source = tokens.GetNextToken();
+        aSource2->m_vstart = SPICE_VALUE( tokens.GetNextToken() );
+        aSource2->m_vend = SPICE_VALUE( tokens.GetNextToken() );
+        aSource2->m_vincrement = SPICE_VALUE( tokens.GetNextToken() );
+    }
+
+    return true;
 }
 
 
