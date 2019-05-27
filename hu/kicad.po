@@ -3448,7 +3448,7 @@ msgstr ""
 
 #: cvpcb/cvpcb_mainframe.cpp:405
 msgid "Delete selections"
-msgstr "Kiválasztás törlése"
+msgstr "Kijelölések törlése"
 
 #: cvpcb/cvpcb_mainframe.cpp:459 cvpcb/cvpcb_mainframe.cpp:469
 msgid "View Footprint"
@@ -10837,17 +10837,17 @@ msgstr "Sokszögek vázlat módban"
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:22 pcbnew/dialogs/panel_modedit_settings_base.cpp:23
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:23
 msgid "Cartesian coordinates"
-msgstr "Derékszögű koordinátarendszer"
+msgstr "Derékszögű koordináta-rendszer"
 
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:22 pcbnew/dialogs/panel_modedit_settings_base.cpp:23
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:23
 msgid "Polar coordinates"
-msgstr "Poláris koordinátarendszer"
+msgstr "Poláris koordináta-rendszer"
 
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:24 pcbnew/dialogs/panel_modedit_settings_base.cpp:25
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:25
 msgid "Coordinates"
-msgstr "Koordinátarendszer:"
+msgstr "Koordináta-rendszer:"
 
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:28 pcbnew/dialogs/dialog_export_idf_base.cpp:102
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:58 pcbnew/dialogs/dialog_gendrill_base.cpp:108
@@ -11461,7 +11461,7 @@ msgstr "Képernyő újrarajzolás"
 
 #: gerbview/menubar.cpp:229 pcbnew/menubar_footprint_editor.cpp:248 pcbnew/menubar_pcb_editor.cpp:603
 msgid "Display &Polar Coordinates"
-msgstr "Poláris koordinátarendszer használata"
+msgstr "Poláris koordináta-rendszer használata"
 
 #: gerbview/menubar.cpp:249
 msgid "Sketch F&lashed Items"
@@ -11678,7 +11678,7 @@ msgstr "D kód:"
 
 #: gerbview/toolbars_gerber.cpp:257
 msgid "Turn polar coordinates on"
-msgstr "Poláris koordinátarendszer használata"
+msgstr "Poláris koordináta-rendszer használata"
 
 #: gerbview/toolbars_gerber.cpp:294
 msgid "Show negatives objects in ghost color"
@@ -11734,7 +11734,7 @@ msgstr "Derékszögű koordináták bekapcsolása"
 
 #: gerbview/toolbars_gerber.cpp:551
 msgid "Turn on polar coordinates"
-msgstr "Poláris koordinátarendszer bekapcsolása"
+msgstr "Poláris koordináta-rendszer bekapcsolása"
 
 #: gerbview/toolbars_gerber.cpp:563
 msgid "Show flashed items in fill mode"
@@ -15328,7 +15328,7 @@ msgstr "Tömb létrehozása"
 
 #: pcbnew/dialogs/dialog_drc.cpp:77
 msgid "Run DRC"
-msgstr "Tervezési szabályellenőrző (DRC) futtatása..."
+msgstr "Tervezési szabályellenőrző (DRC) futtatása"
 
 #: pcbnew/dialogs/dialog_drc.cpp:78
 msgid "List Unconnected"
@@ -15692,7 +15692,7 @@ msgstr "Csatlakozás rézkitöltéshez"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:391 pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:293
 msgid "Pad connection to zones:"
-msgstr "Forrszem csatlakozása:"
+msgstr "Forrszem csatlakozása zónához:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:395 pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:297
 msgid "Use zone setting"
@@ -16822,34 +16822,35 @@ msgstr "Vezetősáv és Via tulajdonságok beállítása"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:31
 msgid "footprint"
-msgstr "alkatrésztok"
+msgstr "alkatrészrajzolat"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred writing empty footprint library table file.\n"
 "\n"
 "%s"
 msgstr ""
-"Hiba történt a projekt alkatrészrajzolat könyvtártáblázat mentése közben:\n"
-"\"%s\"\n"
+"Hiba történt az üres alkatrészrajzolat könyvtártáblázat fájl írása során.\n"
+"\n"
 "%s"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:75
-#, fuzzy
 msgid "Please select a footprint library table file."
-msgstr "Először ellenőrizze a alkatrész könyvtáblázatának bejegyzéseit."
+msgstr "Válasszon egy alkatrészrajzolat könyvtártáblázat fájlt."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File \"%s\" is not a valid footprint library table file.\n"
 "\n"
 "%s"
-msgstr "A(z) \"%s\" nem érvényes könyvtári rajzjel-azonosító."
+msgstr "A(z) \"%s\" nem egy érvényes alkatrészrajzolat könyvtártáblázat fájl."
+"\n"
+"%s"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot copy global footprint library table file:\n"
 "\n"
@@ -16859,24 +16860,28 @@ msgid ""
 "\n"
 "\"%s\"."
 msgstr ""
-"Hiba történt a globális alkatrészrajzolat könyvtártáblázat mentése közben:\n"
-"\"%s\"\n"
-"%s"
+"A globális alkatrészrajzolat könyvtártáblázat nem másolható:\n"
+"\n"
+" \"%s\"\n"
+"\n"
+":ide:\n"
+"\n"
+"\"%s\"."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred loading global footprint library table:\n"
 "\n"
 "%s"
 msgstr ""
-"Hiba történt a globális alkatrészrajzolat könyvtártáblázat mentése közben:\n"
+"Hiba történt a globális alkatrészrajzolat könyvtártáblázat betöltése során:\n"
 "\n"
 "%s"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:164
 msgid "Circle Properties"
-msgstr "Kör tulajdonságai"
+msgstr "Kör tulajdonságok"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:165 pcbnew/dialogs/dialog_graphic_item_properties.cpp:173
 msgid "Center X:"
@@ -16888,7 +16893,7 @@ msgstr "Középpont Y:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:172
 msgid "Arc Properties"
-msgstr "Körív tulajdonságai"
+msgstr "Körív tulajdonságok"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:175
 msgid "Start Point X:"
@@ -16904,24 +16909,24 @@ msgstr "Sokszög tulajdonságok"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:187
 msgid "Line Segment Properties"
-msgstr "Vonalszegmens tulajdonságai"
+msgstr "Vonalszegmens tulajdonságok"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:217
-#, fuzzy
 msgid ""
 "This item was on a non-existing or forbidden layer.\n"
 "It has been moved to the first allowed layer. Please fix it."
 msgstr ""
-"Ez az elem egy ismeretlen rétegen van.\n"
-"Most átkerült a felső szita rétegre. Ha rendben van, erősítsd meg."
+"Ez az elem egy nem létező vagy letiltott rétegen volt, emiatt\n"
+"automatikusan áthelyezésre került az első használható rétegre.\n"
+"Kérjük, javítsa a hibát!"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:278
 msgid "Modify drawing properties"
-msgstr "Rajzelem tulajdonságai módosítása"
+msgstr "Rajzelem tulajdonságok módosítása"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:299
 msgid "The arc angle cannot be zero."
-msgstr "A körív szögének nullánál nagyobbnak kell lennie."
+msgstr "A körív nyílásszöge nem lehet nulla."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:305
 msgid "The radius must be greater than zero."
@@ -16929,11 +16934,11 @@ msgstr "A sugárnak nullánál nagyobbnak kell lennie."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:314
 msgid "The start and end points cannot be the same."
-msgstr "A kezdő és végpont nem lehet ugyanaz."
+msgstr "A kezdő és végpont nem lehet azonos."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:326
 msgid "The polygon outline thickness must be >= 0."
-msgstr "A sokszög körvonalának vastagságának nullánál nagyobbnak kell lennie."
+msgstr "A sokszög körvonal vastagsága nem lehet negatív."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:331
 msgid "The item thickness must be greater than zero."
@@ -16960,76 +16965,64 @@ msgid "End point Y:"
 msgstr "Végpont Y:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:73
-#, fuzzy
 msgid "Bezier point C1 X:"
-msgstr "Kezdőpont X:"
+msgstr "Bezier C1 kontrollpont X:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:84
-#, fuzzy
 msgid "Bezier point C1 Y:"
-msgstr "Kezdőpont Y:"
+msgstr "Bezier C1 kontrollpont Y:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:95
-#, fuzzy
 msgid "Bezier point C2 X:"
-msgstr "Kezdőpont X:"
+msgstr "Bezier C2 kontrollpont X:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:106
-#, fuzzy
 msgid "Bezier point C2 Y:"
-msgstr "Kezdőpont Y:"
+msgstr "Bezier C2 kontrollpont Y:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:129
 msgid "Arc angle:"
-msgstr "Ívszög:"
+msgstr "Körív nyílásszög:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.h:86
 msgid "Graphic Item Properties"
-msgstr "Elem tulajdonságai"
+msgstr "Grafikai elem tulajdonságok"
 
 #: pcbnew/dialogs/dialog_import_settings.cpp:42 pcbnew/dialogs/dialog_import_settings_base.h:62
-#, fuzzy
 msgid "Import Settings"
-msgstr "Laplábak importálása"
+msgstr "Beállítások importálása"
 
 #: pcbnew/dialogs/dialog_import_settings.cpp:61
-#, fuzzy
 msgid "Import Settings From"
-msgstr "Laplábak importálása"
+msgstr "Beállítások importálása"
 
 #: pcbnew/dialogs/dialog_import_settings.cpp:73
-#, fuzzy
 msgid "File not found."
 msgstr "A fájl nem található"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:22
-#, fuzzy
 msgid "Import from:"
-msgstr "Projekt importálása"
+msgstr "Importálás ebből:"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:44
-#, fuzzy
 msgid "Import:"
-msgstr "Import"
+msgstr "Importálás:"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:48
-#, fuzzy
 msgid "Layers setup"
 msgstr "Réteg beállítások"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:51
-#, fuzzy
 msgid "Text && Graphics default properties"
-msgstr "Elem tulajdonságai"
+msgstr "Szöveg és grafika alapértelmezett beállítások"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:60
-#, fuzzy
 msgid "Solder Mask/Paste defaults"
-msgstr "Forrasztópaszta színe"
+msgstr "Forrasztásgátló / paszta színe"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties.cpp:129
 msgid "Tracks, vias, and pads are allowed. The keepout will have no effect."
-msgstr ""
+msgstr "Vezetősávok, viák és forrszemek engedélyezve. A kizárt terület hatástalan."
 
 #: pcbnew/dialogs/dialog_keepout_area_properties.cpp:135
 msgid "No layers selected."
@@ -17037,25 +17030,23 @@ msgstr "Nincs réteg kiválasztva."
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:25
 msgid "Layers:"
-msgstr "Réz rétegek:"
+msgstr "Rétegek:"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:38
-#, fuzzy
 msgid "Keep out tracks"
-msgstr "Vezetősáv huzalozása"
+msgstr "Vezetősávok kizárása"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:41
-#, fuzzy
 msgid "Keep out vias"
-msgstr "Kizárt terület"
+msgstr "Viák kizárása"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:44
 msgid "Keep out copper pours"
-msgstr ""
+msgstr "Rézkitöltések kizárása"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:50
 msgid "Constrain outline to H, V and 45 deg"
-msgstr ""
+msgstr "Körvonal csak vízszintes, függőleges és 45°-os vonalakból állhat"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.h:60
 msgid "Keepout Area Properties"
@@ -17074,55 +17065,46 @@ msgid "Select Layer"
 msgstr "Réteg kiválasztása"
 
 #: pcbnew/dialogs/dialog_layer_selection_base.h:79
-#, fuzzy
 msgid "Select Copper Layer Pair"
-msgstr "Rétegpár kiválasztása"
+msgstr "Vezető rétegpár kiválasztása"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:87
-#, fuzzy
 msgid "Rotate around item anchor"
-msgstr "A horgonyoktól való távolság:"
+msgstr "Forgatás az elem horgonya körül"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:90
 msgid "Rotate around selection center"
-msgstr ""
+msgstr "Forgatás a kijelölés középpontja körül"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:93 pcbnew/dialogs/dialog_move_exact_base.cpp:69
-#, fuzzy
 msgid "Rotate around local coordinates origin"
-msgstr ""
-"Poláris koordinátarendszer használata.\n"
-"Helyzetmeghatározás egy távolsággal és egy szöggel."
+msgstr "Forgatás a lokális koordináta-rendszer origója körül"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:96 pcbnew/dialogs/dialog_move_exact_base.cpp:69
 msgid "Rotate around drill/place origin"
-msgstr ""
+msgstr "Forgatás a fúró/lehelyezés origója körül"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:173 pcbnew/dialogs/dialog_position_relative.cpp:133
 msgid "Distance:"
 msgstr "Távolság:"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:179 pcbnew/dialogs/dialog_move_exact_base.cpp:24
-#, fuzzy
 msgid "Move X:"
-msgstr "Mozgatás"
+msgstr "Mozgatás vízszintesen (X):"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:180 pcbnew/dialogs/dialog_move_exact_base.cpp:38
-#, fuzzy
 msgid "Move Y:"
-msgstr "Mozgatás"
+msgstr "Mozgatás függőlegesen (Y):"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
-#, fuzzy
 msgid "Rotate around center of selection"
-msgstr "Kijelölésre nagyítás"
+msgstr "Forgatás a kijelölés középpontja körül"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:84 pcbnew/dialogs/dialog_position_relative_base.cpp:116
 msgid "Use polar coordinates"
 msgstr "Poláris koordináta-rendszer használata"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:96 pcbnew/dialogs/dialog_update_pcb.cpp:67
-#, fuzzy
 msgid "Changes To Be Applied"
 msgstr "Alkalmazandó módosítások:"
 
@@ -17131,40 +17113,32 @@ msgid "Update PCB"
 msgstr "Nyákterv frissítése"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:102
-#, fuzzy
 msgid "Rebuild Ratsnest"
-msgstr "Légvezetékek"
+msgstr "Légvezetékek újrarajzolása"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:139
 msgid "Select Netlist"
-msgstr "Vezetéklista kiválasztása"
+msgstr "Netlista kiválasztása"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:155
-#, fuzzy
 msgid "Please, choose a valid netlist file."
-msgstr "Kérjük válasszon egy érvényes vezetéklista fájl."
+msgstr "Válasszon egy érvényes netlista fájlt."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:161 pcbnew/dialogs/dialog_netlist.cpp:310
-#, fuzzy
 msgid "The netlist file does not exist."
-msgstr "A vezetéklista fájl nem létezik."
+msgstr "A netlista fájl nem létezik."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:167
-#, fuzzy
 msgid "The changes made cannot be undone.  Are you sure you want to update the PCB?"
-msgstr ""
-"A vezetéklista olvasásával végrehajtott változások nem vonhatók vissza.\n"
-"Biztosan folytatod?"
+msgstr "A módosítások nem vonhatóak vissza. Biztos, hogy frissíti a nyáktervet?"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:169 pcbnew/dialogs/dialog_update_pcb.cpp:198
-#, fuzzy
 msgid "Changes Applied To PCB"
-msgstr "A nyáktervre alkalmazott változások:"
+msgstr "A nyákterv módosításai"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:181
-#, fuzzy
 msgid "No footprints."
-msgstr "Nincsenek alkatrészek."
+msgstr "Nincsenek alkatrészrajzolatok."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:205
 msgid "No duplicate."
@@ -17176,7 +17150,7 @@ msgstr "Azonosak:"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:232
 msgid "No missing footprints."
-msgstr "Nincsenek hiányzó alkatrészek."
+msgstr "Nincsenek hiányzó alkatrészrajzolatok."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:235
 msgid "Missing:"
@@ -17184,170 +17158,156 @@ msgstr "Hiányzó:"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:251
 msgid "No extra footprints."
-msgstr "Nincsenek extra alkatrészek."
+msgstr "Nincsenek extra alkatrészrajzolatok."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:254
 msgid "Not in Netlist:"
-msgstr "Nincs Netlist-ben:"
+msgstr "Nincs a netlistában:"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:279
 msgid "Too many errors: some are skipped"
-msgstr "Túl sok a hiba: néhány kihagyva."
+msgstr "Túl sok a hiba: néhány kihagyva"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:283
 msgid "Check footprints"
-msgstr "Alkatrészek ellenőrzése"
+msgstr "Alkatrészrajzolatok ellenőrzése"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:366 pcbnew/netlist.cpp:90
 #, c-format
 msgid "Cannot open netlist file \"%s\"."
-msgstr "A \"%s\" vezetéklista fájlt nem lehet megnyitni."
+msgstr "A \"%s\" netlista fájlt nem lehet megnyitni."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:367 pcbnew/netlist.cpp:91
 msgid "Netlist Load Error."
-msgstr "Vezetéklista betöltési hiba."
+msgstr "Netlista betöltési hiba."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:376
 #, c-format
 msgid ""
 "Error loading netlist file:\n"
 "%s"
-msgstr "Hiba a \"%s\" vezetéklista fájl betöltése közben."
+msgstr "Hiba a \"%s\" netlista fájl betöltése közben."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:377 pcbnew/netlist.cpp:102
 msgid "Netlist Load Error"
-msgstr "Hiba a vezetéklista betöltése közben"
+msgstr "Hiba a netlista betöltése közben"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:444
 #, c-format
 msgid "Reading netlist file \"%s\".\n"
-msgstr "A \"%s\" vezetéklista fájl olvasása.\n"
+msgstr "A \"%s\" netlista fájl olvasása.\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:448
 msgid "Using time stamps to match components and footprints.\n"
-msgstr "Az időbélyegek használata az összetevők és az alkatrésztokhoz illesztéséhez.\n"
+msgstr "Időbélyegek használata az alkatrészek és az alkatrészrajzolatok egyeztetéséhez.\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:450
 msgid "Using references to match components and footprints.\n"
-msgstr "A referenciák használata az összetevők és az alkatrésztokhoz illesztéséhez.\n"
+msgstr "Referenciák használata az összetevők és az alkatrészrajzolatok egyeztetéséhez.\n"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:25
 msgid "Netlist file:"
-msgstr "Vezetéklista fájl:"
+msgstr "Netlista fájl:"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:43 pcbnew/dialogs/dialog_update_pcb_base.cpp:24
-#, fuzzy
 msgid "Keep existing symbol to footprint associations"
-msgstr "Törli az összes alkatrész hozzárendeléseket"
+msgstr "Meglévő rajzjel - alkatrészrajzolat társítások megtartása"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:43 pcbnew/dialogs/dialog_update_pcb_base.cpp:24
-#, fuzzy
 msgid "Re-associate footprints by reference"
-msgstr "Alkatrész referenciák hozzáfűzése"
+msgstr "Alkatrészrajzolatok újratársítása referenciák alapján"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:45 pcbnew/dialogs/dialog_update_pcb_base.cpp:26
-#, fuzzy
 msgid "Match Method"
-msgstr "Kitöltött"
+msgstr "Egyeztetési mód"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:47
 msgid ""
 "Select whether to update footprint references to match their currently-assigned symbols, or to re-assign footprints to symbols which match "
 "their current references."
 msgstr ""
+"Válasszon, hogy az alkatrészrajzolatok referenciáit frissíti a jelenleg társított rajzjelek referenciáira, "
+"vagy pedig újratársítja az alkatrészrajzolatokat az azonos referenciájú rajzjelekkel."
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:54 pcbnew/dialogs/dialog_update_pcb_base.cpp:35
-#, fuzzy
 msgid "Update footprints"
-msgstr "Alkatrésztok frissítése..."
+msgstr "Alkatrészrajzolatok frissítése"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:57
-#, fuzzy
 msgid "Delete tracks shorting multiple nets"
-msgstr "Vezetősávok csatlakozása többszörösen vezetékhez:"
+msgstr "Rövidzárlatot okozó vezetősávok törlése"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:60 pcbnew/dialogs/dialog_update_pcb_base.cpp:38
-#, fuzzy
 msgid "Delete extra footprints"
-msgstr "Nincsenek extra alkatrészek."
+msgstr "Extra alkatrészrajzolatok törlése"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:63 pcbnew/dialogs/dialog_update_pcb_base.cpp:41
-#, fuzzy
 msgid "Delete single-pad nets"
-msgstr "Kijelölt elem törlése"
+msgstr "A kizárólag egy forrszemhez csatlakozó vezetékek törlése"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:84
 msgid "Test Footprints"
-msgstr "Alkatrészek ellenőrzése"
+msgstr "Alkatrészrajzolatok ellenőrzése"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:85
 msgid "Read the current netlist file and list missing and extra footprints"
 msgstr ""
-"Az aktuális vezetéklista olvasása,\n"
-"és a hiányzó / extra alkatrészek listázása."
+"Az aktuális netlista fájl olvasása,\n"
+"a hiányzó / extra alkatrészrajzolatok listázása."
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:60
-#, fuzzy
 msgid "Non-copper Zone Properties"
-msgstr "Nem réz zónák tulajdonságai"
+msgstr "Nem rézkitöltő zónák tulajdonságai"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:102
 msgid "Ring"
 msgstr "Gyűrű"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:112
-#, fuzzy
 msgid "Center:"
-msgstr "Középre"
+msgstr "Középpont:"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:272
 msgid "Polygon must have at least 3 corners"
-msgstr ""
+msgstr "A sokszögnek legalább 3 sarokkal kell rendelkeznie"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:293
-#, fuzzy
 msgid "Polygon must have at least 3 corners after simplification"
-msgstr "Helytelen sokszög: az egyszerűsítés után túl kevés sarok"
+msgstr "A sokszögnek az egyszerűsítés után is legalább 3 sarokkal kell rendelkeznie"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:299
-#, fuzzy
 msgid "Polygon may not be self-intersecting"
-msgstr "Helytelen sokszög: önmagával keresztező"
+msgstr "A sokszög élei nem metszhetik egymást"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:317
-#, fuzzy
 msgid "Note: redundant corners removed"
-msgstr "Sokszög: redundáns sarkok eltávolítása"
+msgstr "A sokszög redundáns sarkai eltávolításra kerültek"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:343
-#, fuzzy
 msgid "Select a corner to add the new corner after."
-msgstr "Új sarok hozzáadása előtt válasszon ki egy sarkot"
+msgstr "Válasszon ki egy sarkot, amely után az új sarkot kívánja hozzáadni"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:377
-#, fuzzy
 msgid "Select a corner to delete."
-msgstr "Válasszon ki egy hangolandó értéket"
+msgstr "Válasszon ki egy sarkot a törléshez"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:569 pcbnew/dialogs/dialog_text_properties.cpp:290
-#, fuzzy
 msgid "back side (mirrored)"
-msgstr "Alsó oldal (alkatrész tükrözve)"
+msgstr "alsó oldal (alkatrészek tükrözve)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:569 pcbnew/dialogs/dialog_text_properties.cpp:290
-#, fuzzy
 msgid "front side"
-msgstr "Alkatrészoldal (felső oldal)"
+msgstr "felső oldal"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:570
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s (%s),"
-msgstr "\"%s\" alkatrész, a(z) \"%s\" rétegen."
+msgstr "\"%s\" alkatrészrajzolat (%s),"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:571
 #, c-format
 msgid "%s, rotated %.1f deg"
-msgstr ""
+msgstr "%s, elforgatva %.1f°-al"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:787
 #, c-format
@@ -17364,11 +17324,11 @@ msgstr "kihez"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:800
 msgid "center "
-msgstr "Középre"
+msgstr "középre "
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:801
 msgid "start "
-msgstr "kezdés"
+msgstr "kezdő "
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:802
 #, c-format
@@ -17395,62 +17355,61 @@ msgstr "sarkok száma %d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1115
 msgid "Pad size must be greater than zero"
-msgstr "Forrpont méretének nullánál nagyobbnak kell lenni"
+msgstr "Forrszem méretének nullánál nagyobbnak kell lennie"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1121
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
-msgstr "Helytelen furatátmérő: a furatátmérő nagyobb a forrpont átmérőjénél"
+msgstr "Helytelen furatméret: a furatméret nagyobb a forrszemnél"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1128
 msgid "Pad local clearance must be zero or greater than zero"
-msgstr ""
+msgstr "A forrszem lokális szigetelési távolsága nem lehet negatív"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1139
 msgid "Pad local solder mask clearance must be zero or greater than zero"
-msgstr ""
+msgstr "A forrszem lokális forrasztásgátló távolságtartása nem lehet negatív"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1147
 #, c-format
 msgid "Pad local solder mask clearance must be greater than %s"
-msgstr ""
+msgstr "A forrszem lokális forrasztásgátló távolságtartása legyen nagyobb mint %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1162
 msgid "Error: pad has no layer"
-msgstr "Hiba: a forrpontnak nincs rétege."
+msgstr "Hiba: a forrszemnek nincs réteg megadva."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1169
 msgid "Error: the pad is not on a copper layer and has a hole"
-msgstr "Hiba: a forrpont nem réz rétegen van, vagy lyukban van"
+msgstr "Hiba: a furattal rendelkező forrszem nem vezetőrétegen van"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1174
 msgid "For NPTH pad, set pad size value to pad drill value, if you do not want this pad plotted in gerber files"
-msgstr ""
+msgstr "NPTH (fémezetlen) furat esetén a furatméret és a forrszem mérete legyen azonos, ekkor a forrszem nem fog "
+"megjelenni a vezetőrétegeket leíró Gerber fájlokban"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1193
 msgid "Incorrect value for pad offset"
-msgstr "Helytelen a forrpont eltolási érték"
+msgstr "Helytelen forrszem eltolási érték"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1198
 msgid "Too large value for pad delta size"
-msgstr "A forrpont delta mérete túl nagy"
+msgstr "A forrszem delta mérete túl nagy"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1206
 msgid "Error: Through hole pad: drill diameter set to 0"
-msgstr "Hiba: átmenőfuratos forrpont. A furat átmérője nem lehet nulla."
+msgstr "Hiba: furatszerelt forrszem esetén a furatméret nem lehet nulla."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1211
 msgid ""
 "Error: Connector pads are not on the solder paste layer\n"
 "Use SMD pads instead"
 msgstr ""
-"Hiba: A forrpont csatlakozók nincsenek a forrasztópaszta rétegben.Használj \n"
-"SMD forrpontokat."
+"Hiba: Az élcsatlakozó típusú forrszemek esetén nem alkalmazható forrasztópaszta.\n"
+"Használjon SMD forrszem típust."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1220
 msgid "Error: only one external copper layer allowed for SMD or Connector pads"
-msgstr ""
-"Hiba: csak egy külső réz réteg engedélyezett SMD vagy csatlakozó forrpont \n"
-"esetén."
+msgstr "Hiba: SMD és élcsatlakozó típus esetén csak az egyik külső vezetőrétegen lehet forrszem"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1232
 msgid "Incorrect corner size value"
@@ -17458,45 +17417,45 @@ msgstr "Helytelen sarokméret"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1236
 msgid "Incorrect (negative) corner size value"
-msgstr ""
+msgstr "Helytelen (negatív) sarokméret"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1238
 msgid "Corner size value must be smaller than 50%"
-msgstr ""
+msgstr "A sarokméretnek 50%-nál kisebbnek kell lennie"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1245
 msgid "Incorrect pad shape: the shape must be equivalent to only one polygon"
-msgstr ""
+msgstr "Helytelen forrszem alak: nem adható meg egyetlen sokszögként"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1251
 msgid "Pad setup errors list"
-msgstr "Forrpont beállítási hibalista"
+msgstr "Forrszem beállítási hibalista"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1528
 msgid "Modify pad"
-msgstr "Módosítsa forrpontott"
+msgstr "Forrszem módosítása"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1817 pcbnew/dialogs/dialog_pad_properties.cpp:1948 pcbnew/dialogs/dialog_pad_properties.cpp:1983
 msgid "No shape selected"
-msgstr "Nincs forma kiválasztva"
+msgstr "Nincs alak kiválasztva"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1906
 #, fuzzy
 msgid "Ring/Circle"
-msgstr "gyűrű / kör"
+msgstr "Gyűrű/kör"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1908
 #, fuzzy
 msgid "Shape type:"
-msgstr "Forma:"
+msgstr "Alak típus:"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1908 pcbnew/dialogs/dialog_pad_properties_base.cpp:626
 msgid "Add Primitive"
-msgstr ""
+msgstr "Primitív hozzáadása"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:41
 msgid "Pad number:"
-msgstr "Forrpont sorszám:"
+msgstr "Forrszem sorszám:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:51
 msgid "Net name:"
@@ -17504,7 +17463,7 @@ msgstr "Vezeték név:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:61
 msgid "Pad type:"
-msgstr "Forrpont típus:"
+msgstr "Forrszem típus:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:65
 msgid "Through-hole"
@@ -17512,19 +17471,19 @@ msgstr "Átmenőfuratos"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:65
 msgid "Connector"
-msgstr "Csatlakozó"
+msgstr "Élcsatlakozó"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:65
 msgid "NPTH, Mechanical"
-msgstr "Galvanizálatlan / rögzítő"
+msgstr "Fémezetlen furat / rögzítő"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:65
 msgid "Aperture"
-msgstr ""
+msgstr "Apertúra"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:74 pcbnew/dialogs/dialog_target_properties_base.cpp:50
 msgid "Shape:"
-msgstr "Forma:"
+msgstr "Alak:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:78 pcbnew/dialogs/dialog_pad_properties_base.cpp:252
 msgid "Circular"
@@ -17544,11 +17503,11 @@ msgstr "Lekerekített téglalap"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:78
 msgid "Custom (Circ. Anchor)"
-msgstr ""
+msgstr "Egyedi (kör alakú horgony forrszem körül)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:78
 msgid "Custom (Rect. Anchor)"
-msgstr ""
+msgstr "Egyedi (négyszögletes horgony forrszem körül)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109 pcbnew/dialogs/dialog_set_grid_base.cpp:68
 msgid "Size X:"
@@ -17568,19 +17527,19 @@ msgstr "180°"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:146
 msgid "Shape offset X:"
-msgstr "Eltolás X tengelyen:"
+msgstr "Alak X eltolása:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:157
 msgid "Shape offset Y:"
-msgstr "Eltolás Y tengelyen:"
+msgstr "Alak Y eltolása:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:168
 msgid "Pad to die length:"
-msgstr ""
+msgstr "IC bondolás hossza"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:170
 msgid "Wire length from pad to die on chip ( used to calculate actual track length)"
-msgstr ""
+msgstr "Bondoló vezeték hossza a tokon belül, az IC és az alkatrészláb között (hosszkritikus vezetősávok esetén lesz figyelembe véve)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:181
 msgid "Trapezoid delta:"
@@ -17600,6 +17559,10 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
+"A sarokméretet a forrszem méret százalékos arányában kell megadni.\n"
+"Fontos: a forrszem rövidebb oldala van figyelembevéve!\n"
+"Nem lehet 50%-nál nagyobb értéket megadni."
+
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:218
 msgid "Corner radius:"
@@ -17612,6 +17575,9 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "Note: IPC norm gives a max value = 0.25mm."
 msgstr ""
+"A sarok sugara nem lehet nagyobb a forrszem méretének felénél.\n"
+"Fontos: a forrszem rövidebb oldala van figyelembevéve!\n"
+"Megjegyzés: IPC szabvány szerinti maximális értéke 0,25mm."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:225
 msgid ""
@@ -17620,6 +17586,9 @@ msgid ""
 "The width is the smaller value between size X and size Y\n"
 "Note: IPC norm gives a max value = 0.25mm"
 msgstr ""
+"A sarok sugara nem lehet nagyobb a forrszem méretének felénél.\n"
+"Fontos: a forrszem rövidebb oldala van figyelembevéve!\n"
+"Megjegyzés: IPC szabvány szerinti maximális értéke 0,25mm."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:248
 msgid "Hole shape:"
@@ -17627,21 +17596,23 @@ msgstr "Furat alakja:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:262
 msgid "Hole size X:"
-msgstr "Furat méret X:"
+msgstr "Furatméret X:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:273
 msgid "Hole size Y:"
-msgstr "Furat méret Y:"
+msgstr "Furatméret Y:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:297
 msgid ""
 "Parent footprint on board is flipped.\n"
 "Layers will be reversed."
 msgstr ""
+"A szülő alkatrészrajzolat a panelen fel van fordítva.\n"
+"Emiatt a rétegsorrend is fordított."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:307
 msgid "Copper:"
-msgstr "Elhelyezkedés:"
+msgstr "Vezető réteg:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:311
 msgid "Front layer"
@@ -17661,7 +17632,7 @@ msgstr "Alsó ragasztó"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:332
 msgid "Front solder paste"
-msgstr "Felső szorrasztópaszta"
+msgstr "Felső forrasztópaszta"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:335
 msgid "Back solder paste"
@@ -17673,55 +17644,51 @@ msgstr "Alsó szitanyomat"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:347
 msgid "Back solder mask"
-msgstr "Alsó forasztómaszk"
+msgstr "Alsó forrasztásgátló"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:350
 msgid "Drafting notes"
-msgstr "Jegyzetek készítése"
+msgstr "Megjegyzések"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:353
 msgid "E.C.O.1"
-msgstr "E.C.O.1"
+msgstr "ECO 1"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:356
 msgid "E.C.O.2"
-msgstr "E.C.O.2"
+msgstr "ECO 2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:381
 msgid "Set values to 0 to use parent footprint or netclass values."
-msgstr ""
+msgstr "0 = szülő alkatrészrajzolat vagy vezetékosztály szerinti érték használata."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:407
-#, fuzzy
 msgid ""
 "This is the local net clearance for this pad.\n"
 "If 0, the footprint local value or the Netclass value is used."
 msgstr ""
-"Ez a helyi szigetelési távolság a vezetősáv éa a forrpont közt.\n"
-"Ha 0, az alkatrésztok helyi értékét vagy a vezetékosztály értékét használja"
+"Ez a forrszem helyi beállítású szigetelési távolsága.\n"
+"Ha 0, az alkatrészrajzolat helyi értéke vagy a vezetékosztálynál megadott érték lesz használva."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:420
-#, fuzzy
 msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
 msgstr ""
-"Ez a helyi távolság a forrpont és a forrasztómaszk közt.\n"
-"Ha 0, az alkatrésztok helyi értékét vagy a vezetékosztály értékét használja"
+"Ez a forrszem és forrasztásgátló közötti helyi távolságtartás értéke.\n"
+"Ha 0, az alkatrészrajzolat helyi értéke vagy a vezetékosztálynál megadott érték lesz használva."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:433
-#, fuzzy
 msgid ""
 "This is the local clearance between this pad and the solder paste.\n"
 "If 0, the footprint value or the global value is used.\n"
 "The final clearance value is the sum of this value and the clearance value ratio.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Ez a helyi szigetelési távolság aránya százalékban a forrpont a forrasztópaszta és az alkatrészláb közt.\n"
-"A 10-es érték azt jelenti, hogy a szigetelési távolság értéke a forrpont méretének 10% -a.\n"
-"Ez az érték helyettesítheti az egyedileg beállított forraszpont értéket.\n"
-"A végső szigetelési távolság értéke, ennek az értéknek és a szigetelési távolság értéknek  összege.\n"
-"A negatív érték azt jelenti, hogy a maszk kisebb méretű, mint a forrpont mérete."
+"Ez a forrszem és forrasztópaszta közötti helyi távolságtartás értéke.\n"
+"Ha 0, az alkatrészrajzolat értéke vagy a globális érték lesz használva.\n"
+"A tényleges érték ennek, és a \"távolságtartás arány\" -ból számolt érték összege.\n"
+"Negatív érték esetén a maszk-nyílás kisebb lesz a forrszem méreténél."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:446
 #, fuzzy
@@ -17732,195 +17699,185 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"Ez a helyi szigetelési távolság aránya százalékban a forrpont a forrasztópaszta és az alkatrészlábnyom közt.\n"
-"A 10-es érték azt jelenti, hogy a szigetelési távolság értéke a forrpont méretének 10% -a.\n"
-"Ez az érték helyettesítheti az egyedileg beállított forraszpont értéket.\n"
-"A végső szigetelési távolság értéke, ennek az értéknek és a szigetelési távolság értéknek  összege.\n"
-"A negatív érték azt jelenti, hogy a maszk kisebb méretű, mint a forrpont mérete."
+"Ez a forrszem és forrasztópaszta közötti helyi távolságtartás arányának értéke.\n"
+"Például a 10-es érték esetén a távolságtartás a forrszem méretének 10 százaléka.\n"
+"A tényleges érték az ebből számolt, és a megadott távolságtartás értékek összege.\n"
+"Ha 0, az alkatrészrajzolat értéke vagy a globális érték lesz használva.\n"
+"Negatív érték esetén a maszk-nyílás kisebb lesz a forrszem méreténél."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:513 pcbnew/dialogs/dialog_pad_properties_base.cpp:562
 msgid "Pad connection:"
-msgstr "Forrpont csatlakozás:"
+msgstr "Forrszem csatlakozás:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:517
 msgid "From parent footprint"
-msgstr "hozzátartozó alkatrészhez"
+msgstr "Szülő alkatrészrajzolatból"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:526
-#, fuzzy
 msgid "Thermal relief spoke width:"
-msgstr "Hőcsillapító szélesség:"
+msgstr "Hőcsapda-küllő szélesség:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:537
 msgid "Thermal relief gap:"
-msgstr "Hőcsillapító távolság:"
+msgstr "Hőcsapda hézag:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:572
 msgid "Custom pad shape in zone:"
-msgstr ""
+msgstr "Egyedi alakú forrszem a zónában:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:576
 msgid "Use pad shape"
-msgstr "Használja forrpont alakot"
+msgstr "Forrszem alak használata"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:576
 msgid "Use pad convex hull"
-msgstr ""
+msgstr "Forrszemet bezáró konvex sokszög használata"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:599
 msgid "Primitives list"
-msgstr ""
+msgstr "Primitívek listája"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:605
 msgid "Coordinates are relative to anchor pad, orientation 0"
-msgstr ""
+msgstr "A horgony forrszemhez relatív koordináták, 0°-os tájolás"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:620
 msgid "Delete Primitive"
-msgstr ""
+msgstr "Primitív törlése"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:623
 msgid "Edit Primitive"
-msgstr ""
+msgstr "Primitív szerkesztése"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:629
 msgid "Duplicate Primitive"
-msgstr ""
+msgstr "Primitív megkettőzése"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:632
-#, fuzzy
 msgid "Transform Primitive"
-msgstr "Alkatrésztok átalakítása"
+msgstr "Primitív átalakítása"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:645
 msgid "Custom Shape Primitives"
-msgstr ""
+msgstr "Egyedi alakú primitív"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:655
-#, fuzzy
 msgid "Footprint name"
-msgstr "Alkatrész neve:"
+msgstr "Alkatrészrajzolat név"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:661
-#, fuzzy
 msgid "side and rotation"
-msgstr "Elem elforgatása:"
+msgstr "oldal és forgatás"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:681
 msgid "Show pad in outline mode"
-msgstr ""
+msgstr "Forrszem megjelenítése körvonal módban"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:821
-#, fuzzy
 msgid "Start point"
-msgstr "Kezdőpont:"
+msgstr "Kezdőpont"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:847
-#, fuzzy
 msgid "End point"
-msgstr "Végpont:"
+msgstr "Végpont"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:916
-#, fuzzy
 msgid "Set thickness to 0 for a filled circle."
-msgstr "Kitöltött mezők minimális vastagsága"
+msgstr "Teljesen kitöltött körhöz állítsa a vastagságot nullára."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:960
-#, fuzzy
 msgid "Move vector"
-msgstr "Mozgatás tengelyen:"
+msgstr "Mozgatás vektor"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1009
 msgid "Scaling factor:"
-msgstr "Méretezési tényező:"
+msgstr "Méretezési tényező"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1031
-#, fuzzy
 msgid "Duplicate:"
 msgstr "Azonosak:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1140
 msgid "Outline thickness:"
-msgstr ""
+msgstr "Körvonal vastagság:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1202
 msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
-msgstr ""
+msgstr "A horgony forrszemhez relatív koordináták, 0°-os forgatás."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1208
 msgid "Set thickness to 0 for a filled polygon."
-msgstr ""
+msgstr "Teljesen kitöltött sokszöghöz állítsa a vastagságot nullára."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:215
 msgid "Pad Properties"
-msgstr "Forrpont tulajdonságok"
+msgstr "Forrszem tulajdonságok"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:290
 msgid "Pad Custom Shape Geometry Transform"
-msgstr ""
+msgstr "Egyedi alakú forrszem geometriai transzformációja"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:330
 msgid "Basic Shape Polygon"
-msgstr ""
+msgstr "Egyszerű sokszög alak"
 
 #: pcbnew/dialogs/dialog_plot.cpp:54 pcbnew/dialogs/dialog_plot_base.h:138
 msgid "Plot"
-msgstr "Nyákterv exportálás"
+msgstr "Plottolás"
 
 #: pcbnew/dialogs/dialog_plot.cpp:55
 msgid "Generate Drill Files..."
-msgstr "Furatfájlok létrehozás..."
+msgstr "Fúrófájlok létrehozás..."
 
 #: pcbnew/dialogs/dialog_plot.cpp:596
 msgid "HPGL pen size constrained."
-msgstr "HPGL tollméret kényszerítése"
+msgstr "HPGL tollméret kényszerítve."
 
 #: pcbnew/dialogs/dialog_plot.cpp:607
 msgid "Default line width constrained."
-msgstr "Alapértelmezett tollméret kényszerítése."
+msgstr "Alapértelmezett vonalszélesség kényszerítve."
 
 #: pcbnew/dialogs/dialog_plot.cpp:620
 msgid "X scale constrained."
-msgstr "X méretezés kényszerítése."
+msgstr "X méretezés kényszerítve."
 
 #: pcbnew/dialogs/dialog_plot.cpp:634
 msgid "Y scale constrained."
-msgstr "Y méretezés kényszerítése."
+msgstr "Y méretezés kényszerítve."
 
 #: pcbnew/dialogs/dialog_plot.cpp:647
 #, c-format
 msgid "Width correction constrained. The reasonable width correction value must be in a range of  [%s; %s] (%s) for current design rules."
-msgstr ""
+msgstr "Szélesség korrekció kényszerítve. Az ésszerű szélesség korrekciós érték tartománya [%s; %s] (%s) a jelenlegi tervezési szabályok alapján."
 
 #: pcbnew/dialogs/dialog_plot.cpp:720
 msgid "No layer selected, Nothing to plot"
-msgstr ""
+msgstr "Nincs réteg kiválasztva plottoláshoz"
 
 #: pcbnew/dialogs/dialog_plot.cpp:839
 #, c-format
 msgid "Plot file \"%s\" created."
-msgstr "Generált fájl \"%s\" létrejött."
+msgstr "Plottolt fájl \"%s\" létrejött."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:23
 msgid "Plot format:"
-msgstr "Fájlformátum:"
+msgstr "Plottolás formátuma:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:82
 msgid "Plot footprint values"
-msgstr "Alkatrész értékek hozzáfűzése"
+msgstr "Alkatrészrajzolat értékek plottolása"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:86
 msgid "Plot footprint references"
-msgstr "Alkatrész referenciák hozzáfűzése"
+msgstr "Alkatrészrajzolat referenciák plottolása"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:90
-#, fuzzy
 msgid "Force plotting of invisible values / refs"
-msgstr "Láthatatlan értékek / referenciák hozzáfűzése"
+msgstr "Láthatatlan értékek / referenciák plottolása"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:91
 msgid "Force plot invisible values and/or references"
-msgstr "Láthatatlan értékek / referenciák hozzáfűzése"
+msgstr "Láthatatlan értékek / referenciák plottolása"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:95
 msgid "Exclude PCB edge layer from other layers"
@@ -17928,41 +17885,43 @@ msgstr "Nyákterv körvonalainak elhagyása más rétegekről"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:96
 msgid "Do not plot the contents of the PCB edge layer on any other layers."
-msgstr ""
+msgstr "A körvonal réteg elemei ne jelenjenek meg a többi rétegen."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:100
 msgid "Exclude pads from silkscreen"
-msgstr ""
+msgstr "Forrszemek kihagyása a szitanyomaton"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:101
 msgid ""
 "Do not plot pads on silkscreen layers, even when they are assigned to them.\n"
 "Uncheck this if you wish to create assembly drawings from silkscreen layers."
 msgstr ""
+"Ne plottolja a forszemeket a szitanyomat rétegre még akkor sem ha van szintanyomat rétegbeli eleme.\n"
+"Ne jelölje meg, ha szerelési rajzot szeretne készíteni a szitanyomat rétegből."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:105
 msgid "Do not tent vias"
-msgstr "Forrasztómaszk eltávolítása a forrpontokról"
+msgstr "Ne fedje be a viákat"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:106
 msgid "Remove soldermask on vias"
-msgstr "Forrasztómaszk eltávolítása a forrpontokról"
+msgstr "Forrasztásgátló bevonat eltávolítása a viákról"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:111
 msgid "Use auxiliary axis as coordinates origin in plot files"
-msgstr "Segédtengely kezdőpontjának használata"
+msgstr "Segédtengely kezdőpontjának használata plottoláshoz"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:115 pcbnew/dialogs/dialog_print_pcbnew.cpp:166
 msgid "Drill marks:"
-msgstr "Furatok mérete:"
+msgstr "Furatjelölések:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:119
 msgid "Small"
-msgstr "Pici pont"
+msgstr "Kicsi"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:119
 msgid "Actual size"
-msgstr "Valós furatméret"
+msgstr "Valós méret"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:125
 msgid "Scaling:"
@@ -17986,7 +17945,7 @@ msgstr "3:1"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:135
 msgid "Plot mode:"
-msgstr "Létrehozás minősége:"
+msgstr "Plottolás mód:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:139
 msgid "Filled"
@@ -17994,7 +17953,7 @@ msgstr "Kitöltve"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:139
 msgid "Sketch"
-msgstr "Vázlat módban"
+msgstr "Vázlat"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:147
 msgid ""
@@ -18002,29 +17961,28 @@ msgid ""
 "Used mainly to draw items in sketch mode."
 msgstr ""
 "Tollszélesség olyan elemek rajzolásához,\n"
-"amelyeknek nincs alapértelmezett vonalvastagsága.\n"
-"Leginkább a vázlatokhoz kerül alkalmazásra."
+"amelyeknél nincs megadva vonalvastagság.\n"
+"Elsősorban vázlat módban kerül alkalmazásra."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:152
 msgid "Line width for, e.g., sheet references."
-msgstr ""
+msgstr "Vonalszélesség, pl: lap referenciák számára"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:161
 msgid "Mirrored plot"
-msgstr "Létrehozás tükrözve"
+msgstr "Plottolás tükrözve"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:164
 msgid "Negative plot"
-msgstr "Létrehozás negatív módban"
+msgstr "Negatív plottolás"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:167
 msgid "Check zone fills before plotting"
-msgstr ""
+msgstr "Ellenőrizze a kitöltéseket a plottolás előtt"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:179
-#, fuzzy
 msgid "Gerber Options"
-msgstr "Gerber megjelenítő beállítások:"
+msgstr "Gerber beállítások:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:186
 msgid "Use Protel filename extensions"
@@ -18041,26 +17999,27 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:192
 msgid "Generate Gerber job file"
-msgstr "Gerber munkafájl létrehozása"
+msgstr "Gerber feladat fájl létrehozása"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:193
 msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
 msgstr ""
+"Gerber feladat fájl létrehozása, mely tartalmazza a panel információkat,\n"
+"valamint a plottolt Gerber fájlok listáját is."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:197
 msgid "Subtract soldermask from silkscreen"
-msgstr "Forrasztómaszk eltávolítása a szitanyomatról"
+msgstr "Szitanyomat maszkolása a forrasztásgátló réteggel"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:198
 msgid "Remove silkscreen from areas without soldermask"
-msgstr "A forrasztómaszk eltávolítása a szitanyomatról"
+msgstr "Forrasztásgátló réteg nyílásokba belógó szitanyomat elemek eltávolítása"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:202
-#, fuzzy
 msgid "Coordinate format:"
-msgstr "Koordinátaformátum"
+msgstr "Koordináta formátum:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:206
 msgid "4.5, unit mm"
@@ -18072,7 +18031,7 @@ msgstr "4.6 mértékegység mm"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:212
 msgid "Use extended X2 format"
-msgstr ""
+msgstr "Kiterjesztett X2 formátum"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:213
 msgid ""
@@ -18081,11 +18040,14 @@ msgid ""
 "If not checked, use X1 format.\n"
 "In X1 format, these attributes are included as comments in files."
 msgstr ""
+"X2 Gerber fájl formátum használata.\n"
+"X2 attribútumok beillesztése a Gerber fájlok fejléceibe.\n"
+"Ha nincs bejelölve, az X1 formátum lesz használva.\n"
+"X1 formátum esetén az X2 attribútumok kommentként kerülnek beillesztésre a Gerber fájlokba."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
-#, fuzzy
 msgid "Include netlist attributes"
-msgstr "Bővített (X2) attribútumok beillesztése"
+msgstr "Netlista attribútumok beillesztése"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:218
 msgid ""
@@ -18093,34 +18055,33 @@ msgid ""
 "In X1 format, they are comments.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
+"Netlista metaadat és apertúra attribútumok beillesztése a Gerber fájlokba.\n"
+"X1 formátum esetén kommentként fognak a fájlokba kerülni.\n"
+"Elsősorban CAM eszközök, valamint Gerber nézegetők szokták felhasználni."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:249
-#, fuzzy
 msgid "Postscript Options"
-msgstr "PostScript beállítások:"
+msgstr "PostScript beállítások"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:259
-#, fuzzy
 msgid "X scale factor:"
-msgstr "Méretezési tényező:"
+msgstr "X méretezési tényező:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:264
 msgid "Set global X scale adjust for exact scale postscript output."
-msgstr "Globális X tengelyigazítás beállítása a pontos postscript létrehozáshoz."
+msgstr "Globális X méretezési tényező beállítása a méretpontos PostScript kiemenet létrehozáshoz."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:271
-#, fuzzy
 msgid "Y scale factor:"
-msgstr "Méretezési tényező:"
+msgstr "Y méretezési tényező:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:276
 msgid "Set global Y scale adjust for exact scale postscript output."
-msgstr "Globális Y tengelyigazítás beállítása a pontos postscript létrehozáshoz."
+msgstr "Globális Y méretezési tényező beállítása a méretpontos PostScript kiemenet létrehozáshoz."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:283
-#, fuzzy
 msgid "Track width correction:"
-msgstr "Szélesség korrekció:"
+msgstr "Vezetősáv szélesség korrekció:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:288
 msgid ""
@@ -18128,25 +18089,22 @@ msgid ""
 "These width correction is intended to compensate tracks width and also pads and vias size errors.\n"
 "The reasonable width correction value must be in a range of [-(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils."
 msgstr ""
-"Állítsa be a teljes szélesség korrekciót\n"
-"a pontos szélességű postscript létrehozáshoz.\n"
-"A szélességkorrekció célja, a sávok szélességének,\n"
-"valamint a forrpontok és átmenőfuratok méret hibáinak kompenzálása.\n"
-"Az ésszerű szélességkorrekciós értéknek egy tartományon belül kell lennie\n"
-"[- (MinTrackWidth-1), + (MinClearanceValue-1)] tizedrészekben."
+"Adja meg a globális szélességkorrekció értékét a méretpontos PostScript kiemenet létrehozáshoz.\n"
+"A szélességkorrekció célja a vezetősávok szélességének, valamint a forrszemek és viák méret hibáinak kompenzálása.\n"
+"A korrekciós tényezőt [mil] tizedrészében kell megadni, javasolt a \n"
+"[- (MinTrackWidth-1), + (MinClearanceValue-1)] tartományban lévő értéket megadni."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:299
 msgid "Force A4 output"
-msgstr "Létrehozás A4 -es méretben"
+msgstr "Létrehozás A4-es méretben"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:305
-#, fuzzy
 msgid "DXF Options"
-msgstr "DXF beállítások:"
+msgstr "DXF beállítások"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:307
 msgid "Plot all layers in outline (polygon) mode"
-msgstr ""
+msgstr "Plottolás körvonal (sokszög) módban (összes réteg)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:309
 msgid ""
@@ -18156,53 +18114,50 @@ msgid ""
 "and plot in polygon mode other layers (*.Cu, *.Adhes, *.Paste, *.Mask)"
 msgstr ""
 "Csak DXF:\n"
-"Ellenőrizze, hogy az összes réteget többszöri üzemmódban ábrázolja-e.\n"
-"Törölje a jelölést a vázlatos módú rétegek ábrázolásánál,\n"
-"amelyek nem támogatják a sokszögeket\n"
-"(* .SilkS, * _User, Edge.Cuts, Margin, * .CrtYd, * .Fab)\n"
-"és a többszöri üzemmódban más rétegeket\n"
-"(* .Cu, * .Adhes , * .Past, * .Maszk)."
+"Jelölje be, ha az összes réteget körvonal (sokszög) módban kívánja plottolni.\n"
+"Ne jelölje be, ha körvonal (sokszög) módot nem támogató rétegeket (*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
+"vázlat módban, a töbi réteget (*.Cu, *.Adhes, *.Paste, *.Mask) viszont körvonal (sokszög) módban szeretné plottolni."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:313
 msgid "Use Pcbnew font to plot texts"
-msgstr "Használja a nyákterv-tervező betűtípusát a szövegekhez."
+msgstr "Használja a Nyáktervező betűtípusát a szövegekhez"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:314
 msgid ""
 "Check to use Pcbnew stroke font\n"
 "Uncheck to plot oneline ASCII texts as editable text (using DXF font)"
 msgstr ""
-"Ellenőrizze a Pcbnew stroke betűtípus használatát.\n"
-"Szüntesse meg az egy vonalas ASCII szövegek szerkeszthető szövegként való megjelenítését (DXF betűtípus használatával)."
+"Jelölje be, ha a a Nyáktervező beépített egyvonalas betűtípusával szeretne plottolni\n"
+"Ne jelölje be, ha DXF betűtípussal szeretne plottolni."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:340
 msgid "Run DRC..."
-msgstr "Tervezési szabályellenőrző futtatása..."
+msgstr "Tervezési szabályellenőrző (DRC) futtatása..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:363
 msgid "Select Fab Layers"
-msgstr "Műszaki rétegek kiválasztása."
+msgstr "Műszaki rétegek kiválasztása"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:367
 msgid "Select all Copper Layers"
-msgstr "Minden réz réteg kiválasztása."
+msgstr "Minden vezető réteg kiválasztása"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:371
 msgid "Deselect all Copper Layers"
-msgstr "Minden réz réteg kijelölésének megszüntetése."
+msgstr "Vezető réteg kijelölések megszüntetése"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:375
 msgid "Select all Layers"
-msgstr "Minden réteg kijelölése."
+msgstr "Összes réteg kijelölése"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:379
 msgid "Deselect all Layers"
-msgstr "Minden réteg kijelölésének megszüntetése."
+msgstr "Minden réteg kijelölés megszüntetése"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions.cpp:55
 #, fuzzy
 msgid "Trace gap must be greater than 0."
-msgstr "A sugárnak nullánál nagyobbnak kell lennie."
+msgstr "A hézag értéke nem lehet nulla."
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:36
 msgid "Trace gap:"
@@ -18210,63 +18165,63 @@ msgstr "Vezetősáv hézag:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:47
 msgid "Via gap:"
-msgstr "Átvezetőpont hézag:"
+msgstr "Via hézag:"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
 msgid "Via gap same as trace gap"
-msgstr "Átvezetőpont hézag megegyezik a vezetősáv hézaggal"
+msgstr "Vezetősáv és via hézag azonos"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:60 pcbnew/hotkeys.cpp:299
 msgid "Differential Pair Dimensions"
-msgstr "Párhuzamos vezetősáv méretek"
+msgstr "Differenciális jelvezeték méretek"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:78
 msgid "Single Track Length Tuning"
-msgstr "Egy vezetősáv hosszának hangolása"
+msgstr "Vezetősáv hosszának hangolása"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:84
 msgid "Differential Pair Length Tuning"
-msgstr "Párhuzamos vezetősávok hosszának hangolása"
+msgstr "Differenciális jelvezeték hosszának hangolása"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:90
 msgid "Differential Pair Skew Tuning"
-msgstr ""
+msgstr "Differenciális jelvezeték jelcsúszás kompenzálás"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:92
 msgid "Target skew: "
-msgstr ""
+msgstr "Megcélzott jelcsúszás (skew):"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:22
 msgid "Length / Skew"
-msgstr ""
+msgstr "Hossz / jelcsúszás"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:30
 msgid "Tune from:"
-msgstr ""
+msgstr "Hangolás ettől:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:42
 msgid "Tune to:"
-msgstr ""
+msgstr "Hangolás eddig:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:54
 msgid "Constraint:"
-msgstr ""
+msgstr "Megkötés:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:58
 msgid "From Design Rules"
-msgstr ""
+msgstr "Tervezési szabályok szerint"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:58
 msgid "Manual"
-msgstr "Útmutató"
+msgstr "Kézi"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:69
 msgid "Target length:"
-msgstr "Cél hossz:"
+msgstr "Megcélzott hossz:"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:87
 msgid "Meandering"
-msgstr ""
+msgstr "Meanderezés"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:98
 msgid "Min amplitude (Amin):"
@@ -18302,15 +18257,15 @@ msgstr "Vezetősávhossz hangolás"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:34
 msgid "DRC violation: highlight obstacles"
-msgstr "DRC megsértése: az akadályok kiemelése"
+msgstr "DRC szabálysértés: akadályok kiemelése"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:35
 msgid "DRC violation: shove tracks and vias"
-msgstr "DRC megsértése: shove tracks and vias"
+msgstr "DRC szabálysértés: útban lévő vezetősávok és viák félrelökése"
 
 #: pcbnew/dialogs/dialog_pns_settings.cpp:36
 msgid "DRC violation: walk around obstacles"
-msgstr "DRC megsértése: walk around obstacles"
+msgstr "DRC szabálysértés: akadályok megkerülése"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Highlight collisions"
@@ -18318,15 +18273,15 @@ msgstr "Ütközések kiemelés"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Shove"
-msgstr ""
+msgstr "Akadályok félrelökése"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Walk around"
-msgstr "Körbejárás"
+msgstr "Akadályok körbejárása"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:21
 msgid "Mode:"
-msgstr "Színformátum:"
+msgstr "Mód:"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:34
 msgid "Mouse drag behavior:"
@@ -18334,7 +18289,7 @@ msgstr "Egérrel vonszolás viselkedése:"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:38
 msgid "Move item"
-msgstr "Elem mozgatása pontosan"
+msgstr "Elem mozgatása"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:38
 msgid "Interactive drag"
@@ -18342,39 +18297,43 @@ msgstr "Interaktív vonszolás"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:47
 msgid "Free angle mode (no shove/walkaround)"
-msgstr ""
+msgstr "Tetszőleges szögű mód(nincs félrelökés/körbejárás)"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:50
 msgid "Shove vias"
-msgstr ""
+msgstr "Viák félrelökése"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:52
 msgid "When disabled, vias are treated as un-movable objects and hugged instead of shoved."
-msgstr ""
+msgstr "Ha nincs engedélyezve, a viák nem mozdítható elemeknek lesznek tekintve, azaz a félrelökés helyett körbejárást fog alkalmazni."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:56
 msgid "Jump over obstacles"
-msgstr "Ugorj át az akadályokat"
+msgstr "Akadályok átugrása"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
 msgid ""
 "When enabled, the router tries to move colliding traces behind solid obstacles (e.g. pads) instead of \"reflecting\" back the collision"
 msgstr ""
+"Ha engedélyezve van, a huzalozó megpróbálja az akadályba ütköző vezetősávokat egy rögzített elem (pl forrszemek) mögött elvezetni"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:61
 msgid "Remove redundant tracks"
-msgstr "Távolítsa el a felesleges vezetősávokat"
+msgstr "Redundáns vezetősávok eltávolítása"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:62
 msgid ""
 "Removes loops while routing (e.g. if the new track ensures same connectivity as an already existing one, the old track is removed).\n"
 "Loop removal works locally (only between the start and end of the currently routed trace)."
 msgstr ""
+"Eltávolítja a redundáns hurkokat okozó vezetősáv szakaszokat.\n"
+"Az automatikus hurok eltávolítás csak a jelenleg folytatott huzalozás kezdő és végpontja közötti vezetősáv szakaszokra vonatkozik."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:66
 msgid "Optimize pad connections"
-msgstr "Optimalizálja a forrpont csatlakozásokat"
+msgstr "Forrszem csatlakozások optimalizálása"
 
+# translation breakpoint
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 msgid "When enabled, the router tries to break out pads/vias in a clean way, avoiding acute angles and jagged breakout traces."
 msgstr ""
