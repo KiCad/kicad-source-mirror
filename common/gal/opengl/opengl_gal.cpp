@@ -1256,29 +1256,27 @@ void OPENGL_GAL::DrawGrid()
     if( !gridVisibility )
         return;
 
-    int gridScreenSizeDense  = gridSize.x;
-    int gridScreenSizeCoarse = KiROUND( gridSize.x * static_cast<double>( gridTick ) );
+    VECTOR2D gridScreenSize( gridSize );
 
-    double gridThreshold = KiROUND( computeMinGridSpacing() / worldScale );
+    double gridThreshold = computeMinGridSpacing() / worldScale;
 
     if( gridStyle == GRID_STYLE::SMALL_CROSS )
         gridThreshold *= 2.0;
 
     // If we cannot display the grid density, scale down by a tick size and
     // try again.  Eventually, we get some representation of the grid
-    while( std::min( gridScreenSizeDense, gridScreenSizeCoarse ) <= gridThreshold )
+    while( std::min( gridScreenSize.x,  gridScreenSize.y ) <= gridThreshold )
     {
-        gridScreenSizeCoarse *= gridTick;
-        gridScreenSizeDense *= gridTick;
+        gridScreenSize  = gridScreenSize * static_cast<double>( gridTick );
     }
 
-    // Compute grid staring and ending indexes to draw grid points on the
+    // Compute grid starting and ending indexes to draw grid points on the
     // visible screen area
     // Note: later any point coordinate will be offsetted by gridOrigin
-    int gridStartX = KiROUND( ( worldStartPoint.x - gridOrigin.x ) / gridScreenSizeDense );
-    int gridEndX = KiROUND( ( worldEndPoint.x - gridOrigin.x ) / gridScreenSizeDense );
-    int gridStartY = KiROUND( ( worldStartPoint.y - gridOrigin.y ) / gridScreenSizeDense );
-    int gridEndY = KiROUND( ( worldEndPoint.y - gridOrigin.y ) / gridScreenSizeDense );
+    int gridStartX = KiROUND( ( worldStartPoint.x - gridOrigin.x ) / gridScreenSize.x );
+    int gridEndX   = KiROUND( ( worldEndPoint.x - gridOrigin.x ) / gridScreenSize.x );
+    int gridStartY = KiROUND( ( worldStartPoint.y - gridOrigin.y ) / gridScreenSize.y );
+    int gridEndY   = KiROUND( ( worldEndPoint.y - gridOrigin.y ) / gridScreenSize.y );
 
     // Ensure start coordinate > end coordinate
     SWAP( gridStartX, >, gridEndX );
@@ -1312,7 +1310,7 @@ void OPENGL_GAL::DrawGrid()
         for( int j = gridStartY; j <= gridEndY; j++ )
         {
             bool tickY = ( j % gridTick == 0 );
-            int posY =  j * gridScreenSizeDense + gridOrigin.y;
+            const double posY =  j * gridScreenSize.y + gridOrigin.y;
 
             // Horizontal positions
             for( int i = gridStartX; i <= gridEndX; i++ )
@@ -1320,7 +1318,7 @@ void OPENGL_GAL::DrawGrid()
                 bool tickX = ( i % gridTick == 0 );
                 SetLineWidth( ( ( tickX && tickY ) ? majorLineWidth : minorLineWidth ) );
                 auto lineLen = 2.0 * GetLineWidth();
-                auto posX = i * gridScreenSizeDense + gridOrigin.x;
+                auto posX = i * gridScreenSize.x + gridOrigin.x;
 
                 DrawLine( VECTOR2D( posX - lineLen, posY ), VECTOR2D( posX + lineLen, posY ) );
                 DrawLine( VECTOR2D( posX, posY - lineLen ), VECTOR2D( posX, posY + lineLen ) );
@@ -1334,15 +1332,15 @@ void OPENGL_GAL::DrawGrid()
         // Vertical lines
         for( int j = gridStartY; j <= gridEndY; j++ )
         {
-            const double y = j * gridScreenSizeDense + gridOrigin.y;
+            const double y = j * gridScreenSize.y + gridOrigin.y;
 
             // If axes are drawn, skip the lines that would cover them
-            if( axesEnabled && y == 0 )
+            if( axesEnabled && y == 0.0 )
                 continue;
 
             SetLineWidth( ( j % gridTick == 0 ) ? majorLineWidth : minorLineWidth );
-            VECTOR2D a ( gridStartX * gridScreenSizeDense + gridOrigin.x, y );
-            VECTOR2D b ( gridEndX * gridScreenSizeDense + gridOrigin.x, y );
+            VECTOR2D a ( gridStartX * gridScreenSize.x + gridOrigin.x, y );
+            VECTOR2D b ( gridEndX * gridScreenSize.x + gridOrigin.x, y );
 
             DrawLine( a, b );
         }
@@ -1359,15 +1357,15 @@ void OPENGL_GAL::DrawGrid()
         // Horizontal lines
         for( int i = gridStartX; i <= gridEndX; i++ )
         {
-            const double x = i * gridScreenSizeDense + gridOrigin.x;
+            const double x = i * gridScreenSize.x + gridOrigin.x;
 
             // If axes are drawn, skip the lines that would cover them
-            if( axesEnabled && x == 0 )
+            if( axesEnabled && x == 0.0 )
                 continue;
 
             SetLineWidth( ( i % gridTick == 0 ) ? majorLineWidth : minorLineWidth );
-            VECTOR2D a ( x, gridStartY * gridScreenSizeDense + gridOrigin.y );
-            VECTOR2D b ( x, gridEndY * gridScreenSizeDense + gridOrigin.y );
+            VECTOR2D a ( x, gridStartY * gridScreenSize.y + gridOrigin.y );
+            VECTOR2D b ( x, gridEndY * gridScreenSize.y + gridOrigin.y );
             DrawLine( a, b );
         }
 
