@@ -398,12 +398,11 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
 
 
 void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand,
-                                             bool aRebuildRatsnet )
+                                                  bool aRebuildRatsnet )
 {
-    BOARD_ITEM* item;
-    bool        not_found = false;
-    bool        reBuild_ratsnest = false;
-    bool        deep_reBuild_ratsnest = false;  // true later if pointers must be rebuilt
+    bool not_found = false;
+    bool reBuild_ratsnest = false;
+    bool deep_reBuild_ratsnest = false;  // true later if pointers must be rebuilt
 
     auto view = GetGalCanvas()->GetView();
     auto connectivity = GetBoard()->GetConnectivity();
@@ -438,7 +437,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
             build_item_list = false;
 
-            if( !TestForExistingItem( GetBoard(), item ) )
+            if( !TestForExistingItem( GetBoard(), (BOARD_ITEM*) eda_item ) )
             {
                 // Checking if it ever happens
                 wxASSERT_MSG( false, "Item in the undo buffer does not exist" );
@@ -453,7 +452,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         }
 
         // see if we must rebuild ratsnets and pointers lists
-        switch( item->Type() )
+        switch( eda_item->Type() )
         {
         case PCB_MODULE_T:
             deep_reBuild_ratsnest = true;   // Pointers on pads can be invalid
@@ -480,62 +479,76 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         {
         case UR_CHANGED:    /* Exchange old and new data for each item */
         {
+            BOARD_ITEM* item = (BOARD_ITEM*) item;
             BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );
 
             // Remove all pads/drawings/texts, as they become invalid
             // for the VIEW after SwapData() called for modules
-            view->Remove( item );
+            view->Remove( eda_item );
             connectivity->Remove( item );
 
             SwapItemData( item, image );
 
-            view->Add( item );
+            view->Add( eda_item );
             connectivity->Add( item );
         }
         break;
 
         case UR_NEW:        /* new items are deleted */
             aList->SetPickedItemStatus( UR_DELETED, ii );
-            GetModel()->Remove( item );
-            view->Remove( item );
+            GetModel()->Remove( (BOARD_ITEM*) eda_item );
+            view->Remove( eda_item );
             break;
 
         case UR_DELETED:    /* deleted items are put in List, as new items */
             aList->SetPickedItemStatus( UR_NEW, ii );
-            GetModel()->Add( item );
-            view->Add( item );
+            GetModel()->Add( (BOARD_ITEM*) eda_item );
+            view->Add( eda_item );
             build_item_list = true;
             break;
 
         case UR_MOVED:
+        {
+            BOARD_ITEM* item = (BOARD_ITEM*) item;
             item->Move( aRedoCommand ? aList->m_TransformPoint : -aList->m_TransformPoint );
             view->Update( item, KIGFX::GEOMETRY );
             connectivity->Update( item );
+        }
             break;
 
         case UR_ROTATED:
+        {
+            BOARD_ITEM* item = (BOARD_ITEM*) item;
             item->Rotate( aList->m_TransformPoint,
                           aRedoCommand ? m_rotationAngle : -m_rotationAngle );
             view->Update( item, KIGFX::GEOMETRY );
             connectivity->Update( item );
+        }
             break;
 
         case UR_ROTATED_CLOCKWISE:
+        {
+            BOARD_ITEM* item = (BOARD_ITEM*) item;
             item->Rotate( aList->m_TransformPoint,
                           aRedoCommand ? -m_rotationAngle : m_rotationAngle );
             view->Update( item, KIGFX::GEOMETRY );
             connectivity->Update( item );
+        }
             break;
 
         case UR_FLIPPED:
+        {
+            BOARD_ITEM* item = (BOARD_ITEM*) item;
             item->Flip( aList->m_TransformPoint );
             view->Update( item, KIGFX::LAYERS );
             connectivity->Update( item );
+        }
             break;
 
         case UR_DRILLORIGIN:
         case UR_GRIDORIGIN:
         {
+            BOARD_ITEM* item = (BOARD_ITEM*) item;
             BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );
             VECTOR2D origin = image->GetPosition();
             image->SetPosition( item->GetPosition() );
