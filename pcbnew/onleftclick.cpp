@@ -191,14 +191,6 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_ZOOM_SELECTION:
         break;
 
-    case ID_PCB_MUWAVE_TOOL_SELF_CMD:
-    case ID_PCB_MUWAVE_TOOL_GAP_CMD:
-    case ID_PCB_MUWAVE_TOOL_STUB_CMD:
-    case ID_PCB_MUWAVE_TOOL_STUB_ARC_CMD:
-    case ID_PCB_MUWAVE_TOOL_FUNCTION_SHAPE_CMD:
-        MuWaveCommand( aDC, aPosition );
-        break;
-
     case ID_PCB_HIGHLIGHT_BUTT:
     {
         int netcode = SelectHighLight( aDC );
@@ -354,38 +346,6 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         else
         {
             wxLogDebug( wxT( "OnLeftClick err: not a PCB_TEXT_T" ) );
-        }
-
-        break;
-
-    case ID_PCB_MODULE_BUTT:
-        if( curr_item == NULL || curr_item->GetEditFlags() == 0 )
-        {
-            m_canvas->MoveCursorToCrossHair();
-            MODULE* module = SelectFootprintFromLibTree();
-
-            SetCurItem( (BOARD_ITEM*) module );
-
-            if( module )
-            {
-                m_canvas->MoveCursorToCrossHair();
-                module->SetLink( 0 );
-                AddModuleToBoard( module );
-
-                if( aDC )
-                    module->Draw( m_canvas, aDC, GR_OR );
-
-                StartMoveModule( module, aDC, false );
-            }
-        }
-        else if( curr_item->Type() == PCB_MODULE_T )
-        {
-            PlaceModule( (MODULE*) curr_item, aDC );
-            m_canvas->SetAutoPanRequest( false );
-        }
-        else
-        {
-            wxLogDebug( wxT( "Internal err: Struct not PCB_MODULE_T" ) );
         }
 
         break;

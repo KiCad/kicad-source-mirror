@@ -175,6 +175,11 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
     m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrameGal" ).Center().Hide() );
 
+    // Set up viewport
+    KIGFX::VIEW* view = GetGalCanvas()->GetView();
+    view->SetScale( GetZoomLevelCoeff() / m_canvas->GetZoom() );
+    view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
+
     UseGalCanvas( true );
 
     m_auimgr.Update();

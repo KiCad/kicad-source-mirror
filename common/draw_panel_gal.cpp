@@ -214,19 +214,11 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     {
         constexpr auto GAL_FALLBACK = GAL_TYPE_CAIRO;
 
-        if( m_edaFrame )
-        {
-            bool use_gal = m_edaFrame->SwitchCanvas( GAL_FALLBACK );
-            m_edaFrame->UseGalCanvas( use_gal );
-        }
-        else
-        {
-            SwitchBackend( GAL_FALLBACK );
-        }
+        SwitchBackend( GAL_FALLBACK );
 
         DisplayInfoMessage( m_parent,
-                _( "Could not use OpenGL, falling back to software rendering" ),
-                wxString( err.what() ) );
+                            _( "Could not use OpenGL, falling back to software rendering" ),
+                            wxString( err.what() ) );
     }
 
 #ifdef __WXDEBUG__

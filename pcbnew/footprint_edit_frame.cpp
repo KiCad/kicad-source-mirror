@@ -285,6 +285,12 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrameGal" ).Center().Hide() );
 
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
+
+    // Set up viewport
+    KIGFX::VIEW* view = GetGalCanvas()->GetView();
+    view->SetScale( GetZoomLevelCoeff() / m_canvas->GetZoom() );
+    view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
+
     UseGalCanvas( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
 
     m_auimgr.Update();

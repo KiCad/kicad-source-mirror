@@ -45,6 +45,8 @@
 #include <class_zone.h>
 #include <tool/tool_manager.h>
 #include <tools/pcbnew_control.h>
+#include <tools/selection_tool.h>
+#include <tool/actions.h>
 
 /* How to add a new hotkey:
  * see hotkeys.cpp
@@ -68,11 +70,12 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     if( aHotkeyCode == 0 )
         return false;
 
-    bool itemCurrentlyEdited = GetCurItem() && GetCurItem()->GetEditFlags();
-    MODULE* module = NULL;
-    int evt_type = 0;       //Used to post a wxCommandEvent on demand
+    SELECTION&  selection = GetToolManager()->GetTool<SELECTION_TOOL>()->GetSelection();
+    bool        itemCurrentlyEdited = selection.Front() && selection.Front()->GetEditFlags();
+    MODULE*     module = NULL;
+    int         evt_type = 0;       //Used to post a wxCommandEvent on demand
     PCB_SCREEN* screen = GetScreen();
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto        displ_opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
 
     /* Convert lower to upper case
      * (the usual toupper function has problem with non ascii codes like function keys
@@ -253,35 +256,7 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_BACK_SPACE:
-        if( IsCopperLayer( GetActiveLayer() ) )
-        {
-            if( !itemCurrentlyEdited )
-            {
-                // no track is currently being edited - select a segment and remove it.
-                // @todo: possibly? pass the HK command code to PcbGeneralLocateAndDisplay()
-                // so it can restrict its search to specific item types.
-                BOARD_ITEM * item = PcbGeneralLocateAndDisplay();
-
-                // don't let backspace delete modules!!
-                if( item && item->IsTrack() )
-                {
-                    Delete_Segment( aDC, (TRACK*) item );
-                    SetCurItem( NULL );
-                }
-
-                OnModify();
-            }
-            else if( GetCurItem()->IsTrack() )
-            {
-                // then an element is being edited - remove the last segment.
-                // simple lines for debugger:
-                TRACK* track = (TRACK*) GetCurItem();
-                track = Delete_Segment( aDC, track );
-                SetCurItem( track );
-                OnModify();
-            }
-        }
-
+        m_toolManager->RunAction( ACTIONS::doDelete );
         break;
 
     case HK_GET_AND_MOVE_FOOTPRINT:

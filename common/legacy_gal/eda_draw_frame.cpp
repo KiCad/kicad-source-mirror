@@ -656,6 +656,7 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 
 bool EDA_DRAW_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 {
+    // JEY TODO: unravel this...
     auto galCanvas = GetGalCanvas();
     wxCHECK( galCanvas, false );
     bool use_gal = galCanvas->SwitchBackend( aCanvasType );

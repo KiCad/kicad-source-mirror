@@ -520,9 +520,6 @@ public:
      */
     void OnEditTracksAndVias( wxCommandEvent& event );
 
-    void ProcessMuWaveFunctions( wxCommandEvent& event );
-    void MuWaveCommand( wxDC* DC, const wxPoint& MousePos );
-
     void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
     void ReCreateHToolbar() override;
     void ReCreateAuxiliaryToolbar() override;

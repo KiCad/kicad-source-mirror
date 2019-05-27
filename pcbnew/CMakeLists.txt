@@ -280,7 +280,6 @@ set( PCBNEW_CLASS_SRCS
     minimun_spanning_tree.cpp
     move-drag_pads.cpp
     move_or_drag_track.cpp
-    muwave_command.cpp
     netlist.cpp
     onleftclick.cpp
     pad_edit_functions.cpp

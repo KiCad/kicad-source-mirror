@@ -262,7 +262,7 @@ protected:
 public:
 
     /**
-     * A scan list for all editable board items, like PcbGeneralLocateAndDisplay()
+     * A scan list for all editable board items
      */
     static const KICAD_T AllBoardItems[];
 
@@ -354,8 +354,7 @@ public:
     /**
      * The examining function within the INSPECTOR which is passed to the Iterate function.
      *
-     * Searches and collects all the objects that the old function PcbGeneralLocateAndDisplay()
-     * would find, except that it keeps all that it finds and does not do any displaying.
+     * Searches and collects all the objects which match the test data.
      *
      * @param testItem An EDA_ITEM to examine.
      * @param testData is not used in this class.

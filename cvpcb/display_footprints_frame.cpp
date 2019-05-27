@@ -167,6 +167,12 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
     auto& galOpts = GetGalDisplayOptions();
     galOpts.m_axesEnabled = true;
+
+    // Set up viewport
+    KIGFX::VIEW* view = GetGalCanvas()->GetView();
+    view->SetScale( GetZoomLevelCoeff() / m_canvas->GetZoom() );
+    view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
+
     UseGalCanvas( true );
 
     // Restore last zoom.  (If auto-zooming we'll adjust when we load the footprint.)

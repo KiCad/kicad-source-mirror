@@ -99,6 +99,7 @@ static BOARD_ITEM* AllAreModulesAndReturnSmallestIfSo( GENERAL_COLLECTOR* aColle
 }
 
 
+// JEY TODO: RETIRE THIS
 BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 {
     BOARD_ITEM* item;

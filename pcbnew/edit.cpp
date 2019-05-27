@@ -544,10 +544,6 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         Compile_Ratsnest( &dc, true );
         break;
 
-    case ID_PCB_MODULE_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add footprint" ) );
-        break;
-
     case ID_PCB_ZONES_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add zones" ) );
 

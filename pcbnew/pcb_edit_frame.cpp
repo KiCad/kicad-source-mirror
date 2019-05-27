@@ -227,9 +227,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL_RANGE( ID_PCB_HIGHLIGHT_BUTT, ID_PCB_MEASUREMENT_TOOL,
                     PCB_EDIT_FRAME::OnSelectTool )
 
-    EVT_TOOL_RANGE( ID_PCB_MUWAVE_START_CMD, ID_PCB_MUWAVE_END_CMD,
-                    PCB_EDIT_FRAME::ProcessMuWaveFunctions )
-
     EVT_MENU_RANGE( ID_POPUP_PCB_START_RANGE, ID_POPUP_PCB_END_RANGE,
                     PCB_EDIT_FRAME::Process_Special_Functions )
 
@@ -408,6 +405,12 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     }
 
     GetGalCanvas()->SwitchBackend( m_canvasType );
+
+    // Set up viewport
+    KIGFX::VIEW* view = galCanvas->GetView();
+    view->SetScale( GetZoomLevelCoeff() / m_canvas->GetZoom() );
+    view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
+
     UseGalCanvas( true );
 
     // disable Export STEP item if kicad2step does not exist
