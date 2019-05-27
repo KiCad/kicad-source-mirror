@@ -45,18 +45,18 @@ class DIALOG_BOM_BASE : public DIALOG_SHIM
 			ID_CMDLINE
 		};
 
-		wxStaticText* m_staticTextPluginTitle;
-		wxListBox* m_lbPlugins;
+		wxStaticText* m_staticTextGeneratorTitle;
+		wxListBox* m_lbGenerators;
 		wxStaticText* m_staticTextName;
 		wxTextCtrl* m_textCtrlName;
 		wxTextCtrl* m_Messages;
-		wxBitmapButton* m_buttonAddPlugin;
+		wxBitmapButton* m_buttonAddGenerator;
 		wxBitmapButton* m_buttonEdit;
-		wxBitmapButton* m_buttonDelPlugin;
+		wxBitmapButton* m_buttonDelGenerator;
 		wxStaticText* m_staticTextCmd;
 		wxTextCtrl* m_textCtrlCommand;
 		wxCheckBox* m_checkBoxShowConsole;
-		wxStaticLine* m_staticline2;
+		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -64,15 +64,15 @@ class DIALOG_BOM_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnIdle( wxIdleEvent& event ) { event.Skip(); }
-		virtual void OnPluginSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGeneratorSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnNameEdited( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnAddPlugin( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnEditPlugin( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRemovePlugin( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddGenerator( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnEditGenerator( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRemoveGenerator( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCommandLineEdited( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnShowConsoleChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnHelp( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRunPlugin( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRunGenerator( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

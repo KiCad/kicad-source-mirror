@@ -109,7 +109,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">BOM plugins:</property>
+                                        <property name="label">BOM generator scripts:</property>
                                         <property name="markup">0</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
@@ -118,7 +118,7 @@
                                         <property name="minimize_button">0</property>
                                         <property name="minimum_size"></property>
                                         <property name="moveable">1</property>
-                                        <property name="name">m_staticTextPluginTitle</property>
+                                        <property name="name">m_staticTextGeneratorTitle</property>
                                         <property name="pane_border">1</property>
                                         <property name="pane_position"></property>
                                         <property name="pane_size"></property>
@@ -178,7 +178,7 @@
                                         <property name="minimize_button">0</property>
                                         <property name="minimum_size">250,-1</property>
                                         <property name="moveable">1</property>
-                                        <property name="name">m_lbPlugins</property>
+                                        <property name="name">m_lbGenerators</property>
                                         <property name="pane_border">1</property>
                                         <property name="pane_position"></property>
                                         <property name="pane_size"></property>
@@ -199,7 +199,7 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <event name="OnListBox">OnPluginSelected</event>
+                                        <event name="OnListBox">OnGeneratorSelected</event>
                                     </object>
                                 </object>
                             </object>
@@ -254,7 +254,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Plugin nickname:</property>
+                                                <property name="label">Generator nickname:</property>
                                                 <property name="markup">0</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
@@ -424,7 +424,7 @@
                     <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
-                        <property name="name">bPluginButtons</property>
+                        <property name="name">bGeneratorButtons</property>
                         <property name="orient">wxHORIZONTAL</property>
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
@@ -474,7 +474,7 @@
                                 <property name="minimize_button">0</property>
                                 <property name="minimum_size"></property>
                                 <property name="moveable">1</property>
-                                <property name="name">m_buttonAddPlugin</property>
+                                <property name="name">m_buttonAddGenerator</property>
                                 <property name="pane_border">1</property>
                                 <property name="pane_position"></property>
                                 <property name="pane_size"></property>
@@ -489,7 +489,7 @@
                                 <property name="style"></property>
                                 <property name="subclass">; forward_declare</property>
                                 <property name="toolbar_pane">0</property>
-                                <property name="tooltip">Add a new plugin and its command line to the list</property>
+                                <property name="tooltip">Add a new BOM generator and its command line to the list</property>
                                 <property name="validator_data_type"></property>
                                 <property name="validator_style">wxFILTER_NONE</property>
                                 <property name="validator_type">wxDefaultValidator</property>
@@ -497,7 +497,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
-                                <event name="OnButtonClick">OnAddPlugin</event>
+                                <event name="OnButtonClick">OnAddGenerator</event>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
@@ -562,7 +562,7 @@
                                 <property name="style"></property>
                                 <property name="subclass">; forward_declare</property>
                                 <property name="toolbar_pane">0</property>
-                                <property name="tooltip">Edit the plugin file in the text editor</property>
+                                <property name="tooltip">Edit the script file in the text editor</property>
                                 <property name="validator_data_type"></property>
                                 <property name="validator_style">wxFILTER_NONE</property>
                                 <property name="validator_type">wxDefaultValidator</property>
@@ -570,7 +570,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
-                                <event name="OnButtonClick">OnEditPlugin</event>
+                                <event name="OnButtonClick">OnEditGenerator</event>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
@@ -630,7 +630,7 @@
                                 <property name="minimize_button">0</property>
                                 <property name="minimum_size"></property>
                                 <property name="moveable">1</property>
-                                <property name="name">m_buttonDelPlugin</property>
+                                <property name="name">m_buttonDelGenerator</property>
                                 <property name="pane_border">1</property>
                                 <property name="pane_position"></property>
                                 <property name="pane_size"></property>
@@ -645,7 +645,7 @@
                                 <property name="style"></property>
                                 <property name="subclass">; forward_declare</property>
                                 <property name="toolbar_pane">0</property>
-                                <property name="tooltip">Remove the current plugin from list</property>
+                                <property name="tooltip">Remove the current generator script from list</property>
                                 <property name="validator_data_type"></property>
                                 <property name="validator_style">wxFILTER_NONE</property>
                                 <property name="validator_type">wxDefaultValidator</property>
@@ -653,7 +653,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
-                                <event name="OnButtonClick">OnRemovePlugin</event>
+                                <event name="OnButtonClick">OnRemoveGenerator</event>
                             </object>
                         </object>
                     </object>
@@ -699,7 +699,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Command line:</property>
+                                <property name="label">Command line running the generator:</property>
                                 <property name="markup">0</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -811,7 +811,7 @@
                                 <property name="caption"></property>
                                 <property name="caption_visible">1</property>
                                 <property name="center_pane">0</property>
-                                <property name="checked">1</property>
+                                <property name="checked">0</property>
                                 <property name="close_button">1</property>
                                 <property name="context_help"></property>
                                 <property name="context_menu">1</property>
@@ -847,7 +847,7 @@
                                 <property name="style"></property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
-                                <property name="tooltip">By default, command line runs with hidden console window and output is redirected to &quot;Plugin info&quot; field.&#x0A;Set this option to show the window of the running command.</property>
+                                <property name="tooltip">By default, command line runs with hidden console window and output is redirected to the info display.&#x0A;Set this option to show the window of the running command.</property>
                                 <property name="validator_data_type"></property>
                                 <property name="validator_style">wxFILTER_NONE</property>
                                 <property name="validator_type">wxDefaultValidator</property>
@@ -899,7 +899,7 @@
                         <property name="minimize_button">0</property>
                         <property name="minimum_size"></property>
                         <property name="moveable">1</property>
-                        <property name="name">m_staticline2</property>
+                        <property name="name">m_staticline</property>
                         <property name="pane_border">1</property>
                         <property name="pane_position"></property>
                         <property name="pane_size"></property>
@@ -935,7 +935,7 @@
                         <property name="name">m_sdbSizer</property>
                         <property name="permission">protected</property>
                         <event name="OnHelpButtonClick">OnHelp</event>
-                        <event name="OnOKButtonClick">OnRunPlugin</event>
+                        <event name="OnOKButtonClick">OnRunGenerator</event>
                     </object>
                 </object>
             </object>

@@ -24,14 +24,14 @@
 
 #include "bom_plugins.h"
 
-BOM_PLUGIN::BOM_PLUGIN( const wxString& aFile )
+BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
     : m_file( aFile )
 {
     m_isOk = false;
 
     if( !wxFile::Exists( aFile ) )
     {
-        m_info.Printf( _("Plugin file:\n%s\nnot found. Plugin not available."), aFile );
+        m_info.Printf( _("Script file:\n%s\nnot found. Script not available."), aFile );
         return;
     }
 
@@ -75,7 +75,7 @@ BOM_PLUGIN::BOM_PLUGIN( const wxString& aFile )
 }
 
 
-bool BOM_PLUGIN::IsPlugin( const wxString& aFile )
+bool BOM_GENERATOR_HANDLER::IsValidGenerator( const wxString& aFile )
 {
     wxFileName fn( aFile );
     wxString ext = fn.GetExt().Lower();
@@ -90,7 +90,7 @@ bool BOM_PLUGIN::IsPlugin( const wxString& aFile )
 }
 
 
-wxString BOM_PLUGIN::readHeader( const wxString& aEndSection )
+wxString BOM_GENERATOR_HANDLER::readHeader( const wxString& aEndSection )
 {
     if( aEndSection.IsEmpty() )
         return wxEmptyString;

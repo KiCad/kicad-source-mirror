@@ -155,16 +155,16 @@ private:
     void    SelectDefaultNetlistType( wxCommandEvent& event );
 
     /**
-     * Function OnAddPlugin
+     * Function OnAddGenerator
      * Add a new panel for a new netlist plugin
      */
-    void    OnAddPlugin( wxCommandEvent& event ) override;
+    void    OnAddGenerator( wxCommandEvent& event ) override;
 
     /**
-     * Function OnDelPlugin
+     * Function OnDelGenerator
      * Remove a panel relative to a netlist plugin
      */
-    void    OnDelPlugin( wxCommandEvent& event ) override;
+    void    OnDelGenerator( wxCommandEvent& event ) override;
 
     /**
      * Function WriteCurrentNetlistSetup
@@ -198,18 +198,18 @@ private:
 };
 
 
-class NETLIST_DIALOG_ADD_PLUGIN : public NETLIST_DIALOG_ADD_PLUGIN_BASE
+class NETLIST_DIALOG_ADD_GENERATOR : public NETLIST_DIALOG_ADD_GENERATOR_BASE
 {
 private:
    NETLIST_DIALOG* m_Parent;
 
 public:
-    NETLIST_DIALOG_ADD_PLUGIN( NETLIST_DIALOG* parent );
-    const wxString GetPluginTitle()
+    NETLIST_DIALOG_ADD_GENERATOR( NETLIST_DIALOG* parent );
+    const wxString GetGeneratorTitle()
     {
         return m_textCtrlName->GetValue();
     }
-    const wxString GetPluginTCommandLine()
+    const wxString GetGeneratorTCommandLine()
     {
         return m_textCtrlCommand->GetValue();
     }
@@ -225,7 +225,7 @@ private:
     /*
      * Browse plugin files, and set m_CommandStringCtrl field
      */
-    void OnBrowsePlugins( wxCommandEvent& event ) override;
+    void OnBrowseGenerators( wxCommandEvent& event ) override;
 };
 
 
@@ -501,7 +501,7 @@ void NETLIST_DIALOG::OnNetlistTypeSelection( wxNotebookEvent& event )
     if( currPage == NULL )
         return;
 
-    m_buttonDelPlugin->Enable( currPage->m_IdNetType >= NET_TYPE_CUSTOM1 );
+    m_buttonDelGenerator->Enable( currPage->m_IdNetType >= NET_TYPE_CUSTOM1 );
 }
 
 
@@ -735,7 +735,7 @@ void NETLIST_DIALOG::WriteCurrentNetlistSetup()
 }
 
 
-void NETLIST_DIALOG::OnDelPlugin( wxCommandEvent& event )
+void NETLIST_DIALOG::OnDelGenerator( wxCommandEvent& event )
 {
     NETLIST_PAGE_DIALOG* currPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
 
@@ -753,14 +753,14 @@ void NETLIST_DIALOG::OnDelPlugin( wxCommandEvent& event )
 }
 
 
-void NETLIST_DIALOG::OnAddPlugin( wxCommandEvent& event )
+void NETLIST_DIALOG::OnAddGenerator( wxCommandEvent& event )
 {
-    NETLIST_DIALOG_ADD_PLUGIN dlg( this );
+    NETLIST_DIALOG_ADD_GENERATOR dlg( this );
     if( dlg.ShowModal() != wxID_OK )
         return;
 
     // Creates a new custom plugin page
-    wxString title = dlg.GetPluginTitle();
+    wxString title = dlg.GetGeneratorTitle();
 
     // Verify it does not exists
     int netTypeId = PANELCUSTOMBASE;    // the first not used type id
@@ -780,7 +780,7 @@ void NETLIST_DIALOG::OnAddPlugin( wxCommandEvent& event )
         }
     }
 
-    wxString cmd = dlg.GetPluginTCommandLine();
+    wxString cmd = dlg.GetGeneratorTCommandLine();
     currPage = AddOneCustomPage( title,cmd, (NETLIST_TYPE_ID)netTypeId );
     m_PanelNetType[netTypeId] = currPage;
     WriteCurrentNetlistSetup();
@@ -790,15 +790,15 @@ void NETLIST_DIALOG::OnAddPlugin( wxCommandEvent& event )
 }
 
 
-NETLIST_DIALOG_ADD_PLUGIN::NETLIST_DIALOG_ADD_PLUGIN( NETLIST_DIALOG* parent ) :
-    NETLIST_DIALOG_ADD_PLUGIN_BASE( parent )
+NETLIST_DIALOG_ADD_GENERATOR::NETLIST_DIALOG_ADD_GENERATOR( NETLIST_DIALOG* parent ) :
+    NETLIST_DIALOG_ADD_GENERATOR_BASE( parent )
 {
     m_Parent = parent;
     GetSizer()->SetSizeHints( this );
 }
 
 
-void NETLIST_DIALOG_ADD_PLUGIN::OnOKClick( wxCommandEvent& event )
+void NETLIST_DIALOG_ADD_GENERATOR::OnOKClick( wxCommandEvent& event )
 {
     if( m_textCtrlCommand->GetValue() == wxEmptyString )
     {
@@ -816,7 +816,7 @@ void NETLIST_DIALOG_ADD_PLUGIN::OnOKClick( wxCommandEvent& event )
 }
 
 
-void NETLIST_DIALOG_ADD_PLUGIN::OnBrowsePlugins( wxCommandEvent& event )
+void NETLIST_DIALOG_ADD_GENERATOR::OnBrowseGenerators( wxCommandEvent& event )
 {
     wxString FullFileName, Path;
 
@@ -825,7 +825,7 @@ void NETLIST_DIALOG_ADD_PLUGIN::OnBrowsePlugins( wxCommandEvent& event )
 #else
     Path = GetOSXKicadDataDir() + wxT( "/plugins" );
 #endif
-    FullFileName = EDA_FILE_SELECTOR( _( "Plugin files:" ),
+    FullFileName = EDA_FILE_SELECTOR( _( "Generator files:" ),
                                       Path,
                                       FullFileName,
                                       wxEmptyString,

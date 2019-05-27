@@ -22,14 +22,14 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bLeftSizer;
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextPluginTitle = new wxStaticText( this, wxID_ANY, _("BOM plugins:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextPluginTitle->Wrap( -1 );
-	bLeftSizer->Add( m_staticTextPluginTitle, 0, wxTOP, 5 );
+	m_staticTextGeneratorTitle = new wxStaticText( this, wxID_ANY, _("BOM generator scripts:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextGeneratorTitle->Wrap( -1 );
+	bLeftSizer->Add( m_staticTextGeneratorTitle, 0, wxTOP, 5 );
 
-	m_lbPlugins = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	m_lbPlugins->SetMinSize( wxSize( 250,-1 ) );
+	m_lbGenerators = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_lbGenerators->SetMinSize( wxSize( 250,-1 ) );
 
-	bLeftSizer->Add( m_lbPlugins, 1, wxEXPAND, 5 );
+	bLeftSizer->Add( m_lbGenerators, 1, wxEXPAND, 5 );
 
 
 	bUpperSizer->Add( bLeftSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
@@ -40,7 +40,7 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bNameSizer;
 	bNameSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticTextName = new wxStaticText( this, wxID_ANY, _("Plugin nickname:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextName = new wxStaticText( this, wxID_ANY, _("Generator nickname:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextName->Wrap( -1 );
 	bNameSizer->Add( m_staticTextName, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -61,35 +61,35 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 
 	bMainSizer->Add( bUpperSizer, 2, wxEXPAND|wxALL, 5 );
 
-	wxBoxSizer* bPluginButtons;
-	bPluginButtons = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bGeneratorButtons;
+	bGeneratorButtons = new wxBoxSizer( wxHORIZONTAL );
 
-	m_buttonAddPlugin = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
-	m_buttonAddPlugin->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-	m_buttonAddPlugin->SetToolTip( _("Add a new plugin and its command line to the list") );
+	m_buttonAddGenerator = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
+	m_buttonAddGenerator->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_buttonAddGenerator->SetToolTip( _("Add a new BOM generator and its command line to the list") );
 
-	bPluginButtons->Add( m_buttonAddPlugin, 0, wxRIGHT|wxLEFT, 5 );
+	bGeneratorButtons->Add( m_buttonAddGenerator, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_buttonEdit = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
-	m_buttonEdit->SetToolTip( _("Edit the plugin file in the text editor") );
+	m_buttonEdit->SetToolTip( _("Edit the script file in the text editor") );
 
-	bPluginButtons->Add( m_buttonEdit, 0, wxRIGHT, 5 );
-
-
-	bPluginButtons->Add( 0, 0, 0, wxRIGHT|wxLEFT, 5 );
-
-	m_buttonDelPlugin = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
-	m_buttonDelPlugin->SetToolTip( _("Remove the current plugin from list") );
-
-	bPluginButtons->Add( m_buttonDelPlugin, 0, wxRIGHT, 5 );
+	bGeneratorButtons->Add( m_buttonEdit, 0, wxRIGHT, 5 );
 
 
-	bMainSizer->Add( bPluginButtons, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	bGeneratorButtons->Add( 0, 0, 0, wxRIGHT|wxLEFT, 5 );
+
+	m_buttonDelGenerator = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
+	m_buttonDelGenerator->SetToolTip( _("Remove the current generator script from list") );
+
+	bGeneratorButtons->Add( m_buttonDelGenerator, 0, wxRIGHT, 5 );
+
+
+	bMainSizer->Add( bGeneratorButtons, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	wxBoxSizer* bbottomSizer;
 	bbottomSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_staticTextCmd = new wxStaticText( this, wxID_ANY, _("Command line:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextCmd = new wxStaticText( this, wxID_ANY, _("Command line running the generator:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextCmd->Wrap( -1 );
 	bbottomSizer->Add( m_staticTextCmd, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
@@ -99,16 +99,15 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bbottomSizer->Add( m_textCtrlCommand, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_checkBoxShowConsole = new wxCheckBox( this, wxID_ANY, _("Show console window"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkBoxShowConsole->SetValue(true);
-	m_checkBoxShowConsole->SetToolTip( _("By default, command line runs with hidden console window and output is redirected to \"Plugin info\" field.\nSet this option to show the window of the running command.") );
+	m_checkBoxShowConsole->SetToolTip( _("By default, command line runs with hidden console window and output is redirected to the info display.\nSet this option to show the window of the running command.") );
 
 	bbottomSizer->Add( m_checkBoxShowConsole, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bMainSizer->Add( bbottomSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
-	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bMainSizer->Add( m_staticline, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -129,29 +128,29 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 
 	// Connect Events
 	this->Connect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_BOM_BASE::OnIdle ) );
-	m_lbPlugins->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_BOM_BASE::OnPluginSelected ), NULL, this );
+	m_lbGenerators->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_BOM_BASE::OnGeneratorSelected ), NULL, this );
 	m_textCtrlName->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BOM_BASE::OnNameEdited ), NULL, this );
-	m_buttonAddPlugin->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnAddPlugin ), NULL, this );
-	m_buttonEdit->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnEditPlugin ), NULL, this );
-	m_buttonDelPlugin->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnRemovePlugin ), NULL, this );
+	m_buttonAddGenerator->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnAddGenerator ), NULL, this );
+	m_buttonEdit->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnEditGenerator ), NULL, this );
+	m_buttonDelGenerator->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnRemoveGenerator ), NULL, this );
 	m_textCtrlCommand->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BOM_BASE::OnCommandLineEdited ), NULL, this );
 	m_checkBoxShowConsole->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnShowConsoleChanged ), NULL, this );
 	m_sdbSizerHelp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnHelp ), NULL, this );
-	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnRunPlugin ), NULL, this );
+	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnRunGenerator ), NULL, this );
 }
 
 DIALOG_BOM_BASE::~DIALOG_BOM_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_BOM_BASE::OnIdle ) );
-	m_lbPlugins->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_BOM_BASE::OnPluginSelected ), NULL, this );
+	m_lbGenerators->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_BOM_BASE::OnGeneratorSelected ), NULL, this );
 	m_textCtrlName->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BOM_BASE::OnNameEdited ), NULL, this );
-	m_buttonAddPlugin->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnAddPlugin ), NULL, this );
-	m_buttonEdit->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnEditPlugin ), NULL, this );
-	m_buttonDelPlugin->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnRemovePlugin ), NULL, this );
+	m_buttonAddGenerator->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnAddGenerator ), NULL, this );
+	m_buttonEdit->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnEditGenerator ), NULL, this );
+	m_buttonDelGenerator->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnRemoveGenerator ), NULL, this );
 	m_textCtrlCommand->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_BOM_BASE::OnCommandLineEdited ), NULL, this );
 	m_checkBoxShowConsole->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnShowConsoleChanged ), NULL, this );
 	m_sdbSizerHelp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnHelp ), NULL, this );
-	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnRunPlugin ), NULL, this );
+	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_BOM_BASE::OnRunGenerator ), NULL, this );
 
 }

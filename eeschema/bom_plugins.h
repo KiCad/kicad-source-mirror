@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef BOM_PLUGINS_H
-#define BOM_PLUGINS_H
+#ifndef BOM_GENERATOR_HANDLERS_H
+#define BOM_GENERATOR_HANDLERS_H
 
 #include <wx/arrstr.h>
 #include <wx/file.h>
@@ -32,18 +32,22 @@
 #include <memory>
 
 /**
- * Class representing a Bill of Material output plugin.
+ * Class handling a Bill of Material output generator.
+ * A Material output generator is an external application called by Eeschema to create
+ * a BOM from our intermediate xml netlist.
+ * A generator can be a script or an executable that can read the intermediate xml netlist
+ * file and generates a output (the BOM file)
  */
-class BOM_PLUGIN
+class BOM_GENERATOR_HANDLER
 {
 public:
-    typedef std::unique_ptr<BOM_PLUGIN> PTR;
+    typedef std::unique_ptr<BOM_GENERATOR_HANDLER> PTR;
 
     /**
      * Constructor.
      * @param aFile is path to the plugin file.
      */
-    BOM_PLUGIN( const wxString& aFile );
+    BOM_GENERATOR_HANDLER( const wxString& aFile );
 
     /**
      * Returns true if the plugin is ready to work, i.e. if the plugin file
@@ -55,7 +59,7 @@ public:
      * Returns true if a file name matches a recognized plugin format.
      * @param aFile is path to the plugin file.
      */
-    static bool IsPlugin( const wxString& aFile );
+    static bool IsValidGenerator( const wxString& aFile );
 
     /**
      * Returns plugin description stored in the plugin header file (if available).
@@ -140,4 +144,4 @@ protected:
     wxArrayString m_options;
 };
 
-#endif /* BOM_PLUGINS_H */
+#endif /* BOM_GENERATOR_HANDLERS_H */
