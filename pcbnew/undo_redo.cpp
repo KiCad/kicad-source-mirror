@@ -479,7 +479,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         {
         case UR_CHANGED:    /* Exchange old and new data for each item */
         {
-            BOARD_ITEM* item = (BOARD_ITEM*) item;
+            BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
             BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );
 
             // Remove all pads/drawings/texts, as they become invalid
@@ -509,7 +509,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
         case UR_MOVED:
         {
-            BOARD_ITEM* item = (BOARD_ITEM*) item;
+            BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
             item->Move( aRedoCommand ? aList->m_TransformPoint : -aList->m_TransformPoint );
             view->Update( item, KIGFX::GEOMETRY );
             connectivity->Update( item );
@@ -518,7 +518,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
         case UR_ROTATED:
         {
-            BOARD_ITEM* item = (BOARD_ITEM*) item;
+            BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
             item->Rotate( aList->m_TransformPoint,
                           aRedoCommand ? m_rotationAngle : -m_rotationAngle );
             view->Update( item, KIGFX::GEOMETRY );
@@ -528,7 +528,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
         case UR_ROTATED_CLOCKWISE:
         {
-            BOARD_ITEM* item = (BOARD_ITEM*) item;
+            BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
             item->Rotate( aList->m_TransformPoint,
                           aRedoCommand ? -m_rotationAngle : m_rotationAngle );
             view->Update( item, KIGFX::GEOMETRY );
@@ -538,7 +538,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
         case UR_FLIPPED:
         {
-            BOARD_ITEM* item = (BOARD_ITEM*) item;
+            BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
             item->Flip( aList->m_TransformPoint );
             view->Update( item, KIGFX::LAYERS );
             connectivity->Update( item );
@@ -548,7 +548,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         case UR_DRILLORIGIN:
         case UR_GRIDORIGIN:
         {
-            BOARD_ITEM* item = (BOARD_ITEM*) item;
+            BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
             BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );
             VECTOR2D origin = image->GetPosition();
             image->SetPosition( item->GetPosition() );
