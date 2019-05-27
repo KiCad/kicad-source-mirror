@@ -152,31 +152,29 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     auto enableRedoCondition = [ this ] ( const SELECTION& sel ) {
         return GetScreen() && GetScreen()->GetRedoCommandCount() > 0;
     };
-    auto noActiveToolCondition = [ this ] ( const SELECTION& aSelection ) {
-        return GetToolId() == ID_NO_TOOL_SELECTED;
-    };
 
     editMenu->AddItem( ACTIONS::undo,                enableUndoCondition );
     editMenu->AddItem( ACTIONS::redo,                enableRedoCondition );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( ACTIONS::cut,                 SELECTION_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::copy,                SELECTION_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::paste,               noActiveToolCondition );
+    editMenu->AddItem( ACTIONS::cut,                 EE_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::copy,                EE_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::paste,               EE_CONDITIONS::Idle );
+    editMenu->AddItem( ACTIONS::duplicate,           EE_CONDITIONS::NotEmpty );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( EE_ACTIONS::deleteItemCursor, SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( EE_ACTIONS::deleteItemCursor, EE_CONDITIONS::ShowAlways );
 
     // Find
     editMenu->AddSeparator();
-    editMenu->AddItem( ACTIONS::find,                SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( ACTIONS::findAndReplace,      SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( ACTIONS::find,                EE_CONDITIONS::ShowAlways );
+    editMenu->AddItem( ACTIONS::findAndReplace,      EE_CONDITIONS::ShowAlways );
 
     editMenu->AddSeparator();
     // Update field values
     editMenu->AddItem( ID_UPDATE_FIELDS, _( "Update Fields from Library..." ),
                        _( "Sets symbol fields to original library values" ),
-                       update_fields_xpm,            SELECTION_CONDITIONS::ShowAlways );
+                       update_fields_xpm,            EE_CONDITIONS::ShowAlways );
 
     //
     // Menu View:

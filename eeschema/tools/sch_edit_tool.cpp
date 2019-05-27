@@ -341,7 +341,6 @@ bool SCH_EDIT_TOOL::Init()
         moveMenu.AddItem( EE_ACTIONS::rotateCW,        orientCondition );
         moveMenu.AddItem( EE_ACTIONS::mirrorX,         orientCondition );
         moveMenu.AddItem( EE_ACTIONS::mirrorY,         orientCondition );
-        moveMenu.AddItem( EE_ACTIONS::duplicate,       duplicateCondition );
         moveMenu.AddItem( EE_ACTIONS::doDelete,        E_C::NotEmpty );
 
         moveMenu.AddItem( EE_ACTIONS::properties,      propertiesCondition );
@@ -358,6 +357,7 @@ bool SCH_EDIT_TOOL::Init()
         moveMenu.AddSeparator( E_C::IdleSelection );
         moveMenu.AddItem( ACTIONS::cut,                E_C::IdleSelection );
         moveMenu.AddItem( ACTIONS::copy,               E_C::IdleSelection );
+        moveMenu.AddItem( ACTIONS::duplicate,          duplicateCondition );
     }
 
     //
@@ -401,7 +401,6 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::rotateCW,         orientCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::mirrorX,          orientCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::mirrorY,          orientCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::duplicate,        duplicateCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::doDelete,         E_C::NotEmpty, 200 );
 
     selToolMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
@@ -430,6 +429,7 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( ACTIONS::cut,                 E_C::IdleSelection, 300 );
     selToolMenu.AddItem( ACTIONS::copy,                E_C::IdleSelection, 300 );
     selToolMenu.AddItem( ACTIONS::paste,               E_C::Idle, 300 );
+    selToolMenu.AddItem( ACTIONS::duplicate,           duplicateCondition, 300 );
 
     return true;
 }
@@ -1336,7 +1336,7 @@ int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
 
 void SCH_EDIT_TOOL::setTransitions()
 {
-    Go( &SCH_EDIT_TOOL::Duplicate,          EE_ACTIONS::duplicate.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Duplicate,          ACTIONS::duplicate.MakeEvent() );
     Go( &SCH_EDIT_TOOL::RepeatDrawItem,     EE_ACTIONS::repeatDrawItem.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCW.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCCW.MakeEvent() );

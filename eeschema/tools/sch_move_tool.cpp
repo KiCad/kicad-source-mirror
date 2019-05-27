@@ -378,7 +378,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 // Exit on a remove operation; there is no further processing for removed items.
                 break;
             }
-            else if( evt->IsAction( &EE_ACTIONS::duplicate ) )
+            else if( evt->IsAction( &ACTIONS::duplicate ) )
             {
                 if( selection.Front()->IsNew() )
                 {

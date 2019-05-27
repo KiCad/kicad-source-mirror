@@ -270,6 +270,7 @@ enum common_hotkey_id_command {
     HK_CUT,
     HK_COPY,
     HK_PASTE,
+    HK_DUPLICATE,
     HK_DELETE,
     HK_FIND,
     HK_FIND_NEXT,

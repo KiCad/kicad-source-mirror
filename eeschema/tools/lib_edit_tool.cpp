@@ -76,7 +76,6 @@ bool LIB_EDIT_TOOL::Init()
         moveMenu.AddItem( EE_ACTIONS::rotateCW,        EE_CONDITIONS::NotEmpty, 200 );
         moveMenu.AddItem( EE_ACTIONS::mirrorX,         EE_CONDITIONS::NotEmpty, 200 );
         moveMenu.AddItem( EE_ACTIONS::mirrorY,         EE_CONDITIONS::NotEmpty, 200 );
-        moveMenu.AddItem( EE_ACTIONS::duplicate,       EE_CONDITIONS::NotEmpty, 200 );
         moveMenu.AddItem( EE_ACTIONS::doDelete,        EE_CONDITIONS::NotEmpty, 200 );
 
         moveMenu.AddItem( EE_ACTIONS::properties,      EE_CONDITIONS::Count( 1 ), 200 );
@@ -84,6 +83,7 @@ bool LIB_EDIT_TOOL::Init()
         moveMenu.AddSeparator( EE_CONDITIONS::IdleSelection, 300 );
         moveMenu.AddItem( ACTIONS::cut,                EE_CONDITIONS::IdleSelection, 300 );
         moveMenu.AddItem( ACTIONS::copy,               EE_CONDITIONS::IdleSelection, 300 );
+        moveMenu.AddItem( ACTIONS::duplicate,          EE_CONDITIONS::NotEmpty, 300 );
     }
 
     //
@@ -92,12 +92,12 @@ bool LIB_EDIT_TOOL::Init()
     CONDITIONAL_MENU& drawMenu = drawingTools->GetToolMenu().GetMenu();
 
     drawMenu.AddSeparator( EE_CONDITIONS::NotEmpty, 200 );
-    drawMenu.AddItem( EE_ACTIONS::rotateCCW,       EE_CONDITIONS::IdleSelection, 200 );
-    drawMenu.AddItem( EE_ACTIONS::rotateCW,        EE_CONDITIONS::IdleSelection, 200 );
-    drawMenu.AddItem( EE_ACTIONS::mirrorX,         EE_CONDITIONS::IdleSelection, 200 );
-    drawMenu.AddItem( EE_ACTIONS::mirrorY,         EE_CONDITIONS::IdleSelection, 200 );
+    drawMenu.AddItem( EE_ACTIONS::rotateCCW,           EE_CONDITIONS::IdleSelection, 200 );
+    drawMenu.AddItem( EE_ACTIONS::rotateCW,            EE_CONDITIONS::IdleSelection, 200 );
+    drawMenu.AddItem( EE_ACTIONS::mirrorX,             EE_CONDITIONS::IdleSelection, 200 );
+    drawMenu.AddItem( EE_ACTIONS::mirrorY,             EE_CONDITIONS::IdleSelection, 200 );
 
-    drawMenu.AddItem( EE_ACTIONS::properties,      EE_CONDITIONS::Count( 1 ), 200 );
+    drawMenu.AddItem( EE_ACTIONS::properties,          EE_CONDITIONS::Count( 1 ), 200 );
 
     //
     // Add editing actions to the selection tool menu
@@ -108,7 +108,6 @@ bool LIB_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::rotateCW,         EE_CONDITIONS::NotEmpty, 200 );
     selToolMenu.AddItem( EE_ACTIONS::mirrorX,          EE_CONDITIONS::NotEmpty, 200 );
     selToolMenu.AddItem( EE_ACTIONS::mirrorY,          EE_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::duplicate,        EE_CONDITIONS::NotEmpty, 200 );
     selToolMenu.AddItem( EE_ACTIONS::doDelete,         EE_CONDITIONS::NotEmpty, 200 );
 
     selToolMenu.AddItem( EE_ACTIONS::properties,       EE_CONDITIONS::Count( 1 ), 200 );
@@ -117,6 +116,7 @@ bool LIB_EDIT_TOOL::Init()
     selToolMenu.AddItem( ACTIONS::cut,                 EE_CONDITIONS::IdleSelection, 300 );
     selToolMenu.AddItem( ACTIONS::copy,                EE_CONDITIONS::IdleSelection, 300 );
     selToolMenu.AddItem( ACTIONS::paste,               EE_CONDITIONS::Idle, 300 );
+    selToolMenu.AddItem( ACTIONS::duplicate,           EE_CONDITIONS::NotEmpty, 300 );
 
     return true;
 }
@@ -220,43 +220,6 @@ static KICAD_T nonFields[] =
         LIB_PIN_T,
         EOT
 };
-
-
-int LIB_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
-{
-    LIB_PART*  part = m_frame->GetCurPart();
-    SELECTION& selection = m_selectionTool->RequestSelection( nonFields );
-
-    if( selection.GetSize() == 0 )
-        return 0;
-
-    // Doing a duplicate of a new object doesn't really make any sense; we'd just end
-    // up dragging around a stack of objects...
-    if( selection.Front()->IsNew() )
-        return 0;
-
-    if( !selection.Front()->IsMoving() )
-        saveCopyInUndoList( m_frame->GetCurPart(), UR_LIBEDIT );
-
-    EDA_ITEMS newItems;
-
-    for( unsigned ii = 0; ii < selection.GetSize(); ++ii )
-    {
-        LIB_ITEM* oldItem = static_cast<LIB_ITEM*>( selection.GetItem( ii ) );
-        LIB_ITEM* newItem = (LIB_ITEM*) oldItem->Clone();
-        newItem->SetFlags( IS_NEW );
-        newItems.push_back( newItem );
-
-        part->GetDrawItems().push_back( newItem );
-        getView()->Add( newItem );
-    }
-
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    m_toolMgr->RunAction( EE_ACTIONS::addItemsToSel, true, &newItems );
-    m_toolMgr->RunAction( EE_ACTIONS::move, false );
-
-    return 0;
-}
 
 
 int LIB_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
@@ -667,7 +630,51 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     {
         LIB_ITEM* item = (LIB_ITEM*) selection.GetTopLeftItem();
 
-        selection.SetReferencePoint( item->GetPosition() );
+        selection.SetReferencePoint( wxPoint( item->GetPosition().x, -item->GetPosition().y ) );
+        m_toolMgr->RunAction( EE_ACTIONS::move, false );
+    }
+
+    return 0;
+}
+
+
+int LIB_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
+{
+    LIB_PART*  part = m_frame->GetCurPart();
+    SELECTION& selection = m_selectionTool->RequestSelection( nonFields );
+
+    if( selection.GetSize() == 0 )
+        return 0;
+
+    // Doing a duplicate of a new object doesn't really make any sense; we'd just end
+    // up dragging around a stack of objects...
+    if( selection.Front()->IsNew() )
+        return 0;
+
+    if( !selection.Front()->IsMoving() )
+        saveCopyInUndoList( m_frame->GetCurPart(), UR_LIBEDIT );
+
+    EDA_ITEMS newItems;
+
+    for( unsigned ii = 0; ii < selection.GetSize(); ++ii )
+    {
+        LIB_ITEM* oldItem = static_cast<LIB_ITEM*>( selection.GetItem( ii ) );
+        LIB_ITEM* newItem = (LIB_ITEM*) oldItem->Clone();
+        oldItem->ClearFlags( SELECTED );
+        newItem->SetFlags( IS_NEW | IS_PASTED | SELECTED );
+        newItems.push_back( newItem );
+
+        part->GetDrawItems().push_back( newItem );
+        getView()->Add( newItem );
+    }
+
+    m_selectionTool->RebuildSelection();
+
+    if( !selection.Empty() )
+    {
+        LIB_ITEM* item = (LIB_ITEM*) selection.GetTopLeftItem();
+
+        selection.SetReferencePoint( wxPoint( item->GetPosition().x, -item->GetPosition().y ) );
         m_toolMgr->RunAction( EE_ACTIONS::move, false );
     }
 
@@ -677,7 +684,7 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
 void LIB_EDIT_TOOL::setTransitions()
 {
-    Go( &LIB_EDIT_TOOL::Duplicate,          EE_ACTIONS::duplicate.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Duplicate,          ACTIONS::duplicate.MakeEvent() );
     Go( &LIB_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCW.MakeEvent() );
     Go( &LIB_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCCW.MakeEvent() );
     Go( &LIB_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorX.MakeEvent() );

@@ -46,7 +46,6 @@ enum hotkey_id_command {
     HK_EDIT_COMPONENT_WITH_LIBEDIT,
     HK_MIRROR_X,
     HK_MIRROR_Y,
-    HK_DUPLICATE,
     HK_MOVE,
     HK_DRAG,
     HK_SELECT_NODE,

@@ -132,6 +132,12 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AddItem( ACTIONS::redo,                enableRedoCondition );
 
     editMenu->AddSeparator();
+    editMenu->AddItem( ACTIONS::cut,                 EE_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::copy,                EE_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::paste,               EE_CONDITIONS::Idle );
+    editMenu->AddItem( ACTIONS::duplicate,           EE_CONDITIONS::NotEmpty );
+
+    editMenu->AddSeparator();
     editMenu->AddItem( EE_ACTIONS::symbolProperties, havePartCondition );
     editMenu->AddItem( EE_ACTIONS::pinTable,         havePartCondition );
 
