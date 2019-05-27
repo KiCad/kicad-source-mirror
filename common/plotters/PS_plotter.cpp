@@ -711,6 +711,20 @@ void PS_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
             green = aImage.GetGreen( xx, yy) & 0xFF;
             blue = aImage.GetBlue( xx, yy) & 0xFF;
 
+            // PS doesn't support alpha, so premultiply against white background
+            if( aImage.HasAlpha() )
+            {
+                unsigned char alpha = aImage.GetAlpha( xx, yy ) & 0xFF;
+
+                if( alpha < 0xFF )
+                {
+                    float a = 1.0 - ( (float) alpha / 255.0 );
+                    red =   ( int )( red   + ( a * 0xFF ) ) & 0xFF;
+                    green = ( int )( green + ( a * 0xFF ) ) & 0xFF;
+                    blue =  ( int )( blue  + ( a * 0xFF ) ) & 0xFF;
+                }
+            }
+
             if( colorMode )
                 fprintf( outputFile, "%2.2X%2.2X%2.2X", red, green, blue );
             else

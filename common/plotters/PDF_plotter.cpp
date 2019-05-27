@@ -390,6 +390,21 @@ void PDF_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
             unsigned char r = aImage.GetRed( x, y ) & 0xFF;
             unsigned char g = aImage.GetGreen( x, y ) & 0xFF;
             unsigned char b = aImage.GetBlue( x, y ) & 0xFF;
+
+            // PDF inline images don't support alpha, so premultiply against white background
+            if( aImage.HasAlpha() )
+            {
+                unsigned char alpha = aImage.GetAlpha( x, y ) & 0xFF;
+
+                if( alpha < 0xFF )
+                {
+                    float a = 1.0 - ( (float) alpha / 255.0 );
+                    r = ( int )( r + ( a * 0xFF ) ) & 0xFF;
+                    g = ( int )( g + ( a * 0xFF ) ) & 0xFF;
+                    b = ( int )( b + ( a * 0xFF ) ) & 0xFF;
+                }
+            }
+
             // As usual these days, stdio buffering has to suffeeeeerrrr
             if( colorMode )
             {
