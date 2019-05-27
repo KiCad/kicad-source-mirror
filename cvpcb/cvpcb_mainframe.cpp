@@ -167,7 +167,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     auto bottomPanel = new wxPanel( this );
     auto panelSizer = new wxBoxSizer( wxVERTICAL );
 
-    wxFlexGridSizer* fgSizerStatus = new wxFlexGridSizer( 2, 1, 0, 0 );
+    wxFlexGridSizer* fgSizerStatus = new wxFlexGridSizer( 3, 1, 0, 0 );
     fgSizerStatus->SetFlexibleDirection( wxBOTH );
     fgSizerStatus->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -175,7 +175,10 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     fgSizerStatus->Add( m_statusLine1, 0, 0, 5 );
 
     m_statusLine2 = new wxStaticText( bottomPanel, wxID_ANY, wxEmptyString );
-    fgSizerStatus->Add( m_statusLine2, 0, wxBOTTOM, 3 );
+    fgSizerStatus->Add( m_statusLine2, 0, 0, 5 );
+
+    m_statusLine3 = new wxStaticText( bottomPanel, wxID_ANY, wxEmptyString );
+    fgSizerStatus->Add( m_statusLine3, 0, wxBOTTOM, 3 );
 
     panelSizer->Add( fgSizerStatus, 1, wxEXPAND|wxLEFT, 2 );
 
@@ -186,6 +189,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     statusFont.SetSymbolicSize( wxFONTSIZE_SMALL );
     m_statusLine1->SetFont( statusFont );
     m_statusLine2->SetFont( statusFont );
+    m_statusLine3->SetFont( statusFont );
 
     // Add buttons:
     auto buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -709,6 +713,24 @@ void CVPCB_MAINFRAME::DisplayStatus()
     }
 
     SetStatusText( msg, 1 );
+
+
+    msg.Empty();
+
+    if( module )    // can be NULL if no netlist loaded
+    {
+        FP_LIB_TABLE* fptbl = Prj().PcbFootprintLibs( Kiway() );
+
+        wxString modLib = module->GetLibNickname();
+
+        if( fptbl->HasLibrary( modLib ) )
+        {
+            msg = wxString::Format( _( "Library location: %s" ),
+                                    fptbl->GetFullURI( modLib ) );
+        }
+    }
+
+    SetStatusText( msg, 2 );
 }
 
 
@@ -959,9 +981,11 @@ wxString CVPCB_MAINFRAME::GetSelectedFootprint()
 
 void CVPCB_MAINFRAME::SetStatusText( const wxString& aText, int aNumber )
 {
-    wxASSERT( aNumber < 2 );
+    wxASSERT( aNumber < 3 );
 
-    if( aNumber == 1 )
+    if( aNumber == 2 )
+        m_statusLine3->SetLabel( aText );
+    else if( aNumber == 1 )
         m_statusLine2->SetLabel( aText );
     else
         m_statusLine1->SetLabel( aText );

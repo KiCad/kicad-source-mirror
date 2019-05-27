@@ -68,6 +68,7 @@ class CVPCB_MAINFRAME : public KIWAY_PLAYER
     wxTextCtrl*               m_tcFilterString;
     wxStaticText*             m_statusLine1;
     wxStaticText*             m_statusLine2;
+    wxStaticText*             m_statusLine3;
     wxButton*                 m_saveAndContinue;
 
 public:
