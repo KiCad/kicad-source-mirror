@@ -137,8 +137,6 @@ protected:
         ID_LAST_VALUE
     };
 
-    virtual bool AreArbitraryColorsAllowed() override;
-
     virtual COLOR4D getBackgroundLayerColor() override;
 
     /**

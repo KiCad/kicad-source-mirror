@@ -85,10 +85,8 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, GERBVIEW_FRAME::Process_Config )
 
     EVT_MENU( wxID_PREFERENCES, GERBVIEW_FRAME::Process_Config )
-    EVT_UPDATE_UI( ID_MENU_CANVAS_LEGACY, GERBVIEW_FRAME::OnUpdateSwitchCanvas )
     EVT_UPDATE_UI( ID_MENU_CANVAS_CAIRO, GERBVIEW_FRAME::OnUpdateSwitchCanvas )
     EVT_UPDATE_UI( ID_MENU_CANVAS_OPENGL, GERBVIEW_FRAME::OnUpdateSwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_LEGACY, GERBVIEW_FRAME::OnSwitchCanvas )
     EVT_MENU( ID_MENU_CANVAS_CAIRO, GERBVIEW_FRAME::OnSwitchCanvas )
     EVT_MENU( ID_MENU_CANVAS_OPENGL, GERBVIEW_FRAME::OnSwitchCanvas )
 
@@ -146,22 +144,6 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
     int           id = event.GetId();
 
-    switch( id )
-    {
-    case ID_POPUP_CANCEL_CURRENT_COMMAND:
-        m_canvas->EndMouseCapture();
-
-        if( GetToolId() == ID_NO_TOOL_SELECTED )
-            SetNoToolSelected();
-        else
-            m_canvas->SetCursor( (wxStockCursor) m_canvas->GetCurrentCursor() );
-        break;
-
-    default:
-        m_canvas->EndMouseCapture();
-        break;
-    }
-
     GERBER_DRAW_ITEM* currItem = (GERBER_DRAW_ITEM*) GetScreen()->GetCurItem();
 
     switch( id )
@@ -173,13 +155,6 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_TB_MEASUREMENT_TOOL:
         SetToolID( id, wxCURSOR_DEFAULT, _( "Unsupported tool in this canvas" ) );
-        break;
-
-    case ID_POPUP_CLOSE_CURRENT_TOOL:
-        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
-        break;
-
-    case ID_POPUP_CANCEL_CURRENT_COMMAND:
         break;
 
     case ID_GERBVIEW_SHOW_LIST_DCODES:
@@ -224,31 +199,26 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
 void GERBVIEW_FRAME::OnSelectHighlightChoice( wxCommandEvent& event )
 {
-    if( IsGalCanvasActive() )
+    auto settings = static_cast<KIGFX::GERBVIEW_PAINTER*>( GetGalCanvas()->GetView()->GetPainter() )->GetSettings();
+
+    switch( event.GetId() )
     {
-        auto settings = static_cast<KIGFX::GERBVIEW_PAINTER*>( GetGalCanvas()->GetView()->GetPainter() )->GetSettings();
+    case ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE:
+        settings->m_componentHighlightString = m_SelComponentBox->GetStringSelection();
+        break;
 
-        switch( event.GetId() )
-        {
-        case ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE:
-            settings->m_componentHighlightString = m_SelComponentBox->GetStringSelection();
-            break;
+    case ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE:
+        settings->m_netHighlightString = m_SelNetnameBox->GetStringSelection();
+        break;
 
-        case ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE:
-            settings->m_netHighlightString = m_SelNetnameBox->GetStringSelection();
-            break;
+    case ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE:
+        settings->m_attributeHighlightString = m_SelAperAttributesBox->GetStringSelection();
+        break;
 
-        case ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE:
-            settings->m_attributeHighlightString = m_SelAperAttributesBox->GetStringSelection();
-            break;
-
-        }
-
-        GetGalCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
-        GetGalCanvas()->Refresh();
     }
-    else
-        m_canvas->Refresh();
+
+    GetGalCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
+    GetGalCanvas()->Refresh();
 }
 
 
@@ -408,10 +378,6 @@ void GERBVIEW_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
 {
     switch( aEvent.GetId() )
     {
-    case ID_MENU_CANVAS_LEGACY:
-        SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
-        break;
-
     case ID_MENU_CANVAS_CAIRO:
         SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
         break;

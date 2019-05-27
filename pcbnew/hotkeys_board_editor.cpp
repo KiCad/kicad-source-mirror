@@ -413,10 +413,6 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         evt_type = ID_MENU_CANVAS_OPENGL;
         break;
 
-    case HK_CANVAS_LEGACY:
-        evt_type = ID_MENU_CANVAS_LEGACY;
-        break;
-
     case HK_ZONE_FILL_OR_REFILL:
         evt_type = ID_POPUP_PCB_FILL_ALL_ZONES;
         break;
@@ -520,16 +516,6 @@ bool PCB_EDIT_FRAME::OnHotkeyDuplicateOrArrayItem( int aIdCommand )
         case HK_CREATE_ARRAY:
             if( canDuplicate )
                 evt_type = ID_POPUP_PCB_CREATE_ARRAY;
-            break;
-
-        case HK_DUPLICATE_ITEM_AND_INCREMENT:
-            if( canDuplicate )
-                evt_type = ID_POPUP_PCB_DUPLICATE_ITEM_AND_INCREMENT;
-            break;
-
-        case HK_DUPLICATE:
-            if( canDuplicate )
-                evt_type = ID_POPUP_PCB_DUPLICATE_ITEM;
             break;
 
         case HK_MOVE_ITEM_EXACT:

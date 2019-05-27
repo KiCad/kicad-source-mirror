@@ -89,7 +89,6 @@ BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_ON_GRID_SELECT, PCB_BASE_FRAME::OnUpdateSelectGrid )
     EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, PCB_BASE_FRAME::OnUpdateSelectZoom )
     // Switching canvases
-    EVT_UPDATE_UI( ID_MENU_CANVAS_LEGACY, PCB_BASE_FRAME::OnUpdateSwitchCanvas )
     EVT_UPDATE_UI( ID_MENU_CANVAS_CAIRO, PCB_BASE_FRAME::OnUpdateSwitchCanvas )
     EVT_UPDATE_UI( ID_MENU_CANVAS_OPENGL, PCB_BASE_FRAME::OnUpdateSwitchCanvas )
 
@@ -225,10 +224,7 @@ void PCB_BASE_FRAME::AddModuleToBoard( MODULE* module )
 
         module->SetFlags( IS_NEW );
 
-        if( IsGalCanvasActive() )
-            module->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
-        else
-            module->SetPosition( GetCrossHairPosition() );
+        module->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
 
         module->SetTimeStamp( GetNewTimeStamp() );
         GetBoard()->m_Status_Pcb = 0;
@@ -601,10 +597,6 @@ void PCB_BASE_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
 {
     switch( aEvent.GetId() )
     {
-    case ID_MENU_CANVAS_LEGACY:
-        SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
-        break;
-
     case ID_MENU_CANVAS_CAIRO:
         SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
         break;
@@ -624,7 +616,7 @@ void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
     int current = 0;    // display Auto if no match found
 
     // check for a match within 1%
-    double zoom = IsGalCanvasActive() ? GetGalCanvas()->GetLegacyZoom() : GetScreen()->GetZoom();
+    double zoom = GetGalCanvas()->GetLegacyZoom();
 
     for( unsigned i = 0; i < GetScreen()->m_ZoomList.size(); i++ )
     {
@@ -676,16 +668,9 @@ void PCB_BASE_FRAME::UpdateMsgPanel()
     MSG_PANEL_ITEMS items;
 
     if( item )
-    {
         item->GetMsgPanelInfo( m_UserUnits, items );
-    }
     else       // show general information about the board
-    {
-        if( IsGalCanvasActive() )
-            GetGalCanvas()->GetMsgPanelInfo( m_UserUnits, items );
-        else
-            m_Pcb->GetMsgPanelInfo( m_UserUnits, items );
-    }
+        GetGalCanvas()->GetMsgPanelInfo( m_UserUnits, items );
 
     SetMsgPanel( items );
 }
@@ -929,11 +914,8 @@ void PCB_BASE_FRAME::OnModify()
     GetScreen()->SetModify();
     GetScreen()->SetSave();
 
-    if( IsGalCanvasActive() )
-    {
-        UpdateStatusBar();
-        UpdateMsgPanel();
-    }
+    UpdateStatusBar();
+    UpdateMsgPanel();
 }
 
 
@@ -1060,12 +1042,10 @@ void PCB_BASE_FRAME::OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent )
     EDA_DRAW_PANEL_GAL* gal_canvas = GetGalCanvas();
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
 
-    if( IsGalCanvasActive() && gal_canvas )
-        canvasType = gal_canvas->GetBackend();
+    canvasType = gal_canvas->GetBackend();
 
     struct { int menuId; int galType; } menuList[] =
     {
-        { ID_MENU_CANVAS_LEGACY,    EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE },
         { ID_MENU_CANVAS_OPENGL,    EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL },
         { ID_MENU_CANVAS_CAIRO,     EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO },
     };

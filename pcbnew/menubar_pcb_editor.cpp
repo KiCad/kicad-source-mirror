@@ -475,25 +475,16 @@ void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
                  _( "Show preferences for all open tools" ),
                  KiBitmap( preference_xpm ) );
 
-    if( ADVANCED_CFG::GetCfg().AllowLegacyCanvas() )
-    {
-        text = AddHotkeyName(
-                _( "Legacy Tool&set" ), g_Board_Editor_Hotkeys_Descr, HK_CANVAS_LEGACY );
-        AddMenuItem( aParentMenu, ID_MENU_CANVAS_LEGACY, text,
-                _( "Use Legacy Toolset (not all features will be available)" ),
-                KiBitmap( tools_xpm ), wxITEM_RADIO );
-    }
-
-    text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), g_Board_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Accelerated Graphics" ), g_Board_Editor_Hotkeys_Descr,
                           HK_CANVAS_OPENGL );
     AddMenuItem( aParentMenu, ID_MENU_CANVAS_OPENGL, text,
-                 _( "Use Modern Toolset with hardware-accelerated graphics (recommended)" ),
+                 _( "Use hardware-accelerated graphics (recommended)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
 
-    text = AddHotkeyName( _( "Modern Toolset (Fallbac&k)" ), g_Board_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Standard Graphics" ), g_Board_Editor_Hotkeys_Descr,
                           HK_CANVAS_CAIRO );
     AddMenuItem( aParentMenu, ID_MENU_CANVAS_CAIRO, text,
-                 _( "Use Modern Toolset with software graphics (fall-back)" ),
+                 _( "Use software graphics (fall-back)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
 
     aParentMenu->AppendSeparator();

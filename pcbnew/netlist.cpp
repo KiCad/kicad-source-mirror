@@ -115,35 +115,24 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater,
     wxPoint areaPosition = GetCrossHairPosition();
     EDA_RECT bbox = board->GetBoundingBox();
 
-    if( !IsGalCanvasActive() )
-    {
-        // In legacy mode place area to the left side of the board.
-        // if the board is empty, the bbox position is (0,0)
-        areaPosition.x = bbox.GetEnd().x + Millimeter2iu( 10 );
-        areaPosition.y = bbox.GetOrigin().y;
-    }
-
     toolManager->RunAction( PCB_ACTIONS::selectionClear, true );
 
     SpreadFootprints( &newFootprints, false, false, areaPosition, false );
 
-    if( IsGalCanvasActive() )
+    // Start drag command for new modules
+    if( !newFootprints.empty() )
     {
-        // Start drag command for new modules
-        if( !newFootprints.empty() )
-        {
-            for( MODULE* footprint : newFootprints )
-                toolManager->RunAction( PCB_ACTIONS::selectItem, true, footprint );
+        for( MODULE* footprint : newFootprints )
+            toolManager->RunAction( PCB_ACTIONS::selectItem, true, footprint );
 
-            *aRunDragCommand = true;
+        *aRunDragCommand = true;
 
-            // Now fix a reference point to move the footprints.
-            // We use the first footprint in list as reference point
-            // The graphic cursor will be on this fp when moving the footprints.
-            SELECTION_TOOL* selTool = toolManager->GetTool<SELECTION_TOOL>();
-            SELECTION& selection = selTool->GetSelection();
-            selection.SetReferencePoint( newFootprints[0]->GetPosition() );
-        }
+        // Now fix a reference point to move the footprints.
+        // We use the first footprint in list as reference point
+        // The graphic cursor will be on this fp when moving the footprints.
+        SELECTION_TOOL* selTool = toolManager->GetTool<SELECTION_TOOL>();
+        SELECTION& selection = selTool->GetSelection();
+        selection.SetReferencePoint( newFootprints[0]->GetPosition() );
     }
 
     GetCanvas()->Refresh();

@@ -216,18 +216,6 @@ PCB_TARGET* PCB_EDIT_FRAME::CreateTarget( wxDC* DC )
 }
 
 
-void PCB_EDIT_FRAME::BeginMoveTarget( PCB_TARGET* aTarget, wxDC* DC )
-{
-    if( aTarget == NULL )
-        return;
-
-    s_TargetCopy      = *aTarget;
-    aTarget->SetFlags( IS_MOVED );
-    m_canvas->SetMouseCapture( ShowTargetShapeWhileMovingMouse, AbortMoveAndEditTarget );
-    SetCurItem( aTarget );
-}
-
-
 void PCB_EDIT_FRAME::PlaceTarget( PCB_TARGET* aTarget, wxDC* DC )
 {
     if( aTarget == NULL )

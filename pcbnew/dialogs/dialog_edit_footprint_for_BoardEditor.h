@@ -43,7 +43,6 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR: public DIALOG_FOOTPRINT_BOARD_EDITOR_BASE
 private:
     wxConfigBase*                    m_config;
     PCB_EDIT_FRAME*                  m_frame;
-    wxDC*                            m_DC;
     MODULE*                          m_footprint;
 
     static int                       m_page;       // remember the last open page during session
@@ -82,7 +81,7 @@ public:
 
 public:
     // Constructor and destructor
-    DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aParent, MODULE* aModule, wxDC* aDC );
+    DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aParent, MODULE* aModule );
     ~DIALOG_FOOTPRINT_BOARD_EDITOR() override;
 
     bool Validate() override;

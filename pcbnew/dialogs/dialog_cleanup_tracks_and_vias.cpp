@@ -150,10 +150,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnSelectItem( wxCommandEvent& event )
 
         if( item )
         {
-            // When selecting a item, center it on GAL and just move the graphic
-            // cursor in legacy mode gives the best result
-            bool center = m_parentFrame->IsGalCanvasActive() ? true : false;
-            m_parentFrame->FocusOnLocation( item->GetPointA(), false, center );
+            m_parentFrame->FocusOnLocation( item->GetPointA(), false, true );
 
             WINDOW_THAWER thawer( m_parentFrame );
             m_parentFrame->GetCanvas()->Refresh();
@@ -177,10 +174,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnLeftDClickItem( wxMouseEvent& event )
         const DRC_ITEM* item = m_ItemsListBox->GetItem( selection );
         if( item )
         {
-            // When selecting a item, center it on GAL and just move the graphic
-            // cursor in legacy mode gives the best result
-            bool center = m_parentFrame->IsGalCanvasActive() ? true : false;
-            m_parentFrame->FocusOnLocation( item->GetPointA(), true, center );
+            m_parentFrame->FocusOnLocation( item->GetPointA(), true, true );
 
             if( !IsModal() )
             {

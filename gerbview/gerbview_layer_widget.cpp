@@ -79,12 +79,6 @@ GERBER_FILE_IMAGE_LIST* GERBER_LAYER_WIDGET::GetImagesList()
 }
 
 
-bool GERBER_LAYER_WIDGET::AreArbitraryColorsAllowed()
-{
-    return myframe->IsGalCanvasActive();
-}
-
-
 void GERBER_LAYER_WIDGET::SetLayersManagerTabsText( )
 {
     m_notebook->SetPageText(0, _("Layers") );
@@ -267,12 +261,9 @@ void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
     myframe->SetLayerColor( GERBER_DRAW_LAYER( aLayer ), aColor );
     myframe->m_SelLayerBox->ResyncBitmapOnly();
 
-    if( myframe->IsGalCanvasActive() )
-    {
-        KIGFX::VIEW* view = myframe->GetGalCanvas()->GetView();
-        view->GetPainter()->GetSettings()->ImportLegacyColors( myframe->m_colorsSettings );
-        view->UpdateLayerColor( GERBER_DRAW_LAYER( aLayer ) );
-    }
+    KIGFX::VIEW* view = myframe->GetGalCanvas()->GetView();
+    view->GetPainter()->GetSettings()->ImportLegacyColors( myframe->m_colorsSettings );
+    view->UpdateLayerColor( GERBER_DRAW_LAYER( aLayer ) );
 
     myframe->GetCanvas()->Refresh();
 }
@@ -315,21 +306,14 @@ void GERBER_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
     myframe->SetVisibleElementColor( aId, aColor );
 
     auto galCanvas = myframe->GetGalCanvas();
+    auto view = galCanvas->GetView();
 
-    if( galCanvas && myframe->IsGalCanvasActive() )
-    {
-        auto view = galCanvas->GetView();
-        view->GetPainter()->GetSettings()->ImportLegacyColors( myframe->m_colorsSettings );
-        view->UpdateLayerColor( aId );
+    view->GetPainter()->GetSettings()->ImportLegacyColors( myframe->m_colorsSettings );
+    view->UpdateLayerColor( aId );
 
-        view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-        view->UpdateAllItems( KIGFX::COLOR );
-    }
-
-    if( galCanvas && myframe->IsGalCanvasActive() )
-        galCanvas->Refresh();
-    else
-        myframe->GetCanvas()->Refresh();
+    view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+    view->UpdateAllItems( KIGFX::COLOR );
+    galCanvas->Refresh();
 }
 
 
@@ -350,10 +334,7 @@ void GERBER_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
             galCanvas->GetView()->SetLayerVisible( aId, isEnabled );
     }
 
-    if( galCanvas && myframe->IsGalCanvasActive() )
-        galCanvas->Refresh();
-    else
-        myframe->GetCanvas()->Refresh();
+    galCanvas->Refresh();
 }
 
 //-----</LAYER_WIDGET callbacks>------------------------------------------

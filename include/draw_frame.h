@@ -99,7 +99,6 @@ class EDA_DRAW_FRAME : public KIWAY_PLAYER
     KIGFX::GAL_DISPLAY_OPTIONS  m_galDisplayOptions;
 
 protected:
-    bool m_galCanvasActive;    ///< whether to use new GAL engine
     bool m_useSingleCanvasPane;
 
     wxSocketServer*                          m_socketServer;
@@ -847,14 +846,6 @@ public:
      * @return true if any kind of GAL canvas is used.
      */
     virtual bool SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
-
-    /**
-     * Function IsGalCanvasActive
-     * is used to check which canvas (GAL-based or standard) is currently in use.
-     *
-     * @return True for GAL-based canvas, false for standard canvas.
-     */
-    bool IsGalCanvasActive() const { return m_galCanvasActive; }
 
     /**
      * Return a pointer to GAL-based canvas of given EDA draw frame.

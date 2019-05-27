@@ -56,7 +56,7 @@ int DIALOG_FOOTPRINT_BOARD_EDITOR::m_page = 0;     // remember the last open pag
 
 
 DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aParent,
-                                                              MODULE* aModule, wxDC* aDC ) :
+                                                              MODULE* aModule ) :
     DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( aParent ),
     m_posX( aParent, m_XPosLabel, m_ModPositionX, m_XPosUnit ),
     m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit ),
@@ -70,7 +70,6 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     m_config = Kiface().KifaceSettings();
 
     m_frame     = aParent;
-    m_DC        = aDC;
     m_footprint = aModule;
 
     m_texts = new TEXT_MOD_GRID_TABLE( m_units, m_frame );
@@ -622,12 +621,6 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataFromWindow()
     if( !m_Panel3D->TransferDataFromWindow() )
         return false;
 
-    if( m_DC )
-    {
-        m_frame->GetCanvas()->CrossHairOff( m_DC );
-        m_footprint->Draw( m_frame->GetCanvas(), m_DC, GR_XOR );
-    }
-
     auto view = m_frame->GetGalCanvas()->GetView();
     BOARD_COMMIT commit( m_frame );
     commit.Modify( m_footprint );
@@ -740,13 +733,6 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataFromWindow()
         commit.Push( _( "Modify module properties" ) );
 
     SetReturnCode( PRM_EDITOR_EDIT_OK );
-
-    if( m_DC )
-    {
-        m_footprint->Draw( m_frame->GetCanvas(), m_DC, GR_OR );
-        m_frame->GetCanvas()->CrossHairOn( m_DC );
-    }
-
     return true;
 }
 

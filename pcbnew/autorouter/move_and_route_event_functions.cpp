@@ -91,14 +91,6 @@ void PCB_EDIT_FRAME::OnPlaceOrRouteFootprints( wxCommandEvent& event )
         LockModule( NULL, true );
         return;
 
-    case ID_POPUP_CANCEL_CURRENT_COMMAND:
-        if( m_canvas->IsMouseCaptured() )
-        {
-            m_canvas->CallEndMouseCapture( &dc );
-        }
-
-        break;
-
     default:   // Abort a current command (if any)
         m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
         break;

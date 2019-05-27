@@ -133,12 +133,6 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwn
 }
 
 
-bool PCB_LAYER_WIDGET::AreArbitraryColorsAllowed()
-{
-    return myframe->IsGalCanvasActive();
-}
-
-
 COLOR4D PCB_LAYER_WIDGET::getBackgroundLayerColor()
 {
     return myframe->Settings().Colors().GetLayerColor( LAYER_PCB_BACKGROUND );
@@ -580,24 +574,12 @@ void PCB_LAYER_WIDGET::ReFill()
 
 void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
 {
-    // Avoid setting the alpha channel, when we are in legacy mode,
-    // because in legacy mode the alpha channel is not used, but changing it
-    // destroys the GAL color setup
-    if( !myframe->IsGalCanvasActive() )
-    {
-        COLOR4D oldColor = myframe->Settings().Colors().GetLayerColor( aLayer );
-        aColor.a = oldColor.a;
-    }
-
     myframe->Settings().Colors().SetLayerColor( aLayer, aColor );
 
-    if( myframe->IsGalCanvasActive() )
-    {
-        KIGFX::VIEW* view = myframe->GetGalCanvas()->GetView();
-        view->GetPainter()->GetSettings()->ImportLegacyColors( &myframe->Settings().Colors() );
-        view->UpdateLayerColor( aLayer );
-        view->UpdateLayerColor( GetNetnameLayer( aLayer ) );
-    }
+    KIGFX::VIEW* view = myframe->GetGalCanvas()->GetView();
+    view->GetPainter()->GetSettings()->ImportLegacyColors( &myframe->Settings().Colors() );
+    view->UpdateLayerColor( aLayer );
+    view->UpdateLayerColor( GetNetnameLayer( aLayer ) );
 
     myframe->ReCreateHToolbar();
 
@@ -685,22 +667,19 @@ void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
 
     EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
 
-    if( galCanvas && myframe->IsGalCanvasActive() )
-    {
-        if( aId == LAYER_GRID )
-            galCanvas->GetGAL()->SetGridColor( aColor );
+    if( aId == LAYER_GRID )
+        galCanvas->GetGAL()->SetGridColor( aColor );
 
-        KIGFX::VIEW* view = galCanvas->GetView();
-        view->GetPainter()->GetSettings()->ImportLegacyColors( &myframe->Settings().Colors() );
-        view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );   // useful to update rastnest
-        view->UpdateLayerColor( aId );
+    KIGFX::VIEW* view = galCanvas->GetView();
+    view->GetPainter()->GetSettings()->ImportLegacyColors( &myframe->Settings().Colors() );
+    view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );   // useful to update rastnest
+    view->UpdateLayerColor( aId );
 
-        // plated-through-holes don't have their own color; they use the background color
-        if( aId == LAYER_PCB_BACKGROUND )
-            view->UpdateLayerColor( LAYER_PADS_PLATEDHOLES );
+    // plated-through-holes don't have their own color; they use the background color
+    if( aId == LAYER_PCB_BACKGROUND )
+        view->UpdateLayerColor( LAYER_PADS_PLATEDHOLES );
 
-        galCanvas->ForceRefresh();
-    }
+    galCanvas->ForceRefresh();
 
     myframe->ReCreateHToolbar();
 
@@ -725,25 +704,21 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 
     EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
 
-    if( galCanvas && myframe->IsGalCanvasActive() )
+    if( aId == LAYER_GRID )
     {
-        if( aId == LAYER_GRID )
-        {
-            galCanvas->GetGAL()->SetGridVisibility( myframe->IsGridVisible() );
-            galCanvas->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-        }
-        else if( aId == LAYER_RATSNEST )
-        {
-            // don't touch the layers. ratsnest is enabled on per-item basis.
-            galCanvas->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-            galCanvas->GetView()->SetLayerVisible( aId, true );
-        }
-        else
-            galCanvas->GetView()->SetLayerVisible( aId, isEnabled );
-
-        galCanvas->Refresh();
+        galCanvas->GetGAL()->SetGridVisibility( myframe->IsGridVisible() );
+        galCanvas->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     }
+    else if( aId == LAYER_RATSNEST )
+    {
+        // don't touch the layers. ratsnest is enabled on per-item basis.
+        galCanvas->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+        galCanvas->GetView()->SetLayerVisible( aId, true );
+    }
+    else
+        galCanvas->GetView()->SetLayerVisible( aId, isEnabled );
 
+    galCanvas->Refresh();
     myframe->GetCanvas()->Refresh();
 }
 

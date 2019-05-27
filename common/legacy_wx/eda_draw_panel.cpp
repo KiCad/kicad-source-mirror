@@ -126,7 +126,6 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     Pgm().CommonSettings()->Read( ENBL_AUTO_PAN_KEY, &m_enableAutoPan, true );
 
     m_requestAutoPan = false;
-    m_enableBlockCommands = false;
     m_minDragEventCount = 0;
 
 #ifdef __WXMAC__
@@ -320,14 +319,7 @@ void EDA_DRAW_PANEL::RefreshDrawingRect( const EDA_RECT& aRect, bool aEraseBackg
 
 void EDA_DRAW_PANEL::Refresh( bool eraseBackground, const wxRect* rect )
 {
-    if( GetParent()->IsGalCanvasActive() )
-    {
-        GetParent()->GetGalCanvas()->Refresh();
-    }
-    else
-    {
-        wxScrolledWindow::Refresh( eraseBackground, rect );
-    }
+    GetParent()->GetGalCanvas()->Refresh();
 }
 
 
@@ -348,48 +340,7 @@ void EDA_DRAW_PANEL::MoveCursorToCrossHair()
 
 void EDA_DRAW_PANEL::MoveCursor( const wxPoint& aPosition )
 {
-    if( GetParent()->IsGalCanvasActive() )
-        return;
-
-    int     x, y, xPpu, yPpu;
-    wxPoint screenPos, drawingPos;
-    wxRect  clientRect( wxPoint( 0, 0 ), GetClientSize() );
-
-    INSTALL_UNBUFFERED_DC( dc, this );
-    screenPos.x = dc.LogicalToDeviceX( aPosition.x );
-    screenPos.y = dc.LogicalToDeviceY( aPosition.y );
-
-    // Scroll if the requested mouse position cursor is outside the drawing area.
-    if( !clientRect.Contains( screenPos ) )
-    {
-        GetViewStart( &x, &y );
-        GetScrollPixelsPerUnit( &xPpu, &yPpu );
-        CalcUnscrolledPosition( screenPos.x, screenPos.y, &drawingPos.x, &drawingPos.y );
-
-        wxLogTrace( kicadTraceCoords,
-                    wxT( "MoveCursor() initial screen position(%d, %d) " ) \
-                    wxT( "rectangle(%d, %d, %d, %d) view(%d, %d)" ),
-                    screenPos.x, screenPos.y, clientRect.x, clientRect.y,
-                    clientRect.width, clientRect.height, x, y );
-
-        if( screenPos.y < clientRect.GetTop() )
-            y -= m_scrollIncrementY * yPpu;
-        else if( screenPos.y > clientRect.GetBottom() )
-            y += m_scrollIncrementY * yPpu;
-        else if( clientRect.GetRight() < screenPos.x )
-            x += m_scrollIncrementX * xPpu;
-        else
-            x -= m_scrollIncrementX * xPpu;
-
-        Scroll( x, y );
-        CalcScrolledPosition( drawingPos.x, drawingPos.y, &screenPos.x, &screenPos.y );
-
-        wxLogTrace( kicadTraceCoords,
-                    wxT( "MoveCursor() scrolled screen position(%d, %d) view(%d, %d)" ),
-                    screenPos.x, screenPos.y, x, y );
-    }
-
-    WarpPointer( screenPos.x, screenPos.y );
+    // JEY TODO: OBSOLETE
 }
 
 
@@ -652,16 +603,14 @@ void EDA_DRAW_PANEL::SetEnableMousewheelPan( bool aEnable )
 {
     m_enableMousewheelPan = aEnable;
 
-    if( GetParent()->IsGalCanvasActive() )
-        GetParent()->GetGalCanvas()->GetViewControls()->EnableMousewheelPan( aEnable );
+    GetParent()->GetGalCanvas()->GetViewControls()->EnableMousewheelPan( aEnable );
 }
 
 void EDA_DRAW_PANEL::SetEnableAutoPan( bool aEnable )
 {
     m_enableAutoPan = aEnable;
 
-    if( GetParent()->IsGalCanvasActive() )
-        GetParent()->GetGalCanvas()->GetViewControls()->EnableAutoPan( aEnable );
+    GetParent()->GetGalCanvas()->GetViewControls()->EnableAutoPan( aEnable );
 }
 
 
@@ -669,8 +618,7 @@ void EDA_DRAW_PANEL::SetEnableZoomNoCenter( bool aEnable )
 {
     m_enableZoomNoCenter = aEnable;
 
-    if( GetParent()->IsGalCanvasActive() )
-        GetParent()->GetGalCanvas()->GetViewControls()->EnableCursorWarping( !aEnable );
+    GetParent()->GetGalCanvas()->GetViewControls()->EnableCursorWarping( !aEnable );
 }
 
 
@@ -1160,7 +1108,6 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         // or this is the end of a double click, already seen
         // Note also m_ignoreNextLeftButtonRelease can be set by
         // the call to OnLeftClick(), so do not change it after calling OnLeftClick
-        bool ignoreEvt = m_ignoreNextLeftButtonRelease;
         m_ignoreNextLeftButtonRelease = false;
     }
     else if( !event.LeftIsDown() )

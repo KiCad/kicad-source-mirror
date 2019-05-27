@@ -134,7 +134,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_canvas              = NULL;
     m_canvasType          = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
     m_galCanvas           = NULL;
-    m_galCanvasActive     = false;
     m_actions             = NULL;
     m_toolManager         = NULL;
     m_toolDispatcher      = NULL;
@@ -296,9 +295,6 @@ void EDA_DRAW_FRAME::EraseMsgBox()
 
 void EDA_DRAW_FRAME::OnActivate( wxActivateEvent& event )
 {
-    if( m_canvas )
-        m_canvas->SetCanStartBlock( -1 );
-
     event.Skip();   // required under wxMAC
 }
 
@@ -401,8 +397,7 @@ int EDA_DRAW_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
 {
     int result = EDA_BASE_FRAME::WriteHotkeyConfig( aDescList, aFullFileName );
 
-    if( IsGalCanvasActive() )
-        GetToolManager()->UpdateHotKeys();
+    GetToolManager()->UpdateHotKeys();
 
     return result;
 }
@@ -471,10 +466,8 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
     // Notify GAL
     TOOL_MANAGER* mgr = GetToolManager();
 
-    if( mgr && IsGalCanvasActive() )
+    if( mgr )
         mgr->RunAction( "common.Control.gridPreset", true, idx );
-    else
-        SetPresetGrid( idx );
 
     m_canvas->Refresh();
 }
@@ -556,7 +549,7 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
         m_canvas->SetCurrentCursor( aCursor );
 
     // Change GAL canvas cursor if requested.
-    if( IsGalCanvasActive() && aCursor >= 0 )
+    if( aCursor >= 0 )
         GetGalCanvas()->SetCurrentCursor( aCursor );
 
     DisplayToolMsg( aToolMsg );
@@ -578,10 +571,7 @@ void EDA_DRAW_FRAME::SetNoToolSelected()
     int defaultCursor = wxCURSOR_DEFAULT;
 
     // Change GAL canvas cursor if requested.
-    if( IsGalCanvasActive() )
-        defaultCursor = GetGalCanvas()->GetDefaultCursor();
-    else if( m_canvas )
-        defaultCursor = m_canvas->GetDefaultCursor();
+    defaultCursor = GetGalCanvas()->GetDefaultCursor();
 
     SetToolID( ID_NO_TOOL_SELECTED, defaultCursor, wxEmptyString );
 }
@@ -667,16 +657,7 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
 const wxString EDA_DRAW_FRAME::GetZoomLevelIndicator() const
 {
     wxString Line;
-    double level = 0.0;
-
-    if( IsGalCanvasActive() )
-    {
-        level = m_galCanvas->GetGAL()->GetZoomFactor();
-    }
-    else if( BASE_SCREEN* screen = GetScreen() )
-    {
-        level = m_zoomLevelCoeff / (double) screen->GetZoom();
-    }
+    double level = m_galCanvas->GetGAL()->GetZoomFactor();
 
     // returns a human readable value which can be displayed as zoom
     // level indicator in dialogs.
@@ -1029,56 +1010,32 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
 void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 {
-    KIGFX::VIEW* view = GetGalCanvas()->GetView();
     KIGFX::GAL* gal = GetGalCanvas()->GetGAL();
 
-    // Display the same view after canvas switching
-    if( aEnable )
-    {
-        // Switch to GAL renderer from legacy
-        if( !m_galCanvasActive )
-        {
-            // Set up viewport
-            view->SetScale( GetZoomLevelCoeff() / m_canvas->GetZoom() );
-            view->SetCenter(VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
-        }
+    // Set up grid settings
+    gal->SetGridVisibility( IsGridVisible() );
+    gal->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
+    gal->SetGridOrigin( VECTOR2D( GetGridOrigin() ) );
 
-        // Set up grid settings
-        gal->SetGridVisibility( IsGridVisible() );
-        gal->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
-        gal->SetGridOrigin( VECTOR2D( GetGridOrigin() ) );
-
-        // Transfer EDA_DRAW_PANEL settings
-        KIGFX::VIEW_CONTROLS* viewControls = GetGalCanvas()->GetViewControls();
-        viewControls->EnableCursorWarping( !m_canvas->GetEnableZoomNoCenter() );
-        viewControls->EnableMousewheelPan( m_canvas->GetEnableMousewheelPan() );
-        viewControls->EnableAutoPan( m_canvas->GetEnableAutoPan() );
-    }
-    else if( m_galCanvasActive )
-    {
-        // Switch to legacy renderer from GAL
-        m_canvas->SetZoom( GetGalCanvas()->GetLegacyZoom() );
-        VECTOR2D center = view->GetCenter();
-        AdjustScrollBars( wxPoint( center.x, center.y ) );
-    }
+    // Transfer EDA_DRAW_PANEL settings
+    KIGFX::VIEW_CONTROLS* viewControls = GetGalCanvas()->GetViewControls();
+    viewControls->EnableCursorWarping( !m_canvas->GetEnableZoomNoCenter() );
+    viewControls->EnableMousewheelPan( m_canvas->GetEnableMousewheelPan() );
+    viewControls->EnableAutoPan( m_canvas->GetEnableAutoPan() );
 
     m_canvas->SetEvtHandlerEnabled( !aEnable );
     GetGalCanvas()->SetEvtHandlerEnabled( aEnable );
 
-    if( aEnable )
-        GetGalCanvas()->StartDrawing();
-    else
-        GetGalCanvas()->StopDrawing();
+    GetGalCanvas()->StartDrawing();
 
     // Switch panes
-    m_auimgr.GetPane( "DrawFrame" ).Show( !aEnable );
-    m_auimgr.GetPane( "DrawFrameGal" ).Show( aEnable );
+    // JEY TODO: drop down to a single pane....
+    m_auimgr.GetPane( "DrawFrame" ).Show( false );
+    m_auimgr.GetPane( "DrawFrameGal" ).Show( true );
     m_auimgr.Update();
 
     // Reset current tool on switch();
     SetNoToolSelected();
-
-    m_galCanvasActive = aEnable;
 }
 
 
@@ -1174,17 +1131,9 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
 wxPoint EDA_DRAW_FRAME::GetCrossHairPosition( bool aInvertY ) const
 {
     // subject to change, borrow from old BASE_SCREEN for now.
-    if( IsGalCanvasActive() )
-    {
-        VECTOR2I cursor = GetGalCanvas()->GetViewControls()->GetCursorPosition();
+    VECTOR2I cursor = GetGalCanvas()->GetViewControls()->GetCursorPosition();
 
-        return wxPoint( cursor.x, cursor.y );
-    }
-    else
-    {
-        BASE_SCREEN* screen = GetScreen();  // virtual call
-        return screen->getCrossHairPosition( aInvertY );
-    }
+    return wxPoint( cursor.x, cursor.y );
 }
 
 
@@ -1414,40 +1363,12 @@ bool EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos, bool
 void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer )
 {
     // JEY TODO: OBSOLETE
-    if( IsGalCanvasActive() )
-        return;
-
-    AdjustScrollBars( aCenterPoint );
-
-    // Move the mouse cursor to the on grid graphic cursor position
-    if( aWarpPointer )
-        m_canvas->MoveCursorToCrossHair();
-
-    m_canvas->Refresh();
-    m_canvas->Update();
 }
 
 
 void EDA_DRAW_FRAME::RedrawScreen2( const wxPoint& posBefore )
 {
-    if( IsGalCanvasActive() )
-        return;
-
-    // Account for scrollbars (see EDA_DRAW_FRAME::AdjustScrollBars that takes
-    // in account scroolbars area to adjust scroll bars)
-    wxSize scrollbarSize = m_canvas->GetSize() - m_canvas->GetClientSize();
-    wxSize sizeAdjusted = m_canvas->GetClientSize() - scrollbarSize;
-
-    wxPoint dPos = posBefore - sizeAdjusted / 2;
-
-    // screen position of crosshair after zoom
-    wxPoint newScreenPos = m_canvas->ToDeviceXY( GetCrossHairPosition() );
-    wxPoint newCenter = m_canvas->ToLogicalXY( newScreenPos - dPos );
-
-    AdjustScrollBars( newCenter );
-
-    m_canvas->Refresh();
-    m_canvas->Update();
+    // JEY TODO: OBSOLETE
 }
 
 
@@ -1495,10 +1416,7 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
     if( !screen->m_Initialized )
         SetCrossHairPosition( GetScrollCenterPosition() );
 
-    if( !IsGalCanvasActive() )
-        RedrawScreen( GetScrollCenterPosition(), aWarpPointer );
-    else
-        m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
+    m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
 }
 
 
@@ -1694,52 +1612,25 @@ wxWindow* findDialog( wxWindowList& aList )
 
 void EDA_DRAW_FRAME::FocusOnLocation( const wxPoint& aPos, bool aWarpCursor, bool aCenterView )
 {
-    if( IsGalCanvasActive() )
+    if( aCenterView )
     {
-        if( aCenterView )
+        wxWindow* dialog = findDialog( GetChildren() );
+
+        // If a dialog partly obscures the window, then center on the uncovered area.
+        if( dialog )
         {
-            wxWindow* dialog = findDialog( GetChildren() );
-
-            // If a dialog partly obscures the window, then center on the uncovered area.
-            if( dialog )
-            {
-                wxRect dialogRect( GetGalCanvas()->ScreenToClient( dialog->GetScreenPosition() ),
-                                   dialog->GetSize() );
-                GetGalCanvas()->GetView()->SetCenter( aPos, dialogRect );
-            }
-            else
-                GetGalCanvas()->GetView()->SetCenter( aPos );
+            wxRect dialogRect( GetGalCanvas()->ScreenToClient( dialog->GetScreenPosition() ),
+                               dialog->GetSize() );
+            GetGalCanvas()->GetView()->SetCenter( aPos, dialogRect );
         }
-
-        if( aWarpCursor )
-            GetGalCanvas()->GetViewControls()->SetCursorPosition( aPos );
         else
-            GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( aPos );
+            GetGalCanvas()->GetView()->SetCenter( aPos );
     }
+
+    if( aWarpCursor )
+        GetGalCanvas()->GetViewControls()->SetCursorPosition( aPos );
     else
-    {
-        INSTALL_UNBUFFERED_DC( dc, m_canvas );
-
-        // There may be need to reframe the drawing.
-        if( aCenterView || !m_canvas->IsPointOnDisplay( aPos ) )
-        {
-            SetCrossHairPosition( aPos );
-            RedrawScreen( aPos, aWarpCursor );
-        }
-        else
-        {
-            // Put cursor on item position
-            m_canvas->CrossHairOff( &dc );
-            SetCrossHairPosition( aPos );
-
-            if( aWarpCursor )
-                m_canvas->MoveCursorToCrossHair();
-        }
-
-        // Be sure cross hair cursor is ON:
-        m_canvas->CrossHairOn( &dc );
-        m_canvas->CrossHairOn( &dc );
-    }
+        GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( aPos );
 }
 
 

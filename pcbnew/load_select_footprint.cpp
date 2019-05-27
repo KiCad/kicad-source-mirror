@@ -159,8 +159,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     Update3DView();
 
-    if( IsGalCanvasActive() )
-        updateView();
+    updateView();
 
     m_canvas->Refresh();
 

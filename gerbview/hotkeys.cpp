@@ -211,11 +211,6 @@ bool GERBVIEW_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         cmd.SetId( ID_MENU_CANVAS_OPENGL );
         GetEventHandler()->ProcessEvent( cmd );
         break;
-
-    case HK_CANVAS_LEGACY:
-        cmd.SetId( ID_MENU_CANVAS_LEGACY );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
     }
 
     return true;

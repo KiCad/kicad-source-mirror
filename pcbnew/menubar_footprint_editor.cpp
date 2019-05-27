@@ -334,22 +334,14 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     prefs_menu->AppendSeparator();
 
-    if( ADVANCED_CFG::GetCfg().AllowLegacyCanvas() )
-    {
-        text = AddHotkeyName( _( "Legacy Tool&set" ), m_hotkeysDescrList, HK_CANVAS_LEGACY );
-        AddMenuItem( prefs_menu, ID_MENU_CANVAS_LEGACY, text,
-                _( "Use Legacy Toolset (not all features will be available)" ),
-                KiBitmap( tools_xpm ), wxITEM_RADIO );
-    }
-
-    text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), m_hotkeysDescrList, HK_CANVAS_OPENGL );
+    text = AddHotkeyName( _( "Accelerated Graphics" ), m_hotkeysDescrList, HK_CANVAS_OPENGL );
     AddMenuItem( prefs_menu, ID_MENU_CANVAS_OPENGL, text,
-                 _( "Use Modern Toolset with hardware-accelerated graphics (recommended)" ),
+                 _( "Use hardware-accelerated graphics (recommended)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
 
-    text = AddHotkeyName( _( "Modern Toolset (&Fallback)" ), m_hotkeysDescrList, HK_CANVAS_CAIRO );
+    text = AddHotkeyName( _( "Standard Graphics" ), m_hotkeysDescrList, HK_CANVAS_CAIRO );
     AddMenuItem( prefs_menu, ID_MENU_CANVAS_CAIRO, text,
-                 _( "Use Modern Toolset with software graphics (fall-back)" ),
+                 _( "Use software graphics (fall-back)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
 
     prefs_menu->AppendSeparator();

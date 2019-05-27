@@ -171,8 +171,7 @@ void SCH_DRAW_PANEL::SetEnableMousewheelPan( bool aEnable )
 {
     m_enableMousewheelPan = aEnable;
 
-    if( GetParent()->IsGalCanvasActive() )
-        GetParent()->GetGalCanvas()->GetViewControls()->EnableMousewheelPan( aEnable );
+    GetParent()->GetGalCanvas()->GetViewControls()->EnableMousewheelPan( aEnable );
 }
 
 
@@ -180,14 +179,12 @@ void SCH_DRAW_PANEL::SetEnableAutoPan( bool aEnable )
 {
     EDA_DRAW_PANEL::SetEnableAutoPan( aEnable );
 
-    if( GetParent()->IsGalCanvasActive() )
-        GetParent()->GetGalCanvas()->GetViewControls()->EnableAutoPan( aEnable );
+    GetParent()->GetGalCanvas()->GetViewControls()->EnableAutoPan( aEnable );
 }
 
 
 void SCH_DRAW_PANEL::SetAutoPanRequest( bool aEnable )
 {
-    wxCHECK( GetParent()->IsGalCanvasActive(), /*void*/ );
     GetParent()->GetGalCanvas()->GetViewControls()->SetAutoPan( aEnable );
 }
 
@@ -196,8 +193,7 @@ void SCH_DRAW_PANEL::SetEnableZoomNoCenter( bool aEnable )
 {
     m_enableZoomNoCenter = aEnable;
 
-    if( GetParent()->IsGalCanvasActive() )
-        GetParent()->GetGalCanvas()->GetViewControls()->EnableCursorWarping( !aEnable );
+    GetParent()->GetGalCanvas()->GetViewControls()->EnableCursorWarping( !aEnable );
 }
 
 

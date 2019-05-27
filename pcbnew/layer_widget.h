@@ -145,13 +145,6 @@ protected:
     virtual bool useAlternateBitmap(int aRow) { return false; }
 
     /**
-     * Subclasses can override this to provide logic for allowing
-     * arbitrary color selection via wxColourPicker instead of DisplayColorFrame.
-     */
-    // LEGACY TODO: obsolete once legacy canvas removed
-    virtual bool AreArbitraryColorsAllowed() { return false; }
-
-    /**
      * Subclasses can override this to provide accurate representation
      * of transparent colour swatches.
      */

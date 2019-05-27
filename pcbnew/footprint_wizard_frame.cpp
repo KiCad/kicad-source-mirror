@@ -256,12 +256,9 @@ FOOTPRINT_WIZARD_FRAME::~FOOTPRINT_WIZARD_FRAME()
     // Delete the GRID_TRICKS.
     m_parameterGrid->PopEventHandler( true );
 
-    if( IsGalCanvasActive() )
-    {
-        GetGalCanvas()->StopDrawing();
-        // Be sure any event cannot be fired after frame deletion:
-        GetGalCanvas()->SetEvtHandlerEnabled( false );
-    }
+    GetGalCanvas()->StopDrawing();
+    // Be sure any event cannot be fired after frame deletion:
+    GetGalCanvas()->SetEvtHandlerEnabled( false );
 
     // Be sure a active tool (if exists) is desactivated:
     if( m_toolManager )
@@ -328,15 +325,12 @@ void FOOTPRINT_WIZARD_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
 
 void FOOTPRINT_WIZARD_FRAME::updateView()
 {
-    if( IsGalCanvasActive() )
-    {
-        auto dp = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
-        dp->UseColorScheme( &Settings().Colors() );
-        dp->DisplayBoard( GetBoard() );
-        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-        m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
-        UpdateMsgPanel();
-    }
+    auto dp = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
+    dp->UseColorScheme( &Settings().Colors() );
+    dp->DisplayBoard( GetBoard() );
+    m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+    UpdateMsgPanel();
 }
 
 

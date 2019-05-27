@@ -209,8 +209,7 @@ void DIALOG_PAD_PROPERTIES::OnCancel( wxCommandEvent& event )
 {
     // Mandatory to avoid m_panelShowPadGal trying to draw something
     // in a non valid context during closing process:
-    if( m_parent->IsGalCanvasActive() )
-        m_panelShowPadGal->StopDrawing();
+    m_panelShowPadGal->StopDrawing();
 
     // Now call default handler for wxID_CANCEL command event
     event.Skip();
@@ -242,44 +241,36 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
                                                VECTOR2D( m_dummyPad->GetPosition() ) );
     m_axisOrigin->SetDrawAtZero( true );
 
-    if( m_parent->IsGalCanvasActive() )
-    {
-        m_panelShowPadGal->UseColorScheme( &m_parent->Settings().Colors() );
-        m_panelShowPadGal->SwitchBackend( m_parent->GetGalCanvas()->GetBackend() );
-        m_panelShowPadGal->SetStealsFocus( false );
+    m_panelShowPadGal->UseColorScheme( &m_parent->Settings().Colors() );
+    m_panelShowPadGal->SwitchBackend( m_parent->GetGalCanvas()->GetBackend() );
+    m_panelShowPadGal->SetStealsFocus( false );
 
-        bool mousewheelPan = m_parent->GetCanvas()->GetEnableMousewheelPan();
-        m_panelShowPadGal->GetViewControls()->EnableMousewheelPan( mousewheelPan );
+    bool mousewheelPan = m_parent->GetCanvas()->GetEnableMousewheelPan();
+    m_panelShowPadGal->GetViewControls()->EnableMousewheelPan( mousewheelPan );
 
-        m_panelShowPadGal->Show();
-        m_panelShowPad->Hide();
+    m_panelShowPadGal->Show();
+    m_panelShowPad->Hide();
 
-        KIGFX::VIEW* view = m_panelShowPadGal->GetView();
+    KIGFX::VIEW* view = m_panelShowPadGal->GetView();
 
-        // fix the pad render mode (filled/not filled)
-        auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
-        bool sketchMode = m_cbShowPadOutline->IsChecked();
-        settings->SetSketchMode( LAYER_PADS_TH, sketchMode );
-        settings->SetSketchMode( LAYER_PAD_FR, sketchMode );
-        settings->SetSketchMode( LAYER_PAD_BK, sketchMode );
-        settings->SetSketchModeGraphicItems( sketchMode );
+    // fix the pad render mode (filled/not filled)
+    auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+    bool sketchMode = m_cbShowPadOutline->IsChecked();
+    settings->SetSketchMode( LAYER_PADS_TH, sketchMode );
+    settings->SetSketchMode( LAYER_PAD_FR, sketchMode );
+    settings->SetSketchMode( LAYER_PAD_BK, sketchMode );
+    settings->SetSketchModeGraphicItems( sketchMode );
 
-        // gives a non null grid size (0.001mm) because GAL layer does not like a 0 size grid:
-        double gridsize = 0.001 * IU_PER_MM;
-        view->GetGAL()->SetGridSize( VECTOR2D( gridsize, gridsize ) );
-        // And do not show the grid:
-        view->GetGAL()->SetGridVisibility( false );
-        view->Add( m_dummyPad );
-        view->Add( m_axisOrigin );
+    // gives a non null grid size (0.001mm) because GAL layer does not like a 0 size grid:
+    double gridsize = 0.001 * IU_PER_MM;
+    view->GetGAL()->SetGridSize( VECTOR2D( gridsize, gridsize ) );
+    // And do not show the grid:
+    view->GetGAL()->SetGridVisibility( false );
+    view->Add( m_dummyPad );
+    view->Add( m_axisOrigin );
 
-        m_panelShowPadGal->StartDrawing();
-        Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_PAD_PROPERTIES::OnResize ) );
-    }
-    else
-    {
-        m_panelShowPad->Show();
-        m_panelShowPadGal->Hide();
-    }
+    m_panelShowPadGal->StartDrawing();
+    Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_PAD_PROPERTIES::OnResize ) );
 }
 
 
@@ -902,19 +893,16 @@ void DIALOG_PAD_PROPERTIES::onChangePadMode( wxCommandEvent& event )
 {
     m_sketchPreview = m_cbShowPadOutline->GetValue();
 
-    if( m_parent->IsGalCanvasActive() )
-    {
-        KIGFX::VIEW* view = m_panelShowPadGal->GetView();
+    KIGFX::VIEW* view = m_panelShowPadGal->GetView();
 
-        // fix the pad render mode (filled/not filled)
-        KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+    // fix the pad render mode (filled/not filled)
+    KIGFX::PCB_RENDER_SETTINGS* settings =
+        static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
-        settings->SetSketchMode( LAYER_PADS_TH, m_sketchPreview );
-        settings->SetSketchMode( LAYER_PAD_FR, m_sketchPreview );
-        settings->SetSketchMode( LAYER_PAD_BK, m_sketchPreview );
-        settings->SetSketchModeGraphicItems( m_sketchPreview );
-    }
+    settings->SetSketchMode( LAYER_PADS_TH, m_sketchPreview );
+    settings->SetSketchMode( LAYER_PAD_FR, m_sketchPreview );
+    settings->SetSketchMode( LAYER_PAD_BK, m_sketchPreview );
+    settings->SetSketchModeGraphicItems( m_sketchPreview );
 
     redraw();
 }
@@ -1325,104 +1313,97 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
 void DIALOG_PAD_PROPERTIES::redraw()
 {
-    if( m_parent->IsGalCanvasActive() )
+    KIGFX::VIEW* view = m_panelShowPadGal->GetView();
+    m_panelShowPadGal->StopDrawing();
+
+    // The layer used to place primitive items selected when editing custom pad shapes
+    // we use here a layer never used in a pad:
+    #define SELECTED_ITEMS_LAYER Dwgs_User
+
+    view->SetTopLayer( SELECTED_ITEMS_LAYER );
+    KIGFX::PCB_RENDER_SETTINGS* settings =
+        static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+    settings->SetLayerColor( SELECTED_ITEMS_LAYER, m_selectedColor );
+
+    view->Update( m_dummyPad );
+
+    // delete previous items if highlight list
+    while( m_highlight.size() )
     {
-        KIGFX::VIEW* view = m_panelShowPadGal->GetView();
-        m_panelShowPadGal->StopDrawing();
-
-        // The layer used to place primitive items selected when editing custom pad shapes
-        // we use here a layer never used in a pad:
-        #define SELECTED_ITEMS_LAYER Dwgs_User
-
-        view->SetTopLayer( SELECTED_ITEMS_LAYER );
-        KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
-        settings->SetLayerColor( SELECTED_ITEMS_LAYER, m_selectedColor );
-
-        view->Update( m_dummyPad );
-
-        // delete previous items if highlight list
-        while( m_highlight.size() )
-        {
-            delete m_highlight.back(); // the dtor also removes item from view
-            m_highlight.pop_back();
-        }
-
-        // highlight selected primitives:
-        long select = m_listCtrlPrimitives->GetFirstSelected();
-
-        while( select >= 0 )
-        {
-            PAD_CS_PRIMITIVE& primitive = m_primitives[select];
-
-            DRAWSEGMENT* dummySegment = new DRAWSEGMENT;
-            dummySegment->SetLayer( SELECTED_ITEMS_LAYER );
-            primitive.ExportTo( dummySegment );
-            dummySegment->Rotate( wxPoint( 0, 0), m_dummyPad->GetOrientation() );
-            dummySegment->Move( m_dummyPad->GetPosition() );
-
-            // Update selected primitive (highlight selected)
-            switch( primitive.m_Shape )
-            {
-            case S_SEGMENT:
-            case S_ARC:
-            case S_CURVE:
-                break;
-
-            case S_CIRCLE:          //  ring or circle
-                if( primitive.m_Thickness == 0 )    // filled circle
-                {   // the filled circle option does not exist in a DRAWSEGMENT
-                    // but it is easy to create it with a circle having the
-                    // right radius and outline width
-                    wxPoint end = dummySegment->GetCenter();
-                    end.x += primitive.m_Radius / 2;
-                    dummySegment->SetEnd( end );
-                    dummySegment->SetWidth( primitive.m_Radius );
-                }
-                break;
-
-            case S_POLYGON:
-                break;
-
-            default:
-                delete dummySegment;
-                dummySegment = nullptr;
-                break;
-            }
-
-            if( dummySegment )
-            {
-                view->Add( dummySegment );
-                m_highlight.push_back( dummySegment );
-            }
-
-            select = m_listCtrlPrimitives->GetNextSelected( select );
-        }
-
-        BOX2I bbox = m_dummyPad->ViewBBox();
-
-        if( bbox.GetSize().x > 0 && bbox.GetSize().y > 0 )
-        {
-            // gives a size to the full drawable area
-            BOX2I drawbox;
-            drawbox.Move( m_dummyPad->GetPosition() );
-            drawbox.Inflate( bbox.GetSize().x * 2, bbox.GetSize().y * 2 );
-
-            view->SetBoundary( drawbox );
-
-            // Autozoom
-            view->SetViewport( BOX2D( bbox.GetOrigin(), bbox.GetSize() ) );
-
-            // Add a margin
-            view->SetScale( m_panelShowPadGal->GetView()->GetScale() * 0.7 );
-
-            m_panelShowPadGal->StartDrawing();
-            m_panelShowPadGal->Refresh();
-        }
+        delete m_highlight.back(); // the dtor also removes item from view
+        m_highlight.pop_back();
     }
-    else
+
+    // highlight selected primitives:
+    long select = m_listCtrlPrimitives->GetFirstSelected();
+
+    while( select >= 0 )
     {
-        m_panelShowPad->Refresh();
+        PAD_CS_PRIMITIVE& primitive = m_primitives[select];
+
+        DRAWSEGMENT* dummySegment = new DRAWSEGMENT;
+        dummySegment->SetLayer( SELECTED_ITEMS_LAYER );
+        primitive.ExportTo( dummySegment );
+        dummySegment->Rotate( wxPoint( 0, 0), m_dummyPad->GetOrientation() );
+        dummySegment->Move( m_dummyPad->GetPosition() );
+
+        // Update selected primitive (highlight selected)
+        switch( primitive.m_Shape )
+        {
+        case S_SEGMENT:
+        case S_ARC:
+        case S_CURVE:
+            break;
+
+        case S_CIRCLE:          //  ring or circle
+            if( primitive.m_Thickness == 0 )    // filled circle
+            {   // the filled circle option does not exist in a DRAWSEGMENT
+                // but it is easy to create it with a circle having the
+                // right radius and outline width
+                wxPoint end = dummySegment->GetCenter();
+                end.x += primitive.m_Radius / 2;
+                dummySegment->SetEnd( end );
+                dummySegment->SetWidth( primitive.m_Radius );
+            }
+            break;
+
+        case S_POLYGON:
+            break;
+
+        default:
+            delete dummySegment;
+            dummySegment = nullptr;
+            break;
+        }
+
+        if( dummySegment )
+        {
+            view->Add( dummySegment );
+            m_highlight.push_back( dummySegment );
+        }
+
+        select = m_listCtrlPrimitives->GetNextSelected( select );
+    }
+
+    BOX2I bbox = m_dummyPad->ViewBBox();
+
+    if( bbox.GetSize().x > 0 && bbox.GetSize().y > 0 )
+    {
+        // gives a size to the full drawable area
+        BOX2I drawbox;
+        drawbox.Move( m_dummyPad->GetPosition() );
+        drawbox.Inflate( bbox.GetSize().x * 2, bbox.GetSize().y * 2 );
+
+        view->SetBoundary( drawbox );
+
+        // Autozoom
+        view->SetViewport( BOX2D( bbox.GetOrigin(), bbox.GetSize() ) );
+
+        // Add a margin
+        view->SetScale( m_panelShowPadGal->GetView()->GetScale() * 0.7 );
+
+        m_panelShowPadGal->StartDrawing();
+        m_panelShowPadGal->Refresh();
     }
 }
 

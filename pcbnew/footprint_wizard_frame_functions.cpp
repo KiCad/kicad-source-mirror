@@ -104,8 +104,7 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
 
     SetCurItem( NULL );
 
-    if( IsGalCanvasActive() )
-        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+    m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
     // Delete the current footprint
     GetBoard()->m_Modules.DeleteAll();

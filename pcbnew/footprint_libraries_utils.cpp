@@ -329,8 +329,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
     SetMsgPanel( module );
     PlaceModule( module, NULL );
 
-    if( IsGalCanvasActive() )
-        module->SetPosition( wxPoint( 0, 0 ) );
+    module->SetPosition( wxPoint( 0, 0 ) );
 
     GetBoard()->m_Status_Pcb = 0;
     GetBoard()->BuildListOfNets();
@@ -856,11 +855,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         newmodule->SetTimeStamp( GetNewTimeStamp() );
         commit.Push( wxT( "Insert module" ) );
 
-        if( pcbframe->IsGalCanvasActive() )
-        {
-            pcbframe->Raise();
-            pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::placeModule, true, newmodule );
-        }
+        pcbframe->Raise();
+        pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::placeModule, true, newmodule );
     }
 
     newmodule->ClearFlags();

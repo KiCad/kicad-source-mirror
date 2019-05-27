@@ -380,16 +380,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
 
     GetScreen()->PushCommandToUndoList( oldBuffer );
 
-    if( IsGalCanvasActive() )
-    {
-        UseGalCanvas( GetGalCanvas() );
-    }
-    else
-    {
-        UpdateUserInterface();
-        GetScreen()->SetModify();
-        Refresh();
-    }
+    UseGalCanvas( GetGalCanvas() );
 }
 
 

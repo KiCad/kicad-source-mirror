@@ -107,7 +107,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_canvas              = NULL;
     m_canvasType          = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
     m_galCanvas           = NULL;
-    m_galCanvasActive     = false;
     m_actions             = NULL;
     m_toolManager         = NULL;
     m_toolDispatcher      = NULL;
@@ -453,7 +452,7 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
     SetCursor( wxNullCursor );
 
     // Change GAL canvas cursor if requested.
-    if( IsGalCanvasActive() && aCursor >= 0 )
+    if( aCursor >= 0 )
         GetGalCanvas()->SetCurrentCursor( aCursor );
 
     DisplayToolMsg( aToolMsg );
@@ -475,8 +474,7 @@ void EDA_DRAW_FRAME::SetNoToolSelected()
     int defaultCursor = wxCURSOR_DEFAULT;
 
     // Change GAL canvas cursor if requested.
-    if( IsGalCanvasActive() )
-        defaultCursor = GetGalCanvas()->GetDefaultCursor();
+    defaultCursor = GetGalCanvas()->GetDefaultCursor();
 
     SetToolID( ID_NO_TOOL_SELECTED, defaultCursor, wxEmptyString );
 }
@@ -643,31 +641,16 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     EDA_DRAW_PANEL_GAL* galCanvas = GetGalCanvas();
 
     // Display the same view after canvas switching
-    if( aEnable )
-    {
-        // Switch to GAL renderer from legacy
-        if( !m_galCanvasActive )
-        {
-            // Set up viewport
-            KIGFX::VIEW* view = galCanvas->GetView();
-            view->SetScale( GetZoomLevelCoeff() / m_canvas->GetZoom() );
-            view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
-        }
-
-        // Transfer EDA_DRAW_PANEL settings
-        KIGFX::VIEW_CONTROLS* viewControls = galCanvas->GetViewControls();
-        viewControls->EnableCursorWarping( !m_canvas->GetEnableZoomNoCenter() );
-        viewControls->EnableMousewheelPan( m_canvas->GetEnableMousewheelPan() );
-        viewControls->EnableAutoPan( m_canvas->GetEnableAutoPan() );
-    }
+    KIGFX::VIEW_CONTROLS* viewControls = galCanvas->GetViewControls();
+    viewControls->EnableCursorWarping( !m_canvas->GetEnableZoomNoCenter() );
+    viewControls->EnableMousewheelPan( m_canvas->GetEnableMousewheelPan() );
+    viewControls->EnableAutoPan( m_canvas->GetEnableAutoPan() );
 
     galCanvas->SetEvtHandlerEnabled( aEnable );
     galCanvas->StartDrawing();
 
     // Reset current tool on switch();
     SetNoToolSelected();
-
-    m_galCanvasActive = aEnable;
 }
 
 

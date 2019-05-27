@@ -140,20 +140,12 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
                     FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
 
-    EVT_MENU( ID_POPUP_MODEDIT_EDIT_BODY_ITEM,
-              FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-    EVT_MENU( ID_POPUP_MODEDIT_EDIT_WIDTH_ALL_EDGE,
-              FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-    EVT_MENU( ID_POPUP_MODEDIT_EDIT_LAYER_ALL_EDGE,
-              FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-
     EVT_MENU( ID_PCB_USER_GRID_SETUP, FOOTPRINT_EDIT_FRAME::OnGridSettings )
 
     // Menu 3D Frame
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, FOOTPRINT_EDIT_FRAME::Show3D_Frame )
 
     // Switching canvases
-    EVT_MENU( ID_MENU_CANVAS_LEGACY, FOOTPRINT_EDIT_FRAME::OnSwitchCanvas )
     EVT_MENU( ID_MENU_CANVAS_CAIRO, FOOTPRINT_EDIT_FRAME::OnSwitchCanvas )
     EVT_MENU( ID_MENU_CANVAS_OPENGL, FOOTPRINT_EDIT_FRAME::OnSwitchCanvas )
 
@@ -532,11 +524,8 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         }
     }
 
-    if( IsGalCanvasActive() )
-    {
-        GetGalCanvas()->SetEventDispatcher( NULL );
-        GetGalCanvas()->StopDrawing();
-    }
+    GetGalCanvas()->SetEventDispatcher( NULL );
+    GetGalCanvas()->StopDrawing();
 
     // Do not show the layer manager during closing to avoid flicker
     // on some platforms (Windows) that generate useless redraw of items in

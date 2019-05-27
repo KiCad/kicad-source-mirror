@@ -138,66 +138,6 @@ void PCB_EDIT_FRAME::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 }
 
 
-void PCB_EDIT_FRAME::Delete_Drawings_All_Layer( PCB_LAYER_ID aLayer )
-{
-    if( IsCopperLayer( aLayer ) )
-    {
-        DisplayError( this, _( "Copper layer global delete not allowed!" ) );
-        return;
-    }
-
-    wxString msg;
-    msg.Printf( _( "Delete everything on layer %s?" ),
-                GetChars( GetBoard()->GetLayerName( aLayer ) ) );
-
-    if( !IsOK( this, msg ) )
-        return;
-
-    // Step 1: build the list of items to remove.
-    // because we are using iterators, we cannot modify the drawing list during iterate
-    // so we are using a 2 steps calculation:
-    // First, collect items.
-    // Second, remove items.
-    std::vector<BOARD_ITEM*> list;
-
-    for( auto item : GetBoard()->Drawings() )
-    {
-        switch( item->Type() )
-        {
-        case PCB_LINE_T:
-        case PCB_TEXT_T:
-        case PCB_DIMENSION_T:
-        case PCB_TARGET_T:
-            if( item->GetLayer() == aLayer )
-                list.push_back( item );
-
-            break;
-
-        default:
-            wxLogDebug( wxT( "Delete_Drawings_All_Layer() error: unknown type %d" ), item->Type() );
-
-        }
-    }
-
-    if( list.size() == 0 )  // No item found
-        return;
-
-    // Step 2: remove items from main list, and move them to the undo list
-    PICKED_ITEMS_LIST   pickList;
-    ITEM_PICKER         picker( NULL, UR_DELETED );
-
-    for( auto item : list )
-    {
-        item->UnLink();
-        picker.SetItem( item );
-        pickList.PushItem( picker );
-    }
-
-    OnModify();
-    SaveCopyInUndoList(pickList, UR_DELETED);
-}
-
-
 static void Abort_EditEdge( EDA_DRAW_PANEL* aPanel, wxDC* DC )
 {
     DRAWSEGMENT* Segment = (DRAWSEGMENT*) aPanel->GetScreen()->GetCurItem();

@@ -183,7 +183,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, PCB_EDIT_FRAME::Show3D_Frame )
 
     // Switching canvases
-    EVT_MENU( ID_MENU_CANVAS_LEGACY, PCB_EDIT_FRAME::OnSwitchCanvas )
     EVT_MENU( ID_MENU_CANVAS_CAIRO, PCB_EDIT_FRAME::OnSwitchCanvas )
     EVT_MENU( ID_MENU_CANVAS_OPENGL, PCB_EDIT_FRAME::OnSwitchCanvas )
 
@@ -240,7 +239,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
                     PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
 
     // popup menus
-    EVT_MENU( ID_POPUP_PCB_DELETE_TRACKSEG, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
                     PCB_EDIT_FRAME::Process_Special_Functions )
 
@@ -365,7 +363,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_canvasType = LoadCanvasTypeSetting();
 
-    // Nudge user to switch to OpenGL if they are on legacy or Cairo
+    // Nudge user to switch to OpenGL if they are on Cairo
     if( m_firstRunDialogSetting < 1 )
     {
         if( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
@@ -374,11 +372,10 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                               "and faster experience. This option is turned off by "
                               "default since it is not compatible with all computers.\n\n"
                               "Would you like to try enabling graphics acceleration?\n\n"
-                              "If you'd like to choose later, select Modern Toolset "
-                              "(Accelerated) in the Preferences menu." );
+                              "If you'd like to choose later, select Accelerated Graphics "
+                              "in the Preferences menu." );
 
-            wxMessageDialog dlg( this, msg, _( "Enable Graphics Acceleration" ),
-                                 wxYES_NO );
+            wxMessageDialog dlg( this, msg, _( "Enable Graphics Acceleration" ), wxYES_NO );
 
             dlg.SetYesNoLabels( _( "&Enable Acceleration" ), _( "&No Thanks" ) );
 
@@ -400,8 +397,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
             }
             else
             {
-                // If they were on legacy, or they've been coerced into GAL
-                // due to unavailable legacy (GTK3), switch to Cairo
+                // If they were on legacy, switch to Cairo
                 wxCommandEvent evt( wxEVT_MENU, ID_MENU_CANVAS_CAIRO );
                 GetEventHandler()->ProcessEvent( evt );
             }
@@ -411,13 +407,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SaveSettings( config() );
     }
 
-    if( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
-    {
-        if( GetGalCanvas()->SwitchBackend( m_canvasType ) )
-            UseGalCanvas( true );
-    }
-
-    enableGALSpecificMenus();
+    GetGalCanvas()->SwitchBackend( m_canvasType );
+    UseGalCanvas( true );
 
     // disable Export STEP item if kicad2step does not exist
     wxString strK2S = Pgm().GetExecutablePath();
@@ -453,13 +444,10 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
 {
     PCB_BASE_EDIT_FRAME::SetBoard( aBoard );
 
-    if( IsGalCanvasActive() )
-    {
-        aBoard->GetConnectivity()->Build( aBoard );
+    aBoard->GetConnectivity()->Build( aBoard );
 
-        // reload the worksheet
-        SetPageSettings( aBoard->GetPageSettings() );
-    }
+    // reload the worksheet
+    SetPageSettings( aBoard->GetPageSettings() );
 }
 
 
@@ -473,30 +461,27 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
     PCB_BASE_FRAME::SetPageSettings( aPageSettings );
 
-    if( IsGalCanvasActive() )
+    PCB_DRAW_PANEL_GAL* drawPanel = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
+
+    // Prepare worksheet template
+    KIGFX::WS_PROXY_VIEW_ITEM* worksheet;
+    worksheet = new KIGFX::WS_PROXY_VIEW_ITEM( IU_PER_MILS ,&m_Pcb->GetPageSettings(),
+                                               &m_Pcb->GetTitleBlock() );
+    worksheet->SetSheetName( std::string( GetScreenDesc().mb_str() ) );
+
+    BASE_SCREEN* screen = GetScreen();
+
+    if( screen != NULL )
     {
-        PCB_DRAW_PANEL_GAL* drawPanel = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
-
-        // Prepare worksheet template
-        KIGFX::WS_PROXY_VIEW_ITEM* worksheet;
-        worksheet = new KIGFX::WS_PROXY_VIEW_ITEM( IU_PER_MILS ,&m_Pcb->GetPageSettings(),
-                                                   &m_Pcb->GetTitleBlock() );
-        worksheet->SetSheetName( std::string( GetScreenDesc().mb_str() ) );
-
-        BASE_SCREEN* screen = GetScreen();
-
-        if( screen != NULL )
-        {
-            worksheet->SetSheetNumber( screen->m_ScreenNumber );
-            worksheet->SetSheetCount( screen->m_NumberOfScreens );
-        }
-
-        if( auto board = GetBoard() )
-            worksheet->SetFileName(  TO_UTF8( board->GetFileName() ) );
-
-        // PCB_DRAW_PANEL_GAL takes ownership of the worksheet
-        drawPanel->SetWorksheet( worksheet );
+        worksheet->SetSheetNumber( screen->m_ScreenNumber );
+        worksheet->SetSheetCount( screen->m_NumberOfScreens );
     }
+
+    if( auto board = GetBoard() )
+        worksheet->SetFileName(  TO_UTF8( board->GetFileName() ) );
+
+    // PCB_DRAW_PANEL_GAL takes ownership of the worksheet
+    drawPanel->SetWorksheet( worksheet );
 }
 
 
@@ -584,16 +569,13 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         }
     }
 
-    if( IsGalCanvasActive() )
-    {
-        // On Windows 7 / 32 bits, on OpenGL mode only, Pcbnew crashes
-        // when closing this frame if a footprint was selected, and the footprint editor called
-        // to edit this footprint, and when closing pcbnew if this footprint is still selected
-        // See https://bugs.launchpad.net/kicad/+bug/1655858
-        // I think this is certainly a OpenGL event fired after frame deletion, so this workaround
-        // avoid the crash (JPC)
-        GetGalCanvas()->SetEvtHandlerEnabled( false );
-    }
+    // On Windows 7 / 32 bits, on OpenGL mode only, Pcbnew crashes
+    // when closing this frame if a footprint was selected, and the footprint editor called
+    // to edit this footprint, and when closing pcbnew if this footprint is still selected
+    // See https://bugs.launchpad.net/kicad/+bug/1655858
+    // I think this is certainly a OpenGL event fired after frame deletion, so this workaround
+    // avoid the crash (JPC)
+    GetGalCanvas()->SetEvtHandlerEnabled( false );
 
     GetGalCanvas()->StopDrawing();
 
@@ -645,64 +627,17 @@ void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 {
-    if( !aEnable )
-        Compile_Ratsnest( NULL, true );
-
     PCB_BASE_EDIT_FRAME::UseGalCanvas( aEnable );
     COLORS_DESIGN_SETTINGS& cds = Settings().Colors();
 
-    if( aEnable )
-    {
-        cds.SetLegacyMode( false );
-        GetGalCanvas()->GetGAL()->SetGridColor( cds.GetLayerColor( LAYER_GRID ) );
-        auto view = GetGalCanvas()->GetView();
-        view->GetPainter()->GetSettings()->ImportLegacyColors( &cds );
-        GetGalCanvas()->Refresh();
-    }
-
-    enableGALSpecificMenus();
-
-    // Force colors to be legacy-compatible in case they were changed in GAL
-    if( !aEnable )
-    {
-        cds.SetLegacyMode( true );
-        Refresh();
-    }
+    cds.SetLegacyMode( false );
+    GetGalCanvas()->GetGAL()->SetGridColor( cds.GetLayerColor( LAYER_GRID ) );
+    auto view = GetGalCanvas()->GetView();
+    view->GetPainter()->GetSettings()->ImportLegacyColors( &cds );
+    GetGalCanvas()->Refresh();
 
     // Re-create the layer manager to allow arbitrary colors when GAL is enabled
     UpdateUserInterface();
-}
-
-
-void PCB_EDIT_FRAME::enableGALSpecificMenus()
-{
-    // some menus are active only in GAL mode and do nothing in legacy mode.
-    // So enable or disable them, depending on the display mode
-
-    ReCreateMenuBar();
-
-    if( GetMenuBar() )
-    {
-        // Enable / disable some menus which are usable only on GAL
-        pcbnew_ids id_list[] =
-        {
-            ID_MENU_INTERACTIVE_ROUTER_SETTINGS,
-            ID_DIFF_PAIR_BUTT,
-            ID_TUNE_SINGLE_TRACK_LEN_BUTT,
-            ID_TUNE_DIFF_PAIR_LEN_BUTT,
-            ID_TUNE_DIFF_PAIR_SKEW_BUTT,
-            ID_MENU_DIFF_PAIR_DIMENSIONS,
-            ID_MENU_PCB_FLIP_VIEW
-        };
-
-        bool enable = IsGalCanvasActive();
-
-        for( auto& id : id_list )
-        {
-            if( GetMenuBar()->FindItem( id ) )
-                GetMenuBar()->FindItem( id )->Enable( enable );
-        }
-    }
 }
 
 
@@ -727,13 +662,10 @@ void PCB_EDIT_FRAME::DoShowBoardSetupDialog( const wxString& aInitialPage,
         UpdateUserInterface();
         ReCreateAuxiliaryToolbar();
 
-        if( IsGalCanvasActive() )
-        {
-            for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
-                GetGalCanvas()->GetView()->Update( module );
+        for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
+            GetGalCanvas()->GetView()->Update( module );
 
-            GetGalCanvas()->Refresh();
-        }
+        GetGalCanvas()->Refresh();
 
         //this event causes the routing tool to reload its design rules information
         TOOL_EVENT toolEvent( TC_COMMAND, TA_MODEL_CHANGE, AS_ACTIVE );
@@ -804,10 +736,7 @@ void PCB_EDIT_FRAME::SetGridColor( COLOR4D aColor )
 
     Settings().Colors().SetItemColor( LAYER_GRID, aColor );
 
-    if( IsGalCanvasActive() )
-    {
-        GetGalCanvas()->GetGAL()->SetGridColor( aColor );
-    }
+    GetGalCanvas()->GetGAL()->SetGridColor( aColor );
 }
 
 
@@ -838,14 +767,11 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 
     syncLayerWidgetLayer();
 
-    if( IsGalCanvasActive() )
-    {
-        m_toolManager->RunAction( PCB_ACTIONS::layerChanged );       // notify other tools
-        GetGalCanvas()->SetFocus();                 // otherwise hotkeys are stuck somewhere
+    m_toolManager->RunAction( PCB_ACTIONS::layerChanged );  // notify other tools
+    GetGalCanvas()->SetFocus();                             // allow capture of hotkeys
 
-        GetGalCanvas()->SetHighContrastLayer( aLayer );
-        GetGalCanvas()->Refresh();
-    }
+    GetGalCanvas()->SetHighContrastLayer( aLayer );
+    GetGalCanvas()->Refresh();
 }
 
 
@@ -1072,7 +998,7 @@ void PCB_EDIT_FRAME::OnLayerColorChange( wxCommandEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
 {
-    // switches currently used canvas (default / Cairo / OpenGL).
+    // switches currently used canvas (Cairo / OpenGL).
     PCB_BASE_FRAME::OnSwitchCanvas( aEvent );
 
     // The base class method *does not reinit* the layers manager.
@@ -1321,13 +1247,7 @@ void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module, wxDC* DC 
     if( Module == NULL )
         return;
 
-#ifdef __WXMAC__
-    // avoid Avoid "writes" in the dialog, creates errors with WxOverlay and NSView & Modal
-    // Raising an Exception - Fixes #764678
-    DC = NULL;
-#endif
-
-    DIALOG_FOOTPRINT_BOARD_EDITOR* dlg = new DIALOG_FOOTPRINT_BOARD_EDITOR( this, Module, DC );
+    DIALOG_FOOTPRINT_BOARD_EDITOR* dlg = new DIALOG_FOOTPRINT_BOARD_EDITOR( this, Module );
 
     int retvalue = dlg->ShowModal();
     /* retvalue =
@@ -1342,10 +1262,8 @@ void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module, wxDC* DC 
 
     if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_EDIT_OK )
     {
-#ifdef __WXMAC__
         // If something edited, push a refresh request
         m_canvas->Refresh();
-#endif
     }
     else if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_EDIT_BOARD_FOOTPRINT )
     {

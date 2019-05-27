@@ -343,14 +343,6 @@ public:
     void Place_EdgeMod( EDGE_MODULE* drawitem );
 
     /**
-     * Change pad characteristics for the given footprint
-     * or all footprints which look like the given footprint.
-     * Options are set by the opened dialog.
-     * @param aPad is the pattern. The given footprint is the parent of this pad
-     */
-    void PushPadProperties( D_PAD* aPad );
-
-    /**
      * Delete the given module from its library.
      */
     bool DeleteModuleFromLibrary( const LIB_ID& aFPID, bool aConfirm );

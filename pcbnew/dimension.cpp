@@ -51,11 +51,6 @@
 static void BuildDimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                             const wxPoint& aPosition, bool aErase );
 
-static void MoveDimensionText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                               const wxPoint& aPosition, bool aErase );
-static void AbortMoveDimensionText( EDA_DRAW_PANEL* aPanel, wxDC* aDC );
-
-
 /* Local variables : */
 static int status_dimension; /* Used in dimension creation:
                               * = 0 : initial value: no dimension in progress
@@ -210,67 +205,6 @@ void PCB_EDIT_FRAME::DeleteDimension( DIMENSION* aDimension, wxDC* aDC )
 /* Initialize parameters to move a pcb text
  */
 static wxPoint initialTextPosition;
-
-void PCB_EDIT_FRAME::BeginMoveDimensionText( DIMENSION* aItem, wxDC* DC )
-{
-    if( aItem == NULL )
-        return;
-
-    // Store the initial position for undo/abort command
-    initialTextPosition = aItem->Text().GetTextPos();
-
-    aItem->Draw( m_canvas, DC, GR_XOR );
-    aItem->SetFlags( IS_MOVED );
-    SetMsgPanel( aItem );
-
-    SetCrossHairPosition( aItem->Text().GetTextPos() );
-    m_canvas->MoveCursorToCrossHair();
-
-    m_canvas->SetMouseCapture( MoveDimensionText, AbortMoveDimensionText );
-    SetCurItem( aItem );
-    m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
-}
-
-
-/* Move dimension text following the cursor. */
-static void MoveDimensionText( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                               bool aErase )
-{
-    DIMENSION* dimension = (DIMENSION*) aPanel->GetScreen()->GetCurItem();
-
-    if( dimension == NULL )
-        return;
-
-    if( aErase )
-        dimension->Draw( aPanel, aDC, GR_XOR );
-
-    dimension->Text().SetTextPos( aPanel->GetParent()->GetCrossHairPosition() );
-
-    dimension->Draw( aPanel, aDC, GR_XOR );
-}
-
-
-/*
- * Abort current text edit progress.
- *
- * If a text is selected, its initial coord are regenerated
- */
-void AbortMoveDimensionText( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
-{
-    DIMENSION* dimension = (DIMENSION*) aPanel->GetScreen()->GetCurItem();
-    ( (PCB_EDIT_FRAME*) aPanel->GetParent() )->SetCurItem( NULL );
-
-    aPanel->SetMouseCapture( NULL, NULL );
-
-    if( dimension == NULL )  // Should not occur
-        return;
-
-    dimension->Draw( aPanel, aDC, GR_XOR );
-    dimension->Text().SetTextPos( initialTextPosition );
-    dimension->ClearFlags();
-    dimension->Draw( aPanel, aDC, GR_OR );
-}
-
 
 /*
  *  Place the current dimension text being moving

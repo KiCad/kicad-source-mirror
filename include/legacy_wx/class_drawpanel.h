@@ -91,8 +91,6 @@ private:
      */
     bool    m_ignoreNextLeftButtonRelease;  ///< Ignore the next mouse left button release when true.
 
-    bool    m_enableBlockCommands;          ///< True enables block commands.
-
     /**
      * Count the drag events. Used to filter mouse moves before starting a
      * block command.  A block command can be started only if
@@ -162,12 +160,8 @@ public:
 
     void SetIgnoreLeftButtonReleaseEvent( bool aIgnore ) { m_ignoreNextLeftButtonRelease = aIgnore; }
 
-    void SetEnableBlockCommands( bool aEnable ) { m_enableBlockCommands = aEnable; }
-
     bool GetPrintMirrored() const               { return m_PrintIsMirrored; }
     void SetPrintMirrored( bool aMirror )       { m_PrintIsMirrored = aMirror; }
-
-    void SetCanStartBlock( int aStartBlock ) { m_canStartBlock = aStartBlock; }
 
     /**
      * Function DrawBackGround

@@ -121,15 +121,12 @@ bool DIALOG_SET_GRID::TransferDataFromWindow()
     // Notify GAL
     TOOL_MANAGER* mgr = m_parent->GetToolManager();
 
-    if( mgr && m_parent->IsGalCanvasActive() )
-    {
-        mgr->RunAction( "common.Control.gridPreset", true,
-                screen->GetGridCmdId() - ID_POPUP_GRID_LEVEL_1000 );
+    mgr->RunAction( "common.Control.gridPreset", true,
+                    screen->GetGridCmdId() - ID_POPUP_GRID_LEVEL_1000 );
 
-        TOOL_EVENT gridOriginUpdate = ACTIONS::gridSetOrigin.MakeEvent();
-        gridOriginUpdate.SetParameter( new VECTOR2D( m_parent->GetGridOrigin() ) );
-        mgr->ProcessEvent( gridOriginUpdate );
-    }
+    TOOL_EVENT gridOriginUpdate = ACTIONS::gridSetOrigin.MakeEvent();
+    gridOriginUpdate.SetParameter( new VECTOR2D( m_parent->GetGridOrigin() ) );
+    mgr->ProcessEvent( gridOriginUpdate );
 
     m_parent->UpdateGridSelectBox();
 

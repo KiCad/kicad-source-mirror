@@ -328,7 +328,7 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     col = COLUMN_COLORBM;
 
     auto bmb = new COLOR_SWATCH( m_LayerScrolledWindow, aSpec.color, encodeId( col, aSpec.id ),
-                                 AreArbitraryColorsAllowed(), getBackgroundLayerColor() );
+                                 getBackgroundLayerColor() );
     bmb->Bind( wxEVT_LEFT_DOWN, &LAYER_WIDGET::OnLeftDownLayers, this );
     bmb->Bind( COLOR_SWATCH_CHANGED, &LAYER_WIDGET::OnLayerSwatchChanged, this );
     bmb->SetToolTip( _("Left double click or middle click for color change, right click for menu" ) );
@@ -403,7 +403,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
     if( aSpec.color != COLOR4D::UNSPECIFIED )
     {
         auto bmb = new COLOR_SWATCH( m_RenderScrolledWindow, aSpec.color, encodeId( col, aSpec.id ),
-                                     AreArbitraryColorsAllowed(), getBackgroundLayerColor() );
+                                     getBackgroundLayerColor() );
         bmb->Bind( COLOR_SWATCH_CHANGED, &LAYER_WIDGET::OnRenderSwatchChanged, this );
         bmb->SetToolTip( _( "Left double click or middle click for color change" ) );
         m_RenderFlexGridSizer->wxSizer::Insert( index+col, bmb, 0, flags );

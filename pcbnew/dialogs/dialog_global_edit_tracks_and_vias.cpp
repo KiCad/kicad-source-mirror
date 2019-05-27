@@ -339,13 +339,8 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataFromWindow()
     {
         m_parent->SaveCopyInUndoList( itemsListPicker, UR_CHANGED );
 
-        if( m_parent->IsGalCanvasActive() )
-        {
-            for( TRACK* segment = m_brd->m_Track; segment != nullptr; segment = segment->Next() )
-                m_parent->GetGalCanvas()->GetView()->Update( segment );
-        }
-        else
-            m_parent->GetCanvas()->Refresh();
+        for( TRACK* segment = m_brd->m_Track; segment != nullptr; segment = segment->Next() )
+            m_parent->GetGalCanvas()->GetView()->Update( segment );
     }
 
     return !m_failedDRC;

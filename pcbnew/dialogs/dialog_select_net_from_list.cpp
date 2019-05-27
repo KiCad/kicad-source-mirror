@@ -221,25 +221,12 @@ void DIALOG_SELECT_NET_FROM_LIST::HighlightNet( const wxString& aNetName )
             netCode = net->GetNet();
     }
 
-    if( m_frame->IsGalCanvasActive() )
-    {
-        auto galCanvas = m_frame->GetGalCanvas();
-        KIGFX::RENDER_SETTINGS* render = galCanvas->GetView()->GetPainter()->GetSettings();
-        render->SetHighlight( netCode >= 0, netCode );
+    auto galCanvas = m_frame->GetGalCanvas();
+    KIGFX::RENDER_SETTINGS* render = galCanvas->GetView()->GetPainter()->GetSettings();
+    render->SetHighlight( netCode >= 0, netCode );
 
-        galCanvas->GetView()->UpdateAllLayersColor();
-        galCanvas->Refresh();
-    }
-    else
-    {
-        INSTALL_UNBUFFERED_DC( dc, m_frame->GetCanvas() );
-
-        if( m_brd->IsHighLightNetON() )
-            m_frame->HighLight( &dc );
-
-        m_brd->SetHighLightNet( netCode );
-        m_frame->HighLight( &dc );
-    }
+    galCanvas->GetView()->UpdateAllLayersColor();
+    galCanvas->Refresh();
 }
 
 

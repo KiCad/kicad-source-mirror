@@ -278,22 +278,14 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // Canvas selection
     configMenu->AppendSeparator();
 
-    if( ADVANCED_CFG::GetCfg().AllowLegacyCanvas() )
-    {
-        text = AddHotkeyName( _( "Legacy Tool&set" ), GerbviewHotkeysDescr, HK_CANVAS_LEGACY );
-        AddMenuItem( configMenu, ID_MENU_CANVAS_LEGACY, text,
-                _( "Use Legacy Toolset (not all features will be available)" ),
-                KiBitmap( tools_xpm ), wxITEM_RADIO );
-    }
-
-    text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), GerbviewHotkeysDescr, HK_CANVAS_OPENGL );
+    text = AddHotkeyName( _( "Accelerated Graphics" ), GerbviewHotkeysDescr, HK_CANVAS_OPENGL );
     AddMenuItem( configMenu, ID_MENU_CANVAS_OPENGL, text,
-                 _( "Use Modern Toolset with hardware-accelerated graphics (recommended)" ),
+                 _( "Use hardware-accelerated graphics (recommended)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
 
-    text = AddHotkeyName( _( "Modern Toolset (Fallba&ck)" ), GerbviewHotkeysDescr, HK_CANVAS_CAIRO );
+    text = AddHotkeyName( _( "Standard Graphics" ), GerbviewHotkeysDescr, HK_CANVAS_CAIRO );
     AddMenuItem( configMenu, ID_MENU_CANVAS_CAIRO, text,
-                 _( "Use Modern Toolset with software graphics (fall-back)" ),
+                 _( "Use software graphics (fall-back)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
 
     configMenu->AppendSeparator();

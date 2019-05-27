@@ -112,9 +112,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     // GerbView requires draw priority for rendering negative objects
     galCanvas->GetView()->UseDrawPriority( true );
 
-    if( m_canvas )
-        m_canvas->SetEnableBlockCommands( true );
-
     // Give an icon
     wxIcon icon;
     icon.CopyFromBitmap( KiBitmap( icon_gerbview_xpm ) );
@@ -181,8 +178,8 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
                               "and faster experience. This option is turned off by "
                               "default since it is not compatible with all computers.\n\n"
                               "Would you like to try enabling graphics acceleration?\n\n"
-                              "If you'd like to choose later, select Modern Toolset "
-                              "(Accelerated) in the Preferences menu." );
+                              "If you'd like to choose later, select Accelerated Graphics "
+                              "in the Preferences menu." );
 
             wxMessageDialog dlg( this, msg, _( "Enable Graphics Acceleration" ), wxYES_NO );
 
@@ -215,18 +212,13 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
         m_firstRunDialogSetting = 1;
         SaveSettings( config() );
     }
-    else if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
+    else
     {
-        if( GetGalCanvas()->SwitchBackend( canvasType ) )
-            UseGalCanvas( true );
+        GetGalCanvas()->SwitchBackend( canvasType );
+        UseGalCanvas( true );
 
         wxUpdateUIEvent e;
         OnUpdateSwitchCanvas( e );
-    }
-    else
-    {
-        m_colorsSettings->SetLegacyMode( true );
-        m_canvas->Refresh();
     }
 
     // Enable the axes to match legacy draw style
@@ -256,11 +248,8 @@ void GERBVIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
     if( m_toolManager )
         m_toolManager->DeactivateTool();
 
-    if( IsGalCanvasActive() )
-    {
-        // Be sure any OpenGL event cannot be fired after frame deletion:
-        GetGalCanvas()->SetEvtHandlerEnabled( false );
-    }
+    // Be sure any OpenGL event cannot be fired after frame deletion:
+    GetGalCanvas()->SetEvtHandlerEnabled( false );
 
     Destroy();
 }
@@ -934,15 +923,12 @@ void GERBVIEW_FRAME::SetActiveLayer( int aLayer, bool doLayerWidgetUpdate )
 
     UpdateTitleAndInfo();
 
-    if( IsGalCanvasActive() )
-    {
-        m_toolManager->RunAction( GERBVIEW_ACTIONS::layerChanged );       // notify other tools
-        GetGalCanvas()->SetFocus();                 // otherwise hotkeys are stuck somewhere
+    m_toolManager->RunAction( GERBVIEW_ACTIONS::layerChanged );       // notify other tools
+    GetGalCanvas()->SetFocus();                 // otherwise hotkeys are stuck somewhere
 
-        GetGalCanvas()->SetHighContrastLayer( GERBER_DRAW_LAYER( aLayer ) );
+    GetGalCanvas()->SetHighContrastLayer( GERBER_DRAW_LAYER( aLayer ) );
 
-        GetGalCanvas()->Refresh();
-    }
+    GetGalCanvas()->Refresh();
 }
 
 
@@ -954,23 +940,20 @@ void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
     if( screen )
         screen->InitDataPoints( aPageSettings.GetSizeIU() );
 
-    if( IsGalCanvasActive() )
+    auto drawPanel = static_cast<GERBVIEW_DRAW_PANEL_GAL*>( GetGalCanvas() );
+
+    // Prepare worksheet template
+    auto worksheet =
+            new KIGFX::WS_PROXY_VIEW_ITEM( IU_PER_MILS, &GetPageSettings(), &GetTitleBlock() );
+
+    if( screen != NULL )
     {
-        auto drawPanel = static_cast<GERBVIEW_DRAW_PANEL_GAL*>( GetGalCanvas() );
-
-        // Prepare worksheet template
-        auto worksheet =
-                new KIGFX::WS_PROXY_VIEW_ITEM( IU_PER_MILS, &GetPageSettings(), &GetTitleBlock() );
-
-        if( screen != NULL )
-        {
-            worksheet->SetSheetNumber( 1 );
-            worksheet->SetSheetCount( 1 );
-        }
-
-        // PCB_DRAW_PANEL_GAL takes ownership of the worksheet
-        drawPanel->SetWorksheet( worksheet );
+        worksheet->SetSheetNumber( 1 );
+        worksheet->SetSheetCount( 1 );
     }
+
+    // PCB_DRAW_PANEL_GAL takes ownership of the worksheet
+    drawPanel->SetWorksheet( worksheet );
 }
 
 
@@ -1039,8 +1022,7 @@ void GERBVIEW_FRAME::SetCurItem( GERBER_DRAW_ITEM* aItem, bool aDisplayInfo )
 
 void GERBVIEW_FRAME::SetGridColor( COLOR4D aColor )
 {
-    if( IsGalCanvasActive() )
-        GetGalCanvas()->GetGAL()->SetGridColor( aColor );
+    GetGalCanvas()->GetGAL()->SetGridColor( aColor );
 
     m_gridColor = aColor;
 }
@@ -1152,7 +1134,8 @@ unsigned GERBVIEW_FRAME::ImagesMaxCount() const
 
 
 void GERBVIEW_FRAME::unitsChangeRefresh()
-{   // Called on units change (see EDA_DRAW_FRAME)
+{
+    // Called on units change (see EDA_DRAW_FRAME)
     EDA_DRAW_FRAME::unitsChangeRefresh();
     updateDCodeSelectBox();
     updateGridSelectBox();
@@ -1285,7 +1268,7 @@ void GERBVIEW_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
     int current = 0;    // display Auto if no match found
 
     // check for a match within 1%
-    double zoom = IsGalCanvasActive() ? GetGalCanvas()->GetLegacyZoom() : GetScreen()->GetZoom();
+    double zoom = GetGalCanvas()->GetLegacyZoom();
 
     for( unsigned i = 0; i < GetScreen()->m_ZoomList.size(); i++ )
     {

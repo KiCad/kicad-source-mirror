@@ -254,15 +254,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case wxID_COPY:
     case ID_TOOLBARH_PCB_SELECT_LAYER:
     case ID_MODEDIT_PAD_SETTINGS:
-    case ID_POPUP_PCB_COPY_PAD_SETTINGS:
-    case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
-    case ID_POPUP_PCB_STOP_CURRENT_DRAWING:
-    case ID_POPUP_MODEDIT_EDIT_BODY_ITEM:
-    case ID_POPUP_MODEDIT_EDIT_WIDTH_ALL_EDGE:
-    case ID_POPUP_MODEDIT_EDIT_LAYER_ALL_EDGE:
         break;
 
-    case ID_POPUP_CANCEL_CURRENT_COMMAND:
     default:
         if( m_canvas->IsMouseCaptured() )
         {
@@ -270,8 +263,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             m_canvas->CallEndMouseCapture( &dc );
         }
 
-        if( id != ID_POPUP_CANCEL_CURRENT_COMMAND )
-            SetNoToolSelected();
+        SetNoToolSelected();
 
         break;
     }
@@ -427,7 +419,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             {
                 m_toolManager->GetView()->Update( GetBoard()->m_Modules );
 
-                if( IsGalCanvasActive() && GetGalCanvas() )
+                if( GetGalCanvas() )
                     GetGalCanvas()->ForceRefresh();
                 else
                     GetCanvas()->Refresh();
@@ -460,7 +452,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 m_toolManager->GetView()->Update( GetBoard()->m_Modules );
                 GetScreen()->ClrModify();
 
-                if( IsGalCanvasActive() && GetGalCanvas() )
+                if( GetGalCanvas() )
                     GetGalCanvas()->ForceRefresh();
                 else
                     GetCanvas()->Refresh();
@@ -594,26 +586,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
-    case ID_POPUP_CLOSE_CURRENT_TOOL:
-        break;
-
-    case ID_POPUP_CANCEL_CURRENT_COMMAND:
-        break;
-
-    case ID_POPUP_PCB_EDIT_MODULE_PRMS:
-        editFootprintProperties( (MODULE*) GetScreen()->GetCurItem() );
-        m_canvas->MoveCursorToCrossHair();
-        m_canvas->Refresh();
-        break;
-
-    case ID_POPUP_PCB_MOVE_PAD_REQUEST:
-        m_canvas->MoveCursorToCrossHair();
-        StartMovePad( (D_PAD*) GetScreen()->GetCurItem(), &dc, false );
-        break;
-
-    case ID_POPUP_PCB_EDIT_PAD:
-        InstallPadOptionsFrame( (D_PAD*) GetScreen()->GetCurItem() );
-        m_canvas->MoveCursorToCrossHair();
     break;
 
     case ID_POPUP_PCB_MOVE_EXACT:
@@ -625,44 +597,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     // JEY TODO: many (most? all?) of these are legacy-only and can be removed.
-
-    case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
-        SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
-        // Calls the global change dialog:
-        PushPadProperties((D_PAD*) GetScreen()->GetCurItem());
-        m_canvas->MoveCursorToCrossHair();
-        break;
-
-    case ID_POPUP_PCB_COPY_PAD_SETTINGS:
-        m_canvas->MoveCursorToCrossHair();
-        Export_Pad_Settings( (D_PAD*) GetScreen()->GetCurItem() );
-        break;
-
-    case ID_POPUP_PCB_STOP_CURRENT_DRAWING:
-        m_canvas->MoveCursorToCrossHair();
-
-        if( GetScreen()->GetCurItem()->IsNew() )
-        {
-            End_Edge_Module( (EDGE_MODULE*) GetScreen()->GetCurItem() );
-            SetCurItem( NULL );
-        }
-        break;
-
-    case  ID_POPUP_MODEDIT_EDIT_BODY_ITEM :
-        InstallGraphicItemPropertiesDialog( GetScreen()->GetCurItem() );
-        break;
-
-    case ID_POPUP_MODEDIT_EDIT_WIDTH_ALL_EDGE:
-        m_canvas->MoveCursorToCrossHair();
-        Edit_Edge_Width( NULL );
-        m_canvas->Refresh();
-        break;
-
-    case ID_POPUP_MODEDIT_EDIT_LAYER_ALL_EDGE:
-        m_canvas->MoveCursorToCrossHair();
-        Edit_Edge_Layer( NULL );
-        m_canvas->Refresh();
-        break;
 
     case ID_GEN_IMPORT_GRAPHICS_FILE:
         if( GetBoard()->m_Modules )
@@ -866,11 +800,8 @@ void FOOTPRINT_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
     m_Layers->SelectLayer( GetActiveLayer() );
     m_Layers->OnLayerSelected();
 
-    if( IsGalCanvasActive() )
-    {
-        GetGalCanvas()->SetHighContrastLayer( aLayer );
-        GetGalCanvas()->Refresh();
-    }
+    GetGalCanvas()->SetHighContrastLayer( aLayer );
+    GetGalCanvas()->Refresh();
 }
 
 bool FOOTPRINT_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )

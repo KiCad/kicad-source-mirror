@@ -113,69 +113,53 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
                 }
             }
 
-            if( IsGalCanvasActive() )
+            auto view = m_toolManager->GetView();
+            auto rs = view->GetPainter()->GetSettings();
+            rs->SetHighlight( ( netcode >= 0 ), netcode );
+            view->UpdateAllLayersColor();
+
+            BOX2I bbox;
+            bool first = true;
+
+            auto merge_area = [netcode, &bbox, &first]( BOARD_CONNECTED_ITEM* aItem )
             {
-                auto view = m_toolManager->GetView();
-                auto rs = view->GetPainter()->GetSettings();
-                rs->SetHighlight( ( netcode >= 0 ), netcode );
-                view->UpdateAllLayersColor();
-
-                BOX2I bbox;
-                bool first = true;
-
-                auto merge_area = [netcode, &bbox, &first]( BOARD_CONNECTED_ITEM* aItem )
+                if( aItem->GetNetCode() == netcode )
                 {
-                    if( aItem->GetNetCode() == netcode )
+                    if( first )
                     {
-                        if( first )
-                        {
-                            bbox = aItem->GetBoundingBox();
-                            first = false;
-                        }
-                        else
-                        {
-                            bbox.Merge( aItem->GetBoundingBox() );
-                        }
+                        bbox = aItem->GetBoundingBox();
+                        first = false;
                     }
-                };
-
-                for( auto zone : pcb->Zones() )
-                    merge_area( zone );
-
-                for( auto track : pcb->Tracks() )
-                    merge_area( track );
-
-                for( auto mod : pcb->Modules() )
-                    for ( auto mod_pad : mod->Pads() )
-                        merge_area( mod_pad );
-
-                if( netcode > 0 && bbox.GetWidth() > 0 && bbox.GetHeight() > 0 )
-                {
-                    auto bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
-                    auto screenSize = view->ToWorld( GetGalCanvas()->GetClientSize(), false );
-                    double ratio = std::max( fabs( bbSize.x / screenSize.x ),
-                                             fabs( bbSize.y / screenSize.y ) );
-                    double scale = view->GetScale() / ratio;
-
-                    view->SetScale( scale );
-                    view->SetCenter( bbox.Centre() );
+                    else
+                    {
+                        bbox.Merge( aItem->GetBoundingBox() );
+                    }
                 }
+            };
 
-                GetGalCanvas()->Refresh();
-            }
-            else
+            for( auto zone : pcb->Zones() )
+                merge_area( zone );
+
+            for( auto track : pcb->Tracks() )
+                merge_area( track );
+
+            for( auto mod : pcb->Modules() )
+                for ( auto mod_pad : mod->Pads() )
+                    merge_area( mod_pad );
+
+            if( netcode > 0 && bbox.GetWidth() > 0 && bbox.GetHeight() > 0 )
             {
-                if( netcode > 0 )
-                {
-                    pcb->HighLightON();
-                    pcb->SetHighLightNet( netcode );
-                }
-                else
-                {
-                    pcb->HighLightOFF();
-                    pcb->SetHighLightNet( -1 );
-                }
+                auto bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
+                auto screenSize = view->ToWorld( GetGalCanvas()->GetClientSize(), false );
+                double ratio = std::max( fabs( bbSize.x / screenSize.x ),
+                                         fabs( bbSize.y / screenSize.y ) );
+                double scale = view->GetScale() / ratio;
+
+                view->SetScale( scale );
+                view->SetCenter( bbox.Centre() );
             }
+
+            GetGalCanvas()->Refresh();
         }
 
         return;
@@ -279,20 +263,12 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     if( module )  // if found, center the module on screen, and redraw the screen.
     {
-        if( IsGalCanvasActive() )
-        {
-            GetToolManager()->RunAction( PCB_ACTIONS::crossProbeSchToPcb,
-                true,
-                pad ?
-                    static_cast<BOARD_ITEM*>( pad ) :
-                    static_cast<BOARD_ITEM*>( module )
-                );
-        }
-        else
-        {
-            SetCrossHairPosition( pos );
-            RedrawScreen( pos, false );
-        }
+        GetToolManager()->RunAction( PCB_ACTIONS::crossProbeSchToPcb,
+            true,
+            pad ?
+                static_cast<BOARD_ITEM*>( pad ) :
+                static_cast<BOARD_ITEM*>( module )
+            );
     }
 }
 

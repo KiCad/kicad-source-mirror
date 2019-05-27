@@ -499,11 +499,8 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& event )
         newmodule->SetTimeStamp( GetNewTimeStamp() );
         commit.Push( wxT( "Insert module" ) );
 
-        if( pcbframe->IsGalCanvasActive() )
-        {
-            pcbframe->Raise();
-            pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::placeModule, true, newmodule );
-        }
+        pcbframe->Raise();
+        pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::placeModule, true, newmodule );
 
         newmodule->ClearFlags();
         pcbframe->SetCurItem( NULL );

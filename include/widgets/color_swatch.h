@@ -48,8 +48,7 @@ public:
      * @param aArbitraryColors true to allow selection of any 32 bits color for GAL canvas,
      * and false to allow a selection from a set of colors accepted by the legacy canvas.
      */
-    COLOR_SWATCH( wxWindow* aParent, KIGFX::COLOR4D aColor, int aID,
-                  bool aArbitraryColors, KIGFX::COLOR4D aBackground );
+    COLOR_SWATCH( wxWindow* aParent, KIGFX::COLOR4D aColor, int aID, KIGFX::COLOR4D aBackground );
 
     /**
      * Set the current swatch color directly.
@@ -81,9 +80,6 @@ private:
      * Pass unwanted events on to listeners of this object
      */
     void rePostEvent( wxEvent& aEvt );
-
-    ///> Can the swatch have any color, or only preset ones for legacy canvas?
-    bool m_arbitraryColors;
 
     ///> The current colour of the swatch
     KIGFX::COLOR4D m_color;

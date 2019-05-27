@@ -924,10 +924,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
         ZONE_CONTAINER* edge_zone = GetBoard()->GetArea( ii );
         edge_zone->Draw( m_canvas, DC, GR_XOR );
 
-        if( IsGalCanvasActive() )
-        {
-            GetGalCanvas()->GetView()->Update( edge_zone );
-        }
+        GetGalCanvas()->GetView()->Update( edge_zone );
     }
 
     zoneInfo.ExportSetting( *aZone );
@@ -979,9 +976,6 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     GetBoard()->GetConnectivity()->RecalculateRatsnest();
 
     s_PickedList.ClearItemsList();  // s_ItemsListPicker is no longer owner of picked items
-
-    if( !IsGalCanvasActive() )
-        m_canvas->Refresh();
 }
 
 

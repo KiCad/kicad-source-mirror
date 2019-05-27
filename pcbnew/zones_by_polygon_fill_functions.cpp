@@ -81,9 +81,7 @@ void PCB_EDIT_FRAME::Check_All_Zones( wxWindow* aActiveWindow )
     {
         m_ZoneFillsDirty = false;
 
-        if( IsGalCanvasActive() && GetGalCanvas() )
-            GetGalCanvas()->ForceRefresh();
-
+        GetGalCanvas()->ForceRefresh();
         GetCanvas()->Refresh();
     }
 }

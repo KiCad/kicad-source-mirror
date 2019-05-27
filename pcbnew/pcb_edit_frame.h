@@ -100,29 +100,13 @@ protected:
     // The Tool Framework initalization
     void setupTools();
 
-    // we'll use lower case function names for private member functions.
-    void createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu );
-    void createPopUpMenuForFootprints( MODULE* aModule, wxMenu* aPopMenu );
-    void createPopUpMenuForFpTexts( TEXTE_MODULE* aText, wxMenu* aPopMenu );
-    void createPopUpMenuForFpPads( D_PAD* aPad, wxMenu* aPopMenu );
-    void createPopupMenuForTracks( TRACK* aTrack, wxMenu* aPopMenu );
-    void createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu );
-    void createPopUpBlockMenu( wxMenu* menu );
-    void createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aPopMenu );
-
     wxString createBackupFile( const wxString& aFileName );
-
-    /**
-     * an helper function to enable some menus only active when the display
-     * is switched to GAL mode and which do nothing in legacy mode
-     */
-    void enableGALSpecificMenus();
 
     /**
      * switches currently used canvas (default / Cairo / OpenGL).
      * It also reinit the layers manager that slightly changes with canvases
      */
-    virtual void OnSwitchCanvas( wxCommandEvent& aEvent ) override;
+    void OnSwitchCanvas( wxCommandEvent& aEvent ) override;
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     /**
@@ -874,9 +858,8 @@ public:
      * @return true if Ok.
      */
     bool ExportVRML_File( const wxString & aFullFileName, double aMMtoWRMLunit,
-                          bool aExport3DFiles, bool aUseRelativePaths,
-                          bool aUsePlainPCB, const wxString & a3D_Subdir,
-                          double aXRef, double aYRef );
+                          bool aExport3DFiles, bool aUseRelativePaths, bool aUsePlainPCB,
+                          const wxString & a3D_Subdir, double aXRef, double aYRef );
 
     /**
      * Function OnExportIDF3
@@ -996,15 +979,6 @@ public:
      *                               false to just move the module
      */
     void StartMoveModule( MODULE* aModule, wxDC* aDC, bool aDragConnectedTracks );
-
-    /**
-     * Function PushPadProperties
-     * Function to change pad caracteristics for the given footprint
-     * or all footprints which look like the given footprint
-     * Options are set by the opened dialog.
-     * @param aPad is the pattern. The given footprint is the parent of this pad
-     */
-    void PushPadProperties( D_PAD* aPad );
 
     /**
      * Function Delete Module
@@ -1159,26 +1133,8 @@ public:
     void Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On );
     void Attribut_net( wxDC* DC, int net_code, bool Flag_On );
 
-    /**
-     * Function StartMoveOneNodeOrSegment
-     * initializes the parameters to move one  via or/and a terminal point of a track segment
-     * The terminal point of other connected segments (if any) are moved too.
-     */
-    void StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aCommand );
-
     bool PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC );
 
-    /**
-     * @todo This function is broken, because it merge segments having different
-     *       widths or without any connectivity test.
-     * 2 collinear segments can be merged only if no other segment or via is
-     * connected to the common point and if they have the same width. See
-     * cleanup.cpp for merge functions and consider MarkTrace() to locate segments
-     * that can be merged
-     */
-    bool MergeCollinearTracks( TRACK* track, wxDC* DC, int end );
-
-    void Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC );
     void SwitchLayer( wxDC* DC, PCB_LAYER_ID layer ) override;
 
     /**
@@ -1364,7 +1320,6 @@ public:
     // Target handling
     PCB_TARGET* CreateTarget( wxDC* DC );
     void DeleteTarget( PCB_TARGET* aTarget, wxDC* DC );
-    void BeginMoveTarget( PCB_TARGET* aTarget, wxDC* DC );
     void PlaceTarget( PCB_TARGET* aTarget, wxDC* DC );
     void ShowTargetOptionsDialog( PCB_TARGET* aTarget, wxDC* DC );
 
@@ -1372,7 +1327,6 @@ public:
     DRAWSEGMENT* Begin_DrawSegment( DRAWSEGMENT* Segment, STROKE_T shape, wxDC* DC );
     void End_Edge( DRAWSEGMENT* Segment, wxDC* DC );
     void Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC );
-    void Delete_Drawings_All_Layer( PCB_LAYER_ID aLayer );
 
     // Dimension handling:
     void ShowDimensionPropertyDialog( DIMENSION* aDimension, wxDC* aDC );
