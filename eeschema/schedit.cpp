@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -1064,19 +1064,12 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
         if( doClearAnnotation )     // happens when the current sheet load a existing file
         {                           // we must clear "new" components annotation
             SCH_SCREENS screensList( g_RootSheet );
-
             // We clear annotation of new sheet paths here:
             screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
-
             // Clear annotation of m_CurrentSheet itself, because its sheetpath
             // is not a new path, but components managed by its sheet path must have
             // their annotation cleared, becuase they are new:
-            SCH_SCREEN* currentScreen = ((SCH_SHEET*) item)->GetScreen();
-            wxCHECK_RET( currentScreen, "SCH_SHEET does not have valid SCH_SCREEN object." );
-            currentScreen->ClearAnnotation( m_CurrentSheet );
-
-            // Update the library symbol links.
-            currentScreen->UpdateSymbolLinks( true );
+            ((SCH_SHEET*) item)->GetScreen()->ClearAnnotation( m_CurrentSheet );
         }
 
         if( doRefresh )
