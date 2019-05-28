@@ -379,7 +379,7 @@ bool KICADMODULE::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
             wxString::FromUTF8Unchecked( i->m_modelname.c_str() ) ).ToUTF8() );
 
         if( aPCB->AddComponent( fname, m_refdes, LAYER_BOTTOM == m_side ? true : false,
-            newpos, m_rotation, i->m_offset, i->m_rotation ) )
+            newpos, m_rotation, i->m_offset, i->m_rotation, i->m_scale ) )
             hasdata = true;
 
     }

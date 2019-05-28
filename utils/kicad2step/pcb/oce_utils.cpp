@@ -57,6 +57,7 @@
 #include <BRepBuilderAPI.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
+#include <BRepBuilderAPI_GTransform.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepPrimAPI_MakePrism.hxx>
 #include <BRepPrimAPI_MakeCylinder.hxx>
@@ -579,7 +580,7 @@ bool PCBMODEL::AddPadHole( KICADPAD* aPad )
 // add a component at the given position and orientation
 bool PCBMODEL::AddComponent( const std::string& aFileName, const std::string& aRefDes,
     bool aBottom, DOUBLET aPosition, double aRotation,
-    TRIPLET aOffset, TRIPLET aOrientation )
+    TRIPLET aOffset, TRIPLET aOrientation, TRIPLET aScale )
 {
     if( aFileName.empty() )
     {
@@ -595,7 +596,7 @@ bool PCBMODEL::AddComponent( const std::string& aFileName, const std::string& aR
     // first retrieve a label
     TDF_Label lmodel;
 
-    if( !getModelLabel( aFileName, lmodel ) )
+    if( !getModelLabel( aFileName, aScale, lmodel ) )
     {
         std::ostringstream ostr;
 #ifdef __WXDEBUG__
@@ -908,9 +909,11 @@ bool PCBMODEL::WriteSTEP( const std::string& aFileName )
 }
 
 
-bool PCBMODEL::getModelLabel( const std::string aFileName, TDF_Label& aLabel )
+bool PCBMODEL::getModelLabel( const std::string aFileName, TRIPLET aScale, TDF_Label& aLabel )
 {
-    MODEL_MAP::const_iterator mm = m_models.find( aFileName );
+    std::string model_key = aFileName + "_" + std::to_string( aScale.x ) + "_" + std::to_string( aScale.y ) + "_" + std::to_string( aScale.z );
+
+    MODEL_MAP::const_iterator mm = m_models.find( model_key );
 
     if( mm != m_models.end() )
     {
@@ -1000,7 +1003,7 @@ bool PCBMODEL::getModelLabel( const std::string aFileName, TDF_Label& aLabel )
                     {
                         std::string altFileName = altFile.GetFullPath().ToStdString();
 
-                        if( getModelLabel( altFileName, aLabel ) )
+                        if( getModelLabel( altFileName, aScale, aLabel ) )
                         {
                             return true;
                         }
@@ -1016,7 +1019,7 @@ bool PCBMODEL::getModelLabel( const std::string aFileName, TDF_Label& aLabel )
             return false;
     }
 
-    aLabel = transferModel( doc, m_doc );
+    aLabel = transferModel( doc, m_doc, aScale );
 
     if( aLabel.IsNull() )
     {
@@ -1036,7 +1039,7 @@ bool PCBMODEL::getModelLabel( const std::string aFileName, TDF_Label& aLabel )
     TCollection_ExtendedString partname( pname.c_str() );
     TDataStd_Name::Set( aLabel, partname );
 
-    m_models.insert( MODEL_DATUM( aFileName, aLabel ) );
+    m_models.insert( MODEL_DATUM( model_key, aLabel ) );
     ++m_components;
     return true;
 }
@@ -1176,9 +1179,16 @@ bool PCBMODEL::readSTEP( Handle(TDocStd_Document)& doc, const char* fname )
 
 
 TDF_Label PCBMODEL::transferModel( Handle( TDocStd_Document )& source,
-    Handle( TDocStd_Document )& dest )
+    Handle( TDocStd_Document )& dest, TRIPLET aScale )
 {
     // transfer data from Source into a top level component of Dest
+
+    gp_GTrsf scale_transform;
+    scale_transform.SetVectorialPart( gp_Mat( aScale.x, 0, 0,
+                                              0, aScale.y, 0,
+                                              0, 0, aScale.z ) );
+    BRepBuilderAPI_GTransform brep( scale_transform );
+
 
     // s_assy = shape tool for the source
     Handle(XCAFDoc_ShapeTool) s_assy = XCAFDoc_DocumentTool::ShapeTool ( source->Main() );
@@ -1206,7 +1216,22 @@ TDF_Label PCBMODEL::transferModel( Handle( TDocStd_Document )& source,
 
         if ( !shape.IsNull() )
         {
-            TDF_Label niulab = d_assy->AddComponent( component, shape, Standard_False );
+            brep.Perform( shape, Standard_False );
+            TopoDS_Shape scaled_shape;
+
+            if ( brep.IsDone() ) {
+                scaled_shape = brep.Shape();
+            } else {
+                std::ostringstream ostr;
+#ifdef __WXDEBUG__
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+#endif /* __WXDEBUG */
+                ostr << "  * failed to scale model\n";
+                wxLogMessage( "%s", ostr.str().c_str() );
+                scaled_shape = shape;
+            }
+
+            TDF_Label niulab = d_assy->AddComponent( component, scaled_shape, Standard_False );
 
             // check for per-surface colors
             stop.Init( shape, TopAbs_FACE );
