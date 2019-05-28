@@ -99,7 +99,7 @@ class PCBMODEL
     std::list< KICADCURVE >     m_curves;
     std::vector< TopoDS_Shape > m_cutouts;
 
-    bool getModelLabel( const std::string aFileName, TDF_Label& aLabel );
+    bool getModelLabel( const std::string aFileName, TRIPLET aScale, TDF_Label& aLabel );
 
     bool getModelLocation( bool aBottom, DOUBLET aPosition, double aRotation,
         TRIPLET aOffset, TRIPLET aOrientation, TopLoc_Location& aLocation );
@@ -108,7 +108,7 @@ class PCBMODEL
     bool readSTEP( Handle( TDocStd_Document )& m_doc, const char* fname );
 
     TDF_Label transferModel( Handle( TDocStd_Document )& source,
-        Handle( TDocStd_Document )& dest );
+        Handle( TDocStd_Document )& dest, TRIPLET aScale );
 
 public:
     PCBMODEL();
@@ -123,7 +123,7 @@ public:
     // add a component at the given position and orientation
     bool AddComponent( const std::string& aFileName, const std::string& aRefDes,
         bool aBottom, DOUBLET aPosition, double aRotation,
-        TRIPLET aOffset, TRIPLET aOrientation );
+        TRIPLET aOffset, TRIPLET aOrientation, TRIPLET aScale );
 
     // set the thickness of the PCB (mm); the top of the PCB shall be at Z = aThickness
     // aThickness < 0.0 == use default thickness
