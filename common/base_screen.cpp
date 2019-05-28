@@ -383,18 +383,6 @@ wxPoint BASE_SCREEN::getCursorPosition( bool aOnGrid, const wxPoint& aGridOrigin
 }
 
 
-wxPoint BASE_SCREEN::getCrossHairScreenPosition() const
-{
-    wxPoint pos = m_crossHairPosition - m_DrawOrg;
-    double  scalar = GetScalingFactor();
-
-    pos.x = KiROUND( (double) pos.x * scalar );
-    pos.y = KiROUND( (double) pos.y * scalar );
-
-    return pos;
-}
-
-
 void BASE_SCREEN::setCrossHairPosition( const wxPoint& aPosition, const wxPoint& aGridOrigin,
                                         bool aSnapToGrid )
 {

@@ -349,7 +349,6 @@ set( COMMON_SRCS
     richio.cpp
     search_stack.cpp
     searchhelpfilefullpath.cpp
-    selcolor.cpp
     settings.cpp
     status_popup.cpp
     systemdirsappend.cpp

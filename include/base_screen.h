@@ -122,13 +122,6 @@ private:
     void setCrossHairPosition( const wxPoint& aPosition, const wxPoint& aGridOrigin, bool aSnapToGrid );
 
     /**
-     * Function getCursorScreenPosition
-     * returns the cross hair position in device (display) units.b
-     * @return The current cross hair position.
-     */
-    wxPoint getCrossHairScreenPosition() const;
-
-    /**
      * Function getNearestGridPosition
      * returns the nearest \a aGridSize location to \a aPosition.
      * @param aPosition The position to check.
@@ -228,16 +221,6 @@ public:
     EDA_ITEM* GetCurItem() const { return m_CurrentItem; }
 
     void InitDataPoints( const wxSize& aPageSizeInternalUnits );
-
-    /**
-     * Function MilsToIuScalar
-     * returns the scalar required to convert mils to internal units.
-     *
-     * @note This is a temporary hack until the derived objects SCH_SCREEN and PCB_SCREEN
-     *       no longer need to be derived from BASE_SCREEN.  I does allow removal of the
-     *       obsolete GetInternalUnits function.
-     */
-    virtual int MilsToIuScalar() { return 1; }
 
     /* general Undo/Redo command control */
 

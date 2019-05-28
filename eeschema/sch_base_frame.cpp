@@ -354,20 +354,6 @@ void SCH_BASE_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointe
 }
 
 
-void SCH_BASE_FRAME::RedrawScreen2( const wxPoint& posBefore )
-{
-    KIGFX::GAL* gal = GetCanvas()->GetGAL();
-
-    double selectedZoom = GetScreen()->GetZoom();
-    double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
-    double scale = 1.0 / ( zoomFactor * selectedZoom );
-
-    GetCanvas()->GetView()->SetScale( scale );
-
-    GetGalCanvas()->Refresh();
-}
-
-
 void SCH_BASE_FRAME::CenterScreen( const wxPoint& aCenterPoint, bool aWarpPointer )
 {
     GetCanvas()->GetView()->SetCenter( aCenterPoint );

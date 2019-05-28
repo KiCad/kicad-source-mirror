@@ -300,13 +300,11 @@ public:
                                                        const LIB_ID& aPreselectedLibid,
                                                        int aUnit, int aConvert );
 
-    virtual void RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer ) override;
-
-    virtual void RedrawScreen2( const wxPoint& posBefore ) override;
+    virtual void RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer );
 
     virtual void CenterScreen( const wxPoint& aCenterPoint, bool aWarpPointer );
 
-    virtual void HardRedraw() override;
+    void HardRedraw() override;
 
     /**
      * Add an item to the screen (and view)

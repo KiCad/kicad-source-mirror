@@ -123,13 +123,6 @@ GBR_SCREEN::~GBR_SCREEN()
 }
 
 
-// virtual function
-int GBR_SCREEN::MilsToIuScalar()
-{
-    return (int)IU_PER_MILS;
-}
-
-
 /* Virtual function needed by classes derived from BASE_SCREEN
  * this is a virtual pure function in BASE_SCREEN
  * do nothing in GerbView

@@ -50,8 +50,6 @@ public:
 
     GBR_SCREEN* Next() const { return static_cast<GBR_SCREEN*>( Pnext ); }
 
-    virtual int MilsToIuScalar() override;
-
     /**
      * Function ClearUndoORRedoList
      * virtual pure in BASE_SCREEN, so it must be defined here

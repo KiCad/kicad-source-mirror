@@ -177,9 +177,3 @@ PCB_SCREEN::~PCB_SCREEN()
 {
     ClearUndoRedoList();
 }
-
-
-int PCB_SCREEN::MilsToIuScalar()
-{
-    return static_cast<int>( IU_PER_MILS );
-}

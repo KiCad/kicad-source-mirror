@@ -356,13 +356,6 @@ public:
      */
     wxPoint GetNearestGridPosition( const wxPoint& aPosition, wxRealPoint* aGridSize = NULL ) const;
 
-    /**
-     * Return the cross hair position in device (display) units.b
-     *
-     * @return The current cross hair position.
-     */
-    wxPoint GetCrossHairScreenPosition() const;
-
     void SetMousePosition( const wxPoint& aPosition );
 
     /**
@@ -562,23 +555,6 @@ public:
     }
 
     /**
-     * Change the grid size settings to the next one available.
-     */
-    virtual void SetNextGrid();
-
-    /**
-     * Change the grid size settings to the previous one available.
-     */
-    virtual void SetPrevGrid();
-
-    /**
-     * Change the grid size to one of the preset values.
-     *
-     * @param aIndex is the index from the list.
-     */
-    void SetPresetGrid( int aIndex );
-
-    /**
      * Command event handler for selecting grid sizes.
      *
      * All commands that set the grid size should eventually end up here.
@@ -612,8 +588,6 @@ public:
 
     void OnEraseBackground( wxEraseEvent& SizeEvent );
 
-    virtual void OnZoom( wxCommandEvent& event );
-
     /**
      * Change the zoom to the next one available redraws the screen
      * and warp the mouse pointer on request.
@@ -631,29 +605,6 @@ public:
      * @param aWarpPointer = true to move the pointer to the aCenterPoint
      */
     void SetPreviousZoomAndRedraw( const wxPoint& aCenterPoint, bool aWarpPointer );
-
-    /**
-     * Change zoom to one of the preset values.
-     *
-     * @param aIndex is the zoom index from the list.
-     */
-    void SetPresetZoom( int aIndex );
-
-    /**
-     * Redraw the entire screen area by updating the scroll bars and mouse pointer in
-     * order to have \a aCenterPoint at the center of the screen.
-     *
-     * @param aCenterPoint The position in logical units to center the scroll bars.
-     * @param aWarpPointer Moves the mouse cursor to \a aCenterPoint if true.
-     */
-    virtual void RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer );
-
-    /**
-     * Put the crosshair back to the screen position it had before zooming.
-     *
-     * @param posBefore screen position of the crosshair before zooming
-     */
-    virtual void RedrawScreen2( const wxPoint& posBefore );
 
     /**
      * Rebuild the GAL and redraws the screen.  Call when something went wrong.
@@ -737,11 +688,6 @@ public:
      * Display current unit pane on the status bar.
      */
     void DisplayUnitsMsg();
-
-    /**
-     * Copy the current page or the current block to the clipboard.
-     */
-    void CopyToClipboard( wxCommandEvent& event );
 
     /* interprocess communication */
     void CreateServer( int service, bool local = true );

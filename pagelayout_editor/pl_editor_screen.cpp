@@ -101,12 +101,6 @@ PL_EDITOR_SCREEN::~PL_EDITOR_SCREEN()
 }
 
 
-int PL_EDITOR_SCREEN::MilsToIuScalar()
-{
-    return (int)IU_PER_MILS;
-}
-
-
 void PL_EDITOR_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount )
 {
     if( aItemCount == 0 )

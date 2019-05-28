@@ -57,8 +57,6 @@ public:
 
     PCB_SCREEN* Next() const { return static_cast<PCB_SCREEN*>( Pnext ); }
 
-    virtual int MilsToIuScalar() override;
-
     /**
      * Function GetCurItem
      * returns the currently selected BOARD_ITEM, overriding

@@ -100,10 +100,6 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
     EVT_MENU_CLOSE( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_MENU_HIGHLIGHT_ALL( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_ACTIVATE( EDA_DRAW_FRAME::OnActivate )
-    EVT_MENU_RANGE( ID_ZOOM_BEGIN, ID_ZOOM_END, EDA_DRAW_FRAME::OnZoom )
-
-    EVT_MENU_RANGE( ID_POPUP_ZOOM_START_RANGE, ID_POPUP_ZOOM_END_RANGE,
-                    EDA_DRAW_FRAME::OnZoom )
 
     EVT_MENU_RANGE( ID_POPUP_GRID_LEVEL_1000, ID_POPUP_GRID_USER,
                     EDA_DRAW_FRAME::OnSelectGrid )
@@ -493,17 +489,9 @@ void EDA_DRAW_FRAME::DisplayUnitsMsg()
 
     switch( m_UserUnits )
     {
-    case INCHES:
-        msg = _( "Inches" );
-        break;
-
-    case MILLIMETRES:
-        msg = _( "mm" );
-        break;
-
-    default:
-        msg = _( "Units" );
-        break;
+    case INCHES:      msg = _( "Inches" ); break;
+    case MILLIMETRES: msg = _( "mm" );     break;
+    default:          msg = _( "Units" );  break;
     }
 
     SetStatusText( msg, 4 );
@@ -553,71 +541,6 @@ void EDA_DRAW_FRAME::SetNoToolSelected()
     defaultCursor = GetGalCanvas()->GetDefaultCursor();
 
     SetToolID( ID_NO_TOOL_SELECTED, defaultCursor, wxEmptyString );
-}
-
-
-void EDA_DRAW_FRAME::SetNextGrid()
-{
-    BASE_SCREEN * screen = GetScreen();
-
-    int new_grid_cmd = screen->GetGridCmdId();
-
-    // if the grid id is the not the last, increment it
-    if( screen->GridExists( new_grid_cmd + 1 ) )
-        new_grid_cmd += 1;
-
-   SetPresetGrid( new_grid_cmd - ID_POPUP_GRID_LEVEL_1000 );
-}
-
-
-void EDA_DRAW_FRAME::SetPrevGrid()
-{
-    BASE_SCREEN * screen = GetScreen();
-
-    int new_grid_cmd = screen->GetGridCmdId();
-
-    // if the grid id is the not the first, increment it
-    if( screen->GridExists( new_grid_cmd - 1 ) )
-        new_grid_cmd -= 1;
-
-    SetPresetGrid( new_grid_cmd - ID_POPUP_GRID_LEVEL_1000 );
-}
-
-
-void EDA_DRAW_FRAME::SetPresetGrid( int aIndex )
-{
-    BASE_SCREEN * screen = GetScreen();
-
-    if( ! screen->GridExists( aIndex + ID_POPUP_GRID_LEVEL_1000 ) )
-        aIndex = screen->GetGrids()[0].m_CmdId;
-
-    // aIndex is a Command Id relative to ID_POPUP_GRID_LEVEL_1000 comand id code.
-    // we need an index in grid list (the cmd id in list is is screen->GetGrids()[0].m_CmdId):
-    int glistIdx = aIndex + ID_POPUP_GRID_LEVEL_1000 - screen->GetGrids()[0].m_CmdId;
-
-    if( m_gridSelectBox )
-    {
-        int highestGrid = ( int )m_gridSelectBox->GetCount();
-
-        // GerbView does not support the user grid setting
-        if( m_Ident != FRAME_GERBER )
-            highestGrid -= 2;
-
-        if( glistIdx < 0 || glistIdx >= highestGrid )
-        {
-            wxASSERT_MSG( false, "Invalid grid index" );
-            return;
-        }
-
-        m_gridSelectBox->SetSelection( glistIdx );
-    }
-
-    // Be sure m_LastGridSizeId is up to date.
-    m_LastGridSizeId = aIndex;
-    GetScreen()->SetGrid( aIndex + ID_POPUP_GRID_LEVEL_1000 );
-
-    // Put cursor on new grid
-    SetCrossHairPosition( RefPos( true ) );
 }
 
 
@@ -921,13 +844,6 @@ wxPoint EDA_DRAW_FRAME::GetNearestGridPosition( const wxPoint& aPosition, wxReal
 }
 
 
-wxPoint EDA_DRAW_FRAME::GetCrossHairScreenPosition() const
-{
-    BASE_SCREEN* screen = GetScreen();  // virtual call
-    return screen->getCrossHairScreenPosition();
-}
-
-
 void EDA_DRAW_FRAME::SetMousePosition( const wxPoint& aPosition )
 {
     BASE_SCREEN* screen = GetScreen();  // virtual call
@@ -1123,18 +1039,6 @@ bool EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos, bool
 }
 
 
-void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer )
-{
-    // JEY TODO: OBSOLETE
-}
-
-
-void EDA_DRAW_FRAME::RedrawScreen2( const wxPoint& posBefore )
-{
-    // JEY TODO: OBSOLETE
-}
-
-
 void EDA_DRAW_FRAME::HardRedraw()
 {
     m_canvas->Refresh();
@@ -1180,119 +1084,6 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
         SetCrossHairPosition( GetScrollCenterPosition() );
 
     m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
-}
-
-
-void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
-{
-    if( m_canvas == NULL )
-        return;
-
-    int          id = event.GetId();
-    bool         zoom_at_cursor = false;
-    BASE_SCREEN* screen = GetScreen();
-    wxPoint      center = GetScrollCenterPosition();
-
-    if ( id == ID_KEY_ZOOM_IN )
-    {
-        id = GetCanvas()->GetEnableZoomNoCenter() ?
-             ID_OFFCENTER_ZOOM_IN : ID_POPUP_ZOOM_IN;
-    }
-    else if ( id == ID_KEY_ZOOM_OUT )
-    {
-        id = GetCanvas()->GetEnableZoomNoCenter() ?
-             ID_OFFCENTER_ZOOM_OUT : ID_POPUP_ZOOM_OUT;
-    }
-
-    switch( id )
-    {
-    case ID_OFFCENTER_ZOOM_IN:
-        center = m_canvas->ToDeviceXY( GetCrossHairPosition() );
-
-        if( screen->SetPreviousZoom() )
-            RedrawScreen2( center );
-        break;
-
-    case ID_POPUP_ZOOM_IN:
-        zoom_at_cursor = true;
-        center = GetCrossHairPosition();
-
-    // fall thru
-    case ID_VIEWER_ZOOM_IN:
-    case ID_ZOOM_IN:
-        if( screen->SetPreviousZoom() )
-            RedrawScreen( center, zoom_at_cursor );
-        break;
-
-    case ID_OFFCENTER_ZOOM_OUT:
-        center = m_canvas->ToDeviceXY( GetCrossHairPosition() );
-
-        if( screen->SetNextZoom() )
-            RedrawScreen2( center );
-        break;
-
-    case ID_POPUP_ZOOM_OUT:
-        zoom_at_cursor = true;
-        center = GetCrossHairPosition();
-
-    // fall thru
-    case ID_VIEWER_ZOOM_OUT:
-    case ID_ZOOM_OUT:
-        if( screen->SetNextZoom() )
-            RedrawScreen( center, zoom_at_cursor );
-        break;
-
-    case ID_VIEWER_ZOOM_REDRAW:
-    case ID_POPUP_ZOOM_REDRAW:
-    case ID_ZOOM_REDRAW:
-        // This usually means something went wrong.  Do a hard refresh.
-        SetScreen( GetScreen() );
-        break;
-
-    case ID_POPUP_ZOOM_CENTER:
-        center = GetCrossHairPosition();
-        RedrawScreen( center, true );
-        break;
-
-    case ID_POPUP_ZOOM_PAGE:
-    case ID_VIEWER_ZOOM_PAGE:
-    case ID_ZOOM_PAGE:
-        Zoom_Automatique( false );
-        break;
-
-    case ID_POPUP_ZOOM_SELECT:
-        break;
-
-    case ID_POPUP_CANCEL:
-        m_canvas->MoveCursorToCrossHair();
-        break;
-
-    default:
-        SetPresetZoom( id - ID_POPUP_ZOOM_LEVEL_START );
-    }
-
-    UpdateStatusBar();
-}
-
-
-void EDA_DRAW_FRAME::SetPresetZoom( int aIndex )
-{
-    BASE_SCREEN* screen = GetScreen();
-
-    if( aIndex >= (int) screen->m_ZoomList.size() )
-    {
-        wxLogDebug( wxT( "%s %d: index %d is outside the bounds of the zoom list." ),
-                    __TFILE__, __LINE__, aIndex );
-        return;
-    }
-
-    if( m_zoomSelectBox )
-        m_zoomSelectBox->SetSelection( aIndex );
-
-    if( screen->SetZoom( screen->m_ZoomList[aIndex] ) )
-        RedrawScreen( GetScrollCenterPosition(), true );
-
-    UpdateStatusBar();
 }
 
 
@@ -1394,105 +1185,6 @@ void EDA_DRAW_FRAME::FocusOnLocation( const wxPoint& aPos, bool aWarpCursor, boo
         GetGalCanvas()->GetViewControls()->SetCursorPosition( aPos );
     else
         GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( aPos );
-}
-
-
-static bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame );
-
-
-void EDA_DRAW_FRAME::CopyToClipboard( wxCommandEvent& event )
-{
-    DrawPageOnClipboard( this );
-}
-
-
-/* copy the current page or block to the clipboard ,
- * to export drawings to other applications (word processing ...)
- * This is not suitable for copy command within Eeschema or Pcbnew
- */
-bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
-{
-    wxRect  DrawArea;
-    BASE_SCREEN* screen = aFrame->GetCanvas()->GetScreen();
-
-    DrawArea.SetSize( aFrame->GetPageSizeIU() );
-
-    // Calculate a reasonable dc size, in pixels, and the dc scale to fit
-    // the drawings into the dc size
-    // scale is the ratio resolution (in PPI) / internal units
-    double ppi = 300;   // Use 300 pixels per inch to create bitmap images on start
-    double inch2Iu = 1000.0 * (double) screen->MilsToIuScalar();
-    double  scale = ppi / inch2Iu;
-
-    wxSize dcsize = DrawArea.GetSize();
-
-    int maxdim = std::max( dcsize.x, dcsize.y );
-
-    // the max size in pixels of the bitmap used to byuild the sheet copy
-    const int maxbitmapsize = 3000;
-
-    while( int( maxdim * scale ) > maxbitmapsize )
-    {
-        ppi = ppi / 1.5;
-        scale = ppi / inch2Iu;
-    }
-
-    dcsize.x *= scale;
-    dcsize.y *= scale;
-
-    // Set draw offset, zoom... to values needed to draw in the memory DC
-    // after saving initial values:
-    wxPoint tmp_startvisu = screen->m_StartVisu;
-    double tmpzoom = screen->GetZoom();
-    wxPoint old_org = screen->m_DrawOrg;
-    screen->m_DrawOrg.x   = screen->m_DrawOrg.y = 0;
-    screen->m_StartVisu.x = screen->m_StartVisu.y = 0;
-
-    screen->SetZoom( 1 );   // we use zoom = 1 in draw functions.
-
-    wxMemoryDC dc;
-    wxBitmap image( dcsize );
-    dc.SelectObject( image );
-
-    EDA_RECT tmp = *aFrame->GetCanvas()->GetClipBox();
-    GRResetPenAndBrush( &dc );
-    GRForceBlackPen( false );
-    screen->m_IsPrinting = true;
-    dc.SetUserScale( scale, scale );
-
-    aFrame->GetCanvas()->SetClipBox( EDA_RECT( wxPoint( 0, 0 ), wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
-
-    dc.Clear();
-    aFrame->GetCanvas()->EraseScreen( &dc );
-    const LSET allLayersMask = LSET().set();
-    aFrame->PrintPage( &dc, allLayersMask, false );
-    screen->m_IsPrinting = false;
-    aFrame->GetCanvas()->SetClipBox( tmp );
-
-    bool    success = true;
-
-    if( wxTheClipboard->Open() )
-    {
-        // This data objects are held by the clipboard,
-        // so do not delete them in the app.
-        wxBitmapDataObject* clipbrd_data = new wxBitmapDataObject( image );
-        wxTheClipboard->SetData( clipbrd_data );
-        wxTheClipboard->Close();
-    }
-    else
-        success = false;
-
-    // Deselect Bitmap from DC in order to delete the MemoryDC safely
-    // without deleting the bitmap
-    dc.SelectObject( wxNullBitmap );
-
-    GRForceBlackPen( false );
-
-    screen->m_StartVisu = tmp_startvisu;
-    screen->m_DrawOrg   = old_org;
-    screen->SetZoom( tmpzoom );
-
-    return success;
 }
 
 

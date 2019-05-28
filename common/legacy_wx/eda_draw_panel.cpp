@@ -926,7 +926,6 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
 
             GetParent()->SetScrollCenterPosition( center );
             GetParent()->SetCrossHairPosition( center, true );
-            GetParent()->RedrawScreen( center, false );
         }
     }
     else if( wheelRotation > 0 )
@@ -976,10 +975,6 @@ void EDA_DRAW_PANEL::OnMagnify( wxMouseEvent& event )
     vector.y /= magnification;
 
     SetZoom(scaleFactor);
-
-    // Recenter the window along our scaled vector such that the
-    // cursor becomes our scale axis, remaining fixed on screen
-    GetParent()->RedrawScreen( cursorPosition + vector, warpCursor );
 
     event.Skip();
 }

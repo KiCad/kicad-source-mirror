@@ -28,6 +28,7 @@
 #include <kiface_i.h>
 #include <project.h>
 #include <wildcards_and_files_ext.h>
+#include <wx/clipbrd.h>
 #include <sch_edit_frame.h>
 #include <sch_legacy_plugin.h>
 #include <sch_sheet.h>
@@ -402,3 +403,87 @@ SCH_HIERLABEL* SCH_EDIT_FRAME::ImportHierLabel( SCH_SHEET* aSheet )
 
     return nullptr;
 }
+
+
+/*
+ * Copy the current page or block to the clipboard, to export drawings to other applications
+ * (word processing ...) This is not suitable for copy command within Eeschema or Pcbnew.
+ */
+void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard( wxCommandEvent& aEvt )
+{
+    wxRect  DrawArea;
+    BASE_SCREEN* screen = GetCanvas()->GetScreen();
+
+    DrawArea.SetSize( GetPageSizeIU() );
+
+    // Calculate a reasonable dc size, in pixels, and the dc scale to fit
+    // the drawings into the dc size
+    // scale is the ratio resolution (in PPI) / internal units
+    double ppi = 300;   // Use 300 pixels per inch to create bitmap images on start
+    double inch2Iu = 1000.0 * IU_PER_MILS;
+    double  scale = ppi / inch2Iu;
+
+    wxSize dcsize = DrawArea.GetSize();
+
+    int maxdim = std::max( dcsize.x, dcsize.y );
+
+    // the max size in pixels of the bitmap used to byuild the sheet copy
+    const int maxbitmapsize = 3000;
+
+    while( int( maxdim * scale ) > maxbitmapsize )
+    {
+        ppi = ppi / 1.5;
+        scale = ppi / inch2Iu;
+    }
+
+    dcsize.x *= scale;
+    dcsize.y *= scale;
+
+    // Set draw offset, zoom... to values needed to draw in the memory DC
+    // after saving initial values:
+    wxPoint tmp_startvisu = screen->m_StartVisu;
+    double tmpzoom = screen->GetZoom();
+    wxPoint old_org = screen->m_DrawOrg;
+    screen->m_DrawOrg.x   = screen->m_DrawOrg.y = 0;
+    screen->m_StartVisu.x = screen->m_StartVisu.y = 0;
+
+    screen->SetZoom( 1 );   // we use zoom = 1 in draw functions.
+
+    wxMemoryDC dc;
+    wxBitmap image( dcsize );
+    dc.SelectObject( image );
+
+    EDA_RECT tmp = *GetCanvas()->GetClipBox();
+    GRResetPenAndBrush( &dc );
+    GRForceBlackPen( false );
+    screen->m_IsPrinting = true;
+    dc.SetUserScale( scale, scale );
+
+    GetCanvas()->SetClipBox( EDA_RECT( wxPoint( 0, 0 ), wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
+
+    dc.Clear();
+    GetCanvas()->EraseScreen( &dc );
+    const LSET allLayersMask = LSET().set();
+    PrintPage( &dc, allLayersMask, false );
+    screen->m_IsPrinting = false;
+    GetCanvas()->SetClipBox( tmp );
+
+    if( wxTheClipboard->Open() )
+    {
+        // This data objects are held by the clipboard, so do not delete them in the app.
+        wxBitmapDataObject* clipbrd_data = new wxBitmapDataObject( image );
+        wxTheClipboard->SetData( clipbrd_data );
+        wxTheClipboard->Close();
+    }
+
+    // Deselect Bitmap from DC in order to delete the MemoryDC
+    dc.SelectObject( wxNullBitmap );
+
+    GRForceBlackPen( false );
+
+    screen->m_StartVisu = tmp_startvisu;
+    screen->m_DrawOrg   = old_org;
+    screen->SetZoom( tmpzoom );
+}
+
+

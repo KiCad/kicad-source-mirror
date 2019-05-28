@@ -446,7 +446,6 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
 void CVPCB_MAINFRAME::DisplayModule( wxCommandEvent& event )
 {
     CreateScreenCmp();
-    GetFootprintViewerFrame()->RedrawScreen( wxPoint( 0, 0 ), false );
 }
 
 

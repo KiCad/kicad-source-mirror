@@ -567,6 +567,12 @@ public:
     void DisplayCurrentSheet();
 
     /**
+     * Use the wxWidgets print code to draw an image of the current sheet onto
+     * the clipboard.
+     */
+    void DrawCurrentSheetToClipboard( wxCommandEvent& event );
+
+    /**
      * Called when modifying the page settings.
      * In derived classes it can be used to modify parameters like draw area size,
      * and any other local parameter related to the page settings.

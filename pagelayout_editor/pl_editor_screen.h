@@ -48,8 +48,6 @@ public:
 
     ~PL_EDITOR_SCREEN();
 
-    virtual int MilsToIuScalar() override;
-
     /**
      * Function ClearUndoORRedoList
      * virtual pure in BASE_SCREEN, so it must be defined here
