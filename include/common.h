@@ -390,6 +390,22 @@ namespace std
     };
 }
 
+/**
+ * Helper function to print the given wxSize to a stream.
+ *
+ * Used for debugging functions like EDA_ITEM::Show and also in unit
+ * testing fixtures.
+ */
+std::ostream& operator<<( std::ostream& out, const wxSize& size );
+
+/**
+ * Helper function to print the given wxPoint to a stream.
+ *
+ * Used for debugging functions like EDA_ITEM::Show and also in unit
+ * testing fixtures.
+ */
+std::ostream& operator<<( std::ostream& out, const wxPoint& pt );
+
 
 /**
  * A wrapper around a wxFileName which is much more performant with a subset of the API.

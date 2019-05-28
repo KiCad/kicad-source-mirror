@@ -38,15 +38,6 @@
 #include <bitmap_types.h>
 #include <view/view_item.h>
 
-#if defined(DEBUG)
-#include <iostream>         // needed for Show()
-
-extern std::ostream& operator <<( std::ostream& out, const wxSize& size );
-
-extern std::ostream& operator <<( std::ostream& out, const wxPoint& pt );
-#endif
-
-
 /**
  * Enum FILL_T
  * is the set of fill types used in plotting or drawing enclosed areas.

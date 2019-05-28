@@ -612,6 +612,20 @@ bool std::less<wxPoint>::operator()( const wxPoint& aA, const wxPoint& aB ) cons
 #endif
 
 
+std::ostream& operator<<( std::ostream& out, const wxSize& size )
+{
+    out << " width=\"" << size.GetWidth() << "\" height=\"" << size.GetHeight() << "\"";
+    return out;
+}
+
+
+std::ostream& operator<<( std::ostream& out, const wxPoint& pt )
+{
+    out << " x=\"" << pt.x << "\" y=\"" << pt.y << "\"";
+    return out;
+}
+
+
 /**
  * Performance enhancements to file and directory operations.
  *

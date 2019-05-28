@@ -274,22 +274,6 @@ BITMAP_DEF EDA_ITEM::GetMenuImage() const
 
 #if defined(DEBUG)
 
-// A function that should have been in wxWidgets
-std::ostream& operator<<( std::ostream& out, const wxSize& size )
-{
-    out << " width=\"" << size.GetWidth() << "\" height=\"" << size.GetHeight() << "\"";
-    return out;
-}
-
-
-// A function that should have been in wxWidgets
-std::ostream& operator<<( std::ostream& out, const wxPoint& pt )
-{
-    out << " x=\"" << pt.x << "\" y=\"" << pt.y << "\"";
-    return out;
-}
-
-
 void EDA_ITEM::ShowDummy( std::ostream& os ) const
 {
     // XML output:
