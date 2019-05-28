@@ -230,8 +230,6 @@ public:
     void ReCreateOptToolbar();
 
     void ReCreateMenuBar() override;
-    void OnLeftClick( wxDC* aDC, const wxPoint& aMousePos ) override;
-    void OnLeftDClick( wxDC* aDC, const wxPoint& aMousePos ) override;
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
     double BestZoom() override;
     void UpdateStatusBar() override;
@@ -463,17 +461,6 @@ public:
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
     EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
-    /**
-     * Function OnHotKey.
-     *  ** Commands are case insensitive **
-     *  Some commands are relatives to the item under the mouse cursor
-     * @param aDC = current device context
-     * @param aHotkeyCode = hotkey code (ascii or wxWidget code for special keys)
-     * @param aPosition The cursor position in logical (drawing) units.
-     * @param aItem = NULL or pointer on a EDA_ITEM under the mouse cursor
-     */
-    bool OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition, EDA_ITEM* aItem = NULL ) override;
-
     GERBER_DRAW_ITEM* Locate( const wxPoint& aPosition, int typeloc );
 
     void Process_Config( wxCommandEvent& event );
@@ -567,8 +554,6 @@ public:
      */
     bool LoadGerberJobFile( const wxString& aFileName );
 
-
-    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
 
     /**
      * Set Size Items (Lines, Flashes) from DCodes List

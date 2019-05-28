@@ -108,7 +108,6 @@ public:
      */
     COLOR4D GetGridColor() override;
 
-    bool    GeneralControl( wxDC* DC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
     void    InstallOptionsDisplay( wxCommandEvent& event );
     MODULE* Get_Module( const wxString& CmpName );
 

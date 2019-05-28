@@ -846,39 +846,6 @@ void LIB_VIEW_FRAME::OnAddPartToSchematic( wxCommandEvent& aEvent )
 }
 
 
-bool LIB_VIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey )
-{
-    bool eventHandled = true;
-
-    // Filter out the 'fake' mouse motion after a keyboard movement
-    if( !aHotKey && m_movingCursorWithKeyboard )
-    {
-        m_movingCursorWithKeyboard = false;
-        return false;
-    }
-
-    wxPoint pos = aPosition;
-    GeneralControlKeyMovement( aHotKey, &pos, true );
-
-    // Update cursor position.
-    SetCrossHairPosition( pos, true );
-
-    if( aHotKey )
-    {
-        SCH_SCREEN* screen = GetScreen();
-
-        if( screen->GetCurItem() && screen->GetCurItem()->GetEditFlags() )
-            eventHandled = OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
-        else
-            eventHandled = OnHotKey( aDC, aHotKey, aPosition, NULL );
-    }
-
-    UpdateStatusBar();    // Display cursor coordinates info.
-
-    return eventHandled;
-}
-
-
 void LIB_VIEW_FRAME::OnDisplayHotkeyList( wxCommandEvent& event )
 {
     DisplayHotkeyList( this, g_Viewlib_Hotkeys_Descr );

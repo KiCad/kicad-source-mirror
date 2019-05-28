@@ -40,7 +40,6 @@ set( GERBVIEW_SRCS
     gbr_layer_box_selector.cpp
     X2_gerber_attributes.cpp
     clear_gbr_drawlayers.cpp
-    controle.cpp
     dcode.cpp
     draw_gerber_screen.cpp
     evaluate.cpp
@@ -55,7 +54,6 @@ set( GERBVIEW_SRCS
     job_file_reader.cpp
     locate.cpp
     menubar.cpp
-    onleftclick.cpp
     readgerb.cpp
     rs274_read_XY_and_IJ_coordinates.cpp
     rs274d.cpp

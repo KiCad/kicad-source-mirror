@@ -182,20 +182,8 @@ private:
     void                ClickOnPageList( wxCommandEvent& event );
     void                OnSetRelativeOffset( wxCommandEvent& event );
 
-    bool                GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
-
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
     EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
-
-    /**
-     * Function OnHotKey
-     * handle hot key events.
-     * <p?
-     * Some commands are relative to the item under the mouse cursor.  Commands are
-     * case insensitive
-     * </p>
-     */
-    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL ) override;
 
     void                LoadSettings( wxConfigBase* aCfg ) override;
     void                SaveSettings( wxConfigBase* aCfg ) override;

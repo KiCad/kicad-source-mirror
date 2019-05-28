@@ -30,9 +30,7 @@ const KICAD_T GERBER_COLLECTOR::AllItems[] = {
 /**
  * Function Inspect
  * is the examining function within the INSPECTOR which is passed to the
- * Iterate function.  Searches and collects all the objects that the old
- * function PcbGeneralLocateAndDisplay() would find, except that it keeps all
- * that it finds and does not do any displaying.
+ * Iterate function.
  *
  * @param testItem An EDA_ITEM to examine.
  * @param testData not used here.

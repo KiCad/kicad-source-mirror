@@ -425,7 +425,6 @@ public:
     virtual void ExecuteRemoteCommand( const char* cmdline ){}
 
     void OnMenuOpen( wxMenuEvent& event );
-    void  OnMouseEvent( wxMouseEvent& event );
 
     /**
      * After calling this function, if the left mouse button
@@ -454,9 +453,6 @@ public:
      * @return Hot key descriptor or NULL if none found.
      */
     virtual EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const = 0;
-
-    virtual bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
-                           EDA_ITEM* aItem = NULL );
 
     /**
      * Add standard zoom commands and submenu zoom and grid selection to a popup menu
@@ -610,22 +606,6 @@ public:
     void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );
 
     /**
-     * Perform application specific control using \a aDC at \a aPosition in logical units.
-     * <p>
-     * Override this function for application specific control.  This function gets
-     * called on every mouse and key event.
-     *</p>
-     * @param aDC A device context.
-     * @param aPosition The current cursor position in logical (drawing) units.
-     * @param aHotKey A key event used for application specific control if not zero.
-     * @return true if the hotkey code is handled (captured).
-     */
-    virtual bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 )
-    {
-        return false;
-    }
-
-    /**
      * Recalculate the size of toolbars and display panel when the frame size changes.
      */
     virtual void OnSize( wxSizeEvent& event );
@@ -723,8 +703,6 @@ public:
     wxString        GetToolMsg() { return m_toolMsg; }
     virtual void    RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;
     virtual void    OnLeftClick( wxDC* DC, const wxPoint& MousePos ) {}
-    virtual void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) {}
-    virtual bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) { return true; }
     virtual void    ToolOnRightClick( wxCommandEvent& event );
     void            AdjustScrollBars( const wxPoint& aCenterPosition );
 

@@ -240,23 +240,6 @@ public:
      */
     virtual bool CreateAndShow3D_Frame( bool aForceRecreateIfNotOwner );
 
-    /**
-     * Function PcbGeneralLocateAndDisplay
-     * searches for an item under the mouse cursor.
-     * Items are searched first on the current working layer.
-     * If nothing found, an item will be searched without layer restriction.
-     * If more than one item is found meeting the current working layer
-     * criterion, then a popup menu is shown which allows the user to pick
-     * which item he/she is interested in.  Once an item is chosen, then it
-     * is make the "current item" and the status window is updated to reflect
-     * this.
-     *
-     * @param aHotKeyCode The hotkey which relates to the caller and determines
-     *                    the type of search to be performed.  If zero, then
-     *                    the mouse tools will be tested instead.
-     */
-    BOARD_ITEM* PcbGeneralLocateAndDisplay( int aHotKeyCode = 0 );
-
     void ProcessItemSelection( wxCommandEvent& event );
 
     /**
@@ -340,21 +323,6 @@ public:
      * @param aRecreateRatsnest A bool true redraws the module rats nest.
      */
     void PlaceModule( MODULE* aModule, wxDC* aDC, bool aRecreateRatsnest = true );
-
-    // module texts
-    void RotateTextModule( TEXTE_MODULE* Text, wxDC* DC );
-    void DeleteTextModule( TEXTE_MODULE* Text );
-    void PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC );
-    void StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC );
-
-    /**
-     * Function ResetTextSize
-     * resets given field text size and width to current settings in
-     * Preferences->Dimensions->Texts and Drawings.
-     * @param aItem is the item to be reset, either TEXTE_PCB or TEXTE_MODULE.
-     * @param aDC is the drawing context.
-     */
-    void ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC );
 
     void InstallPadOptionsFrame( D_PAD* pad );
 

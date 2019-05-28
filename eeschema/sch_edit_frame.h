@@ -310,8 +310,6 @@ public:
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
     EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
-    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem ) override;
-
     /**
      * Must be called after a schematic change in order to set the "modify" flag of the
      * current screen and update the date in frame reference.

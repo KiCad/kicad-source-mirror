@@ -22,13 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcbnew/hotkeys.cpp
- */
-
 #include <fctsys.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
+#include <footprint_edit_frame.h>
 #include <footprint_viewer_frame.h>
 #include <footprint_wizard_frame.h>
 #include <pcbnew_id.h>
@@ -583,57 +580,6 @@ EDA_HOTKEY* FOOTPRINT_VIEWER_FRAME::GetHotKeyDescription( int aCommand ) const
 }
 
 
-bool FOOTPRINT_VIEWER_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
-                                       EDA_ITEM* aItem )
-{
-    if( aHotKey == 0 )
-        return false;
-
-    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
-    cmd.SetEventObject( this );
-
-    /* Convert lower to upper case (the usual toupper function has problem with non ascii
-     * codes like function keys */
-    if( (aHotKey >= 'a') && (aHotKey <= 'z') )
-        aHotKey += 'A' - 'a';
-
-    EDA_HOTKEY* HK_Descr = GetDescriptorFromHotkey( aHotKey, common_Hotkey_List );
-
-    if( HK_Descr == NULL )
-        HK_Descr = GetDescriptorFromHotkey( aHotKey, module_viewer_Hotkey_List );
-
-    if( HK_Descr == NULL )
-        return false;
-
-    switch( HK_Descr->m_Idcommand )
-    {
-    default:
-    case HK_NOT_FOUND:
-        return false;
-
-    case HK_HELP:                   // Display Current hotkey list
-        DisplayHotkeyList( this, g_Module_Viewer_Hotkeys_Descr );
-        break;
-
-    case HK_RESET_LOCAL_COORD:      // set local (relative) coordinate origin
-        GetScreen()->m_O_Curseur = GetCrossHairPosition();
-        break;
-
-    case HK_LEFT_CLICK:
-        OnLeftClick( aDC, aPosition );
-        break;
-
-    case HK_LEFT_DCLICK:    // Simulate a double left click: generate 2 events
-        OnLeftClick( aDC, aPosition );
-        OnLeftDClick( aDC, aPosition );
-        break;
-    }
-
-    return true;
-}
-
-
-
 EDA_HOTKEY* FOOTPRINT_WIZARD_FRAME::GetHotKeyDescription( int aCommand ) const
 {
     EDA_HOTKEY* HK_Descr = GetDescriptorFromCommand( aCommand, common_Hotkey_List );
@@ -642,47 +588,23 @@ EDA_HOTKEY* FOOTPRINT_WIZARD_FRAME::GetHotKeyDescription( int aCommand ) const
 }
 
 
-bool FOOTPRINT_WIZARD_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
-                                       EDA_ITEM* aItem )
+EDA_HOTKEY* PCB_EDIT_FRAME::GetHotKeyDescription( int aCommand ) const
 {
-    if( aHotKey == 0 )
-        return false;
-
-    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
-    cmd.SetEventObject( this );
-
-    /* Convert lower to upper case (the usual toupper function has problem with non ascii
-     * codes like function keys */
-    if( (aHotKey >= 'a') && (aHotKey <= 'z') )
-        aHotKey += 'A' - 'a';
-
-    EDA_HOTKEY* HK_Descr = GetDescriptorFromHotkey( aHotKey, common_Hotkey_List );
+    EDA_HOTKEY* HK_Descr = GetDescriptorFromCommand( aCommand, common_Hotkey_List );
 
     if( HK_Descr == NULL )
-        return false;
+        HK_Descr = GetDescriptorFromCommand( aCommand, board_edit_Hotkey_List );
 
-    switch( HK_Descr->m_Idcommand )
-    {
-    default:
-    case HK_NOT_FOUND:
-        return false;
+    return HK_Descr;
+}
 
-    case HK_HELP:                   // Display Current hotkey list
-        DisplayHotkeyList( this, g_Module_Viewer_Hotkeys_Descr );
-        break;
 
-    case HK_RESET_LOCAL_COORD:      // set local (relative) coordinate origin
-        GetScreen()->m_O_Curseur = GetCrossHairPosition();
-        break;
+EDA_HOTKEY* FOOTPRINT_EDIT_FRAME::GetHotKeyDescription( int aCommand ) const
+{
+    EDA_HOTKEY* HK_Descr = GetDescriptorFromCommand( aCommand, common_Hotkey_List );
 
-    case HK_LEFT_CLICK:
-        OnLeftClick( aDC, aPosition );
-        break;
+    if( HK_Descr == NULL )
+        HK_Descr = GetDescriptorFromCommand( aCommand, module_edit_Hotkey_List );
 
-    case HK_LEFT_DCLICK:    // Simulate a double left click: generate 2 events
-        OnLeftClick( aDC, aPosition );
-        OnLeftDClick( aDC, aPosition );
-        break;
-    }
-    return true;
+    return HK_Descr;
 }

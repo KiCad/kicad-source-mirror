@@ -686,41 +686,6 @@ void FOOTPRINT_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey )
-{
-    // Filter out the 'fake' mouse motion after a keyboard movement
-    if( !aHotKey && m_movingCursorWithKeyboard )
-    {
-        m_movingCursorWithKeyboard = false;
-        return false;
-    }
-
-    // when moving mouse, use the "magnetic" grid, unless the shift+ctrl keys is pressed
-    // for next cursor position
-    // ( shift or ctrl key down are PAN command with mouse wheel)
-    bool snapToGrid = true;
-
-    if( !aHotKey && wxGetKeyState( WXK_SHIFT ) && wxGetKeyState( WXK_CONTROL ) )
-        snapToGrid = false;
-
-    wxPoint oldpos = GetCrossHairPosition();
-    wxPoint pos = aPosition;
-    bool keyHandled = GeneralControlKeyMovement( aHotKey, &pos, snapToGrid );
-
-    SetCrossHairPosition( pos, snapToGrid );
-    RefreshCrossHair( oldpos, aPosition, aDC );
-
-    if( aHotKey && OnHotKey( aDC, aHotKey, aPosition ) )
-    {
-        keyHandled = true;
-    }
-
-    UpdateStatusBar();
-
-    return keyHandled;
-}
-
-
 void FOOTPRINT_EDIT_FRAME::OnModify()
 {
     PCB_BASE_FRAME::OnModify();

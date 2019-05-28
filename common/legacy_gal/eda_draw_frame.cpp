@@ -83,7 +83,6 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
     EVT_MENU_OPEN( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_MENU_CLOSE( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_MENU_HIGHLIGHT_ALL( EDA_DRAW_FRAME::OnMenuOpen )
-    EVT_MOUSEWHEEL( EDA_DRAW_FRAME::OnMouseEvent )
 END_EVENT_TABLE()
 
 
@@ -364,12 +363,6 @@ void EDA_DRAW_FRAME::ReCreateMenuBar()
 }
 
 
-bool EDA_DRAW_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem )
-{
-    return false;
-}
-
-
 int EDA_DRAW_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
                                        wxString* aFullFileName )
 {
@@ -407,12 +400,6 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
 double EDA_DRAW_FRAME::GetZoom()
 {
     return GetScreen()->GetZoom();
-}
-
-
-void EDA_DRAW_FRAME::OnMouseEvent( wxMouseEvent& event )
-{
-    event.Skip();
 }
 
 

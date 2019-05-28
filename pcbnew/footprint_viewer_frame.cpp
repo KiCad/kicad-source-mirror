@@ -652,38 +652,6 @@ bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent 
 }
 
 
-bool FOOTPRINT_VIEWER_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey )
-{
-    bool eventHandled = true;
-
-    // Filter out the 'fake' mouse motion after a keyboard movement
-    if( !aHotKey && m_movingCursorWithKeyboard )
-    {
-        m_movingCursorWithKeyboard = false;
-        return false;
-    }
-
-    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
-    cmd.SetEventObject( this );
-
-    wxPoint oldpos = GetCrossHairPosition();
-    wxPoint pos = aPosition;
-    GeneralControlKeyMovement( aHotKey, &pos, true );
-
-    if( aHotKey )
-    {
-        eventHandled = OnHotKey( aDC, aHotKey, aPosition );
-    }
-
-    SetCrossHairPosition( pos );
-    RefreshCrossHair( oldpos, aPosition, aDC );
-
-    UpdateStatusBar();    // Display new cursor coordinates
-
-    return eventHandled;
-}
-
-
 void FOOTPRINT_VIEWER_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
     EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();

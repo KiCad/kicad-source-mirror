@@ -392,66 +392,6 @@ EDA_HOTKEY* SCH_EDIT_FRAME::GetHotKeyDescription( int aCommand ) const
 }
 
 
-/*
- * Hot keys.  Commands are case insensitive.
- */
-bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem )
-{
-    if( aHotKey == 0 )
-        return false;
-
-    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
-
-    /* Convert lower to upper case (the usual toupper function has problem
-     * with non ascii codes like function keys */
-    if( (aHotKey >= 'a') && (aHotKey <= 'z') )
-        aHotKey += 'A' - 'a';
-
-    // Search command from key :
-    EDA_HOTKEY* hotKey = GetDescriptorFromHotkey( aHotKey, common_Hotkey_List );
-
-    if( hotKey == NULL )
-        hotKey = GetDescriptorFromHotkey( aHotKey, schematic_Hotkey_List );
-
-    if( hotKey == NULL )
-        return false;
-
-    switch( hotKey->m_Idcommand )
-    {
-    default:
-    case HK_NOT_FOUND:
-        return false;
-
-    case HK_HELP:       // Display Current hotkey list
-        DisplayHotkeyList( this, g_Schematic_Hotkeys_Descr );
-        break;
-
-    case HK_PREFERENCES:
-        cmd.SetId( wxID_PREFERENCES );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_RESET_LOCAL_COORD:         // Reset the relative coord
-        GetScreen()->m_O_Curseur = GetCrossHairPosition();
-        break;
-
-    case HK_CANVAS_CAIRO:
-    case HK_CANVAS_OPENGL:
-        {
-            EDA_HOTKEY_CLIENT_DATA data( aPosition );
-            cmd.SetInt( hotKey->m_Idcommand );
-            cmd.SetClientObject( &data );
-            cmd.SetId( hotKey->m_IdMenuEvent );
-            GetEventHandler()->ProcessEvent( cmd );
-        }
-        break;
-    }
-
-    // Hot key handled.
-    return true;
-}
-
-
 EDA_HOTKEY* LIB_EDIT_FRAME::GetHotKeyDescription( int aCommand ) const
 {
     EDA_HOTKEY* HK_Descr = GetDescriptorFromCommand( aCommand, common_Hotkey_List );
@@ -460,52 +400,6 @@ EDA_HOTKEY* LIB_EDIT_FRAME::GetHotKeyDescription( int aCommand ) const
         HK_Descr = GetDescriptorFromCommand( aCommand, libEdit_Hotkey_List );
 
     return HK_Descr;
-}
-
-
-bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem )
-{
-    if( aHotKey == 0 )
-        return false;
-
-    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
-    cmd.SetEventObject( this );
-
-    /* Convert lower to upper case (the usual toupper function has problem
-     * with non ascii codes like function keys */
-    if( (aHotKey >= 'a') && (aHotKey <= 'z') )
-        aHotKey += 'A' - 'a';
-
-    EDA_HOTKEY* hotKey = GetDescriptorFromHotkey( aHotKey, common_Hotkey_List );
-
-    if( hotKey == NULL )
-        hotKey = GetDescriptorFromHotkey( aHotKey, libEdit_Hotkey_List );
-
-    if( hotKey == NULL )
-        return false;
-
-    switch( hotKey->m_Idcommand )
-    {
-    default:
-    case HK_NOT_FOUND:
-        return false;
-
-    case HK_HELP:       // Display Current hotkey list
-        DisplayHotkeyList( this, g_Libedit_Hotkeys_Descr );
-        break;
-
-    case HK_PREFERENCES:
-        cmd.SetId( wxID_PREFERENCES );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_RESET_LOCAL_COORD:         // Reset the relative coord
-        GetScreen()->m_O_Curseur = GetCrossHairPosition();
-        break;
-    }
-
-    // Hot key handled.
-    return true;
 }
 
 
@@ -520,47 +414,3 @@ EDA_HOTKEY* LIB_VIEW_FRAME::GetHotKeyDescription( int aCommand ) const
 }
 
 
-bool LIB_VIEW_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem )
-{
-    if( aHotKey == 0 )
-        return false;
-
-    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
-    cmd.SetEventObject( this );
-
-    /* Convert lower to upper case (the usual toupper function has problem with non ascii
-     * codes like function keys */
-    if( (aHotKey >= 'a') && (aHotKey <= 'z') )
-        aHotKey += 'A' - 'a';
-
-    EDA_HOTKEY* HK_Descr = GetDescriptorFromHotkey( aHotKey, common_basic_Hotkey_List );
-
-    if( HK_Descr == NULL )
-        HK_Descr = GetDescriptorFromHotkey( aHotKey, viewlib_Hotkey_List );
-
-    if( HK_Descr == NULL )
-        return false;
-
-    switch( HK_Descr->m_Idcommand )
-    {
-    default:
-    case HK_NOT_FOUND:
-        return false;
-
-    case HK_HELP:                   // Display Current hotkey list
-        DisplayHotkeyList( this, g_Viewlib_Hotkeys_Descr );
-        break;
-
-    case HK_RESET_LOCAL_COORD:      // set local (relative) coordinate origin
-        GetScreen()->m_O_Curseur = GetCrossHairPosition();
-        break;
-
-    case HK_CANVAS_CAIRO:
-    case HK_CANVAS_OPENGL:
-        cmd.SetInt( HK_Descr->m_Idcommand );
-        cmd.SetId( HK_Descr->m_IdMenuEvent );
-        GetEventHandler()->ProcessEvent( cmd );
-    }
-
-    return true;
-}

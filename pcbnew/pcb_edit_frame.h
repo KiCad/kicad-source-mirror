@@ -218,14 +218,6 @@ protected:
     virtual bool isAutoSaveRequired() const override;
 
     /**
-     * Function duplicateZone
-     * duplicates the given zone.
-     * @param aDC is the current Device Context.
-     * @param aZone is the zone to duplicate
-     */
-    void duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone );
-
-    /**
      * Function moveExact
      * Move the selected item exactly
      */
@@ -469,38 +461,6 @@ public:
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
     EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
-    /**
-     * Function OnHotKey.
-     *  ** Commands are case insensitive **
-     *  Some commands are relatives to the item under the mouse cursor
-     * @param aDC = current device context
-     * @param aHotkeyCode = hotkey code (ascii or wxWidget code for special keys)
-     * @param aPosition The cursor position in logical (drawing) units.
-     * @param aItem = NULL or pointer on a EDA_ITEM under the mouse cursor
-     */
-    bool OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition, EDA_ITEM* aItem = NULL ) override;
-
-    /**
-     * Function OnHotkeyDuplicateOrArrayItem
-     * Duplicate an item (optionally incrementing if necessary and possible)
-     * or invoke array dialog and create an array
-     * @param aIdCommand = the hotkey command id
-     * @return true if item duplicated or arrayed
-     */
-    bool OnHotkeyDuplicateOrArrayItem( int aIdCommand );
-
-    /**
-     * Function OnHotkeyBeginRoute
-     * If the current active layer is a copper layer,
-     * and if no item currently edited, start a new track segmenton
-     * the current copper layer.
-     * If a new track is in progress, terminate the current segment and
-     * start a new one.
-     * @param aDC = current device context
-     * @return a reference to the track if a track is created, or NULL
-     */
-    TRACK * OnHotkeyBeginRoute( wxDC* aDC );
-
     void OnCloseWindow( wxCloseEvent& Event ) override;
     void Process_Special_Functions( wxCommandEvent& event );
     void Tracks_and_Vias_Size_Event( wxCommandEvent& event );
@@ -615,8 +575,6 @@ public:
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     void UseGalCanvas( bool aEnable ) override;
 
-    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
-
     /**
      * Function ShowBoardSetupDialog
      */
@@ -627,10 +585,6 @@ public:
     /* toolbars update UI functions: */
 
     void PrepareLayerIndicator();
-
-    /* mouse functions events: */
-    void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
-    void OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) override;
 
     void OnSelectOptionToolbar( wxCommandEvent& event );
     void OnFlipPcbView( wxCommandEvent& event );
@@ -952,50 +906,11 @@ public:
 
     void Swap_Layers( wxCommandEvent& event );
 
-    // Handling texts on the board
-    void Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
-    void FlipTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC );
-    TEXTE_PCB* CreateTextePcb( wxDC* aDC, TEXTE_PCB* aText = NULL );
-    void Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
-    void StartMoveTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC, bool aErase = true );
-    void Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
-
     // Graphic Segments type DRAWSEGMENT
     void Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC );
-    void Place_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC );
 
     // Footprint editing (see also PCB_BASE_FRAME)
     void InstallFootprintPropertiesDialog( MODULE* Module, wxDC* DC );
-
-    /**
-     * Function StartMoveModule
-     * Initialize a drag or move pad command
-     * @param aModule = the module to move or drag
-     * @param aDC = the current device context
-     * @param aDragConnectedTracks = true to drag connected tracks,
-     *                               false to just move the module
-     */
-    void StartMoveModule( MODULE* aModule, wxDC* aDC, bool aDragConnectedTracks );
-
-    /**
-     * Function Delete Module
-     * Remove a footprint from m_Modules linked list and put it in undelete buffer
-     * The ratsnest and pad list are recalculated
-     * @param aModule = footprint to delete
-     * @param aDC = currentDevice Context. if NULL: do not redraw new ratsnest
-     */
-    bool Delete_Module( MODULE* aModule, wxDC* aDC );
-
-    /**
-     * Function Change_Side_Module
-     * Flip a footprint (switch layer from component or component to copper)
-     * The mirroring is made from X axis
-     * if a footprint is not on copper or component layer it is not flipped
-     * (it could be on an adhesive layer, not supported at this time)
-     * @param Module the footprint to flip
-     * @param  DC Current Device Context. if NULL, no redraw
-     */
-    void Change_Side_Module( MODULE* Module, wxDC* DC );
 
     int InstallExchangeModuleFrame( MODULE* aModule, bool updateMode, bool selectedMode );
 
@@ -1014,9 +929,6 @@ public:
 
     // loading modules: see PCB_BASE_FRAME
 
-    // Board handling
-    void RemoveStruct( BOARD_ITEM* Item, wxDC* DC );
-
     /**
      * Function OnEditItemRequest
      * Install the corresponding dialog editor for the given item
@@ -1024,12 +936,6 @@ public:
      * @param aItem = a pointer to the BOARD_ITEM to edit
      */
     void OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem ) override;
-
-    /**
-     * Locate track or pad and highlight the corresponding net.
-     * @return The Netcode, or -1 if no net located.
-     */
-    int SelectHighLight( wxDC* DC );
 
     /**
      * Function HighLight.
@@ -1117,21 +1023,6 @@ public:
      */
     TRACK* Begin_Route( TRACK* aTrack, wxDC* aDC );
 
-    /**
-     * Function End_Route
-     * Terminates a track currently being created
-     * @param aTrack = the current track segment in progress
-     * @param aDC = the current device context
-     * @return true if the track was created, false if not (due to a DRC error)
-     */
-    bool End_Route( TRACK* aTrack, wxDC* aDC );
-
-    void Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On );
-    void Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On );
-    void Attribut_net( wxDC* DC, int net_code, bool Flag_On );
-
-    bool PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC );
-
     void SwitchLayer( wxDC* DC, PCB_LAYER_ID layer ) override;
 
     /**
@@ -1186,34 +1077,6 @@ public:
     // zone handling
 
     /**
-     * Function Delete_LastCreatedCorner
-     * Used only while creating a new zone outline
-     * Remove and delete the current outline segment in progress
-     * @return 0 if no corner in list, or corner number
-     */
-    int Delete_LastCreatedCorner( wxDC* DC );
-
-    /**
-     * Function Begin_Zone
-     * either initializes the first segment of a new zone, or adds an
-     * intermediate segment.
-     * A new zone can be:
-     * created from scratch: the user will be prompted to define parameters (layer, clearence ...)
-     * created from a similar zone (s_CurrentZone is used): parameters are copied from
-     * s_CurrentZone
-     * created as a cutout (an hole) inside s_CurrentZone
-     */
-    int Begin_Zone( wxDC* DC );
-
-    /**
-     * Function End_Zone
-     * terminates (if no DRC error ) the zone edge creation process
-     * @param DC = current Device Context
-     * @return true if Ok, false if DRC error
-     */
-    bool End_Zone( wxDC* DC );
-
-    /**
      * Function Fill_Zone
      *  Calculate the zone filling for the outline zone_container
      *  The zone outline is a frontier, and can be complex (with holes)
@@ -1237,61 +1100,10 @@ public:
 
 
     /**
-     * Function Add_Zone_Cutout
-     * Add a cutout zone to a given zone outline
-     * @param DC = current Device Context
-     * @param zone_container = parent zone outline
-     */
-    void Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* zone_container );
-
-    /**
-     * Function Add_Similar_Zone
-     * Add a zone to a given zone outline.
-     * if the zones are overlapping they will be merged
-     * @param DC = current Device Context
-     * @param zone_container = parent zone outline
-     */
-    void Add_Similar_Zone( wxDC* DC, ZONE_CONTAINER* zone_container );
-
-    /**
      * Function Edit_Zone_Params
      * Edit params (layer, clearance, ...) for a zone outline
      */
     void Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container );
-
-    /**
-     * Function Start_Move_Zone_Corner
-     * Prepares a move corner in a zone outline,
-     * called from a move corner command (IsNewCorner = false),
-     * or a create new cornet command (IsNewCorner = true )
-     */
-    void Start_Move_Zone_Corner( wxDC*           DC,
-                                 ZONE_CONTAINER* zone_container,
-                                 int             corner_id,
-                                 bool            IsNewCorner );
-
-    /**
-     * Function Start_Move_Zone_Corner
-     * Prepares a drag edge in an existing zone outline,
-     */
-    void Start_Move_Zone_Drag_Outline_Edge( wxDC*            DC,
-                                            ZONE_CONTAINER* zone_container,
-                                            int             corner_id );
-
-    /**
-     * Function End_Move_Zone_Corner_Or_Outlines
-     * Terminates a move corner in a zone outline, or a move zone outlines
-     * @param DC = current Device Context (can be NULL)
-     * @param zone_container: the given zone
-     */
-    void End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container );
-
-    /**
-     * Function End_Move_Zone_Corner_Or_Outlines
-     * Remove the currently selected corner in a zone outline
-     * the .m_CornerSelection is used as corner selection
-     */
-    void Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_container );
 
     /**
      * Function Delete_Zone
@@ -1306,24 +1118,12 @@ public:
      */
     void Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_container );
 
-    /**
-     * Function Start_Move_Zone_Outlines
-     * Initialize parameters to move an existing zone outlines.
-     * @param DC = current Device Context (can be NULL)
-     * @param zone_container: the given zone to move
-     */
-    void Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container );
-
     // Target handling
     PCB_TARGET* CreateTarget( wxDC* DC );
     void DeleteTarget( PCB_TARGET* aTarget, wxDC* DC );
     void PlaceTarget( PCB_TARGET* aTarget, wxDC* DC );
     void ShowTargetOptionsDialog( PCB_TARGET* aTarget, wxDC* DC );
 
-    // Graphic segments type DRAWSEGMENT handling:
-    DRAWSEGMENT* Begin_DrawSegment( DRAWSEGMENT* Segment, STROKE_T shape, wxDC* DC );
-    void End_Edge( DRAWSEGMENT* Segment, wxDC* DC );
-    void Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC );
 
     // Dimension handling:
     void ShowDimensionPropertyDialog( DIMENSION* aDimension, wxDC* aDC );
@@ -1462,13 +1262,6 @@ public:
     void SendCrossProbeNetName( const wxString& aNetName );
 
     /**
-     * Function Edit_Gap
-     * edits the GAP module if it has changed the position and/or size of the pads that
-     * form the gap get a new value.
-     */
-    void Edit_Gap( wxDC* DC, MODULE* Module );
-
-    /**
      * Function CreateMuWaveBaseFootprint
      * create a basic footprint for micro wave applications.
      * @param aValue = the text value
@@ -1489,8 +1282,6 @@ public:
     MODULE* Create_MuWaveComponent( int shape_type );
 
     MODULE* Create_MuWavePolygonShape();
-
-    void Begin_Self( wxDC* DC );
 
     void ShowChangedLanguage() override;
 

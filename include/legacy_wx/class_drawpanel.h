@@ -216,17 +216,6 @@ public:
     void OnActivate( wxActivateEvent& event );
 
     /**
-     * Function OnTimer
-     * handle timer events
-     * <p>
-     * The class will start a timer when a mouse-up event is handled.  If a
-     * double-click event is not handled inside of a specified interval,
-     * the timer event will fire, causing the single-click event to be handled.
-     * Otherwise, the system will process the double-click.
-     */
-    void OnTimer( wxTimerEvent& event );
-
-    /**
      * Function DoPrepareDC
      * sets up the device context \a aDC for drawing.
      * <p>
@@ -269,10 +258,8 @@ public:
 #if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
     void OnMagnify( wxMouseEvent& event );
 #endif
-    void OnMouseEvent( wxMouseEvent& event );
     void OnMouseEntering( wxMouseEvent& aEvent );
     void OnMouseLeaving( wxMouseEvent& event );
-    void OnKeyEvent( wxKeyEvent& event );
     void OnCharHook( wxKeyEvent& event );
 
     void OnPan( wxCommandEvent& event );
@@ -286,13 +273,6 @@ public:
 
     void SetGrid( const wxRealPoint& size );
     wxRealPoint GetGrid();
-
-    /**
-     * Function OnRightClick
-     * builds and displays a context menu on a right mouse button click.
-     * @return true if the context menu is shown, or false
-     */
-    bool OnRightClick( wxMouseEvent& event );
 
     /**
      * Function IsPointOnDisplay
@@ -467,35 +447,6 @@ public:
 
 
     DECLARE_EVENT_TABLE()
-};
-
-
-/**
- * Class EDA_CROSS_HAIR_MANAGER
- * is used to hide the cross hair and restore it when the class goes out of scope.
- */
-class EDA_CROSS_HAIR_MANAGER
-{
-public:
-    EDA_CROSS_HAIR_MANAGER( EDA_DRAW_PANEL* aPanel, wxDC* aDC ) :
-        m_panel( aPanel ),
-        m_dc( aDC )
-    {
-        if( aPanel && aDC )
-            aPanel->CrossHairOff( aDC );
-    }
-
-    ~EDA_CROSS_HAIR_MANAGER()
-    {
-        if( m_panel && m_dc )
-            m_panel->CrossHairOn( m_dc );
-    }
-
-private:
-    EDA_DRAW_PANEL* m_panel;
-    wxDC* m_dc;
-
-    DECLARE_NO_COPY_CLASS( EDA_CROSS_HAIR_MANAGER )
 };
 
 

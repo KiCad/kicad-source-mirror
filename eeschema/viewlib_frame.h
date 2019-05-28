@@ -97,20 +97,8 @@ public:
     void OnSetRelativeOffset( wxCommandEvent& event );
     void OnSelectSymbol( wxCommandEvent& aEvent );
 
-    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey ) override;
-
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
     EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
-
-    /**
-     * Handle hot key events.
-     *
-     * <p>
-     * Some commands are relative to the item under the mouse cursor.  Commands are
-     * case insensitive
-     * </p>
-     */
-    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem ) override;
 
     /**
      * Displays the hotkey dialog

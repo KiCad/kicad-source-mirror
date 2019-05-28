@@ -48,6 +48,8 @@
 #include <class_track.h>
 #include <class_zone.h>
 #include <class_pcb_text.h>
+#include <class_pcb_target.h>
+#include <class_dimension.h>
 #include <footprint_viewer_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <dialog_drc.h>
@@ -79,16 +81,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case wxID_COPY:
     case ID_TOOLBARH_PCB_SELECT_LAYER:
     case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
-    case ID_POPUP_PCB_PLACE_THROUGH_VIA:
-    case ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_THROUGH_VIA:
-    case ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA:
-    case ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_BLIND_BURIED_VIA:
-    case ID_POPUP_PCB_PLACE_MICROVIA:
-    case ID_POPUP_PCB_SWITCH_TRACK_POSTURE:
-    case ID_POPUP_PCB_FILL_ALL_ZONES:
-    case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES:
-    case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_CURRENT_ZONE:
-    case ID_POPUP_PCB_FILL_ZONE:
         break;
 
     default:        // Finish (abort) the command
@@ -179,137 +171,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         InstallNetlistFrame( &dc );
         break;
 
-    case ID_POPUP_PCB_SWITCH_TRACK_POSTURE:
-        /* change the position of initial segment when creating new tracks
-         * switch from _/  to -\ .
-         * If a track is in progress, it will be redrawn
-        */
-        if( m_canvas->IsMouseCaptured() )
-            m_canvas->CallMouseCapture( &dc, wxDefaultPosition, false );
-
-        g_Alternate_Track_Posture = !g_Alternate_Track_Posture;
-
-        if( m_canvas->IsMouseCaptured() )
-            m_canvas->CallMouseCapture( &dc, wxDefaultPosition, false );
-
-        break;
-
-    case ID_POPUP_PCB_PLACE_MICROVIA:
-        if( !IsMicroViaAcceptable() )
-            break;
-        // fall through
-    case ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA:
-    case ID_POPUP_PCB_PLACE_THROUGH_VIA:
-    case ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_THROUGH_VIA:
-    case ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_BLIND_BURIED_VIA:
-        m_canvas->MoveCursorToCrossHair();
-
-        if( GetCurItem()->IsDragging() )
-        {
-            // JEY TODO: reachable?
-            PlaceDraggedOrMovedTrackSegment( (TRACK*) GetCurItem(), &dc );
-        }
-        else
-        {
-            BOARD_DESIGN_SETTINGS &settings = GetDesignSettings();
-            VIATYPE_T v_type = settings.m_CurrentViaType;
-            switch( id )
-            {
-            case ID_POPUP_PCB_PLACE_BLIND_BURIED_VIA:
-            case ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_BLIND_BURIED_VIA:
-                settings.m_CurrentViaType = VIA_BLIND_BURIED;
-                break;
-
-            case ID_POPUP_PCB_PLACE_MICROVIA:
-                settings.m_CurrentViaType = VIA_MICROVIA;
-                break;
-
-            default:
-                settings.m_CurrentViaType = VIA_THROUGH;
-                break;
-            }
-
-            // place via and switch layer.
-            if( id == ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_THROUGH_VIA ||
-                id == ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_BLIND_BURIED_VIA )
-            {
-                m_canvas->SetIgnoreMouseEvents( true );
-
-                wxPoint dlgPosition;
-
-                wxGetMousePosition( &dlgPosition.x, &dlgPosition.y );
-
-                PCB_LAYER_ID layer = SelectLayer( GetActiveLayer(), LSET::AllNonCuMask(), dlgPosition );
-
-                m_canvas->SetIgnoreMouseEvents( false );
-                m_canvas->MoveCursorToCrossHair();
-
-                if( GetActiveLayer() != layer )
-                {
-                    GetScreen()->m_Route_Layer_TOP    = GetActiveLayer();
-                    GetScreen()->m_Route_Layer_BOTTOM = layer;
-                    Other_Layer_Route( (TRACK*) GetCurItem(), &dc );
-                }
-            }
-
-            else
-                Other_Layer_Route( (TRACK*) GetCurItem(), &dc );
-
-            settings.m_CurrentViaType = v_type;
-
-            if( displ_opts->m_ContrastModeDisplay )
-                m_canvas->Refresh();
-        }
-        break;
-
-    case ID_POPUP_PCB_FILL_ALL_ZONES:
-        m_canvas->MoveCursorToCrossHair();
-        Fill_All_Zones();
-        m_canvas->Refresh();
-        SetMsgPanel( GetBoard() );
-        break;
-
-    case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_CURRENT_ZONE:
-        if( ( GetCurItem() )->Type() == PCB_ZONE_AREA_T )
-        {
-            ZONE_CONTAINER* zone_container = (ZONE_CONTAINER*) GetCurItem();
-            zone_container->UnFill();
-            GetBoard()->GetConnectivity()->Update( zone_container );
-            OnModify();
-            SetMsgPanel( GetBoard() );
-            m_canvas->Refresh();
-        }
-
-        Compile_Ratsnest( &dc, false );
-        SetCurItem( NULL );
-        break;
-
-    case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES: // Remove all zones :
-        for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
-        {
-            // Remove filled areas in zone
-            ZONE_CONTAINER* zone_container = GetBoard()->GetArea( ii );
-            zone_container->UnFill();
-            GetBoard()->GetConnectivity()->Update( zone_container );
-        }
-
-        Compile_Ratsnest( &dc, false );
-        SetCurItem( NULL );        // CurItem might be deleted by this command, clear the pointer
-        OnModify();
-        SetMsgPanel( GetBoard() );
-        m_canvas->Refresh();
-        break;
-
-    case ID_POPUP_PCB_FILL_ZONE:
-    {
-        m_canvas->MoveCursorToCrossHair();
-        ZONE_FILLER filler( GetBoard() );
-        filler.Fill( { (ZONE_CONTAINER*) GetCurItem() } );
-        SetMsgPanel( GetBoard() );
-        m_canvas->Refresh();
-        break;
-    }
-
     case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
         SelectCopperLayerPair();
         break;
@@ -319,14 +180,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         if( displ_opts->m_ContrastModeDisplay )
             m_canvas->Refresh( true );
-        break;
-
-    case ID_POPUP_PCB_MOVE_EXACT:
-        moveExact();
-        break;
-
-    case ID_POPUP_PCB_CREATE_ARRAY:
-        createArray();
         break;
 
     case ID_MENU_PCB_CLEAN:
@@ -366,75 +219,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     m_canvas->CrossHairOn( &dc );
     m_canvas->SetIgnoreMouseEvents( false );
-}
-
-
-void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
-{
-    if( Item == NULL )
-        return;
-
-    switch( Item->Type() )
-    {
-    case PCB_MODULE_T:
-        Delete_Module( (MODULE*) Item, DC );
-        break;
-
-    case PCB_DIMENSION_T:
-        DeleteDimension( (DIMENSION*) Item, DC );
-        break;
-
-    case PCB_TARGET_T:
-        DeleteTarget( (PCB_TARGET*) Item, DC );
-        break;
-
-    case PCB_LINE_T:
-        Delete_Segment_Edge( (DRAWSEGMENT*) Item, DC );
-        break;
-
-    case PCB_TEXT_T:
-        Delete_Texte_Pcb( (TEXTE_PCB*) Item, DC );
-        break;
-
-    case PCB_TRACE_T:
-        Delete_Track( DC, (TRACK*) Item );
-        break;
-
-    case PCB_VIA_T:
-        Delete_Segment( DC, (TRACK*) Item );
-        break;
-
-    case PCB_ZONE_AREA_T:
-        {
-            SetCurItem( NULL );
-            int netcode = ( (ZONE_CONTAINER*) Item )->GetNetCode();
-            Delete_Zone_Contour( DC, (ZONE_CONTAINER*) Item );
-            TestNetConnection( NULL, netcode );
-            SetMsgPanel( GetBoard() );
-        }
-        break;
-
-    case PCB_MARKER_T:
-        if( Item == GetCurItem() )
-            SetCurItem( NULL );
-
-        ( (MARKER_PCB*) Item )->Draw( m_canvas, DC, GR_XOR );
-
-        // delete the marker, and free memory.  Don't use undo stack.
-        GetBoard()->Delete( Item );
-        break;
-
-    case PCB_PAD_T:
-    case PCB_MODULE_TEXT_T:
-    case PCB_MODULE_EDGE_T:
-        break;
-
-    case TYPE_NOT_INIT:
-    case PCB_T:
-    default:
-        wxLogDebug( wxT( "Remove: item type %d unknown." ), Item->Type() );
-        break;
-    }
 }
 
 
@@ -718,4 +502,62 @@ void PCB_BASE_EDIT_FRAME::createArray()
     LEGACY_ARRAY_CREATOR array_creator( *this );
 
     array_creator.Invoke();
+}
+
+
+void PCB_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
+{
+    switch( aItem->Type() )
+    {
+    case PCB_TRACE_T:
+    case PCB_VIA_T:
+        Edit_TrackSegm_Width( aDC, static_cast<TRACK*>( aItem ) );
+        break;
+
+    case PCB_TEXT_T:
+        InstallTextOptionsFrame( aItem, aDC );
+        break;
+
+    case PCB_PAD_T:
+        InstallPadOptionsFrame( static_cast<D_PAD*>( aItem ) );
+        break;
+
+    case PCB_MODULE_T:
+        InstallFootprintPropertiesDialog( static_cast<MODULE*>( aItem ), aDC );
+        break;
+
+    case PCB_TARGET_T:
+        ShowTargetOptionsDialog( static_cast<PCB_TARGET*>( aItem ), aDC );
+        break;
+
+    case PCB_DIMENSION_T:
+        ShowDimensionPropertyDialog( static_cast<DIMENSION*>( aItem ), aDC );
+        break;
+
+    case PCB_MODULE_TEXT_T:
+        InstallTextOptionsFrame( aItem, aDC );
+        break;
+
+    case PCB_LINE_T:
+        InstallGraphicItemPropertiesDialog( aItem );
+        break;
+
+    case PCB_ZONE_AREA_T:
+        Edit_Zone_Params( aDC, static_cast<ZONE_CONTAINER*>( aItem ) );
+        break;
+
+    default:
+        break;
+    }
+}
+
+
+void PCB_EDIT_FRAME::HighLight( wxDC* DC )
+{
+    if( GetBoard()->IsHighLightNetON() )
+        GetBoard()->HighLightOFF();
+    else
+        GetBoard()->HighLightON();
+
+    GetBoard()->DrawHighLight( m_canvas, DC, GetBoard()->GetHighLightNetCode() );
 }

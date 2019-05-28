@@ -124,15 +124,6 @@ public:
 
     void ReCreateVToolbar() override;
     void ReCreateOptToolbar() override;
-    void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
-
-    /**
-     * Handle the double click in the footprint editor.
-     *
-     * If the double clicked item is editable: call the corresponding editor.
-     */
-    void OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) override;
-
 
     /**
      * @brief (Re)Create the menubar for the module editor frame
@@ -161,15 +152,6 @@ public:
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
     EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
-    /**
-     * Handle hot key events.
-     * <p>
-     * Some commands are relative to the item under the mouse cursor.  Commands are
-     * case insensitive
-     * </p>
-     */
-    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL ) override;
-
     BOARD_ITEM* PrepareItemForHotkey( bool failIfCurrentlyEdited );
 
     /**
@@ -177,7 +159,6 @@ public:
      */
     void Show3D_Frame( wxCommandEvent& event ) override;
 
-    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
     void OnVerticalToolbar( wxCommandEvent& aEvent );
 
     /**
@@ -240,15 +221,11 @@ public:
      */
     bool Clear_Pcb( bool aQuery );
 
-    BOARD_ITEM* ModeditLocateAndDisplay( int aHotKeyCode = 0 );
-
     /// Return the LIB_ID of the part selected in the footprint or the part being edited.
     LIB_ID getTargetFPID() const;
 
     /// Return the LIB_ID of the part being edited.
     LIB_ID GetLoadedFPID() const;
-
-    void RemoveStruct( EDA_ITEM* Item );
 
     /**
      * Perform a geometric transform on the current footprint.
@@ -296,51 +273,6 @@ public:
     MODULE* SelectFootprintFromBoard( BOARD* aPcb );
 
     // functions to edit footprint edges
-
-    /**
-     * Change the width of module perimeter lines, EDGE_MODULEs.
-     *
-     * param ModuleSegmentWidth (global) = new width
-     * @param aEdge = edge to edit, or NULL.  If aEdge == NULL change
-     *               the width of all footprint's edges
-     */
-    void Edit_Edge_Width( EDGE_MODULE* aEdge );
-
-    /**
-     * Change the EDGE_MODULE Edge layer,  (The new layer will be asked)
-     * if Edge == NULL change the layer of the entire footprint edges
-     *
-     * @param Edge = edge to edit, or NULL
-     */
-    void Edit_Edge_Layer( EDGE_MODULE* Edge );
-
-    /**
-     * Delete EDGE_MODULE ddge.
-     *
-     * @param Edge = edge to delete
-     */
-    void Delete_Edge_Module( EDGE_MODULE* Edge );
-
-    /**
-     * Creates a new edge item (line, arc ..).
-     *
-     * @param Edge = if NULL: create new edge else terminate edge and create a new edge
-     * @param DC = current Device Context
-     * @param type_edge = S_SEGMENT,S_ARC ..
-     * @return the new created edge.
-     */
-    EDGE_MODULE* Begin_Edge_Module( EDGE_MODULE* Edge, wxDC* DC, STROKE_T type_edge );
-
-    /**
-     * Terminate a move or create edge function.
-     */
-    void End_Edge_Module( EDGE_MODULE* Edge );
-
-    /// Function to initialize the move function params of a graphic item type DRAWSEGMENT
-    void Start_Move_EdgeMod( EDGE_MODULE* drawitem, wxDC* DC );
-
-    /// Function to place a graphic item type EDGE_MODULE currently moved
-    void Place_EdgeMod( EDGE_MODULE* drawitem );
 
     /**
      * Delete the given module from its library.
@@ -474,14 +406,6 @@ protected:
     void restoreLastFootprint();
     void retainLastFootprint();
 
-    /**
-     * Creates a new text for the footprint
-     * @param aModule is the owner of the text
-     * @param aDC is the current DC (can be NULL )
-     * @return a pointer to the new text, or NULL if aborted
-     */
-    TEXTE_MODULE* CreateTextModule( MODULE* aModule, wxDC* aDC );
-
 private:
 
     /**
@@ -490,12 +414,6 @@ private:
     void editFootprintProperties( MODULE* aFootprint );
 
     bool saveFootprintInLibrary( MODULE* aModule, const wxString& aLibraryName );
-
-    /**
-     * Move the selected item exactly, popping up a dialog to allow the
-     * user the enter the move delta
-     */
-    void moveExact();
 };
 
 #endif      // FOOTPRINT_EDIT_FRAME_H

@@ -41,7 +41,6 @@ public:
     void DisplaySheet( const SCH_SCREEN *aScreen );
 
     bool SwitchBackend( GAL_TYPE aGalType ) override;
-    void OnKeyEvent( wxKeyEvent& event );
     void OnCharHook( wxKeyEvent& event );
 
     void SetEnableMousewheelPan( bool aEnable ) override;

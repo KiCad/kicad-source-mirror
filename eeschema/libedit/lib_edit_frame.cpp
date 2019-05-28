@@ -1034,33 +1034,3 @@ void LIB_EDIT_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
 }
 
-
-bool LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey )
-{
-    bool    keyHandled = false;
-    wxPoint pos = aPosition;
-
-    // Filter out the 'fake' mouse motion after a keyboard movement
-    if( !aHotKey && m_movingCursorWithKeyboard )
-    {
-        m_movingCursorWithKeyboard = false;
-        return false;
-    }
-
-    if( aHotKey )
-        keyHandled = GeneralControlKeyMovement( aHotKey, &pos, true );
-
-    GetGalCanvas()->GetViewControls()->SetSnapping( false );
-    SetCrossHairPosition( pos, false );
-
-    if( aHotKey && OnHotKey( aDC, aHotKey, aPosition, NULL ) )
-        keyHandled = true;
-
-    // Make sure current-part highlighting doesn't get lost in seleciton highlighting
-    ClearSearchTreeSelection();
-
-    UpdateStatusBar();
-
-    return keyHandled;
-}
-

@@ -232,31 +232,24 @@ set( PCBNEW_CLASS_SRCS
     action_plugin.cpp
     array_creator.cpp
     array_pad_name_provider.cpp
-    attribut.cpp
     board_netlist_updater.cpp
     build_BOM_from_board.cpp
     connect.cpp
-    controle.cpp
     cross-probing.cpp
     deltrack.cpp
     dimension.cpp
     dragsegm.cpp
     drc.cpp
     drc_clearance_test_functions.cpp
-    edgemod.cpp
     edit.cpp
-    edit_pcb_text.cpp
     edit_track_width.cpp
-    editedge.cpp
     editrack-part2.cpp
     editrack.cpp
-    edtxtmod.cpp
     event_handlers_tracks_vias_sizes.cpp
     files.cpp
     footprint_info_impl.cpp
     footprint_wizard.cpp
     footprint_editor_utils.cpp
-    footprint_editor_onclick.cpp
     footprint_editor_options.cpp
     fp_tree_synchronizing_adapter.cpp
     footprint_edit_frame.cpp
@@ -266,10 +259,7 @@ set( PCBNEW_CLASS_SRCS
     generate_footprint_info.cpp
     grid_layer_box_helpers.cpp
     grid_layer_box_helpers.h
-    highlight.cpp
     hotkeys.cpp
-    hotkeys_board_editor.cpp
-    hotkeys_footprint_editor.cpp
     initpcb.cpp
     layer_widget.cpp
     load_select_footprint.cpp
@@ -278,10 +268,7 @@ set( PCBNEW_CLASS_SRCS
     menubar_pcb_editor.cpp
     microwave.cpp
     minimun_spanning_tree.cpp
-    move-drag_pads.cpp
-    move_or_drag_track.cpp
     netlist.cpp
-    onleftclick.cpp
     pad_edit_functions.cpp
     pad_naming.cpp
     pcb_base_edit_frame.cpp

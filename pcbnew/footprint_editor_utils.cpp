@@ -71,109 +71,6 @@
 using namespace std::placeholders;
 
 
-// Functions defined in block_module_editor, but used here
-// These 3 functions are used in modedit to rotate, mirror or move the
-// whole footprint so they are called with force_all = true
-void MirrorMarkedItems( MODULE* module, wxPoint offset, bool force_all = false );
-void RotateMarkedItems( MODULE* module, wxPoint offset, bool force_all = false );
-void MoveMarkedItemsExactly( MODULE* module, const wxPoint& centre,
-                             const wxPoint& translation, double rotation,
-                             bool force_all = false );
-
-
-BOARD_ITEM* FOOTPRINT_EDIT_FRAME::ModeditLocateAndDisplay( int aHotKeyCode )
-{
-    BOARD_ITEM* item = GetCurItem();
-
-    if( GetBoard()->m_Modules == NULL )
-        return NULL;
-
-    GENERAL_COLLECTORS_GUIDE guide = GetCollectorsGuide();
-
-    // Assign to scanList the proper item types desired based on tool type
-    // or hotkey that is in play.
-
-    const KICAD_T* scanList = NULL;
-
-    if( aHotKeyCode )
-    {
-        // @todo: add switch here and add calls to PcbGeneralLocateAndDisplay(
-        // int aHotKeyCode ) when searching is needed from a hotkey handler
-    }
-    else
-    {
-        scanList = GENERAL_COLLECTOR::ModulesAndTheirItems;
-    }
-
-    m_Collector->Collect( GetBoard(), scanList, RefPos( true ), guide );
-
-    // Remove redundancies: when an item is found, we can remove the module from list
-    if( m_Collector->GetCount() > 1 )
-    {
-        for( int ii = 0; ii < m_Collector->GetCount(); ii++ )
-        {
-            item = (*m_Collector)[ii];
-
-            if( item->Type() != PCB_MODULE_T )
-                continue;
-
-            m_Collector->Remove( ii );
-            ii--;
-        }
-    }
-
-    if( m_Collector->GetCount() <= 1 )
-    {
-        item = (*m_Collector)[0];
-        SetCurItem( item );
-    }
-    else    // we can't figure out which item user wants, do popup menu so user can choose
-    {
-        wxMenu      itemMenu;
-
-        // Give a title to the selection menu. It also allows one to close the popup menu without any action
-        AddMenuItem( &itemMenu, wxID_NONE, _( "Clarify Selection" ),
-                     KiBitmap( info_xpm ) );
-        itemMenu.AppendSeparator();
-
-        int limit = std::min( MAX_ITEMS_IN_PICKER, m_Collector->GetCount() );
-
-        for( int ii = 0; ii<limit; ++ii )
-        {
-            item = (*m_Collector)[ii];
-
-            wxString    text = item->GetSelectMenuText( GetUserUnits() );
-            BITMAP_DEF  xpm  = item->GetMenuImage();
-
-            AddMenuItem( &itemMenu,
-                         ID_POPUP_PCB_ITEM_SELECTION_START + ii,
-                         text,
-                         KiBitmap( xpm ) );
-        }
-
-        // this menu's handler is void
-        // PCB_BASE_FRAME::ProcessItemSelection()
-        // and it calls SetCurItem() which in turn calls DisplayInfo() on the
-        // item.
-        m_canvas->SetAbortRequest( true );   // changed in false if an item is selected
-        PopupMenu( &itemMenu );              // m_AbortRequest = false if an item is selected
-
-        m_canvas->MoveCursorToCrossHair();
-        m_canvas->SetIgnoreMouseEvents( false );
-
-        // The function ProcessItemSelection() has set the current item, return it.
-        item = GetCurItem();
-    }
-
-    if( item )
-    {
-        SetMsgPanel( item );
-    }
-
-    return item;
-}
-
-
 void FOOTPRINT_EDIT_FRAME::LoadModuleFromBoard( wxCommandEvent& event )
 {
     Load_Module_From_BOARD( NULL );
@@ -588,16 +485,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     break;
 
-    case ID_POPUP_PCB_MOVE_EXACT:
-        moveExact();
-        break;
-
-    case ID_POPUP_PCB_CREATE_ARRAY:
-        createArray();
-        break;
-
-    // JEY TODO: many (most? all?) of these are legacy-only and can be removed.
-
     case ID_GEN_IMPORT_GRAPHICS_FILE:
         if( GetBoard()->m_Modules )
         {
@@ -623,44 +510,6 @@ void FOOTPRINT_EDIT_FRAME::editFootprintProperties( MODULE* aModule )
     GetScreen()->GetCurItem()->ClearFlags();
 
     updateTitle();      // in case of a name change...
-}
-
-
-void FOOTPRINT_EDIT_FRAME::moveExact()
-{
-    wxPoint         translation;
-    double          rotation;
-    ROTATION_ANCHOR rotationAnchor = ROTATE_AROUND_ITEM_ANCHOR;
-
-    DIALOG_MOVE_EXACT dialog( this, translation, rotation, rotationAnchor );
-    int ret = dialog.ShowModal();
-
-    if( ret == wxID_OK )
-    {
-        SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
-
-        BOARD_ITEM* item = GetScreen()->GetCurItem();
-
-        item->Move( translation );
-
-        switch( rotationAnchor )
-        {
-        case ROTATE_AROUND_ITEM_ANCHOR:
-            item->Rotate( item->GetPosition(), rotation );
-            break;
-        case ROTATE_AROUND_USER_ORIGIN:
-            item->Rotate( GetScreen()->m_O_Curseur, rotation );
-            break;
-        default:
-            wxFAIL_MSG( "Rotation choice shouldn't have been available in this context." );
-        }
-
-
-        item->Rotate( item->GetPosition(), rotation );
-        m_canvas->Refresh();
-    }
-
-    m_canvas->MoveCursorToCrossHair();
 }
 
 
@@ -738,54 +587,34 @@ void FOOTPRINT_EDIT_FRAME::OnVerticalToolbar( wxCommandEvent& aEvent )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::RemoveStruct( EDA_ITEM* Item )
+void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
 {
-    if( Item == NULL )
-        return;
-
-    switch( Item->Type() )
+    switch( aItem->Type() )
     {
     case PCB_PAD_T:
-        DeletePad( (D_PAD*) Item, false );
-        break;
-
-    case PCB_MODULE_TEXT_T:
-    {
-        TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( Item );
-
-        switch( text->GetType() )
-        {
-        case TEXTE_MODULE::TEXT_is_REFERENCE:
-            DisplayError( this, _( "Cannot delete REFERENCE!" ) );
-            break;
-
-        case TEXTE_MODULE::TEXT_is_VALUE:
-            DisplayError( this, _( "Cannot delete VALUE!" ) );
-            break;
-
-        case TEXTE_MODULE::TEXT_is_DIVERS:
-            DeleteTextModule( text );
-        }
-    }
-    break;
-
-    case PCB_MODULE_EDGE_T:
-        Delete_Edge_Module( (EDGE_MODULE*) Item );
-        m_canvas->Refresh();
+        InstallPadOptionsFrame( static_cast<D_PAD*>( aItem ) );
+        m_canvas->MoveCursorToCrossHair();
         break;
 
     case PCB_MODULE_T:
+        editFootprintProperties( (MODULE*) aItem );
+        m_canvas->MoveCursorToCrossHair();
+        m_canvas->Refresh();
+        break;
+
+    case PCB_MODULE_TEXT_T:
+        InstallTextOptionsFrame( aItem, aDC );
+        break;
+
+    case PCB_MODULE_EDGE_T :
+        InstallGraphicItemPropertiesDialog( aItem );
         break;
 
     default:
-    {
-        wxString Line;
-        Line.Printf( wxT( " RemoveStruct: item type %d unknown." ), Item->Type() );
-        wxMessageBox( Line );
-    }
-    break;
+        break;
     }
 }
+
 
 COLOR4D FOOTPRINT_EDIT_FRAME::GetGridColor()
 {

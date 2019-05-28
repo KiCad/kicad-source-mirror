@@ -62,14 +62,10 @@ BEGIN_EVENT_TABLE( EDA_DRAW_PANEL, wxScrolledWindow )
 #if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
     EVT_MAGNIFY( EDA_DRAW_PANEL::OnMagnify )
 #endif
-    EVT_MOUSE_EVENTS( EDA_DRAW_PANEL::OnMouseEvent )
-    EVT_CHAR( EDA_DRAW_PANEL::OnKeyEvent )
-    EVT_CHAR_HOOK( EDA_DRAW_PANEL::OnKeyEvent )
     EVT_PAINT( EDA_DRAW_PANEL::OnPaint )
     EVT_ERASE_BACKGROUND( EDA_DRAW_PANEL::OnEraseBackground )
     EVT_SCROLLWIN( EDA_DRAW_PANEL::OnScroll )
     EVT_ACTIVATE( EDA_DRAW_PANEL::OnActivate )
-    EVT_TIMER( ID_MOUSE_DOUBLECLICK, EDA_DRAW_PANEL::OnTimer )
     EVT_MENU_RANGE( ID_PAN_UP, ID_PAN_RIGHT, EDA_DRAW_PANEL::OnPan )
 END_EVENT_TABLE()
 
@@ -348,14 +344,6 @@ void EDA_DRAW_PANEL::OnActivate( wxActivateEvent& event )
 {
     m_canStartBlock = -1;   // Block Command can't start
     event.Skip();
-}
-
-
-void EDA_DRAW_PANEL::OnTimer( wxTimerEvent& event )
-{
-    INSTALL_UNBUFFERED_DC( DC, this );
-    DC.SetBackground( *wxBLACK_BRUSH );
-    GetParent()->OnLeftClick( &DC, m_CursorClickPos );
 }
 
 
@@ -827,33 +815,6 @@ void EDA_DRAW_PANEL::DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoi
 }
 
 
-bool EDA_DRAW_PANEL::OnRightClick( wxMouseEvent& event )
-{
-    wxPoint pos;
-    wxMenu  MasterMenu;
-
-    INSTALL_UNBUFFERED_DC( dc, this );
-
-    pos = event.GetLogicalPosition( dc );
-
-    if( !GetParent()->OnRightClick( pos, &MasterMenu ) )
-        return false;
-
-    GetParent()->AddMenuZoomAndGrid( &MasterMenu );
-
-    pos = event.GetPosition();
-    m_ignoreMouseEvents = true;
-    PopupMenu( &MasterMenu, pos );
-
-    // The ZoomAndGrid menu is only invoked over empty space so there's no point in warping
-    // the cursor back to the crosshair, and it's very annoying if one clicked out of the menu.
-
-    m_ignoreMouseEvents = false;
-
-    return true;
-}
-
-
 void EDA_DRAW_PANEL::OnMouseEntering( wxMouseEvent& aEvent )
 {
     // This is an ugly hack that fixes some cross hair display bugs when the mouse leaves the
@@ -1025,248 +986,10 @@ void EDA_DRAW_PANEL::OnMagnify( wxMouseEvent& event )
 #endif
 
 
-void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
-{
-    int          localbutt = 0;
-    BASE_SCREEN* screen = GetScreen();
-
-    if( !screen )
-        return;
-
-    /* Adjust value to filter mouse displacement before consider the drag
-     * mouse is really a drag command, not just a movement while click
-     */
-#define MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND 5
-
-    if( event.Leaving() )
-        m_canStartBlock = -1;
-
-    if( !IsMouseCaptured() )          // No mouse capture in progress.
-        SetAutoPanRequest( false );
-
-    if( GetParent()->IsActive() )
-        SetFocus();
-    else
-        return;
-
-    if( !event.IsButton() && !event.Moving() && !event.Dragging() )
-        return;
-
-    if( event.RightDown() )
-    {
-        OnRightClick( event );
-        return;
-    }
-
-    if( m_ignoreMouseEvents )
-        return;
-
-    if( event.LeftDown() )
-        localbutt = GR_M_LEFT_DOWN;
-
-    if( event.ButtonDClick( 1 ) )
-        localbutt = GR_M_LEFT_DOWN | GR_M_DCLICK;
-
-    if( event.MiddleDown() )
-        localbutt = GR_M_MIDDLE_DOWN;
-
-    INSTALL_UNBUFFERED_DC( DC, this );
-    DC.SetBackground( *wxBLACK_BRUSH );
-
-    // Compute the cursor position in drawing (logical) units.
-    GetParent()->SetMousePosition( event.GetLogicalPosition( DC ) );
-
-    int kbstat = 0;
-
-    if( event.ShiftDown() )
-        kbstat |= GR_KB_SHIFT;
-
-    if( event.ControlDown() )
-        kbstat |= GR_KB_CTRL;
-
-    if( event.AltDown() )
-        kbstat |= GR_KB_ALT;
-
-    // Calling Double Click and Click functions :
-    if( localbutt == (int) ( GR_M_LEFT_DOWN | GR_M_DCLICK ) )
-    {
-        if( m_ClickTimer )
-        {
-            m_ClickTimer->Stop();
-            wxDELETE( m_ClickTimer );
-        }
-        GetParent()->OnLeftDClick( &DC, GetParent()->RefPos( true ) );
-
-        // inhibit a response to the mouse left button release,
-        // because we have a double click, and we do not want a new
-        // OnLeftClick command at end of this Double Click
-        m_ignoreNextLeftButtonRelease = true;
-    }
-    else if( event.LeftUp() )
-    {
-        // A block command is in progress: a left up is the end of block
-        // or this is the end of a double click, already seen
-        // Note also m_ignoreNextLeftButtonRelease can be set by
-        // the call to OnLeftClick(), so do not change it after calling OnLeftClick
-        m_ignoreNextLeftButtonRelease = false;
-    }
-    else if( !event.LeftIsDown() )
-    {
-        /* be sure there is a response to a left button release command
-         * even when a LeftUp event is not seen.  This happens when a
-         * double click opens a dialog box, and the release mouse button
-         * is made when the dialog box is opened.
-         */
-        m_ignoreNextLeftButtonRelease = false;
-    }
-
-    if( event.ButtonDown( wxMOUSE_BTN_MIDDLE ) )
-    {
-        m_PanStartCenter = GetParent()->GetScrollCenterPosition();
-        m_PanStartEventPosition = event.GetPosition();
-
-        INSTALL_UNBUFFERED_DC( dc, this );
-        CrossHairOff( &dc );
-        SetCursor( wxCURSOR_SIZING );
-    }
-
-    if( event.ButtonUp( wxMOUSE_BTN_MIDDLE ) )
-    {
-        INSTALL_UNBUFFERED_DC( dc, this );
-        CrossHairOn( &dc );
-        SetCursor( (wxStockCursor) m_currentCursor );
-    }
-
-    if( event.MiddleIsDown() )
-    {
-        wxPoint currentPosition = event.GetPosition();
-
-        double scale = GetParent()->GetScreen()->GetScalingFactor();
-        int x = m_PanStartCenter.x +
-                KiROUND( (double) ( m_PanStartEventPosition.x - currentPosition.x ) / scale );
-        int y = m_PanStartCenter.y +
-                KiROUND( (double) ( m_PanStartEventPosition.y - currentPosition.y ) / scale );
-
-        GetParent()->RedrawScreen( wxPoint( x, y ), false );
-    }
-
-    // Calling the general function on mouse changes (and pseudo key commands)
-    GetParent()->GeneralControl( &DC, event.GetLogicalPosition( DC ), 0 );
-
-    /*******************************/
-    /* Control of block commands : */
-    /*******************************/
-
-    // Command block can't start if mouse is dragging a new panel
-    static EDA_DRAW_PANEL* lastPanel;
-    if( lastPanel != this )
-    {
-        m_minDragEventCount = 0;
-        m_canStartBlock   = -1;
-    }
-
-    /* A new command block can start after a release buttons
-     * and if the drag is enough
-     * This is to avoid a false start block when a dialog box is dismissed,
-     * or when changing panels in hierarchy navigation
-     * or when clicking while and moving mouse
-     */
-    if( !event.LeftIsDown() && !event.MiddleIsDown() )
-    {
-        m_minDragEventCount = 0;
-        m_canStartBlock   = 0;
-
-        /* Remember the last cursor position when a drag mouse starts
-         * this is the last position ** before ** clicking a button
-         * this is useful to start a block command from the point where the
-         * mouse was clicked first
-         * (a filter creates a delay for the real block command start, and
-         * we must remember this point)
-         */
-        m_CursorStartPos = GetParent()->GetCrossHairPosition();
-    }
-
-    lastPanel = this;
-
-#ifdef __WXGTK3__
-    // Screen has to be updated on every operation, otherwise the cursor leaves a trail (when xor
-    // operation is changed to copy) or is not updated at all.
-    Refresh();
-#endif
-}
-
-
 void EDA_DRAW_PANEL::OnCharHook( wxKeyEvent& event )
 {
     wxLogTrace( kicadTraceKeyEvent, "EDA_DRAW_PANEL::OnCharHook %s", dump( event ) );
     event.Skip();
-}
-
-
-void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
-{
-    int localkey;
-    wxPoint pos;
-
-    wxLogTrace( kicadTraceKeyEvent, "EDA_DRAW_PANEL::OnKeyEvent %s", dump( event ) );
-
-    localkey = event.GetKeyCode();
-    bool keyWasHandled = false;
-
-    switch( localkey )
-    {
-    default:
-        break;
-
-    case WXK_ESCAPE:
-        m_abortRequest = true;
-
-        if( IsMouseCaptured() )
-            EndMouseCapture();
-        else
-            EndMouseCapture( ID_NO_TOOL_SELECTED, m_defaultCursor, wxEmptyString );
-
-        keyWasHandled = true;   // The key is captured: the key event must not be skipped
-        break;
-    }
-
-    /* Normalize keys code to easily handle keys from Ctrl+A to Ctrl+Z
-     * They have an ascii code from 1 to 27 remapped
-     * to GR_KB_CTRL + 'A' to GR_KB_CTRL + 'Z'
-     */
-    if( event.ControlDown() && localkey >= WXK_CONTROL_A && localkey <= WXK_CONTROL_Z )
-        localkey += 'A' - 1;
-
-    /* Disallow shift for keys that have two keycodes on them (e.g. number and
-     * punctuation keys) leaving only the "letter keys" of A-Z.
-     * Then, you can have, e.g. Ctrl-5 and Ctrl-% (GB layout)
-     * and Ctrl-( and Ctrl-5 (FR layout).
-     * Otherwise, you'd have to have to say Ctrl-Shift-5 on a FR layout
-     */
-    bool keyIsLetter = ( localkey >= 'A' && localkey <= 'Z' ) ||
-                       ( localkey >= 'a' && localkey <= 'z' );
-
-    if( event.ShiftDown() && ( keyIsLetter || localkey > 256 ) )
-        localkey |= GR_KB_SHIFT;
-
-    if( event.ControlDown() )
-        localkey |= GR_KB_CTRL;
-
-    if( event.AltDown() )
-        localkey |= GR_KB_ALT;
-
-    INSTALL_UNBUFFERED_DC( DC, this );
-
-    // Some key commands use the current mouse position: refresh it.
-    pos = wxGetMousePosition() - GetScreenPosition();
-
-    // Compute the cursor position in drawing units.  Also known as logical units to wxDC.
-    pos = wxPoint( DC.DeviceToLogicalX( pos.x ), DC.DeviceToLogicalY( pos.y ) );
-
-    GetParent()->SetMousePosition( pos );
-
-    if( !GetParent()->GeneralControl( &DC, pos, localkey ) && !keyWasHandled )
-        event.Skip();   // Skip this event only when the key was not handled
 }
 
 

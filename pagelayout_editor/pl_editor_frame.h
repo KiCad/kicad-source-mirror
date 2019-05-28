@@ -218,18 +218,6 @@ public:
     EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
     /**
-     * Function OnHotKey.
-     *  ** Commands are case insensitive **
-     *  Some commands are relatives to the item under the mouse cursor
-     * @param aDC = current device context
-     * @param aHotkeyCode = hotkey code (ascii or wxWidget code for special keys)
-     * @param aPosition The cursor position in logical (drawing) units.
-     * @param aItem = NULL or pointer on a EDA_ITEM under the mouse cursor
-     */
-    bool OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition,
-                   EDA_ITEM* aItem = NULL ) override;
-
-    /**
      * Function ToPrinter
      * Open a dialog frame to print layers
      */
