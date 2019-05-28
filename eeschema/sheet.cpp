@@ -252,6 +252,11 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
 
             return false;
         }
+
+        SCH_SCREEN* screen = aSheet->GetScreen();
+
+        if( screen )
+            screen->UpdateSymbolLinks( true );
     }
 
     aSheet->SetFileNameSize( dlg.GetFileNameTextSize() );
