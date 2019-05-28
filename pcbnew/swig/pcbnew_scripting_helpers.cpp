@@ -158,7 +158,7 @@ void Refresh()
         auto gal_canvas = static_cast<PCB_DRAW_PANEL_GAL*>( s_PcbEditFrame->GetGalCanvas() );
 
         // Reinit everything: this is the easy way to do that
-        s_PcbEditFrame->UseGalCanvas( true );
+        s_PcbEditFrame->UseGalCanvas();
         gal_canvas->Refresh();
     }
 }

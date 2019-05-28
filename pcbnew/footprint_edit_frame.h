@@ -92,10 +92,10 @@ public:
     void CloseModuleEditor( wxCommandEvent& Event );
 
     /**
-     * switches currently used canvas (default / Cairo / OpenGL).
+     * switches currently used canvas (Cairo / OpenGL).
      * It also reinit the layers manager that slightly changes with canvases
      */
-    void OnSwitchCanvas( wxCommandEvent& aEvent ) override;
+    void SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) override;
 
     /**
      * Update the layer manager and other widgets from the board setup
@@ -133,7 +133,6 @@ public:
     // The Tool Framework initalization, for GAL mode
     void setupTools();
 
-    void ToolOnRightClick( wxCommandEvent& event ) override;
     void OnConfigurePaths( wxCommandEvent& aEvent );
     void OnToggleSearchTree( wxCommandEvent& event );
 
@@ -321,7 +320,7 @@ public:
     void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) override;
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
-    void UseGalCanvas( bool aEnable ) override;
+    void UseGalCanvas() override;
 
     /**
      * Load a KiCad board (.kicad_pcb) from \a aFileName.

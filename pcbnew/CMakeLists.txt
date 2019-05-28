@@ -293,7 +293,6 @@ set( PCBNEW_CLASS_SRCS
     text_mod_grid_table.cpp
     toolbars_footprint_editor.cpp
     toolbars_footprint_viewer.cpp
-    toolbar_onrightclick.cpp
     toolbars_pcb_editor.cpp
     tracks_cleaner.cpp
     undo_redo.cpp

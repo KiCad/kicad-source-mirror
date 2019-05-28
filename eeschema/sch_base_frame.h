@@ -126,16 +126,6 @@ public:
     void SetShowElectricalType( bool aShow ) { m_showPinElectricalTypeName = aShow; }
 
     /**
-     * switches currently used canvas ( Cairo / OpenGL).
-     */
-    virtual void OnSwitchCanvas( wxCommandEvent& aEvent );
-
-    /**
-     * Update UI called when switches currently used canvas (Cairo / OpenGL).
-     */
-    void OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent );
-
-    /**
      * @return the increment value of the position of an item
      * for the repeat command
      */

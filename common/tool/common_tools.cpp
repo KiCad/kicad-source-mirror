@@ -484,6 +484,19 @@ int COMMON_TOOLS::ToggleCursorStyle( const TOOL_EVENT& aEvent )
 }
 
 
+int COMMON_TOOLS::SwitchCanvas( const TOOL_EVENT& aEvent )
+{
+    if( aEvent.IsAction( &ACTIONS::acceleratedGraphics ) )
+        m_frame->SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+    else if( aEvent.IsAction( &ACTIONS::standardGraphics ) )
+        m_frame->SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
+    else
+        wxFAIL_MSG( "Unknown canvas type" );
+
+    return 0;
+}
+
+
 void COMMON_TOOLS::setTransitions()
 {
     // Cursor control
@@ -530,6 +543,9 @@ void COMMON_TOOLS::setTransitions()
 
     Go( &COMMON_TOOLS::ToggleCursor,       ACTIONS::toggleCursor.MakeEvent() );
     Go( &COMMON_TOOLS::ToggleCursorStyle,  ACTIONS::toggleCursorStyle.MakeEvent() );
+
+    Go( &COMMON_TOOLS::SwitchCanvas,       ACTIONS::acceleratedGraphics.MakeEvent() );
+    Go( &COMMON_TOOLS::SwitchCanvas,       ACTIONS::acceleratedGraphics.MakeEvent() );
 }
 
 

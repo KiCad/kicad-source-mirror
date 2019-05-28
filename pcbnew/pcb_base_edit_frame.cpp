@@ -62,15 +62,11 @@ void PCB_BASE_EDIT_FRAME::SetRotationAngle( int aRotationAngle )
 }
 
 
-void PCB_BASE_EDIT_FRAME::UseGalCanvas( bool aEnable )
+void PCB_BASE_EDIT_FRAME::UseGalCanvas()
 {
-    PCB_BASE_FRAME::UseGalCanvas( aEnable );
+    PCB_BASE_FRAME::UseGalCanvas();
 
-    // No matter what, reenable undo/redo on switching to the legacy canvas
-    if( !aEnable )
-        UndoRedoBlock( false );
-    else
-        static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->SyncLayersVisibility( m_Pcb );
+    static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->SyncLayersVisibility( m_Pcb );
 }
 
 

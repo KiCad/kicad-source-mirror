@@ -23,10 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file draw_frame.cpp
- */
-
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
@@ -395,11 +391,6 @@ int EDA_DRAW_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
 
     return result;
 }
-
-void EDA_DRAW_FRAME::ToolOnRightClick( wxCommandEvent& event )
-{
-}
-
 
 void EDA_DRAW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMode, void* aData )
 {
@@ -784,219 +775,7 @@ static const double MAX_AXIS = INT_MAX - 100;
 #define VIRT_MAX    (MAX_AXIS/2.0)      ///< max X or Y coordinate in virtual space
 
 
-void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
-{
-    BASE_SCREEN* screen = GetScreen();
-
-    if( !screen || !m_canvas )
-        return;
-
-    double scale = screen->GetScalingFactor();
-
-    wxLogTrace( traceScrollSettings, wxT( "Center Position = ( %d, %d ), scale = %.10g" ),
-                aCenterPositionIU.x, aCenterPositionIU.y, scale );
-
-    // Calculate the portion of the drawing that can be displayed in the
-    // client area at the current zoom level.
-
-    // visible viewport in device units ~ pixels
-    wxSize  clientSizeDU = m_canvas->GetClientSize();
-
-    // Size of the client window in IU
-    DSIZE   clientSizeIU( clientSizeDU.x / scale, clientSizeDU.y / scale );
-
-    // Full drawing or "page" rectangle in internal units
-    DBOX    pageRectIU( wxPoint( 0, 0 ), wxSize( GetPageSizeIU().x, GetPageSizeIU().y ) );
-
-    // Remark: if something is modified here, perhaps EDA_DRAW_FRAME::RedrawScreen2()
-    // will need changes accordint to the way the center is computed
-    // Account for scrollbars
-    wxSize  scrollbarSizeDU = m_canvas->GetSize() - m_canvas->GetClientSize();
-    wxSize  scrollbarSizeIU = scrollbarSizeDU * (1 / scale);
-    wxPoint centerAdjustedIU = aCenterPositionIU + scrollbarSizeIU / 2;
-
-    // The upper left corner of the client rectangle in internal units.
-    double xIU = centerAdjustedIU.x - clientSizeIU.x / 2.0;
-    double yIU = centerAdjustedIU.y - clientSizeIU.y / 2.0;
-
-    // If drawn around the center, adjust the client rectangle accordingly.
-    if( screen->m_Center )
-    {
-        // half page offset.
-        xIU += pageRectIU.GetWidth()  / 2.0;
-        yIU += pageRectIU.GetHeight() / 2.0;
-    }
-
-    DBOX    clientRectIU( wxPoint( xIU, yIU ), wxSize( clientSizeIU.x, clientSizeIU.y ) );
-    wxPoint centerPositionIU;
-
-    // put "int" limits on the clientRect
-    if( clientRectIU.GetLeft() < VIRT_MIN )
-        clientRectIU.MoveLeftTo( VIRT_MIN );
-    if( clientRectIU.GetTop() < VIRT_MIN )
-        clientRectIU.MoveTopTo( VIRT_MIN );
-    if( clientRectIU.GetRight() > VIRT_MAX )
-        clientRectIU.MoveRightTo( VIRT_MAX );
-    if( clientRectIU.GetBottom() > VIRT_MAX )
-        clientRectIU.MoveBottomTo( VIRT_MAX );
-
-    centerPositionIU.x = KiROUND( clientRectIU.GetX() + clientRectIU.GetWidth() / 2 );
-    centerPositionIU.y = KiROUND( clientRectIU.GetY() + clientRectIU.GetHeight() / 2 );
-
-    if( screen->m_Center )
-    {
-        centerPositionIU.x -= KiROUND( pageRectIU.GetWidth() / 2.0 );
-        centerPositionIU.y -= KiROUND( pageRectIU.GetHeight() / 2.0 );
-    }
-
-    DSIZE   virtualSizeIU;
-
-    if( pageRectIU.GetLeft() < clientRectIU.GetLeft() && pageRectIU.GetRight() > clientRectIU.GetRight() )
-    {
-        virtualSizeIU.x = pageRectIU.GetSize().x;
-    }
-    else
-    {
-        double pageCenterX    = pageRectIU.GetX()   + ( pageRectIU.GetWidth() / 2 );
-        double clientCenterX  = clientRectIU.GetX() + ( clientRectIU.GetWidth() / 2 );
-
-        if( clientRectIU.GetWidth() > pageRectIU.GetWidth() )
-        {
-            if( pageCenterX > clientCenterX )
-                virtualSizeIU.x = ( pageCenterX - clientRectIU.GetLeft() ) * 2;
-            else if( pageCenterX < clientCenterX )
-                virtualSizeIU.x = ( clientRectIU.GetRight() - pageCenterX ) * 2;
-            else
-                virtualSizeIU.x = clientRectIU.GetWidth();
-        }
-        else
-        {
-            if( pageCenterX > clientCenterX )
-                virtualSizeIU.x = pageRectIU.GetWidth() + ( (pageRectIU.GetLeft() - clientRectIU.GetLeft() ) * 2 );
-            else if( pageCenterX < clientCenterX )
-                virtualSizeIU.x = pageRectIU.GetWidth() + ( (clientRectIU.GetRight() - pageRectIU.GetRight() ) * 2 );
-            else
-                virtualSizeIU.x = pageRectIU.GetWidth();
-        }
-    }
-
-    if( pageRectIU.GetTop() < clientRectIU.GetTop() && pageRectIU.GetBottom() > clientRectIU.GetBottom() )
-    {
-        virtualSizeIU.y = pageRectIU.GetSize().y;
-    }
-    else
-    {
-        double pageCenterY   = pageRectIU.GetY()   + ( pageRectIU.GetHeight() / 2 );
-        double clientCenterY = clientRectIU.GetY() + ( clientRectIU.GetHeight() / 2 );
-
-        if( clientRectIU.GetHeight() > pageRectIU.GetHeight() )
-        {
-            if( pageCenterY > clientCenterY )
-                virtualSizeIU.y = ( pageCenterY - clientRectIU.GetTop() ) * 2;
-            else if( pageCenterY < clientCenterY )
-                virtualSizeIU.y = ( clientRectIU.GetBottom() - pageCenterY ) * 2;
-            else
-                virtualSizeIU.y = clientRectIU.GetHeight();
-        }
-        else
-        {
-            if( pageCenterY > clientCenterY )
-                virtualSizeIU.y = pageRectIU.GetHeight() +
-                                ( ( pageRectIU.GetTop() - clientRectIU.GetTop() ) * 2 );
-            else if( pageCenterY < clientCenterY )
-                virtualSizeIU.y = pageRectIU.GetHeight() +
-                                ( ( clientRectIU.GetBottom() - pageRectIU.GetBottom() ) * 2 );
-            else
-                virtualSizeIU.y = pageRectIU.GetHeight();
-        }
-    }
-
-    // put "int" limits on the virtualSizeIU
-    virtualSizeIU.x = std::min( virtualSizeIU.x, MAX_AXIS );
-    virtualSizeIU.y = std::min( virtualSizeIU.y, MAX_AXIS );
-
-    if( screen->m_Center )
-    {
-        screen->m_DrawOrg.x = -KiROUND( virtualSizeIU.x / 2.0 );
-        screen->m_DrawOrg.y = -KiROUND( virtualSizeIU.y / 2.0 );
-    }
-    else
-    {
-        screen->m_DrawOrg.x = -KiROUND( ( virtualSizeIU.x - pageRectIU.GetWidth() )  / 2.0 );
-        screen->m_DrawOrg.y = -KiROUND( ( virtualSizeIU.y - pageRectIU.GetHeight() ) / 2.0 );
-    }
-
-    /* Always set scrollbar pixels per unit to 1 unless you want the zoom
-     * around cursor to jump around.  This reported problem occurs when the
-     * zoom point is not on a pixel per unit increment.  If you set the
-     * pixels per unit to 10, you have potential for the zoom point to
-     * jump around +/-5 pixels from the nearest grid point.
-     */
-    screen->m_ScrollPixelsPerUnitX = screen->m_ScrollPixelsPerUnitY = 1;
-
-    // Number of scroll bar units for the given zoom level in device units.
-    double unitsX = virtualSizeIU.x * scale;
-    double unitsY = virtualSizeIU.y * scale;
-
-    // Store the requested center position for later use
-    SetScrollCenterPosition( aCenterPositionIU );
-
-    // Calculate the scroll bar position in internal units to place the
-    // center position at the center of client rectangle.
-    double posX = centerPositionIU.x - clientRectIU.GetWidth()  / 2.0 - screen->m_DrawOrg.x;
-    double posY = centerPositionIU.y - clientRectIU.GetHeight() / 2.0 - screen->m_DrawOrg.y;
-
-    // Convert scroll bar position to device units.
-    posX = KiROUND( posX * scale );
-    posY = KiROUND( posY * scale );
-
-    if( posX < 0 )
-    {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %.10g" ), posX );
-        posX = 0;
-    }
-
-    if( posX > unitsX )
-    {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %.10g" ), posX );
-        posX = unitsX;
-    }
-
-    if( posY < 0 )
-    {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %.10g" ), posY );
-        posY = 0;
-    }
-
-    if( posY > unitsY )
-    {
-        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %.10g" ), posY );
-        posY = unitsY;
-    }
-
-    screen->m_ScrollbarPos    = wxPoint( KiROUND( posX ),  KiROUND( posY ) );
-    screen->m_ScrollbarNumber = wxSize( KiROUND( unitsX ), KiROUND( unitsY ) );
-
-    wxLogTrace( traceScrollSettings,
-                wxT( "Drawing = (%.10g, %.10g), Client = (%.10g, %.10g), Offset = (%d, %d), SetScrollbars(%d, %d, %d, %d, %d, %d)" ),
-                virtualSizeIU.x, virtualSizeIU.y, clientSizeIU.x, clientSizeIU.y,
-                screen->m_DrawOrg.x, screen->m_DrawOrg.y,
-                screen->m_ScrollPixelsPerUnitX, screen->m_ScrollPixelsPerUnitY,
-                screen->m_ScrollbarNumber.x, screen->m_ScrollbarNumber.y,
-                screen->m_ScrollbarPos.x, screen->m_ScrollbarPos.y );
-
-    bool            noRefresh = true;
-
-    m_canvas->SetScrollbars( screen->m_ScrollPixelsPerUnitX,
-                             screen->m_ScrollPixelsPerUnitY,
-                             screen->m_ScrollbarNumber.x,
-                             screen->m_ScrollbarNumber.y,
-                             screen->m_ScrollbarPos.x,
-                             screen->m_ScrollbarPos.y, noRefresh );
-}
-
-
-void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
+void EDA_DRAW_FRAME::UseGalCanvas()
 {
     KIGFX::GAL* gal = GetGalCanvas()->GetGAL();
 
@@ -1011,8 +790,8 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     viewControls->EnableMousewheelPan( m_canvas->GetEnableMousewheelPan() );
     viewControls->EnableAutoPan( m_canvas->GetEnableAutoPan() );
 
-    m_canvas->SetEvtHandlerEnabled( !aEnable );
-    GetGalCanvas()->SetEvtHandlerEnabled( aEnable );
+    m_canvas->SetEvtHandlerEnabled( false );
+    GetGalCanvas()->SetEvtHandlerEnabled( true );
 
     GetGalCanvas()->StartDrawing();
 
@@ -1027,16 +806,12 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 }
 
 
-bool EDA_DRAW_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
+void EDA_DRAW_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 {
-    auto galCanvas = GetGalCanvas();
-    wxCHECK( galCanvas, false );
-    bool use_gal = galCanvas->SwitchBackend( aCanvasType );
-    use_gal &= aCanvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    UseGalCanvas( use_gal );
-    m_canvasType = use_gal ? aCanvasType : EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
+    GetGalCanvas()->SwitchBackend( aCanvasType );
+    m_canvasType = GetGalCanvas()->GetBackend();
 
-    return use_gal;
+    UseGalCanvas();
 }
 
 

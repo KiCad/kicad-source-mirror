@@ -129,7 +129,7 @@ public:
     /**
      * switches currently used canvas ( Cairo / OpenGL).
      */
-    void OnSwitchCanvas( wxCommandEvent& aEvent ) override;
+    void SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) override;
 
     /** The nickname of the current library being edited and empty string if none. */
     wxString GetCurLib() const;

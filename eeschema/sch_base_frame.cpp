@@ -108,42 +108,6 @@ SCH_BASE_FRAME::~SCH_BASE_FRAME()
 }
 
 
-void SCH_BASE_FRAME::OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent )
-{
-    wxMenuBar* menuBar = GetMenuBar();
-    EDA_DRAW_PANEL_GAL* gal_canvas = GetGalCanvas();
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = gal_canvas->GetBackend();
-
-    struct { int menuId; int galType; } menuList[] =
-    {
-        { ID_MENU_CANVAS_OPENGL,    EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL },
-        { ID_MENU_CANVAS_CAIRO,     EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO },
-    };
-
-    for( auto ii: menuList )
-    {
-        wxMenuItem* item = menuBar->FindItem( ii.menuId );
-        if( ii.galType == canvasType )
-            item->Check( true );
-    }
-}
-
-
-void SCH_BASE_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
-{
-    auto new_type = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
-
-    if( aEvent.GetId() == ID_MENU_CANVAS_CAIRO )
-        new_type = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
-
-    if( m_canvasType == new_type )
-        return;
-
-    GetGalCanvas()->SwitchBackend( new_type );
-    m_canvasType = new_type;
-}
-
-
 void SCH_BASE_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
 {
     LIB_VIEW_FRAME* viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, true );
@@ -451,14 +415,14 @@ void SCH_BASE_FRAME::createCanvas()
 
     m_useSingleCanvasPane = true;
 
-    SetGalCanvas( static_cast<SCH_DRAW_PANEL*> (m_canvas) );
+    SetGalCanvas( static_cast<SCH_DRAW_PANEL*>( m_canvas ) );
 
     // Set up viewport
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
     view->SetScale( GetZoomLevelCoeff() / m_canvas->GetZoom() );
     view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
 
-    UseGalCanvas( true );
+    UseGalCanvas();
 }
 
 

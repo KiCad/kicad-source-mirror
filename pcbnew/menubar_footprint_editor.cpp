@@ -47,105 +47,92 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar* oldMenuBar = GetMenuBar();
     wxMenuBar* menuBar = new wxMenuBar();
-    wxString   text;
 
-    // Recreate all menus:
+    auto modifiedDocumentCondition = [ this ] ( const SELECTION& sel ) {
+        return GetBoard()->m_Modules && GetScreen()->IsModify();
+    };
+    auto libraryPartCondition = [ this ] ( const SELECTION& sel ) {
+        LIB_ID libId = getTargetFPID();
+        const wxString& libName = libId.GetLibNickname();
+        const wxString& partName = libId.GetLibItemName();
 
-    // Menu File:
-    wxMenu* fileMenu = new wxMenu;
+       return( !libName.IsEmpty() || !partName.IsEmpty() );
+    };
 
-    AddMenuItem( fileMenu,
-                 ID_MODEDIT_CREATE_NEW_LIB,
-                 _( "New Library..." ),
-                 _( "Creates an empty library" ),
-                 KiBitmap( new_library_xpm ) );
+            //-- File menu -----------------------------------------------
+    //
+    CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, selTool );
 
-    AddMenuItem( fileMenu,
-                 ID_MODEDIT_ADD_LIBRARY,
-                 _( "Add Library..." ),
-                 _( "Adds a previously created library" ),
-                 KiBitmap( add_library_xpm ) );
+    fileMenu->AddItem( ID_MODEDIT_CREATE_NEW_LIB,
+                       _( "New Library..." ),
+                       _( "Creates an empty library" ),
+                       new_library_xpm,              SELECTION_CONDITIONS::ShowAlways );
 
-    text = AddHotkeyName( _( "&New Footprint..." ), m_hotkeysDescrList, HK_NEW );
-    AddMenuItem( fileMenu, ID_MODEDIT_NEW_MODULE,
-                 text, _( "Create a new footprint" ),
-                 KiBitmap( new_footprint_xpm ) );
+    fileMenu->AddItem( ID_MODEDIT_ADD_LIBRARY,
+                       _( "Add Library..." ),
+                       _( "Adds a previously created library" ),
+                       add_library_xpm,              SELECTION_CONDITIONS::ShowAlways );
+
+    fileMenu->AddItem( ID_MODEDIT_NEW_MODULE,
+                       AddHotkeyName( _( "&New Footprint..." ), m_hotkeysDescrList, HK_NEW ),
+                       _( "Create a new footprint" ),
+                       new_footprint_xpm,            SELECTION_CONDITIONS::ShowAlways );
 
 #ifdef KICAD_SCRIPTING
-    AddMenuItem( fileMenu, ID_MODEDIT_NEW_MODULE_FROM_WIZARD,
-                 _( "&Create Footprint..." ),
-                 _( "Create a new footprint using the footprint wizard" ),
-                 KiBitmap( module_wizard_xpm ) );
+    fileMenu->AddItem( ID_MODEDIT_NEW_MODULE_FROM_WIZARD,
+                       _( "&Create Footprint..." ),
+                       _( "Create a new footprint using the footprint wizard" ),
+                       module_wizard_xpm,            SELECTION_CONDITIONS::ShowAlways );
 #endif
 
-    fileMenu->AppendSeparator();
+    fileMenu->AddSeparator();
+    fileMenu->AddItem( ACTIONS::save,                modifiedDocumentCondition );
+    fileMenu->AddItem( ACTIONS::saveAs,              libraryPartCondition );
+    fileMenu->AddItem( ID_MODEDIT_REVERT_PART,
+                       _( "Revert" ),
+                       _( "Throw away changes" ),
+                       undo_xpm,                     modifiedDocumentCondition );
 
-    text = AddHotkeyName( _( "&Save" ), m_hotkeysDescrList, HK_SAVE );
-    AddMenuItem( fileMenu, ID_MODEDIT_SAVE, text,
-                 _( "Save changes" ),
-                 KiBitmap( save_xpm ) );
+    fileMenu->AddSeparator();
 
-    text = AddHotkeyName( _( "Save &As..." ), m_hotkeysDescrList, HK_SAVEAS );
-    AddMenuItem( fileMenu, ID_MODEDIT_SAVE_AS, text,
-                 _( "Save a copy to a new name and/or location" ),
-                 KiBitmap( save_as_xpm ) );
+    ACTION_MENU* submenuImport = new ACTION_MENU();
+    submenuImport->SetTool( selTool );
+    submenuImport->SetTitle( _( "Import" ) );
+    submenuImport->SetIcon( import_xpm );
 
-    AddMenuItem( fileMenu, ID_MODEDIT_REVERT_PART,
-                 _( "&Revert" ),
-                 _( "Throw away changes" ),
-                 KiBitmap( undo_xpm ) );
+    submenuImport->Add( _( "&Footprint..." ),
+                        _( "Import a footprint from file" ),
+                        ID_MODEDIT_IMPORT_PART, import_module_xpm );
 
-    fileMenu->AppendSeparator();
+    submenuImport->Add( _( "&Graphics..." ),
+                        _( "Import 2D Drawing file to Footprint Editor on Drawings layer" ),
+                        ID_GEN_IMPORT_GRAPHICS_FILE, import_vector_xpm );
 
-    wxMenu* submenuImport = new wxMenu();
+    fileMenu->AddMenu( submenuImport,                SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( submenuImport, ID_MODEDIT_IMPORT_PART,
-                 _( "&Footprint..." ),
-                 _( "Import a footprint from file" ),
-                 KiBitmap( import_module_xpm ) );
+    CONDITIONAL_MENU* submenuExport = new CONDITIONAL_MENU( false, selTool );
+    submenuExport->SetTitle( _( "Export" ) );
+    submenuExport->SetIcon( export_xpm );
 
-    AddMenuItem( submenuImport, ID_GEN_IMPORT_GRAPHICS_FILE,
-                 _( "&Graphics..." ),
-                 _( "Import 2D Drawing file to Footprint Editor on Drawings layer" ),
-                 KiBitmap( import_vector_xpm ) );
+    submenuExport->AddItem( ID_MODEDIT_EXPORT_PART, _( "&Footprint..." ),
+                            _( "Export current footprint to a file" ),
+                            export_module_xpm,      modifiedDocumentCondition );
 
-    AddMenuItem( fileMenu, submenuImport,
-                 ID_GEN_IMPORT_FILE, _( "&Import" ),
-                 _( "Import files" ), KiBitmap( import_xpm ) );
+    submenuExport->AddItem( ID_MODEDIT_SAVE_PNG, _( "View as &PNG..." ),
+                            _( "Create a PNG file from the current view" ),
+                            plot_xpm,               SELECTION_CONDITIONS::ShowAlways );
 
-    wxMenu* submenuExport = new wxMenu();
+    fileMenu->AddMenu( submenuExport,               SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( submenuExport, ID_MODEDIT_EXPORT_PART,
-                 _( "&Footprint..." ),
-                 _( "Export current footprint to a file" ),
-                 KiBitmap( export_module_xpm ) );
+    fileMenu->AddSeparator();
+    fileMenu->AddItem( ACTIONS::print,              SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( submenuExport, ID_MODEDIT_SAVE_PNG,
-                 _( "View as &PNG..." ),
-                 _( "Create a PNG file from the current view" ),
-                 KiBitmap( plot_xpm ) );
+    fileMenu->AddSeparator();
+    // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
+    fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( fileMenu, submenuExport,
-                 ID_GEN_EXPORT_FILE, _( "&Export" ),
-                 _( "Export files" ), KiBitmap( export_xpm ) );
-
-    fileMenu->AppendSeparator();
-
-    // Print
-    text = AddHotkeyName( _( "&Print..." ), m_hotkeysDescrList, HK_PRINT );
-    AddMenuItem( fileMenu, wxID_PRINT, text,
-                 _( "Print current footprint" ),
-                 KiBitmap( print_button_xpm ) );
-
-    fileMenu->AppendSeparator();
-
-    // Close editor
-    AddMenuItem( fileMenu, wxID_EXIT,
-                 _( "&Exit" ),
-                 _( "Close footprint editor" ),
-                 KiBitmap( exit_xpm ) );
-
-    //----- Edit menu ------------------
+    //-- Edit menu -----------------------------------------------
+    //
     CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
 
     auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
@@ -158,7 +145,6 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
         return GetToolId() == ID_NO_TOOL_SELECTED;
     };
 
-    text  = AddHotkeyName( _( "&Undo" ), g_Board_Editor_Hotkeys_Descr, HK_UNDO );
     editMenu->AddItem( ACTIONS::undo,    enableUndoCondition );
     editMenu->AddItem( ACTIONS::redo,    enableRedoCondition );
 
@@ -185,7 +171,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "Delete the current footprint" ),
                  KiBitmap( delete_xpm ) );
 
-    //--------- View menu ----------------
+    //-- View menu -----------------------------------------------
+    //
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
 
     auto gridShownCondition = [ this ] ( const SELECTION& aSel ) {
@@ -217,12 +204,13 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     };
 
     viewMenu->AddItem( ID_OPEN_MODULE_VIEWER,
-                       _( "Footprint &Library Browser" ), _( "Browse footprint libraries" ),
+                       _( "Footprint &Library Browser" ),
+                       _( "Browse footprint libraries" ),
                        modview_icon_xpm, SELECTION_CONDITIONS::ShowAlways );
 
-    text = AddHotkeyName( _( "&3D Viewer" ), m_hotkeysDescrList, HK_3D_VIEWER );
     viewMenu->AddItem( ID_MENU_PCB_SHOW_3D_FRAME,
-                       text, _( "Show footprint in 3D viewer" ),
+                       AddHotkeyName( _( "&3D Viewer" ), m_hotkeysDescrList, HK_3D_VIEWER ),
+                       _( "Show footprint in 3D viewer" ),
                        three_d_xpm, SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
@@ -272,8 +260,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                             _( "&Search Tree" ), _( "Toggles the search tree visibility" ),
                             search_tree_xpm, searchTreeShownCondition );
 
-
-    //-------- Place menu --------------------
+    //-- Place menu -----------------------------------------------
+    //
     CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
 
     placeMenu->AddItem( PCB_ACTIONS::placePad,    SELECTION_CONDITIONS::ShowAlways );
@@ -290,15 +278,17 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->AddItem( ACTIONS::gridSetOrigin,   SELECTION_CONDITIONS::ShowAlways );
 
 
-    //----- Inspect menu ---------------------
+    //-- Inspect menu -----------------------------------------------
+    //
     wxMenu* inspectMenu = new wxMenu;
 
-    text = AddHotkeyName( _( "&Measure" ), m_hotkeysDescrList, HK_MEASURE_TOOL );
     AddMenuItem( inspectMenu, ID_MODEDIT_MEASUREMENT_TOOL,
-                 text, _( "Measure distance" ),
+                 AddHotkeyName( _( "&Measure" ), m_hotkeysDescrList, HK_MEASURE_TOOL ),
+                 _( "Measure distance" ),
                  KiBitmap( measurement_xpm ) );
 
-    //----- Tools menu ---------------------
+    //-- Tools menu -----------------------------------------------
+    //
     wxMenu* toolsMenu = new wxMenu;
 
     AddMenuItem( toolsMenu, ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
@@ -312,52 +302,46 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( insert_module_board_xpm ) );
 
 
-    //----- Preferences menu -----------------
-    wxMenu* prefs_menu = new wxMenu;
+    //-- Preferences menu -----------------------------------------------
+    //
+    CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, selTool );
 
-    // Path configuration edit dialog.
-    AddMenuItem( prefs_menu,
-                 ID_PREFERENCES_CONFIGURE_PATHS,
-                 _( "&Configure Paths..." ),
-                 _( "Edit path configuration environment variables" ),
-                 KiBitmap( path_xpm ) );
+    auto acceleratedGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+    };
+    auto standardGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+    };
 
-    AddMenuItem( prefs_menu, ID_PCB_LIB_TABLE_EDIT,
-                _( "Manage &Footprint Libraries..." ), _( "Configure footprint library table" ),
-                KiBitmap( library_table_xpm ) );
+    prefsMenu->AddItem( ID_PREFERENCES_CONFIGURE_PATHS, _( "&Configure Paths..." ),
+                        _( "Edit path configuration environment variables" ),
+                        path_xpm,            SELECTION_CONDITIONS::ShowAlways );
 
-    // Settings
-    text = AddHotkeyName( _( "&Preferences..." ), m_hotkeysDescrList, HK_PREFERENCES );
-    AddMenuItem( prefs_menu, wxID_PREFERENCES, text,
-                 _( "Show preferences for all open tools" ),
-                 KiBitmap( preference_xpm ) );
+    prefsMenu->AddItem( ID_PCB_LIB_TABLE_EDIT, _( "Manage &Footprint Libraries..." ),
+                        _( "Edit the global and project footprint library tables." ),
+                        library_table_xpm,   SELECTION_CONDITIONS::ShowAlways );
 
-    prefs_menu->AppendSeparator();
+    prefsMenu->AddItem( wxID_PREFERENCES,
+                        AddHotkeyName( _( "&Preferences..." ), g_Module_Editor_Hotkeys_Descr, HK_PREFERENCES ),
+                        _( "Show preferences for all open tools" ),
+                        preference_xpm,      SELECTION_CONDITIONS::ShowAlways );
 
-    text = AddHotkeyName( _( "Accelerated Graphics" ), m_hotkeysDescrList, HK_CANVAS_OPENGL );
-    AddMenuItem( prefs_menu, ID_MENU_CANVAS_OPENGL, text,
-                 _( "Use hardware-accelerated graphics (recommended)" ),
-                 KiBitmap( tools_xpm ), wxITEM_RADIO );
+    prefsMenu->AddSeparator();
+    Pgm().AddMenuLanguageList( prefsMenu );
 
-    text = AddHotkeyName( _( "Standard Graphics" ), m_hotkeysDescrList, HK_CANVAS_CAIRO );
-    AddMenuItem( prefs_menu, ID_MENU_CANVAS_CAIRO, text,
-                 _( "Use software graphics (fall-back)" ),
-                 KiBitmap( tools_xpm ), wxITEM_RADIO );
+    prefsMenu->AddSeparator();
+    prefsMenu->AddCheckItem( ACTIONS::acceleratedGraphics, acceleratedGraphicsCondition );
+    prefsMenu->AddCheckItem( ACTIONS::standardGraphics, standardGraphicsCondition );
 
-    prefs_menu->AppendSeparator();
-
-    // Language submenu
-    Pgm().AddMenuLanguageList( prefs_menu );
-
-    //------------------------------------
-    // Append menus to the menubar
+    //--MenuBar -----------------------------------------------------------
+    //
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( inspectMenu, _( "&Inspect" ) );
     menuBar->Append( toolsMenu, _( "&Tools" ) );
-    menuBar->Append( prefs_menu, _( "P&references" ) );
+    menuBar->Append( prefsMenu, _( "P&references" ) );
     AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );

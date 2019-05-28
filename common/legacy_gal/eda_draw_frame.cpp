@@ -375,11 +375,6 @@ int EDA_DRAW_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
 }
 
 
-void EDA_DRAW_FRAME::ToolOnRightClick( wxCommandEvent& event )
-{
-}
-
-
 void EDA_DRAW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMode, void* aData )
 {
 }
@@ -618,12 +613,7 @@ void EDA_DRAW_FRAME::PushPreferences( const EDA_DRAW_PANEL* aParentCanvas )
 }
 
 
-void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
-{
-}
-
-
-void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
+void EDA_DRAW_FRAME::UseGalCanvas()
 {
     EDA_DRAW_PANEL_GAL* galCanvas = GetGalCanvas();
 
@@ -633,7 +623,7 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     viewControls->EnableMousewheelPan( m_canvas->GetEnableMousewheelPan() );
     viewControls->EnableAutoPan( m_canvas->GetEnableAutoPan() );
 
-    galCanvas->SetEvtHandlerEnabled( aEnable );
+    galCanvas->SetEvtHandlerEnabled( true );
     galCanvas->StartDrawing();
 
     // Reset current tool on switch();
@@ -641,17 +631,12 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 }
 
 
-bool EDA_DRAW_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
+void EDA_DRAW_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 {
-    // JEY TODO: unravel this...
-    auto galCanvas = GetGalCanvas();
-    wxCHECK( galCanvas, false );
-    bool use_gal = galCanvas->SwitchBackend( aCanvasType );
-    use_gal &= aCanvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    UseGalCanvas( use_gal );
-    m_canvasType = use_gal ? aCanvasType : EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
+    GetGalCanvas()->SwitchBackend( aCanvasType );
+    m_canvasType = GetGalCanvas()->GetBackend();
 
-    return use_gal;
+    UseGalCanvas();
 }
 
 

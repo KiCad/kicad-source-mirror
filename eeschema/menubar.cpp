@@ -45,9 +45,6 @@ class CONDITIONAL_MENU;
 // Build the tools menu
 static void prepareToolsMenu( wxMenu* aParentMenu );
 
-// Build the preferences menu
-static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu );
-
 
 void SCH_EDIT_FRAME::ReCreateMenuBar()
 {
@@ -56,15 +53,13 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar* oldMenuBar = GetMenuBar();
     wxMenuBar* menuBar = new wxMenuBar();
-    wxString   text;
 
     auto modifiedDocumentCondition = [] ( const SELECTION& sel ) {
         SCH_SHEET_LIST sheetList( g_RootSheet );
         return sheetList.IsModified();
     };
 
-    //
-    // Menu File:
+    //-- File menu -----------------------------------------------------------
     //
     CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, selTool );
     static ACTION_MENU* openRecentMenu;
@@ -141,8 +136,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
     fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, EE_CONDITIONS::ShowAlways );
 
-    //
-    // Menu Edit:
+    //-- Edit menu -----------------------------------------------------------
     //
     CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
 
@@ -176,8 +170,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                        _( "Sets symbol fields to original library values" ),
                        update_fields_xpm,            EE_CONDITIONS::ShowAlways );
 
-    //
-    // Menu View:
+    //-- View menu -----------------------------------------------------------
     //
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
 
@@ -232,8 +225,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->AppendSeparator();
 #endif
 
-    //
-    // Menu place:
+    //-- Place menu -----------------------------------------------------------
     //
     CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
 
@@ -259,33 +251,57 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->AddItem( EE_ACTIONS::placeSchematicText,     EE_CONDITIONS::ShowAlways );
     placeMenu->AddItem( EE_ACTIONS::placeImage,             EE_CONDITIONS::ShowAlways );
 
-    //
-    // Menu Inspect:
+    //-- Inspect menu -----------------------------------------------
     //
     wxMenu* inspectMenu = new wxMenu;
     AddMenuItem( inspectMenu, ID_GET_ERC, _( "Electrical Rules &Checker" ),
                  _( "Perform electrical rules check" ), KiBitmap( erc_xpm ) );
 
-    //
-    // Menu Tools:
+    //-- Tools menu -----------------------------------------------
     //
     wxMenu* toolsMenu = new wxMenu;
     prepareToolsMenu( toolsMenu );
 
+    //-- Preferences menu -----------------------------------------------
     //
-    // Menu Preferences:
-    //
-    wxMenu* preferencesMenu = new wxMenu;
-    preparePreferencesMenu( this, preferencesMenu );
+    CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, selTool );
 
-    // Create the menubar and append all submenus
+    auto acceleratedGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+    };
+    auto standardGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+    };
+
+    prefsMenu->AddItem( ID_PREFERENCES_CONFIGURE_PATHS, _( "Configure Pa&ths..." ),
+                        _( "Edit path configuration environment variables" ),
+                        path_xpm,                          EE_CONDITIONS::ShowAlways );
+
+    prefsMenu->AddItem( ID_EDIT_SYM_LIB_TABLE, _( "Manage Symbol Libraries..." ),
+                        _( "Edit the global and project symbol library lists" ),
+                        library_table_xpm,                 EE_CONDITIONS::ShowAlways );
+
+    prefsMenu->AddItem( wxID_PREFERENCES,
+                        AddHotkeyName( _( "&Preferences..." ), g_Eeschema_Hotkeys_Descr, HK_PREFERENCES ),
+                        _( "Show preferences for all open tools" ),
+                        preference_xpm,                    EE_CONDITIONS::ShowAlways );
+
+    prefsMenu->AddSeparator();
+    Pgm().AddMenuLanguageList( prefsMenu );
+
+    prefsMenu->AddSeparator();
+    prefsMenu->AddCheckItem( ACTIONS::acceleratedGraphics, acceleratedGraphicsCondition );
+    prefsMenu->AddCheckItem( ACTIONS::standardGraphics,    standardGraphicsCondition );
+
+    //-- Menubar -----------------------------------------------
+    //
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( inspectMenu, _( "&Inspect" ) );
     menuBar->Append( toolsMenu, _( "&Tools" ) );
-    menuBar->Append( preferencesMenu, _( "P&references" ) );
+    menuBar->Append( prefsMenu, _( "P&references" ) );
     AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );
@@ -366,52 +382,3 @@ void prepareToolsMenu( wxMenu* aParentMenu )
 
 }
 
-
-static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
-{
-    // Path configuration edit dialog.
-    AddMenuItem( aParentMenu, ID_PREFERENCES_CONFIGURE_PATHS, _( "Configure Pa&ths..." ),
-                 _( "Edit path configuration environment variables" ),
-                 KiBitmap( path_xpm ) );
-
-    // Library
-    AddMenuItem( aParentMenu, ID_EDIT_SYM_LIB_TABLE, _( "Manage Symbol Libraries..." ),
-                 _( "Edit the global and project symbol library lists" ),
-                 KiBitmap( library_table_xpm ) );
-
-    // Options (Preferences on WXMAC)
-    wxString text = AddHotkeyName( _( "&Preferences..." ), g_Eeschema_Hotkeys_Descr, HK_PREFERENCES );
-    AddMenuItem( aParentMenu, wxID_PREFERENCES, text,
-                 _( "Show preferences for all open tools" ),
-                 KiBitmap( preference_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    // Language submenu
-    Pgm().AddMenuLanguageList( aParentMenu );
-
-    aParentMenu->AppendSeparator();
-
-    text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), g_Eeschema_Hotkeys_Descr,
-                          HK_CANVAS_OPENGL );
-    AddMenuItem( aParentMenu, ID_MENU_CANVAS_OPENGL, text,
-                 _( "Use Modern Toolset with hardware-accelerated graphics (recommended)" ),
-                 KiBitmap( tools_xpm ), wxITEM_RADIO );
-
-    text = AddHotkeyName( _( "Modern Toolset (Fallba&ck)" ), g_Eeschema_Hotkeys_Descr,
-                          HK_CANVAS_CAIRO );
-    AddMenuItem( aParentMenu, ID_MENU_CANVAS_CAIRO, text,
-                 _( "Use Modern Toolset with software graphics (fall-back)" ),
-                 KiBitmap( tools_xpm ), wxITEM_RADIO );
-
-    aParentMenu->AppendSeparator();
-
-    // Import/export
-    AddMenuItem( aParentMenu, ID_CONFIG_SAVE, _( "&Save Project File..." ),
-                 _( "Save project preferences into a project file" ),
-                 KiBitmap( save_setup_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_CONFIG_READ, _( "Load P&roject File..." ),
-                 _( "Load project preferences from a project file" ),
-                 KiBitmap( import_setup_xpm ) );
-}

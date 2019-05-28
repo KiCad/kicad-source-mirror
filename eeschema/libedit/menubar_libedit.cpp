@@ -44,7 +44,6 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar* oldMenuBar = GetMenuBar();
     wxMenuBar* menuBar = new wxMenuBar();
-    wxString   text;
 
     auto modifiedDocumentCondition = [ this ] ( const SELECTION& sel ) {
         LIB_ID libId = getTargetLibId();
@@ -58,8 +57,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
             return ( !readOnly && m_libMgr->IsPartModified( partName, libName ) );
     };
 
-    //
-    // Menu File:
+    //-- File menu -----------------------------------------------
     //
     CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, selTool );
 
@@ -113,8 +111,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
     fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, EE_CONDITIONS::ShowAlways );
 
-    //
-    // Edit menu
+    //-- Edit menu -----------------------------------------------
     //
     CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
 
@@ -141,8 +138,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AddItem( EE_ACTIONS::symbolProperties, havePartCondition );
     editMenu->AddItem( EE_ACTIONS::pinTable,         havePartCondition );
 
-    //
-    // Menu View:
+    //-- View menu -----------------------------------------------
     //
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
 
@@ -188,8 +184,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->AddSeparator();
     viewMenu->AddCheckItem( EE_ACTIONS::showComponentTree, compTreeShownCondition );
 
-    //
-    // Menu Place:
+    //-- Place menu -----------------------------------------------
     //
     CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
 
@@ -200,15 +195,13 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->AddItem( EE_ACTIONS::drawSymbolArc,         EE_CONDITIONS::ShowAlways );
     placeMenu->AddItem( EE_ACTIONS::drawSymbolLines,       EE_CONDITIONS::ShowAlways );
 
-    //
-    // Menu Inspect:
+    //-- Inspect menu -----------------------------------------------
     //
     wxMenu* inspectMenu = new wxMenu;
 
-    text = AddHotkeyName( _( "Show Datasheet" ), g_Libedit_Hotkeys_Descr, HK_LIBEDIT_VIEW_DOC );
     AddMenuItem( inspectMenu,
                  ID_LIBEDIT_VIEW_DOC,
-                 text,
+                 AddHotkeyName( _( "Show Datasheet" ), g_Libedit_Hotkeys_Descr, HK_LIBEDIT_VIEW_DOC ),
                  _( "Open associated datasheet in web browser" ),
                  KiBitmap( datasheet_xpm ) );
 
@@ -218,47 +211,36 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Check duplicate and off grid pins" ),
                  KiBitmap( erc_xpm ) );
 
-    // Menu Preferences:
-    wxMenu* preferencesMenu = new wxMenu;
+    //-- Preferences menu -----------------------------------------------
+    //
+    CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, selTool );
 
-    // Environment varialbes
-    AddMenuItem( preferencesMenu,
-                 ID_PREFERENCES_CONFIGURE_PATHS,
-                 _( "&Configure Paths..." ),
-                 _( "Edit path configuration environment variables" ),
-                 KiBitmap( path_xpm ) );
+    auto acceleratedGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+    };
+    auto standardGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+    };
 
-    // Library list
-    AddMenuItem( preferencesMenu,
-                 ID_EDIT_SYM_LIB_TABLE,
-                 _( "Manage &Symbol Libraries..." ),
-                 _( "Edit the global and project symbol library tables." ),
-                 KiBitmap( library_table_xpm ) );
+    prefsMenu->AddItem( ID_PREFERENCES_CONFIGURE_PATHS, _( "&Configure Paths..." ),
+                        _( "Edit path configuration environment variables" ),
+                        path_xpm, EE_CONDITIONS::ShowAlways );
 
-    preferencesMenu->AppendSeparator();
+    prefsMenu->AddItem( ID_EDIT_SYM_LIB_TABLE, _( "Manage &Symbol Libraries..." ),
+                        _( "Edit the global and project symbol library tables." ),
+                        library_table_xpm, EE_CONDITIONS::ShowAlways );
 
-    // Default values and options
-    text = AddHotkeyName( _( "&Preferences..." ), g_Libedit_Hotkeys_Descr, HK_PREFERENCES );
-    AddMenuItem( preferencesMenu, wxID_PREFERENCES, text,
-                 _( "Show preferences for all open tools" ),
-                 KiBitmap( preference_xpm ) );
+    prefsMenu->AddItem( wxID_PREFERENCES,
+                        AddHotkeyName( _( "&Preferences..." ), g_Libedit_Hotkeys_Descr, HK_PREFERENCES ),
+                        _( "Show preferences for all open tools" ),
+                        preference_xpm, EE_CONDITIONS::ShowAlways );
 
-    // Language submenu
-    Pgm().AddMenuLanguageList( preferencesMenu );
+    prefsMenu->AddSeparator();
+    Pgm().AddMenuLanguageList( prefsMenu );
 
-    preferencesMenu->AppendSeparator();
-
-    text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), g_Libedit_Hotkeys_Descr,
-                          HK_CANVAS_OPENGL );
-    AddMenuItem( preferencesMenu, ID_MENU_CANVAS_OPENGL, text,
-                 _( "Use Modern Toolset with hardware-accelerated graphics (recommended)" ),
-                 KiBitmap( tools_xpm ), wxITEM_RADIO );
-
-    text = AddHotkeyName( _( "Modern Toolset (Fallba&ck)" ), g_Libedit_Hotkeys_Descr,
-                          HK_CANVAS_CAIRO );
-    AddMenuItem( preferencesMenu, ID_MENU_CANVAS_CAIRO, text,
-                 _( "Use Modern Toolset with software graphics (fall-back)" ),
-                 KiBitmap( tools_xpm ), wxITEM_RADIO );
+    prefsMenu->AddSeparator();
+    prefsMenu->AddCheckItem( ACTIONS::acceleratedGraphics, acceleratedGraphicsCondition );
+    prefsMenu->AddCheckItem( ACTIONS::standardGraphics, standardGraphicsCondition );
 
     //
     // Create the menubar and append all submenus
@@ -268,7 +250,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( inspectMenu, _( "&Inspect" ) );
-    menuBar->Append( preferencesMenu, _( "P&references" ) );
+    menuBar->Append( prefsMenu, _( "P&references" ) );
     AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );

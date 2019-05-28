@@ -9,6 +9,11 @@ TOOL_ACTION ACTIONS::doNew( "common.Control.new",
         _( "New..." ), _( "Create a new document in the editor" ),
         new_generic_xpm );
 
+TOOL_ACTION ACTIONS::newLibrary( "common.Control.newLibrary",
+        AS_GLOBAL, 0,
+        _( "New Library..." ), _( "Create a new library folder" ),
+        new_generic_xpm );
+
 TOOL_ACTION ACTIONS::open( "common.Control.open",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_OPEN ),
         _( "Open..." ), _( "Open existing document" ),
@@ -33,6 +38,11 @@ TOOL_ACTION ACTIONS::saveAll( "common.Control.saveAll",
         AS_GLOBAL, 0,
         _( "Save All" ), _( "Save all changes" ),
         save_xpm );
+
+TOOL_ACTION ACTIONS::revert( "common.Control.revert",
+        AS_GLOBAL, 0,
+        _( "Revert" ), _( "Throw away changes" ),
+        undo_xpm );
 
 TOOL_ACTION ACTIONS::pageSettings( "common.Control.pageSettings",
         AS_GLOBAL, 0,
@@ -297,7 +307,6 @@ TOOL_ACTION ACTIONS::toggleUnits( "common.Control.toggleUnits",
         _( "Switch units" ), _( "Switch between inches and millimeters" ),
         unit_mm_xpm );
 
-
 TOOL_ACTION ACTIONS::togglePolarCoords( "common.Control.togglePolarCoords",
         AS_GLOBAL, 0,
         _( "Polar Coordinates" ), _( "Switch between polar and cartesian coordinate systems" ),
@@ -308,11 +317,20 @@ TOOL_ACTION ACTIONS::toggleCursor( "common.Control.toggleCursor",
         _( "Always Show Cursor" ), _( "Display crosshairs even in selection tool" ),
         cursor_xpm );
 
-
 TOOL_ACTION ACTIONS::toggleCursorStyle( "common.Control.toggleCursorStyle",
         AS_GLOBAL, 0,
         _( "Full-Window Crosshairs" ), _( "Switch display of full-window crosshairs" ),
         cursor_shape_xpm );
+
+TOOL_ACTION ACTIONS::acceleratedGraphics( "common.Control.acceleratedGraphics",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_CANVAS_OPENGL ),
+        _( "Accelerated Graphics" ), _( "Use hardware-accelerated graphics (recommended)" ),
+        tools_xpm );
+
+TOOL_ACTION ACTIONS::standardGraphics( "common.Control.standardGraphics",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_CANVAS_CAIRO ),
+        _( "Standard Graphics" ), _( "Use software graphics (fall-back)" ),
+        tools_xpm );
 
 
 // System-wide selection Events

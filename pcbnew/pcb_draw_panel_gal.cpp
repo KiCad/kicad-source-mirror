@@ -385,10 +385,10 @@ void PCB_DRAW_PANEL_GAL::OnShow()
     {
         // Fallback to software renderer
         DisplayError( frame, e.what() );
-        bool use_gal = SwitchBackend( GAL_TYPE_CAIRO );
+        SwitchBackend( GAL_TYPE_CAIRO );
 
         if( frame )
-            frame->UseGalCanvas( use_gal );
+            frame->UseGalCanvas();
     }
 
     if( frame )

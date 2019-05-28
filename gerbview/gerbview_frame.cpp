@@ -213,7 +213,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     }
 
     GetGalCanvas()->SwitchBackend( canvasType );
-    UseGalCanvas( true );
+    UseGalCanvas();
 
     // Enable the axes to match legacy draw style
     auto& galOptions = GetGalDisplayOptions();
@@ -1136,44 +1136,28 @@ void GERBVIEW_FRAME::unitsChangeRefresh()
 }
 
 
-void GERBVIEW_FRAME::UseGalCanvas( bool aEnable )
+void GERBVIEW_FRAME::UseGalCanvas()
 {
-    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
+    EDA_DRAW_FRAME::UseGalCanvas();
 
     EDA_DRAW_PANEL_GAL* galCanvas = GetGalCanvas();
 
     if( m_toolManager )
+    {
         m_toolManager->SetEnvironment( m_gerberLayout, GetGalCanvas()->GetView(),
                                        GetGalCanvas()->GetViewControls(), this );
-
-    if( aEnable )
-    {
-        if( m_toolManager )
-            m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
-
-        m_colorsSettings->SetLegacyMode( false );
-
-        galCanvas->GetGAL()->SetGridColor( GetLayerColor( LAYER_GERBVIEW_GRID ) );
-
-        SetPageSettings( GetPageSettings() );
-
-        galCanvas->GetView()->RecacheAllItems();
-        galCanvas->SetEventDispatcher( m_toolDispatcher );
-        galCanvas->StartDrawing();
+        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
     }
-    else
-    {
-        if( m_toolManager )
-            m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
 
-        galCanvas->StopDrawing();
+    m_colorsSettings->SetLegacyMode( false );
 
-        // Redirect all events to the legacy canvas
-        galCanvas->SetEventDispatcher( NULL );
+    galCanvas->GetGAL()->SetGridColor( GetLayerColor( LAYER_GERBVIEW_GRID ) );
 
-        m_colorsSettings->SetLegacyMode( true );
-        m_canvas->Refresh();
-    }
+    SetPageSettings( GetPageSettings() );
+
+    galCanvas->GetView()->RecacheAllItems();
+    galCanvas->SetEventDispatcher( m_toolDispatcher );
+    galCanvas->StartDrawing();
 
     m_LayersManager->ReFill();
     m_LayersManager->ReFillRender();

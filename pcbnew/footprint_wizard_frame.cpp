@@ -236,7 +236,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     view->SetScale( GetZoomLevelCoeff() / m_canvas->GetZoom() );
     view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
 
-    UseGalCanvas( backend != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
+    UseGalCanvas();
     updateView();
 
     SetActiveLayer( F_Cu );

@@ -182,10 +182,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     // Menu 3D Frame
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, PCB_EDIT_FRAME::Show3D_Frame )
 
-    // Switching canvases
-    EVT_MENU( ID_MENU_CANVAS_CAIRO, PCB_EDIT_FRAME::OnSwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_OPENGL, PCB_EDIT_FRAME::OnSwitchCanvas )
-
     // Menu Get Design Rules Editor
     EVT_MENU( ID_BOARD_SETUP_DIALOG, PCB_EDIT_FRAME::ShowBoardSetupDialog )
 
@@ -411,7 +407,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     view->SetScale( GetZoomLevelCoeff() / m_canvas->GetZoom() );
     view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
 
-    UseGalCanvas( true );
+    UseGalCanvas();
 
     // disable Export STEP item if kicad2step does not exist
     wxString strK2S = Pgm().GetExecutablePath();
@@ -628,9 +624,9 @@ void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 }
 
 
-void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
+void PCB_EDIT_FRAME::UseGalCanvas()
 {
-    PCB_BASE_EDIT_FRAME::UseGalCanvas( aEnable );
+    PCB_BASE_EDIT_FRAME::UseGalCanvas();
     COLORS_DESIGN_SETTINGS& cds = Settings().Colors();
 
     cds.SetLegacyMode( false );
@@ -999,14 +995,13 @@ void PCB_EDIT_FRAME::OnLayerColorChange( wxCommandEvent& aEvent )
 }
 
 
-void PCB_EDIT_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
+void PCB_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 {
     // switches currently used canvas (Cairo / OpenGL).
-    PCB_BASE_FRAME::OnSwitchCanvas( aEvent );
+    PCB_BASE_FRAME::SwitchCanvas( aCanvasType );
 
-    // The base class method *does not reinit* the layers manager.
-    // We must upate the layer widget to match board visibility states,
-    // both layers and render columns.
+    // The base class method *does not reinit* the layers manager. We must upate the
+    // layer widget to match board visibility states, both layers and render columns.
     syncLayerVisibilities();
     syncLayerWidgetLayer();
     syncRenderStates();

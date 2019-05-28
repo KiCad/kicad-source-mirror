@@ -180,7 +180,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     view->SetScale( GetZoomLevelCoeff() / m_canvas->GetZoom() );
     view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
 
-    UseGalCanvas( true );
+    UseGalCanvas();
 
     m_auimgr.Update();
 

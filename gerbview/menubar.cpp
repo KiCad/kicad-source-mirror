@@ -180,11 +180,11 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     viewMenu->AppendSeparator();
 
     viewMenu->AddSeparator();
-    viewMenu->AddItem( ACTIONS::zoomInCenter,    SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomOutCenter,   SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomFitScreen,   SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomTool,        SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomRedraw,      SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomInCenter,                 SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomOutCenter,                SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomFitScreen,                SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomTool,                     SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomRedraw,                   SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AppendSeparator();
     viewMenu->AddCheckItem( ACTIONS::toggleGrid,              gridShownCondition );
@@ -238,34 +238,30 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     //-- Preferences menu -----------------------------------------------
     //
-    wxMenu* preferencesMenu = new wxMenu;
+    auto acceleratedGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+    };
+    auto standardGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+    };
+
+    CONDITIONAL_MENU* preferencesMenu = new CONDITIONAL_MENU( false, selTool );
 
     // Options (Preferences on WXMAC)
     text = AddHotkeyName( _( "&Preferences..." ), GerbviewHotkeysDescr, HK_PREFERENCES );
-    AddMenuItem( preferencesMenu, wxID_PREFERENCES, text,
-                 _( "Show preferences for all open tools" ),
-                 KiBitmap( preference_xpm ) );
+    preferencesMenu->AddItem( wxID_PREFERENCES, text, _( "Show preferences for all open tools" ),
+                              preference_xpm,                    SELECTION_CONDITIONS::ShowAlways );
 
-    // Canvas selection
-    preferencesMenu->AppendSeparator();
-
-    text = AddHotkeyName( _( "Accelerated Graphics" ), GerbviewHotkeysDescr, HK_CANVAS_OPENGL );
-    AddMenuItem( preferencesMenu, ID_MENU_CANVAS_OPENGL, text,
-                 _( "Use hardware-accelerated graphics (recommended)" ),
-                 KiBitmap( tools_xpm ), wxITEM_RADIO );
-
-    text = AddHotkeyName( _( "Standard Graphics" ), GerbviewHotkeysDescr, HK_CANVAS_CAIRO );
-    AddMenuItem( preferencesMenu, ID_MENU_CANVAS_CAIRO, text,
-                 _( "Use software graphics (fall-back)" ),
-                 KiBitmap( tools_xpm ), wxITEM_RADIO );
-
-    preferencesMenu->AppendSeparator();
-
-    // Language submenu
+    preferencesMenu->AddSeparator();
     Pgm().AddMenuLanguageList( preferencesMenu );
 
-    //
-    // Append menus to the menubar
+    preferencesMenu->AddSeparator();
+    preferencesMenu->AddCheckItem( ACTIONS::acceleratedGraphics, acceleratedGraphicsCondition );
+    preferencesMenu->AddCheckItem( ACTIONS::standardGraphics,    standardGraphicsCondition );
+
+    preferencesMenu->AppendSeparator();
+
+    //-- Menubar -----------------------------------------------
     //
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( viewMenu, _( "&View" ) );

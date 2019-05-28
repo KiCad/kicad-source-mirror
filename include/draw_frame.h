@@ -703,8 +703,6 @@ public:
     wxString        GetToolMsg() { return m_toolMsg; }
     virtual void    RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;
     virtual void    OnLeftClick( wxDC* DC, const wxPoint& MousePos ) {}
-    virtual void    ToolOnRightClick( wxCommandEvent& event );
-    void            AdjustScrollBars( const wxPoint& aCenterPosition );
 
     /**
      * Called when modifying the page settings.
@@ -812,18 +810,14 @@ public:
     EDA_DRAW_PANEL_GAL::GAL_TYPE LoadCanvasTypeSetting();
 
     /**
-     * Use to switch between standard and GAL-based canvas.
-     *
-     * @param aEnable True for GAL-based canvas, false for standard canvas.
+     * Use to start up the GAL drawing canvas.
      */
-    virtual void UseGalCanvas( bool aEnable );
+    virtual void UseGalCanvas();
 
     /**
      * Changes the current rendering backend.
-     * aCanvasType is the new rendering backend type.
-     * @return true if any kind of GAL canvas is used.
      */
-    virtual bool SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
+    virtual void SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
 
     /**
      * Return a pointer to GAL-based canvas of given EDA draw frame.

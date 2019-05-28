@@ -121,8 +121,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_LIBEDIT_GEN_PNG_FILE, LIB_EDIT_FRAME::OnPlotCurrentComponent )
     EVT_MENU( ID_LIBEDIT_GEN_SVG_FILE, LIB_EDIT_FRAME::OnPlotCurrentComponent )
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
-    EVT_MENU( ID_MENU_CANVAS_CAIRO, LIB_EDIT_FRAME::OnSwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_OPENGL, LIB_EDIT_FRAME::OnSwitchCanvas )
 
     EVT_MENU( wxID_PREFERENCES, LIB_EDIT_FRAME::OnPreferencesOptions )
 
@@ -139,8 +137,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_DE_MORGAN_CONVERT_BUTT, LIB_EDIT_FRAME::OnUpdateDeMorganConvert )
     EVT_UPDATE_UI_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_DELETE_ITEM_BUTT,
                          LIB_EDIT_FRAME::OnUpdateEditingPart )
-    EVT_UPDATE_UI( ID_MENU_CANVAS_CAIRO, LIB_EDIT_FRAME::OnUpdateSwitchCanvas )
-    EVT_UPDATE_UI( ID_MENU_CANVAS_OPENGL, LIB_EDIT_FRAME::OnUpdateSwitchCanvas )
 
 END_EVENT_TABLE()
 
@@ -1025,10 +1021,10 @@ void LIB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 }
 
 
-void LIB_EDIT_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
+void LIB_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 {
     // switches currently used canvas ( Cairo / OpenGL):
-    SCH_BASE_FRAME::OnSwitchCanvas( aEvent );
+    SCH_BASE_FRAME::SwitchCanvas( aCanvasType );
 
     // Set options specific to symbol editor (axies are always enabled):
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );

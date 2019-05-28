@@ -42,20 +42,8 @@
 #include "pcbnew_id.h"
 
 
-// Build the place submenu
-static void preparePlaceMenu( CONDITIONAL_MENU* aPlaceMenu, SELECTION_TOOL* aSelectionTool );
-
 // Build the route menu
 static void prepareRouteMenu( wxMenu* aParentMenu );
-
-// Build the inspect menu
-static void prepareInspectMenu( wxMenu* aParentMenu );
-
-// Build the library management menu
-static void prepareLibraryMenu( wxMenu* aParentMenu );
-
-// Build the preferences menu
-static void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu );
 
 // Build the tools menu
 static void prepareToolsMenu( wxMenu* aParentMenu );
@@ -68,7 +56,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar* oldMenuBar = GetMenuBar();
     wxMenuBar* menuBar = new wxMenuBar();
-    wxString   text;
 
     auto modifiedDocumentCondition = [ this ] ( const SELECTION& sel ) {
         return GetScreen()->IsModify();
@@ -76,7 +63,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     // Recreate all menus:
 
-    //----- Edit menu -----------------------------------------------------------
+    //-- File menu -----------------------------------------------------------
+    //
     CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, selTool );
     static ACTION_MENU* openRecentMenu;
 
@@ -134,7 +122,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     fileMenu->AddSeparator();
 
-    //----- Import submenu ------------------------------------------------------
+    // Import submenu
     ACTION_MENU* submenuImport = new ACTION_MENU();
     submenuImport->SetTool( selTool );
     submenuImport->SetTitle( _( "Import" ) );
@@ -149,7 +137,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     fileMenu->AddMenu( submenuImport,                SELECTION_CONDITIONS::ShowAlways );
 
-    //----- Export submenu ------------------------------------------------------
+    // Export submenu
     ACTION_MENU* submenuExport = new ACTION_MENU();
     submenuExport->SetTool( selTool );
     submenuExport->SetTitle( _( "Export" ) );
@@ -175,7 +163,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     fileMenu->AddMenu( submenuExport,                SELECTION_CONDITIONS::ShowAlways );
 
-    //----- Fabrication Outputs submenu -----------------------------------------
+    // Fabrication Outputs submenu
     ACTION_MENU* submenuFabOutputs = new ACTION_MENU();
     submenuFabOutputs->SetTool( selTool );
     submenuFabOutputs->SetTitle( _( "Fabrication Outputs" ) );
@@ -214,7 +202,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddItem( ACTIONS::plot,              SELECTION_CONDITIONS::ShowAlways );
 
 
-    //----- archive submenu -----------------------------------------------------
+    // Archive submenu
     ACTION_MENU* submenuArchive = new ACTION_MENU();
     submenuArchive->SetTool( selTool );
     submenuArchive->SetTitle( _( "Archive Footprints" ) );
@@ -237,7 +225,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
     fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
 
-    //----- Edit menu -----------------------------------------------------------
+    //-- Edit menu -----------------------------------------------------------
+    //
     CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
 
     auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
@@ -349,15 +338,18 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
                             _( "Show La&yers Manager" ), HELP_SHOW_HIDE_LAYERMANAGER,
                             layers_manager_xpm,             layersPaletteShownCondition );
+
     viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE,
                             _( "Show Microwa&ve Toolbar" ), HELP_SHOW_HIDE_MICROWAVE_TOOLS,
                              mw_toolbar_xpm,                microwaveToolbarShownCondition );
+
     viewMenu->AddItem( ID_OPEN_MODULE_VIEWER,
                        _( "Footprint &Library Browser" ), _( "Browse footprint libraries" ),
                        modview_icon_xpm,                    SELECTION_CONDITIONS::ShowAlways );
-    text = AddHotkeyName( _( "&3D Viewer" ), g_Board_Editor_Hotkeys_Descr, HK_3D_VIEWER );
+
     viewMenu->AddItem( ID_MENU_PCB_SHOW_3D_FRAME,
-                       text, _( "Show board in 3D viewer" ),
+                       AddHotkeyName( _( "&3D Viewer" ), g_Board_Editor_Hotkeys_Descr, HK_3D_VIEWER ),
+                       _( "Show board in 3D viewer" ),
                        three_d_xpm,                         SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
@@ -420,30 +412,110 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->AppendSeparator();
 #endif
 
-    //----- Place Menu ----------------------------------------------------------
+    //-- Place Menu ----------------------------------------------------------
+    //
     CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
-    preparePlaceMenu( placeMenu, selTool );
+    
+    placeMenu->AddItem( PCB_ACTIONS::placeModule,     SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawVia,         SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawZone,        SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawZoneKeepout, SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::placeText,       SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawArc,         SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawCircle,      SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawLine,        SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawPolygon,     SELECTION_CONDITIONS::ShowAlways );
 
-    //----- Route Menu ----------------------------------------------------------
+    placeMenu->AddSeparator();
+    placeMenu->AddItem( PCB_ACTIONS::drawDimension,   SELECTION_CONDITIONS::ShowAlways );
+
+    placeMenu->AddSeparator();
+    placeMenu->AddItem( PCB_ACTIONS::placeTarget,     SELECTION_CONDITIONS::ShowAlways );
+
+    placeMenu->AddSeparator();
+    placeMenu->AddItem( PCB_ACTIONS::drillOrigin,     SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( ACTIONS::gridSetOrigin,       SELECTION_CONDITIONS::ShowAlways );
+
+    placeMenu->AddSeparator();
+
+    ACTION_MENU* autoplaceSubmenu = new ACTION_MENU;
+    autoplaceSubmenu->SetTitle( _( "Auto-Place Footprints" ) );
+    autoplaceSubmenu->SetTool( selTool );
+    autoplaceSubmenu->SetIcon( mode_module_xpm );
+
+    autoplaceSubmenu->Add( PCB_ACTIONS::autoplaceOffboardComponents );
+    autoplaceSubmenu->Add( PCB_ACTIONS::autoplaceSelectedComponents );
+
+    placeMenu->AddMenu( autoplaceSubmenu );
+
+    //-- Route Menu ----------------------------------------------------------
+    //
     wxMenu* routeMenu = new wxMenu;
     prepareRouteMenu( routeMenu );
 
-    //----- Inspect Menu --------------------------------------------------------
+    //-- Inspect Menu --------------------------------------------------------
+    //
     wxMenu* inspectMenu = new wxMenu;
-    prepareInspectMenu( inspectMenu );
 
-    //----- Tools menu ----------------------------------------------------------
+    AddMenuItem( inspectMenu, ID_MENU_LIST_NETS,
+                 _( "&List Nets" ),
+                 _( "View list of nets with names and IDs" ),
+                 KiBitmap( list_nets_xpm ) );
+
+    AddMenuItem( inspectMenu, ID_PCB_MEASUREMENT_TOOL,
+                 AddHotkeyName( _( "&Measure" ), g_Board_Editor_Hotkeys_Descr, HK_MEASURE_TOOL ),
+                 _( "Measure distance" ),
+                 KiBitmap( measurement_xpm ) );
+
+    inspectMenu->AppendSeparator();
+    AddMenuItem( inspectMenu, ID_DRC_CONTROL,
+                 _( "&Design Rules Checker" ),
+                 _( "Perform design rules check" ),
+                 KiBitmap( erc_xpm ) );
+
+    //-- Tools menu ----------------------------------------------------------
+    //
     wxMenu* toolsMenu = new wxMenu;
     prepareToolsMenu( toolsMenu );
 
-    //----- Preferences and configuration menu ----------------------------------
-    wxMenu* configmenu = new wxMenu;
-    prepareLibraryMenu( configmenu );
-    configmenu->AppendSeparator();
+    //-- Preferences menu ----------------------------------------------------
+    //
+    CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, selTool );
 
-    preparePreferencesMenu( this, configmenu );
+    auto acceleratedGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+    };
+    auto standardGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+    };
 
-    //------ Append all menus to the menuBar ------------------------------------
+    prefsMenu->AddItem( ID_PREFERENCES_CONFIGURE_PATHS, _( "&Configure Paths..." ),
+                        _( "Edit path configuration environment variables" ),
+                        path_xpm,            SELECTION_CONDITIONS::ShowAlways );
+
+    prefsMenu->AddItem( ID_PCB_LIB_TABLE_EDIT, _( "Manage &Footprint Libraries..." ),
+                        _( "Edit the global and project footprint library tables." ),
+                        library_table_xpm,   SELECTION_CONDITIONS::ShowAlways );
+
+#ifdef BUILD_GITHUB_PLUGIN
+    prefsMenu->AddItem( ID_PCB_3DSHAPELIB_WIZARD, _( "Add &3D Shapes Libraries Wizard..." ),
+                        _( "Download 3D shape libraries from GitHub" ),
+                        import3d_xpm,        SELECTION_CONDITIONS::ShowAlways );
+#endif
+    prefsMenu->AddItem( wxID_PREFERENCES,
+                        AddHotkeyName( _( "&Preferences..." ), g_Module_Editor_Hotkeys_Descr, HK_PREFERENCES ),
+                        _( "Show preferences for all open tools" ),
+                        preference_xpm,      SELECTION_CONDITIONS::ShowAlways );
+
+    prefsMenu->AddSeparator();
+    Pgm().AddMenuLanguageList( prefsMenu );
+
+    prefsMenu->AddSeparator();
+    prefsMenu->AddCheckItem( ACTIONS::acceleratedGraphics, acceleratedGraphicsCondition );
+    prefsMenu->AddCheckItem( ACTIONS::standardGraphics, standardGraphicsCondition );
+
+    //--MenuBar -----------------------------------------------------------
+    //
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
@@ -451,7 +523,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( routeMenu, _( "Ro&ute" ) );
     menuBar->Append( inspectMenu, _( "&Inspect" ) );
     menuBar->Append( toolsMenu, _( "&Tools" ) );
-    menuBar->Append( configmenu, _( "P&references" ) );
+    menuBar->Append( prefsMenu, _( "P&references" ) );
     AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );
@@ -462,73 +534,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     RebuildActionPluginMenus();
 #endif
 
-}
-
-
-// Build the preferences menu
-void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
-{
-    wxString text;
-
-    text = AddHotkeyName( _( "&Preferences..." ), g_Board_Editor_Hotkeys_Descr, HK_PREFERENCES );
-    AddMenuItem( aParentMenu, wxID_PREFERENCES, text,
-                 _( "Show preferences for all open tools" ),
-                 KiBitmap( preference_xpm ) );
-
-    text = AddHotkeyName( _( "Accelerated Graphics" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_CANVAS_OPENGL );
-    AddMenuItem( aParentMenu, ID_MENU_CANVAS_OPENGL, text,
-                 _( "Use hardware-accelerated graphics (recommended)" ),
-                 KiBitmap( tools_xpm ), wxITEM_RADIO );
-
-    text = AddHotkeyName( _( "Standard Graphics" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_CANVAS_CAIRO );
-    AddMenuItem( aParentMenu, ID_MENU_CANVAS_CAIRO, text,
-                 _( "Use software graphics (fall-back)" ),
-                 KiBitmap( tools_xpm ), wxITEM_RADIO );
-
-    aParentMenu->AppendSeparator();
-
-    // Language submenu
-    Pgm().AddMenuLanguageList( aParentMenu );
-}
-
-
-// Build the place submenu
-void preparePlaceMenu( CONDITIONAL_MENU* aPlaceMenu, SELECTION_TOOL* aSelectionTool )
-{
-
-    aPlaceMenu->AddItem( PCB_ACTIONS::placeModule,     SELECTION_CONDITIONS::ShowAlways );
-    aPlaceMenu->AddItem( PCB_ACTIONS::drawVia,         SELECTION_CONDITIONS::ShowAlways );
-    aPlaceMenu->AddItem( PCB_ACTIONS::drawZone,        SELECTION_CONDITIONS::ShowAlways );
-    aPlaceMenu->AddItem( PCB_ACTIONS::drawZoneKeepout, SELECTION_CONDITIONS::ShowAlways );
-    aPlaceMenu->AddItem( PCB_ACTIONS::placeText,       SELECTION_CONDITIONS::ShowAlways );
-    aPlaceMenu->AddItem( PCB_ACTIONS::drawArc,         SELECTION_CONDITIONS::ShowAlways );
-    aPlaceMenu->AddItem( PCB_ACTIONS::drawCircle,      SELECTION_CONDITIONS::ShowAlways );
-    aPlaceMenu->AddItem( PCB_ACTIONS::drawLine,        SELECTION_CONDITIONS::ShowAlways );
-    aPlaceMenu->AddItem( PCB_ACTIONS::drawPolygon,     SELECTION_CONDITIONS::ShowAlways );
-
-    aPlaceMenu->AddSeparator();
-    aPlaceMenu->AddItem( PCB_ACTIONS::drawDimension,   SELECTION_CONDITIONS::ShowAlways );
-
-    aPlaceMenu->AddSeparator();
-    aPlaceMenu->AddItem( PCB_ACTIONS::placeTarget,     SELECTION_CONDITIONS::ShowAlways );
-
-    aPlaceMenu->AddSeparator();
-    aPlaceMenu->AddItem( PCB_ACTIONS::drillOrigin,     SELECTION_CONDITIONS::ShowAlways );
-    aPlaceMenu->AddItem( ACTIONS::gridSetOrigin,       SELECTION_CONDITIONS::ShowAlways );
-
-    aPlaceMenu->AddSeparator();
-
-    ACTION_MENU* autoplaceSubmenu = new ACTION_MENU;
-    autoplaceSubmenu->SetTitle( _( "Auto-Place Footprints" ) );
-    autoplaceSubmenu->SetTool( aSelectionTool );
-    autoplaceSubmenu->SetIcon( mode_module_xpm );
-
-    autoplaceSubmenu->Add( PCB_ACTIONS::autoplaceOffboardComponents );
-    autoplaceSubmenu->Add( PCB_ACTIONS::autoplaceSelectedComponents );
-
-    aPlaceMenu->AddMenu( autoplaceSubmenu );
 }
 
 
@@ -581,53 +586,6 @@ void prepareRouteMenu( wxMenu* aParentMenu )
                  _( "&Interactive Router Settings..." ),
                  _( "Configure interactive router" ),
                  KiBitmap( tools_xpm ) );
-}
-
-
-// Build the inspect menu
-void prepareInspectMenu( wxMenu* aParentMenu )
-{
-    wxString text;
-
-    AddMenuItem( aParentMenu, ID_MENU_LIST_NETS,
-                 _( "&List Nets" ),
-                 _( "View list of nets with names and IDs" ),
-                 KiBitmap( list_nets_xpm ) );
-
-    text = AddHotkeyName( _( "&Measure" ), g_Board_Editor_Hotkeys_Descr, HK_MEASURE_TOOL );
-    AddMenuItem( aParentMenu, ID_PCB_MEASUREMENT_TOOL, text,
-                 _( "Measure distance" ),
-                 KiBitmap( measurement_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, ID_DRC_CONTROL,
-                 _( "&Design Rules Checker" ),
-                 _( "Perform design rules check" ),
-                 KiBitmap( erc_xpm ) );
-}
-
-
-// Build the library management menu
-void prepareLibraryMenu( wxMenu* aParentMenu )
-{
-    AddMenuItem( aParentMenu,
-                 ID_PREFERENCES_CONFIGURE_PATHS,
-                 _( "&Configure Paths..." ),
-                 _( "Edit path configuration environment variables" ),
-                 KiBitmap( path_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_PCB_LIB_TABLE_EDIT,
-                _( "Manage &Footprint Libraries..." ),
-                _( "Edit the global and project footprint library lists" ),
-                KiBitmap( library_table_xpm ) );
-
-#ifdef BUILD_GITHUB_PLUGIN
-    AddMenuItem( aParentMenu, ID_PCB_3DSHAPELIB_WIZARD,
-                 _( "Add &3D Shapes Libraries Wizard..." ),
-                 _( "Download 3D shape libraries from GitHub" ),
-                 KiBitmap( import3d_xpm ) );
-#endif
 }
 
 

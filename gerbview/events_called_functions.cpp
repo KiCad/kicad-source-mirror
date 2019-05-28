@@ -85,10 +85,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, GERBVIEW_FRAME::Process_Config )
 
     EVT_MENU( wxID_PREFERENCES, GERBVIEW_FRAME::Process_Config )
-    EVT_UPDATE_UI( ID_MENU_CANVAS_CAIRO, GERBVIEW_FRAME::OnUpdateSwitchCanvas )
-    EVT_UPDATE_UI( ID_MENU_CANVAS_OPENGL, GERBVIEW_FRAME::OnUpdateSwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_CAIRO, GERBVIEW_FRAME::OnSwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_OPENGL, GERBVIEW_FRAME::OnSwitchCanvas )
 
     // menu Postprocess
     EVT_MENU( ID_GERBVIEW_SHOW_LIST_DCODES, GERBVIEW_FRAME::Process_Special_Functions )
@@ -142,6 +138,7 @@ END_EVENT_TABLE()
  */
 void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
+    // JEY TODO: OBSOLETE?
     int           id = event.GetId();
 
     GERBER_DRAW_ITEM* currItem = (GERBER_DRAW_ITEM*) GetScreen()->GetCurItem();
@@ -371,41 +368,4 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     if( needs_refresh )
         UpdateDisplayOptions( options );
-}
-
-
-void GERBVIEW_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
-{
-    switch( aEvent.GetId() )
-    {
-    case ID_MENU_CANVAS_CAIRO:
-        SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
-        break;
-
-    case ID_MENU_CANVAS_OPENGL:
-        SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
-        break;
-    }
-}
-
-
-void GERBVIEW_FRAME::OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent )
-{
-    wxMenuBar* menuBar = GetMenuBar();
-    EDA_DRAW_PANEL_GAL* gal_canvas = GetGalCanvas();
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = gal_canvas->GetBackend();
-
-    struct { int menuId; int galType; } menuList[] =
-    {
-        { ID_MENU_CANVAS_OPENGL,    EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL },
-        { ID_MENU_CANVAS_CAIRO,     EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO },
-    };
-
-    for( auto ii : menuList )
-    {
-        wxMenuItem* item = menuBar->FindItem( ii.menuId );
-
-        if( item && ii.galType == canvasType )
-            item->Check( true );
-    }
 }

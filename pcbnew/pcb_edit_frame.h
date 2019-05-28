@@ -103,10 +103,10 @@ protected:
     wxString createBackupFile( const wxString& aFileName );
 
     /**
-     * switches currently used canvas (default / Cairo / OpenGL).
+     * switches currently used canvas (Cairo / OpenGL).
      * It also reinit the layers manager that slightly changes with canvases
      */
-    void OnSwitchCanvas( wxCommandEvent& aEvent ) override;
+    void SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) override;
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     /**
@@ -573,7 +573,7 @@ public:
     void Show3D_Frame( wxCommandEvent& event ) override;
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
-    void UseGalCanvas( bool aEnable ) override;
+    void UseGalCanvas() override;
 
     /**
      * Function ShowBoardSetupDialog
@@ -588,7 +588,6 @@ public:
 
     void OnSelectOptionToolbar( wxCommandEvent& event );
     void OnFlipPcbView( wxCommandEvent& event );
-    void ToolOnRightClick( wxCommandEvent& event ) override;
 
     void InstallPcbGlobalDeleteFrame( const wxPoint& pos );
 

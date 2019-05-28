@@ -88,9 +88,6 @@ BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
 
     EVT_UPDATE_UI( ID_ON_GRID_SELECT, PCB_BASE_FRAME::OnUpdateSelectGrid )
     EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, PCB_BASE_FRAME::OnUpdateSelectZoom )
-    // Switching canvases
-    EVT_UPDATE_UI( ID_MENU_CANVAS_CAIRO, PCB_BASE_FRAME::OnUpdateSwitchCanvas )
-    EVT_UPDATE_UI( ID_MENU_CANVAS_OPENGL, PCB_BASE_FRAME::OnUpdateSwitchCanvas )
 
     EVT_UPDATE_UI_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, PCB_BASE_FRAME::OnUpdateSelectZoom )
 END_EVENT_TABLE()
@@ -593,21 +590,6 @@ void PCB_BASE_FRAME::OnToggleTextDrawMode( wxCommandEvent& aEvent )
 }
 
 
-void PCB_BASE_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
-{
-    switch( aEvent.GetId() )
-    {
-    case ID_MENU_CANVAS_CAIRO:
-        SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
-        break;
-
-    case ID_MENU_CANVAS_OPENGL:
-        SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
-        break;
-    }
-}
-
-
 void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 {
     if( m_zoomSelectBox == NULL || m_zoomSelectBox->GetParent() == NULL )
@@ -998,62 +980,29 @@ void PCB_BASE_FRAME::SetFastGrid2()
 }
 
 
-void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
+void PCB_BASE_FRAME::UseGalCanvas()
 {
-    EDA_DRAW_FRAME::UseGalCanvas( aEnable );
+    EDA_DRAW_FRAME::UseGalCanvas();
 
     EDA_DRAW_PANEL_GAL* galCanvas = GetGalCanvas();
 
     if( m_toolManager )
         m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
-                                    GetGalCanvas()->GetViewControls(), this );
+                                       GetGalCanvas()->GetViewControls(), this );
 
-    if( aEnable )
-    {
-        SetBoard( m_Pcb );
+    SetBoard( m_Pcb );
 
-        if( m_toolManager )
-            m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
+    if( m_toolManager )
+        m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
 
-        // Transfer latest current display options from legacy to GAL canvas:
-        auto painter = static_cast<KIGFX::PCB_PAINTER*>( galCanvas->GetView()->GetPainter() );
-        auto settings = painter->GetSettings();
-        auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-        settings->LoadDisplayOptions( displ_opts, ShowPageLimits() );
+    // Transfer latest current display options from legacy to GAL canvas:
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( galCanvas->GetView()->GetPainter() );
+    auto settings = painter->GetSettings();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+    settings->LoadDisplayOptions( displ_opts, ShowPageLimits() );
 
-        galCanvas->GetView()->RecacheAllItems();
-        galCanvas->SetEventDispatcher( m_toolDispatcher );
-        galCanvas->StartDrawing();
-    }
-    else
-    {
-        if( m_toolManager )
-            m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
-
-        // Redirect all events to the legacy canvas
-        galCanvas->SetEventDispatcher( NULL );
-    }
+    galCanvas->GetView()->RecacheAllItems();
+    galCanvas->SetEventDispatcher( m_toolDispatcher );
+    galCanvas->StartDrawing();
 }
 
-
-void PCB_BASE_FRAME::OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent )
-{
-    wxMenuBar* menuBar = GetMenuBar();
-    EDA_DRAW_PANEL_GAL* gal_canvas = GetGalCanvas();
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-
-    canvasType = gal_canvas->GetBackend();
-
-    struct { int menuId; int galType; } menuList[] =
-    {
-        { ID_MENU_CANVAS_OPENGL,    EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL },
-        { ID_MENU_CANVAS_CAIRO,     EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO },
-    };
-
-    for( auto ii: menuList )
-    {
-        wxMenuItem* item = menuBar->FindItem( ii.menuId );
-        if( item && ii.galType == canvasType )
-            item->Check( true );
-    }
-}

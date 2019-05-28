@@ -239,7 +239,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     view->SetScale( GetZoomLevelCoeff() / m_canvas->GetZoom() );
     view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
 
-    UseGalCanvas( true );
+    UseGalCanvas();
 
     // Restore last zoom.  (If auto-zooming we'll adjust when we load the footprint.)
     GetGalCanvas()->GetView()->SetScale( m_lastZoom );

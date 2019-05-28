@@ -145,15 +145,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     // Menu 3D Frame
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, FOOTPRINT_EDIT_FRAME::Show3D_Frame )
 
-    // Switching canvases
-    EVT_MENU( ID_MENU_CANVAS_CAIRO, FOOTPRINT_EDIT_FRAME::OnSwitchCanvas )
-    EVT_MENU( ID_MENU_CANVAS_OPENGL, FOOTPRINT_EDIT_FRAME::OnSwitchCanvas )
-
     // UI update events.
-    EVT_UPDATE_UI( ID_MODEDIT_EXPORT_PART, FOOTPRINT_EDIT_FRAME::OnUpdateSaveAs )
-    EVT_UPDATE_UI( ID_MODEDIT_SAVE, FOOTPRINT_EDIT_FRAME::OnUpdateSave )
-    EVT_UPDATE_UI( ID_MODEDIT_SAVE_AS, FOOTPRINT_EDIT_FRAME::OnUpdateSaveAs )
-    EVT_UPDATE_UI( ID_MODEDIT_REVERT_PART, FOOTPRINT_EDIT_FRAME::OnUpdateSave )
     EVT_UPDATE_UI( ID_MODEDIT_DELETE_PART, FOOTPRINT_EDIT_FRAME::OnUpdateModuleTargeted )
     EVT_UPDATE_UI( ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
                    FOOTPRINT_EDIT_FRAME::OnUpdateLoadModuleFromBoard )
@@ -291,7 +283,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     view->SetScale( GetZoomLevelCoeff() / m_canvas->GetZoom() );
     view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
 
-    UseGalCanvas( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
+    UseGalCanvas();
 
     m_auimgr.Update();
     updateTitle();
@@ -313,15 +305,15 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 
 
 
-void FOOTPRINT_EDIT_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
+void FOOTPRINT_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 {
-    // switches currently used canvas (default / Cairo / OpenGL).
-    PCB_BASE_FRAME::OnSwitchCanvas( aEvent );
+    // switches currently used canvas (Cairo / OpenGL).
+    PCB_BASE_FRAME::SwitchCanvas( aCanvasType );
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
 
-    // The base class method *does not reinit* the layers manager.
-    // We must upate the layer widget to match board visibility states,
-    // both layers and render columns, and and some settings dependent on the canvas.
+    // The base class method *does not reinit* the layers manager. We must upate the layer
+    // widget to match board visibility states, both layers and render columns, and and some
+    // settings dependent on the canvas.
     UpdateUserInterface();
 }
 
@@ -569,29 +561,6 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected( wxUpdateUIEvent& aEvent )
 void FOOTPRINT_EDIT_FRAME::OnUpdateModuleTargeted( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( getTargetFPID().IsValid() );
-}
-
-
-void FOOTPRINT_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
-{
-    if( aEvent.GetId() == ID_MODEDIT_SAVE )
-    {
-        wxString text = IsCurrentFPFromBoard() ? _( "&Update Footprint on Board" ) : _( "&Save" );
-        text = AddHotkeyName( text, m_hotkeysDescrList, HK_SAVE );
-        aEvent.SetText( text );
-    }
-
-    aEvent.Enable( GetBoard()->m_Modules && GetScreen()->IsModify() );
-}
-
-
-void FOOTPRINT_EDIT_FRAME::OnUpdateSaveAs( wxUpdateUIEvent& aEvent )
-{
-    LIB_ID libId = getTargetFPID();
-    const wxString& libName = libId.GetLibNickname();
-    const wxString& partName = libId.GetLibItemName();
-
-    aEvent.Enable( !libName.IsEmpty() || !partName.IsEmpty() );
 }
 
 
@@ -940,16 +909,13 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::UseGalCanvas( bool aEnable )
+void FOOTPRINT_EDIT_FRAME::UseGalCanvas()
 {
-    PCB_BASE_EDIT_FRAME::UseGalCanvas( aEnable );
+    PCB_BASE_EDIT_FRAME::UseGalCanvas();
 
-    if( aEnable )
-    {
-        // Be sure the axis are enabled:
-        GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
-        updateView();
-    }
+    // Be sure the axis are enabled:
+    GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
+    updateView();
 
     ReCreateMenuBar();
 

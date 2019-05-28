@@ -514,8 +514,6 @@ public:
     void OnToggleEdgeDrawMode( wxCommandEvent& aEvent );
     void OnToggleTextDrawMode( wxCommandEvent& aEvent );
 
-    virtual void OnSwitchCanvas( wxCommandEvent& aEvent );
-
     // User interface update event handlers.
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
 
@@ -536,12 +534,7 @@ public:
     void SetFastGrid2();
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas
-    virtual void UseGalCanvas( bool aEnable ) override;
-
-    /**
-     * Update UI called when switches currently used canvas (default / Cairo / OpenGL).
-     */
-    void OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent );
+    virtual void UseGalCanvas() override;
 
     PCB_GENERAL_SETTINGS& Settings()
     {

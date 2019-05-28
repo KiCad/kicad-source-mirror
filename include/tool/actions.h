@@ -46,11 +46,13 @@ public:
 
     // Generic document actions
     static TOOL_ACTION doNew;           // sadly 'new' is a reserved word
+    static TOOL_ACTION newLibrary;
     static TOOL_ACTION open;
     static TOOL_ACTION save;
     static TOOL_ACTION saveAs;
     static TOOL_ACTION saveCopyAs;
     static TOOL_ACTION saveAll;
+    static TOOL_ACTION revert;
     static TOOL_ACTION pageSettings;
     static TOOL_ACTION print;
     static TOOL_ACTION plot;
@@ -127,6 +129,10 @@ public:
     static TOOL_ACTION metricUnits;
     static TOOL_ACTION toggleUnits;
     static TOOL_ACTION togglePolarCoords;
+
+    // Misc
+    static TOOL_ACTION acceleratedGraphics;
+    static TOOL_ACTION standardGraphics;
 
     /**
      * Function TranslateLegacyId()

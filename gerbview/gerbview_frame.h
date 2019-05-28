@@ -599,17 +599,7 @@ public:
     }
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas
-    virtual void UseGalCanvas( bool aEnable ) override;
-
-    /**
-     * switches currently used canvas (default / Cairo / OpenGL).
-     */
-    void OnSwitchCanvas( wxCommandEvent& aEvent );
-
-    /**
-     * Update UI called when switches currently used canvas (default / Cairo / OpenGL).
-     */
-    void OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent );
+    virtual void UseGalCanvas() override;
 
     /**
      * Allows Gerbview to install its preferences panels into the preferences dialog.
