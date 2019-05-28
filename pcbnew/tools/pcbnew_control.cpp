@@ -197,10 +197,6 @@ TOOL_ACTION PCB_ACTIONS::selectionTool( "pcbnew.Control.selectionTool",
         _( "Select item(s)" ), "",
         cursor_xpm, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::resetCoords( "pcbnew.Control.resetCoords",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_RESET_LOCAL_COORD ),
-        "", "" );
-
 TOOL_ACTION PCB_ACTIONS::deleteTool( "pcbnew.Control.deleteTool",
         AS_GLOBAL, 0,
         _( "Delete Items Tool" ), _( "Click on items to delete them" ),
@@ -627,21 +623,6 @@ int PCBNEW_CONTROL::GridResetOrigin( const TOOL_EVENT& aEvent )
 
 
 // Miscellaneous
-int PCBNEW_CONTROL::ResetCoords( const TOOL_EVENT& aEvent )
-{
-    auto vcSettings = m_toolMgr->GetCurrentToolVC();
-
-    // Use either the active tool forced cursor position or the general settings
-    VECTOR2I cursorPos = vcSettings.m_forceCursorPosition ? vcSettings.m_forcedPosition :
-                         getViewControls()->GetCursorPosition();
-
-    m_frame->GetScreen()->m_O_Curseur = wxPoint( cursorPos.x, cursorPos.y );
-    m_frame->UpdateStatusBar();
-
-    return 0;
-}
-
-
 static bool deleteItem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 {
     SELECTION_TOOL* selectionTool = aToolMgr->GetTool<SELECTION_TOOL>();
@@ -1057,7 +1038,6 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::Redo,                ACTIONS::redo.MakeEvent() );
 
     // Miscellaneous
-    Go( &PCBNEW_CONTROL::ResetCoords,         PCB_ACTIONS::resetCoords.MakeEvent() );
     Go( &PCBNEW_CONTROL::DeleteItemCursor,    PCB_ACTIONS::deleteTool.MakeEvent() );
     Go( &PCBNEW_CONTROL::ShowHelp,            PCB_ACTIONS::showHelp.MakeEvent() );
     Go( &PCBNEW_CONTROL::ToBeDone,            PCB_ACTIONS::toBeDone.MakeEvent() );

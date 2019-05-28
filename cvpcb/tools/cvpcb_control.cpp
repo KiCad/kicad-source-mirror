@@ -44,10 +44,6 @@ using namespace std::placeholders;
 
 
 // Miscellaneous
-TOOL_ACTION CVPCB_ACTIONS::resetCoords( "cvpcb.Control.resetCoords",
-        AS_GLOBAL, ' ',//TOOL_ACTION::LegacyHotKey( HK_RESET_LOCAL_COORD ),
-        "", "" );
-
 TOOL_ACTION CVPCB_ACTIONS::switchCursor( "cvpcb.Control.switchCursor",
         AS_GLOBAL, 0,
         "", "" );
@@ -80,21 +76,6 @@ void CVPCB_CONTROL::Reset( RESET_REASON aReason )
 
 
 // Miscellaneous
-int CVPCB_CONTROL::ResetCoords( const TOOL_EVENT& aEvent )
-{
-    auto vcSettings = m_toolMgr->GetCurrentToolVC();
-
-    // Use either the active tool forced cursor position or the general settings
-    VECTOR2I cursorPos = vcSettings.m_forceCursorPosition ? vcSettings.m_forcedPosition :
-                         getViewControls()->GetCursorPosition();
-
-    m_frame->GetScreen()->m_O_Curseur = wxPoint( cursorPos.x, cursorPos.y );
-    m_frame->UpdateStatusBar();
-
-    return 0;
-}
-
-
 int CVPCB_CONTROL::SwitchCursor( const TOOL_EVENT& aEvent )
 {
     auto& galOpts = m_frame->GetGalDisplayOptions();
@@ -116,7 +97,6 @@ int CVPCB_CONTROL::SwitchUnits( const TOOL_EVENT& aEvent )
 void CVPCB_CONTROL::setTransitions()
 {
     // Miscellaneous
-    Go( &CVPCB_CONTROL::ResetCoords,        CVPCB_ACTIONS::resetCoords.MakeEvent() );
     Go( &CVPCB_CONTROL::SwitchCursor,       CVPCB_ACTIONS::switchCursor.MakeEvent() );
     Go( &CVPCB_CONTROL::SwitchUnits,        CVPCB_ACTIONS::switchUnits.MakeEvent() );
 }

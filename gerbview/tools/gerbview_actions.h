@@ -77,7 +77,6 @@ public:
     // Miscellaneous
     static TOOL_ACTION selectionTool;
     static TOOL_ACTION zoomTool;
-    static TOOL_ACTION resetCoords;
     static TOOL_ACTION showHelp;
 
     // Highlighting

@@ -636,9 +636,8 @@ namespace TOOL_EVT_UTILS
     /**
      * Function IsCancelInteractive()
      *
-     * @return true if this event should restart/end an ongoing interactive
-     * tool's event loop (eg esc key, click cancel, start different
-     * tool)
+     * Indicates the event should restart/end an ongoing interactive tool's
+     * event loop (eg esc key, click cancel, start different tool)
      */
     bool IsCancelInteractive( const TOOL_EVENT& aEvt );
 

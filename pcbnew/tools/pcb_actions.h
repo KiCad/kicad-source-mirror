@@ -302,7 +302,6 @@ public:
     // Miscellaneous
     static TOOL_ACTION selectionTool;
     static TOOL_ACTION pickerTool;
-    static TOOL_ACTION resetCoords;
     static TOOL_ACTION measureTool;
     static TOOL_ACTION updateUnits;
     static TOOL_ACTION deleteTool;

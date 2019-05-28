@@ -370,6 +370,9 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             m_menu.CloseContextMenu( evt );
         }
+
+        else
+            m_toolMgr->PassEvent();
     }
 
     // This tool is supposed to be active forever

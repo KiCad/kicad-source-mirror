@@ -49,7 +49,6 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     // Miscellaneous
-    int ResetCoords( const TOOL_EVENT& aEvent );
     int SwitchCursor( const TOOL_EVENT& aEvent );
     int SwitchUnits( const TOOL_EVENT& aEvent );
 

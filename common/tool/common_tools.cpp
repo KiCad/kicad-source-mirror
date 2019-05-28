@@ -462,6 +462,21 @@ int COMMON_TOOLS::TogglePolarCoords( const TOOL_EVENT& aEvent )
 }
 
 
+int COMMON_TOOLS::ResetLocalCoords( const TOOL_EVENT& aEvent )
+{
+    auto vcSettings = m_toolMgr->GetCurrentToolVC();
+
+    // Use either the active tool forced cursor position or the general settings
+    VECTOR2I cursorPos = vcSettings.m_forceCursorPosition ? vcSettings.m_forcedPosition :
+                         getViewControls()->GetCursorPosition();
+
+    m_frame->GetScreen()->m_O_Curseur = wxPoint( cursorPos.x, cursorPos.y );
+    m_frame->UpdateStatusBar();
+
+    return 0;
+}
+
+
 int COMMON_TOOLS::ToggleCursor( const TOOL_EVENT& aEvent )
 {
     auto& galOpts = m_frame->GetGalDisplayOptions();
@@ -540,6 +555,7 @@ void COMMON_TOOLS::setTransitions()
     Go( &COMMON_TOOLS::MetricUnits,        ACTIONS::metricUnits.MakeEvent() );
     Go( &COMMON_TOOLS::ToggleUnits,        ACTIONS::toggleUnits.MakeEvent() );
     Go( &COMMON_TOOLS::TogglePolarCoords,  ACTIONS::togglePolarCoords.MakeEvent() );
+    Go( &COMMON_TOOLS::ResetLocalCoords,   ACTIONS::resetLocalCoords.MakeEvent() );
 
     Go( &COMMON_TOOLS::ToggleCursor,       ACTIONS::toggleCursor.MakeEvent() );
     Go( &COMMON_TOOLS::ToggleCursorStyle,  ACTIONS::toggleCursorStyle.MakeEvent() );

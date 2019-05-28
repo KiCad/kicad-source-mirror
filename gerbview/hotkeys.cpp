@@ -58,37 +58,36 @@
 
 // local variables
 // Hotkey list:
-static EDA_HOTKEY   HkZoomAuto( _HKI( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
-static EDA_HOTKEY   HkZoomCenter( _HKI( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
-static EDA_HOTKEY   HkZoomRedraw( _HKI( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
-static EDA_HOTKEY   HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
-static EDA_HOTKEY   HkZoomIn( _HKI( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
-static EDA_HOTKEY   HkZoomSelection( _HKI( "Zoom to Selection" ),
-                                     HK_ZOOM_SELECTION, GR_KB_CTRL + WXK_F5 );
-static EDA_HOTKEY   HkPreferences( _HKI( "Preferences" ),
-                                   HK_PREFERENCES, GR_KB_CTRL + ',', (int) wxID_PREFERENCES );
-static EDA_HOTKEY   HkHelp( _HKI( "List Hotkeys" ), HK_HELP, GR_KB_CTRL + WXK_F1 );
-static EDA_HOTKEY   HkSwitchUnits( _HKI( "Switch Units" ), HK_SWITCH_UNITS, 'U' );
-static EDA_HOTKEY   HkResetLocalCoord( _HKI( "Reset Local Coordinates" ),
-                                       HK_RESET_LOCAL_COORD, ' ' );
-static EDA_HOTKEY   HkSwitchHighContrastMode( _HKI( "Toggle High Contrast Mode" ),
-                                              HK_SWITCH_HIGHCONTRAST_MODE, 'H' + GR_KB_CTRL );
+static EDA_HOTKEY HkZoomAuto( _HKI( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
+static EDA_HOTKEY HkZoomCenter( _HKI( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
+static EDA_HOTKEY HkZoomRedraw( _HKI( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
+static EDA_HOTKEY HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
+static EDA_HOTKEY HkZoomIn( _HKI( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
+static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ),
+                                   HK_ZOOM_SELECTION, GR_KB_CTRL + WXK_F5 );
+static EDA_HOTKEY HkPreferences( _HKI( "Preferences" ),
+                                 HK_PREFERENCES, GR_KB_CTRL + ',', (int) wxID_PREFERENCES );
+static EDA_HOTKEY HkHelp( _HKI( "List Hotkeys" ), HK_HELP, GR_KB_CTRL + WXK_F1 );
+static EDA_HOTKEY HkSwitchUnits( _HKI( "Switch Units" ), HK_SWITCH_UNITS, 'U' );
+static EDA_HOTKEY HkResetLocalCoord( _HKI( "Reset Local Coordinates" ), HK_RESET_LOCAL_COORD, ' ' );
+static EDA_HOTKEY HkSwitchHighContrastMode( _HKI( "Toggle High Contrast Mode" ),
+                                            HK_SWITCH_HIGHCONTRAST_MODE, 'H' + GR_KB_CTRL );
 
-static EDA_HOTKEY   HkLinesDisplayMode( _HKI( "Gbr Lines Display Mode" ),
-                                        HK_GBR_LINES_DISPLAY_MODE, 'L' );
-static EDA_HOTKEY   HkFlashedDisplayMode( _HKI( "Gbr Flashed Display Mode" ),
+static EDA_HOTKEY HkLinesDisplayMode( _HKI( "Gbr Lines Display Mode" ),
+                                      HK_GBR_LINES_DISPLAY_MODE, 'L' );
+static EDA_HOTKEY HkFlashedDisplayMode( _HKI( "Gbr Flashed Display Mode" ),
                                         HK_GBR_FLASHED_DISPLAY_MODE, 'F' );
-static EDA_HOTKEY   HkPolygonDisplayMode( _HKI( "Gbr Polygons Display Mode" ),
-                                          HK_GBR_POLYGON_DISPLAY_MODE, 'P' );
-static EDA_HOTKEY   HkNegativeObjDisplayMode( _HKI( "Gbr Negative Obj Display Mode" ),
-                                              HK_GBR_NEGATIVE_DISPLAY_ONOFF, 'N' );
-static EDA_HOTKEY   HkDCodesDisplayMode( _HKI( "DCodes Display Mode" ),
-                                         HK_GBR_DCODE_DISPLAY_ONOFF, 'D' );
+static EDA_HOTKEY HkPolygonDisplayMode( _HKI( "Gbr Polygons Display Mode" ),
+                                        HK_GBR_POLYGON_DISPLAY_MODE, 'P' );
+static EDA_HOTKEY HkNegativeObjDisplayMode( _HKI( "Gbr Negative Obj Display Mode" ),
+                                            HK_GBR_NEGATIVE_DISPLAY_ONOFF, 'N' );
+static EDA_HOTKEY HkDCodesDisplayMode( _HKI( "DCodes Display Mode" ),
+                                       HK_GBR_DCODE_DISPLAY_ONOFF, 'D' );
 
-static EDA_HOTKEY   HkSwitch2NextCopperLayer( _HKI( "Switch to Next Layer" ),
-                                              HK_SWITCH_LAYER_TO_NEXT, '+' );
-static EDA_HOTKEY   HkSwitch2PreviousCopperLayer( _HKI( "Switch to Previous Layer" ),
-                                              HK_SWITCH_LAYER_TO_PREVIOUS, '-' );
+static EDA_HOTKEY HkSwitch2NextCopperLayer( _HKI( "Switch to Next Layer" ),
+                                            HK_SWITCH_LAYER_TO_NEXT, '+' );
+static EDA_HOTKEY HkSwitch2PreviousCopperLayer( _HKI( "Switch to Previous Layer" ),
+                                                HK_SWITCH_LAYER_TO_PREVIOUS, '-' );
 
 static EDA_HOTKEY HkCanvasDefault( _HKI( "Switch to Legacy Toolset" ),
                                    HK_CANVAS_LEGACY,

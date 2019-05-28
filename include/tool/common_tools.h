@@ -70,6 +70,7 @@ public:
     int MetricUnits( const TOOL_EVENT& aEvent );
     int ToggleUnits( const TOOL_EVENT& aEvent );
     int TogglePolarCoords( const TOOL_EVENT& aEvent );
+    int ResetLocalCoords( const TOOL_EVENT& aEvent );
 
     // Grid control
     int GridNext( const TOOL_EVENT& aEvent );

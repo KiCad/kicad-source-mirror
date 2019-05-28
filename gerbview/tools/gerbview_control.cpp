@@ -92,10 +92,6 @@ TOOL_ACTION GERBVIEW_ACTIONS::dcodeDisplay( "gerbview.Control.dcodeDisplay",
         _( "Show DCodes" ), _( "Show dcode number" ),
         show_dcodenumber_xpm );
 
-TOOL_ACTION GERBVIEW_ACTIONS::resetCoords( "gerbview.Control.resetCoords",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_RESET_LOCAL_COORD ),
-        "", "" );
-
 TOOL_ACTION GERBVIEW_ACTIONS::showHelp( "gerbview.Control.showHelp",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HELP ),
         "", "" );
@@ -229,17 +225,6 @@ int GERBVIEW_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 }
 
 
-int GERBVIEW_CONTROL::ResetCoords( const TOOL_EVENT& aEvent )
-{
-    VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
-
-    m_frame->GetScreen()->m_O_Curseur = wxPoint( cursorPos.x, cursorPos.y );
-    m_frame->UpdateStatusBar();
-
-    return 0;
-}
-
-
 int GERBVIEW_CONTROL::SwitchUnits( const TOOL_EVENT& aEvent )
 {
     m_frame->ChangeUserUnits( m_frame->GetUserUnits() == INCHES ? MILLIMETRES : INCHES );
@@ -271,6 +256,5 @@ void GERBVIEW_CONTROL::setTransitions()
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::negativeObjectDisplay.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::dcodeDisplay.MakeEvent() );
 
-    Go( &GERBVIEW_CONTROL::ResetCoords,        GERBVIEW_ACTIONS::resetCoords.MakeEvent() );
     Go( &GERBVIEW_CONTROL::ShowHelp,           GERBVIEW_ACTIONS::showHelp.MakeEvent() );
 }

@@ -1144,7 +1144,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
             m_view->Update( &preview );
             frame()->SetMsgPanel( aGraphic );
         }
-        else if( evt->IsAction( &PCB_ACTIONS::resetCoords ) )
+        else if( evt->IsAction( &ACTIONS::resetLocalCoords ) )
         {
             IsOCurseurSet = true;
         }

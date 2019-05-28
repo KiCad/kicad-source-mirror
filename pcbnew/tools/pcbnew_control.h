@@ -91,7 +91,6 @@ public:
     int Redo( const TOOL_EVENT& aEvent );
 
     // Miscellaneous
-    int ResetCoords( const TOOL_EVENT& aEvent );
     int DeleteItemCursor( const TOOL_EVENT& aEvent );
     int Paste( const TOOL_EVENT& aEvent );
     int AppendBoardFromFile( const TOOL_EVENT& aEvent );

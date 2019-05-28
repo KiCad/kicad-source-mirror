@@ -312,6 +312,10 @@ TOOL_ACTION ACTIONS::togglePolarCoords( "common.Control.togglePolarCoords",
         _( "Polar Coordinates" ), _( "Switch between polar and cartesian coordinate systems" ),
         polar_coord_xpm );
 
+TOOL_ACTION ACTIONS::resetLocalCoords( "common.Control.resetLocalCoords",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_RESET_LOCAL_COORD ),
+        "", "" );
+
 TOOL_ACTION ACTIONS::toggleCursor( "common.Control.toggleCursor",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_TOGGLE_CURSOR ),
         _( "Always Show Cursor" ), _( "Display crosshairs even in selection tool" ),

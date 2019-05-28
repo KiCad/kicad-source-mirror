@@ -52,7 +52,6 @@ public:
 
     // Miscellaneous
     static TOOL_ACTION zoomTool;
-    static TOOL_ACTION resetCoords;
     static TOOL_ACTION switchCursor;
     static TOOL_ACTION switchUnits;
     static TOOL_ACTION showHelp;

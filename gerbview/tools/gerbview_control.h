@@ -57,7 +57,6 @@ public:
     int HighlightControl( const TOOL_EVENT& aEvent );
 
     // Miscellaneous
-    int ResetCoords( const TOOL_EVENT& aEvent );
     int SwitchUnits( const TOOL_EVENT& aEvent );
     int ShowHelp( const TOOL_EVENT& aEvent );
 

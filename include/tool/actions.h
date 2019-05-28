@@ -129,6 +129,7 @@ public:
     static TOOL_ACTION metricUnits;
     static TOOL_ACTION toggleUnits;
     static TOOL_ACTION togglePolarCoords;
+    static TOOL_ACTION resetLocalCoords;
 
     // Misc
     static TOOL_ACTION acceleratedGraphics;
