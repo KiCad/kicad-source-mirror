@@ -415,6 +415,52 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
         }
     }
 
+    for( auto via : m_board->Tracks() )
+    {
+        if( via->Type() != PCB_VIA_T )
+            continue;
+
+        if( netlistNetnames.count( via->GetNetname() ) == 0 )
+        {
+            wxString updatedNetname = wxEmptyString;
+
+            // Take via name from name change map if it didn't match to a new pad
+            // (this is useful for stitching vias that don't connect to tracks)
+            if( m_oldToNewNets.count( via->GetNetname() ) )
+            {
+                updatedNetname = m_oldToNewNets[via->GetNetname()];
+            }
+
+            if( !updatedNetname.IsEmpty() )
+            {
+                msg.Printf( _( "Reconnect via from %s to %s." ),
+                        UnescapeString( via->GetNetname() ), UnescapeString( updatedNetname ) );
+                m_reporter->Report( msg, REPORTER::RPT_ACTION );
+
+                if( !m_isDryRun )
+                {
+                    NETINFO_ITEM* netinfo = m_board->FindNet( updatedNetname );
+
+                    if( !netinfo )
+                        netinfo = m_addedNets[updatedNetname];
+
+                    if( netinfo )
+                    {
+                        m_commit.Modify( via );
+                        via->SetNet( netinfo );
+                    }
+                }
+            }
+            else
+            {
+                msg.Printf( _( "Via connected to unknown net (%s)." ),
+                        UnescapeString( via->GetNetname() ) );
+                m_reporter->Report( msg, REPORTER::RPT_WARNING );
+                ++m_warningCount;
+            }
+        }
+    }
+
     // Test copper zones to detect "dead" nets (nets without any pad):
     for( int i = 0; i < m_board->GetAreaCount(); i++ )
     {
