@@ -40,12 +40,11 @@ class TEXTE_PCB;
 class DIALOG_TEXT_PROPERTIES : public DIALOG_TEXT_PROPERTIES_BASE
 {
 public:
-    DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BOARD_ITEM* aItem, wxDC* aDC = nullptr );
+    DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BOARD_ITEM* aItem );
     ~DIALOG_TEXT_PROPERTIES();
 
 private:
     PCB_BASE_EDIT_FRAME* m_Parent;
-    wxDC*                m_DC;
     BOARD_ITEM*          m_item;        // TEXTE_MODULE, TEXTE_PCB, or DIMENSION
     EDA_TEXT*            m_edaText;     // always non-null
     TEXTE_MODULE*        m_modText;     // only non-null for TEXTE_MODULEs

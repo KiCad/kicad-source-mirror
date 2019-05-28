@@ -97,6 +97,7 @@ public:
     int AppendBoard( PLUGIN& pi, wxString& fileName );
     int ShowHelp( const TOOL_EVENT& aEvent );
     int ToBeDone( const TOOL_EVENT& aEvent );
+    int UpdateMessagePanel( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;

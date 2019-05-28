@@ -1240,7 +1240,7 @@ void PCB_EDIT_FRAME::PythonPluginsReload()
 }
 
 
-void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module, wxDC* DC )
+void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module )
 {
     if( Module == NULL )
         return;
@@ -1268,7 +1268,6 @@ void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module, wxDC* DC 
         FOOTPRINT_EDIT_FRAME* editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, true );
 
         editor->Load_Module_From_BOARD( Module );
-        SetCurItem( NULL );
 
         editor->Show( true );
         editor->Raise();        // Iconize( false );
@@ -1279,7 +1278,6 @@ void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module, wxDC* DC 
         FOOTPRINT_EDIT_FRAME* editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, true );
 
         editor->LoadModuleFromLibrary( Module->GetFPID() );
-        SetCurItem( NULL );
 
         editor->Show( true );
         editor->Raise();        // Iconize( false );

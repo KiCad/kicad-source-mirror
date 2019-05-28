@@ -30,7 +30,9 @@
 #include <connectivity/connectivity_data.h>
 #include <view/view.h>
 #include <pcb_layer_box_selector.h>
-
+#include <tool/tool_manager.h>
+#include <tool/selection.h>
+#include <tools/selection_tool.h>
 #include "dialog_global_edit_tracks_and_vias_base.h"
 
 // Columns of netclasses grid
@@ -218,7 +220,8 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
 
 bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
 {
-    auto item = dynamic_cast<BOARD_CONNECTED_ITEM*>( m_parent->GetCurItem() );
+    SELECTION& selection = GetToolManager()->GetTool<SELECTION_TOOL>()->GetSelection();
+    auto       item = dynamic_cast<BOARD_CONNECTED_ITEM*>( selection.Front() );
 
     m_tracks->SetValue( g_modifyTracks );
     m_vias->SetValue( g_modifyVias );

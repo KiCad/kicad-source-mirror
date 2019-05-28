@@ -66,8 +66,6 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
     SetElementVisibility( LAYER_GRID, showGrid );
     SetElementVisibility( LAYER_RATSNEST, showRats );
 
-    SetCurItem( NULL );
-
     // clear filename, to avoid overwriting an old file
     GetBoard()->SetFileName( wxEmptyString );
 
@@ -122,8 +120,6 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
 
     board->SynchronizeNetsAndNetClasses();
     SetBoard( board );
-
-    SetCurItem( NULL );
 
     // clear filename, to avoid overwriting an old file
     GetBoard()->SetFileName( wxEmptyString );

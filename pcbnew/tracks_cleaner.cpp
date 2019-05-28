@@ -688,7 +688,6 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
     if( isModified )
     {
         // Clear undo and redo lists to avoid inconsistencies between lists
-        SetCurItem( NULL );
         commit.Push( _( "Board cleanup" ) );
         Compile_Ratsnest( NULL, true );
     }

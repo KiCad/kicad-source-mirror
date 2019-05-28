@@ -229,9 +229,8 @@ void MICROWAVE_TOOL::createInductorBetween( const VECTOR2I& aStart, const VECTOR
 
     wxString errorMessage;
 
-    auto inductorModule = std::unique_ptr<MODULE>(
-            CreateMicrowaveInductor( pattern, &frame, errorMessage )
-    );
+    auto inductorModule = std::unique_ptr<MODULE>( CreateMicrowaveInductor( pattern, &frame,
+                                                                            errorMessage ) );
 
     if( inductorModule )
     {
@@ -253,7 +252,7 @@ void MICROWAVE_TOOL::createInductorBetween( const VECTOR2I& aStart, const VECTOR
     else
     {
         // at this point, we can save the module
-        frame.SetCurItem( inductorModule.get() );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, inductorModule.get() );
 
         BOARD_COMMIT commit( this );
         commit.Add( inductorModule.release() );

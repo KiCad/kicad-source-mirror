@@ -100,8 +100,6 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
     // Clear selection before removing any items
     m_Parent->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    m_Parent->SetCurItem( NULL );
-
     bool delAll = false;
 
     if( m_DelAlls->GetValue() )

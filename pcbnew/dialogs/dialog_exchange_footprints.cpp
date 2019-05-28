@@ -363,9 +363,6 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processModule( MODULE* aModule, const LIB_ID& a
     if( aModule == m_currentModule )
         m_currentModule = newModule;
 
-    if( aModule == m_parent->GetCurItem() )
-        m_parent->SetCurItem( newModule );
-
     msg += ": OK";
     reporter.Report( msg, REPORTER::RPT_ACTION );
 
@@ -412,7 +409,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
 
     /* place module without ratsnest refresh: this will be made later
      * when all modules are on board */
-    PlaceModule( aDest, nullptr, false );
+    PlaceModule( aDest, false );
 
     // Copy full placement and pad net names (when possible)
     // but not local settings like clearances (use library values)

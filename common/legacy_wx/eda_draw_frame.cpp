@@ -674,10 +674,7 @@ void EDA_DRAW_FRAME::SetMsgPanel( EDA_ITEM* aItem )
 
 void EDA_DRAW_FRAME::UpdateMsgPanel()
 {
-    EDA_ITEM* item = GetScreen()->GetCurItem();
-
-    if( item )
-        SetMsgPanel( item );
+    GetToolManager()->PostEvent( EVENTS::SelectedItemsModified );
 }
 
 

@@ -226,7 +226,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
     GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
-    GetScreen()->SetCurItem( NULL );
 
     GetScreen()->AddGrid( m_UserGridSize, EDA_UNITS_T::UNSCALED_UNITS, ID_POPUP_GRID_USER );
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
@@ -930,27 +929,6 @@ void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged()
 
     Layout();
     SendSizeEvent();
-}
-
-
-void FOOTPRINT_EDIT_FRAME::UpdateMsgPanel()
-{
-    // If a item is currently selected, displays the item info.
-    // If nothing selected, display the current footprint info
-    BOARD_ITEM* item = GetScreen()->GetCurItem();
-
-    if( !item )
-        item = GetBoard()->m_Modules;
-
-    MSG_PANEL_ITEMS items;
-
-    if( item )
-    {
-        item->GetMsgPanelInfo( m_UserUnits, items );
-        SetMsgPanel( items );
-    }
-    else
-        ClearMsgPanel();
 }
 
 

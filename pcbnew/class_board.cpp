@@ -1524,36 +1524,6 @@ int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
 }
 
 
-void BOARD::RedrawAreasOutlines( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, PCB_LAYER_ID aLayer )
-{
-    if( !aDC )
-        return;
-
-    for( int ii = 0; ii < GetAreaCount(); ii++ )
-    {
-        ZONE_CONTAINER* edge_zone = GetArea( ii );
-
-        if( (aLayer < 0) || ( aLayer == edge_zone->GetLayer() ) )
-            edge_zone->Draw( panel, aDC, aDrawMode );
-    }
-}
-
-
-void BOARD::RedrawFilledAreas( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, PCB_LAYER_ID aLayer )
-{
-    if( !aDC )
-        return;
-
-    for( int ii = 0; ii < GetAreaCount(); ii++ )
-    {
-        ZONE_CONTAINER* edge_zone = GetArea( ii );
-
-        if( (aLayer < 0) || ( aLayer == edge_zone->GetLayer() ) )
-            edge_zone->DrawFilledArea( panel, aDC, aDrawMode );
-    }
-}
-
-
 ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
     PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aEndLayer,  int aNetCode )
 {

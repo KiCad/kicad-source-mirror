@@ -643,7 +643,7 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         // Do not handle undo buffer, it is done by the properties dialogs @todo LEGACY
         // Display properties dialog provided by the legacy canvas frame
-        editFrame->OnEditItemRequest( NULL, item );
+        editFrame->OnEditItemRequest( item );
 
         // Notify other tools of the changes
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
@@ -1253,8 +1253,6 @@ int EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 
     MODULE* mod = (selection.Empty() ? nullptr : selection.FirstOfKind<MODULE> () );
 
-    frame()->SetCurItem( mod );
-
     // Footprint exchange could remove modules, so they have to be
     // removed from the selection first
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -1403,18 +1401,15 @@ int EDIT_TOOL::editFootprintInFpEditor( const TOOL_EVENT& aEvent )
 
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
-    editFrame->SetCurItem( mod );
-
-    if( editFrame->GetCurItem()->GetTimeStamp() == 0 )    // Module Editor needs a non null timestamp
+    if( mod->GetTimeStamp() == 0 )    // Module Editor needs a non null timestamp
     {
-        editFrame->GetCurItem()->SetTimeStamp( GetNewTimeStamp() );
+        mod->SetTimeStamp( GetNewTimeStamp() );
         editFrame->OnModify();
     }
 
-    FOOTPRINT_EDIT_FRAME* editor = (FOOTPRINT_EDIT_FRAME*) editFrame->Kiway().Player( FRAME_PCB_MODULE_EDITOR, true );
+    auto editor = (FOOTPRINT_EDIT_FRAME*) editFrame->Kiway().Player( FRAME_PCB_MODULE_EDITOR, true );
 
-    editor->Load_Module_From_BOARD( (MODULE*) editFrame->GetCurItem() );
-    editFrame->SetCurItem( NULL );     // the current module could be deleted by
+    editor->Load_Module_From_BOARD( mod );
 
     editor->Show( true );
     editor->Raise();        // Iconize( false );

@@ -48,7 +48,6 @@
 
 #include <ratsnest_data.h>
 #include <pcbnew.h>
-#include <protos.h>
 #include <pcbnew_id.h>
 #include <footprint_edit_frame.h>
 #include <footprint_viewer_frame.h>
@@ -476,9 +475,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_MODEDIT_EDIT_MODULE_PROPERTIES:
         if( GetBoard()->m_Modules )
         {
-            SetCurItem( GetBoard()->m_Modules );
-            editFootprintProperties( (MODULE*) GetScreen()->GetCurItem() );
-
+            editFootprintProperties( GetBoard()->m_Modules );
             m_canvas->Refresh();
         }
         break;
@@ -506,8 +503,6 @@ void FOOTPRINT_EDIT_FRAME::editFootprintProperties( MODULE* aModule )
 
     DIALOG_FOOTPRINT_FP_EDITOR dialog( this, aModule );
     dialog.ShowModal();
-
-    GetScreen()->GetCurItem()->ClearFlags();
 
     updateTitle();      // in case of a name change...
 }
@@ -587,7 +582,7 @@ void FOOTPRINT_EDIT_FRAME::OnVerticalToolbar( wxCommandEvent& aEvent )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
+void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 {
     switch( aItem->Type() )
     {
@@ -603,7 +598,7 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
         break;
 
     case PCB_MODULE_TEXT_T:
-        InstallTextOptionsFrame( aItem, aDC );
+        InstallTextOptionsFrame( aItem );
         break;
 
     case PCB_MODULE_EDGE_T :

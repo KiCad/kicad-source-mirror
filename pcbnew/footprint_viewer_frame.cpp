@@ -412,7 +412,6 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
 
         // Delete the current footprint (MUST reset tools first)
         GetToolManager()->ResetTools( TOOL_BASE::MODEL_RELOAD );
-        SetCurItem( nullptr );
         GetBoard()->m_Modules.DeleteAll();
 
         LIB_ID id;
@@ -499,7 +498,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& event )
 
         commit.Add( newmodule );
         pcbframe->SetCrossHairPosition( wxPoint( 0, 0 ) );
-        pcbframe->PlaceModule( newmodule, NULL );
+        pcbframe->PlaceModule( newmodule );
         newmodule->SetPosition( wxPoint( 0, 0 ) );
         pcbframe->SetCrossHairPosition( cursor_pos );
         newmodule->SetTimeStamp( GetNewTimeStamp() );
@@ -509,7 +508,6 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& event )
         pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::placeModule, true, newmodule );
 
         newmodule->ClearFlags();
-        pcbframe->SetCurItem( NULL );
     }
 }
 
@@ -784,7 +782,6 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
         m_footprintList->EnsureVisible( selection );
 
         setCurFootprintName( m_footprintList->GetString( (unsigned) selection ) );
-        SetCurItem( NULL );
 
         // Delete the current footprint
         GetBoard()->m_Modules.DeleteAll();
@@ -817,22 +814,6 @@ void FOOTPRINT_VIEWER_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     m_canvas->DrawCrossHair( DC );
 
     UpdateMsgPanel();
-}
-
-
-void FOOTPRINT_VIEWER_FRAME::UpdateMsgPanel()
-{
-    BOARD_ITEM* footprint = GetBoard()->m_Modules;
-
-    if( footprint )
-    {
-        MSG_PANEL_ITEMS items;
-
-        footprint->GetMsgPanelInfo( m_UserUnits, items );
-        SetMsgPanel( items );
-    }
-    else
-        ClearMsgPanel();
 }
 
 

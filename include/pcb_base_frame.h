@@ -75,7 +75,6 @@ public:
 
 protected:
     BOARD*               m_Pcb;
-    GENERAL_COLLECTOR*   m_Collector;
 
     PCB_GENERAL_SETTINGS m_configSettings;
 
@@ -243,23 +242,6 @@ public:
     void ProcessItemSelection( wxCommandEvent& event );
 
     /**
-     * Function SetCurItem
-     * sets the currently selected item and displays it in the MsgPanel.
-     * If the given item is NULL then the MsgPanel is erased and there is no
-     * currently selected item. This function is intended to make the process
-     * of "selecting" an item more formal, and to indivisibly tie the operation
-     * of selecting an item to displaying it using BOARD_ITEM::Display_Infos().
-     * @param aItem The BOARD_ITEM to make the selected item or NULL if none.
-     * @param aDisplayInfo = true to display item info, false if not (default = true)
-     */
-    void SetCurItem( BOARD_ITEM* aItem, bool aDisplayInfo = true );
-
-    BOARD_ITEM* GetCurItem();
-
-    ///> @copydoc EDA_DRAW_FRAME::UpdateMsgPanel()
-    void UpdateMsgPanel() override;
-
-    /**
      * Function GetCollectorsGuide
      * @return GENERAL_COLLECTORS_GUIDE - that considers the global
      *configuration options.
@@ -310,7 +292,6 @@ public:
     MODULE* CreateNewModule( const wxString& aModuleName );
 
     void Edit_Module( MODULE* module, wxDC* DC );
-    void Rotate_Module( wxDC* DC, MODULE* module, double angle, bool incremental );
 
     /**
      * Function PlaceModule
@@ -318,11 +299,9 @@ public:
      * with the new position.
      *
      * @param aModule A MODULE object point of the module to be placed.
-     * @param aDC A wxDC object point of the device context to draw \a aModule on
-     *            or  NULL if no display screen need updated.
      * @param aRecreateRatsnest A bool true redraws the module rats nest.
      */
-    void PlaceModule( MODULE* aModule, wxDC* aDC, bool aRecreateRatsnest = true );
+    void PlaceModule( MODULE* aModule, bool aRecreateRatsnest = true );
 
     void InstallPadOptionsFrame( D_PAD* pad );
 
@@ -380,24 +359,6 @@ public:
     void Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus );
 
     /**
-     * Function build_ratsnest_module
-     * Build a ratsnest relative to one footprint. This is a simplified computation
-     * used only in move footprint. It is not optimal, but it is fast and sufficient
-     * to help a footprint placement
-     * It shows the connections from a pad to the nearest connected pad
-     * @param aMoveVector = move vector of the footprint being moved.
-     * @param aModule = module to consider.
-     */
-    void build_ratsnest_module( MODULE *aModule, wxPoint aMoveVector );
-
-    /**
-     * Function TraceModuleRatsNest
-     * display the rats nest of a moving footprint, computed by
-     * build_ratsnest_module()
-     */
-    void TraceModuleRatsNest( wxDC* aDC );
-
-    /**
      *  function Displays the general ratsnest
      *  Only ratsnest with the status bit CH_VISIBLE is set are displayed
      * @param aDC = the current device context (can be NULL)
@@ -405,29 +366,6 @@ public:
      *                 corresponding net_code
      */
     void DrawGeneralRatsnest( wxDC* aDC, int aNetcode = 0 );
-
-    /**
-     * Function TraceAirWiresToTargets
-     * This functions shows airwires to nearest connecting points (pads)
-     * from the current new track end during track creation
-     * Uses data prepared by BuildAirWiresTargetsList()
-     * @param aDC = the current device context
-     */
-    void TraceAirWiresToTargets( wxDC* aDC );
-
-    /**
-     * Function BuildAirWiresTargetsList
-     * Build a list of candidates that can be a coonection point
-     * when a track is started.
-     * This functions prepares data to show airwires to nearest connecting points (pads)
-     * from the current new track to candidates during track creation
-     * @param aItemRef = the item connected to the starting point of the new track (track or pad)
-     * @param aPosition = the position of the new track end (usually the mouse cursor on grid)
-     * @param aNet = the netcode of the track
-     */
-    void BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
-                                   const wxPoint& aPosition,
-                                   int aNet );
 
     /**
      * Function TestNetConnection

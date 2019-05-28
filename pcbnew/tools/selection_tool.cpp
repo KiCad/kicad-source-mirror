@@ -665,14 +665,6 @@ bool SELECTION_TOOL::selectMultiple()
                 }
             }
 
-            if( m_frame )
-            {
-                if( m_selection.Size() == 1 )
-                    m_frame->SetCurItem( static_cast<BOARD_ITEM*>( m_selection.Front() ) );
-                else
-                    m_frame->SetCurItem( NULL );
-            }
-
             // Inform other potentially interested tools
             if( !m_selection.Empty() )
                 m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
@@ -1365,9 +1357,6 @@ void SELECTION_TOOL::clearSelection()
     m_selection.SetIsHover( false );
     m_selection.ClearReferencePoint();
 
-    if( m_frame )
-        m_frame->SetCurItem( NULL );
-
     m_locked = true;
 
     // Inform other potentially interested tools
@@ -1771,20 +1760,6 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
 
     highlight( aItem, SELECTED, m_selection );
     view()->Update( &m_selection );
-
-    if( m_frame )
-    {
-        if( m_selection.Size() == 1 )
-        {
-            // Set as the current item, so the information about selection is displayed
-            m_frame->SetCurItem( aItem, true );
-        }
-        else if( m_selection.Size() == 2 )  // Check only for 2, so it will not be
-        {                                   // called for every next selected item
-            // If multiple items are selected, do not show the information about the selected item
-            m_frame->SetCurItem( NULL, true );
-        }
-    }
 }
 
 
@@ -1792,9 +1767,6 @@ void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 {
     unhighlight( aItem, SELECTED, m_selection );
     view()->Update( &m_selection );
-
-    if( m_frame && m_frame->GetCurItem() == aItem )
-        m_frame->SetCurItem( NULL );
 
     if( m_selection.Empty() )
         m_locked = true;

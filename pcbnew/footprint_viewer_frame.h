@@ -61,13 +61,6 @@ public:
     void SetAutoZoom( bool aEnable ) { m_autoZoom = aEnable; }
 
     /**
-     * redraws the message panel.
-     * display the current footprint info, or
-     * clear the message panel if nothing is loaded
-     */
-    void UpdateMsgPanel() override;
-
-    /**
      * Function ReCreateLibraryList
      *
      * Creates or recreates the list of current loaded libraries.

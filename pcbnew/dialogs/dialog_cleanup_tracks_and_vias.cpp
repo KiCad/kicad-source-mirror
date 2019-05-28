@@ -131,7 +131,6 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
     else if( modified )
     {
         // Clear undo and redo lists to avoid inconsistencies between lists
-        m_parentFrame->SetCurItem( NULL );
         commit.Push( _( "Board cleanup" ) );
 
         m_parentFrame->GetCanvas()->Refresh( true );

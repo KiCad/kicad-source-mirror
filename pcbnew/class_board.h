@@ -818,17 +818,6 @@ public:
                GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset ) override;
 
     /**
-     * Function DrawHighLight
-     * redraws the objects in the board that are associated with the given aNetCode
-     * and turns on or off the brilliance associated with that net according to the
-     * current value of global g_HighLight_Status
-     * @param aDrawPanel is needed for the clipping support.
-     * @param aDC = the current device context
-     * @param aNetCode is the net number to highlight or to dim.
-     */
-    void DrawHighLight( EDA_DRAW_PANEL* aDrawPanel, wxDC* aDC, int aNetCode );
-
-    /**
      * Function Visit
      * may be re-implemented for each derived class in order to handle
      * all the types given by its member data.  Implementations should call
@@ -914,22 +903,6 @@ public:
                                              PCB_LAYER_ID      aStartLayer,
                                              PCB_LAYER_ID      aEndLayer,
                                              int aNetCode );
-
-    /**
-     * Function RedrawAreasOutlines
-     * Redraw all areas outlines on layer aLayer ( redraw all if aLayer < 0 )
-     */
-    void RedrawAreasOutlines( EDA_DRAW_PANEL* aPanel,
-                              wxDC*           aDC,
-                              GR_DRAWMODE     aDrawMode,
-                              PCB_LAYER_ID       aLayer );
-
-    /**
-     * Function RedrawFilledAreas
-     * Redraw all filled areas on layer aLayer ( redraw all if aLayer < 0 )
-     */
-    void RedrawFilledAreas( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
-                            PCB_LAYER_ID aLayer );
 
     /**
      * Function SetAreasNetCodesFromNetNames

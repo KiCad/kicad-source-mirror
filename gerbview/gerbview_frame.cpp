@@ -994,26 +994,6 @@ void GERBVIEW_FRAME::SetAuxOrigin( const wxPoint& aPosition )
 }
 
 
-void GERBVIEW_FRAME::SetCurItem( GERBER_DRAW_ITEM* aItem, bool aDisplayInfo )
-{
-    GetScreen()->SetCurItem( aItem );
-
-    if( aItem )
-    {
-        if( aDisplayInfo )
-        {
-            MSG_PANEL_ITEMS items;
-            aItem->GetMsgPanelInfo( m_UserUnits, items );
-            SetMsgPanel( items );
-        }
-    }
-    else
-    {
-        EraseMsgBox();
-    }
-}
-
-
 void GERBVIEW_FRAME::SetGridColor( COLOR4D aColor )
 {
     GetGalCanvas()->GetGAL()->SetGridColor( aColor );

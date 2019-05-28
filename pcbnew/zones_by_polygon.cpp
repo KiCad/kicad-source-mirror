@@ -38,7 +38,6 @@
 #include <pcbnew.h>
 #include <zones.h>
 #include <pcbnew_id.h>
-#include <protos.h>
 #include <zones_functions_for_undo_redo.h>
 #include <drc.h>
 #include <connectivity/connectivity_data.h>
@@ -52,7 +51,7 @@ static PICKED_ITEMS_LIST s_PickedList;    // a picked list to save zones for und
 static PICKED_ITEMS_LIST s_AuxiliaryList; // a picked list to store zones that are deleted or added when combined
 
 
-void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
+void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE_CONTAINER* aZone )
 {
     int           dialogResult;
     ZONE_SETTINGS zoneInfo = GetZoneSettings();
@@ -112,8 +111,6 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* edge_zone = GetBoard()->GetArea( ii );
-        edge_zone->Draw( m_canvas, DC, GR_XOR );
-
         GetGalCanvas()->GetView()->Update( edge_zone );
     }
 
@@ -126,9 +123,6 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
 
     // Combine zones if possible
     GetBoard()->OnAreaPolygonModified( &s_AuxiliaryList, aZone );
-
-    // Redraw the real new zone outlines
-    GetBoard()->RedrawAreasOutlines( m_canvas, DC, GR_OR, UNDEFINED_LAYER );
 
     UpdateCopyOfZonesList( s_PickedList, s_AuxiliaryList, GetBoard() );
 

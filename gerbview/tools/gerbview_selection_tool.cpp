@@ -452,11 +452,6 @@ bool GERBVIEW_SELECTION_TOOL::selectMultiple()
                 }
             }
 
-            if( m_selection.Size() == 1 )
-                m_frame->SetCurItem( static_cast<GERBER_DRAW_ITEM*>( m_selection.Front() ) );
-            else
-                m_frame->SetCurItem( NULL );
-
             // Inform other potentially interested tools
             if( !m_selection.Empty() )
                 m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
@@ -592,8 +587,6 @@ void GERBVIEW_SELECTION_TOOL::clearSelection()
 
     m_selection.Clear();
 
-    m_frame->SetCurItem( NULL );
-
     // Inform other potentially interested tools
     m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
 }
@@ -727,17 +720,6 @@ void GERBVIEW_SELECTION_TOOL::select( EDA_ITEM* aItem )
     m_selection.Add( aItem );
     getView()->Add( &m_selection );
     selectVisually( aItem );
-
-    if( m_selection.Size() == 1 )
-    {
-        // Set as the current item, so the information about selection is displayed
-        m_frame->SetCurItem( static_cast<GERBER_DRAW_ITEM*>( aItem ), true );
-    }
-    else if( m_selection.Size() == 2 )  // Check only for 2, so it will not be
-    {                                   // called for every next selected item
-        // If multiple items are selected, do not show the information about the selected item
-        m_frame->SetCurItem( NULL, true );
-    }
 }
 
 
@@ -750,10 +732,7 @@ void GERBVIEW_SELECTION_TOOL::unselect( EDA_ITEM* aItem )
     m_selection.Remove( aItem );
 
     if( m_selection.Empty() )
-    {
-        m_frame->SetCurItem( NULL );
         getView()->Remove( &m_selection );
-    }
 }
 
 

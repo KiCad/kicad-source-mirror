@@ -240,6 +240,28 @@ int GERBVIEW_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
 }
 
 
+int GERBVIEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
+{
+    GERBVIEW_SELECTION_TOOL* selTool = m_toolMgr->GetTool<GERBVIEW_SELECTION_TOOL>();
+    SELECTION&               selection = selTool->GetSelection();
+
+    if( selection.GetSize() == 1 )
+    {
+        EDA_ITEM* item = (EDA_ITEM*) selection.Front();
+
+        MSG_PANEL_ITEMS msgItems;
+        item->GetMsgPanelInfo( m_frame->GetUserUnits(), msgItems );
+        m_frame->SetMsgPanel( msgItems );
+    }
+    else
+    {
+        m_frame->EraseMsgBox();
+    }
+
+    return 0;
+}
+
+
 void GERBVIEW_CONTROL::setTransitions()
 {
     Go( &GERBVIEW_CONTROL::HighlightControl,   GERBVIEW_ACTIONS::highlightClear.MakeEvent() );
@@ -257,4 +279,8 @@ void GERBVIEW_CONTROL::setTransitions()
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::dcodeDisplay.MakeEvent() );
 
     Go( &GERBVIEW_CONTROL::ShowHelp,           GERBVIEW_ACTIONS::showHelp.MakeEvent() );
+
+    Go( &GERBVIEW_CONTROL::UpdateMessagePanel, EVENTS::SelectedEvent );
+    Go( &GERBVIEW_CONTROL::UpdateMessagePanel, EVENTS::UnselectedEvent );
+    Go( &GERBVIEW_CONTROL::UpdateMessagePanel, EVENTS::ClearedEvent );
 }

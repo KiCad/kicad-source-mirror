@@ -95,9 +95,6 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
 
 bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
 {
-
-    SetCurItem( NULL );
-
     // To avoid issues with undo/redo lists (dangling pointers)
     // clear the lists
     // todo: use undo/redo feature

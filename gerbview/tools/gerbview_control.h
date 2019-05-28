@@ -59,6 +59,7 @@ public:
     // Miscellaneous
     int SwitchUnits( const TOOL_EVENT& aEvent );
     int ShowHelp( const TOOL_EVENT& aEvent );
+    int UpdateMessagePanel( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;

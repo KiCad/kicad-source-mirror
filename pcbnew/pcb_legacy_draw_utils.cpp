@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,11 +22,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file pcb_legacy_draw_utils.cpp
- * @brief functions (and helper functions) to redraw the current board in legacy canvas.
  */
 
 #include <fctsys.h>
@@ -223,56 +218,10 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
             Trace_Pads_Only( aPanel, DC, module, 0, 0, layerMask, aDrawMode );
     }
 
-    if( IsHighLightNetON() )
-        DrawHighLight( aPanel, DC, GetHighLightNetCode() );
-
     // draw the BOARD's markers last, otherwise the high light will erase any marker on a pad
     for( unsigned i = 0; i < m_markers.size(); ++i )
     {
         m_markers[i]->Draw( aPanel, DC, aDrawMode );
-    }
-}
-
-
-void BOARD::DrawHighLight( EDA_DRAW_PANEL* am_canvas, wxDC* DC, int aNetCode )
-{
-    GR_DRAWMODE draw_mode;
-
-    if( IsHighLightNetON() )
-        draw_mode = GR_HIGHLIGHT | GR_OR;
-    else
-        draw_mode = GR_AND | GR_HIGHLIGHT;
-
-    // Redraw zones
-    for( int ii = 0; ii < GetAreaCount(); ii++ )
-    {
-        ZONE_CONTAINER* zone = GetArea( ii );
-
-        if( zone->GetNetCode() == aNetCode )
-        {
-            zone->Draw( am_canvas, DC, draw_mode );
-        }
-    }
-
-    // Redraw any pads that have aNetCode
-    for( MODULE* module = m_Modules; module; module = module->Next() )
-    {
-        for( D_PAD* pad = module->PadsList(); pad; pad = pad->Next() )
-        {
-            if( pad->GetNetCode() == aNetCode )
-            {
-                pad->Draw( am_canvas, DC, draw_mode );
-            }
-        }
-    }
-
-    // Redraw track and vias that have aNetCode
-    for( TRACK* seg = m_Track; seg; seg = seg->Next() )
-    {
-        if( seg->GetNetCode() == aNetCode )
-        {
-            seg->Draw( am_canvas, DC, draw_mode );
-        }
     }
 }
 

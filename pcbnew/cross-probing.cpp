@@ -250,12 +250,10 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         else if( pad == NULL )
         {
             msg.Printf( _( "%s pin %s not found" ), modName, pinName );
-            SetCurItem( module );
         }
         else
         {
             msg.Printf( _( "%s pin %s found" ), modName, pinName );
-            SetCurItem( pad );
         }
 
         SetStatusText( msg );

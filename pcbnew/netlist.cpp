@@ -97,10 +97,7 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater,
 {
     BOARD* board = GetBoard();
 
-    SetCurItem( nullptr );
     SetMsgPanel( board );
-
-    TOOL_MANAGER* toolManager = GetToolManager();
 
     // Update rendered tracks and vias net labels
     auto view = GetGalCanvas()->GetView();
@@ -115,7 +112,7 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater,
     wxPoint areaPosition = GetCrossHairPosition();
     EDA_RECT bbox = board->GetBoundingBox();
 
-    toolManager->RunAction( PCB_ACTIONS::selectionClear, true );
+    GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
     SpreadFootprints( &newFootprints, false, false, areaPosition, false );
 
@@ -123,15 +120,15 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater,
     if( !newFootprints.empty() )
     {
         for( MODULE* footprint : newFootprints )
-            toolManager->RunAction( PCB_ACTIONS::selectItem, true, footprint );
+            GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, footprint );
 
         *aRunDragCommand = true;
 
         // Now fix a reference point to move the footprints.
         // We use the first footprint in list as reference point
         // The graphic cursor will be on this fp when moving the footprints.
-        SELECTION_TOOL* selTool = toolManager->GetTool<SELECTION_TOOL>();
-        SELECTION& selection = selTool->GetSelection();
+        SELECTION_TOOL* selTool = GetToolManager()->GetTool<SELECTION_TOOL>();
+        SELECTION&      selection = selTool->GetSelection();
         selection.SetReferencePoint( newFootprints[0]->GetPosition() );
     }
 

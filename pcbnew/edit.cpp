@@ -24,11 +24,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file edit.cpp
- * @brief Edit PCB implementation.
- */
-
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
@@ -63,6 +58,7 @@
 
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <dialogs/dialog_text_properties.h>
 
 // Handles the selection of command events.
 void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
@@ -70,7 +66,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     int         id = event.GetId();
 
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
-    MODULE* module;
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
 
     m_canvas->CrossHairOff( &dc );
@@ -168,7 +163,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_GET_NETLIST:
-        InstallNetlistFrame( &dc );
+        InstallNetlistFrame();
         break;
 
     case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
@@ -187,11 +182,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MENU_PCB_UPDATE_FOOTPRINTS:
-        InstallExchangeModuleFrame( dynamic_cast<MODULE*>( GetCurItem() ), true, false );
+        InstallExchangeModuleFrame( nullptr, true, false );
         break;
 
     case ID_MENU_PCB_EXCHANGE_FOOTPRINTS:
-        InstallExchangeModuleFrame( dynamic_cast<MODULE*>( GetCurItem() ), false, false );
+        InstallExchangeModuleFrame( nullptr, false, false );
         break;
 
     case ID_MENU_PCB_SWAP_LAYERS:
@@ -252,34 +247,6 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
             if( layer != B_Cu  &&  layer != F_Cu  && layer >= GetBoard()->GetCopperLayerCount() - 1 )
                 return;
         }
-
-        EDA_ITEM* current = GetScreen()->GetCurItem();
-
-        // See if we are drawing a segment; if so, add a via?
-        if( GetToolId() == ID_TRACK_BUTT && current )
-        {
-            if( current->Type() == PCB_TRACE_T && current->IsNew() )
-            {
-                // Want to set the routing layers so that it switches properly -
-                // see the implementation of Other_Layer_Route - the working
-                // layer is used to 'start' the via and set the layer masks appropriately.
-                GetScreen()->m_Route_Layer_TOP    = curLayer;
-                GetScreen()->m_Route_Layer_BOTTOM = layer;
-
-                SetActiveLayer( curLayer );
-
-                if( Other_Layer_Route( (TRACK*) GetScreen()->GetCurItem(), DC ) )
-                {
-                    if( displ_opts->m_ContrastModeDisplay )
-                        m_canvas->Refresh();
-                }
-
-                // if the via was allowed by DRC, then the layer swap has already
-                // been done by Other_Layer_Route(). if via not allowed, then
-                // return now so assignment to setActiveLayer() below doesn't happen.
-                return;
-            }
-        }
     }
 
     // Is yet more checking required? E.g. when the layer to be selected
@@ -296,6 +263,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
 
 void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 {
+    // JEY TODO: obsolete?
     int id = aEvent.GetId();
     int lastToolID = GetToolId();
 
@@ -333,10 +301,6 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 
         if( displ_opts->m_DisplayZonesMode != 0 )
             DisplayInfoMessage( this, _( "Warning: zone display is OFF!!!" ) );
-
-        if( !GetBoard()->IsHighLightNetON() && (GetBoard()->GetHighLightNetCode() > 0 ) )
-            HighLight( &dc );
-
         break;
 
     case ID_PCB_KEEPOUT_BUTT:
@@ -403,119 +367,17 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 }
 
 
-void PCB_EDIT_FRAME::moveExact()
-{
-    wxPoint         translation;
-    double          rotation;
-    ROTATION_ANCHOR rotationAnchor = ROTATE_AROUND_ITEM_ANCHOR;
-
-    DIALOG_MOVE_EXACT dialog( this, translation, rotation, rotationAnchor );
-    int ret = dialog.ShowModal();
-
-    if( ret == wxID_OK )
-    {
-        if( BOARD_ITEM* item = GetScreen()->GetCurItem() )
-        {
-            // When a pad is modified, the full footprint is saved
-            BOARD_ITEM* itemToSave = item;
-
-            if( item->Type() == PCB_PAD_T )
-                itemToSave = item->GetParent();
-
-            // Could be moved or rotated
-            SaveCopyInUndoList( itemToSave, UR_CHANGED );
-
-            item->Move( translation );
-
-            switch( rotationAnchor )
-            {
-            case ROTATE_AROUND_ITEM_ANCHOR:
-                item->Rotate( item->GetPosition(), rotation );
-                break;
-            case ROTATE_AROUND_USER_ORIGIN:
-                item->Rotate( GetScreen()->m_O_Curseur, rotation );
-                break;
-            case ROTATE_AROUND_AUX_ORIGIN:
-                item->Rotate( GetAuxOrigin(), rotation );
-                break;
-            default:
-                wxFAIL_MSG( "Rotation choice shouldn't have been available in this context." );
-            }
-
-            m_canvas->Refresh();
-        }
-    }
-
-    m_canvas->MoveCursorToCrossHair();
-}
-
-
-class LEGACY_ARRAY_CREATOR: public ARRAY_CREATOR
-{
-public:
-
-    LEGACY_ARRAY_CREATOR( PCB_BASE_EDIT_FRAME& editFrame ):
-        ARRAY_CREATOR( editFrame ),
-        m_item( m_parent.GetScreen()->GetCurItem() )
-    {}
-
-private:
-
-    int getNumberOfItemsToArray() const override
-    {
-        // only handle single items
-        return (m_item != NULL) ? 1 : 0;
-    }
-
-    BOARD_ITEM* getNthItemToArray( int n ) const override
-    {
-        wxASSERT_MSG( n == 0, "Legacy array tool can only handle a single item" );
-        return m_item;
-    }
-
-    BOARD* getBoard() const override
-    {
-        return m_parent.GetBoard();
-    }
-
-    MODULE* getModule() const override
-    {
-        return dynamic_cast<MODULE*>( m_item->GetParent() );
-    }
-
-    wxPoint getRotationCentre() const override
-    {
-        return m_item->GetCenter();
-    }
-
-    void finalise() override
-    {
-        m_parent.GetCanvas()->Refresh();
-    }
-
-    BOARD_ITEM* m_item; // only have the one
-};
-
-
-void PCB_BASE_EDIT_FRAME::createArray()
-{
-    LEGACY_ARRAY_CREATOR array_creator( *this );
-
-    array_creator.Invoke();
-}
-
-
-void PCB_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
+void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 {
     switch( aItem->Type() )
     {
     case PCB_TRACE_T:
     case PCB_VIA_T:
-        Edit_TrackSegm_Width( aDC, static_cast<TRACK*>( aItem ) );
+        Edit_TrackSegm_Width( static_cast<TRACK*>( aItem ) );
         break;
 
     case PCB_TEXT_T:
-        InstallTextOptionsFrame( aItem, aDC );
+        InstallTextOptionsFrame( aItem );
         break;
 
     case PCB_PAD_T:
@@ -523,19 +385,19 @@ void PCB_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
         break;
 
     case PCB_MODULE_T:
-        InstallFootprintPropertiesDialog( static_cast<MODULE*>( aItem ), aDC );
+        InstallFootprintPropertiesDialog( static_cast<MODULE*>( aItem ) );
         break;
 
     case PCB_TARGET_T:
-        ShowTargetOptionsDialog( static_cast<PCB_TARGET*>( aItem ), aDC );
+        ShowTargetOptionsDialog( static_cast<PCB_TARGET*>( aItem ) );
         break;
 
     case PCB_DIMENSION_T:
-        ShowDimensionPropertyDialog( static_cast<DIMENSION*>( aItem ), aDC );
+        ShowDimensionPropertyDialog( static_cast<DIMENSION*>( aItem ) );
         break;
 
     case PCB_MODULE_TEXT_T:
-        InstallTextOptionsFrame( aItem, aDC );
+        InstallTextOptionsFrame( aItem );
         break;
 
     case PCB_LINE_T:
@@ -543,7 +405,7 @@ void PCB_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
         break;
 
     case PCB_ZONE_AREA_T:
-        Edit_Zone_Params( aDC, static_cast<ZONE_CONTAINER*>( aItem ) );
+        Edit_Zone_Params( static_cast<ZONE_CONTAINER*>( aItem ) );
         break;
 
     default:
@@ -552,12 +414,12 @@ void PCB_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
 }
 
 
-void PCB_EDIT_FRAME::HighLight( wxDC* DC )
+void PCB_EDIT_FRAME::ShowDimensionPropertyDialog( DIMENSION* aDimension )
 {
-    if( GetBoard()->IsHighLightNetON() )
-        GetBoard()->HighLightOFF();
-    else
-        GetBoard()->HighLightON();
+    if( aDimension == NULL )
+        return;
 
-    GetBoard()->DrawHighLight( m_canvas, DC, GetBoard()->GetHighLightNetCode() );
+    DIALOG_TEXT_PROPERTIES dlg( this, aDimension );
+    dlg.ShowModal();
 }
+

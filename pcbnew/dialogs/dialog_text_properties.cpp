@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2018 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 2010-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,10 +53,9 @@
  *  wxFormBuilder.
  */
 
-DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BOARD_ITEM* aItem,
-                                                wxDC* aDC ) :
+DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BOARD_ITEM* aItem ) :
     DIALOG_TEXT_PROPERTIES_BASE( aParent ),
-    m_Parent( aParent ), m_DC( aDC ), m_item( aItem ),
+    m_Parent( aParent ), m_item( aItem ),
     m_edaText( nullptr ), m_modText( nullptr ), m_pcbText( nullptr ),
     m_textWidth( aParent, m_SizeXLabel, m_SizeXCtrl, m_SizeXUnits, true ),
     m_textHeight( aParent, m_SizeYLabel, m_SizeYCtrl, m_SizeYUnits, true ),
@@ -187,18 +186,15 @@ DIALOG_TEXT_PROPERTIES::~DIALOG_TEXT_PROPERTIES()
 /**
  * Routine for main window class to launch text properties dialog.
  */
-void PCB_BASE_EDIT_FRAME::InstallTextOptionsFrame( BOARD_ITEM* aText, wxDC* aDC )
+void PCB_BASE_EDIT_FRAME::InstallTextOptionsFrame( BOARD_ITEM* aText )
 {
     m_canvas->SetIgnoreMouseEvents( true );
-#ifndef __WXMAC__
-    DIALOG_TEXT_PROPERTIES dlg( this, aText, aDC );
-#else
-    // Avoid "writes" in the dialog, creates errors with WxOverlay and NSView
-    // Raising an Exception - Fixes #891347
-    DIALOG_TEXT_PROPERTIES dlg( this, aText, NULL );
-#endif
+
+    DIALOG_TEXT_PROPERTIES dlg( this, aText );
+
     dlg.ShowModal();
     m_canvas->MoveCursorToCrossHair();
+
     m_canvas->SetIgnoreMouseEvents( false );
 }
 
@@ -369,14 +365,6 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     if( !pushCommit )
         m_item->SetFlags( IN_EDIT );
 
-#ifndef USE_WX_OVERLAY
-    // Erase old text on screen if context is available
-    if( m_DC )
-    {
-        m_item->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
-    }
-#endif
-
     // Set the new text content
     if( m_SingleLineText->IsShown() )
     {
@@ -439,15 +427,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     default: break;
     }
 
-#ifndef USE_WX_OVERLAY
-    // Finally, display new text if there is a context to do so
-    if( m_DC )
-    {
-        m_item->Draw( m_Parent->GetCanvas(), m_DC, GR_OR );
-    }
-#else
     m_Parent->Refresh();
-#endif
 
     if( pushCommit )
         commit.Push( _( "Change text properties" ) );

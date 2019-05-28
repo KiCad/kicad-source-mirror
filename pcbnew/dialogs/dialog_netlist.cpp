@@ -57,7 +57,7 @@
 #define NETLIST_DELETEEXTRAFOOTPRINTS_KEY wxT("NetlistDeleteExtraFootprints")
 #define NETLIST_DELETESINGLEPADNETS_KEY wxT("NetlistDeleteSinglePadNets")
 
-void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
+void PCB_EDIT_FRAME::InstallNetlistFrame()
 {
     wxString netlistName = GetLastNetListRead();
 

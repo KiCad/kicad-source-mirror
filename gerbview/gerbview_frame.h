@@ -108,18 +108,6 @@ public:
     const TITLE_BLOCK&  GetTitleBlock() const override;
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;
 
-    /**
-     * Function SetCurItem
-     * sets the currently selected item and displays it in the MsgPanel.
-     * If the given item is NULL then the MsgPanel is erased and there is no
-     * currently selected item. This function is intended to make the process
-     * of "selecting" an item more formal, and to indivisibly tie the operation
-     * of selecting an item to displaying it using GERBER_DRAW_ITEM::Display_Infos().
-     * @param aItem The GERBER_DRAW_ITEM to make the selected item or NULL if none.
-     * @param aDisplayInfo = true to display item info, false if not (default = true)
-     */
-    void SetCurItem( GERBER_DRAW_ITEM* aItem, bool aDisplayInfo = true );
-
     /** Install the dialog box for layer selection
      * @param aDefaultLayer = Preselection (NB_PCB_LAYERS for "(Deselect)" layer)
      * @param aCopperLayerCount = number of copper layers

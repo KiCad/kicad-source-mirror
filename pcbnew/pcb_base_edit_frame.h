@@ -74,7 +74,7 @@ public:
      * @param aDC = the current device context
      * @param aItem = a pointer to the BOARD_ITEM to edit
      */
-    virtual void OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem ) = 0;
+    virtual void OnEditItemRequest( BOARD_ITEM* aItem ) = 0;
 
     // Undo buffer handling
 
@@ -169,7 +169,7 @@ public:
      */
     void SetRotationAngle( int aRotationAngle );
 
-    void InstallTextOptionsFrame( BOARD_ITEM* aText, wxDC* aDC );
+    void InstallTextOptionsFrame( BOARD_ITEM* aText );
     void InstallGraphicItemPropertiesDialog( BOARD_ITEM* aItem );
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
@@ -187,14 +187,6 @@ protected:
 
     /// Is undo/redo operation currently blocked?
     bool m_undoRedoBlocked;
-
-    /**
-     * Function createArray
-     * Create an array of the selected item (invokes the dialogue)
-     * This function is shared between pcbnew and modedit, as it is virtually
-     * the same
-     */
-    void createArray();
 
     void unitsChangeRefresh() override;
 };

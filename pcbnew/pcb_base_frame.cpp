@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,10 +24,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file basepcbframe.cpp
- */
-
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <eda_base_frame.h>
@@ -39,7 +35,7 @@
 #include <base_units.h>
 #include <msgpanel.h>
 #include <pgm_base.h>
-#include <3d_viewer/eda_3d_viewer.h>                                            // To include VIEWER3D_FRAMENAME
+#include <3d_viewer/eda_3d_viewer.h>          // To include VIEWER3D_FRAMENAME
 
 #include <pcbnew.h>
 #include <fp_lib_table.h>
@@ -101,7 +97,6 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_configSettings( aFrameType )
 {
     m_UserGridSize        = wxPoint( (int) 10 * IU_PER_MILS, (int) 10 * IU_PER_MILS );
-    m_Collector           = new GENERAL_COLLECTOR();
 
     m_FastGrid1           = 0;
     m_FastGrid2           = 0;
@@ -121,7 +116,6 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
     else
         m_canvasType = GetGalCanvas()->GetBackend();
 
-    delete m_Collector;
     delete m_Pcb;
 }
 
@@ -192,8 +186,7 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs()
         }
         catch( const IO_ERROR& ioe )
         {
-            DisplayErrorMessage( nullptr,
-                                 _( "Error loading project footprint libraries" ),
+            DisplayErrorMessage( nullptr, _( "Error loading project footprint libraries" ),
                                  ioe.What() );
         }
     }
@@ -454,8 +447,8 @@ bool PCB_BASE_FRAME::CreateAndShow3D_Frame( bool aForceRecreateIfNotOwner )
         return true;
     }
 
-    // Raising the window does not show the window on Windows if iconized.
-    // This should work on any platform.
+    // Raising the window does not show the window on Windows if iconized. This should work
+    // on any platform.
     if( draw3DFrame->IsIconized() )
          draw3DFrame->Iconize( false );
 
@@ -479,38 +472,30 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
     if( layer == preslayer )
         return;
 
-    // Copper layers cannot be selected unconditionally; how many
-    // of those layers are currently enabled needs to be checked.
+    // Copper layers cannot be selected unconditionally; how many of those layers are
+    // currently enabled needs to be checked.
     if( IsCopperLayer( layer ) )
     {
-        // If only one copper layer is enabled, the only such layer
-        // that can be selected to is the "Copper" layer (so the
-        // selection of any other copper layer is disregarded).
+        // If only one copper layer is enabled, the only such layer that can be selected to
+        // is the "Copper" layer (so the selection of any other copper layer is disregarded).
         if( m_Pcb->GetCopperLayerCount() < 2 )
         {
             if( layer != B_Cu )
-            {
                 return;
-            }
         }
 
-        // If more than one copper layer is enabled, the "Copper"
-        // and "Component" layers can be selected, but the total
-        // number of copper layers determines which internal
+        // If more than one copper layer is enabled, the "Copper" and "Component" layers
+        // can be selected, but the total number of copper layers determines which internal
         // layers are also capable of being selected.
         else
         {
-            if( ( layer != B_Cu ) && ( layer != F_Cu )
-                && ( layer >= m_Pcb->GetCopperLayerCount() - 1 ) )
-            {
+            if( layer != B_Cu && layer != F_Cu && layer >= ( m_Pcb->GetCopperLayerCount() - 1 ) )
                 return;
-            }
         }
     }
 
-    // Is yet more checking required? E.g. when the layer to be selected
-    // is a non-copper layer, or when switching between a copper layer
-    // and a non-copper layer, or vice-versa?
+    // Is yet more checking required? E.g. when the layer to be selected is a non-copper
+    // layer, or when switching between a copper layer and a non-copper layer, or vice-versa?
     // ...
 
     GetScreen()->m_Active_Layer = layer;
@@ -618,49 +603,13 @@ void PCB_BASE_FRAME::ProcessItemSelection( wxCommandEvent& aEvent )
 {
     int id = aEvent.GetId();
 
-    // index into the collector list:
-    int itemNdx = id - ID_POPUP_PCB_ITEM_SELECTION_START;
-
     if( id >= ID_POPUP_PCB_ITEM_SELECTION_START && id <= ID_POPUP_PCB_ITEM_SELECTION_END )
     {
-        BOARD_ITEM* item = (*m_Collector)[itemNdx];
+        int         itemNdx = id - ID_POPUP_PCB_ITEM_SELECTION_START;
+        // JEY TODO: is this still called?  Or do we do this in the selection tool?
+
         m_canvas->SetAbortRequest( false );
-
-#if 0 && defined (DEBUG)
-        item->Show( 0, std::cout );
-#endif
-
-        SetCurItem( item );
     }
-}
-
-
-void PCB_BASE_FRAME::SetCurItem( BOARD_ITEM* aItem, bool aDisplayInfo )
-{
-    GetScreen()->SetCurItem( aItem );
-
-    if( aDisplayInfo )
-        UpdateMsgPanel();
-}
-
-
-void PCB_BASE_FRAME::UpdateMsgPanel()
-{
-    BOARD_ITEM* item = GetScreen()->GetCurItem();
-    MSG_PANEL_ITEMS items;
-
-    if( item )
-        item->GetMsgPanelInfo( m_UserUnits, items );
-    else       // show general information about the board
-        GetGalCanvas()->GetMsgPanelInfo( m_UserUnits, items );
-
-    SetMsgPanel( items );
-}
-
-
-BOARD_ITEM* PCB_BASE_FRAME::GetCurItem()
-{
-    return GetScreen()->GetCurItem();
 }
 
 
@@ -833,10 +782,10 @@ void PCB_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     double tmp;
     aCfg->Read( baseCfgName + UserGridSizeXEntry, &tmp, 0.01 );
-    m_UserGridSize.x = From_User_Unit( userGridUnits, tmp );
+    m_UserGridSize.x = (int) From_User_Unit( userGridUnits, tmp );
 
     aCfg->Read( baseCfgName + UserGridSizeYEntry, &tmp, 0.01 );
-    m_UserGridSize.y = From_User_Unit( userGridUnits, tmp );
+    m_UserGridSize.y = (int) From_User_Unit( userGridUnits, tmp );
 
     aCfg->Read( baseCfgName + DisplayPadFillEntry, &m_DisplayOptions.m_DisplayPadFill, true );
     aCfg->Read( baseCfgName + DisplayViaFillEntry, &m_DisplayOptions.m_DisplayViaFill, true );
@@ -987,8 +936,10 @@ void PCB_BASE_FRAME::UseGalCanvas()
     EDA_DRAW_PANEL_GAL* galCanvas = GetGalCanvas();
 
     if( m_toolManager )
+    {
         m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
                                        GetGalCanvas()->GetViewControls(), this );
+    }
 
     SetBoard( m_Pcb );
 

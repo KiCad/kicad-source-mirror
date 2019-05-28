@@ -411,7 +411,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
                     text = textMod;
 
-                    DIALOG_TEXT_PROPERTIES textDialog( m_frame, textMod, NULL );
+                    DIALOG_TEXT_PROPERTIES textDialog( m_frame, textMod );
                     bool cancelled;
 
                     RunMainStack([&]() {
@@ -448,7 +448,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     textPcb->SetTextPos( (wxPoint) cursorPos );
 
                     RunMainStack([&]() {
-                        m_frame->InstallTextOptionsFrame( textPcb, NULL );
+                        m_frame->InstallTextOptionsFrame( textPcb );
                     } );
 
                     if( textPcb->GetText().IsEmpty() )

@@ -52,6 +52,7 @@
  */
 void PCB_BASE_FRAME::Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus )
 {
+    // JEY TODO: does this ever get called with a real DC?
     GetBoard()->GetConnectivity()->RecalculateRatsnest();
 
     GetBoard()->m_Status_Pcb = 0;   // we want a full ratsnest computation, from the scratch
@@ -87,6 +88,7 @@ void PCB_BASE_FRAME::Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus )
  */
 void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
 {
+    // JEY TODO: probalby obsolete (we don't really have DCs anymore)
     if( ( m_Pcb->m_Status_Pcb & DO_NOT_SHOW_GENERAL_RASTNEST ) )
     {
         return;
@@ -148,146 +150,3 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
     }
 }
 
-
-void PCB_BASE_FRAME::TraceModuleRatsNest( wxDC* DC )
-{
-    if( DC == NULL )
-        return;
-
-    COLOR4D tmpcolor = Settings().Colors().GetItemColor( LAYER_RATSNEST );
-
-    for( const auto& l : GetBoard()->GetConnectivity()->GetDynamicRatsnest() )
-    {
-        GRLine( m_canvas->GetClipBox(), DC, wxPoint( l.a.x, l.a.y ), wxPoint( l.b.x,
-                        l.b.y ), 0, tmpcolor );
-    }
-}
-
-
-/*
- * PCB_BASE_FRAME::BuildAirWiresTargetsList and
- * PCB_BASE_FRAME::TraceAirWiresToTargets
- * are 2 function to show the near connecting points when
- * a new track is created, by displaying g_MaxLinksShowed airwires
- * between the on grid mouse cursor and these connecting points
- * during the creation of a track
- */
-
-/* Buffer to store pads coordinates when creating a track.
- *  these pads are members of the net
- *  and when the mouse is moved, the g_MaxLinksShowed links to neighbors are
- * drawn
- */
-
-static wxPoint s_CursorPos;     // Coordinate of the moving point (mouse cursor and
-                                // end of current track segment)
-
-/* Function BuildAirWiresTargetsList
- * Build a list of candidates that can be a coonection point
- * when a track is started.
- * This functions prepares data to show airwires to nearest connecting points (pads)
- * from the current new track to candidates during track creation
- */
-
-static BOARD_CONNECTED_ITEM* s_ref = nullptr;
-static int s_refNet = -1;
-
-void PCB_BASE_FRAME::BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
-        const wxPoint& aPosition, int aNet )
-{
-    s_CursorPos = aPosition;    // needed for sort_by_distance
-    s_ref = aItemRef;
-    s_refNet = aNet;
-}
-
-
-static MODULE movedModule( nullptr );
-
-void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule, wxPoint aMoveVector )
-{
-    auto connectivity = GetBoard()->GetConnectivity();
-
-    movedModule = *aModule;
-    movedModule.Move( -aMoveVector );
-    connectivity->ClearDynamicRatsnest();
-    connectivity->BlockRatsnestItems( { aModule } );
-    connectivity->ComputeDynamicRatsnest( { &movedModule } );
-}
-
-
-void PCB_BASE_FRAME::TraceAirWiresToTargets( wxDC* aDC )
-{
-    auto connectivity = GetBoard()->GetConnectivity();
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
-
-    auto targets = connectivity->NearestUnconnectedTargets( s_ref, s_CursorPos, s_refNet );
-
-    if( aDC == NULL )
-        return;
-
-    GRSetDrawMode( aDC, GR_XOR );
-
-    for( int i = 0; i < std::min( (int) displ_opts->m_MaxLinksShowed, (int) targets.size() ); i++ )
-    {
-        auto p = targets[i];
-        GRLine( m_canvas->GetClipBox(), aDC, s_CursorPos, wxPoint( p.x, p.y ), 0, YELLOW );
-    }
-}
-
-
-// Redraw in XOR mode the outlines of the module.
-void MODULE::DrawOutlinesWhenMoving( EDA_DRAW_PANEL* panel, wxDC* DC,
-        const wxPoint& aMoveVector )
-{
-    int pad_fill_tmp;
-    D_PAD* pt_pad;
-
-    DrawEdgesOnly( panel, DC, aMoveVector, GR_XOR );
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*) ( panel->GetDisplayOptions() );
-
-    // Show pads in sketch mode to speedu up drawings
-    pad_fill_tmp = displ_opts->m_DisplayPadFill;
-    displ_opts->m_DisplayPadFill = true;
-
-    pt_pad = PadsList();
-
-    for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
-        pt_pad->Draw( panel, DC, GR_XOR, aMoveVector );
-
-    displ_opts->m_DisplayPadFill = pad_fill_tmp;
-
-    if( displ_opts->m_Show_Module_Ratsnest )
-    {
-        PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) panel->GetParent();
-        frame->build_ratsnest_module( this, aMoveVector );
-        frame->TraceModuleRatsNest( DC );
-    }
-}
-
-
-void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
-{
-    if( item && item->Type() == PCB_MODULE_T )
-    {
-        auto mod = static_cast<MODULE*> (item);
-
-        for( auto pad : mod->Pads() )
-        {
-            pad->SetLocalRatsnestVisible( !pad->GetLocalRatsnestVisible() );
-        }
-    }
-    else
-    {
-        auto modules = GetBoard()->Modules();
-
-        for( auto mod : modules )
-        {
-            for( auto pad : mod->Pads() )
-            {
-                pad->SetLocalRatsnestVisible( false );
-            }
-        }
-    }
-
-    m_canvas->Refresh();
-}

@@ -81,8 +81,6 @@ void GERBVIEW_FRAME::Erase_Current_DrawLayer( bool query )
     if( query && !IsOK( this, msg ) )
         return;
 
-    SetCurItem( NULL );
-
     if( m_toolManager )
         m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 

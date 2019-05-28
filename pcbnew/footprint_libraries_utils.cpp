@@ -327,7 +327,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
 
     // Display info :
     SetMsgPanel( module );
-    PlaceModule( module, NULL );
+    PlaceModule( module );
 
     module->SetPosition( wxPoint( 0, 0 ) );
 
@@ -849,7 +849,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
 
         commit.Add( newmodule );
         pcbframe->SetCrossHairPosition( wxPoint( 0, 0 ) );
-        pcbframe->PlaceModule( newmodule, NULL );
+        pcbframe->PlaceModule( newmodule );
         newmodule->SetPosition( wxPoint( 0, 0 ) );
         pcbframe->SetCrossHairPosition( cursor_pos );
         newmodule->SetTimeStamp( GetNewTimeStamp() );
@@ -860,7 +860,6 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     }
 
     newmodule->ClearFlags();
-    pcbframe->SetCurItem( NULL );
     // @todo LEGACY should be unnecessary
     mainpcb->m_Status_Pcb = 0;
 

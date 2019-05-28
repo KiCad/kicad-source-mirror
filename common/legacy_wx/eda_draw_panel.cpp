@@ -533,6 +533,7 @@ void EDA_DRAW_PANEL::DoPrepareDC( wxDC& dc )
 
 void EDA_DRAW_PANEL::OnPaint( wxPaintEvent& event )
 {
+    // JEY TODO: this is all OBSOLETE...
     if( GetScreen() == NULL )
     {
         event.Skip();

@@ -45,6 +45,8 @@
 #include <gerbview_draw_panel_gal.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
+#include <tool/selection.h>
+#include <tools/gerbview_selection_tool.h>
 #include <gerbview_painter.h>
 #include <view/view.h>
 
@@ -138,10 +140,10 @@ END_EVENT_TABLE()
  */
 void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
-    // JEY TODO: OBSOLETE?
-    int           id = event.GetId();
-
-    GERBER_DRAW_ITEM* currItem = (GERBER_DRAW_ITEM*) GetScreen()->GetCurItem();
+    int                      id = event.GetId();
+    GERBVIEW_SELECTION_TOOL* selTool = GetToolManager()->GetTool<GERBVIEW_SELECTION_TOOL>();
+    SELECTION&               selection = selTool->GetSelection();
+    GERBER_DRAW_ITEM*        currItem = (GERBER_DRAW_ITEM*) selection.Front();
 
     switch( id )
     {

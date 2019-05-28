@@ -22,16 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file edit_track_width.cpp
- * @brief Functions to modify sizes of segment, track, net, all vias and/or all tracks.
- */
-
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
 #include <pcb_edit_frame.h>
-
+#include <pcbnew_id.h>
 #include <class_board.h>
 #include <class_track.h>
 
@@ -40,8 +35,8 @@
 
 
 int PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
-                                           PICKED_ITEMS_LIST* aItemsListPicker,
-                                           bool               aUseNetclassValue )
+                                          PICKED_ITEMS_LIST* aItemsListPicker,
+                                          bool               aUseNetclassValue )
 {
     int           return_code = TRACK_ACTION_NONE;
     int           initial_width;
@@ -167,10 +162,9 @@ int PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
 /**
  * Function Edit_TrackSegm_Width
  * Modify one track segment width or one via diameter (using DRC control).
- * @param aDC = the curred device context (can be NULL)
  * @param aTrackItem = the track segment or via to modify
  */
-void PCB_EDIT_FRAME::Edit_TrackSegm_Width( wxDC* aDC, TRACK* aTrackItem )
+void PCB_EDIT_FRAME::Edit_TrackSegm_Width( TRACK* aTrackItem )
 {
     PICKED_ITEMS_LIST itemsListPicker;
     bool changed = !SetTrackSegmentWidth( aTrackItem, &itemsListPicker, false );
@@ -178,72 +172,133 @@ void PCB_EDIT_FRAME::Edit_TrackSegm_Width( wxDC* aDC, TRACK* aTrackItem )
     if( !changed || aTrackItem->GetEditFlags() )
         return;     // No change
 
-    // The segment has changed: redraw it and save it in undo list
-    if( aDC )
-    {
-        TRACK* oldsegm = (TRACK*) itemsListPicker.GetPickedItemLink( 0 );
-        wxASSERT( oldsegm );
-        m_canvas->CrossHairOff( aDC );                  // Erase cursor shape
-        oldsegm->Draw( m_canvas, aDC, GR_XOR );         // Erase old track shape
-        aTrackItem->Draw( m_canvas, aDC, GR_OR );       // Display new track shape
-        m_canvas->CrossHairOn( aDC );                   // Display cursor shape
-    }
-
     SaveCopyInUndoList( itemsListPicker, UR_CHANGED );
 }
 
 
-void PCB_EDIT_FRAME::Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment )
+void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
 {
-    /* Modify a full track (a trace) width (using DRC control).
-     * a full track is the set of track segments between 2 nodes: pads or a node that has
-     * more than 2 segments connected
-     * aDC = the curred device context (can be NULL)
-     * aTrackSegment = a via or a track belonging to the trace to change
+    int ii;
+    int id = event.GetId();
+
+    /* Note: none of these events require aborting the current command (if any)
+     * (like move, edit or block command)
+     * so we do not test for a current command in progress and call
+     *  m_canvas->m_endMouseCaptureCallback( m_canvas, &dc );
      */
-    TRACK* pt_track;
-    int    nb_segm;
-
-    if( aTrackSegment == NULL )
-        return;
-
-    pt_track = GetBoard()->MarkTrace( GetBoard()->m_Track, aTrackSegment, &nb_segm,
-                                      NULL, NULL, true );
-
-    PICKED_ITEMS_LIST itemsListPicker;
-    bool change = false;
-
-    for( int ii = 0; ii < nb_segm; ii++, pt_track = pt_track->Next() )
+    switch( id )
     {
-        pt_track->SetState( BUSY, false );
+    case ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH:
+        GetDesignSettings().m_UseConnectedTrackWidth =
+                not GetDesignSettings().m_UseConnectedTrackWidth;
+        break;
 
-        if( !SetTrackSegmentWidth( pt_track, &itemsListPicker, false ) )
-            change = true;
-    }
+    case ID_POPUP_PCB_SELECT_USE_NETCLASS_VALUES:
+        GetDesignSettings().m_UseConnectedTrackWidth = false;
+        GetDesignSettings().SetTrackWidthIndex( 0 );
+        GetDesignSettings().SetViaSizeIndex( 0 );
+        break;
 
-    if( !change )
-        return;
+    case ID_POPUP_PCB_SELECT_AUTO_WIDTH:
+        m_canvas->MoveCursorToCrossHair();
+        GetDesignSettings().m_UseConnectedTrackWidth = true;
+        break;
 
-    // Some segment have changed: redraw them and save in undo list
-    if( aDC )
-    {
-        m_canvas->CrossHairOff( aDC );                     // Erase cursor shape
+    case ID_POPUP_PCB_SELECT_WIDTH1:      // this is the default Netclass selection
+    case ID_POPUP_PCB_SELECT_WIDTH2:      // this is a custom value selection
+    case ID_POPUP_PCB_SELECT_WIDTH3:
+    case ID_POPUP_PCB_SELECT_WIDTH4:
+    case ID_POPUP_PCB_SELECT_WIDTH5:
+    case ID_POPUP_PCB_SELECT_WIDTH6:
+    case ID_POPUP_PCB_SELECT_WIDTH7:
+    case ID_POPUP_PCB_SELECT_WIDTH8:
+    case ID_POPUP_PCB_SELECT_WIDTH9:
+    case ID_POPUP_PCB_SELECT_WIDTH10:
+    case ID_POPUP_PCB_SELECT_WIDTH11:
+    case ID_POPUP_PCB_SELECT_WIDTH12:
+    case ID_POPUP_PCB_SELECT_WIDTH13:
+    case ID_POPUP_PCB_SELECT_WIDTH14:
+    case ID_POPUP_PCB_SELECT_WIDTH15:
+    case ID_POPUP_PCB_SELECT_WIDTH16:
+        m_canvas->MoveCursorToCrossHair();
+        GetDesignSettings().m_UseConnectedTrackWidth = false;
+        ii = id - ID_POPUP_PCB_SELECT_WIDTH1;
+        GetDesignSettings().SetTrackWidthIndex( ii );
+        break;
 
-        for( unsigned ii = 0; ii < itemsListPicker.GetCount(); ii++ )
+    case ID_POPUP_PCB_SELECT_VIASIZE1:   // this is the default Netclass selection
+    case ID_POPUP_PCB_SELECT_VIASIZE2:   // this is a custom value selection
+    case ID_POPUP_PCB_SELECT_VIASIZE3:
+    case ID_POPUP_PCB_SELECT_VIASIZE4:
+    case ID_POPUP_PCB_SELECT_VIASIZE5:
+    case ID_POPUP_PCB_SELECT_VIASIZE6:
+    case ID_POPUP_PCB_SELECT_VIASIZE7:
+    case ID_POPUP_PCB_SELECT_VIASIZE8:
+    case ID_POPUP_PCB_SELECT_VIASIZE9:
+    case ID_POPUP_PCB_SELECT_VIASIZE10:
+    case ID_POPUP_PCB_SELECT_VIASIZE11:
+    case ID_POPUP_PCB_SELECT_VIASIZE12:
+    case ID_POPUP_PCB_SELECT_VIASIZE13:
+    case ID_POPUP_PCB_SELECT_VIASIZE14:
+    case ID_POPUP_PCB_SELECT_VIASIZE15:
+    case ID_POPUP_PCB_SELECT_VIASIZE16:
+        // select the new current value for via size (via diameter)
+        m_canvas->MoveCursorToCrossHair();
+        ii = id - ID_POPUP_PCB_SELECT_VIASIZE1;
+        GetDesignSettings().SetViaSizeIndex( ii );
+        break;
+
+    case ID_AUX_TOOLBAR_PCB_TRACK_WIDTH:
+        ii = m_SelTrackWidthBox->GetSelection();
+
+        if( ii == int( m_SelTrackWidthBox->GetCount() - 2 ) )
         {
-            TRACK* segm = (TRACK*) itemsListPicker.GetPickedItemLink( ii );
-            segm->Draw( m_canvas, aDC, GR_XOR );            // Erase old track shape
-            segm = (TRACK*) itemsListPicker.GetPickedItem( ii );
-            segm->Draw( m_canvas, aDC, GR_OR );             // Display new track shape
-
-// fixme: commit!
-//          segm->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            // this is the separator
+            m_SelTrackWidthBox->SetSelection( GetDesignSettings().GetTrackWidthIndex() );
         }
+        else if( ii == int( m_SelTrackWidthBox->GetCount() - 1 ) )
+        {
+            m_SelTrackWidthBox->SetSelection( GetDesignSettings().GetTrackWidthIndex() );
+            DoShowBoardSetupDialog( _( "Tracks & Vias" ) );
+        }
+        else
+            GetDesignSettings().SetTrackWidthIndex( ii );
 
-        m_canvas->CrossHairOn( aDC );                   // Display cursor shape
+        break;
+
+    case ID_AUX_TOOLBAR_PCB_VIA_SIZE:
+        ii = m_SelViaSizeBox->GetSelection();
+
+        if( ii == int( m_SelViaSizeBox->GetCount() - 2 ) )
+        {
+            // this is the separator
+            m_SelViaSizeBox->SetSelection( GetDesignSettings().GetViaSizeIndex() );
+        }
+        else if( ii == int( m_SelViaSizeBox->GetCount() - 1 ) )
+        {
+            m_SelViaSizeBox->SetSelection( GetDesignSettings().GetViaSizeIndex() );
+            DoShowBoardSetupDialog( _( "Tracks & Vias" ) );
+        }
+        else
+            GetDesignSettings().SetViaSizeIndex( ii );
+
+        break;
+
+    default:
+        wxLogDebug( wxT( "PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event() error") );
+        break;
     }
 
-    SaveCopyInUndoList( itemsListPicker, UR_CHANGED );
+    // Refresh track in progress, if any, by forcing a mouse event,
+    // to call the current function attached to the mouse
+    /*if( m_canvas->IsMouseCaptured() )
+    {
+        wxMouseEvent event(wxEVT_MOTION);
+        wxPostEvent( m_canvas, event );
+    }*/
+    //+hp
+    //Refresh canvas, that we can see changes instantly. I use this because it dont,t throw  mouse up-left corner.
+
+    if( m_canvas->IsMouseCaptured() )
+        m_canvas->Refresh();
 }
-
-

@@ -472,9 +472,6 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             break;
         }
 
-        // It is possible that we are going to replace the selected item, so clear it
-        SetCurItem( NULL );
-
         switch( aList->GetPickedItemStatus( ii ) )
         {
         case UR_CHANGED:    /* Exchange old and new data for each item */

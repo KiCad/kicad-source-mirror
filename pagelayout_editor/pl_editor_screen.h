@@ -53,24 +53,6 @@ public:
      * virtual pure in BASE_SCREEN, so it must be defined here
      */
     void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) override;
-
-    /**
-     * Function GetCurItem
-     * returns the currently selected WORKSHEET_DATAITEM, overriding
-     * BASE_SCREEN::GetCurItem().
-     * @return WORKSHEET_DATAITEM* - the one selected, or NULL.
-     */
-    WS_DATA_ITEM* GetCurItem() const
-    {
-        return (WS_DATA_ITEM*) BASE_SCREEN::GetCurItem();
-    }
-
-    /**
-     * Function SetCurItem
-     * sets the currently selected object, m_CurrentItem.
-     * @param aItem Any object derived from WORKSHEET_DATAITEM
-     */
-    void SetCurItem( WS_DATA_ITEM* aItem ) { BASE_SCREEN::SetCurItem( (EDA_ITEM*)aItem ); }
 };
 
 

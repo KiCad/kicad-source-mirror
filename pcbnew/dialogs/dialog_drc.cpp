@@ -453,7 +453,7 @@ void DIALOG_DRC_CONTROL::doSelectionMenu( const DRC_ITEM* aItem )
     m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionMenu, true, &items );
 
     // If we got an item, focus on it
-    BOARD_ITEM* selection = m_brdEditor->GetCurItem();
+    BOARD_ITEM* selection = items.GetCount() ? items[0] : nullptr;
 
     if( selection && ( selection == first || selection == second ) )
         m_brdEditor->GetToolManager()->GetView()->SetCenter( selection->GetPosition() );
@@ -594,8 +594,6 @@ void DIALOG_DRC_CONTROL::RedrawDrawPanel()
 
 void DIALOG_DRC_CONTROL::DelDRCMarkers()
 {
-    m_brdEditor->SetCurItem( NULL );           // clear curr item, because it could be a DRC marker
-
     // Clear current selection list to avoid selection of deleted items
     m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
@@ -677,8 +675,7 @@ void DIALOG_DRC_CONTROL::OnDeleteOneClick( wxCommandEvent& event )
 
         if( selectedIndex != wxNOT_FOUND )
         {
-            // Clear the current item.  It may be the selected DRC marker.
-            m_brdEditor->SetCurItem( NULL );
+            // Clear the selection.  It may be the selected DRC marker.
             m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
             ssize_t newIndex = wxNOT_FOUND;

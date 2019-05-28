@@ -57,24 +57,6 @@ public:
 
     PCB_SCREEN* Next() const { return static_cast<PCB_SCREEN*>( Pnext ); }
 
-    /**
-     * Function GetCurItem
-     * returns the currently selected BOARD_ITEM, overriding
-     * BASE_SCREEN::GetCurItem().
-     * @return BOARD_ITEM* - the one selected, or NULL.
-     */
-    BOARD_ITEM* GetCurItem() const
-    {
-        return (BOARD_ITEM*) BASE_SCREEN::GetCurItem();
-    }
-
-    /**
-     * Function SetCurItem
-     * sets the currently selected object, m_CurrentItem.
-     * @param aItem Any object derived from BOARD_ITEM
-     */
-    void SetCurItem( BOARD_ITEM* aItem ) { BASE_SCREEN::SetCurItem( (EDA_ITEM*)aItem ); }
-
     /* full undo redo management : */
 
     // use BASE_SCREEN::ClearUndoRedoList()

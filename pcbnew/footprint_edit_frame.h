@@ -173,7 +173,7 @@ public:
     void OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent );
 
     ///> @copydoc PCB_BASE_EDIT_FRAME::OnEditItemRequest()
-    void OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem ) override;
+    void OnEditItemRequest( BOARD_ITEM* aItem ) override;
 
     /**
      * Called from the main toolbar to load a footprint from board mainly to edit it.
@@ -362,15 +362,6 @@ public:
      * @param aProgress
      */
     void SyncLibraryTree( bool aProgress );
-
-    /**
-     * Redraw the message panel.
-     *
-     * If a item is currently selected, displays the item info.
-     * If nothing selected, display the current footprint info, or
-     * clear the message panel if nothing is edited
-     */
-    void UpdateMsgPanel() override;
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 

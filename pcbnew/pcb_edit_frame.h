@@ -909,7 +909,7 @@ public:
     void Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC );
 
     // Footprint editing (see also PCB_BASE_FRAME)
-    void InstallFootprintPropertiesDialog( MODULE* Module, wxDC* DC );
+    void InstallFootprintPropertiesDialog( MODULE* Module );
 
     int InstallExchangeModuleFrame( MODULE* aModule, bool updateMode, bool selectedMode );
 
@@ -934,13 +934,7 @@ public:
      * @param aDC = the current device context
      * @param aItem = a pointer to the BOARD_ITEM to edit
      */
-    void OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem ) override;
-
-    /**
-     * Function HighLight.
-     * highlights the net at the current cursor position.
-     */
-    void HighLight( wxDC* DC );
+    void OnEditItemRequest( BOARD_ITEM* aItem ) override;
 
     /**
      * Function IsMicroViaAcceptable
@@ -955,103 +949,13 @@ public:
     bool IsMicroViaAcceptable();
 
     /**
-     * Function Other_Layer_Route
-     * operates in one of two ways.  If argument track is NULL, then swap the
-     * active layer between m_Route_Layer_TOP and m_Route_Layer_BOTTOM.  If a
-     * track is in progress (track is not NULL), and if DRC allows it, place
-     * a via on the end of the current track, and then swap the current active
-     * layer and start a new segment on the new layer.
-     * @param track A TRACK* to append the via to or NULL.
-     * @param DC A device context to draw on.
-     * @return bool - true if the operation was successful, else false such as
-     *                the case where DRC would not allow a via.
-     */
-    bool Other_Layer_Route( TRACK* track, wxDC* DC );
-
-    /**
-     * Function Delete_Segment
-     * removes a track segment.
-     * If a new track is in progress: delete the current new segment.
-     * Otherwise, delete segment under the mouse cursor.
-     */
-    TRACK* Delete_Segment( wxDC* DC, TRACK* Track );
-
-    void Delete_Track( wxDC* DC, TRACK* Track );
-    void Delete_net( wxDC* DC, TRACK* Track );
-
-    /**
-     * Function Remove_One_Track
-     * removes 1 track/
-     * The leading segment is removed and all adjacent segments
-     * until a pad or a junction point of more than 2 segments is found
-     */
-    void Remove_One_Track( wxDC* DC, TRACK* pt_segm );
-
-    /**
-     * Function Edit_Track_Width
-     * Modify a full track width (using DRC control).
-     * a full track is the set of track segments between 2 ends: pads or a
-     * point that has more than 2 segments ends connected
-     * @param  aDC = the curred device context (can be NULL)
-     * @param aTrackSegment = a segment or via on the track to change
-     */
-    void Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment );
-
-    /**
      * Function Edit_TrackSegm_Width
      *  Modify one track segment width or one via diameter (using DRC control).
-     * @param  aDC = the current device context (can be NULL)
      * @param aTrackItem = the track segment or via to modify
      */
-    void Edit_TrackSegm_Width( wxDC* aDC, TRACK* aTrackItem );
-
-    /**
-     * Function Begin_Route
-     * Starts a new track and/or establish of a new track point.
-     *
-     * For a new track:
-     * - Search the netname of the new track from the starting point
-     * if it is on a pad or an existing track
-     * - Highlight all this net
-     * If a track is in progress:
-     * - Call DRC
-     * - If DRC is OK: finish the track segment and starts a new one.
-     * @param aTrack = the current track segment, or NULL to start a new track
-     * @param aDC = the current device context
-     * @return a pointer to the new track segment or null if not created (DRC error)
-     */
-    TRACK* Begin_Route( TRACK* aTrack, wxDC* aDC );
+    void Edit_TrackSegm_Width( TRACK* aTrackItem );
 
     void SwitchLayer( wxDC* DC, PCB_LAYER_ID layer ) override;
-
-    /**
-     * Function Add45DegreeSegment
-     * adds a track segment between 2 tracks segments if these 2 segments
-     * make a 90 deg angle, in order to have 45 deg track segments
-     * Its only works on horizontal or vertical segments.
-     *
-     * @param aDC The wxDC device context to draw on.
-     * @return A bool value true if ok or false if not.
-     */
-    bool Add45DegreeSegment( wxDC* aDC );
-
-    /**
-     * Function EraseRedundantTrack
-     * Called after creating a track
-     * Remove (if exists) the old track that have the same starting and the
-     * same ending point as the new created track
-     * (this is the redunding track)
-     * @param aDC = the current device context (can be NULL)
-     * @param aNewTrack = the new created track (a pointer to a segment of the
-     *                    track list)
-     * @param aNewTrackSegmentsCount = number of segments in this new track
-     * @param aItemsListPicker = the list picker to use for an undo command
-     *                           (can be NULL)
-     */
-    int EraseRedundantTrack( wxDC*              aDC,
-                             TRACK*             aNewTrack,
-                             int                aNewTrackSegmentsCount,
-                             PICKED_ITEMS_LIST* aItemsListPicker );
 
     /**
      * Function SetTrackSegmentWidth
@@ -1102,7 +1006,7 @@ public:
      * Function Edit_Zone_Params
      * Edit params (layer, clearance, ...) for a zone outline
      */
-    void Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container );
+    void Edit_Zone_Params( ZONE_CONTAINER* zone_container );
 
     /**
      * Function Delete_Zone
@@ -1118,22 +1022,16 @@ public:
     void Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_container );
 
     // Target handling
-    PCB_TARGET* CreateTarget( wxDC* DC );
-    void DeleteTarget( PCB_TARGET* aTarget, wxDC* DC );
     void PlaceTarget( PCB_TARGET* aTarget, wxDC* DC );
-    void ShowTargetOptionsDialog( PCB_TARGET* aTarget, wxDC* DC );
+    void ShowTargetOptionsDialog( PCB_TARGET* aTarget );
 
 
     // Dimension handling:
-    void ShowDimensionPropertyDialog( DIMENSION* aDimension, wxDC* aDC );
-    DIMENSION* EditDimension( DIMENSION* aDimension, wxDC* aDC );
-    void DeleteDimension( DIMENSION* aDimension, wxDC* aDC );
-    void BeginMoveDimensionText( DIMENSION* aItem, wxDC* DC );
-    void PlaceDimensionText( DIMENSION* aItem, wxDC* DC );
+    void ShowDimensionPropertyDialog( DIMENSION* aDimension );
 
 
     // netlist  handling:
-    void InstallNetlistFrame( wxDC* DC );
+    void InstallNetlistFrame();
 
     /**
      * Function FetchNetlistFromSchematic
@@ -1226,15 +1124,6 @@ public:
                            wxPoint               aSpreadAreaPosition,
                            bool                  aPrepareUndoCommand = true );
 
-
-    /**
-     * Function Show_1_Ratsnest
-     * draw ratsnest.
-     *
-     * The net edge pad with mouse or module locates the mouse.
-     * Delete the ratsnest if no module or pad is selected.
-     */
-    void Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC );
 
     /**
      * Function Clean_Pcb

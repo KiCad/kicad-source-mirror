@@ -993,6 +993,28 @@ void PCBNEW_CONTROL::updateGrid()
 }
 
 
+int PCBNEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
+{
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    SELECTION&      selection = selTool->GetSelection();
+
+    if( selection.GetSize() == 1 )
+    {
+        EDA_ITEM* item = (EDA_ITEM*) selection.Front();
+
+        MSG_PANEL_ITEMS msgItems;
+        item->GetMsgPanelInfo( m_frame->GetUserUnits(), msgItems );
+        m_frame->SetMsgPanel( msgItems );
+    }
+    else
+    {
+        m_frame->ClearMsgPanel();
+    }
+
+    return 0;
+}
+
+
 void PCBNEW_CONTROL::setTransitions()
 {
     Go( &PCBNEW_CONTROL::Print,               ACTIONS::print.MakeEvent() );
@@ -1046,6 +1068,10 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::AppendBoardFromFile, PCB_ACTIONS::appendBoard.MakeEvent() );
 
     Go( &PCBNEW_CONTROL::Paste,               ACTIONS::paste.MakeEvent() );
+
+    Go( &PCBNEW_CONTROL::UpdateMessagePanel,  EVENTS::SelectedEvent );
+    Go( &PCBNEW_CONTROL::UpdateMessagePanel,  EVENTS::UnselectedEvent );
+    Go( &PCBNEW_CONTROL::UpdateMessagePanel,  EVENTS::ClearedEvent );
 }
 
 

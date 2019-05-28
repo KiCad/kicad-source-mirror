@@ -102,8 +102,6 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
     if( !footprintWizard )
         return;
 
-    SetCurItem( NULL );
-
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
     // Delete the current footprint

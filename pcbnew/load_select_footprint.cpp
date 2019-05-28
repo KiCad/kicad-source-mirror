@@ -23,11 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file load_select_footprint.cpp
- * @brief Footprints selection and loading functions.
- */
-
 #include <functional>
 using namespace std::placeholders;
 
@@ -50,12 +45,13 @@ using namespace std::placeholders;
 #include <class_board.h>
 #include <class_module.h>
 #include <io_mgr.h>
-
+#include <connectivity/connectivity_data.h>
 #include <pcbnew.h>
 #include <footprint_edit_frame.h>
 #include <footprint_info.h>
 #include <footprint_info_impl.h>
 #include <dialog_choose_footprint.h>
+#include <dialog_get_footprint_by_name.h>
 #include <footprint_viewer_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/progress_reporter.h>
@@ -112,8 +108,6 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     if( aModule == NULL )
         return false;
 
-    SetCurItem( NULL );
-
     if( !Clear_Pcb( true ) )
         return false;
 
@@ -135,7 +129,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     newModule->ClearAllNets();
 
     SetCrossHairPosition( wxPoint( 0, 0 ) );
-    PlaceModule( newModule, NULL );
+    PlaceModule( newModule );
     newModule->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
 
     // Put it on FRONT layer,
@@ -145,7 +139,8 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     // Put it in orientation 0,
     // because this is the default orientation in ModEdit, and in libs
-    Rotate_Module( NULL, newModule, 0, false );
+    newModule->SetOrientation( 0 );
+
     Zoom_Automatique( false );
 
     m_adapter->SetPreselectNode( newModule->GetFPID(), 0 );
@@ -158,11 +153,8 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
         ReCreateHToolbar();
 
     Update3DView();
-
     updateView();
-
     m_canvas->Refresh();
-
     m_treePane->GetLibTree()->Refresh();    // update any previously-highlighted items
 
     return true;
@@ -427,12 +419,108 @@ bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
         return false;
     }
 
-    msg = wxString::Format(
-                    _( "Footprint library \"%s\" saved as \"%s\"." ),
-                    GetChars( curLibPath ), GetChars( dstLibPath ) );
+    msg = wxString::Format( _( "Footprint library \"%s\" saved as \"%s\"." ),
+                            curLibPath,
+                            dstLibPath );
 
     DisplayInfoMessage( this, msg );
 
     SetStatusText( wxEmptyString );
     return true;
 }
+
+
+static MODULE*           s_ModuleInitialCopy = NULL;   // Copy of module for abort/undo command
+
+static PICKED_ITEMS_LIST s_PickedList;                 // a pick-list to save initial module
+//   and dragged tracks
+
+
+MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
+{
+    wxString        moduleName;
+    MODULE*         module = NULL;
+    wxArrayString   fplist;
+
+    // Build list of available fp references, to display them in dialog
+    for( MODULE* fp = GetBoard()->m_Modules; fp; fp = fp->Next() )
+        fplist.Add( fp->GetReference() + wxT("    ( ") + fp->GetValue() + wxT(" )") );
+
+    fplist.Sort();
+
+    DIALOG_GET_FOOTPRINT_BY_NAME dlg( this, fplist );
+
+    if( dlg.ShowModal() != wxID_OK )    //Aborted by user
+        return NULL;
+
+    moduleName = dlg.GetValue();
+    moduleName.Trim( true );
+    moduleName.Trim( false );
+
+    if( !moduleName.IsEmpty() )
+    {
+        module = GetBoard()->m_Modules;
+
+        while( module )
+        {
+            if( module->GetReference().CmpNoCase( moduleName ) == 0 )
+                break;
+
+            module = module->Next();
+        }
+    }
+
+    return module;
+}
+
+
+void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, bool aRecreateRatsnest )
+{
+    wxPoint newpos;
+
+    if( aModule == 0 )
+        return;
+
+    OnModify();
+
+    if( aModule->IsNew() )
+    {
+        SaveCopyInUndoList( aModule, UR_NEW );
+    }
+    else if( aModule->IsMoving() )
+    {
+        ITEM_PICKER picker( aModule, UR_CHANGED );
+        picker.SetLink( s_ModuleInitialCopy );
+        s_PickedList.PushItem( picker );
+        s_ModuleInitialCopy = NULL;     // the picker is now owner of s_ModuleInitialCopy.
+    }
+
+    if( s_PickedList.GetCount() )
+    {
+        SaveCopyInUndoList( s_PickedList, UR_UNSPECIFIED );
+
+        // Clear list, but DO NOT delete items, because they are owned by the saved undo
+        // list and they therefore in use
+        s_PickedList.ClearItemsList();
+    }
+
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+
+    newpos = GetCrossHairPosition();
+    aModule->SetPosition( newpos );
+    aModule->ClearFlags();
+
+    delete s_ModuleInitialCopy;
+    s_ModuleInitialCopy = NULL;
+
+    if( aRecreateRatsnest )
+        m_Pcb->GetConnectivity()->Update( aModule );
+
+    if( ( GetBoard()->IsElementVisible( LAYER_RATSNEST ) || displ_opts->m_Show_Module_Ratsnest )
+        && aRecreateRatsnest )
+        Compile_Ratsnest( nullptr, true );
+
+    SetMsgPanel( aModule );
+}
+
+

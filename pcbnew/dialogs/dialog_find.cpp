@@ -29,7 +29,8 @@
 #include <confirm.h>
 #include <kicad_string.h>
 #include <pcb_edit_frame.h>
-
+#include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_marker_pcb.h>
@@ -84,6 +85,7 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
     PCB_SCREEN* screen = parent->GetScreen();
     wxPoint     pos;
 
+    GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
     wxString searchString = m_SearchTextCtrl->GetValue();
 
     if( !searchString.IsSameAs( prevSearchString, false ) )
@@ -131,7 +133,7 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
 
     if( foundItem )
     {
-        parent->SetCurItem( foundItem );
+        GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, foundItem );
         parent->FocusOnLocation( pos, !m_NoMouseWarpCheckBox->IsChecked(), true );
         msg.Printf( _( "\"%s\" found" ), GetChars( searchString ) );
         parent->SetStatusText( msg );
@@ -155,6 +157,7 @@ void DIALOG_FIND::onButtonFindMarkerClick( wxCommandEvent& aEvent )
     wxPoint     pos;
     foundItem = NULL;
 
+    GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
     parent->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
 
     MARKER_PCB* marker = parent->GetBoard()->GetMARKER( markerCount++ );
@@ -168,7 +171,7 @@ void DIALOG_FIND::onButtonFindMarkerClick( wxCommandEvent& aEvent )
     wxString msg;
     if( foundItem )
     {
-        parent->SetCurItem( foundItem );
+        GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, foundItem );
         parent->FocusOnLocation( pos, !m_NoMouseWarpCheckBox->IsChecked() );
         msg = _( "Marker found" );
         parent->SetStatusText( msg );

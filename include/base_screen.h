@@ -211,15 +211,6 @@ public:
     BASE_SCREEN( KICAD_T aType = SCREEN_T );
     ~BASE_SCREEN();
 
-    /**
-     * Function SetCurItem
-     * sets the currently selected object, m_CurrentItem.
-     * @param aItem Any object derived from EDA_ITEM
-     */
-    void SetCurItem( EDA_ITEM* aItem ) { m_CurrentItem = aItem; }
-
-    EDA_ITEM* GetCurItem() const { return m_CurrentItem; }
-
     void InitDataPoints( const wxSize& aPageSizeInternalUnits );
 
     /* general Undo/Redo command control */

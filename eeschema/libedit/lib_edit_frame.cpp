@@ -574,7 +574,6 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
         return;
 
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
-    GetScreen()->SetCurItem( nullptr );
 
     if( m_my_part != aPart )
     {

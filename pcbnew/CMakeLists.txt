@@ -135,6 +135,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_set_grid_base.cpp
     dialogs/dialog_swap_layers.cpp
     dialogs/dialog_swap_layers_base.cpp
+    dialogs/dialog_target_properties.cpp
     dialogs/dialog_target_properties_base.cpp
     dialogs/dialog_text_properties.cpp
     dialogs/dialog_text_properties_base.cpp
@@ -236,16 +237,10 @@ set( PCBNEW_CLASS_SRCS
     build_BOM_from_board.cpp
     connect.cpp
     cross-probing.cpp
-    deltrack.cpp
-    dimension.cpp
-    dragsegm.cpp
     drc.cpp
     drc_clearance_test_functions.cpp
     edit.cpp
     edit_track_width.cpp
-    editrack-part2.cpp
-    editrack.cpp
-    event_handlers_tracks_vias_sizes.cpp
     files.cpp
     footprint_info_impl.cpp
     footprint_wizard.cpp
@@ -263,16 +258,13 @@ set( PCBNEW_CLASS_SRCS
     initpcb.cpp
     layer_widget.cpp
     load_select_footprint.cpp
-    magnetic_tracks_functions.cpp
     menubar_footprint_editor.cpp
     menubar_pcb_editor.cpp
     microwave.cpp
-    minimun_spanning_tree.cpp
     netlist.cpp
     pad_edit_functions.cpp
     pad_naming.cpp
     pcb_base_edit_frame.cpp
-    pcb_footprint_edit_utils.cpp
     pcb_layer_box_selector.cpp
     pcb_layer_widget.cpp
 #    pcb_draw_panel_gal.cpp
@@ -289,7 +281,6 @@ set( PCBNEW_CLASS_SRCS
     specctra_import_export/specctra_export.cpp
     specctra_import_export/specctra_import.cpp
     specctra_import_export/specctra_keywords.cpp
-    target_edit.cpp
     text_mod_grid_table.cpp
     toolbars_footprint_editor.cpp
     toolbars_footprint_viewer.cpp

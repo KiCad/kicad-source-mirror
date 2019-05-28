@@ -195,10 +195,12 @@ BITMAP_DEF PCB_TARGET::GetMenuImage() const
     return  add_pcb_target_xpm;
 }
 
+
 EDA_ITEM* PCB_TARGET::Clone() const
 {
     return new PCB_TARGET( *this );
 }
+
 
 void PCB_TARGET::SwapData( BOARD_ITEM* aImage )
 {
@@ -206,3 +208,42 @@ void PCB_TARGET::SwapData( BOARD_ITEM* aImage )
 
     std::swap( *((PCB_TARGET*) this), *((PCB_TARGET*) aImage) );
 }
+
+
+static PCB_TARGET s_TargetCopy( nullptr );   // Used to store "old" values of the current item
+                                             // parameters before editing for undo/redo/cancel
+
+void PCB_EDIT_FRAME::PlaceTarget( PCB_TARGET* aTarget, wxDC* DC )
+{
+    if( aTarget == NULL )
+        return;
+
+    aTarget->Draw( m_canvas, DC, GR_OR );
+    m_canvas->SetMouseCapture( NULL, NULL );
+    OnModify();
+
+    if( aTarget->IsNew() )
+    {
+        SaveCopyInUndoList( aTarget, UR_NEW );
+        aTarget->ClearFlags();
+        return;
+    }
+
+    if( aTarget->GetEditFlags() == IS_MOVED )
+    {
+        SaveCopyInUndoList( aTarget, UR_MOVED,
+                            aTarget->GetPosition() - s_TargetCopy.GetPosition() );
+        aTarget->ClearFlags();
+        return;
+    }
+
+    if( (aTarget->GetEditFlags() & IN_EDIT) )
+    {
+        aTarget->SwapData( &s_TargetCopy );
+        SaveCopyInUndoList( aTarget, UR_CHANGED );
+        aTarget->SwapData( &s_TargetCopy );
+    }
+
+    aTarget->ClearFlags();
+}
+
