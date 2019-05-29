@@ -736,6 +736,7 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
     case S_CURVE:
         {
             m_plotter->SetCurrentLineWidth( thickness, &gbr_metadata );
+            aSeg->RebuildBezierToSegmentsPointsList( aSeg->GetWidth() );
             const std::vector<wxPoint>& bezierPoints = aSeg->GetBezierPoints();
 
             for( unsigned i = 1; i < bezierPoints.size(); i++ )
