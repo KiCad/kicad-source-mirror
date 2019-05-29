@@ -551,9 +551,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         bds.m_DiffPairDimensionsList            = configBds.m_DiffPairDimensionsList;
         bds.m_CopperEdgeClearance               = configBds.m_CopperEdgeClearance;
 
-        bds.SetElementVisibility( LAYER_GRID,     configBds.IsElementVisible( LAYER_GRID ) );
-        bds.SetElementVisibility( LAYER_RATSNEST, configBds.IsElementVisible( LAYER_RATSNEST ) );
-
         SetBoard( loadedBoard );
 
         // we should not ask PLUGINs to do these items:
