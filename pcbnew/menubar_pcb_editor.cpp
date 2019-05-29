@@ -145,7 +145,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     submenuExport->Add( _( "Specctra DSN..." ), _( "Export Specctra DSN routing info" ),
                         ID_GEN_EXPORT_SPECCTRA, export_dsn_xpm );
-    submenuExport->Add( _( "GenCAD..." ), _( "Export GenCAD 3D board representation" ),
+    submenuExport->Add( _( "GenCAD..." ), _( "Export GenCAD board representation" ),
                         ID_GEN_EXPORT_FILE_GENCADFORMAT, export_xpm );
     submenuExport->Add( _( "VRML..." ), _( "Export VRML 3D board representation" ),
                         ID_GEN_EXPORT_FILE_VRML, export3d_xpm );
@@ -415,7 +415,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     //-- Place Menu ----------------------------------------------------------
     //
     CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
-    
+
     placeMenu->AddItem( PCB_ACTIONS::placeModule,     SELECTION_CONDITIONS::ShowAlways );
     placeMenu->AddItem( PCB_ACTIONS::drawVia,         SELECTION_CONDITIONS::ShowAlways );
     placeMenu->AddItem( PCB_ACTIONS::drawZone,        SELECTION_CONDITIONS::ShowAlways );
