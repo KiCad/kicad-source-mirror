@@ -558,8 +558,9 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
 
     case S_CURVE:
 
-        for( unsigned ii = 0; ii < m_BezierPoints.size(); ++ii )
-            bbox.Merge( m_BezierPoints[ii] );
+        bbox.Merge( m_BezierC1 );
+        bbox.Merge( m_BezierC2 );
+        bbox.Merge( m_End );
         break;
 
     default:
