@@ -561,7 +561,7 @@ void COMMON_TOOLS::setTransitions()
     Go( &COMMON_TOOLS::ToggleCursorStyle,  ACTIONS::toggleCursorStyle.MakeEvent() );
 
     Go( &COMMON_TOOLS::SwitchCanvas,       ACTIONS::acceleratedGraphics.MakeEvent() );
-    Go( &COMMON_TOOLS::SwitchCanvas,       ACTIONS::acceleratedGraphics.MakeEvent() );
+    Go( &COMMON_TOOLS::SwitchCanvas,       ACTIONS::standardGraphics.MakeEvent() );
 }
 
 
