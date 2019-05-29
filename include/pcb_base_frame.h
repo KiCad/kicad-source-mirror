@@ -239,8 +239,6 @@ public:
      */
     virtual bool CreateAndShow3D_Frame( bool aForceRecreateIfNotOwner );
 
-    void ProcessItemSelection( wxCommandEvent& event );
-
     /**
      * Function GetCollectorsGuide
      * @return GENERAL_COLLECTORS_GUIDE - that considers the global

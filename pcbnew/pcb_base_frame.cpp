@@ -74,9 +74,6 @@ static const wxChar FastGrid2Entry[] = wxT( "FastGrid2" );
 
 
 BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
-    EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START, ID_POPUP_PCB_ITEM_SELECTION_END,
-                    PCB_BASE_FRAME::ProcessItemSelection )
-
     EVT_TOOL( ID_TB_OPTIONS_SHOW_PADS_SKETCH, PCB_BASE_FRAME::OnTogglePadDrawMode )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_GRAPHIC_SKETCH, PCB_BASE_FRAME::OnToggleGraphicDrawMode )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, PCB_BASE_FRAME::OnToggleEdgeDrawMode )
@@ -596,20 +593,6 @@ void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 
     if( current != m_zoomSelectBox->GetSelection() )
         m_zoomSelectBox->SetSelection( current );
-}
-
-
-void PCB_BASE_FRAME::ProcessItemSelection( wxCommandEvent& aEvent )
-{
-    int id = aEvent.GetId();
-
-    if( id >= ID_POPUP_PCB_ITEM_SELECTION_START && id <= ID_POPUP_PCB_ITEM_SELECTION_END )
-    {
-        int         itemNdx = id - ID_POPUP_PCB_ITEM_SELECTION_START;
-        // JEY TODO: is this still called?  Or do we do this in the selection tool?
-
-        m_canvas->SetAbortRequest( false );
-    }
 }
 
 
