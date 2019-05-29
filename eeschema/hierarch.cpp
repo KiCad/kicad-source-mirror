@@ -264,6 +264,10 @@ void HIERARCHY_NAVIG_DLG::onSelectSheetPath( wxTreeEvent& event )
 
 void SCH_EDIT_FRAME::DisplayCurrentSheet()
 {
+    // If we are doing something with the mouse, cancel the action before changing sheet
+    if( m_canvas->IsMouseCaptured() )
+        m_canvas->EndMouseCapture( GetToolId(), GetGalCanvas()->GetCurrentCursor() );
+
     SetRepeatItem( NULL );
     ClearMsgPanel();
 
