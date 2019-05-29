@@ -378,21 +378,18 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                 saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
 
                 // Switch to OpenGL, which will save the new setting if successful
-                wxCommandEvent evt( wxEVT_MENU, ID_MENU_CANVAS_OPENGL );
-                GetEventHandler()->ProcessEvent( evt );
+                GetToolManager()->RunAction( ACTIONS::acceleratedGraphics, true );
 
                 // Switch back to Cairo if OpenGL is not supported
                 if( GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
                 {
-                    wxCommandEvent cairoEvt( wxEVT_MENU, ID_MENU_CANVAS_CAIRO );
-                    GetEventHandler()->ProcessEvent( cairoEvt );
+                    GetToolManager()->RunAction( ACTIONS::standardGraphics, true );
                 }
             }
             else
             {
                 // If they were on legacy, switch to Cairo
-                wxCommandEvent evt( wxEVT_MENU, ID_MENU_CANVAS_CAIRO );
-                GetEventHandler()->ProcessEvent( evt );
+                GetToolManager()->RunAction( ACTIONS::standardGraphics, true );
             }
         }
 
