@@ -777,6 +777,23 @@ static void moveNoFlagToVector( DLIST<T>& aList, std::vector<BOARD_ITEM*>& aTarg
     }
 }
 
+
+// Helper function for PCBNEW_CONTROL::placeBoardItems()
+template<typename T>
+static void moveNoFlagToVector( std::deque<T>& aList, std::vector<BOARD_ITEM*>& aTarget, bool aIsNew )
+{
+    std::copy_if( aList.begin(), aList.end(), std::back_inserter( aTarget ),
+            [](T aItem){
+                bool retval = aItem->GetFlags() & FLAG0;
+                aItem->ClearFlags( FLAG0 );
+                return retval;
+            } );
+
+    if( aIsNew )
+        aList.clear();
+}
+
+
 static void moveNoFlagToVector(  ZONE_CONTAINERS& aList, std::vector<BOARD_ITEM*>& aTarget, bool aIsNew )
 {
     if( aList.size() == 0 )
@@ -823,7 +840,7 @@ int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard )
 
     moveNoFlagToVector( aBoard->m_Track, items, isNew );
     moveNoFlagToVector( aBoard->m_Modules, items, isNew );
-    moveNoFlagToVector( aBoard->DrawingsList(), items, isNew );
+    moveNoFlagToVector( aBoard->Drawings(), items, isNew );
     moveNoFlagToVector( aBoard->Zones(), items, isNew );
 
     return placeBoardItems( items, isNew );

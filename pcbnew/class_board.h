@@ -161,6 +161,7 @@ protected:
 DECL_VEC_FOR_SWIG(MARKERS, MARKER_PCB*)
 DECL_VEC_FOR_SWIG(ZONE_CONTAINERS, ZONE_CONTAINER*)
 DECL_VEC_FOR_SWIG(TRACKS, TRACK*)
+DECL_DEQ_FOR_SWIG(DRAWINGS, BOARD_ITEM*)
 
 
 /**
@@ -177,6 +178,9 @@ private:
 
     /// MARKER_PCBs for clearance problems, owned by pointer.
     MARKERS                 m_markers;
+
+    /// BOARD_ITEMs for drawings on the board, owned by pointer.
+    DRAWINGS                m_drawings;
 
     /// edge zone descriptors, owned by pointer.
     ZONE_CONTAINERS         m_ZoneDescriptorList;
@@ -236,8 +240,8 @@ public:
 
     const wxString &GetFileName() const { return m_fileName; }
 
-private:
-    DLIST<BOARD_ITEM>           m_Drawings;             // linked list of lines & texts
+    /// Flags used in ratsnest calculation and update.
+    int m_Status_Pcb;
 
 public:
 
@@ -246,12 +250,9 @@ public:
 
     DLIST_ITERATOR_WRAPPER<TRACK> Tracks() { return DLIST_ITERATOR_WRAPPER<TRACK>(m_Track); }
     DLIST_ITERATOR_WRAPPER<MODULE> Modules() { return DLIST_ITERATOR_WRAPPER<MODULE>(m_Modules); }
-    DLIST_ITERATOR_WRAPPER<BOARD_ITEM> Drawings() { return DLIST_ITERATOR_WRAPPER<BOARD_ITEM>(m_Drawings); }
+    DRAWINGS& Drawings() { return m_drawings; }
     ZONE_CONTAINERS& Zones() { return m_ZoneDescriptorList; }
     const std::vector<BOARD_CONNECTED_ITEM*> AllConnectedItems();
-
-    // will be deprecated as soon as append board functionality is fixed
-    DLIST<BOARD_ITEM>&          DrawingsList() { return m_Drawings; }
 
     /// zone contour currently in progress
     ZONE_CONTAINER*             m_CurrentZoneContour;
@@ -264,7 +265,7 @@ public:
 
     bool IsEmpty() const
     {
-        return m_Drawings.GetCount() == 0 && m_Modules.GetCount() == 0 && m_Track.GetCount() == 0;
+        return m_drawings.empty() && m_Modules.GetCount() == 0 && m_Track.GetCount() == 0;
     }
 
     void Move( const wxPoint& aMoveVector ) override;

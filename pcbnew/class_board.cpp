@@ -913,9 +913,9 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     case PCB_TEXT_T:
     case PCB_TARGET_T:
         if( aMode == ADD_APPEND )
-            m_Drawings.PushBack( aBoardItem );
+            m_drawings.push_back( aBoardItem );
         else
-            m_Drawings.PushFront( aBoardItem );
+            m_drawings.push_front( aBoardItem );
 
         break;
 
@@ -989,7 +989,10 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
     case PCB_LINE_T:
     case PCB_TEXT_T:
     case PCB_TARGET_T:
-        m_Drawings.Remove( aBoardItem );
+        m_drawings.erase(
+                std::remove_if( m_drawings.begin(), m_drawings.end(),
+                        [aBoardItem](BOARD_ITEM* aItem)
+                        {   return aItem == aBoardItem;} ) );
         break;
 
     // other types may use linked list
@@ -1101,7 +1104,7 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
     LSET visible = GetVisibleLayers();
 
     // Check segments, dimensions, texts, and fiducials
-    for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
+    for( auto item : m_drawings )
     {
         if( aBoardEdgesOnly && (item->Type() != PCB_LINE_T || item->GetLayer() != Edge_Cuts ) )
             continue;
@@ -1263,7 +1266,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
         case PCB_TEXT_T:
         case PCB_DIMENSION_T:
         case PCB_TARGET_T:
-            result = IterateForward( m_Drawings, inspector, testData, p );
+            result = IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, p );
 
             // skip over any types handled in the above call.
             for( ; ; )

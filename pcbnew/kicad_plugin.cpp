@@ -601,7 +601,7 @@ void PCB_IO::formatGeneral( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel+1, "(thickness %s)\n",
                   FormatInternalUnits( dsnSettings.GetBoardThickness() ).c_str() );
 
-    m_out->Print( aNestLevel+1, "(drawings %d)\n", aBoard->Drawings().Size() );
+    m_out->Print( aNestLevel+1, "(drawings %zu)\n", aBoard->Drawings().size() );
     m_out->Print( aNestLevel+1, "(tracks %d)\n", aBoard->GetNumSegmTrack() );
     m_out->Print( aNestLevel+1, "(modules %d)\n", aBoard->m_Modules.GetCount() );
     m_out->Print( aNestLevel+1, "(nets %d)\n", m_mapping->GetSize() );
@@ -727,7 +727,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     for( auto item : aBoard->Drawings() )
         Format( item, aNestLevel );
 
-    if( aBoard->Drawings().Size() )
+    if( aBoard->Drawings().size() )
         m_out->Print( 0, "\n" );
 
     // Do not save MARKER_PCBs, they can be regenerated easily.

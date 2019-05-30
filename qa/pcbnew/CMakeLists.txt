@@ -64,6 +64,7 @@ target_link_libraries( qa_pcbnew
     legacy_gal
     gal
     common
+    gal
     qa_utils
     lib_dxf
     idf3

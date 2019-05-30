@@ -232,7 +232,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     }
 
     // Append drawings
-    for( BOARD_ITEM* item = currentPcb->m_Drawings; item != NULL; item = item->Next() )
+    for( auto item : currentPcb->Drawings() )
     {
         ITEM_PICKER picker( item, UR_CHANGED );
         itemsList.PushItem( picker );
@@ -354,7 +354,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         }
     }
 
-    for( BOARD_ITEM* item = currentPcb->m_Drawings; item != NULL; item = item->Next() )
+    for( auto item : currentPcb->Drawings() )
     {
         if( !oldBuffer->ContainsItem( item ) )
         {

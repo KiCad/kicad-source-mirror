@@ -32,6 +32,8 @@
 #ifndef BASE_STRUCT_H_
 #define BASE_STRUCT_H_
 
+#include <deque>
+
 #include <core/typeinfo.h>
 #include "common.h"
 
@@ -367,6 +369,22 @@ public:
     virtual EDA_ITEM* Clone() const; // should not be inline, to save the ~ 6 bytes per call site.
 
     /**
+     * Function Visit
+     * may be re-implemented for each derived class in order to handle
+     * all the types given by its member data.  Implementations should call
+     * inspector->Inspect() on types in scanTypes[], and may use
+     * IterateForward()
+     * to do so on lists of such data.
+     * @param inspector An INSPECTOR instance to use in the inspection.
+     * @param testData Arbitrary data used by the inspector.
+     * @param scanTypes Which KICAD_T types are of interest and the order
+     *                  is significant too, terminated by EOT.
+     * @return SEARCH_RESULT SEARCH_QUIT if the Iterator is to stop the scan,
+     *                       else SCAN_CONTINUE, and determined by the inspector.
+     */
+    virtual SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] );
+
+    /**
      * Function IterateForward
      * walks through the object tree calling the inspector() on each object
      * type requested in scanTypes.
@@ -386,23 +404,37 @@ public:
     static SEARCH_RESULT IterateForward( EDA_ITEM*      listStart,
                                          INSPECTOR      inspector,
                                          void*          testData,
-                                         const KICAD_T  scanTypes[] );
+                                         const KICAD_T  scanTypes[] )
+
+    {
+        for( EDA_ITEM* p = listStart; p; p = p->Pnext )
+        {
+            if( SEARCH_QUIT == p->Visit( inspector, testData, scanTypes ) )
+                return SEARCH_QUIT;
+        }
+
+        return SEARCH_CONTINUE;
+    }
 
     /**
-     * Function Visit
-     * may be re-implemented for each derived class in order to handle
-     * all the types given by its member data.  Implementations should call
-     * inspector->Inspect() on types in scanTypes[], and may use
-     * IterateForward()
-     * to do so on lists of such data.
-     * @param inspector An INSPECTOR instance to use in the inspection.
-     * @param testData Arbitrary data used by the inspector.
-     * @param scanTypes Which KICAD_T types are of interest and the order
-     *                  is significant too, terminated by EOT.
-     * @return SEARCH_RESULT SEARCH_QUIT if the Iterator is to stop the scan,
-     *                       else SCAN_CONTINUE, and determined by the inspector.
+     * @copydoc SEARCH_RESULT IterateForward( EDA_ITEM*, INSPECTOR, void*, const KICAD_T )
+     *
+     * This changes first parameter to avoid the DList and use the main queue instead
      */
-    virtual SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] );
+    template< class T >
+    static SEARCH_RESULT IterateForward( std::deque<T>&  aList,
+                                         INSPECTOR       inspector,
+                                         void*           testData,
+                                         const KICAD_T   scanTypes[] )
+    {
+        for( auto it : aList )
+        {
+            if( static_cast<EDA_ITEM*>( it )->Visit( inspector, testData, scanTypes ) == SEARCH_QUIT )
+                return SEARCH_QUIT;
+        }
+
+        return SEARCH_CONTINUE;
+    }
 
     /**
      * Function GetClass

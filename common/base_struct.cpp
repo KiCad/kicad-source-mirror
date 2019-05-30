@@ -26,6 +26,8 @@
  * @brief Implementation of EDA_ITEM base class for KiCad.
  */
 
+#include <deque>
+
 #include <fctsys.h>
 #include <trigo.h>
 #include <common.h>
@@ -124,21 +126,6 @@ EDA_ITEM* EDA_ITEM::Clone() const
 {
     wxCHECK_MSG( false, NULL, wxT( "Clone not implemented in derived class " ) + GetClass() +
                  wxT( ".  Bad programmer!" ) );
-}
-
-
-SEARCH_RESULT EDA_ITEM::IterateForward( EDA_ITEM*       listStart,
-                                        INSPECTOR       inspector,
-                                        void*           testData,
-                                        const KICAD_T   scanTypes[] )
-{
-    for( EDA_ITEM* p = listStart; p; p = p->Pnext )
-    {
-        if( SEARCH_QUIT == p->Visit( inspector, testData, scanTypes ) )
-            return SEARCH_QUIT;
-    }
-
-    return SEARCH_CONTINUE;
 }
 
 

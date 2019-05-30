@@ -27,6 +27,7 @@
  * @brief General wrappers for kicad / wx structures and classes
  */
 
+%include <std_deque.i>
 %include <std_vector.i>
 %include <std_list.i>
 %include <std_basic_string.i>

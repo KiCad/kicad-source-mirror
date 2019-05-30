@@ -102,7 +102,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
     }
 
     // convert graphic items on copper layers (texts)
-    for( BOARD_ITEM* item = m_Drawings; item; item = item->Next() )
+    for( auto item : m_drawings )
     {
         if( !item->IsOnLayer( aLayer ) )
             continue;

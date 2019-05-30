@@ -89,7 +89,7 @@ void BOARD::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
     }
 
     // Draw the graphic items
-    for( BOARD_ITEM* item = m_Drawings; item; item = item->Next() )
+    for( auto item : m_drawings )
     {
         if( item->IsMoving() )
             continue;
