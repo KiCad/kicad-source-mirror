@@ -82,8 +82,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-29 08:47+0200\n"
-"PO-Revision-Date: 2019-05-29 08:56+0200\n"
+"POT-Creation-Date: 2019-05-30 10:23+0200\n"
+"PO-Revision-Date: 2019-05-30 10:24+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -8134,7 +8134,7 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:731
 #: eeschema/dialogs/panel_sym_lib_table.cpp:745 eeschema/sch_base_frame.cpp:311
 #: eeschema/sch_base_frame.cpp:327 pcbnew/dialogs/panel_fp_lib_table.cpp:837
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:850 pcbnew/files.cpp:926
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:850 pcbnew/files.cpp:923
 msgid "File Save Error"
 msgstr "Errore salvataggio file"
 
@@ -8308,7 +8308,7 @@ msgstr "Etichetta globale non connessa da nessun'altra parte nello schema"
 msgid "Edit %s Field"
 msgstr "Modifica campo %s"
 
-#: eeschema/ee_hotkeys.cpp:89 gerbview/gerbview_frame.cpp:1202
+#: eeschema/ee_hotkeys.cpp:89 gerbview/gerbview_frame.cpp:1199
 #: gerbview/hotkeys.cpp:61 pagelayout_editor/hotkeys.cpp:68
 #: pcbnew/hotkeys.cpp:215 pcbnew/hotkeys.cpp:217 pcbnew/pcb_base_frame.cpp:876
 msgid "Zoom Auto"
@@ -10242,7 +10242,7 @@ msgstr "Non trovato"
 msgid "The following libraries were not found:"
 msgstr "Le seguenti librerie non sono state trovate:"
 
-#: eeschema/sch_edit_frame.cpp:561 pcbnew/pcb_edit_frame.cpp:561
+#: eeschema/sch_edit_frame.cpp:561 pcbnew/pcb_edit_frame.cpp:558
 #, c-format
 msgid ""
 "Save changes to\n"
@@ -10285,7 +10285,7 @@ msgid "Could not open CvPcb"
 msgstr "Impossibile aprire CvPcb"
 
 #: eeschema/sch_edit_frame.cpp:1224 kicad/mainframe.cpp:145
-#: pcbnew/pcb_edit_frame.cpp:935
+#: pcbnew/pcb_edit_frame.cpp:932
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
 
@@ -12216,7 +12216,7 @@ msgstr "Nessun editor definito. Selezionarne uno."
 msgid "No file loaded on the active layer %d"
 msgstr "Nessun file caricato sullo strato attivo %d"
 
-#: gerbview/events_called_functions.cpp:326 pcbnew/pcb_edit_frame.cpp:866
+#: gerbview/events_called_functions.cpp:326 pcbnew/pcb_edit_frame.cpp:863
 msgid "Visibles"
 msgstr "Visibili"
 
@@ -12515,33 +12515,33 @@ msgstr "Abilita acc&elerazione grafica"
 msgid "&No Thanks"
 msgstr "&No grazie"
 
-#: gerbview/gerbview_frame.cpp:605
+#: gerbview/gerbview_frame.cpp:602
 msgid "D Codes"
 msgstr "Codici D"
 
-#: gerbview/gerbview_frame.cpp:714
+#: gerbview/gerbview_frame.cpp:711
 #, c-format
 msgid "Drawing layer %d not in use"
 msgstr "Strato grafico %d non in uso"
 
-#: gerbview/gerbview_frame.cpp:726
+#: gerbview/gerbview_frame.cpp:723
 msgid "GerbView"
 msgstr "GerbView"
 
-#: gerbview/gerbview_frame.cpp:728
+#: gerbview/gerbview_frame.cpp:725
 msgid " (with X2 attributes)"
 msgstr " (con attributi X2)"
 
-#: gerbview/gerbview_frame.cpp:736
+#: gerbview/gerbview_frame.cpp:733
 #, c-format
 msgid "Image name: \"%s\"  Layer name: \"%s\""
 msgstr "Nome immagine: \"%s\"  Nome strato: \"%s\""
 
-#: gerbview/gerbview_frame.cpp:752
+#: gerbview/gerbview_frame.cpp:749
 msgid "X2 attr"
 msgstr "Attr X2"
 
-#: gerbview/gerbview_frame.cpp:1207 pcbnew/pcb_base_frame.cpp:881
+#: gerbview/gerbview_frame.cpp:1204 pcbnew/pcb_base_frame.cpp:881
 msgid "Zoom "
 msgstr "Zoom "
 
@@ -13138,14 +13138,14 @@ msgstr ""
 "Creare una nuova cartella vuota per il progetto?"
 
 #: kicad/import_project.cpp:138 kicad/mainframe.cpp:315
-#: pcbnew/pcb_edit_frame.cpp:1186
+#: pcbnew/pcb_edit_frame.cpp:1183
 msgid "Eeschema failed to load:\n"
 msgstr "Eeschema ha fallito il caricamento:\n"
 
 #: kicad/import_project.cpp:139 kicad/import_project.cpp:173
 #: kicad/mainframe.cpp:316 kicad/mainframe.cpp:361 kicad/mainframe.cpp:386
-#: kicad/mainframe.cpp:430 pcbnew/pcb_edit_frame.cpp:1157
-#: pcbnew/pcb_edit_frame.cpp:1187
+#: kicad/mainframe.cpp:430 pcbnew/pcb_edit_frame.cpp:1154
+#: pcbnew/pcb_edit_frame.cpp:1184
 msgid "KiCad Error"
 msgstr "Errore KiCad"
 
@@ -17781,21 +17781,21 @@ msgstr "C.S. nudo (senza rame o serigrafia)"
 msgid "VRML Export Options"
 msgstr "Opzioni di esportazione VRML"
 
-#: pcbnew/dialogs/dialog_find.cpp:138
+#: pcbnew/dialogs/dialog_find.cpp:139
 #, c-format
 msgid "\"%s\" found"
 msgstr "\"%s\" trovato"
 
-#: pcbnew/dialogs/dialog_find.cpp:144
+#: pcbnew/dialogs/dialog_find.cpp:145
 #, c-format
 msgid "\"%s\" not found"
 msgstr "\"%s\" non trovato"
 
-#: pcbnew/dialogs/dialog_find.cpp:176
+#: pcbnew/dialogs/dialog_find.cpp:177
 msgid "Marker found"
 msgstr "Marcatore trovato"
 
-#: pcbnew/dialogs/dialog_find.cpp:182
+#: pcbnew/dialogs/dialog_find.cpp:183
 msgid "No marker found"
 msgstr "Nessun marcatore trovato"
 
@@ -22395,7 +22395,7 @@ msgstr ""
 "Errore durante il caricamento file scheda:\n"
 "%s"
 
-#: pcbnew/files.cpp:577
+#: pcbnew/files.cpp:574
 msgid ""
 "This file was created by an older version of Pcbnew.\n"
 "It will be stored in the new file format when you save this file again."
@@ -22403,17 +22403,17 @@ msgstr ""
 "Questo file è stato creato con una precedente versione di PcbNew.\n"
 "Al prossimo salvataggio verrà memorizzato nel nuovo formato."
 
-#: pcbnew/files.cpp:661
+#: pcbnew/files.cpp:658
 #, c-format
 msgid "Warning: unable to create backup file \"%s\""
 msgstr "Attenzione: impossibile creare il file di salvataggio \"%s\""
 
-#: pcbnew/files.cpp:688 pcbnew/files.cpp:779
+#: pcbnew/files.cpp:685 pcbnew/files.cpp:776
 #, c-format
 msgid "No access rights to write to file \"%s\""
 msgstr "Nessun diritto di accesso durante la scrittura del file \"%s\""
 
-#: pcbnew/files.cpp:725 pcbnew/files.cpp:804
+#: pcbnew/files.cpp:722 pcbnew/files.cpp:801
 #, c-format
 msgid ""
 "Error saving board file \"%s\".\n"
@@ -22422,22 +22422,22 @@ msgstr ""
 "Errore durante il salvataggio del file scheda \"%s\".\n"
 "%s"
 
-#: pcbnew/files.cpp:731
+#: pcbnew/files.cpp:728
 #, c-format
 msgid "Failed to create \"%s\""
 msgstr "Impossibile creare \"%s\""
 
-#: pcbnew/files.cpp:757
+#: pcbnew/files.cpp:754
 #, c-format
 msgid "Backup file: \"%s\""
 msgstr "File di salvataggio: \"%s\""
 
-#: pcbnew/files.cpp:759
+#: pcbnew/files.cpp:756
 #, c-format
 msgid "Wrote board file: \"%s\""
 msgstr "File scheda scritto: \"%s\""
 
-#: pcbnew/files.cpp:813
+#: pcbnew/files.cpp:810
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -22446,7 +22446,7 @@ msgstr ""
 "Scheda copiata su:\n"
 "\"%s\""
 
-#: pcbnew/files.cpp:923
+#: pcbnew/files.cpp:920
 #, c-format
 msgid ""
 "Error occurred saving project specific footprint library table:\n"
@@ -23825,7 +23825,7 @@ msgid "GenCAD..."
 msgstr "GenCAD..."
 
 #: pcbnew/menubar_pcb_editor.cpp:148
-msgid "Export GenCAD 3D board representation"
+msgid "Export GenCAD board representation"
 msgstr "Esporta rappresentazione scheda 3D GenCAD"
 
 #: pcbnew/menubar_pcb_editor.cpp:150
@@ -24325,20 +24325,20 @@ msgstr "Errore durante il caricamento delle librerie impronte del progetto"
 msgid "Edit user grid..."
 msgstr "Modifica griglia utente..."
 
-#: pcbnew/pcb_edit_frame.cpp:597
+#: pcbnew/pcb_edit_frame.cpp:594
 #, c-format
 msgid "The auto save file \"%s\" could not be removed!"
 msgstr "Il file di salvataggio automatico \"%s\" non può essere rimosso!"
 
-#: pcbnew/pcb_edit_frame.cpp:937
+#: pcbnew/pcb_edit_frame.cpp:934
 msgid " [Unsaved]"
 msgstr " [Non salvato]"
 
-#: pcbnew/pcb_edit_frame.cpp:939 pcbnew/pcbnew_config.cpp:100
+#: pcbnew/pcb_edit_frame.cpp:936 pcbnew/pcbnew_config.cpp:100
 msgid "Pcbnew"
 msgstr "PcbNew"
 
-#: pcbnew/pcb_edit_frame.cpp:1075
+#: pcbnew/pcb_edit_frame.cpp:1072
 msgid ""
 "Cannot update the PCB, because Pcbnew is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you need to launch the KiCad "
@@ -24348,16 +24348,16 @@ msgstr ""
 "Per creare/aggiornare un C.S. da uno schema elettrico, è necessario eseguire "
 "il gestore di progetti KiCad e creare un progetto di C.S. ."
 
-#: pcbnew/pcb_edit_frame.cpp:1111
+#: pcbnew/pcb_edit_frame.cpp:1108
 msgid "Eeschema netlist"
 msgstr "Netlist Eeschema"
 
-#: pcbnew/pcb_edit_frame.cpp:1156
+#: pcbnew/pcb_edit_frame.cpp:1153
 #, c-format
 msgid "Schematic file \"%s\" not found."
 msgstr "File schema elettrico \"%s\" non trovato."
 
-#: pcbnew/pcb_edit_frame.cpp:1352
+#: pcbnew/pcb_edit_frame.cpp:1349
 msgid "Export Hyperlynx Layout"
 msgstr "Esporta progetto in Hyperlynx"
 
@@ -26243,23 +26243,23 @@ msgstr "Distribuisci verticalmente"
 msgid "Self-intersecting polygons are not allowed."
 msgstr "I poligoni autointersecanti non permessi."
 
-#: pcbnew/tools/point_editor.cpp:398
+#: pcbnew/tools/point_editor.cpp:401
 msgid "Drag a corner"
 msgstr "Sposta un angolo"
 
-#: pcbnew/tools/point_editor.cpp:667
+#: pcbnew/tools/point_editor.cpp:670
 msgid "Refill Zones"
 msgstr "Ri-riempi zone"
 
-#: pcbnew/tools/point_editor.cpp:1067
+#: pcbnew/tools/point_editor.cpp:1070
 msgid "Add a zone corner"
 msgstr "Aggiungi un vertice alla zona"
 
-#: pcbnew/tools/point_editor.cpp:1099
+#: pcbnew/tools/point_editor.cpp:1102
 msgid "Split segment"
 msgstr "Dividi segmento"
 
-#: pcbnew/tools/point_editor.cpp:1173
+#: pcbnew/tools/point_editor.cpp:1176
 msgid "Remove a zone/polygon corner"
 msgstr "Elimina zona/vertice poligono"
 
