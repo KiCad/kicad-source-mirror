@@ -57,7 +57,6 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE_CONTAINER* aZone )
     ZONE_SETTINGS zoneInfo = GetZoneSettings();
 
     BOARD_COMMIT commit( this );
-    m_canvas->SetIgnoreMouseEvents( true );
 
     // Save initial zones configuration, for undo/redo, before adding new zone
     // note the net name and the layer can be changed, so we must save all zones
@@ -82,9 +81,6 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE_CONTAINER* aZone )
         zoneInfo << *aZone;
         dialogResult = InvokeNonCopperZonesEditor( this, &zoneInfo );
     }
-
-    m_canvas->MoveCursorToCrossHair();
-    m_canvas->SetIgnoreMouseEvents( false );
 
     if( dialogResult == wxID_CANCEL )
     {

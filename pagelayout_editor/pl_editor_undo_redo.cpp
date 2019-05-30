@@ -81,7 +81,9 @@ void PL_EDITOR_FRAME::GetLayoutFromRedoList()
         HardRedraw();   // items based off of corners will need re-calculating
     }
     else
-        GetCanvas()->Refresh();
+    {
+        GetGalCanvas()->Refresh();
+    }
 
     OnModify();
 }

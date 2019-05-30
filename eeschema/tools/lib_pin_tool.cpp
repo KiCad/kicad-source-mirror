@@ -165,7 +165,6 @@ bool LIB_PIN_TOOL::PlacePin( LIB_PIN* aPin )
 
         if( ask_for_pin && m_frame->SynchronizePins() )
         {
-            m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
             wxString msg;
             msg.Printf( _( "This position is already occupied by another pin, in unit %d." ),
                         test->GetUnit() );
@@ -175,9 +174,6 @@ bool LIB_PIN_TOOL::PlacePin( LIB_PIN* aPin )
             dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
             bool status = dlg.ShowModal() == wxID_OK;
-
-            m_frame->GetCanvas()->MoveCursorToCrossHair();
-            m_frame->GetCanvas()->SetIgnoreMouseEvents( false );
 
             if( !status )
             {

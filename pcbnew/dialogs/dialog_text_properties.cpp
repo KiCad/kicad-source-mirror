@@ -188,14 +188,8 @@ DIALOG_TEXT_PROPERTIES::~DIALOG_TEXT_PROPERTIES()
  */
 void PCB_BASE_EDIT_FRAME::InstallTextOptionsFrame( BOARD_ITEM* aText )
 {
-    m_canvas->SetIgnoreMouseEvents( true );
-
     DIALOG_TEXT_PROPERTIES dlg( this, aText );
-
     dlg.ShowModal();
-    m_canvas->MoveCursorToCrossHair();
-
-    m_canvas->SetIgnoreMouseEvents( false );
 }
 
 

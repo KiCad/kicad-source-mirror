@@ -400,13 +400,7 @@ void SCH_BASE_FRAME::createCanvas()
     m_useSingleCanvasPane = true;
 
     SetGalCanvas( static_cast<SCH_DRAW_PANEL*>( m_canvas ) );
-
-    // Set up viewport
-    KIGFX::VIEW* view = GetGalCanvas()->GetView();
-    view->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
-    view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
-
-    UseGalCanvas();
+    ActivateGalCanvas();
 }
 
 

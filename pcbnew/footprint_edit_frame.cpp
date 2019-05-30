@@ -240,7 +240,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     setupTools();
 
-    // ReCreateMenuBar();       // UseGalCanvas() will do this for us.
+    ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
     ReCreateOptToolbar();
@@ -279,7 +279,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     view->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
     view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
 
-    UseGalCanvas();
+    ActivateGalCanvas();
 
     m_auimgr.Update();
     updateTitle();
@@ -905,15 +905,13 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::UseGalCanvas()
+void FOOTPRINT_EDIT_FRAME::ActivateGalCanvas()
 {
-    PCB_BASE_EDIT_FRAME::UseGalCanvas();
+    PCB_BASE_EDIT_FRAME::ActivateGalCanvas();
 
     // Be sure the axis are enabled:
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
     updateView();
-
-    ReCreateMenuBar();
 
     // Ensure the m_Layers settings are using the canvas type:
     UpdateUserInterface();

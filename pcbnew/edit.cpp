@@ -200,8 +200,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         wxLogDebug( wxT( "PCB_EDIT_FRAME::Process_Special_Functions() unknown event id %d" ), id );
         break;
     }
-
-    m_canvas->SetIgnoreMouseEvents( false );
 }
 
 

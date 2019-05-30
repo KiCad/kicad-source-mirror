@@ -149,10 +149,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
     WX_TEXT_ENTRY_DIALOG dlg( this, msg, _( "Create microwave module" ), value );
 
     if( dlg.ShowModal() != wxID_OK )
-    {
-        m_canvas->MoveCursorToCrossHair();
         return NULL; // cancelled by user
-    }
 
     value    = dlg.GetValue();
     gap_size = ValueFromString( GetUserUnits(), value );
@@ -167,10 +164,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
                                        _( "Create microwave module" ), msg );
 
         if( angledlg.ShowModal() != wxID_OK )
-        {
-            m_canvas->MoveCursorToCrossHair();
             return NULL; // cancelled by user
-        }
 
         msg = angledlg.GetValue();
 
@@ -187,10 +181,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
     }
 
     if( abort )
-    {
-        m_canvas->MoveCursorToCrossHair();
         return NULL;
-    }
 
     module = CreateMuWaveBaseFootprint( cmp_name, text_size, pad_count );
     pad    = module->PadsList();
@@ -464,8 +455,6 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     MWAVE_POLYGONAL_SHAPE_DLG dlg( this, wxDefaultPosition );
 
     int ret = dlg.ShowModal();
-
-    m_canvas->MoveCursorToCrossHair();
 
     if( ret != wxID_OK )
     {

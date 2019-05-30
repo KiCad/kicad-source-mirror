@@ -53,8 +53,6 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     PROJECT&        prj = Prj();
     SEARCH_STACK*   search = prj.SchSearchS();
 
-    m_canvas->SetIgnoreMouseEvents( true );
-
     wxString default_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
 
     if( !default_path )
@@ -66,10 +64,6 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
-
-    SetCrossHairPosition( wxPoint( 0, 0 ) );
-    m_canvas->MoveCursorToCrossHair();
-    m_canvas->SetIgnoreMouseEvents( false );
 
     wxString filename = dlg.GetPath();
 

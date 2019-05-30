@@ -179,7 +179,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     view->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
     view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
 
-    UseGalCanvas();
+    ActivateGalCanvas();
 
     m_auimgr.Update();
 
@@ -287,7 +287,7 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
         KIGFX::VIEW* view = GetGalCanvas()->GetView();
         view->SetLayerVisible( LAYER_WORKSHEET_PAGE1, m_pageSelectBox->GetSelection() == 0 );
         view->SetLayerVisible( LAYER_WORKSHEET_PAGEn, m_pageSelectBox->GetSelection() == 1 );
-        m_canvas->Refresh();
+        GetGalCanvas()->Refresh();
     }
         break;
 
@@ -305,7 +305,7 @@ void PL_EDITOR_FRAME::OnSelectCoordOriginCorner( wxCommandEvent& event )
 {
     m_originSelectChoice = m_originSelectBox->GetSelection();
     UpdateStatusBar();  // Update grid origin
-    m_canvas->Refresh();
+    GetGalCanvas()->Refresh();
 }
 
 
@@ -604,7 +604,7 @@ void PL_EDITOR_FRAME::HardRedraw()
 
     m_propertiesPagelayout->CopyPrmsFromItemToPanel( item );
     m_propertiesPagelayout->CopyPrmsFromGeneralToPanel();
-    m_canvas->Refresh();
+    GetGalCanvas()->Refresh();
 }
 
 
@@ -683,7 +683,6 @@ void PL_EDITOR_FRAME::OnNewPageLayout()
     UpdateTitleAndInfo();
 
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
-    m_canvas->Refresh();
 }
 
 

@@ -172,7 +172,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     view->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
     view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
 
-    UseGalCanvas();
+    ActivateGalCanvas();
 
     // Restore last zoom.  (If auto-zooming we'll adjust when we load the footprint.)
     GetGalCanvas()->GetView()->SetScale( m_lastZoom );
@@ -451,7 +451,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
 
     UpdateStatusBar();
 
-    GetCanvas()->Refresh();
+    GetGalCanvas()->Refresh();
     Update3DView();
 }
 

@@ -173,7 +173,7 @@ public:
     void InstallGraphicItemPropertiesDialog( BOARD_ITEM* aItem );
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
-    void UseGalCanvas() override;
+    void ActivateGalCanvas() override;
 
     ///> @copydoc PCB_BASE_FRAME::SetBoard()
     virtual void SetBoard( BOARD* aBoard ) override;

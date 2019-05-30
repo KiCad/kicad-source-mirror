@@ -206,8 +206,6 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree(
 
 void SCH_EDIT_FRAME::SelectUnit( SCH_COMPONENT* aComponent, int aUnit )
 {
-    GetCanvas()->MoveCursorToCrossHair();
-
     LIB_PART* part = GetLibPart( aComponent->GetLibId() );
 
     if( !part )

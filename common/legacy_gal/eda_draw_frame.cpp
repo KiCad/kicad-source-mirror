@@ -381,15 +381,57 @@ void EDA_DRAW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMod
 }
 
 
+/*
+ * Respond to selections in the toolbar grid popup
+ */
 void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 {
-    wxFAIL_MSG( "Obsolete!  Should go through ToolManager." );
+    wxCHECK_RET( m_gridSelectBox, "m_gridSelectBox uninitialized" );
+
+    int id = m_gridSelectBox->GetCurrentSelection() + ID_POPUP_GRID_FIRST;
+
+    if( id == ID_POPUP_GRID_SEPARATOR )
+    {
+        // wxWidgets will check the separator, which we don't want.
+        // Re-check the current grid.
+        wxUpdateUIEvent dummy;
+        OnUpdateSelectGrid( dummy );
+    }
+    else if( id == ID_POPUP_GRID_SETTINGS )
+    {
+        // wxWidgets will check the Grid Settings... entry, which we don't want.
+        // R-check the current grid.
+        wxUpdateUIEvent dummy;
+        OnUpdateSelectGrid( dummy );
+        // Now run the Grid Settings... dialog
+        wxCommandEvent dummy2;
+        OnGridSettings( dummy2 );
+    }
+    else if( id >= ID_POPUP_GRID_FIRST && id < ID_POPUP_GRID_SEPARATOR  )
+    {
+        m_toolManager->RunAction( ACTIONS::gridPreset, true, id );
+    }
+
+    UpdateStatusBar();
+    m_galCanvas->Refresh();
 }
 
 
+/*
+ * Respond to selections in the toolbar zoom popup
+ */
 void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
 {
-    wxFAIL_MSG( "Obsolete!  Should go through ToolManager." );
+    wxCHECK_RET( m_zoomSelectBox, "m_zoomSelectBox uninitialized" );
+
+    int id = m_zoomSelectBox->GetCurrentSelection();
+
+    if( id < 0 || !( id < (int)m_zoomSelectBox->GetCount() ) )
+        return;
+
+    m_toolManager->RunAction( "common.Control.zoomPreset", true, id );
+    UpdateStatusBar();
+    m_galCanvas->Refresh();
 }
 
 
@@ -533,37 +575,33 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
 void EDA_DRAW_FRAME::AppendMsgPanel( const wxString& textUpper, const wxString& textLower,
                                      COLOR4D color, int pad )
 {
-    if( m_messagePanel == NULL )
-        return;
-
-    m_messagePanel->AppendMessage( textUpper, textLower, color, pad );
+    if( m_messagePanel )
+        m_messagePanel->AppendMessage( textUpper, textLower, color, pad );
 }
 
 
 void EDA_DRAW_FRAME::ClearMsgPanel()
 {
-    if( m_messagePanel == NULL )
-        return;
-
-    m_messagePanel->EraseMsgBox();
+    if( m_messagePanel )
+        m_messagePanel->EraseMsgBox();
 }
 
 
 void EDA_DRAW_FRAME::SetMsgPanel( const MSG_PANEL_ITEMS& aList )
 {
     if( m_messagePanel == NULL )
-        return;
+    {
+        m_messagePanel->EraseMsgBox();
 
-    m_messagePanel->EraseMsgBox();
-
-    for( unsigned i = 0;  i < aList.size();  i++ )
-        m_messagePanel->AppendMessage( aList[i] );
+        for( const MSG_PANEL_ITEM& item : aList )
+            m_messagePanel->AppendMessage( item );
+    }
 }
 
 
 void EDA_DRAW_FRAME::SetMsgPanel( EDA_ITEM* aItem )
 {
-    wxCHECK_RET( aItem != NULL, wxT( "Invalid EDA_ITEM pointer.  Bad programmer." ) );
+    wxCHECK_RET( aItem, wxT( "Invalid EDA_ITEM pointer.  Bad programmer." ) );
 
     MSG_PANEL_ITEMS items;
     aItem->GetMsgPanelInfo( m_UserUnits, items );
@@ -577,7 +615,7 @@ void EDA_DRAW_FRAME::UpdateMsgPanel()
 }
 
 
-void EDA_DRAW_FRAME::UseGalCanvas()
+void EDA_DRAW_FRAME::ActivateGalCanvas()
 {
     EDA_DRAW_PANEL_GAL* galCanvas = GetGalCanvas();
 
@@ -594,7 +632,7 @@ void EDA_DRAW_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
     GetGalCanvas()->SwitchBackend( aCanvasType );
     m_canvasType = GetGalCanvas()->GetBackend();
 
-    UseGalCanvas();
+    ActivateGalCanvas();
 }
 
 
@@ -730,103 +768,6 @@ void EDA_DRAW_FRAME::SetScrollCenterPosition( const wxPoint& aPoint )
 }
 
 //-----</BASE_SCREEN API moved here >--------------------------------------------
-
-bool EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos, bool aSnapToGrid )
-{
-    bool key_handled = false;
-
-    // If requested snap the current position to the grid
-    if( aSnapToGrid )
-        *aPos = GetNearestGridPosition( *aPos );
-
-    switch( aHotKey )
-    {
-    // All these keys have almost the same treatment
-    case GR_KB_CTRL | WXK_NUMPAD8:
-    case GR_KB_CTRL | WXK_UP:
-    case GR_KB_CTRL | WXK_NUMPAD2:
-    case GR_KB_CTRL | WXK_DOWN:
-    case GR_KB_CTRL | WXK_NUMPAD4:
-    case GR_KB_CTRL | WXK_LEFT:
-    case GR_KB_CTRL | WXK_NUMPAD6:
-    case GR_KB_CTRL | WXK_RIGHT:
-    case WXK_NUMPAD8:
-    case WXK_UP:
-    case WXK_NUMPAD2:
-    case WXK_DOWN:
-    case WXK_NUMPAD4:
-    case WXK_LEFT:
-    case WXK_NUMPAD6:
-    case WXK_RIGHT:
-        key_handled = true;
-        {
-            /* Here's a tricky part: when doing cursor key movement, the
-             * 'previous' point should be taken from memory, *not* from the
-             * freshly computed position in the event. Otherwise you can't do
-             * sub-pixel movement. The m_movingCursorWithKeyboard oneshot 'eats'
-             * the automatic motion event generated by cursor warping */
-            wxRealPoint gridSize = GetScreen()->GetGridSize();
-            *aPos = GetCrossHairPosition();
-
-            // Bonus: ^key moves faster (x10)
-            switch( aHotKey )
-            {
-            case GR_KB_CTRL|WXK_NUMPAD8:
-            case GR_KB_CTRL|WXK_UP:
-                aPos->y -= KiROUND( 10 * gridSize.y );
-                break;
-
-            case GR_KB_CTRL|WXK_NUMPAD2:
-            case GR_KB_CTRL|WXK_DOWN:
-                aPos->y += KiROUND( 10 * gridSize.y );
-                break;
-
-            case GR_KB_CTRL|WXK_NUMPAD4:
-            case GR_KB_CTRL|WXK_LEFT:
-                aPos->x -= KiROUND( 10 * gridSize.x );
-                break;
-
-            case GR_KB_CTRL|WXK_NUMPAD6:
-            case GR_KB_CTRL|WXK_RIGHT:
-                aPos->x += KiROUND( 10 * gridSize.x );
-                break;
-
-            case WXK_NUMPAD8:
-            case WXK_UP:
-                aPos->y -= KiROUND( gridSize.y );
-                break;
-
-            case WXK_NUMPAD2:
-            case WXK_DOWN:
-                aPos->y += KiROUND( gridSize.y );
-                break;
-
-            case WXK_NUMPAD4:
-            case WXK_LEFT:
-                aPos->x -= KiROUND( gridSize.x );
-                break;
-
-            case WXK_NUMPAD6:
-            case WXK_RIGHT:
-                aPos->x += KiROUND( gridSize.x );
-                break;
-
-            default: /* Can't happen since we entered the statement */
-                break;
-            }
-
-            m_canvas->MoveCursor( *aPos );
-            m_movingCursorWithKeyboard = true;
-        }
-        break;
-
-    default:
-        break;
-    }
-
-    return key_handled;
-}
-
 
 const BOX2I EDA_DRAW_FRAME::GetDocumentExtents() const
 {

@@ -102,7 +102,7 @@ bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataFromWindow()
     if( needs_repaint )
         view->UpdateAllItems( KIGFX::REPAINT );
 
-    m_Parent->GetCanvas()->Refresh();
+    m_Parent->GetGalCanvas()->Refresh();
 
     return true;
 }

@@ -388,7 +388,7 @@ void PCB_DRAW_PANEL_GAL::OnShow()
         SwitchBackend( GAL_TYPE_CAIRO );
 
         if( frame )
-            frame->UseGalCanvas();
+            frame->ActivateGalCanvas();
     }
 
     if( frame )

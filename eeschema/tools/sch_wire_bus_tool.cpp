@@ -311,7 +311,7 @@ int SCH_WIRE_BUS_TOOL::StartWire( const TOOL_EVENT& aEvent )
 
     Activate();
 
-    m_frame->GetCanvas()->MoveCursorToCrossHair();
+    getViewControls()->WarpCursor( m_frame->GetCrossHairPosition(), true );
     SCH_LINE* segment = startSegments( LAYER_WIRE, m_frame->GetCrossHairPosition() );
     return doDrawSegments( LAYER_WIRE, segment );
 }
@@ -343,7 +343,7 @@ int SCH_WIRE_BUS_TOOL::StartBus( const TOOL_EVENT& aEvent )
 
     Activate();
 
-    m_frame->GetCanvas()->MoveCursorToCrossHair();
+    getViewControls()->WarpCursor( m_frame->GetCrossHairPosition(), true );
     SCH_LINE* segment = startSegments( LAYER_BUS, m_frame->GetCrossHairPosition() );
     return doDrawSegments( LAYER_BUS, segment );
 }
@@ -454,7 +454,7 @@ int SCH_WIRE_BUS_TOOL::StartLine( const TOOL_EVENT& aEvent)
 {
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    m_frame->GetCanvas()->MoveCursorToCrossHair();
+    getViewControls()->WarpCursor( m_frame->GetCrossHairPosition(), true );
     SCH_LINE* segment = startSegments( LAYER_NOTES, m_frame->GetCrossHairPosition() );
     return doDrawSegments( LAYER_BUS, segment );
 }

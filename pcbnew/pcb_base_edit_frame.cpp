@@ -62,9 +62,9 @@ void PCB_BASE_EDIT_FRAME::SetRotationAngle( int aRotationAngle )
 }
 
 
-void PCB_BASE_EDIT_FRAME::UseGalCanvas()
+void PCB_BASE_EDIT_FRAME::ActivateGalCanvas()
 {
-    PCB_BASE_FRAME::UseGalCanvas();
+    PCB_BASE_FRAME::ActivateGalCanvas();
 
     static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->SyncLayersVisibility( m_Pcb );
 }

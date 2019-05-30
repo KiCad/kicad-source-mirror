@@ -315,7 +315,7 @@ public:
     void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) override;
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
-    void UseGalCanvas() override;
+    void ActivateGalCanvas() override;
 
     /**
      * Load a KiCad board (.kicad_pcb) from \a aFileName.

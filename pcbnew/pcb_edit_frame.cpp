@@ -403,7 +403,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     view->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
     view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
 
-    UseGalCanvas();
+    ActivateGalCanvas();
 
     // disable Export STEP item if kicad2step does not exist
     wxString strK2S = Pgm().GetExecutablePath();
@@ -618,9 +618,9 @@ void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 }
 
 
-void PCB_EDIT_FRAME::UseGalCanvas()
+void PCB_EDIT_FRAME::ActivateGalCanvas()
 {
-    PCB_BASE_EDIT_FRAME::UseGalCanvas();
+    PCB_BASE_EDIT_FRAME::ActivateGalCanvas();
     COLORS_DESIGN_SETTINGS& cds = Settings().Colors();
 
     cds.SetLegacyMode( false );
@@ -628,9 +628,6 @@ void PCB_EDIT_FRAME::UseGalCanvas()
     auto view = GetGalCanvas()->GetView();
     view->GetPainter()->GetSettings()->ImportLegacyColors( &cds );
     GetGalCanvas()->Refresh();
-
-    // Re-create the layer manager to allow arbitrary colors when GAL is enabled
-    UpdateUserInterface();
 }
 
 

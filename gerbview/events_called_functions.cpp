@@ -161,21 +161,15 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_HIGHLIGHT_CMP_ITEMS:
-        if( m_SelComponentBox->SetStringSelection( currItem->GetNetAttributes().m_Cmpref ) )
-            m_canvas->Refresh();
+        m_SelComponentBox->SetStringSelection( currItem->GetNetAttributes().m_Cmpref );
         break;
 
     case ID_HIGHLIGHT_NET_ITEMS:
-        if( m_SelNetnameBox->SetStringSelection( UnescapeString( currItem->GetNetAttributes().m_Netname ) ) )
-            m_canvas->Refresh();
+        m_SelNetnameBox->SetStringSelection( UnescapeString( currItem->GetNetAttributes().m_Netname ) );
         break;
 
     case ID_HIGHLIGHT_APER_ATTRIBUTE_ITEMS:
-        {
-        D_CODE* apertDescr = currItem->GetDcodeDescr();
-        if( m_SelAperAttributesBox->SetStringSelection( apertDescr->m_AperFunction ) )
-            m_canvas->Refresh();
-        }
+        m_SelAperAttributesBox->SetStringSelection( currItem->GetDcodeDescr()->m_AperFunction );
         break;
 
     case ID_HIGHLIGHT_REMOVE_ALL:
@@ -185,14 +179,14 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         if( GetGbrImage( GetActiveLayer() ) )
             GetGbrImage( GetActiveLayer() )->m_Selected_Tool = 0;
-
-        m_canvas->Refresh();
         break;
 
     default:
         wxFAIL_MSG( wxT( "GERBVIEW_FRAME::Process_Special_Functions error" ) );
         break;
     }
+
+    GetGalCanvas()->Refresh();
 }
 
 
@@ -232,7 +226,7 @@ void GERBVIEW_FRAME::OnSelectActiveDCode( wxCommandEvent& event )
         if( tool != gerber_image->m_Selected_Tool )
         {
             gerber_image->m_Selected_Tool = tool;
-            m_canvas->Refresh();
+            GetGalCanvas()->Refresh();
         }
     }
 }
@@ -287,25 +281,14 @@ void GERBVIEW_FRAME::OnShowGerberSourceFile( wxCommandEvent& event )
 
 void GERBVIEW_FRAME::OnSelectDisplayMode( wxCommandEvent& event )
 {
-    int oldMode = GetDisplayMode();
-
     switch( event.GetId() )
     {
-    case ID_TB_OPTIONS_SHOW_GBR_MODE_0:
-        SetDisplayMode( 0 );
-        break;
-
-    case ID_TB_OPTIONS_SHOW_GBR_MODE_1:
-        SetDisplayMode( 1 );
-        break;
-
-    case ID_TB_OPTIONS_SHOW_GBR_MODE_2:
-        SetDisplayMode( 2 );
-        break;
+    case ID_TB_OPTIONS_SHOW_GBR_MODE_0: SetDisplayMode( 0 ); break;
+    case ID_TB_OPTIONS_SHOW_GBR_MODE_1: SetDisplayMode( 1 ); break;
+    case ID_TB_OPTIONS_SHOW_GBR_MODE_2: SetDisplayMode( 2 ); break;
     }
 
-    if( GetDisplayMode() != oldMode )
-        m_canvas->Refresh();
+    GetGalCanvas()->Refresh();
 }
 
 

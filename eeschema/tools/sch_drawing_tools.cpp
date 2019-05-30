@@ -185,7 +185,7 @@ int SCH_DRAWING_TOOLS::AddJunction( const TOOL_EVENT& aEvent )
         m_frame->SetCrossHairPosition( (wxPoint) nearest, false );
     }
 
-    m_frame->GetCanvas()->MoveCursorToCrossHair();
+    getViewControls()->WarpCursor( m_frame->GetCrossHairPosition(), true );
     SCH_JUNCTION* junction = m_frame->AddJunction( m_frame->GetCrossHairPosition() );
     m_selectionTool->AddItemToSel( junction );
 
@@ -321,15 +321,11 @@ int SCH_DRAWING_TOOLS::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTE
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
                 // Pick the module to be placed
-                m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
-
                 auto sel = m_frame->SelectCompFromLibTree( aFilter, aHistoryList, true, 1, 1,
                                                            m_frame->GetShowFootprintPreviews());
 
-                m_frame->GetCanvas()->SetIgnoreMouseEvents( false );
-
                 // Restore cursor after dialog
-                m_frame->GetCanvas()->MoveCursorToCrossHair();
+                getViewControls()->WarpCursor( m_frame->GetCrossHairPosition(), true );
 
                 LIB_PART* part = sel.LibId.IsValid() ? m_frame->GetLibPart( sel.LibId ) : nullptr;
 
@@ -446,19 +442,14 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             if( !image )
             {
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-
-                m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
-
                 wxFileDialog dlg( m_frame, _( "Choose Image" ), wxEmptyString, wxEmptyString,
                                   _( "Image Files " ) + wxImage::GetImageExtWildcard(), wxFD_OPEN );
 
                 if( dlg.ShowModal() != wxID_OK )
                     continue;
 
-                m_frame->GetCanvas()->SetIgnoreMouseEvents( false );
-
                 // Restore cursor after dialog
-                m_frame->GetCanvas()->MoveCursorToCrossHair();
+                getViewControls()->WarpCursor( m_frame->GetCrossHairPosition(), true );
 
                 wxString fullFilename = dlg.GetPath();
 
@@ -695,7 +686,6 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
             if( !item )
             {
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-                m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
 
                 switch( aType )
                 {
@@ -746,10 +736,8 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
                     wxFAIL_MSG( "doTwoClickPlace(): unknown type" );
                 }
 
-                m_frame->GetCanvas()->SetIgnoreMouseEvents( false );
-
                 // Restore cursor after dialog
-                m_frame->GetCanvas()->MoveCursorToCrossHair();
+                getViewControls()->WarpCursor( m_frame->GetCrossHairPosition(), true );
 
                 if( item )
                 {

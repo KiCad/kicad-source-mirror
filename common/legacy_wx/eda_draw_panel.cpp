@@ -104,7 +104,6 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_ClipBox.SetX( 0 );
     m_ClipBox.SetY( 0 );
     m_canStartBlock = -1;       // Command block can start if >= 0
-    m_ignoreMouseEvents = false;
     // Be sure a mouse release button event will be ignored when creating the canvas
     // if the mouse click was not made inside the canvas (can happen sometimes, when
     // launching a editor from a double click made in another frame)
@@ -274,18 +273,6 @@ wxPoint EDA_DRAW_PANEL::GetScreenCenterLogicalPosition()
     INSTALL_UNBUFFERED_DC( dc, this );
 
     return wxPoint( dc.DeviceToLogicalX( size.x ), dc.DeviceToLogicalY( size.y ) );
-}
-
-
-void EDA_DRAW_PANEL::MoveCursorToCrossHair()
-{
-    MoveCursor( GetParent()->GetCrossHairPosition() );
-}
-
-
-void EDA_DRAW_PANEL::MoveCursor( const wxPoint& aPosition )
-{
-    // JEY TODO: OBSOLETE
 }
 
 

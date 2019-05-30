@@ -173,7 +173,6 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
             if( !item )
             {
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-                m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
 
                 switch( aType )
                 {
@@ -203,10 +202,8 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
                     wxFAIL_MSG( "doTwoClickPlace(): unknown type" );
                 }
 
-                m_frame->GetCanvas()->SetIgnoreMouseEvents( false );
-
                 // Restore cursor after dialog
-                m_frame->GetCanvas()->MoveCursorToCrossHair();
+                getViewControls()->WarpCursor( m_frame->GetCrossHairPosition(), true );
 
                 if( item )
                 {

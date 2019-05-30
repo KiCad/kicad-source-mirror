@@ -572,7 +572,7 @@ public:
     void Show3D_Frame( wxCommandEvent& event ) override;
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
-    void UseGalCanvas() override;
+    void ActivateGalCanvas() override;
 
     /**
      * Function ShowBoardSetupDialog

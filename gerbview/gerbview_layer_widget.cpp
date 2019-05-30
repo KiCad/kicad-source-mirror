@@ -192,7 +192,7 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         }
 
         myframe->SetVisibleLayers( visibleLayers );
-        myframe->GetCanvas()->Refresh();
+        myframe->GetGalCanvas()->Refresh();
         break;
 
     case ID_SORT_GBR_LAYERS:
@@ -265,7 +265,7 @@ void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
     view->GetPainter()->GetSettings()->ImportLegacyColors( myframe->m_colorsSettings );
     view->UpdateLayerColor( GERBER_DRAW_LAYER( aLayer ) );
 
-    myframe->GetCanvas()->Refresh();
+    myframe->GetGalCanvas()->Refresh();
 }
 
 
@@ -281,7 +281,7 @@ bool GERBER_LAYER_WIDGET::OnLayerSelect( int aLayer )
     if( layer != myframe->GetActiveLayer() )
     {
         if( ! OnLayerSelected() )
-            myframe->GetCanvas()->Refresh();
+            myframe->GetGalCanvas()->Refresh();
     }
 
     return true;
@@ -297,7 +297,7 @@ void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFin
     myframe->SetVisibleLayers( visibleLayers );
 
     if( isFinal )
-        myframe->GetCanvas()->Refresh();
+        myframe->GetGalCanvas()->Refresh();
 }
 
 

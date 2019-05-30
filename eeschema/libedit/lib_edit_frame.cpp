@@ -607,7 +607,6 @@ void LIB_EDIT_FRAME::OnImportBody( wxCommandEvent& aEvent )
     SetToolID( ID_LIBEDIT_IMPORT_BODY_BUTT, GetGalCanvas()->GetDefaultCursor(), _( "Import" ) );
     LoadOneSymbol();
     SetNoToolSelected();
-    m_canvas->SetIgnoreMouseEvents( false );
 }
 
 
@@ -617,7 +616,6 @@ void LIB_EDIT_FRAME::OnExportBody( wxCommandEvent& aEvent )
     SetToolID( ID_LIBEDIT_EXPORT_BODY_BUTT, GetGalCanvas()->GetDefaultCursor(), _( "Export" ) );
     SaveOneSymbol();
     SetNoToolSelected();
-    m_canvas->SetIgnoreMouseEvents( false );
 }
 
 

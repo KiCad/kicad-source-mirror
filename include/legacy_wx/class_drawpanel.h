@@ -73,8 +73,6 @@ private:
     /// of the drawing in internal units.
     EDA_RECT    m_ClipBox;
 
-    bool    m_ignoreMouseEvents;            ///< Ignore mouse events when true.
-
     /* Used to inhibit a response to a mouse left button release, after a double click
      * (when releasing the left button at the end of the second click.  Used in Eeschema
      * to inhibit a mouse left release command when switching between hierarchical sheets
@@ -122,8 +120,6 @@ public:
     EDA_RECT* GetClipBox() { return &m_ClipBox; }
 
     void SetClipBox( const EDA_RECT& aRect ) { m_ClipBox = aRect; }
-
-    void SetIgnoreMouseEvents( bool aIgnore ) { m_ignoreMouseEvents = aIgnore; }
 
     void SetIgnoreLeftButtonReleaseEvent( bool aIgnore ) { m_ignoreNextLeftButtonRelease = aIgnore; }
 
@@ -235,12 +231,6 @@ public:
     wxPoint GetScreenCenterLogicalPosition();
 
     /**
-     * Function MoveCursorToCrossHair
-     * warps the cursor to the current cross hair position.
-     */
-    void MoveCursorToCrossHair();
-
-    /**
      * Function ToDeviceXY
      * transforms logical to device coordinates
      */
@@ -251,13 +241,6 @@ public:
      * transforms device to logical coordinates
      */
     wxPoint ToLogicalXY( const wxPoint& pos );
-
-    /**
-     * Function MoveCursor
-     * moves the mouse pointer to \a aPosition in logical (drawing) units.
-     * @param aPosition The position in logical units to move the cursor.
-     */
-    void MoveCursor( const wxPoint& aPosition );
 
     /* Cursor functions */
     /**

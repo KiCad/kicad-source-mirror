@@ -350,7 +350,5 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
     if( m_CurrentText->IsNew() )
         SetDefaultTextSize( m_CurrentText->GetTextWidth() );
 
-    m_Parent->GetCanvas()->MoveCursorToCrossHair();
-
     return true;
 }

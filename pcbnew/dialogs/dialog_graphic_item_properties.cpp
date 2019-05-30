@@ -130,12 +130,8 @@ void PCB_BASE_EDIT_FRAME::InstallGraphicItemPropertiesDialog( BOARD_ITEM* aItem 
 {
     wxCHECK_RET( aItem != NULL, wxT( "InstallGraphicItemPropertiesDialog() error: NULL item" ) );
 
-    m_canvas->SetIgnoreMouseEvents( true );
     DIALOG_GRAPHIC_ITEM_PROPERTIES dlg( this, aItem );
     dlg.ShowModal();
-    m_canvas->MoveCursorToCrossHair();
-    m_canvas->SetIgnoreMouseEvents( false );
-    m_canvas->Refresh();
 }
 
 

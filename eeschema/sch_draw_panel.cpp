@@ -85,7 +85,6 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
 
     Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( SCH_DRAW_PANEL::OnCharHook ), NULL, this );
 
-    m_ignoreMouseEvents = false;
     // Be sure a mouse release button event will be ignored when creating the canvas
     // if the mouse click was not made inside the canvas (can happen sometimes, when
     // launching a editor from a double click made in another frame)
@@ -196,12 +195,6 @@ BASE_SCREEN* SCH_DRAW_PANEL::GetScreen()
 EDA_DRAW_FRAME* SCH_DRAW_PANEL::GetParent() const
 {
     return static_cast<EDA_DRAW_FRAME*>(m_parent); // static_cast<SCH_EDIT_FRAME*> (m_parent);
-}
-
-
-void SCH_DRAW_PANEL::MoveCursorToCrossHair()
-{
-    GetViewControls()->WarpCursor( GetParent()->GetCrossHairPosition(), true );
 }
 
 

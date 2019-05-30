@@ -195,7 +195,6 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_AUTO_WIDTH:
-        m_canvas->MoveCursorToCrossHair();
         GetDesignSettings().m_UseConnectedTrackWidth = true;
         break;
 
@@ -215,7 +214,6 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_WIDTH14:
     case ID_POPUP_PCB_SELECT_WIDTH15:
     case ID_POPUP_PCB_SELECT_WIDTH16:
-        m_canvas->MoveCursorToCrossHair();
         GetDesignSettings().m_UseConnectedTrackWidth = false;
         ii = id - ID_POPUP_PCB_SELECT_WIDTH1;
         GetDesignSettings().SetTrackWidthIndex( ii );
@@ -238,7 +236,6 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_VIASIZE15:
     case ID_POPUP_PCB_SELECT_VIASIZE16:
         // select the new current value for via size (via diameter)
-        m_canvas->MoveCursorToCrossHair();
         ii = id - ID_POPUP_PCB_SELECT_VIASIZE1;
         GetDesignSettings().SetViaSizeIndex( ii );
         break;

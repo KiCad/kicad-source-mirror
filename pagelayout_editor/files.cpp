@@ -128,7 +128,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         else
         {
             GetScreen()->SetModify();
-            m_canvas->Refresh();
+            GetGalCanvas()->Refresh();
             msg.Printf( _( "File \"%s\" inserted" ), GetChars( filename ) );
             SetStatusText( msg );
         }

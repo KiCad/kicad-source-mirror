@@ -469,7 +469,7 @@ public:
     void SetFastGrid2();
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas
-    virtual void UseGalCanvas() override;
+    virtual void ActivateGalCanvas() override;
 
     PCB_GENERAL_SETTINGS& Settings()
     {

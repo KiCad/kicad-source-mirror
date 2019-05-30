@@ -182,8 +182,6 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
             }
         }
 
-        m_canvas->SetIgnoreMouseEvents( true );
-
         if( isUndoable )
             SaveCopyInUndoList( aSheet, UR_CHANGED );
 
@@ -303,9 +301,6 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
 
     if( aClearAnnotationNewItems )
         *aClearAnnotationNewItems = clearAnnotation;
-
-    m_canvas->MoveCursorToCrossHair();
-    m_canvas->SetIgnoreMouseEvents( false );
 
     GetCanvas()->GetView()->Update( aSheet );
 

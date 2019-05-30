@@ -274,8 +274,6 @@ void PCB_BASE_FRAME::SelectCopperLayerPair()
         if( screen->m_Route_Layer_TOP == screen->m_Route_Layer_BOTTOM )
             DisplayInfoMessage( this, _( "Warning: top and bottom layers are same." ) );
     }
-
-    m_canvas->MoveCursorToCrossHair();
 }
 
 

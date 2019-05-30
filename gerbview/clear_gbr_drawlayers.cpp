@@ -88,5 +88,5 @@ void GERBVIEW_FRAME::Erase_Current_DrawLayer( bool query )
 
     ReFillLayerWidget();
     syncLayerBox();
-    m_canvas->Refresh();
+    GetGalCanvas()->Refresh();
 }

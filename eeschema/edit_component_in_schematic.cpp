@@ -58,10 +58,6 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
     if( aField->GetEditFlags() == 0 )    // i.e. not edited, or moved
         SaveCopyInUndoList( component, UR_CHANGED );
 
-    // Don't use GetText() here.  If the field is the reference designator and it's parent
-    // component has multiple parts, we don't want the part suffix added to the field.
-    m_canvas->SetIgnoreMouseEvents( true );
-
     wxString title;
     title.Printf( _( "Edit %s Field" ), GetChars( aField->GetName() ) );
 
@@ -70,15 +66,9 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
     // The dialog may invoke a kiway player for footprint fields
     // so we must use a quasimodal
     if( dlg.ShowQuasiModal() != wxID_OK )
-    {
-        m_canvas->MoveCursorToCrossHair();
-        m_canvas->SetIgnoreMouseEvents( false );
         return;
-    }
 
     dlg.UpdateField( aField, g_CurrentSheet );
-    m_canvas->MoveCursorToCrossHair();
-    m_canvas->SetIgnoreMouseEvents( false );
 
     if( m_autoplaceFields )
         component->AutoAutoplaceFields( GetScreen() );
@@ -97,8 +87,6 @@ void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
     wxCHECK_RET( aComponent != nullptr && aComponent->Type() == SCH_COMPONENT_T,
             wxT( "Invalid component object pointer.  Bad Programmer!" ) );
 
-    m_canvas->SetIgnoreMouseEvents( true );
-
     DIALOG_EDIT_COMPONENT_IN_SCHEMATIC dlg( this, aComponent );
 
     // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
@@ -106,9 +94,6 @@ void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
     // quasimodal mode for the quasimodal frame support to work.  So don't use
     // the QUASIMODAL macros here.
     int ret = dlg.ShowQuasiModal();
-
-    m_canvas->SetIgnoreMouseEvents( false );
-    m_canvas->MoveCursorToCrossHair();
 
     if( ret == wxID_OK )
     {

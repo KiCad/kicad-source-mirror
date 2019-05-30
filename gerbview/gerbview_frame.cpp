@@ -209,7 +209,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     }
 
     GetGalCanvas()->SwitchBackend( canvasType );
-    UseGalCanvas();
+    ActivateGalCanvas();
 
     // Enable the axes to match legacy draw style
     auto& galOptions = GetGalDisplayOptions();
@@ -622,7 +622,7 @@ void GERBVIEW_FRAME::SortLayersByX2Attributes()
     }
 
     GetGalCanvas()->GetView()->ReorderLayerData( view_remapping );
-    GetCanvas()->Refresh();
+    GetGalCanvas()->Refresh();
 }
 
 
@@ -690,8 +690,7 @@ void GERBVIEW_FRAME::UpdateDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions )
     }
 
     view->UpdateAllItems( KIGFX::COLOR );
-
-    m_canvas->Refresh( true );
+    GetGalCanvas()->Refresh();
 }
 
 
@@ -1112,9 +1111,9 @@ void GERBVIEW_FRAME::unitsChangeRefresh()
 }
 
 
-void GERBVIEW_FRAME::UseGalCanvas()
+void GERBVIEW_FRAME::ActivateGalCanvas()
 {
-    EDA_DRAW_FRAME::UseGalCanvas();
+    EDA_DRAW_FRAME::ActivateGalCanvas();
 
     EDA_DRAW_PANEL_GAL* galCanvas = GetGalCanvas();
 

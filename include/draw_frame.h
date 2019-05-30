@@ -209,17 +209,6 @@ protected:
                              bool isDirectory = false );
 
     /**
-     * Handle the common part of GeneralControl dedicated to global
-     * cursor keys (i.e. cursor movement by keyboard)
-     *
-     * @param aHotKey is the hotkey code
-     * @param aPos is the position of the cursor (initial then new)
-     * @param aSnapToGrid = true to force the cursor position on grid
-     * @return true if the hotkey code is handled (captured).
-     */
-    bool GeneralControlKeyMovement( int aHotKey, wxPoint *aPos, bool aSnapToGrid );
-
-    /**
      * Stores the canvas type in the application settings.
      */
     bool saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
@@ -736,7 +725,7 @@ public:
     /**
      * Use to start up the GAL drawing canvas.
      */
-    virtual void UseGalCanvas();
+    virtual void ActivateGalCanvas();
 
     /**
      * Changes the current rendering backend.

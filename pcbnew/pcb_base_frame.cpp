@@ -912,9 +912,9 @@ void PCB_BASE_FRAME::SetFastGrid2()
 }
 
 
-void PCB_BASE_FRAME::UseGalCanvas()
+void PCB_BASE_FRAME::ActivateGalCanvas()
 {
-    EDA_DRAW_FRAME::UseGalCanvas();
+    EDA_DRAW_FRAME::ActivateGalCanvas();
 
     EDA_DRAW_PANEL_GAL* galCanvas = GetGalCanvas();
 

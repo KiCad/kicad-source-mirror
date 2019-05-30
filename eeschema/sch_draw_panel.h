@@ -46,8 +46,6 @@ public:
     BASE_SCREEN* GetScreen() override;
     virtual EDA_DRAW_FRAME* GetParent() const override;
 
-    virtual void MoveCursorToCrossHair() override;
-
     KIGFX::SCH_VIEW* GetView() const { return view(); }
 
     /// @copydoc wxWindow::Refresh()

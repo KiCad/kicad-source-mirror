@@ -162,6 +162,9 @@ void DIALOG_SCH_FIND::OnOptions( wxCommandEvent& aEvent )
     if( m_checkCurrentSheetOnly->GetValue() )
         flags |= FR_CURRENT_SHEET_ONLY;
 
+    if( m_checkReplaceReferences->GetValue() )
+        flags |= FR_REPLACE_REFERENCES;
+
     m_findReplaceData->SetFlags( flags );
     m_editorControl->UpdateFind( ACTIONS::updateFind.MakeEvent() );
 }

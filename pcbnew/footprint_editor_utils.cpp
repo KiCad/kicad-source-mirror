@@ -576,13 +576,11 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     {
     case PCB_PAD_T:
         InstallPadOptionsFrame( static_cast<D_PAD*>( aItem ) );
-        m_canvas->MoveCursorToCrossHair();
         break;
 
     case PCB_MODULE_T:
         editFootprintProperties( (MODULE*) aItem );
-        m_canvas->MoveCursorToCrossHair();
-        m_canvas->Refresh();
+        GetGalCanvas()->Refresh();
         break;
 
     case PCB_MODULE_TEXT_T:
