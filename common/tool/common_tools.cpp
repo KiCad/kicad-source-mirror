@@ -237,14 +237,7 @@ int COMMON_TOOLS::ZoomFitScreen( const TOOL_EVENT& aEvent )
     VECTOR2D screenSize = view->ToWorld( galCanvas->GetClientSize(), false );
 
     if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
-    {
         bBox = defaultBox;
-    }
-    else if( defaultBox.GetWidth() > 0 && defaultBox.GetHeight() > 0 )
-    {
-        // Ensure worksheet is included in bounding box
-        bBox.Merge( defaultBox );
-    }
 
     VECTOR2D vsize = bBox.GetSize();
     double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
