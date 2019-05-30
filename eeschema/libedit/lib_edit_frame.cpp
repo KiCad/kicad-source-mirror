@@ -85,7 +85,6 @@ FILL_T LIB_EDIT_FRAME::        g_LastFillStyle   = NO_FILL;
 BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_CLOSE( LIB_EDIT_FRAME::OnCloseWindow )
     EVT_SIZE( LIB_EDIT_FRAME::OnSize )
-    EVT_ACTIVATE( LIB_EDIT_FRAME::OnActivate )
 
     // Actions
     EVT_TOOL( ID_LIBEDIT_NEW_LIBRARY, LIB_EDIT_FRAME::OnCreateNewLibrary )
@@ -527,12 +526,6 @@ void LIB_EDIT_FRAME::OnSelectBodyStyle( wxCommandEvent& event )
 void LIB_EDIT_FRAME::OnSyncPinEditClick( wxCommandEvent& event )
 {
     m_SyncPinEdit = m_mainToolBar->GetToolToggled( ID_LIBEDIT_SYNC_PIN_EDIT );
-}
-
-
-void LIB_EDIT_FRAME::OnActivate( wxActivateEvent& event )
-{
-    EDA_DRAW_FRAME::OnActivate( event );
 }
 
 

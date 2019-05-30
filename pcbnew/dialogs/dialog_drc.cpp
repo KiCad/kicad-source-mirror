@@ -335,16 +335,10 @@ void DIALOG_DRC_CONTROL::OnLeftDClickClearance( wxMouseEvent& event )
     {
         if( focusOnItem( m_ClearanceListBox->GetItem( selection ) ) )
         {
+            // turn control over to m_brdEditor, hide this DIALOG_DRC_CONTROL window,
+            // no destruction so we can preserve listbox cursor
             if( !IsModal() )
-            {
-                // turn control over to m_brdEditor, hide this DIALOG_DRC_CONTROL window,
-                // no destruction so we can preserve listbox cursor
                 Show( false );
-
-                // We do not want the clarify selection popup when releasing the
-                // left button in the main window
-                m_brdEditor->SkipNextLeftButtonReleaseEvent();
-            }
         }
     }
 }
@@ -475,13 +469,7 @@ void DIALOG_DRC_CONTROL::OnLeftDClickFootprints( wxMouseEvent& event )
         if( focusOnItem( m_FootprintsListBox->GetItem( selection ) ) )
         {
             if( !IsModal() )
-            {
                 Show( false );
-
-                // We do not want the clarify selection popup when releasing the
-                // left button in the main window
-                m_brdEditor->SkipNextLeftButtonReleaseEvent();
-            }
         }
     }
 }
@@ -497,16 +485,10 @@ void DIALOG_DRC_CONTROL::OnLeftDClickUnconnected( wxMouseEvent& event )
     {
         if( focusOnItem( m_UnconnectedListBox->GetItem( selection ) ) )
         {
+            // turn control over to m_brdEditor, hide this DIALOG_DRC_CONTROL window,
+            // no destruction so we can preserve listbox cursor
             if( !IsModal() )
-            {
-                // turn control over to m_brdEditor, hide this DIALOG_DRC_CONTROL window,
-                // no destruction so we can preserve listbox cursor
                 Show( false );
-
-                // We do not want the clarify selection popup when releasing the
-                // left button in the main window
-                m_brdEditor->SkipNextLeftButtonReleaseEvent();
-            }
         }
     }
 }

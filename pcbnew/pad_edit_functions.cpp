@@ -65,7 +65,7 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     if( aDraw )
     {
         aPad->SetFlags( DO_NOT_DRAW );
-        m_canvas->RefreshDrawingRect( aPad->GetBoundingBox() );
+        m_canvas->Refresh();
         aPad->ClearFlags( DO_NOT_DRAW );
     }
 
@@ -74,7 +74,7 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     aPad->ImportSettingsFromMaster( mp );
 
     if( aDraw )
-        m_canvas->RefreshDrawingRect( aPad->GetBoundingBox() );
+        m_canvas->Refresh();
 
     aPad->GetParent()->SetLastEditTime();
 
@@ -146,7 +146,7 @@ void PCB_BASE_FRAME::AddPad( MODULE* aModule, bool draw )
     SetMsgPanel( pad );
 
     if( draw )
-        m_canvas->RefreshDrawingRect( aModule->GetBoundingBox() );
+        m_canvas->Refresh();
 }
 
 
@@ -169,9 +169,6 @@ void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
             return;
     }
 
-    // Stores the initial bounding box to refresh the old area
-    EDA_RECT bbox = module->GetBoundingBox();
-
     m_Pcb->m_Status_Pcb = 0;
 
     GetBoard()->PadDelete( aPad );
@@ -179,9 +176,6 @@ void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
     // Update the bounding box
     module->CalculateBoundingBox();
 
-    // Refresh the modified screen area, using the initial bounding box
-    // which is perhaps larger than the new bounding box
-    m_canvas->RefreshDrawingRect( bbox );
-
+    GetGalCanvas()->Refresh();
     OnModify();
 }

@@ -163,7 +163,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_auimgr.Update();
 
     SetActiveLayer( 0, true );
-    Zoom_Automatique( false );           // Gives a default zoom value
+    GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
 
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = LoadCanvasTypeSetting();
 

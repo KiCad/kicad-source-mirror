@@ -23,11 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_drawpanel.h:
- * @brief EDA_DRAW_PANEL class definition.
- */
-
 #ifndef  PANEL_WXSTRUCT_H
 #define  PANEL_WXSTRUCT_H
 
@@ -38,18 +33,6 @@
 
 class BASE_SCREEN;
 class PCB_SCREEN;
-
-
-/**
- * Mouse capture callback function prototype.
- */
-typedef void ( *MOUSE_CAPTURE_CALLBACK )( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                                          const wxPoint& aPosition, bool aErase );
-
-/**
- * End mouse capture callback function prototype.
- */
-typedef void ( *END_MOUSE_CAPTURE_CALLBACK )( EDA_DRAW_PANEL* aPanel, wxDC* aDC );
 
 
 class EDA_DRAW_PANEL : public wxScrolledWindow
@@ -67,7 +50,6 @@ private:
     wxPoint m_PanStartEventPosition;        ///< Initial position of mouse event when pan started
 
     wxPoint m_CursorClickPos;               ///< Used for maintaining click position
-    wxTimer *m_ClickTimer;
 
     /// The drawing area used to redraw the screen which is usually the visible area
     /// of the drawing in internal units.
@@ -80,24 +62,9 @@ private:
      */
     bool    m_ignoreNextLeftButtonRelease;  ///< Ignore the next mouse left button release when true.
 
-    /**
-     * Count the drag events. Used to filter mouse moves before starting a
-     * block command.  A block command can be started only if
-     * MinDragEventCount > MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND in order to avoid
-     * spurious block commands.
-     */
-    int     m_minDragEventCount;
-
     /// True when drawing in mirror mode. Used by the draw arc function, because arcs
     /// are oriented, and in mirror mode, orientations are reversed.
     bool    m_PrintIsMirrored;
-
-    /// useful to avoid false start block in certain cases
-    /// (like switch from a sheet to another sheet
-    /// >= 0 (or >= n) if a block can start
-    int     m_canStartBlock;
-
-    int     m_doubleClickInterval;
 
 public:
 
@@ -115,29 +82,14 @@ public:
 
     EDA_DRAW_FRAME* GetParent() const;
 
-    void OnPaint( wxPaintEvent& event );
-
     EDA_RECT* GetClipBox() { return &m_ClipBox; }
 
     void SetClipBox( const EDA_RECT& aRect ) { m_ClipBox = aRect; }
-
-    void SetIgnoreLeftButtonReleaseEvent( bool aIgnore ) { m_ignoreNextLeftButtonRelease = aIgnore; }
 
     bool GetPrintMirrored() const               { return m_PrintIsMirrored; }
     void SetPrintMirrored( bool aMirror )       { m_PrintIsMirrored = aMirror; }
 
     void OnEraseBackground( wxEraseEvent& event ) { }
-
-    /**
-     * Function OnActivate
-     * handles window activation events.
-     * <p>
-     * The member m_canStartBlock is initialize to avoid a block start command on activation
-     * (because a left mouse button can be pressed and no block command wanted.  This happens
-     * when enter on a hierarchy sheet on double click.
-     *</p>
-     */
-    void OnActivate( wxActivateEvent& event );
 
     /**
      * Function DoPrepareDC
@@ -155,44 +107,9 @@ public:
      */
     virtual void DoPrepareDC( wxDC& aDC ) override;
 
-    /**
-     * Function DeviceToLogical
-     * converts \a aRect from device to drawing (logical) coordinates.
-     * <p>
-     * \a aRect must be in scrolled device units.
-     * </p>
-     * @param aRect The rectangle to convert.
-     * @param aDC The device context used for the conversion.
-     * @return A rectangle converted to drawing units.
-     */
-    wxRect DeviceToLogical( const wxRect& aRect, wxDC& aDC );
-
     /* Mouse and keys events */
 
-    /**
-     * Function OnMouseWheel
-     * handles mouse wheel events.
-     * <p>
-     * The mouse wheel is used to provide support for zooming and panning.  This
-     * is accomplished by converting mouse wheel events in pseudo menu command
-     * events and sending them to the appropriate parent window event handler.
-     *</p>
-     */
-    void OnMouseWheel( wxMouseEvent& event );
-#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
-    void OnMagnify( wxMouseEvent& event );
-#endif
-    void OnMouseEntering( wxMouseEvent& aEvent );
-    void OnMouseLeaving( wxMouseEvent& event );
     void OnCharHook( wxKeyEvent& event );
-
-    void OnPan( wxCommandEvent& event );
-
-    void OnScrollWin( wxCommandEvent& event );
-    void OnScroll( wxScrollWinEvent& event );
-
-    void SetGrid( const wxRealPoint& size );
-    wxRealPoint GetGrid();
 
     /**
      * Function SetClipBox
@@ -212,15 +129,6 @@ public:
      */
     void SetClipBox( wxDC& aDC, const wxRect* aRect = NULL );
 
-    /**
-     * Function RefreshDrawingRect
-     * redraws the contents of \a aRect in drawing units.  \a aRect is converted to
-     * screen coordinates and wxWindow::RefreshRect() is called to repaint the region.
-     * @param aRect The rectangle to repaint.
-     * @param aEraseBackground Erases the background if true.
-     */
-    void RefreshDrawingRect( const EDA_RECT& aRect, bool aEraseBackground = true );
-
     /// @copydoc wxWindow::Refresh()
     virtual void Refresh( bool eraseBackground = true, const wxRect* rect = NULL ) override;
 
@@ -230,38 +138,7 @@ public:
      */
     wxPoint GetScreenCenterLogicalPosition();
 
-    /**
-     * Function ToDeviceXY
-     * transforms logical to device coordinates
-     */
-    wxPoint ToDeviceXY( const wxPoint& pos );
-
-    /**
-     * Function ToLogicalXY
-     * transforms device to logical coordinates
-     */
-    wxPoint ToLogicalXY( const wxPoint& pos );
-
     /* Cursor functions */
-    /**
-     * Function DrawCrossHair
-     * draws the user cross hair.
-     * <p>
-     * The user cross hair is not the mouse cursor although they may be at the same screen
-     * position.  The mouse cursor is still render by the OS.  This is a drawn cross hair
-     * that is used to snap to grid when grid snapping is enabled.  This is as an indicator
-     * to where the next user action will take place.
-     * </p>
-     * @param aDC - the device context to draw the cursor
-     * @param aColor - the color to draw the cursor
-     */
-    void DrawCrossHair( wxDC* aDC, COLOR4D aColor = COLOR4D::WHITE );
-
-    // Hide the cross hair.
-    void CrossHairOff( wxDC* DC );
-
-    // Show the cross hair.
-    void CrossHairOn( wxDC* DC );
 
     /**
      * Function SetCurrentCursor
@@ -278,15 +155,6 @@ public:
      * @return the default cursor shape
      */
     int GetDefaultCursor() const { return m_defaultCursor; }
-
-    /**
-     * Function GetCurrentCursor
-     * @return the current cursor shape, depending on the current selected tool
-     */
-    int GetCurrentCursor() const { return m_currentCursor; }
-
-
-    DECLARE_EVENT_TABLE()
 };
 
 

@@ -518,7 +518,7 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, bool aRecreateRatsnest )
 
     if( ( GetBoard()->IsElementVisible( LAYER_RATSNEST ) || displ_opts->m_Show_Module_Ratsnest )
         && aRecreateRatsnest )
-        Compile_Ratsnest( nullptr, true );
+        Compile_Ratsnest( true );
 
     SetMsgPanel( aModule );
 }

@@ -1453,7 +1453,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
     // redraw the area where the pad was, without pad (delete pad on screen)
     m_currentPad->SetFlags( DO_NOT_DRAW );
-    m_parent->GetCanvas()->RefreshDrawingRect( m_currentPad->GetBoundingBox() );
+    m_parent->GetCanvas()->Refresh();
     m_currentPad->ClearFlags( DO_NOT_DRAW );
 
     // Update values
@@ -1573,7 +1573,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_parent->SetMsgPanel( m_currentPad );
 
     // redraw the area where the pad was
-    m_parent->GetCanvas()->RefreshDrawingRect( m_currentPad->GetBoundingBox() );
+    m_parent->GetCanvas()->Refresh();
 
     commit.Push( _( "Modify pad" ) );
 

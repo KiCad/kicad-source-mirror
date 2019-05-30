@@ -85,15 +85,8 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
 
     Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( SCH_DRAW_PANEL::OnCharHook ), NULL, this );
 
-    // Be sure a mouse release button event will be ignored when creating the canvas
-    // if the mouse click was not made inside the canvas (can happen sometimes, when
-    // launching a editor from a double click made in another frame)
-    m_ignoreNextLeftButtonRelease = true;
-
     m_cursorLevel = 0;
     m_PrintIsMirrored = false;
-
-    m_doubleClickInterval = 250;
 
     m_viewControls->SetSnapping( true );
 

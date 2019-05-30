@@ -679,7 +679,7 @@ bool TRACKS_CLEANER::removeItems( std::set<BOARD_ITEM*>& aItems )
 bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
 {
     // Old model has to be refreshed, GAL normally does not keep updating it
-    Compile_Ratsnest( NULL, false );
+    Compile_Ratsnest( false );
     BOARD_COMMIT commit( this );
 
     TRACKS_CLEANER cleaner( m_UserUnits, GetBoard(), commit );
@@ -689,7 +689,7 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
     {
         // Clear undo and redo lists to avoid inconsistencies between lists
         commit.Push( _( "Board cleanup" ) );
-        Compile_Ratsnest( NULL, true );
+        Compile_Ratsnest( true );
     }
 
     m_canvas->Refresh( true );

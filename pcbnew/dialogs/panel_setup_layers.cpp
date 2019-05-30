@@ -577,7 +577,7 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
     if( hasRemovedBoardItems )
     {
         // Rebuild list of nets (full ratsnest rebuild)
-        m_frame->Compile_Ratsnest( NULL, true );
+        m_frame->Compile_Ratsnest( true );
         m_pcb->BuildConnectivity();
     }
 

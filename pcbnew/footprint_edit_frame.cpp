@@ -282,12 +282,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     ActivateGalCanvas();
 
     m_auimgr.Update();
+    GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
     updateTitle();
 
     Raise();            // On some window managers, this is needed
     Show( true );
-
-    Zoom_Automatique( false );
 }
 
 

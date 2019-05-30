@@ -269,13 +269,6 @@ void EDA_DRAW_FRAME::EraseMsgBox()
 }
 
 
-void EDA_DRAW_FRAME::OnActivate( wxActivateEvent& event )
-{
-    // TODO Obsolete!
-    event.Skip();   // required under wxMAC
-}
-
-
 void EDA_DRAW_FRAME::OnMenuOpen( wxMenuEvent& event )
 {
     // On wxWidgets 3.0.x Windows, EVT_MENU_OPEN and EVT_MENU_HIGHLIGHT events are not
@@ -311,12 +304,6 @@ void EDA_DRAW_FRAME::OnMenuOpen( wxMenuEvent& event )
 //#endif
 
     event.Skip();
-}
-
-
-void EDA_DRAW_FRAME::SkipNextLeftButtonReleaseEvent()
-{
-   m_canvas->SetIgnoreLeftButtonReleaseEvent( true );
 }
 
 

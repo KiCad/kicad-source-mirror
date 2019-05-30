@@ -445,17 +445,6 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
 void FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList( wxCommandEvent& event )
 {
     AddFootprintToPCB( event );
-
-    // Prevent the double click from being as a single mouse button release
-    // event in the parent window which would cause the part to be parked
-    // rather than staying in move mode.
-    // Remember the mouse button will be released in the parent window
-    // thus creating a mouse button release event which should be ignored
-    PCB_EDIT_FRAME* pcbframe = dynamic_cast<PCB_EDIT_FRAME*>( GetParent() );
-
-    // The parent may not be the board editor:
-    if( pcbframe )
-        pcbframe->SkipNextLeftButtonReleaseEvent();
 }
 
 
@@ -571,8 +560,6 @@ void FOOTPRINT_VIEWER_FRAME::setCurFootprintName( const wxString& aName )
 
 void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
 {
-    EDA_DRAW_FRAME::OnActivate( event );
-
     // Ensure we do not have old selection:
     if( !event.GetActive() )
         return;

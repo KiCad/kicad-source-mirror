@@ -377,13 +377,6 @@ private:
     void updateTitle();
 
     /**
-     * Called when the frame is activated.  Tests if the current library exists.
-     * The library list can be changed by the schematic editor after reloading a new schematic
-     * and the current library can point a non existent lib.
-     */
-    virtual void OnActivate( wxActivateEvent& event ) override;
-
-    /**
      * Set the current active library to \a aLibrary.
      *
      * @param aLibrary the nickname of the library in the symbol library table.  If wxEmptyString,

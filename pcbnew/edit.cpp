@@ -274,7 +274,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         else
             SetToolID( id, wxCURSOR_QUESTION_ARROW, _( "Add tracks" ) );
 
-        Compile_Ratsnest( nullptr, true );
+        Compile_Ratsnest( true );
         break;
 
     case ID_PCB_ZONES_BUTT:
@@ -335,7 +335,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     case ID_LOCAL_RATSNEST_BUTT:
         SetToolID( id, wxCURSOR_HAND, _( "Select rats nest" ) );
 
-        Compile_Ratsnest( nullptr, true );
+        Compile_Ratsnest( true );
 
         break;
 

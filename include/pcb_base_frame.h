@@ -353,7 +353,7 @@ public:
      * @param aDC = the current device context (can be NULL)
      * @param aDisplayStatus : if true, display the computation results
      */
-    void Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus );
+    void Compile_Ratsnest( bool aDisplayStatus );
 
     /**
      *  function Displays the general ratsnest
@@ -364,17 +364,7 @@ public:
      */
     void DrawGeneralRatsnest( wxDC* aDC, int aNetcode = 0 );
 
-    /**
-     * Function TestNetConnection
-     * tests the connections relative to \a aNetCode.  Track segments are assumed to be
-     * sorted by net codes.
-     * @param aDC Current Device Context
-     * @param aNetCode The net code to test
-     */
-    void TestNetConnection( wxDC* aDC, int aNetCode );
-
-    /* Functions relative to Undo/redo commands:
-     */
+    /* Functions relative to Undo/redo commands: */
 
     /**
      * Function SaveCopyInUndoList (virtual pure)

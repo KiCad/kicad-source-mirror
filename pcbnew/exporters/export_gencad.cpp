@@ -306,7 +306,7 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     GencadOffsetY = optionsDialog.GetOption( USE_AUX_ORIGIN ) ? GetAuxOrigin().y : 0;
 
     // No idea on *why* this should be needed... maybe to fix net names?
-    Compile_Ratsnest( NULL, true );
+    Compile_Ratsnest( true );
 
     /* Temporary modification of footprints that are flipped (i.e. on bottom
      * layer) to convert them to non flipped footprints.

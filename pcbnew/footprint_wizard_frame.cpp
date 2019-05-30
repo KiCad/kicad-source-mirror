@@ -237,12 +237,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     updateView();
 
     SetActiveLayer( F_Cu );
-    // Now Drawpanel is sized, we can use BestZoom to show the component (if any)
-#ifdef USE_WX_GRAPHICS_CONTEXT
-    GetScreen()->SetScalingFactor( BestZoom() );
-#else
-    Zoom_Automatique( false );
-#endif
+    GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
 
     // Do not Run a dialog here: on some Window Managers, it creates issues.
     // Reason: the FOOTPRINT_WIZARD_FRAME is run as modal;
@@ -560,8 +555,6 @@ void FOOTPRINT_WIZARD_FRAME::SaveSettings( wxConfigBase* aCfg )
 
 void FOOTPRINT_WIZARD_FRAME::OnActivate( wxActivateEvent& event )
 {
-    EDA_DRAW_FRAME::OnActivate( event );
-
     // Ensure we do not have old selection:
     if( !event.GetActive() )
         return;

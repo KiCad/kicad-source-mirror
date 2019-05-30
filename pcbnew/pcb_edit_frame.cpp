@@ -350,8 +350,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     syncLayerWidgetLayer();
 
     m_auimgr.Update();
-
-    Zoom_Automatique( false );
+    GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
 
     m_canvasType = LoadCanvasTypeSetting();
 
@@ -939,7 +938,7 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
     // (layer and items visibility, colors ...)
 
     // Rebuild list of nets (full ratsnest rebuild)
-    Compile_Ratsnest( NULL, true );
+    Compile_Ratsnest( true );
     GetBoard()->BuildConnectivity();
 
     // Update info shown by the horizontal toolbars

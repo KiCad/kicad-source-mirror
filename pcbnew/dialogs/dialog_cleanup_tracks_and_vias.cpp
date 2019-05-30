@@ -116,7 +116,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
     }
 
     // Old model has to be refreshed, GAL normally does not keep updating it
-    m_parentFrame->Compile_Ratsnest( NULL, false );
+    m_parentFrame->Compile_Ratsnest( false );
 
     bool modified = cleaner.CleanupBoard( aDryRun, &m_items,
                                           m_cleanShortCircuitOpt->GetValue(),
@@ -176,13 +176,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnLeftDClickItem( wxMouseEvent& event )
             m_parentFrame->FocusOnLocation( item->GetPointA(), true, true );
 
             if( !IsModal() )
-            {
                 Show( false );
-
-                // We do not want the clarify selection popup when releasing the
-                // left button in the main window
-                m_parentFrame->SkipNextLeftButtonReleaseEvent();
-            }
         }
     }
 }

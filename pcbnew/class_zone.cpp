@@ -164,8 +164,7 @@ EDA_ITEM* ZONE_CONTAINER::Clone() const
 
 bool ZONE_CONTAINER::UnFill()
 {
-    bool change = ( !m_FilledPolysList.IsEmpty() ) ||
-                  ( m_FillSegmList.size() > 0 );
+    bool change = ( !m_FilledPolysList.IsEmpty() || m_FillSegmList.size() > 0 );
 
     m_FilledPolysList.RemoveAllContours();
     m_FillSegmList.clear();
@@ -225,9 +224,7 @@ void ZONE_CONTAINER::SetLayerSet( LSET aLayerSet )
     }
 
     if( aLayerSet.count() == 0 )
-    {
         return;
-    }
 
     if( m_layerSet != aLayerSet )
         SetNeedRefill( true );
@@ -260,9 +257,7 @@ void ZONE_CONTAINER::ViewGetLayers( int aLayers[], int& aCount ) const
         LSEQ layers = m_layerSet.Seq();
 
         for( unsigned int idx = 0; idx < layers.size(); idx++ )
-        {
             aLayers[idx] = layers[idx];
-        }
 
         aCount = layers.size();
     }
@@ -277,9 +272,7 @@ void ZONE_CONTAINER::ViewGetLayers( int aLayers[], int& aCount ) const
 bool ZONE_CONTAINER::IsOnLayer( PCB_LAYER_ID aLayer ) const
 {
     if( GetIsKeepout() )
-    {
         return m_layerSet.test( aLayer );
-    }
 
     return BOARD_ITEM::IsOnLayer( aLayer );
 }

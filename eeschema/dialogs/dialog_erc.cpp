@@ -304,11 +304,6 @@ void DIALOG_ERC::OnLeftDblClickMarkersList( wxMouseEvent& event )
         m_parent->FocusOnLocation( m_lastMarkerFound->m_Pos, false, true );
         m_parent->SetCrossHairPosition( m_lastMarkerFound->m_Pos );
         RedrawDrawPanel();
-        // prevent a mouse left button release event in
-        // coming from the ERC dialog double click
-        // ( the button is released after closing this dialog and will generate
-        // an unwanted event in  parent frame)
-        m_parent->SkipNextLeftButtonReleaseEvent();
     }
 
     Close();

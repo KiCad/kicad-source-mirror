@@ -275,7 +275,7 @@ void DIALOG_EXCHANGE_FOOTPRINTS::OnApplyClicked( wxCommandEvent& event )
     if( processMatchingModules() )
     {
         if( m_parent->GetBoard()->IsElementVisible( LAYER_RATSNEST ) )
-            m_parent->Compile_Ratsnest( NULL, true );
+            m_parent->Compile_Ratsnest( true );
 
         m_parent->GetCanvas()->Refresh();
     }

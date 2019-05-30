@@ -403,18 +403,6 @@ public:
 
     void OnMenuOpen( wxMenuEvent& event );
 
-    /**
-     * After calling this function, if the left mouse button
-     * is down, the next left mouse button release event will be ignored.
-     * It is is usefull for instance when closing a dialog on a mouse click,
-     * to skip the next mouse left button release event
-     * by the parent window, because the mouse button
-     * clicked on the dialog is often released in the parent frame,
-     * and therefore creates a left button released mouse event
-     * which can be unwanted in some cases
-     */
-    void SkipNextLeftButtonReleaseEvent();
-
     ///> @copydoc EDA_BASE_FRAME::WriteHotkeyConfig
     int WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList, wxString* aFullFileName = NULL ) override;
 
@@ -636,14 +624,6 @@ public:
      * and any other local parameter related to the page settings.
      */
     virtual void OnPageSettingsChange() {}
-
-    /**
-     * Called when activating the frame.
-     *
-     * In derived classes with a overriding OnActivate function,
-     * do not forget to call this EDA_DRAW_FRAME::OnActivate( event ) basic function.
-     */
-    virtual void OnActivate( wxActivateEvent& event );
 
     /**
      * Update the status bar information.

@@ -582,7 +582,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
     // connectivity can be rebuilt only in the board editor frame
     if( IsType( FRAME_PCB ) && ( reBuild_ratsnest || deep_reBuild_ratsnest ) )
     {
-        Compile_Ratsnest( NULL, false );
+        Compile_Ratsnest( false );
     }
 
     SELECTION_TOOL* selTool = m_toolManager->GetTool<SELECTION_TOOL>();

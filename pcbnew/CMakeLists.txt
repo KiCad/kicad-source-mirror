@@ -235,7 +235,6 @@ set( PCBNEW_CLASS_SRCS
     array_pad_name_provider.cpp
     board_netlist_updater.cpp
     build_BOM_from_board.cpp
-    connect.cpp
     cross-probing.cpp
     drc.cpp
     drc_clearance_test_functions.cpp

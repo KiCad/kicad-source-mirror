@@ -682,18 +682,6 @@ void LIB_VIEW_FRAME::SetSelectedComponent( const wxString& aComponentName )
 void LIB_VIEW_FRAME::DClickOnCmpList( wxCommandEvent& event )
 {
     OnAddPartToSchematic( event );
-
-    // The schematic editor might not be the parent of the library viewer.
-    // It could be a python window.
-    SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
-
-    if( schframe )
-    {
-        // Prevent the double click from being as a single click in the parent
-        // window which would cause the part to be parked rather than staying
-        // in drag mode.
-        schframe->SkipNextLeftButtonReleaseEvent();
-    }
 }
 
 
@@ -753,8 +741,6 @@ void LIB_VIEW_FRAME::SaveSettings( wxConfigBase* aCfg )
 
 void LIB_VIEW_FRAME::OnActivate( wxActivateEvent& event )
 {
-    EDA_DRAW_FRAME::OnActivate( event );
-
     bool changed = m_libList ? ReCreateListLib() : false;
 
     if (changed)

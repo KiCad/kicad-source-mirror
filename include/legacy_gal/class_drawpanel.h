@@ -21,18 +21,9 @@ protected:
     /// of the drawing in internal units.
     EDA_RECT    m_ClipBox;
 
-    /* Used to inhibit a response to a mouse left button release, after a double click
-     * (when releasing the left button at the end of the second click.  Used in Eeschema
-     * to inhibit a mouse left release command when switching between hierarchical sheets
-     * on a double click.
-     */
-    bool    m_ignoreNextLeftButtonRelease;  ///< Ignore the next mouse left button release when true.
-
     /// True when drawing in mirror mode. Used by the draw arc function, because arcs
     /// are oriented, and in mirror mode, orientations are reversed.
     bool    m_PrintIsMirrored;
-
-    int     m_doubleClickInterval;
 
 public:
 
@@ -41,9 +32,7 @@ public:
         m_cursorLevel( 0 ),
         m_scrollIncrementX( 1 ),
         m_scrollIncrementY( 1 ),
-        m_ignoreNextLeftButtonRelease( false ),
-        m_PrintIsMirrored( false ),
-        m_doubleClickInterval( 0 )
+        m_PrintIsMirrored( false )
     {};
 
     virtual ~EDA_DRAW_PANEL(){};
@@ -64,8 +53,6 @@ public:
     virtual EDA_RECT* GetClipBox() { return &m_ClipBox; }
 
     void SetClipBox( const EDA_RECT& aRect ) { m_ClipBox = aRect; }
-
-    void SetIgnoreLeftButtonReleaseEvent( bool aIgnore ) { m_ignoreNextLeftButtonRelease = aIgnore; }
 
     bool GetPrintMirrored() const               { return m_PrintIsMirrored; }
     void SetPrintMirrored( bool aMirror )       { m_PrintIsMirrored = aMirror; }
@@ -124,18 +111,6 @@ public:
      * @return The current screen center position in logical (drawing) units.
      */
     virtual wxPoint GetScreenCenterLogicalPosition() { return wxPoint(0, 0); };;
-
-    /**
-     * Function ToDeviceXY
-     * transforms logical to device coordinates
-     */
-    virtual wxPoint ToDeviceXY( const wxPoint& pos ) { printf("EDA_DRAW_PANEL:Unimplemented15\n"); return wxPoint(0, 0); };;
-
-    /**
-     * Function ToLogicalXY
-     * transforms device to logical coordinates
-     */
-    virtual wxPoint ToLogicalXY( const wxPoint& pos ) { printf("EDA_DRAW_PANEL:Unimplemented16\n"); return wxPoint(0, 0); };;
 
     virtual void Refresh( bool eraseBackground = true, const wxRect* rect = NULL ) {}
 

@@ -219,12 +219,6 @@ public:
     virtual int GetDefaultCursor() const  { return m_defaultCursor; }
 
     /**
-     * Function GetCurrentCursor
-     * @return the current cursor shape, depending on the current selected tool
-     */
-    int GetCurrentCursor() const { return m_currentCursor; }
-
-    /**
      * Returns the bounding box of the view that should be used if model is not valid
      * For example, the worksheet bounding box for an empty PCB
      *

@@ -151,7 +151,7 @@ private:
      * Called when the frame is activated to reload the libraries and component lists
      * that can be changed by the schematic editor or the library editor.
      */
-    virtual void OnActivate( wxActivateEvent& event ) override;
+    void OnActivate( wxActivateEvent& event );
 
     void DClickOnCmpList( wxCommandEvent& event );
 

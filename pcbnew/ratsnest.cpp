@@ -50,23 +50,17 @@
  * @param aDC = the current device context (can be NULL)
  * @param aDisplayStatus : if true, display the computation results
  */
-void PCB_BASE_FRAME::Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus )
+void PCB_BASE_FRAME::Compile_Ratsnest( bool aDisplayStatus )
 {
-    // JEY TODO: does this ever get called with a real DC?
     GetBoard()->GetConnectivity()->RecalculateRatsnest();
-
     GetBoard()->m_Status_Pcb = 0;   // we want a full ratsnest computation, from the scratch
-
-    if( GetBoard()->IsElementVisible( LAYER_RATSNEST ) && aDC )
-        DrawGeneralRatsnest( aDC, 0 );
-
-    wxString msg;
 
     ClearMsgPanel();
 
     if( aDisplayStatus )
     {
         std::shared_ptr<CONNECTIVITY_DATA> conn = m_Pcb->GetConnectivity();
+        wxString                           msg;
 
         msg.Printf( wxT( " %d" ), conn->GetPadCount() );
         AppendMsgPanel( _( "Pads" ), msg, RED );

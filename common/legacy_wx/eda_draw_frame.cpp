@@ -99,7 +99,6 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
     EVT_MENU_OPEN( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_MENU_CLOSE( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_MENU_HIGHLIGHT_ALL( EDA_DRAW_FRAME::OnMenuOpen )
-    EVT_ACTIVATE( EDA_DRAW_FRAME::OnActivate )
 
     EVT_MENU_RANGE( ID_POPUP_GRID_LEVEL_1000, ID_POPUP_GRID_USER,
                     EDA_DRAW_FRAME::OnSelectGrid )
@@ -285,12 +284,6 @@ void EDA_DRAW_FRAME::EraseMsgBox()
 }
 
 
-void EDA_DRAW_FRAME::OnActivate( wxActivateEvent& event )
-{
-    event.Skip();   // required under wxMAC
-}
-
-
 void EDA_DRAW_FRAME::OnMenuOpen( wxMenuEvent& event )
 {
     // On wxWidgets 3.0.x Windows, EVT_MENU_OPEN ( and other EVT_MENU_xx) events are not
@@ -326,12 +319,6 @@ void EDA_DRAW_FRAME::OnMenuOpen( wxMenuEvent& event )
 //#endif
 
     event.Skip();
-}
-
-
-void EDA_DRAW_FRAME::SkipNextLeftButtonReleaseEvent()
-{
-   m_canvas->SetIgnoreLeftButtonReleaseEvent( true );
 }
 
 
@@ -872,6 +859,7 @@ double EDA_DRAW_FRAME::bestZoom( double sizeX, double sizeY, double scaleFactor,
 
 
 // JEY TODO: Obsolete; replace with ACTIONS::zoomFitScreen
+// JEY TODO: This is the last caller of BestZoom() too....
 void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 {
     BASE_SCREEN* screen = GetScreen();
