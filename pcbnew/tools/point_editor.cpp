@@ -317,6 +317,9 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     GRID_HELPER grid( editFrame );
     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );
 
+    if( !item )
+        return 0;
+
     m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
 
     if( !m_editPoints )
