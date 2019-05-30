@@ -220,11 +220,6 @@ protected:
     bool GeneralControlKeyMovement( int aHotKey, wxPoint *aPos, bool aSnapToGrid );
 
     /**
-     * Move and refresh the crosshair after movement and call the mouse capture function.
-     */
-    void RefreshCrossHair( const wxPoint &aOldPos, const wxPoint &aEvtPos, wxDC* aDC );
-
-    /**
      * Stores the canvas type in the application settings.
      */
     bool saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
@@ -448,13 +443,6 @@ public:
     virtual EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const = 0;
 
     /**
-     * Add standard zoom commands and submenu zoom and grid selection to a popup menu
-     * uses zoom hotkeys info base to add hotkeys info to menu commands
-     * @param aMasterMenu = the menu to populate.
-     */
-    virtual void AddMenuZoomAndGrid( wxMenu* aMasterMenu );
-
-    /**
      * Return a human readable value which can be displayed as zoom
      * level indicator in dialogs.
      * this can be a percentage or other indicator.
@@ -652,8 +640,6 @@ public:
 
     void            DisplayToolMsg( const wxString& msg );
     wxString        GetToolMsg() { return m_toolMsg; }
-    virtual void    RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;
-    virtual void    OnLeftClick( wxDC* DC, const wxPoint& MousePos ) {}
 
     /**
      * Called when modifying the page settings.
@@ -731,14 +717,6 @@ public:
      * Redraw the message panel.
      */
     virtual void UpdateMsgPanel();
-
-    /**
-     * Push preferences from a parent window to a child window.
-     * (i.e. from eeschema to schematic symbol editor)
-     *
-     * @param aParentCanvas is the parent canvas to push preferences from.
-     */
-    void PushPreferences( const EDA_DRAW_PANEL* aParentCanvas );
 
     /**
      * Print the page pointed by current screen, set by the calling print function.

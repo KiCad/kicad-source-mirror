@@ -181,11 +181,6 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     int ii;
     int id = event.GetId();
 
-    /* Note: none of these events require aborting the current command (if any)
-     * (like move, edit or block command)
-     * so we do not test for a current command in progress and call
-     *  m_canvas->m_endMouseCaptureCallback( m_canvas, &dc );
-     */
     switch( id )
     {
     case ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH:
@@ -288,17 +283,4 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         wxLogDebug( wxT( "PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event() error") );
         break;
     }
-
-    // Refresh track in progress, if any, by forcing a mouse event,
-    // to call the current function attached to the mouse
-    /*if( m_canvas->IsMouseCaptured() )
-    {
-        wxMouseEvent event(wxEVT_MOTION);
-        wxPostEvent( m_canvas, event );
-    }*/
-    //+hp
-    //Refresh canvas, that we can see changes instantly. I use this because it dont,t throw  mouse up-left corner.
-
-    if( m_canvas->IsMouseCaptured() )
-        m_canvas->Refresh();
 }

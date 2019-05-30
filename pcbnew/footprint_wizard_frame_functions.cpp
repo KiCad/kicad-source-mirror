@@ -260,29 +260,3 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
 }
 
 
-/**
- * Function RedrawActiveWindow
- * Display the current selected component.
- * If the component is an alias, the ROOT component is displayed
- *
- */
-void FOOTPRINT_WIZARD_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
-{
-    if( !GetBoard() )
-        return;
-
-    m_canvas->DrawBackGround( DC );
-    GetBoard()->Draw( m_canvas, DC, GR_COPY );
-
-    MODULE* module = GetBoard()->m_Modules;
-
-    if( module )
-        SetMsgPanel( module );
-
-    m_canvas->DrawCrossHair( DC );
-
-    ClearMsgPanel();
-
-    if( module )
-        SetMsgPanel( module );
-}

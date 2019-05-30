@@ -318,7 +318,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_pageSetupData.GetPrintData().SetNoCopies( 1 );
 
     m_auimgr.SetManagedWindow( this );
-    m_auimgr.SetArtProvider( new EDA_DOCKART( this ) );
+    m_auimgr.SetArtProvider( new EDA_DOCKART() );
 
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
@@ -1020,8 +1020,6 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
         libeditFrame->Show( true );
     }
 
-    libeditFrame->PushPreferences( m_canvas );
-
     // On Windows, Raise() does not bring the window on screen, when iconized
     if( libeditFrame->IsIconized() )
         libeditFrame->Iconize( false );
@@ -1115,8 +1113,6 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
     SCH_SCREEN* screen = GetScreen();
 
     wxCHECK_RET( aItem != NULL, wxT( "Cannot add current aItem to list." ) );
-
-    m_canvas->SetAutoPanRequest( false );
 
     SCH_SHEET*     parentSheet = nullptr;
     SCH_COMPONENT* parentComponent = nullptr;

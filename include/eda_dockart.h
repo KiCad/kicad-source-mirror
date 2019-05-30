@@ -29,17 +29,10 @@
 #include <wx/aui/dockart.h>
 #include <wx/aui/framemanager.h>
 
-class EDA_DRAW_FRAME;
-
-
 class EDA_DOCKART : public wxAuiDefaultDockArt
 {
-private:
-    EDA_DRAW_FRAME* m_frame;
-
 public:
-    EDA_DOCKART( EDA_DRAW_FRAME* aParent ) :
-        m_frame( aParent )
+    EDA_DOCKART()
     {
         SetMetric( wxAUI_DOCKART_PANE_BORDER_SIZE, 1 );
     }

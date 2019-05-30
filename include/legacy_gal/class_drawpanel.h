@@ -17,20 +17,9 @@ protected:
     int     m_scrollIncrementX;             ///< X axis scroll increment in pixels per unit.
     int     m_scrollIncrementY;             ///< Y axis scroll increment in pixels per unit.
 
-    wxPoint m_CursorStartPos;               ///< Used for testing the cursor movement.
-    wxPoint m_PanStartCenter;               ///< Initial scroll center position when pan started
-    wxPoint m_PanStartEventPosition;        ///< Initial position of mouse event when pan started
-
     /// The drawing area used to redraw the screen which is usually the visible area
     /// of the drawing in internal units.
     EDA_RECT    m_ClipBox;
-
-    bool    m_abortRequest;                 ///< Flag used to abort long commands.
-
-    bool    m_enableZoomNoCenter;           ///< True to enable zooming around the crosshair instead of the center
-    bool    m_enableMousewheelPan;          ///< True to enable mousewheel panning by default.
-
-    bool    m_enableAutoPan;                ///< True to enable automatic panning.
 
     bool    m_ignoreMouseEvents;            ///< Ignore mouse events when true.
 
@@ -54,10 +43,6 @@ public:
         m_cursorLevel( 0 ),
         m_scrollIncrementX( 1 ),
         m_scrollIncrementY( 1 ),
-        m_abortRequest( false ),
-        m_enableZoomNoCenter( false ),
-        m_enableMousewheelPan( false ),
-        m_enableAutoPan( false ),
         m_ignoreMouseEvents( false ),
         m_ignoreNextLeftButtonRelease( false ),
         m_PrintIsMirrored( false ),
@@ -83,69 +68,12 @@ public:
 
     void SetClipBox( const EDA_RECT& aRect ) { m_ClipBox = aRect; }
 
-    bool GetAbortRequest() const { return m_abortRequest; }
-
-    void SetAbortRequest( bool aAbortRequest ) { m_abortRequest = aAbortRequest; }
-
-    bool GetEnableMousewheelPan() const { return m_enableMousewheelPan; }
-
-    virtual void SetEnableMousewheelPan( bool aEnable ) { m_enableMousewheelPan = aEnable; };
-
-    bool GetEnableZoomNoCenter() const { return m_enableZoomNoCenter; }
-
-    virtual void SetEnableZoomNoCenter( bool aEnable ) { m_enableZoomNoCenter = aEnable; };
-
-    bool GetEnableAutoPan() const { return m_enableAutoPan; }
-
-    virtual void SetEnableAutoPan( bool aEnable ) { m_enableAutoPan = aEnable; };
-
-    virtual void SetAutoPanRequest( bool aEnable ) = 0;
-
     void SetIgnoreMouseEvents( bool aIgnore ) { m_ignoreMouseEvents = aIgnore; }
 
     void SetIgnoreLeftButtonReleaseEvent( bool aIgnore ) { m_ignoreNextLeftButtonRelease = aIgnore; }
 
     bool GetPrintMirrored() const               { return m_PrintIsMirrored; }
     void SetPrintMirrored( bool aMirror )       { m_PrintIsMirrored = aMirror; }
-
-    /**
-     * Function DrawBackGround
-     * @param DC = current Device Context
-     * Draws (if allowed) :
-     * the grid
-     * X and Y axis
-     * X and Y auxiliary axis
-     */
-    virtual void DrawBackGround( wxDC* DC ) { printf("EDA_DRAW_PANEL:Unimplemented1\n"); };
-
-    /**
-     * Function DrawGrid
-     * draws a grid to \a aDC.
-     * @see m_ClipBox to determine the damaged area of the drawing to draw the grid.
-     * @see EDA_DRAW_FRAME::IsGridVisible() to determine if grid is shown.
-     * @see EDA_DRAW_FRAME::GetGridColor() for the color of the grid.
-     * @param aDC The device context to draw the grid.
-     */
-    virtual void DrawGrid( wxDC* aDC ) { printf("EDA_DRAW_PANEL:Unimplemented2\n"); };
-
-    /**
-     * Function DrawAuxiliaryAxis
-     * Draw the Auxiliary Axis, used in Pcbnew which as origin coordinates
-     * for gerber and excellon files
-     * @param aDC = current Device Context
-     * @param aDrawMode = draw mode (GR_COPY, GR_OR ..)
-     */
-    virtual void DrawAuxiliaryAxis( wxDC* aDC, GR_DRAWMODE aDrawMode ) { printf("EDA_DRAW_PANEL:Unimplemented2\n");};
-
-    /**
-     * Function DrawGridAxis
-     * Draw on auxiliary axis, used in Pcbnew to show grid origin, when
-     * the grid origin is set by user, and is not (0,0)
-     * @param aDC = current Device Context
-     * @param aDrawMode = draw mode (GR_COPY, GR_OR ..)
-     * @param aGridOrigin = the absolute coordinate of grid origin for snap.
-     */
-    virtual void DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoint& aGridOrigin ) { printf("EDA_DRAW_PANEL:Unimplemented4\n");  };
 
     /* Mouse and keys events */
 
@@ -159,22 +87,12 @@ public:
      *</p>
      */
 
-     virtual void EraseScreen( wxDC* DC ) { printf("EDA_DRAW_PANEL:Unimplemented6\n");  };;
-
     virtual void SetZoom( double mode ) { printf("EDA_DRAW_PANEL:Unimplemented7\n");  };;
     virtual double GetZoom() { return 1.0; };;
 
     //virtual void SetGrid( const wxRealPoint& size ) { printf("EDA_DRAW_PANEL:Unimplemented\n");  };;
     //virtual wxRealPoint GetGrid() { printf("EDA_DRAW_PANEL:Unimplemented\n"); return wxRealPoint(1.0, 1.0); };;
 
-
-    /**
-     * Function IsPointOnDisplay
-     * @param aPosition The position to test in logical (drawing) units.
-     * @return true if \a aPosition is visible on the screen.
-     *         false if \a aPosition is not visible on the screen.
-     */
-    virtual bool IsPointOnDisplay( const wxPoint& aPosition ) { printf("EDA_DRAW_PANEL:Unimplemented9\n"); return false; };;
 
     /**
      * Function SetClipBox
@@ -193,8 +111,6 @@ public:
      *              of the screen.
      */
     virtual void SetClipBox( wxDC& aDC, const wxRect* aRect = NULL ) { printf("EDA_DRAW_PANEL:Unimplemented10\n"); };;
-
-    virtual void ReDraw( wxDC* aDC, bool aEraseBackground = true ) { printf("EDA_DRAW_PANEL:Unimplemented11\n");  };;
 
     /**
      * Function RefreshDrawingRect

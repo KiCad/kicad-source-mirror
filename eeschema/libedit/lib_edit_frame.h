@@ -312,8 +312,6 @@ public:
      */
     void RedrawComponent( wxDC* aDC, wxPoint aOffset );
 
-    void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override { /* OBSOLETE */ }
-
     void OnCloseWindow( wxCloseEvent& Event );
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;

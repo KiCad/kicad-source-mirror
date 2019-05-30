@@ -46,7 +46,7 @@ void EDA_DOCKART::DrawBorder( wxDC& aDC, wxWindow* aWindow, const wxRect& aRect,
     {
         art->DrawBorder( aDC, aWindow, r );
     }
-    else if( aPane.name == "DrawFrame" || aPane.name == "DrawFrameGal" )
+    else if( aPane.name == "DrawFrame" )
     {
         // We don't want to re-write the layout manager, so we give the canvas a single-pixel
         // border and then fill in the top and left with the canvas background colour.

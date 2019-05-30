@@ -112,8 +112,6 @@ void SCH_BASE_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
 {
     LIB_VIEW_FRAME* viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, true );
 
-    viewlibFrame->PushPreferences( m_canvas );
-
     // On Windows, Raise() does not bring the window on screen, when iconized
     if( viewlibFrame->IsIconized() )
         viewlibFrame->Iconize( false );
@@ -405,7 +403,7 @@ void SCH_BASE_FRAME::createCanvas()
 
     // Set up viewport
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
-    view->SetScale( GetZoomLevelCoeff() / m_canvas->GetZoom() );
+    view->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
     view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
 
     UseGalCanvas();

@@ -107,13 +107,6 @@ private:
      */
     void UpdateTitle();
 
-    /**
-     * Function RedrawActiveWindow
-     * Display the current selected component.
-     * If the component is an alias, the ROOT component is displayed
-     */
-    void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
-
     void OnCloseWindow( wxCloseEvent& Event ) override;
     void CloseFootprintViewer( wxCommandEvent& event );
 

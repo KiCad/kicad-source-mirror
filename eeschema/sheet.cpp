@@ -462,7 +462,6 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard( wxCommandEvent& aEvt )
     GetCanvas()->SetClipBox( EDA_RECT( wxPoint( 0, 0 ), wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
 
     dc.Clear();
-    GetCanvas()->EraseScreen( &dc );
     const LSET allLayersMask = LSET().set();
     PrintPage( &dc, allLayersMask, false );
     screen->m_IsPrinting = false;

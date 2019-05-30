@@ -66,7 +66,6 @@ void PL_EDITOR_FRAME::OnFileHistory( wxCommandEvent& event )
             }
         }
 
-        m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT );
         ::wxSetWorkingDirectory( ::wxPathOnly( filename ) );
 
         if( LoadPageLayoutDescrFile( filename ) )

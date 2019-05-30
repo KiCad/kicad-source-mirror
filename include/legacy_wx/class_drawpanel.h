@@ -73,15 +73,6 @@ private:
     /// of the drawing in internal units.
     EDA_RECT    m_ClipBox;
 
-    bool    m_abortRequest;                 ///< Flag used to abort long commands.
-
-    bool    m_enableZoomNoCenter;           ///< True to enable zooming around the crosshair instead of the center
-    bool    m_enableMousewheelPan;          ///< True to enable mousewheel panning by default.
-
-    bool    m_enableAutoPan;                ///< True to enable automatic panning.
-
-    bool    m_requestAutoPan;               ///< true to request an auto pan.  Valid only when m_enableAutoPan = true.
-
     bool    m_ignoreMouseEvents;            ///< Ignore mouse events when true.
 
     /* Used to inhibit a response to a mouse left button release, after a double click
@@ -102,12 +93,6 @@ private:
     /// True when drawing in mirror mode. Used by the draw arc function, because arcs
     /// are oriented, and in mirror mode, orientations are reversed.
     bool    m_PrintIsMirrored;
-
-    /// Mouse capture move callback function.
-    MOUSE_CAPTURE_CALLBACK m_mouseCaptureCallback;
-
-    /// Abort mouse capture callback function.
-    END_MOUSE_CAPTURE_CALLBACK m_endMouseCaptureCallback;
 
     /// useful to avoid false start block in certain cases
     /// (like switch from a sheet to another sheet
@@ -138,69 +123,12 @@ public:
 
     void SetClipBox( const EDA_RECT& aRect ) { m_ClipBox = aRect; }
 
-    bool GetAbortRequest() const { return m_abortRequest; }
-
-    void SetAbortRequest( bool aAbortRequest ) { m_abortRequest = aAbortRequest; }
-
-    bool GetEnableMousewheelPan() const { return m_enableMousewheelPan; }
-
-    void SetEnableMousewheelPan( bool aEnable );
-
-    bool GetEnableZoomNoCenter() const { return m_enableZoomNoCenter; }
-
-    void SetEnableZoomNoCenter( bool aEnable );
-
-    bool GetEnableAutoPan() const { return m_enableAutoPan; }
-
-    void SetEnableAutoPan( bool aEnable );
-
-    void SetAutoPanRequest( bool aEnable ) { m_requestAutoPan = aEnable; }
-
     void SetIgnoreMouseEvents( bool aIgnore ) { m_ignoreMouseEvents = aIgnore; }
 
     void SetIgnoreLeftButtonReleaseEvent( bool aIgnore ) { m_ignoreNextLeftButtonRelease = aIgnore; }
 
     bool GetPrintMirrored() const               { return m_PrintIsMirrored; }
     void SetPrintMirrored( bool aMirror )       { m_PrintIsMirrored = aMirror; }
-
-    /**
-     * Function DrawBackGround
-     * @param DC = current Device Context
-     * Draws (if allowed) :
-     * the grid
-     * X and Y axis
-     * X and Y auxiliary axis
-     */
-    void DrawBackGround( wxDC* DC );
-
-    /**
-     * Function DrawGrid
-     * draws a grid to \a aDC.
-     * @see m_ClipBox to determine the damaged area of the drawing to draw the grid.
-     * @see EDA_DRAW_FRAME::IsGridVisible() to determine if grid is shown.
-     * @see EDA_DRAW_FRAME::GetGridColor() for the color of the grid.
-     * @param aDC The device context to draw the grid.
-     */
-    void DrawGrid( wxDC* aDC );
-
-    /**
-     * Function DrawAuxiliaryAxis
-     * Draw the Auxiliary Axis, used in Pcbnew which as origin coordinates
-     * for gerber and excellon files
-     * @param aDC = current Device Context
-     * @param aDrawMode = draw mode (GR_COPY, GR_OR ..)
-     */
-    void DrawAuxiliaryAxis( wxDC* aDC, GR_DRAWMODE aDrawMode );
-
-    /**
-     * Function DrawGridAxis
-     * Draw on auxiliary axis, used in Pcbnew to show grid origin, when
-     * the grid origin is set by user, and is not (0,0)
-     * @param aDC = current Device Context
-     * @param aDrawMode = draw mode (GR_COPY, GR_OR ..)
-     * @param aGridOrigin = the absolute coordinate of grid origin for snap.
-     */
-    void DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoint& aGridOrigin );
 
     void OnEraseBackground( wxEraseEvent& event ) { }
 
@@ -264,23 +192,11 @@ public:
 
     void OnPan( wxCommandEvent& event );
 
-    void EraseScreen( wxDC* DC );
     void OnScrollWin( wxCommandEvent& event );
     void OnScroll( wxScrollWinEvent& event );
 
-    void SetZoom( double mode );
-    double GetZoom();
-
     void SetGrid( const wxRealPoint& size );
     wxRealPoint GetGrid();
-
-    /**
-     * Function IsPointOnDisplay
-     * @param aPosition The position to test in logical (drawing) units.
-     * @return true if \a aPosition is visible on the screen.
-     *         false if \a aPosition is not visible on the screen.
-     */
-    bool IsPointOnDisplay( const wxPoint& aPosition );
 
     /**
      * Function SetClipBox
@@ -299,8 +215,6 @@ public:
      *              of the screen.
      */
     void SetClipBox( wxDC& aDC, const wxRect* aRect = NULL );
-
-    void ReDraw( wxDC* aDC, bool aEraseBackground = true );
 
     /**
      * Function RefreshDrawingRect
@@ -365,63 +279,6 @@ public:
 
     // Show the cross hair.
     void CrossHairOn( wxDC* DC );
-
-    /**
-     * Function SetMouseCapture
-     * sets the mouse capture and end mouse capture callbacks to \a aMouseCaptureCallback
-     * and \a aEndMouseCaptureCallback respectively.
-     */
-    void SetMouseCapture( MOUSE_CAPTURE_CALLBACK aMouseCaptureCallback,
-                          END_MOUSE_CAPTURE_CALLBACK aEndMouseCaptureCallback )
-    {
-        m_mouseCaptureCallback = aMouseCaptureCallback;
-        m_endMouseCaptureCallback = aEndMouseCaptureCallback;
-    }
-
-
-    void SetMouseCaptureCallback( MOUSE_CAPTURE_CALLBACK aMouseCaptureCallback )
-    {
-        m_mouseCaptureCallback = aMouseCaptureCallback;
-    }
-
-
-    /**
-     * Function EndMouseCapture
-     * ends mouse a capture.
-     *
-     * Check to see if the cursor is being managed for block or editing commands and release it.
-     * @param aId The command ID to restore or -1 to keep the current command ID.
-     * @param aCursorId The wxWidgets stock cursor ID to set the cursor to or -1 to keep the
-     *                  current cursor.
-     * @param aTitle The tool message to display in the status bar or wxEmptyString to clear
-     *               the message.
-     * @param aCallEndFunc Call the abort mouse capture callback if true.
-     */
-    void EndMouseCapture( int aId = -1, int aCursorId = -1,
-                          const wxString& aTitle = wxEmptyString,
-                          bool aCallEndFunc = true );
-
-    inline bool IsMouseCaptured() const { return m_mouseCaptureCallback != NULL; }
-
-    /**
-     * Function CallMouseCapture
-     * calls the mouse capture callback.
-     *
-     * @param aDC A point to a wxDC object to perform any drawing upon.
-     * @param aPosition A referecnce to a wxPoint object containing the current cursor
-     *                  position.
-     * @param aErase True indicates the item being drawn should be erase before drawing
-     *               it a \a aPosition.
-     */
-    void CallMouseCapture( wxDC* aDC, const wxPoint& aPosition, bool aErase );
-
-    /**
-     * Function CallEndMouseCapture
-     * calls the end mouse capture callback.
-     *
-     * @param aDC A point to a wxDC object to perform any drawing upon.
-     */
-    void CallEndMouseCapture( wxDC* aDC );
 
     /**
      * Function SetCurrentCursor

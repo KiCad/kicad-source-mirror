@@ -253,7 +253,8 @@ void EDA_DRAW_FRAME::CommonSettingsChanged()
 {
     EDA_BASE_FRAME::CommonSettingsChanged();
 
-    wxConfigBase* settings = Pgm().CommonSettings();
+    wxConfigBase*         settings = Pgm().CommonSettings();
+    KIGFX::VIEW_CONTROLS* viewControls = GetGalCanvas()->GetViewControls();
 
     int autosaveInterval;
     settings->Read( AUTOSAVE_INTERVAL_KEY, &autosaveInterval );
@@ -265,13 +266,13 @@ void EDA_DRAW_FRAME::CommonSettingsChanged()
 
     bool option;
     settings->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option );
-    m_canvas->SetEnableMousewheelPan( option );
+    viewControls->EnableMousewheelPan( option );
 
     settings->Read( ENBL_ZOOM_NO_CENTER_KEY, &option );
-    m_canvas->SetEnableZoomNoCenter( option );
+    viewControls->EnableCursorWarping( !option );
 
     settings->Read( ENBL_AUTO_PAN_KEY, &option );
-    m_canvas->SetEnableAutoPan( option );
+    viewControls->EnableAutoPan( option );
 
     m_galDisplayOptions.ReadCommonConfig( *settings, this );
 }
@@ -396,68 +397,40 @@ void EDA_DRAW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMod
 
 void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 {
-    int* clientData;
-    int  eventId = ID_POPUP_GRID_LEVEL_100;
+    wxCHECK_RET( m_gridSelectBox, "m_gridSelectBox uninitialized" );
 
-    if( event.GetEventType() == wxEVT_CHOICE )
+    int id = m_gridSelectBox->GetCurrentSelection() + ID_POPUP_GRID_FIRST;
+
+    if( id == ID_POPUP_GRID_SEPARATOR )
     {
-        if( m_gridSelectBox == NULL )   // Should not happen
-            return;
-
-        /*
-         * Don't use wxCommandEvent::GetClientData() here.  It always
-         * returns NULL in GTK.  This solution is not as elegant but
-         * it works.
-         */
-        int index = m_gridSelectBox->GetSelection();
-        wxASSERT( index != wxNOT_FOUND );
-
-        // GerbView does not support custom grid
-        if( m_Ident != FRAME_GERBER )
-        {
-            if( index == int( m_gridSelectBox->GetCount() - 2 ) )
-            {
-                // this is the separator
-                wxUpdateUIEvent dummy;
-                OnUpdateSelectGrid( dummy );
-                return;
-            }
-            else if( index == int( m_gridSelectBox->GetCount() - 1 ) )
-            {
-                wxUpdateUIEvent dummy;
-                OnUpdateSelectGrid( dummy );
-                wxCommandEvent dummy2;
-                OnGridSettings( dummy2 );
-                return;
-            }
-        }
-
-        clientData = (int*) m_gridSelectBox->wxItemContainer::GetClientData( index );
-
-        if( clientData != NULL )
-            eventId = *clientData;
+        // wxWidgets will check the separator, which we don't want.
+        // Re-check the current grid.
+        wxUpdateUIEvent dummy;
+        OnUpdateSelectGrid( dummy );
     }
-    else
+    else if( id == ID_POPUP_GRID_SETTINGS )
     {
-        eventId = event.GetId();
+        // wxWidgets will check the Grid Settings... entry, which we don't want.
+        // R-check the current grid.
+        wxUpdateUIEvent dummy;
+        OnUpdateSelectGrid( dummy );
+        // Now run the Grid Settings... dialog
+        wxCommandEvent dummy2;
+        OnGridSettings( dummy2 );
+    }
+    else if( id >= ID_POPUP_GRID_FIRST && id < ID_POPUP_GRID_SEPARATOR  )
+    {
+        m_toolManager->RunAction( ACTIONS::gridPreset, true, id );
     }
 
-    int idx = eventId - ID_POPUP_GRID_LEVEL_1000;
-
-    // Notify GAL
-    TOOL_MANAGER* mgr = GetToolManager();
-
-    if( mgr )
-        mgr->RunAction( "common.Control.gridPreset", true, idx );
-
-    m_canvas->Refresh();
+    UpdateStatusBar();
+    m_galCanvas->Refresh();
 }
 
 
 void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
 {
-    if( m_zoomSelectBox == NULL )
-        return;                        // Should not happen!
+    wxCHECK_RET( m_zoomSelectBox, "m_zoomSelectBox uninitialized" );
 
     int id = m_zoomSelectBox->GetCurrentSelection();
 
@@ -534,13 +507,7 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 void EDA_DRAW_FRAME::SetNoToolSelected()
 {
     // Select the ID_NO_TOOL_SELECTED id tool (Idle tool)
-
-    int defaultCursor = wxCURSOR_DEFAULT;
-
-    // Change GAL canvas cursor if requested.
-    defaultCursor = GetGalCanvas()->GetDefaultCursor();
-
-    SetToolID( ID_NO_TOOL_SELECTED, defaultCursor, wxEmptyString );
+    SetToolID( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor(), wxEmptyString );
 }
 
 
@@ -601,8 +568,7 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
     if( m_LastGridSizeId < 0 )
         m_LastGridSizeId = 0;
 
-    m_UndoRedoCountMax = aCfg->Read( baseCfgName + MaxUndoItemsEntry,
-            long( DEFAULT_MAX_UNDO_ITEMS ) );
+    m_UndoRedoCountMax = aCfg->Read( baseCfgName + MaxUndoItemsEntry, long( DEFAULT_MAX_UNDO_ITEMS ) );
 
     aCfg->Read( baseCfgName + FirstRunShownKeyword, &m_firstRunDialogSetting, 0L );
 
@@ -630,8 +596,7 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
 }
 
 
-void EDA_DRAW_FRAME::AppendMsgPanel( const wxString& textUpper,
-                                     const wxString& textLower,
+void EDA_DRAW_FRAME::AppendMsgPanel( const wxString& textUpper, const wxString& textLower,
                                      COLOR4D color, int pad )
 {
     if( m_messagePanel == NULL )
@@ -678,23 +643,6 @@ void EDA_DRAW_FRAME::UpdateMsgPanel()
 }
 
 
-// FIXME: There needs to be a better way for child windows to load preferences.
-//        This function pushes four preferences from a parent window to a child window
-//        i.e. from eeschema to the schematic symbol editor
-void EDA_DRAW_FRAME::PushPreferences( const EDA_DRAW_PANEL* aParentCanvas )
-{
-    m_canvas->SetEnableZoomNoCenter( aParentCanvas->GetEnableZoomNoCenter() );
-    m_canvas->SetEnableAutoPan( aParentCanvas->GetEnableAutoPan() );
-}
-
-
-// I am not seeing a problem with this size yet:
-static const double MAX_AXIS = INT_MAX - 100;
-
-#define VIRT_MIN    (-MAX_AXIS/2.0)     ///< min X or Y coordinate in virtual space
-#define VIRT_MAX    (MAX_AXIS/2.0)      ///< max X or Y coordinate in virtual space
-
-
 void EDA_DRAW_FRAME::UseGalCanvas()
 {
     KIGFX::GAL* gal = GetGalCanvas()->GetGAL();
@@ -704,22 +652,10 @@ void EDA_DRAW_FRAME::UseGalCanvas()
     gal->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
     gal->SetGridOrigin( VECTOR2D( GetGridOrigin() ) );
 
-    // Transfer EDA_DRAW_PANEL settings
-    KIGFX::VIEW_CONTROLS* viewControls = GetGalCanvas()->GetViewControls();
-    viewControls->EnableCursorWarping( !m_canvas->GetEnableZoomNoCenter() );
-    viewControls->EnableMousewheelPan( m_canvas->GetEnableMousewheelPan() );
-    viewControls->EnableAutoPan( m_canvas->GetEnableAutoPan() );
-
     m_canvas->SetEvtHandlerEnabled( false );
     GetGalCanvas()->SetEvtHandlerEnabled( true );
 
     GetGalCanvas()->StartDrawing();
-
-    // Switch panes
-    // JEY TODO: drop down to a single pane....
-    m_auimgr.GetPane( "DrawFrame" ).Show( false );
-    m_auimgr.GetPane( "DrawFrameGal" ).Show( true );
-    m_auimgr.Update();
 
     // Reset current tool on switch();
     SetNoToolSelected();
@@ -869,38 +805,6 @@ void EDA_DRAW_FRAME::SetScrollCenterPosition( const wxPoint& aPoint )
 }
 
 //-----</BASE_SCREEN API moved here >--------------------------------------------
-
-void EDA_DRAW_FRAME::RefreshCrossHair( const wxPoint &aOldPos, const wxPoint &aEvtPos, wxDC* aDC )
-{
-    wxPoint newpos = GetCrossHairPosition();
-
-    // Redraw the crosshair if it moved
-    if( aOldPos != newpos )
-    {
-        SetCrossHairPosition( aOldPos, false );
-        m_canvas->CrossHairOff( aDC );
-        SetCrossHairPosition( newpos, false );
-        m_canvas->CrossHairOn( aDC );
-
-        if( m_canvas->IsMouseCaptured() )
-        {
-#ifdef USE_WX_OVERLAY
-            wxDCOverlay oDC( m_overlay, (wxWindowDC*)aDC );
-            oDC.Clear();
-            m_canvas->CallMouseCapture( aDC, aEvtPos, false );
-#else
-            m_canvas->CallMouseCapture( aDC, aEvtPos, true );
-#endif
-        }
-#ifdef USE_WX_OVERLAY
-        else
-        {
-            m_overlay.Reset();
-        }
-#endif
-    }
-}
-
 
 bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
                                          const wxString& wildcard, const wxString& ext,
@@ -1081,71 +985,6 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
         SetCrossHairPosition( GetScrollCenterPosition() );
 
     m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
-}
-
-
-void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
-{
-    int         maxZoomIds;
-    double      zoom;
-    wxString    msg;
-    BASE_SCREEN* screen = m_canvas->GetScreen();
-
-    msg = AddHotkeyName( _( "Center" ), m_hotkeysDescrList, HK_ZOOM_CENTER );
-    AddMenuItem( MasterMenu, ID_POPUP_ZOOM_CENTER, msg, KiBitmap( zoom_center_on_screen_xpm ) );
-    msg = AddHotkeyName( _( "Zoom In" ), m_hotkeysDescrList, HK_ZOOM_IN );
-    AddMenuItem( MasterMenu, ID_POPUP_ZOOM_IN, msg, KiBitmap( zoom_in_xpm ) );
-    msg = AddHotkeyName( _( "Zoom Out" ), m_hotkeysDescrList, HK_ZOOM_OUT );
-    AddMenuItem( MasterMenu, ID_POPUP_ZOOM_OUT, msg, KiBitmap( zoom_out_xpm ) );
-    msg = AddHotkeyName( _( "Redraw View" ), m_hotkeysDescrList, HK_ZOOM_REDRAW );
-    AddMenuItem( MasterMenu, ID_POPUP_ZOOM_REDRAW, msg, KiBitmap( zoom_redraw_xpm ) );
-    msg = AddHotkeyName( _( "Zoom to Fit" ), m_hotkeysDescrList, HK_ZOOM_AUTO );
-    AddMenuItem( MasterMenu, ID_POPUP_ZOOM_PAGE, msg, KiBitmap( zoom_fit_in_page_xpm ) );
-
-
-    wxMenu* zoom_choice = new wxMenu;
-    AddMenuItem( MasterMenu, zoom_choice,
-                 ID_POPUP_ZOOM_SELECT, _( "Zoom" ),
-                 KiBitmap( zoom_selection_xpm ) );
-
-    zoom = screen->GetZoom();
-    maxZoomIds = ID_POPUP_ZOOM_LEVEL_END - ID_POPUP_ZOOM_LEVEL_START;
-    maxZoomIds = ( (size_t) maxZoomIds < screen->m_ZoomList.size() ) ?
-                 maxZoomIds : screen->m_ZoomList.size();
-
-    // Populate zoom submenu.
-    for( int i = 0; i < maxZoomIds; i++ )
-    {
-        msg.Printf( wxT( "%.2f" ), m_zoomLevelCoeff / screen->m_ZoomList[i] );
-
-        zoom_choice->Append( ID_POPUP_ZOOM_LEVEL_START + i, _( "Zoom: " ) + msg,
-                             wxEmptyString, wxITEM_CHECK );
-        if( zoom == screen->m_ZoomList[i] )
-            zoom_choice->Check( ID_POPUP_ZOOM_LEVEL_START + i, true );
-    }
-
-    // Create grid submenu as required.
-    if( screen->GetGridCount() )
-    {
-        wxMenu* gridMenu = new wxMenu;
-        AddMenuItem( MasterMenu, gridMenu, ID_POPUP_GRID_SELECT,
-                     _( "Grid" ), KiBitmap( grid_select_xpm ) );
-
-        wxArrayString gridsList;
-        int icurr = screen->BuildGridsChoiceList( gridsList, GetUserUnits() != INCHES );
-
-        for( unsigned i = 0; i < gridsList.GetCount(); i++ )
-        {
-            GRID_TYPE& grid = screen->GetGrid( i );
-            gridMenu->Append( grid.m_CmdId, gridsList[i], wxEmptyString, wxITEM_CHECK );
-
-            if( (int)i == icurr )
-                gridMenu->Check( grid.m_CmdId, true );
-        }
-    }
-
-    MasterMenu->AppendSeparator();
-    AddMenuItem( MasterMenu, ID_POPUP_CANCEL, _( "Close" ), KiBitmap( cancel_xpm ) );
 }
 
 

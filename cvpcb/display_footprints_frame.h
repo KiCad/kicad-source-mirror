@@ -55,11 +55,6 @@ public:
      */
     void OnUIToolSelection( wxUpdateUIEvent& aEvent );
 
-    /*
-     * Draws the current highlighted footprint.
-     */
-    void    RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
-
     void    ReCreateHToolbar() override;
     void    ReCreateVToolbar() override;
     void    ReCreateOptToolbar() override;

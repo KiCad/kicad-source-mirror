@@ -41,7 +41,6 @@ set( GERBVIEW_SRCS
     X2_gerber_attributes.cpp
     clear_gbr_drawlayers.cpp
     dcode.cpp
-    draw_gerber_screen.cpp
     evaluate.cpp
     events_called_functions.cpp
     excellon_read_drill_file.cpp

@@ -84,7 +84,6 @@ public:
     bool ReCreateListCmp();
 
     void DisplayLibInfos();
-    void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override { /* OBSOLETE */ }
     void OnCloseWindow( wxCloseEvent& Event );
     void CloseLibraryViewer( wxCommandEvent& event );
     void ReCreateHToolbar() override;

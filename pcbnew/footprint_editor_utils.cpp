@@ -138,10 +138,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     int        id = event.GetId();
     wxPoint    pos;
 
-    INSTALL_UNBUFFERED_DC( dc, m_canvas );
-
     wxGetMousePosition( &pos.x, &pos.y );
-
     pos.y += 20;
 
     switch( id )
@@ -153,14 +150,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:
-        if( m_canvas->IsMouseCaptured() )
-        {
-            //  for all other commands: stop the move in progress
-            m_canvas->CallEndMouseCapture( &dc );
-        }
-
         SetNoToolSelected();
-
         break;
     }
 
@@ -479,8 +469,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             m_canvas->Refresh();
         }
         break;
-
-    break;
 
     case ID_GEN_IMPORT_GRAPHICS_FILE:
         if( GetBoard()->m_Modules )

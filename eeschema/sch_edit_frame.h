@@ -299,8 +299,6 @@ public:
     void LoadSettings( wxConfigBase* aCfg ) override;
     void SaveSettings( wxConfigBase* aCfg ) override;
 
-    void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override { /* OBSOLETE */ }
-
     void CreateScreens();
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;

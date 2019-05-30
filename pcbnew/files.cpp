@@ -196,8 +196,6 @@ void PCB_EDIT_FRAME::OnFileHistory( wxCommandEvent& event )
     {
         int open_ctl = 0;
 
-        m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
-
         if( !wxFileName::IsFileReadable( fn ) )
         {
             if( !AskLoadBoardFileName( this, &open_ctl, &fn, true ) )
@@ -219,13 +217,6 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
 bool PCB_EDIT_FRAME::Files_io_from_id( int id )
 {
     wxString   msg;
-
-    // If an edit is in progress, stop it.
-    // For something else than save, get rid of current tool.
-    if( id == ID_SAVE_BOARD )
-        m_canvas->EndMouseCapture( -1, m_canvas->GetDefaultCursor() );
-    else
-        m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
 
     switch( id )
     {

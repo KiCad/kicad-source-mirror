@@ -197,7 +197,6 @@ public:
 
     // General
     virtual void OnCloseWindow( wxCloseEvent& Event ) = 0;
-    virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override { }
     virtual void ReCreateOptToolbar() { }
     virtual void ShowChangedLanguage() override;
     virtual void ReCreateMenuBar() override;

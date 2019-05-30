@@ -43,11 +43,6 @@ public:
     bool SwitchBackend( GAL_TYPE aGalType ) override;
     void OnCharHook( wxKeyEvent& event );
 
-    void SetEnableMousewheelPan( bool aEnable ) override;
-    void SetEnableZoomNoCenter( bool aEnable ) override;
-    void SetEnableAutoPan( bool aEnable ) override;
-    void SetAutoPanRequest( bool aEnable ) override;
-
     BASE_SCREEN* GetScreen() override;
     virtual EDA_DRAW_FRAME* GetParent() const override;
 

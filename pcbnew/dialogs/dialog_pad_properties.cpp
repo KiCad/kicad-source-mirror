@@ -230,7 +230,7 @@ void DIALOG_PAD_PROPERTIES::enablePrimitivePage( bool aEnable )
 
 void DIALOG_PAD_PROPERTIES::prepareCanvas()
 {
-    // Initialize the canvases (legacy or gal) to display the pad
+    // Initialize the canvas to display the pad
 
     // Show the X and Y axis. It is usefull because pad shape can have an offset
     // or be a complex shape.
@@ -245,7 +245,7 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
     m_panelShowPadGal->SwitchBackend( m_parent->GetGalCanvas()->GetBackend() );
     m_panelShowPadGal->SetStealsFocus( false );
 
-    bool mousewheelPan = m_parent->GetCanvas()->GetEnableMousewheelPan();
+    bool mousewheelPan = m_parent->GetGalCanvas()->GetViewControls()->IsMousewheelPanEnabled();
     m_panelShowPadGal->GetViewControls()->EnableMousewheelPan( mousewheelPan );
 
     m_panelShowPadGal->Show();

@@ -200,7 +200,8 @@ enum main_id
     ID_POPUP_GRID_NEXT,
     ID_POPUP_GRID_PREV,
     ID_POPUP_GRID_SELECT,
-    ID_POPUP_GRID_LEVEL_1000,       // id for first predefined grid in inches (1000 * 0.0001 inch)
+    ID_POPUP_GRID_FIRST,
+    ID_POPUP_GRID_LEVEL_1000 = ID_POPUP_GRID_FIRST, // These must be in same order as menu
     ID_POPUP_GRID_LEVEL_500,
     ID_POPUP_GRID_LEVEL_250,
     ID_POPUP_GRID_LEVEL_200,
@@ -211,10 +212,10 @@ enum main_id
     ID_POPUP_GRID_LEVEL_10,
     ID_POPUP_GRID_LEVEL_5,
     ID_POPUP_GRID_LEVEL_2,
-    ID_POPUP_GRID_LEVEL_1,       // id for last predefined grid in inches ( 0.0001 inch)
+    ID_POPUP_GRID_LEVEL_1,
     ID_POPUP_GRID_LEVEL_5MM,
     ID_POPUP_GRID_LEVEL_2_5MM,
-    ID_POPUP_GRID_LEVEL_1MM,     // id for first predefined grid in mm (1mm)
+    ID_POPUP_GRID_LEVEL_1MM,
     ID_POPUP_GRID_LEVEL_0_5MM,
     ID_POPUP_GRID_LEVEL_0_25MM,
     ID_POPUP_GRID_LEVEL_0_2MM,
@@ -223,6 +224,8 @@ enum main_id
     ID_POPUP_GRID_LEVEL_0_0_25MM,
     ID_POPUP_GRID_LEVEL_0_0_1MM,
     ID_POPUP_GRID_USER,
+    ID_POPUP_GRID_SEPARATOR,
+    ID_POPUP_GRID_SETTINGS,
 
     ID_GRID_SETTINGS,
 

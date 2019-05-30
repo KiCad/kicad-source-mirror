@@ -175,7 +175,6 @@ private:
     void                DisplayWizardInfos();
 
 
-    void                RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
     void                OnCloseWindow( wxCloseEvent& Event ) override;
     void                ReCreateHToolbar() override;
     void                ReCreateVToolbar() override;

@@ -85,11 +85,6 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
 
     Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( SCH_DRAW_PANEL::OnCharHook ), NULL, this );
 
-    Pgm().CommonSettings()->Read( ENBL_MOUSEWHEEL_PAN_KEY, &m_enableMousewheelPan, false );
-    Pgm().CommonSettings()->Read( ENBL_ZOOM_NO_CENTER_KEY, &m_enableZoomNoCenter, false );
-    Pgm().CommonSettings()->Read( ENBL_AUTO_PAN_KEY, &m_enableAutoPan, true );
-
-    m_abortRequest = false;
     m_ignoreMouseEvents = false;
     // Be sure a mouse release button event will be ignored when creating the canvas
     // if the mouse click was not made inside the canvas (can happen sometimes, when
@@ -162,36 +157,6 @@ bool SCH_DRAW_PANEL::SwitchBackend( GAL_TYPE aGalType )
     Refresh();
 
     return rv;
-}
-
-
-void SCH_DRAW_PANEL::SetEnableMousewheelPan( bool aEnable )
-{
-    m_enableMousewheelPan = aEnable;
-
-    GetParent()->GetGalCanvas()->GetViewControls()->EnableMousewheelPan( aEnable );
-}
-
-
-void SCH_DRAW_PANEL::SetEnableAutoPan( bool aEnable )
-{
-    EDA_DRAW_PANEL::SetEnableAutoPan( aEnable );
-
-    GetParent()->GetGalCanvas()->GetViewControls()->EnableAutoPan( aEnable );
-}
-
-
-void SCH_DRAW_PANEL::SetAutoPanRequest( bool aEnable )
-{
-    GetParent()->GetGalCanvas()->GetViewControls()->SetAutoPan( aEnable );
-}
-
-
-void SCH_DRAW_PANEL::SetEnableZoomNoCenter( bool aEnable )
-{
-    m_enableZoomNoCenter = aEnable;
-
-    GetParent()->GetGalCanvas()->GetViewControls()->EnableCursorWarping( !aEnable );
 }
 
 

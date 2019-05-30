@@ -26,6 +26,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <pgm_base.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 #include <view/zoom_controller.h>
@@ -54,9 +55,26 @@ static std::unique_ptr<ZOOM_CONTROLLER> GetZoomControllerForPlatform()
 
 
 WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel ) :
-    VIEW_CONTROLS( aView ), m_state( IDLE ), m_parentPanel( aParentPanel ),
-    m_scrollScale( 1.0, 1.0 ), m_lastTimestamp( 0 ), m_cursorPos( 0, 0 ), m_updateCursor( true )
+        VIEW_CONTROLS( aView ),
+        m_state( IDLE ),
+        m_parentPanel( aParentPanel ),
+        m_scrollScale( 1.0, 1.0 ),
+        m_lastTimestamp( 0 ),
+        m_cursorPos( 0, 0 ),
+        m_updateCursor( true )
 {
+    bool enableMousewheelPan = false;
+    bool enableZoomNoCenter = false;
+    bool enableAutoPan = true;
+
+    Pgm().CommonSettings()->Read( ENBL_MOUSEWHEEL_PAN_KEY, &enableMousewheelPan, false );
+    Pgm().CommonSettings()->Read( ENBL_ZOOM_NO_CENTER_KEY, &enableZoomNoCenter, false );
+    Pgm().CommonSettings()->Read( ENBL_AUTO_PAN_KEY, &enableAutoPan, true );
+
+    m_settings.m_enableMousewheelPan = enableMousewheelPan;
+    m_settings.m_warpCursor = !enableZoomNoCenter;
+    m_settings.m_autoPanSettingEnabled = enableAutoPan;
+
     m_parentPanel->Connect( wxEVT_MOTION,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onMotion ), NULL, this );
 #if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
@@ -104,8 +122,7 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
     m_cursorWarped = false;
 
     m_panTimer.SetOwner( this );
-    this->Connect( wxEVT_TIMER,
-                   wxTimerEventHandler( WX_VIEW_CONTROLS::onTimer ), NULL, this );
+    this->Connect( wxEVT_TIMER, wxTimerEventHandler( WX_VIEW_CONTROLS::onTimer ), NULL, this );
 
     m_settings.m_lastKeyboardCursorPositionValid = false;
 }
@@ -113,6 +130,14 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
 
 WX_VIEW_CONTROLS::~WX_VIEW_CONTROLS()
 {
+    wxConfigBase* cfg = Pgm().CommonSettings();
+
+    if( cfg )
+    {
+        cfg->Write( ENBL_MOUSEWHEEL_PAN_KEY, m_settings.m_enableMousewheelPan );
+        cfg->Write( ENBL_ZOOM_NO_CENTER_KEY, !m_settings.m_warpCursor );
+        cfg->Write( ENBL_AUTO_PAN_KEY, m_settings.m_autoPanSettingEnabled );
+    }
 }
 
 

@@ -63,12 +63,8 @@
 // Handles the selection of command events.
 void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
-    int         id = event.GetId();
-
-    INSTALL_UNBUFFERED_DC( dc, m_canvas );
+    int  id = event.GetId();
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-
-    m_canvas->CrossHairOff( &dc );
 
     switch( id )   // Some (not all ) edit commands must be finished or aborted
     {
@@ -79,9 +75,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:        // Finish (abort) the command
-        if( m_canvas->IsMouseCaptured() )
-            m_canvas->CallEndMouseCapture( &dc );
-
         if( GetToolId() != id )
         {
             if( m_lastDrawToolId != GetToolId() )
@@ -120,8 +113,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 if( wxWindow::FindFocus() != editor )
                     editor->SetFocus();
             }
-
-            editor->PushPreferences( m_canvas );
         }
         break;
 
@@ -147,8 +138,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 if( wxWindow::FindFocus() != viewer )
                     viewer->SetFocus();
             }
-
-            viewer->PushPreferences( m_canvas );
         }
         break;
 
@@ -212,7 +201,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
     }
 
-    m_canvas->CrossHairOn( &dc );
     m_canvas->SetIgnoreMouseEvents( false );
 }
 
@@ -264,14 +252,9 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
 void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 {
     // JEY TODO: obsolete?
-    int id = aEvent.GetId();
-    int lastToolID = GetToolId();
-
-    INSTALL_UNBUFFERED_DC( dc, m_canvas );
+    int  id = aEvent.GetId();
+    int  lastToolID = GetToolId();
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-
-    // Stop the current command and deselect the current tool.
-    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
 
     switch( id )
     {
@@ -293,7 +276,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         else
             SetToolID( id, wxCURSOR_QUESTION_ARROW, _( "Add tracks" ) );
 
-        Compile_Ratsnest( &dc, true );
+        Compile_Ratsnest( nullptr, true );
         break;
 
     case ID_PCB_ZONES_BUTT:
@@ -354,7 +337,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     case ID_LOCAL_RATSNEST_BUTT:
         SetToolID( id, wxCURSOR_HAND, _( "Select rats nest" ) );
 
-        Compile_Ratsnest( &dc, true );
+        Compile_Ratsnest( nullptr, true );
 
         break;
 

@@ -237,7 +237,8 @@ void EDA_DRAW_FRAME::CommonSettingsChanged()
 {
     EDA_BASE_FRAME::CommonSettingsChanged();
 
-    wxConfigBase* settings = Pgm().CommonSettings();
+    wxConfigBase*         settings = Pgm().CommonSettings();
+    KIGFX::VIEW_CONTROLS* viewControls = GetGalCanvas()->GetViewControls();
 
     int autosaveInterval;
     settings->Read( AUTOSAVE_INTERVAL_KEY, &autosaveInterval );
@@ -249,13 +250,13 @@ void EDA_DRAW_FRAME::CommonSettingsChanged()
 
     bool option;
     settings->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option );
-    m_canvas->SetEnableMousewheelPan( option );
+    viewControls->EnableMousewheelPan( option );
 
     settings->Read( ENBL_ZOOM_NO_CENTER_KEY, &option );
-    m_canvas->SetEnableZoomNoCenter( option );
+    viewControls->EnableCursorWarping( !option );
 
     settings->Read( ENBL_AUTO_PAN_KEY, &option );
-    m_canvas->SetEnableAutoPan( option );
+    viewControls->EnableAutoPan( option );
 
     m_galDisplayOptions.ReadCommonConfig( *settings, this );
 }
@@ -389,12 +390,6 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
 {
     wxFAIL_MSG( "Obsolete!  Should go through ToolManager." );
-}
-
-
-double EDA_DRAW_FRAME::GetZoom()
-{
-    return GetScreen()->GetZoom();
 }
 
 
@@ -582,25 +577,9 @@ void EDA_DRAW_FRAME::UpdateMsgPanel()
 }
 
 
-// FIXME: There needs to be a better way for child windows to load preferences.
-//        This function pushes four preferences from a parent window to a child window
-//        i.e. from eeschema to the schematic symbol editor
-void EDA_DRAW_FRAME::PushPreferences( const EDA_DRAW_PANEL* aParentCanvas )
-{
-    m_canvas->SetEnableZoomNoCenter( aParentCanvas->GetEnableZoomNoCenter() );
-    m_canvas->SetEnableAutoPan( aParentCanvas->GetEnableAutoPan() );
-}
-
-
 void EDA_DRAW_FRAME::UseGalCanvas()
 {
     EDA_DRAW_PANEL_GAL* galCanvas = GetGalCanvas();
-
-    // Display the same view after canvas switching
-    KIGFX::VIEW_CONTROLS* viewControls = galCanvas->GetViewControls();
-    viewControls->EnableCursorWarping( !m_canvas->GetEnableZoomNoCenter() );
-    viewControls->EnableMousewheelPan( m_canvas->GetEnableMousewheelPan() );
-    viewControls->EnableAutoPan( m_canvas->GetEnableAutoPan() );
 
     galCanvas->SetEvtHandlerEnabled( true );
     galCanvas->StartDrawing();
@@ -752,12 +731,6 @@ void EDA_DRAW_FRAME::SetScrollCenterPosition( const wxPoint& aPoint )
 
 //-----</BASE_SCREEN API moved here >--------------------------------------------
 
-void EDA_DRAW_FRAME::RefreshCrossHair( const wxPoint &aOldPos, const wxPoint &aEvtPos, wxDC* aDC )
-{
-    wxFAIL_MSG( "Obsolete; use CallMouseCapture() directly" );
-}
-
-
 bool EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos, bool aSnapToGrid )
 {
     bool key_handled = false;
@@ -879,12 +852,6 @@ double EDA_DRAW_FRAME::bestZoom( double sizeX, double sizeY, double scaleFactor,
 
 
 void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
-{
-    wxFAIL_MSG( "Obsolete!  Should go through COMMON_TOOLS." );
-}
-
-
-void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
 {
     wxFAIL_MSG( "Obsolete!  Should go through COMMON_TOOLS." );
 }

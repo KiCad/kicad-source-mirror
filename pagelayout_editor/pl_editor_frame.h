@@ -99,7 +99,6 @@ public:
     void setupTools();
 
     // Virtual basic functions:
-    void    RedrawActiveWindow( wxDC* DC, bool EraseBg ) override { /* OBSOLETE */ }
     void    ReCreateHToolbar() override;
 
     void SetPageSettings(const PAGE_INFO&) override;

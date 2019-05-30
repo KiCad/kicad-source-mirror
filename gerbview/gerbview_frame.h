@@ -200,7 +200,6 @@ public:
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl ) override;
 
     // Virtual basic functions:
-    void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
     void ReCreateHToolbar() override;
     void ReCreateAuxiliaryToolbar() override;
 

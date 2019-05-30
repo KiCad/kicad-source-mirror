@@ -480,7 +480,6 @@ public:
      */
     void OnEditTracksAndVias( wxCommandEvent& event );
 
-    void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
     void ReCreateHToolbar() override;
     void ReCreateAuxiliaryToolbar() override;
     void ReCreateVToolbar() override;
@@ -1021,16 +1020,9 @@ public:
      */
     void Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_container );
 
-    // Target handling
-    void PlaceTarget( PCB_TARGET* aTarget, wxDC* DC );
+    // Properties dialogs
     void ShowTargetOptionsDialog( PCB_TARGET* aTarget );
-
-
-    // Dimension handling:
     void ShowDimensionPropertyDialog( DIMENSION* aDimension );
-
-
-    // netlist  handling:
     void InstallNetlistFrame();
 
     /**
