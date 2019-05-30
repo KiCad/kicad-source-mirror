@@ -55,6 +55,12 @@ SCH_PIN& SCH_PIN::operator=( const SCH_PIN& aPin )
 }
 
 
+bool SCH_PIN::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
+{
+    return m_libPin->Matches( aSearchData, aAuxData );
+}
+
+
 SCH_COMPONENT* SCH_PIN::GetParentComponent() const
 {
     return static_cast<SCH_COMPONENT*>( GetParent() );

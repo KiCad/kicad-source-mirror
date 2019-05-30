@@ -321,13 +321,14 @@ void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 {
     wxString text = GetFullyQualifiedText();
+    int      flags = aSearchData.GetFlags();
 
     // User defined fields have an ID of -1.
-    if( ((m_id > VALUE || m_id < REFERENCE) && !(aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS))
-        || ((m_id == REFERENCE) && !(aSearchData.GetFlags() & FR_REPLACE_REFERENCES)) )
-    {
+    if( m_id != REFERENCE && m_id != VALUE && !( flags & FR_SEARCH_ALL_FIELDS ) )
         return false;
-    }
+
+    if( ( flags & FR_SEARCH_REPLACE ) && m_id == REFERENCE && !( flags & FR_REPLACE_REFERENCES ) )
+        return false;
 
     wxLogTrace( traceFindItem, wxT( "    child item " ) + GetSelectMenuText( MILLIMETRES ) );
 
