@@ -3,14 +3,14 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-08 21:33+0100\n"
-"PO-Revision-Date: 2019-05-29 18:54+0200\n"
+"PO-Revision-Date: 2019-05-30 18:19+0200\n"
 "Last-Translator: szlldm\n"
-"Language-Team: Wolftronics <farkasg.zoltan@wolftronics.hu>\n"
+"Language-Team: szlldm\n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 1.8.7.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:51
@@ -1438,9 +1438,8 @@ msgid "Environment variable path cannot be empty."
 msgstr "Környezeti változó elérési útvonala nem lehet üres."
 
 #: common/dialogs/dialog_configure_paths.cpp:271 common/dialogs/dialog_configure_paths.cpp:313
-#, fuzzy
 msgid "3D search path alias cannot be empty."
-msgstr "A 3D keresési útvonal alternatíva nem lehet üres."
+msgstr "Meg kell adni a 3D keresési útvonal megnevezést."
 
 #: common/dialogs/dialog_configure_paths.cpp:279 common/dialogs/dialog_configure_paths.cpp:315
 msgid "3D search path cannot be empty."
@@ -1968,7 +1967,7 @@ msgstr "Laphoz igazítva"
 
 #: common/dialogs/dialog_print_generic_base.cpp:66
 msgid "Custom:"
-msgstr "Egyéni:"
+msgstr "Egyedi:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:70
 msgid "Set X scale adjust for exact scale plotting"
@@ -2013,9 +2012,8 @@ msgid "File history size:"
 msgstr "Fájltörténet mérete:"
 
 #: common/dialogs/panel_common_settings_base.cpp:54
-#, fuzzy
 msgid "Graphics (Accelerated):"
-msgstr "réteg:"
+msgstr "Megjelenítés (gyorsított):"
 
 #: common/dialogs/panel_common_settings_base.cpp:58 common/dialogs/panel_common_settings_base.cpp:69
 msgid "No Antialiasing"
@@ -2038,9 +2036,8 @@ msgid "Supersampling (4x)"
 msgstr "SSAA élsimítás (4x)"
 
 #: common/dialogs/panel_common_settings_base.cpp:65
-#, fuzzy
 msgid "Graphics (Fallback):"
-msgstr "réteg:"
+msgstr "Megjelenítés (tartalékmegoldás):"
 
 #: common/dialogs/panel_common_settings_base.cpp:69
 msgid "Fast Antialiasing"
@@ -2086,9 +2083,8 @@ msgid "%"
 msgstr "%"
 
 #: common/dialogs/panel_common_settings_base.cpp:156
-#, fuzzy
 msgid "Automatic"
-msgstr "Automatikus igazítás"
+msgstr "Automatikus"
 
 #: common/dialogs/panel_common_settings_base.cpp:165
 msgid "Show icons in menus"
@@ -2124,7 +2120,7 @@ msgstr "Vezeték rajzolásakor vagy elem mozgatásakor a nézet követi a kurzor
 
 #: common/dialogs/panel_hotkeys_editor.cpp:81
 msgid "Type filter text"
-msgstr ""
+msgstr "Típus szűrő szöveg"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:106
 msgid "Reset Hotkeys"
@@ -2412,15 +2408,15 @@ msgstr "A helyileg telepített rajzjelkönyvtárak kezdő elérési útvonala."
 
 #: common/env_vars.cpp:77
 msgid "Used by KiCad to define the URL of the repository of the official KiCad footprint libraries."
-msgstr ""
+msgstr "A KiCad hivatalos alkatrészrajzolat könyvtárak tárolójának URL-je."
 
 #: common/env_vars.cpp:80
 msgid "A directory containing project templates installed with KiCad."
-msgstr ""
+msgstr "A mintaprojekteket tartalmazó mappa installálásra került a KiCad-el."
 
 #: common/env_vars.cpp:82
 msgid "Optional. Can be defined if you want to create your own project templates folder."
-msgstr ""
+msgstr "Opcionálisan megadhatja a saját mintaprojekt könyvtárát."
 
 #: common/env_vars.cpp:85
 msgid ""
@@ -2428,6 +2424,9 @@ msgid ""
 "used to define files and paths relative to the currently loaded project.  For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a folder "
 "containing a project specific footprint library named footprints.pretty."
 msgstr ""
+"KiCad által belsőleg definiált (nem szerkeszthető) környezeti változó, amely az aktuálisan betöltött projekt fájl abszolút elérési útvonalára mutat. Ez a "
+"környezeti változó a többi fájl és könyvtár relatív útvonalú elérését teszi lehetővé, például a projekt specifikus alkatrészrajzolat könyvtár "
+"\"${KIPRJMOD}/libs/footprints.pretty\"-ként adható meg."
 
 #: common/env_vars.cpp:93
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
@@ -2437,6 +2436,8 @@ msgstr "Elavult KICAD_TEMPLATE_DIR verzió."
 #, c-format
 msgid "from %s : %s() line:%d"
 msgstr ""
+"%s-ből: %s()\n"
+"%d. sor"
 
 #: common/exceptions.cpp:30
 #, c-format
@@ -2445,6 +2446,9 @@ msgid ""
 "\"%s\"\n"
 "line %d, offset %d"
 msgstr ""
+"%s a bemeneten/forrásban:\n"
+"\"%s\"\n"
+"%d. sor, %d. oszlop"
 
 #: common/exceptions.cpp:104
 #, c-format
@@ -2766,7 +2770,6 @@ msgid "Unit"
 msgstr "Részegység"
 
 #: common/lib_tree_model_adapter.cpp:199
-#, fuzzy
 msgid "Item"
 msgstr "Elem"
 
@@ -2957,11 +2960,11 @@ msgstr "Kijelölésre nagyítás"
 
 #: common/tool/common_tools.cpp:40
 msgid "Toggle Always Show Cursor"
-msgstr ""
+msgstr "Kurzor megjelenítése mindig/szükség szerint"
 
 #: common/tool/common_tools.cpp:41
 msgid "Toggle display of the cursor, even when not in an interactive tool"
-msgstr ""
+msgstr "Váltás a kurzor megjelenítése között: mindig, vagy csak az interaktív eszközök használatakor"
 
 #: common/tool/zoom_menu.cpp:49
 #, c-format
@@ -3045,14 +3048,12 @@ msgid "Cursor shape for drawing, placement and movement tools"
 msgstr "Kurzor rajzoláshoz, lehelyezéshez és mozgatáshoz"
 
 #: common/widgets/gal_options_panel.cpp:182
-#, fuzzy
 msgid "Always show crosshairs"
 msgstr "Mindig mutassa a célkeresztet"
 
 #: common/widgets/gal_options_panel.cpp:187
-#, fuzzy
 msgid "Always show crosshairs (not in Legacy)"
-msgstr "Mindig mutassa a célkeresztet"
+msgstr "Mindig mutassa a célkeresztet (nem elérhető Legacy módban)"
 
 #: common/widgets/grid_text_button_helpers.cpp:335
 msgid "Select a File"
@@ -3060,7 +3061,7 @@ msgstr "Fájl kiválasztása"
 
 #: common/widgets/mathplot.cpp:1792
 msgid "Center plot view to this position"
-msgstr ""
+msgstr "Pozíció középpontba helyezése"
 
 #: common/widgets/mathplot.cpp:1793 eeschema/hotkeys.cpp:87 eeschema/sim/sim_plot_frame_base.cpp:85
 msgid "Fit on Screen"
@@ -3068,15 +3069,15 @@ msgstr "Illesztés a képernyőre"
 
 #: common/widgets/mathplot.cpp:1793
 msgid "Set plot view to show all items"
-msgstr ""
+msgstr "Nagyítás képernyőméretre"
 
 #: common/widgets/mathplot.cpp:1794
 msgid "Zoom in plot view."
-msgstr ""
+msgstr "Nagyítás"
 
 #: common/widgets/mathplot.cpp:1795
 msgid "Zoom out plot view."
-msgstr ""
+msgstr "Kicsinyítés"
 
 #: common/widgets/net_selector.cpp:48
 msgid "<no net>"
@@ -3340,21 +3341,21 @@ msgstr "JPEG fájlok"
 #: cvpcb/auto_associate.cpp:107
 #, c-format
 msgid "Equivalence file \"%s\" could not be found in the default search paths."
-msgstr ""
+msgstr "Az \"%s\" ekvivalencia (alkatrész - alkatrészrajzolat társítások) fájl nem található az alapértelmezett keresési útvonalakon."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
 msgid "Error opening equivalence file \"%s\"."
-msgstr ""
+msgstr "Hiba történt az \"%s\" ekvivalencia fájl megnyitása során."
 
 #: cvpcb/auto_associate.cpp:179
 msgid "Equivalence File Load Error"
-msgstr ""
+msgstr "Hiba történt az ekvivalencia fájl betöltése során."
 
 #: cvpcb/auto_associate.cpp:187
 #, c-format
 msgid "%lu footprint/cmp equivalences found."
-msgstr ""
+msgstr "%lu alkatrész - alkatrészrajzolat társítás megtalálva."
 
 #: cvpcb/auto_associate.cpp:259
 #, c-format
@@ -3571,9 +3572,8 @@ msgid "Auto-zoom"
 msgstr "Automatikus nagyítás"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:46 pcbnew/dialogs/dialog_fp_browser_display_options_base.cpp:46
-#, fuzzy
 msgid "Zoom to fit when changing footprint"
-msgstr "Nagyítás képernyőméretre alkatrészrajzolat módosítása után"
+msgstr "Nagyítás képernyőméretre alkatrészrajzolat módosításakor"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
@@ -3768,6 +3768,8 @@ msgid ""
 "\n"
 "You will need to reassign them manually if you want them to be updated correctly the next time you import the netlist in Pcbnew."
 msgstr ""
+"\n"
+"Ahhoz, hogy a következő netlista importálás sikeresen frissítse, manuálisan újra össze kell rendelnie ezeket."
 
 #: cvpcb/toolbars_cvpcb.cpp:45
 msgid "Edit footprint library table"
@@ -3830,17 +3832,17 @@ msgstr "%d azonos időbélyegek találhatóak és cserélődtek."
 #: eeschema/annotate.cpp:204
 #, c-format
 msgid "Updated %s (unit %s) from %s to %s"
-msgstr ""
+msgstr "%s (%s részegység) frissítve (\"%s\" -> \"%s\")"
 
 #: eeschema/annotate.cpp:210
 #, c-format
 msgid "Updated %s from %s to %s"
-msgstr ""
+msgstr "%s frissítve (\"%s\" -> \"%s\")"
 
 #: eeschema/annotate.cpp:218
 #, c-format
 msgid "Annotated %s (unit %s) as %s"
-msgstr ""
+msgstr "%s (%s részegység) sorszámozása %s-ként"
 
 #: eeschema/annotate.cpp:223
 #, c-format
@@ -3902,7 +3904,7 @@ msgstr "A %s plugin fájl nem található."
 #: eeschema/class_libentry.cpp:591
 #, c-format
 msgid "An attempt was made to remove the %s field from component %s in library %s."
-msgstr ""
+msgstr "Kísérlet történt a \"%s\" mező eltávolítására a \"%s\" alkatrész esetén (\"%s\" könyvtár)."
 
 #: eeschema/class_library.cpp:54
 #, c-format
@@ -3957,7 +3959,7 @@ msgstr "Az elem nincs sorszámozva: %s%s\n"
 #: eeschema/component_references_lister.cpp:583
 #, c-format
 msgid "Error: symbol %s%s unit %d and symbol has only %d units defined\n"
-msgstr ""
+msgstr "Hiba a %s%s rajzjel / %d. részegység használatakor. Maximum %d részegység lehetséges\n"
 
 #: eeschema/component_references_lister.cpp:621 eeschema/component_references_lister.cpp:651
 #, c-format
@@ -4445,7 +4447,6 @@ msgid "Delete alias"
 msgstr "Megnevezés törlése"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:306
-#, fuzzy
 msgid "Alias field substitutions:"
 msgstr "Megnevezés mező helyettesítések:"
 
@@ -6055,10 +6056,12 @@ msgid ""
 "In Spice values,the decimal separator is the point.\n"
 "Values can use Spice unit symbols."
 msgstr ""
+"SPICE értékek decimális szeparátora csak tizedespont lehet.\n"
+"Az értékek opcionálisan SI elő/utótaggal rendelkezhetnek."
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:71
 msgid "Spice unit symbols in values (case insensitive):"
-msgstr ""
+msgstr "SPICE értékek SI elő/utótagjai (érzéketlen a kis/nagybetűre ! ):"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:81
 msgid "f"
@@ -6379,7 +6382,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_remap.cpp:205
 #, c-format
 msgid "Adding library \"%s\", file \"%s\" to project symbol library table."
-msgstr ""
+msgstr "\"%s\" könyvtár (\"%s\" fájl) hozzáadása a projekt rajzjel könyvtártáblázathoz."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:214
 #, c-format
@@ -6392,10 +6395,12 @@ msgid ""
 "Failed to write project symbol library table. Error:\n"
 "  %s"
 msgstr ""
+"Hiba a projekt rajzjel könyvtártáblázat írása során. Hiba:\n"
+"%s"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:236
 msgid "Created project symbol library table.\n"
-msgstr ""
+msgstr "Projekt rajzjel könyvtártáblázat létrehozva.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:264
 #, c-format
@@ -7645,7 +7650,7 @@ msgid "Field%d"
 msgstr "Mező %d"
 
 #: eeschema/lib_field.cpp:541
-#, fuzzy, c-format
+#, c-format
 msgid "Field %s \"%s\""
 msgstr "Mező %s \"%s\""
 
@@ -8749,7 +8754,6 @@ msgid "&New..."
 msgstr "Új..."
 
 #: eeschema/menubar.cpp:363
-#, fuzzy
 msgid "Start new schematic root sheet"
 msgstr "Új hierarchikus gyökér lap megkezdése"
 
@@ -9499,7 +9503,7 @@ msgid "Match %i of %i: %s of %s in sheet %s"
 msgstr "%i/%i találat: %s - %s a %s lapon található"
 
 #: eeschema/sch_collectors.cpp:520
-#, fuzzy, c-format
+#, c-format
 msgid "Match %i of %i: %s in sheet %s"
 msgstr "%i/%i találat: %s a %s lapon található"
 
@@ -10694,7 +10698,6 @@ msgid "Print mirrored"
 msgstr "Nyomtatás tükrözve"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:192 pcbnew/dialogs/dialog_plot_base.cpp:56 pcbnew/dialogs/dialog_print_pcbnew.cpp:196
-#, fuzzy
 msgid "Included Layers"
 msgstr "Feldolgozott rétegek"
 
@@ -10731,7 +10734,6 @@ msgid "Drawing Mode"
 msgstr "Rajzolási mód"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:40
-#, fuzzy
 msgid "Sketch flashed items"
 msgstr "Forrszemek vázlat módban"
 
@@ -10953,9 +10955,8 @@ msgid "Loading Gerber files..."
 msgstr "Gerber fájlok betöltése..."
 
 #: gerbview/files.cpp:402
-#, fuzzy
 msgid "Open NC (Excellon) Drill File(s)"
-msgstr "Excellon fúrófájlok megnyitása"
+msgstr "NC (Excellon) fúrófájlok megnyitása"
 
 #: gerbview/files.cpp:501
 #, c-format
@@ -11031,7 +11032,7 @@ msgstr "Cmp: %s; Forrszem: %s"
 
 #: gerbview/gerber_draw_item.cpp:758
 msgid "Cmp:"
-msgstr ""
+msgstr "Alkatrész:"
 
 #: gerbview/gerber_draw_item.cpp:991
 #, c-format
@@ -11068,9 +11069,8 @@ msgid "Graphic layer %d"
 msgstr "%d. réteg "
 
 #: gerbview/gerbview_config.cpp:68
-#, fuzzy
 msgid "Gerbview"
-msgstr "Gerber megjelenítő"
+msgstr "Gerbview - Gerber megjelenítő"
 
 #: gerbview/gerbview_frame.cpp:158 pcbnew/footprint_edit_frame.cpp:319 pcbnew/footprint_edit_frame.cpp:725 pcbnew/pcb_edit_frame.cpp:374
 msgid "Layers Manager"
@@ -11198,19 +11198,19 @@ msgstr "Magas kontrasztú képernyőmód"
 
 #: gerbview/hotkeys.cpp:75
 msgid "Gbr Lines Display Mode"
-msgstr "Gbr vonalak képernyőmód"
+msgstr "Vonalak képernyőmód"
 
 #: gerbview/hotkeys.cpp:77
 msgid "Gbr Flashed Display Mode"
-msgstr ""
+msgstr "Forrszemek vázlat módban"
 
 #: gerbview/hotkeys.cpp:79
 msgid "Gbr Polygons Display Mode"
-msgstr "Gbr sokszögek képernyőmód"
+msgstr "Sokszögek képernyőmód"
 
 #: gerbview/hotkeys.cpp:81
 msgid "Gbr Negative Obj Display Mode"
-msgstr "Gbr negatív objektumok képernyőmód"
+msgstr "Negatív objektumok képernyőmód"
 
 #: gerbview/hotkeys.cpp:83
 msgid "DCodes Display Mode"
@@ -11563,7 +11563,7 @@ msgstr "Ehhez az alkatrészhez tartozó elemek kiemelése"
 
 #: gerbview/toolbars_gerber.cpp:125
 msgid "Cmp: "
-msgstr ""
+msgstr "Alkatrész: "
 
 #: gerbview/toolbars_gerber.cpp:136
 msgid "Highlight items belonging to this net"
@@ -13093,7 +13093,7 @@ msgstr "Vezetősáv keresztmetszet:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1024 pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1028
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:170
 msgid "dummy"
-msgstr ""
+msgstr "dummy"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:379 pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:468
 msgid "mm ^ 2"
@@ -14289,7 +14289,7 @@ msgstr "Grafika: %s, hossza: %s , a(z) %s rétegen"
 #: pcbnew/class_edge_mod.cpp:295
 #, c-format
 msgid "Graphic %s of %s on %s"
-msgstr ""
+msgstr "%s grafika (%s) a %s rétegen"
 
 #: pcbnew/class_marker_pcb.cpp:96
 msgid "Marker"
@@ -14397,7 +14397,7 @@ msgstr "Pozíció"
 
 #: pcbnew/class_pad.cpp:820
 msgid "Length in package"
-msgstr ""
+msgstr "IC bondolás hossza"
 
 #: pcbnew/class_pad.cpp:1216 pcbnew/dialogs/dialog_pad_properties_base.cpp:78 pcbnew/dialogs/dialog_pad_properties_base.cpp:252
 msgid "Oval"
@@ -14413,11 +14413,11 @@ msgstr "Lekerekített négyszög"
 
 #: pcbnew/class_pad.cpp:1228
 msgid "CustomShape"
-msgstr "Egyéni alakzat"
+msgstr "Egyedi alakzat"
 
 #: pcbnew/class_pad.cpp:1241
 msgid "Std"
-msgstr ""
+msgstr "Normál"
 
 #: pcbnew/class_pad.cpp:1244 pcbnew/dialogs/dialog_pad_properties_base.cpp:65
 msgid "SMD"
@@ -14425,7 +14425,7 @@ msgstr "SMD"
 
 #: pcbnew/class_pad.cpp:1247
 msgid "Conn"
-msgstr ""
+msgstr "Élcsatlakozó"
 
 #: pcbnew/class_pad.cpp:1250
 msgid "Not Plated"
@@ -14530,23 +14530,23 @@ msgstr "IC bondolás hossza"
 
 #: pcbnew/class_track.cpp:1091
 msgid "NC Name"
-msgstr "NC név"
+msgstr "Vezetékosztály név"
 
 #: pcbnew/class_track.cpp:1094
 msgid "NC Clearance"
-msgstr "NC szigetelési távolság"
+msgstr "Vezetékosztály szigetelési távolság"
 
 #: pcbnew/class_track.cpp:1097
 msgid "NC Width"
-msgstr "NC szélesség"
+msgstr "Vezetékosztály szélesség"
 
 #: pcbnew/class_track.cpp:1100
 msgid "NC Via Size"
-msgstr "NC via átmérő"
+msgstr "Vezetékosztály via átmérő"
 
 #: pcbnew/class_track.cpp:1103
 msgid "NC Via Drill"
-msgstr "NC via furatméret"
+msgstr "Vezetékosztály via furatméret"
 
 #: pcbnew/class_track.cpp:1121 pcbnew/class_zone.cpp:846
 msgid "NetName"
@@ -14825,7 +14825,6 @@ msgid "The legacy segment fill mode is not recommended.Convert zone to polygon f
 msgstr "A régi kitöltési mód nem ajánlott. Átváltja sokszög kitöltésre?"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:243
-#, fuzzy
 msgid "Legacy Warning"
 msgstr "Legacy figyelmeztetés"
 
@@ -14888,9 +14887,8 @@ msgstr ""
 "szigetet létrehozni."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:104 pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:45
-#, fuzzy
 msgid "Constrain outline to H, V and 45 degrees"
-msgstr "Rajzelemek vonalvezetése csak vízszintesen, függőlegesen és 45°-ban"
+msgstr "Körvonal vonalvezetése csak vízszintesen, függőlegesen és 45°-ban megengedett"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:107
 msgid "Corner smoothing:"
@@ -14922,19 +14920,18 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:137 pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:56
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:48
-#, fuzzy
 msgid "Outline display:"
-msgstr "Körvonal dőlése:"
+msgstr "Körvonal megjelenítése:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:141 pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
 msgid "Hatched"
-msgstr "Kitöltött"
+msgstr "Vonalkázott keret"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:141 pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
 msgid "Fully hatched"
-msgstr "Teljesen kitöltött"
+msgstr "Teljesen vonalkázott"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:160 pcbnew/dialogs/dialog_drc_base.cpp:35
 msgid "Clearance:"
@@ -15396,9 +15393,8 @@ msgstr "Szöveges elemek"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:61 pcbnew/dialogs/dialog_text_properties_base.cpp:185
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:49 pcbnew/text_mod_grid_table.cpp:93
-#, fuzzy
 msgid "Keep Upright"
-msgstr "Tartsa egyenesen"
+msgstr "Tartsa az irányt"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:62 pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:62
 #: pcbnew/text_mod_grid_table.cpp:94
@@ -15427,9 +15423,8 @@ msgid "180.0"
 msgstr "180.0°"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:185
-#, fuzzy
 msgid "Board side:"
-msgstr "Elhelyezkedés:"
+msgstr "Panel oldal:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:189 pcbnew/dialogs/panel_setup_layers_base.cpp:603
 msgid "Back"
@@ -15638,9 +15633,8 @@ msgid "Footprint name may not contain \"%s\"."
 msgstr "Alkatrészrajzolat név nem tartalmazhat \"%s\"-t."
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:61
-#, fuzzy
 msgid "Unconstrained"
-msgstr "Korlátlan"
+msgstr "Korlátozatlan"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:111
 msgid "Footprint name:"
@@ -16229,7 +16223,7 @@ msgstr "Exportálás a GenCAD beállításaihoz"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:141
 msgid "Flip bottom footprint padstacks"
-msgstr "Alul lévő forrszemek átfordítása"
+msgstr "Alul lévő forrszem-rétegstruktúrák átfordítása"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:142
 msgid "Generate unique pin names"
@@ -16595,9 +16589,8 @@ msgid "Text Thickness"
 msgstr "Szövegvastagság"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:235
-#, fuzzy
 msgid "Upright"
-msgstr "Egyenes"
+msgstr "Egyenesen"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:22 pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:22
 msgid "Scope"
@@ -16658,9 +16651,8 @@ msgid "Layer:"
 msgstr "Réteg:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:204
-#, fuzzy
 msgid "Keep upright"
-msgstr "Tartsa egyenesen"
+msgstr "Tartsa az irányt"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:228
 msgid "Set to layer default values:"
@@ -18620,9 +18612,8 @@ msgid "Options Editor..."
 msgstr "Beállítás szerkesztő"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:203
-#, fuzzy
 msgid "Edit options"
-msgstr "Szerkesztési beállítások"
+msgstr "Beállítások szerkesztése"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:440
 #, c-format
@@ -18658,7 +18649,6 @@ msgid "SilkScreen"
 msgstr "Szitanyomat"
 
 #: pcbnew/dialogs/panel_modedit_defaults_base.cpp:41 pcbnew/dialogs/panel_modedit_defaults_base.cpp:63
-#, fuzzy
 msgid "Fab. Layer"
 msgstr "Műszaki réteg"
 
@@ -18708,13 +18698,12 @@ msgid "Magnetic pads"
 msgstr "\"Mágneses\" forrszemek"
 
 #: pcbnew/dialogs/panel_modedit_settings_base.cpp:51 pcbnew/dialogs/panel_pcbnew_settings_base.cpp:46
-#, fuzzy
 msgid "L&imit graphic lines to H, V and 45 degrees"
-msgstr "Rajzelemek vonalvezetése csak vízszintesen, függőlegesen és 45°-ban"
+msgstr "Rajzelemek vonalvezetése csak vízszintesen, függőlegesen és 45°-ban megengedett"
 
 #: pcbnew/dialogs/panel_modedit_settings_base.cpp:52 pcbnew/dialogs/panel_pcbnew_settings_base.cpp:47
 msgid "Force line segment directions to H, V or 45 degrees when drawing on technical layers."
-msgstr "Műszaki rétegen történő rajzolás során a vonalvezetés csak vízszintesen, függőlegesen és 45°-ban lehetséges"
+msgstr "Műszaki rétegen történő rajzolás során a vonalvezetés csak vízszintesen, függőlegesen és 45°-ban megengedett"
 
 #: pcbnew/dialogs/panel_modedit_settings_base.cpp:56 pcbnew/dialogs/panel_pcbnew_settings_base.cpp:56
 msgid "Prefer selection to dragging"
@@ -18780,7 +18769,6 @@ msgid "Show when creating tracks"
 msgstr "Megjelenítés vezetősáv létrehozásakor"
 
 #: pcbnew/dialogs/panel_pcbnew_display_options_base.cpp:53
-#, fuzzy
 msgid "Show with via clearance at end"
 msgstr "Megjelenítés via szigetelési távolsággal a vezetősáv végén"
 
@@ -18884,22 +18872,20 @@ msgid "Enable automatic track deletion when redrawing a track."
 msgstr "Automatikus vezetősáv törlés engedélyezése vezetősáv újrarajzolásakor."
 
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:159
-#, fuzzy
 msgid "&Limit tracks to H, V and 45 degrees"
-msgstr "Vezetősávok vonalvezetése csak vízszintesen, függőlegesen és 45°-ban"
+msgstr "Vezetősávok vonalvezetése csak vízszintesen, függőlegesen és 45°-ban megengedett"
 
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:161
 msgid "Force track directions to H, V or 45 degrees when drawing a track."
-msgstr "Vezetősáv rajzolása során a vonalvezetés csak vízszintesen, függőlegesen és 45°-ban lehetséges"
+msgstr "Vezetősáv rajzolása során a vonalvezetés csak vízszintesen, függőlegesen és 45°-ban megengedett"
 
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:165
-#, fuzzy
 msgid "&Use double segmented tracks"
 msgstr "Vezetősávok rajzolása két szegmensrésszel"
 
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:167
 msgid "Use two track segments, with 45 degrees angle between them, when drawing a new track"
-msgstr ""
+msgstr "Új vezetősáv rajzolásakor mindig két, 45°-ot bezáró szegmenst használjon"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:20
 msgid "Allow blind/buried vias"
@@ -20422,7 +20408,7 @@ msgstr "Az alkatrészrajzolat módosult. Menti a módosításokat?"
 
 #: pcbnew/footprint_editor_utils.cpp:538
 msgid "_copy"
-msgstr ""
+msgstr "_masolat"
 
 #: pcbnew/footprint_editor_utils.cpp:965
 msgid "Place anchor"
@@ -21184,7 +21170,7 @@ msgstr "Huzalozás beállítások"
 
 #: pcbnew/hotkeys.cpp:297
 msgid "Custom Track/Via Size"
-msgstr "Egyéni vezetősáv/via méret"
+msgstr "Egyedi vezetősáv/via méret"
 
 #: pcbnew/hotkeys.cpp:302
 msgid "Increase Via Size"
@@ -21476,17 +21462,17 @@ msgstr "azonos VEZETÉKOSZTÁLY nevek \"%s\""
 #: pcbnew/legacy_plugin.cpp:2553 pcbnew/legacy_plugin.cpp:2564
 #, c-format
 msgid "Bad ZAux for CZONE_CONTAINER \"%s\""
-msgstr ""
+msgstr "Bad ZAux for CZONE_CONTAINER \"%s\""
 
 #: pcbnew/legacy_plugin.cpp:2581
 #, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
-msgstr ""
+msgstr "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 
 #: pcbnew/legacy_plugin.cpp:2655
 #, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
-msgstr ""
+msgstr "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
 
 #: pcbnew/legacy_plugin.cpp:3003 pcbnew/legacy_plugin.cpp:3040
 #, c-format
@@ -21637,7 +21623,7 @@ msgstr "Rács beállítások..."
 
 #: pcbnew/menubar_footprint_editor.cpp:244 pcbnew/menubar_pcb_editor.cpp:599
 msgid "Adjust custom user-defined grid dimensions"
-msgstr "A felhasználói rácsméretek beállításai"
+msgstr "Egyedi rácsméretek megadása"
 
 #: pcbnew/menubar_footprint_editor.cpp:268 pcbnew/menubar_footprint_editor.cpp:273 pcbnew/menubar_pcb_editor.cpp:624 pcbnew/menubar_pcb_editor.cpp:629
 msgid "Full Window Crosshair"
@@ -22032,8 +22018,7 @@ msgstr "Vezetősávok és viák tisztázása..."
 
 #: pcbnew/menubar_pcb_editor.cpp:528
 msgid "Clean stubs, vias, delete break points or unconnected tracks"
-msgstr "Vezetősáv csonkok, felesleges viák és töréspontok, valamint "
-"nem csatlakozó vezetősávok törlése"
+msgstr "Vezetősáv csonkok, felesleges viák és töréspontok, valamint nem csatlakozó vezetősávok törlése"
 
 #: pcbnew/menubar_pcb_editor.cpp:539
 msgid "Show La&yers Manager"
@@ -22284,8 +22269,8 @@ msgstr ""
 msgid "Arc&hive Footprints"
 msgstr "Alkatrészrajzolatok archiválása"
 
-#, fuzzy
 #: pcbnew/menubar_pcb_editor.cpp:930
+#, fuzzy
 msgid "Archive or add all footprints in library file"
 msgstr "Archiválja vagy hozzáadja az összes alkatrészrajzolatot a könyvtárfájlban"
 
@@ -22347,8 +22332,7 @@ msgstr "Alkatrészrajzolat társítási (*.cmp) fájl..."
 
 #: pcbnew/menubar_pcb_editor.cpp:970
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
-msgstr "Alkatrészrajzolat társítási (*.cmp) fájl exportálása "
-"a kapcsolási rajz frissítéséhez"
+msgstr "Alkatrészrajzolat társítási (*.cmp) fájl exportálása a kapcsolási rajz frissítéséhez"
 
 #: pcbnew/microwave.cpp:246
 msgid "Gap Size:"
@@ -23216,7 +23200,7 @@ msgstr "A \"%s\" lap típus nem érvényes "
 #: pcbnew/pcb_parser.cpp:998
 #, c-format
 msgid "Layer \"%s\" in file \"%s\" at line %d, is not in fixed layer hash"
-msgstr "A \"%s\" réteg a \"%s\ fájl %d. sorában nem érvényes azonosítójú"
+msgstr "A \"%s\" réteg a \"%s\\ fájl %d. sorában nem érvényes azonosítójú"
 
 #: pcbnew/pcb_parser.cpp:1031
 #, c-format
@@ -23274,8 +23258,7 @@ msgid ""
 "Please edit this global footprint library table in Preferences menu."
 msgstr ""
 "Hiba történt a globális alkatrészrajzolat könyvtártáblázat betöltése során.\n"
-"Kérjük módosítsa a globális alkatrészrajzolat könyvtártáblázatot a Beállítások "
-"menüben."
+"Kérjük módosítsa a globális alkatrészrajzolat könyvtártáblázatot a Beállítások menüben."
 
 #: pcbnew/pcbnew_config.cpp:102
 msgid "Action Plugins"
@@ -23425,83 +23408,81 @@ msgstr ""
 "Ez a zóna nem kezelhető a huzalozás során.\n"
 "Ellenőrizze, hogy a zónakörvonal nem egy önmagát metsző sokszög."
 
-# translation breakpoint
 #: pcbnew/router/pns_kicad_iface.cpp:1201
-#, fuzzy
 msgid "Added a track"
-msgstr "Vezetősáv hozzáadása"
+msgstr "Vezetősáv hozzáadva"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:53
 msgid "Please select a differential pair trace you want to tune."
-msgstr "Válassza ki a vezetősáv párt, melyet hangolni akar."
+msgstr "Válassza ki a hangolni kívánt differenciális jelvezetéket."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:72
 msgid ""
 "Unable to find complementary differential pair net for skew tuning. Make sure the names of the nets belonging to a differential pair end with either _N/_P "
 "or +/-."
 msgstr ""
-"Nem sikerült megtalálni a kiegészítő differenciálpárt vezetéket a SKEW hangoláshoz.\n"
-"Győződjön meg róla, hogy a differenciálpárhoz tartozó vezetékek nevei _N/_P vagy +/-."
+"A jelcsúszás kompenzáláshoz nem található a differenciális jelvezeték pár másik fele.\n"
+"Differenciális jelvezeték párok neveinek _N/_P vagy +/- -ra kell végződniük."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:154
 msgid "Too long: skew "
-msgstr "Túl hosszú: ferdeség"
+msgstr "Túl hosszú: jelcsúszás"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:157
 msgid "Too short: skew "
-msgstr "Túl rövid: ferdeség"
+msgstr "Túl rövid: jelcsúszás"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:160
 msgid "Tuned: skew "
-msgstr "Hangolt: ferdeség"
+msgstr "Hangolt: jelcsúszás"
 
 #: pcbnew/router/pns_router.cpp:181
 msgid "Cannot start routing inside a keepout area or board outline."
-msgstr ""
+msgstr "A huzalozás nem kezdhető meg a kizárt területen belül."
 
 #: pcbnew/router/router_tool.cpp:83
 msgid "Interactive Router (Single Tracks)"
-msgstr "Interaktív huzalozás (Egy vezetősáv)"
+msgstr "Interaktív huzalozás (vezetősáv)"
 
 #: pcbnew/router/router_tool.cpp:84
 msgid "Run push & shove router (single tracks)"
-msgstr ""
+msgstr "Akadályokat félrelökő huzalozás (vezetősáv)"
 
 #: pcbnew/router/router_tool.cpp:88
 msgid "Interactive Router (Differential Pairs)"
-msgstr "Interaktív huzalozás (Differenciális vezeték)"
+msgstr "Interaktív huzalozás (differenciális jelvezeték)"
 
 #: pcbnew/router/router_tool.cpp:89
 msgid "Run push & shove router (differential pairs)"
-msgstr ""
+msgstr "Akadályokat félrelökő huzalozás (differenciális jelvezeték)"
 
 #: pcbnew/router/router_tool.cpp:93
 msgid "Interactive Router Settings..."
-msgstr "Interaktív nyomvonaltervezés beállítások..."
+msgstr "Interaktív huzalozás beállítások..."
 
 #: pcbnew/router/router_tool.cpp:94
 msgid "Open Interactive Router settings"
-msgstr "Interaktív nyomvonaltervezés beállítások"
+msgstr "Interaktív huzalozás beállítások"
 
 #: pcbnew/router/router_tool.cpp:98
 msgid "Differential Pair Dimension Settings..."
-msgstr "Differenciális vezeték méretek beállítása..."
+msgstr "Differenciális jelvezeték méretek beállítása..."
 
 #: pcbnew/router/router_tool.cpp:99
 msgid "Open Differential Pair Dimension settings"
-msgstr "Differenciális vezeték méretek beállítása"
+msgstr "Differenciális jelvezeték méretek beállítása"
 
 #: pcbnew/router/router_tool.cpp:104
 msgid "Tune length of a single track"
-msgstr "Egy vezetősáv hosszának hangolása"
+msgstr "Vezetősáv hosszának hangolása"
 
 #: pcbnew/router/router_tool.cpp:108
 msgid "Tune length of a differential pair"
-msgstr "Differenciális vezeték hosszának hangolása"
+msgstr "Differenciális jelvezeték hosszának hangolása"
 
 #: pcbnew/router/router_tool.cpp:112
 msgid "Tune skew of a differential pair"
-msgstr "Differenciális vezeték jelcsúszás kompenzálása"
+msgstr "Differenciális jelvezeték jelcsúszás kompenzálása"
 
 #: pcbnew/router/router_tool.cpp:116
 msgid "Drag Track/Via"
@@ -23517,11 +23498,11 @@ msgstr "Vezetősáv szakasz két részre bontása, új töréspont a kurzor alat
 
 #: pcbnew/router/router_tool.cpp:133
 msgid "Drag (45 degree mode)"
-msgstr "Vonszolás (45 fokos szabály betartásával)"
+msgstr "Vonszolás (45° tartás)"
 
 #: pcbnew/router/router_tool.cpp:134
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
-msgstr "Vezetősáv szakasz vonszolása a 45 fokos szabályok betartásával"
+msgstr "Vezetősáv szakasz vonszolása a 45 fokos törések megtartásával"
 
 #: pcbnew/router/router_tool.cpp:139
 msgid "Drag (free angle)"
@@ -23537,21 +23518,19 @@ msgstr "Vezetősáv rajzolásának befejezése"
 
 #: pcbnew/router/router_tool.cpp:151
 msgid "Auto-end Track"
-msgstr "Vezetősáv automatikus vég"
+msgstr "Vezetősáv automatikus befejezése"
 
 #: pcbnew/router/router_tool.cpp:151
 msgid "Automagically finishes currently routed track."
-msgstr "Automatikusan befejezi az éppen tervezett vezetősávot."
+msgstr "Automatikusan befejezi az éppen huzalozott vezetősávot."
 
 #: pcbnew/router/router_tool.cpp:156
 msgid "Adds a through-hole via at the end of currently routed track."
-msgstr "Hozzáad egy átvezetőfuratot a jelenleg tervezett vezetősáv végén."
+msgstr "Átmenő via hozzáadása a jelenleg huzalozott vezetősáv végén."
 
 #: pcbnew/router/router_tool.cpp:163
 msgid "Adds a blind or buried via at the end of currently routed track."
-msgstr ""
-"Hozzáad egy zsák vagy belső átvezetőfuratot a jelenleg tervezett vezetősáv\n"
-"végén."
+msgstr "Zsák vagy eltemetett via hozzáadása a jelenleg huzalozott vezetősáv végén."
 
 #: pcbnew/router/router_tool.cpp:169
 msgid "Place Microvia"
@@ -23559,7 +23538,7 @@ msgstr "μVia hozzáadása"
 
 #: pcbnew/router/router_tool.cpp:169
 msgid "Adds a microvia at the end of currently routed track."
-msgstr "Hozzáad egy pici átvezetőfuratot a jelenleg tervezett vezetősáv végén."
+msgstr "μVia via hozzáadása a jelenleg huzalozott vezetősáv végén."
 
 #: pcbnew/router/router_tool.cpp:177
 msgid "Select a layer, then add a through-hole via at the end of currently routed track."
@@ -23571,7 +23550,7 @@ msgstr "Válasszon réteget, akkor hozzáadhat egy zsák vagy belső átvezetőf
 
 #: pcbnew/router/router_tool.cpp:191
 msgid "Custom Track/Via Size..."
-msgstr "Egyéni vezetősáv / via méret..."
+msgstr "Egyedi vezetősáv/via méret..."
 
 #: pcbnew/router/router_tool.cpp:192
 msgid "Shows a dialog for changing the track width and via size."
@@ -23587,11 +23566,11 @@ msgstr "Vezetősáv szélesség / via méret kiválasztása"
 
 #: pcbnew/router/router_tool.cpp:233
 msgid "Use Starting Track Width"
-msgstr "Használja kezdő vezetősáv szélességét"
+msgstr "Kezdő vezetősáv szélesség használata"
 
 #: pcbnew/router/router_tool.cpp:234
 msgid "Route using the width of the starting track."
-msgstr "Használja a kezdő pálya szélességét"
+msgstr "Megkezdett/folytatott vezetősáv szélesség használata."
 
 #: pcbnew/router/router_tool.cpp:238 pcbnew/router/router_tool.cpp:358
 msgid "Use Net Class Values"
@@ -23599,56 +23578,47 @@ msgstr "Vezetékosztály szélesség használata"
 
 #: pcbnew/router/router_tool.cpp:239
 msgid "Use track and via sizes from the net class"
-msgstr "Használja a vezetékosztályban lévő vezetősávok és átvezetések méreteit"
+msgstr "Használja a vezetékosztályban megadott vezetősáv és via méreteket"
 
 #: pcbnew/router/router_tool.cpp:243 pcbnew/router/router_tool.cpp:363
-#, fuzzy
 msgid "Use Custom Values..."
-msgstr "Vezetékosztály szélesség használata"
+msgstr "Egyedi méretek használata..."
 
 #: pcbnew/router/router_tool.cpp:244
-#, fuzzy
 msgid "Specify custom track and via sizes"
-msgstr "Vezetősáv szélesség / via méret szerkesztése"
+msgstr "Egyedi vezetősáv szélesség / via méretek megadása"
 
 #: pcbnew/router/router_tool.cpp:255
-#, fuzzy
 msgid "Track netclass width"
-msgstr "vezetékosztály szélesség"
+msgstr "Vezetősáv vezetékosztály szerinti szélessége"
 
 #: pcbnew/router/router_tool.cpp:271
-#, fuzzy
 msgid "Via netclass values"
-msgstr "Vezetékosztály értékek használata"
+msgstr "Via vezetékosztály szerinti mérete"
 
 #: pcbnew/router/router_tool.cpp:342
-#, fuzzy
 msgid "Select Differential Pair Dimensions"
-msgstr "Párhuzamos vezetősáv méretek"
+msgstr "Differenciális jelvezeték méretek megadása"
 
 #: pcbnew/router/router_tool.cpp:359
-#, fuzzy
 msgid "Use differential pair dimensions from the net class"
-msgstr "Használja a vezetékosztályban lévő vezetősávok és átvezetések méreteit"
+msgstr "Használja a vezetékosztályban megadott differenciális jelvezeték méreteket"
 
 #: pcbnew/router/router_tool.cpp:364
-#, fuzzy
 msgid "Specify custom differential pair dimensions"
-msgstr "Párhuzamos vezetősáv méretek"
+msgstr "Egyedi differenciális jelvezeték méretek megadása"
 
 #: pcbnew/router/router_tool.cpp:377
-#, fuzzy
 msgid "Width "
-msgstr "Szélesség"
+msgstr "Szélesség "
 
 #: pcbnew/router/router_tool.cpp:380
 msgid ", gap "
-msgstr "Hézag:"
+msgstr ", hézag "
 
 #: pcbnew/router/router_tool.cpp:383
-#, fuzzy
 msgid ", via gap "
-msgstr "Via hézag:"
+msgstr ", via hézag "
 
 #: pcbnew/router/router_tool.cpp:432
 msgid "Interactive Router"
@@ -23664,11 +23634,11 @@ msgstr "A μViákat külön engedélyezni kell a tervezési beállításoknál."
 
 #: pcbnew/router/router_tool.cpp:620
 msgid "Only through vias are allowed on 2 layer boards."
-msgstr "Kétrétegű paneleken csak átmenő viák engedélyezettek"
+msgstr "Kétrétegű paneleken csak átmenő viák engedélyezettek."
 
 #: pcbnew/router/router_tool.cpp:627
 msgid "Microvias can be placed only between the outer layers (F.Cu/B.Cu) and the ones directly adjacent to them."
-msgstr "μViák csak egy külső és egy közetlen szomszéd belső réteg között használható"
+msgstr "μViák csak egy külső és a közetlen szomszéd belső réteg között használható"
 
 #: pcbnew/router/router_tool.cpp:913
 msgid "Route Track"
@@ -23676,22 +23646,19 @@ msgstr "Vezetősáv huzalozása"
 
 #: pcbnew/router/router_tool.cpp:920
 msgid "Router Differential Pair"
-msgstr "Párhuzamos vezetősávok huzalozása"
+msgstr "Differenciális jelvezeték huzalozása"
 
 #: pcbnew/router/router_tool.cpp:1019 pcbnew/router/router_tool.cpp:1168 pcbnew/router/router_tool.cpp:1244
-#, fuzzy
 msgid "The selected item is locked."
-msgstr "Kijelölt elem(ek) jobbra forgatása"
+msgstr "A kijelölt elem zárolva van."
 
 #: pcbnew/router/router_tool.cpp:1021 pcbnew/router/router_tool.cpp:1170
-#, fuzzy
 msgid "Drag Anyway"
-msgstr "Átvezetés vonszolása"
+msgstr "Vonszolás mindenképpen"
 
 #: pcbnew/sel_layer.cpp:275
-#, fuzzy
 msgid "Warning: top and bottom layers are same."
-msgstr "Figyelmeztetés: A felső és alsó réteg megegyeznek."
+msgstr "Figyelmeztetés: a felső és alsó réteg megegyezik."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:95
 msgid "Specctra DSN File"
@@ -23703,21 +23670,21 @@ msgstr "Panel exportálása rendben."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:162
 msgid "Unable to export, please fix and try again"
-msgstr "Az exportálás nem lehetséges. Javítsa a hibát és próbálja újra."
+msgstr "Az exportálás nem lehetséges. Javítsa a hibát, majd próbálja újra"
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:934
 #, c-format
 msgid "Symbol with value of \"%s\" has empty reference id."
-msgstr "A(z) \"%s\" értékű összetevőnek üres referenciaazonosítója van."
+msgstr "A(z) \"%s\" értékű rajzjel referencia azonosítója nincs megadva."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:942
 #, c-format
 msgid "Multiple symbols have identical reference IDs of \"%s\"."
-msgstr "Több rajzjelnek is azonos a referencia azonosítója \"%s\"."
+msgstr "Több rajzjelnek is az azonos \"%s\" referencia azonosító van megadva."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:78
 msgid "Merge Specctra Session file:"
-msgstr "Specctra *.SES fájl"
+msgstr "Specctra Session (*.SES) fájl beolvasztása:"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:110
 msgid ""
@@ -23725,52 +23692,52 @@ msgid ""
 "Fix problem and try again"
 msgstr ""
 "A panel sérült lehet, mentése nem ajánlott!\n"
-"Javítsa ki a problémát, és próbálkozzon újra!"
+"Javítsa a hibákat, majd próbálja újra!"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:140
 msgid "Session file imported and merged OK."
-msgstr "Munkamenet fájl importálása és egyesítése rendben megtörtént."
+msgstr "A Session fájl importálása és beolvasztása rendben megtörtént."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:212 pcbnew/specctra_import_export/specctra_import.cpp:323
 #, c-format
 msgid "Session file uses invalid layer id \"%s\""
-msgstr "Munkamenet fájl érvénytelen réteg azonosítót tartalmaz \"%s\""
+msgstr "A Session fájl érvénytelen réteg azonosítót tartalmaz: \"%s\""
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:264
 msgid "Session via padstack has no shapes"
-msgstr ""
+msgstr "A Session fájlban megadott via rétegstruktúrának nincs alakja"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:271 pcbnew/specctra_import_export/specctra_import.cpp:289
 #: pcbnew/specctra_import_export/specctra_import.cpp:314
 #, c-format
 msgid "Unsupported via shape: %s"
-msgstr "Nem támogatott forrpont alakzat: %s"
+msgstr "Nem támogatott via alakzat: %s"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:370
 msgid "Session file is missing the \"session\" section"
-msgstr "A munkamenet fájl hiányos a \"session\" szakaszban."
+msgstr "Hiányzó \"session\" bekezdés a Session fájlban"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:378
 msgid "Session file is missing the \"routes\" section"
-msgstr "A munkamenet fájl hiányos a \"routes\" szakaszban."
+msgstr "Hiányzó \"routes\" bekezdés a Session fájlban"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:381
 msgid "Session file is missing the \"library_out\" section"
-msgstr "A munkamenet fájl hiányos a \"library_out\" szakaszban."
+msgstr "Hiányzó \"library_out\" bekezdés a Session fájlban"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:407
 #, c-format
 msgid "Session file has 'reference' to non-existent symbol \"%s\""
-msgstr "A munkamenet fájl nem létező rajzjelre hivatkozik \"%s\""
+msgstr "A Session fájl egy nem létező \"%s\" rajzjelre próbál hivatkozni"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:546
 #, c-format
 msgid "A wire_via references a missing padstack \"%s\""
-msgstr "A \"WIRE_VIA\" hiányzó \"PADSTACK\" -ra hivatkozik. \"%s\""
+msgstr "A \"WIRE_VIA\" a nem létező \"%s\" via rétegstruktúrára próbál hivatkozni"
 
 #: pcbnew/swig/pcbnew_action_plugins.cpp:76
 msgid "Exception on python action plugin code"
-msgstr "A python plugin nem tudott lefutni"
+msgstr "Kivétel történt a Python plugin futása során"
 
 #: pcbnew/swig/pcbnew_action_plugins.cpp:88 pcbnew/swig/pcbnew_footprint_wizards.cpp:82
 #, c-format
@@ -23779,42 +23746,40 @@ msgstr "Az \"%s\" eljárás nem található, vagy nem hívható"
 
 #: pcbnew/swig/pcbnew_action_plugins.cpp:89 pcbnew/swig/pcbnew_footprint_wizards.cpp:83
 msgid "Unknown Method"
-msgstr "Ismeretlen módszer"
+msgstr "Ismeretlen eljárás"
 
 #: pcbnew/swig/pcbnew_action_plugins.cpp:336
 #, c-format
 msgid "(PCB_EDIT_FRAME::OnActionPlugin) needs work: BOARD_ITEM type (%d) not handled"
-msgstr ""
+msgstr "(PCB_EDIT_FRAME::OnActionPlugin) további munkát igényel: BOARD_ITEM típus (%d) nincs lekezelve"
 
 #: pcbnew/swig/pcbnew_footprint_wizards.cpp:69
 msgid "Exception on python footprint wizard code"
-msgstr "Az alkatrészrajzolat varázsló nem tudott lefutni"
+msgstr "Kivétel történt az alkatrészrajzolat varázsló futása során"
 
 #: pcbnew/target_edit.cpp:147
 msgid "Modified alignment target"
-msgstr "Módosított igazító célkereszt"
+msgstr "Módosított rétegillesztő jelölés"
 
 #: pcbnew/tool_footprint_editor.cpp:58
 msgid "New footprint"
-msgstr "Új alkatrész"
+msgstr "Új alkatrészrajzolat"
 
 #: pcbnew/tool_footprint_editor.cpp:63
 msgid "New footprint using footprint wizard"
-msgstr "Új alkatrész, az alkatrész varázslóval"
+msgstr "Új alkatrészrajzolat létrehozása varázslóval"
 
 #: pcbnew/tool_footprint_editor.cpp:70
-#, fuzzy
 msgid "Save changes to board"
-msgstr "Aktuális nyákterv mentése"
+msgstr "Nyákterv módosítások mentése"
 
 #: pcbnew/tool_footprint_editor.cpp:70
-#, fuzzy
 msgid "Save changes to library"
-msgstr "Az aktuális könyvtár mentése"
+msgstr "Könyvtár módosítások mentése"
 
 #: pcbnew/tool_footprint_editor.cpp:75
 msgid "Print footprint"
-msgstr "Alkatrésztokozás nyomtatása"
+msgstr "Alkatrészrajzolat nyomtatása"
 
 #: pcbnew/tool_footprint_editor.cpp:81
 msgid "Redo last undo command"
@@ -23822,24 +23787,23 @@ msgstr "Újra"
 
 #: pcbnew/tool_footprint_editor.cpp:102
 msgid "Footprint properties"
-msgstr "Alkatrész tulajdonságok"
+msgstr "Alkatrészrajzolat tulajdonságok"
 
 #: pcbnew/tool_footprint_editor.cpp:106
-#, fuzzy
 msgid "Default pad properties"
-msgstr "Alapértelmezett forrpont tulajdonságai..."
+msgstr "Alapértelmezett forrszem tulajdonságok"
 
 #: pcbnew/tool_footprint_editor.cpp:111
 msgid "Load footprint from current board"
-msgstr "Alkatrész betöltése az aktuális panelről"
+msgstr "Alkatrészrajzolat betöltése az aktuális panelről"
 
 #: pcbnew/tool_footprint_editor.cpp:115
 msgid "Insert footprint into current board"
-msgstr "Alkatrész beillesztése az aktuális nyáktervre"
+msgstr "Alkatrészrajzolat beszúrása az aktuális nyáktervre"
 
 #: pcbnew/tool_footprint_editor.cpp:121
 msgid "Check footprint"
-msgstr "Alkatrész ellenőrzése"
+msgstr "Alkatrészrajzolat ellenőrzése"
 
 #: pcbnew/tool_footprint_editor.cpp:218
 msgid "Display Polar Coord ON"
@@ -23847,7 +23811,7 @@ msgstr "Poláris koordináta-rendszer használata"
 
 #: pcbnew/tool_footprint_editor.cpp:235
 msgid "Show Pads Sketch"
-msgstr "Forrpontok megjelenítése vázlat módban"
+msgstr "Forrszemek megjelenítése vázlat módban"
 
 #: pcbnew/tool_footprint_editor.cpp:239
 msgid "Show Texts Sketch"
@@ -23859,23 +23823,23 @@ msgstr "Körvonalak megjelenítése vázlat módban"
 
 #: pcbnew/tool_footprint_viewer.cpp:60
 msgid "Select footprint to browse"
-msgstr "Alkatrész keresése"
+msgstr "Alkatrészrajzolat böngészése"
 
 #: pcbnew/tool_footprint_viewer.cpp:72
 msgid "Display previous footprint"
-msgstr "Előző alkatrész"
+msgstr "Előző alkatrészrajzolat megjelenítése"
 
 #: pcbnew/tool_footprint_viewer.cpp:76
 msgid "Display next footprint"
-msgstr "Következő alkatrész"
+msgstr "Következő alkatrészrajzolat megjelenítése"
 
 #: pcbnew/tool_footprint_viewer.cpp:106
 msgid "Insert footprint in board"
-msgstr "Alkatrész beillesztése az aktuális panelra"
+msgstr "Alkatrészrajzolat beszúrása az aktuális nyáktervre"
 
 #: pcbnew/tool_footprint_viewer.cpp:158
 msgid "Close footprint viewer"
-msgstr "Alkatrészböngésző bezárása"
+msgstr "Alkatrészrajzolat böngésző bezárása"
 
 #: pcbnew/tool_footprint_viewer.cpp:172
 msgid "&Fit on Screen"
@@ -23902,8 +23866,8 @@ msgid ""
 "Show active layer selections\n"
 "and select layer pair for route and place via"
 msgstr ""
-"Az aktív réteg kiválasztása\n"
-"és rétegpár kiválasztása az átvezetőforrpont elhelyezéséhez."
+"Az aktív réteg kijelölések megjelenítése,\n"
+"valamint rétegpár kiválasztása huzalozáshoz és via hozzáadáshoz"
 
 #: pcbnew/tool_pcb_editor.cpp:258
 msgid "New board"
@@ -23914,9 +23878,8 @@ msgid "Save board"
 msgstr "Nyákterv mentése"
 
 #: pcbnew/tool_pcb_editor.cpp:265
-#, fuzzy
 msgid "Board setup"
-msgstr "Nyákterv tisztítása"
+msgstr "Panel beállítások"
 
 #: pcbnew/tool_pcb_editor.cpp:268
 msgid "Page settings for paper size and texts"
@@ -23924,34 +23887,31 @@ msgstr "Lap beállítások"
 
 #: pcbnew/tool_pcb_editor.cpp:270
 msgid "Plot (HPGL, PostScript, or GERBER format)"
-msgstr "Nyákterv exportálása választható fájlformátumba"
+msgstr "Plottolás (HPGL, PostScript, vagy GERBER formátumba)"
 
 #: pcbnew/tool_pcb_editor.cpp:296
 msgid "Open footprint editor"
-msgstr "Alkatrésztok szerkesztő"
+msgstr "Alkatrészrajzolat szerkesztő"
 
 #: pcbnew/tool_pcb_editor.cpp:297
 msgid "Open footprint viewer"
-msgstr "Alkatrészkönyvtár böngésző megnyitása"
+msgstr "Alkatrészrajzolat böngésző megnyitása"
 
 #: pcbnew/tool_pcb_editor.cpp:300
-#, fuzzy
 msgid "Load netlist"
-msgstr "Vezetéklista betöltése"
+msgstr "Netlista betöltése"
 
 #: pcbnew/tool_pcb_editor.cpp:301
-#, fuzzy
 msgid "Update PCB from schematic"
-msgstr "Nyákterv frissítése a kapcsolási rajzból"
+msgstr "Nyákterv frissítése kapcsolási rajzból"
 
 #: pcbnew/tool_pcb_editor.cpp:320
-#, fuzzy
 msgid "Open schematic in Eeschema"
 msgstr "Kapcsolási rajz megnyitása"
 
 #: pcbnew/tool_pcb_editor.cpp:330
 msgid "Show/Hide the Python Scripting console"
-msgstr "A Python szkript konzolablak megjelenítése / elrejtése"
+msgstr "A Python szkript konzol megjelenítése / elrejtése"
 
 #: pcbnew/tool_pcb_editor.cpp:363
 msgid "Enable design rule checking"
@@ -23963,7 +23923,7 @@ msgstr "Helyi légvezetékek megjelenítése"
 
 #: pcbnew/tool_pcb_editor.cpp:465
 msgid "Add footprints"
-msgstr "Alkatrész tokozások hozzáadása"
+msgstr "Alkatrészrajzolat hozzáadása"
 
 #: pcbnew/tool_pcb_editor.cpp:468
 msgid "Route tracks"
@@ -23971,81 +23931,78 @@ msgstr "Vezetősáv huzalozása"
 
 #: pcbnew/tool_pcb_editor.cpp:471 pcbnew/tools/drawing_tool.cpp:1773
 msgid "Add vias"
-msgstr "Viák hozzáadása"
+msgstr "Via hozzáadása"
 
 #: pcbnew/tool_pcb_editor.cpp:474
 msgid "Add filled zones"
-msgstr "Kitöltött RÉZ zóna hozzáadása"
+msgstr "Kitöltött zóna hozzáadása"
 
 #: pcbnew/tool_pcb_editor.cpp:478
 msgid "Add keepout areas"
-msgstr "Tervezésből kizárt területek hozzáadása"
+msgstr "Kizárt terület hozzáadása"
 
 #: pcbnew/tool_pcb_editor.cpp:483
 msgid "Add graphic lines"
-msgstr "Vonalak hozzáadása"
+msgstr "Vonal hozzáadása"
 
 #: pcbnew/tool_pcb_editor.cpp:511
 msgid ""
 "Place the auxiliary axis origin for some plot file formats,\n"
 "and for drill and place files"
-msgstr "Gerber- és fúrófájlok koordinátarendszer origójának meghatározása"
+msgstr ""
+"Segédtengelyek kezdőpontjának megadása plottoláshoz,\n"
+"valamint fúró és pozíció fájlokhoz"
 
 #: pcbnew/tool_pcb_editor.cpp:517
 msgid "Set the origin point for the grid"
-msgstr "Rács kezdőpont hozzáadása"
+msgstr "Rács origó megadása"
 
 #: pcbnew/tool_pcb_editor.cpp:545 pcbnew/tools/microwave_tool.cpp:89
 msgid "Create line of specified length for microwave applications"
-msgstr ""
-"Meghatározott hosszúságú vezetősáv létrehozása mikrohullámú \n"
-"alkalmazásokhoz"
+msgstr "Adott hosszúságú vezetősáv létrehozása mikrohullámú alkalmazásokhoz"
 
 #: pcbnew/tool_pcb_editor.cpp:550 pcbnew/tools/microwave_tool.cpp:65
 msgid "Create gap of specified length for microwave applications"
-msgstr "Meghatározott hosszúságú hézag létrehozása mikrohullámú alkalmazásokhoz"
+msgstr "Adott méretű hézag létrehozása mikrohullámú alkalmazásokhoz"
 
 #: pcbnew/tool_pcb_editor.cpp:557 pcbnew/tools/microwave_tool.cpp:71
 msgid "Create stub of specified length for microwave applications"
-msgstr "Megadott hosszúságú mikrohullámú csonk létrehozása"
+msgstr "Adott hosszúságú mikrohullámú csonk (négyszögletes) létrehozása"
 
 #: pcbnew/tool_pcb_editor.cpp:562 pcbnew/tools/microwave_tool.cpp:77
 msgid "Create stub (arc) of specified length for microwave applications"
-msgstr ""
-"Meghatározott hosszúságú körcikk létrehozása mikrohullámú \n"
-"alkalmazásokhoz"
+msgstr "Adott hosszúságú mikrohullámú csonk (körcikk) létrehozása"
 
 #: pcbnew/tool_pcb_editor.cpp:567
 msgid "Create a polynomial shape for microwave applications"
-msgstr "Polinomiális felület létrehozása mikrohullámú alkalmazásokhoz"
+msgstr "Polinomiális alakzat létrehozása mikrohullámú alkalmazásokhoz"
 
 #: pcbnew/tool_pcb_editor.cpp:625
 msgid ""
 "Auto track width: when starting on an existing track use its width\n"
 "otherwise, use current width setting"
 msgstr ""
-"Automatikus vezetősáv szélesség: ha meglévő vezetősávon kezdődik,\n"
-"használja annak szélességét, egyébként használja az aktuális sávszélességet."
+"Automatikus vezetősáv szélesség: meglévő vezetősáv folytatásakor használja\n"
+"annak szélességét, egyébként alkalmazza az aktuális beállítást"
 
 #: pcbnew/tool_pcb_editor.cpp:677
 #, c-format
 msgid "Track: %.3f mm (%.2f mils)"
-msgstr "Vezetősáv: %.3f mm -- %.2f mill"
+msgstr "Vezetősáv: %.3f mm (%.2f mil)"
 
 #: pcbnew/tool_pcb_editor.cpp:680
 #, c-format
 msgid "Track: %.2f mils (%.3f mm)"
-msgstr "Vezetősáv: %.2f mill -- %.3f mm"
+msgstr "Vezetősáv: %.2f mil (%.3f mm)"
 
 #: pcbnew/tool_pcb_editor.cpp:693 pcbnew/tool_pcb_editor.cpp:745
-#, fuzzy
 msgid "Edit pre-defined sizes..."
-msgstr "Alkatrészmező szerkesztése"
+msgstr "Előre definiált méretek szerkesztése..."
 
 #: pcbnew/tool_pcb_editor.cpp:721
-#, fuzzy, c-format
+#, c-format
 msgid "%.2f / %.2f mm"
-msgstr "%.1f mils (%.2f mm)"
+msgstr "%.2f / %.2f mm"
 
 #: pcbnew/tool_pcb_editor.cpp:723
 #, c-format
@@ -24053,39 +24010,43 @@ msgid "%.2f mm"
 msgstr "%.2f mm"
 
 #: pcbnew/tool_pcb_editor.cpp:729
-#, fuzzy, c-format
+#, c-format
 msgid "%.1f / %.1f mils"
-msgstr "%.2f mm (%.1f mils)"
+msgstr "%.1f / %.1f mil"
 
 #: pcbnew/tool_pcb_editor.cpp:731
-#, fuzzy, c-format
+#, c-format
 msgid "%.1f mils"
-msgstr "%.2f mm (%.1f mils)"
+msgstr "%.1f mil"
 
 #: pcbnew/tool_pcb_editor.cpp:733
-#, fuzzy, c-format
+#, c-format
 msgid "Via: %s (%s)"
-msgstr "\"%s\" érték mely a(z) \"%s\" alkatrészhez tartozik."
+msgstr "Via: %s (%s)"
 
 #: pcbnew/tool_pcb_editor.cpp:760
 msgid "+/- to switch"
-msgstr "+/- váltani"
+msgstr "+/- a váltáshoz"
 
 #: pcbnew/toolbars_update_user_interface.cpp:104
 msgid ""
 "Disable design rule checking while routing/editing tracks using Legacy Toolset.\n"
 "Use Route > Interactive Router Settings... for Modern Toolset."
 msgstr ""
+"Tervezési szabályellenőrzés letiltása huzalozás során, Legacy Eszköztár használatakor.\n"
+"Modern Eszköztár esetén használja a \"Huzalozás\" / \"Interaktív huzalozás beállítások...\"-at."
 
 #: pcbnew/toolbars_update_user_interface.cpp:105
 msgid ""
 "Enable design rule checking while routing/editing tracks using Legacy Toolset.\n"
 "Use Route > Interactive Router Settings... for Modern Toolset."
 msgstr ""
+"Tervezési szabályellenőrzés engedélyezése huzalozás során, Legacy Eszköztár használatakor.\n"
+"Modern Eszköztár esetén használja a \"Huzalozás\" / \"Interaktív huzalozás beállítások...\"-at."
 
 #: pcbnew/toolbars_update_user_interface.cpp:113
 msgid "Hide board ratsnest"
-msgstr "Alkatrész légvezetékek elrejtése"
+msgstr "Légvezetékek elrejtése"
 
 #: pcbnew/toolbars_update_user_interface.cpp:125
 msgid "Show vias in fill mode"
@@ -24141,15 +24102,15 @@ msgstr "Kizárt terület hozzáadása"
 
 #: pcbnew/tools/drawing_tool.cpp:106
 msgid "Add a cutout area of an existing zone"
-msgstr ""
+msgstr "Kivágott terület hozzáadása zónához"
 
 #: pcbnew/tools/drawing_tool.cpp:111
 msgid "Add a zone with the same settings as an existing zone"
-msgstr "Zóna hozzáadása egy már meglévő paraméterei alapján"
+msgstr "Zóna hozzáadása egy meglévő zóna paraméterei alapján"
 
 #: pcbnew/tools/drawing_tool.cpp:120 pcbnew/tools/drawing_tool.cpp:898
 msgid "Place the footprint anchor"
-msgstr "Alkatrésztok referenciahorgony hozzáadása"
+msgstr "Alkatrészrajzolat horgony hozzáadása"
 
 #: pcbnew/tools/drawing_tool.cpp:125
 msgid "Increase the line width"
@@ -24173,11 +24134,11 @@ msgstr "Utolsó pont törlése"
 
 #: pcbnew/tools/drawing_tool.cpp:141
 msgid "Delete the last point added to the current item"
-msgstr "Törölje az aktuális elemhez hozzáadott utolsó pontot"
+msgstr "Törölje az aktuális elemhez utoljára hozzáadott pontot"
 
 #: pcbnew/tools/drawing_tool.cpp:146
 msgid "Close the outline of a zone in progress"
-msgstr "Zárja be a folyamatban lévő zóna körvonalát"
+msgstr "Zárja be a rajzolt zóna körvonalát"
 
 #: pcbnew/tools/drawing_tool.cpp:242
 msgid "Draw a line segment"
@@ -24189,7 +24150,7 @@ msgstr "Szöveg hozzáadása"
 
 #: pcbnew/tools/drawing_tool.cpp:630
 msgid "Draw a dimension"
-msgstr "Méretvonal rajzolása"
+msgstr "Méretvonal hozzáadása"
 
 #: pcbnew/tools/drawing_tool.cpp:714
 msgid "Add zone cutout"
@@ -24200,13 +24161,12 @@ msgid "Add similar zone"
 msgstr "Hasonló zóna hozzáadása"
 
 #: pcbnew/tools/drawing_tool.cpp:797 pcbnew/tools/drawing_tool.cpp:875
-#, fuzzy
 msgid "Place a DXF_SVG drawing"
-msgstr "DXF rajz hozzáadása"
+msgstr "DXF_SVG rajz hozzáadása"
 
 #: pcbnew/tools/drawing_tool.cpp:918
 msgid "Move the footprint reference anchor"
-msgstr "Alkatrész referenciahorgony  mozgatása"
+msgstr "Alkatrészrajzolat horgony mozgatása"
 
 #: pcbnew/tools/drawing_tool.cpp:1381 pcbnew/tools/point_editor.cpp:252
 msgid "Self-intersecting polygons are not allowed"
@@ -24218,15 +24178,15 @@ msgstr "Via hozzáadása"
 
 #: pcbnew/tools/edit_tool.cpp:78
 msgid "Open in Footprint Editor"
-msgstr "Megnyitás alkatrésztok szerkesztőben"
+msgstr "Megnyitás Alkatrészrajzolat szerkesztőben"
 
 #: pcbnew/tools/edit_tool.cpp:79
 msgid "Opens the selected footprint in the Footprint Editor"
-msgstr "Kijelölt alkatrésztok megnyitása az alkatrésztok szerkesztőben"
+msgstr "Kijelölt alkatrészrajzolat megnyitása az Alkatrészrajzolat szerkesztőben"
 
 #: pcbnew/tools/edit_tool.cpp:84
 msgid "Edit Activate"
-msgstr ""
+msgstr "Szerkesztés aktiválása"
 
 #: pcbnew/tools/edit_tool.cpp:88
 msgid "Moves the selected item(s)"
@@ -24234,11 +24194,11 @@ msgstr "A kijelölt elem(ek) mozgatása"
 
 #: pcbnew/tools/edit_tool.cpp:92
 msgid "Duplicates the selected item(s)"
-msgstr "Kijelölt elem(ek) másolása"
+msgstr "Kijelölt elem(ek) megkettőzése"
 
 #: pcbnew/tools/edit_tool.cpp:96
 msgid "Duplicates the selected item(s), incrementing pad numbers"
-msgstr "Duplikálja a kijelölt eleme(ke)t és növeli a forrpont számozását."
+msgstr "Kijelölt elem(ek) megkettőzése, a forrszem számozások növelése"
 
 #: pcbnew/tools/edit_tool.cpp:100
 msgid "Moves the selected item(s) by an exact amount"
@@ -24258,20 +24218,19 @@ msgstr "Kijelölt elem(ek) balra forgatása"
 
 #: pcbnew/tools/edit_tool.cpp:119
 msgid "Flips selected item(s)"
-msgstr "Kijelölt elem(ek) túloldalra helyezése"
+msgstr "Kijelölt elem(ek) átfordítása"
 
 #: pcbnew/tools/edit_tool.cpp:123
 msgid "Mirrors selected item"
-msgstr "Tükrözi kiválasztott elemet"
+msgstr "Kijelölt elem(ek) tükrözése"
 
 #: pcbnew/tools/edit_tool.cpp:127
 msgid "Deletes selected item(s)"
 msgstr "Kijelölt elem(ek) törlése"
 
 #: pcbnew/tools/edit_tool.cpp:132
-#, fuzzy
 msgid "Deletes selected item(s) and copper connections"
-msgstr "Kijelölt elem(ek) balra forgatása"
+msgstr "Kijelölt elem(ek) és csatlakozó vezetősávok törlése"
 
 #: pcbnew/tools/edit_tool.cpp:137
 msgid "Update the footprint from the library"
@@ -24287,7 +24246,7 @@ msgstr "Tulajdonságok..."
 
 #: pcbnew/tools/edit_tool.cpp:147
 msgid "Displays item properties dialog"
-msgstr "A tulajdonságok párbeszédablakának megnyitása"
+msgstr "Elem tulajdonságok párbeszédablak megnyitása"
 
 #: pcbnew/tools/edit_tool.cpp:155
 msgid "Measuring Tool"
@@ -24295,24 +24254,23 @@ msgstr "Mérőeszköz"
 
 #: pcbnew/tools/edit_tool.cpp:160
 msgid "Copy selected content to clipboard"
-msgstr "A kiválasztott tartalmat másolása a vágólapra"
+msgstr "Kijelölt tartalom másolása vágólapra"
 
 #: pcbnew/tools/edit_tool.cpp:165
 msgid "Cut selected content to clipboard"
-msgstr "A kiválasztott tartalmat kivágás a vágólapra"
+msgstr "Kijelölt tartalom kivágása vágólapra"
 
 #: pcbnew/tools/edit_tool.cpp:237 pcbnew/tools/placement_tool.cpp:101 pcbnew/tools/point_editor.cpp:263
 msgid "pcbnew.InteractiveSelection tool is not available"
-msgstr ""
+msgstr "a pcbnew.InteractiveSelection eszköz nem érhető el"
 
 #: pcbnew/tools/edit_tool.cpp:626
 msgid "Edit track width/via size"
-msgstr "Vezetősáv szélesség / via méret szerkesztése"
+msgstr "Vezetősáv szélesség / via méret szerkesztés"
 
 #: pcbnew/tools/edit_tool.cpp:977
-#, fuzzy
 msgid "Delete again to remove locked items"
-msgstr "Kijelölt elem törlése"
+msgstr "Újratörlés a zárolt elemek eltávolításához"
 
 #: pcbnew/tools/edit_tool.cpp:1058
 msgid "Move exact"
@@ -24321,21 +24279,19 @@ msgstr "Mozgatás pontosan"
 #: pcbnew/tools/edit_tool.cpp:1138
 #, c-format
 msgid "Duplicated %d item(s)"
-msgstr "Azonos elem(ek) %d"
+msgstr "%d azonos elem"
 
 #: pcbnew/tools/edit_tool.cpp:1480
-#, fuzzy
 msgid "Select reference point for the copy..."
-msgstr "Rács kezdőpont hozzáadása"
+msgstr "Referencia pont megadása másoláshoz..."
 
 #: pcbnew/tools/edit_tool.cpp:1485
-#, fuzzy
 msgid "Selection copied."
-msgstr "Fájl kiválasztása..."
+msgstr "Kijelölés másolva."
 
 #: pcbnew/tools/edit_tool.cpp:1492
 msgid "Copy cancelled."
-msgstr "A másolás meg lett szakítva."
+msgstr "Másolás megszakítva."
 
 #: pcbnew/tools/footprint_editor_tools.cpp:64
 msgid "Add Pad"
@@ -24347,11 +24303,11 @@ msgstr "Forrszem hozzáadása"
 
 #: pcbnew/tools/footprint_editor_tools.cpp:68 pcbnew/tools/footprint_editor_tools.cpp:541
 msgid "Create Pad from Selected Shapes"
-msgstr "Forrszem készítése a kiválasztott alakzatokból"
+msgstr "Forrszem készítése a kijelölt alakzatokból"
 
 #: pcbnew/tools/footprint_editor_tools.cpp:69
 msgid "Creates a custom-shaped pads from a set of selected shapes"
-msgstr "Kiválasztott elemek egyesítése egyedi alakú forszemmé"
+msgstr "Kijelölt elemek egyesítése egyedi alakú forszemmé"
 
 #: pcbnew/tools/footprint_editor_tools.cpp:74
 msgid "Explode Pad to Graphic Shapes"
@@ -24397,7 +24353,7 @@ msgstr "Forrszemek újraszámozása"
 
 #: pcbnew/tools/footprint_editor_tools.cpp:375
 msgid "Explode pad to shapes"
-msgstr "Forrszem szétbontása részalakokra"
+msgstr "Forrszem felbontása részalakokra"
 
 #: pcbnew/tools/footprint_editor_tools.cpp:450
 msgid ""
@@ -24405,7 +24361,7 @@ msgid ""
 "selection contains more than one reference pad."
 msgstr ""
 "Az objektumok nem egyesíthetőek az egyedi forrszem alakká:\n"
-"az elemek között egynél több referencia forrszem található."
+"a kijelölés egynél több referencia forrszemet tartalmaz."
 
 #: pcbnew/tools/footprint_editor_tools.cpp:458
 msgid ""
@@ -24414,7 +24370,7 @@ msgid ""
 "Only graphical lines, circles, arcs and polygons are allowed."
 msgstr ""
 "Az objektumok nem egyesíthetőek az egyedi forrszem alakká:\n"
-"egynémely elem nem támogatott az összevonáshoz.\n"
+"a kijelölés nem támogatott elemeket tartalmaz.\n"
 "Csak vonalak, körök, ívek és sokszögek engedélyezettek."
 
 #: pcbnew/tools/footprint_editor_tools.cpp:504
@@ -24434,11 +24390,11 @@ msgid ""
 "selected items do not form a single solid shape."
 msgstr ""
 "Az objektumok nem egyesíthetőek az egyedi forrszem alakká:\n"
-"a kiválasztott elemek nem alkotnak egy egész alakot."
+"a kijelölt elemek nem alkotnak egy egész alakot."
 
 #: pcbnew/tools/microwave_tool.cpp:83
 msgid "Create polynomial shape for microwave applications"
-msgstr "Polinomiális alakzat létrehozása, mikrohullámú alkalmazásokhoz"
+msgstr "Polinomiális alakzat létrehozása mikrohullámú alkalmazásokhoz"
 
 #: pcbnew/tools/microwave_tool.cpp:89
 msgid "Add Microwave Line"
@@ -24454,16 +24410,15 @@ msgstr "Mikrohullámú funkció hozzáadása"
 
 #: pcbnew/tools/microwave_tool.cpp:260
 msgid "Add microwave inductor"
-msgstr "Mikrohullámú tekercs hozzáadása"
+msgstr "Mikrohullámú induktivitás hozzáadása"
 
 #: pcbnew/tools/microwave_tool.cpp:282
 msgid "Add Microwave Inductor"
-msgstr "Mikrohullámú tekercs hozzáadása"
+msgstr "Mikrohullámú induktivitás hozzáadása"
 
 #: pcbnew/tools/pad_tool.cpp:48
-#, fuzzy
 msgid "Copy current pad's properties"
-msgstr "Forrpont tulajdonságok másolása"
+msgstr "Forrszem tulajdonságok másolása"
 
 #: pcbnew/tools/pad_tool.cpp:54
 msgid "Replace the current pad's properties with those copied earlier"
@@ -24471,12 +24426,11 @@ msgstr "Aktuális forrszem tulajdonságainak lecserélése a korábban másoltra
 
 #: pcbnew/tools/pad_tool.cpp:60
 msgid "Copy the current pad's properties to other pads"
-msgstr "Az aktuális forrpont tulajdonságainak kiterjesztése a többire"
+msgstr "Forrszem tulajdonságok klónozása"
 
 #: pcbnew/tools/pad_tool.cpp:336
-#, fuzzy
 msgid "Push Pad Settings"
-msgstr "Lap beállítások"
+msgstr "Forrszem tulajdonságok klónozása"
 
 #: pcbnew/tools/pcb_editor_control.cpp:92
 msgid "Merge Zones"
@@ -24488,15 +24442,15 @@ msgstr "Zónák egyesítése"
 
 #: pcbnew/tools/pcb_editor_control.cpp:96
 msgid "Duplicate zone outline onto a different layer"
-msgstr "Zóna körvonalának másolása, egy  másik rétegre"
+msgstr "Zóna körvonal megkettőzése egy másik rétegre"
 
 #: pcbnew/tools/pcb_editor_control.cpp:101
 msgid "Add Layer Alignment Target"
-msgstr "Réteg igazító célkereszt hozzáadása"
+msgstr "Rétegillesztő jelölés hozzáadása"
 
 #: pcbnew/tools/pcb_editor_control.cpp:101
 msgid "Add a layer alignment target"
-msgstr "Réteg igazító célkereszt hozzáadása"
+msgstr "Rétegillesztő jelölés hozzáadása"
 
 #: pcbnew/tools/pcb_editor_control.cpp:105
 msgid "Add a footprint"
@@ -24504,15 +24458,15 @@ msgstr "Alkatrészrajzolat hozzáadása"
 
 #: pcbnew/tools/pcb_editor_control.cpp:121
 msgid "Lock"
-msgstr "Zárolt"
+msgstr "Zárol"
 
 #: pcbnew/tools/pcb_editor_control.cpp:125
 msgid "Unlock"
-msgstr "Feloldás"
+msgstr "Felold"
 
 #: pcbnew/tools/pcb_editor_control.cpp:224
 msgid "Locking"
-msgstr "Lezárás"
+msgstr "Zárolás"
 
 #: pcbnew/tools/pcb_editor_control.cpp:505
 msgid "Place a module"
@@ -24520,11 +24474,11 @@ msgstr "Modul hozzáadása"
 
 #: pcbnew/tools/pcb_editor_control.cpp:657
 msgid "Place a layer alignment target"
-msgstr "Réteg igazító célkereszt hozzáadása"
+msgstr "Rétegillesztő jelölés hozzáadása"
 
 #: pcbnew/tools/pcb_editor_control.cpp:829
 msgid "Duplicate zone"
-msgstr "Zóna másolása"
+msgstr "Zóna megkettőzése"
 
 #: pcbnew/tools/pcb_editor_control.cpp:1164
 msgid "Pick Components for Local Ratsnest"
@@ -24532,7 +24486,7 @@ msgstr "Alkatrészek kiválasztása lokális légvezetékekhez"
 
 #: pcbnew/tools/pcbnew_control.cpp:208
 msgid "Paste content from clipboard"
-msgstr "Tartalom beillesztése a vágólapról"
+msgstr "Tartalom beillesztése vágólapról"
 
 #: pcbnew/tools/pcbnew_control.cpp:768
 msgid "Invalid clipboard contents"
@@ -24544,12 +24498,12 @@ msgid ""
 "Error loading board.\n"
 "%s"
 msgstr ""
-"Hiba a nyákterv betöltése közben:\n"
+"Hiba a nyákterv betöltése során.\n"
 "%s"
 
 #: pcbnew/tools/pcbnew_control.cpp:989
 msgid "Not available in OpenGL/Cairo canvases."
-msgstr "Nem lehetséges OpenGL/Cairo megjelenítés mellett"
+msgstr "Nem elérhető OpenGL/Cairo megjelenítés mellett."
 
 #: pcbnew/tools/placement_tool.cpp:43
 msgid "Align to Top"
@@ -24557,7 +24511,7 @@ msgstr "Igazítás felülre"
 
 #: pcbnew/tools/placement_tool.cpp:44
 msgid "Aligns selected items to the top edge"
-msgstr "A kijelölt elem igazítása felső élhez"
+msgstr "Kijelölt elemek igazítása felső élhez"
 
 #: pcbnew/tools/placement_tool.cpp:48
 msgid "Align to Bottom"
@@ -24565,59 +24519,59 @@ msgstr "Igazítás alulra"
 
 #: pcbnew/tools/placement_tool.cpp:49
 msgid "Aligns selected items to the bottom edge"
-msgstr "A kijelölt elem igazítása alsó élhez"
+msgstr "Kijelölt elemek igazítása alsó élhez"
 
 #: pcbnew/tools/placement_tool.cpp:53
 msgid "Align to Left"
-msgstr "Igazítása balra"
+msgstr "Igazítás balra"
 
 #: pcbnew/tools/placement_tool.cpp:54
 msgid "Aligns selected items to the left edge"
-msgstr "A kijelölt elem igazítása bal élhez"
+msgstr "Kijelölt elemek igazítása bal élhez"
 
 #: pcbnew/tools/placement_tool.cpp:58
 msgid "Align to Right"
-msgstr "Igazítása jobbra"
+msgstr "Igazítás jobbra"
 
 #: pcbnew/tools/placement_tool.cpp:59
 msgid "Aligns selected items to the right edge"
-msgstr "A kijelölt elem igazítása jobb élhez"
+msgstr "Kijelölt elemek igazítása jobb élhez"
 
 #: pcbnew/tools/placement_tool.cpp:63
 msgid "Align to Middle"
-msgstr "Igazítása közepére"
+msgstr "Igazítás függőlegesen középre"
 
 #: pcbnew/tools/placement_tool.cpp:64
 msgid "Aligns selected items to the vertical center"
-msgstr "A kijelölt elem igazítása függőlegesen középre"
+msgstr "Kijelölt elemek igazítása függőlegesen középre"
 
 #: pcbnew/tools/placement_tool.cpp:68
 msgid "Align to Center"
-msgstr "Igazítása központtól"
+msgstr "Igazítás vízszintesen középre"
 
 #: pcbnew/tools/placement_tool.cpp:69
 msgid "Aligns selected items to the horizontal center"
-msgstr "A kijelölt elem igazítása vízszintesen középre"
+msgstr "Kijelölt elemek igazítása vízszintesen középre"
 
 #: pcbnew/tools/placement_tool.cpp:73
 msgid "Distribute Horizontally"
-msgstr "Vízszintes elosztás"
+msgstr "Szétszórás vízszintesen"
 
 #: pcbnew/tools/placement_tool.cpp:74
 msgid "Distributes selected items along the horizontal axis"
-msgstr "Elosztja a kijelölt elemeket a vízszintes tengely mentén"
+msgstr "Szétszórja a kijelölt elemeket a vízszintes tengely mentén"
 
 #: pcbnew/tools/placement_tool.cpp:78
 msgid "Distribute Vertically"
-msgstr "Függőleges elosztás"
+msgstr "Szétszórás függőlegesen"
 
 #: pcbnew/tools/placement_tool.cpp:79
 msgid "Distributes selected items along the vertical axis"
-msgstr "Elosztja a kijelölt elemeket a függőleges tengely mentén"
+msgstr "Szétszórja a kijelölt elemeket a függőleges tengely mentén"
 
 #: pcbnew/tools/placement_tool.cpp:110
 msgid "Align/Distribute"
-msgstr "Igazítás/Elosztás"
+msgstr "Igazítás/Szétszórás"
 
 #: pcbnew/tools/placement_tool.cpp:239
 msgid "Align to top"
@@ -24629,31 +24583,31 @@ msgstr "Igazítás alulra"
 
 #: pcbnew/tools/placement_tool.cpp:320
 msgid "Align to left"
-msgstr "Igazítása balra"
+msgstr "Igazítás balra"
 
 #: pcbnew/tools/placement_tool.cpp:368
 msgid "Align to right"
-msgstr "Igazítása jobbra"
+msgstr "Igazítás jobbra"
 
 #: pcbnew/tools/placement_tool.cpp:401
 msgid "Align to middle"
-msgstr "Igazítása közepére"
+msgstr "Igazítás függőlegesen középre"
 
 #: pcbnew/tools/placement_tool.cpp:434
 msgid "Align to center"
-msgstr "Igazítása központtól"
+msgstr "Igazítás vízszintesen középre"
 
 #: pcbnew/tools/placement_tool.cpp:486
 msgid "Distribute horizontally"
-msgstr "Vízszintes elosztás"
+msgstr "Szétszórás vízszintesen"
 
 #: pcbnew/tools/placement_tool.cpp:588
 msgid "Distribute vertically"
-msgstr "Függőleges elosztás"
+msgstr "Szétszórás függőlegesen"
 
 #: pcbnew/tools/point_editor.cpp:55
 msgid "Create a corner"
-msgstr "Hozzon létre egy sarokot"
+msgstr "Sarok létrehozása"
 
 #: pcbnew/tools/point_editor.cpp:59
 msgid "Remove Corner"
@@ -24685,65 +24639,59 @@ msgstr "Relatív pozíció..."
 
 #: pcbnew/tools/position_relative_tool.cpp:46
 msgid "Positions the selected item(s) by an exact amount relative to another"
-msgstr ""
+msgstr "Kiválasztott elemek mozgatása egy másik elemhez viszonyított relatív pozícióba"
 
 #: pcbnew/tools/position_relative_tool.cpp:127
 msgid "Position Relative"
 msgstr "Relatív pozíció"
 
 #: pcbnew/tools/position_relative_tool.cpp:147
-#, fuzzy
 msgid "Select reference item..."
-msgstr "Fájl kiválasztása..."
+msgstr "Referencia elem kijelölése..."
 
 #: pcbnew/tools/selection_tool.cpp:101
-#, fuzzy
 msgid "Single Track"
-msgstr "Egy vezetősáv"
+msgstr "Vezetősáv"
 
 #: pcbnew/tools/selection_tool.cpp:101
-#, fuzzy
 msgid "Selects all track segments & vias between two junctions."
-msgstr "Két csomópont közötti kapcsolatot választ."
+msgstr "Két csomópont közötti összes vezetősáv szegmens és via kijelölése."
 
 #: pcbnew/tools/selection_tool.cpp:105
-#, fuzzy
 msgid "Connected Tracks"
-msgstr "Zárolt vezetősávok"
+msgstr "Csatlakozó vezetősávok"
 
 #: pcbnew/tools/selection_tool.cpp:105
-#, fuzzy
 msgid "Selects all connected tracks & vias."
-msgstr "Két csomópont közötti kapcsolatot választ."
+msgstr "Összes csatlakozó vezetősáv és via kijelölése."
 
 #: pcbnew/tools/selection_tool.cpp:109
 msgid "Expand Selected Connection"
-msgstr ""
+msgstr "Kijelölés bővítése"
 
 #: pcbnew/tools/selection_tool.cpp:110
 msgid "Expands the current selection to select a connection between two junctions."
-msgstr ""
+msgstr "Kijelölés bővítése két csomópont közötti csatlakozásokkal"
 
 #: pcbnew/tools/selection_tool.cpp:114
-#, fuzzy
 msgid "All Tracks in Net"
-msgstr "A réz oldalon lévő szöveg, belelóg egy vezetősávba!"
+msgstr "A vezetékhez tartozó összes vezetősáv"
 
 #: pcbnew/tools/selection_tool.cpp:114
 msgid "Selects all tracks & vias belonging to the same net."
-msgstr "Kijelöli az azonos vezetékhez tartozó vezetősávokat és átvezetéseket."
+msgstr "Minden, a vezetékhez tartozó vezetősáv és via kijelölése."
 
 #: pcbnew/tools/selection_tool.cpp:118
 msgid "Selects all modules and tracks in the schematic sheet"
-msgstr "Az összes modul és vezetősáv kijelölése a kapcsolásirajz oldalon"
+msgstr "Az összes modul és vezetősáv kijelölése a kapcsolási rajz lapon"
 
 #: pcbnew/tools/selection_tool.cpp:122
 msgid "Items in Same Hierarchical Sheet"
-msgstr ""
+msgstr "Hierarchikus lapon lévő összes elem"
 
 #: pcbnew/tools/selection_tool.cpp:123
 msgid "Selects all modules and tracks in the same schematic sheet"
-msgstr ""
+msgstr "Az összes modul és vezetősáv kijelölése egy kapcsolási rajz lapon"
 
 #: pcbnew/tools/selection_tool.cpp:127
 msgid "Find Item..."
@@ -24755,7 +24703,7 @@ msgstr "Az elemhez kapcsolódó dokumentum megjelenítése"
 
 #: pcbnew/tools/selection_tool.cpp:132
 msgid "Selects a footprint by reference and places it under the cursor for moving"
-msgstr "Alkatrészrajzolat kiválasztása referencia alapján és lehelyezése a kurzorhoz"
+msgstr "Alkatrészrajzolat kiválasztása referencia alapján, majd mozgatása kurzorral"
 
 #: pcbnew/tools/selection_tool.cpp:137
 msgid "Filter Selection..."
@@ -24767,7 +24715,7 @@ msgstr "A kiválasztott elemek szűrése típus alapján"
 
 #: pcbnew/tools/selection_tool.cpp:786
 msgid "Selection contains locked items. Do you want to continue?"
-msgstr "A kijelölés zárolt elemeket tartalmaz. Biztosan folytatod?"
+msgstr "A kijelölés zárolt elemeket tartalmaz. Folytatja?"
 
 #: pcbnew/tools/selection_tool.cpp:1389
 msgid "Filter selection"
@@ -24795,27 +24743,27 @@ msgstr "Zóna kitöltése"
 
 #: pcbnew/tools/zone_filler_tool.cpp:51
 msgid "Fill All"
-msgstr "Mind kitöltése"
+msgstr "Mindet kitölti"
 
 #: pcbnew/tools/zone_filler_tool.cpp:51
 msgid "Fill all zones"
-msgstr "Minden zóna kitöltése"
+msgstr "Összes zóna kitöltése"
 
 #: pcbnew/tools/zone_filler_tool.cpp:55
 msgid "Unfill"
-msgstr "Kitöltések eltávolítása"
+msgstr "Kitöltés eltávolítása"
 
 #: pcbnew/tools/zone_filler_tool.cpp:55
 msgid "Unfill zone(s)"
-msgstr "Kitöltések eltávolítása zónákból"
+msgstr "Zónakitöltések eltávolítása"
 
 #: pcbnew/tools/zone_filler_tool.cpp:59
 msgid "Unfill All"
-msgstr "Kitöltések eltávolítása az összes zónából"
+msgstr "Összes kitöltés eltávolítása"
 
 #: pcbnew/tools/zone_filler_tool.cpp:59
 msgid "Unfill all zones"
-msgstr "Kitöltések eltávolítása az összes zónából"
+msgstr "Összes zónakitöltés eltávolítása"
 
 #: pcbnew/tools/zone_filler_tool.cpp:122
 msgid "Fill All Zones"
@@ -24827,7 +24775,7 @@ msgstr "Zónakitöltés eltávolítása"
 
 #: pcbnew/tools/zone_filler_tool.cpp:200
 msgid "Unfill All Zones"
-msgstr "Kitöltések eltávolítása az összes zónából"
+msgstr "Összes zónakitöltés eltávolítása"
 
 #: pcbnew/tracks_cleaner.cpp:169 pcbnew/tracks_cleaner.cpp:739
 msgid "Board cleanup"
@@ -24839,7 +24787,7 @@ msgstr "A visszavonás/újra művelet nem sikerült: néhány elem nem találhat
 
 #: pcbnew/zone_filler.cpp:112
 msgid "Checking zone fills..."
-msgstr "Zóna kitöltések ellenőrzése..."
+msgstr "Zónakitöltések ellenőrzése..."
 
 #: pcbnew/zone_filler.cpp:182
 msgid "Removing insulated copper islands..."
