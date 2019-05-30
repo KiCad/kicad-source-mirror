@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2010 jean-pierre.charras
- * Copyright (C) 1992-2019 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2019 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@
 
 #include <fctsys.h>
 #include <macros.h>
+#include <wx/clipbrd.h>
 
 #include <pgm_base.h>
 #include <confirm.h>
@@ -56,9 +57,6 @@
 
 #define DEFAULT_DPI 300     // Default resolution in Bit per inches
 
-extern int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
-                             OUTPUT_FMT_ID aFormat, int aDpi_X, int aDpi_Y,
-                             BMP2CMP_MOD_LAYER aModLayer );
 
 /**
  * Class BM2CMP_FRAME_BASE
@@ -81,6 +79,7 @@ private:
     wxSize          m_frameSize;
     wxPoint         m_framePos;
     std::unique_ptr<wxConfigBase> m_config;
+    bool            m_exportToClipboard;
 
 public:
     BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent );
@@ -96,23 +95,24 @@ private:
     void OnPaintGreyscale( wxPaintEvent& event ) override;
     void OnPaintBW( wxPaintEvent& event ) override;
     void OnLoadFile( wxCommandEvent& event ) override;
-    void OnExport( wxCommandEvent& event ) override;
+    void OnExportToFile( wxCommandEvent& event ) override;
+    void OnExportToClipboard( wxCommandEvent& event ) override;
 
     /**
      * Generate a schematic library which contains one component:
      * the logo
      */
-    void OnExportEeschema();
+    void exportEeschemaFormat();
 
     /**
      * Generate a module in S expr format
      */
-    void OnExportPcbnew();
+    void exportPcbnewFormat();
 
     /**
      * Generate a postscript file
      */
-    void OnExportPostScript();
+    void exportPostScriptFormat();
 
     /**
      * Generate a file suitable to be copied into a page layout
@@ -141,9 +141,16 @@ private:
     }
 
     void NegateGreyscaleImage( );
-    void ExportFile( FILE* aOutfile, OUTPUT_FMT_ID aFormat );
+    /**
+     * generate a export data of the current bitmap.
+     * @param aOutput is a string buffer to fill with data
+     * @param aFormat is the format to generate
+     */
+    void ExportToBuffer( std::string&aOutput, OUTPUT_FMT_ID aFormat );
+
     void updateImageInfo();
     void OnFormatChange( wxCommandEvent& event ) override;
+    void exportBitmap( OUTPUT_FMT_ID aFormat );
 };
 
 
@@ -167,6 +174,7 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_config->Read( KEYWORD_BW_NEGATIVE, &tmp, 0 );
     m_Negative = tmp != 0;
     m_checkNegative->SetValue( m_Negative );
+    m_exportToClipboard = false;
 
     if( m_config->Read( KEYWORD_LAST_FORMAT, &tmp ) )
     {
@@ -198,7 +206,8 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SetSize( m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
 
-    m_buttonExport->Enable( false );
+    m_buttonExportFile->Enable( false );
+    m_buttonExportClipboard->Enable( false );
 
     m_imageDPI.x = m_imageDPI.y = DEFAULT_DPI;  // Default resolution in Bit per inches
 
@@ -390,7 +399,9 @@ bool BM2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int 
     m_NB_Image  = m_Greyscale_Image;
     Binarize( (double) m_sliderThreshold->GetValue()/m_sliderThreshold->GetMax() );
 
-    m_buttonExport->Enable( true );
+    m_buttonExportFile->Enable( true );
+    m_buttonExportClipboard->Enable( true );
+
     return true;
 }
 
@@ -502,24 +513,53 @@ void BM2CMP_FRAME::OnThresholdChange( wxScrollEvent& event )
 }
 
 
-void BM2CMP_FRAME::OnExport( wxCommandEvent& event )
+void BM2CMP_FRAME::OnExportToFile( wxCommandEvent& event )
 {
+    m_exportToClipboard = false;
     // choices of m_radioBoxFormat are expected to be in same order as
     // OUTPUT_FMT_ID. See bitmap2component.h
-    OUTPUT_FMT_ID sel = (OUTPUT_FMT_ID) m_radioBoxFormat->GetSelection();
+    OUTPUT_FMT_ID format = (OUTPUT_FMT_ID) m_radioBoxFormat->GetSelection();
+    exportBitmap( format );
+}
 
-    switch( sel )
+
+void BM2CMP_FRAME::OnExportToClipboard( wxCommandEvent& event )
+{
+    m_exportToClipboard = true;
+    // choices of m_radioBoxFormat are expected to be in same order as
+    // OUTPUT_FMT_ID. See bitmap2component.h
+    OUTPUT_FMT_ID format = (OUTPUT_FMT_ID) m_radioBoxFormat->GetSelection();
+
+    std::string buffer;
+    ExportToBuffer( buffer, format );
+
+    // Write buffer to the clipboard
+    if (wxTheClipboard->Open())
+    {
+        // This data objects are held by the clipboard,
+        // so do not delete them in the app.
+        wxTheClipboard->SetData( new wxTextDataObject( buffer.c_str() ) );
+        wxTheClipboard->Close();
+    }
+    else
+        wxMessageBox( _( " Unable to export to the Clipboard") );
+}
+
+
+void BM2CMP_FRAME::exportBitmap( OUTPUT_FMT_ID aFormat )
+{
+    switch( aFormat )
     {
     case EESCHEMA_FMT:
-        OnExportEeschema();
+        exportEeschemaFormat();
         break;
 
     case PCBNEW_KICAD_MOD:
-        OnExportPcbnew();
+        exportPcbnewFormat();
         break;
 
     case POSTSCRIPT_FMT:
-        OnExportPostScript();
+        exportPostScriptFormat();
         break;
 
     case KICAD_LOGO:
@@ -560,12 +600,14 @@ void BM2CMP_FRAME::OnExportLogo()
         return;
     }
 
-    ExportFile( outfile, KICAD_LOGO );
+    std::string buffer;
+    ExportToBuffer( buffer, KICAD_LOGO );
+    fputs( buffer.c_str(), outfile );
     fclose( outfile );
 }
 
 
-void BM2CMP_FRAME::OnExportPostScript()
+void BM2CMP_FRAME::exportPostScriptFormat()
 {
     wxFileName  fn( m_ConvertedFileName );
     wxString    path = fn.GetPath();
@@ -598,12 +640,14 @@ void BM2CMP_FRAME::OnExportPostScript()
         return;
     }
 
-    ExportFile( outfile, POSTSCRIPT_FMT );
+    std::string buffer;
+    ExportToBuffer( buffer, POSTSCRIPT_FMT );
+    fputs( buffer.c_str(), outfile );
     fclose( outfile );
 }
 
 
-void BM2CMP_FRAME::OnExportEeschema()
+void BM2CMP_FRAME::exportEeschemaFormat()
 {
     wxFileName  fn( m_ConvertedFileName );
     wxString    path = fn.GetPath();
@@ -635,12 +679,14 @@ void BM2CMP_FRAME::OnExportEeschema()
         return;
     }
 
-    ExportFile( outfile, EESCHEMA_FMT );
+    std::string buffer;
+    ExportToBuffer( buffer, EESCHEMA_FMT );
+    fputs( buffer.c_str(), outfile );
     fclose( outfile );
 }
 
 
-void BM2CMP_FRAME::OnExportPcbnew()
+void BM2CMP_FRAME::exportPcbnewFormat()
 {
     wxFileName  fn( m_ConvertedFileName );
     wxString    path = fn.GetPath();
@@ -672,13 +718,15 @@ void BM2CMP_FRAME::OnExportPcbnew()
         return;
     }
 
-    ExportFile( outfile, PCBNEW_KICAD_MOD );
+    std::string buffer;
+    ExportToBuffer( buffer, PCBNEW_KICAD_MOD );
+    fputs( buffer.c_str(), outfile );
     fclose( outfile );
     m_mruPath = fn.GetPath();
 }
 
 
-void BM2CMP_FRAME::ExportFile( FILE* aOutfile, OUTPUT_FMT_ID aFormat )
+void BM2CMP_FRAME::ExportToBuffer( std::string& aOutput, OUTPUT_FMT_ID aFormat )
 {
     // Create a potrace bitmap
     int h = m_NB_Image.GetHeight();
@@ -710,7 +758,8 @@ void BM2CMP_FRAME::ExportFile( FILE* aOutfile, OUTPUT_FMT_ID aFormat )
     if( aFormat == PCBNEW_KICAD_MOD )
         modLayer = (BMP2CMP_MOD_LAYER) m_radio_PCBLayer->GetSelection();
 
-    bitmap2component( potrace_bitmap, aOutfile, aFormat, m_imageDPI.x, m_imageDPI.y, modLayer );
+    BITMAPCONV_INFO converter( aOutput );
+    converter.ConvertBitmap( potrace_bitmap, aFormat, m_imageDPI.x, m_imageDPI.y, modLayer );
 }
 
 
@@ -784,6 +833,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
     return start_common( aCtlBits );
 }
+
 
 void BM2CMP_FRAME::OnFormatChange( wxCommandEvent& event )
 {

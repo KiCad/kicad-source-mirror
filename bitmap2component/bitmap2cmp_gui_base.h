@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan 17 2019)
+// C++ code generated with wxFormBuilder (version Dec  1 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -65,7 +65,8 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 		wxTextCtrl* m_DPIValueY;
 		wxStaticText* m_DPI_Units;
 		wxButton* m_buttonLoad;
-		wxButton* m_buttonExport;
+		wxButton* m_buttonExportFile;
+		wxButton* m_buttonExportClipboard;
 		wxRadioBox* m_radioBoxFormat;
 		wxStaticText* m_ThresholdText;
 		wxSlider* m_sliderThreshold;
@@ -81,7 +82,8 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 		virtual void OnResolutionChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void UpdatePPITextValueY( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnLoadFile( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnExport( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnExportToFile( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnExportToClipboard( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFormatChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnThresholdChange( wxScrollEvent& event ) { event.Skip(); }
 		virtual void OnNegativeClicked( wxCommandEvent& event ) { event.Skip(); }
@@ -89,7 +91,7 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 
 	public:
 
-		BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Bitmap to Component Converter"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 733,634 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxTAB_TRAVERSAL );
+		BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Bitmap to Component Converter"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 733,616 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxTAB_TRAVERSAL );
 
 		~BM2CMP_FRAME_BASE();
 
