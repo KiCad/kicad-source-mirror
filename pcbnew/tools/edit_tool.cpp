@@ -641,8 +641,7 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         // Display properties dialog
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );
 
-        // Do not handle undo buffer, it is done by the properties dialogs @todo LEGACY
-        // Display properties dialog provided by the legacy canvas frame
+        // Do not handle undo buffer, it is done by the properties dialogs
         editFrame->OnEditItemRequest( item );
 
         // Notify other tools of the changes

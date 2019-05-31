@@ -146,7 +146,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
 
     EVT_MENU( ID_GEN_IMPORT_SPECCTRA_SESSION,PCB_EDIT_FRAME::ImportSpecctraSession )
     EVT_MENU( ID_GEN_IMPORT_SPECCTRA_DESIGN, PCB_EDIT_FRAME::ImportSpecctraDesign )
-    EVT_MENU( ID_GEN_IMPORT_GRAPHICS_FILE, PCB_EDIT_FRAME::Process_Special_Functions )
 
     EVT_MENU( ID_MENU_ARCHIVE_MODULES_IN_LIBRARY, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_MENU_CREATE_LIBRARY_AND_ARCHIVE_MODULES, PCB_EDIT_FRAME::Process_Special_Functions )
@@ -611,7 +610,6 @@ void PCB_EDIT_FRAME::ActivateGalCanvas()
     PCB_BASE_EDIT_FRAME::ActivateGalCanvas();
     COLORS_DESIGN_SETTINGS& cds = Settings().Colors();
 
-    cds.SetLegacyMode( false );
     GetGalCanvas()->GetGAL()->SetGridColor( cds.GetLayerColor( LAYER_GRID ) );
     auto view = GetGalCanvas()->GetView();
     view->GetPainter()->GetSettings()->ImportLegacyColors( &cds );

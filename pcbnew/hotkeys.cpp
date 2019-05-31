@@ -187,12 +187,6 @@ static EDA_HOTKEY HkDecreaseLineWidth( _HKI( "Decrease Line Width" ), HK_DEC_LIN
 static EDA_HOTKEY HkSetGridOrigin( _HKI( "Set Grid Origin" ), HK_SET_GRID_ORIGIN, 'S' );
 static EDA_HOTKEY HkResetGridOrigin( _HKI( "Reset Grid Origin" ), HK_RESET_GRID_ORIGIN, 'Z' );
 
-static EDA_HOTKEY HkCanvasDefault( _HKI( "Switch to Legacy Toolset (not all features will be available" ),
-                                   HK_CANVAS_LEGACY,
-#ifdef __WXMAC__
-                                   GR_KB_ALT +
-#endif
-                                   WXK_F9 );
 static EDA_HOTKEY HkCanvasOpenGL( _HKI( "Switch to Modern Toolset with hardware-accelerated graphics (recommended)" ),
                                   HK_CANVAS_OPENGL,
 #ifdef __WXMAC__
@@ -477,7 +471,6 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
 
     // Display
     &HkSwitchHighContrastMode,
-    &HkCanvasDefault,
     &HkCanvasCairo,
     &HkCanvasOpenGL,
     NULL
@@ -514,7 +507,6 @@ EDA_HOTKEY* module_edit_Hotkey_List[] = {
 
     // Display
     &HkSwitchHighContrastMode,
-    &HkCanvasDefault,
     &HkCanvasCairo,
     &HkCanvasOpenGL,
     NULL

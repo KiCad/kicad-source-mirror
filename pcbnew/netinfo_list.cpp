@@ -140,8 +140,6 @@ void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
  *  Compute and update the net_codes for PADS et and equipots (.m_NetCode member)
  *  net_codes are >= 1 (net_code = 0 means not connected)
  *  Update the net buffer
- *  Must be called after editing pads (netname, or deleting) or after read a netlist
- *  set to 1 flag NET_CODE_OK  of m_Pcb->m_Status_Pcb;
  *  m_Pcb->m_NbNodes and m_Pcb->m_NbNets are updated
  * Be aware NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname )
  * when search a net by its net name does a binary search

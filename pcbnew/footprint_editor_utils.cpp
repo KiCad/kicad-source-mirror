@@ -460,14 +460,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
-    case ID_GEN_IMPORT_GRAPHICS_FILE:
-        if( GetBoard()->m_Modules )
-        {
-            InvokeDialogImportGfxModule( this, GetBoard()->m_Modules );
-            GetGalCanvas()->Refresh();
-        }
-        break;
-
     default:
         wxLogDebug( wxT( "FOOTPRINT_EDIT_FRAME::Process_Special_Functions error" ) );
         break;

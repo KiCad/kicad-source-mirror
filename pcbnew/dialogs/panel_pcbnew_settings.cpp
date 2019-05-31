@@ -49,6 +49,7 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
     rotationAngle = AngleToStringDegrees( (double)m_Frame->GetRotationAngle() );
     m_RotationAngle->SetValue( rotationAngle );
 
+    // JEY TODO: clean out legacy-routing settings
     m_TrackAutodel->SetValue( m_Frame->Settings().m_legacyAutoDeleteOldTrack );
     m_Track_45_Only_Ctrl->SetValue( m_Frame->Settings().m_legacyUse45DegreeTracks );
     m_Segments_45_Only_Ctrl->SetValue( m_Frame->Settings().m_use45DegreeGraphicSegments );

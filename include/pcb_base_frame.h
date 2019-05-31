@@ -355,15 +355,6 @@ public:
      */
     void Compile_Ratsnest( bool aDisplayStatus );
 
-    /**
-     *  function Displays the general ratsnest
-     *  Only ratsnest with the status bit CH_VISIBLE is set are displayed
-     * @param aDC = the current device context (can be NULL)
-     * @param aNetcode if > 0, Display only the ratsnest relative to the
-     *                 corresponding net_code
-     */
-    void DrawGeneralRatsnest( wxDC* aDC, int aNetcode = 0 );
-
     /* Functions relative to Undo/redo commands: */
 
     /**

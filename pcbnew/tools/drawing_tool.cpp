@@ -769,8 +769,8 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     if( !m_frame->GetModel() )
         return 0;
 
-    // Note: PlaceImportedGraphics() will convert  PCB_LINE_T and PCB_TEXT_T to module graphic items
-    // if needed
+    // Note: PlaceImportedGraphics() will convert PCB_LINE_T and PCB_TEXT_T to module graphic
+    // items if needed
     DIALOG_IMPORT_GFX dlg( m_frame, m_editModules );
     int dlgResult = dlg.ShowModal();
 
@@ -785,7 +785,6 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         wxMessageBox( _( "No graphic items found in file to import") );
         return 0;
     }
-
 
     m_frame->SetNoToolSelected();
 

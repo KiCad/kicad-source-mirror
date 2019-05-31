@@ -236,10 +236,6 @@ public:
 
     const wxString &GetFileName() const { return m_fileName; }
 
-    /// Flags used in ratsnest calculation and update.
-    int m_Status_Pcb;
-
-
 private:
     DLIST<BOARD_ITEM>           m_Drawings;             // linked list of lines & texts
 

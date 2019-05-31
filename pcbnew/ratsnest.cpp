@@ -44,7 +44,6 @@
 void PCB_BASE_FRAME::Compile_Ratsnest( bool aDisplayStatus )
 {
     GetBoard()->GetConnectivity()->RecalculateRatsnest();
-    GetBoard()->m_Status_Pcb = 0;   // we want a full ratsnest computation, from the scratch
 
     ClearMsgPanel();
 
@@ -63,78 +62,4 @@ void PCB_BASE_FRAME::Compile_Ratsnest( bool aDisplayStatus )
     }
 }
 
-
-/**
- *  function DrawGeneralRatsnest
- *  Only ratsnest items with the status bit CH_VISIBLE set are displayed
- * @param aDC = the current device context (can be NULL)
- * @param aNetcode: if > 0, Display only the ratsnest relative to the
- * corresponding net_code
- */
-void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
-{
-    // JEY TODO: probalby obsolete (we don't really have DCs anymore)
-    if( ( m_Pcb->m_Status_Pcb & DO_NOT_SHOW_GENERAL_RASTNEST ) )
-    {
-        return;
-    }
-
-    if( aDC == NULL )
-        return;
-
-    auto connectivity = m_Pcb->GetConnectivity();
-
-    std::unique_lock<std::mutex> lock( connectivity->GetLock(), std::try_to_lock );
-
-    if( !lock )
-        return;
-
-    COLOR4D color = Settings().Colors().GetItemColor( LAYER_RATSNEST );
-
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
-
-    const bool curved_ratsnest = displ_opts->m_DisplayRatsnestLinesCurved;
-
-    for( int i = 1 /* skip "No Net" at [0] */; i < connectivity->GetNetCount(); ++i )
-    {
-        RN_NET* net = connectivity->GetRatsnestForNet( i );
-
-        if( !net )
-            continue;
-
-        if( ( aNetcode <= 0 ) || ( aNetcode == i ) )
-        {
-            for( const auto& edge : net->GetEdges() )
-            {
-                auto s = edge.GetSourcePos();
-                auto d = edge.GetTargetPos();
-                auto sn = edge.GetSourceNode();
-                auto dn = edge.GetTargetNode();
-
-                if( !sn->Valid() || !dn->Valid() )
-                    continue;
-
-                bool enable = !sn->GetNoLine() && !dn->GetNoLine();
-                bool show = sn->Parent()->GetLocalRatsnestVisible()
-                            || dn->Parent()->GetLocalRatsnestVisible();
-
-                if( enable && show )
-                {
-                    if (curved_ratsnest)
-                    {
-                        auto dx = d.x - s.x;
-                        auto dy = d.y - s.y;
-                        auto cx = s.x + 0.5 * dx + 1.2 * dy;
-                        auto cy = s.y + 0.5 * dy - 1.2 * dx;
-                        GRArc1( nullptr, aDC, s.x, s.y, d.x, d.y, cx, cy, 0, color);
-                    }
-                    else
-                    {
-                        GRLine( nullptr, aDC, s.x, s.y, d.x, d.y, 0, color );
-                    }
-                }
-            }
-        }
-    }
-}
 

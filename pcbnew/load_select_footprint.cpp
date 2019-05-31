@@ -110,7 +110,6 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     if( !Clear_Pcb( true ) )
         return false;
 
-    GetBoard()->m_Status_Pcb = 0;
     newModule = new MODULE( *aModule );
     newModule->SetParent( GetBoard() );
     newModule->SetLink( aModule->GetTimeStamp() );

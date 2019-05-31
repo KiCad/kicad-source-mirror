@@ -250,7 +250,6 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
     // run all the tests, with no UI at this time.
     m_Messages->Clear();
     wxSafeYield();                             // Allows time slice to refresh the Messages
-    m_brdEditor->GetBoard()->m_Status_Pcb = 0; // Force full connectivity and ratsnest calculations
     m_tester->RunTests(m_Messages);
     m_Notebook->ChangeSelection( 0 );          // display the "Problems/Markers" tab
 

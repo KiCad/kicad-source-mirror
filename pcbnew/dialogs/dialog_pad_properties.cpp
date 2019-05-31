@@ -1572,9 +1572,6 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
     commit.Push( _( "Modify pad" ) );
 
-    if( rastnestIsChanged )  // The net ratsnest must be recalculated
-        m_board->m_Status_Pcb = 0;
-
     return true;
 }
 

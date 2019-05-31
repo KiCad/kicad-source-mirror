@@ -209,7 +209,6 @@ void PCB_BASE_FRAME::AddModuleToBoard( MODULE* module )
         module->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
 
         module->SetTimeStamp( GetNewTimeStamp() );
-        GetBoard()->m_Status_Pcb = 0;
 
         // Put it on FRONT layer,
         // (Can be stored flipped if the lib is an archive built from a board)

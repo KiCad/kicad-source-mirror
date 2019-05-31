@@ -1123,8 +1123,6 @@ void GERBVIEW_FRAME::ActivateGalCanvas()
         m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
     }
 
-    m_colorsSettings->SetLegacyMode( false );
-
     galCanvas->GetGAL()->SetGridColor( GetLayerColor( LAYER_GERBVIEW_GRID ) );
 
     SetPageSettings( GetPageSettings() );

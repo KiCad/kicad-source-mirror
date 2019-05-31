@@ -83,12 +83,6 @@ static EDA_HOTKEY HkSwitch2NextCopperLayer( _HKI( "Switch to Next Layer" ),
 static EDA_HOTKEY HkSwitch2PreviousCopperLayer( _HKI( "Switch to Previous Layer" ),
                                                 HK_SWITCH_LAYER_TO_PREVIOUS, '-' );
 
-static EDA_HOTKEY HkCanvasDefault( _HKI( "Switch to Legacy Toolset" ),
-                                   HK_CANVAS_LEGACY,
-#ifdef __WXMAC__
-                                   GR_KB_ALT +
-#endif
-                                   WXK_F9 );
 static EDA_HOTKEY HkCanvasOpenGL( _HKI( "Switch to Modern Toolset with hardware-accelerated graphics (recommended)" ),
                                   HK_CANVAS_OPENGL,
 #ifdef __WXMAC__
@@ -115,7 +109,6 @@ EDA_HOTKEY* gerbviewHotkeyList[] = {
     &HkSwitchHighContrastMode,
     &HkSwitch2NextCopperLayer,
     &HkSwitch2PreviousCopperLayer,
-    &HkCanvasDefault,
     &HkCanvasOpenGL,
     &HkCanvasCairo,
     &HkMeasureTool,

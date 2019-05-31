@@ -96,23 +96,6 @@ void InvokePluginOptionsEditor( wxWindow* aCaller, const wxString& aNickname,
     const wxString& aPluginType, const wxString& aOptions, wxString* aResult );
 
 /**
- * Shows the modal DIALOG_IMPORT_GFX for importing a DXF file to a board.
-
- * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
- * @return true if the import was made.
- */
-bool InvokeDialogImportGfxBoard( PCB_BASE_FRAME* aCaller );
-
-/**
- * shows the modal DIALOG_IMPORT_GFX for importing a DXF file as footprint outlines.
- *
- * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
- * @param aModule is the footprint currently edited.
- * @return true if the import was made.
- */
-bool InvokeDialogImportGfxModule( PCB_BASE_FRAME* aCaller, MODULE* aModule );
-
-/**
  * Function InvokeExportSVG
  * shows the Export SVG dialog
  * @param aCaller is the PCB_BASE_FRAME which is invoking the dialog.

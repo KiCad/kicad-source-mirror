@@ -558,7 +558,6 @@ private:
      * Function buildPadsFullList
      * creates the pad list, and initializes:
      *   m_Pads (list of pads)
-     * set m_Status_Pcb = LISTE_PAD_OK;
      * and clear for all pads in list the m_SubRatsnest member;
      * clear m_Pcb->m_FullRatsnest
      */
@@ -587,13 +586,6 @@ private:
 #define START_ON_TRACK 0x40
 #define END_ON_TRACK   0x80
 
-/* Status bit (OR'ed bits) for class BOARD member .m_Status_Pcb */
-enum StatusPcbFlags {
-
-    RATSNEST_ITEM_LOCAL_OK = 4,          /* current MODULE ratsnest is Ok */
-    DO_NOT_SHOW_GENERAL_RASTNEST = 0x20  /* Do not display the general
-                                          * ratsnest (used in module moves) */
-};
 
 
 #endif  // CLASS_NETINFO_

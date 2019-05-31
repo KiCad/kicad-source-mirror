@@ -115,7 +115,6 @@ BOARD::BOARD() :
     m_fileFormatVersionAtLoad = LEGACY_BOARD_FILE_VERSION;
 
     m_colorsSettings = &dummyColorsSettings;
-    m_Status_Pcb    = 0;                    // Status word: bit 1 = calculate.
     m_CurrentZoneContour = NULL;            // This ZONE_CONTAINER handle the
                                             // zone contour currently in progress
 
@@ -836,8 +835,6 @@ void BOARD::SetElementVisibility( GAL_LAYER_ID aLayer, bool isEnabled )
             zone->SetLocalRatsnestVisible( isEnabled );
         }
 
-        m_Status_Pcb = 0;
-
         break;
     }
 
@@ -909,9 +906,6 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
         else
             m_Modules.PushFront( (MODULE*) aBoardItem );
 
-        // Because the list of pads has changed, reset the status
-        // This indicate the list of pad and nets must be recalculated before use
-        m_Status_Pcb = 0;
         break;
 
     case PCB_DIMENSION_T:

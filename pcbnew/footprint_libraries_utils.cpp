@@ -329,7 +329,6 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
 
     module->SetPosition( wxPoint( 0, 0 ) );
 
-    GetBoard()->m_Status_Pcb = 0;
     GetBoard()->BuildListOfNets();
     updateView();
 
@@ -858,8 +857,6 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     }
 
     newmodule->ClearFlags();
-    // @todo LEGACY should be unnecessary
-    mainpcb->m_Status_Pcb = 0;
 
     return true;
 }

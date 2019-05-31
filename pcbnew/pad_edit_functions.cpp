@@ -109,7 +109,6 @@ static wxString GetNextPadName( wxString aPadName )
  */
 void PCB_BASE_FRAME::AddPad( MODULE* aModule, bool draw )
 {
-    m_Pcb->m_Status_Pcb     = 0;
     aModule->SetLastEditTime();
 
     D_PAD* pad = new D_PAD( aModule );
@@ -167,8 +166,6 @@ void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
         if( !IsOK( this, msg ) )
             return;
     }
-
-    m_Pcb->m_Status_Pcb = 0;
 
     GetBoard()->PadDelete( aPad );
 

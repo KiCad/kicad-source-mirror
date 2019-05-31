@@ -580,9 +580,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( !converted )
         UpdateFileHistory( GetBoard()->GetFileName() );
 
-    // Rebuild the new pad list (for drc and ratsnet control ...)
-    GetBoard()->m_Status_Pcb = 0;
-
     // Select netclass Default as current netclass (it always exists)
     SetCurrentNetClass( NETCLASS::Default );
 

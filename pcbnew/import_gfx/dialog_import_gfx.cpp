@@ -379,17 +379,3 @@ void DIALOG_IMPORT_GFX::updatePcbImportOffsets_mm()
 }
 
 
-// Used only in legacy canvas by the board editor.
-bool InvokeDialogImportGfxBoard( PCB_BASE_FRAME* aCaller )
-{
-    // Legacy R.I.P.
-    return true;
-}
-
-
-// Used only in legacy canvas by the footprint editor.
-bool InvokeDialogImportGfxModule( PCB_BASE_FRAME* aCaller, MODULE* aModule )
-{
-    // Legacy R.I.P.
-    return true;
-}

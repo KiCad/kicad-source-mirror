@@ -120,7 +120,6 @@ bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
     }
 
     OnModify();
-    GetBoard()->m_Status_Pcb = 0;
 
     GetBoard()->GetConnectivity()->Clear();
     GetBoard()->GetConnectivity()->Build( GetBoard() );

@@ -258,8 +258,6 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     aActionPlugin->Run();
     ACTION_PLUGINS::SetActionRunning( false );
 
-    currentPcb->m_Status_Pcb = 0;
-
     // Get back the undo buffer to fix some modifications
     PICKED_ITEMS_LIST* oldBuffer = NULL;
 

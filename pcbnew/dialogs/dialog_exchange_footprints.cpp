@@ -449,8 +449,6 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
     aCommit.Remove( aSrc );
     aCommit.Add( aDest );
 
-    // @todo LEGACY should be unnecessary
-    GetBoard()->m_Status_Pcb = 0;
     aDest->ClearFlags();
 }
 

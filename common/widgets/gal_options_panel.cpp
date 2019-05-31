@@ -66,16 +66,13 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
     wxBoxSizer* sLeftSizer = new wxBoxSizer( wxVERTICAL );
     m_mainSizer->Add( sLeftSizer, 1, wxALL | wxEXPAND, 0 );
 
-    // @todo LEGACY: not required when legacy is gone
-    const wxString galOnlySuffix = _( " (not supported in Legacy Toolset)" );
-
     /*
      * Grid settings subpanel
      */
     {
+        wxStaticBox*      sGridOpts = new wxStaticBox( this, wxID_ANY, _( "Grid Options" ) );
         wxStaticBoxSizer* sGridSettings;
-        sGridSettings = new wxStaticBoxSizer( new wxStaticBox( this,
-                wxID_ANY, _( "Grid Options" ) + galOnlySuffix ), wxVERTICAL );
+        sGridSettings = new wxStaticBoxSizer( sGridOpts, wxVERTICAL );
 
         wxString m_gridStyleChoices[] = {
             _( "Dots" ),
@@ -136,16 +133,8 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
      * Cursor settings subpanel
      */
     {
-        wxString cursorDisplayTitle = _( "Cursor Options" );
-
-        // cursor is not shown in legacy on OSX
-        // @todo LEGACY remove this
-#ifdef __APPLE__
-        cursorDisplayTitle += galOnlySuffix;
-#endif
-
         auto sCursorSettings = new wxStaticBoxSizer( new wxStaticBox( this,
-                wxID_ANY, cursorDisplayTitle ), wxVERTICAL );
+                wxID_ANY, _( "Cursor Options" ) ), wxVERTICAL );
 
         sLeftSizer->Add( sCursorSettings, 1, wxTOP | wxRIGHT | wxEXPAND, 5 );
 
@@ -162,19 +151,9 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
 
         m_cursorShape->SetSelection( 0 );
         m_cursorShape->SetToolTip( _( "Cursor shape for drawing, placement and movement tools" ) );
-
         sCursorSettings->Add( m_cursorShape, 0, wxALL | wxEXPAND, 5 );
 
-#ifdef __APPLE__
-        // Whole section is galOnly on OSX; no need for further qualifier here
         m_forceCursorDisplay = new wxCheckBox( this, wxID_ANY, _( "Always show crosshairs" ) );
-#else
-        // User a shorter galOnly qualifier as otherwise the label is obnoxiously long
-        // @todo LEGACY remove this
-        m_forceCursorDisplay = new wxCheckBox( this, wxID_ANY,
-                                         _( "Always show crosshairs (not in Legacy)" ) );
-#endif
-
         sCursorSettings->Add( m_forceCursorDisplay, 0, wxALL | wxEXPAND, 5 );
     }
 }

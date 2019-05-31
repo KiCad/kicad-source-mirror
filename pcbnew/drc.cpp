@@ -105,6 +105,7 @@ void DRC::addMarkerToPcb( MARKER_PCB* aMarker )
 {
     // In legacy routing mode, do not add markers to the board.
     // only shows the drc error message
+    // JEY TODO: clear out the legacyRoutingMode stuff...
     if( m_drcInLegacyRoutingMode )
     {
         m_pcbEditorFrame->SetMsgPanel( aMarker );

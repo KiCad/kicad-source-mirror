@@ -45,8 +45,6 @@ public:
      * @param aParent parent window
      * @param aColor initial swatch color
      * @param aID id to use when sending swatch events
-     * @param aArbitraryColors true to allow selection of any 32 bits color for GAL canvas,
-     * and false to allow a selection from a set of colors accepted by the legacy canvas.
      */
     COLOR_SWATCH( wxWindow* aParent, KIGFX::COLOR4D aColor, int aID, KIGFX::COLOR4D aBackground );
 

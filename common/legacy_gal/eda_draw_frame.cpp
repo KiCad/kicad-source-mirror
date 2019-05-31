@@ -46,7 +46,6 @@
 #include <ws_draw_item.h>
 #include <page_info.h>
 #include <title_block.h>
-#include <advanced_config.h>
 
 /**
  * Definition for enabling and disabling scroll bar setting trace output.  See the
@@ -641,10 +640,9 @@ EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::LoadCanvasTypeSetting()
         canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
     }
 
-    // Coerce the value into a GAL type when Legacy is not available
-    // Default to Cairo, and on the first, user will be prompted for OpenGL
-    if( canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
-            && !ADVANCED_CFG::GetCfg().AllowLegacyCanvas() )
+    // Legacy canvas no longer supported.  Switch to Cairo, and on the first instantiation
+    // the user will be prompted to switch to OpenGL
+    if( canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
     {
 #ifdef __WXMAC__
         // Cairo renderer doesn't handle Retina displays

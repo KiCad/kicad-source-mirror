@@ -104,25 +104,6 @@ public:
     COLOR4D LegacyMix( COLOR4D aColor ) const;
 
     /**
-     * Function SetToLegacyHighlightColor()
-     * Sets the color to the "light" version of the nearest matching
-     * legacy color (see g_ColorRefs in colors.cpp).
-     */
-    COLOR4D& SetToLegacyHighlightColor();
-
-    /**
-     * Function SetToNearestLegacyColor()
-     * Sets the color to the nearest matching
-     * legacy color (see g_ColorRefs in colors.cpp).
-     */
-    COLOR4D& SetToNearestLegacyColor();
-
-    COLOR4D AsLegacyColor() const
-    {
-        return COLOR4D( COLOR4D::GetNearestLegacyColor( *this ) );
-    }
-
-    /**
      * Packs the color into an unsigned int for compatibility with legacy canvas.
      * Note that this is a lossy downsampling and also that the alpha channel is lost.
      */
@@ -132,11 +113,6 @@ public:
      * Unpacks from a unsigned int in the legacy EDA_COLOR_T format.
      */
     void FromU32( unsigned int aPackedColor );
-
-    /**
-     * Determines the "nearest" EDA_COLOR_T according to ColorFindNearest
-     */
-    static EDA_COLOR_T GetNearestLegacyColor( const COLOR4D &aColor );
 #endif /* WX_COMPATIBLITY */
 
 

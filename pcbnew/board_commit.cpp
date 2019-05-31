@@ -172,8 +172,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                         module->Delete( boardItem );
                     }
 
-                    board->m_Status_Pcb = 0; // it is done in the legacy view (ratsnest perhaps?)
-
                     break;
 
                 // Board items
@@ -207,9 +205,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
                     if( !( changeFlags & CHT_DONE ) )
                         board->Remove( module );        // handles connectivity
-
-                    // Clear flags to indicate, that the ratsnest, list of nets & pads are not valid anymore
-                    board->m_Status_Pcb = 0;
                 }
                 break;
 
