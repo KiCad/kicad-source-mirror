@@ -200,10 +200,10 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 //
                 for( SCH_ITEM* it = m_frame->GetScreen()->GetDrawItems(); it; it = it->Next() )
                 {
+                    it->ClearFlags( STARTPOINT | ENDPOINT | SELECTEDNODE );
+
                     if( it->IsSelected() )
-                        it->SetFlags( STARTPOINT | ENDPOINT | SELECTEDNODE );
-                    else
-                        it->ClearFlags( STARTPOINT | ENDPOINT | SELECTEDNODE );
+                        it->SetFlags( STARTPOINT | ENDPOINT );
                 }
 
                 if( m_isDragOperation )
@@ -338,7 +338,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     continue;
 
                 moveItem( item, delta, m_frame->GetToolId() == ID_SCH_DRAG );
-
                 updateView( item );
             }
 
@@ -502,36 +501,25 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
             break;
 
         case SCH_COMPONENT_T:
-        case SCH_NO_CONNECT_T:
-        case SCH_JUNCTION_T:
             if( test->IsConnected( aPoint ) )
             {
-                // Connected to a wire: anchor the connected end of the wire
-                if( aOriginalItem->Type() == SCH_LINE_T )
-                {
-                    SCH_LINE* originalWire = (SCH_LINE*) aOriginalItem;
+                // Add a new wire between the component and the selected item so the selected
+                // item can be dragged.
+                SCH_LINE* newWire = new SCH_LINE( aPoint, LAYER_WIRE );
+                newWire->SetFlags( IS_NEW );
+                m_frame->AddToScreen( newWire, m_frame->GetScreen() );
 
-                    if( originalWire->GetStartPoint() == aPoint )
-                        originalWire->ClearFlags( STARTPOINT );
-                    else if( originalWire->GetEndPoint() == aPoint )
-                        originalWire->ClearFlags( ENDPOINT );
-                }
-                // Connected directly to a component: add a new wire and pick up the end
-                else if( test->Type() == SCH_COMPONENT_T)
-                {
-                    SCH_LINE* newWire = new SCH_LINE( aPoint, LAYER_WIRE );
-                    newWire->SetFlags( IS_NEW );
-                    m_frame->AddToScreen( newWire, m_frame->GetScreen() );
-
-                    newWire->SetFlags( SELECTEDNODE | STARTPOINT );
-                    aList.push_back( newWire );
-                }
-                // Connected to a no-connect or junction: pick it up
-                else
-                {
-                    aList.push_back( test );
-                }
+                newWire->SetFlags( SELECTEDNODE | STARTPOINT );
+                aList.push_back( newWire );
             }
+            break;
+
+        case SCH_NO_CONNECT_T:
+        case SCH_JUNCTION_T:
+            // Select no-connects and junctions that are connected to items being moved.
+            if( test->IsConnected( aPoint ) )
+                aList.push_back( test );
+
             break;
 
         case SCH_LABEL_T:
