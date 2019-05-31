@@ -344,8 +344,6 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
                                                wxDefaultPosition, wxDefaultSize,
                                                KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_DRC_OFF, wxEmptyString, KiScaledBitmap( drc_off_xpm, this ),
-                               _( "Enable design rule checking" ), wxITEM_CHECK );
     m_optionsToolBar->Add( ACTIONS::toggleGrid,              ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->Add( PCB_ACTIONS::togglePolarCoords,  ACTION_TOOLBAR::TOGGLE );
@@ -679,10 +677,6 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_TB_OPTIONS_DRC_OFF:
-        Settings().m_legacyDrcOn = !state;
-        break;
-
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE:
         m_show_microwave_tools = state;
         m_auimgr.GetPane( "MicrowaveToolbar" ).Show( m_show_microwave_tools );
@@ -751,16 +745,6 @@ void PCB_EDIT_FRAME::OnUpdateScriptingConsoleState( wxUpdateUIEvent& aEvent )
 
 #endif
 
-
-void PCB_EDIT_FRAME::OnUpdateDrcEnable( wxUpdateUIEvent& aEvent )
-{
-    bool state = !Settings().m_legacyDrcOn;
-    aEvent.Check( state );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_DRC_OFF,
-                                        Settings().m_legacyDrcOn ?
-                                        _( "Disable design rule checking while routing/editing tracks using Legacy Toolset.\nUse Route > Interactive Router Settings... for Modern Toolset." ) :
-                                        _( "Enable design rule checking while routing/editing tracks using Legacy Toolset.\nUse Route > Interactive Router Settings... for Modern Toolset." ) );
-}
 
 bool PCB_EDIT_FRAME::LayerManagerShown()
 {

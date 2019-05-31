@@ -781,7 +781,7 @@ double EDA_DRAW_FRAME::bestZoom( double sizeX, double sizeY, double scaleFactor,
 
 void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 {
-    wxFAIL_MSG( "Obsolete!  Should go through COMMON_TOOLS." );
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
 }
 
 

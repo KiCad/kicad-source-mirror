@@ -153,8 +153,6 @@ public:
      */
     void Show3D_Frame( wxCommandEvent& event ) override;
 
-    void OnVerticalToolbar( wxCommandEvent& aEvent );
-
     /**
      * Handle most of tools og the vertical right toolbar ("Tools" toolbar)
      */

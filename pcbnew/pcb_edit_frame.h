@@ -313,7 +313,6 @@ public:
     void OnUpdateSave( wxUpdateUIEvent& aEvent );
     void OnUpdateLayerPair( wxUpdateUIEvent& aEvent );
     void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
-    void OnUpdateDrcEnable( wxUpdateUIEvent& aEvent );
     bool LayerManagerShown();
     bool MicrowaveToolbarShown();
     void OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent );

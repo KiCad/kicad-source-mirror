@@ -49,7 +49,6 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
     rotationAngle = AngleToStringDegrees( (double)m_Frame->GetRotationAngle() );
     m_RotationAngle->SetValue( rotationAngle );
 
-    m_DrcOn->SetValue( m_Frame->Settings().m_legacyDrcOn );
     m_TrackAutodel->SetValue( m_Frame->Settings().m_legacyAutoDeleteOldTrack );
     m_Track_45_Only_Ctrl->SetValue( m_Frame->Settings().m_legacyUse45DegreeTracks );
     m_Segments_45_Only_Ctrl->SetValue( m_Frame->Settings().m_use45DegreeGraphicSegments );
@@ -74,7 +73,6 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataFromWindow()
     m_Frame->SetRotationAngle( wxRound( 10.0 * wxAtof( m_RotationAngle->GetValue() ) ) );
 
     /* Updating the combobox to display the active layer. */
-    m_Frame->Settings().m_legacyDrcOn = m_DrcOn->GetValue();
 
     m_Frame->Settings().m_legacyAutoDeleteOldTrack   = m_TrackAutodel->GetValue();
     m_Frame->Settings().m_use45DegreeGraphicSegments = m_Segments_45_Only_Ctrl->GetValue();

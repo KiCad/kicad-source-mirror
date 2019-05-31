@@ -50,9 +50,6 @@ public:
         return m_colorsSettings;
     }
 
-    bool    m_legacyDrcOn = true;                   // Not stored, always true when starting pcbnew,
-                                                    // false only on request during routing, and
-                                                    // always for temporary use
     bool    m_legacyAutoDeleteOldTrack = true;
     bool    m_legacyUse45DegreeTracks = true;       // True to allow horiz, vert. and 45deg only tracks
     static bool m_use45DegreeGraphicSegments;       // True to allow horizontal, vertical and

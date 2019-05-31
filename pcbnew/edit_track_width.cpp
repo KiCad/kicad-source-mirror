@@ -108,9 +108,6 @@ int PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
         int diagdrc = OK_DRC;
         return_code = TRACK_ACTION_SUCCESS;
 
-        if( Settings().m_legacyDrcOn )
-            diagdrc = m_drc->DrcOnCreatingTrack( aTrackItem, GetBoard()->m_Track );
-
         if( diagdrc != OK_DRC )
             return_code = TRACK_ACTION_DRC_ERROR;
     }

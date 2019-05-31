@@ -98,7 +98,6 @@ static const EDA_COLOR_T default_items_color[] = {
 COLORS_DESIGN_SETTINGS::COLORS_DESIGN_SETTINGS( FRAME_T aFrameType )
 {
     m_frameType = aFrameType;
-    m_legacyMode = false;
 
     for( unsigned src = 0, dst = 0; dst < arrayDim( m_LayersColors ); ++dst )
     {
@@ -126,10 +125,8 @@ COLORS_DESIGN_SETTINGS::COLORS_DESIGN_SETTINGS( FRAME_T aFrameType )
 COLOR4D COLORS_DESIGN_SETTINGS::GetLayerColor( LAYER_NUM aLayer ) const
 {
     if( (unsigned) aLayer < arrayDim( m_LayersColors ) )
-    {
-        return m_legacyMode ? m_LayersColors[aLayer].AsLegacyColor()
-                            : m_LayersColors[aLayer];
-    }
+        return m_LayersColors[aLayer];
+
     return COLOR4D::UNSPECIFIED;
 }
 
@@ -137,19 +134,14 @@ COLOR4D COLORS_DESIGN_SETTINGS::GetLayerColor( LAYER_NUM aLayer ) const
 void COLORS_DESIGN_SETTINGS::SetLayerColor( LAYER_NUM aLayer, COLOR4D aColor )
 {
     if( (unsigned) aLayer < arrayDim( m_LayersColors ) )
-    {
         m_LayersColors[aLayer] = aColor;
-    }
 }
 
 
 COLOR4D COLORS_DESIGN_SETTINGS::GetItemColor( int aItemIdx ) const
 {
     if( (unsigned) aItemIdx < arrayDim( m_LayersColors ) )
-    {
-        return m_legacyMode ? m_LayersColors[aItemIdx].AsLegacyColor()
-                            : m_LayersColors[aItemIdx];
-    }
+        return m_LayersColors[aItemIdx];
 
     return COLOR4D::UNSPECIFIED;
 }
@@ -158,9 +150,7 @@ COLOR4D COLORS_DESIGN_SETTINGS::GetItemColor( int aItemIdx ) const
 void COLORS_DESIGN_SETTINGS::SetItemColor( int aItemIdx, COLOR4D aColor )
 {
     if( (unsigned) aItemIdx < arrayDim( m_LayersColors ) )
-    {
         m_LayersColors[aItemIdx] = aColor;
-    }
 }
 
 
