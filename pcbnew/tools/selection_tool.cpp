@@ -858,7 +858,7 @@ int SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
         // Track items marked BUSY have already been visited
         //  therefore their connections have already been marked
         if( trackItem && !trackItem->GetState( BUSY ) )
-            selectAllItemsConnectedToTrack( *trackItem );
+            selectAllItemsConnectedToItem( *trackItem );
     }
 
     // Inform other potentially interested tools
@@ -923,15 +923,12 @@ int SELECTION_TOOL::selectCopper( const TOOL_EVENT& aEvent )
 
 void SELECTION_TOOL::selectAllItemsConnectedToTrack( TRACK& aSourceTrack )
 {
-    int segmentCount;
-    TRACK* trackList = board()->MarkTrace( board()->m_Track, &aSourceTrack, &segmentCount,
-                                           nullptr, nullptr, true );
+    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
+    auto              connectivity = board()->GetConnectivity();
 
-    for( int i = 0; i < segmentCount; ++i )
-    {
-        select( trackList );
-        trackList = trackList->Next();
-    }
+    for( auto item : connectivity->GetConnectedItems(
+                 static_cast<BOARD_CONNECTED_ITEM*>( &aSourceTrack ), types ) )
+        select( item );
 }
 
 
@@ -1026,12 +1023,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
 
     for( auto pad : padList )
     {
-        launchTracks = board()->GetTracksByPosition( pad->GetPosition() );
-
-        for( auto track : launchTracks )
-        {
-            selectAllItemsConnectedToTrack( *track );
-        }
+        selectAllItemsConnectedToItem( *pad );
     }
 
     // now we need to find all modules that are connected to each of these nets

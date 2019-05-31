@@ -1064,15 +1064,6 @@ public:
      */
     void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aRunDragCommand );
 
-    /**
-     * Function RemoveMisConnectedTracks
-     * finds all track segments which are mis-connected (to more than one net).
-     * When such a bad segment is found, it is flagged to be removed.
-     * All tracks having at least one flagged segment are removed.
-     * @return true if any change is made
-     */
-    bool RemoveMisConnectedTracks();
-
 
     // Autoplacement:
     void OnPlaceOrRouteFootprints( wxCommandEvent& event );

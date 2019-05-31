@@ -602,7 +602,7 @@ void PCB_IO::formatGeneral( BOARD* aBoard, int aNestLevel ) const
                   FormatInternalUnits( dsnSettings.GetBoardThickness() ).c_str() );
 
     m_out->Print( aNestLevel+1, "(drawings %zu)\n", aBoard->Drawings().size() );
-    m_out->Print( aNestLevel+1, "(tracks %d)\n", aBoard->GetNumSegmTrack() );
+    m_out->Print( aNestLevel + 1, "(tracks %zu)\n", aBoard->Tracks().size() );
     m_out->Print( aNestLevel + 1, "(modules %zu)\n", aBoard->Modules().size() );
     m_out->Print( aNestLevel+1, "(nets %d)\n", m_mapping->GetSize() );
     m_out->Print( aNestLevel, ")\n\n" );
@@ -733,10 +733,10 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     // Do not save MARKER_PCBs, they can be regenerated easily.
 
     // Save the tracks and vias.
-    for( TRACK* track = aBoard->m_Track;  track; track = track->Next() )
+    for( auto track : aBoard->Tracks() )
         Format( track, aNestLevel );
 
-    if( aBoard->m_Track.GetCount() )
+    if( aBoard->Tracks().size() )
         m_out->Print( 0, "\n" );
 
     /// @todo Add warning here that the old segment filed zones are no longer supported and

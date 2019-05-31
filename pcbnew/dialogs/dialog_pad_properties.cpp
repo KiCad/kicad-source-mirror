@@ -1434,7 +1434,6 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     if( !padValuesOK() )
         return false;
 
-    bool rastnestIsChanged = false;
     int  isign = m_isFlipped ? -1 : 1;
 
     transferDataToPad( m_padMaster );
@@ -1454,12 +1453,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     // Update values
     m_currentPad->SetShape( m_padMaster->GetShape() );
     m_currentPad->SetAttribute( m_padMaster->GetAttribute() );
-
-    if( m_currentPad->GetPosition() != m_padMaster->GetPosition() )
-    {
-        m_currentPad->SetPosition( m_padMaster->GetPosition() );
-        rastnestIsChanged = true;
-    }
+    m_currentPad->SetPosition( m_padMaster->GetPosition() );
 
     wxSize  size;
     MODULE* footprint = m_currentPad->GetParent();
@@ -1505,11 +1499,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
         m_currentPad->FlipPrimitives();
     }
 
-    if( m_currentPad->GetLayerSet() != m_padMaster->GetLayerSet() )
-    {
-        rastnestIsChanged = true;
-        m_currentPad->SetLayerSet( m_padMaster->GetLayerSet() );
-    }
+    m_currentPad->SetLayerSet( m_padMaster->GetLayerSet() );
 
     if( m_isFlipped )
     {
@@ -1524,12 +1514,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     if( m_padMaster->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED  )
         padNetcode = m_PadNetSelector->GetSelectedNetcode();
 
-    if( m_currentPad->GetNetCode() != padNetcode )
-    {
-        rastnestIsChanged = true;
-        m_currentPad->SetNetCode( padNetcode );
-    }
-
+    m_currentPad->SetNetCode( padNetcode );
     m_currentPad->SetLocalClearance( m_padMaster->GetLocalClearance() );
     m_currentPad->SetLocalSolderMaskMargin( m_padMaster->GetLocalSolderMaskMargin() );
     m_currentPad->SetLocalSolderPasteMargin( m_padMaster->GetLocalSolderPasteMargin() );

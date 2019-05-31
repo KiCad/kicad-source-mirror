@@ -58,40 +58,10 @@ static bool ShowClearance( PCB_DISPLAY_OPTIONS* aDisplOpts, const TRACK* aTrack 
 }
 
 
-TRACK* GetTrack( TRACK* aStartTrace, const TRACK* aEndTrace,
-        const wxPoint& aPosition, LSET aLayerMask )
-{
-    for( TRACK* seg = aStartTrace;  seg;  seg = seg->Next() )
-    {
-        if( seg->GetState( IS_DELETED | BUSY ) == 0 )
-        {
-            if( aPosition == seg->GetStart() )
-            {
-                if( ( aLayerMask & seg->GetLayerSet() ).any() )
-                    return seg;
-            }
-
-            if( aPosition == seg->GetEnd() )
-            {
-                if( ( aLayerMask & seg->GetLayerSet() ).any() )
-                    return seg;
-            }
-        }
-
-        if( seg == aEndTrace )
-            break;
-    }
-
-    return NULL;
-}
-
-
 TRACK::TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_CONNECTED_ITEM( aParent, idtype )
 {
     m_Width = Millimeter2iu( 0.2 );
-    start   = end = NULL;
-    m_Param = 0;
 }
 
 
@@ -188,16 +158,7 @@ int VIA::GetDrillValue() const
 }
 
 
-bool TRACK::IsNull()
-{
-    if( ( Type() != PCB_VIA_T ) && ( m_Start == m_End ) )
-        return true;
-    else
-        return false;
-}
-
-
-STATUS_FLAGS TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
+STATUS_FLAGS TRACK::IsPointOnEnds( const wxPoint& point, int min_dist ) const
 {
     STATUS_FLAGS result = 0;
 
@@ -416,21 +377,6 @@ void VIA::SanitizeLayers()
 
     if( m_BottomLayer < m_Layer )
         std::swap( m_BottomLayer, m_Layer );
-}
-
-
-TRACK* TRACK::GetBestInsertPoint( BOARD* aPcb )
-{
-    // When reading from a file most of the items will already be in the correct order.
-    // Searching from the back therefore takes us from n^2 to essentially 0.
-
-    for( TRACK* track = aPcb->m_Track.GetLast(); track;  track = track->Back() )
-    {
-        if( GetNetCode() >= track->GetNetCode() )
-            return track->Next();
-    }
-
-    return aPcb->m_Track.GetFirst();
 }
 
 
@@ -794,17 +740,12 @@ void TRACK::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& 
     // Display full track length (in Pcbnew)
     if( board )
     {
-        double trackLen = 0;
-        double lenPadToDie = 0;
+        int    count;
+        double trackLen;
+        double lenPadToDie;
 
-        // Find the beginning of the track buffer containing this, because it is not
-        // always the track list on board, but can be a "private" list
-        TRACK* track_buffer_start = this;
+        std::tie( count, trackLen, lenPadToDie ) = board->GetTrackLength( *this );
 
-        while( track_buffer_start->Back() )
-            track_buffer_start = track_buffer_start->Back();
-
-        board->MarkTrace( track_buffer_start, this, NULL, &trackLen, &lenPadToDie, false );
         msg = MessageTextFromValue( aUnits, trackLen );
         aList.push_back( MSG_PANEL_ITEM( _( "Length" ), msg, DARKCYAN ) );
 
@@ -1056,248 +997,6 @@ bool VIA::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
     {
         return arect.IntersectsCircle( GetStart(), GetWidth() / 2 );
     }
-}
-
-
-VIA* TRACK::GetVia( const wxPoint& aPosition, PCB_LAYER_ID aLayer)
-{
-    for( VIA* via = GetFirstVia( this ); via; via = GetFirstVia( via->Next() ) )
-    {
-        if( via->HitTest( aPosition ) &&
-                !via->GetState( BUSY | IS_DELETED ) &&
-                ((aLayer == UNDEFINED_LAYER) || (via->IsOnLayer( aLayer ))) )
-            return via;
-    }
-
-    return NULL;
-}
-
-
-VIA* TRACK::GetVia( TRACK* aEndTrace, const wxPoint& aPosition, LSET aLayerMask )
-{
-    for( VIA* via = GetFirstVia( this, aEndTrace ); via; via = GetFirstVia( via->Next() ) )
-    {
-        if( via->HitTest( aPosition ) &&
-            !via->GetState( BUSY | IS_DELETED ) &&
-            ( aLayerMask & via->GetLayerSet() ).any()
-            )
-        {
-            return via;
-        }
-    }
-
-    return NULL;
-}
-
-
-TRACK* TRACK::GetTrack( TRACK* aStartTrace, TRACK* aEndTrace, ENDPOINT_T aEndPoint,
-        bool aSameNetOnly, bool aSequential )
-{
-    const   wxPoint& position = GetEndPoint( aEndPoint );
-    LSET    refLayers = GetLayerSet();
-    TRACK*  previousSegment;
-    TRACK*  nextSegment;
-
-    if( aSequential )
-    {
-        // Simple sequential search: from aStartTrace forward to aEndTrace
-        previousSegment = NULL;
-        nextSegment = aStartTrace;
-    }
-    else
-    {
-        /* Local bidirectional search: from this backward to aStartTrace
-         * AND forward to aEndTrace. The idea is that nearest segments
-         * are found (on average) faster in this way. In fact same-net
-         * segments are almost guaranteed to be found faster, in a global
-         * search, since they are grouped together in the track list */
-        previousSegment = this;
-        nextSegment = this;
-    }
-
-    while( nextSegment || previousSegment )
-    {
-        // Terminate the search in the direction if the netcode mis-matches
-        if( aSameNetOnly )
-        {
-            if( nextSegment && (nextSegment->GetNetCode() != GetNetCode()) )
-                nextSegment = NULL;
-            if( previousSegment && (previousSegment->GetNetCode() != GetNetCode()) )
-                previousSegment = NULL;
-        }
-
-        if( nextSegment )
-        {
-            if ( (nextSegment != this) &&
-                 !nextSegment->GetState( BUSY | IS_DELETED ) &&
-                 ( refLayers & nextSegment->GetLayerSet() ).any() )
-            {
-                if( (position == nextSegment->m_Start) ||
-                    (position == nextSegment->m_End) )
-                    return nextSegment;
-            }
-
-            // Keep looking forward
-            if( nextSegment == aEndTrace )
-                nextSegment = NULL;
-            else
-                nextSegment = nextSegment->Next();
-        }
-
-        // Same as above, looking back. During sequential search this branch is inactive
-        if( previousSegment )
-        {
-            if( (previousSegment != this) &&
-                !previousSegment->GetState( BUSY | IS_DELETED ) &&
-                ( refLayers & previousSegment->GetLayerSet() ).any()
-                )
-            {
-                if( (position == previousSegment->m_Start) ||
-                    (position == previousSegment->m_End) )
-                    return previousSegment;
-            }
-
-            if( previousSegment == aStartTrace )
-                previousSegment = NULL;
-            else
-                previousSegment = previousSegment->Back();
-        }
-    }
-
-    return NULL;
-}
-
-
-int TRACK::GetEndSegments( int aCount, TRACK** aStartTrace, TRACK** aEndTrace )
-{
-    TRACK* Track, * via, * segm, * TrackListEnd;
-    int      NbEnds, ii, ok = 0;
-    LSET layerMask;
-
-    if( aCount <= 1 )
-    {
-        *aStartTrace = *aEndTrace = this;
-        return 1;
-    }
-
-    // Calculation of the limit analysis.
-    *aStartTrace = *aEndTrace = NULL;
-    TrackListEnd = Track = this;
-    ii = 0;
-
-    for( ; ( Track != NULL ) && ( ii < aCount ); ii++, Track = Track->Next() )
-    {
-        TrackListEnd   = Track;
-        Track->m_Param = 0;
-    }
-
-    // Calculate the extremes.
-    NbEnds = 0;
-    Track = this;
-    ii = 0;
-
-    for( ; ( Track != NULL ) && ( ii < aCount ); ii++, Track = Track->Next() )
-    {
-        if( Track->Type() == PCB_VIA_T )
-            continue;
-
-        layerMask = Track->GetLayerSet();
-        via = GetVia( TrackListEnd, Track->m_Start, layerMask );
-
-        if( via )
-        {
-            layerMask |= via->GetLayerSet();
-            via->SetState( BUSY, true );
-        }
-
-        Track->SetState( BUSY, true );
-        segm = ::GetTrack( this, TrackListEnd, Track->m_Start, layerMask );
-        Track->SetState( BUSY, false );
-
-        if( via )
-            via->SetState( BUSY, false );
-
-        if( segm == NULL )
-        {
-            switch( NbEnds )
-            {
-            case 0:
-                *aStartTrace = Track; NbEnds++;
-                break;
-
-            case 1:
-                int BeginPad, EndPad;
-                *aEndTrace = Track;
-
-                // Swap ox, oy with fx, fy
-                BeginPad = Track->GetState( BEGIN_ONPAD );
-                EndPad   = Track->GetState( END_ONPAD );
-
-                Track->SetState( BEGIN_ONPAD | END_ONPAD, false );
-
-                if( BeginPad )
-                    Track->SetState( END_ONPAD, true );
-
-                if( EndPad )
-                    Track->SetState( BEGIN_ONPAD, true );
-
-                std::swap( Track->m_Start, Track->m_End );
-                std::swap( Track->start, Track->end );
-                ok = 1;
-                return ok;
-            }
-        }
-
-        layerMask = Track->GetLayerSet();
-        via = GetVia( TrackListEnd, Track->m_End, layerMask );
-
-        if( via )
-        {
-            layerMask |= via->GetLayerSet();
-            via->SetState( BUSY, true );
-        }
-
-        Track->SetState( BUSY, true );
-        segm = ::GetTrack( this, TrackListEnd, Track->m_End, layerMask );
-        Track->SetState( BUSY, false );
-
-        if( via )
-            via->SetState( BUSY, false );
-
-        if( segm == NULL )
-        {
-            switch( NbEnds )
-            {
-            case 0:
-                int BeginPad, EndPad;
-                *aStartTrace = Track;
-                NbEnds++;
-
-                // Swap ox, oy with fx, fy
-                BeginPad = Track->GetState( BEGIN_ONPAD );
-                EndPad   = Track->GetState( END_ONPAD );
-
-                Track->SetState( BEGIN_ONPAD | END_ONPAD, false );
-
-                if( BeginPad )
-                    Track->SetState( END_ONPAD, true );
-
-                if( EndPad )
-                    Track->SetState( BEGIN_ONPAD, true );
-
-                std::swap( Track->m_Start, Track->m_End );
-                std::swap( Track->start, Track->end );
-                break;
-
-            case 1:
-                *aEndTrace = Track;
-                ok = 1;
-                return ok;
-            }
-        }
-    }
-
-    return ok;
 }
 
 

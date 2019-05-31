@@ -44,7 +44,6 @@
 void PCB_BASE_FRAME::Compile_Ratsnest( bool aDisplayStatus )
 {
     GetBoard()->GetConnectivity()->RecalculateRatsnest();
-
     ClearMsgPanel();
 
     if( aDisplayStatus )
@@ -61,5 +60,4 @@ void PCB_BASE_FRAME::Compile_Ratsnest( bool aDisplayStatus )
         SetMsgPanel( m_Pcb );
     }
 }
-
 

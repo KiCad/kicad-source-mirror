@@ -170,7 +170,7 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
         m_view->Add( drawing );
 
     // Load tracks
-    for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
+    for( auto track : aBoard->Tracks() )
         m_view->Add( track );
 
     // Load modules and its additional elements
@@ -344,7 +344,7 @@ void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector<MSG_PA
     int viasCount = 0;
     int trackSegmentsCount = 0;
 
-    for( const BOARD_ITEM* item = board->m_Track; item; item = item->Next() )
+    for( auto item : board->Tracks() )
     {
         if( item->Type() == PCB_VIA_T )
             viasCount++;

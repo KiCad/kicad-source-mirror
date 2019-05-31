@@ -209,11 +209,13 @@ private:
 
     /**
      * Selects all items connected by copper tracks to the given TRACK
+     * This selects tracks and vias but stops at pads
      */
     void selectAllItemsConnectedToTrack( TRACK& aSourceTrack );
 
     /**
      * Selects all items connected (by copper) to the given item
+     * This selects tracks and vias _and_ continues through pads without selecting
      */
     void selectAllItemsConnectedToItem( BOARD_CONNECTED_ITEM& aSourceItem );
 

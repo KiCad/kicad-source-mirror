@@ -66,7 +66,7 @@ void BOARD::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
      * tracks.  But a white track will cover any other color since it has
      * more bits to OR in.
      */
-    for( TRACK* track = m_Track; track; track = track->Next() )
+    for( auto track : m_tracks )
     {
         if( track->IsMoving() )
             continue;

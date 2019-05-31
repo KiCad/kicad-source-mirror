@@ -213,7 +213,7 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
     bool hasChanges = false;
 
     // Change tracks.
-    for( TRACK* segm = GetBoard()->m_Track;  segm;  segm = segm->Next() )
+    for( auto segm : GetBoard()->Tracks() )
     {
         if( segm->Type() == PCB_VIA_T )
         {

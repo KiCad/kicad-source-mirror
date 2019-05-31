@@ -135,7 +135,8 @@ bool convex2pointDRC( wxPoint* aTref, int aTrefCount, wxPoint aPcompare, int aDi
 }
 
 
-bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool aTestPads, bool aTestZones )
+bool DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterator aEndIt,
+        bool aTestPads, bool aTestZones )
 {
     TRACK*    track;
     wxPoint   delta;           // length on X and Y axis of segments
@@ -431,8 +432,9 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool aTestPads, bool aTestZ
     wxPoint segStartPoint;
     wxPoint segEndPoint;
 
-    for( track = aStart; track; track = track->Next() )
+    for( auto it = aStartIt; it != aEndIt; it++ )
     {
+        track = *it;
         // No problem if segments have the same net code:
         if( net_code_ref == track->GetNetCode() )
             continue;

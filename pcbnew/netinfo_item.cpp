@@ -119,7 +119,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_I
 
     count  = 0;
 
-    for( const TRACK *track = board->m_Track; track != NULL; track = track->Next() )
+    for( auto track : board->Tracks() )
     {
         if( track->Type() == PCB_VIA_T )
         {

@@ -180,7 +180,7 @@ void DIALOG_GENDRILL::InitDisplayParams()
         }
     }
 
-    for( TRACK* track = m_board->m_Track; track != NULL; track = track->Next() )
+    for( auto track : m_board->Tracks() )
     {
         const VIA *via = dynamic_cast<const VIA*>( track );
         if( via )

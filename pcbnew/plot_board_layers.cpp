@@ -489,7 +489,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
     aPlotter->StartBlock( NULL );
 
-    for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
+    for( auto track : aBoard->Tracks() )
     {
         const VIA* Via = dyn_cast<const VIA*>( track );
 
@@ -548,7 +548,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
 
     // Plot tracks (not vias) :
-    for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
+    for( auto track : aBoard->Tracks() )
     {
         if( track->Type() == PCB_VIA_T )
             continue;
@@ -723,7 +723,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter,
         }
 
         // Plot vias holes
-        for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
+        for( auto track : aBoard->Tracks() )
         {
             const VIA* via = dyn_cast<const VIA*>( track );
 
@@ -820,7 +820,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
         int via_clearance = aBoard->GetDesignSettings().m_SolderMaskMargin;
         int via_margin = via_clearance + inflate;
 
-        for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
+        for( auto track : aBoard->Tracks() )
         {
             const VIA* via = dyn_cast<const VIA*>( track );
 

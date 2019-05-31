@@ -179,7 +179,7 @@ DRC::~DRC()
 }
 
 
-int DRC::DrcOnCreatingTrack( TRACK* aRefSegm, TRACK* aList )
+int DRC::DrcOnCreatingTrack( TRACK* aRefSegm, TRACKS& aList )
 {
     updatePointers();
 
@@ -190,7 +190,7 @@ int DRC::DrcOnCreatingTrack( TRACK* aRefSegm, TRACK* aList )
     m_reportAllTrackErrors = false;
 
     // Test new segment against tracks and pads, not against copper zones
-    if( !doTrackDrc( aRefSegm, aList, true, false ) )
+    if( !doTrackDrc( aRefSegm, aList.begin(), aList.end(), true, false ) )
     {
         if( m_currentMarker )
         {
@@ -833,10 +833,7 @@ void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
     wxProgressDialog * progressDialog = NULL;
     const int delta = 500;  // This is the number of tests between 2 calls to the
                             // progress bar
-    int count = 0;
-
-    for( TRACK* segm = m_pcb->m_Track; segm && segm->Next(); segm = segm->Next() )
-        count++;
+    int count = m_pcb->Tracks().size();
 
     int deltamax = count/delta;
 
@@ -853,7 +850,7 @@ void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
     int ii = 0;
     count = 0;
 
-    for( TRACK* segm = m_pcb->m_Track; segm; segm = segm->Next() )
+    for( auto seg_it = m_pcb->Tracks().begin(); seg_it != m_pcb->Tracks().end(); seg_it++ )
     {
         if( ii++ > delta )
         {
@@ -873,7 +870,7 @@ void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
         }
 
         // Test new segment against tracks and pads, optionally against copper zones
-        if( !doTrackDrc( segm, segm->Next(), true, m_doZonesTest ) )
+        if( !doTrackDrc( *seg_it, seg_it + 1, m_pcb->Tracks().end(), true, m_doZonesTest ) )
         {
             if( m_currentMarker )
             {
@@ -968,7 +965,7 @@ void DRC::testKeepoutAreas()
             continue;
         }
 
-        for( TRACK* segm = m_pcb->m_Track; segm != NULL; segm = segm->Next() )
+        for( auto segm : m_pcb->Tracks() )
         {
             if( segm->Type() == PCB_TRACE_T )
             {
@@ -1104,7 +1101,7 @@ void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
     }
 
     // Test tracks and vias
-    for( TRACK* track = m_pcb->m_Track; track != NULL; track = track->Next() )
+    for( auto track : m_pcb->Tracks() )
     {
         if( !track->IsOnLayer( aItem->GetLayer() ) )
             continue;
@@ -1172,7 +1169,7 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
     SHAPE_RECT rect_area( bbox.GetX(), bbox.GetY(), bbox.GetWidth(), bbox.GetHeight() );
 
     // Test tracks and vias
-    for( TRACK* track = m_pcb->m_Track; track != NULL; track = track->Next() )
+    for( auto track : m_pcb->Tracks() )
     {
         if( !track->IsOnLayer( aTextItem->GetLayer() ) )
             continue;

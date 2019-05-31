@@ -62,26 +62,12 @@ private:
     bool cleanupVias();
 
     /**
-     * Removes all the following THT vias on the same position of the
-     * specified one
-     */
-    void removeDuplicatesOfVia( const VIA *aVia, std::set<BOARD_ITEM *>& aToRemove );
-
-    /**
-     * Removes all the following duplicates tracks of the specified one
-     */
-    void removeDuplicatesOfTrack( const TRACK* aSeg, std::set<BOARD_ITEM*>& aToRemove );
-
-    /**
      * Removes dangling tracks
      */
     bool deleteDanglingTracks();
 
     /// Delete null length track segments
-    bool deleteNullSegments();
-
-    /// Try to merge the segment to a following collinear one
-    bool MergeCollinearTracks( TRACK* aSegment );
+    bool deleteNullSegments( TRACKS& aTracks );
 
     /**
      * Merge collinear segments and remove duplicated and null len segments
@@ -100,10 +86,9 @@ private:
      * merge aTrackRef and aCandidate, when possible,
      * i.e. when they are colinear, same width, and obviously same layer
      */
-    TRACK* mergeCollinearSegments( TRACK* aSeg1,
-                                   TRACK* aSeg2, ENDPOINT_T aEndType );
+    bool mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 );
 
-    bool testTrackEndpointDangling( TRACK* aTrack, ENDPOINT_T aEndPoint );
+    bool testTrackEndpointDangling( TRACK* aTrack );
 
     EDA_UNITS_T   m_units;
     BOARD*        m_brd;

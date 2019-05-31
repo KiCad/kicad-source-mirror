@@ -838,7 +838,7 @@ int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard )
     bool isNew = board() != aBoard;
     std::vector<BOARD_ITEM*> items;
 
-    moveNoFlagToVector( aBoard->m_Track, items, isNew );
+    moveNoFlagToVector( aBoard->Tracks(), items, isNew );
     moveNoFlagToVector( aBoard->Modules(), items, isNew );
     moveNoFlagToVector( aBoard->Drawings(), items, isNew );
     moveNoFlagToVector( aBoard->Zones(), items, isNew );

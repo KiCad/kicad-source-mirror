@@ -189,7 +189,7 @@ static void build_via_testpoints( BOARD *aPcb,
     wxPoint origin = aPcb->GetAuxOrigin();
 
     // Enumerate all the track segments and keep the vias
-    for( TRACK *track = aPcb->m_Track; track; track = track->Next() )
+    for( auto track : aPcb->Tracks() )
     {
         if( track->Type() == PCB_VIA_T )
         {

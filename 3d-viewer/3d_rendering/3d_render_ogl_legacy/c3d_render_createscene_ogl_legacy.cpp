@@ -745,9 +745,7 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
         // /////////////////////////////////////////////////////////////////////////
 
         // Insert vias holes (vertical cylinders)
-        for( const TRACK* track = m_settings.GetBoard()->m_Track;
-             track;
-             track = track->Next() )
+        for( auto track : m_settings.GetBoard()->Tracks() )
         {
             if( track->Type() == PCB_VIA_T )
             {

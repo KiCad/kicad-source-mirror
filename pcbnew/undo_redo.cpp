@@ -119,41 +119,42 @@ using namespace std::placeholders;
 
 static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 {
-    static std::set<BOARD_ITEM*> itemsList;
-
-    if( aItem == NULL ) // Build list
+    for( auto item : aPcb->Tracks() )
     {
-        // Count items to store in itemsList:
-        BOARD_ITEM* item;
-        itemsList.clear();
-
-        // Store items in list:
-        // Append tracks:
-        for( item = aPcb->m_Track; item != NULL; item = item->Next() )
-            itemsList.insert( item );
-
-        // Append modules:
-        std::copy( aPcb->Modules().begin(), aPcb->Modules().end(),
-                std::inserter( itemsList, itemsList.end() ) );
-
-        // Append drawings
-        for( auto ditem : aPcb->Drawings() )
-            itemsList.insert( ditem );
-
-        // Append zones outlines
-        for( int ii = 0; ii < aPcb->GetAreaCount(); ii++ )
-            itemsList.insert( aPcb->GetArea( ii ) );
-
-        NETINFO_LIST& netInfo = aPcb->GetNetInfo();
-
-        for( NETINFO_LIST::iterator i = netInfo.begin(); i != netInfo.end(); ++i )
-            itemsList.insert( *i );
-
-        return false;
+        if( aItem == static_cast<BOARD_ITEM*>( item ) )
+            return true;
     }
 
-    // search in list:
-    return itemsList.count( aItem );
+    // Append modules:
+    for( auto item : aPcb->Modules() )
+    {
+        if( aItem == static_cast<BOARD_ITEM*>( item ) )
+            return true;
+    }
+
+    // Append drawings
+    for( auto item : aPcb->Drawings() )
+    {
+        if( aItem == static_cast<BOARD_ITEM*>( item ) )
+            return true;
+    }
+
+    // Append zones outlines
+    for( auto item : aPcb->Zones() )
+    {
+        if( aItem == static_cast<BOARD_ITEM*>( item ) )
+            return true;
+    }
+
+    NETINFO_LIST& netInfo = aPcb->GetNetInfo();
+
+    for( NETINFO_LIST::iterator i = netInfo.begin(); i != netInfo.end(); ++i )
+    {
+        if( aItem == static_cast<BOARD_ITEM*>( *i ) )
+            return true;
+    }
+
+    return false;
 }
 
 static void SwapItemData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
@@ -405,8 +406,6 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
     // Undo in the reverse order of list creation: (this can allow stacked changes
     // like the same item can be changes and deleted in the same complex command
 
-    bool build_item_list = true;    // if true the list of existing items must be rebuilt
-
     // Restore changes in reverse order
     for( int ii = aList->GetCount() - 1; ii >= 0 ; ii-- )
     {
@@ -426,12 +425,6 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
                 && status != UR_GRIDORIGIN      // origin markers never on board
                 && status != UR_PAGESETTINGS )  // nor are page settings proxy items
         {
-            if( build_item_list )
-                // Build list of existing items, for integrity test
-                TestForExistingItem( GetBoard(), NULL );
-
-            build_item_list = false;
-
             if( !TestForExistingItem( GetBoard(), (BOARD_ITEM*) eda_item ) )
             {
                 // Checking if it ever happens
@@ -442,6 +435,10 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
                 ii++;       // the current item was removed, ii points now the next item
                             // decrement it because it will be incremented later
                 not_found = true;
+
+                if( aList->GetCount() == 0 )
+                    break;
+
                 continue;
             }
         }
@@ -496,7 +493,6 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             aList->SetPickedItemStatus( UR_NEW, ii );
             GetModel()->Add( (BOARD_ITEM*) eda_item );
             view->Add( eda_item );
-            build_item_list = true;
             break;
 
         case UR_MOVED:

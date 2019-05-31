@@ -74,7 +74,7 @@ static void addTextSegmToPoly( int x0, int y0, int xf, int yf, void* aData )
 void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aOutlines )
 {
     // convert tracks and vias:
-    for( TRACK* track = m_Track; track != NULL; track = track->Next() )
+    for( auto track : m_tracks )
     {
         if( !track->IsOnLayer( aLayer ) )
             continue;

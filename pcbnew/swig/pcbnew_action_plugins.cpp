@@ -218,7 +218,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     OnModify();
 
     // Append tracks:
-    for( BOARD_ITEM* item = currentPcb->m_Track; item != NULL; item = item->Next() )
+    for( auto item : currentPcb->Tracks() )
     {
         ITEM_PICKER picker( item, UR_CHANGED );
         itemsList.PushItem( picker );
@@ -345,7 +345,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         }
     }
 
-    for( BOARD_ITEM* item = currentPcb->m_Track; item != NULL; item = item->Next() )
+    for( auto item : currentPcb->Tracks() )
     {
         if( !oldBuffer->ContainsItem( item ) )
         {

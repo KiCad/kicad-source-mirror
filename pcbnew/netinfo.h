@@ -555,15 +555,6 @@ private:
     void buildListOfNets();
 
     /**
-     * Function buildPadsFullList
-     * creates the pad list, and initializes:
-     *   m_Pads (list of pads)
-     * and clear for all pads in list the m_SubRatsnest member;
-     * clear m_Pcb->m_FullRatsnest
-     */
-    void buildPadsFullList();
-
-    /**
      * Function getFreeNetCode
      * returns the first available net code that is not used by any other net.
      */
@@ -585,7 +576,5 @@ private:
 #define END_ON_PAD     0x20
 #define START_ON_TRACK 0x40
 #define END_ON_TRACK   0x80
-
-
 
 #endif  // CLASS_NETINFO_

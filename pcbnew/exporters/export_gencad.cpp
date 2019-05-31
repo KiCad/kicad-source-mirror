@@ -363,31 +363,25 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
 
 
 // Comparator for sorting pads with qsort
-static int PadListSortByShape( const void* aRefptr, const void* aObjptr )
+static int PadListSortByShape( const D_PAD* aRefptr, const D_PAD* aObjptr )
 {
-    const D_PAD* padref = *(D_PAD**) aRefptr;
-    const D_PAD* padcmp = *(D_PAD**) aObjptr;
-
-    return D_PAD::Compare( padref, padcmp );
+    return D_PAD::Compare( aRefptr, aObjptr ) < 0;
 }
 
 
 // Sort vias for uniqueness
-static int ViaSort( const void* aRefptr, const void* aObjptr )
+static bool ViaSort( const VIA* aPadref, const VIA* aPadcmp )
 {
-    VIA* padref = *(VIA**) aRefptr;
-    VIA* padcmp = *(VIA**) aObjptr;
+    if( aPadref->GetWidth() != aPadcmp->GetWidth() )
+        return aPadref->GetWidth() < aPadcmp->GetWidth();
 
-    if( padref->GetWidth() != padcmp->GetWidth() )
-        return padref->GetWidth() - padcmp->GetWidth();
+    if( aPadref->GetDrillValue() != aPadcmp->GetDrillValue() )
+        return aPadref->GetDrillValue() < aPadcmp->GetDrillValue();
 
-    if( padref->GetDrillValue() != padcmp->GetDrillValue() )
-        return padref->GetDrillValue() - padcmp->GetDrillValue();
+    if( aPadref->GetLayerSet() != aPadcmp->GetLayerSet() )
+        return aPadref->GetLayerSet().FmtBin().compare( aPadcmp->GetLayerSet().FmtBin() ) < 0;
 
-    if( padref->GetLayerSet() != padcmp->GetLayerSet() )
-        return padref->GetLayerSet().FmtBin().compare( padcmp->GetLayerSet().FmtBin() );
-
-    return 0;
+    return false;
 }
 
 
@@ -418,33 +412,28 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
     fputs( "$PADS\n", aFile );
 
     // Enumerate and sort the pads
-    if( aPcb->GetPadCount() > 0 )
-    {
-        pads = aPcb->GetPads();
-        qsort( &pads[0], aPcb->GetPadCount(), sizeof( D_PAD* ),
-               PadListSortByShape );
-    }
+    pads = aPcb->GetPads();
+    std::sort( pads.begin(), pads.end(), PadListSortByShape );
+
 
     // The same for vias
-    for( VIA* via = GetFirstVia( aPcb->m_Track ); via;
-            via = GetFirstVia( via->Next() ) )
+    for( auto track : aPcb->Tracks() )
     {
-        vias.push_back( via );
+        if( auto via = dyn_cast<VIA*>( track ) )
+            vias.push_back( via );
     }
 
-    qsort( &vias[0], vias.size(), sizeof(VIA*), ViaSort );
+    std::sort( vias.begin(), vias.end(), ViaSort );
+    vias.erase( std::unique( vias.begin(), vias.end(),
+                        []( const VIA* a, const VIA* b ) { return ViaSort( a, b ) == 0; } ),
+            vias.end() );
 
     // Emit vias pads
-    TRACK* old_via = 0;
 
-    for( unsigned i = 0; i < vias.size(); i++ )
+    for( auto item : vias )
     {
-        VIA* via = vias[i];
+        VIA* via = static_cast<VIA*>( item );
 
-        if( old_via && 0 == ViaSort( &old_via, &via ) )
-            continue;
-
-        old_via = via;
         viastacks.push_back( via );
         fprintf( aFile, "PAD V%d.%d.%s ROUND %g\nCIRCLE 0 0 %g\n",
                 via->GetWidth(), via->GetDrillValue(),
@@ -1043,39 +1032,21 @@ static int TrackListSortByNetcode( const void* refptr, const void* objptr )
  */
 static void CreateRoutesSection( FILE* aFile, BOARD* aPcb )
 {
-    TRACK*  track, ** tracklist;
     int     vianum = 1;
     int     old_netcode, old_width, old_layer;
-    int     nbitems, ii;
     LSET    master_layermask = aPcb->GetDesignSettings().GetEnabledLayers();
 
     int     cu_count = aPcb->GetCopperLayerCount();
 
-    // Count items
-    nbitems = 0;
-
-    for( track = aPcb->m_Track; track; track = track->Next() )
-        nbitems++;
-
-    tracklist = (TRACK**) operator new( (nbitems + 1)* sizeof( TRACK* ) );
-
-    nbitems = 0;
-
-    for( track = aPcb->m_Track; track; track = track->Next() )
-        tracklist[nbitems++] = track;
-
-    tracklist[nbitems] = NULL;
-
-    qsort( tracklist, nbitems, sizeof(TRACK*), TrackListSortByNetcode );
+    TRACKS tracks = aPcb->Tracks();
+    std::sort( tracks.begin(), tracks.end(), TrackListSortByNetcode );
 
     fputs( "$ROUTES\n", aFile );
 
     old_netcode = -1; old_width = -1; old_layer = -1;
 
-    for( ii = 0; ii < nbitems; ii++ )
+    for( auto track : tracks )
     {
-        track = tracklist[ii];
-
         if( old_netcode != track->GetNetCode() )
         {
             old_netcode = track->GetNetCode();
@@ -1125,8 +1096,6 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb )
     }
 
     fputs( "$ENDROUTES\n\n", aFile );
-
-    delete tracklist;
 }
 
 
@@ -1208,41 +1177,18 @@ static void CreateBoardSection( FILE* aFile, BOARD* aPcb )
  */
 static void CreateTracksInfoData( FILE* aFile, BOARD* aPcb )
 {
-    TRACK* track;
-    int    last_width = -1;
-
     // Find thickness used for traces
-    // XXX could use the same sorting approach used for pads
 
-    std::vector <int> trackinfo;
+    std::set<int> trackinfo;
 
-    unsigned          ii;
-
-    for( track = aPcb->m_Track; track; track = track->Next() )
-    {
-        if( last_width != track->GetWidth() ) // Find a thickness already used.
-        {
-            for( ii = 0; ii < trackinfo.size(); ii++ )
-            {
-                if( trackinfo[ii] == track->GetWidth() )
-                    break;
-            }
-
-            if( ii == trackinfo.size() )    // not found
-                trackinfo.push_back( track->GetWidth() );
-
-            last_width = track->GetWidth();
-        }
-    }
+    for( auto track : aPcb->Tracks() )
+        trackinfo.insert( track->GetWidth() );
 
     // Write data
     fputs( "$TRACKS\n", aFile );
 
-    for( ii = 0; ii < trackinfo.size(); ii++ )
-    {
-        fprintf( aFile, "TRACK TRACK%d %g\n", trackinfo[ii],
-                 trackinfo[ii] / SCALE_FACTOR );
-    }
+    for( auto size : trackinfo )
+        fprintf( aFile, "TRACK TRACK%d %g\n", size, size / SCALE_FACTOR );
 
     fputs( "$ENDTRACKS\n\n", aFile );
 }

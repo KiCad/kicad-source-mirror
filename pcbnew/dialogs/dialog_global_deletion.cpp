@@ -196,12 +196,8 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
         if( !m_TrackFilterAR->GetValue() )
             track_mask_filter |= TRACK_AR;
 
-        TRACK* nexttrack;
-
-        for( TRACK *track = pcb->m_Track; track; track = nexttrack )
+        for( auto track : pcb->Tracks() )
         {
-            nexttrack = track->Next();
-
             if( !delAll )
             {
                 if( ( track->GetState( TRACK_LOCKED | TRACK_AR ) & track_mask_filter ) != 0 )

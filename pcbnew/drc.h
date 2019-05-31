@@ -29,10 +29,12 @@
 #ifndef DRC_H
 #define DRC_H
 
-#include <vector>
-#include <memory>
+#include <class_board.h>
+#include <class_track.h>
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
+#include <memory>
+#include <vector>
 
 #include <drc/drc_marker_factory.h>
 
@@ -327,14 +329,15 @@ private:
      * Test the current segment.
      *
      * @param aRefSeg The segment to test
-     * @param aStart the first item of track list to test against (usually BOARD::m_Track)
+     * @param aStartIt the iterator to the first track to test
+     * @param aEndIt the marker for the iterator end
      * @param aTestPads true if should do pads test
      * @param aTestZones true if should do copper zones test. This can be very time consumming
      * @return bool - true if no problems, else false and m_currentMarker is
      *          filled in with the problem information.
      */
-    bool doTrackDrc( TRACK* aRefSeg, TRACK* aStart,
-                     bool aTestPads, bool aTestZones );
+    bool doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterator aEndIt,
+            bool aTestPads, bool aTestZones );
 
     /**
      * Test the current segment or via.
@@ -428,10 +431,10 @@ public:
      * No marker created or added to the board. Must be used only during track
      * creation in legacy canvas
      * @param aRefSeg The current segment to test.
-     * @param aList The track list to test (usually m_Pcb->m_Track)
+     * @param aList The track list to test (usually m_Pcb->Tracks())
      * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
      */
-    int DrcOnCreatingTrack( TRACK* aRefSeg, TRACK* aList );
+    int DrcOnCreatingTrack( TRACK* aRefSeg, TRACKS& aList );
 
     /**
      * Function Drc

@@ -234,327 +234,6 @@ TRACKS BOARD::TracksInNet( int aNetCode )
 }
 
 
-/**
- * Function removeTrack
- * removes aOneToRemove from aList, which is a non-owning std::vector
- */
-static void removeTrack( TRACKS* aList, TRACK* aOneToRemove )
-{
-    aList->erase( std::remove( aList->begin(), aList->end(), aOneToRemove ), aList->end() );
-}
-
-
-static void otherEnd( const TRACK& aTrack, const wxPoint& aNotThisEnd, wxPoint* aOtherEnd )
-{
-    if( aTrack.GetStart() == aNotThisEnd )
-    {
-        *aOtherEnd = aTrack.GetEnd();
-    }
-    else
-    {
-        wxASSERT( aTrack.GetEnd() == aNotThisEnd );
-        *aOtherEnd = aTrack.GetStart();
-    }
-}
-
-
-/**
- * Function find_vias_and_tracks_at
- * collects TRACKs and VIAs at aPos and returns the @a track_count which excludes vias.
- */
-static int find_vias_and_tracks_at( TRACKS& at_next, TRACKS& in_net, LSET& lset, const wxPoint& next )
-{
-    // first find all vias (in this net) at 'next' location, and expand LSET with each
-    for( TRACKS::iterator it = in_net.begin(); it != in_net.end();  )
-    {
-        TRACK* t = *it;
-
-        if( t->Type() == PCB_VIA_T && (t->GetLayerSet() & lset).any() &&
-            ( t->GetStart() == next || t->GetEnd() == next ) )
-        {
-            lset |= t->GetLayerSet();
-            at_next.push_back( t );
-            it = in_net.erase( it );
-        }
-        else
-            ++it;
-    }
-
-    int track_count = 0;
-
-    // with expanded lset, find all tracks with an end on any of the layers in lset
-    for( TRACKS::iterator it = in_net.begin();  it != in_net.end(); /* iterates in the loop body */ )
-    {
-        TRACK* t = *it;
-
-        if( ( t->GetLayerSet() & lset ).any() && ( t->GetStart() == next || t->GetEnd() == next ) )
-        {
-            at_next.push_back( t );
-            it = in_net.erase( it );
-            ++track_count;
-        }
-        else
-        {
-            ++it;
-        }
-    }
-
-    return track_count;
-}
-
-
-/**
- * Function checkConnectedTo
- * returns if aTracksInNet contains a copper pathway to aGoal when starting with
- * aFirstTrack.  aFirstTrack should have one end situated on aStart, and the
- * traversal testing begins from the other end of aFirstTrack.
- * <p>
- * The function throws an exception instead of returning bool so that detailed
- * information can be provided about a possible failure in the track layout.
- *
- * @throw IO_ERROR - if points are not connected, with text saying why.
- */
-static void checkConnectedTo( BOARD* aBoard, TRACKS* aList, const TRACKS& aTracksInNet,
-        const wxPoint& aGoal, const wxPoint& aStart, TRACK* aFirstTrack )
-{
-    TRACKS  in_net = aTracksInNet;      // copy source list so the copy can be modified
-    wxPoint next;
-
-    otherEnd( *aFirstTrack, aStart, &next );
-
-    aList->push_back( aFirstTrack );
-    removeTrack( &in_net, aFirstTrack );
-
-    LSET lset( aFirstTrack->GetLayer() );
-
-    while( in_net.size() )
-    {
-        if( next == aGoal )
-            return;             // success
-
-        // Want an exact match on the position of next, i.e. pad at next,
-        // not a forgiving HitTest() with tolerance type of match, otherwise the overall
-        // algorithm will not work.  GetPadFast() is an exact match as I write this.
-        if( aBoard->GetPadFast( next, lset ) )
-        {
-            std::string m = StrPrintf(
-                "intervening pad at:(xy %s) between start:(xy %s) and goal:(xy %s)",
-                FormatInternalUnits( next ).c_str(),
-                FormatInternalUnits( aStart ).c_str(),
-                FormatInternalUnits( aGoal ).c_str()
-                );
-            THROW_IO_ERROR( m );
-        }
-
-        int track_count = find_vias_and_tracks_at( *aList, in_net, lset, next );
-
-        if( track_count != 1 )
-        {
-            std::string m = StrPrintf(
-                "found %d tracks intersecting at (xy %s), exactly 2 would be acceptable.",
-                track_count + aList->size() == 1 ? 1 : 0,
-                FormatInternalUnits( next ).c_str()
-                );
-            THROW_IO_ERROR( m );
-        }
-
-        // reduce lset down to the layer that the last track at 'next' is on.
-        lset = aList->back()->GetLayerSet();
-
-        otherEnd( *aList->back(), next, &next );
-    }
-
-    std::string m = StrPrintf(
-        "not enough tracks connecting start:(xy %s) and goal:(xy %s).",
-        FormatInternalUnits( aStart ).c_str(),
-        FormatInternalUnits( aGoal ).c_str()
-        );
-    THROW_IO_ERROR( m );
-}
-
-
-TRACKS BOARD::TracksInNetBetweenPoints( const wxPoint& aStartPos, const wxPoint& aGoalPos, int aNetCode )
-{
-    TRACKS  in_between_pts;
-    TRACKS  on_start_point;
-    TRACKS  in_net = TracksInNet( aNetCode );   // a small subset of TRACKs and VIAs
-
-    for( auto t : in_net )
-    {
-        if( t->Type() == PCB_TRACE_T && ( t->GetStart() == aStartPos || t->GetEnd() == aStartPos )  )
-            on_start_point.push_back( t );
-    }
-
-    wxString  per_path_problem_text;
-
-    for( auto t : on_start_point )    // explore each trace (path) leaving aStartPos
-    {
-        // checkConnectedTo() fills in_between_pts on every attempt.  For failures
-        // this set needs to be cleared.
-        in_between_pts.clear();
-
-        try
-        {
-            checkConnectedTo( this, &in_between_pts, in_net, aGoalPos, aStartPos, t );
-        }
-        catch( const IO_ERROR& ioe )    // means not connected
-        {
-            per_path_problem_text += "\n\t";
-            per_path_problem_text += ioe.Problem();
-            continue;           // keep trying, there may be other paths leaving from aStartPos
-        }
-
-        // success, no exception means a valid connection,
-        // return this set of TRACKS without throwing.
-        return in_between_pts;
-    }
-
-    wxString m = wxString::Format(
-            "no clean path connecting start:(xy %s) with goal:(xy %s)",
-            FormatInternalUnits( aStartPos ).c_str(),
-            FormatInternalUnits( aGoalPos ).c_str()
-            );
-
-    THROW_IO_ERROR( m + per_path_problem_text );
-}
-
-
-void BOARD::chainMarkedSegments( TRACK* aTrackList, wxPoint aPosition,
-                                 const LSET& aLayerSet, TRACKS* aList )
-{
-    LSET    layer_set = aLayerSet;
-
-    if( !aTrackList )      // no tracks at all in board
-        return;
-
-    D_PAD*  pad = NULL;
-    double  distanceToPadCenter = std::numeric_limits<double>::max();
-
-    /* Set the BUSY flag of all connected segments, first search starting at
-     * aPosition.  The search ends when a pad is found (end of a track), a
-     * segment end has more than one other segment end connected, or when no
-     * connected item found.
-     *
-     * Vias are a special case because they can connect segments
-     * on other layers and they change the layer mask.  They can be a track
-     * end or not.  They will be analyzed later, and vias on terminal points
-     * of the track will be considered as part of this track if they do not
-     * connect segments on a other track together and will be considered as
-     * part of a other track when removing the via, the segments of that other
-     * track are disconnected.
-     */
-    for( ; ; )
-    {
-        if( !pad )
-            pad = GetPad( aPosition, layer_set );
-
-        if( pad )
-            distanceToPadCenter = GetLineLength( aPosition, pad->GetCenter() );
-
-        /* Test for a via: a via changes the layer mask and can connect a lot
-         * of segments at location aPosition. When found, the via is just
-         * pushed in list.  Vias will be examined later, when all connected
-         * segment are found and push in list.  This is because when a via
-         * is found we do not know at this time the number of connected items
-         * and we do not know if this via is on the track or finish the track
-         */
-        TRACK* via = aTrackList->GetVia( NULL, aPosition, layer_set );
-
-        if( via )
-        {
-            layer_set = via->GetLayerSet();
-            aList->push_back( via );
-        }
-
-        int     seg_count = 0;
-        TRACK*  candidate = NULL;
-
-        /* Search all segments connected to point aPosition.
-         *  if only 1 segment at aPosition: then this segment is "candidate"
-         *  if > 1 segment:
-         *      then end of "track" (because more than 2 segments are connected at aPosition)
-         */
-        TRACK*  segment = aTrackList;
-
-        while( ( segment = ::GetTrack( segment, NULL, aPosition, layer_set ) ) != NULL )
-        {
-            if( segment->GetState( BUSY ) ) // already found and selected: skip it
-            {
-                segment = segment->Next();
-                continue;
-            }
-
-            if( segment == via )    // just previously found: skip it
-            {
-                segment = segment->Next();
-                continue;
-            }
-
-            if( ++seg_count == 1 )  // if first connected item: then segment is candidate
-            {
-                candidate = segment;
-                segment = segment->Next();
-            }
-            else        // More than 1 segment connected -> location is end of track
-            {
-                return;
-            }
-        }
-
-        if( candidate )      // A candidate is found: flag it and push it in list
-        {
-            /* Initialize parameters to search items connected to this
-             * candidate:
-             * we must analyze connections to its other end
-             */
-            if( aPosition == candidate->GetStart() )
-            {
-                aPosition = candidate->GetEnd();
-            }
-            else
-            {
-                aPosition = candidate->GetStart();
-            }
-
-            /* If we are in a pad, only candidates approaching the pad center
-             * are accepted.
-             */
-            if( pad )
-            {
-                if( GetPad( aPosition, layer_set ) != pad )
-                    return;
-
-                if( GetLineLength( aPosition, pad->GetCenter() ) > distanceToPadCenter )
-                    return;
-            }
-
-            layer_set = candidate->GetLayerSet();
-
-            // flag this item and push it in list of selected items
-            aList->push_back( candidate );
-            candidate->SetState( BUSY, true );
-        }
-        else
-        {
-            return;
-        }
-    }
-}
-
-
-void BOARD::PushHighLight()
-{
-    m_highLightPrevious = m_highLight;
-}
-
-
-void BOARD::PopHighLight()
-{
-    m_highLight = m_highLightPrevious;
-    m_highLightPrevious.Clear();
-}
-
-
 bool BOARD::SetLayerDescr( PCB_LAYER_ID aIndex, const LAYER& aLayer )
 {
     if( unsigned( aIndex ) < arrayDim( m_Layer ) )
@@ -566,7 +245,6 @@ bool BOARD::SetLayerDescr( PCB_LAYER_ID aIndex, const LAYER& aLayer )
     return false;
 }
 
-#include <stdio.h>
 
 const PCB_LAYER_ID BOARD::GetLayerID( const wxString& aLayerName ) const
 {
@@ -888,15 +566,9 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     case PCB_TRACE_T:
     case PCB_VIA_T:
         if( aMode == ADD_APPEND )
-        {
-            m_Track.PushBack( (TRACK*) aBoardItem );
-        }
+            m_tracks.push_back( static_cast<TRACK*>( aBoardItem ) );
         else
-        {
-            TRACK* insertAid;
-            insertAid = ( (TRACK*) aBoardItem )->GetBestInsertPoint( this );
-            m_Track.Insert( (TRACK*) aBoardItem, insertAid );
-        }
+            m_tracks.push_front( static_cast<TRACK*>( aBoardItem ) );
 
         break;
 
@@ -983,7 +655,8 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
 
     case PCB_TRACE_T:
     case PCB_VIA_T:
-        m_Track.Remove( (TRACK*) aBoardItem );
+        m_tracks.erase( std::remove_if( m_tracks.begin(), m_tracks.end(),
+                [aBoardItem]( BOARD_ITEM* aItem ) { return aItem == aBoardItem; } ) );
         break;
 
     case PCB_DIMENSION_T:
@@ -1070,12 +743,6 @@ BOARD_ITEM* BOARD::GetItem( void* aWeakReference )
 }
 
 
-int BOARD::GetNumSegmTrack() const
-{
-    return m_Track.GetCount();
-}
-
-
 unsigned BOARD::GetNodesCount( int aNet )
 {
     unsigned retval = 0;
@@ -1138,7 +805,7 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
         }
 
         // Check tracks
-        for( TRACK* track = m_Track; track; track = track->Next() )
+        for( auto track : m_tracks )
         {
             if( !( track->GetLayerSet() & visible ).any() )
                 continue;
@@ -1177,7 +844,7 @@ void BOARD::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& 
     int      viasCount = 0;
     int      trackSegmentsCount = 0;
 
-    for( BOARD_ITEM* item = m_Track; item; item = item->Next() )
+    for( auto item : m_tracks )
     {
         if( item->Type() == PCB_VIA_T )
             viasCount++;
@@ -1331,12 +998,12 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
 
 #else
         case PCB_VIA_T:
-            result = IterateForward( m_Track, inspector, testData, p );
+            result = IterateForward<TRACK*>( m_tracks, inspector, testData, p );
             ++p;
             break;
 
         case PCB_TRACE_T:
-            result = IterateForward( m_Track, inspector, testData, p );
+            result = IterateForward<TRACK*>( m_tracks, inspector, testData, p );
             ++p;
             break;
 #endif
@@ -1587,20 +1254,6 @@ int BOARD::SetAreasNetCodesFromNetNames()
 }
 
 
-VIA* BOARD::GetViaByPosition( const wxPoint& aPosition, PCB_LAYER_ID aLayer) const
-{
-    for( VIA *via = GetFirstVia( m_Track); via; via = GetFirstVia( via->Next() ) )
-    {
-        if( (via->GetStart() == aPosition) &&
-                (via->GetState( BUSY | IS_DELETED ) == 0) &&
-                ((aLayer == UNDEFINED_LAYER) || (via->IsOnLayer( aLayer ))) )
-            return via;
-    }
-
-    return NULL;
-}
-
-
 D_PAD* BOARD::GetPad( const wxPoint& aPosition, LSET aLayerSet )
 {
     if( !aLayerSet.any() )
@@ -1628,23 +1281,6 @@ D_PAD* BOARD::GetPad( TRACK* aTrace, ENDPOINT_T aEndPoint )
     LSET lset( aTrace->GetLayer() );
 
     return GetPad( aPosition, lset );
-}
-
-
-std::list<TRACK*> BOARD::GetTracksByPosition( const wxPoint& aPosition, PCB_LAYER_ID aLayer ) const
-{
-    std::list<TRACK*> tracks;
-
-    for( TRACK* track = GetFirstTrack( m_Track ); track; track = GetFirstTrack( track->Next() ) )
-    {
-        if( ( ( track->GetStart() == aPosition ) || track->GetEnd() == aPosition ) &&
-                ( track->GetState( BUSY | IS_DELETED ) == 0 ) &&
-                ( ( aLayer == UNDEFINED_LAYER ) || ( track->IsOnLayer( aLayer ) ) ) )
-
-        tracks.push_back( track );
-    }
-
-    return tracks;
 }
 
 
@@ -1798,340 +1434,44 @@ void BOARD::PadDelete( D_PAD* aPad )
 }
 
 
-TRACK* BOARD::GetVisibleTrack( TRACK* aStartingTrace, const wxPoint& aPosition,
-        LSET aLayerSet ) const
+std::tuple<int, double, double> BOARD::GetTrackLength( const TRACK& aTrack ) const
 {
-    for( TRACK* track = aStartingTrace; track; track = track->Next() )
+    int    count = 0;
+    double length = 0.0;
+    double package_length = 0.0;
+
+    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, PCB_PAD_T, EOT };
+    auto              connectivity = GetBoard()->GetConnectivity();
+
+    for( auto item : connectivity->GetConnectedItems(
+                 static_cast<const BOARD_CONNECTED_ITEM*>( &aTrack ), types ) )
     {
-        PCB_LAYER_ID layer = track->GetLayer();
+        count++;
 
-        if( track->GetState( BUSY | IS_DELETED ) )
-            continue;
-
-        // track's layer is not visible
-        if( m_designSettings.IsLayerVisible( layer ) == false )
-            continue;
-
-        if( track->Type() == PCB_VIA_T )    // VIA encountered.
+        if( auto track = dyn_cast<TRACK*>( item ) )
         {
-            if( track->HitTest( aPosition ) )
-                return track;
-        }
-        else
-        {
-            if( !aLayerSet[layer] )
-                continue;               // track's layer is not in aLayerSet
+            bool inPad = false;
 
-            if( track->HitTest( aPosition ) )
-                return track;
-        }
-    }
-
-    return NULL;
-}
-
-
-TRACK* BOARD::MarkTrace( TRACK* aTrackList, TRACK*  aTrace, int* aCount,
-                         double* aTraceLength, double* aPadToDieLength,
-                         bool    aReorder )
-{
-    TRACKS trackList;
-
-    if( aCount )
-        *aCount = 0;
-
-    if( aTraceLength )
-        *aTraceLength = 0;
-
-    if( aTrace == NULL )
-        return NULL;
-
-    // Ensure the flag BUSY of all tracks of the board is cleared
-    // because we use it to mark segments of the track
-    for( TRACK* track = aTrackList; track; track = track->Next() )
-        track->SetState( BUSY, false );
-
-    // Set flags of the initial track segment
-    aTrace->SetState( BUSY, true );
-    LSET layer_set = aTrace->GetLayerSet();
-
-    trackList.push_back( aTrace );
-
-    /* Examine the initial track segment : if it is really a segment, this is
-     * easy.
-     *  If it is a via, one must search for connected segments.
-     *  If <=2, this via connect 2 segments (or is connected to only one
-     *  segment) and this via and these 2 segments are a part of a track.
-     *  If > 2 only this via is flagged (the track has only this via)
-     */
-    if( aTrace->Type() == PCB_VIA_T )
-    {
-        TRACK* segm1 = ::GetTrack( aTrackList, NULL, aTrace->GetStart(), layer_set );
-        TRACK* segm2 = NULL;
-        TRACK* segm3 = NULL;
-
-        if( segm1 )
-        {
-            segm2 = ::GetTrack( segm1->Next(), NULL, aTrace->GetStart(), layer_set );
-        }
-
-        if( segm2 )
-        {
-            segm3 = ::GetTrack( segm2->Next(), NULL, aTrace->GetStart(), layer_set );
-        }
-
-        if( segm3 )
-        {
-            // More than 2 segments are connected to this via.
-            // The "track" is only this via.
-
-            if( aCount )
-                *aCount = 1;
-
-            return aTrace;
-        }
-
-        if( segm1 ) // search for other segments connected to the initial segment start point
-        {
-            layer_set = segm1->GetLayerSet();
-            chainMarkedSegments( aTrackList, aTrace->GetStart(), layer_set, &trackList );
-        }
-
-        if( segm2 ) // search for other segments connected to the initial segment end point
-        {
-            layer_set = segm2->GetLayerSet();
-            chainMarkedSegments( aTrackList, aTrace->GetStart(), layer_set, &trackList );
-        }
-    }
-    else    // mark the chain using both ends of the initial segment
-    {
-        TRACKS  from_start;
-        TRACKS  from_end;
-
-        chainMarkedSegments( aTrackList, aTrace->GetStart(), layer_set, &from_start );
-        chainMarkedSegments( aTrackList, aTrace->GetEnd(),   layer_set, &from_end );
-
-        // combine into one trackList:
-        trackList.insert( trackList.end(), from_start.begin(), from_start.end() );
-        trackList.insert( trackList.end(), from_end.begin(),   from_end.end() );
-    }
-
-    // Now examine selected vias and flag them if they are on the track
-    // If a via is connected to only one or 2 segments, it is flagged (is on the track)
-    // If a via is connected to more than 2 segments, it is a track end, and it
-    // is removed from the list.
-    // Go through the list backwards.
-    for( int i = trackList.size() - 1;  i>=0;  --i )
-    {
-        ::VIA*  via = dynamic_cast< ::VIA* >( trackList[i] );
-
-        if( !via )
-            continue;
-
-        if( via == aTrace )
-            continue;
-
-        via->SetState( BUSY, true );  // Try to flag it. the flag will be cleared later if needed
-
-        layer_set = via->GetLayerSet();
-
-        TRACK* track = ::GetTrack( aTrackList, NULL, via->GetStart(), layer_set );
-
-        // GetTrace does not consider tracks flagged BUSY.
-        // So if no connected track found, this via is on the current track
-        // only: keep it
-        if( track == NULL )
-            continue;
-
-        /* If a track is found, this via connects also other segments of
-         * the other track.  This case happens when a via ends the selected
-         * track but must we consider this via is on the selected track, or
-         * on a other track.
-         * (this is important when selecting a track for deletion: must this
-         * via be deleted or not?)
-         * We consider this via to be on our track if other segments connected
-         * to this via remain connected when removing this via.
-         * We search for all other segments connected together:
-         * if they are on the same layer, then the via is on the selected track;
-         * if they are on different layers, the via is on a other track.
-         */
-        LAYER_NUM layer = track->GetLayer();
-
-        while( ( track = ::GetTrack( track->Next(), NULL, via->GetStart(), layer_set ) ) != NULL )
-        {
-            if( layer != track->GetLayer() )
+            for( auto pad_it : connectivity->GetConnectedPads( item ) )
             {
-                // The via connects segments of a other track: it is removed
-                // from list because it is member of a other track
-                via->SetState( BUSY, false );
-                break;
+                auto pad = static_cast<D_PAD*>( pad_it );
+
+                if( pad->HitTest( track->GetStart(), track->GetWidth() / 2 )
+                        && pad->HitTest( track->GetEnd(), track->GetWidth() / 2 ) )
+                {
+                    inPad = true;
+                    break;
+                }
             }
+
+            if( !inPad )
+                length += track->GetLength();
         }
+        else if( auto pad = dyn_cast<D_PAD*>( item ) )
+            package_length += pad->GetPadToDieLength();
     }
 
-    /* Rearrange the track list in order to have flagged segments linked
-     * from firstTrack so the NbSegmBusy segments are consecutive segments
-     * in list, the first item in the full track list is firstTrack, and
-     * the NbSegmBusy-1 next items (NbSegmBusy when including firstTrack)
-     * are the flagged segments
-     */
-    int     busy_count = 0;
-    TRACK*  firstTrack;
-
-    for( firstTrack = aTrackList; firstTrack; firstTrack = firstTrack->Next() )
-    {
-        // Search for the first flagged BUSY segments
-        if( firstTrack->GetState( BUSY ) )
-        {
-            busy_count = 1;
-            break;
-        }
-    }
-
-    if( firstTrack == NULL )
-        return NULL;
-
-    // First step: calculate the track length and find the pads (when exist)
-    // at each end of the trace.
-    double full_len = 0;
-    double lenPadToDie = 0;
-    // Because we have a track (a set of track segments between 2 nodes),
-    // only 2 pads (maximum) will be taken in account:
-    // that are on each end of the track, if any.
-    // keep trace of them, to know the die length and the track length ibside each pad.
-    D_PAD* s_pad = NULL;        // the pad on one end of the trace
-    D_PAD* e_pad = NULL;        // the pad on the other end of the trace
-    int dist_fromstart = INT_MAX;
-    int dist_fromend = INT_MAX;
-
-    for( TRACK* track = firstTrack; track; track = track->Next() )
-    {
-        if( !track->GetState( BUSY ) )
-            continue;
-
-        layer_set = track->GetLayerSet();
-        D_PAD * pad_on_start = GetPad( track->GetStart(), layer_set );
-        D_PAD * pad_on_end = GetPad( track->GetEnd(), layer_set );
-
-        // a segment fully inside a pad does not contribute to the track len
-        // (another track end inside this pad will contribute to this lenght)
-        if( pad_on_start && ( pad_on_start == pad_on_end ) )
-            continue;
-
-        full_len += track->GetLength();
-
-        if( pad_on_start == NULL && pad_on_end == NULL )
-            // This most of time the case
-            continue;
-
-        // At this point, we can have one track end on a pad, or the 2 track ends on
-        // 2 different pads.
-        // We don't know what pad (s_pad or e_pad) must be used to store the
-        // start point and the end point of the track, so if a pad is already set,
-        // use the other
-        if( pad_on_start )
-        {
-            SEG segm( track->GetStart(), pad_on_start->GetPosition() );
-            int dist = segm.Length();
-
-            if( s_pad == NULL )
-            {
-                dist_fromstart = dist;
-                s_pad = pad_on_start;
-            }
-            else if( e_pad == NULL )
-            {
-                dist_fromend = dist;
-                e_pad = pad_on_start;
-            }
-            else    // Should not occur, at least for basic pads
-            {
-                wxLogWarning( "Unexpected BOARD::MarkTrace: multiple pad_on_start" );
-            }
-        }
-
-        if( pad_on_end )
-        {
-            SEG segm( track->GetEnd(), pad_on_end->GetPosition() );
-            int dist = segm.Length();
-
-            if( s_pad == NULL )
-            {
-                dist_fromstart = dist;
-                s_pad = pad_on_end;
-            }
-            else if( e_pad == NULL )
-            {
-                dist_fromend = dist;
-                e_pad = pad_on_end;
-            }
-            else    // Should not occur, at least for basic pads
-            {
-                wxLogWarning( "Unexpected BOARD::MarkTrace: multiple pad_on_end" );
-            }
-        }
-    }
-
-    if( aReorder )
-    {
-        DLIST<TRACK>* list = (DLIST<TRACK>*)firstTrack->GetList();
-        wxASSERT( list );
-
-        /* Rearrange the chain starting at firstTrack
-         * All other BUSY flagged items are moved from their position to the end
-         * of the flagged list
-         */
-        TRACK* next;
-
-        for( TRACK* track = firstTrack->Next(); track; track = next )
-        {
-            next = track->Next();
-
-            if( track->GetState( BUSY ) )   // move it!
-            {
-                busy_count++;
-                track->UnLink();
-                list->Insert( track, firstTrack->Next() );
-
-            }
-        }
-    }
-    else if( aTraceLength )
-    {
-        busy_count = 0;
-
-        for( TRACK* track = firstTrack; track; track = track->Next() )
-        {
-            if( track->GetState( BUSY ) )
-            {
-                busy_count++;
-                track->SetState( BUSY, false );
-            }
-        }
-    }
-
-    if( s_pad )
-    {
-        full_len += dist_fromstart;
-        lenPadToDie += (double) s_pad->GetPadToDieLength();
-    }
-
-    if( e_pad )
-    {
-        full_len += dist_fromend;
-        lenPadToDie += (double) e_pad->GetPadToDieLength();
-    }
-
-    if( aTraceLength )
-        *aTraceLength = full_len;
-
-    if( aPadToDieLength )
-        *aPadToDieLength = lenPadToDie;
-
-    if( aCount )
-        *aCount = busy_count;
-
-    return firstTrack;
+    return std::make_tuple( count, length, package_length );
 }
 
 
@@ -2200,104 +1540,6 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer
     }
 
     return NULL;
-}
-
-
-BOARD_CONNECTED_ITEM* BOARD::GetLockPoint( const wxPoint& aPosition, LSET aLayerSet )
-{
-    for( auto module : m_modules )
-    {
-        D_PAD* pad = module->GetPad( aPosition, aLayerSet );
-
-        if( pad )
-            return pad;
-    }
-
-    // No pad has been located so check for a segment of the trace.
-    TRACK* segment = ::GetTrack( m_Track, NULL, aPosition, aLayerSet );
-
-    if( !segment )
-        segment = GetVisibleTrack( m_Track, aPosition, aLayerSet );
-
-    return segment;
-}
-
-
-TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS_LIST* aList )
-{
-    /* creates an intermediate point on aSegment and break it into two segments
-     * at aPosition.
-     * The new segment starts from aPosition and ends at the end point of
-     * aSegment. The original segment now ends at aPosition.
-     */
-    if( aSegment->GetStart() == aPosition || aSegment->GetEnd() == aPosition )
-        return NULL;
-
-    // A via is a good lock point
-    if( aSegment->Type() == PCB_VIA_T )
-    {
-        aPosition = aSegment->GetStart();
-        return aSegment;
-    }
-
-    // Calculation coordinate of intermediate point relative to the start point of aSegment
-     wxPoint delta = aSegment->GetEnd() - aSegment->GetStart();
-
-    // calculate coordinates of aPosition relative to aSegment->GetStart()
-    wxPoint lockPoint = aPosition - aSegment->GetStart();
-
-    // lockPoint must be on aSegment:
-    // Ensure lockPoint.y/lockPoint.y = delta.y/delta.x
-    if( delta.x == 0 )
-        lockPoint.x = 0;         // horizontal segment
-    else
-        lockPoint.y = KiROUND( ( (double)lockPoint.x * delta.y ) / delta.x );
-
-    /* Create the intermediate point (that is to say creation of a new
-     * segment, beginning at the intermediate point.
-     */
-    lockPoint += aSegment->GetStart();
-
-    TRACK* newTrack = (TRACK*)aSegment->Clone();
-    // The new segment begins at the new point,
-    newTrack->SetStart(lockPoint);
-    newTrack->start = aSegment;
-    newTrack->SetState( BEGIN_ONPAD, false );
-
-    DLIST<TRACK>* list = (DLIST<TRACK>*)aSegment->GetList();
-    wxASSERT( list );
-    list->Insert( newTrack, aSegment->Next() );
-
-    if( aList )
-    {
-        // Prepare the undo command for the now track segment
-        ITEM_PICKER picker( newTrack, UR_NEW );
-        aList->PushItem( picker );
-        // Prepare the undo command for the old track segment
-        // before modifications
-        picker.SetItem( aSegment );
-        picker.SetStatus( UR_CHANGED );
-        picker.SetLink( aSegment->Clone() );
-        aList->PushItem( picker );
-    }
-
-    // Old track segment now ends at new point.
-    aSegment->SetEnd(lockPoint);
-    aSegment->end = newTrack;
-    aSegment->SetState( END_ONPAD, false );
-
-    D_PAD * pad = GetPad( newTrack, ENDPOINT_START );
-
-    if( pad )
-    {
-        newTrack->start = pad;
-        newTrack->SetState( BEGIN_ONPAD, true );
-        aSegment->end = pad;
-        aSegment->SetState( END_ONPAD, true );
-    }
-
-    aPosition = lockPoint;
-    return newTrack;
 }
 
 

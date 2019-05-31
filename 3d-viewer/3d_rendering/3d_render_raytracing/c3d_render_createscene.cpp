@@ -1171,9 +1171,7 @@ void C3D_RENDER_RAYTRACING::add_3D_vias_and_pads_to_container()
     // /////////////////////////////////////////////////////////////////////////
 
     // Insert vias holes (vertical cylinders)
-    for( const TRACK* track = m_settings.GetBoard()->m_Track;
-         track;
-         track = track->Next() )
+    for( auto track : m_settings.GetBoard()->Tracks() )
     {
         if( track->Type() == PCB_VIA_T )
         {

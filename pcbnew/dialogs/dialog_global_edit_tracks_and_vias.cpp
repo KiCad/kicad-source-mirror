@@ -329,7 +329,7 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataFromWindow()
     wxBusyCursor dummy;
 
     // Examine segments
-    for( TRACK* segment = m_brd->m_Track; segment != nullptr; segment = segment->Next() )
+    for( auto segment : m_brd->Tracks() )
     {
         if( m_tracks->GetValue() && segment->Type() == PCB_TRACE_T )
             visitItem( &itemsListPicker, segment );
@@ -341,7 +341,7 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataFromWindow()
     {
         m_parent->SaveCopyInUndoList( itemsListPicker, UR_CHANGED );
 
-        for( TRACK* segment = m_brd->m_Track; segment != nullptr; segment = segment->Next() )
+        for( auto segment : m_brd->Tracks() )
             m_parent->GetGalCanvas()->GetView()->Update( segment );
     }
 

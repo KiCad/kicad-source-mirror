@@ -341,7 +341,7 @@ void PCB_PAD::AddToBoard()
         if( IsCopperLayer( m_KiCadLayer ) )
         {
             VIA* via = new VIA( m_board );
-            m_board->m_Track.Append( via );
+            m_board->Add( via );
 
             via->SetTimeStamp( 0 );
 

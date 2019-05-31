@@ -2107,7 +2107,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                         t->SetLayer( layer );
                         t->SetNetCode( netCode );
 
-                        m_board->m_Track.PushBack( t );
+                        m_board->Add( t );
 
                         start = end;
                         angle -= delta_angle;
@@ -2122,7 +2122,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     t->SetLayer( layer );
                     t->SetNetCode( netCode );
 
-                    m_board->m_Track.PushBack( t );
+                    m_board->Add( t );
                 }
                 else
                 {
@@ -2146,7 +2146,7 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     int  kidiam;
                     int  drillz = v.drill.ToPcbUnits();
                     VIA* via = new VIA( m_board );
-                    m_board->m_Track.PushBack( via );
+                    m_board->Add( via );
 
                     via->SetLayerPair( layer_front_most, layer_back_most );
 

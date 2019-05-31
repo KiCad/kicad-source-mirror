@@ -29,15 +29,15 @@ class TestBoardClass(unittest.TestCase):
     def test_pcb_get_track_count(self):
         pcb = BOARD()
 
-        self.assertEqual(pcb.GetNumSegmTrack(),0)
+        self.assertEqual(pcb.Tracks().size(),0)
 
         track0 = TRACK(pcb)
         pcb.Add(track0)
-        self.assertEqual(pcb.GetNumSegmTrack(),1)
+        self.assertEqual(pcb.Tracks().size(),1)
 
         track1 = TRACK(pcb)
         pcb.Add(track1)
-        self.assertEqual(pcb.GetNumSegmTrack(),2)
+        self.assertEqual(pcb.Tracks().size(),2)
 
     def test_pcb_bounding_box(self):
         pcb = BOARD()

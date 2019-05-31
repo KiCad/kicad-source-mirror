@@ -82,8 +82,12 @@ void GENDRILL_WRITER_BASE::buildHolesList( DRILL_LAYER_PAIR aLayerPair,
     // build hole list for vias
     if( ! aGenerateNPTH_list )  // vias are always plated !
     {
-        for( VIA* via = GetFirstVia( m_pcb->m_Track ); via; via = GetFirstVia( via->Next() ) )
+        for( auto track : m_pcb->Tracks() )
         {
+            if( track->Type() != PCB_VIA_T )
+                continue;
+
+            auto via = static_cast<VIA*>( track );
             int hole_sz = via->GetDrillValue();
 
             if( hole_sz == 0 )   // Should not occur.

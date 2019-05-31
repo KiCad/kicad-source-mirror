@@ -116,9 +116,9 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
     %pythoncode
     %{
 
-    def GetModules(self):             return self.m_Modules
-    def GetDrawings(self):            return self.DrawingsList()
-    def GetTracks(self):              return self.m_Track
+    def GetModules(self):             return self.Modules()
+    def GetDrawings(self):            return self.Drawings()
+    def GetTracks(self):              return self.Tracks()
 
     def Save(self,filename):
         return SaveBoard(filename,self)

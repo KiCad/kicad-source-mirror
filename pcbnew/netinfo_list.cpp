@@ -208,7 +208,7 @@ void NETINFO_MAPPING::Update()
         nets.insert( m_board->GetArea( i )->GetNetCode() );
 
     // Tracks
-    for( TRACK* track = m_board->m_Track; track; track = track->Next() )
+    for( auto track : m_board->Tracks() )
         nets.insert( track->GetNetCode() );
 
     // Modules/pads

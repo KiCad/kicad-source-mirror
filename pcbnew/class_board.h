@@ -30,6 +30,7 @@
 #ifndef CLASS_BOARD_H_
 #define CLASS_BOARD_H_
 
+#include <tuple>
 
 #include <dlist.h>
 #include <core/iterators.h>
@@ -161,7 +162,7 @@ protected:
 
 DECL_VEC_FOR_SWIG( MARKERS, MARKER_PCB* )
 DECL_VEC_FOR_SWIG( ZONE_CONTAINERS, ZONE_CONTAINER* )
-DECL_VEC_FOR_SWIG( TRACKS, TRACK* )
+DECL_DEQ_FOR_SWIG( TRACKS, TRACK* )
 DECL_DEQ_FOR_SWIG( DRAWINGS, BOARD_ITEM* )
 DECL_DEQ_FOR_SWIG( MODULES, MODULE* )
 
@@ -187,6 +188,9 @@ private:
     /// MODULES for components on the board, owned by pointer.
     MODULES                 m_modules;
 
+    /// TRACKS for traces on the board, owned by pointer.
+    TRACKS                  m_tracks;
+
     /// edge zone descriptors, owned by pointer.
     ZONE_CONTAINERS         m_ZoneDescriptorList;
 
@@ -208,18 +212,6 @@ private:
     PCB_PLOT_PARAMS         m_plotOptions;
     NETINFO_LIST            m_NetInfo;              ///< net info list (name, design constraints ..
 
-    /**
-     * Function chainMarkedSegments
-     * is used by MarkTrace() to set the BUSY flag of connected segments of the trace
-     * segment located at \a aPosition on aLayerMask.
-     *  Vias are put in list but their flags BUSY is not set
-     * @param aTrackList is the beginning of the track list (usually the board track list).
-     * @param aPosition A wxPoint object containing the position of the starting search.
-     * @param aLayerSet The allowed layers for segments to search.
-     * @param aList The track list to fill with points of flagged segments.
-     */
-    void chainMarkedSegments( TRACK* aTrackList, wxPoint aPosition,
-                              const LSET& aLayerSet, TRACKS* aList );
 
     // The default copy constructor & operator= are inadequate,
     // either write one or do not use it at all
@@ -245,15 +237,16 @@ public:
 
     const wxString &GetFileName() const { return m_fileName; }
 
-    /// Flags used in ratsnest calculation and update.
-    int m_Status_Pcb;
+    TRACKS& Tracks()
+    {
+        return m_tracks;
+    }
+    const TRACKS& Tracks() const
+    {
+        return m_tracks;
+    }
 
-public:
-
-    DLIST<TRACK>                m_Track;                // linked list of TRACKs and VIAs
-
-    DLIST_ITERATOR_WRAPPER<TRACK> Tracks() { return DLIST_ITERATOR_WRAPPER<TRACK>(m_Track); }
-    MODULES&                      Modules()
+    MODULES& Modules()
     {
         return m_modules;
     }
@@ -261,8 +254,17 @@ public:
     {
         return m_modules;
     }
-    DRAWINGS& Drawings() { return m_drawings; }
-    ZONE_CONTAINERS& Zones() { return m_ZoneDescriptorList; }
+
+    DRAWINGS& Drawings()
+    {
+        return m_drawings;
+    }
+
+    ZONE_CONTAINERS& Zones()
+    {
+        return m_ZoneDescriptorList;
+    }
+
     const std::vector<BOARD_CONNECTED_ITEM*> AllConnectedItems();
 
     /// zone contour currently in progress
@@ -276,7 +278,7 @@ public:
 
     bool IsEmpty() const
     {
-        return m_drawings.empty() && m_modules.empty() && m_Track.GetCount() == 0;
+        return m_drawings.empty() && m_modules.empty() && m_tracks.empty();
     }
 
     void Move( const wxPoint& aMoveVector ) override;
@@ -422,18 +424,6 @@ public:
      * if m_highLight_NetCode >= 0, this net will be highlighted
      */
     void HighLightON() { m_highLight.m_highLightOn = true; }
-
-    /**
-     * Function PushHighLight
-     * save current high light info for later use
-     */
-    void PushHighLight();
-
-    /**
-     * Function PopHighLight
-     * retrieve a previously saved high light info
-     */
-    void PopHighLight();
 
     /**
      * Function GetCopperLayerCount
@@ -714,9 +704,6 @@ public:
      * @return bool - true if aLayerType was legal and aLayer was within range, else false.
      */
     bool SetLayerType( PCB_LAYER_ID aLayer, LAYER_T aLayerType );
-
-    /** Functions to get some items count */
-    int GetNumSegmTrack() const;
 
     /**
      * Function GetNodesCount
@@ -1092,31 +1079,6 @@ public:
                        ZONE_CONTAINER*    area_to_combine );
 
     /**
-     * Function GetViaByPosition
-     * finds the first via at \a aPosition on \a aLayer.
-     * <p>
-     * This function does not use the normal hit test to locate a via which which tests
-     * if a position is within the via's bounding box.  It tests for the actual locate
-     * of the via.
-     * </p>
-     * @param aPosition The wxPoint to HitTest() against.
-     * @param aLayer The layer to search.  Use -1 (PCB_LAYER_ID::UNDEFINED_LAYER) for a don't care.
-     * @return VIA* A point a to the VIA object if found, else NULL.
-     */
-    VIA* GetViaByPosition( const wxPoint& aPosition,
-                           PCB_LAYER_ID aLayer = PCB_LAYER_ID( -1 ) ) const;
-
-    /**
-     * Function GetTracksByPosition
-     * finds the list of tracks that starts or ends at \a aPosition on \a aLayer.
-     *
-     * @param aPosition The wxPoint to check start agains against.
-     * @param aLayer The layer to search.  Use -1 (<PCB_LAYER_ID>::UNDEFINED_LAYER) for a don't care.
-     * @return std::list<TRACK*> A list of TRACK* items that can be zero if no track is found.
-     */
-    std::list<TRACK*> GetTracksByPosition( const wxPoint& aPosition, PCB_LAYER_ID aLayer = PCB_LAYER_ID( -1 ) ) const;
-
-    /**
      * Function GetPad
      * finds a pad \a aPosition on \a aLayer.
      *
@@ -1192,48 +1154,13 @@ public:
     void GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector, int aNetCode = -1 );
 
     /**
-     * Function GetVisibleTrack
-     * finds the neighboring visible segment of \a aTrace at \a aPosition that is
-     * on a layer in \a aLayerSet.
-     * Traces that are flagged as deleted or busy are ignored.
+     * Returns data on the length and number of track segments connected to a given track.
+     * This uses the connectivity data for the board to calculate connections
      *
-     * @param aStartingTrace is the first TRACK to test, testing continues to end of m_Track list from
-     *   this starting point.
-     * @param aPosition A wxPoint object containing the position to test.
-     * @param aLayerSet A set of layers; returned TRACK must be on one of these.
-     *     May pass a full set to request any layer.
-     * @return A TRACK object pointer if found otherwise NULL.
+     * @param aTrack Starting track (can also be a via) to check against for connection.
+     * @return a tuple containing <number, length, package length>
      */
-    TRACK* GetVisibleTrack( TRACK* aStartingTrace, const wxPoint& aPosition, LSET aLayerSet ) const;
-
-    /**
-     * Function MarkTrace
-     * marks a chain of trace segments, connected to \a aTrace.
-     * <p>
-     * Each segment is marked by setting the BUSY bit into m_Flags.  Electrical
-     * continuity is detected by walking each segment, and finally the segments
-     * are rearranged into a contiguous chain within the given list.
-     * </p>
-     *
-     * @param aTrackList The list of available track segments.
-     * usually tracks on board, but can be a list of segments currently created.
-     * @param aTrace The segment within a list of trace segments to test.
-     * @param aCount A pointer to an integer where to return the number of
-     *               marked segments (can be NULL).
-     * @param aTraceLength A pointer to an double where to return the length of the
-     *                     trace (can be NULL).
-     * @param aInPackageLength A pointer to an double where to return the extra lengths inside
-     *                   integrated circuits from the pads connected to this track to the
-     *                   die (if any) (can be NULL).
-     * @param aReorder true for reorder the interesting segments (useful for
-     *                 track editing/deleting) in this case the flag BUSY is
-     *                 set (the user is responsible of flag clearing). False
-     *                 for no reorder : useful when we want just calculate the
-     *                 track length in this case, flags are reset
-     * @return TRACK* - The first in the chain of interesting segments.
-     */
-    TRACK* MarkTrace( TRACK* aTrackList, TRACK* aTrace, int* aCount, double* aTraceLength,
-                      double* aInPackageLength, bool aReorder );
+    std::tuple<int, double, double> GetTrackLength( const TRACK& aTrack ) const;
 
     /**
      * Function TrackInNet
@@ -1243,25 +1170,6 @@ public:
      * @return TRACKS - which are in the net identified by @a aNetCode.
      */
     TRACKS TracksInNet( int aNetCode );
-
-    /**
-     * Function TrackInNetBetweenPoints
-     * collects all the TRACKs and VIAs that are members of a net given by aNetCode and that
-     * make up a path between two end points.  The end points must be carefully chosen,
-     * and are typically the locations of two neighboring pads.  The function fails if there
-     * is an intervening pad or a 3 way intersection at a track or via.  The seeking starts
-     * at @a aStartPos and strives to travel to @a aGoalPos.
-     * Used from python.
-     * @param aStartPos must correspond to a point on the BOARD which has a TRACK end or start,
-     *  typically the location of either a via or pad.
-     * @param aGoalPos must correspond to a point on the BOARD which has a TRACK end or start,
-     *  typically the location of either a via or pad.
-     * @param aNetCode gives the id of the net.
-     * @return TRACKS - non empty if success, empty if your aStartPos or aEndPos are bad or
-     *  the net is interrupted along the way by an intervening D_PAD or a 3 way path.
-     * @throw IO_ERROR in order to convey detailed error reason upon failure.
-     */
-    TRACKS TracksInNetBetweenPoints( const wxPoint& aStartPos, const wxPoint& aGoalPos, int aNetCode );
 
     /**
      * Function GetFootprint
@@ -1279,40 +1187,6 @@ public:
      */
     MODULE* GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer,
                           bool aVisibleOnly, bool aIgnoreLocked = false );
-
-    /**
-     * Function GetLockPoint
-     * returns the item at the "attachment" point at the end of a trace at \a aPosition
-     * on \a aLayerMask.
-     * <p>
-     * This may be a PAD or another trace segment.
-     * </p>
-     *
-     * @param aPosition A wxPoint object containing the position to test.
-     * @param aLayerMask A layer or layers to mask the hit test.  Use -1 to ignore
-     *                   layer mask.
-     * @return A pointer to a BOARD_ITEM object if found otherwise NULL.
-     */
-    BOARD_CONNECTED_ITEM* GetLockPoint( const wxPoint& aPosition, LSET aLayerMask );
-
-    /**
-     * Function CreateLockPoint
-     * creates an intermediate point on \a aSegment and break it into two segments
-     * at \a aPosition.
-     * <p>
-     * The new segment starts from \a aPosition and ends at the end point of \a
-     * aSegment.  The original segment now ends at \a aPosition.
-     * </p>
-     *
-     * @param aPosition A wxPoint object containing the position to test and the new
-     *                  segment start position if the return value is not NULL.
-     * @param aSegment The trace segment to create the lock point on.
-     * @param aList The pick list to add the created items to.
-     * @return NULL if no new point was created or a pointer to a TRACK object of the
-     *         created segment.  If \a aSegment points to a via the exact value of \a
-     *         aPosition and a pointer to the via are returned.
-     */
-    TRACK* CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS_LIST* aList );
 
     /**
      * Function ClearAllNetCodes()

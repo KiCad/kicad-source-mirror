@@ -617,7 +617,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
                                 }
                             };
 
-        for( TRACK* segm = m_board->m_Track;  segm;  segm = segm->Next() )
+        for( auto segm : m_board->Tracks() )
         {
             if( segm->Type() == PCB_VIA_T )
             {

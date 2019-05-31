@@ -166,9 +166,9 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     // /////////////////////////////////////////////////////////////////////////
     std::vector< const TRACK *> trackList;
     trackList.clear();
-    trackList.reserve( m_board->m_Track.GetCount() );
+    trackList.reserve( m_board->Tracks().size() );
 
-    for( const TRACK* track = m_board->m_Track; track; track = track->Next() )
+    for( auto track : m_board->Tracks() )
     {
         if( !Is3DLayerEnabled( track->GetLayer() ) ) // Skip non enabled layers
             continue;

@@ -132,7 +132,7 @@ bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
         view->RecacheAllItems();
 
         // add imported tracks (previous tracks are removed, therfore all are new)
-        for( TRACK* track = GetBoard()->m_Track; track; track = track->Next() )
+        for( auto track : GetBoard()->Tracks() )
         {
             view->Add( track );
         }
@@ -384,7 +384,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
         THROW_IO_ERROR( _("Session file is missing the \"library_out\" section") );
 
     // delete all the old tracks and vias
-    aBoard->m_Track.DeleteAll();
+    aBoard->Tracks().clear();
 
     aBoard->DeleteMARKERs();
 

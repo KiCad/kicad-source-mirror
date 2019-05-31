@@ -961,7 +961,7 @@ static void export_vrml_via( MODEL_VRML& aModel, BOARD* aPcb, const VIA* aVia )
 
 static void export_vrml_tracks( MODEL_VRML& aModel, BOARD* pcb )
 {
-    for( TRACK* track = pcb->m_Track; track; track = track->Next() )
+    for( auto track : pcb->Tracks() )
     {
         if( track->Type() == PCB_VIA_T )
         {

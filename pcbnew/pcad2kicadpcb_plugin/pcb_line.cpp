@@ -138,7 +138,7 @@ void PCB_LINE::AddToBoard()
     if( IsCopperLayer( m_KiCadLayer ) )
     {
         TRACK* track = new TRACK( m_board );
-        m_board->m_Track.Append( track );
+        m_board->Add( track );
 
         track->SetTimeStamp( m_timestamp );
 

@@ -831,7 +831,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
     if( GetPlotMode() == FILLED )
          m_plotter->SetColor( WHITE );
 
-    for( TRACK* pts = m_board->m_Track; pts != NULL; pts = pts->Next() )
+    for( auto pts : m_board->Tracks() )
     {
         const VIA* via = dyn_cast<const VIA*>( pts );
 
