@@ -80,8 +80,22 @@ bool LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
     if( m_canvas->IsMouseCaptured() )
         m_canvas->CallMouseCapture( aDC, aPosition, true );
 
-    if( aHotKey && OnHotKey( aDC, aHotKey, aPosition, NULL ) )
-        keyHandled = true;
+    if( aHotKey )
+    {
+        if( m_movingCursorWithKeyboard )    // The hotkey was a move crosshair cursor command
+        {
+            // The crosshair was moved. move the mouse cursor to the new crosshair position:
+            GetGalCanvas()->GetViewControls()->WarpCursor( GetCrossHairPosition(), true );
+            m_movingCursorWithKeyboard = 0;
+            keyHandled = true;
+        }
+        else
+        {
+            keyHandled = OnHotKey( aDC, aHotKey, aPosition, NULL );
+        }
+    }
+
+
 
     // Make sure current-part highlighting doesn't get lost in seleciton highlighting
     ClearSearchTreeSelection();
