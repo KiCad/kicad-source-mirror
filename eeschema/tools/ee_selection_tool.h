@@ -223,6 +223,11 @@ private:
     void unhighlight( EDA_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr );
 
     /**
+     * Sets the reference point to the anchor of the top-left item.
+     */
+    void updateReferencePoint();
+
+    /**
      * Function selectionContains()
      * Checks if the given point is placed within any of selected items' bounding box.
      *

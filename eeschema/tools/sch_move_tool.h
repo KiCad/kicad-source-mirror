@@ -70,6 +70,7 @@ private:
 private:
     ///> Flag determining if anything is being dragged right now
     bool                  m_moveInProgress;
+    bool                  m_isDragOperation;
 
     ///> Items (such as wires) which were added to the selection for a drag
     EDA_ITEMS             m_dragAdditions;
@@ -81,7 +82,7 @@ private:
     ///> of edit reference point).
     VECTOR2I              m_cursor;
 
-    boost::optional<VECTOR2I> m_anchorPoint;
+    boost::optional<VECTOR2I> m_anchorPos;
 };
 
 #endif //KICAD_SCH_MOVE_TOOL_H

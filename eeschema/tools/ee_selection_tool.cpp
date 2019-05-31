@@ -613,6 +613,14 @@ SELECTION& EE_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
         m_selection.ClearReferencePoint();
     }
 
+    updateReferencePoint();
+
+    return m_selection;
+}
+
+
+void EE_SELECTION_TOOL::updateReferencePoint()
+{
     VECTOR2I refP( 0, 0 );
 
     if( m_selection.Size() > 0 )
@@ -624,8 +632,6 @@ SELECTION& EE_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
     }
 
     m_selection.SetReferencePoint( refP );
-
-    return m_selection;
 }
 
 
@@ -923,6 +929,8 @@ void EE_SELECTION_TOOL::RebuildSelection()
     };
 
     EDA_ITEM::IterateForward( start, inspector, nullptr, EE_COLLECTOR::AllItems );
+
+    updateReferencePoint();
 }
 
 
