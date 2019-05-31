@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Dec  1 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __PROPERTIES_FRAME_BASE_H__
-#define __PROPERTIES_FRAME_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -23,11 +22,11 @@
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
 #include <wx/combobox.h>
-#include <wx/button.h>
-#include <wx/scrolwin.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/button.h>
+#include <wx/scrolwin.h>
 #include <wx/notebook.h>
 #include <wx/panel.h>
 
@@ -36,10 +35,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_PROPERTIES_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_PROPERTIES_BASE : public wxPanel 
+class PANEL_PROPERTIES_BASE : public wxPanel
 {
 	private:
-	
+
 	protected:
 		wxNotebook* m_notebook;
 		wxScrolledWindow* m_swItemProperties;
@@ -143,18 +142,17 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxTextCtrl* m_textCtrlDefaultBottomMargin;
 		wxStaticText* m_units1432;
 		wxButton* m_buttonGeneralOptsOK;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnPageChanged( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnAcceptPrms( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetDefaultValues( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 340,775 ), long style = wxTAB_TRAVERSAL ); 
+
+		PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 340,775 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_PROPERTIES_BASE();
-	
+
 };
 
-#endif //__PROPERTIES_FRAME_BASE_H__

@@ -41,9 +41,7 @@
 */
 static const double pl_editorZoomList[] =
 {
-    ZOOM_FACTOR( 5 ),
-    ZOOM_FACTOR( 7.0 ),
-    ZOOM_FACTOR( 10.0 ),
+    ZOOM_FACTOR( 10.0 ),        // Zoom in
     ZOOM_FACTOR( 15.0 ),
     ZOOM_FACTOR( 22.0 ),
     ZOOM_FACTOR( 35.0 ),
@@ -60,10 +58,11 @@ static const double pl_editorZoomList[] =
     ZOOM_FACTOR( 1500.0 ),
     ZOOM_FACTOR( 2000.0 ),
     ZOOM_FACTOR( 3000.0 ),
+    ZOOM_FACTOR( 4500.0 ),      // Zoom out
 };
 
 
-// Default grid sizes for PCB editor screens.
+// Default grid sizes for page layout editor screens.
 static GRID_TYPE pl_editorGridList[] =
 {
     // predefined grid list in mm

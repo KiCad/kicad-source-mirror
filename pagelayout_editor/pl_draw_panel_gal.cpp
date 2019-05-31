@@ -47,6 +47,7 @@ PL_DRAW_PANEL_GAL::PL_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindo
 
     m_painter.reset( new KIGFX::WS_PAINTER( m_gal ) );
     m_view->SetPainter( m_painter.get() );
+    m_view->SetScaleLimits( 20.0, 0.05 );    // This fixes the zoom in and zoom out limits
 
     setDefaultLayerDeps();
 
@@ -76,12 +77,29 @@ void PL_DRAW_PANEL_GAL::DisplayWorksheet()
     selTool->GetSelection().Clear();
     m_view->Clear();
 
+    // Obviously, always show the page limit:
+    m_edaFrame->SetShowPageLimits( true );
+    auto painter = m_view->GetPainter();
+    auto settings = painter->GetSettings();
+    settings->SetShowPageLimits( true );
+
     model.SetupDrawEnvironment( m_edaFrame->GetPageSettings(), Mils2iu( 1 ) );
 
     for( WS_DATA_ITEM* dataItem : model.GetItems() )
         dataItem->SyncDrawItems( nullptr, m_view );
 
     selTool->RebuildSelection();
+
+    // Gives a reasonable boundary to the view area
+    // Otherwise scroll bars are not usable
+    // A full size = 2 * page size allows a margin around the worksheet.
+    // (Note: no need to have a large working area: nothing can be drawn outside th page size).
+    double size_x = m_edaFrame->GetPageSizeIU().x;
+    double size_y = m_edaFrame->GetPageSizeIU().y;
+    BOX2D boundary( VECTOR2D( -size_x/4 , -size_y/4 ),
+                    VECTOR2D( size_x * 1.5, size_y * 1.5) );
+    m_view->SetBoundary( boundary );
+
 }
 
 
