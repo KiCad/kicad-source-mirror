@@ -157,7 +157,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     Activate();
     controls->ShowCursor( true );
-    controls->SetAutoPan( true );
 
     bool restore_state = false;
     bool chain_commands = false;
@@ -423,6 +422,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             break; // Finish
         }
+
+        controls->SetAutoPan( m_moveInProgress );
 
     } while( ( evt = Wait() ) ); //Should be assignment not equality test
 
