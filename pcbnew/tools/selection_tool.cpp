@@ -992,11 +992,10 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 
 void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
 {
-    auto modules = board()->m_Modules.GetFirst();
     std::list<MODULE*> modList;
 
     // store all modules that are on that sheet
-    for( MODULE* mitem = modules; mitem; mitem = mitem->Next() )
+    for( auto mitem : board()->Modules() )
     {
         if( mitem != NULL && mitem->GetPath().Contains( aSheetpath ) )
         {

@@ -311,9 +311,8 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
      * these changes will be undone later
      */
     BOARD*  pcb = GetBoard();
-    MODULE* module;
 
-    for( module = pcb->m_Modules; module; module = module->Next() )
+    for( auto module : pcb->Modules() )
     {
         module->SetFlag( 0 );
 
@@ -349,7 +348,7 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     fclose( file );
 
     // Undo the footprints modifications (flipped footprints)
-    for( module = pcb->m_Modules; module; module = module->Next() )
+    for( auto module : pcb->Modules() )
     {
         if( module->GetFlag() )
         {
@@ -732,7 +731,6 @@ static size_t hashModule( const MODULE* aModule )
  */
 static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
 {
-    MODULE*     module;
     D_PAD*      pad;
     const char* layer;
     wxString    pinname;
@@ -741,7 +739,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
 
     fputs( "$SHAPES\n", aFile );
 
-    for( module = aPcb->m_Modules; module; module = module->Next() )
+    for( auto module : aPcb->Modules() )
     {
         if( !individualShapes )
         {
@@ -854,7 +852,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
 
     int cu_count = aPcb->GetCopperLayerCount();
 
-    for( MODULE* module = aPcb->m_Modules; module; module = module->Next() )
+    for( auto module : aPcb->Modules() )
     {
         const char*   mirror;
         const char*   flip;
@@ -929,7 +927,6 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
     wxString      msg;
     NETINFO_ITEM* net;
     D_PAD*        pad;
-    MODULE*       module;
     int           NbNoConn = 1;
 
     fputs( "$SIGNALS\n", aFile );
@@ -951,7 +948,7 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
         fputs( TO_UTF8( msg ), aFile );
         fputs( "\n", aFile );
 
-        for( module = aPcb->m_Modules; module; module = module->Next() )
+        for( auto module : aPcb->Modules() )
         {
             for( pad = module->PadsList(); pad; pad = pad->Next() )
             {

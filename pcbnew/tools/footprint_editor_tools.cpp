@@ -104,7 +104,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
     {
         std::unique_ptr<BOARD_ITEM> CreateItem() override
         {
-            D_PAD* pad = new D_PAD ( m_board->m_Modules );
+            D_PAD* pad = new D_PAD( m_board->GetFirstModule() );
             m_frame->Import_Pad_Settings( pad, false );     // use the global settings for pad
             pad->IncrementPadName( true, true );
             return std::unique_ptr<BOARD_ITEM>( pad );
@@ -130,7 +130,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 
     frame()->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_PENCIL, _( "Add pads" ) );
 
-    wxASSERT( board()->m_Modules );
+    wxASSERT( board()->GetFirstModule() );
 
     doInteractiveItemPlacement( &placer,  _( "Place pad" ), IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP );
 
@@ -142,7 +142,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 
 int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 {
-    if( !board()->m_Modules || !board()->m_Modules->PadsList() )
+    if( !board()->GetFirstModule() || !board()->GetFirstModule()->PadsList() )
         return 0;
 
     DIALOG_ENUM_PADS settingsDlg( frame() );
@@ -318,7 +318,7 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
         statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
     }
 
-    for( auto p : board()->m_Modules->Pads() )
+    for( auto p : board()->GetFirstModule()->Pads() )
     {
         p->ClearSelected();
         view->Update( p );
@@ -354,7 +354,7 @@ int MODULE_EDITOR_TOOLS::ExplodePadToShapes( const TOOL_EVENT& aEvent )
 
     for( auto prim : pad->GetPrimitives() )
     {
-        auto ds = new EDGE_MODULE( board()->m_Modules );
+        auto ds = new EDGE_MODULE( board()->GetFirstModule() );
 
         prim.ExportTo( ds );    // ExportTo exports to a DRAWSEGMENT
         // Fix an arbitray draw layer for this EDGE_MODULE
@@ -385,7 +385,7 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
 {
     SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
 
-    std::unique_ptr<D_PAD> pad ( new D_PAD ( board()->m_Modules ) );
+    std::unique_ptr<D_PAD> pad( new D_PAD( board()->GetFirstModule() ) );
     D_PAD *refPad = nullptr;
     bool multipleRefPadsFound = false;
     bool illegalItemsFound = false;

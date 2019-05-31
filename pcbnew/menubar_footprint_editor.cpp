@@ -48,8 +48,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     wxMenuBar* oldMenuBar = GetMenuBar();
     wxMenuBar* menuBar = new wxMenuBar();
 
-    auto modifiedDocumentCondition = [ this ] ( const SELECTION& sel ) {
-        return GetBoard()->m_Modules && GetScreen()->IsModify();
+    auto modifiedDocumentCondition = [this]( const SELECTION& sel ) {
+        return !GetBoard()->Modules().empty() && GetScreen()->IsModify();
     };
     auto libraryPartCondition = [ this ] ( const SELECTION& sel ) {
         LIB_ID libId = getTargetFPID();

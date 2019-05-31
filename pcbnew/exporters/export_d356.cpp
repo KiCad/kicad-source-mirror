@@ -114,8 +114,7 @@ static void build_pad_testpoints( BOARD *aPcb,
 {
     wxPoint origin = aPcb->GetAuxOrigin();
 
-    for( MODULE* module = aPcb->m_Modules;
-        module; module = module->Next() )
+    for( auto module : aPcb->Modules() )
     {
         for( D_PAD* pad = module->PadsList();  pad; pad = pad->Next() )
         {

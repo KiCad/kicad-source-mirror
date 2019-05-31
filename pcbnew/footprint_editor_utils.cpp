@@ -89,14 +89,16 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
     SetCrossHairPosition( wxPoint( 0, 0 ) );
     AddModuleToBoard( module );
 
-    if( GetBoard()->m_Modules )
+    auto fp = GetBoard()->GetFirstModule();
+
+    if( fp )
     {
-        GetBoard()->m_Modules->ClearFlags();
+        fp->ClearFlags();
 
         // if either m_Reference or m_Value are gone, reinstall them -
         // otherwise you cannot see what you are doing on board
-        TEXTE_MODULE* ref = &GetBoard()->m_Modules->Reference();
-        TEXTE_MODULE* val = &GetBoard()->m_Modules->Value();
+        TEXTE_MODULE* ref = &fp->Reference();
+        TEXTE_MODULE* val = &fp->Value();
 
         if( val && ref )
         {
@@ -210,8 +212,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             GetBoard()->BuildListOfNets();
             module->SetPosition( wxPoint( 0, 0 ) );
 
-            if( GetBoard()->m_Modules )
-                GetBoard()->m_Modules->ClearFlags();
+            if( GetBoard()->GetFirstModule() )
+                GetBoard()->GetFirstModule()->ClearFlags();
 
             Zoom_Automatique( false );
             GetScreen()->SetModify();
@@ -240,8 +242,11 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
             {
-                if( !HandleUnsavedChanges( this, _( "The current footprint has been modified.  Save changes?" ),
-                                           [&]()->bool { return SaveFootprint( GetBoard()->m_Modules ); } ) )
+                if( !HandleUnsavedChanges( this,
+                            _( "The current footprint has been modified.  Save changes?" ),
+                            [&]() -> bool {
+                                return SaveFootprint( GetBoard()->GetFirstModule() );
+                            } ) )
                 {
                     break;
                 }
@@ -299,9 +304,9 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_MODEDIT_SAVE:
         if( getTargetFPID() == GetLoadedFPID() )
         {
-            if( SaveFootprint( GetBoard()->m_Modules ) )
+            if( SaveFootprint( GetBoard()->GetFirstModule() ) )
             {
-                m_toolManager->GetView()->Update( GetBoard()->m_Modules );
+                m_toolManager->GetView()->Update( GetBoard()->GetFirstModule() );
 
                 GetGalCanvas()->ForceRefresh();
                 GetScreen()->ClrModify();
@@ -324,12 +329,12 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         else if( getTargetFPID() == GetLoadedFPID() )
         {
             // Save Board Footprint As
-            MODULE* footprint = GetBoard()->m_Modules;
+            MODULE* footprint = GetBoard()->GetFirstModule();
 
             if( footprint && SaveFootprintAs( footprint ) )
             {
                 m_footprintNameWhenLoaded = footprint->GetFPID().GetLibItemName();
-                m_toolManager->GetView()->Update( GetBoard()->m_Modules );
+                m_toolManager->GetView()->Update( footprint );
                 GetScreen()->ClrModify();
 
                 GetGalCanvas()->ForceRefresh();
@@ -359,7 +364,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             LIB_ID fpID = getTargetFPID();
 
             if( fpID == GetLoadedFPID() )
-                m_copiedModule.reset( new MODULE( *GetBoard()->m_Modules.GetFirst() ) );
+                m_copiedModule.reset( new MODULE( *GetBoard()->GetFirstModule() ) );
             else
                 m_copiedModule.reset( LoadFootprint( fpID ) );
 
@@ -404,8 +409,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SetCrossHairPosition( wxPoint( 0, 0 ) );
         Import_Module();
 
-        if( GetBoard()->m_Modules )
-            GetBoard()->m_Modules->ClearFlags();
+        if( GetBoard()->GetFirstModule() )
+            GetBoard()->GetFirstModule()->ClearFlags();
 
         GetScreen()->SetModify();
         Zoom_Automatique( false );
@@ -416,7 +421,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_EXPORT_PART:
         if( getTargetFPID() == GetLoadedFPID() )
-            Export_Module( GetBoard()->m_Modules );
+            Export_Module( GetBoard()->GetFirstModule() );
         else
             Export_Module( LoadFootprint( getTargetFPID() ) );
         break;
@@ -453,9 +458,9 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_EDIT_MODULE_PROPERTIES:
-        if( GetBoard()->m_Modules )
+        if( GetBoard()->GetFirstModule() )
         {
-            editFootprintProperties( GetBoard()->m_Modules );
+            editFootprintProperties( GetBoard()->GetFirstModule() );
             GetGalCanvas()->Refresh();
         }
         break;
@@ -530,8 +535,8 @@ bool FOOTPRINT_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileS
     SetCrossHairPosition( wxPoint( 0, 0 ) );
     Import_Module( aFileSet[0] );
 
-    if( GetBoard()->m_Modules )
-        GetBoard()->m_Modules->ClearFlags();
+    if( GetBoard()->GetFirstModule() )
+        GetBoard()->GetFirstModule()->ClearFlags();
 
     GetScreen()->ClrModify();
     Zoom_Automatique( false );

@@ -135,7 +135,7 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater,
 
 MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName()
 {
-    if( GetBoard()->m_Modules == NULL )
+    if( GetBoard()->Modules().empty() )
     {
         DisplayError( this, _( "No footprints" ) );
         return 0;
@@ -143,9 +143,7 @@ MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName()
 
     wxArrayString listnames;
 
-    MODULE* module;
-
-    for( module = GetBoard()->m_Modules;  module;  module = module->Next() )
+    for( auto module : GetBoard()->Modules() )
         listnames.Add( module->GetReference() );
 
     wxArrayString headers;
@@ -163,17 +161,17 @@ MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName()
     EDA_LIST_DIALOG dlg( this, _( "Components" ), headers, itemsToDisplay, wxEmptyString );
 
     if( dlg.ShowModal() != wxID_OK )
-        return NULL;
+        return nullptr;
 
     wxString ref = dlg.GetTextSelection();
 
-    for( module = GetBoard()->m_Modules;  module;  module = module->Next() )
+    for( auto module : GetBoard()->Modules() )
     {
         if( module->GetReference() == ref )
-            break;
+            return module;
     }
 
-    return module;
+    return nullptr;
 }
 
 

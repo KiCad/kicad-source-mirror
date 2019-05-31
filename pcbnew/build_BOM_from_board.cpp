@@ -77,10 +77,9 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
 {
     wxFileName fn;
     FILE*      fp_bom;
-    MODULE*    module = GetBoard()->m_Modules;
     wxString   msg;
 
-    if( module == NULL )
+    if( GetBoard()->Modules().empty() )
     {
         DisplayError( this, _( "Cannot export BOM: there are no footprints in the PCB" ) );
         return;
@@ -126,7 +125,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     CmpList::iterator iter;
     int               i = 1;
 
-    while( module != NULL )
+    for( auto module : GetBoard()->Modules() )
     {
         bool valExist = false;
 
@@ -157,9 +156,6 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
             comp->m_CmpCount = 1;
             list.Append( comp );
         }
-
-        // increment module
-        module = module->Next();
     }
 
     // Print list. Also delete temporary created objects.

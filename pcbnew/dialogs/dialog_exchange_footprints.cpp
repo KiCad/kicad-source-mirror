@@ -284,13 +284,11 @@ void DIALOG_EXCHANGE_FOOTPRINTS::OnApplyClicked( wxCommandEvent& event )
 
 bool DIALOG_EXCHANGE_FOOTPRINTS::processMatchingModules()
 {
-    MODULE*  Module;
-    MODULE*  PtBack;
     bool     change = false;
     LIB_ID   newFPID;
     wxString value;
 
-    if( !m_parent->GetBoard()->m_Modules )
+    if( m_parent->GetBoard()->Modules().empty() )
         return false;
 
     if( !m_updateMode )
@@ -303,26 +301,23 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processMatchingModules()
 
     /* The change is done from the last module because processModule() modifies the last item
      * in the list.
-     * Note: for the first module in chain (the last here), Module->Back() points to the board
-     * or is NULL.
      */
-    Module = m_parent->GetBoard()->m_Modules.GetLast();
-
-    for( ; Module && Module->Type() == PCB_MODULE_T; Module = PtBack )
+    for( auto it = m_parent->GetBoard()->Modules().rbegin();
+            it != m_parent->GetBoard()->Modules().rend(); it++ )
     {
-        PtBack = Module->Back();
+        auto mod = *it;
 
-        if( !isMatch( Module ) )
+        if( !isMatch( mod ) )
             continue;
 
         if( m_updateMode )
         {
-            if( processModule( Module, Module->GetFPID()) )
+            if( processModule( mod, mod->GetFPID() ) )
                 change = true;
         }
         else
         {
-            if( processModule( Module, newFPID ) )
+            if( processModule( mod, newFPID ) )
                 change = true;
         }
     }

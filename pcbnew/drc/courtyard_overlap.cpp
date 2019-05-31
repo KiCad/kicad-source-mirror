@@ -65,7 +65,7 @@ bool DRC_COURTYARD_OVERLAP::RunDRC( BOARD& aBoard ) const
     const DRC_MARKER_FACTORY& marker_factory = GetMarkerFactory();
 
     // Update courtyard polygons, and test for missing courtyard definition:
-    for( MODULE* footprint = aBoard.m_Modules; footprint; footprint = footprint->Next() )
+    for( auto footprint : aBoard.Modules() )
     {
         wxPoint pos = footprint->GetPosition();
         bool    is_ok = footprint->BuildPolyCourtyard();
@@ -99,13 +99,17 @@ bool DRC_COURTYARD_OVERLAP::RunDRC( BOARD& aBoard ) const
     // Now test for overlapping on top layer:
     SHAPE_POLY_SET courtyard; // temporary storage of the courtyard of current footprint
 
-    for( MODULE* footprint = aBoard.m_Modules; footprint; footprint = footprint->Next() )
+    for( auto it1 = aBoard.Modules().begin(); it1 != aBoard.Modules().end(); it1++ )
     {
+        auto footprint = *it1;
+
         if( footprint->GetPolyCourtyardFront().OutlineCount() == 0 )
             continue; // No courtyard defined
 
-        for( MODULE* candidate = footprint->Next(); candidate; candidate = candidate->Next() )
+        for( auto it2 = it1 + 1; it2 != aBoard.Modules().end(); it2++ )
         {
+            auto candidate = *it2;
+
             if( candidate->GetPolyCourtyardFront().OutlineCount() == 0 )
                 continue; // No courtyard defined
 
@@ -132,13 +136,17 @@ bool DRC_COURTYARD_OVERLAP::RunDRC( BOARD& aBoard ) const
     }
 
     // Test for overlapping on bottom layer:
-    for( MODULE* footprint = aBoard.m_Modules; footprint; footprint = footprint->Next() )
+    for( auto it1 = aBoard.Modules().begin(); it1 != aBoard.Modules().end(); it1++ )
     {
+        auto footprint = *it1;
+
         if( footprint->GetPolyCourtyardBack().OutlineCount() == 0 )
             continue; // No courtyard defined
 
-        for( MODULE* candidate = footprint->Next(); candidate; candidate = candidate->Next() )
+        for( auto it2 = it1 + 1; it2 != aBoard.Modules().end(); it2++ )
         {
+            auto candidate = *it2;
+
             if( candidate->GetPolyCourtyardBack().OutlineCount() == 0 )
                 continue; // No courtyard defined
 

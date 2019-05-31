@@ -88,7 +88,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     if( layersmask_plotpads.any() )
     {
-        for( MODULE* Module = aBoard->m_Modules; Module; Module = Module->Next() )
+        for( auto Module : aBoard->Modules() )
         {
             aPlotter->StartBlock( NULL );
 
@@ -115,7 +115,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     }
 
     // Plot footprints fields (ref, value ...)
-    for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
+    for( auto module : aBoard->Modules() )
     {
         if( ! itemplotter.PlotAllTextsModule( module ) )
         {
@@ -299,7 +299,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // We plot here module texts, but they are usually on silkscreen layer,
     // so they are not plot here but plot by PlotSilkScreen()
     // Plot footprints fields (ref, value ...)
-    for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
+    for( auto module : aBoard->Modules() )
     {
         if( ! itemplotter.PlotAllTextsModule( module ) )
         {
@@ -308,7 +308,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         }
     }
 
-    for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
+    for( auto module : aBoard->Modules() )
     {
         for( BOARD_ITEM* item = module->GraphicalItemsList(); item; item = item->Next() )
         {
@@ -328,7 +328,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     }
 
     // Plot footprint pads
-    for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
+    for( auto module : aBoard->Modules() )
     {
         aPlotter->StartBlock( NULL );
 
@@ -695,7 +695,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter,
             int smallDrill = (aPlotOpt.GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE)
                                   ? SMALL_DRILL : INT_MAX;
 
-            for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
+            for( auto module : aBoard->Modules() )
             {
                 for( D_PAD* pad = module->PadsList(); pad; pad = pad->Next() )
                 {
@@ -773,7 +773,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // on this layer (like logos), not actually areas around pads.
     itemplotter.PlotBoardGraphicItems();
 
-    for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
+    for( auto module : aBoard->Modules() )
     {
         for( BOARD_ITEM* item = module->GraphicalItemsList(); item; item = item->Next() )
         {
@@ -804,7 +804,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     SHAPE_POLY_SET initialPolys;    // Contains exact shapes to plot
 
     // Plot pads
-    for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
+    for( auto module : aBoard->Modules() )
     {
         // add shapes with exact size
         module->TransformPadsShapesWithClearanceToPolygon( layer, initialPolys, 0 );

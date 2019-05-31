@@ -639,7 +639,7 @@ void PCB_EDIT_FRAME::DoShowBoardSetupDialog( const wxString& aInitialPage,
         UpdateUserInterface();
         ReCreateAuxiliaryToolbar();
 
-        for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
+        for( auto module : GetBoard()->Modules() )
             GetGalCanvas()->GetView()->Update( module );
 
         GetGalCanvas()->Refresh();
@@ -1303,11 +1303,11 @@ void PCB_EDIT_FRAME::LockModule( MODULE* aModule, bool aLocked )
     }
     else
     {
-        for( aModule = GetBoard()->m_Modules; aModule != NULL; aModule = aModule->Next() )
+        for( auto mod : GetBoard()->Modules() )
         {
-            if( WildCompareString( ModulesMaskSelection, aModule->GetReference() ) )
+            if( WildCompareString( ModulesMaskSelection, mod->GetReference() ) )
             {
-                aModule->SetLocked( aLocked );
+                mod->SetLocked( aLocked );
                 OnModify();
             }
         }

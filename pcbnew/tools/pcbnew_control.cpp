@@ -705,7 +705,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
             if( editModules )
             {
                 auto oldModule = static_cast<MODULE*>( clipItem );
-                auto newModule = board()->m_Modules.GetFirst();
+                auto newModule = board()->GetFirstModule();
 
                 for( D_PAD* pad = oldModule->PadsList(), *next = nullptr; pad; pad = next )
                 {
@@ -839,7 +839,7 @@ int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard )
     std::vector<BOARD_ITEM*> items;
 
     moveNoFlagToVector( aBoard->m_Track, items, isNew );
-    moveNoFlagToVector( aBoard->m_Modules, items, isNew );
+    moveNoFlagToVector( aBoard->Modules(), items, isNew );
     moveNoFlagToVector( aBoard->Drawings(), items, isNew );
     moveNoFlagToVector( aBoard->Zones(), items, isNew );
 

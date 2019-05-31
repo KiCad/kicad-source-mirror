@@ -603,7 +603,7 @@ void PCB_IO::formatGeneral( BOARD* aBoard, int aNestLevel ) const
 
     m_out->Print( aNestLevel+1, "(drawings %zu)\n", aBoard->Drawings().size() );
     m_out->Print( aNestLevel+1, "(tracks %d)\n", aBoard->GetNumSegmTrack() );
-    m_out->Print( aNestLevel+1, "(modules %d)\n", aBoard->m_Modules.GetCount() );
+    m_out->Print( aNestLevel + 1, "(modules %zu)\n", aBoard->Modules().size() );
     m_out->Print( aNestLevel+1, "(nets %d)\n", m_mapping->GetSize() );
     m_out->Print( aNestLevel, ")\n\n" );
 
@@ -717,7 +717,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     formatHeader( aBoard, aNestLevel );
 
     // Save the modules.
-    for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
+    for( auto module : aBoard->Modules() )
     {
         Format( module, aNestLevel );
         m_out->Print( 0, "\n" );

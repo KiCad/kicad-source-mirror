@@ -99,7 +99,7 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
 
     int count = 0;
 
-    for( MODULE* module = parent->GetBoard()->m_Modules; module; module = module->Next() )
+    for( auto module : parent->GetBoard()->Modules() )
     {
         if( WildCompareString( searchString, module->GetReference().GetData(), false ) )
         {

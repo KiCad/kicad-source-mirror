@@ -800,9 +800,7 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
         tht_inner_holes_poly.RemoveAllContours();
 
         // Insert pads holes (vertical cylinders)
-        for( const MODULE* module = m_settings.GetBoard()->m_Modules;
-             module;
-             module = module->Next() )
+        for( const auto module : m_settings.GetBoard()->Modules() )
         {
             for( const D_PAD* pad = module->PadsList(); pad; pad = pad->Next() )
             {
@@ -907,8 +905,7 @@ void C3D_RENDER_OGL_LEGACY::load_3D_models( REPORTER *aStatusTextReporter )
         return;
 
     // Go for all modules
-    for( const MODULE* module = m_settings.GetBoard()->m_Modules;
-         module; module = module->Next() )
+    for( auto module : m_settings.GetBoard()->Modules() )
     {
         if( !module->Models().empty() )
         {

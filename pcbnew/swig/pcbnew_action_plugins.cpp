@@ -225,7 +225,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     }
 
     // Append modules:
-    for( BOARD_ITEM* item = currentPcb->m_Modules; item != NULL; item = item->Next() )
+    for( auto item : currentPcb->Modules() )
     {
         ITEM_PICKER picker( item, UR_CHANGED );
         itemsList.PushItem( picker );
@@ -336,7 +336,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     }
 
     // Find new modules
-    for( BOARD_ITEM* item = currentPcb->m_Modules; item != NULL; item = item->Next() )
+    for( auto item : currentPcb->Modules() )
     {
         if( !oldBuffer->ContainsItem( item ) )
         {

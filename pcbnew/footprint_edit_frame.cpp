@@ -327,7 +327,7 @@ bool FOOTPRINT_EDIT_FRAME::IsSearchTreeShown()
 
 BOARD_ITEM_CONTAINER* FOOTPRINT_EDIT_FRAME::GetModel() const
 {
-    return GetBoard()->m_Modules;
+    return GetBoard()->GetFirstModule();
 }
 
 
@@ -345,7 +345,7 @@ LIB_ID FOOTPRINT_EDIT_FRAME::getTargetFPID() const
 
 LIB_ID FOOTPRINT_EDIT_FRAME::GetLoadedFPID() const
 {
-    MODULE* module = GetBoard()->m_Modules;
+    MODULE* module = GetBoard()->GetFirstModule();
 
     if( module )
         return LIB_ID( module->GetFPID().GetLibNickname(), m_footprintNameWhenLoaded );
@@ -356,7 +356,7 @@ LIB_ID FOOTPRINT_EDIT_FRAME::GetLoadedFPID() const
 
 bool FOOTPRINT_EDIT_FRAME::IsCurrentFPFromBoard() const
 {
-    MODULE* module = GetBoard()->m_Modules;
+    MODULE* module = GetBoard()->GetFirstModule();
 
     return ( module && module->GetLink() > 0 );
 }
@@ -498,10 +498,10 @@ double FOOTPRINT_EDIT_FRAME::BestZoom()
 
 void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    if( GetScreen()->IsModify() && GetBoard()->m_Modules )
+    if( GetScreen()->IsModify() && GetBoard()->GetFirstModule() )
     {
         if( !HandleUnsavedChanges( this, _( "Save changes to footprint before closing?" ),
-                                   [&]()->bool { return SaveFootprint( GetBoard()->m_Modules ); } ) )
+                    [&]() -> bool { return SaveFootprint( GetBoard()->GetFirstModule() ); } ) )
         {
             Event.Veto();
             return;
@@ -531,7 +531,7 @@ void FOOTPRINT_EDIT_FRAME::CloseModuleEditor( wxCommandEvent& Event )
 
 void FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Enable( GetBoard()->m_Modules != NULL );
+    aEvent.Enable( GetBoard()->GetFirstModule() != NULL );
 
     if( aEvent.GetEventObject() == m_drawToolBar )
         aEvent.Check( GetToolId() == aEvent.GetId() );
@@ -540,7 +540,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
 
 void FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Enable( GetBoard()->m_Modules != NULL );
+    aEvent.Enable( GetBoard()->GetFirstModule() != NULL );
 }
 
 
@@ -554,7 +554,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent 
 {
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, false );
 
-    aEvent.Enable( frame && frame->GetBoard()->m_Modules != NULL );
+    aEvent.Enable( frame && frame->GetBoard()->GetFirstModule() != NULL );
 }
 
 
@@ -562,23 +562,24 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent 
 {
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, false );
 
-    MODULE* module_in_edit = GetBoard()->m_Modules;
+    MODULE* module_in_edit = GetBoard()->GetFirstModule();
     bool canInsert = frame && module_in_edit && !module_in_edit->GetLink();
 
     // If the source was deleted, the module can inserted but not updated in the board.
     if( frame && module_in_edit && module_in_edit->GetLink() ) // this is not a new module
     {
         BOARD*  mainpcb = frame->GetBoard();
-        MODULE* source_module = mainpcb->m_Modules;
+        canInsert = true;
 
         // search if the source module was not deleted:
-        for( ; source_module != NULL; source_module = source_module->Next() )
+        for( auto source_module : mainpcb->Modules() )
         {
             if( module_in_edit->GetLink() == source_module->GetTimeStamp() )
+            {
+                canInsert = false;
                 break;
+            }
         }
-
-        canInsert = ( source_module == NULL );
     }
 
     aEvent.Enable( canInsert );
@@ -658,8 +659,8 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
     if( IsCurrentFPFromBoard() )
     {
         title += wxString::Format( wxT( " \u2014 %s [from %s.%s]" ),
-                                   GetBoard()->m_Modules->GetReference(),
-                                   Prj().GetProjectName(), PcbFileExtension );
+                GetBoard()->GetFirstModule()->GetReference(), Prj().GetProjectName(),
+                PcbFileExtension );
     }
     else if( fpid.IsValid() )
     {
@@ -674,15 +675,15 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
 
         // Note: don't used GetLoadedFPID(); footprint name may have been edited
         title += wxString::Format( wxT( " \u2014 %s %s" ),
-                                   FROM_UTF8( GetBoard()->m_Modules->GetFPID().Format().c_str() ),
-                                   writable ? wxString( wxEmptyString ) : _( "[Read Only]" ) );
+                FROM_UTF8( GetBoard()->GetFirstModule()->GetFPID().Format().c_str() ),
+                writable ? wxString( wxEmptyString ) : _( "[Read Only]" ) );
     }
     else if( !fpid.GetLibItemName().empty() )
     {
         // Note: don't used GetLoadedFPID(); footprint name may have been edited
         title += wxString::Format( wxT( " \u2014 %s %s" ),
-                                   FROM_UTF8( GetBoard()->m_Modules->GetFPID().GetLibItemName().c_str() ),
-                                   _( "[Unsaved]" ) );
+                FROM_UTF8( GetBoard()->GetFirstModule()->GetFPID().GetLibItemName().c_str() ),
+                _( "[Unsaved]" ) );
     }
 
     SetTitle( title );

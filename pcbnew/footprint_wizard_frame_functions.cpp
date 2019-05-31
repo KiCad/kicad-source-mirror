@@ -100,7 +100,7 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
     // Delete the current footprint
-    GetBoard()->m_Modules.DeleteAll();
+    GetBoard()->DeleteAllModules();
 
     // Creates the module
     wxString msg;
@@ -253,5 +253,4 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
         DisplayWizardInfos();
     }
 }
-
 

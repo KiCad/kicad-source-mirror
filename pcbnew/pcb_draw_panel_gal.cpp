@@ -174,7 +174,7 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
         m_view->Add( track );
 
     // Load modules and its additional elements
-    for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
+    for( auto module : aBoard->Modules() )
         m_view->Add( module );
 
     // DRC markers

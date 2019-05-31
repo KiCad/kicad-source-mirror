@@ -98,7 +98,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     if( aModule == NULL )
     {
-        if( ! frame->GetBoard() || ! frame->GetBoard()->m_Modules )
+        if( !frame->GetBoard() || !frame->GetBoard()->GetFirstModule() )
             return false;
 
         aModule = SelectFootprintFromBoard( frame->GetBoard() );
@@ -336,9 +336,8 @@ MODULE* FOOTPRINT_EDIT_FRAME::SelectFootprintFromBoard( BOARD* aPcb )
     wxString        fpname;
     wxString        msg;
     wxArrayString   listnames;
-    MODULE*         module = aPcb->m_Modules;
 
-    for(  ; module;  module = module->Next() )
+    for( auto module : aPcb->Modules() )
         listnames.Add( module->GetReference() );
 
     msg.Printf( _( "Footprints [%u items]" ), (unsigned) listnames.GetCount() );
@@ -367,15 +366,13 @@ MODULE* FOOTPRINT_EDIT_FRAME::SelectFootprintFromBoard( BOARD* aPcb )
 
     oldName = fpname;
 
-    module = aPcb->m_Modules;
-
-    for(  ;  module;  module = module->Next() )
+    for( auto mod : aPcb->Modules() )
     {
-        if( fpname == module->GetReference() )
-            break;
+        if( fpname == mod->GetReference() )
+            return mod;
     }
 
-    return module;
+    return nullptr;
 }
 
 
@@ -437,11 +434,10 @@ static PICKED_ITEMS_LIST s_PickedList;                 // a pick-list to save in
 MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
 {
     wxString        moduleName;
-    MODULE*         module = NULL;
     wxArrayString   fplist;
 
     // Build list of available fp references, to display them in dialog
-    for( MODULE* fp = GetBoard()->m_Modules; fp; fp = fp->Next() )
+    for( auto fp : GetBoard()->Modules() )
         fplist.Add( fp->GetReference() + wxT("    ( ") + fp->GetValue() + wxT(" )") );
 
     fplist.Sort();
@@ -457,18 +453,14 @@ MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
 
     if( !moduleName.IsEmpty() )
     {
-        module = GetBoard()->m_Modules;
-
-        while( module )
+        for( auto mod : GetBoard()->Modules() )
         {
-            if( module->GetReference().CmpNoCase( moduleName ) == 0 )
-                break;
-
-            module = module->Next();
+            if( mod->GetReference().CmpNoCase( moduleName ) == 0 )
+                return mod;
         }
     }
 
-    return module;
+    return nullptr;
 }
 
 

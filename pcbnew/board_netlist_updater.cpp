@@ -530,12 +530,10 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
 bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
 {
     wxString msg;
-    MODULE* nextModule;
     const COMPONENT* component;
 
-    for( MODULE* module = m_board->m_Modules; module != NULL; module = nextModule )
+    for( auto module : m_board->Modules() )
     {
-        nextModule = module->Next();
 
         if( m_lookupByTimestamp )
             component = aNetlist.GetComponentByTimeStamp( module->GetPath() );
@@ -691,7 +689,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     m_errorCount = 0;
     m_warningCount = 0;
     m_newFootprintsCount = 0;
-    MODULE* lastPreexistingFootprint = m_board->m_Modules.GetLast();
+    MODULE* lastPreexistingFootprint = m_board->Modules().back();
 
     cacheCopperZoneConnections();
 
@@ -717,7 +715,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                     component->GetFPID().Format().wx_str() );
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
-        for( MODULE* footprint = m_board->m_Modules; footprint; footprint = footprint->Next() )
+        for( auto footprint : m_board->Modules() )
         {
             bool     match = false;
 

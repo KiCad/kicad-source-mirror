@@ -488,7 +488,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
     // Add holes of modules
     // /////////////////////////////////////////////////////////////////////////
-    for( const MODULE* module = m_board->m_Modules; module; module = module->Next() )
+    for( auto module : m_board->Modules() )
     {
         const D_PAD* pad = module->PadsList();
 
@@ -522,7 +522,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
     // Add contours of the pad holes (pads can be Circle or Segment holes)
     // /////////////////////////////////////////////////////////////////////////
-    for( const MODULE* module = m_board->m_Modules; module; module = module->Next() )
+    for( auto module : m_board->Modules() )
     {
         const D_PAD* pad = module->PadsList();
 
@@ -566,7 +566,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
         CBVHCONTAINER2D *layerContainer = m_layers_container2D[curr_layer_id];
 
         // ADD PADS
-        for( const MODULE* module = m_board->m_Modules; module; module = module->Next() )
+        for( auto module : m_board->Modules() )
         {
             // Note: NPTH pads are not drawn on copper layers when the pad
             // has same shape as its hole
@@ -603,7 +603,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
             SHAPE_POLY_SET *layerPoly = m_layers_poly[curr_layer_id];
 
             // ADD PADS
-            for( const MODULE* module = m_board->m_Modules; module; module = module->Next() )
+            for( auto module : m_board->Modules() )
             {
                 // Construct polys
                 // /////////////////////////////////////////////////////////////
@@ -993,7 +993,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
         // Add modules tech layers - objects
         // /////////////////////////////////////////////////////////////////////
-        for( MODULE* module = m_board->m_Modules; module; module = module->Next() )
+        for( auto module : m_board->Modules() )
         {
             if( (curr_layer_id == F_SilkS) || (curr_layer_id == B_SilkS) )
             {
@@ -1020,7 +1020,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
         // Add modules tech layers - contours
         // /////////////////////////////////////////////////////////////////////
-        for( MODULE* module = m_board->m_Modules; module; module = module->Next() )
+        for( auto module : m_board->Modules() )
         {
             if( (curr_layer_id == F_SilkS) || (curr_layer_id == B_SilkS) )
             {

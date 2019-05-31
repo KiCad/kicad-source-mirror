@@ -406,7 +406,8 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
 
         // Delete the current footprint (MUST reset tools first)
         GetToolManager()->ResetTools( TOOL_BASE::MODEL_RELOAD );
-        GetBoard()->m_Modules.DeleteAll();
+
+        GetBoard()->DeleteAllModules();
 
         LIB_ID id;
         id.SetLibNickname( getCurNickname() );
@@ -459,7 +460,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& event )
 
         Close( true );
     }
-    else if( GetBoard()->m_Modules )
+    else if( GetBoard()->GetFirstModule() )
     {
         PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, false );
 
@@ -473,7 +474,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& event )
         BOARD_COMMIT commit( pcbframe );
 
         // Create the "new" module
-        MODULE* newmodule = new MODULE( *GetBoard()->m_Modules );
+        MODULE* newmodule = new MODULE( *GetBoard()->GetFirstModule() );
         newmodule->SetParent( pcbframe->GetBoard() );
         newmodule->SetLink( 0 );
 
@@ -584,7 +585,7 @@ void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
 
 void FOOTPRINT_VIEWER_FRAME::OnUpdateFootprintButton( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Enable( GetBoard()->m_Modules != nullptr );
+    aEvent.Enable( GetBoard()->GetFirstModule() != nullptr );
 }
 
 
@@ -765,7 +766,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
         setCurFootprintName( m_footprintList->GetString( (unsigned) selection ) );
 
         // Delete the current footprint
-        GetBoard()->m_Modules.DeleteAll();
+        GetBoard()->DeleteAllModules();
 
         MODULE* footprint = Prj().PcbFootprintLibs()->FootprintLoad( getCurNickname(),
                                                                      getCurFootprintName() );

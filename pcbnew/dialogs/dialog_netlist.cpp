@@ -178,7 +178,7 @@ void DIALOG_NETLIST::OnUpdatePCB( wxCommandEvent& event )
 
 void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
 {
-    if( m_parent->GetBoard()->m_Modules == nullptr )
+    if( m_parent->GetBoard()->GetFirstModule() == nullptr )
     {
         DisplayInfoMessage( this, _( "No footprints." ) );
         return;

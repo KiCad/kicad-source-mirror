@@ -1758,7 +1758,7 @@ void SPECCTRA_DB::exportNETCLASS( const NETCLASSPTR& aNetClass, BOARD* aBoard )
 
 void SPECCTRA_DB::FlipMODULEs( BOARD* aBoard )
 {
-    for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
+    for( auto module : aBoard->Modules() )
     {
         module->SetFlag( 0 );
         if( module->GetLayer() == B_Cu )
@@ -1779,7 +1779,7 @@ void SPECCTRA_DB::RevertMODULEs( BOARD* aBoard )
 
     // DSN Images (=KiCad MODULES and pads) must be presented from the
     // top view.  Restore those that were flipped.
-    for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
+    for( auto module : aBoard->Modules() )
     {
         if( module->GetFlag() )
         {

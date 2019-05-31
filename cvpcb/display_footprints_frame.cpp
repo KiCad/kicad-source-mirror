@@ -413,8 +413,10 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
     MODULE*               module = nullptr;
     const FOOTPRINT_INFO* module_info = nullptr;
 
-    if( GetBoard()->m_Modules.GetCount() )
-        GetBoard()->m_Modules.DeleteAll();
+    for( auto it = GetBoard()->Modules().begin(); it != GetBoard()->Modules().end(); it++ )
+        delete *it;
+
+    GetBoard()->Modules().clear();
 
     wxString footprintName = parentframe->GetSelectedFootprint();
 
@@ -436,7 +438,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
     }
 
     if( module )
-        GetBoard()->m_Modules.PushBack( module );
+        GetBoard()->Modules().push_back( module );
 
     if( module_info )
         SetStatusText( wxString::Format( _( "Lib: %s" ), module_info->GetLibNickname() ), 0 );
@@ -471,7 +473,7 @@ void DISPLAY_FOOTPRINTS_FRAME::updateView()
 
 void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
 {
-    MODULE* footprint = GetBoard()->m_Modules;
+    MODULE*         footprint = GetBoard()->GetFirstModule();
     MSG_PANEL_ITEMS items;
 
     if( footprint )
@@ -515,7 +517,9 @@ void DISPLAY_FOOTPRINTS_FRAME::SyncMenusAndToolbars()
  */
 void BOARD::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
 {
-    if( m_Modules )
-        m_Modules->Print( aFrame, aDC );
+    if( !m_modules.empty() )
+    {
+        GetFirstModule()->Print( aFrame, aDC );
+    }
 }
 

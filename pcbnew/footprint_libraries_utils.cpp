@@ -634,7 +634,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromLibrary( const LIB_ID& aFPID, bool aC
 void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString& aLibName,
                                             wxString* aLibPath )
 {
-    if( GetBoard()->m_Modules == NULL )
+    if( GetBoard()->GetFirstModule() == NULL )
     {
         DisplayInfoMessage( this, _( "No footprints to archive!" ) );
         return;
@@ -658,7 +658,7 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString&
         {
             FP_LIB_TABLE* tbl = prj.PcbFootprintLibs();
 
-            for( MODULE* curr_fp = GetBoard()->m_Modules; curr_fp; curr_fp = curr_fp->Next() )
+            for( auto curr_fp : GetBoard()->Modules() )
             {
                 if( !curr_fp->GetFPID().GetLibItemName().empty() )   // Can happen with old boards.
                     tbl->FootprintSave( nickname, curr_fp, false );
@@ -684,7 +684,7 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString&
         IO_MGR::PCB_FILE_T  piType = IO_MGR::KICAD_SEXP;
         PLUGIN::RELEASER  pi( IO_MGR::PluginFind( piType ) );
 
-        for( MODULE* curr_fp = GetBoard()->m_Modules; curr_fp; curr_fp = curr_fp->Next() )
+        for( auto curr_fp : GetBoard()->Modules() )
         {
             try
             {
@@ -794,18 +794,21 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
 
     BOARD*  mainpcb  = pcbframe->GetBoard();
     MODULE* source_module  = NULL;
-    MODULE* module_in_edit = GetBoard()->m_Modules;
+    MODULE* module_in_edit = GetBoard()->GetFirstModule();
 
     // Search the old module (source) if exists
     // Because this source could be deleted when editing the main board...
     if( module_in_edit->GetLink() )        // this is not a new module ...
     {
-        source_module = mainpcb->m_Modules;
+        source_module = nullptr;
 
-        for( ; source_module != NULL; source_module = source_module->Next() )
+        for( auto mod : mainpcb->Modules() )
         {
             if( module_in_edit->GetLink() == source_module->GetTimeStamp() )
+            {
+                source_module = mod;
                 break;
+            }
         }
     }
 

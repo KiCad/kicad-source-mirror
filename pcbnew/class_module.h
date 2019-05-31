@@ -119,9 +119,6 @@ public:
         return aItem && PCB_MODULE_T == aItem->Type();
     }
 
-    MODULE* Next() const { return static_cast<MODULE*>( Pnext ); }
-    MODULE* Back() const { return static_cast<MODULE*>( Pback ); }
-
     ///> @copydoc BOARD_ITEM_CONTAINER::Add()
     void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_INSERT ) override;
 

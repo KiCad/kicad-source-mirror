@@ -1478,23 +1478,25 @@ void DRC::doFootprintOverlappingDrc()
 void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS_T aUnits,
                           DRC_LIST& aDRCList )
 {
-    MODULE*                 module;
-    MODULE*                 nextModule;
+    auto mods = aPCB->Modules();
+
+    std::sort( mods.begin(), mods.end(), []( const MODULE* a, const MODULE* b ) {
+        return a->GetReference().CmpNoCase( b->GetReference() );
+    } );
 
     // Search for duplicate footprints.
-    for( module = aPCB->m_Modules; module != NULL; module = module->Next() )
+    for( auto it = mods.begin(); it != mods.end(); it++ )
     {
-        nextModule = module->Next();
+        auto next_it = it + 1;
 
-        for( ; nextModule != NULL; nextModule = nextModule->Next() )
+        if( next_it == mods.end() )
+            break;
+
+        if( ( *it )->GetReference().CmpNoCase( ( *next_it )->GetReference() ) == 0 )
         {
-            if( module->GetReference().CmpNoCase( nextModule->GetReference() ) == 0 )
-            {
-                aDRCList.emplace_back( new DRC_ITEM( aUnits, DRCE_DUPLICATE_FOOTPRINT,
-                                                     module, module->GetPosition(),
-                                                     nextModule, nextModule->GetPosition() ) );
-                break;
-            }
+            aDRCList.emplace_back( new DRC_ITEM( aUnits, DRCE_DUPLICATE_FOOTPRINT, *it,
+                    ( *it )->GetPosition(), *next_it, ( *next_it )->GetPosition() ) );
+            break;
         }
     }
 
@@ -1503,7 +1505,7 @@ void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS_T aUnits,
     {
         COMPONENT* component = aNetlist.GetComponent( ii );
 
-        module = aPCB->FindModuleByReference( component->GetReference() );
+        auto module = aPCB->FindModuleByReference( component->GetReference() );
 
         if( module == NULL )
         {
@@ -1516,9 +1518,8 @@ void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS_T aUnits,
     }
 
     // Search for component footprints found on board but not in netlist.
-    for( module = aPCB->m_Modules; module != NULL; module = module->Next() )
+    for( auto module : mods )
     {
-
         COMPONENT* component = aNetlist.GetComponentByReference( module->GetReference() );
 
         if( component == NULL )

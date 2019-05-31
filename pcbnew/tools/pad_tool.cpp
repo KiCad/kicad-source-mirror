@@ -161,7 +161,7 @@ void PAD_TOOL::Reset( RESET_REASON aReason )
 bool PAD_TOOL::haveFootprints()
 {
     auto& board = *getModel<BOARD>();
-    return board.m_Modules.GetCount() > 0;
+    return board.Modules().size() > 0;
 }
 
 
@@ -267,7 +267,7 @@ static void doPushPadProperties( BOARD& board, const D_PAD& aSrcPad, BOARD_COMMI
 
     double pad_orient = aSrcPad.GetOrientation() - moduleRef->GetOrientation();
 
-    for( const MODULE* module = board.m_Modules; module; module = module->Next() )
+    for( auto module : board.Modules() )
     {
         if( !aSameFootprints && ( module != moduleRef ) )
             continue;

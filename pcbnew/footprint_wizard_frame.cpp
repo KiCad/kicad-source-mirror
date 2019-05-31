@@ -324,7 +324,7 @@ void FOOTPRINT_WIZARD_FRAME::updateView()
 
 void FOOTPRINT_WIZARD_FRAME::UpdateMsgPanel()
 {
-    BOARD_ITEM* footprint = GetBoard()->m_Modules;
+    BOARD_ITEM* footprint = GetBoard()->GetFirstModule();
 
     if( footprint )
     {

@@ -119,7 +119,7 @@ using namespace std::placeholders;
 
 static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 {
-    static std::list<BOARD_ITEM*> itemsList;
+    static std::set<BOARD_ITEM*> itemsList;
 
     if( aItem == NULL ) // Build list
     {
@@ -130,33 +130,30 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
         // Store items in list:
         // Append tracks:
         for( item = aPcb->m_Track; item != NULL; item = item->Next() )
-            itemsList.push_back( item );
+            itemsList.insert( item );
 
         // Append modules:
-        for( item = aPcb->m_Modules; item != NULL; item = item->Next() )
-            itemsList.push_back( item );
+        std::copy( aPcb->Modules().begin(), aPcb->Modules().end(),
+                std::inserter( itemsList, itemsList.end() ) );
 
         // Append drawings
         for( auto ditem : aPcb->Drawings() )
-            itemsList.push_back( ditem );
+            itemsList.insert( ditem );
 
         // Append zones outlines
         for( int ii = 0; ii < aPcb->GetAreaCount(); ii++ )
-            itemsList.push_back( aPcb->GetArea( ii ) );
+            itemsList.insert( aPcb->GetArea( ii ) );
 
         NETINFO_LIST& netInfo = aPcb->GetNetInfo();
 
         for( NETINFO_LIST::iterator i = netInfo.begin(); i != netInfo.end(); ++i )
-            itemsList.push_back( *i );
-
-        // Sort list
-        itemsList.sort();
+            itemsList.insert( *i );
 
         return false;
     }
 
     // search in list:
-    return std::binary_search( itemsList.begin(), itemsList.end(), aItem );
+    return itemsList.count( aItem );
 }
 
 static void SwapItemData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )

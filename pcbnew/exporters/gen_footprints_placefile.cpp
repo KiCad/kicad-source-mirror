@@ -431,8 +431,6 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
                                                  bool aForceSmdItems, int aSide,
                                                  bool aFormatCSV )
 {
-    MODULE*     footprint;
-
     // Minimal text lengths:
     int lenRefText = 8;
     int lenValText = 8;
@@ -451,7 +449,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
     std::vector<LIST_MOD> list;
     list.reserve( footprintCount );
 
-    for( footprint = GetBoard()->m_Modules; footprint; footprint = footprint->Next() )
+    for( auto footprint : GetBoard()->Modules() )
     {
         if( aSide != PCB_BOTH_SIDES )
         {
@@ -696,7 +694,7 @@ bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool 
 
     fputs( "$EndBOARD\n\n", rptfile );
 
-    for( MODULE* Module = GetBoard()->m_Modules;  Module;  Module = Module->Next() )
+    for( auto Module : GetBoard()->Modules() )
     {
         fprintf( rptfile, "$MODULE %s\n", EscapedUTF8( Module->GetReference() ).c_str() );
 

@@ -902,9 +902,9 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 
     case PCB_MODULE_T:
         if( aMode == ADD_APPEND )
-            m_Modules.PushBack( (MODULE*) aBoardItem );
+            m_modules.push_back( (MODULE*) aBoardItem );
         else
-            m_Modules.PushFront( (MODULE*) aBoardItem );
+            m_modules.push_front( (MODULE*) aBoardItem );
 
         break;
 
@@ -977,7 +977,8 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
         break;
 
     case PCB_MODULE_T:
-        m_Modules.Remove( (MODULE*) aBoardItem );
+        m_modules.erase( std::remove_if( m_modules.begin(), m_modules.end(),
+                [aBoardItem]( BOARD_ITEM* aItem ) { return aItem == aBoardItem; } ) );
         break;
 
     case PCB_TRACE_T:
@@ -1123,7 +1124,7 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
     if( !aBoardEdgesOnly )
     {
         // Check modules
-        for( MODULE* module = m_Modules; module; module = module->Next() )
+        for( auto module : m_modules )
         {
             if( !( module->GetLayerSet() & visible ).any() )
                 continue;
@@ -1240,7 +1241,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
         case PCB_MODULE_EDGE_T:
 
             // this calls MODULE::Visit() on each module.
-            result = IterateForward( m_Modules, inspector, testData, p );
+            result = IterateForward<MODULE*>( m_modules, inspector, testData, p );
 
             // skip over any types handled in the above call.
             for( ; ; )
@@ -1434,7 +1435,7 @@ MODULE* BOARD::FindModule( const wxString& aRefOrTimeStamp, bool aSearchByTimeSt
 {
     if( aSearchByTimeStamp )
     {
-        for( MODULE* module = m_Modules;  module;  module = module->Next() )
+        for( auto module : m_modules )
         {
             if( aRefOrTimeStamp.CmpNoCase( module->GetPath() ) == 0 )
                 return module;
@@ -1605,7 +1606,7 @@ D_PAD* BOARD::GetPad( const wxPoint& aPosition, LSET aLayerSet )
     if( !aLayerSet.any() )
         aLayerSet = LSET::AllCuMask();
 
-    for( MODULE* module = m_Modules;  module;  module = module->Next() )
+    for( auto module : m_modules )
     {
         D_PAD* pad = NULL;
 
@@ -2137,14 +2138,13 @@ TRACK* BOARD::MarkTrace( TRACK* aTrackList, TRACK*  aTrace, int* aCount,
 MODULE* BOARD::GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer,
                              bool aVisibleOnly, bool aIgnoreLocked )
 {
-    MODULE* pt_module;
     MODULE* module      = NULL;
     MODULE* alt_module  = NULL;
     int     min_dim     = 0x7FFFFFFF;
     int     alt_min_dim = 0x7FFFFFFF;
     bool    current_layer_back = IsBackLayer( aActiveLayer );
 
-    for( pt_module = m_Modules;  pt_module;  pt_module = pt_module->Next() )
+    for( auto pt_module : m_modules )
     {
         // is the ref point within the module's bounds?
         if( !pt_module->HitTest( aPosition ) )
@@ -2205,7 +2205,7 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer
 
 BOARD_CONNECTED_ITEM* BOARD::GetLockPoint( const wxPoint& aPosition, LSET aLayerSet )
 {
-    for( MODULE* module = m_Modules; module; module = module->Next() )
+    for( auto module : m_modules )
     {
         D_PAD* pad = module->GetPad( aPosition, aLayerSet );
 
@@ -2497,9 +2497,9 @@ D_PAD* BOARD::GetPad( unsigned aIndex ) const
 {
     unsigned count = 0;
 
-    for( MODULE* mod = m_Modules; mod ; mod = mod->Next() ) // FIXME: const DLIST_ITERATOR
+    for( auto mod : m_modules )
     {
-        for( D_PAD* pad = mod->PadsList(); pad; pad = pad->Next() )
+        for( auto pad : mod->Pads() )
         {
             if( count == aIndex )
                 return pad;

@@ -110,7 +110,7 @@ void BOARD::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
 
     LSET all_cu = LSET::AllCuMask();
 
-    for( MODULE* module = m_Modules; module; module = module->Next() )
+    for( auto module : m_modules )
     {
         bool    display = true;
         LSET    layerMask = all_cu;

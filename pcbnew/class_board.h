@@ -34,17 +34,18 @@
 #include <dlist.h>
 #include <core/iterators.h>
 
-#include <common.h>                         // PAGE_INFO
-#include <layers_id_colors_and_visibility.h>
-#include <netinfo.h>
+#include <board_design_settings.h>
+#include <board_item_container.h>
+#include <class_module.h>
 #include <class_pad.h>
 #include <colors_design_settings.h>
-#include <board_design_settings.h>
+#include <common.h> // PAGE_INFO
+#include <eda_rect.h>
+#include <layers_id_colors_and_visibility.h>
+#include <netinfo.h>
+#include <pcb_plot_params.h>
 #include <title_block.h>
 #include <zone_settings.h>
-#include <pcb_plot_params.h>
-#include <board_item_container.h>
-#include <eda_rect.h>
 
 #include <memory>
 
@@ -158,10 +159,11 @@ protected:
 };
 
 
-DECL_VEC_FOR_SWIG(MARKERS, MARKER_PCB*)
-DECL_VEC_FOR_SWIG(ZONE_CONTAINERS, ZONE_CONTAINER*)
-DECL_VEC_FOR_SWIG(TRACKS, TRACK*)
-DECL_DEQ_FOR_SWIG(DRAWINGS, BOARD_ITEM*)
+DECL_VEC_FOR_SWIG( MARKERS, MARKER_PCB* )
+DECL_VEC_FOR_SWIG( ZONE_CONTAINERS, ZONE_CONTAINER* )
+DECL_VEC_FOR_SWIG( TRACKS, TRACK* )
+DECL_DEQ_FOR_SWIG( DRAWINGS, BOARD_ITEM* )
+DECL_DEQ_FOR_SWIG( MODULES, MODULE* )
 
 
 /**
@@ -181,6 +183,9 @@ private:
 
     /// BOARD_ITEMs for drawings on the board, owned by pointer.
     DRAWINGS                m_drawings;
+
+    /// MODULES for components on the board, owned by pointer.
+    MODULES                 m_modules;
 
     /// edge zone descriptors, owned by pointer.
     ZONE_CONTAINERS         m_ZoneDescriptorList;
@@ -245,11 +250,17 @@ public:
 
 public:
 
-    DLIST<MODULE>               m_Modules;              // linked list of MODULEs
     DLIST<TRACK>                m_Track;                // linked list of TRACKs and VIAs
 
     DLIST_ITERATOR_WRAPPER<TRACK> Tracks() { return DLIST_ITERATOR_WRAPPER<TRACK>(m_Track); }
-    DLIST_ITERATOR_WRAPPER<MODULE> Modules() { return DLIST_ITERATOR_WRAPPER<MODULE>(m_Modules); }
+    MODULES&                      Modules()
+    {
+        return m_modules;
+    }
+    const MODULES& Modules() const
+    {
+        return m_modules;
+    }
     DRAWINGS& Drawings() { return m_drawings; }
     ZONE_CONTAINERS& Zones() { return m_ZoneDescriptorList; }
     const std::vector<BOARD_CONNECTED_ITEM*> AllConnectedItems();
@@ -265,7 +276,7 @@ public:
 
     bool IsEmpty() const
     {
-        return m_drawings.empty() && m_Modules.GetCount() == 0 && m_Track.GetCount() == 0;
+        return m_drawings.empty() && m_modules.empty() && m_Track.GetCount() == 0;
     }
 
     void Move( const wxPoint& aMoveVector ) override;
@@ -276,6 +287,26 @@ public:
     void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_INSERT ) override;
 
     void Remove( BOARD_ITEM* aBoardItem ) override;
+
+    /**
+     * Gets the first module in the list (used in footprint viewer/editor) or NULL if none
+     * @return first module or null pointer
+     */
+    MODULE* GetFirstModule() const
+    {
+        return m_modules.empty() ? nullptr : m_modules.front();
+    }
+
+    /**
+     * Removes all modules from the deque and frees the memory associated with them
+     */
+    void DeleteAllModules()
+    {
+        for( MODULE* mod : m_modules )
+            delete mod;
+
+        m_modules.clear();
+    }
 
     BOARD_ITEM* GetItem( void* aWeakReference );
 

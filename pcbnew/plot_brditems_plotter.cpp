@@ -430,7 +430,7 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( PCB_TARGET* aMire )
 // Plot footprints graphic items (outlines)
 void BRDITEMS_PLOTTER::Plot_Edges_Modules()
 {
-    for( MODULE* module = m_board->m_Modules;  module;  module = module->Next() )
+    for( auto module : m_board->Modules() )
     {
         for( BOARD_ITEM* item = module->GraphicalItemsList().GetFirst(); item; item = item->Next() )
         {
@@ -843,7 +843,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
         }
     }
 
-    for( MODULE* Module = m_board->m_Modules; Module != NULL; Module = Module->Next() )
+    for( auto Module : m_board->Modules() )
     {
         for( D_PAD* pad = Module->PadsList(); pad != NULL; pad = pad->Next() )
         {

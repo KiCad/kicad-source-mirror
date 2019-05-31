@@ -110,7 +110,6 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
 
     BOARD*            pcb = m_Parent->GetBoard();
     BOARD_COMMIT      commit( m_Parent );
-    BOARD_ITEM*       item;
 
     LSET layers_filter = LSET().set();
 
@@ -120,7 +119,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
     if( delAll || m_DelZones->GetValue() )
     {
         int area_index = 0;
-        item = pcb->GetArea( area_index );
+        auto item = pcb->GetArea( area_index );
 
         while( item )
         {
@@ -170,7 +169,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
 
     if( delAll || m_DelModules->GetValue() )
     {
-        for( item = pcb->m_Modules; item; item = item->Next() )
+        for( auto item : pcb->Modules() )
         {
             bool del_fp = delAll;
 

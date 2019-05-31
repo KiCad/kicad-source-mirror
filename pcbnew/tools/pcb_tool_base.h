@@ -138,7 +138,10 @@ protected:
     KIGFX::VIEW_CONTROLS* controls() const { return getViewControls(); }
     PCB_EDIT_FRAME* frame() const { return getEditFrame<PCB_EDIT_FRAME>(); }
     BOARD* board() const { return getModel<BOARD>(); }
-    MODULE* module() const { return board()->m_Modules; }
+    MODULE*               module() const
+    {
+        return board()->Modules().front();
+    }
     PCB_DISPLAY_OPTIONS* displayOptions() const;
     PCB_DRAW_PANEL_GAL* canvas() const;
     const SELECTION& selection() const;

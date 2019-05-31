@@ -132,7 +132,7 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER* 
     }
 
     // Build clearance cache for pads
-    for( MODULE* mod = m_board->m_Modules; mod ; mod = mod->Next() )
+    for( auto mod : m_board->Modules() )
     {
         auto moduleClearance = mod->GetLocalClearance();
 

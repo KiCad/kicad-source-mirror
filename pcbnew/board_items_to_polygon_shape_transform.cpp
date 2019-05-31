@@ -83,7 +83,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
     }
 
     // convert pads
-    for( MODULE* module = m_Modules; module != NULL; module = module->Next() )
+    for( auto module : m_modules )
     {
         module->TransformPadsShapesWithClearanceToPolygon( aLayer, aOutlines, 0 );
 

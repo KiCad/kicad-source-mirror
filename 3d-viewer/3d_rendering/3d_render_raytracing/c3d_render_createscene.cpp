@@ -1183,9 +1183,7 @@ void C3D_RENDER_RAYTRACING::add_3D_vias_and_pads_to_container()
     }
 
     // Insert pads holes (vertical cylinders)
-    for( const MODULE* module = m_settings.GetBoard()->m_Modules;
-         module;
-         module = module->Next() )
+    for( auto module : m_settings.GetBoard()->Modules() )
     {
         for( const D_PAD* pad = module->PadsList(); pad; pad = pad->Next() )
             if( pad->GetAttribute () != PAD_ATTRIB_HOLE_NOT_PLATED )
@@ -1199,9 +1197,7 @@ void C3D_RENDER_RAYTRACING::add_3D_vias_and_pads_to_container()
 void C3D_RENDER_RAYTRACING::load_3D_models()
 {
     // Go for all modules
-    for( const MODULE* module = m_settings.GetBoard()->m_Modules;
-         module;
-         module = module->Next() )
+    for( auto module : m_settings.GetBoard()->Modules() )
     {
         if( (!module->Models().empty() ) &&
             m_settings.ShouldModuleBeDisplayed( (MODULE_ATTR_T)module->GetAttributes() ) )

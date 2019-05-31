@@ -1085,7 +1085,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
         if( m_editModules )
         {
-            dupe_item = editFrame->GetBoard()->m_Modules->Duplicate( orig_item, increment );
+            dupe_item = editFrame->GetBoard()->GetFirstModule()->Duplicate( orig_item, increment );
         }
         else
         {

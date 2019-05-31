@@ -377,7 +377,7 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
     MODULE  dummymodule( m_board );   // Creates a dummy parent
     D_PAD   dummypad( &dummymodule );
 
-    for( MODULE* module = m_board->m_Modules; module; module = module->Next() )
+    for( auto module : m_board->Modules() )
     {
         D_PAD* nextpad;
 

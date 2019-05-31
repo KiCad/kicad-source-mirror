@@ -40,7 +40,7 @@ bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName )
 
     fprintf( cmpFile, "Cmp-Mod V01 Created by PcbNew   date = %s\n", TO_UTF8( DateAndTime() ) );
 
-    for( MODULE* module = aBrd->m_Modules; module != NULL; module = module->Next() )
+    for( auto module : aBrd->Modules() )
     {
         fprintf( cmpFile, "\nBeginCmp\n" );
         fprintf( cmpFile, "TimeStamp = %8.8lX\n", (unsigned long)module->GetTimeStamp() );

@@ -980,18 +980,13 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models( bool aRenderTopOrBot,
                                               bool aRenderTransparentOnly )
 {
     // Go for all modules
-    if( m_settings.GetBoard()->m_Modules.GetCount() )
+    for( auto module : m_settings.GetBoard()->Modules() )
     {
-        for( const MODULE* module = m_settings.GetBoard()->m_Modules;
-             module;
-             module = module->Next() )
-        {
-            if( !module->Models().empty() )
-                if( m_settings.ShouldModuleBeDisplayed( (MODULE_ATTR_T)module->GetAttributes() ) )
-                    if( ( aRenderTopOrBot && !module->IsFlipped()) ||
-                        (!aRenderTopOrBot &&  module->IsFlipped()) )
-                        render_3D_module( module, aRenderTransparentOnly );
-        }
+        if( !module->Models().empty() )
+            if( m_settings.ShouldModuleBeDisplayed( (MODULE_ATTR_T) module->GetAttributes() ) )
+                if( ( aRenderTopOrBot && !module->IsFlipped() )
+                        || ( !aRenderTopOrBot && module->IsFlipped() ) )
+                    render_3D_module( module, aRenderTransparentOnly );
     }
 }
 

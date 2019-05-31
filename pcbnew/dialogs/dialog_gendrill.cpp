@@ -153,7 +153,7 @@ void DIALOG_GENDRILL::InitDisplayParams()
     m_microViasCount   = 0;
     m_blindOrBuriedViasCount = 0;
 
-    for( MODULE* module = m_board->m_Modules;  module;  module = module->Next() )
+    for( auto module : m_board->Modules() )
     {
         for( D_PAD* pad = module->PadsList(); pad != NULL; pad = pad->Next() )
         {
