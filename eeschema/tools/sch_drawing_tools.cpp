@@ -275,7 +275,7 @@ int SCH_DRAWING_TOOLS::PlacePower( const TOOL_EVENT& aEvent )
 
 
 int SCH_DRAWING_TOOLS::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER* aFilter,
-                                         SCH_BASE_FRAME::HISTORY_LIST aHistoryList )
+                                         SCH_BASE_FRAME::HISTORY_LIST& aHistoryList )
 {
     VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
     getViewControls()->ShowCursor( true );

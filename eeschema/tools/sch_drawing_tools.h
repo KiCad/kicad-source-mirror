@@ -73,7 +73,7 @@ public:
 private:
 
     int doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER* aFilter,
-                          SCH_BASE_FRAME::HISTORY_LIST aHistoryList );
+                          SCH_BASE_FRAME::HISTORY_LIST& aHistoryList );
 
     int doSingleClickPlace( KICAD_T aType );
 
