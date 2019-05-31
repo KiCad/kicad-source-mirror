@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-08 21:33+0100\n"
-"PO-Revision-Date: 2019-05-30 18:19+0200\n"
+"PO-Revision-Date: 2019-05-31 18:07+0200\n"
 "Last-Translator: szlldm\n"
 "Language-Team: szlldm\n"
 "Language: hu_HU\n"
@@ -23,11 +23,11 @@ msgstr "3D modell kiválasztása"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:136
 msgid "Paths:"
-msgstr "Elérési utak:"
+msgstr "Elérési útvonalak:"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:137 common/dialogs/dialog_configure_paths_base.h:73
 msgid "Configure Paths"
-msgstr "Elérési utak konfigurálása"
+msgstr "Elérési útvonalak konfigurálása"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:142 common/dialog_about/dialog_about_base.cpp:75 common/dialogs/dialog_display_info_HTML_base.cpp:24
 #: eeschema/dialogs/dialog_netlist_base.cpp:117 gerbview/dialogs/dialog_select_one_pcb_layer.cpp:181 pcbnew/microwave.cpp:454
@@ -551,7 +551,7 @@ msgstr "Gyorsbillentyűk és a hozzájuk tartozó parancsok megjelenítése"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:318 eeschema/libedit/menubar_libedit.cpp:382 eeschema/menubar.cpp:609 eeschema/tool_viewlib.cpp:186
 #: gerbview/menubar.cpp:369 kicad/menubar.cpp:427 pagelayout_editor/menubar.cpp:200 pcbnew/menubar_footprint_editor.cpp:481 pcbnew/menubar_pcb_editor.cpp:438
 msgid "Get &Involved"
-msgstr "KiCad-hez csatlakozás"
+msgstr "Részvétel a fejlesztésben"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:319 eeschema/libedit/menubar_libedit.cpp:383 eeschema/menubar.cpp:610 eeschema/tool_viewlib.cpp:187
 #: gerbview/menubar.cpp:370 kicad/menubar.cpp:428 pagelayout_editor/menubar.cpp:201 pcbnew/menubar_footprint_editor.cpp:482 pcbnew/menubar_pcb_editor.cpp:439
@@ -561,7 +561,7 @@ msgstr "Közreműködés a KiCad fejlesztésében (böngészőt nyit)"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:325 cvpcb/menubar.cpp:102 eeschema/libedit/menubar_libedit.cpp:389 eeschema/menubar.cpp:614 gerbview/menubar.cpp:376
 #: kicad/menubar.cpp:434 pagelayout_editor/menubar.cpp:208 pcbnew/menubar_footprint_editor.cpp:487 pcbnew/menubar_pcb_editor.cpp:444
 msgid "&About KiCad"
-msgstr "A KiCad-ről"
+msgstr "Névjegy"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:326
 msgid "Display KiCad About dialog"
@@ -630,7 +630,7 @@ msgstr "A 3D modellek határoló dobozainak megjelenítése"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:78 pcbnew/menubar_pcb_editor.cpp:647 pcbnew/tool_pcb_editor.cpp:394
 msgid "Show filled areas in zones"
-msgstr "A zónákban lévő rézkitöltések megjelenítése"
+msgstr "Zónakitöltések megjelenítése"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:95
 msgid "3D model visibility:"
@@ -817,7 +817,7 @@ msgstr "Logo fájl létrehozása"
 #: bitmap2component/bitmap2cmp_gui.cpp:670
 #, c-format
 msgid "File \"%s\" could not be created."
-msgstr "A \"%s\" fájl nem hozható létre."
+msgstr "A(z) \"%s\" fájl nem hozható létre."
 
 #: bitmap2component/bitmap2cmp_gui.cpp:576
 msgid "Create Postscript File"
@@ -934,19 +934,19 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:129
 msgid "Eeschema (.lib file)"
-msgstr "Kapcsolási rajz tervező könyvtár *.lib fájl"
+msgstr "Kapcsolási rajz tervező könyvtár fájl (*.lib)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:129
 msgid "Pcbnew (.kicad_mod file)"
-msgstr "Nyáktervező *.kicad_mod fájl"
+msgstr "Nyáktervező fájl (*.kicad_mod)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:129
 msgid "Postscript (.ps file)"
-msgstr "Postscript *.ps fájl"
+msgstr "Postscript fájl (*.ps)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:129
 msgid "Logo for title block (.kicad_wks file)"
-msgstr "Rajz-fejléc logo *.kicad_wks fájl"
+msgstr "Rajz-fejléc logo fájl (*.kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:131
 msgid "Format:"
@@ -1167,7 +1167,7 @@ msgstr "Nem sikerült a környezeti változók kiterjesztése. Hiányzó '%c' a 
 #: common/common.cpp:498
 #, c-format
 msgid "Cannot make path \"%s\" absolute with respect to \"%s\"."
-msgstr "Az \"%s\" elérési út nem tehető abszolúttá az \"%s\" tekintetében."
+msgstr "A(z) \"%s\" elérési út nem tehető abszolúttá a(z) \"%s\" tekintetében."
 
 #: common/common.cpp:516
 #, c-format
@@ -1533,7 +1533,7 @@ msgstr "Mindenre alkalmaz"
 
 #: common/dialogs/dialog_exit_base.cpp:55
 msgid "Discard Changes"
-msgstr "Módosítások eldobása"
+msgstr "Módosítások elvetése"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:39
 #, c-format
@@ -1568,7 +1568,7 @@ msgstr "Egyedi globális '%s' könyvtártáblázat másolása"
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
 msgid "Select this option to copy a %s library table file other than the default"
-msgstr "Válassza ezt az opciót a '%s' könyvtártáblázat fájl másolásához"
+msgstr "Válassza ezt az opciót a(z) '%s' könyvtártáblázat fájl másolásához"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:61
 #, c-format
@@ -1578,7 +1578,7 @@ msgstr "Egy üres globális %s könyvtártáblázat létrehozása"
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
 msgid "Select this option to define %s libraries in project specific library tables"
-msgstr "Válassza ezt a lehetőséget a %s könyvtárak megadásához a projekt specifikus könyvtártáblázatokban"
+msgstr "Válassza ezt a lehetőséget a(z) %s könyvtárak megadásához a projekt specifikus könyvtártáblázatokban"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:67
 #, c-format
@@ -1588,23 +1588,23 @@ msgstr "Válassza ki a globális %s könyvtártáblázat fájlt:"
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21 common/dialogs/dialog_global_lib_table_config_base.cpp:30
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:35 common/dialogs/dialog_global_lib_table_config_base.cpp:40
 msgid "Temp"
-msgstr ""
+msgstr "Temp"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
 msgid "temp1"
-msgstr ""
+msgstr "temp1"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:34
 msgid "temp2"
-msgstr ""
+msgstr "temp2"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:39
 msgid "temp3"
-msgstr ""
+msgstr "temp3"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:47
 msgid "temp"
-msgstr ""
+msgstr "temp"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:51
 msgid "Select a file"
@@ -1735,7 +1735,7 @@ msgstr "Álló"
 #: common/dialogs/dialog_page_settings.cpp:441
 #, c-format
 msgid "Page layout description file \"%s\" not found."
-msgstr "A \"%s\" papírelrendezés fájl nem található."
+msgstr "A(z) \"%s\" papírelrendezés fájl nem található."
 
 #: common/dialogs/dialog_page_settings.cpp:512
 msgid "the translation for paper size must preserve original spellings"
@@ -1770,7 +1770,7 @@ msgstr "Papír paraméterek"
 
 #: common/dialogs/dialog_page_settings_base.cpp:36
 msgid "dummy text"
-msgstr ""
+msgstr "dummy text"
 
 #: common/dialogs/dialog_page_settings_base.cpp:42 eeschema/dialogs/dialog_lib_edit_text_base.cpp:86 pcbnew/dialogs/dialog_pad_properties_base.cpp:131
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:146
@@ -2241,7 +2241,7 @@ msgstr "Az '%s' már léltezik"
 #: common/dsnlexer.cpp:433
 #, c-format
 msgid "need a NUMBER for \"%s\""
-msgstr "szükség van egy számra a \"%s\" számára"
+msgstr "szükség van egy számra a(z) \"%s\" számára"
 
 #: common/dsnlexer.cpp:705 common/dsnlexer.cpp:765
 msgid "Un-terminated delimited string"
@@ -2264,7 +2264,7 @@ msgid ""
 " or\n"
 "\"%s\" could not be found."
 msgstr ""
-"A *.html vagy *.pdf súgófájl nem található.\n"
+"A HTML vagy PDF súgófájl nem található.\n"
 "\n"
 "A hiányzó fájlok:\n"
 "\n"
@@ -2277,7 +2277,7 @@ msgstr ""
 #, c-format
 msgid "Help file \"%s\" could not be found."
 msgstr ""
-"A \"%s\" felhasználói kézikönyv nem található.\n"
+"A(z) \"%s\" felhasználói kézikönyv nem található.\n"
 "\n"
 "Valószínűleg nem telepítette."
 
@@ -2310,17 +2310,17 @@ msgstr "Gyorsbillentyűk"
 #: common/eda_base_frame.cpp:561
 #, c-format
 msgid "You do not have write permissions to folder \"%s\"."
-msgstr "Nincs írási jogosultsága a \"%s\" könyvtárban."
+msgstr "Nincs írási jogosultsága a(z) \"%s\" könyvtárban."
 
 #: common/eda_base_frame.cpp:566
 #, c-format
 msgid "You do not have write permissions to save file \"%s\" to folder \"%s\"."
-msgstr "Nincs írási jogosultsága a \"%s\" fájl mentéséhez a \"%s\" könyvtárban."
+msgstr "Nincs írási jogosultsága a(z) \"%s\" fájl mentéséhez a(z) \"%s\" könyvtárban."
 
 #: common/eda_base_frame.cpp:571
 #, c-format
 msgid "You do not have write permissions to save file \"%s\"."
-msgstr "Nincs írási jogosultsága a \"%s\" fájl mentéséhez."
+msgstr "Nincs írási jogosultsága a(z) \"%s\" fájl mentéséhez."
 
 #: common/eda_base_frame.cpp:603
 #, c-format
@@ -2339,7 +2339,7 @@ msgstr ""
 #: common/eda_base_frame.cpp:631
 #, c-format
 msgid "Could not create backup file \"%s\""
-msgstr "Nem lehetett létrehozni a \"%s\" biztonsági másolat fájlt"
+msgstr "Nem lehetett létrehozni a(z) \"%s\" biztonsági másolat fájlt"
 
 #: common/eda_base_frame.cpp:639
 msgid "The auto save file could not be renamed to the board file name."
@@ -2352,12 +2352,12 @@ msgstr "Dokumentum fájlok"
 #: common/eda_doc.cpp:163
 #, c-format
 msgid "Doc File \"%s\" not found"
-msgstr "A \"%s\" dokumentum fájl nem található"
+msgstr "Av \"%s\" dokumentum fájl nem található"
 
 #: common/eda_doc.cpp:206
 #, c-format
 msgid "Unknown MIME type for doc file \"%s\""
-msgstr "A \"%s\" dokumentum fájl MIME típusa ismeretlen"
+msgstr "A(z) \"%s\" dokumentum fájl MIME típusa ismeretlen"
 
 #: common/eda_size_ctrl.cpp:39
 msgid " X:"
@@ -2521,23 +2521,23 @@ msgstr "Hiba történt egy alkatrészrajzolat betöltése közben:"
 #: common/fp_lib_table.cpp:198
 #, c-format
 msgid "Duplicate library nickname \"%s\" found in footprint library table file line %d"
-msgstr "A \"%s\" könyvtárnév már létezik az alkatrészrajzolat könyvtártáblázat %d. sorában"
+msgstr "A(z) \"%s\" könyvtárnév már létezik az alkatrészrajzolat könyvtártáblázat %d. sorában"
 
 #: common/fp_lib_table.cpp:289
 #, c-format
 msgid "fp-lib-table files contain no library with nickname \"%s\""
-msgstr "A \"fp-lib-table\" fájlok nem tartalmazzák a \"%s\" könyvtárnevet"
+msgstr "A \"fp-lib-table\" fájlok nem tartalmazzák a(z) \"%s\" könyvtárnevet"
 
 #: common/fp_lib_table.cpp:475 eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:110 eeschema/symbol_lib_table.cpp:488
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:110
 #, c-format
 msgid "Cannot create global library table path \"%s\"."
-msgstr "A \"%s\" globális könyvtártáblázat útvonal nem hozható létre."
+msgstr "A(z) \"%s\" globális könyvtártáblázat útvonal nem hozható létre."
 
 #: common/gestfich.cpp:233
 #, c-format
 msgid "Command \"%s\" could not found"
-msgstr "A \"%s\" parancs nem található"
+msgstr "A(z) \"%s\" parancs nem található"
 
 #: common/gestfich.cpp:377
 #, c-format
@@ -2600,12 +2600,12 @@ msgstr "Gyorsbillentyű konfigurációs fájl mentése:"
 #: common/kiway.cpp:184
 #, c-format
 msgid "Failed to load kiface library \"%s\"."
-msgstr "Nem sikerült betölteni a \"%s\" \"kiface\" könyvtárat."
+msgstr "Nem sikerült betölteni a(z) \"%s\" \"kiface\" könyvtárat."
 
 #: common/kiway.cpp:193
 #, c-format
 msgid "Could not read instance name and version symbol form kiface library \"%s\"."
-msgstr "Nem lehet kiolvasni a példány nevet és verziót a \"%s\" \"kiface\" könyvtárból."
+msgstr "Nem lehet kiolvasni a példány nevet és verziót a(z) \"%s\" \"kiface\" könyvtárból."
 
 #: common/kiway.cpp:227
 #, c-format
@@ -2679,7 +2679,7 @@ msgstr "Blokk átfordítása"
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:58 pcbnew/dialogs/dialog_gendrill_base.cpp:108
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:65 pcbnew/dialogs/panel_modedit_settings_base.cpp:31 pcbnew/dialogs/panel_pcbnew_settings_base.cpp:31
 msgid "Inches"
-msgstr "Inch-ek"
+msgstr "Hüvelyk"
 
 #: common/legacy_gal/eda_draw_frame.cpp:440 common/legacy_wx/eda_draw_frame.cpp:443 cvpcb/display_footprints_frame.cpp:231
 #: pcbnew/tool_footprint_editor.cpp:214 pcbnew/tool_pcb_editor.cpp:365
@@ -2780,7 +2780,7 @@ msgstr "Jelző információ"
 #: common/page_layout/page_layout_reader.cpp:847
 #, c-format
 msgid "The file \"%s\" was not fully read"
-msgstr "A \"%s\" fájl bizonyos része(i) nem olvasható(ak)"
+msgstr "A(z) \"%s\" fájl bizonyos része(i) nem olvasható(ak)"
 
 #: common/pgm_base.cpp:125 common/widgets/footprint_select_widget.cpp:231 eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:184
 #: eeschema/dialogs/dialog_edit_line_style.cpp:40 pcbnew/dialogs/panel_setup_netclasses_base.cpp:62
@@ -2892,7 +2892,7 @@ msgstr "Alapértelmezett szövegszerkesztő kiválasztása"
 #: common/pgm_base.cpp:274
 #, c-format
 msgid "%s is already running. Continue?"
-msgstr "A %s már fut. Folytatja?"
+msgstr "A(z) %s már fut. Folytatja?"
 
 #: common/pgm_base.cpp:833
 msgid "Set Language"
@@ -2915,7 +2915,7 @@ msgstr "Hiba történt a projektfájl-sablon másolásakor"
 #, c-format
 msgid "Cannot create prj file \"%s\" (Directory not writable)"
 msgstr ""
-"A \"%s\" projekt fájlt nem lehet létrehozni.\n"
+"A(z) \"%s\" projekt fájlt nem lehet létrehozni.\n"
 "(A célmappa nem írható.)"
 
 #: common/project.cpp:430
@@ -2925,7 +2925,7 @@ msgstr "Hiba történt az alkatrészrajzolat könyvtártáblázat betöltése so
 #: common/richio.cpp:167
 #, c-format
 msgid "Unable to open filename \"%s\" for reading"
-msgstr "Nem sikerült megnyitni olvasásra a \"%s\" fájlt"
+msgstr "Nem sikerült megnyitni olvasásra a(z) \"%s\" fájlt"
 
 #: common/richio.cpp:201 common/richio.cpp:296
 msgid "Maximum line length exceeded"
@@ -3140,7 +3140,7 @@ msgstr "Visszaállít mindent az alapértelmezettre"
 #: common/widgets/widget_hotkey_list.cpp:483
 #, c-format
 msgid "\"%s\" is already assigned to \"%s\" in section \"%s\". Are you sure you want to change its assignment?"
-msgstr "\"%s\" már hozzá van rendelve a \"%s\" -hoz a \"%s\" szakaszban. Biztos benne, hogy módosítani szeretné kijelölést?"
+msgstr "\"%s\" már hozzá van rendelve a(z) \"%s\" -hoz a(z) \"%s\" szakaszban. Biztos benne, hogy módosítani szeretné kijelölést?"
 
 #: common/widgets/widget_hotkey_list.cpp:488
 msgid "Confirm change"
@@ -3341,12 +3341,12 @@ msgstr "JPEG fájlok"
 #: cvpcb/auto_associate.cpp:107
 #, c-format
 msgid "Equivalence file \"%s\" could not be found in the default search paths."
-msgstr "Az \"%s\" ekvivalencia (alkatrész - alkatrészrajzolat társítások) fájl nem található az alapértelmezett keresési útvonalakon."
+msgstr "A(z) \"%s\" ekvivalencia (alkatrész - alkatrészrajzolat társítások) fájl nem található az alapértelmezett keresési útvonalakon."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
 msgid "Error opening equivalence file \"%s\"."
-msgstr "Hiba történt az \"%s\" ekvivalencia fájl megnyitása során."
+msgstr "Hiba történt a(z) \"%s\" ekvivalencia fájl megnyitása során."
 
 #: cvpcb/auto_associate.cpp:179
 msgid "Equivalence File Load Error"
@@ -3360,7 +3360,7 @@ msgstr "%lu alkatrész - alkatrészrajzolat társítás megtalálva."
 #: cvpcb/auto_associate.cpp:259
 #, c-format
 msgid "Component %s: footprint %s not found in any of the project footprint libraries."
-msgstr "Alkatrész %s: az %s alkatrészrajzolat nem található egyik könyvtárban sem."
+msgstr "Alkatrész %s: a(z) %s alkatrészrajzolat nem található egyik könyvtárban sem."
 
 #: cvpcb/auto_associate.cpp:300
 msgid "CvPcb Warning"
@@ -3369,7 +3369,7 @@ msgstr "Alkatrésztársító \"ERC\" figyelmeztetés"
 #: cvpcb/cfg.cpp:77
 #, c-format
 msgid "Project file \"%s\" is not writable"
-msgstr "A \"%s\" projekt fájl nem írható"
+msgstr "A(z) \"%s\" projekt fájl nem írható"
 
 #: cvpcb/common_help_msg.h:28
 msgid "Save footprint associations in schematic symbol footprint fields"
@@ -3499,7 +3499,7 @@ msgstr "Alkatrészrajzolat hozzárendelési fájl"
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:294
 #, c-format
 msgid "File \"%s\" already exists in list"
-msgstr "A \"%s\" fájl már szerepel a listában"
+msgstr "A(z) \"%s\" fájl már szerepel a listában"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
@@ -3671,7 +3671,7 @@ msgstr "3D megjelenítő [Alt]+[3]"
 #: cvpcb/display_footprints_frame.cpp:488
 #, c-format
 msgid "Footprint ID \"%s\" is not valid."
-msgstr "Az \"%s\" alkatrészrajzolat azonosító nem érvényes."
+msgstr "A(z) \"%s\" alkatrészrajzolat azonosító nem érvényes."
 
 #: cvpcb/display_footprints_frame.cpp:515
 #, c-format
@@ -3729,7 +3729,7 @@ msgstr "Alkatrésztársító felhasználói kézikönyv"
 #: cvpcb/readwrite_dlgs.cpp:103
 #, c-format
 msgid "\"%s\" is not a valid LIB_ID."
-msgstr "A \"%s\" nem érvényes LIB_ID."
+msgstr "A(z) \"%s\" nem érvényes LIB_ID."
 
 #: cvpcb/readwrite_dlgs.cpp:206
 msgid ""
@@ -3740,12 +3740,12 @@ msgstr ""
 #: cvpcb/readwrite_dlgs.cpp:239
 #, c-format
 msgid "Component \"%s\" footprint \"%s\" was <b>not found</b> in any library.\n"
-msgstr "Az \"%s\" alkatrészhez tartozó \"%s\" alkatrészrajzolat <b>egyik könyvtárban sem</b> található meg.\n"
+msgstr "A(z) \"%s\" alkatrészhez tartozó \"%s\" alkatrészrajzolat <b>egyik könyvtárban sem</b> található meg.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:247
 #, c-format
 msgid "Component \"%s\" footprint \"%s\" was found in <b>multiple</b> libraries.\n"
-msgstr "Az \"%s\" alkatrészhez tartozó \"%s\" alkatrészrajzolat <b>több könyvtárban is</b> megtalálható.\n"
+msgstr "A(z) \"%s\" alkatrészhez tartozó \"%s\" alkatrészrajzolat <b>több könyvtárban is</b> megtalálható.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:260
 msgid "First check your footprint library table entries."
@@ -3827,7 +3827,7 @@ msgstr "Távolságmérés"
 #: eeschema/annotate.cpp:114
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
-msgstr "%d azonos időbélyegek találhatóak és cserélődtek."
+msgstr "%d azonos időbélyeget talált majd cserélt le."
 
 #: eeschema/annotate.cpp:204
 #, c-format
@@ -3880,7 +3880,7 @@ msgstr "A láthatóság módosítása"
 #: eeschema/backanno.cpp:252
 #, c-format
 msgid "Failed to open component-footprint link file \"%s\""
-msgstr "A \"%s\" alkatrészrajzolat hozzárendelési fájl megnyitása nem sikerült"
+msgstr "A(z) \"%s\" alkatrészrajzolat hozzárendelési fájl megnyitása nem sikerült"
 
 #: eeschema/block.cpp:454
 msgid "No item to paste."
@@ -3891,7 +3891,7 @@ msgstr "Nincs beilleszthető elem."
 msgid ""
 "The sheet changes cannot be made because the destination sheet already has the sheet \"%s\" or one of it's subsheets as a parent somewhere in the "
 "schematic hierarchy."
-msgstr "A kívánt változtatások nem hajthatóak végre, mivel a cél-lap már eleve tartalmazza a \"%s\" lapot."
+msgstr "A kívánt változtatások nem hajthatóak végre, mivel a cél-lap már eleve tartalmazza a(z) \"%s\" lapot."
 
 #: eeschema/bom_plugins.cpp:34
 #, c-format
@@ -3899,12 +3899,12 @@ msgid ""
 "Plugin file:\n"
 "%s\n"
 "not found. Plugin not available."
-msgstr "A %s plugin fájl nem található."
+msgstr "A(z) %s plugin fájl nem található."
 
 #: eeschema/class_libentry.cpp:591
 #, c-format
 msgid "An attempt was made to remove the %s field from component %s in library %s."
-msgstr "Kísérlet történt a \"%s\" mező eltávolítására a \"%s\" alkatrész esetén (\"%s\" könyvtár)."
+msgstr "Kísérlet történt a(z) \"%s\" mező eltávolítására a(z) \"%s\" alkatrész esetén (\"%s\" könyvtár)."
 
 #: eeschema/class_library.cpp:54
 #, c-format
@@ -3912,13 +3912,13 @@ msgid ""
 "Library \"%s\" has duplicate entry name \"%s\".\n"
 "This may cause some unexpected behavior when loading components into a schematic."
 msgstr ""
-"A \"%s\" könyvtár több azonos \"%s\" nevű bejegyzést tartalmaz.\n"
+"A(z) \"%s\" könyvtár több azonos \"%s\" nevű bejegyzést tartalmaz.\n"
 "Ez nem kívánt viselkedéshez vezethet az alkatrészek kapcsolási rajzba történő betöltése során."
 
 #: eeschema/class_library.cpp:537
 #, c-format
 msgid "Unable to load project's \"%s\" file"
-msgstr "Nem sikerült betölteni a \"%s\" projekt fájlt"
+msgstr "Nem sikerült betölteni a(z) \"%s\" projekt fájlt"
 
 #: eeschema/class_library.cpp:577 eeschema/libedit/lib_edit_frame.cpp:1611 eeschema/symbol_tree_model_adapter.cpp:61
 msgid "Loading Symbol Libraries"
@@ -3934,7 +3934,7 @@ msgid ""
 "Symbol library \"%s\" failed to load. Error:\n"
 " %s"
 msgstr ""
-"Nem sikerült betölteni a \"%s\" rajzjel könyvtárat. Hiba:\n"
+"Nem sikerült betölteni a(z) \"%s\" rajzjel könyvtárat. Hiba:\n"
 " %s"
 
 #: eeschema/class_library.cpp:661
@@ -3943,7 +3943,7 @@ msgid ""
 "Symbol library \"%s\" failed to load.\n"
 "Error: %s"
 msgstr ""
-"Nem sikerült betölteni a \"%s\" rajzjel könyvtárat.\n"
+"Nem sikerült betölteni a(z) \"%s\" rajzjel könyvtárat.\n"
 "Hiba: %s"
 
 #: eeschema/component_references_lister.cpp:555
@@ -3959,7 +3959,7 @@ msgstr "Az elem nincs sorszámozva: %s%s\n"
 #: eeschema/component_references_lister.cpp:583
 #, c-format
 msgid "Error: symbol %s%s unit %d and symbol has only %d units defined\n"
-msgstr "Hiba a %s%s rajzjel / %d. részegység használatakor. Maximum %d részegység lehetséges\n"
+msgstr "Hiba a(z) %s%s rajzjel / %d. részegység használatakor. Maximum %d részegység lehetséges\n"
 
 #: eeschema/component_references_lister.cpp:621 eeschema/component_references_lister.cpp:651
 #, c-format
@@ -3974,12 +3974,12 @@ msgstr "Azonos elemek %s%s\n"
 #: eeschema/component_references_lister.cpp:672
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
-msgstr "Eltérő értékek a %s%d%s (%s) és %s%d%s (%s) esetén"
+msgstr "Eltérő értékek a(z) %s%d%s (%s) és %s%d%s (%s) esetén"
 
 #: eeschema/component_references_lister.cpp:703
 #, c-format
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
-msgstr "Azonos időbélyeg (%s) a %s%d és %s%d esetén"
+msgstr "Ismétlődő időbélyeg (%s) a(z) %s%d és %s%d esetén"
 
 #: eeschema/controle.cpp:204 eeschema/libedit/lib_edit_frame.cpp:1363 pcbnew/controle.cpp:229 pcbnew/footprint_editor_utils.cpp:135
 #: pcbnew/tools/selection_tool.cpp:578
@@ -4048,7 +4048,7 @@ msgstr "Sorszámozások törlése"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:38
 msgid "Use the entire schematic"
-msgstr "Az egész kapcsolási rajzban"
+msgstr "Teljes kapcsolási rajzban"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:38
 msgid "Use the current page only"
@@ -4064,11 +4064,11 @@ msgstr "Sorrend:"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:50
 msgid "Sort components by &X position"
-msgstr "Vízszintes tengelyen végighaladva, és fentről lefelé"
+msgstr "Rendezés vízszintes pozíció szerint"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:65
 msgid "Sort components by &Y position"
-msgstr "Függőleges tengelyen végighaladva, és balról jobbra"
+msgstr "Rendezés függőleges pozíció szerint"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:80
 msgid "Keep existing annotations"
@@ -4187,7 +4187,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Hiba történt a %s rajzjel %s könyvtárból történő betöltése során.\n"
+"Hiba történt a(z) %s rajzjel %s könyvtárból történő betöltése során.\n"
 "\n"
 "%s"
 
@@ -4206,7 +4206,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Hiba történt a %s rajzjel %s könyvtárból történő betöltése során.\n"
+"Hiba történt a(z) %s rajzjel %s könyvtárból történő betöltése során.\n"
 "\n"
 "%s"
 
@@ -4247,7 +4247,7 @@ msgstr "Már létezik egy \"%s\" megnevezés."
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:667
 #, c-format
 msgid "Symbol name \"%s\" already exists in library \"%s\"."
-msgstr "A(z) \"%s\" rajzjel már létezik a \"%s\" könyvtárban."
+msgstr "A(z) \"%s\" rajzjel már létezik a(z) \"%s\" könyvtárban."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:683
 msgid "untitled"
@@ -4510,7 +4510,7 @@ msgstr "A könyvtári hivatkozás érvénytelen."
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:324
 #, c-format
 msgid "Symbol \"%s\" not found in library \"%s\"."
-msgstr "A \"%s\" rajzjel nem található a \"%s\" könyvtárban."
+msgstr "A(z) \"%s\" rajzjel nem található a(z) \"%s\" könyvtárban."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:107 eeschema/menubar.cpp:504
 msgid "Update Fields from Library..."
@@ -4775,7 +4775,7 @@ msgstr "Szín:"
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:395 pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:297
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:517 pcbnew/dialogs/dialog_pad_properties_base.cpp:566
 msgid "Solid"
-msgstr "Egyenes"
+msgstr "Tömör"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:62
 msgid "Dashed"
@@ -4832,7 +4832,7 @@ msgstr "Sorszámozás kötelező!"
 #: eeschema/dialogs/dialog_erc.cpp:612
 #, c-format
 msgid "Pin %s on %s is connected to both %s and %s"
-msgstr "A %s láb (%s) %s-el és %s-el is össze van kötve"
+msgstr "A(z) %s láb (%s) %s-el és %s-el is össze van kötve"
 
 #: eeschema/dialogs/dialog_erc.cpp:654 pcbnew/drc.cpp:546
 msgid "Finished"
@@ -4935,7 +4935,7 @@ msgstr "A Referencia oszlop nem rejthető el."
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:223
 msgid "Qty"
-msgstr "Mennyiség"
+msgstr "Darab"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:668 eeschema/lib_field.cpp:626 eeschema/lib_field.h:107 eeschema/template_fieldnames.cpp:51
 msgid "Field"
@@ -5016,7 +5016,7 @@ msgstr "Válasszon ki egy rajzjel könyvtártáblázat fájlt."
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:85 pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:85
 #, c-format
 msgid "File \"%s\" not found."
-msgstr "A \"%s\" fájl nem található."
+msgstr "A(z) \"%s\" fájl nem található."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:99
 #, c-format
@@ -5025,7 +5025,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"A \"%s\" rajzjel könyvtártáblázat fájl nem érvényes.\n"
+"A(z) \"%s\" rajzjel könyvtártáblázat fájl nem érvényes.\n"
 "\n"
 "%s"
 
@@ -5466,29 +5466,29 @@ msgstr "A0"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:225 eeschema/dialogs/dialog_plot_schematic.cpp:236 eeschema/dialogs/dialog_plot_schematic_base.cpp:61
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:83 pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:271
 msgid "A"
-msgstr "ANSI-A"
+msgstr "A"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:226
 msgid "B"
-msgstr "ANSI-B"
+msgstr "B"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:227
 msgid "C"
-msgstr "ANSI-C"
+msgstr "C"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:228
 msgid "D"
-msgstr "ANSI-D"
+msgstr "D"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:229
 msgid "E"
-msgstr "ANSI-E"
+msgstr "E"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:320 pcbnew/dialogs/dialog_export_svg.cpp:256 pcbnew/dialogs/dialog_plot.cpp:733
 #: pcbnew/exporters/gen_footprints_placefile.cpp:270
 #, c-format
 msgid "Could not write plot files to folder \"%s\"."
-msgstr "Nem írhatóak a kimeneti fájlok a \"%s\" mappában."
+msgstr "Nem írhatóak a kimeneti fájlok a(z) \"%s\" mappában."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:24 pcbnew/dialogs/dialog_export_svg_base.cpp:24
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:26 pcbnew/dialogs/dialog_plot_base.cpp:36
@@ -5617,7 +5617,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_rescue_each.cpp:110 pagelayout_editor/dialogs/properties_frame_base.cpp:210
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:643
 msgid "Accept"
-msgstr "Alkalmaz"
+msgstr "Elfogad"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:124
 msgid "Symbol Name"
@@ -5625,7 +5625,7 @@ msgstr "Rajzjel név"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:128
 msgid "Action Taken"
-msgstr "Elfogadott művelet"
+msgstr "Művelet"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:231
 #, c-format
@@ -6081,7 +6081,7 @@ msgstr "p"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:97
 msgid "pico"
-msgstr "piko"
+msgstr "pico"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:101
 msgid "1e-12"
@@ -6102,11 +6102,11 @@ msgstr "1e-9"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:117 pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:32
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:43 pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:58
 msgid "u"
-msgstr "μ"
+msgstr "u"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:121
 msgid "micro"
-msgstr "mikro"
+msgstr "micro"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:125
 msgid "1e-6"
@@ -6138,7 +6138,7 @@ msgstr "1e3"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:153
 msgid "meg"
-msgstr "M"
+msgstr "meg"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:157
 msgid "mega"
@@ -6150,7 +6150,7 @@ msgstr "1e6"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:165
 msgid "g"
-msgstr "G"
+msgstr "g"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:169
 msgid "giga"
@@ -6162,7 +6162,7 @@ msgstr "1e9"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:177
 msgid "t"
-msgstr "T"
+msgstr "t"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:181
 msgid "tera"
@@ -6369,7 +6369,7 @@ msgstr "SPICE modell szerkesztő"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:55
 #, c-format
 msgid "Remapping is not possible because you do not have write privileges to the project folder \"%s\"."
-msgstr "A migrációs művelet nem végezhető el, mert nincs írási jogosultsága a \"%s\" projekt mappában."
+msgstr "A migrációs művelet nem végezhető el, mert nincs írási jogosultsága a(z) \"%s\" projekt mappában."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:64
 msgid ""
@@ -6405,12 +6405,12 @@ msgstr "Projekt rajzjel könyvtártáblázat létrehozva.\n"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:264
 #, c-format
 msgid "No symbol \"%s\" found in symbol library table."
-msgstr "A \"%s\" rajzjel nem található a könyvtártáblázatban."
+msgstr "A(z) \"%s\" rajzjel nem található a könyvtártáblázatban."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:270
 #, c-format
 msgid "Symbol \"%s\" mapped to symbol library \"%s\"."
-msgstr "A \"%s\" rajzjel migrálása a \"%s\" könyvtárba megtörtént."
+msgstr "A(z) \"%s\" rajzjel migrálása a(z) \"%s\" könyvtárba megtörtént."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:279
 msgid "Symbol library table mapping complete!"
@@ -6437,18 +6437,18 @@ msgstr "Átmentés megszakítása"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:449 eeschema/dialogs/dialog_symbol_remap.cpp:464 eeschema/dialogs/dialog_symbol_remap.cpp:479
 #, c-format
 msgid "Backing up file \"%s\" to file \"%s\"."
-msgstr "A \"%s\" fájl biztonsági mentése az \"%s\" fájlba."
+msgstr "A(z) \"%s\" fájl biztonsági mentése a(z) \"%s\" fájlba."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:379 eeschema/dialogs/dialog_symbol_remap.cpp:419 eeschema/dialogs/dialog_symbol_remap.cpp:436
 #: eeschema/dialogs/dialog_symbol_remap.cpp:456 eeschema/dialogs/dialog_symbol_remap.cpp:471 eeschema/dialogs/dialog_symbol_remap.cpp:486
 #, c-format
 msgid "Failed to back up file \"%s\".\n"
-msgstr "A \"%s\" fájl biztonsági mentése sikertelen.\n"
+msgstr "A(z) \"%s\" fájl biztonsági mentése sikertelen.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:411
 #, c-format
 msgid "Failed to create backup folder \"%s\"\n"
-msgstr "Nem sikerült létrehozni a \"%s\" biztonsági mappát.\n"
+msgstr "Nem sikerült létrehozni a(z) \"%s\" biztonsági mappát.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:492
 msgid "Some of the project files could not be backed up."
@@ -6645,7 +6645,7 @@ msgstr "50"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:278 pcbnew/dialogs/panel_fp_lib_table.cpp:402
 #, c-format
 msgid "Illegal character '%c' in Nickname: \"%s\""
-msgstr "A \"%c\" karakter nem megengedett a \"%s\" megnevezésben."
+msgstr "A(z) \"%c\" karakter nem megengedett a(z) \"%s\" megnevezésben."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:289 pcbnew/dialogs/panel_fp_lib_table.cpp:413
 msgid "No Colon in Nicknames"
@@ -6654,7 +6654,7 @@ msgstr "A megnevezésben nem lehet kettőspont"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:316
 #, c-format
 msgid "Duplicate Nickname: \"%s\"."
-msgstr "Azonos megnevezés: \"%s\"."
+msgstr "Ismétlődő megnevezés: \"%s\"."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:326 pcbnew/dialogs/panel_fp_lib_table.cpp:450
 msgid "Please Delete or Modify One"
@@ -6667,7 +6667,7 @@ msgstr "Figyelmeztetés: Ismétlődő megnevezés"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:363 pcbnew/dialogs/panel_fp_lib_table.cpp:633
 #, c-format
 msgid "A library nicknamed \"%s\" already exists."
-msgstr "A \"%s\" megnevezésű könyvtár már létezik."
+msgstr "A(z) \"%s\" megnevezésű könyvtár már létezik."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:379 eeschema/libedit/lib_edit_frame.cpp:1671 pcbnew/dialogs/panel_fp_lib_table.cpp:648
 msgid "Skip"
@@ -6805,7 +6805,7 @@ msgstr "Eltérő vezetékek lettek csatlakoztatva egy alkatrész osztott haszná
 #: eeschema/edit_bitmap.cpp:52 eeschema/edit_bitmap.cpp:62 pagelayout_editor/pl_editor_frame.cpp:566 pagelayout_editor/pl_editor_frame.cpp:574
 #, c-format
 msgid "Couldn't load image from \"%s\""
-msgstr "Nem sikerült betölteni a \"%s\" képet"
+msgstr "Nem sikerült betölteni a(z) \"%s\" képet"
 
 #: eeschema/edit_component_in_schematic.cpp:67 eeschema/libedit/libfield.cpp:58
 #, c-format
@@ -6826,7 +6826,7 @@ msgstr "Projekt betöltése"
 
 #: eeschema/eeschema_config.cpp:209 eeschema/sch_edit_frame.cpp:1481 eeschema/sch_edit_frame.cpp:1488
 msgid "Eeschema"
-msgstr "Kapcsolásirajz szerkesztő"
+msgstr "Eeschema - Kapcsolási rajz szerkesztő"
 
 #: eeschema/eeschema_config.cpp:212
 msgid "Field Name Templates"
@@ -6843,7 +6843,7 @@ msgstr "Rajzjel szerkesztő"
 #: eeschema/eeschema_config.cpp:634 eeschema/files-io.cpp:521
 #, c-format
 msgid "An error occurred loading the symbol library table \"%s\"."
-msgstr "Hiba történt a \"%s\" rajzjel könyvtártáblázat betöltése során."
+msgstr "Hiba történt a(z) \"%s\" rajzjel könyvtártáblázat betöltése során."
 
 #: eeschema/erc.cpp:89 eeschema/erc.cpp:105
 msgid "Input Pin"
@@ -6901,17 +6901,17 @@ msgstr "Részegység hozzárendelési konfliktus (%s - '%s') és (%s - '%s') kö
 #: eeschema/erc.cpp:319
 #, c-format
 msgid "Hierarchical label %s is not connected to a sheet label."
-msgstr "A \"%s\" hierarchikus címke nincs összeköttetésben egy lapon belüli címkével."
+msgstr "A(z) \"%s\" hierarchikus címke nincs összeköttetésben egy lapon belüli címkével."
 
 #: eeschema/erc.cpp:328
 #, c-format
 msgid "Global label %s is not connected to any other global label."
-msgstr "A \"%s\" globális címke nincs összeköttetésben egy másik globális címkével."
+msgstr "A(z) \"%s\" globális címke nincs összeköttetésben egy másik globális címkével."
 
 #: eeschema/erc.cpp:337
 #, c-format
 msgid "Sheet label %s is not connected to a hierarchical label."
-msgstr "A \"%s\" lapon belüli címke nincs összeköttetésben egy hierarchikus címkével."
+msgstr "A(z) \"%s\" lapon belüli címke nincs összeköttetésben egy hierarchikus címkével."
 
 #: eeschema/erc.cpp:359
 #, c-format
@@ -6998,7 +6998,7 @@ msgid ""
 "Error saving schematic file \"%s\".\n"
 "%s"
 msgstr ""
-"Hiba történt a \"%s\" kapcsolási rajz fájl mentése során.\n"
+"Hiba történt a(z) \"%s\" kapcsolási rajz fájl mentése során.\n"
 "%s"
 
 #: eeschema/files-io.cpp:128
@@ -7018,12 +7018,12 @@ msgstr "Sikertelen fájl írási művelet."
 #: eeschema/files-io.cpp:212 eeschema/files-io.cpp:781
 #, c-format
 msgid "Schematic file \"%s\" is already open."
-msgstr "Az \"%s\" kapcsolási rajz fájl már meg van nyitva."
+msgstr "A(z) \"%s\" kapcsolási rajz fájl már meg van nyitva."
 
 #: eeschema/files-io.cpp:230
 #, c-format
 msgid "Schematic \"%s\" does not exist.  Do you wish to create it?"
-msgstr "A \"%s\" kapcsolási rajz nem létezik. Szeretné létrehozni?"
+msgstr "A(z) \"%s\" kapcsolási rajz nem létezik. Szeretné létrehozni?"
 
 #: eeschema/files-io.cpp:301
 msgid ""
@@ -7039,7 +7039,7 @@ msgid ""
 "Error loading schematic file \"%s\".\n"
 "%s"
 msgstr ""
-"Hiba történt a \"%s\" kapcsolási rajz fájl betöltésekor.\n"
+"Hiba történt a(z) \"%s\" kapcsolási rajz fájl betöltésekor.\n"
 "%s"
 
 #: eeschema/files-io.cpp:319 eeschema/files-io.cpp:878
@@ -7064,12 +7064,12 @@ msgstr "Nem sikerült betölteni a kapcsolási rajzot. A hibát egy hierarchikus
 #: eeschema/files-io.cpp:453 eeschema/sheet.cpp:247
 #, c-format
 msgid "Error occurred loading schematic file \"%s\"."
-msgstr "Hiba történt a \"%s\" kapcsolási rajz fájl betöltése során."
+msgstr "Hiba történt a(z) \"%s\" kapcsolási rajz fájl betöltése során."
 
 #: eeschema/files-io.cpp:456 eeschema/sheet.cpp:250
 #, c-format
 msgid "Failed to load schematic \"%s\""
-msgstr "Nem sikerült betölteni a \"%s\" kapcsolási rajzot"
+msgstr "Nem sikerült betölteni a(z) \"%s\" kapcsolási rajzot"
 
 #: eeschema/files-io.cpp:649
 msgid ""
@@ -7088,7 +7088,7 @@ msgstr "Kapcsolási rajz importálása"
 #: eeschema/files-io.cpp:705
 #, c-format
 msgid "Directory \"%s\" is not writable."
-msgstr "A \"%s\" könyvtár nem lehet írható."
+msgstr "A(z) \"%s\" könyvtár nem lehet írható."
 
 #: eeschema/files-io.cpp:875
 #, c-format
@@ -7096,7 +7096,7 @@ msgid ""
 "Error loading schematic \"%s\".\n"
 "%s"
 msgstr ""
-"Hiba történt a \"%s\" kapcsolási rajz betöltése során.\n"
+"Hiba történt a(z) \"%s\" kapcsolási rajz betöltése során.\n"
 "%s"
 
 #: eeschema/files-io.cpp:901
@@ -7106,7 +7106,7 @@ msgstr "A kapcsolási rajz módosult.  Menti a módosításokat?"
 #: eeschema/find.cpp:96
 #, c-format
 msgid "Design rule check marker found in sheet %s at %s, %s"
-msgstr "DRC hibajelölő található a %s lapon (itt: %s, %s)"
+msgstr "DRC hibajelölő található a(z) %s lapon (itt: %s, %s)"
 
 #: eeschema/find.cpp:104
 msgid "No more markers were found."
@@ -7149,7 +7149,7 @@ msgstr "%s talált, de %s nem található"
 #: eeschema/find.cpp:234
 #, c-format
 msgid "Component %s not found"
-msgstr "A %s alkatrész nem található"
+msgstr "A(z) %s alkatrész nem található"
 
 #: eeschema/find.cpp:448
 #, c-format
@@ -7185,7 +7185,7 @@ msgstr "Válasszon rajzjelet (%d tétel)"
 #: eeschema/getpart.cpp:365
 #, c-format
 msgid "No alternate body style found for symbol \"%s\" in library \"%s\"."
-msgstr "Nem található alternatív rajzjel a \"%s\" rajzjelhez a \"%s\" könyvtárban."
+msgstr "Nem található alternatív rajzjel a(z) \"%s\" rajzjelhez a(z) \"%s\" könyvtárban."
 
 #: eeschema/help_common_strings.h:40
 msgid "Undo last command"
@@ -7346,7 +7346,7 @@ msgstr "Hierarchia"
 
 #: eeschema/hierarch.cpp:162
 msgid "Root"
-msgstr "Eredet"
+msgstr "Gyökér"
 
 #: eeschema/highlight_connection.cpp:54
 msgid "Error: duplicate sub-sheet names found in current sheet. Fix it"
@@ -7474,7 +7474,7 @@ msgstr "Kapcsolási rajz elem mozgatása"
 
 #: eeschema/hotkeys.cpp:183
 msgid "Duplicate Symbol or Label"
-msgstr "Rajzjel vagy címke megkettőzése"
+msgstr "Rajzjel vagy címke duplikálása"
 
 #: eeschema/hotkeys.cpp:187 pcbnew/hotkeys.cpp:153
 msgid "Drag Item"
@@ -7725,7 +7725,7 @@ msgstr "Szöveg"
 #: eeschema/libarch.cpp:102
 #, c-format
 msgid "Failed to add symbol \"%s\" to library file \"%s\"."
-msgstr "Nem sikerült hozzáadni a \"%s\" rajzjelet a \"%s\" könyvtárfájlhoz."
+msgstr "Nem sikerült hozzáadni a(z) \"%s\" rajzjelet a(z) \"%s\" könyvtárfájlhoz."
 
 #: eeschema/libarch.cpp:110
 msgid "Unexpected exception occurred."
@@ -7734,17 +7734,17 @@ msgstr "Váratlan kivétel történt."
 #: eeschema/libarch.cpp:125
 #, c-format
 msgid "Symbol %s not found in any library or cache."
-msgstr "A %s rajzjel semelyik könyvtárban vagy gyorsítótárban sem található."
+msgstr "A(z) %s rajzjel semelyik könyvtárban vagy gyorsítótárban sem található."
 
 #: eeschema/libarch.cpp:141
 #, c-format
 msgid "Errors occurred creating symbol library %s."
-msgstr "Hiba történt a \"%s\" könyvtár létrehozásakor."
+msgstr "Hiba történt a(z) \"%s\" könyvtár létrehozásakor."
 
 #: eeschema/libarch.cpp:153 eeschema/libarch.cpp:159
 #, c-format
 msgid "Failed to save symbol library file \"%s\""
-msgstr "Nem sikerült menteni a \"%s\" könyvtár fájlt"
+msgstr "Nem sikerült menteni a(z) \"%s\" könyvtár fájlt"
 
 #: eeschema/libedit/lib_edit_frame.cpp:268 pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:194 pcbnew/footprint_edit_frame.cpp:314
 #: pcbnew/footprint_edit_frame.cpp:721
@@ -7796,7 +7796,7 @@ msgstr "Importálás"
 #: eeschema/libedit/lib_edit_frame.cpp:1532
 #, c-format
 msgid "Library \"%s\" already exists"
-msgstr "A \"%s\" könyvtár már létezik"
+msgstr "A(z) \"%s\" könyvtár már létezik"
 
 #: eeschema/libedit/lib_edit_frame.cpp:1546
 msgid "Could not create the library file. Check write permission."
@@ -7853,7 +7853,7 @@ msgid ""
 "in the current configuration.  Use Manage Symbol Libraries to\n"
 "edit the configuration."
 msgstr ""
-"A \"%s\" megnevezésű könyvtár nincs engedélyezve a jelenlegi konfiguráció.\n"
+"A(z) \"%s\" megnevezésű könyvtár nincs engedélyezve a jelenlegi konfiguráció.\n"
 "Nyissa meg a \"Könyvtárak kezelése\" menüpontot a szerkesztéshez."
 
 #: eeschema/libedit/lib_edit_frame.cpp:1838 eeschema/viewlib_frame.cpp:349
@@ -7867,17 +7867,17 @@ msgstr "Rajzjel importálása"
 #: eeschema/libedit/lib_export.cpp:73 eeschema/libedit/symbedit.cpp:91
 #, c-format
 msgid "Cannot import symbol library \"%s\"."
-msgstr "A \"%s\" könyvtár nem importálható."
+msgstr "A(z) \"%s\" könyvtár nem importálható."
 
 #: eeschema/libedit/lib_export.cpp:80 eeschema/libedit/symbedit.cpp:98
 #, c-format
 msgid "Symbol library file \"%s\" is empty."
-msgstr "A \"%s\" könyvtár fájl üres."
+msgstr "A(z) \"%s\" könyvtár fájl üres."
 
 #: eeschema/libedit/lib_export.cpp:90
 #, c-format
 msgid "Symbol \"%s\" already exists in library \"%s\"."
-msgstr "A \"%s\" rajzjel már létezik a \"%s\" könyvtárban."
+msgstr "A(z) \"%s\" rajzjel már létezik a(z) \"%s\" könyvtárban."
 
 #: eeschema/libedit/lib_export.cpp:108
 msgid "There is no symbol selected to save."
@@ -7890,12 +7890,12 @@ msgstr "Rajzjel exportálása"
 #: eeschema/libedit/lib_export.cpp:141
 #, c-format
 msgid "Error occurred attempting to load symbol library file \"%s\""
-msgstr "Hiba történt a \"%s\" könyvtár fájl betöltése során"
+msgstr "Hiba történt a(z) \"%s\" könyvtár fájl betöltése során"
 
 #: eeschema/libedit/lib_export.cpp:149
 #, c-format
 msgid "Symbol \"%s\" already exists in \"%s\"."
-msgstr "A \"%s\" rajzjel már létezik a \"%s\" könyvtárban."
+msgstr "A(z) \"%s\" rajzjel már létezik a(z) \"%s\" könyvtárban."
 
 #: eeschema/libedit/lib_export.cpp:154 kicad/prjconfig.cpp:399 pcbnew/dialogs/dialog_export_idf.cpp:172 pcbnew/dialogs/dialog_gencad_export_options.cpp:127
 #: pcbnew/footprint_libraries_utils.cpp:485 pcbnew/footprint_libraries_utils.cpp:973
@@ -7905,7 +7905,7 @@ msgstr "Felülír"
 #: eeschema/libedit/lib_export.cpp:164
 #, c-format
 msgid "Write permissions are required to save library \"%s\"."
-msgstr "A \"%s\" könyvtár mentéséhez írási jogosultságokra van szükség."
+msgstr "A(z) \"%s\" könyvtár mentéséhez írási jogosultságokra van szükség."
 
 #: eeschema/libedit/lib_export.cpp:178
 msgid "Failed to create symbol library file "
@@ -7914,17 +7914,17 @@ msgstr "Nem sikerült létrehozni a könyvtár fájlt "
 #: eeschema/libedit/lib_export.cpp:180
 #, c-format
 msgid "Error creating symbol library \"%s\""
-msgstr "Hiba a \"%s\" könyvtár létrehozásakor"
+msgstr "Hiba a(z) \"%s\" könyvtár létrehozásakor"
 
 #: eeschema/libedit/lib_export.cpp:189
 #, c-format
 msgid "Symbol \"%s\" saved in library \"%s\""
-msgstr "A \"%s\" rajzjel el lett mentve a \"%s\" könyvtárba"
+msgstr "A(z) \"%s\" rajzjel el lett mentve a(z) \"%s\" könyvtárba"
 
 #: eeschema/libedit/lib_manager.cpp:105
 #, c-format
 msgid "Cannot find library \"%s\" in the Symbol Library Table"
-msgstr "A \"%s\" könyvtár nem található a könyvtártáblázatban"
+msgstr "A(z) \"%s\" könyvtár nem található a könyvtártáblázatban"
 
 #: eeschema/libedit/lib_manager.cpp:144
 #, c-format
@@ -7934,12 +7934,12 @@ msgstr "A könyvtár módosítások nem vonhatóak vissza (\"%s\")"
 #: eeschema/libedit/lib_manager.cpp:300 eeschema/libedit/lib_manager.cpp:687
 #, c-format
 msgid "Cannot enumerate library \"%s\""
-msgstr "Nem sikerült a \"%s\" könyvtárat feldolgozni"
+msgstr "Nem sikerült a(z) \"%s\" könyvtárat feldolgozni"
 
 #: eeschema/libedit/lib_manager.cpp:338
 #, c-format
 msgid "Cannot load aliases from library \"%s\""
-msgstr "Nem sikerült a \"%s\" könyvtárból betölteni a megnevezéseket"
+msgstr "Nem sikerült a(z) \"%s\" könyvtárból betölteni a megnevezéseket"
 
 #: eeschema/libedit/lib_manager.cpp:365
 msgid "Symbol not found."
@@ -7948,12 +7948,12 @@ msgstr "A rajzjel nem található."
 #: eeschema/libedit/lib_manager.cpp:372
 #, c-format
 msgid "Error loading symbol \"%s\" from library \"%s\"."
-msgstr "Hiba a \"%s\" rajzjel \"%s\" könyvtárból történő betöltése során."
+msgstr "Hiba a(z) \"%s\" rajzjel \"%s\" könyvtárból történő betöltése során."
 
 #: eeschema/libedit/lib_manager.cpp:544
 #, c-format
 msgid "Cannot load symbol \"%s\" from library \"%s\""
-msgstr "Nem sikerült betölteni a \"%s\" rajzjelet a \"%s\" könyvtárból."
+msgstr "Nem sikerült betölteni a(z) \"%s\" rajzjelet a(z) \"%s\" könyvtárból."
 
 #: eeschema/libedit/libedit.cpp:107
 msgid "The current symbol has been modified.  Save changes?"
@@ -7962,7 +7962,7 @@ msgstr "A rajzjel módosult. Kívánja menteni a módosításokat?"
 #: eeschema/libedit/libedit.cpp:132 eeschema/sch_edit_frame.cpp:1231 eeschema/selpart.cpp:63
 #, c-format
 msgid "Error occurred loading symbol \"%s\" from library \"%s\"."
-msgstr "Hiba a \"%s\" rajzjel \"%s\" könyvtárból történő betöltése során."
+msgstr "Hiba a(z) \"%s\" rajzjel \"%s\" könyvtárból történő betöltése során."
 
 #: eeschema/libedit/libedit.cpp:299
 msgid "This new symbol has no name and cannot be created."
@@ -7971,7 +7971,7 @@ msgstr "Az új rajzjelnek nincs neve, így nem hozható létre."
 #: eeschema/libedit/libedit.cpp:310 eeschema/libedit/libedit.cpp:479
 #, c-format
 msgid "Symbol \"%s\" already exists in library \"%s\""
-msgstr "A \"%s\" rajzjel már létezik a \"%s\" könyvtárban"
+msgstr "A(z) \"%s\" rajzjel már létezik a(z) \"%s\" könyvtárban"
 
 #: eeschema/libedit/libedit.cpp:416 include/lib_table_grid.h:190 pcbnew/footprint_libraries_utils.cpp:886 pcbnew/footprint_libraries_utils.cpp:1109
 msgid "Nickname"
@@ -8001,7 +8001,7 @@ msgstr "\"%s\" visszaállítása az utolsó mentett verzióra?"
 #: eeschema/libedit/libedit.cpp:656
 #, c-format
 msgid "Symbol name \"%s\" not found in library \"%s\""
-msgstr "A \"%s\" rajzjel név nem található a \"%s\" könyvtárban"
+msgstr "A(z) \"%s\" rajzjel név nem található a(z) \"%s\" könyvtárban"
 
 #: eeschema/libedit/libedit.cpp:685
 msgid "No library specified."
@@ -8010,12 +8010,12 @@ msgstr "Nincs könyvtár kiválasztva."
 #: eeschema/libedit/libedit.cpp:702
 #, c-format
 msgid "Save Library \"%s\" As..."
-msgstr "A \"%s\" könyvtár mentése másként..."
+msgstr "A(z) \"%s\" könyvtár mentése másként..."
 
 #: eeschema/libedit/libedit.cpp:740
 #, c-format
 msgid "Failed to save changes to symbol library file \"%s\""
-msgstr "Nem sikerült menteni a \"%s\" könyvtár fájl változásokat"
+msgstr "Nem sikerült menteni a(z) \"%s\" könyvtár fájl változásokat"
 
 #: eeschema/libedit/libedit.cpp:742
 msgid "Error saving library"
@@ -8024,12 +8024,12 @@ msgstr "Hiba történt a könyvtár mentésekor"
 #: eeschema/libedit/libedit.cpp:749
 #, c-format
 msgid "Symbol library file \"%s\" saved"
-msgstr "A \"%s\" könyvtár fájl mentve"
+msgstr "A(z) \"%s\" könyvtár fájl mentve"
 
 #: eeschema/libedit/libedit.cpp:751
 #, c-format
 msgid "Symbol library documentation file \"%s\" saved"
-msgstr "A \"%s\" könyvtár dokumentációs fájl mentve"
+msgstr "A(z) \"%s\" könyvtár dokumentációs fájl mentve"
 
 #: eeschema/libedit/libedit.cpp:777
 #, c-format
@@ -8188,7 +8188,7 @@ msgstr "Blokk másolása"
 
 #: eeschema/libedit/libedit_onrightclick.cpp:355 eeschema/onrightclick.cpp:889
 msgid "Duplicate Block"
-msgstr "Blokk megkettőzése"
+msgstr "Blokk duplikálása"
 
 #: eeschema/libedit/libedit_onrightclick.cpp:358 eeschema/onrightclick.cpp:899
 msgid "Mirror Block Around Horizontal(X) Axis"
@@ -8223,7 +8223,7 @@ msgstr "Fájlnév:"
 #: eeschema/libedit/libedit_plot_component.cpp:122
 #, c-format
 msgid "Can't save file \"%s\"."
-msgstr "A \"%s\" fájl nem menthető"
+msgstr "A(z) \"%s\" fájl nem menthető"
 
 #: eeschema/libedit/libfield.cpp:56
 msgid "Edit Component Name"
@@ -8232,7 +8232,7 @@ msgstr "Alkatrész név szerkesztése"
 #: eeschema/libedit/libfield.cpp:80
 #, c-format
 msgid "The name \"%s\" conflicts with an existing entry in the symbol library \"%s\"."
-msgstr "A \"%s\" rajzjel már létezik a \"%s\" könyvtárban."
+msgstr "A(z) \"%s\" rajzjel már létezik a(z) \"%s\" könyvtárban."
 
 #: eeschema/libedit/menubar_libedit.cpp:56 pcbnew/menubar_footprint_editor.cpp:59
 msgid "New Library..."
@@ -8469,7 +8469,7 @@ msgstr "Duplikált és a rácshoz nem illeszkedő lábak keresése"
 
 #: eeschema/libedit/menubar_libedit.cpp:325 kicad/menubar.cpp:343
 msgid "Manage &Symbol Libraries..."
-msgstr "Könyvtárak kezelése..."
+msgstr "Rajzjel könyvtárak kezelése..."
 
 #: eeschema/libedit/menubar_libedit.cpp:326
 msgid "Edit the global and project symbol library tables."
@@ -8506,11 +8506,11 @@ msgstr "Modern Eszköztár használata (tartalékmegoldás)"
 
 #: eeschema/libedit/menubar_libedit.cpp:363 eeschema/menubar.cpp:595 eeschema/tool_viewlib.cpp:175
 msgid "Eeschema &Manual"
-msgstr "Kapcsolásirajz tervező kézikönyv"
+msgstr "Kapcsolási rajz tervező kézikönyv"
 
 #: eeschema/libedit/menubar_libedit.cpp:364
 msgid "Open the Eeschema Manual"
-msgstr "Kapcsolásirajz tervező kézikönyv megnyitása"
+msgstr "Kapcsolási rajz tervező kézikönyv megnyitása"
 
 #: eeschema/libedit/menubar_libedit.cpp:370 eeschema/tool_viewlib.cpp:181 pcbnew/menubar_footprint_editor.cpp:469 pcbnew/tool_footprint_viewer.cpp:198
 msgid "Open the \"Getting Started in KiCad\" guide for beginners"
@@ -8519,7 +8519,7 @@ msgstr "Az \"Első lépések a KiCAD -ban\" útmutató kezdőknek megnyitása"
 #: eeschema/libedit/menubar_libedit.cpp:395 eeschema/menubar.cpp:117 pagelayout_editor/menubar.cpp:214 pcbnew/menubar_footprint_editor.cpp:493
 #: pcbnew/menubar_pcb_editor.cpp:133
 msgid "&Place"
-msgstr "Lehelyez"
+msgstr "Hozzáad"
 
 #: eeschema/libedit/menubar_libedit.cpp:396 eeschema/menubar.cpp:118 pcbnew/menubar_footprint_editor.cpp:494 pcbnew/menubar_pcb_editor.cpp:135
 msgid "&Inspect"
@@ -8553,7 +8553,7 @@ msgstr "Jelölő információ"
 #: eeschema/libedit/pinedit.cpp:639
 #, c-format
 msgid "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"
-msgstr "<b>Duplikált láb %s</b> \"%s\" a <b>(%.3f, %.3f)</b> pozícióban konfliktusba került a %s \"%s\" lábbal a <b>(%.3f, %.3f)</b> pozícióban "
+msgstr "<b>Duplikált láb %s</b> \"%s\" a <b>(%.3f, %.3f)</b> pozícióban konfliktusba került a(z) %s \"%s\" lábbal a <b>(%.3f, %.3f)</b> pozícióban "
 
 #: eeschema/libedit/pinedit.cpp:653
 #, c-format
@@ -8587,7 +8587,7 @@ msgstr ""
 #: eeschema/libedit/symbedit.cpp:105
 #, c-format
 msgid "More than one symbol found in symbol file \"%s\"."
-msgstr "Egynél több rajzjel található a \"%s\" rajzjelfájlban."
+msgstr "Egynél több rajzjel található a(z) \"%s\" rajzjelfájlban."
 
 #: eeschema/libedit/symbedit.cpp:191
 #, c-format
@@ -8597,7 +8597,7 @@ msgstr "Rajzjel mentése (ebben: \"%s\")"
 #: eeschema/libedit/symbedit.cpp:207
 #, c-format
 msgid "An error occurred saving symbol file \"%s\""
-msgstr "Hiba lépett fel a \"%s\" rajzjel fájl mentése közben."
+msgstr "Hiba lépett fel a(z) \"%s\" rajzjel fájl mentése közben."
 
 #: eeschema/libedit/tool_lib.cpp:85
 msgid "Move symbol anchor"
@@ -8996,7 +8996,7 @@ msgstr "Elérési útvonalak konfigurálása..."
 
 #: eeschema/menubar.cpp:626
 msgid "Manage Symbol Libraries..."
-msgstr "Könyvtárak kezelése..."
+msgstr "Rajzjel könyvtárak kezelése..."
 
 #: eeschema/menubar.cpp:627
 msgid "Edit the global and project symbol library lists"
@@ -9025,12 +9025,12 @@ msgstr "Projekt beállítások betöltése egy projekt fájlból"
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:47 eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:53
 #, c-format
 msgid "Failed to create file \"%s\""
-msgstr "Nem sikerült létrehozni a \"%s\" fájlt"
+msgstr "Nem sikerült létrehozni a(z) \"%s\" fájlt"
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:103
 #, c-format
 msgid "Could not find library file %s"
-msgstr "A \"%s\" könyvtár fájl nem található"
+msgstr "A(z) \"%s\" könyvtár fájl nem található"
 
 #: eeschema/netlist_generator.cpp:115
 msgid "Run command:"
@@ -9059,7 +9059,7 @@ msgstr "A netlista létrehozása csak akkor lehetséges ha az összes rajzjel so
 
 #: eeschema/netlist_generator.cpp:184
 msgid "Error: duplicate sheet names. Continue?"
-msgstr "Hiba: azonos lapnevek. Folytatja?"
+msgstr "Hiba: ismétlődő lapnevek. Folytatja?"
 
 #: eeschema/netlist_generator.cpp:250
 msgid "No Objects"
@@ -9162,11 +9162,11 @@ msgstr "Vonszolás"
 
 #: eeschema/onrightclick.cpp:399 eeschema/onrightclick.cpp:811 eeschema/onrightclick.cpp:936
 msgid "Mirror Around Horizontal(X) Axis"
-msgstr "Vízszintes tükrözés"
+msgstr "Függőleges tükrözés"
 
 #: eeschema/onrightclick.cpp:402 eeschema/onrightclick.cpp:814 eeschema/onrightclick.cpp:939
 msgid "Mirror Around Vertical(Y) Axis"
-msgstr "Függőleges tükrözés"
+msgstr "Vízszintes tükrözés"
 
 #: eeschema/onrightclick.cpp:405
 msgid "Reset to Default"
@@ -9177,7 +9177,7 @@ msgstr "Visszaállítás alapértelmezettre"
 #: pcbnew/onrightclick.cpp:245 pcbnew/onrightclick.cpp:276 pcbnew/onrightclick.cpp:424 pcbnew/onrightclick.cpp:477 pcbnew/onrightclick.cpp:778
 #: pcbnew/tools/edit_tool.cpp:92 pcbnew/tools/edit_tool.cpp:96
 msgid "Duplicate"
-msgstr "Megkettőzés"
+msgstr "Duplikálás"
 
 #: eeschema/onrightclick.cpp:426
 msgid "Open Documentation"
@@ -9401,7 +9401,7 @@ msgstr "Plottolás: \"%s\" Rendben.\n"
 #: eeschema/plot_schematic_DXF.cpp:84 eeschema/plot_schematic_HPGL.cpp:156 eeschema/plot_schematic_PDF.cpp:90 eeschema/plot_schematic_PS.cpp:112
 #, c-format
 msgid "Unable to create file \"%s\".\n"
-msgstr "Nem sikerült létrehozni a \"%s\" fájlt.\n"
+msgstr "Nem sikerült létrehozni a(z) \"%s\" fájlt.\n"
 
 #: eeschema/plot_schematic_SVG.cpp:76
 #, c-format
@@ -9416,17 +9416,17 @@ msgstr "Átnevezés erre: %s"
 #: eeschema/project_rescue.cpp:293 eeschema/project_rescue.cpp:428
 #, c-format
 msgid "Cannot rescue symbol %s which is not available in any library or the cache."
-msgstr "A %s rajzjel semelyik könyvtárban vagy gyorsítótárban sem található, ezért átmentése nem lehetséges."
+msgstr "A(z) \"%s\" rajzjel semelyik könyvtárban vagy gyorsítótárban sem található, ezért átmentése nem lehetséges."
 
 #: eeschema/project_rescue.cpp:296 eeschema/project_rescue.cpp:431
 #, c-format
 msgid "Rescue symbol %s found only in cache library to %s."
-msgstr "A gyorsítótárazott %s rajzjel átmentése %s-be"
+msgstr "A gyorsítótárazott \"%s\" rajzjel átmentése \"%s\"-ként"
 
 #: eeschema/project_rescue.cpp:299 eeschema/project_rescue.cpp:434
 #, c-format
 msgid "Rescue modified symbol %s to %s"
-msgstr "A módosított %s rajzjel átmentése %s-be"
+msgstr "A módosított \"%s\" rajzjel átmentése \"%s\"-be"
 
 #: eeschema/project_rescue.cpp:559
 msgid "This project has nothing to rescue."
@@ -9439,12 +9439,12 @@ msgstr "Egy rajzjel sem került átmentésre."
 #: eeschema/project_rescue.cpp:684
 #, c-format
 msgid "Failed to create symbol library file \"%s\""
-msgstr "A \"%s\" könyvtár fájlt nem lehet létrehozni"
+msgstr "A(z) \"%s\" könyvtár fájlt nem lehet létrehozni"
 
 #: eeschema/project_rescue.cpp:810
 #, c-format
 msgid "Failed to save rescue library %s."
-msgstr "Nem sikerült a %s könyvtárat menteni."
+msgstr "Nem sikerült a(z) %s könyvtárat menteni."
 
 #: eeschema/project_rescue.cpp:834
 msgid "Error occurred saving project specific symbol library table."
@@ -9453,7 +9453,7 @@ msgstr "Hiba történt a projekt specifikus rajzjel könyvtártáblázat mentés
 #: eeschema/sch_base_frame.cpp:66
 #, c-format
 msgid "Could not load symbol \"%s\" from library \"%s\"."
-msgstr "Nem sikerült a \"%s\" rajzjelet betölteni a \"%s\" könyvtárból."
+msgstr "Nem sikerült a(z) \"%s\" rajzjelet betölteni a(z) \"%s\" könyvtárból."
 
 #: eeschema/sch_base_frame.cpp:335
 #, c-format
@@ -9500,12 +9500,12 @@ msgstr "(Törölt elem)"
 #: eeschema/sch_collectors.cpp:511
 #, c-format
 msgid "Match %i of %i: %s of %s in sheet %s"
-msgstr "%i/%i találat: %s - %s a %s lapon található"
+msgstr "%i/%i találat: %s - %s a(z) %s lapon található"
 
 #: eeschema/sch_collectors.cpp:520
 #, c-format
 msgid "Match %i of %i: %s in sheet %s"
-msgstr "%i/%i találat: %s a %s lapon található"
+msgstr "%i/%i találat: %s a(z) %s lapon található"
 
 #: eeschema/sch_component.cpp:1444
 msgid "Power symbol"
@@ -9531,7 +9531,7 @@ msgstr "Nincs könyvtár definiálva!!!"
 #: eeschema/sch_component.cpp:1496
 #, c-format
 msgid "Symbol not found in %s!!!"
-msgstr "A rajzjel nem található az \"%s\"-ben !!!"
+msgstr "A rajzjel nem található a(z) \"%s\"-ben !!!"
 
 #: eeschema/sch_component.cpp:1720
 #, c-format
@@ -9541,7 +9541,7 @@ msgstr "Rajzjel %s, %s"
 #: eeschema/sch_eagle_plugin.cpp:385 pcbnew/eagle_plugin.cpp:243 pcbnew/eagle_plugin.cpp:2333
 #, c-format
 msgid "Unable to read file \"%s\""
-msgstr "A \"%s\" fájt nem lehet olvasni."
+msgstr "A(z) \"%s\" fájt nem lehet olvasni."
 
 #: eeschema/sch_eagle_plugin.cpp:1089
 #, c-format
@@ -9602,7 +9602,7 @@ msgstr "Új kapcsolási rajz"
 #: eeschema/sch_edit_frame.cpp:1041
 #, c-format
 msgid "Schematic file \"%s\" already exists."
-msgstr "A \"%s\" kapcsolási rajz fájl már létezik."
+msgstr "A(z) \"%s\" kapcsolási rajz fájl már létezik."
 
 #: eeschema/sch_edit_frame.cpp:1059
 msgid "Open Schematic"
@@ -9632,12 +9632,12 @@ msgstr "Mező %s"
 #: eeschema/sch_io_mgr.cpp:32 eeschema/sch_plugin.cpp:27 pcbnew/io_mgr.cpp:42 pcbnew/plugin.cpp:29
 #, c-format
 msgid "Plugin \"%s\" does not implement the \"%s\" function."
-msgstr "A \"%s\" plugin nem tartalmazza a \"%s\" függvényt."
+msgstr "A(z) \"%s\" plugin nem tartalmazza a(z) \"%s\" függvényt."
 
 #: eeschema/sch_io_mgr.cpp:33 pcbnew/io_mgr.cpp:43
 #, c-format
 msgid "Plugin type \"%s\" is not found."
-msgstr "A \"%s\" plugin típus nem található."
+msgstr "A(z) \"%s\" plugin típus nem található."
 
 #: eeschema/sch_io_mgr.cpp:85
 #, c-format
@@ -9661,7 +9661,7 @@ msgstr "idézőjelek nélküli karakterláncot várt volna"
 #: eeschema/sch_legacy_plugin.cpp:783
 #, c-format
 msgid "\"%s\" does not appear to be an Eeschema file"
-msgstr "A \"%s\" nem kapcsolási rajz fájl"
+msgstr "A(z) \"%s\" nem kapcsolási rajz fájl"
 
 #: eeschema/sch_legacy_plugin.cpp:811
 msgid "Missing 'EELAYER END'"
@@ -9690,14 +9690,14 @@ msgid ""
 "\n"
 "Use the Manage Symbol Libraries dialog to fix the path (or remove the library)."
 msgstr ""
-"A \"%s\" könyvtár fájl nem található.\n"
+"A(z) \"%s\" könyvtár fájl nem található.\n"
 "\n"
 "Hasznája a \"Könyvtárak kezelése\" opciót az elérési útvonal javításához (vagy távolítsa el a könyvtárat)."
 
 #: eeschema/sch_legacy_plugin.cpp:2463
 #, c-format
 msgid "user does not have permission to read library document file \"%s\""
-msgstr "a felhasználónak nincs engedélye a \"%s\" könyvtár dokumentumfájl olvasására"
+msgstr "a felhasználónak nincs engedélye a(z) \"%s\" könyvtár dokumentumfájl olvasására"
 
 #: eeschema/sch_legacy_plugin.cpp:2471
 msgid "symbol document library file is empty"
@@ -9706,17 +9706,17 @@ msgstr "a rajzjel dokumentumtár fájl üres"
 #: eeschema/sch_legacy_plugin.cpp:4062 eeschema/sch_legacy_plugin.cpp:4097
 #, c-format
 msgid "library %s does not contain an alias %s"
-msgstr "a \"%s\" könyvtár nem tartalmazza a \"%s\" megnevezést"
+msgstr "a(z) \"%s\" könyvtár nem tartalmazza a(z) \"%s\" megnevezést"
 
 #: eeschema/sch_legacy_plugin.cpp:4280
 #, c-format
 msgid "symbol library \"%s\" already exists, cannot create a new library"
-msgstr "a \"%s\" könyvtár már létezik, nem hozható létre ugyanilyen néven"
+msgstr "a(z) \"%s\" könyvtár már létezik, nem hozható létre ugyanilyen néven"
 
 #: eeschema/sch_legacy_plugin.cpp:4308 pcbnew/legacy_plugin.cpp:3471
 #, c-format
 msgid "library \"%s\" cannot be deleted"
-msgstr "a \"%s\" könyvtár nem törölhető"
+msgstr "a(z) \"%s\" könyvtár nem törölhető"
 
 #: eeschema/sch_line.cpp:623
 #, c-format
@@ -10028,7 +10028,7 @@ msgstr "Könyvtár kiválasztása"
 #: eeschema/selpart.cpp:144
 #, c-format
 msgid "Error occurred loading symbol library \"%s\"."
-msgstr "Hiba történt a \"%s\" könyvtár betöltésekor."
+msgstr "Hiba történt a(z) \"%s\" könyvtár betöltésekor."
 
 #: eeschema/selpart.cpp:150
 msgid "Library:Symbol"
@@ -10046,17 +10046,17 @@ msgstr "\"%s\" már létezik."
 #: eeschema/sheet.cpp:107
 #, c-format
 msgid "Link \"%s\" to this file?"
-msgstr "Összekapcsolja a \"%s\\-t ezzel a fájllal?"
+msgstr "Összekapcsolja a(z) \"%s\\-t ezzel a fájllal?"
 
 #: eeschema/sheet.cpp:133
 #, c-format
 msgid "Change \"%s\" link from \"%s\" to \"%s\"?"
-msgstr "Módosítja a \"%s\" hivatkozást (\"%s\" --> \"%s\")?"
+msgstr "Módosítja a(z) \"%s\" hivatkozást (\"%s\" --> \"%s\")?"
 
 #: eeschema/sheet.cpp:135
 #, c-format
 msgid "Create new file \"%s\" with contents of \"%s\"?"
-msgstr "Létrehozza az új \"%s\" fájlt az \"%s\" tartalmával?"
+msgstr "Létrehozza az új \"%s\" fájlt a(z) \"%s\" tartalmával?"
 
 #: eeschema/sheet.cpp:137
 msgid "This action cannot be undone."
@@ -10065,7 +10065,7 @@ msgstr "Ez a művelet nem vonható vissza."
 #: eeschema/sheet.cpp:203
 #, c-format
 msgid "Error occurred saving schematic file \"%s\"."
-msgstr "Hiba történt a \"%s\" kapcsolási rajz fájl mentése során."
+msgstr "Hiba történt a(z) \"%s\" kapcsolási rajz fájl mentése során."
 
 #: eeschema/sheet.cpp:206
 #, c-format
@@ -10087,7 +10087,7 @@ msgid ""
 "library table.  The project this schematic belongs to must first be remapped\n"
 "before it can be imported into the current project."
 msgstr ""
-"A \"%s\" kapcsolási rajz nem migrálható.\n"
+"A(z) \"%s\" kapcsolási rajz nem migrálható.\n"
 "Először a kapcsolási rajz projektjét kell migrálnia."
 
 #: eeschema/sheetlab.cpp:133
@@ -10140,7 +10140,7 @@ msgstr "Hiba történt a netlista exportálásakor, megszakítva."
 
 #: eeschema/sim/sim_plot_frame.cpp:299
 msgid "You need to select the simulation settings first."
-msgstr "Először ki kell választania a szimulátor beállításait."
+msgstr "Először meg kell adni a szimulációs beállításokat."
 
 #: eeschema/sim/sim_plot_frame.cpp:332
 #, c-format
@@ -10330,12 +10330,12 @@ msgstr "Kérjük, töltse ki a kötelező mezőket"
 #: eeschema/sim/spice_value.cpp:271
 #, c-format
 msgid "\"%s\" is not a valid Spice value"
-msgstr "A \"%s\" nem érvényes SPICE érték"
+msgstr "A(z) \"%s\" nem érvényes SPICE érték"
 
 #: eeschema/symbol_lib_table.cpp:212
 #, c-format
 msgid "Duplicate library nickname \"%s\" found in symbol library table file line %d"
-msgstr "Azonos \"%s\" könyvtári megnevezés a könyvtártáblázat %d. sorában "
+msgstr "Ismétlődő \"%s\" könyvtári megnevezés a könyvtártáblázat %d. sorában "
 
 #: eeschema/symbol_lib_table.cpp:299
 #, c-format
@@ -10349,7 +10349,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Hiba történt a %s könyvtár betöltése során.\n"
+"Hiba történt a(z) %s könyvtár betöltése során.\n"
 "\n"
 "%s"
 
@@ -10806,7 +10806,7 @@ msgstr "Nem használhatja ezt az eszközt ebben a megjelenítési módban"
 #: gerbview/events_called_functions.cpp:379
 #, c-format
 msgid "Source file \"%s\" is not available"
-msgstr "A \"%s\" forrásfájl nem érhető el"
+msgstr "A(z) \"%s\" forrásfájl nem érhető el"
 
 #: gerbview/events_called_functions.cpp:387
 msgid "No editor defined. Please select one"
@@ -10828,7 +10828,7 @@ msgstr "Nincs elég hely a fájl betöltéséhez"
 #: gerbview/excellon_read_drill_file.cpp:275
 #, c-format
 msgid "File %s not found"
-msgstr "A \"%s\" fájl nem található."
+msgstr "A(z) \"%s\" fájl nem található."
 
 #: gerbview/excellon_read_drill_file.cpp:283
 msgid "Error reading EXCELLON drill file"
@@ -10841,17 +10841,17 @@ msgstr "Ismeretlen EXCELLON G kód: &lt;%s&gt;"
 
 #: gerbview/excellon_read_drill_file.cpp:590
 msgid "Tool definition shape not found"
-msgstr "Az eszközdefiníció alakja nem található"
+msgstr "A szerszám definíció alakja nem található"
 
 #: gerbview/excellon_read_drill_file.cpp:593
 #, c-format
 msgid "Tool definition '%c' not supported"
-msgstr "A '%c' eszközdefiníció nem támogatott"
+msgstr "A '%c' szerszám definíció nem támogatott"
 
 #: gerbview/excellon_read_drill_file.cpp:674
 #, c-format
 msgid "Tool %d not defined"
-msgstr "A %d eszköz nincs definiálva"
+msgstr "A %d szerszám nincs definiálva"
 
 #: gerbview/excellon_read_drill_file.cpp:855
 #, c-format
@@ -10961,7 +10961,7 @@ msgstr "NC (Excellon) fúrófájlok megnyitása"
 #: gerbview/files.cpp:501
 #, c-format
 msgid "Zip file \"%s\" cannot be opened"
-msgstr "A \"%s\" zip fájl nem nyitható meg"
+msgstr "A(z) \"%s\" zip fájl nem nyitható meg"
 
 #: gerbview/files.cpp:543
 #, c-format
@@ -10971,7 +10971,7 @@ msgstr "Kihagyott fájl: <i>\"%s\"</i> (ismeretlen típus)\n"
 #: gerbview/files.cpp:585
 #, c-format
 msgid "<b>Unable to create temporary file \"%s\"</b>\n"
-msgstr "<b>Nem hozható létre a \"%s\" ideiglenes fájl</b>\n"
+msgstr "<b>Nem hozható létre a(z) \"%s\" ideiglenes fájl</b>\n"
 
 #: gerbview/files.cpp:615
 #, c-format
@@ -11491,17 +11491,17 @@ msgstr "Gerber megjelenítő kézikönyv megnyitása"
 #: gerbview/onrightclick.cpp:106 gerbview/tools/selection_tool.cpp:104
 #, c-format
 msgid "Highlight Items of Component \"%s\""
-msgstr "A \"%s\" alkatrész elemeinek kiemelése"
+msgstr "A(z) \"%s\" alkatrész elemeinek kiemelése"
 
 #: gerbview/onrightclick.cpp:115 gerbview/tools/selection_tool.cpp:112
 #, c-format
 msgid "Highlight Items of Net \"%s\""
-msgstr "A \"%s\" vezeték elemeinek kiemelése"
+msgstr "A(z) \"%s\" vezeték elemeinek kiemelése"
 
 #: gerbview/onrightclick.cpp:126 gerbview/tools/selection_tool.cpp:122
 #, c-format
 msgid "Highlight Aperture Type \"%s\""
-msgstr "A \"%s\" apertúratípus kiemelése"
+msgstr "A(z) \"%s\" apertúratípus kiemelése"
 
 #: gerbview/onrightclick.cpp:137 gerbview/tools/gerbview_control.cpp:42
 msgid "Clear Highlight"
@@ -11510,7 +11510,7 @@ msgstr "Kiemelés megszüntetése"
 #: gerbview/readgerb.cpp:61 pcbnew/footprint_libraries_utils.cpp:64
 #, c-format
 msgid "File \"%s\" not found"
-msgstr "A \"%s\" fájl nem található"
+msgstr "A(z) \"%s\" fájl nem található"
 
 #: gerbview/readgerb.cpp:79
 msgid ""
@@ -11530,7 +11530,7 @@ msgstr "RS274X: Érvénytelen GERBER formátumú parancs '%c' a %d. sorban: \"%s
 #: gerbview/rs274x.cpp:274
 #, c-format
 msgid "GERBER file \"%s\" may not display as intended."
-msgstr "A \"%s\" GERBER fájl nem feltétlenül fog helyesen megjelenni."
+msgstr "A(z) \"%s\" GERBER fájl nem feltétlenül fog helyesen megjelenni."
 
 #: gerbview/rs274x.cpp:549
 msgid "RS274X: Command \"IR\" rotation value not allowed"
@@ -11719,19 +11719,27 @@ msgstr "Aktív"
 
 #: kicad/commandframe.cpp:72
 msgid "Schematic Layout Editor"
-msgstr "Kapcsolási rajz tervező"
+msgstr ""
+"Kapcsolási rajz tervező\n"
+"(Eeschema)"
 
 #: kicad/commandframe.cpp:83
 msgid "PCB Layout Editor"
-msgstr "Nyáktervező"
+msgstr ""
+"Nyáktervező\n"
+"(Pcbnew)"
 
 #: kicad/commandframe.cpp:87 pcbnew/footprint_edit_frame.cpp:790 pcbnew/footprint_edit_frame.cpp:984 pcbnew/hotkeys.cpp:533
 msgid "Footprint Editor"
-msgstr "Alkatrészrajzolat szerkesztő"
+msgstr ""
+"Alkatrészrajzolat szerkesztő\n"
+"(Footprint Editor)"
 
 #: kicad/commandframe.cpp:94
 msgid "Gerber Viewer"
-msgstr "Gerber megjelenítő"
+msgstr ""
+"Gerber megjelenítő\n"
+"(GerbView)"
 
 #: kicad/commandframe.cpp:98
 msgid ""
@@ -11811,7 +11819,7 @@ msgstr "Célmappa"
 #: kicad/files-io.cpp:81
 #, c-format
 msgid "Unzipping project in \"%s\"\n"
-msgstr "Projekt kitömörítése a \"%s\" mappába.\n"
+msgstr "Projekt kitömörítése a(z) \"%s\" mappába.\n"
 
 #: kicad/files-io.cpp:106
 #, c-format
@@ -11833,7 +11841,7 @@ msgstr "Projekt fájlok archiválása"
 #: kicad/files-io.cpp:190
 #, c-format
 msgid "Unable to create zip archive file \"%s\""
-msgstr "Nem lehet létrehozni a \"%s\" zip archívumot."
+msgstr "Nem lehet létrehozni a(z) \"%s\" zip archívumot."
 
 #: kicad/files-io.cpp:217
 #, c-format
@@ -12079,7 +12087,7 @@ msgstr "Projekt fájlok böngészése"
 
 #: kicad/menubar.cpp:328 kicad/menubar.cpp:515
 msgid "Open project directory in file explorer"
-msgstr "A projekt könyvtárának megnyitása fájlkezelőben"
+msgstr "Projektkönyvtár megnyitása fájlkezelőben"
 
 #: kicad/menubar.cpp:344
 msgid "Edit the global and project symbol library tables"
@@ -12119,7 +12127,7 @@ msgstr "Kép konvertálása kapcsolási rajz vagy nyákterv elemmé"
 
 #: kicad/menubar.cpp:392
 msgid "Calculator Tools"
-msgstr "Elektronikai kalkulátor eszközök"
+msgstr "Elektronikai kalkulátor"
 
 #: kicad/menubar.cpp:394
 msgid "Run component calculations, track width calculations, etc."
@@ -12127,7 +12135,7 @@ msgstr "Számolások (pl: vezetősáv szélesség) elvégzése"
 
 #: kicad/menubar.cpp:397
 msgid "Edit Worksheet"
-msgstr "Munkalap"
+msgstr "Papírelrendezés szerkesztése"
 
 #: kicad/menubar.cpp:399
 msgid "Edit worksheet graphics and text"
@@ -12176,7 +12184,7 @@ msgid ""
 "\n"
 "Please make sure you have write permissions and try again."
 msgstr ""
-"A \"%s\" mappa nem hozható létre.\n"
+"A(z) \"%s\" mappa nem hozható létre.\n"
 "\n"
 "Kérjük, ellenőrizze, van-e írási jogosultsága, majd próbálja meg újra."
 
@@ -12209,7 +12217,7 @@ msgstr "Új projekt mappa"
 #: kicad/prjconfig.cpp:366
 #, c-format
 msgid "Cannot write to folder \"%s\"."
-msgstr "A \"%s\" mappába nem lehet írni."
+msgstr "A(z) \"%s\" mappába nem lehet írni."
 
 #: kicad/prjconfig.cpp:367
 msgid "Error!"
@@ -12250,12 +12258,12 @@ msgstr "Nem sikerült megtalálni a meta HTML információs fájlt ehhez a sablo
 #: kicad/project_template.cpp:205
 #, c-format
 msgid "Cannot create folder \"%s\"."
-msgstr "Nem sikerült létrehozni a \"%s\" mappát."
+msgstr "Nem sikerült létrehozni a(z) \"%s\" mappát."
 
 #: kicad/project_template.cpp:227
 #, c-format
 msgid "Cannot copy file \"%s\"."
-msgstr "Az \"%s\" fájl nem másolható."
+msgstr "A(z) \"%s\" fájl nem másolható."
 
 #: kicad/tree_project_frame.cpp:235
 #, c-format
@@ -12576,7 +12584,7 @@ msgstr ""
 #: pagelayout_editor/files.cpp:79 pagelayout_editor/files.cpp:162
 #, c-format
 msgid "File \"%s\" loaded"
-msgstr "A \"%s\" fájl betöltve"
+msgstr "A(z) \"%s\" fájl betöltve"
 
 #: pagelayout_editor/files.cpp:119
 msgid "Append Existing Page Layout File"
@@ -12730,7 +12738,7 @@ msgstr "A papírelrendezés szerkesztő már fut. Folytatja?"
 #: pagelayout_editor/pl_editor.cpp:182 pagelayout_editor/pl_editor_frame.cpp:169
 #, c-format
 msgid "Error when loading file \"%s\""
-msgstr "Hiba a \"%s\" fájl betöltése közben."
+msgstr "Hiba a(z) \"%s\" fájl betöltése közben."
 
 #: pagelayout_editor/pl_editor_frame.cpp:117
 msgid "coord origin: Right Bottom page corner"
@@ -12869,7 +12877,7 @@ msgstr "hüvelyk"
 
 #: pcb_calculator/UnitSelector.cpp:75
 msgid "oz/ft^2"
-msgstr "oz/ft^2"
+msgstr "oz/ft²"
 
 #: pcb_calculator/UnitSelector.cpp:104
 msgid "GHz"
@@ -13054,7 +13062,7 @@ msgstr "°C"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:286
 msgid "Conductor length:"
-msgstr "Vezetősáv hossza:"
+msgstr "Vezetősáv hossz:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:298
 msgid "Resistivity:"
@@ -13269,7 +13277,7 @@ msgstr "Hordozó paraméterek"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:649 pcb_calculator/transline_ident.cpp:142
 msgid "Er:"
-msgstr "εr:"
+msgstr "εᵣ:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:656 pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:666
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:678
@@ -13278,11 +13286,11 @@ msgstr "..."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:659 pcb_calculator/transline_ident.cpp:145
 msgid "TanD:"
-msgstr "tangensΔ"
+msgstr "tan δ:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:669 pcb_calculator/transline_ident.cpp:150
 msgid "Rho:"
-msgstr "ρ (Ω⋅m):"
+msgstr "ρ [Ω⋅m]:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:671
 msgid "Specific resistance in ohms * meters"
@@ -13291,30 +13299,30 @@ msgstr "Fajlagos ellenállás [Ω⋅m]"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:681 pcb_calculator/transline_ident.cpp:171 pcb_calculator/transline_ident.cpp:208
 #: pcb_calculator/transline_ident.cpp:240 pcb_calculator/transline_ident.cpp:341 pcb_calculator/transline_ident.cpp:377
 msgid "H:"
-msgstr "H"
+msgstr "H:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:693 pcb_calculator/transline_ident.cpp:173 pcb_calculator/transline_ident.cpp:343
 msgid "H_t:"
-msgstr "H_t"
+msgstr "Hₜ:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:705 pcb_calculator/transline_ident.cpp:175 pcb_calculator/transline_ident.cpp:210
 #: pcb_calculator/transline_ident.cpp:242 pcb_calculator/transline_ident.cpp:345 pcb_calculator/transline_ident.cpp:382
 msgid "T:"
-msgstr "T"
+msgstr "T:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:717 pcb_calculator/transline_ident.cpp:177 pcb_calculator/transline_ident.cpp:347
 msgid "Rough:"
-msgstr "Érdesség:"
+msgstr "érdesség:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:729
 msgid "mu Rel:"
-msgstr "µr"
+msgstr "µᵣ:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:741 pcb_calculator/transline_ident.cpp:182 pcb_calculator/transline_ident.cpp:212
 #: pcb_calculator/transline_ident.cpp:244 pcb_calculator/transline_ident.cpp:279 pcb_calculator/transline_ident.cpp:310
 #: pcb_calculator/transline_ident.cpp:349 pcb_calculator/transline_ident.cpp:384 pcb_calculator/transline_ident.cpp:412
 msgid "mu Rel C:"
-msgstr "Vezető µr"
+msgstr "µᵣ,v:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:760
 msgid "Component Parameters:"
@@ -13513,15 +13521,15 @@ msgstr "Minimális szigetelési távolság:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1312
 msgid "Via: (diam - drill)"
-msgstr "Via: (átmérő - furatméret)"
+msgstr "Via: (átmérő - furat)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1313
 msgid "Plated Pad: (diam - drill)"
-msgstr "Furatfémezett forrszem: (átmérő - furatméret)"
+msgstr "Furatfémezett forrszem: (átmérő - furat)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1314
 msgid "NP Pad: (diam - drill)"
-msgstr "Nem furatfémezett forrszem: (átmérő - furatméret)"
+msgstr "Nem furatfémezett forrszem: (átmérő - furat)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1333
 msgid "Board Classes"
@@ -13549,7 +13557,7 @@ msgid ""
 "Unable to write file \"%s\"\n"
 "Do you want to exit and abandon your change?"
 msgstr ""
-"Nem lehet írni a \"%s\" fájlt.\n"
+"Nem lehet írni a(z) \"%s\" fájlt.\n"
 "Biztosan kilép, és elveti a módosításokat?"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:161
@@ -13576,7 +13584,7 @@ msgstr "Szeretné betölteni ezt a fájlt és lecserélni az aktuális feszülts
 #: pcb_calculator/regulators_funct.cpp:263
 #, c-format
 msgid "Unable to read data file \"%s\""
-msgstr "A \"%s\" adatfájt nem lehet olvasni."
+msgstr "A(z) \"%s\" adatfájt nem lehet olvasni."
 
 #: pcb_calculator/regulators_funct.cpp:294
 msgid "This regulator is already in list. Aborted"
@@ -13675,7 +13683,7 @@ msgstr "A bemeneti jel frekvenciája"
 #: pcb_calculator/transline_ident.cpp:268 pcb_calculator/transline_ident.cpp:301 pcb_calculator/transline_ident.cpp:371
 #: pcb_calculator/transline_ident.cpp:404
 msgid "ErEff:"
-msgstr "εr,eff:"
+msgstr "εᵣ,eff:"
 
 #: pcb_calculator/transline_ident.cpp:166 pcb_calculator/transline_ident.cpp:203 pcb_calculator/transline_ident.cpp:235
 #: pcb_calculator/transline_ident.cpp:269 pcb_calculator/transline_ident.cpp:302 pcb_calculator/transline_ident.cpp:372
@@ -13701,7 +13709,7 @@ msgstr "Hordozó magassága"
 
 #: pcb_calculator/transline_ident.cpp:173 pcb_calculator/transline_ident.cpp:343
 msgid "Height of Box Top"
-msgstr "Határolófal távolsága (nagyobb érték pontosabb eredményre vezet, de lassab lehet a számolás)"
+msgstr "Felső határolófal távolsága (nagyobb érték pontosabb eredményre vezet, de lassab lehet a számolás)"
 
 #: pcb_calculator/transline_ident.cpp:175 pcb_calculator/transline_ident.cpp:210 pcb_calculator/transline_ident.cpp:242
 #: pcb_calculator/transline_ident.cpp:345 pcb_calculator/transline_ident.cpp:382
@@ -13714,28 +13722,28 @@ msgstr "Vezetőfólia egyenetlensége"
 
 #: pcb_calculator/transline_ident.cpp:179
 msgid "mu Rel S:"
-msgstr "Hordozó µr"
+msgstr "µᵣ,h:"
 
 #: pcb_calculator/transline_ident.cpp:180
 msgid "Relative Permeability (mu) of Substrate"
-msgstr "A hordozó relatív permeabilitása (μr)"
+msgstr "A hordozó relatív permeabilitása (μᵣ)"
 
 #: pcb_calculator/transline_ident.cpp:182 pcb_calculator/transline_ident.cpp:212 pcb_calculator/transline_ident.cpp:244
 #: pcb_calculator/transline_ident.cpp:279 pcb_calculator/transline_ident.cpp:310 pcb_calculator/transline_ident.cpp:349
 #: pcb_calculator/transline_ident.cpp:384 pcb_calculator/transline_ident.cpp:412
 msgid "Relative Permeability (mu) of Conductor"
-msgstr "A vezető relatív permeabilitása (μr)"
+msgstr "A vezető relatív permeabilitása (μᵣ)"
 
 #: pcb_calculator/transline_ident.cpp:186 pcb_calculator/transline_ident.cpp:216 pcb_calculator/transline_ident.cpp:248
 #: pcb_calculator/transline_ident.cpp:353 pcb_calculator/transline_ident.cpp:388
 msgid "W:"
-msgstr "Sz:"
+msgstr "W:"
 
 #: pcb_calculator/transline_ident.cpp:188 pcb_calculator/transline_ident.cpp:220 pcb_calculator/transline_ident.cpp:252
 #: pcb_calculator/transline_ident.cpp:287 pcb_calculator/transline_ident.cpp:318 pcb_calculator/transline_ident.cpp:357
 #: pcb_calculator/transline_ident.cpp:390 pcb_calculator/transline_ident.cpp:422
 msgid "L:"
-msgstr "H:"
+msgstr "L:"
 
 #: pcb_calculator/transline_ident.cpp:188 pcb_calculator/transline_ident.cpp:220 pcb_calculator/transline_ident.cpp:252
 #: pcb_calculator/transline_ident.cpp:318 pcb_calculator/transline_ident.cpp:357 pcb_calculator/transline_ident.cpp:390
@@ -13746,7 +13754,7 @@ msgstr "Tápvonal hosszúság"
 #: pcb_calculator/transline_ident.cpp:290 pcb_calculator/transline_ident.cpp:321 pcb_calculator/transline_ident.cpp:393
 #: pcb_calculator/transline_ident.cpp:425
 msgid "Z0:"
-msgstr "Z0:"
+msgstr "Z₀:"
 
 #: pcb_calculator/transline_ident.cpp:191 pcb_calculator/transline_ident.cpp:223 pcb_calculator/transline_ident.cpp:255
 #: pcb_calculator/transline_ident.cpp:290 pcb_calculator/transline_ident.cpp:321 pcb_calculator/transline_ident.cpp:393
@@ -13788,11 +13796,11 @@ msgstr "TM módusok:"
 
 #: pcb_calculator/transline_ident.cpp:275 pcb_calculator/transline_ident.cpp:308
 msgid "mu Rel I:"
-msgstr "Szigetelő µr"
+msgstr "µᵣ,sz:"
 
 #: pcb_calculator/transline_ident.cpp:275 pcb_calculator/transline_ident.cpp:308
 msgid "Relative Permeability (mu) of Insulator"
-msgstr "A szigetelő relatív permeabilitása (µr)"
+msgstr "A szigetelő relatív permeabilitása (µᵣ)"
 
 #: pcb_calculator/transline_ident.cpp:277
 msgid "TanM:"
@@ -13824,27 +13832,27 @@ msgstr "Csőtápvonal hosszúság"
 
 #: pcb_calculator/transline_ident.cpp:314 pcb_calculator/transline_ident.cpp:418
 msgid "Din:"
-msgstr "Dm:"
+msgstr "Din:"
 
 #: pcb_calculator/transline_ident.cpp:314 pcb_calculator/transline_ident.cpp:418
 msgid "Inner Diameter (conductor)"
-msgstr "Melegér (belső vezető) átmérő"
+msgstr "Belső átmérő (vezető)"
 
 #: pcb_calculator/transline_ident.cpp:316 pcb_calculator/transline_ident.cpp:420
 msgid "Dout:"
-msgstr "Dk:"
+msgstr "Dout:"
 
 #: pcb_calculator/transline_ident.cpp:316 pcb_calculator/transline_ident.cpp:420
 msgid "Outer Diameter (insulator)"
-msgstr "Köpeny átmérő."
+msgstr "Külső átmérő (szigetelő / koax köppeny)"
 
 #: pcb_calculator/transline_ident.cpp:332
 msgid "ErEff Even:"
-msgstr "εr,eff (páros módus):"
+msgstr "εᵣ,eff (páros módus):"
 
 #: pcb_calculator/transline_ident.cpp:333
 msgid "ErEff Odd:"
-msgstr "εr,eff (páratlan módus):"
+msgstr "εᵣ,eff (páratlan módus):"
 
 #: pcb_calculator/transline_ident.cpp:334
 msgid "Conductor Losses Even:"
@@ -13884,7 +13892,7 @@ msgstr "a szalag és a felső fém közötti távolság"
 
 #: pcb_calculator/transline_ident.cpp:410
 msgid "Twists:"
-msgstr "Csavarodás:"
+msgstr "csavarodás:"
 
 #: pcb_calculator/transline_ident.cpp:410
 msgid "Number of Twists per Length"
@@ -13892,7 +13900,7 @@ msgstr "Csavarodások száma a megadott hosszon"
 
 #: pcb_calculator/transline_ident.cpp:415
 msgid "ErEnv:"
-msgstr "εr,körny.:"
+msgstr "εᵣ,körny.:"
 
 #: pcb_calculator/transline_ident.cpp:415
 msgid "Relative Permittivity of Environment"
@@ -13993,7 +14001,7 @@ msgstr "%s nem adható hozzá (nincs hozzárendelt alkatrészrajzolat)."
 #: pcbnew/board_netlist_updater.cpp:138
 #, c-format
 msgid "Cannot add %s (footprint \"%s\" not found)."
-msgstr "%s nem adható hozzá (a \"%s\" alkatrészrajzolat nem található)."
+msgstr "%s nem adható hozzá (a(z) \"%s\" alkatrészrajzolat nem található)."
 
 #: pcbnew/board_netlist_updater.cpp:146
 #, c-format
@@ -14008,7 +14016,7 @@ msgstr "%s nem frissíthető (nincs hozzárendelt alkatrészrajzolat)."
 #: pcbnew/board_netlist_updater.cpp:186
 #, c-format
 msgid "Cannot update %s (footprint \"%s\" not found)."
-msgstr "%s nem frissíthető (a \"%s\" alkatrészrajzolat nem található)."
+msgstr "%s nem frissíthető (a(z) \"%s\" alkatrészrajzolat nem található)."
 
 #: pcbnew/board_netlist_updater.cpp:194
 #, c-format
@@ -14088,7 +14096,7 @@ msgstr "\"%s:%s:%s\" alkatrész feldolgozása."
 #: pcbnew/board_netlist_updater.cpp:699 pcbnew/class_board.cpp:2738
 #, c-format
 msgid "Multiple footprints found for \"%s\"."
-msgstr "A \"%s\" rajzjelhez nincs egyértelműen alkatrészrajzolat társítva (több lehetőség)."
+msgstr "A(z) \"%s\" rajzjelhez nincs egyértelműen alkatrészrajzolat társítva (több lehetőség)."
 
 #: pcbnew/board_netlist_updater.cpp:715
 msgid "Update netlist"
@@ -14120,7 +14128,7 @@ msgstr "Bevásárlólista mentése"
 #: pcbnew/build_BOM_from_board.cpp:108 pcbnew/dialogs/dialog_export_vrml.cpp:253
 #, c-format
 msgid "Unable to create file \"%s\""
-msgstr "Nem lehet létrehozni a \"%s\" fájlt."
+msgstr "Nem lehet létrehozni a(z) \"%s\" fájlt."
 
 #: pcbnew/build_BOM_from_board.cpp:115
 msgid "Id"
@@ -14266,7 +14274,7 @@ msgstr "Sokszög"
 #: pcbnew/class_dimension.cpp:490
 #, c-format
 msgid "Dimension \"%s\" on %s"
-msgstr "\"%s\" kiterjedése a %s rétegen"
+msgstr "\"%s\" kiterjedése a(z) %s rétegen"
 
 #: pcbnew/class_drawsegment.cpp:440
 msgid "Drawing"
@@ -14289,7 +14297,7 @@ msgstr "Grafika: %s, hossza: %s , a(z) %s rétegen"
 #: pcbnew/class_edge_mod.cpp:295
 #, c-format
 msgid "Graphic %s of %s on %s"
-msgstr "%s grafika (%s) a %s rétegen"
+msgstr "%s grafika (%s) a(z) %s rétegen"
 
 #: pcbnew/class_marker_pcb.cpp:96
 msgid "Marker"
@@ -14367,7 +14375,7 @@ msgstr "<nincs referencia>"
 #: pcbnew/class_module.cpp:873
 #, c-format
 msgid "Footprint %s on %s"
-msgstr "\"%s\" alkatrész, a(z) \"%s\" rétegen."
+msgstr "A(z) \"%s\" alkatrészrajzolat, a(z) \"%s\" rétegen."
 
 #: pcbnew/class_module.cpp:1446
 #, c-format
@@ -14434,20 +14442,20 @@ msgstr "Furatfémezés nélküli"
 #: pcbnew/class_pad.cpp:1262
 #, c-format
 msgid "Pad of %s on %s"
-msgstr "\"%s\" forrszeme a \"%s\" rétegen."
+msgstr "\"%s\" alkatrészrajzolat forrszeme a(z) \"%s\" réteg(ek)en."
 
 #: pcbnew/class_pad.cpp:1268
 #, c-format
 msgid "Pad %s of %s on %s"
-msgstr "A \"%s\" forrszem (%s) a \"%s\" rétegen."
+msgstr "A(z) \"%s\" forrszem (\"%s\" alkatrészrajzolat) a(z) \"%s\" réteg(ek)en."
 
 #: pcbnew/class_pad.cpp:1414 pcbnew/dialogs/dialog_pad_properties_base.cpp:311
 msgid "All copper layers"
-msgstr "Minden vezető réteg"
+msgstr "Minden vezető"
 
 #: pcbnew/class_pad.cpp:1428
 msgid " and others"
-msgstr " és a többi"
+msgstr " és további"
 
 #: pcbnew/class_pad.cpp:1439
 #, fuzzy
@@ -14475,7 +14483,7 @@ msgstr "Vastagság"
 #: pcbnew/class_pcb_text.cpp:183
 #, c-format
 msgid "Pcb Text \"%s\" on %s"
-msgstr "A \"%s\" szöveg a \"%s\" rétegen."
+msgstr "A(z) \"%s\" szöveg a(z) \"%s\" rétegen."
 
 #: pcbnew/class_text_mod.cpp:374
 msgid "Ref."
@@ -14498,7 +14506,7 @@ msgstr "\"%s\" érték mely a(z) \"%s\" alkatrészhez tartozik."
 #: pcbnew/class_text_mod.cpp:431
 #, c-format
 msgid "Text \"%s\" of %s on %s"
-msgstr "A \"%s\" szöveg (%s) a \"%s\" rétegen."
+msgstr "A(z) \"%s\" szöveg (%s) a(z) \"%s\" rétegen."
 
 #: pcbnew/class_track.cpp:125
 #, c-format
@@ -14546,7 +14554,7 @@ msgstr "Vezetékosztály via átmérő"
 
 #: pcbnew/class_track.cpp:1103
 msgid "NC Via Drill"
-msgstr "Vezetékosztály via furatméret"
+msgstr "Vezetékosztály via furat"
 
 #: pcbnew/class_track.cpp:1121 pcbnew/class_zone.cpp:846
 msgid "NetName"
@@ -14595,7 +14603,7 @@ msgstr "(Vezetékosztály)"
 #: pcbnew/class_track.cpp:1599
 #, c-format
 msgid "Track %s %s on %s, length: %s"
-msgstr "%s %s vezetősáv a %s rétegen, hossza: %s"
+msgstr "Vezetősáv %s %s a(z) %s rétegen, hossza: %s"
 
 #: pcbnew/class_zone.cpp:807
 msgid "Zone Outline"
@@ -14664,7 +14672,7 @@ msgstr "(Kizárt)"
 #: pcbnew/class_zone.cpp:1050
 #, c-format
 msgid "Zone Outline %s on %s"
-msgstr "%s zóna körvonal a %s rétegen"
+msgstr "%s zóna körvonal a(z) %s rétegen"
 
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:484 pcbnew/convert_drawsegment_list_to_polygon.cpp:686
 #, c-format
@@ -14684,7 +14692,7 @@ msgstr "%s nem található"
 #: pcbnew/cross-probing.cpp:194
 #, c-format
 msgid "Selecting all from sheet \"%s\""
-msgstr "Az összes kiválasztása a \"%s\" lapról"
+msgstr "Az összes kiválasztása a(z) \"%s\" lapról"
 
 #: pcbnew/cross-probing.cpp:245
 #, c-format
@@ -14931,7 +14939,7 @@ msgstr "Vonalkázott keret"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:141 pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
 msgid "Fully hatched"
-msgstr "Teljesen vonalkázott"
+msgstr "Vonalkázott terület"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:160 pcbnew/dialogs/dialog_drc_base.cpp:35
 msgid "Clearance:"
@@ -15022,7 +15030,7 @@ msgstr "Nem határozható meg a számozás kezdőértéke (\"%s\"): a várt ért
 #: pcbnew/dialogs/dialog_create_array.cpp:265
 #, c-format
 msgid "Bad numeric value for %s: %s"
-msgstr "Rossz számérték az %s: %s számára"
+msgstr "Rossz számérték a(z) %s: %s számára"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:286
 msgid "horizontal count"
@@ -15227,7 +15235,7 @@ msgstr "Nem csatlakoztatottak listázása"
 #: pcbnew/dialogs/dialog_drc.cpp:237 pcbnew/dialogs/dialog_drc.cpp:306
 #, c-format
 msgid "Report file \"%s\" created"
-msgstr "A \"%s\" naplófájl létrehozva"
+msgstr "A(z) \"%s\" naplófájl létrehozva"
 
 #: pcbnew/dialogs/dialog_drc.cpp:238 pcbnew/dialogs/dialog_drc.cpp:307
 msgid "Disk File Report Completed"
@@ -15236,7 +15244,7 @@ msgstr "A naplófájl elkészült"
 #: pcbnew/dialogs/dialog_drc.cpp:243 pcbnew/dialogs/dialog_drc.cpp:312
 #, c-format
 msgid "Unable to create report file \"%s\""
-msgstr "Nem lehet létrehozni a \"%s\" naplófájlt."
+msgstr "Nem lehet létrehozni a(z) \"%s\" naplófájlt."
 
 #: pcbnew/dialogs/dialog_drc.cpp:333
 msgid "Save DRC Report File"
@@ -15732,7 +15740,7 @@ msgstr "Csere:"
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:343
 #, c-format
 msgid "%s footprint \"%s\" (from \"%s\") to \"%s\""
-msgstr "%s alkatrészrajzolatát (\"%s\" a \"%s\" könyvtárból) erre: \"%s\""
+msgstr "%s alkatrészrajzolatát (\"%s\" a(z) \"%s\" könyvtárból) erre: \"%s\""
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:353
 msgid "*** footprint not found ***"
@@ -15791,7 +15799,7 @@ msgstr "%s"
 #: pcbnew/dialogs/dialog_export_idf.cpp:170 pcbnew/dialogs/dialog_gencad_export_options.cpp:125
 #, c-format
 msgid "File %s already exists."
-msgstr "A \"%s\" fájl már létezik."
+msgstr "A(z) \"%s\" fájl már létezik."
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:227 pcbnew/exporters/export_d356.cpp:376
 msgid "Unable to create "
@@ -15946,7 +15954,7 @@ msgstr "\"%s\" exportálásra került."
 #: pcbnew/dialogs/dialog_export_svg.cpp:289 pcbnew/dialogs/dialog_plot.cpp:844 pcbnew/exporters/gen_footprints_placefile.cpp:346
 #, c-format
 msgid "Unable to create file \"%s\"."
-msgstr "Nem lehet létrehozni a \"%s\" fájlt."
+msgstr "Nem lehet létrehozni a(z) \"%s\" fájlt."
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:29
 msgid ""
@@ -16256,7 +16264,7 @@ msgstr "Furattérkép fájl létrehozása"
 #: pcbnew/dialogs/dialog_gendrill.cpp:396
 #, c-format
 msgid "Could not write drill and/or map files to folder \"%s\"."
-msgstr "Nem írhatóak a \"%s\" mappába a létrehozni kívánt fúró és/vagy furattérkép fájlok."
+msgstr "Nem írhatóak a(z) \"%s\" mappába a létrehozni kívánt fúró és/vagy furattérkép fájlok."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:444
 msgid "Save Drill Report File"
@@ -16271,7 +16279,7 @@ msgstr "** Nem lehet létrehozni %s-t ** \n"
 #: pcbnew/dialogs/dialog_gendrill.cpp:475
 #, c-format
 msgid "Report file %s created\n"
-msgstr "A \"%s\" naplófájl létrehozva\n"
+msgstr "A(z) \"%s\" naplófájl létrehozva\n"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:22
 msgid "Output folder:"
@@ -16668,7 +16676,7 @@ msgstr "Via átmérő"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:190 pcbnew/dialogs/panel_setup_netclasses_base.cpp:52
 msgid "Via Drill"
-msgstr "Via furatméret"
+msgstr "Via furat"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:191 pcbnew/dialogs/panel_setup_netclasses_base.cpp:53
 msgid "uVia Size"
@@ -16676,7 +16684,7 @@ msgstr "μVia átmérő"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:192 pcbnew/dialogs/panel_setup_netclasses_base.cpp:54
 msgid "uVia Drill"
-msgstr "μVia furatméret"
+msgstr "μVia furat"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:256
 msgid "Some items failed DRC and were not modified."
@@ -17053,7 +17061,7 @@ msgstr "Alkatrészrajzolatok ellenőrzése"
 #: pcbnew/dialogs/dialog_netlist.cpp:366 pcbnew/netlist.cpp:90
 #, c-format
 msgid "Cannot open netlist file \"%s\"."
-msgstr "A \"%s\" netlista fájlt nem lehet megnyitni."
+msgstr "A(z) \"%s\" netlista fájlt nem lehet megnyitni."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:367 pcbnew/netlist.cpp:91
 msgid "Netlist Load Error."
@@ -17064,7 +17072,7 @@ msgstr "Netlista betöltési hiba."
 msgid ""
 "Error loading netlist file:\n"
 "%s"
-msgstr "Hiba a \"%s\" netlista fájl betöltése közben."
+msgstr "Hiba a(z) \"%s\" netlista fájl betöltése közben."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:377 pcbnew/netlist.cpp:102
 msgid "Netlist Load Error"
@@ -17073,7 +17081,7 @@ msgstr "Hiba a netlista betöltése közben"
 #: pcbnew/dialogs/dialog_netlist.cpp:444
 #, c-format
 msgid "Reading netlist file \"%s\".\n"
-msgstr "A \"%s\" netlista fájl olvasása.\n"
+msgstr "A(z) \"%s\" netlista fájl olvasása.\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:448
 msgid "Using time stamps to match components and footprints.\n"
@@ -17237,7 +17245,7 @@ msgstr "Forrszem méretének nullánál nagyobbnak kell lennie"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1121
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
-msgstr "Helytelen furatméret: a furatméret nagyobb a forrszemnél"
+msgstr "Helytelen furat méret: a furat nagyobb a forrszemnél"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1128
 msgid "Pad local clearance must be zero or greater than zero"
@@ -17263,8 +17271,7 @@ msgstr "Hiba: a furattal rendelkező forrszem nem vezetőrétegen van"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1174
 msgid "For NPTH pad, set pad size value to pad drill value, if you do not want this pad plotted in gerber files"
 msgstr ""
-"NPTH (fémezetlen) furat esetén a furatméret és a forrszem mérete legyen azonos, ekkor a forrszem nem fog megjelenni a vezetőrétegeket leíró Gerber "
-"fájlokban"
+"NPTH (fémezetlen) furat esetén a furat és a forrszem mérete legyen azonos, ekkor a forrszem nem fog megjelenni a vezetőrétegeket leíró Gerber fájlokban"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1193
 msgid "Incorrect value for pad offset"
@@ -17276,7 +17283,7 @@ msgstr "A forrszem delta mérete túl nagy"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1206
 msgid "Error: Through hole pad: drill diameter set to 0"
-msgstr "Hiba: furatszerelt forrszem esetén a furatméret nem lehet nulla."
+msgstr "Hiba: furatszerelt forrszem esetén a furat nem lehet nulla méretű."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1211
 msgid ""
@@ -17472,11 +17479,11 @@ msgstr "Furat alakja:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:262
 msgid "Hole size X:"
-msgstr "Furatméret X:"
+msgstr "Furat méret X:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:273
 msgid "Hole size Y:"
-msgstr "Furatméret Y:"
+msgstr "Furat méret Y:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:297
 msgid ""
@@ -17626,7 +17633,7 @@ msgstr "Primitív szerkesztése"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:629
 msgid "Duplicate Primitive"
-msgstr "Primitív megkettőzése"
+msgstr "Primitív duplikálása"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:632
 msgid "Transform Primitive"
@@ -18311,7 +18318,7 @@ msgstr "Pontszerű"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:168
 msgid "Real drill"
-msgstr "Valós furatméret"
+msgstr "Valós furat méret"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:177
 msgid "One page per layer"
@@ -18487,7 +18494,7 @@ msgid ""
 "This will change the net assigned to %s pad %s to %s.\n"
 "Do you wish to continue?"
 msgstr ""
-"A(z) %s alkatrész %s lábának átkötése a %s vezetékre.\n"
+"A(z) %s alkatrész %s lábának átkötése a(z) %s vezetékre.\n"
 "Folytatja?"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:311
@@ -18496,7 +18503,7 @@ msgid ""
 "This will change the net assigned to %s pad %s and %s pad %s to %s.\n"
 "Do you wish to continue?"
 msgstr ""
-"A(z) %s alkatrész %s láb valamint a(z) %s alkatrész %s láb átkötése a %s vezetékre.\n"
+"A(z) %s alkatrész %s láb valamint a(z) %s alkatrész %s láb átkötése a(z) %s vezetékre.\n"
 "Folytatja?"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:321
@@ -18505,7 +18512,7 @@ msgid ""
 "This will change the net assigned to %d connected pads to %s.\n"
 "Do you wish to continue?"
 msgstr ""
-"Összesen %d alkatrészláb átkötése a %s vezetékre.\n"
+"Összesen %d alkatrészláb átkötése a(z) %s vezetékre.\n"
 "Folytatja?"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:328
@@ -18514,7 +18521,7 @@ msgstr "Folytatás"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:383
 msgid "Via drill size must be smaller than via diameter"
-msgstr "Via furatméretnek kisebnek kell lennie a via átmérőjénél"
+msgstr "Via furatnak kisebnek kell lennie a via átmérőjénél"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:392
 msgid "Via start layer and end layer cannot be the same"
@@ -18550,7 +18557,7 @@ msgstr "Via átmérő:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:208 pcbnew/dialogs/dialog_track_via_size_base.cpp:47
 msgid "Via drill:"
-msgstr "Via furatméret:"
+msgstr "Via furat:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:222
 msgid "Use net class sizes"
@@ -18586,7 +18593,7 @@ msgstr "Vezetősáv / Via tulajdonságok"
 
 #: pcbnew/dialogs/dialog_track_via_size.cpp:58
 msgid "Via drill size has to be smaller than via diameter"
-msgstr "Via furatméretnek kisebnek kell lennie a via átmérőjénél"
+msgstr "Via furatnak kisebnek kell lennie a via átmérőjénél"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:54
 msgid "Track Width and Via Size"
@@ -18618,7 +18625,7 @@ msgstr "Beállítások szerkesztése"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:440
 #, c-format
 msgid "Duplicate Nicknames \"%s\"."
-msgstr "Azonos megnevezés: \"%s\"."
+msgstr "Ismétlődő megnevezés: \"%s\"."
 
 #: pcbnew/dialogs/panel_modedit_defaults.cpp:167 pcbnew/dialogs/panel_setup_text_and_graphics.cpp:160
 msgid ""
@@ -18905,19 +18912,19 @@ msgstr "Alkatrészrajzolat határolódobozok átlapolódása nem engedélyezett"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:72
 msgid "Minimum via diameter:"
-msgstr "Minimális via átmérő"
+msgstr "Minimális via átmérő:"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:83
 msgid "Minimum via drill:"
-msgstr "Minimális via furatméret"
+msgstr "Minimális via furat:"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:103
 msgid "Minimum uVia diameter:"
-msgstr "Minimális μVia átmérő"
+msgstr "Minimális μVia átmérő:"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:114
 msgid "Minimum uVia drill:"
-msgstr "Minimális μVia furatméret"
+msgstr "Minimális μVia furat:"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:134
 msgid "Minimum hole to hole:"
@@ -18926,12 +18933,12 @@ msgstr "Minimális furatok közötti távolság:"
 #: pcbnew/dialogs/panel_setup_layers.cpp:432
 #, c-format
 msgid "Use the \"%s\" control to change the number of copper layers."
-msgstr "A vezetőrétegek számának módosítsa a \"%s\"-ban lehetséges."
+msgstr "A vezetőrétegek számának módosítsa a(z) \"%s\"-ban lehetséges."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:447
 #, c-format
 msgid "The %s layer is mandatory."
-msgstr "A %s réteg nem törölhető/kapcsolható ki."
+msgstr "A(z) %s réteg nem törölhető/kapcsolható ki."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:507
 #, c-format
@@ -18959,7 +18966,7 @@ msgstr "A rétegnek nevet kell adni."
 #: pcbnew/dialogs/panel_setup_layers.cpp:655
 #, c-format
 msgid "\"%s\" are forbidden in layer names."
-msgstr "Réteg név nem tartalmazhatja a \"%s\"-t-"
+msgstr "Réteg név nem tartalmazhatja a(z) \"%s\"-t-"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:662
 msgid "Layer name \"signal\" is reserved."
@@ -19087,7 +19094,7 @@ msgstr "Fab_Front_layer"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:104 pcbnew/dialogs/panel_setup_layers_base.cpp:677
 msgid "Off-board, manufacturing"
-msgstr "Panelen kívüli, gyártói"
+msgstr "Panelen kívüli, gyártás"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:109
 msgid "If you want an adhesive template for the front side of the board"
@@ -19510,12 +19517,12 @@ msgstr "Via átmérő kisebb a minimális via átmérőnél (%s)."
 
 #: pcbnew/dialogs/panel_setup_netclasses.cpp:529 pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:282
 msgid "Via drill larger than via diameter."
-msgstr "Via furatméret nem lehet nagyobb a via átmérőnél."
+msgstr "Via furat nem lehet nagyobb a via átmérőnél."
 
 #: pcbnew/dialogs/panel_setup_netclasses.cpp:536 pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:273
 #, c-format
 msgid "Via drill less than minimum via drill (%s)."
-msgstr "Via furatméret kisebb a minimális via furatméretnél (%s)."
+msgstr "Via furat kisebb a minimális via furat méreténél (%s)."
 
 #: pcbnew/dialogs/panel_setup_netclasses.cpp:545
 #, c-format
@@ -19524,12 +19531,12 @@ msgstr "μVia átmérő kisebb a minimális μVia átmérőnél (%s)."
 
 #: pcbnew/dialogs/panel_setup_netclasses.cpp:553
 msgid "Microvia drill larger than microvia diameter."
-msgstr "μVia furatméret nem lehet nagyobb a μVia átmérőnél."
+msgstr "μVia furat nem lehet nagyobb a μVia átmérőnél."
 
 #: pcbnew/dialogs/panel_setup_netclasses.cpp:560
 #, c-format
 msgid "Microvia drill less than minimum microvia drill (%s)."
-msgstr "μVia furatméret kisebb a minimális μVia furatméretnél (%s)"
+msgstr "μVia furat kisebb a minimális μVia furat méreténél (%s)"
 
 #: pcbnew/dialogs/panel_setup_netclasses_base.cpp:49
 msgid "Clearance"
@@ -19537,11 +19544,11 @@ msgstr "Szigetelési távolság"
 
 #: pcbnew/dialogs/panel_setup_netclasses_base.cpp:55
 msgid "dPair Width"
-msgstr "Diff. jelvezeték szélesség"
+msgstr "Diff. vezeték szélesség"
 
 #: pcbnew/dialogs/panel_setup_netclasses_base.cpp:56
 msgid "dPair Gap"
-msgstr "Diff. jelvezeték hézag"
+msgstr "Diff. vezeték hézag"
 
 #: pcbnew/dialogs/panel_setup_netclasses_base.cpp:97
 msgid "Net Class Memberships"
@@ -19581,7 +19588,7 @@ msgstr "Vezetékosztály"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:266
 msgid "No via drill defined."
-msgstr "Nincs megadva via furatméret"
+msgstr "Nincs megadva via furat"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:298
 #, c-format
@@ -19749,32 +19756,32 @@ msgstr "Letiltott rétegeken lévő elemek...\n"
 #: pcbnew/drc.cpp:588
 #, c-format
 msgid "NETCLASS: \"%s\" has Clearance:%s which is less than global:%s"
-msgstr "A \"%s\" vezetékosztályban megadott szigetelési távolság (%s) kisebb a globális (%s) értéknél"
+msgstr "A(z) \"%s\" vezetékosztályban megadott szigetelési távolság (%s) kisebb a globális (%s) értéknél"
 
 #: pcbnew/drc.cpp:602
 #, c-format
 msgid "NETCLASS: \"%s\" has TrackWidth:%s which is less than global:%s"
-msgstr "A \"%s\" vezetékosztályban megadott vezetősáv szélesség (%s) kisebb a globális (%s) értéknél"
+msgstr "A(z) \"%s\" vezetékosztályban megadott vezetősáv szélesség (%s) kisebb a globális (%s) értéknél"
 
 #: pcbnew/drc.cpp:614
 #, c-format
 msgid "NETCLASS: \"%s\" has Via Dia:%s which is less than global:%s"
-msgstr "A \"%s\" vezetékosztályban megadott via átmérő (%s) kisebb a globális (%s) értéknél"
+msgstr "A(z) \"%s\" vezetékosztályban megadott via átmérő (%s) kisebb a globális (%s) értéknél"
 
 #: pcbnew/drc.cpp:626
 #, c-format
 msgid "NETCLASS: \"%s\" has Via Drill:%s which is less than global:%s"
-msgstr "A \"%s\" vezetékosztályban megadott via furatméret (%s) kisebb a globális (%s) értéknél"
+msgstr "A(z) \"%s\" vezetékosztályban megadott via furat (%s) kisebb a globális (%s) értéknél"
 
 #: pcbnew/drc.cpp:638
 #, c-format
 msgid "NETCLASS: \"%s\" has uVia Dia:%s which is less than global:%s"
-msgstr "A \"%s\" vezetékosztályban megadott μVia átmérő (%s) kisebb a globális (%s) értéknél"
+msgstr "A(z) \"%s\" vezetékosztályban megadott μVia átmérő (%s) kisebb a globális (%s) értéknél"
 
 #: pcbnew/drc.cpp:649
 #, c-format
 msgid "NETCLASS: \"%s\" has uVia Drill:%s which is less than global:%s"
-msgstr "A \"%s\" vezetékosztályban megadott μVia furatméret (%s) kisebb a globális (%s) értéknél"
+msgstr "A(z) \"%s\" vezetékosztályban megadott μVia furat (%s) kisebb a globális (%s) értéknél"
 
 #: pcbnew/drc.cpp:818
 msgid "Track clearances"
@@ -19826,7 +19833,7 @@ msgstr "Forrszem túl közel van egy másik forrszemhez"
 
 #: pcbnew/drc_item.cpp:71
 msgid "Via hole > diameter"
-msgstr "Via furatméret > átmérő"
+msgstr "Via furat > átmérő"
 
 #: pcbnew/drc_item.cpp:73
 msgid "Micro Via: incorrect layer pairs (not adjacent)"
@@ -19878,11 +19885,11 @@ msgstr "μVia átmérő túl kicsi"
 
 #: pcbnew/drc_item.cpp:99
 msgid "Via drill too small"
-msgstr "Via furatméret túl kicsi"
+msgstr "Via furat túl kicsi"
 
 #: pcbnew/drc_item.cpp:101
 msgid "Micro via drill too small"
-msgstr "μVia furatméret túl kicsi"
+msgstr "μVia furat túl kicsi"
 
 #: pcbnew/drc_item.cpp:103
 msgid "Drilled holes too close together"
@@ -19910,7 +19917,7 @@ msgstr "Vezetékosztály via átmérő < globális limit"
 
 #: pcbnew/drc_item.cpp:117
 msgid "NetClass Via Drill &lt; global limit"
-msgstr "Vezetékosztály via furatméret < globális limit"
+msgstr "Vezetékosztály via furat < globális limit"
 
 #: pcbnew/drc_item.cpp:119
 msgid "NetClass uVia Dia &lt; global limit"
@@ -19918,7 +19925,7 @@ msgstr "Vezetékosztály μVia átmérő < globális limit"
 
 #: pcbnew/drc_item.cpp:121
 msgid "NetClass uVia Drill &lt; global limit"
-msgstr "Vezetékosztály μVia furatméret < globális limit"
+msgstr "Vezetékosztály μVia furat < globális limit"
 
 #: pcbnew/drc_item.cpp:124
 msgid "Via inside keepout area"
@@ -19964,12 +19971,12 @@ msgstr "Ismeretlen DRC hibakód %d"
 #: pcbnew/eagle_plugin.cpp:815
 #, c-format
 msgid "<package> name: \"%s\" duplicated in eagle <library>: \"%s\""
-msgstr "<csomag> név: \"%s\", duplikálva a \"%s\" egale <könyvtárban>"
+msgstr "<csomag> név: \"%s\", duplikálva a(z) \"%s\" egale <könyvtárban>"
 
 #: pcbnew/eagle_plugin.cpp:893
 #, c-format
 msgid "No \"%s\" package in library \"%s\""
-msgstr "Nincs \"%s\" csomag a \"%s\" könyvtárban"
+msgstr "Nincs \"%s\" csomag a(z) \"%s\" könyvtárban"
 
 #: pcbnew/eagle_plugin.cpp:2238
 #, c-format
@@ -20056,7 +20063,7 @@ msgstr "Vezetőréteg globális törlése nem engedélyezett!"
 #: pcbnew/editedge.cpp:151
 #, c-format
 msgid "Delete everything on layer %s?"
-msgstr "Mindent töröl a %s rétegről?"
+msgstr "Mindent töröl a(z) %s rétegről?"
 
 #: pcbnew/editrack.cpp:789
 msgid "Segs Count"
@@ -20152,7 +20159,7 @@ msgstr "Fájl létrehozása: %s\n"
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:128
 #, c-format
 msgid "Unable to create job file \"%s\""
-msgstr "Nem sikerült létrehozni a \"%s\"feladat fájlt"
+msgstr "Nem sikerült létrehozni a(z) \"%s\"feladat fájlt"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:134
 #, c-format
@@ -20178,12 +20185,12 @@ msgstr "Nyomtatott áramköri lap"
 #: pcbnew/files.cpp:279
 #, c-format
 msgid "Recovery file \"%s\" not found."
-msgstr "A \"%s\" biztonsági másolat fájl nem található."
+msgstr "A(z) \"%s\" biztonsági másolat fájl nem található."
 
 #: pcbnew/files.cpp:284
 #, c-format
 msgid "OK to load recovery or backup file \"%s\""
-msgstr "A visszaállítás sikerült a \"%s\" biztonsági másolat fájlból."
+msgstr "A visszaállítás sikerült a(z) \"%s\" biztonsági másolat fájlból."
 
 #: pcbnew/files.cpp:346
 msgid "noname"
@@ -20192,7 +20199,7 @@ msgstr "névtelen"
 #: pcbnew/files.cpp:420
 #, c-format
 msgid "PCB file \"%s\" is already open."
-msgstr "A \"%s\" nyákterv fájl már meg van nyitva."
+msgstr "A(z) \"%s\" nyákterv fájl már meg van nyitva."
 
 #: pcbnew/files.cpp:429
 msgid "The current PCB has been modified.  Save changes?"
@@ -20201,7 +20208,7 @@ msgstr "A nyákterv módosult. Menti a módosításokat?"
 #: pcbnew/files.cpp:445
 #, c-format
 msgid "PCB \"%s\" does not exist.  Do you wish to create it?"
-msgstr "A \"%s\" panel nem létezik. Szeretné létrehozni?"
+msgstr "A(z) \"%s\" panel nem létezik. Szeretné létrehozni?"
 
 #: pcbnew/files.cpp:510
 #, c-format
@@ -20223,12 +20230,12 @@ msgstr ""
 #: pcbnew/files.cpp:640
 #, c-format
 msgid "Warning: unable to create backup file \"%s\""
-msgstr "Figyelmeztetés: nem lehet létrehozni a \"%s\" biztonsági másolat fájlt."
+msgstr "Figyelmeztetés: nem lehet létrehozni a(z) \"%s\" biztonsági másolat fájlt."
 
 #: pcbnew/files.cpp:667 pcbnew/files.cpp:760
 #, c-format
 msgid "No access rights to write to file \"%s\""
-msgstr "Nincs írási jogosultsága az \"%s\" fájlba íráshoz."
+msgstr "Nincs írási jogosultsága a(z) \"%s\" fájlba íráshoz."
 
 #: pcbnew/files.cpp:706 pcbnew/files.cpp:785
 #, c-format
@@ -20236,7 +20243,7 @@ msgid ""
 "Error saving board file \"%s\".\n"
 "%s"
 msgstr ""
-"Hiba a \"%s\" panel fájl mentése közben.\n"
+"Hiba a(z) \"%s\" panel fájl mentése közben.\n"
 "%s"
 
 #: pcbnew/files.cpp:712
@@ -20309,7 +20316,7 @@ msgstr "A vonalzó nem elérhető a Legacy Eszköztárban"
 
 #: pcbnew/footprint_editor_onclick.cpp:250
 msgid "Duplicate Block (shift + drag mouse)"
-msgstr "Blokk megkettőzése [Shift]+egér húzás"
+msgstr "Blokk duplikálása [Shift]+egér húzás"
 
 #: pcbnew/footprint_editor_onclick.cpp:253
 msgid "Mirror Block (alt + drag mouse)"
@@ -20363,7 +20370,7 @@ msgstr "Forrszem törlése"
 
 #: pcbnew/footprint_editor_onclick.cpp:319
 msgid "Duplicate Pad"
-msgstr "Forrszem megkettőzése"
+msgstr "Forrszem duplikálása"
 
 #: pcbnew/footprint_editor_onclick.cpp:322
 msgid "Move Pad Exactly..."
@@ -20457,7 +20464,7 @@ msgid ""
 "in the current configuration.  Use Manage Footprint Libraries to\n"
 "edit the configuration."
 msgstr ""
-"A \"%s\" megnevezésű könyvtár\n"
+"A(z) \"%s\" megnevezésű könyvtár\n"
 "nincs engedélyeze a jelenlegi konfigurációban.\n"
 "Használja az \"Alkatrészrajzolat könyvtárak kezelése\"-t a konfiguráció szerkesztéséhez."
 
@@ -20476,7 +20483,7 @@ msgstr "Alkatrészrajzolatok betöltése"
 #: pcbnew/footprint_libraries_utils.cpp:62
 #, c-format
 msgid "OK to delete footprint \"%s\" in library \"%s\""
-msgstr "A \"%s\" alkatrészrajzolat a \"%s\" könyvtárból törölve."
+msgstr "A(z) \"%s\" alkatrészrajzolat a(z) \"%s\" könyvtárból törölve."
 
 #: pcbnew/footprint_libraries_utils.cpp:63
 msgid "Import Footprint"
@@ -20489,12 +20496,12 @@ msgstr "Nem alkatrészrajzolat fájl."
 #: pcbnew/footprint_libraries_utils.cpp:66
 #, c-format
 msgid "Unable to find or load footprint \"%s\" from lib path \"%s\""
-msgstr "Nem található vagy nem tölthető be a \"%s\" alkatrészrajzolat a \"%s\" könyvtár útvonalon."
+msgstr "Nem található vagy nem tölthető be a(z) \"%s\" alkatrészrajzolat a(z) \"%s\" könyvtár útvonalon."
 
 #: pcbnew/footprint_libraries_utils.cpp:67
 #, c-format
 msgid "Library \"%s\" is read only, not writable"
-msgstr "A \"%s\" könyvtár csak olvasható, nem lehet írni"
+msgstr "A(z) \"%s\" könyvtár csak olvasható, nem lehet írni"
 
 #: pcbnew/footprint_libraries_utils.cpp:69
 msgid "Export Footprint"
@@ -20511,12 +20518,12 @@ msgstr "Új alkatrészrajzolat neve:"
 #: pcbnew/footprint_libraries_utils.cpp:72
 #, c-format
 msgid "Footprint exported to file \"%s\""
-msgstr "Alkatrészrajzolat exportálva a \"%s\" fájlba."
+msgstr "Alkatrészrajzolat exportálva a(z) \"%s\" fájlba."
 
 #: pcbnew/footprint_libraries_utils.cpp:73
 #, c-format
 msgid "Footprint \"%s\" deleted from library \"%s\""
-msgstr "Az \"%s\" alkatrészrajzolat a \"%s\" könyvtárból törölésre került."
+msgstr "A(z) \"%s\" alkatrészrajzolat a(z) \"%s\" könyvtárból törölésre került."
 
 #: pcbnew/footprint_libraries_utils.cpp:74
 msgid "New Footprint"
@@ -20557,7 +20564,7 @@ msgstr "Nem lehet létrehozni vagy írni a(z) \"%s\" fájlt."
 #: pcbnew/footprint_libraries_utils.cpp:483
 #, c-format
 msgid "Library %s already exists."
-msgstr "A \"%s\" könyvtár már létezik"
+msgstr "A(z) \"%s\" könyvtár már létezik"
 
 #: pcbnew/footprint_libraries_utils.cpp:537
 msgid "Select Library Table"
@@ -20566,7 +20573,7 @@ msgstr "Könyvtártáblázat kiválasztása"
 #: pcbnew/footprint_libraries_utils.cpp:609 pcbnew/gpcb_plugin.cpp:961 pcbnew/kicad_plugin.cpp:2052 pcbnew/kicad_plugin.cpp:2133
 #, c-format
 msgid "Library \"%s\" is read only"
-msgstr "A \"%s\" könyvtár csak olvasható."
+msgstr "A(z) \"%s\" könyvtár csak olvasható."
 
 #: pcbnew/footprint_libraries_utils.cpp:643
 msgid "No footprints to archive!"
@@ -20604,12 +20611,12 @@ msgstr "A(z) \"%s\" alkatrészrajzolat már létezik \"%s\"-ben."
 #: pcbnew/footprint_libraries_utils.cpp:985
 #, c-format
 msgid "Component \"%s\" replaced in \"%s\""
-msgstr "A \"%s\" alkatrész lecserélve \"%s\"-ben."
+msgstr "A(z) \"%s\" alkatrész lecserélve \"%s\"-ben."
 
 #: pcbnew/footprint_libraries_utils.cpp:986
 #, c-format
 msgid "Component \"%s\" added in  \"%s\""
-msgstr "A \"%s\" alkatrész hozzáfűzve a \"%s\"-hez."
+msgstr "A(z) \"%s\" alkatrész hozzáfűzve a(z) \"%s\"-hez."
 
 #: pcbnew/footprint_tree_pane.cpp:59
 msgid "Save a Copy &As..."
@@ -20650,7 +20657,7 @@ msgid ""
 "\n"
 "Error %s."
 msgstr ""
-"A \"%s\" alkatrészrajzolat nem tölthető be a \"%s\" könyvtárból.\n"
+"A(z) \"%s\" alkatrészrajzolat nem tölthető be a(z) \"%s\" könyvtárból.\n"
 "\n"
 "Hiba %s."
 
@@ -20661,7 +20668,7 @@ msgid ""
 "nickname \"%s\".  Use Manage Footprint Libraries\n"
 "to edit the configuration."
 msgstr ""
-"A \"%s\" megnevezésű könyvtár\n"
+"A(z) \"%s\" megnevezésű könyvtár\n"
 "nincs hozzáadva a jelenlegi konfigurációhoz.\n"
 "Használja az \"Alkatrészrajzolat könyvtárak kezelése\"-t a konfiguráció szerkesztéséhez."
 
@@ -20742,7 +20749,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Hiba történt a %s alkatrészrajzolat %s könyvtárból történő betöltése során.\n"
+"Hiba történt a(z) %s alkatrészrajzolat %s könyvtárból történő betöltése során.\n"
 "\n"
 "%s"
 
@@ -20772,7 +20779,7 @@ msgid ""
 "is not in the writable portion of this Github library\n"
 "\"%s\""
 msgstr ""
-"Az \"%s\"\n"
+"A(z) \"%s\"\n"
 "alkatrészrajzolat\n"
 "nem szerepel a Github könyvtár írható részében\n"
 "\"%s\""
@@ -20820,13 +20827,13 @@ msgid ""
 "Cannot download library \"%s\".\n"
 "The library does not exist on the server"
 msgstr ""
-"A \"%s\" könyvtárat nem lehet letölteni.\n"
+"A(z) \"%s\" könyvtárat nem lehet letölteni.\n"
 "A könyvtár nem létezik a szerveren."
 
 #: pcbnew/gpcb_plugin.cpp:91
 #, c-format
 msgid "Cannot convert \"%s\" to an integer"
-msgstr "A \"%s\" nem konvertálható egész számra."
+msgstr "A(z) \"%s\" nem konvertálható egész számra."
 
 #: pcbnew/gpcb_plugin.cpp:231 pcbnew/gpcb_plugin.cpp:879
 #, c-format
@@ -20851,7 +20858,7 @@ msgstr "Az elem tokenje %d paramétert tartalmaz."
 #: pcbnew/gpcb_plugin.cpp:980 pcbnew/kicad_plugin.cpp:2177
 #, c-format
 msgid "user does not have permission to delete directory \"%s\""
-msgstr "a felhasználónak nincs jogosultsága a \"%s\" mappa törléséhez"
+msgstr "a felhasználónak nincs jogosultsága a(z) \"%s\" mappa törléséhez"
 
 #: pcbnew/gpcb_plugin.cpp:988 pcbnew/kicad_plugin.cpp:2185
 #, c-format
@@ -20861,7 +20868,7 @@ msgstr "a(z) \"%s\" könyvtár mappa nem várt almappákat tartalmaz"
 #: pcbnew/gpcb_plugin.cpp:1007 pcbnew/kicad_plugin.cpp:2204
 #, c-format
 msgid "unexpected file \"%s\" was found in library path \"%s\""
-msgstr "váratlan fájl \"%s\" található a \"%s\" mappában"
+msgstr "váratlan fájl \"%s\" található a(z) \"%s\" mappában"
 
 #: pcbnew/gpcb_plugin.cpp:1025 pcbnew/kicad_plugin.cpp:2222
 #, c-format
@@ -21014,11 +21021,11 @@ msgstr "Elem relatív mozgatása"
 
 #: pcbnew/hotkeys.cpp:147
 msgid "Duplicate Item"
-msgstr "Elem megkettőzése"
+msgstr "Elem duplikálása"
 
 #: pcbnew/hotkeys.cpp:148
 msgid "Duplicate Item and Increment"
-msgstr "Elem megkettőzése és a referencia növelése"
+msgstr "Elem duplikálása és a referencia növelése"
 
 #: pcbnew/hotkeys.cpp:152
 msgid "Copy Item"
@@ -21310,7 +21317,7 @@ msgstr "Az alkatrészrajzolat könyvtár \"%s\" elérési útvonala csak olvasha
 #: pcbnew/kicad_plugin.cpp:234
 #, c-format
 msgid "Cannot rename temporary file \"%s\" to footprint library file \"%s\""
-msgstr "Nem lehet átnevezni az \"%s\" ideiglenes fájlt az \"%s\" alkatrészrajzolat könyvtár fájlba."
+msgstr "Nem lehet átnevezni a(z) \"%s\" ideiglenes fájlt a(z) \"%s\" alkatrészrajzolat könyvtár fájlba."
 
 #: pcbnew/kicad_plugin.cpp:261
 #, c-format
@@ -21357,12 +21364,12 @@ msgstr "Alkatrészrajzolat fájlnév \"%s\" nem érvényes."
 #: pcbnew/kicad_plugin.cpp:2089
 #, c-format
 msgid "No write permissions to delete file \"%s\""
-msgstr "Nincs írási jogosultsága a \"%s\" fájl törléséhez."
+msgstr "Nincs írási jogosultsága a(z) \"%s\" fájl törléséhez."
 
 #: pcbnew/kicad_plugin.cpp:2152
 #, c-format
 msgid "cannot overwrite library path \"%s\""
-msgstr "nem lehet felülírni a \"%s\" könyvtár elérési útvonalat"
+msgstr "nem lehet felülírni a(z) \"%s\" könyvtár elérési útvonalat"
 
 #: pcbnew/layer_widget.cpp:130
 msgid "Change Layer Color for "
@@ -21411,7 +21418,7 @@ msgstr "Vezetéknév nem értelmezhető a netlista hálózat szekciójában."
 #: pcbnew/legacy_netlist_reader.cpp:248
 #, c-format
 msgid "Cannot find symbol \"%s\" in footprint filter section of netlist."
-msgstr "A \"%s\" rajzjel nem található a netlista alkatrészrajzolat szűrő szekciójában."
+msgstr "A(z) \"%s\" rajzjel nem található a netlista alkatrészrajzolat szűrő szekciójában."
 
 #: pcbnew/legacy_plugin.cpp:94
 #, c-format
@@ -21420,7 +21427,7 @@ msgid ""
 "I only support format version <= %d.\n"
 "Please upgrade Pcbnew to load this file."
 msgstr ""
-"A \"%s\" fájl formátum verziója: %d.\n"
+"A(z) \"%s\" fájl formátum verziója: %d.\n"
 "A jelenlegi szoftver csak a %d vagy régebbi formátum verziót támogatja.\n"
 "Telepítsen egy újabb verziót, majd próbálja újra."
 
@@ -21442,7 +21449,7 @@ msgstr "Ismeretlen laptípus \"%s\" a %d. sorban"
 #: pcbnew/legacy_plugin.cpp:1382
 #, c-format
 msgid "Missing '$EndMODULE' for MODULE \"%s\""
-msgstr "Hiányzó '$EndMODULE' a \"%s\" modulban"
+msgstr "Hiányzó '$EndMODULE' a(z) \"%s\" modulban"
 
 #: pcbnew/legacy_plugin.cpp:1434
 #, c-format
@@ -21457,7 +21464,7 @@ msgstr "Ismeretlen EDGE_MODULE típus \"%c=0x%02x\" a %d. sorban (\"%s\" alkatr�
 #: pcbnew/legacy_plugin.cpp:2471
 #, c-format
 msgid "duplicate NETCLASS name \"%s\""
-msgstr "azonos VEZETÉKOSZTÁLY nevek \"%s\""
+msgstr "ismétlődő VEZETÉKOSZTÁLY név \"%s\""
 
 #: pcbnew/legacy_plugin.cpp:2553 pcbnew/legacy_plugin.cpp:2564
 #, c-format
@@ -21480,7 +21487,7 @@ msgid ""
 "invalid float number in file: \"%s\"\n"
 "line: %d, offset: %d"
 msgstr ""
-"érvénytelen lebegőpontos szám a \"%s\" fájlban,\n"
+"érvénytelen lebegőpontos szám a(z) \"%s\" fájlban,\n"
 "%d. sor, %d. oszlop"
 
 #: pcbnew/legacy_plugin.cpp:3012 pcbnew/legacy_plugin.cpp:3048
@@ -21489,13 +21496,13 @@ msgid ""
 "missing float number in file: \"%s\"\n"
 "line: %d, offset: %d"
 msgstr ""
-"hiányzó lebegőpontos szám a \"%s\" fájlban\n"
+"hiányzó lebegőpontos szám a(z) \"%s\" fájlban\n"
 "%d. sor, %d. oszlop"
 
 #: pcbnew/legacy_plugin.cpp:3271
 #, c-format
 msgid "File \"%s\" is empty or is not a legacy library"
-msgstr "A \"%s\" fájl üres vagy nem örökölt könyvtár"
+msgstr "A(z) \"%s\" fájl üres vagy nem örökölt könyvtár"
 
 #: pcbnew/load_select_footprint.cpp:242
 #, c-format
@@ -22498,12 +22505,12 @@ msgstr "Alkatrészek"
 #: pcbnew/netlist.cpp:249
 #, c-format
 msgid "No footprint defined for symbol \"%s\".\n"
-msgstr "A \"%s\" rajzjelhez nincs alkatrészrajzolat társítva.\n"
+msgstr "A(z) \"%s\" rajzjelhez nincs alkatrészrajzolat társítva.\n"
 
 #: pcbnew/netlist.cpp:267
 #, c-format
 msgid "Footprint of %s changed: board footprint \"%s\", netlist footprint \"%s\"."
-msgstr "Az %s alkatrészrajzolata megváltozott: panelen \"%s\", netlistában \"%s\"."
+msgstr "A(z) %s alkatrészrajzolata megváltozott: panelen \"%s\", netlistában \"%s\"."
 
 #: pcbnew/netlist.cpp:294
 #, c-format
@@ -22637,7 +22644,7 @@ msgstr "μVia hozzáadása"
 
 #: pcbnew/onrightclick.cpp:553
 msgid "Change Via Size and Drill"
-msgstr "Via átmérő és furatméret módosítása"
+msgstr "Via átmérő és furat módosítása"
 
 #: pcbnew/onrightclick.cpp:559
 msgid "Change Segment Width"
@@ -22737,7 +22744,7 @@ msgstr "Kivágott terület hozzáadása"
 
 #: pcbnew/onrightclick.cpp:679 pcbnew/tools/pcb_editor_control.cpp:96
 msgid "Duplicate Zone onto Layer..."
-msgstr "Zóna megkettőzése másik rétegre..."
+msgstr "Zóna duplikálása másik rétegre..."
 
 #: pcbnew/onrightclick.cpp:684 pcbnew/tools/zone_filler_tool.cpp:97
 msgid "Fill Zone"
@@ -22870,7 +22877,7 @@ msgstr "[Nincs mentve]"
 
 #: pcbnew/pcb_edit_frame.cpp:1029 pcbnew/pcbnew_config.cpp:99
 msgid "Pcbnew"
-msgstr "Nyáktervező"
+msgstr "Pcbnew - Nyáktervező"
 
 #: pcbnew/pcb_edit_frame.cpp:1139
 msgid ""
@@ -22883,7 +22890,7 @@ msgstr ""
 #: pcbnew/pcb_edit_frame.cpp:1177
 #, c-format
 msgid "Schematic file \"%s\" not found."
-msgstr "A \"%s\" kapcsolási rajz fájl nem található."
+msgstr "A(z) \"%s\" kapcsolási rajz fájl nem található."
 
 #: pcbnew/pcb_layer_box_selector.cpp:97
 msgid "(not activated)"
@@ -23195,12 +23202,12 @@ msgstr "Átmentés"
 #: pcbnew/pcb_parser.cpp:766
 #, c-format
 msgid "Page type \"%s\" is not valid "
-msgstr "A \"%s\" lap típus nem érvényes "
+msgstr "A(z) \"%s\" lap típus nem érvényes "
 
 #: pcbnew/pcb_parser.cpp:998
 #, c-format
 msgid "Layer \"%s\" in file \"%s\" at line %d, is not in fixed layer hash"
-msgstr "A \"%s\" réteg a \"%s\\ fájl %d. sorában nem érvényes azonosítójú"
+msgstr "A(z) \"%s\" réteg a(z) \"%s\\ fájl %d. sorában nem érvényes azonosítójú"
 
 #: pcbnew/pcb_parser.cpp:1031
 #, c-format
@@ -23210,7 +23217,7 @@ msgstr "Érvénytelen rétegszám: %d"
 #: pcbnew/pcb_parser.cpp:1448
 #, c-format
 msgid "Duplicate NETCLASS name \"%s\" in file \"%s\" at line %d, offset %d"
-msgstr "ismétlődő VEZETÉKOSZTÁLY név: \"%s\", a \"%s\" fájl %d. sorában (%d. karakter)"
+msgstr "Ismétlődő VEZETÉKOSZTÁLY név: \"%s\", a(z) \"%s\" fájl %d. sorában (%d. karakter)"
 
 #: pcbnew/pcb_parser.cpp:1899
 #, c-format
@@ -23271,7 +23278,7 @@ msgstr "Több réteg"
 #: pcbnew/plot_board_layers.cpp:122 pcbnew/plot_board_layers.cpp:317
 #, c-format
 msgid "Your BOARD has a bad layer number for footprint %s"
-msgstr "A %s alkatrészrajzolathoz hibás réteg szám tartozik"
+msgstr "A(z) %s alkatrészrajzolathoz hibás réteg szám tartozik"
 
 #: pcbnew/plugin.cpp:137
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
@@ -23350,7 +23357,7 @@ msgstr "Nem található kezdőpont. Már létező differenciális jelvezeték es
 #: pcbnew/router/pns_diff_pair_placer.cpp:524
 #, c-format
 msgid "Can't find a suitable starting point for coupled net \"%s\"."
-msgstr "Nem található kezdőpont a \"%s\" csatolt vezetékhez."
+msgstr "Nem található kezdőpont a(z) \"%s\" csatolt vezetékhez."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:554
 msgid "Can't start a differential pair  in the middle of nowhere."
@@ -23742,7 +23749,7 @@ msgstr "Kivétel történt a Python plugin futása során"
 #: pcbnew/swig/pcbnew_action_plugins.cpp:88 pcbnew/swig/pcbnew_footprint_wizards.cpp:82
 #, c-format
 msgid "Method \"%s\" not found, or not callable"
-msgstr "Az \"%s\" eljárás nem található, vagy nem hívható"
+msgstr "A(z) \"%s\" eljárás nem található, vagy nem hívható"
 
 #: pcbnew/swig/pcbnew_action_plugins.cpp:89 pcbnew/swig/pcbnew_footprint_wizards.cpp:83
 msgid "Unknown Method"
@@ -24194,11 +24201,11 @@ msgstr "A kijelölt elem(ek) mozgatása"
 
 #: pcbnew/tools/edit_tool.cpp:92
 msgid "Duplicates the selected item(s)"
-msgstr "Kijelölt elem(ek) megkettőzése"
+msgstr "Kijelölt elem(ek) duplikálása"
 
 #: pcbnew/tools/edit_tool.cpp:96
 msgid "Duplicates the selected item(s), incrementing pad numbers"
-msgstr "Kijelölt elem(ek) megkettőzése, a forrszem számozások növelése"
+msgstr "Kijelölt elem(ek) duplikálása, a forrszem számozások növelése"
 
 #: pcbnew/tools/edit_tool.cpp:100
 msgid "Moves the selected item(s) by an exact amount"
@@ -24343,7 +24350,7 @@ msgid ""
 "Click on pad %s%d\n"
 "Press Escape to cancel or double-click to commit"
 msgstr ""
-"Kattintson a %s%d forrszemre\n"
+"Kattintson a(z) %s%d forrszemre\n"
 "Nyomjon ESC-et a megszakításhoz, vagy\n"
 "dupla-klikkelés a végrehajtáshoz"
 
@@ -24442,7 +24449,7 @@ msgstr "Zónák egyesítése"
 
 #: pcbnew/tools/pcb_editor_control.cpp:96
 msgid "Duplicate zone outline onto a different layer"
-msgstr "Zóna körvonal megkettőzése egy másik rétegre"
+msgstr "Zóna körvonal duplikálása egy másik rétegre"
 
 #: pcbnew/tools/pcb_editor_control.cpp:101
 msgid "Add Layer Alignment Target"
@@ -24478,7 +24485,7 @@ msgstr "Rétegillesztő jelölés hozzáadása"
 
 #: pcbnew/tools/pcb_editor_control.cpp:829
 msgid "Duplicate zone"
-msgstr "Zóna megkettőzése"
+msgstr "Zóna duplikálása"
 
 #: pcbnew/tools/pcb_editor_control.cpp:1164
 msgid "Pick Components for Local Ratsnest"
