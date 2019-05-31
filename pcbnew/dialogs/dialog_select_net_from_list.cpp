@@ -24,7 +24,6 @@
 
 #include <fctsys.h>
 #include <kicad_string.h>
-#include <kicad_device_context.h>
 #include <class_drawpanel.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>

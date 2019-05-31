@@ -50,7 +50,7 @@
 
 #include <fctsys.h>
 #include <eda_rect.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <ws_draw_item.h>
 #include <ws_data_model.h>
 #include <base_units.h>
@@ -145,10 +145,9 @@ void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aL
 
 // ============================ TEXT ==============================
 
-void WS_DRAW_ITEM_TEXT::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-                                    GR_DRAWMODE aDrawMode, COLOR4D aColor )
+void WS_DRAW_ITEM_TEXT::PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor )
 {
-    Draw( aClipBox, aDC, aOffset, aColor, GR_COPY, FILLED, COLOR4D::UNSPECIFIED );
+    Print( aDC, aOffset, aColor, FILLED );
 }
 
 
@@ -181,8 +180,7 @@ wxString WS_DRAW_ITEM_TEXT::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 
 // ============================ POLYGON ==============================
 
-void WS_DRAW_ITEM_POLYGON::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-                                       GR_DRAWMODE aDrawMode, COLOR4D aColor )
+void WS_DRAW_ITEM_POLYGON::PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor )
 {
     std::vector<wxPoint> points_moved;
     wxPoint *points;
@@ -199,7 +197,7 @@ void WS_DRAW_ITEM_POLYGON::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPo
         points = &m_Corners[0];
     }
 
-    GRPoly( aClipBox, aDC, m_Corners.size(), points, IsFilled() ? FILLED_SHAPE : NO_FILL,
+    GRPoly( nullptr, aDC, m_Corners.size(), points, IsFilled() ? FILLED_SHAPE : NO_FILL,
             GetPenWidth(), aColor, aColor );
 }
 
@@ -268,13 +266,10 @@ wxString WS_DRAW_ITEM_POLYGON::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 
 // ============================ RECT ==============================
 
-void WS_DRAW_ITEM_RECT::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-                                    GR_DRAWMODE aDrawMode, COLOR4D aColor )
+void WS_DRAW_ITEM_RECT::PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor )
 {
-    GRRect( aClipBox, aDC,
-            GetStart().x + aOffset.x, GetStart().y + aOffset.y,
-            GetEnd().x + aOffset.x, GetEnd().y + aOffset.y,
-            GetPenWidth(), aColor );
+    GRRect( nullptr, aDC, GetStart().x + aOffset.x, GetStart().y + aOffset.y,
+            GetEnd().x + aOffset.x, GetEnd().y + aOffset.y, GetPenWidth(), aColor );
 }
 
 
@@ -330,10 +325,9 @@ wxString WS_DRAW_ITEM_RECT::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 
 // ============================ LINE ==============================
 
-void WS_DRAW_ITEM_LINE::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-                                    GR_DRAWMODE aDrawMode, COLOR4D aColor )
+void WS_DRAW_ITEM_LINE::PrintWsItem(  wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor )
 {
-    GRLine( aClipBox, aDC, GetStart() + aOffset, GetEnd() + aOffset, GetPenWidth(), aColor );
+    GRLine( nullptr, aDC, GetStart() + aOffset, GetEnd() + aOffset, GetPenWidth(), aColor );
 }
 
 
@@ -362,17 +356,12 @@ wxString WS_DRAW_ITEM_LINE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 
 // ============== BITMAP ================
 
-void WS_DRAW_ITEM_BITMAP::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-                                      GR_DRAWMODE aDrawMode, COLOR4D aColor )
+void WS_DRAW_ITEM_BITMAP::PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor )
 {
     WS_DATA_ITEM_BITMAP* bitmap = (WS_DATA_ITEM_BITMAP*) GetPeer();
 
     if( bitmap->m_ImageBitmap  )
-    {
-        GRSetDrawMode( aDC, ( aDrawMode == UNSPECIFIED_DRAWMODE ) ? GR_COPY : aDrawMode );
         bitmap->m_ImageBitmap->DrawBitmap( aDC, m_pos + aOffset );
-        GRSetDrawMode( aDC, GR_COPY );
-    }
 }
 
 
@@ -423,17 +412,16 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( const PAGE_INFO& aPageInfo,
 }
 
 
-/* Draws the item list created by BuildWorkSheetGraphicList
- * aClipBox = the clipping rect, or NULL if no clipping
+/* Print the item list created by BuildWorkSheetGraphicList
  * aDC = the current Device Context
  * The not selected items are drawn first (most of items)
  * The selected items are drawn after (usually 0 or 1)
  * to be sure they are seen, even for overlapping items
  */
-void WS_DRAW_ITEM_LIST::Draw( EDA_RECT* aClipBox, wxDC* aDC, COLOR4D aColor )
+void WS_DRAW_ITEM_LIST::Print( wxDC* aDC, COLOR4D aColor )
 {
     for( WS_DRAW_ITEM_BASE* item = GetFirst(); item; item = GetNext() )
-        item->DrawWsItem( aClipBox, aDC, aColor );
+        item->PrintWsItem( aDC, aColor );
 }
 
 

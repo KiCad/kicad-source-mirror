@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +37,7 @@
 class wxSingleInstanceChecker;
 class EDA_HOTKEY;
 class ACTION_TOOLBAR;
+class EDA_DRAW_PANEL;
 
 using KIGFX::COLOR4D;
 
@@ -91,16 +92,12 @@ class EDA_DRAW_FRAME : public KIWAY_PLAYER
 
     BASE_SCREEN*        m_currentScreen;      ///< current used SCREEN
 
-    bool                m_snapToGrid;         ///< Indicates if cursor should be snapped to grid.
-
     EDA_DRAW_PANEL_GAL* m_galCanvas;
 
     ///< GAL display options - this is the frame's interface to setting GAL display options
     KIGFX::GAL_DISPLAY_OPTIONS  m_galDisplayOptions;
 
 protected:
-    bool m_useSingleCanvasPane;
-
     wxSocketServer*                          m_socketServer;
     std::vector<wxSocketBase*>               m_sockets;         ///< interprocess communication
 
@@ -601,7 +598,7 @@ public:
     double GetZoom();
 
     /**
-     * Draws on screen the page layout with the frame and the basic inscriptions.
+     * Prints the page layout with the frame and the basic inscriptions.
      *
      * @param aDC The device context.
      * @param aScreen screen to draw
@@ -610,9 +607,8 @@ public:
      * @param aFilename The filename to display in basic inscriptions.
      * @param aSheetLayer The layer displayed from pcbnew.
      */
-    void DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
-                         double aScale, const wxString &aFilename,
-                         const wxString &aSheetLayer = wxEmptyString,
+    void PrintWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth, double aScale,
+                         const wxString &aFilename, const wxString &aSheetLayer = wxEmptyString,
                          COLOR4D aColor = COLOR4D::UNSPECIFIED );
 
     void            DisplayToolMsg( const wxString& msg );

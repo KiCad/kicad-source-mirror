@@ -118,33 +118,17 @@ void EDGE_MODULE::SetDrawCoord()
 }
 
 
-void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
-                        const wxPoint& offset )
+void EDGE_MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
 {
-    int         ux0, uy0, dx, dy, radius, StAngle, EndAngle;
-    PCB_LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-
+    int     ux0, uy0, dx, dy, radius, StAngle, EndAngle;
     MODULE* module = (MODULE*) m_Parent;
+    BOARD*  brd = GetBoard( );
 
-    if( !module )
+    if( !module || !brd->IsLayerVisible( m_Layer ) )
         return;
 
-    BOARD* brd = GetBoard( );
-
-    if( brd->IsLayerVisible( m_Layer ) == false )
-        return;
-
-
-    auto frame = static_cast<PCB_BASE_FRAME*> ( panel->GetParent() );
-    auto color = frame->Settings().Colors().GetLayerColor( m_Layer );
-
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
-
-    if(( draw_mode & GR_ALLOW_HIGHCONTRAST ) && displ_opts && displ_opts->m_ContrastModeDisplay )
-    {
-        if( !IsOnLayer( curr_layer ) )
-            color = COLOR4D( DARKDARKGRAY );
-    }
+    auto color = aFrame->Settings().Colors().GetLayerColor( m_Layer );
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( aFrame->GetDisplayOptions() );
 
     ux0 = m_Start.x - offset.x;
     uy0 = m_Start.y - offset.y;
@@ -152,7 +136,6 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     dx = m_End.x - offset.x;
     dy = m_End.y - offset.y;
 
-    GRSetDrawMode( DC, draw_mode );
     bool filled = displ_opts ? displ_opts->m_DisplayModEdgeFill : FILLED;
 
     if( IsCopperLayer( m_Layer ) )
@@ -162,10 +145,10 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     {
     case S_SEGMENT:
         if( filled )
-            GRLine( panel->GetClipBox(), DC, ux0, uy0, dx, dy, m_Width, color );
+            GRLine( nullptr, DC, ux0, uy0, dx, dy, m_Width, color );
         else
             // SKETCH Mode
-            GRCSegm( panel->GetClipBox(), DC, ux0, uy0, dx, dy, m_Width, color );
+            GRCSegm( nullptr, DC, ux0, uy0, dx, dy, m_Width, color );
 
         break;
 
@@ -174,12 +157,12 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 
         if( filled )
         {
-            GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius, m_Width, color );
+            GRCircle( nullptr, DC, ux0, uy0, radius, m_Width, color );
         }
         else        // SKETCH Mode
         {
-            GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius + (m_Width / 2), color );
-            GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius - (m_Width / 2), color );
+            GRCircle( nullptr, DC, ux0, uy0, radius + (m_Width / 2), color );
+            GRCircle( nullptr, DC, ux0, uy0, radius - (m_Width / 2), color );
         }
 
         break;
@@ -189,27 +172,17 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         StAngle  = ArcTangente( dy - uy0, dx - ux0 );
         EndAngle = StAngle + m_Angle;
 
-        if( !panel->GetPrintMirrored() )
-        {
-            if( StAngle > EndAngle )
-                std::swap( StAngle, EndAngle );
-        }
-        else    // Mirrored mode: arc orientation is reversed
-        {
-            if( StAngle < EndAngle )
-                std::swap( StAngle, EndAngle );
-        }
+        if( StAngle > EndAngle )
+            std::swap( StAngle, EndAngle );
 
         if( filled )
         {
-            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle, radius, m_Width, color );
+            GRArc( nullptr, DC, ux0, uy0, StAngle, EndAngle, radius, m_Width, color );
         }
         else        // SKETCH Mode
         {
-            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle,
-                   radius + (m_Width / 2), color );
-            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle,
-                   radius - (m_Width / 2), color );
+            GRArc( nullptr, DC, ux0, uy0, StAngle, EndAngle, radius + (m_Width / 2), color );
+            GRArc( nullptr, DC, ux0, uy0, StAngle, EndAngle, radius - (m_Width / 2), color );
         }
         break;
 
@@ -235,7 +208,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
             pt += module->GetPosition() - offset;
         }
 
-        GRPoly( panel->GetClipBox(), DC, points.size(), &points[0], true, m_Width, color, color );
+        GRPoly( nullptr, DC, points.size(), &points[0], true, m_Width, color, color );
         }
         break;
 
@@ -250,11 +223,9 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
                 wxPoint& endp = m_BezierPoints[i];
 
                 if( filled )
-                    GRFilledSegment( panel->GetClipBox(), DC,
-                                     startp-offset, endp-offset, m_Width, color );
+                    GRFilledSegment( nullptr, DC, startp-offset, endp-offset, m_Width, color );
                 else
-                    GRCSegm( panel->GetClipBox(), DC,
-                             startp-offset, endp-offset, m_Width, color );
+                    GRCSegm( nullptr, DC, startp-offset, endp-offset, m_Width, color );
 
                 startp = m_BezierPoints[i];
             }

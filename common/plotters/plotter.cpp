@@ -46,7 +46,7 @@
 #include <plotter.h>
 #include <macros.h>
 #include <base_screen.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/geometry_utils.h>
 

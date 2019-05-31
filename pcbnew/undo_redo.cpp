@@ -364,7 +364,7 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
 
     m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_POST, AS_GLOBAL } );
 
-    m_canvas->Refresh();
+    GetGalCanvas()->Refresh();
 }
 
 
@@ -393,7 +393,7 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
 
     m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_POST, AS_GLOBAL } );
 
-    m_canvas->Refresh();
+    GetGalCanvas()->Refresh();
 }
 
 
@@ -626,5 +626,5 @@ void PCB_BASE_EDIT_FRAME::RollbackFromUndo()
     undo->ClearListAndDeleteItems();
     delete undo;
 
-    GetCanvas()->Refresh();
+    GetGalCanvas()->Refresh();
 }

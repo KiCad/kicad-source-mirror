@@ -124,10 +124,9 @@ bool LIB_ITEM::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) 
 }
 
 
-void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
-                     const TRANSFORM& aTransform )
+void LIB_ITEM::Print( wxDC* aDC, const wxPoint& aOffset, void* aData, const TRANSFORM& aTransform )
 {
-    drawGraphic( aPanel, aDC, aOffset, aData, aTransform );
+    print( aDC, aOffset, aData, aTransform );
 }
 
 

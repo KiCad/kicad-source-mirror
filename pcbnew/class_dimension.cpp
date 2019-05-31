@@ -323,57 +323,39 @@ void DIMENSION::AdjustDimensionDetails()
 }
 
 
-void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
-                      const wxPoint& offset )
+void DIMENSION::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
 {
-    BOARD*      brd = GetBoard();
+    BOARD* brd = GetBoard();
 
     if( brd->IsLayerVisible( m_Layer ) == false )
         return;
 
-    m_Text.Draw( panel, DC, mode_color, offset );
+    m_Text.Print( aFrame, DC, offset );
 
-    auto frame = static_cast<PCB_EDIT_FRAME*> ( panel->GetParent() );
-    auto gcolor = frame->Settings().Colors().GetLayerColor( m_Layer );
-
-    GRSetDrawMode( DC, mode_color );
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
+    auto gcolor = aFrame->Settings().Colors().GetLayerColor( m_Layer );
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( aFrame->GetDisplayOptions() );
     bool filled = displ_opts ? displ_opts->m_DisplayDrawItemsFill : FILLED;
-    int width   = m_Width;
+    int  width   = m_Width;
 
     if( filled )
     {
-        GRLine( panel->GetClipBox(), DC, m_crossBarO + offset,
-                m_crossBarF + offset, width, gcolor );
-        GRLine( panel->GetClipBox(), DC, m_featureLineGO + offset,
-                m_featureLineGF + offset, width, gcolor );
-        GRLine( panel->GetClipBox(), DC, m_featureLineDO + offset,
-                m_featureLineDF + offset, width, gcolor );
-        GRLine( panel->GetClipBox(), DC, m_crossBarF + offset,
-                m_arrowD1F + offset, width, gcolor );
-        GRLine( panel->GetClipBox(), DC, m_crossBarF + offset,
-                m_arrowD2F + offset, width, gcolor );
-        GRLine( panel->GetClipBox(), DC, m_crossBarO + offset,
-                m_arrowG1F + offset, width, gcolor );
-        GRLine( panel->GetClipBox(), DC, m_crossBarO + offset,
-                m_arrowG2F + offset, width, gcolor );
+        GRLine( nullptr, DC, m_crossBarO + offset, m_crossBarF + offset, width, gcolor );
+        GRLine( nullptr, DC, m_featureLineGO + offset, m_featureLineGF + offset, width, gcolor );
+        GRLine( nullptr, DC, m_featureLineDO + offset, m_featureLineDF + offset, width, gcolor );
+        GRLine( nullptr, DC, m_crossBarF + offset, m_arrowD1F + offset, width, gcolor );
+        GRLine( nullptr, DC, m_crossBarF + offset, m_arrowD2F + offset, width, gcolor );
+        GRLine( nullptr, DC, m_crossBarO + offset, m_arrowG1F + offset, width, gcolor );
+        GRLine( nullptr, DC, m_crossBarO + offset, m_arrowG2F + offset, width, gcolor );
     }
     else
     {
-        GRCSegm( panel->GetClipBox(), DC, m_crossBarO + offset,
-                 m_crossBarF + offset, width, gcolor );
-        GRCSegm( panel->GetClipBox(), DC, m_featureLineGO + offset,
-                 m_featureLineGF + offset, width, gcolor );
-        GRCSegm( panel->GetClipBox(), DC, m_featureLineDO + offset,
-                 m_featureLineDF + offset, width, gcolor );
-        GRCSegm( panel->GetClipBox(), DC, m_crossBarF + offset,
-                 m_arrowD1F + offset, width, gcolor );
-        GRCSegm( panel->GetClipBox(), DC, m_crossBarF + offset,
-                 m_arrowD2F + offset, width, gcolor );
-        GRCSegm( panel->GetClipBox(), DC, m_crossBarO + offset,
-                 m_arrowG1F + offset, width, gcolor );
-        GRCSegm( panel->GetClipBox(), DC, m_crossBarO + offset,
-                 m_arrowG2F + offset, width, gcolor );
+        GRCSegm( nullptr, DC, m_crossBarO + offset, m_crossBarF + offset, width, gcolor );
+        GRCSegm( nullptr, DC, m_featureLineGO + offset, m_featureLineGF + offset, width, gcolor );
+        GRCSegm( nullptr, DC, m_featureLineDO + offset,  m_featureLineDF + offset, width, gcolor );
+        GRCSegm( nullptr, DC, m_crossBarF + offset, m_arrowD1F + offset, width, gcolor );
+        GRCSegm( nullptr, DC, m_crossBarF + offset, m_arrowD2F + offset, width, gcolor );
+        GRCSegm( nullptr, DC, m_crossBarO + offset, m_arrowG1F + offset, width, gcolor );
+        GRCSegm( nullptr, DC, m_crossBarO + offset, m_arrowG2F + offset, width, gcolor );
     }
 }
 

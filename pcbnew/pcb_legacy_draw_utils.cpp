@@ -48,12 +48,12 @@
  * and we want to see pad through.
  * The pads must appear on the layers selected in LayerMask
  */
-static void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module,
-                             int ox, int oy, LSET LayerMask, GR_DRAWMODE draw_mode );
+static void Trace_Pads_Only( PCB_BASE_FRAME* aFrame, wxDC* DC, MODULE* Module,
+                             int ox, int oy, LSET LayerMask );
 
 
 // Redraw the BOARD items but not cursors, axis or grid
-void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const wxPoint& offset )
+void BOARD::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
 {
     /* The order of drawing is flexible on some systems and not on others.  For
      * OSes which use OR to draw, the order is not important except for the
@@ -75,7 +75,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
         if( track->IsMoving() )
             continue;
 
-        track->Draw( aPanel, DC, aDrawMode );
+        track->Print( aFrame, DC );
     }
 
     // Draw areas (i.e. zones)
@@ -87,8 +87,8 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
         // because these areas are drawn by ManageCursor() in a specific manner
         if( ( zone->GetEditFlags() & (IN_EDIT | IS_DRAGGED | IS_MOVED) ) == 0 )
         {
-            zone->Draw( aPanel, DC, aDrawMode );
-            zone->DrawFilledArea( aPanel, DC, aDrawMode );
+            zone->Print( aFrame, DC );
+            zone->PrintFilledArea( aFrame, DC );
         }
     }
 
@@ -104,7 +104,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
         case PCB_TEXT_T:
         case PCB_TARGET_T:
         case PCB_LINE_T:
-            item->Draw( aPanel, DC, aDrawMode );
+            item->Print( aFrame, DC );
             break;
 
         default:
@@ -139,15 +139,15 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
         }
 
         if( display )
-            module->Draw( aPanel, DC, aDrawMode );
+            module->Print( aFrame, DC );
         else
-            Trace_Pads_Only( aPanel, DC, module, 0, 0, layerMask, aDrawMode );
+            Trace_Pads_Only( aFrame, DC, module, 0, 0, layerMask );
     }
 
     // draw the BOARD's markers last, otherwise the high light will erase any marker on a pad
     for( unsigned i = 0; i < m_markers.size(); ++i )
     {
-        m_markers[i]->Draw( aPanel, DC, aDrawMode );
+        m_markers[i]->Print( aFrame, DC );
     }
 }
 
@@ -157,12 +157,11 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
  * and we want to see pad through.
  * The pads must appear on the layers selected in LayerMask
  */
-static void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* aModule,
-                             int ox, int oy, LSET aLayerMask, GR_DRAWMODE draw_mode )
+static void Trace_Pads_Only( PCB_BASE_FRAME* aFrame, wxDC* DC, MODULE* aModule,
+                             int ox, int oy, LSET aLayerMask )
 {
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
-
-    int tmp = displ_opts->m_DisplayPadFill;
+    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*) aFrame->GetDisplayOptions();
+    int                  tmp = displ_opts->m_DisplayPadFill;
 
     displ_opts->m_DisplayPadFill = false;
 
@@ -172,7 +171,7 @@ static void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* aModule,
         if( (pad->GetLayerSet() & aLayerMask) == 0 )
             continue;
 
-        pad->Draw( panel, DC, draw_mode, wxPoint( ox, oy ) );
+        pad->Print( aFrame, DC, wxPoint( ox, oy ) );
     }
 
     displ_opts->m_DisplayPadFill = tmp;

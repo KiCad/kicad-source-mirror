@@ -233,11 +233,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
 
-    // Set up viewport
-    KIGFX::VIEW* view = GetGalCanvas()->GetView();
-    view->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
-    view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
-
+    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
     // Restore last zoom.  (If auto-zooming we'll adjust when we load the footprint.)
@@ -327,7 +323,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
 
     ReCreateFootprintList();
 
-    m_canvas->Refresh();
+    GetGalCanvas()->Refresh();
 }
 
 
@@ -436,7 +432,7 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
 
         updateView();
 
-        m_canvas->Refresh();
+        GetGalCanvas()->Refresh();
         Update3D_Frame();
     }
 }
@@ -785,7 +781,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
 
     UpdateTitle();
 
-    m_canvas->Refresh();
+    GetGalCanvas()->Refresh();
 }
 
 

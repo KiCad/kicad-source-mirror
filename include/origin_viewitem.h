@@ -31,6 +31,8 @@
 #include <layers_id_colors_and_visibility.h>
 #include <gal/color4d.h>
 
+class PCB_BASE_FRAME;
+
 /**
  * Class ORIGIN_VIEWITEM
  *
@@ -56,10 +58,9 @@ public:
 
     void ViewDraw( int aLayer, VIEW* aView ) const override;
 
-    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-               GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset ) override
+    void Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset = ZeroOffset ) override
     {
-        wxASSERT( 0 ); // ORIGIN_VIEWITEM never added to BOARD; drawn directly through ViewDraw().
+        wxASSERT( 0 ); // ORIGIN_VIEWITEM never added to BOARD
     }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override

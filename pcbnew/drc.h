@@ -112,7 +112,6 @@
 #define DRCE_ZERO_LENGTH_TRACK                 64
 
 
-class EDA_DRAW_PANEL;
 class PCB_EDIT_FRAME;
 class DIALOG_DRC_CONTROL;
 class BOARD_ITEM;

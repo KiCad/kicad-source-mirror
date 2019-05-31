@@ -27,7 +27,7 @@
 #include <gr_basic.h>
 #include <macros.h>
 #include <base_struct.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <kicad_string.h>
 #include <sch_draw_panel.h>
 #include <plotter.h>
@@ -128,8 +128,8 @@ int LIB_FIELD::GetPenSize() const
 }
 
 
-void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                             void* aData, const TRANSFORM& aTransform )
+void LIB_FIELD::print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+                       const TRANSFORM& aTransform )
 {
     wxPoint  text_pos;
     COLOR4D  color = IsVisible() ? GetDefaultColor() : GetInvisibleItemColor();
@@ -144,10 +144,8 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
     else
         text = m_Text;
 
-    EDA_RECT* clipbox = aPanel? aPanel->GetClipBox() : NULL;
-
-    DrawGraphicText( clipbox, aDC, text_pos, color, text, GetTextAngle(), GetTextSize(),
-                     GetHorizJustify(), GetVertJustify(), linewidth, IsItalic(), IsBold() );
+    GRText( aDC, text_pos, color, text, GetTextAngle(), GetTextSize(), GetHorizJustify(),
+            GetVertJustify(), linewidth, IsItalic(), IsBold() );
 }
 
 

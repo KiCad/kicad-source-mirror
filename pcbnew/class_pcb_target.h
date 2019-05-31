@@ -35,7 +35,6 @@
 
 class EDA_RECT;
 class LINE_READER;
-class EDA_DRAW_PANEL;
 
 
 class PCB_TARGET : public BOARD_ITEM
@@ -84,8 +83,7 @@ public:
 
     void Flip( const wxPoint& aCentre ) override;
 
-    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-               GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset ) override;
+    void Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset = ZeroOffset ) override;
 
     wxString GetClass() const override
     {

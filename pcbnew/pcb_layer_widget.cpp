@@ -583,7 +583,7 @@ void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
 
     myframe->ReCreateHToolbar();
 
-    myframe->GetCanvas()->Refresh();
+    myframe->GetGalCanvas()->Refresh();
 
     if( aLayer == LAYER_PCB_BACKGROUND )
         myframe->SetDrawBgColor( aColor );
@@ -605,7 +605,7 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
     if( m_alwaysShowActiveCopperLayer )
         OnLayerSelected();
     else if( displ_opts->m_ContrastModeDisplay )
-        myframe->GetCanvas()->Refresh();
+        myframe->GetGalCanvas()->Refresh();
 
     return true;
 }
@@ -649,7 +649,7 @@ void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal 
     }
 
     if( isFinal )
-        myframe->GetCanvas()->Refresh();
+        myframe->GetGalCanvas()->Refresh();
 }
 
 
@@ -683,7 +683,7 @@ void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
 
     myframe->ReCreateHToolbar();
 
-    myframe->GetCanvas()->Refresh();
+    myframe->GetGalCanvas()->Refresh();
 }
 
 
@@ -719,7 +719,7 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
         galCanvas->GetView()->SetLayerVisible( aId, isEnabled );
 
     galCanvas->Refresh();
-    myframe->GetCanvas()->Refresh();
+    myframe->GetGalCanvas()->Refresh();
 }
 
 //-----</LAYER_WIDGET callbacks>------------------------------------------

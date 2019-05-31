@@ -28,11 +28,10 @@
  */
 
 #include <eda_text.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <eda_rect.h>
 #include <macros.h>
 #include <trigo.h>               // RotatePoint
-#include <class_drawpanel.h>     // EDA_DRAW_PANEL
 
 #include <basic_gal.h>
 #include <base_units.h>
@@ -293,9 +292,7 @@ bool EDA_TEXT::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy
 }
 
 
-void EDA_TEXT::Draw( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-                     COLOR4D aColor, GR_DRAWMODE aDrawMode,
-                     EDA_DRAW_MODE_T aFillMode, COLOR4D aAnchor_color )
+void EDA_TEXT::Print( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor, EDA_DRAW_MODE_T aFillMode )
 {
     if( IsMultilineAllowed() )
     {
@@ -310,21 +307,11 @@ void EDA_TEXT::Draw( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
         for( unsigned ii = 0; ii < strings.Count(); ii++ )
         {
             wxString& txt = strings.Item( ii );
-            drawOneLineOfText( aClipBox, aDC, aOffset, aColor,
-                               aDrawMode, aFillMode, txt, positions[ii] );
+            printOneLineOfText( aDC, aOffset, aColor, aFillMode, txt, positions[ii] );
         }
     }
     else
-        drawOneLineOfText( aClipBox, aDC, aOffset, aColor,
-                           aDrawMode, aFillMode, GetShownText(), GetTextPos() );
-
-    // Draw text anchor, if requested
-    if( aAnchor_color != COLOR4D::UNSPECIFIED )
-    {
-        GRDrawAnchor( aClipBox, aDC,
-                      GetTextPos().x + aOffset.x, GetTextPos().y + aOffset.y,
-                      DIM_ANCRE_TEXTE, aAnchor_color );
-    }
+        printOneLineOfText( aDC, aOffset, aColor, aFillMode, GetShownText(), GetTextPos() );
 }
 
 
@@ -370,15 +357,11 @@ void EDA_TEXT::GetPositionsOfLinesOfMultilineText(
     }
 }
 
-void EDA_TEXT::drawOneLineOfText( EDA_RECT* aClipBox, wxDC* aDC,
-                                  const wxPoint& aOffset, COLOR4D aColor,
-                                  GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aFillMode,
-                                  const wxString& aText, const wxPoint &aPos )
+void EDA_TEXT::printOneLineOfText( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor,
+                                   EDA_DRAW_MODE_T aFillMode,  const wxString& aText,
+                                   const wxPoint &aPos )
 {
     int width = GetThickness();
-
-    if( aDrawMode != UNSPECIFIED_DRAWMODE )
-        GRSetDrawMode( aDC, aDrawMode );
 
     if( aFillMode == SKETCH )
         width = -width;
@@ -388,9 +371,8 @@ void EDA_TEXT::drawOneLineOfText( EDA_RECT* aClipBox, wxDC* aDC,
     if( IsMirrored() )
         size.x = -size.x;
 
-    DrawGraphicText( aClipBox, aDC, aOffset + aPos, aColor, aText, GetTextAngle(), size,
-                     GetHorizJustify(), GetVertJustify(),
-                     width, IsItalic(), IsBold() );
+    GRText( aDC, aOffset + aPos, aColor, aText, GetTextAngle(), size, GetHorizJustify(),
+            GetVertJustify(), width, IsItalic(), IsBold() );
 }
 
 
@@ -482,16 +464,16 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 
 // Convert the text shape to a list of segment
 // each segment is stored as 2 wxPoints: its starting point and its ending point
-// we are using DrawGraphicText to create the segments.
-// and therefore a call-back function is needed
+// we are using GRText to create the segments and therefore a call-back function is needed
 
-// This is a call back function, used by DrawGraphicText to put each segment in buffer
+// This is a call back function, used by GRText to put each segment in buffer
 static void addTextSegmToBuffer( int x0, int y0, int xf, int yf, void* aData )
 {
     std::vector<wxPoint>* cornerBuffer = static_cast<std::vector<wxPoint>*>( aData );
     cornerBuffer->push_back( wxPoint( x0, y0 ) );
     cornerBuffer->push_back( wxPoint( xf, yf ) );
 }
+
 
 void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuffer ) const
 {
@@ -500,7 +482,7 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
     if( IsMirrored() )
         size.x = -size.x;
 
-    COLOR4D color = COLOR4D::BLACK;  // not actually used, but needed by DrawGraphicText
+    COLOR4D color = COLOR4D::BLACK;  // not actually used, but needed by GRText
 
     if( IsMultilineAllowed() )
     {
@@ -513,19 +495,15 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
         for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
             wxString txt = strings_list.Item( ii );
-            DrawGraphicText( NULL, NULL, positions[ii], color,
-                             txt, GetTextAngle(), size,
-                             GetHorizJustify(), GetVertJustify(),
-                             GetThickness(), IsItalic(),
-                             true, addTextSegmToBuffer, &aCornerBuffer );
+            GRText( NULL, positions[ii], color, txt, GetTextAngle(), size, GetHorizJustify(),
+                    GetVertJustify(), GetThickness(), IsItalic(), true, addTextSegmToBuffer,
+                    &aCornerBuffer );
         }
     }
     else
     {
-        DrawGraphicText( NULL, NULL, GetTextPos(), color,
-                         GetText(), GetTextAngle(), size,
-                         GetHorizJustify(), GetVertJustify(),
-                         GetThickness(), IsItalic(),
-                         true, addTextSegmToBuffer, &aCornerBuffer );
+        GRText( NULL, GetTextPos(), color, GetText(), GetTextAngle(), size, GetHorizJustify(),
+                GetVertJustify(), GetThickness(), IsItalic(), true, addTextSegmToBuffer,
+                &aCornerBuffer );
     }
 }

@@ -36,7 +36,6 @@
 #include <pgm_base.h>
 #include <trigo.h>
 #include <3d_viewer/eda_3d_viewer.h>
-#include <kicad_device_context.h>
 #include <macros.h>
 #include <invoke_pcb_dialog.h>
 #include <pcb_layer_widget.h>
@@ -121,7 +120,7 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
     GetScreen()->ClrModify();
 
     updateView();
-    m_canvas->Refresh();
+    GetGalCanvas()->Refresh();
 
     // Update the bitmap of the ID_MODEDIT_SAVE tool if needed.
     if( is_last_fp_from_brd )
@@ -229,7 +228,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             }
 
             updateView();
-            m_canvas->Refresh();
+            GetGalCanvas()->Refresh();
             Update3DView();
 
             SyncLibraryTree( false );
@@ -288,7 +287,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 }
 
                 updateView();
-                m_canvas->Refresh();
+                GetGalCanvas()->Refresh();
                 Update3DView();
 
                 SyncLibraryTree( false );
@@ -305,11 +304,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             {
                 m_toolManager->GetView()->Update( GetBoard()->m_Modules );
 
-                if( GetGalCanvas() )
-                    GetGalCanvas()->ForceRefresh();
-                else
-                    GetCanvas()->Refresh();
-
+                GetGalCanvas()->ForceRefresh();
                 GetScreen()->ClrModify();
             }
         }
@@ -338,11 +333,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 m_toolManager->GetView()->Update( GetBoard()->m_Modules );
                 GetScreen()->ClrModify();
 
-                if( GetGalCanvas() )
-                    GetGalCanvas()->ForceRefresh();
-                else
-                    GetCanvas()->Refresh();
-
+                GetGalCanvas()->ForceRefresh();
                 SyncLibraryTree( true );
             }
         }
@@ -419,7 +410,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         GetScreen()->SetModify();
         Zoom_Automatique( false );
-        m_canvas->Refresh();
+        GetGalCanvas()->Refresh();
         Update3DView();
 
         break;
@@ -466,7 +457,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( GetBoard()->m_Modules )
         {
             editFootprintProperties( GetBoard()->m_Modules );
-            m_canvas->Refresh();
+            GetGalCanvas()->Refresh();
         }
         break;
 
@@ -474,7 +465,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( GetBoard()->m_Modules )
         {
             InvokeDialogImportGfxModule( this, GetBoard()->m_Modules );
-            m_canvas->Refresh();
+            GetGalCanvas()->Refresh();
         }
         break;
 
@@ -627,7 +618,7 @@ bool FOOTPRINT_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileS
 
     GetScreen()->ClrModify();
     Zoom_Automatique( false );
-    m_canvas->Refresh();
+    GetGalCanvas()->Refresh();
 
     return true;
 }

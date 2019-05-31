@@ -53,11 +53,8 @@ class LIB_ARC : public LIB_ITEM
     int      m_editDirection;
     int      m_lastEditState;
 
-    /**
-     * Draws the arc.
-     */
-    void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
-                      const TRANSFORM& aTransform ) override;
+    void print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+                const TRANSFORM& aTransform ) override;
 
 public:
     LIB_ARC( LIB_PART * aParent );

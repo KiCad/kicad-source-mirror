@@ -32,7 +32,7 @@
 #include <gr_basic.h>
 #include <trigo.h>
 #include <class_drawpanel.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <kicad_string.h>
 #include <richio.h>
 #include <macros.h>
@@ -263,22 +263,14 @@ const EDA_RECT TEXTE_MODULE::GetBoundingBox() const
 }
 
 
-void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
-                         const wxPoint& aOffset )
+void TEXTE_MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
 {
-    if( aPanel == NULL )
-        return;
-
-    /* parent must *not* be NULL (a footprint text without a footprint
-       parent has no sense) */
+    /* parent must *not* be NULL (a footprint text without a footprint parent has no sense) */
     wxASSERT( m_Parent );
 
-    BOARD* brd = GetBoard( );
-
-    auto frame = static_cast<PCB_BASE_FRAME*> ( aPanel->GetParent() );
-    auto color = frame->Settings().Colors().GetLayerColor( GetLayer() );
-
-    PCB_LAYER_ID text_layer = GetLayer();
+    BOARD*         brd = GetBoard( );
+    KIGFX::COLOR4D color = aFrame->Settings().Colors().GetLayerColor( GetLayer() );
+    PCB_LAYER_ID   text_layer = GetLayer();
 
     if( !brd->IsLayerVisible( m_Layer )
       || ( IsFrontLayer( text_layer ) && !brd->IsElementVisible( LAYER_MOD_TEXT_FR ) )
@@ -298,19 +290,10 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMod
         if( !brd->IsElementVisible( LAYER_MOD_TEXT_INVISIBLE ) )
             return;
 
-        color = frame->Settings().Colors().GetItemColor( LAYER_MOD_TEXT_INVISIBLE );
+        color = aFrame->Settings().Colors().GetItemColor( LAYER_MOD_TEXT_INVISIBLE );
     }
 
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( aPanel->GetDisplayOptions() );
-
-    // shade text if high contrast mode is active
-    if( ( aDrawMode & GR_ALLOW_HIGHCONTRAST ) && displ_opts && displ_opts->m_ContrastModeDisplay )
-    {
-        PCB_LAYER_ID curr_layer = ( (PCB_SCREEN*) aPanel->GetScreen() )->m_Active_Layer;
-
-        if( !IsOnLayer( curr_layer ) )
-            color = COLOR4D( DARKDARKGRAY );
-    }
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( aFrame->GetDisplayOptions() );
 
     // Draw mode compensation for the width
     int width = GetThickness();
@@ -318,15 +301,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMod
     if( displ_opts && displ_opts->m_DisplayModTextFill == SKETCH )
         width = -width;
 
-    GRSetDrawMode( aDC, aDrawMode );
     wxPoint pos = GetTextPos() - aOffset;
-
-    // Draw the text anchor point
-    if( brd->IsElementVisible( LAYER_ANCHOR ) )
-    {
-        COLOR4D anchor_color = frame->Settings().Colors().GetItemColor( LAYER_ANCHOR );
-        GRDrawAnchor( aPanel->GetClipBox(), aDC, pos.x, pos.y, DIM_ANCRE_TEXTE, anchor_color );
-    }
 
     // Draw the text proper, with the right attributes
     wxSize size   = GetTextSize();
@@ -336,34 +311,8 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMod
     if( IsMirrored() )
         size.x = -size.x;
 
-    DrawGraphicText( aPanel->GetClipBox(), aDC, pos, color, GetShownText(), orient,
-                     size, GetHorizJustify(), GetVertJustify(),
-                     width, IsItalic(), IsBold() );
-
-    // Enable these line to draw the bounding box (debug test purpose only)
-#if 0
-    {
-        EDA_RECT BoundaryBox = GetBoundingBox();
-        GRRect( aPanel->GetClipBox(), aDC, BoundaryBox, 0, BROWN );
-    }
-#endif
-}
-
-
-void TEXTE_MODULE::DrawUmbilical( EDA_DRAW_PANEL* aPanel,
-                                  wxDC*           aDC,
-                                  GR_DRAWMODE     aDrawMode,
-                                  const wxPoint&  aOffset )
-{
-    MODULE* parent = static_cast<MODULE*>( GetParent() );
-
-    if( !parent )
-        return;
-
-    GRSetDrawMode( aDC, GR_XOR );
-    GRLine( aPanel->GetClipBox(), aDC,
-            parent->GetPosition(), GetTextPos() + aOffset,
-            0, UMBILICAL_COLOR);
+    GRText( aDC, pos, color, GetShownText(), orient, size, GetHorizJustify(), GetVertJustify(),
+            width, IsItalic(), IsBold() );
 }
 
 

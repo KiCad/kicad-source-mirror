@@ -37,7 +37,7 @@
 #include <macros.h>
 #include <class_drawpanel.h>
 #include <pcb_screen.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <pcb_base_frame.h>
 #include <class_board.h>
 #include <class_track.h>
@@ -503,158 +503,34 @@ TRACK* TRACK::GetEndNetCode( int NetCode )
         return NULL;
 }
 
-void TRACK::DrawShortNetname( EDA_DRAW_PANEL* panel,
-        wxDC* aDC, GR_DRAWMODE aDrawMode, COLOR4D aBgColor )
-{
-    if( ! panel )
-        return;
-
-    /* we must filter tracks, to avoid a lot of texts.
-     *  - only tracks with a length > 10 * thickness are eligible
-     * and, of course, if we are not printing the board
-     */
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
-
-    if( displ_opts->m_DisplayNetNamesMode == 0 || displ_opts->m_DisplayNetNamesMode == 1 )
-        return;
-
-    #define THRESHOLD 10
-
-    int len = KiROUND( GetLineLength( m_Start, m_End ) );
-
-    if( len < THRESHOLD * m_Width )
-        return;
-
-    // no room to display a text inside track
-    if( aDC->LogicalToDeviceXRel( m_Width ) < MIN_TEXT_SIZE )
-        return;
-
-    if( GetNetCode() == NETINFO_LIST::UNCONNECTED )
-        return;
-
-    NETINFO_ITEM* net = GetNet();
-
-    if( net == NULL )
-        return;
-
-    wxString text = UnescapeString( net->GetShortNetname() );
-    int textlen = text.Len();
-
-    if( textlen > 0 )
-    {
-        // calculate a good size for the text
-        int     tsize = std::min( m_Width, len / textlen );
-        int     dx = m_End.x - m_Start.x ;
-        int     dy = m_End.y - m_Start.y ;
-        wxPoint tpos  = m_Start + m_End;
-        tpos.x /= 2;
-        tpos.y /= 2;
-
-        // Calculate angle: if the track segment is vertical, angle = 90 degrees
-        // If horizontal 0 degrees, otherwise compute it
-        double angle;        // angle is in 0.1 degree
-
-        if( dy == 0 )        // Horizontal segment
-        {
-            angle = 0;
-        }
-        else
-        {
-            if( dx == 0 )    // Vertical segment
-            {
-                angle = 900;
-            }
-            else
-            {
-                /* atan2 is *not* the solution here, since it can give upside
-                   down text. We want to work only in the first and fourth quadrant */
-                angle = RAD2DECIDEG( -atan( double( dy ) / double( dx ) ) );
-            }
-        }
-
-        PCB_LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-
-        if( ( aDC->LogicalToDeviceXRel( tsize ) >= MIN_TEXT_SIZE )
-         && ( !(!IsOnLayer( curr_layer )&& displ_opts->m_ContrastModeDisplay) ) )
-        {
-            if( (aDrawMode & GR_XOR) == 0 )
-                GRSetDrawMode( aDC, GR_COPY );
-
-            tsize = (tsize * 7) / 10;       // small reduction to give a better look
-            DrawGraphicHaloText( panel->GetClipBox(), aDC, tpos,
-                                 aBgColor, BLACK, WHITE,
-                                 text, angle, wxSize( tsize, tsize ),
-                                 GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                 tsize / 7, false, false );
-        }
-    }
-}
-
-
-void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
-                  const wxPoint& aOffset )
+void TRACK::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
 {
     BOARD* brd = GetBoard();
+    auto   color = aFrame->Settings().Colors().GetLayerColor( m_Layer );
 
-    auto frame = static_cast<PCB_BASE_FRAME*> ( panel->GetParent() );
-    auto color = frame->Settings().Colors().GetLayerColor( m_Layer );
-
-    if( ( !brd->IsLayerVisible( m_Layer ) || !brd->IsElementVisible( LAYER_TRACKS ) )
-        && !( aDrawMode & GR_HIGHLIGHT ) )
+    if( !brd->IsLayerVisible( m_Layer ) || !brd->IsElementVisible( LAYER_TRACKS ) )
         return;
 
-#ifdef USE_WX_OVERLAY
-    // If dragged not draw in OnPaint otherwise remains impressed in wxOverlay
-    if( (m_Flags & IS_DRAGGED) && aDC->IsKindOf(wxCLASSINFO(wxPaintDC)))
-      return;
-#endif
-
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
-
-    if( ( aDrawMode & GR_ALLOW_HIGHCONTRAST ) && displ_opts->m_ContrastModeDisplay )
-    {
-        PCB_LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-
-        if( !IsOnLayer( curr_layer ) )
-            color = COLOR4D( DARKDARKGRAY );
-    }
-
-    if( ( aDrawMode & GR_HIGHLIGHT ) && !( aDrawMode & GR_AND ) )
-        color.SetToLegacyHighlightColor();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( aFrame->GetDisplayOptions() );
 
     color.a = 0.588;
-
-    GRSetDrawMode( aDC, aDrawMode );
 
     // Draw track as line if width <= 1pixel:
     if( aDC->LogicalToDeviceXRel( m_Width ) <= 1 )
     {
-        GRLine( panel->GetClipBox(), aDC, m_Start + aOffset, m_End + aOffset, m_Width, color );
+        GRLine( nullptr, aDC, m_Start + aOffset, m_End + aOffset, m_Width, color );
         return;
     }
 
     if( !displ_opts->m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
     {
-        GRCSegm( panel->GetClipBox(), aDC, m_Start + aOffset, m_End + aOffset, m_Width, color );
+        GRCSegm( nullptr, aDC, m_Start + aOffset, m_End + aOffset, m_Width, color );
     }
     else
     {
-        GRFillCSegm( panel->GetClipBox(), aDC, m_Start.x + aOffset.x,
-                     m_Start.y + aOffset.y,
+        GRFillCSegm( nullptr, aDC, m_Start.x + aOffset.x, m_Start.y + aOffset.y,
                      m_End.x + aOffset.x, m_End.y + aOffset.y, m_Width, color );
     }
-
-    if( panel->GetScreen()->m_IsPrinting )
-        return;
-
-    // Show clearance for tracks, not for zone segments
-    if( ShowClearance( displ_opts, this ) )
-    {
-        GRCSegm( panel->GetClipBox(), aDC, m_Start + aOffset, m_End + aOffset,
-                 m_Width + (GetClearance() * 2), color );
-    }
-
-    DrawShortNetname( panel, aDC, aDrawMode, color );
 }
 
 
@@ -693,57 +569,36 @@ const BOX2I TRACK::ViewBBox() const
 }
 
 
-void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoint& aOffset )
+void VIA::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
 {
-    wxCHECK_RET( panel != NULL, wxT( "VIA::Draw panel cannot be NULL." ) );
-
-    int radius;
-    PCB_LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-
-    int fillvia = 0;
-    PCB_BASE_FRAME* frame  = (PCB_BASE_FRAME*) panel->GetParent();
-    PCB_SCREEN*     screen = frame->GetScreen();
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( frame->GetDisplayOptions() );
+    int                  radius;
+    int                  fillvia = 0;
+    PCB_SCREEN*          screen = aFrame->GetScreen();
+    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*) aFrame->GetDisplayOptions();
+    BOARD*               brd =  GetBoard();
+    COLOR4D              color = aFrame->Settings().Colors().GetItemColor( LAYER_VIAS + GetViaType() );
 
     if( displ_opts->m_DisplayViaFill == FILLED )
         fillvia = 1;
 
-    GRSetDrawMode( aDC, aDrawMode );
-
-    BOARD * brd =  GetBoard();
-    COLOR4D color = frame->Settings().Colors().GetItemColor( LAYER_VIAS + GetViaType() );
-
-    if( brd->IsElementVisible( LAYER_VIAS + GetViaType() ) == false
-        && !( aDrawMode & GR_HIGHLIGHT ) )
+    if( !brd->IsElementVisible( LAYER_VIAS + GetViaType() ) )
        return;
 
     // Only draw the via if at least one of the layers it crosses is being displayed
     if( !( brd->GetVisibleLayers() & GetLayerSet() ).any() )
         return;
 
-    if( displ_opts->m_ContrastModeDisplay )
-    {
-        if( !IsOnLayer( curr_layer ) )
-            color = COLOR4D( DARKDARKGRAY );
-    }
-
-    if( ( aDrawMode & GR_HIGHLIGHT ) && !( aDrawMode & GR_AND ) )
-        color.SetToLegacyHighlightColor();
-
     color.a = 0.588;
-
 
     radius = m_Width >> 1;
     // for small via size on screen (radius < 4 pixels) draw a simplified shape
 
-    int radius_in_pixels = aDC->LogicalToDeviceXRel( radius );
-
+    int  radius_in_pixels = aDC->LogicalToDeviceXRel( radius );
     bool fast_draw = false;
 
     // Vias are drawn as a filled circle or a double circle. The hole will be drawn later
-    int drill_radius = GetDrillValue() / 2;
-
-    int inner_radius = radius - aDC->DeviceToLogicalXRel( 2 );
+    int  drill_radius = GetDrillValue() / 2;
+    int  inner_radius = radius - aDC->DeviceToLogicalXRel( 2 );
 
     if( radius_in_pixels < MIN_VIA_DRAW_SIZE )
     {
@@ -753,16 +608,16 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
 
     if( fillvia )
     {
-        GRFilledCircle( panel->GetClipBox(), aDC, m_Start + aOffset, radius, color );
+        GRFilledCircle( nullptr, aDC, m_Start + aOffset, radius, color );
     }
     else
     {
-        GRCircle( panel->GetClipBox(), aDC, m_Start + aOffset, radius, 0, color );
+        GRCircle( nullptr, aDC, m_Start + aOffset, radius, 0, color );
 
         if ( fast_draw )
             return;
 
-        GRCircle( panel->GetClipBox(), aDC, m_Start + aOffset, inner_radius, 0, color );
+        GRCircle( nullptr, aDC, m_Start + aOffset, inner_radius, 0, color );
     }
 
     if( fillvia )
@@ -780,13 +635,10 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
             color = BLACK;     // or DARKGRAY;
         }
 
-        if( (aDrawMode & GR_XOR) == 0)
-            GRSetDrawMode( aDC, GR_COPY );
-
         // Draw hole if the radius is > 1pixel.
         if( aDC->LogicalToDeviceXRel( drill_radius ) > 1 )
-            GRFilledCircle( panel->GetClipBox(), aDC, m_Start.x + aOffset.x,
-                            m_Start.y + aOffset.y, drill_radius, 0, color, color );
+            GRFilledCircle( nullptr, aDC, m_Start.x + aOffset.x, m_Start.y + aOffset.y,
+                            drill_radius, 0, color, color );
 
         if( screen->m_IsPrinting )
             GRForceBlackPen( blackpenstate );
@@ -794,12 +646,12 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
     else
     {
         if( drill_radius < inner_radius )         // We can show the via hole
-            GRCircle( panel->GetClipBox(), aDC, m_Start + aOffset, drill_radius, 0, color );
+            GRCircle( nullptr, aDC, m_Start + aOffset, drill_radius, 0, color );
     }
 
     if( ShowClearance( displ_opts, this ) )
     {
-        GRCircle( panel->GetClipBox(), aDC, m_Start + aOffset, radius + GetClearance(), 0, color );
+        GRCircle( nullptr, aDC, m_Start + aOffset, radius + GetClearance(), 0, color );
     }
 
     // for Micro Vias, draw a partial cross : X on component layer, or + on copper layer
@@ -820,24 +672,16 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
         }
 
         // lines '|' or '\'
-        GRLine( panel->GetClipBox(), aDC, m_Start.x + aOffset.x - ax,
-                m_Start.y + aOffset.y - ay,
-                m_Start.x + aOffset.x - bx,
-                m_Start.y + aOffset.y - by, 0, color );
-        GRLine( panel->GetClipBox(), aDC, m_Start.x + aOffset.x + bx,
-                m_Start.y + aOffset.y + by,
-                m_Start.x + aOffset.x + ax,
-                m_Start.y + aOffset.y + ay, 0, color );
+        GRLine( nullptr, aDC, m_Start.x + aOffset.x - ax, m_Start.y + aOffset.y - ay,
+                m_Start.x + aOffset.x - bx, m_Start.y + aOffset.y - by, 0, color );
+        GRLine( nullptr, aDC, m_Start.x + aOffset.x + bx, m_Start.y + aOffset.y + by,
+                m_Start.x + aOffset.x + ax, m_Start.y + aOffset.y + ay, 0, color );
 
         // lines - or '/'
-        GRLine( panel->GetClipBox(), aDC, m_Start.x + aOffset.x + ay,
-                m_Start.y + aOffset.y - ax,
-                m_Start.x + aOffset.x + by,
-                m_Start.y + aOffset.y - bx, 0, color );
-        GRLine( panel->GetClipBox(), aDC, m_Start.x + aOffset.x - by,
-                m_Start.y + aOffset.y + bx,
-                m_Start.x + aOffset.x - ay,
-                m_Start.y + aOffset.y + ax, 0, color );
+        GRLine( nullptr, aDC, m_Start.x + aOffset.x + ay, m_Start.y + aOffset.y - ax,
+                m_Start.x + aOffset.x + by, m_Start.y + aOffset.y - bx, 0, color );
+        GRLine( nullptr, aDC, m_Start.x + aOffset.x - by, m_Start.y + aOffset.y + bx,
+                m_Start.x + aOffset.x - ay, m_Start.y + aOffset.y + ax, 0, color );
     }
 
     // for Buried Vias, draw a partial line : orient depending on layer pair
@@ -852,19 +696,15 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
         // lines for the top layer
         RotatePoint( &ax, &ay, layer_top * 3600.0 / brd->GetCopperLayerCount( ) );
         RotatePoint( &bx, &by, layer_top * 3600.0 / brd->GetCopperLayerCount( ) );
-        GRLine( panel->GetClipBox(), aDC, m_Start.x + aOffset.x - ax,
-                m_Start.y + aOffset.y - ay,
-                m_Start.x + aOffset.x - bx,
-                m_Start.y + aOffset.y - by, 0, color );
+        GRLine( nullptr, aDC, m_Start.x + aOffset.x - ax, m_Start.y + aOffset.y - ay,
+                m_Start.x + aOffset.x - bx, m_Start.y + aOffset.y - by, 0, color );
 
         // lines for the bottom layer
         ax = 0; ay = radius; bx = 0; by = drill_radius;
         RotatePoint( &ax, &ay, layer_bottom * 3600.0 / brd->GetCopperLayerCount( ) );
         RotatePoint( &bx, &by, layer_bottom * 3600.0 / brd->GetCopperLayerCount( ) );
-        GRLine( panel->GetClipBox(), aDC, m_Start.x + aOffset.x - ax,
-                m_Start.y + aOffset.y - ay,
-                m_Start.x + aOffset.x - bx,
-                m_Start.y + aOffset.y - by, 0, color );
+        GRLine( nullptr, aDC, m_Start.x + aOffset.x - ax, m_Start.y + aOffset.y - ay,
+                m_Start.x + aOffset.x - bx, m_Start.y + aOffset.y - by, 0, color );
     }
 
     // Display the short netname:
@@ -891,15 +731,8 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
         {
             tsize = (tsize * 7) / 10;        // small reduction to give a better look, inside via
 
-            if( (aDrawMode & GR_XOR) == 0 )
-                GRSetDrawMode( aDC, GR_COPY );
-
-            EDA_RECT* clipbox = panel->GetClipBox();
-            DrawGraphicHaloText( clipbox, aDC, m_Start,
-                                 color, WHITE, BLACK,
-                                 text, 0, wxSize( tsize, tsize ),
-                                 GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                 tsize / 7, false, false );
+            GRHaloText( aDC, m_Start, color, WHITE, BLACK, text, 0, wxSize( tsize, tsize ),
+                        GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, tsize/7, false, false );
         }
     }
 }

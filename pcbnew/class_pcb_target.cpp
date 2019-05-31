@@ -71,12 +71,11 @@ PCB_TARGET::~PCB_TARGET()
 }
 
 
-/* Draw PCB_TARGET object: 2 segments + 1 circle
+/* Print PCB_TARGET object: 2 segments + 1 circle
  * The circle radius is half the radius of the target
  * 2 lines have length the diameter of the target
  */
-void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
-                       const wxPoint& offset )
+void PCB_TARGET::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
 {
     int radius, ox, oy, width;
     int dx1, dx2, dy1, dy2;
@@ -84,18 +83,15 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
     ox = m_Pos.x + offset.x;
     oy = m_Pos.y + offset.y;
 
-    BOARD * brd =  GetBoard( );
+    BOARD* brd =  GetBoard( );
 
     if( brd->IsLayerVisible( m_Layer ) == false )
         return;
 
-    auto frame = static_cast<PCB_EDIT_FRAME*> ( panel->GetParent() );
-    auto gcolor = frame->Settings().Colors().GetLayerColor( m_Layer );
-
-    GRSetDrawMode( DC, mode_color );
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
+    auto gcolor = aFrame->Settings().Colors().GetLayerColor( m_Layer );
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*) aFrame->GetDisplayOptions();
     bool filled = displ_opts ? displ_opts->m_DisplayDrawItemsFill : FILLED;
-    width   = m_Width;
+    width = m_Width;
 
     radius = m_Size / 3;
 
@@ -103,11 +99,11 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
         radius = m_Size / 2;
 
     if( filled )
-        GRCircle( panel->GetClipBox(), DC, ox, oy, radius, width, gcolor );
+        GRCircle( nullptr, DC, ox, oy, radius, width, gcolor );
     else
     {
-        GRCircle( panel->GetClipBox(), DC, ox, oy, radius + (width / 2), gcolor );
-        GRCircle( panel->GetClipBox(), DC, ox, oy, radius - (width / 2), gcolor );
+        GRCircle( nullptr, DC, ox, oy, radius + (width / 2), gcolor );
+        GRCircle( nullptr, DC, ox, oy, radius - (width / 2), gcolor );
     }
 
 
@@ -126,13 +122,13 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
 
     if( filled )
     {
-        GRLine( panel->GetClipBox(), DC, ox - dx1, oy - dy1, ox + dx1, oy + dy1, width, gcolor );
-        GRLine( panel->GetClipBox(), DC, ox - dx2, oy - dy2, ox + dx2, oy + dy2, width, gcolor );
+        GRLine( nullptr, DC, ox - dx1, oy - dy1, ox + dx1, oy + dy1, width, gcolor );
+        GRLine( nullptr, DC, ox - dx2, oy - dy2, ox + dx2, oy + dy2, width, gcolor );
     }
     else
     {
-        GRCSegm( panel->GetClipBox(), DC, ox - dx1, oy - dy1, ox + dx1, oy + dy1, width, gcolor );
-        GRCSegm( panel->GetClipBox(), DC, ox - dx2, oy - dy2, ox + dx2, oy + dy2, width, gcolor );
+        GRCSegm( nullptr, DC, ox - dx1, oy - dy1, ox + dx1, oy + dy1, width, gcolor );
+        GRCSegm( nullptr, DC, ox - dx2, oy - dy2, ox + dx2, oy + dy2, width, gcolor );
     }
 }
 

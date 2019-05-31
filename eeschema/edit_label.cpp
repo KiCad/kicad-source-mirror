@@ -25,11 +25,10 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <base_struct.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <sch_draw_panel.h>
 #include <confirm.h>
 #include <sch_edit_frame.h>
-#include <kicad_device_context.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <general.h>

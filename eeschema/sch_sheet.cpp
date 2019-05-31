@@ -29,7 +29,7 @@
 
 #include <fctsys.h>
 #include <sch_draw_panel.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <trigo.h>
 #include <richio.h>
 #include <sch_edit_frame.h>
@@ -433,7 +433,7 @@ void SCH_SHEET::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset )
+void SCH_SHEET::Print( wxDC* aDC, const wxPoint& aOffset )
 {
     wxString  Text;
     int       name_orientation;
@@ -442,10 +442,9 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset 
     int       lineWidth = GetPenSize();
     int       textWidth;
     wxSize    textSize;
-    EDA_RECT* clipbox  = aPanel? aPanel->GetClipBox() : NULL;
     COLOR4D   color = GetLayerColor( m_Layer );
 
-    GRRect( clipbox, aDC, pos.x, pos.y, pos.x + m_size.x, pos.y + m_size.y, lineWidth, color );
+    GRRect( nullptr, aDC, pos.x, pos.y, pos.x + m_size.x, pos.y + m_size.y, lineWidth, color );
 
     pos_sheetname = GetSheetNamePosition() + aOffset;
     pos_filename = GetFileNamePosition() + aOffset;
@@ -459,21 +458,19 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset 
     Text = wxT( "Sheet: " ) + m_name;
     textSize = wxSize( m_sheetNameSize, m_sheetNameSize );
     textWidth = Clamp_Text_PenSize( lineWidth, textSize, false );
-    DrawGraphicText( clipbox, aDC, pos_sheetname, GetLayerColor( LAYER_SHEETNAME ), Text,
-                     name_orientation, textSize, GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM,
-                     textWidth, false, false );
+    GRText( aDC, pos_sheetname, GetLayerColor( LAYER_SHEETNAME ), Text, name_orientation,
+            textSize, GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, textWidth, false, false );
 
     /* Draw text : FileName */
     Text = wxT( "File: " ) + m_fileName;
     textSize = wxSize( m_fileNameSize, m_fileNameSize );
     textWidth = Clamp_Text_PenSize( lineWidth, textSize, false );
-    DrawGraphicText( clipbox, aDC, pos_filename, GetLayerColor( LAYER_SHEETFILENAME ), Text,
-                     name_orientation, textSize, GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP,
-                     textWidth, false, false );
+    GRText( aDC, pos_filename, GetLayerColor( LAYER_SHEETFILENAME ), Text, name_orientation,
+            textSize, GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, textWidth, false, false );
 
     /* Draw text : SheetLabel */
     for( SCH_SHEET_PIN& sheetPin : m_pins )
-        sheetPin.Draw( aPanel, aDC, aOffset );
+        sheetPin.Print( aDC, aOffset );
 }
 
 

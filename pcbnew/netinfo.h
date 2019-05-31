@@ -39,12 +39,12 @@
 class wxDC;
 class wxPoint;
 class LINE_READER;
-class EDA_DRAW_PANEL;
 class EDA_DRAW_FRAME;
 class D_PAD;
 class BOARD;
 class BOARD_ITEM;
 class MSG_PANEL_ITEM;
+class PCB_BASE_FRAME;
 
 
 /*****************************/
@@ -213,12 +213,11 @@ public:
 #endif
 
     /**
-     * Function Draw
+     * Function Peinr
      * @todo we actually could show a NET, simply show all the tracks and
      *       a pads or net name on pad and vias
      */
-    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMode,
-               const wxPoint& offset ) override;
+    void Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset ) override;
 
     /**
      * Function GetNet

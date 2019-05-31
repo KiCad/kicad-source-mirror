@@ -169,7 +169,7 @@ void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
     dc.SetUserScale( scale, scale );
     GRResetPenAndBrush( &dc );
 
-    m_dummyPin->Draw( nullptr, &dc, -bBox.Centre(), (void*)0, DefaultTransform );
+    m_dummyPin->Print( &dc, -bBox.Centre(), (void*)0, DefaultTransform );
 
     m_dummyPin->SetParent( nullptr );
 

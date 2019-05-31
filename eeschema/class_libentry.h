@@ -436,17 +436,16 @@ public:
     LIB_FIELD& GetFootprintField();
 
     /**
-     * Draw part.
+     * Print part.
      *
-     * @param aPanel - Window to draw on. Can be NULL if not available.
      * @param aDc - Device context to draw on.
      * @param aOffset - Position of part.
      * @param aMulti - unit if multiple units per part.
      * @param aConvert - Component conversion (DeMorgan) if available.
      * @param aOpts - Drawing options
      */
-    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
-               int aMulti, int aConvert, const PART_DRAW_OPTIONS& aOpts );
+    void Print( wxDC* aDc, const wxPoint& aOffset, int aMulti, int aConvert,
+                const PART_DRAW_OPTIONS& aOpts );
 
     /**
      * Plot lib part to plotter.
@@ -460,7 +459,7 @@ public:
      * @param aTransform - Component plot transform matrix.
      */
     void Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& aOffset,
-                const TRANSFORM& aTransform );
+               const TRANSFORM& aTransform );
 
     /**
      * Plot Lib Fields only of the part to plotter.
@@ -472,8 +471,8 @@ public:
      * @param aOffset - Distance to shift the plot coordinates.
      * @param aTransform - Component plot transform matrix.
      */
-    void PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
-                        const wxPoint& aOffset, const TRANSFORM& aTransform );
+    void PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& aOffset,
+                        const TRANSFORM& aTransform );
 
     /**
      * Add a new draw \a aItem to the draw object list.
@@ -486,10 +485,8 @@ public:
      * Remove draw \a aItem from list.
      *
      * @param aItem - Draw item to remove from list.
-     * @param aPanel - Panel to remove part from.
-     * @param aDc - Device context to remove part from.
      */
-    void RemoveDrawItem( LIB_ITEM* aItem, EDA_DRAW_PANEL* aPanel = NULL, wxDC* aDc = NULL );
+    void RemoveDrawItem( LIB_ITEM* aItem );
 
     /**
      * Return the next draw object pointer.
@@ -557,7 +554,7 @@ public:
      * @param aTestLength - Whether two pins at the same point must have the same length.
      */
     bool PinsConflictWith( LIB_PART& aOtherPart, bool aTestNums, bool aTestNames,
-            bool aTestType, bool aTestOrientation, bool aTestLength );
+                           bool aTestType, bool aTestOrientation, bool aTestLength );
 
     /**
      * Move the part \a aOffset.
@@ -604,8 +601,8 @@ public:
      * @param aTransform = the transform matrix
      * @return The draw object if found.  Otherwise NULL.
      */
-    LIB_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
-                              const wxPoint& aPoint, const TRANSFORM& aTransform );
+    LIB_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType, const wxPoint& aPoint,
+                              const TRANSFORM& aTransform );
 
     /**
      * Return a reference to the draw item list.
@@ -630,7 +627,6 @@ public:
      * @param count - Number of units per package.
      */
     void SetUnitCount( int count );
-
     int GetUnitCount() const { return m_unitCount; }
 
     /**
@@ -656,7 +652,6 @@ public:
      * only for read/save setting functions
      */
     static int* SubpartIdSeparatorPtr() { return &m_subpartIdSeparator; }
-
     static int GetSubpartFirstId() { return m_subpartFirstId; }
 
     /** return a reference to m_subpartFirstId, only for read/save setting functions
@@ -696,7 +691,6 @@ public:
      * @param aOffset - The offset in mils.
      */
     void SetPinNameOffset( int aOffset ) { m_pinNameOffset = aOffset; }
-
     int GetPinNameOffset() { return m_pinNameOffset; }
 
     /**
@@ -705,7 +699,6 @@ public:
      * @param aShow - True to make the part pin names visible.
      */
     void SetShowPinNames( bool aShow ) { m_showPinNames = aShow; }
-
     bool ShowPinNames() { return m_showPinNames; }
 
     /**
@@ -714,7 +707,6 @@ public:
      * @param aShow - True to make the part pin numbers visible.
      */
     void SetShowPinNumbers( bool aShow ) { m_showPinNumbers = aShow; }
-
     bool ShowPinNumbers() { return m_showPinNumbers; }
 
     bool operator==( const LIB_PART*  aPart ) const { return this == aPart; }

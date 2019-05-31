@@ -466,14 +466,13 @@ public:
     SCH_PINS& GetPins() { return m_pins; }
 
     /**
-     * Draw a component
+     * Print a component
      *
-     * @param aPanel is the panel to use (can be null) mainly used for clipping purposes.
      * @param aDC is the device context (can be null)
      * @param aOffset is the drawing offset (usually wxPoint(0,0),
      *  but can be different when moving an object)
      */
-    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset ) override;
+    void Print( wxDC* aDC, const wxPoint& aOffset ) override;
 
     void SwapData( SCH_ITEM* aItem ) override;
 

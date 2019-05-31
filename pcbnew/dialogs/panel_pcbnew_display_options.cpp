@@ -91,7 +91,6 @@ bool PANEL_PCBNEW_DISPLAY_OPTIONS::TransferDataFromWindow()
     m_frame->SetElementVisibility( LAYER_NO_CONNECTS, m_OptDisplayPadNoConn->GetValue() );
 
     displ_opts->m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
-
     displ_opts->m_DisplayRatsnestLinesCurved = m_OptDisplayCurvedRatsnestLines->GetValue();
 
     m_galOptsPanel->TransferDataFromWindow();
@@ -104,7 +103,7 @@ bool PANEL_PCBNEW_DISPLAY_OPTIONS::TransferDataFromWindow()
     view->RecacheAllItems();
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 
-    m_frame->GetCanvas()->Refresh();
+    m_frame->GetGalCanvas()->Refresh();
 
     return true;
 }

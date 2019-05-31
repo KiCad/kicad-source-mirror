@@ -72,7 +72,7 @@ void SCH_MARKER::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-void SCH_MARKER::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset )
+void SCH_MARKER::Print( wxDC* aDC, const wxPoint& aOffset )
 {
     COLOR4D tmp = m_Color;
 
@@ -82,7 +82,7 @@ void SCH_MARKER::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset
                     GetLayerColor( LAYER_ERC_ERR ) : GetLayerColor( LAYER_ERC_WARN );
     }
 
-    DrawMarker( aPanel, aDC, aOffset );
+    PrintMarker( aDC, aOffset );
     m_Color = tmp;
 }
 

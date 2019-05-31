@@ -234,22 +234,6 @@ void MODULE::ClearAllNets()
 }
 
 
-void MODULE::DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-                        int dim_ancre, GR_DRAWMODE draw_mode )
-{
-    auto frame = (PCB_EDIT_FRAME*) panel->GetParent();
-
-    GRSetDrawMode( DC, draw_mode );
-
-    if( GetBoard()->IsElementVisible( LAYER_ANCHOR ) )
-    {
-        GRDrawAnchor( panel->GetClipBox(), DC, m_Pos.x, m_Pos.y,
-                      dim_ancre,
-                      frame->Settings().Colors().GetItemColor( LAYER_ANCHOR ) );
-    }
-}
-
-
 void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 {
     switch( aBoardItem->Type() )
@@ -365,72 +349,27 @@ void MODULE::CopyNetlistSettings( MODULE* aModule, bool aCopyLocalSettings )
 }
 
 
-void MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
-                   const wxPoint& aOffset )
+void MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
 {
-    if( (m_Flags & DO_NOT_DRAW) || (IsMoving()) )
-        return;
-
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
-    {
-        if( pad->IsMoving() )
-            continue;
-
-        pad->Draw( aPanel, aDC, aDrawMode, aOffset );
-    }
+        pad->Print( aFrame, aDC, aOffset );
 
     BOARD* brd = GetBoard();
 
-    // Draws footprint anchor
-    DrawAncre( aPanel, aDC, aOffset, DIM_ANCRE_MODULE, aDrawMode );
-
     // Draw graphic items
     if( brd->IsElementVisible( LAYER_MOD_REFERENCES ) )
-    {
-        if( !(m_Reference->IsMoving()) )
-            m_Reference->Draw( aPanel, aDC, aDrawMode, aOffset );
-    }
+        m_Reference->Print( aFrame, aDC, aOffset );
 
     if( brd->IsElementVisible( LAYER_MOD_VALUES ) )
-    {
-        if( !(m_Value->IsMoving()) )
-            m_Value->Draw( aPanel, aDC, aDrawMode, aOffset );
-    }
+        m_Value->Print( aFrame, aDC, aOffset );
 
     for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
     {
-        if( item->IsMoving() )
-            continue;
-
         switch( item->Type() )
         {
         case PCB_MODULE_TEXT_T:
         case PCB_MODULE_EDGE_T:
-            item->Draw( aPanel, aDC, aDrawMode, aOffset );
-            break;
-
-        default:
-            break;
-        }
-    }
-
-    // Enable these line to draw m_BoundaryBox (debug tests purposes only)
-#if 0
-    GRRect( aPanel->GetClipBox(), aDC, m_BoundaryBox, 0, BROWN );
-#endif
-
-}
-
-
-void MODULE::DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-                            GR_DRAWMODE draw_mode )
-{
-    for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
-    {
-        switch( item->Type() )
-        {
-        case PCB_MODULE_EDGE_T:
-            item->Draw( panel, DC, draw_mode, offset );
+            item->Print( aFrame, aDC, aOffset );
             break;
 
         default:

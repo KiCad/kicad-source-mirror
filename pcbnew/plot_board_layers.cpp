@@ -33,7 +33,7 @@
 #include <common.h>
 #include <plotter.h>
 #include <base_struct.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <geometry/geometry_utils.h>
 #include <trigo.h>
 #include <pcb_base_frame.h>

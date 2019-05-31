@@ -31,7 +31,6 @@
 #include <sch_draw_panel.h>
 #include <confirm.h>
 #include <sch_edit_frame.h>
-#include <kicad_device_context.h>
 #include <msgpanel.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>

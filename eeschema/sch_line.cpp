@@ -319,14 +319,14 @@ int SCH_LINE::GetPenSize() const
 }
 
 
-void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset )
+void SCH_LINE::Print( wxDC* DC, const wxPoint& offset )
 {
     COLOR4D color = ( m_color != COLOR4D::UNSPECIFIED ) ? m_color : GetLayerColor( m_Layer );
     int     width = GetPenSize();
     wxPoint start = m_start;
     wxPoint end = m_end;
 
-    GRLine( panel->GetClipBox(), DC, start.x, start.y, end.x, end.y, width, color,
+    GRLine( nullptr, DC, start.x, start.y, end.x, end.y, width, color,
             getwxPenStyle( (PlotDashType) GetLineStyle() ) );
 }
 

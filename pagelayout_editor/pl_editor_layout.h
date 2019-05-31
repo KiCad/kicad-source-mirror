@@ -33,8 +33,6 @@
 #include <title_block.h>
 #include <ws_draw_item.h>
 
-class EDA_DRAW_PANEL;
-
 
 /**
  * Class PL_EDITOR_LAYOUT

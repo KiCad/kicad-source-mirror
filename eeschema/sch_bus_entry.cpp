@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_bus_entry.cpp
- *
- */
-
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <macros.h>
@@ -36,7 +31,6 @@
 #include <richio.h>
 #include <plotter.h>
 #include <bitmaps.h>
-
 #include <eeschema_config.h>
 #include <general.h>
 #include <sch_bus_entry.h>
@@ -57,12 +51,14 @@ SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos, char 
     m_isDanglingStart = m_isDanglingEnd = true;
 }
 
+
 SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const wxPoint& pos, char shape ) :
     SCH_BUS_ENTRY_BASE( SCH_BUS_WIRE_ENTRY_T, pos, shape )
 {
     m_Layer  = LAYER_WIRE;
     m_connected_bus_item = nullptr;
 }
+
 
 SCH_BUS_BUS_ENTRY::SCH_BUS_BUS_ENTRY( const wxPoint& pos, char shape ) :
     SCH_BUS_ENTRY_BASE( SCH_BUS_BUS_ENTRY_T, pos, shape )
@@ -72,10 +68,12 @@ SCH_BUS_BUS_ENTRY::SCH_BUS_BUS_ENTRY( const wxPoint& pos, char shape ) :
     m_connected_bus_items[1] = nullptr;
 }
 
+
 EDA_ITEM* SCH_BUS_WIRE_ENTRY::Clone() const
 {
     return new SCH_BUS_WIRE_ENTRY( *this );
 }
+
 
 EDA_ITEM* SCH_BUS_BUS_ENTRY::Clone() const
 {
@@ -108,7 +106,6 @@ void SCH_BUS_ENTRY_BASE::SwapData( SCH_ITEM* aItem )
 void SCH_BUS_ENTRY_BASE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount      = 1;
-
     aLayers[0]  = Type() == SCH_BUS_BUS_ENTRY_T ? LAYER_BUS : LAYER_WIRE;
 }
 
@@ -159,13 +156,12 @@ void SCH_BUS_BUS_ENTRY::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemLis
 }
 
 
-void SCH_BUS_ENTRY_BASE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset )
+void SCH_BUS_ENTRY_BASE::Print( wxDC* aDC, const wxPoint& aOffset )
 {
-    COLOR4D   color = GetLayerColor( m_Layer );
-    EDA_RECT* clipbox = aPanel->GetClipBox();
+    COLOR4D color = GetLayerColor( m_Layer );
 
-    GRLine( clipbox, aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
-            m_End().x + aOffset.x, m_End().y + aOffset.y, GetPenSize(), color );
+    GRLine( nullptr, aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y, m_End().x + aOffset.x,
+            m_End().y + aOffset.y, GetPenSize(), color );
 }
 
 

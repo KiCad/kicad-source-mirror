@@ -99,19 +99,17 @@ int SCH_NO_CONNECT::GetPenSize() const
 }
 
 
-void SCH_NO_CONNECT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset )
+void SCH_NO_CONNECT::Print( wxDC* aDC, const wxPoint& aOffset )
 {
-    int pX, pY;
     int half = GetSize() / 2;
     int width = GetDefaultLineThickness();
-
-    pX = m_pos.x + aOffset.x;
-    pY = m_pos.y + aOffset.y;
+    int pX = m_pos.x + aOffset.x;
+    int pY = m_pos.y + aOffset.y;
 
     COLOR4D color = GetLayerColor( LAYER_NOCONNECT );
 
-    GRLine( aPanel->GetClipBox(), aDC, pX - half, pY - half, pX + half, pY + half, width, color );
-    GRLine( aPanel->GetClipBox(), aDC, pX + half, pY - half, pX - half, pY + half, width, color );
+    GRLine( nullptr, aDC, pX - half, pY - half, pX + half, pY + half, width, color );
+    GRLine( nullptr, aDC, pX + half, pY - half, pX - half, pY + half, width, color );
 }
 
 

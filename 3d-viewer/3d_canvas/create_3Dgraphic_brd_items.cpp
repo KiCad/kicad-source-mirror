@@ -50,7 +50,7 @@
 #include <class_text_mod.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <utility>
 #include <vector>
 
@@ -65,7 +65,7 @@ static float s_biuTo3Dunits;
 static const CBBOX2D *s_boardBBox3DU = NULL;
 static const BOARD_ITEM *s_boardItem = NULL;
 
-// This is a call back function, used by DrawGraphicText to draw the 3D text shape:
+// This is a call back function, used by GRText to draw the 3D text shape:
 void addTextSegmToContainer( int x0, int y0, int xf, int yf, void* aData )
 {
     wxASSERT( s_boardBBox3DU != NULL );
@@ -89,52 +89,47 @@ void addTextSegmToContainer( int x0, int y0, int xf, int yf, void* aData )
 // Based on
 // void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet
 // board_items_to_polygon_shape_transform.cpp
-void CINFO3D_VISU::AddShapeWithClearanceToContainer( const TEXTE_PCB* aTextPCB,
+void CINFO3D_VISU::AddShapeWithClearanceToContainer( const TEXTE_PCB* aText,
                                                      CGENERICCONTAINER2D *aDstContainer,
                                                      PCB_LAYER_ID aLayerId,
                                                      int aClearanceValue )
 {
-    wxSize size = aTextPCB->GetTextSize();
+    wxSize size = aText->GetTextSize();
 
-    if( aTextPCB->IsMirrored() )
+    if( aText->IsMirrored() )
         size.x = -size.x;
 
-    s_boardItem    = (const BOARD_ITEM *)&aTextPCB;
+    s_boardItem    = (const BOARD_ITEM *) &aText;
     s_dstcontainer = aDstContainer;
-    s_textWidth    = aTextPCB->GetThickness() + ( 2 * aClearanceValue );
+    s_textWidth    = aText->GetThickness() + ( 2 * aClearanceValue );
     s_biuTo3Dunits = m_biuTo3Dunits;
     s_boardBBox3DU = &m_board2dBBox3DU;
 
-    // not actually used, but needed by DrawGraphicText
+    // not actually used, but needed by GRText
     const COLOR4D dummy_color = COLOR4D::BLACK;
 
-    if( aTextPCB->IsMultilineAllowed() )
+    if( aText->IsMultilineAllowed() )
     {
         wxArrayString strings_list;
-        wxStringSplit( aTextPCB->GetShownText(), strings_list, '\n' );
+        wxStringSplit( aText->GetShownText(), strings_list, '\n' );
         std::vector<wxPoint> positions;
         positions.reserve( strings_list.Count() );
-        aTextPCB->GetPositionsOfLinesOfMultilineText( positions,
-                                                      strings_list.Count() );
+        aText->GetPositionsOfLinesOfMultilineText( positions, strings_list.Count() );
 
         for( unsigned ii = 0; ii < strings_list.Count(); ++ii )
         {
             wxString txt = strings_list.Item( ii );
 
-            DrawGraphicText( NULL, NULL, positions[ii], dummy_color,
-                             txt, aTextPCB->GetTextAngle(), size,
-                             aTextPCB->GetHorizJustify(), aTextPCB->GetVertJustify(),
-                             aTextPCB->GetThickness(), aTextPCB->IsItalic(),
-                             true, addTextSegmToContainer );
+            GRText( NULL, positions[ii], dummy_color, txt, aText->GetTextAngle(), size,
+                    aText->GetHorizJustify(), aText->GetVertJustify(), aText->GetThickness(),
+                    aText->IsItalic(), true, addTextSegmToContainer );
         }
     }
     else
     {
-        DrawGraphicText( NULL, NULL, aTextPCB->GetTextPos(), dummy_color,
-                         aTextPCB->GetShownText(), aTextPCB->GetTextAngle(), size,
-                         aTextPCB->GetHorizJustify(), aTextPCB->GetVertJustify(),
-                         aTextPCB->GetThickness(), aTextPCB->IsItalic(),
-                         true, addTextSegmToContainer );
+        GRText( NULL, aText->GetTextPos(), dummy_color, aText->GetShownText(),
+                aText->GetTextAngle(), size, aText->GetHorizJustify(), aText->GetVertJustify(),
+                aText->GetThickness(), aText->IsItalic(), true, addTextSegmToContainer );
     }
 }
 
@@ -230,20 +225,17 @@ void CINFO3D_VISU::AddGraphicsShapesWithClearanceToContainer( const MODULE* aMod
     s_biuTo3Dunits = m_biuTo3Dunits;
     s_boardBBox3DU = &m_board2dBBox3DU;
 
-    for( unsigned ii = 0; ii < texts.size(); ++ii )
+    for( TEXTE_MODULE* text : texts )
     {
-        TEXTE_MODULE *textmod = texts[ii];
-        s_textWidth = textmod->GetThickness() + ( 2 * aInflateValue );
-        wxSize size = textmod->GetTextSize();
+        s_textWidth = text->GetThickness() + ( 2 * aInflateValue );
+        wxSize size = text->GetTextSize();
 
-        if( textmod->IsMirrored() )
+        if( text->IsMirrored() )
             size.x = -size.x;
 
-        DrawGraphicText( NULL, NULL, textmod->GetTextPos(), BLACK,
-                         textmod->GetShownText(), textmod->GetDrawRotation(), size,
-                         textmod->GetHorizJustify(), textmod->GetVertJustify(),
-                         textmod->GetThickness(), textmod->IsItalic(),
-                         true, addTextSegmToContainer );
+        GRText( NULL, text->GetTextPos(), BLACK, text->GetShownText(), text->GetDrawRotation(),
+                size, text->GetHorizJustify(), text->GetVertJustify(), text->GetThickness(),
+                text->IsItalic(), true, addTextSegmToContainer );
     }
 }
 

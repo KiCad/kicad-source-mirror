@@ -230,8 +230,7 @@ public:
         return wxPoint(0, 0);   // dummy
     }
 
-    void Draw( EDA_DRAW_PANEL* DrawPanel, wxDC* DC,
-               GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset )
+    void Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& aOffset = ZeroOffset )
     {
     }
 

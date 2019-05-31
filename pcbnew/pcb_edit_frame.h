@@ -464,7 +464,6 @@ public:
     void OnCloseWindow( wxCloseEvent& Event ) override;
     void Process_Special_Functions( wxCommandEvent& event );
     void Tracks_and_Vias_Size_Event( wxCommandEvent& event );
-    void OnSelectTool( wxCommandEvent& aEvent );
 
     /**
      * Function OnEditTextAndGraphics

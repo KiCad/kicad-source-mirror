@@ -48,7 +48,6 @@
 */
 #define MIN_DRAWABLE_TEXT_SIZE 3
 
-class EDA_DRAW_PANEL;
 class PLOTTER;
 
 /**
@@ -81,7 +80,7 @@ int GetPenSizeForBold( int aTextSize );
 int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool italic, bool bold );
 
 /**
- * Function DrawGraphicText
+ * Function GRText
  * Draw a graphic text (like module texts)
  *  @param aClipBox = the clipping rect, or NULL if no clipping
  *  @param aDC = the current Device Context. NULL if draw within a 3D GL Canvas
@@ -105,45 +104,24 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool italic, b
  *  @param aPlotter = a pointer to a PLOTTER instance, when this function is used to plot
  *                  the text. NULL to draw this text.
  */
-void DrawGraphicText( EDA_RECT* aClipBox,
-                      wxDC * aDC,
-                      const wxPoint &aPos,
-                      const COLOR4D aColor,
-                      const wxString &aText,
-                      double aOrient,
-                      const wxSize &aSize,
-                      enum EDA_TEXT_HJUSTIFY_T aH_justify,
-                      enum EDA_TEXT_VJUSTIFY_T aV_justify,
-                      int aWidth,
-                      bool aItalic,
-                      bool aBold,
-                      void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ) = nullptr,
-                      void* aCallbackData = nullptr,
-                      PLOTTER * aPlotter = nullptr );
+void GRText( wxDC * aDC, const wxPoint &aPos, const COLOR4D aColor, const wxString &aText,
+             double aOrient, const wxSize &aSize, enum EDA_TEXT_HJUSTIFY_T aH_justify,
+             enum EDA_TEXT_VJUSTIFY_T aV_justify, int aWidth, bool aItalic, bool aBold,
+             void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ) = nullptr,
+             void* aCallbackData = nullptr, PLOTTER * aPlotter = nullptr );
 
 
 /**
  * Draw graphic text with a border, so that it can be read on different
- * backgrounds. See DrawGraphicText for most of the parameters.
+ * backgrounds. See GRText for most of the parameters.
  * If aBgColor is a dark color text is drawn in aColor2 with aColor1
  * border; otherwise colors are swapped.
  */
-void DrawGraphicHaloText( EDA_RECT* aClipBox,
-                          wxDC * aDC,
-                          const wxPoint &aPos,
-                          const COLOR4D aBgColor,
-                          COLOR4D aColor1,
-                          COLOR4D aColor2,
-                          const wxString &aText,
-                          double aOrient,
-                          const wxSize &aSize,
-                          enum EDA_TEXT_HJUSTIFY_T aH_justify,
-                          enum EDA_TEXT_VJUSTIFY_T aV_justify,
-                          int aWidth,
-                          bool aItalic,
-                          bool aBold,
-                          void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ) = nullptr,
-                          void* aCallbackData = nullptr,
-                          PLOTTER * aPlotter = nullptr );
+void GRHaloText( wxDC * aDC, const wxPoint &aPos, const COLOR4D aBgColor, COLOR4D aColor1,
+                 COLOR4D aColor2, const wxString &aText, double aOrient, const wxSize &aSize,
+                 enum EDA_TEXT_HJUSTIFY_T aH_justify, enum EDA_TEXT_VJUSTIFY_T aV_justify,
+                 int aWidth, bool aItalic, bool aBold,
+                 void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ) = nullptr,
+                 void* aCallbackData = nullptr, PLOTTER * aPlotter = nullptr );
 
 #endif /* __INCLUDE__DRAWTXT_H__ */

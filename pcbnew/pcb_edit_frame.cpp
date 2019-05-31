@@ -219,10 +219,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
               PCB_EDIT_FRAME::OnSelectOptionToolbar )
 
-    // Vertical main toolbar:
-    EVT_TOOL_RANGE( ID_PCB_HIGHLIGHT_BUTT, ID_PCB_MEASUREMENT_TOOL,
-                    PCB_EDIT_FRAME::OnSelectTool )
-
     EVT_MENU_RANGE( ID_POPUP_PCB_START_RANGE, ID_POPUP_PCB_END_RANGE,
                     PCB_EDIT_FRAME::Process_Special_Functions )
 
@@ -397,11 +393,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     GetGalCanvas()->SwitchBackend( m_canvasType );
 
-    // Set up viewport
-    KIGFX::VIEW* view = galCanvas->GetView();
-    view->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
-    view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
-
+    galCanvas->GetView()->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
     // disable Export STEP item if kicad2step does not exist
@@ -1034,9 +1026,7 @@ bool PCB_EDIT_FRAME::SetCurrentNetClass( const wxString& aNetClassName )
     bool change = GetDesignSettings().SetCurrentNetClass( aNetClassName );
 
     if( change )
-    {
         ReCreateAuxiliaryToolbar();
-    }
 
     return change;
 }
@@ -1062,10 +1052,9 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST
 {
     if( Kiface().IsSingle() )
     {
-        DisplayError( this,  _( "Cannot update the PCB, because Pcbnew is "
-                                "opened in stand-alone mode. In order to create or update "
-                                "PCBs from schematics, you need to launch the KiCad project manager "
-                                "and create a PCB project." ) );
+        DisplayError( this, _( "Cannot update the PCB because Pcbnew is opened in stand-alone "
+                               "mode. In order to create or update PCBs from schematics, you "
+                               "must launch the KiCad project manager and create a project." ) );
         return false;
     }
 
@@ -1251,7 +1240,7 @@ void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module )
     if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_EDIT_OK )
     {
         // If something edited, push a refresh request
-        m_canvas->Refresh();
+        GetGalCanvas()->Refresh();
     }
     else if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_EDIT_BOARD_FOOTPRINT )
     {
@@ -1316,9 +1305,7 @@ void PCB_EDIT_FRAME::LockModule( MODULE* aModule, bool aLocked )
     }
     else
     {
-        aModule = GetBoard()->m_Modules;
-
-        for( ; aModule != NULL; aModule = aModule->Next() )
+        for( aModule = GetBoard()->m_Modules; aModule != NULL; aModule = aModule->Next() )
         {
             if( WildCompareString( ModulesMaskSelection, aModule->GetReference() ) )
             {
@@ -1329,22 +1316,19 @@ void PCB_EDIT_FRAME::LockModule( MODULE* aModule, bool aLocked )
     }
 }
 
+
 bool ExportBoardToHyperlynx( BOARD* aBoard, const wxFileName& aPath );
+
 
 void PCB_EDIT_FRAME::OnExportHyperlynx( wxCommandEvent& event )
 {
-    wxString    wildcard =  wxT("*.hyp");
+    wxString    wildcard =  wxT( "*.hyp" );
     wxFileName  fn = GetBoard()->GetFileName();
 
     fn.SetExt( wxT("hyp") );
 
-    wxFileDialog dlg( this,
-            _( "Export Hyperlynx Layout" ),
-            fn.GetPath(),
-            fn.GetFullName(),
-            wildcard,
-            wxFD_SAVE | wxFD_OVERWRITE_PROMPT
-            );
+    wxFileDialog dlg( this, _( "Export Hyperlynx Layout" ), fn.GetPath(), fn.GetFullName(),
+                      wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
@@ -1352,7 +1336,7 @@ void PCB_EDIT_FRAME::OnExportHyperlynx( wxCommandEvent& event )
     fn = dlg.GetPath();
 
     // always enforce filename extension, user may not have entered it.
-    fn.SetExt( wxT("hyp") );
+    fn.SetExt( wxT( "hyp" ) );
 
     ExportBoardToHyperlynx( GetBoard(), fn );
 }

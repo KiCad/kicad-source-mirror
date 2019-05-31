@@ -174,11 +174,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
-    // Set up viewport
-    KIGFX::VIEW* view = GetGalCanvas()->GetView();
-    view->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
-    view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
-
+    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
     m_auimgr.Update();
@@ -584,8 +580,8 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
 
 void PL_EDITOR_FRAME::PrintPage( wxDC* aDC, LSET , bool , void *  )
 {
-    GetScreen()-> m_ScreenNumber = GetPageNumberOption() ? 1 : 2;
-    DrawWorkSheet( aDC, GetScreen(), 0, IU_PER_MILS, wxEmptyString );
+    GetScreen()->m_ScreenNumber = GetPageNumberOption() ? 1 : 2;
+    PrintWorkSheet( aDC, GetScreen(), 0, IU_PER_MILS, wxEmptyString );
 }
 
 

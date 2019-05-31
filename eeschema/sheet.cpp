@@ -448,19 +448,15 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard( wxCommandEvent& aEvt )
     wxBitmap image( dcsize );
     dc.SelectObject( image );
 
-    EDA_RECT tmp = *GetCanvas()->GetClipBox();
     GRResetPenAndBrush( &dc );
     GRForceBlackPen( false );
     screen->m_IsPrinting = true;
     dc.SetUserScale( scale, scale );
 
-    GetCanvas()->SetClipBox( EDA_RECT( wxPoint( 0, 0 ), wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
-
     dc.Clear();
     const LSET allLayersMask = LSET().set();
     PrintPage( &dc, allLayersMask, false );
     screen->m_IsPrinting = false;
-    GetCanvas()->SetClipBox( tmp );
 
     if( wxTheClipboard->Open() )
     {

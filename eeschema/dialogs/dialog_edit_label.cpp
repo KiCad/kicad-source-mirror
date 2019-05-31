@@ -35,7 +35,7 @@
 
 #include <sch_draw_panel.h>
 #include <general.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <confirm.h>
 #include <sch_text.h>
 #include <typeinfo>

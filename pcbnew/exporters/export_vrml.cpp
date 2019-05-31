@@ -40,7 +40,7 @@
 #include "class_track.h"
 #include "class_zone.h"
 #include "convert_to_biu.h"
-#include "draw_graphic_text.h"
+#include "gr_text.h"
 #include "macros.h"
 #include "pgm_base.h"
 #include "plugins/3dapi/ifsg_all.h"
@@ -781,7 +781,7 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
     if( text->IsMirrored() )
         size.x = -size.x;
 
-    COLOR4D color = COLOR4D::BLACK;  // not actually used, but needed by DrawGraphicText
+    COLOR4D color = COLOR4D::BLACK;  // not actually used, but needed by GRText
 
     if( text->IsMultilineAllowed() )
     {
@@ -794,22 +794,16 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
         for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
             wxString& txt = strings_list.Item( ii );
-            DrawGraphicText( NULL, NULL, positions[ii], color,
-                             txt, text->GetTextAngle(), size,
-                             text->GetHorizJustify(), text->GetVertJustify(),
-                             text->GetThickness(), text->IsItalic(),
-                             true,
-                             vrml_text_callback );
+            GRText( NULL, positions[ii], color, txt, text->GetTextAngle(), size,
+                    text->GetHorizJustify(), text->GetVertJustify(), text->GetThickness(),
+                    text->IsItalic(), true, vrml_text_callback );
         }
     }
     else
     {
-        DrawGraphicText( NULL, NULL, text->GetTextPos(), color,
-                         text->GetShownText(), text->GetTextAngle(), size,
-                         text->GetHorizJustify(), text->GetVertJustify(),
-                         text->GetThickness(), text->IsItalic(),
-                         true,
-                         vrml_text_callback );
+        GRText( NULL, text->GetTextPos(), color, text->GetShownText(), text->GetTextAngle(),
+                size, text->GetHorizJustify(), text->GetVertJustify(), text->GetThickness(),
+                text->IsItalic(), true, vrml_text_callback );
     }
 }
 
@@ -1028,24 +1022,21 @@ static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb )
 }
 
 
-static void export_vrml_text_module( TEXTE_MODULE* module )
+static void export_vrml_text_module( TEXTE_MODULE* item )
 {
-    if( module->IsVisible() )
+    if( item->IsVisible() )
     {
-        wxSize size = module->GetTextSize();
+        wxSize size = item->GetTextSize();
 
-        if( module->IsMirrored() )
+        if( item->IsMirrored() )
             size.x = -size.x;  // Text is mirrored
 
-        model_vrml->m_text_layer    = module->GetLayer();
-        model_vrml->m_text_width    = module->GetThickness();
+        model_vrml->m_text_layer = item->GetLayer();
+        model_vrml->m_text_width = item->GetThickness();
 
-        DrawGraphicText( NULL, NULL, module->GetTextPos(), BLACK,
-                         module->GetShownText(), module->GetDrawRotation(), size,
-                         module->GetHorizJustify(), module->GetVertJustify(),
-                         module->GetThickness(), module->IsItalic(),
-                         true,
-                         vrml_text_callback );
+        GRText( NULL, item->GetTextPos(), BLACK, item->GetShownText(), item->GetDrawRotation(),
+                size, item->GetHorizJustify(), item->GetVertJustify(), item->GetThickness(),
+                item->IsItalic(), true, vrml_text_callback );
     }
 }
 

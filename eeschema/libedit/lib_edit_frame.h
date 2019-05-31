@@ -301,17 +301,6 @@ public:
     void UpdateAfterSymbolProperties( wxString* aOldName, wxArrayString* aOldAliases );
     void RebuildSymbolUnitsList();
 
-    /**
-     * Redraw the current component loaded in library editor
-     * Display reference like in schematic (a reference U is shown U? or U?A)
-     * accordint to the current selected unit and De Morgan selection
-     * although it is stored without ? and part id.
-     * @param aDC = the current device context
-     * @param aOffset = a draw offset. usually 0,0 to draw on the screen, but
-     * can be set to page size / 2 to draw or print in SVG format.
-     */
-    void RedrawComponent( wxDC* aDC, wxPoint aOffset );
-
     void OnCloseWindow( wxCloseEvent& Event );
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;

@@ -71,16 +71,14 @@ public:
     virtual void SetPosition( wxPoint aPos ) = 0;
     virtual void SetEnd( wxPoint aPos ) { /* not all types will need this */ }
 
-    // The function to draw a WS_DRAW_ITEM
-    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, COLOR4D aColor )
+    // The function to print a WS_DRAW_ITEM
+    virtual void PrintWsItem( wxDC* aDC, COLOR4D aColor )
     {
-        wxPoint offset( 0, 0 );
-        DrawWsItem( aClipBox, aDC, offset, UNSPECIFIED_DRAWMODE, aColor );
+        PrintWsItem( aDC, wxPoint( 0, 0 ), aColor );
     }
 
     // More advanced version of DrawWsItem. This is what must be defined in the derived type.
-    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-                             GR_DRAWMODE aDrawMode, COLOR4D aColor ) = 0;
+    virtual void PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor ) = 0;
 
     // Derived types must define GetBoundingBox() as a minimum, and can then override the
     // two HitTest() functions if they need something more specific.
@@ -131,8 +129,7 @@ public:
     const EDA_RECT GetBoundingBox() const override;
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
-    void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset, GR_DRAWMODE aDrawMode,
-                     COLOR4D aColor ) override;
+    void PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor ) override;
 
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
@@ -175,8 +172,7 @@ public:
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset, GR_DRAWMODE aDrawMode,
-                     COLOR4D aColor ) override;
+    void PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor ) override;
 
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
@@ -214,8 +210,7 @@ public:
     const wxPoint GetPosition() const override { return GetStart(); }
     void SetPosition( wxPoint aPos ) override { SetStart( aPos ); }
 
-    void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset, GR_DRAWMODE aDrawMode,
-                     COLOR4D aColor ) override;
+    void PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor ) override;
 
     const EDA_RECT GetBoundingBox() const override;
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
@@ -247,10 +242,7 @@ public:
 
     virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_TEXT" ); }
 
-    /** The function to draw a WS_DRAW_ITEM_TEXT
-     */
-    void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset, GR_DRAWMODE aDrawMode,
-                     COLOR4D aColor ) override;
+    void PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor ) override;
 
     // Accessors:
     int GetPenWidth() { return GetThickness(); }
@@ -293,8 +285,7 @@ public:
     const wxPoint GetPosition() const override { return m_pos; }
     void SetPosition( wxPoint aPos ) override { m_pos = aPos; }
 
-    void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset, GR_DRAWMODE aDrawMode,
-                     COLOR4D aColor ) override;
+    void PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor ) override;
 
     const EDA_RECT GetBoundingBox() const override;
 
@@ -442,10 +433,9 @@ public:
 
     /**
      * Draws the item list created by BuildWorkSheetGraphicList
-     * @param aClipBox = the clipping rect, or NULL if no clipping
      * @param aDC = the current Device Context
      */
-    void Draw( EDA_RECT* aClipBox, wxDC* aDC, COLOR4D aColor );
+    void Print( wxDC* aDC, COLOR4D aColor );
 
     /**
      * Function BuildWorkSheetGraphicList is a core function for drawing or plotting the

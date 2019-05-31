@@ -72,13 +72,11 @@ set( GAL_SRCS
 
 set( LEGACY_GAL_SRCS
     legacy_gal/eda_draw_frame.cpp
-    legacy_gal/other.cpp
     )
 
 set( LEGACY_WX_SRCS
     legacy_wx/eda_draw_frame.cpp
     legacy_wx/eda_draw_panel.cpp
-    legacy_wx/other.cpp
     )
 
 add_library( gal STATIC ${GAL_SRCS} )
@@ -298,7 +296,7 @@ set( COMMON_SRCS
     dialog_shim.cpp
     displlst.cpp
     dpi_scaling.cpp
-    draw_graphic_text.cpp
+    gr_text.cpp
     dsnlexer.cpp
     eagle_parser.cpp
     eda_base_frame.cpp
@@ -483,7 +481,7 @@ set( PCB_COMMON_SRCS
     ../pcbnew/legacy_plugin.cpp
     ../pcbnew/netlist_reader.cpp
     ../pcbnew/pad_custom_shape_functions.cpp
-    ../pcbnew/pad_draw_functions.cpp
+    ../pcbnew/pad_print_functions.cpp
     ../pcbnew/pcb_display_options.cpp
     ../pcbnew/pcb_draw_panel_gal.cpp
     ../pcbnew/pcb_general_settings.cpp

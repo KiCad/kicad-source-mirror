@@ -44,12 +44,6 @@
 using namespace std::placeholders;
 
 
-// Events used by EDA_DRAW_PANEL
-BEGIN_EVENT_TABLE( SCH_DRAW_PANEL, wxScrolledCanvas )
-      EVT_CHAR_HOOK( SCH_DRAW_PANEL::OnCharHook )
-      EVT_PAINT( SCH_DRAW_PANEL::onPaint )
-END_EVENT_TABLE()
-
 SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                 const wxPoint& aPosition, const wxSize& aSize,
                                 KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
@@ -57,7 +51,6 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
     m_parent( aParentWindow )
 {
     m_defaultCursor = m_currentCursor = wxCURSOR_ARROW;
-    m_showCrossHair = true;
     m_view = new KIGFX::SCH_VIEW( true, dynamic_cast<SCH_BASE_FRAME*>( aParentWindow ) );
     m_view->SetGAL( m_gal );
 
@@ -82,11 +75,6 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
     // View controls is the first in the event handler chain, so the Tool Framework operates
     // on updated viewport data.
     m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
-
-    Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( SCH_DRAW_PANEL::OnCharHook ), NULL, this );
-
-    m_cursorLevel = 0;
-    m_PrintIsMirrored = false;
 
     m_viewControls->SetSnapping( true );
 
@@ -194,12 +182,6 @@ EDA_DRAW_FRAME* SCH_DRAW_PANEL::GetParent() const
 void SCH_DRAW_PANEL::Refresh( bool aEraseBackground, const wxRect* aRect )
 {
     EDA_DRAW_PANEL_GAL::Refresh( aEraseBackground, aRect );
-}
-
-
-void SCH_DRAW_PANEL::OnCharHook( wxKeyEvent& event )
-{
-    event.Skip();
 }
 
 

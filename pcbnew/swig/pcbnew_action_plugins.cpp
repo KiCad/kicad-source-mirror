@@ -39,7 +39,6 @@
 #include <class_drawsegment.h>
 #include <class_zone.h>
 #include <board_commit.h>
-#include <kicad_device_context.h>
 
 PYTHON_ACTION_PLUGIN::PYTHON_ACTION_PLUGIN( PyObject* aAction )
 {

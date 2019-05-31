@@ -192,5 +192,5 @@ void LIB_EDIT_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMod
     plot_offset.x = pagesize.x / 2;
     plot_offset.y = pagesize.y / 2;
 
-    part->Draw( m_canvas, aDC, plot_offset, m_unit, m_convert, PART_DRAW_OPTIONS::Default() );
+    part->Print( aDC, plot_offset, m_unit, m_convert, PART_DRAW_OPTIONS::Default() );
 }

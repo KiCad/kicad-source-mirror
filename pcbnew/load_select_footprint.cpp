@@ -154,7 +154,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     Update3DView();
     updateView();
-    m_canvas->Refresh();
+    GetGalCanvas()->Refresh();
     m_treePane->GetLibTree()->Refresh();    // update any previously-highlighted items
 
     return true;

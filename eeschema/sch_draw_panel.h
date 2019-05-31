@@ -41,7 +41,6 @@ public:
     void DisplaySheet( const SCH_SCREEN *aScreen );
 
     bool SwitchBackend( GAL_TYPE aGalType ) override;
-    void OnCharHook( wxKeyEvent& event );
 
     BASE_SCREEN* GetScreen() override;
     virtual EDA_DRAW_FRAME* GetParent() const override;
@@ -60,8 +59,6 @@ protected:
 
     void setDefaultLayerOrder();    ///> Reassigns layer order to the initial settings.
     void setDefaultLayerDeps();     ///> Sets rendering targets & dependencies for layers.
-
-    DECLARE_EVENT_TABLE()
 };
 
 #endif

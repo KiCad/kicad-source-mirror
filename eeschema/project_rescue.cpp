@@ -26,7 +26,6 @@
 #include <class_library.h>
 #include <confirm.h>
 #include <invoke_sch_dialog.h>
-#include <kicad_device_context.h>
 #include <kiway.h>
 #include <project_rescue.h>
 #include <sch_component.h>

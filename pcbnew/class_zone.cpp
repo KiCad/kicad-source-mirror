@@ -278,27 +278,21 @@ bool ZONE_CONTAINER::IsOnLayer( PCB_LAYER_ID aLayer ) const
 }
 
 
-void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMode,
-                           const wxPoint& offset )
+void ZONE_CONTAINER::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
 {
     if( !DC )
         return;
 
-    wxPoint     seg_start, seg_end;
-    PCB_LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-    BOARD*      brd   = GetBoard();
-
-    auto frame = static_cast<PCB_BASE_FRAME*> ( panel->GetParent() );
-
+    wxPoint      seg_start, seg_end;
+    PCB_LAYER_ID curr_layer = ( (PCB_SCREEN*) aFrame->GetScreen() )->m_Active_Layer;
+    BOARD*       brd   = GetBoard();
     PCB_LAYER_ID draw_layer = UNDEFINED_LAYER;
 
     LSET layers = GetLayerSet() & brd->GetVisibleLayers();
 
-    // If there are no visible layers and the zone is not highlighted, return
-    if( layers.count() == 0 && !( aDrawMode & GR_HIGHLIGHT ) )
-    {
+    // If there are no visible layers, return
+    if( layers.count() == 0 )
         return;
-    }
 
     /* Keepout zones can exist on multiple layers
      * Thus, determining which color to use to render them is a bit tricky.
@@ -318,10 +312,8 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
         assert( GetLayerSet().count() > 0 );
 
         // Not on any visible layer?
-        if( layers.count() == 0 && !( aDrawMode & GR_HIGHLIGHT ) )
-        {
+        if( layers.count() == 0 )
             return;
-        }
 
         // Is keepout zone present on the selected layer?
         if( layers.test( curr_layer ) )
@@ -346,32 +338,22 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
      */
     else
     {
-        if( brd->IsLayerVisible( GetLayer() ) == false && !( aDrawMode & GR_HIGHLIGHT ) )
-        {
+        if( brd->IsLayerVisible( GetLayer() ) == false )
             return;
-        }
 
         draw_layer = GetLayer();
     }
 
     assert( draw_layer != UNDEFINED_LAYER );
 
-    auto color = frame->Settings().Colors().GetLayerColor( draw_layer );
+    auto color = aFrame->Settings().Colors().GetLayerColor( draw_layer );
 
-    GRSetDrawMode( DC, aDrawMode );
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( aFrame->GetDisplayOptions() );
 
     if( displ_opts->m_ContrastModeDisplay )
     {
         if( !IsOnLayer( curr_layer ) )
-        {
             color = COLOR4D( DARKDARKGRAY );
-        }
-    }
-
-    if( ( aDrawMode & GR_HIGHLIGHT ) && !( aDrawMode & GR_AND ) )
-    {
-        color.SetToLegacyHighlightColor();
     }
 
     color.a = 0.588;
@@ -390,7 +372,7 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
         lines.push_back( static_cast<wxPoint>( segment.B ) + offset );
     }
 
-    GRLineArray( panel->GetClipBox(), DC, lines, 0, color );
+    GRLineArray( nullptr, DC, lines, 0, color );
 
     // draw hatches
     lines.clear();
@@ -404,20 +386,18 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
         lines.push_back( seg_end );
     }
 
-    GRLineArray( panel->GetClipBox(), DC, lines, 0, color );
+    GRLineArray( nullptr, DC, lines, 0, color );
 }
 
 
-void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
-                                     wxDC* DC, GR_DRAWMODE aDrawMode, const wxPoint& offset )
+void ZONE_CONTAINER::PrintFilledArea( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
 {
-
     static std::vector <wxPoint> CornersBuffer;
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
 
-    // outline_mode is false to show filled polys,
-    // and true to show polygons outlines only (test and debug purposes)
-    bool outline_mode = displ_opts->m_DisplayZonesMode == 2 ? true : false;
+    BOARD*               brd = GetBoard();
+    KIGFX::COLOR4D       color = aFrame->Settings().Colors().GetLayerColor( GetLayer() );
+    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*) aFrame->GetDisplayOptions();
+    bool                 outline_mode = displ_opts->m_DisplayZonesMode == 2;
 
     if( DC == NULL )
         return;
@@ -428,28 +408,10 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
     if( m_FilledPolysList.IsEmpty() )  // Nothing to draw
         return;
 
-    BOARD*      brd = GetBoard();
-    PCB_LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-
-    auto frame = static_cast<PCB_BASE_FRAME*> ( panel->GetParent() );
-    auto color = frame->Settings().Colors().GetLayerColor( GetLayer() );
-
-    if( brd->IsLayerVisible( GetLayer() ) == false && !( aDrawMode & GR_HIGHLIGHT ) )
+    if( brd->IsLayerVisible( GetLayer() ) == false )
         return;
 
-    GRSetDrawMode( DC, aDrawMode );
-
-    if( displ_opts->m_ContrastModeDisplay )
-    {
-        if( !IsOnLayer( curr_layer ) )
-            color = COLOR4D( DARKDARKGRAY );
-    }
-
-    if( ( aDrawMode & GR_HIGHLIGHT ) && !( aDrawMode & GR_AND ) )
-        color.SetToLegacyHighlightColor();
-
     color.a = 0.588;
-
 
     for( int ic = 0; ic < m_FilledPolysList.OutlineCount(); ic++ )
     {
@@ -484,12 +446,12 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
                 // Draw only basic outlines, not extra segments.
                 if( !displ_opts->m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
                 {
-                    GRCSegm( panel->GetClipBox(), DC, CornersBuffer[is], CornersBuffer[ie],
+                    GRCSegm( nullptr, DC, CornersBuffer[is], CornersBuffer[ie],
                              line_thickness, color );
                 }
                 else
                 {
-                    GRFilledSegment( panel->GetClipBox(), DC, CornersBuffer[is], CornersBuffer[ie],
+                    GRFilledSegment( nullptr, DC, CornersBuffer[is], CornersBuffer[ie],
                                      line_thickness, color );
                 }
             }
@@ -497,10 +459,7 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
 
         // Draw fill:
         if( !outline_mode )
-        {
-            GRPoly( panel->GetClipBox(), DC, CornersBuffer.size(), &CornersBuffer[0], true, 0,
-                    color, color );
-        }
+            GRPoly( nullptr, DC, CornersBuffer.size(), &CornersBuffer[0], true, 0, color, color );
     }
 }
 
@@ -529,89 +488,6 @@ const EDA_RECT ZONE_CONTAINER::GetBoundingBox() const
     EDA_RECT ret( wxPoint( xmin, ymin ), wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
 
     return ret;
-}
-
-
-void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC,
-                                             GR_DRAWMODE draw_mode )
-{
-    GR_DRAWMODE current_gr_mode  = draw_mode;
-    bool    is_close_segment = false;
-
-    if( !DC )
-        return;
-
-    PCB_LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-
-    auto frame = static_cast<PCB_BASE_FRAME*> ( panel->GetParent() );
-    auto color = frame->Settings().Colors().GetLayerColor( GetLayer() );
-
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
-
-    if( displ_opts->m_ContrastModeDisplay )
-    {
-        if( !IsOnLayer( curr_layer ) )
-            color = COLOR4D( DARKDARKGRAY );
-    }
-
-    // Object to iterate through the corners of the outlines
-    SHAPE_POLY_SET::ITERATOR iterator = m_Poly->Iterate();
-
-    // Segment start and end
-    VECTOR2I seg_start, seg_end;
-
-    // Remember the first point of this contour
-    VECTOR2I contour_first_point = *iterator;
-
-    // Iterate through all the corners of the outlines and build the segments to draw
-    while( iterator )
-    {
-        // Get the first point of the current segment
-        seg_start = *iterator;
-
-        // Get the last point of the current segment, handling the case where the end of the
-        // contour is reached, when the last point of the segment is the first point of the
-        // contour
-        if( !iterator.IsEndContour() )
-        {
-            // Set GR mode to default
-            current_gr_mode = draw_mode;
-
-            SHAPE_POLY_SET::ITERATOR iterator_copy = iterator;
-            iterator_copy++;
-            if( iterator_copy.IsEndContour() )
-                current_gr_mode = GR_XOR;
-
-            is_close_segment = false;
-
-            iterator++;
-            seg_end = *iterator;
-        }
-        else
-        {
-            is_close_segment = true;
-
-            seg_end = contour_first_point;
-
-            // Reassign first point of the contour to the next contour start
-            iterator++;
-
-            if( iterator )
-                contour_first_point = *iterator;
-
-            // Set GR mode to XOR
-            current_gr_mode = GR_XOR;
-        }
-
-        GRSetDrawMode( DC, current_gr_mode );
-
-        if( is_close_segment )
-            GRLine( panel->GetClipBox(), DC, seg_start.x, seg_start.y, seg_end.x, seg_end.y, 0,
-                    WHITE );
-        else
-            GRLine( panel->GetClipBox(), DC, seg_start.x, seg_start.y, seg_end.x, seg_end.y, 0,
-                    color );
-    }
 }
 
 

@@ -41,7 +41,7 @@ class wxFindReplaceData;
 class PLOTTER;
 class NETLIST_OBJECT;
 class NETLIST_OBJECT_LIST;
-class EDA_DRAW_PANEL;
+
 
 enum DANGLING_END_T {
     UNKNOWN = 0,
@@ -212,14 +212,13 @@ public:
     virtual int GetPenSize() const { return 0; }
 
     /**
-     * Function Draw
-     * Draw a schematic item. Each schematic item should have its own method
-     * @param aPanel DrawPanel to use (can be null) mainly used for clipping purposes.
+     * Function Print
+     * Print a schematic item. Each schematic item should have its own method
      * @param aDC Device Context (can be null)
      * @param aOffset drawing Offset (usually wxPoint(0,0),
      *  but can be different when moving an object)
      */
-    virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&  aOffset ) = 0;
+    virtual void Print( wxDC* aDC, const wxPoint&  aOffset ) = 0;
 
     /**
      * Function Move

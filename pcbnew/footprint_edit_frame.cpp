@@ -274,11 +274,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
 
-    // Set up viewport  // JEY TODO: do these directly rather than off of m_canvas....
-    KIGFX::VIEW* view = GetGalCanvas()->GetView();
-    view->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
-    view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
-
+    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
     m_auimgr.Update();

@@ -130,7 +130,7 @@ public:
      */
     virtual wxPoint GetSchematicTextOffset() const;
 
-    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset ) override;
+    void Print( wxDC* DC, const wxPoint& offset ) override;
 
     /**
      * Calculate the graphic shape (a polygon) associated to the text.
@@ -251,7 +251,7 @@ public:
 
     ~SCH_GLOBALLABEL() { }
 
-    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset ) override;
+    void Print( wxDC* DC, const wxPoint& offset ) override;
 
     wxString GetClass() const override
     {
@@ -296,7 +296,7 @@ public:
 
     ~SCH_HIERLABEL() { }
 
-    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset ) override;
+    void Print( wxDC* DC, const wxPoint& offset ) override;
 
     wxString GetClass() const override
     {

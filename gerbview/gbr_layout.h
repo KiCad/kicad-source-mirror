@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +58,6 @@ private:
     wxPoint             m_originAxisPosition;
 
 public:
-
     GBR_LAYOUT();
     ~GBR_LAYOUT();
 
@@ -71,25 +70,11 @@ public:
     // which handles the list of gerber files (and drill files) images loaded
     GERBER_FILE_IMAGE_LIST* GetImagesList() const;
 
-    const wxPoint&      GetAuxOrigin() const
-    {
-        return m_originAxisPosition;
-    }
+    const wxPoint& GetAuxOrigin() const { return m_originAxisPosition; }
+    void SetAuxOrigin( const wxPoint& aPosition ) { m_originAxisPosition = aPosition; }
 
-    void SetAuxOrigin( const wxPoint& aPosition )
-    {
-        m_originAxisPosition = aPosition;
-    }
-
-    TITLE_BLOCK& GetTitleBlock()
-    {
-        return m_titles;
-    }
-
-    void SetTitleBlock( const TITLE_BLOCK& aTitleBlock )
-    {
-        m_titles = aTitleBlock;
-    }
+    TITLE_BLOCK& GetTitleBlock() { return m_titles; }
+    void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) { m_titles = aTitleBlock; }
 
     /**
      * Function ComputeBoundingBox
@@ -108,39 +93,11 @@ public:
 
     void SetBoundingBox( const EDA_RECT& aBox ) { m_BoundingBox = aBox; }
 
-    /**
-     * Function Draw.
-     * Redraw the CLASS_GBR_LAYOUT items but not cursors, axis or grid.
-     * @param aPanel = the draw canvas
-     * @param aDC = the current device context
-     * @param aDrawMode = GR_COPY, GR_OR ... (not always used)
-     * @param aOffset = an draw offset value
-     * @param aDisplayOptions = a GBR_DISPLAY_OPTIONS for draw display opts
-     */
-    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-               GR_DRAWMODE aDrawMode, const wxPoint& aOffset,
-               GBR_DISPLAY_OPTIONS* aDisplayOptions );
-
-    /**
-     * Function DrawItemsDCodeID
-     * Draw the DCode value (if exists) corresponding to gerber item
-     * (polygons do not have a DCode)
-     * @param aPanel = the draw canvas
-     * @param aDC = the current device context
-     * @param aDrawMode = GR_COPY, GR_OR ...
-     * @param aDrawColor = the color of dcode texts
-     */
-    void DrawItemsDCodeID( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                           GR_DRAWMODE aDrawMode, COLOR4D aDrawColor );
-
     ///> @copydoc EDA_ITEM::Visit()
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
-
 #if defined(DEBUG)
-
-    void    Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
-
+    void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 };
 

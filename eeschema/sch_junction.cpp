@@ -92,12 +92,12 @@ const EDA_RECT SCH_JUNCTION::GetBoundingBox() const
 }
 
 
-void SCH_JUNCTION::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset )
+void SCH_JUNCTION::Print( wxDC* aDC, const wxPoint& aOffset )
 {
     auto    conn = Connection( *g_CurrentSheet );
     COLOR4D color = GetLayerColor( ( conn && conn->IsBus() ) ? LAYER_BUS : m_Layer );
 
-    GRFilledCircle( aPanel->GetClipBox(), aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
+    GRFilledCircle( nullptr, aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
                     ( GetEffectiveSymbolSize() / 2 ), 0, color, color );
 }
 

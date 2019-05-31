@@ -4,7 +4,7 @@
  * Copyright (C) 2017 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,15 +24,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_pad_draw_functions.cpp
- */
-
 #include <class_board.h>
 #include <class_drawpanel.h>
 #include <common.h>
 #include <convert_basic_shapes_to_polygon.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <fctsys.h>
 #include <geometry/geometry_utils.h>
 #include <gr_basic.h>
@@ -44,21 +40,9 @@
 #include <trigo.h>
 
 
-/* uncomment this line to show this pad with its specfic size and color
- * when it is not on copper layers, and only one solder mask layer or solder paste layer
- * is displayed for this pad
- * After testing this feature,I am not sure this is a good idea
- * but the code is left here.
- */
-
-//#define SHOW_PADMASK_REAL_SIZE_AND_COLOR
-
-
 // Helper class to store parameters used to draw a pad
 PAD_DRAWINFO::PAD_DRAWINFO()
 {
-    m_DrawPanel       = NULL;
-    m_DrawMode        = GR_COPY;
     m_Color           = BLACK;
     m_HoleColor       = BLACK; // could be DARKGRAY;
     m_NPHoleColor     = YELLOW;
@@ -73,17 +57,9 @@ PAD_DRAWINFO::PAD_DRAWINFO()
 }
 
 
-void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
-                  const wxPoint& aOffset )
+void D_PAD::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
 {
     wxSize mask_margin;   // margin (clearance) used for some non copper layers
-
-#ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
-    int    showActualMaskSize = 0;  /* Layer number if the actual pad size on mask layer can
-                                     * be displayed i.e. if only one layer is shown for this pad
-                                     * and this layer is a mask (solder mask or solder paste
-                                     */
-#endif
 
     if( m_Flags & DO_NOT_DRAW )
         return;
@@ -104,8 +80,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
 
     BOARD* brd = GetBoard();
 
-    auto frame = static_cast<PCB_EDIT_FRAME*> ( aPanel->GetParent() );
-    const auto& cds = frame->Settings().Colors();
+    const auto& cds = aFrame->Settings().Colors();
 
     bool   frontVisible = brd->IsElementVisible( LAYER_PAD_FR );
     bool   backVisible  = brd->IsElementVisible( LAYER_PAD_BK );
@@ -124,10 +99,8 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
         return;
 
 
-    wxCHECK_RET( frame != NULL, wxT( "Panel has no parent frame window." ) );
-
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( frame->GetDisplayOptions() );
-    PCB_SCREEN*     screen = frame->GetScreen();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( aFrame->GetDisplayOptions() );
+    PCB_SCREEN* screen = aFrame->GetScreen();
 
     if( displ_opts && displ_opts->m_DisplayPadFill == SKETCH )
         drawInfo.m_ShowPadFilled = false;
@@ -151,9 +124,6 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
         // If the pad is on only one tech layer, use the layer color else use DARKGRAY
         LSET mask_non_copper_layers = m_layerMask & ~LSET::AllCuMask();
 
-#ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
-        mask_non_copper_layers &= brd->GetVisibleLayers();
-#endif
         PCB_LAYER_ID pad_layer = mask_non_copper_layers.ExtractLayer();
 
         switch( (int) pad_layer )
@@ -167,125 +137,21 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
 
         default:
             color = cds.GetLayerColor( pad_layer );
-#ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
-            showActualMaskSize = pad_layer;
-#endif
         }
     }
 
-    // if SMD or connector pad and high contrast mode
-    if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) &&
-        ( GetAttribute() == PAD_ATTRIB_SMD || GetAttribute() == PAD_ATTRIB_CONN ) &&
-        displ_opts && displ_opts->m_ContrastModeDisplay )
+    if( ( IsOnLayer( B_Paste ) && brd->IsLayerVisible( B_Paste ) ) ||
+        ( IsOnLayer( F_Paste ) && brd->IsLayerVisible( F_Paste ) ) )
     {
-        // when routing tracks
-        if( frame->GetToolId() == ID_TRACK_BUTT )
-        {
-            PCB_LAYER_ID routeTop = screen->m_Route_Layer_TOP;
-            PCB_LAYER_ID routeBot = screen->m_Route_Layer_BOTTOM;
-
-            // if routing between copper and component layers,
-            // or the current layer is one of said 2 external copper layers,
-            // then highlight only the current layer.
-            if( ( screen->m_Active_Layer == F_Cu || screen->m_Active_Layer == B_Cu ) ||
-                ( routeTop==F_Cu && routeBot==B_Cu ) ||
-                ( routeTop==B_Cu && routeBot==F_Cu )
-                )
-            {
-                if( !IsOnLayer( screen->m_Active_Layer ) )
-                    color = COLOR4D( DARKDARKGRAY );
-            }
-            // else routing between an internal signal layer and some other
-            // layer.  Grey out all PAD_ATTRIB_SMD pads not on current or the single
-            // selected external layer.
-            else if( !IsOnLayer( screen->m_Active_Layer )
-                    && !IsOnLayer( routeTop )
-                    && !IsOnLayer( routeBot ) )
-            {
-                color = COLOR4D( DARKDARKGRAY );
-            }
-        }
-        // when not edting tracks, show PAD_ATTRIB_SMD components not on active layer
-        // as greyed out
-        else
-        {
-            if( !IsOnLayer( screen->m_Active_Layer ) )
-                color = COLOR4D( DARKDARKGRAY );
-        }
+        mask_margin = GetSolderPasteMargin();
     }
 
-#ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
-    if( showActualMaskSize )
+    if( ( IsOnLayer( B_Mask ) && brd->IsLayerVisible( B_Mask ) ) ||
+        ( IsOnLayer( F_Mask ) && brd->IsLayerVisible( F_Mask ) ) )
     {
-        switch( showActualMaskSize )
-        {
-        case B_Mask:
-        case F_Mask:
-            mask_margin.x = mask_margin.y = GetSolderMaskMargin();
-            break;
-
-        case B_Paste:
-        case F_Paste:
-            mask_margin = GetSolderPasteMargin();
-            break;
-
-        default:
-            // Another layer which has no margin to handle
-            break;
-        }
+        mask_margin.x = std::max( mask_margin.x, GetSolderMaskMargin() );
+        mask_margin.y = std::max( mask_margin.y, GetSolderMaskMargin() );
     }
-#endif
-
-    // if Contrast mode is ON and a technical layer active, show pads on this
-    // layer so we can see pads on paste or solder layer and the size of the
-    // mask
-    if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) &&
-        displ_opts && displ_opts->m_ContrastModeDisplay && !IsCopperLayer( screen->m_Active_Layer ) )
-    {
-        if( IsOnLayer( screen->m_Active_Layer ) )
-        {
-            color = cds.GetLayerColor( screen->m_Active_Layer );
-
-            // In high contrast mode, and if the active layer is the mask
-            // layer shows the pad size with the mask clearance
-            switch( screen->m_Active_Layer )
-            {
-            case B_Mask:
-            case F_Mask:
-                mask_margin.x = mask_margin.y = GetSolderMaskMargin();
-                break;
-
-            case B_Paste:
-            case F_Paste:
-                mask_margin = GetSolderPasteMargin();
-                break;
-
-            default:
-                break;
-            }
-        }
-        else
-            color = DARKDARKGRAY;
-    }
-    // If use asks for masks to be printed, then print them.
-    else if( screen->m_IsPrinting )
-    {
-        if( ( IsOnLayer( B_Paste ) && brd->IsLayerVisible( B_Paste ) ) ||
-            ( IsOnLayer( F_Paste ) && brd->IsLayerVisible( F_Paste ) ) )
-        {
-            mask_margin = GetSolderPasteMargin();
-        }
-
-        if( ( IsOnLayer( B_Mask ) && brd->IsLayerVisible( B_Mask ) ) ||
-            ( IsOnLayer( F_Mask ) && brd->IsLayerVisible( F_Mask ) ) )
-        {
-            mask_margin.x = std::max( mask_margin.x, GetSolderMaskMargin() );
-            mask_margin.y = std::max( mask_margin.y, GetSolderMaskMargin() );
-        }
-    }
-
-    if( ( aDraw_mode & GR_HIGHLIGHT ) && !( aDraw_mode & GR_AND ) )
-        color.SetToLegacyHighlightColor();
 
     bool DisplayIsol = displ_opts && displ_opts->m_DisplayPadIsol;
 
@@ -305,13 +171,11 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
         drawInfo.m_NPHoleColor = cds.GetItemColor( LAYER_MOD_TEXT_INVISIBLE );
     }
 
-    drawInfo.m_DrawMode    = aDraw_mode;
-    drawInfo.m_Color       = color;
+    drawInfo.m_Color          = color;
     drawInfo.m_NoNetMarkColor = cds.GetItemColor( LAYER_NO_CONNECTS );
-    drawInfo.m_DrawPanel   = aPanel;
-    drawInfo.m_Mask_margin = mask_margin;
-    drawInfo.m_ShowNCMark  = brd->IsElementVisible( LAYER_NO_CONNECTS );
-    drawInfo.m_IsPrinting  = screen->m_IsPrinting;
+    drawInfo.m_Mask_margin    = mask_margin;
+    drawInfo.m_ShowNCMark     = brd->IsElementVisible( LAYER_NO_CONNECTS );
+    drawInfo.m_IsPrinting     = screen->m_IsPrinting;
     color.a = 0.666;
 
     /* Get the pad clearance. This has a meaning only for Pcbnew.
@@ -329,24 +193,16 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
         (( displ_opts ->m_DisplayNetNamesMode == 0 ) || ( displ_opts->m_DisplayNetNamesMode == 2 )) )
         drawInfo.m_Display_netname = false;
 
-    // Display net names is restricted to pads that are on the active layer
-    // in high contrast mode display
-    if( ( aDraw_mode & GR_ALLOW_HIGHCONTRAST ) &&
-        !IsOnLayer( screen->m_Active_Layer ) && displ_opts && displ_opts->m_ContrastModeDisplay )
-        drawInfo.m_Display_netname = false;
-
-    DrawShape( aPanel->GetClipBox(), aDC, drawInfo );
+    PrintShape( aDC, drawInfo );
 }
 
 
-void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
+void D_PAD::PrintShape( wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 {
     #define SEGCOUNT 32     // number of segments to approximate a circle
     wxPoint coord[12];
     double  angle = m_Orient;
     int     seg_width;
-
-    GRSetDrawMode( aDC, aDrawInfo.m_DrawMode );
 
     // calculate pad shape position :
     wxPoint shape_pos = ShapePos() - aDrawInfo.m_Offset;
@@ -359,20 +215,18 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     {
     case PAD_SHAPE_CIRCLE:
         if( aDrawInfo.m_ShowPadFilled )
-            GRFilledCircle( aClipBox, aDC, shape_pos.x, shape_pos.y,
+            GRFilledCircle( nullptr, aDC, shape_pos.x, shape_pos.y,
                             halfsize.x + aDrawInfo.m_Mask_margin.x, 0,
                             aDrawInfo.m_Color, aDrawInfo.m_Color );
         else
-            GRCircle( aClipBox, aDC, shape_pos.x, shape_pos.y,
+            GRCircle( nullptr, aDC, shape_pos.x, shape_pos.y,
                       halfsize.x + aDrawInfo.m_Mask_margin.x,
                       m_PadSketchModePenSize, aDrawInfo.m_Color );
 
         if( aDrawInfo.m_PadClearance )
         {
-            GRCircle( aClipBox,
-                      aDC, shape_pos.x, shape_pos.y,
-                      halfsize.x + aDrawInfo.m_PadClearance,
-                      0, aDrawInfo.m_Color );
+            GRCircle( nullptr, aDC, shape_pos.x, shape_pos.y,
+                      halfsize.x + aDrawInfo.m_PadClearance, 0, aDrawInfo.m_Color );
         }
 
         break;
@@ -380,28 +234,27 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     case PAD_SHAPE_OVAL:
     {
         wxPoint segStart, segEnd;
-        seg_width = BuildSegmentFromOvalShape(segStart, segEnd, angle,
-                                              aDrawInfo.m_Mask_margin);
+        seg_width = BuildSegmentFromOvalShape( segStart, segEnd, angle, aDrawInfo.m_Mask_margin );
         segStart += shape_pos;
         segEnd += shape_pos;
 
         if( aDrawInfo.m_ShowPadFilled )
         {
-            GRFillCSegm( aClipBox, aDC, segStart.x, segStart.y, segEnd.x, segEnd.y,
-                         seg_width, aDrawInfo.m_Color );
+            GRFillCSegm( nullptr, aDC, segStart.x, segStart.y, segEnd.x, segEnd.y, seg_width,
+                         aDrawInfo.m_Color );
         }
         else
         {
-            GRCSegm( aClipBox, aDC, segStart.x, segStart.y, segEnd.x, segEnd.y,
-                     seg_width, m_PadSketchModePenSize, aDrawInfo.m_Color );
+            GRCSegm( nullptr, aDC, segStart.x, segStart.y, segEnd.x, segEnd.y, seg_width,
+                     m_PadSketchModePenSize, aDrawInfo.m_Color );
         }
 
         // Draw the clearance line
         if( aDrawInfo.m_PadClearance )
         {
             seg_width += 2 * aDrawInfo.m_PadClearance;
-            GRCSegm( aClipBox, aDC, segStart.x, segStart.y, segEnd.x, segEnd.y,
-                     seg_width, aDrawInfo.m_Color );
+            GRCSegm( nullptr, aDC, segStart.x, segStart.y, segEnd.x, segEnd.y, seg_width,
+                     aDrawInfo.m_Color );
         }
     }
         break;
@@ -413,7 +266,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         for( int ii = 0; ii < 4; ii++ )
             coord[ii] += shape_pos;
 
-        GRClosedPoly( aClipBox, aDC, 4, coord, aDrawInfo.m_ShowPadFilled,
+        GRClosedPoly( nullptr, aDC, 4, coord, aDrawInfo.m_ShowPadFilled,
                       aDrawInfo.m_ShowPadFilled ? 0 : m_PadSketchModePenSize,
                       aDrawInfo.m_Color, aDrawInfo.m_Color );
 
@@ -429,9 +282,8 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 
                 if( poly.PointCount() > 0 )
                 {
-                    GRClosedPoly( aClipBox, aDC, poly.PointCount(),
-                                  (wxPoint*)&poly.Point( 0 ), false, 0,
-                                  aDrawInfo.m_Color, aDrawInfo.m_Color );
+                    GRClosedPoly( nullptr, aDC, poly.PointCount(), (wxPoint*)&poly.Point( 0 ),
+                                  false, 0, aDrawInfo.m_Color, aDrawInfo.m_Color );
                 }
             }
         }
@@ -457,8 +309,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 
         SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
 
-        GRClosedPoly( aClipBox, aDC, poly.PointCount(),
-                      (wxPoint*)&poly.Point( 0 ), filled, 0,
+        GRClosedPoly( nullptr, aDC, poly.PointCount(), (wxPoint*)&poly.Point( 0 ), filled, 0,
                       aDrawInfo.m_Color, aDrawInfo.m_Color );
 
         if( aDrawInfo.m_PadClearance )
@@ -477,7 +328,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             // Draw the polygon: Inflate creates only one convex polygon
             SHAPE_LINE_CHAIN& clearance_poly = outline.Outline( 0 );
 
-            GRClosedPoly( aClipBox, aDC, clearance_poly.PointCount(),
+            GRClosedPoly( nullptr, aDC, clearance_poly.PointCount(),
                           (wxPoint*)&clearance_poly.Point( 0 ), false, 0,
                           aDrawInfo.m_Color, aDrawInfo.m_Color );
         }
@@ -511,13 +362,12 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
                     poly[ii] += pad_pos;
                 }
 
-                GRClosedPoly( aClipBox, aDC, 4, poly, false, 0,
-                              aDrawInfo.m_Color, aDrawInfo.m_Color );
+                GRClosedPoly( nullptr, aDC, 4, poly, false, 0, aDrawInfo.m_Color,
+                              aDrawInfo.m_Color );
             }
             else
             {
-                GRCircle( aClipBox, aDC, pad_pos.x, pad_pos.y,
-                          halfsize.x,
+                GRCircle( nullptr, aDC, pad_pos.x, pad_pos.y, halfsize.x,
                           m_PadSketchModePenSize, aDrawInfo.m_Color );
             }
         }
@@ -541,9 +391,8 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         {
             poly = &outline.Outline( jj );
 
-            GRClosedPoly( aClipBox, aDC, poly->PointCount(),
-                    (wxPoint*)&poly->Point( 0 ), aDrawInfo.m_ShowPadFilled, 0,
-                    aDrawInfo.m_Color, aDrawInfo.m_Color );
+            GRClosedPoly( nullptr, aDC, poly->PointCount(), (wxPoint*)&poly->Point( 0 ),
+                          aDrawInfo.m_ShowPadFilled, 0, aDrawInfo.m_Color, aDrawInfo.m_Color );
         }
 
         if( aDrawInfo.m_PadClearance )
@@ -561,9 +410,8 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 
                 if( poly->PointCount() > 0 )
                 {
-                    GRClosedPoly( aClipBox, aDC, poly->PointCount(),
-                                  (wxPoint*)&poly->Point( 0 ), false, 0,
-                                  aDrawInfo.m_Color, aDrawInfo.m_Color );
+                    GRClosedPoly( nullptr, aDC, poly->PointCount(), (wxPoint*)&poly->Point( 0 ),
+                                  false, 0, aDrawInfo.m_Color, aDrawInfo.m_Color );
                 }
             }
         }
@@ -588,16 +436,9 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
                                                            aDrawInfo.m_HoleColor;
         COLOR4D hole_color = fillcolor;
 
-        if( aDrawInfo.m_IsPrinting )
-        {
-            fillcolor = COLOR4D::WHITE;
-            blackpenstate = GetGRForceBlackPenState();
-            GRForceBlackPen( false );
-        }
-        else
-        {
-            GRSetDrawMode( aDC, ( aDrawInfo.m_DrawMode != GR_XOR ) ? GR_COPY : GR_XOR );
-        }
+        fillcolor = COLOR4D::WHITE;
+        blackpenstate = GetGRForceBlackPenState();
+        GRForceBlackPen( false );
 
         if( blackpenstate )
             hole_color = COLOR4D::BLACK;
@@ -606,8 +447,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         {
         case PAD_DRILL_SHAPE_CIRCLE:
             if( aDC->LogicalToDeviceXRel( hole ) > 1 )  // hole is drawn if hole > 1pixel
-                GRFilledCircle( aClipBox, aDC, holepos.x, holepos.y, hole, 0,
-                                hole_color, fillcolor );
+                GRFilledCircle( nullptr, aDC, holepos.x, holepos.y, hole, 0, hole_color, fillcolor );
             break;
 
         case PAD_DRILL_SHAPE_OBLONG:
@@ -616,8 +456,8 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             GetOblongDrillGeometry( drl_start, drl_end, seg_width );
             drl_start += holepos;
             drl_end += holepos;
-            GRFilledSegment( aClipBox, aDC, drl_start, drl_end, seg_width, fillcolor );
-            GRCSegm( aClipBox, aDC, drl_start, drl_end, seg_width, hole_color );
+            GRFilledSegment( nullptr, aDC, drl_start, drl_end, seg_width, fillcolor );
+            GRCSegm( nullptr, aDC, drl_start, drl_end, seg_width, hole_color );
         }
             break;
 
@@ -629,24 +469,19 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             GRForceBlackPen( blackpenstate );
     }
 
-    GRSetDrawMode( aDC, aDrawInfo.m_DrawMode );
-
     // Draw "No connect" ( / or \ or cross X ) if necessary
     if( GetNetCode() == 0 && aDrawInfo.m_ShowNCMark )
     {
         int dx0 = std::min( halfsize.x, halfsize.y );
 
         if( m_layerMask[F_Cu] )    /* Draw \ */
-            GRLine( aClipBox, aDC, holepos.x - dx0, holepos.y - dx0,
+            GRLine( nullptr, aDC, holepos.x - dx0, holepos.y - dx0,
                     holepos.x + dx0, holepos.y + dx0, 0, aDrawInfo.m_NoNetMarkColor );
 
         if( m_layerMask[B_Cu] )     // Draw /
-            GRLine( aClipBox, aDC, holepos.x + dx0, holepos.y - dx0,
+            GRLine( nullptr, aDC, holepos.x + dx0, holepos.y - dx0,
                     holepos.x - dx0, holepos.y + dx0, 0, aDrawInfo.m_NoNetMarkColor );
     }
-
-    if( !aDrawInfo.m_IsPrinting )
-        GRSetDrawMode( aDC, ( aDrawInfo.m_DrawMode != GR_XOR ) ? GR_COPY : GR_XOR );
 
     // Draw the pad number
     if( !aDrawInfo.m_Display_padnum && !aDrawInfo.m_Display_netname )
@@ -698,7 +533,6 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     constexpr int MIN_CHAR_COUNT = 3;
 
     unsigned int tsize;
-    EDA_RECT* clipBox = aDrawInfo.m_DrawPanel ? aDrawInfo.m_DrawPanel->GetClipBox() : NULL;
 
     if( aDrawInfo.m_Display_padnum )
     {
@@ -709,11 +543,9 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         {
             // tsize reserve room for marges and segments thickness
             tsize = ( tsize * 7 ) / 10;
-            DrawGraphicHaloText( clipBox, aDC, tpos,
-                                 aDrawInfo.m_Color, BLACK, WHITE,
-                                 m_name, t_angle,
-                                 wxSize( tsize , tsize ), GR_TEXT_HJUSTIFY_CENTER,
-                                 GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false );
+            GRHaloText( aDC, tpos, aDrawInfo.m_Color, BLACK, WHITE, m_name, t_angle,
+                        wxSize( tsize , tsize ), GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                        tsize / 7, false, false );
 
         }
     }
@@ -736,11 +568,9 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 
         // tsize reserve room for marges and segments thickness
         tsize = ( tsize * 7 ) / 10;
-        DrawGraphicHaloText( clipBox, aDC, tpos,
-                             aDrawInfo.m_Color, BLACK, WHITE,
-                             shortname, t_angle, wxSize( tsize, tsize ),
-                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                             tsize / 7, false, false );
+        GRHaloText( aDC, tpos, aDrawInfo.m_Color, BLACK, WHITE, shortname, t_angle,
+                    wxSize( tsize, tsize ), GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                    tsize / 7, false, false );
     }
 }
 
@@ -752,8 +582,8 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
  * aSegStart and aSegEnd are the ending points of the equivalent segment of the shape
  * aRotation is the asked rotation of the segment (usually m_Orient)
  */
-int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd,
-                                     double aRotation, const wxSize& aMargin) const
+int D_PAD::BuildSegmentFromOvalShape( wxPoint& aSegStart, wxPoint& aSegEnd, double aRotation,
+                                      const wxSize& aMargin ) const
 {
     int width;
 

@@ -624,10 +624,8 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
 
         WS_DATA_MODEL::SetAltInstance( m_pagelayout );
         GRFilledRect( NULL, &memDC, 0, 0, m_layout_size.x, m_layout_size.y, WHITE, WHITE );
-        DrawPageLayout( &memDC, NULL, pageDUMMY,
-                        emptyString, emptyString,
-                        m_tb, m_screen->m_NumberOfScreens,
-                        m_screen->m_ScreenNumber, 1, 1, DARKGRAY );
+        PrintPageLayout( &memDC, pageDUMMY, emptyString, emptyString, m_tb,
+                         m_screen->m_NumberOfScreens, m_screen->m_ScreenNumber, 1, 1, DARKGRAY );
 
         memDC.SelectObject( wxNullBitmap );
         m_PageLayoutExampleBitmap->SetBitmap( *m_page_bitmap );

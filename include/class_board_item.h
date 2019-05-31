@@ -39,8 +39,9 @@
 
 class BOARD;
 class BOARD_ITEM_CONTAINER;
-class EDA_DRAW_PANEL;
 class SHAPE_POLY_SET;
+class PCB_BASE_FRAME;
+
 
 /**
  * Enum STROKE_T
@@ -146,11 +147,10 @@ public:
     }
 
     /**
-     * Function Draw
+     * Function Print
      * BOARD_ITEMs have their own color information.
      */
-    virtual void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-                       GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset ) = 0;
+    virtual void Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset = ZeroOffset ) = 0;
 
     /**
      * Swap data between aItem and aImage.

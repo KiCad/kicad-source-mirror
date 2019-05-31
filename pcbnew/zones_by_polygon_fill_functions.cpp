@@ -80,8 +80,6 @@ void PCB_EDIT_FRAME::Check_All_Zones( wxWindow* aActiveWindow )
     if( filler.Fill( toFill, true ) )
     {
         m_ZoneFillsDirty = false;
-
         GetGalCanvas()->ForceRefresh();
-        GetCanvas()->Refresh();
     }
 }

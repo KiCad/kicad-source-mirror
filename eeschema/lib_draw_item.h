@@ -44,7 +44,6 @@ class PLOTTER;
 class LIB_ITEM;
 class LIB_PIN;
 class MSG_PANEL_ITEM;
-class EDA_DRAW_PANEL;
 
 
 extern const int fill_tab[];
@@ -67,17 +66,16 @@ typedef std::vector< LIB_PIN* > LIB_PINS;
 class LIB_ITEM : public EDA_ITEM
 {
     /**
-     * Draw the item on \a aPanel.
+     * Print the item to \a aDC.
      *
-     * @param aPanel A pointer to the panel to draw the object upon.
      * @param aDC A pointer to the device context used to draw the object.
      * @param aOffset A reference to a wxPoint object containing the offset where to draw
      *                from the object's current position.
      * @param aData A pointer to any object specific data required to perform the draw.
      * @param aTransform A reference to a #TRANSFORM object containing drawing transform.
      */
-    virtual void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                              void* aData, const TRANSFORM& aTransform ) = 0;
+    virtual void print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+                        const TRANSFORM& aTransform ) = 0;
 
     friend class LIB_PART;
 
@@ -174,7 +172,6 @@ public:
     /**
      * Draw an item
      *
-     * @param aPanel DrawPanel to use (can be null) mainly used for clipping purposes.
      * @param aDC Device Context (can be null)
      * @param aOffset Offset to draw
      * @param aData Value or pointer used to pass others parameters, depending on body items.
@@ -183,8 +180,8 @@ public:
      *              pass reference to the lib component for pins.
      * @param aTransform Transform Matrix (rotation, mirror ..)
      */
-    virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint &aOffset, void* aData,
-                       const TRANSFORM& aTransform );
+    virtual void Print( wxDC* aDC, const wxPoint &aOffset, void* aData,
+                        const TRANSFORM& aTransform );
 
     /**
      * @return the size of the "pen" that be used to draw or plot this item

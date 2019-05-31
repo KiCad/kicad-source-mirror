@@ -387,7 +387,7 @@ bool DIALOG_DRC_CONTROL::focusOnItem( const DRC_ITEM* aItem )
     }
 
     toolmgr->GetView()->SetCenter( pos );
-    m_brdEditor->GetCanvas()->Refresh();
+    m_brdEditor->GetGalCanvas()->Refresh();
 
     return true;
 }
@@ -452,7 +452,7 @@ void DIALOG_DRC_CONTROL::doSelectionMenu( const DRC_ITEM* aItem )
     if( selection && ( selection == first || selection == second ) )
         m_brdEditor->GetToolManager()->GetView()->SetCenter( selection->GetPosition() );
 
-    m_brdEditor->GetCanvas()->Refresh();
+    m_brdEditor->GetGalCanvas()->Refresh();
 }
 
 
@@ -570,7 +570,7 @@ void DIALOG_DRC_CONTROL::RedrawDrawPanel()
 {
     WINDOW_THAWER thawer( m_brdEditor );
 
-    m_brdEditor->GetCanvas()->Refresh();
+    m_brdEditor->GetGalCanvas()->Refresh();
 }
 
 

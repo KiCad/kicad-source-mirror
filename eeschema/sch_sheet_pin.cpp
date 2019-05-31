@@ -25,7 +25,7 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <sch_draw_panel.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <plotter.h>
 #include <trigo.h>
 #include <richio.h>
@@ -65,11 +65,10 @@ EDA_ITEM* SCH_SHEET_PIN::Clone() const
 }
 
 
-void SCH_SHEET_PIN::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&  aOffset )
+void SCH_SHEET_PIN::Print( wxDC* aDC, const wxPoint&  aOffset )
 {
-    // The icon selection is handle by the virtual method CreateGraphicShape
-    // called by ::Draw
-    SCH_HIERLABEL::Draw( aPanel, aDC, aOffset );
+    // The icon selection is handle by the virtual method CreateGraphicShape called by ::Print
+    SCH_HIERLABEL::Print( aDC, aOffset );
 }
 
 

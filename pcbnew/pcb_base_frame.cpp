@@ -30,7 +30,6 @@
 #include <confirm.h>
 #include <kiface_i.h>
 #include <dialog_helpers.h>
-#include <kicad_device_context.h>
 #include <pcb_base_frame.h>
 #include <base_units.h>
 #include <msgpanel.h>
@@ -498,7 +497,7 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
     GetScreen()->m_Active_Layer = layer;
 
     if( displ_opts->m_ContrastModeDisplay )
-        m_canvas->Refresh();
+        GetGalCanvas()->Refresh();
 }
 
 
@@ -524,7 +523,7 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
         }
     }
 
-    m_canvas->Refresh();
+    GetGalCanvas()->Refresh();
 }
 
 
@@ -532,7 +531,7 @@ void PCB_BASE_FRAME::OnToggleGraphicDrawMode( wxCommandEvent& aEvent )
 {
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
     displ_opts->m_DisplayDrawItemsFill = !displ_opts->m_DisplayDrawItemsFill;
-    m_canvas->Refresh();
+    GetGalCanvas()->Refresh();
 }
 
 
@@ -550,7 +549,7 @@ void PCB_BASE_FRAME::OnToggleEdgeDrawMode( wxCommandEvent& aEvent )
         view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     }
 
-    m_canvas->Refresh();
+    GetGalCanvas()->Refresh();
 }
 
 
@@ -568,7 +567,7 @@ void PCB_BASE_FRAME::OnToggleTextDrawMode( wxCommandEvent& aEvent )
         view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     }
 
-    m_canvas->Refresh();
+    GetGalCanvas()->Refresh();
 }
 
 
@@ -641,8 +640,8 @@ void PCB_BASE_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 
     // must do this after the tool has been set, otherwise pad::Draw() does
     // not show proper color when GetDisplayOptions().ContrastModeDisplay is true.
-    if( redraw && m_canvas )
-        m_canvas->Refresh();
+    if( redraw )
+        GetGalCanvas()->Refresh();
 }
 
 

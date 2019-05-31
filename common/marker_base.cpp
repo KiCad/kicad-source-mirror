@@ -235,3 +235,23 @@ void MARKER_BASE::DisplayMarkerInfo( EDA_DRAW_FRAME* aFrame )
     infodisplay.m_htmlWindow->SetPage( msg );
     infodisplay.ShowModal();
 }
+
+
+void MARKER_BASE::PrintMarker( wxDC* aDC, const wxPoint& aOffset )
+{
+    // Build the marker shape polygon in internal units:
+    const int ccount = GetShapePolygonCornerCount();
+    std::vector<wxPoint> shape;
+    shape.reserve( ccount );
+
+    for( int ii = 0; ii < ccount; ii++ )
+    {
+        shape.push_back( wxPoint( GetShapePolygonCorner( ii ).x * MarkerScale(),
+                                  GetShapePolygonCorner( ii ).y * MarkerScale() ) );
+    }
+
+    for( int ii = 0; ii < ccount; ii++ )
+        shape[ii] += m_Pos + aOffset;
+
+    GRClosedPoly( nullptr, aDC, ccount, &shape[0], true, 0, m_Color, m_Color );
+}

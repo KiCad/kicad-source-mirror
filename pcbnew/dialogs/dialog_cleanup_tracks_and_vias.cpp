@@ -132,8 +132,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
     {
         // Clear undo and redo lists to avoid inconsistencies between lists
         commit.Push( _( "Board cleanup" ) );
-
-        m_parentFrame->GetCanvas()->Refresh( true );
+        m_parentFrame->GetGalCanvas()->Refresh( true );
     }
 }
 
@@ -150,9 +149,8 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnSelectItem( wxCommandEvent& event )
         if( item )
         {
             m_parentFrame->FocusOnLocation( item->GetPointA(), false, true );
-
             WINDOW_THAWER thawer( m_parentFrame );
-            m_parentFrame->GetCanvas()->Refresh();
+            m_parentFrame->GetGalCanvas()->Refresh();
         }
     }
 
@@ -201,7 +199,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnRightUpItem( wxMouseEvent& event )
 
         WINDOW_THAWER thawer( m_parentFrame );
         m_parentFrame->GetToolManager()->RunAction( PCB_ACTIONS::selectionMenu, true, &items );
-        m_parentFrame->GetCanvas()->Refresh();
+        m_parentFrame->GetGalCanvas()->Refresh();
     }
 }
 

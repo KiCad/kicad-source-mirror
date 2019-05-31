@@ -33,7 +33,7 @@
 #include <macros.h>
 #include <trigo.h>
 #include <sch_draw_panel.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <sch_edit_frame.h>
 #include <plotter.h>
 #include <msgpanel.h>
@@ -302,11 +302,10 @@ int SCH_TEXT::GetPenSize() const
 }
 
 
-void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset )
+void SCH_TEXT::Print( wxDC* DC, const wxPoint& aOffset )
 {
     COLOR4D     color = GetLayerColor( m_Layer );
     int         linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
-    EDA_RECT*   clipbox = panel? panel->GetClipBox() : NULL;
 
     linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
 
@@ -315,7 +314,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset )
     int savedWidth = GetThickness();
     SetThickness( linewidth );              // Set the minimum width
 
-    EDA_TEXT::Draw( clipbox, DC, text_offset, color, GR_DEFAULT_DRAWMODE );
+    EDA_TEXT::Print( DC, text_offset, color );
 
     SetThickness( savedWidth );
 }
@@ -484,9 +483,7 @@ void SCH_TEXT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
 
     // If a bus connects to label
     if( Connection( *aSheetPath )->IsBusLabel( m_Text ) )
-    {
         item->ConvertBusToNetListItems( aNetListItems );
-    }
 }
 
 
@@ -512,7 +509,7 @@ bool SCH_TEXT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) 
 
 void SCH_TEXT::Plot( PLOTTER* aPlotter )
 {
-    static std::vector <wxPoint> Poly;
+    static std::vector<wxPoint> Poly;
     COLOR4D  color = GetLayerColor( GetLayer() );
     int      tmp = GetThickness();
     int      thickness = GetPenSize();
@@ -536,9 +533,8 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
         {
             wxPoint textpos = positions[ii] + GetSchematicTextOffset();
             wxString& txt = strings_list.Item( ii );
-            aPlotter->Text( textpos, color, txt, GetTextAngle(), GetTextSize(),
-                            GetHorizJustify(), GetVertJustify(),
-                            thickness, IsItalic(), IsBold() );
+            aPlotter->Text( textpos, color, txt, GetTextAngle(), GetTextSize(), GetHorizJustify(),
+                            GetVertJustify(), thickness, IsItalic(), IsBold() );
         }
     }
     else
@@ -546,8 +542,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
         wxPoint textpos = GetTextPos() + GetSchematicTextOffset();
 
         aPlotter->Text( textpos, color, GetShownText(), GetTextAngle(), GetTextSize(),
-                        GetHorizJustify(), GetVertJustify(),
-                        thickness, IsItalic(), IsBold() );
+                        GetHorizJustify(), GetVertJustify(), thickness, IsItalic(), IsBold() );
     }
 
     // Draw graphic symbol for global or hierarchical labels
@@ -568,11 +563,11 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 
     switch( Type() )
     {
-    case SCH_TEXT_T:               msg = _( "Graphic Text" );           break;
-    case SCH_LABEL_T:              msg = _( "Label" );                  break;
-    case SCH_GLOBAL_LABEL_T:       msg = _( "Global Label" );           break;
-    case SCH_HIER_LABEL_T: msg = _( "Hierarchical Label" );     break;
-    case SCH_SHEET_PIN_T:          msg = _( "Hierarchical Sheet Pin" ); break;
+    case SCH_TEXT_T:          msg = _( "Graphic Text" );           break;
+    case SCH_LABEL_T:         msg = _( "Label" );                  break;
+    case SCH_GLOBAL_LABEL_T:  msg = _( "Global Label" );           break;
+    case SCH_HIER_LABEL_T:    msg = _( "Hierarchical Label" );     break;
+    case SCH_SHEET_PIN_T:     msg = _( "Hierarchical Sheet Pin" ); break;
     default: return;
     }
 
@@ -600,11 +595,8 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "Style" ), textStyle[style], BROWN ) );
 
-
-    // Display electricat type if it is relevant
-    if( (Type() == SCH_GLOBAL_LABEL_T) ||
-        (Type() == SCH_HIER_LABEL_T ) ||
-        (Type() == SCH_SHEET_PIN_T ) )
+    // Display electrical type if it is relevant
+    if( Type() == SCH_GLOBAL_LABEL_T || Type() == SCH_HIER_LABEL_T || Type() == SCH_SHEET_PIN_T )
     {
         switch( GetShape() )
         {
@@ -624,11 +616,8 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Size" ), msg, RED ) );
 
 #if defined(DEBUG)
-
     if( auto conn = Connection( *g_CurrentSheet ) )
-    {
         conn->AppendDebugInfoToMsgPanel( aList );
-    }
 
     msg.Printf( "%p", this );
     aList.push_back( MSG_PANEL_ITEM( "Object Address", msg, RED ) );
@@ -796,7 +785,7 @@ void SCH_GLOBALLABEL::SetLabelSpinStyle( int aSpinStyle )
 }
 
 
-void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset )
+void SCH_GLOBALLABEL::Print( wxDC* DC, const wxPoint& aOffset )
 {
     static std::vector <wxPoint> Poly;
     COLOR4D color = GetLayerColor( m_Layer );
@@ -809,13 +798,12 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOff
     int save_width = GetThickness();
     SetThickness( linewidth );
 
-    EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
-    EDA_TEXT::Draw( clipbox, DC, text_offset, color, GR_DEFAULT_DRAWMODE );
+    EDA_TEXT::Print( DC, text_offset, color );
 
     SetThickness( save_width );   // restore initial value
 
     CreateGraphicShape( Poly, GetTextPos() + aOffset );
-    GRPoly( clipbox, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
+    GRPoly( nullptr, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
 }
 
 
@@ -1036,13 +1024,13 @@ void SCH_HIERLABEL::SetLabelSpinStyle( int aSpinStyle )
 }
 
 
-void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset )
+void SCH_HIERLABEL::Print( wxDC* DC, const wxPoint& offset )
 {
     static std::vector <wxPoint> Poly;
-    auto        conn = Connection( *g_CurrentSheet );
-    COLOR4D     color = GetLayerColor( ( conn && conn->IsBus() ) ? LAYER_BUS : m_Layer );
-    int         linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
-    EDA_RECT*   clipbox = panel? panel->GetClipBox() : NULL;
+
+    auto    conn = Connection( *g_CurrentSheet );
+    COLOR4D color = GetLayerColor( ( conn && conn->IsBus() ) ? LAYER_BUS : m_Layer );
+    int     linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
 
     linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
 
@@ -1050,12 +1038,12 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset
     SetThickness( linewidth );
 
     wxPoint text_offset = offset + GetSchematicTextOffset();
-    EDA_TEXT::Draw( clipbox, DC, text_offset, color, GR_DEFAULT_DRAWMODE );
+    EDA_TEXT::Print( DC, text_offset, color );
 
     SetThickness( save_width );         // restore initial value
 
     CreateGraphicShape( Poly, GetTextPos() + offset );
-    GRPoly( clipbox, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
+    GRPoly( nullptr, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
 }
 
 

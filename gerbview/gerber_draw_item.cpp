@@ -450,8 +450,7 @@ bool GERBER_DRAW_ITEM::HasNegativeItems()
 }
 
 
-void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
-                             const wxPoint& aOffset, GBR_DISPLAY_OPTIONS* aDrawOptions )
+void GERBER_DRAW_ITEM::Print( wxDC* aDC, const wxPoint& aOffset, GBR_DISPLAY_OPTIONS* aOptions )
 {
     // used when a D_CODE is not found. default D_CODE to draw a flashed item
     static D_CODE dummyD_CODE( 0 );
@@ -466,9 +465,6 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
 
     COLOR4D color = m_GerberImageFile->GetPositiveDrawColor();
 
-    if( ( aDrawMode & GR_HIGHLIGHT ) && !( aDrawMode & GR_AND ) )
-        color.SetToLegacyHighlightColor();
-
     /* isDark is true if flash is positive and should use a drawing
      *   color other than the background color, else use the background color
      *   when drawing so that an erasure happens.
@@ -478,22 +474,20 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
     if( !isDark )
     {
         // draw in background color ("negative" color)
-        color = aDrawOptions->m_NegativeDrawColor;
+        color = aOptions->m_NegativeDrawColor;
     }
 
-    GRSetDrawMode( aDC, aDrawMode );
-
-    isFilled = aDrawOptions->m_DisplayLinesFill;
+    isFilled = aOptions->m_DisplayLinesFill;
 
     switch( m_Shape )
     {
     case GBR_POLYGON:
-        isFilled = aDrawOptions->m_DisplayPolygonsFill;
+        isFilled = aOptions->m_DisplayPolygonsFill;
 
         if( !isDark )
             isFilled = true;
 
-        DrawGbrPoly( aPanel->GetClipBox(), aDC, color, aOffset, isFilled );
+        PrintGerberPoly( aDC, color, aOffset, isFilled );
         break;
 
     case GBR_CIRCLE:
@@ -504,40 +498,27 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
         if( !isFilled )
         {
             // draw the border of the pen's path using two circles, each as narrow as possible
-            GRCircle( aPanel->GetClipBox(), aDC, GetABPosition( m_Start ),
-                      radius - halfPenWidth, 0, color );
-            GRCircle( aPanel->GetClipBox(), aDC, GetABPosition( m_Start ),
-                      radius + halfPenWidth, 0, color );
+            GRCircle( nullptr, aDC, GetABPosition( m_Start ), radius - halfPenWidth, 0, color );
+            GRCircle( nullptr, aDC, GetABPosition( m_Start ), radius + halfPenWidth, 0, color );
         }
         else    // Filled mode
         {
-            GRCircle( aPanel->GetClipBox(), aDC, GetABPosition( m_Start ),
-                      radius, m_Size.x, color );
+            GRCircle( nullptr, aDC, GetABPosition( m_Start ), radius, m_Size.x, color );
         }
         break;
 
     case GBR_ARC:
         // Currently, arcs plotted with a rectangular aperture are not supported.
         // a round pen only is expected.
-
-#if 0   // for arc debug only
-        GRLine( aPanel->GetClipBox(), aDC, GetABPosition( m_Start ),
-                GetABPosition( m_ArcCentre ), 0, color );
-        GRLine( aPanel->GetClipBox(), aDC, GetABPosition( m_End ),
-                GetABPosition( m_ArcCentre ), 0, color );
-#endif
-
         if( !isFilled )
         {
-            GRArc1( aPanel->GetClipBox(), aDC, GetABPosition( m_Start ),
-                    GetABPosition( m_End ), GetABPosition( m_ArcCentre ),
-                    0, color );
+            GRArc1( nullptr, aDC, GetABPosition( m_Start ), GetABPosition( m_End ),
+                    GetABPosition( m_ArcCentre ), 0, color );
         }
         else
         {
-            GRArc1( aPanel->GetClipBox(), aDC, GetABPosition( m_Start ),
-                    GetABPosition( m_End ), GetABPosition( m_ArcCentre ),
-                    m_Size.x, color );
+            GRArc1( nullptr, aDC, GetABPosition( m_Start ), GetABPosition( m_End ),
+                    GetABPosition( m_ArcCentre ), m_Size.x, color );
         }
 
         break;
@@ -547,9 +528,8 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
     case GBR_SPOT_OVAL:
     case GBR_SPOT_POLY:
     case GBR_SPOT_MACRO:
-        isFilled = aDrawOptions->m_DisplayFlashedItemsFill;
-        d_codeDescr->DrawFlashedShape( this, aPanel->GetClipBox(), aDC, color,
-                                       m_Start, isFilled );
+        isFilled = aOptions->m_DisplayFlashedItemsFill;
+        d_codeDescr->DrawFlashedShape( this, nullptr, aDC, color, m_Start, isFilled );
         break;
 
     case GBR_SEGMENT:
@@ -563,19 +543,19 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
             if( m_Polygon.OutlineCount() == 0 )
                 ConvertSegmentToPolygon();
 
-            DrawGbrPoly( aPanel->GetClipBox(), aDC, color, aOffset, isFilled );
+            PrintGerberPoly( aDC, color, aOffset, isFilled );
         }
         else
         {
             if( !isFilled )
             {
-                    GRCSegm( aPanel->GetClipBox(), aDC, GetABPosition( m_Start ),
-                             GetABPosition( m_End ), m_Size.x, color );
+                GRCSegm( nullptr, aDC, GetABPosition( m_Start ), GetABPosition( m_End ),
+                         m_Size.x, color );
             }
             else
             {
-                GRFilledSegment( aPanel->GetClipBox(), aDC, GetABPosition( m_Start ),
-                                 GetABPosition( m_End ), m_Size.x, color );
+                GRFilledSegment( nullptr, aDC, GetABPosition( m_Start ), GetABPosition( m_End ),
+                                 m_Size.x, color );
             }
         }
 
@@ -660,11 +640,8 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon()
 }
 
 
-void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_RECT*      aClipBox,
-                                    wxDC*          aDC,
-                                    COLOR4D        aColor,
-                                    const wxPoint& aOffset,
-                                    bool           aFilledShape )
+void GERBER_DRAW_ITEM::PrintGerberPoly( wxDC* aDC, COLOR4D aColor, const wxPoint& aOffset,
+                                        bool aFilledShape )
 {
     std::vector<wxPoint> points;
     SHAPE_LINE_CHAIN& poly = m_Polygon.Outline( 0 );
@@ -679,7 +656,7 @@ void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_RECT*      aClipBox,
         points[ii] = GetABPosition( points[ii] );
     }
 
-    GRClosedPoly( aClipBox, aDC, pointCount, &points[0], aFilledShape, aColor, aColor );
+    GRClosedPoly( nullptr, aDC, pointCount, &points[0], aFilledShape, aColor, aColor );
 }
 
 

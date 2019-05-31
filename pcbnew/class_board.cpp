@@ -85,7 +85,7 @@ public:
     // pure virtuals:
     const wxPoint GetPosition() const override { return wxPoint(); }
     void SetPosition( const wxPoint& ) override {}
-    void Draw( EDA_DRAW_PANEL* , wxDC* , GR_DRAWMODE , const wxPoint& ) override {}
+    void Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& aOffset ) override {}
 
 #if defined(DEBUG)
     void Show( int , std::ostream&  ) const override {}

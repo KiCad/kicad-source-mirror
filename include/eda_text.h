@@ -248,19 +248,14 @@ public:
     void Empty()                                { m_Text.Empty(); }
 
     /**
-     * Function Draw
-     * @param aClipBox = the clipping rect, or NULL if no clipping
+     * Function Print
      * @param aDC = the current Device Context
      * @param aOffset = draw offset (usually (0,0))
      * @param aColor = text color
-     * @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
      * @param aDisplay_mode = FILLED or SKETCH
-     * @param aAnchor_color = anchor color ( COLOR4D::UNSPECIFIED = do not draw anchor ).
      */
-    void Draw( EDA_RECT* aClipBox, wxDC* aDC,
-               const wxPoint& aOffset, COLOR4D aColor,
-               GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aDisplay_mode = FILLED,
-               COLOR4D aAnchor_color = COLOR4D::UNSPECIFIED );
+    void Print( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor,
+                EDA_DRAW_MODE_T aDisplay_mode = FILLED );
 
     /**
      * Convert the text shape to a list of segment
@@ -385,22 +380,18 @@ protected:
 
 private:
     /**
-     * Function drawOneLineOfText
-     * draws a single text line.
-     * Used to draw each line of this EDA_TEXT, that can be multiline
-     * @param aClipBox = the clipping rect, or NULL if no clipping
+     * Function printOneLineOfText
+     * Used to print each line of this EDA_TEXT, that can be multiline
      * @param aDC = the current Device Context
      * @param aOffset = draw offset (usually (0,0))
      * @param aColor = text color
-     * @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
      * @param aFillMode = FILLED or SKETCH
      * @param aText = the single line of text to draw.
      * @param aPos = the position of this line ).
      */
-    void drawOneLineOfText( EDA_RECT* aClipBox, wxDC* aDC,
-                            const wxPoint& aOffset, COLOR4D aColor,
-                            GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aFillMode,
-                            const wxString& aText, const wxPoint& aPos );
+    void printOneLineOfText( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor,
+                             EDA_DRAW_MODE_T aFillMode, const wxString& aText,
+                             const wxPoint& aPos );
 
     // Private text effects data. API above provides accessor funcs.
     TEXT_EFFECTS    m_e;

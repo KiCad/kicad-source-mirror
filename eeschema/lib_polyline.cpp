@@ -202,8 +202,8 @@ int LIB_POLYLINE::GetPenSize() const
 }
 
 
-void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                                void* aData, const TRANSFORM& aTransform )
+void LIB_POLYLINE::print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+                          const TRANSFORM& aTransform )
 {
     COLOR4D color   = GetLayerColor( LAYER_DEVICE );
     COLOR4D bgColor = GetLayerColor( LAYER_DEVICE_BACKGROUND );
@@ -215,13 +215,12 @@ void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
 
-    EDA_RECT* const clipbox  = aPanel? aPanel->GetClipBox() : NULL;
     if( fill == FILLED_WITH_BG_BODYCOLOR )
-        GRPoly( clipbox, aDC, m_PolyPoints.size(), buffer, 1, GetPenSize(), bgColor, bgColor );
+        GRPoly( nullptr, aDC, m_PolyPoints.size(), buffer, 1, GetPenSize(), bgColor, bgColor );
     else if( fill == FILLED_SHAPE  )
-        GRPoly( clipbox, aDC, m_PolyPoints.size(), buffer, 1, GetPenSize(), color, color );
+        GRPoly( nullptr, aDC, m_PolyPoints.size(), buffer, 1, GetPenSize(), color, color );
     else
-        GRPoly( clipbox, aDC, m_PolyPoints.size(), buffer, 0, GetPenSize(), color, color );
+        GRPoly( nullptr, aDC, m_PolyPoints.size(), buffer, 0, GetPenSize(), color, color );
 
     delete[] buffer;
 }

@@ -188,7 +188,7 @@ KIFACE_I& Kiface()
 
 FP_LIB_TABLE GFootprintTable;
 
-void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const wxPoint& offset )
+void BOARD::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
 {
 }
 
@@ -361,17 +361,8 @@ EDA_DRAW_FRAME* EDA_DRAW_PANEL::GetParent() const
     return nullptr;
 }
 
-void* EDA_DRAW_PANEL::GetDisplayOptions()
-{
-    return nullptr;
-}
-
 BASE_SCREEN* EDA_DRAW_PANEL::GetScreen()
 {
     return nullptr;
 }
 
-void DrawAndSizingBlockOutlines(EDA_DRAW_PANEL*, wxDC*, wxPoint const&, bool) 
-{
-
-}

@@ -267,28 +267,6 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& a
 }
 
 
-void LIB_EDIT_FRAME::RedrawComponent( wxDC* aDC, wxPoint aOffset  )
-{
-    LIB_PART* part = GetCurPart();
-
-    if( part )
-    {
-        // display reference like in schematic (a reference U is shown U? or U?A)
-        // although it is stored without ? and part id.
-        // So temporary change the reference by a schematic like reference
-        LIB_FIELD*  field = part->GetField( REFERENCE );
-        wxString    fieldText = field->GetText();
-        wxString    fieldfullText = field->GetFullText( m_unit );
-
-        field->EDA_TEXT::SetText( fieldfullText );  // change the field text string only
-        auto opts = PART_DRAW_OPTIONS::Default();
-        opts.show_elec_type = GetShowElectricalType();
-        part->Draw( m_canvas, aDC, aOffset, m_unit, m_convert, opts );
-        field->EDA_TEXT::SetText( fieldText );      // restore the field text string
-    }
-}
-
-
 void LIB_EDIT_FRAME::OnSaveAll()
 {
     saveAllLibraries( false );

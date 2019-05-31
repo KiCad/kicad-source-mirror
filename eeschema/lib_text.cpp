@@ -30,7 +30,7 @@
 #include <macros.h>
 #include <sch_draw_panel.h>
 #include <plotter.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <trigo.h>
 #include <base_units.h>
 #include <msgpanel.h>
@@ -192,8 +192,7 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
     else
         color = COLOR4D::BLACK;
 
-    plotter->Text( pos, color, GetShownText(),
-                   t1 ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT,
+    plotter->Text( pos, color, GetShownText(), t1 ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT,
                    GetTextSize(), GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                    GetPenSize(), IsItalic(), IsBold() );
 }
@@ -217,8 +216,7 @@ int LIB_TEXT::GetPenSize() const
 }
 
 
-void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                            void* aData, const TRANSFORM& aTransform )
+void LIB_TEXT::print( wxDC* aDC, const wxPoint& aOffset, void* aData, const TRANSFORM& aTransform )
 {
     COLOR4D color = GetDefaultColor();
 
@@ -255,21 +253,16 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
     // Calculate pos according to mirror/rotation.
     txtpos = aTransform.TransformCoordinate( txtpos ) + aOffset;
 
-    EDA_RECT* clipbox = aPanel? aPanel->GetClipBox() : NULL;
-    DrawGraphicText( clipbox, aDC, txtpos, color, GetShownText(), orient, GetTextSize(),
-                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, GetPenSize(),
-                     IsItalic(), IsBold() );
+    GRText( aDC, txtpos, color, GetShownText(), orient, GetTextSize(), GR_TEXT_HJUSTIFY_CENTER,
+            GR_TEXT_VJUSTIFY_CENTER, GetPenSize(), IsItalic(), IsBold() );
 }
 
 
 void LIB_TEXT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 {
-    wxString msg;
-
     LIB_ITEM::GetMsgPanelInfo( aUnits, aList );
 
-    msg = MessageTextFromValue( aUnits, GetThickness(), true );
-
+    wxString msg = MessageTextFromValue( aUnits, GetThickness(), true );
     aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
 }
 

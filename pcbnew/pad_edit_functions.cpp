@@ -65,7 +65,7 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     if( aDraw )
     {
         aPad->SetFlags( DO_NOT_DRAW );
-        m_canvas->Refresh();
+        GetGalCanvas()->Refresh();
         aPad->ClearFlags( DO_NOT_DRAW );
     }
 
@@ -74,7 +74,7 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     aPad->ImportSettingsFromMaster( mp );
 
     if( aDraw )
-        m_canvas->Refresh();
+        GetGalCanvas()->Refresh();
 
     aPad->GetParent()->SetLastEditTime();
 
@@ -146,7 +146,7 @@ void PCB_BASE_FRAME::AddPad( MODULE* aModule, bool draw )
     SetMsgPanel( pad );
 
     if( draw )
-        m_canvas->Refresh();
+        GetGalCanvas()->Refresh();
 }
 
 

@@ -364,7 +364,7 @@ void PCB_EDIT_FRAME::SpreadFootprints( std::vector<MODULE*>* aFootprints,
 
     OnModify();
 
-    m_canvas->Refresh();
+    GetGalCanvas()->Refresh();
 }
 
 

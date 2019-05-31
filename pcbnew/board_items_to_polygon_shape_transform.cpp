@@ -35,7 +35,7 @@
 #include <fctsys.h>
 #include <bezier_curves.h>
 #include <base_units.h>     // for IU_PER_MM
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <trigo.h>
@@ -61,7 +61,7 @@ struct TSEGM_2_POLY_PRMS {
 };
 TSEGM_2_POLY_PRMS prms;
 
-// This is a call back function, used by DrawGraphicText to draw the 3D text shape:
+// This is a call back function, used by GRText to draw the 3D text shape:
 static void addTextSegmToPoly( int x0, int y0, int xf, int yf, void* aData )
 {
     TSEGM_2_POLY_PRMS* prm = static_cast<TSEGM_2_POLY_PRMS*>( aData );
@@ -250,11 +250,10 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLaye
         if( textmod->IsMirrored() )
             size.x = -size.x;
 
-        DrawGraphicText( NULL, NULL, textmod->GetTextPos(), BLACK,
-                         textmod->GetShownText(), textmod->GetDrawRotation(), size,
-                         textmod->GetHorizJustify(), textmod->GetVertJustify(),
-                         textmod->GetThickness(), textmod->IsItalic(),
-                         true, addTextSegmToPoly, &prms );
+        GRText( NULL, textmod->GetTextPos(), BLACK, textmod->GetShownText(),
+                textmod->GetDrawRotation(), size, textmod->GetHorizJustify(),
+                textmod->GetVertJustify(), textmod->GetThickness(), textmod->IsItalic(),
+                true, addTextSegmToPoly, &prms );
     }
 
 }
@@ -309,11 +308,10 @@ void MODULE::TransformGraphicTextWithClearanceToPolygonSet(
         if( textmod->IsMirrored() )
             size.x = -size.x;
 
-        DrawGraphicText( NULL, NULL, textmod->GetTextPos(), BLACK,
-                         textmod->GetShownText(), textmod->GetDrawRotation(), size,
-                         textmod->GetHorizJustify(), textmod->GetVertJustify(),
-                         textmod->GetThickness(), textmod->IsItalic(),
-                         true, addTextSegmToPoly, &prms );
+        GRText( NULL, textmod->GetTextPos(), BLACK, textmod->GetShownText(),
+                textmod->GetDrawRotation(), size, textmod->GetHorizJustify(),
+                textmod->GetVertJustify(), textmod->GetThickness(), textmod->IsItalic(),
+                true, addTextSegmToPoly, &prms );
     }
 
 }
@@ -407,7 +405,7 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
     prms.m_cornerBuffer = &aCornerBuffer;
     prms.m_textWidth = GetThickness() + ( 2 * aClearanceValue );
     prms.m_error = aError;
-    COLOR4D color = COLOR4D::BLACK;  // not actually used, but needed by DrawGraphicText
+    COLOR4D color = COLOR4D::BLACK;  // not actually used, but needed by GRText
 
     if( IsMultilineAllowed() )
     {
@@ -420,20 +418,14 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
         for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
             wxString txt = strings_list.Item( ii );
-            DrawGraphicText( NULL, NULL, positions[ii], color,
-                             txt, GetTextAngle(), size,
-                             GetHorizJustify(), GetVertJustify(),
-                             GetThickness(), IsItalic(),
-                             true, addTextSegmToPoly, &prms );
+            GRText( NULL, positions[ii], color, txt, GetTextAngle(), size, GetHorizJustify(),
+                    GetVertJustify(), GetThickness(), IsItalic(), true, addTextSegmToPoly, &prms );
         }
     }
     else
     {
-        DrawGraphicText( NULL, NULL, GetTextPos(), color,
-                         GetShownText(), GetTextAngle(), size,
-                         GetHorizJustify(), GetVertJustify(),
-                         GetThickness(), IsItalic(),
-                         true, addTextSegmToPoly, &prms );
+        GRText( NULL, GetTextPos(), color, GetShownText(), GetTextAngle(), size, GetHorizJustify(),
+                GetVertJustify(), GetThickness(), IsItalic(), true, addTextSegmToPoly, &prms );
     }
 }
 

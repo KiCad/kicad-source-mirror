@@ -77,17 +77,16 @@ class LIB_PIN : public LIB_ITEM
     int      m_nameTextSize; ///< Pin num and Pin name sizes
 
     /**
-     * Draw a pin, with or without the pin texts
+     * Print a pin, with or without the pin texts
      *
-     * @param aPanel DrawPanel to use (can be null) mainly used for clipping purposes.
      * @param aDC Device Context (can be null)
      * @param aOffset Offset to draw
      * @param aData = used here as a boolean indicating whether or not to draw the pin
      *                electrical types
      * @param aTransform Transform Matrix (rotation, mirror ..)
      */
-    void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
-                      const TRANSFORM& aTransform ) override;
+    void print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+                const TRANSFORM& aTransform ) override;
 
 public:
     LIB_PIN( LIB_PART* aParent );
@@ -356,11 +355,10 @@ public:
     int GetPenSize() const override;
 
     /**
-     * Draw the pin symbol without text.
+     * Print the pin symbol without text.
      * If \a aColor != 0, draw with \a aColor, else with the normal pin color.
      */
-    void DrawPinSymbol( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos,
-                        int aOrientation );
+    void PrintPinSymbol( wxDC* aDC, const wxPoint& aPos, int aOrientation );
 
     /**
      * Put the pin number and pin text info, given the pin line coordinates.
@@ -370,14 +368,13 @@ public:
      * If TextInside then the text is been put inside,otherwise all is drawn outside.
      * Pin Name:    substring between '~' is negated
      */
-    void DrawPinTexts( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint& aPosition,
-                       int aOrientation, int TextInside, bool DrawPinNum, bool DrawPinName );
+    void PrintPinTexts( wxDC* aDC, wxPoint& aPosition, int aOrientation, int TextInside,
+                        bool DrawPinNum, bool DrawPinName );
 
     /**
      * Draw the electrical type text of the pin (only for the footprint editor)
      */
-    void DrawPinElectricalTypeName( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint& aPosition,
-                                    int aOrientation );
+    void PrintPinElectricalTypeName( wxDC* aDC, wxPoint& aPosition, int aOrientation );
 
     /**
      * Plot the pin number and pin text info, given the pin line coordinates.

@@ -211,8 +211,8 @@ int LIB_BEZIER::GetPenSize() const
 }
 
 
-void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                              void* aData, const TRANSFORM& aTransform )
+void LIB_BEZIER::print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+                        const TRANSFORM& aTransform )
 {
     std::vector<wxPoint> PolyPointsTraslated;
 
@@ -228,21 +228,19 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
 
-    EDA_RECT* const clipbox  = aPanel? aPanel->GetClipBox() : NULL;
-
     if( fill == FILLED_WITH_BG_BODYCOLOR )
     {
-        GRPoly( clipbox, aDC, m_PolyPoints.size(), &PolyPointsTraslated[0], true, GetPenSize(),
+        GRPoly( nullptr, aDC, m_PolyPoints.size(), &PolyPointsTraslated[0], true, GetPenSize(),
                 bgColor, bgColor );
     }
     else if( fill == FILLED_SHAPE  )
     {
-        GRPoly( clipbox, aDC, m_PolyPoints.size(), &PolyPointsTraslated[0], true, GetPenSize(),
+        GRPoly( nullptr, aDC, m_PolyPoints.size(), &PolyPointsTraslated[0], true, GetPenSize(),
                 color, color );
     }
     else
     {
-        GRPoly( clipbox, aDC, m_PolyPoints.size(), &PolyPointsTraslated[0], false, GetPenSize(),
+        GRPoly( nullptr, aDC, m_PolyPoints.size(), &PolyPointsTraslated[0], false, GetPenSize(),
                 color, color );
     }
 }

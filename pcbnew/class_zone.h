@@ -42,7 +42,6 @@
 
 class EDA_RECT;
 class LINE_READER;
-class EDA_DRAW_PANEL;
 class PCB_EDIT_FRAME;
 class BOARD;
 class ZONE_CONTAINER;
@@ -102,42 +101,24 @@ public:
     virtual LSET GetLayerSet() const override;
 
     /**
-     * Function Draw
-     * Draws the zone outline.
-     * @param panel = current Draw Panel
+     * Function Print
+     * Prints the zone outline.
+     * @param aFrame = current Frame
      * @param DC = current Device Context
      * @param aDrawMode = GR_OR, GR_XOR, GR_COPY ..
      * @param offset = Draw offset (usually wxPoint(0,0))
      */
-    void Draw( EDA_DRAW_PANEL* panel,
-               wxDC*           DC,
-               GR_DRAWMODE     aDrawMode,
-               const wxPoint&  offset = ZeroOffset ) override;
+    void Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint&  offset = ZeroOffset ) override;
 
     /**
-     * Function DrawDrawFilledArea
+     * Function PrintFilledArea
      * Draws the filled  area for this zone (polygon list .m_FilledPolysList)
-     * @param panel = current Draw Panel
+     * @param aFrame = current Frame
      * @param DC = current Device Context
      * @param offset = Draw offset (usually wxPoint(0,0))
      * @param aDrawMode = GR_OR, GR_XOR, GR_COPY ..
      */
-    void DrawFilledArea( EDA_DRAW_PANEL* panel,
-                         wxDC*           DC,
-                         GR_DRAWMODE     aDrawMode,
-                         const wxPoint&  offset = ZeroOffset );
-
-    /**
-     * Function DrawWhileCreateOutline
-     * Draws the zone outline when it is created.
-     * The moving edges are in XOR graphic mode, old segment in draw_mode graphic mode
-     * (usually GR_OR).  The closing edge has its own shape.
-     * @param panel = current Draw Panel
-     * @param DC = current Device Context
-     * @param draw_mode = draw mode: OR, XOR ..
-     */
-    void DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC,
-                                 GR_DRAWMODE draw_mode = GR_OR );
+    void PrintFilledArea( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint&  offset = ZeroOffset );
 
     /** Function GetBoundingBox (virtual)
      * @return an EDA_RECT that is the bounding box of the zone outline

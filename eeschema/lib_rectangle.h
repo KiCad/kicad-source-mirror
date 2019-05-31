@@ -34,8 +34,8 @@ class LIB_RECTANGLE  : public LIB_ITEM
     wxPoint m_Pos;                  // Rectangle start point.
     int     m_Width;                // Line width
 
-    void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
-                      const TRANSFORM& aTransform ) override;
+    void print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+                const TRANSFORM& aTransform ) override;
 
 public:
     LIB_RECTANGLE( LIB_PART * aParent );

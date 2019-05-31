@@ -807,15 +807,14 @@ public:
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     /**
-     * Function Draw.
-     * Redraw the BOARD items but not cursors, axis or grid.
-     * @param aPanel = the panel relative to the board
+     * Function Print.
+     * Print the BOARD items.
+     * @param aFrame = the current Frame
      * @param aDC = the current device context
      * @param aDrawMode = GR_COPY, GR_OR ... (not always used)
      * @param aOffset = an draw offset value (default = 0,0)
      */
-    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-               GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset ) override;
+    void Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset = ZeroOffset ) override;
 
     /**
      * Function Visit

@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_field.cpp
- * @brief Implementation of the SCH_FIELD class.
- */
-
 /* Fields are texts attached to a component, having a special meaning
  * Fields 0 and 1 are very important: reference and value
  * Field 2 is used as default footprint name.
@@ -39,7 +34,7 @@
 #include <sch_draw_panel.h>
 #include <base_struct.h>
 #include <gr_basic.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <macros.h>
 #include <sch_edit_frame.h>
 #include <plotter.h>
@@ -150,7 +145,7 @@ int SCH_FIELD::GetPenSize() const
 }
 
 
-void SCH_FIELD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset )
+void SCH_FIELD::Print( wxDC* aDC, const wxPoint& aOffset )
 {
     int            orient;
     COLOR4D        color;
@@ -206,10 +201,8 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset 
     else
         color = GetLayerColor( LAYER_FIELDS );
 
-    EDA_RECT* clipbox = aPanel ? aPanel->GetClipBox() : NULL;
-    DrawGraphicText( clipbox, aDC, textpos, color, GetFullyQualifiedText(), orient, GetTextSize(),
-                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, lineWidth, IsItalic(),
-                     IsBold() );
+    GRText( aDC, textpos, color, GetFullyQualifiedText(), orient, GetTextSize(),
+            GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, lineWidth, IsItalic(), IsBold() );
 }
 
 
@@ -378,8 +371,7 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
 
         SCH_COMPONENT* component = (SCH_COMPONENT*) m_Parent;
 
-        wxCHECK_MSG( component != NULL, false,
-                     wxT( "No symbol associated with field" ) + text );
+        wxCHECK_MSG( component != NULL, false, wxT( "No symbol associated with field" ) + text );
 
         text = component->GetRef( (SCH_SHEET_PATH*) aAuxData );
 
@@ -540,8 +532,7 @@ void SCH_FIELD::SetPosition( const wxPoint& aPosition )
 wxPoint SCH_FIELD::GetPosition() const
 {
     SCH_COMPONENT* component = (SCH_COMPONENT*) GetParent();
-
-    wxPoint pos = GetTextPos() - component->GetPosition();
+    wxPoint        pos = GetTextPos() - component->GetPosition();
 
     return component->GetTransform().TransformCoordinate( pos ) + component->GetPosition();
 }

@@ -64,8 +64,6 @@ namespace KIGFX
 class PAD_DRAWINFO
 {
 public:
-    EDA_DRAW_PANEL* m_DrawPanel;  // the EDA_DRAW_PANEL used to draw a PAD ; can be null
-    GR_DRAWMODE m_DrawMode;       // the draw mode
     COLOR4D m_Color;              // color used to draw the pad shape , from pad layers and
                                   // visible layers
     COLOR4D m_HoleColor;          // color used to draw the pad hole
@@ -501,21 +499,17 @@ public:
     void SetThermalGap( int aGap ) { m_ThermalGap = aGap; }
     int GetThermalGap() const;
 
-    /* drawing functions */
-    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-               GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset ) override;
+    void Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset = ZeroOffset ) override;
 
     /**
-     * Function DrawShape
-     * basic function to draw a pad.
+     * Function PrintShape
+     * basic function to print a pad.
      * <p>
-     * This function is used by Draw after calculation of parameters (color, ) final
-     * orientation transforms are set. It can also be called to draw a pad on any panel
-     * even if this panel is not a EDA_DRAW_PANEL for instance on a wxPanel inside the
-     * pad editor.
+     * This function is used by Print after calculation of parameters (color, ) final
+     * orientation transforms are set.
      * </p>
      */
-    void DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo );
+    void PrintShape( wxDC* aDC, PAD_DRAWINFO& aDrawInfo );
 
     /**
      * Function BuildPadPolygon

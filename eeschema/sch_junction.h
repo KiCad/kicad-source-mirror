@@ -59,7 +59,7 @@ public:
 
     const EDA_RECT GetBoundingBox() const override;
 
-    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset ) override;
+    void Print( wxDC* aDC, const wxPoint& aOffset ) override;
 
     void Move( const wxPoint& aMoveVector ) override
     {

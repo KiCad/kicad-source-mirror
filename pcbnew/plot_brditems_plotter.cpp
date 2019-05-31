@@ -25,7 +25,7 @@
 #include <common.h>
 #include <plotter.h>
 #include <base_struct.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <trigo.h>
 #include <macros.h>
 #include <pcb_base_frame.h>

@@ -167,10 +167,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     auto& galOpts = GetGalDisplayOptions();
     galOpts.m_axesEnabled = true;
 
-    // Set up viewport
-    KIGFX::VIEW* view = GetGalCanvas()->GetView();
-    view->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
-    view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
+    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
 
     ActivateGalCanvas();
 
@@ -517,12 +514,9 @@ void DISPLAY_FOOTPRINTS_FRAME::SyncMenusAndToolbars()
 /*
  * Redraw the BOARD items but not cursors, axis or grid.
  */
-void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                  GR_DRAWMODE aDrawMode, const wxPoint& aOffset )
+void BOARD::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
 {
     if( m_Modules )
-    {
-        m_Modules->Draw( aPanel, aDC, GR_COPY );
-    }
+        m_Modules->Print( aFrame, aDC );
 }
 

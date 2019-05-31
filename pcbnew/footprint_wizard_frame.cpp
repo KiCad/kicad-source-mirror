@@ -228,11 +228,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     galOpts.m_forceDisplayCursor = true;
     galOpts.m_axesEnabled = true;
 
-    // Set up viewport
-    KIGFX::VIEW* view = GetGalCanvas()->GetView();
-    view->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
-    view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
-
+    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
     ActivateGalCanvas();
     updateView();
 
@@ -399,7 +395,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreatePageList()
     ReCreateParameterList();
     ReCreateHToolbar();
     DisplayWizardInfos();
-    m_canvas->Refresh();
+    GetGalCanvas()->Refresh();
 }
 
 
@@ -528,7 +524,7 @@ void FOOTPRINT_WIZARD_FRAME::ClickOnPageList( wxCommandEvent& event )
     if( m_pageList->GetSelection() > 0 )
     {
         ReCreateParameterList();
-        m_canvas->Refresh();
+        GetGalCanvas()->Refresh();
         DisplayWizardInfos();
     }
 }

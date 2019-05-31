@@ -237,5 +237,5 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
         m_Parent->Compile_Ratsnest( true );
 
     // There is a chance that some of tracks have changed their nets, so rebuild ratsnest from scratch
-    m_Parent->GetCanvas()->Refresh();
+    m_Parent->GetGalCanvas()->Refresh();
 }

@@ -277,7 +277,7 @@ void DIALOG_EXCHANGE_FOOTPRINTS::OnApplyClicked( wxCommandEvent& event )
         if( m_parent->GetBoard()->IsElementVisible( LAYER_RATSNEST ) )
             m_parent->Compile_Ratsnest( true );
 
-        m_parent->GetCanvas()->Refresh();
+        m_parent->GetGalCanvas()->Refresh();
     }
 
     m_commit.Push( wxT( "Changed footprint" ) );

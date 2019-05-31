@@ -87,7 +87,6 @@ typedef enum {
 } GRLineStypeType;
 
 
-class EDA_DRAW_PANEL;
 
 void GRSetDrawMode( wxDC* DC, GR_DRAWMODE mode );
 GR_DRAWMODE  GRGetDrawMode( wxDC* DC );

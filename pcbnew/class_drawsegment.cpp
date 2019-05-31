@@ -335,32 +335,20 @@ MODULE* DRAWSEGMENT::GetParentModule() const
 }
 
 
-void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
-                        const wxPoint& aOffset )
+void DRAWSEGMENT::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& aOffset )
 {
     int ux0, uy0, dx, dy;
     int l_trace;
     int radius;
 
-    PCB_LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-
-    BOARD * brd =  GetBoard( );
+    BOARD* brd =  GetBoard( );
 
     if( brd->IsLayerVisible( GetLayer() ) == false )
         return;
 
-    auto frame = static_cast<PCB_EDIT_FRAME*> ( panel->GetParent() );
-    auto color = frame->Settings().Colors().GetLayerColor( GetLayer() );
+    auto color = aFrame->Settings().Colors().GetLayerColor( GetLayer() );
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*) aFrame->GetDisplayOptions();
 
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*) panel->GetDisplayOptions();
-
-    if( ( draw_mode & GR_ALLOW_HIGHCONTRAST ) &&  displ_opts && displ_opts->m_ContrastModeDisplay )
-    {
-        if( !IsOnLayer( curr_layer ) && !IsOnLayer( Edge_Cuts ) )
-            color = COLOR4D( DARKDARKGRAY );
-    }
-
-    GRSetDrawMode( DC, draw_mode );
     l_trace = m_Width >> 1;         // half trace width
 
     // Line start point or Circle and Arc center
@@ -383,12 +371,12 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 
         if( filled )
         {
-            GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius, m_Width, color );
+            GRCircle( nullptr, DC, ux0, uy0, radius, m_Width, color );
         }
         else
         {
-            GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius - l_trace, color );
-            GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius + l_trace, color );
+            GRCircle( nullptr, DC, ux0, uy0, radius - l_trace, color );
+            GRCircle( nullptr, DC, ux0, uy0, radius + l_trace, color );
         }
 
         break;
@@ -399,33 +387,17 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
         StAngle  = ArcTangente( dy - uy0, dx - ux0 );
         EndAngle = StAngle + m_Angle;
 
-        if( !panel->GetPrintMirrored() )
-        {
-            if( StAngle > EndAngle )
-                std::swap( StAngle, EndAngle );
-        }
-        else    // Mirrored mode: arc orientation is reversed
-        {
-#ifdef __WXMAC__    // wxWidgets OSX print driver handles arc mirroring for us
-            if( StAngle > EndAngle )
-                std::swap( StAngle, EndAngle );
-#else
-            if( StAngle < EndAngle )
-                std::swap( StAngle, EndAngle );
-#endif
-        }
+        if( StAngle > EndAngle )
+            std::swap( StAngle, EndAngle );
 
         if( filled )
         {
-            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle,
-                   radius, m_Width, color );
+            GRArc( nullptr, DC, ux0, uy0, StAngle, EndAngle, radius, m_Width, color );
         }
         else
         {
-            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle,
-                   radius - l_trace, color );
-            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle,
-                   radius + l_trace, color );
+            GRArc( nullptr, DC, ux0, uy0, StAngle, EndAngle, radius - l_trace, color );
+            GRArc( nullptr, DC, ux0, uy0, StAngle, EndAngle, radius + l_trace, color );
         }
 
         break;
@@ -441,11 +413,9 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
                 wxPoint& endp = m_BezierPoints[i];
 
                 if( filled )
-                    GRFilledSegment( panel->GetClipBox(), DC,
-                                     startp+aOffset, endp+aOffset, m_Width, color );
+                    GRFilledSegment( nullptr, DC, startp+aOffset, endp+aOffset, m_Width, color );
                 else
-                    GRCSegm( panel->GetClipBox(), DC,
-                             startp+aOffset, endp+aOffset, m_Width, color );
+                    GRCSegm( nullptr, DC, startp+aOffset, endp+aOffset, m_Width, color );
 
                 startp = m_BezierPoints[i];
             }
@@ -461,22 +431,17 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
             for( int jj = 0; jj < outline.OutlineCount(); ++jj )
             {
                 SHAPE_LINE_CHAIN& poly = outline.Outline( jj );
-                GRClosedPoly( panel->GetClipBox(), DC, poly.PointCount(),
-                        (wxPoint*)&poly.Point( 0 ), IsPolygonFilled(), GetWidth(),
-                        color, color );
+                GRClosedPoly( nullptr, DC, poly.PointCount(), (wxPoint*)&poly.Point( 0 ),
+                              IsPolygonFilled(), GetWidth(), color, color );
             }
         }
         break;
 
     default:
         if( filled )
-        {
-            GRFillCSegm( panel->GetClipBox(), DC, ux0, uy0, dx, dy, m_Width, color );
-        }
+            GRFillCSegm( nullptr, DC, ux0, uy0, dx, dy, m_Width, color );
         else
-        {
-            GRCSegm( panel->GetClipBox(), DC, ux0, uy0, dx, dy, m_Width, color );
-        }
+            GRCSegm( nullptr, DC, ux0, uy0, dx, dy, m_Width, color );
 
         break;
     }

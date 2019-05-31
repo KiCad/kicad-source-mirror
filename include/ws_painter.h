@@ -31,7 +31,6 @@
 #include <page_info.h>
 
 // Forward declarations:
-class EDA_DRAW_PANEL;
 class EDA_RECT;
 class TITLE_BLOCK;
 
@@ -129,10 +128,9 @@ private:
 
 
 /**
- * Function DrawPageLayout is a core function to draw the page layout with
- * the frame and the basic inscriptions.
+ * Function PrintPageLayout is a core function to print the page layout with the frame and the
+ * basic inscriptions.
  * @param aDC The device context.
- * @param aClipBox = the clipping rect, or NULL if no clipping.
  * @param aPageInfo for margins and page size (in mils).
  * @param aFullSheetName The sheetpath (full sheet name), for basic inscriptions.
  * @param aFileName The file name, for basic inscriptions.
@@ -142,7 +140,6 @@ private:
  * @param aPenWidth the pen size The line width for drawing.
  * @param aScalar the scale factor to convert from mils to internal units.
  * @param aColor The color for drawing.
- * @param aAltColor The color for items which need to be "hightlighted".
  * @param aSheetLayer The layer from pcbnew.
  *
  * Parameters used in aPageInfo
@@ -150,18 +147,9 @@ private:
  * - the LTmargin The left top margin of the page layout.
  * - the RBmargin The right bottom margin of the page layout.
  */
-void DrawPageLayout( wxDC*            aDC,
-                     EDA_RECT*        aClipBox,
-                     const PAGE_INFO& aPageInfo,
-                     const wxString&  aFullSheetName,
-                     const wxString&  aFileName,
-                     TITLE_BLOCK&     aTitleBlock,
-                     int              aSheetCount,
-                     int              aSheetNumber,
-                     int              aPenWidth,
-                     double           aScalar,
-                     COLOR4D          aColor,
-                     const wxString&  aSheetLayer = wxEmptyString );
-
+void PrintPageLayout( wxDC* aDC, const PAGE_INFO& aPageInfo, const wxString& aFullSheetName,
+                      const wxString& aFileName, const TITLE_BLOCK& aTitleBlock, int aSheetCount,
+                      int aSheetNumber, int aPenWidth, double aScalar, COLOR4D aColor,
+                      const wxString& aSheetLayer = wxEmptyString );
 
 #endif // WS_PAINTER_H

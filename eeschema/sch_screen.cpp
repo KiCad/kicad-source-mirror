@@ -38,7 +38,7 @@
 #include <kiway.h>
 #include <sch_draw_panel.h>
 #include <sch_item.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <sch_edit_frame.h>
 #include <plotter.h>
 
@@ -524,12 +524,8 @@ void SCH_SCREEN::UpdateSymbolLinks( bool aForce )
 }
 
 
-void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
+void SCH_SCREEN::Print( wxDC* aDC )
 {
-    /* note: SCH_SCREEN::Draw is useful only for schematic.
-     * library editor and library viewer do not use m_drawList, and therefore
-     * their SCH_SCREEN::Draw() draws nothing
-     */
     std::vector< SCH_ITEM* > junctions;
 
     // Ensure links are up to date, even if a library was reloaded for some reason:
@@ -543,30 +539,11 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
         if( item->Type() == SCH_JUNCTION_T )
             junctions.push_back( item );
         else
-            // uncomment line below when there is a virtual EDA_ITEM::GetBoundingBox()
-            // if( panel->GetClipBox().Intersects( item->GetBoundingBox() ) )
-            item->Draw( aCanvas, aDC, wxPoint( 0, 0 ) );
-
-        // TODO(JE) Remove debugging code
-#ifdef DEBUG
-
-        auto conn = item->Connection( *g_CurrentSheet );
-
-        if( conn )
-        {
-            auto pos = item->GetBoundingBox().Centre();
-            int sz = Mils2iu( 15 );
-            auto label = conn->Name( true );
-
-            auto text = SCH_TEXT( pos, label, SCH_TEXT_T );
-            text.SetTextSize( wxSize( sz, sz ) );
-            text.Draw( aCanvas, aDC, wxPoint( 10, 10 ) );
-        }
-#endif
+            item->Print( aDC, wxPoint( 0, 0 ) );
     }
 
     for( auto item : junctions )
-        item->Draw( aCanvas, aDC, wxPoint( 0, 0 ) );
+        item->Print( aDC, wxPoint( 0, 0 ) );
 }
 
 

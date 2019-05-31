@@ -50,7 +50,6 @@
 
 class LINE_READER;
 class EDA_3D_CANVAS;
-class EDA_DRAW_PANEL;
 class D_PAD;
 class BOARD;
 class MSG_PANEL_ITEM;
@@ -318,17 +317,13 @@ public:
     /* drawing functions */
 
     /**
-     * Function Draw
-     * draws the footprint to the \a aDC.
-     * @param aPanel = draw panel, Used to know the clip box
+     * Function Print
+     * Prints the footprint to the \a aDC.
+     * @param aFrame = the current Frame
      * @param aDC = Current Device Context
-     * @param aDrawMode = GR_OR, GR_XOR..
      * @param aOffset = draw offset (usually wxPoint(0,0)
      */
-    void Draw( EDA_DRAW_PANEL* aPanel,
-            wxDC* aDC,
-            GR_DRAWMODE aDrawMode,
-            const wxPoint& aOffset = ZeroOffset ) override;
+    void Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset = ZeroOffset ) override;
 
     /**
      * function TransformPadsShapesWithClearanceToPolygon
@@ -381,26 +376,6 @@ public:
      */
     void TransformGraphicTextWithClearanceToPolygonSet( PCB_LAYER_ID aLayer,
             SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aError = ARC_HIGH_DEF ) const;
-
-    /**
-     * Function DrawEdgesOnly
-     *  Draws the footprint edges only to the current Device Context
-     *  @param panel = The active Draw Panel (used to know the clip box)
-     *  @param DC = current Device Context
-     *  @param offset = draw offset (usually wxPoint(0,0)
-     *  @param draw_mode =  GR_OR, GR_XOR, GR_AND
-     */
-    void DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-            GR_DRAWMODE draw_mode );
-
-    /**
-     * Function DrawAncre
-     * Draw the anchor cross (vertical)
-     * Must be done after the pads, because drawing the hole will erase overwrite
-     * every thing already drawn.
-     */
-    void DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC,
-            const wxPoint& offset, int dim_ancre, GR_DRAWMODE draw_mode );
 
     ///> @copydoc EDA_ITEM::GetMsgPanelInfo
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
@@ -476,8 +451,7 @@ public:
      * returns a D_PAD* with a matching name.  Note that names may not be
      * unique, depending on how the foot print was created.
      * @param aPadName the pad name to find
-     * @return D_PAD* - The first matching name is returned, or NULL if not
-     *                  found.
+     * @return D_PAD* - The first matching name is returned, or NULL if not found.
      */
     D_PAD* FindPadByName( const wxString& aPadName ) const;
 
@@ -521,8 +495,8 @@ public:
      * Function GetNextPadName
      * returns the next available pad name in the module
      *
-     * @param aFillSequenceGaps true if the numbering should "fill in" gaps in
-     * the sequence, else return the highest value + 1
+     * @param aFillSequenceGaps true if the numbering should "fill in" gaps in the sequence,
+     *                          else return the highest value + 1
      * @return the next available pad name
      */
     wxString GetNextPadName( bool aFillSequenceGaps ) const;
@@ -606,7 +580,6 @@ public:
      *
      * @param aModule is the #MODULE to copy the settings to.
      * @param aCopyLocalSettings = false to copy only module placement
-     *   true to also copy local prms
      */
     void CopyNetlistSettings( MODULE* aModule, bool aCopyLocalSettings );
 
@@ -632,17 +605,16 @@ public:
     /**
      * Function SetInitialComments
      * takes ownership of caller's heap allocated aInitialComments block.  The comments
-     * are single line strings already containing the s-expression comments with
-     * optional leading whitespace and then a '#' character followed by optional
-     * single line text (text with no line endings, not even one).
+     * are single line strings already containing the s-expression comments with optional
+     * leading whitespace and then a '#' character followed by optional single line text
+     * (text with no line endings, not even one).
      * This block of single line comments will be output upfront of any generated
      * s-expression text in the PCBIO::Format() function.
      * <p>
-     * Note that a block of single line comments constitutes a multiline block of
-     * single line comments.  That is, the block is made of consecutive single line
-     * comments.
+     * Note that a block of single line comments constitutes a multiline block of single
+     * line comments.  That is, the block is made of consecutive single line comments.
      * @param aInitialComments is a heap allocated wxArrayString or NULL, which the caller
-     *  gives up ownership of over to this MODULE.
+     *                         gives up ownership of over to this MODULE.
      */
     void SetInitialComments( wxArrayString* aInitialComments )
     {

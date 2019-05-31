@@ -26,7 +26,7 @@
 
 #include <class_drawpanel.h>
 #include <confirm.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <fctsys.h>
 #include <gr_basic.h>
 

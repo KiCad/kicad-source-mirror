@@ -37,7 +37,7 @@
 #include <trigo.h>
 #include <macros.h>
 #include <base_screen.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 
 #include <basic_gal.h>
 
@@ -98,9 +98,8 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool aItalic, 
 
 
 /**
- * Function DrawGraphicText
+ * Function GRText
  * Draw a graphic text (like module texts)
- *  @param aClipBox = the clipping rect, or NULL if no clipping
  *  @param aDC = the current Device Context. NULL if draw within a 3D GL Canvas
  *  @param aPos = text position (according to h_justify, v_justify)
  *  @param aColor (COLOR4D) = text color
@@ -122,23 +121,13 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool aItalic, 
  *  @param aPlotter = a pointer to a PLOTTER instance, when this function is used to plot
  *                  the text. NULL to draw this text.
  */
-void DrawGraphicText( EDA_RECT* aClipBox,
-                      wxDC* aDC,
-                      const wxPoint& aPos,
-                      COLOR4D aColor,
-                      const wxString& aText,
-                      double aOrient,
-                      const wxSize& aSize,
-                      enum EDA_TEXT_HJUSTIFY_T aH_justify,
-                      enum EDA_TEXT_VJUSTIFY_T aV_justify,
-                      int aWidth,
-                      bool aItalic,
-                      bool aBold,
-                      void (* aCallback)( int x0, int y0, int xf, int yf, void* aData ),
-                      void* aCallbackData,
-                      PLOTTER* aPlotter )
+void GRText( wxDC* aDC, const wxPoint& aPos, COLOR4D aColor, const wxString& aText,
+             double aOrient, const wxSize& aSize, enum EDA_TEXT_HJUSTIFY_T aH_justify,
+             enum EDA_TEXT_VJUSTIFY_T aV_justify, int aWidth, bool aItalic, bool aBold,
+             void (* aCallback)( int x0, int y0, int xf, int yf, void* aData ),
+             void* aCallbackData, PLOTTER* aPlotter )
 {
-    bool    fill_mode = true;
+    bool fill_mode = true;
 
     if( aWidth == 0 && aBold ) // Use default values if aWidth == 0
         aWidth = GetPenSizeForBold( std::min( aSize.x, aSize.y ) );
@@ -171,26 +160,18 @@ void DrawGraphicText( EDA_RECT* aClipBox,
     basic_gal.SetCallback( aCallback, aCallbackData );
     basic_gal.m_DC = aDC;
     basic_gal.m_Color = aColor;
-    basic_gal.SetClipBox( aClipBox );
+    basic_gal.SetClipBox( nullptr );
 
     basic_gal.StrokeText( aText, VECTOR2D( aPos ), aOrient * M_PI/1800 );
 }
 
 
-void DrawGraphicHaloText( EDA_RECT* aClipBox, wxDC * aDC,
-                          const wxPoint &aPos,
-                          const COLOR4D aBgColor,
-                          COLOR4D aColor1,
-                          COLOR4D aColor2,
-                          const wxString &aText,
-                          double aOrient,
-                          const wxSize &aSize,
-                          enum EDA_TEXT_HJUSTIFY_T aH_justify,
-                          enum EDA_TEXT_VJUSTIFY_T aV_justify,
-                          int aWidth, bool aItalic, bool aBold,
-                          void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ),
-                          void* aCallbackData,
-                          PLOTTER * aPlotter )
+void GRHaloText( wxDC * aDC, const wxPoint &aPos, const COLOR4D aBgColor, COLOR4D aColor1,
+                 COLOR4D aColor2, const wxString &aText, double aOrient, const wxSize &aSize,
+                 enum EDA_TEXT_HJUSTIFY_T aH_justify, enum EDA_TEXT_VJUSTIFY_T aV_justify,
+                 int aWidth, bool aItalic, bool aBold,
+                 void (*aCallback)( int x0, int y0, int xf, int yf, void* aData ),
+                 void* aCallbackData, PLOTTER * aPlotter )
 {
     // Swap color if contrast would be better
     // TODO: Maybe calculate contrast some way other than brightness
@@ -202,19 +183,17 @@ void DrawGraphicHaloText( EDA_RECT* aClipBox, wxDC * aDC,
     }
 
     // Draw the background
-    DrawGraphicText( aClipBox, aDC, aPos, aColor1, aText, aOrient, aSize,
-                     aH_justify, aV_justify, aWidth, aItalic, aBold,
-                     aCallback, aCallbackData, aPlotter );
+    GRText( aDC, aPos, aColor1, aText, aOrient, aSize, aH_justify, aV_justify, aWidth, aItalic,
+            aBold, aCallback, aCallbackData, aPlotter );
 
     // Draw the text
-    DrawGraphicText( aClipBox, aDC, aPos, aColor2, aText, aOrient, aSize,
-                     aH_justify, aV_justify, aWidth/4, aItalic, aBold,
-                     aCallback, aCallbackData, aPlotter );
+    GRText( aDC, aPos, aColor2, aText, aOrient, aSize, aH_justify, aV_justify, aWidth/4, aItalic,
+            aBold, aCallback, aCallbackData, aPlotter );
 }
 
 /**
  * Function PLOTTER::Text
- * same as DrawGraphicText, but plot graphic text insteed of draw it
+ * same as GRText, but plot graphic text insteed of draw it
  *  @param aPos = text position (according to aH_justify, aV_justify)
  *  @param aColor (COLOR4D) = text color
  *  @param aText = text to draw
@@ -258,10 +237,8 @@ void PLOTTER::Text( const wxPoint&              aPos,
 
     SetColor( aColor );
 
-    DrawGraphicText( NULL, NULL, aPos, aColor, aText,
-                     aOrient, aSize,
-                     aH_justify, aV_justify,
-                     textPensize, aItalic, aBold, nullptr, nullptr, this );
+    GRText( NULL, aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify, textPensize,
+            aItalic, aBold, nullptr, nullptr, this );
 
     if( aWidth != textPensize )
         SetCurrentLineWidth( aWidth, aData );

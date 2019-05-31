@@ -36,7 +36,6 @@
 #include <msgpanel.h>
 #include <draw_frame.h>
 #include <confirm.h>
-#include <kicad_device_context.h>
 #include <dialog_helpers.h>
 #include <base_units.h>
 #include <math/box2.h>
@@ -141,7 +140,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_showPageLimits      = false;
     m_drawBgColor         = COLOR4D( BLACK );   // the background color of the draw canvas:
                                                 // BLACK for Pcbnew, BLACK or WHITE for eeschema
-    m_snapToGrid          = true;
     m_MsgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight();
     m_movingCursorWithKeyboard = false;
     m_zoomLevelCoeff      = 1.0;
@@ -174,8 +172,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
         // units display, Inches is bigger than mm
         GetTextSize( _( "Inches" ), stsbar ).x + 10,
 
-        // Size for the panel used as "Current tool in play": will take longest string from
-        // void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent ) in pcbnew/edit.cpp
+        // Size for the "Current Tool" panel; longest string from SetToolID()
         GetTextSize( wxT( "Add layer alignment target" ), stsbar ).x + 10,
     };
 
@@ -470,10 +467,6 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 {
     // Keep default cursor in toolbars
     SetCursor( wxNullCursor );
-
-    // Change m_canvas cursor if requested.
-    if( m_canvas && aCursor >= 0 )
-        m_canvas->SetCurrentCursor( aCursor );
 
     // Change GAL canvas cursor if requested.
     if( aCursor >= 0 )
@@ -915,18 +908,10 @@ void EDA_DRAW_FRAME::FocusOnLocation( const wxPoint& aPos, bool aWarpCursor, boo
 }
 
 
-void DrawPageLayout( wxDC*            aDC,
-                     EDA_RECT*        aClipBox,
-                     const PAGE_INFO& aPageInfo,
-                     const wxString&  aFullSheetName,
-                     const wxString&  aFileName,
-                     TITLE_BLOCK&     aTitleBlock,
-                     int              aSheetCount,
-                     int              aSheetNumber,
-                     int              aPenWidth,
-                     double           aScalar,
-                     COLOR4D          aColor,
-                     const wxString&  aSheetLayer )
+void PrintPageLayout( wxDC* aDC, const PAGE_INFO& aPageInfo, const wxString& aFullSheetName,
+                      const wxString& aFileName, const TITLE_BLOCK& aTitleBlock, int aSheetCount,
+                      int aSheetNumber, int aPenWidth, double aScalar, COLOR4D aColor,
+                      const wxString& aSheetLayer )
 {
     WS_DRAW_ITEM_LIST drawList;
 
@@ -941,46 +926,32 @@ void DrawPageLayout( wxDC*            aDC,
     drawList.BuildWorkSheetGraphicList( aPageInfo, aTitleBlock );
 
     // Draw item list
-    drawList.Draw( aClipBox, aDC, aColor );
+    drawList.Print( aDC, aColor );
 }
 
 
-void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
-                                    double aScalar, const wxString &aFilename,
-                                    const wxString &aSheetLayer, COLOR4D aColor )
+void EDA_DRAW_FRAME::PrintWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
+                                     double aScalar, const wxString &aFilename,
+                                     const wxString &aSheetLayer, COLOR4D aColor )
 {
     if( !m_showBorderAndTitleBlock )
         return;
 
-    const PAGE_INFO&  pageInfo = GetPageSettings();
-    wxSize  pageSize = pageInfo.GetSizeMils();
-
-    // if not printing, draw the page limits:
-    if( !aScreen->m_IsPrinting && m_showPageLimits )
-    {
-        GRSetDrawMode( aDC, GR_COPY );
-        GRRect( m_canvas->GetClipBox(), aDC, 0, 0,
-                pageSize.x * aScalar, pageSize.y * aScalar, aLineWidth,
-                m_drawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
-    }
-
-    TITLE_BLOCK t_block = GetTitleBlock();
     COLOR4D color = ( aColor != COLOR4D::UNSPECIFIED ) ? aColor : COLOR4D( RED );
 
     wxPoint origin = aDC->GetDeviceOrigin();
 
-    if( aScreen->m_IsPrinting && origin.y > 0 )
+    if( origin.y > 0 )
     {
         aDC->SetDeviceOrigin( 0, 0 );
         aDC->SetAxisOrientation( true, false );
     }
 
-    DrawPageLayout( aDC, m_canvas->GetClipBox(), pageInfo,
-                    GetScreenDesc(), aFilename, t_block,
-                    aScreen->m_NumberOfScreens, aScreen->m_ScreenNumber,
-                    aLineWidth, aScalar, color, aSheetLayer );
+    PrintPageLayout( aDC, GetPageSettings(), GetScreenDesc(), aFilename, GetTitleBlock(),
+                     aScreen->m_NumberOfScreens, aScreen->m_ScreenNumber, aLineWidth, aScalar,
+                     color, aSheetLayer );
 
-    if( aScreen->m_IsPrinting && origin.y > 0 )
+    if( origin.y > 0 )
     {
         aDC->SetDeviceOrigin( origin.x, origin.y );
         aDC->SetAxisOrientation( true, true );
@@ -990,8 +961,7 @@ void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWi
 
 wxString EDA_DRAW_FRAME::GetScreenDesc() const
 {
-    // Virtual function. In basic class, returns
-    // an empty string.
+    // Virtual function. In basic class, returns an empty string.
     return wxEmptyString;
 }
 

@@ -106,7 +106,7 @@ public:
      */
     bool IsMovableFromAnchorPoint() override { return true; }
 
-    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset ) override;
+    void Print( wxDC* aDC, const wxPoint& aOffset ) override;
 
     /**
      * Calculate the graphic shape (a polygon) associated to the text.
@@ -395,7 +395,7 @@ public:
 
     int GetPenSize() const override;
 
-    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset ) override;
+    void Print( wxDC* aDC, const wxPoint& aOffset ) override;
 
     EDA_RECT const GetBoundingBox() const override;
 

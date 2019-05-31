@@ -124,7 +124,7 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
     }
 
     updateView();
-    m_canvas->Refresh();
+    GetGalCanvas()->Refresh();
 }
 
 

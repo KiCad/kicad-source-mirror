@@ -254,6 +254,6 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
     {
         OnModify();
         commit.Push( "Layers moved" );
-        GetCanvas()->Refresh();
+        GetGalCanvas()->Refresh();
     }
 }

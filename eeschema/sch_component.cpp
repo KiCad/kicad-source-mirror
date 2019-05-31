@@ -541,7 +541,7 @@ int SCH_COMPONENT::GetUnitCount() const
 }
 
 
-void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset )
+void SCH_COMPONENT::Print( wxDC* aDC, const wxPoint& aOffset )
 {
     auto opts = PART_DRAW_OPTIONS::Default();
     opts.transform = m_transform;
@@ -550,29 +550,28 @@ void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOff
 
     if( PART_SPTR part = m_part.lock() )
     {
-        part->Draw( aPanel, aDC, m_Pos + aOffset, m_unit, m_convert, opts );
+        part->Print( aDC, m_Pos + aOffset, m_unit, m_convert, opts );
     }
     else    // Use dummy() part if the actual cannot be found.
     {
-        dummy()->Draw( aPanel, aDC, m_Pos + aOffset, 0, 0, opts );
+        dummy()->Print( aDC, m_Pos + aOffset, 0, 0, opts );
     }
 
     SCH_FIELD* field = GetField( REFERENCE );
 
     if( field->IsVisible() )
-        field->Draw( aPanel, aDC, aOffset );
+        field->Print(aDC, aOffset );
 
     for( int ii = VALUE; ii < GetFieldCount(); ii++ )
     {
         field = GetField( ii );
-        field->Draw( aPanel, aDC, aOffset );
+        field->Print( aDC, aOffset );
     }
 }
 
 
-void SCH_COMPONENT::AddHierarchicalReference( const wxString& aPath,
-                                              const wxString& aRef,
-                                              int             aMulti )
+void SCH_COMPONENT::AddHierarchicalReference( const wxString& aPath, const wxString& aRef,
+                                              int aMulti )
 {
     wxString          h_path, h_ref;
     wxStringTokenizer tokenizer;

@@ -44,7 +44,7 @@
 #include <sch_bus_entry.h>
 #include <sch_bitmap.h>
 #include <sch_sheet.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <geometry/geometry_utils.h>
 #include <lib_edit_frame.h>
 #include <plotter.h>

@@ -222,15 +222,14 @@ public:
     void UpdateSymbolLinks( bool aForce = false );
 
     /**
-     * Draw all the items in the screen to \a aCanvas.
+     * Print all the items in the screen to \a aDC.
      *
      * @note This function is useful only for schematic.  The library editor and library viewer
      *       do not use a draw list and therefore draws nothing.
      *
-     * @param aCanvas The canvas item to draw on.
      * @param aDC The device context to draw on.
      */
-    void Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC );
+    void Print( wxDC* aDC );
 
     /**
      * Plot all the schematic objects to \a aPlotter.

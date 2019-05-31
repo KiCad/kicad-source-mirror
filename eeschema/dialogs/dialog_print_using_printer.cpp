@@ -88,7 +88,7 @@ public:
     bool HasPage( int page ) override;
     bool OnBeginDocument( int startPage, int endPage ) override;
     void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo ) override;
-    void DrawPage( SCH_SCREEN* aScreen );
+    void PrintPage( SCH_SCREEN* aScreen );
 };
 
 
@@ -321,7 +321,7 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
     m_parent->GetCurrentSheet().UpdateAllScreenReferences();
     m_parent->SetSheetNumberAndCount();
     screen = m_parent->GetCurrentSheet().LastScreen();
-    DrawPage( screen );
+    PrintPage( screen );
     m_parent->SetCurrentSheet( oldsheetpath );
     m_parent->GetCurrentSheet().UpdateAllScreenReferences();
     m_parent->SetSheetNumberAndCount();
@@ -369,16 +369,14 @@ bool SCH_PRINTOUT::OnBeginDocument( int startPage, int endPage )
 /*
  * This is the real print function: print the active screen
  */
-void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
+void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
 {
     int      oldZoom;
     wxPoint  tmp_startvisu;
     wxSize   pageSizeIU;             // Page size in internal units
     wxPoint  old_org;
-    EDA_RECT oldClipBox;
     wxRect   fitRect;
     wxDC*    dc = GetDC();
-    auto panel = m_parent->GetCanvas();
 
     wxBusyCursor dummy;
 
@@ -386,13 +384,6 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
     tmp_startvisu = aScreen->m_StartVisu;
     oldZoom = aScreen->GetZoom();
     old_org = aScreen->m_DrawOrg;
-
-    oldClipBox = *panel->GetClipBox();
-
-    // Change clip box to print the whole page.
-    #define MAX_VALUE (INT_MAX/2)   // MAX_VALUE is the max we can use in an integer
-                                    // and that allows calculations without overflow
-    panel->SetClipBox( EDA_RECT( wxPoint( 0, 0 ), wxSize( MAX_VALUE, MAX_VALUE ) ) );
 
     // Change scale factor and offset to print the whole page.
     bool printReference = m_parent->GetPrintSheetReference();
@@ -437,23 +428,23 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
     m_parent->SetDrawBgColor( COLOR4D::WHITE );
 
     GRSetDrawMode( dc, GR_COPY );
-    GRSFilledRect( nullptr, dc, fitRect.GetX(), fitRect.GetY(),
-                   fitRect.GetRight(), fitRect.GetBottom(),
-                   0, COLOR4D::WHITE, COLOR4D::WHITE );
+    GRSFilledRect( nullptr, dc, fitRect.GetX(), fitRect.GetY(), fitRect.GetRight(),
+                   fitRect.GetBottom(), 0, COLOR4D::WHITE, COLOR4D::WHITE );
 
     if( m_parent->GetPrintMonochrome() )
         GRForceBlackPen( true );
 
-    aScreen->Draw( panel, dc );
+    aScreen->Print( dc );
 
     if( printReference )
-        m_parent->DrawWorkSheet( dc, aScreen, GetDefaultLineThickness(),
-                IU_PER_MILS, aScreen->GetFileName(), wxEmptyString,
-                GetLayerColor( ( SCH_LAYER_ID )LAYER_WORKSHEET ) );
+    {
+        m_parent->PrintWorkSheet( dc, aScreen, GetDefaultLineThickness(), IU_PER_MILS,
+                                  aScreen->GetFileName(), wxEmptyString,
+                                  GetLayerColor( ( SCH_LAYER_ID )LAYER_WORKSHEET ) );
+    }
 
     m_parent->SetDrawBgColor( bgColor );
     aScreen->m_IsPrinting = false;
-    panel->SetClipBox( oldClipBox );
 
     GRForceBlackPen( false );
 

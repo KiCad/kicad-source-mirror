@@ -71,12 +71,9 @@ NETINFO_ITEM::~NETINFO_ITEM()
 
 
 /**
- * Function Draw (TODO)
+ * Function Print (TODO)
  */
-void NETINFO_ITEM::Draw( EDA_DRAW_PANEL* panel,
-                         wxDC*           DC,
-                         GR_DRAWMODE     aDrawMode,
-                         const wxPoint&  aOffset )
+void NETINFO_ITEM::Print( PCB_BASE_FRAME* frame, wxDC* DC, const wxPoint& aOffset )
 {
 }
 

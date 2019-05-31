@@ -39,8 +39,8 @@
  */
 class LIB_TEXT : public LIB_ITEM, public EDA_TEXT
 {
-    void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
-                      const TRANSFORM& aTransform ) override;
+    void print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+                const TRANSFORM& aTransform ) override;
 
 public:
     LIB_TEXT( LIB_PART * aParent );
@@ -101,16 +101,13 @@ public:
     wxPoint GetPosition() const override { return EDA_TEXT::GetTextPos(); }
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
-
     void MirrorVertical( const wxPoint& aCenter ) override;
-
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                const TRANSFORM& aTransform ) override;
 
     int GetWidth() const override { return GetThickness(); }
-
     void SetWidth( int aWidth ) override { SetThickness( aWidth ); }
 
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;

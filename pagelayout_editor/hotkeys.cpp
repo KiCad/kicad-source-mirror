@@ -25,7 +25,6 @@
 
 #include <fctsys.h>
 #include <common.h>
-#include <kicad_device_context.h>
 #include <id.h>
 
 #include <class_drawpanel.h>

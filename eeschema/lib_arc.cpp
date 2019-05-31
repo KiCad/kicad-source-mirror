@@ -295,14 +295,8 @@ int LIB_ARC::GetPenSize() const
 }
 
 
-void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
-                           const TRANSFORM& aTransform )
+void LIB_ARC::print( wxDC* aDC, const wxPoint& aOffset, void* aData, const TRANSFORM& aTransform )
 {
-    // Don't draw the arc until the end point is selected.  Only the edit indicators
-    // get drawn at this time.
-    if( IsNew() && m_lastEditState == 1 )
-        return;
-
     wxPoint pos1, pos2, posc;
     COLOR4D color   = GetLayerColor( LAYER_DEVICE );
     COLOR4D bgColor = GetLayerColor( LAYER_DEVICE_BACKGROUND );
@@ -322,15 +316,14 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
 
-    EDA_RECT* const clipbox  = aPanel? aPanel->GetClipBox() : NULL;
     int penSize = GetPenSize();
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
-        GRFilledArc( clipbox, aDC, posc.x, posc.y, pt1, pt2, m_Radius, penSize, bgColor, bgColor );
+        GRFilledArc( nullptr, aDC, posc.x, posc.y, pt1, pt2, m_Radius, penSize, bgColor, bgColor );
     else if( fill == FILLED_SHAPE && !aData )
-        GRFilledArc( clipbox, aDC, posc.x, posc.y, pt1, pt2, m_Radius, color, color );
+        GRFilledArc( nullptr, aDC, posc.x, posc.y, pt1, pt2, m_Radius, color, color );
     else
-        GRArc1( clipbox, aDC, pos1.x, pos1.y, pos2.x, pos2.y, posc.x, posc.y, penSize, color );
+        GRArc1( nullptr, aDC, pos1.x, pos1.y, pos2.x, pos2.y, posc.x, posc.y, penSize, color );
 }
 
 

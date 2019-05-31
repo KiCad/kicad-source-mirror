@@ -27,7 +27,7 @@
 #include <plotter.h>
 #include <ws_painter.h>
 #include <base_screen.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <title_block.h>
 #include "ws_draw_item.h"
 #include "ws_data_item.h"

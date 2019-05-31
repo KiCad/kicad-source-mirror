@@ -36,7 +36,6 @@
 
 
 class LINE_READER;
-class EDA_DRAW_PANEL;
 class TEXTE_PCB;
 class MSG_PANEL_ITEM;
 
@@ -200,17 +199,14 @@ public:
     TEXTE_PCB&      Text()  { return m_Text; }
     TEXTE_PCB&      Text() const  { return *(const_cast<TEXTE_PCB*> (&m_Text)); }
 
-    void            Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-                          GR_DRAWMODE aColorMode, const wxPoint& offset = ZeroOffset ) override;
+    void Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset = ZeroOffset ) override;
 
     /**
      * Function Move
      * @param offset : moving vector
      */
     void            Move( const wxPoint& offset ) override;
-
     void            Rotate( const wxPoint& aRotCentre, double aAngle ) override;
-
     void            Flip( const wxPoint& aCentre ) override;
 
     /**

@@ -62,7 +62,7 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset ) override;
+    void Print( wxDC* aDC, const wxPoint& aOffset ) override;
 
     void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 

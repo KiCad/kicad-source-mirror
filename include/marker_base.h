@@ -141,10 +141,10 @@ public:
     int GetShapePolygonCornerCount() const;
 
     /**
-     * Function DrawMarker
-     * draws the shape is the polygon defined in m_Corners (array of wxPoints).
+     * Function PrintMarker
+     * Prints the shape is the polygon defined in m_Corners (array of wxPoints).
      */
-    void DrawMarker( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset );
+    void PrintMarker( wxDC* aDC, const wxPoint& aOffset );
 
     /**
      * Function GetPos

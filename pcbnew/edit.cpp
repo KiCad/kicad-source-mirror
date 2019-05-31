@@ -31,7 +31,6 @@
 #include <confirm.h>
 #include <eda_doc.h>
 #include <gestfich.h>
-#include <kicad_device_context.h>
 #include <pcb_edit_frame.h>
 
 #include <pcbnew_id.h>
@@ -163,7 +162,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SetActiveLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
 
         if( displ_opts->m_ContrastModeDisplay )
-            m_canvas->Refresh( true );
+            GetGalCanvas()->Refresh();
         break;
 
     case ID_MENU_PCB_CLEAN:
@@ -192,7 +191,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_GEN_IMPORT_GRAPHICS_FILE:
         InvokeDialogImportGfxBoard( this );
-        m_canvas->Refresh();
+        GetGalCanvas()->Refresh();
         break;
 
 
@@ -243,108 +242,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
     SetActiveLayer( layer );
 
     if( displ_opts->m_ContrastModeDisplay )
-        m_canvas->Refresh();
-}
-
-
-void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
-{
-    // JEY TODO: obsolete?
-    int  id = aEvent.GetId();
-    int  lastToolID = GetToolId();
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-
-    switch( id )
-    {
-    case ID_NO_TOOL_SELECTED:
-        SetNoToolSelected();
-        break;
-
-    case ID_ZOOM_SELECTION:
-        // This tool is located on the main toolbar: switch it on or off on click on it
-        if( lastToolID != ID_ZOOM_SELECTION )
-            SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
-        else
-            SetNoToolSelected();
-        break;
-
-    case ID_TRACK_BUTT:
-        if( Settings().m_legacyDrcOn )
-            SetToolID( id, wxCURSOR_PENCIL, _( "Add tracks" ) );
-        else
-            SetToolID( id, wxCURSOR_QUESTION_ARROW, _( "Add tracks" ) );
-
-        Compile_Ratsnest( true );
-        break;
-
-    case ID_PCB_ZONES_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add zones" ) );
-
-        if( displ_opts->m_DisplayZonesMode != 0 )
-            DisplayInfoMessage( this, _( "Warning: zone display is OFF!!!" ) );
-        break;
-
-    case ID_PCB_KEEPOUT_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add keepout" ) );
-        break;
-
-    case ID_PCB_TARGET_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add layer alignment target" ) );
-        break;
-
-    case ID_PCB_PLACE_OFFSET_COORD_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Adjust zero" ) );
-        break;
-
-    case ID_PCB_PLACE_GRID_COORD_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Adjust grid origin" ) );
-        break;
-
-    case ID_PCB_ADD_LINE_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add graphic line" ) );
-        break;
-
-    case ID_PCB_ARC_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add graphic arc" ) );
-        break;
-
-    case ID_PCB_CIRCLE_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add graphic circle" ) );
-        break;
-
-    case ID_PCB_ADD_TEXT_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add text" ) );
-        break;
-
-    case ID_COMPONENT_BUTT:
-        SetToolID( id, wxCURSOR_HAND, _( "Add footprint" ) );
-        break;
-
-    case ID_PCB_DIMENSION_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add dimension" ) );
-        break;
-
-    case ID_PCB_DELETE_ITEM_BUTT:
-        SetToolID( id, wxCURSOR_BULLSEYE, _( "Delete item" ) );
-        break;
-
-    case ID_PCB_HIGHLIGHT_BUTT:
-        SetToolID( id, wxCURSOR_HAND, _( "Highlight net" ) );
-        break;
-
-    case ID_LOCAL_RATSNEST_BUTT:
-        SetToolID( id, wxCURSOR_HAND, _( "Select rats nest" ) );
-
-        Compile_Ratsnest( true );
-
-        break;
-
-    // collect GAL-only tools here
-    case ID_PCB_DRAW_VIA_BUTT:
-    case ID_PCB_MEASUREMENT_TOOL:
-        SetToolID( id, wxCURSOR_DEFAULT, _( "Unsupported tool in this canvas" ) );
-        break;
-    }
+        GetGalCanvas()->Refresh();
 }
 
 

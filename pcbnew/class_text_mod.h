@@ -38,9 +38,9 @@
 
 class LINE_READER;
 class EDA_RECT;
-class EDA_DRAW_PANEL;
 class MODULE;
 class MSG_PANEL_ITEM;
+class PCB_BASE_FRAME;
 
 
 #define UMBILICAL_COLOR   LIGHTBLUE
@@ -177,31 +177,13 @@ public:
     /* drawing functions */
 
     /**
-     * Function Draw
-     * Draw the text according to the footprint pos and orient
-     * @param aPanel = draw panel, Used to know the clip box
+     * Function Print
+     * Print the text according to the footprint pos and orient
+     * @param aFrame = the current Frame
      * @param aDC = Current Device Context
      * @param aOffset = draw offset (usually wxPoint(0,0)
-     * @param aDrawMode = GR_OR, GR_XOR..
      */
-    void Draw( EDA_DRAW_PANEL* aPanel,
-               wxDC*           aDC,
-               GR_DRAWMODE     aDrawMode,
-               const wxPoint&  aOffset = ZeroOffset ) override;
-
-    /**
-     * Function DrawUmbilical
-     * draws a line from the TEXTE_MODULE origin
-     * to parent MODULE origin.
-     * @param aPanel = the current DrawPanel
-     * @param aDC = the current device context
-     * @param aDrawMode = drawing mode, typically GR_XOR
-     * @param aOffset = offset for TEXTE_MODULE
-     */
-    void DrawUmbilical( EDA_DRAW_PANEL* aPanel,
-                        wxDC*           aDC,
-                        GR_DRAWMODE     aDrawMode,
-                        const wxPoint&  aOffset = ZeroOffset );
+    void Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint&  aOffset = ZeroOffset ) override;
 
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 

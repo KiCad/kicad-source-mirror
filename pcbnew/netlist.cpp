@@ -132,7 +132,7 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater,
         selection.SetReferencePoint( newFootprints[0]->GetPosition() );
     }
 
-    GetCanvas()->Refresh();
+    GetGalCanvas()->Refresh();
 }
 
 

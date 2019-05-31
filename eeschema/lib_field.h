@@ -62,14 +62,14 @@ class LIB_FIELD : public LIB_ITEM, public EDA_TEXT
     wxString m_name;         ///< Name (not the field text value itself, that is .m_Text)
 
     /**
-     * Draw the field.
+     * Print the field.
      * <p>
      * If \a aData not NULL, \a aData must point a wxString which is used instead of
      * the m_Text
      * </p>
      */
-    void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
-                      const TRANSFORM& aTransform ) override;
+    void print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+                const TRANSFORM& aTransform ) override;
 
     /**
      * Calculate the new circle at \a aPosition when editing.

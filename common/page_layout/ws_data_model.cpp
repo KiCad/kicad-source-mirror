@@ -46,7 +46,7 @@
 
 #include <fctsys.h>
 #include <kiface_i.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <ws_painter.h>
 #include <title_block.h>
 #include <ws_draw_item.h>

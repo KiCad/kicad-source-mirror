@@ -692,7 +692,7 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
         Compile_Ratsnest( true );
     }
 
-    m_canvas->Refresh( true );
+    GetGalCanvas()->Refresh( true );
 
     return isModified;
 }

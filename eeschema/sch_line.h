@@ -128,7 +128,7 @@ public:
      */
     double GetLength() const;
 
-    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset ) override;
+    void Print( wxDC* aDC, const wxPoint& aOffset ) override;
 
     int GetPenSize() const override;
 

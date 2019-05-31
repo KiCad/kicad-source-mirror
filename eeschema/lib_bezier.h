@@ -38,8 +38,8 @@ class LIB_BEZIER : public LIB_ITEM
     std::vector<wxPoint> m_BezierPoints;   // list of parameter (3|4)
     std::vector<wxPoint> m_PolyPoints;     // list of points (>= 2)
 
-    void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
-                      const TRANSFORM& aTransform ) override;
+    void print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+                const TRANSFORM& aTransform ) override;
 
 public:
     LIB_BEZIER( LIB_PART * aParent );

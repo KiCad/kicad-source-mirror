@@ -163,8 +163,8 @@ int LIB_RECTANGLE::GetPenSize() const
 }
 
 
-void LIB_RECTANGLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                                 void* aData, const TRANSFORM& aTransform )
+void LIB_RECTANGLE::print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+                           const TRANSFORM& aTransform )
 {
     COLOR4D color   = GetLayerColor( LAYER_DEVICE );
     COLOR4D bgColor = GetLayerColor( LAYER_DEVICE_BACKGROUND );
@@ -173,13 +173,12 @@ void LIB_RECTANGLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoin
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
 
-    EDA_RECT* const clipbox  = aPanel? aPanel->GetClipBox() : NULL;
     if( fill == FILLED_WITH_BG_BODYCOLOR && !aData )
-        GRFilledRect( clipbox, aDC, pt1.x, pt1.y, pt2.x, pt2.y, GetPenSize( ), bgColor, bgColor );
+        GRFilledRect( nullptr, aDC, pt1.x, pt1.y, pt2.x, pt2.y, GetPenSize( ), bgColor, bgColor );
     else if( m_Fill == FILLED_SHAPE  && !aData )
-        GRFilledRect( clipbox, aDC, pt1.x, pt1.y, pt2.x, pt2.y, GetPenSize(), color, color );
+        GRFilledRect( nullptr, aDC, pt1.x, pt1.y, pt2.x, pt2.y, GetPenSize(), color, color );
     else
-        GRRect( clipbox, aDC, pt1.x, pt1.y, pt2.x, pt2.y, GetPenSize(), color );
+        GRRect( nullptr, aDC, pt1.x, pt1.y, pt2.x, pt2.y, GetPenSize(), color );
 }
 
 

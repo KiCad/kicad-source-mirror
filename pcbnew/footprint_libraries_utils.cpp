@@ -1014,7 +1014,7 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
             GetScreen()->ClrModify();
 
             updateView();
-            m_canvas->Refresh();
+            GetGalCanvas()->Refresh();
 
             return true;
         }

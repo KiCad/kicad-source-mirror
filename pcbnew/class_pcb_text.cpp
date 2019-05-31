@@ -31,7 +31,7 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <base_struct.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <kicad_string.h>
 #include <trigo.h>
 #include <richio.h>
@@ -65,52 +65,21 @@ void TEXTE_PCB::SetTextAngle( double aAngle )
 }
 
 
-void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-                      GR_DRAWMODE DrawMode, const wxPoint& offset )
+void TEXTE_PCB::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
 {
-    wxASSERT( panel );
-
-    if( !panel )
-        return;
-
    BOARD* brd = GetBoard();
 
     if( brd->IsLayerVisible( m_Layer ) == false )
         return;
 
-    auto frame = static_cast<PCB_EDIT_FRAME*>( panel->GetParent() );
-    auto color = frame->Settings().Colors().GetLayerColor( m_Layer );
-
-    EDA_DRAW_MODE_T fillmode = FILLED;
-    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
+    auto                 color = aFrame->Settings().Colors().GetLayerColor( m_Layer );
+    EDA_DRAW_MODE_T      fillmode = FILLED;
+    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*)( aFrame->GetDisplayOptions() );
 
     if( displ_opts && displ_opts->m_DisplayDrawItemsFill == SKETCH )
         fillmode = SKETCH;
 
-    // shade text if high contrast mode is active
-    if( ( DrawMode & GR_ALLOW_HIGHCONTRAST ) && displ_opts && displ_opts->m_ContrastModeDisplay )
-    {
-        PCB_LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-
-        if( !IsOnLayer( curr_layer ) )
-            color = COLOR4D( DARKDARKGRAY );
-    }
-
-    COLOR4D anchor_color = COLOR4D::UNSPECIFIED;
-
-    if( brd->IsElementVisible( LAYER_ANCHOR ) )
-        anchor_color = frame->Settings().Colors().GetItemColor( LAYER_ANCHOR );
-
-    EDA_TEXT::Draw( panel->GetClipBox(), DC, offset, color,
-                    DrawMode, fillmode, anchor_color );
-
-    // Enable these line to draw the bounding box (debug tests purposes only)
-#if 0
-    {
-        EDA_RECT BoundaryBox = GetBoundingBox();
-        GRRect( clipbox, DC, BoundaryBox, 0, BROWN );
-    }
-#endif
+    EDA_TEXT::Print( DC, offset, color, fillmode );
 }
 
 

@@ -34,8 +34,8 @@ class LIB_CIRCLE : public LIB_ITEM
     wxPoint m_EndPos;         // A point on the circumference of the circle.
     int     m_Width;          // Line width.
 
-    void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
-                      const TRANSFORM& aTransform ) override;
+    void print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+                const TRANSFORM& aTransform ) override;
 
 public:
     LIB_CIRCLE( LIB_PART * aParent );

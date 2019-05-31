@@ -33,8 +33,8 @@ class LIB_POLYLINE : public LIB_ITEM
     int m_Width;                              // Line width
     std::vector<wxPoint> m_PolyPoints;        // list of points (>= 2)
 
-    void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
-                      const TRANSFORM& aTransform ) override;
+    void print( wxDC* aDC, const wxPoint& aOffset, void* aData,
+                const TRANSFORM& aTransform ) override;
 
 public:
     LIB_POLYLINE( LIB_PART * aParent );

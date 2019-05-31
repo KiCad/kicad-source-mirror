@@ -42,6 +42,7 @@ class GBR_LAYOUT;
 class D_CODE;
 class MSG_PANEL_ITEM;
 class GBR_DISPLAY_OPTIONS;
+class PCB_BASE_FRAME;
 
 namespace KIGFX
 {
@@ -75,19 +76,19 @@ private:
 
 
 public:
-    bool    m_UnitsMetric;                  /* store here the gerber units (inch/mm).  Used
-                                             * only to calculate aperture macros shapes sizes */
-    int     m_Shape;                        // Shape and type of this gerber item
-    wxPoint m_Start;                        // Line or arc start point or position of the shape
+    bool               m_UnitsMetric;       // store here the gerber units (inch/mm).  Used
+                                            // only to calculate aperture macros shapes sizes
+    int                m_Shape;             // Shape and type of this gerber item
+    wxPoint            m_Start;             // Line or arc start point or position of the shape
                                             // for flashed items
-    wxPoint m_End;                          // Line or arc end point
-    wxPoint m_ArcCentre;                    // for arcs only: Centre of arc
-    SHAPE_POLY_SET m_Polygon;               // Polygon shape data (G36 to G37 coordinates)
+    wxPoint            m_End;               // Line or arc end point
+    wxPoint            m_ArcCentre;         // for arcs only: Centre of arc
+    SHAPE_POLY_SET     m_Polygon;           // Polygon shape data (G36 to G37 coordinates)
                                             // or for complex shapes which are converted to polygon
-    wxSize  m_Size;                         // Flashed shapes: size of the shape
+    wxSize             m_Size;              // Flashed shapes: size of the shape
                                             // Lines : m_Size.x = m_Size.y = line width
-    bool    m_Flashed;                      // True for flashed items
-    int     m_DCode;                        // DCode used to draw this item.
+    bool               m_Flashed;           // True for flashed items
+    int                m_DCode;             // DCode used to draw this item.
                                             // 0 for items that do not use DCodes (polygons)
                                             // or when unknown and normal values are 10 to 999
                                             // values 0 to 9 can be used for special purposes
@@ -231,9 +232,7 @@ public:
 
     const EDA_RECT GetBoundingBox() const override;
 
-    /* Display on screen: */
-    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-               GR_DRAWMODE aDrawMode, const wxPoint&aOffset, GBR_DISPLAY_OPTIONS* aDrawOptions );
+    void Print( wxDC* aDC, const wxPoint& aOffset, GBR_DISPLAY_OPTIONS* aOptions );
 
     /**
      * Function ConvertSegmentToPolygon
@@ -244,11 +243,10 @@ public:
     void ConvertSegmentToPolygon();
 
     /**
-     * Function DrawGbrPoly
-     * a helper function used to draw the polygon stored in m_PolyCorners
+     * Function PrintGerberPoly
+     * a helper function used to print the polygon stored in m_PolyCorners
      */
-    void DrawGbrPoly( EDA_RECT* aClipBox, wxDC* aDC, COLOR4D aColor,
-                      const wxPoint& aOffset, bool aFilledShape );
+    void PrintGerberPoly( wxDC* aDC, COLOR4D aColor, const wxPoint& aOffset, bool aFilledShape );
 
     /* divers */
     int Shape() const { return m_Shape; }

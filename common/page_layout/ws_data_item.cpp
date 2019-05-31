@@ -50,7 +50,7 @@
  */
 
 #include <fctsys.h>
-#include <draw_graphic_text.h>
+#include <gr_text.h>
 #include <eda_rect.h>
 #include <view/view.h>
 #include <ws_painter.h>

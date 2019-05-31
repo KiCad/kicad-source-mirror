@@ -367,14 +367,14 @@ void LIB_PART::SetName( const wxString& aName )
 }
 
 
-void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
-                     int aMulti, int aConvert, const PART_DRAW_OPTIONS& aOpts )
+void LIB_PART::Print( wxDC* aDc, const wxPoint& aOffset, int aMulti, int aConvert,
+                      const PART_DRAW_OPTIONS& aOpts )
 {
     /* draw background for filled items using background option
      * Solid lines will be drawn after the background
      * Note also, background is not drawn when printing in black and white
      */
-    if( ! GetGRForceBlackPenState() )
+    if( !GetGRForceBlackPenState() )
     {
         for( LIB_ITEM& drawItem : m_drawings )
         {
@@ -393,7 +393,7 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
 
             // Now, draw only the background for items with
             // m_Fill == FILLED_WITH_BG_BODYCOLOR:
-            drawItem.Draw( aPanel, aDc, aOffset, (void*) false, aOpts.transform );
+            drawItem.Print( aDc, aOffset, (void*) false, aOpts.transform );
         }
     }
 
@@ -419,16 +419,16 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
 
         if( drawItem.Type() == LIB_PIN_T )
         {
-            drawItem.Draw( aPanel, aDc, aOffset, (void*) aOpts.show_elec_type, aOpts.transform );
+            drawItem.Print( aDc, aOffset, (void*) aOpts.show_elec_type, aOpts.transform );
         }
         else if( drawItem.Type() == LIB_FIELD_T )
         {
-            drawItem.Draw( aPanel, aDc, aOffset, (void*) NULL, aOpts.transform );
+            drawItem.Print( aDc, aOffset, (void*) NULL, aOpts.transform );
         }
         else
         {
             bool forceNoFill = drawItem.m_Fill == FILLED_WITH_BG_BODYCOLOR;
-            drawItem.Draw( aPanel, aDc, aOffset, (void*) forceNoFill, aOpts.transform );
+            drawItem.Print( aDc, aOffset, (void*) forceNoFill, aOpts.transform );
         }
     }
 }
@@ -514,7 +514,7 @@ void LIB_PART::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
 }
 
 
-void LIB_PART::RemoveDrawItem( LIB_ITEM* aItem, EDA_DRAW_PANEL* aPanel, wxDC* aDc )
+void LIB_PART::RemoveDrawItem( LIB_ITEM* aItem )
 {
     wxASSERT( aItem != NULL );
 

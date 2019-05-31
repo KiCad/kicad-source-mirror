@@ -88,10 +88,9 @@ public:
 
     void Flip( const wxPoint& aCentre ) override;
 
-    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-               GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset ) override
+    void Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset = ZeroOffset ) override
     {
-        DrawMarker( aPanel, aDC, aOffset );
+        PrintMarker( aDC, aOffset );
     }
 
     const wxPoint GetPosition() const override { return m_Pos; }
