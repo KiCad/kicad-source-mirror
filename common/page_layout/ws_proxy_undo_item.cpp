@@ -42,11 +42,11 @@ WS_PROXY_UNDO_ITEM::WS_PROXY_UNDO_ITEM( const EDA_DRAW_FRAME* aFrame ) :
     WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
     model.SaveInString( m_layoutSerialization );
 
-    for( int ii = 0; ii < model.GetItems().size(); ++ii )
+    for( size_t ii = 0; ii < model.GetItems().size(); ++ii )
     {
         WS_DATA_ITEM* dataItem = model.GetItem( ii );
 
-        for( int jj = 0; jj < dataItem->GetDrawItems().size(); ++jj )
+        for( size_t jj = 0; jj < dataItem->GetDrawItems().size(); ++jj )
         {
             WS_DRAW_ITEM_BASE* drawItem = dataItem->GetDrawItems()[ jj ];
 
@@ -75,13 +75,13 @@ void WS_PROXY_UNDO_ITEM::Restore( EDA_DRAW_FRAME* aFrame, KIGFX::VIEW* aView )
     {
         aView->Clear();
 
-        for( int ii = 0; ii < WS_DATA_MODEL::GetTheInstance().GetItems().size(); ++ii )
+        for( int ii = 0; ii < (int)WS_DATA_MODEL::GetTheInstance().GetItems().size(); ++ii )
         {
             WS_DATA_ITEM* dataItem = WS_DATA_MODEL::GetTheInstance().GetItem( ii );
 
             dataItem->SyncDrawItems( nullptr, aView );
 
-            if( ii == m_selectedDataItem && m_selectedDrawItem < dataItem->GetDrawItems().size() )
+            if( ii == m_selectedDataItem && m_selectedDrawItem < (int)dataItem->GetDrawItems().size() )
             {
                 WS_DRAW_ITEM_BASE* drawItem = dataItem->GetDrawItems()[ m_selectedDrawItem ];
                 drawItem->SetSelected();

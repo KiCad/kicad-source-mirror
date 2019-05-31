@@ -127,7 +127,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     controls->SetSnapping( true );
     VECTOR2I originalCursorPos = controls->GetCursorPosition();
-    bool moveMode;
+    bool moveMode = true;   // For move item option. Alternate option is drag
 
     m_anchorPoint.reset();
 
@@ -187,7 +187,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
-        if( evt->IsAction( &EE_ACTIONS::moveActivate ) 
+        if( evt->IsAction( &EE_ACTIONS::moveActivate )
                 || evt->IsAction( &EE_ACTIONS::move ) || evt->IsAction( &EE_ACTIONS::drag )
                 || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
                 || evt->IsAction( &EE_ACTIONS::refreshPreview ) )
@@ -444,7 +444,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     if( restore_state )
     {
         m_frame->RollbackSchematicFromUndo();
-            
+
         if( unselect )
         {
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
