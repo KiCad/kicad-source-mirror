@@ -86,16 +86,16 @@ class SCH_BASE_FRAME : public EDA_DRAW_FRAME
 {
 protected:
     TEMPLATES m_templateFieldNames;
-
-    wxPoint  m_repeatStep;          ///< the increment value of the position of an item
-                                    ///< when it is repeated
-    int      m_repeatDeltaLabel;    ///< the increment value of labels like bus members
-                                    ///< when they are repeated
-    bool     m_showPinElectricalTypeName;
-    bool     m_moveTakesCursorAsOrigin; ///< eemodern: always take the cursor (instead of item origin) as move anchor
-    bool     m_dragActionIsMove;        ///< eemodern: if true, drag action defaults to move, otherwise it's drag
-    bool     m_dragAlwaysSelects;       ///< eemodern: if true, drag action only selects items (and never drags/moves)
-    bool     m_moveWarpsCursor;         ///< eemodern: if true, cursor is warped to move/drag origin
+    wxPoint   m_repeatStep;                // the increment value of the position of an item
+                                           // when it is repeated
+    int       m_repeatDeltaLabel;          // the increment value of labels like bus members
+                                           // when they are repeated
+    bool      m_showPinElectricalTypeName;
+    bool      m_moveTakesCursorAsOrigin;   // always take the cursor (instead of item origin) as
+                                           // the move anchor
+    bool      m_dragActionIsMove;          // drag action defaults to move, otherwise it's drag
+    bool      m_dragAlwaysSelects;         // drag action selects items (and never drags/moves)
+    bool      m_moveWarpsCursor;           // cursor is warped to move/drag origin
 
 public:
     SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
@@ -108,7 +108,7 @@ public:
 
     void createCanvas();
 
-    SCH_DRAW_PANEL* GetCanvas() const override;
+    SCH_DRAW_PANEL* GetCanvas() const;
     SCH_SCREEN* GetScreen() const override;
     void SetScreen( BASE_SCREEN* aScreen ) override;
 

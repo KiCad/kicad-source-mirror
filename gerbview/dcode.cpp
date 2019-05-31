@@ -30,9 +30,7 @@
 
 #include <fctsys.h>
 #include <common.h>
-#include <class_drawpanel.h>
 #include <trigo.h>
-
 #include <gerbview_frame.h>
 #include <gerber_file_image.h>
 #include <convert_to_biu.h>

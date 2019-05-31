@@ -28,7 +28,6 @@
  */
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <kiface_i.h>
@@ -37,9 +36,7 @@
 #include <build_version.h>
 #include <macros.h>
 #include <wildcards_and_files_ext.h>
-
 #include <pcbnew.h>
-
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>

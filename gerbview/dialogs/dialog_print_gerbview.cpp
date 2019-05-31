@@ -25,20 +25,15 @@
  */
 
 #include <fctsys.h>
-
 #include <kiface_i.h>
 #include <common.h>
-#include <class_drawpanel.h>
 #include <confirm.h>
-
 #include <dialogs/dialog_print_generic.h>
 #include <gerbview_printout.h>
-
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
-
 #include <tool/tool_manager.h>
 #include <tools/gerbview_actions.h>
 

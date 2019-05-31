@@ -140,7 +140,7 @@ int PL_EDITOR_CONTROL::ToggleBackgroundColor( const TOOL_EVENT& aEvent )
     getView()->GetPainter()->GetSettings()->SetBackgroundColor( m_frame->GetDrawBgColor() );
 
     m_frame->GetGalCanvas()->GetView()->UpdateAllLayersColor();
-    m_frame->GetCanvas()->Refresh();
+    m_frame->GetGalCanvas()->Refresh();
 
     return 0;
 }

@@ -17,7 +17,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <class_drawpanel.h>
 #include <lib_edit_frame.h>
 #include <view/view.h>
 #include <widgets/gal_options_panel.h>

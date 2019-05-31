@@ -22,20 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file gerber_draw_item.cpp
- */
-
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <common.h>
 #include <trigo.h>
 #include <bitmaps.h>
-#include <class_drawpanel.h>
 #include <msgpanel.h>
 #include <gerbview_frame.h>
 #include <convert_basic_shapes_to_polygon.h>
-
 #include <gerber_draw_item.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>

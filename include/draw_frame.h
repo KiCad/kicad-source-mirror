@@ -37,7 +37,6 @@
 class wxSingleInstanceChecker;
 class EDA_HOTKEY;
 class ACTION_TOOLBAR;
-class EDA_DRAW_PANEL;
 
 using KIGFX::COLOR4D;
 
@@ -82,10 +81,6 @@ namespace KIGFX
  */
 class EDA_DRAW_FRAME : public KIWAY_PLAYER
 {
-    /// Let the #EDA_DRAW_PANEL object have access to the protected data since
-    /// it is closely tied to the #EDA_DRAW_FRAME.
-    friend class EDA_DRAW_PANEL;
-
     ///< Id of active button on the vertical toolbar.
     int                 m_toolId;
     wxString            m_toolMsg;
@@ -120,9 +115,6 @@ protected:
                                             // to screens
     EDA_UNITS_T m_UserUnits;
     bool        m_PolarCoords;              //< for those frames that support polar coordinates
-
-    /// The area to draw on.
-    EDA_DRAW_PANEL* m_canvas;
 
     TOOL_MANAGER*       m_toolManager;
     TOOL_DISPATCHER*    m_toolDispatcher;
@@ -375,8 +367,6 @@ public:
     void SetShowBorderAndTitleBlock( bool aShow ) { m_showBorderAndTitleBlock = aShow; }
     bool ShowPageLimits() const { return m_showPageLimits; }
     void SetShowPageLimits( bool aShow ) { m_showPageLimits = aShow; }
-
-    virtual EDA_DRAW_PANEL* GetCanvas() const { return m_canvas; }
 
     virtual wxString GetScreenDesc() const;
 

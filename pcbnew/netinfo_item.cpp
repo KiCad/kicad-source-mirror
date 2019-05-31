@@ -29,7 +29,6 @@
 
 #include <fctsys.h>
 #include <gr_basic.h>
-#include <class_drawpanel.h>
 #include <pcb_base_frame.h>
 #include <common.h>
 #include <kicad_string.h>
@@ -38,7 +37,6 @@
 #include <macros.h>
 #include <msgpanel.h>
 #include <base_units.h>
-
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>

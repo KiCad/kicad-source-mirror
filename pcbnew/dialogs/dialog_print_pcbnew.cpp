@@ -26,7 +26,6 @@
 
 #include <fctsys.h>
 #include <kiface_i.h>
-#include <class_drawpanel.h>
 #include <confirm.h>
 #include <base_units.h>
 #include <pcbnew.h>

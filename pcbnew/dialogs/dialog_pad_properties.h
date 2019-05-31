@@ -32,18 +32,14 @@
 #ifndef _DIALOG_PAD_PROPERTIES_H_
 #define _DIALOG_PAD_PROPERTIES_H_
 
-#include <class_drawpanel.h>
 #include <pcbnew.h>
 #include <pcb_base_frame.h>
 #include <base_units.h>
 #include <wx/valnum.h>
-
 #include <class_board.h>
 #include <class_module.h>
 #include <class_drawsegment.h>
-
 #include <origin_viewitem.h>
-
 #include <dialog_pad_properties_base.h>
 #include <widgets/text_ctrl_eval.h>
 #include <pcb_draw_panel_gal.h>

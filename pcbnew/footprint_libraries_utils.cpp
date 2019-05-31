@@ -28,11 +28,9 @@
 
 #include <wx/ffile.h>
 #include <wx/stdpaths.h>
-
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
-#include <class_drawpanel.h>
 #include <confirm.h>
 #include <kicad_string.h>
 #include <gestfich.h>

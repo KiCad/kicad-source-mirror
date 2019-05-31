@@ -26,8 +26,6 @@
 #include <fctsys.h>
 #include <common.h>
 #include <id.h>
-
-#include <class_drawpanel.h>
 #include <pl_editor_frame.h>
 #include <hotkeys.h>
 #include <pl_editor_id.h>

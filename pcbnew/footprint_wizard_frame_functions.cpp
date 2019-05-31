@@ -23,13 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file footprint_wizard_frame_functions.cpp
- */
-
 #include <fctsys.h>
 #include <gr_basic.h>
-#include <class_drawpanel.h>
 #include <pcb_edit_frame.h>
 #include <dialog_helpers.h>
 

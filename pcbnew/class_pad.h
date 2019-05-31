@@ -49,7 +49,6 @@ enum CUST_PAD_SHAPE_IN_ZONE
 
 class LINE_READER;
 class EDA_3D_CANVAS;
-class EDA_DRAW_PANEL;
 class MODULE;
 class EDGE_MODULE;
 class TRACK;

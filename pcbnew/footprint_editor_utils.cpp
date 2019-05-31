@@ -29,7 +29,6 @@
 #include <kiface_i.h>
 #include <kiway.h>
 #include <kiway_express.h>
-#include <class_drawpanel.h>
 #include <pcb_draw_panel_gal.h>
 #include <confirm.h>
 #include <gestfich.h>

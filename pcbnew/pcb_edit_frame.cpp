@@ -23,7 +23,6 @@
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
-#include <class_drawpanel.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <collectors.h>
@@ -288,7 +287,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetBoard( new BOARD() );
 
     // Create the PCB_LAYER_WIDGET *after* SetBoard():
-    m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas() );
+    m_Layers = new PCB_LAYER_WIDGET( this, GetGalCanvas() );
 
     m_drc = new DRC( this );        // these 2 objects point to each other
 
@@ -393,7 +392,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     GetGalCanvas()->SwitchBackend( m_canvasType );
 
-    galCanvas->GetView()->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
+    galCanvas->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
     // disable Export STEP item if kicad2step does not exist

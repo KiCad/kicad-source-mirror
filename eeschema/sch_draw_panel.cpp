@@ -168,32 +168,16 @@ KIGFX::SCH_VIEW* SCH_DRAW_PANEL::view() const
     return static_cast<KIGFX::SCH_VIEW*>( m_view );
 }
 
-BASE_SCREEN* SCH_DRAW_PANEL::GetScreen()
-{
-    return GetParent()->GetScreen();
-}
-
-EDA_DRAW_FRAME* SCH_DRAW_PANEL::GetParent() const
-{
-    return static_cast<EDA_DRAW_FRAME*>(m_parent); // static_cast<SCH_EDIT_FRAME*> (m_parent);
-}
-
-
-void SCH_DRAW_PANEL::Refresh( bool aEraseBackground, const wxRect* aRect )
-{
-    EDA_DRAW_PANEL_GAL::Refresh( aEraseBackground, aRect );
-}
-
 
 void SCH_DRAW_PANEL::onPaint( wxPaintEvent& aEvent )
 {
+    // The first wxPaintEvent can be fired at startup before the GAL engine is fully initialized
+    // (depending on platforms). Do nothing in this case
     if( !m_gal->IsInitialized() || !m_gal->IsVisible() )
-        // The first wxPaintEvent can be fired at startup before the GAL engine is fully initialized
-        // (depending on platforms). Do nothing in this case
         return;
 
     if( m_painter )
-        static_cast<KIGFX::SCH_PAINTER*>(m_painter.get())->GetSettings()->ImportLegacyColors( nullptr );
+        static_cast<KIGFX::SCH_PAINTER*>( m_painter.get() )->GetSettings()->ImportLegacyColors( nullptr );
 
     EDA_DRAW_PANEL_GAL::onPaint( aEvent );
 }

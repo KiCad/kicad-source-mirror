@@ -6,7 +6,6 @@ configure_file( 3d_plugin_dir.h.in 3d_plugin_dir.h @ONLY )
 include_directories(BEFORE ${INC_BEFORE})
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
-    ../include/legacy_wx
     ../pcbnew
     3d_canvas
     3d_cache

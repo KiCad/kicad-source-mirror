@@ -6,8 +6,6 @@
 #include <gr_basic.h>
 #include <eda_rect.h>
 
-#include <legacy_gal/class_drawpanel.h>
-
 
 namespace KIGFX
 {
@@ -26,7 +24,7 @@ class COLORS_DESIGN_SETTINGS;
 class SCH_EDIT_FRAME;
 
 
-class SCH_DRAW_PANEL : public EDA_DRAW_PANEL, public EDA_DRAW_PANEL_GAL
+class SCH_DRAW_PANEL : public EDA_DRAW_PANEL_GAL
 {
 public:
     SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId, const wxPoint& aPosition,
@@ -35,21 +33,12 @@ public:
 
     ~SCH_DRAW_PANEL();
 
-    virtual wxWindow* GetWindow() override { return this; }
-
     void DisplayComponent( const LIB_PART *aComponent );
     void DisplaySheet( const SCH_SCREEN *aScreen );
 
     bool SwitchBackend( GAL_TYPE aGalType ) override;
 
-    BASE_SCREEN* GetScreen() override;
-    virtual EDA_DRAW_FRAME* GetParent() const override;
-
     KIGFX::SCH_VIEW* GetView() const { return view(); }
-
-    /// @copydoc wxWindow::Refresh()
-    void Refresh( bool aEraseBackground = true, const wxRect* aRect = NULL ) override;
-
 
 protected:
     virtual void onPaint( wxPaintEvent& WXUNUSED( aEvent ) ) override;

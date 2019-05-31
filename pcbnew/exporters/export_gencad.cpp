@@ -30,7 +30,6 @@
  */
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <pgm_base.h>
@@ -38,15 +37,12 @@
 #include <trigo.h>
 #include <build_version.h>
 #include <macros.h>
-
 #include <pcbnew.h>
 #include <dialogs/dialog_gencad_export_options.h>
-
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
 #include <class_edge_mod.h>
-
 #include <hash_eda.h>
 
 static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* frame );

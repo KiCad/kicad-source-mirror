@@ -29,7 +29,6 @@
 #include <fctsys.h>
 #include <macros.h>
 #include <confirm.h>
-#include <class_drawpanel.h>
 #include <pcb_base_edit_frame.h>
 #include <wx/valnum.h>
 #include <board_commit.h>

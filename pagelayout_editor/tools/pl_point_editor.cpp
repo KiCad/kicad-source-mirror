@@ -254,7 +254,7 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
             m_frame->OnModify();
 
         m_editPoints.reset();
-        m_frame->GetCanvas()->Refresh();
+        m_frame->GetGalCanvas()->Refresh();
     }
 
     return 0;

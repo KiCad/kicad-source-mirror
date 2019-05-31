@@ -28,9 +28,7 @@
 
 #include <fctsys.h>
 #include <gr_basic.h>
-#include <class_drawpanel.h>
 #include <base_units.h>
-
 #include <pl_editor_frame.h>
 #include <pl_editor_id.h>
 #include <dialog_helpers.h>
@@ -58,7 +56,7 @@ public:
     bool OnPrintPage( int aPageNum ) override;
     bool HasPage( int aPageNum ) override { return ( aPageNum <= 2 ); }
     void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo ) override;
-    void DrawPage( int aPageNum );
+    void PrintPage( int aPageNum );
 };
 
 /**
@@ -132,7 +130,7 @@ END_EVENT_TABLE()
 
 bool PLEDITOR_PRINTOUT::OnPrintPage( int aPageNum )
 {
-    DrawPage( aPageNum );
+    PrintPage( aPageNum );
     return true;
 }
 

@@ -186,7 +186,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_auimgr.AddPane( m_cmpList, EDA_PANE().Palette().Name( "Symbols" ).Left().Layer(1)
                       .CaptionVisible( false ).MinSize( 80, -1 ).BestSize( m_cmpListWidth, -1 ) );
 
-    m_auimgr.AddPane( m_canvas->GetWindow(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
     m_auimgr.GetPane( m_libList ).Show( aLibraryName.empty() );
 
@@ -555,7 +555,7 @@ bool LIB_VIEW_FRAME::ReCreateListLib()
 
     bool cmp_changed = ReCreateListCmp();
     DisplayLibInfos();
-    m_canvas->Refresh();
+    GetCanvas()->Refresh();
 
     return cmp_changed;
 }
@@ -631,7 +631,7 @@ void LIB_VIEW_FRAME::SetSelectedLibrary( const wxString& aLibraryName )
 
     m_libraryName = aLibraryName;
     ReCreateListCmp();
-    m_canvas->Refresh();
+    GetCanvas()->Refresh();
     DisplayLibInfos();
 
     // Ensure the corresponding line in m_libList is selected

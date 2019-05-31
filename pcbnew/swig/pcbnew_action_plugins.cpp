@@ -32,7 +32,6 @@
 #include <macros.h>
 #include <pcbnew_id.h>
 #include <menus_helpers.h>
-#include <class_drawpanel.h>    // m_canvas
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>

@@ -26,7 +26,6 @@
 #include <grid_layer_box_helpers.h>
 #include <board_commit.h>
 #include <class_drawsegment.h>
-#include <class_drawpanel.h>
 #include <class_track.h>
 #include <view/view.h>
 #include <widgets/wx_grid.h>

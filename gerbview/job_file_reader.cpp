@@ -29,10 +29,8 @@
 #include <fctsys.h>
 #include <wx/filename.h>
 #include <wildcards_and_files_ext.h>
-
 #include <gerbview.h>
 #include <richio.h>
-#include <class_drawpanel.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include <gerbview_frame.h>
@@ -40,7 +38,6 @@
 #include <gbr_metadata.h>
 #include <html_messagebox.h>
 #include <view/view.h>
-
 #include "json11.hpp"   // A light JSON parser
 
 /**

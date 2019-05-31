@@ -21,17 +21,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_netinfolist.cpp
- */
-
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <common.h>
-#include <class_drawpanel.h>
 #include <macros.h>
 #include <pcbnew.h>
-
 #include <class_board.h>
 #include <class_module.h>
 #include <class_pad.h>

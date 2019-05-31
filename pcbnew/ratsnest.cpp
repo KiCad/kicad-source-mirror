@@ -22,24 +22,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file ratsnest.cpp
- * @brief Ratsnets functions.
- */
-
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <common.h>
-#include <class_drawpanel.h>
 #include <pcb_edit_frame.h>
 #include <macros.h>
-
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
-
 #include <pcbnew.h>
-
 #include <ratsnest_data.h>
 
 /**
@@ -129,14 +120,17 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
 
                 if( enable && show )
                 {
-                    if (curved_ratsnest) {
+                    if (curved_ratsnest)
+                    {
                         auto dx = d.x - s.x;
                         auto dy = d.y - s.y;
                         auto cx = s.x + 0.5 * dx + 1.2 * dy;
                         auto cy = s.y + 0.5 * dy - 1.2 * dx;
-                        GRArc1( m_canvas->GetClipBox(), aDC, s.x, s.y, d.x, d.y, cx, cy, 0, color);
-                    } else {
-                        GRLine( m_canvas->GetClipBox(), aDC, s.x, s.y, d.x, d.y, 0, color );
+                        GRArc1( nullptr, aDC, s.x, s.y, d.x, d.y, cx, cy, 0, color);
+                    }
+                    else
+                    {
+                        GRLine( nullptr, aDC, s.x, s.y, d.x, d.y, 0, color );
                     }
                 }
             }

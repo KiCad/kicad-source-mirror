@@ -23,13 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcbnew/files.cpp
- * @brief Read and write board files.
- */
-
 #include <fctsys.h>
-#include <class_drawpanel.h>
 #include <confirm.h>
 #include <kicad_string.h>
 #include <gestfich.h>
@@ -620,7 +614,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
          * This is more a workaround than a fix.
          */
         SetFocus();
-        GetCanvas()->SetFocus();
+        GetGalCanvas()->SetFocus();
     }
 
     return true;

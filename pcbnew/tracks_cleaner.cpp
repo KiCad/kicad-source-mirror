@@ -30,7 +30,6 @@
 
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew.h>
 #include <class_board.h>

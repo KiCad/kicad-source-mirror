@@ -23,15 +23,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file gerbview_config.cpp
- * @brief GerbView configuration.
-*/
-
 #include <fctsys.h>
 #include <id.h>
 #include <common.h>
-#include <class_drawpanel.h>
 #include <config_params.h>
 #include <gerbview_frame.h>
 #include <hotkeys.h>

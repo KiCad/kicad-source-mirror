@@ -26,24 +26,19 @@
 
 #include <fctsys.h>
 #include <kiface_i.h>
-#include <class_drawpanel.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <board_commit.h>
 #include <view/view.h>
-
 #include <class_board.h>
 #include <class_zone.h>
-
 #include <pcbnew.h>
 #include <zones.h>
 #include <pcbnew_id.h>
 #include <zones_functions_for_undo_redo.h>
 #include <drc.h>
 #include <connectivity/connectivity_data.h>
-
 #include <widgets/progress_reporter.h>
-
 #include <zone_filler.h>
 
 // Local variables

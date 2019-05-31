@@ -26,27 +26,21 @@
  */
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
 #include <confirm.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <gr_basic.h>
 #include <macros.h>
 #include <msgpanel.h>
-
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
 #include <class_drawsegment.h>
 #include <class_pad.h>
-
 #include <board_commit.h>
-
 #include <connectivity/connectivity_data.h>
 #include <ratsnest_data.h>
-
 #include <widgets/progress_reporter.h>
-
 #include "ar_matrix.h"
 #include "ar_cell.h"
 #include "ar_autoplacer.h"

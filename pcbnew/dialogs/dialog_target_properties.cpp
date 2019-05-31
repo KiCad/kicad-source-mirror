@@ -24,16 +24,13 @@
  */
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
 #include <pcb_edit_frame.h>
 #include <dialog_helpers.h>
 #include <base_units.h>
 #include <gr_basic.h>
 #include <board_commit.h>
-
 #include <class_board.h>
 #include <class_pcb_target.h>
-
 #include <pcbnew.h>
 #include <dialog_target_properties_base.h>
 #include <widgets/unit_binder.h>

@@ -24,25 +24,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_drawsegment.cpp
- * @brief Class and functions to handle a graphic segments.
- */
-
 #include <fctsys.h>
 #include <macros.h>
 #include <gr_basic.h>
 #include <bezier_curves.h>
-#include <class_drawpanel.h>
 #include <pcb_screen.h>
 #include <trigo.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
-
 #include <pcb_edit_frame.h>
-
 #include <pcbnew.h>
-
 #include <class_board.h>
 #include <class_module.h>
 #include <class_drawsegment.h>

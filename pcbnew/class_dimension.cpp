@@ -24,15 +24,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_dimension.cpp
- */
-
 #include <fctsys.h>
 #include <macros.h>
 #include <gr_basic.h>
 #include <trigo.h>
-#include <class_drawpanel.h>
 #include <kicad_string.h>
 #include <richio.h>
 #include <bitmaps.h>

@@ -27,7 +27,6 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
-#include <class_drawpanel.h>
 #include <confirm.h>
 #include <eda_doc.h>
 #include <gestfich.h>

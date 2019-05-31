@@ -23,15 +23,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file eeschema.cpp
- * @brief the main file
- */
-
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
-#include <class_drawpanel.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <eda_dde.h>

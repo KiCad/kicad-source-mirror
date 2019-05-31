@@ -105,10 +105,11 @@ public:
 private:
     SCH_BASE_FRAME* m_frame;    // The frame using this view. Can be null. Used mainly
                                 // to know the sheet path name when drawing the page layout
-    std::unique_ptr<WS_PROXY_VIEW_ITEM> m_worksheet;
+
+    std::unique_ptr<WS_PROXY_VIEW_ITEM>             m_worksheet;
     std::unique_ptr<KIGFX::PREVIEW::SELECTION_AREA> m_selectionArea;
-    std::unique_ptr<KIGFX::VIEW_GROUP> m_preview;
-    std::vector<EDA_ITEM *> m_ownedItems;
+    std::unique_ptr<KIGFX::VIEW_GROUP>              m_preview;
+    std::vector<EDA_ITEM *>                         m_ownedItems;
 };
 
 }; // namespace

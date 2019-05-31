@@ -25,7 +25,6 @@
 #include <kiway.h>
 #include <project.h>
 #include <kicad_plugin.h>
-#include <class_drawpanel.h>
 #include <pcb_draw_panel_gal.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
@@ -215,7 +214,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     // no net in footprint editor: make it non visible
     GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
 
-    m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), true );
+    m_Layers = new PCB_LAYER_WIDGET( this, GetGalCanvas(), true );
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
@@ -274,7 +273,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
 
-    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
+    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
     m_auimgr.Update();

@@ -26,7 +26,6 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiway.h>
-#include <class_drawpanel.h>
 #include <pcb_draw_panel_gal.h>
 #include <3d_viewer/eda_3d_viewer.h>
 #include <dialog_helpers.h>
@@ -233,7 +232,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
 
-    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
+    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
     // Restore last zoom.  (If auto-zooming we'll adjust when we load the footprint.)

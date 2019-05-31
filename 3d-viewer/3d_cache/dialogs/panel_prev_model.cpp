@@ -24,20 +24,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file  panel_prev_model.cpp
- */
-
 #include "panel_prev_model.h"
-
 #include <3d_canvas/eda_3d_canvas.h>
 #include <common_ogl/cogl_att_list.h>
-
 #include <class_board.h>
-
 #include <base_units.h>
 #include <bitmaps.h>
-#include <class_drawpanel.h>
 #include <dpi_scaling.h>
 #include <pgm_base.h>
 #include <project.h>

@@ -174,7 +174,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
-    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
+    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
     m_auimgr.Update();

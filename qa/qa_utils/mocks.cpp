@@ -31,16 +31,13 @@
 #include <kiface_i.h>
 #include <confirm.h>
 #include <macros.h>
-#include <class_drawpanel.h>
 #include <pcb_edit_frame.h>
 #include <eda_dde.h>
 #include <wx/stdpaths.h>
-
 #include <wx/file.h>
 #include <wx/snglinst.h>
 #include <wx/dir.h>
 #include <gestfich.h>
-
 #include <pcbnew.h>
 #include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
@@ -354,15 +351,5 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
 
 void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I&, GENERAL_COLLECTOR& )
 {
-}
-
-EDA_DRAW_FRAME* EDA_DRAW_PANEL::GetParent() const
-{
-    return nullptr;
-}
-
-BASE_SCREEN* EDA_DRAW_PANEL::GetScreen()
-{
-    return nullptr;
 }
 

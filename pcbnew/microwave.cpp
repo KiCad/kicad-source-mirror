@@ -24,13 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file microwave.cpp
- * @brief Microwave pcb layout code.
- */
-
 #include <fctsys.h>
-#include <class_drawpanel.h>
 #include <confirm.h>
 #include <trigo.h>
 #include <kicad_string.h>
@@ -44,13 +38,10 @@
 #include <base_units.h>
 #include <validators.h>
 #include <dialog_text_entry.h>
-
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>
-
 #include <microwave/microwave_inductor.h>
-
 #include <pcbnew.h>
 
 static std::vector< wxRealPoint > PolyEdges;

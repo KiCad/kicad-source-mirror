@@ -27,23 +27,12 @@
 #define _DIALOG_DRCLISTBOX_H_
 
 #include <wx/htmllbox.h>
-
 #include <fctsys.h>
 #include <pcbnew.h>
-#include <class_drawpanel.h>
 #include <drc.h>
 #include <class_marker_pcb.h>
 #include <class_board.h>
-
 #include <dialog_drc_base.h>
-
-
-// outside @end control identifiers since wxFormBuilder knows not DRCLISTBOX
-#define ID_DRCLISTCTRL 14000
-#define ID_POPUP_UNCONNECTED_A  14001
-#define ID_POPUP_UNCONNECTED_B  14002
-#define ID_POPUP_MARKERS_A      14003
-#define ID_POPUP_MARKERS_B      14004
 
 
 /**

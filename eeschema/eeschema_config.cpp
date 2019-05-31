@@ -199,7 +199,7 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     if( ShowPreferences( g_Eeschema_Hotkeys_Descr, g_Schematic_Hotkeys_Descr, wxT( "eeschema" ) ) )
     {
         SaveSettings( config() );  // save values shared by eeschema applications.
-        m_canvas->Refresh( true );
+        GetGalCanvas()->Refresh( true );
     }
 }
 
@@ -613,7 +613,7 @@ void LIB_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     if( ShowPreferences( g_Eeschema_Hotkeys_Descr, g_Libedit_Hotkeys_Descr, wxT( "eeschema" ) ) )
     {
         SaveSettings( config() );  // save values shared by eeschema applications.
-        m_canvas->Refresh( true );
+        GetGalCanvas()->Refresh( true );
     }
 }
 

@@ -31,11 +31,9 @@
 
 #include <fctsys.h>
 #include <pgm_base.h>
-#include <class_drawpanel.h>
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <painter.h>
-
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <pcb_display_options.h>
@@ -47,14 +45,11 @@
 #include <menus_helpers.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <pcb_painter.h>
-
 #include <class_board.h>
 #include <pcb_layer_widget.h>
-
 #include <pcbnew.h>
 #include <collectors.h>
 #include <pcbnew_id.h>
-
 #include <gal/graphics_abstraction_layer.h>
 
 

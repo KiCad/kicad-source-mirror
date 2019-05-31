@@ -31,7 +31,6 @@
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <project.h>
-#include <class_drawpanel.h>
 #include <pcb_draw_panel_gal.h>
 #include <confirm.h>
 #include <gestfich.h>

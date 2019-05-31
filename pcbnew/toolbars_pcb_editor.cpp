@@ -29,7 +29,6 @@
 #include <help_common_strings.h>
 #include <dialog_helpers.h>
 #include <pcb_edit_frame.h>
-#include <class_drawpanel.h>
 #include <confirm.h>
 #include <bitmaps.h>
 #include <class_board.h>
@@ -682,14 +681,6 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     {
     case ID_TB_OPTIONS_DRC_OFF:
         Settings().m_legacyDrcOn = !state;
-
-        if( GetToolId() == ID_TRACK_BUTT )
-        {
-            if( Settings().m_legacyDrcOn )
-                m_canvas->SetCursor( wxCURSOR_PENCIL );
-            else
-                m_canvas->SetCursor( wxCURSOR_QUESTION_ARROW );
-        }
         break;
 
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE:

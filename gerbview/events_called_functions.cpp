@@ -22,16 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file events_called_functions.cpp
- * @brief GerbView command event functions.
- */
-
 #include <fctsys.h>
 #include <pgm_base.h>
-#include <class_drawpanel.h>
 #include <gestfich.h>
-
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
@@ -40,7 +33,6 @@
 #include <dialog_helpers.h>
 #include <DCodeSelectionbox.h>
 #include <gerbview_layer_widget.h>
-
 #include <gerbview_draw_panel_gal.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>

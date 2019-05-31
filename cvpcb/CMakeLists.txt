@@ -7,7 +7,6 @@ add_definitions( -DCVPCB )
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
-    ../include/legacy_wx
     ./dialogs
     ../3d-viewer
     ../pcbnew
@@ -145,7 +144,7 @@ target_link_libraries( cvpcb_kiface
     pcad2kicadpcb
     3d-viewer
     gal
-    legacy_wx
+    legacy_gal
     common
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}

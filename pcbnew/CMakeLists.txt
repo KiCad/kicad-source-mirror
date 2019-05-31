@@ -37,7 +37,6 @@ endif()
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
-    ../include/legacy_wx
     ./dialogs
     ./autorouter
     ../3d-viewer
@@ -644,7 +643,7 @@ set( PCBNEW_KIFACE_LIBRARIES
     pcbcommon
     pnsrouter
     pcad2kicadpcb
-    legacy_wx
+    legacy_gal
     common
     gal
     lib_dxf

@@ -22,14 +22,11 @@
  */
 
 #include <dialog_set_grid_base.h>
-
 #include <common.h>
 #include <sch_base_frame.h>
-#include <class_drawpanel.h>
 #include <class_draw_panel_gal.h>
 #include <sch_view.h>
 #include <gal/graphics_abstraction_layer.h>
-
 
 
 class DIALOG_SET_GRID : public DIALOG_SET_GRID_BASE

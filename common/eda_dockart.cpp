@@ -24,8 +24,6 @@
 #include <eda_dockart.h>
 #include <wx/aui/tabart.h>
 #include <wx/aui/auibook.h>
-//#include <class_draw_panel_gal.h>
-//#include <class_drawpanel.h>
 #include <draw_frame.h>
 
 void EDA_DOCKART::DrawBorder( wxDC& aDC, wxWindow* aWindow, const wxRect& aRect,

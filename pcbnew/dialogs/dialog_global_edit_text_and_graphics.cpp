@@ -23,7 +23,6 @@
  */
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
 #include <kicad_string.h>
 #include <board_commit.h>
 #include <pcb_edit_frame.h>

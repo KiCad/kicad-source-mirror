@@ -43,7 +43,6 @@
 
 #include <fctsys.h>
 #include <pgm_base.h>
-#include <class_drawpanel.h>
 #include <pcb_edit_frame.h>
 
 #include <class_board.h>

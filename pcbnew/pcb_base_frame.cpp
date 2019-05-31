@@ -35,7 +35,6 @@
 #include <msgpanel.h>
 #include <pgm_base.h>
 #include <3d_viewer/eda_3d_viewer.h>          // To include VIEWER3D_FRAMENAME
-
 #include <pcbnew.h>
 #include <fp_lib_table.h>
 #include <pcbnew_id.h>
@@ -43,15 +42,12 @@
 #include <class_track.h>
 #include <class_module.h>
 #include <class_drawsegment.h>
-
 #include <collectors.h>
-#include <class_drawpanel.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_view.h>
 #include <math/vector2d.h>
 #include <trigo.h>
 #include <pcb_painter.h>
-
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tools/pcb_actions.h>

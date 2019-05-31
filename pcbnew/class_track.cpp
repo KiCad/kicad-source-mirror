@@ -24,18 +24,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_track.h
- * @brief Functions relatives to tracks, vias and segments used to fill zones.
- */
-
-
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <common.h>
 #include <trigo.h>
 #include <macros.h>
-#include <class_drawpanel.h>
 #include <pcb_screen.h>
 #include <gr_text.h>
 #include <pcb_base_frame.h>

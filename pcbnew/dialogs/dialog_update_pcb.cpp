@@ -35,11 +35,9 @@
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
 #include <class_draw_panel_gal.h>
-#include <class_drawpanel.h>
 #include <class_board.h>
 #include <ratsnest_data.h>
 #include <view/view.h>
-
 #include <functional>
 #include <kiface_i.h>
 

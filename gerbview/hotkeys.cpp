@@ -22,17 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file gerbview/hotkeys.cpp
- */
-
 #include <fctsys.h>
 #include <common.h>
 #include <gerbview_id.h>
-
 #include <gerbview.h>
 #include <gerbview_frame.h>
-#include <class_drawpanel.h>
 #include <gerbview_layer_widget.h>
 #include <hotkeys.h>
 

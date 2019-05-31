@@ -23,13 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_zone.cpp
- * @brief Implementation of class to handle copper zones.
- */
-
 #include <bitmaps.h>
-#include <class_drawpanel.h>
 #include <fctsys.h>
 #include <geometry/geometry_utils.h>
 #include <kicad_string.h>
@@ -39,11 +33,9 @@
 #include <pcb_screen.h>
 #include <richio.h>
 #include <trigo.h>
-
 #include <convert_to_biu.h>
 #include <class_board.h>
 #include <class_zone.h>
-
 #include <pcbnew.h>
 #include <zones.h>
 #include <math_for_graphics.h>

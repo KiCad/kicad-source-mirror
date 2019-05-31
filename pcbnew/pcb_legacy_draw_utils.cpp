@@ -25,20 +25,16 @@
  */
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
 #include <pcb_edit_frame.h>
 #include <base_units.h>
-
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
 #include <class_marker_pcb.h>
-
 #include <pcbnew.h>
 #include <footprint_edit_frame.h>
 #include <pcbplot.h>
-
 #include <wx/overlay.h>
 
 

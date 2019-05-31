@@ -24,19 +24,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file footprint_editor_options.cpp
- * @brief footprint editor options (events from left vertical option toolbar).
- */
-
 #include <fctsys.h>
-#include <class_drawpanel.h>
-
 #include <pcbnew.h>
 #include <footprint_edit_frame.h>
 #include <board_design_settings.h>
 #include <layers_id_colors_and_visibility.h>
-
 #include <pcbnew_id.h>
 
 

@@ -27,7 +27,6 @@
 using namespace std::placeholders;
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
 #include <pcb_draw_panel_gal.h>
 #include <confirm.h>
 #include <eda_doc.h>

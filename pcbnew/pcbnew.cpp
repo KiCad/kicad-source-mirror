@@ -39,16 +39,13 @@
 #include <confirm.h>
 #include <macros.h>
 #include <make_unique.h>
-#include <class_drawpanel.h>
 #include <pcb_edit_frame.h>
 #include <eda_dde.h>
 #include <wx/stdpaths.h>
-
 #include <wx/file.h>
 #include <wx/snglinst.h>
 #include <wx/dir.h>
 #include <gestfich.h>
-
 #include <pcbnew.h>
 #include <hotkeys.h>
 #include <wildcards_and_files_ext.h>

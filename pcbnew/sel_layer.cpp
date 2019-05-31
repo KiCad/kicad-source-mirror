@@ -29,7 +29,6 @@
 
 #include <fctsys.h>
 #include <common.h>
-#include <class_drawpanel.h>
 #include <confirm.h>
 #include <pcb_base_frame.h>
 #include <widgets/layer_box_selector.h>

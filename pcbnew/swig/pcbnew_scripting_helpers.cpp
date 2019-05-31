@@ -35,7 +35,6 @@
 #include <pcbnew_id.h>
 #include <build_version.h>
 #include <class_board.h>
-#include <class_drawpanel.h>
 #include <kicad_string.h>
 #include <io_mgr.h>
 #include <macros.h>

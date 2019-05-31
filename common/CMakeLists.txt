@@ -74,19 +74,11 @@ set( LEGACY_GAL_SRCS
     legacy_gal/eda_draw_frame.cpp
     )
 
-set( LEGACY_WX_SRCS
-    legacy_wx/eda_draw_frame.cpp
-    legacy_wx/eda_draw_panel.cpp
-    )
-
 add_library( gal STATIC ${GAL_SRCS} )
 add_library( legacy_gal STATIC ${LEGACY_GAL_SRCS} )
-add_library( legacy_wx STATIC ${LEGACY_WX_SRCS} )
 
-target_include_directories( legacy_wx PUBLIC ../include/legacy_wx )
 target_include_directories( legacy_gal PUBLIC ../include/legacy_gal )
 
-target_link_libraries( legacy_wx PRIVATE bitmaps polygon )
 target_link_libraries( legacy_gal PRIVATE bitmaps polygon )
 
 target_link_libraries( gal
@@ -507,7 +499,6 @@ set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
 add_library( pcbcommon STATIC ${PCB_COMMON_SRCS} )
 
 target_include_directories( pcbcommon PUBLIC
-    ../include/legacy_wx
 )
 
 target_link_libraries( pcbcommon PUBLIC

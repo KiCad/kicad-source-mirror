@@ -33,7 +33,6 @@
 #include <pcb_edit_frame.h>
 #include <tracks_cleaner.h>
 #include <reporter.h>
-#include <class_drawpanel.h>
 #include <tool/tool_manager.h>
 #include <collectors.h>
 #include "dialog_drclistbox.h"

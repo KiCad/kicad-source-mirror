@@ -63,7 +63,6 @@ target_link_libraries( qa_pcbnew_utils PUBLIC
 #     pcad2kicadpcb
 #     common
 #     pcbcommon
-#     legacy_wx
 #     gal
 #     qa_utils
 #     lib_dxf

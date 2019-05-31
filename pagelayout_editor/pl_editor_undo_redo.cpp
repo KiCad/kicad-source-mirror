@@ -24,7 +24,6 @@
  */
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
 #include <macros.h>
 #include <ws_data_model.h>
 #include <ws_draw_item.h>
@@ -121,7 +120,7 @@ void PL_EDITOR_FRAME::GetLayoutFromUndoList()
         HardRedraw();   // items based off of corners will need re-calculating
     }
     else
-        GetCanvas()->Refresh();
+        GetGalCanvas()->Refresh();
 
     OnModify();
 }
@@ -153,5 +152,5 @@ void PL_EDITOR_FRAME::RollbackFromUndo()
         HardRedraw();   // items based off of corners will need re-calculating
     }
     else
-        GetCanvas()->Refresh();
+        GetGalCanvas()->Refresh();
 }

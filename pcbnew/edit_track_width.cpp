@@ -24,12 +24,10 @@
 
 #include <fctsys.h>
 #include <gr_basic.h>
-#include <class_drawpanel.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
 #include <class_board.h>
 #include <class_track.h>
-
 #include <pcbnew.h>
 #include <drc.h>
 

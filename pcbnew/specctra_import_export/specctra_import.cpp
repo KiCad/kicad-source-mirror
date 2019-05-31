@@ -32,12 +32,10 @@
 */
 
 
-#include <class_drawpanel.h>    // m_canvas
 #include <confirm.h>            // DisplayError()
 #include <gestfich.h>           // EDA_FileSelector()
 #include <pcb_edit_frame.h>
 #include <macros.h>
-
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>

@@ -23,20 +23,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
 #include <fctsys.h>
 #include <common.h>
-#include <class_drawpanel.h>
 #include <macros.h>
 #include <gbr_layer_box_selector.h>
 #include <menus_helpers.h>
-
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerber_file_image_list.h>
 #include <layer_widget.h>
 #include <gerbview_layer_widget.h>
-
 #include <view/view.h>
 #include <gerbview_painter.h>
 #include <gal/graphics_abstraction_layer.h>

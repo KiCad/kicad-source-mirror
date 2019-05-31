@@ -26,7 +26,6 @@
 #include <fctsys.h>
 #include <common.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <class_drawpanel.h>
 #include <class_draw_panel_gal.h>
 #include <pcb_draw_panel_gal.h>
 #include <confirm.h>
@@ -167,7 +166,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     auto& galOpts = GetGalDisplayOptions();
     galOpts.m_axesEnabled = true;
 
-    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
+    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
 
     ActivateGalCanvas();
 

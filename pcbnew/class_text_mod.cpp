@@ -23,15 +23,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_module.cpp
- * @brief TEXT_MODULE class implementation.
- */
-
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <trigo.h>
-#include <class_drawpanel.h>
 #include <gr_text.h>
 #include <kicad_string.h>
 #include <richio.h>
@@ -40,12 +34,9 @@
 #include <msgpanel.h>
 #include <base_units.h>
 #include <bitmaps.h>
-
 #include <class_board.h>
 #include <class_module.h>
-
 #include <view/view.h>
-
 #include <pcbnew.h>
 
 

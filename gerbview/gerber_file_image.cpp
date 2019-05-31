@@ -29,15 +29,12 @@
 
 #include <fctsys.h>
 #include <common.h>
-#include <class_drawpanel.h>
 #include <macros.h>
 #include <convert_to_biu.h>
-
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerber_file_image.h>
 #include <X2_gerber_attributes.h>
-
 #include <algorithm>
 #include <map>
 

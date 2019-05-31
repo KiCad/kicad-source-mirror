@@ -35,7 +35,6 @@
 #include <kicad_string.h>
 #include <trigo.h>
 #include <richio.h>
-#include <class_drawpanel.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <msgpanel.h>

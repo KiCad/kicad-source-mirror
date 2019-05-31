@@ -7,7 +7,6 @@ add_definitions(-DPL_EDITOR)
 
 include_directories(BEFORE ${INC_BEFORE})
 include_directories(
-    ../include/legacy_wx
     dialogs
     ../common/dialogs
     ${INC_AFTER}
@@ -81,7 +80,7 @@ set_source_files_properties( ../common/single_top.cpp PROPERTIES
 target_link_libraries( pl_editor
     #singletop  # replaces common, giving us restrictive control and link warnings.
     # There's way too much crap coming in from common yet.
-    legacy_wx
+    legacy_gal
     gal
     common
     ${wxWidgets_LIBRARIES}
@@ -100,7 +99,7 @@ add_library( pl_editor_kiface MODULE
     ${PL_EDITOR_EXTRA_SRCS}
     )
 target_link_libraries( pl_editor_kiface
-    legacy_wx
+    legacy_gal
     gal
     common
     ${wxWidgets_LIBRARIES}

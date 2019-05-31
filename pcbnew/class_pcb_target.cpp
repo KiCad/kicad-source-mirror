@@ -32,14 +32,12 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <common.h>
-#include <class_drawpanel.h>
 #include <kicad_string.h>
 #include <trigo.h>
 #include <macros.h>
 #include <richio.h>
 #include <bitmaps.h>
 #include <pcb_edit_frame.h>
-
 #include <class_board.h>
 #include <class_pcb_target.h>
 #include <base_units.h>

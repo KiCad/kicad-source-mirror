@@ -24,14 +24,12 @@
 
 #include <fctsys.h>
 #include <kicad_string.h>
-#include <class_drawpanel.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <dialog_select_net_from_list_base.h>
 #include <eda_pattern_match.h>
 #include <wildcards_and_files_ext.h>
-
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <pcb_painter.h>

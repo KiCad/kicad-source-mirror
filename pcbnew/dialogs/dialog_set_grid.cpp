@@ -21,25 +21,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file dialog_set_grid.cpp
- * @brief Manage user grid.
- */
-
 #include <dialog_set_grid_base.h>
-
 #include <base_units.h>
 #include <common.h>
 #include <widgets/unit_binder.h>
 #include <hotkeys.h>
 #include <pcb_base_edit_frame.h>
-#include <class_drawpanel.h>
 #include <class_draw_panel_gal.h>
-
 #include <gal/graphics_abstraction_layer.h>
 #include <tools/pcb_actions.h>
 #include <tool/tool_manager.h>
-
 #include <pcbnew_id.h>
 
 // Max values for grid size

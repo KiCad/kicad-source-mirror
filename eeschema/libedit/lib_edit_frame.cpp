@@ -211,7 +211,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .BestSize( m_defaultLibWidth, -1 ).Resizable() );
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(1) );
 
-    m_auimgr.AddPane( m_canvas->GetWindow(), wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
+    m_auimgr.AddPane( GetGalCanvas(), wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
 
     m_auimgr.Update();
 

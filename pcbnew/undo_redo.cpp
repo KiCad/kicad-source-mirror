@@ -28,10 +28,8 @@
 #include <functional>
 using namespace std::placeholders;
 #include <fctsys.h>
-#include <class_drawpanel.h>
 #include <class_draw_panel_gal.h>
 #include <macros.h>
-
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
 #include <class_board.h>

@@ -591,7 +591,7 @@ bool PL_SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
         }
 
         getView()->UpdateItems();
-        m_frame->GetCanvas()->Refresh();
+        m_frame->GetGalCanvas()->Refresh();
     }
 
     if( current )
@@ -599,7 +599,7 @@ bool PL_SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
         unhighlight( current, BRIGHTENED );
 
         getView()->UpdateItems();
-        m_frame->GetCanvas()->Refresh();
+        m_frame->GetGalCanvas()->Refresh();
 
         aCollector->Empty();
         aCollector->Append( current );

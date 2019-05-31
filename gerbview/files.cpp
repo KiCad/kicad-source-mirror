@@ -26,12 +26,9 @@
 #include <wx/fs_zip.h>
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
-
 #include <common.h>
-#include <class_drawpanel.h>
 #include <reporter.h>
 #include <html_messagebox.h>
-
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
 #include <gerber_file_image.h>

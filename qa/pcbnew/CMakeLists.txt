@@ -61,7 +61,7 @@ target_link_libraries( qa_pcbnew
     pcbcommon
     pnsrouter
     pcad2kicadpcb
-    legacy_wx
+    legacy_gal
     gal
     common
     qa_utils

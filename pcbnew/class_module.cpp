@@ -24,15 +24,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_module.cpp
- * @brief MODULE class implementation.
- */
-
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <plotter.h>
-#include <class_drawpanel.h>
 #include <trigo.h>
 #include <confirm.h>
 #include <kicad_string.h>
@@ -44,13 +38,11 @@
 #include <msgpanel.h>
 #include <bitmaps.h>
 #include <unordered_set>
-
 #include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <class_edge_mod.h>
 #include <class_module.h>
 #include <convert_basic_shapes_to_polygon.h>
-
 #include <view/view.h>
 
 MODULE::MODULE( BOARD* parent ) :

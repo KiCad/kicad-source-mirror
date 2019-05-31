@@ -27,7 +27,6 @@
 #include <confirm.h>
 #include <gr_basic.h>
 #include <base_struct.h>
-#include <class_drawpanel.h>
 #include <title_block.h>
 #include <draw_frame.h>
 #include <ws_data_model.h>

@@ -407,7 +407,7 @@ SCH_HIERLABEL* SCH_EDIT_FRAME::ImportHierLabel( SCH_SHEET* aSheet )
 void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard( wxCommandEvent& aEvt )
 {
     wxRect  DrawArea;
-    BASE_SCREEN* screen = GetCanvas()->GetScreen();
+    BASE_SCREEN* screen = GetScreen();
 
     DrawArea.SetSize( GetPageSizeIU() );
 

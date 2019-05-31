@@ -22,16 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file gbr_layout.cpp
- * @brief  GBR_LAYOUT class functions.
- */
-
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <gr_text.h>
 #include <gerbview_frame.h>
-#include <class_drawpanel.h>
 #include <gbr_layout.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>

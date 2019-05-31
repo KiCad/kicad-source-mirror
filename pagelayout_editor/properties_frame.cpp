@@ -24,7 +24,6 @@
  */
 
 #include <fctsys.h>
-#include <class_drawpanel.h>
 #include <ws_draw_item.h>
 #include <ws_data_model.h>
 #include <properties_frame.h>
@@ -309,7 +308,7 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
     CopyPrmsFromGeneralToPanel();
 
     m_parent->OnModify();
-    m_parent->GetCanvas()->Refresh();
+    m_parent->GetGalCanvas()->Refresh();
 }
 
 
@@ -322,7 +321,7 @@ void PROPERTIES_FRAME::OnSetDefaultValues( wxCommandEvent& event )
     model.m_DefaultTextThickness = 0.15;
 
     CopyPrmsFromGeneralToPanel();
-    m_parent->GetCanvas()->Refresh();
+    m_parent->GetGalCanvas()->Refresh();
 }
 
 

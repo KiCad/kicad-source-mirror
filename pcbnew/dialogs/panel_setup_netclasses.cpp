@@ -23,9 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
 #include <fctsys.h>
-#include <class_drawpanel.h>
 #include <base_units.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
@@ -33,7 +31,6 @@
 #include <bitmaps.h>
 #include <widgets/wx_grid.h>
 #include <grid_tricks.h>
-
 #include <panel_setup_netclasses.h>
 
 

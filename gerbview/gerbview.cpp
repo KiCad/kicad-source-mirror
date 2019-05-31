@@ -29,8 +29,6 @@
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
-#include <class_drawpanel.h>
-
 #include <gerbview.h>
 #include <hotkeys.h>
 #include <gerbview_frame.h>

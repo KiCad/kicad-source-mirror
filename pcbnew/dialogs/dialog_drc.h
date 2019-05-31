@@ -28,14 +28,11 @@
 #define _DIALOG_DRC_H_
 
 #include <wx/htmllbox.h>
-
 #include <fctsys.h>
 #include <pcbnew.h>
-#include <class_drawpanel.h>
 #include <drc.h>
 #include <class_marker_pcb.h>
 #include <class_board.h>
-
 #include <dialog_drc_base.h>
 #include <dialog_drclistbox.h>
 #include <widgets/unit_binder.h>

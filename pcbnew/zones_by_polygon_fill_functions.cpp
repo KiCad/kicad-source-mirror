@@ -27,27 +27,20 @@
  */
 
 #include <wx/progdlg.h>
-
 #include <fctsys.h>
 #include <pgm_base.h>
-#include <class_drawpanel.h>
 #include <class_draw_panel_gal.h>
 #include <ratsnest_data.h>
 #include <pcb_edit_frame.h>
 #include <macros.h>
-
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-
 #include <class_board.h>
 #include <class_track.h>
 #include <class_zone.h>
-
 #include <pcbnew.h>
 #include <zones.h>
-
 #include <board_commit.h>
-
 #include <widgets/progress_reporter.h>
 #include <zone_filler.h>
 

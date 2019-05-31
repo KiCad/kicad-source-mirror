@@ -323,7 +323,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(1) );
-    m_auimgr.AddPane( m_canvas->GetWindow(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
     m_auimgr.Update();
@@ -505,15 +505,14 @@ void SCH_EDIT_FRAME::SetCurrentSheet( const SCH_SHEET_PATH& aSheet )
     if( aSheet != *g_CurrentSheet )
     {
         *g_CurrentSheet = aSheet;
-
-        static_cast<SCH_DRAW_PANEL*>( m_canvas )->DisplaySheet( g_CurrentSheet->LastScreen() );
+        GetCanvas()->DisplaySheet( g_CurrentSheet->LastScreen() );
     }
 }
 
 
 void SCH_EDIT_FRAME::HardRedraw()
 {
-    static_cast<SCH_DRAW_PANEL*>( m_canvas )->DisplaySheet( g_CurrentSheet->LastScreen() );
+    GetCanvas()->DisplaySheet( g_CurrentSheet->LastScreen() );
     GetGalCanvas()->ForceRefresh();
 }
 
@@ -669,7 +668,7 @@ void SCH_EDIT_FRAME::OnModify()
     if( ADVANCED_CFG::GetCfg().m_realTimeConnectivity && CONNECTION_GRAPH::m_allowRealTime )
         RecalculateConnections( false );
 
-    m_canvas->Refresh();
+    GetCanvas()->Refresh();
 }
 
 
@@ -852,7 +851,7 @@ void SCH_EDIT_FRAME::OnLoadFile( wxCommandEvent& event )
 void SCH_EDIT_FRAME::OnLoadCmpToFootprintLinkFile( wxCommandEvent& event )
 {
     LoadCmpToFootprintLinkFile();
-    m_canvas->Refresh();
+    GetCanvas()->Refresh();
 }
 
 
@@ -867,7 +866,7 @@ void SCH_EDIT_FRAME::OnUpdateFields( wxCommandEvent& event )
     }
 
     if( InvokeDialogUpdateFields( this, components, true ) == wxID_OK )
-        m_canvas->Refresh();
+        GetCanvas()->Refresh();
 }
 
 
@@ -1045,7 +1044,7 @@ void SCH_EDIT_FRAME::OnRemapSymbols( wxCommandEvent& event )
 
     dlgRemap.ShowQuasiModal();
 
-    m_canvas->Refresh( true );
+    GetCanvas()->Refresh( true );
 }
 
 
@@ -1057,7 +1056,7 @@ void SCH_EDIT_FRAME::OnRemapSymbols( wxCommandEvent& event )
 void SCH_EDIT_FRAME::OnEditComponentSymbolsId( wxCommandEvent& event )
 {
     InvokeDialogEditComponentsLibId( this );
-    m_canvas->Refresh( true );
+    GetCanvas()->Refresh( true );
 }
 
 
@@ -1292,8 +1291,7 @@ void SCH_EDIT_FRAME::ShowChangedLanguage()
 void SCH_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 {
     SCH_BASE_FRAME::SetScreen( aScreen );
-    auto c = static_cast<SCH_DRAW_PANEL*>(m_canvas);
-    c->DisplaySheet( static_cast<SCH_SCREEN*>( aScreen ) );
+    GetCanvas()->DisplaySheet( static_cast<SCH_SCREEN*>( aScreen ) );
 }
 
 

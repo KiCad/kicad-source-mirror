@@ -22,7 +22,6 @@
 #include <kiface_i.h>
 #include <pgm_base.h>
 #include <eda_base_frame.h>
-#include <class_drawpanel.h>
 #include <build_version.h>
 #include <trigo.h>
 #include <base_units.h>
@@ -123,7 +122,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     SetScreen( new GBR_SCREEN( GetPageSettings().GetSizeIU() ) );
 
     // Create the PCB_LAYER_WIDGET *after* SetLayout():
-    m_LayersManager = new GERBER_LAYER_WIDGET( this, m_canvas );
+    m_LayersManager = new GERBER_LAYER_WIDGET( this, GetGalCanvas() );
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager

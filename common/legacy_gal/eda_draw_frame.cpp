@@ -29,7 +29,6 @@
 #include <bitmaps.h>
 #include <macros.h>
 #include <id.h>
-#include <class_drawpanel.h>
 #include <base_screen.h>
 #include <msgpanel.h>
 #include <draw_frame.h>
@@ -82,6 +81,7 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
     EVT_MENU_OPEN( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_MENU_CLOSE( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_MENU_HIGHLIGHT_ALL( EDA_DRAW_FRAME::OnMenuOpen )
+    EVT_MENU_RANGE( ID_POPUP_GRID_LEVEL_1000, ID_POPUP_GRID_USER, EDA_DRAW_FRAME::OnSelectGrid )
 END_EVENT_TABLE()
 
 
@@ -99,7 +99,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_zoomSelectBox       = NULL;
     m_hotkeysDescrList    = NULL;
 
-    m_canvas              = NULL;
     m_canvasType          = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
     m_galCanvas           = NULL;
     m_actions             = NULL;
@@ -359,6 +358,7 @@ int EDA_DRAW_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
 
 void EDA_DRAW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMode, void* aData )
 {
+    wxMessageBox( wxT("EDA_DRAW_FRAME::PrintPage() error") );
 }
 
 
@@ -413,6 +413,12 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
     m_toolManager->RunAction( "common.Control.zoomPreset", true, id );
     UpdateStatusBar();
     m_galCanvas->Refresh();
+}
+
+
+double EDA_DRAW_FRAME::GetZoom()
+{
+    return GetScreen()->GetZoom();
 }
 
 

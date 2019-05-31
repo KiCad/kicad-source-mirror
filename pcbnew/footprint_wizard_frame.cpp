@@ -24,14 +24,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file footprint_wizard_frame.cpp
- */
-
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <class_drawpanel.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew.h>
@@ -228,7 +223,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     galOpts.m_forceDisplayCursor = true;
     galOpts.m_axesEnabled = true;
 
-    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / m_canvas->GetScreen()->GetZoom() );
+    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
     updateView();
 

@@ -7,7 +7,6 @@ add_definitions(-DGERBVIEW)
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
-    ../include/legacy_wx
     ../pcbnew
     dialogs
     ../common
@@ -113,7 +112,7 @@ target_link_libraries( gerbview
     #singletop  # replaces common, giving us restrictive control and link warnings.
     # There's way too much crap coming in from common yet.
     gal
-    legacy_wx
+    legacy_gal
     common
     ${wxWidgets_LIBRARIES}
     )
@@ -137,7 +136,7 @@ set_target_properties( gerbview_kiface PROPERTIES
     )
 target_link_libraries( gerbview_kiface
     gal
-    legacy_wx
+    legacy_gal
     common
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}

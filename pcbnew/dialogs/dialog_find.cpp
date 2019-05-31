@@ -25,7 +25,6 @@
 
 #include <fctsys.h>
 #include <gr_basic.h>
-#include <class_drawpanel.h>
 #include <confirm.h>
 #include <kicad_string.h>
 #include <pcb_edit_frame.h>
@@ -34,7 +33,6 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_marker_pcb.h>
-
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <dialog_find.h>
@@ -97,7 +95,7 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
 
     prevSearchString = searchString;
 
-    parent->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
+    parent->GetGalCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
 
     int count = 0;
 
@@ -159,7 +157,7 @@ void DIALOG_FIND::onButtonFindMarkerClick( wxCommandEvent& aEvent )
     foundItem = NULL;
 
     parent->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
-    parent->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
+    parent->GetGalCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
 
     MARKER_PCB* marker = parent->GetBoard()->GetMARKER( markerCount++ );
 
