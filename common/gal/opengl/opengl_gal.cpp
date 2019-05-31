@@ -1253,7 +1253,7 @@ void OPENGL_GAL::DrawGrid()
     // force flush
     nonCachedManager->EndDrawing();
 
-    if( !gridVisibility )
+    if( !gridVisibility || gridSize.x == 0 || gridSize.y == 0 )
         return;
 
     VECTOR2D gridScreenSize( gridSize );
