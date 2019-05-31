@@ -874,7 +874,10 @@ public:
      */
     bool EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy, bool* aClearAnnotationNewItems );
 
-    void InitSheet( SCH_SHEET* aSheet, const wxString& aFilename );
+    void InitSheet( SCH_SHEET* aSheet, const wxString& aNewFilename );
+
+    void LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
+                            const wxString& aExistingFilename );
 
     wxPoint GetLastSheetPinPosition() const { return m_lastSheetPinPosition; }
 

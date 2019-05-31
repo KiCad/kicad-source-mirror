@@ -38,12 +38,59 @@
 #include <dialogs/dialog_sch_edit_sheet_pin.h>
 
 
-void SCH_EDIT_FRAME::InitSheet( SCH_SHEET* aSheet, const wxString& aFilename )
+void SCH_EDIT_FRAME::InitSheet( SCH_SHEET* aSheet, const wxString& aNewFilename )
 {
     aSheet->SetScreen( new SCH_SCREEN( &Kiway() ) );
     aSheet->GetScreen()->SetModify();
     aSheet->GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
-    aSheet->GetScreen()->SetFileName( aFilename );
+    aSheet->GetScreen()->SetFileName( aNewFilename );
+}
+
+
+void SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
+                                        const wxString& aExistingFilename )
+{
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+
+    wxFileName fileName( aExistingFilename );
+
+    if( !fileName.IsAbsolute() )
+    {
+        const SCH_SCREEN* currentScreen = aHierarchy->LastScreen();
+        wxFileName currentSheetFileName = currentScreen->GetFileName();
+        fileName.Normalize( wxPATH_NORM_ALL, currentSheetFileName.GetPath() );
+    }
+
+    wxString fullFilename = fileName.GetFullPath();
+
+    try
+    {
+        pi->Load( fullFilename, &Kiway(), aSheet );
+
+        if( !pi->GetError().IsEmpty() )
+        {
+            DisplayErrorMessage( this, _( "The entire schematic could not be loaded.\n"
+                                          "Errors occurred loading hierarchical sheets." ),
+                                 pi->GetError() );
+        }
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxString msg;
+
+        msg.Printf( _( "Error occurred loading schematic file \"%s\"." ), fullFilename );
+        DisplayErrorMessage( this, msg, ioe.What() );
+
+        msg.Printf( _( "Failed to load schematic \"%s\"" ), fullFilename );
+        AppendMsgPanel( wxEmptyString, msg, CYAN );
+
+        return;
+    }
+
+    SCH_SCREEN* screen = aSheet->GetScreen();
+
+    if( screen )
+        screen->UpdateSymbolLinks( true );
 }
 
 
@@ -97,8 +144,6 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
 
     // Inside Eeschema, filenames are stored using unix notation
     newFilename.Replace( wxT( "\\" ), wxT( "/" ) );
-
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
 
     if( aSheet->GetScreen() == NULL )              // New sheet.
     {
@@ -187,6 +232,8 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
 
         if( renameFile )
         {
+            SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+
             // If the the associated screen is shared by more than one sheet, do not
             // change the filename of the corresponding screen here.
             // (a new screen will be created later)
@@ -230,33 +277,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
     }
     else if( loadFromFile )
     {
-        try
-        {
-            aSheet = pi->Load( newFilename, &Kiway(), aSheet );
-
-            if( !pi->GetError().IsEmpty() )
-            {
-                DisplayErrorMessage( this,
-                                     _( "The entire schematic could not be loaded.\n"
-                                        "Errors occurred loading hierarchical sheets." ),
-                                     pi->GetError() );
-            }
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            msg.Printf( _( "Error occurred loading schematic file \"%s\"." ), newFilename );
-            DisplayErrorMessage( this, msg, ioe.What() );
-
-            msg.Printf( _( "Failed to load schematic \"%s\"" ), newFilename );
-            AppendMsgPanel( wxEmptyString, msg, CYAN );
-
-            return false;
-        }
-
-        SCH_SCREEN* screen = aSheet->GetScreen();
-
-        if( screen )
-            screen->UpdateSymbolLinks( true );
+        LoadSheetFromFile( aSheet, aHierarchy, newFilename );
     }
 
     aSheet->SetFileNameSize( dlg.GetFileNameTextSize() );
