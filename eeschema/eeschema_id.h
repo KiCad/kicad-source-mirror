@@ -108,7 +108,6 @@ enum id_eeschema_frm
     ID_LIBEDIT_ADD_LIBRARY,
     ID_LIBEDIT_SAVE,
     ID_LIBEDIT_SAVE_AS,
-    ID_LIBEDIT_SAVE_ALL,
     ID_LIBEDIT_REVERT,
     ID_LIBEDIT_NEW_PART,
     ID_LIBEDIT_EDIT_PART,
@@ -157,12 +156,10 @@ enum id_eeschema_frm
     ID_SET_RELATIVE_OFFSET,
 
     ID_UPDATE_PCB_FROM_SCH,
-    ID_UPDATE_SCH_FROM_PCB,
 
     ID_SIM_RUN,
     ID_SIM_TUNE,
     ID_SIM_PROBE,
-    ID_SIM_SETTINGS,
     ID_SIM_ADD_SIGNALS,
     ID_SIM_SHOW,
 
@@ -181,9 +178,7 @@ enum id_eeschema_frm
     ID_POPUP_SCH_SELECT_UNIT1,
     // ... leave room for MAX_UNIT_COUNT_PER_PACKAGE IDs ,
     // to select one unit among MAX_UNIT_COUNT_PER_PACKAGE in popup menu
-    ID_POPUP_SCH_SELECT_UNIT_CMP_MAX = ID_POPUP_SCH_SELECT_UNIT1
-                                       + MAX_UNIT_COUNT_PER_PACKAGE
-
+    ID_POPUP_SCH_SELECT_UNIT_CMP_MAX = ID_POPUP_SCH_SELECT_UNIT1 + MAX_UNIT_COUNT_PER_PACKAGE
 };
 
 

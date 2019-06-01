@@ -43,7 +43,6 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar* oldMenuBar = GetMenuBar();
     wxMenuBar* menuBar = new wxMenuBar();
-    wxString   text;
 
     //-- File menu -----------------------------------------------
     //
@@ -208,12 +207,12 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     viewMenu->AddCheckItem( ID_TB_OPTIONS_DIFF_MODE,
                             _( "Show in Differential Mode" ),
                             _( "Show layers in differential mode" ),
-                            gbr_select_mode2_xpm, diffModeCondition );
+                            gbr_select_mode2_xpm,                      diffModeCondition );
 
-    text = AddHotkeyName( _( "Show in High Contrast" ), GerbviewHotkeysDescr, HK_SWITCH_HIGHCONTRAST_MODE );
-    viewMenu->AddCheckItem( ID_TB_OPTIONS_HIGH_CONTRAST_MODE, text,
+    viewMenu->AddCheckItem( ID_TB_OPTIONS_HIGH_CONTRAST_MODE,
+                            AddHotkeyName( _( "Show in High Contrast" ), GerbviewHotkeysDescr, HK_SWITCH_HIGHCONTRAST_MODE ),
                             _( "Show in high contrast mode" ),
-                            contrast_mode_xpm, contrastModeCondition );
+                            contrast_mode_xpm,                         contrastModeCondition );
 
     //-- Tools menu -----------------------------------------------
     //
@@ -247,9 +246,9 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     CONDITIONAL_MENU* preferencesMenu = new CONDITIONAL_MENU( false, selTool );
 
-    // Options (Preferences on WXMAC)
-    text = AddHotkeyName( _( "&Preferences..." ), GerbviewHotkeysDescr, HK_PREFERENCES );
-    preferencesMenu->AddItem( wxID_PREFERENCES, text, _( "Show preferences for all open tools" ),
+    preferencesMenu->AddItem( wxID_PREFERENCES,
+                              AddHotkeyName( _( "Preferences..." ), GerbviewHotkeysDescr, HK_PREFERENCES ),
+                              _( "Show preferences for all open tools" ),
                               preference_xpm,                    SELECTION_CONDITIONS::ShowAlways );
 
     preferencesMenu->AddSeparator();

@@ -282,7 +282,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                         library_table_xpm,                 EE_CONDITIONS::ShowAlways );
 
     prefsMenu->AddItem( wxID_PREFERENCES,
-                        AddHotkeyName( _( "&Preferences..." ), g_Eeschema_Hotkeys_Descr, HK_PREFERENCES ),
+                        AddHotkeyName( _( "Preferences..." ), g_Eeschema_Hotkeys_Descr, HK_PREFERENCES ),
                         _( "Show preferences for all open tools" ),
                         preference_xpm,                    EE_CONDITIONS::ShowAlways );
 

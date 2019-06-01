@@ -349,7 +349,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  _( "Configure footprint library table" ),
                  KiBitmap( library_table_xpm ) );
 
-    msg = AddHotkeyName( _( "&Preferences..." ), kicad_Manager_Hotkeys_Descr, HK_PREFERENCES );
+    msg = AddHotkeyName( _( "Preferences..." ), kicad_Manager_Hotkeys_Descr, HK_PREFERENCES );
     AddMenuItem( preferencesMenu, wxID_PREFERENCES, msg,
                  _( "Show preferences for all open tools" ),
                  KiBitmap( preference_xpm ) );

@@ -69,6 +69,12 @@ void CONDITIONAL_MENU::AddItem( int aId, const wxString& aText, const wxString& 
         AddBitmapToMenuItem( item, KiBitmap( aIcon ) );
 
     addEntry( ENTRY( item, aIcon, aCondition, aOrder, false ) );
+
+#ifdef __WXMAC__
+    // Make sure the Mac-specific preference-menu handling code can find it
+    if( aId == wxID_PREFERENCES )
+        Append( new wxMenuItem( this, aId, aText, aTooltip, wxITEM_NORMAL ) );
+#endif
 }
 
 
@@ -136,8 +142,16 @@ void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
                 break;
 
             case ENTRY::WXITEM:
-                menuItem = new wxMenuItem( this, entry.wxItem()->GetId(), entry.wxItem()->GetItemLabel(),
-                                   entry.wxItem()->GetHelp(), entry.wxItem()->GetKind() );
+#ifdef __WXMAC__
+                // wxWidgets moved the Preferences... item to the Apple menu
+                if( entry.wxItem()->GetId() == wxID_PREFERENCES )
+                    continue;
+#endif
+                menuItem = new wxMenuItem( this,
+                                           entry.wxItem()->GetId(),
+                                           entry.wxItem()->GetItemLabel(),
+                                           entry.wxItem()->GetHelp(),
+                                           entry.wxItem()->GetKind() );
 
                 if( entry.GetIcon() )
                     AddBitmapToMenuItem( menuItem, KiBitmap( entry.GetIcon() ) );

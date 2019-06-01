@@ -503,7 +503,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                         import3d_xpm,        SELECTION_CONDITIONS::ShowAlways );
 #endif
     prefsMenu->AddItem( wxID_PREFERENCES,
-                        AddHotkeyName( _( "&Preferences..." ), g_Module_Editor_Hotkeys_Descr, HK_PREFERENCES ),
+                        AddHotkeyName( _( "Preferences..." ), g_Module_Editor_Hotkeys_Descr, HK_PREFERENCES ),
                         _( "Show preferences for all open tools" ),
                         preference_xpm,      SELECTION_CONDITIONS::ShowAlways );
 

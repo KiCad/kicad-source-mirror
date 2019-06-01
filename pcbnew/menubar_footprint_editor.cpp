@@ -322,7 +322,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                         library_table_xpm,   SELECTION_CONDITIONS::ShowAlways );
 
     prefsMenu->AddItem( wxID_PREFERENCES,
-                        AddHotkeyName( _( "&Preferences..." ), g_Module_Editor_Hotkeys_Descr, HK_PREFERENCES ),
+                        AddHotkeyName( _( "Preferences..." ), g_Module_Editor_Hotkeys_Descr, HK_PREFERENCES ),
                         _( "Show preferences for all open tools" ),
                         preference_xpm,      SELECTION_CONDITIONS::ShowAlways );
 
