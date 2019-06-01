@@ -52,7 +52,7 @@ void ARRAY_CREATOR::Invoke()
     if( m_selection.Size() == 0 )
         return;
 
-    MODULE* const module = m_editModules ? m_parent.GetBoard()->m_Modules.GetFirst() : nullptr;
+    MODULE* const module = m_editModules ? m_parent.GetBoard()->GetFirstModule() : nullptr;
 
     const bool enableArrayNumbering = m_editModules;
     const wxPoint rotPoint = (wxPoint) m_selection.GetCenter();
@@ -128,9 +128,9 @@ void ARRAY_CREATOR::Invoke()
 
                     if( this_item->Type() == PCB_MODULE_T )
                     {
-                        static_cast<MODULE*>( this_item )->RunOnChildren( [&] ( BOARD_ITEM* item )
+                        static_cast<MODULE*>( this_item )->RunOnChildren( [&] ( BOARD_ITEM* aItem )
                         {
-                            item->ClearSelected();
+                            aItem->ClearSelected();
                         });
                     }
 
