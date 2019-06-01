@@ -138,12 +138,14 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
     {
         // First check if all the candidates are actually the same
         bool same = true;
-        auto first = GetNameForDriver( candidates[0] );
+        wxString first = GetNameForDriver( candidates[0] );
+        SCH_ITEM* second_item = nullptr;
 
         for( unsigned i = 1; i < candidates.size(); i++ )
         {
             if( GetNameForDriver( candidates[i] ) != first )
             {
+                second_item = candidates[i];
                 same = false;
                 break;
             }
@@ -155,18 +157,18 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
             msg.Printf( _( "%s and %s are both attached to the same wires. "
                            "%s was picked as the label to use for netlisting." ),
                         candidates[0]->GetSelectMenuText( m_frame->GetUserUnits() ),
-                        candidates[1]->GetSelectMenuText( m_frame->GetUserUnits() ),
+                        second_item->GetSelectMenuText( m_frame->GetUserUnits() ),
                         candidates[0]->Connection( m_sheet )->Name() );
 
-            wxASSERT( candidates[0] != candidates[1] );
+            wxASSERT( candidates[0] != second_item );
 
             auto p0 = ( candidates[0]->Type() == SCH_PIN_T ) ?
                       static_cast<SCH_PIN*>( candidates[0] )->GetTransformedPosition() :
                       candidates[0]->GetPosition();
 
-            auto p1 = ( candidates[1]->Type() == SCH_PIN_T ) ?
-                      static_cast<SCH_PIN*>( candidates[1] )->GetTransformedPosition() :
-                      candidates[1]->GetPosition();
+            auto p1 = ( second_item->Type() == SCH_PIN_T ) ?
+                      static_cast<SCH_PIN*>( second_item )->GetTransformedPosition() :
+                      second_item->GetPosition();
 
             auto marker = new SCH_MARKER();
             marker->SetTimeStamp( GetNewTimeStamp() );
