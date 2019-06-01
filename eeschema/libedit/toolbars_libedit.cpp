@@ -31,7 +31,7 @@
 #include <lib_edit_frame.h>
 #include <dialog_helpers.h>
 #include <bitmaps.h>
-
+#include <lib_manager.h>
 #include <help_common_strings.h>
 #include <tools/ee_actions.h>
 
@@ -167,6 +167,15 @@ void LIB_EDIT_FRAME::SyncMenusAndToolbars()
 {
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
 
+    LIB_ID libId = getTargetLibId();
+    const wxString& libName = libId.GetLibNickname();
+    const wxString& partName = libId.GetLibItemName();
+    bool modified = m_libMgr->IsLibraryModified( libName );
+
+    if( !partName.IsEmpty() && m_libMgr->IsPartModified( partName, libName ) )
+        modified = true;
+
+    m_mainToolBar->Toggle( ACTIONS::saveAll, modified );
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
