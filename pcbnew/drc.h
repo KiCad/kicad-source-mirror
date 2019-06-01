@@ -112,6 +112,7 @@
 #define DRCE_DANGLING_TRACK                    62
 #define DRCE_DANGLING_VIA                      63
 #define DRCE_ZERO_LENGTH_TRACK                 64
+#define DRCE_TRACK_IN_PAD                      65
 
 
 class PCB_EDIT_FRAME;

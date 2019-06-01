@@ -568,13 +568,4 @@ private:
     int m_newNetCode;               ///< possible value for new net code assignment
 };
 
-
-/***********************************************************/
-/* Description of a trace point for monitoring connections */
-/***********************************************************/
-#define START_ON_PAD   0x10
-#define END_ON_PAD     0x20
-#define START_ON_TRACK 0x40
-#define END_ON_TRACK   0x80
-
 #endif  // CLASS_NETINFO_

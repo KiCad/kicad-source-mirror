@@ -164,6 +164,8 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _( "Remove dangling via" ) );
     case DRCE_ZERO_LENGTH_TRACK:
         return wxString( _( "Remove zero-length track" ) );
+    case DRCE_TRACK_IN_PAD:
+        return wxString( _( "Remove track inside pad" ) );
 
     default:
         return wxString::Format( _( "Unknown DRC error code %d" ), m_ErrorCode );

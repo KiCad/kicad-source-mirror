@@ -26,32 +26,48 @@
  */
 #include <wx/wx.h>
 
-#include <dialog_cleanup_tracks_and_vias.h>
-#include <wx_html_report_panel.h>
+#include "dialog_drclistbox.h"
 #include <board_commit.h>
-#include <tools/pcb_actions.h>
+#include <collectors.h>
+#include <dialog_cleanup_tracks_and_vias.h>
+#include <kiface_i.h>
 #include <pcb_edit_frame.h>
-#include <tracks_cleaner.h>
 #include <reporter.h>
 #include <tool/tool_manager.h>
-#include <collectors.h>
-#include "dialog_drclistbox.h"
+#include <tools/pcb_actions.h>
+#include <tracks_cleaner.h>
+#include <wx_html_report_panel.h>
 
-// Static members of DIALOG_CLEANUP_TRACKS_AND_VIAS
-bool DIALOG_CLEANUP_TRACKS_AND_VIAS::m_cleanVias = true;
-bool DIALOG_CLEANUP_TRACKS_AND_VIAS::m_mergeSegments = true;
-bool DIALOG_CLEANUP_TRACKS_AND_VIAS::m_deleteUnconnectedSegm = true;
-bool DIALOG_CLEANUP_TRACKS_AND_VIAS::m_deleteShortCircuits = true;
+// Keywords for read and write config
+#define CleanupViaKey wxT( "DialogCleanupVias" )
+#define MergeKey wxT( "DialogCleanupMergeSegments" )
+#define UnconnectedKey wxT( "DialogCleanupUnconnected" )
+#define ShortCircuitKey wxT( "DialogCleanupShortCircuit" )
+#define TracksInPadKey wxT( "DialogCleanupTracksInPads" )
 
 
 DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParentFrame ):
         DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE( aParentFrame ),
     m_parentFrame( aParentFrame )
 {
-    m_cleanViasOpt->SetValue( m_cleanVias );
-    m_mergeSegmOpt->SetValue( m_mergeSegments );
-    m_deleteUnconnectedOpt->SetValue( m_deleteUnconnectedSegm );
-    m_cleanShortCircuitOpt->SetValue( m_deleteShortCircuits );
+    m_config = Kiface().KifaceSettings();
+    m_config->SetPath( "/dialogs/cleanup_tracks/" );
+
+    bool value;
+    m_config->Read( CleanupViaKey, &value, true );
+    m_cleanViasOpt->SetValue( value );
+
+    m_config->Read( MergeKey, &value, true );
+    m_mergeSegmOpt->SetValue( value );
+
+    m_config->Read( UnconnectedKey, &value, true );
+    m_deleteUnconnectedOpt->SetValue( value );
+
+    m_config->Read( ShortCircuitKey, &value, true );
+    m_cleanShortCircuitOpt->SetValue( value );
+
+    m_config->Read( TracksInPadKey, &value, true );
+    m_deleteTracksInPadsOpt->SetValue( value );
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
     // that requires us to correct the button labels here.
@@ -65,10 +81,11 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
 
 DIALOG_CLEANUP_TRACKS_AND_VIAS::~DIALOG_CLEANUP_TRACKS_AND_VIAS()
 {
-    m_cleanVias = m_cleanViasOpt->GetValue();
-    m_mergeSegments = m_mergeSegmOpt->GetValue();
-    m_deleteUnconnectedSegm = m_deleteUnconnectedOpt->GetValue();
-    m_deleteShortCircuits = m_cleanShortCircuitOpt->GetValue();
+    m_config->Write( CleanupViaKey, m_cleanViasOpt->GetValue() );
+    m_config->Write( MergeKey, m_mergeSegmOpt->GetValue() );
+    m_config->Write( UnconnectedKey, m_deleteUnconnectedOpt->GetValue() );
+    m_config->Write( ShortCircuitKey, m_cleanShortCircuitOpt->GetValue() );
+    m_config->Write( TracksInPadKey, m_deleteTracksInPadsOpt->GetValue() );
 
     for( DRC_ITEM* item : m_items )
         delete item;
@@ -117,11 +134,9 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
     // Old model has to be refreshed, GAL normally does not keep updating it
     m_parentFrame->Compile_Ratsnest( false );
 
-    bool modified = cleaner.CleanupBoard( aDryRun, &m_items,
-                                          m_cleanShortCircuitOpt->GetValue(),
-                                          m_cleanViasOpt->GetValue(),
-                                          m_mergeSegmOpt->GetValue(),
-                                          m_deleteUnconnectedOpt->GetValue() );
+    bool modified = cleaner.CleanupBoard( aDryRun, &m_items, m_cleanShortCircuitOpt->GetValue(),
+            m_cleanViasOpt->GetValue(), m_mergeSegmOpt->GetValue(),
+            m_deleteUnconnectedOpt->GetValue(), m_deleteTracksInPadsOpt->GetValue() );
 
     if( aDryRun )
     {

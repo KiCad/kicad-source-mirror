@@ -66,44 +66,14 @@ TRACKS_CLEANER::TRACKS_CLEANER( EDA_UNITS_T aUnits, BOARD* aPcb, BOARD_COMMIT& a
 }
 
 
-void TRACKS_CLEANER::buildTrackConnectionInfo()
-{
-    auto connectivity = m_brd->GetConnectivity();
-
-    connectivity->Build(m_brd);
-
-    // clear flags and variables used in cleanup
-    for( auto track : m_brd->Tracks() )
-    {
-        track->SetState( START_ON_PAD | END_ON_PAD | BUSY, false );
-    }
-
-    for( auto track : m_brd->Tracks() )
-    {
-        // Mark track if connected to pads
-        for( auto pad : connectivity->GetConnectedPads( track ) )
-        {
-            if( pad->HitTest( track->GetStart() ) )
-                track->SetState( START_ON_PAD, true );
-
-            if( pad->HitTest( track->GetEnd() ) )
-                track->SetState( END_ON_PAD, true );
-        }
-    }
-}
-
-
 /* Main cleaning function.
  *  Delete
  * - Redundant points on tracks (merge aligned segments)
  * - vias on pad
  * - null length segments
  */
-bool TRACKS_CLEANER::CleanupBoard( bool aDryRun, DRC_LIST* aItemsList,
-                                   bool aRemoveMisConnected,
-                                   bool aCleanVias,
-                                   bool aMergeSegments,
-                                   bool aDeleteUnconnected )
+bool TRACKS_CLEANER::CleanupBoard( bool aDryRun, DRC_LIST* aItemsList, bool aRemoveMisConnected,
+        bool aCleanVias, bool aMergeSegments, bool aDeleteUnconnected, bool aDeleteTracksinPad )
 {
     m_dryRun = aDryRun;
     m_itemsList = aItemsList;
@@ -120,10 +90,11 @@ bool TRACKS_CLEANER::CleanupBoard( bool aDryRun, DRC_LIST* aItemsList,
     else if( aRemoveMisConnected )
         modified |= deleteNullSegments( m_brd->Tracks() );
 
-    buildTrackConnectionInfo();
-
     if( aRemoveMisConnected )
         modified |= removeBadTrackSegments();
+
+    if( aDeleteTracksinPad )
+        modified |= deleteTracksInPads();
 
     // Delete dangling tracks
     if( aDeleteUnconnected )
@@ -160,9 +131,8 @@ bool TRACKS_CLEANER::removeBadTrackSegments()
             {
                 if( m_itemsList )
                 {
-                    m_itemsList->emplace_back( new DRC_ITEM( m_units, DRCE_SHORT,
-                                                             segment, segment->GetPosition(),
-                                                             nullptr, wxPoint() ) );
+                    m_itemsList->emplace_back(
+                            new DRC_ITEM( m_units, DRCE_SHORT, segment, segment->GetPosition() ) );
                 }
 
                 toRemove.insert( segment );
@@ -259,6 +229,21 @@ bool TRACKS_CLEANER::cleanupVias()
 }
 
 
+bool TRACKS_CLEANER::testTrackHasPad( const TRACK* aTrack ) const
+{
+    auto connectivity = m_brd->GetConnectivity();
+
+    // Mark track if connected to pads
+    for( auto pad : connectivity->GetConnectedPads( aTrack ) )
+    {
+        if( pad->HitTest( aTrack->GetStart() ) || pad->HitTest( aTrack->GetEnd() ) )
+            return true;
+    }
+
+    return false;
+}
+
+
 bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK* aTrack )
 {
     auto connectivity = m_brd->GetConnectivity();
@@ -288,10 +273,6 @@ bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK* aTrack )
 }
 
 
-/* Delete dangling tracks
- *  Vias:
- *  If a via is only connected to a dangling track, it also will be removed
- */
 bool TRACKS_CLEANER::deleteDanglingTracks()
 {
     bool item_erased = false;
@@ -299,7 +280,6 @@ bool TRACKS_CLEANER::deleteDanglingTracks()
 
     do // Iterate when at least one track is deleted
     {
-        buildTrackConnectionInfo();
         item_erased = false;
 
         for( auto track_it = m_brd->Tracks().begin(); track_it != m_brd->Tracks().end();
@@ -308,15 +288,14 @@ bool TRACKS_CLEANER::deleteDanglingTracks()
             auto track = *track_it;
             bool flag_erase = false; // Start without a good reason to erase it
 
+            if( track->Type() != PCB_TRACE_T )
+                continue;
+
             /* if a track endpoint is not connected to a pad, test if
              * the endpoint is connected to another track or to a zone.
-             * For via test, an enhancement could be to test if
-             * connected to 2 items on different layers. Currently
-             * a via must be connected to 2 items, that can be on the
-             * same layer */
+             */
 
-            // Check if there is nothing attached on the start
-            if( !( track->GetState( START_ON_PAD | END_ON_PAD ) ) )
+            if( !testTrackHasPad( track ) )
                 flag_erase |= testTrackEndpointDangling( track );
 
             if( flag_erase )
@@ -324,9 +303,8 @@ bool TRACKS_CLEANER::deleteDanglingTracks()
                 if( m_itemsList )
                 {
                     int code = track->IsTrack() ? DRCE_DANGLING_TRACK : DRCE_DANGLING_VIA;
-                    m_itemsList->emplace_back( new DRC_ITEM( m_units, code,
-                                                             track, track->GetPosition(),
-                                                             nullptr, wxPoint() ) );
+                    m_itemsList->emplace_back(
+                            new DRC_ITEM( m_units, code, track, track->GetPosition() ) );
                 }
 
                 if( !m_dryRun )
@@ -359,12 +337,40 @@ bool TRACKS_CLEANER::deleteNullSegments( TRACKS& aTracks )
         {
             if( m_itemsList )
             {
-                m_itemsList->emplace_back( new DRC_ITEM( m_units, DRCE_ZERO_LENGTH_TRACK,
-                                                         segment, segment->GetPosition(),
-                                                         nullptr, wxPoint() ) );
+                m_itemsList->emplace_back( new DRC_ITEM(
+                        m_units, DRCE_ZERO_LENGTH_TRACK, segment, segment->GetPosition() ) );
             }
 
             toRemove.insert( segment );
+        }
+    }
+
+    return removeItems( toRemove );
+}
+
+
+bool TRACKS_CLEANER::deleteTracksInPads()
+{
+    std::set<BOARD_ITEM*> toRemove;
+
+    // Delete tracks that start and end on the same pad
+    auto connectivity = m_brd->GetConnectivity();
+
+    for( auto track : m_brd->Tracks() )
+    {
+        // Mark track if connected to pads
+        for( auto pad : connectivity->GetConnectedPads( track ) )
+        {
+            if( pad->HitTest( track->GetStart() ) && pad->HitTest( track->GetEnd() ) )
+            {
+                if( m_itemsList )
+                {
+                    m_itemsList->emplace_back( new DRC_ITEM(
+                            m_units, DRCE_TRACK_IN_PAD, track, track->GetPosition() ) );
+                }
+
+                toRemove.insert( track );
+            }
         }
     }
 
@@ -379,8 +385,6 @@ bool TRACKS_CLEANER::cleanupSegments()
 
     // Easy things first
     modified |= deleteNullSegments( m_brd->Tracks() );
-
-    buildTrackConnectionInfo();
 
     std::set<BOARD_ITEM*> toRemove;
 
@@ -423,9 +427,8 @@ bool TRACKS_CLEANER::cleanupSegments()
     {
         auto segment = *track_it;
         auto connectivity = m_brd->GetConnectivity();
-        auto clusters = connectivity->GetConnectivityAlgo()->GetClusters();
 
-        auto& entry = m_brd->GetConnectivity()->GetConnectivityAlgo()->ItemEntry( segment );
+        auto& entry = connectivity->GetConnectivityAlgo()->ItemEntry( segment );
 
         for( auto citem : entry.GetItems() )
         {
@@ -488,6 +491,13 @@ bool TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
         }
 
         connectivity->Update( aSeg1 );
+
+        // Clear the status flags here after update.
+        for( auto pad : connectivity->GetConnectedPads( aSeg1 ) )
+        {
+            aSeg1->SetState( BEGIN_ONPAD, pad->HitTest( aSeg1->GetStart() ) );
+            aSeg1->SetState( END_ONPAD, pad->HitTest( aSeg1->GetEnd() ) );
+        }
     }
 
 

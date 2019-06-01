@@ -78,6 +78,11 @@ public:
         SetData( aUnits, aErrorCode, aMainItem, aMainPos, bAuxiliaryItem, bAuxiliaryPos );
     }
 
+    DRC_ITEM( EDA_UNITS_T aUnits, int aErrorCode, EDA_ITEM* aMainItem, const wxPoint& aMainPos )
+    {
+        SetData( aUnits, aErrorCode, aMainItem, aMainPos );
+    }
+
 
     DRC_ITEM( int aErrorCode, const wxString& aMainText )
     {

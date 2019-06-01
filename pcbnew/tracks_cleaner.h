@@ -43,17 +43,25 @@ public:
      * @param aRemoveMisConnected = true to remove segments connecting 2 different nets
      * @param aMergeSegments = true to merge collinear segmenst and remove 0 len segm
      * @param aDeleteUnconnected = true to remove dangling tracks
+     * @param aDeleteTracksinPad = true to remove tracks fully inside pads
      * (short circuits)
      */
-    bool CleanupBoard( bool aDryRun, DRC_LIST* aItemsList,
-                       bool aCleanVias, bool aRemoveMisConnected,
-                       bool aMergeSegments, bool aDeleteUnconnected );
+    bool CleanupBoard( bool aDryRun, DRC_LIST* aItemsList, bool aCleanVias,
+            bool aRemoveMisConnected, bool aMergeSegments, bool aDeleteUnconnected,
+            bool aDeleteTracksinPad );
 
 private:
     /* finds and remove all track segments which are connected to more than one net.
      * (short circuits)
      */
     bool removeBadTrackSegments();
+
+    /**
+     * Checks whether the track is connected to a pad
+     * @param aTrack pointer to the track
+     * @return true if the track has a pad
+     */
+    bool testTrackHasPad( const TRACK* aTrack ) const;
 
     /**
      * Removes redundant vias like vias at same location
@@ -65,6 +73,11 @@ private:
      * Removes dangling tracks
      */
     bool deleteDanglingTracks();
+
+    /**
+     * Removes tracks that are fully inside pads
+     */
+    bool deleteTracksInPads();
 
     /// Delete null length track segments
     bool deleteNullSegments( TRACKS& aTracks );
