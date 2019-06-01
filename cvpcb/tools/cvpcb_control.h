@@ -62,9 +62,6 @@ private:
     ///> Grid origin marker.
     std::unique_ptr<KIGFX::ORIGIN_VIEWITEM> m_gridOrigin;
 
-    ///> Applies the legacy canvas grid settings for GAL.
-    void updateGrid();
-
     KIGFX::VIEW* view()
     {
         return m_frame->GetGalCanvas()->GetView();

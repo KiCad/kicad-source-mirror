@@ -1131,77 +1131,6 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 }
 
 
-class GAL_ARRAY_CREATOR: public ARRAY_CREATOR
-{
-public:
-
-    GAL_ARRAY_CREATOR( PCB_BASE_FRAME& editFrame, bool editModules,
-                       const SELECTION& selection ):
-        ARRAY_CREATOR( editFrame ),
-        m_editModules( editModules ),
-        m_selection( selection )
-    {}
-
-private:
-
-    int getNumberOfItemsToArray() const override
-    {
-        // only handle single items
-        return m_selection.Size();
-    }
-
-    BOARD_ITEM* getNthItemToArray( int n ) const override
-    {
-        return static_cast<BOARD_ITEM*>( m_selection[n] );
-    }
-
-    BOARD* getBoard() const override
-    {
-        return m_parent.GetBoard();
-    }
-
-    MODULE* getModule() const override
-    {
-        // Remember this is valid and used only in the module editor.
-        // in board editor, the parent of items is usually the board.
-        return m_editModules ? m_parent.GetBoard()->m_Modules.GetFirst() : NULL;
-    }
-
-    wxPoint getRotationCentre() const override
-    {
-        const VECTOR2I rp = m_selection.GetCenter();
-        return wxPoint( rp.x, rp.y );
-    }
-
-    void prePushAction( BOARD_ITEM* aItem ) override
-    {
-        // Because aItem is/can be created from a selected item, and inherits from
-        // it this state, reset the selected stated of aItem:
-        aItem->ClearSelected();
-
-        if( aItem->Type() == PCB_MODULE_T )
-        {
-            static_cast<MODULE*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM* item )
-                                    {
-                                        item->ClearSelected();
-                                    }
-                                );
-        }
-    }
-
-    void postPushAction( BOARD_ITEM* new_item ) override
-    {
-    }
-
-    void finalise() override
-    {
-    }
-
-    bool m_editModules;
-    const SELECTION& m_selection;
-};
-
-
 int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
 {
     const auto& selection = m_selectionTool->RequestSelection(
@@ -1213,7 +1142,7 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
 
     // we have a selection to work on now, so start the tool process
     PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
-    GAL_ARRAY_CREATOR array_creator( *editFrame, m_editModules, selection );
+    ARRAY_CREATOR   array_creator( *editFrame, m_editModules, selection );
     array_creator.Invoke();
 
     return 0;

@@ -59,8 +59,8 @@ const BOX2I ORIGIN_VIEWITEM::ViewBBox() const
 void ORIGIN_VIEWITEM::ViewDraw( int, VIEW* aView ) const
 {
     auto gal = aView->GetGAL();
-    // Nothing to do if the target shouldn't be drawn at 0,0 and that's where the target is. This
-    // mimics the Legacy canvas that doesn't display most targets at 0,0
+
+    // Nothing to do if the target shouldn't be drawn at 0,0 and that's where the target is.
     if( !m_drawAtZero && ( m_position.x == 0 ) && ( m_position.y == 0 ) )
         return;
 

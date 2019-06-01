@@ -42,8 +42,8 @@ class PLOTTER;
  * (using wxDC functions) in plot functions only for texts.
  * It is used also to calculate the text bounding boxes
  *
- * The main purpose is to avoid duplicate code to do the same thing in GAL canvas
- * legacy canvas, plotter canvas and DRC.
+ * The main purpose is to avoid duplicate code to do the same thing in GAL canvas,
+ * print & plotter canvasses and DRC.
  *
  * It will be certainly removed when a full GAL canvas using wxDC is implemented
  * (or at least restricted to plotter and DRC "canvas")

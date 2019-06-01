@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file array_creator.cpp
- */
-
 #include "array_creator.h"
 
 #include <array_pad_name_provider.h>
@@ -52,17 +48,14 @@ static void TransformItem( const ARRAY_OPTIONS& aArrOpts, int aIndex, BOARD_ITEM
 
 void ARRAY_CREATOR::Invoke()
 {
-    const int numItems = getNumberOfItemsToArray();
-
     // bail out if no items
-    if( numItems == 0 )
+    if( m_selection.Size() == 0 )
         return;
 
-    MODULE* const module = getModule();
-    const bool isModuleEditor = module != NULL;
+    MODULE* const module = m_editModules ? m_parent.GetBoard()->m_Modules.GetFirst() : nullptr;
 
-    const bool enableArrayNumbering = isModuleEditor;
-    const wxPoint rotPoint = getRotationCentre();
+    const bool enableArrayNumbering = m_editModules;
+    const wxPoint rotPoint = (wxPoint) m_selection.GetCenter();
 
     std::unique_ptr<ARRAY_OPTIONS> array_opts;
 
@@ -77,11 +70,11 @@ void ARRAY_CREATOR::Invoke()
 
     ARRAY_PAD_NAME_PROVIDER pad_name_provider( module, *array_opts );
 
-    for ( int i = 0; i < numItems; ++i )
+    for ( int i = 0; i < m_selection.Size(); ++i )
     {
-        BOARD_ITEM* item = getNthItemToArray( i );
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( m_selection[ i ] );
 
-        if( item->Type() == PCB_PAD_T && !isModuleEditor )
+        if( item->Type() == PCB_PAD_T && !m_editModules )
         {
             // If it is not the module editor, then duplicate the parent module instead
             item = static_cast<MODULE*>( item )->GetParent();
@@ -103,7 +96,7 @@ void ARRAY_CREATOR::Invoke()
                 // Need to create a new item
                 std::unique_ptr<BOARD_ITEM> new_item;
 
-                if( isModuleEditor )
+                if( m_editModules )
                 {
                     // Don't bother incrementing pads: the module won't update
                     // until commit, so we can only do this once
@@ -111,7 +104,7 @@ void ARRAY_CREATOR::Invoke()
                 }
                 else
                 {
-                    new_item.reset( getBoard()->Duplicate( item ) );
+                    new_item.reset( m_parent.GetBoard()->Duplicate( item ) );
 
                     // PCB items keep the same numbering
 
@@ -129,9 +122,19 @@ void ARRAY_CREATOR::Invoke()
 
                 if( new_item )
                 {
-                    prePushAction( this_item );
+                    // Because aItem is/can be created from a selected item, and inherits from
+                    // it this state, reset the selected stated of aItem:
+                    this_item->ClearSelected();
+
+                    if( this_item->Type() == PCB_MODULE_T )
+                    {
+                        static_cast<MODULE*>( this_item )->RunOnChildren( [&] ( BOARD_ITEM* item )
+                        {
+                            item->ClearSelected();
+                        });
+                    }
+
                     commit.Add( new_item.release() );
-                    postPushAction( this_item );
                 }
             }
 
@@ -163,5 +166,4 @@ void ARRAY_CREATOR::Invoke()
     }
 
     commit.Push( _( "Create an array" ) );
-    finalise();
 }
