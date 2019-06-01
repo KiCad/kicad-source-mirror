@@ -1539,7 +1539,7 @@ void CAIRO_GAL_BASE::DrawGrid()
         drawAxes( worldStartPoint, worldEndPoint );
     }
 
-    if( !gridVisibility )
+    if( !gridVisibility || gridSize.x == 0 || gridSize.y == 0 )
         return;
 
     VECTOR2D gridScreenSize( gridSize );
