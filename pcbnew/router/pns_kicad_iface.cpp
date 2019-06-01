@@ -136,7 +136,7 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER* 
     {
         auto moduleClearance = mod->GetLocalClearance();
 
-        for( D_PAD* pad = mod->PadsList(); pad; pad = pad->Next() )
+        for( auto pad : mod->Pads() )
         {
             int padClearance = pad->GetLocalClearance();
 

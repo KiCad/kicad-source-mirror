@@ -707,7 +707,7 @@ static size_t hashModule( const MODULE* aModule )
     for( const BOARD_ITEM* i = aModule->GraphicalItemsList(); i; i = i->Next() )
         ret ^= hash_eda( i, flags );
 
-    for( const D_PAD* i = aModule->PadsList(); i; i = i->Next() )
+    for( auto i : aModule->Pads() )
         ret ^= hash_eda( i, flags );
 
     return ret;
@@ -720,7 +720,6 @@ static size_t hashModule( const MODULE* aModule )
  */
 static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
 {
-    D_PAD*      pad;
     const char* layer;
     wxString    pinname;
     const char* mirror = "0";
@@ -784,7 +783,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
         // set of already emitted pins to check for duplicates
         std::set<wxString> pins;
 
-        for( pad = module->PadsList(); pad; pad = pad->Next() )
+        for( auto pad : module->Pads() )
         {
             /* Padstacks are defined using the correct layers for the pads, therefore to
              * all pads need to be marked as TOP to use the padstack information correctly.
@@ -915,7 +914,6 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
 {
     wxString      msg;
     NETINFO_ITEM* net;
-    D_PAD*        pad;
     int           NbNoConn = 1;
 
     fputs( "$SIGNALS\n", aFile );
@@ -939,7 +937,7 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
 
         for( auto module : aPcb->Modules() )
         {
-            for( pad = module->PadsList(); pad; pad = pad->Next() )
+            for( auto pad : module->Pads() )
             {
                 if( pad->GetNetCode() != net->GetNet() )
                     continue;

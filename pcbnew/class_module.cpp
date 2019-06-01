@@ -103,7 +103,7 @@ MODULE::MODULE( const MODULE& aModule ) :
     m_Value->SetParent( this );
 
     // Copy auxiliary data: Pads
-    for( D_PAD* pad = aModule.m_Pads;  pad;  pad = pad->Next() )
+    for( auto pad : aModule.Pads() )
     {
         Add( new D_PAD( *pad ) );
     }
@@ -179,9 +179,9 @@ MODULE& MODULE::operator=( const MODULE& aOther )
     m_Value->SetParent( this );
 
     // Copy auxiliary data: Pads
-    m_Pads.DeleteAll();
+    m_pads.clear();
 
-    for( D_PAD* pad = aOther.m_Pads;  pad;  pad = pad->Next() )
+    for( auto pad : aOther.Pads() )
     {
         Add( new D_PAD( *pad ) );
     }
@@ -221,7 +221,7 @@ void MODULE::ClearAllNets()
 {
     // Force the ORPHANED dummy net info for all pads.
     // ORPHANED dummy net does not depend on a board
-    for( D_PAD* pad = PadsList(); pad; pad = pad->Next() )
+    for( auto pad : m_pads )
         pad->SetNetCode( NETINFO_LIST::ORPHANED );
 }
 
@@ -245,9 +245,9 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 
     case PCB_PAD_T:
         if( aMode == ADD_APPEND )
-            m_Pads.PushBack( static_cast<D_PAD*>( aBoardItem ) );
+            m_pads.push_back( static_cast<D_PAD*>( aBoardItem ) );
         else
-            m_Pads.PushFront( static_cast<D_PAD*>( aBoardItem ) );
+            m_pads.push_front( static_cast<D_PAD*>( aBoardItem ) );
         break;
 
     default:
@@ -280,7 +280,8 @@ void MODULE::Remove( BOARD_ITEM* aBoardItem )
         break;
 
     case PCB_PAD_T:
-        m_Pads.Remove( static_cast<D_PAD*>( aBoardItem ) );
+        m_pads.erase( std::remove_if( m_pads.begin(), m_pads.end(),
+                [aBoardItem]( BOARD_ITEM* aItem ) { return aItem == aBoardItem; } ) );
         break;
 
     default:
@@ -321,7 +322,7 @@ void MODULE::CopyNetlistSettings( MODULE* aModule, bool aCopyLocalSettings )
         aModule->SetThermalGap( GetThermalGap() );
     }
 
-    for( D_PAD* pad = aModule->PadsList();  pad;  pad = pad->Next() )
+    for( auto pad : m_pads )
     {
         // Fix me: if aCopyLocalSettings == true, for "multiple" pads
         // (set of pads having the same name/number) this is broken
@@ -343,7 +344,7 @@ void MODULE::CopyNetlistSettings( MODULE* aModule, bool aCopyLocalSettings )
 
 void MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
 {
-    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
+    for( auto pad : m_pads )
         pad->Print( aFrame, aDC, aOffset );
 
     BOARD* brd = GetBoard();
@@ -399,7 +400,7 @@ EDA_RECT MODULE::GetFootprintRect() const
             area.Merge( item->GetBoundingBox() );
     }
 
-    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
+    for( auto pad : m_pads )
         area.Merge( pad->GetBoundingBox() );
 
     return area;
@@ -475,7 +476,6 @@ SHAPE_POLY_SET MODULE::GetBoundingPoly() const
 
 void MODULE::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
-    int      nbpad;
     wxString msg;
 
     aList.push_back( MSG_PANEL_ITEM( m_Reference->GetShownText(), m_Value->GetShownText(), DARKCYAN ) );
@@ -498,16 +498,8 @@ void MODULE::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >&
     aList.push_back( MSG_PANEL_ITEM( _( "Board Side" ),
                      IsFlipped()? _( "Back (Flipped)" ) : _( "Front" ), RED ) );
 
-    EDA_ITEM* PtStruct = m_Pads;
-    nbpad = 0;
 
-    while( PtStruct )
-    {
-        nbpad++;
-        PtStruct = PtStruct->Next();
-    }
-
-    msg.Printf( wxT( "%d" ), nbpad );
+    msg.Printf( wxT( "%zu" ), m_pads.size() );
     aList.push_back( MSG_PANEL_ITEM( _( "Pads" ), msg, BLUE ) );
 
     msg = wxT( ".." );
@@ -592,7 +584,7 @@ bool MODULE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) co
             return false;
 
         // Determine if any elements in the MODULE intersect the rect
-        for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
+        for( auto pad : m_pads )
         {
             if( pad->HitTest( arect, false, 0 ) )
                 return true;
@@ -612,7 +604,7 @@ bool MODULE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) co
 
 D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 {
-    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
+    for( auto pad : m_pads )
     {
         if( pad->GetName().CmpNoCase( aPadName ) == 0 )    // why case insensitive?
             return pad;
@@ -624,7 +616,7 @@ D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 
 D_PAD* MODULE::GetPad( const wxPoint& aPosition, LSET aLayerMask )
 {
-    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
+    for( auto pad : m_pads )
     {
         // ... and on the correct layer.
         if( !( pad->GetLayerSet() & aLayerMask ).any() )
@@ -640,9 +632,9 @@ D_PAD* MODULE::GetPad( const wxPoint& aPosition, LSET aLayerMask )
 
 D_PAD* MODULE::GetTopLeftPad()
 {
-    D_PAD* topLeftPad = m_Pads;
+    D_PAD* topLeftPad = GetFirstPad();
 
-    for( D_PAD* p = m_Pads->Next(); p; p =  p->Next() )
+    for( auto p : m_pads )
     {
         wxPoint pnt = p->GetPosition(); // GetPosition() returns the center of the pad
 
@@ -661,11 +653,11 @@ D_PAD* MODULE::GetTopLeftPad()
 unsigned MODULE::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 {
     if( aIncludeNPTH )
-        return m_Pads.GetCount();
+        return m_pads.size();
 
     unsigned cnt = 0;
 
-    for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
+    for( auto pad : m_pads )
     {
         if( pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED )
             continue;
@@ -682,7 +674,7 @@ unsigned MODULE::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
     std::set<wxString> usedNames;
 
     // Create a set of used pad numbers
-    for( D_PAD* pad = PadsList(); pad; pad = pad->Next() )
+    for( auto pad : m_pads )
     {
         // Skip pads not on copper layers (used to build complex
         // solder paste shapes for instance)
@@ -746,7 +738,7 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
             break;
 
         case PCB_PAD_T:
-            result = IterateForward( m_Pads, inspector, testData, p );
+            result = IterateForward<D_PAD*>( m_pads, inspector, testData, p );
             ++p;
             break;
 
@@ -824,7 +816,7 @@ void MODULE::RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction )
 {
     try
     {
-        for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
+        for( auto pad : m_pads )
             aFunction( static_cast<BOARD_ITEM*>( pad ) );
 
         for( BOARD_ITEM* drawing = m_Drawings; drawing; drawing = drawing->Next() )
@@ -851,7 +843,7 @@ void MODULE::GetAllDrawingLayers( int aLayers[], int& aCount, bool aIncludePads 
 
     if( aIncludePads )
     {
-        for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
+        for( auto pad : m_pads )
         {
             int pad_layers[KIGFX::VIEW::VIEW_MAX_LAYERS], pad_layers_count;
             pad->ViewGetLayers( pad_layers, pad_layers_count );
@@ -904,7 +896,7 @@ void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
             non_silk = true;
     }
 
-    if( ( f_silk || b_silk ) && !non_silk && m_Pads.GetCount() == 0 )
+    if( ( f_silk || b_silk ) && !non_silk && m_pads.empty() )
     {
         if( f_silk )
             aLayers[ aCount++ ] = F_SilkS;
@@ -1015,7 +1007,7 @@ void MODULE::Flip( const wxPoint& aCentre )
     NORMALIZE_ANGLE_POS( m_Orient );
 
     // Mirror pads to other side of board about the x axis, i.e. vertically.
-    for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
+    for( auto pad : m_pads )
         pad->Flip( m_Pos );
 
     // Mirror reference and value.
@@ -1054,7 +1046,7 @@ void MODULE::SetPosition( const wxPoint& newpos )
     m_Reference->EDA_TEXT::Offset( delta );
     m_Value->EDA_TEXT::Offset( delta );
 
-    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
+    for( auto pad : m_pads )
     {
         pad->SetPosition( pad->GetPosition() + delta );
     }
@@ -1109,7 +1101,7 @@ void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
     m_Value->SetDrawCoord();
 
     // Update the pad local coordinates.
-    for( D_PAD* pad = PadsList(); pad; pad = pad->Next() )
+    for( auto pad : m_pads )
     {
         pad->SetPos0( pad->GetPos0() + moveVector );
         pad->SetDrawCoord();
@@ -1152,7 +1144,7 @@ void MODULE::SetOrientation( double newangle )
 
     m_Orient = newangle;
 
-    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
+    for( auto pad : m_pads )
     {
         pad->SetOrientation( pad->GetOrientation() + angleChange );
         pad->SetDrawCoord();
@@ -1192,7 +1184,7 @@ BOARD_ITEM* MODULE::Duplicate( const BOARD_ITEM* aItem,
         new_pad = new D_PAD( *static_cast<const D_PAD*>( aItem ) );
 
         if( aAddToModule )
-            PadsList().PushBack( new_pad );
+            m_pads.push_back( new_pad );
 
         new_item = new_pad;
         break;
@@ -1253,7 +1245,7 @@ wxString MODULE::GetNextPadName( bool aFillSequenceGaps ) const
     std::set<int> usedNumbers;
 
     // Create a set of used pad numbers
-    for( D_PAD* pad = PadsList(); pad; pad = pad->Next() )
+    for( auto pad : m_pads )
     {
         int padNumber = GetTrailingInt( pad->GetName() );
         usedNumbers.insert( padNumber );
@@ -1310,7 +1302,7 @@ double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
     // build list of holes (covered areas not available for selection)
     SHAPE_POLY_SET holes;
 
-    for( D_PAD* pad = m_Pads; pad; pad = pad->Next() )
+    for( auto pad : m_pads )
         addRect( holes, pad->GetBoundingBox() );
 
     addRect( holes, m_Reference->GetBoundingBox() );

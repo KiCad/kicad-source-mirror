@@ -800,7 +800,7 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
         // Insert pads holes (vertical cylinders)
         for( const auto module : m_settings.GetBoard()->Modules() )
         {
-            for( const D_PAD* pad = module->PadsList(); pad; pad = pad->Next() )
+            for( auto pad : module->Pads() )
             {
                 if( pad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
                 {

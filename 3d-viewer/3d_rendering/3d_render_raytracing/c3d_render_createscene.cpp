@@ -1183,7 +1183,7 @@ void C3D_RENDER_RAYTRACING::add_3D_vias_and_pads_to_container()
     // Insert pads holes (vertical cylinders)
     for( auto module : m_settings.GetBoard()->Modules() )
     {
-        for( const D_PAD* pad = module->PadsList(); pad; pad = pad->Next() )
+        for( auto pad : module->Pads() )
             if( pad->GetAttribute () != PAD_ATTRIB_HOLE_NOT_PLATED )
             {
                 insert3DPadHole( pad );

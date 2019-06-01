@@ -845,7 +845,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
 
     for( auto Module : m_board->Modules() )
     {
-        for( D_PAD* pad = Module->PadsList(); pad != NULL; pad = pad->Next() )
+        for( auto pad : Module->Pads() )
         {
             if( pad->GetDrillSize().x == 0 )
                 continue;

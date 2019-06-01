@@ -482,7 +482,7 @@ class CINFO3D_VISU
                                              SHAPE_POLY_SET &aCornerBuffer,
                                              int aWidth) const;
 
-    void transformPadsShapesWithClearanceToPolygon( const DLIST<D_PAD> &aPads,
+    void transformPadsShapesWithClearanceToPolygon( const PADS &aPads,
                                                     PCB_LAYER_ID aLayer,
                                                     SHAPE_POLY_SET &aCornerBuffer,
                                                     int aInflateValue,

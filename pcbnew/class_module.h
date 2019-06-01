@@ -31,6 +31,7 @@
 #ifndef MODULE_H_
 #define MODULE_H_
 
+#include <deque>
 
 #include <board_item_container.h>
 #include <class_board_item.h>
@@ -103,6 +104,10 @@ class MODULE_3D_SETTINGS
         bool     m_Preview;     ///< Include module in 3D preview
 };
 
+DECL_DEQ_FOR_SWIG( PADS, D_PAD* )
+DECL_DEQ_FOR_SWIG( DRAWINGS, BOARD_ITEM* )
+DECL_DEQ_FOR_SWIG( MODULES, MODULE* )
+
 class MODULE : public BOARD_ITEM_CONTAINER
 {
 public:
@@ -156,15 +161,17 @@ public:
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;
 
-    DLIST<D_PAD>& PadsList()                        { return m_Pads; }
-    const DLIST<D_PAD>& PadsList() const { return m_Pads; }
-
     DLIST<BOARD_ITEM>& GraphicalItemsList()         { return m_Drawings; }
     const DLIST<BOARD_ITEM>& GraphicalItemsList() const { return m_Drawings; }
 
-    DLIST_ITERATOR_WRAPPER<D_PAD> Pads()
+    PADS& Pads()
     {
-         return DLIST_ITERATOR_WRAPPER<D_PAD>( m_Pads );
+         return m_pads;
+    }
+
+    const PADS& Pads() const
+    {
+         return m_pads;
     }
 
     DLIST_ITERATOR_WRAPPER<BOARD_ITEM> GraphicalItems()
@@ -465,6 +472,15 @@ public:
     D_PAD* GetTopLeftPad();
 
     /**
+     * Gets the first pad in the list or NULL if none
+     * @return first pad or null pointer
+     */
+    D_PAD* GetFirstPad() const
+    {
+        return m_pads.empty() ? nullptr : m_pads.front();
+    }
+
+    /**
      * GetPadCount
      * returns the number of pads.
      *
@@ -543,6 +559,7 @@ public:
      * Function RunOnChildren
      *
      * Invokes a function on all BOARD_ITEMs that belong to the module (pads, drawings, texts).
+     * Note that this function should not add or remove items to the module
      * @param aFunction is the function to be invoked.
      */
     void RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction );
@@ -652,8 +669,17 @@ public:
 #endif
 
 private:
-    DLIST<D_PAD> m_Pads;                ///< Linked list of pads.
+
     DLIST<BOARD_ITEM> m_Drawings;       ///< Linked list of graphical items.
+
+
+
+    /// BOARD_ITEMs for drawings on the board, owned by pointer.
+    DRAWINGS                m_drawings;
+
+    /// D_PAD items, owned by pointer
+    PADS                    m_pads;
+
     std::list<MODULE_3D_SETTINGS> m_3D_Drawings;  ///< Linked list of 3D models.
     double m_Orient;                    ///< Orientation in tenths of a degree, 900=90.0 degrees.
     wxPoint m_Pos;                      ///< Position of module on the board in internal units.

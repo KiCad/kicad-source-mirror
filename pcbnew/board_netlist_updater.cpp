@@ -291,7 +291,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
     bool changed = false;
 
     // At this point, the component footprint is updated.  Now update the nets.
-    for( D_PAD* pad = aPcbComponent->PadsList(); pad; pad = pad->Next() )
+    for( auto pad : aPcbComponent->Pads() )
     {
         COMPONENT_NET net = aNewComponent->GetNet( pad->GetName() );
 

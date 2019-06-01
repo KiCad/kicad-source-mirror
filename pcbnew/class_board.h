@@ -32,7 +32,6 @@
 
 #include <tuple>
 
-#include <dlist.h>
 #include <core/iterators.h>
 
 #include <board_design_settings.h>
@@ -163,8 +162,6 @@ protected:
 DECL_VEC_FOR_SWIG( MARKERS, MARKER_PCB* )
 DECL_VEC_FOR_SWIG( ZONE_CONTAINERS, ZONE_CONTAINER* )
 DECL_DEQ_FOR_SWIG( TRACKS, TRACK* )
-DECL_DEQ_FOR_SWIG( DRAWINGS, BOARD_ITEM* )
-DECL_DEQ_FOR_SWIG( MODULES, MODULE* )
 
 
 /**

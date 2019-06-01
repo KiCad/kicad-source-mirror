@@ -908,7 +908,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
         m_board->Add( m, ADD_APPEND );
 
         // update the nets within the pads of the clone
-        for( D_PAD* pad = m->PadsList();  pad;  pad = pad->Next() )
+        for( auto pad : m->Pads() )
         {
             wxString pn_key = makeKey( e.name, pad->GetName() );
 
@@ -1515,7 +1515,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
     int shape = EPAD::UNDEF;
 
     D_PAD* pad = new D_PAD( aModule );
-    aModule->PadsList().PushBack( pad );
+    aModule->Add( pad );
     transferPad( e, pad );
 
     if( e.first && *e.first && m_rules->psFirst != EPAD::UNDEF )
@@ -1858,7 +1858,7 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, wxXmlNode* aTree, bool aCenter 
 
     // we add a PAD_ATTRIB_HOLE_NOT_PLATED pad to this module.
     D_PAD* pad = new D_PAD( aModule );
-    aModule->PadsList().PushBack( pad );
+    aModule->Add( pad );
 
     pad->SetShape( PAD_SHAPE_CIRCLE );
     pad->SetAttribute( PAD_ATTRIB_HOLE_NOT_PLATED );
@@ -1902,7 +1902,7 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
     bool shape_set = false;
     int shape = EPAD::UNDEF;
     D_PAD* pad = new D_PAD( aModule );
-    aModule->PadsList().PushBack( pad );
+    aModule->Add( pad );
     transferPad( e, pad );
 
     if( pad->GetName() == wxT( "1" ) && m_rules->psFirst != EPAD::UNDEF )

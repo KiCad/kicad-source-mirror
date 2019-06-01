@@ -275,7 +275,7 @@ static void doPushPadProperties( BOARD& board, const D_PAD& aSrcPad, BOARD_COMMI
         if( module->GetFPID() != moduleRef->GetFPID() )
             continue;
 
-        for( D_PAD* pad = module->PadsList();  pad;  pad = pad->Next() )
+        for( auto pad : module->Pads() )
         {
             if( aPadShapeFilter && ( pad->GetShape() != aSrcPad.GetShape() ) )
                 continue;

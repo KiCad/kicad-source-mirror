@@ -139,15 +139,13 @@ void CINFO3D_VISU::buildPadShapeThickOutlineAsPolygon( const D_PAD* aPad,
 
 // Based on the same function name in board_items_to_polyshape_transform.cpp
 // It was implemented here to allow dynamic segments count per pad shape
-void CINFO3D_VISU::transformPadsShapesWithClearanceToPolygon( const DLIST<D_PAD>& aPads, PCB_LAYER_ID aLayer,
+void CINFO3D_VISU::transformPadsShapesWithClearanceToPolygon( const PADS& aPads, PCB_LAYER_ID aLayer,
                                                               SHAPE_POLY_SET& aCornerBuffer,
                                                               int aInflateValue,
                                                               bool aSkipNPTHPadsWihNoCopper ) const
 {
-    const D_PAD* pad = aPads;
-
     wxSize margin;
-    for( ; pad != NULL; pad = pad->Next() )
+    for( auto pad : aPads )
     {
         if( !pad->IsOnLayer(aLayer) )
             continue;

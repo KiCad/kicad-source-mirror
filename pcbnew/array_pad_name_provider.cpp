@@ -45,7 +45,7 @@ ARRAY_PAD_NAME_PROVIDER::ARRAY_PAD_NAME_PROVIDER(
         if( aMod )
         {
             // reserve the name of each existing pad
-            for( D_PAD* pad = aMod->PadsList(); pad; pad = pad->Next() )
+            for( auto pad : aMod->Pads() )
             {
                 m_existing_pad_names.insert( pad->GetName() );
             }

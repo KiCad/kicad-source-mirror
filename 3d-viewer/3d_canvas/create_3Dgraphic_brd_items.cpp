@@ -623,11 +623,9 @@ void CINFO3D_VISU::AddPadsShapesWithClearanceToContainer( const MODULE* aModule,
                                                           int aInflateValue,
                                                           bool aSkipNPTHPadsWihNoCopper )
 {
-    const D_PAD* pad = aModule->PadsList();
-
     wxSize margin;
 
-    for( ; pad != NULL; pad = pad->Next() )
+    for( auto pad : aModule->Pads() )
     {
         if( !pad->IsOnLayer( aLayerId ) )
             continue;

@@ -490,9 +490,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     // /////////////////////////////////////////////////////////////////////////
     for( auto module : m_board->Modules() )
     {
-        const D_PAD* pad = module->PadsList();
-
-        for( ; pad; pad = pad->Next() )
+        for( auto pad : module->Pads() )
         {
             const wxSize padHole = pad->GetDrillSize();
 
@@ -524,9 +522,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     // /////////////////////////////////////////////////////////////////////////
     for( auto module : m_board->Modules() )
     {
-        const D_PAD* pad = module->PadsList();
-
-        for( ; pad; pad = pad->Next() )
+        for( auto pad : module->Pads() )
         {
             const wxSize padHole = pad->GetDrillSize();
 
@@ -610,7 +606,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
                 // Note: NPTH pads are not drawn on copper layers when the pad
                 // has same shape as its hole
-                transformPadsShapesWithClearanceToPolygon( module->PadsList(),
+                transformPadsShapesWithClearanceToPolygon( module->Pads(),
                                                            curr_layer_id,
                                                            *layerPoly,
                                                            0,
@@ -997,10 +993,9 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
         {
             if( (curr_layer_id == F_SilkS) || (curr_layer_id == B_SilkS) )
             {
-                D_PAD*  pad = module->PadsList();
                 int     linewidth = g_DrawDefaultLineThickness;
 
-                for( ; pad; pad = pad->Next() )
+                for( auto pad : module->Pads() )
                 {
                     if( !pad->IsOnLayer( curr_layer_id ) )
                         continue;
@@ -1024,10 +1019,9 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
         {
             if( (curr_layer_id == F_SilkS) || (curr_layer_id == B_SilkS) )
             {
-                D_PAD*  pad = module->PadsList();
                 const int linewidth = g_DrawDefaultLineThickness;
 
-                for( ; pad; pad = pad->Next() )
+                for( auto pad : module->Pads() )
                 {
                     if( !pad->IsOnLayer( curr_layer_id ) )
                         continue;
@@ -1038,7 +1032,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
             else
             {
                 transformPadsShapesWithClearanceToPolygon(
-                        module->PadsList(), curr_layer_id, *layerPoly, 0, false );
+                        module->Pads(), curr_layer_id, *layerPoly, 0, false );
             }
 
             // On tech layers, use a poor circle approximation, only for texts (stroke font)

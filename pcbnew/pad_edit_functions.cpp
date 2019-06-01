@@ -114,7 +114,7 @@ void PCB_BASE_FRAME::AddPad( MODULE* aModule, bool draw )
     D_PAD* pad = new D_PAD( aModule );
 
     // Add the new pad to end of the module pad list.
-    aModule->PadsList().PushBack( pad );
+    aModule->Add( pad );
 
     // Update the pad properties,
     // and keep NETINFO_LIST::ORPHANED as net info

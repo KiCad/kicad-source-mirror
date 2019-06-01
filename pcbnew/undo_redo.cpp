@@ -246,7 +246,7 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
                 for( EDA_ITEM* child = clone->GraphicalItemsList(); child; child = child->Next() )
                     child->ClearEditFlags();
 
-                for( D_PAD* pad = clone->PadsList(); pad; pad = pad->Next() )
+                for( auto pad : clone->Pads() )
                     pad->ClearEditFlags();
 
                 clone->Reference().ClearEditFlags();

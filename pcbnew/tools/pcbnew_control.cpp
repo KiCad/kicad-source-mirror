@@ -707,9 +707,9 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 auto oldModule = static_cast<MODULE*>( clipItem );
                 auto newModule = board()->GetFirstModule();
 
-                for( D_PAD* pad = oldModule->PadsList(), *next = nullptr; pad; pad = next )
+                for( auto it = oldModule->Pads().begin(); it != oldModule->Pads().end(); it++ )
                 {
-                    next = pad->Next();
+                    auto pad = *it;
                     oldModule->Remove( pad );
                     pad->SetParent( newModule );
                     items.push_back( pad );

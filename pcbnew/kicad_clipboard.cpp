@@ -99,7 +99,7 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
         // Do not modify existing board
         MODULE newModule(*mod);
 
-        for( D_PAD* pad = newModule.PadsList().begin(); pad; pad = pad->Next() )
+        for( auto pad : newModule.Pads() )
         {
             pad->SetNetCode( 0, 0 );
         }

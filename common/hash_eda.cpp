@@ -69,8 +69,8 @@ size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
             for( const BOARD_ITEM* i = module->GraphicalItemsList(); i; i = i->Next() )
                 ret ^= hash_eda( i, aFlags );
 
-            for( const D_PAD* i = module->PadsList(); i; i = i->Next() )
-                ret ^= hash_eda( i, aFlags );
+            for( auto i : module->Pads() )
+                ret ^= hash_eda( static_cast<EDA_ITEM*>( i ), aFlags );
         }
         break;
 

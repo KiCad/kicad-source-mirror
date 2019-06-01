@@ -103,7 +103,7 @@ void CN_CONNECTIVITY_ALGO::markItemNetAsDirty( const BOARD_ITEM* aItem )
         {
             auto mod = static_cast <const MODULE*>( aItem );
 
-            for( D_PAD* pad = mod->PadsList(); pad; pad = pad->Next() )
+            for( auto pad : mod->Pads() )
                 MarkNetAsDirty( pad->GetNetCode() );
         }
     }

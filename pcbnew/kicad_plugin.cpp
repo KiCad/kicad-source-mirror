@@ -1094,7 +1094,7 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
         Format( gr, aNestLevel+1 );
 
     // Save pads.
-    for( D_PAD* pad = aModule->PadsList();  pad;  pad = pad->Next() )
+    for( auto pad : aModule->Pads() )
         format( pad, aNestLevel+1 );
 
     // Save 3D info.

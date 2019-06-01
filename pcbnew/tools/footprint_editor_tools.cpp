@@ -142,7 +142,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 
 int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 {
-    if( !board()->GetFirstModule() || !board()->GetFirstModule()->PadsList() )
+    if( !board()->GetFirstModule() || !board()->GetFirstModule()->Pads().empty() )
         return 0;
 
     DIALOG_ENUM_PADS settingsDlg( frame() );

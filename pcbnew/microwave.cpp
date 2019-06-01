@@ -76,7 +76,7 @@ MODULE* PCB_EDIT_FRAME::CreateMuWaveBaseFootprint( const wxString& aValue,
     {
         D_PAD* pad = new D_PAD( module );
 
-        module->PadsList().PushFront( pad );
+        module->Add( pad, ADD_INSERT );
 
         int tw = GetDesignSettings().GetCurrentTrackWidth();
         pad->SetSize( wxSize( tw, tw ) );
@@ -175,7 +175,8 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
         return NULL;
 
     module = CreateMuWaveBaseFootprint( cmp_name, text_size, pad_count );
-    pad    = module->PadsList();
+    auto it = module->Pads().begin();
+    pad = *it;
 
     switch( shape_type )
     {
@@ -185,7 +186,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
 
         pad->SetX( pad->GetPos0().x + pad->GetPosition().x );
 
-        pad = pad->Next();
+        pad = *( it + 1 );
 
         pad->SetX0( oX + gap_size + pad->GetSize().x );
         pad->SetX( pad->GetPos0().x + pad->GetPosition().x );
@@ -193,7 +194,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
 
     case 1:     //Stub :
         pad->SetName( wxT( "1" ) );
-        pad = pad->Next();
+        pad = *( it + 1 );
         pad->SetY0( -( gap_size + pad->GetSize().y ) / 2 );
         pad->SetSize( wxSize( pad->GetSize().x, gap_size ) );
         pad->SetY( pad->GetPos0().y + pad->GetPosition().y );
@@ -479,11 +480,13 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     wxPoint offset;
     offset.x = -ShapeSize.x / 2;
 
-    pad1   = module->PadsList();
+    auto it = module->Pads().begin();
+
+    pad1 = *it;
     pad1->SetX0( offset.x );
     pad1->SetX( pad1->GetPos0().x );
 
-    pad2 = pad1->Next();
+    pad2 = *( ++it );
     pad2->SetX0( offset.x + ShapeSize.x );
     pad2->SetX( pad2->GetPos0().x );
 

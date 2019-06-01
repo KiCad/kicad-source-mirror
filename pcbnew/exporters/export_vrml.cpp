@@ -1358,7 +1358,7 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb,
     }
 
     // Export pads
-    for( D_PAD* pad = aModule->PadsList(); pad; pad = pad->Next() )
+    for( auto pad : aModule->Pads() )
         export_vrml_pad( aModel, aPcb, pad );
 
     bool isFlipped = aModule->GetLayer() == B_Cu;

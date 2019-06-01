@@ -157,8 +157,6 @@ public:
         return aItem && PCB_PAD_T == aItem->Type();
     }
 
-    D_PAD* Next() const       { return static_cast<D_PAD*>( Pnext ); }
-
     MODULE* GetParent() const { return (MODULE*) m_Parent; }
 
     /**

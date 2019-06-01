@@ -1725,7 +1725,7 @@ unsigned BOARD::GetPadCount()
     unsigned retval = 0;
 
     for( auto mod : Modules() )
-        retval += mod->Pads().Size();
+        retval += mod->Pads().size();
 
     return retval;
 }

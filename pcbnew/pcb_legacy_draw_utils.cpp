@@ -162,7 +162,7 @@ static void Trace_Pads_Only( PCB_BASE_FRAME* aFrame, wxDC* DC, MODULE* aModule,
     displ_opts->m_DisplayPadFill = false;
 
     // Draw pads.
-    for( D_PAD* pad = aModule->PadsList(); pad; pad = pad->Next() )
+    for( auto pad : aModule->Pads() )
     {
         if( (pad->GetLayerSet() & aLayerMask) == 0 )
             continue;

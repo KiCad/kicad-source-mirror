@@ -48,7 +48,7 @@ static std::unique_ptr<MODULE> ModuleWithPads( const std::vector<wxString> aName
 
         pad->SetName( name );
 
-        module->PadsList().PushBack( pad.release() );
+        module->Add( pad.release() );
     }
 
     return module;

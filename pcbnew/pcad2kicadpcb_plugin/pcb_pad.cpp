@@ -304,7 +304,7 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
         pad->SetPosition( padpos + aModule->GetPosition() );
     }
 
-    aModule->PadsList().PushBack( pad );
+    aModule->Add( pad );
 }
 
 

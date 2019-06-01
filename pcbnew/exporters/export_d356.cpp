@@ -116,7 +116,7 @@ static void build_pad_testpoints( BOARD *aPcb,
 
     for( auto module : aPcb->Modules() )
     {
-        for( D_PAD* pad = module->PadsList();  pad; pad = pad->Next() )
+        for( auto pad : module->Pads() )
         {
             D356_RECORD rk;
             rk.access = compute_pad_access_code( aPcb, pad->GetLayerSet() );

@@ -379,13 +379,8 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
 
     for( auto module : m_board->Modules() )
     {
-        D_PAD* nextpad;
-
-        for( D_PAD* pad = module->PadsList(); pad != NULL; pad = nextpad )
+        for( auto pad : module->Pads() )
         {
-            nextpad = pad->Next();      // pad pointer can be modified by next code, so
-                                        // calculate the next pad here
-
             if( !pad->IsOnLayer( aZone->GetLayer() ) )
             {
                 /* Test for pads that are on top or bottom only and have a hole.

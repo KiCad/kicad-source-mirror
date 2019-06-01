@@ -92,7 +92,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         {
             aPlotter->StartBlock( NULL );
 
-            for( D_PAD* pad = Module->PadsList(); pad; pad = pad->Next() )
+            for( auto pad : Module->Pads() )
             {
                 // See if the pad is on this layer
                 LSET masklayer = pad->GetLayerSet();
@@ -332,7 +332,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     {
         aPlotter->StartBlock( NULL );
 
-        for( D_PAD* pad = module->PadsList();  pad;  pad = pad->Next() )
+        for( auto pad : module->Pads() )
         {
             if( (pad->GetLayerSet() & aLayerMask) == 0 )
                 continue;
@@ -697,7 +697,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter,
 
             for( auto module : aBoard->Modules() )
             {
-                for( D_PAD* pad = module->PadsList(); pad; pad = pad->Next() )
+                for( auto pad : module->Pads() )
                 {
                     wxSize hole = pad->GetDrillSize();
 

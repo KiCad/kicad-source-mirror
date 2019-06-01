@@ -128,10 +128,9 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
         SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aMaxError,
         bool aSkipNPTHPadsWihNoCopper ) const
 {
-    D_PAD* pad = PadsList();
-
     wxSize margin;
-    for( ; pad != NULL; pad = pad->Next() )
+
+    for( auto pad : m_pads )
     {
         if( aLayer != UNDEFINED_LAYER && !pad->IsOnLayer(aLayer) )
             continue;
