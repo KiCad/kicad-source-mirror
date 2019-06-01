@@ -78,8 +78,6 @@ void LIB_EDIT_FRAME::ReCreateVToolbar()
 
 void LIB_EDIT_FRAME::ReCreateHToolbar()
 {
-    wxString msg;
-
     if( m_mainToolBar )
         m_mainToolBar->Clear();
     else
@@ -110,9 +108,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     KiScaledSeparator( m_mainToolBar, this );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_VIEW_DOC, wxEmptyString,
-                            KiScaledBitmap( datasheet_xpm, this ),
-                            _( "Show associated datasheet or document" ) );
+    m_mainToolBar->Add( EE_ACTIONS::showDatasheet );
 
     m_mainToolBar->AddTool( ID_LIBEDIT_CHECK_PART, wxEmptyString, KiScaledBitmap( erc_xpm, this ),
                             _( "Check duplicate and off grid pins" ) );
@@ -127,25 +123,20 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                             _( "Show as \"De Morgan\" convert symbol" ), wxITEM_CHECK );
 
     KiScaledSeparator( m_mainToolBar, this );
-
-    m_partSelectBox = new wxComboBox( m_mainToolBar,
-                                      ID_LIBEDIT_SELECT_PART_NUMBER,
-                                      wxEmptyString,
-                                      wxDefaultPosition,
-                                      wxSize( LISTBOX_WIDTH, -1 ),
-                                      0, nullptr, wxCB_READONLY );
+    m_partSelectBox = new wxComboBox( m_mainToolBar, ID_LIBEDIT_SELECT_PART_NUMBER, wxEmptyString,
+                                      wxDefaultPosition, wxSize( LISTBOX_WIDTH, -1 ), 0, nullptr,
+                                      wxCB_READONLY );
     m_mainToolBar->AddControl( m_partSelectBox );
 
     KiScaledSeparator( m_mainToolBar, this );
-
-    msg = _( "Synchronized pin edit mode\n"
-             "Synchronized pin edit mode propagates to other units all pin changes except pin number modification.\n"
-             "Enabled by default for multiunit parts with interchangeable units." );
     m_mainToolBar->AddTool( ID_LIBEDIT_SYNC_PIN_EDIT, wxEmptyString,
-                            KiScaledBitmap( pin2pin_xpm, this ), msg, wxITEM_CHECK );
+                            KiScaledBitmap( pin2pin_xpm, this ),
+                            _( "Synchronized pin edit mode\n"
+                               "Propagates all changes (except pin numbers) to other units.\n"
+                               "Enabled by default for multiunit parts with interchangeable units." ),
+                            wxITEM_CHECK );
 
     KiScaledSeparator( m_mainToolBar, this );
-
     m_mainToolBar->AddTool( ID_ADD_PART_TO_SCHEMATIC, wxEmptyString,
                             KiScaledBitmap( export_xpm, this ),
                             _( "Add symbol to schematic" ) );
@@ -184,6 +175,8 @@ void LIB_EDIT_FRAME::SyncMenusAndToolbars()
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
+    m_mainToolBar->Toggle( EE_ACTIONS::showDatasheet, GetCurPart() != nullptr );
+    // JEY TODO: deMorgan buttons...
     m_mainToolBar->Refresh();
 
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,             IsGridVisible() );

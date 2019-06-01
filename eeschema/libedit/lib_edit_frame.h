@@ -267,7 +267,7 @@ public:
     /**
      * Reverts unsaved changes in a part, restoring to the last saved state.
      */
-    void OnRevert( wxCommandEvent& aEvent );
+    void OnRevert();
 
     /**
      * Removes a part from the working copy of a library.
@@ -286,13 +286,11 @@ public:
     bool IsSearchTreeShown();
     void ClearSearchTreeSelection();
 
-    void OnViewEntryDoc( wxCommandEvent& event );
     void OnCheckComponent( wxCommandEvent& event );
     void OnSelectBodyStyle( wxCommandEvent& event );
 
     void OnUpdateEditingPart( wxUpdateUIEvent& event );
     void OnUpdateHavePart( wxUpdateUIEvent& aEvent );
-    void OnUpdateRevert( wxUpdateUIEvent& aEvent );
     void OnUpdateSyncPinEdit( wxUpdateUIEvent& event );
     void OnUpdatePartNumber( wxUpdateUIEvent& event );
     void OnUpdateDeMorganNormal( wxUpdateUIEvent& event );

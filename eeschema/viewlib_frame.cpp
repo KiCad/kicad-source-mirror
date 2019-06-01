@@ -50,6 +50,7 @@
 #include <tool/zoom_tool.h>
 #include <tools/lib_control.h>
 #include <tools/lib_move_tool.h>
+#include <tools/ee_inspection_tool.h>
 
 // Save previous component library viewer state.
 wxString LIB_VIEW_FRAME::m_libraryName;
@@ -69,7 +70,6 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_LIBVIEW_SELECT_PART, LIB_VIEW_FRAME::OnSelectSymbol )
     EVT_TOOL( ID_LIBVIEW_NEXT, LIB_VIEW_FRAME::onSelectNextSymbol )
     EVT_TOOL( ID_LIBVIEW_PREVIOUS, LIB_VIEW_FRAME::onSelectPreviousSymbol )
-    EVT_TOOL( ID_LIBVIEW_VIEWDOC, LIB_VIEW_FRAME::onViewSymbolDocument )
     EVT_TOOL_RANGE( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT,
                     LIB_VIEW_FRAME::onSelectSymbolBodyStyle )
     EVT_CHOICE( ID_LIBVIEW_SELECT_PART_NUMBER, LIB_VIEW_FRAME::onSelectSymbolUnit )
@@ -89,7 +89,6 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, LIB_VIEW_FRAME::onUpdateNormalBodyStyleButton )
     EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, LIB_VIEW_FRAME::onUpdateAltBodyStyleButton )
     EVT_UPDATE_UI( ID_LIBVIEW_SELECT_PART_NUMBER, LIB_VIEW_FRAME::onUpdateUnitChoice )
-    EVT_UPDATE_UI( ID_LIBEDIT_VIEW_DOC, LIB_VIEW_FRAME::onUpdateDocButton )
 
 END_EVENT_TABLE()
 
@@ -234,6 +233,7 @@ void LIB_VIEW_FRAME::setupTools()
     // Register tools
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
+    m_toolManager->RegisterTool( new EE_INSPECTION_TOOL );  // manage show datasheet
     m_toolManager->RegisterTool( new EE_SELECTION_TOOL );   // manage context menu
     m_toolManager->RegisterTool( new LIB_CONTROL );         // manage show electrical type option
     m_toolManager->RegisterTool( new LIB_MOVE_TOOL );
@@ -262,7 +262,7 @@ void LIB_VIEW_FRAME::SetUnitAndConvert( int aUnit, int aConvert )
 }
 
 
-LIB_ALIAS* LIB_VIEW_FRAME::getSelectedAlias() const
+LIB_ALIAS* LIB_VIEW_FRAME::GetSelectedAlias() const
 {
     LIB_ALIAS* alias = NULL;
 
@@ -273,10 +273,10 @@ LIB_ALIAS* LIB_VIEW_FRAME::getSelectedAlias() const
 }
 
 
-LIB_PART* LIB_VIEW_FRAME::getSelectedSymbol() const
+LIB_PART* LIB_VIEW_FRAME::GetSelectedSymbol() const
 {
     LIB_PART* symbol = NULL;
-    LIB_ALIAS* alias = getSelectedAlias();
+    LIB_ALIAS* alias = GetSelectedAlias();
 
     if( alias )
         symbol = alias->GetPart();
@@ -287,7 +287,7 @@ LIB_PART* LIB_VIEW_FRAME::getSelectedSymbol() const
 
 void LIB_VIEW_FRAME::updatePreviewSymbol()
 {
-    LIB_ALIAS* alias = getSelectedAlias();
+    LIB_ALIAS* alias = GetSelectedAlias();
     KIGFX::SCH_VIEW* view = GetCanvas()->GetView();
 
     if( m_previewItem )
@@ -317,7 +317,7 @@ void LIB_VIEW_FRAME::updatePreviewSymbol()
 
 void LIB_VIEW_FRAME::onUpdateAltBodyStyleButton( wxUpdateUIEvent& aEvent )
 {
-    LIB_PART* symbol = getSelectedSymbol();
+    LIB_PART* symbol = GetSelectedSymbol();
 
     aEvent.Enable( symbol && symbol->HasConversion() );
 
@@ -330,7 +330,7 @@ void LIB_VIEW_FRAME::onUpdateAltBodyStyleButton( wxUpdateUIEvent& aEvent )
 
 void LIB_VIEW_FRAME::onUpdateNormalBodyStyleButton( wxUpdateUIEvent& aEvent )
 {
-    LIB_PART* symbol = getSelectedSymbol();
+    LIB_PART* symbol = GetSelectedSymbol();
 
     aEvent.Enable( symbol && symbol->HasConversion() );
 
@@ -417,7 +417,7 @@ void LIB_VIEW_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
 
 void LIB_VIEW_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
 {
-    LIB_PART* part = getSelectedSymbol();
+    LIB_PART* part = GetSelectedSymbol();
 
     int unit_count = 1;
 
@@ -775,7 +775,7 @@ void LIB_VIEW_FRAME::SetFilter( const SCHLIB_FILTER* aFilter )
 
 const BOX2I LIB_VIEW_FRAME::GetDocumentExtents() const
 {
-    LIB_ALIAS*  alias = getSelectedAlias();
+    LIB_ALIAS*  alias = GetSelectedAlias();
     LIB_PART*   part = alias ? alias->GetPart() : nullptr;
 
     if( !part )
@@ -806,7 +806,7 @@ void LIB_VIEW_FRAME::OnAddPartToSchematic( wxCommandEvent& aEvent )
         return;
     }
 
-    if( getSelectedSymbol() )
+    if( GetSelectedSymbol() )
     {
         SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
 
@@ -816,8 +816,8 @@ void LIB_VIEW_FRAME::OnAddPartToSchematic( wxCommandEvent& aEvent )
             return;
         }
 
-        SCH_COMPONENT* component = new SCH_COMPONENT( *getSelectedSymbol(),
-                                                      getSelectedAlias()->GetLibId(),
+        SCH_COMPONENT* component = new SCH_COMPONENT( *GetSelectedSymbol(),
+                                                      GetSelectedAlias()->GetLibId(),
                                                       g_CurrentSheet, m_unit, m_convert );
 
         // Be sure the link to the corresponding LIB_PART is OK:

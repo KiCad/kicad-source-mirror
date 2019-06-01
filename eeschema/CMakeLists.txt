@@ -259,7 +259,6 @@ if( KICAD_SPICE )
         sim/sim_plot_frame.cpp
         sim/sim_plot_frame_base.cpp
         sim/sim_plot_panel.cpp
-        sim/simulate.cpp
         sim/spice_simulator.cpp
         sim/spice_value.cpp
         simulation_cursors.cpp

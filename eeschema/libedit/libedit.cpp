@@ -666,7 +666,7 @@ void LIB_EDIT_FRAME::fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibr
 }
 
 
-void LIB_EDIT_FRAME::OnRevert( wxCommandEvent& aEvent )
+void LIB_EDIT_FRAME::OnRevert()
 {
     LIB_ID libId = getTargetLibId();
     const wxString& libName = libId.GetLibNickname();

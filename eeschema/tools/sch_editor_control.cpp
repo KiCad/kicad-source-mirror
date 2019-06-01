@@ -96,6 +96,11 @@ TOOL_ACTION EE_ACTIONS::editSymbolFields( "eeschema.EditorControl.editSymbolFiel
         _( "Edit Symbol Fields..." ), _( "Bulk-edit fields of all symbols in schematic" ),
         spreadsheet_xpm );
 
+TOOL_ACTION EE_ACTIONS::editSymbolLibraryLinks( "eeschema.EditorControl.editSymbolLibraryLinks",
+        AS_GLOBAL, 0,
+        _( "Edit Symbol Library Links..." ), _( "Edit links between schematic and library symbols" ),
+        edit_cmp_symb_links_xpm );
+
 TOOL_ACTION EE_ACTIONS::assignFootprints( "eeschema.EditorControl.assignFootprints",
         AS_GLOBAL, 0,
         _( "Assign Footprints..." ), _( "Run Cvpcb" ),
@@ -1114,6 +1119,14 @@ int SCH_EDITOR_CONTROL::EditSymbolFields( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::EditSymbolLibraryLinks( const TOOL_EVENT& aEvent )
+{
+    InvokeDialogEditComponentsLibId( m_frame );
+    m_frame->GetCanvas()->Refresh( true );
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::ShowPcbNew( const TOOL_EVENT& aEvent )
 {
     wxCommandEvent dummy;
@@ -1249,6 +1262,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::ShowCvpcb,             EE_ACTIONS::assignFootprints.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Annotate,              EE_ACTIONS::annotate.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::EditSymbolFields,      EE_ACTIONS::editSymbolFields.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::EditSymbolLibraryLinks,EE_ACTIONS::editSymbolLibraryLinks.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowPcbNew,            EE_ACTIONS::showPcbNew.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::UpdatePCB,             EE_ACTIONS::updatePcbFromSchematic.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::GenerateBOM,           EE_ACTIONS::generateBOM.MakeEvent() );

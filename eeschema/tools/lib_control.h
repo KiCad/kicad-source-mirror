@@ -47,6 +47,7 @@ public:
     int Save( const TOOL_EVENT& aEvent );
     int SaveAs( const TOOL_EVENT& aEvent );
     int SaveAll( const TOOL_EVENT& aEvent );
+    int Revert( const TOOL_EVENT& aEvent );
 
     int ShowLibraryBrowser( const TOOL_EVENT& aEvent );
     int ShowElectricalTypes( const TOOL_EVENT& aEvent );

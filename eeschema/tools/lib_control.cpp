@@ -62,6 +62,13 @@ int LIB_CONTROL::SaveAll( const TOOL_EVENT& aEvent )
 }
 
 
+int LIB_CONTROL::Revert( const TOOL_EVENT& aEvent )
+{
+    m_frame->OnRevert();
+    return 0;
+}
+
+
 int LIB_CONTROL::ShowLibraryBrowser( const TOOL_EVENT& aEvent )
 {
     wxCommandEvent dummy;
@@ -103,6 +110,7 @@ void LIB_CONTROL::setTransitions()
     Go( &LIB_CONTROL::Save,                  ACTIONS::save.MakeEvent() );
     Go( &LIB_CONTROL::SaveAs,                ACTIONS::saveAs.MakeEvent() );
     Go( &LIB_CONTROL::SaveAll,               ACTIONS::saveAll.MakeEvent() );
+    Go( &LIB_CONTROL::Revert,                ACTIONS::revert.MakeEvent() );
 
     Go( &LIB_CONTROL::ShowLibraryBrowser,    EE_ACTIONS::showLibraryBrowser.MakeEvent() );
     Go( &LIB_CONTROL::ShowElectricalTypes,   EE_ACTIONS::showElectricalTypes.MakeEvent() );

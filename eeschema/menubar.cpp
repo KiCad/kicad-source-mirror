@@ -251,6 +251,9 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     CONDITIONAL_MENU* inspectMenu = new CONDITIONAL_MENU( false, selTool );
 
     inspectMenu->AddItem( EE_ACTIONS::runERC,               EE_CONDITIONS::ShowAlways );
+#ifdef KICAD_SPICE
+    inspectMenu->AddItem( EE_ACTIONS::runSimulation,        EE_CONDITIONS::ShowAlways );
+#endif
 
     //-- Tools menu -----------------------------------------------
     //
@@ -278,11 +281,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     toolsMenu->AddSeparator();
     toolsMenu->AddItem( EE_ACTIONS::editSymbolFields,       EE_CONDITIONS::ShowAlways );
-
-    toolsMenu->AddItem( ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID,
-                        _( "Edit Symbol &Library References..." ),
-                        _( "Edit links between schematic symbols and library symbols" ),
-                        edit_cmp_symb_links_xpm,            EE_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( EE_ACTIONS::editSymbolLibraryLinks, EE_CONDITIONS::ShowAlways );
 
     toolsMenu->AddSeparator();
     toolsMenu->AddItem( EE_ACTIONS::annotate,               EE_CONDITIONS::ShowAlways );
@@ -291,12 +290,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     toolsMenu->AddSeparator();
     toolsMenu->AddItem( EE_ACTIONS::assignFootprints,       EE_CONDITIONS::ShowAlways );
     toolsMenu->AddItem( EE_ACTIONS::generateBOM,            EE_CONDITIONS::ShowAlways );
-
-#ifdef KICAD_SPICE
-    toolsMenu->AddSeparator();
-    toolsMenu->AddItem( ID_SIM_SHOW, _("Simula&tor"), _( "Simulate circuit" ),
-                        simulator_xpm,                      EE_CONDITIONS::ShowAlways );
-#endif /* KICAD_SPICE */
 
     //-- Preferences menu -----------------------------------------------
     //

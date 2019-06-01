@@ -232,7 +232,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
 
     EVT_TOOL( ID_RESCUE_CACHED, SCH_EDIT_FRAME::OnRescueProject )
     EVT_MENU( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnRemapSymbols )
-    EVT_MENU( ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID, SCH_EDIT_FRAME::OnEditComponentSymbolsId )
 
     EVT_TOOL( ID_RUN_PCB_MODULE_EDITOR, SCH_EDIT_FRAME::OnOpenFootprintEditor )
 
@@ -240,11 +239,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_BACKANNO_ITEMS, SCH_EDIT_FRAME::OnLoadCmpToFootprintLinkFile )
     EVT_TOOL( ID_UPDATE_FIELDS, SCH_EDIT_FRAME::OnUpdateFields )
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
-
-#ifdef KICAD_SPICE
-    EVT_TOOL( ID_SIM_SHOW, SCH_EDIT_FRAME::OnSimulate )
-#endif /* KICAD_SPICE */
-
 END_EVENT_TABLE()
 
 
@@ -979,18 +973,6 @@ void SCH_EDIT_FRAME::OnRemapSymbols( wxCommandEvent& event )
 
     dlgRemap.ShowQuasiModal();
 
-    GetCanvas()->Refresh( true );
-}
-
-
-// This method is not the same as OnRemapSymbols.
-// It allows renaming the lib id of groups of components when a symbol
-// has moved from a library to another library.
-// For instance to rename libname1::mysymbol to libname2::mysymbol
-// or any other lib id name
-void SCH_EDIT_FRAME::OnEditComponentSymbolsId( wxCommandEvent& event )
-{
-    InvokeDialogEditComponentsLibId( this );
     GetCanvas()->Refresh( true );
 }
 

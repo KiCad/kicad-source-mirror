@@ -155,7 +155,7 @@ static EDA_HOTKEY HkEdit( _HKI( "Edit Item" ), HK_EDIT, 'E' );
 static EDA_HOTKEY HkEditValue( _HKI( "Edit Symbol Value" ), HK_EDIT_COMPONENT_VALUE, 'V' );
 static EDA_HOTKEY HkEditReference( _HKI( "Edit Symbol Reference" ), HK_EDIT_COMPONENT_REFERENCE, 'U' );
 static EDA_HOTKEY HkEditFootprint( _HKI( "Edit Symbol Footprint" ), HK_EDIT_COMPONENT_FOOTPRINT, 'F' );
-static EDA_HOTKEY HkShowDatasheet( _HKI( "Show Symbol Datasheet" ), HK_SHOW_COMPONENT_DATASHEET, 'D' );
+static EDA_HOTKEY HkShowDatasheet( _HKI( "Show Datasheet" ), HK_SHOW_DATASHEET, 'D' );
 static EDA_HOTKEY HkEditWithLibedit( _HKI( "Edit with Symbol Editor" ), HK_EDIT_COMPONENT_WITH_LIBEDIT, 'E' + GR_KB_CTRL );
 
 static EDA_HOTKEY HkDuplicateItem( _HKI( "Duplicate" ), HK_DUPLICATE, 'D' + GR_KB_CTRL );
@@ -176,8 +176,6 @@ static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTIO
 // Special keys for library editor:
 static EDA_HOTKEY HkCreatePin( _HKI( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P' );
 static EDA_HOTKEY HkInsertPin( _HKI( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
-static EDA_HOTKEY HkViewDoc( _HKI( "Show Datasheet" ), HK_LIBEDIT_VIEW_DOC, 'D' + GR_KB_ALT,
-                             ID_LIBEDIT_VIEW_DOC );
 
 // Autoplace fields
 static EDA_HOTKEY HkAutoplaceFields( _HKI( "Autoplace Fields" ), HK_AUTOPLACE_FIELDS, 'O' );
@@ -323,11 +321,11 @@ static EDA_HOTKEY* libEdit_Hotkey_List[] =
 {
     &HkCreatePin,
     &HkInsertPin,
-    &HkViewDoc,
+    &HkShowDatasheet,
     NULL
 };
 
-// List of hotkey descriptors for library viewer (currently empty
+// List of hotkey descriptors for library viewer (currently empty)
 static EDA_HOTKEY* viewlib_Hotkey_List[] =
 {
     NULL

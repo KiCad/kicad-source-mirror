@@ -88,7 +88,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     // Actions
     EVT_TOOL( ID_LIBEDIT_NEW_LIBRARY, LIB_EDIT_FRAME::OnCreateNewLibrary )
     EVT_TOOL( ID_LIBEDIT_ADD_LIBRARY, LIB_EDIT_FRAME::OnAddLibrary )
-    EVT_TOOL( ID_LIBEDIT_REVERT, LIB_EDIT_FRAME::OnRevert )
     EVT_TOOL( ID_LIBEDIT_NEW_PART, LIB_EDIT_FRAME::OnCreateNewPart )
     EVT_TOOL( ID_LIBEDIT_EDIT_PART, LIB_EDIT_FRAME::OnEditPart )
     EVT_TOOL( ID_LIBEDIT_IMPORT_PART, LIB_EDIT_FRAME::OnImportPart )
@@ -104,7 +103,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_LIBEDIT_CHECK_PART, LIB_EDIT_FRAME::OnCheckComponent )
     EVT_TOOL( ID_DE_MORGAN_NORMAL_BUTT, LIB_EDIT_FRAME::OnSelectBodyStyle )
     EVT_TOOL( ID_DE_MORGAN_CONVERT_BUTT, LIB_EDIT_FRAME::OnSelectBodyStyle )
-    EVT_TOOL( ID_LIBEDIT_VIEW_DOC, LIB_EDIT_FRAME::OnViewEntryDoc )
     EVT_TOOL( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::OnSyncPinEditClick )
     EVT_TOOL( ID_ADD_PART_TO_SCHEMATIC, LIB_EDIT_FRAME::OnAddPartToSchematic )
 
@@ -127,7 +125,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     // Update user interface elements.
     EVT_UPDATE_UI( ID_LIBEDIT_EXPORT_PART, LIB_EDIT_FRAME::OnUpdateHavePart )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE_AS, LIB_EDIT_FRAME::OnUpdateHavePart )
-    EVT_UPDATE_UI( ID_LIBEDIT_REVERT, LIB_EDIT_FRAME::OnUpdateRevert )
     EVT_UPDATE_UI( ID_LIBEDIT_CHECK_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::OnUpdateSyncPinEdit )
     EVT_UPDATE_UI( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnUpdatePartNumber )
@@ -386,19 +383,6 @@ void LIB_EDIT_FRAME::ClearSearchTreeSelection()
 }
 
 
-void LIB_EDIT_FRAME::OnUpdateRevert( wxUpdateUIEvent& aEvent )
-{
-    LIB_ID libId = getTargetLibId();
-    const wxString& libName = libId.GetLibNickname();
-    const wxString& partName = libId.GetLibItemName();
-
-    if( partName.IsEmpty() )
-        aEvent.Enable( !libName.IsEmpty() && m_libMgr->IsLibraryModified( libName ) );
-    else
-        aEvent.Enable( !libName.IsEmpty() && m_libMgr->IsPartModified( partName, libName ) );
-}
-
-
 void LIB_EDIT_FRAME::OnUpdateHavePart( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( getTargetLibId().IsValid() );
@@ -469,44 +453,6 @@ void LIB_EDIT_FRAME::OnSelectUnit( wxCommandEvent& event )
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     RebuildView();
-}
-
-
-void LIB_EDIT_FRAME::OnViewEntryDoc( wxCommandEvent& event )
-{
-    LIB_PART* part = GetCurPart();
-
-    if( !part )
-        return;
-
-    wxString filename;
-
-    if( part->GetAliasCount() > 1 )
-    {
-        ACTION_MENU  popup;
-        wxString     msg;
-        int          id = 0;
-
-        for( LIB_ALIAS* alias : part->GetAliases() )
-        {
-            msg.Printf( wxT( "%s (%s)" ), alias->GetName(), alias->GetDocFileName() );
-            popup.Append( id++, msg );
-        }
-
-        PopupMenu( &popup );
-
-        if( popup.GetSelected() >= 0 )
-            filename = part->GetAlias( (unsigned) popup.GetSelected() )->GetDocFileName();
-    }
-    else
-        filename = part->GetAlias( 0 )->GetDocFileName();
-
-    if( !filename.IsEmpty() && filename != wxT( "~" ) )
-    {
-        SEARCH_STACK* lib_search = Prj().SchSearchS();
-
-        GetAssociatedDocument( this, filename, lib_search );
-    }
 }
 
 

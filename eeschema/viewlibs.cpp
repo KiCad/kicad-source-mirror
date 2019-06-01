@@ -54,7 +54,7 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
     const auto libNicknames = libs->GetLogicalLibs();
     adapter->AddLibraries( libNicknames, this );
 
-    LIB_ALIAS *current = getSelectedAlias();
+    LIB_ALIAS *current = GetSelectedAlias();
     LIB_ID id;
     int unit = 0;
 
@@ -108,27 +108,6 @@ void LIB_VIEW_FRAME::onSelectPreviousSymbol( wxCommandEvent& aEvent )
 
     m_cmpList->SetSelection( ii );
     ProcessEvent( evt );
-}
-
-
-void LIB_VIEW_FRAME::onUpdateDocButton( wxUpdateUIEvent& aEvent )
-{
-    LIB_ALIAS* entry = getSelectedAlias();
-
-    aEvent.Enable( entry && !entry->GetDocFileName().IsEmpty() );
-}
-
-
-void LIB_VIEW_FRAME::onViewSymbolDocument( wxCommandEvent& aEvent )
-{
-    LIB_ALIAS* entry = getSelectedAlias();
-
-    if( entry && !entry->GetDocFileName().IsEmpty() )
-    {
-        SEARCH_STACK* lib_search = Prj().SchSearchS();
-
-        GetAssociatedDocument( this, entry->GetDocFileName(), lib_search );
-    }
 }
 
 

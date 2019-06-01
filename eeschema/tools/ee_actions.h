@@ -151,6 +151,7 @@ public:
     static TOOL_ACTION showMarkerInfo;
     static TOOL_ACTION annotate;
     static TOOL_ACTION editSymbolFields;
+    static TOOL_ACTION editSymbolLibraryLinks;
     static TOOL_ACTION assignFootprints;
     static TOOL_ACTION showBusManager;
 
@@ -161,6 +162,7 @@ public:
     static TOOL_ACTION showPcbNew;
     static TOOL_ACTION updatePcbFromSchematic;
     static TOOL_ACTION generateBOM;
+    static TOOL_ACTION runSimulation;
 
     // Miscellaneous
     static TOOL_ACTION enterSheet;

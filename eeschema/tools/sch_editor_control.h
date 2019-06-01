@@ -107,6 +107,7 @@ public:
     int ShowCvpcb( const TOOL_EVENT& aEvent );
     int Annotate( const TOOL_EVENT& aEvent );
     int EditSymbolFields( const TOOL_EVENT& aEvent );
+    int EditSymbolLibraryLinks( const TOOL_EVENT& aEvent );
     int ShowPcbNew( const TOOL_EVENT& aEvent );
     int UpdatePCB( const TOOL_EVENT& aEvent );
     int GenerateBOM( const TOOL_EVENT& aEvent );

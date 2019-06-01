@@ -78,10 +78,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddItem( ACTIONS::save,                modifiedDocumentCondition );
     fileMenu->AddItem( ACTIONS::saveAs,              EE_CONDITIONS::ShowAlways );
     fileMenu->AddItem( ACTIONS::saveAll,             EE_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( ID_LIBEDIT_REVERT,
-                       _( "Revert" ),
-                       _( "Throw away changes" ),
-                       undo_xpm,                     EE_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::revert,              modifiedDocumentCondition );
 
     fileMenu->AddSeparator();
     fileMenu->AddItem( ID_LIBEDIT_IMPORT_PART,
@@ -197,18 +194,18 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     //-- Inspect menu -----------------------------------------------
     //
-    wxMenu* inspectMenu = new wxMenu;
+    CONDITIONAL_MENU* inspectMenu = new CONDITIONAL_MENU( false, selTool );
 
-    AddMenuItem( inspectMenu,
-                 ID_LIBEDIT_VIEW_DOC,
-                 AddHotkeyName( _( "Show Datasheet" ), g_Libedit_Hotkeys_Descr, HK_LIBEDIT_VIEW_DOC ),
-                 _( "Open associated datasheet in web browser" ),
-                 KiBitmap( datasheet_xpm ) );
+    auto datasheetAvailableCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetCurPart() != nullptr;
+    };
+
+    inspectMenu->AddItem( EE_ACTIONS::showDatasheet,       datasheetAvailableCondition );
 
     AddMenuItem( inspectMenu,
                  ID_LIBEDIT_CHECK_PART,
-                 _( "Electrical Rules &Checker" ),
-                 _( "Check duplicate and off grid pins" ),
+                 _( "Electrical Rules Checker" ),
+                 _( "Check for duplicate and off-grid pins" ),
                  KiBitmap( erc_xpm ) );
 
     //-- Preferences menu -----------------------------------------------

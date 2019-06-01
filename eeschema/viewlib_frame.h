@@ -141,7 +141,12 @@ public:
     int GetUnit() const { return m_unit; }
     int GetConvert() const { return m_convert; }
 
+    LIB_PART* GetSelectedSymbol() const;
+    LIB_ALIAS* GetSelectedAlias() const;
+
     const BOX2I GetDocumentExtents() const override;
+
+    void SyncMenusAndToolbars() override;
 
 private:
     // Sets up the tool framework
@@ -157,19 +162,14 @@ private:
 
     void onUpdateAltBodyStyleButton( wxUpdateUIEvent& aEvent );
     void onUpdateNormalBodyStyleButton( wxUpdateUIEvent& aEvent );
-    void onUpdateDocButton( wxUpdateUIEvent& aEvent );
-    void OnUpdateElectricalType( wxUpdateUIEvent& aEvent );
     void onUpdateUnitChoice( wxUpdateUIEvent& aEvent );
 
     void onSelectNextSymbol( wxCommandEvent& aEvent );
     void onSelectPreviousSymbol( wxCommandEvent& aEvent );
-    void onViewSymbolDocument( wxCommandEvent& aEvent );
     void onSelectSymbolBodyStyle( wxCommandEvent& aEvent );
     void onSelectSymbolUnit( wxCommandEvent& aEvent );
     void OnAddPartToSchematic( wxCommandEvent& aEvent );
 
-    LIB_ALIAS* getSelectedAlias() const;
-    LIB_PART* getSelectedSymbol() const;
     void updatePreviewSymbol();
 
 // Private members:

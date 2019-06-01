@@ -49,17 +49,17 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
     wxString msg;
 
     m_mainToolBar->AddTool( ID_LIBVIEW_SELECT_PART, wxEmptyString,
-            KiScaledBitmap( add_component_xpm, this ),
-            _( "Select symbol to browse" ) );
+                            KiScaledBitmap( add_component_xpm, this ),
+                            _( "Select symbol to browse" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_LIBVIEW_PREVIOUS, wxEmptyString,
-            KiScaledBitmap( lib_previous_xpm, this ),
-            _( "Display previous symbol" ) );
+                            KiScaledBitmap( lib_previous_xpm, this ),
+                            _( "Display previous symbol" ) );
 
     m_mainToolBar->AddTool( ID_LIBVIEW_NEXT, wxEmptyString,
-            KiScaledBitmap( lib_next_xpm, this ),
-            _( "Display next symbol" ) );
+                            KiScaledBitmap( lib_next_xpm, this ),
+                            _( "Display next symbol" ) );
 
     toolbar->AddSeparator();
     toolbar->Add( ACTIONS::zoomRedraw );
@@ -69,33 +69,30 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, wxEmptyString,
-            KiScaledBitmap( morgan1_xpm, this ),
-            _( "Show as \"De Morgan\" normal symbol" ),
-            wxITEM_CHECK );
+                            KiScaledBitmap( morgan1_xpm, this ),
+                            _( "Show as \"De Morgan\" normal symbol" ),
+                            wxITEM_CHECK );
 
     m_mainToolBar->AddTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, wxEmptyString,
-            KiScaledBitmap( morgan2_xpm, this ),
-            _( "Show as \"De Morgan\" convert symbol" ),
-            wxITEM_CHECK );
+                            KiScaledBitmap( morgan2_xpm, this ),
+                            _( "Show as \"De Morgan\" convert symbol" ),
+                            wxITEM_CHECK );
 
     KiScaledSeparator( m_mainToolBar, this );
 
-    m_unitChoice = new wxChoice( m_mainToolBar, ID_LIBVIEW_SELECT_PART_NUMBER,
-            wxDefaultPosition, wxSize( 150, -1 ) );
+    m_unitChoice = new wxChoice( m_mainToolBar, ID_LIBVIEW_SELECT_PART_NUMBER, wxDefaultPosition,
+                                 wxSize( 150, -1 ) );
     m_mainToolBar->AddControl( m_unitChoice );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_LIBVIEW_VIEWDOC, wxEmptyString,
-            KiScaledBitmap( datasheet_xpm, this ),
-            _( "View symbol documents" ) );
+    m_mainToolBar->Add( EE_ACTIONS::showDatasheet );
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_ADD_PART_TO_SCHEMATIC, wxEmptyString,
-            KiScaledBitmap( export_xpm, this ),
-            _( "Add symbol to schematic" ) );
+                            KiScaledBitmap( export_xpm, this ),
+                            _( "Add symbol to schematic" ) );
 
-    // after adding the buttons to the toolbar, must call Realize() to
-    // reflect the changes
+    // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();
 
     m_mainToolBar->Refresh();
@@ -158,4 +155,14 @@ void LIB_VIEW_FRAME::ReCreateMenuBar()
 
     SetMenuBar( menuBar );
     delete oldMenuBar;
+}
+
+
+void LIB_VIEW_FRAME::SyncMenusAndToolbars()
+{
+    LIB_ALIAS* alias = GetSelectedAlias();
+
+    m_mainToolBar->Toggle( EE_ACTIONS::showDatasheet, alias && !alias->GetDocFileName().IsEmpty() );
+    // JEY TODO: deMorgan buttons...
+    m_mainToolBar->Refresh();
 }

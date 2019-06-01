@@ -28,26 +28,37 @@
 #include <sch_component.h>
 #include <sch_marker.h>
 #include <id.h>
+#include <kiway.h>
 #include <ee_hotkeys.h>
 #include <confirm.h>
 #include <tool/conditional_menu.h>
 #include <tool/selection_conditions.h>
 #include <tool/selection.h>
 #include <tool/tool_manager.h>
+#include <search_stack.h>
+#include <sim/sim_plot_frame.h>
 #include <sch_view.h>
 #include <sch_edit_frame.h>
+#include <lib_edit_frame.h>
+#include <viewlib_frame.h>
 #include <eda_doc.h>
 #include <invoke_sch_dialog.h>
-
-TOOL_ACTION EE_ACTIONS::showDatasheet( "eeschema.InspectionTool.showDatasheet",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SHOW_COMPONENT_DATASHEET ),
-        _( "Show Datasheet" ), _( "Opens the datasheet in a browser" ),
-        datasheet_xpm );
+#include <project.h>
 
 TOOL_ACTION EE_ACTIONS::runERC( "eeschame.InspectionTool.runERC",
         AS_GLOBAL, 0,
         _( "Electrical Rules &Checker" ), _( "Perform electrical rules check" ),
         erc_xpm );
+
+TOOL_ACTION EE_ACTIONS::runSimulation( "eeschema.EditorControl.runSimulation",
+        AS_GLOBAL, 0,
+        _( "Simulator..." ), _( "Simulate circuit in SPICE" ),
+        simulator_xpm );
+
+TOOL_ACTION EE_ACTIONS::showDatasheet( "eeschema.InspectionTool.showDatasheet",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SHOW_DATASHEET ),
+        _( "Show Datasheet" ), _( "Opens the datasheet in a browser" ),
+        datasheet_xpm );
 
 TOOL_ACTION EE_ACTIONS::showMarkerInfo( "eeschema.InspectionTool.showMarkerInfo",
         AS_GLOBAL, 0,
@@ -72,8 +83,8 @@ bool EE_INSPECTION_TOOL::Init()
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( EE_ACTIONS::showDatasheet, EE_CONDITIONS::SingleSymbol && EE_CONDITIONS::Idle, 400 );
-    selToolMenu.AddItem( EE_ACTIONS::showMarkerInfo, singleMarkerCondition && EE_CONDITIONS::Idle, 400 );
+    selToolMenu.AddItem( EE_ACTIONS::showDatasheet, EE_CONDITIONS::SingleSymbol && EE_CONDITIONS::Idle, 220 );
+    selToolMenu.AddItem( EE_ACTIONS::showMarkerInfo, singleMarkerCondition && EE_CONDITIONS::Idle, 220 );
 
     return true;
 }
@@ -94,18 +105,83 @@ int EE_INSPECTION_TOOL::RunERC( const TOOL_EVENT& aEvent )
 }
 
 
+int EE_INSPECTION_TOOL::RunSimulation( const TOOL_EVENT& aEvent )
+{
+#ifdef KICAD_SPICE
+    SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, true );
+    simFrame->Show( true );
+
+    // On Windows, Raise() does not bring the window on screen, when iconized
+    if( simFrame->IsIconized() )
+        simFrame->Iconize( false );
+
+    simFrame->Raise();
+#endif /* KICAD_SPICE */
+    return 0;
+}
+
+
 int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
+    wxString datasheet;
 
-    if( selection.Empty() )
-        return 0;
+    LIB_EDIT_FRAME* libEditFrame = dynamic_cast<LIB_EDIT_FRAME*>( m_frame );
+    LIB_VIEW_FRAME* libViewFrame = dynamic_cast<LIB_VIEW_FRAME*>( m_frame );
 
-    SCH_COMPONENT* component = (SCH_COMPONENT*) selection.Front();
-    wxString       datasheet = component->GetField( DATASHEET )->GetText();
+    if( libEditFrame )
+    {
+        LIB_PART* part = libEditFrame->GetCurPart();
 
-    if( !datasheet.IsEmpty() )
-        GetAssociatedDocument( m_frame, datasheet );
+        if( !part )
+            return 0;
+
+        if( part->GetAliasCount() > 1 )
+        {
+            ACTION_MENU  popup;
+            wxString     msg;
+            int          id = 0;
+
+            for( LIB_ALIAS* alias : part->GetAliases() )
+            {
+                msg.Printf( wxT( "%s (%s)" ), alias->GetName(), alias->GetDocFileName() );
+                popup.Append( id++, msg );
+            }
+
+            m_frame->PopupMenu( &popup );
+
+            if( popup.GetSelected() >= 0 )
+                datasheet = part->GetAlias( (unsigned) popup.GetSelected() )->GetDocFileName();
+        }
+        else
+            datasheet = part->GetAlias( 0 )->GetDocFileName();
+    }
+    else if( libViewFrame )
+    {
+        LIB_ALIAS* entry = libViewFrame->GetSelectedAlias();
+
+        if( !entry )
+            return 0;
+
+        datasheet = entry->GetDocFileName();
+    }
+    else
+    {
+        SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
+
+        if( selection.Empty() )
+            return 0;
+
+        SCH_COMPONENT* component = (SCH_COMPONENT*) selection.Front();
+
+        datasheet = component->GetField( DATASHEET )->GetText();
+    }
+
+    if( !datasheet.IsEmpty() && datasheet != wxT( "~" ) )
+    {
+        SEARCH_STACK* lib_search = m_frame->Prj().SchSearchS();
+
+        GetAssociatedDocument( m_frame, datasheet, lib_search );
+    }
 
     return 0;
 }
@@ -152,6 +228,8 @@ int EE_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 void EE_INSPECTION_TOOL::setTransitions()
 {
     Go( &EE_INSPECTION_TOOL::RunERC,              EE_ACTIONS::runERC.MakeEvent() );
+    Go( &EE_INSPECTION_TOOL::RunSimulation,       EE_ACTIONS::runSimulation.MakeEvent() );
+
     Go( &EE_INSPECTION_TOOL::ShowDatasheet,       EE_ACTIONS::showDatasheet.MakeEvent() );
     Go( &EE_INSPECTION_TOOL::ShowMarkerInfo,      EE_ACTIONS::showMarkerInfo.MakeEvent() );
 

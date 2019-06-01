@@ -60,7 +60,6 @@ enum id_eeschema_frm
     ID_RESCUE_CACHED,
     ID_EDIT_SYM_LIB_TABLE,
     ID_REMAP_SYMBOLS,
-    ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID,
 
     /* Schematic editor horizontal toolbar IDs */
     ID_TO_LIBVIEW,
@@ -119,7 +118,6 @@ enum id_eeschema_frm
     ID_DE_MORGAN_NORMAL_BUTT,
     ID_DE_MORGAN_CONVERT_BUTT,
     ID_LIBEDIT_SYNC_PIN_EDIT,
-    ID_LIBEDIT_VIEW_DOC,
     ID_LIBEDIT_CHECK_PART,
     ID_LIBEDIT_SELECT_PART_NUMBER,
 
@@ -143,7 +141,6 @@ enum id_eeschema_frm
     ID_LIBVIEW_SELECT_PART,
     ID_LIBVIEW_NEXT,
     ID_LIBVIEW_PREVIOUS,
-    ID_LIBVIEW_VIEWDOC,
     ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT,
     ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT,
     ID_LIBVIEW_SELECT_PART_NUMBER,
@@ -155,7 +152,6 @@ enum id_eeschema_frm
     ID_SIM_TUNE,
     ID_SIM_PROBE,
     ID_SIM_ADD_SIGNALS,
-    ID_SIM_SHOW,
 
     ID_END_EESCHEMA_ID_LIST,    // End of IDs specific to Eeschema
 

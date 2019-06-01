@@ -43,6 +43,7 @@ public:
     bool Init() override;
 
     int RunERC( const TOOL_EVENT& aEvent );
+    int RunSimulation( const TOOL_EVENT& aEvent );
 
     int ShowDatasheet( const TOOL_EVENT& aEvent );
     int ShowMarkerInfo( const TOOL_EVENT& aEvent );
