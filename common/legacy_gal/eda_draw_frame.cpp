@@ -378,7 +378,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
     }
     else if( id >= ID_POPUP_GRID_FIRST && id < ID_POPUP_GRID_SEPARATOR  )
     {
-        m_toolManager->RunAction( ACTIONS::gridPreset, true, id );
+        m_toolManager->RunAction( ACTIONS::gridPreset, true, id - ID_POPUP_GRID_FIRST );
     }
 
     UpdateStatusBar();
