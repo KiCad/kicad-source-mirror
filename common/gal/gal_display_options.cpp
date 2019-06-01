@@ -52,7 +52,7 @@ static const UTIL::CFG_MAP<KIGFX::GRID_STYLE> gridStyleConfigVals =
 
 
 /**
- * Flag to enable GAL_DISPLAY_OPTIONS loggin
+ * Flag to enable GAL_DISPLAY_OPTIONS logging
  *
  * Use "KICAD_GAL_DISPLAY_OPTIONS" to enable.
  *

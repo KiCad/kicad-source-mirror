@@ -1,11 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#ifndef __PANEL_PCBNEW_DISPLAY_OPTIONS_BASE_H__
+#define __PANEL_PCBNEW_DISPLAY_OPTIONS_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -26,16 +27,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_PCBNEW_DISPLAY_OPTIONS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_PCBNEW_DISPLAY_OPTIONS_BASE : public wxPanel
+class PANEL_PCBNEW_DISPLAY_OPTIONS_BASE : public wxPanel 
 {
 	private:
-
+	
 	protected:
 		enum
 		{
 			ID_SHOW_CLEARANCE = 1000
 		};
-
+		
 		wxBoxSizer* m_galOptionsSizer;
 		wxRadioBox* m_ShowNetNamesOption;
 		wxCheckBox* m_OptDisplayPadNumber;
@@ -43,11 +44,12 @@ class PANEL_PCBNEW_DISPLAY_OPTIONS_BASE : public wxPanel
 		wxRadioBox* m_OptDisplayTracksClearance;
 		wxCheckBox* m_OptDisplayPadClearence;
 		wxCheckBox* m_OptDisplayCurvedRatsnestLines;
-
+	
 	public:
-
-		PANEL_PCBNEW_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		
+		PANEL_PCBNEW_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL ); 
 		~PANEL_PCBNEW_DISPLAY_OPTIONS_BASE();
-
+	
 };
 
+#endif //__PANEL_PCBNEW_DISPLAY_OPTIONS_BASE_H__

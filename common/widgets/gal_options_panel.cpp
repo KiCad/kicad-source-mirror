@@ -145,7 +145,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
 
         int m_CursorShapeNChoices = sizeof( m_CursorShapeChoices ) / sizeof( wxString );
         m_cursorShape = new wxRadioBox( this, wxID_ANY,
-                                        _( "Cursor Shape:" ), wxDefaultPosition, wxDefaultSize,
+                                        _( "Cursor Shape" ), wxDefaultPosition, wxDefaultSize,
                                         m_CursorShapeNChoices, m_CursorShapeChoices, 1,
                                         wxRA_SPECIFY_COLS );
 
