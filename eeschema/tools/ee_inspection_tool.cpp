@@ -27,6 +27,7 @@
 #include <view/view_controls.h>
 #include <sch_component.h>
 #include <sch_marker.h>
+#include <id.h>
 #include <ee_hotkeys.h>
 #include <confirm.h>
 #include <tool/conditional_menu.h>
@@ -36,12 +37,17 @@
 #include <sch_view.h>
 #include <sch_edit_frame.h>
 #include <eda_doc.h>
-
+#include <invoke_sch_dialog.h>
 
 TOOL_ACTION EE_ACTIONS::showDatasheet( "eeschema.InspectionTool.showDatasheet",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SHOW_COMPONENT_DATASHEET ),
         _( "Show Datasheet" ), _( "Opens the datasheet in a browser" ),
         datasheet_xpm );
+
+TOOL_ACTION EE_ACTIONS::runERC( "eeschame.InspectionTool.runERC",
+        AS_GLOBAL, 0,
+        _( "Electrical Rules &Checker" ), _( "Perform electrical rules check" ),
+        erc_xpm );
 
 TOOL_ACTION EE_ACTIONS::showMarkerInfo( "eeschema.InspectionTool.showMarkerInfo",
         AS_GLOBAL, 0,
@@ -70,6 +76,21 @@ bool EE_INSPECTION_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::showMarkerInfo, singleMarkerCondition && EE_CONDITIONS::Idle, 400 );
 
     return true;
+}
+
+
+int EE_INSPECTION_TOOL::RunERC( const TOOL_EVENT& aEvent )
+{
+    SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+    wxWindow*       erc = wxWindow::FindWindowById( ID_DIALOG_ERC, m_frame );
+
+    if( erc )
+        // Bring it to the top if already open.  Dual monitor users need this.
+        erc->Raise();
+    else if( editFrame )
+        InvokeDialogERC( editFrame );
+
+    return 0;
 }
 
 
@@ -130,6 +151,7 @@ int EE_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
 void EE_INSPECTION_TOOL::setTransitions()
 {
+    Go( &EE_INSPECTION_TOOL::RunERC,              EE_ACTIONS::runERC.MakeEvent() );
     Go( &EE_INSPECTION_TOOL::ShowDatasheet,       EE_ACTIONS::showDatasheet.MakeEvent() );
     Go( &EE_INSPECTION_TOOL::ShowMarkerInfo,      EE_ACTIONS::showMarkerInfo.MakeEvent() );
 

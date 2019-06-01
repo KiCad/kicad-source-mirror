@@ -73,7 +73,6 @@ enum main_id
 {
     ID_RUN_PCB                  = wxID_HIGHEST,
     ID_RUN_PCB_MODULE_EDITOR,
-    ID_RUN_CVPCB,
     ID_RUN_LIBRARY,     // pcbnew & eeschema each use this internally to load their respective lib editors
 
     ID_LOAD_PROJECT,
@@ -256,8 +255,6 @@ enum main_id
     ID_DRAG_POINT,
 
     ID_GET_NETLIST,
-    ID_OPEN_CMP_TABLE,
-    ID_GET_TOOLS,
     ID_FIND_ITEMS,
 
     ID_EDA_SOCKET_EVENT_SERV,

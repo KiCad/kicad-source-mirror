@@ -40,11 +40,6 @@
 
 class CONDITIONAL_MENU;
 
-// helper functions that build specific submenus:
-
-// Build the tools menu
-static void prepareToolsMenu( wxMenu* aParentMenu );
-
 
 void SCH_EDIT_FRAME::ReCreateMenuBar()
 {
@@ -253,14 +248,55 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     //-- Inspect menu -----------------------------------------------
     //
-    wxMenu* inspectMenu = new wxMenu;
-    AddMenuItem( inspectMenu, ID_GET_ERC, _( "Electrical Rules &Checker" ),
-                 _( "Perform electrical rules check" ), KiBitmap( erc_xpm ) );
+    CONDITIONAL_MENU* inspectMenu = new CONDITIONAL_MENU( false, selTool );
+
+    inspectMenu->AddItem( EE_ACTIONS::runERC,               EE_CONDITIONS::ShowAlways );
 
     //-- Tools menu -----------------------------------------------
     //
-    wxMenu* toolsMenu = new wxMenu;
-    prepareToolsMenu( toolsMenu );
+    CONDITIONAL_MENU* toolsMenu = new CONDITIONAL_MENU( false, selTool );
+
+    auto remapSymbolsCondition = [] ( const SELECTION& aSel ) {
+        SCH_SCREENS schematic;
+
+        // The remapping can only be performed on legacy projects.
+        return schematic.HasNoFullyDefinedLibIds();
+    };
+
+    toolsMenu->AddItem( EE_ACTIONS::updatePcbFromSchematic, EE_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( EE_ACTIONS::showPcbNew,             EE_CONDITIONS::ShowAlways );
+
+    toolsMenu->AddSeparator();
+    toolsMenu->AddItem( EE_ACTIONS::showSymbolEditor,       EE_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( ID_RESCUE_CACHED, _( "&Rescue Symbols..." ),
+                        _( "Find old symbols in project and rename/rescue them" ),
+                        rescue_xpm,                         EE_CONDITIONS::ShowAlways );
+
+    toolsMenu->AddItem( ID_REMAP_SYMBOLS, _( "Remap S&ymbols..." ),
+                        _( "Remap legacy library symbols to symbol library table" ),
+                        rescue_xpm,                         remapSymbolsCondition );
+
+    toolsMenu->AddSeparator();
+    toolsMenu->AddItem( EE_ACTIONS::editSymbolFields,       EE_CONDITIONS::ShowAlways );
+
+    toolsMenu->AddItem( ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID,
+                        _( "Edit Symbol &Library References..." ),
+                        _( "Edit links between schematic symbols and library symbols" ),
+                        edit_cmp_symb_links_xpm,            EE_CONDITIONS::ShowAlways );
+
+    toolsMenu->AddSeparator();
+    toolsMenu->AddItem( EE_ACTIONS::annotate,               EE_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( EE_ACTIONS::showBusManager,         EE_CONDITIONS::ShowAlways );
+
+    toolsMenu->AddSeparator();
+    toolsMenu->AddItem( EE_ACTIONS::assignFootprints,       EE_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( EE_ACTIONS::generateBOM,            EE_CONDITIONS::ShowAlways );
+
+#ifdef KICAD_SPICE
+    toolsMenu->AddSeparator();
+    toolsMenu->AddItem( ID_SIM_SHOW, _("Simula&tor"), _( "Simulate circuit" ),
+                        simulator_xpm,                      EE_CONDITIONS::ShowAlways );
+#endif /* KICAD_SPICE */
 
     //-- Preferences menu -----------------------------------------------
     //
@@ -308,77 +344,4 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     delete oldMenuBar;
 }
 
-
-void prepareToolsMenu( wxMenu* aParentMenu )
-{
-    wxString text;
-
-    text = AddHotkeyName( _( "Update PCB from Schematic..." ), g_Schematic_Hotkeys_Descr,
-                          HK_UPDATE_PCB_FROM_SCH );
-
-    AddMenuItem( aParentMenu,
-                 ID_UPDATE_PCB_FROM_SCH,
-                 text, _( "Update PCB design with current schematic." ),
-                 KiBitmap( update_pcb_from_sch_xpm ) );
-
-    // Run Pcbnew
-    AddMenuItem( aParentMenu, ID_RUN_PCB, _( "&Open PCB Editor" ),
-                 _( "Run Pcbnew" ),
-                 KiBitmap( pcbnew_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, ID_RUN_LIBRARY, _( "Symbol Library &Editor" ),
-                 HELP_RUN_LIB_EDITOR,
-                 KiBitmap( libedit_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_RESCUE_CACHED, _( "&Rescue Symbols..." ),
-                 _( "Find old symbols in project and rename/rescue them" ),
-                 KiBitmap( rescue_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_REMAP_SYMBOLS, _( "Remap S&ymbols..." ),
-                 _( "Remap legacy library symbols to symbol library table" ),
-                 KiBitmap( rescue_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, ID_OPEN_CMP_TABLE, _( "Edit Symbol Field&s..." ),
-                 KiBitmap( spreadsheet_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID,
-                 _( "Edit Symbol &Library References..." ),
-                 _( "Edit links between schematic symbols and library symbols" ),
-                 KiBitmap( edit_cmp_symb_links_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, ID_GET_ANNOTATE, _( "&Annotate Schematic..." ),
-                 HELP_ANNOTATE,
-                 KiBitmap( annotate_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_BUS_MANAGER, _( "Bus &Definitions..." ),
-                 HELP_BUS_MANAGER,
-                 KiBitmap( bus_definition_tool_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    // Run CvPcb
-    AddMenuItem( aParentMenu, ID_RUN_CVPCB, _( "A&ssign Footprints..." ),
-                 _( "Assign PCB footprints to schematic symbols" ),
-                 KiBitmap( cvpcb_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_GET_TOOLS, _( "Generate Bill of &Materials..." ),
-                 HELP_GENERATE_BOM,
-                 KiBitmap( bom_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-#ifdef KICAD_SPICE
-    // Simulator
-    AddMenuItem( aParentMenu, ID_SIM_SHOW, _("Simula&tor"),
-                 _( "Simulate circuit" ),
-                 KiBitmap( simulator_xpm ) );
-#endif /* KICAD_SPICE */
-
-}
 

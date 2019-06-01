@@ -48,6 +48,8 @@
 #include <status_popup.h>
 #include <ws_proxy_undo_item.h>
 #include <dialogs/dialog_page_settings.h>
+#include <dialogs/dialog_fields_editor_global.h>
+#include <invoke_sch_dialog.h>
 
 TOOL_ACTION EE_ACTIONS::refreshPreview( "eeschema.EditorControl.refreshPreview",
          AS_GLOBAL, 0, "", "" );
@@ -88,6 +90,41 @@ TOOL_ACTION EE_ACTIONS::showLibraryBrowser( "eeschema.EditorControl.showLibraryB
         AS_GLOBAL, 0,
         _( "Symbol Library Browser" ), _( "Browse symbol libraries" ),
         library_browse_xpm );
+
+TOOL_ACTION EE_ACTIONS::editSymbolFields( "eeschema.EditorControl.editSymbolFields",
+        AS_GLOBAL, 0,
+        _( "Edit Symbol Fields..." ), _( "Bulk-edit fields of all symbols in schematic" ),
+        spreadsheet_xpm );
+
+TOOL_ACTION EE_ACTIONS::assignFootprints( "eeschema.EditorControl.assignFootprints",
+        AS_GLOBAL, 0,
+        _( "Assign Footprints..." ), _( "Run Cvpcb" ),
+        cvpcb_xpm );
+
+TOOL_ACTION EE_ACTIONS::annotate( "eeschema.EditorControl.annotate",
+        AS_GLOBAL, 0,
+        _( "Annotate Schematic..." ), _( "Fill in schematic symbol reference designators" ),
+        annotate_xpm );
+
+TOOL_ACTION EE_ACTIONS::showBusManager( "eeschema.EditorControl.showBusManager",
+        AS_GLOBAL, 0,
+        _( "Bus Definitions..." ), _( "Manage bus definitions" ),
+        bus_definition_tool_xpm );
+
+TOOL_ACTION EE_ACTIONS::showPcbNew( "eeschema.EditorControl.showPcbNew",
+        AS_GLOBAL, 0,
+        _( "Open PCB Editor" ), _( "Run Pcbnew" ),
+        pcbnew_xpm );
+
+TOOL_ACTION EE_ACTIONS::updatePcbFromSchematic( "eeschema.EditorControl.updatePcbFromSchematic",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_UPDATE_PCB_FROM_SCH ),
+        _( "Update PCB from Schematic..." ), _( "Push changes from schematic to PCB" ),
+        update_pcb_from_sch_xpm );
+
+TOOL_ACTION EE_ACTIONS::generateBOM( "eeschema.EditorControl.generateBOM",
+        AS_GLOBAL, 0,
+        _( "Generate BOM..." ), _( "Generate a bill of materials for the current schematic" ),
+        bom_xpm );
 
 TOOL_ACTION EE_ACTIONS::enterSheet( "eeschema.EditorControl.enterSheet",
         AS_GLOBAL, 0,
@@ -1053,6 +1090,60 @@ int SCH_EDITOR_CONTROL::ShowLibraryBrowser( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::Annotate( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent dummy;
+    m_frame->OnAnnotate( dummy );
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::ShowCvpcb( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent dummy;
+    m_frame->OnOpenCvpcb( dummy );
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::EditSymbolFields( const TOOL_EVENT& aEvent )
+{
+    DIALOG_FIELDS_EDITOR_GLOBAL dlg( m_frame );
+    dlg.ShowQuasiModal();
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::ShowPcbNew( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent dummy;
+    m_frame->OnOpenPcbnew( dummy );
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::UpdatePCB( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent dummy;
+    m_frame->OnUpdatePCB( dummy );
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::GenerateBOM( const TOOL_EVENT& aEvent )
+{
+    InvokeDialogCreateBOM( m_frame );
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::ShowBusManager( const TOOL_EVENT& aEvent )
+{
+    InvokeDialogBusManager( m_frame );
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::EnterSheet( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
@@ -1155,6 +1246,14 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::EditWithLibEdit,       EE_ACTIONS::editWithLibEdit.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowSymbolEditor,      EE_ACTIONS::showSymbolEditor.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowLibraryBrowser,    EE_ACTIONS::showLibraryBrowser.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ShowCvpcb,             EE_ACTIONS::assignFootprints.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Annotate,              EE_ACTIONS::annotate.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::EditSymbolFields,      EE_ACTIONS::editSymbolFields.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ShowPcbNew,            EE_ACTIONS::showPcbNew.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::UpdatePCB,             EE_ACTIONS::updatePcbFromSchematic.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::GenerateBOM,           EE_ACTIONS::generateBOM.MakeEvent() );
+
+    Go( &SCH_EDITOR_CONTROL::ShowBusManager,        EE_ACTIONS::showBusManager.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::EnterSheet,            EE_ACTIONS::enterSheet.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::LeaveSheet,            EE_ACTIONS::leaveSheet.MakeEvent() );

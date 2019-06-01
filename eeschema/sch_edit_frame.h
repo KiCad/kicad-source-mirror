@@ -314,7 +314,7 @@ public:
      */
     void OnModify() override;
 
-    virtual wxString GetScreenDesc() const override;
+    wxString GetScreenDesc() const override;
 
     /**
      * Execute a remote command send by Pcbnew via a socket,
@@ -322,7 +322,7 @@ public:
      * this is a virtual function called by EDA_DRAW_FRAME::OnSockRequest().
      * @param cmdline = received command from socket
      */
-    virtual void ExecuteRemoteCommand( const char* cmdline ) override;
+    void ExecuteRemoteCommand( const char* cmdline ) override;
 
     void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
 
@@ -748,44 +748,33 @@ public:
      */
     void GetSchematicConnections( std::vector< wxPoint >& aConnections );
 
+    void OnOpenPcbnew( wxCommandEvent& event );
+    void OnOpenFootprintEditor( wxCommandEvent& event );
+    void OnOpenCvpcb( wxCommandEvent& event );
+    void OnRescueProject( wxCommandEvent& event );
+    void OnRemapSymbols( wxCommandEvent& aEvent );
+    void OnUpdatePCB( wxCommandEvent& event );
+    void OnAnnotate( wxCommandEvent& event );
+
 private:
     // Sets up the tool framework
     void setupTools();
 
     void OnExit( wxCommandEvent& event );
-    void OnAnnotate( wxCommandEvent& event );
-    void OnErc( wxCommandEvent& event );
     void OnCreateNetlist( wxCommandEvent& event );
-    void OnUpdatePCB( wxCommandEvent& event );
     void OnSimulate( wxCommandEvent& event );
-    void OnCreateBillOfMaterials( wxCommandEvent& event );
-    void OnLaunchBomManager( wxCommandEvent& event );
-    void OnLaunchBusManager( wxCommandEvent& event );
 
     void OnLoadFile( wxCommandEvent& event );
     void OnLoadCmpToFootprintLinkFile( wxCommandEvent& event );
     void OnUpdateFields( wxCommandEvent& event );
     void OnAppendProject( wxCommandEvent& event );
     void OnImportProject( wxCommandEvent& event );
-    void OnOpenPcbnew( wxCommandEvent& event );
-    void OnOpenPcbModuleEditor( wxCommandEvent& event );
-    void OnOpenCvpcb( wxCommandEvent& event );
-    void OnRescueProject( wxCommandEvent& event );
-    void OnRemapSymbols( wxCommandEvent& aEvent );
 
     // a helper function to run the dialog that allows to rename the symbol library Id of
     // groups of components, for instance after a symbol has moved from a library to
     // another library
     void OnEditComponentSymbolsId( wxCommandEvent& aEvent );
     void OnPreferencesOptions( wxCommandEvent& event );
-
-    /* User interface update event handlers. */
-    void OnUpdateRemapSymbols( wxUpdateUIEvent& aEvent );
-
-    /**
-     * Close the ERC dialog if it is open.
-     */
-    void CloseErc();
 
     /**
      * Set the main window title bar text.
@@ -1128,9 +1117,9 @@ public:
 
     void SyncMenusAndToolbars() override;
 
-    virtual void SetScreen( BASE_SCREEN* aScreen ) override;
+    void SetScreen( BASE_SCREEN* aScreen ) override;
 
-    virtual const BOX2I GetDocumentExtents() const override;
+    const BOX2I GetDocumentExtents() const override;
 
     DECLARE_EVENT_TABLE()
 };

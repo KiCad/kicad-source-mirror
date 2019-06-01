@@ -182,8 +182,7 @@ static EDA_HOTKEY HkViewDoc( _HKI( "Show Datasheet" ), HK_LIBEDIT_VIEW_DOC, 'D' 
 // Autoplace fields
 static EDA_HOTKEY HkAutoplaceFields( _HKI( "Autoplace Fields" ), HK_AUTOPLACE_FIELDS, 'O' );
 
-static EDA_HOTKEY HkUpdatePcbFromSch( _HKI( "Update PCB from Schematic" ), HK_UPDATE_PCB_FROM_SCH, WXK_F8,
-                                      ID_UPDATE_PCB_FROM_SCH );
+static EDA_HOTKEY HkUpdatePcbFromSch( _HKI( "Update PCB from Schematic" ), HK_UPDATE_PCB_FROM_SCH, WXK_F8 );
 
 // Selection
 static EDA_HOTKEY HkSelectNode( _HKI( "Select Node" ), HK_SELECT_NODE, GR_KB_ALT + '3' );

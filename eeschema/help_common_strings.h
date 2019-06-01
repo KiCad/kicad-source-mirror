@@ -23,11 +23,6 @@
  */
 
 /**
- * @file eeschema/help_common_strings.h
- * strings common to toolbars and menubar
- */
-
-/**
  * These strings are used in menus and tools, that do the same command
  * But they are internationalized, and therefore must be created
  * at run time, on the fly.
@@ -36,57 +31,12 @@
  * Therefore they are defined by \#define, used inside menu constructors
  */
 
-// Common to schematic editor and component editor
-#define HELP_UNDO _( "Undo last command" )
-#define HELP_REDO _( "Redo last command" )
-
 #define HELP_ZOOM_IN     _( "Zoom in" )
 #define HELP_ZOOM_OUT    _( "Zoom out" )
 #define HELP_ZOOM_FIT    _( "Zoom to fit schematic page" )
 #define HELP_ZOOM_REDRAW _( "Redraw schematic view" )
 
-#define HELP_DELETE_ITEMS         _( "Delete item" )
-
 // Schematic editor:
-#define HELP_SELECT               _( "Select item" )
-#define HELP_HIGHLIGHT            _( "Highlight net" )
-#define HELP_FIND                 _( "Find symbols and text" )
-#define HELP_REPLACE              _( "Find and replace text in schematic items" )
-#define HELP_PLACE_COMPONENTS     _( "Place symbol" )
-#define HELP_PLACE_POWERPORT      _( "Place power port" )
-#define HELP_PLACE_WIRE           _( "Place wire" )
-#define HELP_PLACE_BUS            _( "Place bus" )
-#define HELP_PLACE_WIRE2BUS_ENTRY _( "Place wire to bus entry" )
-#define HELP_PLACE_BUS2BUS_ENTRY  _( "Place bus to bus entry" )
-#define HELP_PLACE_NC_FLAG        _( "Place no connection flag" )
-
-#define HELP_PLACE_NETLABEL _( "Place net label" )
-#define HELP_PLACE_GLOBALLABEL \
-    _( "Place global label.\nAll global labels with same name are connected throughout the sheet hierarchy" )
-#define HELP_PLACE_HIER_LABEL \
-    _( "Place a hierarchical label.\nHierarchical labels are exposed to other sheets through sheet pins" )
-
-#define HELP_PLACE_JUNCTION     _( "Place junction" )
-#define HELP_PLACE_SHEET        _( "Create hierarchical sheet" )
-#define HELP_IMPORT_SHEETPIN \
-    _( "Place hierarchical sheet pin corresponding to a hierarchical label in the sheet" )
-#define HELP_PLACE_SHEETPIN     _( "Place hierarchical sheet pin" )
-#define HELP_PLACE_GRAPHICLINES _( "Place graphic lines or polygons" )
-#define HELP_PLACE_GRAPHICTEXTS _( "Place text" )
-
-#define HELP_ANNOTATE _( "Annotate schematic symbols" )
-#define HELP_RUN_LIB_EDITOR _( "Create, delete, and edit symbols" )
-#define HELP_RUN_LIB_VIEWER _( "Browse symbol libraries" )
-#define HELP_GENERATE_BOM _( "Generate bill of materials" )
-#define HELP_BUS_MANAGER _( "Manage bus definitions" )
 #define HELP_IMPORT_FOOTPRINTS \
     _( "Back-import symbol footprint association fields from the .cmp back import file created by Pcbnew" )
 
-// Component editor:
-#define HELP_ADD_PIN _( "Add pins to symbol" )
-#define HELP_ADD_BODYTEXT _( "Add text to symbol body" )
-#define HELP_ADD_BODYRECT _( "Add graphic rectangle to symbol body" )
-#define HELP_ADD_BODYCIRCLE _( "Add circles to symbol body" )
-#define HELP_ADD_BODYARC _( "Add arcs to symbol body" )
-#define HELP_ADD_BODYPOLYGON _( "Add lines and polygons to symbol body" )
-#define HELP_PLACE_GRAPHICIMAGES _("Add bitmap image")

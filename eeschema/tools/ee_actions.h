@@ -112,7 +112,7 @@ public:
     static TOOL_ACTION placeSymbolAnchor;
     static TOOL_ACTION finishDrawing;
 
-    // Editing
+    // Interactive Editing
     static TOOL_ACTION moveActivate;
     static TOOL_ACTION move;
     static TOOL_ACTION drag;
@@ -145,12 +145,22 @@ public:
     static TOOL_ACTION pointEditorAddCorner;
     static TOOL_ACTION pointEditorRemoveCorner;
 
-    /// Inspection
+    /// Inspection and Editing
     static TOOL_ACTION showDatasheet;
+    static TOOL_ACTION runERC;
     static TOOL_ACTION showMarkerInfo;
+    static TOOL_ACTION annotate;
+    static TOOL_ACTION editSymbolFields;
+    static TOOL_ACTION assignFootprints;
+    static TOOL_ACTION showBusManager;
+
+    // Suite operations
     static TOOL_ACTION showSymbolEditor;
     static TOOL_ACTION editWithLibEdit;
     static TOOL_ACTION showLibraryBrowser;
+    static TOOL_ACTION showPcbNew;
+    static TOOL_ACTION updatePcbFromSchematic;
+    static TOOL_ACTION generateBOM;
 
     // Miscellaneous
     static TOOL_ACTION enterSheet;

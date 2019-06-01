@@ -71,7 +71,6 @@
 #include <build_version.h>
 #include <wildcards_and_files_ext.h>
 #include <connection_graph.h>
-#include <dialogs/dialog_fields_editor_global.h>
 #include <sch_view.h>
 #include <sch_painter.h>
 
@@ -231,23 +230,13 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( wxID_PREFERENCES, SCH_EDIT_FRAME::OnPreferencesOptions )
     EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, SCH_EDIT_FRAME::OnConfigurePaths )
 
-    EVT_TOOL( ID_RUN_LIBRARY, SCH_EDIT_FRAME::OnOpenLibraryEditor )
     EVT_TOOL( ID_RESCUE_CACHED, SCH_EDIT_FRAME::OnRescueProject )
     EVT_MENU( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnRemapSymbols )
     EVT_MENU( ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID, SCH_EDIT_FRAME::OnEditComponentSymbolsId )
 
-    EVT_TOOL( ID_RUN_PCB, SCH_EDIT_FRAME::OnOpenPcbnew )
-    EVT_TOOL( ID_RUN_PCB_MODULE_EDITOR, SCH_EDIT_FRAME::OnOpenPcbModuleEditor )
+    EVT_TOOL( ID_RUN_PCB_MODULE_EDITOR, SCH_EDIT_FRAME::OnOpenFootprintEditor )
 
-    EVT_TOOL( ID_RUN_CVPCB, SCH_EDIT_FRAME::OnOpenCvpcb )
-
-    EVT_TOOL( ID_GET_ANNOTATE, SCH_EDIT_FRAME::OnAnnotate )
-    EVT_TOOL( ID_GET_ERC, SCH_EDIT_FRAME::OnErc )
     EVT_TOOL( ID_GET_NETLIST, SCH_EDIT_FRAME::OnCreateNetlist )
-    EVT_TOOL( ID_UPDATE_PCB_FROM_SCH, SCH_EDIT_FRAME::OnUpdatePCB )
-    EVT_TOOL( ID_GET_TOOLS, SCH_EDIT_FRAME::OnCreateBillOfMaterials )
-    EVT_TOOL( ID_OPEN_CMP_TABLE, SCH_EDIT_FRAME::OnLaunchBomManager )
-    EVT_TOOL( ID_BUS_MANAGER, SCH_EDIT_FRAME::OnLaunchBusManager )
     EVT_TOOL( ID_BACKANNO_ITEMS, SCH_EDIT_FRAME::OnLoadCmpToFootprintLinkFile )
     EVT_TOOL( ID_UPDATE_FIELDS, SCH_EDIT_FRAME::OnUpdateFields )
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
@@ -255,9 +244,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
 #ifdef KICAD_SPICE
     EVT_TOOL( ID_SIM_SHOW, SCH_EDIT_FRAME::OnSimulate )
 #endif /* KICAD_SPICE */
-
-    /* Handle user interface update events. */
-    EVT_UPDATE_UI( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnUpdateRemapSymbols )
 
 END_EVENT_TABLE()
 
@@ -672,38 +658,6 @@ void SCH_EDIT_FRAME::OnModify()
 }
 
 
-void SCH_EDIT_FRAME::OnUpdateRemapSymbols( wxUpdateUIEvent& aEvent )
-{
-    SCH_SCREENS schematic;
-
-    // The remapping can only be performed on legacy projects.
-    aEvent.Enable( schematic.HasNoFullyDefinedLibIds() );
-}
-
-
-void SCH_EDIT_FRAME::OnErc( wxCommandEvent& event )
-{
-    // See if it's already open...
-    wxWindow* erc = FindWindowById( ID_DIALOG_ERC, this );
-
-    if( erc )
-        // Bring it to the top if already open.  Dual monitor users need this.
-        erc->Raise();
-    else
-        InvokeDialogERC( this );
-}
-
-
-void SCH_EDIT_FRAME::CloseErc()
-{
-    // Find the ERC dialog if it's open and close it
-    wxWindow* erc = FindWindowById( ID_DIALOG_ERC, this );
-
-    if( erc )
-        erc->Close( false );
-}
-
-
 void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
 {
     wxFileName fn = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
@@ -752,25 +706,6 @@ void SCH_EDIT_FRAME::OnCreateNetlist( wxCommandEvent& event )
         // If a plugin is removed or added, rebuild and reopen the new dialog
 
     } while( result == NET_PLUGIN_CHANGE );
-}
-
-
-void SCH_EDIT_FRAME::OnCreateBillOfMaterials( wxCommandEvent& )
-{
-    InvokeDialogCreateBOM( this );
-}
-
-
-void SCH_EDIT_FRAME::OnLaunchBomManager( wxCommandEvent& event )
-{
-    DIALOG_FIELDS_EDITOR_GLOBAL dlg( this );
-    dlg.ShowQuasiModal();
-}
-
-
-void SCH_EDIT_FRAME::OnLaunchBusManager( wxCommandEvent& )
-{
-    InvokeDialogBusManager( this );
 }
 
 
@@ -961,7 +896,7 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
 }
 
 
-void SCH_EDIT_FRAME::OnOpenPcbModuleEditor( wxCommandEvent& event )
+void SCH_EDIT_FRAME::OnOpenFootprintEditor( wxCommandEvent& event )
 {
     wxFileName fn = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
 

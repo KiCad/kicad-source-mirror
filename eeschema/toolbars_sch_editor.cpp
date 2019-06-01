@@ -94,26 +94,14 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
                             _( "Footprint Editor - Create/edit footprints" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( ID_GET_ANNOTATE, wxEmptyString, KiScaledBitmap( annotate_xpm, this ),
-                            HELP_ANNOTATE );
-
-    m_mainToolBar->AddTool( ID_GET_ERC, wxEmptyString, KiScaledBitmap( erc_xpm, this ),
-                            _( "Perform electrical rules check" ) );
-
-    m_mainToolBar->AddTool( ID_RUN_CVPCB, wxEmptyString, KiScaledBitmap( cvpcb_xpm, this ),
-                            _( "Assign PCB footprints to schematic symbols" ) );
-
-    m_mainToolBar->AddTool( ID_OPEN_CMP_TABLE, wxEmptyString,
-                            KiScaledBitmap( spreadsheet_xpm, this ), _( "Edit symbol fields"  ) );
-
-    m_mainToolBar->AddTool( ID_GET_TOOLS, wxEmptyString, KiScaledBitmap( bom_xpm, this ),
-                            HELP_GENERATE_BOM );
+    m_mainToolBar->Add( EE_ACTIONS::annotate );
+    m_mainToolBar->Add( EE_ACTIONS::runERC );
+    m_mainToolBar->Add( EE_ACTIONS::assignFootprints );
+    m_mainToolBar->Add( EE_ACTIONS::editSymbolFields );
+    m_mainToolBar->Add( EE_ACTIONS::generateBOM );
 
     KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( ID_RUN_PCB, wxEmptyString, KiScaledBitmap( pcbnew_xpm, this ),
-                            _( "Run Pcbnew to layout printed circuit board" ) );
+    m_mainToolBar->Add( EE_ACTIONS::showPcbNew );
 
     m_mainToolBar->AddTool( ID_BACKANNO_ITEMS, wxEmptyString,
                             KiScaledBitmap( import_footprint_names_xpm, this ),

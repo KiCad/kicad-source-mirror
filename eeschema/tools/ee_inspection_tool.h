@@ -42,6 +42,8 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
+    int RunERC( const TOOL_EVENT& aEvent );
+
     int ShowDatasheet( const TOOL_EVENT& aEvent );
     int ShowMarkerInfo( const TOOL_EVENT& aEvent );
 

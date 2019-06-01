@@ -59,17 +59,13 @@ enum id_eeschema_frm
     /* Schematic editor main menubar IDs. */
     ID_RESCUE_CACHED,
     ID_EDIT_SYM_LIB_TABLE,
-    ID_BUS_MANAGER,
     ID_REMAP_SYMBOLS,
     ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID,
 
     /* Schematic editor horizontal toolbar IDs */
     ID_TO_LIBVIEW,
-    ID_GET_ANNOTATE,
-    ID_GET_ERC,
     ID_BACKANNO_ITEMS,
     ID_UPDATE_FIELDS,
-    ID_GEN_PLOT_SCHEMATIC,
 
     /* Schematic editor vertical toolbar IDs */
     ID_HIGHLIGHT_TOOL,
@@ -154,8 +150,6 @@ enum id_eeschema_frm
     ID_LIBVIEW_LIB_LIST,
     ID_LIBVIEW_CMP_LIST,
     ID_SET_RELATIVE_OFFSET,
-
-    ID_UPDATE_PCB_FROM_SCH,
 
     ID_SIM_RUN,
     ID_SIM_TUNE,
