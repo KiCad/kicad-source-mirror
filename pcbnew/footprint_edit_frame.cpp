@@ -265,11 +265,12 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
-
+    GetGalCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
     GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
     m_auimgr.Update();
+    GetToolManager()->RunAction( ACTIONS::gridPreset, true, m_LastGridSizeId );
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
     updateTitle();
 
@@ -292,7 +293,9 @@ void FOOTPRINT_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasTyp
 {
     // switches currently used canvas (Cairo / OpenGL).
     PCB_BASE_FRAME::SwitchCanvas( aCanvasType );
+
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
+    GetGalCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
 
     // The base class method *does not reinit* the layers manager. We must upate the layer
     // widget to match board visibility states, both layers and render columns, and and some

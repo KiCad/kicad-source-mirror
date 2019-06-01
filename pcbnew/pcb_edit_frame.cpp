@@ -342,6 +342,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     syncLayerWidgetLayer();
 
     m_auimgr.Update();
+    GetToolManager()->RunAction( ACTIONS::gridPreset, true, m_LastGridSizeId );
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
 
     m_canvasType = LoadCanvasTypeSetting();
@@ -388,7 +389,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     }
 
     GetGalCanvas()->SwitchBackend( m_canvasType );
-
+    galCanvas->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
     galCanvas->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
@@ -976,6 +977,8 @@ void PCB_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 {
     // switches currently used canvas (Cairo / OpenGL).
     PCB_BASE_FRAME::SwitchCanvas( aCanvasType );
+
+    GetGalCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
 
     // The base class method *does not reinit* the layers manager. We must upate the
     // layer widget to match board visibility states, both layers and render columns.
