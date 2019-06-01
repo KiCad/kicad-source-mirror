@@ -578,7 +578,7 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
 }
 
 
-void PL_EDITOR_FRAME::PrintPage( wxDC* aDC, LSET , bool , void *  )
+void PL_EDITOR_FRAME::PrintPage( wxDC* aDC )
 {
     GetScreen()->m_ScreenNumber = GetPageNumberOption() ? 1 : 2;
     PrintWorkSheet( aDC, GetScreen(), 0, IU_PER_MILS, wxEmptyString );

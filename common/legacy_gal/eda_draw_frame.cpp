@@ -80,7 +80,6 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
     EVT_MENU_OPEN( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_MENU_CLOSE( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_MENU_HIGHLIGHT_ALL( EDA_DRAW_FRAME::OnMenuOpen )
-    EVT_MENU_RANGE( ID_POPUP_GRID_LEVEL_1000, ID_POPUP_GRID_USER, EDA_DRAW_FRAME::OnSelectGrid )
 END_EVENT_TABLE()
 
 
@@ -333,16 +332,6 @@ void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
 }
 
 
-void EDA_DRAW_FRAME::ReCreateAuxiliaryToolbar()
-{
-}
-
-
-void EDA_DRAW_FRAME::ReCreateMenuBar()
-{
-}
-
-
 int EDA_DRAW_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
                                        wxString* aFullFileName )
 {
@@ -355,7 +344,7 @@ int EDA_DRAW_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
 }
 
 
-void EDA_DRAW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMode, void* aData )
+void EDA_DRAW_FRAME::PrintPage( wxDC* aDC )
 {
     wxMessageBox( wxT("EDA_DRAW_FRAME::PrintPage() error") );
 }
@@ -722,13 +711,6 @@ wxPoint EDA_DRAW_FRAME::GetNearestGridPosition( const wxPoint& aPosition,
 {
     BASE_SCREEN* screen = GetScreen();  // virtual call
     return screen->getNearestGridPosition( aPosition, GetGridOrigin(), aGridSize );
-}
-
-
-void EDA_DRAW_FRAME::SetMousePosition( const wxPoint& aPosition )
-{
-    BASE_SCREEN* screen = GetScreen();  // virtual call
-    screen->setMousePosition( aPosition );
 }
 
 

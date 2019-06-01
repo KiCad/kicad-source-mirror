@@ -1062,12 +1062,8 @@ public:
      * Plot or print the current sheet to the clipboard.
      *
      * @param aDC = wxDC given by the calling print function
-     * @param aPrintMask = not used here
-     * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
-     * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void PrintPage( wxDC* aDC, LSET aPrintMask,
-                            bool aPrintMirrorMode, void* aData = NULL ) override;
+    virtual void PrintPage( wxDC* aDC ) override;
 
     void SetSimulatorCommand( const wxString& aCommand ) { m_simulatorCommand = aCommand; }
 

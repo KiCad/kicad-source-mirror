@@ -70,7 +70,7 @@ public:
     {
         m_frame = getEditFrame<T>();
         m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-        m_isLibEdit = dynamic_cast<LIB_EDIT_FRAME*>( m_frame ) != nullptr;
+        m_isLibEdit = m_frame->IsType( FRAME_SCH_LIB_EDITOR );
 
         // A basic context manu.  Many (but not all) tools will choose to override this.
 

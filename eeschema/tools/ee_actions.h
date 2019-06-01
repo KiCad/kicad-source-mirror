@@ -126,7 +126,9 @@ public:
     static TOOL_ACTION editValue;
     static TOOL_ACTION editFootprint;
     static TOOL_ACTION autoplaceFields;
-    static TOOL_ACTION convertDeMorgan;
+    static TOOL_ACTION toggleDeMorgan;
+    static TOOL_ACTION showDeMorganStandard;
+    static TOOL_ACTION showDeMorganAlternate;
     static TOOL_ACTION editSymbolUnit;
     static TOOL_ACTION addJunction;
     static TOOL_ACTION addLabel;

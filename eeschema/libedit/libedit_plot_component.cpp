@@ -175,7 +175,7 @@ void LIB_EDIT_FRAME::SVG_PlotComponent( const wxString& aFullFileName )
 }
 
 
-void LIB_EDIT_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMode, void* aData )
+void LIB_EDIT_FRAME::PrintPage( wxDC* aDC )
 {
     LIB_PART*      part = GetCurPart();
 

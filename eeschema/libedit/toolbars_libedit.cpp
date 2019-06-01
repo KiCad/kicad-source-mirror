@@ -114,13 +114,8 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                             _( "Check duplicate and off grid pins" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( ID_DE_MORGAN_NORMAL_BUTT, wxEmptyString,
-                            KiScaledBitmap( morgan1_xpm, this ),
-                            _( "Show as \"De Morgan\" normal symbol" ), wxITEM_CHECK );
-    m_mainToolBar->AddTool( ID_DE_MORGAN_CONVERT_BUTT, wxEmptyString,
-                            KiScaledBitmap( morgan2_xpm, this ),
-                            _( "Show as \"De Morgan\" convert symbol" ), wxITEM_CHECK );
+    m_mainToolBar->Add( EE_ACTIONS::showDeMorganStandard, ACTION_TOOLBAR::TOGGLE );
+    m_mainToolBar->Add( EE_ACTIONS::showDeMorganAlternate, ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_mainToolBar, this );
     m_partSelectBox = new wxComboBox( m_mainToolBar, ID_LIBEDIT_SELECT_PART_NUMBER, wxEmptyString,
@@ -176,7 +171,10 @@ void LIB_EDIT_FRAME::SyncMenusAndToolbars()
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
     m_mainToolBar->Toggle( EE_ACTIONS::showDatasheet, GetCurPart() != nullptr );
-    // JEY TODO: deMorgan buttons...
+    m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganStandard, GetShowDeMorgan(),
+                           m_convert == LIB_ITEM::LIB_CONVERT::BASE );
+    m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganAlternate, GetShowDeMorgan(),
+                           m_convert == LIB_ITEM::LIB_CONVERT::DEMORGAN );
     m_mainToolBar->Refresh();
 
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,             IsGridVisible() );
@@ -187,13 +185,13 @@ void LIB_EDIT_FRAME::SyncMenusAndToolbars()
     m_optionsToolBar->Toggle( EE_ACTIONS::showComponentTree,   IsSearchTreeShown() );
     m_optionsToolBar->Refresh();
 
-    m_drawToolBar->Toggle( EE_ACTIONS::selectionTool,        GetToolId() == ID_NO_TOOL_SELECTED );
-    m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolPin,       GetToolId() == ID_LIBEDIT_PIN_BUTT );
-    m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolText,      GetToolId() == ID_LIBEDIT_BODY_TEXT_BUTT );
-    m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolRectangle,  GetToolId() == ID_LIBEDIT_BODY_RECT_BUTT );
-    m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolCircle,     GetToolId() == ID_LIBEDIT_BODY_CIRCLE_BUTT );
-    m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolArc,        GetToolId() == ID_LIBEDIT_BODY_ARC_BUTT );
-    m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolLines,      GetToolId() == ID_LIBEDIT_BODY_LINE_BUTT );
-    m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolAnchor,    GetToolId() == ID_LIBEDIT_ANCHOR_ITEM_BUTT );
+    m_drawToolBar->Toggle( EE_ACTIONS::selectionTool,       GetToolId() == ID_NO_TOOL_SELECTED );
+    m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolPin,      GetToolId() == ID_SYMBOL_PIN_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolText,     GetToolId() == ID_SYMBOL_TEXT_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolRectangle, GetToolId() == ID_SYMBOL_RECT_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolCircle,    GetToolId() == ID_SYMBOL_CIRCLE_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolArc,       GetToolId() == ID_SYMBOL_ARC_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolLines,     GetToolId() == ID_SYMBOL_LINE_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolAnchor,   GetToolId() == ID_SYMBOL_ANCHOR_TOOL );
     m_drawToolBar->Refresh();
 }

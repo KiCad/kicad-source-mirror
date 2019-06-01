@@ -287,14 +287,10 @@ public:
     void ClearSearchTreeSelection();
 
     void OnCheckComponent( wxCommandEvent& event );
-    void OnSelectBodyStyle( wxCommandEvent& event );
 
-    void OnUpdateEditingPart( wxUpdateUIEvent& event );
     void OnUpdateHavePart( wxUpdateUIEvent& aEvent );
     void OnUpdateSyncPinEdit( wxUpdateUIEvent& event );
     void OnUpdatePartNumber( wxUpdateUIEvent& event );
-    void OnUpdateDeMorganNormal( wxUpdateUIEvent& event );
-    void OnUpdateDeMorganConvert( wxUpdateUIEvent& event );
 
     void UpdateAfterSymbolProperties( wxString* aOldName, wxArrayString* aOldAliases );
     void RebuildSymbolUnitsList();
@@ -329,11 +325,13 @@ public:
      */
     void OnModify() override;
 
-    int GetUnit() { return m_unit; }
+    int GetUnit() const { return m_unit; }
+    void SetUnit( int aUnit ) { m_unit = aUnit; }
 
-    int GetConvert() { return m_convert; }
+    int GetConvert() const { return m_convert; }
+    void SetConvert( int aConvert ) { m_convert = aConvert; }
 
-    bool GetShowDeMorgan() { return m_showDeMorgan; }
+    bool GetShowDeMorgan() const { return m_showDeMorgan; }
     void SetShowDeMorgan( bool show ) { m_showDeMorgan = show; }
 
     void ClearMsgPanel() override { DisplayCmpDoc(); }
@@ -467,12 +465,8 @@ public:
      * Print a page
      *
      * @param aDC = wxDC given by the calling print function
-     * @param aPrintMask = not used here
-     * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
-     * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void PrintPage( wxDC* aDC, LSET aPrintMask,
-                            bool aPrintMirrorMode, void* aData = NULL ) override;
+    void PrintPage( wxDC* aDC ) override;
 
     /**
      * Creates the SVG print file for the current edited component.

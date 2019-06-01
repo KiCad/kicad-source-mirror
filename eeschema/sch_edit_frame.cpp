@@ -994,7 +994,7 @@ void SCH_EDIT_FRAME::Print()
 }
 
 
-void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMode, void* aData )
+void SCH_EDIT_FRAME::PrintPage( wxDC* aDC )
 {
     wxString fileName = Prj().AbsolutePath( GetScreen()->GetFileName() );
 

@@ -53,7 +53,13 @@ public:
      */
     void Add( const TOOL_ACTION& aAction, bool aIsToggleEntry = false );
 
+    /**
+     * Applies the default toggle action.  For checked items this is check/uncheck; for
+     * non-checked items it's enable/disable.
+     */
     void Toggle( const TOOL_ACTION& aAction, bool aState );
+
+    void Toggle( const TOOL_ACTION& aAction, bool aEnabled, bool aChecked );
 
     static const bool TOGGLE = true;
 

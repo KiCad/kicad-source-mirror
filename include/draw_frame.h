@@ -329,8 +329,6 @@ public:
      */
     wxPoint GetNearestGridPosition( const wxPoint& aPosition, wxRealPoint* aGridSize = NULL ) const;
 
-    void SetMousePosition( const wxPoint& aPosition );
-
     /**
      * Return the reference position, coming from either the mouse position
      * or the cursor position.
@@ -423,10 +421,10 @@ public:
 
     void EraseMsgBox();
 
+    void ReCreateMenuBar() override { }
     virtual void ReCreateHToolbar() = 0;
     virtual void ReCreateVToolbar() = 0;
-    virtual void ReCreateMenuBar() override;
-    virtual void ReCreateAuxiliaryToolbar();
+    virtual void ReCreateAuxiliaryToolbar() { }
 
     // Toolbar accessors
     ACTION_TOOLBAR* GetMainToolBar() const { return m_mainToolBar; }
@@ -677,11 +675,8 @@ public:
      * Print the page pointed by current screen, set by the calling print function.
      *
      * @param aDC = wxDC given by the calling print function
-     * @param aPrintMask = not used here
-     * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
-     * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
-    virtual void PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMode, void* aData = NULL );
+    virtual void PrintPage( wxDC* aDC );
 
     /**
      * Returns the canvas type stored in the application settings.

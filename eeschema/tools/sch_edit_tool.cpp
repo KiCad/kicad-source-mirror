@@ -99,9 +99,19 @@ TOOL_ACTION EE_ACTIONS::autoplaceFields( "eeschema.InteractiveEdit.autoplaceFiel
         _( "Autoplace Fields" ), _( "Runs the automatic placement algorithm on the symbol's fields" ),
         autoplace_fields_xpm );
 
-TOOL_ACTION EE_ACTIONS::convertDeMorgan( "eeschema.InteractiveEdit.convertDeMorgan",
+TOOL_ACTION EE_ACTIONS::toggleDeMorgan( "eeschema.InteractiveEdit.toggleDeMorgan",
         AS_GLOBAL, 0,
         _( "DeMorgan Conversion" ), _( "Switch between DeMorgan representations" ),
+        morgan2_xpm );
+
+TOOL_ACTION EE_ACTIONS::showDeMorganStandard( "eeschema.InteractiveEdit.showDeMorganStandard",
+        AS_GLOBAL, 0,
+        _( "DeMorgan Standard" ), _( "Switch to standard DeMorgan representation" ),
+        morgan1_xpm );
+
+TOOL_ACTION EE_ACTIONS::showDeMorganAlternate( "eeschema.InteractiveEdit.showDeMorganAlternate",
+        AS_GLOBAL, 0,
+        _( "DeMorgan Alternate" ), _( "Switch to alternate DeMorgan representation" ),
         morgan2_xpm );
 
 TOOL_ACTION EE_ACTIONS::toShapeSlash( "eeschema.InteractiveEdit.toShapeSlash",
@@ -347,7 +357,7 @@ bool SCH_EDIT_TOOL::Init()
         moveMenu.AddItem( EE_ACTIONS::editReference,   singleComponentCondition );
         moveMenu.AddItem( EE_ACTIONS::editValue,       singleComponentCondition );
         moveMenu.AddItem( EE_ACTIONS::editFootprint,   singleComponentCondition );
-        moveMenu.AddItem( EE_ACTIONS::convertDeMorgan, E_C::SingleDeMorganSymbol );
+        moveMenu.AddItem( EE_ACTIONS::toggleDeMorgan,  E_C::SingleDeMorganSymbol );
 
         std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu = std::make_shared<SYMBOL_UNIT_MENU>();
         symUnitMenu->SetTool( this );
@@ -375,7 +385,7 @@ bool SCH_EDIT_TOOL::Init()
     drawMenu.AddItem( EE_ACTIONS::editValue,        singleComponentCondition, 200 );
     drawMenu.AddItem( EE_ACTIONS::editFootprint,    singleComponentCondition, 200 );
     drawMenu.AddItem( EE_ACTIONS::autoplaceFields,  singleComponentCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::convertDeMorgan,  E_C::SingleDeMorganSymbol, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toggleDeMorgan,   E_C::SingleDeMorganSymbol, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu2 = std::make_shared<SYMBOL_UNIT_MENU>();
     symUnitMenu2->SetTool( drawingTools );
@@ -408,7 +418,7 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::editValue,        E_C::SingleSymbol, 200 );
     selToolMenu.AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
     selToolMenu.AddItem( EE_ACTIONS::autoplaceFields,  singleComponentCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::convertDeMorgan,  E_C::SingleSymbol, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::toggleDeMorgan,   E_C::SingleSymbol, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu3 = std::make_shared<SYMBOL_UNIT_MENU>();
     symUnitMenu3->SetTool( m_selectionTool );
@@ -1123,12 +1133,21 @@ int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
 
     SCH_COMPONENT* component = (SCH_COMPONENT*) selection.Front();
 
-    if( component->IsNew() )
-        m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
-    else
+    if( aEvent.IsAction( &EE_ACTIONS::showDeMorganStandard )
+            && component->GetConvert() == LIB_ITEM::LIB_CONVERT::BASE )
+        return 0;
+
+    if( aEvent.IsAction( &EE_ACTIONS::showDeMorganAlternate )
+            && component->GetConvert() != LIB_ITEM::LIB_CONVERT::DEMORGAN )
+        return 0;
+
+    if( !component->IsNew() )
         m_frame->SaveCopyInUndoList( component, UR_CHANGED );
 
     m_frame->ConvertPart( component );
+
+    if( component->IsNew() )
+        m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
 
     return 0;
 }
@@ -1350,7 +1369,9 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::EditField,          EE_ACTIONS::editValue.MakeEvent() );
     Go( &SCH_EDIT_TOOL::EditField,          EE_ACTIONS::editFootprint.MakeEvent() );
     Go( &SCH_EDIT_TOOL::AutoplaceFields,    EE_ACTIONS::autoplaceFields.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::convertDeMorgan.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::toggleDeMorgan.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::showDeMorganStandard.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::showDeMorganAlternate.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::ChangeShape,        EE_ACTIONS::toShapeSlash.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeShape,        EE_ACTIONS::toShapeBackslash.MakeEvent() );

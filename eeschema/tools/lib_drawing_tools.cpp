@@ -118,14 +118,14 @@ bool LIB_DRAWING_TOOLS::Init()
 
 int LIB_DRAWING_TOOLS::PlacePin( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_LIBEDIT_PIN_BUTT, wxCURSOR_PENCIL, _( "Add pin" ) );
+    m_frame->SetToolID( ID_SYMBOL_PIN_TOOL, wxCURSOR_PENCIL, _( "Add pin" ) );
     return doTwoClickPlace( LIB_PIN_T );
 }
 
 
 int LIB_DRAWING_TOOLS::PlaceText( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_LIBEDIT_BODY_TEXT_BUTT, wxCURSOR_PENCIL, _( "Add text" ) );
+    m_frame->SetToolID( ID_SYMBOL_TEXT_TOOL, wxCURSOR_PENCIL, _( "Add text" ) );
     return doTwoClickPlace( LIB_TEXT_T );
 }
 
@@ -275,13 +275,13 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     m_toolMgr->DeactivateTool();
 
     if( aEvent.IsAction( &EE_ACTIONS::drawSymbolArc ) )
-        m_frame->SetToolID( ID_LIBEDIT_BODY_ARC_BUTT, wxCURSOR_PENCIL, _( "Draw Arc" ) );
+        m_frame->SetToolID( ID_SYMBOL_ARC_TOOL, wxCURSOR_PENCIL, _( "Draw Arc" ) );
     else if( aEvent.IsAction( &EE_ACTIONS::drawSymbolCircle ) )
-        m_frame->SetToolID( ID_LIBEDIT_BODY_CIRCLE_BUTT, wxCURSOR_PENCIL, _( "Draw Circle" ) );
+        m_frame->SetToolID( ID_SYMBOL_CIRCLE_TOOL, wxCURSOR_PENCIL, _( "Draw Circle" ) );
     else if( aEvent.IsAction( &EE_ACTIONS::drawSymbolLines ) )
-        m_frame->SetToolID( ID_LIBEDIT_BODY_LINE_BUTT, wxCURSOR_PENCIL, _( "Draw Lines" ) );
+        m_frame->SetToolID( ID_SYMBOL_LINE_TOOL, wxCURSOR_PENCIL, _( "Draw Lines" ) );
     else if( aEvent.IsAction( &EE_ACTIONS::drawSymbolRectangle ) )
-        m_frame->SetToolID( ID_LIBEDIT_BODY_RECT_BUTT, wxCURSOR_PENCIL, _( "Draw Rectangle" ) );
+        m_frame->SetToolID( ID_SYMBOL_RECT_TOOL, wxCURSOR_PENCIL, _( "Draw Rectangle" ) );
     else
         wxCHECK_MSG( false, 0, "Unknown action in LIB_DRAWING_TOOLS::DrawShape()" );
 
@@ -324,10 +324,10 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
             switch( m_frame->GetToolId() )
             {
-            case ID_LIBEDIT_BODY_ARC_BUTT:    item = new LIB_ARC( part );       break;
-            case ID_LIBEDIT_BODY_CIRCLE_BUTT: item = new LIB_CIRCLE( part );    break;
-            case ID_LIBEDIT_BODY_LINE_BUTT:   item = new LIB_POLYLINE( part );  break;
-            case ID_LIBEDIT_BODY_RECT_BUTT:   item = new LIB_RECTANGLE( part ); break;
+            case ID_SYMBOL_ARC_TOOL:    item = new LIB_ARC( part );       break;
+            case ID_SYMBOL_CIRCLE_TOOL: item = new LIB_CIRCLE( part );    break;
+            case ID_SYMBOL_LINE_TOOL:   item = new LIB_POLYLINE( part );  break;
+            case ID_SYMBOL_RECT_TOOL:   item = new LIB_RECTANGLE( part ); break;
             }
 
             item->SetWidth( LIB_EDIT_FRAME::g_LastLineWidth );
@@ -400,7 +400,7 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
 int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_LIBEDIT_ANCHOR_ITEM_BUTT, wxCURSOR_PENCIL, _( "Move symbol anchor" ) );
+    m_frame->SetToolID( ID_SYMBOL_ANCHOR_TOOL, wxCURSOR_PENCIL, _( "Move symbol anchor" ) );
 
     getViewControls()->ShowCursor( true );
     getViewControls()->SetSnapping( true );

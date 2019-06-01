@@ -101,8 +101,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     // Main horizontal toolbar.
     EVT_TOOL( ID_TO_LIBVIEW, LIB_EDIT_FRAME::OnOpenLibraryViewer )
     EVT_TOOL( ID_LIBEDIT_CHECK_PART, LIB_EDIT_FRAME::OnCheckComponent )
-    EVT_TOOL( ID_DE_MORGAN_NORMAL_BUTT, LIB_EDIT_FRAME::OnSelectBodyStyle )
-    EVT_TOOL( ID_DE_MORGAN_CONVERT_BUTT, LIB_EDIT_FRAME::OnSelectBodyStyle )
     EVT_TOOL( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::OnSyncPinEditClick )
     EVT_TOOL( ID_ADD_PART_TO_SCHEMATIC, LIB_EDIT_FRAME::OnAddPartToSchematic )
 
@@ -124,14 +122,8 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
 
     // Update user interface elements.
     EVT_UPDATE_UI( ID_LIBEDIT_EXPORT_PART, LIB_EDIT_FRAME::OnUpdateHavePart )
-    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_AS, LIB_EDIT_FRAME::OnUpdateHavePart )
-    EVT_UPDATE_UI( ID_LIBEDIT_CHECK_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::OnUpdateSyncPinEdit )
     EVT_UPDATE_UI( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnUpdatePartNumber )
-    EVT_UPDATE_UI( ID_DE_MORGAN_NORMAL_BUTT, LIB_EDIT_FRAME::OnUpdateDeMorganNormal )
-    EVT_UPDATE_UI( ID_DE_MORGAN_CONVERT_BUTT, LIB_EDIT_FRAME::OnUpdateDeMorganConvert )
-    EVT_UPDATE_UI_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_DELETE_ITEM_BUTT,
-                         LIB_EDIT_FRAME::OnUpdateEditingPart )
 
 END_EVENT_TABLE()
 
@@ -389,17 +381,6 @@ void LIB_EDIT_FRAME::OnUpdateHavePart( wxUpdateUIEvent& aEvent )
 }
 
 
-void LIB_EDIT_FRAME::OnUpdateEditingPart( wxUpdateUIEvent& aEvent )
-{
-    LIB_PART* part = GetCurPart();
-
-    aEvent.Enable( part != NULL );
-
-    if( part && aEvent.GetEventObject() == m_drawToolBar )
-        aEvent.Check( GetToolId() == aEvent.GetId() );
-}
-
-
 void LIB_EDIT_FRAME::OnUpdateSyncPinEdit( wxUpdateUIEvent& event )
 {
     LIB_PART* part = GetCurPart();
@@ -421,24 +402,6 @@ void LIB_EDIT_FRAME::OnUpdatePartNumber( wxUpdateUIEvent& event )
 }
 
 
-void LIB_EDIT_FRAME::OnUpdateDeMorganNormal( wxUpdateUIEvent& event )
-{
-    LIB_PART*      part = GetCurPart();
-
-    event.Enable( GetShowDeMorgan() || ( part && part->HasConversion() ) );
-    event.Check( m_convert <= 1 );
-}
-
-
-void LIB_EDIT_FRAME::OnUpdateDeMorganConvert( wxUpdateUIEvent& event )
-{
-    LIB_PART*      part = GetCurPart();
-
-    event.Enable( GetShowDeMorgan() || ( part && part->HasConversion() ) );
-    event.Check( m_convert > 1 );
-}
-
-
 void LIB_EDIT_FRAME::OnSelectUnit( wxCommandEvent& event )
 {
     int i = event.GetSelection();
@@ -450,18 +413,6 @@ void LIB_EDIT_FRAME::OnSelectUnit( wxCommandEvent& event )
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
     m_unit = i + 1;
-
-    m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-    RebuildView();
-}
-
-
-void LIB_EDIT_FRAME::OnSelectBodyStyle( wxCommandEvent& event )
-{
-    m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
-    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
-
-    m_convert = event.GetId() == ID_DE_MORGAN_NORMAL_BUTT ? 1 : 2;
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     RebuildView();

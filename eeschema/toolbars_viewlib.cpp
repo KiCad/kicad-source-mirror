@@ -68,20 +68,12 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
     toolbar->Add( ACTIONS::zoomFitScreen );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, wxEmptyString,
-                            KiScaledBitmap( morgan1_xpm, this ),
-                            _( "Show as \"De Morgan\" normal symbol" ),
-                            wxITEM_CHECK );
-
-    m_mainToolBar->AddTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, wxEmptyString,
-                            KiScaledBitmap( morgan2_xpm, this ),
-                            _( "Show as \"De Morgan\" convert symbol" ),
-                            wxITEM_CHECK );
+    toolbar->Add( EE_ACTIONS::showDeMorganStandard, ACTION_TOOLBAR::TOGGLE );
+    toolbar->Add( EE_ACTIONS::showDeMorganAlternate, ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_mainToolBar, this );
-
-    m_unitChoice = new wxChoice( m_mainToolBar, ID_LIBVIEW_SELECT_PART_NUMBER, wxDefaultPosition,
-                                 wxSize( 150, -1 ) );
+    m_unitChoice = new wxChoice( m_mainToolBar, ID_LIBVIEW_SELECT_PART_NUMBER,
+                                 wxDefaultPosition, wxSize( 150, -1 ) );
     m_mainToolBar->AddControl( m_unitChoice );
 
     KiScaledSeparator( m_mainToolBar, this );
@@ -160,9 +152,13 @@ void LIB_VIEW_FRAME::ReCreateMenuBar()
 
 void LIB_VIEW_FRAME::SyncMenusAndToolbars()
 {
+    LIB_PART*  symbol = GetSelectedSymbol();
     LIB_ALIAS* alias = GetSelectedAlias();
 
     m_mainToolBar->Toggle( EE_ACTIONS::showDatasheet, alias && !alias->GetDocFileName().IsEmpty() );
-    // JEY TODO: deMorgan buttons...
+    m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganStandard, symbol && symbol->HasConversion(),
+                           m_convert == LIB_FIELD::LIB_CONVERT::BASE );
+    m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganAlternate, symbol && symbol->HasConversion(),
+                           m_convert == LIB_FIELD::LIB_CONVERT::DEMORGAN );
     m_mainToolBar->Refresh();
 }

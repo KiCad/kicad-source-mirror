@@ -257,6 +257,8 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& a
     m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
     updateTitle();
     RebuildSymbolUnitsList();
+    SetShowDeMorgan( GetCurPart()->HasConversion() );
+    SyncMenusAndToolbars();
 
     // Display the document information based on the entry selected just in
     // case the entry is an alias.
@@ -525,6 +527,7 @@ void LIB_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName, wxArrayStr
     m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, part->GetName() ) );
 
     RebuildSymbolUnitsList();
+    SetShowDeMorgan( part->HasConversion() );
     updateTitle();
     DisplayCmpDoc();
 

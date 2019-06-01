@@ -86,8 +86,6 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
     EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, LIB_VIEW_FRAME::OnDisplayHotkeyList )
 
-    EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, LIB_VIEW_FRAME::onUpdateNormalBodyStyleButton )
-    EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, LIB_VIEW_FRAME::onUpdateAltBodyStyleButton )
     EVT_UPDATE_UI( ID_LIBVIEW_SELECT_PART_NUMBER, LIB_VIEW_FRAME::onUpdateUnitChoice )
 
 END_EVENT_TABLE()
@@ -254,11 +252,7 @@ void LIB_VIEW_FRAME::SetUnitAndConvert( int aUnit, int aConvert )
     m_convert = aConvert > 0 ? aConvert : LIB_ITEM::LIB_CONVERT::BASE;
     m_selection_changed = false;
 
-    // Update canvas
-    GetRenderSettings()->m_ShowUnit = m_unit;
-    GetRenderSettings()->m_ShowConvert = m_convert;
-    GetCanvas()->GetView()->MarkDirty();
-    GetCanvas()->Refresh();
+    updatePreviewSymbol();
 }
 
 
@@ -312,32 +306,6 @@ void LIB_VIEW_FRAME::updatePreviewSymbol()
     }
 
     GetCanvas()->ForceRefresh();
-}
-
-
-void LIB_VIEW_FRAME::onUpdateAltBodyStyleButton( wxUpdateUIEvent& aEvent )
-{
-    LIB_PART* symbol = GetSelectedSymbol();
-
-    aEvent.Enable( symbol && symbol->HasConversion() );
-
-    if( symbol )
-        aEvent.Check( m_convert > 1 );
-    else
-        aEvent.Check( false );
-}
-
-
-void LIB_VIEW_FRAME::onUpdateNormalBodyStyleButton( wxUpdateUIEvent& aEvent )
-{
-    LIB_PART* symbol = GetSelectedSymbol();
-
-    aEvent.Enable( symbol && symbol->HasConversion() );
-
-    if( symbol )
-        aEvent.Check( m_convert <= 1 );
-    else
-        aEvent.Check( true );
 }
 
 

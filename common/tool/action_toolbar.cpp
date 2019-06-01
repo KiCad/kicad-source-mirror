@@ -63,6 +63,15 @@ void ACTION_TOOLBAR::Toggle( const TOOL_ACTION& aAction, bool aState )
 }
 
 
+void ACTION_TOOLBAR::Toggle( const TOOL_ACTION& aAction, bool aEnabled, bool aChecked )
+{
+    int toolId = aAction.GetId() + ACTION_ID;
+
+    EnableTool( toolId, aEnabled );
+    ToggleTool( toolId, aEnabled && aChecked );
+}
+
+
 void ACTION_TOOLBAR::onToolEvent( wxAuiToolBarEvent& aEvent )
 {
     OPT_TOOL_EVENT evt;

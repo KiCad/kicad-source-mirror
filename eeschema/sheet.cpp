@@ -475,8 +475,7 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard( wxCommandEvent& aEvt )
     dc.SetUserScale( scale, scale );
 
     dc.Clear();
-    const LSET allLayersMask = LSET().set();
-    PrintPage( &dc, allLayersMask, false );
+    PrintPage( &dc );
     screen->m_IsPrinting = false;
 
     if( wxTheClipboard->Open() )

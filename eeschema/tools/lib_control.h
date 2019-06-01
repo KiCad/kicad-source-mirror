@@ -35,11 +35,11 @@ class LIB_EDIT_FRAME;
  *
  * Handles actions for the various symbol editor and viewers.
  */
-class LIB_CONTROL : public wxEvtHandler, public EE_TOOL_BASE<LIB_EDIT_FRAME>
+class LIB_CONTROL : public wxEvtHandler, public EE_TOOL_BASE<SCH_BASE_FRAME>
 {
 public:
     LIB_CONTROL() :
-        EE_TOOL_BASE<LIB_EDIT_FRAME>( "eeschema.SymbolLibraryControl" )
+        EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.SymbolLibraryControl" )
     { }
 
     virtual ~LIB_CONTROL() { }
@@ -48,6 +48,8 @@ public:
     int SaveAs( const TOOL_EVENT& aEvent );
     int SaveAll( const TOOL_EVENT& aEvent );
     int Revert( const TOOL_EVENT& aEvent );
+
+    int OnDeMorgan( const TOOL_EVENT& aEvent );
 
     int ShowLibraryBrowser( const TOOL_EVENT& aEvent );
     int ShowElectricalTypes( const TOOL_EVENT& aEvent );
