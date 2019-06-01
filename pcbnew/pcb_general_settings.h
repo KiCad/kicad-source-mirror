@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __PCBNEW_GENERAL_SETTINGS_H
-#define __PCBNEW_GENERAL_SETTINGS_H
+#ifndef PCBNEW_GENERAL_SETTINGS_H
+#define PCBNEW_GENERAL_SETTINGS_H
 
 #include <colors_design_settings.h>
 #include <vector>
@@ -30,7 +30,7 @@
 class wxConfigBase;
 class wxString;
 
-enum MAGNETIC_PAD_OPTION_VALUES
+enum MAGNETIC_OPTIONS
 {
     NO_EFFECT,
     CAPTURE_CURSOR_IN_TRACK_TOOL,
@@ -45,32 +45,25 @@ public:
     void Load( wxConfigBase* aCfg ) override;
     void Save( wxConfigBase* aCfg ) override;
 
-    COLORS_DESIGN_SETTINGS& Colors()
-    {
-        return m_colorsSettings;
-    }
+    COLORS_DESIGN_SETTINGS& Colors() { return m_colorsSettings; }
 
-    bool    m_legacyAutoDeleteOldTrack = true;
-    bool    m_legacyUse45DegreeTracks = true;       // True to allow horiz, vert. and 45deg only tracks
-    static bool m_use45DegreeGraphicSegments;       // True to allow horizontal, vertical and
-                                                    // 45deg only graphic segments
-    bool    m_legacyUseTwoSegmentTracks = true;
+    static bool g_Use45DegreeGraphicSegments;   // True to constraint graphic lines to horizontal,
+                                                // vertical and 45º
+    static bool g_EditHotkeyChangesTrackWidth;
+    static bool g_DragSelects;                  // True: Drag gesture always draws a selection box,
+                                                // False: Drag will select an item and move it
 
-    bool    m_editActionChangesTrackWidth = false;
-    static bool m_dragSelects;                  // True: Drag gesture always draws a selection box,
-                                                // False: Drag will preselect an item and move it
-
-    MAGNETIC_PAD_OPTION_VALUES  m_magneticPads  = CAPTURE_CURSOR_IN_TRACK_TOOL;
-    MAGNETIC_PAD_OPTION_VALUES  m_magneticTracks = CAPTURE_CURSOR_IN_TRACK_TOOL;
-    bool                        m_magneticGraphics = true;
+    static MAGNETIC_OPTIONS g_MagneticPads;
+    static MAGNETIC_OPTIONS g_MagneticTracks;
+    static bool             g_MagneticGraphics;
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     std::vector< std::pair<wxString, wxString> > m_pluginSettings;  // Settings for action plugins
 #endif
 
 protected:
-    const FRAME_T m_frameType;
-    COLORS_DESIGN_SETTINGS m_colorsSettings;
+    const FRAME_T           m_frameType;
+    COLORS_DESIGN_SETTINGS  m_colorsSettings;
 };
 
-#endif
+#endif  // PCBNEW_GENERAL_SETTINGS_H

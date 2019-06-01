@@ -235,30 +235,24 @@ void TOOL_BASE::highlightNet( bool aEnabled, int aNetcode )
 
 bool TOOL_BASE::checkSnap( ITEM *aItem )
 {
-    bool doSnap = false;
-
-    // Sync PNS engine settings with the general PCB editor options. I know the code below is awful, but...
+    // Sync PNS engine settings with the general PCB editor options.
     auto& pnss = m_router->Settings();
-    const auto& gens = frame()->Settings();
 
-    pnss.SetSnapToTracks( false );
-    pnss.SetSnapToPads( false );
+    pnss.SetSnapToPads( PCB_GENERAL_SETTINGS::g_MagneticPads == CAPTURE_CURSOR_IN_TRACK_TOOL
+                     || PCB_GENERAL_SETTINGS::g_MagneticPads == CAPTURE_ALWAYS );
 
-    if( gens.m_magneticPads == CAPTURE_CURSOR_IN_TRACK_TOOL || gens.m_magneticPads == CAPTURE_ALWAYS )
-        pnss.SetSnapToPads( true );
-
-    if( gens.m_magneticTracks == CAPTURE_CURSOR_IN_TRACK_TOOL || gens.m_magneticTracks == CAPTURE_ALWAYS )
-        pnss.SetSnapToTracks( true );
+    pnss.SetSnapToTracks( PCB_GENERAL_SETTINGS::g_MagneticTracks == CAPTURE_CURSOR_IN_TRACK_TOOL
+                       || PCB_GENERAL_SETTINGS::g_MagneticTracks == CAPTURE_ALWAYS );
 
     if( aItem )
     {
-        if( ( aItem->OfKind( ITEM::VIA_T ) || aItem->OfKind( ITEM::SEGMENT_T ) ) && pnss.GetSnapToTracks() )
-            doSnap = true;
-        else if( aItem->OfKind( ITEM::SOLID_T ) && pnss.GetSnapToPads() )
-            doSnap = true;
+        if( aItem->OfKind( ITEM::VIA_T ) || aItem->OfKind( ITEM::SEGMENT_T )  )
+            return pnss.GetSnapToTracks();
+        else if( aItem->OfKind( ITEM::SOLID_T ) )
+            return pnss.GetSnapToPads();
     }
 
-    return doSnap;
+    return false;
 }
 
 void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )

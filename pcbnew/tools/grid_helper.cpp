@@ -337,8 +337,8 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, co
 
             for( auto pad : mod->Pads() )
             {
-                if( ( aFrom || m_frame->Settings().m_magneticPads == CAPTURE_ALWAYS ) &&
-                        pad->GetBoundingBox().Contains( wxPoint( aRefPos.x, aRefPos.y ) ) )
+                if(( aFrom || PCB_GENERAL_SETTINGS::g_MagneticPads == CAPTURE_ALWAYS ) &&
+                   pad->GetBoundingBox().Contains( wxPoint( aRefPos.x, aRefPos.y ) ) )
                 {
                     addAnchor( pad->GetPosition(), CORNER | SNAPPABLE, pad );
                     break;
@@ -352,7 +352,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, co
 
         case PCB_PAD_T:
         {
-            if( aFrom || m_frame->Settings().m_magneticPads == CAPTURE_ALWAYS )
+            if( aFrom || PCB_GENERAL_SETTINGS::g_MagneticPads == CAPTURE_ALWAYS )
             {
                 D_PAD* pad = static_cast<D_PAD*>( aItem );
                 addAnchor( pad->GetPosition(), CORNER | SNAPPABLE, pad );
@@ -364,7 +364,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, co
         case PCB_MODULE_EDGE_T:
         case PCB_LINE_T:
         {
-            if( !m_frame->Settings().m_magneticGraphics )
+            if( !PCB_GENERAL_SETTINGS::g_MagneticGraphics )
                 break;
 
             DRAWSEGMENT* dseg = static_cast<DRAWSEGMENT*>( aItem );
@@ -427,7 +427,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, co
 
         case PCB_TRACE_T:
         {
-            if( aFrom || m_frame->Settings().m_magneticTracks == CAPTURE_ALWAYS )
+            if( aFrom || PCB_GENERAL_SETTINGS::g_MagneticTracks == CAPTURE_ALWAYS )
             {
                 TRACK* track = static_cast<TRACK*>( aItem );
                 VECTOR2I start = track->GetStart();
@@ -449,7 +449,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, co
 
         case PCB_VIA_T:
         {
-            if( aFrom || m_frame->Settings().m_magneticTracks == CAPTURE_ALWAYS )
+            if( aFrom ||PCB_GENERAL_SETTINGS::g_MagneticTracks == CAPTURE_ALWAYS )
                 addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem );
 
             break;

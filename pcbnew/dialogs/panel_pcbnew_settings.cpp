@@ -49,16 +49,12 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
     rotationAngle = AngleToStringDegrees( (double)m_Frame->GetRotationAngle() );
     m_RotationAngle->SetValue( rotationAngle );
 
-    // JEY TODO: clean out legacy-routing settings
-    m_TrackAutodel->SetValue( m_Frame->Settings().m_legacyAutoDeleteOldTrack );
-    m_Track_45_Only_Ctrl->SetValue( m_Frame->Settings().m_legacyUse45DegreeTracks );
-    m_Segments_45_Only_Ctrl->SetValue( m_Frame->Settings().m_use45DegreeGraphicSegments );
-    m_Track_DoubleSegm_Ctrl->SetValue( m_Frame->Settings().m_legacyUseTwoSegmentTracks );
-    m_magneticPadChoice->SetSelection( m_Frame->Settings().m_magneticPads );
-    m_magneticTrackChoice->SetSelection( m_Frame->Settings().m_magneticTracks );
-    m_magneticGraphicsChoice->SetSelection( !m_Frame->Settings().m_magneticGraphics );
-    m_UseEditKeyForWidth->SetValue( m_Frame->Settings().m_editActionChangesTrackWidth );
-    m_dragSelects->SetValue( m_Frame->Settings().m_dragSelects );
+    m_Segments_45_Only_Ctrl->SetValue( PCB_GENERAL_SETTINGS::g_Use45DegreeGraphicSegments );
+    m_magneticPadChoice->SetSelection( PCB_GENERAL_SETTINGS::g_MagneticPads );
+    m_magneticTrackChoice->SetSelection( PCB_GENERAL_SETTINGS::g_MagneticTracks );
+    m_magneticGraphicsChoice->SetSelection( !PCB_GENERAL_SETTINGS::g_MagneticGraphics );
+    m_UseEditKeyForWidth->SetValue( PCB_GENERAL_SETTINGS::g_EditHotkeyChangesTrackWidth );
+    m_dragSelects->SetValue( PCB_GENERAL_SETTINGS::g_DragSelects );
 
     m_Show_Page_Limits->SetValue( m_Frame->ShowPageLimits() );
 
@@ -75,16 +71,12 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataFromWindow()
 
     /* Updating the combobox to display the active layer. */
 
-    m_Frame->Settings().m_legacyAutoDeleteOldTrack   = m_TrackAutodel->GetValue();
-    m_Frame->Settings().m_use45DegreeGraphicSegments = m_Segments_45_Only_Ctrl->GetValue();
-    m_Frame->Settings().m_legacyUse45DegreeTracks    = m_Track_45_Only_Ctrl->GetValue();
-
-    m_Frame->Settings().m_legacyUseTwoSegmentTracks = m_Track_DoubleSegm_Ctrl->GetValue();
-    m_Frame->Settings().m_magneticPads   = (MAGNETIC_PAD_OPTION_VALUES) m_magneticPadChoice->GetSelection();
-    m_Frame->Settings().m_magneticTracks = (MAGNETIC_PAD_OPTION_VALUES) m_magneticTrackChoice->GetSelection();
-    m_Frame->Settings().m_magneticGraphics = !m_magneticGraphicsChoice->GetSelection();
-    m_Frame->Settings().m_editActionChangesTrackWidth = m_UseEditKeyForWidth->GetValue();
-    m_Frame->Settings().m_dragSelects = m_dragSelects->GetValue();
+    PCB_GENERAL_SETTINGS::g_Use45DegreeGraphicSegments = m_Segments_45_Only_Ctrl->GetValue();
+    PCB_GENERAL_SETTINGS::g_MagneticPads = (MAGNETIC_OPTIONS) m_magneticPadChoice->GetSelection();
+    PCB_GENERAL_SETTINGS::g_MagneticTracks = (MAGNETIC_OPTIONS) m_magneticTrackChoice->GetSelection();
+    PCB_GENERAL_SETTINGS::g_MagneticGraphics = !m_magneticGraphicsChoice->GetSelection();
+    PCB_GENERAL_SETTINGS::g_EditHotkeyChangesTrackWidth = m_UseEditKeyForWidth->GetValue();
+    PCB_GENERAL_SETTINGS::g_DragSelects = m_dragSelects->GetValue();
 
     m_Frame->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
 
@@ -93,6 +85,7 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataFromWindow()
     KIGFX::VIEW*                view = m_Frame->GetGalCanvas()->GetView();
     KIGFX::PCB_PAINTER*         painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
+
     settings->LoadDisplayOptions( displ_opts, m_Frame->ShowPageLimits() );
 
     return true;

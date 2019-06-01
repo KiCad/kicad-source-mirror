@@ -326,7 +326,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             else if( m_selection.Empty() )
             {
                 // There is nothing selected, so try to select something
-                if( getEditFrame<PCB_BASE_FRAME>()->Settings().m_dragSelects || !selectCursor() )
+                if( getEditFrame<PCB_BASE_FRAME>()->Settings().g_DragSelects || !selectCursor() )
                 {
                     // If nothings has been selected, user wants to select more or selection
                     // box is preferred to dragging - draw selection box
