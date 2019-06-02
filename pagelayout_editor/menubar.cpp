@@ -57,8 +57,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     if( openRecentMenu )
         Kiface().GetFileHistory().RemoveMenu( openRecentMenu );
 
-    //
-    // File Menu:
+    //-- File menu -------------------------------------------------------
     //
     CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, selTool );
 
@@ -86,8 +85,9 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
     fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
 
-    //
-    // Edit Menu:
+    fileMenu->Resolve();
+
+    //-- Edit menu -------------------------------------------------------
     //
     CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
 
@@ -110,8 +110,9 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     editMenu->AddItem( ACTIONS::paste,        idleCondition );
     editMenu->AddItem( ACTIONS::doDelete,     SELECTION_CONDITIONS::MoreThan( 0 ) );
 
-    //
-    // View Menu:
+    editMenu->Resolve();
+
+    //-- View menu -------------------------------------------------------
     //
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
 
@@ -137,8 +138,9 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     viewMenu->AddCheckItem( ACTIONS::toggleGrid,             gridShownCondition );
     viewMenu->AddCheckItem( ACTIONS::toggleCursorStyle,      fullCrosshairCondition );
 
-    //
-    // Place Menu:
+    viewMenu->Resolve();
+
+    //-- Place menu -------------------------------------------------------
     //
     CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
 
@@ -150,8 +152,9 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     placeMenu->AddSeparator();
     placeMenu->AddItem( PL_ACTIONS::appendImportedWorksheet, SELECTION_CONDITIONS::ShowAlways );
 
-    //
-    // Menu for preferences
+    placeMenu->Resolve();
+
+    //-- Preferences menu --------------------------------------------------
     //
     wxMenu* preferencesMenu = new wxMenu;
 
@@ -163,7 +166,8 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // Language submenu
     Pgm().AddMenuLanguageList( preferencesMenu );
 
-    // Append menus to the menubar
+    //-- Menubar -----------------------------------------------------------
+    //
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );

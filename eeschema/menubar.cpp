@@ -131,6 +131,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
     fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, EE_CONDITIONS::ShowAlways );
 
+    fileMenu->Resolve();
+
     //-- Edit menu -----------------------------------------------------------
     //
     CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
@@ -164,6 +166,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AddItem( ID_UPDATE_FIELDS, _( "Update Fields from Library..." ),
                        _( "Sets symbol fields to original library values" ),
                        update_fields_xpm,            EE_CONDITIONS::ShowAlways );
+
+    editMenu->Resolve();
 
     //-- View menu -----------------------------------------------------------
     //
@@ -217,8 +221,10 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->AddCheckItem( EE_ACTIONS::toggleHiddenPins, hiddenPinsCondition );
 
 #ifdef __APPLE__
-    viewMenu->AppendSeparator();
+    viewMenu->AddSeparator();
 #endif
+
+    viewMenu->Resolve();
 
     //-- Place menu -----------------------------------------------------------
     //
@@ -246,6 +252,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->AddItem( EE_ACTIONS::placeSchematicText,     EE_CONDITIONS::ShowAlways );
     placeMenu->AddItem( EE_ACTIONS::placeImage,             EE_CONDITIONS::ShowAlways );
 
+    placeMenu->Resolve();
+
     //-- Inspect menu -----------------------------------------------
     //
     CONDITIONAL_MENU* inspectMenu = new CONDITIONAL_MENU( false, selTool );
@@ -254,6 +262,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 #ifdef KICAD_SPICE
     inspectMenu->AddItem( EE_ACTIONS::runSimulation,        EE_CONDITIONS::ShowAlways );
 #endif
+
+    inspectMenu->Resolve();
 
     //-- Tools menu -----------------------------------------------
     //
@@ -291,6 +301,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     toolsMenu->AddItem( EE_ACTIONS::assignFootprints,       EE_CONDITIONS::ShowAlways );
     toolsMenu->AddItem( EE_ACTIONS::generateBOM,            EE_CONDITIONS::ShowAlways );
 
+    toolsMenu->Resolve();
+
     //-- Preferences menu -----------------------------------------------
     //
     CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, selTool );
@@ -322,7 +334,9 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     prefsMenu->AddCheckItem( ACTIONS::acceleratedGraphics, acceleratedGraphicsCondition );
     prefsMenu->AddCheckItem( ACTIONS::standardGraphics,    standardGraphicsCondition );
 
-    //-- Menubar -----------------------------------------------
+    prefsMenu->Resolve();
+
+    //-- Menubar -------------------------------------------------------------
     //
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );

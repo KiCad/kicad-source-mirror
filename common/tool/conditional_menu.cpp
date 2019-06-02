@@ -69,12 +69,6 @@ void CONDITIONAL_MENU::AddItem( int aId, const wxString& aText, const wxString& 
         AddBitmapToMenuItem( item, KiBitmap( aIcon ) );
 
     addEntry( ENTRY( item, aIcon, aCondition, aOrder, false ) );
-
-#ifdef __WXMAC__
-    // Make sure the Mac-specific preference-menu handling code can find it
-    if( aId == wxID_PREFERENCES )
-        Append( new wxMenuItem( this, aId, aText, aTooltip, wxITEM_NORMAL ) );
-#endif
 }
 
 
@@ -101,6 +95,14 @@ void CONDITIONAL_MENU::AddMenu( ACTION_MENU* aMenu, const SELECTION_CONDITION& a
 void CONDITIONAL_MENU::AddSeparator( const SELECTION_CONDITION& aCondition, int aOrder )
 {
     addEntry( ENTRY( aCondition, aOrder ) );
+}
+
+
+SELECTION g_resolveDummySelection;
+
+void CONDITIONAL_MENU::Resolve()
+{
+    Evaluate( g_resolveDummySelection );
 }
 
 
@@ -143,9 +145,13 @@ void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
 
             case ENTRY::WXITEM:
 #ifdef __WXMAC__
-                // wxWidgets moved the Preferences... item to the Apple menu
+                // Instantiate the Preferences item only on the first Resolve(); after that
+                // wxWidgets will have moved it to the Application menu
                 if( entry.wxItem()->GetId() == wxID_PREFERENCES )
-                    continue;
+                {
+                    if( &aSelection != &g_resolveDummySelection )
+                        continue;
+                }
 #endif
                 menuItem = new wxMenuItem( this,
                                            entry.wxItem()->GetId(),

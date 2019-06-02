@@ -108,6 +108,8 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
     fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, EE_CONDITIONS::ShowAlways );
 
+    fileMenu->Resolve();
+
     //-- Edit menu -----------------------------------------------
     //
     CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
@@ -134,6 +136,8 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AddSeparator();
     editMenu->AddItem( EE_ACTIONS::symbolProperties, havePartCondition );
     editMenu->AddItem( EE_ACTIONS::pinTable,         havePartCondition );
+
+    editMenu->Resolve();
 
     //-- View menu -----------------------------------------------
     //
@@ -181,6 +185,8 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->AddSeparator();
     viewMenu->AddCheckItem( EE_ACTIONS::showComponentTree, compTreeShownCondition );
 
+    viewMenu->Resolve();
+
     //-- Place menu -----------------------------------------------
     //
     CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
@@ -191,6 +197,8 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->AddItem( EE_ACTIONS::drawSymbolCircle,      EE_CONDITIONS::ShowAlways );
     placeMenu->AddItem( EE_ACTIONS::drawSymbolArc,         EE_CONDITIONS::ShowAlways );
     placeMenu->AddItem( EE_ACTIONS::drawSymbolLines,       EE_CONDITIONS::ShowAlways );
+
+    placeMenu->Resolve();
 
     //-- Inspect menu -----------------------------------------------
     //
@@ -207,6 +215,8 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Electrical Rules Checker" ),
                  _( "Check for duplicate and off-grid pins" ),
                  KiBitmap( erc_xpm ) );
+
+    inspectMenu->Resolve();
 
     //-- Preferences menu -----------------------------------------------
     //
@@ -239,8 +249,9 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     prefsMenu->AddCheckItem( ACTIONS::acceleratedGraphics, acceleratedGraphicsCondition );
     prefsMenu->AddCheckItem( ACTIONS::standardGraphics, standardGraphicsCondition );
 
-    //
-    // Create the menubar and append all submenus
+    prefsMenu->Resolve();
+
+    //-- Menubar -------------------------------------------------------------
     //
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );

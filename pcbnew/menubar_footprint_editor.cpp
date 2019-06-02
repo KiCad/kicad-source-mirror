@@ -59,7 +59,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
        return( !libName.IsEmpty() || !partName.IsEmpty() );
     };
 
-            //-- File menu -----------------------------------------------
+    //-- File menu ----------------------------------------------------------
     //
     CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, selTool );
 
@@ -131,7 +131,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
     fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
 
-    //-- Edit menu -----------------------------------------------
+    fileMenu->Resolve();
+
+    //-- Edit menu -------------------------------------------------------
     //
     CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
 
@@ -171,7 +173,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "Delete the current footprint" ),
                  KiBitmap( delete_xpm ) );
 
-    //-- View menu -----------------------------------------------
+    editMenu->Resolve();
+
+    //-- View menu -------------------------------------------------------
     //
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
 
@@ -260,7 +264,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                             _( "&Search Tree" ), _( "Toggles the search tree visibility" ),
                             search_tree_xpm, searchTreeShownCondition );
 
-    //-- Place menu -----------------------------------------------
+    viewMenu->Resolve();
+
+    //-- Place menu -------------------------------------------------------
     //
     CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
 
@@ -277,8 +283,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->AddItem( PCB_ACTIONS::setAnchor,   SELECTION_CONDITIONS::ShowAlways );
     placeMenu->AddItem( ACTIONS::gridSetOrigin,   SELECTION_CONDITIONS::ShowAlways );
 
+    placeMenu->Resolve();
 
-    //-- Inspect menu -----------------------------------------------
+    //-- Inspect menu -------------------------------------------------------
     //
     wxMenu* inspectMenu = new wxMenu;
 
@@ -287,7 +294,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "Measure distance" ),
                  KiBitmap( measurement_xpm ) );
 
-    //-- Tools menu -----------------------------------------------
+    //-- Tools menu -------------------------------------------------------
     //
     wxMenu* toolsMenu = new wxMenu;
 
@@ -302,7 +309,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( insert_module_board_xpm ) );
 
 
-    //-- Preferences menu -----------------------------------------------
+    //-- Preferences menu -------------------------------------------------
     //
     CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, selTool );
 
@@ -332,6 +339,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     prefsMenu->AddSeparator();
     prefsMenu->AddCheckItem( ACTIONS::acceleratedGraphics, acceleratedGraphicsCondition );
     prefsMenu->AddCheckItem( ACTIONS::standardGraphics, standardGraphicsCondition );
+
+    prefsMenu->Resolve();
 
     //--MenuBar -----------------------------------------------------------
     //

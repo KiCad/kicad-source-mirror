@@ -110,6 +110,15 @@ public:
      */
     void Evaluate( SELECTION& aSelection );
 
+    /**
+     * Function Resolve()
+     *
+     * Updates the initial contents so that wxWidgets doesn't get its knickers tied in a knot
+     * over the menu being empty (mainly an issue on GTK, but also on OSX with the preferences
+     * and quit menu items).
+     */
+     void Resolve();
+
 private:
     ///> Helper class to organize menu entries.
     class ENTRY

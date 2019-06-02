@@ -96,19 +96,16 @@ void LIB_VIEW_FRAME::ReCreateVToolbar()
 }
 
 
-// Virtual function
 void LIB_VIEW_FRAME::ReCreateMenuBar()
 {
     LIB_CONTROL* libControl = m_toolManager->GetTool<LIB_CONTROL>();
-    // wxWidgets handles the Mac Application menu behind the scenes, but that means
+    // wxWidgets handles the OSX Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar* oldMenuBar = GetMenuBar();
     wxMenuBar* menuBar = new wxMenuBar();
-    wxString   text;
 
-    // Recreate all menus:
-
-    // Menu File:
+    //-- File menu -----------------------------------------------------------
+    //
     wxMenu* fileMenu = new wxMenu;
 
     AddMenuItem( fileMenu, wxID_EXIT,
@@ -116,13 +113,13 @@ void LIB_VIEW_FRAME::ReCreateMenuBar()
                  _( "Close schematic symbol viewer" ),
                  KiBitmap( exit_xpm ) );
 
-    // View menu
+    //-- View menu -----------------------------------------------------------
+    //
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, libControl );
 
     auto gridShownCondition = [ this ] ( const SELECTION& aSel ) {
         return IsGridVisible();
     };
-
     auto electricalTypesShownCondition = [ this ] ( const SELECTION& aSel ) {
         return GetShowElectricalType();
     };
@@ -139,9 +136,11 @@ void LIB_VIEW_FRAME::ReCreateMenuBar()
     viewMenu->AddSeparator();
     viewMenu->AddCheckItem( EE_ACTIONS::showElectricalTypes, electricalTypesShownCondition );
 
-    // Append menus to the menubar
-    menuBar->Append( fileMenu, _( "&File" ) );
+    viewMenu->Resolve();
 
+    //-- Menubar -------------------------------------------------------------
+    //
+    menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
     AddStandardHelpMenu( menuBar );
 

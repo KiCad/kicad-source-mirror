@@ -201,7 +201,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddItem( ACTIONS::print,             SELECTION_CONDITIONS::ShowAlways );
     fileMenu->AddItem( ACTIONS::plot,              SELECTION_CONDITIONS::ShowAlways );
 
-
     // Archive submenu
     ACTION_MENU* submenuArchive = new ACTION_MENU();
     submenuArchive->SetTool( selTool );
@@ -224,6 +223,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddSeparator();
     // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
     fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
+
+    fileMenu->Resolve();
 
     //-- Edit menu -----------------------------------------------------------
     //
@@ -280,7 +281,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                        _( "Clean stubs, vias, delete break points or unconnected tracks" ),
                        delete_xpm,                     SELECTION_CONDITIONS::ShowAlways );
 
+    editMenu->Resolve();
+
     //----- View menu -----------------------------------------------------------
+    //
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
 
     auto layersPaletteShownCondition = [ this ] ( const SELECTION& aSel ) {
@@ -412,6 +416,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->AppendSeparator();
 #endif
 
+    viewMenu->Resolve();
+
     //-- Place Menu ----------------------------------------------------------
     //
     CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
@@ -447,6 +453,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     autoplaceSubmenu->Add( PCB_ACTIONS::autoplaceSelectedComponents );
 
     placeMenu->AddMenu( autoplaceSubmenu );
+
+    placeMenu->Resolve();
 
     //-- Route Menu ----------------------------------------------------------
     //
@@ -513,6 +521,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     prefsMenu->AddSeparator();
     prefsMenu->AddCheckItem( ACTIONS::acceleratedGraphics, acceleratedGraphicsCondition );
     prefsMenu->AddCheckItem( ACTIONS::standardGraphics, standardGraphicsCondition );
+
+    prefsMenu->Resolve();
 
     //--MenuBar -----------------------------------------------------------
     //

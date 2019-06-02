@@ -44,7 +44,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     wxMenuBar* oldMenuBar = GetMenuBar();
     wxMenuBar* menuBar = new wxMenuBar();
 
-    //-- File menu -----------------------------------------------
+    //-- File menu -------------------------------------------------------
     //
     CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, selTool );
     static ACTION_MENU* openRecentGbrMenu;
@@ -142,7 +142,9 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
     fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
 
-    //-- View menu -----------------------------------------------
+    fileMenu->Resolve();
+
+    //-- View menu -------------------------------------------------------
     //
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
 
@@ -226,7 +228,9 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                             _( "Show in high contrast mode" ),
                             contrast_mode_xpm,                         contrastModeCondition );
 
-    //-- Tools menu -----------------------------------------------
+    viewMenu->Resolve();
+
+    //-- Tools menu -------------------------------------------------------
     //
     wxMenu* toolsMenu = new wxMenu;
 
@@ -270,9 +274,9 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     preferencesMenu->AddCheckItem( ACTIONS::acceleratedGraphics, acceleratedGraphicsCondition );
     preferencesMenu->AddCheckItem( ACTIONS::standardGraphics,    standardGraphicsCondition );
 
-    preferencesMenu->AppendSeparator();
+    preferencesMenu->Resolve();
 
-    //-- Menubar -----------------------------------------------
+    //-- Menubar -------------------------------------------------------------
     //
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( viewMenu, _( "&View" ) );

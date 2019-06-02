@@ -115,7 +115,6 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateVToolbar()
 }
 
 
-// Virtual function
 void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
 {
     SELECTION_TOOL* selTool = m_toolManager->GetTool<SELECTION_TOOL>();
@@ -123,11 +122,9 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar* oldMenuBar = GetMenuBar();
     wxMenuBar* menuBar = new wxMenuBar();
-    wxString   text;
 
-    // Recreate all menus:
-
-    // Menu File:
+    //----- File menu -----------------------------------------------------------
+    //
     wxMenu* fileMenu = new wxMenu;
 
     // Close viewer
@@ -136,7 +133,8 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
                  _( "Close footprint viewer" ),
                  KiBitmap( exit_xpm ) );
 
-    // View menu
+    //----- View menu -----------------------------------------------------------
+    //
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
 
     viewMenu->AddSeparator();
@@ -145,14 +143,16 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
     viewMenu->AddItem( ACTIONS::zoomFitScreen,   SELECTION_CONDITIONS::ShowAlways );
     viewMenu->AddItem( ACTIONS::zoomRedraw,      SELECTION_CONDITIONS::ShowAlways );
 
-    viewMenu->AppendSeparator();
+    viewMenu->AddSeparator();
+    viewMenu->AddItem( ID_MODVIEW_SHOW_3D_VIEW,
+                       AddHotkeyName( _( "3D Viewer" ), g_Module_Viewer_Hotkeys_Descr, HK_3D_VIEWER ),
+                       _( "Show footprint in 3D viewer" ),
+                       three_d_xpm,              SELECTION_CONDITIONS::ShowAlways );
 
-    // 3D view
-    text = AddHotkeyName( _( "3&D Viewer" ), g_Module_Viewer_Hotkeys_Descr, HK_3D_VIEWER );
-    AddMenuItem( viewMenu, ID_MODVIEW_SHOW_3D_VIEW, text, _( "Show footprint in 3D viewer" ),
-                 KiBitmap( three_d_xpm ) );
+    viewMenu->Resolve();
 
-    // Append menus to the menubar
+    //----- Menubar -------------------------------------------------------------
+    //
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
     AddStandardHelpMenu( menuBar );
