@@ -290,8 +290,8 @@ bool EDIT_TOOL::Init()
     auto& ctxMenu = m_menu.GetMenu();
 
     // "Cancel" goes at the top of the context menu when a tool is active
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1000 );
-    ctxMenu.AddSeparator( activeToolCondition, 1000 );
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
+    ctxMenu.AddSeparator( activeToolCondition, 1 );
 
     if( frame )
         m_menu.AddStandardSubMenus( frame );
