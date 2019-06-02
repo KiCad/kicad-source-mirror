@@ -415,7 +415,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
     }
 
     if( module )
-        GetBoard()->Modules().push_back( module );
+        GetBoard()->Add( module );
 
     if( module_info )
         SetStatusText( wxString::Format( _( "Lib: %s" ), module_info->GetLibNickname() ), 0 );
