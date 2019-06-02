@@ -672,8 +672,9 @@ public:
      * Function Clear_Pcb
      * delete all and reinitialize the current board
      * @param aQuery = true to prompt user for confirmation, false to initialize silently
+     * @param aFinal = if true, we are clearing the board to exit, so don't run more events
      */
-    bool Clear_Pcb( bool aQuery );
+    bool Clear_Pcb( bool aQuery, bool aFinal = false );
 
     ///> @copydoc PCB_BASE_FRAME::SetBoard()
     void SetBoard( BOARD* aBoard ) override;

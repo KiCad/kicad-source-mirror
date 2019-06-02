@@ -36,7 +36,7 @@
 #include <footprint_edit_frame.h>
 
 
-bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
+bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery, bool aFinal )
 {
     if( GetBoard() == NULL )
         return false;
@@ -60,33 +60,36 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
     bool showGrid = IsElementVisible( LAYER_GRID );
     bool showRats = IsElementVisible( LAYER_RATSNEST );
 
-    // delete the old BOARD and create a new BOARD so that the default
-    // layer names are put into the BOARD.
-    SetBoard( new BOARD() );
-    SetElementVisibility( LAYER_GRID, showGrid );
-    SetElementVisibility( LAYER_RATSNEST, showRats );
+    if( !aFinal )
+    {
+        // delete the old BOARD and create a new BOARD so that the default
+        // layer names are put into the BOARD.
+        SetBoard( new BOARD() );
+        SetElementVisibility( LAYER_GRID, showGrid );
+        SetElementVisibility( LAYER_RATSNEST, showRats );
 
-    // clear filename, to avoid overwriting an old file
-    GetBoard()->SetFileName( wxEmptyString );
+        // clear filename, to avoid overwriting an old file
+        GetBoard()->SetFileName( wxEmptyString );
 
-    GetScreen()->InitDataPoints( GetPageSizeIU() );
+        GetScreen()->InitDataPoints( GetPageSizeIU() );
 
-    GetBoard()->ResetHighLight();
+        GetBoard()->ResetHighLight();
 
-    // Enable all layers (SetCopperLayerCount() will adjust the copper layers enabled)
-    GetBoard()->SetEnabledLayers( LSET().set() );
+        // Enable all layers (SetCopperLayerCount() will adjust the copper layers enabled)
+        GetBoard()->SetEnabledLayers( LSET().set() );
 
-    // Default copper layers count set to 2: double layer board
-    GetBoard()->SetCopperLayerCount( 2 );
+        // Default copper layers count set to 2: double layer board
+        GetBoard()->SetCopperLayerCount( 2 );
 
-    // Update display (some options depend on the board setup)
-    GetBoard()->SetVisibleLayers( LSET().set() );
-    ReCreateLayerBox();
-    ReCreateAuxiliaryToolbar();
-    ReFillLayerWidget();
-    UpdateTitle();
+        // Update display (some options depend on the board setup)
+        GetBoard()->SetVisibleLayers( LSET().set() );
+        ReCreateLayerBox();
+        ReCreateAuxiliaryToolbar();
+        ReFillLayerWidget();
+        UpdateTitle();
 
-    Zoom_Automatique( false );
+        Zoom_Automatique( false );
+    }
 
     return true;
 }

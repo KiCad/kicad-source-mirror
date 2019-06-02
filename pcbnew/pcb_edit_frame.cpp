@@ -524,7 +524,7 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
     // Delete board structs and undo/redo lists, to avoid crash on exit
     // when deleting some structs (mainly in undo/redo lists) too late
-    Clear_Pcb( false );
+    Clear_Pcb( false, true );
 
     // do not show the window because ScreenPcb will be deleted and we do not
     // want any paint event
