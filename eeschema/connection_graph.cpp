@@ -2025,17 +2025,17 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
         bus_wire = bus_entry->m_connected_bus_item;
         conflict = true;
 
-        auto test_name = bus_entry->Connection( sheet )->Name();
+        auto test_name = bus_entry->Connection( sheet )->Name( true );
 
         for( const auto& member : bus_wire->Connection( sheet )->Members() )
         {
             if( member->Type() == CONNECTION_BUS )
             {
                 for( const auto& sub_member : member->Members() )
-                    if( sub_member->Name() == test_name )
+                    if( sub_member->Name( true ) == test_name )
                         conflict = false;
             }
-            else if( member->Name() == test_name )
+            else if( member->Name( true ) == test_name )
             {
                 conflict = false;
             }
@@ -2048,9 +2048,9 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
         {
             msg.Printf( _( "%s (%s) is connected to %s (%s) but is not a member of the bus" ),
                         bus_entry->GetSelectMenuText( m_frame->GetUserUnits() ),
-                        bus_entry->Connection( sheet )->Name(),
+                        bus_entry->Connection( sheet )->Name( true ),
                         bus_wire->GetSelectMenuText( m_frame->GetUserUnits() ),
-                        bus_wire->Connection( sheet )->Name() );
+                        bus_wire->Connection( sheet )->Name( true ) );
 
             auto marker = new SCH_MARKER();
             marker->SetTimeStamp( GetNewTimeStamp() );
