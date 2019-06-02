@@ -34,7 +34,9 @@
 #include <hotkeys.h>
 #include <tool/common_tools.h>
 #include <id.h>
-
+#include <project.h>
+#include <kiface_i.h>
+#include <dialog_configure_paths.h>
 
 void COMMON_TOOLS::Reset( RESET_REASON aReason )
 {
@@ -492,6 +494,31 @@ int COMMON_TOOLS::ToggleCursorStyle( const TOOL_EVENT& aEvent )
 }
 
 
+int COMMON_TOOLS::ConfigurePaths( const TOOL_EVENT& aEvent )
+{
+    KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );
+    kiface->CreateWindow( m_frame, DIALOG_CONFIGUREPATHS, &m_frame->Kiway() );
+    return 0;
+}
+
+
+int COMMON_TOOLS::ShowLibraryTable( const TOOL_EVENT& aEvent )
+{
+    if( aEvent.IsAction( &ACTIONS::showSymbolLibTable ) )
+    {
+        KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_SCH );
+        kiface->CreateWindow( m_frame, DIALOG_SCH_LIBRARY_TABLE, &m_frame->Kiway() );
+    }
+    else if( aEvent.IsAction( &ACTIONS::showFootprintLibTable ) )
+    {
+        KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );
+        kiface->CreateWindow( m_frame, DIALOG_PCB_LIBRARY_TABLE, &m_frame->Kiway() );
+    }
+
+    return 0;
+}
+
+
 int COMMON_TOOLS::SwitchCanvas( const TOOL_EVENT& aEvent )
 {
     if( aEvent.IsAction( &ACTIONS::acceleratedGraphics ) )
@@ -553,6 +580,9 @@ void COMMON_TOOLS::setTransitions()
     Go( &COMMON_TOOLS::ToggleCursor,       ACTIONS::toggleCursor.MakeEvent() );
     Go( &COMMON_TOOLS::ToggleCursorStyle,  ACTIONS::toggleCursorStyle.MakeEvent() );
 
+    Go( &COMMON_TOOLS::ConfigurePaths,     ACTIONS::configurePaths.MakeEvent() );
+    Go( &COMMON_TOOLS::ShowLibraryTable,   ACTIONS::showSymbolLibTable.MakeEvent() );
+    Go( &COMMON_TOOLS::ShowLibraryTable,   ACTIONS::showFootprintLibTable.MakeEvent() );
     Go( &COMMON_TOOLS::SwitchCanvas,       ACTIONS::acceleratedGraphics.MakeEvent() );
     Go( &COMMON_TOOLS::SwitchCanvas,       ACTIONS::standardGraphics.MakeEvent() );
 }

@@ -494,23 +494,18 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
         return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
     };
 
-    prefsMenu->AddItem( ID_PREFERENCES_CONFIGURE_PATHS, _( "&Configure Paths..." ),
-                        _( "Edit path configuration environment variables" ),
-                        path_xpm,            SELECTION_CONDITIONS::ShowAlways );
-
-    prefsMenu->AddItem( ID_PCB_LIB_TABLE_EDIT, _( "Manage &Footprint Libraries..." ),
-                        _( "Edit the global and project footprint library tables." ),
-                        library_table_xpm,   SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->AddItem( ACTIONS::configurePaths,        SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->AddItem( ACTIONS::showFootprintLibTable, SELECTION_CONDITIONS::ShowAlways );
 
 #ifdef BUILD_GITHUB_PLUGIN
     prefsMenu->AddItem( ID_PCB_3DSHAPELIB_WIZARD, _( "Add &3D Shapes Libraries Wizard..." ),
                         _( "Download 3D shape libraries from GitHub" ),
-                        import3d_xpm,        SELECTION_CONDITIONS::ShowAlways );
+                        import3d_xpm,                   SELECTION_CONDITIONS::ShowAlways );
 #endif
     prefsMenu->AddItem( wxID_PREFERENCES,
                         AddHotkeyName( _( "Preferences..." ), g_Module_Editor_Hotkeys_Descr, HK_PREFERENCES ),
                         _( "Show preferences for all open tools" ),
-                        preference_xpm,      SELECTION_CONDITIONS::ShowAlways );
+                        preference_xpm,                 SELECTION_CONDITIONS::ShowAlways );
 
     prefsMenu->AddSeparator();
     Pgm().AddMenuLanguageList( prefsMenu );

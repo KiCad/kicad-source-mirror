@@ -128,7 +128,6 @@ public:
     // The Tool Framework initalization, for GAL mode
     void setupTools();
 
-    void OnConfigurePaths( wxCommandEvent& aEvent );
     void OnToggleSearchTree( wxCommandEvent& event );
 
     void OnSaveFootprintAsPng( wxCommandEvent& event );

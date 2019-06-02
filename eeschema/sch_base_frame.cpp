@@ -36,13 +36,9 @@
 #include <viewlib_frame.h>
 #include <sch_base_frame.h>
 #include <symbol_lib_table.h>
-#include <dialog_configure_paths.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tools/ee_actions.h>
-
-#include "dialogs/panel_sym_lib_table.h"
-
 
 
 LIB_ALIAS* SchGetLibAlias( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PART_LIB* aCacheLib,
@@ -259,19 +255,6 @@ void SCH_BASE_FRAME::UpdateStatusBar()
 
     // refresh units display
     DisplayUnitsMsg();
-}
-
-
-void SCH_BASE_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
-{
-    DIALOG_CONFIGURE_PATHS dlg( this, nullptr );
-    dlg.ShowModal();
-}
-
-
-void SCH_BASE_FRAME::OnEditSymbolLibTable( wxCommandEvent& aEvent )
-{
-    InvokeSchEditSymbolLibTable( &Kiway(), this );
 }
 
 

@@ -34,6 +34,7 @@ using namespace std::placeholders;
 #include <tools/cvpcb_selection_tool.h>
 
 
+// JEY TODO: move all these actions to tool/actions.cpp
 // Selection tool actions
 TOOL_ACTION CVPCB_ACTIONS::selectionActivate( "cvpcb.InteractiveSelection",
         AS_GLOBAL, 0,

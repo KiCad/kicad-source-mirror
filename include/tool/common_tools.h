@@ -79,6 +79,8 @@ public:
     int ToggleGrid( const TOOL_EVENT& aEvent );
     int GridProperties( const TOOL_EVENT& aEvent );
 
+    int ConfigurePaths( const TOOL_EVENT& aEvent );
+    int ShowLibraryTable( const TOOL_EVENT& aEvent );
     int SwitchCanvas( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.

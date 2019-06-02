@@ -162,22 +162,12 @@ public:
     /** @return The default pin len setting.
      */
     static int GetDefaultPinLength() { return m_defaultPinLength; }
-
-    /** Set the default pin len.
-     */
     static void SetDefaultPinLength( int aLength ) { m_defaultPinLength = aLength; }
 
     /**
-     * @return the increment value of the position of a pin
-     * for the pin repeat command
+     * @return the increment value of the position of a pin for the pin repeat command
      */
     int GetRepeatPinStep() const { return m_repeatPinStep; }
-
-    /**
-     * Sets the repeat step value for pins repeat command
-     * @param aStep the increment value of the position of an item
-     * for the repeat command
-     */
     void SetRepeatPinStep( int aStep) { m_repeatPinStep = aStep; }
 
     void ReCreateMenuBar() override;
@@ -270,10 +260,9 @@ public:
 
     void OnToggleSearchTree( wxCommandEvent& event );
 
-    void OnEditSymbolLibTable( wxCommandEvent& aEvent ) override;
-
     bool IsSearchTreeShown();
-    void ClearSearchTreeSelection();
+    void FreezeSearchTree();
+    void ThawSearchTree();
 
     void OnUpdateHavePart( wxUpdateUIEvent& aEvent );
     void OnUpdateSyncPinEdit( wxUpdateUIEvent& event );

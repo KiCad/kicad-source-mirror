@@ -66,7 +66,8 @@ enum FRAME_T
     FRAME_T_COUNT,
 
     // Library table dialogs are transient and are never returned
-    DIALOG_SCH_LIBRARY_TABLE = FRAME_T_COUNT,
+    DIALOG_CONFIGUREPATHS = FRAME_T_COUNT,
+    DIALOG_SCH_LIBRARY_TABLE,
     DIALOG_PCB_LIBRARY_TABLE
 };
 

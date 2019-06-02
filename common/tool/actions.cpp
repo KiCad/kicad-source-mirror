@@ -344,6 +344,28 @@ TOOL_ACTION ACTIONS::highContrastDec( "common.Control.highContrastDec",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HIGHCONTRAST_DEC ),
         "", "" );
 
+TOOL_ACTION ACTIONS::show3DViewer( "common.Control.show3DViewer",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_3D_VIEWER ),
+        _( "3D Viewer" ), _( "Show 3D viewer window" ),
+        three_d_xpm );
+
+TOOL_ACTION ACTIONS::configurePaths( "common.Control.configurePaths",
+        AS_GLOBAL, 0,
+        _( "Configure Paths..." ), _( "Edit path configuration environment variables" ),
+        path_xpm );
+
+TOOL_ACTION ACTIONS::showSymbolLibTable( "common.Control.showSymbolLibTable",
+        AS_GLOBAL, 0,
+        _( "Manage Symbol Libraries..." ),
+        _( "Edit the global and project symbol library lists" ),
+        library_table_xpm );
+
+TOOL_ACTION ACTIONS::showFootprintLibTable( "common.Control.showFootprintLibTable",
+        AS_GLOBAL, 0,
+        _( "Manage Footprint Libraries..." ),
+        _( "Edit the global and project footprint library lists" ),
+        library_table_xpm );
+
 TOOL_ACTION ACTIONS::acceleratedGraphics( "common.Control.acceleratedGraphics",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_CANVAS_OPENGL ),
         _( "Accelerated Graphics" ), _( "Use hardware-accelerated graphics (recommended)" ),
@@ -353,11 +375,6 @@ TOOL_ACTION ACTIONS::standardGraphics( "common.Control.standardGraphics",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_CANVAS_CAIRO ),
         _( "Standard Graphics" ), _( "Use software graphics (fall-back)" ),
         tools_xpm );
-
-TOOL_ACTION ACTIONS::show3DViewer( "pcbnew.Control.show3DViewer",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_3D_VIEWER ),
-        _( "3D Viewer" ), _( "Show 3D viewer window" ),
-        three_d_xpm );
 
 
 

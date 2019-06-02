@@ -66,10 +66,6 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_PCB_LIB_TABLE_EDIT:
-        InvokePcbLibTableEditor( &Kiway(), this );
-        break;
-
     case ID_PCB_3DSHAPELIB_WIZARD:
 #ifdef BUILD_GITHUB_PLUGIN
         Invoke3DShapeLibsDownloaderWizard( this );

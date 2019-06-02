@@ -228,7 +228,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, SCH_EDIT_FRAME::Process_Config )
 
     EVT_TOOL( wxID_PREFERENCES, SCH_EDIT_FRAME::OnPreferencesOptions )
-    EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, SCH_EDIT_FRAME::OnConfigurePaths )
 
     EVT_TOOL( ID_RESCUE_CACHED, SCH_EDIT_FRAME::OnRescueProject )
     EVT_MENU( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnRemapSymbols )
@@ -317,18 +316,12 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     // Net list generator
     DefaultExecFlags();
 
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &SCH_EDIT_FRAME::OnEditSymbolLibTable, this,
-          ID_EDIT_SYM_LIB_TABLE );
-
     UpdateTitle();
 }
 
 
 SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 {
-    Unbind( wxEVT_COMMAND_MENU_SELECTED, &SCH_EDIT_FRAME::OnEditSymbolLibTable, this,
-            ID_EDIT_SYM_LIB_TABLE );
-
     delete m_item_to_repeat;        // we own the cloned object, see this->SaveCopyForRepeatItem()
 
     SetScreen( NULL );

@@ -40,6 +40,12 @@ CACHE_WRAPPER::~CACHE_WRAPPER()
 }
 
 
+FILENAME_RESOLVER* PROJECT::Get3DFilenameResolver()
+{
+    return Get3DCacheManager()->GetResolver();
+}
+
+
 S3D_CACHE* PROJECT::Get3DCacheManager( bool updateProjDir )
 {
     wxCriticalSectionLocker lock( lock3D_wrapper );

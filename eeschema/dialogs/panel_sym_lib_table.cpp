@@ -703,12 +703,20 @@ size_t PANEL_SYM_LIB_TABLE::m_pageNdx = 0;
 
 void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
 {
+    SCH_EDIT_FRAME*   schEditor = (SCH_EDIT_FRAME*) aKiway->Player( FRAME_SCH, false );
+    LIB_EDIT_FRAME*   libEditor = (LIB_EDIT_FRAME*) aKiway->Player( FRAME_SCH_LIB_EDITOR, false );
+    LIB_VIEW_FRAME*   libViewer = (LIB_VIEW_FRAME*) aKiway->Player( FRAME_SCH_VIEWER, false );
+
     SYMBOL_LIB_TABLE* globalTable = &SYMBOL_LIB_TABLE::GetGlobalLibTable();
     wxString          globalTablePath = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
     SYMBOL_LIB_TABLE* projectTable = aKiway->Prj().SchSymbolLibTable();
     wxString          projectPath = aKiway->Prj().GetProjectPath();
     wxFileName        projectTableFn( projectPath, SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
     wxString          msg;
+
+    // This prevents an ugly crash on OSX (https://bugs.launchpad.net/kicad/+bug/1765286)
+    if( libEditor )
+        libEditor->FreezeSearchTree();
 
     DIALOG_EDIT_LIBRARY_TABLES dlg( aParent, _( "Symbol Libraries" ) );
 
@@ -750,20 +758,15 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
 
     schematic.UpdateSymbolLinks( true );    // Update all symbol library links for all sheets.
 
-    SCH_EDIT_FRAME* schEditor = (SCH_EDIT_FRAME*) aKiway->Player( FRAME_SCH, false );
-
     if( schEditor )
         schEditor->SyncView();
 
-    auto editor = (LIB_EDIT_FRAME*) aKiway->Player( FRAME_SCH_LIB_EDITOR, false );
+    if( libEditor )
+    {
+        libEditor->SyncLibraries( true );
+        libEditor->ThawSearchTree();
+    }
 
-    if( editor )
-        editor->SyncLibraries( true );
-
-    LIB_VIEW_FRAME* viewer = (LIB_VIEW_FRAME*) aKiway->Player( FRAME_SCH_VIEWER, false );
-
-    if( viewer )
-        viewer->ReCreateListLib();
+    if( libViewer )
+        libViewer->ReCreateListLib();
 }
-
-

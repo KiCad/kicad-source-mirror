@@ -204,12 +204,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Raise();
     Show( true );
 
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &LIB_EDIT_FRAME::OnConfigurePaths, this,
-          ID_PREFERENCES_CONFIGURE_PATHS );
-
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &LIB_EDIT_FRAME::OnEditSymbolLibTable, this,
-          ID_EDIT_SYM_LIB_TABLE );
-
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
 
     SyncView();
@@ -231,9 +225,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
 {
-    Unbind( wxEVT_COMMAND_MENU_SELECTED, &LIB_EDIT_FRAME::OnEditSymbolLibTable, this,
-            ID_EDIT_SYM_LIB_TABLE );
-
     // current screen is destroyed in EDA_DRAW_FRAME
     SetScreen( m_dummyScreen );
 
@@ -347,26 +338,21 @@ void LIB_EDIT_FRAME::OnToggleSearchTree( wxCommandEvent& event )
 }
 
 
-void LIB_EDIT_FRAME::OnEditSymbolLibTable( wxCommandEvent& aEvent )
-{
-    m_libMgr->GetAdapter()->Freeze();
-
-    SCH_BASE_FRAME::OnEditSymbolLibTable( aEvent );
-    SyncLibraries( true );
-
-    m_libMgr->GetAdapter()->Thaw();
-}
-
-
 bool LIB_EDIT_FRAME::IsSearchTreeShown()
 {
     return m_auimgr.GetPane( m_treePane ).IsShown();
 }
 
 
-void LIB_EDIT_FRAME::ClearSearchTreeSelection()
+void LIB_EDIT_FRAME::FreezeSearchTree()
 {
-    m_treePane->GetLibTree()->Unselect();
+    m_libMgr->GetAdapter()->Freeze();
+}
+
+
+void LIB_EDIT_FRAME::ThawSearchTree()
+{
+    m_libMgr->GetAdapter()->Thaw();
 }
 
 

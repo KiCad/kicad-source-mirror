@@ -62,8 +62,6 @@
 #include <dialogs/panel_modedit_settings.h>
 #include <dialogs/panel_modedit_defaults.h>
 #include <dialogs/panel_modedit_display_options.h>
-#include <dialog_configure_paths.h>
-
 #include <tools/position_relative_tool.h>
 #include <widgets/progress_reporter.h>
 #include "tools/selection_tool.h"
@@ -113,13 +111,8 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_MODEDIT_SHOW_HIDE_SEARCH_TREE, FOOTPRINT_EDIT_FRAME::OnToggleSearchTree )
 
     // Preferences and option menus
-    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
-              FOOTPRINT_EDIT_FRAME::ProcessPreferences )
-    EVT_MENU( ID_PCB_LIB_TABLE_EDIT,
-              FOOTPRINT_EDIT_FRAME::ProcessPreferences )
-    EVT_MENU( wxID_PREFERENCES,
-              FOOTPRINT_EDIT_FRAME::ProcessPreferences )
-    EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, FOOTPRINT_EDIT_FRAME::OnConfigurePaths )
+    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, FOOTPRINT_EDIT_FRAME::ProcessPreferences )
+    EVT_MENU( wxID_PREFERENCES, FOOTPRINT_EDIT_FRAME::ProcessPreferences )
 
     // popup commands
     EVT_MENU_RANGE( ID_POPUP_PCB_START_RANGE, ID_POPUP_PCB_END_RANGE,
@@ -822,10 +815,6 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
         DisplayHotkeyList( this, g_Module_Editor_Hotkeys_Descr );
         break;
 
-    case ID_PCB_LIB_TABLE_EDIT:
-        InvokePcbLibTableEditor( &Kiway(), this );
-        break;
-
     case wxID_PREFERENCES:
         ShowPreferences( g_Pcbnew_Editor_Hotkeys_Descr, g_Module_Editor_Hotkeys_Descr,
                          wxT( "pcbnew" ) );
@@ -844,13 +833,6 @@ void FOOTPRINT_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
     book->AddPage( new PANEL_MODEDIT_SETTINGS( this, aParent ), _( "Footprint Editor" ) );
     book->AddSubPage( new PANEL_MODEDIT_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_MODEDIT_DEFAULTS( this, aParent ), _( "Default Values" ) );
-}
-
-
-void FOOTPRINT_EDIT_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
-{
-    DIALOG_CONFIGURE_PATHS dlg( this, Prj().Get3DCacheManager()->GetResolver() );
-    dlg.ShowModal();
 }
 
 

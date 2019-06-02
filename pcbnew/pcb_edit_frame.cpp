@@ -44,7 +44,6 @@
 #include <dialog_exchange_footprints.h>
 #include <dialog_edit_footprint_for_BoardEditor.h>
 #include <dialog_board_setup.h>
-#include <dialog_configure_paths.h>
 #include <dialog_update_pcb.h>
 #include <convert_to_biu.h>
 #include <view/view.h>
@@ -153,9 +152,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( wxID_EXIT, PCB_EDIT_FRAME::OnQuit )
 
     // menu Config
-    EVT_MENU( ID_PCB_LIB_TABLE_EDIT, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_PCB_3DSHAPELIB_WIZARD, PCB_EDIT_FRAME::Process_Config )
-    EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, PCB_EDIT_FRAME::OnConfigurePaths )
     EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( wxID_PREFERENCES, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_GRID_SETTINGS, PCB_EDIT_FRAME::OnGridSettings )
@@ -1017,13 +1014,6 @@ bool PCB_EDIT_FRAME::SetCurrentNetClass( const wxString& aNetClassName )
         ReCreateAuxiliaryToolbar();
 
     return change;
-}
-
-
-void PCB_EDIT_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
-{
-    DIALOG_CONFIGURE_PATHS dlg( this, Prj().Get3DCacheManager()->GetResolver() );
-    dlg.ShowModal();
 }
 
 

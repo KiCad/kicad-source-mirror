@@ -590,8 +590,8 @@ void KICAD_MANAGER_FRAME::OnShowHotkeys( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 {
-    DIALOG_CONFIGURE_PATHS dlg( this, nullptr );
-    dlg.ShowModal();
+    KIFACE* kiface = Kiway().KiFACE( KIWAY::FACE_PCB );
+    kiface->CreateWindow( this, DIALOG_CONFIGUREPATHS, &Kiway() );
 }
 
 

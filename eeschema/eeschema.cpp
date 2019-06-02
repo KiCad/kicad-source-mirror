@@ -72,45 +72,40 @@ static struct IFACE : public KIFACE_I
         switch( aClassId )
         {
         case FRAME_SCH:
-            {
-                SCH_EDIT_FRAME* frame = new SCH_EDIT_FRAME( aKiway, aParent );
+        {
+            SCH_EDIT_FRAME* frame = new SCH_EDIT_FRAME( aKiway, aParent );
 
-                if( Kiface().IsSingle() )
-                {
-                    // only run this under single_top, not under a project manager.
-                    frame->CreateServer( KICAD_SCH_PORT_SERVICE_NUMBER );
-                }
-                return frame;
+            if( Kiface().IsSingle() )
+            {
+                // only run this under single_top, not under a project manager.
+                frame->CreateServer( KICAD_SCH_PORT_SERVICE_NUMBER );
             }
-            break;
+
+            return frame;
+        }
 
         case FRAME_SCH_LIB_EDITOR:
-            {
-                LIB_EDIT_FRAME* frame = new LIB_EDIT_FRAME( aKiway, aParent );
-                return frame;
-            }
-            break;
+        {
+            LIB_EDIT_FRAME* frame = new LIB_EDIT_FRAME( aKiway, aParent );
+            return frame;
+        }
 
 #ifdef KICAD_SPICE
         case FRAME_SIMULATOR:
-            {
-                SIM_PLOT_FRAME* frame = new SIM_PLOT_FRAME( aKiway, aParent );
-                return frame;
-            }
-            break;
-#endif /* KICAD_SPICE */
-
+        {
+            SIM_PLOT_FRAME* frame = new SIM_PLOT_FRAME( aKiway, aParent );
+            return frame;
+        }
+#endif
         case FRAME_SCH_VIEWER:
         case FRAME_SCH_VIEWER_MODAL:
-            {
-                LIB_VIEW_FRAME* frame = new LIB_VIEW_FRAME( aKiway, aParent, FRAME_T( aClassId ) );
-                return frame;
-            }
-            break;
+        {
+            LIB_VIEW_FRAME* frame = new LIB_VIEW_FRAME( aKiway, aParent, FRAME_T( aClassId ) );
+            return frame;
+        }
 
         case DIALOG_SCH_LIBRARY_TABLE:
             InvokeSchEditSymbolLibTable( aKiway, aParent );
-
             // Dialog has completed; nothing to return.
             return nullptr;
 

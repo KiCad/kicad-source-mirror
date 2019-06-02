@@ -320,7 +320,6 @@ public:
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
     void OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent );
     void OnLayerColorChange( wxCommandEvent& aEvent );
-    void OnConfigurePaths( wxCommandEvent& aEvent );
     void OnUpdatePCBFromSch( wxCommandEvent& event );
     void OnRunEeschema( wxCommandEvent& event );
 

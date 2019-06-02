@@ -244,8 +244,6 @@ public:
             const LIB_ID* aHighlight = nullptr,
             bool aAllowFields = true );
 
-    void OnConfigurePaths( wxCommandEvent& aEvent );
-
     /**
      * Return a template field names list for read only access.
      */
@@ -264,8 +262,6 @@ public:
     {
         return m_templateFieldNames.GetFieldName( aName );
     }
-
-    virtual void OnEditSymbolLibTable( wxCommandEvent& aEvent );
 
     /**
      * Load symbol from symbol library table.

@@ -136,9 +136,12 @@ public:
     static TOOL_ACTION resetLocalCoords;
 
     // Misc
+    static TOOL_ACTION show3DViewer;
+    static TOOL_ACTION configurePaths;
+    static TOOL_ACTION showSymbolLibTable;
+    static TOOL_ACTION showFootprintLibTable;
     static TOOL_ACTION acceleratedGraphics;
     static TOOL_ACTION standardGraphics;
-    static TOOL_ACTION show3DViewer;
 
     /**
      * Function TranslateLegacyId()

@@ -314,14 +314,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
         return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
     };
 
-    prefsMenu->AddItem( ID_PREFERENCES_CONFIGURE_PATHS, _( "Configure Pa&ths..." ),
-                        _( "Edit path configuration environment variables" ),
-                        path_xpm,                          EE_CONDITIONS::ShowAlways );
-
-    prefsMenu->AddItem( ID_EDIT_SYM_LIB_TABLE, _( "Manage Symbol Libraries..." ),
-                        _( "Edit the global and project symbol library lists" ),
-                        library_table_xpm,                 EE_CONDITIONS::ShowAlways );
-
+    prefsMenu->AddItem( ACTIONS::configurePaths,           EE_CONDITIONS::ShowAlways );
+    prefsMenu->AddItem( ACTIONS::showSymbolLibTable,       EE_CONDITIONS::ShowAlways );
     prefsMenu->AddItem( wxID_PREFERENCES,
                         AddHotkeyName( _( "Preferences..." ), g_Eeschema_Hotkeys_Descr, HK_PREFERENCES ),
                         _( "Show preferences for all open tools" ),

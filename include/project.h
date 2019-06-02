@@ -45,6 +45,7 @@ class SEARCH_STACK;
 class S3D_CACHE;
 class KIWAY;
 class SYMBOL_LIB_TABLE;
+class FILENAME_RESOLVER;
 
 #define VTBL_ENTRY      virtual
 
@@ -285,6 +286,9 @@ public:
      * @return a pointer to an instance of the 3D cache manager or NULL on failure
      */
     S3D_CACHE* Get3DCacheManager( bool updateProjDir = false );
+
+    /// Accessor for 3D path resolver
+    FILENAME_RESOLVER* Get3DFilenameResolver();
 #endif
 
 
@@ -297,6 +301,9 @@ public:
 
     /// Accessor for project symbol library table.
     SYMBOL_LIB_TABLE* SchSymbolLibTable();
+
+    /// Accessor for 3D path resolver
+    FILENAME_RESOLVER* Get3DFilenameResolver() { return nullptr; }
 #endif
 
     //-----</KIFACE Specific APIs>-----------------------------------------------
