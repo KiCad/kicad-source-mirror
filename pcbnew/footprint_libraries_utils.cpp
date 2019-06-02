@@ -804,7 +804,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
 
         for( auto mod : mainpcb->Modules() )
         {
-            if( module_in_edit->GetLink() == source_module->GetTimeStamp() )
+            if( module_in_edit->GetLink() == mod->GetTimeStamp() )
             {
                 source_module = mod;
                 break;
