@@ -462,7 +462,6 @@ if( KICAD_SCRIPTING )   # Generate pcbnew.py and pcbnew_wrap.cxx using swig
         DEPENDS swig/zone.i
         DEPENDS swig/zone_settings.i
 
-        DEPENDS ../common/swig/dlist.i
         DEPENDS ../common/swig/kicad.i
         DEPENDS ../common/swig/wx.i
         DEPENDS ../common/swig/ki_exception.i

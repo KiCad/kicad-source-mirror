@@ -37,7 +37,6 @@
 #include <class_board_item.h>
 #include <collectors.h>
 #include <convert_to_biu.h>
-#include <dlist.h>
 #include <layers_id_colors_and_visibility.h> // ALL_LAYERS definition.
 #include <lib_id.h>
 #include <list>
@@ -161,9 +160,6 @@ public:
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;
 
-    DLIST<BOARD_ITEM>& GraphicalItemsList()         { return m_Drawings; }
-    const DLIST<BOARD_ITEM>& GraphicalItemsList() const { return m_Drawings; }
-
     PADS& Pads()
     {
          return m_pads;
@@ -174,9 +170,14 @@ public:
          return m_pads;
     }
 
-    DLIST_ITERATOR_WRAPPER<BOARD_ITEM> GraphicalItems()
+    DRAWINGS& GraphicalItems()
     {
-        return DLIST_ITERATOR_WRAPPER<BOARD_ITEM>( m_Drawings );
+        return m_drawings;
+    }
+
+    const DRAWINGS& GraphicalItems() const
+    {
+        return m_drawings;
     }
 
     std::list<MODULE_3D_SETTINGS>& Models()             { return m_3D_Drawings; }
@@ -669,10 +670,6 @@ public:
 #endif
 
 private:
-
-    DLIST<BOARD_ITEM> m_Drawings;       ///< Linked list of graphical items.
-
-
 
     /// BOARD_ITEMs for drawings on the board, owned by pointer.
     DRAWINGS                m_drawings;

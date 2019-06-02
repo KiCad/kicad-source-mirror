@@ -51,8 +51,8 @@
     %pythoncode
     %{
 
-    def Pads(self):            return self.PadsList()
-    def GraphicalItems(self):  return self.GraphicalItemsList()
+    def Pads(self):            return self.Pads()
+    def GraphicalItems(self):  return self.GraphicalItems()
 
     #def SaveToLibrary(self,filename):
     #  return SaveModuleToLibrary(filename,self)

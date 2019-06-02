@@ -382,9 +382,9 @@ void processTextItem( const TEXTE_MODULE& aSrc, TEXTE_MODULE& aDest,
 
 TEXTE_MODULE* getMatchingTextItem( TEXTE_MODULE* aRefItem, MODULE* aModule )
 {
-    for( auto iItem = aModule->GraphicalItemsList().GetFirst(); iItem; iItem = iItem->Next() )
+    for( auto item : aModule->GraphicalItems() )
     {
-        TEXTE_MODULE* candidate = dyn_cast<TEXTE_MODULE*>( iItem );
+        TEXTE_MODULE* candidate = dyn_cast<TEXTE_MODULE*>( item );
 
         if( candidate && candidate->GetText() == aRefItem->GetText() )
             return candidate;
@@ -422,7 +422,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
                      resetTextLayers, resetTextEffects );
 
     // Copy fields in accordance with the reset* flags
-    for( BOARD_ITEM* item = aSrc->GraphicalItemsList().GetFirst(); item; item = item->Next() )
+    for( auto item : aSrc->GraphicalItems() )
     {
         TEXTE_MODULE* srcItem = dyn_cast<TEXTE_MODULE*>( item );
 
@@ -433,7 +433,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
             if( destItem )
                 processTextItem( *srcItem, *destItem, false, resetTextLayers, resetTextEffects );
             else if( !deleteExtraTexts )
-                aDest->GraphicalItemsList().Append( new TEXTE_MODULE( *srcItem ) );
+                aDest->Add( new TEXTE_MODULE( *srcItem ) );
         }
     }
 

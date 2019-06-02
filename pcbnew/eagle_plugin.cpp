@@ -1504,7 +1504,7 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
     dwg->SetWidth( width );
     dwg->SetDrawCoord();
 
-    aModule->GraphicalItemsList().PushBack( dwg );
+    aModule->Add( dwg );
 }
 
 
@@ -1622,7 +1622,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
     {
         // FIXME: graphical text items are rotated for some reason.
         txt = new TEXTE_MODULE( aModule );
-        aModule->GraphicalItemsList().PushBack( txt );
+        aModule->Add( txt );
     }
 
     txt->SetTimeStamp( EagleTimeStamp( aTree ) );
@@ -1714,7 +1714,7 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
     PCB_LAYER_ID layer = kicad_layer( r.layer );
     EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
 
-    aModule->GraphicalItemsList().PushBack( dwg );
+    aModule->Add( dwg );
 
     dwg->SetLayer( layer );
     dwg->SetWidth( 0 );
@@ -1749,7 +1749,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
     PCB_LAYER_ID  layer = kicad_layer( p.layer );
     EDGE_MODULE*  dwg = new EDGE_MODULE( aModule, S_POLYGON );
 
-    aModule->GraphicalItemsList().PushBack( dwg );
+    aModule->Add( dwg );
 
     dwg->SetWidth( 0 );     // it's filled, no need for boundary width
     dwg->SetLayer( layer );
@@ -1832,7 +1832,7 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
         radius = radius / 2;
     }
 
-    aModule->GraphicalItemsList().PushBack( gr );
+    aModule->Add( gr );
     gr->SetWidth( width );
 
     switch ( (int) layer )

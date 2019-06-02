@@ -1090,7 +1090,7 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
     Format( (BOARD_ITEM*) &aModule->Value(), aNestLevel+1 );
 
     // Save drawing elements.
-    for( BOARD_ITEM* gr = aModule->GraphicalItemsList();  gr;  gr = gr->Next() )
+    for( auto gr : aModule->GraphicalItems() )
         Format( gr, aNestLevel+1 );
 
     // Save pads.

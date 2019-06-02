@@ -495,7 +495,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     edge->SetShape( S_POLYGON );
     edge->SetLayer( F_Cu );
 
-    module->GraphicalItemsList().PushFront( edge );
+    module->Add( edge, ADD_INSERT );
 
     // Get the corner buffer of the polygonal edge
     std::vector<wxPoint> polyPoints;

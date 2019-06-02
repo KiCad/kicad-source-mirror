@@ -239,7 +239,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
         PlotTextModule( textModule, getColor( textLayer ) );
     }
 
-    for( BOARD_ITEM* item = aModule->GraphicalItemsList().GetFirst(); item; item = item->Next() )
+    for( auto item : aModule->GraphicalItems() )
     {
         textModule = dyn_cast<TEXTE_MODULE*>( item );
 
@@ -432,7 +432,7 @@ void BRDITEMS_PLOTTER::Plot_Edges_Modules()
 {
     for( auto module : m_board->Modules() )
     {
-        for( BOARD_ITEM* item = module->GraphicalItemsList().GetFirst(); item; item = item->Next() )
+        for( auto item : module->GraphicalItems() )
         {
             EDGE_MODULE* edge = dyn_cast<EDGE_MODULE*>( item );
 

@@ -179,9 +179,7 @@ void CINFO3D_VISU::AddGraphicsShapesWithClearanceToContainer( const MODULE* aMod
     std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
     EDGE_MODULE* outline;
 
-    for( EDA_ITEM* item = aModule->GraphicalItemsList();
-         item != NULL;
-         item = item->Next() )
+    for( auto item : aModule->GraphicalItems() )
     {
         switch( item->Type() )
         {

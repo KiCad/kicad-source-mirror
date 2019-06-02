@@ -248,7 +248,7 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
     m_texts->push_back( m_footprint->Reference() );
     m_texts->push_back( m_footprint->Value() );
 
-    for( BOARD_ITEM* item = m_footprint->GraphicalItemsList().GetFirst(); item; item = item->Next() )
+    for( auto item : m_footprint->GraphicalItems() )
     {
         auto textModule = dyn_cast<TEXTE_MODULE*>( item );
 
@@ -628,11 +628,9 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataFromWindow()
     m_footprint->Value() = m_texts->at( 1 );
 
     size_t i = 2;
-    BOARD_ITEM* next;
 
-    for( BOARD_ITEM* item = m_footprint->GraphicalItemsList().GetFirst(); item; item = next )
+    for( auto item : m_footprint->GraphicalItems() )
     {
-        next = item->Next();
         TEXTE_MODULE* textModule = dyn_cast<TEXTE_MODULE*>( item );
 
         if( textModule )

@@ -199,7 +199,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLaye
     std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
     EDGE_MODULE* outline;
 
-    for( EDA_ITEM* item = GraphicalItemsList(); item != NULL; item = item->Next() )
+    for( auto item : GraphicalItems() )
     {
         switch( item->Type() )
         {
@@ -265,7 +265,7 @@ void MODULE::TransformGraphicTextWithClearanceToPolygonSet(
 {
     std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
 
-    for( EDA_ITEM* item = GraphicalItemsList(); item != NULL; item = item->Next() )
+    for( auto item : GraphicalItems() )
     {
         switch( item->Type() )
         {

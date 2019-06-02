@@ -704,7 +704,8 @@ static size_t hashModule( const MODULE* aModule )
     constexpr int flags = HASH_FLAGS::POSITION | HASH_FLAGS::REL_COORD
                 | HASH_FLAGS::ROTATION | HASH_FLAGS::LAYER;
 
-    for( const BOARD_ITEM* i = aModule->GraphicalItemsList(); i; i = i->Next() )
+
+    for( auto i : aModule->GraphicalItems() )
         ret ^= hash_eda( i, flags );
 
     for( auto i : aModule->Pads() )
@@ -1200,7 +1201,6 @@ static void CreateTracksInfoData( FILE* aFile, BOARD* aPcb )
 static void FootprintWriteShape( FILE* aFile, MODULE* module, const wxString& aShapeName )
 {
     EDGE_MODULE* PtEdge;
-    EDA_ITEM*    PtStruct;
 
     /* creates header: */
     fprintf( aFile, "\nSHAPE \"%s\"\n", TO_UTF8( escapeString( aShapeName ) ) );
@@ -1242,7 +1242,7 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module, const wxString& aS
     // CAM350 read it right but only closed shapes
     // ProntoPlace double-flip it (at least the pads are correct)
     // GerberTool usually get it right...
-    for( PtStruct = module->GraphicalItemsList(); PtStruct; PtStruct = PtStruct->Next() )
+    for( auto PtStruct : module->GraphicalItems() )
     {
         switch( PtStruct->Type() )
         {

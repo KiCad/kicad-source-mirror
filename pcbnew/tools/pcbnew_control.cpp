@@ -715,10 +715,10 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
                     items.push_back( pad );
                 }
 
-                for( BOARD_ITEM* item = oldModule->GraphicalItemsList(), *next = nullptr;
-                        item; item = next )
+                for( auto it = oldModule->GraphicalItems().begin();
+                        it != oldModule->GraphicalItems().end(); it++ )
                 {
-                    next = item->Next();
+                    auto item = *it;
                     oldModule->Remove( item );
                     item->SetParent( newModule );
                     items.push_back( item );

@@ -1206,7 +1206,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
             // All other fields greater than 1.
             default:
                 textm = new TEXTE_MODULE( aModule );
-                aModule->GraphicalItemsList().PushBack( textm );
+                aModule->Add( textm );
             }
 
             loadMODULE_TEXT( textm );
@@ -1765,7 +1765,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
 
     EDGE_MODULE* em = dwg.release();
 
-    aModule->GraphicalItemsList().PushBack( em );
+    aModule->Add( em );
 
     // this had been done at the MODULE level before, presumably because the
     // EDGE_MODULE needs to be already added to a module before this function will work.

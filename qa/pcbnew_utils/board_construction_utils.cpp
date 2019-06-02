@@ -44,7 +44,7 @@ void DrawSegment( MODULE& aMod, const SEG& aSeg, int aWidth, PCB_LAYER_ID aLayer
     seg->SetWidth( aWidth );
     seg->SetLayer( aLayer );
 
-    aMod.GraphicalItemsList().PushBack( seg.release() );
+    aMod.Add( seg.release() );
 }
 
 
@@ -70,7 +70,7 @@ void DrawArc( MODULE& aMod, const VECTOR2I& aCentre, const VECTOR2I& aStart, dou
     seg->SetWidth( aWidth );
     seg->SetLayer( aLayer );
 
-    aMod.GraphicalItemsList().PushBack( seg.release() );
+    aMod.Add( seg.release() );
 }
 
 

@@ -42,8 +42,6 @@ file near the top; only class BOARD functions go in board.i.
 HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 
 
-//%import dlist.h       // comes in from kicad.i which wraps & includes board.i
-
 %include board_item.i
 %include board_item_container.i
 %include board_connected_item.i

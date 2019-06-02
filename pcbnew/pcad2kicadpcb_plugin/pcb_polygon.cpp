@@ -161,7 +161,7 @@ void PCB_POLYGON::AddToModule( MODULE* aModule )
     if( IsNonCopperLayer( m_KiCadLayer ) )
     {
         EDGE_MODULE* dwg = new EDGE_MODULE( aModule, S_POLYGON );
-        aModule->GraphicalItemsList().PushBack( dwg );
+        aModule->Add( dwg );
 
         dwg->SetWidth( 0 );
         dwg->SetLayer( m_KiCadLayer );

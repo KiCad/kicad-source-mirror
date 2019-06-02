@@ -109,7 +109,7 @@ MODULE::MODULE( const MODULE& aModule ) :
     }
 
     // Copy auxiliary data: Drawings
-    for( BOARD_ITEM* item = aModule.m_Drawings;  item;  item = item->Next() )
+    for( auto item : aModule.GraphicalItems() )
     {
         switch( item->Type() )
         {
@@ -187,9 +187,9 @@ MODULE& MODULE::operator=( const MODULE& aOther )
     }
 
     // Copy auxiliary data: Drawings
-    m_Drawings.DeleteAll();
+    m_drawings.clear();
 
-    for( BOARD_ITEM* item = aOther.m_Drawings;  item;  item = item->Next() )
+    for( auto item : aOther.GraphicalItems() )
     {
         switch( item->Type() )
         {
@@ -238,9 +238,9 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 
     case PCB_MODULE_EDGE_T:
         if( aMode == ADD_APPEND )
-            m_Drawings.PushBack( aBoardItem );
+            m_drawings.push_back( aBoardItem );
         else
-            m_Drawings.PushFront( aBoardItem );
+            m_drawings.push_front( aBoardItem );
         break;
 
     case PCB_PAD_T:
@@ -276,7 +276,8 @@ void MODULE::Remove( BOARD_ITEM* aBoardItem )
         // no break
 
     case PCB_MODULE_EDGE_T:
-        m_Drawings.Remove( aBoardItem );
+        m_drawings.erase( std::remove_if( m_drawings.begin(), m_drawings.end(),
+                [aBoardItem]( BOARD_ITEM* aItem ) { return aItem == aBoardItem; } ) );
         break;
 
     case PCB_PAD_T:
@@ -322,7 +323,7 @@ void MODULE::CopyNetlistSettings( MODULE* aModule, bool aCopyLocalSettings )
         aModule->SetThermalGap( GetThermalGap() );
     }
 
-    for( auto pad : m_pads )
+    for( auto pad : aModule->Pads() )
     {
         // Fix me: if aCopyLocalSettings == true, for "multiple" pads
         // (set of pads having the same name/number) this is broken
@@ -356,7 +357,7 @@ void MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
     if( brd->IsElementVisible( LAYER_MOD_VALUES ) )
         m_Value->Print( aFrame, aDC, aOffset );
 
-    for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
+    for( auto item : m_drawings )
     {
         switch( item->Type() )
         {
@@ -394,7 +395,7 @@ EDA_RECT MODULE::GetFootprintRect() const
     area.SetEnd( m_Pos );
     area.Inflate( Millimeter2iu( 0.25 ) );   // Give a min size to the area
 
-    for( const BOARD_ITEM* item = m_Drawings.GetFirst(); item; item = item->Next() )
+    for( auto item : m_drawings )
     {
         if( item->Type() == PCB_MODULE_EDGE_T )
             area.Merge( item->GetBoundingBox() );
@@ -412,7 +413,7 @@ const EDA_RECT MODULE::GetBoundingBox() const
     EDA_RECT area = GetFootprintRect();
 
     // Add in items not collected by GetFootprintRect():
-    for( const BOARD_ITEM* item = m_Drawings.GetFirst(); item; item = item->Next() )
+    for( auto item : m_drawings )
     {
         if( item->Type() != PCB_MODULE_EDGE_T )
             area.Merge( item->GetBoundingBox() );
@@ -590,7 +591,7 @@ bool MODULE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) co
                 return true;
         }
 
-        for( BOARD_ITEM* item = m_Drawings; item; item = item->Next() )
+        for( auto item : m_drawings )
         {
             if( item->HitTest( arect, false, 0 ) )
                 return true;
@@ -756,7 +757,7 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
         // m_Drawings can hold TYPETEXTMODULE also, so fall thru
 
         case PCB_MODULE_EDGE_T:
-            result = IterateForward( m_Drawings, inspector, testData, p );
+            result = IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, p );
 
             // skip over any types handled in the above call.
             for( ; ; )
@@ -819,8 +820,8 @@ void MODULE::RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction )
         for( auto pad : m_pads )
             aFunction( static_cast<BOARD_ITEM*>( pad ) );
 
-        for( BOARD_ITEM* drawing = m_Drawings; drawing; drawing = drawing->Next() )
-            aFunction( drawing );
+        for( auto drawing : m_drawings )
+            aFunction( static_cast<BOARD_ITEM*>( drawing ) );
 
         aFunction( static_cast<BOARD_ITEM*>( m_Reference ) );
         aFunction( static_cast<BOARD_ITEM*>( m_Value ) );
@@ -836,7 +837,7 @@ void MODULE::GetAllDrawingLayers( int aLayers[], int& aCount, bool aIncludePads 
 {
     std::unordered_set<int> layers;
 
-    for( BOARD_ITEM* item = m_Drawings; item; item = item->Next() )
+    for( auto item : m_drawings )
     {
         layers.insert( static_cast<int>( item->GetLayer() ) );
     }
@@ -886,7 +887,7 @@ void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
     // with the silkscreen layer
     bool f_silk = false, b_silk = false, non_silk = false;
 
-    for( BOARD_ITEM* item = m_Drawings; item; item = item->Next() )
+    for( auto item : m_drawings )
     {
         if( item->GetLayer() == F_SilkS )
             f_silk = true;
@@ -984,7 +985,7 @@ void MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
     m_Reference->KeepUpright( orientation, newOrientation );
     m_Value->KeepUpright( orientation, newOrientation );
 
-    for( EDA_ITEM* item = m_Drawings; item; item = item->Next() )
+    for( auto item : m_drawings )
     {
         if( item->Type() == PCB_MODULE_TEXT_T )
             static_cast<TEXTE_MODULE*>( item )->KeepUpright(  orientation, newOrientation  );
@@ -1015,7 +1016,7 @@ void MODULE::Flip( const wxPoint& aCentre )
     m_Value->Flip( m_Pos );
 
     // Reverse mirror module graphics and texts.
-    for( EDA_ITEM* item = m_Drawings; item; item = item->Next() )
+    for( auto item : m_drawings )
     {
         switch( item->Type() )
         {
@@ -1051,7 +1052,7 @@ void MODULE::SetPosition( const wxPoint& newpos )
         pad->SetPosition( pad->GetPosition() + delta );
     }
 
-    for( EDA_ITEM* item = m_Drawings;  item;  item = item->Next() )
+    for( auto item : m_drawings )
     {
         switch( item->Type() )
         {
@@ -1108,7 +1109,7 @@ void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
     }
 
     // Update the draw element coordinates.
-    for( EDA_ITEM* item = GraphicalItemsList(); item; item = item->Next() )
+    for( auto item : GraphicalItems() )
     {
         switch( item->Type() )
         {
@@ -1155,7 +1156,7 @@ void MODULE::SetOrientation( double newangle )
     m_Value->SetDrawCoord();
 
     // Displace contours and text of the footprint.
-    for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
+    for( auto item : m_drawings )
     {
         if( item->Type() == PCB_MODULE_EDGE_T )
         {
@@ -1201,7 +1202,7 @@ BOARD_ITEM* MODULE::Duplicate( const BOARD_ITEM* aItem,
             TEXTE_MODULE* new_text = new TEXTE_MODULE( *old_text );
 
             if( aAddToModule )
-                GraphicalItemsList().PushBack( new_text );
+                Add( new_text );
 
             new_item = new_text;
         }
@@ -1214,7 +1215,7 @@ BOARD_ITEM* MODULE::Duplicate( const BOARD_ITEM* aItem,
                 *static_cast<const EDGE_MODULE*>(aItem) );
 
         if( aAddToModule )
-            GraphicalItemsList().PushBack( new_edge );
+            Add( new_edge );
 
         new_item = new_edge;
         break;
@@ -1352,7 +1353,7 @@ bool MODULE::BuildPolyCourtyard()
     std::vector< DRAWSEGMENT* > list_front;
     std::vector< DRAWSEGMENT* > list_back;
 
-    for( BOARD_ITEM* item = GraphicalItemsList(); item; item = item->Next() )
+    for( auto item : GraphicalItems() )
     {
         if( item->GetLayer() == B_CrtYd && item->Type() == PCB_MODULE_EDGE_T )
             list_back.push_back( static_cast< DRAWSEGMENT* > ( item ) );

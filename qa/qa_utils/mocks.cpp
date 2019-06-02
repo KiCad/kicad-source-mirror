@@ -66,37 +66,6 @@
 #include <dialog_find.h>
 #include <dialog_block_options.h>
 
-bool    g_Drc_On = true;
-bool    g_AutoDeleteOldTrack = true;
-bool    g_Raccord_45_Auto = true;
-bool    g_Alternate_Track_Posture = false;
-bool    g_Track_45_Only_Allowed = true;         // True to allow horiz, vert. and 45deg only tracks
-bool    g_Segments_45_Only;                     // True to allow horiz, vert. and 45deg only graphic segments
-bool    g_TwoSegmentTrackBuild = true;
-
-PCB_LAYER_ID    g_Route_Layer_TOP;
-PCB_LAYER_ID    g_Route_Layer_BOTTOM;
-int g_MagneticPadOption;
-int g_MagneticTrackOption;
-
-wxPoint g_Offset_Module;     // module offset used when moving a footprint
-
-/* Name of the document footprint list
- * usually located in share/modules/footprints_doc
- * this is of the responsibility to users to create this file
- * if they want to have a list of footprints
- */
-wxString g_DocModulesFileName = wxT( "footprints_doc/footprints.pdf" );
-
-/*
- * Used in track creation, a list of track segments currently being created,
- * with the newest track at the end of the list, sorted by new-ness.  e.g. use
- * TRACK->Back() to get the next older track, TRACK->Next() to get the next
- * newer track.
- */
-DLIST<TRACK> g_CurrentTrackList;
-
-bool g_DumpZonesWhenFilling = false;
 
 static struct IFACE : public KIFACE_I
 {

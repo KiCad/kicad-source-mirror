@@ -310,7 +310,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
     for( auto module : aBoard->Modules() )
     {
-        for( BOARD_ITEM* item = module->GraphicalItemsList(); item; item = item->Next() )
+        for( auto item : module->GraphicalItems() )
         {
             if( !aLayerMask[ item->GetLayer() ] )
                 continue;
@@ -775,7 +775,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
     for( auto module : aBoard->Modules() )
     {
-        for( BOARD_ITEM* item = module->GraphicalItemsList(); item; item = item->Next() )
+        for( auto item : module->GraphicalItems() )
         {
             if( layer != item->GetLayer() )
                 continue;

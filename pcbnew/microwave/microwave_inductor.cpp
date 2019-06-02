@@ -398,7 +398,7 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
         PtSegm->SetShape( S_SEGMENT );
         PtSegm->SetStart0( PtSegm->GetStart() - module->GetPosition() );
         PtSegm->SetEnd0( PtSegm->GetEnd() - module->GetPosition() );
-        module->GraphicalItemsList().PushBack( PtSegm );
+        module->Add( PtSegm );
     }
 
     // Place a pad on each end of coil.

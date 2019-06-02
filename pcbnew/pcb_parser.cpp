@@ -2140,7 +2140,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
                     break;
 
                 default:
-                    module->GraphicalItemsList().PushBack( text );
+                    module->Add( text );
                 }
             }
             break;
@@ -2154,7 +2154,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
                 EDGE_MODULE* em = parseEDGE_MODULE();
                 em->SetParent( module.get() );
                 em->SetDrawCoord();
-                module->GraphicalItemsList().PushBack( em );
+                module->Add( em );
             }
             break;
 

@@ -1338,7 +1338,8 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb,
             export_vrml_text_module( &aModule->Value() );
 
         // Export module edges
-        for( EDA_ITEM* item = aModule->GraphicalItemsList(); item; item = item->Next() )
+
+        for( auto item : aModule->GraphicalItems() )
         {
             switch( item->Type() )
             {

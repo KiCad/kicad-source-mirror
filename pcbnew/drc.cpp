@@ -1031,7 +1031,7 @@ void DRC::testCopperTextAndGraphics()
         if( module->IsNetTie() )
             continue;
 
-        for( BOARD_ITEM* item = module->GraphicalItemsList();  item;  item = item->Next() )
+        for( auto item : module->GraphicalItems() )
         {
             if( IsCopperLayer( item->GetLayer() ) )
             {

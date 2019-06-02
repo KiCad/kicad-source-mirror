@@ -66,7 +66,7 @@ size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
             if( aFlags & ROTATION )
                 ret ^= hash<double>{}( module->GetOrientation() );
 
-            for( const BOARD_ITEM* i = module->GraphicalItemsList(); i; i = i->Next() )
+            for( auto i : module->GraphicalItems() )
                 ret ^= hash_eda( i, aFlags );
 
             for( auto i : module->Pads() )
