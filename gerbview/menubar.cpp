@@ -65,6 +65,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     Kiface().GetFileHistory().UseMenu( openRecentGbrMenu );
     Kiface().GetFileHistory().AddFilesToMenu();
 
+    // Add drill file menu and the drill file history
     if( openRecentDrlMenu )
         m_drillFileHistory.RemoveMenu( openRecentDrlMenu );
 
@@ -73,14 +74,22 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     openRecentDrlMenu->SetTitle( _( "Open Recent Drill File" ) );
     openRecentDrlMenu->SetIcon( recent_xpm );
 
+    m_drillFileHistory.UseMenu( openRecentDrlMenu );
+    m_drillFileHistory.AddFilesToMenu( );
+
+    // Add job file menu and the job file history
     if( openRecentJobMenu )
         m_jobFileHistory.RemoveMenu( openRecentJobMenu );
 
     openRecentJobMenu = new ACTION_MENU();
     openRecentJobMenu->SetTool( selTool );
     openRecentJobMenu->SetTitle( _( "Open Recent Job" ) );
-    openRecentJobMenu->SetIcon( recent_xpm );
 
+    openRecentJobMenu->SetIcon( recent_xpm );
+    m_jobFileHistory.UseMenu( openRecentJobMenu );
+    m_jobFileHistory.AddFilesToMenu( );
+
+    // Add zip file menu and the zip file history
     if( openRecentZipMenu )
         m_zipFileHistory.RemoveMenu( openRecentZipMenu );
 
@@ -88,6 +97,9 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     openRecentZipMenu->SetTool( selTool );
     openRecentZipMenu->SetTitle( _( "Open Recent Zip" ) );
     openRecentZipMenu->SetIcon( recent_xpm );
+
+    m_zipFileHistory.UseMenu( openRecentZipMenu );
+    m_zipFileHistory.AddFilesToMenu( );
 
     fileMenu->AddItem( wxID_FILE, _( "Open &Gerber File(s)..." ),
                        _( "Open Gerber file(s) on the current layer. Previous data will be deleted" ),
