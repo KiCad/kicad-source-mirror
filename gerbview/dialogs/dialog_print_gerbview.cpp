@@ -36,6 +36,7 @@
 #include <gerber_file_image_list.h>
 #include <tool/tool_manager.h>
 #include <tools/gerbview_actions.h>
+#include <tools/gerbview_control.h>
 
 ///@{
 /// \ingroup config
@@ -309,13 +310,15 @@ void DIALOG_PRINT_GERBVIEW::saveSettings()
 }
 
 
-void GERBVIEW_FRAME::ToPrinter( wxCommandEvent& event )
+int GERBVIEW_CONTROL::Print( const TOOL_EVENT& aEvent )
 {
     // Selection affects the original item visibility
-    GetToolManager()->RunAction( GERBVIEW_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( GERBVIEW_ACTIONS::selectionClear, true );
 
-    BOARD_PRINTOUT_SETTINGS settings( GetPageSettings() );
-    DIALOG_PRINT_GERBVIEW dlg( this, &settings );
+    BOARD_PRINTOUT_SETTINGS settings( m_frame->GetPageSettings() );
+    DIALOG_PRINT_GERBVIEW dlg( m_frame, &settings );
     dlg.ForcePrintBorder( false );
     dlg.ShowModal();
+
+    return 0;
 }

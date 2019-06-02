@@ -42,6 +42,31 @@ TOOL_ACTION EE_ACTIONS::showComponentTree( "eeschema.SymbolLibraryControl.showCo
         search_tree_xpm );
 
 
+int LIB_CONTROL::AddLibrary( const TOOL_EVENT& aEvent )
+{
+    bool createNew = aEvent.IsAction( &ACTIONS::newLibrary );
+
+    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+        static_cast<LIB_EDIT_FRAME*>( m_frame )->AddLibraryFile( createNew );
+
+    return 0;
+}
+
+
+int LIB_CONTROL::AddSymbol( const TOOL_EVENT& aEvent )
+{
+    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+    {
+        if( aEvent.IsAction( &EE_ACTIONS::newSymbol ) )
+            static_cast<LIB_EDIT_FRAME*>( m_frame )->CreateNewPart();
+        else if( aEvent.IsAction( &EE_ACTIONS::importSymbol ) )
+            static_cast<LIB_EDIT_FRAME*>( m_frame )->ImportPart();
+    }
+
+    return 0;
+}
+
+
 int LIB_CONTROL::Save( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
@@ -140,8 +165,14 @@ int LIB_CONTROL::ShowElectricalTypes( const TOOL_EVENT& aEvent )
 
 void LIB_CONTROL::setTransitions()
 {
+    Go( &LIB_CONTROL::AddLibrary,            ACTIONS::newLibrary.MakeEvent() );
+    Go( &LIB_CONTROL::AddLibrary,            ACTIONS::addLibrary.MakeEvent() );
+    Go( &LIB_CONTROL::AddSymbol,             EE_ACTIONS::newSymbol.MakeEvent() );
+    Go( &LIB_CONTROL::AddSymbol,             EE_ACTIONS::importSymbol.MakeEvent() );
+
     Go( &LIB_CONTROL::Save,                  ACTIONS::save.MakeEvent() );
-    Go( &LIB_CONTROL::SaveAs,                ACTIONS::saveAs.MakeEvent() );
+    Go( &LIB_CONTROL::SaveAs,                ACTIONS::saveAs.MakeEvent() );     // for libraries
+    Go( &LIB_CONTROL::SaveAs,                ACTIONS::saveCopyAs.MakeEvent() ); // for symbols
     Go( &LIB_CONTROL::SaveAll,               ACTIONS::saveAll.MakeEvent() );
     Go( &LIB_CONTROL::Revert,                ACTIONS::revert.MakeEvent() );
 

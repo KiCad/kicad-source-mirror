@@ -64,6 +64,7 @@ public:
     static TOOL_ACTION polygonsDisplayOutlines;
     static TOOL_ACTION negativeObjectDisplay;
     static TOOL_ACTION dcodeDisplay;
+    static TOOL_ACTION toggleDiffMode;
 
     // Layer control
     static TOOL_ACTION layerPrev;

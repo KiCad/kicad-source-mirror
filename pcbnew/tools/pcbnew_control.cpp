@@ -117,19 +117,6 @@ TOOL_ACTION PCB_ACTIONS::zoneDisplayOutlines( "pcbnew.Control.zoneDisplayOutline
         _( "Sketch Zones" ), _( "Outline filled areas of zones" ),
         show_zone_outline_only_xpm);
 
-TOOL_ACTION PCB_ACTIONS::highContrastMode( "pcbnew.Control.highContrastMode",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_HIGHCONTRAST_MODE ),
-        _( "High Contrast Mode" ), _( "Use high contrast display mode" ),
-        contrast_mode_xpm );
-
-TOOL_ACTION PCB_ACTIONS::highContrastInc( "pcbnew.Control.highContrastInc",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HIGHCONTRAST_INC ),
-        "", "" );
-
-TOOL_ACTION PCB_ACTIONS::highContrastDec( "pcbnew.Control.highContrastDec",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HIGHCONTRAST_DEC ),
-        "", "" );
-
 
 // Layer control
 TOOL_ACTION PCB_ACTIONS::layerTop( "pcbnew.Control.layerTop",
@@ -1067,9 +1054,9 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,     PCB_ACTIONS::zoneDisplayEnable.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,     PCB_ACTIONS::zoneDisplayDisable.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,     PCB_ACTIONS::zoneDisplayOutlines.MakeEvent() );
-    Go( &PCBNEW_CONTROL::HighContrastMode,    PCB_ACTIONS::highContrastMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::HighContrastInc,     PCB_ACTIONS::highContrastInc.MakeEvent() );
-    Go( &PCBNEW_CONTROL::HighContrastDec,     PCB_ACTIONS::highContrastDec.MakeEvent() );
+    Go( &PCBNEW_CONTROL::HighContrastMode,    ACTIONS::highContrastMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::HighContrastInc,     ACTIONS::highContrastInc.MakeEvent() );
+    Go( &PCBNEW_CONTROL::HighContrastDec,     ACTIONS::highContrastDec.MakeEvent() );
 
     // Layer control
     Go( &PCBNEW_CONTROL::LayerSwitch,         PCB_ACTIONS::layerTop.MakeEvent() );

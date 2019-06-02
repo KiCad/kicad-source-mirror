@@ -85,10 +85,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Set up toolbar
-    m_mainToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString,
-                            KiScaledBitmap( new_component_xpm, this ),
-                            _( "Create new symbol" ) );
-
+    m_mainToolBar->Add( EE_ACTIONS::newSymbol );
     m_mainToolBar->Add( ACTIONS::saveAll );
 
     m_mainToolBar->AddSeparator();
@@ -107,11 +104,8 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( EE_ACTIONS::pinTable );
 
     KiScaledSeparator( m_mainToolBar, this );
-
     m_mainToolBar->Add( EE_ACTIONS::showDatasheet );
-
-    m_mainToolBar->AddTool( ID_LIBEDIT_CHECK_PART, wxEmptyString, KiScaledBitmap( erc_xpm, this ),
-                            _( "Check duplicate and off grid pins" ) );
+    m_mainToolBar->Add( EE_ACTIONS::runERC );
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->Add( EE_ACTIONS::showDeMorganStandard, ACTION_TOOLBAR::TOGGLE );

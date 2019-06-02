@@ -217,39 +217,26 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     viewMenu->AddCheckItem( GERBVIEW_ACTIONS::polygonsDisplayOutlines, sketchPolygonsCondition );
     viewMenu->AddCheckItem( GERBVIEW_ACTIONS::dcodeDisplay,            showDcodes );
     viewMenu->AddCheckItem( GERBVIEW_ACTIONS::negativeObjectDisplay,   showNegativeObjects );
-
-    viewMenu->AddCheckItem( ID_TB_OPTIONS_DIFF_MODE,
-                            _( "Show in Differential Mode" ),
-                            _( "Show layers in differential mode" ),
-                            gbr_select_mode2_xpm,                      diffModeCondition );
-
-    viewMenu->AddCheckItem( ID_TB_OPTIONS_HIGH_CONTRAST_MODE,
-                            AddHotkeyName( _( "Show in High Contrast" ), GerbviewHotkeysDescr, HK_SWITCH_HIGHCONTRAST_MODE ),
-                            _( "Show in high contrast mode" ),
-                            contrast_mode_xpm,                         contrastModeCondition );
+    viewMenu->AddCheckItem( GERBVIEW_ACTIONS::toggleDiffMode,          diffModeCondition );
+    viewMenu->AddCheckItem( ACTIONS::highContrastMode,                 contrastModeCondition );
 
     viewMenu->Resolve();
 
     //-- Tools menu -------------------------------------------------------
     //
-    wxMenu* toolsMenu = new wxMenu;
+    ACTION_MENU* toolsMenu = new ACTION_MENU();
 
-    // List dcodes
-    AddMenuItem( toolsMenu, ID_GERBVIEW_SHOW_LIST_DCODES, _( "&List DCodes..." ),
-                 _( "List D-codes defined in Gerber files" ),
-                 KiBitmap( show_dcodenumber_xpm ) );
+    toolsMenu->Add( _( "&List DCodes..." ), _( "List D-codes defined in Gerber files" ),
+                    ID_GERBVIEW_SHOW_LIST_DCODES, show_dcodenumber_xpm );
 
-    // Show source
-    AddMenuItem( toolsMenu, ID_GERBVIEW_SHOW_SOURCE, _( "&Show Source..." ),
-                 _( "Show source file for the current layer" ),
-                 KiBitmap( tools_xpm ) );
+    toolsMenu->Add( _( "&Show Source..." ), _( "Show source file for the current layer" ),
+                    ID_GERBVIEW_SHOW_SOURCE, tools_xpm );
+
+    toolsMenu->Add( GERBVIEW_ACTIONS::measureTool );
 
     toolsMenu->AppendSeparator();
-
-    // Erase graphic layer
-    AddMenuItem( toolsMenu, ID_GERBVIEW_ERASE_CURR_LAYER, _( "&Clear Current Layer..." ),
-                 _( "Clear the graphic layer currently selected" ),
-                 KiBitmap( delete_sheet_xpm ) );
+    toolsMenu->Add( _( "Clear Current Layer..." ), _( "Clear the selected graphic layer" ),
+                    ID_GERBVIEW_ERASE_CURR_LAYER, delete_sheet_xpm );
 
     //-- Preferences menu -----------------------------------------------
     //

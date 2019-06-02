@@ -97,10 +97,9 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_zipFileHistory.SetMaxFiles( fileHistorySize );
     m_jobFileHistory.SetMaxFiles( fileHistorySize );
 
-    EDA_DRAW_PANEL_GAL* galCanvas = new GERBVIEW_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ),
-                                            m_FrameSize,
-                                            GetGalDisplayOptions(),
-                                            EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
+    auto* galCanvas = new GERBVIEW_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                                   GetGalDisplayOptions(),
+                                                   EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
 
     SetGalCanvas( galCanvas );
 
@@ -757,20 +756,11 @@ bool GERBVIEW_FRAME::IsElementVisible( int aLayerID ) const
 {
     switch( aLayerID )
     {
-    case LAYER_DCODES:
-        return m_DisplayOptions.m_DisplayDCodes;
-
-    case LAYER_NEGATIVE_OBJECTS:
-        return m_DisplayOptions.m_DisplayNegativeObjects;
-
-    case LAYER_GERBVIEW_GRID:
-        return IsGridVisible();
-
-    case LAYER_WORKSHEET:
-        return m_showBorderAndTitleBlock;
-
-    case LAYER_PCB_BACKGROUND:
-        return true;
+    case LAYER_DCODES:           return m_DisplayOptions.m_DisplayDCodes;
+    case LAYER_NEGATIVE_OBJECTS: return m_DisplayOptions.m_DisplayNegativeObjects;
+    case LAYER_GERBVIEW_GRID:    return IsGridVisible();
+    case LAYER_WORKSHEET:        return m_showBorderAndTitleBlock;
+    case LAYER_PCB_BACKGROUND:   return true;
 
     default:
         wxLogDebug( wxT( "GERBVIEW_FRAME::IsElementVisible(): bad arg %d" ), aLayerID );

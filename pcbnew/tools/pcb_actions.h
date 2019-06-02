@@ -218,9 +218,6 @@ public:
     static TOOL_ACTION zoneDisplayEnable;
     static TOOL_ACTION zoneDisplayDisable;
     static TOOL_ACTION zoneDisplayOutlines;
-    static TOOL_ACTION highContrastMode;
-    static TOOL_ACTION highContrastInc;
-    static TOOL_ACTION highContrastDec;
 
     // Layer control
     static TOOL_ACTION layerTop;

@@ -166,10 +166,16 @@ public:
     static TOOL_ACTION generateBOM;
     static TOOL_ACTION runSimulation;
 
-    // Miscellaneous
+    // Library management
+    static TOOL_ACTION newSymbol;
+    static TOOL_ACTION importSymbol;
+
+    // Hierarchy navigation
     static TOOL_ACTION enterSheet;
     static TOOL_ACTION leaveSheet;
     static TOOL_ACTION navigateHierarchy;
+
+    // Miscellaneous
     static TOOL_ACTION cleanupSheetPins;
     static TOOL_ACTION toggleHiddenPins;
     static TOOL_ACTION symbolProperties;

@@ -47,6 +47,7 @@ public:
     // Generic document actions
     static TOOL_ACTION doNew;           // sadly 'new' is a reserved word
     static TOOL_ACTION newLibrary;
+    static TOOL_ACTION addLibrary;
     static TOOL_ACTION open;
     static TOOL_ACTION save;
     static TOOL_ACTION saveAs;
@@ -92,6 +93,9 @@ public:
     static TOOL_ACTION centerContents;
     static TOOL_ACTION toggleCursor;
     static TOOL_ACTION toggleCursorStyle;
+    static TOOL_ACTION highContrastMode;
+    static TOOL_ACTION highContrastInc;
+    static TOOL_ACTION highContrastDec;
 
     /// Cursor control with keyboard
     static TOOL_ACTION cursorUp;

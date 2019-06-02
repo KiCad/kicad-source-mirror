@@ -182,7 +182,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->AddSeparator();
     m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode,     ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( PCB_ACTIONS::moduleEdgeOutlines, ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( PCB_ACTIONS::highContrastMode,   ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::highContrastMode,       ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddSeparator();
     m_optionsToolBar->AddTool( ID_MODEDIT_SHOW_HIDE_SEARCH_TREE, wxEmptyString,
@@ -208,7 +208,7 @@ void FOOTPRINT_EDIT_FRAME::SyncMenusAndToolbars()
     m_optionsToolBar->Toggle( ACTIONS::togglePolarCoords,      GetShowPolarCoords() );
     m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,     !opts->m_DisplayPadFill );
     m_optionsToolBar->Toggle( PCB_ACTIONS::moduleEdgeOutlines, !opts->m_DisplayModEdgeFill );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::highContrastMode,   opts->m_ContrastModeDisplay );
+    m_optionsToolBar->Toggle( ACTIONS::highContrastMode,       opts->m_ContrastModeDisplay );
     m_optionsToolBar->Refresh();
 
     m_drawToolBar->Toggle( PCB_ACTIONS::selectionTool, GetToolId() == ID_NO_TOOL_SELECTED );

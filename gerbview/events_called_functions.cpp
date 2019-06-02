@@ -86,7 +86,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     // menu Miscellaneous
     EVT_MENU( ID_GERBVIEW_ERASE_CURR_LAYER, GERBVIEW_FRAME::Process_Special_Functions )
 
-    EVT_TOOL( wxID_PRINT, GERBVIEW_FRAME::ToPrinter )
     EVT_COMBOBOX( ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER, GERBVIEW_FRAME::OnSelectActiveLayer )
 
     EVT_SELECT_DCODE( ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE, GERBVIEW_FRAME::OnSelectActiveDCode )
@@ -95,13 +94,10 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
                     GERBVIEW_FRAME::Process_Special_Functions )
 
     // Option toolbar
-    EVT_TOOL( ID_TB_MEASUREMENT_TOOL, GERBVIEW_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
               GERBVIEW_FRAME::OnToggleShowLayerManager )
     EVT_TOOL_RANGE( ID_TB_OPTIONS_SHOW_GBR_MODE_0, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
                     GERBVIEW_FRAME::OnSelectDisplayMode )
-    EVT_TOOL( ID_TB_OPTIONS_DIFF_MODE, GERBVIEW_FRAME::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_HIGH_CONTRAST_MODE, GERBVIEW_FRAME::OnSelectOptionToolbar )
 
     // Auxiliary horizontal toolbar
     EVT_CHOICE( ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE, GERBVIEW_FRAME::OnSelectHighlightChoice )
@@ -141,10 +137,6 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_GERBVIEW_ERASE_CURR_LAYER:
         Erase_Current_DrawLayer( true );
         ClearMsgPanel();
-        break;
-
-    case ID_TB_MEASUREMENT_TOOL:
-        SetToolID( id, wxCURSOR_DEFAULT, _( "Unsupported tool in this canvas" ) );
         break;
 
     case ID_GERBVIEW_SHOW_LIST_DCODES:
@@ -311,37 +303,4 @@ void GERBVIEW_FRAME::OnToggleShowLayerManager( wxCommandEvent& aEvent )
     // show/hide auxiliary Vertical layers and visibility manager toolbar
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
     m_auimgr.Update();
-}
-
-
-void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
-{
-    int     id = event.GetId();
-    bool    needs_refresh = false;
-
-    GBR_DISPLAY_OPTIONS options = m_DisplayOptions;
-
-    switch( id )
-    {
-    case ID_TB_OPTIONS_DIFF_MODE:
-        options.m_DiffMode = !options.m_DiffMode;
-        needs_refresh = true;
-        break;
-
-    case ID_TB_OPTIONS_HIGH_CONTRAST_MODE:
-        options.m_HighContrastMode = !options.m_HighContrastMode;
-        needs_refresh = true;
-        break;
-
-    case ID_TB_MEASUREMENT_TOOL:
-        SetToolID( id, wxCURSOR_DEFAULT, _( "Unsupported tool in this canvas" ) );
-        break;
-
-    default:
-        wxMessageBox( wxT( "GERBVIEW_FRAME::OnSelectOptionToolbar error" ) );
-        break;
-    }
-
-    if( needs_refresh )
-        UpdateDisplayOptions( options );
 }

@@ -22,24 +22,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file cvpcb/menubar.cpp
- * @brief (Re)Create the menubar for CvPcb
- */
-
 #include <common_help_msg.h>
 #include <kiface_i.h>
 #include <menus_helpers.h>
 #include <pgm_base.h>
-
+#include <tool/action_menu.h>
+#include <tool/actions.h>
 #include "cvpcb.h"
 #include "cvpcb_id.h"
 #include "cvpcb_mainframe.h"
 
 
-/**
- * @brief (Re)Create the menubar for the CvPcb mainframe
- */
 void CVPCB_MAINFRAME::ReCreateMenuBar()
 {
     // wxWidgets handles the Mac Application menu behind the scenes, but that means

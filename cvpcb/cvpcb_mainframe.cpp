@@ -368,7 +368,6 @@ void CVPCB_MAINFRAME::ToPreviousNA( wxCommandEvent& event )
 void CVPCB_MAINFRAME::OnOK( wxCommandEvent& aEvent )
 {
     SaveFootprintAssociation( false );
-
     m_modified = false;
 
     Close( true );
@@ -378,7 +377,6 @@ void CVPCB_MAINFRAME::OnOK( wxCommandEvent& aEvent )
 void CVPCB_MAINFRAME::OnSaveAndContinue( wxCommandEvent& aEvent )
 {
     SaveFootprintAssociation( true );
-
     m_modified = false;
 }
 

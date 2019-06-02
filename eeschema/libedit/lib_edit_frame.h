@@ -205,25 +205,14 @@ public:
     void OnExportBody( wxCommandEvent& aEvent );
 
     /**
-     * Creates a new library. The library is added to the project libraries table.
+     * Creates or adds an existing library to the symbol library table.
      */
-    void OnCreateNewLibrary( wxCommandEvent& aEvent )
-    {
-        addLibraryFile( true );
-    }
-
-    /**
-     * Adds an existing library. The library is added to the project libraries table.
-     */
-    void OnAddLibrary( wxCommandEvent& aEvent )
-    {
-        addLibraryFile( false );
-    }
+    bool AddLibraryFile( bool aCreateNew );
 
     /**
      * Creates a new part in the selected library.
      */
-    void OnCreateNewPart( wxCommandEvent& aEvent );
+    void CreateNewPart();
 
     /**
      * Opens the selected part for editing.
@@ -236,7 +225,7 @@ public:
      * Or 1 component if there are several.
      * If the first component is an alias, it will load the corresponding root.
      */
-    void OnImportPart( wxCommandEvent& event );
+    void ImportPart();
 
     /**
      * Creates a new library and backup the current component in this library or exports
@@ -285,8 +274,6 @@ public:
 
     bool IsSearchTreeShown();
     void ClearSearchTreeSelection();
-
-    void OnCheckComponent( wxCommandEvent& event );
 
     void OnUpdateHavePart( wxUpdateUIEvent& aEvent );
     void OnUpdateSyncPinEdit( wxUpdateUIEvent& event );
@@ -541,9 +528,6 @@ private:
 
     ///> Saves the current part.
     bool saveCurrentPart();
-
-    ///> Creates or adds an existing library to the symbol library table.
-    bool addLibraryFile( bool aCreateNew );
 
     ///> Stores the currently modified part in the library manager buffer.
     void storeCurrentPart();

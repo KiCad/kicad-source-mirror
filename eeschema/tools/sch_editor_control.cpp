@@ -131,6 +131,16 @@ TOOL_ACTION EE_ACTIONS::generateBOM( "eeschema.EditorControl.generateBOM",
         _( "Generate BOM..." ), _( "Generate a bill of materials for the current schematic" ),
         bom_xpm );
 
+TOOL_ACTION EE_ACTIONS::newSymbol( "eeschema.EditorControl.newSymbol",
+        AS_GLOBAL, 0,
+        _( "New Symbol..." ), _( "Create a new symbol" ),
+        new_component_xpm );
+
+TOOL_ACTION EE_ACTIONS::importSymbol( "eeschema.EditorControl.importSymbol",
+        AS_GLOBAL, 0,
+        _( "Import Symbol..." ), _( "Import a symbol to the current library" ),
+        import_part_xpm );
+
 TOOL_ACTION EE_ACTIONS::enterSheet( "eeschema.EditorControl.enterSheet",
         AS_GLOBAL, 0,
         _( "Enter Sheet" ), _( "Display the selected sheet's contents in the Eeschema window" ),

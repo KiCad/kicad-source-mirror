@@ -251,9 +251,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     contrastModeSubMenu->SetTitle( _( "&Contrast Mode" ) );
     contrastModeSubMenu->SetIcon( contrast_mode_xpm );
 
-    contrastModeSubMenu->AddCheckItem( PCB_ACTIONS::highContrastMode,   contrastModeCondition );
-    contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaDec, SELECTION_CONDITIONS::ShowAlways );
-    contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaInc, SELECTION_CONDITIONS::ShowAlways );
+    contrastModeSubMenu->AddCheckItem( ACTIONS::highContrastMode, contrastModeCondition );
+    contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaDec,     SELECTION_CONDITIONS::ShowAlways );
+    contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaInc,     SELECTION_CONDITIONS::ShowAlways );
     viewMenu->AddMenu( contrastModeSubMenu );
 
     viewMenu->AddSeparator();

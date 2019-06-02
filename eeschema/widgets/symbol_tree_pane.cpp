@@ -30,16 +30,20 @@
 #include <lib_edit_frame.h>
 #include <symbol_lib_table.h>
 #include <menus_helpers.h>
-
+#include <tool/action_menu.h>
+#include <tool/actions.h>
+#include <tools/ee_actions.h>
 
 SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
         : wxPanel( aParent ),
-          m_libEditFrame( aParent ), m_tree( nullptr ), m_libMgr( aLibMgr )
+          m_libEditFrame( aParent ),
+          m_tree( nullptr ),
+          m_libMgr( aLibMgr )
 {
     // Create widgets
     wxBoxSizer* boxSizer = new wxBoxSizer( wxVERTICAL );
-    m_tree = new LIB_TREE( this, &SYMBOL_LIB_TABLE::GetGlobalLibTable(),
-            m_libMgr->GetAdapter(), LIB_TREE::SEARCH );
+    m_tree = new LIB_TREE( this, &SYMBOL_LIB_TABLE::GetGlobalLibTable(), m_libMgr->GetAdapter(),
+                           LIB_TREE::SEARCH );
     boxSizer->Add( m_tree, 1, wxEXPAND, 5 );
 
     SetSizer( boxSizer );      // should remove the previous sizer according to wxWidgets docs
@@ -47,42 +51,32 @@ SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMg
     boxSizer->Fit( this );
 
     // Setup right click-context menus
-    std::unique_ptr<wxMenu> menuLibrary = std::make_unique<wxMenu>();
+    std::unique_ptr<ACTION_MENU> menuLibrary = std::make_unique<ACTION_MENU>();
 
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_NEW_LIBRARY, _( "&New Library..." ),
-                 KiBitmap( new_library_xpm ) );
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_ADD_LIBRARY, _( "&Add Library..." ),
-                 KiBitmap( add_library_xpm ) );
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_SAVE, _( "&Save" ),
-                 KiBitmap( save_xpm ) );
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_SAVE_AS, _( "Save As..." ),
-                 KiBitmap( save_as_xpm ) );
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_REVERT, _( "Revert" ),
-                 KiBitmap( undo_xpm ) );
+    menuLibrary->Add( ACTIONS::newLibrary );
+    menuLibrary->Add( ACTIONS::addLibrary );
+    menuLibrary->Add( ACTIONS::save );
+    menuLibrary->Add( ACTIONS::saveAs );
+    menuLibrary->Add( ACTIONS::revert );
 
     menuLibrary->AppendSeparator();
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_NEW_PART, _( "New Sy&mbol..." ),
-                 KiBitmap( new_component_xpm ) );
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_IMPORT_PART, _( "&Import Symbol..." ),
-                 KiBitmap( import_part_xpm ) );
+    menuLibrary->Add( EE_ACTIONS::newSymbol );
+    menuLibrary->Add( EE_ACTIONS::importSymbol );
     AddMenuItem( menuLibrary.get(), ID_LIBEDIT_PASTE_PART, _( "Paste Symbol" ),
                  KiBitmap( paste_xpm ) );
 
-    std::unique_ptr<wxMenu> menuPart = std::make_unique<wxMenu>();
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_EDIT_PART, _( "&Edit Symbol" ),
+    std::unique_ptr<ACTION_MENU> menuPart = std::make_unique<ACTION_MENU>();
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_EDIT_PART, _( "Edit Symbol" ),
                  KiBitmap( edit_xpm ) );
 
     menuPart->AppendSeparator();
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_SAVE, _( "&Save" ),
-                 KiBitmap( save_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_SAVE_AS, _( "Save a Copy As..." ),
-                 KiBitmap( save_xpm ) );
+    menuPart->Add( ACTIONS::save );
+    menuPart->Add( ACTIONS::saveCopyAs );
     AddMenuItem( menuPart.get(), ID_LIBEDIT_DUPLICATE_PART, _( "Duplicate" ),
                  KiBitmap( duplicate_xpm ) );
     AddMenuItem( menuPart.get(), ID_LIBEDIT_REMOVE_PART, _( "Delete" ),
                  KiBitmap( delete_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_REVERT, _( "Revert" ),
-                 KiBitmap( undo_xpm ) );
+    menuPart->Add( ACTIONS::revert );
 
     menuPart->AppendSeparator();
     AddMenuItem( menuPart.get(), ID_LIBEDIT_CUT_PART, _( "Cut" ),
@@ -95,11 +89,9 @@ SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMg
                  KiBitmap( export_part_xpm ) );
 
     // Menu displayed when nothing is selected
-    std::unique_ptr<wxMenu> menuNoSelection = std::make_unique<wxMenu>();
-    AddMenuItem( menuNoSelection.get(), ID_LIBEDIT_NEW_LIBRARY, _( "&New Library..." ),
-                 KiBitmap( new_library_xpm ) );
-    AddMenuItem( menuNoSelection.get(), ID_LIBEDIT_ADD_LIBRARY, _( "&Add Library..." ),
-                 KiBitmap( add_library_xpm ) );
+    std::unique_ptr<ACTION_MENU> menuNoSelection = std::make_unique<ACTION_MENU>();
+    menuLibrary->Add( ACTIONS::newLibrary );
+    menuLibrary->Add( ACTIONS::addLibrary );
 
     m_tree->SetMenu( LIB_TREE_NODE::LIBID, std::move( menuPart ) );
     m_tree->SetMenu( LIB_TREE_NODE::LIB, std::move( menuLibrary ) );

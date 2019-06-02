@@ -36,7 +36,7 @@
 #include <wx/filename.h>
 
 
-void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
+void LIB_EDIT_FRAME::ImportPart()
 {
     wxString msg;
     wxString libName = getTargetLib();

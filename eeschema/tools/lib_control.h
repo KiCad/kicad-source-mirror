@@ -44,6 +44,9 @@ public:
 
     virtual ~LIB_CONTROL() { }
 
+    int AddLibrary( const TOOL_EVENT& aEvent );
+    int AddSymbol( const TOOL_EVENT& aEvent );
+
     int Save( const TOOL_EVENT& aEvent );
     int SaveAs( const TOOL_EVENT& aEvent );
     int SaveAll( const TOOL_EVENT& aEvent );

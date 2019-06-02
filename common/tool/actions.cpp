@@ -14,6 +14,11 @@ TOOL_ACTION ACTIONS::newLibrary( "common.Control.newLibrary",
         _( "New Library..." ), _( "Create a new library folder" ),
         new_generic_xpm );
 
+TOOL_ACTION ACTIONS::addLibrary( "common.Control.addLibrary",
+        AS_GLOBAL, 0,
+        _( "Add Library..." ), _( "Add an existing library folder" ),
+        add_library_xpm );
+
 TOOL_ACTION ACTIONS::open( "common.Control.open",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_OPEN ),
         _( "Open..." ), _( "Open existing document" ),
@@ -325,6 +330,19 @@ TOOL_ACTION ACTIONS::toggleCursorStyle( "common.Control.toggleCursorStyle",
         AS_GLOBAL, 0,
         _( "Full-Window Crosshairs" ), _( "Switch display of full-window crosshairs" ),
         cursor_shape_xpm );
+
+TOOL_ACTION ACTIONS::highContrastMode( "common.Control.highContrastMode",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_HIGHCONTRAST_MODE ),
+        _( "High Contrast Mode" ), _( "Use high contrast display mode" ),
+        contrast_mode_xpm );
+
+TOOL_ACTION ACTIONS::highContrastInc( "common.Control.highContrastInc",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HIGHCONTRAST_INC ),
+        "", "" );
+
+TOOL_ACTION ACTIONS::highContrastDec( "common.Control.highContrastDec",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HIGHCONTRAST_DEC ),
+        "", "" );
 
 TOOL_ACTION ACTIONS::acceleratedGraphics( "common.Control.acceleratedGraphics",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_CANVAS_OPENGL ),

@@ -122,7 +122,7 @@ public:
     void             OnSize( wxSizeEvent& SizeEvent );
     void             OnKeyDown( wxKeyEvent& aEvent );
     void             ReCreateHToolbar();
-    virtual void     ReCreateMenuBar() override;
+    void             ReCreateMenuBar() override;
     void             ShowChangedLanguage() override;
 
     void             ChangeFocus( bool aMoveRight );

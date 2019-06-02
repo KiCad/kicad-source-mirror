@@ -51,6 +51,8 @@ public:
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
 
 private:
+    void checkPart( LIB_PART* aPart );
+
     ///> @copydoc TOOL_INTERACTIVE::setTransitions();
     void setTransitions() override;
 };

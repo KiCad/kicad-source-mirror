@@ -410,7 +410,6 @@ public:
     void ShowChangedLanguage() override;
 
     void Process_Special_Functions( wxCommandEvent& event );
-    void OnSelectOptionToolbar( wxCommandEvent& event );
 
     /// Handles the changing of the highlighted component/net/attribute
     void OnSelectHighlightChoice( wxCommandEvent& event );
@@ -461,12 +460,6 @@ public:
     void OnUpdateDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectDCode( wxUpdateUIEvent& aEvent );
     void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
-
-    /**
-     * Function ToPrinter
-     * Open a dialog frame to print layers
-     */
-    void ToPrinter( wxCommandEvent& event );
 
     void Files_io( wxCommandEvent& event );
 

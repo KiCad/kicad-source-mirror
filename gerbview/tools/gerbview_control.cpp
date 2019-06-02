@@ -92,6 +92,11 @@ TOOL_ACTION GERBVIEW_ACTIONS::dcodeDisplay( "gerbview.Control.dcodeDisplay",
         _( "Show DCodes" ), _( "Show dcode number" ),
         show_dcodenumber_xpm );
 
+TOOL_ACTION GERBVIEW_ACTIONS::toggleDiffMode( "gerbview.Control.toggleDiffMode",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GBR_DCODE_DISPLAY_ONOFF ),
+        _( "Show in Differential Mode" ), _( "Show layers in diff (compare) mode" ),
+        gbr_select_mode2_xpm );
+
 TOOL_ACTION GERBVIEW_ACTIONS::showHelp( "gerbview.Control.showHelp",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HELP ),
         "", "" );
@@ -195,6 +200,16 @@ int GERBVIEW_CONTROL::DisplayControl( const TOOL_EVENT& aEvent )
         state = !m_frame->IsElementVisible( LAYER_DCODES );
         m_frame->SetElementVisibility( LAYER_DCODES, state );
     }
+    else if( aEvent.IsAction( &ACTIONS::highContrastMode ) )
+    {
+        options.m_HighContrastMode = !options.m_HighContrastMode;
+        needs_refresh = true;
+    }
+    else if( aEvent.IsAction( &GERBVIEW_ACTIONS::toggleDiffMode ) )
+    {
+        options.m_DiffMode = !options.m_DiffMode;
+        needs_refresh = true;
+    }
 
     if( needs_refresh )
         m_frame->UpdateDisplayOptions( options );
@@ -264,6 +279,8 @@ int GERBVIEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
 void GERBVIEW_CONTROL::setTransitions()
 {
+    Go( &GERBVIEW_CONTROL::Print,              ACTIONS::print.MakeEvent() );
+
     Go( &GERBVIEW_CONTROL::HighlightControl,   GERBVIEW_ACTIONS::highlightClear.MakeEvent() );
     Go( &GERBVIEW_CONTROL::HighlightControl,   GERBVIEW_ACTIONS::highlightNet.MakeEvent() );
     Go( &GERBVIEW_CONTROL::HighlightControl,   GERBVIEW_ACTIONS::highlightComponent.MakeEvent() );
@@ -277,6 +294,8 @@ void GERBVIEW_CONTROL::setTransitions()
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::polygonsDisplayOutlines.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::negativeObjectDisplay.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::dcodeDisplay.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::DisplayControl,     ACTIONS::highContrastMode.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::toggleDiffMode.MakeEvent() );
 
     Go( &GERBVIEW_CONTROL::ShowHelp,           GERBVIEW_ACTIONS::showHelp.MakeEvent() );
 

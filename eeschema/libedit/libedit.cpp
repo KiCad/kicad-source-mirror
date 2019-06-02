@@ -277,7 +277,7 @@ void LIB_EDIT_FRAME::OnSaveAll()
 }
 
 
-void LIB_EDIT_FRAME::OnCreateNewPart( wxCommandEvent& event )
+void LIB_EDIT_FRAME::CreateNewPart()
 {
     m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
     wxString lib = getTargetLib();
@@ -877,39 +877,3 @@ bool LIB_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
 }
 
 
-void LIB_EDIT_FRAME::DisplayCmpDoc()
-{
-    LIB_PART* part = GetCurPart();
-
-    EDA_DRAW_FRAME::ClearMsgPanel();
-
-    if( !part )
-        return;
-
-    LIB_ALIAS* alias = part->GetAlias( part->GetName() );
-    wxString msg = part->GetName();
-
-    AppendMsgPanel( _( "Name" ), msg, BLUE, 8 );
-
-    static wxChar UnitLetter[] = wxT( "?ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
-    msg = UnitLetter[m_unit];
-
-    AppendMsgPanel( _( "Unit" ), msg, BROWN, 8 );
-
-    if( m_convert > 1 )
-        msg = _( "Convert" );
-    else
-        msg = _( "Normal" );
-
-    AppendMsgPanel( _( "Body" ), msg, GREEN, 8 );
-
-    if( part->IsPower() )
-        msg = _( "Power Symbol" );
-    else
-        msg = _( "Symbol" );
-
-    AppendMsgPanel( _( "Type" ), msg, MAGENTA, 8 );
-    AppendMsgPanel( _( "Description" ), alias->GetDescription(), CYAN, 8 );
-    AppendMsgPanel( _( "Key words" ), alias->GetKeyWords(), DARKDARKGRAY );
-    AppendMsgPanel( _( "Datasheet" ), alias->GetDocFileName(), DARKDARKGRAY );
-}

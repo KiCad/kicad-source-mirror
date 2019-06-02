@@ -61,30 +61,18 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     //
     CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, selTool );
 
-    fileMenu->AddItem( ID_LIBEDIT_NEW_LIBRARY,
-                       _( "New Library..." ),
-                       _( "Creates an empty library" ),
-                       new_library_xpm,              EE_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( ID_LIBEDIT_ADD_LIBRARY,
-                       _( "Add Library..." ),
-                       _( "Adds a previously created library" ),
-                       add_library_xpm,              EE_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( ID_LIBEDIT_NEW_PART,
-                       AddHotkeyName( _( "New Symbol..." ), m_hotkeysDescrList, HK_NEW ),
-                       _( "Create a new symbol" ),
-                       new_component_xpm,            EE_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::newLibrary,          EE_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::addLibrary,          EE_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( EE_ACTIONS::newSymbol,        EE_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
     fileMenu->AddItem( ACTIONS::save,                modifiedDocumentCondition );
-    fileMenu->AddItem( ACTIONS::saveAs,              EE_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::saveCopyAs,          EE_CONDITIONS::ShowAlways );
     fileMenu->AddItem( ACTIONS::saveAll,             EE_CONDITIONS::ShowAlways );
     fileMenu->AddItem( ACTIONS::revert,              modifiedDocumentCondition );
 
     fileMenu->AddSeparator();
-    fileMenu->AddItem( ID_LIBEDIT_IMPORT_PART,
-                       _( "Import Symbol..." ),
-                       _( "Import a symbol to the current library" ),
-                       import_part_xpm,              EE_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( EE_ACTIONS::importSymbol,     EE_CONDITIONS::ShowAlways );
 
     // Export submenu
     ACTION_MENU* submenuExport = new ACTION_MENU();
@@ -209,12 +197,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     };
 
     inspectMenu->AddItem( EE_ACTIONS::showDatasheet,       datasheetAvailableCondition );
-
-    AddMenuItem( inspectMenu,
-                 ID_LIBEDIT_CHECK_PART,
-                 _( "Electrical Rules Checker" ),
-                 _( "Check for duplicate and off-grid pins" ),
-                 KiBitmap( erc_xpm ) );
+    inspectMenu->AddItem( EE_ACTIONS::runERC,              EE_CONDITIONS::ShowAlways );
 
     inspectMenu->Resolve();
 

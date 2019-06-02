@@ -236,16 +236,8 @@ void GERBVIEW_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( GERBVIEW_ACTIONS::polygonsDisplayOutlines, ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( GERBVIEW_ACTIONS::negativeObjectDisplay,   ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( GERBVIEW_ACTIONS::dcodeDisplay,            ACTION_TOOLBAR::TOGGLE );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_DIFF_MODE, wxEmptyString,
-                               KiScaledBitmap( gbr_select_mode2_xpm, this ),
-                               _( "Show layers in diff (compare) mode" ),
-                               wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_HIGH_CONTRAST_MODE, wxEmptyString,
-                               KiScaledBitmap( contrast_mode_xpm, this ),
-                               _( "Enable high contrast display mode" ),
-                               wxITEM_CHECK );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::toggleDiffMode,          ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::highContrastMode,                 ACTION_TOOLBAR::TOGGLE );
 
     // Tools to show/hide toolbars:
     KiScaledSeparator( m_mainToolBar, this );
@@ -493,5 +485,7 @@ void GERBVIEW_FRAME::SyncMenusAndToolbars()
                                                   IsElementVisible( LAYER_NEGATIVE_OBJECTS ) );
     m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::dcodeDisplay,
                                                   IsElementVisible( LAYER_DCODES ) );
+    m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::toggleDiffMode,m_DisplayOptions.m_DiffMode );
+    m_optionsToolBar->Toggle( ACTIONS::highContrastMode,       m_DisplayOptions.m_HighContrastMode );
     m_optionsToolBar->Refresh();
 }

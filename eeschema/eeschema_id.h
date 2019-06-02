@@ -99,14 +99,7 @@ enum id_eeschema_frm
     ID_ADD_PART_TO_SCHEMATIC,
 
     /* Library editor: edit events */
-    ID_LIBEDIT_NEW_LIBRARY,
-    ID_LIBEDIT_ADD_LIBRARY,
-    ID_LIBEDIT_SAVE,
-    ID_LIBEDIT_SAVE_AS,
-    ID_LIBEDIT_REVERT,
-    ID_LIBEDIT_NEW_PART,
     ID_LIBEDIT_EDIT_PART,
-    ID_LIBEDIT_IMPORT_PART,
     ID_LIBEDIT_EXPORT_PART,
     ID_LIBEDIT_REMOVE_PART,
     ID_LIBEDIT_CUT_PART,
@@ -115,10 +108,7 @@ enum id_eeschema_frm
     ID_LIBEDIT_DUPLICATE_PART,
 
     /* Library editor horizontal toolbar IDs. */
-    ID_DE_MORGAN_NORMAL_BUTT,
-    ID_DE_MORGAN_CONVERT_BUTT,
     ID_LIBEDIT_SYNC_PIN_EDIT,
-    ID_LIBEDIT_CHECK_PART,
     ID_LIBEDIT_SELECT_PART_NUMBER,
 
     /* Library editor vertical toolbar IDs. */

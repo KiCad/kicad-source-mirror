@@ -37,7 +37,6 @@
 #include <sch_legacy_plugin.h>
 #include <properties.h>
 #include <view/view.h>
-#include <dialogs/dialog_display_info_HTML_base.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
 
@@ -203,147 +202,39 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
 }
 
 
-// helper function to sort pins by pin num
-bool sort_by_pin_number( const LIB_PIN* ref, const LIB_PIN* tst )
+void LIB_EDIT_FRAME::DisplayCmpDoc()
 {
-    // Use number as primary key
-    int test = ref->GetNumber().Cmp( tst->GetNumber() );
+    LIB_PART* part = GetCurPart();
 
-    // Use DeMorgan variant as secondary key
-    if( test == 0 )
-        test = ref->GetConvert() - tst->GetConvert();
-
-    // Use unit as tertiary key
-    if( test == 0 )
-        test = ref->GetUnit() - tst->GetUnit();
-
-    return test < 0;
-}
-
-
-void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
-{
-    LIB_PART*      part = GetCurPart();
+    EDA_DRAW_FRAME::ClearMsgPanel();
 
     if( !part )
         return;
 
-    wxRealPoint curr_grid_size = GetScreen()->GetGridSize();
-    const int min_grid_size = 25;
-    const int grid_size = KiROUND( curr_grid_size.x );
-    const int clamped_grid_size = ( grid_size < min_grid_size ) ? min_grid_size : grid_size;
+    LIB_ALIAS* alias = part->GetAlias( part->GetName() );
+    wxString msg = part->GetName();
 
-    LIB_PINS pinList;
+    AppendMsgPanel( _( "Name" ), msg, BLUE, 8 );
 
-    part->GetPins( pinList );
+    static wxChar UnitLetter[] = wxT( "?ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
+    msg = UnitLetter[m_unit];
 
-    if( pinList.size() == 0 )
-    {
-        DisplayInfoMessage( this, _( "No pins!" ) );
-        return;
-    }
+    AppendMsgPanel( _( "Unit" ), msg, BROWN, 8 );
 
-    // Sort pins by pin num, so 2 duplicate pins
-    // (pins with the same number) will be consecutive in list
-    sort( pinList.begin(), pinList.end(), sort_by_pin_number );
-
-    // Test for duplicates:
-    DIALOG_DISPLAY_HTML_TEXT_BASE error_display( this, wxID_ANY,
-                                                 _( "Marker Information" ),
-                                                 wxDefaultPosition,
-                                                 wxSize( 750, 600 ) );
-
-    int dup_error = 0;
-
-    for( unsigned ii = 1; ii < pinList.size(); ii++ )
-    {
-        LIB_PIN* curr_pin = pinList[ii];
-        LIB_PIN* pin      = pinList[ii - 1];
-
-        if( pin->GetNumber() != curr_pin->GetNumber()
-            || pin->GetConvert() != curr_pin->GetConvert() )
-            continue;
-
-        dup_error++;
-
-        /* TODO I dare someone to find a way to make happy translators on
-           this thing! Lorenzo */
-
-        wxString msg = wxString::Format( _(
-                                                 "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
-                                                 " conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>" ),
-                                         GetChars( curr_pin->GetNumber() ),
-                                         GetChars( curr_pin->GetName() ),
-                                         curr_pin->GetPosition().x / 1000.0,
-                                         -curr_pin->GetPosition().y / 1000.0,
-                                         GetChars( pin->GetNumber() ),
-                                         GetChars( pin->GetName() ),
-                                         pin->GetPosition().x / 1000.0,
-                                         -pin->GetPosition().y / 1000.0
-        );
-
-        if( part->GetUnitCount() > 1 )
-        {
-            msg += wxString::Format( _( " in units %c and %c" ),
-                                     'A' + curr_pin->GetUnit() - 1,
-                                     'A' + pin->GetUnit() - 1 );
-        }
-
-        if( m_showDeMorgan )
-        {
-            if( curr_pin->GetConvert() )
-                msg += _( "  of converted" );
-            else
-                msg += _( "  of normal" );
-        }
-
-        msg += wxT( ".<br>" );
-
-        error_display.m_htmlWindow->AppendToPage( msg );
-    }
-
-    // Test for off grid pins:
-    int offgrid_error = 0;
-
-    for( unsigned ii = 0; ii < pinList.size(); ii++ )
-    {
-        LIB_PIN* pin = pinList[ii];
-
-        if( ( (pin->GetPosition().x % clamped_grid_size) == 0 ) &&
-            ( (pin->GetPosition().y % clamped_grid_size) == 0 ) )
-            continue;
-
-        // "pin" is off grid here.
-        offgrid_error++;
-
-        wxString msg = wxString::Format( _(
-                                                 "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>" ),
-                                         GetChars( pin->GetNumber() ),
-                                         GetChars( pin->GetName() ),
-                                         pin->GetPosition().x / 1000.0,
-                                         -pin->GetPosition().y / 1000.0
-        );
-
-        if( part->GetUnitCount() > 1 )
-        {
-            msg += wxString::Format( _( " in symbol %c" ), 'A' + pin->GetUnit() - 1 );
-        }
-
-        if( m_showDeMorgan )
-        {
-            if( pin->GetConvert() )
-                msg += _( "  of converted" );
-            else
-                msg += _( "  of normal" );
-        }
-
-        msg += wxT( ".<br>" );
-
-        error_display.m_htmlWindow->AppendToPage( msg );
-    }
-
-    if( !dup_error && !offgrid_error )
-        DisplayInfoMessage( this, _( "No off grid or duplicate pins were found." ) );
+    if( m_convert > 1 )
+        msg = _( "Convert" );
     else
-        error_display.ShowModal();
+        msg = _( "Normal" );
+
+    AppendMsgPanel( _( "Body" ), msg, GREEN, 8 );
+
+    if( part->IsPower() )
+        msg = _( "Power Symbol" );
+    else
+        msg = _( "Symbol" );
+
+    AppendMsgPanel( _( "Type" ), msg, MAGENTA, 8 );
+    AppendMsgPanel( _( "Description" ), alias->GetDescription(), CYAN, 8 );
+    AppendMsgPanel( _( "Key words" ), alias->GetKeyWords(), DARKDARKGRAY );
+    AppendMsgPanel( _( "Datasheet" ), alias->GetDocFileName(), DARKDARKGRAY );
 }

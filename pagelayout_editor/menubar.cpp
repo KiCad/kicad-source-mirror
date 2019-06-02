@@ -48,9 +48,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
         return GetScreen() && GetScreen()->IsModify();
     };
 
-    wxString msg;
-    static ACTION_MENU* openRecentMenu;  // Open Recent submenu,
-                                         // static to remember this menu
+    static ACTION_MENU* openRecentMenu;  // Open Recent submenu, static to remember this menu
 
     // Before deleting, remove the menus managed by m_fileHistory
     // (the file history will be updated when adding/removing files in history
@@ -78,7 +76,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     fileMenu->AddItem( ACTIONS::saveAs,        SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-    fileMenu->AddItem( ACTIONS::pageSettings,     SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::pageSettings,  SELECTION_CONDITIONS::ShowAlways );
     fileMenu->AddItem( ACTIONS::print,         SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AppendSeparator();
@@ -156,12 +154,12 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
     //-- Preferences menu --------------------------------------------------
     //
-    wxMenu* preferencesMenu = new wxMenu;
+    CONDITIONAL_MENU* preferencesMenu = new CONDITIONAL_MENU( false, selTool );
 
-    msg = AddHotkeyName( _( "Preferences..." ), PlEditorHotkeysDescr, HK_PREFERENCES );
-    AddMenuItem( preferencesMenu, wxID_PREFERENCES,  msg,
-                 _( "Show preferences for all open tools" ),
-                 KiBitmap( preference_xpm ) );
+    preferencesMenu->AddItem( wxID_PREFERENCES,
+                              AddHotkeyName( _( "Preferences..." ), PlEditorHotkeysDescr, HK_PREFERENCES ),
+                              _( "Show preferences for all open tools" ),
+                              preference_xpm,                SELECTION_CONDITIONS::ShowAlways );
 
     // Language submenu
     Pgm().AddMenuLanguageList( preferencesMenu );
