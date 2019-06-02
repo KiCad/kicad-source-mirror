@@ -1187,7 +1187,7 @@ class SHAPE_POLY_SET : public SHAPE
          * @return POLYGON - the chamfered/filleted version of the polygon.
          */
         POLYGON chamferFilletPolygon( CORNER_MODE aMode, unsigned int aDistance,
-                                      int aIndex, int aErrorMax = -1 );
+                                      int aIndex, int aErrorMax );
 
         ///> Returns true if the polygon set has any holes that touch share a vertex.
         bool hasTouchingHoles( const POLYGON& aPoly ) const;

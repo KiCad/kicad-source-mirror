@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,6 +77,27 @@ public:
      * Do real-time connectivity
      */
     bool m_realTimeConnectivity;
+
+    /**
+     * Force filled polygons with outlines in zone -- To be removed after testing
+     * default = true (legacy mode)
+     */
+    bool m_forceThickOutlinesInZones;
+
+    /**
+     * Helper to determine if legacy canvas is allowed (according to platform
+     * and config)
+     * @return true if legacy canvas should be shown
+     */
+    bool AllowLegacyCanvas() const;
+
+private:
+    /*
+     * These settings are private, as there is extra logic provide by helper
+     * functions above.
+     */
+
+    bool m_allowLegacyCanvasInGtk3;
 
 private:
     ADVANCED_CFG();

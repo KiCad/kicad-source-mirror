@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,6 +64,18 @@ static const wxChar EnableSvgImport[] = wxT( "EnableSvgImport" );
  * at the moment
  */
 static const wxChar RealtimeConnectivity[] = wxT( "RealtimeConnectivity" );
+
+/**
+ * Allow legacy canvas to be shown in GTK3. Legacy canvas is generally pretty
+ * broken, but this avoids code in an ifdef where it could become broken
+ * on other platforms
+ */
+static const wxChar AllowLegacyCanvasInGtk3[] = wxT( "AllowLegacyCanvasInGtk3" );
+
+/**
+ * Draw zones in pcbnew with the stroked outline.
+ */
+static const wxChar ForceThickZones[] = wxT( "ForceThickZones" );
 
 } // namespace KEYS
 
@@ -143,7 +155,9 @@ ADVANCED_CFG::ADVANCED_CFG()
     // Init defaults - this is done in case the config doesn't exist,
     // then the values will remain as set here.
     m_enableSvgImport = false;
+    m_allowLegacyCanvasInGtk3 = false;
     m_realTimeConnectivity = true;
+    m_forceThickOutlinesInZones = true;
 
     loadFromConfigFile();
 }
@@ -180,8 +194,14 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back(
             new PARAM_CFG_BOOL( true, AC_KEYS::EnableSvgImport, &m_enableSvgImport, false ) );
 
+    configParams.push_back( new PARAM_CFG_BOOL(
+            true, AC_KEYS::AllowLegacyCanvasInGtk3, &m_allowLegacyCanvasInGtk3, false ) );
+
     configParams.push_back(
             new PARAM_CFG_BOOL( true, AC_KEYS::RealtimeConnectivity, &m_realTimeConnectivity, false ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ForceThickZones,
+                                                &m_forceThickOutlinesInZones, true ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
 
@@ -189,3 +209,15 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 }
 
 
+bool ADVANCED_CFG::AllowLegacyCanvas() const
+{
+    // default is to allow
+    bool allow = true;
+
+    // on GTK3, check the config
+#ifdef __WXGTK3__
+    allow = m_allowLegacyCanvasInGtk3;
+#endif
+
+    return allow;
+}

@@ -1512,7 +1512,7 @@ int SHAPE_POLY_SET::TotalVertices() const
 
 SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::ChamferPolygon( unsigned int aDistance, int aIndex )
 {
-    return chamferFilletPolygon( CORNER_MODE::CHAMFERED, aDistance, aIndex );
+    return chamferFilletPolygon( CORNER_MODE::CHAMFERED, aDistance, aIndex, 0 );
 }
 
 
