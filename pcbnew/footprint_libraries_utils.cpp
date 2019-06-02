@@ -571,7 +571,10 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename )
     auto editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, false );
 
     if( editor )
+    {
         editor->SyncLibraryTree( true );
+        editor->FocusOnLibrary( libName );
+    }
 
     auto viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
 

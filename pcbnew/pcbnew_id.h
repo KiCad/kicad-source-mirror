@@ -183,8 +183,6 @@ enum pcbnew_ids
 
     // ID used in module editor:
     ID_MODEDIT_CHECK,
-    ID_MODEDIT_CREATE_NEW_LIB,
-    ID_MODEDIT_ADD_LIBRARY,
     ID_MODEDIT_SAVE,
     ID_MODEDIT_SAVE_AS,
     ID_MODEDIT_SAVE_PNG,

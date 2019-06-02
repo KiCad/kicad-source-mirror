@@ -23,7 +23,8 @@
 
 #include "footprint_tree_pane.h"
 #include "fp_tree_synchronizing_adapter.h"
-
+#include <tool/actions.h>
+#include <tool/action_menu.h>
 #include <widgets/lib_tree.h>
 #include <pcbnew_id.h>
 #include <footprint_edit_frame.h>
@@ -46,62 +47,40 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
     boxSizer->Fit( this );
 
     // Setup right click-context menus
-    std::unique_ptr<wxMenu> menuLibrary = std::make_unique<wxMenu>();
-
-    AddMenuItem( menuLibrary.get(), ID_MODEDIT_CREATE_NEW_LIB, _( "&New Library..." ),
-                 KiBitmap( new_library_xpm ) );
-
-    AddMenuItem( menuLibrary.get(), ID_MODEDIT_ADD_LIBRARY, _( "&Add Library..." ),
-                 KiBitmap( add_library_xpm ) );
-
-    AddMenuItem( menuLibrary.get(), ID_MODEDIT_SAVE, _( "&Save" ),
-                 KiBitmap( save_xpm ) );
-    AddMenuItem( menuLibrary.get(), ID_MODEDIT_SAVE_AS, _( "Save a Copy &As..." ),
-                 KiBitmap( save_as_xpm ) );
+    std::unique_ptr<ACTION_MENU> menuLibrary = std::make_unique<ACTION_MENU>();
+    menuLibrary->Add( ACTIONS::newLibrary );
+    menuLibrary->Add( ACTIONS::addLibrary );
+    menuLibrary->Add( _( "Save" ), ID_MODEDIT_SAVE, save_xpm );
+    menuLibrary->Add( _( "Save a Copy As..." ), ID_MODEDIT_SAVE_AS, save_as_xpm );
 
     menuLibrary->AppendSeparator();
-    AddMenuItem( menuLibrary.get(), ID_MODEDIT_NEW_MODULE, _( "&New Footprint..." ),
-                 KiBitmap( new_footprint_xpm ) );
+    menuLibrary->Add( _( "New Footprint..." ), ID_MODEDIT_NEW_MODULE, new_footprint_xpm );
 #ifdef KICAD_SCRIPTING
-    AddMenuItem( menuLibrary.get(), ID_MODEDIT_NEW_MODULE_FROM_WIZARD, _( "&Create Footprint from Wizard..." ),
-                 KiBitmap( module_wizard_xpm ) );
+    menuLibrary->Add( _( "Create Footprint from Wizard..." ), ID_MODEDIT_NEW_MODULE_FROM_WIZARD, module_wizard_xpm );
 #endif
-    AddMenuItem( menuLibrary.get(), ID_MODEDIT_IMPORT_PART, _( "&Import Footprint..." ),
-                 KiBitmap( import_module_xpm ) );
-    AddMenuItem( menuLibrary.get(), ID_MODEDIT_PASTE_PART, _( "Paste Footprint" ),
-                 KiBitmap( paste_xpm ) );
+    menuLibrary->Add( _( "Import Footprint..." ), ID_MODEDIT_IMPORT_PART, import_module_xpm );
+    menuLibrary->Add( _( "Paste Footprint" ), ID_MODEDIT_PASTE_PART, paste_xpm );
 
-    std::unique_ptr<wxMenu> menuPart = std::make_unique<wxMenu>();
-    AddMenuItem( menuPart.get(), ID_MODEDIT_EDIT_MODULE, _( "&Edit Footprint" ),
-                 KiBitmap( edit_xpm ) );
+    std::unique_ptr<ACTION_MENU> menuPart = std::make_unique<ACTION_MENU>();
+    menuPart->Add( _( "Edit Footprint" ), ID_MODEDIT_EDIT_MODULE, edit_xpm );
 
     menuPart->AppendSeparator();
-    AddMenuItem( menuPart.get(), ID_MODEDIT_SAVE, _( "&Save" ),
-                 KiBitmap( save_xpm ) );
-    AddMenuItem( menuPart.get(), ID_MODEDIT_SAVE_AS, _( "Save &As..." ),
-                 KiBitmap( save_xpm ) );
-    AddMenuItem( menuPart.get(), ID_MODEDIT_DELETE_PART, _( "&Delete" ),
-                 KiBitmap( delete_xpm ) );
-    AddMenuItem( menuPart.get(), ID_MODEDIT_REVERT_PART, _( "Revert" ),
-                 KiBitmap( undo_xpm ) );
+    menuPart->Add( _( "Save" ), ID_MODEDIT_SAVE, save_xpm );
+    menuPart->Add( _( "Save a Copy As..." ), ID_MODEDIT_SAVE_AS, save_as_xpm );
+    menuPart->Add( _( "Delete" ), ID_MODEDIT_DELETE_PART, delete_xpm );
+    menuPart->Add( _( "Revert" ), ID_MODEDIT_REVERT_PART, undo_xpm );
 
     menuPart->AppendSeparator();
-    AddMenuItem( menuPart.get(), ID_MODEDIT_CUT_PART, _( "Cut" ),
-                 KiBitmap( cut_xpm ) );
-    AddMenuItem( menuPart.get(), ID_MODEDIT_COPY_PART, _( "Copy" ),
-                 KiBitmap( copy_xpm ) );
+    menuPart->Add( _( "Cut" ), ID_MODEDIT_CUT_PART, cut_xpm );
+    menuPart->Add( _( "Copy" ), ID_MODEDIT_COPY_PART, copy_xpm );
 
     menuPart->AppendSeparator();
-    AddMenuItem( menuPart.get(), ID_MODEDIT_EXPORT_PART, _( "E&xport Footprint..." ),
-                 KiBitmap( export_module_xpm ) );
+    menuPart->Add( _( "Export Footprint..." ), ID_MODEDIT_EXPORT_PART, export_module_xpm );
 
     // Menu displayed when nothing is selected
-    std::unique_ptr<wxMenu> menuNoSelection = std::make_unique<wxMenu>();
-    AddMenuItem( menuNoSelection.get(), ID_MODEDIT_CREATE_NEW_LIB, _( "&New Library..." ),
-                 KiBitmap( new_library_xpm ) );
-
-    AddMenuItem( menuNoSelection.get(), ID_MODEDIT_ADD_LIBRARY, _( "&Add Library..." ),
-                 KiBitmap( add_library_xpm ) );
+    std::unique_ptr<ACTION_MENU> menuNoSelection = std::make_unique<ACTION_MENU>();
+    menuNoSelection->Add( ACTIONS::newLibrary );
+    menuNoSelection->Add( ACTIONS::addLibrary );
 
     m_tree->SetMenu( LIB_TREE_NODE::LIBID, std::move( menuPart ) );
     m_tree->SetMenu( LIB_TREE_NODE::LIB, std::move( menuLibrary ) );

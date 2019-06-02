@@ -101,8 +101,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_MODEDIT_NEW_MODULE_FROM_WIZARD, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_IMPORT_PART, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_EXPORT_PART, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_CREATE_NEW_LIB, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_ADD_LIBRARY, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_SHEET_SET, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_PRINT, FOOTPRINT_EDIT_FRAME::ToPrinter )
     EVT_TOOL( ID_MODEDIT_EDIT_MODULE, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
@@ -770,6 +768,13 @@ void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( bool aProgress )
             m_treePane->GetLibTree()->CenterLibId( target );
         }
     }
+}
+
+
+void FOOTPRINT_EDIT_FRAME::FocusOnLibrary( const wxString& aLibName )
+{
+    LIB_ID libID( aLibName, wxEmptyString );
+    m_treePane->GetLibTree()->SelectLibId( libID );
 }
 
 

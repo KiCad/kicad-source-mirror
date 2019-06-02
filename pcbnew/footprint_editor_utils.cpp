@@ -426,25 +426,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             Export_Module( LoadFootprint( getTargetFPID() ) );
         break;
 
-    case ID_MODEDIT_CREATE_NEW_LIB:
-    {
-        wxFileName fn( CreateNewLibrary() );
-        wxString name = fn.GetName();
-
-        if( !name.IsEmpty() )
-        {
-            LIB_ID newLib( name, wxEmptyString );
-
-            SyncLibraryTree( true );
-            m_treePane->GetLibTree()->SelectLibId( newLib );
-        }
-    }
-        break;
-
-    case ID_MODEDIT_ADD_LIBRARY:
-        AddLibrary();
-        break;
-
     case ID_MODEDIT_EDIT_MODULE:
         LoadModuleFromLibrary( m_treePane->GetLibTree()->GetSelectedLibId() );
         break;

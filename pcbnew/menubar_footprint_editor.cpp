@@ -63,16 +63,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     //
     CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, selTool );
 
-    fileMenu->AddItem( ID_MODEDIT_CREATE_NEW_LIB,
-                       _( "New Library..." ),
-                       _( "Creates an empty library" ),
-                       new_library_xpm,              SELECTION_CONDITIONS::ShowAlways );
-
-    fileMenu->AddItem( ID_MODEDIT_ADD_LIBRARY,
-                       _( "Add Library..." ),
-                       _( "Adds a previously created library" ),
-                       add_library_xpm,              SELECTION_CONDITIONS::ShowAlways );
-
+    fileMenu->AddItem( ACTIONS::newLibrary,          SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::addLibrary,          SELECTION_CONDITIONS::ShowAlways );
     fileMenu->AddItem( ID_MODEDIT_NEW_MODULE,
                        AddHotkeyName( _( "&New Footprint..." ), m_hotkeysDescrList, HK_NEW ),
                        _( "Create a new footprint" ),

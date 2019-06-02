@@ -346,6 +346,7 @@ public:
      * @param aProgress
      */
     void SyncLibraryTree( bool aProgress );
+    void FocusOnLibrary( const wxString& aLibName );
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 

@@ -62,31 +62,24 @@ SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMg
     menuLibrary->AppendSeparator();
     menuLibrary->Add( EE_ACTIONS::newSymbol );
     menuLibrary->Add( EE_ACTIONS::importSymbol );
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_PASTE_PART, _( "Paste Symbol" ),
-                 KiBitmap( paste_xpm ) );
+    menuLibrary->Add( _( "Paste Symbol" ), ID_LIBEDIT_PASTE_PART, paste_xpm );
 
     std::unique_ptr<ACTION_MENU> menuPart = std::make_unique<ACTION_MENU>();
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_EDIT_PART, _( "Edit Symbol" ),
-                 KiBitmap( edit_xpm ) );
+    menuPart->Add( _( "Edit Symbol" ), ID_LIBEDIT_EDIT_PART, edit_xpm );
 
     menuPart->AppendSeparator();
     menuPart->Add( ACTIONS::save );
     menuPart->Add( ACTIONS::saveCopyAs );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_DUPLICATE_PART, _( "Duplicate" ),
-                 KiBitmap( duplicate_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_REMOVE_PART, _( "Delete" ),
-                 KiBitmap( delete_xpm ) );
+    menuPart->Add( _( "Duplicate" ), ID_LIBEDIT_DUPLICATE_PART, duplicate_xpm );
+    menuPart->Add( _( "Delete" ), ID_LIBEDIT_REMOVE_PART, delete_xpm );
     menuPart->Add( ACTIONS::revert );
 
     menuPart->AppendSeparator();
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_CUT_PART, _( "Cut" ),
-                 KiBitmap( cut_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_COPY_PART, _( "Copy" ),
-                 KiBitmap( copy_xpm ) );
+    menuPart->Add( _( "Cut" ), ID_LIBEDIT_CUT_PART, cut_xpm );
+    menuPart->Add( _( "Copy" ), ID_LIBEDIT_COPY_PART, copy_xpm );
 
     menuPart->AppendSeparator();
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_EXPORT_PART, _( "E&xport Symbol..." ),
-                 KiBitmap( export_part_xpm ) );
+    menuPart->Add( _( "Export Symbol..." ), ID_LIBEDIT_EXPORT_PART, export_part_xpm );
 
     // Menu displayed when nothing is selected
     std::unique_ptr<ACTION_MENU> menuNoSelection = std::make_unique<ACTION_MENU>();

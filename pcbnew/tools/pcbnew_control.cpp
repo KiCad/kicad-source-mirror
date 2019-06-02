@@ -224,6 +224,20 @@ void PCBNEW_CONTROL::Reset( RESET_REASON aReason )
 }
 
 
+int PCBNEW_CONTROL::AddLibrary( const TOOL_EVENT& aEvent )
+{
+    if( m_frame->IsType( FRAME_PCB_MODULE_EDITOR ) || m_frame->IsType( FRAME_PCB ) )
+    {
+        if( aEvent.IsAction( &ACTIONS::newLibrary ) )
+            static_cast<PCB_BASE_EDIT_FRAME*>( m_frame )->CreateNewLibrary();
+        else if( aEvent.IsAction( &ACTIONS::addLibrary ) )
+            static_cast<PCB_BASE_EDIT_FRAME*>( m_frame )->AddLibrary();
+    }
+
+    return 0;
+}
+
+
 int PCBNEW_CONTROL::Quit( const TOOL_EVENT& aEvent )
 {
     m_frame->Close( false );
@@ -1040,6 +1054,8 @@ int PCBNEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
 void PCBNEW_CONTROL::setTransitions()
 {
+    Go( &PCBNEW_CONTROL::AddLibrary,          ACTIONS::newLibrary.MakeEvent() );
+    Go( &PCBNEW_CONTROL::AddLibrary,          ACTIONS::addLibrary.MakeEvent() );
     Go( &PCBNEW_CONTROL::Print,               ACTIONS::print.MakeEvent() );
     Go( &PCBNEW_CONTROL::Quit,                ACTIONS::quit.MakeEvent() );
 
