@@ -1475,25 +1475,20 @@ void DRC::doFootprintOverlappingDrc()
 void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS_T aUnits,
                           DRC_LIST& aDRCList )
 {
-    auto mods = aPCB->Modules();
 
-    std::sort( mods.begin(), mods.end(), []( const MODULE* a, const MODULE* b ) {
-        return a->GetReference().CmpNoCase( b->GetReference() );
-    } );
+    // Search for duplicate footprints on the board
+    auto comp = []( const MODULE* x, const MODULE* y ) {
+        return x->GetReference().CmpNoCase( y->GetReference() ) < 0;
+    };
+    auto mods = std::set<MODULE*, decltype( comp )>( comp );
 
-    // Search for duplicate footprints.
-    for( auto it = mods.begin(); it != mods.end(); it++ )
+    for( auto mod : aPCB->Modules() )
     {
-        auto next_it = it + 1;
-
-        if( next_it == mods.end() )
-            break;
-
-        if( ( *it )->GetReference().CmpNoCase( ( *next_it )->GetReference() ) == 0 )
+        auto ins = mods.insert( mod );
+        if( !ins.second )
         {
-            aDRCList.emplace_back( new DRC_ITEM( aUnits, DRCE_DUPLICATE_FOOTPRINT, *it,
-                    ( *it )->GetPosition(), *next_it, ( *next_it )->GetPosition() ) );
-            break;
+            aDRCList.emplace_back( new DRC_ITEM( aUnits, DRCE_DUPLICATE_FOOTPRINT, mod,
+                    mod->GetPosition(), *ins.first, ( *ins.first )->GetPosition() ) );
         }
     }
 
