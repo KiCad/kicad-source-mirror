@@ -281,6 +281,21 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::updateFootprints, singleModuleCondition );
     menu.AddItem( PCB_ACTIONS::exchangeFootprints, singleModuleCondition );
 
+    // Populate the context menu displayed during the edit tool (primarily the measure tool)
+    auto activeToolCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( frame()->GetToolId() != ID_NO_TOOL_SELECTED );
+    };
+
+    auto frame = getEditFrame<PCB_BASE_FRAME>();
+    auto& ctxMenu = m_menu.GetMenu();
+
+    // "Cancel" goes at the top of the context menu when a tool is active
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1000 );
+    ctxMenu.AddSeparator( activeToolCondition, 1000 );
+
+    if( frame )
+        m_menu.AddStandardSubMenus( frame );
+
     return true;
 }
 
@@ -1279,7 +1294,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu( selection() );
+            m_menu.ShowContextMenu();
         }
     }
 
