@@ -689,7 +689,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     m_errorCount = 0;
     m_warningCount = 0;
     m_newFootprintsCount = 0;
-    MODULE* lastPreexistingFootprint = m_board->Modules().back();
+    MODULE* lastPreexistingFootprint = m_board->Modules().empty() ? NULL : m_board->Modules().back();
 
     cacheCopperZoneConnections();
 
