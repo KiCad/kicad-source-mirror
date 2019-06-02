@@ -564,7 +564,7 @@ void EDA_DRAW_FRAME::ClearMsgPanel()
 
 void EDA_DRAW_FRAME::SetMsgPanel( const MSG_PANEL_ITEMS& aList )
 {
-    if( m_messagePanel == NULL )
+    if( m_messagePanel )
     {
         m_messagePanel->EraseMsgBox();
 
