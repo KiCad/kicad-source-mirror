@@ -45,7 +45,7 @@ private:
     PCB_BASE_FRAME* m_Parent;
     wxConfigBase*   m_Config;               // Current config
 
-    bool            m_settingsExported;     // settings were written to all other zones
+    bool            m_settingsExported;     // settings will be written to all other zones
 
     ZONE_SETTINGS   m_settings;
     ZONE_SETTINGS*  m_ptr;
