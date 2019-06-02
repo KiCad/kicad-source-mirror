@@ -601,9 +601,9 @@ void PCB_IO::formatGeneral( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel+1, "(thickness %s)\n",
                   FormatInternalUnits( dsnSettings.GetBoardThickness() ).c_str() );
 
-    m_out->Print( aNestLevel+1, "(drawings %zu)\n", aBoard->Drawings().size() );
-    m_out->Print( aNestLevel + 1, "(tracks %zu)\n", aBoard->Tracks().size() );
-    m_out->Print( aNestLevel + 1, "(modules %zu)\n", aBoard->Modules().size() );
+    m_out->Print( aNestLevel+1, "(drawings %u)\n", (unsigned)aBoard->Drawings().size() );
+    m_out->Print( aNestLevel + 1, "(tracks %u)\n", (unsigned)aBoard->Tracks().size() );
+    m_out->Print( aNestLevel + 1, "(modules %u)\n", (unsigned)aBoard->Modules().size() );
     m_out->Print( aNestLevel+1, "(nets %d)\n", m_mapping->GetSize() );
     m_out->Print( aNestLevel, ")\n\n" );
 
