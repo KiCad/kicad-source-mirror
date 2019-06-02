@@ -140,7 +140,7 @@ protected:
     BOARD* board() const { return getModel<BOARD>(); }
     MODULE*               module() const
     {
-        return board()->Modules().front();
+        return board()->GetFirstModule();
     }
     PCB_DISPLAY_OPTIONS* displayOptions() const;
     PCB_DRAW_PANEL_GAL* canvas() const;
