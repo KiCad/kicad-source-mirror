@@ -205,19 +205,13 @@ private:
     void                ParametersUpdated( wxGridEvent& event );
 
     /**
-     * Function Show3D_Frame (virtual)
-     * displays 3D view of the footprint (module) being edited.
-     */
-    void                Show3D_Frame( wxCommandEvent& event ) override;
-
-    /**
      * Function Update3D_Frame
      * must be called after a footprint selection
      * Updates the 3D view and 3D frame title.
-     * @param aForceReloadFootprint = true to reload data (default)
-     *   = false to update title only -(aftre creating the 3D viewer)
+     * @param aForceReload = true to reload data immediately
+     * @param aTitle (optional) the window title to set for the viewer
      */
-    void                Update3D_Frame( bool aForceReloadFootprint = true );
+    void                Update3DView( bool aForceReload, const wxString* aTitle ) override;
 
     /*
      * Virtual functions, not used here, but needed by PCB_BASE_FRAME

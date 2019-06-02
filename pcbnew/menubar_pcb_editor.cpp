@@ -351,10 +351,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                        _( "Footprint &Library Browser" ), _( "Browse footprint libraries" ),
                        modview_icon_xpm,                    SELECTION_CONDITIONS::ShowAlways );
 
-    viewMenu->AddItem( ID_MENU_PCB_SHOW_3D_FRAME,
-                       AddHotkeyName( _( "&3D Viewer" ), g_Board_Editor_Hotkeys_Descr, HK_3D_VIEWER ),
-                       _( "Show board in 3D viewer" ),
-                       three_d_xpm,                         SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::show3DViewer,               SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
     viewMenu->AddItem( ACTIONS::zoomInCenter,               SELECTION_CONDITIONS::ShowAlways );

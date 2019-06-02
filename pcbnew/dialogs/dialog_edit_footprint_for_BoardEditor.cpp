@@ -43,7 +43,7 @@
 #include "3d_cache/dialogs/panel_prev_model.h"
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
 #include <bitmaps.h>
-#include <3d_viewer.h>
+#include <3d_viewer/eda_3d_viewer.h>
 
 #include <dialog_edit_footprint_for_BoardEditor.h>
 

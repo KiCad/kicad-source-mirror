@@ -74,7 +74,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_FOOTPRINT_WIZARD_NEXT, FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_FOOTPRINT_WIZARD_PREVIOUS, FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_FOOTPRINT_WIZARD_DONE, FOOTPRINT_WIZARD_FRAME::ExportSelectedFootprint )
-    EVT_TOOL( ID_FOOTPRINT_WIZARD_SHOW_3D_VIEW, FOOTPRINT_WIZARD_FRAME::Show3D_Frame )
 
     // listbox events
     EVT_LISTBOX( ID_FOOTPRINT_WIZARD_PAGE_LIST, FOOTPRINT_WIZARD_FRAME::ClickOnPageList )
@@ -571,50 +570,16 @@ void FOOTPRINT_WIZARD_FRAME::OnActivate( wxActivateEvent& event )
 }
 
 
-void FOOTPRINT_WIZARD_FRAME::Show3D_Frame( wxCommandEvent& event )
-{
-    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
-
-    // We can probably remove this for 6.0, but just to be safe we'll stick to
-    // one 3DFrame at a time for 5.0
-    if( draw3DFrame )
-        draw3DFrame->Close( true );
-
-    draw3DFrame = new EDA_3D_VIEWER( &Kiway(), this, _( "3D Viewer" ) );
-    Update3D_Frame( false );
-
-#ifdef  __WXMAC__
-    // A stronger version of Raise() which promotes the window to its parent's level.
-    draw3DFrame->ReparentQuasiModal();
-#else
-    draw3DFrame->Raise();     // Needed with some Window Managers
-#endif
-
-    draw3DFrame->Show( true );
-}
-
-
 /**
- * Function Update3D_Frame
+ * Function Update3DView
  * must be called after a footprint selection
  * Updates the 3D view and 3D frame title.
  */
-void FOOTPRINT_WIZARD_FRAME::Update3D_Frame( bool aForceReloadFootprint )
+void FOOTPRINT_WIZARD_FRAME::Update3DView( bool aForceReload, const wxString* aTitle )
 {
-    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
-
-    if( draw3DFrame == NULL )
-        return;
-
     wxString frm3Dtitle;
     frm3Dtitle.Printf( _( "ModView: 3D Viewer [%s]" ), GetChars( m_wizardName ) );
-    draw3DFrame->SetTitle( frm3Dtitle );
-
-    if( aForceReloadFootprint )
-    {
-        // Force 3D screen refresh immediately
-        draw3DFrame->NewDisplay( true );
-    }
+    PCB_BASE_FRAME::Update3DView( aForceReload, &frm3Dtitle );
 }
 
 
@@ -646,9 +611,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
                                 _( "Select next parameters page" ) );
 
         m_mainToolBar->AddSeparator();
-        m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_SHOW_3D_VIEW, wxEmptyString,
-                                KiBitmap( three_d_xpm ),
-                                _( "Show footprint in 3D viewer" ) );
+        m_mainToolBar->Add( ACTIONS::show3DViewer );
 
         m_mainToolBar->AddSeparator();
         m_mainToolBar->Add( ACTIONS::zoomRedraw );

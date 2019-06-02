@@ -37,7 +37,7 @@
 
 #include <fctsys.h>
 #include <project.h>
-#include <3d_viewer.h>      // for KISYS3DMOD
+#include <3d_viewer/eda_3d_viewer.h>      // for KISYS3DMOD
 #include <panel_fp_lib_table.h>
 #include <lib_id.h>
 #include <fp_lib_table.h>

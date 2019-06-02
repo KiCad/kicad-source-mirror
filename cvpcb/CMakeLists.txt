@@ -45,7 +45,6 @@ set( CVPCB_SRCS
     menubar.cpp
     readwrite_dlgs.cpp
     toolbars_cvpcb.cpp
-    tools/cvpcb_actions.cpp
     tools/cvpcb_control.cpp
     tools/cvpcb_selection_tool.cpp
     )

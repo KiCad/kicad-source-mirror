@@ -177,9 +177,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_MENU_PCB_SWAP_LAYERS, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_MENU_PCB_EDIT_TEXT_AND_GRAPHICS, PCB_EDIT_FRAME::OnEditTextAndGraphics )
 
-    // Menu 3D Frame
-    EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, PCB_EDIT_FRAME::Show3D_Frame )
-
     // Menu Get Design Rules Editor
     EVT_MENU( ID_BOARD_SETUP_DIALOG, PCB_EDIT_FRAME::ShowBoardSetupDialog )
 
@@ -599,13 +596,6 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 }
 
 
-void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
-{
-    bool forceRecreateIfNotOwner = true;
-    CreateAndShow3D_Frame( forceRecreateIfNotOwner );
-}
-
-
 void PCB_EDIT_FRAME::ActivateGalCanvas()
 {
     PCB_BASE_EDIT_FRAME::ActivateGalCanvas();
@@ -892,7 +882,7 @@ void PCB_EDIT_FRAME::OnModify( )
 {
     PCB_BASE_FRAME::OnModify();
 
-    Update3DView();
+    Update3DView( false );
 
     m_ZoneFillsDirty = true;
 }

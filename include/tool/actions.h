@@ -134,6 +134,7 @@ public:
     // Misc
     static TOOL_ACTION acceleratedGraphics;
     static TOOL_ACTION standardGraphics;
+    static TOOL_ACTION show3DViewer;
 
     /**
      * Function TranslateLegacyId()

@@ -112,7 +112,7 @@ public:
      * @return false if the 3D view cannot be updated (because the
      * owner of the viewer is not this frame)
      */
-    bool Update3DView( const wxString* aTitle = nullptr );
+    virtual void Update3DView( bool aForceReload, const wxString* aTitle = nullptr );
 
     /**
      * Function LoadFootprint
@@ -224,19 +224,9 @@ public:
     /**
      * Shows the 3D view frame.
      * If it does not exist, it is created.
-     * If it exists, and if I am the owner, it is bring to the foreground
-     */
-    virtual void Show3D_Frame( wxCommandEvent& event );
-
-    /**
-     * Shows the 3D view frame.
-     * If it does not exist, it is created.
      * If it exists, it is bring to the foreground
-     * @param aForceRecreateIfNotOwner = true to recreate the 3D frame viewer,
-     * when the owner is not me
-     * @return true if it is shown with me as owner
      */
-    virtual bool CreateAndShow3D_Frame( bool aForceRecreateIfNotOwner );
+    EDA_3D_VIEWER* CreateAndShow3D_Frame();
 
     /**
      * Function GetCollectorsGuide

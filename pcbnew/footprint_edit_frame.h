@@ -146,13 +146,6 @@ public:
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
     EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
-    BOARD_ITEM* PrepareItemForHotkey( bool failIfCurrentlyEdited );
-
-    /**
-     * Display 3D view of the footprint (module) being edited.
-     */
-    void Show3D_Frame( wxCommandEvent& event ) override;
-
     /**
      * Handle most of tools og the vertical right toolbar ("Tools" toolbar)
      */
@@ -160,8 +153,6 @@ public:
 
     void OnUpdateModuleSelected( wxUpdateUIEvent& aEvent );
     void OnUpdateModuleTargeted( wxUpdateUIEvent& aEvent );
-    void OnUpdateSave( wxUpdateUIEvent& aEvent );
-    void OnUpdateSaveAs( wxUpdateUIEvent& aEvent );
     void OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent );
     void OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent );
 

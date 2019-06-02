@@ -36,20 +36,16 @@
 #include <lib_id.h>
 #include <fp_lib_table.h>
 #include <eda_dockart.h>
-
 #include <io_mgr.h>
 #include <class_module.h>
 #include <class_board.h>
 #include <pcb_painter.h>
-
 #include <cvpcb_mainframe.h>
 #include <display_footprints_frame.h>
 #include <cvpcb_id.h>
 #include <listboxes.h>
-
 #include <3d_viewer/eda_3d_viewer.h>
 #include <view/view.h>
-
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/common_tools.h>
@@ -65,13 +61,8 @@ COLORS_DESIGN_SETTINGS g_ColorsSettings( FRAME_CVPCB_DISPLAY );
 BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
     EVT_CLOSE( DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow )
     EVT_TOOL( ID_OPTIONS_SETUP, DISPLAY_FOOTPRINTS_FRAME::InstallOptionsDisplay )
-    EVT_TOOL( ID_CVPCB_SHOW3D_FRAME, DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame )
     EVT_CHOICE( ID_ON_ZOOM_SELECT, DISPLAY_FOOTPRINTS_FRAME::OnSelectZoom )
     EVT_CHOICE( ID_ON_GRID_SELECT, DISPLAY_FOOTPRINTS_FRAME::OnSelectGrid )
-
-    EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, DISPLAY_FOOTPRINTS_FRAME::OnUIToolSelection )
-    EVT_UPDATE_UI( ID_TB_MEASUREMENT_TOOL, DISPLAY_FOOTPRINTS_FRAME::OnUIToolSelection )
-    EVT_UPDATE_UI( ID_ZOOM_SELECTION, DISPLAY_FOOTPRINTS_FRAME::OnUIToolSelection )
 
     /*
     EVT_TOOL  and EVT_UPDATE_UI for:
@@ -220,21 +211,15 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
     // TODO: these can be moved to the 'proper' right vertical toolbar if and when there are
     // actual tools to put there. That, or I'll get around to implementing configurable
     // toolbars.
-    m_optionsToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString,
-                               KiScaledBitmap( cursor_xpm, this ),
-                               wxEmptyString, wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_TB_MEASUREMENT_TOOL, wxEmptyString,
-                               KiScaledBitmap( measurement_xpm, this ),
-                               _( "Measure distance between two points" ),
-                               wxITEM_CHECK );
+    m_optionsToolBar->Add( CVPCB_ACTIONS::selectionTool, ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( CVPCB_ACTIONS::measureTool,   ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddSeparator();
-    m_optionsToolBar->Add( ACTIONS::toggleGrid,        ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::togglePolarCoords, ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::imperialUnits,     ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::metricUnits,       ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle, ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleGrid,          ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::togglePolarCoords,   ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::imperialUnits,       ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::metricUnits,         ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,   ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddSeparator();
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
@@ -272,8 +257,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE );
 
     m_mainToolBar->AddSeparator();
-    m_mainToolBar->AddTool( ID_CVPCB_SHOW3D_FRAME, wxEmptyString, KiScaledBitmap( three_d_xpm, this ),
-                            _( "3D Display (Alt+3)" ) );
+    m_mainToolBar->Add( ACTIONS::show3DViewer );
 
     KiScaledSeparator( m_mainToolBar, this );
 
@@ -325,13 +309,6 @@ void DISPLAY_FOOTPRINTS_FRAME::ApplyDisplaySettingsToGAL()
 
     GetGalCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
     GetGalCanvas()->Refresh();
-}
-
-
-void DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame( wxCommandEvent& event )
-{
-    bool forceRecreateIfNotOwner = true;
-    CreateAndShow3D_Frame( forceRecreateIfNotOwner );
 }
 
 
@@ -450,7 +427,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
     UpdateStatusBar();
 
     GetGalCanvas()->Refresh();
-    Update3DView();
+    Update3DView( true );
 }
 
 
@@ -483,32 +460,16 @@ void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
 }
 
 
-void DISPLAY_FOOTPRINTS_FRAME::OnUIToolSelection( wxUpdateUIEvent& aEvent )
-{
-    switch( aEvent.GetId() )
-    {
-    case ID_TB_MEASUREMENT_TOOL:
-        aEvent.Check( GetToolId() == ID_TB_MEASUREMENT_TOOL );
-        break;
-
-    case ID_NO_TOOL_SELECTED:
-        aEvent.Check( GetToolId() == ID_NO_TOOL_SELECTED );
-        break;
-
-    case ID_ZOOM_SELECTION:
-        aEvent.Check( GetToolId() == ID_ZOOM_SELECTION );
-        break;
-
-    default:
-        break;
-    }
-}
-
-
 void DISPLAY_FOOTPRINTS_FRAME::SyncMenusAndToolbars()
 {
+    m_mainToolBar->Toggle( CVPCB_ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
+    m_mainToolBar->Refresh();
+
+    m_optionsToolBar->Toggle( CVPCB_ACTIONS::selectionTool, GetToolId() == ID_NO_TOOL_SELECTED );
+    m_optionsToolBar->Toggle( CVPCB_ACTIONS::measureTool, GetToolId() == ID_TB_MEASUREMENT_TOOL );
     m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != INCHES );
     m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == INCHES );
+    m_optionsToolBar->Refresh();
 }
 
 
@@ -518,8 +479,6 @@ void DISPLAY_FOOTPRINTS_FRAME::SyncMenusAndToolbars()
 void BOARD::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
 {
     if( !m_modules.empty() )
-    {
         GetFirstModule()->Print( aFrame, aDC );
-    }
 }
 

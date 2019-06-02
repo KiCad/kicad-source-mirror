@@ -83,7 +83,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_MODVIEW_NEXT, FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList )
     EVT_TOOL( ID_MODVIEW_PREVIOUS, FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList )
     EVT_TOOL( ID_ADD_FOOTPRINT_TO_BOARD, FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB )
-    EVT_TOOL( ID_MODVIEW_SHOW_3D_VIEW, FOOTPRINT_VIEWER_FRAME::Show3D_Frame )
     EVT_CHOICE( ID_ON_ZOOM_SELECT, FOOTPRINT_VIEWER_FRAME::OnSelectZoom )
     EVT_CHOICE( ID_ON_GRID_SELECT, FOOTPRINT_VIEWER_FRAME::OnSelectGrid )
 
@@ -433,7 +432,7 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
         updateView();
 
         GetGalCanvas()->Refresh();
-        Update3D_Frame();
+        Update3DView( true );
     }
 }
 
@@ -632,35 +631,11 @@ bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent 
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::Show3D_Frame( wxCommandEvent& event )
-{
-    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
-
-    // We can probably remove this for 6.0, but just to be safe we'll stick to
-    // one 3DFrame at a time for 5.0
-    if( draw3DFrame )
-        draw3DFrame->Close( true );
-
-    draw3DFrame = new EDA_3D_VIEWER( &Kiway(), this, _( "3D Viewer" ) );
-    Update3D_Frame( false );
-
-#ifdef  __WXMAC__
-    // A stronger version of Raise() which promotes the window to its parent's level.
-    draw3DFrame->ReparentQuasiModal();
-#else
-    draw3DFrame->Raise();     // Needed with some Window Managers
-#endif
-
-    draw3DFrame->Show( true );
-}
-
-
-void FOOTPRINT_VIEWER_FRAME::Update3D_Frame( bool aForceReloadFootprint )
+void FOOTPRINT_VIEWER_FRAME::Update3DView( bool aForceReload, const wxString* aTitle )
 {
     wxString title = wxString::Format( _( "3D Viewer" ) + wxT( " \u2014 %s" ),
                                        getCurFootprintName() );
-
-    Update3DView( &title );
+    PCB_BASE_FRAME::Update3DView( aForceReload, &title );
 }
 
 
@@ -774,7 +749,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
         if( footprint )
             GetBoard()->Add( footprint, ADD_APPEND );
 
-        Update3D_Frame();
+        Update3DView( true );
 
         updateView();
     }

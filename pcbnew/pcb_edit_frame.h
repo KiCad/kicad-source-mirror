@@ -563,12 +563,6 @@ public:
      */
     void ReFillLayerWidget();
 
-    /**
-     * Function Show3D_Frame
-     * displays the 3D view of current printed circuit board.
-     */
-    void Show3D_Frame( wxCommandEvent& event ) override;
-
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     void ActivateGalCanvas() override;
 

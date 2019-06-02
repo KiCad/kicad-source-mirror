@@ -44,7 +44,7 @@
 #include <io_mgr.h>
 #include <kicad_plugin.h>
 #include <kicad_clipboard.h>
-
+#include <3d_viewer/eda_3d_viewer.h>
 #include <pcbnew_id.h>
 #include <pcb_edit_frame.h>
 #include <pcb_draw_panel_gal.h>
@@ -993,10 +993,29 @@ int PCBNEW_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
 }
 
 
+int PCBNEW_CONTROL::Show3DViewer( const TOOL_EVENT& aEvent )
+{
+    EDA_3D_VIEWER* draw3DFrame = m_frame->CreateAndShow3D_Frame();
+
+    if( m_frame->IsType( FRAME_PCB_MODULE_VIEWER )
+     || m_frame->IsType( FRAME_PCB_MODULE_VIEWER_MODAL )
+     || m_frame->IsType( FRAME_PCB_FOOTPRINT_WIZARD ) )
+    {
+        m_frame->Update3DView( true );
+
+#ifdef  __WXMAC__
+        // A stronger version of Raise() which promotes the window to its parent's level.
+        draw3DFrame->ReparentQuasiModal();
+#endif
+    }
+
+    return 0;
+}
+
+
 int PCBNEW_CONTROL::ToBeDone( const TOOL_EVENT& aEvent )
 {
     DisplayInfoMessage( m_frame, _( "Not available in OpenGL/Cairo canvases." ) );
-
     return 0;
 }
 
@@ -1079,6 +1098,7 @@ void PCBNEW_CONTROL::setTransitions()
     // Miscellaneous
     Go( &PCBNEW_CONTROL::DeleteItemCursor,    PCB_ACTIONS::deleteTool.MakeEvent() );
     Go( &PCBNEW_CONTROL::ShowHelp,            PCB_ACTIONS::showHelp.MakeEvent() );
+    Go( &PCBNEW_CONTROL::Show3DViewer,        ACTIONS::show3DViewer.MakeEvent() );
     Go( &PCBNEW_CONTROL::ToBeDone,            PCB_ACTIONS::toBeDone.MakeEvent() );
 
     // Append control

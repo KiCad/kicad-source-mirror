@@ -96,6 +96,7 @@ public:
     int AppendBoardFromFile( const TOOL_EVENT& aEvent );
     int AppendBoard( PLUGIN& pi, wxString& fileName );
     int ShowHelp( const TOOL_EVENT& aEvent );
+    int Show3DViewer( const TOOL_EVENT& aEvent );
     int ToBeDone( const TOOL_EVENT& aEvent );
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
 

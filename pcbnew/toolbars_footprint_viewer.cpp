@@ -27,6 +27,7 @@
 #include <tool/conditional_menu.h>
 #include <tool/tool_manager.h>
 #include <tools/selection_tool.h>
+#include <tools/pcb_actions.h>
 #include "help_common_strings.h"
 #include "hotkeys.h"
 #include "footprint_viewer_frame.h"
@@ -76,9 +77,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_MODVIEW_SHOW_3D_VIEW, wxEmptyString,
-                            KiScaledBitmap( three_d_xpm, this ),
-                            _( "Show footprint in 3D viewer" ) );
+    m_mainToolBar->Add( ACTIONS::show3DViewer );
     m_mainToolBar->AddTool( ID_ADD_FOOTPRINT_TO_BOARD, wxEmptyString,
                             KiScaledBitmap( export_xpm, this ),
                             _( "Insert footprint in board" ) );
@@ -138,16 +137,13 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
 
     viewMenu->AddSeparator();
-    viewMenu->AddItem( ACTIONS::zoomInCenter,    SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomOutCenter,   SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomFitScreen,   SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomRedraw,      SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomInCenter,     SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomOutCenter,    SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomFitScreen,    SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomRedraw,       SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
-    viewMenu->AddItem( ID_MODVIEW_SHOW_3D_VIEW,
-                       AddHotkeyName( _( "3D Viewer" ), g_Module_Viewer_Hotkeys_Descr, HK_3D_VIEWER ),
-                       _( "Show footprint in 3D viewer" ),
-                       three_d_xpm,              SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::show3DViewer,     SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->Resolve();
 

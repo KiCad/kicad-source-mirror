@@ -47,19 +47,12 @@ public:
     static TOOL_ACTION selectionActivate;
 
     /// Tool selection
-    static TOOL_ACTION no_selectionTool;
+    static TOOL_ACTION selectionTool;
     static TOOL_ACTION measureTool;
-
-    // Miscellaneous
-    static TOOL_ACTION zoomTool;
-    static TOOL_ACTION switchCursor;
-    static TOOL_ACTION switchUnits;
-    static TOOL_ACTION showHelp;
-    static TOOL_ACTION toBeDone;
 
 
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
-    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override;
+    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override { return OPT<TOOL_EVENT>(); }
 };
 
 #endif

@@ -39,6 +39,11 @@
 #include <../common/dialogs/dialog_color_picker.h>  // for CUSTOM_COLORS_LIST definition
 
 
+/// A variable name whose value holds the path of 3D shape files.
+/// Currently an environment variable, eventually a project variable.
+#define KISYS3DMOD wxT( "KISYS3DMOD" )
+
+
 #define KICAD_DEFAULT_3D_DRAWFRAME_STYLE    (wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS)
 
 #define VIEWER3D_FRAMENAME wxT( "Viewer3DFrameName" )

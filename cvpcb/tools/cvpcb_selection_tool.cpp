@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -25,38 +25,37 @@ using namespace std::placeholders;
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <hotkeys.h>
-
+#include <bitmaps.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
+#include <tools/cvpcb_actions.h>
 #include <preview_items/ruler_item.h>
-
 #include <cvpcb_id.h>
+#include <tools/cvpcb_selection_tool.h>
 
-#include "cvpcb_selection_tool.h"
-#include "cvpcb_actions.h"
 
 // Selection tool actions
 TOOL_ACTION CVPCB_ACTIONS::selectionActivate( "cvpcb.InteractiveSelection",
         AS_GLOBAL, 0,
         "", "", NULL, AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
 
+// Selection tool actions
+TOOL_ACTION CVPCB_ACTIONS::selectionTool( "cvpcb.InteractiveSelection.selectionTool",
+        AS_GLOBAL, 0,
+        _( "Select item(s)" ), "",
+        cursor_xpm, AF_ACTIVATE );
 
 TOOL_ACTION CVPCB_ACTIONS::measureTool( "cvpcb.InteractiveSelection.measureTool",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MEASURE_TOOL ),
         _( "Measure Tool" ), _( "Interactively measure distance between points" ),
-        nullptr, AF_ACTIVATE );
+        measurement_xpm, AF_ACTIVATE );
 
 
 CVPCB_SELECTION_TOOL::CVPCB_SELECTION_TOOL() :
         TOOL_INTERACTIVE( "cvpcb.InteractiveSelection" ),
-        m_frame( NULL ), m_menu( *this )
+        m_frame( nullptr ),
+        m_menu( *this )
 {
-}
-
-
-CVPCB_SELECTION_TOOL::~CVPCB_SELECTION_TOOL()
-{
-    getView()->Remove( &m_selection );
 }
 
 
@@ -127,42 +126,6 @@ int CVPCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-SELECTION& CVPCB_SELECTION_TOOL::GetSelection()
-{
-    return m_selection;
-}
-
-
-void CVPCB_SELECTION_TOOL::setTransitions()
-{
-    Go( &CVPCB_SELECTION_TOOL::Main,             CVPCB_ACTIONS::selectionActivate.MakeEvent() );
-    Go( &CVPCB_SELECTION_TOOL::MeasureTool,      CVPCB_ACTIONS::measureTool.MakeEvent() );
-}
-
-/*
-void CVPCB_SELECTION_TOOL::zoomFitSelection( void )
-{
-    //Should recalculate the view to zoom in on the selection
-    auto selectionBox = m_selection.ViewBBox();
-    auto canvas = m_frame->GetGalCanvas();
-    auto view = getView();
-
-    VECTOR2D screenSize = view->ToWorld( canvas->GetClientSize(), false );
-
-    if( !( selectionBox.GetWidth() == 0 ) || !( selectionBox.GetHeight() == 0 ) )
-    {
-        VECTOR2D vsize = selectionBox.GetSize();
-        double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
-                fabs( vsize.y / screenSize.y ) );
-        view->SetScale( scale );
-        view->SetCenter( selectionBox.Centre() );
-        view->Add( &m_selection );
-    }
-
-    m_frame->GetGalCanvas()->ForceRefresh();
-}
-*/
-
 int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 {
     auto& view = *getView();
@@ -170,8 +133,7 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     auto previous_settings = controls.GetSettings();
 
     Activate();
-    m_frame->SetToolID( ID_TB_MEASUREMENT_TOOL, wxCURSOR_PENCIL,
-                        _( "Measure distance" ) );
+    m_frame->SetToolID( ID_TB_MEASUREMENT_TOOL, wxCURSOR_PENCIL, _( "Measure distance" ) );
 
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
     KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, m_frame->GetUserUnits() );
@@ -259,34 +221,19 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
 const BOX2I SELECTION::ViewBBox() const
 {
-    EDA_RECT eda_bbox;
-
-    if( Size() == 1 )
-    {
-        eda_bbox = Front()->GetBoundingBox();
-    }
-    else if( Size() > 1 )
-    {
-        eda_bbox = Front()->GetBoundingBox();
-        auto i = m_items.begin();
-        ++i;
-
-        for( ; i != m_items.end(); ++i )
-        {
-            eda_bbox.Merge( (*i)->GetBoundingBox() );
-        }
-    }
-
-    return BOX2I( eda_bbox.GetOrigin(), eda_bbox.GetSize() );
+    return BOX2I();
 }
 
 
 const KIGFX::VIEW_GROUP::ITEMS SELECTION::updateDrawList() const
 {
-    std::vector<VIEW_ITEM*> items;
-
-    for( auto item : m_items )
-        items.push_back( item );
-
-    return items;
+    return std::vector<VIEW_ITEM*>();
 }
+
+
+void CVPCB_SELECTION_TOOL::setTransitions()
+{
+    Go( &CVPCB_SELECTION_TOOL::Main,             CVPCB_ACTIONS::selectionActivate.MakeEvent() );
+    Go( &CVPCB_SELECTION_TOOL::MeasureTool,      CVPCB_ACTIONS::measureTool.MakeEvent() );
+}
+

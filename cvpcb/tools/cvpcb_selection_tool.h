@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -24,18 +24,8 @@
 #include <tool/tool_interactive.h>
 #include <tool/action_menu.h>
 #include <tool/selection.h>
-#include <tool/selection_conditions.h>
 #include <tool/tool_menu.h>
-
 #include <display_footprints_frame.h>
-
-class SELECTION_AREA;
-class GERBER_COLLECTOR;
-
-namespace KIGFX
-{
-    class GAL;
-}
 
 
 /**
@@ -47,13 +37,15 @@ class CVPCB_SELECTION_TOOL : public TOOL_INTERACTIVE
 {
 public:
     CVPCB_SELECTION_TOOL();
-    ~CVPCB_SELECTION_TOOL();
+    ~CVPCB_SELECTION_TOOL() { }
 
     /// @copydoc TOOL_BASE::Init()
     bool Init() override;
 
     /// @copydoc TOOL_BASE::Reset()
     void Reset( RESET_REASON aReason ) override;
+
+    inline TOOL_MENU& GetToolMenu() { return m_menu; }
 
     /**
      * Function Main()
@@ -62,17 +54,10 @@ public:
      */
     int Main( const TOOL_EVENT& aEvent );
 
-    /** Returns the set of currently selected items.
+    /**
+     * Selections aren't currently supported in the footprint viewer.
      */
-    SELECTION& GetSelection();
-
-    inline TOOL_MENU& GetToolMenu()
-    {
-        return m_menu;
-    }
-
-    /** Clears the current selection.
-     */
+    SELECTION& GetSelection() { return m_selection; }
     void clearSelection() {};
 
     ///> Launches a tool to measure between points
@@ -81,18 +66,13 @@ public:
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
-    ///> Zooms the screen to center and fit the current selection.
-    void zoomFitSelection( void );
-
 private:
-
     /// Pointer to the parent frame.
     DISPLAY_FOOTPRINTS_FRAME* m_frame;
 
     /// Current state of selection (not really used: no selection in display footprints frame).
     SELECTION m_selection;
 
-    /// Menu model displayed by the tool.
     TOOL_MENU m_menu;
 };
 

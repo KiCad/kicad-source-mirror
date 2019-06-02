@@ -1006,7 +1006,7 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
 
             Zoom_Automatique( false );
 
-            Update3DView();
+            Update3DView( true );
 
             GetScreen()->ClearUndoRedoList();
             GetScreen()->ClrModify();

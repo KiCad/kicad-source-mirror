@@ -120,34 +120,20 @@ EDA_3D_VIEWER* PCB_BASE_FRAME::Get3DViewerFrame()
 }
 
 
-bool PCB_BASE_FRAME::Update3DView( const wxString* aTitle )
+void PCB_BASE_FRAME::Update3DView( bool aForceReload, const wxString* aTitle )
 {
     // Update the 3D view only if the viewer is opened by this frame
     EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
-    if( draw3DFrame == NULL )
-        return false;
-
-    // Ensure the viewer was created by me, and not by another editor:
-    PCB_BASE_FRAME* owner = draw3DFrame->Parent();
-
     // if I am not the owner, do not use the current viewer instance
-    if( this != owner )
-        return false;
+    // JEY TODO: need to keep looking for one that is ours....
+    if( !draw3DFrame || draw3DFrame->Parent() != this )
+        return;
 
     if( aTitle )
         draw3DFrame->SetTitle( *aTitle );
 
-    // The 3D view update can be time consumming to rebuild a board 3D view.
-    // So do not use a immediate update in the board editor
-    bool immediate_update = true;
-
-    if( IsType( FRAME_PCB ) )
-        immediate_update = false;
-
-    draw3DFrame->NewDisplay( immediate_update );
-
-    return true;
+    draw3DFrame->NewDisplay( aForceReload );
 }
 
 
@@ -405,38 +391,16 @@ void PCB_BASE_FRAME::ShowChangedLanguage()
 }
 
 
-// Virtual functions: Do nothing for PCB_BASE_FRAME window
-void PCB_BASE_FRAME::Show3D_Frame( wxCommandEvent& event )
-{
-}
-
-
-bool PCB_BASE_FRAME::CreateAndShow3D_Frame( bool aForceRecreateIfNotOwner )
+EDA_3D_VIEWER* PCB_BASE_FRAME::CreateAndShow3D_Frame()
 {
     EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
-    // Ensure the viewer was created by me, and not by another editor:
-    PCB_BASE_FRAME* owner = draw3DFrame ? draw3DFrame->Parent() : nullptr;
-
     // if I am not the owner, do not use the current viewer instance
-    if( draw3DFrame && this != owner )
-    {
-        if( aForceRecreateIfNotOwner )
-        {
-            draw3DFrame->Destroy();
-            draw3DFrame = nullptr;
-        }
-        else
-            return false;
-    }
+    if( draw3DFrame && draw3DFrame->Parent() != this )
+        draw3DFrame = nullptr;
 
     if( !draw3DFrame )
-    {
         draw3DFrame = new EDA_3D_VIEWER( &Kiway(), this, _( "3D Viewer" ) );
-        draw3DFrame->Raise();     // Needed with some Window Managers
-        draw3DFrame->Show( true );
-        return true;
-    }
 
     // Raising the window does not show the window on Windows if iconized. This should work
     // on any platform.
@@ -444,12 +408,13 @@ bool PCB_BASE_FRAME::CreateAndShow3D_Frame( bool aForceRecreateIfNotOwner )
          draw3DFrame->Iconize( false );
 
     draw3DFrame->Raise();
+    draw3DFrame->Show( true );
 
     // Raising the window does not set the focus on Linux.  This should work on any platform.
     if( wxWindow::FindFocus() != draw3DFrame )
         draw3DFrame->SetFocus();
 
-    return true;
+    return draw3DFrame;
 }
 
 

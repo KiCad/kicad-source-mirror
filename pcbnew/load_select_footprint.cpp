@@ -150,7 +150,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     if( !is_last_fp_from_brd )
         ReCreateHToolbar();
 
-    Update3DView();
+    Update3DView( true );
     updateView();
     GetGalCanvas()->Refresh();
     m_treePane->GetLibTree()->Refresh();    // update any previously-highlighted items

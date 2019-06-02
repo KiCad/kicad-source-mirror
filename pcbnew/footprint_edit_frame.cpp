@@ -132,9 +132,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
 
     EVT_MENU( ID_GRID_SETTINGS, FOOTPRINT_EDIT_FRAME::OnGridSettings )
 
-    // Menu 3D Frame
-    EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, FOOTPRINT_EDIT_FRAME::Show3D_Frame )
-
     // UI update events.
     EVT_UPDATE_UI( ID_MODEDIT_DELETE_PART, FOOTPRINT_EDIT_FRAME::OnUpdateModuleTargeted )
     EVT_UPDATE_UI( ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
@@ -635,17 +632,10 @@ void FOOTPRINT_EDIT_FRAME::ShowChangedLanguage()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
-{
-    bool forceRecreateIfNotOwner = true;
-    CreateAndShow3D_Frame( forceRecreateIfNotOwner );
-}
-
-
 void FOOTPRINT_EDIT_FRAME::OnModify()
 {
     PCB_BASE_FRAME::OnModify();
-    Update3DView();
+    Update3DView( false );
     m_treePane->GetLibTree()->Refresh();
 }
 

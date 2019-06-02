@@ -336,6 +336,12 @@ TOOL_ACTION ACTIONS::standardGraphics( "common.Control.standardGraphics",
         _( "Standard Graphics" ), _( "Use software graphics (fall-back)" ),
         tools_xpm );
 
+TOOL_ACTION ACTIONS::show3DViewer( "pcbnew.Control.show3DViewer",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_3D_VIEWER ),
+        _( "3D Viewer" ), _( "Show 3D viewer window" ),
+        three_d_xpm );
+
+
 
 // System-wide selection Events
 

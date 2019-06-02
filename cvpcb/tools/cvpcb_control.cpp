@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014-2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2007-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,47 +24,15 @@
  */
 
 #include <cstdint>
-
-#include <view/view.h>
 #include "cvpcb_actions.h"
 #include "cvpcb_control.h"
-
-#include <class_board.h>
-
-#include <hotkeys.h>
-#include <properties.h>
-
-#include <cvpcb_id.h>
-#include <tool/tool_manager.h>
-#include <view/view_controls.h>
-#include <tools/grid_helper.h>  // from pcbnew
-
 #include <functional>
 using namespace std::placeholders;
 
 
-// Miscellaneous
-TOOL_ACTION CVPCB_ACTIONS::switchCursor( "cvpcb.Control.switchCursor",
-        AS_GLOBAL, 0,
-        "", "" );
-
-TOOL_ACTION CVPCB_ACTIONS::switchUnits( "cvpcb.Control.switchUnits",
-        AS_GLOBAL, 'U',//TOOL_ACTION::LegacyHotKey( HK_SWITCH_UNITS ),
-        "", "" );
-
-TOOL_ACTION CVPCB_ACTIONS::no_selectionTool( "cvpcb.Control.no_selectionTool",
-        AS_GLOBAL, ESC,
-        "", "", NULL, AF_ACTIVATE );
-
-
-///////////////
 CVPCB_CONTROL::CVPCB_CONTROL() :
-    TOOL_INTERACTIVE( "cvpcb.Control" ), m_frame( NULL )
-{
-}
-
-
-CVPCB_CONTROL::~CVPCB_CONTROL()
+    TOOL_INTERACTIVE( "cvpcb.Control" ),
+    m_frame( nullptr )
 {
 }
 
@@ -75,21 +43,9 @@ void CVPCB_CONTROL::Reset( RESET_REASON aReason )
 }
 
 
-// Miscellaneous
-int CVPCB_CONTROL::SwitchCursor( const TOOL_EVENT& aEvent )
+int CVPCB_CONTROL::Show3DViewer( const TOOL_EVENT& aEvent )
 {
-    auto& galOpts = m_frame->GetGalDisplayOptions();
-
-    galOpts.m_fullscreenCursor = !galOpts.m_fullscreenCursor;
-    galOpts.NotifyChanged();
-
-    return 0;
-}
-
-
-int CVPCB_CONTROL::SwitchUnits( const TOOL_EVENT& aEvent )
-{
-    m_frame->ChangeUserUnits( m_frame->GetUserUnits() == INCHES ? MILLIMETRES : INCHES );
+    m_frame->CreateAndShow3D_Frame();
     return 0;
 }
 
@@ -97,6 +53,5 @@ int CVPCB_CONTROL::SwitchUnits( const TOOL_EVENT& aEvent )
 void CVPCB_CONTROL::setTransitions()
 {
     // Miscellaneous
-    Go( &CVPCB_CONTROL::SwitchCursor,       CVPCB_ACTIONS::switchCursor.MakeEvent() );
-    Go( &CVPCB_CONTROL::SwitchUnits,        CVPCB_ACTIONS::switchUnits.MakeEvent() );
+    Go( &CVPCB_CONTROL::Show3DViewer,       ACTIONS::show3DViewer.MakeEvent() );
 }

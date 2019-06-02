@@ -29,9 +29,6 @@
 #include <tool/tool_interactive.h>
 #include <display_footprints_frame.h>
 
-namespace KIGFX {
-    class ORIGIN_VIEWITEM;
-}
 
 /**
  * Class CVPCB_CONTROL
@@ -43,14 +40,12 @@ class CVPCB_CONTROL : public TOOL_INTERACTIVE
 {
 public:
     CVPCB_CONTROL();
-    ~CVPCB_CONTROL();
+    ~CVPCB_CONTROL() { }
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    // Miscellaneous
-    int SwitchCursor( const TOOL_EVENT& aEvent );
-    int SwitchUnits( const TOOL_EVENT& aEvent );
+    int Show3DViewer( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
@@ -58,14 +53,6 @@ public:
 private:
     ///> Pointer to the currently used edit/draw frame.
     DISPLAY_FOOTPRINTS_FRAME* m_frame;
-
-    ///> Grid origin marker.
-    std::unique_ptr<KIGFX::ORIGIN_VIEWITEM> m_gridOrigin;
-
-    KIGFX::VIEW* view()
-    {
-        return m_frame->GetGalCanvas()->GetView();
-    }
 };
 
 #endif

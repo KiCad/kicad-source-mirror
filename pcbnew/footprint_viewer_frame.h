@@ -156,19 +156,12 @@ private:
     void SelectAndViewFootprint( int aMode );
 
     /**
-     * Function Show3D_Frame (virtual)
-     * displays 3D view of the footprint (module) being edited.
-     */
-    void Show3D_Frame( wxCommandEvent& event ) override;
-
-    /**
-     * Function Update3D_Frame
+     * Function Update3DView
      * must be called after a footprint selection
      * Updates the 3D view and 3D frame title.
-     * @param aForceReloadFootprint = true to reload data (default)
-     *   = false to update title only -(after creating the 3D viewer)
+     * @param aForceReload = true to reload data immediately
      */
-    void Update3D_Frame( bool aForceReloadFootprint = true );
+    void Update3DView( bool aForceReload, const wxString* aTitle = nullptr ) override;
 
     /*
      * Virtual functions, not used here, but needed by PCB_BASE_FRAME

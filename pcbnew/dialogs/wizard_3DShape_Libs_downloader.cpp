@@ -42,7 +42,7 @@
 #include <project.h>
 #include <wizard_3DShape_Libs_downloader.h>
 #include <confirm.h>
-#include <3d_viewer.h>
+#include <3d_viewer/eda_3d_viewer.h>
 #include <bitmaps.h>
 
 #include <../github/github_getliblist.h>

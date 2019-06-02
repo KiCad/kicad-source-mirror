@@ -116,7 +116,7 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
 
     Zoom_Automatique( false );
 
-    Update3DView();
+    Update3DView( true );
 
     GetScreen()->ClrModify();
 
@@ -230,7 +230,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             updateView();
             GetGalCanvas()->Refresh();
-            Update3DView();
+            Update3DView( true );
 
             SyncLibraryTree( false );
         }
@@ -292,7 +292,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
                 updateView();
                 GetGalCanvas()->Refresh();
-                Update3DView();
+                Update3DView( true );
 
                 SyncLibraryTree( false );
             }
@@ -415,7 +415,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         GetScreen()->SetModify();
         Zoom_Automatique( false );
         GetGalCanvas()->Refresh();
-        Update3DView();
+        Update3DView( true );
 
         break;
 

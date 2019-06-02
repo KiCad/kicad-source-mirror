@@ -51,10 +51,6 @@ public:
 
     void    OnCloseWindow( wxCloseEvent& Event ) override;
 
-    /** UI events:
-     */
-    void OnUIToolSelection( wxUpdateUIEvent& aEvent );
-
     void    ReCreateHToolbar() override;
     void    ReCreateVToolbar() override;
     void    ReCreateOptToolbar() override;
@@ -108,11 +104,6 @@ public:
 
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
     EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override { return NULL; }
-
-    /**
-     * Display 3D frame of current footprint selection.
-     */
-    void    Show3D_Frame( wxCommandEvent& event ) override;
 
     /* SaveCopyInUndoList() virtual
      * currently: do nothing in CvPcb.
