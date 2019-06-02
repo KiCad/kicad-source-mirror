@@ -607,6 +607,9 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
         return -1;
     }
 
+    if( !newPart )
+        return -1;
+
     m_frame->SaveCopyInUndoList( part );
     m_selectionTool->ClearSelection();
 
