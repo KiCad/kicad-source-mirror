@@ -29,7 +29,7 @@
 #include <wx/htmllbox.h>
 #include <fctsys.h>
 #include <pcbnew.h>
-#include <drc.h>
+#include <tools/drc.h>
 #include <class_marker_pcb.h>
 #include <class_board.h>
 #include <dialog_drc_base.h>

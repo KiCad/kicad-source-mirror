@@ -23,10 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file drc.cpp
- */
-
 #include <fctsys.h>
 #include <pcb_edit_frame.h>
 #include <trigo.h>
@@ -45,13 +41,13 @@
 #include <geometry/geometry_utils.h>
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
-
+#include <bitmaps.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-
+#include <tools/pcb_tool_base.h>
 #include <kiface_i.h>
 #include <pcbnew.h>
-#include <drc.h>
+#include <tools/drc.h>
 #include <pcb_netlist.h>
 
 #include <dialog_drc.h>
@@ -62,13 +58,79 @@
 
 #include <drc/courtyard_overlap.h>
 
+
+TOOL_ACTION PCB_ACTIONS::runDRC( "pcbnew.DRCTool.runDRC",
+        AS_GLOBAL, 0,
+        _( "Design Rules Checker" ), _( "Show the design rules checker window" ),
+        erc_xpm );
+
+
+DRC::DRC() :
+        PCB_TOOL_BASE( "pcbnew.DRCTool" )
+{
+    m_drcDialog  = NULL;
+
+    // establish initial values for everything:
+    m_drcInLegacyRoutingMode = false;
+    m_doPad2PadTest     = true;         // enable pad to pad clearance tests
+    m_doUnconnectedTest = true;         // enable unconnected tests
+    m_doZonesTest = false;              // disable zone to items clearance tests
+    m_doKeepoutTest = true;             // enable keepout areas to items clearance tests
+    m_refillZones = false;              // Only fill zones if requested by user.
+    m_reportAllTrackErrors = false;
+    m_testFootprints = false;
+
+    m_drcRun = false;
+    m_footprintsTested = false;
+
+    m_doCreateRptFile = false;
+    // m_rptFilename set to empty by its constructor
+
+    m_currentMarker = NULL;
+
+    m_segmAngle  = 0;
+    m_segmLength = 0;
+
+    m_xcliplo = 0;
+    m_ycliplo = 0;
+    m_xcliphi = 0;
+    m_ycliphi = 0;
+}
+
+
+DRC::~DRC()
+{
+    for( DRC_ITEM* unconnectedItem : m_unconnected )
+        delete unconnectedItem;
+
+    for( DRC_ITEM* footprintItem : m_footprints )
+        delete footprintItem;
+}
+
+
+void DRC::Reset( RESET_REASON aReason )
+{
+    m_pcbEditorFrame = getEditFrame<PCB_EDIT_FRAME>();
+
+    if( aReason == MODEL_RELOAD )
+    {
+        if( m_drcDialog )
+            DestroyDRCDialog( wxID_OK );
+
+        m_pcb = m_pcbEditorFrame->GetBoard();
+
+        m_markerFactory.SetUnitsProvider( [=]() { return m_pcbEditorFrame->GetUserUnits(); } );
+    }
+}
+
+
 void DRC::ShowDRCDialog( wxWindow* aParent )
 {
     bool show_dlg_modal = true;
 
     // the dialog needs a parent frame. if it is not specified, this is
     // the PCB editor frame specified in DRC class.
-    if( aParent == NULL )
+    if( !aParent )
     {
         // if any parent is specified, the dialog is modal.
         // if this is the default PCB editor frame, it is not modal
@@ -76,10 +138,8 @@ void DRC::ShowDRCDialog( wxWindow* aParent )
         aParent = m_pcbEditorFrame;
     }
 
-    TOOL_MANAGER* toolMgr = m_pcbEditorFrame->GetToolManager();
-    toolMgr->RunAction( ACTIONS::cancelInteractive, true );
-    toolMgr->DeactivateTool();
-    toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    Activate();
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     if( !m_drcDialog )
     {
@@ -98,6 +158,13 @@ void DRC::ShowDRCDialog( wxWindow* aParent )
         updatePointers();
         m_drcDialog->Show( true );
     }
+}
+
+
+int DRC::ShowDRCDialog( const TOOL_EVENT& aEvent )
+{
+    ShowDRCDialog( nullptr );
+    return 0;
 }
 
 
@@ -128,99 +195,8 @@ void DRC::DestroyDRCDialog( int aReason )
         m_drcDialog->GetRptSettings( &m_doCreateRptFile, m_rptFilename);
 
         m_drcDialog->Destroy();
-        m_drcDialog = NULL;
+        m_drcDialog = nullptr;
     }
-}
-
-
-DRC::DRC( PCB_EDIT_FRAME* aPcbWindow )
-{
-    m_pcbEditorFrame = aPcbWindow;
-    m_pcb = aPcbWindow->GetBoard();
-    m_drcDialog  = NULL;
-
-    // establish initial values for everything:
-    m_drcInLegacyRoutingMode = false;
-    m_doPad2PadTest     = true;         // enable pad to pad clearance tests
-    m_doUnconnectedTest = true;         // enable unconnected tests
-    m_doZonesTest = false;              // disable zone to items clearance tests
-    m_doKeepoutTest = true;             // enable keepout areas to items clearance tests
-    m_refillZones = false;              // Only fill zones if requested by user.
-    m_reportAllTrackErrors = false;
-    m_testFootprints = false;
-
-    m_drcRun = false;
-    m_footprintsTested = false;
-
-    m_doCreateRptFile = false;
-    // m_rptFilename set to empty by its constructor
-
-    m_currentMarker = NULL;
-
-    m_segmAngle  = 0;
-    m_segmLength = 0;
-
-    m_xcliplo = 0;
-    m_ycliplo = 0;
-    m_xcliphi = 0;
-    m_ycliphi = 0;
-
-    m_markerFactory.SetUnitsProvider( [=]() { return aPcbWindow->GetUserUnits(); } );
-}
-
-
-DRC::~DRC()
-{
-    for( DRC_ITEM* unconnectedItem : m_unconnected )
-        delete unconnectedItem;
-
-    for( DRC_ITEM* footprintItem : m_footprints )
-        delete footprintItem;
-}
-
-
-int DRC::DrcOnCreatingTrack( TRACK* aRefSegm, TRACKS& aList )
-{
-    updatePointers();
-
-    // Set right options for this on line drc
-    int drc_state = m_drcInLegacyRoutingMode;
-    m_drcInLegacyRoutingMode = true;
-    int rpt_state = m_reportAllTrackErrors;
-    m_reportAllTrackErrors = false;
-
-    // Test new segment against tracks and pads, not against copper zones
-    if( !doTrackDrc( aRefSegm, aList.begin(), aList.end(), true, false ) )
-    {
-        if( m_currentMarker )
-        {
-            m_pcbEditorFrame->SetMsgPanel( m_currentMarker );
-            delete m_currentMarker;
-            m_currentMarker = nullptr;
-        }
-
-        m_drcInLegacyRoutingMode = drc_state;
-        m_reportAllTrackErrors = rpt_state;
-        return BAD_DRC;
-    }
-
-    if( !doTrackKeepoutDrc( aRefSegm ) )
-    {
-        if( m_currentMarker )
-        {
-            m_pcbEditorFrame->SetMsgPanel( m_currentMarker );
-            delete m_currentMarker;
-            m_currentMarker = nullptr;
-        }
-
-        m_drcInLegacyRoutingMode = drc_state;
-        m_reportAllTrackErrors = rpt_state;
-        return BAD_DRC;
-    }
-
-    m_drcInLegacyRoutingMode = drc_state;
-    m_reportAllTrackErrors = rpt_state;
-    return OK_DRC;
 }
 
 
@@ -374,33 +350,6 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
         commit.Push( wxEmptyString, false, false );
 
     return nerrors;
-}
-
-
-int DRC::DrcOnCreatingZone( ZONE_CONTAINER* aArea, int aCornerIndex )
-{
-    updatePointers();
-
-    // Set right options for this on line drc
-    int drc_state = m_drcInLegacyRoutingMode;
-    m_drcInLegacyRoutingMode = true;
-    int rpt_state = m_reportAllTrackErrors;
-    m_reportAllTrackErrors = false;
-
-    if( !doEdgeZoneDrc( aArea, aCornerIndex ) )
-    {
-        wxASSERT( m_currentMarker );
-        m_pcbEditorFrame->SetMsgPanel( m_currentMarker );
-        delete m_currentMarker;
-        m_currentMarker = nullptr;
-        m_drcInLegacyRoutingMode = drc_state;
-        m_reportAllTrackErrors = rpt_state;
-        return BAD_DRC;
-    }
-
-    m_drcInLegacyRoutingMode = drc_state;
-    m_reportAllTrackErrors = rpt_state;
-    return OK_DRC;
 }
 
 
@@ -1522,5 +1471,12 @@ void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS_T aUnits,
         }
     }
 }
+
+
+void DRC::setTransitions()
+{
+    Go( &DRC::ShowDRCDialog,              PCB_ACTIONS::runDRC.MakeEvent() );
+}
+
 
 

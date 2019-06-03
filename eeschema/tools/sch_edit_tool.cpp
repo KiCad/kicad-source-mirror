@@ -46,6 +46,7 @@
 #include <eeschema_id.h>
 #include <status_popup.h>
 #include <wx/gdicmn.h>
+#include <invoke_sch_dialog.h>
 #include "sch_drawing_tools.h"
 
 
@@ -98,6 +99,11 @@ TOOL_ACTION EE_ACTIONS::autoplaceFields( "eeschema.InteractiveEdit.autoplaceFiel
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_AUTOPLACE_FIELDS ),
         _( "Autoplace Fields" ), _( "Runs the automatic placement algorithm on the symbol's fields" ),
         autoplace_fields_xpm );
+
+TOOL_ACTION EE_ACTIONS::updateFieldsFromLibrary( "eeschema.InteractiveEdit.updateFieldsFromLibrary",
+        AS_GLOBAL, 0,
+        _( "Update Fields from Library..." ), _( "Sets symbol fields to original library values" ),
+        update_fields_xpm );
 
 TOOL_ACTION EE_ACTIONS::toggleDeMorgan( "eeschema.InteractiveEdit.toggleDeMorgan",
         AS_GLOBAL, 0,
@@ -175,6 +181,9 @@ TOOL_ACTION EE_ACTIONS::breakBus( "eeschema.InteractiveEdit.breakBus",
         break_line_xpm );
 
 
+char g_lastBusEntryShape = '/';
+
+
 class SYMBOL_UNIT_MENU : public ACTION_MENU
 {
 public:
@@ -183,7 +192,6 @@ public:
         SetIcon( component_select_unit_xpm );
         SetTitle( _( "Symbol Unit" ) );
     }
-
 
 protected:
     ACTION_MENU* create() const override
@@ -236,11 +244,6 @@ private:
 
 SCH_EDIT_TOOL::SCH_EDIT_TOOL() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveEdit" )
-{
-}
-
-
-SCH_EDIT_TOOL::~SCH_EDIT_TOOL()
 {
 }
 
@@ -1124,6 +1127,23 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TOOL::UpdateFields( const TOOL_EVENT& aEvent )
+{
+    std::list<SCH_COMPONENT*> components;
+
+    for( SCH_ITEM* item = m_frame->GetScreen()->GetDrawItems(); item; item = item->Next() )
+    {
+        if( item->Type() == SCH_COMPONENT_T )
+            components.push_back( static_cast<SCH_COMPONENT*>( item ) );
+    }
+
+    if( InvokeDialogUpdateFields( m_frame, components, true ) == wxID_OK )
+        m_frame->GetCanvas()->Refresh();
+
+    return 0;
+}
+
+
 int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
 {
     SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
@@ -1369,6 +1389,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::EditField,          EE_ACTIONS::editValue.MakeEvent() );
     Go( &SCH_EDIT_TOOL::EditField,          EE_ACTIONS::editFootprint.MakeEvent() );
     Go( &SCH_EDIT_TOOL::AutoplaceFields,    EE_ACTIONS::autoplaceFields.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::UpdateFields,       EE_ACTIONS::updateFieldsFromLibrary.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::toggleDeMorgan.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::showDeMorganStandard.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::showDeMorganAlternate.MakeEvent() );

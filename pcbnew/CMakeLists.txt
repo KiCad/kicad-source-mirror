@@ -235,8 +235,8 @@ set( PCBNEW_CLASS_SRCS
     board_netlist_updater.cpp
     build_BOM_from_board.cpp
     cross-probing.cpp
-    drc.cpp
-    drc_clearance_test_functions.cpp
+    tools/drc.cpp
+    tools/drc_clearance_test_functions.cpp
     edit.cpp
     edit_track_width.cpp
     files.cpp

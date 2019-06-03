@@ -59,6 +59,9 @@ public:
     int PageSettings( const TOOL_EVENT& aEvent );
     int Plot( const TOOL_EVENT& aEvent );
 
+    int UpdatePCBFromSchematic( const TOOL_EVENT& aEvent );
+    int TogglePythonConsole( const TOOL_EVENT& aEvent );
+
     int Find( const TOOL_EVENT& aEvent );
 
     // Track & via size control
@@ -128,6 +131,8 @@ public:
 
     ///> Shows local ratsnest of a component
     int LocalRatsnestTool( const TOOL_EVENT& aEvent );
+
+    int ListNets( const TOOL_EVENT& aEvent );
 
 private:
     ///> Event handler to recalculate dynamic ratsnest

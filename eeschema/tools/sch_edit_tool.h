@@ -36,7 +36,7 @@ class SCH_EDIT_TOOL : public EE_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
     SCH_EDIT_TOOL();
-    ~SCH_EDIT_TOOL();
+    ~SCH_EDIT_TOOL() { }
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
@@ -50,6 +50,7 @@ public:
     int Properties( const TOOL_EVENT& aEvent );
     int EditField( const TOOL_EVENT& aEvent );
     int AutoplaceFields( const TOOL_EVENT& aEvent );
+    int UpdateFields( const TOOL_EVENT& aEvent );
     int ConvertDeMorgan( const TOOL_EVENT& aEvent );
 
     int ChangeShape( const TOOL_EVENT& aEvent );

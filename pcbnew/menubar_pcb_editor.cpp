@@ -42,13 +42,6 @@
 #include "pcbnew_id.h"
 
 
-// Build the route menu
-static void prepareRouteMenu( wxMenu* aParentMenu );
-
-// Build the tools menu
-static void prepareToolsMenu( wxMenu* aParentMenu );
-
-
 void PCB_EDIT_FRAME::ReCreateMenuBar()
 {
     SELECTION_TOOL* selTool = m_toolManager->GetTool<SELECTION_TOOL>();
@@ -86,6 +79,13 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
         fileMenu->AddItem( ACTIONS::doNew,         SELECTION_CONDITIONS::ShowAlways );
         fileMenu->AddItem( ACTIONS::open,          SELECTION_CONDITIONS::ShowAlways );
         fileMenu->AddMenu( openRecentMenu,         SELECTION_CONDITIONS::ShowAlways );
+
+        fileMenu->AddItem( PCB_ACTIONS::appendBoard, SELECTION_CONDITIONS::ShowAlways );
+        fileMenu->AddItem( ID_IMPORT_NON_KICAD_BOARD,
+                           _( "Import Non-KiCad Board File..." ),
+                           _( "Import board file from other applications" ),
+                           import_brd_file_xpm,      SELECTION_CONDITIONS::ShowAlways );
+
         fileMenu->AddSeparator();
     }
 
@@ -106,21 +106,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                        _( "Clear board and get last rescue file automatically saved by Pcbnew" ),
                        rescue_xpm,                  SELECTION_CONDITIONS::ShowAlways );
 
-    if( Kiface().IsSingle() )   // not when under a project mgr
-    {
-        fileMenu->AddItem( PCB_ACTIONS::appendBoard, SELECTION_CONDITIONS::ShowAlways );
-        fileMenu->AddItem( ID_IMPORT_NON_KICAD_BOARD,
-                           _( "Import Non-KiCad Board File..." ),
-                           _( "Import board file from other applications" ),
-                           import_brd_file_xpm,      SELECTION_CONDITIONS::ShowAlways );
-    }
-
     fileMenu->AddItem( ID_MENU_READ_BOARD_BACKUP_FILE,
                        _( "Revert to Last Backup" ),
                        _( "Clear board and get previous backup version of board" ),
                        undo_xpm,                     SELECTION_CONDITIONS::ShowAlways );
-
-    fileMenu->AddSeparator();
 
     // Import submenu
     ACTION_MENU* submenuImport = new ACTION_MENU();
@@ -135,6 +124,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuImport->Add( _( "Graphics..." ), _( "Import 2D drawing file" ),
                         ID_GEN_IMPORT_GRAPHICS_FILE, import_vector_xpm );
 
+    fileMenu->AddSeparator();
     fileMenu->AddMenu( submenuImport,                SELECTION_CONDITIONS::ShowAlways );
 
     // Export submenu
@@ -261,7 +251,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AddItem( ID_MENU_PCB_EDIT_TEXT_AND_GRAPHICS,
                        _( "Edit Text && Graphic Properties..." ), "",
                        reset_text_xpm,                  SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( PCB_ACTIONS::exchangeFootprints, SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::changeFootprints, SELECTION_CONDITIONS::ShowAlways );
     editMenu->AddItem( ID_MENU_PCB_SWAP_LAYERS,
                        _( "Swap Layers..." ),
                        _( "Move tracks or drawings from a layer to another layer" ),
@@ -455,33 +445,95 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     //-- Route Menu ----------------------------------------------------------
     //
-    wxMenu* routeMenu = new wxMenu;
-    prepareRouteMenu( routeMenu );
+    CONDITIONAL_MENU* routeMenu = new CONDITIONAL_MENU( false, selTool );
+
+    routeMenu->AddItem( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR,
+                        _( "Set &Layer Pair..." ), _( "Change active layer pair" ),
+                        select_layer_pair_xpm,            SELECTION_CONDITIONS::ShowAlways );
+
+    routeMenu->AddSeparator();
+    routeMenu->AddItem( ID_TRACK_BUTT,
+                        AddHotkeyName( _( "&Single Track" ), g_Board_Editor_Hotkeys_Descr,
+                                       HK_ADD_NEW_TRACK, IS_ACCELERATOR ),
+                        _( "Interactively route single track" ),
+                        add_tracks_xpm,                   SELECTION_CONDITIONS::ShowAlways );
+
+    routeMenu->AddItem( ID_DIFF_PAIR_BUTT,
+                        AddHotkeyName( _( "&Differential Pair" ), g_Board_Editor_Hotkeys_Descr,
+                                       HK_ROUTE_DIFF_PAIR, IS_ACCELERATOR ),
+                        _( "Interactively route differential pair" ),
+                        ps_diff_pair_xpm,                 SELECTION_CONDITIONS::ShowAlways );
+
+    routeMenu->AddSeparator();
+    routeMenu->AddItem( ID_TUNE_SINGLE_TRACK_LEN_BUTT,
+                        AddHotkeyName( _( "&Tune Track Length" ), g_Board_Editor_Hotkeys_Descr,
+                                       HK_ROUTE_TUNE_SINGLE, IS_ACCELERATOR ),
+                        _( "Tune length of single track" ),
+                        ps_tune_length_xpm,               SELECTION_CONDITIONS::ShowAlways );
+
+    routeMenu->AddItem( ID_TUNE_DIFF_PAIR_LEN_BUTT,
+                        AddHotkeyName( _( "Tune Differential Pair &Length" ), g_Board_Editor_Hotkeys_Descr,
+                                       HK_ROUTE_TUNE_DIFF_PAIR, IS_ACCELERATOR ),
+                        _( "Tune length of differential pair" ),
+                        ps_diff_pair_tune_length_xpm,     SELECTION_CONDITIONS::ShowAlways );
+
+    routeMenu->AddItem( ID_TUNE_DIFF_PAIR_SKEW_BUTT,
+                        AddHotkeyName( _( "Tune Differential Pair S&kew/Phase" ), g_Board_Editor_Hotkeys_Descr,
+                                       HK_ROUTE_TUNE_SKEW, IS_ACCELERATOR ),
+                        _( "Tune skew/phase of a differential pair" ),
+                        ps_diff_pair_tune_phase_xpm,      SELECTION_CONDITIONS::ShowAlways );
+
+    routeMenu->AddSeparator();
+    routeMenu->AddItem( ID_MENU_INTERACTIVE_ROUTER_SETTINGS,
+                        _( "&Interactive Router Settings..." ),
+                        _( "Configure interactive router" ),
+                        tools_xpm,                        SELECTION_CONDITIONS::ShowAlways );
 
     //-- Inspect Menu --------------------------------------------------------
     //
-    wxMenu* inspectMenu = new wxMenu;
+    CONDITIONAL_MENU* inspectMenu = new CONDITIONAL_MENU( false, selTool );
 
-    AddMenuItem( inspectMenu, ID_MENU_LIST_NETS,
-                 _( "&List Nets" ),
-                 _( "View list of nets with names and IDs" ),
-                 KiBitmap( list_nets_xpm ) );
+    inspectMenu->AddItem( PCB_ACTIONS::listNets,         SELECTION_CONDITIONS::ShowAlways );
+    inspectMenu->AddItem( ACTIONS::measureTool,          SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( inspectMenu, ID_PCB_MEASUREMENT_TOOL,
-                 AddHotkeyName( _( "&Measure" ), g_Board_Editor_Hotkeys_Descr, HK_MEASURE_TOOL ),
-                 _( "Measure distance" ),
-                 KiBitmap( measurement_xpm ) );
+    inspectMenu->AddSeparator();
+    inspectMenu->AddItem( PCB_ACTIONS::runDRC,           SELECTION_CONDITIONS::ShowAlways );
 
-    inspectMenu->AppendSeparator();
-    AddMenuItem( inspectMenu, ID_DRC_CONTROL,
-                 _( "&Design Rules Checker" ),
-                 _( "Perform design rules check" ),
-                 KiBitmap( erc_xpm ) );
+    inspectMenu->Resolve();
 
     //-- Tools menu ----------------------------------------------------------
     //
-    wxMenu* toolsMenu = new wxMenu;
-    prepareToolsMenu( toolsMenu );
+    CONDITIONAL_MENU* toolsMenu = new CONDITIONAL_MENU( false, selTool );
+
+    toolsMenu->AddItem( ACTIONS::updatePcbFromSchematic, SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( PCB_ACTIONS::updateFootprints,   SELECTION_CONDITIONS::ShowAlways );
+
+#if defined(KICAD_SCRIPTING_WXPYTHON)
+    auto pythonConsoleShownCondition = [] ( const SELECTION& aSel ) {
+        wxMiniFrame* pythonConsole = (wxMiniFrame *) PCB_EDIT_FRAME::findPythonConsole();
+        return pythonConsole && pythonConsole->IsShown();
+    };
+
+    toolsMenu->AddSeparator();
+    toolsMenu->AddCheckItem( PCB_ACTIONS::showPythonConsole,  pythonConsoleShownCondition );
+#endif
+
+#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
+    ACTION_MENU* submenuActionPlugins = new ACTION_MENU();
+    submenuActionPlugins->SetTool( selTool );
+    submenuActionPlugins->SetTitle( _( "External Plugins" ) );
+    submenuActionPlugins->SetIcon( hammer_xpm );
+
+    submenuActionPlugins->Add( _( "Refresh Plugins" ),
+                               _( "Reload all python plugins and refresh plugin menus" ),
+                               ID_TOOLBARH_PCB_ACTION_PLUGIN_REFRESH, reload_xpm );
+    submenuActionPlugins->AppendSeparator();
+
+    toolsMenu->AddSeparator();
+    toolsMenu->AddMenu( submenuActionPlugins,            SELECTION_CONDITIONS::ShowAlways );
+#endif
+
+    toolsMenu->Resolve();
 
     //-- Preferences menu ----------------------------------------------------
     //
@@ -494,18 +546,19 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
         return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
     };
 
-    prefsMenu->AddItem( ACTIONS::configurePaths,        SELECTION_CONDITIONS::ShowAlways );
-    prefsMenu->AddItem( ACTIONS::showFootprintLibTable, SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->AddItem( ACTIONS::configurePaths,         SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->AddItem( ACTIONS::showFootprintLibTable,  SELECTION_CONDITIONS::ShowAlways );
 
 #ifdef BUILD_GITHUB_PLUGIN
-    prefsMenu->AddItem( ID_PCB_3DSHAPELIB_WIZARD, _( "Add &3D Shapes Libraries Wizard..." ),
+    prefsMenu->AddItem( ID_PCB_3DSHAPELIB_WIZARD,
+                        _( "Add &3D Shapes Libraries Wizard..." ),
                         _( "Download 3D shape libraries from GitHub" ),
-                        import3d_xpm,                   SELECTION_CONDITIONS::ShowAlways );
+                        import3d_xpm,                    SELECTION_CONDITIONS::ShowAlways );
 #endif
     prefsMenu->AddItem( wxID_PREFERENCES,
                         AddHotkeyName( _( "Preferences..." ), g_Module_Editor_Hotkeys_Descr, HK_PREFERENCES ),
                         _( "Show preferences for all open tools" ),
-                        preference_xpm,                 SELECTION_CONDITIONS::ShowAlways );
+                        preference_xpm,                  SELECTION_CONDITIONS::ShowAlways );
 
     prefsMenu->AddSeparator();
     Pgm().AddMenuLanguageList( prefsMenu );
@@ -533,112 +586,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     // Populate the Action Plugin sub-menu
-    RebuildActionPluginMenus();
+    buildActionPluginMenus( submenuActionPlugins );
 #endif
 
-}
-
-
-// Build the route menu
-void prepareRouteMenu( wxMenu* aParentMenu )
-{
-    wxString text;
-
-    AddMenuItem( aParentMenu, ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR,
-                 _( "Set &Layer Pair..." ), _( "Change active layer pair" ),
-                 KiBitmap( select_layer_pair_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    text = AddHotkeyName( _( "&Single Track" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_ADD_NEW_TRACK, IS_ACCELERATOR );
-    AddMenuItem( aParentMenu, ID_TRACK_BUTT, text,
-                 _( "Interactively route single track" ),
-                 KiBitmap( add_tracks_xpm ) );
-
-    text = AddHotkeyName( _( "&Differential Pair" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_ROUTE_DIFF_PAIR, IS_ACCELERATOR );
-    AddMenuItem( aParentMenu, ID_DIFF_PAIR_BUTT, text,
-                 _( "Interactively route differential pair" ),
-                 KiBitmap( ps_diff_pair_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    text = AddHotkeyName( _( "&Tune Track Length" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_ROUTE_TUNE_SINGLE, IS_ACCELERATOR );
-    AddMenuItem( aParentMenu, ID_TUNE_SINGLE_TRACK_LEN_BUTT, text,
-                 _( "Tune length of single track" ),
-                 KiBitmap( ps_tune_length_xpm ) );
-
-    text = AddHotkeyName( _( "Tune Differential Pair &Length" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_ROUTE_TUNE_DIFF_PAIR, IS_ACCELERATOR );
-    AddMenuItem( aParentMenu, ID_TUNE_DIFF_PAIR_LEN_BUTT, text,
-                 _( "Tune length of differential pair" ),
-                 KiBitmap( ps_diff_pair_tune_length_xpm ) );
-
-    text = AddHotkeyName( _( "Tune Differential Pair S&kew/Phase" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_ROUTE_TUNE_SKEW, IS_ACCELERATOR );
-    AddMenuItem( aParentMenu, ID_TUNE_DIFF_PAIR_SKEW_BUTT, text,
-                 _( "Tune skew/phase of a differential pair" ),
-                 KiBitmap( ps_diff_pair_tune_phase_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, ID_MENU_INTERACTIVE_ROUTER_SETTINGS,
-                 _( "&Interactive Router Settings..." ),
-                 _( "Configure interactive router" ),
-                 KiBitmap( tools_xpm ) );
-}
-
-
-// Build the tools menu
-void prepareToolsMenu( wxMenu* aParentMenu )
-{
-    AddMenuItem( aParentMenu,
-                 ID_UPDATE_PCB_FROM_SCH,
-                 _( "Update &PCB from Schematic..." ),
-                 _( "Update PCB design with current schematic (forward annotation)" ),
-                 KiBitmap( update_pcb_from_sch_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_MENU_PCB_UPDATE_FOOTPRINTS,
-                 _( "Update &Footprints from Library..." ),
-                 _( "Update footprints to include any changes from the library" ),
-                 KiBitmap( reload_xpm ) );
-
-    bool needsSeparator = true;
-
-#if defined(KICAD_SCRIPTING_WXPYTHON)
-    if( needsSeparator )
-    {
-        aParentMenu->AppendSeparator();
-        needsSeparator = false;
-    }
-
-    AddMenuItem( aParentMenu, ID_TOOLBARH_PCB_SCRIPTING_CONSOLE,
-                 _( "&Scripting Console" ),
-                 _( "Show/Hide the Python scripting console" ),
-                 KiBitmap( py_script_xpm ) );
-#endif
-
-#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
-    if( needsSeparator )
-    {
-        aParentMenu->AppendSeparator();
-        needsSeparator = false;
-    }
-
-    wxMenu* submenuActionPluginsMenu = new wxMenu();
-
-    AddMenuItem( aParentMenu, submenuActionPluginsMenu, ID_TOOLBARH_PCB_ACTION_PLUGIN,
-                 _( "&External Plugins..." ),
-                 _( "Execute or reload python action plugins" ),
-                 KiBitmap( hammer_xpm ) );
-
-    AddMenuItem( submenuActionPluginsMenu, ID_TOOLBARH_PCB_ACTION_PLUGIN_REFRESH,
-                 _( "&Refresh Plugins" ),
-                 _( "Reload all python plugins and refresh plugin menus" ),
-                 KiBitmap( reload_xpm ) );
-
-    submenuActionPluginsMenu->AppendSeparator();
-#endif
 }

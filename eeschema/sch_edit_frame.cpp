@@ -236,7 +236,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
 
     EVT_TOOL( ID_GET_NETLIST, SCH_EDIT_FRAME::OnCreateNetlist )
     EVT_TOOL( ID_BACKANNO_ITEMS, SCH_EDIT_FRAME::OnLoadCmpToFootprintLinkFile )
-    EVT_TOOL( ID_UPDATE_FIELDS, SCH_EDIT_FRAME::OnUpdateFields )
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
 END_EVENT_TABLE()
 
@@ -774,21 +773,6 @@ void SCH_EDIT_FRAME::OnLoadCmpToFootprintLinkFile( wxCommandEvent& event )
 {
     LoadCmpToFootprintLinkFile();
     GetCanvas()->Refresh();
-}
-
-
-void SCH_EDIT_FRAME::OnUpdateFields( wxCommandEvent& event )
-{
-    std::list<SCH_COMPONENT*> components;
-
-    for( SCH_ITEM* item = GetScreen()->GetDrawItems(); item; item = item->Next() )
-    {
-        if( item->Type() == SCH_COMPONENT_T )
-            components.push_back( static_cast<SCH_COMPONENT*>( item ) );
-    }
-
-    if( InvokeDialogUpdateFields( this, components, true ) == wxID_OK )
-        GetCanvas()->Refresh();
 }
 
 

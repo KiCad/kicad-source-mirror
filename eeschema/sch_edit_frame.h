@@ -762,11 +762,9 @@ private:
 
     void OnExit( wxCommandEvent& event );
     void OnCreateNetlist( wxCommandEvent& event );
-    void OnSimulate( wxCommandEvent& event );
 
     void OnLoadFile( wxCommandEvent& event );
     void OnLoadCmpToFootprintLinkFile( wxCommandEvent& event );
-    void OnUpdateFields( wxCommandEvent& event );
     void OnAppendProject( wxCommandEvent& event );
     void OnImportProject( wxCommandEvent& event );
 

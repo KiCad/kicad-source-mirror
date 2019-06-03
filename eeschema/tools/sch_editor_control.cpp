@@ -121,11 +121,6 @@ TOOL_ACTION EE_ACTIONS::showPcbNew( "eeschema.EditorControl.showPcbNew",
         _( "Open PCB Editor" ), _( "Run Pcbnew" ),
         pcbnew_xpm );
 
-TOOL_ACTION EE_ACTIONS::updatePcbFromSchematic( "eeschema.EditorControl.updatePcbFromSchematic",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_UPDATE_PCB_FROM_SCH ),
-        _( "Update PCB from Schematic..." ), _( "Push changes from schematic to PCB" ),
-        update_pcb_from_sch_xpm );
-
 TOOL_ACTION EE_ACTIONS::generateBOM( "eeschema.EditorControl.generateBOM",
         AS_GLOBAL, 0,
         _( "Generate BOM..." ), _( "Generate a bill of materials for the current schematic" ),
@@ -1274,7 +1269,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::EditSymbolFields,      EE_ACTIONS::editSymbolFields.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::EditSymbolLibraryLinks,EE_ACTIONS::editSymbolLibraryLinks.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowPcbNew,            EE_ACTIONS::showPcbNew.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::UpdatePCB,             EE_ACTIONS::updatePcbFromSchematic.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::UpdatePCB,             ACTIONS::updatePcbFromSchematic.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::GenerateBOM,           EE_ACTIONS::generateBOM.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::ShowBusManager,        EE_ACTIONS::showBusManager.MakeEvent() );

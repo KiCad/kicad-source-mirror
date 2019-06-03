@@ -296,6 +296,7 @@ enum common_hotkey_id_command {
     HK_PREFERENCES,
     HK_TOGGLE_CURSOR,
     HK_MEASURE_TOOL,
+    HK_UPDATE_PCB_FROM_SCH,
     HK_COMMON_END
 };
 

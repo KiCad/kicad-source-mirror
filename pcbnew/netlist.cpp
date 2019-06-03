@@ -133,48 +133,6 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater,
 }
 
 
-MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName()
-{
-    if( GetBoard()->Modules().empty() )
-    {
-        DisplayError( this, _( "No footprints" ) );
-        return 0;
-    }
-
-    wxArrayString listnames;
-
-    for( auto module : GetBoard()->Modules() )
-        listnames.Add( module->GetReference() );
-
-    wxArrayString headers;
-    headers.Add( wxT( "Module" ) );
-    std::vector<wxArrayString> itemsToDisplay;
-
-    // Conversion from wxArrayString to vector of ArrayString
-    for( unsigned i = 0; i < listnames.GetCount(); i++ )
-    {
-        wxArrayString item;
-        item.Add( listnames[i] );
-        itemsToDisplay.push_back( item );
-    }
-
-    EDA_LIST_DIALOG dlg( this, _( "Components" ), headers, itemsToDisplay, wxEmptyString );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return nullptr;
-
-    wxString ref = dlg.GetTextSelection();
-
-    for( auto module : GetBoard()->Modules() )
-    {
-        if( module->GetReference() == ref )
-            return module;
-    }
-
-    return nullptr;
-}
-
-
 #define ALLOW_PARTIAL_FPID      1
 
 void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )

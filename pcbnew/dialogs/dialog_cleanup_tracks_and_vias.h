@@ -27,7 +27,7 @@
 
 #include <dialog_cleanup_tracks_and_vias_base.h>
 
-#include <drc.h>
+#include <tools/drc.h>
 #include <wx/config.h>
 
 

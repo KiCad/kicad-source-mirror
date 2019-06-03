@@ -358,6 +358,11 @@ TOOL_ACTION ACTIONS::show3DViewer( "common.Control.show3DViewer",
         _( "3D Viewer" ), _( "Show 3D viewer window" ),
         three_d_xpm );
 
+TOOL_ACTION ACTIONS::updatePcbFromSchematic( "common.Control.updatePcbFromSchematic",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_UPDATE_PCB_FROM_SCH ),
+        _( "Update PCB from Schematic..." ), _( "Push changes from schematic to PCB" ),
+        update_pcb_from_sch_xpm );
+
 TOOL_ACTION ACTIONS::configurePaths( "common.Control.configurePaths",
         AS_GLOBAL, 0,
         _( "Configure Paths..." ), _( "Edit path configuration environment variables" ),
@@ -386,16 +391,10 @@ TOOL_ACTION ACTIONS::standardGraphics( "common.Control.standardGraphics",
         tools_xpm );
 
 
-
 // System-wide selection Events
 
-///> Event sent after an item is selected.
 const TOOL_EVENT EVENTS::SelectedEvent( TC_MESSAGE, TA_ACTION, "common.Interactive.selected" );
-
-///> Event sent after an item is unselected.
 const TOOL_EVENT EVENTS::UnselectedEvent( TC_MESSAGE, TA_ACTION, "common.Interactive.unselected" );
-
-///> Event sent after selection is cleared.
 const TOOL_EVENT EVENTS::ClearedEvent( TC_MESSAGE, TA_ACTION, "common.Interactive.cleared" );
 
 const TOOL_EVENT EVENTS::SelectedItemsModified( TC_MESSAGE, TA_ACTION, "common.Interactive.modified" );

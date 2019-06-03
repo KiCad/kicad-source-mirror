@@ -114,10 +114,12 @@ public:
     static TOOL_ACTION duplicateIncrement;
 
     /// Update footprints to reflect any changes in the library
+    static TOOL_ACTION updateFootprint;
     static TOOL_ACTION updateFootprints;
 
     /// Exchange footprints of modules
-    static TOOL_ACTION exchangeFootprints;
+    static TOOL_ACTION changeFootprint;
+    static TOOL_ACTION changeFootprints;
 
     /// Deleting a BOARD_ITEM
     static TOOL_ACTION remove;
@@ -253,6 +255,11 @@ public:
 
     /// Duplicate zone onto another layer
     static TOOL_ACTION zoneDuplicate;
+
+    static TOOL_ACTION listNets;
+    static TOOL_ACTION runDRC;
+    static TOOL_ACTION updatePcbFromSchematic;
+    static TOOL_ACTION showPythonConsole;
 
     // Module editor tools
     /// Activation of the drawing tool (placing a PAD)

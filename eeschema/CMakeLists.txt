@@ -223,7 +223,6 @@ set( EESCHEMA_SRCS
     netlist_exporters/netlist_exporter_orcadpcb2.cpp
     netlist_exporters/netlist_exporter_pspice.cpp
 
-    tools/ee_actions.cpp
     tools/ee_inspection_tool.cpp
     tools/ee_picker_tool.cpp
     tools/ee_point_editor.cpp

@@ -35,7 +35,7 @@
 #include <class_track.h>
 #include <class_zone.h>
 #include <common.h>
-#include <drc.h>
+#include <tools/drc.h>
 #include <fctsys.h>
 #include <geometry/geometry_utils.h>
 #include <pcb_edit_frame.h>

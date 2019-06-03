@@ -47,12 +47,9 @@
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
-
 #include <collectors.h>
 #include <pcbnew.h>
 #include <pcb_netlist.h>
-#include <dialogs/dialog_update_pcb.h>
-
 #include <tools/pcb_actions.h>
 #include <tool/tool_manager.h>
 #include <tools/selection_tool.h>
@@ -382,14 +379,8 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         break;
 
     case MAIL_PCB_UPDATE:
-    {
-        NETLIST netlist;
-
-        if( FetchNetlistFromSchematic( netlist, ANNOTATION_DIALOG ) )
-            UpdatePCBFromNetlist( netlist );
-
+        m_toolManager->RunAction( ACTIONS::updatePcbFromSchematic, true );
         break;
-    }
 
     case MAIL_IMPORT_FILE:
     {

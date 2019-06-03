@@ -282,8 +282,8 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     ADD_TOOL( ID_OPEN_MODULE_VIEWER, modview_icon_xpm, _( "Open footprint viewer" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-    ADD_TOOL( ID_UPDATE_PCB_FROM_SCH, update_pcb_from_sch_xpm, _( "Update PCB from schematic" ) );
-    ADD_TOOL( ID_DRC_CONTROL, erc_xpm, _( "Perform design rules check" ) );
+    m_mainToolBar->Add( ACTIONS::updatePcbFromSchematic );
+    m_mainToolBar->Add( PCB_ACTIONS::runDRC );
 
     KiScaledSeparator( m_mainToolBar, this );
 
@@ -308,10 +308,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     if( IsWxPythonLoaded() )
     {
         KiScaledSeparator( m_mainToolBar, this );
-
-        m_mainToolBar->AddTool( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, wxEmptyString,
-                                KiScaledBitmap( py_script_xpm, this ),
-                                _( "Show/Hide the Python Scripting console" ), wxITEM_CHECK );
+        m_mainToolBar->Add( PCB_ACTIONS::showPythonConsole, ACTION_TOOLBAR::TOGGLE );
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
         AddActionPluginTools();
@@ -556,7 +553,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 }
 
 
-void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, const bool aEdit )
+void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, bool aEdit )
 {
     if( aTrackWidthSelectBox == NULL )
         return;
@@ -600,7 +597,7 @@ void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, 
 }
 
 
-void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, const bool aEdit )
+void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool aEdit )
 {
     if( aViaSizeSelectBox == NULL )
         return;
@@ -730,22 +727,6 @@ void PCB_EDIT_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
 }
 
 
-#if defined( KICAD_SCRIPTING_WXPYTHON )
-
-// Used only when the DKICAD_SCRIPTING_WXPYTHON option is on
-void PCB_EDIT_FRAME::OnUpdateScriptingConsoleState( wxUpdateUIEvent& aEvent )
-{
-    if( aEvent.GetEventObject() != m_mainToolBar )
-        return;
-
-    wxMiniFrame* pythonPanelFrame = (wxMiniFrame *) findPythonConsole();
-    bool pythonPanelShown = pythonPanelFrame ? pythonPanelFrame->IsShown() : false;
-    aEvent.Check( pythonPanelShown );
-}
-
-#endif
-
-
 bool PCB_EDIT_FRAME::LayerManagerShown()
 {
     return m_auimgr.GetPane( "LayersManager" ).IsShown();
@@ -780,6 +761,13 @@ void PCB_EDIT_FRAME::SyncMenusAndToolbars()
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
+#if defined(KICAD_SCRIPTING_WXPYTHON)
+    if( IsWxPythonLoaded() )
+    {
+        wxMiniFrame* console = (wxMiniFrame *) PCB_EDIT_FRAME::findPythonConsole();
+        m_mainToolBar->Toggle( PCB_ACTIONS::showPythonConsole, console && console->IsShown() );
+    }
+#endif
     m_mainToolBar->Refresh();
 
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,            IsGridVisible() );

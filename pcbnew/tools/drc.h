@@ -35,7 +35,7 @@
 #include <geometry/shape_poly_set.h>
 #include <memory>
 #include <vector>
-
+#include <tools/pcb_tool_base.h>
 #include <drc/drc_marker_factory.h>
 
 #define OK_DRC  0
@@ -187,9 +187,16 @@ typedef std::vector<DRC_ITEM*> DRC_LIST;
  * This class is given access to the windows and the BOARD
  * that it needs via its constructor or public access functions.
  */
-class DRC
+class DRC : public PCB_TOOL_BASE
 {
     friend class DIALOG_DRC_CONTROL;
+
+public:
+    DRC();
+    ~DRC();
+
+    /// @copydoc TOOL_INTERACTIVE::Reset()
+    void Reset( RESET_REASON aReason ) override;
 
 private:
 
@@ -249,6 +256,9 @@ private:
     bool                m_drcRun;
     bool                m_footprintsTested;
 
+
+    ///> Sets up handlers for various events.
+    void setTransitions() override;
 
     /**
      * Update needed pointers from the one pointer which is known not to change.
@@ -421,36 +431,6 @@ private:
     //-----</single tests>---------------------------------------------
 
 public:
-    DRC( PCB_EDIT_FRAME* aPcbWindow );
-
-    ~DRC();
-
-    /**
-     * Function Drc
-     * tests the current segment and returns the result and displays the error
-     * in the status panel only if one exists.
-     * No marker created or added to the board. Must be used only during track
-     * creation in legacy canvas
-     * @param aRefSeg The current segment to test.
-     * @param aList The track list to test (usually m_Pcb->Tracks())
-     * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
-     */
-    int DrcOnCreatingTrack( TRACK* aRefSeg, TRACKS& aList );
-
-    /**
-     * Function Drc
-     * tests the outline segment starting at CornerIndex and returns the result and displays
-     * the error in the status panel only if one exists.
-     *      Test Edge inside other areas
-     *      Test Edge too close other areas
-     * No marker created or added to the board. Must be used only during zone
-     * creation in legacy canvas
-     * @param aArea The area parent which contains the corner.
-     * @param aCornerIndex The starting point of the segment to test.
-     * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
-     */
-    int DrcOnCreatingZone( ZONE_CONTAINER* aArea, int aCornerIndex );
-
     /**
      * Tests whether distance between zones complies with the DRC rules.
      *
@@ -482,7 +462,9 @@ public:
      * The modal mode is mandatory if the dialog is created from another dialog, not
      * from the PCB editor frame
      */
-    void ShowDRCDialog( wxWindow* aParent = NULL );
+    void ShowDRCDialog( wxWindow* aParent );
+
+    int ShowDRCDialog( const TOOL_EVENT& aEvent );
 
     /**
      * Deletes this ui dialog box and zeros out its pointer to remember

@@ -49,7 +49,7 @@
 
 #include <dialog_netlist.h>
 #include <wx_html_report_panel.h>
-#include <drc.h>
+#include <tools/drc.h>
 
 #define NETLIST_FILTER_MESSAGES_KEY wxT("NetlistReportFilterMsg")
 #define NETLIST_UPDATEFOOTPRINTS_KEY wxT("NetlistUpdateFootprints")

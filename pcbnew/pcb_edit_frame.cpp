@@ -33,7 +33,7 @@
 #include <trace_helpers.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
-#include <drc.h>
+#include <tools/drc.h>
 #include <layer_widget.h>
 #include <pcb_layer_widget.h>
 #include <hotkeys.h>
@@ -41,10 +41,9 @@
 #include <footprint_edit_frame.h>
 #include <dialog_helpers.h>
 #include <dialog_plot.h>
-#include <dialog_exchange_footprints.h>
 #include <dialog_edit_footprint_for_BoardEditor.h>
+#include <dialogs/dialog_exchange_footprints.h>
 #include <dialog_board_setup.h>
-#include <dialog_update_pcb.h>
 #include <convert_to_biu.h>
 #include <view/view.h>
 #include <view/view_controls.h>
@@ -91,8 +90,6 @@
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
-#include <tool/common_tools.h>
-
 #endif
 
 
@@ -165,12 +162,9 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_PCB_GEN_BOM_FILE_FROM_BOARD, PCB_EDIT_FRAME::RecreateBOMFileFromBoard )
 
     // menu Miscellaneous
-    EVT_MENU( ID_MENU_LIST_NETS, PCB_EDIT_FRAME::ListNetsAndSelect )
     EVT_MENU( ID_PCB_EDIT_TRACKS_AND_VIAS, PCB_EDIT_FRAME::OnEditTracksAndVias )
     EVT_MENU( ID_PCB_GLOBAL_DELETE, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_MENU_PCB_CLEAN, PCB_EDIT_FRAME::Process_Special_Functions )
-    EVT_MENU( ID_MENU_PCB_UPDATE_FOOTPRINTS, PCB_EDIT_FRAME::Process_Special_Functions )
-    EVT_MENU( ID_MENU_PCB_EXCHANGE_FOOTPRINTS, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_MENU_PCB_SWAP_LAYERS, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_MENU_PCB_EDIT_TEXT_AND_GRAPHICS, PCB_EDIT_FRAME::OnEditTextAndGraphics )
 
@@ -181,7 +175,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_RUN_LIBRARY, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_GEN_PLOT_SVG, PCB_EDIT_FRAME::ExportSVG )
     EVT_TOOL( ID_GET_NETLIST, PCB_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_DRC_CONTROL, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH, PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
     EVT_COMBOBOX( ID_TOOLBARH_PCB_SELECT_LAYER, PCB_EDIT_FRAME::Process_Special_Functions )
@@ -193,18 +186,10 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_TOOLBARH_PCB_ACTION_PLUGIN_REFRESH, PCB_EDIT_FRAME::OnActionPluginRefresh )
 #endif
 
-#if defined( KICAD_SCRIPTING_WXPYTHON )
-    // has meaning only with KICAD_SCRIPTING_WXPYTHON enabled
-    EVT_TOOL( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE, PCB_EDIT_FRAME::ScriptingConsoleEnableDisable )
-    EVT_UPDATE_UI( ID_TOOLBARH_PCB_SCRIPTING_CONSOLE,
-                   PCB_EDIT_FRAME::OnUpdateScriptingConsoleState )
-#endif
-
     // Option toolbar
     EVT_TOOL( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE,
               PCB_EDIT_FRAME::OnSelectOptionToolbar )
 
-    EVT_TOOL( ID_UPDATE_PCB_FROM_SCH, PCB_EDIT_FRAME::OnUpdatePCBFromSch )
     EVT_TOOL( ID_RUN_EESCHEMA, PCB_EDIT_FRAME::OnRunEeschema )
 
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
@@ -279,8 +264,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Create the PCB_LAYER_WIDGET *after* SetBoard():
     m_Layers = new PCB_LAYER_WIDGET( this, GetGalCanvas() );
-
-    m_drc = new DRC( this );        // these 2 objects point to each other
 
     wxIcon  icon;
     icon.CopyFromBitmap( KiBitmap( icon_pcbnew_xpm ) );
@@ -413,7 +396,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
-    delete m_drc;
 }
 
 
@@ -498,6 +480,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new POSITION_RELATIVE_TOOL );
     m_toolManager->RegisterTool( new ZONE_FILLER_TOOL );
     m_toolManager->RegisterTool( new AUTOPLACE_TOOL );
+    m_toolManager->RegisterTool( new DRC );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
@@ -701,27 +684,6 @@ void PCB_EDIT_FRAME::SetGridColor( COLOR4D aColor )
     Settings().Colors().SetItemColor( LAYER_GRID, aColor );
 
     GetGalCanvas()->GetGAL()->SetGridColor( aColor );
-}
-
-
-bool PCB_EDIT_FRAME::IsMicroViaAcceptable()
-{
-    int copperlayercnt = GetBoard()->GetCopperLayerCount( );
-    PCB_LAYER_ID currLayer = GetActiveLayer();
-
-    if( !GetDesignSettings().m_MicroViasAllowed )
-        return false;   // Obvious..
-
-    if( copperlayercnt < 4 )
-        return false;   // Only on multilayer boards..
-
-    if( ( currLayer == B_Cu )
-       || ( currLayer == F_Cu )
-       || ( currLayer == copperlayercnt - 2 )
-       || ( currLayer == In1_Cu ) )
-        return true;
-
-    return false;
 }
 
 
@@ -935,9 +897,8 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
 
 #if defined( KICAD_SCRIPTING_WXPYTHON )
 
-void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
+void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable()
 {
-
     wxWindow * pythonPanelFrame = findPythonConsole();
     bool pythonPanelShown = true;
 
@@ -1017,15 +978,6 @@ bool PCB_EDIT_FRAME::SetCurrentNetClass( const wxString& aNetClassName )
 }
 
 
-void PCB_EDIT_FRAME::OnUpdatePCBFromSch( wxCommandEvent& event )
-{
-    NETLIST netlist;
-
-    if( FetchNetlistFromSchematic( netlist, ANNOTATION_DIALOG ) )
-        UpdatePCBFromNetlist( netlist );
-}
-
-
 bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST_MODE aMode )
 {
     if( Kiface().IsSingle() )
@@ -1076,19 +1028,6 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST
     }
 
     return true;
-}
-
-
-void PCB_EDIT_FRAME::UpdatePCBFromNetlist( NETLIST& aNetlist )
-{
-    DIALOG_UPDATE_PCB updateDialog( this, &aNetlist );
-    updateDialog.ShowModal();
-
-    auto selectionTool = static_cast<SELECTION_TOOL*>(
-            m_toolManager->FindTool( "pcbnew.InteractiveSelection" ) );
-
-    if( !selectionTool->GetSelection().Empty() )
-        GetToolManager()->InvokeTool( "pcbnew.InteractiveEdit" );
 }
 
 
@@ -1189,7 +1128,7 @@ void PCB_EDIT_FRAME::PythonPluginsReload()
     #if defined(KICAD_SCRIPTING_ACTION_MENU)
         // Action plugins can be modified, therefore the plugins menu
         // must be updated:
-        RebuildActionPluginMenus();
+        ReCreateMenuBar();
         // Recreate top toolbar to add action plugin buttons
         ReCreateHToolbar();
     #endif

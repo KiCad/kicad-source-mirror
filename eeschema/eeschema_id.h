@@ -64,7 +64,6 @@ enum id_eeschema_frm
     /* Schematic editor horizontal toolbar IDs */
     ID_TO_LIBVIEW,
     ID_BACKANNO_ITEMS,
-    ID_UPDATE_FIELDS,
 
     /* Schematic editor vertical toolbar IDs */
     ID_HIGHLIGHT_TOOL,

@@ -153,6 +153,8 @@ public:
     static TOOL_ACTION annotate;
     static TOOL_ACTION editSymbolFields;
     static TOOL_ACTION editSymbolLibraryLinks;
+    static TOOL_ACTION pinTable;
+    static TOOL_ACTION updateFieldsFromLibrary;
     static TOOL_ACTION assignFootprints;
     static TOOL_ACTION showBusManager;
 
@@ -178,7 +180,6 @@ public:
     static TOOL_ACTION cleanupSheetPins;
     static TOOL_ACTION toggleHiddenPins;
     static TOOL_ACTION symbolProperties;
-    static TOOL_ACTION pinTable;
     static TOOL_ACTION deleteItemCursor;
     static TOOL_ACTION refreshPreview;
     static TOOL_ACTION explicitCrossProbe;
@@ -200,7 +201,7 @@ public:
     static TOOL_ACTION highlightNetCursor;
 
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
-    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override;
+    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override { return OPT<TOOL_EVENT>(); }
 };
 
 

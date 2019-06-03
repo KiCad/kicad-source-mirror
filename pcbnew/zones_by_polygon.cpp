@@ -36,7 +36,7 @@
 #include <zones.h>
 #include <pcbnew_id.h>
 #include <zones_functions_for_undo_redo.h>
-#include <drc.h>
+#include <tools/drc.h>
 #include <connectivity/connectivity_data.h>
 #include <widgets/progress_reporter.h>
 #include <zone_filler.h>

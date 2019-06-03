@@ -38,6 +38,7 @@
 #include <class_drawsegment.h>
 #include <class_zone.h>
 #include <board_commit.h>
+#include <tool/action_menu.h>
 
 PYTHON_ACTION_PLUGIN::PYTHON_ACTION_PLUGIN( PyObject* aAction )
 {
@@ -380,39 +381,10 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
 }
 
 
-void PCB_EDIT_FRAME::RebuildActionPluginMenus()
+void PCB_EDIT_FRAME::buildActionPluginMenus( ACTION_MENU* actionMenu )
 {
-    wxMenu* actionMenu = GetMenuBar()->FindItem( ID_TOOLBARH_PCB_ACTION_PLUGIN )->GetSubMenu();
-
     if( !actionMenu ) // Should not occur.
         return;
-
-    // First, remove existing submenus, if they are too many
-    wxMenuItemList list = actionMenu->GetMenuItems();
-    // The first menuitems are the refresh menu and separator. do not count them
-    int act_menu_count = -2;
-
-    std::vector<wxMenuItem*> available_menus;
-
-    for( auto iter = list.begin(); iter != list.end(); ++iter, act_menu_count++ )
-    {
-        if( act_menu_count < 0 )
-            continue;
-
-        wxMenuItem* item = *iter;
-
-        if( act_menu_count < ACTION_PLUGINS::GetActionsCount() )
-        {
-            available_menus.push_back( item );
-            continue;
-        }
-
-        // Remove menus which are not usable for our current plugin list
-        Disconnect( item->GetId(), wxEVT_COMMAND_MENU_SELECTED,
-                (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) &
-                PCB_EDIT_FRAME::OnActionPluginMenu );
-        actionMenu->Delete( item );
-    }
 
     for( int ii = 0; ii < ACTION_PLUGINS::GetActionsCount(); ii++ )
     {
@@ -420,30 +392,11 @@ void PCB_EDIT_FRAME::RebuildActionPluginMenus()
         ACTION_PLUGIN* ap = ACTION_PLUGINS::GetAction( ii );
         const wxBitmap& bitmap = ap->iconBitmap.IsOk() ? ap->iconBitmap : KiBitmap( hammer_xpm );
 
-        if( ii < (int) available_menus.size() )
-        {
-            item = available_menus[ii];
-            item->SetItemLabel( ap->GetName() );
-            item->SetHelp( ap->GetDescription() );
+        item = AddMenuItem( actionMenu, wxID_ANY,  ap->GetName(), ap->GetDescription(), bitmap );
 
-            // On windows we need to set "unchecked" bitmap
-#if defined(__WXMSW__)
-            item->SetBitmap( bitmap, false );
-#else
-            item->SetBitmap( bitmap );
-#endif
-        }
-        else
-        {
-            item = AddMenuItem( actionMenu, wxID_ANY,
-                    ap->GetName(),
-                    ap->GetDescription(),
-                    bitmap );
-
-            Connect( item->GetId(), wxEVT_COMMAND_MENU_SELECTED,
-                    (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) &
-                    PCB_EDIT_FRAME::OnActionPluginMenu );
-        }
+        Connect( item->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+                 (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) &
+                 PCB_EDIT_FRAME::OnActionPluginMenu );
 
         ACTION_PLUGINS::SetActionMenu( ii, item->GetId() );
     }

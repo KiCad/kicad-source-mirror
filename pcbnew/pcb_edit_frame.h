@@ -59,6 +59,7 @@ struct PARSE_ERROR;
 class IO_ERROR;
 class FP_LIB_TABLE;
 class BOARD_NETLIST_UPDATER;
+class ACTION_MENU;
 
 namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
 
@@ -91,8 +92,6 @@ class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
 protected:
     PCB_LAYER_WIDGET* m_Layers;
 
-    DRC* m_drc;                                 ///< the DRC controller, see drc.cpp
-
     PARAM_CFG_ARRAY   m_configParams;         ///< List of Pcbnew configuration settings.
 
     wxString          m_lastNetListRead;        ///< Last net list read with relative path.
@@ -110,10 +109,10 @@ protected:
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     /**
-     * Function RebuildActionPluginMenus
+     * Function buildActionPluginMenus
      * Fill action menu with all registered action plugins
      */
-    void RebuildActionPluginMenus();
+    void buildActionPluginMenus( ACTION_MENU* aActionMenu );
 
     /**
      * Function AddActionPluginTools
@@ -209,19 +208,13 @@ protected:
      *
      * @return true if the auto save was successful.
      */
-    virtual bool doAutoSave() override;
+    bool doAutoSave() override;
 
     /**
      * Function isautoSaveRequired
      * returns true if the board has been modified.
      */
-    virtual bool isAutoSaveRequired() const override;
-
-    /**
-     * Function moveExact
-     * Move the selected item exactly
-     */
-    void moveExact();
+    bool isAutoSaveRequired() const override;
 
     /**
      * Load the given filename but sets the path to the current project path.
@@ -287,7 +280,7 @@ public:
      * this is a virtual function called by EDA_DRAW_FRAME::OnSockRequest().
      * @param cmdline = received command from socket
      */
-    virtual void ExecuteRemoteCommand( const char* cmdline ) override;
+    void ExecuteRemoteCommand( const char* cmdline ) override;
 
     void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
 
@@ -298,19 +291,12 @@ public:
     void ToPlotter( wxCommandEvent& event );
 
     /**
-     * Function ToPrinter
-     * Install the print dialog.
-     */
-    void ToPrinter( wxCommandEvent& event );
-
-    /**
      * Function SVG_Print
      * Shows the Export to SVG file dialog.
      */
     void ExportSVG( wxCommandEvent& event );
 
     // User interface update command event handlers.
-    void OnUpdateSave( wxUpdateUIEvent& aEvent );
     void OnUpdateLayerPair( wxUpdateUIEvent& aEvent );
     void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
     bool LayerManagerShown();
@@ -320,17 +306,16 @@ public:
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
     void OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent );
     void OnLayerColorChange( wxCommandEvent& aEvent );
-    void OnUpdatePCBFromSch( wxCommandEvent& event );
     void OnRunEeschema( wxCommandEvent& event );
 
-    void UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, const bool aEdit = true );
-    void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, const bool aEdit = true );
+    void UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, bool aEdit = true );
+    void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool aEdit = true );
 
     /**
      * Function IsGridVisible() , virtual
      * @return true if the grid must be shown
      */
-    virtual bool IsGridVisible() const override;
+    bool IsGridVisible() const override;
 
     /**
      * Function SetGridVisibility() , virtual
@@ -338,19 +323,19 @@ public:
      * if you want to store/retrieve the grid visibility in configuration.
      * @param aVisible = true if the grid must be shown
      */
-    virtual void SetGridVisibility( bool aVisible ) override;
+    void SetGridVisibility( bool aVisible ) override;
 
     /**
      * Function GetGridColor() , virtual
      * @return the color of the grid
      */
-    virtual COLOR4D GetGridColor() override;
+    COLOR4D GetGridColor() override;
 
     /**
      * Function SetGridColor() , virtual
      * @param aColor = the new color of the grid
      */
-    virtual void SetGridColor( COLOR4D aColor ) override;
+    void SetGridColor( COLOR4D aColor ) override;
 
     // Configurations:
     void Process_Config( wxCommandEvent& event );
@@ -514,14 +499,14 @@ public:
      * to update auxiliary information.
      * </p>
      */
-    virtual void OnModify() override;
+    void OnModify() override;
 
     /**
      * Function SetActiveLayer
      * will change the currently active layer to \a aLayer and also
      * update the PCB_LAYER_WIDGET.
      */
-    virtual void SetActiveLayer( PCB_LAYER_ID aLayer ) override;
+    void SetActiveLayer( PCB_LAYER_ID aLayer ) override;
 
     PCB_LAYER_WIDGET* GetLayerManager() { return m_Layers; }
 
@@ -668,13 +653,6 @@ public:
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
     /**
-     * Function AppendBoardFile
-     * appends a board file onto the current one, creating God knows what.
-     * the main purpose is only to allow panelizing boards.
-     */
-    bool AppendBoardFile( const wxString& aFullFileName, int aCtl );
-
-    /**
      * Function SavePcbFile
      * writes the board data structures to \a a aFileName
      * Creates backup when requested and update flags (modified and saved flgs)
@@ -718,12 +696,6 @@ public:
 
     ///> @copydoc PCB_BASE_FRAME::SetPageSettings()
     void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
-
-    /**
-     * Function GetDrcController
-     * @return the DRC controller
-     */
-    DRC* GetDrcController() { return m_drc; }
 
     /**
      * Function RecreateBOMFileFromBoard
@@ -813,7 +785,6 @@ public:
      */
     void OnExportHyperlynx( wxCommandEvent& event );
 
-
     /**
      * Function Export_IDF3
      * Creates an IDF3 compliant BOARD (*.emn) and LIBRARY (*.emp) file.
@@ -878,25 +849,7 @@ public:
      */
     void ImportSpecctraDesign( wxCommandEvent& event );
 
-    /**
-     * Function ListAndSelectModuleName
-     * builds and shows a list of existing modules on board that the user can select.
-     * @return a pointer to the selected module or NULL.
-     */
-    MODULE* ListAndSelectModuleName();
-
-    /**
-     * Function ListNetsAndSelect
-     * called by a command event
-     * displays the sorted list of nets in a dialog frame
-     * If a net is selected, it is highlighted
-     */
-    void ListNetsAndSelect( wxCommandEvent& event );
-
     void Swap_Layers( wxCommandEvent& event );
-
-    // Graphic Segments type DRAWSEGMENT
-    void Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC );
 
     // Footprint editing (see also PCB_BASE_FRAME)
     void InstallFootprintPropertiesDialog( MODULE* Module );
@@ -925,18 +878,6 @@ public:
      * @param aItem = a pointer to the BOARD_ITEM to edit
      */
     void OnEditItemRequest( BOARD_ITEM* aItem ) override;
-
-    /**
-     * Function IsMicroViaAcceptable
-     * return true if a microvia can be placed on the board.
-     * <p>
-     * A microvia is a small via restricted to 2 near neighbor layers
-     * because its is hole is made by laser which can penetrate only one layer
-     * It is mainly used to connect BGA to the first inner layer
-     * And it is allowed from an external layer to the first inner layer
-     * </p>
-     */
-    bool IsMicroViaAcceptable();
 
     /**
      * Function Edit_TrackSegm_Width
@@ -970,16 +911,6 @@ public:
     // zone handling
 
     /**
-     * Function Fill_Zone
-     *  Calculate the zone filling for the outline zone_container
-     *  The zone outline is a frontier, and can be complex (with holes)
-     *  The filling starts from starting points like pads, tracks.
-     * If exists the old filling is removed
-     * @param aZone = zone to fill
-     */
-    void Fill_Zone( ZONE_CONTAINER* aZone );
-
-    /**
      * Function Fill_All_Zones
      */
     void Fill_All_Zones();
@@ -991,25 +922,11 @@ public:
      */
     void Check_All_Zones( wxWindow* aActiveWindow );
 
-
     /**
      * Function Edit_Zone_Params
      * Edit params (layer, clearance, ...) for a zone outline
      */
     void Edit_Zone_Params( ZONE_CONTAINER* zone_container );
-
-    /**
-     * Function Delete_Zone
-     * Remove the zone which include the segment aZone, or the zone which have
-     * the given time stamp.  A zone is a group of segments which have the
-     * same TimeStamp
-     * @param DC = current Device Context (can be NULL)
-     * @param zone_container = zone to modify
-     *  the member .m_CornerSelection is used to find the outline to remove.
-     * if the outline is the main outline, all the zone is removed
-     * otherwise, the hole is deleted
-     */
-    void Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_container );
 
     // Properties dialogs
     void ShowTargetOptionsDialog( PCB_TARGET* aTarget );
@@ -1023,12 +940,6 @@ public:
      */
     enum FETCH_NETLIST_MODE { NO_ANNOTATION, QUIET_ANNOTATION, ANNOTATION_DIALOG };
     bool FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST_MODE aMode );
-
-    /**
-     * Function UpdatePCBFromNetlist
-     * @param aNetlist
-     */
-    void UpdatePCBFromNetlist( NETLIST& aNetlist );
 
     /**
      * Function DoUpdatePCBFromNetlist
@@ -1046,9 +957,7 @@ public:
      * @param aReporter is a #REPORTER object to display messages
      * @return true if the netlist was read successfully
      */
-    bool ReadNetlistFromFile( const wxString &aFilename,
-                              NETLIST& aNetlist,
-                              REPORTER& aReporter );
+    bool ReadNetlistFromFile( const wxString &aFilename, NETLIST& aNetlist, REPORTER& aReporter );
 
     /**
      * Called after netlist is updated
@@ -1058,19 +967,12 @@ public:
     void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aRunDragCommand );
 
 
-    // Autoplacement:
-    void OnPlaceOrRouteFootprints( wxCommandEvent& event );
-
 #if defined( KICAD_SCRIPTING_WXPYTHON )
-
     /**
      * Function ScriptingConsoleEnableDisable
      * enables or disabled the scripting console
      */
-    void ScriptingConsoleEnableDisable( wxCommandEvent& aEvent );
-
-    void OnUpdateScriptingConsoleState( wxUpdateUIEvent& aEvent );
-
+    void ScriptingConsoleEnableDisable();
 #endif
 
     void LockModule( MODULE* aModule, bool aLocked );

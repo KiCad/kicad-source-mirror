@@ -68,7 +68,7 @@ using namespace std::placeholders;
 
 
 // Edit tool actions
-TOOL_ACTION PCB_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.editFootprintInFpEditor",
+TOOL_ACTION PCB_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.EditFpInFpEditor",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_MODULE_WITH_MODEDIT ),
         _( "Open in Footprint Editor" ),
         _( "Opens the selected footprint in the Footprint Editor" ),
@@ -134,14 +134,26 @@ TOOL_ACTION PCB_ACTIONS::removeAlt( "pcbnew.InteractiveEdit.removeAlt",
         _( "Delete Full Track" ), _( "Deletes selected item(s) and copper connections" ),
         delete_xpm, AF_NONE, (void*) REMOVE_FLAGS::ALT );
 
-TOOL_ACTION PCB_ACTIONS::updateFootprints( "pcbnew.InteractiveEdit.updateFootprints",
+TOOL_ACTION PCB_ACTIONS::updateFootprint( "pcbnew.InteractiveEdit.updateFootprint",
         AS_GLOBAL, 0,
-        _( "Update Footprint..." ), _( "Update the footprint from the library" ),
+        _( "Update Footprint..." ),
+        _( "Update footprint to include any changes from the library" ),
         reload_xpm );
 
-TOOL_ACTION PCB_ACTIONS::exchangeFootprints( "pcbnew.InteractiveEdit.ExchangeFootprints",
+TOOL_ACTION PCB_ACTIONS::updateFootprints( "pcbnew.InteractiveEdit.updateFootprints",
+        AS_GLOBAL, 0,
+        _( "Update Footprints from Library..." ),
+        _( "Update footprints to include any changes from the library" ),
+        reload_xpm );
+
+TOOL_ACTION PCB_ACTIONS::changeFootprint( "pcbnew.InteractiveEdit.changeFootprint",
         AS_GLOBAL, 0,
         _( "Change Footprint..." ), _( "Assign a different footprint from the library" ),
+        exchange_xpm );
+
+TOOL_ACTION PCB_ACTIONS::changeFootprints( "pcbnew.InteractiveEdit.changeFootprints",
+        AS_GLOBAL, 0,
+        _( "Change Footprints..." ), _( "Assign different footprints from the library" ),
         exchange_xpm );
 
 TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
@@ -273,8 +285,8 @@ bool EDIT_TOOL::Init()
     // Footprint actions
     menu.AddSeparator( singleModuleCondition );
     menu.AddItem( PCB_ACTIONS::editFootprintInFpEditor, singleModuleCondition );
-    menu.AddItem( PCB_ACTIONS::updateFootprints, singleModuleCondition );
-    menu.AddItem( PCB_ACTIONS::exchangeFootprints, singleModuleCondition );
+    menu.AddItem( PCB_ACTIONS::updateFootprint, singleModuleCondition );
+    menu.AddItem( PCB_ACTIONS::changeFootprint, singleModuleCondition );
 
     // Populate the context menu displayed during the edit tool (primarily the measure tool)
     auto activeToolCondition = [ this ] ( const SELECTION& aSel ) {
@@ -1191,11 +1203,33 @@ void EDIT_TOOL::FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector 
 
 int EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 {
-    const auto& selection = m_selectionTool->RequestSelection( FootprintFilter );
+    SELECTION& selection = m_selectionTool->RequestSelection( FootprintFilter );
+    MODULE*    mod = (selection.Empty() ? nullptr : selection.FirstOfKind<MODULE> () );
+    bool       updateMode = false;
+    bool       currentMode = false;
 
-    bool updateMode = aEvent.IsAction( &PCB_ACTIONS::updateFootprints );
-
-    MODULE* mod = (selection.Empty() ? nullptr : selection.FirstOfKind<MODULE> () );
+    if( aEvent.IsAction( &PCB_ACTIONS::updateFootprint ) )
+    {
+        updateMode = true;
+        currentMode = true;
+    }
+    else if( aEvent.IsAction( &PCB_ACTIONS::updateFootprints ) )
+    {
+        updateMode = true;
+        currentMode = false;
+    }
+    else if( aEvent.IsAction( &PCB_ACTIONS::changeFootprint ) )
+    {
+        updateMode = false;
+        currentMode = true;
+    }
+    else if( aEvent.IsAction( &PCB_ACTIONS::changeFootprints ) )
+    {
+        updateMode = false;
+        currentMode = false;
+    }
+    else
+        wxFAIL_MSG( "ExchangeFootprints: unexpected action" );
 
     // Footprint exchange could remove modules, so they have to be
     // removed from the selection first
@@ -1203,7 +1237,7 @@ int EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 
     // invoke the exchange dialog process
     {
-        DIALOG_EXCHANGE_FOOTPRINTS dialog( frame(), mod, updateMode, mod != nullptr );
+        DIALOG_EXCHANGE_FOOTPRINTS dialog( frame(), mod, updateMode, currentMode );
         dialog.ShowQuasiModal();
     }
 
@@ -1331,7 +1365,7 @@ bool EDIT_TOOL::updateModificationPoint( SELECTION& aSelection )
 }
 
 
-int EDIT_TOOL::editFootprintInFpEditor( const TOOL_EVENT& aEvent )
+int EDIT_TOOL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
 {
     const auto& selection = m_selectionTool->RequestSelection( FootprintFilter );
 
@@ -1466,29 +1500,31 @@ int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
 
 void EDIT_TOOL::setTransitions()
 {
-    Go( &EDIT_TOOL::Main,       PCB_ACTIONS::editActivate.MakeEvent() );
-    Go( &EDIT_TOOL::Main,       PCB_ACTIONS::move.MakeEvent() );
-    Go( &EDIT_TOOL::Drag,       PCB_ACTIONS::drag45Degree.MakeEvent() );
-    Go( &EDIT_TOOL::Drag,       PCB_ACTIONS::dragFreeAngle.MakeEvent() );
-    Go( &EDIT_TOOL::Rotate,     PCB_ACTIONS::rotateCw.MakeEvent() );
-    Go( &EDIT_TOOL::Rotate,     PCB_ACTIONS::rotateCcw.MakeEvent() );
-    Go( &EDIT_TOOL::Flip,       PCB_ACTIONS::flip.MakeEvent() );
-    Go( &EDIT_TOOL::Remove,     PCB_ACTIONS::remove.MakeEvent() );
-    Go( &EDIT_TOOL::Remove,     PCB_ACTIONS::removeAlt.MakeEvent() );
-    Go( &EDIT_TOOL::Properties, PCB_ACTIONS::properties.MakeEvent() );
-    Go( &EDIT_TOOL::MoveExact,  PCB_ACTIONS::moveExact.MakeEvent() );
-    Go( &EDIT_TOOL::Duplicate,  PCB_ACTIONS::duplicate.MakeEvent() );
-    Go( &EDIT_TOOL::Duplicate,  PCB_ACTIONS::duplicateIncrement.MakeEvent() );
-    Go( &EDIT_TOOL::CreateArray,PCB_ACTIONS::createArray.MakeEvent() );
-    Go( &EDIT_TOOL::Mirror,     PCB_ACTIONS::mirror.MakeEvent() );
+    Go( &EDIT_TOOL::Main,                PCB_ACTIONS::editActivate.MakeEvent() );
+    Go( &EDIT_TOOL::Main,                PCB_ACTIONS::move.MakeEvent() );
+    Go( &EDIT_TOOL::Drag,                PCB_ACTIONS::drag45Degree.MakeEvent() );
+    Go( &EDIT_TOOL::Drag,                PCB_ACTIONS::dragFreeAngle.MakeEvent() );
+    Go( &EDIT_TOOL::Rotate,              PCB_ACTIONS::rotateCw.MakeEvent() );
+    Go( &EDIT_TOOL::Rotate,              PCB_ACTIONS::rotateCcw.MakeEvent() );
+    Go( &EDIT_TOOL::Flip,                PCB_ACTIONS::flip.MakeEvent() );
+    Go( &EDIT_TOOL::Remove,              PCB_ACTIONS::remove.MakeEvent() );
+    Go( &EDIT_TOOL::Remove,              PCB_ACTIONS::removeAlt.MakeEvent() );
+    Go( &EDIT_TOOL::Properties,          PCB_ACTIONS::properties.MakeEvent() );
+    Go( &EDIT_TOOL::MoveExact,           PCB_ACTIONS::moveExact.MakeEvent() );
+    Go( &EDIT_TOOL::Duplicate,           PCB_ACTIONS::duplicate.MakeEvent() );
+    Go( &EDIT_TOOL::Duplicate,           PCB_ACTIONS::duplicateIncrement.MakeEvent() );
+    Go( &EDIT_TOOL::CreateArray,         PCB_ACTIONS::createArray.MakeEvent() );
+    Go( &EDIT_TOOL::Mirror,              PCB_ACTIONS::mirror.MakeEvent() );
 
-    Go( &EDIT_TOOL::editFootprintInFpEditor, PCB_ACTIONS::editFootprintInFpEditor.MakeEvent() );
-    Go( &EDIT_TOOL::ExchangeFootprints,      PCB_ACTIONS::updateFootprints.MakeEvent() );
-    Go( &EDIT_TOOL::ExchangeFootprints,      PCB_ACTIONS::exchangeFootprints.MakeEvent() );
-    Go( &EDIT_TOOL::MeasureTool,             ACTIONS::measureTool.MakeEvent() );
+    Go( &EDIT_TOOL::EditFpInFpEditor,    PCB_ACTIONS::editFootprintInFpEditor.MakeEvent() );
+    Go( &EDIT_TOOL::ExchangeFootprints,  PCB_ACTIONS::updateFootprint.MakeEvent() );
+    Go( &EDIT_TOOL::ExchangeFootprints,  PCB_ACTIONS::updateFootprints.MakeEvent() );
+    Go( &EDIT_TOOL::ExchangeFootprints,  PCB_ACTIONS::changeFootprint.MakeEvent() );
+    Go( &EDIT_TOOL::ExchangeFootprints,  PCB_ACTIONS::changeFootprints.MakeEvent() );
+    Go( &EDIT_TOOL::MeasureTool,         ACTIONS::measureTool.MakeEvent() );
 
-    Go( &EDIT_TOOL::copyToClipboard,         ACTIONS::copy.MakeEvent() );
-    Go( &EDIT_TOOL::cutToClipboard,          ACTIONS::cut.MakeEvent() );
+    Go( &EDIT_TOOL::copyToClipboard,     ACTIONS::copy.MakeEvent() );
+    Go( &EDIT_TOOL::cutToClipboard,      ACTIONS::cut.MakeEvent() );
 }
 
 

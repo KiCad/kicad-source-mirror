@@ -1,7 +1,3 @@
-/**
- * @file drc_clearance_test_functions.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -36,7 +32,7 @@
 #include <trigo.h>
 
 #include <pcbnew.h>
-#include <drc.h>
+#include <tools/drc.h>
 
 #include <class_board.h>
 #include <class_module.h>

@@ -30,12 +30,13 @@
 #include <gerber_jobfile_writer.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
+#include <tool/tool_manager.h>
 #include <bitmaps.h>
 #include <class_board.h>
 #include <dialog_plot.h>
 #include <dialog_gendrill.h>
 #include <wx_html_report_panel.h>
-#include <drc.h>
+#include <tools/drc.h>
 
 
 DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
@@ -863,12 +864,14 @@ void DIALOG_PLOT::onRunDRC( wxCommandEvent& event )
 
     if( parent )
     {
+        DRC* drcTool = parent->GetToolManager()->GetTool<DRC>();
+
         // First close an existing dialog if open
         // (low probability, but can happen)
-        parent->GetDrcController()->DestroyDRCDialog( wxID_OK );
+        drcTool->DestroyDRCDialog( wxID_OK );
 
         // Open a new drc dialod, with the right parent frame, and in Modal Mode
-        parent->GetDrcController()->ShowDRCDialog( this );
+        drcTool->ShowDRCDialog( this );
     }
 }
 

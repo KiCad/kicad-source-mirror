@@ -32,18 +32,17 @@
 #include <confirm.h>
 #include <bitmaps.h>
 #include <wildcards_and_files_ext.h>
-
 #include <widgets/tuner_slider.h>
 #include <dialogs/dialog_signal_list.h>
 #include "netlist_exporter_pspice_sim.h"
 #include <pgm_base.h>
-
 #include "sim_plot_frame.h"
 #include "sim_plot_panel.h"
 #include "spice_simulator.h"
 #include "spice_reporter.h"
-
 #include <menus_helpers.h>
+#include <tool/tool_manager.h>
+#include <tools/ee_actions.h>
 
 SIM_PLOT_TYPE operator|( SIM_PLOT_TYPE aFirst, SIM_PLOT_TYPE aSecond )
 {
@@ -1191,7 +1190,7 @@ void SIM_PLOT_FRAME::onProbe( wxCommandEvent& event )
     if( m_schematicFrame == NULL )
         return;
 
-    wxQueueEvent( m_schematicFrame, new wxCommandEvent( wxEVT_TOOL, ID_SIM_PROBE ) );
+    m_schematicFrame->GetToolManager()->RunAction( EE_ACTIONS::simProbe );
     m_schematicFrame->Raise();
 }
 
@@ -1201,7 +1200,7 @@ void SIM_PLOT_FRAME::onTune( wxCommandEvent& event )
     if( m_schematicFrame == NULL )
         return;
 
-    wxQueueEvent( m_schematicFrame, new wxCommandEvent( wxEVT_TOOL, ID_SIM_TUNE ) );
+    m_schematicFrame->GetToolManager()->RunAction( EE_ACTIONS::simTune );
     m_schematicFrame->Raise();
 }
 

@@ -61,6 +61,8 @@
 #include <widgets/progress_reporter.h>
 #include <dialogs/dialog_find.h>
 #include <dialogs/dialog_page_settings.h>
+#include <pcb_netlist.h>
+#include <dialogs/dialog_update_pcb.h>
 
 using namespace std::placeholders;
 
@@ -163,6 +165,17 @@ TOOL_ACTION PCB_ACTIONS::hideDynamicRatsnest(
 TOOL_ACTION PCB_ACTIONS::updateLocalRatsnest( "pcbnew.Control.updateLocalRatsnest",
         AS_GLOBAL, 0,
         "", "" );
+
+TOOL_ACTION PCB_ACTIONS::listNets( "pcbnew.Control.listNets",
+        AS_GLOBAL, 0,
+        _( "List Nets" ), _( "Show a list of nets with names and IDs" ),
+        list_nets_xpm );
+
+TOOL_ACTION PCB_ACTIONS::showPythonConsole( "pcbnew.Control.showPythonConsole",
+        AS_GLOBAL, 0,
+        _( "Scripting Console" ), _( "Show the Python scripting console" ),
+        py_script_xpm );
+
 
 class ZONE_CONTEXT_MENU : public ACTION_MENU
 {
@@ -418,6 +431,34 @@ int PCB_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
 {
     wxCommandEvent evt( wxEVT_NULL, ID_GEN_PLOT );
     m_frame->ToPlotter( evt );
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::UpdatePCBFromSchematic( const TOOL_EVENT& aEvent )
+{
+    NETLIST netlist;
+
+    if( m_frame->FetchNetlistFromSchematic( netlist, PCB_EDIT_FRAME::ANNOTATION_DIALOG ) )
+    {
+        DIALOG_UPDATE_PCB updateDialog( m_frame, &netlist );
+        updateDialog.ShowModal();
+
+        SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+
+        if( !selectionTool->GetSelection().Empty() )
+            m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
+    }
+
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::TogglePythonConsole( const TOOL_EVENT& aEvent )
+{
+#if defined( KICAD_SCRIPTING_WXPYTHON )
+    m_frame->ScriptingConsoleEnableDisable();
+#endif
     return 0;
 }
 
@@ -1344,29 +1385,30 @@ void PCB_EDITOR_CONTROL::calculateSelectionRatsnest()
 
 void PCB_EDITOR_CONTROL::setTransitions()
 {
-    Go( &PCB_EDITOR_CONTROL::New,                ACTIONS::doNew.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::Open,               ACTIONS::open.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::Save,               ACTIONS::save.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::SaveAs,             ACTIONS::saveAs.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::SaveCopyAs,         ACTIONS::saveCopyAs.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::PageSettings,       ACTIONS::pageSettings.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::Plot,               ACTIONS::plot.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::New,                 ACTIONS::doNew.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::Open,                ACTIONS::open.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::Save,                ACTIONS::save.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::SaveAs,              ACTIONS::saveAs.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::SaveCopyAs,          ACTIONS::saveCopyAs.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::PageSettings,        ACTIONS::pageSettings.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::Plot,                ACTIONS::plot.MakeEvent() );
 
-    Go( &PCB_EDITOR_CONTROL::Find,               ACTIONS::find.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::Find,                ACTIONS::find.MakeEvent() );
 
     // Track & via size control
-    Go( &PCB_EDITOR_CONTROL::TrackWidthInc,      PCB_ACTIONS::trackWidthInc.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::TrackWidthDec,      PCB_ACTIONS::trackWidthDec.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ViaSizeInc,         PCB_ACTIONS::viaSizeInc.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ViaSizeDec,         PCB_ACTIONS::viaSizeDec.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::TrackWidthInc,       PCB_ACTIONS::trackWidthInc.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::TrackWidthDec,       PCB_ACTIONS::trackWidthDec.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ViaSizeInc,          PCB_ACTIONS::viaSizeInc.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ViaSizeDec,          PCB_ACTIONS::viaSizeDec.MakeEvent() );
 
     // Zone actions
-    Go( &PCB_EDITOR_CONTROL::ZoneMerge,          PCB_ACTIONS::zoneMerge.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ZoneDuplicate,      PCB_ACTIONS::zoneDuplicate.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ZoneMerge,           PCB_ACTIONS::zoneMerge.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ZoneDuplicate,       PCB_ACTIONS::zoneDuplicate.MakeEvent() );
 
     // Placing tools
-    Go( &PCB_EDITOR_CONTROL::PlaceTarget,        PCB_ACTIONS::placeTarget.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::PlaceModule,        PCB_ACTIONS::placeModule.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::PlaceTarget,         PCB_ACTIONS::placeTarget.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::PlaceModule,         PCB_ACTIONS::placeModule.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::DrillOrigin,         PCB_ACTIONS::drillOrigin.MakeEvent() );
 
     // Other
     Go( &PCB_EDITOR_CONTROL::ToggleLockSelected,  PCB_ACTIONS::toggleLock.MakeEvent() );
@@ -1376,15 +1418,18 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,  EVENTS::UnselectedEvent );
     Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,  EVENTS::ClearedEvent );
     Go( &PCB_EDITOR_CONTROL::CrossProbeSchToPcb,  PCB_ACTIONS::crossProbeSchToPcb.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::DrillOrigin,         PCB_ACTIONS::drillOrigin.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNet,        PCB_ACTIONS::highlightNet.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ClearHighlight,      PCB_ACTIONS::clearHighlight.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  PCB_ACTIONS::highlightNetTool.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  PCB_ACTIONS::highlightNetSelection.MakeEvent() );
 
-    Go( &PCB_EDITOR_CONTROL::LocalRatsnestTool,   PCB_ACTIONS::localRatsnestTool.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::HideDynamicRatsnest, PCB_ACTIONS::hideDynamicRatsnest.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::UpdateSelectionRatsnest, PCB_ACTIONS::updateLocalRatsnest.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::LocalRatsnestTool,      PCB_ACTIONS::localRatsnestTool.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::HideDynamicRatsnest,    PCB_ACTIONS::hideDynamicRatsnest.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::UpdateSelectionRatsnest,PCB_ACTIONS::updateLocalRatsnest.MakeEvent() );
+
+    Go( &PCB_EDITOR_CONTROL::ListNets,               PCB_ACTIONS::listNets.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::UpdatePCBFromSchematic, ACTIONS::updatePcbFromSchematic.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::TogglePythonConsole,    PCB_ACTIONS::showPythonConsole.MakeEvent() );
 }
 
 

@@ -204,6 +204,10 @@ static EDA_HOTKEY HkZoneFillOrRefill( _HKI( "Fill or Refill All Zones" ),
                                       HK_ZONE_FILL_OR_REFILL, 'B' );
 static EDA_HOTKEY HkZoneRemoveFilled( _HKI( "Remove Filled Areas in All Zones" ),
                                       HK_ZONE_REMOVE_FILLED, 'B' + GR_KB_CTRL );
+
+static EDA_HOTKEY HkUpdatePcbFromSch( _HKI( "Update PCB from Schematic" ),
+                                      HK_UPDATE_PCB_FROM_SCH, WXK_F8 );
+
 /* Fit on Screen */
 #if !defined( __WXMAC__ )
 static EDA_HOTKEY HkZoomAuto( _HKI( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
@@ -450,6 +454,7 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
 
     &HkEditBoardItem,
     &HkEditWithModedit,
+    &HkUpdatePcbFromSch,
 
     // Active Layer
     &HkSwitch2ComponentLayer,

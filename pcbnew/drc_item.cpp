@@ -27,7 +27,7 @@
 #include <common.h>
 
 #include <pcbnew.h>
-#include <drc.h>
+#include <tools/drc.h>
 #include <drc_item.h>
 #include <class_board.h>
 #include <base_units.h>

@@ -25,7 +25,7 @@
 #include <fctsys.h>
 #include <kicad_string.h>
 #include <pcbnew.h>
-#include <pcb_edit_frame.h>
+#include <tools/pcb_editor_control.h>
 #include <class_board.h>
 #include <dialog_select_net_from_list_base.h>
 #include <eda_pattern_match.h>
@@ -76,9 +76,9 @@ private:
 };
 
 
-void PCB_EDIT_FRAME::ListNetsAndSelect( wxCommandEvent& event )
+int PCB_EDITOR_CONTROL::ListNets( const TOOL_EVENT& aEvent )
 {
-    DIALOG_SELECT_NET_FROM_LIST dlg( this );
+    DIALOG_SELECT_NET_FROM_LIST dlg( m_frame );
     wxString netname;
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -86,6 +86,8 @@ void PCB_EDIT_FRAME::ListNetsAndSelect( wxCommandEvent& event )
         // Clear highlight
         dlg.HighlightNet( "" );
     }
+
+    return 0;
 }
 
 

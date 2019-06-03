@@ -143,12 +143,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         InstallPcbGlobalDeleteFrame( wxDefaultPosition );
         break;
 
-    case ID_DRC_CONTROL:
-        // Shows the DRC dialog in non modal mode, to allows board editing
-        // with the DRC dialog opened and showing errors.
-        m_drc->ShowDRCDialog();
-        break;
-
     case ID_GET_NETLIST:
         InstallNetlistFrame();
         break;
@@ -166,14 +160,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MENU_PCB_CLEAN:
         Clean_Pcb();
-        break;
-
-    case ID_MENU_PCB_UPDATE_FOOTPRINTS:
-        InstallExchangeModuleFrame( nullptr, true, false );
-        break;
-
-    case ID_MENU_PCB_EXCHANGE_FOOTPRINTS:
-        InstallExchangeModuleFrame( nullptr, false, false );
         break;
 
     case ID_MENU_PCB_SWAP_LAYERS:
