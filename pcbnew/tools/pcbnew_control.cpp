@@ -1030,7 +1030,7 @@ int PCBNEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     }
     else
     {
-        m_frame->ClearMsgPanel();
+        m_frame->SetMsgPanel( m_frame->GetBoard() );
     }
 
     return 0;
