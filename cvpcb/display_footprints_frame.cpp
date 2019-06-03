@@ -380,10 +380,8 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
     MODULE*               module = nullptr;
     const FOOTPRINT_INFO* module_info = nullptr;
 
-    for( auto it = GetBoard()->Modules().begin(); it != GetBoard()->Modules().end(); it++ )
-        delete *it;
-
-    GetBoard()->Modules().clear();
+    GetBoard()->DeleteAllModules();
+    GetGalCanvas()->GetView()->Clear();
 
     wxString footprintName = parentframe->GetSelectedFootprint();
 
