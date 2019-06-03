@@ -61,6 +61,11 @@
 #define ROOM_FOR_3D_VIEWER 100
 #define ROOM_FOR_PANEL_PREV_MODEL 50
 
+/// The default file history size is 9.
+#define DEFAULT_FILE_HISTORY_SIZE 9
+// Our max file history count
+#define MAX_FILE_HISTORY_SIZE 99
+
 enum main_id
 {
     ID_RUN_PCB                  = wxID_HIGHEST,
@@ -84,6 +89,12 @@ enum main_id
     ID_CONFIG_REQ,
     ID_CONFIG_SAVE,
     ID_CONFIG_READ,
+
+    // ID for menuitems used in our file history management,
+    // when we do not use wxFILE_ID (restricted to 9 items)
+    ID_FILE,
+    ID_FILE1,
+    ID_FILEMAX = ID_FILE + MAX_FILE_HISTORY_SIZE,
 
     ID_MENU_CANVAS_LEGACY,
     ID_MENU_CANVAS_OPENGL,

@@ -29,6 +29,7 @@
 #include <dpi_scaling.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
+#include <id.h>
 
 #include <wx/graphics.h>
 
