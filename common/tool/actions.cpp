@@ -344,6 +344,15 @@ TOOL_ACTION ACTIONS::highContrastDec( "common.Control.highContrastDec",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HIGHCONTRAST_DEC ),
         "", "" );
 
+TOOL_ACTION ACTIONS::selectionTool( "common.InteractiveSelection.selectionTool",
+        AS_GLOBAL, 0, _( "Select item(s)" ), "",
+        cursor_xpm, AF_ACTIVATE );
+
+TOOL_ACTION ACTIONS::measureTool( "common.InteractiveEdit.measureTool",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MEASURE_TOOL ),
+        _( "Measure Tool" ), _( "Interactively measure distance between points" ),
+        measurement_xpm, AF_ACTIVATE );
+
 TOOL_ACTION ACTIONS::show3DViewer( "common.Control.show3DViewer",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_3D_VIEWER ),
         _( "3D Viewer" ), _( "Show 3D viewer window" ),

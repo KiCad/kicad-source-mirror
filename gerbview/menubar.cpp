@@ -232,7 +232,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     toolsMenu->Add( _( "&Show Source..." ), _( "Show source file for the current layer" ),
                     ID_GERBVIEW_SHOW_SOURCE, tools_xpm );
 
-    toolsMenu->Add( GERBVIEW_ACTIONS::measureTool );
+    toolsMenu->Add( ACTIONS::measureTool );
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( _( "Clear Current Layer..." ), _( "Clear the selected graphic layer" ),

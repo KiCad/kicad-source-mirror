@@ -49,10 +49,6 @@ TOOL_ACTION PL_ACTIONS::selectionActivate( "plEditor.InteractiveSelection",
         AS_GLOBAL, 0, "", "",       // No description, not shown anywhere
         nullptr, AF_ACTIVATE );
 
-TOOL_ACTION PL_ACTIONS::selectionTool( "plEditor.InteractiveSelection.selectionTool",
-        AS_GLOBAL, 0, _( "Select item(s)" ), "",
-        cursor_xpm, AF_ACTIVATE );
-
 TOOL_ACTION PL_ACTIONS::selectionMenu( "plEditor.InteractiveSelection.SelectionMenu",
         AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 

@@ -135,6 +135,10 @@ public:
     static TOOL_ACTION togglePolarCoords;
     static TOOL_ACTION resetLocalCoords;
 
+    // Common Tools
+    static TOOL_ACTION selectionTool;
+    static TOOL_ACTION measureTool;
+
     // Misc
     static TOOL_ACTION show3DViewer;
     static TOOL_ACTION configurePaths;

@@ -362,7 +362,7 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
-    m_toolManager->InvokeTool( "eeschema.InteractiveSelection" );
+    m_toolManager->RunAction( EE_ACTIONS::selectionActivate );
 
     GetCanvas()->SetEventDispatcher( m_toolDispatcher );
 }

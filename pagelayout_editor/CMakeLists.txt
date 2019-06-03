@@ -28,7 +28,6 @@ set( PL_EDITOR_SRCS
     menubar.cpp
     toolbars_pl_editor.cpp
 
-    tools/pl_actions.cpp
     tools/pl_selection_tool.cpp
     tools/pl_drawing_tools.cpp
     tools/pl_edit_tool.cpp

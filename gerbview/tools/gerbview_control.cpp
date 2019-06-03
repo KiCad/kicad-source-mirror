@@ -29,11 +29,6 @@
 #include "gerbview_control.h"
 #include "gerbview_selection_tool.h"
 
-TOOL_ACTION GERBVIEW_ACTIONS::selectionTool( "gerbview.Control.selectionTool",
-        AS_GLOBAL, 0,
-        _( "Select item(s)" ), "",
-        cursor_xpm, AF_ACTIVATE );
-
 TOOL_ACTION GERBVIEW_ACTIONS::layerChanged( "gerbview.Control.layerChanged",
         AS_GLOBAL, 0,
         "", "",
@@ -236,13 +231,6 @@ int GERBVIEW_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
     if( layer > 0 )
         m_frame->SetActiveLayer( layer - 1, true );
 
-    return 0;
-}
-
-
-int GERBVIEW_CONTROL::SwitchUnits( const TOOL_EVENT& aEvent )
-{
-    m_frame->ChangeUserUnits( m_frame->GetUserUnits() == INCHES ? MILLIMETRES : INCHES );
     return 0;
 }
 

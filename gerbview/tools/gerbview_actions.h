@@ -56,8 +56,6 @@ public:
     /// Activation of the edit tool
     static TOOL_ACTION properties;
 
-    static TOOL_ACTION measureTool;
-
     // Display modes
     static TOOL_ACTION linesDisplayOutlines;
     static TOOL_ACTION flashedDisplayOutlines;
@@ -69,15 +67,10 @@ public:
     // Layer control
     static TOOL_ACTION layerPrev;
     static TOOL_ACTION layerNext;
-    static TOOL_ACTION layerAlphaInc;
-    static TOOL_ACTION layerAlphaDec;
-    static TOOL_ACTION layerToggle;
 
     static TOOL_ACTION layerChanged;        // notification
 
     // Miscellaneous
-    static TOOL_ACTION selectionTool;
-    static TOOL_ACTION zoomTool;
     static TOOL_ACTION showHelp;
 
     // Highlighting

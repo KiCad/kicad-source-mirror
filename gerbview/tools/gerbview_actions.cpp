@@ -38,7 +38,6 @@ OPT<TOOL_EVENT> GERBVIEW_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_HIGHLIGHT_APER_ATTRIBUTE_ITEMS:
         return GERBVIEW_ACTIONS::highlightAttribute.MakeEvent();
-        break;
     }
 
     return OPT<TOOL_EVENT>();

@@ -419,7 +419,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     KiScaledSeparator( m_drawToolBar, this );
     m_drawToolBar->Add( PCB_ACTIONS::drillOrigin,          ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::gridSetOrigin,        ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::measureTool,          ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::measureTool,              ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->Realize();
 }
@@ -817,6 +817,6 @@ void PCB_EDIT_FRAME::SyncMenusAndToolbars()
     m_drawToolBar->Toggle( PCB_ACTIONS::deleteTool,       GetToolId() == ID_PCB_DELETE_ITEM_BUTT );
     m_drawToolBar->Toggle( PCB_ACTIONS::drillOrigin,      GetToolId() == ID_PCB_PLACE_OFFSET_COORD_BUTT );
     m_drawToolBar->Toggle( PCB_ACTIONS::gridSetOrigin,    GetToolId() == ID_PCB_PLACE_GRID_COORD_BUTT );
-    m_drawToolBar->Toggle( PCB_ACTIONS::measureTool,      GetToolId() == ID_PCB_MEASUREMENT_TOOL );
+    m_drawToolBar->Toggle( ACTIONS::measureTool,          GetToolId() == ID_PCB_MEASUREMENT_TOOL );
     m_drawToolBar->Refresh();
 }

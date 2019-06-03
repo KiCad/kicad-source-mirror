@@ -149,11 +149,6 @@ TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         _( "Properties..." ), _( "Displays item properties dialog" ),
         config_xpm );
 
-TOOL_ACTION PCB_ACTIONS::measureTool( "pcbnew.InteractiveEdit.measureTool",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MEASURE_TOOL ),
-        _( "Measuring Tool" ), _( "Interactively measure distance between points" ),
-        measurement_xpm, AF_ACTIVATE );
-
 TOOL_ACTION PCB_ACTIONS::updateUnits( "pcbnew.InteractiveEdit.updateUnits",
         AS_GLOBAL, 0,
         "", "" );
@@ -1490,7 +1485,7 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::editFootprintInFpEditor, PCB_ACTIONS::editFootprintInFpEditor.MakeEvent() );
     Go( &EDIT_TOOL::ExchangeFootprints,      PCB_ACTIONS::updateFootprints.MakeEvent() );
     Go( &EDIT_TOOL::ExchangeFootprints,      PCB_ACTIONS::exchangeFootprints.MakeEvent() );
-    Go( &EDIT_TOOL::MeasureTool,             PCB_ACTIONS::measureTool.MakeEvent() );
+    Go( &EDIT_TOOL::MeasureTool,             ACTIONS::measureTool.MakeEvent() );
 
     Go( &EDIT_TOOL::copyToClipboard,         ACTIONS::copy.MakeEvent() );
     Go( &EDIT_TOOL::cutToClipboard,          ACTIONS::cut.MakeEvent() );

@@ -220,8 +220,8 @@ void GERBVIEW_FRAME::ReCreateOptToolbar()
     // TODO: these can be moved to the 'proper' vertical toolbar if and when there are
     // actual tools to put there. That, or I'll get around to implementing configurable
     // toolbars.
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::selectionTool,           ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::measureTool,             ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::selectionTool,                    ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::measureTool,                      ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddSeparator();
     m_optionsToolBar->Add( ACTIONS::toggleGrid,                       ACTION_TOOLBAR::TOGGLE );

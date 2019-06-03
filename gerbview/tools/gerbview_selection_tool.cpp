@@ -69,11 +69,6 @@ TOOL_ACTION GERBVIEW_ACTIONS::selectionClear( "gerbview.InteractiveSelection.Cle
         AS_GLOBAL, 0,
         "", "" );    // No description, it is not supposed to be shown anywhere
 
-TOOL_ACTION GERBVIEW_ACTIONS::measureTool( "gerbview.InteractiveSelection.measureTool",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MEASURE_TOOL ),
-        _( "Measure Tool" ), _( "Interactively measure distance between points" ),
-        measurement_xpm, AF_ACTIVATE );
-
 
 class HIGHLIGHT_MENU: public ACTION_MENU
 {
@@ -477,7 +472,7 @@ void GERBVIEW_SELECTION_TOOL::setTransitions()
     Go( &GERBVIEW_SELECTION_TOOL::ClearSelection,   GERBVIEW_ACTIONS::selectionClear.MakeEvent() );
     Go( &GERBVIEW_SELECTION_TOOL::SelectItem,       GERBVIEW_ACTIONS::selectItem.MakeEvent() );
     Go( &GERBVIEW_SELECTION_TOOL::UnselectItem,     GERBVIEW_ACTIONS::unselectItem.MakeEvent() );
-    Go( &GERBVIEW_SELECTION_TOOL::MeasureTool,      GERBVIEW_ACTIONS::measureTool.MakeEvent() );
+    Go( &GERBVIEW_SELECTION_TOOL::MeasureTool,      ACTIONS::measureTool.MakeEvent() );
 }
 
 

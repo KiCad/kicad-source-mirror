@@ -159,7 +159,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
     KiScaledSeparator( m_drawToolBar, this );
     m_drawToolBar->Add( PCB_ACTIONS::setAnchor,      ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::gridSetOrigin,  ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::measureTool,    ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::measureTool,        ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->Realize();
 }
@@ -211,7 +211,7 @@ void FOOTPRINT_EDIT_FRAME::SyncMenusAndToolbars()
     m_optionsToolBar->Toggle( ACTIONS::highContrastMode,       opts->m_ContrastModeDisplay );
     m_optionsToolBar->Refresh();
 
-    m_drawToolBar->Toggle( PCB_ACTIONS::selectionTool, GetToolId() == ID_NO_TOOL_SELECTED );
+    m_drawToolBar->Toggle( ACTIONS::selectionTool,     GetToolId() == ID_NO_TOOL_SELECTED );
     m_drawToolBar->Toggle( PCB_ACTIONS::placePad,      GetToolId() == ID_MODEDIT_PAD_TOOL );
     m_drawToolBar->Toggle( PCB_ACTIONS::drawLine,      GetToolId() == ID_MODEDIT_LINE_TOOL );
     m_drawToolBar->Toggle( PCB_ACTIONS::drawCircle,    GetToolId() == ID_MODEDIT_CIRCLE_TOOL );
@@ -221,6 +221,6 @@ void FOOTPRINT_EDIT_FRAME::SyncMenusAndToolbars()
     m_drawToolBar->Toggle( PCB_ACTIONS::deleteTool,    GetToolId() == ID_MODEDIT_DELETE_TOOL );
     m_drawToolBar->Toggle( PCB_ACTIONS::setAnchor,     GetToolId() == ID_MODEDIT_ANCHOR_TOOL );
     m_drawToolBar->Toggle( PCB_ACTIONS::gridSetOrigin, GetToolId() == ID_MODEDIT_PLACE_GRID_COORD );
-    m_drawToolBar->Toggle( PCB_ACTIONS::measureTool,   GetToolId() == ID_MODEDIT_MEASUREMENT_TOOL );
+    m_drawToolBar->Toggle( ACTIONS::measureTool,       GetToolId() == ID_MODEDIT_MEASUREMENT_TOOL );
     m_drawToolBar->Refresh();
 }

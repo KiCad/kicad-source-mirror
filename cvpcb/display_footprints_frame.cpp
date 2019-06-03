@@ -50,8 +50,8 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/common_tools.h>
 #include <tool/zoom_tool.h>
-#include <tools/cvpcb_selection_tool.h>
 #include <tools/cvpcb_actions.h>
+#include <tools/cvpcb_selection_tool.h>
 #include <tools/cvpcb_control.h>
 
 // Colors for layers and items
@@ -63,14 +63,6 @@ BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_OPTIONS_SETUP, DISPLAY_FOOTPRINTS_FRAME::InstallOptionsDisplay )
     EVT_CHOICE( ID_ON_ZOOM_SELECT, DISPLAY_FOOTPRINTS_FRAME::OnSelectZoom )
     EVT_CHOICE( ID_ON_GRID_SELECT, DISPLAY_FOOTPRINTS_FRAME::OnSelectGrid )
-
-    /*
-    EVT_TOOL  and EVT_UPDATE_UI for:
-      ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
-      ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
-      ID_TB_OPTIONS_SHOW_PADS_SKETCH
-      are managed in PCB_BASE_FRAME
-    */
 END_EVENT_TABLE()
 
 
@@ -209,8 +201,8 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
     // TODO: these can be moved to the 'proper' right vertical toolbar if and when there are
     // actual tools to put there. That, or I'll get around to implementing configurable
     // toolbars.
-    m_optionsToolBar->Add( CVPCB_ACTIONS::selectionTool, ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( CVPCB_ACTIONS::measureTool,   ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::selectionTool,       ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::measureTool,         ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddSeparator();
     m_optionsToolBar->Add( ACTIONS::toggleGrid,          ACTION_TOOLBAR::TOGGLE );
@@ -460,11 +452,11 @@ void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
 
 void DISPLAY_FOOTPRINTS_FRAME::SyncMenusAndToolbars()
 {
-    m_mainToolBar->Toggle( CVPCB_ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
+    m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
     m_mainToolBar->Refresh();
 
-    m_optionsToolBar->Toggle( CVPCB_ACTIONS::selectionTool, GetToolId() == ID_NO_TOOL_SELECTED );
-    m_optionsToolBar->Toggle( CVPCB_ACTIONS::measureTool, GetToolId() == ID_TB_MEASUREMENT_TOOL );
+    m_optionsToolBar->Toggle( ACTIONS::selectionTool, GetToolId() == ID_NO_TOOL_SELECTED );
+    m_optionsToolBar->Toggle( ACTIONS::measureTool, GetToolId() == ID_TB_MEASUREMENT_TOOL );
     m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != INCHES );
     m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == INCHES );
     m_optionsToolBar->Refresh();

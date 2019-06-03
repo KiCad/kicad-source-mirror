@@ -24,9 +24,9 @@
  */
 
 #include <cstdint>
-#include "cvpcb_actions.h"
-#include "cvpcb_control.h"
 #include <functional>
+#include <tool/actions.h>
+#include <tools/cvpcb_control.h>
 using namespace std::placeholders;
 
 

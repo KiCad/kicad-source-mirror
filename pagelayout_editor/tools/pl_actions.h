@@ -59,7 +59,6 @@ public:
     static TOOL_ACTION selectionMenu;
 
     // Tools
-    static TOOL_ACTION selectionTool;
     static TOOL_ACTION pickerTool;
     static TOOL_ACTION placeText;
     static TOOL_ACTION placeImage;
@@ -80,7 +79,7 @@ public:
     static TOOL_ACTION toggleBackground;
 
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
-    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override;
+    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override { return OPT<TOOL_EVENT>(); }
 };
 
 

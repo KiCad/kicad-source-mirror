@@ -212,7 +212,7 @@ PCB_TEST_FRAME::PCB_TEST_FRAME( wxFrame* frame, const wxString& title, const wxP
 
     m_toolManager->InitTools();
     m_galPanel->SetEventDispatcher( m_toolDispatcher.get() );
-    m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+    m_toolManager->InvokeTool( "common.InteractiveSelection" );
 #endif
 
     SetBoard( new BOARD );

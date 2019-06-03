@@ -46,11 +46,6 @@ public:
     /// Activation of the selection tool
     static TOOL_ACTION selectionActivate;
 
-    /// Tool selection
-    static TOOL_ACTION selectionTool;
-    static TOOL_ACTION measureTool;
-
-
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
     virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override { return OPT<TOOL_EVENT>(); }
 };

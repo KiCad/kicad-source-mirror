@@ -18,7 +18,6 @@
  */
 
 #include <limits>
-
 #include <functional>
 using namespace std::placeholders;
 
@@ -29,27 +28,14 @@ using namespace std::placeholders;
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <tools/cvpcb_actions.h>
+#include <tools/cvpcb_selection_tool.h>
 #include <preview_items/ruler_item.h>
 #include <cvpcb_id.h>
-#include <tools/cvpcb_selection_tool.h>
 
 
-// JEY TODO: move all these actions to tool/actions.cpp
-// Selection tool actions
 TOOL_ACTION CVPCB_ACTIONS::selectionActivate( "cvpcb.InteractiveSelection",
         AS_GLOBAL, 0,
         "", "", NULL, AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
-
-// Selection tool actions
-TOOL_ACTION CVPCB_ACTIONS::selectionTool( "cvpcb.InteractiveSelection.selectionTool",
-        AS_GLOBAL, 0,
-        _( "Select item(s)" ), "",
-        cursor_xpm, AF_ACTIVATE );
-
-TOOL_ACTION CVPCB_ACTIONS::measureTool( "cvpcb.InteractiveSelection.measureTool",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MEASURE_TOOL ),
-        _( "Measure Tool" ), _( "Interactively measure distance between points" ),
-        measurement_xpm, AF_ACTIVATE );
 
 
 CVPCB_SELECTION_TOOL::CVPCB_SELECTION_TOOL() :
@@ -235,6 +221,6 @@ const KIGFX::VIEW_GROUP::ITEMS SELECTION::updateDrawList() const
 void CVPCB_SELECTION_TOOL::setTransitions()
 {
     Go( &CVPCB_SELECTION_TOOL::Main,             CVPCB_ACTIONS::selectionActivate.MakeEvent() );
-    Go( &CVPCB_SELECTION_TOOL::MeasureTool,      CVPCB_ACTIONS::measureTool.MakeEvent() );
+    Go( &CVPCB_SELECTION_TOOL::MeasureTool,      ACTIONS::measureTool.MakeEvent() );
 }
 
