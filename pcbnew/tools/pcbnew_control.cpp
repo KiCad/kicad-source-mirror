@@ -766,21 +766,6 @@ int PCBNEW_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
 
 // Helper function for PCBNEW_CONTROL::placeBoardItems()
 template<typename T>
-static void moveNoFlagToVector( DLIST<T>& aList, std::vector<BOARD_ITEM*>& aTarget, bool aIsNew )
-{
-    for( auto obj = aIsNew ? aList.PopFront() : aList.GetFirst(); obj;
-            obj = aIsNew ? aList.PopFront() : obj->Next() )
-    {
-        if( obj->GetFlags() & FLAG0 )
-            obj->ClearFlags( FLAG0 );
-        else
-            aTarget.push_back( obj );
-    }
-}
-
-
-// Helper function for PCBNEW_CONTROL::placeBoardItems()
-template<typename T>
 static void moveNoFlagToVector( std::deque<T>& aList, std::vector<BOARD_ITEM*>& aTarget, bool aIsNew )
 {
     std::copy_if( aList.begin(), aList.end(), std::back_inserter( aTarget ),

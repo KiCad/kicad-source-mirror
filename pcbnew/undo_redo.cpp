@@ -169,18 +169,12 @@ static void SwapItemData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     // mainly pointers in chain and time stamp, which is set to new, unique value.
     // So we have to use the current values of these parameters.
 
-    EDA_ITEM* pnext = aItem->Next();
-    EDA_ITEM* pback = aItem->Back();
-    DHEAD* mylist    = aItem->GetList();
     timestamp_t timestamp = aItem->GetTimeStamp();
     EDA_ITEM* parent = aItem->GetParent();
 
     aItem->SwapData( aImage );
 
     // Restore pointers and time stamp, to be sure they are not broken
-    aItem->SetNext( pnext );
-    aItem->SetBack( pback );
-    aItem->SetList( mylist );
     aItem->SetTimeStamp( timestamp );
     aItem->SetParent( parent );
 }

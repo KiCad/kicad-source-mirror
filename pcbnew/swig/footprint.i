@@ -35,7 +35,6 @@
 %feature("flatnested", "");
 
 %rename(Get) operator   MODULE*;
-%template(MODULE_List)  DLIST<MODULE>;
 %{
 #include <class_module.h>
 %}

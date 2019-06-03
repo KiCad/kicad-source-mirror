@@ -32,10 +32,7 @@
 
 %include class_board_item.h         // generate code for this interface
 
-// this is to help python with the * accessor of DLIST templates
 %rename(Get) operator       BOARD_ITEM*;
-%template(BOARD_ITEM_List)  DLIST<BOARD_ITEM>;
-
 
 %{
 #include <class_board_item.h>
@@ -138,7 +135,7 @@ static PCB_TARGET*       Cast_to_PCB_TARGET( BOARD_ITEM* );
         elif ct=="ZONE_CONTAINER":
             return Cast_to_ZONE_CONTAINER(self)
         else:
-            return None
+            return none
 
     def Duplicate(self):
         ct = self.GetClass()

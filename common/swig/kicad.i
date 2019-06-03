@@ -76,8 +76,6 @@ principle should be easily implemented by adapting the current STL containers.
 %ignore operator <<;
 %ignore operator=;
 
-%include dlist.i
-
 // headers/imports that must be included in the _wrapper.cpp at top
 
 %{
