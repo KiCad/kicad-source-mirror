@@ -114,7 +114,7 @@ TOOL_ACTION PCB_ACTIONS::zoneDisplayDisable( "pcbnew.Control.zoneDisplayDisable"
 
 TOOL_ACTION PCB_ACTIONS::zoneDisplayOutlines( "pcbnew.Control.zoneDisplayOutlines",
         AS_GLOBAL, 0,
-        _( "Sketch Zones" ), _( "Outline filled areas of zones" ),
+        _( "Sketch Zones" ), _( "Show solid areas of zones in outline mode" ),
         show_zone_outline_only_xpm);
 
 
