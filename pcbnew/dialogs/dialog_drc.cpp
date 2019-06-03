@@ -385,7 +385,7 @@ bool DIALOG_DRC_CONTROL::focusOnItem( const DRC_ITEM* aItem )
         toolmgr->RunAction( PCB_ACTIONS::selectItem, true, marker );
     }
 
-    toolmgr->GetView()->SetCenter( pos );
+    m_brdEditor->FocusOnLocation( pos, false, true );
     m_brdEditor->GetGalCanvas()->Refresh();
 
     return true;
