@@ -314,7 +314,7 @@ public:
 
     // Ratsnest
     static TOOL_ACTION localRatsnestTool;
-    static TOOL_ACTION hideLocalRatsnest;
+    static TOOL_ACTION hideDynamicRatsnest;
     static TOOL_ACTION updateLocalRatsnest;
 
     /// Find an item

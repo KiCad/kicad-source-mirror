@@ -157,9 +157,8 @@ TOOL_ACTION PCB_ACTIONS::localRatsnestTool( "pcbnew.Control.localRatsnestTool",
         _( "Highlight Ratsnest" ), "",
         tool_ratsnest_xpm );
 
-TOOL_ACTION PCB_ACTIONS::hideLocalRatsnest( "pcbnew.Control.hideLocalRatsnest",
-        AS_GLOBAL, 0,
-        "", "" );
+TOOL_ACTION PCB_ACTIONS::hideDynamicRatsnest(
+        "pcbnew.Control.hideDynamicRatsnest", AS_GLOBAL, 0, "", "" );
 
 TOOL_ACTION PCB_ACTIONS::updateLocalRatsnest( "pcbnew.Control.updateLocalRatsnest",
         AS_GLOBAL, 0,
@@ -1295,9 +1294,9 @@ int PCB_EDITOR_CONTROL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::HideSelectionRatsnest( const TOOL_EVENT& aEvent )
+int PCB_EDITOR_CONTROL::HideDynamicRatsnest( const TOOL_EVENT& aEvent )
 {
-    getModel<BOARD>()->GetConnectivity()->ClearDynamicRatsnest();
+    getModel<BOARD>()->GetConnectivity()->HideDynamicRatsnest();
     m_slowRatsnest = false;
     return 0;
 }
@@ -1384,7 +1383,7 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  PCB_ACTIONS::highlightNetSelection.MakeEvent() );
 
     Go( &PCB_EDITOR_CONTROL::LocalRatsnestTool,   PCB_ACTIONS::localRatsnestTool.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::HideSelectionRatsnest, PCB_ACTIONS::hideLocalRatsnest.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::HideDynamicRatsnest, PCB_ACTIONS::hideDynamicRatsnest.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::UpdateSelectionRatsnest, PCB_ACTIONS::updateLocalRatsnest.MakeEvent() );
 }
 

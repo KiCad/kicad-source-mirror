@@ -585,10 +585,16 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     if( unselect )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
+    // If canceled, we need to remove the dynamic ratsnest from the screen
     if( restore_state )
+    {
+        m_toolMgr->RunAction( PCB_ACTIONS::hideDynamicRatsnest, true );
         m_commit->Revert();
+    }
     else
+    {
         m_commit->Push( _( "Drag" ) );
+    }
 
     return 0;
 }

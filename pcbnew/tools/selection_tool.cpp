@@ -1352,7 +1352,7 @@ void SELECTION_TOOL::clearSelection()
 
     // Inform other potentially interested tools
     m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
-    m_toolMgr->RunAction( PCB_ACTIONS::hideLocalRatsnest, true );
+    m_toolMgr->RunAction( PCB_ACTIONS::hideDynamicRatsnest, true );
 }
 
 

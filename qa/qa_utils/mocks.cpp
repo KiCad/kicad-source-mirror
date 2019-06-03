@@ -229,9 +229,8 @@ MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
     return nullptr;
 }
 
-TOOL_ACTION PCB_ACTIONS::hideLocalRatsnest( "pcbnew.Control.hideLocalRatsnest",
-        AS_GLOBAL, 0,
-        "", "" );
+TOOL_ACTION PCB_ACTIONS::hideDynamicRatsnest(
+        "pcbnew.Control.hideLocalRatsnest", AS_GLOBAL, 0, "", "" );
 
 TOOL_ACTION PCB_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_FLIP_ITEM ),
