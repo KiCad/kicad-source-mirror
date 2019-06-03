@@ -32,7 +32,7 @@
 #include <eda_dockart.h>
 #include <pl_editor_frame.h>
 #include <pl_editor_id.h>
-#include <pl_draw_panel_gal.cpp>
+#include <pl_draw_panel_gal.h>
 #include <hotkeys.h>
 #include <pl_editor_screen.h>
 #include <ws_data_model.h>
