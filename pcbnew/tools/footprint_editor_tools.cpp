@@ -26,18 +26,15 @@
 #include "kicad_clipboard.h"
 #include "selection_tool.h"
 #include "pcb_actions.h"
-
 #include <core/optional.h>
-
 #include <tool/tool_manager.h>
-
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
 #include <view/view_group.h>
 #include <pcb_painter.h>
 #include <origin_viewitem.h>
 #include <status_popup.h>
-
+#include <footprint_edit_frame.h>
 #include <kicad_plugin.h>
 #include <pcbnew_id.h>
 #include <collectors.h>
@@ -45,7 +42,6 @@
 #include <dialogs/dialog_enum_pads.h>
 #include <hotkeys.h>
 #include <bitmaps.h>
-
 #include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <class_module.h>
@@ -96,6 +92,12 @@ void MODULE_EDITOR_TOOLS::Reset( RESET_REASON aReason )
 {
 }
 
+
+int MODULE_EDITOR_TOOLS::Revert( const TOOL_EVENT& aEvent )
+{
+    getEditFrame<FOOTPRINT_EDIT_FRAME>()->RevertFootprint();
+    return 0;
+}
 
 
 int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
@@ -542,6 +544,8 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
 
 void MODULE_EDITOR_TOOLS::setTransitions()
 {
+    Go( &MODULE_EDITOR_TOOLS::Revert,              ACTIONS::revert.MakeEvent() );
+
     Go( &MODULE_EDITOR_TOOLS::PlacePad,            PCB_ACTIONS::placePad.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::CreatePadFromShapes, PCB_ACTIONS::createPadFromShapes.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::ExplodePadToShapes,  PCB_ACTIONS::explodePadToShapes.MakeEvent() );

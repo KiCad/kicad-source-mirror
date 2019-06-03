@@ -353,10 +353,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_treePane->GetLibTree()->Refresh();
         break;
 
-    case ID_MODEDIT_REVERT_PART:
-        RevertFootprint();
-        break;
-
     case ID_MODEDIT_CUT_PART:
     case ID_MODEDIT_COPY_PART:
         if( getTargetFPID().IsValid() )

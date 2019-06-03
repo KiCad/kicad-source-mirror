@@ -32,7 +32,7 @@
 #include <class_edge_mod.h>
 #include <class_pcb_text.h>
 #include <widgets/unit_binder.h>
-
+#include <tools/global_edit_tool.h>
 #include <dialog_global_edit_text_and_graphics_base.h>
 
 
@@ -408,10 +408,12 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
 }
 
 
-void PCB_EDIT_FRAME::OnEditTextAndGraphics( wxCommandEvent& event )
+int GLOBAL_EDIT_TOOL::EditTextAndGraphics( const TOOL_EVENT& aEvent )
 {
-    DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS dlg( this );
+    DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS dlg( frame() );
     dlg.ShowModal();
+
+    return 0;
 }
 
 

@@ -176,6 +176,11 @@ TOOL_ACTION PCB_ACTIONS::showPythonConsole( "pcbnew.Control.showPythonConsole",
         _( "Scripting Console" ), _( "Show the Python scripting console" ),
         py_script_xpm );
 
+TOOL_ACTION PCB_ACTIONS::flipBoard( "pcbnew.Control.flipBoard",
+        AS_GLOBAL, 0,
+        _( "Flip Board View" ), _( "Flip (mirror) the board view" ),
+        flip_board_xpm );
+
 
 class ZONE_CONTEXT_MENU : public ACTION_MENU
 {
@@ -1383,6 +1388,15 @@ void PCB_EDITOR_CONTROL::calculateSelectionRatsnest()
 }
 
 
+int PCB_EDITOR_CONTROL::FlipPcbView( const TOOL_EVENT& aEvent )
+{
+    view()->SetMirror( !view()->IsMirroredX(), false );
+    view()->RecacheAllItems();
+    frame()->Refresh();
+    return 0;
+}
+
+
 void PCB_EDITOR_CONTROL::setTransitions()
 {
     Go( &PCB_EDITOR_CONTROL::New,                 ACTIONS::doNew.MakeEvent() );
@@ -1430,6 +1444,7 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::ListNets,               PCB_ACTIONS::listNets.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::UpdatePCBFromSchematic, ACTIONS::updatePcbFromSchematic.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::TogglePythonConsole,    PCB_ACTIONS::showPythonConsole.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::FlipPcbView,            PCB_ACTIONS::flipBoard.MakeEvent() );
 }
 
 

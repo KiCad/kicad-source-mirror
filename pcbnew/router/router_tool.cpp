@@ -91,29 +91,34 @@ TOOL_ACTION PCB_ACTIONS::routerActivateDiffPair( "pcbnew.InteractiveRouter.DiffP
         _( "Run push & shove router (differential pairs)" ),
         ps_diff_pair_xpm, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::routerActivateSettingsDialog( "pcbnew.InteractiveRouter.SettingsDialog",
+TOOL_ACTION PCB_ACTIONS::routerSettingsDialog( "pcbnew.InteractiveRouter.SettingsDialog",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTING_OPTIONS ),
         _( "Interactive Router Settings..." ),
         _( "Open Interactive Router settings" ),
         tools_xpm );
 
-TOOL_ACTION PCB_ACTIONS::routerActivateDpDimensionsDialog( "pcbnew.InteractiveRouter.DpDimensionsDialog",
+TOOL_ACTION PCB_ACTIONS::routerDiffPairDialog( "pcbnew.InteractiveRouter.DiffPairDialog",
         AS_GLOBAL, 0,
         _( "Differential Pair Dimension Settings..." ),
         _( "Open Differential Pair Dimension settings" ),
         ps_diff_pair_gap_xpm );
 
-TOOL_ACTION PCB_ACTIONS::routerActivateTuneSingleTrace( "pcbnew.LengthTuner.TuneSingleTrack",
+TOOL_ACTION PCB_ACTIONS::selectLayerPair( "pcbnew.InteractiveRouter.SelectLayerPair",
+        AS_GLOBAL, 0,
+        _( "Set Layer Pair..." ), _( "Change active layer pair for routing" ),
+        select_layer_pair_xpm, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::routerTuneSingleTrace( "pcbnew.LengthTuner.TuneSingleTrack",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_SINGLE ),
         _( "Tune length of a single track" ), "",
         ps_tune_length_xpm, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::routerActivateTuneDiffPair( "pcbnew.LengthTuner.TuneDiffPair",
+TOOL_ACTION PCB_ACTIONS::routerTuneDiffPair( "pcbnew.LengthTuner.TuneDiffPair",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_DIFF_PAIR ),
         _( "Tune length of a differential pair" ), "",
         NULL, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::routerActivateTuneDiffPairSkew( "pcbnew.LengthTuner.TuneDiffPairSkew",
+TOOL_ACTION PCB_ACTIONS::routerTuneDiffPairSkew( "pcbnew.LengthTuner.TuneDiffPairSkew",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_SKEW ),
         _( "Tune skew of a differential pair" ), "",
         NULL, AF_ACTIVATE );
@@ -409,7 +414,7 @@ protected:
         {
             bds.UseCustomDiffPairDimensions( true );
             TOOL_MANAGER* toolManager = m_frame.GetToolManager();
-            toolManager->RunAction( PCB_ACTIONS::routerActivateDpDimensionsDialog, true );
+            toolManager->RunAction( PCB_ACTIONS::routerDiffPairDialog, true );
         }
         else if( id == ID_POPUP_PCB_SELECT_USE_NETCLASS_DIFFPAIR )
         {
@@ -466,7 +471,7 @@ public:
         if( m_mode == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
             Add( &m_diffPairMenu );
 
-        Add( PCB_ACTIONS::routerActivateSettingsDialog );
+        Add( PCB_ACTIONS::routerSettingsDialog );
 
         AppendSeparator();
 
@@ -899,21 +904,23 @@ int ROUTER_TOOL::SettingsDialog( const TOOL_EVENT& aEvent )
 
 void ROUTER_TOOL::setTransitions()
 {
-    Go( &ROUTER_TOOL::RouteSingleTrace, PCB_ACTIONS::routerActivateSingle.MakeEvent() );
-    Go( &ROUTER_TOOL::RouteDiffPair, PCB_ACTIONS::routerActivateDiffPair.MakeEvent() );
-    Go( &ROUTER_TOOL::DpDimensionsDialog, PCB_ACTIONS::routerActivateDpDimensionsDialog.MakeEvent() );
-    Go( &ROUTER_TOOL::SettingsDialog, PCB_ACTIONS::routerActivateSettingsDialog.MakeEvent() );
-    Go( &ROUTER_TOOL::InlineDrag, PCB_ACTIONS::routerInlineDrag.MakeEvent() );
-    Go( &ROUTER_TOOL::InlineBreakTrack, PCB_ACTIONS::inlineBreakTrack.MakeEvent() );
+    Go( &ROUTER_TOOL::SelectCopperLayerPair,  PCB_ACTIONS::selectLayerPair.MakeEvent() );
 
-    Go( &ROUTER_TOOL::onViaCommand, ACT_PlaceThroughVia.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand, ACT_PlaceBlindVia.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand, ACT_PlaceMicroVia.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand, ACT_SelLayerAndPlaceThroughVia.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand, ACT_SelLayerAndPlaceBlindVia.MakeEvent() );
+    Go( &ROUTER_TOOL::RouteSingleTrace,       PCB_ACTIONS::routerActivateSingle.MakeEvent() );
+    Go( &ROUTER_TOOL::RouteDiffPair,          PCB_ACTIONS::routerActivateDiffPair.MakeEvent() );
+    Go( &ROUTER_TOOL::DpDimensionsDialog,     PCB_ACTIONS::routerDiffPairDialog.MakeEvent() );
+    Go( &ROUTER_TOOL::SettingsDialog,         PCB_ACTIONS::routerSettingsDialog.MakeEvent() );
+    Go( &ROUTER_TOOL::InlineDrag,             PCB_ACTIONS::routerInlineDrag.MakeEvent() );
+    Go( &ROUTER_TOOL::InlineBreakTrack,       PCB_ACTIONS::inlineBreakTrack.MakeEvent() );
+
+    Go( &ROUTER_TOOL::onViaCommand,           ACT_PlaceThroughVia.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           ACT_PlaceBlindVia.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           ACT_PlaceMicroVia.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           ACT_SelLayerAndPlaceThroughVia.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand,           ACT_SelLayerAndPlaceBlindVia.MakeEvent() );
 
     Go( &ROUTER_TOOL::CustomTrackWidthDialog, ACT_CustomTrackWidth.MakeEvent() );
-    Go( &ROUTER_TOOL::onTrackViaSizeChanged, PCB_ACTIONS::trackViaSizeChanged.MakeEvent() );
+    Go( &ROUTER_TOOL::onTrackViaSizeChanged,  PCB_ACTIONS::trackViaSizeChanged.MakeEvent() );
 }
 
 

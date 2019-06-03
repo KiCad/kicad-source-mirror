@@ -113,17 +113,11 @@ public:
     /// Activation of the duplication tool with incrementing (e.g. pad number)
     static TOOL_ACTION duplicateIncrement;
 
-    /// Update footprints to reflect any changes in the library
-    static TOOL_ACTION updateFootprint;
-    static TOOL_ACTION updateFootprints;
-
-    /// Exchange footprints of modules
-    static TOOL_ACTION changeFootprint;
-    static TOOL_ACTION changeFootprints;
-
     /// Deleting a BOARD_ITEM
     static TOOL_ACTION remove;
     static TOOL_ACTION removeAlt;
+
+    static TOOL_ACTION selectLayerPair;
 
     /// Break a single track into two segments at the cursor
     static TOOL_ACTION breakTrack;
@@ -170,17 +164,17 @@ public:
     static TOOL_ACTION routerActivateDiffPair;
 
     /// Activation of the Push and Shove router (tune single line mode)
-    static TOOL_ACTION routerActivateTuneSingleTrace;
+    static TOOL_ACTION routerTuneSingleTrace;
 
     /// Activation of the Push and Shove router (diff pair tuning mode)
-    static TOOL_ACTION routerActivateTuneDiffPair;
+    static TOOL_ACTION routerTuneDiffPair;
 
     /// Activation of the Push and Shove router (skew tuning mode)
-    static TOOL_ACTION routerActivateTuneDiffPairSkew;
+    static TOOL_ACTION routerTuneDiffPairSkew;
 
     /// Activation of the Push and Shove settings dialogs
-    static TOOL_ACTION routerActivateSettingsDialog;
-    static TOOL_ACTION routerActivateDpDimensionsDialog;
+    static TOOL_ACTION routerSettingsDialog;
+    static TOOL_ACTION routerDiffPairDialog;
 
 
     /// Activation of the Push and Shove router (inline dragging mode)
@@ -238,6 +232,8 @@ public:
 
     static TOOL_ACTION layerChanged;        // notification
 
+    static TOOL_ACTION flipBoard;
+
     // Track & via size control
     static TOOL_ACTION trackWidthInc;
     static TOOL_ACTION trackWidthDec;
@@ -255,6 +251,18 @@ public:
 
     /// Duplicate zone onto another layer
     static TOOL_ACTION zoneDuplicate;
+
+    // Global edit tool
+    static TOOL_ACTION editTracksAndVias;
+    static TOOL_ACTION editTextAndGraphics;
+    static TOOL_ACTION globalDeletions;
+    static TOOL_ACTION cleanupTracksAndVias;
+    static TOOL_ACTION updateFootprint;
+    static TOOL_ACTION updateFootprints;
+    static TOOL_ACTION changeFootprint;
+    static TOOL_ACTION changeFootprints;
+    static TOOL_ACTION swapLayers;
+
 
     static TOOL_ACTION listNets;
     static TOOL_ACTION runDRC;

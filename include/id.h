@@ -82,7 +82,6 @@ enum main_id
     ID_SAVE_PROJECT,
     ID_SAVE_PROJECT_AS,
     ID_LOAD_FILE,
-    ID_APPEND_FILE,
     ID_NEW_BOARD,
     ID_SAVE_BOARD,
     ID_SAVE_BOARD_AS,
@@ -164,11 +163,6 @@ enum main_id
 
     // Popup Menu (mouse Right button) (id consecutifs)
 
-    ID_POPUP_GENERAL_START_RANGE,   // first number
-    ID_POPUP_CANCEL_CURRENT_COMMAND,
-    ID_POPUP_CLOSE_CURRENT_TOOL,
-    ID_POPUP_GENERAL_END_RANGE, // last number
-
     ID_ON_ZOOM_SELECT,
     ID_POPUP_ZOOM_START_RANGE,       // first zoom id
     ID_POPUP_CANCEL,
@@ -195,8 +189,6 @@ enum main_id
     ID_POPUP_ZOOM_END_RANGE,         // last zoom id
 
     ID_ON_GRID_SELECT,
-    ID_POPUP_GRID_NEXT,
-    ID_POPUP_GRID_PREV,
     ID_POPUP_GRID_SELECT,
     ID_POPUP_GRID_FIRST,
     ID_POPUP_GRID_LEVEL_1000 = ID_POPUP_GRID_FIRST, // These must be in same order as menu

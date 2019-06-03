@@ -22,16 +22,14 @@
  */
 
 #include <pcb_edit_frame.h>
-#include <class_board.h>
 #include <grid_layer_box_helpers.h>
-#include <board_commit.h>
 #include <class_drawsegment.h>
 #include <class_track.h>
 #include <view/view.h>
 #include <widgets/wx_grid.h>
 #include <class_zone.h>
-
-#include "dialog_swap_layers_base.h"
+#include <class_board.h>
+#include "dialog_swap_layers.h"
 
 
 class LAYER_GRID_TABLE : public wxGridTableBase
@@ -68,28 +66,6 @@ public:
     {
         m_layers[ row ][ col ] = value;
     }
-};
-
-
-class DIALOG_SWAP_LAYERS : public DIALOG_SWAP_LAYERS_BASE
-{
-private:
-    PCB_EDIT_FRAME*   m_parent;
-    PCB_LAYER_ID*     m_layerDestinations;
-
-    LAYER_GRID_TABLE* m_gridTable;
-
-public:
-    DIALOG_SWAP_LAYERS( PCB_EDIT_FRAME* aParent, PCB_LAYER_ID* aArray );
-    ~DIALOG_SWAP_LAYERS() override;
-
-private:
-    bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
-
-    void OnSize( wxSizeEvent& event ) override;
-
-    void adjustGridColumns( int aWidth );
 };
 
 
@@ -185,74 +161,3 @@ void DIALOG_SWAP_LAYERS::OnSize( wxSizeEvent& event )
 }
 
 
-bool processBoardItem( PCB_EDIT_FRAME* aFrame, BOARD_COMMIT& commit, BOARD_ITEM* aItem,
-                       PCB_LAYER_ID* new_layer )
-{
-    if( new_layer[ aItem->GetLayer() ] != aItem->GetLayer() )
-    {
-        commit.Modify( aItem );
-        aItem->SetLayer( new_layer[ aItem->GetLayer() ] );
-        aFrame->GetGalCanvas()->GetView()->Update( aItem, KIGFX::GEOMETRY );
-        return true;
-    }
-
-    return false;
-}
-
-
-void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
-{
-    PCB_LAYER_ID new_layer[PCB_LAYER_ID_COUNT];
-
-    DIALOG_SWAP_LAYERS dlg( this, new_layer );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return;
-
-    BOARD_COMMIT commit( this );
-    bool hasChanges = false;
-
-    // Change tracks.
-    for( auto segm : GetBoard()->Tracks() )
-    {
-        if( segm->Type() == PCB_VIA_T )
-        {
-            VIA*         via = (VIA*) segm;
-            PCB_LAYER_ID top_layer, bottom_layer;
-
-            if( via->GetViaType() == VIA_THROUGH )
-                continue;
-
-            via->LayerPair( &top_layer, &bottom_layer );
-
-            if( new_layer[bottom_layer] != bottom_layer || new_layer[top_layer] != top_layer )
-            {
-                commit.Modify( via );
-                via->SetLayerPair( new_layer[top_layer], new_layer[bottom_layer] );
-                GetGalCanvas()->GetView()->Update( via, KIGFX::GEOMETRY );
-                hasChanges = true;
-            }
-        }
-        else
-        {
-            hasChanges |= processBoardItem( this, commit, segm, new_layer );
-        }
-    }
-
-    for( BOARD_ITEM* zone : GetBoard()->Zones() )
-    {
-        hasChanges |= processBoardItem( this, commit, zone, new_layer );
-    }
-
-    for( BOARD_ITEM* drawing : GetBoard()->Drawings() )
-    {
-        hasChanges |= processBoardItem( this, commit, drawing, new_layer );
-    }
-
-    if( hasChanges )
-    {
-        OnModify();
-        commit.Push( "Layers moved" );
-        GetGalCanvas()->Refresh();
-    }
-}

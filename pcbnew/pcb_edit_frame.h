@@ -301,7 +301,6 @@ public:
     void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
     bool LayerManagerShown();
     bool MicrowaveToolbarShown();
-    void OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
     void OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent );
@@ -564,8 +563,6 @@ public:
     void OnSelectOptionToolbar( wxCommandEvent& event );
     void OnFlipPcbView( wxCommandEvent& event );
 
-    void InstallPcbGlobalDeleteFrame( const wxPoint& pos );
-
     /**
      * Function GenFootprintsPositionFile
      * Calls DoGenFootprintsPositionFile to create a footprint position file
@@ -627,7 +624,6 @@ public:
      * ID_LOAD_FILE
      * ID_MENU_READ_BOARD_BACKUP_FILE
      * ID_MENU_RECOVER_BOARD_AUTOSAVE
-     * ID_APPEND_FILE
      * ID_NEW_BOARD
      * ID_SAVE_BOARD
      * ID_COPY_BOARD_AS
@@ -1000,15 +996,6 @@ public:
                            wxPoint               aSpreadAreaPosition,
                            bool                  aPrepareUndoCommand = true );
 
-
-    /**
-     * Function Clean_Pcb
-     * Clean up the board (remove redundant vias, not connected tracks
-     * and merges collinear track segments)
-     * Install the cleanup dialog frame to know what should be cleaned
-     * and run the cleanup function
-     */
-    void Clean_Pcb();
 
     /**
      * Function SendMessageToEESCHEMA

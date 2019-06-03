@@ -177,21 +177,10 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
                 switch( s_BitmapLayerIcon[ii][jj] )
                 {
                 default:
-                case 0:
-                    pen.SetColour( active_layer_color.ToColour() );
-                    break;
-
-                case 1:
-                    pen.SetColour( Route_Layer_TOP_color.ToColour() );
-                    break;
-
-                case 2:
-                    pen.SetColour( Route_Layer_BOTTOM_color.ToColour() );
-                    break;
-
-                case 3:
-                    pen.SetColour( via_color.ToColour() );
-                    break;
+                case 0: pen.SetColour( active_layer_color.ToColour() );       break;
+                case 1: pen.SetColour( Route_Layer_TOP_color.ToColour() );    break;
+                case 2: pen.SetColour( Route_Layer_BOTTOM_color.ToColour() ); break;
+                case 3: pen.SetColour( via_color.ToColour() );                break;
                 }
 
                 buttonColor = s_BitmapLayerIcon[ii][jj];
@@ -366,16 +355,11 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
     // Tools to show/hide toolbars:
     KiScaledSeparator( m_optionsToolBar, this );
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
-                               wxEmptyString,
-                               KiScaledBitmap( layers_manager_xpm, this ),
-                               HELP_SHOW_HIDE_LAYERMANAGER,
-                               wxITEM_CHECK );
+                               wxEmptyString, KiScaledBitmap( layers_manager_xpm, this ),
+                               HELP_SHOW_HIDE_LAYERMANAGER, wxITEM_CHECK );
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE,
-                               wxEmptyString,
-                               KiScaledBitmap( mw_toolbar_xpm, this ),
-                               HELP_SHOW_HIDE_MICROWAVE_TOOLS,
-                               wxITEM_CHECK );
-
+                               wxEmptyString, KiScaledBitmap( mw_toolbar_xpm, this ),
+                               HELP_SHOW_HIDE_MICROWAVE_TOOLS, wxITEM_CHECK );
 
     KiScaledSeparator( m_optionsToolBar, this );
     m_optionsToolBar->Realize();
@@ -495,10 +479,8 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 
     // Creates box to display and choose tracks widths:
     if( m_SelTrackWidthBox == nullptr )
-        m_SelTrackWidthBox = new wxChoice( m_auxiliaryToolBar,
-                                       ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
-                                       wxDefaultPosition, wxDefaultSize,
-                                       0, NULL );
+        m_SelTrackWidthBox = new wxChoice( m_auxiliaryToolBar, ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
+                                           wxDefaultPosition, wxDefaultSize, 0, NULL );
 
     UpdateTrackWidthSelectBox( m_SelTrackWidthBox );
     m_auxiliaryToolBar->AddControl( m_SelTrackWidthBox );
@@ -506,18 +488,15 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     // Creates box to display and choose vias diameters:
 
     if( m_SelViaSizeBox == nullptr )
-        m_SelViaSizeBox = new wxChoice( m_auxiliaryToolBar,
-                                    ID_AUX_TOOLBAR_PCB_VIA_SIZE,
-                                    wxDefaultPosition, wxDefaultSize,
-                                    0, NULL );
+        m_SelViaSizeBox = new wxChoice( m_auxiliaryToolBar, ID_AUX_TOOLBAR_PCB_VIA_SIZE,
+                                        wxDefaultPosition, wxDefaultSize, 0, NULL );
 
     UpdateViaSizeSelectBox( m_SelViaSizeBox );
     m_auxiliaryToolBar->AddControl( m_SelViaSizeBox );
     KiScaledSeparator( m_auxiliaryToolBar, this );
 
     // Creates box to display and choose strategy to handle tracks an vias sizes:
-    m_auxiliaryToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
-                                 wxEmptyString,
+    m_auxiliaryToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH, wxEmptyString,
                                  KiScaledBitmap( auto_track_width_xpm, this ),
                                  _( "Auto track width: when starting on an existing track "
                                     "use its width\notherwise, use current width setting" ),
@@ -527,10 +506,8 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     KiScaledSeparator( m_auxiliaryToolBar, this );
 
     if( m_gridSelectBox == nullptr )
-        m_gridSelectBox = new wxChoice( m_auxiliaryToolBar,
-                                    ID_ON_GRID_SELECT,
-                                    wxDefaultPosition, wxDefaultSize,
-                                    0, NULL );
+        m_gridSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_GRID_SELECT,
+                                        wxDefaultPosition, wxDefaultSize, 0, NULL );
 
     UpdateGridSelectBox();
 
@@ -540,10 +517,8 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     KiScaledSeparator( m_auxiliaryToolBar, this );
 
     if( m_zoomSelectBox == nullptr )
-        m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar,
-                                    ID_ON_ZOOM_SELECT,
-                                    wxDefaultPosition, wxDefaultSize,
-                                    0, NULL );
+        m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_ZOOM_SELECT,
+                                        wxDefaultPosition, wxDefaultSize, 0, NULL );
 
     updateZoomSelectBox();
     m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
@@ -571,11 +546,9 @@ void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, 
         double value_mm = To_User_Unit( MILLIMETRES, size );
 
         if( mmFirst )
-            msg.Printf( _( "Track: %.3f mm (%.2f mils)" ),
-                        value_mm, valueMils );
+            msg.Printf( _( "Track: %.3f mm (%.2f mils)" ), value_mm, valueMils );
         else
-            msg.Printf( _( "Track: %.2f mils (%.3f mm)" ),
-                        valueMils, value_mm );
+            msg.Printf( _( "Track: %.2f mils (%.3f mm)" ), valueMils, value_mm );
 
         // Mark the netclass track width value (the first in list)
         if( ii == 0 )
@@ -737,12 +710,6 @@ bool PCB_EDIT_FRAME::MicrowaveToolbarShown()
     return m_auimgr.GetPane( "MicrowaveToolbar" ).IsShown();
 }
 
-
-void PCB_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
-{
-    if( aEvent.GetEventObject() == m_drawToolBar || aEvent.GetEventObject() == m_mainToolBar )
-        aEvent.Check( GetToolId() == aEvent.GetId() );
-}
 
 void PCB_EDIT_FRAME::OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent )
 {

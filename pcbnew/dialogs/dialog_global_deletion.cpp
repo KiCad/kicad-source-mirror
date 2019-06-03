@@ -36,6 +36,7 @@ using namespace std::placeholders;
 #include <class_zone.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <tools/global_edit_tool.h>
 #include <dialog_global_deletion.h>
 
 
@@ -57,12 +58,12 @@ DIALOG_GLOBAL_DELETION::DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent ) :
 }
 
 
-void PCB_EDIT_FRAME::InstallPcbGlobalDeleteFrame( const wxPoint& pos )
+int GLOBAL_EDIT_TOOL::GlobalDeletions( const TOOL_EVENT& aEvent )
 {
-    DIALOG_GLOBAL_DELETION dlg( this );
-    dlg.SetCurrentLayer( GetActiveLayer() );
-
+    DIALOG_GLOBAL_DELETION dlg( frame() );
+    dlg.SetCurrentLayer( frame()->GetActiveLayer() );
     dlg.ShowModal();
+    return 0;
 }
 
 

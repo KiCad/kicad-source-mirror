@@ -66,10 +66,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     switch( id )   // Some (not all ) edit commands must be finished or aborted
     {
-    case wxID_CUT:
-    case wxID_COPY:
     case ID_TOOLBARH_PCB_SELECT_LAYER:
-    case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
         break;
 
     default:        // Finish (abort) the command
@@ -139,16 +136,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
-    case ID_PCB_GLOBAL_DELETE:
-        InstallPcbGlobalDeleteFrame( wxDefaultPosition );
-        break;
-
     case ID_GET_NETLIST:
         InstallNetlistFrame();
-        break;
-
-    case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
-        SelectCopperLayerPair();
         break;
 
     case ID_TOOLBARH_PCB_SELECT_LAYER:
@@ -156,14 +145,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         if( displ_opts->m_ContrastModeDisplay )
             GetGalCanvas()->Refresh();
-        break;
-
-    case ID_MENU_PCB_CLEAN:
-        Clean_Pcb();
-        break;
-
-    case ID_MENU_PCB_SWAP_LAYERS:
-        Swap_Layers( event );
         break;
 
     case ID_MENU_ARCHIVE_MODULES_IN_LIBRARY:

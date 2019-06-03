@@ -34,6 +34,7 @@
 #include <widgets/layer_box_selector.h>
 #include <class_board.h>
 #include <dialogs/dialog_layer_selection_base.h>
+#include <router/router_tool.h>
 
 
 // Column position by function:
@@ -256,13 +257,12 @@ private:
 };
 
 
-void PCB_BASE_FRAME::SelectCopperLayerPair()
+int ROUTER_TOOL::SelectCopperLayerPair( const TOOL_EVENT& aEvent )
 {
-    PCB_SCREEN* screen = GetScreen();
+    PCB_SCREEN* screen = frame()->GetScreen();
 
-    SELECT_COPPER_LAYERS_PAIR_DIALOG dlg( this, GetBoard(),
-                                         screen->m_Route_Layer_TOP,
-                                         screen->m_Route_Layer_BOTTOM );
+    SELECT_COPPER_LAYERS_PAIR_DIALOG dlg( frame(), frame()->GetBoard(), screen->m_Route_Layer_TOP,
+                                          screen->m_Route_Layer_BOTTOM );
 
     if( dlg.ShowModal() == wxID_OK )
     {
@@ -271,8 +271,10 @@ void PCB_BASE_FRAME::SelectCopperLayerPair()
         // select the same layer for both layers is allowed (normal in some boards)
         // but could be a mistake. So display an info message
         if( screen->m_Route_Layer_TOP == screen->m_Route_Layer_BOTTOM )
-            DisplayInfoMessage( this, _( "Warning: top and bottom layers are same." ) );
+            DisplayInfoMessage( frame(), _( "Warning: top and bottom layers are same." ) );
     }
+
+    return 0;
 }
 
 

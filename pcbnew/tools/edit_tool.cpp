@@ -134,28 +134,6 @@ TOOL_ACTION PCB_ACTIONS::removeAlt( "pcbnew.InteractiveEdit.removeAlt",
         _( "Delete Full Track" ), _( "Deletes selected item(s) and copper connections" ),
         delete_xpm, AF_NONE, (void*) REMOVE_FLAGS::ALT );
 
-TOOL_ACTION PCB_ACTIONS::updateFootprint( "pcbnew.InteractiveEdit.updateFootprint",
-        AS_GLOBAL, 0,
-        _( "Update Footprint..." ),
-        _( "Update footprint to include any changes from the library" ),
-        reload_xpm );
-
-TOOL_ACTION PCB_ACTIONS::updateFootprints( "pcbnew.InteractiveEdit.updateFootprints",
-        AS_GLOBAL, 0,
-        _( "Update Footprints from Library..." ),
-        _( "Update footprints to include any changes from the library" ),
-        reload_xpm );
-
-TOOL_ACTION PCB_ACTIONS::changeFootprint( "pcbnew.InteractiveEdit.changeFootprint",
-        AS_GLOBAL, 0,
-        _( "Change Footprint..." ), _( "Assign a different footprint from the library" ),
-        exchange_xpm );
-
-TOOL_ACTION PCB_ACTIONS::changeFootprints( "pcbnew.InteractiveEdit.changeFootprints",
-        AS_GLOBAL, 0,
-        _( "Change Footprints..." ), _( "Assign different footprints from the library" ),
-        exchange_xpm );
-
 TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_ITEM ),
         _( "Properties..." ), _( "Displays item properties dialog" ),
@@ -1201,50 +1179,6 @@ void EDIT_TOOL::FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector 
 }
 
 
-int EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
-{
-    SELECTION& selection = m_selectionTool->RequestSelection( FootprintFilter );
-    MODULE*    mod = (selection.Empty() ? nullptr : selection.FirstOfKind<MODULE> () );
-    bool       updateMode = false;
-    bool       currentMode = false;
-
-    if( aEvent.IsAction( &PCB_ACTIONS::updateFootprint ) )
-    {
-        updateMode = true;
-        currentMode = true;
-    }
-    else if( aEvent.IsAction( &PCB_ACTIONS::updateFootprints ) )
-    {
-        updateMode = true;
-        currentMode = false;
-    }
-    else if( aEvent.IsAction( &PCB_ACTIONS::changeFootprint ) )
-    {
-        updateMode = false;
-        currentMode = true;
-    }
-    else if( aEvent.IsAction( &PCB_ACTIONS::changeFootprints ) )
-    {
-        updateMode = false;
-        currentMode = false;
-    }
-    else
-        wxFAIL_MSG( "ExchangeFootprints: unexpected action" );
-
-    // Footprint exchange could remove modules, so they have to be
-    // removed from the selection first
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
-    // invoke the exchange dialog process
-    {
-        DIALOG_EXCHANGE_FOOTPRINTS dialog( frame(), mod, updateMode, currentMode );
-        dialog.ShowQuasiModal();
-    }
-
-    return 0;
-}
-
-
 int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 {
     if( EditingModules() && !frame()->GetModel())
@@ -1517,10 +1451,6 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::Mirror,              PCB_ACTIONS::mirror.MakeEvent() );
 
     Go( &EDIT_TOOL::EditFpInFpEditor,    PCB_ACTIONS::editFootprintInFpEditor.MakeEvent() );
-    Go( &EDIT_TOOL::ExchangeFootprints,  PCB_ACTIONS::updateFootprint.MakeEvent() );
-    Go( &EDIT_TOOL::ExchangeFootprints,  PCB_ACTIONS::updateFootprints.MakeEvent() );
-    Go( &EDIT_TOOL::ExchangeFootprints,  PCB_ACTIONS::changeFootprint.MakeEvent() );
-    Go( &EDIT_TOOL::ExchangeFootprints,  PCB_ACTIONS::changeFootprints.MakeEvent() );
     Go( &EDIT_TOOL::MeasureTool,         ACTIONS::measureTool.MakeEvent() );
 
     Go( &EDIT_TOOL::copyToClipboard,     ACTIONS::copy.MakeEvent() );

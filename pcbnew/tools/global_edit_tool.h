@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 CERN
- * @author Maciej Suminski <maciej.suminski@cern.ch>
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,71 +21,55 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef MODULE_EDITOR_TOOLS_H
-#define MODULE_EDITOR_TOOLS_H
+#ifndef GLOBAL_EDIT_TOOL_H
+#define GLOBAL_EDIT_TOOL_H
 
+#include <math/vector2d.h>
 #include <tools/pcb_tool_base.h>
+#include <tools/selection_tool.h>
+#include <status_popup.h>
 
-namespace KIGFX
-{
-    class VIEW;
-    class VIEW_CONTROLS;
-}
-class BOARD;
-class PCB_EDIT_FRAME;
 
-/**
- * Class MODULE_EDITOR_TOOLS
- *
- * Module editor specific tools.
- */
-class MODULE_EDITOR_TOOLS : public PCB_TOOL_BASE
+class BOARD_COMMIT;
+class BOARD_ITEM;
+class CONNECTIVITY_DATA;
+
+
+class GLOBAL_EDIT_TOOL : public PCB_TOOL_BASE
 {
 public:
-    MODULE_EDITOR_TOOLS();
-    ~MODULE_EDITOR_TOOLS();
+    GLOBAL_EDIT_TOOL();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    int Revert( const TOOL_EVENT& aEvent );
+    /// @copydoc TOOL_INTERACTIVE::Init()
+    bool Init() override;
 
     /**
-     * Function PlacePad()
-     * Places a pad in module editor.
-     */
-    int PlacePad( const TOOL_EVENT& aEvent );
-
-    /**
-     * Function EnumeratePads()
-     * Tool for quick pad enumeration.
-     */
-    int EnumeratePads( const TOOL_EVENT& aEvent );
-
-    /**
-     * Function CreateArray
+     * Function ExchangeFootprints()
      *
-     * Creates an array of objects using settings from a dialog
+     * Invoke the dialog used to update or exchange the footprints used for
+     * modules.  The mode depends on the PCB_ACTIONS held by the TOOL_EVENT.
      */
-    int CreateArray( TOOL_EVENT& aEvent );
+    int ExchangeFootprints( const TOOL_EVENT& aEvent );
 
-    /**
-     * Function CreatePadFromShapes()
-     *
-     * Creates a custom-shaped pad from a set of selected graphical shapes
-     */
-    int CreatePadFromShapes( const TOOL_EVENT& aEvent );
+    int SwapLayers( const TOOL_EVENT& aEvent );
 
-    /**
-     * Function ExplodePadToShapes()
-     *
-     * Breaks apart a complex-shaped part into a set of graphical shapes
-     */
-    int ExplodePadToShapes( const TOOL_EVENT& aEvent );
+    int EditTracksAndVias( const TOOL_EVENT& aEvent );
+    int EditTextAndGraphics( const TOOL_EVENT& aEvent );
+    int GlobalDeletions( const TOOL_EVENT& aEvent );
+    int CleanupTracksAndVias( const TOOL_EVENT& aEvent );
+
+private:
+    bool swapBoardItem( BOARD_ITEM* aItem, PCB_LAYER_ID* new_layer );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
+private:
+    SELECTION_TOOL*               m_selectionTool;
+    std::unique_ptr<BOARD_COMMIT> m_commit;
 };
 
 #endif

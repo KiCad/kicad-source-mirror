@@ -87,7 +87,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
 
     EVT_TOOL( ID_MODEDIT_SAVE, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_SAVE_AS, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_REVERT_PART, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_OPEN_MODULE_VIEWER, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_SAVE_PNG, FOOTPRINT_EDIT_FRAME::OnSaveFootprintAsPng )
 
@@ -115,12 +114,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( wxID_PREFERENCES, FOOTPRINT_EDIT_FRAME::ProcessPreferences )
 
     // popup commands
-    EVT_MENU_RANGE( ID_POPUP_PCB_START_RANGE, ID_POPUP_PCB_END_RANGE,
-                    FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-
-    EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
-                    FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-
     EVT_MENU( ID_GRID_SETTINGS, FOOTPRINT_EDIT_FRAME::OnGridSettings )
 
     // UI update events.
@@ -129,9 +122,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
                    FOOTPRINT_EDIT_FRAME::OnUpdateLoadModuleFromBoard )
     EVT_UPDATE_UI( ID_ADD_FOOTPRINT_TO_BOARD,
                    FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard )
-
-    EVT_UPDATE_UI_RANGE( ID_MODEDIT_PAD_TOOL, ID_MODEDIT_MEASUREMENT_TOOL,
-                         FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar )
 
     EVT_UPDATE_UI( ID_MODEDIT_EDIT_MODULE_PROPERTIES, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
     EVT_UPDATE_UI( ID_MODEDIT_PAD_SETTINGS, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
@@ -514,15 +504,6 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 void FOOTPRINT_EDIT_FRAME::CloseModuleEditor( wxCommandEvent& Event )
 {
     Close();
-}
-
-
-void FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Enable( GetBoard()->GetFirstModule() != NULL );
-
-    if( aEvent.GetEventObject() == m_drawToolBar )
-        aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 
 

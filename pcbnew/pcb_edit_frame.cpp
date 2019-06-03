@@ -68,6 +68,7 @@
 #include <tools/pcbnew_picker_tool.h>
 #include <tools/point_editor.h>
 #include <tools/edit_tool.h>
+#include <tools/global_edit_tool.h>
 #include <tools/drawing_tool.h>
 #include <tools/point_editor.h>
 #include <tools/pcbnew_control.h>
@@ -123,9 +124,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
 
     // Menu Files:
     EVT_MENU( ID_MAIN_MENUBAR, PCB_EDIT_FRAME::Process_Special_Functions )
-    EVT_MENU( ID_MENU_PCB_FLIP_VIEW, PCB_EDIT_FRAME::OnFlipPcbView )
 
-    EVT_MENU( ID_APPEND_FILE, PCB_EDIT_FRAME::Files_io )
     EVT_MENU( ID_IMPORT_NON_KICAD_BOARD, PCB_EDIT_FRAME::Files_io )
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, PCB_EDIT_FRAME::OnFileHistory )
 
@@ -161,13 +160,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_PCB_GEN_CMP_FILE, PCB_EDIT_FRAME::RecreateCmpFileFromBoard )
     EVT_MENU( ID_PCB_GEN_BOM_FILE_FROM_BOARD, PCB_EDIT_FRAME::RecreateBOMFileFromBoard )
 
-    // menu Miscellaneous
-    EVT_MENU( ID_PCB_EDIT_TRACKS_AND_VIAS, PCB_EDIT_FRAME::OnEditTracksAndVias )
-    EVT_MENU( ID_PCB_GLOBAL_DELETE, PCB_EDIT_FRAME::Process_Special_Functions )
-    EVT_MENU( ID_MENU_PCB_CLEAN, PCB_EDIT_FRAME::Process_Special_Functions )
-    EVT_MENU( ID_MENU_PCB_SWAP_LAYERS, PCB_EDIT_FRAME::Process_Special_Functions )
-    EVT_MENU( ID_MENU_PCB_EDIT_TEXT_AND_GRAPHICS, PCB_EDIT_FRAME::OnEditTextAndGraphics )
-
     // Menu Get Design Rules Editor
     EVT_MENU( ID_BOARD_SETUP_DIALOG, PCB_EDIT_FRAME::ShowBoardSetupDialog )
 
@@ -195,31 +187,20 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
               PCB_EDIT_FRAME::OnSelectOptionToolbar )
 
-    EVT_MENU_RANGE( ID_POPUP_PCB_START_RANGE, ID_POPUP_PCB_END_RANGE,
-                    PCB_EDIT_FRAME::Process_Special_Functions )
-
     // Tracks and vias sizes general options
     EVT_MENU_RANGE( ID_POPUP_PCB_SELECT_WIDTH_START_RANGE,
                     ID_POPUP_PCB_SELECT_WIDTH_END_RANGE,
                     PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
 
-    // popup menus
-    EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
-                    PCB_EDIT_FRAME::Process_Special_Functions )
-
     // User interface update event handlers.
     EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, PCB_EDIT_FRAME::OnUpdateLayerPair )
     EVT_UPDATE_UI( ID_TOOLBARH_PCB_SELECT_LAYER, PCB_EDIT_FRAME::OnUpdateLayerSelectBox )
-    EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, PCB_EDIT_FRAME::OnUpdateVerticalToolbar )
-    EVT_UPDATE_UI( ID_ZOOM_SELECTION, PCB_EDIT_FRAME::OnUpdateVerticalToolbar )
     EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH, PCB_EDIT_FRAME::OnUpdateSelectTrackWidth )
     EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_VIA_SIZE, PCB_EDIT_FRAME::OnUpdateSelectViaSize )
     EVT_UPDATE_UI_RANGE( ID_POPUP_PCB_SELECT_WIDTH1, ID_POPUP_PCB_SELECT_WIDTH8,
                          PCB_EDIT_FRAME::OnUpdateSelectTrackWidth )
     EVT_UPDATE_UI_RANGE( ID_POPUP_PCB_SELECT_VIASIZE1, ID_POPUP_PCB_SELECT_VIASIZE8,
                          PCB_EDIT_FRAME::OnUpdateSelectViaSize )
-    EVT_UPDATE_UI_RANGE( ID_PCB_HIGHLIGHT_BUTT, ID_PCB_MEASUREMENT_TOOL,
-                         PCB_EDIT_FRAME::OnUpdateVerticalToolbar )
     EVT_UPDATE_UI_RANGE( ID_PCB_MUWAVE_START_CMD, ID_PCB_MUWAVE_END_CMD,
                          PCB_EDIT_FRAME::OnUpdateMuWaveToolbar )
 
@@ -470,6 +451,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new ROUTER_TOOL );
     m_toolManager->RegisterTool( new LENGTH_TUNER_TOOL );
     m_toolManager->RegisterTool( new EDIT_TOOL );
+    m_toolManager->RegisterTool( new GLOBAL_EDIT_TOOL );
     m_toolManager->RegisterTool( new PAD_TOOL );
     m_toolManager->RegisterTool( new DRAWING_TOOL );
     m_toolManager->RegisterTool( new POINT_EDITOR );
@@ -1104,15 +1086,6 @@ void PCB_EDIT_FRAME::OnRunEeschema( wxCommandEvent& event )
 
         frame->Raise();
     }
-}
-
-
-void PCB_EDIT_FRAME::OnFlipPcbView( wxCommandEvent& evt )
-{
-    auto view = GetGalCanvas()->GetView();
-    view->SetMirror( evt.IsChecked(), false );
-    view->RecacheAllItems();
-    Refresh();
 }
 
 

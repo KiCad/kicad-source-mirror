@@ -273,9 +273,6 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
             return false;
         }
 
-    case ID_APPEND_FILE:
-        wxFAIL_MSG( "OBSOLETE!  Should have gone though modern toolset." );
-
     case ID_NEW_BOARD:
     {
         if( !Clear_Pcb( true ) )

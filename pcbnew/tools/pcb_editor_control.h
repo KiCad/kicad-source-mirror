@@ -132,6 +132,8 @@ public:
     ///> Shows local ratsnest of a component
     int LocalRatsnestTool( const TOOL_EVENT& aEvent );
 
+    int FlipPcbView( const TOOL_EVENT& aEvent );
+
     int ListNets( const TOOL_EVENT& aEvent );
 
 private:

@@ -80,10 +80,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddSeparator();
     fileMenu->AddItem( ACTIONS::save,                modifiedDocumentCondition );
     fileMenu->AddItem( ACTIONS::saveAs,              libraryPartCondition );
-    fileMenu->AddItem( ID_MODEDIT_REVERT_PART,
-                       _( "Revert" ),
-                       _( "Throw away changes" ),
-                       undo_xpm,                     modifiedDocumentCondition );
+    fileMenu->AddItem( ACTIONS::revert,              modifiedDocumentCondition );
 
     fileMenu->AddSeparator();
 
@@ -276,12 +273,10 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     //-- Inspect menu -------------------------------------------------------
     //
-    wxMenu* inspectMenu = new wxMenu;
+    CONDITIONAL_MENU* inspectMenu = new CONDITIONAL_MENU( false, selTool );
 
-    AddMenuItem( inspectMenu, ID_MODEDIT_MEASUREMENT_TOOL,
-                 AddHotkeyName( _( "&Measure" ), m_hotkeysDescrList, HK_MEASURE_TOOL ),
-                 _( "Measure distance" ),
-                 KiBitmap( measurement_xpm ) );
+    inspectMenu->AddItem( ACTIONS::measureTool,   SELECTION_CONDITIONS::ShowAlways );
+    inspectMenu->Resolve();
 
     //-- Tools menu -------------------------------------------------------
     //

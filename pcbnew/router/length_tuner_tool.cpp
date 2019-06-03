@@ -254,9 +254,9 @@ int LENGTH_TUNER_TOOL::TuneDiffPairSkew( const TOOL_EVENT& aEvent )
 
 void LENGTH_TUNER_TOOL::setTransitions()
 {
-    Go( &LENGTH_TUNER_TOOL::TuneSingleTrace, PCB_ACTIONS::routerActivateTuneSingleTrace.MakeEvent() );
-    Go( &LENGTH_TUNER_TOOL::TuneDiffPair, PCB_ACTIONS::routerActivateTuneDiffPair.MakeEvent() );
-    Go( &LENGTH_TUNER_TOOL::TuneDiffPairSkew, PCB_ACTIONS::routerActivateTuneDiffPairSkew.MakeEvent() );
+    Go( &LENGTH_TUNER_TOOL::TuneSingleTrace, PCB_ACTIONS::routerTuneSingleTrace.MakeEvent() );
+    Go( &LENGTH_TUNER_TOOL::TuneDiffPair, PCB_ACTIONS::routerTuneDiffPair.MakeEvent() );
+    Go( &LENGTH_TUNER_TOOL::TuneDiffPairSkew, PCB_ACTIONS::routerTuneDiffPairSkew.MakeEvent() );
 }
 
 

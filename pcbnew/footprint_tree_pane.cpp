@@ -68,7 +68,7 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
     menuPart->Add( _( "Save" ), ID_MODEDIT_SAVE, save_xpm );
     menuPart->Add( _( "Save a Copy As..." ), ID_MODEDIT_SAVE_AS, save_as_xpm );
     menuPart->Add( _( "Delete" ), ID_MODEDIT_DELETE_PART, delete_xpm );
-    menuPart->Add( _( "Revert" ), ID_MODEDIT_REVERT_PART, undo_xpm );
+    menuPart->Add( ACTIONS::revert );
 
     menuPart->AppendSeparator();
     menuPart->Add( _( "Cut" ), ID_MODEDIT_CUT_PART, cut_xpm );

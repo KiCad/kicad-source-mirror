@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,12 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file tracks_cleaner.cpp
- * @brief functions to clean tracks: remove null length and redundant segments
- */
-
-
 #include <fctsys.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew.h>
@@ -39,20 +33,19 @@
 #include <board_commit.h>
 #include <connectivity/connectivity_algo.h>
 #include <connectivity/connectivity_data.h>
-
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-
+#include <tools/global_edit_tool.h>
 #include <tracks_cleaner.h>
 
 
 /* Install the cleanup dialog frame to know what should be cleaned
 */
-void PCB_EDIT_FRAME::Clean_Pcb()
+int GLOBAL_EDIT_TOOL::CleanupTracksAndVias( const TOOL_EVENT& aEvent )
 {
-    DIALOG_CLEANUP_TRACKS_AND_VIAS dlg( this );
-
+    DIALOG_CLEANUP_TRACKS_AND_VIAS dlg( frame() );
     dlg.ShowModal();
+    return 0;
 }
 
 
@@ -104,8 +97,7 @@ bool TRACKS_CLEANER::CleanupBoard( bool aDryRun, DRC_LIST* aItemsList, bool aRem
             modified = true;
 
             // Removed tracks can leave aligned segments
-            // (when a T was formed by tracks and the "vertical" segment
-            // is removed)
+            // (when a T was formed by tracks and the "vertical" segment is removed)
             if( aMergeSegments )
                 cleanupSegments();
         }
@@ -180,9 +172,9 @@ bool TRACKS_CLEANER::cleanupVias()
         if( via1->GetStart() != via1->GetEnd() )
             via1->SetEnd( via1->GetStart() );
 
-        /* To delete through Via on THT pads at same location
-         * Examine the list of connected pads:
-         * if one through pad is found, the via can be removed */
+        // To delete through Via on THT pads at same location
+        // Examine the list of connected pads:
+        // if one through pad is found, the via can be removed
 
         const auto pads = m_brd->GetConnectivity()->GetConnectedPads( via1 );
         for( const auto pad : pads )
@@ -282,18 +274,15 @@ bool TRACKS_CLEANER::deleteDanglingTracks()
     {
         item_erased = false;
 
-        for( auto track_it = m_brd->Tracks().begin(); track_it != m_brd->Tracks().end();
-                track_it++ )
+        for( TRACK* track : m_brd->Tracks() )
         {
-            auto track = *track_it;
             bool flag_erase = false; // Start without a good reason to erase it
 
             if( track->Type() != PCB_TRACE_T )
                 continue;
 
-            /* if a track endpoint is not connected to a pad, test if
-             * the endpoint is connected to another track or to a zone.
-             */
+            // if a track endpoint is not connected to a pad, test if
+            // the endpoint is connected to another track or to a zone.
 
             if( !testTrackHasPad( track ) )
                 flag_erase |= testTrackEndpointDangling( track );
@@ -320,7 +309,6 @@ bool TRACKS_CLEANER::deleteDanglingTracks()
             }
         }
     } while( item_erased );
-
 
     return modified;
 }

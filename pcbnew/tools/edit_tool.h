@@ -139,14 +139,6 @@ public:
      */
     int CreateArray( const TOOL_EVENT& aEvent );
 
-    /**
-     * Function ExchangeFootprints()
-     *
-     * Invoke the dialog used to update or exchange the footprints used for
-     * modules.  The mode depends on the PCB_ACTIONS held by the TOOL_EVENT.
-     */
-    int ExchangeFootprints( const TOOL_EVENT& aEvent );
-
     ///> Launches a tool to measure between points
     int MeasureTool( const TOOL_EVENT& aEvent );
 

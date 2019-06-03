@@ -178,13 +178,13 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                             _( "Create bill of materials from current schematic" ),
                             ID_PCB_GEN_BOM_FILE_FROM_BOARD, bom_xpm );
 
-    fileMenu->AddMenu( submenuFabOutputs,              SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddMenu( submenuFabOutputs,          SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
     fileMenu->AddItem( ID_BOARD_SETUP_DIALOG,
                        _( "&Board Setup..." ),
                        _( "Edit board setup including layers, design rules and various defaults" ),
-                       options_board_xpm,              SELECTION_CONDITIONS::ShowAlways );
+                       options_board_xpm,          SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
     fileMenu->AddItem( ACTIONS::pageSettings,      SELECTION_CONDITIONS::ShowAlways );
@@ -230,46 +230,33 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
         return GetToolId() == ID_NO_TOOL_SELECTED;
     };
 
-    editMenu->AddItem( ACTIONS::undo,                   enableUndoCondition );
-    editMenu->AddItem( ACTIONS::redo,                   enableRedoCondition );
+    editMenu->AddItem( ACTIONS::undo,                     enableUndoCondition );
+    editMenu->AddItem( ACTIONS::redo,                     enableRedoCondition );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( ACTIONS::cut,                    SELECTION_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::copy,                   SELECTION_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::paste,                  noActiveToolCondition );
+    editMenu->AddItem( ACTIONS::cut,                      SELECTION_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::copy,                     SELECTION_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::paste,                    noActiveToolCondition );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( PCB_ACTIONS::deleteTool,         SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::deleteTool,           SELECTION_CONDITIONS::ShowAlways );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( ACTIONS::find,                   SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( ACTIONS::find,                     SELECTION_CONDITIONS::ShowAlways );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( ID_PCB_EDIT_TRACKS_AND_VIAS,
-                       _( "Edit Track && Via Properties..." ), "",
-                       width_track_via_xpm,             SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( ID_MENU_PCB_EDIT_TEXT_AND_GRAPHICS,
-                       _( "Edit Text && Graphic Properties..." ), "",
-                       reset_text_xpm,                  SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( PCB_ACTIONS::changeFootprints, SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( ID_MENU_PCB_SWAP_LAYERS,
-                       _( "Swap Layers..." ),
-                       _( "Move tracks or drawings from a layer to another layer" ),
-                       swap_layer_xpm,                  SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::editTracksAndVias,    SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::editTextAndGraphics,  SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::changeFootprints,     SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::swapLayers,           SELECTION_CONDITIONS::ShowAlways );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( PCB_ACTIONS::zoneFillAll,        SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( PCB_ACTIONS::zoneUnfillAll,      SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::zoneFillAll,          SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::zoneUnfillAll,        SELECTION_CONDITIONS::ShowAlways );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( ID_PCB_GLOBAL_DELETE,
-                       _( "Global Deletions..." ),
-                       _( "Delete tracks, footprints and graphic items from board" ),
-                       general_deletions_xpm,          SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( ID_MENU_PCB_CLEAN,
-                       _( "Cleanup Tracks and Vias..." ),
-                       _( "Clean stubs, vias, delete break points or unconnected tracks" ),
-                       delete_xpm,                     SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::globalDeletions,      SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::cleanupTracksAndVias, SELECTION_CONDITIONS::ShowAlways );
 
     editMenu->Resolve();
 
@@ -395,9 +382,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaInc, SELECTION_CONDITIONS::ShowAlways );
     viewMenu->AddMenu( contrastModeSubMenu );
 
-    viewMenu->AddCheckItem( ID_MENU_PCB_FLIP_VIEW,
-                            _( "Flip &Board View" ), _( "Flip (mirror) the board view" ),
-                            flip_board_xpm, boardFlippedCondition );
+    viewMenu->AddCheckItem( PCB_ACTIONS::flipBoard,           boardFlippedCondition );
 
 #ifdef __APPLE__
     viewMenu->AppendSeparator();
@@ -447,57 +432,29 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     //
     CONDITIONAL_MENU* routeMenu = new CONDITIONAL_MENU( false, selTool );
 
-    routeMenu->AddItem( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR,
-                        _( "Set &Layer Pair..." ), _( "Change active layer pair" ),
-                        select_layer_pair_xpm,            SELECTION_CONDITIONS::ShowAlways );
+    routeMenu->AddItem( PCB_ACTIONS::selectLayerPair,        SELECTION_CONDITIONS::ShowAlways );
 
     routeMenu->AddSeparator();
-    routeMenu->AddItem( ID_TRACK_BUTT,
-                        AddHotkeyName( _( "&Single Track" ), g_Board_Editor_Hotkeys_Descr,
-                                       HK_ADD_NEW_TRACK, IS_ACCELERATOR ),
-                        _( "Interactively route single track" ),
-                        add_tracks_xpm,                   SELECTION_CONDITIONS::ShowAlways );
-
-    routeMenu->AddItem( ID_DIFF_PAIR_BUTT,
-                        AddHotkeyName( _( "&Differential Pair" ), g_Board_Editor_Hotkeys_Descr,
-                                       HK_ROUTE_DIFF_PAIR, IS_ACCELERATOR ),
-                        _( "Interactively route differential pair" ),
-                        ps_diff_pair_xpm,                 SELECTION_CONDITIONS::ShowAlways );
+    routeMenu->AddItem( PCB_ACTIONS::routerActivateSingle,   SELECTION_CONDITIONS::ShowAlways );
+    routeMenu->AddItem( PCB_ACTIONS::routerActivateDiffPair, SELECTION_CONDITIONS::ShowAlways );
 
     routeMenu->AddSeparator();
-    routeMenu->AddItem( ID_TUNE_SINGLE_TRACK_LEN_BUTT,
-                        AddHotkeyName( _( "&Tune Track Length" ), g_Board_Editor_Hotkeys_Descr,
-                                       HK_ROUTE_TUNE_SINGLE, IS_ACCELERATOR ),
-                        _( "Tune length of single track" ),
-                        ps_tune_length_xpm,               SELECTION_CONDITIONS::ShowAlways );
-
-    routeMenu->AddItem( ID_TUNE_DIFF_PAIR_LEN_BUTT,
-                        AddHotkeyName( _( "Tune Differential Pair &Length" ), g_Board_Editor_Hotkeys_Descr,
-                                       HK_ROUTE_TUNE_DIFF_PAIR, IS_ACCELERATOR ),
-                        _( "Tune length of differential pair" ),
-                        ps_diff_pair_tune_length_xpm,     SELECTION_CONDITIONS::ShowAlways );
-
-    routeMenu->AddItem( ID_TUNE_DIFF_PAIR_SKEW_BUTT,
-                        AddHotkeyName( _( "Tune Differential Pair S&kew/Phase" ), g_Board_Editor_Hotkeys_Descr,
-                                       HK_ROUTE_TUNE_SKEW, IS_ACCELERATOR ),
-                        _( "Tune skew/phase of a differential pair" ),
-                        ps_diff_pair_tune_phase_xpm,      SELECTION_CONDITIONS::ShowAlways );
+    routeMenu->AddItem( PCB_ACTIONS::routerTuneSingleTrace,  SELECTION_CONDITIONS::ShowAlways );
+    routeMenu->AddItem( PCB_ACTIONS::routerTuneDiffPair,     SELECTION_CONDITIONS::ShowAlways );
+    routeMenu->AddItem( PCB_ACTIONS::routerTuneDiffPairSkew, SELECTION_CONDITIONS::ShowAlways );
 
     routeMenu->AddSeparator();
-    routeMenu->AddItem( ID_MENU_INTERACTIVE_ROUTER_SETTINGS,
-                        _( "&Interactive Router Settings..." ),
-                        _( "Configure interactive router" ),
-                        tools_xpm,                        SELECTION_CONDITIONS::ShowAlways );
+    routeMenu->AddItem( PCB_ACTIONS::routerSettingsDialog,   SELECTION_CONDITIONS::ShowAlways );
 
     //-- Inspect Menu --------------------------------------------------------
     //
     CONDITIONAL_MENU* inspectMenu = new CONDITIONAL_MENU( false, selTool );
 
-    inspectMenu->AddItem( PCB_ACTIONS::listNets,         SELECTION_CONDITIONS::ShowAlways );
-    inspectMenu->AddItem( ACTIONS::measureTool,          SELECTION_CONDITIONS::ShowAlways );
+    inspectMenu->AddItem( PCB_ACTIONS::listNets,             SELECTION_CONDITIONS::ShowAlways );
+    inspectMenu->AddItem( ACTIONS::measureTool,              SELECTION_CONDITIONS::ShowAlways );
 
     inspectMenu->AddSeparator();
-    inspectMenu->AddItem( PCB_ACTIONS::runDRC,           SELECTION_CONDITIONS::ShowAlways );
+    inspectMenu->AddItem( PCB_ACTIONS::runDRC,               SELECTION_CONDITIONS::ShowAlways );
 
     inspectMenu->Resolve();
 
@@ -505,8 +462,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     //
     CONDITIONAL_MENU* toolsMenu = new CONDITIONAL_MENU( false, selTool );
 
-    toolsMenu->AddItem( ACTIONS::updatePcbFromSchematic, SELECTION_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( PCB_ACTIONS::updateFootprints,   SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( ACTIONS::updatePcbFromSchematic,     SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( PCB_ACTIONS::updateFootprints,       SELECTION_CONDITIONS::ShowAlways );
 
 #if defined(KICAD_SCRIPTING_WXPYTHON)
     auto pythonConsoleShownCondition = [] ( const SELECTION& aSel ) {

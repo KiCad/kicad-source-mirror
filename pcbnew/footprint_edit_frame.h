@@ -145,11 +145,6 @@ public:
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
     EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
-    /**
-     * Handle most of tools og the vertical right toolbar ("Tools" toolbar)
-     */
-    void OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent );
-
     void OnUpdateModuleSelected( wxUpdateUIEvent& aEvent );
     void OnUpdateModuleTargeted( wxUpdateUIEvent& aEvent );
     void OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent );

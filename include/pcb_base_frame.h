@@ -385,11 +385,6 @@ public:
                           LSET aNotAllowedLayersMask = LSET(),
                           wxPoint aDlgPosition = wxDefaultPosition );
 
-    /* Display a list of two copper layers to choose a pair of copper layers
-     * the layer pair is used to fast switch between copper layers when placing vias
-     */
-    void SelectCopperLayerPair();
-
     virtual void SwitchLayer( wxDC* DC, PCB_LAYER_ID layer );
 
     /**

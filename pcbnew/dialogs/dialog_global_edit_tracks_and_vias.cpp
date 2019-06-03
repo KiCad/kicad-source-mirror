@@ -32,6 +32,7 @@
 #include <tool/tool_manager.h>
 #include <tool/selection.h>
 #include <tools/selection_tool.h>
+#include <tools/global_edit_tool.h>
 #include "dialog_global_edit_tracks_and_vias_base.h"
 
 // Columns of netclasses grid
@@ -219,7 +220,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
 
 bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
 {
-    SELECTION& selection = GetToolManager()->GetTool<SELECTION_TOOL>()->GetSelection();
+    SELECTION& selection = m_parent->GetToolManager()->GetTool<SELECTION_TOOL>()->GetSelection();
     auto       item = dynamic_cast<BOARD_CONNECTED_ITEM*>( selection.Front() );
 
     m_tracks->SetValue( g_modifyTracks );
@@ -368,9 +369,11 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnSizeNetclassGrid( wxSizeEvent& event 
 }
 
 
-void PCB_EDIT_FRAME::OnEditTracksAndVias( wxCommandEvent& event )
+int GLOBAL_EDIT_TOOL::EditTracksAndVias( const TOOL_EVENT& aEvent )
 {
-    DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS dlg( this );
+    DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS dlg( frame() );
     dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR
+
+    return 0;
 }
 
