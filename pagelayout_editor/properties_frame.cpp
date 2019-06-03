@@ -29,6 +29,7 @@
 #include <properties_frame.h>
 #include <tool/tool_manager.h>
 #include <tools/pl_selection_tool.h>
+#include <pl_draw_panel_gal.h>
 
 PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ):
     PANEL_PROPERTIES_BASE( aParent )
@@ -308,7 +309,12 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
     CopyPrmsFromGeneralToPanel();
 
     m_parent->OnModify();
-    m_parent->GetGalCanvas()->Refresh();
+
+    // Rebuild the draw list with the new parameters
+    PL_DRAW_PANEL_GAL*  drawPanel = static_cast<PL_DRAW_PANEL_GAL*>( m_parent->GetGalCanvas() );
+    drawPanel->DisplayWorksheet();
+
+    drawPanel->Refresh();
 }
 
 
@@ -321,7 +327,12 @@ void PROPERTIES_FRAME::OnSetDefaultValues( wxCommandEvent& event )
     model.m_DefaultTextThickness = 0.15;
 
     CopyPrmsFromGeneralToPanel();
-    m_parent->GetGalCanvas()->Refresh();
+
+    // Rebuild the draw list with the new parameters
+    PL_DRAW_PANEL_GAL*  drawPanel = static_cast<PL_DRAW_PANEL_GAL*>( m_parent->GetGalCanvas() );
+    drawPanel->DisplayWorksheet();
+
+    drawPanel->Refresh();
 }
 
 
