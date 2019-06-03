@@ -424,7 +424,7 @@ int PCB_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
     dlg.SetWksFileName( BASE_SCREEN::m_PageLayoutDescrFileName );
 
     if( dlg.ShowModal() == wxID_OK )
-        m_toolMgr->RunAction( ACTIONS::zoomFitScreen );
+        m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
     else
         m_frame->RollbackFromUndo();
 
@@ -489,7 +489,7 @@ int PCB_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
     board->GetDesignSettings().SetTrackWidthIndex( widthIndex );
     board->GetDesignSettings().UseCustomTrackViaSize( false );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
+    m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
 
     return 0;
 }
@@ -506,7 +506,7 @@ int PCB_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
     board->GetDesignSettings().SetTrackWidthIndex( widthIndex );
     board->GetDesignSettings().UseCustomTrackViaSize( false );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
+    m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
 
     return 0;
 }
@@ -523,7 +523,7 @@ int PCB_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
     board->GetDesignSettings().SetViaSizeIndex( sizeIndex );
     board->GetDesignSettings().UseCustomTrackViaSize( false );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
+    m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
 
     return 0;
 }
@@ -540,7 +540,7 @@ int PCB_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
     board->GetDesignSettings().SetViaSizeIndex( sizeIndex );
     board->GetDesignSettings().UseCustomTrackViaSize( false );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
+    m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
 
     return 0;
 }

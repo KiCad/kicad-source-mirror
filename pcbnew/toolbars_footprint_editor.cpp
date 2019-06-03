@@ -23,6 +23,7 @@
 #include <fctsys.h>
 #include <tool/actions.h>
 #include <pcbnew.h>
+#include <class_board.h>
 #include <footprint_edit_frame.h>
 #include <dialog_helpers.h>
 #include <pcbnew_id.h>
@@ -59,22 +60,12 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 #endif
 
     if( IsCurrentFPFromBoard() )
-    {
-        m_mainToolBar->AddTool( ID_MODEDIT_SAVE, wxEmptyString,
-                                KiScaledBitmap( save_fp_to_board_xpm, this ),
-                                _( "Update footprint on board" ) );
-    }
+        m_mainToolBar->Add( PCB_ACTIONS::saveToBoard );
     else
-    {
-        m_mainToolBar->AddTool( ID_MODEDIT_SAVE, wxEmptyString,
-                                KiScaledBitmap( save_xpm, this ),
-                                _( "Save changes to library" ) );
-    }
+        m_mainToolBar->Add( PCB_ACTIONS::saveToLibrary );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString,
-                            KiScaledBitmap( print_button_xpm, this ),
-                            _( "Print footprint" ) );
+    m_mainToolBar->Add( ACTIONS::print );
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->Add( ACTIONS::undo );
@@ -88,13 +79,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_MODEDIT_EDIT_MODULE_PROPERTIES, wxEmptyString,
-                            KiScaledBitmap( module_options_xpm, this ),
-                            _( "Footprint properties" ) );
-
-    m_mainToolBar->AddTool( ID_MODEDIT_PAD_SETTINGS, wxEmptyString,
-                            KiScaledBitmap( options_pad_xpm, this ),
-                            _( "Default pad properties" ) );
+    m_mainToolBar->Add( PCB_ACTIONS::footprintProperties );
+    m_mainToolBar->Add( PCB_ACTIONS::defaultPadProperties );
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, wxEmptyString,
@@ -197,9 +183,15 @@ void FOOTPRINT_EDIT_FRAME::SyncMenusAndToolbars()
 {
     PCB_DISPLAY_OPTIONS* opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
 
+    if( IsCurrentFPFromBoard() )
+        m_mainToolBar->Toggle( PCB_ACTIONS::saveToBoard,   GetScreen() && GetScreen()->IsModify() );
+    else
+        m_mainToolBar->Toggle( PCB_ACTIONS::saveToLibrary, GetScreen() && GetScreen()->IsModify() );
+
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
+    m_mainToolBar->Toggle( PCB_ACTIONS::footprintProperties, GetBoard()->GetFirstModule() );
     m_mainToolBar->Refresh();
 
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,             IsGridVisible() );

@@ -51,36 +51,38 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     auto modifiedDocumentCondition = [this]( const SELECTION& sel ) {
         return !GetBoard()->Modules().empty() && GetScreen()->IsModify();
     };
-    auto libraryPartCondition = [ this ] ( const SELECTION& sel ) {
-        LIB_ID libId = getTargetFPID();
-        const wxString& libName = libId.GetLibNickname();
-        const wxString& partName = libId.GetLibItemName();
-
-       return( !libName.IsEmpty() || !partName.IsEmpty() );
+    auto haveFootprintCondition = [ this ] ( const SELECTION& aSelection ) {
+        return GetBoard()->GetFirstModule() != nullptr;
+    };
+    auto footprintTargettedCondition = [ this ] ( const SELECTION& aSelection ) {
+        return GetTargetFPID().IsValid();
     };
 
     //-- File menu ----------------------------------------------------------
     //
     CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, selTool );
 
-    fileMenu->AddItem( ACTIONS::newLibrary,          SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( ACTIONS::addLibrary,          SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::newLibrary,            SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::addLibrary,            SELECTION_CONDITIONS::ShowAlways );
     fileMenu->AddItem( ID_MODEDIT_NEW_MODULE,
                        AddHotkeyName( _( "&New Footprint..." ), m_hotkeysDescrList, HK_NEW ),
                        _( "Create a new footprint" ),
-                       new_footprint_xpm,            SELECTION_CONDITIONS::ShowAlways );
+                       new_footprint_xpm,              SELECTION_CONDITIONS::ShowAlways );
 
 #ifdef KICAD_SCRIPTING
     fileMenu->AddItem( ID_MODEDIT_NEW_MODULE_FROM_WIZARD,
                        _( "&Create Footprint..." ),
                        _( "Create a new footprint using the footprint wizard" ),
-                       module_wizard_xpm,            SELECTION_CONDITIONS::ShowAlways );
+                       module_wizard_xpm,              SELECTION_CONDITIONS::ShowAlways );
 #endif
 
     fileMenu->AddSeparator();
-    fileMenu->AddItem( ACTIONS::save,                modifiedDocumentCondition );
-    fileMenu->AddItem( ACTIONS::saveAs,              libraryPartCondition );
-    fileMenu->AddItem( ACTIONS::revert,              modifiedDocumentCondition );
+    if( IsCurrentFPFromBoard() )
+        fileMenu->AddItem( PCB_ACTIONS::saveToBoard,   modifiedDocumentCondition );
+    else
+        fileMenu->AddItem( PCB_ACTIONS::saveToLibrary, modifiedDocumentCondition );
+    fileMenu->AddItem( ACTIONS::saveAs,                footprintTargettedCondition );
+    fileMenu->AddItem( ACTIONS::revert,                modifiedDocumentCondition );
 
     fileMenu->AddSeparator();
 
@@ -114,7 +116,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddMenu( submenuExport,               SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-    fileMenu->AddItem( ACTIONS::print,              SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::print,              haveFootprintCondition );
 
     fileMenu->AddSeparator();
     // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
@@ -136,31 +138,18 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
         return GetToolId() == ID_NO_TOOL_SELECTED;
     };
 
-    editMenu->AddItem( ACTIONS::undo,    enableUndoCondition );
-    editMenu->AddItem( ACTIONS::redo,    enableRedoCondition );
+    editMenu->AddItem( ACTIONS::undo,                     enableUndoCondition );
+    editMenu->AddItem( ACTIONS::redo,                     enableRedoCondition );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( ACTIONS::cut,     SELECTION_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::copy,    SELECTION_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::paste,   noActiveToolCondition );
+    editMenu->AddItem( ACTIONS::cut,                      SELECTION_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::copy,                     SELECTION_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::paste,                    noActiveToolCondition );
+    editMenu->AddItem( PCB_ACTIONS::deleteFootprint,      footprintTargettedCondition );
 
-    // Properties
-    AddMenuItem( editMenu, ID_MODEDIT_EDIT_MODULE_PROPERTIES,
-                 _( "&Footprint Properties..." ),
-                 _( "Edit footprint properties" ),
-                 KiBitmap( module_options_xpm ) );
-
-    AddMenuItem( editMenu, ID_MODEDIT_PAD_SETTINGS,
-                 _( "Default Pad Properties..." ),
-                 _( "Edit default pad properties" ),
-                 KiBitmap( options_pad_xpm ) );
-
-    editMenu->AppendSeparator();
-
-    AddMenuItem( editMenu, ID_MODEDIT_DELETE_PART,
-                 _( "&Delete Footprint from Library" ),
-                 _( "Delete the current footprint" ),
-                 KiBitmap( delete_xpm ) );
+    editMenu->AddSeparator();
+    editMenu->AddItem( PCB_ACTIONS::footprintProperties,  haveFootprintCondition );
+    editMenu->AddItem( PCB_ACTIONS::defaultPadProperties, SELECTION_CONDITIONS::ShowAlways );
 
     editMenu->Resolve();
 
@@ -201,7 +190,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                        _( "Browse footprint libraries" ),
                        modview_icon_xpm, SELECTION_CONDITIONS::ShowAlways );
 
-    viewMenu->AddItem( ACTIONS::show3DViewer,              SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::show3DViewer,               SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
     viewMenu->AddItem( ACTIONS::zoomInCenter,               SELECTION_CONDITIONS::ShowAlways );
@@ -256,29 +245,29 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     //
     CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
 
-    placeMenu->AddItem( PCB_ACTIONS::placePad,    SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::placePad,    haveFootprintCondition );
 
     placeMenu->AppendSeparator();
-    placeMenu->AddItem( PCB_ACTIONS::placeText,   SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawArc,     SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawCircle,  SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawLine,    SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawPolygon, SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::placeText,   haveFootprintCondition );
+    placeMenu->AddItem( PCB_ACTIONS::drawArc,     haveFootprintCondition );
+    placeMenu->AddItem( PCB_ACTIONS::drawCircle,  haveFootprintCondition );
+    placeMenu->AddItem( PCB_ACTIONS::drawLine,    haveFootprintCondition );
+    placeMenu->AddItem( PCB_ACTIONS::drawPolygon, haveFootprintCondition );
 
     placeMenu->AppendSeparator();
-    placeMenu->AddItem( PCB_ACTIONS::setAnchor,   SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( ACTIONS::gridSetOrigin,   SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::setAnchor,   haveFootprintCondition );
+    placeMenu->AddItem( ACTIONS::gridSetOrigin,   haveFootprintCondition );
 
     placeMenu->Resolve();
 
-    //-- Inspect menu -------------------------------------------------------
+    //-- Inspect menu ------------------------------------------------------
     //
     CONDITIONAL_MENU* inspectMenu = new CONDITIONAL_MENU( false, selTool );
 
-    inspectMenu->AddItem( ACTIONS::measureTool,   SELECTION_CONDITIONS::ShowAlways );
+    inspectMenu->AddItem( ACTIONS::measureTool,   haveFootprintCondition );
     inspectMenu->Resolve();
 
-    //-- Tools menu -------------------------------------------------------
+    //-- Tools menu --------------------------------------------------------
     //
     wxMenu* toolsMenu = new wxMenu;
 
@@ -304,20 +293,19 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
         return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
     };
 
-    prefsMenu->AddItem( ACTIONS::configurePaths,        SELECTION_CONDITIONS::ShowAlways );
-    prefsMenu->AddItem( ACTIONS::showFootprintLibTable, SELECTION_CONDITIONS::ShowAlways );
-
+    prefsMenu->AddItem( ACTIONS::configurePaths,             SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->AddItem( ACTIONS::showFootprintLibTable,      SELECTION_CONDITIONS::ShowAlways );
     prefsMenu->AddItem( wxID_PREFERENCES,
                         AddHotkeyName( _( "Preferences..." ), g_Module_Editor_Hotkeys_Descr, HK_PREFERENCES ),
                         _( "Show preferences for all open tools" ),
-                        preference_xpm,                 SELECTION_CONDITIONS::ShowAlways );
+                        preference_xpm,                      SELECTION_CONDITIONS::ShowAlways );
 
     prefsMenu->AddSeparator();
     Pgm().AddMenuLanguageList( prefsMenu );
 
     prefsMenu->AddSeparator();
-    prefsMenu->AddCheckItem( ACTIONS::acceleratedGraphics, acceleratedGraphicsCondition );
-    prefsMenu->AddCheckItem( ACTIONS::standardGraphics, standardGraphicsCondition );
+    prefsMenu->AddCheckItem( ACTIONS::acceleratedGraphics,   acceleratedGraphicsCondition );
+    prefsMenu->AddCheckItem( ACTIONS::standardGraphics,      standardGraphicsCondition );
 
     prefsMenu->Resolve();
 

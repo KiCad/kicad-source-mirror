@@ -241,29 +241,19 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         }
 
         if( module == NULL )
-        {
             msg.Printf( _( "%s not found" ), modName );
-        }
         else if( pad == NULL )
-        {
             msg.Printf( _( "%s pin %s not found" ), modName, pinName );
-        }
         else
-        {
             msg.Printf( _( "%s pin %s found" ), modName, pinName );
-        }
 
         SetStatusText( msg );
     }
 
     if( module )  // if found, center the module on screen, and redraw the screen.
     {
-        GetToolManager()->RunAction( PCB_ACTIONS::crossProbeSchToPcb,
-            true,
-            pad ?
-                static_cast<BOARD_ITEM*>( pad ) :
-                static_cast<BOARD_ITEM*>( module )
-            );
+        GetToolManager()->RunAction( PCB_ACTIONS::crossProbeSchToPcb, true,
+                                     pad ? (BOARD_ITEM*) pad : (BOARD_ITEM*) module );
     }
 }
 
@@ -287,8 +277,8 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
             wxString pad = ((D_PAD*)aItem)->GetName();
 
             return StrPrintf( "$PART: \"%s\" $PAD: \"%s\"",
-                     TO_UTF8( module->GetReference() ),
-                     TO_UTF8( pad ) );
+                              TO_UTF8( module->GetReference() ),
+                              TO_UTF8( pad ) );
         }
 
     case PCB_MODULE_TEXT_T:
@@ -309,9 +299,9 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
                 break;
 
             return StrPrintf( "$PART: \"%s\" %s \"%s\"",
-                     TO_UTF8( module->GetReference() ),
-                     text_key,
-                     TO_UTF8( text_mod->GetText() ) );
+                              TO_UTF8( module->GetReference() ),
+                              text_key,
+                              TO_UTF8( text_mod->GetText() ) );
         }
 
     default:

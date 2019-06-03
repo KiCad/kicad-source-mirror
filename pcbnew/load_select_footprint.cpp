@@ -146,9 +146,12 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     GetScreen()->ClearUndoRedoList();
     GetScreen()->ClrModify();
 
-    // Update the bitmap of the ID_MODEDIT_SAVE tool if needed.
+    // Update the save items if needed.
     if( !is_last_fp_from_brd )
+    {
+        ReCreateMenuBar();
         ReCreateHToolbar();
+    }
 
     Update3DView( true );
     updateView();

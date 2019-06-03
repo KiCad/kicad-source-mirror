@@ -270,6 +270,14 @@ public:
     static TOOL_ACTION showPythonConsole;
 
     // Module editor tools
+
+    // These are distinct so that they can have individual tooltips and icons.
+    static TOOL_ACTION saveToBoard;
+    static TOOL_ACTION saveToLibrary;
+
+    static TOOL_ACTION deleteFootprint;
+    static TOOL_ACTION footprintProperties;
+
     /// Activation of the drawing tool (placing a PAD)
     static TOOL_ACTION placePad;
 
@@ -286,6 +294,8 @@ public:
     static TOOL_ACTION moduleEdgeOutlines;
 
     // Pad tools
+    static TOOL_ACTION defaultPadProperties;
+
     /// Copy the selected pad's settings to the board design settings
     static TOOL_ACTION copyPadSettings;
 

@@ -313,7 +313,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( m_selection.Empty() )
                 selectPoint( evt->Position() );
 
-            m_toolMgr->RunAction( PCB_ACTIONS::properties );
+            m_toolMgr->RunAction( PCB_ACTIONS::properties, true );
         }
 
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them

@@ -54,7 +54,28 @@
 using namespace std::placeholders;
 #include <wx/defs.h>
 
+
+TOOL_ACTION PCB_ACTIONS::saveToBoard( "pcbnew.ModuleEditor.saveToBoard",
+        AS_GLOBAL, 0,
+        _( "Save to Board" ), _( "Update footprint on board" ),
+        save_fp_to_board_xpm );
+
+TOOL_ACTION PCB_ACTIONS::saveToLibrary( "pcbnew.ModuleEditor.saveToLibrary",
+        AS_GLOBAL, 0,
+        _( "Save to Library" ), _( "Save changes to library" ),
+        save_xpm );
+
 // Module editor tools
+TOOL_ACTION PCB_ACTIONS::footprintProperties( "pcbnew.ModuleEditor.footprintProperties",
+        AS_GLOBAL, 0,
+        _( "Footprint Properties..." ), "",
+        module_options_xpm );
+
+TOOL_ACTION PCB_ACTIONS::deleteFootprint( "pcbnew.ModuleEditor.deleteFootprint",
+        AS_GLOBAL, 0,
+        _( "Delete Footprint from Library" ), "",
+        delete_xpm );
+
 TOOL_ACTION PCB_ACTIONS::placePad( "pcbnew.ModuleEditor.placePad",
         AS_GLOBAL, 0,
         _( "Add Pad" ), _( "Add a pad" ),
@@ -74,7 +95,13 @@ TOOL_ACTION PCB_ACTIONS::explodePadToShapes( "pcbnew.ModuleEditor.explodePadToSh
 
 TOOL_ACTION PCB_ACTIONS::enumeratePads( "pcbnew.ModuleEditor.enumeratePads",
         AS_GLOBAL, 0,
-        _( "Renumber Pads..." ), _( "Renumber pads by clicking on them in the desired order" ), pad_enumerate_xpm, AF_ACTIVATE );
+        _( "Renumber Pads..." ), _( "Renumber pads by clicking on them in the desired order" ),
+        pad_enumerate_xpm, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::defaultPadProperties( "pcbnew.ModuleEditor.defaultPadProperties",
+        AS_GLOBAL, 0,
+        _( "Default Pad Properties..." ), _( "Edit the pad properties used when creating new pads" ),
+        options_pad_xpm );
 
 
 MODULE_EDITOR_TOOLS::MODULE_EDITOR_TOOLS() :
@@ -93,9 +120,61 @@ void MODULE_EDITOR_TOOLS::Reset( RESET_REASON aReason )
 }
 
 
+int MODULE_EDITOR_TOOLS::Save( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent evt( wxEVT_NULL, ID_MODEDIT_SAVE );
+    getEditFrame<FOOTPRINT_EDIT_FRAME>()->Process_Special_Functions( evt );
+    return 0;
+}
+
+
+int MODULE_EDITOR_TOOLS::SaveAs( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent evt( wxEVT_NULL, ID_MODEDIT_SAVE_AS );
+    getEditFrame<FOOTPRINT_EDIT_FRAME>()->Process_Special_Functions( evt );
+    return 0;
+}
+
+
 int MODULE_EDITOR_TOOLS::Revert( const TOOL_EVENT& aEvent )
 {
     getEditFrame<FOOTPRINT_EDIT_FRAME>()->RevertFootprint();
+    return 0;
+}
+
+
+int MODULE_EDITOR_TOOLS::Delete( const TOOL_EVENT& aEvent )
+{
+    FOOTPRINT_EDIT_FRAME* frame = getEditFrame<FOOTPRINT_EDIT_FRAME>();
+
+    if( frame->DeleteModuleFromLibrary( frame->GetTargetFPID(), true ) )
+    {
+        if( frame->GetTargetFPID() == frame->GetLoadedFPID() )
+            frame->Clear_Pcb( false );
+
+        frame->SyncLibraryTree( true );
+    }
+
+    return 0;
+}
+
+
+int MODULE_EDITOR_TOOLS::Properties( const TOOL_EVENT& aEvent )
+{
+    MODULE* footprint = frame()->GetBoard()->GetFirstModule();
+
+    if( footprint )
+    {
+        getEditFrame<FOOTPRINT_EDIT_FRAME>()->OnEditItemRequest( footprint );
+        frame()->GetGalCanvas()->Refresh();
+    }
+    return 0;
+}
+
+
+int MODULE_EDITOR_TOOLS::DefaultPadProperties( const TOOL_EVENT& aEvent )
+{
+    getEditFrame<FOOTPRINT_EDIT_FRAME>()->InstallPadOptionsFrame( nullptr );
     return 0;
 }
 
@@ -544,10 +623,19 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
 
 void MODULE_EDITOR_TOOLS::setTransitions()
 {
-    Go( &MODULE_EDITOR_TOOLS::Revert,              ACTIONS::revert.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::Save,                 ACTIONS::save.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::Save,                 PCB_ACTIONS::saveToBoard.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::Save,                 PCB_ACTIONS::saveToLibrary.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::SaveAs,               ACTIONS::saveAs.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::SaveAs,               ACTIONS::saveCopyAs.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::Revert,               ACTIONS::revert.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::Delete,               PCB_ACTIONS::deleteFootprint.MakeEvent() );
 
-    Go( &MODULE_EDITOR_TOOLS::PlacePad,            PCB_ACTIONS::placePad.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::CreatePadFromShapes, PCB_ACTIONS::createPadFromShapes.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::ExplodePadToShapes,  PCB_ACTIONS::explodePadToShapes.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::EnumeratePads,       PCB_ACTIONS::enumeratePads.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::Properties,           PCB_ACTIONS::footprintProperties.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::DefaultPadProperties, PCB_ACTIONS::defaultPadProperties.MakeEvent() );
+
+    Go( &MODULE_EDITOR_TOOLS::PlacePad,             PCB_ACTIONS::placePad.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::CreatePadFromShapes,  PCB_ACTIONS::createPadFromShapes.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::ExplodePadToShapes,   PCB_ACTIONS::explodePadToShapes.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::EnumeratePads,        PCB_ACTIONS::enumeratePads.MakeEvent() );
 }

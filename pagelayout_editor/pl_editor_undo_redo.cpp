@@ -76,7 +76,7 @@ void PL_EDITOR_FRAME::GetLayoutFromRedoList()
 
     if( pageSettingsAndTitleBlock )
     {
-        GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
+        GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
         HardRedraw();   // items based off of corners will need re-calculating
     }
     else
@@ -116,7 +116,7 @@ void PL_EDITOR_FRAME::GetLayoutFromUndoList()
 
     if( pageSettingsAndTitleBlock )
     {
-        GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
+        GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
         HardRedraw();   // items based off of corners will need re-calculating
     }
     else
@@ -148,7 +148,7 @@ void PL_EDITOR_FRAME::RollbackFromUndo()
 
     if( pageSettingsAndTitleBlock )
     {
-        GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
+        GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
         HardRedraw();   // items based off of corners will need re-calculating
     }
     else

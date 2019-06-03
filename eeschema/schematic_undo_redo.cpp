@@ -291,7 +291,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             WS_PROXY_UNDO_ITEM* item = (WS_PROXY_UNDO_ITEM*) eda_item;
             item->Restore( this );
             *item = alt_item;
-            GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
+            GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
         }
         else if( dynamic_cast<SCH_ITEM*>( eda_item ) )
         {

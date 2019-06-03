@@ -30,7 +30,7 @@
 #include <footprint_edit_frame.h>
 #include <fp_lib_table.h>
 #include <menus_helpers.h>
-
+#include <tools/pcb_actions.h>
 
 FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
         : wxPanel( aParent ),
@@ -50,8 +50,8 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
     std::unique_ptr<ACTION_MENU> menuLibrary = std::make_unique<ACTION_MENU>();
     menuLibrary->Add( ACTIONS::newLibrary );
     menuLibrary->Add( ACTIONS::addLibrary );
-    menuLibrary->Add( _( "Save" ), ID_MODEDIT_SAVE, save_xpm );
-    menuLibrary->Add( _( "Save a Copy As..." ), ID_MODEDIT_SAVE_AS, save_as_xpm );
+    menuLibrary->Add( ACTIONS::save );
+    menuLibrary->Add( ACTIONS::saveAs );
 
     menuLibrary->AppendSeparator();
     menuLibrary->Add( _( "New Footprint..." ), ID_MODEDIT_NEW_MODULE, new_footprint_xpm );
@@ -65,9 +65,9 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
     menuPart->Add( _( "Edit Footprint" ), ID_MODEDIT_EDIT_MODULE, edit_xpm );
 
     menuPart->AppendSeparator();
-    menuPart->Add( _( "Save" ), ID_MODEDIT_SAVE, save_xpm );
-    menuPart->Add( _( "Save a Copy As..." ), ID_MODEDIT_SAVE_AS, save_as_xpm );
-    menuPart->Add( _( "Delete" ), ID_MODEDIT_DELETE_PART, delete_xpm );
+    menuPart->Add( ACTIONS::save );
+    menuPart->Add( ACTIONS::saveCopyAs );
+    menuPart->Add( PCB_ACTIONS::deleteFootprint );
     menuPart->Add( ACTIONS::revert );
 
     menuPart->AppendSeparator();

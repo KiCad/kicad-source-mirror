@@ -184,11 +184,6 @@ public:
      */
     void OnModify() override;
 
-    /**
-     * Install the print dialog
-     */
-    void ToPrinter( wxCommandEvent& event );
-
     // BOARD handling
 
     /**
@@ -199,7 +194,7 @@ public:
     bool Clear_Pcb( bool aQuery );
 
     /// Return the LIB_ID of the part selected in the footprint or the part being edited.
-    LIB_ID getTargetFPID() const;
+    LIB_ID GetTargetFPID() const;
 
     /// Return the LIB_ID of the part being edited.
     LIB_ID GetLoadedFPID() const;

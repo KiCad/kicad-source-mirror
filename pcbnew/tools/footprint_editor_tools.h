@@ -49,7 +49,17 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
+    int Save( const TOOL_EVENT& aEvent );
+    int SaveAs( const TOOL_EVENT& aEvent );
     int Revert( const TOOL_EVENT& aEvent );
+    int Delete( const TOOL_EVENT& aEvent );
+
+    int Properties( const TOOL_EVENT& aEvent );
+
+    /**
+     * Edit the properties used for new pad creation.
+     */
+    int DefaultPadProperties( const TOOL_EVENT& aEvent );
 
     /**
      * Function PlacePad()
@@ -84,6 +94,7 @@ public:
      */
     int ExplodePadToShapes( const TOOL_EVENT& aEvent );
 
+private:
     ///> Sets up handlers for various events.
     void setTransitions() override;
 

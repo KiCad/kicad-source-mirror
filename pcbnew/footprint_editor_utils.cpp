@@ -123,9 +123,12 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
     updateView();
     GetGalCanvas()->Refresh();
 
-    // Update the bitmap of the ID_MODEDIT_SAVE tool if needed.
+    // Update the save items if needed.
     if( is_last_fp_from_brd )
+    {
+        ReCreateMenuBar();
         ReCreateHToolbar();
+    }
 
     m_treePane->GetLibTree()->ExpandLibId( aFPID );
     m_treePane->GetLibTree()->CenterLibId( aFPID );
@@ -143,10 +146,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     switch( id )
     {
-    case wxID_CUT:
-    case wxID_COPY:
     case ID_TOOLBARH_PCB_SELECT_LAYER:
-    case ID_MODEDIT_PAD_SETTINGS:
         break;
 
     default:
@@ -179,16 +179,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 if( wxWindow::FindFocus() != viewer )
                     viewer->SetFocus();
             }
-        }
-        break;
-
-    case ID_MODEDIT_DELETE_PART:
-        if( DeleteModuleFromLibrary( getTargetFPID(), true ) )
-        {
-            if( getTargetFPID() == GetLoadedFPID() )
-                Clear_Pcb( false );
-
-            SyncLibraryTree( true );
         }
         break;
 
@@ -302,7 +292,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_SAVE:
-        if( getTargetFPID() == GetLoadedFPID() )
+        if( GetTargetFPID() == GetLoadedFPID() )
         {
             if( SaveFootprint( GetBoard()->GetFirstModule() ) )
             {
@@ -317,16 +307,16 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_SAVE_AS:
-        if( getTargetFPID().GetLibItemName().empty() )
+        if( GetTargetFPID().GetLibItemName().empty() )
         {
             // Save Library As
-            const wxString& src_libNickname = getTargetFPID().GetLibNickname();
+            const wxString& src_libNickname = GetTargetFPID().GetLibNickname();
             wxString src_libFullName = Prj().PcbFootprintLibs()->GetFullURI( src_libNickname );
 
             if( SaveLibraryAs( src_libFullName ) )
                 SyncLibraryTree( true );
         }
-        else if( getTargetFPID() == GetLoadedFPID() )
+        else if( GetTargetFPID() == GetLoadedFPID() )
         {
             // Save Board Footprint As
             MODULE* footprint = GetBoard()->GetFirstModule();
@@ -344,7 +334,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         else
         {
             // Save Selected Footprint As
-            MODULE* footprint = LoadFootprint( getTargetFPID() );
+            MODULE* footprint = LoadFootprint( GetTargetFPID() );
 
             if( footprint && SaveFootprintAs( footprint ) )
                 SyncLibraryTree( true );
@@ -355,9 +345,9 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_CUT_PART:
     case ID_MODEDIT_COPY_PART:
-        if( getTargetFPID().IsValid() )
+        if( GetTargetFPID().IsValid() )
         {
-            LIB_ID fpID = getTargetFPID();
+            LIB_ID fpID = GetTargetFPID();
 
             if( fpID == GetLoadedFPID() )
                 m_copiedModule.reset( new MODULE( *GetBoard()->GetFirstModule() ) );
@@ -377,9 +367,9 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_PASTE_PART:
-        if( m_copiedModule && !getTargetFPID().GetLibNickname().empty() )
+        if( m_copiedModule && !GetTargetFPID().GetLibNickname().empty() )
         {
-            wxString newLib = getTargetFPID().GetLibNickname();
+            wxString newLib = GetTargetFPID().GetLibNickname();
             MODULE*  newModule( m_copiedModule.get() );
             wxString newName = newModule->GetFPID().GetLibItemName();
 
@@ -416,30 +406,18 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_EXPORT_PART:
-        if( getTargetFPID() == GetLoadedFPID() )
+        if( GetTargetFPID() == GetLoadedFPID() )
             Export_Module( GetBoard()->GetFirstModule() );
         else
-            Export_Module( LoadFootprint( getTargetFPID() ) );
+            Export_Module( LoadFootprint( GetTargetFPID() ) );
         break;
 
     case ID_MODEDIT_EDIT_MODULE:
         LoadModuleFromLibrary( m_treePane->GetLibTree()->GetSelectedLibId() );
         break;
 
-    case ID_MODEDIT_PAD_SETTINGS:
-        InstallPadOptionsFrame( NULL );
-        break;
-
     case ID_MODEDIT_CHECK:
         // Currently: not implemented
-        break;
-
-    case ID_MODEDIT_EDIT_MODULE_PROPERTIES:
-        if( GetBoard()->GetFirstModule() )
-        {
-            editFootprintProperties( GetBoard()->GetFirstModule() );
-            GetGalCanvas()->Refresh();
-        }
         break;
 
     default:

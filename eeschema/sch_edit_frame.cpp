@@ -307,7 +307,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_auimgr.Update();
 
     GetToolManager()->RunAction( ACTIONS::gridPreset, true, m_LastGridSizeId );
-    GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
+    GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
 
     if( GetGalCanvas() )
         GetGalCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );

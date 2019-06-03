@@ -227,7 +227,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     updateView();
 
     SetActiveLayer( F_Cu );
-    GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
+    GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
 
     // Do not Run a dialog here: on some Window Managers, it creates issues.
     // Reason: the FOOTPRINT_WIZARD_FRAME is run as modal;

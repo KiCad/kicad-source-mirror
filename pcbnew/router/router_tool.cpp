@@ -1289,7 +1289,7 @@ int ROUTER_TOOL::CustomTrackWidthDialog( const TOOL_EVENT& aEvent )
     if( sizeDlg.ShowModal() )
     {
         bds.UseCustomTrackViaSize( true );
-        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
+        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
     }
 
     return 0;
