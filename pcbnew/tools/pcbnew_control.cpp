@@ -1022,10 +1022,18 @@ int PCBNEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
     if( selection.GetSize() == 1 )
     {
-        EDA_ITEM* item = (EDA_ITEM*) selection.Front();
-
+        EDA_ITEM*       item = (EDA_ITEM*) selection.Front();
         MSG_PANEL_ITEMS msgItems;
+
         item->GetMsgPanelInfo( m_frame->GetUserUnits(), msgItems );
+        m_frame->SetMsgPanel( msgItems );
+    }
+    else if( selection.GetSize() > 1 )
+    {
+        MSG_PANEL_ITEMS msgItems;
+        wxString        msg = wxString::Format( wxT( "%d" ), selection.GetSize() );
+
+        msgItems.push_back( MSG_PANEL_ITEM( _( "Selected Items" ), msg, DARKCYAN ) );
         m_frame->SetMsgPanel( msgItems );
     }
     else
