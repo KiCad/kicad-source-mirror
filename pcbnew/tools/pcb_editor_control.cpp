@@ -231,6 +231,16 @@ TOOL_ACTION PCB_ACTIONS::showPythonConsole( "pcbnew.Control.showPythonConsole",
         _( "Scripting Console" ), _( "Show the Python scripting console" ),
         py_script_xpm );
 
+TOOL_ACTION PCB_ACTIONS::showLayersManager( "pcbnew.Control.showLayersManager",
+        AS_GLOBAL, 0,
+        _( "Show Layers Manager" ), _( "Show/hide the layers manager" ),
+        layers_manager_xpm );
+
+TOOL_ACTION PCB_ACTIONS::showMicrowaveToolbar( "pcbnew.Control.showMicrowaveToolbar",
+        AS_GLOBAL, 0,
+        _( "Show Microwave Toolbar" ), _( "Show/hide microwave toolbar\n(Experimental feature)" ),
+        mw_toolbar_xpm );
+
 TOOL_ACTION PCB_ACTIONS::flipBoard( "pcbnew.Control.flipBoard",
         AS_GLOBAL, 0,
         _( "Flip Board View" ), _( "Flip (mirror) the board view" ),
@@ -580,6 +590,20 @@ int PCB_EDITOR_CONTROL::UpdatePCBFromSchematic( const TOOL_EVENT& aEvent )
             m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
     }
 
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::ToggleLayersManager( const TOOL_EVENT& aEvent )
+{
+    frame()->ToggleLayersManager();
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::ToggleMicrowaveToolbar( const TOOL_EVENT& aEvent )
+{
+    frame()->ToggleMicrowaveToolbar();
     return 0;
 }
 
@@ -1578,6 +1602,8 @@ void PCB_EDITOR_CONTROL::setTransitions()
 
     Go( &PCB_EDITOR_CONTROL::ListNets,               PCB_ACTIONS::listNets.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::UpdatePCBFromSchematic, ACTIONS::updatePcbFromSchematic.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ToggleLayersManager,    PCB_ACTIONS::showLayersManager.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ToggleMicrowaveToolbar, PCB_ACTIONS::showMicrowaveToolbar.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::TogglePythonConsole,    PCB_ACTIONS::showPythonConsole.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::FlipPcbView,            PCB_ACTIONS::flipBoard.MakeEvent() );
 }

@@ -298,42 +298,36 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
         return !( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_ContrastModeDisplay;
     };
 
-    viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
-                            _( "Show La&yers Manager" ), HELP_SHOW_HIDE_LAYERMANAGER,
-                            layers_manager_xpm,             layersPaletteShownCondition );
-
-    viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE,
-                            _( "Show Microwa&ve Toolbar" ), HELP_SHOW_HIDE_MICROWAVE_TOOLS,
-                             mw_toolbar_xpm,                microwaveToolbarShownCondition );
-
-    viewMenu->AddItem( ACTIONS::showFootprintBrowser,       SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::show3DViewer,               SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddCheckItem( PCB_ACTIONS::showLayersManager,    layersPaletteShownCondition );
+    viewMenu->AddCheckItem( PCB_ACTIONS::showMicrowaveToolbar, microwaveToolbarShownCondition );
+    viewMenu->AddItem( ACTIONS::showFootprintBrowser,          SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::show3DViewer,                  SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
-    viewMenu->AddItem( ACTIONS::zoomInCenter,               SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomOutCenter,              SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomFitScreen,              SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomTool,                   SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomRedraw,                 SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomInCenter,                  SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomOutCenter,                 SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomFitScreen,                 SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomTool,                      SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomRedraw,                    SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AppendSeparator();
-    viewMenu->AddCheckItem( ACTIONS::toggleGrid,            gridShownCondition );
-    viewMenu->AddItem( ACTIONS::gridProperties,             SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddCheckItem( PCB_ACTIONS::togglePolarCoords, polarCoordsCondition );
+    viewMenu->AddCheckItem( ACTIONS::toggleGrid,               gridShownCondition );
+    viewMenu->AddItem( ACTIONS::gridProperties,                SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddCheckItem( PCB_ACTIONS::togglePolarCoords,    polarCoordsCondition );
 
     // Units submenu
     CONDITIONAL_MENU* unitsSubMenu = new CONDITIONAL_MENU( false, selTool );
     unitsSubMenu->SetTitle( _( "&Units" ) );
     unitsSubMenu->SetIcon( unit_mm_xpm );
-    unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,     imperialUnitsCondition );
-    unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,       metricUnitsCondition );
+    unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,        imperialUnitsCondition );
+    unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,          metricUnitsCondition );
     viewMenu->AddMenu( unitsSubMenu );
 
-    viewMenu->AddCheckItem( ACTIONS::toggleCursorStyle,     fullCrosshairCondition );
+    viewMenu->AddCheckItem( ACTIONS::toggleCursorStyle,        fullCrosshairCondition );
 
     viewMenu->AddSeparator();
-    viewMenu->AddCheckItem( PCB_ACTIONS::showRatsnest,      ratsnestShownCondition );
-    viewMenu->AddCheckItem( PCB_ACTIONS::ratsnestLineMode,  curvedRatsnestCondition );
+    viewMenu->AddCheckItem( PCB_ACTIONS::showRatsnest,         ratsnestShownCondition );
+    viewMenu->AddCheckItem( PCB_ACTIONS::ratsnestLineMode,     curvedRatsnestCondition );
 
     viewMenu->AddSeparator();
     // Drawing Mode Submenu

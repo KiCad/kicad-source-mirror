@@ -280,6 +280,8 @@ public:
     static TOOL_ACTION runDRC;
 
     static TOOL_ACTION editFootprintInFpEditor;
+    static TOOL_ACTION showLayersManager;
+    static TOOL_ACTION showMicrowaveToolbar;
     static TOOL_ACTION showPythonConsole;
     static TOOL_ACTION showHelp;
 

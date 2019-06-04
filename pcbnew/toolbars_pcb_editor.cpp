@@ -330,36 +330,32 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
                                                wxDefaultPosition, wxDefaultSize,
                                                KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    m_optionsToolBar->Add( ACTIONS::toggleGrid,              ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleGrid,               ACTION_TOOLBAR::TOGGLE );
 
-    m_optionsToolBar->Add( PCB_ACTIONS::togglePolarCoords,  ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::imperialUnits,           ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::metricUnits,             ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,       ACTION_TOOLBAR::TOGGLE );
-
-    KiScaledSeparator( m_optionsToolBar, this );
-    m_optionsToolBar->Add( PCB_ACTIONS::showRatsnest,        ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( PCB_ACTIONS::ratsnestLineMode,    ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::togglePolarCoords,    ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::imperialUnits,            ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::metricUnits,              ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,        ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_optionsToolBar, this );
-    m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayEnable,   ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayDisable,  ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayOutlines, ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::showRatsnest,         ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::ratsnestLineMode,     ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_optionsToolBar, this );
-    m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode,      ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( PCB_ACTIONS::viaDisplayMode,      ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( PCB_ACTIONS::trackDisplayMode,    ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::highContrastMode,        ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayEnable,    ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayDisable,   ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayOutlines,  ACTION_TOOLBAR::TOGGLE );
+
+    KiScaledSeparator( m_optionsToolBar, this );
+    m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode,       ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::viaDisplayMode,       ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::trackDisplayMode,     ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::highContrastMode,         ACTION_TOOLBAR::TOGGLE );
 
     // Tools to show/hide toolbars:
     KiScaledSeparator( m_optionsToolBar, this );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
-                               wxEmptyString, KiScaledBitmap( layers_manager_xpm, this ),
-                               HELP_SHOW_HIDE_LAYERMANAGER, wxITEM_CHECK );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE,
-                               wxEmptyString, KiScaledBitmap( mw_toolbar_xpm, this ),
-                               HELP_SHOW_HIDE_MICROWAVE_TOOLS, wxITEM_CHECK );
+    m_optionsToolBar->Add( PCB_ACTIONS::showLayersManager,    ACTION_TOOLBAR::TOGGLE  );
+    m_optionsToolBar->Add( PCB_ACTIONS::showMicrowaveToolbar, ACTION_TOOLBAR::TOGGLE  );
 
     KiScaledSeparator( m_optionsToolBar, this );
     m_optionsToolBar->Realize();
@@ -640,31 +636,20 @@ void PCB_EDIT_FRAME::ReCreateLayerBox( bool aForceResizeToolbar )
 }
 
 
-void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
+void PCB_EDIT_FRAME::ToggleLayersManager()
 {
-    int id = event.GetId();
-    bool state = event.IsChecked();
+    // show auxiliary Vertical layers and visibility manager toolbar
+    m_show_layer_manager_tools = !m_show_layer_manager_tools;
+    m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
+    m_auimgr.Update();
+}
 
-    switch( id )
-    {
-    case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE:
-        m_show_microwave_tools = state;
-        m_auimgr.GetPane( "MicrowaveToolbar" ).Show( m_show_microwave_tools );
-        m_auimgr.Update();
-        break;
 
-    case ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR:
-        // show auxiliary Vertical layers and visibility manager toolbar
-        m_show_layer_manager_tools = state;
-        m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
-        m_auimgr.Update();
-        break;
-
-    default:
-        DisplayErrorMessage( this, "Invalid toolbar option",
-                       "PCB_EDIT_FRAME::OnSelectOptionToolbar error \n (event not handled!)" );
-        break;
-    }
+void PCB_EDIT_FRAME::ToggleMicrowaveToolbar()
+{
+    m_show_microwave_tools = !m_show_microwave_tools;
+    m_auimgr.GetPane( "MicrowaveToolbar" ).Show( m_show_microwave_tools );
+    m_auimgr.Update();
 }
 
 
@@ -723,6 +708,7 @@ void PCB_EDIT_FRAME::SyncMenusAndToolbars()
     PCB_DISPLAY_OPTIONS*        opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
     int                         zoneMode = opts->m_DisplayZonesMode;
+    bool                        ratsnestShown = GetBoard()->IsElementVisible( LAYER_RATSNEST );
 
     m_mainToolBar->Toggle( ACTIONS::save, GetScreen() && GetScreen()->IsModify() );
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
@@ -737,21 +723,23 @@ void PCB_EDIT_FRAME::SyncMenusAndToolbars()
 #endif
     m_mainToolBar->Refresh();
 
-    m_optionsToolBar->Toggle( ACTIONS::toggleGrid,            IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits,           GetUserUnits() != INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits,         GetUserUnits() == INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::togglePolarCoords,     GetShowPolarCoords() );
-    m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,     !galOpts.m_fullscreenCursor );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::showRatsnest,      GetBoard()->IsElementVisible( LAYER_RATSNEST ) );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::ratsnestLineMode,  opts->m_DisplayRatsnestLinesCurved );
+    m_optionsToolBar->Toggle( ACTIONS::toggleGrid,               IsGridVisible() );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits,              GetUserUnits() != INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits,            GetUserUnits() == INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::togglePolarCoords,        GetShowPolarCoords() );
+    m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,        !galOpts.m_fullscreenCursor );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::showRatsnest,         ratsnestShown );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::ratsnestLineMode,     opts->m_DisplayRatsnestLinesCurved );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::showLayersManager,    LayerManagerShown() );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::showMicrowaveToolbar, MicrowaveToolbarShown() );
 
-    m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayEnable,   zoneMode == 0 );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayDisable,  zoneMode == 1 );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayOutlines, zoneMode == 2 );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::trackDisplayMode,    !opts->m_DisplayPcbTrackFill );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::viaDisplayMode,      !opts->m_DisplayViaFill );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,      !opts->m_DisplayPadFill );
-    m_optionsToolBar->Toggle( ACTIONS::highContrastMode,        opts->m_ContrastModeDisplay );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayEnable,    zoneMode == 0 );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayDisable,   zoneMode == 1 );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayOutlines,  zoneMode == 2 );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::trackDisplayMode,     !opts->m_DisplayPcbTrackFill );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::viaDisplayMode,       !opts->m_DisplayViaFill );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,       !opts->m_DisplayPadFill );
+    m_optionsToolBar->Toggle( ACTIONS::highContrastMode,         opts->m_ContrastModeDisplay );
     m_optionsToolBar->Refresh();
 
     m_drawToolBar->Toggle( PCB_ACTIONS::selectionTool,    GetToolId() == ID_NO_TOOL_SELECTED );

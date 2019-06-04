@@ -552,7 +552,6 @@ public:
     /**
      * Function ShowBoardSetupDialog
      */
-    void ShowBoardSetupDialog( wxCommandEvent& event );
     void DoShowBoardSetupDialog( const wxString& aInitialPage = wxEmptyString,
                                  const wxString& aInitialParentPage = wxEmptyString );
 
@@ -560,7 +559,8 @@ public:
 
     void PrepareLayerIndicator();
 
-    void OnSelectOptionToolbar( wxCommandEvent& event );
+    void ToggleLayersManager();
+    void ToggleMicrowaveToolbar();
 
     /**
      * Function DoGenFootprintsPositionFile
