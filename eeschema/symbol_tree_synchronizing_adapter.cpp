@@ -222,7 +222,10 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
         break;
 
     case 1:
-        aVariant = node->Desc;
+        if( node->LibId == m_libMgr->GetCurrentLibId() )
+            aVariant = m_libMgr->GetAlias( node->Name, node->Parent->Name )->GetDescription();
+        else
+            aVariant = node->Desc;
         break;
 
     default:    // column == -1 is used for default Compare function
