@@ -54,9 +54,9 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
     menuLibrary->Add( ACTIONS::saveAs );
 
     menuLibrary->AppendSeparator();
-    menuLibrary->Add( _( "New Footprint..." ), ID_MODEDIT_NEW_MODULE, new_footprint_xpm );
+    menuLibrary->Add( PCB_ACTIONS::newFootprint );
 #ifdef KICAD_SCRIPTING
-    menuLibrary->Add( _( "Create Footprint from Wizard..." ), ID_MODEDIT_NEW_MODULE_FROM_WIZARD, module_wizard_xpm );
+    menuLibrary->Add( PCB_ACTIONS::createFootprint );
 #endif
     menuLibrary->Add( _( "Import Footprint..." ), ID_MODEDIT_IMPORT_PART, import_module_xpm );
     menuLibrary->Add( _( "Paste Footprint" ), ID_MODEDIT_PASTE_PART, paste_xpm );

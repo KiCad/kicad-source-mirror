@@ -64,16 +64,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     fileMenu->AddItem( ACTIONS::newLibrary,            SELECTION_CONDITIONS::ShowAlways );
     fileMenu->AddItem( ACTIONS::addLibrary,            SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( ID_MODEDIT_NEW_MODULE,
-                       AddHotkeyName( _( "&New Footprint..." ), m_hotkeysDescrList, HK_NEW ),
-                       _( "Create a new footprint" ),
-                       new_footprint_xpm,              SELECTION_CONDITIONS::ShowAlways );
-
+    fileMenu->AddItem( PCB_ACTIONS::newFootprint,      SELECTION_CONDITIONS::ShowAlways );
 #ifdef KICAD_SCRIPTING
-    fileMenu->AddItem( ID_MODEDIT_NEW_MODULE_FROM_WIZARD,
-                       _( "&Create Footprint..." ),
-                       _( "Create a new footprint using the footprint wizard" ),
-                       module_wizard_xpm,              SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( PCB_ACTIONS::createFootprint,   SELECTION_CONDITIONS::ShowAlways );
 #endif
 
     fileMenu->AddSeparator();
@@ -185,11 +178,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
         return IsSearchTreeShown();
     };
 
-    viewMenu->AddItem( ID_OPEN_MODULE_VIEWER,
-                       _( "Footprint &Library Browser" ),
-                       _( "Browse footprint libraries" ),
-                       modview_icon_xpm, SELECTION_CONDITIONS::ShowAlways );
-
+    viewMenu->AddItem( ACTIONS::showFootprintBrowser,       SELECTION_CONDITIONS::ShowAlways );
     viewMenu->AddItem( ACTIONS::show3DViewer,               SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();

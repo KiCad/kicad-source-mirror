@@ -111,31 +111,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
-    case ID_OPEN_MODULE_VIEWER:
-        {
-            FOOTPRINT_VIEWER_FRAME* viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
-
-            if( !viewer )
-            {
-                viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, true );
-            }
-            else
-            {
-                // Needed on Windows, other platforms do not use it,
-                // but it creates no issue
-                if( viewer->IsIconized() )
-                     viewer->Iconize( false );
-
-                viewer->Raise();
-
-                // Raising the window does not set the focus on Linux.  This should work on
-                // any platform.
-                if( wxWindow::FindFocus() != viewer )
-                    viewer->SetFocus();
-            }
-        }
-        break;
-
     case ID_GET_NETLIST:
         InstallNetlistFrame();
         break;

@@ -156,32 +156,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_OPEN_MODULE_VIEWER:
-        {
-            FOOTPRINT_VIEWER_FRAME* viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
-
-            if( !viewer )
-            {
-                viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, true );
-                viewer->Show( true );
-                viewer->Zoom_Automatique( false );
-            }
-            else
-            {
-                // On Windows, Raise() does not bring the window on screen, when iconized
-                if( viewer->IsIconized() )
-                    viewer->Iconize( false );
-
-                viewer->Raise();
-
-                // Raising the window does not set the focus on Linux.  This should work on
-                // any platform.
-                if( wxWindow::FindFocus() != viewer )
-                    viewer->SetFocus();
-            }
-        }
-        break;
-
     case ID_MODEDIT_NEW_MODULE:
         {
             LIB_ID selected = m_treePane->GetLibTree()->GetSelectedLibId();

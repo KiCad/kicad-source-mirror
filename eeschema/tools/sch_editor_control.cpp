@@ -86,11 +86,6 @@ TOOL_ACTION EE_ACTIONS::editWithLibEdit( "eeschema.EditorControl.editWithSymbolE
         _( "Edit with Symbol Editor" ), _( "Open the symbol editor to edit the symbol" ),
         libedit_xpm );
 
-TOOL_ACTION EE_ACTIONS::showLibraryBrowser( "eeschema.EditorControl.showLibraryBrowser",
-        AS_GLOBAL, 0,
-        _( "Symbol Library Browser" ), _( "Browse symbol libraries" ),
-        library_browse_xpm );
-
 TOOL_ACTION EE_ACTIONS::editSymbolFields( "eeschema.EditorControl.editSymbolFields",
         AS_GLOBAL, 0,
         _( "Edit Symbol Fields..." ), _( "Bulk-edit fields of all symbols in schematic" ),
@@ -1265,7 +1260,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
 
     Go( &SCH_EDITOR_CONTROL::EditWithLibEdit,       EE_ACTIONS::editWithLibEdit.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowSymbolEditor,      EE_ACTIONS::showSymbolEditor.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::ShowLibraryBrowser,    EE_ACTIONS::showLibraryBrowser.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ShowLibraryBrowser,    ACTIONS::showSymbolBrowser.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowCvpcb,             EE_ACTIONS::assignFootprints.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Annotate,              EE_ACTIONS::annotate.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::EditSymbolFields,      EE_ACTIONS::editSymbolFields.MakeEvent() );

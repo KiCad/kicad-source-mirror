@@ -141,6 +141,8 @@ public:
 
     // Misc
     static TOOL_ACTION show3DViewer;
+    static TOOL_ACTION showSymbolBrowser;
+    static TOOL_ACTION showFootprintBrowser;
     static TOOL_ACTION updatePcbFromSchematic;
     static TOOL_ACTION configurePaths;
     static TOOL_ACTION showSymbolLibTable;

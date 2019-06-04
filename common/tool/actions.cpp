@@ -358,6 +358,16 @@ TOOL_ACTION ACTIONS::show3DViewer( "common.Control.show3DViewer",
         _( "3D Viewer" ), _( "Show 3D viewer window" ),
         three_d_xpm );
 
+TOOL_ACTION ACTIONS::showSymbolBrowser( "common.Control.showSymbolBrowser",
+        AS_GLOBAL, 0,
+        _( "Symbol Library Browser" ), _( "Browse symbol libraries" ),
+        library_browse_xpm );
+
+TOOL_ACTION ACTIONS::showFootprintBrowser( "common.Control.showFootprintBrowser",
+        AS_GLOBAL, 0,
+        _( "Footprint Library Browser" ), _( "Browse footprint libraries" ),
+        modview_icon_xpm );
+
 TOOL_ACTION ACTIONS::updatePcbFromSchematic( "common.Control.updatePcbFromSchematic",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_UPDATE_PCB_FROM_SCH ),
         _( "Update PCB from Schematic..." ), _( "Push changes from schematic to PCB" ),

@@ -263,20 +263,31 @@ public:
     static TOOL_ACTION changeFootprints;
     static TOOL_ACTION swapLayers;
 
-
     static TOOL_ACTION listNets;
     static TOOL_ACTION runDRC;
-    static TOOL_ACTION updatePcbFromSchematic;
+
+    static TOOL_ACTION editFootprintInFpEditor;
     static TOOL_ACTION showPythonConsole;
+    static TOOL_ACTION showHelp;
 
     // Module editor tools
 
-    // These are distinct so that they can have individual tooltips and icons.
+    // We don't use ACTION::new here because we need to distinguish between New Library
+    // and New Footprint.
+    static TOOL_ACTION newFootprint;
+    
+    // Create a new footprint using the Footprint Wizard
+    static TOOL_ACTION createFootprint;
+
+    // We don't use ACTION::save here because we need to distinguish between saving to
+    // the library and saving to the board (which have different tooltips and icons).
     static TOOL_ACTION saveToBoard;
     static TOOL_ACTION saveToLibrary;
 
     static TOOL_ACTION deleteFootprint;
+    
     static TOOL_ACTION footprintProperties;
+    static TOOL_ACTION defaultPadProperties;
 
     /// Activation of the drawing tool (placing a PAD)
     static TOOL_ACTION placePad;
@@ -294,12 +305,11 @@ public:
     static TOOL_ACTION moduleEdgeOutlines;
 
     // Pad tools
-    static TOOL_ACTION defaultPadProperties;
 
     /// Copy the selected pad's settings to the board design settings
     static TOOL_ACTION copyPadSettings;
 
-    /// Copy the pad settings in the board design settings to the selected pad
+    /// Copy the default pad settings to the selected pad
     static TOOL_ACTION applyPadSettings;
 
     /// Copy the current pad's settings to other pads in the module or on the board
@@ -334,7 +344,6 @@ public:
     static TOOL_ACTION drillOrigin;
     static TOOL_ACTION crossProbeSchToPcb;
     static TOOL_ACTION appendBoard;
-    static TOOL_ACTION showHelp;
     static TOOL_ACTION toBeDone;
 
     // Ratsnest
@@ -347,8 +356,6 @@ public:
 
     /// Find an item and start moving
     static TOOL_ACTION findMove;
-
-    static TOOL_ACTION editFootprintInFpEditor;
 
     static TOOL_ACTION autoplaceOffboardComponents;
     static TOOL_ACTION autoplaceSelectedComponents;

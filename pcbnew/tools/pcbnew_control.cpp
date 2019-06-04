@@ -31,7 +31,7 @@
 #include "pcbnew_picker_tool.h"
 #include "pcb_editor_control.h"
 #include "grid_helper.h"
-
+#include <kiway.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
@@ -58,6 +58,8 @@
 #include <bitmaps.h>
 
 #include <functional>
+#include <footprint_viewer_frame.h>
+
 using namespace std::placeholders;
 
 
@@ -999,6 +1001,28 @@ int PCBNEW_CONTROL::Show3DViewer( const TOOL_EVENT& aEvent )
 }
 
 
+int PCBNEW_CONTROL::ShowFootprintBrowser( const TOOL_EVENT& aEvent )
+{
+    auto* viewer = (FOOTPRINT_VIEWER_FRAME*) m_frame->Kiway().Player( FRAME_PCB_MODULE_VIEWER );
+
+    viewer->Show( true );
+
+    // On Windows, Raise() does not bring the window on screen, when iconized
+    if( viewer->IsIconized() )
+        viewer->Iconize( false );
+
+    viewer->Raise();
+
+    // Raising the window does not set the focus on Linux.  This should work on
+    // any platform.
+    if( wxWindow::FindFocus() != viewer )
+        viewer->SetFocus();
+    
+    return 0;
+
+}
+
+
 int PCBNEW_CONTROL::ToBeDone( const TOOL_EVENT& aEvent )
 {
     DisplayInfoMessage( m_frame, _( "Not available in OpenGL/Cairo canvases." ) );
@@ -1047,64 +1071,65 @@ int PCBNEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
 void PCBNEW_CONTROL::setTransitions()
 {
-    Go( &PCBNEW_CONTROL::AddLibrary,          ACTIONS::newLibrary.MakeEvent() );
-    Go( &PCBNEW_CONTROL::AddLibrary,          ACTIONS::addLibrary.MakeEvent() );
-    Go( &PCBNEW_CONTROL::Print,               ACTIONS::print.MakeEvent() );
-    Go( &PCBNEW_CONTROL::Quit,                ACTIONS::quit.MakeEvent() );
-
+    Go( &PCBNEW_CONTROL::AddLibrary,           ACTIONS::newLibrary.MakeEvent() );
+    Go( &PCBNEW_CONTROL::AddLibrary,           ACTIONS::addLibrary.MakeEvent() );
+    Go( &PCBNEW_CONTROL::Print,                ACTIONS::print.MakeEvent() );
+    Go( &PCBNEW_CONTROL::Quit,                 ACTIONS::quit.MakeEvent() );
+    
     // Display modes
-    Go( &PCBNEW_CONTROL::TrackDisplayMode,    PCB_ACTIONS::trackDisplayMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ToggleRatsnest,      PCB_ACTIONS::showRatsnest.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ToggleRatsnest,      PCB_ACTIONS::ratsnestLineMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::PadDisplayMode,      PCB_ACTIONS::padDisplayMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ViaDisplayMode,      PCB_ACTIONS::viaDisplayMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::GraphicDisplayMode,  PCB_ACTIONS::graphicDisplayMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ModuleEdgeOutlines,  PCB_ACTIONS::moduleEdgeOutlines.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ZoneDisplayMode,     PCB_ACTIONS::zoneDisplayEnable.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ZoneDisplayMode,     PCB_ACTIONS::zoneDisplayDisable.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ZoneDisplayMode,     PCB_ACTIONS::zoneDisplayOutlines.MakeEvent() );
-    Go( &PCBNEW_CONTROL::HighContrastMode,    ACTIONS::highContrastMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::HighContrastInc,     ACTIONS::highContrastInc.MakeEvent() );
-    Go( &PCBNEW_CONTROL::HighContrastDec,     ACTIONS::highContrastDec.MakeEvent() );
+    Go( &PCBNEW_CONTROL::TrackDisplayMode,     PCB_ACTIONS::trackDisplayMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ToggleRatsnest,       PCB_ACTIONS::showRatsnest.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ToggleRatsnest,       PCB_ACTIONS::ratsnestLineMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::PadDisplayMode,       PCB_ACTIONS::padDisplayMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ViaDisplayMode,       PCB_ACTIONS::viaDisplayMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::GraphicDisplayMode,   PCB_ACTIONS::graphicDisplayMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ModuleEdgeOutlines,   PCB_ACTIONS::moduleEdgeOutlines.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayEnable.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayDisable.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayOutlines.MakeEvent() );
+    Go( &PCBNEW_CONTROL::HighContrastMode,     ACTIONS::highContrastMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::HighContrastInc,      ACTIONS::highContrastInc.MakeEvent() );
+    Go( &PCBNEW_CONTROL::HighContrastDec,      ACTIONS::highContrastDec.MakeEvent() );
 
     // Layer control
-    Go( &PCBNEW_CONTROL::LayerSwitch,         PCB_ACTIONS::layerTop.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,         PCB_ACTIONS::layerInner1.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,         PCB_ACTIONS::layerInner2.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,         PCB_ACTIONS::layerInner3.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,         PCB_ACTIONS::layerInner4.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,         PCB_ACTIONS::layerInner5.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,         PCB_ACTIONS::layerInner6.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,         PCB_ACTIONS::layerBottom.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerNext,           PCB_ACTIONS::layerNext.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerPrev,           PCB_ACTIONS::layerPrev.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerToggle,         PCB_ACTIONS::layerToggle.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerAlphaInc,       PCB_ACTIONS::layerAlphaInc.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerAlphaDec,       PCB_ACTIONS::layerAlphaDec.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerTop.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner1.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner2.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner3.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner4.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner5.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner6.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerBottom.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerNext,            PCB_ACTIONS::layerNext.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerPrev,            PCB_ACTIONS::layerPrev.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerToggle,          PCB_ACTIONS::layerToggle.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerAlphaInc,        PCB_ACTIONS::layerAlphaInc.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerAlphaDec,        PCB_ACTIONS::layerAlphaDec.MakeEvent() );
 
     // Grid control
-    Go( &PCBNEW_CONTROL::GridFast1,           ACTIONS::gridFast1.MakeEvent() );
-    Go( &PCBNEW_CONTROL::GridFast2,           ACTIONS::gridFast2.MakeEvent() );
-    Go( &PCBNEW_CONTROL::GridSetOrigin,       ACTIONS::gridSetOrigin.MakeEvent() );
-    Go( &PCBNEW_CONTROL::GridResetOrigin,     ACTIONS::gridResetOrigin.MakeEvent() );
+    Go( &PCBNEW_CONTROL::GridFast1,            ACTIONS::gridFast1.MakeEvent() );
+    Go( &PCBNEW_CONTROL::GridFast2,            ACTIONS::gridFast2.MakeEvent() );
+    Go( &PCBNEW_CONTROL::GridSetOrigin,        ACTIONS::gridSetOrigin.MakeEvent() );
+    Go( &PCBNEW_CONTROL::GridResetOrigin,      ACTIONS::gridResetOrigin.MakeEvent() );
 
-    Go( &PCBNEW_CONTROL::Undo,                ACTIONS::undo.MakeEvent() );
-    Go( &PCBNEW_CONTROL::Redo,                ACTIONS::redo.MakeEvent() );
+    Go( &PCBNEW_CONTROL::Undo,                 ACTIONS::undo.MakeEvent() );
+    Go( &PCBNEW_CONTROL::Redo,                 ACTIONS::redo.MakeEvent() );
 
     // Miscellaneous
-    Go( &PCBNEW_CONTROL::DeleteItemCursor,    PCB_ACTIONS::deleteTool.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ShowHelp,            PCB_ACTIONS::showHelp.MakeEvent() );
-    Go( &PCBNEW_CONTROL::Show3DViewer,        ACTIONS::show3DViewer.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ToBeDone,            PCB_ACTIONS::toBeDone.MakeEvent() );
+    Go( &PCBNEW_CONTROL::DeleteItemCursor,     PCB_ACTIONS::deleteTool.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ShowHelp,             PCB_ACTIONS::showHelp.MakeEvent() );
+    Go( &PCBNEW_CONTROL::Show3DViewer,         ACTIONS::show3DViewer.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ShowFootprintBrowser, ACTIONS::showFootprintBrowser.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ToBeDone,             PCB_ACTIONS::toBeDone.MakeEvent() );
 
     // Append control
-    Go( &PCBNEW_CONTROL::AppendBoardFromFile, PCB_ACTIONS::appendBoard.MakeEvent() );
+    Go( &PCBNEW_CONTROL::AppendBoardFromFile,  PCB_ACTIONS::appendBoard.MakeEvent() );
 
-    Go( &PCBNEW_CONTROL::Paste,               ACTIONS::paste.MakeEvent() );
+    Go( &PCBNEW_CONTROL::Paste,                ACTIONS::paste.MakeEvent() );
 
-    Go( &PCBNEW_CONTROL::UpdateMessagePanel,  EVENTS::SelectedEvent );
-    Go( &PCBNEW_CONTROL::UpdateMessagePanel,  EVENTS::UnselectedEvent );
-    Go( &PCBNEW_CONTROL::UpdateMessagePanel,  EVENTS::ClearedEvent );
+    Go( &PCBNEW_CONTROL::UpdateMessagePanel,   EVENTS::SelectedEvent );
+    Go( &PCBNEW_CONTROL::UpdateMessagePanel,   EVENTS::UnselectedEvent );
+    Go( &PCBNEW_CONTROL::UpdateMessagePanel,   EVENTS::ClearedEvent );
 }
 
 

@@ -49,6 +49,9 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
+    int NewFootprint( const TOOL_EVENT& aEvent );
+    int CreateFootprint( const TOOL_EVENT& aEvent );
+    
     int Save( const TOOL_EVENT& aEvent );
     int SaveAs( const TOOL_EVENT& aEvent );
     int Revert( const TOOL_EVENT& aEvent );

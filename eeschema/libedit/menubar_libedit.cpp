@@ -147,7 +147,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
         return IsSearchTreeShown();
     };
 
-    viewMenu->AddItem( EE_ACTIONS::showLibraryBrowser,     EE_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::showSymbolBrowser,         EE_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
     viewMenu->AddItem( ACTIONS::zoomInCenter,              EE_CONDITIONS::ShowAlways );

@@ -324,10 +324,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                             _( "Show Microwa&ve Toolbar" ), HELP_SHOW_HIDE_MICROWAVE_TOOLS,
                              mw_toolbar_xpm,                microwaveToolbarShownCondition );
 
-    viewMenu->AddItem( ID_OPEN_MODULE_VIEWER,
-                       _( "Footprint &Library Browser" ), _( "Browse footprint libraries" ),
-                       modview_icon_xpm,                    SELECTION_CONDITIONS::ShowAlways );
-
+    viewMenu->AddItem( ACTIONS::showFootprintBrowser,       SELECTION_CONDITIONS::ShowAlways );
     viewMenu->AddItem( ACTIONS::show3DViewer,               SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();

@@ -188,7 +188,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
         return GetShowAllPins();
     };
 
-    viewMenu->AddItem( EE_ACTIONS::showLibraryBrowser,    EE_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::showSymbolBrowser,        EE_CONDITIONS::ShowAlways );
     viewMenu->AddItem( EE_ACTIONS::navigateHierarchy,     EE_CONDITIONS::ShowAlways );
     viewMenu->AddItem( EE_ACTIONS::leaveSheet,            belowRootSheetCondition );
 

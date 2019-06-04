@@ -49,16 +49,11 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     wxString msg;
 
     // Set up toolbar
-    m_mainToolBar->AddTool( ID_MODEDIT_NEW_MODULE, wxEmptyString,
-                            KiScaledBitmap( new_footprint_xpm, this ),
-                            _( "New footprint" ) );
-
+    m_mainToolBar->Add( PCB_ACTIONS::newFootprint );
 #ifdef KICAD_SCRIPTING
-    m_mainToolBar->AddTool( ID_MODEDIT_NEW_MODULE_FROM_WIZARD, wxEmptyString,
-                            KiScaledBitmap( module_wizard_xpm, this ),
-                            _( "New footprint using footprint wizard" ) );
+    m_mainToolBar->Add( PCB_ACTIONS::createFootprint );
 #endif
-
+    
     if( IsCurrentFPFromBoard() )
         m_mainToolBar->Add( PCB_ACTIONS::saveToBoard );
     else

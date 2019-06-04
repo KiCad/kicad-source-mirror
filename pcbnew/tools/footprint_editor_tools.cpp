@@ -55,6 +55,16 @@ using namespace std::placeholders;
 #include <wx/defs.h>
 
 
+TOOL_ACTION PCB_ACTIONS::newFootprint( "pcbnew.ModuleEditor.newFootprint",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_NEW ),
+        _( "New Footprint..." ), _( "Create a new, empty footprint" ),
+        new_footprint_xpm );
+
+TOOL_ACTION PCB_ACTIONS::createFootprint( "pcbnew.ModuleEditor.createFootprint",
+        AS_GLOBAL, 0,
+        _( "Create Footprint..." ), _( "Create a new footprint using the Footprint Wizard" ),
+        module_wizard_xpm );
+
 TOOL_ACTION PCB_ACTIONS::saveToBoard( "pcbnew.ModuleEditor.saveToBoard",
         AS_GLOBAL, 0,
         _( "Save to Board" ), _( "Update footprint on board" ),
@@ -117,6 +127,22 @@ MODULE_EDITOR_TOOLS::~MODULE_EDITOR_TOOLS()
 
 void MODULE_EDITOR_TOOLS::Reset( RESET_REASON aReason )
 {
+}
+
+
+int MODULE_EDITOR_TOOLS::NewFootprint( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent evt( wxEVT_NULL, ID_MODEDIT_NEW_MODULE );
+    getEditFrame<FOOTPRINT_EDIT_FRAME>()->Process_Special_Functions( evt );
+    return 0;
+}
+
+
+int MODULE_EDITOR_TOOLS::CreateFootprint( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent evt( wxEVT_NULL, ID_MODEDIT_NEW_MODULE_FROM_WIZARD );
+    getEditFrame<FOOTPRINT_EDIT_FRAME>()->Process_Special_Functions( evt );
+    return 0;
 }
 
 
@@ -623,6 +649,8 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
 
 void MODULE_EDITOR_TOOLS::setTransitions()
 {
+    Go( &MODULE_EDITOR_TOOLS::NewFootprint,         PCB_ACTIONS::newFootprint.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::CreateFootprint,      PCB_ACTIONS::createFootprint.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::Save,                 ACTIONS::save.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::Save,                 PCB_ACTIONS::saveToBoard.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::Save,                 PCB_ACTIONS::saveToLibrary.MakeEvent() );

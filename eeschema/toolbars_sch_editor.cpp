@@ -85,7 +85,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->Add( EE_ACTIONS::showSymbolEditor );
-    m_mainToolBar->Add( EE_ACTIONS::showLibraryBrowser );
+    m_mainToolBar->Add( ACTIONS::showSymbolBrowser );
 
     // modedit is with libedit in a "library section" because the user must have footprints before
     // they can be assigned.

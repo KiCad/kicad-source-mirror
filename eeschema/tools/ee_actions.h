@@ -161,9 +161,7 @@ public:
     // Suite operations
     static TOOL_ACTION showSymbolEditor;
     static TOOL_ACTION editWithLibEdit;
-    static TOOL_ACTION showLibraryBrowser;
     static TOOL_ACTION showPcbNew;
-    static TOOL_ACTION updatePcbFromSchematic;
     static TOOL_ACTION generateBOM;
     static TOOL_ACTION runSimulation;
 
