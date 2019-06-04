@@ -114,8 +114,7 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
 
 EDA_3D_VIEWER* PCB_BASE_FRAME::Get3DViewerFrame()
 {
-    // Even though less safe, this has to be a static_cast so the qa tools will link.
-    return static_cast<EDA_3D_VIEWER*>( FindWindow( VIEWER3D_FRAMENAME ) );
+    return dynamic_cast<EDA_3D_VIEWER*>( FindWindow( VIEWER3D_FRAMENAME ) );
 }
 
 
