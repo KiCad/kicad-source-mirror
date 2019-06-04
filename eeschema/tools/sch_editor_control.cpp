@@ -997,6 +997,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                 sheet->SetName( wxString::Format( wxT( "sheet%8.8lX" ), (unsigned long)uid ) );
                 sheet->SetTimeStamp( uid );
+                sheet->SetParent( g_CurrentSheet->Last() );
+                sheet->SetScreen( nullptr );
                 sheetsPasted = true;
             }
         }
