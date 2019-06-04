@@ -114,26 +114,21 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
 
 EDA_3D_VIEWER* PCB_BASE_FRAME::Get3DViewerFrame()
 {
-    // return the 3D viewer frame, when exists, or NULL
-    return static_cast<EDA_3D_VIEWER*>
-        ( wxWindow::FindWindowByName( VIEWER3D_FRAMENAME ) );
+    return dynamic_cast<EDA_3D_VIEWER*>( FindWindow( VIEWER3D_FRAMENAME ) );
 }
 
 
 void PCB_BASE_FRAME::Update3DView( bool aForceReload, const wxString* aTitle )
 {
-    // Update the 3D view only if the viewer is opened by this frame
     EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
-    // if I am not the owner, do not use the current viewer instance
-    // JEY TODO: need to keep looking for one that is ours....
-    if( !draw3DFrame || draw3DFrame->Parent() != this )
-        return;
+    if( draw3DFrame )
+    {
+        if( aTitle )
+            draw3DFrame->SetTitle( *aTitle );
 
-    if( aTitle )
-        draw3DFrame->SetTitle( *aTitle );
-
-    draw3DFrame->NewDisplay( aForceReload );
+        draw3DFrame->NewDisplay( aForceReload );
+    }
 }
 
 
@@ -394,10 +389,6 @@ void PCB_BASE_FRAME::ShowChangedLanguage()
 EDA_3D_VIEWER* PCB_BASE_FRAME::CreateAndShow3D_Frame()
 {
     EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
-
-    // if I am not the owner, do not use the current viewer instance
-    if( draw3DFrame && draw3DFrame->Parent() != this )
-        draw3DFrame = nullptr;
 
     if( !draw3DFrame )
         draw3DFrame = new EDA_3D_VIEWER( &Kiway(), this, _( "3D Viewer" ) );
@@ -772,13 +763,11 @@ void PCB_BASE_FRAME::CommonSettingsChanged()
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
+    // The 3D viewer isn't in the Kiway, so send its update manually
     EDA_3D_VIEWER* viewer = Get3DViewerFrame();
 
     if( viewer )
-    {
-        // The 3D viewer isn't in the Kiway, so send its update manually
         viewer->CommonSettingsChanged();
-    }
 }
 
 

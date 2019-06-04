@@ -101,7 +101,7 @@ public:
     ~PCB_BASE_FRAME();
 
     /**
-     * @return a reference to the 3D viewer frame, when exists, or NULL
+     * @return a reference to the child 3D viewer frame, when exists, or NULL
      */
     EDA_3D_VIEWER* Get3DViewerFrame();
 
