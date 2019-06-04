@@ -151,6 +151,9 @@ int PL_EDITOR_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     PL_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PL_SELECTION_TOOL>();
     SELECTION&         selection = selTool->GetSelection();
 
+    // The Properties frame will be updated. Avoid flicker during update:
+    m_frame->GetPropertiesFrame()->Freeze();
+
     if( selection.GetSize() == 1 )
     {
         EDA_ITEM* item = (EDA_ITEM*) selection.Front();
@@ -169,6 +172,9 @@ int PL_EDITOR_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     }
 
     m_frame->GetPropertiesFrame()->CopyPrmsFromGeneralToPanel();
+
+    // The Properties frame is updated. Reenable it:
+    m_frame->GetPropertiesFrame()->Thaw();
 
     return 0;
 }

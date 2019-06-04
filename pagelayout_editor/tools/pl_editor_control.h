@@ -62,6 +62,10 @@ public:
 
     int ToggleBackgroundColor( const TOOL_EVENT& aEvent );
 
+    /**
+     * Update the message panel *and* the Properties frame, after change
+     * (selection, move, edit ...) of a wks item
+     */
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
 
 private:
