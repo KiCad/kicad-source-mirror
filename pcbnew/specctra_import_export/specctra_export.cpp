@@ -82,32 +82,6 @@ using namespace DSN;
 static const double safetyMargin = 0.1;
 
 
-// see pcb_edit_frame.h
-void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
-{
-    wxString    fullFileName;
-    wxString    dsn_ext = SpecctraDsnFileExtension;
-    wxString    mask    = SpecctraDsnFileWildcard();
-    wxFileName  fn( GetBoard()->GetFileName() );
-
-    fn.SetExt( dsn_ext );
-
-    fullFileName = EDA_FILE_SELECTOR( _( "Specctra DSN File" ),
-                                      fn.GetPath(),
-                                      fn.GetFullName(),
-                                      dsn_ext,
-                                      mask,
-                                      this,
-                                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT,
-                                      false );
-
-    if( fullFileName == wxEmptyString )
-        return;
-
-    ExportSpecctraFile( fullFileName );
-}
-
-
 bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
 {
     SPECCTRA_DB     db;

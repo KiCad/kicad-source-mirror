@@ -1,12 +1,7 @@
-
-/**
- * @file pcbnew/dialogs/dialog_netlist.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,6 +145,7 @@ void DIALOG_NETLIST::OnOpenNetlistClick( wxCommandEvent& event )
 
 void DIALOG_NETLIST::OnUpdatePCB( wxCommandEvent& event )
 {
+    BOARD*     pcb = m_parent->GetBoard();
     wxFileName fn = m_NetlistFilenameCtrl->GetValue();
 
     if( !fn.IsOk() )
@@ -165,8 +161,8 @@ void DIALOG_NETLIST::OnUpdatePCB( wxCommandEvent& event )
     }
 
     // Give the user a chance to bail out when making changes from a netlist.
-    if( m_parent->GetBoard()->IsEmpty()
-        || IsOK( this, _( "The changes made cannot be undone.  Are you sure you want to update the PCB?" ) ) )
+    if( pcb->IsEmpty() || IsOK( this, _( "The changes made cannot be undone.  "
+                                         "Are you sure you want to update the PCB?" ) ) )
     {
         m_MessageWindow->SetLabel( _( "Changes Applied To PCB" ) );
         loadNetlist( false );

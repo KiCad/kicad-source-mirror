@@ -245,7 +245,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::save );
 
     KiScaledSeparator( m_mainToolBar, this );
-    ADD_TOOL( ID_BOARD_SETUP_DIALOG, options_board_xpm, _( "Board setup" ) );
+    m_mainToolBar->Add( PCB_ACTIONS::boardSetup );
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->Add( ACTIONS::pageSettings );

@@ -1,10 +1,7 @@
-/**
- * @file gen_modules_placefile.cpp
- */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,17 +36,15 @@
 #include <build_version.h>
 #include <macros.h>
 #include <reporter.h>
-
+#include <tools/pcb_editor_control.h>
 #include <class_board.h>
 #include <class_module.h>
-
 #include <pcbnew.h>
 #include <wildcards_and_files_ext.h>
 #include <kiface_i.h>
 #include <wx_html_report_panel.h>
-
-
 #include <dialog_gen_footprint_position_file_base.h>
+
 /*
  * The ASCII format of the kicad place file is:
  *      ### Module positions - created on 04/12/2012 15:24:24 ###
@@ -410,10 +405,11 @@ static bool HasNonSMDPins( MODULE* aModule )
     return false;
 }
 
-void PCB_EDIT_FRAME::GenFootprintsPositionFile( wxCommandEvent& event )
+int PCB_EDITOR_CONTROL::GeneratePosFile( const TOOL_EVENT& aEvent )
 {
-    DIALOG_GEN_FOOTPRINT_POSITION dlg( this );
+    DIALOG_GEN_FOOTPRINT_POSITION dlg( frame() );
     dlg.ShowModal();
+    return 0;
 }
 
 /*
@@ -424,10 +420,8 @@ void PCB_EDIT_FRAME::GenFootprintsPositionFile( wxCommandEvent& event )
  * if aFullFileName is empty, the file is not created, only the
  * count of footprints to place is returned
  */
-int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
-                                                 bool aUnitsMM,
-                                                 bool aForceSmdItems, int aSide,
-                                                 bool aFormatCSV )
+int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName, bool aUnitsMM,
+                                                 bool aForceSmdItems, int aSide, bool aFormatCSV )
 {
     // Minimal text lengths:
     int lenRefText = 8;
@@ -476,8 +470,8 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
                 }
                 else
                 {
-                    DBG(printf( "skipping %s because its attribute is not CMS and it has non SMD pins\n",
-                                TO_UTF8(footprint->GetReference()) ) );
+                    DBG( printf( "skipping %s because it is not marked CMS and has non-SMD pins\n",
+                                 TO_UTF8( footprint->GetReference() ) ) );
                     continue;
                 }
             }
@@ -503,6 +497,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
         return footprintCount;
 
     FILE * file = wxFopen( aFullFileName, wxT( "wt" ) );
+    
     if( file == NULL )
         return -1;
 

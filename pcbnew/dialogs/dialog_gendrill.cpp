@@ -1,7 +1,3 @@
-/**
- * @file dialog_gendrill.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -35,15 +31,13 @@
 #include <gendrill_Excellon_writer.h>
 #include <gendrill_gerber_writer.h>
 #include <bitmaps.h>
-
+#include <tools/pcb_editor_control.h>
 #include <class_board.h>
 #include <class_track.h>
 #include <class_module.h>
-
 #include <dialog_gendrill.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
-
 #include <wx/stdpaths.h>
 
 
@@ -67,11 +61,11 @@ static DRILL_PRECISION precisionListForMetric( 3, 3 );
 
 /* This function displays the dialog frame for drill tools
  */
-void PCB_EDIT_FRAME::InstallDrillFrame( wxCommandEvent& event )
+int PCB_EDITOR_CONTROL::GenerateDrillFiles( const TOOL_EVENT& aEvent )
 {
-    DIALOG_GENDRILL dlg( this, this );
-
+    DIALOG_GENDRILL dlg( frame(), frame() );
     dlg.ShowModal();
+    return 0;
 }
 
 

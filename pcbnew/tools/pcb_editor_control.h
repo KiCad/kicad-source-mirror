@@ -58,6 +58,14 @@ public:
     int SaveCopyAs( const TOOL_EVENT& aEvent );
     int PageSettings( const TOOL_EVENT& aEvent );
     int Plot( const TOOL_EVENT& aEvent );
+    
+    int BoardSetup( const TOOL_EVENT& aEvent );
+    int ImportNetlist( const TOOL_EVENT& aEvent );
+    int ImportSpecctraSession( const TOOL_EVENT& aEvent );
+    int ExportSpecctraDSN( const TOOL_EVENT& aEvent );
+    int GenerateDrillFiles( const TOOL_EVENT& aEvent );
+    int GeneratePosFile( const TOOL_EVENT& aEvent );
+    int GenerateFabFiles( const TOOL_EVENT& aEvent );
 
     int UpdatePCBFromSchematic( const TOOL_EVENT& aEvent );
     int TogglePythonConsole( const TOOL_EVENT& aEvent );

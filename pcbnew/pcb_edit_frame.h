@@ -288,7 +288,7 @@ public:
      * Function ToPlotter
      * Open a dialog frame to create plot and drill files relative to the current board.
      */
-    void ToPlotter( wxCommandEvent& event );
+    void ToPlotter( int aID );
 
     /**
      * Function SVG_Print
@@ -561,14 +561,6 @@ public:
     void PrepareLayerIndicator();
 
     void OnSelectOptionToolbar( wxCommandEvent& event );
-    void OnFlipPcbView( wxCommandEvent& event );
-
-    /**
-     * Function GenFootprintsPositionFile
-     * Calls DoGenFootprintsPositionFile to create a footprint position file
-     * See DoGenFootprintsPositionFile for options and file format
-     */
-    void GenFootprintsPositionFile( wxCommandEvent& event );
 
     /**
      * Function DoGenFootprintsPositionFile
@@ -604,7 +596,6 @@ public:
      */
     bool DoGenFootprintsReport( const wxString& aFullFilename, bool aUnitsMM );
 
-    void InstallDrillFrame( wxCommandEvent& event );
     void GenD356File( wxCommandEvent& event );
 
     void OnFileHistory( wxCommandEvent& event );
@@ -802,13 +793,6 @@ public:
     void OnExportSTEP( wxCommandEvent& event );
 
     /**
-     * Function ExporttoSPECCTRA
-     * Ask for a filename and call ExportSpecctraFile to export the current BOARD
-     * to a specctra dsn file.
-     */
-    void ExportToSpecctra( wxCommandEvent& event );
-
-    /**
      * Function ExportSpecctraFile
      * will export the current BOARD to a specctra dsn file.
      * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
@@ -824,28 +808,7 @@ public:
      * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
      * specification.
      */
-    void ImportSpecctraSession( wxCommandEvent& event );
-
-    /**
-     * Function ImportSpecctraSession
-     * will import a specctra *.ses file and use it to relocate MODULEs and
-     * to replace all vias and tracks in an existing and loaded BOARD.
-     * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
-     * specification.
-     */
     bool ImportSpecctraSession( const wxString& aFullFilename );
-
-    /**
-     * Function ImportSpecctraDesign
-     * will import a specctra *.dsn file and use it to replace an entire BOARD.
-     * The new board will not have any graphics, only components, tracks and
-     * vias.
-     * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
-     * specification.
-     */
-    void ImportSpecctraDesign( wxCommandEvent& event );
-
-    void Swap_Layers( wxCommandEvent& event );
 
     // Footprint editing (see also PCB_BASE_FRAME)
     void InstallFootprintPropertiesDialog( MODULE* Module );

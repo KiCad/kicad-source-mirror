@@ -44,51 +44,9 @@
 #include <class_drawsegment.h>
 #include <connectivity/connectivity_data.h>
 #include <view/view.h>
-
 #include "specctra.h"
 
-
 using namespace DSN;
-
-void PCB_EDIT_FRAME::ImportSpecctraDesign( wxCommandEvent& event )
-{
-    /* @todo write this someday
-
-    if( !Clear_Pcb( true ) )
-        return;
-    */
-}
-
-
-void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
-{
-    wxString fullFileName = GetBoard()->GetFileName();
-    wxString path;
-    wxString name;
-    wxString ext;
-
-    wxString sessionExt( wxT( ".ses" ) );
-    wxString mask = wxT( "*" ) + sessionExt;
-
-    wxFileName::SplitPath( fullFileName, &path, &name, &ext );
-    name += sessionExt;
-
-    fullFileName = EDA_FILE_SELECTOR( _( "Merge Specctra Session file:" ),
-                                      path,
-                                      name,
-                                      sessionExt,
-                                      mask,
-                                      this,
-                                      wxFD_OPEN,
-                                      false );
-
-    if( fullFileName == wxEmptyString )
-    {
-        return;
-    }
-
-    ImportSpecctraSession( fullFileName );
-}
 
 
 bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
@@ -108,10 +66,7 @@ bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
     }
     catch( const IO_ERROR& ioe )
     {
-        wxString msg = _(
-                "Board may be corrupted, do not save it.\n"
-                "Fix problem and try again"
-                );
+        wxString msg = _( "Board may be corrupted, do not save it.\n Fix problem and try again" );
 
         wxString extra = ioe.What();
 

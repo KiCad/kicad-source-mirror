@@ -253,6 +253,7 @@ public:
     static TOOL_ACTION zoneDuplicate;
 
     // Global edit tool
+    static TOOL_ACTION boardSetup;
     static TOOL_ACTION editTracksAndVias;
     static TOOL_ACTION editTextAndGraphics;
     static TOOL_ACTION globalDeletions;
@@ -263,6 +264,18 @@ public:
     static TOOL_ACTION changeFootprints;
     static TOOL_ACTION swapLayers;
 
+    static TOOL_ACTION importNetlist;
+
+    static TOOL_ACTION importSpecctraSession;
+    static TOOL_ACTION exportSpecctraDSN;
+    
+    static TOOL_ACTION generateGerbers;
+    static TOOL_ACTION generateDrillFiles;
+    static TOOL_ACTION generatePosFile;
+    static TOOL_ACTION generateReportFile;
+    static TOOL_ACTION generateD356File;
+    static TOOL_ACTION generateBOM;
+    
     static TOOL_ACTION listNets;
     static TOOL_ACTION runDRC;
 

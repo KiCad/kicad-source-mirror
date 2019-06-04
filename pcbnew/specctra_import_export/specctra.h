@@ -3935,12 +3935,10 @@ public:
 
     /**
      * Function FromBOARD
-     * adds the entire BOARD to the PCB but does not write it out.  Note that
-     * the BOARD given to this function must have all the MODULEs on the component
-     * side of the BOARD.
+     * adds the entire BOARD to the PCB but does not write it out.  Note that the BOARD given 
+     * to this function must have all the MODULEs on the component side of the BOARD.
      *
-     * See void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
-     * for how this can be done before calling this function.
+     * See PCB_EDIT_FRAME::ExportToSpecctra() for an example before calling this function.
      *
      * @param aBoard The BOARD to convert to a PCB.
      */
@@ -3948,9 +3946,9 @@ public:
 
     /**
      * Function FromSESSION
-     * adds the entire SESSION info to a BOARD but does not write it out.  The
-     * the BOARD given to this function will have all its tracks and via's replaced,
-     * and all its components are subject to being moved.
+     * adds the entire SESSION info to a BOARD but does not write it out.  The BOARD given to 
+     * this function will have all its tracks and via's replaced, and all its components are 
+     * subject to being moved.
      *
      * @param aBoard The BOARD to merge the SESSION information into.
      */

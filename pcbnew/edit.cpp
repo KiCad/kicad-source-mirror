@@ -111,10 +111,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
-    case ID_GET_NETLIST:
-        InstallNetlistFrame();
-        break;
-
     case ID_TOOLBARH_PCB_SELECT_LAYER:
         SetActiveLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
 

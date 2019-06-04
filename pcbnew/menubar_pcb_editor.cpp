@@ -76,9 +76,9 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
         Kiface().GetFileHistory().UseMenu( openRecentMenu );
         Kiface().GetFileHistory().AddFilesToMenu( openRecentMenu );
 
-        fileMenu->AddItem( ACTIONS::doNew,         SELECTION_CONDITIONS::ShowAlways );
-        fileMenu->AddItem( ACTIONS::open,          SELECTION_CONDITIONS::ShowAlways );
-        fileMenu->AddMenu( openRecentMenu,         SELECTION_CONDITIONS::ShowAlways );
+        fileMenu->AddItem( ACTIONS::doNew,           SELECTION_CONDITIONS::ShowAlways );
+        fileMenu->AddItem( ACTIONS::open,            SELECTION_CONDITIONS::ShowAlways );
+        fileMenu->AddMenu( openRecentMenu,           SELECTION_CONDITIONS::ShowAlways );
 
         fileMenu->AddItem( PCB_ACTIONS::appendBoard, SELECTION_CONDITIONS::ShowAlways );
         fileMenu->AddItem( ID_IMPORT_NON_KICAD_BOARD,
@@ -89,22 +89,22 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
         fileMenu->AddSeparator();
     }
 
-    fileMenu->AddItem( ACTIONS::save,              modifiedDocumentCondition );
+    fileMenu->AddItem( ACTIONS::save,                modifiedDocumentCondition );
 
     // Save as menu:
     // under a project mgr we do not want to modify the board filename
     // to keep consistency with the project mgr which expects files names same as prj name
     // for main files
     if( Kiface().IsSingle() )
-        fileMenu->AddItem( ACTIONS::saveAs,         SELECTION_CONDITIONS::ShowAlways );
+        fileMenu->AddItem( ACTIONS::saveAs,          SELECTION_CONDITIONS::ShowAlways );
     else
-        fileMenu->AddItem( ACTIONS::saveCopyAs,     SELECTION_CONDITIONS::ShowAlways );
+        fileMenu->AddItem( ACTIONS::saveCopyAs,      SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
     fileMenu->AddItem( ID_MENU_RECOVER_BOARD_AUTOSAVE,
                        _( "Resc&ue" ),
                        _( "Clear board and get last rescue file automatically saved by Pcbnew" ),
-                       rescue_xpm,                  SELECTION_CONDITIONS::ShowAlways );
+                       rescue_xpm,                   SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddItem( ID_MENU_READ_BOARD_BACKUP_FILE,
                        _( "Revert to Last Backup" ),
@@ -117,10 +117,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuImport->SetTitle( _( "Import" ) );
     submenuImport->SetIcon( import_xpm );
 
-    submenuImport->Add( _( "Netlist..." ), _( "Read netlist and update board connectivity" ),
-                        ID_GET_NETLIST, netlist_xpm );
-    submenuImport->Add( _( "Specctra Session..." ), _( "Import routed Specctra session (*.ses) file" ),
-                        ID_GEN_IMPORT_SPECCTRA_SESSION, import_xpm );
+    submenuImport->Add( PCB_ACTIONS::importNetlist );
+    submenuImport->Add( PCB_ACTIONS::importSpecctraSession );
     submenuImport->Add( _( "Graphics..." ), _( "Import 2D drawing file" ),
                         ID_GEN_IMPORT_GRAPHICS_FILE, import_vector_xpm );
 
@@ -133,8 +131,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->SetTitle( _( "Export" ) );
     submenuExport->SetIcon( export_xpm );
 
-    submenuExport->Add( _( "Specctra DSN..." ), _( "Export Specctra DSN routing info" ),
-                        ID_GEN_EXPORT_SPECCTRA, export_dsn_xpm );
+    submenuExport->Add( PCB_ACTIONS::exportSpecctraDSN );
     submenuExport->Add( _( "GenCAD..." ), _( "Export GenCAD board representation" ),
                         ID_GEN_EXPORT_FILE_GENCADFORMAT, export_xpm );
     submenuExport->Add( _( "VRML..." ), _( "Export VRML 3D board representation" ),
@@ -159,37 +156,22 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuFabOutputs->SetTitle( _( "Fabrication Outputs" ) );
     submenuFabOutputs->SetIcon( fabrication_xpm );
 
-    submenuFabOutputs->Add( _( "&Gerbers (.gbr)..." ),
-                            _( "Generate Gerbers for fabrication" ),
-                            ID_GEN_PLOT_GERBER, post_compo_xpm );
-    submenuFabOutputs->Add( _( "&Drill Files (.drl)..." ),
-                            _( "Generate Excellon drill file(s)" ),
-                            ID_PCB_GEN_DRILL_FILE, post_drill_xpm );
-    submenuFabOutputs->Add( _( "Footprint &Positions (.pos)..." ),
-                            _( "Generate footprint position file for pick and place" ),
-                            ID_PCB_GEN_POS_MODULES_FILE, post_compo_xpm );
-    submenuFabOutputs->Add( _( "&Footprint Report (.rpt)..." ),
-                            _( "Create report of all footprints from current board" ),
-                            ID_GEN_EXPORT_FILE_MODULE_REPORT, tools_xpm );
-    submenuFabOutputs->Add( _( "IPC-D-356 Netlist File..." ),
-                            _( "Generate IPC-D-356 netlist file" ),
-                            ID_PCB_GEN_D356_FILE, netlist_xpm );
-    submenuFabOutputs->Add( _( "&BOM..." ),
-                            _( "Create bill of materials from current schematic" ),
-                            ID_PCB_GEN_BOM_FILE_FROM_BOARD, bom_xpm );
+    submenuFabOutputs->Add( PCB_ACTIONS::generateGerbers );
+    submenuFabOutputs->Add( PCB_ACTIONS::generateDrillFiles );
+    submenuFabOutputs->Add( PCB_ACTIONS::generatePosFile );
+    submenuFabOutputs->Add( PCB_ACTIONS::generateReportFile );
+    submenuFabOutputs->Add( PCB_ACTIONS::generateD356File );
+    submenuFabOutputs->Add( PCB_ACTIONS::generateBOM );
 
-    fileMenu->AddMenu( submenuFabOutputs,          SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddMenu( submenuFabOutputs,            SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-    fileMenu->AddItem( ID_BOARD_SETUP_DIALOG,
-                       _( "&Board Setup..." ),
-                       _( "Edit board setup including layers, design rules and various defaults" ),
-                       options_board_xpm,          SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( PCB_ACTIONS::boardSetup,      SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-    fileMenu->AddItem( ACTIONS::pageSettings,      SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( ACTIONS::print,             SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( ACTIONS::plot,              SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::pageSettings,        SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::print,               SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( ACTIONS::plot,                SELECTION_CONDITIONS::ShowAlways );
 
     // Archive submenu
     ACTION_MENU* submenuArchive = new ACTION_MENU();
@@ -208,7 +190,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                          ID_MENU_CREATE_LIBRARY_AND_ARCHIVE_MODULES, library_archive_as_xpm );
 
     fileMenu->AddSeparator();
-    fileMenu->AddMenu( submenuArchive,             SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddMenu( submenuArchive,               SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
     // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
@@ -230,33 +212,33 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
         return GetToolId() == ID_NO_TOOL_SELECTED;
     };
 
-    editMenu->AddItem( ACTIONS::undo,                     enableUndoCondition );
-    editMenu->AddItem( ACTIONS::redo,                     enableRedoCondition );
+    editMenu->AddItem( ACTIONS::undo,                       enableUndoCondition );
+    editMenu->AddItem( ACTIONS::redo,                       enableRedoCondition );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( ACTIONS::cut,                      SELECTION_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::copy,                     SELECTION_CONDITIONS::NotEmpty );
-    editMenu->AddItem( ACTIONS::paste,                    noActiveToolCondition );
+    editMenu->AddItem( ACTIONS::cut,                        SELECTION_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::copy,                       SELECTION_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::paste,                      noActiveToolCondition );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( PCB_ACTIONS::deleteTool,           SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::deleteTool,             SELECTION_CONDITIONS::ShowAlways );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( ACTIONS::find,                     SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( ACTIONS::find,                       SELECTION_CONDITIONS::ShowAlways );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( PCB_ACTIONS::editTracksAndVias,    SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( PCB_ACTIONS::editTextAndGraphics,  SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( PCB_ACTIONS::changeFootprints,     SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( PCB_ACTIONS::swapLayers,           SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::editTracksAndVias,      SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::editTextAndGraphics,    SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::changeFootprints,       SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::swapLayers,             SELECTION_CONDITIONS::ShowAlways );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( PCB_ACTIONS::zoneFillAll,          SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( PCB_ACTIONS::zoneUnfillAll,        SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::zoneFillAll,            SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::zoneUnfillAll,          SELECTION_CONDITIONS::ShowAlways );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( PCB_ACTIONS::globalDeletions,      SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( PCB_ACTIONS::cleanupTracksAndVias, SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::globalDeletions,        SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::cleanupTracksAndVias,   SELECTION_CONDITIONS::ShowAlways );
 
     editMenu->Resolve();
 
@@ -343,15 +325,15 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     CONDITIONAL_MENU* unitsSubMenu = new CONDITIONAL_MENU( false, selTool );
     unitsSubMenu->SetTitle( _( "&Units" ) );
     unitsSubMenu->SetIcon( unit_mm_xpm );
-    unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,    imperialUnitsCondition );
-    unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,      metricUnitsCondition );
+    unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,     imperialUnitsCondition );
+    unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,       metricUnitsCondition );
     viewMenu->AddMenu( unitsSubMenu );
 
-    viewMenu->AddCheckItem( ACTIONS::toggleCursorStyle,    fullCrosshairCondition );
+    viewMenu->AddCheckItem( ACTIONS::toggleCursorStyle,     fullCrosshairCondition );
 
     viewMenu->AddSeparator();
-    viewMenu->AddCheckItem( PCB_ACTIONS::showRatsnest,     ratsnestShownCondition );
-    viewMenu->AddCheckItem( PCB_ACTIONS::ratsnestLineMode, curvedRatsnestCondition );
+    viewMenu->AddCheckItem( PCB_ACTIONS::showRatsnest,      ratsnestShownCondition );
+    viewMenu->AddCheckItem( PCB_ACTIONS::ratsnestLineMode,  curvedRatsnestCondition );
 
     viewMenu->AddSeparator();
     // Drawing Mode Submenu
@@ -374,12 +356,12 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     contrastModeSubMenu->SetTitle( _( "&Contrast Mode" ) );
     contrastModeSubMenu->SetIcon( contrast_mode_xpm );
 
-    contrastModeSubMenu->AddCheckItem( ACTIONS::highContrastMode,   contrastModeCondition );
+    contrastModeSubMenu->AddCheckItem( ACTIONS::highContrastMode,       contrastModeCondition );
     contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaDec, SELECTION_CONDITIONS::ShowAlways );
     contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaInc, SELECTION_CONDITIONS::ShowAlways );
     viewMenu->AddMenu( contrastModeSubMenu );
 
-    viewMenu->AddCheckItem( PCB_ACTIONS::flipBoard,           boardFlippedCondition );
+    viewMenu->AddCheckItem( PCB_ACTIONS::flipBoard,                     boardFlippedCondition );
 
 #ifdef __APPLE__
     viewMenu->AppendSeparator();
@@ -391,25 +373,25 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     //
     CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
 
-    placeMenu->AddItem( PCB_ACTIONS::placeModule,     SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawVia,         SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawZone,        SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawZoneKeepout, SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::placeText,       SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawArc,         SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawCircle,      SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawLine,        SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawPolygon,     SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::placeModule,      SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawVia,          SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawZone,         SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawZoneKeepout,  SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::placeText,        SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawArc,          SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawCircle,       SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawLine,         SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawPolygon,      SELECTION_CONDITIONS::ShowAlways );
 
     placeMenu->AddSeparator();
-    placeMenu->AddItem( PCB_ACTIONS::drawDimension,   SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawDimension,    SELECTION_CONDITIONS::ShowAlways );
 
     placeMenu->AddSeparator();
-    placeMenu->AddItem( PCB_ACTIONS::placeTarget,     SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::placeTarget,      SELECTION_CONDITIONS::ShowAlways );
 
     placeMenu->AddSeparator();
-    placeMenu->AddItem( PCB_ACTIONS::drillOrigin,     SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( ACTIONS::gridSetOrigin,       SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drillOrigin,      SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( ACTIONS::gridSetOrigin,        SELECTION_CONDITIONS::ShowAlways );
 
     placeMenu->AddSeparator();
 
@@ -484,7 +466,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuActionPlugins->AppendSeparator();
 
     toolsMenu->AddSeparator();
-    toolsMenu->AddMenu( submenuActionPlugins,            SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->AddMenu( submenuActionPlugins,                 SELECTION_CONDITIONS::ShowAlways );
 #endif
 
     toolsMenu->Resolve();
@@ -500,19 +482,19 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
         return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
     };
 
-    prefsMenu->AddItem( ACTIONS::configurePaths,         SELECTION_CONDITIONS::ShowAlways );
-    prefsMenu->AddItem( ACTIONS::showFootprintLibTable,  SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->AddItem( ACTIONS::configurePaths,              SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->AddItem( ACTIONS::showFootprintLibTable,       SELECTION_CONDITIONS::ShowAlways );
 
 #ifdef BUILD_GITHUB_PLUGIN
     prefsMenu->AddItem( ID_PCB_3DSHAPELIB_WIZARD,
                         _( "Add &3D Shapes Libraries Wizard..." ),
                         _( "Download 3D shape libraries from GitHub" ),
-                        import3d_xpm,                    SELECTION_CONDITIONS::ShowAlways );
+                        import3d_xpm,                         SELECTION_CONDITIONS::ShowAlways );
 #endif
     prefsMenu->AddItem( wxID_PREFERENCES,
                         AddHotkeyName( _( "Preferences..." ), g_Module_Editor_Hotkeys_Descr, HK_PREFERENCES ),
                         _( "Show preferences for all open tools" ),
-                        preference_xpm,                  SELECTION_CONDITIONS::ShowAlways );
+                        preference_xpm,                       SELECTION_CONDITIONS::ShowAlways );
 
     prefsMenu->AddSeparator();
     Pgm().AddMenuLanguageList( prefsMenu );

@@ -63,9 +63,64 @@
 #include <dialogs/dialog_page_settings.h>
 #include <pcb_netlist.h>
 #include <dialogs/dialog_update_pcb.h>
+#include <gestfich.h>
+#include <wildcards_and_files_ext.h>
 
 using namespace std::placeholders;
 
+
+TOOL_ACTION PCB_ACTIONS::boardSetup( "pcbnew.EditorControl.boardSetup",
+        AS_GLOBAL, 0,
+        _( "Board Setup..." ), 
+        _( "Edit board setup including layers, design rules and various defaults" ),
+        options_board_xpm );
+
+TOOL_ACTION PCB_ACTIONS::importNetlist( "pcbnew.EditorControl.importNetlist",
+        AS_GLOBAL, 0,
+        _( "Netlist..." ), _( "Read netlist and update board connectivity" ),
+        netlist_xpm );
+
+TOOL_ACTION PCB_ACTIONS::importSpecctraSession( "pcbnew.EditorControl.importSpecctraSession",
+        AS_GLOBAL, 0,
+        _( "Specctra Session..." ), _( "Import routed Specctra session (*.ses) file" ),
+        import_xpm );
+
+TOOL_ACTION PCB_ACTIONS::exportSpecctraDSN( "pcbnew.EditorControl.exportSpecctraDSN",
+        AS_GLOBAL, 0,
+        _( "Specctra DSN..." ), _( "Export Specctra DSN routing info" ),
+        export_dsn_xpm );
+
+TOOL_ACTION PCB_ACTIONS::generateGerbers( "pcbnew.EditorControl.generateGerbers",
+        AS_GLOBAL, 0,
+        _( "&Gerbers (.gbr)..." ), _( "Generate Gerbers for fabrication" ),
+        post_compo_xpm );
+
+TOOL_ACTION PCB_ACTIONS::generateDrillFiles( "pcbnew.EditorControl.generateDrillFiles",
+        AS_GLOBAL, 0,
+        _( "&Drill Files (.drl)..." ), _( "Generate Excellon drill file(s)" ),
+        post_drill_xpm );
+
+TOOL_ACTION PCB_ACTIONS::generatePosFile( "pcbnew.EditorControl.generatePosFile",
+        AS_GLOBAL, 0,
+        _( "Footprint &Positions (.pos)..." ),
+        _( "Generate footprint position file for pick and place" ),
+        post_compo_xpm );
+
+TOOL_ACTION PCB_ACTIONS::generateReportFile( "pcbnew.EditorControl.generateReportFile",
+        AS_GLOBAL, 0,
+        _( "&Footprint Report (.rpt)..." ),
+        _( "Create report of all footprints from current board" ),
+        tools_xpm );
+
+TOOL_ACTION PCB_ACTIONS::generateD356File( "pcbnew.EditorControl.generateD356File",
+        AS_GLOBAL, 0,
+        _( "IPC-D-356 Netlist File..." ), _( "Generate IPC-D-356 netlist file" ),
+        netlist_xpm );
+
+TOOL_ACTION PCB_ACTIONS::generateBOM( "pcbnew.EditorControl.generateBOM",
+        AS_GLOBAL, 0,
+        _( "&BOM..." ), _( "Create bill of materials from current schematic" ),
+        bom_xpm );
 
 // Track & via size control
 TOOL_ACTION PCB_ACTIONS::trackWidthInc( "pcbnew.EditorControl.trackWidthInc",
@@ -434,8 +489,78 @@ int PCB_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
 {
-    wxCommandEvent evt( wxEVT_NULL, ID_GEN_PLOT );
-    m_frame->ToPlotter( evt );
+    m_frame->ToPlotter( ID_GEN_PLOT );
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::BoardSetup( const TOOL_EVENT& aEvent )
+{
+    frame()->DoShowBoardSetupDialog();
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::ImportNetlist( const TOOL_EVENT& aEvent )
+{
+    frame()->InstallNetlistFrame();
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::ImportSpecctraSession( const TOOL_EVENT& aEvent )
+{
+    wxString fullFileName = frame()->GetBoard()->GetFileName();
+    wxString path;
+    wxString name;
+    wxString ext;
+
+    wxFileName::SplitPath( fullFileName, &path, &name, &ext );
+    name += wxT( ".ses" );
+
+    fullFileName = EDA_FILE_SELECTOR( _( "Merge Specctra Session file:" ), path, name,
+                                      wxT( ".ses" ), wxT( "*.ses" ), frame(), wxFD_OPEN, false );
+
+    if( !fullFileName.IsEmpty() )
+        frame()->ImportSpecctraSession( fullFileName );
+
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::ExportSpecctraDSN( const TOOL_EVENT& aEvent )
+{
+    wxString    fullFileName;
+    wxFileName  fn( frame()->GetBoard()->GetFileName() );
+
+    fn.SetExt( SpecctraDsnFileExtension );
+
+    fullFileName = EDA_FILE_SELECTOR( _( "Specctra DSN File" ), fn.GetPath(), fn.GetFullName(),
+                                      SpecctraDsnFileExtension, SpecctraDsnFileWildcard(), 
+                                      frame(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, false );
+
+    if( !fullFileName.IsEmpty() )
+        frame()->ExportSpecctraFile( fullFileName );
+    
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::GenerateFabFiles( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent dummy;
+    
+    if( aEvent.IsAction( &PCB_ACTIONS::generateGerbers ) )
+        m_frame->ToPlotter( ID_GEN_PLOT_GERBER );
+    else if( aEvent.IsAction( &PCB_ACTIONS::generateReportFile ) )
+        m_frame->GenFootprintsReport( dummy );
+    else if( aEvent.IsAction( &PCB_ACTIONS::generateD356File ) )
+        m_frame->GenD356File( dummy );
+    else if( aEvent.IsAction( &PCB_ACTIONS::generateBOM ) )
+        m_frame->RecreateBOMFileFromBoard( dummy );
+    else
+        wxFAIL_MSG( "GenerateFabFiles(): unexpected request" );
+    
     return 0;
 }
 
@@ -472,7 +597,6 @@ int PCB_EDITOR_CONTROL::Find( const TOOL_EVENT& aEvent )
 {
     DIALOG_FIND dlg( m_frame );
     dlg.ShowModal();
-
     return 0;
 }
 
@@ -1399,43 +1523,54 @@ int PCB_EDITOR_CONTROL::FlipPcbView( const TOOL_EVENT& aEvent )
 
 void PCB_EDITOR_CONTROL::setTransitions()
 {
-    Go( &PCB_EDITOR_CONTROL::New,                 ACTIONS::doNew.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::Open,                ACTIONS::open.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::Save,                ACTIONS::save.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::SaveAs,              ACTIONS::saveAs.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::SaveCopyAs,          ACTIONS::saveCopyAs.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::PageSettings,        ACTIONS::pageSettings.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::Plot,                ACTIONS::plot.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::New,                    ACTIONS::doNew.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::Open,                   ACTIONS::open.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::Save,                   ACTIONS::save.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::SaveAs,                 ACTIONS::saveAs.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::SaveCopyAs,             ACTIONS::saveCopyAs.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::PageSettings,           ACTIONS::pageSettings.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::Plot,                   ACTIONS::plot.MakeEvent() );
 
-    Go( &PCB_EDITOR_CONTROL::Find,                ACTIONS::find.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::BoardSetup,             PCB_ACTIONS::boardSetup.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ImportNetlist,          PCB_ACTIONS::importNetlist.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ImportSpecctraSession,  PCB_ACTIONS::importSpecctraSession.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ExportSpecctraDSN,      PCB_ACTIONS::exportSpecctraDSN.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::GenerateDrillFiles,     PCB_ACTIONS::generateDrillFiles.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateGerbers.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::GeneratePosFile,        PCB_ACTIONS::generatePosFile.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateReportFile.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateD356File.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateBOM.MakeEvent() );
+
+    Go( &PCB_EDITOR_CONTROL::Find,                   ACTIONS::find.MakeEvent() );
 
     // Track & via size control
-    Go( &PCB_EDITOR_CONTROL::TrackWidthInc,       PCB_ACTIONS::trackWidthInc.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::TrackWidthDec,       PCB_ACTIONS::trackWidthDec.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ViaSizeInc,          PCB_ACTIONS::viaSizeInc.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ViaSizeDec,          PCB_ACTIONS::viaSizeDec.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::TrackWidthInc,          PCB_ACTIONS::trackWidthInc.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::TrackWidthDec,          PCB_ACTIONS::trackWidthDec.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ViaSizeInc,             PCB_ACTIONS::viaSizeInc.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ViaSizeDec,             PCB_ACTIONS::viaSizeDec.MakeEvent() );
 
     // Zone actions
-    Go( &PCB_EDITOR_CONTROL::ZoneMerge,           PCB_ACTIONS::zoneMerge.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ZoneDuplicate,       PCB_ACTIONS::zoneDuplicate.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ZoneMerge,              PCB_ACTIONS::zoneMerge.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ZoneDuplicate,          PCB_ACTIONS::zoneDuplicate.MakeEvent() );
 
     // Placing tools
-    Go( &PCB_EDITOR_CONTROL::PlaceTarget,         PCB_ACTIONS::placeTarget.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::PlaceModule,         PCB_ACTIONS::placeModule.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::DrillOrigin,         PCB_ACTIONS::drillOrigin.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::PlaceTarget,            PCB_ACTIONS::placeTarget.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::PlaceModule,            PCB_ACTIONS::placeModule.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::DrillOrigin,            PCB_ACTIONS::drillOrigin.MakeEvent() );
 
     // Other
-    Go( &PCB_EDITOR_CONTROL::ToggleLockSelected,  PCB_ACTIONS::toggleLock.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::LockSelected,        PCB_ACTIONS::lock.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::UnlockSelected,      PCB_ACTIONS::unlock.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,  EVENTS::SelectedEvent );
-    Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,  EVENTS::UnselectedEvent );
-    Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,  EVENTS::ClearedEvent );
-    Go( &PCB_EDITOR_CONTROL::CrossProbeSchToPcb,  PCB_ACTIONS::crossProbeSchToPcb.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::HighlightNet,        PCB_ACTIONS::highlightNet.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ClearHighlight,      PCB_ACTIONS::clearHighlight.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  PCB_ACTIONS::highlightNetTool.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  PCB_ACTIONS::highlightNetSelection.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ToggleLockSelected,     PCB_ACTIONS::toggleLock.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::LockSelected,           PCB_ACTIONS::lock.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::UnlockSelected,         PCB_ACTIONS::unlock.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,     EVENTS::SelectedEvent );
+    Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,     EVENTS::UnselectedEvent );
+    Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,     EVENTS::ClearedEvent );
+    Go( &PCB_EDITOR_CONTROL::CrossProbeSchToPcb,     PCB_ACTIONS::crossProbeSchToPcb.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::HighlightNet,           PCB_ACTIONS::highlightNet.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ClearHighlight,         PCB_ACTIONS::clearHighlight.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,     PCB_ACTIONS::highlightNetTool.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,     PCB_ACTIONS::highlightNetSelection.MakeEvent() );
 
     Go( &PCB_EDITOR_CONTROL::LocalRatsnestTool,      PCB_ACTIONS::localRatsnestTool.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HideDynamicRatsnest,    PCB_ACTIONS::hideDynamicRatsnest.MakeEvent() );

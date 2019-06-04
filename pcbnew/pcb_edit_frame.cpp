@@ -127,19 +127,11 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_IMPORT_NON_KICAD_BOARD, PCB_EDIT_FRAME::Files_io )
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, PCB_EDIT_FRAME::OnFileHistory )
 
-    EVT_MENU( ID_GEN_PLOT, PCB_EDIT_FRAME::ToPlotter )
-    EVT_MENU( ID_GEN_PLOT_GERBER, PCB_EDIT_FRAME::ToPlotter )
-
-    EVT_MENU( ID_GEN_EXPORT_SPECCTRA, PCB_EDIT_FRAME::ExportToSpecctra )
     EVT_MENU( ID_GEN_EXPORT_FILE_GENCADFORMAT, PCB_EDIT_FRAME::ExportToGenCAD )
-    EVT_MENU( ID_GEN_EXPORT_FILE_MODULE_REPORT, PCB_EDIT_FRAME::GenFootprintsReport )
     EVT_MENU( ID_GEN_EXPORT_FILE_VRML, PCB_EDIT_FRAME::OnExportVRML )
     EVT_MENU( ID_GEN_EXPORT_FILE_IDF3, PCB_EDIT_FRAME::OnExportIDF3 )
     EVT_MENU( ID_GEN_EXPORT_FILE_STEP, PCB_EDIT_FRAME::OnExportSTEP )
     EVT_MENU( ID_GEN_EXPORT_FILE_HYPERLYNX, PCB_EDIT_FRAME::OnExportHyperlynx )
-
-    EVT_MENU( ID_GEN_IMPORT_SPECCTRA_SESSION,PCB_EDIT_FRAME::ImportSpecctraSession )
-    EVT_MENU( ID_GEN_IMPORT_SPECCTRA_DESIGN, PCB_EDIT_FRAME::ImportSpecctraDesign )
 
     EVT_MENU( ID_MENU_ARCHIVE_MODULES_IN_LIBRARY, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_MENU_CREATE_LIBRARY_AND_ARCHIVE_MODULES, PCB_EDIT_FRAME::Process_Special_Functions )
@@ -153,19 +145,11 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_GRID_SETTINGS, PCB_EDIT_FRAME::OnGridSettings )
 
     // menu Postprocess
-    EVT_MENU( ID_PCB_GEN_POS_MODULES_FILE, PCB_EDIT_FRAME::GenFootprintsPositionFile )
-    EVT_MENU( ID_PCB_GEN_DRILL_FILE, PCB_EDIT_FRAME::InstallDrillFrame )
-    EVT_MENU( ID_PCB_GEN_D356_FILE, PCB_EDIT_FRAME::GenD356File )
     EVT_MENU( ID_PCB_GEN_CMP_FILE, PCB_EDIT_FRAME::RecreateCmpFileFromBoard )
-    EVT_MENU( ID_PCB_GEN_BOM_FILE_FROM_BOARD, PCB_EDIT_FRAME::RecreateBOMFileFromBoard )
-
-    // Menu Get Design Rules Editor
-    EVT_MENU( ID_BOARD_SETUP_DIALOG, PCB_EDIT_FRAME::ShowBoardSetupDialog )
 
     // Horizontal toolbar
     EVT_TOOL( ID_RUN_LIBRARY, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_GEN_PLOT_SVG, PCB_EDIT_FRAME::ExportSVG )
-    EVT_TOOL( ID_GET_NETLIST, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH, PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
     EVT_COMBOBOX( ID_TOOLBARH_PCB_SELECT_LAYER, PCB_EDIT_FRAME::Process_Special_Functions )
@@ -569,12 +553,6 @@ void PCB_EDIT_FRAME::ActivateGalCanvas()
 }
 
 
-void PCB_EDIT_FRAME::ShowBoardSetupDialog( wxCommandEvent& event )
-{
-    DoShowBoardSetupDialog();
-}
-
-
 void PCB_EDIT_FRAME::DoShowBoardSetupDialog( const wxString& aInitialPage,
                                              const wxString& aInitialParentPage )
 {
@@ -917,20 +895,20 @@ void PCB_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 }
 
 
-void PCB_EDIT_FRAME::ToPlotter( wxCommandEvent& event )
+void PCB_EDIT_FRAME::ToPlotter( int aID )
 {
     PCB_PLOT_PARAMS plotSettings = GetPlotSettings();
 
-    switch( event.GetId() )
+    switch( aID )
     {
     case ID_GEN_PLOT_GERBER: plotSettings.SetFormat( PLOT_FORMAT_GERBER );   break;
     case ID_GEN_PLOT_DXF:    plotSettings.SetFormat( PLOT_FORMAT_DXF );      break;
     case ID_GEN_PLOT_HPGL:   plotSettings.SetFormat( PLOT_FORMAT_HPGL );     break;
     case ID_GEN_PLOT_PDF:    plotSettings.SetFormat( PLOT_FORMAT_PDF );      break;
     case ID_GEN_PLOT_PS:     plotSettings.SetFormat( PLOT_FORMAT_POST );     break;
-    case ID_GEN_PLOT_SVG:    wxFAIL_MSG( "Must be handled by ExportSVG()" ); break;
-    case ID_GEN_PLOT:
-    default:    // called with no specified plot type: keep the previous setup
+    case ID_GEN_PLOT:        /* keep the previous setup */                   break;
+    default:
+        wxFAIL_MSG( "ToPlotter(): unexpected plot type" ); break;
         break;
     }
 
