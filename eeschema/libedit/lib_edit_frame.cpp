@@ -204,7 +204,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Raise();
     Show( true );
 
-    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen, false );
 
     SyncView();
     GetGalCanvas()->GetViewControls()->SetSnapping( true );
@@ -760,7 +760,7 @@ void LIB_EDIT_FRAME::emptyScreen()
     SetCurPart( nullptr );
     SetScreen( m_dummyScreen );
     m_dummyScreen->ClearUndoRedoList();
-    m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     Refresh();
 }
 

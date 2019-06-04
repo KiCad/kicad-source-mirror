@@ -161,7 +161,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_auimgr.Update();
 
     SetActiveLayer( 0, true );
-    GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
+    GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
 
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = LoadCanvasTypeSetting();
 

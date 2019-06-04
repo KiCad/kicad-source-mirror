@@ -189,8 +189,8 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     m_auimgr.Update();
 
-    GetToolManager()->RunAction( "common.Control.gridPreset", true, m_LastGridSizeId );
-    GetToolManager()->RunAction( "common.Control.zoomFitScreen", true );
+    GetToolManager()->RunAction( ACTIONS::gridPreset, true, m_LastGridSizeId );
+    GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
 
     if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame
     {
@@ -642,7 +642,7 @@ void LIB_VIEW_FRAME::SetSelectedComponent( const wxString& aComponentName )
         }
 
         updatePreviewSymbol();
-        m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
+        m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     }
 }
 

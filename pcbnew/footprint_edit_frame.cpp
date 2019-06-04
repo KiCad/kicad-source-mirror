@@ -239,7 +239,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     m_auimgr.Update();
     GetToolManager()->RunAction( ACTIONS::gridPreset, true, m_LastGridSizeId );
-    GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
+    GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
     updateTitle();
 
     Raise();            // On some window managers, this is needed

@@ -50,7 +50,7 @@
 #include <dialog_migrate_buses.h>
 #include <ws_data_model.h>
 #include <connection_graph.h>
-
+#include <tool/actions.h>
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
                                  bool aCreateBackupFile )
@@ -309,7 +309,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // Do not leave g_RootSheet == NULL because it is expected to be
             // a valid sheet. Therefore create a dummy empty root sheet and screen.
             CreateScreens();
-            m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
+            m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
 
             wxString msg;
             msg.Printf( _( "Error loading schematic file \"%s\".\n%s" ),
@@ -382,7 +382,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
 
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
-    m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     SetSheetNumberAndCount();
     SyncView();
     GetScreen()->ClearDrawingState();
@@ -645,7 +645,7 @@ bool SCH_EDIT_FRAME::AppendSchematic()
     screens.TestDanglingEnds();
 
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
-    m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     SetSheetNumberAndCount();
 
     SyncView();
@@ -868,7 +868,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             RecalculateConnections();
 
             GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
-            m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
+            m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
             SetSheetNumberAndCount();
             SyncView();
             UpdateTitle();
@@ -878,7 +878,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             // Do not leave g_RootSheet == NULL because it is expected to be
             // a valid sheet. Therefore create a dummy empty root sheet and screen.
             CreateScreens();
-            m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
+            m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
 
             wxString msg;
             msg.Printf( _( "Error loading schematic \"%s\".\n%s" ), aFileName, ioe.What() );

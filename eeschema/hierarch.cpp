@@ -273,7 +273,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
 
     if( !screen->m_Initialized )
     {
-        m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
+        m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
         screen->m_Initialized = true;
         screen->ClearUndoORRedoList( screen->m_UndoList, 1 );
     }
