@@ -59,7 +59,7 @@ private:
 
     void updateUi();
 
-    std::vector<wxString> getProposedLabels( std::vector<wxString> aLabelList );
+    std::vector<wxString> getProposedLabels( const std::vector<wxString>& aLabelList );
 
     void onItemSelected( wxListEvent& aEvent );
 

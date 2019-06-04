@@ -21,6 +21,7 @@
 #include <sch_connection.h>
 #include <connection_graph.h>
 #include <tool/tool_manager.h>
+#include <tool/actions.h>
 #include <dialog_migrate_buses.h>
 
 /**
@@ -122,13 +123,13 @@ void DIALOG_MIGRATE_BUSES::updateUi()
 }
 
 
-std::vector<wxString> DIALOG_MIGRATE_BUSES::getProposedLabels( std::vector<wxString> aLabelList )
+std::vector<wxString> DIALOG_MIGRATE_BUSES::getProposedLabels( const std::vector<wxString>& aLabelList )
 {
     int lowest_start = INT_MAX;
     int highest_end = -1;
     int widest_bus = -1;
 
-    for( auto label : aLabelList )
+    for( const wxString& label : aLabelList )
     {
         SCH_CONNECTION conn;
         conn.ConfigureFromLabel( label );
@@ -149,7 +150,7 @@ std::vector<wxString> DIALOG_MIGRATE_BUSES::getProposedLabels( std::vector<wxStr
     SCH_CONNECTION conn;
     std::vector<wxString> proposals;
 
-    for( auto label : aLabelList )
+    for( const wxString& label : aLabelList )
     {
         conn.ConfigureFromLabel( label );
         wxString proposal = conn.VectorPrefix();
