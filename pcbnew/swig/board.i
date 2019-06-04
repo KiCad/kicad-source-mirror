@@ -106,6 +106,21 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 #include <class_board.h>
 %}
 
+%extend std::deque<BOARD_ITEM *>
+{
+    %pythoncode
+    %{
+        def __iter__(self):
+            it = self.iterator()
+            try:
+                while True:
+                    item = it.next()  # throws StopIteration when iterator reached the end.
+                    yield item.Cast()
+            except StopIteration:
+                return
+    %}
+}
+
 %extend BOARD
 {
     // BOARD_ITEM_CONTAINER's interface functions will be implemented by SWIG
