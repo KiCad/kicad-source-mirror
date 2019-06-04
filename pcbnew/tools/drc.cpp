@@ -71,7 +71,6 @@ DRC::DRC() :
     m_drcDialog  = NULL;
 
     // establish initial values for everything:
-    m_drcInLegacyRoutingMode = false;
     m_doPad2PadTest     = true;         // enable pad to pad clearance tests
     m_doUnconnectedTest = true;         // enable unconnected tests
     m_doZonesTest = false;              // disable zone to items clearance tests
@@ -170,21 +169,9 @@ int DRC::ShowDRCDialog( const TOOL_EVENT& aEvent )
 
 void DRC::addMarkerToPcb( MARKER_PCB* aMarker )
 {
-    // In legacy routing mode, do not add markers to the board.
-    // only shows the drc error message
-    // JEY TODO: clear out the legacyRoutingMode stuff...
-    if( m_drcInLegacyRoutingMode )
-    {
-        m_pcbEditorFrame->SetMsgPanel( aMarker );
-        delete aMarker;
-        m_currentMarker = nullptr;
-    }
-    else
-    {
-        BOARD_COMMIT commit( m_pcbEditorFrame );
-        commit.Add( aMarker );
-        commit.Push( wxEmptyString, false, false );
-    }
+    BOARD_COMMIT commit( m_pcbEditorFrame );
+    commit.Add( aMarker );
+    commit.Push( wxEmptyString, false, false );
 }
 
 
@@ -273,8 +260,8 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
                 if( smoothed_polys[ia2].Contains( currentVertex ) )
                 {
                     if( aCreateMarkers )
-                        commit.Add( m_markerFactory.NewMarker(
-                                pt, zoneRef, zoneToTest, DRCE_ZONES_INTERSECT ) );
+                        commit.Add( m_markerFactory.NewMarker( pt, zoneRef, zoneToTest,
+                                                               DRCE_ZONES_INTERSECT ) );
 
                     nerrors++;
                 }
@@ -289,8 +276,8 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
                 if( smoothed_polys[ia].Contains( currentVertex ) )
                 {
                     if( aCreateMarkers )
-                        commit.Add( m_markerFactory.NewMarker(
-                                pt, zoneToTest, zoneRef, DRCE_ZONES_INTERSECT ) );
+                        commit.Add( m_markerFactory.NewMarker( pt, zoneToTest, zoneRef,
+                                                               DRCE_ZONES_INTERSECT ) );
 
                     nerrors++;
                 }
@@ -338,8 +325,8 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
             for( wxPoint pt : conflictPoints )
             {
                 if( aCreateMarkers )
-                    commit.Add( m_markerFactory.NewMarker(
-                            pt, zoneRef, zoneToTest, DRCE_ZONES_TOO_CLOSE ) );
+                    commit.Add( m_markerFactory.NewMarker( pt, zoneRef, zoneToTest,
+                                                           DRCE_ZONES_TOO_CLOSE ) );
 
                 nerrors++;
             }
@@ -666,16 +653,14 @@ void DRC::testPad2Pad()
 
     m_pcb->GetSortedPadListByXthenYCoord( sortedPads );
 
-    if( sortedPads.size() == 0 )
+    if( sortedPads.empty() )
         return;
 
     // find the max size of the pads (used to stop the test)
     int max_size = 0;
 
-    for( unsigned i = 0; i < sortedPads.size(); ++i )
+    for( D_PAD* pad : sortedPads )
     {
-        D_PAD* pad = sortedPads[i];
-
         // GetBoundingRadius() is the radius of the minimum sized circle fully containing the pad
         int radius = pad->GetBoundingRadius();
 
@@ -687,14 +672,11 @@ void DRC::testPad2Pad()
     D_PAD** listEnd = &sortedPads[0] + sortedPads.size();
 
     // Test the pads
-    for( unsigned i = 0; i< sortedPads.size(); ++i )
+    for( auto& pad : sortedPads )
     {
-        D_PAD* pad = sortedPads[i];
+        int x_limit = pad->GetClearance() + pad->GetBoundingRadius() + pad->GetPosition().x;
 
-        int    x_limit = max_size + pad->GetClearance() +
-                         pad->GetBoundingRadius() + pad->GetPosition().x;
-
-        if( !doPadToPadsDrc( pad, &sortedPads[i], listEnd, x_limit ) )
+        if( !doPadToPadsDrc( pad, &pad, listEnd, max_size + x_limit ) )
         {
             wxASSERT( m_currentMarker );
             addMarkerToPcb ( m_currentMarker );
@@ -861,7 +843,6 @@ void DRC::testUnconnected()
                                                   wxPoint( src.x, src.y ),
                                                   edge.GetTargetNode()->Parent(),
                                                   wxPoint( dst.x, dst.y ) ) );
-
     }
 }
 
@@ -892,8 +873,8 @@ void DRC::testZones()
         if( ( netcode < 0 ) || pads_in_net == 0 )
         {
             wxPoint markerPos = zone->GetPosition();
-            addMarkerToPcb( m_markerFactory.NewMarker(
-                    markerPos, zone, DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE ) );
+            addMarkerToPcb( m_markerFactory.NewMarker( markerPos, zone,
+                                                       DRCE_SUSPICIOUS_NET_FOR_ZONE_OUTLINE ) );
         }
     }
 
@@ -910,9 +891,7 @@ void DRC::testKeepoutAreas()
         ZONE_CONTAINER* area = m_pcb->GetArea( ii );
 
         if( !area->GetIsKeepout() )
-        {
             continue;
-        }
 
         for( auto segm : m_pcb->Tracks() )
         {
@@ -1014,7 +993,7 @@ void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
     }
 
     case S_SEGMENT:
-        itemShape.push_back( SEG( aItem->GetStart(), aItem->GetEnd() ) );
+        itemShape.emplace_back( SEG( aItem->GetStart(), aItem->GetEnd() ) );
         break;
 
     case S_CIRCLE:
@@ -1038,7 +1017,7 @@ void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
         for( unsigned int jj = 1; jj < aItem->GetBezierPoints().size(); jj++ )
         {
             wxPoint end_pt = aItem->GetBezierPoints()[jj];
-            itemShape.push_back( SEG( start_pt, end_pt ) );
+            itemShape.emplace_back( SEG( start_pt, end_pt ) );
             start_pt = end_pt;
         }
 
@@ -1228,55 +1207,6 @@ void DRC::testDisabledLayers()
         if( disabledLayers.test( zone->GetLayer() ) )
             createMarker( zone );
     }
-}
-
-
-bool DRC::doTrackKeepoutDrc( TRACK* aRefSeg )
-{
-    // Test keepout areas for vias, tracks and pads inside keepout areas
-    for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
-    {
-        ZONE_CONTAINER* area = m_pcb->GetArea( ii );
-
-        if( !area->GetIsKeepout() )
-            continue;
-
-        if( aRefSeg->Type() == PCB_TRACE_T )
-        {
-            if( !area->GetDoNotAllowTracks()  )
-                continue;
-
-            if( !area->IsOnLayer( aRefSeg->GetLayer() ) )
-                continue;
-
-            if( area->Outline()->Distance( SEG( aRefSeg->GetStart(), aRefSeg->GetEnd() ),
-                                           aRefSeg->GetWidth() ) == 0 )
-            {
-                m_currentMarker =
-                        m_markerFactory.NewMarker( aRefSeg, area, DRCE_TRACK_INSIDE_KEEPOUT );
-                return false;
-            }
-        }
-        else if( aRefSeg->Type() == PCB_VIA_T )
-        {
-            if( !area->GetDoNotAllowVias() )
-                continue;
-
-            auto viaLayers = aRefSeg->GetLayerSet();
-
-            if( !area->CommonLayerExists( viaLayers ) )
-                continue;
-
-            if( area->Outline()->Distance( aRefSeg->GetPosition() ) < aRefSeg->GetWidth()/2 )
-            {
-                m_currentMarker =
-                        m_markerFactory.NewMarker( aRefSeg, area, DRCE_VIA_INSIDE_KEEPOUT );
-                return false;
-            }
-        }
-    }
-
-    return true;
 }
 
 

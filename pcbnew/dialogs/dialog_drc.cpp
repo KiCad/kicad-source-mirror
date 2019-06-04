@@ -238,7 +238,6 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
     m_tester->m_rptFilename            = reportName;
     m_tester->m_doCreateRptFile        = make_report;
     m_tester->m_refillZones            = m_cbRefillZones->GetValue();
-    m_tester->m_drcInLegacyRoutingMode = false;
     m_tester->m_reportAllTrackErrors   = m_cbReportAllTrackErrors->GetValue();
     m_tester->m_testFootprints         = m_cbTestFootprints->GetValue();
 

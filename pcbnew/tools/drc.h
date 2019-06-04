@@ -1,12 +1,8 @@
-/**
- * @file drc_stuff.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2016 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2017-2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -214,14 +210,6 @@ private:
 
     MARKER_PCB* m_currentMarker;
 
-    /**
-     * in legacy canvas, when creating a track, the drc test must only display the
-     * error message, and do not create a DRC marker.
-     * if m_drcInLegacyRoutingMode it true only the message will be displayed
-     * m_drcInLegacyRoutingMode = false is the normal Drc mode
-     */
-    bool        m_drcInLegacyRoutingMode;
-
     /* In DRC functions, many calculations are using coordinates relative
      * to the position of the segment under test (segm to segm DRC, segm to pad DRC
      * Next variables store coordinates relative to the start point of this segment
@@ -249,7 +237,7 @@ private:
     BOARD*              m_pcb;
     SHAPE_POLY_SET      m_board_outlines;   ///< The board outline including cutouts
     DIALOG_DRC_CONTROL* m_drcDialog;
-    DRC_MARKER_FACTORY  m_markerFactory; ///< Class that generates markers
+    DRC_MARKER_FACTORY  m_markerFactory;    ///< Class that generates markers
 
     DRC_LIST            m_unconnected;      ///< list of unconnected pads, as DRC_ITEMs
     DRC_LIST            m_footprints;       ///< list of footprint warnings, as DRC_ITEMs
@@ -348,28 +336,7 @@ private:
      *          filled in with the problem information.
      */
     bool doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterator aEndIt,
-            bool aTestPads, bool aTestZones );
-
-    /**
-     * Test the current segment or via.
-     *
-     * @param aRefSeg The segment to test
-     * @return bool - true if no problems, else false and m_currentMarker is
-     *          filled in with the problem information.
-     */
-    bool doTrackKeepoutDrc( TRACK* aRefSeg );
-
-
-    /**
-     * Test a segment in ZONE_CONTAINER * aArea:
-     *      Test Edge inside other areas
-     *      Test Edge too close other areas
-     *
-     * @param aArea The current area.
-     * @param aCornerIndex The first corner of the segment to test.
-     * @return bool - false if DRC error  or true if OK
-     */
-    bool doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex );
+                     bool aTestPads, bool aTestZones );
 
     /**
      * Test for footprint courtyard overlaps.
@@ -426,7 +393,7 @@ private:
      * The rectangle is defined by m_xcliplo, m_ycliplo and m_xcliphi, m_ycliphi
      * return true if the line from aSegStart to aSegEnd is outside the bounding box
      */
-    bool        checkLine( wxPoint aSegStart, wxPoint aSegEnd );
+    bool checkLine( wxPoint aSegStart, wxPoint aSegEnd );
 
     //-----</single tests>---------------------------------------------
 
@@ -482,14 +449,6 @@ public:
      * @param aMessages = a wxTextControl where to display some activity messages. Can be NULL
      */
     void RunTests( wxTextCtrl* aMessages = NULL );
-
-    /**
-     * @return a pointer to the current marker (last created marker
-     */
-    MARKER_PCB* GetCurrentMarker( )
-    {
-        return m_currentMarker;
-    }
 };
 
 

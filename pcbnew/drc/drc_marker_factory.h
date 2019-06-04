@@ -68,7 +68,7 @@ public:
      * @param aErrorCode An ID for the particular type of error that is being reported.
      */
     MARKER_PCB* NewMarker( TRACK* aTrack, BOARD_ITEM* aConflitItem, const SEG& aConflictSeg,
-            int aErrorCode ) const;
+                           int aErrorCode ) const;
 
     MARKER_PCB* NewMarker( TRACK* aTrack, ZONE_CONTAINER* aConflictZone, int aErrorCode ) const;
 
@@ -83,8 +83,8 @@ public:
      */
     MARKER_PCB* NewMarker( const wxPoint& aPos, BOARD_ITEM* aItem, int aErrorCode ) const;
 
-    MARKER_PCB* NewMarker(
-            const wxPoint& aPos, BOARD_ITEM* aItem, BOARD_ITEM* bItem, int aErrorCode ) const;
+    MARKER_PCB* NewMarker( const wxPoint& aPos, BOARD_ITEM* aItem, BOARD_ITEM* bItem,
+                           int aErrorCode ) const;
 
     /**
      * Create a MARKER which will report on a generic problem with the board which is
