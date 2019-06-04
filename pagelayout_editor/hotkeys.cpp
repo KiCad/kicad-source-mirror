@@ -71,7 +71,7 @@ static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTIO
                                    GR_KB_CTRL + WXK_F5 );
 static EDA_HOTKEY HkHelp( _HKI( "List Hotkeys" ), HK_HELP, GR_KB_CTRL + WXK_F1 );
 static EDA_HOTKEY HkMoveItem( _HKI( "Move Item" ), HK_MOVE, 'M' );
-static EDA_HOTKEY HkDeleteItem( _HKI( "Delete Item" ), HK_DELETE_ITEM, WXK_DELETE );
+static EDA_HOTKEY HkDeleteItem( _HKI( "Delete Item" ), HK_DELETE, WXK_DELETE );
 
 // Common: hotkeys_basic.h
 static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );

@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,8 +35,9 @@
 // see also enum common_hotkey_id_command in hotkeys_basic.h
 // for shared hotkeys id
 enum hotkey_id_command {
-    HK_MOVE = HK_COMMON_END,
-    HK_DELETE_ITEM
+    HK_PL_EDITOR_START = HK_COMMON_END,
+    HK_MOVE,
+    HK_PL_EDITOR_END
 };
 
 // List of hotkey descriptors for PlEditor.
