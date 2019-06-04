@@ -1,7 +1,3 @@
-/**
- * @file dialog_drc.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -448,7 +444,7 @@ void DIALOG_DRC_CONTROL::doSelectionMenu( const DRC_ITEM* aItem )
     BOARD_ITEM* selection = items.GetCount() ? items[0] : nullptr;
 
     if( selection && ( selection == first || selection == second ) )
-        m_brdEditor->GetToolManager()->GetView()->SetCenter( selection->GetPosition() );
+        m_brdEditor->FocusOnLocation( selection->GetPosition(), false, true );
 
     m_brdEditor->GetGalCanvas()->Refresh();
 }

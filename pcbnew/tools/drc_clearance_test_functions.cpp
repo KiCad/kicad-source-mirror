@@ -32,6 +32,7 @@
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
+#include <class_drawsegment.h>
 #include <class_marker_pcb.h>
 #include <math_for_graphics.h>
 #include <polygon_test_point_inside.h>
@@ -697,14 +698,39 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
         // the minimum distance = clearance plus half the reference track width
         SEG::ecoord w_dist = clearance + aRefSeg->GetWidth() / 2;
-        w_dist *= w_dist;
+        SEG::ecoord w_dist_sq = w_dist * w_dist;
 
         for( auto it = m_board_outlines.IterateSegmentsWithHoles(); it; it++ )
         {
-            if( test_seg.SquaredDistance( *it ) < w_dist )
+            if( test_seg.SquaredDistance( *it ) < w_dist_sq )
             {
-                auto pt = test_seg.NearestPoint( *it );
-                markers.PUSH_NEW_MARKER_3( wxPoint( pt.x, pt.y ), aRefSeg, DRCE_TRACK_NEAR_EDGE );
+                VECTOR2I pt = test_seg.NearestPoint( *it );
+
+                KICAD_T        types[] = { PCB_LINE_T, EOT };
+                DRAWSEGMENT*   edge = nullptr;
+                INSPECTOR_FUNC inspector = [&] ( EDA_ITEM* item, void* testData )
+                {
+                    DRAWSEGMENT* test_edge = dynamic_cast<DRAWSEGMENT*>( item );
+
+                    if( !test_edge || test_edge->GetLayer() != Edge_Cuts )
+                        return SEARCH_CONTINUE;
+
+                    if( test_edge->HitTest((wxPoint) pt, w_dist ) )
+                    {
+                        edge = test_edge;
+                        return SEARCH_QUIT;
+                    }
+
+                    return SEARCH_CONTINUE;
+                };
+
+                // Best-efforts search for edge segment
+                BOARD::IterateForward<BOARD_ITEM*>( m_pcb->Drawings(), inspector, nullptr, types );
+
+                if( edge )
+                    markers.PUSH_NEW_MARKER_4( (wxPoint) pt, aRefSeg, edge, DRCE_TRACK_NEAR_EDGE );
+                else
+                    markers.PUSH_NEW_MARKER_3( (wxPoint) pt, aRefSeg, DRCE_TRACK_NEAR_EDGE );
 
                 if( !handleNewMarker() )
                     return false;
