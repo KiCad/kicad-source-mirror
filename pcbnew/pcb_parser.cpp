@@ -1385,6 +1385,11 @@ void PCB_PARSER::parseSetup()
             NeedRIGHT();
             break;
 
+        case T_filled_areas_thickness:
+            designSettings.m_ZoneUseNoOutlineInFill = not parseBool();
+            NeedRIGHT();
+            break;
+
         case T_pcbplotparams:
             {
                 PCB_PLOT_PARAMS plotParams;
@@ -3171,6 +3176,11 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
 
         case T_min_thickness:
             zone->SetMinThickness( parseBoardUnits( T_min_thickness ) );
+            NeedRIGHT();
+            break;
+
+        case T_filled_areas_thickness:
+            zone->SetFilledPolysUseThickness( parseBool() );
             NeedRIGHT();
             break;
 

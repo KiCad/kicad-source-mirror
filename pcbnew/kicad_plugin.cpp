@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -528,6 +528,10 @@ void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const
 
     m_out->Print( aNestLevel+1, "(max_error %s)\n",
                   FormatInternalUnits( dsnSettings.m_MaxError ).c_str() );
+
+    // Store this option only if it is not the legacy option:
+    if( dsnSettings.m_ZoneUseNoOutlineInFill )
+        m_out->Print( aNestLevel+1, "(filled_areas_thickness no)\n" );
 
     // 6.0 TODO: are we going to update the tokens we save these under?
     // 6.0 TODO: need to save the LAYER_CLASS_OTHERS stuff
@@ -1709,6 +1713,11 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
     m_out->Print( aNestLevel+1, "(min_thickness %s)",
                   FormatInternalUnits( aZone->GetMinThickness() ).c_str() );
+
+    // write it only if V 6.O version option is not used (i.e. do not write if the
+    // "legacy" algorithm is used)
+    if( !aZone->GetFilledPolysUseThickness() )
+        m_out->Print( 0, " (filled_areas_thickness no)" );
 
     m_out->Print( 0, "\n" );
 

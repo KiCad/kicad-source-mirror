@@ -589,7 +589,7 @@ public:
     unsigned int GetCornerRadius() const { return m_cornerRadius; }
 
     bool GetFilledPolysUseThickness() const { return m_FilledPolysUseThickness; }
-    void SetFilledPolysUseThickness( bool aWidth ) { m_FilledPolysUseThickness = aWidth; }
+    void SetFilledPolysUseThickness( bool aOption ) { m_FilledPolysUseThickness = aOption; }
 
 
     /**
