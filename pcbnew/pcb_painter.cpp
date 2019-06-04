@@ -45,6 +45,7 @@
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_line_chain.h>
 
+
 using namespace KIGFX;
 
 PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
@@ -514,7 +515,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
         break;
 
     default:
-        assert( false );
+        wxASSERT( false );
         break;
     }
 
@@ -1162,14 +1163,15 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone, int aLayer )
             return;
 
         // Set up drawing options
+        int outline_thickness = aZone->GetFilledPolysUseThickness() ? aZone->GetMinThickness() : 0;
         m_gal->SetStrokeColor( color );
         m_gal->SetFillColor( color );
-        m_gal->SetLineWidth( aZone->GetMinThickness() );
+        m_gal->SetLineWidth( outline_thickness );
 
         if( displayMode == PCB_RENDER_SETTINGS::DZ_SHOW_FILLED )
         {
             m_gal->SetIsFill( true );
-            m_gal->SetIsStroke( true );
+            m_gal->SetIsStroke( outline_thickness > 0 );
         }
         else if( displayMode == PCB_RENDER_SETTINGS::DZ_SHOW_OUTLINED )
         {

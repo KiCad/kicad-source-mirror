@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,10 +54,13 @@ public:
     PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );
     ~PANEL_SETUP_FEATURE_CONSTRAINTS( ) override { };
 
+    void ImportSettingsFrom( BOARD* aBoard );
+
+private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void ImportSettingsFrom( BOARD* aBoard );
+    void onChangeOutlineOpt( wxCommandEvent& event ) override;
 };
 
 #endif //PANEL_SETUP_FEATURE_CONSTRAINTS_H

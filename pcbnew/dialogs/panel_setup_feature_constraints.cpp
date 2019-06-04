@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,8 @@
 
 #include <panel_setup_feature_constraints.h>
 
+#include <advanced_config.h>    // To be removed later, when the zone fill option will be always allowed
+
 
 PANEL_SETUP_FEATURE_CONSTRAINTS::PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* aParent,
                                                                   PCB_EDIT_FRAME* aFrame ) :
@@ -43,6 +45,10 @@ PANEL_SETUP_FEATURE_CONSTRAINTS::PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* 
 {
     m_Frame = aFrame;
     m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
+
+    // Temporary option: allows zone fill option only if the advanced config option allow it
+    if( ADVANCED_CFG::GetCfg().m_forceThickOutlinesInZones )
+        m_bSizerPolygonFillOption->Show( false );
 }
 
 
@@ -66,6 +72,9 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataToWindow()
     m_OptOverlappingCourtyards->SetValue( m_BrdSettings->m_ProhibitOverlappingCourtyards );
 
     m_maxError.SetValue( m_BrdSettings->m_MaxError );
+
+    m_cbOutlinePolygonFastest->SetValue( m_BrdSettings->m_ZoneUseNoOutlineInFill );
+    m_cbOutlinePolygonBestQ->SetValue( !m_BrdSettings->m_ZoneUseNoOutlineInFill );
 
     return true;
 }
@@ -97,6 +106,8 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataFromWindow()
     m_BrdSettings->m_MaxError = Clamp<int>( IU_PER_MM * MINIMUM_ERROR_SIZE_MM,
             m_maxError.GetValue(), IU_PER_MM * MAXIMUM_ERROR_SIZE_MM );
 
+    m_BrdSettings->m_ZoneUseNoOutlineInFill = m_cbOutlinePolygonFastest->GetValue();
+
     return true;
 }
 
@@ -109,4 +120,15 @@ void PANEL_SETUP_FEATURE_CONSTRAINTS::ImportSettingsFrom( BOARD* aBoard )
     TransferDataToWindow();
 
     m_BrdSettings = savedSettings;
+}
+
+
+void PANEL_SETUP_FEATURE_CONSTRAINTS::onChangeOutlineOpt( wxCommandEvent& event )
+{
+    wxObject* item =event.GetEventObject();
+
+    if( item == m_cbOutlinePolygonBestQ )
+        m_cbOutlinePolygonFastest->SetValue( not m_cbOutlinePolygonBestQ->GetValue() );
+    else
+        m_cbOutlinePolygonBestQ->SetValue( not m_cbOutlinePolygonFastest->GetValue() );
 }

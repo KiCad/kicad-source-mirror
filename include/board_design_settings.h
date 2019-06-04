@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2015 KiCad Developers, see CHANGELOG.txt for contributors.
+ * Copyright (C) 2009-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -197,6 +197,14 @@ public:
     int        m_MicroViasMinSize;          ///< micro vias (not vias) min diameter
     int        m_MicroViasMinDrill;         ///< micro vias (not vias) min drill diameter
     int        m_CopperEdgeClearance;
+
+    /** Option to handle filled polygons in zones:
+     * the "legacy" option is using thick outlines around filled polygons: give the best shape
+     * the "new" option is using only filled polygons (no outline: give the faster redraw time
+     * moreover when exporting zone filled areas, the excatct shape is exported.
+     * the legacy option can really create redraw time issues for large boards.
+     */
+    bool       m_ZoneUseNoOutlineInFill;    // true for new filling option
 
     // Maximum error allowed when approximating circles and arcs to segments
     int        m_MaxError;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 23 2019)
+// C++ code generated with wxFormBuilder (version Dec  1 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -16,6 +16,7 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
@@ -36,9 +37,16 @@ class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel
 		wxCheckBox* m_OptAllowMicroVias;
 		wxCheckBox* m_OptRequireCourtyards;
 		wxCheckBox* m_OptOverlappingCourtyards;
+		wxStaticLine* m_staticline2;
+		wxStaticText* m_stCircleToPolyOpt;
 		wxStaticText* m_maxErrorTitle;
 		wxTextCtrl* m_maxErrorCtrl;
 		wxStaticText* m_maxErrorUnits;
+		wxBoxSizer* m_bSizerPolygonFillOption;
+		wxStaticLine* m_staticline1;
+		wxStaticText* m_stZoneFilledPolysOpt;
+		wxCheckBox* m_cbOutlinePolygonBestQ;
+		wxCheckBox* m_cbOutlinePolygonFastest;
 		wxStaticText* m_TrackMinWidthTitle;
 		wxTextCtrl* m_TrackMinWidthCtrl;
 		wxStaticText* m_TrackMinWidthUnits;
@@ -60,6 +68,10 @@ class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_EdgeClearanceLabel;
 		wxTextCtrl* m_EdgeClearanceCtrl;
 		wxStaticText* m_EdgeClearanceUnits;
+
+		// Virtual event handlers, overide them in your derived class
+		virtual void onChangeOutlineOpt( wxCommandEvent& event ) { event.Skip(); }
+
 
 	public:
 

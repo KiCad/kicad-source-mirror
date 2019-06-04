@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 23 2019)
+// C++ code generated with wxFormBuilder (version Dec  1 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,48 +18,94 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	sbFeatureRules = new wxBoxSizer( wxVERTICAL );
 
 	m_OptAllowBlindBuriedVias = new wxCheckBox( this, wxID_ANY, _("Allow blind/buried vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbFeatureRules->Add( m_OptAllowBlindBuriedVias, 0, wxRIGHT|wxTOP, 5 );
+	sbFeatureRules->Add( m_OptAllowBlindBuriedVias, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_OptAllowMicroVias = new wxCheckBox( this, wxID_ANY, _("Allow micro vias (uVias)"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbFeatureRules->Add( m_OptAllowMicroVias, 0, wxRIGHT|wxTOP, 5 );
+	sbFeatureRules->Add( m_OptAllowMicroVias, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	sbFeatureRules->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	m_OptRequireCourtyards = new wxCheckBox( this, wxID_ANY, _("Require courtyard definitions in footprints"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbFeatureRules->Add( m_OptRequireCourtyards, 0, wxTOP|wxRIGHT, 5 );
+	sbFeatureRules->Add( m_OptRequireCourtyards, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_OptOverlappingCourtyards = new wxCheckBox( this, wxID_ANY, _("Prohibit overlapping courtyards"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbFeatureRules->Add( m_OptOverlappingCourtyards, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	sbFeatureRules->Add( m_OptOverlappingCourtyards, 0, wxALL, 5 );
 
 
 	sbFeatureRules->Add( 0, 0, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
+	wxBoxSizer* bSizerArcToPoly;
+	bSizerArcToPoly = new wxBoxSizer( wxVERTICAL );
+
+	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerArcToPoly->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
+
+	m_stCircleToPolyOpt = new wxStaticText( this, wxID_ANY, _("Arc to polygon approximation:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stCircleToPolyOpt->Wrap( -1 );
+	m_stCircleToPolyOpt->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+
+	bSizerArcToPoly->Add( m_stCircleToPolyOpt, 0, wxALL, 5 );
+
 	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 0, 3, 3, 0 );
-	fgSizer2->AddGrowableCol( 1 );
+	fgSizer2 = new wxFlexGridSizer( 0, 4, 3, 0 );
+	fgSizer2->AddGrowableCol( 2 );
 	fgSizer2->SetFlexibleDirection( wxBOTH );
 	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_maxErrorTitle = new wxStaticText( this, wxID_ANY, _("Maximum Error Dist:"), wxDefaultPosition, wxDefaultSize, 0 );
+
+	fgSizer2->Add( 15, 0, 1, wxEXPAND, 5 );
+
+	m_maxErrorTitle = new wxStaticText( this, wxID_ANY, _("Maximum error:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_maxErrorTitle->Wrap( -1 );
-	fgSizer2->Add( m_maxErrorTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM, 5 );
+	m_maxErrorTitle->SetToolTip( _("This is the maximum distance between a circle and the polygonal shape that approximate it.\nThe error max defines the number of segments of this polygon.") );
+
+	fgSizer2->Add( m_maxErrorTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
 
 	m_maxErrorCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_maxErrorCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_maxErrorUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_maxErrorUnits->Wrap( -1 );
-	fgSizer2->Add( m_maxErrorUnits, 0, wxALL, 5 );
+	fgSizer2->Add( m_maxErrorUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	sbFeatureRules->Add( fgSizer2, 1, wxEXPAND, 5 );
+	bSizerArcToPoly->Add( fgSizer2, 0, wxEXPAND, 5 );
+
+
+	sbFeatureRules->Add( bSizerArcToPoly, 0, wxEXPAND, 5 );
+
+	m_bSizerPolygonFillOption = new wxBoxSizer( wxVERTICAL );
+
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_bSizerPolygonFillOption->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+
+	m_stZoneFilledPolysOpt = new wxStaticText( this, wxID_ANY, _(" Option to fill polygons in zones:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stZoneFilledPolysOpt->Wrap( -1 );
+	m_stZoneFilledPolysOpt->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+
+	m_bSizerPolygonFillOption->Add( m_stZoneFilledPolysOpt, 0, wxALL, 5 );
+
+	wxBoxSizer* bSizer5;
+	bSizer5 = new wxBoxSizer( wxVERTICAL );
+
+	m_cbOutlinePolygonBestQ = new wxCheckBox( this, wxID_ANY, _("Thick outlines (best quality)"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer5->Add( m_cbOutlinePolygonBestQ, 0, wxALL, 5 );
+
+	m_cbOutlinePolygonFastest = new wxCheckBox( this, wxID_ANY, _("No outline (fastest draw mode)"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer5->Add( m_cbOutlinePolygonFastest, 0, wxALL, 5 );
+
+
+	m_bSizerPolygonFillOption->Add( bSizer5, 1, wxEXPAND|wxLEFT, 15 );
+
+
+	sbFeatureRules->Add( m_bSizerPolygonFillOption, 0, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( sbFeatureRules, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
-	bMainSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 25 );
+	bMainSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 15 );
 
 	wxBoxSizer* sbFeatureConstraints;
 	sbFeatureConstraints = new wxBoxSizer( wxVERTICAL );
@@ -195,8 +241,16 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	this->SetSizer( bMainSizer );
 	this->Layout();
 	bMainSizer->Fit( this );
+
+	// Connect Events
+	m_cbOutlinePolygonBestQ->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
+	m_cbOutlinePolygonFastest->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
 }
 
 PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::~PANEL_SETUP_FEATURE_CONSTRAINTS_BASE()
 {
+	// Disconnect Events
+	m_cbOutlinePolygonBestQ->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
+	m_cbOutlinePolygonFastest->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::onChangeOutlineOpt ), NULL, this );
+
 }

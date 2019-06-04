@@ -497,6 +497,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_CopperEdgeClearance = Millimeter2iu( DEFAULT_COPPEREDGECLEARANCE );
 
     m_MaxError            = ARC_HIGH_DEF;
+    m_ZoneUseNoOutlineInFill = false;   // Use compatibility mode by default
 
     // Global mask margins:
     m_SolderMaskMargin  = Millimeter2iu( DEFAULT_SOLDERMASK_CLEARANCE );

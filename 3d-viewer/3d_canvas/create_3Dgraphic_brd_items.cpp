@@ -855,13 +855,16 @@ void CINFO3D_VISU::AddSolidAreasShapesToContainer( const ZONE_CONTAINER* aZoneCo
     SHAPE_POLY_SET polyList = SHAPE_POLY_SET( aZoneContainer->GetFilledPolysList(), true );
 
     // This convert the poly in outline and holes
-    Convert_shape_line_polygon_to_triangles( polyList,
-                                             *aDstContainer,
-                                             m_biuTo3Dunits,
+    Convert_shape_line_polygon_to_triangles( polyList, *aDstContainer, m_biuTo3Dunits,
                                              *aZoneContainer );
 
     // add filled areas outlines, which are drawn with thick lines segments
-    // /////////////////////////////////////////////////////////////////////////
+    // but only if filled polygons outlines have thickness
+    if( !aZoneContainer->GetFilledPolysUseThickness() )
+        return;
+
+    float line_thickness = aZoneContainer->GetMinThickness() * m_biuTo3Dunits;
+
     for( int i = 0; i < polyList.OutlineCount(); ++i )
     {
         // Add outline
@@ -877,17 +880,15 @@ void CINFO3D_VISU::AddSolidAreasShapesToContainer( const ZONE_CONTAINER* aZoneCo
 
             if( Is_segment_a_circle( start3DU, end3DU ) )
             {
-                float radius = (aZoneContainer->GetMinThickness() / 2) * m_biuTo3Dunits;
+                float radius = line_thickness/2;
 
                 if( radius > 0.0 )  // degenerated circles crash 3D viewer
-                    aDstContainer->Add( new CFILLEDCIRCLE2D( start3DU, radius ,
+                    aDstContainer->Add( new CFILLEDCIRCLE2D( start3DU, radius,
                                                              *aZoneContainer ) );
             }
             else
             {
-                aDstContainer->Add( new CROUNDSEGMENT2D( start3DU, end3DU,
-                                                         aZoneContainer->GetMinThickness() *
-                                                         m_biuTo3Dunits,
+                aDstContainer->Add( new CROUNDSEGMENT2D( start3DU, end3DU, line_thickness,
                                                          *aZoneContainer ) );
             }
         }
@@ -907,7 +908,7 @@ void CINFO3D_VISU::AddSolidAreasShapesToContainer( const ZONE_CONTAINER* aZoneCo
 
                 if( Is_segment_a_circle( start3DU, end3DU ) )
                 {
-                    float radius = (aZoneContainer->GetMinThickness() / 2) * m_biuTo3Dunits;
+                    float radius = line_thickness/2;
 
                     if( radius > 0.0 )  // degenerated circles crash 3D viewer
                         aDstContainer->Add(
@@ -917,9 +918,7 @@ void CINFO3D_VISU::AddSolidAreasShapesToContainer( const ZONE_CONTAINER* aZoneCo
                 else
                 {
                     aDstContainer->Add(
-                                new CROUNDSEGMENT2D( start3DU, end3DU,
-                                                     aZoneContainer->GetMinThickness() *
-                                                     m_biuTo3Dunits,
+                                new CROUNDSEGMENT2D( start3DU, end3DU, line_thickness,
                                                      *aZoneContainer ) );
                 }
             }

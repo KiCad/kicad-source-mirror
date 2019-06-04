@@ -66,6 +66,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
     m_cornerRadius = 0;
     SetLocalFlags( 0 );                         // flags tempoarry used in zone calculations
     m_Poly = new SHAPE_POLY_SET();              // Outlines
+    m_FilledPolysUseThickness = true;           // set the "old" way to build filled polygon areas (before 6.0.x)
     aBoard->GetZoneSettings().ExportSetting( *this );
 
     m_needRefill = false;   // True only after some edition.
@@ -84,6 +85,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     m_IsFilled = aZone.m_IsFilled;
     m_ZoneClearance = aZone.m_ZoneClearance;     // clearance value
     m_ZoneMinThickness = aZone.m_ZoneMinThickness;
+    m_FilledPolysUseThickness = aZone.m_FilledPolysUseThickness;
     m_FillMode = aZone.m_FillMode;               // Filling mode (segments/polygons)
     m_hv45 = aZone.m_hv45;
     m_priority = aZone.m_priority;
@@ -123,6 +125,7 @@ ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
     m_CornerSelection  = nullptr; // for corner moving, corner index to (null if no selection)
     m_ZoneClearance    = aOther.m_ZoneClearance;            // clearance value
     m_ZoneMinThickness = aOther.m_ZoneMinThickness;
+    m_FilledPolysUseThickness = aOther.m_FilledPolysUseThickness;
     m_FillMode = aOther.m_FillMode;                         // filling mode (segments/polygons)
     m_PadConnection = aOther.m_PadConnection;
     m_ThermalReliefGap = aOther.m_ThermalReliefGap;
@@ -428,10 +431,11 @@ void ZONE_CONTAINER::PrintFilledArea( PCB_BASE_FRAME* aFrame, wxDC* DC, const wx
         CornersBuffer.push_back( p0 );
 
         // Draw outlines:
-        if( ( m_ZoneMinThickness > 1 ) || outline_mode )
+        int outline_thickness = GetFilledPolysUseThickness() ? GetMinThickness() : 0;
+
+        if( ( outline_thickness > 1 ) || outline_mode )
         {
             int ilim = CornersBuffer.size() - 1;
-            int line_thickness = m_ZoneMinThickness;
 
             for( int is = 0, ie = ilim; is <= ilim; ie = is, is++ )
             {
@@ -439,12 +443,12 @@ void ZONE_CONTAINER::PrintFilledArea( PCB_BASE_FRAME* aFrame, wxDC* DC, const wx
                 if( !displ_opts->m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
                 {
                     GRCSegm( nullptr, DC, CornersBuffer[is], CornersBuffer[ie],
-                             line_thickness, color );
+                             outline_thickness, color );
                 }
                 else
                 {
                     GRFilledSegment( nullptr, DC, CornersBuffer[is], CornersBuffer[ie],
-                                     line_thickness, color );
+                                     outline_thickness, color );
                 }
             }
         }

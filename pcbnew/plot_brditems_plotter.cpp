@@ -612,10 +612,9 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
 }
 
 
-/* Plot areas (given by .m_FilledPolysList member) in a zone
- */
 void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
 {
+    //Plot areas (given by .m_FilledPolysList member) in a zone
     const SHAPE_POLY_SET& polysList = aZone->GetFilledPolysList();
 
     if( polysList.IsEmpty() )
@@ -650,7 +649,8 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
 
     /* Plot all filled areas: filled areas have a filled area and a thick
      * outline we must plot the filled area itself ( as a filled polygon
-     * OR a set of segments ) and plot the thick outline itself
+     * OR a set of segments ) and plot the thick outline itself,
+     * if the thickness has meaning (at least is > 1)
      *
      * in non filled mode the outline is plotted, but not the filling items
      */
@@ -666,18 +666,20 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
                 cornerList.push_back( cornerList[0] );
 
             // Plot the current filled area and its outline
+            int outline_thickness = aZone->GetFilledPolysUseThickness() ? aZone->GetMinThickness() : 0;
+
             if( GetPlotMode() == FILLED )
             {
-                m_plotter->PlotPoly( cornerList, FILLED_SHAPE, aZone->GetMinThickness(), &gbr_metadata );
+                m_plotter->PlotPoly( cornerList, FILLED_SHAPE, outline_thickness, &gbr_metadata );
             }
             else
             {
-                if( aZone->GetMinThickness() > 0 )
+                if( outline_thickness )
                 {
                     for( unsigned jj = 1; jj < cornerList.size(); jj++ )
                     {
                         m_plotter->ThickSegment( cornerList[jj -1], cornerList[jj],
-                                                 aZone->GetMinThickness(),
+                                                 outline_thickness,
                                                  GetPlotMode(), &gbr_metadata );
                     }
                 }
