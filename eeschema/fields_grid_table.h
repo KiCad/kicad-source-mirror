@@ -29,6 +29,7 @@
 #include <wx/grid.h>
 #include <sch_component.h>
 #include <grid_tricks.h>
+#include <validators.h>
 
 class SCH_BASE_FRAME;
 class DIALOG_SHIM;
@@ -105,6 +106,9 @@ private:
     SCH_FIELD_VALIDATOR   m_fieldNameValidator;
     SCH_FIELD_VALIDATOR   m_referenceValidator;
     SCH_FIELD_VALIDATOR   m_valueValidator;
+    LIB_ID_VALIDATOR      m_libIdValidator;
+    SCH_FIELD_VALIDATOR   m_urlValidator;
+    SCH_FIELD_VALIDATOR   m_nonUrlValidator;
 
     wxGridCellAttr*       m_readOnlyAttr;
     wxGridCellAttr*       m_fieldNameAttr;

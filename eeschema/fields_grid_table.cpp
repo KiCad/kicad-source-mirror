@@ -52,9 +52,14 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
     m_part( aPart ),
     m_fieldNameValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_NAME ),
     m_referenceValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), REFERENCE ),
-    m_valueValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), VALUE )
+    m_valueValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), VALUE ),
+    m_libIdValidator( LIB_ID::ID_PCB ),
+    m_urlValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), DATASHEET ),
+    m_nonUrlValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), DATASHEET )
 {
     // Build the various grid cell attributes.
+    // NOTE: validators and cellAttrs are member variables to get the destruction order
+    // right.  wxGrid is VERY cranky about this.
 
     m_readOnlyAttr = new wxGridCellAttr;
     m_readOnlyAttr->SetReadOnly( true );
@@ -76,19 +81,17 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
 
     m_footprintAttr = new wxGridCellAttr;
     GRID_CELL_FOOTPRINT_ID_EDITOR* fpIdEditor = new GRID_CELL_FOOTPRINT_ID_EDITOR( aDialog );
-    fpIdEditor->SetValidator( LIB_ID_VALIDATOR( LIB_ID::ID_PCB ) );
+    fpIdEditor->SetValidator( m_libIdValidator );
     m_footprintAttr->SetEditor( fpIdEditor );
 
     m_urlAttr = new wxGridCellAttr;
     GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( aDialog );
-    urlEditor->SetValidator( SCH_FIELD_VALIDATOR( aFrame->IsType( FRAME_SCH_LIB_EDITOR ),
-                                                  DATASHEET ) );
+    urlEditor->SetValidator( m_urlValidator );
     m_urlAttr->SetEditor( urlEditor );
 
     m_nonUrlAttr = new wxGridCellAttr;
-    wxGridCellTextEditor* nonUrlEditor = new wxGridCellTextEditor();
-    nonUrlEditor->SetValidator( SCH_FIELD_VALIDATOR( aFrame->IsType( FRAME_SCH_LIB_EDITOR ),
-                                                     DATASHEET ) );
+    GRID_CELL_TEXT_EDITOR* nonUrlEditor = new GRID_CELL_TEXT_EDITOR();
+    nonUrlEditor->SetValidator( m_nonUrlValidator );
     m_nonUrlAttr->SetEditor( nonUrlEditor );
 
     m_boolAttr = new wxGridCellAttr;
@@ -250,11 +253,13 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
                 m_urlAttr->IncRef();
                 return m_urlAttr;
             }
+            /*
             else
             {
                 m_nonUrlAttr->IncRef();
                 return m_nonUrlAttr;
             }
+             */
         }
         return nullptr;
 
@@ -313,12 +318,9 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
     case FDC_H_ALIGN:
         switch ( field.GetHorizJustify() )
         {
-        case GR_TEXT_HJUSTIFY_LEFT:
-            return _( "Left" );
-        case GR_TEXT_HJUSTIFY_CENTER:
-            return _( "Center" );
-        case GR_TEXT_HJUSTIFY_RIGHT:
-            return _( "Right" );
+        case GR_TEXT_HJUSTIFY_LEFT:   return _( "Left" );
+        case GR_TEXT_HJUSTIFY_CENTER: return _( "Center" );
+        case GR_TEXT_HJUSTIFY_RIGHT:  return _( "Right" );
         }
 
         break;
@@ -326,12 +328,9 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
     case FDC_V_ALIGN:
         switch ( field.GetVertJustify() )
         {
-        case GR_TEXT_VJUSTIFY_TOP:
-            return _( "Top" );
-        case GR_TEXT_VJUSTIFY_CENTER:
-            return _( "Center" );
-        case GR_TEXT_VJUSTIFY_BOTTOM:
-            return _( "Bottom" );
+        case GR_TEXT_VJUSTIFY_TOP:    return _( "Top" );
+        case GR_TEXT_VJUSTIFY_CENTER: return _( "Center" );
+        case GR_TEXT_VJUSTIFY_BOTTOM: return _( "Bottom" );
         }
 
         break;
@@ -348,10 +347,8 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
     case FDC_ORIENTATION:
         switch ( (int) field.GetTextAngle() )
         {
-        case TEXT_ANGLE_HORIZ:
-            return _( "Horizontal" );
-        case TEXT_ANGLE_VERT:
-            return _( "Vertical" );
+        case TEXT_ANGLE_HORIZ: return _( "Horizontal" );
+        case TEXT_ANGLE_VERT:  return _( "Vertical" );
         }
 
         break;
