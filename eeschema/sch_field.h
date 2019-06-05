@@ -55,8 +55,6 @@ class SCH_FIELD : public SCH_ITEM, public EDA_TEXT
 
     wxString m_name;
 
-    mutable UNIQUE_MUTEX m_mutex;
-
 public:
     SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent,
                const wxString& aName = wxEmptyString );
@@ -105,10 +103,6 @@ public:
     int GetId() const { return m_id; }
 
     void SetId( int aId ) { m_id = aId; }
-
-    const wxString GetText() const override;
-    wxString GetShownText() const override;
-    void SetText( const wxString& aText ) override;
 
     /**
      * Function GetFullyQualifiedText

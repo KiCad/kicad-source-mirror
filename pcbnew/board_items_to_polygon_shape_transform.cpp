@@ -350,10 +350,6 @@ void ZONE_CONTAINER::TransformSolidAreasShapesToPolygonSet(
 void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon(
         SHAPE_POLY_SET* aCornerBuffer, int aClearanceValue ) const
 {
-    // Oh dear.  When in UTF-8 mode, wxString puts string iterators in a linked list, and
-    // that linked list is not thread-safe.
-    std::lock_guard<std::mutex> guard( m_mutex );
-
     if( GetText().Length() == 0 )
         return;
 

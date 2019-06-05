@@ -74,10 +74,6 @@ EDA_ITEM* SCH_FIELD::Clone() const
 
 const wxString SCH_FIELD::GetFullyQualifiedText() const
 {
-    // When in UTF-8 mode, wxString puts string iterators in a linked list, and
-    // that linked list is not thread-safe.
-    std::lock_guard<std::mutex> guard( m_mutex );
-
     wxString text = m_Text;
 
     /* For more than one part per package, we must add the part selection
@@ -94,36 +90,6 @@ const wxString SCH_FIELD::GetFullyQualifiedText() const
     }
 
     return text;
-}
-
-
-const wxString SCH_FIELD::GetText() const
-{
-    // When in UTF-8 mode, wxString puts string iterators in a linked list, and
-    // that linked list is not thread-safe.
-    std::lock_guard<std::mutex> guard( m_mutex );
-
-    return m_Text;
-}
-
-
-wxString SCH_FIELD::GetShownText() const
-{
-    // When in UTF-8 mode, wxString puts string iterators in a linked list, and
-    // that linked list is not thread-safe.
-    std::lock_guard<std::mutex> guard( m_mutex );
-
-    return m_Text;
-}
-
-
-void SCH_FIELD::SetText( const wxString& aText )
-{
-    // When in UTF-8 mode, wxString puts string iterators in a linked list, and
-    // that linked list is not thread-safe.
-    std::lock_guard<std::mutex> guard( m_mutex );
-
-    m_Text = aText;
 }
 
 
@@ -291,10 +257,6 @@ bool SCH_FIELD::IsHorizJustifyFlipped() const
 
 bool SCH_FIELD::IsVoid() const
 {
-    // When in UTF-8 mode, wxString puts string iterators in a linked list, and
-    // that linked list is not thread-safe.
-    std::lock_guard<std::mutex> guard( m_mutex );
-
     return m_Text.Len() == 0;
 }
 

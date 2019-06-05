@@ -22,35 +22,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file eda_text.h
- * @brief Definition of base KiCad text object.
- */
-
 #ifndef EDA_TEXT_H_
 #define EDA_TEXT_H_
 
-#include <mutex>
 #include <trigo.h>                  // NORMALIZE_ANGLE_POS( angle );
 #include <common.h>                 // wxStringSplit
 #include <gr_basic.h>               // EDA_DRAW_MODE_T
 #include <base_struct.h>            // EDA_RECT
-
-#include <mutex>
 #include "kicad_string.h"
 
 class SHAPE_POLY_SET;
-
-// A mutex which is unique to each instance it appears in (ie: a new std::mutex is allocated
-// on copy or assignment).
-class UNIQUE_MUTEX : public std::mutex
-{
-public:
-    UNIQUE_MUTEX() : std::mutex() {}
-    UNIQUE_MUTEX( const UNIQUE_MUTEX& ) : std::mutex() {}
-    UNIQUE_MUTEX& operator= (const UNIQUE_MUTEX& ) { return *this; }
-};
-
 
 // part of the kicad_plugin.h family of defines.
 // See kicad_plugin.h for the choice of the value
@@ -139,12 +120,8 @@ public:
      * returns the string associated with the text object.
      *
      * @return a const wxString reference containing the string of the item.
-     *
-     * WARNING: this routine MUST NOT return a reference!
-     * While it would be faster, it would also defeat the use of RAII mutex locks
-     * in subclasses to get around wxString's multi-threading bugs in UTF-8 mode.
      */
-    virtual const wxString/* & forbidden */ GetText() const { return m_Text; }
+    virtual const wxString& GetText() const { return m_Text; }
 
     /**
      * Returns the string actually shown after processing of the base
@@ -374,9 +351,6 @@ protected:
 
     /// Cache of unescaped text for efficient access
     wxString    m_shown_text;
-
-    // wxString isn't thread-safe, so make use of this in multi-threaded situations
-    mutable UNIQUE_MUTEX m_mutex;
 
 private:
     /**

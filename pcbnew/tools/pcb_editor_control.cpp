@@ -24,7 +24,6 @@
  */
 #include <cstdint>
 #include <thread>
-#include <mutex>
 #include <functional>
 #include "pcb_editor_control.h"
 #include "pcb_actions.h"
