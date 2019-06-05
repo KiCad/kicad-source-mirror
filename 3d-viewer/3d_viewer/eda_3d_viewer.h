@@ -47,6 +47,8 @@
 #define KICAD_DEFAULT_3D_DRAWFRAME_STYLE    (wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS)
 
 #define VIEWER3D_FRAMENAME wxT( "Viewer3DFrameName" )
+#define QUALIFIED_VIEWER3D_FRAMENAME( parent ) \
+                    ( wxString( VIEWER3D_FRAMENAME ) + wxT( ":" ) + parent->GetName() )
 
 /**
  *  Create and handle a window for the 3d viewer connected to a Kiway and a pcbboard

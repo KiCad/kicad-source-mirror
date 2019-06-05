@@ -158,7 +158,7 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent,
                 KIWAY_PLAYER( aKiway, aParent,
                               FRAME_PCB_DISPLAY3D, aTitle,
                               wxDefaultPosition, wxDefaultSize,
-                              style, VIEWER3D_FRAMENAME )
+                              style, QUALIFIED_VIEWER3D_FRAMENAME( aParent ) )
 {
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::EDA_3D_VIEWER %s", aTitle );
 
