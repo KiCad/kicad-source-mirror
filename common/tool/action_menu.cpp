@@ -399,7 +399,11 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
             // Handling non-action menu entries (e.g. items in clarification list)
             // in some context menus, that have IDs explicitly chosen between
             // ID_POPUP_MENU_START and ID_POPUP_MENU_END
-            if( !evt && ( m_selected < wxID_LOWEST ||
+            // Note also items in clarification list have an id >= 0 and < wxID_LOWEST
+            // in fact 0 to n-1 for n items in clarification list)
+            // id < 0 are automatically created for menuitems created with wxID_ANY
+            #define ID_CONTEXT_MENU_ID_MAX wxID_LOWEST  /* = 100 should be enough and better */
+            if( !evt && ( ( m_selected >=0 && m_selected < ID_CONTEXT_MENU_ID_MAX ) ||
                           ( m_selected >= ID_POPUP_MENU_START &&
                             m_selected <= ID_POPUP_MENU_END )
                         )
