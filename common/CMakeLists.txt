@@ -508,6 +508,7 @@ target_link_libraries( pcbcommon PUBLIC
 
 # auto-generate netlist_lexer.h and netlist_keywords.cpp
 make_lexer(
+    netlist_lexer_source_files
     ${CMAKE_CURRENT_SOURCE_DIR}/netlist.keywords
     ${PROJECT_SOURCE_DIR}/include/netlist_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/netlist_keywords.cpp
@@ -517,18 +518,12 @@ make_lexer(
     ${CMAKE_PROJECT_SOURCE_DIR}/pcbnew/netlist_reader.h
     )
 
-add_custom_target(
-    netlist_lexer_source_files ALL
-    DEPENDS
-        ${PROJECT_SOURCE_DIR}/include/netlist_lexer.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/netlist_keywords.cpp
-    )
-
 add_dependencies( common netlist_lexer_source_files )
 add_dependencies( pcbcommon netlist_lexer_source_files )
 
 # auto-generate pcb_plot_params_lexer.h and pcb_plot_params_keywords.cpp
 make_lexer(
+    pcb_plot_lexer_source_files
     ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params.keywords
     ${PROJECT_SOURCE_DIR}/include/pcb_plot_params_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params_keywords.cpp
@@ -538,17 +533,11 @@ make_lexer(
     ${PROJECT_SOURCE_DIR}/pcbnew/pcb_plot_params.h
     )
 
-add_custom_target(
-    pcb_plot_lexer_source_files ALL
-    DEPENDS
-        ${PROJECT_SOURCE_DIR}/include/pcb_plot_params_lexer.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params_keywords.cpp
-    )
-
 add_dependencies( pcbcommon pcb_plot_lexer_source_files )
 
 # auto-generate pcbnew_sexpr.h and pcbnew_sexpr.cpp
 make_lexer(
+    pcb_lexer_source_files
     ${CMAKE_CURRENT_SOURCE_DIR}/pcb.keywords
     ${PROJECT_SOURCE_DIR}/include/pcb_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/pcb_keywords.cpp
@@ -558,28 +547,15 @@ make_lexer(
     ${PROJECT_SOURCE_DIR}/pcbnew/pcb_parser.h
     )
 
-add_custom_target(
-    pcb_lexer_source_files ALL
-    DEPENDS
-        ${PROJECT_SOURCE_DIR}/include/pcb_lexer.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/pcb_keywords.cpp
-    )
-
 add_dependencies( pcbcommon pcb_lexer_source_files )
 
 # auto-generate s-expression library table code.
 make_lexer(
+    lib_table_lexer_source_files
     ${CMAKE_CURRENT_SOURCE_DIR}/lib_table.keywords
     ${PROJECT_SOURCE_DIR}/include/lib_table_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/lib_table_keywords.cpp
     LIB_TABLE_T
-    )
-
-add_custom_target(
-    lib_table_lexer_source_files ALL
-    DEPENDS
-        ${PROJECT_SOURCE_DIR}/include/lib_table_lexer.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/lib_table_keywords.cpp
     )
 
 add_dependencies( common lib_table_lexer_source_files )
@@ -588,17 +564,11 @@ add_dependencies( pcbcommon lib_table_lexer_source_files )
 # auto-generate page layout reader s-expression page_layout_reader_lexer.h
 # and title_block_reader_keywords.cpp.
 make_lexer(
+    page_layout_lexer_source_files
     ${CMAKE_CURRENT_SOURCE_DIR}/page_layout/page_layout_reader.keywords
     ${PROJECT_SOURCE_DIR}/include/page_layout_reader_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/page_layout/page_layout_reader_keywords.cpp
     TB_READER_T
-    )
-
-add_custom_target(
-    page_layout_lexer_source_files ALL
-    DEPENDS
-        ${PROJECT_SOURCE_DIR}/include/page_layout_reader_lexer.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/page_layout/page_layout_reader_keywords.cpp
     )
 
 add_dependencies( common page_layout_lexer_source_files )

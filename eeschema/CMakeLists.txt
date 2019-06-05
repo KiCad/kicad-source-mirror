@@ -443,22 +443,17 @@ endif()
 # auto-generate cmp_library_lexer.h and cmp_library_keywords.cpp for the component
 # library format.
 make_lexer(
+    cmp_library_lexer_source_files
     ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library.keywords
     ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.cpp
     TLIB_T
     )
 
-add_custom_target(
-    cmp_library_lexer_source_files ALL
-    DEPENDS
-        ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_lexer.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/cmp_library_keywords.cpp
-    )
-
 add_dependencies( eeschema_kiface cmp_library_lexer_source_files )
 
 make_lexer(
+    field_template_lexer_source_files
     ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames.keywords
     ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_keywords.cpp
@@ -468,16 +463,10 @@ make_lexer(
     template_fieldnames.h
     )
 
-add_custom_target(
-    field_template_lexer_source_files ALL
-    DEPENDS
-        ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_lexer.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/template_fieldnames_keywords.cpp
-    )
-
 add_dependencies( eeschema_kiface field_template_lexer_source_files )
 
 make_lexer(
+    dialog_bom_cfg_lexer_source_files
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_cfg.keywords
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_cfg_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_cfg_keywords.cpp
@@ -485,13 +474,6 @@ make_lexer(
 
     # Pass header file with dependency on *_lexer.h as extra_arg
     dialogs/dialog_bom_cfg.h
-    )
-
-add_custom_target(
-    dialog_bom_cfg_lexer_source_files ALL
-    DEPENDS
-        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_cfg_lexer.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_cfg_keywords.cpp
     )
 
 add_dependencies( eeschema_kiface dialog_bom_cfg_lexer_source_files )
