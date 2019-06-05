@@ -49,7 +49,6 @@
 #include <wx/progdlg.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
-#include <tool/action_menu.h>
 #include <tool/common_tools.h>
 #include <tool/zoom_tool.h>
 #include <tools/ee_actions.h>
@@ -83,15 +82,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_CLOSE( LIB_EDIT_FRAME::OnCloseWindow )
     EVT_SIZE( LIB_EDIT_FRAME::OnSize )
 
-    // Actions
-    EVT_TOOL( ID_LIBEDIT_EDIT_PART, LIB_EDIT_FRAME::OnEditPart )
-    EVT_TOOL( ID_LIBEDIT_EXPORT_PART, LIB_EDIT_FRAME::OnExportPart )
-    EVT_TOOL( ID_LIBEDIT_REMOVE_PART, LIB_EDIT_FRAME::OnRemovePart )
-    EVT_TOOL( ID_LIBEDIT_CUT_PART, LIB_EDIT_FRAME::OnCopyCutPart )
-    EVT_TOOL( ID_LIBEDIT_COPY_PART, LIB_EDIT_FRAME::OnCopyCutPart )
-    EVT_TOOL( ID_LIBEDIT_PASTE_PART, LIB_EDIT_FRAME::OnPasteDuplicatePart )
-    EVT_TOOL( ID_LIBEDIT_DUPLICATE_PART, LIB_EDIT_FRAME::OnPasteDuplicatePart )
-
     // Main horizontal toolbar.
     EVT_TOOL( ID_TO_LIBVIEW, LIB_EDIT_FRAME::OnOpenLibraryViewer )
     EVT_TOOL( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::OnSyncPinEditClick )
@@ -114,7 +104,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, LIB_EDIT_FRAME::Process_Config )
 
     // Update user interface elements.
-    EVT_UPDATE_UI( ID_LIBEDIT_EXPORT_PART, LIB_EDIT_FRAME::OnUpdateHavePart )
     EVT_UPDATE_UI( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::OnUpdateSyncPinEdit )
     EVT_UPDATE_UI( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnUpdatePartNumber )
 
@@ -355,12 +344,6 @@ void LIB_EDIT_FRAME::ThawSearchTree()
 }
 
 
-void LIB_EDIT_FRAME::OnUpdateHavePart( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Enable( getTargetLibId().IsValid() );
-}
-
-
 void LIB_EDIT_FRAME::OnUpdateSyncPinEdit( wxUpdateUIEvent& event )
 {
     LIB_PART* part = GetCurPart();
@@ -592,9 +575,9 @@ bool LIB_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
 }
 
 
-LIB_ID LIB_EDIT_FRAME::GetTreeLIBID() const
+LIB_ID LIB_EDIT_FRAME::GetTreeLIBID( int* aUnit ) const
 {
-    return m_treePane->GetLibTree()->GetSelectedLibId();
+    return m_treePane->GetLibTree()->GetSelectedLibId( aUnit );
 }
 
 

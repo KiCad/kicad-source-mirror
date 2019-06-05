@@ -31,8 +31,6 @@
 #include <tools/ee_selection_tool.h>
 #include <lib_manager.h>
 #include "eeschema_id.h"
-#include "general.h"
-#include "help_common_strings.h"
 #include "ee_hotkeys.h"
 #include "lib_edit_frame.h"
 
@@ -80,9 +78,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->SetTitle( _( "Export" ) );
     submenuExport->SetIcon( export_xpm );
 
-    submenuExport->Add( _( "Symbol..." ),
-                        _( "Create a new library file containing the current symbol" ),
-                        ID_LIBEDIT_EXPORT_PART, export_part_xpm );
+    submenuExport->Add( EE_ACTIONS::exportSymbol );
     submenuExport->Add( _( "View as PNG..." ),
                         _( "Create a PNG file from the current view" ),
                         ID_LIBEDIT_GEN_PNG_FILE, plot_xpm );

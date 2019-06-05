@@ -27,8 +27,6 @@
 #include "class_library.h"
 #include "eeschema_id.h"
 #include "general.h"
-#include "help_common_strings.h"
-#include "ee_hotkeys.h"
 #include "viewlib_frame.h"
 #include <symbol_lib_table.h>
 #include <tool/conditional_menu.h>

@@ -23,11 +23,12 @@
  */
 
 #include "symbol_tree_pane.h"
-
 #include <widgets/lib_tree.h>
 #include <lib_manager.h>
 #include <lib_edit_frame.h>
 #include <symbol_lib_table.h>
+#include <tool/tool_manager.h>
+#include <tools/ee_actions.h>
 
 SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
         : wxPanel( aParent ),
@@ -65,9 +66,7 @@ void SYMBOL_TREE_PANE::Regenerate()
 
 void SYMBOL_TREE_PANE::onComponentSelected( wxCommandEvent& aEvent )
 {
-    wxCommandEvent dummy;
-    m_libEditFrame->OnEditPart( dummy );
-
-    // Make sure current-part highlighting doesn't get lost in seleciton highlighting
+    m_libEditFrame->GetToolManager()->RunAction( EE_ACTIONS::editSymbol, true );
+    // Make sure current-part highlighting doesn't get lost in selection highlighting
     m_tree->Unselect();
 }

@@ -28,11 +28,9 @@
 #include <sch_edit_frame.h>
 #include <kiface_i.h>
 #include <bitmaps.h>
-#include <ee_hotkeys.h>
 #include <eeschema_id.h>
 #include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>
-#include <help_common_strings.h>
 #include <tools/ee_actions.h>
 
 /* Create  the main Horizontal Toolbar for the schematic editor
@@ -105,7 +103,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddTool( ID_BACKANNO_ITEMS, wxEmptyString,
                             KiScaledBitmap( import_footprint_names_xpm, this ),
-                            HELP_IMPORT_FOOTPRINTS );
+                            _( "Back-import symbol footprint associations from .cmp file created by Pcbnew" ) );
 
     // after adding the tools to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();

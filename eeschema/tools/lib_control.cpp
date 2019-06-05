@@ -31,6 +31,51 @@
 #include <viewlib_frame.h>
 
 
+TOOL_ACTION EE_ACTIONS::newSymbol( "eeschema.SymbolLibraryControl.newSymbol",
+        AS_GLOBAL, 0,
+        _( "New Symbol..." ), _( "Create a new symbol" ),
+        new_component_xpm );
+
+TOOL_ACTION EE_ACTIONS::editSymbol( "eeschema.SymbolLibraryControl.editSymbol",
+        AS_GLOBAL, 0,
+        _( "Edit Symbol" ), _( "Show selected symbol on editor canvas" ),
+        edit_xpm );
+
+TOOL_ACTION EE_ACTIONS::duplicateSymbol( "eeschema.SymbolLibraryControl.duplicateSymbol",
+        AS_GLOBAL, 0,
+        _( "Duplicate Symbol" ), _( "Make a copy of the selected symbol" ),
+        duplicate_xpm );
+
+TOOL_ACTION EE_ACTIONS::deleteSymbol( "eeschema.SymbolLibraryControl.deleteSymbol",
+        AS_GLOBAL, 0,
+        _( "Delete Symbol" ), _( "Remove the selected symbol from its library" ),
+        delete_xpm );
+
+TOOL_ACTION EE_ACTIONS::cutSymbol( "eeschema.SymbolLibraryControl.cutSymbol",
+        AS_GLOBAL, 0,
+        _( "Cut Symbol" ), "",
+        cut_xpm );
+
+TOOL_ACTION EE_ACTIONS::copySymbol( "eeschema.SymbolLibraryControl.copySymbol",
+        AS_GLOBAL, 0,
+        _( "Copy Symbol" ), "",
+        copy_xpm );
+
+TOOL_ACTION EE_ACTIONS::pasteSymbol( "eeschema.SymbolLibraryControl.pasteSymbol",
+        AS_GLOBAL, 0,
+        _( "Paste Symbol" ), "",
+        paste_xpm );
+
+TOOL_ACTION EE_ACTIONS::importSymbol( "eeschema.SymbolLibraryControl.importSymbol",
+        AS_GLOBAL, 0,
+        _( "Import Symbol..." ), _( "Import a symbol to the current library" ),
+        import_part_xpm );
+
+TOOL_ACTION EE_ACTIONS::exportSymbol( "eeschema.SymbolLibraryControl.exportSymbol",
+        AS_GLOBAL, 0,
+        _( "Export Symbol..." ), _( "Export a symbol to a new library file" ),
+        export_part_xpm );
+
 TOOL_ACTION EE_ACTIONS::showElectricalTypes( "eeschema.SymbolLibraryControl.showElectricalTypes",
         AS_GLOBAL, 0,
         _( "Show Pin Electrical Types" ), _( "Annotate pins with their electrical types" ),
@@ -45,6 +90,8 @@ TOOL_ACTION EE_ACTIONS::showComponentTree( "eeschema.SymbolLibraryControl.showCo
 
 bool LIB_CONTROL::Init()
 {
+    EE_TOOL_BASE::Init();
+    
     if( m_isLibEdit )
     {
         CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
@@ -67,33 +114,23 @@ bool LIB_CONTROL::Init()
     
         ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways );
         ctxMenu.AddItem( EE_ACTIONS::newSymbol,          SELECTION_CONDITIONS::ShowAlways );
-        ctxMenu.AddItem( ID_LIBEDIT_EDIT_PART,
-                         _( "Edit Symbol" ), _( "Show selected symbol on editor canvas" ),
-                         edit_xpm,                       symbolSelectedCondition );
+        ctxMenu.AddItem( EE_ACTIONS::editSymbol,         symbolSelectedCondition );
     
         ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways );
         ctxMenu.AddItem( ACTIONS::save,                  symbolSelectedCondition );
         ctxMenu.AddItem( ACTIONS::saveCopyAs,            symbolSelectedCondition );
-        ctxMenu.AddItem( ID_LIBEDIT_DUPLICATE_PART,
-                         _( "Duplicate" ), _( "Make a copy of the selected symbol" ),
-                         duplicate_xpm,                  symbolSelectedCondition );
-        ctxMenu.AddItem( ID_LIBEDIT_REMOVE_PART,
-                         _( "Delete" ), _( "Remove the selected symbol from the library" ),
-                         delete_xpm,                     symbolSelectedCondition );
+        ctxMenu.AddItem( EE_ACTIONS::duplicateSymbol,    symbolSelectedCondition );
+        ctxMenu.AddItem( EE_ACTIONS::deleteSymbol,       symbolSelectedCondition );
         ctxMenu.AddItem( ACTIONS::revert,                symbolSelectedCondition );
     
         ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways );
-        ctxMenu.AddItem( ID_LIBEDIT_CUT_PART, _( "Cut Symbol" ), "",
-                         cut_xpm,                        symbolSelectedCondition );
-        ctxMenu.AddItem( ID_LIBEDIT_COPY_PART, _( "Copy Symbol" ), "",
-                         copy_xpm,                       symbolSelectedCondition );
-        ctxMenu.AddItem( ID_LIBEDIT_PASTE_PART, _( "Paste Symbol" ), "",
-                         paste_xpm,                      SELECTION_CONDITIONS::ShowAlways );
+        ctxMenu.AddItem( EE_ACTIONS::cutSymbol,          symbolSelectedCondition );
+        ctxMenu.AddItem( EE_ACTIONS::copySymbol,         symbolSelectedCondition );
+        ctxMenu.AddItem( EE_ACTIONS::pasteSymbol,        SELECTION_CONDITIONS::ShowAlways );
     
         ctxMenu.AddSeparator( symbolSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::importSymbol,       SELECTION_CONDITIONS::ShowAlways );
-        ctxMenu.AddItem( ID_LIBEDIT_EXPORT_PART, _( "Export Symbol..." ), "",
-                         export_part_xpm,                symbolSelectedCondition );
+        ctxMenu.AddItem( EE_ACTIONS::exportSymbol,       symbolSelectedCondition );
     }
     
     return true;
@@ -111,42 +148,50 @@ int LIB_CONTROL::AddLibrary( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_CONTROL::AddSymbol( const TOOL_EVENT& aEvent )
+int LIB_CONTROL::EditSymbol( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
     {
-        if( aEvent.IsAction( &EE_ACTIONS::newSymbol ) )
-            static_cast<LIB_EDIT_FRAME*>( m_frame )->CreateNewPart();
-        else if( aEvent.IsAction( &EE_ACTIONS::importSymbol ) )
-            static_cast<LIB_EDIT_FRAME*>( m_frame )->ImportPart();
+        LIB_EDIT_FRAME* editFrame = static_cast<LIB_EDIT_FRAME*>( m_frame );
+        int             unit = 0;
+        LIB_ID          partId = editFrame->GetTreeLIBID( &unit );
+        
+        editFrame->LoadPart( partId.GetLibItemName(), partId.GetLibNickname(), unit );
     }
 
     return 0;
 }
 
 
-int LIB_CONTROL::Save( const TOOL_EVENT& aEvent )
+int LIB_CONTROL::AddSymbol( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
-        static_cast<LIB_EDIT_FRAME*>( m_frame )->OnSave();
+    {
+        LIB_EDIT_FRAME* editFrame = static_cast<LIB_EDIT_FRAME*>( m_frame );
+
+        if( aEvent.IsAction( &EE_ACTIONS::newSymbol ) )
+            editFrame->CreateNewPart();
+        else if( aEvent.IsAction( &EE_ACTIONS::importSymbol ) )
+            editFrame->ImportPart();
+    }
 
     return 0;
 }
 
 
-int LIB_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
+int LIB_CONTROL::Save( const TOOL_EVENT& aEvt )
 {
     if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
-        static_cast<LIB_EDIT_FRAME*>( m_frame )->OnSaveAs();
+    {
+        LIB_EDIT_FRAME* editFrame = static_cast<LIB_EDIT_FRAME*>( m_frame );
 
-    return 0;
-}
-
-
-int LIB_CONTROL::SaveAll( const TOOL_EVENT& aEvent )
-{
-    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
-        static_cast<LIB_EDIT_FRAME*>( m_frame )->OnSaveAll();
+        if( aEvt.IsAction( &EE_ACTIONS::save ) )
+            editFrame->Save();
+        else if( aEvt.IsAction( &EE_ACTIONS::saveAs ) || aEvt.IsAction( &EE_ACTIONS::saveCopyAs ) )
+            editFrame->SaveAs();
+        else if( aEvt.IsAction( &EE_ACTIONS::saveAll ) )
+            editFrame->SaveAll();
+    }
 
     return 0;
 }
@@ -155,7 +200,45 @@ int LIB_CONTROL::SaveAll( const TOOL_EVENT& aEvent )
 int LIB_CONTROL::Revert( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
-        static_cast<LIB_EDIT_FRAME*>( m_frame )->OnRevert();
+        static_cast<LIB_EDIT_FRAME*>( m_frame )->Revert();
+
+    return 0;
+}
+
+
+int LIB_CONTROL::ExportSymbol( const TOOL_EVENT& aEvent )
+{
+    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+        static_cast<LIB_EDIT_FRAME*>( m_frame )->ExportPart();
+
+    return 0;
+}
+
+
+int LIB_CONTROL::CutCopyDelete( const TOOL_EVENT& aEvt )
+{
+    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+    {
+        LIB_EDIT_FRAME* editFrame = static_cast<LIB_EDIT_FRAME*>( m_frame );
+        
+        if( aEvt.IsAction( &EE_ACTIONS::cutSymbol ) || aEvt.IsAction( &EE_ACTIONS::copySymbol ) )
+            editFrame->CopyPartToClipboard();
+        
+        if( aEvt.IsAction( &EE_ACTIONS::cutSymbol ) || aEvt.IsAction( &EE_ACTIONS::deleteSymbol ) )
+            editFrame->DeletePartFromLibrary();
+    }
+
+    return 0;
+}
+
+
+int LIB_CONTROL::DuplicateSymbol( const TOOL_EVENT& aEvent )
+{
+    if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+    {
+        LIB_EDIT_FRAME* editFrame = static_cast<LIB_EDIT_FRAME*>( m_frame );
+        editFrame->DuplicatePart( aEvent.IsAction( &EE_ACTIONS::pasteSymbol ) );
+    }
 
     return 0;
 }
@@ -227,12 +310,20 @@ void LIB_CONTROL::setTransitions()
     Go( &LIB_CONTROL::AddLibrary,            ACTIONS::addLibrary.MakeEvent() );
     Go( &LIB_CONTROL::AddSymbol,             EE_ACTIONS::newSymbol.MakeEvent() );
     Go( &LIB_CONTROL::AddSymbol,             EE_ACTIONS::importSymbol.MakeEvent() );
+    Go( &LIB_CONTROL::EditSymbol,            EE_ACTIONS::editSymbol.MakeEvent() );
 
     Go( &LIB_CONTROL::Save,                  ACTIONS::save.MakeEvent() );
-    Go( &LIB_CONTROL::SaveAs,                ACTIONS::saveAs.MakeEvent() );     // for libraries
-    Go( &LIB_CONTROL::SaveAs,                ACTIONS::saveCopyAs.MakeEvent() ); // for symbols
-    Go( &LIB_CONTROL::SaveAll,               ACTIONS::saveAll.MakeEvent() );
+    Go( &LIB_CONTROL::Save,                  ACTIONS::saveAs.MakeEvent() );     // for libraries
+    Go( &LIB_CONTROL::Save,                  ACTIONS::saveCopyAs.MakeEvent() ); // for symbols
+    Go( &LIB_CONTROL::Save,                  ACTIONS::saveAll.MakeEvent() );
     Go( &LIB_CONTROL::Revert,                ACTIONS::revert.MakeEvent() );
+
+    Go( &LIB_CONTROL::DuplicateSymbol,       EE_ACTIONS::duplicateSymbol.MakeEvent() );
+    Go( &LIB_CONTROL::CutCopyDelete,         EE_ACTIONS::deleteSymbol.MakeEvent() );
+    Go( &LIB_CONTROL::CutCopyDelete,         EE_ACTIONS::cutSymbol.MakeEvent() );
+    Go( &LIB_CONTROL::CutCopyDelete,         EE_ACTIONS::copySymbol.MakeEvent() );
+    Go( &LIB_CONTROL::DuplicateSymbol,       EE_ACTIONS::pasteSymbol.MakeEvent() );
+    Go( &LIB_CONTROL::ExportSymbol,          EE_ACTIONS::exportSymbol.MakeEvent() );
 
     Go( &LIB_CONTROL::OnDeMorgan,            EE_ACTIONS::showDeMorganStandard.MakeEvent() );
     Go( &LIB_CONTROL::OnDeMorgan,            EE_ACTIONS::showDeMorganAlternate.MakeEvent() );

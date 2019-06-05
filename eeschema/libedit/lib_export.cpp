@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,14 +24,11 @@
  */
 
 #include <fctsys.h>
-#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <symbol_lib_table.h>
-#include <general.h>
 #include <lib_edit_frame.h>
 #include <class_library.h>
 #include <wildcards_and_files_ext.h>
-#include <eeschema_id.h>
 #include <lib_manager.h>
 #include <wx/filename.h>
 
@@ -49,9 +46,8 @@ void LIB_EDIT_FRAME::ImportPart()
             return;
     }
 
-    wxFileDialog dlg( this, _( "Import Symbol" ), m_mruPath,
-                      wxEmptyString, SchematicLibraryFileWildcard(),
-                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+    wxFileDialog dlg( this, _( "Import Symbol" ), m_mruPath, wxEmptyString, 
+                      SchematicLibraryFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -93,11 +89,11 @@ void LIB_EDIT_FRAME::ImportPart()
 
     m_libMgr->UpdatePart( entry->GetPart(), libName );
     SyncLibraries( false );
-    loadPart( symbolName, libName, 1 );
+    LoadPart( symbolName, libName, 1 );
 }
 
 
-void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
+void LIB_EDIT_FRAME::ExportPart()
 {
     wxString msg, title;
     LIB_PART* part = getTargetPart();
@@ -160,7 +156,8 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
 
     if( fn.Exists() && !fn.IsDirWritable() )
     {
-        msg.Printf( _( "Write permissions are required to save library \"%s\"." ), fn.GetFullPath() );
+        msg.Printf( _( "Write permissions are required to save library \"%s\"." ), 
+                    fn.GetFullPath() );
         DisplayError( this, msg );
         return;
     }

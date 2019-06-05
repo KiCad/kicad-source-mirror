@@ -49,11 +49,14 @@ public:
 
     int AddLibrary( const TOOL_EVENT& aEvent );
     int AddSymbol( const TOOL_EVENT& aEvent );
+    int EditSymbol( const TOOL_EVENT& aEvent );
 
-    int Save( const TOOL_EVENT& aEvent );
-    int SaveAs( const TOOL_EVENT& aEvent );
-    int SaveAll( const TOOL_EVENT& aEvent );
+    int Save( const TOOL_EVENT& aEvt );
     int Revert( const TOOL_EVENT& aEvent );
+
+    int CutCopyDelete( const TOOL_EVENT& aEvent );
+    int DuplicateSymbol( const TOOL_EVENT& aEvent );
+    int ExportSymbol( const TOOL_EVENT& aEvent );
 
     int OnDeMorgan( const TOOL_EVENT& aEvent );
 

@@ -32,7 +32,6 @@
 #include <dialog_helpers.h>
 #include <bitmaps.h>
 #include <lib_manager.h>
-#include <help_common_strings.h>
 #include <tools/ee_actions.h>
 
 #ifdef __UNIX__

@@ -167,7 +167,14 @@ public:
 
     // Library management
     static TOOL_ACTION newSymbol;
+    static TOOL_ACTION editSymbol;
+    static TOOL_ACTION duplicateSymbol;
+    static TOOL_ACTION deleteSymbol;
+    static TOOL_ACTION cutSymbol;
+    static TOOL_ACTION copySymbol;
+    static TOOL_ACTION pasteSymbol;
     static TOOL_ACTION importSymbol;
+    static TOOL_ACTION exportSymbol;
 
     // Hierarchy navigation
     static TOOL_ACTION enterSheet;

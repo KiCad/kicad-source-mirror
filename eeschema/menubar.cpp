@@ -31,10 +31,7 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/ee_actions.h>
-
 #include "eeschema_id.h"
-#include "general.h"
-#include "help_common_strings.h"
 #include "ee_hotkeys.h"
 #include "sch_edit_frame.h"
 
@@ -102,7 +99,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     submenuImport->SetTitle( _( "Import" ) );
     submenuImport->SetIcon( import_xpm );
 
-    submenuImport->Add( _( "Footprint Association File..." ), HELP_IMPORT_FOOTPRINTS,
+    submenuImport->Add( _( "Footprint Association File..." ), 
+                        _( "Back-import symbol footprint associations from .cmp file created by Pcbnew" ),
                         ID_BACKANNO_ITEMS, import_footprint_names_xpm );
 
     fileMenu->AddMenu( submenuImport,              EE_CONDITIONS::ShowAlways );

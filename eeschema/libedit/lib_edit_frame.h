@@ -140,7 +140,7 @@ public:
     /**
      * Return the LIB_ID of the library or symbol selected in the symbol tree.
      */
-    LIB_ID GetTreeLIBID() const;
+    LIB_ID GetTreeLIBID( int* aUnit = nullptr ) const;
 
     /**
      * Return the current part being edited or NULL if none selected.
@@ -209,24 +209,8 @@ public:
      */
     void CreateNewPart();
 
-    /**
-     * Opens the selected part for editing.
-     */
-    void OnEditPart( wxCommandEvent& aEvent );
-
-    /**
-     * Routine to read one part.
-     * The format is that of libraries, but it loads only 1 component.
-     * Or 1 component if there are several.
-     * If the first component is an alias, it will load the corresponding root.
-     */
     void ImportPart();
-
-    /**
-     * Creates a new library and backup the current component in this library or exports
-     * the component of the current library.
-     */
-    void OnExportPart( wxCommandEvent& event );
+    void ExportPart();
 
     /**
      * Add the current part to the schematic
@@ -236,30 +220,33 @@ public:
     /**
      * Saves the selected part or library.
      */
-    void OnSave();
+    void Save();
 
     /**
      * Saves the selected part or library to a new name and/or location.
      */
-    void OnSaveAs();
+    void SaveAs();
 
     /**
      * Saves all modified parts and libraries.
      */
-    void OnSaveAll();
+    void SaveAll();
 
     /**
      * Reverts unsaved changes in a part, restoring to the last saved state.
      */
-    void OnRevert();
+    void Revert();
+
+    void DeletePartFromLibrary();
+    
+    void CopyPartToClipboard();
+
+    void LoadPart( const wxString& aLibrary, const wxString& aPart, int Unit );
 
     /**
-     * Removes a part from the working copy of a library.
+     * Inserts a duplicate part.  If aFromClipboard is true then action is a paste.
      */
-    void OnRemovePart( wxCommandEvent& aEvent );
-
-    void OnCopyCutPart( wxCommandEvent& aEvent );
-    void OnPasteDuplicatePart( wxCommandEvent& aEvent );
+    void DuplicatePart( bool aFromClipboard );
 
     void OnSelectUnit( wxCommandEvent& event );
 
@@ -269,7 +256,6 @@ public:
     void FreezeSearchTree();
     void ThawSearchTree();
 
-    void OnUpdateHavePart( wxUpdateUIEvent& aEvent );
     void OnUpdateSyncPinEdit( wxUpdateUIEvent& event );
     void OnUpdatePartNumber( wxUpdateUIEvent& event );
 
@@ -320,8 +306,6 @@ public:
 private:
     // Sets up the tool framework
     void setupTools();
-
-    void loadPart( const wxString& aLibrary, const wxString& aPart, int Unit );
 
     void savePartAs();
 

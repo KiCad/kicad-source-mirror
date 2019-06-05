@@ -24,17 +24,10 @@
  */
 
 #include <fctsys.h>
-#include <kiway.h>
-#include <gr_basic.h>
-#include <macros.h>
 #include <pgm_base.h>
-#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <gestfich.h>
-
-#include <eeschema_id.h>
 #include <tools/ee_actions.h>
-#include <general.h>
 #include <lib_edit_frame.h>
 #include <class_library.h>
 #include <template_fieldnames.h>
@@ -212,8 +205,8 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, in
  * @param aCurrentScreen    the existing frame screen
  * @param aIncomingScreen   a screen that is intended to replace the current screen
  */
-static void synchronizeLibEditScreenSettings(
-        const SCH_SCREEN& aCurrentScreen, SCH_SCREEN& aIncomingScreen )
+static void synchronizeLibEditScreenSettings( const SCH_SCREEN& aCurrentScreen, 
+                                              SCH_SCREEN& aIncomingScreen )
 {
     aIncomingScreen.SetGrid( aCurrentScreen.GetGridSize() );
 }
@@ -269,7 +262,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& a
 }
 
 
-void LIB_EDIT_FRAME::OnSaveAll()
+void LIB_EDIT_FRAME::SaveAll()
 {
     saveAllLibraries( false );
     m_treePane->Refresh();
@@ -345,25 +338,16 @@ void LIB_EDIT_FRAME::CreateNewPart()
 
     m_libMgr->UpdatePart( &new_part, lib );
     SyncLibraries( false );
-    loadPart( name, lib, 1 );
+    LoadPart( name, lib, 1 );
 
     new_part.SetConversion( dlg.GetAlternateBodyStyle() );
     // must be called after loadPart, that calls SetShowDeMorgan, but
     // because the symbol is empty,it looks like it has no alternate body
     SetShowDeMorgan( dlg.GetAlternateBodyStyle() );
-
 }
 
 
-void LIB_EDIT_FRAME::OnEditPart( wxCommandEvent& aEvent )
-{
-    int unit = 0;
-    LIB_ID partId = m_treePane->GetLibTree()->GetSelectedLibId( &unit );
-    loadPart( partId.GetLibItemName(), partId.GetLibNickname(), unit );
-}
-
-
-void LIB_EDIT_FRAME::OnSave()
+void LIB_EDIT_FRAME::Save()
 {
     LIB_ID libId = getTargetLibId();
     const wxString& libName = libId.GetLibNickname();
@@ -385,7 +369,7 @@ void LIB_EDIT_FRAME::OnSave()
 }
 
 
-void LIB_EDIT_FRAME::OnSaveAs()
+void LIB_EDIT_FRAME::SaveAs()
 {
     LIB_ID libId = getTargetLibId();
     const wxString& libName = libId.GetLibNickname();
@@ -493,7 +477,7 @@ void LIB_EDIT_FRAME::savePartAs()
         m_treePane->GetLibTree()->SelectLibId( LIB_ID( new_lib, new_part.GetName() ) );
 
         if( isCurrentPart( old_lib_id ) )
-            loadPart( new_name, new_lib, m_unit );
+            LoadPart( new_name, new_lib, m_unit );
     }
 }
 
@@ -536,14 +520,14 @@ void LIB_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName, wxArrayStr
 }
 
 
-void LIB_EDIT_FRAME::OnRemovePart( wxCommandEvent& aEvent )
+void LIB_EDIT_FRAME::DeletePartFromLibrary()
 {
     LIB_ID libId = getTargetLibId();
 
     if( m_libMgr->IsPartModified( libId.GetLibItemName(), libId.GetLibNickname() )
         && !IsOK( this, _( wxString::Format( "Component %s has been modified\n"
-                        "Do you want to remove it from the library?",
-                        libId.GetUniStringLibItemName() ) ) ) )
+                                             "Do you want to remove it from the library?",
+                                             libId.GetUniStringLibItemName() ) ) ) )
     {
         return;
     }
@@ -557,7 +541,7 @@ void LIB_EDIT_FRAME::OnRemovePart( wxCommandEvent& aEvent )
 }
 
 
-void LIB_EDIT_FRAME::OnCopyCutPart( wxCommandEvent& aEvent )
+void LIB_EDIT_FRAME::CopyPartToClipboard()
 {
     int dummyUnit;
     LIB_ID libId = m_treePane->GetLibTree()->GetSelectedLibId( &dummyUnit );
@@ -579,13 +563,10 @@ void LIB_EDIT_FRAME::OnCopyCutPart( wxCommandEvent& aEvent )
     clipboard->SetData( data );
 
     clipboard->Flush();
-
-    if( aEvent.GetId() == ID_LIBEDIT_CUT_PART )
-        OnRemovePart( aEvent );
 }
 
 
-void LIB_EDIT_FRAME::OnPasteDuplicatePart( wxCommandEvent& aEvent )
+void LIB_EDIT_FRAME::DuplicatePart( bool aFromClipboard )
 {
     int dummyUnit;
     LIB_ID libId = m_treePane->GetLibTree()->GetSelectedLibId( &dummyUnit );
@@ -597,12 +578,7 @@ void LIB_EDIT_FRAME::OnPasteDuplicatePart( wxCommandEvent& aEvent )
     LIB_PART* srcPart = nullptr;
     LIB_PART* newPart = nullptr;
 
-    if( aEvent.GetId() == ID_LIBEDIT_DUPLICATE_PART )
-    {
-        srcPart = m_libMgr->GetBufferedPart( libId.GetLibItemName(), lib );
-        newPart = new LIB_PART( *srcPart );
-    }
-    else if( aEvent.GetId() == ID_LIBEDIT_PASTE_PART )
+    if( aFromClipboard )
     {
         auto clipboard = wxTheClipboard;
         wxClipboardLocker clipboardLock( clipboard );
@@ -628,7 +604,10 @@ void LIB_EDIT_FRAME::OnPasteDuplicatePart( wxCommandEvent& aEvent )
         }
     }
     else
-        wxFAIL;
+    {
+        srcPart = m_libMgr->GetBufferedPart( libId.GetLibItemName(), lib );
+        newPart = new LIB_PART( *srcPart );
+    }
 
     if( !newPart )
         return;
@@ -669,7 +648,7 @@ void LIB_EDIT_FRAME::fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibr
 }
 
 
-void LIB_EDIT_FRAME::OnRevert()
+void LIB_EDIT_FRAME::Revert()
 {
     LIB_ID libId = getTargetLibId();
     const wxString& libName = libId.GetLibNickname();
@@ -718,14 +697,14 @@ void LIB_EDIT_FRAME::OnRevert()
     }
 
     if( reload_currentPart && m_libMgr->PartExists( curr_partName, libName ) )
-        loadPart( curr_partName, libName, unit );
+        LoadPart( curr_partName, libName, unit );
 
     m_treePane->Refresh();
     refreshSchematic();
 }
 
 
-void LIB_EDIT_FRAME::loadPart( const wxString& aAlias, const wxString& aLibrary, int aUnit )
+void LIB_EDIT_FRAME::LoadPart( const wxString& aAlias, const wxString& aLibrary, int aUnit )
 {
     wxCHECK( m_libMgr->PartExists( aAlias, aLibrary ), /* void */ );
     LIB_PART* part = m_libMgr->GetBufferedPart( aAlias, aLibrary );
@@ -743,7 +722,7 @@ void LIB_EDIT_FRAME::loadPart( const wxString& aAlias, const wxString& aLibrary,
     // Optimize default edit options for this symbol
     // Usually if units are locked, graphic items are specific to each unit
     // and if units are interchangeable, graphic items are common to units
-    m_DrawSpecificUnit = part->UnitsLocked() ? true : false;
+    m_DrawSpecificUnit = part->UnitsLocked();
 
     LoadOneLibraryPartAux( alias, aLibrary, aUnit, 0 );
 }
