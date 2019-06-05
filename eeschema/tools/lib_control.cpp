@@ -90,7 +90,9 @@ TOOL_ACTION EE_ACTIONS::showComponentTree( "eeschema.SymbolLibraryControl.showCo
 
 bool LIB_CONTROL::Init()
 {
-    EE_TOOL_BASE::Init();
+    m_frame = getEditFrame<SCH_BASE_FRAME>();
+    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    m_isLibEdit = m_frame->IsType( FRAME_SCH_LIB_EDITOR );
     
     if( m_isLibEdit )
     {
