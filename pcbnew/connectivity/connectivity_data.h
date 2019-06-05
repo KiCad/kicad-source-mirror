@@ -29,9 +29,10 @@
 
 #include <core/typeinfo.h>
 
-#include <wx/string.h>
-#include <vector>
 #include <memory>
+#include <mutex>
+#include <vector>
+#include <wx/string.h>
 
 #include <math/vector2d.h>
 #include <geometry/shape_poly_set.h>
