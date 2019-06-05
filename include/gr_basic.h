@@ -87,9 +87,6 @@ typedef enum {
 } GRLineStypeType;
 
 
-
-void GRSetDrawMode( wxDC* DC, GR_DRAWMODE mode );
-GR_DRAWMODE  GRGetDrawMode( wxDC* DC );
 void GRResetPenAndBrush( wxDC* DC );
 void GRSetColorPen( wxDC* DC, COLOR4D Color, int width = 1, wxPenStyle stype = wxPENSTYLE_SOLID );
 void GRSetBrush( wxDC* DC, COLOR4D Color, bool fill = false );

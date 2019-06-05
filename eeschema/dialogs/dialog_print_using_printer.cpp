@@ -419,7 +419,7 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
 #endif
     OffsetLogicalOrigin( xoffset, yoffset );
 
-    GRSetDrawMode( dc, GR_DEFAULT_DRAWMODE );
+    dc->SetLogicalFunction( wxCOPY );
     GRResetPenAndBrush( dc );
 
     aScreen->m_IsPrinting = true;
@@ -427,7 +427,6 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
     COLOR4D bgColor = m_parent->GetDrawBgColor();
     m_parent->SetDrawBgColor( COLOR4D::WHITE );
 
-    GRSetDrawMode( dc, GR_COPY );
     GRSFilledRect( nullptr, dc, fitRect.GetX(), fitRect.GetY(), fitRect.GetRight(),
                    fitRect.GetBottom(), 0, COLOR4D::WHITE, COLOR4D::WHITE );
 

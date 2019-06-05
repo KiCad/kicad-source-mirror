@@ -932,7 +932,7 @@ void SCH_EDIT_FRAME::PrintPage( wxDC* aDC )
 {
     wxString fileName = Prj().AbsolutePath( GetScreen()->GetFileName() );
 
-    GRSetDrawMode( aDC, GR_DEFAULT_DRAWMODE );
+    aDC->SetLogicalFunction( wxCOPY );
     GetScreen()->Print( aDC );
     PrintWorkSheet( aDC, GetScreen(), GetDefaultLineThickness(), IU_PER_MILS, fileName );
 }

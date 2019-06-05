@@ -36,9 +36,6 @@
 #include <wx/graphics.h>
 #include <wx/tokenzr.h>
 #include <geometry/geometry_utils.h>
-#if defined(__WXMAC__) && defined(USE_WX_GRAPHICS_CONTEXT)
-#include <wx/dcgraph.h>
-#endif
 
 static const bool FILLED = true;
 static const bool NOT_FILLED = false;
@@ -217,54 +214,6 @@ bool GetGRForceBlackPenState( void )
 }
 
 
-/*************************************/
-/* Set the device context draw mode. */
-/*************************************/
-void GRSetDrawMode( wxDC* DC, GR_DRAWMODE draw_mode )
-{
-    if( draw_mode & GR_OR )
-#if defined(__WXMAC__) && (wxMAC_USE_CORE_GRAPHICS || wxCHECK_VERSION( 2, 9, 0 ) )
-
-        DC->SetLogicalFunction( wxCOPY );
-#elif defined( USE_WX_GRAPHICS_CONTEXT )
-
-        DC->SetLogicalFunction( wxCOPY );
-#else
-
-        DC->SetLogicalFunction( wxOR );
-#endif
-    else if( draw_mode & GR_XOR )
-#if defined( USE_WX_GRAPHICS_CONTEXT )
-
-        DC->SetLogicalFunction( wxCOPY );
-#else
-
-        DC->SetLogicalFunction( wxXOR );
-#endif
-    else if( draw_mode & GR_NXOR )
-#if defined(__WXMAC__) && (wxMAC_USE_CORE_GRAPHICS || wxCHECK_VERSION( 2, 9, 0 ) )
-
-        DC->SetLogicalFunction( wxXOR );
-#elif defined( USE_WX_GRAPHICS_CONTEXT )
-
-        DC->SetLogicalFunction( wxCOPY );
-#else
-
-        DC->SetLogicalFunction( wxEQUIV );
-#endif
-    else if( draw_mode & GR_INVERT )
-#if defined( USE_WX_GRAPHICS_CONTEXT )
-
-        DC->SetLogicalFunction( wxCOPY );
-#else
-
-        DC->SetLogicalFunction( wxINVERT );
-#endif
-    else if( draw_mode & GR_COPY )
-        DC->SetLogicalFunction( wxCOPY );
-}
-
-
 void GRPutPixel( EDA_RECT* ClipBox, wxDC* DC, int x, int y, COLOR4D Color )
 {
     if( ClipBox && !ClipBox->Contains( x, y ) )
@@ -343,42 +292,16 @@ void GRLineArray( EDA_RECT* aClipBox, wxDC* aDC, std::vector<wxPoint>& aLines,
     if( aClipBox )
         aClipBox->Inflate( aWidth / 2 );
 
-#if defined( __WXMAC__ ) && defined( USE_WX_GRAPHICS_CONTEXT )
-    wxGCDC *gcdc = wxDynamicCast( aDC, wxGCDC );
-    if( gcdc )
+    for( unsigned i = 0; i < aLines.size(); i += 2 )
     {
-        wxGraphicsContext *gc = gcdc->GetGraphicsContext();
+        int x1 = aLines[i].x;
+        int y1 = aLines[i].y;
+        int x2 = aLines[i + 1].x;
+        int y2 = aLines[i + 1].y;
+        if( ( aClipBox == NULL ) || !ClipLine( aClipBox, x1, y1, x2, y2 ) )
+            aDC->DrawLine( x1, y1, x2, y2 );
+    }
 
-        // create path
-        wxGraphicsPath path = gc->CreatePath();
-        for( unsigned i = 0; i < aLines.size(); i += 2 )
-        {
-            int x1 = aLines[i].x;
-            int y1 = aLines[i].y;
-            int x2 = aLines[i+1].x;
-            int y2 = aLines[i+1].y;
-            if( ( aClipBox == NULL ) || !ClipLine( aClipBox, x1, y1, x2, y2 ) )
-            {
-                path.MoveToPoint( x1, y1 );
-                path.AddLineToPoint( x2, y2 );
-            }
-        }
-        // draw path
-        gc->StrokePath( path );
-    }
-    else
-#endif
-    {
-        for( unsigned i = 0; i < aLines.size(); i += 2 )
-        {
-            int x1 = aLines[i].x;
-            int y1 = aLines[i].y;
-            int x2 = aLines[i+1].x;
-            int y2 = aLines[i+1].y;
-            if( ( aClipBox == NULL ) || !ClipLine( aClipBox, x1, y1, x2, y2 ) )
-                aDC->DrawLine( x1, y1, x2, y2 );
-        }
-    }
     GRMoveTo( aLines[aLines.size() - 1].x, aLines[aLines.size() - 1].y );
 
     if( aClipBox )
@@ -567,36 +490,11 @@ static void GRSPoly( EDA_RECT* ClipBox, wxDC* DC, int n, wxPoint Points[],
     }
     else
     {
-#if defined( __WXMAC__ ) && defined( USE_WX_GRAPHICS_CONTEXT )
-        wxGCDC *gcdc = wxDynamicCast( DC, wxGCDC );
-        if( gcdc )
+
+        GRMoveTo( Points[0].x, Points[0].y );
+        for( int i = 1; i < n; ++i )
         {
-            wxGraphicsContext *gc = gcdc->GetGraphicsContext();
-
-            // set pen
-            GRSetColorPen( DC, Color, width );
-
-            // create path
-            wxGraphicsPath path = gc->CreatePath();
-            path.MoveToPoint( Points[0].x, Points[0].y );
-            for( int i = 1; i < n; ++i )
-            {
-                path.AddLineToPoint( Points[i].x, Points[i].y );
-            }
-            // draw path
-            gc->StrokePath( path );
-
-            // correctly update last position
-            GRMoveTo( Points[n - 1].x, Points[n - 1].y );
-        }
-        else
-#endif
-        {
-            GRMoveTo( Points[0].x, Points[0].y );
-            for( int i = 1; i < n; ++i )
-            {
-                GRLineTo( ClipBox, DC, Points[i].x, Points[i].y, width, Color );
-            }
+            GRLineTo( ClipBox, DC, Points[i].x, Points[i].y, width, Color );
         }
     }
 }
@@ -624,46 +522,19 @@ static void GRSClosedPoly( EDA_RECT* aClipBox, wxDC* aDC,
     }
     else
     {
-#if defined( __WXMAC__ ) && defined( USE_WX_GRAPHICS_CONTEXT )
-        wxGCDC *gcdc = wxDynamicCast( aDC, wxGCDC );
-        if( gcdc )
+
+        GRMoveTo( aPoints[0].x, aPoints[0].y );
+        for( int i = 1; i < aPointCount; ++i )
         {
-            wxGraphicsContext *gc = gcdc->GetGraphicsContext();
-
-            // set pen
-            GRSetColorPen( aDC, aColor, aWidth );
-
-            // create path
-            wxGraphicsPath path = gc->CreatePath();
-            path.MoveToPoint( aPoints[0].x, aPoints[0].y );
-            for( int i = 1; i < aPointCount; ++i )
-            {
-                path.AddLineToPoint( aPoints[i].x, aPoints[i].y );
-            }
-            if( aPoints[aPointCount - 1] != aPoints[0] )
-                path.AddLineToPoint( aPoints[0].x, aPoints[0].y );
-            // draw path
-            gc->StrokePath( path );
-
-            // correctly update last position
-            GRMoveTo( aPoints[aPointCount - 1].x, aPoints[aPointCount - 1].y );
+            GRLineTo( aClipBox, aDC, aPoints[i].x, aPoints[i].y, aWidth, aColor );
         }
-        else
-#endif
+
+        int lastpt = aPointCount - 1;
+
+        // Close the polygon
+        if( aPoints[lastpt] != aPoints[0] )
         {
-            GRMoveTo( aPoints[0].x, aPoints[0].y );
-            for( int i = 1; i < aPointCount; ++i )
-            {
-                GRLineTo( aClipBox, aDC, aPoints[i].x, aPoints[i].y, aWidth, aColor );
-            }
-
-            int lastpt = aPointCount - 1;
-
-            // Close the polygon
-            if( aPoints[lastpt] != aPoints[0] )
-            {
-                GRLineTo( aClipBox, aDC, aPoints[0].x, aPoints[0].y, aWidth, aColor );
-            }
+            GRLineTo( aClipBox, aDC, aPoints[0].x, aPoints[0].y, aWidth, aColor );
         }
     }
 }

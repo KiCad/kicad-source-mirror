@@ -135,17 +135,6 @@ KiCad has many build options that can be configured to build different options d
 the availability of support for each option on a given platform.  This section documents
 these options and their default values.
 
-## Advanced Graphics Context ## {#graphics_context_opt}
-
-The USE_WX_GRAPHICS_CONTEXT option replaces wxDC with wxGraphicsContext for graphics rendering.
-This option is disabled by default.  Warning: the is experimental and has not been maintained
-so use at your own risk.
-
-## Graphics Context Overlay ## {#overlay_opt}
-
-The USE_WX_OVERLAY option is used to enable the optional wxOverlay class for graphics rendering
-on macOS.  This is enabled on macOS and GTK3 by default and disabled on all other platforms.
-
 ## Scripting Support ## {#scripting_opt}
 
 The KICAD_SCRIPTING option is used to enable building the Python scripting support into Pcbnew.
