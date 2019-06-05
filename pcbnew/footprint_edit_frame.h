@@ -193,11 +193,15 @@ public:
      */
     bool Clear_Pcb( bool aQuery );
 
-    /// Return the LIB_ID of the part selected in the footprint or the part being edited.
-    LIB_ID GetTargetFPID() const;
+    /// Return the LIB_ID of the part or library selected in the footprint tree.
+    LIB_ID GetTreeFPID() const;
 
     /// Return the LIB_ID of the part being edited.
     LIB_ID GetLoadedFPID() const;
+
+    /// Return the LIB_ID of the part selected in the footprint tree, or the loaded part if
+    /// there is no selection in the tree.
+    LIB_ID GetTargetFPID() const;
 
     /**
      * Perform a geometric transform on the current footprint.

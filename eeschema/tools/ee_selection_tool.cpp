@@ -160,8 +160,7 @@ EE_SELECTION_TOOL::EE_SELECTION_TOOL() :
         m_isLibEdit( false ),
         m_isLibView( false ),
         m_unit( 0 ),
-        m_convert( 0 ),
-        m_menu( *this )
+        m_convert( 0 )
 {
 }
 

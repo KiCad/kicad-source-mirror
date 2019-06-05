@@ -23,14 +23,10 @@
 
 #include "footprint_tree_pane.h"
 #include "fp_tree_synchronizing_adapter.h"
-#include <tool/actions.h>
-#include <tool/action_menu.h>
 #include <widgets/lib_tree.h>
 #include <pcbnew_id.h>
 #include <footprint_edit_frame.h>
 #include <fp_lib_table.h>
-#include <menus_helpers.h>
-#include <tools/pcb_actions.h>
 
 FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
         : wxPanel( aParent ),
@@ -45,47 +41,7 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
     SetSizer( boxSizer );      // should remove the previous sizer according to wxWidgets docs
     Layout();
     boxSizer->Fit( this );
-
-    // Setup right click-context menus
-    std::unique_ptr<ACTION_MENU> menuLibrary = std::make_unique<ACTION_MENU>();
-    menuLibrary->Add( ACTIONS::newLibrary );
-    menuLibrary->Add( ACTIONS::addLibrary );
-    menuLibrary->Add( ACTIONS::save );
-    menuLibrary->Add( ACTIONS::saveAs );
-
-    menuLibrary->AppendSeparator();
-    menuLibrary->Add( PCB_ACTIONS::newFootprint );
-#ifdef KICAD_SCRIPTING
-    menuLibrary->Add( PCB_ACTIONS::createFootprint );
-#endif
-    menuLibrary->Add( _( "Import Footprint..." ), ID_MODEDIT_IMPORT_PART, import_module_xpm );
-    menuLibrary->Add( _( "Paste Footprint" ), ID_MODEDIT_PASTE_PART, paste_xpm );
-
-    std::unique_ptr<ACTION_MENU> menuPart = std::make_unique<ACTION_MENU>();
-    menuPart->Add( _( "Edit Footprint" ), ID_MODEDIT_EDIT_MODULE, edit_xpm );
-
-    menuPart->AppendSeparator();
-    menuPart->Add( ACTIONS::save );
-    menuPart->Add( ACTIONS::saveCopyAs );
-    menuPart->Add( PCB_ACTIONS::deleteFootprint );
-    menuPart->Add( ACTIONS::revert );
-
-    menuPart->AppendSeparator();
-    menuPart->Add( _( "Cut" ), ID_MODEDIT_CUT_PART, cut_xpm );
-    menuPart->Add( _( "Copy" ), ID_MODEDIT_COPY_PART, copy_xpm );
-
-    menuPart->AppendSeparator();
-    menuPart->Add( _( "Export Footprint..." ), ID_MODEDIT_EXPORT_PART, export_module_xpm );
-
-    // Menu displayed when nothing is selected
-    std::unique_ptr<ACTION_MENU> menuNoSelection = std::make_unique<ACTION_MENU>();
-    menuNoSelection->Add( ACTIONS::newLibrary );
-    menuNoSelection->Add( ACTIONS::addLibrary );
-
-    m_tree->SetMenu( LIB_TREE_NODE::LIBID, std::move( menuPart ) );
-    m_tree->SetMenu( LIB_TREE_NODE::LIB, std::move( menuLibrary ) );
-    m_tree->SetMenu( LIB_TREE_NODE::INVALID, std::move( menuNoSelection ) );
-
+    
     // Event handlers
     Bind( COMPONENT_SELECTED, &FOOTPRINT_TREE_PANE::onComponentSelected, this );
     m_tree->Bind( wxEVT_UPDATE_UI, &FOOTPRINT_TREE_PANE::onUpdateUI, this );

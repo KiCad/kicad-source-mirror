@@ -96,13 +96,7 @@ public:
      * @param aFiltered is an optional vector, that is filled with items removed by the filter
      */
     SELECTION& RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
-            std::vector<BOARD_ITEM*>* aFiltered = NULL, bool aConfirmLockedItems = false );
-
-
-    inline TOOL_MENU& GetToolMenu()
-    {
-        return m_menu;
-    }
+            std::vector<BOARD_ITEM*>* aFiltered = nullptr, bool aConfirmLockedItems = false );
 
     ///> Checks if the user has agreed to modify locked items for the given selection.
     SELECTION_LOCK_FLAGS CheckLock();
@@ -353,8 +347,6 @@ private:
     bool m_multiple;            // Multiple selection mode is active
     bool m_skip_heuristics;     // Heuristics are not allowed when choosing item under cursor
     bool m_locked;              // Other tools are not allowed to modify locked items
-
-    TOOL_MENU m_menu;
 
     /// Private state (opaque pointer/compilation firewall)
     class PRIV;

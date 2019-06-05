@@ -28,6 +28,8 @@
 #include <footprint_info_impl.h>
 #include <class_board.h>
 #include <class_module.h>
+#include <tool/tool_manager.h>
+#include <tools/footprint_editor_tools.h>
 
 
 LIB_TREE_MODEL_ADAPTER::PTR FP_TREE_SYNCHRONIZING_ADAPTER::Create( FOOTPRINT_EDIT_FRAME* aFrame,
@@ -42,6 +44,12 @@ FP_TREE_SYNCHRONIZING_ADAPTER::FP_TREE_SYNCHRONIZING_ADAPTER( FOOTPRINT_EDIT_FRA
         FP_TREE_MODEL_ADAPTER( aLibs ),
         m_frame( aFrame )
 {
+}
+
+
+TOOL_INTERACTIVE* FP_TREE_SYNCHRONIZING_ADAPTER::GetContextMenuTool()
+{
+    return m_frame->GetToolManager()->GetTool<MODULE_EDITOR_TOOLS>();
 }
 
 

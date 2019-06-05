@@ -81,8 +81,6 @@ public:
      */
     SELECTION& GetSelection();
 
-    inline TOOL_MENU& GetToolMenu() { return m_menu; }
-
     /**
      * Function RequestSelection()
      *
@@ -251,8 +249,6 @@ private:
     bool m_isLibView;           // True when libview is the parent frame
     int  m_unit;                // Fixed unit filter (for symbol editor)
     int  m_convert;             // Fixed DeMorgan filter (for symbol editor)
-
-    TOOL_MENU m_menu;
 };
 
 #endif //KICAD_SCH_SELECTION_TOOL_H

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -23,15 +23,12 @@
 #define LIB_TREE_MODEL_ADAPTER_H
 
 #include <lib_id.h>
-
 #include <lib_tree_model.h>
-
 #include <wx/hashmap.h>
 #include <wx/dataview.h>
 #include <wx/headerctrl.h>
 #include <vector>
 #include <functional>
-
 
 /**
  * Adapter class in the component selector Model-View-Adapter (mediated MVC)
@@ -90,6 +87,9 @@
  * - `Compare()` - compare two rows, for sorting
  * - `HasDefaultCompare()` - whether sorted by default
  */
+ 
+class TOOL_INTERACTIVE;
+
 class LIB_TREE_MODEL_ADAPTER: public wxDataViewModel
 {
 public:
@@ -251,6 +251,9 @@ public:
     void Thaw() { m_freeze--; }
     bool IsFrozen() const { return m_freeze; }
 
+    // Allows subclasses to nominate a context menu handler.
+    virtual TOOL_INTERACTIVE* GetContextMenuTool() { return nullptr; }
+
 protected:
     static wxDataViewItem ToItem( LIB_TREE_NODE const* aNode );
     static LIB_TREE_NODE const* ToNode( wxDataViewItem aItem );
@@ -258,40 +261,31 @@ protected:
 
     LIB_TREE_NODE_ROOT m_tree;
 
-    /**
-     * Constructor
-     */
     LIB_TREE_MODEL_ADAPTER();
 
     /**
      * Check whether a container has columns too
      */
-    virtual bool HasContainerColumns( wxDataViewItem const& aItem ) const override;
+    bool HasContainerColumns( wxDataViewItem const& aItem ) const override;
 
     /**
      * Check whether an item can have children.
      */
-    virtual bool IsContainer( wxDataViewItem const& aItem ) const override;
+    bool IsContainer( wxDataViewItem const& aItem ) const override;
 
     /**
      * Get the parent of an item.
      *
-     * @param aItem item to get the parent of
      * @return parent of aItem, or an invalid wxDataViewItem if parent is root
      */
-    virtual wxDataViewItem GetParent( wxDataViewItem const& aItem ) const override;
+    wxDataViewItem GetParent( wxDataViewItem const& aItem ) const override;
+
+    unsigned int GetColumnCount() const override { return 2; }
 
     /**
-     * Return the number of columns in the model
+     * Return the type of data stored in the column as indicated by wxVariant::GetType()
      */
-    virtual unsigned int GetColumnCount() const override { return 2; }
-
-    /**
-     * Return the type of data stored in the column
-     *
-     * @return type of data as indicated by wxVariant::GetType()
-     */
-    virtual wxString GetColumnType( unsigned int aCol ) const override { return "string"; }
+    wxString GetColumnType( unsigned int aCol ) const override { return "string"; }
 
     /**
      * Get the value of an item.
@@ -300,17 +294,17 @@ protected:
      * @param aItem     item whose data will be placed into aVariant
      * @param aCol      column number of the data
      */
-    virtual void GetValue( wxVariant&              aVariant,
-                           wxDataViewItem const&   aItem,
-                           unsigned int            aCol ) const override;
+    void GetValue( wxVariant&              aVariant,
+                   wxDataViewItem const&   aItem,
+                   unsigned int            aCol ) const override;
 
     /**
      * Set the value of an item. Does nothing - this model doesn't support
      * editing.
      */
-    virtual bool SetValue( wxVariant const&        aVariant,
-                           wxDataViewItem const&   aItem,
-                           unsigned int            aCol ) override { return false; }
+    bool SetValue( wxVariant const& aVariant,
+                   wxDataViewItem const&   aItem,
+                   unsigned int            aCol ) override { return false; }
 
     /**
      * Get any formatting for an item.
@@ -320,9 +314,9 @@ protected:
      * @param aAttr     receiver for attributes
      * @return          true iff the item has non-default attributes
      */
-    virtual bool GetAttr( wxDataViewItem const&   aItem,
-                          unsigned int            aCol,
-                          wxDataViewItemAttr&     aAttr ) const override;
+    bool GetAttr( wxDataViewItem const&   aItem,
+                  unsigned int            aCol,
+                  wxDataViewItemAttr&     aAttr ) const override;
 
 private:
     CMP_FILTER_TYPE     m_filter;

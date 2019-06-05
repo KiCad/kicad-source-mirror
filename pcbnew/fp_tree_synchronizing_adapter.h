@@ -41,6 +41,8 @@ public:
 
     int GetLibrariesCount() const override;
 
+    TOOL_INTERACTIVE* GetContextMenuTool() override;
+
 protected:
     FP_TREE_SYNCHRONIZING_ADAPTER( FOOTPRINT_EDIT_FRAME* aFrame, FP_LIB_TABLE* aLibs );
 
@@ -53,6 +55,7 @@ protected:
     bool GetAttr( wxDataViewItem const& aItem, unsigned int aCol,
                   wxDataViewItemAttr& aAttr ) const override;
 
+protected:
     FOOTPRINT_EDIT_FRAME*  m_frame;
     std::set<wxString>     m_libMap;   // Set to indicate libraries currently in tree
 };

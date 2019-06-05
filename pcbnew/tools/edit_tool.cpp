@@ -207,12 +207,7 @@ bool EDIT_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
     m_selectionTool = static_cast<SELECTION_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveSelection" ) );
-
-    if( !m_selectionTool )
-    {
-        DisplayError( NULL, _( "pcbnew.InteractiveSelection tool is not available" ) );
-        return false;
-    }
+    wxASSERT_MSG( m_selectionTool, "pcbnew.InteractiveSelection tool is not available" );
 
     auto editingModuleCondition = [ this ] ( const SELECTION& aSelection ) {
         return m_editModules;

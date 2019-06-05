@@ -44,6 +44,9 @@ public:
 
     virtual ~LIB_CONTROL() { }
 
+    /// @copydoc TOOL_INTERACTIVE::Init()
+    bool Init() override;
+
     int AddLibrary( const TOOL_EVENT& aEvent );
     int AddSymbol( const TOOL_EVENT& aEvent );
 

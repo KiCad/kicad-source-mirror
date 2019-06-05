@@ -59,11 +59,10 @@ public:
         m_frame( nullptr ),
         m_view( nullptr ),
         m_selectionTool( nullptr ),
-        m_isLibEdit( false ),
-        m_menu( *this )
+        m_isLibEdit( false )
     {};
 
-    virtual ~EE_TOOL_BASE() {};
+    ~EE_TOOL_BASE() override {};
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override
@@ -98,9 +97,6 @@ public:
 
         m_view = static_cast<KIGFX::SCH_VIEW*>( getView() );
     }
-
-    ///> Get the tool's top-level context menu
-    inline TOOL_MENU& GetToolMenu() { return m_menu; }
 
 protected:
     ///> Similar to getView()->Update(), but handles items that are redrawn by their parents.
@@ -142,9 +138,6 @@ protected:
     KIGFX::SCH_VIEW*   m_view;
     EE_SELECTION_TOOL* m_selectionTool;
     bool               m_isLibEdit;
-
-    /// Menu model displayed by the tool.
-    TOOL_MENU m_menu;
 };
 
 #endif

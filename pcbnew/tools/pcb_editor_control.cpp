@@ -329,8 +329,7 @@ public:
 
 PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
     PCB_TOOL_BASE( "pcbnew.EditorControl" ),
-    m_frame( nullptr ),
-    m_menu( *this )
+    m_frame( nullptr )
 {
     m_placeOrigin.reset( new KIGFX::ORIGIN_VIEWITEM( KIGFX::COLOR4D( 0.8, 0.0, 0.0, 1.0 ),
                                                 KIGFX::ORIGIN_VIEWITEM::CIRCLE_CROSS ) );

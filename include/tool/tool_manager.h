@@ -387,6 +387,11 @@ public:
         m_warpMouseAfterContextMenu = false;
     }
 
+    /**
+     * Function DispatchContextMenu()
+     * Handles context menu related events.
+     */
+    void DispatchContextMenu( const TOOL_EVENT& aEvent );
 
 private:
     typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> TRANSITION;
@@ -412,12 +417,6 @@ private:
      * @return True if a tool was invoked, false otherwise.
      */
     bool dispatchActivation( const TOOL_EVENT& aEvent );
-
-    /**
-     * Function dispatchContextMenu()
-     * Handles context menu related events.
-     */
-    void dispatchContextMenu( const TOOL_EVENT& aEvent );
 
     /**
      * Function invokeTool()

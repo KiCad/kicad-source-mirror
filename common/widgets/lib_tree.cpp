@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,14 +24,12 @@
 
 #include "lib_tree.h"
 #include <wxdataviewctrl_helpers.h>
-
 #include <wx/artprov.h>
 #include <wx/sizer.h>
 #include <wx/statbmp.h>
 #include <wx/html/htmlwin.h>
-
-#include <lib_table_base.h>
-
+#include <tool/tool_interactive.h>
+#include <tool/tool_manager.h>
 
 LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAPTER::PTR& aAdapter,
                     WIDGETS aWidgets, wxHtmlWindow* aDetails )
@@ -40,12 +38,8 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAP
       m_lib_table( aLibTable ),
       m_adapter( aAdapter ),
       m_query_ctrl( nullptr ),
-      m_details_ctrl( nullptr ),
-      m_menuActive( false )
+      m_details_ctrl( nullptr )
 {
-    // create space for context menu pointers, INVALID is the max value
-    m_menus.resize( LIB_TREE_NODE::TYPE::INVALID + 1 );
-
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
     // Search text control
@@ -412,14 +406,15 @@ void LIB_TREE::onPreselect( wxCommandEvent& aEvent )
 
 void LIB_TREE::onContextMenu( wxDataViewEvent& aEvent )
 {
-    auto const sel = m_tree_ctrl->GetSelection();
-    auto type = sel.IsOk() ? m_adapter->GetTypeFor( sel ) : LIB_TREE_NODE::INVALID;
-
-    if( m_menus[type] )
+    TOOL_INTERACTIVE* tool = m_adapter->GetContextMenuTool();
+    
+    if( tool )
     {
-        m_menuActive = true;
-        PopupMenu( m_menus[type].get() );
-        m_menuActive = false;
+        tool->Activate();
+        tool->GetToolMenu().ShowContextMenu();
+
+        TOOL_EVENT evt( TC_MOUSE, TA_MOUSE_CLICK, BUT_RIGHT );
+        tool->GetManager()->DispatchContextMenu( evt );
     }
 }
 

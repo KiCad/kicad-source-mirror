@@ -45,8 +45,6 @@ public:
     /// @copydoc TOOL_BASE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    inline TOOL_MENU& GetToolMenu() { return m_menu; }
-
     /**
      * Function Main()
      *
@@ -72,8 +70,6 @@ private:
 
     /// Current state of selection (not really used: no selection in display footprints frame).
     SELECTION m_selection;
-
-    TOOL_MENU m_menu;
 };
 
 #endif

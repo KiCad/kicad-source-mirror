@@ -36,10 +36,11 @@
 #include <list>
 
 
-LIB_MANAGER::LIB_MANAGER( LIB_EDIT_FRAME& aFrame )
-    : m_frame( aFrame ), m_syncHash( 0 )
+LIB_MANAGER::LIB_MANAGER( LIB_EDIT_FRAME& aFrame ) :
+        m_frame( aFrame ), 
+        m_syncHash( 0 )
 {
-    m_adapter = SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( this );
+    m_adapter = SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( &m_frame, this );
     m_adapter->ShowUnits( false );
 }
 
@@ -560,7 +561,8 @@ bool LIB_MANAGER::PartExists( const wxString& aAlias, const wxString& aLibrary )
     try
     {
         alias = symTable()->LoadSymbol( aLibrary, aAlias );
-    } catch( IO_ERROR& )
+    } 
+    catch( IO_ERROR& )
     {
         // checking if certain symbol exists, so its absence is perfectly fine
     }
@@ -686,8 +688,8 @@ std::set<LIB_PART*> LIB_MANAGER::getOriginalParts( const wxString& aLibrary )
     }
     catch( const IO_ERROR& e )
     {
-        DisplayErrorMessage( &m_frame, wxString::Format( _( "Cannot enumerate library \"%s\"" ),
-                                                         aLibrary ),
+        DisplayErrorMessage( &m_frame, 
+                             wxString::Format( _( "Cannot enumerate library \"%s\"" ), aLibrary ),
                              e.What() );
     }
 
@@ -713,8 +715,9 @@ LIB_MANAGER::LIB_BUFFER& LIB_MANAGER::getLibraryBuffer( const wxString& aLibrary
 }
 
 
-LIB_MANAGER::PART_BUFFER::PART_BUFFER( LIB_PART* aPart, std::unique_ptr<SCH_SCREEN> aScreen )
-    : m_screen( std::move( aScreen ) ), m_part( aPart )
+LIB_MANAGER::PART_BUFFER::PART_BUFFER( LIB_PART* aPart, std::unique_ptr<SCH_SCREEN> aScreen ) :
+        m_screen( std::move( aScreen ) ), 
+        m_part( aPart )
 {
     m_original = new LIB_PART( *aPart );
 }

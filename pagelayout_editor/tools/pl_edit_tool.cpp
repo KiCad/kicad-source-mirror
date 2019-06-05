@@ -59,8 +59,7 @@ TOOL_ACTION PL_ACTIONS::deleteItemCursor( "plEditor.InteractiveEdit.deleteTool",
 PL_EDIT_TOOL::PL_EDIT_TOOL() :
         TOOL_INTERACTIVE( "plEditor.InteractiveEdit" ),
         m_frame( nullptr ),
-        m_selectionTool( nullptr ),
-        m_menu( *this )
+        m_selectionTool( nullptr )
 {
 }
 

@@ -27,13 +27,9 @@
 
 #include <tools/pcb_tool_base.h>
 
-namespace KIGFX
-{
-    class VIEW;
-    class VIEW_CONTROLS;
-}
-class BOARD;
-class PCB_EDIT_FRAME;
+
+class FOOTPRINT_EDIT_FRAME;
+
 
 /**
  * Class MODULE_EDITOR_TOOLS
@@ -44,10 +40,13 @@ class MODULE_EDITOR_TOOLS : public PCB_TOOL_BASE
 {
 public:
     MODULE_EDITOR_TOOLS();
-    ~MODULE_EDITOR_TOOLS();
+    ~MODULE_EDITOR_TOOLS() override;
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
+
+    /// @copydoc TOOL_INTERACTIVE::Init()
+    bool Init() override;
 
     int NewFootprint( const TOOL_EVENT& aEvent );
     int CreateFootprint( const TOOL_EVENT& aEvent );
@@ -101,6 +100,8 @@ private:
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
+private:
+    FOOTPRINT_EDIT_FRAME* m_frame;
 };
 
 #endif

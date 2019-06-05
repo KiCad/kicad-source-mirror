@@ -28,12 +28,13 @@
 #include <lib_tree_model_adapter.h>
 #include <map>
 
+class LIB_EDIT_FRAME;
 class LIB_MANAGER;
 
 class SYMBOL_TREE_SYNCHRONIZING_ADAPTER : public LIB_TREE_MODEL_ADAPTER
 {
 public:
-    static PTR Create( LIB_MANAGER* aLibs );
+    static PTR Create( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibs );
 
     bool IsContainer( const wxDataViewItem& aItem ) const override;
 
@@ -41,21 +42,23 @@ public:
                std::function<void(int, int, const wxString&)> aProgressCallback = [](int, int, const wxString&){} );
 
     int GetLibrariesCount() const override;
+    
+    TOOL_INTERACTIVE* GetContextMenuTool() override;
 
 protected:
     void updateLibrary( LIB_TREE_NODE_LIB& aLibNode );
 
     LIB_TREE_NODE::PTR_VECTOR::iterator deleteLibrary( LIB_TREE_NODE::PTR_VECTOR::iterator& aLibNodeIt );
 
-    LIB_TREE_NODE* findLibrary( const wxString& aLibNickName );
-
     void GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
                    unsigned int aCol ) const override;
     bool GetAttr( wxDataViewItem const& aItem, unsigned int aCol,
                   wxDataViewItemAttr& aAttr ) const override;
 
-    SYMBOL_TREE_SYNCHRONIZING_ADAPTER( LIB_MANAGER* aLibMgr );
+    SYMBOL_TREE_SYNCHRONIZING_ADAPTER( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr );
 
+protected:
+    LIB_EDIT_FRAME*         m_frame;
     LIB_MANAGER*            m_libMgr;
 
     ///> Hashes to decide whether a library needs an update

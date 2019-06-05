@@ -70,8 +70,8 @@ public:
      * Creates a tool with given id & name. The name must be unique. */
     PCB_TOOL_BASE( TOOL_ID aId, const std::string& aName ) :
         TOOL_INTERACTIVE ( aId, aName ),
-        m_menu( *this ),
-        m_editModules( false ) {};
+        m_editModules( false ) 
+    {};
 
     /**
      * Constructor
@@ -79,8 +79,8 @@ public:
      * Creates a tool with given name. The name must be unique. */
     PCB_TOOL_BASE( const std::string& aName ) :
         TOOL_INTERACTIVE ( aName ),
-        m_menu( *this ),
-        m_editModules( false ) {};
+        m_editModules( false ) 
+    {};
 
     virtual ~PCB_TOOL_BASE() {};
 
@@ -146,9 +146,6 @@ protected:
     PCB_DRAW_PANEL_GAL* canvas() const;
     const SELECTION& selection() const;
     SELECTION& selection();
-
-    /// Menu model displayed by the tool.
-    TOOL_MENU m_menu;
 
     bool m_editModules;
 };

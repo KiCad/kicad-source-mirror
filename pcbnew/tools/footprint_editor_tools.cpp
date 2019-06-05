@@ -115,7 +115,8 @@ TOOL_ACTION PCB_ACTIONS::defaultPadProperties( "pcbnew.ModuleEditor.defaultPadPr
 
 
 MODULE_EDITOR_TOOLS::MODULE_EDITOR_TOOLS() :
-    PCB_TOOL_BASE( "pcbnew.ModuleEditor" )
+    PCB_TOOL_BASE( "pcbnew.ModuleEditor" ),
+    m_frame( nullptr )
 {
 }
 
@@ -127,6 +128,61 @@ MODULE_EDITOR_TOOLS::~MODULE_EDITOR_TOOLS()
 
 void MODULE_EDITOR_TOOLS::Reset( RESET_REASON aReason )
 {
+    m_frame = getEditFrame<FOOTPRINT_EDIT_FRAME>();
+}
+
+
+bool MODULE_EDITOR_TOOLS::Init()
+{
+    // Build a context menu for the footprint tree
+    //
+    CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
+
+    auto libSelectedCondition = [ this ] ( const SELECTION& aSel ) {
+        LIB_ID sel = m_frame->GetTreeFPID();
+        return !sel.GetLibNickname().empty() && sel.GetLibItemName().empty();
+    };
+    auto fpSelectedCondition = [ this ] ( const SELECTION& aSel ) {
+        LIB_ID sel = m_frame->GetTreeFPID();
+        return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
+    };
+
+    ctxMenu.AddItem( ACTIONS::newLibrary,            SELECTION_CONDITIONS::ShowAlways );
+    ctxMenu.AddItem( ACTIONS::addLibrary,            SELECTION_CONDITIONS::ShowAlways );
+    ctxMenu.AddItem( ACTIONS::save,                  libSelectedCondition );
+    ctxMenu.AddItem( ACTIONS::saveAs,                libSelectedCondition );
+    ctxMenu.AddItem( ACTIONS::revert,                libSelectedCondition );
+
+    ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways );
+    ctxMenu.AddItem( PCB_ACTIONS::newFootprint,      SELECTION_CONDITIONS::ShowAlways );
+#ifdef KICAD_SCRIPTING
+    ctxMenu.AddItem( PCB_ACTIONS::createFootprint,   SELECTION_CONDITIONS::ShowAlways );
+#endif
+    ctxMenu.AddItem( ID_MODEDIT_EDIT_MODULE,
+                     _( "Edit Footprint" ), _( "Show selected footprint on editor canvas" ),
+                     edit_xpm,                       fpSelectedCondition );
+
+    ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways );
+    ctxMenu.AddItem( ACTIONS::save,                  fpSelectedCondition );
+    ctxMenu.AddItem( ACTIONS::saveCopyAs,            fpSelectedCondition );
+    ctxMenu.AddItem( PCB_ACTIONS::deleteFootprint,   fpSelectedCondition );
+    ctxMenu.AddItem( ACTIONS::revert,                fpSelectedCondition );
+
+    ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways );
+    ctxMenu.AddItem( ID_MODEDIT_CUT_PART, _( "Cut Footprint" ),  "",
+                     cut_xpm,                        fpSelectedCondition );
+    ctxMenu.AddItem( ID_MODEDIT_COPY_PART, _( "Copy Footprint" ),  "",
+                     copy_xpm,                       fpSelectedCondition );
+    ctxMenu.AddItem( ID_MODEDIT_PASTE_PART, _( "Paste Footprint" ), "",
+                     paste_xpm,                      SELECTION_CONDITIONS::ShowAlways );
+
+    ctxMenu.AddSeparator( fpSelectedCondition );
+    ctxMenu.AddItem( ID_MODEDIT_IMPORT_PART, _( "Import Footprint..." ),  "",
+                     import_module_xpm,              SELECTION_CONDITIONS::ShowAlways );
+    ctxMenu.AddItem( ID_MODEDIT_EXPORT_PART,  _( "Export Footprint..." ), "",
+                     export_module_xpm,              fpSelectedCondition );
+    
+    return true;
 }
 
 
@@ -187,12 +243,12 @@ int MODULE_EDITOR_TOOLS::Delete( const TOOL_EVENT& aEvent )
 
 int MODULE_EDITOR_TOOLS::Properties( const TOOL_EVENT& aEvent )
 {
-    MODULE* footprint = frame()->GetBoard()->GetFirstModule();
+    MODULE* footprint = m_frame->GetBoard()->GetFirstModule();
 
     if( footprint )
     {
         getEditFrame<FOOTPRINT_EDIT_FRAME>()->OnEditItemRequest( footprint );
-        frame()->GetGalCanvas()->Refresh();
+        m_frame->GetGalCanvas()->Refresh();
     }
     return 0;
 }
@@ -235,13 +291,13 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 
     PAD_PLACER placer;
 
-    frame()->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_PENCIL, _( "Add pads" ) );
+    m_frame->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_PENCIL, _( "Add pads" ) );
 
     wxASSERT( board()->GetFirstModule() );
 
     doInteractiveItemPlacement( &placer,  _( "Place pad" ), IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP );
 
-    frame()->SetNoToolSelected();
+    m_frame->SetNoToolSelected();
 
     return 0;
 }
@@ -252,7 +308,7 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
     if( !board()->GetFirstModule() || !board()->GetFirstModule()->Pads().empty() )
         return 0;
 
-    DIALOG_ENUM_PADS settingsDlg( frame() );
+    DIALOG_ENUM_PADS settingsDlg( m_frame );
 
     if( settingsDlg.ShowModal() != wxID_OK )
         return 0;
@@ -262,7 +318,7 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
     GENERAL_COLLECTOR collector;
     const KICAD_T types[] = { PCB_PAD_T, EOT };
 
-    GENERAL_COLLECTORS_GUIDE guide = frame()->GetCollectorsGuide();
+    GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
     guide.SetIgnoreMTextsMarkedNoShow( true );
     guide.SetIgnoreMTextsOnBack( true );
     guide.SetIgnoreMTextsOnFront( true );
@@ -273,7 +329,7 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
     wxString padPrefix = settingsDlg.GetPrefix();
     std::deque<int> storedPadNumbers;
 
-    frame()->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_HAND,
+    m_frame->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_HAND,
                         _( "Click on successive pads to renumber them" ) );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -282,11 +338,11 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
     KIGFX::VIEW* view = m_toolMgr->GetView();
     VECTOR2I oldCursorPos;  // store the previous mouse cursor position, during mouse drag
     std::list<D_PAD*> selectedPads;
-    BOARD_COMMIT commit( frame() );
+    BOARD_COMMIT commit( m_frame );
     std::map<wxString, std::pair<int, wxString>> oldNames;
     bool isFirstPoint = true;   // used to be sure oldCursorPos will be initialized at least once.
 
-    STATUS_TEXT_POPUP statusPopup( frame() );
+    STATUS_TEXT_POPUP statusPopup( m_frame );
     statusPopup.SetText( wxString::Format(
             _( "Click on pad %s%d\nPress Escape to cancel or double-click to commit" ),
             padPrefix.c_str(), seqPadNum ) );
@@ -432,8 +488,8 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
     }
 
     statusPopup.Hide();
-    frame()->SetNoToolSelected();
-    frame()->GetGalCanvas()->SetCursor( wxCURSOR_ARROW );
+    m_frame->SetNoToolSelected();
+    m_frame->GetGalCanvas()->SetCursor( wxCURSOR_ARROW );
 
     return 0;
 }
@@ -442,7 +498,7 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 int MODULE_EDITOR_TOOLS::ExplodePadToShapes( const TOOL_EVENT& aEvent )
 {
     SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
-    BOARD_COMMIT commit( frame() );
+    BOARD_COMMIT commit( m_frame );
 
     if( selection.Size() != 1 )
         return 0;
@@ -499,7 +555,7 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
 
     std::vector<PAD_CS_PRIMITIVE> shapes;
 
-    BOARD_COMMIT commit( frame() );
+    BOARD_COMMIT commit( m_frame );
 
     for( auto item : selection )
     {
@@ -549,18 +605,17 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
 
     if( multipleRefPadsFound )
     {
-        DisplayErrorMessage( frame(),
-            _(  "Cannot convert items to a custom-shaped pad:\n"
-                "selection contains more than one reference pad." ) );
+        DisplayErrorMessage( m_frame, _(  "Cannot convert items to a custom-shaped pad:\n"
+                                          "selection contains more than one reference pad." ) );
         return 0;
     }
 
     if( illegalItemsFound )
     {
-        DisplayErrorMessage( frame(),
-            _( "Cannot convert items to a custom-shaped pad:\n"
-               "selection contains unsupported items.\n"
-               "Only graphical lines, circles, arcs and polygons are allowed." ) );
+        DisplayErrorMessage( m_frame, _( "Cannot convert items to a custom-shaped pad:\n"
+                                         "selection contains unsupported items.\n"
+                                         "Only graphical lines, circles, arcs and polygons "
+                                         "are allowed." ) );
         return 0;
     }
 
@@ -603,10 +658,10 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
 
     if( !anchor )
     {
-        DisplayErrorMessage( frame(),
-            _( "Cannot convert items to a custom-shaped pad:\n"
-               "unable to determine the anchor point position.\n"
-               "Consider adding a small anchor pad to the selection and try again.") );
+        DisplayErrorMessage( m_frame, _( "Cannot convert items to a custom-shaped pad:\n"
+                                         "unable to determine the anchor point position.\n"
+                                         "Consider adding a small anchor pad to the selection "
+                                         "and try again.") );
         return 0;
     }
 
@@ -626,9 +681,8 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
 
     if( !result )
     {
-        DisplayErrorMessage( frame(),
-                _( "Cannot convert items to a custom-shaped pad:\n"
-                   "selected items do not form a single solid shape.") );
+        DisplayErrorMessage( m_frame, _( "Cannot convert items to a custom-shaped pad:\n"
+                                         "selected items do not form a single solid shape.") );
         return 0;
     }
 

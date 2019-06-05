@@ -80,9 +80,6 @@ private:
     PL_EDITOR_FRAME*   m_frame;
     PL_SELECTION_TOOL* m_selectionTool;
 
-    /// Menu model displayed by the tool.
-    TOOL_MENU          m_menu;
-
     ///> Flag determining if anything is being dragged right now
     bool               m_moveInProgress;
 

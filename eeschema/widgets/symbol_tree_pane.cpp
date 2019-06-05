@@ -25,14 +25,9 @@
 #include "symbol_tree_pane.h"
 
 #include <widgets/lib_tree.h>
-#include <eeschema_id.h>
 #include <lib_manager.h>
 #include <lib_edit_frame.h>
 #include <symbol_lib_table.h>
-#include <menus_helpers.h>
-#include <tool/action_menu.h>
-#include <tool/actions.h>
-#include <tools/ee_actions.h>
 
 SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMgr )
         : wxPanel( aParent ),
@@ -49,46 +44,6 @@ SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMg
     SetSizer( boxSizer );      // should remove the previous sizer according to wxWidgets docs
     Layout();
     boxSizer->Fit( this );
-
-    // Setup right click-context menus
-    std::unique_ptr<ACTION_MENU> menuLibrary = std::make_unique<ACTION_MENU>();
-
-    menuLibrary->Add( ACTIONS::newLibrary );
-    menuLibrary->Add( ACTIONS::addLibrary );
-    menuLibrary->Add( ACTIONS::save );
-    menuLibrary->Add( ACTIONS::saveAs );
-    menuLibrary->Add( ACTIONS::revert );
-
-    menuLibrary->AppendSeparator();
-    menuLibrary->Add( EE_ACTIONS::newSymbol );
-    menuLibrary->Add( EE_ACTIONS::importSymbol );
-    menuLibrary->Add( _( "Paste Symbol" ), ID_LIBEDIT_PASTE_PART, paste_xpm );
-
-    std::unique_ptr<ACTION_MENU> menuPart = std::make_unique<ACTION_MENU>();
-    menuPart->Add( _( "Edit Symbol" ), ID_LIBEDIT_EDIT_PART, edit_xpm );
-
-    menuPart->AppendSeparator();
-    menuPart->Add( ACTIONS::save );
-    menuPart->Add( ACTIONS::saveCopyAs );
-    menuPart->Add( _( "Duplicate" ), ID_LIBEDIT_DUPLICATE_PART, duplicate_xpm );
-    menuPart->Add( _( "Delete" ), ID_LIBEDIT_REMOVE_PART, delete_xpm );
-    menuPart->Add( ACTIONS::revert );
-
-    menuPart->AppendSeparator();
-    menuPart->Add( _( "Cut" ), ID_LIBEDIT_CUT_PART, cut_xpm );
-    menuPart->Add( _( "Copy" ), ID_LIBEDIT_COPY_PART, copy_xpm );
-
-    menuPart->AppendSeparator();
-    menuPart->Add( _( "Export Symbol..." ), ID_LIBEDIT_EXPORT_PART, export_part_xpm );
-
-    // Menu displayed when nothing is selected
-    std::unique_ptr<ACTION_MENU> menuNoSelection = std::make_unique<ACTION_MENU>();
-    menuLibrary->Add( ACTIONS::newLibrary );
-    menuLibrary->Add( ACTIONS::addLibrary );
-
-    m_tree->SetMenu( LIB_TREE_NODE::LIBID, std::move( menuPart ) );
-    m_tree->SetMenu( LIB_TREE_NODE::LIB, std::move( menuLibrary ) );
-    m_tree->SetMenu( LIB_TREE_NODE::INVALID, std::move( menuNoSelection ) );
 
     // Event handlers
     Bind( COMPONENT_SELECTED, &SYMBOL_TREE_PANE::onComponentSelected, this );
@@ -110,8 +65,8 @@ void SYMBOL_TREE_PANE::Regenerate()
 
 void SYMBOL_TREE_PANE::onComponentSelected( wxCommandEvent& aEvent )
 {
-    wxCommandEvent evt( ID_LIBEDIT_EDIT_PART );
-    m_libEditFrame->OnEditPart( evt );
+    wxCommandEvent dummy;
+    m_libEditFrame->OnEditPart( dummy );
 
     // Make sure current-part highlighting doesn't get lost in seleciton highlighting
     m_tree->Unselect();

@@ -83,8 +83,7 @@ PL_SELECTION_TOOL::PL_SELECTION_TOOL() :
         m_additive( false ),
         m_subtractive( false ),
         m_multiple( false ),
-        m_skip_heuristics( false ),
-        m_menu( *this )
+        m_skip_heuristics( false )
 {
 }
 

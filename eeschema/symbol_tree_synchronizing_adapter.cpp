@@ -26,18 +26,29 @@
 #include <lib_manager.h>
 #include <symbol_lib_table.h>
 #include <class_libentry.h>
+#include <tool/tool_manager.h>
+#include <tools/lib_control.h>
 
 
-LIB_TREE_MODEL_ADAPTER::PTR SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( LIB_MANAGER* aLibMgr )
+LIB_TREE_MODEL_ADAPTER::PTR SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( LIB_EDIT_FRAME* aParent,
+                                                                       LIB_MANAGER* aLibMgr )
 {
-    return PTR( new SYMBOL_TREE_SYNCHRONIZING_ADAPTER( aLibMgr ) );
+    return PTR( new SYMBOL_TREE_SYNCHRONIZING_ADAPTER( aParent, aLibMgr ) );
 }
 
 
-SYMBOL_TREE_SYNCHRONIZING_ADAPTER::SYMBOL_TREE_SYNCHRONIZING_ADAPTER( LIB_MANAGER* aLibMgr )
-        : m_libMgr( aLibMgr ),
-          m_lastSyncHash( -1 )
+SYMBOL_TREE_SYNCHRONIZING_ADAPTER::SYMBOL_TREE_SYNCHRONIZING_ADAPTER( LIB_EDIT_FRAME* aParent,
+                                                                      LIB_MANAGER* aLibMgr ) :
+        m_frame( aParent ),
+        m_libMgr( aLibMgr ),
+        m_lastSyncHash( -1 )
 {
+}
+
+
+TOOL_INTERACTIVE* SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetContextMenuTool()
+{
+    return m_frame->GetToolManager()->GetTool<LIB_CONTROL>();
 }
 
 
@@ -178,18 +189,6 @@ LIB_TREE_NODE::PTR_VECTOR::iterator SYMBOL_TREE_SYNCHRONIZING_ADAPTER::deleteLib
     m_libHashes.erase( node->Name );
     auto it = m_tree.Children.erase( aLibNodeIt );
     return it;
-}
-
-
-LIB_TREE_NODE* SYMBOL_TREE_SYNCHRONIZING_ADAPTER::findLibrary( const wxString& aLibNickName )
-{
-    for( auto& lib : m_tree.Children )
-    {
-        if( lib->Name == aLibNickName )
-            return lib.get();
-    }
-
-    return nullptr;
 }
 
 

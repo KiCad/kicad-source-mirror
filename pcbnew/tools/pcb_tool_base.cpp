@@ -21,24 +21,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
 #include "pcb_tool_base.h"
 
 #include <view/view_controls.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>
 #include <board_commit.h>
-
 #include <class_module.h>
 #include <pcb_draw_panel_gal.h>
-
 #include "selection_tool.h"
 #include "pcb_actions.h"
 #include "tool_event_utils.h"
 
 void PCB_TOOL_BASE::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer,
-                                                const wxString& aCommitMessage,
-                                                int aOptions )
+                                                const wxString& aCommitMessage, int aOptions )
 {
     using namespace std::placeholders;
     std::unique_ptr<BOARD_ITEM> newItem;
@@ -211,6 +207,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer
     view()->Remove( &preview );
 }
 
+
 bool PCB_TOOL_BASE::Init()
 {
     // A basic context manu.  Many (but not all) tools will choose to override this.
@@ -230,13 +227,13 @@ bool PCB_TOOL_BASE::Init()
 
 void PCB_TOOL_BASE::Reset( RESET_REASON aReason )
 {
-
 }
+
 
 void PCB_TOOL_BASE::setTransitions()
 {
-
 }
+
 
 PCB_DISPLAY_OPTIONS* PCB_TOOL_BASE::displayOptions() const
 {
@@ -248,12 +245,14 @@ PCB_DRAW_PANEL_GAL* PCB_TOOL_BASE::canvas() const
     return static_cast<PCB_DRAW_PANEL_GAL*>( frame()->GetGalCanvas() );
 }
 
+
 const SELECTION& PCB_TOOL_BASE::selection() const
 {
     auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     const auto& selection = selTool->GetSelection();
     return selection;
 }
+
 
 SELECTION& PCB_TOOL_BASE::selection()
 {
@@ -267,6 +266,7 @@ void INTERACTIVE_PLACER_BASE::SnapItem( BOARD_ITEM *aItem )
 {
     // Base implementation performs no snapping
 }
+
 
 bool INTERACTIVE_PLACER_BASE::PlaceItem( BOARD_ITEM *aItem, BOARD_COMMIT& aCommit )
 {

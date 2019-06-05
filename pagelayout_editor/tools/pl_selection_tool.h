@@ -74,8 +74,6 @@ public:
      */
     SELECTION& GetSelection();
 
-    inline TOOL_MENU& GetToolMenu() { return m_menu; }
-
     /**
      * Function RequestSelection()
      *
@@ -210,8 +208,6 @@ private:
     bool m_subtractive;         // Items should be removed from selection
     bool m_multiple;            // Multiple selection mode is active
     bool m_skip_heuristics;     // Heuristics are not allowed when choosing item under cursor
-
-    TOOL_MENU m_menu;
 };
 
 #endif //PL_SELECTION_TOOL_H

@@ -27,7 +27,7 @@
 #define __TOOL_INTERACTIVE_H
 
 #include <string>
-
+#include <tool/tool_menu.h>
 #include <tool/tool_event.h>
 #include <tool/tool_base.h>
 
@@ -55,6 +55,8 @@ public:
      */
     void Activate();
 
+    TOOL_MENU& GetToolMenu() { return m_menu; }
+    
     /**
      * Function SetContextMenu()
      *
@@ -103,15 +105,7 @@ public:
         void Yield( const T& returnValue );*/
 
 protected:
-    /* helper functions for constructing events for Wait() and Go() with less typing */
-    const TOOL_EVENT evActivate( std::string aToolName = "" );
-    const TOOL_EVENT evCommand( int aCommandId = -1 );
-    const TOOL_EVENT evCommand( std::string aCommandStr = "" );
-    const TOOL_EVENT evMotion();
-    const TOOL_EVENT evClick( int aButton = BUT_ANY );
-    const TOOL_EVENT evDrag( int aButton = BUT_ANY );
-    const TOOL_EVENT evButtonUp( int aButton = BUT_ANY );
-    const TOOL_EVENT evButtonDown(int aButton = BUT_ANY );
+    TOOL_MENU m_menu;
 
 private:
     /**

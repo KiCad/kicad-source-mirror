@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,9 +32,9 @@ class wxDataViewCtrl;
 class wxTextCtrl;
 class wxHtmlWindow;
 class wxHtmlLinkEvent;
+class ACTION_MENU;
 class LIB_ID;
 class LIB_TABLE;
-
 
 /**
  * Widget displaying a tree of components with optional search text control and description panel.
@@ -88,25 +88,6 @@ public:
      * Expand and item i the tree widget.
      */
     void ExpandLibId( const LIB_ID& aLibId );
-
-    /**
-     * Associates a right click context menu for a specific node type.
-     * @param aType is the node type to have a menu associated.
-     * @param aMenu is the associated menu.
-     */
-    void SetMenu( LIB_TREE_NODE::TYPE aType, std::unique_ptr<wxMenu> aMenu )
-    {
-        m_menus[aType] = std::move( aMenu );
-    }
-
-    /**
-     * Returns the status of right-click context menu.
-     * @return True in case a right-click context menu is active.
-     */
-    bool IsMenuActive() const
-    {
-        return m_menuActive;
-    }
 
     /**
      * Regenerates the tree.
@@ -170,7 +151,6 @@ protected:
     void onTreeSelect( wxDataViewEvent& aEvent );
     void onTreeActivate( wxDataViewEvent& aEvent );
     void onExpandCollapse( wxDataViewEvent& aEvent );
-    void onUpdateUI( wxUpdateUIEvent& aEvent );
 
     void onDetailsLink( wxHtmlLinkEvent& aEvent );
     void onPreselect( wxCommandEvent& aEvent );
@@ -182,12 +162,6 @@ protected:
     wxTextCtrl*     m_query_ctrl;
     wxDataViewCtrl* m_tree_ctrl;
     wxHtmlWindow*   m_details_ctrl;
-
-    ///> Right click context menus for each tree level
-    std::vector<std::unique_ptr<wxMenu>> m_menus;
-
-    ///> Flag indicating whether a right-click context menu is active
-    bool m_menuActive;
 
     ///> State of the widget before any filters applied
     STATE m_unfilteredState;

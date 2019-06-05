@@ -653,7 +653,7 @@ bool TOOL_MANAGER::dispatchActivation( const TOOL_EVENT& aEvent )
     return false;
 }
 
-void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
+void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
 {
     for( TOOL_ID toolId : m_activeTools )
     {
@@ -887,7 +887,7 @@ void TOOL_MANAGER::saveViewControls( TOOL_STATE* aState )
 
     if( m_menuActive )
     {
-        // Context menu is active, so the cursor settings are overridden (see dispatchContextMenu())
+        // Context menu is active, so the cursor settings are overridden (see DispatchContextMenu())
         auto it = m_cursorSettings.find( aState->theTool->GetId() );
 
         if( it != m_cursorSettings.end() )
@@ -935,7 +935,7 @@ bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
 
     dispatchInternal( aEvent );
     dispatchActivation( aEvent );
-    dispatchContextMenu( aEvent );
+    DispatchContextMenu( aEvent );
 
     // Dispatch queue
     while( !m_eventQueue.empty() )

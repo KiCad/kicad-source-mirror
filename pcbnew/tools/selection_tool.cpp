@@ -194,7 +194,6 @@ SELECTION_TOOL::SELECTION_TOOL() :
         m_multiple( false ),
         m_skip_heuristics( false ),
         m_locked( true ),
-        m_menu( *this ),
         m_priv( std::make_unique<PRIV>() )
 {
 }

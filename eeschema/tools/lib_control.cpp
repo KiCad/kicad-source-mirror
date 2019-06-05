@@ -25,9 +25,10 @@
 #include <sch_painter.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
+#include <tools/lib_control.h>
+#include <eeschema_id.h>
 #include <lib_edit_frame.h>
 #include <viewlib_frame.h>
-#include <tools/lib_control.h>
 
 
 TOOL_ACTION EE_ACTIONS::showElectricalTypes( "eeschema.SymbolLibraryControl.showElectricalTypes",
@@ -40,6 +41,63 @@ TOOL_ACTION EE_ACTIONS::showComponentTree( "eeschema.SymbolLibraryControl.showCo
         AS_GLOBAL, 0,
         _( "Show Symbol Tree" ), "",
         search_tree_xpm );
+
+
+bool LIB_CONTROL::Init()
+{
+    if( m_isLibEdit )
+    {
+        CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
+        LIB_EDIT_FRAME* editFrame = getEditFrame<LIB_EDIT_FRAME>();
+
+        auto libSelectedCondition = [ editFrame ] ( const SELECTION& aSel ) {
+            LIB_ID sel = editFrame->GetTreeLIBID();
+            return !sel.GetLibNickname().empty() && sel.GetLibItemName().empty();
+        };
+        auto symbolSelectedCondition = [ editFrame ] ( const SELECTION& aSel ) {
+            LIB_ID sel = editFrame->GetTreeLIBID();
+            return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
+        };
+    
+        ctxMenu.AddItem( ACTIONS::newLibrary,            SELECTION_CONDITIONS::ShowAlways );
+        ctxMenu.AddItem( ACTIONS::addLibrary,            SELECTION_CONDITIONS::ShowAlways );
+        ctxMenu.AddItem( ACTIONS::save,                  libSelectedCondition );
+        ctxMenu.AddItem( ACTIONS::saveAs,                libSelectedCondition );
+        ctxMenu.AddItem( ACTIONS::revert,                libSelectedCondition );
+    
+        ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways );
+        ctxMenu.AddItem( EE_ACTIONS::newSymbol,          SELECTION_CONDITIONS::ShowAlways );
+        ctxMenu.AddItem( ID_LIBEDIT_EDIT_PART,
+                         _( "Edit Symbol" ), _( "Show selected symbol on editor canvas" ),
+                         edit_xpm,                       symbolSelectedCondition );
+    
+        ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways );
+        ctxMenu.AddItem( ACTIONS::save,                  symbolSelectedCondition );
+        ctxMenu.AddItem( ACTIONS::saveCopyAs,            symbolSelectedCondition );
+        ctxMenu.AddItem( ID_LIBEDIT_DUPLICATE_PART,
+                         _( "Duplicate" ), _( "Make a copy of the selected symbol" ),
+                         duplicate_xpm,                  symbolSelectedCondition );
+        ctxMenu.AddItem( ID_LIBEDIT_REMOVE_PART,
+                         _( "Delete" ), _( "Remove the selected symbol from the library" ),
+                         delete_xpm,                     symbolSelectedCondition );
+        ctxMenu.AddItem( ACTIONS::revert,                symbolSelectedCondition );
+    
+        ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways );
+        ctxMenu.AddItem( ID_LIBEDIT_CUT_PART, _( "Cut Symbol" ), "",
+                         cut_xpm,                        symbolSelectedCondition );
+        ctxMenu.AddItem( ID_LIBEDIT_COPY_PART, _( "Copy Symbol" ), "",
+                         copy_xpm,                       symbolSelectedCondition );
+        ctxMenu.AddItem( ID_LIBEDIT_PASTE_PART, _( "Paste Symbol" ), "",
+                         paste_xpm,                      SELECTION_CONDITIONS::ShowAlways );
+    
+        ctxMenu.AddSeparator( symbolSelectedCondition );
+        ctxMenu.AddItem( EE_ACTIONS::importSymbol,       SELECTION_CONDITIONS::ShowAlways );
+        ctxMenu.AddItem( ID_LIBEDIT_EXPORT_PART, _( "Export Symbol..." ), "",
+                         export_part_xpm,                symbolSelectedCondition );
+    }
+    
+    return true;
+}
 
 
 int LIB_CONTROL::AddLibrary( const TOOL_EVENT& aEvent )

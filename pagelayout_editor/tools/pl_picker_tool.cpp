@@ -34,7 +34,6 @@ TOOL_ACTION PL_ACTIONS::pickerTool( "plEditor.Picker", AS_GLOBAL, 0, "", "", NUL
 PL_PICKER_TOOL::PL_PICKER_TOOL() :
         TOOL_INTERACTIVE( "plEditor.Picker" ),
         m_frame( nullptr ),
-        m_menu( *this ),
         m_cursorCapture( false ),
         m_autoPanning( false )
 {

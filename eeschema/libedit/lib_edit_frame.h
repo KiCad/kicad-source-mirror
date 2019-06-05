@@ -124,7 +124,7 @@ public:
 public:
     LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
-    ~LIB_EDIT_FRAME();
+    ~LIB_EDIT_FRAME() override;
 
     /**
      * switches currently used canvas ( Cairo / OpenGL).
@@ -136,6 +136,11 @@ public:
 
     /** Sets the current library nickname and returns the old library nickname. */
     wxString SetCurLib( const wxString& aLibNickname );
+
+    /**
+     * Return the LIB_ID of the library or symbol selected in the symbol tree.
+     */
+    LIB_ID GetTreeLIBID() const;
 
     /**
      * Return the current part being edited or NULL if none selected.
@@ -471,9 +476,9 @@ public:
 
     void SyncMenusAndToolbars() override;
 
-    virtual void SetScreen( BASE_SCREEN* aScreen ) override;
+    void SetScreen( BASE_SCREEN* aScreen ) override;
 
-    virtual const BOX2I GetDocumentExtents() const override;
+    const BOX2I GetDocumentExtents() const override;
 
     void RebuildView();
 

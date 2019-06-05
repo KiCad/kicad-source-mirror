@@ -40,8 +40,7 @@ TOOL_ACTION CVPCB_ACTIONS::selectionActivate( "cvpcb.InteractiveSelection",
 
 CVPCB_SELECTION_TOOL::CVPCB_SELECTION_TOOL() :
         TOOL_INTERACTIVE( "cvpcb.InteractiveSelection" ),
-        m_frame( nullptr ),
-        m_menu( *this )
+        m_frame( nullptr )
 {
 }
 

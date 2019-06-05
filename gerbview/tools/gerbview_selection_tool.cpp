@@ -136,8 +136,7 @@ private:
 GERBVIEW_SELECTION_TOOL::GERBVIEW_SELECTION_TOOL() :
         TOOL_INTERACTIVE( "gerbview.InteractiveSelection" ),
         m_frame( NULL ), m_additive( false ), m_subtractive( false ),
-        m_multiple( false ),
-        m_menu( *this )
+        m_multiple( false )
 {
     // these members are initialized to avoid warnings about non initialized vars
     m_preliminary = true;

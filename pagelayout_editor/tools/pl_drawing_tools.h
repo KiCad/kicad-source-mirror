@@ -50,8 +50,6 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    TOOL_MENU& GetToolMenu() { return m_menu; }
-
     int DrawShape( const TOOL_EVENT& aEvent );
     int PlaceItem( const TOOL_EVENT& aEvent );
 
@@ -62,9 +60,6 @@ private:
 private:
     PL_EDITOR_FRAME*   m_frame;
     PL_SELECTION_TOOL* m_selectionTool;
-
-    /// Menu model displayed by the tool.
-    TOOL_MENU m_menu;
 };
 
 #endif /* PL_DRAWING_TOOLS_H */

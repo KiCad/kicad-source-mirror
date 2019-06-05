@@ -116,9 +116,6 @@ private:
 private:
     PL_EDITOR_FRAME*   m_frame;
 
-    /// Menu model displayed by the tool.
-    TOOL_MENU          m_menu;
-
     bool               m_cursorCapture;
     bool               m_autoPanning;
 

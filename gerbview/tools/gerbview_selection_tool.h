@@ -75,11 +75,6 @@ public:
      */
     SELECTION& GetSelection();
 
-    inline TOOL_MENU& GetToolMenu()
-    {
-        return m_menu;
-    }
-
     ///> Select a single item under cursor event handler.
     int CursorSelection( const TOOL_EVENT& aEvent );
 
@@ -233,9 +228,6 @@ private:
 
     /// Determines if the selection is preliminary or final.
     bool m_preliminary;
-
-    /// Menu model displayed by the tool.
-    TOOL_MENU m_menu;
 };
 
 #endif

@@ -35,10 +35,8 @@
 #include <bitmaps.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <eda_dockart.h>
-
 #include <class_board.h>
 #include <class_module.h>
-
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
@@ -47,17 +45,14 @@
 #include <wildcards_and_files_ext.h>
 #include <pcb_layer_widget.h>
 #include <invoke_pcb_dialog.h>
-
 #include <tool/tool_manager.h>
 #include <tool/common_tools.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/zoom_tool.h>
-
 #include <footprint_tree_pane.h>
 #include <widgets/lib_tree.h>
 #include <fp_lib_table.h>
 #include <footprint_info_impl.h>
-
 #include <widgets/paged_dialog.h>
 #include <dialogs/panel_modedit_settings.h>
 #include <dialogs/panel_modedit_defaults.h>
@@ -191,11 +186,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
-    initLibraryTree();
-    m_treePane = new FOOTPRINT_TREE_PANE( this );
-
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     setupTools();
+
+    initLibraryTree();
+    m_treePane = new FOOTPRINT_TREE_PANE( this );
 
     ReCreateMenuBar();
     ReCreateHToolbar();
@@ -296,12 +291,17 @@ BOARD_ITEM_CONTAINER* FOOTPRINT_EDIT_FRAME::GetModel() const
 }
 
 
+LIB_ID FOOTPRINT_EDIT_FRAME::GetTreeFPID() const
+{
+    return m_treePane->GetLibTree()->GetSelectedLibId();
+}
+
+
 LIB_ID FOOTPRINT_EDIT_FRAME::GetTargetFPID() const
 {
-    LIB_ID   id = m_treePane->GetLibTree()->GetSelectedLibId();
-    wxString nickname = id.GetLibNickname();
+    LIB_ID id = GetTreeFPID();
 
-    if( nickname.IsEmpty() )
+    if( id.GetLibNickname().empty() )
         return GetLoadedFPID();
 
     return id;

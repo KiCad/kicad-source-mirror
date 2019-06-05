@@ -58,12 +58,6 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    ///> Get the DRAWING_TOOL top-level context menu
-    inline TOOL_MENU& GetToolMenu()
-    {
-        return m_menu;
-    }
-
     ///> The possible drawing modes of DRAWING_TOOL
     enum class MODE
     {

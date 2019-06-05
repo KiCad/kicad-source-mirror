@@ -83,8 +83,7 @@ TOOL_ACTION PL_ACTIONS::addImage( "plEditor.InteractiveDrawing.addImage",
 PL_DRAWING_TOOLS::PL_DRAWING_TOOLS() :
         TOOL_INTERACTIVE( "plEditor.InteractiveDrawing" ),
         m_frame( nullptr ),
-        m_selectionTool( nullptr ),
-        m_menu( *this )
+        m_selectionTool( nullptr )
 {
 }
 

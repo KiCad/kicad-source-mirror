@@ -159,9 +159,6 @@ private:
     ///> Pointer to the currently used edit frame.
     PCB_EDIT_FRAME* m_frame;
 
-    /// Menu model displayed by the tool.
-    TOOL_MENU m_menu;
-
     std::unique_ptr<KIGFX::ORIGIN_VIEWITEM> m_placeOrigin;    ///> Place & drill origin marker
 
     bool m_probingSchToPcb;     ///> Recursion guard when cross-probing to EESchema

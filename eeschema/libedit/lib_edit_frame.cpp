@@ -35,12 +35,10 @@
 #include <msgpanel.h>
 #include <confirm.h>
 #include <eda_dockart.h>
-
 #include <general.h>
 #include <eeschema_id.h>
 #include <lib_edit_frame.h>
 #include <class_library.h>
-
 #include <lib_manager.h>
 #include <widgets/symbol_tree_pane.h>
 #include <widgets/lib_tree.h>
@@ -136,7 +134,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetShowElectricalType( true );
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
 
-    m_my_part = NULL;
+    m_my_part = nullptr;
     m_treePane = nullptr;
     m_libMgr = nullptr;
     m_unit = 1;
@@ -169,11 +167,12 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
+    setupTools();
+    
     m_libMgr = new LIB_MANAGER( *this );
     SyncLibraries( true );
     m_treePane = new SYMBOL_TREE_PANE( this, m_libMgr );
 
-    setupTools();
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
@@ -298,7 +297,7 @@ double LIB_EDIT_FRAME::BestZoom()
 
 void LIB_EDIT_FRAME::RebuildSymbolUnitsList()
 {
-    if( m_partSelectBox == NULL )
+    if( !m_partSelectBox )
         return;
 
     if( m_partSelectBox->GetCount() != 0 )
@@ -372,10 +371,10 @@ void LIB_EDIT_FRAME::OnUpdateSyncPinEdit( wxUpdateUIEvent& event )
 
 void LIB_EDIT_FRAME::OnUpdatePartNumber( wxUpdateUIEvent& event )
 {
-    if( m_partSelectBox == NULL )
+    if( !m_partSelectBox )
         return;
 
-    LIB_PART*      part = GetCurPart();
+    LIB_PART* part = GetCurPart();
 
     // Using the typical event.Enable() call doesn't seem to work with wxGTK
     // so use the pointer to alias combobox to directly enable or disable.
@@ -447,9 +446,7 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
 
     if( m_my_part != aPart )
     {
-        if( m_my_part )
-            delete m_my_part;
-
+        delete m_my_part;
         m_my_part = aPart;
     }
 
@@ -512,7 +509,7 @@ void LIB_EDIT_FRAME::OnAddPartToSchematic( wxCommandEvent& event )
     {
         SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
 
-        if( schframe == NULL )      // happens when the schematic editor is not active (or closed)
+        if( !schframe )      // happens when the schematic editor is not active (or closed)
         {
             DisplayErrorMessage( this, _( "No schematic currently open." ) );
             return;
@@ -525,7 +522,7 @@ void LIB_EDIT_FRAME::OnAddPartToSchematic( wxCommandEvent& event )
         component->Resolve( *Prj().SchSymbolLibTable() );
 
         if( schframe->GetAutoplaceFields() )
-            component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
+            component->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
 
         schframe->Raise();
         schframe->GetToolManager()->RunAction( EE_ACTIONS::placeSymbol, true, component );
@@ -595,30 +592,31 @@ bool LIB_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
 }
 
 
+LIB_ID LIB_EDIT_FRAME::GetTreeLIBID() const
+{
+    return m_treePane->GetLibTree()->GetSelectedLibId();
+}
+
+
 LIB_PART* LIB_EDIT_FRAME::getTargetPart() const
 {
-    LIB_ALIAS* alias = nullptr;
-
-    if( m_treePane->GetLibTree()->IsMenuActive() )
+    LIB_ID libId = GetTreeLIBID();
+    
+    if( libId.IsValid() )
     {
-        LIB_ID libId = m_treePane->GetLibTree()->GetSelectedLibId();
-        alias = m_libMgr->GetAlias( libId.GetLibItemName(), libId.GetLibNickname() );
-    }
-    else if( LIB_PART* part = GetCurPart() )
-    {
-        alias = part->GetAlias( 0 );
+        LIB_ALIAS* alias = m_libMgr->GetAlias( libId.GetLibItemName(), libId.GetLibNickname() );
+        return alias ? alias->GetPart() : nullptr;
     }
 
-    return alias ? alias->GetPart() : nullptr;
+    return GetCurPart();
 }
 
 
 LIB_ID LIB_EDIT_FRAME::getTargetLibId() const
 {
-    LIB_ID   id = m_treePane->GetLibTree()->GetSelectedLibId();
-    wxString nickname = id.GetLibNickname();
+    LIB_ID id = GetTreeLIBID();
 
-    if( nickname.IsEmpty() && GetCurPart() )
+    if( id.GetLibNickname().empty() && GetCurPart() )
         id = GetCurPart()->GetLibId();
 
     return id;
