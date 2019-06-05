@@ -145,6 +145,7 @@ endif()
 # auto-generate pcb_calculator_datafile.h and pcb_calculator_datafile_keywords.cpp
 # for the storage data file format.
 make_lexer(
+    pcb_calculator_lexer_source_files
     ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile.keywords
     ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_keywords.cpp
@@ -153,13 +154,6 @@ make_lexer(
     # Pass header file with dependency on *_lexer.h as extra_arg
     datafile_read_write.h
    )
-
-add_custom_target(
-    pcb_calculator_lexer_source_files ALL
-    DEPENDS
-        ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_lexer.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_keywords.cpp
-)
 
 #
 # Conversion of .html doc source files to .h files included in cpp sources

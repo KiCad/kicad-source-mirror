@@ -25,17 +25,28 @@
 # Function make_lexer
 # is a standard way to invoke TokenList2DsnLexer.cmake.
 # Extra arguments are treated as source files which depend on the generated
-# outHeaderFile
+# files.  Some detail here on the indirection:
+#  - Parallel builds all depend on the same files, and CMake will generate the same file multiple times in the same location.
+# This can be problematic if the files are generated at the same time and overwrite each other.
+#  - To fix this, we create a custom target (outputTarget) that the parallel builds depend on.
+#  - This almost works except that our targets that depend on targets don't get the file-level dependencies
+#  - So we have one additional layer of indirection to create an intermediate target with file dependencies
+# AND build dependencies.  This creates the needed rebuild for appropriate source object changes.
+function( make_lexer outputTarget inputFile outHeaderFile outCppFile enum )
+    get_filename_component( outHeaderFileBase ${outHeaderFile} NAME )
+    get_filename_component( outCppFileBase ${outCppFile} NAME )
+    set( intermediateHeader "${CMAKE_CURRENT_BINARY_DIR}/${outHeaderFileBase}.1" )
+    set( intermediateCpp "${CMAKE_CURRENT_BINARY_DIR}/${outCppFileBase}.1" )
+    set( intermediateTarget "${outHeaderFileBase}.target" )
 
-function( make_lexer inputFile outHeaderFile outCppFile enum )
     add_custom_command(
-        OUTPUT  ${outHeaderFile}
-                ${outCppFile}
+        OUTPUT  ${intermediateHeader}
+                ${intermediateCpp}
         COMMAND ${CMAKE_COMMAND}
             -Denum=${enum}
             -DinputFile=${inputFile}
-            -DoutHeaderFile=${outHeaderFile}
-            -DoutCppFile=${outCppFile}
+            -DoutHeaderFile=${intermediateHeader}
+            -DoutCppFile=${intermediateCpp}
             -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
         DEPENDS ${inputFile}
                 ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
@@ -45,11 +56,31 @@ function( make_lexer inputFile outHeaderFile outCppFile enum )
            ${inputFile}"
         )
 
+    add_custom_target(
+        ${intermediateTarget}
+        DEPENDS ${intermediateHeader}
+                ${intermediateCpp}
+        )
+
+    add_custom_command(
+        OUTPUT  ${outHeaderFile}
+                ${outCppFile}
+        DEPENDS ${intermediateTarget} ${intermediateHeader} ${intermediateCpp}
+        COMMAND ${CMAKE_COMMAND} -E copy ${intermediateHeader} ${outHeaderFile}
+        COMMAND ${CMAKE_COMMAND} -E copy ${intermediateCpp} ${outCppFile}
+        )
+
+    add_custom_target(
+        ${outputTarget} ALL
+        DEPENDS ${outHeaderFile}
+                ${outCppFile}
+        )
+
     # extra_args, if any, are treated as source files (typically headers) which
     # are known to depend on the generated outHeader.
     foreach( extra_arg ${ARGN} )
         set_source_files_properties( ${extra_arg}
-            PROPERTIES OBJECT_DEPENDS ${outHeaderFile}
+            PROPERTIES OBJECT_DEPENDS ${outputTarget}
             )
     endforeach()
 
