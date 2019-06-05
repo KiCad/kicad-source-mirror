@@ -8,25 +8,25 @@
                 <key>CFBundleTypeRole</key>         <string>Editor</string>
                 <key>CFBundleTypeExtensions</key>
                     <array>
-                        <string>kicad_wks</string>
+                        <string>sch</string>
                     </array>
-                <key>CFBundleTypeIconFile</key>     <string>pl_editor_doc.icns</string>
-                <key>CFBundleTypeName</key>         <string>pl_editor document</string>
+                <key>CFBundleTypeIconFile</key>     <string>eeschema_doc.icns</string>
+                <key>CFBundleTypeName</key>         <string>eeschema document</string>
                 <key>LSHandlerRank</key>            <string>Owner</string>
             </dict>
         </array>
     <key>CFBundleDevelopmentRegion</key>            <string>English</string>
-    <key>CFBundleExecutable</key>                   <string>pl_editor</string>
+    <key>CFBundleExecutable</key>                   <string>eeschema</string>
     <key>CFBundleGetInfoString</key>                <string></string>
-    <key>CFBundleIconFile</key>                     <string>pl_editor.icns</string>
-    <key>CFBundleIdentifier</key>                   <string>org.kicad-pcb.pl_editor</string>
+    <key>CFBundleIconFile</key>                     <string>eeschema.icns</string>
+    <key>CFBundleIdentifier</key>                   <string>org.kicad-pcb.eeschema</string>
     <key>CFBundleInfoDictionaryVersion</key>        <string>6.0</string>
-    <key>CFBundleLongVersionString</key>            <string></string>
-    <key>CFBundleName</key>                         <string>Page Layout Editor</string>
+    <key>CFBundleLongVersionString</key>            <string>@KICAD_VERSION_FULL@</string>
+    <key>CFBundleName</key>                         <string>Eeschema</string>
     <key>CFBundlePackageType</key>                  <string>APPL</string>
-    <key>CFBundleShortVersionString</key>           <string></string>
+    <key>CFBundleShortVersionString</key>           <string>@KICAD_VERSION@</string>
     <key>CFBundleSignature</key>                    <string>????</string>
-    <key>CFBundleVersion</key>                      <string></string>
+    <key>CFBundleVersion</key>                      <string>@KICAD_VERSION_FULL@</string>
     <key>CSResourcesFileMapped</key>                <true/>
     <key>LSRequiresCarbon</key>                     <true/>
     <key>NSRequiresAquaSystemAppearance</key>       <true/>

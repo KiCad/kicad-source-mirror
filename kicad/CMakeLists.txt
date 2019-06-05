@@ -66,6 +66,9 @@ if( UNIX )
 endif()
 
 if( APPLE )
+    include( ${CMAKE_MODULE_PATH}/KiCadVersion.cmake )
+    configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist @ONLY )
+
     set_target_properties( kicad PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
         )

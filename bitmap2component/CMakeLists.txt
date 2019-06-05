@@ -54,6 +54,9 @@ target_link_libraries( bitmap2component
     )
 
 if( APPLE )
+    include( ${CMAKE_MODULE_PATH}/KiCadVersion.cmake )
+    configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist @ONLY )
+
     set_target_properties( bitmap2component PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
         )

@@ -140,6 +140,9 @@ add_dependencies( pl_editor pl_editor_kiface )
 
 # these 2 binaries are a matched set, keep them together:
 if( APPLE )
+    include( ${CMAKE_MODULE_PATH}/KiCadVersion.cmake )
+    configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist @ONLY )
+
     set_target_properties( pl_editor PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
         )

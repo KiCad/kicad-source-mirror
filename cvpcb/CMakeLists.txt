@@ -96,6 +96,9 @@ if( false ) # no CVPCB exe any more, only the *.kiface
     endif()
 
     if( APPLE )
+        include( ${CMAKE_MODULE_PATH}/KiCadVersion.cmake )
+        configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist @ONLY )
+
         set_target_properties( cvpcb PROPERTIES
             MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
             )

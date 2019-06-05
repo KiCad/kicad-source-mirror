@@ -59,6 +59,16 @@ demos/**/*-bak
 demos/**/_autosave-*
 demos/**/fp-info-cache
 
+# MacOS package info created by CMake
+bitmap2component/Info.plist
+cvpcb/Info.plist
+eeschema/Info.plist
+gerbview/Info.plist
+kicad/Info.plist
+pagelayout_editor/Info.plist
+pcb_calculator/Info.plist
+pcbnew/Info.plist
+
 # editor/OS fluff
 .*.swp
 *~
