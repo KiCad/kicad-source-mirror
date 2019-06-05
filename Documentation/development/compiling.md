@@ -154,7 +154,8 @@ This options is enabled by default.
 ## Scripting Module Support ## {#scripting_mod_opt}
 
 The KICAD_SCRIPTING_MODULES option is used to enable building and installing the Python modules
-supplied by KiCad.  This option is enabled by default.
+supplied by KiCad.  This option is enabled by default and it will enable
+[KICAD_SCRIPTING](#scripting_opt) if disabled.
 
 ## Python 3 Scripting Support ## {#python3}
 
@@ -170,6 +171,13 @@ Pcbnew including the wxPython console.  This option is enabled by default.
 
 The KICAD_SCRIPTING_WXPYTHON_PHOENIX option is used to enable building the wxPython interface with
 the new Phoenix binding instead of the legacy one.  This option is disabled by default.
+
+## Python Scripting Action Menu Support ## {#python_action_menu_opt}
+
+The KICAD_SCRIPTING_ACTION_MENU option allows Python scripts to be added directly to the Pcbnew
+menu.  This option is enabled by default and will enable [KICAD_SCRIPTING](#scripting_opt) if
+disabled.  Please note that this option is highly experimental and can cause Pcbnew to crash
+if Python scripts create an invalid object state within Pcbnew.
 
 ## GitHub Plugin ## {#github_opt}
 
@@ -198,12 +206,6 @@ The KiCad source code includes some demos and examples to showcase the program. 
 whether install them or not with the KICAD_INSTALL_DEMOS option. You can also select where to
 install them with the KICAD_DEMOS variable. On Linux the demos are installed in
 $PREFIX/share/kicad/demos by default.
-
-## Python Scripting Action Menu Support ## {#python_action_menu_opt}
-
-The KICAD_SCRIPTING_ACTION_MENU option allows Python scripts to be added directly to the Pcbnew
-menu.  This option is disabled by default.  Please note that this option is highly experimental
-and can cause Pcbnew to crash if Python scripts create an invalid object state within Pcbnew.
 
 ## Quality assurance (QA) unit tests ## {#quality_assurance_tests_opt}
 
