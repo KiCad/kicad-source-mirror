@@ -1560,6 +1560,10 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
         }
     };
 
+    // If we are a bus, we must propagate to local neighbors and then the hierarchy
+    if( conn->IsBus() )
+        propagate_bus_neighbors( aSubgraph );
+
     // If we don't have any hier pins (i.e. no children), nothing to do
     if( aSubgraph->m_hier_pins.empty() )
     {
@@ -1577,10 +1581,6 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
         return;
 
     visited.insert( aSubgraph );
-
-    // If we are a bus, we must propagate to local neighbors and then the hierarchy
-    if( conn->IsBus() )
-        propagate_bus_neighbors( aSubgraph );
 
     wxLogTrace( "CONN", "Propagating %lu (%s) to subsheets",
                 aSubgraph->m_code, aSubgraph->m_driver_connection->Name() );
