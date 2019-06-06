@@ -287,6 +287,8 @@ public:
 
     void PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor ) override;
 
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
     const EDA_RECT GetBoundingBox() const override;
 
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;

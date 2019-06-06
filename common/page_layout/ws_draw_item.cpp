@@ -368,10 +368,32 @@ void WS_DRAW_ITEM_BITMAP::PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4
 const EDA_RECT WS_DRAW_ITEM_BITMAP::GetBoundingBox() const
 {
     auto*    bitmap = static_cast<const WS_DATA_ITEM_BITMAP*>( m_peer );
-    EDA_RECT rect = bitmap->m_ImageBitmap->GetBoundingBox();
+    wxSize bm_size = bitmap->m_ImageBitmap->GetSize();
 
-    rect.Move( m_pos );
-    return rect;
+    // Size is in mils, convert to iu (0.001 mm)
+    bm_size.x *= 25.4;
+    bm_size.y *= 25.4;
+
+    EDA_RECT bbox;
+    bbox.SetSize( bm_size );
+    bbox.SetOrigin( m_pos.x - bm_size.x/2, m_pos.y - bm_size.y/2 );
+
+    return bbox;
+}
+
+
+bool WS_DRAW_ITEM_BITMAP::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+{
+    EDA_RECT bbox = GetBoundingBox();
+    bbox.Inflate( aAccuracy );
+
+    return bbox.Contains( aPosition );
+}
+
+
+bool WS_DRAW_ITEM_BITMAP::HitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy ) const
+{
+    return WS_DRAW_ITEM_BASE::HitTest( aRect, aContains, aAccuracy );
 }
 
 

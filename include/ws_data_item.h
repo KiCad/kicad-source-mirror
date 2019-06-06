@@ -40,9 +40,11 @@ class WS_DRAW_ITEM_TEXT;            // Forward declaration
 
 #define TB_DEFAULT_TEXTSIZE 1.5     // default worksheet text size in mm
 
-// A coordinate is relative to a page corner.
-// Any of the 4 corners can be a reference.
-// The default is the right bottom corner
+/**
+ * A coordinate is relative to a page corner.
+ * Any of the 4 corners can be a reference.
+ * The default is the right bottom corner
+ */
 enum CORNER_ANCHOR
 {
     RB_CORNER,      // right bottom corner
@@ -58,10 +60,11 @@ enum PAGE_OPTION
     SUBSEQUENT_PAGES
 };
 
-// a coordinate point
-// The position is always relative to the corner anchor
-// Note the coordinate is from the anchor point
-// to the opposite corner.
+/**
+ * A coordinate point
+ * The position is always relative to the corner anchor
+ * Note the coordinate is from the anchor point to the opposite corner.
+ */
 class POINT_COORD
 {
 public:
@@ -78,13 +81,15 @@ public:
 };
 
 
-// Work sheet structure type definitions.
-// Basic items are:
-// * segment and rect (defined by 2 points)
-// * text (defined by a coordinate), the text and its justifications
-// * poly polygon defined by a coordinate, and a set of list of corners
-//   ( because we use it for logos, there are more than one polygon
-//   in this description
+/**
+ * Work sheet structure type definitions.
+ * Basic items are:
+ * * segment and rect (defined by 2 points)
+ * * text (defined by a coordinate), the text and its justifications
+ * * poly polygon defined by a coordinate, and a set of list of corners
+ *   ( because we use it for logos, there are more than one polygon
+ *   in this description
+ */
 class WS_DATA_ITEM
 {
 public:
@@ -295,7 +300,7 @@ class WS_DATA_ITEM_TEXT : public WS_DATA_ITEM
 public:
     wxString            m_TextBase;             // The basic text, with format symbols
     wxString            m_FullText;             // The expanded text, shown on screen
-    double              m_Orient;               //  Orientation in degrees
+    double              m_Orient;               // Orientation in degrees
     EDA_TEXT_HJUSTIFY_T m_Hjustify;
     EDA_TEXT_VJUSTIFY_T m_Vjustify;
     bool                m_Italic;
