@@ -1091,9 +1091,12 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                         if( sch_pin->IsPowerConnection() )
                         {
-                            auto c = std::make_shared<SCH_CONNECTION>( possible_driver,
-                                                                       aSubgraph->m_sheet );
-                            c->SetName( static_cast<SCH_PIN *>( possible_driver )->GetName() );
+                            auto pin = static_cast<SCH_PIN *>( possible_driver );
+                            auto c = std::make_shared<SCH_CONNECTION>( pin, aSubgraph->m_sheet );
+                            c->ConfigureFromLabel( pin->GetName() );
+
+                            if( c->Type() != aSubgraph->m_driver_connection->Type() )
+                                continue;
 
                             if( c->Name( true ) == aSubgraph->m_driver_connection->Name( true ) )
                                 continue;
@@ -1111,9 +1114,12 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                     case SCH_HIER_LABEL_T:
                     case SCH_LABEL_T:
                     {
-                        auto c = std::make_shared<SCH_CONNECTION>( possible_driver,
-                                                                   aSubgraph->m_sheet );
-                        c->SetName( static_cast<SCH_TEXT*>( possible_driver )->GetShownText() );
+                        auto text = static_cast<SCH_TEXT*>( possible_driver );
+                        auto c = std::make_shared<SCH_CONNECTION>( text, aSubgraph->m_sheet );
+                        c->ConfigureFromLabel( text->GetShownText() );
+
+                        if( c->Type() != aSubgraph->m_driver_connection->Type() )
+                            continue;
 
                         if( c->Name( true ) == aSubgraph->m_driver_connection->Name( true ) )
                             continue;
@@ -1340,6 +1346,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
             for( CONNECTION_SUBGRAPH* parent : it.second )
             {
+                if( parent->m_absorbed )
+                    parent = parent->m_absorbed_by;
+
                 SCH_CONNECTION* match = matchBusMember( parent->m_driver_connection, link_member );
 
                 if( !match )
