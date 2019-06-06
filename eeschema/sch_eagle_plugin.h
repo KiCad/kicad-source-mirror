@@ -174,6 +174,14 @@ private:
     ///> Moves net labels that are detached from any wire to the nearest wire
     void adjustNetLabels();
 
+    /**
+     * Translates an Eagle-style bus name into one that is KiCad-compatible.
+     * For vector buses such as A[7..0] this has no impact.
+     * For group buses, we translate from Eagle-style to KiCad-style.
+     * @param aEagleName is the name of the bus from the Eagle schematic
+     */
+    wxString translateEagleBusName( const wxString& aEagleName ) const;
+
     wxString        getLibName();
     wxFileName      getLibFileName();
 

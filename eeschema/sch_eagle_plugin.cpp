@@ -24,6 +24,7 @@
 #include <kiway.h>
 
 #include <wx/filename.h>
+#include <wx/tokenzr.h>
 #include <memory>
 #include <algorithm>
 
@@ -39,6 +40,7 @@
 #include <lib_draw_item.h>
 #include <lib_id.h>
 #include <sch_component.h>
+#include <sch_connection.h>
 #include <sch_sheet_path.h>
 #include <lib_arc.h>
 #include <lib_circle.h>
@@ -700,7 +702,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     while( busNode )
     {
         // Get the bus name
-        wxString busName = busNode->GetAttribute( "name" );
+        wxString busName = translateEagleBusName( busNode->GetAttribute( "name" ) );
 
         // Load segments of this bus
         loadSegments( busNode, busName, wxString() );
@@ -2640,6 +2642,37 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_COMPONENT* aComponent,
 wxString SCH_EAGLE_PLUGIN::fixSymbolName( const wxString& aName )
 {
     wxString ret = LIB_ID::FixIllegalChars( aName, LIB_ID::ID_SCH );
+
+    return ret;
+}
+
+
+wxString SCH_EAGLE_PLUGIN::translateEagleBusName( const wxString& aEagleName ) const
+{
+    if( SCH_CONNECTION::IsBusVectorLabel( aEagleName ) )
+        return aEagleName;
+
+    wxString ret = "{";
+
+    wxStringTokenizer tokenizer( aEagleName, "," );
+
+    while( tokenizer.HasMoreTokens() )
+    {
+        wxString member = tokenizer.GetNextToken();
+
+        // In Eagle, overbar text is automatically stopped at the end of the net name, even when
+        // that net name is part of a bus definition.  In KiCad, we don't (currently) do that, so
+        // if there is an odd number of overbar markers in this net name, we need to append one
+        // to close it out before appending the space.
+
+        if( member.Freq( '!' ) % 2 > 0 )
+            member << "!";
+
+        ret << member << " ";
+    }
+
+    ret.Trim( true );
+    ret << "}";
 
     return ret;
 }
