@@ -572,8 +572,9 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename )
 
     if( editor )
     {
+        LIB_ID libID( libName, wxEmptyString );
         editor->SyncLibraryTree( true );
-        editor->FocusOnLibrary( libName );
+        editor->FocusOnLibID( libID );
     }
 
     auto viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
@@ -749,7 +750,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aModule )
         DeleteModuleFromLibrary( oldFPID, false );
     }
 
-    if( !saveFootprintInLibrary( aModule, libraryName ) )
+    if( !SaveFootprintInLibrary( aModule, libraryName ) )
         return false;
 
     if( nameChanged )
@@ -762,7 +763,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aModule )
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::saveFootprintInLibrary( MODULE* aModule, const wxString& aLibraryName )
+bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( MODULE* aModule, const wxString& aLibraryName )
 {
     try
     {
@@ -978,7 +979,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
             return false;
     }
 
-    if( !saveFootprintInLibrary( aModule, libraryName ) )
+    if( !SaveFootprintInLibrary( aModule, libraryName ) )
         return false;
 
     // Once saved-as a board footprint is no longer a board footprint

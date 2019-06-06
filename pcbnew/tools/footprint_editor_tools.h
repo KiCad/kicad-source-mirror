@@ -54,8 +54,15 @@ public:
     int Save( const TOOL_EVENT& aEvent );
     int SaveAs( const TOOL_EVENT& aEvent );
     int Revert( const TOOL_EVENT& aEvent );
-    int Delete( const TOOL_EVENT& aEvent );
 
+    int EditFootprint( const TOOL_EVENT& aEvent );
+    int CutCopyFootprint( const TOOL_EVENT& aEvent );
+    int PasteFootprint( const TOOL_EVENT& aEvent );
+    int DeleteFootprint( const TOOL_EVENT& aEvent );
+    int ImportFootprint( const TOOL_EVENT& aEvent );
+    int ExportFootprint( const TOOL_EVENT& aEvent );
+    
+    int ToggleFootprintTree( const TOOL_EVENT& aEvent );
     int Properties( const TOOL_EVENT& aEvent );
 
     /**
@@ -101,7 +108,10 @@ private:
     void setTransitions() override;
 
 private:
-    FOOTPRINT_EDIT_FRAME* m_frame;
+    FOOTPRINT_EDIT_FRAME*       m_frame;
+    
+    // A private clipboard for cut/copy/past of an entire footprint
+    std::unique_ptr<MODULE>     m_copiedModule;
 };
 
 #endif

@@ -84,11 +84,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     submenuImport->SetTitle( _( "Import" ) );
     submenuImport->SetIcon( import_xpm );
 
-    submenuImport->Add( _( "&Footprint..." ),
-                        _( "Import a footprint from file" ),
-                        ID_MODEDIT_IMPORT_PART, import_module_xpm );
-
-    submenuImport->Add( _( "&Graphics..." ),
+    submenuImport->Add( PCB_ACTIONS::importFootprint );
+    submenuImport->Add( _( "&Impot Graphics..." ),
                         _( "Import 2D Drawing file to Footprint Editor on Drawings layer" ),
                         ID_GEN_IMPORT_GRAPHICS_FILE, import_vector_xpm );
 
@@ -98,11 +95,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->SetTitle( _( "Export" ) );
     submenuExport->SetIcon( export_xpm );
 
-    submenuExport->AddItem( ID_MODEDIT_EXPORT_PART, _( "&Footprint..." ),
-                            _( "Export current footprint to a file" ),
-                            export_module_xpm,      modifiedDocumentCondition );
-
-    submenuExport->AddItem( ID_MODEDIT_SAVE_PNG, _( "View as &PNG..." ),
+    submenuExport->AddItem( PCB_ACTIONS::exportFootprint, modifiedDocumentCondition );
+    submenuExport->AddItem( ID_MODEDIT_SAVE_PNG, _( "Export View as &PNG..." ),
                             _( "Create a PNG file from the current view" ),
                             plot_xpm,               SELECTION_CONDITIONS::ShowAlways );
 
@@ -224,9 +218,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->AddMenu( contrastModeSubMenu );
 
     viewMenu->AddSeparator();
-    viewMenu->AddCheckItem( ID_MODEDIT_SHOW_HIDE_SEARCH_TREE,
-                            _( "&Search Tree" ), _( "Toggles the search tree visibility" ),
-                            search_tree_xpm, searchTreeShownCondition );
+    viewMenu->AddCheckItem( PCB_ACTIONS::toggleFootprintTree,     searchTreeShownCondition );
 
     viewMenu->Resolve();
 

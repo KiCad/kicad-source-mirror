@@ -411,6 +411,7 @@ void LIB_TREE::onContextMenu( wxDataViewEvent& aEvent )
     if( tool )
     {
         tool->Activate();
+        tool->GetManager()->VetoContextMenuMouseWarp();
         tool->GetToolMenu().ShowContextMenu();
 
         TOOL_EVENT evt( TC_MOUSE, TA_MOUSE_CLICK, BUT_RIGHT );

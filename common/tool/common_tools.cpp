@@ -532,6 +532,38 @@ int COMMON_TOOLS::SwitchCanvas( const TOOL_EVENT& aEvent )
 }
 
 
+int COMMON_TOOLS::ShowPlayer( const TOOL_EVENT& aEvent )
+{
+    FRAME_T playerType = FRAME_SCH_VIEWER;
+    
+    if( aEvent.IsAction( &ACTIONS::showSymbolBrowser ) )
+        playerType = FRAME_SCH_VIEWER;
+    else if( aEvent.IsAction( &ACTIONS::showSymbolEditor ) )
+        playerType = FRAME_SCH_LIB_EDITOR;
+    else if( aEvent.IsAction( &ACTIONS::showFootprintBrowser ) )
+        playerType = FRAME_PCB_MODULE_VIEWER;
+    else if( aEvent.IsAction( &ACTIONS::showFootprintEditor ) )
+        playerType = FRAME_PCB_MODULE_EDITOR;
+    else
+        wxFAIL_MSG( "ShowPlayer(): unexpected request" );
+    
+    KIWAY_PLAYER* editor = m_frame->Kiway().Player( playerType, true );
+
+    // Needed on Windows, other platforms do not use it, but it creates no issue
+    if( editor->IsIconized() )
+        editor->Iconize( false );
+
+    editor->Raise();
+
+    // Raising the window does not set the focus on Linux.  This should work on
+    // any platform.
+    if( wxWindow::FindFocus() != editor )
+        editor->SetFocus();
+    
+    return 0;
+}
+
+
 void COMMON_TOOLS::setTransitions()
 {
     // Cursor control
@@ -585,6 +617,10 @@ void COMMON_TOOLS::setTransitions()
     Go( &COMMON_TOOLS::ShowLibraryTable,   ACTIONS::showFootprintLibTable.MakeEvent() );
     Go( &COMMON_TOOLS::SwitchCanvas,       ACTIONS::acceleratedGraphics.MakeEvent() );
     Go( &COMMON_TOOLS::SwitchCanvas,       ACTIONS::standardGraphics.MakeEvent() );
+    Go( &COMMON_TOOLS::ShowPlayer,         ACTIONS::showSymbolBrowser.MakeEvent() );
+    Go( &COMMON_TOOLS::ShowPlayer,         ACTIONS::showSymbolEditor.MakeEvent() );
+    Go( &COMMON_TOOLS::ShowPlayer,         ACTIONS::showFootprintBrowser.MakeEvent() );
+    Go( &COMMON_TOOLS::ShowPlayer,         ACTIONS::showFootprintEditor.MakeEvent() );
 }
 
 

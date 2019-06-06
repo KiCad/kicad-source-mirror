@@ -267,7 +267,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_mainToolBar, this );
-    ADD_TOOL( ID_OPEN_MODULE_EDITOR, module_editor_xpm, _( "Open footprint editor" ) );
+    m_mainToolBar->Add( ACTIONS::showFootprintEditor );
     m_mainToolBar->Add( ACTIONS::showFootprintBrowser );
 
     KiScaledSeparator( m_mainToolBar, this );

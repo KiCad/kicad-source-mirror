@@ -272,15 +272,6 @@ int LIB_CONTROL::OnDeMorgan( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_CONTROL::ShowLibraryBrowser( const TOOL_EVENT& aEvent )
-{
-    wxCommandEvent dummy;
-    m_frame->OnOpenLibraryViewer( dummy );
-
-    return 0;
-}
-
-
 int LIB_CONTROL::ShowComponentTree( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
@@ -330,7 +321,6 @@ void LIB_CONTROL::setTransitions()
     Go( &LIB_CONTROL::OnDeMorgan,            EE_ACTIONS::showDeMorganStandard.MakeEvent() );
     Go( &LIB_CONTROL::OnDeMorgan,            EE_ACTIONS::showDeMorganAlternate.MakeEvent() );
 
-    Go( &LIB_CONTROL::ShowLibraryBrowser,    ACTIONS::showSymbolBrowser.MakeEvent() );
     Go( &LIB_CONTROL::ShowElectricalTypes,   EE_ACTIONS::showElectricalTypes.MakeEvent() );
     Go( &LIB_CONTROL::ShowComponentTree,     EE_ACTIONS::showComponentTree.MakeEvent() );
 }

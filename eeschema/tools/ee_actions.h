@@ -159,7 +159,6 @@ public:
     static TOOL_ACTION showBusManager;
 
     // Suite operations
-    static TOOL_ACTION showSymbolEditor;
     static TOOL_ACTION editWithLibEdit;
     static TOOL_ACTION showPcbNew;
     static TOOL_ACTION generateBOM;

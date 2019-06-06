@@ -317,82 +317,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_treePane->GetLibTree()->Refresh();
         break;
 
-    case ID_MODEDIT_CUT_PART:
-    case ID_MODEDIT_COPY_PART:
-        if( GetTargetFPID().IsValid() )
-        {
-            LIB_ID fpID = GetTargetFPID();
-
-            if( fpID == GetLoadedFPID() )
-                m_copiedModule.reset( new MODULE( *GetBoard()->GetFirstModule() ) );
-            else
-                m_copiedModule.reset( LoadFootprint( fpID ) );
-
-            if( id == ID_MODEDIT_CUT_PART )
-            {
-                if( fpID == GetLoadedFPID() )
-                    Clear_Pcb( false );
-
-                DeleteModuleFromLibrary( fpID, false );
-            }
-
-            SyncLibraryTree( true );
-        }
-        break;
-
-    case ID_MODEDIT_PASTE_PART:
-        if( m_copiedModule && !GetTargetFPID().GetLibNickname().empty() )
-        {
-            wxString newLib = GetTargetFPID().GetLibNickname();
-            MODULE*  newModule( m_copiedModule.get() );
-            wxString newName = newModule->GetFPID().GetLibItemName();
-
-            while( Prj().PcbFootprintLibs()->FootprintExists( newLib, newName ) )
-                newName += _( "_copy" );
-
-            newModule->SetFPID( LIB_ID( newLib, newName ) );
-            saveFootprintInLibrary( newModule, newLib );
-
-            SyncLibraryTree( true );
-            m_treePane->GetLibTree()->SelectLibId( newModule->GetFPID() );
-        }
-        break;
-
     case ID_ADD_FOOTPRINT_TO_BOARD:
         SaveFootprintToBoard( true );
-        break;
-
-    case ID_MODEDIT_IMPORT_PART:
-        if( ! Clear_Pcb( true ) )
-            break;                  // this command is aborted
-
-        SetCrossHairPosition( wxPoint( 0, 0 ) );
-        Import_Module();
-
-        if( GetBoard()->GetFirstModule() )
-            GetBoard()->GetFirstModule()->ClearFlags();
-
-        GetScreen()->SetModify();
-        // Clear undo and redo lists because we don't have handling to in
-        // FP editor to undo across imports (the module _is_ the board with the stack)
-        // todo: Abstract undo/redo stack to a higher element or keep consistent board item in fpeditor
-        GetScreen()->ClearUndoRedoList();
-
-        Zoom_Automatique( false );
-        GetGalCanvas()->Refresh();
-        Update3DView( true );
-
-        break;
-
-    case ID_MODEDIT_EXPORT_PART:
-        if( GetTargetFPID() == GetLoadedFPID() )
-            Export_Module( GetBoard()->GetFirstModule() );
-        else
-            Export_Module( LoadFootprint( GetTargetFPID() ) );
-        break;
-
-    case ID_MODEDIT_EDIT_MODULE:
-        LoadModuleFromLibrary( m_treePane->GetLibTree()->GetSelectedLibId() );
         break;
 
     case ID_MODEDIT_CHECK:

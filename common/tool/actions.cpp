@@ -363,10 +363,20 @@ TOOL_ACTION ACTIONS::showSymbolBrowser( "common.Control.showSymbolBrowser",
         _( "Symbol Library Browser" ), _( "Browse symbol libraries" ),
         library_browse_xpm );
 
+TOOL_ACTION ACTIONS::showSymbolEditor( "common.Control.showSymbolEditor",
+        AS_GLOBAL, 0,
+        _( "Symbol Editor" ), _( "Create, delete and edit symbols" ),
+        libedit_xpm );
+
 TOOL_ACTION ACTIONS::showFootprintBrowser( "common.Control.showFootprintBrowser",
         AS_GLOBAL, 0,
         _( "Footprint Library Browser" ), _( "Browse footprint libraries" ),
         modview_icon_xpm );
+
+TOOL_ACTION ACTIONS::showFootprintEditor( "common.Control.showFootprintEditor",
+        AS_GLOBAL, 0,
+        _( "Footprint Editor" ), _( "Create, delete and edit footprints" ),
+        module_editor_xpm );
 
 TOOL_ACTION ACTIONS::updatePcbFromSchematic( "common.Control.updatePcbFromSchematic",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_UPDATE_PCB_FROM_SCH ),

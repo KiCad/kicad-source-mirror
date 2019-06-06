@@ -63,9 +63,7 @@ void FOOTPRINT_TREE_PANE::Regenerate()
 
 void FOOTPRINT_TREE_PANE::onComponentSelected( wxCommandEvent& aEvent )
 {
-    wxCommandEvent evt( wxEVT_COMMAND_TOOL_CLICKED, ID_MODEDIT_EDIT_MODULE );
-    m_frame->Process_Special_Functions( evt );
-
+    m_frame->LoadModuleFromLibrary( GetLibTree()->GetSelectedLibId() );
     // Make sure current-part highlighting doesn't get lost in seleciton highlighting
     m_tree->Unselect();
 }

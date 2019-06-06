@@ -85,32 +85,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case 0:
         break;
 
-    case ID_OPEN_MODULE_EDITOR:
-        {
-            FOOTPRINT_EDIT_FRAME* editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, false );
-
-            if( !editor )
-            {
-                editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, true );
-                editor->Zoom_Automatique( false );
-            }
-            else
-            {
-                // Needed on Windows, other platforms do not use it,
-                // but it creates no issue
-                if( editor->IsIconized() )
-                     editor->Iconize( false );
-
-                editor->Raise();
-
-                // Raising the window does not set the focus on Linux.  This should work on
-                // any platform.
-                if( wxWindow::FindFocus() != editor )
-                    editor->SetFocus();
-            }
-        }
-        break;
-
     case ID_TOOLBARH_PCB_SELECT_LAYER:
         SetActiveLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
 

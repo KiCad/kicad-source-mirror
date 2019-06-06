@@ -82,6 +82,8 @@ public:
     int ConfigurePaths( const TOOL_EVENT& aEvent );
     int ShowLibraryTable( const TOOL_EVENT& aEvent );
     int SwitchCanvas( const TOOL_EVENT& aEvent );
+    
+    int ShowPlayer( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;

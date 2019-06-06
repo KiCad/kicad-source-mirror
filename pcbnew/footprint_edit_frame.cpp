@@ -82,18 +82,9 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
 
     EVT_TOOL( ID_MODEDIT_SAVE_PNG, FOOTPRINT_EDIT_FRAME::OnSaveFootprintAsPng )
 
-    EVT_TOOL( ID_MODEDIT_CUT_PART, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_COPY_PART, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_PASTE_PART, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_IMPORT_PART, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_EXPORT_PART, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_SHEET_SET, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_EDIT_MODULE, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_CHECK, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, FOOTPRINT_EDIT_FRAME::LoadModuleFromBoard )
     EVT_TOOL( ID_ADD_FOOTPRINT_TO_BOARD, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
-
-    EVT_TOOL( ID_MODEDIT_SHOW_HIDE_SEARCH_TREE, FOOTPRINT_EDIT_FRAME::OnToggleSearchTree )
 
     // Preferences and option menus
     EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, FOOTPRINT_EDIT_FRAME::ProcessPreferences )
@@ -271,7 +262,7 @@ void FOOTPRINT_EDIT_FRAME::HardRedraw()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::OnToggleSearchTree( wxCommandEvent& event )
+void FOOTPRINT_EDIT_FRAME::ToggleSearchTree()
 {
     auto& treePane = m_auimgr.GetPane( m_treePane );
     treePane.Show( !IsSearchTreeShown() );
@@ -726,10 +717,9 @@ void FOOTPRINT_EDIT_FRAME::SyncLibraryTree( bool aProgress )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::FocusOnLibrary( const wxString& aLibName )
+void FOOTPRINT_EDIT_FRAME::FocusOnLibID( const LIB_ID& aLibID )
 {
-    LIB_ID libID( aLibName, wxEmptyString );
-    m_treePane->GetLibTree()->SelectLibId( libID );
+    m_treePane->GetLibTree()->SelectLibId( aLibID );
 }
 
 

@@ -154,21 +154,19 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
         m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                                KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    m_optionsToolBar->Add( ACTIONS::toggleGrid,             ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( PCB_ACTIONS::togglePolarCoords,  ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::imperialUnits,          ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::metricUnits,            ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,      ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleGrid,              ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::togglePolarCoords,   ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::imperialUnits,           ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::metricUnits,             ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,       ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddSeparator();
-    m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode,     ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( PCB_ACTIONS::moduleEdgeOutlines, ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::highContrastMode,       ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode,      ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::moduleEdgeOutlines,  ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::highContrastMode,        ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddSeparator();
-    m_optionsToolBar->AddTool( ID_MODEDIT_SHOW_HIDE_SEARCH_TREE, wxEmptyString,
-                               KiScaledBitmap( search_tree_xpm, this ),
-                               _( "Toggles the search tree" ), wxITEM_CHECK );
+    m_optionsToolBar->Add( PCB_ACTIONS::toggleFootprintTree, ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->Realize();
 }
@@ -189,13 +187,14 @@ void FOOTPRINT_EDIT_FRAME::SyncMenusAndToolbars()
     m_mainToolBar->Toggle( PCB_ACTIONS::footprintProperties, GetBoard()->GetFirstModule() );
     m_mainToolBar->Refresh();
 
-    m_optionsToolBar->Toggle( ACTIONS::toggleGrid,             IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits,            GetUserUnits() != INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits,          GetUserUnits() == INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::togglePolarCoords,      GetShowPolarCoords() );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,     !opts->m_DisplayPadFill );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::moduleEdgeOutlines, !opts->m_DisplayModEdgeFill );
-    m_optionsToolBar->Toggle( ACTIONS::highContrastMode,       opts->m_ContrastModeDisplay );
+    m_optionsToolBar->Toggle( ACTIONS::toggleGrid,              IsGridVisible() );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits,             GetUserUnits() != INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits,           GetUserUnits() == INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::togglePolarCoords,       GetShowPolarCoords() );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,      !opts->m_DisplayPadFill );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::moduleEdgeOutlines,  !opts->m_DisplayModEdgeFill );
+    m_optionsToolBar->Toggle( ACTIONS::highContrastMode,        opts->m_ContrastModeDisplay );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::toggleFootprintTree, IsSearchTreeShown() );
     m_optionsToolBar->Refresh();
 
     m_drawToolBar->Toggle( ACTIONS::selectionTool,     GetToolId() == ID_NO_TOOL_SELECTED );

@@ -104,19 +104,6 @@ SCH_BASE_FRAME::~SCH_BASE_FRAME()
 }
 
 
-void SCH_BASE_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
-{
-    LIB_VIEW_FRAME* viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, true );
-
-    // On Windows, Raise() does not bring the window on screen, when iconized
-    if( viewlibFrame->IsIconized() )
-        viewlibFrame->Iconize( false );
-
-    viewlibFrame->Show( true );
-    viewlibFrame->Raise();
-}
-
-
 SCH_SCREEN* SCH_BASE_FRAME::GetScreen() const
 {
     return (SCH_SCREEN*) EDA_DRAW_FRAME::GetScreen();

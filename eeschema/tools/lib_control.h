@@ -60,7 +60,6 @@ public:
 
     int OnDeMorgan( const TOOL_EVENT& aEvent );
 
-    int ShowLibraryBrowser( const TOOL_EVENT& aEvent );
     int ShowElectricalTypes( const TOOL_EVENT& aEvent );
     int ShowComponentTree( const TOOL_EVENT& aEvent );
 

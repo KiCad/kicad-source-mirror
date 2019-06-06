@@ -62,7 +62,6 @@ enum id_eeschema_frm
     ID_REMAP_SYMBOLS,
 
     /* Schematic editor horizontal toolbar IDs */
-    ID_TO_LIBVIEW,
     ID_BACKANNO_ITEMS,
 
     /* Schematic editor vertical toolbar IDs */

@@ -1001,28 +1001,6 @@ int PCBNEW_CONTROL::Show3DViewer( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::ShowFootprintBrowser( const TOOL_EVENT& aEvent )
-{
-    auto* viewer = (FOOTPRINT_VIEWER_FRAME*) m_frame->Kiway().Player( FRAME_PCB_MODULE_VIEWER );
-
-    viewer->Show( true );
-
-    // On Windows, Raise() does not bring the window on screen, when iconized
-    if( viewer->IsIconized() )
-        viewer->Iconize( false );
-
-    viewer->Raise();
-
-    // Raising the window does not set the focus on Linux.  This should work on
-    // any platform.
-    if( wxWindow::FindFocus() != viewer )
-        viewer->SetFocus();
-    
-    return 0;
-
-}
-
-
 int PCBNEW_CONTROL::ToBeDone( const TOOL_EVENT& aEvent )
 {
     DisplayInfoMessage( m_frame, _( "Not available in OpenGL/Cairo canvases." ) );
@@ -1119,7 +1097,6 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::DeleteItemCursor,     PCB_ACTIONS::deleteTool.MakeEvent() );
     Go( &PCBNEW_CONTROL::ShowHelp,             PCB_ACTIONS::showHelp.MakeEvent() );
     Go( &PCBNEW_CONTROL::Show3DViewer,         ACTIONS::show3DViewer.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ShowFootprintBrowser, ACTIONS::showFootprintBrowser.MakeEvent() );
     Go( &PCBNEW_CONTROL::ToBeDone,             PCB_ACTIONS::toBeDone.MakeEvent() );
 
     // Append control

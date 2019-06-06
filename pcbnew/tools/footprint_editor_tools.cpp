@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2019 CERN
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -47,13 +48,18 @@
 #include <class_module.h>
 #include <class_edge_mod.h>
 #include <board_commit.h>
-
+#include <project.h>
 #include <tools/tool_event_utils.h>
-
+#include <fp_lib_table.h>
 #include <functional>
 using namespace std::placeholders;
 #include <wx/defs.h>
 
+
+TOOL_ACTION PCB_ACTIONS::toggleFootprintTree( "pcbnew.ModuleEditor.toggleFootprintTree",
+        AS_GLOBAL, 0,
+        _( "Show Footprint Tree" ), _( "Toggles the footprint tree visibility" ),
+        search_tree_xpm );
 
 TOOL_ACTION PCB_ACTIONS::newFootprint( "pcbnew.ModuleEditor.newFootprint",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_NEW ),
@@ -75,16 +81,46 @@ TOOL_ACTION PCB_ACTIONS::saveToLibrary( "pcbnew.ModuleEditor.saveToLibrary",
         _( "Save to Library" ), _( "Save changes to library" ),
         save_xpm );
 
-// Module editor tools
-TOOL_ACTION PCB_ACTIONS::footprintProperties( "pcbnew.ModuleEditor.footprintProperties",
+TOOL_ACTION PCB_ACTIONS::editFootprint( "pcbnew.ModuleEditor.editFootprint",
         AS_GLOBAL, 0,
-        _( "Footprint Properties..." ), "",
-        module_options_xpm );
+        _( "Edit Footprint" ), _( "Show selected footprint on editor canvas" ),
+        edit_xpm );
 
 TOOL_ACTION PCB_ACTIONS::deleteFootprint( "pcbnew.ModuleEditor.deleteFootprint",
         AS_GLOBAL, 0,
         _( "Delete Footprint from Library" ), "",
         delete_xpm );
+
+TOOL_ACTION PCB_ACTIONS::cutFootprint( "pcbnew.ModuleEditor.cutFootprint",
+        AS_GLOBAL, 0,
+        _( "Cut Footprint" ), "",
+        cut_xpm );
+
+TOOL_ACTION PCB_ACTIONS::copyFootprint( "pcbnew.ModuleEditor.copyFootprint",
+        AS_GLOBAL, 0,
+        _( "Copy Footprint" ), "",
+        copy_xpm );
+
+TOOL_ACTION PCB_ACTIONS::pasteFootprint( "pcbnew.ModuleEditor.pasteFootprint",
+        AS_GLOBAL, 0,
+        _( "Paste Footprint" ), "",
+        paste_xpm );
+
+TOOL_ACTION PCB_ACTIONS::importFootprint( "pcbnew.ModuleEditor.importFootprint",
+        AS_GLOBAL, 0,
+        _( "Import Footprint..." ), "",
+        import_module_xpm );
+
+TOOL_ACTION PCB_ACTIONS::exportFootprint( "pcbnew.ModuleEditor.exportFootprint",
+        AS_GLOBAL, 0,
+        _( "Export Footprint..." ), "",
+        export_module_xpm );
+
+// Module editor tools
+TOOL_ACTION PCB_ACTIONS::footprintProperties( "pcbnew.ModuleEditor.footprintProperties",
+        AS_GLOBAL, 0,
+        _( "Footprint Properties..." ), "",
+        module_options_xpm );
 
 TOOL_ACTION PCB_ACTIONS::placePad( "pcbnew.ModuleEditor.placePad",
         AS_GLOBAL, 0,
@@ -158,9 +194,7 @@ bool MODULE_EDITOR_TOOLS::Init()
 #ifdef KICAD_SCRIPTING
     ctxMenu.AddItem( PCB_ACTIONS::createFootprint,   SELECTION_CONDITIONS::ShowAlways );
 #endif
-    ctxMenu.AddItem( ID_MODEDIT_EDIT_MODULE,
-                     _( "Edit Footprint" ), _( "Show selected footprint on editor canvas" ),
-                     edit_xpm,                       fpSelectedCondition );
+    ctxMenu.AddItem( PCB_ACTIONS::editFootprint,     fpSelectedCondition );
 
     ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways );
     ctxMenu.AddItem( ACTIONS::save,                  fpSelectedCondition );
@@ -169,18 +203,13 @@ bool MODULE_EDITOR_TOOLS::Init()
     ctxMenu.AddItem( ACTIONS::revert,                fpSelectedCondition );
 
     ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways );
-    ctxMenu.AddItem( ID_MODEDIT_CUT_PART, _( "Cut Footprint" ),  "",
-                     cut_xpm,                        fpSelectedCondition );
-    ctxMenu.AddItem( ID_MODEDIT_COPY_PART, _( "Copy Footprint" ),  "",
-                     copy_xpm,                       fpSelectedCondition );
-    ctxMenu.AddItem( ID_MODEDIT_PASTE_PART, _( "Paste Footprint" ), "",
-                     paste_xpm,                      SELECTION_CONDITIONS::ShowAlways );
+    ctxMenu.AddItem( PCB_ACTIONS::cutFootprint,      fpSelectedCondition );
+    ctxMenu.AddItem( PCB_ACTIONS::copyFootprint,     fpSelectedCondition );
+    ctxMenu.AddItem( PCB_ACTIONS::pasteFootprint,    SELECTION_CONDITIONS::ShowAlways );
 
     ctxMenu.AddSeparator( fpSelectedCondition );
-    ctxMenu.AddItem( ID_MODEDIT_IMPORT_PART, _( "Import Footprint..." ),  "",
-                     import_module_xpm,              SELECTION_CONDITIONS::ShowAlways );
-    ctxMenu.AddItem( ID_MODEDIT_EXPORT_PART,  _( "Export Footprint..." ), "",
-                     export_module_xpm,              fpSelectedCondition );
+    ctxMenu.AddItem( PCB_ACTIONS::importFootprint,   SELECTION_CONDITIONS::ShowAlways );
+    ctxMenu.AddItem( PCB_ACTIONS::exportFootprint,   fpSelectedCondition );
     
     return true;
 }
@@ -225,7 +254,45 @@ int MODULE_EDITOR_TOOLS::Revert( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_EDITOR_TOOLS::Delete( const TOOL_EVENT& aEvent )
+int MODULE_EDITOR_TOOLS::CutCopyFootprint( const TOOL_EVENT& aEvent )
+{
+    LIB_ID fpID = m_frame->GetTreeFPID();
+
+    if( fpID == m_frame->GetLoadedFPID() )
+        m_copiedModule.reset( new MODULE( *m_frame->GetBoard()->GetFirstModule() ) );
+    else
+        m_copiedModule.reset( m_frame->LoadFootprint( fpID ) );
+    
+    if( aEvent.IsAction( &PCB_ACTIONS::cutFootprint ) )
+        DeleteFootprint(aEvent );
+
+    return 0;
+}
+
+
+int MODULE_EDITOR_TOOLS::PasteFootprint( const TOOL_EVENT& aEvent )
+{
+    if( m_copiedModule && !m_frame->GetTreeFPID().GetLibNickname().empty() )
+    {
+        wxString newLib = m_frame->GetTreeFPID().GetLibNickname();
+        MODULE*  newModule( m_copiedModule.get() );
+        wxString newName = newModule->GetFPID().GetLibItemName();
+
+        while( m_frame->Prj().PcbFootprintLibs()->FootprintExists( newLib, newName ) )
+            newName += _( "_copy" );
+
+        newModule->SetFPID( LIB_ID( newLib, newName ) );
+        m_frame->SaveFootprintInLibrary( newModule, newLib );
+
+        m_frame->SyncLibraryTree( true );
+        m_frame->FocusOnLibID( newModule->GetFPID() );
+    }
+
+    return 0;
+}
+
+
+int MODULE_EDITOR_TOOLS::DeleteFootprint( const TOOL_EVENT& aEvent )
 {
     FOOTPRINT_EDIT_FRAME* frame = getEditFrame<FOOTPRINT_EDIT_FRAME>();
 
@@ -237,6 +304,57 @@ int MODULE_EDITOR_TOOLS::Delete( const TOOL_EVENT& aEvent )
         frame->SyncLibraryTree( true );
     }
 
+    return 0;
+}
+
+
+int MODULE_EDITOR_TOOLS::ImportFootprint( const TOOL_EVENT& aEvent )
+{
+    if( !m_frame->Clear_Pcb( true ) )
+        return -1;                  // this command is aborted
+
+    m_frame->SetCrossHairPosition( wxPoint( 0, 0 ) );
+    m_frame->Import_Module();
+
+    if( m_frame->GetBoard()->GetFirstModule() )
+        m_frame->GetBoard()->GetFirstModule()->ClearFlags();
+
+    // Clear undo and redo lists because we don't have handling to in
+    // FP editor to undo across imports (the module _is_ the board with the stack)
+    // todo: Abstract undo/redo stack to a higher element or keep consistent board item in fpeditor
+    frame()->GetScreen()->ClearUndoRedoList();
+
+    m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
+    m_frame->OnModify();
+    return 0;
+}
+
+
+int MODULE_EDITOR_TOOLS::ExportFootprint( const TOOL_EVENT& aEvent )
+{
+    LIB_ID  fpID = m_frame->GetTreeFPID();
+    MODULE* fp;
+    
+    if( fpID == m_frame->GetLoadedFPID() )
+        fp = m_frame->GetBoard()->GetFirstModule();
+    else
+        fp = m_frame->LoadFootprint( fpID );
+    
+    m_frame->Export_Module( fp );
+    return 0;
+}
+
+
+int MODULE_EDITOR_TOOLS::EditFootprint( const TOOL_EVENT& aEvent )
+{
+    m_frame->LoadModuleFromLibrary( m_frame->GetTreeFPID() );
+    return 0;
+}
+
+
+int MODULE_EDITOR_TOOLS::ToggleFootprintTree( const TOOL_EVENT& aEvent )
+{
+    m_frame->ToggleSearchTree();
     return 0;
 }
 
@@ -711,8 +829,17 @@ void MODULE_EDITOR_TOOLS::setTransitions()
     Go( &MODULE_EDITOR_TOOLS::SaveAs,               ACTIONS::saveAs.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::SaveAs,               ACTIONS::saveCopyAs.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::Revert,               ACTIONS::revert.MakeEvent() );
-    Go( &MODULE_EDITOR_TOOLS::Delete,               PCB_ACTIONS::deleteFootprint.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::DeleteFootprint,      PCB_ACTIONS::deleteFootprint.MakeEvent() );
 
+    Go( &MODULE_EDITOR_TOOLS::EditFootprint,        PCB_ACTIONS::editFootprint.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::CutCopyFootprint,     PCB_ACTIONS::cutFootprint.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::CutCopyFootprint,     PCB_ACTIONS::copyFootprint.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::PasteFootprint,       PCB_ACTIONS::pasteFootprint.MakeEvent() );
+
+    Go( &MODULE_EDITOR_TOOLS::ImportFootprint,      PCB_ACTIONS::importFootprint.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::ExportFootprint,      PCB_ACTIONS::exportFootprint.MakeEvent() );
+
+    Go( &MODULE_EDITOR_TOOLS::ToggleFootprintTree,  PCB_ACTIONS::toggleFootprintTree.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::Properties,           PCB_ACTIONS::footprintProperties.MakeEvent() );
     Go( &MODULE_EDITOR_TOOLS::DefaultPadProperties, PCB_ACTIONS::defaultPadProperties.MakeEvent() );
 

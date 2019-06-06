@@ -76,11 +76,6 @@ TOOL_ACTION EE_ACTIONS::highlightNetCursor( "eeschema.EditorControl.highlightNet
         _( "Highlight Nets" ), _( "Highlight wires and pins of a net" ),
         net_highlight_schematic_xpm, AF_ACTIVATE );
 
-TOOL_ACTION EE_ACTIONS::showSymbolEditor( "eeschema.EditorControl.showSymbolEditor",
-        AS_GLOBAL, 0,
-        _( "Show Symbol Editor" ), _( "Create, delete and edit symbols" ),
-        libedit_xpm );
-
 TOOL_ACTION EE_ACTIONS::editWithLibEdit( "eeschema.EditorControl.editWithSymbolEditor",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_WITH_LIBEDIT ),
         _( "Edit with Symbol Editor" ), _( "Open the symbol editor to edit the symbol" ),
@@ -1048,41 +1043,21 @@ int SCH_EDITOR_CONTROL::EditWithLibEdit( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     SELECTION&         selection = selTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
-    SCH_COMPONENT*     comp = nullptr;
+    SCH_COMPONENT*     sym = nullptr;
+    LIB_EDIT_FRAME*    libEdit;
 
     if( selection.GetSize() >= 1 )
-        comp = (SCH_COMPONENT*) selection.Front();
+        sym = (SCH_COMPONENT*) selection.Front();
 
-    if( !comp || comp->GetEditFlags() != 0 )
+    if( !sym || sym->GetEditFlags() != 0 )
         return 0;
 
-    wxCommandEvent dummy;
-    m_frame->OnOpenLibraryEditor( dummy );
+    m_toolMgr->RunAction( ACTIONS::showSymbolEditor, true );
+    libEdit = (LIB_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
 
-    auto libeditFrame = (LIB_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
+    if( libEdit )
+        libEdit->LoadComponentAndSelectLib( sym->GetLibId(), sym->GetUnit(), sym->GetConvert() );
 
-    if( libeditFrame )
-    {
-        const LIB_ID& id = comp->GetLibId();
-        libeditFrame->LoadComponentAndSelectLib( id, comp->GetUnit(), comp->GetConvert() );
-    }
-
-    return 0;
-}
-
-
-int SCH_EDITOR_CONTROL::ShowSymbolEditor( const TOOL_EVENT& aEvent )
-{
-    wxCommandEvent dummy;
-    m_frame->OnOpenLibraryEditor( dummy );
-    return 0;
-}
-
-
-int SCH_EDITOR_CONTROL::ShowLibraryBrowser( const TOOL_EVENT& aEvent )
-{
-    wxCommandEvent dummy;
-    m_frame->OnOpenLibraryViewer( dummy );
     return 0;
 }
 
@@ -1249,8 +1224,6 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::Paste,                 ACTIONS::paste.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::EditWithLibEdit,       EE_ACTIONS::editWithLibEdit.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::ShowSymbolEditor,      EE_ACTIONS::showSymbolEditor.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::ShowLibraryBrowser,    ACTIONS::showSymbolBrowser.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowCvpcb,             EE_ACTIONS::assignFootprints.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Annotate,              EE_ACTIONS::annotate.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::EditSymbolFields,      EE_ACTIONS::editSymbolFields.MakeEvent() );

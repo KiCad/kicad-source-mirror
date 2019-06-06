@@ -82,14 +82,9 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( EE_ACTIONS::leaveSheet );
 
     m_mainToolBar->AddSeparator();
-    m_mainToolBar->Add( EE_ACTIONS::showSymbolEditor );
+    m_mainToolBar->Add( ACTIONS::showSymbolEditor );
     m_mainToolBar->Add( ACTIONS::showSymbolBrowser );
-
-    // modedit is with libedit in a "library section" because the user must have footprints before
-    // they can be assigned.
-    m_mainToolBar->AddTool( ID_RUN_PCB_MODULE_EDITOR, wxEmptyString,
-                            KiScaledBitmap( module_editor_xpm, this ),
-                            _( "Footprint Editor - Create/edit footprints" ) );
+    m_mainToolBar->Add( ACTIONS::showFootprintEditor );
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->Add( EE_ACTIONS::annotate );

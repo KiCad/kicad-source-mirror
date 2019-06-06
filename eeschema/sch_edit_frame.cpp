@@ -232,8 +232,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_RESCUE_CACHED, SCH_EDIT_FRAME::OnRescueProject )
     EVT_MENU( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnRemapSymbols )
 
-    EVT_TOOL( ID_RUN_PCB_MODULE_EDITOR, SCH_EDIT_FRAME::OnOpenFootprintEditor )
-
     EVT_TOOL( ID_GET_NETLIST, SCH_EDIT_FRAME::OnCreateNetlist )
     EVT_TOOL( ID_BACKANNO_ITEMS, SCH_EDIT_FRAME::OnLoadCmpToFootprintLinkFile )
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
@@ -867,24 +865,6 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
 }
 
 
-void SCH_EDIT_FRAME::OnOpenFootprintEditor( wxCommandEvent& event )
-{
-    wxFileName fn = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
-
-    if( fn.IsOk() )
-    {
-        KIWAY_PLAYER* fp_editor = Kiway().Player( FRAME_PCB_MODULE_EDITOR );
-
-        // On Windows, Raise() does not bring the window on screen, when iconized
-        if( fp_editor->IsIconized() )
-            fp_editor->Iconize( false );
-
-        fp_editor->Show( true );
-        fp_editor->Raise();
-    }
-}
-
-
 void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
 {
     wxFileName fn = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
@@ -912,24 +892,6 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
     {
         DisplayError( this, _( "Could not open CvPcb" ) );
     }
-}
-
-
-void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
-{
-    LIB_EDIT_FRAME* libeditFrame = (LIB_EDIT_FRAME*) Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
-
-    if( !libeditFrame )
-    {
-        libeditFrame = (LIB_EDIT_FRAME*) Kiway().Player( FRAME_SCH_LIB_EDITOR, true );
-        libeditFrame->Show( true );
-    }
-
-    // On Windows, Raise() does not bring the window on screen, when iconized
-    if( libeditFrame->IsIconized() )
-        libeditFrame->Iconize( false );
-
-    libeditFrame->Raise();
 }
 
 

@@ -42,7 +42,6 @@ class FOOTPRINT_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
     FOOTPRINT_TREE_PANE*        m_treePane;
     LIB_TREE_MODEL_ADAPTER::PTR m_adapter;
 
-    std::unique_ptr<MODULE>     m_copiedModule;
     std::unique_ptr<MODULE>     m_revertModule;
     wxString                    m_footprintNameWhenLoaded;
 
@@ -128,11 +127,10 @@ public:
     // The Tool Framework initalization, for GAL mode
     void setupTools();
 
-    void OnToggleSearchTree( wxCommandEvent& event );
-
     void OnSaveFootprintAsPng( wxCommandEvent& event );
 
     bool IsSearchTreeShown();
+    void ToggleSearchTree();
 
     /**
      * Save a library to a new name and/or library type.
@@ -174,6 +172,7 @@ public:
     bool SaveFootprint( MODULE* aModule );
     bool SaveFootprintAs( MODULE* aModule );
     bool SaveFootprintToBoard( bool aAddNew );
+    bool SaveFootprintInLibrary( MODULE* aModule, const wxString& aLibraryName );
     bool RevertFootprint();
 
     /**
@@ -339,7 +338,7 @@ public:
      * @param aProgress
      */
     void SyncLibraryTree( bool aProgress );
-    void FocusOnLibrary( const wxString& aLibName );
+    void FocusOnLibID( const LIB_ID& aLibID );
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 
@@ -374,14 +373,10 @@ protected:
     void restoreLastFootprint();
     void retainLastFootprint();
 
-private:
-
     /**
      * Run the Footprint Properties dialog and handle changes made in it.
      */
     void editFootprintProperties( MODULE* aFootprint );
-
-    bool saveFootprintInLibrary( MODULE* aModule, const wxString& aLibraryName );
 };
 
 #endif      // FOOTPRINT_EDIT_FRAME_H

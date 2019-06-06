@@ -274,7 +274,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     toolsMenu->AddItem( EE_ACTIONS::showPcbNew,             EE_CONDITIONS::ShowAlways );
 
     toolsMenu->AddSeparator();
-    toolsMenu->AddItem( EE_ACTIONS::showSymbolEditor,       EE_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( ACTIONS::showSymbolEditor,          EE_CONDITIONS::ShowAlways );
     toolsMenu->AddItem( ID_RESCUE_CACHED, _( "&Rescue Symbols..." ),
                         _( "Find old symbols in project and rename/rescue them" ),
                         rescue_xpm,                         EE_CONDITIONS::ShowAlways );

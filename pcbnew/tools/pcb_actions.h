@@ -287,6 +287,8 @@ public:
 
     // Module editor tools
 
+    static TOOL_ACTION toggleFootprintTree;
+    
     // We don't use ACTION::new here because we need to distinguish between New Library
     // and New Footprint.
     static TOOL_ACTION newFootprint;
@@ -299,7 +301,13 @@ public:
     static TOOL_ACTION saveToBoard;
     static TOOL_ACTION saveToLibrary;
 
+    static TOOL_ACTION editFootprint;
     static TOOL_ACTION deleteFootprint;
+    static TOOL_ACTION cutFootprint;
+    static TOOL_ACTION copyFootprint;
+    static TOOL_ACTION pasteFootprint;
+    static TOOL_ACTION importFootprint;
+    static TOOL_ACTION exportFootprint;
     
     static TOOL_ACTION footprintProperties;
     static TOOL_ACTION defaultPadProperties;
