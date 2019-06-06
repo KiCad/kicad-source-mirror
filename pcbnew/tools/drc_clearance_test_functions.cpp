@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2007 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -40,8 +40,8 @@
 #include <board_commit.h>
 
 
-/*
- * compare 2 convex polygons and return true if distance > aDist
+/**
+ * compare 2 convex polygons and return true if distance > aDist (if no error DRC)
  * i.e if for each edge of the first polygon distance from each edge of the other polygon
  * is >= aDist
  */
@@ -860,7 +860,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         {
             int padRadius = aRefPad->GetRoundRectCornerRadius();
             dist_min += padRadius;
-            GetRoundRectCornerCenters( polyref, padRadius, wxPoint( 0, 0 ), aRefPad->GetSize(), 
+            GetRoundRectCornerCenters( polyref, padRadius, wxPoint( 0, 0 ), aRefPad->GetSize(),
                                        aRefPad->GetOrientation() );
         }
         else if( aRefPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT )
@@ -887,7 +887,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
             // The reference pad can be rotated. calculate the rotated
             // coordiantes ( note, the ref pad position is the origin of
             // coordinates for this drc test)
-            aRefPad->CustomShapeAsPolygonToBoardPosition( &polysetref, wxPoint( 0, 0 ), 
+            aRefPad->CustomShapeAsPolygonToBoardPosition( &polysetref, wxPoint( 0, 0 ),
                                                           aRefPad->GetOrientation() );
         }
         else
@@ -908,7 +908,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
             {
                 int padRadius = aPad->GetRoundRectCornerRadius();
                 dist_min += padRadius;
-                GetRoundRectCornerCenters( polycompare, padRadius, relativePadPos, aPad->GetSize(), 
+                GetRoundRectCornerCenters( polycompare, padRadius, relativePadPos, aPad->GetSize(),
                                            aPad->GetOrientation() );
             }
             else if( aPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT )
@@ -923,7 +923,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
                 // coordinates ( note, the ref pad position is the origin of
                 // coordinates for this drc test)
                 int padRadius = aPad->GetRoundRectCornerRadius();
-                TransformRoundChamferedRectToPolygon( polysetcompare, relativePadPos, 
+                TransformRoundChamferedRectToPolygon( polysetcompare, relativePadPos,
                                                       aPad->GetSize(), aPad->GetOrientation(),
                                                       padRadius, aPad->GetChamferRectRatio(),
                                                       aPad->GetChamferPositions(), maxError );
@@ -935,7 +935,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
                 // The pad to compare can be rotated. calculate the rotated
                 // coordinattes ( note, the pad to compare position
                 // is the relativePadPos for this drc test
-                aPad->CustomShapeAsPolygonToBoardPosition( &polysetcompare, relativePadPos, 
+                aPad->CustomShapeAsPolygonToBoardPosition( &polysetcompare, relativePadPos,
                                                            aPad->GetOrientation() );
             }
             else
@@ -954,15 +954,17 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
             {
                 const SHAPE_LINE_CHAIN& refpoly = polysetref.COutline( 0 );
                 // And now test polygons:
-                diag &= !poly2polyDRC( (wxPoint*) &refpoly.CPoint( 0 ), refpoly.PointCount(),
-                                       polycompare, 4, dist_min );
+                if( !poly2polyDRC( (wxPoint*) &refpoly.CPoint( 0 ), refpoly.PointCount(),
+                                    polycompare, 4, dist_min ) )    // Therefore error
+                    diag = false;
             }
             else if( polysetref.OutlineCount() == 0 && polysetcompare.OutlineCount())
             {
                 const SHAPE_LINE_CHAIN& cmppoly = polysetcompare.COutline( 0 );
                 // And now test polygons:
-                diag &= !poly2polyDRC( (wxPoint*) &cmppoly.CPoint( 0 ), cmppoly.PointCount(),
-                                       polyref, 4, dist_min );
+                if( !poly2polyDRC( (wxPoint*) &cmppoly.CPoint( 0 ), cmppoly.PointCount(),
+                                    polyref, 4, dist_min ) )    // Therefore error
+                    diag = false;
             }
             else if( polysetref.OutlineCount() && polysetcompare.OutlineCount() )
             {
@@ -970,13 +972,15 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
                 const SHAPE_LINE_CHAIN& cmppoly = polysetcompare.COutline( 0 );
 
                 // And now test polygons:
-                diag &= !poly2polyDRC( (wxPoint*) &refpoly.CPoint( 0 ), refpoly.PointCount(),
-                                       (wxPoint*) &cmppoly.CPoint( 0 ), cmppoly.PointCount(), 
-                                       dist_min );
+                if( !poly2polyDRC( (wxPoint*) &refpoly.CPoint( 0 ), refpoly.PointCount(),
+                                    (wxPoint*) &cmppoly.CPoint( 0 ), cmppoly.PointCount(),
+                                    dist_min ) )    // Therefore error
+                    diag = false;
             }
             else
             {
-                diag &= !poly2polyDRC( polyref, 4, polycompare, 4, dist_min );
+                if( !poly2polyDRC( polyref, 4, polycompare, 4, dist_min ) ) // Therefore error
+                    diag = false;
             }
             break;
 
