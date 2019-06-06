@@ -1769,27 +1769,6 @@ std::vector<const CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigrati
 }
 
 
-bool CONNECTION_GRAPH::UsesNewBusFeatures() const
-{
-    for( auto&& subgraph : m_subgraphs )
-    {
-        if( !subgraph->m_driver )
-            continue;
-
-        auto sheet = subgraph->m_sheet;
-        auto connection = subgraph->m_driver->Connection( sheet );
-
-        if( !connection->IsBus() )
-            continue;
-
-        if( connection->Type() == CONNECTION_BUS_GROUP )
-            return true;
-    }
-
-    return false;
-}
-
-
 int CONNECTION_GRAPH::RunERC( const ERC_SETTINGS& aSettings, bool aCreateMarkers )
 {
     int error_count = 0;
