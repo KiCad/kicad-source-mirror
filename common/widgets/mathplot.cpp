@@ -3053,7 +3053,8 @@ bool mpWindow::SaveScreenshot( const wxString& filename, wxBitmapType type,
     wxBitmap screenBuffer( sizeX, sizeY );
     wxMemoryDC screenDC;
     screenDC.SelectObject( screenBuffer );
-    screenDC.SetPen( *wxTRANSPARENT_PEN );
+    screenDC.SetPen( *wxWHITE_PEN );
+    screenDC.SetTextForeground( m_fgColour );
     wxBrush brush( GetBackgroundColour() );
     screenDC.SetBrush( brush );
     screenDC.DrawRectangle( 0, 0, sizeX, sizeY );
