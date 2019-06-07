@@ -37,8 +37,12 @@ public:
     ///> @copydoc EDA_DRAW_PANEL_GAL::GetMsgPanelInfo()
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
+    /**
+     * Build and update the list of WS_DRAW_ITEM_xxx showing the frame layout
+     */
     void DisplayWorksheet();
 
+    ///> @copydoc EDA_DRAW_PANEL_GAL::SwitchBackend
     bool SwitchBackend( GAL_TYPE aGalType ) override;
 
     ///> @copydoc EDA_DRAW_PANEL_GAL::SetTopLayer

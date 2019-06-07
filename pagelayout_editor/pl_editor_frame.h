@@ -126,10 +126,17 @@ public:
     {
         return m_grid_origin;
     }
+
     void SetGridOrigin( const wxPoint& aPoint ) override
     {
         m_grid_origin = aPoint;
     }
+
+    /**
+     * calculate the position (in page, in iu) of the corner used as coordinate origin
+     * of items
+     */
+    wxPoint ReturnCoordOriginCorner() const;
 
     const TITLE_BLOCK& GetTitleBlock() const override;
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;

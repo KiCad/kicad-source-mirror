@@ -180,6 +180,7 @@ enum KICAD_T
     WSG_POLY_T,
     WSG_TEXT_T,
     WSG_BITMAP_T,
+    WSG_PAGE_T,
 
     // serialized layout used in undo/redo commands
     WS_PROXY_UNDO_ITEM_T,  // serialized layout used in undo/redo commands

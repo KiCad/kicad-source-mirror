@@ -119,6 +119,7 @@ private:
     void draw( const WS_DRAW_ITEM_POLYGON* aItem, int aLayer ) const;
     void draw( const WS_DRAW_ITEM_TEXT* aItem, int aLayer ) const;
     void draw( const WS_DRAW_ITEM_BITMAP* aItem, int aLayer ) const;
+    void draw( const WS_DRAW_ITEM_PAGE* aItem, int aLayer ) const;
 
 private:
     WS_RENDER_SETTINGS m_renderSettings;

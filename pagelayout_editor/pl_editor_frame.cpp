@@ -179,6 +179,9 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.Update();
 
+    wxPoint originCoord = ReturnCoordOriginCorner();
+    SetGridOrigin( originCoord );
+
     // Initialize the current page layout
     WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
 #if 0       //start with empty layout
@@ -301,6 +304,7 @@ void PL_EDITOR_FRAME::OnSelectCoordOriginCorner( wxCommandEvent& event )
 {
     m_originSelectChoice = m_originSelectBox->GetSelection();
     UpdateStatusBar();  // Update grid origin
+    static_cast<PL_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayWorksheet();
     GetGalCanvas()->Refresh();
 }
 
@@ -481,6 +485,46 @@ void PL_EDITOR_FRAME::SetTitleBlock( const TITLE_BLOCK& aTitleBlock )
 }
 
 
+wxPoint PL_EDITOR_FRAME::ReturnCoordOriginCorner() const
+{
+    // calculate the position (in page, in iu) of the corner used as coordinate origin
+     // coordinate origin can be the paper Top Left corner, or each of 4 page corners
+    wxPoint originCoord;
+
+    // To avoid duplicate code, we use a dummy segment starting at 0,0 in relative coord
+    WS_DATA_ITEM dummy( WS_DATA_ITEM::WS_SEGMENT );
+
+    switch( m_originSelectChoice )
+    {
+    default:
+    case 0: // Origin = paper Left Top corner
+        break;
+
+    case 1: // Origin = page Right Bottom corner
+        dummy.SetStart( 0, 0, RB_CORNER );
+        originCoord = dummy.GetStartPosUi();
+        break;
+
+    case 2: // Origin = page Left Bottom corner
+        dummy.SetStart( 0, 0, LB_CORNER );
+        originCoord = dummy.GetStartPosUi();
+        break;
+
+    case 3: // Origin = page Right Top corner
+        dummy.SetStart( 0, 0, RT_CORNER );
+        originCoord = dummy.GetStartPosUi();
+        break;
+
+    case 4: // Origin = page Left Top corner
+        dummy.SetStart( 0, 0, LT_CORNER );
+        originCoord = dummy.GetStartPosUi();
+        break;
+    }
+
+    return originCoord;
+}
+
+
 void PL_EDITOR_FRAME::UpdateStatusBar()
 {
     PL_EDITOR_SCREEN* screen = (PL_EDITOR_SCREEN*) GetScreen();
@@ -492,11 +536,12 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     EDA_DRAW_FRAME::UpdateStatusBar();
 
     // coordinate origin can be the paper Top Left corner, or each of 4 page corners
-    wxPoint originCoord;
+    wxPoint originCoord = ReturnCoordOriginCorner();
+    SetGridOrigin( originCoord );
+
+    // We need the orientation of axis (sign of coordinates)
     int Xsign = 1;
     int Ysign = 1;
-
-    WS_DATA_ITEM dummy( WS_DATA_ITEM::WS_SEGMENT );
 
     switch( m_originSelectChoice )
     {
@@ -507,29 +552,19 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     case 1: // Origin = page Right Bottom corner
         Xsign = -1;
         Ysign = -1;
-        dummy.SetStart( 0, 0, RB_CORNER );
-        originCoord = dummy.GetStartPosUi();
         break;
 
     case 2: // Origin = page Left Bottom corner
         Ysign = -1;
-        dummy.SetStart( 0, 0, LB_CORNER );
-        originCoord = dummy.GetStartPosUi();
-        break;
+         break;
 
     case 3: // Origin = page Right Top corner
         Xsign = -1;
-        dummy.SetStart( 0, 0, RT_CORNER );
-        originCoord = dummy.GetStartPosUi();
         break;
 
     case 4: // Origin = page Left Top corner
-        dummy.SetStart( 0, 0, LT_CORNER );
-        originCoord = dummy.GetStartPosUi();
         break;
     }
-
-    SetGridOrigin( originCoord );
 
     // Display absolute coordinates:
     wxPoint coord = GetCrossHairPosition() - originCoord;

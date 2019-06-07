@@ -222,6 +222,49 @@ public:
 #endif
 };
 
+
+// This class draws a rectangle with thick segment showing the page limits
+// and a marker showing the coord origin
+class WS_DRAW_ITEM_PAGE : public WS_DRAW_ITEM_BASE
+{
+    wxPoint m_markerPos;    // position of the marker
+    wxSize  m_pageSize;     // full size of the page
+    int     m_penWidth;
+    double m_markerSize;
+
+public:
+    WS_DRAW_ITEM_PAGE( int aPenWidth, double aMarkerSize ) :
+            WS_DRAW_ITEM_BASE( nullptr, 0, WSG_PAGE_T )
+    {
+        m_penWidth  = aPenWidth;
+        m_markerSize = aMarkerSize;
+    }
+
+    virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_PAGE" ); }
+
+    // Accessors:
+    int GetPenWidth() const { return m_penWidth; }
+    void SetPageSize( wxSize aSize ) { m_pageSize = aSize; }
+    wxSize GetPageSize() const { return m_pageSize; }
+    const wxPoint& GetMarkerPos() const { return m_markerPos; }
+    void SetMarkerPos( wxPoint aPos ) { m_markerPos = aPos; }
+    double GetMarkerSize() const { return m_markerSize; }
+
+    const wxPoint GetPosition() const override { return wxPoint( 0, 0 ); }
+    void SetPosition( wxPoint aPos ) override { /* do nothing */ }
+
+    void PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor ) override { /* do nothing */ }
+
+    const EDA_RECT GetBoundingBox() const override;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override { return false; }
+
+    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
+
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
+#endif
+};
+
 // This class draws a graphic text.
 // it is derived from an EDA_TEXT, so it handle all caracteristics
 // of this graphic text (justification, rotation ... )

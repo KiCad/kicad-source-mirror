@@ -88,6 +88,13 @@ void PL_DRAW_PANEL_GAL::DisplayWorksheet()
     for( WS_DATA_ITEM* dataItem : model.GetItems() )
         dataItem->SyncDrawItems( nullptr, m_view );
 
+    // Build and add a WS_DRAW_ITEM_PAGE to show the page limits and the corner position
+    // of the selected corner for coord origin of new items
+    const int penWidth = 0;     // This value is to use the default thickness line
+    constexpr double markerSize = Millimeter2iu( 5 );
+    WS_DRAW_ITEM_PAGE* pageDrawing = new WS_DRAW_ITEM_PAGE( penWidth, markerSize );
+    m_view->Add( pageDrawing );
+
     selTool->RebuildSelection();
 
     // Gives a reasonable boundary to the view area
@@ -100,6 +107,9 @@ void PL_DRAW_PANEL_GAL::DisplayWorksheet()
                     VECTOR2D( size_x * 1.5, size_y * 1.5) );
     m_view->SetBoundary( boundary );
 
+    pageDrawing->SetPageSize( m_edaFrame->GetPageSizeIU() );
+    wxPoint originCoord = static_cast<PL_EDITOR_FRAME*>( m_edaFrame )->ReturnCoordOriginCorner();
+    pageDrawing->SetMarkerPos( originCoord );
 }
 
 

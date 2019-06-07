@@ -247,6 +247,7 @@ bool KIGFX::WS_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
     case WSG_RECT_T:   draw( (WS_DRAW_ITEM_RECT*) item, aLayer );         break;
     case WSG_TEXT_T:   draw( (WS_DRAW_ITEM_TEXT*) item, aLayer );         break;
     case WSG_BITMAP_T: draw( (WS_DRAW_ITEM_BITMAP*) item, aLayer );       break;
+    case WSG_PAGE_T:   draw( (WS_DRAW_ITEM_PAGE*) item, aLayer );       break;
     default:           return false;
     }
 
@@ -331,6 +332,34 @@ void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_BITMAP* aItem, int aLayer ) con
 
     m_gal->DrawBitmap( *bitmap->m_ImageBitmap );
     m_gal->Restore();
+}
+
+
+void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_PAGE* aItem, int aLayer ) const
+{
+    VECTOR2D origin = VECTOR2D( 0.0, 0.0 );
+    VECTOR2D end = VECTOR2D( aItem->GetPageSize().x,
+                             aItem->GetPageSize().y );
+
+    m_gal->SetIsStroke( true );
+
+    // Use a gray color for the border color
+    m_gal->SetStrokeColor( COLOR4D( 0.4, 0.4, 0.4, 1.0 ) );
+    m_gal->SetIsFill( false );
+    m_gal->DrawRectangle( origin, end );
+
+    // Draw the corner marker
+    double marker_size = aItem->GetMarkerSize();
+
+    m_gal->SetStrokeColor( COLOR4D( 0.4, 0.4, 1.0, 1.0 ) );
+    VECTOR2D pos = VECTOR2D( aItem->GetMarkerPos().x, aItem->GetMarkerPos().y );
+
+    // Draw a cirle and a X
+    m_gal->DrawCircle( pos, marker_size );
+    m_gal->DrawLine( VECTOR2D( pos.x - marker_size, pos.y - marker_size),
+                     VECTOR2D( pos.x + marker_size, pos.y + marker_size ) );
+    m_gal->DrawLine( VECTOR2D( pos.x + marker_size, pos.y - marker_size),
+                     VECTOR2D( pos.x - marker_size, pos.y + marker_size ) );
 }
 
 

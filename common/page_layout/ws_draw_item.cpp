@@ -65,6 +65,12 @@ void WS_DRAW_ITEM_BASE::ViewGetLayers( int aLayers[], int& aCount ) const
 
     WS_DATA_ITEM* dataItem = GetPeer();
 
+    if( !dataItem )     // No peer: this item is like a WS_DRAW_ITEM_PAGE
+    {
+        aLayers[0] = LAYER_WORKSHEET;
+        return;
+    }
+
     if( dataItem->GetPage1Option() == FIRST_PAGE_ONLY )
         aLayers[0] = LAYER_WORKSHEET_PAGE1;
     else if( dataItem->GetPage1Option() == SUBSEQUENT_PAGES )
@@ -93,6 +99,10 @@ void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aL
 {
     wxString            msg;
     WS_DATA_ITEM* dataItem = GetPeer();
+
+    if( dataItem == nullptr )   // Is only a pure graphic item used in page layout editor
+                                // to handle the page limits
+        return;
 
     switch( dataItem->GetType() )
     {
@@ -405,7 +415,24 @@ wxString WS_DRAW_ITEM_BITMAP::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 }
 
 
-// ============================ LIST ==============================
+wxString WS_DRAW_ITEM_PAGE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+{
+    wxString txt( "Page limits" );
+    return txt;
+}
+
+
+const EDA_RECT WS_DRAW_ITEM_PAGE::GetBoundingBox() const
+{
+    EDA_RECT dummy;
+
+    // We want this graphic item alway visible. So gives the max size to the
+    // bounding box to avoid any clamping:
+    dummy.SetSize( wxSize( std::numeric_limits<int>::max(), std::numeric_limits<int>::max() ) );
+    return dummy;
+}
+
+// ====================== WS_DRAW_ITEM_LIST ==============================
 
 void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( const PAGE_INFO& aPageInfo,
                                                    const TITLE_BLOCK& aTitleBlock )
