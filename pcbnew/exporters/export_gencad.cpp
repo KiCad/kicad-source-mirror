@@ -362,13 +362,6 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
 }
 
 
-// Comparator for sorting pads with qsort
-static int PadListSortByShape( const D_PAD* aRefptr, const D_PAD* aObjptr )
-{
-    return D_PAD::Compare( aRefptr, aObjptr ) < 0;
-}
-
-
 // Sort vias for uniqueness
 static bool ViaSort( const VIA* aPadref, const VIA* aPadcmp )
 {
@@ -398,7 +391,6 @@ static void CreateArtworksSection( FILE* aFile )
 // Via name is synthesized from their attributes, pads are numbered
 static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 {
-    std::vector<D_PAD*> pads;
     std::vector<D_PAD*> padstacks;
     std::vector<VIA*>   vias;
     std::vector<VIA*>   viastacks;
@@ -412,8 +404,10 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
     fputs( "$PADS\n", aFile );
 
     // Enumerate and sort the pads
-    pads = aPcb->GetPads();
-    std::sort( pads.begin(), pads.end(), PadListSortByShape );
+
+    auto pads( aPcb->GetPads() );
+    std::sort( pads.begin(), pads.end(),
+            []( const D_PAD* a, const D_PAD* b ) { return D_PAD::Compare( a, b ) < 0; } );
 
 
     // The same for vias
@@ -425,7 +419,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 
     std::sort( vias.begin(), vias.end(), ViaSort );
     vias.erase( std::unique( vias.begin(), vias.end(),
-                        []( const VIA* a, const VIA* b ) { return ViaSort( a, b ) == 0; } ),
+                        []( const VIA* a, const VIA* b ) { return ViaSort( a, b ) == false; } ),
             vias.end() );
 
     // Emit vias pads
@@ -995,31 +989,6 @@ static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* aFrame )
 }
 
 
-/*
- *  Sort function used to sort tracks segments:
- *   items are sorted by netcode, then by width then by layer
- */
-static int TrackListSortByNetcode( const void* refptr, const void* objptr )
-{
-    const TRACK* ref, * cmp;
-    int          diff;
-
-    ref = *( (TRACK**) refptr );
-    cmp = *( (TRACK**) objptr );
-
-    if( ( diff = ref->GetNetCode() - cmp->GetNetCode() ) )
-        return diff;
-
-    if( ( diff = ref->GetWidth() - cmp->GetWidth() ) )
-        return diff;
-
-    if( ( diff = ref->GetLayer() - cmp->GetLayer() ) )
-        return diff;
-
-    return 0;
-}
-
-
 /* Creates the section ROUTES
  * that handles tracks, vias
  * TODO: add zones
@@ -1037,8 +1006,18 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb )
 
     int     cu_count = aPcb->GetCopperLayerCount();
 
-    TRACKS tracks = aPcb->Tracks();
-    std::sort( tracks.begin(), tracks.end(), TrackListSortByNetcode );
+    TRACKS tracks( aPcb->Tracks() );
+    std::sort( tracks.begin(), tracks.end(), []( const TRACK* a, const TRACK* b ) {
+        if( a->GetNetCode() == b->GetNetCode() )
+        {
+            if( a->GetWidth() == b->GetWidth() )
+                return ( a->GetLayer() < b->GetLayer() );
+
+            return ( a->GetWidth() < b->GetWidth() );
+        }
+
+        return ( a->GetNetCode() < b->GetNetCode() );
+    } );
 
     fputs( "$ROUTES\n", aFile );
 
