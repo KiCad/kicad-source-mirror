@@ -254,7 +254,6 @@ bool D_PAD::buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError )
         case S_POLYGON:         // polygon
             if( bshape.m_Poly.size() < 2 )
                 break;      // Malformed polygon.
-
             {
             // Insert the polygon:
             const std::vector< wxPoint>& poly = bshape.m_Poly;
@@ -276,7 +275,6 @@ bool D_PAD::buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError )
 
                 aux_polyset.Append( polyset );
             }
-
             else
                 for( unsigned ii = 0; ii < poly.size(); ii++ )
                     aux_polyset.Append( poly[ii].x, poly[ii].y );
