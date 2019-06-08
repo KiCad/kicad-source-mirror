@@ -155,7 +155,6 @@ int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
         return 1;
     }
 
-    printf("Step 1\n");
     BITMAPCONV_INFO info;
     info.m_PixmapWidth  = aPotrace_bitmap->w;
     info.m_PixmapHeight = aPotrace_bitmap->h;     // the bitmap size in pixels

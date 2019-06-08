@@ -450,7 +450,7 @@ void BM2CMP_FRAME::Binarize( double aThreshold )
             auto alpha   = m_Greyscale_Image.HasAlpha() ?
                     m_Greyscale_Image.GetAlpha( x, y ) : wxALPHA_OPAQUE;
 
-            if( pixin < threshold || alpha < alpha_thresh )
+            if( pixin < threshold && alpha > alpha_thresh )
                 pixout = 0;
             else
                 pixout = 255;
