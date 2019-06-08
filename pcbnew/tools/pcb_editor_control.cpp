@@ -720,6 +720,8 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
+        // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
+        m_frame->GetGalCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
         cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( reselect && module )
@@ -895,6 +897,8 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
+        // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
+        m_frame->GetGalCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
         cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )

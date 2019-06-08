@@ -243,6 +243,9 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
 
     while( drawSegment( S_SEGMENT, line, startingPoint ) )
     {
+        // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
+        m_frame->GetGalCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+
         if( line )
         {
             if( m_editModules )
@@ -282,6 +285,9 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
 
     while( drawSegment( S_CIRCLE, circle ) )
     {
+        // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
+        m_frame->GetGalCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+
         if( circle )
         {
             if( m_editModules )
@@ -316,6 +322,9 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 
     while( drawArc( arc ) )
     {
+        // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
+        m_frame->GetGalCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+
         if( arc )
         {
             if( m_editModules )
@@ -359,6 +368,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
+        // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
+        m_frame->GetGalCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
         VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
         if( reselect && text )
@@ -552,6 +563,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
+        // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
+        m_frame->GetGalCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
@@ -918,6 +931,9 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
+        // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
+        m_frame->GetGalCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+
         if( evt->IsClick( BUT_LEFT ) )
         {
             MODULE* module = (MODULE*) m_frame->GetModel();
@@ -1395,6 +1411,8 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
+        // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
+        m_frame->GetGalCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
         LSET layers( m_frame->GetActiveLayer() );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
