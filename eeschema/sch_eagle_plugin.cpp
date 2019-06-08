@@ -676,6 +676,7 @@ void SCH_EAGLE_PLUGIN::loadSheet( wxXmlNode* aSheetNode, int aSheetIndex )
     if( descriptionNode )
     {
         des = descriptionNode->GetContent();
+        des.Replace( "\n", "_", true );
         m_currentSheet->SetName( des );
         filename = des.ToStdString();
     }
