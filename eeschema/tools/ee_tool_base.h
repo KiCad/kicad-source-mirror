@@ -36,7 +36,7 @@
 #include <undo_redo_container.h>
 
 
-class SELECTION;
+class EE_SELECTION;
 
 /**
  * Class EE_TOOL_BASE

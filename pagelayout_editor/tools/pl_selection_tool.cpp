@@ -227,7 +227,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-SELECTION& PL_SELECTION_TOOL::GetSelection()
+PL_SELECTION& PL_SELECTION_TOOL::GetSelection()
 {
     return m_selection;
 }
@@ -307,7 +307,7 @@ void PL_SELECTION_TOOL::guessSelectionCandidates( COLLECTOR& collector, const VE
 }
 
 
-SELECTION& PL_SELECTION_TOOL::RequestSelection()
+PL_SELECTION& PL_SELECTION_TOOL::RequestSelection()
 {
     // If nothing is selected do a hover selection
     if( m_selection.Empty() )
@@ -660,7 +660,7 @@ void PL_SELECTION_TOOL::unselect( EDA_ITEM* aItem )
 }
 
 
-void PL_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup )
+void PL_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, PL_SELECTION* aGroup )
 {
     if( aMode == SELECTED )
         aItem->SetSelected();
@@ -674,7 +674,7 @@ void PL_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup
 }
 
 
-void PL_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup )
+void PL_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, PL_SELECTION* aGroup )
 {
     if( aMode == SELECTED )
         aItem->ClearSelected();

@@ -25,9 +25,8 @@
 #define PL_SELECTION_TOOL_H
 
 #include <tool/tool_interactive.h>
-#include <tool/action_menu.h>
 #include <tool/tool_menu.h>
-#include <tool/selection.h>
+#include <tools/pl_selection.h>
 
 class PL_EDITOR_FRAME;
 class SCH_ITEM;
@@ -72,7 +71,7 @@ public:
      *
      * Returns the set of currently selected items.
      */
-    SELECTION& GetSelection();
+    PL_SELECTION& GetSelection();
 
     /**
      * Function RequestSelection()
@@ -80,7 +79,7 @@ public:
      * Returns either an existing selection (filtered), or the selection at the current
      * cursor if the existing selection is empty.
      */
-    SELECTION& RequestSelection();
+    PL_SELECTION& RequestSelection();
 
     /**
      * Function selectPoint()
@@ -178,7 +177,7 @@ private:
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to add the item to in the BRIGHTENED mode.
      */
-    void highlight( EDA_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr );
+    void highlight( EDA_ITEM* aItem, int aHighlightMode, PL_SELECTION* aGroup = nullptr );
 
     /**
      * Function unhighlight()
@@ -187,7 +186,7 @@ private:
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to remove the item from.
      */
-    void unhighlight( EDA_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr );
+    void unhighlight( EDA_ITEM* aItem, int aHighlightMode, PL_SELECTION* aGroup = nullptr );
 
     /**
      * Function selectionContains()
@@ -202,7 +201,7 @@ private:
 
 private:
     PL_EDITOR_FRAME* m_frame;   // Pointer to the parent frame
-    SELECTION m_selection;      // Current state of selection
+    PL_SELECTION m_selection;   // Current state of selection
 
     bool m_additive;            // Items should be added to selection (instead of replacing)
     bool m_subtractive;         // Items should be removed from selection

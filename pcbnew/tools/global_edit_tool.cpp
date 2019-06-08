@@ -109,10 +109,10 @@ bool GLOBAL_EDIT_TOOL::Init()
 
 int GLOBAL_EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection( EDIT_TOOL::FootprintFilter );
-    MODULE*    mod = (selection.Empty() ? nullptr : selection.FirstOfKind<MODULE> () );
-    bool       updateMode = false;
-    bool       currentMode = false;
+    PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection( EDIT_TOOL::FootprintFilter );
+    MODULE*           mod = (selection.Empty() ? nullptr : selection.FirstOfKind<MODULE> () );
+    bool              updateMode = false;
+    bool              currentMode = false;
 
     if( aEvent.IsAction( &PCB_ACTIONS::updateFootprint ) )
     {

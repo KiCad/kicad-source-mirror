@@ -36,58 +36,26 @@ using namespace std::placeholders;
 #include <class_pcb_text.h>
 #include <class_drawsegment.h>
 #include <class_zone.h>
-
 #include <pcb_edit_frame.h>
-
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
 #include <view/view_group.h>
 #include <preview_items/selection_area.h>
 #include <painter.h>
 #include <bitmaps.h>
-#include <hotkeys.h>
-
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
+#include <tools/pcbnew_selection.h>
 #include <connectivity/connectivity_data.h>
-
 #include "selection_tool.h"
 #include "pcb_bright_box.h"
 #include "pcb_actions.h"
 
 #include "kicad_plugin.h"
 
-// TODO(JE) Only works for BOARD_ITEM
-VECTOR2I SELECTION::GetPosition() const
-{
-    return static_cast<VECTOR2I>( GetBoundingBox().GetPosition() );
-}
 
 
-VECTOR2I SELECTION::GetCenter() const
-{
-    return static_cast<VECTOR2I>( GetBoundingBox().Centre() );
-}
-
-
-EDA_RECT SELECTION::GetBoundingBox() const
-{
-    EDA_RECT bbox;
-
-    bbox = Front()->GetBoundingBox();
-    auto i = m_items.begin();
-    ++i;
-
-    for( ; i != m_items.end(); ++i )
-    {
-        bbox.Merge( (*i)->GetBoundingBox() );
-    }
-
-    return bbox;
-}
-
-
-EDA_ITEM* SELECTION::GetTopLeftItem( bool onlyModules ) const
+EDA_ITEM* PCBNEW_SELECTION::GetTopLeftItem( bool onlyModules ) const
 {
     BOARD_ITEM* topLeftItem = nullptr;
     BOARD_ITEM* currentItem;
@@ -123,15 +91,7 @@ EDA_ITEM* SELECTION::GetTopLeftItem( bool onlyModules ) const
 }
 
 
-const BOX2I SELECTION::ViewBBox() const
-{
-    BOX2I r;
-    r.SetMaximum();
-    return r;
-}
-
-
-const KIGFX::VIEW_GROUP::ITEMS SELECTION::updateDrawList() const
+const KIGFX::VIEW_GROUP::ITEMS PCBNEW_SELECTION::updateDrawList() const
 {
     std::vector<VIEW_ITEM*> items;
 

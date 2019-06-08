@@ -22,40 +22,12 @@
  */
 
 #include <limits>
-
 #include <functional>
-#include <tool/selection.h>
+#include <tools/ee_selection.h>
 #include <sch_item.h>
 #include <lib_draw_item.h>
 
-VECTOR2I SELECTION::GetPosition() const
-{
-    return static_cast<VECTOR2I>( GetBoundingBox().GetPosition() );
-}
-
-
-VECTOR2I SELECTION::GetCenter() const
-{
-    return static_cast<VECTOR2I>( GetBoundingBox().Centre() );
-}
-
-
-EDA_RECT SELECTION::GetBoundingBox() const
-{
-    EDA_RECT bbox;
-
-    bbox = Front()->GetBoundingBox();
-    auto i = m_items.begin();
-    ++i;
-
-    for( ; i != m_items.end(); ++i )
-        bbox.Merge( (*i)->GetBoundingBox() );
-
-    return bbox;
-}
-
-
-EDA_ITEM* SELECTION::GetTopLeftItem( bool onlyModules ) const
+EDA_ITEM* EE_SELECTION::GetTopLeftItem( bool onlyModules ) const
 {
     EDA_ITEM* topLeftItem = nullptr;
     wxPoint   topLeftPos;
@@ -82,23 +54,4 @@ EDA_ITEM* SELECTION::GetTopLeftItem( bool onlyModules ) const
     }
 
     return static_cast<EDA_ITEM*>( topLeftItem );
-}
-
-
-const BOX2I SELECTION::ViewBBox() const
-{
-    BOX2I r;
-    r.SetMaximum();
-    return r;
-}
-
-
-const KIGFX::VIEW_GROUP::ITEMS SELECTION::updateDrawList() const
-{
-    std::vector<VIEW_ITEM*> items;
-
-    for( auto item : m_items )
-        items.push_back( item );
-
-    return items;
 }

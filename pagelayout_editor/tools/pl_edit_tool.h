@@ -71,7 +71,7 @@ private:
 
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.
-    bool updateModificationPoint( SELECTION& aSelection );
+    bool updateModificationPoint( PL_SELECTION& aSelection );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;

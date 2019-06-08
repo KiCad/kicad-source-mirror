@@ -165,8 +165,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     // Be sure that there is at least one item that we can move. If there's no selection try
     // looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection).
-    SELECTION& selection = m_selectionTool->RequestSelection( movableItems );
-    bool       unselect = selection.IsHover();
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( movableItems );
+    bool          unselect = selection.IsHover();
 
     if( selection.Empty() )
         return 0;
@@ -548,7 +548,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
 }
 
 
-void SCH_MOVE_TOOL::addJunctionsIfNeeded( SELECTION& aSelection )
+void SCH_MOVE_TOOL::addJunctionsIfNeeded( EE_SELECTION& aSelection )
 {
     std::vector< wxPoint > pts;
     std::vector< wxPoint > connections;
@@ -641,7 +641,7 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta, bool isDrag )
 }
 
 
-bool SCH_MOVE_TOOL::updateModificationPoint( SELECTION& aSelection )
+bool SCH_MOVE_TOOL::updateModificationPoint( EE_SELECTION& aSelection )
 {
     if( m_moveInProgress && aSelection.HasReferencePoint() )
         return false;

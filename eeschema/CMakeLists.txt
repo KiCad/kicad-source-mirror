@@ -226,6 +226,7 @@ set( EESCHEMA_SRCS
     tools/ee_inspection_tool.cpp
     tools/ee_picker_tool.cpp
     tools/ee_point_editor.cpp
+    tools/ee_selection.cpp
     tools/ee_selection_tool.cpp
     tools/lib_control.cpp
     tools/lib_drawing_tools.cpp
@@ -237,7 +238,6 @@ set( EESCHEMA_SRCS
     tools/sch_editor_control.cpp
     tools/sch_wire_bus_tool.cpp
     tools/sch_move_tool.cpp
-    tools/selection.cpp
     )
 
 

@@ -579,7 +579,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-bool EDIT_TOOL::changeTrackWidthOnClick( const SELECTION& selection )
+bool EDIT_TOOL::changeTrackWidthOnClick( const PCBNEW_SELECTION& selection )
 {
     if ( selection.Size() == 1 && frame()->Settings().g_EditHotkeyChangesTrackWidth )
     {
@@ -875,7 +875,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     std::vector<BOARD_ITEM*> lockedItems;
 
     // get a copy instead of reference (as we're going to clear the selection before removing items)
-    SELECTION selectionCopy;
+    PCBNEW_SELECTION selectionCopy;
     bool isCut = aEvent.Parameter<intptr_t>() == static_cast<intptr_t>( PCB_ACTIONS::REMOVE_FLAGS::CUT );
     bool isAlt = aEvent.Parameter<intptr_t>() == static_cast<intptr_t>( PCB_ACTIONS::REMOVE_FLAGS::ALT );
 
@@ -1273,7 +1273,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 }
 
 
-bool EDIT_TOOL::updateModificationPoint( SELECTION& aSelection )
+bool EDIT_TOOL::updateModificationPoint( PCBNEW_SELECTION& aSelection )
 {
     if( m_dragging && aSelection.HasReferencePoint() )
         return false;
@@ -1375,7 +1375,7 @@ int EDIT_TOOL::doCopyToClipboard( bool withAnchor )
 
     Activate();
 
-    SELECTION& selection = m_selectionTool->RequestSelection(
+    PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); } );
 

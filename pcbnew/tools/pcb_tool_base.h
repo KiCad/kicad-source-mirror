@@ -47,7 +47,7 @@
 class PCB_TOOL_BASE;
 class PCB_EDIT_FRAME;
 class PCB_DISPLAY_OPTIONS;
-class SELECTION;
+class PCBNEW_SELECTION;
 
 struct INTERACTIVE_PLACER_BASE
 {
@@ -144,8 +144,8 @@ protected:
     }
     PCB_DISPLAY_OPTIONS* displayOptions() const;
     PCB_DRAW_PANEL_GAL* canvas() const;
-    const SELECTION& selection() const;
-    SELECTION& selection();
+    const PCBNEW_SELECTION& selection() const;
+    PCBNEW_SELECTION& selection();
 
     bool m_editModules;
 };

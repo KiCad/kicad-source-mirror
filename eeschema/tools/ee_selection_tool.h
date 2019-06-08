@@ -26,8 +26,8 @@
 
 #include <tool/tool_interactive.h>
 #include <tool/action_menu.h>
-#include <tool/selection.h>
 #include <tool/tool_menu.h>
+#include <tools/ee_selection.h>
 #include <ee_collectors.h>
 #include <sch_component.h>
 
@@ -79,7 +79,7 @@ public:
      *
      * Returns the set of currently selected items.
      */
-    SELECTION& GetSelection();
+    EE_SELECTION& GetSelection();
 
     /**
      * Function RequestSelection()
@@ -87,7 +87,7 @@ public:
      * Returns either an existing selection (filtered), or the selection at the current
      * cursor if the existing selection is empty.
      */
-    SELECTION& RequestSelection( const KICAD_T* aFilterList = EE_COLLECTOR::AllItems );
+    EE_SELECTION& RequestSelection( const KICAD_T* aFilterList = EE_COLLECTOR::AllItems );
 
     /**
      * Function selectPoint()
@@ -209,7 +209,7 @@ private:
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to add the item to in the BRIGHTENED mode.
      */
-    void highlight( EDA_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr );
+    void highlight( EDA_ITEM* aItem, int aHighlightMode, EE_SELECTION* aGroup = nullptr );
 
     /**
      * Function unhighlight()
@@ -218,7 +218,7 @@ private:
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to remove the item from.
      */
-    void unhighlight( EDA_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr );
+    void unhighlight( EDA_ITEM* aItem, int aHighlightMode, EE_SELECTION* aGroup = nullptr );
 
     /**
      * Sets the reference point to the anchor of the top-left item.
@@ -237,18 +237,18 @@ private:
     void setTransitions() override;
 
 private:
-    SCH_BASE_FRAME* m_frame;    // Pointer to the parent frame
-    SELECTION m_selection;      // Current state of selection
+    SCH_BASE_FRAME* m_frame;     // Pointer to the parent frame
+    EE_SELECTION    m_selection; // Current state of selection
 
-    bool m_additive;            // Items should be added to selection (instead of replacing)
-    bool m_subtractive;         // Items should be removed from selection
-    bool m_multiple;            // Multiple selection mode is active
-    bool m_skip_heuristics;     // Heuristics are not allowed when choosing item under cursor
+    bool m_additive;             // Items should be added to selection (instead of replacing)
+    bool m_subtractive;          // Items should be removed from selection
+    bool m_multiple;             // Multiple selection mode is active
+    bool m_skip_heuristics;      // Heuristics are not allowed when choosing item under cursor
 
-    bool m_isLibEdit;           // True when libedit is the parent frame
-    bool m_isLibView;           // True when libview is the parent frame
-    int  m_unit;                // Fixed unit filter (for symbol editor)
-    int  m_convert;             // Fixed DeMorgan filter (for symbol editor)
+    bool m_isLibEdit;            // True when libedit is the parent frame
+    bool m_isLibView;            // True when libview is the parent frame
+    int  m_unit;                 // Fixed unit filter (for symbol editor)
+    int  m_convert;              // Fixed DeMorgan filter (for symbol editor)
 };
 
 #endif //KICAD_SCH_SELECTION_TOOL_H

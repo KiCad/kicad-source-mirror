@@ -829,8 +829,8 @@ int PCB_EDITOR_CONTROL::UnlockSelected( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 {
-    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const SELECTION& selection = selTool->GetSelection();
+    SELECTION_TOOL*         selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const PCBNEW_SELECTION& selection = selTool->GetSelection();
 
     if( selection.Empty() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
@@ -999,9 +999,9 @@ static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE_CONTAINER *>& aO
 
 int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
 {
-    const SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
-    BOARD* board = getModel<BOARD>();
-    BOARD_COMMIT commit( m_frame );
+    const PCBNEW_SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+    BOARD*                  board = getModel<BOARD>();
+    BOARD_COMMIT            commit( m_frame );
 
     if( selection.Size() < 2 )
         return 0;
@@ -1115,8 +1115,8 @@ int PCB_EDITOR_CONTROL::CrossProbePcbToSch( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const SELECTION& selection = selTool->GetSelection();
+    SELECTION_TOOL*         selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const PCBNEW_SELECTION& selection = selTool->GetSelection();
 
     if( selection.Size() == 1 )
         m_frame->SendMessageToEESCHEMA( static_cast<BOARD_ITEM*>( selection.Front() ) );
@@ -1217,7 +1217,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition,
     {
         auto selectionTool = aToolMgr->GetTool<SELECTION_TOOL>();
 
-        const SELECTION& selection = selectionTool->GetSelection();
+        const PCBNEW_SELECTION& selection = selectionTool->GetSelection();
 
         for( auto item : selection )
         {
@@ -1381,7 +1381,7 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, BOARD* aBoard, const VECT
 
     aToolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     aToolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, EDIT_TOOL::PadFilter );
-    SELECTION& selection = selectionTool->GetSelection();
+    PCBNEW_SELECTION& selection = selectionTool->GetSelection();
 
     if( selection.Empty() )
     {

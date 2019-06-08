@@ -32,8 +32,7 @@
 #include <math/vector2d.h>
 #include <tools/pcb_tool_base.h>
 #include <tool/action_menu.h>
-#include <tool/selection.h>
-
+#include <tools/pcbnew_selection.h>
 #include <tools/pcb_selection_conditions.h>
 #include <tool/tool_menu.h>
 
@@ -85,7 +84,7 @@ public:
      *
      * Returns the set of currently selected items.
      */
-    SELECTION& GetSelection();
+    PCBNEW_SELECTION& GetSelection();
 
     /**
      * Function RequestSelection()
@@ -95,7 +94,7 @@ public:
      * If the set is empty, performs the legacy-style hover selection.
      * @param aFiltered is an optional vector, that is filled with items removed by the filter
      */
-    SELECTION& RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
+    PCBNEW_SELECTION& RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
             std::vector<BOARD_ITEM*>* aFiltered = nullptr, bool aConfirmLockedItems = false );
 
     ///> Checks if the user has agreed to modify locked items for the given selection.
@@ -298,7 +297,7 @@ private:
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to add the item to in the BRIGHTENED mode.
      */
-    void highlight( BOARD_ITEM* aItem, int aHighlightMode, SELECTION& aGroup );
+    void highlight( BOARD_ITEM* aItem, int aHighlightMode, PCBNEW_SELECTION& aGroup );
 
     /**
      * Function unhighlight()
@@ -307,7 +306,7 @@ private:
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to remove the item from.
      */
-    void unhighlight( BOARD_ITEM* aItem, int aHighlightMode, SELECTION& aGroup );
+    void unhighlight( BOARD_ITEM* aItem, int aHighlightMode, PCBNEW_SELECTION& aGroup );
 
     /**
      * Function selectionContains()
@@ -339,14 +338,14 @@ private:
     const GENERAL_COLLECTORS_GUIDE getCollectorsGuide() const;
 
 private:
-    PCB_BASE_FRAME* m_frame;    // Pointer to the parent frame
-    SELECTION m_selection;      // Current state of selection
+    PCB_BASE_FRAME*  m_frame;     // Pointer to the parent frame
+    PCBNEW_SELECTION m_selection; // Current state of selection
 
-    bool m_additive;            // Items should be added to selection (instead of replacing)
-    bool m_subtractive;         // Items should be removed from selection
-    bool m_multiple;            // Multiple selection mode is active
-    bool m_skip_heuristics;     // Heuristics are not allowed when choosing item under cursor
-    bool m_locked;              // Other tools are not allowed to modify locked items
+    bool m_additive;              // Items should be added to selection (instead of replacing)
+    bool m_subtractive;           // Items should be removed from selection
+    bool m_multiple;              // Multiple selection mode is active
+    bool m_skip_heuristics;       // Heuristics are not allowed when choosing item under cursor
+    bool m_locked;                // Other tools are not allowed to modify locked items
 
     /// Private state (opaque pointer/compilation firewall)
     class PRIV;

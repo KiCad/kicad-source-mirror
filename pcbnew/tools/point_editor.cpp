@@ -301,7 +301,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     if( !m_selectionTool )
         return 0;
 
-    const SELECTION& selection = m_selectionTool->GetSelection();
+    const PCBNEW_SELECTION& selection = m_selectionTool->GetSelection();
 
     if( selection.Size() != 1 )
         return 0;

@@ -123,7 +123,7 @@ private:
         SCH_EDIT_FRAME*    frame = (SCH_EDIT_FRAME*) getToolManager()->GetEditFrame();
         EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
         KICAD_T            busType[] = { SCH_LINE_LOCATE_BUS_T, EOT };
-        SELECTION&         selection = selTool->RequestSelection( busType );
+        EE_SELECTION&      selection = selTool->RequestSelection( busType );
         SCH_LINE*          bus = (SCH_LINE*) selection.Front();
 
         Clear();

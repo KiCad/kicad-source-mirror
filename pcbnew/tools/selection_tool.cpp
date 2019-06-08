@@ -41,7 +41,6 @@ using namespace std::placeholders;
 #include <confirm.h>
 #include <dialog_find.h>
 #include <dialog_block_options.h>
-
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
 #include <view/view_group.h>
@@ -56,7 +55,6 @@ using namespace std::placeholders;
 #include <connectivity/connectivity_data.h>
 #include <footprint_viewer_frame.h>
 #include "tool_event_utils.h"
-
 #include "selection_tool.h"
 #include "pcb_bright_box.h"
 #include "pcb_actions.h"
@@ -381,13 +379,13 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-SELECTION& SELECTION_TOOL::GetSelection()
+PCBNEW_SELECTION& SELECTION_TOOL::GetSelection()
 {
     return m_selection;
 }
 
 
-SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
+PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
         std::vector<BOARD_ITEM*>* aFiltered, bool aConfirmLockedItems )
 {
     bool selectionEmpty = m_selection.Empty();
@@ -1392,9 +1390,9 @@ int SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 
 bool SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxString& aTitle )
 {
-    BOARD_ITEM* current = nullptr;
-    SELECTION highlightGroup;
-    ACTION_MENU menu;
+    BOARD_ITEM*      current = nullptr;
+    PCBNEW_SELECTION highlightGroup;
+    ACTION_MENU      menu;
 
     highlightGroup.SetLayer( LAYER_SELECT_OVERLAY );
     getView()->Add( &highlightGroup );
@@ -1763,7 +1761,7 @@ void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 }
 
 
-void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, SELECTION& aGroup )
+void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION& aGroup )
 {
     if( aMode == SELECTED )
         aItem->SetSelected();
@@ -1799,7 +1797,7 @@ void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, SELECTION& aGroup 
 }
 
 
-void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, SELECTION& aGroup )
+void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION& aGroup )
 {
     if( aMode == SELECTED )
         aItem->ClearSelected();

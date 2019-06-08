@@ -205,18 +205,6 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-const BOX2I SELECTION::ViewBBox() const
-{
-    return BOX2I();
-}
-
-
-const KIGFX::VIEW_GROUP::ITEMS SELECTION::updateDrawList() const
-{
-    return std::vector<VIEW_ITEM*>();
-}
-
-
 void CVPCB_SELECTION_TOOL::setTransitions()
 {
     Go( &CVPCB_SELECTION_TOOL::Main,             CVPCB_ACTIONS::selectionActivate.MakeEvent() );

@@ -633,7 +633,7 @@ static bool deleteItem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
     aToolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    const SELECTION& selection = selectionTool->RequestSelection(
+    const PCBNEW_SELECTION& selection = selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED ); } );
 
@@ -842,7 +842,7 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
     auto selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     auto editTool = m_toolMgr->GetTool<EDIT_TOOL>();
 
-    SELECTION& selection = selectionTool->GetSelection();
+    PCBNEW_SELECTION& selection = selectionTool->GetSelection();
 
     for( auto item : aItems )
     {
@@ -1019,8 +1019,8 @@ void PCBNEW_CONTROL::updateGrid()
 
 int PCBNEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 {
-    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    SELECTION&      selection = selTool->GetSelection();
+    SELECTION_TOOL*   selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    PCBNEW_SELECTION& selection = selTool->GetSelection();
 
     if( selection.GetSize() == 1 )
     {

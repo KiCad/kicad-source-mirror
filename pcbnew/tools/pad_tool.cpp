@@ -30,16 +30,15 @@
 #include <view/view.h>
 #include <tool/tool_manager.h>
 #include <bitmaps.h>
-
 #include <class_board_item.h>
 #include <class_module.h>
 #include <board_commit.h>
-
 #include <dialogs/dialog_push_pad_properties.h>
-#include "pcb_actions.h"
-#include "selection_tool.h"
-#include "pcb_selection_conditions.h"
-#include "edit_tool.h"
+#include <tools/pcb_actions.h>
+#include <tools/pcbnew_selection.h>
+#include <tools/selection_tool.h>
+#include <tools/pcb_selection_conditions.h>
+#include <tools/edit_tool.h>
 #include "pcbnew_id.h"
 
 // Pad tools
@@ -128,7 +127,7 @@ private:
     void update() override
     {
         auto selTool = getToolManager()->GetTool<SELECTION_TOOL>();
-        const SELECTION& selection = selTool->GetSelection();
+        const PCBNEW_SELECTION& selection = selTool->GetSelection();
 
         auto enablements = getEnablements( selection );
 

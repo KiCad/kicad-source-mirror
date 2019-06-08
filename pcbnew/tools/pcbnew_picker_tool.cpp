@@ -110,7 +110,7 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            SELECTION dummy;
+            PCBNEW_SELECTION dummy;
             m_menu.ShowContextMenu( dummy );
         }
 

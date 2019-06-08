@@ -28,13 +28,13 @@ set( PL_EDITOR_SRCS
     menubar.cpp
     toolbars_pl_editor.cpp
 
+    tools/pl_selection.cpp
     tools/pl_selection_tool.cpp
     tools/pl_drawing_tools.cpp
     tools/pl_edit_tool.cpp
     tools/pl_editor_control.cpp
     tools/pl_picker_tool.cpp
     tools/pl_point_editor.cpp
-    tools/selection.cpp
     )
 
 set( PL_EDITOR_EXTRA_SRCS

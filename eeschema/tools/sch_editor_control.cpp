@@ -332,11 +332,11 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
         return FindAndReplace( ACTIONS::find.MakeEvent() );
     }
 
-    bool        searchAllSheets = !( data->GetFlags() & FR_CURRENT_SHEET_ONLY );
-    SELECTION&  selection = m_selectionTool->GetSelection();
-    SCH_SCREEN* afterScreen = m_frame->GetScreen();
-    EDA_ITEM*   afterItem = selection.Front();
-    EDA_ITEM*   item = nullptr;
+    bool          searchAllSheets = !( data->GetFlags() & FR_CURRENT_SHEET_ONLY );
+    EE_SELECTION& selection = m_selectionTool->GetSelection();
+    SCH_SCREEN*   afterScreen = m_frame->GetScreen();
+    EDA_ITEM*     afterItem = selection.Front();
+    EDA_ITEM*     item = nullptr;
 
     if( wrapAroundTimer.IsRunning() )
     {
@@ -490,14 +490,14 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
 
     if( aForce )
     {
-        SELECTION& selection = selTool->RequestSelection();
+        EE_SELECTION& selection = selTool->RequestSelection();
 
         if( selection.GetSize() >= 1 )
             item = (SCH_ITEM*) selection.Front();
     }
     else
     {
-        SELECTION& selection = selTool->GetSelection();
+        EE_SELECTION& selection = selTool->GetSelection();
 
         if( selection.GetSize() >= 1 )
             item = (SCH_ITEM*) selection.Front();
@@ -861,7 +861,7 @@ int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
 bool SCH_EDITOR_CONTROL::doCopy()
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    SELECTION&         selection = selTool->GetSelection();
+    EE_SELECTION&      selection = selTool->GetSelection();
 
     if( !selection.GetSize() )
         return false;
@@ -1025,7 +1025,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     m_toolMgr->RunAction( EE_ACTIONS::addItemsToSel, true, &loadedItems );
 
-    SELECTION& selection = selTool->GetSelection();
+    EE_SELECTION& selection = selTool->GetSelection();
 
     if( !selection.Empty() )
     {
@@ -1042,7 +1042,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::EditWithLibEdit( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    SELECTION&         selection = selTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
+    EE_SELECTION&      selection = selTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
     SCH_COMPONENT*     sym = nullptr;
     LIB_EDIT_FRAME*    libEdit;
 
@@ -1126,8 +1126,8 @@ int SCH_EDITOR_CONTROL::ShowBusManager( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::EnterSheet( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    const SELECTION&   selection = selTool->RequestSelection( EE_COLLECTOR::SheetsOnly );
+    EE_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    const EE_SELECTION& selection = selTool->RequestSelection( EE_COLLECTOR::SheetsOnly );
 
     if( selection.GetSize() == 1 )
     {

@@ -538,7 +538,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     GRID_HELPER grid( m_frame );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    SELECTION preview;
+    PCBNEW_SELECTION preview;
 
     m_view->Add( &preview );
 
@@ -802,7 +802,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     m_frame->SetNoToolSelected();
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    SELECTION preview;
+    PCBNEW_SELECTION preview;
     BOARD_COMMIT commit( m_frame );
 
     // Build the undo list & add items to the current view
@@ -975,7 +975,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
     m_frame->SetActiveLayer( getDrawingLayer() );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    SELECTION preview;
+    PCBNEW_SELECTION preview;
     m_view->Add( &preview );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -1209,7 +1209,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
     KIGFX::PREVIEW::ARC_ASSISTANT arcAsst( arcManager, m_frame->GetUserUnits() );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    SELECTION preview;
+    PCBNEW_SELECTION preview;
     m_view->Add( &preview );
     m_view->Add( &arcAsst );
     GRID_HELPER grid( m_frame );
@@ -1341,8 +1341,8 @@ bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER*& aZo
     if( aMode == ZONE_MODE::ADD || aMode == ZONE_MODE::GRAPHIC_POLYGON )
         return true;
 
-    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const SELECTION& selection = selTool->GetSelection();
+    SELECTION_TOOL*         selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const PCBNEW_SELECTION& selection = selTool->GetSelection();
 
     if( selection.Empty() )
     {

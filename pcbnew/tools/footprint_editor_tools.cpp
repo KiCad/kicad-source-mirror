@@ -615,8 +615,8 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 
 int MODULE_EDITOR_TOOLS::ExplodePadToShapes( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
-    BOARD_COMMIT commit( m_frame );
+    PCBNEW_SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+    BOARD_COMMIT      commit( m_frame );
 
     if( selection.Size() != 1 )
         return 0;
@@ -664,7 +664,7 @@ int MODULE_EDITOR_TOOLS::ExplodePadToShapes( const TOOL_EVENT& aEvent )
 
 int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+    PCBNEW_SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
 
     std::unique_ptr<D_PAD> pad( new D_PAD( board()->GetFirstModule() ) );
     D_PAD *refPad = nullptr;

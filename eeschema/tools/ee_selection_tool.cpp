@@ -460,7 +460,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-SELECTION& EE_SELECTION_TOOL::GetSelection()
+EE_SELECTION& EE_SELECTION_TOOL::GetSelection()
 {
     return m_selection;
 }
@@ -582,7 +582,7 @@ void EE_SELECTION_TOOL::guessSelectionCandidates( EE_COLLECTOR& collector, const
 }
 
 
-SELECTION& EE_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
+EE_SELECTION& EE_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
 {
     // Filter an existing selection
     if( !m_selection.Empty() )
@@ -1125,7 +1125,7 @@ void EE_SELECTION_TOOL::unselect( EDA_ITEM* aItem )
 }
 
 
-void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup )
+void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* aGroup )
 {
     KICAD_T itemType = aItem->Type();
 
@@ -1182,7 +1182,7 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup
 }
 
 
-void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup )
+void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* aGroup )
 {
     KICAD_T itemType = aItem->Type();
 

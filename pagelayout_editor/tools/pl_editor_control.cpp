@@ -149,7 +149,7 @@ int PL_EDITOR_CONTROL::ToggleBackgroundColor( const TOOL_EVENT& aEvent )
 int PL_EDITOR_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 {
     PL_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PL_SELECTION_TOOL>();
-    SELECTION&         selection = selTool->GetSelection();
+    PL_SELECTION&      selection = selTool->GetSelection();
 
     // The Properties frame will be updated. Avoid flicker during update:
     m_frame->GetPropertiesFrame()->Freeze();

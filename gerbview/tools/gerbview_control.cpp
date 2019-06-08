@@ -246,7 +246,7 @@ int GERBVIEW_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
 int GERBVIEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 {
     GERBVIEW_SELECTION_TOOL* selTool = m_toolMgr->GetTool<GERBVIEW_SELECTION_TOOL>();
-    SELECTION&               selection = selTool->GetSelection();
+    GERBVIEW_SELECTION&      selection = selTool->GetSelection();
 
     if( selection.GetSize() == 1 )
     {

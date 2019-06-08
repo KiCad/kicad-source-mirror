@@ -150,7 +150,7 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
     picker->SetClickHandler( [&]( const VECTOR2D& aPoint ) -> bool
             {
                 m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-                const SELECTION& sel = m_selectionTool->RequestSelection(
+                const PCBNEW_SELECTION& sel = m_selectionTool->RequestSelection(
                         []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
                         { EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS ); } );
 

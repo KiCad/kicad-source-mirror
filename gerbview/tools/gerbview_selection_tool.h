@@ -18,18 +18,16 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GERBVIEW_SELECTION_TOOL_H
-#define __GERBVIEW_SELECTION_TOOL_H
+#ifndef GERBVIEW_SELECTION_TOOL_H
+#define GERBVIEW_SELECTION_TOOL_H
 
 #include <memory>
 #include <math/vector2d.h>
-
 #include <tool/tool_interactive.h>
 #include <tool/action_menu.h>
-#include <tool/selection.h>
 #include <tool/selection_conditions.h>
 #include <tool/tool_menu.h>
-
+#include <tools/gerbview_selection.h>
 #include <gerbview_frame.h>
 
 class SELECTION_AREA;
@@ -73,7 +71,7 @@ public:
      *
      * Returns the set of currently selected items.
      */
-    SELECTION& GetSelection();
+    GERBVIEW_SELECTION& GetSelection();
 
     ///> Select a single item under cursor event handler.
     int CursorSelection( const TOOL_EVENT& aEvent );
@@ -215,7 +213,7 @@ private:
     GERBVIEW_FRAME* m_frame;
 
     /// Current state of selection.
-    SELECTION m_selection;
+    GERBVIEW_SELECTION m_selection;
 
     /// Flag saying if items should be added to the current selection or rather replace it.
     bool m_additive;

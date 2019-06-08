@@ -113,8 +113,8 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
     // Be sure that there is at least one item that we can move. If there's no selection try
     // looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection).
-    SELECTION& selection = m_selectionTool->RequestSelection();
-    bool       unselect = selection.IsHover();
+    PL_SELECTION& selection = m_selectionTool->RequestSelection();
+    bool          unselect = selection.IsHover();
 
     if( selection.Empty() )
         return 0;
@@ -285,7 +285,7 @@ void PL_EDIT_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta )
 }
 
 
-bool PL_EDIT_TOOL::updateModificationPoint( SELECTION& aSelection )
+bool PL_EDIT_TOOL::updateModificationPoint( PL_SELECTION& aSelection )
 {
     if( m_moveInProgress && aSelection.HasReferencePoint() )
         return false;
@@ -320,7 +320,7 @@ int PL_EDIT_TOOL::ImportWorksheetContent( const TOOL_EVENT& aEvent )
 
 int PL_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection();
+    PL_SELECTION& selection = m_selectionTool->RequestSelection();
 
     if( selection.Size() == 0 )
         return 0;
@@ -412,7 +412,7 @@ int PL_EDIT_TOOL::Cut( const TOOL_EVENT& aEvent )
 
 int PL_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
 {
-    SELECTION&                 selection = m_selectionTool->RequestSelection();
+    PL_SELECTION&              selection = m_selectionTool->RequestSelection();
     std::vector<WS_DATA_ITEM*> items;
     WS_DATA_MODEL&             model = WS_DATA_MODEL::GetTheInstance();
     wxString                   sexpr;
@@ -441,7 +441,7 @@ int PL_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
 
 int PL_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 {
-    SELECTION&     selection = m_selectionTool->GetSelection();
+    PL_SELECTION&  selection = m_selectionTool->GetSelection();
     WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
     std::string    sexpr = m_toolMgr->GetClipboard();
 

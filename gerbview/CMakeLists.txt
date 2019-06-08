@@ -63,6 +63,7 @@ set( GERBVIEW_SRCS
     gerbview_painter.cpp
 
     tools/gerbview_actions.cpp
+    tools/gerbview_selection.cpp
     tools/gerbview_selection_tool.cpp
     tools/gerbview_control.cpp
     gerber_collectors.cpp

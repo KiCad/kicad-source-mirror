@@ -294,9 +294,9 @@ void LIB_PIN_TOOL::CreateImagePins( LIB_PIN* aPin )
 
 int LIB_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
 {
-    LIB_PART*  part = m_frame->GetCurPart();
-    SELECTION& selection = m_selectionTool->GetSelection();
-    LIB_PIN*   sourcePin = dynamic_cast<LIB_PIN*>( selection.Front() );
+    LIB_PART*     part = m_frame->GetCurPart();
+    EE_SELECTION& selection = m_selectionTool->GetSelection();
+    LIB_PIN*      sourcePin = dynamic_cast<LIB_PIN*>( selection.Front() );
 
     if( !sourcePin )
         return 0;

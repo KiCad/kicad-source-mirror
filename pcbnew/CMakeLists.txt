@@ -305,10 +305,10 @@ set( PCBNEW_CLASS_SRCS
     tools/pcb_tool_base.cpp
     tools/pcbnew_control.cpp
     tools/pcbnew_picker_tool.cpp
+    tools/pcbnew_selection.cpp
     tools/placement_tool.cpp
     tools/point_editor.cpp
     tools/position_relative_tool.cpp
-    tools/selection.cpp
     tools/selection_tool.cpp
     tools/tool_event_utils.cpp
     tools/zone_create_helper.cpp

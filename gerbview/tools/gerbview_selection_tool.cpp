@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,15 +19,12 @@
  */
 
 #include <limits>
-
 #include <functional>
 using namespace std::placeholders;
 
 #include <base_struct.h>
 #include <bitmaps.h>
-
 #include <gerber_collectors.h>
-
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <view/view_controls.h>
@@ -41,10 +38,8 @@ using namespace std::placeholders;
 #include <preview_items/bright_box.h>
 #include <preview_items/ruler_item.h>
 #include <preview_items/selection_area.h>
-
 #include <gerbview_id.h>
 #include <gerbview_painter.h>
-
 #include "gerbview_selection_tool.h"
 #include "gerbview_actions.h"
 
@@ -267,7 +262,7 @@ int GERBVIEW_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-SELECTION& GERBVIEW_SELECTION_TOOL::GetSelection()
+GERBVIEW_SELECTION& GERBVIEW_SELECTION_TOOL::GetSelection()
 {
     return m_selection;
 }
@@ -868,62 +863,3 @@ int GERBVIEW_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 }
 
 
-VECTOR2I SELECTION::GetCenter() const
-{
-    VECTOR2I centre;
-
-    if( Size() == 1 )
-    {
-        centre = static_cast<GERBER_DRAW_ITEM*>( Front() )->GetPosition();
-    }
-    else
-    {
-        EDA_RECT bbox = Front()->GetBoundingBox();
-        auto i = m_items.begin();
-        ++i;
-
-        for( ; i != m_items.end(); ++i )
-        {
-            bbox.Merge( (*i)->GetBoundingBox() );
-        }
-
-        centre = bbox.Centre();
-    }
-
-    return centre;
-}
-
-
-const BOX2I SELECTION::ViewBBox() const
-{
-    EDA_RECT eda_bbox;
-
-    if( Size() == 1 )
-    {
-        eda_bbox = Front()->GetBoundingBox();
-    }
-    else if( Size() > 1 )
-    {
-        eda_bbox = Front()->GetBoundingBox();
-        auto i = m_items.begin();
-        ++i;
-
-        for( ; i != m_items.end(); ++i )
-        {
-            eda_bbox.Merge( (*i)->GetBoundingBox() );
-        }
-    }
-
-    return BOX2I( eda_bbox.GetOrigin(), eda_bbox.GetSize() );
-}
-
-
-const KIGFX::VIEW_GROUP::ITEMS SELECTION::updateDrawList() const
-{
-    std::vector<VIEW_ITEM*> items;
-
-    for( auto item : m_items )
-        items.push_back( item );
-
-    return items;
-}

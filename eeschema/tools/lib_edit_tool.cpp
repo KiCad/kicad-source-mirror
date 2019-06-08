@@ -124,7 +124,7 @@ bool LIB_EDIT_TOOL::Init()
 
 int LIB_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection();
+    EE_SELECTION& selection = m_selectionTool->RequestSelection();
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -164,7 +164,7 @@ int LIB_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
 int LIB_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection();
+    EE_SELECTION& selection = m_selectionTool->RequestSelection();
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -319,7 +319,7 @@ int LIB_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
 int LIB_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection();
+    EE_SELECTION& selection = m_selectionTool->RequestSelection();
 
     if( selection.Empty() || aEvent.IsAction( &EE_ACTIONS::symbolProperties ) )
     {
@@ -550,8 +550,8 @@ int LIB_EDIT_TOOL::Cut( const TOOL_EVENT& aEvent )
 
 int LIB_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
 {
-    LIB_PART*  part = m_frame->GetCurPart();
-    SELECTION& selection = m_selectionTool->RequestSelection( nonFields );
+    LIB_PART*     part = m_frame->GetCurPart();
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( nonFields );
 
     if( !part || !selection.GetSize() )
         return 0;
@@ -591,7 +591,7 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     if( !part )
         return 0;
 
-    SELECTION&          selection = m_selectionTool->GetSelection();
+    EE_SELECTION&       selection = m_selectionTool->GetSelection();
     std::string         text = m_toolMgr->GetClipboard();
     STRING_LINE_READER  reader( text, "Clipboard" );
     LIB_PART*           newPart;
@@ -641,8 +641,8 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
 int LIB_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 {
-    LIB_PART*  part = m_frame->GetCurPart();
-    SELECTION& selection = m_selectionTool->RequestSelection( nonFields );
+    LIB_PART*     part = m_frame->GetCurPart();
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( nonFields );
 
     if( selection.GetSize() == 0 )
         return 0;

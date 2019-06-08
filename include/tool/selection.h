@@ -23,11 +23,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __SELECTION_H
-#define __SELECTION_H
+#ifndef SELECTION_H
+#define SELECTION_H
 
 #include <deque>
-
+#include <eda_rect.h>
 #include <base_struct.h>
 #include <view/view_group.h>
 
@@ -118,7 +118,7 @@ public:
     /// Checks if there is anything selected
     bool Empty() const
     {
-        return ( m_items.size() == 0 );
+        return m_items.empty();
     }
 
     /// Returns the number of selected parts
@@ -131,17 +131,46 @@ public:
     {
         return m_items;
     }
-
+    
     /// Returns the center point of the selection area bounding box.
-    VECTOR2I GetCenter() const;
+    virtual VECTOR2I GetCenter() const
+    {
+        return static_cast<VECTOR2I>( GetBoundingBox().Centre() );
+    }
 
-    const BOX2I ViewBBox() const override;
+    virtual const BOX2I ViewBBox() const override
+    {
+        BOX2I r;
+        r.SetMaximum();
+        return r;
+    }
 
     /// Returns the top left point of the selection area bounding box.
-    VECTOR2I GetPosition() const;
+    VECTOR2I GetPosition() const
+    {
+        return static_cast<VECTOR2I>( GetBoundingBox().GetPosition() );
+    }
 
-    EDA_RECT    GetBoundingBox() const;
-    EDA_ITEM*   GetTopLeftItem( bool onlyModules = false ) const;
+    EDA_RECT GetBoundingBox() const
+    {
+        EDA_RECT bbox;
+
+        bbox = Front()->GetBoundingBox();
+        auto i = m_items.begin();
+        ++i;
+
+        for( ; i != m_items.end(); ++i )
+        {
+            bbox.Merge( (*i)->GetBoundingBox() );
+        }
+
+        return bbox;
+    }
+    
+    virtual EDA_ITEM* GetTopLeftItem( bool onlyModules = false ) const
+    {
+        return nullptr;
+    }
 
     EDA_ITEM* operator[]( const size_t aIdx ) const
     {
@@ -192,7 +221,15 @@ public:
         return false;
     }
 
-    virtual const VIEW_GROUP::ITEMS updateDrawList() const override;
+    virtual const VIEW_GROUP::ITEMS updateDrawList() const override
+    {
+        std::vector<VIEW_ITEM*> items;
+
+        for( auto item : m_items )
+            items.push_back( item );
+
+        return items;
+    }
 
     bool HasReferencePoint() const
     {
@@ -214,14 +251,10 @@ public:
         m_referencePoint = NULLOPT;
     }
 
-private:
-
-    OPT<VECTOR2I> m_referencePoint;
-
-    /// Set of selected items
+protected:
+    OPT<VECTOR2I>         m_referencePoint;
     std::deque<EDA_ITEM*> m_items;
-
-    bool m_isHover;
+    bool                  m_isHover;
 
     // mute hidden overloaded virtual function warnings
     using VIEW_GROUP::Add;

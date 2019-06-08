@@ -150,7 +150,7 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     if( !m_selectionTool )
         return 0;
 
-    const SELECTION& selection = m_selectionTool->GetSelection();
+    const PL_SELECTION& selection = m_selectionTool->GetSelection();
 
     if( selection.Size() != 1 || !selection.Front()->IsType( pointTypes ) )
         return 0;

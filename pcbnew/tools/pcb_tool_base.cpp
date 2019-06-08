@@ -50,7 +50,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer
     controls()->SetSnapping( true );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    SELECTION preview;
+    PCBNEW_SELECTION preview;
     view()->Add( &preview );
 
     aPlacer->m_board = board();
@@ -246,7 +246,7 @@ PCB_DRAW_PANEL_GAL* PCB_TOOL_BASE::canvas() const
 }
 
 
-const SELECTION& PCB_TOOL_BASE::selection() const
+const PCBNEW_SELECTION& PCB_TOOL_BASE::selection() const
 {
     auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     const auto& selection = selTool->GetSelection();
@@ -254,7 +254,7 @@ const SELECTION& PCB_TOOL_BASE::selection() const
 }
 
 
-SELECTION& PCB_TOOL_BASE::selection()
+PCBNEW_SELECTION& PCB_TOOL_BASE::selection()
 {
     auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     auto& selection = selTool->GetSelection();

@@ -202,14 +202,14 @@ private:
 
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.
-    bool updateModificationPoint( SELECTION& aSelection );
+    bool updateModificationPoint( PCBNEW_SELECTION& aSelection );
 
     int EditFpInFpEditor( const TOOL_EVENT& aEvent );
 
     bool invokeInlineRouter( int aDragMode );
     bool isInteractiveDragEnabled() const;
 
-    bool changeTrackWidthOnClick( const SELECTION& selection );
+    bool changeTrackWidthOnClick( const PCBNEW_SELECTION& selection );
     bool pickCopyReferencePoint( VECTOR2I& aP );
 
     std::unique_ptr<BOARD_COMMIT> m_commit;

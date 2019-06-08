@@ -203,7 +203,7 @@ private:
     void update() override
     {
         EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
-        SELECTION&         selection = selTool->GetSelection();
+        EE_SELECTION&      selection = selTool->GetSelection();
         SCH_COMPONENT*     component = dynamic_cast<SCH_COMPONENT*>( selection.Front() );
 
         if( !component )
@@ -450,7 +450,7 @@ bool SCH_EDIT_TOOL::Init()
 
 int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::RotatableItems );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::RotatableItems );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -620,7 +620,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::RotatableItems );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::RotatableItems );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -818,7 +818,7 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         EOT
     };
 
-    SELECTION& selection = m_selectionTool->RequestSelection( duplicatableItems );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( duplicatableItems );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -1079,7 +1079,7 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &EE_ACTIONS::editFootprint ) )
         filter = CmpOrFootprint;
 
-    SELECTION& selection = m_selectionTool->RequestSelection( filter );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( filter );
 
     if( selection.Empty() )
         return 0;
@@ -1108,7 +1108,7 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
 
     if( selection.Empty() )
         return 0;
@@ -1146,7 +1146,7 @@ int SCH_EDIT_TOOL::UpdateFields( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
 
     if( selection.Empty() )
         return 0;
@@ -1175,7 +1175,7 @@ int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::EditableItems );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::EditableItems );
 
     if( selection.Empty() )
         return 0;
@@ -1267,8 +1267,8 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::ChangeShape( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->GetSelection();
-    char shape;
+    EE_SELECTION& selection = m_selectionTool->GetSelection();
+    char          shape;
 
     if( aEvent.IsAction( &EE_ACTIONS::toShapeSlash ) )
         shape = '/';
@@ -1302,9 +1302,9 @@ int SCH_EDIT_TOOL::ChangeShape( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 {
-    KICAD_T    allTextTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
-    SELECTION& selection = m_selectionTool->RequestSelection( allTextTypes );
-    KICAD_T    convertTo;
+    KICAD_T       allTextTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( allTextTypes );
+    KICAD_T       convertTo;
 
     if( aEvent.IsAction( &EE_ACTIONS::toLabel ) )
         convertTo = SCH_LABEL_T;
@@ -1347,8 +1347,8 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::SheetsOnly );
-    SCH_SHEET* sheet = (SCH_SHEET*) selection.Front();
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::SheetsOnly );
+    SCH_SHEET*    sheet = (SCH_SHEET*) selection.Front();
 
     if( !sheet )
         return 0;

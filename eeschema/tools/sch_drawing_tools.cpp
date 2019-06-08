@@ -173,8 +173,8 @@ bool SCH_DRAWING_TOOLS::Init()
 
 int SCH_DRAWING_TOOLS::AddJunction( const TOOL_EVENT& aEvent )
 {
-    SELECTION&  selection = m_selectionTool->GetSelection();
-    SCH_LINE*   wire = dynamic_cast<SCH_LINE*>( selection.Front() );
+    EE_SELECTION& selection = m_selectionTool->GetSelection();
+    SCH_LINE*     wire = dynamic_cast<SCH_LINE*>( selection.Front() );
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
@@ -216,7 +216,7 @@ int SCH_DRAWING_TOOLS::AddLabel( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOLS::AddSheetPin( const TOOL_EVENT& aEvent )
 {
-    SELECTION&     selection = m_selectionTool->GetSelection();
+    EE_SELECTION&  selection = m_selectionTool->GetSelection();
     SCH_SHEET*     sheet = dynamic_cast<SCH_SHEET*>( selection.Front() );
     SCH_HIERLABEL* label = nullptr;
 
@@ -771,7 +771,7 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
         else if( item && TOOL_EVT_UTILS::IsSelectionEvent( evt.get() ) )
         {
             // This happens if our text was replaced out from under us by ConvertTextType()
-            SELECTION& selection = m_selectionTool->GetSelection();
+            EE_SELECTION& selection = m_selectionTool->GetSelection();
 
             if( selection.GetSize() == 1 )
             {

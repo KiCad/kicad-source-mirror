@@ -21,9 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <tools/ee_actions.h>
-#include <tools/ee_inspection_tool.h>
-#include <tools/ee_selection_tool.h>
 #include <view/view_controls.h>
 #include <sch_component.h>
 #include <sch_marker.h>
@@ -33,8 +30,11 @@
 #include <confirm.h>
 #include <tool/conditional_menu.h>
 #include <tool/selection_conditions.h>
-#include <tool/selection.h>
 #include <tool/tool_manager.h>
+#include <tools/ee_actions.h>
+#include <tools/ee_inspection_tool.h>
+#include <tools/ee_selection_tool.h>
+#include <tools/ee_selection.h>
 #include <search_stack.h>
 #include <sim/sim_plot_frame.h>
 #include <sch_view.h>
@@ -300,7 +300,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
     }
     else if( m_frame->IsType( FRAME_SCH ) )
     {
-        SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
+        EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
 
         if( selection.Empty() )
             return 0;
@@ -323,7 +323,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 
 int EE_INSPECTION_TOOL::ShowMarkerInfo( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->GetSelection();
+    EE_SELECTION& selection = m_selectionTool->GetSelection();
 
     if( selection.Empty() )
         return 0;
@@ -340,7 +340,7 @@ int EE_INSPECTION_TOOL::ShowMarkerInfo( const TOOL_EVENT& aEvent )
 int EE_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    SELECTION&         selection = selTool->GetSelection();
+    EE_SELECTION&      selection = selTool->GetSelection();
 
     if( selection.GetSize() == 1 )
     {
