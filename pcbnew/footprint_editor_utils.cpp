@@ -560,6 +560,11 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             GetBoard()->m_Modules->ClearFlags();
 
         GetScreen()->SetModify();
+        // Clear undo and redo lists because we don't have handling to in
+        // FP editor to undo across imports (the module _is_ the board with the stack)
+        // todo: Abstract undo/redo stack to a higher element or keep consistent board item in fpeditor
+        GetScreen()->ClearUndoRedoList();
+
         Zoom_Automatique( false );
         m_canvas->Refresh();
         Update3DView();
