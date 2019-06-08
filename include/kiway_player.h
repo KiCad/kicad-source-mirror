@@ -56,7 +56,7 @@ class WX_EVENT_LOOP;
 #ifdef SWIG
 class KIWAY_PLAYER : public wxFrame, public KIWAY_HOLDER
 #else
-class KIWAY_PLAYER : public EDA_BASE_FRAME, public KIWAY_HOLDER
+class KIWAY_PLAYER : public EDA_BASE_FRAME
 #endif
 {
 public:

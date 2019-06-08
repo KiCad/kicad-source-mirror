@@ -76,7 +76,7 @@ enum TreeFileType {
 /**
  * The main KiCad project manager frame.  It is not a KIWAY_PLAYER.
  */
-class KICAD_MANAGER_FRAME : public EDA_BASE_FRAME, public KIWAY_HOLDER
+class KICAD_MANAGER_FRAME : public EDA_BASE_FRAME
 {
 public:
     KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,

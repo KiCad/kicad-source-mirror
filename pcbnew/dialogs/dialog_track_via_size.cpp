@@ -27,7 +27,7 @@
 #include <confirm.h>
 #include <widgets/text_ctrl_eval.h>
 #include <core/optional.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 
 #include "board_design_settings.h"
 

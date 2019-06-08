@@ -38,7 +38,7 @@
 #include <eda_base_frame.h>
 #include <macros.h>
 #include <menus_helpers.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 
 #include <tool/tool_manager.h>
 

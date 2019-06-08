@@ -19,7 +19,7 @@
 #include "dialog_print_generic.h"
 
 #include <confirm.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 #include <printout.h>
 #include <enabler.h>
 

@@ -31,7 +31,7 @@
 #include <id.h>
 #include <base_screen.h>
 #include <msgpanel.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 #include <confirm.h>
 #include <dialog_helpers.h>
 #include <lockfile.h>

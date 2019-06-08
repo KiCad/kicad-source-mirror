@@ -33,7 +33,7 @@
 #include <view/wx_view_controls.h>
 
 #include <class_draw_panel_gal.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 #include <pcbnew_id.h>
 
 #include <core/optional.h>

@@ -42,7 +42,7 @@
 #include <tool/action_manager.h>
 
 #include <class_draw_panel_gal.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 
 /// Struct describing the current execution state of a TOOL
 struct TOOL_MANAGER::TOOL_STATE

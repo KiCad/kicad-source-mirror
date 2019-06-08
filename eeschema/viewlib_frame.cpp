@@ -114,7 +114,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     // Force the frame name used in config. the lib viewer frame has a name
     // depending on aFrameType (needed to identify the frame by wxWidgets),
     // but only one configuration is preferable.
-    m_configFrameName = LIB_VIEW_NAME;
+    m_configName = LIB_VIEW_NAME;
 
     // Give an icon
     wxIcon  icon;

@@ -113,10 +113,8 @@ protected:
                                             // is at scale = 1
     int         m_UndoRedoCountMax;         ///< default Undo/Redo command Max depth, to be handed
                                             // to screens
-    EDA_UNITS_T m_UserUnits;
     bool        m_PolarCoords;              //< for those frames that support polar coordinates
 
-    TOOL_MANAGER*       m_toolManager;
     TOOL_DISPATCHER*    m_toolDispatcher;
     ACTIONS*            m_actions;
 
@@ -174,13 +172,7 @@ protected:
 
     double bestZoom( double sizeX, double sizeY, double scaleFactor, wxPoint centre );
 
-    /**
-     * Called when when the units setting has changed to allow for any derived classes
-     * to handle refreshing and controls that have units based measurements in them.  The
-     * default version only updates the status bar.  Don't forget to call the default
-     * in your derived class or the status bar will not get updated properly.
-     */
-    virtual void unitsChangeRefresh();
+    void unitsChangeRefresh() override;
 
     void CommonSettingsChanged() override;
 
@@ -255,18 +247,6 @@ public:
      * the internal units of this particular view.
      */
     virtual const wxSize GetPageSizeIU() const = 0;
-
-    /**
-     * Return the user units currently in use.
-     */
-    EDA_UNITS_T GetUserUnits() const override { return m_UserUnits; }
-    void SetUserUnits( EDA_UNITS_T aUnits ) { m_UserUnits = aUnits; }
-
-    void ChangeUserUnits( EDA_UNITS_T aUnits )
-    {
-        SetUserUnits( aUnits );
-        unitsChangeRefresh();
-    }
 
     /**
      * For those frames that support polar coordinates.
@@ -700,11 +680,6 @@ public:
      */
     EDA_DRAW_PANEL_GAL* GetGalCanvas() const        { return m_galCanvas; }
     void SetGalCanvas( EDA_DRAW_PANEL_GAL* aPanel ) { m_galCanvas = aPanel; }
-
-    /**
-     * Return the tool manager instance, if any.
-     */
-    TOOL_MANAGER* GetToolManager() const override   { return m_toolManager; }
 
     /**
      * A way to pass info to draw functions. the base class has no knowledge about

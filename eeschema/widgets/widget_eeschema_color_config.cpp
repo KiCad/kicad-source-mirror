@@ -26,7 +26,7 @@
  */
 
 #include <fctsys.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 #include <sch_draw_panel.h>
 #include <sch_view.h>
 #include <general.h>

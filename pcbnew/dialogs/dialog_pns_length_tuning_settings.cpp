@@ -27,7 +27,7 @@
 #include <router/pns_meander_placer.h>
 #include <widgets/text_ctrl_eval.h>
 #include <bitmaps.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 
 // TODO validators
 

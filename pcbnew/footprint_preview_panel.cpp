@@ -30,7 +30,7 @@
 #include <class_module.h>
 #include <class_board.h>
 #include <mutex>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 #include <utility>
 #include <make_unique.h>
 #include <colors_design_settings.h>
@@ -248,7 +248,7 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aPare
                                                   std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aOpts,
                                                   GAL_TYPE aGalType )
     : PCB_DRAW_PANEL_GAL ( aParent, -1, wxPoint( 0, 0 ), wxSize(200, 200), *aOpts, aGalType  ),
-      KIWAY_HOLDER( aKiway ),
+      KIWAY_HOLDER( aKiway, KIWAY_HOLDER::PANEL ),
       m_DisplayOptions( std::move( aOpts ) ),
       m_footprintDisplayed( true )
 {

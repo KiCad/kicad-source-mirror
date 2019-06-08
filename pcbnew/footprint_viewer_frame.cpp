@@ -134,7 +134,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     // Force the frame name used in config. the footprint viewer frame has a name
     // depending on aFrameType (needed to identify the frame by wxWidgets),
     // but only one configuration is preferable.
-    m_configFrameName = FOOTPRINT_VIEWER_FRAME_NAME;
+    m_configName = FOOTPRINT_VIEWER_FRAME_NAME;
 
     m_showAxis   = true;         // true to draw axis.
 

@@ -25,7 +25,7 @@
 #include <bitmaps.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <view/view_controls.h>

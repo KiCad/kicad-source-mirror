@@ -28,7 +28,7 @@
 #include <gr_basic.h>
 #include <base_struct.h>
 #include <title_block.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 #include <ws_data_model.h>
 #include <base_screen.h>
 #include <wildcards_and_files_ext.h>

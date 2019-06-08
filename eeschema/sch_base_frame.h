@@ -26,7 +26,7 @@
 #define SCH_BASE_FRAME_H_
 
 #include <lib_id.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 
 #include <sch_screen.h>
 #include <sch_draw_panel.h>

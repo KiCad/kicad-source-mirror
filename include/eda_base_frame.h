@@ -48,6 +48,7 @@
 #include <frame_type.h>
 #include "hotkeys_basic.h"
 #include <tool/action_toolbar.h>
+#include <kiway_holder.h>
 
 #ifdef USE_WX_OVERLAY
 #include <wx/overlay.h>
@@ -98,7 +99,7 @@ enum id_librarytype {
  * and that class is not a player.
  * </p>
  */
-class EDA_BASE_FRAME : public wxFrame
+class EDA_BASE_FRAME : public wxFrame, public KIWAY_HOLDER
 {
     /**
      * (with its unexpected name so it does not collide with the real OnWindowClose()
@@ -115,32 +116,29 @@ class EDA_BASE_FRAME : public wxFrame
     wxWindow* findQuasiModalDialog();
 
 protected:
-    FRAME_T         m_Ident;           ///< Id Type (pcb, schematic, library..)
+    FRAME_T         m_Ident;             // Id Type (pcb, schematic, library..)
     wxPoint         m_FramePos;
     wxSize          m_FrameSize;
 
-    wxString        m_configFrameName; ///< prefix used in config to identify some params (frame size...)
-                                    ///< if empty, the frame name defined in CTOR is used
-
-    wxString        m_AboutTitle;      ///< Name of program displayed in About.
+    wxString        m_AboutTitle;        // Name of program displayed in About.
 
     wxAuiManager    m_auimgr;
 
-    /// Flag to indicate if this frame supports auto save.
+    wxString        m_configName;        // prefix used to identify some params (frame size...) 
+                                         // and to name some config files (legacy hotkey files)
+
+    TOOL_MANAGER*   m_toolManager;
+
     bool            m_hasAutoSave;
-
-    /// Flag to indicate the last auto save state.
     bool            m_autoSaveState;
-
-    /// The auto save interval time in seconds.
-    int             m_autoSaveInterval;
-
-    /// The timer used to implement the auto save feature;
+    int             m_autoSaveInterval;  // The auto save interval time in seconds.
     wxTimer*        m_autoSaveTimer;
 
-    wxString        m_perspective;     ///< wxAuiManager perspective.
+    wxString        m_perspective;       // wxAuiManager perspective.
 
-    wxString        m_mruPath;         ///< Most recently used path.
+    wxString        m_mruPath;           // Most recently used path.
+
+    EDA_UNITS_T     m_UserUnits;
 
     ///> Default style flags used for wxAUI toolbars
     static constexpr int KICAD_AUI_TB_STYLE = wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_PLAIN_BACKGROUND;
@@ -189,14 +187,39 @@ protected:
 
     virtual wxString help_name();
 
+    /**
+     * Called when when the units setting has changed to allow for any derived classes
+     * to handle refreshing and controls that have units based measurements in them.  The
+     * default version only updates the status bar.  Don't forget to call the default
+     * in your derived class or the status bar will not get updated properly.
+     */
+    virtual void unitsChangeRefresh() { }
+
     DECLARE_EVENT_TABLE()
 
 public:
     EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
-        long aStyle, const wxString& aFrameName );
+        long aStyle, const wxString& aFrameName, KIWAY* aKiway );
 
     ~EDA_BASE_FRAME();
+
+    /**
+     * Return the user units currently in use.
+     */
+    EDA_UNITS_T GetUserUnits() const { return m_UserUnits; }
+    void SetUserUnits( EDA_UNITS_T aUnits ) { m_UserUnits = aUnits; }
+
+    void ChangeUserUnits( EDA_UNITS_T aUnits )
+    {
+        SetUserUnits( aUnits );
+        unitsChangeRefresh();
+    }
+
+    /**
+     * Return the MVC controller.
+     */
+    TOOL_MANAGER* GetToolManager() const { return m_toolManager; }
 
     /**
      * Override the default process event handler to implement the auto save feature.
@@ -254,17 +277,15 @@ public:
     virtual void SaveSettings( wxConfigBase* aCfg );
 
     /**
-     * @return a base name prefix used in Load/Save settings to build
-     * the full name of keys used in config.
-     * This is usually the name of the frame set by CTOR, unless m_configFrameName
-     * contains a base name.
-     * this is the case of frames which can be shown in normal or modal mode.
-     * This is needed because we want only one base name prefix,
-     * regardless the mode used.
+     * @return a base name prefix used in Load/Save settings to build the full name of keys 
+     * used in config.
+     * This is usually the name of the frame set by CTOR, except for frames shown in multiple
+     * modes in which case the m_configName must be set to the base name so that a single
+     * config can be used.
      */
     wxString ConfigBaseName()
     {
-        wxString baseCfgName = m_configFrameName.IsEmpty() ? GetName() : m_configFrameName;
+        wxString baseCfgName = m_configName.IsEmpty() ? GetName() : m_configName;
         return baseCfgName;
     }
 

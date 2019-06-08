@@ -26,7 +26,7 @@
 #include "dialog_pns_diff_pair_dimensions.h"
 #include <widgets/text_ctrl_eval.h>
 #include <router/pns_sizes_settings.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 #include <confirm.h>
 
 DIALOG_PNS_DIFF_PAIR_DIMENSIONS::DIALOG_PNS_DIFF_PAIR_DIMENSIONS( EDA_DRAW_FRAME* aParent,

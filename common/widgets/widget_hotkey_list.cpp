@@ -28,7 +28,7 @@
 
 #include <wx/statline.h>
 
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 #include <dialog_shim.h>
 
 

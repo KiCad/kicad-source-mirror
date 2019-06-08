@@ -22,7 +22,7 @@
  */
 
 #include <functional>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 #include <tool/actions.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>

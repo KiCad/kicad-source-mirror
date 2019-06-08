@@ -130,7 +130,7 @@ public:
 
     void OnPaint( wxPaintEvent &event );
 
-    EDA_UNITS_T GetUserUnits() const override { return m_units; }
+    EDA_UNITS_T GetUserUnits() const { return m_units; }
 
 protected:
 

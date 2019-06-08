@@ -103,7 +103,7 @@ static GRID_TYPE SchematicGridList[] = {
 
 SCH_SCREEN::SCH_SCREEN( KIWAY* aKiway ) :
     BASE_SCREEN( SCH_SCREEN_T ),
-    KIWAY_HOLDER( aKiway ),
+    KIWAY_HOLDER( aKiway, KIWAY_HOLDER::HOLDER_TYPE::SCREEN ),
     m_paper( wxT( "A4" ) )
 {
     m_modification_sync = 0;

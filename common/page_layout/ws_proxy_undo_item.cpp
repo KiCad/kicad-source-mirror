@@ -23,7 +23,7 @@
 
 #include <ws_proxy_undo_item.h>
 #include <ws_data_model.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 #include <macros.h>
 
 using namespace KIGFX;

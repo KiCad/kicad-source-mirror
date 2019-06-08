@@ -28,7 +28,7 @@
 #include <gr_basic.h>
 #include <common.h>
 #include <base_screen.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 #include <title_block.h>
 #include <build_version.h>
 #include <ws_draw_item.h>

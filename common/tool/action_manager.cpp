@@ -26,7 +26,7 @@
 #include <tool/action_manager.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_action.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 
 #include <hotkeys_basic.h>
 #include <cctype>

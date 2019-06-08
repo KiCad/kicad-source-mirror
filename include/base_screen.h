@@ -31,7 +31,7 @@
 #ifndef  BASE_SCREEN_H
 #define  BASE_SCREEN_H
 
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 #include <base_struct.h>
 #include <undo_redo_container.h>
 #include <common.h>

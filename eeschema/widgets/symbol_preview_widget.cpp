@@ -28,7 +28,7 @@
 #include <sch_preview_panel.h>
 #include <pgm_base.h>
 #include <sch_painter.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 
 
 SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,

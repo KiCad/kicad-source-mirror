@@ -25,11 +25,10 @@
 #define KIWAY_HOLDER_H_
 
 #include <wx/frame.h>
-#include <base_units.h>
+
 
 class KIWAY;
 class PROJECT;
-class TOOL_MANAGER;
 
 
 /**
@@ -40,10 +39,15 @@ class TOOL_MANAGER;
 class KIWAY_HOLDER
 {
 public:
-    KIWAY_HOLDER( KIWAY* aKiway ) :
-        m_kiway( aKiway )
+    enum HOLDER_TYPE { DIALOG, FRAME, PANEL, SCREEN };
+
+    KIWAY_HOLDER( KIWAY* aKiway, HOLDER_TYPE aType ) :
+        m_kiway( aKiway ),
+        m_type( aType )
     {}
 
+    HOLDER_TYPE GetType() { return m_type; }
+    
     /**
      * Function Kiway
      * returns a reference to the KIWAY that this object has an opportunity
@@ -62,21 +66,6 @@ public:
     PROJECT& Prj() const;
 
     /**
-     * Function GetUserUnits
-     * Allows participation in KEYWAY_PLAYER/DIALOG_SHIM userUnits inheritance.
-     *
-     * This would fit better in KEYWAY_PLAYER, but DIALOG_SHIMs can only use mix-ins
-     * because their primary superclass must be wxDialog.
-     */
-    virtual EDA_UNITS_T GetUserUnits() const;
-
-    /**
-     * Function GetToolManager
-     * Return the tool manager instance, if any.
-     */
-    virtual TOOL_MANAGER* GetToolManager() const;
-
-    /**
      * Function SetKiway
      *
      * @param aDest is the recipient of aKiway pointer.
@@ -90,6 +79,7 @@ public:
 private:
     // private, all setting is done through SetKiway().
     KIWAY*          m_kiway;            // no ownership.
+    HOLDER_TYPE     m_type;
 };
 
 

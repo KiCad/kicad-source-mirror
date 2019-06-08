@@ -29,7 +29,7 @@
  */
 
 
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 #include <panel_hotkeys_editor.h>
 #include <gestfich.h>
 #include <kiway.h>
@@ -57,8 +57,7 @@
 KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent,
         const wxString& title, const wxPoint&  pos, const wxSize&   size ) :
     EDA_BASE_FRAME( parent, KICAD_MAIN_FRAME_T, title, pos, size,
-                    KICAD_DEFAULT_DRAWFRAME_STYLE, KICAD_MANAGER_FRAME_NAME ),
-    KIWAY_HOLDER( &::Kiway )
+                    KICAD_DEFAULT_DRAWFRAME_STYLE, KICAD_MANAGER_FRAME_NAME, &::Kiway )
 {
     m_active_project = false;
     m_mainToolBar = nullptr;

@@ -80,9 +80,10 @@ BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
 END_EVENT_TABLE()
 
 EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
-        const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
-        long aStyle, const wxString& aFrameName ) :
-    wxFrame( aParent, wxID_ANY, aTitle, aPos, aSize, aStyle, aFrameName )
+                                const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
+                                long aStyle, const wxString& aFrameName, KIWAY* aKiway ) :
+        wxFrame( aParent, wxID_ANY, aTitle, aPos, aSize, aStyle, aFrameName ),
+        KIWAY_HOLDER( aKiway, KIWAY_HOLDER::FRAME )
 {
     m_Ident = aFrameType;
     m_hasAutoSave = false;

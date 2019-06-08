@@ -43,8 +43,7 @@ END_EVENT_TABLE()
 KIWAY_PLAYER::KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
         long aStyle, const wxString& aWdoName ) :
-    EDA_BASE_FRAME( aParent, aFrameType, aTitle, aPos, aSize, aStyle, aWdoName ),
-    KIWAY_HOLDER( aKiway ),
+    EDA_BASE_FRAME( aParent, aFrameType, aTitle, aPos, aSize, aStyle, aWdoName, aKiway ),
     m_modal( false ),
     m_modal_loop( 0 ), m_modal_resultant_parent( 0 )
 {
@@ -55,8 +54,7 @@ KIWAY_PLAYER::KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType
 KIWAY_PLAYER::KIWAY_PLAYER( wxWindow* aParent, wxWindowID aId, const wxString& aTitle,
         const wxPoint& aPos, const wxSize& aSize, long aStyle,
         const wxString& aWdoName ) :
-    EDA_BASE_FRAME( aParent, (FRAME_T) aId, aTitle, aPos, aSize, aStyle, aWdoName ),
-    KIWAY_HOLDER( 0 ),
+    EDA_BASE_FRAME( aParent, (FRAME_T) aId, aTitle, aPos, aSize, aStyle, aWdoName, nullptr ),
     m_modal( false ),
     m_modal_loop( 0 ),
     m_modal_resultant_parent( 0 ),

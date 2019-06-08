@@ -28,7 +28,7 @@
 
 
 #include <config_params.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 #include <pl_editor_screen.h>
 #include <pl_editor_layout.h>
 

@@ -19,7 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "draw_frame.h"
+#include "eda_draw_frame.h"
 #include "pns_tune_status_popup.h"
 #include "pns_router.h"
 #include "pns_meander_placer.h"

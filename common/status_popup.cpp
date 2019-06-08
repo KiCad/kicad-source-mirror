@@ -27,7 +27,7 @@
  */
 
 #include <status_popup.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 
 STATUS_POPUP::STATUS_POPUP( wxWindow* aParent ) :
         wxPopupWindow( aParent ),

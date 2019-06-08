@@ -18,7 +18,7 @@
  */
 
 #include <class_draw_panel_gal.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 #include <id.h>
 #include <preview_items/selection_area.h>
 #include <tool/actions.h>

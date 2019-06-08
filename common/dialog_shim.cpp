@@ -65,15 +65,16 @@ END_EVENT_TABLE()
 
 
 DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& title,
-        const wxPoint& pos, const wxSize& size, long style, const wxString& name ) :
-    wxDialog( aParent, id, title, pos, size, style, name ),
-    KIWAY_HOLDER( nullptr ),
-    m_units( MILLIMETRES ),
-    m_firstPaintEvent( true ),
-    m_initialFocusTarget( nullptr ),
-    m_qmodal_loop( nullptr ),
-    m_qmodal_showing( false ),
-    m_qmodal_parent_disabler( nullptr )
+                          const wxPoint& pos, const wxSize& size, long style, 
+                          const wxString& name ) :
+        wxDialog( aParent, id, title, pos, size, style, name ),
+        KIWAY_HOLDER( nullptr, KIWAY_HOLDER::DIALOG ),
+        m_units( MILLIMETRES ),
+        m_firstPaintEvent( true ),
+        m_initialFocusTarget( nullptr ),
+        m_qmodal_loop( nullptr ),
+        m_qmodal_showing( false ),
+        m_qmodal_parent_disabler( nullptr )
 {
     KIWAY_HOLDER* kiwayHolder = nullptr;
 
@@ -88,34 +89,34 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
         }
     }
 
-    if( kiwayHolder )
-    {
-        // Inherit units from parent
-        m_units = kiwayHolder->GetUserUnits();
+    // Inherit units from parent
+    if( kiwayHolder && kiwayHolder->GetType() == KIWAY_HOLDER::FRAME )
+        m_units = static_cast<EDA_BASE_FRAME*>( kiwayHolder )->GetUserUnits();
+    else if( kiwayHolder && kiwayHolder->GetType() == KIWAY_HOLDER::DIALOG )
+        m_units = static_cast<DIALOG_SHIM*>( kiwayHolder )->GetUserUnits();
 
-        // Don't mouse-warp after a dialog run from the context menu
-        TOOL_MANAGER* toolMgr = kiwayHolder->GetToolManager();
+    // Don't mouse-warp after a dialog run from the context menu
+    if( kiwayHolder && kiwayHolder->GetType() == KIWAY_HOLDER::FRAME )
+    {
+        TOOL_MANAGER* toolMgr = static_cast<EDA_BASE_FRAME*>( kiwayHolder )->GetToolManager();
 
         if( toolMgr )
             toolMgr->VetoContextMenuMouseWarp();
-
-        // Set up the message bus
-        SetKiway( this, &kiwayHolder->Kiway() );
     }
+
+    // Set up the message bus
+    if( kiwayHolder )
+        SetKiway( this, &kiwayHolder->Kiway() );
 
     Bind( wxEVT_CLOSE_WINDOW, &DIALOG_SHIM::OnCloseWindow, this );
     Bind( wxEVT_BUTTON, &DIALOG_SHIM::OnButton, this );
 
 #ifdef __WINDOWS__
-    // On Windows, the app top windows can be brought to the foreground
-    // (at least temporary) in certain circumstances,
-    // for instance when calling an external tool in Eeschema BOM generation.
-    // So set the parent KIWAY_PLAYER kicad frame (if exists) to top window
-    // to avoid this annoying behavior
-    KIWAY_PLAYER* parent_kiwayplayer = dynamic_cast<KIWAY_PLAYER*>( aParent );
-
-    if( parent_kiwayplayer )
-        Pgm().App().SetTopWindow( parent_kiwayplayer );
+    // On Windows, the app top windows can be brought to the foreground (at least temporarily) 
+    // in certain circumstances such as when calling an external tool in Eeschema BOM generation.
+    // So set the parent frame (if exists) to top window to avoid this annoying behavior.
+    if( kiwayHolder && kiwayHolder->GetType() == KIWAY_HOLDER::FRAME )
+        Pgm().App().SetTopWindow( (EDA_BASE_FRAME*) kiwayHolder );
 #endif
 
     Connect( wxEVT_PAINT, wxPaintEventHandler( DIALOG_SHIM::OnPaint ) );

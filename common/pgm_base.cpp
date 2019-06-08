@@ -41,7 +41,7 @@
 #include <wx/richmsgdlg.h>
 
 #include <pgm_base.h>
-#include <draw_frame.h>
+#include <eda_draw_frame.h>
 #include <eda_base_frame.h>
 #include <macros.h>
 #include <config_params.h>

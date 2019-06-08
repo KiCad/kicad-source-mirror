@@ -22,16 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_screen.h
- * @brief Definitions for the Eeschema program SCH_SCREEN class.
- */
-
 #ifndef SCREEN_H
 #define SCREEN_H
 
 #include <unordered_set>
-
 #include <macros.h>
 #include <dlist.h>
 #include <sch_item.h>
@@ -39,7 +33,7 @@
 #include <base_screen.h>
 #include <title_block.h>
 #include <page_info.h>
-#include <kiway_player.h>
+#include <kiway_holder.h>
 #include <sch_marker.h>
 #include <bus_alias.h>
 
