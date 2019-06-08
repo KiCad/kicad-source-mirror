@@ -807,7 +807,7 @@ public:
      * create a new text, and prepare the undo/redo command data for this change and the
      * current move/edit command
      */
-    void ConvertTextType( SCH_TEXT* aText, KICAD_T aType );
+    void ConvertTextType( SCH_TEXT* aText, KICAD_T aNewType );
 
     /**
      * Launches the "Edit Text/Label" dialog

@@ -309,7 +309,11 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
 
     m_Parent->GetCanvas()->Refresh();
 
-    text = EscapeString( m_activeTextEntry->GetValue(), CTX_NETNAME );
+    // Escape string only if is is a label. For a simple graphic text do not change anything
+    if( m_CurrentText->Type() == SCH_TEXT_T )
+        text = m_activeTextEntry->GetValue();
+    else
+        text = EscapeString( m_activeTextEntry->GetValue(), CTX_NETNAME );
 
     if( !text.IsEmpty() )
         m_CurrentText->SetText( text );

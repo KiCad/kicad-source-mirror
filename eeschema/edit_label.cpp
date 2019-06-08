@@ -97,18 +97,18 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
 }
 
 
-void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aType )
+void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aNewType )
 {
     bool selected = aText->IsSelected();
 
     wxCHECK_RET( aText->CanIncrementLabel(), "Cannot convert text type." );
 
-    if( aText->Type() == aType )
+    if( aText->Type() == aNewType )
         return;
 
     SCH_TEXT* newtext = nullptr;
     const wxPoint& position = aText->GetPosition();
-    wxString txt = aText->GetText();
+    wxString txt = UnescapeString( aText->GetText() );
 
     // There can be characters in a SCH_TEXT object that can break labels so we have to
     // fix them here.
@@ -118,10 +118,13 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aType )
         txt.Replace( "\r", "_" );
         txt.Replace( "\t", "_" );
         txt.Replace( " ", "_" );
-        txt.Replace( "/", "_" );
     }
 
-    switch( aType )
+    // label strings are "escaped" i.e. a '/' is replaced by "{slash}"
+    if( aNewType != SCH_TEXT_T )
+        txt = EscapeString( txt, CTX_NETNAME );
+
+    switch( aNewType )
     {
     case SCH_LABEL_T:        newtext = new SCH_LABEL( position, txt );        break;
     case SCH_GLOBAL_LABEL_T: newtext = new SCH_GLOBALLABEL( position, txt );  break;
@@ -129,7 +132,7 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aType )
     case SCH_TEXT_T:         newtext = new SCH_TEXT( position, txt );         break;
 
     default:
-        wxASSERT_MSG( false, wxString::Format( "Invalid text type: %d.", aType ) );
+        wxASSERT_MSG( false, wxString::Format( "Invalid text type: %d.", aNewType ) );
         return;
     }
 
