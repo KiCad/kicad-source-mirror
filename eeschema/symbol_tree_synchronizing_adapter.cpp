@@ -223,7 +223,14 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
 
     case 1:
         if( node->LibId == m_libMgr->GetCurrentLibId() )
-            aVariant = m_libMgr->GetAlias( node->Name, node->Parent->Name )->GetDescription();
+        {
+            auto alias = m_libMgr->GetAlias( node->Name, node->Parent->Name );
+
+            if( alias )
+                aVariant = alias->GetDescription();
+            else
+                aVariant = node->Desc;
+        }
         else
             aVariant = node->Desc;
         break;
