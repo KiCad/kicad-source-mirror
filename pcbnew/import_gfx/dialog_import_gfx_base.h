@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Apr 23 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,10 +25,10 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
-#include <wx/statline.h>
 #include <wx/radiobut.h>
 #include <wx/valtext.h>
 #include <wx/choice.h>
+#include <wx/statbox.h>
 #include <wx/bmpcbox.h>
 #include <wx/dialog.h>
 
@@ -46,8 +46,6 @@ class DIALOG_IMPORT_GFX_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextFile;
 		wxTextCtrl* m_textCtrlFileName;
 		wxButton* m_buttonBrowse;
-		wxStaticLine* m_staticline2;
-		wxStaticText* m_staticTextPlacement;
 		wxRadioButton* m_rbInteractivePlacement;
 		wxRadioButton* m_rbAbsolutePlacement;
 		wxStaticText* m_staticTextXpos;
@@ -56,8 +54,6 @@ class DIALOG_IMPORT_GFX_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_DxfPcbYCoord;
 		wxStaticText* m_staticTextUnits;
 		wxChoice* m_DxfPcbPositionUnits;
-		wxStaticLine* m_staticline3;
-		wxStaticText* m_staticTextPrms;
 		wxStaticText* m_staticTextLineWidth;
 		wxTextCtrl* m_textCtrlLineWidth;
 		wxChoice* m_choiceUnitLineWidth;
@@ -65,7 +61,6 @@ class DIALOG_IMPORT_GFX_BASE : public DIALOG_SHIM
 		PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;
 		wxStaticText* m_staticTextscale;
 		wxTextCtrl* m_textCtrlImportScale;
-		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
