@@ -27,6 +27,7 @@
 
 #include <wx/frame.h>
 #include <vector>
+#include <kiway_holder.h>
 #include <eda_base_frame.h>
 
 
@@ -35,78 +36,9 @@ class PROJECT;
 struct KIFACE;
 class KIFACE_I;
 class TOOL_MANAGER;
-
-#define VTBL_ENTRY          virtual
-
-
-/**
- * Class KIWAY_HOLDER
- * is a mix in class which holds the location of a wxWindow's KIWAY.  It allows
- * calls to Kiway() and SetKiway().
- *
- * Known to be used in at least DIALOG_SHIM, KICAD_MANAGER_FRAME and KIWAY_PLAYER classes.
- */
-class KIWAY_HOLDER
-{
-public:
-    KIWAY_HOLDER( KIWAY* aKiway ) :
-        m_kiway( aKiway )
-    {}
-
-    /**
-     * Function Kiway
-     * returns a reference to the KIWAY that this object has an opportunity
-     * to participate in.  A KIWAY_HOLDER is not necessarily a KIWAY_PLAYER.
-     */
-    KIWAY& Kiway() const
-    {
-        wxASSERT( m_kiway );    // smoke out bugs in Debug build, then Release runs fine.
-        return *m_kiway;
-    }
-
-    /**
-     * Function Prj
-     * returns a reference to the PROJECT "associated with" this KIWAY.
-     */
-    PROJECT& Prj() const;
-
-    /**
-     * Function GetUserUnits
-     * Allows participation in KEYWAY_PLAYER/DIALOG_SHIM userUnits inheritance.
-     *
-     * This would fit better in KEYWAY_PLAYER, but DIALOG_SHIMs can only use mix-ins
-     * because their primary superclass must be wxDialog.
-     */
-    VTBL_ENTRY EDA_UNITS_T GetUserUnits() const;
-
-    /**
-     * Function GetToolManager
-     * Return the tool manager instance, if any.
-     */
-    VTBL_ENTRY TOOL_MANAGER* GetToolManager() const;
-
-    /**
-     * Function SetKiway
-     *
-     * @param aDest is the recipient of aKiway pointer.
-     *  It is only used for debugging, since "this" is not a wxWindow*.  "this" is
-     *  a KIWAY_HOLDER mix-in.
-     *
-     * @param aKiway is often from a parent window, or from KIFACE::CreateWindow().
-     */
-    void SetKiway( wxWindow* aDest, KIWAY* aKiway );
-
-private:
-    // private, all setting is done through SetKiway().
-    KIWAY*          m_kiway;            // no ownership.
-};
-
-
 class KIWAY_EXPRESS;
 
 #define WX_EVENT_LOOP      wxGUIEventLoop
-
-
 class WX_EVENT_LOOP;
 
 
@@ -183,7 +115,7 @@ public:
      *
      * @return bool - true if all requested files were opened OK, else false.
      */
-    VTBL_ENTRY bool OpenProjectFiles( const std::vector<wxString>& aFileList, int aCtl = 0 )
+    virtual bool OpenProjectFiles( const std::vector<wxString>& aFileList, int aCtl = 0 )
     {
         // overload me for your wxFrame type.
 
@@ -211,7 +143,7 @@ public:
      * @return bool - true if frame implementation called KIWAY_PLAYER::DismissModal()
      *  with aRetVal of true.
      */
-    VTBL_ENTRY bool ShowModal( wxString* aResult = NULL, wxWindow* aResultantFocusWindow = NULL );
+    virtual bool ShowModal( wxString* aResult = NULL, wxWindow* aResultantFocusWindow = NULL );
 
     //----</Cross Module API>----------------------------------------------------
 

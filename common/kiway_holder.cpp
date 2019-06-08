@@ -24,7 +24,7 @@
  */
 
 #include <kiway.h>
-#include <kiway_player.h>
+#include <kiway_holder.h>
 
 #if defined(DEBUG)
  #include <typeinfo>

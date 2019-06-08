@@ -1,0 +1,97 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#ifndef KIWAY_HOLDER_H_
+#define KIWAY_HOLDER_H_
+
+#include <wx/frame.h>
+#include <base_units.h>
+
+class KIWAY;
+class PROJECT;
+class TOOL_MANAGER;
+
+
+/**
+ * Class KIWAY_HOLDER
+ * is a mix in class which holds the location of a wxWindow's KIWAY.  It allows calls to 
+ * Kiway() and SetKiway().
+ */
+class KIWAY_HOLDER
+{
+public:
+    KIWAY_HOLDER( KIWAY* aKiway ) :
+        m_kiway( aKiway )
+    {}
+
+    /**
+     * Function Kiway
+     * returns a reference to the KIWAY that this object has an opportunity
+     * to participate in.  A KIWAY_HOLDER is not necessarily a KIWAY_PLAYER.
+     */
+    KIWAY& Kiway() const
+    {
+        wxASSERT( m_kiway );    // smoke out bugs in Debug build, then Release runs fine.
+        return *m_kiway;
+    }
+
+    /**
+     * Function Prj
+     * returns a reference to the PROJECT "associated with" this KIWAY.
+     */
+    PROJECT& Prj() const;
+
+    /**
+     * Function GetUserUnits
+     * Allows participation in KEYWAY_PLAYER/DIALOG_SHIM userUnits inheritance.
+     *
+     * This would fit better in KEYWAY_PLAYER, but DIALOG_SHIMs can only use mix-ins
+     * because their primary superclass must be wxDialog.
+     */
+    virtual EDA_UNITS_T GetUserUnits() const;
+
+    /**
+     * Function GetToolManager
+     * Return the tool manager instance, if any.
+     */
+    virtual TOOL_MANAGER* GetToolManager() const;
+
+    /**
+     * Function SetKiway
+     *
+     * @param aDest is the recipient of aKiway pointer.
+     *  It is only used for debugging, since "this" is not a wxWindow*.  "this" is
+     *  a KIWAY_HOLDER mix-in.
+     *
+     * @param aKiway is often from a parent window, or from KIFACE::CreateWindow().
+     */
+    void SetKiway( wxWindow* aDest, KIWAY* aKiway );
+
+private:
+    // private, all setting is done through SetKiway().
+    KIWAY*          m_kiway;            // no ownership.
+};
+
+
+
+#endif // KIWAY_HOLDER_H_
