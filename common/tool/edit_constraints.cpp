@@ -173,8 +173,12 @@ void EC_CONVERGING::Apply( EDIT_LINE& aHandle )
 
     if( OPT_VECTOR2I originEndIntersect = endSide.Intersect( originSide ) )
     {
-        origin.SetPosition( *originEndIntersect );
-        end.SetPosition( *originEndIntersect );
+        // Triangle intersect by definition
+        if( m_editPoints.LinesSize() > 3 )
+        {
+            origin.SetPosition( *originEndIntersect );
+            end.SetPosition( *originEndIntersect );
+        }
     }
 }
 
