@@ -293,7 +293,7 @@ static bool validateAxisOptions( const wxTextCtrl& offsetEntry, const wxChoice& 
     }
 
     long step;
-    ok = validateLongEntry( aStepEntry, step, _( "step" ), errors );
+    ok = validateLongEntry( aStepEntry, step, _( "step value" ), errors );
 
     if( ok )
         aAxis.SetStep( step );
