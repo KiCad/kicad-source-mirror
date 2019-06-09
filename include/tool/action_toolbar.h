@@ -40,7 +40,7 @@ class TOOL_ACTION;
 class ACTION_TOOLBAR : public wxAuiToolBar
 {
 public:
-    ACTION_TOOLBAR( EDA_DRAW_FRAME* parent, wxWindowID id = wxID_ANY,
+    ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id = wxID_ANY,
                     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
                     long style = wxAUI_TB_DEFAULT_STYLE );
 

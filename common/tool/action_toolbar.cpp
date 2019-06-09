@@ -30,7 +30,7 @@
 #include <tool/action_toolbar.h>
 
 
-ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_DRAW_FRAME* parent, wxWindowID id, const wxPoint& pos,
+ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxPoint& pos,
                                 const wxSize& size, long style ) :
     wxAuiToolBar( parent, id, pos, size, style ),
     m_toolManager( parent->GetToolManager() )

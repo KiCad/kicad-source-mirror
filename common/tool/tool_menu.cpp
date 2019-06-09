@@ -82,6 +82,7 @@ using S_C = SELECTION_CONDITIONS;
 
 void TOOL_MENU::AddStandardSubMenus( EDA_DRAW_FRAME* aFrame )
 {
+#if defined( PCBNEW ) || defined( CVPCB ) || defined( EESCHEMA ) || defined( GERBVIEW ) || defined( PL_EDITOR )
     m_menu.AddItem( ACTIONS::zoomCenter, S_C::ShowAlways, 1000 );
     m_menu.AddItem( ACTIONS::zoomIn, S_C::ShowAlways, 1000  );
     m_menu.AddItem( ACTIONS::zoomOut, S_C::ShowAlways, 1000 );
@@ -94,4 +95,5 @@ void TOOL_MENU::AddStandardSubMenus( EDA_DRAW_FRAME* aFrame )
         m_menu.AddMenu( createOwnSubMenu<ZOOM_MENU>( aFrame ).get(), S_C::ShowAlways, 1000 );
         m_menu.AddMenu( createOwnSubMenu<GRID_MENU>( aFrame ).get(), S_C::ShowAlways, 1000 );
     }
+#endif
 }

@@ -224,6 +224,22 @@ public:
      */
     bool ProcessEvent( wxEvent& aEvent ) override;
 
+    /**
+     * Capture the key event before it is sent to the GUI.
+     *
+     * the basic frame does not capture this event.
+     * editor frames should override this event function to capture and filter
+     * these keys when they are used as hotkeys, and skip it if the key is not
+     * used as hotkey (otherwise the key events will be not sent to menus)
+     */
+    virtual void OnCharHook( wxKeyEvent& event );
+
+    /**
+     * Workaround some issues in wxWidgets where the menu events aren't captured by the
+     * menus themselves.
+     */
+    void OnMenuOpen( wxMenuEvent& event );
+
     void SetAutoSaveInterval( int aInterval );
 
     int GetAutoSaveInterval() const { return m_autoSaveInterval; }

@@ -231,9 +231,9 @@ int ACTION_MANAGER::processHotKey( TOOL_ACTION* aAction )
     {
         hotkey = hotkey & ~TOOL_ACTION::LEGACY_HK;  // it leaves only HK_xxx identifier
 
-        auto frame = dynamic_cast<EDA_DRAW_FRAME*>( m_toolMgr->GetEditFrame() );
+        auto frame = static_cast<EDA_DRAW_FRAME*>( m_toolMgr->GetEditFrame() );
         EDA_HOTKEY* hk_desc = nullptr;
-
+        
         if( frame )
             hk_desc = frame->GetHotKeyDescription( hotkey );
 

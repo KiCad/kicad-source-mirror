@@ -87,24 +87,6 @@ public:
     void OnCloseWindow( wxCloseEvent& Event );
     void OnSize( wxSizeEvent& event );
 
-    /**
-     * Load an exiting project (.pro) file.
-     */
-    void OnLoadProject( wxCommandEvent& event );
-
-    /**
-     * Creates a new project folder, copy a template into this new folder.
-     * and open this new projrct as working project
-     */
-    void OnCreateProjectFromTemplate( wxCommandEvent& event );
-
-    void OnNewProject( wxCommandEvent& aEvent );
-
-    /**
-     * Save the project (.pro) file containing the top level configuration parameters.
-     */
-    void OnSaveProject( wxCommandEvent& event );
-
     void OnArchiveFiles( wxCommandEvent& event );
     void OnUnarchiveFiles( wxCommandEvent& event );
 
@@ -154,10 +136,9 @@ public:
      */
     void ClearMsg();
 
-    void OnRefresh( wxCommandEvent& event );
-    void OnUpdateRequiresProject( wxUpdateUIEvent& event );
+    void RefreshProjectTree();
 
-    /**
+    /** 
      * Creates a new project by setting up and initial project, schematic, and board files.
      *
      * The project file is copied from the kicad.pro template file if possible.  Otherwise,
@@ -208,6 +189,7 @@ public:
      */
     void OnChangeWatchedPaths( wxCommandEvent& aEvent );
 
+    void SyncMenusAndToolbars() override;
 
     void SetProjectFileName( const wxString& aFullProjectProFileName );
     const wxString GetProjectFileName();
@@ -239,7 +221,7 @@ private:
     TREE_PROJECT_FRAME* m_LeftWin;
     LAUNCHER_PANEL*     m_Launcher;
     wxTextCtrl*         m_MessagesBox;
-    wxAuiToolBar*       m_mainToolBar;
+    ACTION_TOOLBAR*     m_mainToolBar;
 
     int m_leftWinWidth;
     EDA_HOTKEY_CONFIG* m_manager_Hotkeys_Descr;

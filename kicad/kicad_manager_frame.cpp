@@ -37,6 +37,8 @@
 #include "pgm_kicad.h"
 #include "tree_project_frame.h"
 #include "kicad_id.h"
+#include <tool/tool_manager.h>
+#include <tools/kicad_manager_control.h>
 
 #ifdef __WXMAC__
 #include <MacTypes.h>
@@ -84,6 +86,14 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_MessagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
                                     wxDefaultPosition, wxDefaultSize,
                                     wxTE_MULTILINE | wxTE_READONLY | wxBORDER_NONE );
+
+    // Create the manager
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( nullptr, nullptr, nullptr, this );
+
+    // Register tools
+    m_toolManager->RegisterTool( new KICAD_MANAGER_CONTROL );
+    m_toolManager->InitTools();
 
     RecreateBaseHToolbar();
     ReCreateMenuBar();
@@ -513,7 +523,7 @@ void KICAD_MANAGER_FRAME::OnBrowseInFileExplorer( wxCommandEvent& event )
 }
 
 
-void KICAD_MANAGER_FRAME::OnRefresh( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::RefreshProjectTree()
 {
     m_LeftWin->ReCreateTreePrj();
 }

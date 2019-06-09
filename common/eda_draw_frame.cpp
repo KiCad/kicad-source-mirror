@@ -40,7 +40,6 @@
 #include <view/view.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
-#include <tool/action_menu.h>
 #include <tool/actions.h>
 #include <wx/clipbrd.h>
 #include <ws_draw_item.h>
@@ -74,14 +73,6 @@ static const wxString FirstRunShownKeyword( wxT( "FirstRunShown" ) );
  * \ingroup develconfig
  */
 static const wxString MaxUndoItemsEntry(wxT( "DevelMaxUndoItems" ) );
-
-BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
-    EVT_CHAR_HOOK( EDA_DRAW_FRAME::OnCharHook )
-    EVT_MENU_OPEN( EDA_DRAW_FRAME::OnMenuOpen )
-    EVT_MENU_CLOSE( EDA_DRAW_FRAME::OnMenuOpen )
-    EVT_MENU_HIGHLIGHT_ALL( EDA_DRAW_FRAME::OnMenuOpen )
-END_EVENT_TABLE()
-
 
 EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
                                 const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
@@ -193,15 +184,6 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 }
 
 
-void EDA_DRAW_FRAME::OnCharHook( wxKeyEvent& event )
-{
-    wxLogTrace( kicadTraceKeyEvent, "EDA_DRAW_FRAME::OnCharHook %s", dump( event ) );
-    // Key events can be filtered here.
-    // Currently no filtering is made.
-    event.Skip();
-}
-
-
 void EDA_DRAW_FRAME::ReleaseFile()
 {
     m_file_checker = nullptr;
@@ -256,44 +238,6 @@ void EDA_DRAW_FRAME::EraseMsgBox()
 {
     if( m_messagePanel )
         m_messagePanel->EraseMsgBox();
-}
-
-
-void EDA_DRAW_FRAME::OnMenuOpen( wxMenuEvent& event )
-{
-    // On wxWidgets 3.0.x Windows, EVT_MENU_OPEN and EVT_MENU_HIGHLIGHT events are not
-    // captured by the ACTON_MENU menus.  While it is fixed in wxWidgets 3.1.x, we still
-    // need a solution for the earlier verions.
-    //
-    // This could be made conditional, but for now I'm going to use the same strategy
-    // everywhere so it gets wider testing.
-    // Note that if the conditional compilation is reactivated, the Connect() lines in
-    // ACTION_MENU::setupEvents() will need to be re-enabled.
-//#if defined( __WINDOWS__ ) && wxCHECK_VERSION( 3, 0, 0 ) && !wxCHECK_VERSION( 3, 1, 0 )
-
-    // As if things weren't bad enough, wxWidgets doesn't pass the menu pointer when the
-    // event is a wxEVT_MENU_HIGHLIGHT, so we store the menu from the EVT_MENU_OPEN call.
-    static ACTION_MENU* currentMenu;
-
-    if( event.GetEventType() == wxEVT_MENU_OPEN )
-    {
-        currentMenu = dynamic_cast<ACTION_MENU*>( event.GetMenu() );
-
-        if( currentMenu )
-            currentMenu->OnMenuEvent( event );
-    }
-    else if( event.GetEventType() == wxEVT_MENU_HIGHLIGHT )
-    {
-        if( currentMenu )
-            currentMenu->OnMenuEvent( event );
-    }
-    else // if( event.GetEventType() == wxEVT_MENU_CLOSE )
-    {
-        currentMenu = nullptr;
-    }
-//#endif
-
-    event.Skip();
 }
 
 

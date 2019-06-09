@@ -449,8 +449,8 @@ void TOOL_MANAGER::InitTools()
 
         if( !tool->Init() )
         {
-            wxMessageBox(
-                    wxString::Format( "Initialization of tool \"%s\" failed", tool->GetName() ) );
+            wxMessageBox( wxString::Format( "Initialization of tool \"%s\" failed", 
+                                            tool->GetName() ) );
 
             // Unregister the tool
             setActiveState( nullptr );
@@ -779,7 +779,7 @@ bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
     if( TOOL_STATE* active = GetCurrentToolState() )
         setActiveState( active );
 
-    if( m_view->IsDirty() )
+    if( m_view && m_view->IsDirty() )
     {
         GetEditFrame()->RefreshCanvas();
 
@@ -947,12 +947,12 @@ bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
 
 void TOOL_MANAGER::setActiveState( TOOL_STATE* aState )
 {
-    if( m_activeState )
+    if( m_activeState && m_viewControls )
         saveViewControls( m_activeState );
 
     m_activeState = aState;
 
-    if( m_activeState )
+    if( m_activeState && m_viewControls )
         applyViewControls( aState );
 }
 

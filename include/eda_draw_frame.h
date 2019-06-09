@@ -212,16 +212,6 @@ public:
     ~EDA_DRAW_FRAME();
 
     /**
-     * Capture the key event before it is sent to the GUI.
-     *
-     * the basic frame does not capture this event.
-     * editor frames should override this event function to capture and filter
-     * these keys when they are used as hotkeys, and skip it if the key is not
-     * used as hotkey (otherwise the key events will be not sent to menus)
-     */
-    virtual void OnCharHook( wxKeyEvent& event );
-
-    /**
      * Mark a schematic file as being in use.  Use ReleaseFile() to undo this.
      *
      * @param aFileName = full path to the file.
@@ -360,8 +350,6 @@ public:
      * @param cmdline = received command from socket
      */
     virtual void ExecuteRemoteCommand( const char* cmdline ){}
-
-    void OnMenuOpen( wxMenuEvent& event );
 
     ///> @copydoc EDA_BASE_FRAME::WriteHotkeyConfig
     int WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList, wxString* aFullFileName = NULL ) override;
@@ -683,9 +671,12 @@ public:
      */
     KIGFX::GAL_DISPLAY_OPTIONS& GetGalDisplayOptions() { return m_galDisplayOptions; }
 
+    void RefreshCanvas() override
+    {
+        GetGalCanvas()->Refresh();
+    }
+    
     virtual const BOX2I GetDocumentExtents() const;
-
-    DECLARE_EVENT_TABLE()
 };
 
 #endif  // DRAW_FRAME_H_

@@ -23,16 +23,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file eda_base_frame.cpp
- * @brief EDA_BASE_FRAME class implementation.
- */
-
-
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 #include <wx/display.h>
-
 #include <dialog_shim.h>
 #include <eda_doc.h>
 #include <id.h>
@@ -77,6 +70,11 @@ BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
     EVT_MENU( wxID_INDEX, EDA_BASE_FRAME::GetKicadHelp )
     EVT_MENU( ID_HELP_GET_INVOLVED, EDA_BASE_FRAME::GetKicadContribute )
     EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::GetKicadAbout )
+    
+    EVT_CHAR_HOOK( EDA_BASE_FRAME::OnCharHook )
+    EVT_MENU_OPEN( EDA_BASE_FRAME::OnMenuOpen )
+    EVT_MENU_CLOSE( EDA_BASE_FRAME::OnMenuOpen )
+    EVT_MENU_HIGHLIGHT_ALL( EDA_BASE_FRAME::OnMenuOpen )
 END_EVENT_TABLE()
 
 EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
@@ -238,6 +236,53 @@ bool EDA_BASE_FRAME::doAutoSave()
 }
 
 
+void EDA_BASE_FRAME::OnCharHook( wxKeyEvent& event )
+{
+    wxLogTrace( kicadTraceKeyEvent, "EDA_DRAW_FRAME::OnCharHook %s", dump( event ) );
+    // Key events can be filtered here.
+    // Currently no filtering is made.
+    event.Skip();
+}
+
+
+void EDA_BASE_FRAME::OnMenuOpen( wxMenuEvent& event )
+{
+    // On wxWidgets 3.0.x Windows, EVT_MENU_OPEN and EVT_MENU_HIGHLIGHT events are not
+    // captured by the ACTON_MENU menus.  While it is fixed in wxWidgets 3.1.x, we still
+    // need a solution for the earlier verions.
+    //
+    // This could be made conditional, but for now I'm going to use the same strategy
+    // everywhere so it gets wider testing.
+    // Note that if the conditional compilation is reactivated, the Connect() lines in
+    // ACTION_MENU::setupEvents() will need to be re-enabled.
+//#if defined( __WINDOWS__ ) && wxCHECK_VERSION( 3, 0, 0 ) && !wxCHECK_VERSION( 3, 1, 0 )
+
+    // As if things weren't bad enough, wxWidgets doesn't pass the menu pointer when the
+    // event is a wxEVT_MENU_HIGHLIGHT, so we store the menu from the EVT_MENU_OPEN call.
+    static ACTION_MENU* currentMenu;
+
+    if( event.GetEventType() == wxEVT_MENU_OPEN )
+    {
+        currentMenu = dynamic_cast<ACTION_MENU*>( event.GetMenu() );
+
+        if( currentMenu )
+            currentMenu->OnMenuEvent( event );
+    }
+    else if( event.GetEventType() == wxEVT_MENU_HIGHLIGHT )
+    {
+        if( currentMenu )
+            currentMenu->OnMenuEvent( event );
+    }
+    else // if( event.GetEventType() == wxEVT_MENU_CLOSE )
+    {
+        currentMenu = nullptr;
+    }
+//#endif
+
+    event.Skip();
+}
+
+
 void EDA_BASE_FRAME::ReCreateMenuBar()
 {
 }
@@ -257,6 +302,7 @@ void EDA_BASE_FRAME::AddStandardHelpMenu( wxMenuBar* aMenuBar )
                  _( "Open \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
+    // JEY TODO: move to actions...
     AddMenuItem( helpMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, _( "&List Hotkeys..." ),
                  _( "Displays current hotkeys table and corresponding commands" ),
                  KiBitmap( hotkeys_xpm ) );

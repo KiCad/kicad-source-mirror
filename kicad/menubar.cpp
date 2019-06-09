@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,16 +23,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file kicad/menubar.cpp
- * @brief (Re)Create the project manager menubar for KiCad
- */
-
-
 #include <bitmaps.h>
 #include <hotkeys_basic.h>
 #include <menus_helpers.h>
-
+#include <tool/tool_manager.h>
+#include <tools/kicad_manager_control.h>
+#include <tools/kicad_manager_actions.h>
 #include "kicad_manager_frame.h"
 #include "pgm_kicad.h"
 #include "kicad_id.h"
@@ -44,13 +40,7 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     EVT_SIZE( KICAD_MANAGER_FRAME::OnSize )
     EVT_CLOSE( KICAD_MANAGER_FRAME::OnCloseWindow )
 
-    // Toolbar events
-    EVT_TOOL( ID_NEW_PROJECT, KICAD_MANAGER_FRAME::OnNewProject )
-    EVT_TOOL( ID_NEW_PROJECT_FROM_TEMPLATE, KICAD_MANAGER_FRAME::OnCreateProjectFromTemplate )
-    EVT_TOOL( ID_LOAD_PROJECT, KICAD_MANAGER_FRAME::OnLoadProject )
-
     // Menu events
-    EVT_MENU( ID_SAVE_PROJECT, KICAD_MANAGER_FRAME::OnSaveProject )
     EVT_MENU( wxID_EXIT, KICAD_MANAGER_FRAME::OnExit )
     EVT_MENU( ID_TO_TEXT_EDITOR, KICAD_MANAGER_FRAME::OnOpenTextEditor )
     EVT_MENU( ID_BROWSE_AN_SELECT_FILE, KICAD_MANAGER_FRAME::OnOpenFileInTextEditor )
@@ -61,7 +51,6 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     EVT_MENU( wxID_PREFERENCES, KICAD_MANAGER_FRAME::OnPreferences )
     EVT_MENU( ID_SAVE_AND_ZIP_FILES, KICAD_MANAGER_FRAME::OnArchiveFiles )
     EVT_MENU( ID_READ_ZIP_ARCHIVE, KICAD_MANAGER_FRAME::OnUnarchiveFiles )
-    EVT_MENU( ID_PROJECT_TREE_REFRESH, KICAD_MANAGER_FRAME::OnRefresh )
     EVT_MENU( ID_IMPORT_EAGLE_PROJECT, KICAD_MANAGER_FRAME::OnImportEagleFiles )
 
     // Range menu events
@@ -101,9 +90,6 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
 
     EVT_BUTTON( ID_TO_PL_EDITOR, KICAD_MANAGER_FRAME::OnRunPageLayoutEditor )
     EVT_MENU( ID_TO_PL_EDITOR, KICAD_MANAGER_FRAME::OnRunPageLayoutEditor )
-
-    EVT_UPDATE_UI_RANGE( ID_TO_SCH, ID_TO_PCB_FP_EDITOR,
-                         KICAD_MANAGER_FRAME::OnUpdateRequiresProject )
 
 END_EVENT_TABLE()
 
@@ -184,184 +170,88 @@ struct EDA_HOTKEY_CONFIG kicad_Manager_Hotkeys_Descr[] = {
  */
 void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 {
-    wxString msg;
-    static wxMenu* openRecentMenu;  // Open Recent submenu,
-                                    // static to remember this menu
-
-    m_manager_Hotkeys_Descr = kicad_Manager_Hotkeys_Descr;
-
+    KICAD_MANAGER_CONTROL* controlTool = m_toolManager->GetTool<KICAD_MANAGER_CONTROL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar*  oldMenuBar = GetMenuBar();
     wxMenuBar*  menuBar = new wxMenuBar();
+
+    m_manager_Hotkeys_Descr = kicad_Manager_Hotkeys_Descr;
+
+    //-- File menu -----------------------------------------------------------
+    //
+    CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, controlTool );
+    static ACTION_MENU* openRecentMenu;
 
     // Before deleting, remove the menus managed by m_fileHistory
     // (the file history will be updated when adding/removing files in history)
     if( openRecentMenu )
         PgmTop().GetFileHistory().RemoveMenu( openRecentMenu );
 
-    // Recreate all menus:
+    openRecentMenu = new ACTION_MENU();
+    openRecentMenu->SetTool( controlTool );
+    openRecentMenu->SetTitle( _( "Open Recent" ) );
+    openRecentMenu->SetIcon( recent_xpm );
 
-    // Menu File:
-    wxMenu* fileMenu = new wxMenu;
-
-    // New project creation
-    wxMenu* newprjSubMenu = new wxMenu();
-    msg = AddHotkeyName( _( "&Project..." ), kicad_Manager_Hotkeys_Descr, HK_NEW );
-    AddMenuItem( newprjSubMenu, ID_NEW_PROJECT, msg,
-                 _( "Create new blank project" ),
-                 KiBitmap( new_project_xpm ) );
-    msg = AddHotkeyName( _( "Project from &Template..." ),
-                         kicad_Manager_Hotkeys_Descr, HK_NEW_PRJ_TEMPLATE );
-    AddMenuItem( newprjSubMenu, ID_NEW_PROJECT_FROM_TEMPLATE, msg,
-                 _( "Create new project from template" ),
-                 KiBitmap( new_project_with_template_xpm ) );
-    AddMenuItem( fileMenu, newprjSubMenu,
-                 wxID_ANY,
-                 _( "&New" ),
-                 _( "Create new project" ),
-                 KiBitmap( new_project_xpm ) );
-
-    // Open
-    msg = AddHotkeyName( _( "&Open Project..." ), kicad_Manager_Hotkeys_Descr, HK_OPEN );
-    AddMenuItem( fileMenu, ID_LOAD_PROJECT, msg,
-                 _( "Open an existing project" ),
-                 KiBitmap( open_project_xpm ) );
-
-    // File history
-    openRecentMenu = new wxMenu();
     PgmTop().GetFileHistory().UseMenu( openRecentMenu );
-    PgmTop().GetFileHistory().AddFilesToMenu( );
-    AddMenuItem( fileMenu, openRecentMenu,
-                 wxID_ANY,
-                 _( "Open &Recent" ),
-                 _( "Open a recent project" ),
-                 KiBitmap( recent_xpm ) );
+    PgmTop().GetFileHistory().AddFilesToMenu( openRecentMenu );
 
-    // Currently there is nothing to save
-    // (Kicad manager does not save any info in .pro file)
-#if 0
-    // Save
-    msg = AddHotkeyName( _( "&Save" ), kicad_Manager_Hotkeys_Descr, HK_SAVE );
-    AddMenuItem( fileMenu, ID_SAVE_PROJECT, msg,
-                 _( "Save current project" ),
-                 KiBitmap( save_project_xpm ) );
-#endif
+    fileMenu->AddItem( KICAD_MANAGER_ACTIONS::newProject,      SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( KICAD_MANAGER_ACTIONS::newFromTemplate, SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( KICAD_MANAGER_ACTIONS::openProject,     SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddMenu( openRecentMenu,                         SELECTION_CONDITIONS::ShowAlways );
+    
+    fileMenu->AddSeparator();
+    fileMenu->AddItem( ID_IMPORT_EAGLE_PROJECT, 
+                       _( "Import EAGLE Project..." ), 
+                       _( "Import EAGLE CAD XML schematic and board" ),
+                       import_project_xpm,                     SELECTION_CONDITIONS::ShowAlways );
 
-    fileMenu->AppendSeparator();
-    wxMenu* importprjSubMenu = new wxMenu();
+    fileMenu->AddSeparator();
+    fileMenu->AddItem( ID_SAVE_AND_ZIP_FILES,
+                       _( "&Archive Project..." ),
+                       _( "Archive all needed project files into zip archive" ),
+                       zip_xpm,                                SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( importprjSubMenu, ID_IMPORT_EAGLE_PROJECT, _( "EAGLE CAD..." ),
-            _( "Import EAGLE CAD XML schematic and board" ),
-            KiBitmap( import_project_xpm ) );
+    fileMenu->AddItem( ID_READ_ZIP_ARCHIVE,
+                       _( "&Unarchive Project..." ),  
+                       _( "Unarchive project files from zip archive" ),
+                       unzip_xpm,                              SELECTION_CONDITIONS::ShowAlways );
 
+    fileMenu->AddSeparator();
+    // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
+    fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm,   SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( fileMenu, importprjSubMenu,
-            wxID_ANY,
-            _( "Import Project" ),
-            _( "Import project files from other software" ),
-            KiBitmap( import_project_xpm ) );
+    fileMenu->Resolve();
 
+    //-- View menu -----------------------------------------------------------
+    //
+    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, controlTool );
+    viewMenu->AddItem( ACTIONS::zoomRedraw,             SELECTION_CONDITIONS::ShowAlways );
 
-    fileMenu->AppendSeparator();
+    viewMenu->AddSeparator();
+    viewMenu->AddItem( ID_TO_TEXT_EDITOR,
+                       _( "Open Text Editor" ), _( "Launch preferred text editor" ),
+                       editor_xpm,                      SELECTION_CONDITIONS::ShowAlways );
 
-    // Archive
-    AddMenuItem( fileMenu,
-                 ID_SAVE_AND_ZIP_FILES,
-                 _( "&Archive Project..." ),
-                 _( "Archive all needed project files into zip archive" ),
-                 KiBitmap( zip_xpm ) );
+    viewMenu->AddItem( ID_BROWSE_AN_SELECT_FILE,
+                       _( "Open Local File..." ), _( "Edit local file" ),
+                       browse_files_xpm,                SELECTION_CONDITIONS::ShowAlways );
 
-    // Unarchive
-    AddMenuItem( fileMenu,
-                 ID_READ_ZIP_ARCHIVE,
-                 _( "&Unarchive Project..." ),
-                 _( "Unarchive project files from zip archive" ),
-                 KiBitmap( unzip_xpm ) );
-
-    // Separator
-    fileMenu->AppendSeparator();
-
-    // Quit
-    AddMenuItem( fileMenu,
-                 wxID_EXIT,
-                 _( "&Exit" ),
-                 _( "Close KiCad" ),
-                 KiBitmap( exit_xpm ) );
-
-     // View Menu:
-     wxMenu* viewMenu = new wxMenu();
-
-     // Refresh project tree
-     msg = AddHotkeyName( _( "&Refresh" ), kicad_Manager_Hotkeys_Descr, HK_REFRESH );
-     AddMenuItem( viewMenu, ID_PROJECT_TREE_REFRESH, msg,
-                  _( "Refresh project tree" ),
-                  KiBitmap( reload_xpm ) );
+    viewMenu->AddItem( ID_BROWSE_IN_FILE_EXPLORER,
+                       _( "Browse Project Files" ), _( "Open project directory in file browser" ),
+                       directory_browser_xpm,           SELECTION_CONDITIONS::ShowAlways );
 
 #ifdef __APPLE__
-    viewMenu->AppendSeparator();
+    viewMenu->AddSeparator();
 #endif
 
-    // Menu Browse:
-    wxMenu* browseMenu = new wxMenu();
+    viewMenu->Resolve();
 
-    // Text editor
-    AddMenuItem( browseMenu,
-                 ID_TO_TEXT_EDITOR,
-                 _( "Open Text E&ditor" ),
-                 _( "Launch preferred text editor" ),
-                 KiBitmap( editor_xpm ) );
-
-    // View file
-    AddMenuItem( browseMenu,
-                 ID_BROWSE_AN_SELECT_FILE,
-                 _( "&Open Local File..." ),
-                 _( "Edit local file" ),
-                 KiBitmap( browse_files_xpm ) );
-
-    // Browse in file explorer
-    browseMenu->AppendSeparator();
-    AddMenuItem( browseMenu,
-                ID_BROWSE_IN_FILE_EXPLORER,
-                _( "&Browse Project Files" ),
-                _( "Open project directory in file explorer" ),
-                KiBitmap( directory_browser_xpm ) );
-
-    // Menu Preferences:
-    wxMenu* preferencesMenu = new wxMenu;
-
-    // Path configuration edit dialog.
-    AddMenuItem( preferencesMenu,
-                 ID_PREFERENCES_CONFIGURE_PATHS,
-                 _( "&Configure Paths..." ),
-                 _( "Edit path configuration environment variables" ),
-                 KiBitmap( path_xpm ) );
-
-    AddMenuItem( preferencesMenu,
-                 ID_EDIT_SYMBOL_LIBRARY_TABLE,
-                 _( "Manage &Symbol Libraries..." ),
-                 _( "Edit the global and project symbol library tables" ),
-                 KiBitmap( library_table_xpm ) );
-
-    AddMenuItem( preferencesMenu,
-                 ID_EDIT_FOOTPRINT_LIBRARY_TABLE,
-                 _( "Manage &Footprint Libraries..." ),
-                 _( "Configure footprint library table" ),
-                 KiBitmap( library_table_xpm ) );
-
-    msg = AddHotkeyName( _( "Preferences..." ), kicad_Manager_Hotkeys_Descr, HK_PREFERENCES );
-    AddMenuItem( preferencesMenu, wxID_PREFERENCES, msg,
-                 _( "Show preferences for all open tools" ),
-                 KiBitmap( preference_xpm ) );
-
-    preferencesMenu->AppendSeparator();
-
-    // Language submenu
-    Pgm().AddMenuLanguageList( preferencesMenu );
-
-    // Menu Tools:
+    //-- Tools menu -----------------------------------------------
+    //
     wxMenu* toolsMenu = new wxMenu;
-
+    wxString msg;
     msg = AddHotkeyName( _( "Edit Schematic" ), kicad_Manager_Hotkeys_Descr, HK_RUN_EESCHEMA );
     AddMenuItem( toolsMenu, ID_TO_SCH, msg, KiBitmap( eeschema_xpm ) );
 
@@ -397,12 +287,27 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  _( "Edit worksheet graphics and text" ),
                  KiBitmap( pagelayout_load_xpm ) );
 
-    // Create the menubar and append all submenus
+    //-- Preferences menu -----------------------------------------------
+    //
+    CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, controlTool );
+
+    prefsMenu->AddItem( ACTIONS::configurePaths,        SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->AddItem( ACTIONS::showSymbolLibTable,    SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->AddItem( ACTIONS::showFootprintLibTable, SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->AddItem( wxID_PREFERENCES,
+                        AddHotkeyName( _( "Preferences..." ), kicad_Manager_Hotkeys_Descr, HK_PREFERENCES ),
+                        _( "Show preferences for all open tools" ),
+                        preference_xpm,                 SELECTION_CONDITIONS::ShowAlways );
+
+    prefsMenu->AddSeparator();
+    Pgm().AddMenuLanguageList( prefsMenu );
+
+    //-- Menubar -------------------------------------------------------------
+    //
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( toolsMenu, _( "&Tools" ) );
-    menuBar->Append( browseMenu, _( "&Browse" ) );
-    menuBar->Append( preferencesMenu, _( "&Preferences" ) );
+    menuBar->Append( prefsMenu, _( "&Preferences" ) );
     AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );
@@ -427,52 +332,26 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
     if( m_mainToolBar )
         m_mainToolBar->Clear();
     else
-        m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // New
-    m_mainToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString,
-                            KiScaledBitmap( new_project_xpm, this ),
-                            _( "Create new project" ) );
-
-    m_mainToolBar->AddTool( ID_NEW_PROJECT_FROM_TEMPLATE, wxEmptyString,
-                            KiScaledBitmap( new_project_with_template_xpm, this ),
-                            _( "Create new project from template" ) );
-
-    // Load
-    m_mainToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString,
-                            KiScaledBitmap( open_project_xpm, this ),
-                            _( "Open existing project" ) );
-
-    // Currently there is nothing to save
-    // (Kicad manager does not save any info in .pro file)
-#if 0
-    // Save
-    m_mainToolBar->AddTool( ID_SAVE_PROJECT, wxEmptyString,
-                            KiScaledBitmap( save_project_xpm, this ),
-                            _( "Save current project" ) );
-#endif
+    m_mainToolBar->Add( KICAD_MANAGER_ACTIONS::newProject );
+    m_mainToolBar->Add( KICAD_MANAGER_ACTIONS::newFromTemplate );
+    m_mainToolBar->Add( KICAD_MANAGER_ACTIONS::openProject );
 
     KiScaledSeparator( m_mainToolBar, this );
-
-    // Archive
     m_mainToolBar->AddTool( ID_SAVE_AND_ZIP_FILES, wxEmptyString,
                             KiScaledBitmap( zip_xpm, this ),
                             _( "Archive all project files" ) );
 
-    // Unarchive
     m_mainToolBar->AddTool( ID_READ_ZIP_ARCHIVE, wxEmptyString,
                             KiScaledBitmap( unzip_xpm, this ),
                             _( "Unarchive project files from zip archive" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->Add( ACTIONS::zoomRedraw );
 
-    // Refresh project tree
-    m_mainToolBar->AddTool( ID_PROJECT_TREE_REFRESH, wxEmptyString,
-                            KiScaledBitmap( reload_xpm, this ),
-                            _( "Refresh project tree" ) );
-
-    // Acces to the system file manager
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_BROWSE_IN_FILE_EXPLORER, wxEmptyString,
                             KiScaledBitmap( directory_browser_xpm, this ),
@@ -481,3 +360,15 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
     // Create m_mainToolBar
     m_mainToolBar->Realize();
 }
+
+
+void KICAD_MANAGER_FRAME::SyncMenusAndToolbars()
+{
+    m_mainToolBar->ToggleTool( ID_TO_SCH,            m_active_project );
+    m_mainToolBar->ToggleTool( ID_TO_SCH_LIB_EDITOR, m_active_project );
+    m_mainToolBar->ToggleTool( ID_TO_PCB,            m_active_project );
+    m_mainToolBar->ToggleTool( ID_TO_PCB_FP_EDITOR,  m_active_project );
+    m_mainToolBar->Refresh();
+}
+
+

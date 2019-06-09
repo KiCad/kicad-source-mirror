@@ -126,10 +126,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     PrintMsg( wxT( "** end **\n" ) );
 
     if( unzipDir == Prj().GetProjectPath() )
-    {
-        wxCommandEvent dummy;
-        OnRefresh( dummy );
-    }
+        RefreshProjectTree();
 }
 
 

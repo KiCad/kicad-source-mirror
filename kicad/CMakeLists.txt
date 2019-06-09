@@ -27,6 +27,7 @@ set( KICAD_SRCS
     tree_project_frame.cpp
     treeprojectfiles.cpp
     treeproject_item.cpp
+    tools/kicad_manager_control.cpp
     )
 
 if( MINGW )
