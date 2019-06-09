@@ -48,7 +48,7 @@
 #include <io_mgr.h>
 #include <sch_io_mgr.h>
 
-#include "kicad.h"
+#include "kicad_manager_frame.h"
 
 void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 {

@@ -28,7 +28,7 @@
 
 #include <wx/treebase.h>
 
-#include "kicad.h"
+#include "kicad_manager_frame.h"
 
 
 /**

@@ -23,12 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file kicad/mainframe.cpp
- * @brief KICAD_MANAGER_FRAME is the KiCad main frame.
- */
-
-
 #include <eda_draw_frame.h>
 #include <panel_hotkeys_editor.h>
 #include <gestfich.h>
@@ -49,15 +43,15 @@
 #include <ApplicationServices/ApplicationServices.h>
 #endif
 
-#include "kicad.h"
+#include "kicad_manager_frame.h"
 
 
 #define TREE_FRAME_WIDTH_ENTRY     wxT( "LeftWinWidth" )
 
-KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent,
-        const wxString& title, const wxPoint&  pos, const wxSize&   size ) :
-    EDA_BASE_FRAME( parent, KICAD_MAIN_FRAME_T, title, pos, size,
-                    KICAD_DEFAULT_DRAWFRAME_STYLE, KICAD_MANAGER_FRAME_NAME, &::Kiway )
+KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title, 
+                                          const wxPoint& pos, const wxSize&   size ) :
+        EDA_BASE_FRAME( parent, KICAD_MAIN_FRAME_T, title, pos, size,
+                        KICAD_DEFAULT_DRAWFRAME_STYLE, KICAD_MANAGER_FRAME_NAME, &::Kiway )
 {
     m_active_project = false;
     m_mainToolBar = nullptr;

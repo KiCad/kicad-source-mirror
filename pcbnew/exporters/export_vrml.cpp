@@ -47,7 +47,7 @@
 #include "streamwrapper.h"
 #include "vrml_layer.h"
 #include "pcb_edit_frame.h"
-#include "../../kicad/kicad.h"
+#include "kicad/kicad_manager_frame.h"
 
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>

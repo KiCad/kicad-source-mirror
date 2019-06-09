@@ -20,7 +20,7 @@ set( KICAD_SRCS
     files-io.cpp
     import_project.cpp
     kicad.cpp
-    mainframe.cpp
+    kicad_manager_frame.cpp
     menubar.cpp
     prjconfig.cpp
     project_template.cpp

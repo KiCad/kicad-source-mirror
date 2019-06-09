@@ -33,7 +33,7 @@
 #include <hotkeys_basic.h>
 #include <menus_helpers.h>
 
-#include "kicad.h"
+#include "kicad_manager_frame.h"
 #include "pgm_kicad.h"
 #include "kicad_id.h"
 

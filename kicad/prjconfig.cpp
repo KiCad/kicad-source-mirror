@@ -42,7 +42,7 @@
 
 #include "dialogs/dialog_template_selector.h"
 
-#include "kicad.h"
+#include "kicad_manager_frame.h"
 #include "pgm_kicad.h"
 #include "tree_project_frame.h"
 #include "kicad_id.h"

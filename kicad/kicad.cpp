@@ -43,8 +43,7 @@
 #include <stdexcept>
 
 #include "pgm_kicad.h"
-
-#include "kicad.h"
+#include "kicad_manager_frame.h"
 
 
 // a dummy to quiet linking with EDA_BASE_FRAME::config();

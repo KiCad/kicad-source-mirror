@@ -34,7 +34,7 @@
 #include <wx/laywin.h>
 #include <wx/treebase.h>
 
-#include "kicad.h"
+#include "kicad_manager_frame.h"
 
 
 class KICAD_MANAGER_FRAME;

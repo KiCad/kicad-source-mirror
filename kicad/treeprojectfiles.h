@@ -32,7 +32,7 @@
 
 #include <wx/treectrl.h>
 
-#include "kicad.h"
+#include "kicad_manager_frame.h"
 
 
 /** Class TREEPROJECTFILES

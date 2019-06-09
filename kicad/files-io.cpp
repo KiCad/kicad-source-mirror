@@ -38,7 +38,7 @@
 #include "pgm_kicad.h"
 #include "wildcards_and_files_ext.h"
 
-#include "kicad.h"
+#include "kicad_manager_frame.h"
 
 
 #define ZipFileExtension wxT( "zip" )
