@@ -34,7 +34,7 @@
 
 
 LIB_MOVE_TOOL::LIB_MOVE_TOOL() :
-        EE_TOOL_BASE( "libedit.InteractiveMove" ),
+        EE_TOOL_BASE( "eeschema.SymbolMoveTool" ),
         m_moveInProgress( false ),
         m_moveOffset( 0, 0 )
 {

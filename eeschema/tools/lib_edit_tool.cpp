@@ -44,7 +44,7 @@
 
 
 LIB_EDIT_TOOL::LIB_EDIT_TOOL() :
-        EE_TOOL_BASE( "libedit.InteractiveEdit" )
+        EE_TOOL_BASE( "eeschema.SymbolEditTool" )
 {
 }
 
@@ -61,7 +61,7 @@ bool LIB_EDIT_TOOL::Init()
     LIB_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<LIB_DRAWING_TOOLS>();
     LIB_MOVE_TOOL*     moveTool = m_toolMgr->GetTool<LIB_MOVE_TOOL>();
 
-    wxASSERT_MSG( drawingTools, "libedit.InteractiveDrawing tool is not available" );
+    wxASSERT_MSG( drawingTools, "eeschema.SymbolDrawing tool is not available" );
 
     //
     // Add edit actions to the move tool menu

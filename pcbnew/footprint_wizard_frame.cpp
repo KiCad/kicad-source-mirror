@@ -320,7 +320,7 @@ void FOOTPRINT_WIZARD_FRAME::UpdateMsgPanel()
     {
         MSG_PANEL_ITEMS items;
 
-        footprint->GetMsgPanelInfo( m_UserUnits, items );
+        footprint->GetMsgPanelInfo( m_userUnits, items );
         SetMsgPanel( items );
     }
     else

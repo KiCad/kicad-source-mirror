@@ -75,7 +75,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                         wxDefaultPosition, wxDefaultSize,
                         KICAD_DEFAULT_DRAWFRAME_STYLE, PL_EDITOR_FRAME_NAME )
 {
-    m_UserUnits = MILLIMETRES;
+    m_userUnits = MILLIMETRES;
     m_zoomLevelCoeff = 290.0;   // Adjusted to roughly displays zoom level = 1
                                 // when the screen shows a 1:1 image
                                 // obviously depends on the monitor,

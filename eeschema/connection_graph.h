@@ -158,7 +158,7 @@ public:
 
     SCH_SHEET_PATH m_sheet;
 
-    // Needed for m_UserUnits for now; maybe refactor later
+    // Needed for m_userUnits for now; maybe refactor later
     SCH_EDIT_FRAME* m_frame;
 
     /// Cache for driver connection
@@ -283,7 +283,7 @@ private:
 
     std::mutex m_item_mutex;
 
-    // Needed for m_UserUnits for now; maybe refactor later
+    // Needed for m_userUnits for now; maybe refactor later
     SCH_EDIT_FRAME* m_frame;
 
     /**

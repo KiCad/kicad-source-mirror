@@ -39,7 +39,7 @@ wxString HOTKEY_STORE::GetSectionName( TOOL_ACTION* aAction )
             { wxT( "common" ),   _( "Common" ) },
             { wxT( "kicad" ),    _( "Kicad Manager" ) },
             { wxT( "eeschema" ), _( "Eeschema" ) },
-            { wxT( "pcbnew" ),   _( "PcbNew" ) },
+            { wxT( "pcbnew" ),   _( "Pcbnew" ) },
             { wxT( "plEditor" ), _( "Page Layout Editor" ) }
     };
 

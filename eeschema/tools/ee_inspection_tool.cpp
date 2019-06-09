@@ -45,7 +45,7 @@
 #include <project.h>
 #include <dialogs/dialog_display_info_HTML_base.h>
 
-TOOL_ACTION EE_ACTIONS::runERC( "eeschame.InspectionTool.runERC",
+TOOL_ACTION EE_ACTIONS::runERC( "eeschema.InspectionTool.runERC",
         AS_GLOBAL, 0, "",
         _( "Electrical Rules &Checker" ), _( "Perform electrical rules check" ),
         erc_xpm );

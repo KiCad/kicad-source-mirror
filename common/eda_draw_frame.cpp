@@ -107,7 +107,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_MsgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight();
     m_movingCursorWithKeyboard = false;
     m_zoomLevelCoeff      = 1.0;
-    m_UserUnits           = MILLIMETRES;
+    m_userUnits           = MILLIMETRES;
     m_PolarCoords         = false;
 
     m_auimgr.SetFlags(wxAUI_MGR_DEFAULT);
@@ -339,7 +339,7 @@ void EDA_DRAW_FRAME::DisplayUnitsMsg()
 {
     wxString msg;
 
-    switch( m_UserUnits )
+    switch( m_userUnits )
     {
     case INCHES:      msg = _( "Inches" ); break;
     case MILLIMETRES: msg = _( "mm" );     break;
@@ -453,7 +453,7 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     wxString baseCfgName = ConfigBaseName();
 
-    aCfg->Write( baseCfgName + UserUnitsEntryKeyword, (int) m_UserUnits );
+    aCfg->Write( baseCfgName + UserUnitsEntryKeyword, (int) m_userUnits );
     aCfg->Write( baseCfgName + ShowGridEntryKeyword, IsGridVisible() );
     aCfg->Write( baseCfgName + LastGridSizeIdKeyword, ( long ) m_LastGridSizeId );
     aCfg->Write( baseCfgName + FirstRunShownKeyword, m_firstRunDialogSetting );
@@ -497,7 +497,7 @@ void EDA_DRAW_FRAME::SetMsgPanel( EDA_ITEM* aItem )
     wxCHECK_RET( aItem, wxT( "Invalid EDA_ITEM pointer.  Bad programmer." ) );
 
     MSG_PANEL_ITEMS items;
-    aItem->GetMsgPanelInfo( m_UserUnits, items );
+    aItem->GetMsgPanelInfo( m_userUnits, items );
     SetMsgPanel( items );
 }
 
