@@ -77,12 +77,6 @@ public:
     int PlacePad( const TOOL_EVENT& aEvent );
 
     /**
-     * Function EnumeratePads()
-     * Tool for quick pad enumeration.
-     */
-    int EnumeratePads( const TOOL_EVENT& aEvent );
-
-    /**
      * Function CreateArray
      *
      * Creates an array of objects using settings from a dialog

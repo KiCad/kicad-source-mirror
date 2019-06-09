@@ -24,7 +24,7 @@
 
 #include "pad_tool.h"
 
-#include <pcb_edit_frame.h>
+#include <pcb_base_edit_frame.h>
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
 #include <view/view.h>
@@ -39,6 +39,7 @@
 #include <tools/selection_tool.h>
 #include <tools/pcb_selection_conditions.h>
 #include <tools/edit_tool.h>
+#include <dialogs/dialog_enum_pads.h>
 #include "pcbnew_id.h"
 
 // Pad tools
@@ -56,6 +57,11 @@ TOOL_ACTION PCB_ACTIONS::pushPadSettings( "pcbnew.PadTool.PushPadSettings",
         AS_GLOBAL, 0, "",
         _( "Push Pad Properties..." ), _( "Copy the current pad's properties to other pads" ),
         push_pad_settings_xpm );
+
+TOOL_ACTION PCB_ACTIONS::enumeratePads( "pcbnew.PadTool.enumeratePads",
+        AS_GLOBAL, 0, "",
+        _( "Renumber Pads..." ), _( "Renumber pads by clicking on them in the desired order" ),
+        pad_enumerate_xpm, AF_ACTIVATE );
 
 
 class PAD_CONTEXT_MENU : public ACTION_MENU
@@ -203,10 +209,9 @@ int PAD_TOOL::pastePadProperties( const TOOL_EVENT& aEvent )
 {
     auto& selTool = *m_toolMgr->GetTool<SELECTION_TOOL>();
     const auto& selection = selTool.GetSelection();
-    auto& frame = *getEditFrame<PCB_EDIT_FRAME>();
-    const D_PAD& masterPad = frame.GetDesignSettings().m_Pad_Master;
+    const D_PAD& masterPad = frame()->GetDesignSettings().m_Pad_Master;
 
-    BOARD_COMMIT commit( &frame );
+    BOARD_COMMIT commit( frame() );
 
     // for every selected pad, paste global settings
     for( auto item : selection )
@@ -221,7 +226,7 @@ int PAD_TOOL::pastePadProperties( const TOOL_EVENT& aEvent )
     commit.Push( _( "Paste Pad Properties" ) );
 
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
-    frame.Refresh();
+    frame()->Refresh();
 
     return 0;
 }
@@ -232,9 +237,7 @@ int PAD_TOOL::copyPadSettings( const TOOL_EVENT& aEvent )
     auto& selTool = *m_toolMgr->GetTool<SELECTION_TOOL>();
     const auto& selection = selTool.GetSelection();
 
-    auto& frame = *getEditFrame<PCB_EDIT_FRAME>();
-
-    D_PAD& masterPad = frame.GetDesignSettings().m_Pad_Master;
+    D_PAD& masterPad = frame()->GetDesignSettings().m_Pad_Master;
 
     // can only copy from a single pad
     if( selection.Size() == 1 )
@@ -300,7 +303,6 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 {
     auto&       selTool = *m_toolMgr->GetTool<SELECTION_TOOL>();
     const auto& selection = selTool.GetSelection();
-    auto&       frame = *getEditFrame<PCB_EDIT_FRAME>();
     D_PAD*      srcPad;
 
     if( selection.Size() == 1 && selection[0]->Type() == PCB_PAD_T )
@@ -313,9 +315,9 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
     if( !module )
         return 0;
 
-    frame.SetMsgPanel( module );
+    frame()->SetMsgPanel( module );
 
-    DIALOG_PUSH_PAD_PROPERTIES dlg( &frame );
+    DIALOG_PUSH_PAD_PROPERTIES dlg( frame() );
     int dialogRet = dlg.ShowModal();
 
     if( dialogRet == wxID_CANCEL )
@@ -323,7 +325,7 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 
     const bool edit_Same_Modules = (dialogRet == 1);
 
-    BOARD_COMMIT commit( &frame );
+    BOARD_COMMIT commit( frame() );
 
     doPushPadProperties( *getModel<BOARD>(), *srcPad, commit, edit_Same_Modules,
                          DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Shape_Filter,
@@ -333,7 +335,199 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
     commit.Push( _( "Push Pad Settings" ) );
 
     m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
-    frame.Refresh();
+    frame()->Refresh();
+
+    return 0;
+}
+
+
+int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
+{
+    if( !board()->GetFirstModule() || !board()->GetFirstModule()->Pads().empty() )
+        return 0;
+
+    DIALOG_ENUM_PADS settingsDlg( frame() );
+
+    if( settingsDlg.ShowModal() != wxID_OK )
+        return 0;
+
+    Activate();
+
+    GENERAL_COLLECTOR collector;
+    const KICAD_T types[] = { PCB_PAD_T, EOT };
+
+    GENERAL_COLLECTORS_GUIDE guide = frame()->GetCollectorsGuide();
+    guide.SetIgnoreMTextsMarkedNoShow( true );
+    guide.SetIgnoreMTextsOnBack( true );
+    guide.SetIgnoreMTextsOnFront( true );
+    guide.SetIgnoreModulesVals( true );
+    guide.SetIgnoreModulesRefs( true );
+
+    int seqPadNum = settingsDlg.GetStartNumber();
+    wxString padPrefix = settingsDlg.GetPrefix();
+    std::deque<int> storedPadNumbers;
+
+    frame()->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_HAND,
+                        _( "Click on successive pads to renumber them" ) );
+
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    getViewControls()->ShowCursor( true );
+
+    KIGFX::VIEW* view = m_toolMgr->GetView();
+    VECTOR2I oldCursorPos;  // store the previous mouse cursor position, during mouse drag
+    std::list<D_PAD*> selectedPads;
+    BOARD_COMMIT commit( frame() );
+    std::map<wxString, std::pair<int, wxString>> oldNames;
+    bool isFirstPoint = true;   // used to be sure oldCursorPos will be initialized at least once.
+
+    STATUS_TEXT_POPUP statusPopup( frame() );
+    statusPopup.SetText( wxString::Format(
+            _( "Click on pad %s%d\nPress Escape to cancel or double-click to commit" ),
+            padPrefix.c_str(), seqPadNum ) );
+    statusPopup.Popup();
+    statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        if( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
+        {
+            selectedPads.clear();
+            VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
+
+            // Be sure the old cursor mouse position was initialized:
+            if( isFirstPoint )
+            {
+                oldCursorPos = cursorPos;
+                isFirstPoint = false;
+            }
+
+            // wxWidgets deliver mouse move events not frequently enough, resulting in skipping
+            // pads if the user moves cursor too fast. To solve it, create a line that approximates
+            // the mouse move and search pads that are on the line.
+            int distance = ( cursorPos - oldCursorPos ).EuclideanNorm();
+            // Search will be made every 0.1 mm:
+            int segments = distance / int( 0.1*IU_PER_MM ) + 1;
+            const wxPoint line_step( ( cursorPos - oldCursorPos ) / segments );
+
+            collector.Empty();
+
+            for( int j = 0; j < segments; ++j )
+            {
+                wxPoint testpoint( cursorPos.x - j * line_step.x,
+                                   cursorPos.y - j * line_step.y );
+                collector.Collect( board(), types, testpoint, guide );
+
+                for( int i = 0; i < collector.GetCount(); ++i )
+                {
+                    selectedPads.push_back( static_cast<D_PAD*>( collector[i] ) );
+                }
+            }
+
+            selectedPads.unique();
+
+            for( D_PAD* pad : selectedPads )
+            {
+                // If pad was not selected, then enumerate it
+                if( !pad->IsSelected() )
+                {
+                    commit.Modify( pad );
+
+                    // Rename pad and store the old name
+                    int newval;
+
+                    if( storedPadNumbers.size() > 0 )
+                    {
+                        newval = storedPadNumbers.front();
+                        storedPadNumbers.pop_front();
+                    }
+                    else
+                        newval = seqPadNum++;
+
+                    wxString newName = wxString::Format( wxT( "%s%d" ), padPrefix.c_str(), newval );
+                    oldNames[newName] = { newval, pad->GetName() };
+                    pad->SetName( newName );
+                    pad->SetSelected();
+                    getView()->Update( pad );
+
+                    // Ensure the popup text shows the correct next value
+                    if( storedPadNumbers.size() > 0 )
+                        newval = storedPadNumbers.front();
+                    else
+                        newval = seqPadNum;
+
+                    statusPopup.SetText( wxString::Format(
+                            _( "Click on pad %s%d\nPress Escape to cancel or double-click to commit" ),
+                            padPrefix.c_str(), newval ) );
+                }
+
+                    // ..or restore the old name if it was enumerated and clicked again
+                else if( pad->IsSelected() && evt->IsClick( BUT_LEFT ) )
+                {
+                    auto it = oldNames.find( pad->GetName() );
+                    wxASSERT( it != oldNames.end() );
+
+                    if( it != oldNames.end() )
+                    {
+                        storedPadNumbers.push_back( it->second.first );
+                        pad->SetName( it->second.second );
+                        oldNames.erase( it );
+
+                        statusPopup.SetText( wxString::Format(
+                                _( "Click on pad %s%d\nPress Escape to cancel or double-click to commit" ),
+                                padPrefix.c_str(), storedPadNumbers.front() ) );
+                    }
+
+                    pad->ClearSelected();
+                    getView()->Update( pad );
+                }
+            }
+        }
+
+        else if( ( evt->IsKeyPressed() && evt->KeyCode() == WXK_RETURN ) ||
+                 evt->IsDblClick( BUT_LEFT ) )
+        {
+            commit.Push( _( "Renumber pads" ) );
+            break;
+        }
+
+            // This is a cancel-current-action (ie: <esc>).
+            // Note that this must go before IsCancelInteractive() as it also checks IsCancel().
+        else if( evt->IsCancel() )
+        {
+            // Clear current selection list to avoid selection of deleted items
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
+            commit.Revert();
+            break;
+        }
+
+            // Now that cancel-current-action has been handled, check for cancel-tool.
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        {
+            commit.Push( _( "Renumber pads" ) );
+            break;
+        }
+
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            m_menu.ShowContextMenu( selection() );
+        }
+
+        // Prepare the next loop by updating the old cursor mouse position
+        // to this last mouse cursor position
+        oldCursorPos = getViewControls()->GetCursorPosition();
+        statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+    }
+
+    for( auto p : board()->GetFirstModule()->Pads() )
+    {
+        p->ClearSelected();
+        view->Update( p );
+    }
+
+    statusPopup.Hide();
+    frame()->SetNoToolSelected();
+    frame()->GetGalCanvas()->SetCursor( wxCURSOR_ARROW );
 
     return 0;
 }
@@ -342,6 +536,8 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 void PAD_TOOL::setTransitions()
 {
     Go( &PAD_TOOL::pastePadProperties, PCB_ACTIONS::applyPadSettings.MakeEvent() );
-    Go( &PAD_TOOL::copyPadSettings,  PCB_ACTIONS::copyPadSettings.MakeEvent() );
-    Go( &PAD_TOOL::pushPadSettings,  PCB_ACTIONS::pushPadSettings.MakeEvent() );
+    Go( &PAD_TOOL::copyPadSettings,    PCB_ACTIONS::copyPadSettings.MakeEvent() );
+    Go( &PAD_TOOL::pushPadSettings,    PCB_ACTIONS::pushPadSettings.MakeEvent() );
+    
+    Go( &PAD_TOOL::EnumeratePads,      PCB_ACTIONS::enumeratePads.MakeEvent() );
 }

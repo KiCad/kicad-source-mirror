@@ -46,6 +46,12 @@ public:
     ///> Basic initalization
     bool Init() override;
 
+    /**
+     * Function EnumeratePads()
+     * Tool for quick pad enumeration.
+     */
+    int EnumeratePads( const TOOL_EVENT& aEvent );
+
     ///> Bind handlers to corresponding TOOL_ACTIONs
     void setTransitions() override;
 
