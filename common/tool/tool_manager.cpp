@@ -33,7 +33,7 @@
 #include <wx/clipbrd.h>
 
 #include <view/view.h>
-
+#include <eda_base_frame.h>
 #include <tool/tool_base.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
@@ -42,7 +42,6 @@
 #include <tool/action_manager.h>
 
 #include <class_draw_panel_gal.h>
-#include <eda_draw_frame.h>
 
 /// Struct describing the current execution state of a TOOL
 struct TOOL_MANAGER::TOOL_STATE
@@ -192,14 +191,14 @@ private:
 
 
 TOOL_MANAGER::TOOL_MANAGER() :
-    m_model( NULL ),
-    m_view( NULL ),
-    m_viewControls( NULL ),
-    m_editFrame( NULL ),
-    m_passEvent( false ),
-    m_menuActive( false ),
-    m_menuOwner( -1 ),
-    m_activeState( nullptr )
+        m_model( NULL ),
+        m_view( NULL ),
+        m_viewControls( NULL ),
+        m_frame( NULL ),
+        m_passEvent( false ),
+        m_menuActive( false ),
+        m_menuOwner( -1 ),
+        m_activeState( nullptr )
 {
     m_actionMgr = new ACTION_MANAGER( this );
 }
@@ -700,7 +699,7 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
         m_menuOwner = toolId;
         m_menuActive = true;
 
-        auto frame = dynamic_cast<wxFrame*>( m_editFrame );
+        auto frame = dynamic_cast<wxFrame*>( m_frame );
 
         if( frame )
             frame->PopupMenu( menu.get() );
@@ -782,10 +781,7 @@ bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 
     if( m_view->IsDirty() )
     {
-        auto f = dynamic_cast<EDA_DRAW_FRAME*>( GetEditFrame() );
-
-        if( f )
-            f->GetGalCanvas()->Refresh(); // fixme: ugly hack, provide a method in TOOL_DISPATCHER.
+        GetEditFrame()->RefreshCanvas();
 
 #if defined( __WXMAC__ ) || defined( __WINDOWS__ )
         wxTheApp->ProcessPendingEvents(); // required for updating brightening behind a popup menu
@@ -861,12 +857,12 @@ TOOL_ID TOOL_MANAGER::MakeToolId( const std::string& aToolName )
 
 
 void TOOL_MANAGER::SetEnvironment( EDA_ITEM* aModel, KIGFX::VIEW* aView,
-                                   KIGFX::VIEW_CONTROLS* aViewControls, EDA_DRAW_FRAME* aFrame )
+                                   KIGFX::VIEW_CONTROLS* aViewControls, EDA_BASE_FRAME* aFrame )
 {
     m_model = aModel;
     m_view = aView;
     m_viewControls = aViewControls;
-    m_editFrame = aFrame;
+    m_frame = aFrame;
     m_actionMgr->UpdateHotKeys();
 }
 
@@ -970,7 +966,7 @@ bool TOOL_MANAGER::IsToolActive( TOOL_ID aId ) const
 
 void TOOL_MANAGER::UpdateUI()
 {
-    EDA_DRAW_FRAME* frame = GetEditFrame();
+    EDA_BASE_FRAME* frame = GetEditFrame();
 
     if( frame )
     {

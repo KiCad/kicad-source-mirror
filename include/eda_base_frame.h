@@ -406,6 +406,21 @@ public:
     void CheckForAutoSaveFile( const wxFileName& aFileName );
 
     /**
+     * Update the status bar information.
+     *
+     * The status bar can draw itself.  This is not a drawing function per se, but rather 
+     * updates lines of text held by the components within the status bar which is owned 
+     * by the wxFrame.
+     */
+    virtual void UpdateStatusBar() { }
+
+    /**
+     * Update the toolbars (mostly settings/check buttons/checkboxes) with the current 
+     * controller state.
+     */
+    virtual void SyncMenusAndToolbars() { };
+
+    /**
      * Redraw the menus and what not in current language.
      */
     virtual void ShowChangedLanguage();
@@ -415,12 +430,11 @@ public:
      * Update menus, toolbars, local variables, etc.
      */
     virtual void CommonSettingsChanged();
-
+    
     /**
-     * Post a menu event to the frame, which can be used to trigger actions
-     * bound to menu items.
+     * Notification to refresh the drawing canvas (if any).
      */
-    bool PostCommandMenuEvent( int evt_type );
+    virtual void RefreshCanvas() { };
 
     const wxString& GetAboutTitle() const { return m_AboutTitle; }
 };

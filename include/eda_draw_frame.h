@@ -587,16 +587,11 @@ public:
     /**
      * Update the status bar information.
      *
-     * The base method updates the absolute and relative coordinates and the
-     * zoom information.  If you override this virtual method, make sure to call
-     * this subclassed method.  The status bar can draw itself.  This is not
-     * a drawing function per se, but rather updates lines of text held by
-     * the components within the status bar which is owned by the wxFrame.
-     * <p>
-     * On a MAC, be careful about calling this function when there is an
-     * existing wxDC in existence on a sibling window.
+     * The EDA_DRAW_FRAME level updates the absolute and relative coordinates and the
+     * zoom information.  If you override this virtual method, make sure to call this 
+     * subclassed method.
      */
-    virtual void UpdateStatusBar();
+    void UpdateStatusBar() override;
 
     /**
      * Display current unit pane on the status bar.
@@ -687,12 +682,6 @@ public:
      * Return a reference to the gal rendering options used by GAL for rendering.
      */
     KIGFX::GAL_DISPLAY_OPTIONS& GetGalDisplayOptions() { return m_galDisplayOptions; }
-
-    /**
-     * Update the toolbars and menus (mostly settings/check buttons/checkboxes)
-     * with the current controller state
-     */
-    virtual void SyncMenusAndToolbars() { };
 
     virtual const BOX2I GetDocumentExtents() const;
 

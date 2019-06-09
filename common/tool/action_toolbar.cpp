@@ -41,7 +41,7 @@ ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_DRAW_FRAME* parent, wxWindowID id, const wxP
 
 void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry )
 {
-    EDA_DRAW_FRAME* editFrame = m_toolManager->GetEditFrame();
+    EDA_BASE_FRAME* editFrame = m_toolManager->GetEditFrame();
     int toolId = aAction.GetId() + ACTION_ID;
 
     AddTool( toolId, wxEmptyString, KiScaledBitmap( aAction.GetIcon(), editFrame ),

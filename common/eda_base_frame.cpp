@@ -91,6 +91,7 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
     m_autoSaveInterval = -1;
     m_autoSaveTimer = new wxTimer( this, ID_AUTO_SAVE_TIMER );
     m_mruPath = wxStandardPaths::Get().GetDocumentsDir();
+    m_toolManager = nullptr;
 
     // Gives a reasonable minimal size to the frame:
     const int minsize_x = 500;
@@ -685,18 +686,4 @@ void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
     }
 }
 
-
-bool EDA_BASE_FRAME::PostCommandMenuEvent( int evt_type )
-{
-    if( evt_type != 0 )
-    {
-        wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
-        evt.SetEventObject( this );
-        evt.SetId( evt_type );
-        wxPostEvent( this, evt );
-        return true;
-    }
-
-    return false;
-}
 

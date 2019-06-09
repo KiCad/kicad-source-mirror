@@ -37,7 +37,8 @@
 class TOOL_BASE;
 class ACTION_MANAGER;
 class ACTION_MENU;
-class wxWindow;
+class EDA_BASE_FRAME;
+
 
 /**
  * Class TOOL_MANAGER.
@@ -242,11 +243,10 @@ public:
 
     /**
      * Sets the work environment (model, view, view controls and the parent window).
-     * These are made available to the tool. Called by the parent frame (PCB_EDIT_FRAME)
-     * when the board is set up.
+     * These are made available to the tool. Called by the parent frame when it is set up.
      */
     void SetEnvironment( EDA_ITEM* aModel, KIGFX::VIEW* aView,
-            KIGFX::VIEW_CONTROLS* aViewControls, EDA_DRAW_FRAME* aFrame );
+                         KIGFX::VIEW_CONTROLS* aViewControls, EDA_BASE_FRAME* aFrame );
 
     /* Accessors for the environment objects (view, model, etc.) */
     KIGFX::VIEW* GetView() const
@@ -264,9 +264,9 @@ public:
         return m_model;
     }
 
-    inline EDA_DRAW_FRAME* GetEditFrame() const
+    inline EDA_BASE_FRAME* GetEditFrame() const
     {
-        return m_editFrame;
+        return m_frame;
     }
 
     /**
@@ -535,7 +535,7 @@ private:
     EDA_ITEM* m_model;
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_CONTROLS* m_viewControls;
-    EDA_DRAW_FRAME* m_editFrame;
+    EDA_BASE_FRAME* m_frame;
 
     /// Queue that stores events to be processed at the end of the event processing cycle.
     std::list<TOOL_EVENT> m_eventQueue;
