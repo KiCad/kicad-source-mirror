@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -315,21 +315,21 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
         if( startAngle > endAngle )
             endAngle += (2 * M_PI);
 
-        // 360-degree arcs are stored in the file with start equal to end
+        // In Gerber, 360-degree arcs are stored in the file with start equal to end
         if( arcStart == arcEnd )
         {
-            startAngle = 0;
-            endAngle = 2 * M_PI;
+            endAngle =  startAngle + 2*M_PI;
         }
 
         m_gal->DrawArcSegment( center, radius, startAngle, endAngle, width );
 
-        // Arc Debugging
-        // m_gal->SetLineWidth( 5 );
-        // m_gal->SetStrokeColor( COLOR4D( 0.0, 1.0, 0.0, 1.0 ) );
-        // m_gal->DrawLine( center, aItem->GetABPosition( arcStart ) );
-        // m_gal->SetStrokeColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
-        // m_gal->DrawLine( center, aItem->GetABPosition( arcEnd ) );
+#if 0   // Arc Debugging only
+        m_gal->SetLineWidth( 5 );
+        m_gal->SetStrokeColor( COLOR4D( 0.0, 1.0, 0.0, 1.0 ) );
+        m_gal->DrawLine( center, aItem->GetABPosition( arcStart ) );
+        m_gal->SetStrokeColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ) );
+        m_gal->DrawLine( center, aItem->GetABPosition( arcEnd ) );
+#endif
         break;
     }
 

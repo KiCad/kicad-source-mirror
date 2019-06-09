@@ -146,8 +146,18 @@ void CAIRO_GAL_BASE::arc_angles_xform_and_normalize( double& aStartAngle, double
     SWAP( startAngle, >, endAngle );
 
     // now rotate arc according to the rotation transform matrix
+    // Remark:
+    // We call angle_xform() to calculate angles according to the flip/rotation
+    // transform and normatize between -2M_PI and +2M_PI.
+    // Therefore, if aStartAngle = aEndAngle + 2*n*M_PI, the transform gives
+    // aEndAngle = aStartAngle
+    // So, if this is the case, force the aEndAngle value to draw a circle.
     aStartAngle = angle_xform( startAngle );
-    aEndAngle = angle_xform( endAngle );
+
+    if( std::abs( aEndAngle - aStartAngle ) >= 2*M_PI )     // arc is a full circle
+        aEndAngle = aStartAngle + 2*M_PI;
+    else
+        aEndAngle = angle_xform( endAngle );
 }
 
 
