@@ -150,6 +150,9 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
                 // Replace parenthesis with underscore to prevent parse issues with simulators
                 ReplaceForbiddenChars( netName );
 
+                // unescape net names that contain a escaped sequence ("{slash}"):
+                netName = UnescapeString( netName );
+
                 // Add quotes to nets containing slashes. This isn't added to ReplaceForbidenChars
                 // because this is only necessary for file writing; nets with slashes can be
                 // handled by ngspice after loading.

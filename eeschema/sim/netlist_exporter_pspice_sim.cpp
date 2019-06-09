@@ -36,13 +36,15 @@ wxString NETLIST_EXPORTER_PSPICE_SIM::GetSpiceVector( const wxString& aName, SIM
 
     if( aType & SPT_VOLTAGE )
     {
+        // netnames are escaped (can contain "{slash}" for '/') Unscape them:
+        wxString spicenet = UnescapeString( aName );
+
         // Spice netlist netnames does not accept some chars, whicyh are replaced
         // by eeschema netlist generator.
         // Replace these forbidden chars to find the actual spice net name
-        wxString spicenet = aName;
         NETLIST_EXPORTER_PSPICE::ReplaceForbiddenChars( spicenet );
 
-        return wxString::Format( "V(%s)", spicenet.GetData() );
+        return wxString::Format( "V(%s)", spicenet );
     }
 
     else if( aType & SPT_CURRENT )

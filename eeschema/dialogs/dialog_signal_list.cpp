@@ -54,8 +54,11 @@ bool DIALOG_SIGNAL_LIST::TransferDataToWindow()
         // Voltage list
         for( const auto& net : m_exporter->GetNetIndexMap() )
         {
-            if( net.first != "GND" && net.first != "0" )
-                m_signals->Append( wxString::Format( "V(%s)", net.first ) );
+            // netnames are escaped (can contain "{slash}" for '/') Unscape them:
+            wxString netname = UnescapeString( net.first );
+
+            if( netname != "GND" && netname != "0" )
+                m_signals->Append( wxString::Format( "V(%s)", netname ) );
         }
 
         auto simType = m_exporter->GetSimType();
