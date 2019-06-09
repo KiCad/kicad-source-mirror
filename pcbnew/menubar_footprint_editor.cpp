@@ -35,7 +35,6 @@
 #include <tools/selection_tool.h>
 #include <tools/pcb_actions.h>
 #include "help_common_strings.h"
-#include "hotkeys.h"
 #include "pcbnew.h"
 #include "pcbnew_id.h"
 
@@ -277,7 +276,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     prefsMenu->AddItem( ACTIONS::configurePaths,             SELECTION_CONDITIONS::ShowAlways );
     prefsMenu->AddItem( ACTIONS::showFootprintLibTable,      SELECTION_CONDITIONS::ShowAlways );
     prefsMenu->AddItem( wxID_PREFERENCES,
-                        AddHotkeyName( _( "Preferences..." ), g_Module_Editor_Hotkeys_Descr, HK_PREFERENCES ),
+                        _( "Preferences...\tCTRL+," ),
                         _( "Show preferences for all open tools" ),
                         preference_xpm,                      SELECTION_CONDITIONS::ShowAlways );
 

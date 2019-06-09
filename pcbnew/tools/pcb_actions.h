@@ -115,7 +115,7 @@ public:
 
     /// Deleting a BOARD_ITEM
     static TOOL_ACTION remove;
-    static TOOL_ACTION removeAlt;
+    static TOOL_ACTION deleteFull;
 
     static TOOL_ACTION selectLayerPair;
 
@@ -283,7 +283,6 @@ public:
     static TOOL_ACTION showLayersManager;
     static TOOL_ACTION showMicrowaveToolbar;
     static TOOL_ACTION showPythonConsole;
-    static TOOL_ACTION showHelp;
 
     // Module editor tools
 
@@ -367,7 +366,6 @@ public:
     static TOOL_ACTION drillOrigin;
     static TOOL_ACTION crossProbeSchToPcb;
     static TOOL_ACTION appendBoard;
-    static TOOL_ACTION toBeDone;
 
     // Ratsnest
     static TOOL_ACTION localRatsnestTool;

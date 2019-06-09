@@ -39,15 +39,16 @@
 #include <class_module.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
-#include <hotkeys.h>
 #include <footprint_edit_frame.h>
 #include <footprint_viewer_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <pcb_layer_widget.h>
 #include <invoke_pcb_dialog.h>
 #include <tool/tool_manager.h>
+#include <tool/common_control.h>
 #include <tool/common_tools.h>
 #include <tool/tool_dispatcher.h>
+#include <tool/action_toolbar.h>
 #include <tool/zoom_tool.h>
 #include <footprint_tree_pane.h>
 #include <widgets/lib_tree.h>
@@ -57,6 +58,7 @@
 #include <dialogs/panel_modedit_settings.h>
 #include <dialogs/panel_modedit_defaults.h>
 #include <dialogs/panel_modedit_display_options.h>
+#include <panel_hotkeys_editor.h>
 #include <tools/position_relative_tool.h>
 #include <widgets/progress_reporter.h>
 #include "tools/selection_tool.h"
@@ -86,10 +88,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, FOOTPRINT_EDIT_FRAME::LoadModuleFromBoard )
     EVT_TOOL( ID_ADD_FOOTPRINT_TO_BOARD, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
 
-    // Preferences and option menus
-    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, FOOTPRINT_EDIT_FRAME::ProcessPreferences )
-    EVT_MENU( wxID_PREFERENCES, FOOTPRINT_EDIT_FRAME::ProcessPreferences )
-
     // popup commands
     EVT_MENU( ID_GRID_SETTINGS, FOOTPRINT_EDIT_FRAME::OnGridSettings )
 
@@ -114,7 +112,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_showBorderAndTitleBlock = false;   // true to show the frame references
     m_showAxis = true;                   // true to show X and Y axis on screen
     m_showGridAxis = true;               // show the grid origin axis
-    m_hotkeysDescrList = g_Module_Editor_Hotkeys_Descr;
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
     m_canvasType = aBackend;
     m_AboutTitle = "ModEdit";
@@ -755,36 +752,16 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateLayerAlpha( wxUpdateUIEvent & )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
-{
-    int id = event.GetId();
-
-    switch( id )
-    {
-    // Hotkey IDs
-    case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
-        // Display current hotkey list for the footprint editor.
-        DisplayHotkeyList( this, g_Module_Editor_Hotkeys_Descr );
-        break;
-
-    case wxID_PREFERENCES:
-        ShowPreferences( g_Pcbnew_Editor_Hotkeys_Descr, g_Module_Editor_Hotkeys_Descr,
-                         wxT( "pcbnew" ) );
-        break;
-
-    default:
-        DisplayError( this, "FOOTPRINT_EDIT_FRAME::ProcessPreferences error" );
-    }
-}
-
-
-void FOOTPRINT_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
+void FOOTPRINT_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent, 
+                                               PANEL_HOTKEYS_EDITOR* aHotkeysPanel )
 {
     wxTreebook* book = aParent->GetTreebook();
 
     book->AddPage( new PANEL_MODEDIT_SETTINGS( this, aParent ), _( "Footprint Editor" ) );
     book->AddSubPage( new PANEL_MODEDIT_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_MODEDIT_DEFAULTS( this, aParent ), _( "Default Values" ) );
+    
+    aHotkeysPanel->AddHotKeys( GetToolManager() );
 }
 
 
@@ -801,6 +778,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
 
     drawPanel->SetEventDispatcher( m_toolDispatcher );
 
+    m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new SELECTION_TOOL );
     m_toolManager->RegisterTool( new ZOOM_TOOL );

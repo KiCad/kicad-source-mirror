@@ -44,7 +44,6 @@ set( common_srcs
     test_color4d.cpp
     test_coroutine.cpp
     test_format_units.cpp
-    test_hotkey_store.cpp
     test_lib_table.cpp
     test_kicad_string.cpp
     test_refdes_utils.cpp

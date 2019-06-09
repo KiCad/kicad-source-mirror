@@ -29,11 +29,9 @@ using namespace std::placeholders;
 #include "selection_tool.h"
 #include "edit_tool.h"
 #include "pcbnew_picker_tool.h"
-
 #include <dialogs/dialog_position_relative.h>
 #include <status_popup.h>
 #include <board_commit.h>
-#include <hotkeys.h>
 #include <bitmaps.h>
 #include <confirm.h>
 
@@ -41,15 +39,15 @@ using namespace std::placeholders;
 // Position relative tool actions
 
 TOOL_ACTION PCB_ACTIONS::positionRelative( "pcbnew.PositionRelative.positionRelative",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_POSITION_RELATIVE ),
+        AS_GLOBAL, 
+        MD_SHIFT + 'P', LEGACY_HK_NAME( "Position Item Relative" ),
         _( "Position Relative To..." ),
         _( "Positions the selected item(s) by an exact amount relative to another" ),
         move_relative_xpm );
 
 
-TOOL_ACTION PCB_ACTIONS::selectpositionRelativeItem(
-        "pcbnew.PositionRelative.selectpositionRelativeItem",
-        AS_GLOBAL, 0, "", "", nullptr );
+TOOL_ACTION PCB_ACTIONS::selectpositionRelativeItem( "pcbnew.PositionRelative.selectpositionRelativeItem",
+        AS_GLOBAL );
 
 
 POSITION_RELATIVE_TOOL::POSITION_RELATIVE_TOOL() :

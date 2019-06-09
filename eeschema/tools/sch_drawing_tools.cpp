@@ -36,7 +36,6 @@
 #include <view/view_controls.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>
-#include <ee_hotkeys.h>
 #include <sch_component.h>
 #include <sch_no_connect.h>
 #include <sch_line.h>
@@ -50,98 +49,119 @@
 
 // Drawing tool actions
 TOOL_ACTION EE_ACTIONS::placeSymbol( "eeschema.InteractiveDrawing.placeSymbol",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_COMPONENT ),
+        AS_GLOBAL, 
+        'A', LEGACY_HK_NAME( "Add Symbol" ),
         _( "Add Symbol" ), _( "Add a symbol" ),
         add_component_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placePower( "eeschema.InteractiveDrawing.placePowerPort",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_POWER ),
+        AS_GLOBAL, 
+        'P', LEGACY_HK_NAME( "Add Power" ),
         _( "Add Power" ), _( "Add a power port" ),
         add_power_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeNoConnect( "eeschema.InteractiveDrawing.placeNoConnect",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NOCONN_FLAG ),
+        AS_GLOBAL, 
+        'Q', LEGACY_HK_NAME( "Add No Connect Flag" ),
         _( "Add No Connect Flag" ), _( "Add a no-connection flag" ),
         noconn_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeJunction( "eeschema.InteractiveDrawing.placeJunction",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_JUNCTION ),
+        AS_GLOBAL, 
+        'J', LEGACY_HK_NAME( "Add Junction" ),
         _( "Add Junction" ), _( "Add a junction" ),
         add_junction_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeBusWireEntry( "eeschema.InteractiveDrawing.placeBusWireEntry",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_WIRE_ENTRY ),
+        AS_GLOBAL, 
+        'Z', LEGACY_HK_NAME( "Add Wire Entry" ),
         _( "Add Wire to Bus Entry" ), _( "Add a wire entry to a bus" ),
         add_line2bus_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeBusBusEntry( "eeschema.InteractiveDrawing.placeBusBusEntry",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_BUS_ENTRY ),
+        AS_GLOBAL, 
+        '/', LEGACY_HK_NAME( "Add Bus Entry" ),
         _( "Add Bus to Bus Entry" ), _( "Add a bus entry to a bus" ),
         add_bus2bus_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeLabel( "eeschema.InteractiveDrawing.placeLabel",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_LABEL ),
+        AS_GLOBAL, 
+        'L', LEGACY_HK_NAME( "Add Label" ),
         _( "Add Label" ), _( "Add a net label" ),
         add_line_label_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeHierarchicalLabel( "eeschema.InteractiveDrawing.placeHierarchicalLabel",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_HLABEL ),
+        AS_GLOBAL, 
+        'H', LEGACY_HK_NAME( "Add Hierarchical Label" ),
         _( "Add Hierarchical Label" ), _( "Add a hierarchical sheet label" ),
         add_hierarchical_label_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::drawSheet( "eeschema.InteractiveDrawing.drawSheet",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_HIER_SHEET ),
+        AS_GLOBAL, 
+        'S', LEGACY_HK_NAME( "Add Sheet" ),
         _( "Add Sheet" ), _( "Add a hierarchical sheet" ),
         add_hierarchical_subsheet_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeSheetPin( "eeschema.InteractiveDrawing.placeSheetPin",
-        AS_GLOBAL, 0, _( "Add Sheet Pin" ), _( "Add a sheet pin" ),
+        AS_GLOBAL, 0, "",
+        _( "Add Sheet Pin" ), _( "Add a sheet pin" ),
         add_hierar_pin_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::importSheetPin( "eeschema.InteractiveDrawing.importSheetPin",
-        AS_GLOBAL, 0, _( "Import Sheet Pin" ), _( "Import a hierarchical sheet pin" ),
+        AS_GLOBAL, 0, "",
+        _( "Import Sheet Pin" ), _( "Import a hierarchical sheet pin" ),
         import_hierarchical_label_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeGlobalLabel( "eeschema.InteractiveDrawing.placeGlobalLabel",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_GLABEL ),
+        AS_GLOBAL, 
+        MD_CTRL + 'H', LEGACY_HK_NAME( "Add Global Label" ),
         _( "Add Global Label" ), _( "Add a global label" ),
         add_glabel_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeSchematicText( "eeschema.InteractiveDrawing.placeSchematicText",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_GRAPHIC_TEXT ),
+        AS_GLOBAL, 
+        'T', LEGACY_HK_NAME( "Add Graphic Text" ),
         _( "Add Text" ), _( "Add text" ),
         text_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeImage( "eeschema.InteractiveDrawing.placeImage",
-        AS_GLOBAL, 0, _( "Add Image" ), _( "Add bitmap image" ),
+        AS_GLOBAL, 0, "",
+        _( "Add Image" ), _( "Add bitmap image" ),
         image_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::finishSheet( "eeschema.InteractiveDrawing.finishSheet",
-        AS_GLOBAL, 0, _( "Finish Sheet" ), _( "Finish drawing sheet" ),
+        AS_GLOBAL, 0, "",
+        _( "Finish Sheet" ), _( "Finish drawing sheet" ),
         checked_ok_xpm, AF_NONE );
 
 TOOL_ACTION EE_ACTIONS::addJunction( "eeschema.InteractiveEditing.addJunction",
-        AS_GLOBAL, 0, _( "Add Junction" ), _( "Add a wire or bus junction" ),
+        AS_GLOBAL, 0, "",
+        _( "Add Junction" ), _( "Add a wire or bus junction" ),
         add_junction_xpm, AF_NONE );
 
 TOOL_ACTION EE_ACTIONS::addLabel( "eeschema.InteractiveEditing.addLabel",
-        AS_GLOBAL, 0, _( "Add Label" ), _( "Add a label to a wire or bus" ),
+        AS_GLOBAL, 0, "",
+        _( "Add Label" ), _( "Add a label to a wire or bus" ),
         add_line_label_xpm, AF_NONE );
 
 TOOL_ACTION EE_ACTIONS::addGlobalLabel( "eeschema.InteractiveEditing.addGlobalLabel",
-        AS_GLOBAL, 0, _( "Add Global Label" ), _( "Add a global label to a wire or bus" ),
+        AS_GLOBAL, 0, "",
+        _( "Add Global Label" ), _( "Add a global label to a wire or bus" ),
         add_glabel_xpm, AF_NONE );
 
 TOOL_ACTION EE_ACTIONS::addHierLabel( "eeschema.InteractiveEditing.addHierLabel",
-        AS_GLOBAL, 0, _( "Add Hierarchical Label" ), _( "Add a hierarchical label to a wire or bus" ),
+        AS_GLOBAL, 0, "",
+        _( "Add Hierarchical Label" ), _( "Add a hierarchical label to a wire or bus" ),
         add_hierarchical_label_xpm, AF_NONE );
 
 TOOL_ACTION EE_ACTIONS::addSheetPin( "eeschema.InteractiveEditing.addSheetPin",
-        AS_GLOBAL, 0, _( "Add Sheet Pin" ), _( "Add a sheet pin to the selected sheet" ),
+        AS_GLOBAL, 0, "",
+        _( "Add Sheet Pin" ), _( "Add a sheet pin to the selected sheet" ),
         add_hierarchical_label_xpm, AF_NONE );
 
 TOOL_ACTION EE_ACTIONS::addImportedSheetPin( "eeschema.InteractiveEditing.addImportedSheetPin",
-        AS_GLOBAL, 0, _( "Add Imported Sheet Pin" ), _( "Add an imported sheet pin" ),
+        AS_GLOBAL, 0, "",
+        _( "Add Imported Sheet Pin" ), _( "Add an imported sheet pin" ),
         add_hierarchical_label_xpm, AF_NONE );
 
 

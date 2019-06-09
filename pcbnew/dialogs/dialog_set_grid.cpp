@@ -25,7 +25,6 @@
 #include <base_units.h>
 #include <common.h>
 #include <widgets/unit_binder.h>
-#include <hotkeys.h>
 #include <pcb_base_edit_frame.h>
 #include <class_draw_panel_gal.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -136,8 +135,8 @@ bool DIALOG_SET_GRID::TransferDataToWindow()
     m_comboBoxGrid1->SetSelection( m_parent->m_FastGrid1 );
     m_comboBoxGrid2->SetSelection( m_parent->m_FastGrid2 );
 
-    int hk1 = m_parent->GetHotKeyDescription( HK_SWITCH_GRID_TO_FASTGRID1 )->m_KeyCode;
-    int hk2 = m_parent->GetHotKeyDescription( HK_SWITCH_GRID_TO_FASTGRID2 )->m_KeyCode;
+    int hk1 = ACTIONS::gridFast1.GetHotKey();
+    int hk2 = ACTIONS::gridFast1.GetHotKey();
     m_grid1HotKey->SetLabel( wxString::Format( wxT( "(%s)" ), KeyNameFromKeyCode( hk1 ) ) );
     m_grid2HotKey->SetLabel( wxString::Format( wxT( "(%s)" ), KeyNameFromKeyCode( hk2 ) ) );
 

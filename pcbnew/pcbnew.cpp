@@ -47,7 +47,6 @@
 #include <wx/dir.h>
 #include <gestfich.h>
 #include <pcbnew.h>
-#include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
 #include <class_board.h>
 #include <class_draw_panel_gal.h>
@@ -321,10 +320,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     // Do nothing in here pertinent to a project!
 
     start_common( aCtlBits );
-
-    // Must be called before creating the main frame in order to
-    // display the real hotkeys in menus or tool tips
-    ReadHotkeyConfig( PCB_EDIT_FRAME_NAME, g_Board_Editor_Hotkeys_Descr );
 
     wxFileName fn = FP_LIB_TABLE::GetGlobalTableFileName();
 

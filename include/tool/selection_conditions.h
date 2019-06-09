@@ -28,7 +28,6 @@
 #include <functional>
 #include <core/typeinfo.h>
 #include <vector>
-
 #include <tool/selection.h>
 
 ///> Functor type that checks a specific condition for selected items.

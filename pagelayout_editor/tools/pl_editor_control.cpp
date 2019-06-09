@@ -37,10 +37,10 @@
 #include <dialog_page_settings.h>
 
 TOOL_ACTION PL_ACTIONS::refreshPreview( "plEditor.EditorControl.refreshPreview",
-         AS_GLOBAL, 0, "", "" );
+         AS_GLOBAL );
 
 TOOL_ACTION PL_ACTIONS::toggleBackground( "plEditor.EditorControl.ToggleBackground",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Background White" ), _( "Switch between white and black background" ),
         palette_xpm );
 

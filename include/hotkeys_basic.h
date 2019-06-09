@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,14 +21,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file hotkeys_basic.h
- * @brief Some functions to handle hotkeys in KiCad
- */
-
 #ifndef  HOTKEYS_BASIC_H
 #define  HOTKEYS_BASIC_H
 
+#include <map>
 #include <common.h>
 
 #define DEFAULT_HOTKEY_FILENAME_EXT wxT( "hotkeys" )
@@ -43,6 +39,8 @@
 // strings to translate
 #include <i18n_utility.h>       // _HKI definition
 
+class TOOL_ACTION;
+class TOOL_MANAGER;
 class EDA_BASE_FRAME;
 
 
@@ -58,9 +56,6 @@ extern wxString g_CommonSectionTag;
  */
 class EDA_HOTKEY
 {
-private:
-    int m_defaultKeyCode;   // Key code assigned upon object construction, to be used as default value
-
 public:
     int      m_KeyCode;      // Key code (ascii value for ascii keys or wxWidgets code for function key
     wxString m_InfoMsg;      // info message.
@@ -69,13 +64,6 @@ public:
 
 public:
     EDA_HOTKEY( const wxChar* infomsg, int idcommand, int keycode, int idmenuevent = 0 );
-    EDA_HOTKEY( const EDA_HOTKEY* base);
-    void ResetKeyCodeToDefault() { m_KeyCode = m_defaultKeyCode; }
-
-    int GetDefaultKeyCode() const
-    {
-        return m_defaultKeyCode;
-    }
 };
 
 
@@ -94,38 +82,11 @@ public:
 struct EDA_HOTKEY_CONFIG
 {
 public:
-    wxString*       m_SectionTag;     // The configuration file section name.
-    EDA_HOTKEY**    m_HK_InfoList;    // List of EDA_HOTKEY pointers
-    wxString*  m_Title;        // Title displayed in hotkey editor and used as comment in file
+    wxString*     m_SectionTag;   // The configuration file section name.
+    EDA_HOTKEY**  m_HK_InfoList;  // List of EDA_HOTKEY pointers
+    wxString*     m_Title;        // Title displayed in hotkey editor and used as comment in file
 };
 
-
-/**
- * Class EDA_HOTKEY_CLIENT_DATA
- * provides client data member for hotkeys to include in command events generated
- * by the hot key.
- */
-class EDA_HOTKEY_CLIENT_DATA : public wxClientData
-{
-    //< Logical position of the mouse cursor when the hot key was pressed.
-    wxPoint m_position;
-
-public:
-    EDA_HOTKEY_CLIENT_DATA( const wxPoint& aPosition = wxDefaultPosition ) :
-        m_position( aPosition ) {}
-
-    ~EDA_HOTKEY_CLIENT_DATA();
-
-    void SetPosition( const wxPoint& aPosition ) { m_position = aPosition; }
-
-    wxPoint GetPosition() { return m_position; }
-};
-
-
-/* Functions:
- */
-void AddHotkeyConfigMenu( wxMenu* menu );
-void HandleHotkeyConfigMenuSelection( EDA_BASE_FRAME* frame, int id );
 
 /**
  * Function KeyNameFromKeyCode
@@ -136,7 +97,7 @@ void HandleHotkeyConfigMenuSelection( EDA_BASE_FRAME* frame, int id );
  * @param aIsFound = a pointer to a bool to return true if found, or false. an be NULL default)
  * @return the key name in a wxString
  */
-wxString KeyNameFromKeyCode( int aKeycode, bool * aIsFound = NULL );
+wxString KeyNameFromKeyCode( int aKeycode, bool * aIsFound = nullptr );
 
 /**
  * Function KeyNameFromCommandId
@@ -146,17 +107,6 @@ wxString KeyNameFromKeyCode( int aKeycode, bool * aIsFound = NULL );
  * @return the key name in a wxString
  */
 wxString KeyNameFromCommandId( EDA_HOTKEY** aList, int aCommandId );
-
-/**
-
- * Function KeyCodeFromKeyName
- * return the key code from its key name
- * Only some wxWidgets key values are handled for function key
- * @param keyname = wxString key name to find in s_Hotkey_Name_List[],
- *   like F2 or space or an usual (ascii) char.
- * @return the key code
- */
-int KeyCodeFromKeyName( const wxString& keyname );
 
 /**
  * An helper enum for AddHotkeyName function
@@ -169,21 +119,18 @@ int KeyCodeFromKeyName( const wxString& keyname );
 enum HOTKEY_ACTION_TYPE
 {
     IS_HOTKEY,
-    IS_ACCELERATOR,
     IS_COMMENT
 };
 
 /**
- * Function AddHotkeyName
- * Add the key name from the Command id value ( m_Idcommand member value)
- * @param aText = a wxString. returns aText + key name
- * @param aList = pointer to a EDA_HOTKEY list of commands
- * @param aCommandId = Command Id value
- * @param aShortCutType The #HOTKEY_ACTION_TYPE of the shortcut.
- * @return a wxString (aTest + key name) if key found or aText without modification
+ * AddHotkeyName
+ * @param aText - the base text on which to append the hotkey
+ * @param aHotKey - the hotkey keycode
+ * @param aStyle - IS_HOTKEY to add <tab><keyname> (shortcuts in menus, same as hotkeys)
+ *                 IS_COMMENT to add <spaces><(keyname)> mainly in tool tips
  */
-wxString AddHotkeyName( const wxString& aText, EDA_HOTKEY** aList, int aCommandId,
-                        HOTKEY_ACTION_TYPE aShortCutType = IS_HOTKEY);
+wxString AddHotkeyName(  const wxString& aText, int aHotKey, 
+                         HOTKEY_ACTION_TYPE aStyle = IS_HOTKEY);
 
 /**
  * Function AddHotkeyName
@@ -203,101 +150,33 @@ wxString AddHotkeyName( const wxString&           aText,
  * Function DisplayHotkeyList
  * Displays the current hotkey list
  * @param aFrame = current active frame
- * @param aList = pointer to a EDA_HOTKEY_CONFIG list (Null terminated)
+ * @param aToolMgr = the tool manager holding the registered actions from which the hotkeys
+ *                   will be harvested
  */
-void DisplayHotkeyList( EDA_BASE_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aList );
+void DisplayHotkeyList( EDA_BASE_FRAME* aFrame, TOOL_MANAGER* aToolMgr );
 
 /**
- * Function GetDescriptorFromHotkey
- * Returns a EDA_HOTKEY* pointer from a key code for OnHotKey() function
- * @param aKey = key code (ascii value, or wxWidgets value for function keys
- * @param aList = pointer to a EDA_HOTKEY list of commands
- * @return the corresponding EDA_HOTKEY pointer from the EDA_HOTKEY List
+ * Function WriteHotKeyConfig
+ * Updates the hotkeys config file with the hotkeys from the given actions map.
  */
-EDA_HOTKEY* GetDescriptorFromHotkey( int aKey, EDA_HOTKEY** aList );
+int WriteHotKeyConfig( std::map<std::string, TOOL_ACTION*> aActionMap );
 
 /**
- * Function GetDescriptorFromCommand
- * Returns a EDA_HOTKEY* pointer from a hot key identifier.
- * @param aCommand = hot key identifier (@see hotkeys.h)
- * @param aList = pointer to a EDA_HOTKEY list of commands
- * @return the corresponding EDA_HOTKEY pointer from the EDA_HOTKEY List
- */
-EDA_HOTKEY* GetDescriptorFromCommand( int aCommand, EDA_HOTKEY** aList );
-
-/**
- * Function ReadHotkeyConfig
+ * Function ReadLegacyHotkeyConfigFile
  * Read hotkey configuration for a given app,
  * possibly before the frame for that app has been created
  * @param aFilename = the filename to save the hotkeys as
- * @param aDescList = the hotkey data
- * @param aDefaultLocation = if true, add hotkey path and extension to aFilename
+ * @param aMap The list of keycodes mapped by legacy property names 
  * @return 1 on success, 0 on failure
 */
-int ReadHotkeyConfigFile( const wxString& aFilename, struct EDA_HOTKEY_CONFIG* aDescList,
-                        const bool aDefaultLocation = true );
+int ReadLegacyHotkeyConfigFile( const wxString& aFilename, std::map<std::string, int>& aMap );
 
 /**
- * Function ReadHotkeyConfig
+ * Function ReadLegacyHotkeyConfig
  * Read configuration data and fill the current hotkey list with hotkeys
  * @param aAppname = the value of the app's m_FrameName
- * @param aDescList = current hotkey list descr. to initialize.
+ * @param aMap The list of keycodes mapped by legacy property names 
  */
-int ReadHotkeyConfig( const wxString& aAppname,  struct EDA_HOTKEY_CONFIG* aDescList );
-
-/**
- * Function ParseHotkeyConfig
- * Translates hotkey string data into application hotkeys
- * @param data The string of data read from the configuration files
- * @param aDescList The list of hotkeys to update
- * @param aAppname The application interface requesting hotkey updates or empty for all
- */
-void ParseHotkeyConfig( const wxString& data, struct EDA_HOTKEY_CONFIG* aDescList,
-        const wxString& aAppname );
-
-
-// common hotkeys event id
-// these hotkey ID are used in many files, so they are define here only once.
-enum common_hotkey_id_command {
-    HK_NOT_FOUND = 0,
-    HK_NEW,
-    HK_OPEN,
-    HK_SAVE,
-    HK_SAVEAS,
-    HK_PRINT,
-    HK_UNDO,
-    HK_REDO,
-    HK_CUT,
-    HK_COPY,
-    HK_PASTE,
-    HK_DUPLICATE,
-    HK_DELETE,
-    HK_FIND,
-    HK_FIND_NEXT,
-    HK_FIND_NEXT_MARKER,
-    HK_REPLACE,
-    HK_RESET_LOCAL_COORD,
-    HK_SET_GRID_ORIGIN,
-    HK_RESET_GRID_ORIGIN,
-    HK_SWITCH_GRID_TO_FASTGRID1,
-    HK_SWITCH_GRID_TO_FASTGRID2,
-    HK_SWITCH_GRID_TO_NEXT,
-    HK_SWITCH_GRID_TO_PREVIOUS,
-    HK_SWITCH_UNITS,
-    HK_HELP,
-    HK_ZOOM_IN,
-    HK_ZOOM_OUT,
-    HK_ZOOM_REDRAW,
-    HK_ZOOM_CENTER,
-    HK_ZOOM_AUTO,
-    HK_ZOOM_SELECTION,
-    HK_LEFT_CLICK,
-    HK_LEFT_DCLICK,
-    HK_PREFERENCES,
-    HK_TOGGLE_CURSOR,
-    HK_MEASURE_TOOL,
-    HK_UPDATE_PCB_FROM_SCH,
-    HK_COMMON_END
-};
+int ReadLegacyHotkeyConfig( const wxString& aAppname, std::map<std::string, int>& aMap );
 
 #endif // HOTKEYS_BASIC_H

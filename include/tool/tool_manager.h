@@ -158,9 +158,11 @@ public:
         RunAction( aAction, aNow, (void*) NULL );
     }
 
+    const std::map<std::string, TOOL_ACTION*>& GetActions();
+    
     ///> @copydoc ACTION_MANAGER::GetHotKey()
     int GetHotKey( const TOOL_ACTION& aAction );
-
+    
     ///> @copydoc ACTION_MANAGER::UpdateHotKeys()
     void UpdateHotKeys();
 

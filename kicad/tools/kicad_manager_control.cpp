@@ -30,17 +30,20 @@
 #include <pgm_base.h>
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::newProject( "kicad.Control.newProject",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_NEW ),
+        AS_GLOBAL, 
+        MD_CTRL + 'N', LEGACY_HK_NAME( "New Project" ),
         _( "New Project..." ), _( "Create new blank project" ),
         new_project_xpm );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::newFromTemplate( "kicad.Control.newFromTemplate",
-        AS_GLOBAL, 0, // TOOL_ACTION::LegacyHotKey( HK_NEW_PRJ_TEMPLATE ),
+        AS_GLOBAL, 
+        MD_CTRL + 'T', LEGACY_HK_NAME( "New Project From Template" ),
         _( "New Project from Template..." ), _( "Create new project from template" ),
         new_project_with_template_xpm );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::openProject( "kicad.Control.openProject",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_OPEN ),
+        AS_GLOBAL, 
+        MD_CTRL + 'O', LEGACY_HK_NAME( "Open Project" ),
         _( "Open Project..." ), _( "Open an existing project" ),
         open_project_xpm );
 
@@ -192,8 +195,8 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     // Get project destination folder and project file name.
     wxString        default_dir = wxFileName( Prj().GetProjectFullName() ).GetPathWithSep();
     wxString        title = _( "New Project Folder" );
-    wxFileDialog    dlg( m_frame, title, default_dir, wxEmptyString,
-                         ProjectFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog    dlg( m_frame, title, default_dir, wxEmptyString, ProjectFileWildcard(), 
+                         wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     // Add a "Create a new directory" checkbox
     dlg.SetExtraControlCreator( &DIR_CHECKBOX::Create );
@@ -299,7 +302,6 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
 
     m_frame->CreateNewProject( fn.GetFullPath() );
     m_frame->LoadProject( fn );
-    
     return 0;
 }
 
@@ -323,10 +325,8 @@ int KICAD_MANAGER_CONTROL::OpenProject( const TOOL_EVENT& aEvent )
         return -1;
 
     m_frame->LoadProject( pro );
-    
     return 0;
 }
-
 
 
 int KICAD_MANAGER_CONTROL::Refresh( const TOOL_EVENT& aEvent )
@@ -338,9 +338,9 @@ int KICAD_MANAGER_CONTROL::Refresh( const TOOL_EVENT& aEvent )
 
 void KICAD_MANAGER_CONTROL::setTransitions()
 {
-    Go( &KICAD_MANAGER_CONTROL::NewProject,  KICAD_MANAGER_ACTIONS::newProject.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::NewProject,  KICAD_MANAGER_ACTIONS::newFromTemplate.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::OpenProject, KICAD_MANAGER_ACTIONS::openProject.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::NewProject,      KICAD_MANAGER_ACTIONS::newProject.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::NewFromTemplate, KICAD_MANAGER_ACTIONS::newFromTemplate.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::OpenProject,     KICAD_MANAGER_ACTIONS::openProject.MakeEvent() );
 
-    Go( &KICAD_MANAGER_CONTROL::Refresh,     ACTIONS::zoomRedraw.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Refresh,         ACTIONS::zoomRedraw.MakeEvent() );
 }

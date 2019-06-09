@@ -60,7 +60,7 @@
 
 
 TOOL_ACTION PCB_ACTIONS::runDRC( "pcbnew.DRCTool.runDRC",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Design Rules Checker" ), _( "Show the design rules checker window" ),
         erc_xpm );
 

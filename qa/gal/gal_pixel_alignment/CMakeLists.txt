@@ -25,7 +25,7 @@
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
 
-add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW -DUSE_TOOL_MANAGER)
+add_definitions(-DBOOST_TEST_DYN_LINK -DPCBNEW -DUSE_TOOL_MANAGER -DQA_TEST)
 
 if( BUILD_GITHUB_PLUGIN )
     set( GITHUB_PLUGIN_LIBRARIES github_plugin )

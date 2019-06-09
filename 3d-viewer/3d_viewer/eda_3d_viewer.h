@@ -201,7 +201,8 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
 
     void DisplayHotKeys()
     {
-        DisplayHotkeyList( this, GetHotkeyConfig() );
+        // JEY TODO: need a toolManager....
+        DisplayHotkeyList( this, GetToolManager() );
     }
 
     /**

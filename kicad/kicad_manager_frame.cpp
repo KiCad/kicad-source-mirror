@@ -23,8 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <eda_draw_frame.h>
-#include <panel_hotkeys_editor.h>
 #include <gestfich.h>
 #include <kiway.h>
 #include <kiway_player.h>
@@ -32,12 +30,13 @@
 #include <bitmaps.h>
 #include <executable_names.h>
 #include <build_version.h>
-#include <dialog_configure_paths.h>
-#include <dialog_edit_library_tables.h>
 #include "pgm_kicad.h"
 #include "tree_project_frame.h"
 #include "kicad_id.h"
 #include <tool/tool_manager.h>
+#include <tool/action_toolbar.h>
+#include <tool/common_control.h>
+#include <tools/kicad_manager_actions.h>
 #include <tools/kicad_manager_control.h>
 
 #ifdef __WXMAC__
@@ -58,7 +57,6 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     m_active_project = false;
     m_mainToolBar = nullptr;
     m_leftWinWidth = 60;
-    m_manager_Hotkeys_Descr = NULL;
     m_AboutTitle = "KiCad";
 
     // Create the status line (bottom of the frame)
@@ -90,8 +88,10 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     // Create the manager
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( nullptr, nullptr, nullptr, this );
+    m_actions = new KICAD_MANAGER_ACTIONS();
 
     // Register tools
+    m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new KICAD_MANAGER_CONTROL );
     m_toolManager->InitTools();
 
@@ -162,7 +162,6 @@ const wxString KICAD_MANAGER_FRAME::SchFileName()
    wxFileName   fn( GetProjectFileName() );
 
    fn.SetExt( SchematicFileExtension );
-
    return fn.GetFullPath();
 }
 
@@ -172,7 +171,6 @@ const wxString KICAD_MANAGER_FRAME::PcbFileName()
    wxFileName   fn( GetProjectFileName() );
 
    fn.SetExt( PcbFileExtension );
-
    return fn.GetFullPath();
 }
 
@@ -182,7 +180,6 @@ const wxString KICAD_MANAGER_FRAME::PcbLegacyFileName()
    wxFileName   fn( GetProjectFileName() );
 
    fn.SetExt( LegacyPcbFileExtension );
-
    return fn.GetFullPath();
 }
 
@@ -257,8 +254,9 @@ void KICAD_MANAGER_FRAME::OnExit( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::TERMINATE_HANDLER::OnTerminate( int pid, int status )
 {
-    wxString msg = wxString::Format( _( "%s closed [pid=%d]\n" ),
-            GetChars( m_appName ), pid );
+    wxString msg = wxString::Format( _( "%s closed [pid=%d]\n" ), 
+                                     m_appName, 
+                                     pid );
 
     wxWindow* window = wxWindow::FindWindowByName( KICAD_MANAGER_FRAME_NAME );
 
@@ -276,8 +274,7 @@ void KICAD_MANAGER_FRAME::TERMINATE_HANDLER::OnTerminate( int pid, int status )
 }
 
 
-void KICAD_MANAGER_FRAME::Execute( wxWindow* frame, const wxString& execFile,
-                                   wxString params )
+void KICAD_MANAGER_FRAME::Execute( wxWindow* frame, const wxString& execFile, wxString params )
 {
     if( params.size() )
         AddDelimiterString( params );
@@ -289,8 +286,9 @@ void KICAD_MANAGER_FRAME::Execute( wxWindow* frame, const wxString& execFile,
     if( pid > 0 )
     {
         wxString msg = wxString::Format( _( "%s %s opened [pid=%ld]\n" ),
-                                         GetChars( execFile ), GetChars( params ), pid );
-
+                                         execFile, 
+                                         params, 
+                                         pid );
         PrintMsg( msg );
 
 #ifdef __WXMAC__
@@ -585,34 +583,3 @@ void KICAD_MANAGER_FRAME::PrintPrjInfo()
 }
 
 
-void KICAD_MANAGER_FRAME::OnShowHotkeys( wxCommandEvent& event )
-{
-    DisplayHotkeyList( this, m_manager_Hotkeys_Descr );
-}
-
-
-void KICAD_MANAGER_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
-{
-    KIFACE* kiface = Kiway().KiFACE( KIWAY::FACE_PCB );
-    kiface->CreateWindow( this, DIALOG_CONFIGUREPATHS, &Kiway() );
-}
-
-
-void KICAD_MANAGER_FRAME::OnEditSymLibTable( wxCommandEvent& aEvent )
-{
-    KIFACE* kiface = Kiway().KiFACE( KIWAY::FACE_SCH );
-    kiface->CreateWindow( this, DIALOG_SCH_LIBRARY_TABLE, &Kiway() );
-}
-
-
-void KICAD_MANAGER_FRAME::OnEditFpLibTable( wxCommandEvent& aEvent )
-{
-    KIFACE* kiface = Kiway().KiFACE( KIWAY::FACE_PCB );
-    kiface->CreateWindow( this, DIALOG_PCB_LIBRARY_TABLE, &Kiway() );
-}
-
-
-void KICAD_MANAGER_FRAME::OnPreferences( wxCommandEvent& aEvent )
-{
-    ShowPreferences( m_manager_Hotkeys_Descr, m_manager_Hotkeys_Descr, wxT( "kicad" ) );
-}

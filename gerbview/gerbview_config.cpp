@@ -28,39 +28,21 @@
 #include <common.h>
 #include <config_params.h>
 #include <gerbview_frame.h>
-#include <hotkeys.h>
 #include <widgets/paged_dialog.h>
 #include <dialogs/panel_gerbview_settings.h>
 #include <dialogs/panel_gerbview_display_options.h>
-
-void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )
-{
-    int      id = event.GetId();
-
-    switch( id )
-    {
-    case wxID_PREFERENCES:
-        ShowPreferences( GerbviewHotkeysDescr, GerbviewHotkeysDescr, wxT( "gerbview" ) );
-        break;
-
-    case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
-        // Display current hotkey list for GerbView.
-        DisplayHotkeyList( this, GerbviewHotkeysDescr );
-        break;
-
-    default:
-        wxMessageBox( wxT( "GERBVIEW_FRAME::Process_Config error" ) );
-        break;
-    }
-}
+#include <panel_hotkeys_editor.h>
 
 
-void GERBVIEW_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
+void GERBVIEW_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
+                                         PANEL_HOTKEYS_EDITOR* aHotkeysPanel )
 {
     wxTreebook* book = aParent->GetTreebook();
 
     book->AddPage( new PANEL_GERBVIEW_SETTINGS( this, book ), _( "Gerbview" ) );
     book->AddSubPage( new PANEL_GERBVIEW_DISPLAY_OPTIONS( this, book ), _( "Display Options" ) );
+    
+    aHotkeysPanel->AddHotKeys( GetToolManager() );
 }
 
 

@@ -37,13 +37,14 @@
 #include <widgets/paged_dialog.h>
 #include <bitmaps.h>
 #include <tool/action_menu.h>
+#include <tool/common_control.h>
+#include <tool/tool_manager.h>
 #include <menus_helpers.h>
+#include <tool/actions.h>
 
 
 /// The default auto save interval is 10 minutes.
 #define DEFAULT_AUTO_SAVE_INTERVAL 600
-
-#define URL_GET_INVOLVED "http://kicad-pcb.org/contribute/"
 
 ///@{
 /// \ingroup config
@@ -66,10 +67,8 @@ static const wxString entryMaximized = "Maximized";  ///< Nonzero iff frame is m
 
 
 BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
-    EVT_MENU( wxID_HELP, EDA_BASE_FRAME::GetKicadHelp )
-    EVT_MENU( wxID_INDEX, EDA_BASE_FRAME::GetKicadHelp )
-    EVT_MENU( ID_HELP_GET_INVOLVED, EDA_BASE_FRAME::GetKicadContribute )
-    EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::GetKicadAbout )
+    EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::OnKicadAbout )
+    EVT_MENU( wxID_PREFERENCES, EDA_BASE_FRAME::OnPreferences )
     
     EVT_CHAR_HOOK( EDA_BASE_FRAME::OnCharHook )
     EVT_MENU_OPEN( EDA_BASE_FRAME::OnMenuOpen )
@@ -290,30 +289,18 @@ void EDA_BASE_FRAME::ReCreateMenuBar()
 
 void EDA_BASE_FRAME::AddStandardHelpMenu( wxMenuBar* aMenuBar )
 {
-    wxMenu* helpMenu = new wxMenu;
+    COMMON_CONTROL* commonControl = m_toolManager->GetTool<COMMON_CONTROL>();
+    ACTION_MENU*    helpMenu = new ACTION_MENU();
 
-    AddMenuItem( helpMenu, wxID_HELP,
-                 _( "&Help" ),
-                 _( "Open product documentation in a web browser" ),
-                 KiBitmap( online_help_xpm ) );
+    helpMenu->SetTool( commonControl );
 
-    AddMenuItem( helpMenu, wxID_INDEX,
-                 _( "&Getting Started with KiCad" ),
-                 _( "Open \"Getting Started in KiCad\" guide for beginners" ),
-                 KiBitmap( help_xpm ) );
-
-    // JEY TODO: move to actions...
-    AddMenuItem( helpMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, _( "&List Hotkeys..." ),
-                 _( "Displays current hotkeys table and corresponding commands" ),
-                 KiBitmap( hotkeys_xpm ) );
-
+    helpMenu->Add( ACTIONS::help );
+    helpMenu->Add( ACTIONS::gettingStarted );
+    helpMenu->Add( ACTIONS::listHotKeys );
+    helpMenu->Add( ACTIONS::getInvolved );
+    
     helpMenu->AppendSeparator();
-    AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED, _( "Get &Involved" ),
-                 _( "Open \"Contribute to KiCad\" in a web browser" ),
-                 KiBitmap( info_xpm ) );
-
-    helpMenu->AppendSeparator();
-    AddMenuItem( helpMenu, wxID_ABOUT, _( "&About KiCad" ), KiBitmap( about_xpm ) );
+    helpMenu->Add( _( "&About KiCad" ), "", wxID_ABOUT, about_xpm );
 
     aMenuBar->Append( helpMenu, _( "&Help" ) );
 }
@@ -517,112 +504,33 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
 }
 
 
-void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
-{
-    const SEARCH_STACK& search = sys_search();
-
-    /* We have to get document for beginners,
-     * or the full specific doc
-     * if event id is wxID_INDEX, we want the document for beginners.
-     * else the specific doc file (its name is in Kiface().GetHelpFileName())
-     * The document for beginners is the same for all KiCad utilities
-     */
-    if( event.GetId() == wxID_INDEX )
-    {
-        // List of possible names for Getting Started in KiCad
-        const wxChar* names[2] = {
-            wxT( "getting_started_in_kicad" ),
-            wxT( "Getting_Started_in_KiCad" )
-            };
-
-        wxString helpFile;
-        // Search for "getting_started_in_kicad.html" or "getting_started_in_kicad.pdf"
-        // or "Getting_Started_in_KiCad.html" or "Getting_Started_in_KiCad.pdf"
-        for( unsigned ii = 0; ii < arrayDim( names ); ii++ )
-        {
-            helpFile = SearchHelpFileFullPath( search, names[ii] );
-
-            if( !helpFile.IsEmpty() )
-               break;
-        }
-
-        if( !helpFile )
-        {
-            wxString msg = wxString::Format( _(
-                "Html or pdf help file \n\"%s\"\n or\n\"%s\" could not be found." ), names[0], names[1] );
-            wxMessageBox( msg );
-        }
-        else
-        {
-            GetAssociatedDocument( this, helpFile );
-        }
-
-        return;
-    }
-
-    wxString base_name = help_name();
-    wxString helpFile = SearchHelpFileFullPath( search, base_name );
-
-    if( !helpFile )
-    {
-        wxString msg = wxString::Format( _(
-            "Help file \"%s\" could not be found." ),
-            GetChars( base_name )
-            );
-        wxMessageBox( msg );
-    }
-    else
-    {
-        GetAssociatedDocument( this, helpFile );
-    }
-}
-
-
-void EDA_BASE_FRAME::GetKicadContribute( wxCommandEvent& event )
-{
-    if( !wxLaunchDefaultBrowser( URL_GET_INVOLVED ) )
-    {
-        wxString msg;
-        msg.Printf( _( "Could not launch the default browser.\n"
-                       "For information on how to help the KiCad project, visit %s" ),
-                    URL_GET_INVOLVED );
-        wxMessageBox( msg, _( "Get involved with KiCad" ), wxOK, this );
-    }
-}
-
-
-void EDA_BASE_FRAME::GetKicadAbout( wxCommandEvent& event )
+void EDA_BASE_FRAME::OnKicadAbout( wxCommandEvent& event )
 {
     void ShowAboutDialog(EDA_BASE_FRAME * aParent); // See AboutDialog_main.cpp
     ShowAboutDialog( this );
 }
 
 
-bool EDA_BASE_FRAME::ShowPreferences( EDA_HOTKEY_CONFIG* aHotkeys, EDA_HOTKEY_CONFIG* aShowHotkeys,
-                                      const wxString& aHotkeysNickname )
+void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
 {
     PAGED_DIALOG dlg( this, _( "Preferences" ) );
     wxTreebook* book = dlg.GetTreebook();
 
     book->AddPage( new PANEL_COMMON_SETTINGS( &dlg, book ), _( "Common" ) );
-    book->AddPage( new PANEL_HOTKEYS_EDITOR( this, book, false,
-        aHotkeys, aShowHotkeys, aHotkeysNickname ), _( "Hotkeys" ) );
+    
+    PANEL_HOTKEYS_EDITOR* hotkeysPanel = new PANEL_HOTKEYS_EDITOR( book, false );
+    book->AddPage( hotkeysPanel, _( "Hotkeys" ) );
 
     for( unsigned i = 0; i < KIWAY_PLAYER_COUNT;  ++i )
     {
         KIWAY_PLAYER* frame = dlg.Kiway().Player( (FRAME_T) i, false );
 
         if( frame )
-            frame->InstallPreferences( &dlg );
+            frame->InstallPreferences( &dlg, hotkeysPanel );
     }
 
     if( dlg.ShowModal() == wxID_OK )
-    {
         dlg.Kiway().CommonSettingsChanged();
-        return true;
-    }
-
-    return false;
 }
 
 

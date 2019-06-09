@@ -24,7 +24,6 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
 #include <ee_actions.h>
-#include <ee_hotkeys.h>
 #include <view/view.h>
 #include <bitmaps.h>
 #include <base_struct.h>

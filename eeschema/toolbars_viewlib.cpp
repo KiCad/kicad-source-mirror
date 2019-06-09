@@ -20,15 +20,13 @@
  */
 
 
-#include <dialog_helpers.h>
 #include <macros.h>
-#include <menus_helpers.h>
-
 #include "class_library.h"
 #include "eeschema_id.h"
 #include "general.h"
 #include "viewlib_frame.h"
 #include <symbol_lib_table.h>
+#include <tool/action_toolbar.h>
 #include <tool/conditional_menu.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
@@ -104,12 +102,13 @@ void LIB_VIEW_FRAME::ReCreateMenuBar()
 
     //-- File menu -----------------------------------------------------------
     //
-    wxMenu* fileMenu = new wxMenu;
+    CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, libControl );
 
-    AddMenuItem( fileMenu, wxID_EXIT,
-                 _( "Cl&ose" ),
-                 _( "Close schematic symbol viewer" ),
-                 KiBitmap( exit_xpm ) );
+    fileMenu->AddItem( wxID_EXIT, _( "Close" ), _( "Close footprint viewer" ),
+                       exit_xpm,                           EE_CONDITIONS::ShowAlways );
+
+    fileMenu->Resolve();
+
 
     //-- View menu -----------------------------------------------------------
     //

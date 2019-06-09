@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file kicad/kicad.h
- * @brief KICAD_MANAGER_FRAME is the KiCad main frame.
- */
-
 #ifndef KICAD_H
 #define KICAD_H
 
@@ -40,6 +35,7 @@
 class LAUNCHER_PANEL;
 class TREEPROJECTFILES;
 class TREE_PROJECT_FRAME;
+class ACTION_TOOLBAR;
 
 // Identify the type of files handled by Kicad manager
 //
@@ -99,14 +95,9 @@ public:
     void OnRunPcbCalculator( wxCommandEvent& event );
     void OnRunPageLayoutEditor( wxCommandEvent& event );
 
-    void OnConfigurePaths( wxCommandEvent& aEvent );
-    void OnEditSymLibTable( wxCommandEvent& aEvent );
-    void OnEditFpLibTable( wxCommandEvent& aEvent );
-    void OnPreferences( wxCommandEvent& aEvent );
     void OnOpenTextEditor( wxCommandEvent& event );
     void OnOpenFileInTextEditor( wxCommandEvent& event );
     void OnBrowseInFileExplorer( wxCommandEvent& event );
-    void OnShowHotkeys( wxCommandEvent& event );
 
     void OnFileHistory( wxCommandEvent& event );
     void OnExit( wxCommandEvent& event );
@@ -224,7 +215,6 @@ private:
     ACTION_TOOLBAR*     m_mainToolBar;
 
     int m_leftWinWidth;
-    EDA_HOTKEY_CONFIG* m_manager_Hotkeys_Descr;
 
     void language_change( wxCommandEvent& event );
 

@@ -24,7 +24,6 @@ set( PL_EDITOR_SRCS
     pl_draw_panel_gal.cpp
     pl_editor_undo_redo.cpp
     properties_frame.cpp
-    hotkeys.cpp
     menubar.cpp
     toolbars_pl_editor.cpp
 

@@ -287,7 +287,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WS_DATA_ITEM* aItem )
 void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
 {
     PL_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<PL_SELECTION_TOOL>();
-    SELECTION&         selection = selTool->GetSelection();
+    PL_SELECTION&      selection = selTool->GetSelection();
 
     m_parent->SaveCopyInUndoList();
 

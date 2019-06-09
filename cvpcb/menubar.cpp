@@ -55,6 +55,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     wxMenu* preferencesMenu = new wxMenu;
 
     // Path configuration edit dialog.
+    // JEY TODO: fix these....
     AddMenuItem( preferencesMenu,
                  ID_PREFERENCES_CONFIGURE_PATHS,
                  _( "&Configure Paths..." ),

@@ -30,12 +30,9 @@
 #include <pcb_painter.h>
 #include <dialogs/dialog_pns_settings.h>
 #include <dialogs/dialog_pns_length_tuning_settings.h>
-
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <hotkeys.h>
-
 #include "pns_segment.h"
 #include "pns_router.h"
 #include "pns_meander_placer.h" // fixme: move settings to separate header
@@ -47,37 +44,45 @@
 
 using namespace KIGFX;
 
-static TOOL_ACTION ACT_StartTuning( "pcbnew.LengthTuner.StartTuning", AS_CONTEXT,
-        TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_TRACK ),
-    _( "New Track" ), _( "Starts laying a new track." ) );
+static TOOL_ACTION ACT_StartTuning( "pcbnew.LengthTuner.StartTuning", 
+        AS_CONTEXT,
+        'X', LEGACY_HK_NAME( "Add New Track" ),
+        _( "New Track" ), _( "Starts laying a new track." ) );
 
-static TOOL_ACTION ACT_EndTuning( "pcbnew.LengthTuner.EndTuning", AS_CONTEXT, WXK_END,
-    _( "End Track" ), _( "Stops laying the current meander." ) );
+static TOOL_ACTION ACT_EndTuning( "pcbnew.LengthTuner.EndTuning", 
+        AS_CONTEXT, 
+        WXK_END,
+        _( "End Track" ), _( "Stops laying the current meander." ) );
 
-static TOOL_ACTION ACT_Settings( "pcbnew.LengthTuner.Settings", AS_CONTEXT,
-        TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_SETTINGS ),
-    _( "Length Tuning Settings..." ), _( "Sets the length tuning parameters for currently routed item." ),
-    router_len_tuner_setup_xpm );
+static TOOL_ACTION ACT_Settings( "pcbnew.LengthTuner.Settings", 
+        AS_CONTEXT,
+        MD_CTRL + 'L', LEGACY_HK_NAME( "Length Tuning Settings (Modern Toolset only)" ),
+        _( "Length Tuning Settings..." ), _( "Sets the length tuning parameters for currently routed item." ),
+        router_len_tuner_setup_xpm );
 
-static TOOL_ACTION ACT_SpacingIncrease( "pcbnew.LengthTuner.SpacingIncrease", AS_CONTEXT,
-        TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_INCREASE_SPACING ),
-    _( "Increase Spacing" ), _( "Increase meander spacing by one step." ),
-    router_len_tuner_dist_incr_xpm );
+static TOOL_ACTION ACT_SpacingIncrease( "pcbnew.LengthTuner.SpacingIncrease", 
+        AS_CONTEXT,
+        '1', LEGACY_HK_NAME( "Increase meander spacing by one step." ),
+        _( "Increase Spacing" ), _( "Increase meander spacing by one step." ),
+        router_len_tuner_dist_incr_xpm );
 
-static TOOL_ACTION ACT_SpacingDecrease( "pcbnew.LengthTuner.SpacingDecrease", AS_CONTEXT,
-        TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_DECREASE_SPACING ),
-    _( "Decrease Spacing" ), _( "Decrease meander spacing by one step." ),
-    router_len_tuner_dist_decr_xpm );
+static TOOL_ACTION ACT_SpacingDecrease( "pcbnew.LengthTuner.SpacingDecrease", 
+        AS_CONTEXT,
+        '2', LEGACY_HK_NAME( "Decrease meander spacing by one step." ),
+        _( "Decrease Spacing" ), _( "Decrease meander spacing by one step." ),
+        router_len_tuner_dist_decr_xpm );
 
-static TOOL_ACTION ACT_AmplIncrease( "pcbnew.LengthTuner.AmplIncrease", AS_CONTEXT,
-        TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_INCREASE_AMP ),
-    _( "Increase Amplitude" ), _( "Increase meander amplitude by one step." ),
-    router_len_tuner_amplitude_incr_xpm );
+static TOOL_ACTION ACT_AmplIncrease( "pcbnew.LengthTuner.AmplIncrease", 
+        AS_CONTEXT,
+        '3', LEGACY_HK_NAME( "Increase meander amplitude by one step." ),
+        _( "Increase Amplitude" ), _( "Increase meander amplitude by one step." ),
+        router_len_tuner_amplitude_incr_xpm );
 
-static TOOL_ACTION ACT_AmplDecrease( "pcbnew.LengthTuner.AmplDecrease", AS_CONTEXT,
-        TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_DECREASE_AMP ),
-    _( "Decrease Amplitude" ), _( "Decrease meander amplitude by one step." ),
-    router_len_tuner_amplitude_decr_xpm );
+static TOOL_ACTION ACT_AmplDecrease( "pcbnew.LengthTuner.AmplDecrease", 
+        AS_CONTEXT,
+        '4', LEGACY_HK_NAME( "Decrease meander amplitude by one step." ),
+        _( "Decrease Amplitude" ), _( "Decrease meander amplitude by one step." ),
+        router_len_tuner_amplitude_decr_xpm );
 
 
 LENGTH_TUNER_TOOL::LENGTH_TUNER_TOOL() :

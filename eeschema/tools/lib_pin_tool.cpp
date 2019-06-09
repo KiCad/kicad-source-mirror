@@ -34,15 +34,18 @@
 
 
 TOOL_ACTION EE_ACTIONS::pushPinLength( "libedit.PinEditing.pushPinLength",
-        AS_GLOBAL, 0, _( "Push Pin Length" ), _( "Copy pin length to other pins in symbol" ),
+        AS_GLOBAL, 0, "",
+        _( "Push Pin Length" ), _( "Copy pin length to other pins in symbol" ),
         pin_size_to_xpm );
 
 TOOL_ACTION EE_ACTIONS::pushPinNameSize( "libedit.PinEditing.pushPinNameSize",
-        AS_GLOBAL, 0, _( "Push Pin Name Size" ), _( "Copy pin name size to other pins in symbol" ),
+        AS_GLOBAL, 0, "",
+        _( "Push Pin Name Size" ), _( "Copy pin name size to other pins in symbol" ),
         pin_size_to_xpm );
 
 TOOL_ACTION EE_ACTIONS::pushPinNumSize( "libedit.PinEditing.pushPinNumSize",
-        AS_GLOBAL, 0, _( "Push Pin Number Size" ), _( "Copy pin number size to other pins in symbol" ),
+        AS_GLOBAL, 0, "",
+        _( "Push Pin Number Size" ), _( "Copy pin number size to other pins in symbol" ),
         pin_size_to_xpm );
 
 

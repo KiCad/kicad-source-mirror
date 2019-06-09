@@ -82,8 +82,8 @@ private:
     DIALOG_POSITION_RELATIVE* m_dialog;
 
     ///> Selection tool used for obtaining selected items
-    SELECTION_TOOL* m_selectionTool;
-    SELECTION m_selection;
+    SELECTION_TOOL*  m_selectionTool;
+    PCBNEW_SELECTION m_selection;
 
     std::unique_ptr<BOARD_COMMIT> m_commit;
 

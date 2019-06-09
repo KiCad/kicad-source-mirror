@@ -56,13 +56,6 @@ class WIDGET_HOTKEY_LIST : public TWO_COLUMN_TREE_LIST
     WIDGET_HOTKEY_CLIENT_DATA* GetHKClientData( wxTreeListItem aItem );
 
     /**
-     * Method GetSelHKClientData
-     * Return the WIDGET_HOTKEY_CLIENT_DATA for the item being edited, or NULL if
-     * none is selected.
-     */
-    WIDGET_HOTKEY_CLIENT_DATA* GetSelHKClientData();
-
-    /**
      * Get the WIDGET_HOTKEY_CLIENT_DATA form an item and assert if it isn't
      * found. This is for use when the data not being present indicates an
      * error.
@@ -93,7 +86,7 @@ class WIDGET_HOTKEY_LIST : public TWO_COLUMN_TREE_LIST
      * @param aHotkey the change-able hotkey to try to change
      * @param aKey the key code to change it to
      */
-    void changeHotkey( CHANGED_HOTKEY& aHotkey, long aKey );
+    void changeHotkey( HOTKEY& aHotkey, long aKey );
 
 protected:
 
@@ -150,11 +143,11 @@ protected:
      * section and g_CommonSectionTag section.
      *
      * @param aKey - key to check
-     * @param aSectionTag - section tag into which the key is proposed to be installed
+     * @param aActionName - name of the action into which the key is proposed to be installed
      *
      * @return true iff the user accepted the overwrite or no conflict existed
      */
-    bool ResolveKeyConflicts( long aKey, const wxString& aSectionTag );
+    bool ResolveKeyConflicts( TOOL_ACTION* aAction, long aKey );
 
 public:
     /**

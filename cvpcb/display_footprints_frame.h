@@ -102,9 +102,6 @@ public:
     void    InstallOptionsDisplay( wxCommandEvent& event );
     MODULE* Get_Module( const wxString& CmpName );
 
-    ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override { return NULL; }
-
     /* SaveCopyInUndoList() virtual
      * currently: do nothing in CvPcb.
      * but but be defined because it is a pure virtual in PCB_BASE_FRAME

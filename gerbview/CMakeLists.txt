@@ -47,7 +47,6 @@ set( GERBVIEW_SRCS
     files.cpp
     gerbview_config.cpp
     gerbview_frame.cpp
-    hotkeys.cpp
     json11.cpp
     job_file_reader.cpp
     locate.cpp

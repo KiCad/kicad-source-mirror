@@ -23,7 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
 #include <kiface_i.h>
 #include <menus_helpers.h>
 #include <pgm_base.h>
@@ -32,7 +31,6 @@
 #include <tools/ee_selection_tool.h>
 #include <tools/ee_actions.h>
 #include "eeschema_id.h"
-#include "ee_hotkeys.h"
 #include "sch_edit_frame.h"
 
 class CONDITIONAL_MENU;
@@ -311,7 +309,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     prefsMenu->AddItem( ACTIONS::configurePaths,           EE_CONDITIONS::ShowAlways );
     prefsMenu->AddItem( ACTIONS::showSymbolLibTable,       EE_CONDITIONS::ShowAlways );
     prefsMenu->AddItem( wxID_PREFERENCES,
-                        AddHotkeyName( _( "Preferences..." ), g_Eeschema_Hotkeys_Descr, HK_PREFERENCES ),
+                        _( "Preferences...\tCTRL+," ),
                         _( "Show preferences for all open tools" ),
                         preference_xpm,                    EE_CONDITIONS::ShowAlways );
 

@@ -27,8 +27,8 @@
 #include <footprint_edit_frame.h>
 #include <dialog_helpers.h>
 #include <pcbnew_id.h>
-#include <hotkeys.h>
 #include <bitmaps.h>
+#include <tool/action_toolbar.h>
 #include <tools/pcb_actions.h>
 
 void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()

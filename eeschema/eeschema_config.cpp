@@ -36,7 +36,6 @@
 #include <invoke_sch_dialog.h>
 #include <lib_edit_frame.h>
 #include <eeschema_config.h>
-#include <ee_hotkeys.h>
 #include <ws_draw_item.h>
 #include <ws_data_model.h>
 #include <class_library.h>
@@ -48,6 +47,7 @@
 #include <dialogs/panel_eeschema_settings.h>
 #include <dialogs/panel_eeschema_display_options.h>
 #include <dialogs/panel_libedit_display_options.h>
+#include <panel_hotkeys_editor.h>
 #include <widgets/widget_eeschema_color_config.h>
 #include <widgets/symbol_tree_pane.h>
 #include <dialogs/panel_libedit_settings.h>
@@ -128,23 +128,6 @@ COLOR4D GetInvisibleItemColor()
 }
 
 
-void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
-{
-    int id = event.GetId();
-
-    switch( id )
-    {
-    case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
-        // Display current hotkey list for LibEdit.
-        DisplayHotkeyList( this, g_Libedit_Hotkeys_Descr );
-        break;
-
-    default:
-        DisplayError( this, wxT( "LIB_EDIT_FRAME::Process_Config error" ) );
-    }
-}
-
-
 void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 {
     int        id = event.GetId();
@@ -152,6 +135,7 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
     switch( id )
     {
+    // JEY TODO: are these still active?
     case ID_CONFIG_SAVE:
         SaveProjectSettings( true );
         break;
@@ -183,28 +167,14 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         }
         break;
 
-    case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
-        // Display current hotkey list for eeschema.
-        DisplayHotkeyList( this, g_Schematic_Hotkeys_Descr );
-        break;
-
     default:
         DisplayError( this, wxT( "SCH_EDIT_FRAME::Process_Config error" ) );
     }
 }
 
 
-void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
-{
-    if( ShowPreferences( g_Eeschema_Hotkeys_Descr, g_Schematic_Hotkeys_Descr, wxT( "eeschema" ) ) )
-    {
-        SaveSettings( config() );  // save values shared by eeschema applications.
-        GetGalCanvas()->Refresh( true );
-    }
-}
-
-
-void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
+void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent, 
+                                         PANEL_HOTKEYS_EDITOR* aHotkeysPanel  )
 {
     wxTreebook* book = aParent->GetTreebook();
 
@@ -212,6 +182,8 @@ void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
     book->AddSubPage( new PANEL_EESCHEMA_DISPLAY_OPTIONS( this, book ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_EESCHEMA_COLOR_CONFIG( this, book ), _( "Colors" ) );
     book->AddSubPage( new PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( this, book ), _( "Field Name Templates" ) );
+    
+    aHotkeysPanel->AddHotKeys( GetToolManager() );
 }
 
 
@@ -411,7 +383,6 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     long tmp;
 
-    ReadHotkeyConfig( SCH_EDIT_FRAME_NAME, g_Schematic_Hotkeys_Descr );
     wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
     SetDefaultBusThickness( (int) aCfg->Read( DefaultBusWidthEntry, DEFAULTBUSTHICKNESS ) );
@@ -548,8 +519,6 @@ void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    ReadHotkeyConfig( LIB_EDIT_FRAME_NAME, g_Libedit_Hotkeys_Descr );
-
     SetDefaultLineThickness( (int) aCfg->Read( DefaultDrawLineWidthEntry, DEFAULTDRAWLINETHICKNESS ) );
     SetDefaultPinLength( (int) aCfg->Read( DefaultPinLengthEntry, DEFAULTPINLENGTH ) );
     m_textPinNumDefaultSize = (int) aCfg->Read( defaultPinNumSizeEntry, DEFAULTPINNUMSIZE );
@@ -608,22 +577,15 @@ void LIB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 }
 
 
-void LIB_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
-{
-    if( ShowPreferences( g_Eeschema_Hotkeys_Descr, g_Libedit_Hotkeys_Descr, wxT( "eeschema" ) ) )
-    {
-        SaveSettings( config() );  // save values shared by eeschema applications.
-        GetGalCanvas()->Refresh( true );
-    }
-}
-
-
-void LIB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
+void LIB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
+                                         PANEL_HOTKEYS_EDITOR* aHotkeysPanel )
 {
     wxTreebook* book = aParent->GetTreebook();
 
     book->AddPage( new PANEL_LIBEDIT_SETTINGS( this, book ), _( "Symbol Editor" ) );
     book->AddSubPage( new PANEL_LIBEDIT_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
+
+    aHotkeysPanel->AddHotKeys( GetToolManager() );
 }
 
 

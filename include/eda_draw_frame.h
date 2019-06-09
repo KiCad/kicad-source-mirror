@@ -98,8 +98,6 @@ protected:
 
     std::unique_ptr<wxSingleInstanceChecker> m_file_checker;    ///< prevents opening same file multiple times.
 
-    EDA_HOTKEY_CONFIG*                       m_hotkeysDescrList;
-
     int         m_LastGridSizeId;           // the command id offset (>= 0) of the last selected grid
                                             // 0 is for the grid corresponding to
                                             // a wxCommand ID = ID_POPUP_GRID_LEVEL_1000.
@@ -116,7 +114,6 @@ protected:
     bool        m_PolarCoords;              //< for those frames that support polar coordinates
 
     TOOL_DISPATCHER*    m_toolDispatcher;
-    ACTIONS*            m_actions;
 
     /// Tool ID of previously active draw tool bar button.
     int     m_lastDrawToolId;
@@ -351,22 +348,6 @@ public:
      */
     virtual void ExecuteRemoteCommand( const char* cmdline ){}
 
-    ///> @copydoc EDA_BASE_FRAME::WriteHotkeyConfig
-    int WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList, wxString* aFullFileName = NULL ) override;
-
-    /**
-     * Return a structure containing currently used hotkey mapping.
-     */
-    EDA_HOTKEY_CONFIG* GetHotkeyConfig() const { return m_hotkeysDescrList; }
-
-    /**
-     * Search lists of hot key identifiers (HK_xxx) used in the frame to find a matching
-     * hot key descriptor.
-     * @param aCommand is the hot key identifier.
-     * @return Hot key descriptor or NULL if none found.
-     */
-    virtual EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const = 0;
-
     /**
      * Return a human readable value which can be displayed as zoom
      * level indicator in dialogs.
@@ -388,20 +369,6 @@ public:
     virtual void ReCreateHToolbar() = 0;
     virtual void ReCreateVToolbar() = 0;
     virtual void ReCreateAuxiliaryToolbar() { }
-
-    // Toolbar accessors
-    ACTION_TOOLBAR* GetMainToolBar() const { return m_mainToolBar; }
-    ACTION_TOOLBAR* GetOptionsToolBar() const { return m_optionsToolBar; }
-    ACTION_TOOLBAR* GetDrawToolBar() const { return m_drawToolBar; }
-    ACTION_TOOLBAR* GetAuxiliaryToolBar() const { return m_auxiliaryToolBar; }
-
-    /**
-     * Checks all the toolbars and returns true if the given tool id is toggled.
-     *
-     * This is needed because GerbView and Pcbnew can put some of the same tools in
-     * different toolbars.
-     */
-    bool GetToolToggled( int aToolId );
 
     /**
      * Set the tool command ID to \a aId and sets the cursor to \a aCursor.

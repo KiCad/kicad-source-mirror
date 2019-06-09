@@ -177,9 +177,6 @@ public:
 
     void ReCreateMenuBar() override;
 
-    void OnPreferencesOptions( wxCommandEvent& event );
-    void Process_Config( wxCommandEvent& event );
-
     /**
      * Pin editing (add, delete, move...) can be synchronized between units
      * when units are interchangeable because in this case similar pins are expected
@@ -267,9 +264,6 @@ public:
     void ReCreateVToolbar() override;
     void ReCreateOptToolbar();
     double BestZoom() override;         // Returns the best zoom
-
-    ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
     void LoadSettings( wxConfigBase* aCfg ) override;
     void SaveSettings( wxConfigBase* aCfg ) override;
@@ -449,7 +443,7 @@ public:
     /**
      * Allows Libedit to install its preferences panel into the preferences dialog.
      */
-    void InstallPreferences( PAGED_DIALOG* aParent ) override;
+    void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
 
     /**
      * Called after the preferences dialog is run.

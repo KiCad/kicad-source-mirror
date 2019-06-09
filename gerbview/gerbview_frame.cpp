@@ -30,21 +30,20 @@
 #include <bitmaps.h>
 #include <wildcards_and_files_ext.h>
 #include <eda_dockart.h>
-
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
-#include <hotkeys.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include <dialog_helpers.h>
 #include <DCodeSelectionbox.h>
 #include <gerbview_layer_widget.h>
-
 #include <gerbview_draw_panel_gal.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
+#include <tool/action_toolbar.h>
 #include <tool/tool_dispatcher.h>
+#include <tool/common_control.h>
 #include <tool/common_tools.h>
 #include <tool/zoom_tool.h>
 #include <tools/gerbview_actions.h>
@@ -81,7 +80,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_showAxis = true;                      // true to show X and Y axis on screen
     m_showBorderAndTitleBlock = false;      // true for reference drawings.
-    m_hotkeysDescrList = GerbviewHotkeysDescr;
     m_SelLayerBox   = NULL;
     m_DCodeSelector = NULL;
     m_SelComponentBox = nullptr;
@@ -1139,6 +1137,7 @@ void GERBVIEW_FRAME::setupTools()
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
     // Register tools
+    m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new GERBVIEW_SELECTION_TOOL );
     m_toolManager->RegisterTool( new GERBVIEW_CONTROL );

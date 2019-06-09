@@ -205,7 +205,10 @@ public:
     static TOOL_ACTION highlightNetCursor;
 
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
-    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override { return OPT<TOOL_EVENT>(); }
+    virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override 
+    {
+        return OPT<TOOL_EVENT>();
+    }
 };
 
 

@@ -36,7 +36,6 @@
 #include <general.h>
 #include <viewlib_frame.h>
 #include <symbol_lib_table.h>
-#include <ee_hotkeys.h>
 #include <dialog_helpers.h>
 #include <class_libentry.h>
 #include <class_library.h>
@@ -44,6 +43,7 @@
 #include <sch_painter.h>
 #include <confirm.h>
 #include <tool/tool_manager.h>
+#include <tool/action_toolbar.h>
 #include <tool/tool_dispatcher.h>
 #include <tools/ee_actions.h>
 #include <tool/common_tools.h>
@@ -84,7 +84,6 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_EXIT, LIB_VIEW_FRAME::CloseLibraryViewer )
     EVT_MENU( ID_SET_RELATIVE_OFFSET, LIB_VIEW_FRAME::OnSetRelativeOffset )
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
-    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, LIB_VIEW_FRAME::OnDisplayHotkeyList )
 
     EVT_UPDATE_UI( ID_LIBVIEW_SELECT_PART_NUMBER, LIB_VIEW_FRAME::onUpdateUnitChoice )
 
@@ -121,7 +120,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     icon.CopyFromBitmap( KiBitmap( library_browse_xpm ) );
     SetIcon( icon );
 
-    m_hotkeysDescrList = g_Viewlib_Hotkeys_Descr;
     m_libListWidth = 200;
     m_cmpListWidth = 300;
     m_listPowerCmpOnly = false;
@@ -799,8 +797,3 @@ void LIB_VIEW_FRAME::OnAddPartToSchematic( wxCommandEvent& aEvent )
     }
 }
 
-
-void LIB_VIEW_FRAME::OnDisplayHotkeyList( wxCommandEvent& event )
-{
-    DisplayHotkeyList( this, g_Viewlib_Hotkeys_Descr );
-}

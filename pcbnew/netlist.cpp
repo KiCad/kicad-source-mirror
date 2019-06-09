@@ -124,8 +124,8 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater,
         // Now fix a reference point to move the footprints.
         // We use the first footprint in list as reference point
         // The graphic cursor will be on this fp when moving the footprints.
-        SELECTION_TOOL* selTool = GetToolManager()->GetTool<SELECTION_TOOL>();
-        SELECTION&      selection = selTool->GetSelection();
+        SELECTION_TOOL*   selTool = GetToolManager()->GetTool<SELECTION_TOOL>();
+        PCBNEW_SELECTION& selection = selTool->GetSelection();
         selection.SetReferencePoint( newFootprints[0]->GetPosition() );
     }
 

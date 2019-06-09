@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,28 +22,82 @@
  */
 
 #include <hotkey_store.h>
+#include <tool/tool_manager.h>
+#include <tool/tool_action.h>
 
-HOTKEY_STORE::HOTKEY_STORE( EDA_HOTKEY_CONFIG* aHotkeys )
+
+wxString HOTKEY_STORE::GetAppName( TOOL_ACTION* aAction )
 {
-    for( EDA_HOTKEY_CONFIG* section = aHotkeys; section->m_HK_InfoList; ++section )
-    {
-        m_hk_sections.push_back( genSection( *section ) );
-    }
+    wxString name( aAction->GetName() );
+    return name.BeforeFirst( '.' );
 }
 
 
-HOTKEY_SECTION HOTKEY_STORE::genSection( EDA_HOTKEY_CONFIG& aSection )
+wxString HOTKEY_STORE::GetSectionName( TOOL_ACTION* aAction )
 {
-    HOTKEY_SECTION generated_section { {}, {}, aSection };
+    std::map<wxString, wxString> s_AppNames = {
+            { wxT( "common" ),   _( "Common" ) },
+            { wxT( "kicad" ),    _( "Kicad Manager" ) },
+            { wxT( "eeschema" ), _( "Eeschema" ) },
+            { wxT( "pcbnew" ),   _( "PcbNew" ) },
+            { wxT( "plEditor" ), _( "Page Layout Editor" ) }
+    };
 
-    generated_section.m_name = wxGetTranslation( *aSection.m_Title );
+    wxString appName = GetAppName( aAction );
+    
+    if( s_AppNames.count( appName ) )
+        return s_AppNames[ appName ];
+    else
+        return wxT( "XXX" + appName );
+}
 
-    for( EDA_HOTKEY** info_ptr = aSection.m_HK_InfoList; *info_ptr; ++info_ptr )
+
+HOTKEY_STORE::HOTKEY_STORE()
+{
+}
+
+
+void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList )
+{
+    m_toolManagers = std::move( aToolManagerList );
+    
+    // Collect all action maps into a single master map.  This will re-group everything
+    // and elimate duplicates
+    std::map<std::string, TOOL_ACTION*> masterMap;
+    
+    for( TOOL_MANAGER* toolMgr : m_toolManagers )
     {
-        generated_section.m_hotkeys.push_back( { **info_ptr, *aSection.m_SectionTag } );
+        for( const auto& entry : toolMgr->GetActions() )
+        {
+            // Internal actions probably shouldn't be allowed hotkeys
+            if( entry.second->GetMenuItem().IsEmpty() )
+                continue;
+            
+            masterMap[ entry.first ] = entry.second;
+        }
     }
+    
+    wxString        currentApp;
+    HOTKEY_SECTION* currentSection = nullptr;
+    HOTKEY*         currentHotKey = nullptr;
 
-    return generated_section;
+    for( const auto& entry : masterMap )
+    {
+        wxString thisApp = GetAppName( entry.second );
+        
+        if( thisApp != currentApp )
+        {
+            m_hk_sections.emplace_back( HOTKEY_SECTION() );
+            currentApp = thisApp;
+            currentSection = &m_hk_sections.back();
+            currentSection->m_SectionName = GetSectionName( entry.second );
+        }
+
+        currentSection->m_HotKeys.emplace_back( HOTKEY() );
+        currentHotKey = &currentSection->m_HotKeys.back();
+        currentHotKey->m_Parent = entry.second;
+        currentHotKey->m_EditKeycode = entry.second->GetHotKey();
+    }
 }
 
 
@@ -53,102 +107,57 @@ std::vector<HOTKEY_SECTION>& HOTKEY_STORE::GetSections()
 }
 
 
-CHANGED_HOTKEY* HOTKEY_STORE::FindHotkey( const wxString& aTag, int aCmdId )
-{
-    CHANGED_HOTKEY* found_key = nullptr;
-
-    for( auto& section: m_hk_sections )
-    {
-        if( *section.m_section.m_SectionTag != aTag)
-            continue;
-
-        for( auto& hotkey: section.m_hotkeys )
-        {
-            auto& curr_hk = hotkey.GetCurrentValue();
-            if( curr_hk.m_Idcommand == aCmdId )
-            {
-                found_key = &hotkey;
-                break;
-            }
-        }
-    }
-
-    return found_key;
-}
-
-
 void HOTKEY_STORE::SaveAllHotkeys()
 {
-    for( auto& section: m_hk_sections )
+    for( HOTKEY_SECTION& section: m_hk_sections )
     {
-        for( auto& hotkey: section.m_hotkeys )
-        {
-            hotkey.SaveHotkey();
-        }
+        for( HOTKEY& hotkey: section.m_HotKeys )
+            hotkey.m_Parent->SetHotKey( hotkey.m_EditKeycode );
     }
 }
 
 
 void HOTKEY_STORE::ResetAllHotkeysToDefault()
 {
-    for( auto& section: m_hk_sections )
+    for( HOTKEY_SECTION& section: m_hk_sections )
     {
-        for( auto& hotkey: section.m_hotkeys )
-        {
-            hotkey.GetCurrentValue().ResetKeyCodeToDefault();
-        }
+        for( HOTKEY& hotkey: section.m_HotKeys )
+            hotkey.m_EditKeycode = hotkey.m_Parent->GetDefaultHotKey();
     }
 }
 
 
 void HOTKEY_STORE::ResetAllHotkeysToOriginal()
 {
-    for( auto& section: m_hk_sections )
+    for( HOTKEY_SECTION& section: m_hk_sections )
     {
-        for( auto& hotkey: section.m_hotkeys )
-        {
-            hotkey.GetCurrentValue().m_KeyCode = hotkey.GetOriginalValue().m_KeyCode;
-        }
+        for( HOTKEY& hotkey: section.m_HotKeys )
+            hotkey.m_EditKeycode = hotkey.m_Parent->GetHotKey();
     }
 }
 
 
-bool HOTKEY_STORE::CheckKeyConflicts( long aKey, const wxString& aSectionTag,
-        EDA_HOTKEY** aConfKey, EDA_HOTKEY_CONFIG** aConfSect )
+bool HOTKEY_STORE::CheckKeyConflicts( TOOL_ACTION* aAction, long aKey, HOTKEY** aConflict )
 {
-    EDA_HOTKEY* conflicting_key = nullptr;
-    EDA_HOTKEY_CONFIG* conflicting_section = nullptr;
+    wxString sectionName = GetSectionName( aAction );
 
-    for( auto& section: m_hk_sections )
+    for( HOTKEY_SECTION& section: m_hk_sections )
     {
-        const auto& sectionTag = *section.m_section.m_SectionTag;
-
-        if( aSectionTag != g_CommonSectionTag
-            && sectionTag != g_CommonSectionTag
-            && sectionTag != aSectionTag )
-        {
-            // This key and its conflict candidate are in orthogonal sections, so skip.
+        if( section.m_SectionName != sectionName )
             continue;
-        }
-
-        // See if any *current* hotkeys are in conflict
-        for( auto& hotkey: section.m_hotkeys )
+        
+        for( HOTKEY& hotkey: section.m_HotKeys )
         {
-            auto& curr_hk = hotkey.GetCurrentValue();
-            if( aKey == curr_hk.m_KeyCode )
+            if( hotkey.m_Parent == aAction )
+                continue;
+            
+            if( hotkey.m_EditKeycode == aKey )
             {
-                conflicting_key = &curr_hk;
-                conflicting_section = &section.m_section;
+                *aConflict = &hotkey;
+                return true;
             }
         }
     }
-
-    // Write the outparams
-    if( aConfKey )
-        *aConfKey = conflicting_key;
-
-    if( aConfSect )
-        *aConfSect = conflicting_section;
-
-    return conflicting_key == nullptr;
+    
+    return false;
 }

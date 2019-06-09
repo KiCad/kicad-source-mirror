@@ -47,8 +47,6 @@ using namespace std::placeholders;
 #include <preview_items/selection_area.h>
 #include <painter.h>
 #include <bitmaps.h>
-#include <hotkeys.h>
-
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <router/router_tool.h>
@@ -63,72 +61,75 @@ using namespace std::placeholders;
 
 // Selection tool actions
 TOOL_ACTION PCB_ACTIONS::selectionActivate( "pcbnew.InteractiveSelection",
-        AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );      // No description, not shown anywhere
+        AS_GLOBAL, 0, "", "", "", nullptr, AF_ACTIVATE );   // No description, not shown anywhere
 
 TOOL_ACTION PCB_ACTIONS::selectionCursor( "pcbnew.InteractiveSelection.Cursor",
-        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::selectItem( "pcbnew.InteractiveSelection.SelectItem",
-        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::selectItems( "pcbnew.InteractiveSelection.SelectItems",
-        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::unselectItem( "pcbnew.InteractiveSelection.UnselectItem",
-        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::unselectItems( "pcbnew.InteractiveSelection.UnselectItems",
-        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::selectionClear( "pcbnew.InteractiveSelection.Clear",
-        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::selectionMenu( "pcbnew.InteractiveSelection.SelectionMenu",
-        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::selectConnection( "pcbnew.InteractiveSelection.SelectConnection",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SEL_TRIVIAL_CONNECTION ),
+        AS_GLOBAL, 
+        'U', LEGACY_HK_NAME( "Select Single Track" ),
         _( "Single Track" ),
         _( "Selects all track segments & vias between two junctions." ),
         add_tracks_xpm );
 
 TOOL_ACTION PCB_ACTIONS::selectCopper( "pcbnew.InteractiveSelection.SelectCopper",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SEL_COPPER_CONNECTION ),
+        AS_GLOBAL, 
+        'I', LEGACY_HK_NAME( "Select Connected Tracks" ),
         _( "Connected Tracks" ),
         _( "Selects all connected tracks & vias." ),
         net_highlight_xpm );
 
 TOOL_ACTION PCB_ACTIONS::expandSelectedConnection( "pcbnew.InteractiveSelection.ExpandConnection",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Expand Selected Connection" ),
         _( "Expands the current selection to select a connection between two junctions." ) );
 
 TOOL_ACTION PCB_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "All Tracks in Net" ),
         _( "Selects all tracks & vias belonging to the same net." ),
         mode_track_xpm );
 
 TOOL_ACTION PCB_ACTIONS::selectOnSheetFromEeschema( "pcbnew.InteractiveSelection.SelectOnSheet",
-        AS_GLOBAL,  0,
+        AS_GLOBAL, 0, "",
         _( "Sheet" ),
         _( "Selects all modules and tracks in the schematic sheet" ),
         select_same_sheet_xpm );
 
 TOOL_ACTION PCB_ACTIONS::selectSameSheet( "pcbnew.InteractiveSelection.SelectSameSheet",
-        AS_GLOBAL,  0,
+        AS_GLOBAL,  0, "",
         _( "Items in Same Hierarchical Sheet" ),
         _( "Selects all modules and tracks in the same schematic sheet" ),
         select_same_sheet_xpm );
 
 TOOL_ACTION PCB_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GET_AND_MOVE_FOOTPRINT ),
+        AS_GLOBAL, 
+        'T', LEGACY_HK_NAME( "Get and Move Footprint" ),
         _( "Get and Move Footprint" ),
         _( "Selects a footprint by reference and places it under the cursor for moving"),
         move_xpm );
 
 TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSelection",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Filter Selection..." ), _( "Filter the types of items in the selection" ),
         options_generic_xpm );
 

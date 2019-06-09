@@ -39,7 +39,7 @@ add_executable(test_window WIN32
   ../qa_utils/mocks.cpp
   ../../common/base_units.cpp
     ../../pcbnew/tools/pcb_tool_base.cpp
-  ../../pcbnew/tools/selection.cpp
+    ../../pcbnew/tools/pcbnew_selection.cpp
   ../../pcbnew/tools/selection_tool.cpp
   ../../pcbnew/tools/tool_event_utils.cpp
   #../../pcbnew/tools/outline_editor.cpp

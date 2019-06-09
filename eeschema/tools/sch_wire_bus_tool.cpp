@@ -35,7 +35,6 @@
 #include <view/view_controls.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>
-#include <ee_hotkeys.h>
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_bus_entry.h>
@@ -44,54 +43,63 @@
 #include <advanced_config.h>
 
 TOOL_ACTION EE_ACTIONS::startWire( "eeschema.WireBusDrawing.startWire",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Start Wire" ), _( "Start drawing a wire" ),
         add_line_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::drawWire( "eeschema.WireBusDrawing.drawWires",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_WIRE ),
+        AS_GLOBAL, 
+        'W', LEGACY_HK_NAME( "Begin Wire" ),
         _( "Add Wire" ), _( "Add a wire" ),
         add_line_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::startBus( "eeschema.WireBusDrawing.startBus",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Start Bus" ), _( "Start drawing a bus" ),
         add_bus_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::drawBus( "eeschema.WireBusDrawing.drawBusses",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_BUS ),
+        AS_GLOBAL, 
+        'B', LEGACY_HK_NAME( "Begin Bus" ),
         _( "Add Bus" ), _( "Add a bus" ),
         add_bus_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::unfoldBus( "eeschema.WireBusDrawing.unfoldBus",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_UNFOLD_BUS ),
+        AS_GLOBAL, 
+        'C', LEGACY_HK_NAME( "Unfold from Bus" ),
         _( "Unfold from Bus" ), _( "Break a wire out of a bus" ),
         nullptr, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::startLines( "eeschema.WireBusDrawing.startLines",
-        AS_GLOBAL, 0, _( "Begin Lines" ), _( "Start drawing connected graphic lines" ),
+        AS_GLOBAL, 0,  "",
+        _( "Begin Lines" ), _( "Start drawing connected graphic lines" ),
         add_line_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::drawLines( "eeschema.WireBusDrawing.drawLines",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_GRAPHIC_POLYLINE ),
+        AS_GLOBAL, 
+        'I', LEGACY_HK_NAME( "Add Graphic PolyLine" ),
         _( "Add Lines" ), _( "Add connected graphic lines" ),
         add_dashed_line_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::finishLineWireOrBus( "eeschema.WireBusDrawing.finishLineWireOrBus",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_END_CURR_LINEWIREBUS ),
+        AS_GLOBAL, 
+        'K', LEGACY_HK_NAME( "End Line Wire Bus" ),
         _( "Finish Wire or Bus" ), _( "Complete drawing at current segment" ),
         checked_ok_xpm, AF_NONE );
 
 TOOL_ACTION EE_ACTIONS::finishWire( "eeschema.WireBusDrawing.finishWire",
-        AS_GLOBAL, 0, _( "Finish Wire" ), _( "Complete wire with current segment" ),
+        AS_GLOBAL, 0,  "",
+        _( "Finish Wire" ), _( "Complete wire with current segment" ),
         checked_ok_xpm, AF_NONE );
 
 TOOL_ACTION EE_ACTIONS::finishBus( "eeschema.WireBusDrawing.finishBus",
-        AS_GLOBAL, 0, _( "Finish Bus" ), _( "Complete bus with current segment" ),
+        AS_GLOBAL, 0,  "",
+        _( "Finish Bus" ), _( "Complete bus with current segment" ),
         checked_ok_xpm, AF_NONE );
 
 TOOL_ACTION EE_ACTIONS::finishLine( "eeschema.WireBusDrawing.finishLine",
-        AS_GLOBAL, 0, _( "Finish Lines" ), _( "Complete connected lines with current segment" ),
+        AS_GLOBAL, 0,  "",
+        _( "Finish Lines" ), _( "Complete connected lines with current segment" ),
         checked_ok_xpm, AF_NONE );
 
 

@@ -75,6 +75,11 @@ public:
     static int MakeActionId( const std::string& aActionName );
 
     /**
+     * Get a list of currently-registered actions mapped by their name.
+     */
+    const std::map<std::string, TOOL_ACTION*>& GetActions();
+
+    /**
      * Function FindAction()
      * Finds an action with a given name (if there is one available).
      * @param aActionName is the searched action.
@@ -98,7 +103,7 @@ public:
     int GetHotKey( const TOOL_ACTION& aAction ) const;
 
     /**
-     * Function UpdateHotKeys()
+     * Function ReadHotKeyConfig()
      * Updates TOOL_ACTIONs hot key assignment according to the current frame's Hot Key Editor settings.
      */
     void UpdateHotKeys();
@@ -117,9 +122,10 @@ public:
     }
 
 private:
-    ///> Resolves a reference to legacy hot key settings to a particular hot key.
-    ///> @param aAction is the action to be resolved.
-    int processHotKey( TOOL_ACTION* aAction );
+    // Resolves a hotkey by applying legacy and current settings over the action's
+    // default hotkey.
+    int processHotKey( TOOL_ACTION* aAction, std::map<std::string, int> aLegacyMap,
+                       std::map<std::string, int> aHotKeyMap );
 
     ///> Tool manager needed to run actions
     TOOL_MANAGER* m_toolMgr;

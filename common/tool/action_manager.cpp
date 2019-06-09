@@ -178,6 +178,12 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
 }
 
 
+const std::map<std::string, TOOL_ACTION*>& ACTION_MANAGER::GetActions()
+{
+    return m_actionNameIndex;
+}
+
+
 int ACTION_MANAGER::GetHotKey( const TOOL_ACTION& aAction ) const
 {
     std::map<int, int>::const_iterator it = m_hotkeys.find( aAction.GetId() );
@@ -191,13 +197,19 @@ int ACTION_MANAGER::GetHotKey( const TOOL_ACTION& aAction ) const
 
 void ACTION_MANAGER::UpdateHotKeys()
 {
+    std::map<std::string, int> legacyHotKeyMap;
+    std::map<std::string, int> userHotKeyMap;
+
     m_actionHotKeys.clear();
     m_hotkeys.clear();
+    
+    ReadLegacyHotkeyConfig( m_toolMgr->GetEditFrame()->ConfigBaseName(), legacyHotKeyMap );
+    // JEY TODO: read user hotkey config...
 
     for( const auto& actionName : m_actionNameIndex )
     {
         TOOL_ACTION* action = actionName.second;
-        int hotkey = processHotKey( action );
+        int hotkey = processHotKey( action, legacyHotKeyMap, userHotKeyMap );
 
         if( hotkey <= 0 )
             continue;
@@ -218,53 +230,20 @@ void ACTION_MANAGER::UpdateHotKeys()
 
         m_actionHotKeys[hotkey].push_back( action );
         m_hotkeys[action->GetId()] = hotkey;
-
     }
 }
 
 
-int ACTION_MANAGER::processHotKey( TOOL_ACTION* aAction )
+int ACTION_MANAGER::processHotKey( TOOL_ACTION* aAction, std::map<std::string, int> aLegacyMap,
+                                   std::map<std::string, int> aHotKeyMap )
 {
-    int hotkey = aAction->getDefaultHotKey();
-
-    if( ( hotkey & TOOL_ACTION::LEGACY_HK ) )
-    {
-        hotkey = hotkey & ~TOOL_ACTION::LEGACY_HK;  // it leaves only HK_xxx identifier
-
-        auto frame = static_cast<EDA_DRAW_FRAME*>( m_toolMgr->GetEditFrame() );
-        EDA_HOTKEY* hk_desc = nullptr;
-        
-        if( frame )
-            hk_desc = frame->GetHotKeyDescription( hotkey );
-
-        if( hk_desc )
-        {
-            hotkey = hk_desc->m_KeyCode;
-
-            // Convert modifiers to the ones used by the Tool Framework
-            if( hotkey & GR_KB_CTRL )
-            {
-                hotkey &= ~GR_KB_CTRL;
-                hotkey |= MD_CTRL;
-            }
-
-            if( hotkey & GR_KB_ALT )
-            {
-                hotkey &= ~GR_KB_ALT;
-                hotkey |= MD_ALT;
-            }
-
-            if( hotkey & GR_KB_SHIFT )
-            {
-                hotkey &= ~GR_KB_SHIFT;
-                hotkey |= MD_SHIFT;
-            }
-        }
-        else
-        {
-            hotkey = 0;
-        }
-    }
-
-    return hotkey;
+    aAction->m_hotKey = aAction->m_defaultHotKey;
+    
+    if( !aAction->m_legacyName.empty() && aLegacyMap.count( aAction->m_legacyName ) )
+        aAction->m_hotKey = aLegacyMap[ aAction->m_legacyName ];
+    
+    if( aHotKeyMap.count( aAction->m_name ) )
+        aAction->m_hotKey = aHotKeyMap[ aAction->m_name ];
+    
+    return aAction->m_hotKey;
 }

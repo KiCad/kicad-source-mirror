@@ -36,7 +36,6 @@
 
 class EDA_ITEM;
 class TOOL_MANAGER;
-class wxWindow;
 
 namespace KIGFX
 {
@@ -187,6 +186,9 @@ protected:
     template <typename T>
     T* getEditFrame() const
     {
+#if !defined( QA_TEST )   // Dynamic casts give the linker a siezure in the test framework
+        wxASSERT( dynamic_cast<T*>( getEditFrameInt() ) );
+#endif
         return static_cast<T*>( getEditFrameInt() );
     }
 
@@ -199,8 +201,9 @@ protected:
     T* getModel() const
     {
         EDA_ITEM* m = getModelInt();
+#if !defined( QA_TEST )   // Dynamic casts give the linker a siezure in the test framework
         wxASSERT( dynamic_cast<T*>( m ) );
-
+#endif
         return static_cast<T*>( m );
     }
 
@@ -220,7 +223,7 @@ private:
     // hide the implementation to avoid spreading half of
     // kicad and wxWidgets headers to the tools that may not need them at all!
     EDA_ITEM* getModelInt() const;
-    wxWindow* getEditFrameInt() const;
+    EDA_BASE_FRAME* getEditFrameInt() const;
 };
 
 #endif

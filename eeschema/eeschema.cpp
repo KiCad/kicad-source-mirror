@@ -33,16 +33,13 @@
 #include <lib_edit_frame.h>
 #include <viewlib_frame.h>
 #include <eda_text.h>
-
 #include <general.h>
 #include <class_libentry.h>
-#include <ee_hotkeys.h>
 #include <transform.h>
 #include <wildcards_and_files_ext.h>
 #include <symbol_lib_table.h>
 #include <dialogs/dialog_global_sym_lib_table_config.h>
 #include <dialogs/panel_sym_lib_table.h>
-
 #include <kiway.h>
 #include <sim/sim_plot_frame.h>
 
@@ -244,10 +241,6 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 
     SetLayerColor( COLOR4D::WHITE, LAYER_SCHEMATIC_BACKGROUND );
     SetLayerColor( COLOR4D::BLACK, LAYER_SCHEMATIC_CURSOR );
-
-    // Must be called before creating the main frame in order to
-    // display the real hotkeys in menus or tool tips
-    ReadHotkeyConfig( SCH_EDIT_FRAME_NAME, g_Eeschema_Hotkeys_Descr );
 
     wxConfigLoadSetups( KifaceSettings(), cfg_params() );
 

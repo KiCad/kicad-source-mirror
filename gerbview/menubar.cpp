@@ -28,7 +28,6 @@
 #include <kiface_i.h>
 #include <pgm_base.h>
 #include "gerbview_id.h"
-#include "hotkeys.h"
 #include <menus_helpers.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
@@ -250,7 +249,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     CONDITIONAL_MENU* preferencesMenu = new CONDITIONAL_MENU( false, selTool );
 
     preferencesMenu->AddItem( wxID_PREFERENCES,
-                              AddHotkeyName( _( "Preferences..." ), GerbviewHotkeysDescr, HK_PREFERENCES ),
+                              _( "Preferences...\tCTRL+," ),
                               _( "Show preferences for all open tools" ),
                               preference_xpm,                    SELECTION_CONDITIONS::ShowAlways );
 

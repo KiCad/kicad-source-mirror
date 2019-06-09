@@ -45,8 +45,7 @@
 #include <common.h>
 #include <layers_id_colors_and_visibility.h>
 #include <frame_type.h>
-#include "hotkeys_basic.h"
-#include <tool/action_toolbar.h>
+#include <hotkeys_basic.h>
 #include <kiway_holder.h>
 
 // Option for main frames
@@ -72,6 +71,7 @@ class TOOL_DISPATCHER;
 class ACTIONS;
 class PAGED_DIALOG;
 class DIALOG_EDIT_LIBRARY_TABLES;
+class PANEL_HOTKEYS_EDITOR;
 
 
 enum id_librarytype {
@@ -123,6 +123,7 @@ protected:
                                          // and to name some config files (legacy hotkey files)
 
     TOOL_MANAGER*   m_toolManager;
+    ACTIONS*        m_actions;
 
     bool            m_hasAutoSave;
     bool            m_autoSaveState;
@@ -172,15 +173,6 @@ protected:
      * @return true if the auto save was successful otherwise false.
      */
     virtual bool doAutoSave();
-
-    /**
-     * Return a SEARCH_STACK pertaining to entire program.
-     *
-     * This is overloaded in #KICAD_MANAGER_FRAME
-     */
-    virtual const SEARCH_STACK& sys_search();
-
-    virtual wxString help_name();
 
     /**
      * Called when when the units setting has changed to allow for any derived classes
@@ -246,14 +238,17 @@ public:
 
     bool IsType( FRAME_T aType ) const { return m_Ident == aType; }
 
-    void GetKicadHelp( wxCommandEvent& event );
+    /**
+     * Return a SEARCH_STACK pertaining to entire program.
+     *
+     * This is overloaded in #KICAD_MANAGER_FRAME
+     */
+    virtual const SEARCH_STACK& sys_search();
 
-    void GetKicadContribute( wxCommandEvent& event );
+    virtual wxString help_name();
 
-    void GetKicadAbout( wxCommandEvent& event );
-
-    bool ShowPreferences( EDA_HOTKEY_CONFIG* aHotkeys, EDA_HOTKEY_CONFIG* aShowHotkeys,
-                          const wxString& aHotkeysNickname );
+    void OnKicadAbout( wxCommandEvent& event );
+    void OnPreferences( wxCommandEvent& event );
 
     void PrintMsg( const wxString& text );
 
@@ -268,7 +263,7 @@ public:
      * Allow a frame to load its preference panels (if any) into the preferences dialog.
      * @param aParent a paged dialog into which the preference panels should be installed
      */
-    virtual void InstallPreferences( PAGED_DIALOG* aParent ) { }
+    virtual void InstallPreferences( PAGED_DIALOG* , PANEL_HOTKEYS_EDITOR* ) { }
 
     /**
      * Load common frame parameters from a configuration file.
@@ -300,7 +295,6 @@ public:
         return baseCfgName;
     }
 
-
     /**
      * Save changes to the project settings to the project (.pro) file.
      *
@@ -311,20 +305,6 @@ public:
     virtual void SaveProjectSettings( bool aAskForSave ) {};
 
     // Read/Save and Import/export hotkeys config
-
-    /**
-     * Store the current hotkey list
-     *
-     * The hotkey list is stored using the standard wxConfig mechanism or a file.
-     *
-     * @param aDescList = pointer to the current hotkey list.
-     * @param aFullFileName = a wxString pointer to a full file name.
-     *  if NULL, use the standard wxConfig mechanism (default)
-     * the output format is: shortcut  "key"  "function"
-     * lines starting with # are comments
-     */
-    virtual int WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
-                                   wxString* aFullFileName = NULL );
 
     /**
      * Prompt the user for an old hotkey file to read, and read it.

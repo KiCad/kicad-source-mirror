@@ -35,36 +35,27 @@
 #include <layers_id_colors_and_visibility.h>
 
 #include <class_board.h>
-#include <hotkeys.h>
-
 #include <pcb_layer_box_selector.h>
+#include <tools/pcb_actions.h>
 
 // translate aLayer to its hotkey
-static int layer2hotkey_id( PCB_LAYER_ID aLayer )
+static TOOL_ACTION* layer2action( PCB_LAYER_ID aLayer )
 {
     switch( aLayer )
     {
-    case F_Cu:      return HK_SWITCH_LAYER_TO_COMPONENT;
+    case F_Cu:      return &PCB_ACTIONS::layerTop;
 
-    case B_Cu:      return HK_SWITCH_LAYER_TO_COPPER;
+    case B_Cu:      return &PCB_ACTIONS::layerBottom;
 
-    case In1_Cu:    return HK_SWITCH_LAYER_TO_INNER1;
-    case In2_Cu:    return HK_SWITCH_LAYER_TO_INNER2;
-    case In3_Cu:    return HK_SWITCH_LAYER_TO_INNER3;
-    case In4_Cu:    return HK_SWITCH_LAYER_TO_INNER4;
-    case In5_Cu:    return HK_SWITCH_LAYER_TO_INNER5;
-    case In6_Cu:    return HK_SWITCH_LAYER_TO_INNER6;
-    case In7_Cu:    return HK_SWITCH_LAYER_TO_INNER7;
-    case In8_Cu:    return HK_SWITCH_LAYER_TO_INNER8;
-    case In9_Cu:    return HK_SWITCH_LAYER_TO_INNER9;
-    case In10_Cu:   return HK_SWITCH_LAYER_TO_INNER10;
-    case In11_Cu:   return HK_SWITCH_LAYER_TO_INNER11;
-    case In12_Cu:   return HK_SWITCH_LAYER_TO_INNER12;
-    case In13_Cu:   return HK_SWITCH_LAYER_TO_INNER13;
-    case In14_Cu:   return HK_SWITCH_LAYER_TO_INNER14;
+    case In1_Cu:    return &PCB_ACTIONS::layerInner1;
+    case In2_Cu:    return &PCB_ACTIONS::layerInner2;
+    case In3_Cu:    return &PCB_ACTIONS::layerInner3;
+    case In4_Cu:    return &PCB_ACTIONS::layerInner4;
+    case In5_Cu:    return &PCB_ACTIONS::layerInner5;
+    case In6_Cu:    return &PCB_ACTIONS::layerInner6;
 
     default:
-        return -1;
+        return nullptr;
     }
 }
 
@@ -103,12 +94,12 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
 
         wxString layername = GetLayerName( layerid ) + layerstatus;
 
-        if( m_layerhotkeys && m_hotkeys )
+        if( m_layerhotkeys )
         {
-            int id = layer2hotkey_id( layerid );
+            TOOL_ACTION* action = layer2action( layerid );
 
-            if( id != -1 )
-                layername = AddHotkeyName( layername, m_hotkeys, id, IS_COMMENT );
+            if( action )
+                layername = AddHotkeyName( layername, action->GetHotKey(), IS_COMMENT );
         }
 
         Append( layername, bmp, (void*)(intptr_t) layerid );

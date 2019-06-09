@@ -305,9 +305,6 @@ public:
     void ReCreateOptToolbar();
     void ReCreateMenuBar() override;
 
-    ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
-
     /**
      * Must be called after a schematic change in order to set the "modify" flag of the
      * current screen and update the date in frame reference.
@@ -765,11 +762,6 @@ private:
     void OnAppendProject( wxCommandEvent& event );
     void OnImportProject( wxCommandEvent& event );
 
-    // a helper function to run the dialog that allows to rename the symbol library Id of
-    // groups of components, for instance after a symbol has moved from a library to
-    // another library
-    void OnPreferencesOptions( wxCommandEvent& event );
-
     /**
      * Set the main window title bar text.
      *
@@ -1096,7 +1088,7 @@ public:
     /**
      * Allows Eeschema to install its preferences panels into the preferences dialog.
      */
-    void InstallPreferences( PAGED_DIALOG* aParent ) override;
+    void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
 
     /**
      * Called after the preferences dialog is run.

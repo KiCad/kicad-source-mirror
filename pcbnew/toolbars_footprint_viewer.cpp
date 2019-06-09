@@ -20,18 +20,15 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <dialog_helpers.h>
+
 #include <macros.h>
-#include <menus_helpers.h>
-#include <tool/actions.h>
+#include <bitmaps.h>
+#include <tool/action_toolbar.h>
 #include <tool/conditional_menu.h>
 #include <tool/tool_manager.h>
 #include <tools/selection_tool.h>
 #include <tools/pcb_actions.h>
-#include "help_common_strings.h"
-#include "hotkeys.h"
 #include "footprint_viewer_frame.h"
-#include "pcbnew.h"
 #include "pcbnew_id.h"
 
 
@@ -124,13 +121,12 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
 
     //----- File menu -----------------------------------------------------------
     //
-    wxMenu* fileMenu = new wxMenu;
+    CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, selTool );
 
-    // Close viewer
-    AddMenuItem( fileMenu, wxID_EXIT,
-                 _( "Cl&ose" ),
-                 _( "Close footprint viewer" ),
-                 KiBitmap( exit_xpm ) );
+    fileMenu->AddItem( wxID_EXIT, _( "Close" ), _( "Close footprint viewer" ), 
+                       exit_xpm,                  SELECTION_CONDITIONS::ShowAlways );
+    
+    fileMenu->Resolve();
 
     //----- View menu -----------------------------------------------------------
     //

@@ -26,6 +26,7 @@
 #define ALIGN_DISTRIBUTE_TOOL_H_
 
 #include <tool/tool_interactive.h>
+#include <tools/pcbnew_selection.h>
 #include <class_board_item.h>
 #include <pcb_base_frame.h>
 
@@ -142,7 +143,7 @@ private:
      * We also check the lock of a pad's parent as we will not move pads independently of
      * the parent module
      */
-    int checkLockedStatus( const SELECTION &selection ) const;
+    int checkLockedStatus( const PCBNEW_SELECTION &selection ) const;
 
     /**
      * Distributes selected items using an even spacing between the centers of their bounding boxes

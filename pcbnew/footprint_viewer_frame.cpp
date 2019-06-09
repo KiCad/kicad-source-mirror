@@ -39,18 +39,15 @@
 #include <pcb_painter.h>
 #include <class_board.h>
 #include <class_module.h>
-
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <footprint_viewer_frame.h>
 #include <footprint_info.h>
-
-#include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
 #include <config_params.h>
-
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
+#include <tool/action_toolbar.h>
 #include <tool/common_tools.h>
 #include "tools/selection_tool.h"
 #include "tools/pcbnew_control.h"
@@ -142,8 +139,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     wxIcon  icon;
     icon.CopyFromBitmap( KiBitmap( modview_icon_xpm ) );
     SetIcon( icon );
-
-    m_hotkeysDescrList = g_Module_Viewer_Hotkeys_Descr;
 
     m_libList = new wxListBox( this, ID_MODVIEW_LIB_LIST, wxDefaultPosition, wxDefaultSize,
                                0, NULL, wxLB_HSCROLL | wxNO_BORDER );

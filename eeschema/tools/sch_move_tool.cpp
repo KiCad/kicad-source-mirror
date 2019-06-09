@@ -25,7 +25,6 @@
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_wire_bus_tool.h>
 #include <ee_actions.h>
-#include <ee_hotkeys.h>
 #include <bitmaps.h>
 #include <base_struct.h>
 #include <sch_item.h>
@@ -39,15 +38,17 @@
 
 
 TOOL_ACTION EE_ACTIONS::move( "eeschema.InteractiveEdit.move",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE ),
+        AS_GLOBAL, 
+        'M', LEGACY_HK_NAME( "Move Item" ),
         _( "Move" ), _( "Moves the selected item(s)" ), move_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::drag( "eeschema.InteractiveEdit.drag",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DRAG ),
+        AS_GLOBAL, 
+        'G', LEGACY_HK_NAME( "Drag Item" ),
         _( "Drag" ), _( "Drags the selected item(s)" ), move_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::moveActivate( "eeschema.InteractiveMove",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Move Activate" ), "", move_xpm, AF_ACTIVATE );
 
 

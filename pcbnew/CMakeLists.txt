@@ -14,7 +14,7 @@ add_subdirectory(connectivity)
 
 add_subdirectory(router)
 
-# psnrouter depends on make_lexer outputs in common (bug # 1285878 )
+# psnrouter depends on make_lexer outputs in common (bug #1285878 )
 add_dependencies( pnsrouter pcbcommon )
 
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
@@ -252,7 +252,6 @@ set( PCBNEW_CLASS_SRCS
     generate_footprint_info.cpp
     grid_layer_box_helpers.cpp
     grid_layer_box_helpers.h
-    hotkeys.cpp
     initpcb.cpp
     layer_widget.cpp
     load_select_footprint.cpp
@@ -328,6 +327,7 @@ set( PCBNEW_SRCS
 set( PCBNEW_COMMON_SRCS
     ../common/dialogs/dialog_page_settings.cpp
     ../common/base_units.cpp
+    ../common/hotkeys_basic.cpp
     )
 
 set( PCBNEW_SCRIPTING_DIALOGS

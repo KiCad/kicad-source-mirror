@@ -199,7 +199,7 @@ public:
 
     void SaveSettings( wxConfigBase* aCfg ) override;
 
-    void Process_Special_Functions( wxCommandEvent& event );
+    void OnSelectPage( wxCommandEvent& event );
 
     /**
      * called when the user select one of the 4 page corner as corner reference (or the
@@ -218,9 +218,6 @@ public:
 
     void OnUpdateTitleBlockDisplayNormalMode( wxUpdateUIEvent& event );
     void OnUpdateTitleBlockDisplayEditMode( wxUpdateUIEvent& event );
-
-    ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
     /**
      * Function ToPrinter

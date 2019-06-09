@@ -26,7 +26,6 @@
 #include <map>
 #include <stack>
 #include <algorithm>
-
 #include <core/optional.h>
 
 #include <wx/event.h>
@@ -311,6 +310,12 @@ void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aPara
 }
 
 
+const std::map<std::string, TOOL_ACTION*>& TOOL_MANAGER::GetActions()
+{
+    return m_actionMgr->GetActions();
+}
+
+
 int TOOL_MANAGER::GetHotKey( const TOOL_ACTION& aAction )
 {
     return m_actionMgr->GetHotKey( aAction );
@@ -464,6 +469,8 @@ void TOOL_MANAGER::InitTools()
         }
     }
 
+    m_actionMgr->UpdateHotKeys();
+    
     ResetTools( TOOL_BASE::RUN );
 }
 
@@ -863,7 +870,6 @@ void TOOL_MANAGER::SetEnvironment( EDA_ITEM* aModel, KIGFX::VIEW* aView,
     m_view = aView;
     m_viewControls = aViewControls;
     m_frame = aFrame;
-    m_actionMgr->UpdateHotKeys();
 }
 
 

@@ -34,24 +34,23 @@
 
 class wxPanel;
 class wxSizer;
+class TOOL_MANAGER;
 
 
 class PANEL_HOTKEYS_EDITOR : public wxPanel
 {
 protected:
-    EDA_BASE_FRAME*           m_frame;
-    bool                      m_readOnly;
-    struct EDA_HOTKEY_CONFIG* m_hotkeys;
-    wxString                  m_nickname;
+    bool                       m_readOnly;
+    std::vector<TOOL_MANAGER*> m_toolManagers;
 
-    HOTKEY_STORE              m_hotkeyStore;
-    WIDGET_HOTKEY_LIST*       m_hotkeyListCtrl;
+    HOTKEY_STORE               m_hotkeyStore;
+    WIDGET_HOTKEY_LIST*        m_hotkeyListCtrl;
 
 public:
-    PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow, bool aReadOnly,
-                          EDA_HOTKEY_CONFIG* aHotkeys, EDA_HOTKEY_CONFIG* aShowHotkeys,
-                          const wxString& aNickname );
+    PANEL_HOTKEYS_EDITOR( wxWindow* aWindow, bool aReadOnly );
 
+    void AddHotKeys( TOOL_MANAGER* aToolMgr );
+    
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 

@@ -23,86 +23,82 @@
 #include <gerbview_frame.h>
 #include <tool/tool_manager.h>
 #include <menus_helpers.h>
-#include <hotkeys.h>
-
 #include "gerbview_actions.h"
 #include "gerbview_control.h"
 #include "gerbview_selection_tool.h"
 
 TOOL_ACTION GERBVIEW_ACTIONS::layerChanged( "gerbview.Control.layerChanged",
-        AS_GLOBAL, 0,
-        "", "",
-        NULL, AF_NOTIFY );
+        AS_GLOBAL, 0, "", "", "",
+        nullptr, AF_NOTIFY );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightClear( "gerbview.Control.highlightClear",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Clear Highlight" ), "",
         highlight_remove_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightNet( "gerbview.Control.highlightNet",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Highlight Net" ), "",
         general_ratsnest_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightComponent( "gerbview.Control.highlightComponent",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Highlight Component" ), "",
         file_footprint_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightAttribute( "gerbview.Control.highlightAttribute",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Highlight Attribute" ), "",
         flag_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::layerNext( "gerbview.Control.layerNext",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_NEXT ),
+        AS_GLOBAL, 
+        '+', LEGACY_HK_NAME( "Switch to Next Layer" ),
         "", "" );
 
 TOOL_ACTION GERBVIEW_ACTIONS::layerPrev( "gerbview.Control.layerPrev",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_PREVIOUS ),
+        AS_GLOBAL, 
+        '-', LEGACY_HK_NAME( "Switch to Previous Layer" ),
         "", "" );
 
 TOOL_ACTION GERBVIEW_ACTIONS::linesDisplayOutlines( "gerbview.Control.linesDisplayOutlines",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GBR_LINES_DISPLAY_MODE ),
+        AS_GLOBAL, 
+        'L', LEGACY_HK_NAME( "Gbr Lines Display Mode" ),
         _( "Sketch Lines" ), _( "Show lines in outline mode" ),
         showtrack_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::flashedDisplayOutlines( "gerbview.Control.flashedDisplayOutlines",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GBR_FLASHED_DISPLAY_MODE ),
+        AS_GLOBAL, 
+        'F', LEGACY_HK_NAME( "Gbr Flashed Display Mode" ),
         _( "Sketch Flashed Items" ), _( "Show flashed items in outline mode" ),
         pad_sketch_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::polygonsDisplayOutlines( "gerbview.Control.polygonsDisplayOutlines",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GBR_POLYGON_DISPLAY_MODE ),
+        AS_GLOBAL, 
+        'P', LEGACY_HK_NAME( "Gbr Polygons Display Mode" ),
         _( "Sketch Polygons" ), _( "Show polygons in outline mode" ),
         opt_show_polygon_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::negativeObjectDisplay( "gerbview.Control.negativeObjectDisplay",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GBR_NEGATIVE_DISPLAY_ONOFF ),
+        AS_GLOBAL, 
+        'N', LEGACY_HK_NAME( "Gbr Negative Obj Display Mode" ),
         _( "Ghost Negative Objects" ), _( "Show negative objects in ghost color" ),
         gerbview_show_negative_objects_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::dcodeDisplay( "gerbview.Control.dcodeDisplay",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GBR_DCODE_DISPLAY_ONOFF ),
+        AS_GLOBAL,
+        'D', LEGACY_HK_NAME( "DCodes Display Mode" ),
         _( "Show DCodes" ), _( "Show dcode number" ),
         show_dcodenumber_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::toggleDiffMode( "gerbview.Control.toggleDiffMode",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GBR_DCODE_DISPLAY_ONOFF ),
+        AS_GLOBAL, 0, "",
         _( "Show in Differential Mode" ), _( "Show layers in diff (compare) mode" ),
         gbr_select_mode2_xpm );
 
-TOOL_ACTION GERBVIEW_ACTIONS::showHelp( "gerbview.Control.showHelp",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HELP ),
-        "", "" );
-
 GERBVIEW_CONTROL::GERBVIEW_CONTROL() :
-    TOOL_INTERACTIVE( "gerbview.Control" ), m_frame( NULL )
-{
-}
-
-
-GERBVIEW_CONTROL::~GERBVIEW_CONTROL()
+    TOOL_INTERACTIVE( "gerbview.Control" ), 
+    m_frame( nullptr )
 {
 }
 
@@ -117,7 +113,7 @@ int GERBVIEW_CONTROL::HighlightControl( const TOOL_EVENT& aEvent )
 {
     auto settings = static_cast<KIGFX::GERBVIEW_PAINTER*>( getView()->GetPainter() )->GetSettings();
     const auto& selection = m_toolMgr->GetTool<GERBVIEW_SELECTION_TOOL>()->GetSelection();
-    GERBER_DRAW_ITEM* item = NULL;
+    GERBER_DRAW_ITEM* item = nullptr;
 
     if( selection.Size() == 1 )
     {
@@ -235,14 +231,6 @@ int GERBVIEW_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 }
 
 
-int GERBVIEW_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
-{
-    DisplayHotkeyList( m_frame, m_frame->GetHotkeyConfig() );
-
-    return 0;
-}
-
-
 int GERBVIEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 {
     GERBVIEW_SELECTION_TOOL* selTool = m_toolMgr->GetTool<GERBVIEW_SELECTION_TOOL>();
@@ -284,8 +272,6 @@ void GERBVIEW_CONTROL::setTransitions()
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::dcodeDisplay.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     ACTIONS::highContrastMode.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::toggleDiffMode.MakeEvent() );
-
-    Go( &GERBVIEW_CONTROL::ShowHelp,           GERBVIEW_ACTIONS::showHelp.MakeEvent() );
 
     Go( &GERBVIEW_CONTROL::UpdateMessagePanel, EVENTS::SelectedEvent );
     Go( &GERBVIEW_CONTROL::UpdateMessagePanel, EVENTS::UnselectedEvent );

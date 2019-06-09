@@ -63,8 +63,6 @@ public:
     int GraphicDisplayMode( const TOOL_EVENT& aEvent );
     int ModuleEdgeOutlines( const TOOL_EVENT& aEvent );
     int HighContrastMode( const TOOL_EVENT& aEvent );
-    int HighContrastInc( const TOOL_EVENT& aEvent );
-    int HighContrastDec( const TOOL_EVENT& aEvent );
 
     // Layer control
     int LayerSwitch( const TOOL_EVENT& aEvent );
@@ -96,9 +94,7 @@ public:
     int Paste( const TOOL_EVENT& aEvent );
     int AppendBoardFromFile( const TOOL_EVENT& aEvent );
     int AppendBoard( PLUGIN& pi, wxString& fileName );
-    int ShowHelp( const TOOL_EVENT& aEvent );
     int Show3DViewer( const TOOL_EVENT& aEvent );
-    int ToBeDone( const TOOL_EVENT& aEvent );
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.

@@ -181,9 +181,6 @@ private:
     void                ClickOnPageList( wxCommandEvent& event );
     void                OnSetRelativeOffset( wxCommandEvent& event );
 
-    ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
-
     void                LoadSettings( wxConfigBase* aCfg ) override;
     void                SaveSettings( wxConfigBase* aCfg ) override;
 

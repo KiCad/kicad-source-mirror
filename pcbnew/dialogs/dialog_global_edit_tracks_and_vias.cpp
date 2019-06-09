@@ -220,8 +220,8 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
 
 bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
 {
-    SELECTION& selection = m_parent->GetToolManager()->GetTool<SELECTION_TOOL>()->GetSelection();
-    auto       item = dynamic_cast<BOARD_CONNECTED_ITEM*>( selection.Front() );
+    PCBNEW_SELECTION& selection = m_parent->GetToolManager()->GetTool<SELECTION_TOOL>()->GetSelection();
+    auto              item = dynamic_cast<BOARD_CONNECTED_ITEM*>( selection.Front() );
 
     m_tracks->SetValue( g_modifyTracks );
     m_vias->SetValue( g_modifyVias );

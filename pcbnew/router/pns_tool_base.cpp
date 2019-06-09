@@ -39,7 +39,6 @@ using namespace std::placeholders;
 #include <dialogs/dialog_track_via_size.h>
 #include <base_units.h>
 #include <bitmaps.h>
-#include <hotkeys.h>
 
 #include <tool/action_menu.h>
 #include <tools/pcb_actions.h>

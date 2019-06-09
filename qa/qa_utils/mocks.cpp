@@ -39,7 +39,6 @@
 #include <wx/dir.h>
 #include <gestfich.h>
 #include <pcbnew.h>
-#include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
 #include <class_board.h>
 #include <fp_lib_table.h>
@@ -229,25 +228,23 @@ MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
     return nullptr;
 }
 
-TOOL_ACTION PCB_ACTIONS::hideDynamicRatsnest(
-        "pcbnew.Control.hideLocalRatsnest", AS_GLOBAL, 0, "", "" );
+TOOL_ACTION PCB_ACTIONS::hideDynamicRatsnest( "pcbnew.Control.hideLocalRatsnest", 
+        AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_FLIP_ITEM ),
+        AS_GLOBAL, 'F', "",
         _( "Flip" ), _( "Flips selected item(s)" ), nullptr );
 
 
 TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_ITEM ),
+        AS_GLOBAL, 'E', "",
         _( "Properties..." ), _( "Displays item properties dialog" ), nullptr );
 
 TOOL_ACTION PCB_ACTIONS::highlightNet( "pcbnew.EditorControl.highlightNet",
-        AS_GLOBAL, 0,
-        "", "" );
+        AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::clearHighlight( "pcbnew.EditorControl.clearHighlight",
-        AS_GLOBAL, 0,
-        "", "" );
+        AS_GLOBAL );
 
 
 DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent,
@@ -281,12 +278,12 @@ DIALOG_BLOCK_OPTIONS_BASE::~DIALOG_BLOCK_OPTIONS_BASE()
 
 
 TOOL_ACTION PCB_ACTIONS::rotateCw( "pcbnew.InteractiveEdit.rotateCw",
-        AS_GLOBAL, MD_SHIFT + 'R',
+        AS_GLOBAL, MD_SHIFT + 'R', "",
         _( "Rotate Clockwise" ), _( "Rotates selected item(s) clockwise" ),
         nullptr, AF_NONE, (void*) -1 );
 
 TOOL_ACTION PCB_ACTIONS::rotateCcw( "pcbnew.InteractiveEdit.rotateCcw",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROTATE_ITEM ),
+        AS_GLOBAL, 'R', "",
         _( "Rotate Counterclockwise" ), _( "Rotates selected item(s) counterclockwise" ),
         nullptr, AF_NONE, (void*) 1 );
 

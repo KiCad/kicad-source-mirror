@@ -32,17 +32,16 @@
 #include <confirm.h>
 #include <bitmaps.h>
 #include <class_board.h>
+#include <tool/action_toolbar.h>
 #include <tool/actions.h>
 #include <pcbnew.h>
-#include <pcbnew_id.h>
-#include <hotkeys.h>
 #include <pcb_layer_box_selector.h>
 #include <view/view.h>
-
 #include <wx/wupdlock.h>
 #include <memory>
 #include <pgm_base.h>
 #include <tools/pcb_actions.h>
+#include <pcbnew_id.h>
 
 extern bool IsWxPythonLoaded();
 
@@ -207,7 +206,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
 
     if( m_mainToolBar )
     {
-        m_mainToolBar->SetToolBitmap( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, *LayerPairBitmap );
+        m_mainToolBar->SetToolBitmap( PCB_ACTIONS::selectLayerPair.GetId(), *LayerPairBitmap );
         m_mainToolBar->Refresh();
     }
 }
@@ -285,10 +284,9 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     ReCreateLayerBox( false );
     m_mainToolBar->AddControl( m_SelLayerBox );
 
+    m_mainToolBar->Add( PCB_ACTIONS::selectLayerPair );
     PrepareLayerIndicator();    // Initialize the bitmap with the active layer colors
-    m_mainToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, wxEmptyString, *LayerPairBitmap,
-                            SEL_LAYER_HELP );
-
+    
     KiScaledSeparator( m_mainToolBar, this );
     ADD_TOOL( ID_RUN_EESCHEMA, eeschema_xpm, _( "Open schematic in Eeschema" ) );
 
@@ -624,7 +622,6 @@ void PCB_EDIT_FRAME::ReCreateLayerBox( bool aForceResizeToolbar )
         return;
 
     m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
-    m_SelLayerBox->m_hotkeys = g_Board_Editor_Hotkeys_Descr;
     m_SelLayerBox->Resync();
 
     if( aForceResizeToolbar )
@@ -650,12 +647,6 @@ void PCB_EDIT_FRAME::ToggleMicrowaveToolbar()
     m_show_microwave_tools = !m_show_microwave_tools;
     m_auimgr.GetPane( "MicrowaveToolbar" ).Show( m_show_microwave_tools );
     m_auimgr.Update();
-}
-
-
-void PCB_EDIT_FRAME::OnUpdateLayerPair( wxUpdateUIEvent& aEvent )
-{
-    PrepareLayerIndicator();
 }
 
 
@@ -722,6 +713,8 @@ void PCB_EDIT_FRAME::SyncMenusAndToolbars()
     }
 #endif
     m_mainToolBar->Refresh();
+
+    PrepareLayerIndicator();
 
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,               IsGridVisible() );
     m_optionsToolBar->Toggle( ACTIONS::metricUnits,              GetUserUnits() != INCHES );

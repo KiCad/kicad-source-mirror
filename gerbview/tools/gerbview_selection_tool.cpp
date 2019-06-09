@@ -31,8 +31,6 @@ using namespace std::placeholders;
 #include <view/view_group.h>
 #include <painter.h>
 #include <bitmaps.h>
-#include <hotkeys.h>
-
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <preview_items/bright_box.h>
@@ -45,24 +43,20 @@ using namespace std::placeholders;
 
 // Selection tool actions
 TOOL_ACTION GERBVIEW_ACTIONS::selectionActivate( "gerbview.InteractiveSelection",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         "", "", NULL, AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
 
 TOOL_ACTION GERBVIEW_ACTIONS::selectionCursor( "gerbview.InteractiveSelection.Cursor",
-        AS_GLOBAL, 0,
-        "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL );
 
 TOOL_ACTION GERBVIEW_ACTIONS::selectItem( "gerbview.InteractiveSelection.SelectItem",
-        AS_GLOBAL, 0,
-        "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL );
 
 TOOL_ACTION GERBVIEW_ACTIONS::unselectItem( "gerbview.InteractiveSelection.UnselectItem",
-        AS_GLOBAL, 0,
-        "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL );
 
 TOOL_ACTION GERBVIEW_ACTIONS::selectionClear( "gerbview.InteractiveSelection.Clear",
-        AS_GLOBAL, 0,
-        "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL );
 
 
 class HIGHLIGHT_MENU: public ACTION_MENU

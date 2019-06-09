@@ -34,7 +34,7 @@ class GERBVIEW_CONTROL : public TOOL_INTERACTIVE
 {
 public:
     GERBVIEW_CONTROL();
-    ~GERBVIEW_CONTROL();
+    ~GERBVIEW_CONTROL() override { }
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
@@ -58,7 +58,6 @@ public:
 
     // Miscellaneous
     int SwitchUnits( const TOOL_EVENT& aEvent );
-    int ShowHelp( const TOOL_EVENT& aEvent );
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
     int Print( const TOOL_EVENT& aEvent );
 

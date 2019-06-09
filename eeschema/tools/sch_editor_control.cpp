@@ -34,10 +34,10 @@
 #include <tools/ee_actions.h>
 #include <tools/ee_picker_tool.h>
 #include <tools/sch_editor_control.h>
+#include <tools/ee_selection.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_drawing_tools.h>
 #include <tools/sch_wire_bus_tool.h>
-#include <ee_hotkeys.h>
 #include <advanced_config.h>
 #include <simulation_cursors.h>
 #include <sim/sim_plot_frame.h>
@@ -52,97 +52,99 @@
 #include <invoke_sch_dialog.h>
 
 TOOL_ACTION EE_ACTIONS::refreshPreview( "eeschema.EditorControl.refreshPreview",
-         AS_GLOBAL, 0, "", "" );
+         AS_GLOBAL );
 
 TOOL_ACTION EE_ACTIONS::simProbe( "eeschema.Simulation.probe",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Add a simulator probe" ), "" );
 
 TOOL_ACTION EE_ACTIONS::simTune( "eeschema.Simulation.tune",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Select a value to be tuned" ), "" );
 
 TOOL_ACTION EE_ACTIONS::highlightNet( "eeschema.EditorControl.highlightNet",
-        AS_GLOBAL, 0, "", "" );
+        AS_GLOBAL );
 
 TOOL_ACTION EE_ACTIONS::clearHighlight( "eeschema.EditorControl.clearHighlight",
-        AS_GLOBAL, 0, "", "" );
+        AS_GLOBAL );
 
 TOOL_ACTION EE_ACTIONS::updateNetHighlighting( "eeschema.EditorControl.updateNetHighlighting",
-        AS_GLOBAL, 0, "", "" );
+        AS_GLOBAL );
 
 TOOL_ACTION EE_ACTIONS::highlightNetCursor( "eeschema.EditorControl.highlightNetTool",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Highlight Nets" ), _( "Highlight wires and pins of a net" ),
         net_highlight_schematic_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::editWithLibEdit( "eeschema.EditorControl.editWithSymbolEditor",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_WITH_LIBEDIT ),
+        AS_GLOBAL, 
+        MD_CTRL + 'E', LEGACY_HK_NAME( "Edit with Symbol Editor" ),
         _( "Edit with Symbol Editor" ), _( "Open the symbol editor to edit the symbol" ),
         libedit_xpm );
 
 TOOL_ACTION EE_ACTIONS::editSymbolFields( "eeschema.EditorControl.editSymbolFields",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Edit Symbol Fields..." ), _( "Bulk-edit fields of all symbols in schematic" ),
         spreadsheet_xpm );
 
 TOOL_ACTION EE_ACTIONS::editSymbolLibraryLinks( "eeschema.EditorControl.editSymbolLibraryLinks",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Edit Symbol Library Links..." ), _( "Edit links between schematic and library symbols" ),
         edit_cmp_symb_links_xpm );
 
 TOOL_ACTION EE_ACTIONS::assignFootprints( "eeschema.EditorControl.assignFootprints",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Assign Footprints..." ), _( "Run Cvpcb" ),
         cvpcb_xpm );
 
 TOOL_ACTION EE_ACTIONS::annotate( "eeschema.EditorControl.annotate",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Annotate Schematic..." ), _( "Fill in schematic symbol reference designators" ),
         annotate_xpm );
 
 TOOL_ACTION EE_ACTIONS::showBusManager( "eeschema.EditorControl.showBusManager",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Bus Definitions..." ), _( "Manage bus definitions" ),
         bus_definition_tool_xpm );
 
 TOOL_ACTION EE_ACTIONS::showPcbNew( "eeschema.EditorControl.showPcbNew",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Open PCB Editor" ), _( "Run Pcbnew" ),
         pcbnew_xpm );
 
 TOOL_ACTION EE_ACTIONS::generateBOM( "eeschema.EditorControl.generateBOM",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Generate BOM..." ), _( "Generate a bill of materials for the current schematic" ),
         bom_xpm );
 
 TOOL_ACTION EE_ACTIONS::enterSheet( "eeschema.EditorControl.enterSheet",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Enter Sheet" ), _( "Display the selected sheet's contents in the Eeschema window" ),
         enter_sheet_xpm );
 
 TOOL_ACTION EE_ACTIONS::leaveSheet( "eeschema.EditorControl.leaveSheet",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_LEAVE_SHEET ),
+        AS_GLOBAL, 
+        MD_ALT + WXK_BACK, LEGACY_HK_NAME( "Leave Sheet" ),
         _( "Leave Sheet" ), _( "Display the parent sheet in the Eeschema window" ),
         leave_sheet_xpm );
 
 TOOL_ACTION EE_ACTIONS::navigateHierarchy( "eeschema.EditorControl.navigateHierarchy",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Show Hierarchy Navigator" ), "",
         hierarchy_nav_xpm );
 
 TOOL_ACTION EE_ACTIONS::explicitCrossProbe( "eeschema.EditorControl.explicitCrossProbe",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SELECT_ITEMS_ON_PCB ),
+        AS_GLOBAL, 0, "",
         _( "Highlight on PCB" ), _( "Highlight corresponding items in PCBNew" ),
         select_same_sheet_xpm );
 
 TOOL_ACTION EE_ACTIONS::toggleHiddenPins( "eeschema.EditorControl.showHiddenPins",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Show Hidden Pins" ), "",
         hidden_pin_xpm );
 
 TOOL_ACTION EE_ACTIONS::toggleForceHV( "eeschema.EditorControl.forceHVLines",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Force H/V Wires and Busses" ), "",
         lines90_xpm );
 

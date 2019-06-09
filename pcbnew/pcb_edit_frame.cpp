@@ -36,7 +36,6 @@
 #include <tools/drc.h>
 #include <layer_widget.h>
 #include <pcb_layer_widget.h>
-#include <hotkeys.h>
 #include <config_params.h>
 #include <footprint_edit_frame.h>
 #include <dialog_helpers.h>
@@ -62,6 +61,8 @@
 #include <functional>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
+#include <tool/action_toolbar.h>
+#include <tool/common_control.h>
 #include <tool/common_tools.h>
 #include <tool/zoom_tool.h>
 #include <tools/selection_tool.h>
@@ -138,9 +139,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( wxID_EXIT, PCB_EDIT_FRAME::OnQuit )
 
     // menu Config
-    EVT_MENU( ID_PCB_3DSHAPELIB_WIZARD, PCB_EDIT_FRAME::Process_Config )
-    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, PCB_EDIT_FRAME::Process_Config )
-    EVT_MENU( wxID_PREFERENCES, PCB_EDIT_FRAME::Process_Config )
+    EVT_MENU( ID_PCB_3DSHAPELIB_WIZARD, PCB_EDIT_FRAME::On3DShapeLibWizard )
     EVT_MENU( ID_GRID_SETTINGS, PCB_EDIT_FRAME::OnGridSettings )
 
     // menu Postprocess
@@ -148,7 +147,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
 
     // Horizontal toolbar
     EVT_TOOL( ID_GEN_PLOT_SVG, PCB_EDIT_FRAME::ExportSVG )
-    EVT_TOOL( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH, PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
     EVT_COMBOBOX( ID_TOOLBARH_PCB_SELECT_LAYER, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_CHOICE( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH, PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
@@ -167,7 +165,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
                     PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
 
     // User interface update event handlers.
-    EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, PCB_EDIT_FRAME::OnUpdateLayerPair )
     EVT_UPDATE_UI( ID_TOOLBARH_PCB_SELECT_LAYER, PCB_EDIT_FRAME::OnUpdateLayerSelectBox )
     EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH, PCB_EDIT_FRAME::OnUpdateSelectTrackWidth )
     EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_VIA_SIZE, PCB_EDIT_FRAME::OnUpdateSelectViaSize )
@@ -195,7 +192,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_SelLayerBox = NULL;
     m_show_microwave_tools = false;
     m_show_layer_manager_tools = true;
-    m_hotkeysDescrList = g_Board_Editor_Hotkeys_Descr;
     m_hasAutoSave = true;
     m_microWaveToolBar = NULL;
     m_Layers = nullptr;
@@ -418,6 +414,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
     // Register tools
+    m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new SELECTION_TOOL );
     m_toolManager->RegisterTool( new ZOOM_TOOL );

@@ -70,9 +70,6 @@ public:
 
     static TOOL_ACTION layerChanged;        // notification
 
-    // Miscellaneous
-    static TOOL_ACTION showHelp;
-
     // Highlighting
     static TOOL_ACTION highlightClear;
     static TOOL_ACTION highlightNet;

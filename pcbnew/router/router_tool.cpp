@@ -40,16 +40,13 @@ using namespace std::placeholders;
 #include <dialogs/dialog_pns_diff_pair_dimensions.h>
 #include <dialogs/dialog_track_via_size.h>
 #include <base_units.h>
-#include <hotkeys.h>
 #include <confirm.h>
 #include <bitmaps.h>
 #include <collectors.h>
-
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_settings.h>
 #include <tool/grid_menu.h>
-
 #include <tool/zoom_menu.h>
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
@@ -80,137 +77,148 @@ enum VIA_ACTION_FLAGS
 
 
 TOOL_ACTION PCB_ACTIONS::routerActivateSingle( "pcbnew.InteractiveRouter.SingleTrack",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_TRACK ),
-        _( "Interactive Router (Single Tracks)" ),
-        _( "Run push & shove router (single tracks)" ),
+        AS_GLOBAL, 
+        'X', LEGACY_HK_NAME( "Add New Track" ),
+        _( "Interactive Router (Single Tracks)" ), _( "Run push & shove router (single tracks)" ),
         add_tracks_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerActivateDiffPair( "pcbnew.InteractiveRouter.DiffPair",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTE_DIFF_PAIR ),
-        _( "Interactive Router (Differential Pairs)" ),
-        _( "Run push & shove router (differential pairs)" ),
+        AS_GLOBAL, 
+        '6', LEGACY_HK_NAME( "Route Differential Pair (Modern Toolset only)" ),
+        _( "Interactive Router (Differential Pairs)" ), _( "Run push & shove router (differential pairs)" ),
         ps_diff_pair_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerSettingsDialog( "pcbnew.InteractiveRouter.SettingsDialog",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTING_OPTIONS ),
-        _( "Interactive Router Settings..." ),
-        _( "Open Interactive Router settings" ),
+        AS_GLOBAL, 
+        MD_CTRL + MD_SHIFT + ',', LEGACY_HK_NAME( "Routing Options" ),
+        _( "Interactive Router Settings..." ), _( "Open Interactive Router settings" ),
         tools_xpm );
 
 TOOL_ACTION PCB_ACTIONS::routerDiffPairDialog( "pcbnew.InteractiveRouter.DiffPairDialog",
-        AS_GLOBAL, 0,
-        _( "Differential Pair Dimension Settings..." ),
-        _( "Open Differential Pair Dimension settings" ),
+        AS_GLOBAL, 0, "",
+        _( "Differential Pair Dimensions..." ), _( "Open Differential Pair Dimension settings" ),
         ps_diff_pair_gap_xpm );
 
 TOOL_ACTION PCB_ACTIONS::selectLayerPair( "pcbnew.InteractiveRouter.SelectLayerPair",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Set Layer Pair..." ), _( "Change active layer pair for routing" ),
         select_layer_pair_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerTuneSingleTrace( "pcbnew.LengthTuner.TuneSingleTrack",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_SINGLE ),
+        AS_GLOBAL, 
+        '7', LEGACY_HK_NAME( "Tune Single Track (Modern Toolset only)" ),
         _( "Tune length of a single track" ), "",
         ps_tune_length_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerTuneDiffPair( "pcbnew.LengthTuner.TuneDiffPair",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_DIFF_PAIR ),
+        AS_GLOBAL, 
+        '8', LEGACY_HK_NAME( "Tune Differential Pair Length (Modern Toolset only)" ),
         _( "Tune length of a differential pair" ), "",
-        NULL, AF_ACTIVATE );
+        nullptr, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerTuneDiffPairSkew( "pcbnew.LengthTuner.TuneDiffPairSkew",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_SKEW ),
+        AS_GLOBAL, 
+        '9', LEGACY_HK_NAME( "Tune Differential Pair Skew (Modern Toolset only)" ),
         _( "Tune skew of a differential pair" ), "",
-        NULL, AF_ACTIVATE );
+        nullptr, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerInlineDrag( "pcbnew.InteractiveRouter.InlineDrag",
-        AS_CONTEXT, 0,
+        AS_CONTEXT, 0, "",
         _( "Drag Track/Via" ), _( "Drags tracks and vias without breaking connections" ),
         drag_xpm );
 
 TOOL_ACTION PCB_ACTIONS::inlineBreakTrack( "pcbnew.InteractiveRouter.InlineBreakTrack",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Break Track" ),
         _( "Splits the track segment into two segments connected at the cursor position." ),
         break_line_xpm );
 
 TOOL_ACTION PCB_ACTIONS::breakTrack( "pcbnew.InteractiveRouter.BreakTrack",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Break Track" ),
         _( "Splits the track segment into two segments connected at the cursor position." ),
         break_line_xpm );
 
 TOOL_ACTION PCB_ACTIONS::drag45Degree( "pcbnew.InteractiveRouter.Drag45Degree",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DRAG_TRACK_KEEP_SLOPE ),
+        AS_GLOBAL, 
+        'D', LEGACY_HK_NAME( "Drag Track Keep Slope" ),
         _( "Drag (45 degree mode)" ),
         _( "Drags the track segment while keeping connected tracks at 45 degrees." ),
         drag_segment_withslope_xpm );
 
 TOOL_ACTION PCB_ACTIONS::dragFreeAngle( "pcbnew.InteractiveRouter.DragFreeAngle",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DRAG_ITEM ),
+        AS_GLOBAL, 
+        'G', LEGACY_HK_NAME( "Drag Item" ),
         _( "Drag (free angle)" ),
         _( "Drags the nearest joint in the track without restricting the track angle." ),
         move_xpm );
 
-static const TOOL_ACTION ACT_NewTrack( "pcbnew.InteractiveRouter.NewTrack", AS_CONTEXT,
-    TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_TRACK ),
-    _( "New Track" ),  _( "Starts laying a new track." ),
-    add_tracks_xpm );
+static const TOOL_ACTION ACT_NewTrack( "pcbnew.InteractiveRouter.NewTrack", 
+        AS_CONTEXT,
+        'X', LEGACY_HK_NAME( "Add New Track" ),
+        _( "New Track" ),  _( "Starts laying a new track." ),
+        add_tracks_xpm );
 
-static const TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack", AS_CONTEXT, WXK_END,
-    _( "End Track" ),  _( "Stops laying the current track." ),
-    checked_ok_xpm );
+static const TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack", 
+        AS_CONTEXT, 
+        WXK_END, "",
+        _( "End Track" ),  _( "Stops laying the current track." ),
+        checked_ok_xpm );
 
-static const TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute", AS_CONTEXT, 'F',
-    _( "Auto-end Track" ),  _( "Automagically finishes currently routed track." ) );
+static const TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute", 
+        AS_CONTEXT, 
+        'F', "",
+        _( "Auto-end Track" ),  _( "Automagically finishes currently routed track." ) );
 
 static const TOOL_ACTION ACT_PlaceThroughVia( "pcbnew.InteractiveRouter.PlaceVia",
-    AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_ADD_THROUGH_VIA ),
-    _( "Place Through Via" ),
-    _( "Adds a through-hole via at the end of currently routed track." ),
-    via_xpm, AF_NONE,
-    (void*) VIA_ACTION_FLAGS::VIA );
+        AS_CONTEXT, 
+        'V', LEGACY_HK_NAME( "Add Through Via" ),
+        _( "Place Through Via" ),
+        _( "Adds a through-hole via at the end of currently routed track." ),
+        via_xpm, AF_NONE, (void*) VIA_ACTION_FLAGS::VIA );
 
 static const TOOL_ACTION ACT_PlaceBlindVia( "pcbnew.InteractiveRouter.PlaceBlindVia",
-    AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_ADD_BLIND_BURIED_VIA ),
-    _( "Place Blind/Buried Via" ),
-    _( "Adds a blind or buried via at the end of currently routed track."),
-    via_buried_xpm, AF_NONE,
-    (void*) VIA_ACTION_FLAGS::BLIND_VIA );
+        AS_CONTEXT, 
+        MD_ALT + MD_SHIFT + 'V', LEGACY_HK_NAME( "Add Blind/Buried Via" ),
+        _( "Place Blind/Buried Via" ),
+        _( "Adds a blind or buried via at the end of currently routed track."),
+        via_buried_xpm, AF_NONE, (void*) VIA_ACTION_FLAGS::BLIND_VIA );
 
 static const TOOL_ACTION ACT_PlaceMicroVia( "pcbnew.InteractiveRouter.PlaceMicroVia",
-    AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_ADD_MICROVIA ),
-    _( "Place Microvia" ), _( "Adds a microvia at the end of currently routed track." ),
-    via_microvia_xpm, AF_NONE,
-    (void*) VIA_ACTION_FLAGS::MICROVIA );
+        AS_CONTEXT, 
+        MD_CTRL + 'V', LEGACY_HK_NAME( "Add MicroVia" ),
+        _( "Place Microvia" ), _( "Adds a microvia at the end of currently routed track." ),
+        via_microvia_xpm, AF_NONE, (void*) VIA_ACTION_FLAGS::MICROVIA );
 
-static const TOOL_ACTION ACT_SelLayerAndPlaceThroughVia(
-    "pcbnew.InteractiveRouter.SelLayerAndPlaceVia",
-    AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_SEL_LAYER_AND_ADD_THROUGH_VIA ),
-    _( "Select Layer and Place Through Via..." ),
-    _( "Select a layer, then add a through-hole via at the end of currently routed track." ),
-    select_w_layer_xpm, AF_NONE,
-    (void*) ( VIA_ACTION_FLAGS::VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
+static const TOOL_ACTION ACT_SelLayerAndPlaceThroughVia( "pcbnew.InteractiveRouter.SelLayerAndPlaceVia",
+        AS_CONTEXT,
+        '<', LEGACY_HK_NAME( "Select Layer and Add Through Via" ),
+        _( "Select Layer and Place Through Via..." ),
+        _( "Select a layer, then add a through-hole via at the end of currently routed track." ),
+        select_w_layer_xpm, AF_NONE,
+        (void*) ( VIA_ACTION_FLAGS::VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
 
-static const TOOL_ACTION ACT_SelLayerAndPlaceBlindVia(
-    "pcbnew.InteractiveRouter.SelLayerAndPlaceBlindVia",
-    AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_SEL_LAYER_AND_ADD_BLIND_BURIED_VIA ),
-    _( "Select Layer and Place Blind/Buried Via..." ),
-    _( "Select a layer, then add a blind or buried via at the end of currently routed track."),
-    select_w_layer_xpm, AF_NONE,
-    (void*) ( VIA_ACTION_FLAGS::BLIND_VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
+static const TOOL_ACTION ACT_SelLayerAndPlaceBlindVia( "pcbnew.InteractiveRouter.SelLayerAndPlaceBlindVia",
+        AS_CONTEXT, 
+        MD_ALT + '<', LEGACY_HK_NAME( "Select Layer and Add Blind/Buried Via" ),
+        _( "Select Layer and Place Blind/Buried Via..." ),
+        _( "Select a layer, then add a blind or buried via at the end of currently routed track."),
+        select_w_layer_xpm, AF_NONE,
+        (void*) ( VIA_ACTION_FLAGS::BLIND_VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
 
 static const TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackViaSize",
-    AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_CUSTOM_TRACK_WIDTH ),
-    _( "Custom Track/Via Size..." ),
-    _( "Shows a dialog for changing the track width and via size." ),
-    width_track_xpm );
+        AS_CONTEXT, 
+        'Q', LEGACY_HK_NAME( "Custom Track/Via Size" ),
+        _( "Custom Track/Via Size..." ),
+        _( "Shows a dialog for changing the track width and via size." ),
+        width_track_xpm );
 
-static const TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture", AS_CONTEXT,
-    TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_POSTURE ),
-    _( "Switch Track Posture" ),
-    _( "Switches posture of the currently routed track." ),
-    change_entry_orient_xpm );
+static const TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture", 
+        AS_CONTEXT,
+        '/', LEGACY_HK_NAME( "Switch Track Posture" ),
+        _( "Switch Track Posture" ),
+        _( "Switches posture of the currently routed track." ),
+        change_entry_orient_xpm );
 
 ROUTER_TOOL::ROUTER_TOOL() :
     TOOL_BASE( "pcbnew.InteractiveRouter" )
@@ -783,7 +791,7 @@ bool ROUTER_TOOL::prepareInteractive()
         return false;
     }
 
-    m_endItem = NULL;
+    m_endItem = nullptr;
     m_endSnapPoint = m_startSnapPoint;
 
     frame()->UndoRedoBlock( true );
@@ -840,7 +848,7 @@ void ROUTER_TOOL::performRouting()
             frame()->SetActiveLayer( ToLAYER_ID( m_router->GetCurrentLayer() ) );
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
-            m_startItem = NULL;
+            m_startItem = nullptr;
         }
         else if( evt->IsAction( &ACT_SwitchPosture ) )
         {

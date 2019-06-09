@@ -27,7 +27,7 @@
 #include <core/optional.h>
 #include <layers_id_colors_and_visibility.h>
 
-class SELECTION;
+class PCBNEW_SELECTION;
 class COMMIT;
 class NET_SELECTOR_COMBO_POPUP;
 class PCB_BASE_FRAME;
@@ -36,7 +36,7 @@ class D_PAD;
 class DIALOG_TRACK_VIA_PROPERTIES : public DIALOG_TRACK_VIA_PROPERTIES_BASE
 {
 public:
-    DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent, const SELECTION& aItems,
+    DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent, const PCBNEW_SELECTION& aItems,
                                  COMMIT& aCommit );
 
     bool TransferDataFromWindow() override;
@@ -51,17 +51,17 @@ private:
 
     bool confirmPadChange( const std::vector<D_PAD*>& connectedPads );
 
-    PCB_BASE_FRAME*  m_frame;
-    const SELECTION& m_items;   // List of items to be modified.
-    COMMIT&          m_commit;  // An undo record to add any changes to.
+    PCB_BASE_FRAME*         m_frame;
+    const PCBNEW_SELECTION& m_items;   // List of items to be modified.
+    COMMIT&                 m_commit;  // An undo record to add any changes to.
 
-    UNIT_BINDER      m_trackStartX, m_trackStartY;
-    UNIT_BINDER      m_trackEndX, m_trackEndY;
-    UNIT_BINDER      m_trackWidth;
+    UNIT_BINDER             m_trackStartX, m_trackStartY;
+    UNIT_BINDER             m_trackEndX, m_trackEndY;
+    UNIT_BINDER             m_trackWidth;
 
-    UNIT_BINDER      m_viaX, m_viaY;
-    UNIT_BINDER      m_viaDiameter, m_viaDrill;
+    UNIT_BINDER             m_viaX, m_viaY;
+    UNIT_BINDER             m_viaDiameter, m_viaDrill;
 
-    bool             m_tracks;  // True if dialog displays any track properties.
-    bool             m_vias;    // True if dialog displays any via properties.
+    bool                    m_tracks;  // True if dialog displays any track properties.
+    bool                    m_vias;    // True if dialog displays any via properties.
 };

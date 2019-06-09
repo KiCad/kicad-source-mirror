@@ -46,7 +46,6 @@
 #include <reporter.h>
 #include <lib_edit_frame.h>
 #include <viewlib_frame.h>
-#include <ee_hotkeys.h>
 #include <eeschema_config.h>
 #include <sch_sheet.h>
 #include <sim/sim_plot_frame.h>
@@ -56,6 +55,8 @@
 #include <view/view.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
+#include <tool/action_toolbar.h>
+#include <tool/common_control.h>
 #include <tool/common_tools.h>
 #include <tool/zoom_tool.h>
 #include <tools/ee_actions.h>
@@ -225,9 +226,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
 
     EVT_MENU( ID_CONFIG_SAVE, SCH_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_CONFIG_READ, SCH_EDIT_FRAME::Process_Config )
-    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, SCH_EDIT_FRAME::Process_Config )
-
-    EVT_TOOL( wxID_PREFERENCES, SCH_EDIT_FRAME::OnPreferencesOptions )
 
     EVT_TOOL( ID_RESCUE_CACHED, SCH_EDIT_FRAME::OnRescueProject )
     EVT_MENU( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnRemapSymbols )
@@ -254,7 +252,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_printMonochrome = true;
     m_printSheetReference = true;
     SetShowPageLimits( true );
-    m_hotkeysDescrList = g_Schematic_Hotkeys_Descr;
     m_undoItem = NULL;
     m_hasAutoSave = true;
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
@@ -345,6 +342,7 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
     // Register tools
+    m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->RegisterTool( new EE_SELECTION_TOOL );

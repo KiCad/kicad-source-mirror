@@ -43,12 +43,13 @@
 #include <widgets/symbol_tree_pane.h>
 #include <widgets/lib_tree.h>
 #include <symbol_lib_table.h>
-#include <ee_hotkeys.h>
 #include <eeschema_config.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/progdlg.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
+#include <tool/action_toolbar.h>
+#include <tool/common_control.h>
 #include <tool/common_tools.h>
 #include <tool/zoom_tool.h>
 #include <tools/ee_actions.h>
@@ -98,10 +99,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_LIBEDIT_GEN_SVG_FILE, LIB_EDIT_FRAME::OnPlotCurrentComponent )
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
 
-    EVT_MENU( wxID_PREFERENCES, LIB_EDIT_FRAME::OnPreferencesOptions )
-
-    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, LIB_EDIT_FRAME::Process_Config )
-
     // Update user interface elements.
     EVT_UPDATE_UI( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::OnUpdateSyncPinEdit )
     EVT_UPDATE_UI( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnUpdatePartNumber )
@@ -116,7 +113,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetShowDeMorgan( false );
     m_DrawSpecificConvert = true;
     m_DrawSpecificUnit    = false;
-    m_hotkeysDescrList    = g_Libedit_Hotkeys_Descr;
     m_SyncPinEdit         = false;
     m_repeatPinStep = DEFAULT_REPEAT_OFFSET_PIN;
     SetShowElectricalType( true );
@@ -230,6 +226,7 @@ void LIB_EDIT_FRAME::setupTools()
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
     // Register tools
+    m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->RegisterTool( new EE_SELECTION_TOOL );
@@ -759,6 +756,7 @@ void LIB_EDIT_FRAME::CommonSettingsChanged()
 
 void LIB_EDIT_FRAME::ShowChangedLanguage()
 {
+    // JEY TODO: push this down into EDA_BASE_FRAME...
     // call my base class
     SCH_BASE_FRAME::ShowChangedLanguage();
 

@@ -33,10 +33,7 @@
 #include <gestfich.h>
 #include <ws_draw_item.h>
 #include <pl_editor_frame.h>
-#include <hotkeys.h>
-
 #include <build_version.h>
-
 #include <wx/file.h>
 #include <wx/snglinst.h>
 
@@ -119,11 +116,6 @@ PGM_BASE& Pgm()
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
     start_common( aCtlBits );
-
-    // Must be called before creating the main frame in order to
-    // display the real hotkeys in menus or tool tips
-    ReadHotkeyConfig( PL_EDITOR_FRAME_NAME, PlEditorHotkeysDescr );
-
     return true;
 }
 

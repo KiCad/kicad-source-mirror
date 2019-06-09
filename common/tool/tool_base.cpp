@@ -45,7 +45,7 @@ KIGFX::VIEW_CONTROLS* TOOL_BASE::getViewControls() const
 }
 
 
-wxWindow* TOOL_BASE::getEditFrameInt() const
+EDA_BASE_FRAME* TOOL_BASE::getEditFrameInt() const
 {
     return m_toolMgr->GetEditFrame();
 }

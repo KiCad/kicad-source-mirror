@@ -33,15 +33,16 @@
 #include <pl_editor_frame.h>
 #include <pl_editor_id.h>
 #include <pl_draw_panel_gal.h>
-#include <hotkeys.h>
 #include <pl_editor_screen.h>
 #include <ws_data_model.h>
 #include <properties_frame.h>
 #include <view/view.h>
 #include <confirm.h>
 #include <tool/selection.h>
+#include <tool/action_toolbar.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
+#include <tool/common_control.h>
 #include <tool/common_tools.h>
 #include <tool/zoom_tool.h>
 #include <tools/pl_actions.h>
@@ -59,14 +60,10 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
 
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, PL_EDITOR_FRAME::OnFileHistory )
 
-    // menu Preferences
-    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, PL_EDITOR_FRAME::Process_Special_Functions )
-    EVT_MENU( wxID_PREFERENCES, PL_EDITOR_FRAME::Process_Special_Functions )
-
     EVT_TOOL( ID_SHOW_REAL_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
     EVT_TOOL( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
-    EVT_CHOICE( ID_SELECT_COORDINATE_ORIGIN, PL_EDITOR_FRAME::OnSelectCoordOriginCorner)
-    EVT_CHOICE( ID_SELECT_PAGE_NUMBER, PL_EDITOR_FRAME::Process_Special_Functions)
+    EVT_CHOICE( ID_SELECT_COORDINATE_ORIGIN, PL_EDITOR_FRAME::OnSelectCoordOriginCorner )
+    EVT_CHOICE( ID_SELECT_PAGE_NUMBER, PL_EDITOR_FRAME::OnSelectPage )
 
     EVT_UPDATE_UI( ID_SHOW_REAL_MODE, PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayNormalMode )
     EVT_UPDATE_UI( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayEditMode )
@@ -87,7 +84,6 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_showAxis = false;                 // true to show X and Y axis on screen
     m_showGridAxis = true;
     m_showBorderAndTitleBlock   = true; // true for reference drawings.
-    m_hotkeysDescrList = PlEditorHotkeysDescr;
     m_originSelectChoice = 0;
     SetDrawBgColor( WHITE );            // default value, user option (WHITE/BLACK)
     WS_DATA_MODEL::GetTheInstance().m_EditMode = true;
@@ -206,6 +202,7 @@ void PL_EDITOR_FRAME::setupTools()
     GetGalCanvas()->SetEventDispatcher( m_toolDispatcher );
 
     // Register tools
+    m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->RegisterTool( new PL_SELECTION_TOOL );
@@ -266,34 +263,12 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
 /* Handles the selection of tools, menu, and popup menu commands.
  */
-void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
+void PL_EDITOR_FRAME::OnSelectPage( wxCommandEvent& event )
 {
-    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
-    cmd.SetEventObject( this );
-
-    switch( event.GetId() )
-    {
-    case wxID_PREFERENCES:
-        ShowPreferences( PlEditorHotkeysDescr, PlEditorHotkeysDescr, wxT( "pl_editor" ) );
-        break;
-
-    case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
-        DisplayHotkeyList( this, PlEditorHotkeysDescr );
-        break;
-
-    case ID_SELECT_PAGE_NUMBER:
-    {
-        KIGFX::VIEW* view = GetGalCanvas()->GetView();
-        view->SetLayerVisible( LAYER_WORKSHEET_PAGE1, m_pageSelectBox->GetSelection() == 0 );
-        view->SetLayerVisible( LAYER_WORKSHEET_PAGEn, m_pageSelectBox->GetSelection() == 1 );
-        GetGalCanvas()->Refresh();
-    }
-        break;
-
-    default:
-        wxMessageBox( wxT( "PL_EDITOR_FRAME::Process_Special_Functions error" ) );
-        break;
-    }
+    KIGFX::VIEW* view = GetGalCanvas()->GetView();
+    view->SetLayerVisible( LAYER_WORKSHEET_PAGE1, m_pageSelectBox->GetSelection() == 0 );
+    view->SetLayerVisible( LAYER_WORKSHEET_PAGEn, m_pageSelectBox->GetSelection() == 1 );
+    GetGalCanvas()->Refresh();
 }
 
 
@@ -627,7 +602,7 @@ void PL_EDITOR_FRAME::HardRedraw()
     drawPanel->DisplayWorksheet();
 
     PL_SELECTION_TOOL*  selTool = m_toolManager->GetTool<PL_SELECTION_TOOL>();
-    SELECTION&          selection = selTool->GetSelection();
+    PL_SELECTION&       selection = selTool->GetSelection();
     WS_DATA_ITEM* item = nullptr;
 
     if( selection.GetSize() == 1 )

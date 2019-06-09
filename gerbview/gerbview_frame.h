@@ -450,12 +450,7 @@ public:
      */
     void OnQuit( wxCommandEvent& event );
 
-    ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
-
     GERBER_DRAW_ITEM* Locate( const wxPoint& aPosition, int typeloc );
-
-    void Process_Config( wxCommandEvent& event );
 
     void OnUpdateDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectDCode( wxUpdateUIEvent& aEvent );
@@ -590,7 +585,7 @@ public:
     /**
      * Allows Gerbview to install its preferences panels into the preferences dialog.
      */
-    void InstallPreferences( PAGED_DIALOG* aParent ) override;
+    void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
 
     /**
      * Called after the preferences dialog is run.

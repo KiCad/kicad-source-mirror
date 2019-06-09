@@ -104,8 +104,6 @@ public:
 
     void Process_Special_Functions( wxCommandEvent& event );
 
-    void ProcessPreferences( wxCommandEvent& event );
-
     /**
      * Refresh the library tree and redraw the window
      */
@@ -140,11 +138,7 @@ public:
      */
     bool SaveLibraryAs( const wxString& aLibraryPath );
 
-    ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
-
     void OnUpdateModuleSelected( wxUpdateUIEvent& aEvent );
-    void OnUpdateModuleTargeted( wxUpdateUIEvent& aEvent );
     void OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent );
     void OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent );
 
@@ -318,7 +312,7 @@ public:
     /**
      * Allows Modedit to install its preferences panel into the preferences dialog.
      */
-    void InstallPreferences( PAGED_DIALOG* aParent ) override;
+    void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
 
     void ReFillLayerWidget();
 

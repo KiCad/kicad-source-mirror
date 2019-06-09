@@ -32,58 +32,58 @@
 
 
 TOOL_ACTION EE_ACTIONS::newSymbol( "eeschema.SymbolLibraryControl.newSymbol",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "New Symbol..." ), _( "Create a new symbol" ),
         new_component_xpm );
 
 TOOL_ACTION EE_ACTIONS::editSymbol( "eeschema.SymbolLibraryControl.editSymbol",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Edit Symbol" ), _( "Show selected symbol on editor canvas" ),
         edit_xpm );
 
 TOOL_ACTION EE_ACTIONS::duplicateSymbol( "eeschema.SymbolLibraryControl.duplicateSymbol",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Duplicate Symbol" ), _( "Make a copy of the selected symbol" ),
         duplicate_xpm );
 
 TOOL_ACTION EE_ACTIONS::deleteSymbol( "eeschema.SymbolLibraryControl.deleteSymbol",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Delete Symbol" ), _( "Remove the selected symbol from its library" ),
         delete_xpm );
 
 TOOL_ACTION EE_ACTIONS::cutSymbol( "eeschema.SymbolLibraryControl.cutSymbol",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Cut Symbol" ), "",
         cut_xpm );
 
 TOOL_ACTION EE_ACTIONS::copySymbol( "eeschema.SymbolLibraryControl.copySymbol",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Copy Symbol" ), "",
         copy_xpm );
 
 TOOL_ACTION EE_ACTIONS::pasteSymbol( "eeschema.SymbolLibraryControl.pasteSymbol",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Paste Symbol" ), "",
         paste_xpm );
 
 TOOL_ACTION EE_ACTIONS::importSymbol( "eeschema.SymbolLibraryControl.importSymbol",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Import Symbol..." ), _( "Import a symbol to the current library" ),
         import_part_xpm );
 
 TOOL_ACTION EE_ACTIONS::exportSymbol( "eeschema.SymbolLibraryControl.exportSymbol",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Export Symbol..." ), _( "Export a symbol to a new library file" ),
         export_part_xpm );
 
 TOOL_ACTION EE_ACTIONS::showElectricalTypes( "eeschema.SymbolLibraryControl.showElectricalTypes",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Show Pin Electrical Types" ), _( "Annotate pins with their electrical types" ),
         pin_show_etype_xpm );
 
 
 TOOL_ACTION EE_ACTIONS::showComponentTree( "eeschema.SymbolLibraryControl.showComponentTree",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Show Symbol Tree" ), "",
         search_tree_xpm );
 

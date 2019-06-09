@@ -23,10 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file cvpcb_mainframe.cpp
- */
-
 #include <fctsys.h>
 #include <build_version.h>
 #include <kiway_express.h>
@@ -48,7 +44,7 @@
 #include <invoke_pcb_dialog.h>
 #include <display_footprints_frame.h>
 #include <cvpcb_id.h>
-
+#include <tool/action_toolbar.h>
 #include <cvpcb_mainframe.h>
 
 wxSize const FRAME_MIN_SIZE_DU( 350, 250 );
@@ -65,7 +61,6 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, KIWAY_PLAYER )
     // Menu events
     EVT_MENU( ID_SAVE_PROJECT, CVPCB_MAINFRAME::OnSaveAndContinue )
     EVT_MENU( wxID_EXIT, CVPCB_MAINFRAME::OnQuit )
-    EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, CVPCB_MAINFRAME::OnConfigurePaths )
     EVT_MENU( ID_CVPCB_EQUFILES_LIST_EDIT, CVPCB_MAINFRAME::OnEditEquFilesList )
 
     // Toolbar events

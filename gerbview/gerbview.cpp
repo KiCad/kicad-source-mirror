@@ -30,7 +30,6 @@
 #include <kiface_i.h>
 #include <pgm_base.h>
 #include <gerbview.h>
-#include <hotkeys.h>
 #include <gerbview_frame.h>
 
 const wxChar* g_GerberPageSizeList[] =
@@ -123,11 +122,6 @@ PGM_BASE& Pgm()
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
     start_common( aCtlBits );
-
-    // Must be called before creating the main frame in order to
-    // display the real hotkeys in menus or tool tips
-    ReadHotkeyConfig( GERBVIEW_FRAME_NAME, GerbviewHotkeysDescr );
-
     return true;
 }
 

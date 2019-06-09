@@ -40,42 +40,42 @@
 
 // Drawing tool actions
 TOOL_ACTION PL_ACTIONS::drawLine( "plEditor.InteractiveDrawing.drawLine",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Add Line" ), _( "Add a line" ),
         add_graphical_segments_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PL_ACTIONS::drawRectangle( "plEditor.InteractiveDrawing.drawRectangle",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Add Rectangle" ), _( "Add a rectangle" ),
         add_rectangle_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PL_ACTIONS::placeText( "plEditor.InteractiveDrawing.placeText",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Add Text" ), _( "Add a text item" ),
         text_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PL_ACTIONS::placeImage( "plEditor.InteractiveDrawing.placeImage",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Add Bitmap" ), _( "Add a bitmap image" ),
         image_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PL_ACTIONS::addLine( "plEditor.InteractiveDrawing.addLine",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Add Line" ), _( "Add a line" ),
         add_dashed_line_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PL_ACTIONS::addRectangle( "plEditor.InteractiveDrawing.addRectangle",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Add Rectangle" ), _( "Add a rectangle" ),
         add_rectangle_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PL_ACTIONS::addText( "plEditor.InteractiveDrawing.addText",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Add Text" ), _( "Add a text item" ),
         text_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PL_ACTIONS::addImage( "plEditor.InteractiveDrawing.addImage",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Add Bitmap" ), _( "Add a bitmap image" ),
         image_xpm, AF_ACTIVATE );
 

@@ -35,7 +35,7 @@
 #include <board_commit.h>
 
 DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent,
-                                                          const SELECTION& aItems,
+                                                          const PCBNEW_SELECTION& aItems,
                                                           COMMIT& aCommit ) :
     DIALOG_TRACK_VIA_PROPERTIES_BASE( aParent ),
     m_frame( aParent ),

@@ -51,8 +51,6 @@
 #include <board_commit.h>
 #include <confirm.h>
 #include <bitmaps.h>
-#include <hotkeys.h>
-
 #include <view/view_group.h>
 #include <view/view_controls.h>
 #include <origin_viewitem.h>
@@ -69,179 +67,183 @@ using namespace std::placeholders;
 
 
 TOOL_ACTION PCB_ACTIONS::boardSetup( "pcbnew.EditorControl.boardSetup",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Board Setup..." ), 
         _( "Edit board setup including layers, design rules and various defaults" ),
         options_board_xpm );
 
 TOOL_ACTION PCB_ACTIONS::importNetlist( "pcbnew.EditorControl.importNetlist",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Netlist..." ), _( "Read netlist and update board connectivity" ),
         netlist_xpm );
 
 TOOL_ACTION PCB_ACTIONS::importSpecctraSession( "pcbnew.EditorControl.importSpecctraSession",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Specctra Session..." ), _( "Import routed Specctra session (*.ses) file" ),
         import_xpm );
 
 TOOL_ACTION PCB_ACTIONS::exportSpecctraDSN( "pcbnew.EditorControl.exportSpecctraDSN",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Specctra DSN..." ), _( "Export Specctra DSN routing info" ),
         export_dsn_xpm );
 
 TOOL_ACTION PCB_ACTIONS::generateGerbers( "pcbnew.EditorControl.generateGerbers",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "&Gerbers (.gbr)..." ), _( "Generate Gerbers for fabrication" ),
         post_compo_xpm );
 
 TOOL_ACTION PCB_ACTIONS::generateDrillFiles( "pcbnew.EditorControl.generateDrillFiles",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "&Drill Files (.drl)..." ), _( "Generate Excellon drill file(s)" ),
         post_drill_xpm );
 
 TOOL_ACTION PCB_ACTIONS::generatePosFile( "pcbnew.EditorControl.generatePosFile",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Footprint &Positions (.pos)..." ),
         _( "Generate footprint position file for pick and place" ),
         post_compo_xpm );
 
 TOOL_ACTION PCB_ACTIONS::generateReportFile( "pcbnew.EditorControl.generateReportFile",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "&Footprint Report (.rpt)..." ),
         _( "Create report of all footprints from current board" ),
         tools_xpm );
 
 TOOL_ACTION PCB_ACTIONS::generateD356File( "pcbnew.EditorControl.generateD356File",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "IPC-D-356 Netlist File..." ), _( "Generate IPC-D-356 netlist file" ),
         netlist_xpm );
 
 TOOL_ACTION PCB_ACTIONS::generateBOM( "pcbnew.EditorControl.generateBOM",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "&BOM..." ), _( "Create bill of materials from current schematic" ),
         bom_xpm );
 
 // Track & via size control
 TOOL_ACTION PCB_ACTIONS::trackWidthInc( "pcbnew.EditorControl.trackWidthInc",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_WIDTH_TO_NEXT ),
+        AS_GLOBAL, 
+        'W', LEGACY_HK_NAME( "Switch Track Width To Next" ),
         "", "" );
 
 TOOL_ACTION PCB_ACTIONS::trackWidthDec( "pcbnew.EditorControl.trackWidthDec",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_WIDTH_TO_PREVIOUS ),
+        AS_GLOBAL, 
+        MD_SHIFT + 'W', LEGACY_HK_NAME( "Switch Track Width To Previous" ),
         "", "" );
 
 TOOL_ACTION PCB_ACTIONS::viaSizeInc( "pcbnew.EditorControl.viaSizeInc",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_VIA_SIZE_INC ),
+        AS_GLOBAL,
+        '\'', LEGACY_HK_NAME( "Increase Via Size" ),
         "", "" );
 
 TOOL_ACTION PCB_ACTIONS::viaSizeDec( "pcbnew.EditorControl.viaSizeDec",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_VIA_SIZE_DEC ),
+        AS_GLOBAL,
+        '\\', LEGACY_HK_NAME( "Decrease Via Size" ),
         "", "" );
 
 TOOL_ACTION PCB_ACTIONS::trackViaSizeChanged( "pcbnew.EditorControl.trackViaSizeChanged",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         "", "",
         nullptr, AF_NOTIFY );
 
 TOOL_ACTION PCB_ACTIONS::zoneMerge( "pcbnew.EditorControl.zoneMerge",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Merge Zones" ), _( "Merge zones" ) );
 
 TOOL_ACTION PCB_ACTIONS::zoneDuplicate( "pcbnew.EditorControl.zoneDuplicate",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Duplicate Zone onto Layer..." ), _( "Duplicate zone outline onto a different layer" ),
         zone_duplicate_xpm );
 
 TOOL_ACTION PCB_ACTIONS::placeTarget( "pcbnew.EditorControl.placeTarget",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Add Layer Alignment Target" ), _( "Add a layer alignment target" ),
         add_pcb_target_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::placeModule( "pcbnew.EditorControl.placeModule",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_MODULE ),
+        AS_GLOBAL, 
+        'O', LEGACY_HK_NAME( "Add Footprint" ),
         _( "Add Footprint" ), _( "Add a footprint" ),
         module_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drillOrigin( "pcbnew.EditorControl.drillOrigin",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Drill and Place Offset" ), _( "Place origin point for drill and place files" ),
         pcb_offset_xpm );
 
 TOOL_ACTION PCB_ACTIONS::crossProbeSchToPcb( "pcbnew.EditorControl.crossProbSchToPcb",
-        AS_GLOBAL, 0,
-        "", "" );
+        AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::toggleLock( "pcbnew.EditorControl.toggleLock",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_LOCK_UNLOCK_FOOTPRINT ),
+        AS_GLOBAL, 
+        'L', LEGACY_HK_NAME( "Lock/Unlock Footprint" ),
         "Toggle Lock", "",
         lock_unlock_xpm );
 
 TOOL_ACTION PCB_ACTIONS::lock( "pcbnew.EditorControl.lock",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Lock" ), "",
         locked_xpm );
 
 TOOL_ACTION PCB_ACTIONS::unlock( "pcbnew.EditorControl.unlock",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Unlock" ), "",
         unlocked_xpm );
 
 TOOL_ACTION PCB_ACTIONS::appendBoard( "pcbnew.EditorControl.appendBoard",
-        AS_GLOBAL, 0,
-        "Append Board...", "", add_board_xpm );
+        AS_GLOBAL, 0, "",
+        "Append Board...", "", 
+        add_board_xpm );
 
 TOOL_ACTION PCB_ACTIONS::highlightNet( "pcbnew.EditorControl.highlightNet",
-        AS_GLOBAL, 0,
-        "", "" );
+        AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::clearHighlight( "pcbnew.EditorControl.clearHighlight",
-        AS_GLOBAL, 0,
-        "", "" );
+        AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::highlightNetTool( "pcbnew.EditorControl.highlightNetTool",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Highlight Nets" ), _( "Highlight all copper items of a net" ),
         net_highlight_xpm );
 
 TOOL_ACTION PCB_ACTIONS::highlightNetSelection( "pcbnew.EditorControl.highlightNetSelection",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HIGHLIGHT_NET_SELECTION ),
+        AS_GLOBAL,
+        '`', LEGACY_HK_NAME( "Toggle Highlight of Selected Net (Modern Toolset only)" ),
         _( "Highlight Net" ), _( "Highlight all copper items of a net" ),
         net_highlight_xpm );
 
 TOOL_ACTION PCB_ACTIONS::localRatsnestTool( "pcbnew.Control.localRatsnestTool",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Highlight Ratsnest" ), "",
         tool_ratsnest_xpm );
 
-TOOL_ACTION PCB_ACTIONS::hideDynamicRatsnest(
-        "pcbnew.Control.hideDynamicRatsnest", AS_GLOBAL, 0, "", "" );
+TOOL_ACTION PCB_ACTIONS::hideDynamicRatsnest( "pcbnew.Control.hideDynamicRatsnest", 
+        AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::updateLocalRatsnest( "pcbnew.Control.updateLocalRatsnest",
-        AS_GLOBAL, 0,
-        "", "" );
+        AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::listNets( "pcbnew.Control.listNets",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "List Nets" ), _( "Show a list of nets with names and IDs" ),
         list_nets_xpm );
 
 TOOL_ACTION PCB_ACTIONS::showPythonConsole( "pcbnew.Control.showPythonConsole",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Scripting Console" ), _( "Show the Python scripting console" ),
         py_script_xpm );
 
 TOOL_ACTION PCB_ACTIONS::showLayersManager( "pcbnew.Control.showLayersManager",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Show Layers Manager" ), _( "Show/hide the layers manager" ),
         layers_manager_xpm );
 
 TOOL_ACTION PCB_ACTIONS::showMicrowaveToolbar( "pcbnew.Control.showMicrowaveToolbar",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Show Microwave Toolbar" ), _( "Show/hide microwave toolbar\n(Experimental feature)" ),
         mw_toolbar_xpm );
 
 TOOL_ACTION PCB_ACTIONS::flipBoard( "pcbnew.Control.flipBoard",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Flip Board View" ), _( "Flip (mirror) the board view" ),
         flip_board_xpm );
 

@@ -29,7 +29,6 @@
 #include <tools/pl_picker_tool.h>
 #include <ws_data_model.h>
 #include <ws_draw_item.h>
-#include <hotkeys.h>
 #include <bitmaps.h>
 #include <confirm.h>
 #include <base_struct.h>
@@ -40,18 +39,19 @@
 
 
 TOOL_ACTION PL_ACTIONS::move( "plEditor.InteractiveEdit.move",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE ),
+        AS_GLOBAL, 
+        'M', LEGACY_HK_NAME( "Move Item" ),
         _( "Move" ), _( "Moves the selected item(s)" ),
         move_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PL_ACTIONS::appendImportedWorksheet( "plEditor.InteractiveEdit.appendWorksheet",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Append Existing Page Layout File..." ),
         _( "Append an existing page layout design file to current file" ),
         import_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PL_ACTIONS::deleteItemCursor( "plEditor.InteractiveEdit.deleteTool",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Delete Items" ), _( "Delete clicked items" ),
         delete_xpm, AF_ACTIVATE );
 

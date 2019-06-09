@@ -96,14 +96,6 @@ public:
     void OnSetRelativeOffset( wxCommandEvent& event );
     void OnSelectSymbol( wxCommandEvent& aEvent );
 
-    ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
-
-    /**
-     * Displays the hotkey dialog
-     */
-    void OnDisplayHotkeyList( wxCommandEvent& event );
-
     void LoadSettings( wxConfigBase* aCfg ) override;
     void SaveSettings( wxConfigBase* aCfg ) override;
 

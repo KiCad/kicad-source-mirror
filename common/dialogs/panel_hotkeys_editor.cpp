@@ -22,16 +22,14 @@
  */
 
 #include <panel_hotkeys_editor.h>
-#include <eda_base_frame.h>
-
+#include <kiway_player.h>
 #include <wx/srchctrl.h>
 #include <wx/panel.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
-
 #include <widgets/button_row_panel.h>
 #include <widgets/ui_common.h>
-
+#include <tool/tool_manager.h>
 
 static const wxSize default_dialog_size { 500, 350 };
 static const wxSize min_dialog_size { -1, 350 };
@@ -57,17 +55,10 @@ static wxSearchCtrl* CreateTextFilterBox( wxWindow* aParent, const wxString& aDe
 }
 
 
-PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow,
-                                            bool aReadOnly,
-                                            EDA_HOTKEY_CONFIG* aHotkeys,
-                                            EDA_HOTKEY_CONFIG* aShowHotkeys,
-                                            const wxString& aNickname ) :
+PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( wxWindow* aWindow, bool aReadOnly ) :
         wxPanel( aWindow, wxID_ANY, wxDefaultPosition, default_dialog_size ),
-        m_frame( aFrame ),
         m_readOnly( aReadOnly ),
-        m_hotkeys( aHotkeys ),
-        m_nickname( aNickname ),
-        m_hotkeyStore( aShowHotkeys )
+        m_hotkeyStore()
 {
     const auto margin = KIUI::GetStdMargin();
     auto mainSizer = new wxBoxSizer( wxVERTICAL );
@@ -93,8 +84,13 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
     this->Layout();
 
     // Connect Events
-    filterSearch->Bind( wxEVT_COMMAND_TEXT_UPDATED,
-        &PANEL_HOTKEYS_EDITOR::OnFilterSearch, this );
+    filterSearch->Bind( wxEVT_COMMAND_TEXT_UPDATED, &PANEL_HOTKEYS_EDITOR::OnFilterSearch, this );
+}
+
+
+void PANEL_HOTKEYS_EDITOR::AddHotKeys( TOOL_MANAGER* aToolMgr )
+{
+    m_toolManagers.push_back( aToolMgr );
 }
 
 
@@ -116,26 +112,19 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
             [this]( wxCommandEvent& ){
                 m_hotkeyListCtrl->ResetAllHotkeys( true );
             }
+        },
+        {
+            wxID_ANY,
+            _( "Import Hotkeys..." ),
+            _( "Import hotkey definitions from an external file, replacing the current values" ),
+            [this]( wxCommandEvent& ){
+                // JEY TODO: implement hotkey import....
+                /*m_frame->ImportHotkeyConfigFromFile( m_hotkeys, m_nickname );*/
+            }
         }
     };
 
     const BUTTON_ROW_PANEL::BTN_DEF_LIST r_btn_defs = {
-        {
-            wxID_ANY,
-            _( "Import..." ),
-            _( "Import hotkey definitions from an external file, replacing the current values" ),
-            [this]( wxCommandEvent& ){
-                m_frame->ImportHotkeyConfigFromFile( m_hotkeys, m_nickname );
-            }
-        },
-        {
-            wxID_ANY,
-            _( "Export..." ),
-            _( "Export these hotkey definitions to an external file" ),
-            [this]( wxCommandEvent& ){
-                m_frame->ExportHotkeyConfigToFile( m_hotkeys, m_nickname );
-            }
-        },
     };
 
     auto btnPanel = std::make_unique<BUTTON_ROW_PANEL>( this, l_btn_defs, r_btn_defs );
@@ -146,6 +135,7 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
 
 bool PANEL_HOTKEYS_EDITOR::TransferDataToWindow()
 {
+    m_hotkeyStore.Init( m_toolManagers );
     return m_hotkeyListCtrl->TransferDataToControl();
 }
 
@@ -156,7 +146,8 @@ bool PANEL_HOTKEYS_EDITOR::TransferDataFromWindow()
         return false;
 
     // save the hotkeys
-    m_frame->WriteHotkeyConfig( m_hotkeys );
+    for( TOOL_MANAGER* toolMgr : m_toolManagers )
+        WriteHotKeyConfig( toolMgr->GetActions() );
 
     return true;
 }

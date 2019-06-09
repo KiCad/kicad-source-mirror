@@ -32,27 +32,23 @@
 
 #include <dialog_shim.h>
 
-// Private forwards
+class TOOL_MANAGER;
 class PANEL_HOTKEYS_EDITOR;
 
 
 /**
- * A dialog that presents the user with a read-only list of hotkeys and
- * their current bindings.
+ * A dialog that presents the user with a read-only list of hotkeys and their current bindings.
  */
 class DIALOG_LIST_HOTKEYS: public DIALOG_SHIM
 {
 public:
 
     /**
-     * Construct a hotkey list dialog on the given frame, with a set of hotkeys
+     * Construct a hotkey list dialog on the given frame
      *
      * @param aParent the parent frame
-     * @param aDescList the list of hotkey sections (each of which has a list
-     * of hotkeys) to display
      */
-    DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent,
-        EDA_HOTKEY_CONFIG* aDescList );
+    DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent, TOOL_MANAGER* aToolManager );
 
 protected:
 
@@ -62,7 +58,6 @@ protected:
     bool TransferDataToWindow() override;
 
 private:
-
     PANEL_HOTKEYS_EDITOR* m_hk_list;
 };
 

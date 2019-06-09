@@ -20,10 +20,8 @@
 #include <limits>
 #include <functional>
 using namespace std::placeholders;
-
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
-#include <hotkeys.h>
 #include <bitmaps.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
@@ -34,7 +32,7 @@ using namespace std::placeholders;
 
 
 TOOL_ACTION CVPCB_ACTIONS::selectionActivate( "cvpcb.InteractiveSelection",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         "", "", NULL, AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
 
 

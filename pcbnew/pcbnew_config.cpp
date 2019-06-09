@@ -45,6 +45,7 @@
 #include <panel_pcbnew_settings.h>
 #include <panel_pcbnew_display_options.h>
 #include <panel_pcbnew_action_plugins.h>
+#include <panel_hotkeys_editor.h>
 #include <fp_lib_table.h>
 #include <ws_draw_item.h>
 #include <ws_data_model.h>
@@ -52,7 +53,6 @@
 #include <class_module.h>
 #include <pcbplot.h>
 #include <pcbnew_id.h>
-#include <hotkeys.h>
 #include <footprint_viewer_frame.h>
 #include <invoke_pcb_dialog.h>
 #include <wildcards_and_files_ext.h>
@@ -60,35 +60,16 @@
 #include <widgets/paged_dialog.h>
 
 
-void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
+void PCB_EDIT_FRAME::On3DShapeLibWizard( wxCommandEvent& event )
 {
-    int id = event.GetId();
-
-    switch( id )
-    {
-    case ID_PCB_3DSHAPELIB_WIZARD:
 #ifdef BUILD_GITHUB_PLUGIN
-        Invoke3DShapeLibsDownloaderWizard( this );
+    Invoke3DShapeLibsDownloaderWizard( this );
 #endif
-        break;
-
-    case wxID_PREFERENCES:
-        ShowPreferences( g_Pcbnew_Editor_Hotkeys_Descr, g_Board_Editor_Hotkeys_Descr, wxT( "pcbnew" ) );
-        break;
-
-    case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
-        DisplayHotkeyList( this, g_Board_Editor_Hotkeys_Descr );
-        break;
-
-    default:
-        DisplayErrorMessage( this, "Unknown ID in Process Config",
-                wxString::Format(  "PCB_EDIT_FRAME::Process_Config received ID %d", id ) );
-        break;
-    }
 }
 
 
-void PCB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
+void PCB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
+                                         PANEL_HOTKEYS_EDITOR* aHotkeysPanel )
 {
     wxTreebook* book = aParent->GetTreebook();
 
@@ -97,6 +78,8 @@ void PCB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     book->AddSubPage( new PANEL_PCBNEW_ACTION_PLUGINS( this, aParent ), _( "Action Plugins" ) );
 #endif
+    
+    aHotkeysPanel->AddHotKeys( GetToolManager() );
 }
 
 

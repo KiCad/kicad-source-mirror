@@ -36,7 +36,6 @@
 #include <tools/ee_selection_tool.h>
 #include <tools/lib_drawing_tools.h>
 #include <tools/lib_pin_tool.h>
-#include <ee_hotkeys.h>
 #include <class_libentry.h>
 #include <bitmaps.h>
 #include <lib_text.h>
@@ -48,42 +47,44 @@
 
 // Drawing tool actions
 TOOL_ACTION EE_ACTIONS::placeSymbolPin( "libedit.InteractiveDrawing.placeSymbolPin",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_LIBEDIT_CREATE_PIN ),
+        AS_GLOBAL, 
+        'P', LEGACY_HK_NAME( "Create Pin" ),
         _( "Add Pin" ), _( "Add a pin" ),
         pin_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeSymbolText( "libedit.InteractiveDrawing.placeSymbolText",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Add Text" ), _( "Add a text item" ),
         text_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::drawSymbolRectangle( "libedit.InteractiveDrawing.drawSymbolRectangle",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Add Rectangle" ), _( "Add a rectangle" ),
         add_rectangle_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::drawSymbolCircle( "libedit.InteractiveDrawing.drawSymbolCircle",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Add Circle" ), _( "Add a circle" ),
         add_circle_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::drawSymbolArc( "libedit.InteractiveDrawing.drawSymbolArc",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Add Arc" ), _( "Add an arc" ),
         add_arc_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::drawSymbolLines( "libedit.InteractiveDrawing.drawSymbolLines",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Add Lines" ), _( "Add connected graphic lines" ),
         add_graphical_segments_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeSymbolAnchor( "libedit.InteractiveDrawing.placeSymbolAnchor",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Move Symbol Anchor" ), _( "Specify a new location for the symbol anchor" ),
         anchor_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::finishDrawing( "libedit.InteractiveDrawing.finishDrawing",
-        AS_GLOBAL, 0, _( "Finish Drawing" ), _( "Finish drawing shape" ),
+        AS_GLOBAL, 0, "",
+        _( "Finish Drawing" ), _( "Finish drawing shape" ),
         checked_ok_xpm, AF_NONE );
 
 

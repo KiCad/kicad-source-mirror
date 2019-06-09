@@ -63,9 +63,6 @@ class wxApp;
 class wxMenu;
 class wxWindow;
 
-class FILENAME_RESOLVER;
-class EDA_DRAW_FRAME;
-
 
 class FILE_HISTORY : public wxFileHistory
 {

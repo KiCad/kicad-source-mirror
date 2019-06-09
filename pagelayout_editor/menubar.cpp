@@ -31,7 +31,6 @@
 #include <tool/selection.h>
 #include <tools/pl_actions.h>
 #include <tools/pl_selection_tool.h>
-#include "hotkeys.h"
 #include "pl_editor_frame.h"
 #include "pl_editor_id.h"
 
@@ -157,7 +156,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     CONDITIONAL_MENU* preferencesMenu = new CONDITIONAL_MENU( false, selTool );
 
     preferencesMenu->AddItem( wxID_PREFERENCES,
-                              AddHotkeyName( _( "Preferences..." ), PlEditorHotkeysDescr, HK_PREFERENCES ),
+                              _( "Preferences...\tCTRL+," ),
                               _( "Show preferences for all open tools" ),
                               preference_xpm,                SELECTION_CONDITIONS::ShowAlways );
 

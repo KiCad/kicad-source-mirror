@@ -25,8 +25,6 @@
 
 #include <fctsys.h>
 #include <common.h>
-#include <gal/graphics_abstraction_layer.h>
-#include <class_draw_panel_gal.h>
 #include <pcb_draw_panel_gal.h>
 #include <confirm.h>
 #include <macros.h>
@@ -36,7 +34,6 @@
 #include <lib_id.h>
 #include <fp_lib_table.h>
 #include <eda_dockart.h>
-#include <io_mgr.h>
 #include <class_module.h>
 #include <class_board.h>
 #include <pcb_painter.h>
@@ -44,10 +41,10 @@
 #include <display_footprints_frame.h>
 #include <cvpcb_id.h>
 #include <listboxes.h>
-#include <3d_viewer/eda_3d_viewer.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
+#include <tool/action_toolbar.h>
 #include <tool/common_tools.h>
 #include <tool/zoom_tool.h>
 #include <tools/cvpcb_actions.h>

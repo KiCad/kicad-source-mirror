@@ -28,7 +28,6 @@
 #include <tools/lib_drawing_tools.h>
 #include <tools/lib_move_tool.h>
 #include <ee_actions.h>
-#include <ee_hotkeys.h>
 #include <bitmaps.h>
 #include <confirm.h>
 #include <base_struct.h>

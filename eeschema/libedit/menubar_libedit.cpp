@@ -31,7 +31,6 @@
 #include <tools/ee_selection_tool.h>
 #include <lib_manager.h>
 #include "eeschema_id.h"
-#include "ee_hotkeys.h"
 #include "lib_edit_frame.h"
 
 
@@ -211,7 +210,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     prefsMenu->AddItem( ACTIONS::configurePaths,           EE_CONDITIONS::ShowAlways );
     prefsMenu->AddItem( ACTIONS::showSymbolLibTable,       EE_CONDITIONS::ShowAlways );
     prefsMenu->AddItem( wxID_PREFERENCES,
-                        AddHotkeyName( _( "Preferences..." ), g_Libedit_Hotkeys_Descr, HK_PREFERENCES ),
+                        _( "Preferences...\tCTRL+," ),
                         _( "Show preferences for all open tools" ),
                         preference_xpm,                    EE_CONDITIONS::ShowAlways );
 

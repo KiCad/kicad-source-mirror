@@ -124,11 +124,6 @@ bool PGM_KICAD::OnPgmInit()
             m_bm.m_search.Insert( it->second.GetValue(), 0 );
     }
 
-    // Must be called before creating the main frame in order to
-    // display the real hotkeys in menus or tool tips
-    extern struct EDA_HOTKEY_CONFIG kicad_Manager_Hotkeys_Descr[];
-    ReadHotkeyConfig( KICAD_MANAGER_FRAME_NAME, kicad_Manager_Hotkeys_Descr );
-
     KICAD_MANAGER_FRAME* frame = new KICAD_MANAGER_FRAME( NULL, wxT( "KiCad" ),
                                                           wxDefaultPosition, wxSize( 775, -1 ) );
     App().SetTopWindow( frame );

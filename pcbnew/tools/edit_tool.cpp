@@ -45,12 +45,9 @@
 #include <connectivity/connectivity_data.h>
 #include <confirm.h>
 #include <bitmaps.h>
-#include <hotkeys.h>
-
 #include <cassert>
 #include <functional>
 using namespace std::placeholders;
-
 #include "pcb_actions.h"
 #include "selection_tool.h"
 #include "edit_tool.h"
@@ -69,79 +66,90 @@ using namespace std::placeholders;
 
 // Edit tool actions
 TOOL_ACTION PCB_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.EditFpInFpEditor",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_MODULE_WITH_MODEDIT ),
+        AS_GLOBAL, 
+        MD_CTRL + 'E', LEGACY_HK_NAME( "Edit with Footprint Editor" ),
         _( "Open in Footprint Editor" ),
         _( "Opens the selected footprint in the Footprint Editor" ),
         module_editor_xpm );
 
 TOOL_ACTION PCB_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Edit Activate" ), "",
         move_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveEdit.move",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_ITEM ),
+        AS_GLOBAL, 
+        'M', LEGACY_HK_NAME( "Move Item" ),
         _( "Move" ), _( "Moves the selected item(s)" ),
         move_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::duplicate( "pcbnew.InteractiveEdit.duplicate",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE ),
+        AS_GLOBAL, 
+        MD_CTRL + 'D', LEGACY_HK_NAME( "Duplicate Item" ),
         _( "Duplicate" ), _( "Duplicates the selected item(s)" ),
         duplicate_xpm );
 
 TOOL_ACTION PCB_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicateIncrementPads",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE_ITEM_AND_INCREMENT ),
+        AS_GLOBAL, 
+        MD_SHIFT + MD_CTRL + 'D', LEGACY_HK_NAME( "Duplicate Item and Increment" ),
         _( "Duplicate" ), _( "Duplicates the selected item(s), incrementing pad numbers" ),
         duplicate_xpm );
 
 TOOL_ACTION PCB_ACTIONS::moveExact( "pcbnew.InteractiveEdit.moveExact",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_ITEM_EXACT ),
+        AS_GLOBAL, 
+        MD_CTRL + 'M', LEGACY_HK_NAME( "Move Item Exactly" ),
         _( "Move Exactly..." ), _( "Moves the selected item(s) by an exact amount" ),
         move_exactly_xpm );
 
 TOOL_ACTION PCB_ACTIONS::createArray( "pcbnew.InteractiveEdit.createArray",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_CREATE_ARRAY ),
+        AS_GLOBAL, 
+        MD_CTRL + 'T', LEGACY_HK_NAME( "Create Array" ),
         _( "Create Array..." ), _( "Create array" ),
         array_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::rotateCw( "pcbnew.InteractiveEdit.rotateCw",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROTATE_ITEM_CLOCKWISE ),
+        AS_GLOBAL, 
+        MD_SHIFT + 'R', LEGACY_HK_NAME( "Rotate Item Clockwise (Modern Toolset only)" ),
         _( "Rotate Clockwise" ), _( "Rotates selected item(s) clockwise" ),
         rotate_cw_xpm, AF_NONE, (void*) -1 );
 
 TOOL_ACTION PCB_ACTIONS::rotateCcw( "pcbnew.InteractiveEdit.rotateCcw",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROTATE_ITEM ),
+        AS_GLOBAL, 
+        'R', LEGACY_HK_NAME( "Rotate Item" ),
         _( "Rotate Counterclockwise" ), _( "Rotates selected item(s) counterclockwise" ),
         rotate_ccw_xpm, AF_NONE, (void*) 1 );
 
 TOOL_ACTION PCB_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_FLIP_ITEM ),
+        AS_GLOBAL, 
+        'F', LEGACY_HK_NAME( "Flip Item" ),
         _( "Flip" ), _( "Flips selected item(s)" ),
         swap_layer_xpm );
 
 TOOL_ACTION PCB_ACTIONS::mirror( "pcbnew.InteractiveEdit.mirror",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Mirror" ), _( "Mirrors selected item" ),
         mirror_h_xpm );
 
 TOOL_ACTION PCB_ACTIONS::remove( "pcbnew.InteractiveEdit.remove",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BACK_SPACE ),
+        AS_GLOBAL,
+        WXK_BACK, "",
         _( "Delete" ), _( "Deletes selected item(s)" ),
         delete_xpm, AF_NONE, (void*) REMOVE_FLAGS::NORMAL );
 
-TOOL_ACTION PCB_ACTIONS::removeAlt( "pcbnew.InteractiveEdit.removeAlt",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
+TOOL_ACTION PCB_ACTIONS::deleteFull( "pcbnew.InteractiveEdit.deleteFull",
+        AS_GLOBAL,
+        WXK_DELETE, LEGACY_HK_NAME( "Delete Full Track" ),
         _( "Delete Full Track" ), _( "Deletes selected item(s) and copper connections" ),
         delete_xpm, AF_NONE, (void*) REMOVE_FLAGS::ALT );
 
 TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_ITEM ),
+        AS_GLOBAL, 
+        'E', LEGACY_HK_NAME( "Edit Item" ),
         _( "Properties..." ), _( "Displays item properties dialog" ),
         config_xpm );
 
 TOOL_ACTION PCB_ACTIONS::updateUnits( "pcbnew.InteractiveEdit.updateUnits",
-        AS_GLOBAL, 0,
-        "", "" );
+        AS_GLOBAL );
 
 
 void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags )
@@ -1439,7 +1447,7 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::Rotate,              PCB_ACTIONS::rotateCcw.MakeEvent() );
     Go( &EDIT_TOOL::Flip,                PCB_ACTIONS::flip.MakeEvent() );
     Go( &EDIT_TOOL::Remove,              PCB_ACTIONS::remove.MakeEvent() );
-    Go( &EDIT_TOOL::Remove,              PCB_ACTIONS::removeAlt.MakeEvent() );
+    Go( &EDIT_TOOL::Remove,              PCB_ACTIONS::deleteFull.MakeEvent() );
     Go( &EDIT_TOOL::Properties,          PCB_ACTIONS::properties.MakeEvent() );
     Go( &EDIT_TOOL::MoveExact,           PCB_ACTIONS::moveExact.MakeEvent() );
     Go( &EDIT_TOOL::Duplicate,           PCB_ACTIONS::duplicate.MakeEvent() );

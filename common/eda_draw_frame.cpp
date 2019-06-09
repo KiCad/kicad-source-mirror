@@ -86,11 +86,9 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_auxiliaryToolBar    = NULL;
     m_gridSelectBox       = NULL;
     m_zoomSelectBox       = NULL;
-    m_hotkeysDescrList    = NULL;
 
     m_canvasType          = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
     m_galCanvas           = NULL;
-    m_actions             = NULL;
     m_toolDispatcher      = NULL;
     m_messagePanel        = NULL;
     m_currentScreen       = NULL;
@@ -241,17 +239,6 @@ void EDA_DRAW_FRAME::EraseMsgBox()
 }
 
 
-bool EDA_DRAW_FRAME::GetToolToggled( int aToolId )
-{
-    // Checks all the toolbars and returns true if the given tool id is toggled.
-    return ( ( m_mainToolBar && m_mainToolBar->GetToolToggled( aToolId ) ) ||
-             ( m_optionsToolBar && m_optionsToolBar->GetToolToggled( aToolId ) ) ||
-             ( m_drawToolBar && m_drawToolBar->GetToolToggled( aToolId ) ) ||
-             ( m_auxiliaryToolBar && m_auxiliaryToolBar->GetToolToggled( aToolId ) )
-           );
-}
-
-
 void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
 {
     // No need to update the grid select box if it doesn't exist or the grid setting change
@@ -272,18 +259,6 @@ void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
 
     if( select != m_gridSelectBox->GetSelection() )
         m_gridSelectBox->SetSelection( select );
-}
-
-
-int EDA_DRAW_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
-                                       wxString* aFullFileName )
-{
-    int result = EDA_BASE_FRAME::WriteHotkeyConfig( aDescList, aFullFileName );
-
-    if( GetToolManager() )
-        GetToolManager()->UpdateHotKeys();
-
-    return result;
 }
 
 

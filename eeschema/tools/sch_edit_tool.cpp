@@ -28,7 +28,6 @@
 #include <tools/ee_picker_tool.h>
 #include <tools/sch_move_tool.h>
 #include <ee_actions.h>
-#include <ee_hotkeys.h>
 #include <bitmaps.h>
 #include <confirm.h>
 #include <eda_doc.h>
@@ -51,132 +50,141 @@
 
 
 TOOL_ACTION EE_ACTIONS::repeatDrawItem( "eeschema.InteractiveEdit.repeatDrawItem",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_REPEAT_LAST ),
+        AS_GLOBAL, 
+        WXK_INSERT, LEGACY_HK_NAME( "Repeat Last Item" ),
         _( "Repeat Last Item" ), _( "Duplicates the last drawn item" ),
         nullptr );
 
 TOOL_ACTION EE_ACTIONS::rotateCW( "eeschema.InteractiveEdit.rotateCW",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Rotate Clockwise" ), _( "Rotates selected item(s) clockwise" ),
         rotate_cw_xpm );
 
 TOOL_ACTION EE_ACTIONS::rotateCCW( "eeschema.InteractiveEdit.rotateCCW",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROTATE ),
+        AS_GLOBAL, 
+        'R', LEGACY_HK_NAME( "Rotate Item" ),
         _( "Rotate" ), _( "Rotates selected item(s) counter-clockwise" ),
         rotate_ccw_xpm );
 
 TOOL_ACTION EE_ACTIONS::mirrorX( "eeschema.InteractiveEdit.mirrorX",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MIRROR_X ),
+        AS_GLOBAL, 
+        'X', LEGACY_HK_NAME( "Mirror X" ),
         _( "Mirror Around Horizontal Axis" ), _( "Flips selected item(s) from top to bottom" ),
         mirror_v_xpm );
 
 TOOL_ACTION EE_ACTIONS::mirrorY( "eeschema.InteractiveEdit.mirrorY",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MIRROR_Y ),
+        AS_GLOBAL, 
+        'Y', LEGACY_HK_NAME( "Mirror Y" ),
         _( "Mirror Around Vertical Axis" ), _( "Flips selected item(s) from left to right" ),
         mirror_h_xpm );
 
 TOOL_ACTION EE_ACTIONS::properties( "eeschema.InteractiveEdit.properties",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT ),
+        AS_GLOBAL, 
+        'E', LEGACY_HK_NAME( "Edit Item" ),
         _( "Properties..." ), _( "Displays item properties dialog" ),
         edit_xpm );
 
 TOOL_ACTION EE_ACTIONS::editReference( "eeschema.InteractiveEdit.editReference",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_REFERENCE ),
+        AS_GLOBAL, 
+        'U', LEGACY_HK_NAME( "Edit Symbol Reference" ),
         _( "Edit Reference..." ), _( "Displays reference field dialog" ),
         edit_comp_ref_xpm );
 
 TOOL_ACTION EE_ACTIONS::editValue( "eeschema.InteractiveEdit.editValue",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_VALUE ),
+        AS_GLOBAL, 
+        'V', LEGACY_HK_NAME( "Edit Symbol Value" ),
         _( "Edit Value..." ), _( "Displays value field dialog" ),
         edit_comp_value_xpm );
 
 TOOL_ACTION EE_ACTIONS::editFootprint( "eeschema.InteractiveEdit.editFootprint",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_FOOTPRINT ),
+        AS_GLOBAL, 
+        'F', LEGACY_HK_NAME( "Edit Symbol Footprint" ),
         _( "Edit Footprint..." ), _( "Displays footprint field dialog" ),
         edit_comp_footprint_xpm );
 
 TOOL_ACTION EE_ACTIONS::autoplaceFields( "eeschema.InteractiveEdit.autoplaceFields",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_AUTOPLACE_FIELDS ),
+        AS_GLOBAL, 
+        'O', LEGACY_HK_NAME( "Autoplace Fields" ),
         _( "Autoplace Fields" ), _( "Runs the automatic placement algorithm on the symbol's fields" ),
         autoplace_fields_xpm );
 
 TOOL_ACTION EE_ACTIONS::updateFieldsFromLibrary( "eeschema.InteractiveEdit.updateFieldsFromLibrary",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Update Fields from Library..." ), _( "Sets symbol fields to original library values" ),
         update_fields_xpm );
 
 TOOL_ACTION EE_ACTIONS::toggleDeMorgan( "eeschema.InteractiveEdit.toggleDeMorgan",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "DeMorgan Conversion" ), _( "Switch between DeMorgan representations" ),
         morgan2_xpm );
 
 TOOL_ACTION EE_ACTIONS::showDeMorganStandard( "eeschema.InteractiveEdit.showDeMorganStandard",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "DeMorgan Standard" ), _( "Switch to standard DeMorgan representation" ),
         morgan1_xpm );
 
 TOOL_ACTION EE_ACTIONS::showDeMorganAlternate( "eeschema.InteractiveEdit.showDeMorganAlternate",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "DeMorgan Alternate" ), _( "Switch to alternate DeMorgan representation" ),
         morgan2_xpm );
 
 TOOL_ACTION EE_ACTIONS::toShapeSlash( "eeschema.InteractiveEdit.toShapeSlash",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Set Bus Entry Shape /" ), _( "Change the bus entry shape to /" ),
         change_entry_orient_xpm );
 
 TOOL_ACTION EE_ACTIONS::toShapeBackslash( "eeschema.InteractiveEdit.toShapeBackslash",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Set Bus Entry Shape \\" ), _( "Change the bus entry shape to \\" ),
         change_entry_orient_xpm );
 
 TOOL_ACTION EE_ACTIONS::toLabel( "eeschema.InteractiveEdit.toLabel",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Change to Label" ), _( "Change existing item to a label" ),
         add_line_label_xpm );
 
 TOOL_ACTION EE_ACTIONS::toHLabel( "eeschema.InteractiveEdit.toHLabel",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Change to Hierarchical Label" ), _( "Change existing item to a hierarchical label" ),
         add_hierarchical_label_xpm );
 
 TOOL_ACTION EE_ACTIONS::toGLabel( "eeschema.InteractiveEdit.toGLabel",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Change to Global Label" ), _( "Change existing item to a global label" ),
         add_glabel_xpm );
 
 TOOL_ACTION EE_ACTIONS::toText( "eeschema.InteractiveEdit.toText",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Change to Text" ), _( "Change existing item to a text comment" ),
         text_xpm );
 
 TOOL_ACTION EE_ACTIONS::cleanupSheetPins( "eeschema.InteractiveEdit.cleanupSheetPins",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Cleanup Sheet Pins" ), _( "Delete unreferenced sheet pins" ),
         nullptr );
 
 TOOL_ACTION EE_ACTIONS::symbolProperties( "eeschema.InteractiveEdit.symbolProperties",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Symbol Properties..." ), _( "Displays symbol properties dialog" ),
         part_properties_xpm );
 
 TOOL_ACTION EE_ACTIONS::pinTable( "eeschema.InteractiveEdit.pinTable",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Pin Table..." ), _( "Displays pin table for bulk editing of pins" ),
         pin_table_xpm );
 
 TOOL_ACTION EE_ACTIONS::deleteItemCursor( "eeschema.InteractiveEdit.deleteTool",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Delete Items" ), _( "Delete clicked items" ),
         delete_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::breakWire( "eeschema.InteractiveEdit.breakWire",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Break Wire" ), _( "Divide a wire into segments which can be dragged independently" ),
         break_line_xpm );
 
 TOOL_ACTION EE_ACTIONS::breakBus( "eeschema.InteractiveEdit.breakBus",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Break Bus" ), _( "Divide a bus into segments which can be dragged independently" ),
         break_line_xpm );
 

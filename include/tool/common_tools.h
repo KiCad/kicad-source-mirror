@@ -40,10 +40,10 @@ class COMMON_TOOLS : public TOOL_INTERACTIVE
 public:
     COMMON_TOOLS() :
         TOOL_INTERACTIVE( "common.Control" ),
-        m_frame( NULL )
+        m_frame( nullptr )
     { }
 
-    virtual ~COMMON_TOOLS() { }
+    ~COMMON_TOOLS() override { }
 
     /// @copydoc TOOL_BASE::Reset()
     void Reset( RESET_REASON aReason ) override;
@@ -79,12 +79,8 @@ public:
     int ToggleGrid( const TOOL_EVENT& aEvent );
     int GridProperties( const TOOL_EVENT& aEvent );
 
-    int ConfigurePaths( const TOOL_EVENT& aEvent );
-    int ShowLibraryTable( const TOOL_EVENT& aEvent );
     int SwitchCanvas( const TOOL_EVENT& aEvent );
     
-    int ShowPlayer( const TOOL_EVENT& aEvent );
-
     ///> Sets up handlers for various events.
     void setTransitions() override;
 

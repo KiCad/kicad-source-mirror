@@ -24,14 +24,13 @@
  */
 
 #include <fctsys.h>
-#include <ee_hotkeys.h>
 #include <eeschema_id.h>
-#include <tool/action_toolbar.h>
 #include <general.h>
 #include <lib_edit_frame.h>
 #include <dialog_helpers.h>
 #include <bitmaps.h>
 #include <lib_manager.h>
+#include <tool/action_toolbar.h>
 #include <tools/ee_actions.h>
 
 #ifdef __UNIX__
@@ -117,6 +116,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddControl( m_partSelectBox );
 
     KiScaledSeparator( m_mainToolBar, this );
+    // JEY TODO: move to an action....
     m_mainToolBar->AddTool( ID_LIBEDIT_SYNC_PIN_EDIT, wxEmptyString,
                             KiScaledBitmap( pin2pin_xpm, this ),
                             _( "Synchronized pin edit mode\n"

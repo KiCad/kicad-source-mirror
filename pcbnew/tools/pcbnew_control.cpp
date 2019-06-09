@@ -37,9 +37,7 @@
 #include <class_track.h>
 #include <class_zone.h>
 #include <pcb_screen.h>
-
 #include <confirm.h>
-#include <hotkeys.h>
 #include <properties.h>
 #include <io_mgr.h>
 #include <kicad_plugin.h>
@@ -71,137 +69,150 @@ extern IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl );
 
 // Display modes
 TOOL_ACTION PCB_ACTIONS::showRatsnest( "pcbnew.Control.showRatsnest",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Show Ratsnest" ), _( "Show board ratsnest" ),
         general_ratsnest_xpm );
 
 TOOL_ACTION PCB_ACTIONS::ratsnestLineMode( "pcbnew.Control.ratsnestLineMode",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Curved Ratsnest Lines" ), _( "Show ratsnest with curved lines" ),
         curved_ratsnest_xpm );
 
 TOOL_ACTION PCB_ACTIONS::trackDisplayMode( "pcbnew.Control.trackDisplayMode",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_DISPLAY_MODE ),
+        AS_GLOBAL, 
+        'K', LEGACY_HK_NAME( "Track Display Mode" ),
         _( "Sketch Tracks" ), _( "Show tracks in outline mode" ),
         showtrack_xpm );
 
 TOOL_ACTION PCB_ACTIONS::padDisplayMode( "pcbnew.Control.padDisplayMode",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Sketch Pads" ), _( "Show pads in outline mode" ),
         pad_sketch_xpm );
 
 TOOL_ACTION PCB_ACTIONS::viaDisplayMode( "pcbnew.Control.viaDisplayMode",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Sketch Vias" ), _( "Show vias in outline mode" ),
         via_sketch_xpm );
 
 TOOL_ACTION PCB_ACTIONS::graphicDisplayMode( "pcbnew.Control.graphicDisplayMode",
-        AS_GLOBAL, 0,
-        "", "" );
+        AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::moduleEdgeOutlines( "pcbnew.Control.graphicOutlines",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Sketch Graphics" ), _( "Show footprint graphic items in outline mode" ),
         show_mod_edge_xpm );
 
 TOOL_ACTION PCB_ACTIONS::zoneDisplayEnable( "pcbnew.Control.zoneDisplayEnable",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Fill Zones" ), _( "Show filled areas of zones" ),
         show_zone_xpm);
 
 TOOL_ACTION PCB_ACTIONS::zoneDisplayDisable( "pcbnew.Control.zoneDisplayDisable",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Wireframe Zones" ), _( "Show only zone boundaries" ),
         show_zone_disable_xpm );
 
 TOOL_ACTION PCB_ACTIONS::zoneDisplayOutlines( "pcbnew.Control.zoneDisplayOutlines",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Sketch Zones" ), _( "Show solid areas of zones in outline mode" ),
         show_zone_outline_only_xpm);
 
 
 // Layer control
 TOOL_ACTION PCB_ACTIONS::layerTop( "pcbnew.Control.layerTop",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_COMPONENT ),
-        "", "", NULL, AF_NONE, (void*) F_Cu );
+        AS_GLOBAL,
+        WXK_PAGEUP, LEGACY_HK_NAME( "Switch to Component (F.Cu) layer" ),
+        "Switch to Component (F.Cu) layer", "", 
+        nullptr, AF_NONE, (void*) F_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner1( "pcbnew.Control.layerInner1",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_INNER1 ),
-        "", "", NULL, AF_NONE, (void*) In1_Cu );
+        AS_GLOBAL, 
+        WXK_F5, LEGACY_HK_NAME( "Switch to Inner layer 1" ),
+        "Switch to Inner layer 1", "", 
+        nullptr, AF_NONE, (void*) In1_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner2( "pcbnew.Control.layerInner2",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_INNER2 ),
-        "", "", NULL, AF_NONE, (void*) In2_Cu );
+        AS_GLOBAL, 
+        WXK_F6, LEGACY_HK_NAME( "Switch to Inner layer 2" ),
+        "Switch to Inner layer 2", "", 
+        nullptr, AF_NONE, (void*) In2_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner3( "pcbnew.Control.layerInner3",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_INNER3 ),
-        "", "", NULL, AF_NONE, (void*) In3_Cu );
+        AS_GLOBAL, 
+        WXK_F7, LEGACY_HK_NAME( "Switch to Inner layer 3" ),
+        "Switch to Inner layer 3", "", 
+        nullptr, AF_NONE, (void*) In3_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner4( "pcbnew.Control.layerInner4",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_INNER4 ),
-        "", "", NULL, AF_NONE, (void*) In4_Cu );
+        AS_GLOBAL, 
+        WXK_F8, LEGACY_HK_NAME( "Switch to Inner layer 4" ),
+        "Switch to Inner layer 4", "", 
+        nullptr, AF_NONE, (void*) In4_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner5( "pcbnew.Control.layerInner5",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_INNER5 ),
-        "", "", NULL, AF_NONE, (void*) In5_Cu );
+        AS_GLOBAL, 
+        MD_SHIFT + WXK_F5, LEGACY_HK_NAME( "Switch to Inner layer 5" ),
+        "Switch to Inner layer 5", "", 
+        nullptr, AF_NONE, (void*) In5_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerInner6( "pcbnew.Control.layerInner6",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_INNER6 ),
-        "", "", NULL, AF_NONE, (void*) In6_Cu );
+        AS_GLOBAL, 
+        MD_SHIFT + WXK_F6, LEGACY_HK_NAME( "Switch to Inner layer 6" ),
+        "Switch to Inner layer 6", "", 
+        nullptr, AF_NONE, (void*) In6_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerBottom( "pcbnew.Control.layerBottom",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_COPPER ),
-        "", "", NULL, AF_NONE, (void*) B_Cu );
+        AS_GLOBAL, 
+        WXK_PAGEDOWN, LEGACY_HK_NAME( "Switch to Copper (B.Cu) layer" ),
+        "Switch to Copper (B.Cu) layer", "", 
+        nullptr, AF_NONE, (void*) B_Cu );
 
 TOOL_ACTION PCB_ACTIONS::layerNext( "pcbnew.Control.layerNext",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_NEXT ),
-        "", "" );
+        AS_GLOBAL, 
+        '+', LEGACY_HK_NAME( "Switch to Next Layer" ),
+        "Switch to Next Layer", "" );
 
 TOOL_ACTION PCB_ACTIONS::layerPrev( "pcbnew.Control.layerPrev",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_PREVIOUS ),
-        "", "" );
+        AS_GLOBAL, 
+        '-', LEGACY_HK_NAME( "Switch to Previous Layer" ),
+        "Switch to Previous Layer", "" );
 
 TOOL_ACTION PCB_ACTIONS::layerToggle( "pcbnew.Control.layerToggle",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_THROUGH_VIA ),
-        "", "" );
+        AS_GLOBAL, 
+        'V', LEGACY_HK_NAME( "Add Through Via" ),
+        "Add Through Via", "" );
 
 TOOL_ACTION PCB_ACTIONS::layerAlphaInc( "pcbnew.Control.layerAlphaInc",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_INC_LAYER_ALPHA ),
+        AS_GLOBAL, 
+        '}', LEGACY_HK_NAME( "Increment Layer Transparency (Modern Toolset only)" ),
         _( "Increase Layer Opacity" ), _( "Make the current layer more transparent" ),
         contrast_mode_xpm );
 
 TOOL_ACTION PCB_ACTIONS::layerAlphaDec( "pcbnew.Control.layerAlphaDec",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DEC_LAYER_ALPHA ),
+        AS_GLOBAL, 
+        '{', LEGACY_HK_NAME( "Decrement Layer Transparency (Modern Toolset only)" ),
         _( "Decrease Layer Opacity" ), _( "Make the current layer more transparent" ),
         contrast_mode_xpm );
 
 TOOL_ACTION PCB_ACTIONS::layerChanged( "pcbnew.Control.layerChanged",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         "", "",
-        NULL, AF_NOTIFY );
+        nullptr, AF_NOTIFY );
 
 // Miscellaneous
 TOOL_ACTION PCB_ACTIONS::selectionTool( "pcbnew.Control.selectionTool",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Select item(s)" ), "",
         cursor_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::deleteTool( "pcbnew.Control.deleteTool",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Delete Items Tool" ), _( "Click on items to delete them" ),
         delete_xpm );
 
-TOOL_ACTION PCB_ACTIONS::showHelp( "pcbnew.Control.showHelp",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HELP ),
-        "", "" );
-
-TOOL_ACTION PCB_ACTIONS::toBeDone( "pcbnew.Control.toBeDone",
-        AS_GLOBAL, 0,           // dialog saying it is not implemented yet
-        "", "" );               // so users are aware of that
-
-
 PCBNEW_CONTROL::PCBNEW_CONTROL() :
-    PCB_TOOL_BASE( "pcbnew.Control" ), m_frame( NULL )
+    PCB_TOOL_BASE( "pcbnew.Control" ), 
+    m_frame( nullptr )
 {
     m_gridOrigin.reset( new KIGFX::ORIGIN_VIEWITEM() );
 }
@@ -404,18 +415,6 @@ int PCBNEW_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
     view()->UpdateDisplayOptions( opts );
     canvas()->SetHighContrastLayer( m_frame->GetActiveLayer() );
 
-    return 0;
-}
-
-
-int PCBNEW_CONTROL::HighContrastInc( const TOOL_EVENT& aEvent )
-{
-    return 0;
-}
-
-
-int PCBNEW_CONTROL::HighContrastDec( const TOOL_EVENT& aEvent )
-{
     return 0;
 }
 
@@ -973,14 +972,6 @@ int PCBNEW_CONTROL::Redo( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
-{
-    DisplayHotkeyList( m_frame, m_frame->GetHotkeyConfig() );
-
-    return 0;
-}
-
-
 int PCBNEW_CONTROL::Show3DViewer( const TOOL_EVENT& aEvent )
 {
     EDA_3D_VIEWER* draw3DFrame = m_frame->CreateAndShow3D_Frame();
@@ -997,13 +988,6 @@ int PCBNEW_CONTROL::Show3DViewer( const TOOL_EVENT& aEvent )
 #endif
     }
 
-    return 0;
-}
-
-
-int PCBNEW_CONTROL::ToBeDone( const TOOL_EVENT& aEvent )
-{
-    DisplayInfoMessage( m_frame, _( "Not available in OpenGL/Cairo canvases." ) );
     return 0;
 }
 
@@ -1066,8 +1050,6 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayDisable.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayOutlines.MakeEvent() );
     Go( &PCBNEW_CONTROL::HighContrastMode,     ACTIONS::highContrastMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::HighContrastInc,      ACTIONS::highContrastInc.MakeEvent() );
-    Go( &PCBNEW_CONTROL::HighContrastDec,      ACTIONS::highContrastDec.MakeEvent() );
 
     // Layer control
     Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerTop.MakeEvent() );
@@ -1095,9 +1077,7 @@ void PCBNEW_CONTROL::setTransitions()
 
     // Miscellaneous
     Go( &PCBNEW_CONTROL::DeleteItemCursor,     PCB_ACTIONS::deleteTool.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ShowHelp,             PCB_ACTIONS::showHelp.MakeEvent() );
     Go( &PCBNEW_CONTROL::Show3DViewer,         ACTIONS::show3DViewer.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ToBeDone,             PCB_ACTIONS::toBeDone.MakeEvent() );
 
     // Append control
     Go( &PCBNEW_CONTROL::AppendBoardFromFile,  PCB_ACTIONS::appendBoard.MakeEvent() );

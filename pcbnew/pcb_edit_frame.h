@@ -297,7 +297,6 @@ public:
     void ExportSVG( wxCommandEvent& event );
 
     // User interface update command event handlers.
-    void OnUpdateLayerPair( wxUpdateUIEvent& aEvent );
     void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
     bool LayerManagerShown();
     bool MicrowaveToolbarShown();
@@ -439,9 +438,6 @@ public:
      * @param aNetListFile - The last net list file with full path successfully read.
      */
     void SetLastNetListRead( const wxString& aNetListFile );
-
-    ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
     void OnCloseWindow( wxCloseEvent& Event ) override;
     void Process_Special_Functions( wxCommandEvent& event );
@@ -1012,10 +1008,12 @@ public:
      */
     void UpdateTitle();
 
+    void On3DShapeLibWizard( wxCommandEvent& event );
+    
     /**
      * Allows Pcbnew to install its preferences panel into the preferences dialog.
      */
-    void InstallPreferences( PAGED_DIALOG* aParent ) override;
+    void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
 
     /**
      * Called after the preferences dialog is run.

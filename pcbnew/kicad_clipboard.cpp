@@ -59,7 +59,7 @@ void CLIPBOARD_IO::SetBoard( BOARD* aBoard )
 }
 
 
-void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
+void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected )
 {
     VECTOR2I refPoint( 0, 0 );
 

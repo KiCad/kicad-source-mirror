@@ -26,7 +26,6 @@
 #include <gerbview_frame.h>
 #include <bitmaps.h>
 #include <gerbview_id.h>
-#include <hotkeys.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include <gbr_layer_box_selector.h>
@@ -36,6 +35,7 @@
 #include <kicad_string.h>
 #include <wx/wupdlock.h>
 #include <tool/actions.h>
+#include <tool/action_toolbar.h>
 #include <tools/gerbview_actions.h>
 
 void GERBVIEW_FRAME::ReCreateHToolbar( void )

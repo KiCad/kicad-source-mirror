@@ -32,6 +32,8 @@
 class TOOL_EVENT;
 class TOOL_MANAGER;
 
+#define LEGACY_HK_NAME( x ) x
+
 /**
  * Class ACTIONS
  *
@@ -94,8 +96,6 @@ public:
     static TOOL_ACTION toggleCursor;
     static TOOL_ACTION toggleCursorStyle;
     static TOOL_ACTION highContrastMode;
-    static TOOL_ACTION highContrastInc;
-    static TOOL_ACTION highContrastDec;
 
     /// Cursor control with keyboard
     static TOOL_ACTION cursorUp;
@@ -146,11 +146,17 @@ public:
     static TOOL_ACTION showFootprintBrowser;
     static TOOL_ACTION showFootprintEditor;
     static TOOL_ACTION updatePcbFromSchematic;
+    static TOOL_ACTION acceleratedGraphics;
+    static TOOL_ACTION standardGraphics;
+
+    // Suite
     static TOOL_ACTION configurePaths;
     static TOOL_ACTION showSymbolLibTable;
     static TOOL_ACTION showFootprintLibTable;
-    static TOOL_ACTION acceleratedGraphics;
-    static TOOL_ACTION standardGraphics;
+    static TOOL_ACTION gettingStarted;
+    static TOOL_ACTION help;
+    static TOOL_ACTION listHotKeys;
+    static TOOL_ACTION getInvolved;
 
     /**
      * Function TranslateLegacyId()

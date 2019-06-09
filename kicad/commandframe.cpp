@@ -142,8 +142,5 @@ void LAUNCHER_PANEL::AddButton( wxWindowID aId, const wxBitmap& aBitmap, const w
 
     btn->SetToolTip( aToolTip );
 
-    m_buttonSizer->Add( btn,
-                        0,
-                        wxALL | wxEXPAND,
-                        BUTTON_SEPARATION );
+    m_buttonSizer->Add( btn, 0, wxALL | wxEXPAND, BUTTON_SEPARATION );
 }

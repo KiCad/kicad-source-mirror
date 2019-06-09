@@ -30,7 +30,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_board_item.h>
-#include <tool/selection.h>
+#include <tools/pcbnew_selection.h>
 
 /*!
  * Class that performs array creation by producing a dialog to gather
@@ -39,7 +39,7 @@
 class ARRAY_CREATOR
 {
 public:
-    ARRAY_CREATOR( PCB_BASE_FRAME& aParent, bool editModules, const SELECTION& aSelection ) :
+    ARRAY_CREATOR( PCB_BASE_FRAME& aParent, bool editModules, const PCBNEW_SELECTION& aSelection ) :
             m_parent( aParent ),
             m_editModules( editModules ),
             m_selection( aSelection )
@@ -53,9 +53,9 @@ public:
     void Invoke();
 
 private:
-    PCB_BASE_FRAME&  m_parent;
-    bool             m_editModules;
-    const SELECTION& m_selection;
+    PCB_BASE_FRAME&         m_parent;
+    bool                    m_editModules;
+    const PCBNEW_SELECTION& m_selection;
 };
 
 #endif /* ARRAY_CREATOR_H_ */

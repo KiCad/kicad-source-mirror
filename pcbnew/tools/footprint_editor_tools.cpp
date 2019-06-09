@@ -41,7 +41,6 @@
 #include <collectors.h>
 #include <confirm.h>
 #include <dialogs/dialog_enum_pads.h>
-#include <hotkeys.h>
 #include <bitmaps.h>
 #include <pcb_edit_frame.h>
 #include <class_board.h>
@@ -57,95 +56,96 @@ using namespace std::placeholders;
 
 
 TOOL_ACTION PCB_ACTIONS::toggleFootprintTree( "pcbnew.ModuleEditor.toggleFootprintTree",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Show Footprint Tree" ), _( "Toggles the footprint tree visibility" ),
         search_tree_xpm );
 
 TOOL_ACTION PCB_ACTIONS::newFootprint( "pcbnew.ModuleEditor.newFootprint",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_NEW ),
+        AS_GLOBAL, 
+        MD_CTRL + 'N', LEGACY_HK_NAME( "New" ),
         _( "New Footprint..." ), _( "Create a new, empty footprint" ),
         new_footprint_xpm );
 
 TOOL_ACTION PCB_ACTIONS::createFootprint( "pcbnew.ModuleEditor.createFootprint",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Create Footprint..." ), _( "Create a new footprint using the Footprint Wizard" ),
         module_wizard_xpm );
 
 TOOL_ACTION PCB_ACTIONS::saveToBoard( "pcbnew.ModuleEditor.saveToBoard",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Save to Board" ), _( "Update footprint on board" ),
         save_fp_to_board_xpm );
 
 TOOL_ACTION PCB_ACTIONS::saveToLibrary( "pcbnew.ModuleEditor.saveToLibrary",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Save to Library" ), _( "Save changes to library" ),
         save_xpm );
 
 TOOL_ACTION PCB_ACTIONS::editFootprint( "pcbnew.ModuleEditor.editFootprint",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Edit Footprint" ), _( "Show selected footprint on editor canvas" ),
         edit_xpm );
 
 TOOL_ACTION PCB_ACTIONS::deleteFootprint( "pcbnew.ModuleEditor.deleteFootprint",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Delete Footprint from Library" ), "",
         delete_xpm );
 
 TOOL_ACTION PCB_ACTIONS::cutFootprint( "pcbnew.ModuleEditor.cutFootprint",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Cut Footprint" ), "",
         cut_xpm );
 
 TOOL_ACTION PCB_ACTIONS::copyFootprint( "pcbnew.ModuleEditor.copyFootprint",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Copy Footprint" ), "",
         copy_xpm );
 
 TOOL_ACTION PCB_ACTIONS::pasteFootprint( "pcbnew.ModuleEditor.pasteFootprint",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Paste Footprint" ), "",
         paste_xpm );
 
 TOOL_ACTION PCB_ACTIONS::importFootprint( "pcbnew.ModuleEditor.importFootprint",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Import Footprint..." ), "",
         import_module_xpm );
 
 TOOL_ACTION PCB_ACTIONS::exportFootprint( "pcbnew.ModuleEditor.exportFootprint",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Export Footprint..." ), "",
         export_module_xpm );
 
 // Module editor tools
 TOOL_ACTION PCB_ACTIONS::footprintProperties( "pcbnew.ModuleEditor.footprintProperties",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Footprint Properties..." ), "",
         module_options_xpm );
 
 TOOL_ACTION PCB_ACTIONS::placePad( "pcbnew.ModuleEditor.placePad",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Add Pad" ), _( "Add a pad" ),
         pad_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::createPadFromShapes( "pcbnew.ModuleEditor.createPadFromShapes",
-        AS_CONTEXT, 0,
+        AS_CONTEXT, 0, "",
         _( "Create Pad from Selected Shapes" ),
         _( "Creates a custom-shaped pads from a set of selected shapes" ),
         primitives_to_custom_pad_xpm );
 
 TOOL_ACTION PCB_ACTIONS::explodePadToShapes( "pcbnew.ModuleEditor.explodePadToShapes",
-        AS_CONTEXT, 0,
+        AS_CONTEXT, 0, "",
         _( "Explode Pad to Graphic Shapes" ),
         _( "Converts a custom-shaped pads to a set of graphical shapes" ),
         custom_pad_to_primitives_xpm );
 
 TOOL_ACTION PCB_ACTIONS::enumeratePads( "pcbnew.ModuleEditor.enumeratePads",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Renumber Pads..." ), _( "Renumber pads by clicking on them in the desired order" ),
         pad_enumerate_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::defaultPadProperties( "pcbnew.ModuleEditor.defaultPadProperties",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Default Pad Properties..." ), _( "Edit the pad properties used when creating new pads" ),
         options_pad_xpm );
 

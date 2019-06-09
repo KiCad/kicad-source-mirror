@@ -31,7 +31,6 @@
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <base_screen.h>
-#include <hotkeys.h>
 #include <tool/common_tools.h>
 #include <id.h>
 #include <project.h>
@@ -494,31 +493,6 @@ int COMMON_TOOLS::ToggleCursorStyle( const TOOL_EVENT& aEvent )
 }
 
 
-int COMMON_TOOLS::ConfigurePaths( const TOOL_EVENT& aEvent )
-{
-    KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );
-    kiface->CreateWindow( m_frame, DIALOG_CONFIGUREPATHS, &m_frame->Kiway() );
-    return 0;
-}
-
-
-int COMMON_TOOLS::ShowLibraryTable( const TOOL_EVENT& aEvent )
-{
-    if( aEvent.IsAction( &ACTIONS::showSymbolLibTable ) )
-    {
-        KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_SCH );
-        kiface->CreateWindow( m_frame, DIALOG_SCH_LIBRARY_TABLE, &m_frame->Kiway() );
-    }
-    else if( aEvent.IsAction( &ACTIONS::showFootprintLibTable ) )
-    {
-        KIFACE* kiface = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );
-        kiface->CreateWindow( m_frame, DIALOG_PCB_LIBRARY_TABLE, &m_frame->Kiway() );
-    }
-
-    return 0;
-}
-
-
 int COMMON_TOOLS::SwitchCanvas( const TOOL_EVENT& aEvent )
 {
     if( aEvent.IsAction( &ACTIONS::acceleratedGraphics ) )
@@ -528,38 +502,6 @@ int COMMON_TOOLS::SwitchCanvas( const TOOL_EVENT& aEvent )
     else
         wxFAIL_MSG( "Unknown canvas type" );
 
-    return 0;
-}
-
-
-int COMMON_TOOLS::ShowPlayer( const TOOL_EVENT& aEvent )
-{
-    FRAME_T playerType = FRAME_SCH_VIEWER;
-    
-    if( aEvent.IsAction( &ACTIONS::showSymbolBrowser ) )
-        playerType = FRAME_SCH_VIEWER;
-    else if( aEvent.IsAction( &ACTIONS::showSymbolEditor ) )
-        playerType = FRAME_SCH_LIB_EDITOR;
-    else if( aEvent.IsAction( &ACTIONS::showFootprintBrowser ) )
-        playerType = FRAME_PCB_MODULE_VIEWER;
-    else if( aEvent.IsAction( &ACTIONS::showFootprintEditor ) )
-        playerType = FRAME_PCB_MODULE_EDITOR;
-    else
-        wxFAIL_MSG( "ShowPlayer(): unexpected request" );
-    
-    KIWAY_PLAYER* editor = m_frame->Kiway().Player( playerType, true );
-
-    // Needed on Windows, other platforms do not use it, but it creates no issue
-    if( editor->IsIconized() )
-        editor->Iconize( false );
-
-    editor->Raise();
-
-    // Raising the window does not set the focus on Linux.  This should work on
-    // any platform.
-    if( wxWindow::FindFocus() != editor )
-        editor->SetFocus();
-    
     return 0;
 }
 
@@ -594,33 +536,27 @@ void COMMON_TOOLS::setTransitions()
     Go( &COMMON_TOOLS::ZoomCenter,         ACTIONS::zoomCenter.MakeEvent() );
     Go( &COMMON_TOOLS::ZoomFitScreen,      ACTIONS::zoomFitScreen.MakeEvent() );
     Go( &COMMON_TOOLS::ZoomPreset,         ACTIONS::zoomPreset.MakeEvent() );
-
     Go( &COMMON_TOOLS::CenterContents,     ACTIONS::centerContents.MakeEvent() );
 
+    // Grid control
     Go( &COMMON_TOOLS::GridNext,           ACTIONS::gridNext.MakeEvent() );
     Go( &COMMON_TOOLS::GridPrev,           ACTIONS::gridPrev.MakeEvent() );
     Go( &COMMON_TOOLS::GridPreset,         ACTIONS::gridPreset.MakeEvent() );
     Go( &COMMON_TOOLS::ToggleGrid,         ACTIONS::toggleGrid.MakeEvent() );
     Go( &COMMON_TOOLS::GridProperties,     ACTIONS::gridProperties.MakeEvent() );
 
+    // Units and coordinates
     Go( &COMMON_TOOLS::ImperialUnits,      ACTIONS::imperialUnits.MakeEvent() );
     Go( &COMMON_TOOLS::MetricUnits,        ACTIONS::metricUnits.MakeEvent() );
     Go( &COMMON_TOOLS::ToggleUnits,        ACTIONS::toggleUnits.MakeEvent() );
     Go( &COMMON_TOOLS::TogglePolarCoords,  ACTIONS::togglePolarCoords.MakeEvent() );
     Go( &COMMON_TOOLS::ResetLocalCoords,   ACTIONS::resetLocalCoords.MakeEvent() );
 
+    // Misc
     Go( &COMMON_TOOLS::ToggleCursor,       ACTIONS::toggleCursor.MakeEvent() );
     Go( &COMMON_TOOLS::ToggleCursorStyle,  ACTIONS::toggleCursorStyle.MakeEvent() );
-
-    Go( &COMMON_TOOLS::ConfigurePaths,     ACTIONS::configurePaths.MakeEvent() );
-    Go( &COMMON_TOOLS::ShowLibraryTable,   ACTIONS::showSymbolLibTable.MakeEvent() );
-    Go( &COMMON_TOOLS::ShowLibraryTable,   ACTIONS::showFootprintLibTable.MakeEvent() );
     Go( &COMMON_TOOLS::SwitchCanvas,       ACTIONS::acceleratedGraphics.MakeEvent() );
     Go( &COMMON_TOOLS::SwitchCanvas,       ACTIONS::standardGraphics.MakeEvent() );
-    Go( &COMMON_TOOLS::ShowPlayer,         ACTIONS::showSymbolBrowser.MakeEvent() );
-    Go( &COMMON_TOOLS::ShowPlayer,         ACTIONS::showSymbolEditor.MakeEvent() );
-    Go( &COMMON_TOOLS::ShowPlayer,         ACTIONS::showFootprintBrowser.MakeEvent() );
-    Go( &COMMON_TOOLS::ShowPlayer,         ACTIONS::showFootprintEditor.MakeEvent() );
 }
 
 

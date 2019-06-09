@@ -31,7 +31,6 @@ include_directories(
     ${INC_AFTER}
     )
 
-
 set( EESCHEMA_DLGS
     dialogs/dialog_annotate.cpp
     dialogs/dialog_annotate_base.cpp
@@ -153,7 +152,6 @@ set( EESCHEMA_SRCS
     generate_alias_info.cpp
     getpart.cpp
     hierarch.cpp
-    ee_hotkeys.cpp
     lib_arc.cpp
     lib_bezier.cpp
     lib_circle.cpp

@@ -25,20 +25,17 @@
 #include <fctsys.h>
 #include <macros.h>
 #include <wx/clipbrd.h>
-
 #include <pgm_base.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <wildcards_and_files_ext.h>
 #include <bitmap_io.h>
+#include <bitmaps.h>
 #include <build_version.h>
-#include <menus_helpers.h>
 #include <kiway.h>
 #include <kiface_i.h>
-
 #include <wx/rawbmp.h>
 #include <potracelib.h>
-
 #include "bitmap2component.h"
 
 #include "bitmap2cmp_gui_base.h"

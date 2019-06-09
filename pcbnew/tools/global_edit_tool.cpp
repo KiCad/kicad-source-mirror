@@ -35,50 +35,50 @@
 
 
 TOOL_ACTION PCB_ACTIONS::updateFootprint( "pcbnew.GlobalEdit.updateFootprint",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Update Footprint..." ),
         _( "Update footprint to include any changes from the library" ),
         reload_xpm );
 
 TOOL_ACTION PCB_ACTIONS::updateFootprints( "pcbnew.GlobalEdit.updateFootprints",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Update Footprints from Library..." ),
         _( "Update footprints to include any changes from the library" ),
         reload_xpm );
 
 TOOL_ACTION PCB_ACTIONS::changeFootprint( "pcbnew.GlobalEdit.changeFootprint",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Change Footprint..." ), _( "Assign a different footprint from the library" ),
         exchange_xpm );
 
 TOOL_ACTION PCB_ACTIONS::changeFootprints( "pcbnew.GlobalEdit.changeFootprints",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Change Footprints..." ), _( "Assign different footprints from the library" ),
         exchange_xpm );
 
 TOOL_ACTION PCB_ACTIONS::swapLayers( "pcbnew.GlobalEdit.swapLayers",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Swap Layers..." ), _( "Move tracks or drawings from one layer to another" ),
         swap_layer_xpm );
 
 TOOL_ACTION PCB_ACTIONS::editTracksAndVias( "pcbnew.GlobalEdit.editTracksAndVias",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Edit Track && Via Properties..." ), "",
         width_track_via_xpm );
 
 TOOL_ACTION PCB_ACTIONS::editTextAndGraphics( "pcbnew.GlobalEdit.editTextAndGraphics",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Edit Text && Graphic Properties..." ), "",
         reset_text_xpm );
 
 TOOL_ACTION PCB_ACTIONS::globalDeletions( "pcbnew.GlobalEdit.globalDeletions",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Global Deletions..." ),
         _( "Delete tracks, footprints and graphic items from board" ),
         general_deletions_xpm );
 
 TOOL_ACTION PCB_ACTIONS::cleanupTracksAndVias( "pcbnew.GlobalEdit.cleanupTracksAndVias",
-        AS_GLOBAL, 0,
+        AS_GLOBAL, 0, "",
         _( "Cleanup Tracks && Vias..." ),
         _( "Clean stubs, vias, delete break points or unconnected tracks" ),
         delete_xpm );

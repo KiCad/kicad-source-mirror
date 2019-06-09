@@ -74,11 +74,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
 
     EVT_MENU( wxID_EXIT, GERBVIEW_FRAME::OnQuit )
 
-    // menu Preferences
-    EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, GERBVIEW_FRAME::Process_Config )
-
-    EVT_MENU( wxID_PREFERENCES, GERBVIEW_FRAME::Process_Config )
-
     // menu Postprocess
     EVT_MENU( ID_GERBVIEW_SHOW_LIST_DCODES, GERBVIEW_FRAME::Process_Special_Functions )
     EVT_MENU( ID_GERBVIEW_SHOW_SOURCE, GERBVIEW_FRAME::OnShowGerberSourceFile )
@@ -126,7 +121,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
     int                      id = event.GetId();
     GERBVIEW_SELECTION_TOOL* selTool = GetToolManager()->GetTool<GERBVIEW_SELECTION_TOOL>();
-    SELECTION&               selection = selTool->GetSelection();
+    GERBVIEW_SELECTION&      selection = selTool->GetSelection();
     GERBER_DRAW_ITEM*        currItem = (GERBER_DRAW_ITEM*) selection.Front();
 
     switch( id )

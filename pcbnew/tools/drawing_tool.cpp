@@ -44,7 +44,6 @@
 #include <board_commit.h>
 #include <scoped_set_reset.h>
 #include <bitmaps.h>
-#include <hotkeys.h>
 #include <painter.h>
 #include <status_popup.h>
 #include "grid_helper.h"
@@ -66,80 +65,101 @@ using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 
 // Drawing tool actions
 TOOL_ACTION PCB_ACTIONS::drawLine( "pcbnew.InteractiveDrawing.line",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_LINE ),
+        AS_GLOBAL, 
+        MD_SHIFT + MD_CTRL + 'L', LEGACY_HK_NAME( "Draw Line" ),
         _( "Draw Line" ), _( "Draw a line" ),
         add_graphical_segments_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawPolygon( "pcbnew.InteractiveDrawing.graphicPolygon",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_POLYGON ),
+        AS_GLOBAL, 
+        MD_SHIFT + MD_CTRL + 'P', LEGACY_HK_NAME( "Draw Graphic Polygon" ),
         _( "Draw Graphic Polygon" ), _( "Draw a graphic polygon" ),
         add_graphical_polygon_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawCircle( "pcbnew.InteractiveDrawing.circle",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_CIRCLE ),
+        AS_GLOBAL, 
+        MD_SHIFT + MD_CTRL + 'C', LEGACY_HK_NAME( "Draw Circle" ),
         _( "Draw Circle" ), _( "Draw a circle" ),
         add_circle_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawArc( "pcbnew.InteractiveDrawing.arc",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_ARC ),
+        AS_GLOBAL, 
+        MD_SHIFT + MD_CTRL + 'A', LEGACY_HK_NAME( "Draw Arc" ),
         _( "Draw Arc" ), _( "Draw an arc" ),
         add_arc_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::placeText( "pcbnew.InteractiveDrawing.text",
-        AS_GLOBAL,  TOOL_ACTION::LegacyHotKey( HK_ADD_TEXT ),
+        AS_GLOBAL,  
+        MD_SHIFT + MD_CTRL + 'T', LEGACY_HK_NAME( "Add Text" ),
         _( "Add Text" ), _( "Add a text item" ),
         text_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawDimension( "pcbnew.InteractiveDrawing.dimension",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_DIMENSION ),
+        AS_GLOBAL, 
+        MD_SHIFT + MD_CTRL + 'H', LEGACY_HK_NAME(  "Add Dimension" ),
         _( "Add Dimension" ), _( "Add a dimension" ),
         add_dimension_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawZone( "pcbnew.InteractiveDrawing.zone",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_ZONE ),
+        AS_GLOBAL,
+#ifdef __WXOSX_MAC__
+        GR_KB_ALT + 'Z',
+#else
+        MD_SHIFT + MD_CTRL + 'Z',
+#endif
+        LEGACY_HK_NAME( "Add Filled Zone" ),
         _( "Add Filled Zone" ), _( "Add a filled zone" ),
         add_zone_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawVia( "pcbnew.InteractiveDrawing.via",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_FREE_VIA ),
+        AS_GLOBAL, 
+        MD_SHIFT + MD_CTRL + 'V', LEGACY_HK_NAME( "Add Vias" ),
         _( "Add Vias" ), _( "Add free-standing vias" ),
         add_via_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawZoneKeepout( "pcbnew.InteractiveDrawing.keepout",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_KEEPOUT ),
+        AS_GLOBAL, 
+        MD_SHIFT + MD_CTRL + 'K', LEGACY_HK_NAME( "Add Keepout Area" ),
         _( "Add Keepout Area" ), _( "Add a keepout area" ),
         add_keepout_area_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawZoneCutout( "pcbnew.InteractiveDrawing.zoneCutout",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_CUTOUT ),
+        AS_GLOBAL, 
+        GR_KB_SHIFT + 'C', LEGACY_HK_NAME( "Add a Zone Cutout" ),
         _( "Add a Zone Cutout" ), _( "Add a cutout area of an existing zone" ),
         add_zone_cutout_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawSimilarZone( "pcbnew.InteractiveDrawing.similarZone",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_SIMILAR_ZONE ),
+        AS_GLOBAL, 
+        MD_SHIFT + MD_CTRL + '.', LEGACY_HK_NAME( "Add a Similar Zone" ),
         _( "Add a Similar Zone" ), _( "Add a zone with the same settings as an existing zone" ),
         add_zone_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::placeImportedGraphics( "pcbnew.InteractiveDrawing.placeImportedGraphics",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_DXF ),
+        AS_GLOBAL, 
+        MD_SHIFT + MD_CTRL + 'F', LEGACY_HK_NAME( "Place DXF" ),
         _( "Place Imported Graphics" ), "",
         import_vector_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::setAnchor( "pcbnew.InteractiveDrawing.setAnchor",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_ANCHOR ),
+        AS_GLOBAL, 
+        MD_SHIFT + MD_CTRL + 'N', LEGACY_HK_NAME( "Place the Footprint Anchor" ),
         _( "Place the Footprint Anchor" ), "",
         anchor_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::incWidth( "pcbnew.InteractiveDrawing.incWidth",
-        AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_INC_LINE_WIDTH ),
+        AS_CONTEXT, 
+        MD_CTRL + '+', LEGACY_HK_NAME( "Increase Line Width" ),
         _( "Increase Line Width" ), _( "Increase the line width" ) );
 
 TOOL_ACTION PCB_ACTIONS::decWidth( "pcbnew.InteractiveDrawing.decWidth",
-        AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_DEC_LINE_WIDTH ),
+        AS_CONTEXT, 
+        MD_CTRL + '-', LEGACY_HK_NAME( "Decrease Line Width" ),
         _( "Decrease Line Width" ), _( "Decrease the line width" ) );
 
 TOOL_ACTION PCB_ACTIONS::arcPosture( "pcbnew.InteractiveDrawing.arcPosture",
-        AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_POSTURE ),
+        AS_CONTEXT, 
+        '/', LEGACY_HK_NAME( "Switch Track Posture" ),
         _( "Switch Arc Posture" ), _( "Switch the arc posture" ) );
 
 /*
@@ -147,12 +167,13 @@ TOOL_ACTION PCB_ACTIONS::arcPosture( "pcbnew.InteractiveDrawing.arcPosture",
  */
 
 static TOOL_ACTION deleteLastPoint( "pcbnew.InteractiveDrawing.deleteLastPoint",
-        AS_CONTEXT, WXK_BACK,
+        AS_CONTEXT, 
+        WXK_BACK, "",
         _( "Delete Last Point" ), _( "Delete the last point added to the current item" ),
         undo_xpm );
 
 static TOOL_ACTION closeZoneOutline( "pcbnew.InteractiveDrawing.closeZoneOutline",
-        AS_CONTEXT, 0,
+        AS_CONTEXT, 0, "",
         _( "Close Zone Outline" ), _( "Close the outline of a zone in progress" ),
         checked_ok_xpm );
 
