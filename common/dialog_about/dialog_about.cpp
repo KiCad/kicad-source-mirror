@@ -527,13 +527,6 @@ void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
     aMsg << OFF;
 #endif
 
-    aMsg << indent4 << "USE_WX_OVERLAY=";
-#ifdef USE_WX_OVERLAY
-    aMsg << ON;
-#else
-    aMsg << OFF;
-#endif
-
     aMsg << indent4 << "KICAD_SCRIPTING=";
 #ifdef KICAD_SCRIPTING
     aMsg << ON;

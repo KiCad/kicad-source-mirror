@@ -157,11 +157,6 @@ protected:
 
     int             m_MsgFrameHeight;
 
-#ifdef USE_WX_OVERLAY
-    // MAC Uses overlay to workaround the wxINVERT and wxXOR miss
-    wxOverlay       m_overlay;
-#endif
-
     /// One-shot to avoid a recursive mouse event during hotkey movement
     bool            m_movingCursorWithKeyboard;
 
@@ -698,10 +693,6 @@ public:
      * with the current controller state
      */
     virtual void SyncMenusAndToolbars() { };
-
-    bool GetShowAxis() const { return m_showAxis; }
-    bool GetShowGridAxis() const { return m_showGridAxis; }
-    bool GetShowOriginAxis() const { return m_showOriginAxis; }
 
     virtual const BOX2I GetDocumentExtents() const;
 

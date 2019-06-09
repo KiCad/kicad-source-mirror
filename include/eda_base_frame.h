@@ -41,7 +41,6 @@
 #include <wx/laywin.h>
 #include <wx/aui/aui.h>
 #include <wx/docview.h>
-
 #include <fctsys.h>
 #include <common.h>
 #include <layers_id_colors_and_visibility.h>
@@ -49,10 +48,6 @@
 #include "hotkeys_basic.h"
 #include <tool/action_toolbar.h>
 #include <kiway_holder.h>
-
-#ifdef USE_WX_OVERLAY
-#include <wx/overlay.h>
-#endif
 
 // Option for main frames
 #define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS
