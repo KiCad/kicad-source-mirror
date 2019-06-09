@@ -271,9 +271,11 @@ protected:
     ///> Colors for all layers (darkened)
     COLOR4D m_layerColorsDark[LAYER_ID_COUNT];
 
+    ///< Colora used for high contrast display mode
+    COLOR4D m_hiContrastColor[LAYER_ID_COUNT];
+
     /// Parameters for display modes
     bool    m_hiContrastEnabled;    ///< High contrast display mode on/off
-    COLOR4D m_hiContrastColor;      ///< Color used for high contrast display mode
     float   m_hiContrastFactor;     ///< Factor used for computing high contrast color
 
     bool    m_highlightEnabled;     ///< Highlight display mode on/off

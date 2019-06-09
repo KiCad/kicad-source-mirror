@@ -223,6 +223,22 @@ public:
     }
 
     /**
+     * Function Mix
+     * Returns a color that is mixed with the input by a factor
+     * @param aFactor Specifies how much of the original color to keep (valid values: 0.0 .. 1.0).
+     * @return COLOR4D Mixed color.
+     */
+    COLOR4D Mix( const COLOR4D& aColor, double aFactor ) const
+    {
+        assert( aFactor >= 0.0 && aFactor <= 1.0 );
+
+        return COLOR4D( aColor.r * ( 1.0 - aFactor ) + r * aFactor,
+                        aColor.g * ( 1.0 - aFactor ) + g * aFactor,
+                        aColor.b * ( 1.0 - aFactor ) + b * aFactor,
+                        a );
+    }
+
+    /**
      * Function WithAlpha
      * Returns a colour with the same colour, but the given alpha
      * @param aAlpha specifies the alpha of the new color
