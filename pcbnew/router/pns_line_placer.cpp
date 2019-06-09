@@ -436,21 +436,25 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead )
 
     m_currentNode->QueryColliding( &newHead, obstacles );
 
-    for( auto& obs : obstacles )
+    // If we are allowing DRC violations, we don't push back to the hull
+    if( !Settings().CanViolateDRC() )
     {
-        int cl = m_currentNode->GetClearance( obs.m_item, &newHead );
-        auto hull = obs.m_item->Hull( cl, newHead.Width() );
-
-        auto nearest = hull.NearestPoint( aP );
-        Dbg()->AddLine( hull, 2, 10000 );
-
-        if( ( nearest - aP ).EuclideanNorm() < newHead.Width() + cl )
+        for( auto& obs : obstacles )
         {
-            buildInitialLine( nearest, newHead );
-            if ( newHead.CLine().Length() > bestHead.CLine().Length() )
+            int cl = m_currentNode->GetClearance( obs.m_item, &newHead );
+            auto hull = obs.m_item->Hull( cl, newHead.Width() );
+
+            auto nearest = hull.NearestPoint( aP );
+            Dbg()->AddLine( hull, 2, 10000 );
+
+            if( ( nearest - aP ).EuclideanNorm() < newHead.Width() + cl )
             {
-                bestHead = newHead;
-                hasBest = true;
+                buildInitialLine( nearest, newHead );
+                if ( newHead.CLine().Length() > bestHead.CLine().Length() )
+                {
+                    bestHead = newHead;
+                    hasBest = true;
+                }
             }
         }
     }
