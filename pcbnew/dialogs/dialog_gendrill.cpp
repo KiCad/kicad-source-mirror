@@ -63,7 +63,9 @@ static DRILL_PRECISION precisionListForMetric( 3, 3 );
  */
 int PCB_EDITOR_CONTROL::GenerateDrillFiles( const TOOL_EVENT& aEvent )
 {
-    DIALOG_GENDRILL dlg( frame(), frame() );
+    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    DIALOG_GENDRILL dlg( editFrame, editFrame );
+    
     dlg.ShowModal();
     return 0;
 }

@@ -33,13 +33,13 @@ class LAYER_GRID_TABLE;
 class DIALOG_SWAP_LAYERS : public DIALOG_SWAP_LAYERS_BASE
 {
 private:
-    PCB_EDIT_FRAME*   m_parent;
-    PCB_LAYER_ID*     m_layerDestinations;
+    PCB_BASE_EDIT_FRAME* m_parent;
+    PCB_LAYER_ID*        m_layerDestinations;
 
-    LAYER_GRID_TABLE* m_gridTable;
+    LAYER_GRID_TABLE*    m_gridTable;
 
 public:
-    DIALOG_SWAP_LAYERS( PCB_EDIT_FRAME* aParent, PCB_LAYER_ID* aArray );
+    DIALOG_SWAP_LAYERS( PCB_BASE_EDIT_FRAME* aParent, PCB_LAYER_ID* aArray );
     ~DIALOG_SWAP_LAYERS() override;
 
 private:

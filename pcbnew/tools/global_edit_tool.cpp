@@ -143,7 +143,8 @@ int GLOBAL_EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 
     // invoke the exchange dialog process
     {
-        DIALOG_EXCHANGE_FOOTPRINTS dialog( frame(), mod, updateMode, currentMode );
+        PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+        DIALOG_EXCHANGE_FOOTPRINTS dialog( editFrame, mod, updateMode, currentMode );
         dialog.ShowQuasiModal();
     }
 

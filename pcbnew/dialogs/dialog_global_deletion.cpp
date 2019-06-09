@@ -60,7 +60,9 @@ DIALOG_GLOBAL_DELETION::DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent ) :
 
 int GLOBAL_EDIT_TOOL::GlobalDeletions( const TOOL_EVENT& aEvent )
 {
-    DIALOG_GLOBAL_DELETION dlg( frame() );
+    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    DIALOG_GLOBAL_DELETION dlg( editFrame );
+    
     dlg.SetCurrentLayer( frame()->GetActiveLayer() );
     dlg.ShowModal();
     return 0;

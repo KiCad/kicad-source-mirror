@@ -371,9 +371,10 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnSizeNetclassGrid( wxSizeEvent& event 
 
 int GLOBAL_EDIT_TOOL::EditTracksAndVias( const TOOL_EVENT& aEvent )
 {
-    DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS dlg( frame() );
+    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS dlg( editFrame );
+    
     dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR
-
     return 0;
 }
 

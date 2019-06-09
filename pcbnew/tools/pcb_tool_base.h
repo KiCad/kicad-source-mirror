@@ -55,7 +55,7 @@ struct INTERACTIVE_PLACER_BASE
     virtual void SnapItem( BOARD_ITEM *aItem );
     virtual bool PlaceItem( BOARD_ITEM *aItem, BOARD_COMMIT& aCommit );
 
-    PCB_EDIT_FRAME* m_frame;
+    PCB_BASE_EDIT_FRAME* m_frame;
     BOARD* m_board;
     int m_modifiers;
 };
@@ -134,14 +134,28 @@ protected:
     virtual void setTransitions() override;
 
 
-    KIGFX::PCB_VIEW* view() const { return static_cast<KIGFX::PCB_VIEW*>( getView() ); }
-    KIGFX::VIEW_CONTROLS* controls() const { return getViewControls(); }
-    PCB_EDIT_FRAME* frame() const { return getEditFrame<PCB_EDIT_FRAME>(); }
+    KIGFX::PCB_VIEW* view() const 
+    { 
+        return static_cast<KIGFX::PCB_VIEW*>( getView() ); 
+    }
+    
+    KIGFX::VIEW_CONTROLS* controls() const 
+    { 
+        return getViewControls(); 
+    }
+    
+    PCB_BASE_EDIT_FRAME* frame() const 
+    { 
+        return getEditFrame<PCB_BASE_EDIT_FRAME>(); 
+    }
+    
     BOARD* board() const { return getModel<BOARD>(); }
-    MODULE*               module() const
+    
+    MODULE* module() const
     {
         return board()->GetFirstModule();
     }
+    
     PCB_DISPLAY_OPTIONS* displayOptions() const;
     PCB_DRAW_PANEL_GAL* canvas() const;
     const PCBNEW_SELECTION& selection() const;

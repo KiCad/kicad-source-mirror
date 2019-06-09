@@ -407,7 +407,9 @@ static bool HasNonSMDPins( MODULE* aModule )
 
 int PCB_EDITOR_CONTROL::GeneratePosFile( const TOOL_EVENT& aEvent )
 {
-    DIALOG_GEN_FOOTPRINT_POSITION dlg( frame() );
+    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    DIALOG_GEN_FOOTPRINT_POSITION dlg( editFrame );
+    
     dlg.ShowModal();
     return 0;
 }

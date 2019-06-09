@@ -506,14 +506,14 @@ int PCB_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::BoardSetup( const TOOL_EVENT& aEvent )
 {
-    frame()->DoShowBoardSetupDialog();
+    getEditFrame<PCB_EDIT_FRAME>()->DoShowBoardSetupDialog();
     return 0;
 }
 
 
 int PCB_EDITOR_CONTROL::ImportNetlist( const TOOL_EVENT& aEvent )
 {
-    frame()->InstallNetlistFrame();
+    getEditFrame<PCB_EDIT_FRAME>()->InstallNetlistFrame();
     return 0;
 }
 
@@ -532,7 +532,7 @@ int PCB_EDITOR_CONTROL::ImportSpecctraSession( const TOOL_EVENT& aEvent )
                                       wxT( ".ses" ), wxT( "*.ses" ), frame(), wxFD_OPEN, false );
 
     if( !fullFileName.IsEmpty() )
-        frame()->ImportSpecctraSession( fullFileName );
+        getEditFrame<PCB_EDIT_FRAME>()->ImportSpecctraSession( fullFileName );
 
     return 0;
 }
@@ -550,7 +550,7 @@ int PCB_EDITOR_CONTROL::ExportSpecctraDSN( const TOOL_EVENT& aEvent )
                                       frame(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, false );
 
     if( !fullFileName.IsEmpty() )
-        frame()->ExportSpecctraFile( fullFileName );
+        getEditFrame<PCB_EDIT_FRAME>()->ExportSpecctraFile( fullFileName );
     
     return 0;
 }
@@ -596,14 +596,14 @@ int PCB_EDITOR_CONTROL::UpdatePCBFromSchematic( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::ToggleLayersManager( const TOOL_EVENT& aEvent )
 {
-    frame()->ToggleLayersManager();
+    getEditFrame<PCB_EDIT_FRAME>()->ToggleLayersManager();
     return 0;
 }
 
 
 int PCB_EDITOR_CONTROL::ToggleMicrowaveToolbar( const TOOL_EVENT& aEvent )
 {
-    frame()->ToggleMicrowaveToolbar();
+    getEditFrame<PCB_EDIT_FRAME>()->ToggleMicrowaveToolbar();
     return 0;
 }
 

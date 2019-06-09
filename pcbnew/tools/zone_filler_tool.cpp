@@ -127,7 +127,7 @@ int ZONE_FILLER_TOOL::ZoneFillAll( const TOOL_EVENT& aEvent )
     filler.SetProgressReporter( progressReporter.get() );
 
     if( filler.Fill( toFill ) )
-        frame()->m_ZoneFillsDirty = false;
+        getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty = false;
 
     canvas()->Refresh();
 

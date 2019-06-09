@@ -410,9 +410,10 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
 
 int GLOBAL_EDIT_TOOL::EditTextAndGraphics( const TOOL_EVENT& aEvent )
 {
-    DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS dlg( frame() );
+    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS dlg( editFrame );
+    
     dlg.ShowModal();
-
     return 0;
 }
 

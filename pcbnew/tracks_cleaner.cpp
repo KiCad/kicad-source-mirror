@@ -43,7 +43,9 @@
 */
 int GLOBAL_EDIT_TOOL::CleanupTracksAndVias( const TOOL_EVENT& aEvent )
 {
-    DIALOG_CLEANUP_TRACKS_AND_VIAS dlg( frame() );
+    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+    DIALOG_CLEANUP_TRACKS_AND_VIAS dlg( editFrame );
+    
     dlg.ShowModal();
     return 0;
 }

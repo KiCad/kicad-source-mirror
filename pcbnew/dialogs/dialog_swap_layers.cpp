@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcb_edit_frame.h>
+#include <pcb_base_edit_frame.h>
 #include <grid_layer_box_helpers.h>
 #include <class_drawsegment.h>
 #include <class_track.h>
@@ -69,7 +69,7 @@ public:
 };
 
 
-DIALOG_SWAP_LAYERS::DIALOG_SWAP_LAYERS( PCB_EDIT_FRAME* aParent, PCB_LAYER_ID* aArray ) :
+DIALOG_SWAP_LAYERS::DIALOG_SWAP_LAYERS( PCB_BASE_EDIT_FRAME* aParent, PCB_LAYER_ID* aArray ) :
     DIALOG_SWAP_LAYERS_BASE( aParent ),
     m_parent( aParent ),
     m_layerDestinations( aArray )

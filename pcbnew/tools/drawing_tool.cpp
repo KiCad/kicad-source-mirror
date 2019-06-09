@@ -1549,7 +1549,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
     {
         GRID_HELPER m_gridHelper;
 
-        VIA_PLACER( PCB_EDIT_FRAME* aFrame ) : m_gridHelper( aFrame )
+        VIA_PLACER( PCB_BASE_EDIT_FRAME* aFrame ) : m_gridHelper( aFrame )
         {}
 
         TRACK* findTrack( VIA* aVia )
