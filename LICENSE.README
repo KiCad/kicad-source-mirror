@@ -1,7 +1,7 @@
 The majority of KiCad's source code is developed and distributed under the terms
 of the GPLv3 or later. However, It does include some third-party code licensed
-under AGPLv3 or later as well as sections licensed under the BOOST license v1.0
-and portions licensed under the ISC license.
+under AGPLv3 or later as well as sections licensed under the BOOST license v1.0,
+the ISC license and the MIT license.
 
 These licenses are compatible, but a combined works as is will be governed under
 the terms of the AGPLv3 (or later). This includes any binary distribution of the
@@ -15,6 +15,8 @@ Licensed under BOOSTv1:
 - libcontext [https://github.com/boostorg/context], sources in common/system/libcontext.cpp
 Licensed under ISC:
 - portions of code in include/geometry/polygon_triangulation.h
+Licensed under MIT:
+- tinyspline_lib in dxflib_qcad/tinyspline_lib
 Licensed under CC-BY-SA-4.0:
 - All the demo files provided in demos/*
 Licensed under GPLv3 (or later):
