@@ -28,7 +28,7 @@
 #include <view/view_controls.h>
 #include <pl_editor_frame.h>
 
-TOOL_ACTION PL_ACTIONS::pickerTool( "plEditor.InteractivePicker.activate", 
+TOOL_ACTION PL_ACTIONS::pickerTool( "plEditor.InteractivePicker", 
         AS_GLOBAL, 0, "", "", "", NULL, AF_ACTIVATE );
 
 

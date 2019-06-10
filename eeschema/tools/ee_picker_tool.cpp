@@ -27,7 +27,7 @@
 #include <tool/tool_manager.h>
 #include <sch_base_frame.h>
 
-TOOL_ACTION EE_ACTIONS::pickerTool( "eeschema.InteractivePicker.activate",
+TOOL_ACTION EE_ACTIONS::pickerTool( "eeschema.InteractivePicker",
         AS_GLOBAL, 0, "", "", "", NULL, AF_ACTIVATE );
 
 
