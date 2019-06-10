@@ -159,6 +159,8 @@ void WS_DATA_MODEL::SaveInString( std::vector<WS_DATA_ITEM*> aItemsList, wxStrin
 {
     WS_DATA_MODEL_STRINGIO writer( aOutputString );
 
+    LOCALE_IO   toggle;     // switch on/off the locale "C" notation
+
     for( WS_DATA_ITEM* item : aItemsList )
         writer.Format( this, item, 0 );
 }

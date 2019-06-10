@@ -22,6 +22,7 @@
 
 find_path( NGSPICE_INCLUDE_DIR ngspice/sharedspice.h
     PATHS ${NGSPICE_ROOT_DIR} $ENV{NGSPICE_ROOT_DIR} ${NGSPICE_INCLUDE_PATH}
+          ${NGSPICE_ROOT_DIR}/include
     PATH_SUFFIXES src/include share/ngspice/include share/ngspice/include/ngspice
 )
 
