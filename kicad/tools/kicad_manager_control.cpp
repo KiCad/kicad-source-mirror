@@ -477,8 +477,7 @@ private:
 public:
     TERMINATE_HANDLER( const wxString& appName ) :
             m_appName( appName )
-    {
-    }
+    { }
 
     void OnTerminate( int pid, int status ) override
     {

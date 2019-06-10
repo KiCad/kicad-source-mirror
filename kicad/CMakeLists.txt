@@ -21,7 +21,6 @@ set( KICAD_SRCS
     kicad.cpp
     kicad_manager_frame.cpp
     menubar.cpp
-    prjconfig.cpp
     project_template.cpp
     tree_project_frame.cpp
     treeprojectfiles.cpp
