@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013-2017 Jean-Pierre Charras, jp.charras@wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,7 +121,7 @@ class NETLIST_DIALOG : public NETLIST_DIALOG_BASE
 
 public:
     SCH_EDIT_FRAME*   m_Parent;
-    wxString          m_NetFmtName;
+    wxString          m_DefaultNetFmtName;
     NETLIST_PAGE_DIALOG* m_PanelNetType[4 + CUSTOMPANEL_COUNTMAX];
 
 protected:
@@ -268,7 +268,7 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
     m_SpiceAjustPassiveValues = NULL;
     m_ButtonCancel = NULL;
 
-    wxString netfmtName = ((NETLIST_DIALOG*)parent->GetParent())->m_NetFmtName;
+    wxString netfmtName = ((NETLIST_DIALOG*)parent->GetParent())->m_DefaultNetFmtName;
 
     bool selected = m_pageNetFmtName == netfmtName;
 
@@ -309,7 +309,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
 
     long tmp;
     m_config->Read( NETLIST_USE_DEFAULT_NETNAME, &tmp, 0l );
-    m_NetFmtName = m_Parent->GetNetListFormatName();
+    m_DefaultNetFmtName = m_Parent->GetNetListFormatName();
 
     for( int ii = 0; ii < PANELCUSTOMBASE + CUSTOMPANEL_COUNTMAX; ii++ )
     {
@@ -345,6 +345,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
     {
         m_PanelNetType[PANELPCBNEW]->m_IsCurrentFormat->SetValue( true );
         m_NoteBook->SetSelection( PANELPCBNEW );
+        m_DefaultNetFmtName = m_PanelNetType[PANELPCBNEW]->GetPageNetFmtName();
         // call OnNetlistTypeSelection to update some widgets.
         // SetSelection() do nothing if the current page is already PANELPCBNEW
         wxNotebookEvent event;
@@ -489,7 +490,8 @@ void NETLIST_DIALOG::SelectDefaultNetlistType( wxCommandEvent& event )
     if( currPage == NULL )
         return;
 
-    m_Parent->SetNetListFormatName( currPage->GetPageNetFmtName() );
+    m_DefaultNetFmtName = currPage->GetPageNetFmtName();
+    m_Parent->SetNetListFormatName( m_DefaultNetFmtName );
     currPage->m_IsCurrentFormat->SetValue( true );
 }
 
@@ -859,5 +861,16 @@ int InvokeDialogNetList( SCH_EDIT_FRAME* aCaller )
 {
     NETLIST_DIALOG dlg( aCaller );
 
-    return dlg.ShowModal();
+    wxString curr_default_netformat = aCaller->GetNetListFormatName();
+
+    int ret = dlg.ShowModal();
+
+    // Ensure the default netlist is up to date, and store it in prj config
+    // if its was explicitely changed.
+    aCaller->SetNetListFormatName( dlg.m_DefaultNetFmtName );   // can have temporary changed
+
+    if( curr_default_netformat != dlg.m_DefaultNetFmtName )
+        aCaller->SaveProjectSettings( false );
+
+    return ret;
 }
