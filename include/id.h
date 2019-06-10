@@ -83,10 +83,6 @@ enum main_id
     ID_SAVE_BOARD_AS,
     ID_AUTO_SAVE_TIMER,
 
-    ID_CONFIG_REQ,
-    ID_CONFIG_SAVE,
-    ID_CONFIG_READ,
-
     // ID for menuitems used in our file history management,
     // when we do not use wxFILE_ID (restricted to 9 items)
     ID_FILE,

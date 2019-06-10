@@ -229,8 +229,6 @@ public:
     const wxString& GetPlotDirectoryName() const { return m_plotDirectoryName; }
     void SetPlotDirectoryName( const wxString& aDirName ) { m_plotDirectoryName = aDirName; }
 
-    void Process_Config( wxCommandEvent& event );
-
     /**
      * Return the project file parameter list for Eeschema.
      *

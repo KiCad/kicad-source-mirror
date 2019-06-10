@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,26 +21,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file eeschema_config.cpp
- */
-
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
-#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <gestfich.h>
 #include <sch_edit_frame.h>
 #include <sch_sheet.h>
-#include <invoke_sch_dialog.h>
 #include <lib_edit_frame.h>
 #include <eeschema_config.h>
-#include <ws_draw_item.h>
 #include <ws_data_model.h>
 #include <class_library.h>
 #include <symbol_lib_table.h>
-#include <dialog_erc.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/paged_dialog.h>
 #include <dialogs/panel_eeschema_template_fieldnames.h>
@@ -120,56 +112,10 @@ COLOR4D GetItemSelectedColor()
 }
 
 
-// Color to draw items flagged invisible, in libedit (they are invisible
-// in Eeschema
+// Color to draw items flagged invisible, in libedit (they are invisible in Eeschema)
 COLOR4D GetInvisibleItemColor()
 {
     return COLOR4D( DARKGRAY );
-}
-
-
-void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
-{
-    int        id = event.GetId();
-    wxFileName fn;
-
-    switch( id )
-    {
-    // JEY TODO: are these still active?
-    case ID_CONFIG_SAVE:
-        SaveProjectSettings( true );
-        break;
-
-    case ID_CONFIG_READ:
-        {
-            fn = g_RootSheet->GetScreen()->GetFileName();
-            fn.SetExt( ProjectFileExtension );
-
-            wxFileDialog dlg( this, _( "Load Project File" ), fn.GetPath(), fn.GetFullName(),
-                              ProjectFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
-
-            if( dlg.ShowModal() == wxID_CANCEL )
-                break;
-
-            wxString chosen = dlg.GetPath();
-
-            if( chosen == Prj().GetProjectFullName() )
-                LoadProjectFile();
-            else
-            {
-                // Read library list and library path list
-                Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH,
-                                  GetProjectFileParameters() );
-                // Read schematic editor setup
-                Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH_EDIT,
-                                  GetProjectFileParameters() );
-            }
-        }
-        break;
-
-    default:
-        DisplayError( this, wxT( "SCH_EDIT_FRAME::Process_Config error" ) );
-    }
 }
 
 
@@ -307,8 +253,8 @@ const wxChar RescueNeverShowEntry[] =               wxT( "RescueNeverShow" );
 const wxChar AutoplaceFieldsEntry[] =               wxT( "AutoplaceFields" );
 const wxChar AutoplaceJustifyEntry[] =              wxT( "AutoplaceJustify" );
 const wxChar AutoplaceAlignEntry[] =                wxT( "AutoplaceAlign" );
-static const wxChar MoveWarpsCursorEntry[] =       wxT( "MoveWarpsCursor" );
-static const wxChar MoveTakesCursorAsOriginEntry[] =       wxT( "MoveTakesCursorAsOrigin" );
+static const wxChar MoveWarpsCursorEntry[] =        wxT( "MoveWarpsCursor" );
+static const wxChar MoveTakesCursorAsOriginEntry[] = wxT( "MoveTakesCursorAsOrigin" );
 static const wxChar DragActionIsMoveEntry[] =       wxT( "DragActionIsMove" );
 static const wxChar DragAlwaysSelectsEntry[] =      wxT( "DragAlwaysSelects" );
 static const wxChar FootprintPreviewEntry[] =       wxT( "FootprintPreview" );
@@ -361,18 +307,18 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings()
                                                     &m_printSheetReference, true ) );
 
     m_configSettings.push_back( new PARAM_CFG_INT( true, RepeatStepXEntry,
-                                                      &m_repeatStep.x,
-                                                      DEFAULT_REPEAT_OFFSET_X,
-                                                      -REPEAT_OFFSET_MAX,
-                                                      REPEAT_OFFSET_MAX ) );
+                                                   &m_repeatStep.x,
+                                                   DEFAULT_REPEAT_OFFSET_X,
+                                                   -REPEAT_OFFSET_MAX,
+                                                   REPEAT_OFFSET_MAX ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, RepeatStepYEntry,
-                                                      &m_repeatStep.y,
-                                                      DEFAULT_REPEAT_OFFSET_Y,
-                                                      -REPEAT_OFFSET_MAX,
-                                                      REPEAT_OFFSET_MAX ) );
+                                                   &m_repeatStep.y,
+                                                   DEFAULT_REPEAT_OFFSET_Y,
+                                                   -REPEAT_OFFSET_MAX,
+                                                   REPEAT_OFFSET_MAX ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, RepeatLabelIncrementEntry,
-                                                      &m_repeatDeltaLabel,
-                                                      DEFAULT_REPEAT_LABEL_INC, -10, +10 ) );
+                                                   &m_repeatDeltaLabel,
+                                                   DEFAULT_REPEAT_LABEL_INC, -10, +10 ) );
     return m_configSettings;
 }
 
