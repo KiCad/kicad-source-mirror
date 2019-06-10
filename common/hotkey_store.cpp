@@ -70,7 +70,7 @@ void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList )
         for( const auto& entry : toolMgr->GetActions() )
         {
             // Internal actions probably shouldn't be allowed hotkeys
-            if( entry.second->GetMenuItem().IsEmpty() )
+            if( entry.second->GetLabel().IsEmpty() )
                 continue;
             
             masterMap[ entry.first ] = entry.second;

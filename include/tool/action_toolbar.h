@@ -52,6 +52,13 @@ public:
      * a TOOL_EVENT command containing name of the action is sent.
      */
     void Add( const TOOL_ACTION& aAction, bool aIsToggleEntry = false );
+    
+    /**
+     * Function AddButton()
+     * Adds a large button such as used in the Kicad Manager Frame's launch bar.
+     * @param aAction 
+     */
+    void AddButton( const TOOL_ACTION& aAction );
 
     /**
      * Applies the default toggle action.  For checked items this is check/uncheck; for

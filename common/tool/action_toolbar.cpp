@@ -52,6 +52,19 @@ void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry )
 }
 
 
+void ACTION_TOOLBAR::AddButton( const TOOL_ACTION& aAction )
+{
+    EDA_BASE_FRAME* editFrame = m_toolManager->GetEditFrame();
+    int toolId = aAction.GetId() + ACTION_ID;
+
+    AddTool( toolId, wxEmptyString, KiScaledBitmap( aAction.GetIcon(), editFrame ), 
+             aAction.GetName(), wxITEM_NORMAL );
+
+    m_toolKinds[ toolId ] = false;
+    m_toolActions[ toolId ] = &aAction;
+}
+
+
 void ACTION_TOOLBAR::Toggle( const TOOL_ACTION& aAction, bool aState )
 {
     int toolId = aAction.GetId() + ACTION_ID;

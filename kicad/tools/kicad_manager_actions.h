@@ -40,10 +40,19 @@ public:
     static TOOL_ACTION newProject;
     static TOOL_ACTION newFromTemplate;
     static TOOL_ACTION openProject;
-    static TOOL_ACTION importEagle;
 
-    static TOOL_ACTION archiveProject;
-    static TOOL_ACTION unarchiveProject;
+    static TOOL_ACTION editSchematic;
+    static TOOL_ACTION editSymbols;
+    static TOOL_ACTION editPCB;
+    static TOOL_ACTION editFootprints;
+    static TOOL_ACTION viewGerbers;
+    static TOOL_ACTION convertImage;
+    static TOOL_ACTION showCalculator;
+    static TOOL_ACTION editWorksheet;
+    static TOOL_ACTION openTextEditor;
+
+    static TOOL_ACTION editOtherSch;
+    static TOOL_ACTION editOtherPCB;
 
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
     virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override

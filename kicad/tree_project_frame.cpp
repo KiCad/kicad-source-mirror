@@ -1129,5 +1129,5 @@ void TREE_PROJECT_FRAME::FileWatcherReset()
 
 void KICAD_MANAGER_FRAME::OnChangeWatchedPaths( wxCommandEvent& aEvent )
 {
-    m_LeftWin->FileWatcherReset();
+    m_leftWin->FileWatcherReset();
 }

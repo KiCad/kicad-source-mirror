@@ -51,6 +51,9 @@ public:
 
     int Refresh( const TOOL_EVENT& aEvent );
 
+    int ShowPlayer( const TOOL_EVENT& aEvent );
+    int Execute( const TOOL_EVENT& aEvent );
+
     ///> Sets up handlers for various events.
     void setTransitions() override;
 

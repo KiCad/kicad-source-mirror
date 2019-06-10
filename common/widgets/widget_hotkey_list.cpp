@@ -249,7 +249,7 @@ public:
             return true;
 
         // Match in the (translated) filter string
-        const auto normedInfo = wxGetTranslation( aHotkey.m_Parent->GetMenuItem() ).Upper();
+        const auto normedInfo = wxGetTranslation( aHotkey.m_Parent->GetLabel() ).Upper();
         if( normedInfo.Contains( m_normalised_filter_str ) )
             return true;
 
@@ -302,7 +302,7 @@ void WIDGET_HOTKEY_LIST::UpdateFromClientData()
         if( hkdata )
         {
             const auto& changed_hk = hkdata->GetChangedHotkey();
-            wxString    label = changed_hk.m_Parent->GetMenuItem();
+            wxString    label = changed_hk.m_Parent->GetLabel();
             wxString    key_text = KeyNameFromKeyCode( changed_hk.m_EditKeycode );
 
             if( label.IsEmpty() )
@@ -460,7 +460,7 @@ bool WIDGET_HOTKEY_LIST::ResolveKeyConflicts( TOOL_ACTION* aAction, long aKey )
     wxString msg = wxString::Format( _( "\"%s\" is already assigned to \"%s\" in section \"%s\". "
                                         "Are you sure you want to change its assignment?" ),
                                      KeyNameFromKeyCode( aKey ),
-                                     conflictingAction->GetMenuItem(),
+                                     conflictingAction->GetLabel(),
                                      HOTKEY_STORE::GetSectionName( conflictingAction ) );
 
     wxMessageDialog dlg( GetParent(), msg, _( "Confirm change" ), wxYES_NO | wxNO_DEFAULT );

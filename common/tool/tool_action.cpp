@@ -26,22 +26,24 @@
 #include <tool/action_manager.h>
 
 #include <algorithm>
+#include <hotkeys_basic.h>
 
 TOOL_ACTION::TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope,
                           int aDefaultHotKey, const std::string& aLegacyHotKeyName,
-                          const wxString& aMenuText, const wxString& aTooltip,
+                          const wxString& aLabel, const wxString& aTooltip,
                           const BITMAP_OPAQUE* aIcon, TOOL_ACTION_FLAGS aFlags, void* aParam ) :
         m_name( aName ),
         m_scope( aScope ),
         m_defaultHotKey( aDefaultHotKey ),
         m_legacyName( aLegacyHotKeyName ),
-        m_menuText( aMenuText ),
+        m_label( aLabel ),
         m_tooltip( aTooltip ),
         m_icon( aIcon ),
         m_id( -1 ),
         m_flags( aFlags ),
         m_param( aParam )
 {
+    SetHotKey( aDefaultHotKey );
     ACTION_MANAGER::GetActionList().push_back( this );
 }
 
@@ -49,6 +51,13 @@ TOOL_ACTION::TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope,
 TOOL_ACTION::~TOOL_ACTION()
 {
     ACTION_MANAGER::GetActionList().remove( this );
+}
+
+
+void TOOL_ACTION::SetHotKey( int aKeycode )
+{
+    m_hotKey = aKeycode;
+    m_menuItem = AddHotkeyName( m_label, m_hotKey, IS_HOTKEY );
 }
 
 

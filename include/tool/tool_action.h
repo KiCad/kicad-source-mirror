@@ -84,7 +84,7 @@ public:
      * Returns the hotkey keycode which initiates the action.
      */
     int GetHotKey() const { return m_hotKey; }
-    void SetHotKey( int aKeycode ) { m_hotKey = aKeycode; }
+    void SetHotKey( int aKeycode );
     
     /**
      * Function GetId()
@@ -110,8 +110,9 @@ public:
             return TOOL_EVENT( TC_COMMAND, TA_ACTION, m_name, m_scope, m_param );
     }
 
-    const wxString& GetMenuItem() const { return m_menuText; }
-    void SetMenuItem( const wxString& aItem ) { m_menuText = aItem; }
+    const wxString& GetLabel() const { return m_label; }
+    
+    const wxString& GetMenuItem() const { return m_menuItem; }
 
     const wxString& GetDescription() const { return m_tooltip; }
     void SetDescription( const wxString& aDescription ) { m_tooltip = aDescription; }
@@ -160,7 +161,8 @@ private:
     int                  m_hotKey;         // The curret hotkey (post-user-settings-application)
     const std::string    m_legacyName;     // Name for reading legacy hotkey settings
 
-    wxString             m_menuText;
+    const wxString       m_label;
+    wxString             m_menuItem;       // Label + hotkey text for menus
     wxString             m_tooltip;
     const BITMAP_OPAQUE* m_icon;           // Icon for the menu entry
 

@@ -86,16 +86,6 @@ public:
     void OnArchiveFiles( wxCommandEvent& event );
     void OnUnarchiveFiles( wxCommandEvent& event );
 
-    void OnRunEeschema( wxCommandEvent& event );
-    void OnRunSchLibEditor( wxCommandEvent& event );
-    void OnRunPcbNew( wxCommandEvent& event );
-    void OnRunPcbFpEditor( wxCommandEvent& event );
-    void OnRunGerbview( wxCommandEvent& event );
-    void OnRunBitmapConverter( wxCommandEvent& event );
-    void OnRunPcbCalculator( wxCommandEvent& event );
-    void OnRunPageLayoutEditor( wxCommandEvent& event );
-
-    void OnOpenTextEditor( wxCommandEvent& event );
     void OnOpenFileInTextEditor( wxCommandEvent& event );
     void OnBrowseInFileExplorer( wxCommandEvent& event );
 
@@ -104,6 +94,7 @@ public:
 
     void ReCreateMenuBar() override;
     void RecreateBaseHToolbar();
+    void RecreateLauncher();
 
     /**
      *  Open dialog to import Eagle schematic and board files.
@@ -151,30 +142,6 @@ public:
     void CommonSettingsChanged() override;
 
     /**
-     * Open another KiCad application and logs a message.
-     *
-     * @param frame = owner frame.
-     * @param execFile = name of the executable file.
-     * @param param = parameters to be passed to the executable.
-     */
-    void Execute( wxWindow* frame, const wxString& execFile,
-                  wxString param = wxEmptyString );
-
-    class TERMINATE_HANDLER : public wxProcess
-    {
-    private:
-        wxString m_appName;
-
-    public:
-        TERMINATE_HANDLER( const wxString& appName ) :
-            m_appName( appName )
-        {
-        }
-
-        void OnTerminate( int pid, int status ) override;
-    };
-
-    /**
      * Called by sending a event with id = ID_INIT_WATCHED_PATHS
      * rebuild the list of wahtched paths
      */
@@ -192,62 +159,27 @@ public:
 
     void ReCreateTreePrj();
 
-    /// Call this only for a PCB associated with the current project.  That is,
-    /// it must have the same path and name as the project *.pro file.
-    void RunPcbNew( const wxString& aProjectBoardFileName );
-
-    /// Call this only for a SCH associated with the current project.  That is,
-    /// it must have the same path and name as the project *.pro file.
-    void RunEeschema( const wxString& aProjectSchematicFileName );
-
     DECLARE_EVENT_TABLE()
 
 private:
-    wxConfigBase*       config() override;
+    wxConfigBase* config() override;
 
     const SEARCH_STACK& sys_search() override;
 
     wxString help_name() override;
 
-    TREE_PROJECT_FRAME* m_LeftWin;
-    LAUNCHER_PANEL*     m_Launcher;
-    wxTextCtrl*         m_MessagesBox;
-    ACTION_TOOLBAR*     m_mainToolBar;
-
-    int m_leftWinWidth;
-
     void language_change( wxCommandEvent& event );
 
-    bool m_active_project;
+private:
+    TREE_PROJECT_FRAME* m_leftWin;
+    ACTION_TOOLBAR*     m_launcher;
+    wxTextCtrl*         m_messagesBox;
+    ACTION_TOOLBAR*     m_mainToolBar;
+
+    int                 m_leftWinWidth;
+    bool                m_active_project;
 };
 
-
-/** class LAUNCHER_PANEL
- */
-class LAUNCHER_PANEL : public wxPanel
-{
-private:
-    wxBoxSizer* m_buttonSizer;
-
-    int m_height = 0;
-    int m_width  = 0;
-
-public: LAUNCHER_PANEL( wxWindow* parent );
-    ~LAUNCHER_PANEL() { };
-
-    int GetPanelHeight() const;
-    int GetPanelWidth() const;
-
-    /**
-     * Function CreateCommandToolbar
-     * creates the main tool bar buttons (fast launch buttons)
-     */
-    void ReCreateCommandToolbar();
-
-private:
-
-    void AddButton( wxWindowID aId, const wxBitmap& aBitmap, const wxString& aToolTip );
-};
 
 // The C++ project manager includes a single PROJECT in its link image.
 class PROJECT;

@@ -35,112 +35,6 @@
 #include "kicad_id.h"
 
 
-// Menubar and toolbar event table
-BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
-    // Window events
-    EVT_SIZE( KICAD_MANAGER_FRAME::OnSize )
-    EVT_CLOSE( KICAD_MANAGER_FRAME::OnCloseWindow )
-
-    // Menu events
-    EVT_MENU( wxID_EXIT, KICAD_MANAGER_FRAME::OnExit )
-    EVT_MENU( ID_TO_TEXT_EDITOR, KICAD_MANAGER_FRAME::OnOpenTextEditor )
-    EVT_MENU( ID_BROWSE_AN_SELECT_FILE, KICAD_MANAGER_FRAME::OnOpenFileInTextEditor )
-    EVT_MENU( ID_BROWSE_IN_FILE_EXPLORER, KICAD_MANAGER_FRAME::OnBrowseInFileExplorer )
-    EVT_MENU( ID_SAVE_AND_ZIP_FILES, KICAD_MANAGER_FRAME::OnArchiveFiles )
-    EVT_MENU( ID_READ_ZIP_ARCHIVE, KICAD_MANAGER_FRAME::OnUnarchiveFiles )
-    EVT_MENU( ID_IMPORT_EAGLE_PROJECT, KICAD_MANAGER_FRAME::OnImportEagleFiles )
-
-    // Range menu events
-    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
-                    KICAD_MANAGER_FRAME::language_change )
-
-    EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, KICAD_MANAGER_FRAME::OnFileHistory )
-
-    // Special functions
-    EVT_MENU( ID_INIT_WATCHED_PATHS, KICAD_MANAGER_FRAME::OnChangeWatchedPaths )
-
-    // Button events (in command frame), and menu events equivalent to buttons
-    EVT_BUTTON( ID_TO_SCH, KICAD_MANAGER_FRAME::OnRunEeschema )
-    EVT_MENU( ID_TO_SCH, KICAD_MANAGER_FRAME::OnRunEeschema )
-
-    EVT_BUTTON( ID_TO_SCH_LIB_EDITOR, KICAD_MANAGER_FRAME::OnRunSchLibEditor )
-    EVT_MENU( ID_TO_SCH_LIB_EDITOR, KICAD_MANAGER_FRAME::OnRunSchLibEditor )
-
-    EVT_BUTTON( ID_TO_PCB, KICAD_MANAGER_FRAME::OnRunPcbNew )
-    EVT_MENU( ID_TO_PCB, KICAD_MANAGER_FRAME::OnRunPcbNew )
-
-    EVT_BUTTON( ID_TO_PCB_FP_EDITOR, KICAD_MANAGER_FRAME::OnRunPcbFpEditor )
-    EVT_MENU( ID_TO_PCB_FP_EDITOR, KICAD_MANAGER_FRAME::OnRunPcbFpEditor )
-
-    EVT_BUTTON( ID_TO_GERBVIEW, KICAD_MANAGER_FRAME::OnRunGerbview )
-    EVT_MENU( ID_TO_GERBVIEW, KICAD_MANAGER_FRAME::OnRunGerbview )
-
-    EVT_BUTTON( ID_TO_BITMAP_CONVERTER, KICAD_MANAGER_FRAME::OnRunBitmapConverter )
-    EVT_MENU( ID_TO_BITMAP_CONVERTER, KICAD_MANAGER_FRAME::OnRunBitmapConverter )
-
-    EVT_BUTTON( ID_TO_PCB_CALCULATOR, KICAD_MANAGER_FRAME::OnRunPcbCalculator )
-    EVT_MENU( ID_TO_PCB_CALCULATOR, KICAD_MANAGER_FRAME::OnRunPcbCalculator )
-
-    EVT_BUTTON( ID_TO_PL_EDITOR, KICAD_MANAGER_FRAME::OnRunPageLayoutEditor )
-    EVT_MENU( ID_TO_PL_EDITOR, KICAD_MANAGER_FRAME::OnRunPageLayoutEditor )
-
-END_EVENT_TABLE()
-
-enum hotkey_id_command
-{
-    HK_RUN_EESCHEMA = 0,
-    HK_RUN_LIBEDIT,
-    HK_RUN_PCBNEW,
-    HK_RUN_FPEDITOR,
-    HK_RUN_GERBVIEW,
-    HK_RUN_BM2COMPONENT,
-    HK_RUN_PCBCALCULATOR,
-    HK_RUN_PLEDITOR
-};
-
-/////////////  Hotkeys management   ///////////////////////////////////////
-
-// Remark: the hotkey message info is used as keyword in hotkey config files and
-// as comments in help windows, therefore translated only when displayed
-// they are marked _HKI to be extracted by translation tools
-// See hotkeys_basic.h for more info
-
-// hotkeys command:
-static EDA_HOTKEY HkRunEeschema( _HKI( "Run Eeschema" ), HK_RUN_EESCHEMA, 'E' + GR_KB_CTRL, 0 );
-static EDA_HOTKEY HkRunLibedit( _HKI( "Run LibEdit" ), HK_RUN_LIBEDIT, 'L' + GR_KB_CTRL, 0 );
-static EDA_HOTKEY HkRunPcbnew( _HKI( "Run Pcbnew" ), HK_RUN_PCBNEW, 'P' + GR_KB_CTRL, 0 );
-static EDA_HOTKEY HkRunModedit( _HKI( "Run FpEditor" ), HK_RUN_FPEDITOR, 'F' + GR_KB_CTRL, 0 );
-static EDA_HOTKEY HkRunGerbview( _HKI( "Run Gerbview" ), HK_RUN_GERBVIEW, 'G' + GR_KB_CTRL, 0 );
-static EDA_HOTKEY HkRunBm2Cmp( _HKI( "Run Bitmap2Component" ),
-                               HK_RUN_BM2COMPONENT, 'B' + GR_KB_CTRL, 0 );
-static EDA_HOTKEY HkRunPcbCalc( _HKI( "Run PcbCalculator" ),
-                                HK_RUN_PCBCALCULATOR, 'A' + GR_KB_CTRL, 0 );
-static EDA_HOTKEY HkRunPleditor( _HKI( "Run PlEditor" ), HK_RUN_PLEDITOR, 'Y' + GR_KB_CTRL, 0 );
-
-// List of hotkey descriptors
-EDA_HOTKEY* common_Hotkey_List[] =
-{
-    &HkRunEeschema, &HkRunLibedit,
-    &HkRunPcbnew,   &HkRunModedit,  &HkRunGerbview,
-    &HkRunBm2Cmp,   &HkRunPcbCalc,  &HkRunPleditor,
-    NULL
-};
-
-// list of sections and corresponding hotkey list for Kicad
-// (used to create an hotkey config file, and edit hotkeys )
-// here we have only one section.
-static wxString sectionTitle( _HKI( "Kicad Manager Hotkeys" ) );
-
-struct EDA_HOTKEY_CONFIG kicad_Manager_Hotkeys_Descr[] = {
-    { &g_CommonSectionTag,      common_Hotkey_List,         &sectionTitle      },
-    { nullptr,                  nullptr,                    nullptr               }
-};
-/////////////  End hotkeys management   ///////////////////////////////////////
-
-
-/**
- * @brief (Re)Create the menubar
- */
 void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 {
     KICAD_MANAGER_CONTROL* controlTool = m_toolManager->GetTool<KICAD_MANAGER_CONTROL>();
@@ -198,20 +92,14 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     //-- View menu -----------------------------------------------------------
     //
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, controlTool );
-    viewMenu->AddItem( ACTIONS::zoomRedraw,             SELECTION_CONDITIONS::ShowAlways );
+    
+    viewMenu->AddItem( ACTIONS::zoomRedraw,                    SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
-    viewMenu->AddItem( ID_TO_TEXT_EDITOR,
-                       _( "Open Text Editor" ), _( "Launch preferred text editor" ),
-                       editor_xpm,                      SELECTION_CONDITIONS::ShowAlways );
-
-    viewMenu->AddItem( ID_BROWSE_AN_SELECT_FILE,
-                       _( "Open Local File..." ), _( "Edit local file" ),
-                       browse_files_xpm,                SELECTION_CONDITIONS::ShowAlways );
-
+    viewMenu->AddItem( KICAD_MANAGER_ACTIONS::openTextEditor,  SELECTION_CONDITIONS::ShowAlways );
     viewMenu->AddItem( ID_BROWSE_IN_FILE_EXPLORER,
                        _( "Browse Project Files" ), _( "Open project directory in file browser" ),
-                       directory_browser_xpm,           SELECTION_CONDITIONS::ShowAlways );
+                       directory_browser_xpm,                  SELECTION_CONDITIONS::ShowAlways );
 
 #ifdef __APPLE__
     viewMenu->AddSeparator();
@@ -221,42 +109,25 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     //-- Tools menu -----------------------------------------------
     //
-    wxMenu* toolsMenu = new wxMenu;
-    wxString msg;
-    msg = AddHotkeyName( _( "Edit Schematic" ), kicad_Manager_Hotkeys_Descr, HK_RUN_EESCHEMA );
-    AddMenuItem( toolsMenu, ID_TO_SCH, msg, KiBitmap( eeschema_xpm ) );
+    CONDITIONAL_MENU* toolsMenu = new CONDITIONAL_MENU( false, controlTool );
 
-    msg = AddHotkeyName( _( "Edit Schematic Symbols" ),
-                         kicad_Manager_Hotkeys_Descr, HK_RUN_LIBEDIT );
-    AddMenuItem( toolsMenu, ID_TO_SCH_LIB_EDITOR, msg, KiBitmap( libedit_xpm ) );
+    toolsMenu->AddItem( KICAD_MANAGER_ACTIONS::editSchematic,  SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( KICAD_MANAGER_ACTIONS::editSymbols,    SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( KICAD_MANAGER_ACTIONS::editPCB,        SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( KICAD_MANAGER_ACTIONS::editFootprints, SELECTION_CONDITIONS::ShowAlways );
 
-    msg = AddHotkeyName( _( "Edit PCB" ),
-                         kicad_Manager_Hotkeys_Descr, HK_RUN_PCBNEW );
-    AddMenuItem( toolsMenu, ID_TO_PCB, msg, KiBitmap( pcbnew_xpm ) );
+    toolsMenu->AddSeparator();
+    toolsMenu->AddItem( KICAD_MANAGER_ACTIONS::viewGerbers,    SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( KICAD_MANAGER_ACTIONS::convertImage,   SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( KICAD_MANAGER_ACTIONS::showCalculator, SELECTION_CONDITIONS::ShowAlways );
+    toolsMenu->AddItem( KICAD_MANAGER_ACTIONS::editWorksheet,  SELECTION_CONDITIONS::ShowAlways );
 
-    msg = AddHotkeyName( _( "Edit PCB Footprints" ),
-                         kicad_Manager_Hotkeys_Descr, HK_RUN_FPEDITOR );
-    AddMenuItem( toolsMenu, ID_TO_PCB_FP_EDITOR, msg, KiBitmap( module_editor_xpm ) );
-
-    msg = AddHotkeyName( _( "View Gerber Files" ),
-                         kicad_Manager_Hotkeys_Descr, HK_RUN_GERBVIEW );
-    AddMenuItem( toolsMenu, ID_TO_GERBVIEW, msg, KiBitmap( icon_gerbview_small_xpm ) );
-
-    msg = AddHotkeyName( _( "Convert Image" ),
-                         kicad_Manager_Hotkeys_Descr, HK_RUN_BM2COMPONENT );
-    AddMenuItem( toolsMenu, ID_TO_BITMAP_CONVERTER, msg,
-                 _( "Convert bitmap images to schematic or PCB components." ),
-                 KiBitmap( bitmap2component_xpm ) );
-
-    msg = AddHotkeyName( _( "Calculator Tools" ), kicad_Manager_Hotkeys_Descr, HK_RUN_PCBCALCULATOR );
-    AddMenuItem( toolsMenu, ID_TO_PCB_CALCULATOR, msg,
-                 _( "Run component calculations, track width calculations, etc." ),
-                 KiBitmap( calculator_xpm ) );
-
-    msg = AddHotkeyName( _( "Edit Worksheet" ), kicad_Manager_Hotkeys_Descr, HK_RUN_PLEDITOR );
-    AddMenuItem( toolsMenu, ID_TO_PL_EDITOR, msg,
-                 _( "Edit worksheet graphics and text" ),
-                 KiBitmap( pagelayout_load_xpm ) );
+    toolsMenu->AddSeparator();
+    toolsMenu->AddItem( ID_EDIT_LOCAL_FILE_IN_TEXT_EDITOR,
+                       _( "Edit Local File..." ), _( "Edit local file in text editor" ),
+                       browse_files_xpm,                       SELECTION_CONDITIONS::ShowAlways );
+    
+    toolsMenu->Resolve();
 
     //-- Preferences menu -----------------------------------------------
     //
@@ -272,6 +143,8 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     prefsMenu->AddSeparator();
     Pgm().AddMenuLanguageList( prefsMenu );
+    
+    prefsMenu->Resolve();
 
     //-- Menubar -------------------------------------------------------------
     //
@@ -324,13 +197,39 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
 }
 
 
+void KICAD_MANAGER_FRAME::RecreateLauncher()
+{
+    if( m_launcher )
+        m_launcher->Clear();
+    else
+        m_launcher = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                         KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+    
+    m_launcher->Add( KICAD_MANAGER_ACTIONS::editSchematic );
+    m_launcher->Add( KICAD_MANAGER_ACTIONS::editSymbols );
+
+    KiScaledSeparator( m_launcher, this );
+    m_launcher->Add( KICAD_MANAGER_ACTIONS::editPCB );
+    m_launcher->Add( KICAD_MANAGER_ACTIONS::editFootprints );
+    
+    KiScaledSeparator( m_launcher, this );
+    m_launcher->Add( KICAD_MANAGER_ACTIONS::viewGerbers );
+    m_launcher->Add( KICAD_MANAGER_ACTIONS::convertImage );
+    m_launcher->Add( KICAD_MANAGER_ACTIONS::showCalculator );
+    m_launcher->Add( KICAD_MANAGER_ACTIONS::editWorksheet );
+
+    // Create mlauncher
+    m_launcher->Realize();
+}
+
+
 void KICAD_MANAGER_FRAME::SyncMenusAndToolbars()
 {
-    m_mainToolBar->ToggleTool( ID_TO_SCH,            m_active_project );
-    m_mainToolBar->ToggleTool( ID_TO_SCH_LIB_EDITOR, m_active_project );
-    m_mainToolBar->ToggleTool( ID_TO_PCB,            m_active_project );
-    m_mainToolBar->ToggleTool( ID_TO_PCB_FP_EDITOR,  m_active_project );
-    m_mainToolBar->Refresh();
+    m_launcher->Toggle( KICAD_MANAGER_ACTIONS::editSchematic,  m_active_project );
+    m_launcher->Toggle( KICAD_MANAGER_ACTIONS::editSymbols,    m_active_project );
+    m_launcher->Toggle( KICAD_MANAGER_ACTIONS::editPCB,        m_active_project );
+    m_launcher->Toggle( KICAD_MANAGER_ACTIONS::editFootprints, m_active_project );
+    m_launcher->Refresh();
 }
 
 

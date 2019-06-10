@@ -34,6 +34,8 @@
 #include <gestfich.h>
 #include <executable_names.h>
 #include <kiway.h>
+#include <tool/tool_manager.h>
+#include <tools/kicad_manager_actions.h>
 #include "treeprojectfiles.h"
 #include "pgm_kicad.h"
 #include "tree_project_frame.h"
@@ -104,10 +106,9 @@ bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
 
     if( check && !ext.IsEmpty() && !reg.Matches( newFile ) )
     {
-        wxMessageDialog dialog( m_parent, _(
-            "Changing file extension will change file type.\n Do you want to continue ?" ),
-            _( "Rename File" ),
-            wxYES_NO | wxICON_QUESTION );
+        wxMessageDialog dialog( m_parent, _( "Changing file extension will change file type.\n"
+                                             "Do you want to continue ?" ),
+                                _( "Rename File" ), wxYES_NO | wxICON_QUESTION );
 
         if( wxID_YES != dialog.ShowModal() )
             return false;
@@ -115,8 +116,8 @@ bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
 
     if( !wxRenameFile( GetFileName(), newFile, false ) )
     {
-        wxMessageDialog( m_parent, _( "Unable to rename file ... " ),
-                         _( "Permission error ?" ), wxICON_ERROR | wxOK );
+        wxMessageDialog( m_parent, _( "Unable to rename file ... " ), _( "Permission error?" ), 
+                         wxICON_ERROR | wxOK );
         return false;
     }
 
@@ -128,13 +129,8 @@ bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
 
 bool TREEPROJECT_ITEM::Delete( bool check )
 {
-    wxString    msg = wxString::Format( _(
-                    "Do you really want to delete \"%s\"" ),
-                    GetChars( GetFileName() )
-                    );
-
-    wxMessageDialog dialog( m_parent, msg,
-                            _( "Delete File" ), wxYES_NO | wxICON_QUESTION );
+    wxString msg = wxString::Format( _( "Are you sure you want to delete '%s'?" ), GetFileName() );
+    wxMessageDialog dialog( m_parent, msg, _( "Delete File" ), wxYES_NO | wxICON_QUESTION );
 
     if( !check || wxID_YES == dialog.ShowModal() )
     {
@@ -166,11 +162,13 @@ bool TREEPROJECT_ITEM::Delete( bool check )
 
 void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
 {
-    wxString        sep = wxFileName().GetPathSeparator();
-    wxString        fullFileName = GetFileName();
-    wxTreeItemId    id = GetId();
+    wxString             sep = wxFileName::GetPathSeparator();
+    wxString             fullFileName = GetFileName();
+    wxTreeItemId         id = GetId();
+    std::string          packet;
 
     KICAD_MANAGER_FRAME* frame = aTreePrjFrame->m_Parent;
+    TOOL_MANAGER*        toolMgr = frame->GetToolManager();
     KIWAY&               kiway = frame->Kiway();
 
     switch( GetType() )
@@ -188,18 +186,12 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
     case TREE_SCHEMA:
         if( fullFileName == frame->SchFileName() )
         {
-            // the project's schematic is opened using the *.kiface as part of this process.
-            // We do not call frame->RunEeschema( fullFileName ),
-            // because after the double click, for some reason,
-            // the tree project frame is brought to the foreground after Eeschema is called from here.
-            // Instead, we post an event, equivalent to click on the eeschema tool in command frame
-            wxCommandEvent evt( wxEVT_COMMAND_TOOL_CLICKED, ID_TO_SCH );
-            wxPostEvent( frame, evt );
+            toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editSchematic, true );
         }
         else
         {
             // schematics not part of the project are opened in a separate process.
-            frame->Execute( m_parent, EESCHEMA_EXE, fullFileName );
+            toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editOtherSch, true, &fullFileName );
         }
         break;
 
@@ -207,18 +199,12 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
     case TREE_SEXP_PCB:
         if( fullFileName == frame->PcbFileName() || fullFileName == frame->PcbLegacyFileName() )
         {
-            // the project's BOARD is opened using the *.kiface as part of this process.
-            // We do not call frame->RunPcbNew( fullFileName ),
-            // because after the double click, for some reason,
-            // the tree project frame is brought to the foreground after PcbNew is called from here.
-            // Instead, we post an event, equivalent to simple click on the pcb editor tool in command frame
-            wxCommandEvent evt( wxEVT_COMMAND_TOOL_CLICKED, ID_TO_PCB );
-            wxPostEvent( frame, evt );
+            toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editPCB, true );
         }
         else
         {
             // boards not part of the project are opened in a separate process.
-            frame->Execute( m_parent, PCBNEW_EXE, fullFileName );
+            toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editOtherPCB, true, &fullFileName );
         }
         break;
 
@@ -226,7 +212,7 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
     case TREE_DRILL:
     case TREE_DRILL_NC:
     case TREE_DRILL_XNC:
-        frame->Execute( m_parent, GERBVIEW_EXE, fullFileName );
+        toolMgr->RunAction( KICAD_MANAGER_ACTIONS::viewGerbers, true, &fullFileName );
         break;
 
     case TREE_HTML:
@@ -240,36 +226,23 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
     case TREE_NET:
     case TREE_TXT:
     case TREE_REPORT:
-        {
-            wxString editorname = Pgm().GetEditorName();
-
-            if( !editorname.IsEmpty() )
-                frame->Execute( m_parent, editorname, fullFileName );
-        }
+        toolMgr->RunAction( KICAD_MANAGER_ACTIONS::openTextEditor, true, &fullFileName );
         break;
 
     case TREE_PAGE_LAYOUT_DESCR:
-        frame->Execute( m_parent, PL_EDITOR_EXE, fullFileName );
+        toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editWorksheet, true, &fullFileName );
         break;
 
     case TREE_FOOTPRINT_FILE:
-        {
-            wxCommandEvent dummy;
-            frame->OnRunPcbFpEditor( dummy );
-
-            std::string packet = fullFileName.ToStdString();
-            kiway.ExpressMail( FRAME_PCB_MODULE_EDITOR, MAIL_FP_EDIT, packet );
-        }
+        toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editFootprints, true );
+        packet = fullFileName.ToStdString();
+        kiway.ExpressMail( FRAME_PCB_MODULE_EDITOR, MAIL_FP_EDIT, packet );
         break;
 
     case TREE_SCHEMATIC_LIBFILE:
-        {
-            wxCommandEvent dummy;
-            frame->OnRunSchLibEditor( dummy );
-
-            std::string packet = fullFileName.ToStdString();
-            kiway.ExpressMail( FRAME_SCH_LIB_EDITOR, MAIL_LIB_EDIT, packet );
-        }
+        toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editSymbols, true );
+        packet = fullFileName.ToStdString();
+        kiway.ExpressMail( FRAME_SCH_LIB_EDITOR, MAIL_LIB_EDIT, packet );
         break;
 
     default:

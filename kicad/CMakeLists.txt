@@ -14,7 +14,6 @@ include_directories(
 
 
 set( KICAD_SRCS
-    commandframe.cpp
     dialogs/dialog_template_selector_base.cpp
     dialogs/dialog_template_selector.cpp
     files-io.cpp

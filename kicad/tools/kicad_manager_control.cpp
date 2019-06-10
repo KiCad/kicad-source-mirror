@@ -17,17 +17,20 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <kicad_manager_frame.h>
-#include <bitmaps.h>
+#include <gestfich.h>
 #include <wildcards_and_files_ext.h>
+#include <executable_names.h>
+#include <pgm_base.h>
+#include <kiway.h>
+#include <kicad_manager_frame.h>
+#include <confirm.h>
+#include <bitmaps.h>
 #include <tool/selection.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <tools/kicad_manager_actions.h>
 #include <tools/kicad_manager_control.h>
-#include <confirm.h>
 #include <dialogs/dialog_template_selector.h>
-#include <pgm_base.h>
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::newProject( "kicad.Control.newProject",
         AS_GLOBAL, 
@@ -46,6 +49,66 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::openProject( "kicad.Control.openProject",
         MD_CTRL + 'O', LEGACY_HK_NAME( "Open Project" ),
         _( "Open Project..." ), _( "Open an existing project" ),
         open_project_xpm );
+
+TOOL_ACTION KICAD_MANAGER_ACTIONS::editSchematic( "kicad.Control.editSchematic",
+        AS_GLOBAL,
+        MD_CTRL + 'E', LEGACY_HK_NAME( "Run Eeschema" ),
+        _( "Edit Schematic" ), "",
+        icon_eeschema_xpm );
+
+TOOL_ACTION KICAD_MANAGER_ACTIONS::editSymbols( "kicad.Control.editSymbols",
+        AS_GLOBAL,
+        MD_CTRL + 'L', LEGACY_HK_NAME( "Run LibEdit" ),
+        _( "Edit Schematic Symbols" ), "",
+        icon_libedit_xpm );
+
+TOOL_ACTION KICAD_MANAGER_ACTIONS::editPCB( "kicad.Control.editPCB",
+        AS_GLOBAL,
+        MD_CTRL + 'P', LEGACY_HK_NAME( "Run Pcbnew" ),
+        _( "Edit PCB" ), "",
+        icon_pcbnew_xpm );
+
+TOOL_ACTION KICAD_MANAGER_ACTIONS::editFootprints( "kicad.Control.editFootprints",
+        AS_GLOBAL,
+        MD_CTRL + 'F', LEGACY_HK_NAME( "Run FpEditor" ),
+        _( "Edit PCB Footprints" ), "",
+        icon_modedit_xpm );
+
+TOOL_ACTION KICAD_MANAGER_ACTIONS::viewGerbers( "kicad.Control.viewGerbers",
+        AS_GLOBAL,
+        MD_CTRL + 'G', LEGACY_HK_NAME( "Run Gerbview" ),
+        _( "View Gerber Files" ), "",
+        icon_gerbview_xpm );
+
+TOOL_ACTION KICAD_MANAGER_ACTIONS::convertImage( "kicad.Control.convertImage",
+        AS_GLOBAL,
+        MD_CTRL + 'B', LEGACY_HK_NAME( "Run Bitmap2Component" ),
+        _( "Convert Image" ), _( "Convert bitmap images to schematic or PCB components" ),
+        icon_bitmap2component_xpm );
+
+TOOL_ACTION KICAD_MANAGER_ACTIONS::showCalculator( "kicad.Control.showCalculator",
+        AS_GLOBAL,
+        MD_CTRL + 'A', LEGACY_HK_NAME( "Run PcbCalculator" ),
+        _( "Calculator Tools" ), _( "Run component calculations, track width calculations, etc." ),
+        icon_pcbcalculator_xpm );
+
+TOOL_ACTION KICAD_MANAGER_ACTIONS::editWorksheet( "kicad.Control.editWorksheet",
+        AS_GLOBAL,
+        MD_CTRL + 'Y', LEGACY_HK_NAME( "Run PlEditor" ),
+        _( "Edit Worksheet" ), _( "Edit worksheet graphics and text" ),
+        icon_pagelayout_editor_xpm );
+
+TOOL_ACTION KICAD_MANAGER_ACTIONS::openTextEditor( "kicad.Control.openTextEditor",
+        AS_GLOBAL,
+        0, "",
+        _( "Open Text Editor" ), _( "Launch preferred text editor" ),
+        editor_xpm );
+
+TOOL_ACTION KICAD_MANAGER_ACTIONS::editOtherSch( "kicad.Control.editOtherSch",
+        AS_GLOBAL );
+
+TOOL_ACTION KICAD_MANAGER_ACTIONS::editOtherPCB( "kicad.Control.editOtherPCB",
+        AS_GLOBAL );
 
 
 ///> Helper widget to select whether a new directory should be created for a project
@@ -183,11 +246,10 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     if( ps->ShowModal() != wxID_OK )
         return -1;
 
-    if( ps->GetSelectedTemplate() == NULL )
+    if( !ps->GetSelectedTemplate() )
     {
         wxMessageBox( _( "No project template was selected.  Cannot generate new project." ),
-                      _( "Error" ),
-                      wxOK | wxICON_ERROR, m_frame );
+                      _( "Error" ), wxOK | wxICON_ERROR, m_frame );
 
         return -1;
     }
@@ -336,11 +398,188 @@ int KICAD_MANAGER_CONTROL::Refresh( const TOOL_EVENT& aEvent )
 }
 
 
+int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
+{
+    FRAME_T playerType = FRAME_SCH_VIEWER;
+
+    if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::editSchematic ) )
+        playerType = FRAME_SCH;
+    else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::editSymbols ) )
+        playerType = FRAME_SCH_LIB_EDITOR;
+    else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::editPCB ) )
+        playerType = FRAME_PCB;
+    else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::editFootprints ) )
+        playerType = FRAME_PCB_MODULE_EDITOR;
+    else
+        wxFAIL_MSG( "ShowPlayer(): unexpected request" );
+
+    KIWAY_PLAYER* player;
+
+    try
+    {
+        player = m_frame->Kiway().Player( playerType, true );
+    }
+    catch( const IO_ERROR& err )
+    {
+        wxMessageBox( _( "Application failed to load:\n" ) + err.What(), _( "KiCad Error" ),
+                      wxOK | wxICON_ERROR, m_frame );
+        return -1;
+    }
+
+    if( !player->IsVisible() )   // A hidden frame might not have the document loaded.
+    {
+        wxString filepath;
+        
+        if( playerType == FRAME_SCH )
+        {
+            filepath = m_frame->SchFileName();
+        }
+        else if( playerType == FRAME_PCB )
+        {
+            wxFileName  kicad_board( m_frame->PcbFileName() );
+            wxFileName  legacy_board( m_frame->PcbLegacyFileName() );
+            
+            if( !legacy_board.FileExists() || kicad_board.FileExists() )
+                filepath = kicad_board.GetFullPath();
+            else
+                filepath = legacy_board.GetFullPath();
+        }
+
+        if( !filepath.IsEmpty() )
+        {
+            if( !player->OpenProjectFiles( std::vector<wxString>( 1, filepath ) ) )
+                return -1;
+        }
+
+        player->Show( true );
+    }
+
+    // Needed on Windows, other platforms do not use it, but it creates no issue
+    if( player->IsIconized() )
+        player->Iconize( false );
+
+    player->Raise();
+
+    // Raising the window does not set the focus on Linux.  This should work on
+    // any platform.
+    if( wxWindow::FindFocus() != player )
+        player->SetFocus();
+
+    return 0;
+}
+
+
+class TERMINATE_HANDLER : public wxProcess
+{
+private:
+    wxString m_appName;
+
+public:
+    TERMINATE_HANDLER( const wxString& appName ) :
+            m_appName( appName )
+    {
+    }
+
+    void OnTerminate( int pid, int status ) override
+    {
+        wxString msg = wxString::Format( _( "%s closed [pid=%d]\n" ),
+                                         m_appName,
+                                         pid );
+
+        wxWindow* window = wxWindow::FindWindowByName( KICAD_MANAGER_FRAME_NAME );
+
+        if( window )    // Should always happen.
+        {
+            // Be sure the kicad frame manager is found
+            // This dynamic cast is not really mandatory, but ...
+            KICAD_MANAGER_FRAME* frame = dynamic_cast<KICAD_MANAGER_FRAME*>( window );
+
+            if( frame )
+                frame->PrintMsg( msg );
+        }
+
+        delete this;
+    }
+};
+
+
+int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
+{
+    wxString execFile;
+    wxString params;
+
+    if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::viewGerbers ) )
+        execFile = GERBVIEW_EXE;
+    else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::convertImage ) )
+        execFile = BITMAPCONVERTER_EXE;
+    else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::showCalculator ) )
+        execFile = PCB_CALCULATOR_EXE;
+    else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::editWorksheet ) )
+        execFile = PL_EDITOR_EXE;
+    else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::openTextEditor ) )
+        execFile = Pgm().GetEditorName();
+    else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::editOtherSch ) )
+        execFile = EESCHEMA_EXE;
+    else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::editOtherPCB ) )
+        execFile = PCBNEW_EXE;
+    else
+        wxFAIL_MSG( "Execute(): unexpected request" );
+
+    if( execFile.IsEmpty() )
+        return 0;
+
+    if( aEvent.Parameter<wxString*>() )
+        params = *aEvent.Parameter<wxString*>();
+    else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::viewGerbers ) )
+        params = m_frame->Prj().GetProjectPath();
+
+    if( !params.empty() )
+        AddDelimiterString( params );
+
+    TERMINATE_HANDLER* callback = new TERMINATE_HANDLER( execFile );
+
+    long pid = ExecuteFile( m_frame, execFile, params, callback );
+
+    if( pid > 0 )
+    {
+        wxString msg = wxString::Format( _( "%s %s opened [pid=%ld]\n" ),
+                                         execFile,
+                                         params,
+                                         pid );
+        m_frame->PrintMsg( msg );
+
+#ifdef __WXMAC__
+        msg.Printf( "osascript -e 'activate application \"%s\"' ", execFile );
+        system( msg.c_str() );
+#endif
+    }
+    else
+    {
+        delete callback;
+    }
+
+    return 0;
+}
+
+
 void KICAD_MANAGER_CONTROL::setTransitions()
 {
-    Go( &KICAD_MANAGER_CONTROL::NewProject,      KICAD_MANAGER_ACTIONS::newProject.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::NewProject,    KICAD_MANAGER_ACTIONS::newProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::NewFromTemplate, KICAD_MANAGER_ACTIONS::newFromTemplate.MakeEvent() );
-    Go( &KICAD_MANAGER_CONTROL::OpenProject,     KICAD_MANAGER_ACTIONS::openProject.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::OpenProject,   KICAD_MANAGER_ACTIONS::openProject.MakeEvent() );
 
-    Go( &KICAD_MANAGER_CONTROL::Refresh,         ACTIONS::zoomRedraw.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Refresh,       ACTIONS::zoomRedraw.MakeEvent() );
+
+    Go( &KICAD_MANAGER_CONTROL::ShowPlayer,    KICAD_MANAGER_ACTIONS::editSchematic.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::ShowPlayer,    KICAD_MANAGER_ACTIONS::editSymbols.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::ShowPlayer,    KICAD_MANAGER_ACTIONS::editPCB.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::ShowPlayer,    KICAD_MANAGER_ACTIONS::editFootprints.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Execute,       KICAD_MANAGER_ACTIONS::viewGerbers.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Execute,       KICAD_MANAGER_ACTIONS::convertImage.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Execute,       KICAD_MANAGER_ACTIONS::showCalculator.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Execute,       KICAD_MANAGER_ACTIONS::editWorksheet.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Execute,       KICAD_MANAGER_ACTIONS::openTextEditor.MakeEvent() );
+
+    Go( &KICAD_MANAGER_CONTROL::Execute,       KICAD_MANAGER_ACTIONS::editOtherSch.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::Execute,       KICAD_MANAGER_ACTIONS::editOtherPCB.MakeEvent() );
 }
