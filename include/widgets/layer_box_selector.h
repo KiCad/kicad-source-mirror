@@ -29,7 +29,6 @@
 #include <gal/color4d.h>
 #include <layers_id_colors_and_visibility.h>
 
-struct EDA_HOTKEY_CONFIG;
 using KIGFX::COLOR4D;
 
 /* Basic class to build a layer list.
@@ -40,10 +39,6 @@ class LAYER_SELECTOR
 {
 protected:
     bool m_layerhotkeys;
-
-public:
-    // Hotkey Info
-    struct EDA_HOTKEY_CONFIG* m_hotkeys;
 
 public:
     LAYER_SELECTOR();
@@ -71,10 +66,6 @@ public:
  */
 class LAYER_BOX_SELECTOR : public wxBitmapComboBox, public LAYER_SELECTOR
 {
-public:
-    // Hotkey Info
-    struct EDA_HOTKEY_CONFIG* m_hotkeys;
-
 public:
     LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
                         const wxPoint& pos = wxDefaultPosition,

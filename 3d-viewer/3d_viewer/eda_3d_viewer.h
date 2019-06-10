@@ -91,28 +91,9 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
     void NewDisplay( bool aForceImmediateRedraw = false );
 
     /**
-     *  Set the default file name (eg: to be suggested to a screenshot)
-     *  @param aFn = file name to assign
-     */
-    void SetDefaultFileName( const wxString& aFn )
-    {
-        m_defaultSaveScreenshotFileName = aFn;
-    }
-
-    /**
-     *  @return the default suggested file name
-     */
-    const wxFileName& GetDefaultFileName() const { return m_defaultSaveScreenshotFileName; }
-
-    /**
      *  @return current settings
      */
     CINFO3D_VISU &GetSettings() { return m_settings; }
-
-    /**
-     * Return a structure containing currently used hotkey mapping.
-     */
-    EDA_HOTKEY_CONFIG* GetHotkeyConfig() const;
 
     /**
      * Get a SFVEC3D from a wx colour dialog
@@ -183,12 +164,6 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
     void OnRenderEngineSelection( wxCommandEvent &event );
     void OnDisableRayTracing( wxCommandEvent& aEvent );
 
-    void OnUpdateUIEngine( wxUpdateUIEvent& aEvent );
-    void OnUpdateUIMaterial( wxUpdateUIEvent& aEvent );
-    void OnUpdateUIOpenGL( wxUpdateUIEvent& aEvent );
-    void OnUpdateUIRayTracing( wxUpdateUIEvent& aEvent );
-    void OnUpdateUIAxis( wxUpdateUIEvent& aEvent );
-
     void ProcessZoom( wxCommandEvent &event );
 
     void OnActivate( wxActivateEvent &event );
@@ -199,18 +174,10 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
 
     void CreateMenuBar();
 
-    void DisplayHotKeys()
-    {
-        // JEY TODO: need a toolManager....
-        DisplayHotkeyList( this, GetToolManager() );
-    }
-
     /**
      * Equivalent of EDA_DRAW_FRAME::ReCreateHToolbar
      */
     void ReCreateMainToolbar();
-
-    void SetToolbars();
 
     void SaveSettings( wxConfigBase *aCfg ) override;
 

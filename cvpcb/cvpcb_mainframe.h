@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file cvpcb_mainframe.h
- */
-
 #ifndef _CVPCB_MAINFRAME_H_
 #define _CVPCB_MAINFRAME_H_
 
@@ -135,8 +131,6 @@ public:
      * removes all component footprint associations already made
      */
     void             DelAssociations( wxCommandEvent& event );
-
-    void             OnConfigurePaths( wxCommandEvent& aEvent );
 
     /**
      * Function OnEditEquFilesList

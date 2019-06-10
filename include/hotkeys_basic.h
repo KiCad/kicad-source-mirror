@@ -44,49 +44,6 @@ class TOOL_MANAGER;
 class EDA_BASE_FRAME;
 
 
-/* Identifiers (tags) in key code configuration file (or section names)
- *  .m_SectionTag member of a EDA_HOTKEY_CONFIG
- */
-extern wxString g_CommonSectionTag;
-
-/**
- * class EDA_HOTKEY
- * is a class to handle hot key commands.  Hot keys have a default value.
- * This class allows the real key code changed by user(from a key code list file)
- */
-class EDA_HOTKEY
-{
-public:
-    int      m_KeyCode;      // Key code (ascii value for ascii keys or wxWidgets code for function key
-    wxString m_InfoMsg;      // info message.
-    int      m_Idcommand;    // internal id for the corresponding command (see hotkey_id_command list)
-
-public:
-    EDA_HOTKEY( const wxChar* infomsg, int idcommand, int keycode );
-};
-
-
-/**
- * Structure EDA_HOTKEY_CONFIG
- * contains the information required to save hot key information to a configuration file.
- * a Section name and the corresponding list of hotkeys (EDA_HOTKEY list)
- * hotkeys are grouped by section.
- * a section is a list of hotkey infos ( a EDA_HOTKEY list).
- * A full list of hotkeys can used one or many sections
- * for instance:
- *    the schematic editor uses a common section (zoom hotkeys list ..) and a specific section
- *    the library editor uses the same common section and a specific section
- * this feature avoid duplications and made hotkey file config easier to understand and edit
- */
-struct EDA_HOTKEY_CONFIG
-{
-public:
-    wxString*     m_SectionTag;   // The configuration file section name.
-    EDA_HOTKEY**  m_HK_InfoList;  // List of EDA_HOTKEY pointers
-    wxString*     m_Title;        // Title displayed in hotkey editor and used as comment in file
-};
-
-
 /**
  * Function KeyCodeFromKeyName
  * return the key code from its user-friendly key name (ie: "Ctrl+M")
@@ -100,15 +57,6 @@ int KeyCodeFromKeyName( const wxString& keyname );
  * @param aIsFound = a pointer to a bool to return true if found, or false
  */
 wxString KeyNameFromKeyCode( int aKeycode, bool * aIsFound = nullptr );
-
-/**
- * Function KeyNameFromCommandId
- * return the key name from the Command id value ( m_Idcommand member value)
- * @param aList = pointer to a EDA_HOTKEY list of commands
- * @param aCommandId = Command Id value
- * @return the key name in a wxString
- */
-wxString KeyNameFromCommandId( EDA_HOTKEY** aList, int aCommandId );
 
 /**
  * An helper enum for AddHotkeyName function
@@ -135,20 +83,6 @@ wxString AddHotkeyName(  const wxString& aText, int aHotKey,
                          HOTKEY_ACTION_TYPE aStyle = IS_HOTKEY);
 
 /**
- * Function AddHotkeyName
- * Add the key name from the Command id value ( m_Idcommand member value)
- * @param aText = a wxString. returns aText + key name
- * @param aDescrList = pointer to a EDA_HOTKEY_CONFIG DescrList of commands
- * @param aCommandId = Command Id value
- * @param aShortCutType The #HOTKEY_ACTION_TYPE of the shortcut.
- * @return a wxString (aTest + key name) if key found or aText without modification
- */
-wxString AddHotkeyName( const wxString&           aText,
-                        struct EDA_HOTKEY_CONFIG* aDescrList,
-                        int                       aCommandId,
-                        HOTKEY_ACTION_TYPE        aShortCutType = IS_HOTKEY );
-
-/**
  * Function DisplayHotkeyList
  * Displays the current hotkey list
  * @param aFrame = current active frame
@@ -169,7 +103,7 @@ void ReadHotKeyConfig( wxString aFileName, std::map<std::string, int>& aHotKeys 
  * Function WriteHotKeyConfig
  * Updates the hotkeys config file with the hotkeys from the given actions map.
  */
-int WriteHotKeyConfig( std::map<std::string, TOOL_ACTION*> aActionMap );
+int WriteHotKeyConfig( const std::map<std::string, TOOL_ACTION*>& aActionMap );
 
 /**
  * Function ReadLegacyHotkeyConfigFile

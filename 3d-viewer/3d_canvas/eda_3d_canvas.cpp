@@ -660,79 +660,42 @@ void EDA_3D_CANVAS::OnRightClick( wxMouseEvent &event )
 
     wxPoint     pos;
     wxMenu      PopUpMenu;
-    wxString msg;
 
     pos.x = event.GetX();
     pos.y = event.GetY();
 
-    msg = AddHotkeyName( _( "Zoom +" ), GetHotkeyConfig(),
-                         ID_POPUP_ZOOMIN );
     AddMenuItem( &PopUpMenu, ID_POPUP_ZOOMIN,
-                 msg, KiBitmap( zoom_in_xpm ) );
-
-
-    msg = AddHotkeyName( _( "Zoom -" ), GetHotkeyConfig(),
-                         ID_POPUP_ZOOMOUT );
+                 _( "Zoom +\tF1" ), KiBitmap( zoom_in_xpm ) );
     AddMenuItem( &PopUpMenu, ID_POPUP_ZOOMOUT,
-                 msg, KiBitmap( zoom_out_xpm ) );
+                 _( "Zoom -\tF2" ), KiBitmap( zoom_out_xpm ) );
 
     PopUpMenu.AppendSeparator();
-
-    msg = AddHotkeyName( _( "Top View" ), GetHotkeyConfig(),
-                         ID_POPUP_VIEW_ZPOS );
     AddMenuItem( &PopUpMenu, ID_POPUP_VIEW_ZPOS,
-                 msg, KiBitmap( axis3d_top_xpm ) );
-
-    msg = AddHotkeyName( _( "Bottom View" ), GetHotkeyConfig(),
-                         ID_POPUP_VIEW_ZNEG );
+                 _( "Top View\tZ" ), KiBitmap( axis3d_top_xpm ) );
     AddMenuItem( &PopUpMenu, ID_POPUP_VIEW_ZNEG,
-                 msg, KiBitmap( axis3d_bottom_xpm ) );
+                 _( "Bottom View\tShift+Z" ), KiBitmap( axis3d_bottom_xpm ) );
 
     PopUpMenu.AppendSeparator();
-
-    msg = AddHotkeyName( _( "Right View" ), GetHotkeyConfig(),
-                         ID_POPUP_VIEW_XPOS );
     AddMenuItem( &PopUpMenu, ID_POPUP_VIEW_XPOS,
-                 msg, KiBitmap( axis3d_right_xpm ) );
-
-    msg = AddHotkeyName( _( "Left View" ), GetHotkeyConfig(),
-                         ID_POPUP_VIEW_XNEG );
+                 _( "Right View\tX" ), KiBitmap( axis3d_right_xpm ) );
     AddMenuItem( &PopUpMenu, ID_POPUP_VIEW_XNEG,
-                 msg, KiBitmap( axis3d_left_xpm ) );
+                 _( "Left View\tShift+X" ), KiBitmap( axis3d_left_xpm ) );
 
     PopUpMenu.AppendSeparator();
-
-    msg = AddHotkeyName( _( "Front View" ), GetHotkeyConfig(),
-                         ID_POPUP_VIEW_YPOS );
     AddMenuItem( &PopUpMenu, ID_POPUP_VIEW_YPOS,
-                 msg, KiBitmap( axis3d_front_xpm ) );
-
-    msg = AddHotkeyName( _( "Back View" ), GetHotkeyConfig(),
-                         ID_POPUP_VIEW_YNEG );
+                 _( "Front View\tY" ), KiBitmap( axis3d_front_xpm ) );
     AddMenuItem( &PopUpMenu, ID_POPUP_VIEW_YNEG,
-                 msg, KiBitmap( axis3d_back_xpm ) );
+                 _( "Back View\tShift+Y" ), KiBitmap( axis3d_back_xpm ) );
 
     PopUpMenu.AppendSeparator();
-
-    msg = AddHotkeyName( _( "Move Left <-" ), GetHotkeyConfig(),
-                         ID_POPUP_MOVE3D_LEFT );
     AddMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_LEFT,
-                 msg, KiBitmap( left_xpm ) );
-
-    msg = AddHotkeyName( _( "Move Right ->" ), GetHotkeyConfig(),
-                         ID_POPUP_MOVE3D_RIGHT );
+                 _( "Move Left <-\tLeft" ), KiBitmap( left_xpm ) );
     AddMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_RIGHT,
-                 msg, KiBitmap( right_xpm ) );
-
-    msg = AddHotkeyName( _( "Move Up ^" ), GetHotkeyConfig(),
-                         ID_POPUP_MOVE3D_UP );
+                 _( "Move Right ->\tRight" ), KiBitmap( right_xpm ) );
     AddMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_UP,
-                 msg, KiBitmap( up_xpm ) );
-
-    msg = AddHotkeyName( _( "Move Down" ), GetHotkeyConfig(),
-                         ID_POPUP_MOVE3D_DOWN );
+                 _( "Move Up ^\tUp" ), KiBitmap( up_xpm ) );
     AddMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_DOWN,
-                 msg, KiBitmap( down_xpm ) );
+                 _( "Move Down\tDown" ), KiBitmap( down_xpm ) );
 
     PopupMenu( &PopUpMenu, pos );
 }

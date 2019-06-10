@@ -36,16 +36,16 @@
 #include <netlist_reader.h>
 #include <bitmaps.h>
 #include <widgets/progress_reporter.h>
-#include <3d_cache/3d_cache.h>
-#include <dialog_configure_paths.h>
 #include <cvpcb.h>
 #include <listboxes.h>
 #include <wx/statline.h>
 #include <invoke_pcb_dialog.h>
 #include <display_footprints_frame.h>
 #include <cvpcb_id.h>
+#include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>
 #include <cvpcb_mainframe.h>
+#include <tool/common_control.h>
 
 wxSize const FRAME_MIN_SIZE_DU( 350, 250 );
 wxSize const FRAME_DEFAULT_SIZE_DU( 450, 300 );
@@ -102,7 +102,7 @@ END_EVENT_TABLE()
 
 CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     KIWAY_PLAYER( aKiway, aParent, FRAME_CVPCB, _( "Assign Footprints" ), wxDefaultPosition,
-        wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, CVPCB_MAINFRAME_NAME )
+                  wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, CVPCB_MAINFRAME_NAME )
 {
     m_compListBox           = NULL;
     m_footprintListBox      = NULL;
@@ -130,6 +130,14 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Frame size and position
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+
+    // Create the manager
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( nullptr, nullptr, nullptr, this );
+
+    // Register tools
+    m_toolManager->RegisterTool( new COMMON_CONTROL );
+    m_toolManager->InitTools();
 
     ReCreateMenuBar();
     ReCreateHToolbar();
@@ -938,13 +946,6 @@ void CVPCB_MAINFRAME::SetStatusText( const wxString& aText, int aNumber )
         m_statusLine2->SetLabel( aText );
     else
         m_statusLine1->SetLabel( aText );
-}
-
-
-void CVPCB_MAINFRAME::OnConfigurePaths( wxCommandEvent& aEvent )
-{
-    DIALOG_CONFIGURE_PATHS dlg( this, Prj().Get3DCacheManager()->GetResolver() );
-    dlg.ShowModal();
 }
 
 

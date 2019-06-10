@@ -40,7 +40,8 @@ wxString HOTKEY_STORE::GetSectionName( TOOL_ACTION* aAction )
             { wxT( "kicad" ),    _( "Kicad Manager" ) },
             { wxT( "eeschema" ), _( "Eeschema" ) },
             { wxT( "pcbnew" ),   _( "Pcbnew" ) },
-            { wxT( "plEditor" ), _( "Page Layout Editor" ) }
+            { wxT( "plEditor" ), _( "Page Layout Editor" ), },
+            { wxT( "3DViewer" ), _( "3D Viewer" ) }
     };
 
     wxString appName = GetAppName( aAction );

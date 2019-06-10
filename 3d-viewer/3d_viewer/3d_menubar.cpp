@@ -24,273 +24,368 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file 3d_menubar.cpp
- */
-
 #include <fctsys.h>
-
+#include <tool/conditional_menu.h>
 #include <eda_3d_viewer.h>
 #include <3d_canvas/cinfo3d_visu.h>
 #include <menus_helpers.h>
 #include <3d_viewer_id.h>
+#include <3d_actions.h>
+#include <tool/tool_manager.h>
+#include <tool/conditional_menu.h>
+#include <tool/common_control.h>
 #include "help_common_strings.h"
+
+
+TOOL_ACTION EDA_3D_ACTIONS::pivotCenter( "3DViewer.Control.pivotCenter", AS_GLOBAL, 
+                                         ' ', "",  "Center pivot rotation (Middle mouse click)" );
+
+TOOL_ACTION EDA_3D_ACTIONS::moveLeft( "3DViewer.Control.moveLeft", AS_GLOBAL,
+                                      WXK_LEFT, "", "Move board Left" );
+
+TOOL_ACTION EDA_3D_ACTIONS::moveRight( "3DViewer.Control.moveRight", AS_GLOBAL,
+                                       WXK_RIGHT, "", "Move board Right" );
+
+TOOL_ACTION EDA_3D_ACTIONS::moveUp( "3DViewer.Control.moveUp", AS_GLOBAL,
+                                    WXK_UP, "", "Move board Up" );
+
+TOOL_ACTION EDA_3D_ACTIONS::moveDown( "3DViewer.Control.moveDown", AS_GLOBAL,
+                                      WXK_DOWN, "", "Move board Down" );
+
+TOOL_ACTION EDA_3D_ACTIONS::homeView( "3DViewer.Control.homeView", AS_GLOBAL,
+                                      WXK_HOME, "", "Home view" );
+
+TOOL_ACTION EDA_3D_ACTIONS::resetView( "3DViewer.Control.resetView", AS_GLOBAL,
+                                       'R', "", "Reset view" );
+
+TOOL_ACTION EDA_3D_ACTIONS::viewFront( "3DViewer.Control.viewFront", AS_GLOBAL,
+                                       'Y', "", "View Front" );
+
+TOOL_ACTION EDA_3D_ACTIONS::viewBack( "3DViewer.Control.viewBack", AS_GLOBAL,
+                                      MD_SHIFT + 'Y', "", "View Back" );
+
+TOOL_ACTION EDA_3D_ACTIONS::viewLeft( "3DViewer.Control.viewLeft", AS_GLOBAL,
+                                      MD_SHIFT + 'X', "", "View Left" );
+
+TOOL_ACTION EDA_3D_ACTIONS::viewRight( "3DViewer.Control.viewRight", AS_GLOBAL,
+                                       'X', "", "View Right" );
+
+TOOL_ACTION EDA_3D_ACTIONS::viewTop( "3DViewer.Control.viewTop", AS_GLOBAL,
+                                     'Z', "", "View Top" );
+
+TOOL_ACTION EDA_3D_ACTIONS::viewBottom( "3DViewer.Control.viewBottom", AS_GLOBAL,
+                                        MD_SHIFT + 'Z', "", "View Bottom" );
+
+TOOL_ACTION EDA_3D_ACTIONS::rotate45axisZ( "3DViewer.Control.rotate45axisZ", AS_GLOBAL,
+                                           WXK_TAB, "", "Rotate 45 degrees over Z axis" );
+
+TOOL_ACTION EDA_3D_ACTIONS::zoomIn( "3DViewer.Control.zoomIn", AS_GLOBAL,
+                                    WXK_F1, "", "Zoom in " );
+
+TOOL_ACTION EDA_3D_ACTIONS::zoomOut( "3DViewer.Control.zoomOut", AS_GLOBAL,
+                                     WXK_F2, "", "Zoom out" );
+
+TOOL_ACTION EDA_3D_ACTIONS::attributesTHT( "3DViewer.Control.attributesTHT", AS_GLOBAL,
+                                           'T', "", "Toggle 3D models with type Through Hole" );
+
+TOOL_ACTION EDA_3D_ACTIONS::attributesSMD( "3DViewer.Control.attributesSMD", AS_GLOBAL,
+                                           'S', "", "Toggle 3D models with type Surface Mount" );
+
+TOOL_ACTION EDA_3D_ACTIONS::attributesVirtual( "3DViewer.Control.attributesVirtual", AS_GLOBAL,
+                                               'V', "", "Toggle 3D models with type Virtual" );
+
 
 void EDA_3D_VIEWER::CreateMenuBar()
 {
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::CreateMenuBar" );
 
+    COMMON_CONTROL* tool = m_toolManager->GetTool<COMMON_CONTROL>();
     wxMenuBar* menuBar   = new wxMenuBar;
-    wxMenu*    fileMenu  = new wxMenu;
-    wxMenu*    editMenu  = new wxMenu;
-    wxMenu*    viewMenu  = new wxMenu;
-    wxMenu*    prefsMenu = new wxMenu;
 
-    menuBar->Append( fileMenu, _( "&File" ) );
 
-    AddMenuItem( fileMenu, ID_MENU_SCREENCOPY_PNG,
-                 _( "Export Current View as PNG..." ),
-                 KiBitmap( export_xpm ) );
+    //-- File menu -----------------------------------------------------------
+    //
+    CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, tool );
 
-    AddMenuItem( fileMenu, ID_MENU_SCREENCOPY_JPEG,
-                 _( "Export Current View as JPEG..." ),
-                 KiBitmap( export_xpm ) );
+    fileMenu->AddItem( ID_MENU_SCREENCOPY_PNG, _( "Export Current View as PNG..." ), "",
+                       export_xpm,                     SELECTION_CONDITIONS::ShowAlways );
 
-    fileMenu->AppendSeparator();
-    AddMenuItem( fileMenu, wxID_EXIT,
-                 _( "&Exit" ),
-                 KiBitmap( exit_xpm ) );
+    fileMenu->AddItem( ID_MENU_SCREENCOPY_JPEG, _( "Export Current View as JPEG..." ), "",
+                       export_xpm,                     SELECTION_CONDITIONS::ShowAlways );
 
-    menuBar->Append( editMenu, _( "&Edit" ) );
+    fileMenu->AddSeparator();
+    // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
+    fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( editMenu, ID_TOOL_SCREENCOPY_TOCLIBBOARD,
-                 _( "Copy 3D Image" ),
-                 KiBitmap( copy_xpm ) );
+    //-- Edit menu -------------------------------------------------------
+    //
+    CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, tool );
 
-    menuBar->Append( viewMenu, _( "&View" ) );
+    editMenu->AddItem( ID_TOOL_SCREENCOPY_TOCLIBBOARD, _( "Copy 3D Image" ), "",
+                       copy_xpm,                       SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( viewMenu, ID_ZOOM_IN,
-                 _( "Zoom &In" ), HELP_ZOOM_IN,
-                 KiBitmap( zoom_in_xpm ) );
+    //-- View menu -------------------------------------------------------
+    //
+    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, tool );
 
-    AddMenuItem( viewMenu, ID_ZOOM_OUT,
-                 _( "Zoom &Out" ), HELP_ZOOM_OUT,
-                 KiBitmap( zoom_out_xpm ) );
+    viewMenu->AddItem( ID_ZOOM_IN, _( "Zoom In\tF1" ), HELP_ZOOM_IN,
+                       zoom_in_xpm,                    SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( viewMenu, ID_ZOOM_PAGE,
-                 _( "Zoom to &Fit" ), HELP_ZOOM_FIT,
-                 KiBitmap( zoom_fit_in_page_xpm ) );
+    viewMenu->AddItem( ID_ZOOM_OUT, _( "Zoom Out\tF2" ), HELP_ZOOM_OUT,
+                       zoom_out_xpm,                   SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( viewMenu, ID_ZOOM_REDRAW,
-                 _( "&Redraw" ), HELP_ZOOM_REDRAW,
-                 KiBitmap( zoom_redraw_xpm ) );
+    viewMenu->AddItem( ID_ZOOM_PAGE, _( "Zoom to Fit" ), HELP_ZOOM_FIT,
+                       zoom_fit_in_page_xpm,           SELECTION_CONDITIONS::ShowAlways );
 
-    viewMenu->AppendSeparator();
+    viewMenu->AddItem( ID_ZOOM_REDRAW, _( "Redraw\tR" ), HELP_ZOOM_REDRAW,
+                       zoom_redraw_xpm,                SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( viewMenu, ID_ROTATE3D_X_NEG,
-                 _( "Rotate X Clockwise" ),
-                 KiBitmap( rotate_neg_x_xpm ) );
+    viewMenu->AddSeparator();
+    viewMenu->AddItem( ID_ROTATE3D_X_NEG, _( "Rotate X Clockwise\tShift+X" ), "",
+                       rotate_neg_x_xpm,               SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( viewMenu, ID_ROTATE3D_X_POS,
-                 _( "Rotate X Counterclockwise" ),
-                 KiBitmap( rotate_pos_x_xpm ) );
+    viewMenu->AddItem( ID_ROTATE3D_X_POS, _( "Rotate X Counterclockwise\tX" ), "",
+                       rotate_pos_x_xpm,               SELECTION_CONDITIONS::ShowAlways );
 
-    viewMenu->AppendSeparator();
+    viewMenu->AddSeparator();
+    viewMenu->AddItem( ID_ROTATE3D_Y_NEG, _( "Rotate Y Clockwise\tShift+Y" ), "",
+                       rotate_neg_y_xpm,               SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( viewMenu, ID_ROTATE3D_Y_NEG,
-                 _( "Rotate Y Clockwise" ),
-                 KiBitmap( rotate_neg_y_xpm ) );
+    viewMenu->AddItem( ID_ROTATE3D_Y_POS, _( "Rotate Y Counterclockwise\tY" ), "",
+                       rotate_pos_y_xpm,               SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( viewMenu, ID_ROTATE3D_Y_POS,
-                 _( "Rotate Y Counterclockwise" ),
-                 KiBitmap( rotate_pos_y_xpm ) );
+    viewMenu->AddSeparator();
+    viewMenu->AddItem( ID_ROTATE3D_Z_NEG, _( "Rotate Z Clockwise\tShift+Z" ), "",
+                       rotate_neg_z_xpm,               SELECTION_CONDITIONS::ShowAlways );;
+
+    viewMenu->AddItem( ID_ROTATE3D_Z_POS, _( "Rotate Z Counterclockwise\tZ" ), "",
+                       rotate_pos_z_xpm,               SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AppendSeparator();
+    viewMenu->AddItem( ID_MOVE3D_LEFT, _( "Move Left\tLeft" ), "",
+                       left_xpm,                       SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( viewMenu, ID_ROTATE3D_Z_NEG,
-                 _( "Rotate Z Clockwise" ),
-                 KiBitmap( rotate_neg_z_xpm ) );
+    viewMenu->AddItem( ID_MOVE3D_RIGHT, _( "Move Right\tRight" ), "",
+                       right_xpm,                      SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( viewMenu, ID_ROTATE3D_Z_POS,
-                 _( "Rotate Z Counterclockwise" ),
-                 KiBitmap( rotate_pos_z_xpm ) );
+    viewMenu->AddItem( ID_MOVE3D_UP, _( "Move Up\tUp" ), "",
+                       up_xpm,                         SELECTION_CONDITIONS::ShowAlways );
 
-    viewMenu->AppendSeparator();
+    viewMenu->AddItem( ID_MOVE3D_DOWN, _( "Move Down\tDown" ), "",
+                       down_xpm,                       SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( viewMenu, ID_MOVE3D_LEFT,
-                 _( "Move left" ),
-                 KiBitmap( left_xpm ) );
+    viewMenu->Resolve();
 
-    AddMenuItem( viewMenu, ID_MOVE3D_RIGHT,
-                 _( "Move right" ),
-                 KiBitmap( right_xpm ) );
+    //-- Preferences menu -----------------------------------------------
+    //
+    CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, tool );
 
-    AddMenuItem( viewMenu, ID_MOVE3D_UP,
-                 _( "Move up" ),
-                 KiBitmap( up_xpm ) );
+    auto raytracingCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.RenderEngineGet() != RENDER_ENGINE_OPENGL_LEGACY;
+    };
+    auto NormalModeCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.MaterialModeGet() == MATERIAL_MODE_NORMAL;
+    };
+    auto DiffuseModeCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.MaterialModeGet() == MATERIAL_MODE_DIFFUSE_ONLY;
+    };
+    auto CADModeCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.MaterialModeGet() == MATERIAL_MODE_CAD_MODE;
+    };
+    auto copperThicknessCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS );
+    };
+    auto boundingBoxesCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX );
+    };
+    auto renderShadowsCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS );
+    };
+    auto proceduralTexturesCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES );
+    };
+    auto showFloorCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.GetFlag( FL_RENDER_RAYTRACING_BACKFLOOR );
+    };
+    auto useRefractionsCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS );
+    };
+    auto useReflectionsCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS );
+    };
+    auto antiAliasingCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING );
+    };
+    auto postProcessCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING );
+    };
+    auto showAxesCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.GetFlag( FL_AXIS );
+    };
+    
+    prefsMenu->AddItem( ID_TOOL_SET_VISIBLE_ITEMS, _( "Display Options" ), "",
+                        read_setup_xpm,                SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( viewMenu, ID_MOVE3D_DOWN,
-                 _( "Move down" ),
-                 KiBitmap( down_xpm ) );
+    prefsMenu->AddCheckItem( ID_RENDER_CURRENT_VIEW, _( "Raytracing" ), "",
+                             tools_xpm,                raytracingCondition );
 
-    menuBar->Append( prefsMenu, _( "&Preferences" ) );
+    // Render options submenu
+    CONDITIONAL_MENU* optsSubmenu = new CONDITIONAL_MENU( false, tool );
+    optsSubmenu->SetTitle( _( "Render Options" ) );
+    optsSubmenu->SetIcon( options_3drender_xpm );
 
-    AddMenuItem( prefsMenu, ID_TOOL_SET_VISIBLE_ITEMS,
-                 _( "Display Options" ),
-                 KiBitmap( read_setup_xpm ) );
+    // Material properties submenu
+    CONDITIONAL_MENU* propsSubmenu = new CONDITIONAL_MENU( false, tool );
+    propsSubmenu->SetTitle( _( "Material Properties" ) );
+    propsSubmenu->SetIcon( color_materials_xpm );
 
-    prefsMenu->AppendCheckItem( ID_RENDER_CURRENT_VIEW, _( "Raytracing" ) );
-    prefsMenu->Check( ID_RENDER_CURRENT_VIEW,
-                      m_settings.RenderEngineGet() != RENDER_ENGINE_OPENGL_LEGACY );
+    propsSubmenu->AddCheckItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL,
+                                _( "Use All Properties" ),
+                                _( "Use all material properties from each 3D model file" ),
+                                nullptr,                       NormalModeCondition );
 
-    wxMenu * renderOptionsMenu = new wxMenu;
-    AddMenuItem( prefsMenu, renderOptionsMenu, ID_MENU3D_FL,
-                _( "Render Options" ), KiBitmap( options_3drender_xpm ) );
+    propsSubmenu->AddCheckItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_DIFFUSE_ONLY,
+                                _( "Use Diffuse Only" ),
+                                _( "Use only the diffuse color property from model 3D model file" ),
+                                nullptr,                       DiffuseModeCondition );
 
-    wxMenu * materialsList = new wxMenu;
-    AddMenuItem( renderOptionsMenu, materialsList, ID_MENU3D_FL_RENDER_MATERIAL,
-                _( "Material Properties" ), KiBitmap( color_materials_xpm ) );
+    propsSubmenu->AddCheckItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE,
+                                _( "CAD Color Style" ),
+                                _( "Use a CAD color style based on the diffuse color of the material" ),
+                                nullptr,                       CADModeCondition );
 
-    materialsList->AppendRadioItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL,
-                                    _( "Use All Properties" ),
-                                    _( "Use all material properties from each 3D model file" ) );
+    optsSubmenu->AddMenu( propsSubmenu,                        SELECTION_CONDITIONS::ShowAlways );
 
-    materialsList->AppendRadioItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_DIFFUSE_ONLY,
-                                    _( "Use Diffuse Only" ),
-                                    _( "Use only the diffuse color property from model 3D model file" ) );
+    optsSubmenu->AddCheckItem( ID_MENU3D_FL_OPENGL_RENDER_COPPER_THICKNESS,
+                               _( "Show Copper Thickness" ),
+                               _( "Shows the copper thickness on copper layers (slower loading)" ),
+                               use_3D_copper_thickness_xpm,    copperThicknessCondition );
 
-    materialsList->AppendRadioItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE,
-                                    _( "CAD Color Style" ),
-                                    _( "Use a CAD color style based on the diffuse color of the material" ) );
+    optsSubmenu->AddCheckItem( ID_MENU3D_FL_OPENGL_RENDER_SHOW_MODEL_BBOX,
+                               _( "Show Model Bounding Boxes" ), "",
+                               ortho_xpm,                      boundingBoxesCondition );
 
-    // Add specific preferences for OpenGL
-    // /////////////////////////////////////////////////////////////////////////
-    wxMenu * renderOptionsMenu_OPENGL = new wxMenu;
+    // Raytracing  submenu
+    CONDITIONAL_MENU* raySubmenu = new CONDITIONAL_MENU( false, tool );
+    raySubmenu->SetTitle( _( "Raytracing Options" ) );
+    raySubmenu->SetIcon( tools_xpm );
 
-    AddMenuItem( renderOptionsMenu, renderOptionsMenu_OPENGL, ID_MENU3D_FL_OPENGL,
-                _( "OpenGL Options" ), KiBitmap( tools_xpm ) );
+    raySubmenu->AddCheckItem( ID_MENU3D_FL_RAYTRACING_RENDER_SHADOWS,
+                 _( "Render Shadows" ), "",
+                  green_xpm,                                   renderShadowsCondition );
 
-    AddMenuItem( renderOptionsMenu_OPENGL, ID_MENU3D_FL_OPENGL_RENDER_COPPER_THICKNESS,
-                _( "Show Copper Thickness" ),
-                _( "Shows the copper thickness on copper layers (slower loading)"),
-                KiBitmap( use_3D_copper_thickness_xpm ), wxITEM_CHECK );
-
-    AddMenuItem( renderOptionsMenu_OPENGL, ID_MENU3D_FL_OPENGL_RENDER_SHOW_MODEL_BBOX,
-                _( "Show Model Bounding Boxes" ),
-                KiBitmap( ortho_xpm ), wxITEM_CHECK );
-
-
-    // Add specific preferences for Raytracing
-    // /////////////////////////////////////////////////////////////////////////
-    wxMenu * renderOptionsMenu_RAYTRACING = new wxMenu;
-    AddMenuItem( renderOptionsMenu, renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING,
-                 _( "Raytracing Options" ), KiBitmap( tools_xpm ) );
-
-    AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_RENDER_SHADOWS,
-                 _( "Render Shadows" ),
-                 KiBitmap( green_xpm ), wxITEM_CHECK );
-
-    AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_PROCEDURAL_TEXTURES,
+    raySubmenu->AddCheckItem( ID_MENU3D_FL_RAYTRACING_PROCEDURAL_TEXTURES,
                  _( "Procedural Textures" ),
                  _( "Apply procedural textures to materials (slow)"),
-                 KiBitmap( green_xpm ), wxITEM_CHECK );
+                   green_xpm,                                  proceduralTexturesCondition );
 
-    AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_BACKFLOOR,
+    raySubmenu->AddCheckItem( ID_MENU3D_FL_RAYTRACING_BACKFLOOR,
                  _( "Add Floor" ),
                  _( "Adds a floor plane below the board (slow)"),
-                 KiBitmap( green_xpm ), wxITEM_CHECK );
+                   green_xpm,                                  showFloorCondition );
 
-    AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_REFRACTIONS,
+    raySubmenu->AddCheckItem( ID_MENU3D_FL_RAYTRACING_REFRACTIONS,
                  _( "Refractions" ),
                  _( "Render materials with refractions properties on final render (slow)"),
-                 KiBitmap( green_xpm ), wxITEM_CHECK );
+                   green_xpm,                                  useRefractionsCondition );
 
-    AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_REFLECTIONS,
+    raySubmenu->AddCheckItem( ID_MENU3D_FL_RAYTRACING_REFLECTIONS,
                 _( "Reflections" ),
                 _( "Render materials with reflections properties on final render (slow)"),
-                KiBitmap( green_xpm ), wxITEM_CHECK );
+                  green_xpm,                                   useReflectionsCondition );
 
-    AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_ANTI_ALIASING,
+    raySubmenu->AddCheckItem( ID_MENU3D_FL_RAYTRACING_ANTI_ALIASING,
                  _( "Anti-aliasing" ),
                  _( "Render with improved quality on final render (slow)"),
-                 KiBitmap( green_xpm ), wxITEM_CHECK );
+                   green_xpm,                                  antiAliasingCondition );
 
-    AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_POST_PROCESSING,
+    raySubmenu->AddCheckItem( ID_MENU3D_FL_RAYTRACING_POST_PROCESSING,
                  _( "Post-processing" ),
                  _( "Apply Screen Space Ambient Occlusion and Global Illumination reflections on final render (slow)"),
-                 KiBitmap( green_xpm ), wxITEM_CHECK );
+                   green_xpm,                                  postProcessCondition );
 
+    optsSubmenu->AddMenu( raySubmenu,                          SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->AddMenu( optsSubmenu,                           SELECTION_CONDITIONS::ShowAlways );
+
+    prefsMenu->AddSeparator();
+
+    // Color  submenu
+    CONDITIONAL_MENU* colorSubmenu = new CONDITIONAL_MENU( false, tool );
+    colorSubmenu->SetTitle( _( "Choose Colors" ) );
+    colorSubmenu->SetIcon( palette_xpm );
+
+    colorSubmenu->AddItem( ID_MENU3D_BGCOLOR_TOP, _( "Background Top Color..." ), "",
+                           setcolor_3d_bg_xpm,                 SELECTION_CONDITIONS::ShowAlways );
+
+    colorSubmenu->AddItem( ID_MENU3D_BGCOLOR_BOTTOM, _( "Background Bottom Color..." ), "",
+                           setcolor_3d_bg_xpm,                 SELECTION_CONDITIONS::ShowAlways );
+
+    colorSubmenu->AddItem( ID_MENU3D_SILKSCREEN_COLOR, _( "Silkscreen Color..." ), "",
+                           setcolor_silkscreen_xpm,            SELECTION_CONDITIONS::ShowAlways );
+
+    colorSubmenu->AddItem( ID_MENU3D_SOLDERMASK_COLOR, _( "Solder Mask Color..." ), "",
+                           setcolor_soldermask_xpm,            SELECTION_CONDITIONS::ShowAlways );
+
+    colorSubmenu->AddItem( ID_MENU3D_SOLDERPASTE_COLOR, _( "Solder Paste Color..." ), "",
+                           setcolor_solderpaste_xpm,           SELECTION_CONDITIONS::ShowAlways );
+
+    colorSubmenu->AddItem( ID_MENU3D_COPPER_COLOR, _( "Copper/Surface Finish Color..." ), "",
+                           setcolor_copper_xpm,                SELECTION_CONDITIONS::ShowAlways );
+
+    colorSubmenu->AddItem( ID_MENU3D_PCB_BODY_COLOR, _( "Board Body Color..." ), "",
+                           setcolor_board_body_xpm,            SELECTION_CONDITIONS::ShowAlways );
+
+    prefsMenu->AddMenu( colorSubmenu );
+    
+    prefsMenu->AddCheckItem( ID_MENU3D_AXIS_ONOFF, _( "Show 3D &Axis" ), "",
+                             axis3d_front_xpm,                 showAxesCondition );
+
+    // Grid  submenu
+    CONDITIONAL_MENU* gridSubmenu = new CONDITIONAL_MENU( false, tool );
+    gridSubmenu->SetTitle( _( "3D Grid" ) );
+    gridSubmenu->SetIcon( grid_xpm );
+
+    auto noGridCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.GridGet() == GRID3D_NONE;
+    };
+    auto grid10mmCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.GridGet() == GRID3D_10MM;
+    };
+    auto grid5mmCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.GridGet() == GRID3D_5MM;
+    };
+    auto grid2p5mmCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.GridGet() == GRID3D_2P5MM;
+    };
+    auto grid_1mmCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_settings.GridGet() == GRID3D_1MM;
+    };
+
+    gridSubmenu->AddItem( ID_MENU3D_GRID_NOGRID, _( "No 3D Grid" ), "",
+                          nullptr,                             noGridCondition );
+    gridSubmenu->AddItem( ID_MENU3D_GRID_10_MM, _( "3D Grid 10mm" ), "",
+                          nullptr,                             grid10mmCondition );
+    gridSubmenu->AddItem( ID_MENU3D_GRID_5_MM, _( "3D Grid 5mm" ), "",
+                          nullptr,                             grid5mmCondition );
+    gridSubmenu->AddItem( ID_MENU3D_GRID_2P5_MM, _( "3D Grid 2.5mm" ), "",
+                          nullptr,                             grid2p5mmCondition );
+    gridSubmenu->AddItem( ID_MENU3D_GRID_1_MM, _( "3D Grid 1mm" ), "",
+                          nullptr,                             grid_1mmCondition );
+    
+    prefsMenu->AddMenu( gridSubmenu,                           SELECTION_CONDITIONS::ShowAlways );
+    
     prefsMenu->AppendSeparator();
+    prefsMenu->AddItem( ID_MENU3D_RESET_DEFAULTS, _( "Reset to Default Settings" ), "",
+                        tools_xpm,                             SELECTION_CONDITIONS::ShowAlways );
 
-
-    // Colors, axis and grid elements
-    // /////////////////////////////////////////////////////////////////////////
-
-    // Add submenu set Colors
-    wxMenu * setColorMenu = new wxMenu;
-    AddMenuItem( prefsMenu, setColorMenu, ID_MENU3D_COLOR,
-                 _( "Choose Colors" ), KiBitmap( palette_xpm ) );
-
-    wxMenu * setBgColorMenu = new wxMenu;
-    AddMenuItem( setColorMenu, setBgColorMenu, ID_MENU3D_BGCOLOR,
-                 _( "Background Color" ), KiBitmap( palette_xpm ) );
-
-    AddMenuItem( setBgColorMenu, ID_MENU3D_BGCOLOR_TOP_SELECTION,
-                 _( "Background Top Color..." ), KiBitmap( setcolor_3d_bg_xpm ) );
-
-    AddMenuItem( setBgColorMenu, ID_MENU3D_BGCOLOR_BOTTOM_SELECTION,
-                 _( "Background Bottom Color..." ), KiBitmap( setcolor_3d_bg_xpm ) );
-
-    AddMenuItem( setColorMenu, ID_MENU3D_SILKSCREEN_COLOR_SELECTION,
-                 _( "Silkscreen Color..." ), KiBitmap( setcolor_silkscreen_xpm ) );
-
-    AddMenuItem( setColorMenu, ID_MENU3D_SOLDERMASK_COLOR_SELECTION,
-                 _( "Solder Mask Color..." ), KiBitmap( setcolor_soldermask_xpm ) );
-
-    AddMenuItem( setColorMenu, ID_MENU3D_SOLDERPASTE_COLOR_SELECTION,
-                 _( "Solder Paste Color..." ), KiBitmap( setcolor_solderpaste_xpm ) );
-
-    AddMenuItem( setColorMenu, ID_MENU3D_COPPER_COLOR_SELECTION,
-                 _( "Copper/Surface Finish Color..." ), KiBitmap( setcolor_copper_xpm ) );
-
-    AddMenuItem( setColorMenu, ID_MENU3D_PCB_BODY_COLOR_SELECTION,
-                 _( "Board Body Color..." ), KiBitmap( setcolor_board_body_xpm ) );
-
-    AddMenuItem( prefsMenu, ID_MENU3D_AXIS_ONOFF,
-                 _( "Show 3D &Axis" ), KiBitmap( axis3d_front_xpm ), wxITEM_CHECK );
-
-
-    // Creates grid menu
-    // /////////////////////////////////////////////////////////////////////////
-
-    wxMenu * gridlistMenu = new wxMenu;
-    AddMenuItem( prefsMenu, gridlistMenu, ID_MENU3D_GRID,
-                _( "3D Grid" ), KiBitmap( grid_xpm ) );
-    gridlistMenu->AppendRadioItem( ID_MENU3D_GRID_NOGRID, _( "No 3D Grid" ),     wxEmptyString );
-    gridlistMenu->AppendRadioItem( ID_MENU3D_GRID_10_MM,  _( "3D Grid 10 mm" ),  wxEmptyString );
-    gridlistMenu->AppendRadioItem( ID_MENU3D_GRID_5_MM,   _( "3D Grid 5 mm" ),   wxEmptyString );
-    gridlistMenu->AppendRadioItem( ID_MENU3D_GRID_2P5_MM, _( "3D Grid 2.5 mm" ), wxEmptyString );
-    gridlistMenu->AppendRadioItem( ID_MENU3D_GRID_1_MM,   _( "3D Grid 1 mm" ),   wxEmptyString );
-
-    // If the grid is on, check the corresponding menuitem showing the grid  size
-    if( m_settings.GridGet() != GRID3D_NONE )
-    {
-        gridlistMenu->Check( ID_MENU3D_GRID_10_MM,  m_settings.GridGet() == GRID3D_10MM );
-        gridlistMenu->Check( ID_MENU3D_GRID_5_MM,   m_settings.GridGet() == GRID3D_5MM );
-        gridlistMenu->Check( ID_MENU3D_GRID_2P5_MM, m_settings.GridGet() == GRID3D_2P5MM );
-        gridlistMenu->Check( ID_MENU3D_GRID_1_MM,   m_settings.GridGet() == GRID3D_1MM );
-    }
-    else
-        gridlistMenu->Check( ID_MENU3D_GRID_NOGRID, true );
-
-    // Reset options
-    // /////////////////////////////////////////////////////////////////////////
-    prefsMenu->AppendSeparator();
-
-    AddMenuItem( prefsMenu, ID_MENU3D_RESET_DEFAULTS,
-                 _( "Reset to Default Settings" ),
-                 KiBitmap( tools_xpm ) );
-
+    prefsMenu->Resolve();
+    
+    //-- Menubar -------------------------------------------------------------
+    //
+    menuBar->Append( fileMenu, _( "&File" ) );
+    menuBar->Append( editMenu, _( "&Edit" ) );
+    menuBar->Append( viewMenu, _( "&View" ) );
+    menuBar->Append( prefsMenu, _( "&Preferences" ) );
     AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );

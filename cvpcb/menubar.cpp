@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,65 +22,62 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <common_help_msg.h>
-#include <kiface_i.h>
-#include <menus_helpers.h>
 #include <pgm_base.h>
-#include <tool/action_menu.h>
+#include <bitmaps.h>
+#include <tool/conditional_menu.h>
 #include <tool/actions.h>
-#include "cvpcb.h"
+#include <tool/tool_manager.h>
+#include <tool/common_control.h>
 #include "cvpcb_id.h"
 #include "cvpcb_mainframe.h"
 
 
 void CVPCB_MAINFRAME::ReCreateMenuBar()
 {
+    COMMON_CONTROL* tool = m_toolManager->GetTool<COMMON_CONTROL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar*  oldMenuBar = GetMenuBar();
     wxMenuBar*  menuBar = new wxMenuBar();
 
-    // Recreate all menus:
+    //-- File menu -----------------------------------------------------------
+    //
+    CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, tool );
 
-    // Menu File:
-    wxMenu* filesMenu = new wxMenu;
+    fileMenu->AddItem( ID_SAVE_PROJECT, 
+                       _( "&Save Schematic\tCtrl+S" ),
+                       _( "Save footprint associations in schematic symbol footprint fields" ),
+                       save_xpm,                        SELECTION_CONDITIONS::ShowAlways );
+    
+    fileMenu->Resolve();
 
-    // Save the footprints back into eeschema
-    AddMenuItem( filesMenu, ID_SAVE_PROJECT,
-                 _( "&Save Schematic\tCtrl+S" ),
-                 SAVE_HLP_MSG,
-                 KiBitmap( save_xpm ) );
+    //-- Preferences menu -----------------------------------------------
+    //
+    CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, tool );
 
-    // Preferences Menu :
-    wxMenu* preferencesMenu = new wxMenu;
+    prefsMenu->AddItem( ACTIONS::configurePaths,        SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->AddItem( ACTIONS::showFootprintLibTable, SELECTION_CONDITIONS::ShowAlways );
+    prefsMenu->AddItem( wxID_PREFERENCES,
+                        _( "Preferences...\tCTRL+," ),
+                        _( "Show preferences for all open tools" ),
+                        preference_xpm,                 SELECTION_CONDITIONS::ShowAlways );
 
-    // Path configuration edit dialog.
-    // JEY TODO: fix these....
-    AddMenuItem( preferencesMenu,
-                 ID_PREFERENCES_CONFIGURE_PATHS,
-                 _( "&Configure Paths..." ),
-                 _( "Edit path configuration environment variables" ),
-                 KiBitmap( editor_xpm ) );
+    prefsMenu->AddSeparator();
+    prefsMenu->AddItem( ID_CVPCB_EQUFILES_LIST_EDIT, 
+                        _( "Footprint &Association Files..." ),
+                        _( "Configure footprint association file (.equ) list.  These files are "
+                           "used to automatically assign footprint names from symbol values." ),
+                        library_table_xpm,              SELECTION_CONDITIONS::ShowAlways );
 
-    AddMenuItem( preferencesMenu, ID_CVPCB_LIB_TABLE_EDIT,
-                 _( "Manage &Footprint Libraries..." ), _( "Manage footprint libraries" ),
-                 KiBitmap( library_table_xpm ) );
+    prefsMenu->AddSeparator();
+    Pgm().AddMenuLanguageList( prefsMenu );
 
-    preferencesMenu->AppendSeparator();
-    AddMenuItem( preferencesMenu, ID_CVPCB_EQUFILES_LIST_EDIT,
-                 _( "Footprint &Association Files..." ),
-                 _( "Configure footprint association file (.equ) list."
-                    "These files are used to automatically assign "
-                    "the footprint name from the symbol value" ),
-                 KiBitmap( library_table_xpm ) );
-    preferencesMenu->AppendSeparator();
+    prefsMenu->Resolve();
 
-    // Language submenu
-    Pgm().AddMenuLanguageList( preferencesMenu );
-
-    // Create the menubar and append all submenus
-    menuBar->Append( filesMenu, _( "&File" ) );
-    menuBar->Append( preferencesMenu, _( "&Preferences" ) );
+    //-- Menubar -------------------------------------------------------------
+    //
+    menuBar->Append( fileMenu, _( "&File" ) );
+    menuBar->Append( prefsMenu, _( "&Preferences" ) );
     AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );

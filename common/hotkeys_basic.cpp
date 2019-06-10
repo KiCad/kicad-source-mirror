@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2010-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,11 +21,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file hotkeys_basic.cpp
- * @brief Some functions to handle hotkeys in KiCad
  */
 
 #include <fctsys.h>
@@ -48,21 +43,8 @@
 #include <tool/tool_action.h>
 
 
-wxString g_CommonSectionTag( wxT( "[common]" ) );
-
-
-/* Class to handle hotkey commands hotkeys have a default value
- * This class allows the real key code changed by user from a key code list
- * file.
- */
-EDA_HOTKEY::EDA_HOTKEY( const wxChar* infomsg, int idcommand, int keycode ) :
-        m_KeyCode( keycode ), 
-        m_InfoMsg( infomsg ), 
-        m_Idcommand( idcommand )
-{ }
-
-
-/* class to handle the printable name and the keycode
+/* 
+ * class to handle the printable name and the keycode
  */
 struct hotkey_name_descr
 {
@@ -235,88 +217,6 @@ wxString AddHotkeyName( const wxString& aText, int aHotKey, HOTKEY_ACTION_TYPE a
 }
 
 
-/* AddHotkeyName
- * Add the key name from the Command id value ( m_Idcommand member value)
- *  aText = a wxString. returns aText + key name
- *  aList = pointer to a EDA_HOTKEY_CONFIG DescrList of commands
- *  aCommandId = Command Id value
- *  aShortCutType = IS_HOTKEY to add <tab><keyname> (active shortcuts in menus)
- *                  IS_ACCELERATOR to add <tab><Shift+keyname> (active accelerators in menus)
- *                  IS_COMMENT to add <spaces><(keyname)>
- * Return a wxString (aText + key name) if key found or aText without modification
- */
-wxString AddHotkeyName( const wxString&           aText,
-                        struct EDA_HOTKEY_CONFIG* aDescList,
-                        int                       aCommandId,
-                        HOTKEY_ACTION_TYPE        aShortCutType )
-{
-    // JEY TODO: obsolete once 3DViewer and ProjectManager are moved over...
-    wxString     msg = aText;
-    wxString     keyname;
-    EDA_HOTKEY** list;
-
-    if( aDescList )
-    {
-        for( ; aDescList->m_HK_InfoList != nullptr; aDescList++ )
-        {
-            list    = aDescList->m_HK_InfoList;
-            keyname = KeyNameFromCommandId( list, aCommandId );
-
-            if( !keyname.IsEmpty() )
-            {
-                switch( aShortCutType )
-                {
-                case IS_HOTKEY:
-                    msg << wxT( "\t" ) << keyname;
-                    break;
-
-                case IS_COMMENT:
-                    msg << wxT( " (" ) << keyname << wxT( ")" );
-                    break;
-                }
-
-                break;
-            }
-        }
-    }
-
-#ifdef USING_MAC_CMD
-    // On OSX, the modifier equivalent to the Ctrl key of PCs
-    // is the Cmd key, but in code we should use Ctrl as prefix in menus
-    msg.Replace( MODIFIER_CMD_MAC, MODIFIER_CTRL_BASE );
-#endif
-
-    return msg;
-}
-
-
-/**
- * Function KeyNameFromCommandId
- * return the key name from the Command id value ( m_Idcommand member value)
- * @param aList = pointer to a EDA_HOTKEY list of commands
- * @param aCommandId = Command Id value
- * @return the key name in a wxString
- */
-wxString KeyNameFromCommandId( EDA_HOTKEY** aList, int aCommandId )
-{
-    // JEY TODO: obsolete once 3DViewer and ProjectManager are moved over...
-    wxString keyname;
-
-    for( ; *aList != nullptr; aList++ )
-    {
-        EDA_HOTKEY* hk_decr = *aList;
-
-        if( hk_decr->m_Idcommand == aCommandId )
-        {
-            keyname = KeyNameFromKeyCode( hk_decr->m_KeyCode );
-            break;
-        }
-    }
-
-    return keyname;
-}
-
-
 /**
  * Function KeyCodeFromKeyName
  * return the key code from its user-friendly key name (ie: "Ctrl+M")
@@ -431,7 +331,7 @@ void ReadHotKeyConfig( wxString fileName, std::map<std::string, int>& aHotKeys )
 }
 
 
-int WriteHotKeyConfig( std::map<std::string, TOOL_ACTION*> aActionMap )
+int WriteHotKeyConfig( const std::map<std::string, TOOL_ACTION*>& aActionMap )
 {
     std::map<std::string, int> hotkeys;
     wxFileName fn( "user" );
