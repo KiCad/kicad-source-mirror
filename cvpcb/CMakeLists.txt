@@ -143,7 +143,6 @@ target_link_libraries( cvpcb_kiface
     pcad2kicadpcb
     3d-viewer
     gal
-    legacy_gal
     common
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}

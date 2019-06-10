@@ -70,16 +70,7 @@ set( GAL_SRCS
     gal/cairo/cairo_print.cpp
     )
 
-set( LEGACY_GAL_SRCS
-    legacy_gal/eda_draw_frame.cpp
-    )
-
 add_library( gal STATIC ${GAL_SRCS} )
-add_library( legacy_gal STATIC ${LEGACY_GAL_SRCS} )
-
-target_include_directories( legacy_gal PUBLIC ../include/legacy_gal )
-
-target_link_libraries( legacy_gal PRIVATE bitmaps polygon )
 
 target_link_libraries( gal
     polygon
@@ -295,6 +286,7 @@ set( COMMON_SRCS
     eda_dde.cpp
     eda_doc.cpp
     eda_dockart.cpp
+    eda_draw_frame.cpp
     eda_pattern_match.cpp
     eda_size_ctrl.cpp
     env_paths.cpp

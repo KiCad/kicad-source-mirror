@@ -48,7 +48,6 @@ include_directories(
 
 target_link_libraries( qa_common_tools
     common
-    legacy_gal
     gal
     qa_utils
     sexpr

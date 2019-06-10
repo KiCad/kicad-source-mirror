@@ -636,7 +636,6 @@ set( PCBNEW_KIFACE_LIBRARIES
     pcbcommon
     pnsrouter
     pcad2kicadpcb
-    legacy_gal
     common
     gal
     lib_dxf

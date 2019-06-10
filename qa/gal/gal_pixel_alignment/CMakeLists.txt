@@ -71,7 +71,6 @@ target_link_libraries( test_gal_pixel_alignment
     bitmaps
     3d-viewer
     gal
-    legacy_gal
     common
     ${GITHUB_PLUGIN_LIBRARIES}
     ${Boost_FILESYSTEM_LIBRARY}

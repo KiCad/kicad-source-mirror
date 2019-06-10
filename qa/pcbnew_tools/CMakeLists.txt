@@ -49,7 +49,6 @@ target_link_libraries( qa_pcbnew_tools
     pcbcommon
     pnsrouter
     pcad2kicadpcb
-    legacy_gal
     gal
     lib_dxf
     idf3

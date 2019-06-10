@@ -67,7 +67,6 @@ set( common_srcs
 
 set( common_libs
     common
-    legacy_gal
     gal
     qa_utils
     unit_test_utils

@@ -112,7 +112,6 @@ target_link_libraries( gerbview
     #singletop  # replaces common, giving us restrictive control and link warnings.
     # There's way too much crap coming in from common yet.
     gal
-    legacy_gal
     common
     ${wxWidgets_LIBRARIES}
     )
@@ -136,7 +135,6 @@ set_target_properties( gerbview_kiface PROPERTIES
     )
 target_link_libraries( gerbview_kiface
     gal
-    legacy_gal
     common
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}

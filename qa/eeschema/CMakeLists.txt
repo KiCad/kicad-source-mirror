@@ -54,7 +54,6 @@ add_executable( qa_eeschema
 
 target_link_libraries( qa_eeschema
     common
-    legacy_gal
     qa_utils
     unit_test_utils
     ${GDI_PLUS_LIBRARIES}

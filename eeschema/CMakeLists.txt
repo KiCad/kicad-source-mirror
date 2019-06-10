@@ -324,7 +324,6 @@ target_link_libraries( eeschema
     #singletop  # replaces common, giving us restrictive control and link warnings.
     # There's way too much crap coming in from common yet.
     gal
-    legacy_gal
     common
     ${wxWidgets_LIBRARIES}
     )
@@ -339,7 +338,6 @@ add_library( eeschema_kiface_objects OBJECT
 # but we only need include directories, as we will link the kiface MODULE
 target_include_directories( eeschema_kiface_objects PRIVATE
    $<TARGET_PROPERTY:common,INCLUDE_DIRECTORIES>
-   $<TARGET_PROPERTY:legacy_gal,INCLUDE_DIRECTORIES>
 )
 
 add_library( eeschema_kiface MODULE
@@ -348,7 +346,6 @@ add_library( eeschema_kiface MODULE
     )
 
 target_link_libraries( eeschema_kiface
-    legacy_gal
     common
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
