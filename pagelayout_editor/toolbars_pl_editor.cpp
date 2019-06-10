@@ -143,7 +143,7 @@ void PL_EDITOR_FRAME::ReCreateOptToolbar()
 }
 
 
-void PL_EDITOR_FRAME::SyncMenusAndToolbars()
+void PL_EDITOR_FRAME::SyncToolbars()
 {
     m_mainToolBar->Toggle( ACTIONS::save, GetScreen() && GetScreen()->IsModify() );
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );

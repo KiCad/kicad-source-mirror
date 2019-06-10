@@ -146,7 +146,7 @@ void LIB_VIEW_FRAME::ReCreateMenuBar()
 }
 
 
-void LIB_VIEW_FRAME::SyncMenusAndToolbars()
+void LIB_VIEW_FRAME::SyncToolbars()
 {
     LIB_PART*  symbol = GetSelectedSymbol();
     LIB_ALIAS* alias = GetSelectedAlias();

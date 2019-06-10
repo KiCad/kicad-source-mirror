@@ -138,7 +138,7 @@ public:
 
     const BOX2I GetDocumentExtents() const override;
 
-    void SyncMenusAndToolbars() override;
+    void SyncToolbars() override;
 
 private:
     // Sets up the tool framework

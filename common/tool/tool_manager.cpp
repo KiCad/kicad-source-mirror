@@ -977,6 +977,6 @@ void TOOL_MANAGER::UpdateUI()
     if( frame )
     {
         frame->UpdateStatusBar();
-        frame->SyncMenusAndToolbars();
+        frame->SyncToolbars();
     }
 }

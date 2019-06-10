@@ -1020,7 +1020,7 @@ public:
      */
     void CommonSettingsChanged() override;
 
-    void SyncMenusAndToolbars() override;
+    void SyncToolbars() override;
 
     DECLARE_EVENT_TABLE()
 };

@@ -167,7 +167,7 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
 }
 
 
-void SCH_EDIT_FRAME::SyncMenusAndToolbars()
+void SCH_EDIT_FRAME::SyncToolbars()
 {
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
     SCH_SHEET_LIST              sheetList( g_RootSheet );

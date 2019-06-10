@@ -127,7 +127,7 @@ public:
         // currently: do nothing in CvPcb.
     }
 
-    void SyncMenusAndToolbars() override;
+    void SyncToolbars() override;
 
     DECLARE_EVENT_TABLE()
 };

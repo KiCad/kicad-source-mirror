@@ -463,7 +463,7 @@ void GERBVIEW_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
 }
 
 
-void GERBVIEW_FRAME::SyncMenusAndToolbars()
+void GERBVIEW_FRAME::SyncToolbars()
 {
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
 

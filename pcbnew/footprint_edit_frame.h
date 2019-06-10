@@ -336,7 +336,7 @@ public:
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 
-    void SyncMenusAndToolbars() override;
+    void SyncToolbars() override;
 
     DECLARE_EVENT_TABLE()
 

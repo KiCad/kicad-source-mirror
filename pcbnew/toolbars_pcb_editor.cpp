@@ -694,7 +694,7 @@ void PCB_EDIT_FRAME::OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent )
 }
 
 
-void PCB_EDIT_FRAME::SyncMenusAndToolbars()
+void PCB_EDIT_FRAME::SyncToolbars()
 {
     PCB_DISPLAY_OPTIONS*        opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();

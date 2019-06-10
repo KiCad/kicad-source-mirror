@@ -452,7 +452,7 @@ public:
 
     void ShowChangedLanguage() override;
 
-    void SyncMenusAndToolbars() override;
+    void SyncToolbars() override;
 
     void SetScreen( BASE_SCREEN* aScreen ) override;
 

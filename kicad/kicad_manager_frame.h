@@ -147,7 +147,7 @@ public:
      */
     void OnChangeWatchedPaths( wxCommandEvent& aEvent );
 
-    void SyncMenusAndToolbars() override;
+    void SyncToolbars() override;
 
     void SetProjectFileName( const wxString& aFullProjectProFileName );
     const wxString GetProjectFileName();

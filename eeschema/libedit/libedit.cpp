@@ -251,7 +251,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& a
     updateTitle();
     RebuildSymbolUnitsList();
     SetShowDeMorgan( GetCurPart()->HasConversion() );
-    SyncMenusAndToolbars();
+    SyncToolbars();
 
     // Display the document information based on the entry selected just in
     // case the entry is an alias.

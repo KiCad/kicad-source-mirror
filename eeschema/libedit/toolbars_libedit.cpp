@@ -156,7 +156,7 @@ void LIB_EDIT_FRAME::ReCreateOptToolbar()
 }
 
 
-void LIB_EDIT_FRAME::SyncMenusAndToolbars()
+void LIB_EDIT_FRAME::SyncToolbars()
 {
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
 

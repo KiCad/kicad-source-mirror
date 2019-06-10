@@ -445,7 +445,7 @@ void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
 }
 
 
-void DISPLAY_FOOTPRINTS_FRAME::SyncMenusAndToolbars()
+void DISPLAY_FOOTPRINTS_FRAME::SyncToolbars()
 {
     m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
     m_mainToolBar->Refresh();

@@ -172,7 +172,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::SyncMenusAndToolbars()
+void FOOTPRINT_EDIT_FRAME::SyncToolbars()
 {
     PCB_DISPLAY_OPTIONS* opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
 

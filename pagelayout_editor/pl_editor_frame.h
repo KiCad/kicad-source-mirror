@@ -162,7 +162,7 @@ public:
     void    ReCreateMenuBar() override;
     double  BestZoom() override;
 
-    void    SyncMenusAndToolbars() override;
+    void    SyncToolbars() override;
 
     const PL_EDITOR_LAYOUT& GetPageLayout() const { return m_pageLayout; }
     PL_EDITOR_LAYOUT& GetPageLayout() { return m_pageLayout; }
