@@ -29,51 +29,27 @@
 #  - Parallel builds all depend on the same files, and CMake will generate the same file multiple times in the same location.
 # This can be problematic if the files are generated at the same time and overwrite each other.
 #  - To fix this, we create a custom target (outputTarget) that the parallel builds depend on.
-#  - This almost works except that our targets that depend on targets don't get the file-level dependencies
-#  - So we have one additional layer of indirection to create an intermediate target with file dependencies
 # AND build dependencies.  This creates the needed rebuild for appropriate source object changes.
 function( make_lexer outputTarget inputFile outHeaderFile outCppFile enum )
-    get_filename_component( outHeaderFileBase ${outHeaderFile} NAME )
-    get_filename_component( outCppFileBase ${outCppFile} NAME )
-    set( intermediateHeader "${CMAKE_CURRENT_BINARY_DIR}/${outHeaderFileBase}.1" )
-    set( intermediateCpp "${CMAKE_CURRENT_BINARY_DIR}/${outCppFileBase}.1" )
-    set( intermediateTarget "${outHeaderFileBase}.target" )
 
     add_custom_command(
-        OUTPUT  ${intermediateHeader}
-                ${intermediateCpp}
+        OUTPUT  ${outHeaderFile}
+                ${outCppFile}
         COMMAND ${CMAKE_COMMAND}
             -Denum=${enum}
             -DinputFile=${inputFile}
-            -DoutHeaderFile=${intermediateHeader}
-            -DoutCppFile=${intermediateCpp}
+            -DoutHeaderFile=${outHeaderFile}
+            -DoutCppFile=${outCppFile}
             -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
-        DEPENDS ${inputFile}
-                ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
         COMMENT "TokenList2DsnLexer.cmake creating:
            ${outHeaderFile} and
            ${outCppFile} from
            ${inputFile}"
         )
 
-    add_custom_target(
-        ${intermediateTarget}
-        DEPENDS ${intermediateHeader}
-                ${intermediateCpp}
-        )
-
-    add_custom_command(
-        OUTPUT  ${outHeaderFile}
-                ${outCppFile}
-        DEPENDS ${intermediateTarget} ${intermediateHeader} ${intermediateCpp}
-        COMMAND ${CMAKE_COMMAND} -E copy ${intermediateHeader} ${outHeaderFile}
-        COMMAND ${CMAKE_COMMAND} -E copy ${intermediateCpp} ${outCppFile}
-        )
-
-    add_custom_target(
-        ${outputTarget} ALL
-        DEPENDS ${outHeaderFile}
-                ${outCppFile}
+    add_custom_target( ${outputTarget}
+        DEPENDS ${inputFile}
+                ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
         )
 
     # extra_args, if any, are treated as source files (typically headers) which
