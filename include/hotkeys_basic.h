@@ -60,10 +60,9 @@ public:
     int      m_KeyCode;      // Key code (ascii value for ascii keys or wxWidgets code for function key
     wxString m_InfoMsg;      // info message.
     int      m_Idcommand;    // internal id for the corresponding command (see hotkey_id_command list)
-    int      m_IdMenuEvent;  // id to call the corresponding event (if any) (see id.h)
 
 public:
-    EDA_HOTKEY( const wxChar* infomsg, int idcommand, int keycode, int idmenuevent = 0 );
+    EDA_HOTKEY( const wxChar* infomsg, int idcommand, int keycode );
 };
 
 
@@ -89,13 +88,16 @@ public:
 
 
 /**
+ * Function KeyCodeFromKeyName
+ * return the key code from its user-friendly key name (ie: "Ctrl+M")
+ */
+int KeyCodeFromKeyName( const wxString& keyname );
+
+/**
  * Function KeyNameFromKeyCode
- * return the key name from the key code
- * * Only some wxWidgets key values are handled for function key ( see
- * s_Hotkey_Name_List[] )
+ * return the user-friendly key name (ie: "Ctrl+M") from the key code
  * @param aKeycode = key code (ascii value, or wxWidgets value for function keys)
- * @param aIsFound = a pointer to a bool to return true if found, or false. an be NULL default)
- * @return the key name in a wxString
+ * @param aIsFound = a pointer to a bool to return true if found, or false
  */
 wxString KeyNameFromKeyCode( int aKeycode, bool * aIsFound = nullptr );
 
@@ -154,6 +156,14 @@ wxString AddHotkeyName( const wxString&           aText,
  *                   will be harvested
  */
 void DisplayHotkeyList( EDA_BASE_FRAME* aFrame, TOOL_MANAGER* aToolMgr );
+
+/**
+ * Function ReadotKeyConfig
+ * Reads a hotkey config file into a map.  If aFileName is empty it will read in the defualt
+ * hotkeys file.
+ * @param aHotKeys 
+ */
+void ReadHotKeyConfig( wxString aFileName, std::map<std::string, int>& aHotKeys );
 
 /**
  * Function WriteHotKeyConfig

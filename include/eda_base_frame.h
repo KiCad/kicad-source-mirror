@@ -307,24 +307,14 @@ public:
     // Read/Save and Import/export hotkeys config
 
     /**
-     * Prompt the user for an old hotkey file to read, and read it.
+     * Prompt the user for a hotkey file to read, and read it.
      *
-     * @param aDescList = current hotkey list descr. to initialize.
+     * @param aActionMap = current hotkey map (over which the imported hotkeys will be applied)
      * @param aDefaultShortname = a default short name (extension not needed)
      *     like eechema, kicad...
      */
-    void ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList,
+    void ImportHotkeyConfigFromFile( std::map<std::string, TOOL_ACTION*> aActionMap,
                                      const wxString& aDefaultShortname );
-
-    /**
-     * Prompt the user for an old hotkey file to read, and read it.
-     *
-     * @param aDescList = current hotkey list descr. to initialize.
-     * @param aDefaultShortname = a default short name (extension not needed)
-     *     like eechema, kicad...
-     */
-    void ExportHotkeyConfigToFile( EDA_HOTKEY_CONFIG* aDescList,
-                                   const wxString& aDefaultShortname );
 
     /**
      * Fetches the file name from the file history list.

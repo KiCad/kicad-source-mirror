@@ -37,7 +37,7 @@ DIALOG_LIST_HOTKEYS::DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent, TOOL_MANAGER*
 
     auto main_sizer = new wxBoxSizer( wxVERTICAL );
 
-    m_hk_list = new PANEL_HOTKEYS_EDITOR( this, true );
+    m_hk_list = new PANEL_HOTKEYS_EDITOR( aParent, this, true );
     m_hk_list->AddHotKeys( aToolMgr );
 
     main_sizer->Add( m_hk_list, 1, wxTOP | wxLEFT | wxRIGHT | wxEXPAND, margin );

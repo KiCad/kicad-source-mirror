@@ -40,14 +40,15 @@ class TOOL_MANAGER;
 class PANEL_HOTKEYS_EDITOR : public wxPanel
 {
 protected:
+    EDA_BASE_FRAME*            m_frame;
     bool                       m_readOnly;
+    
     std::vector<TOOL_MANAGER*> m_toolManagers;
-
     HOTKEY_STORE               m_hotkeyStore;
     WIDGET_HOTKEY_LIST*        m_hotkeyListCtrl;
 
 public:
-    PANEL_HOTKEYS_EDITOR( wxWindow* aWindow, bool aReadOnly );
+    PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow, bool aReadOnly );
 
     void AddHotKeys( TOOL_MANAGER* aToolMgr );
     
@@ -69,6 +70,14 @@ private:
      * @param aEvent: the search event, used to get the search query
      */
     void OnFilterSearch( wxCommandEvent& aEvent );
+
+    /**
+     * Function ImportHotKeys
+     * Puts up a dialog allowing the user to select a hotkeys file and then overlays those
+     * hotkeys onto the current hotkey store.
+     */
+    void ImportHotKeys();
+
 };
 
 

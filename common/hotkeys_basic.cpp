@@ -55,12 +55,11 @@ wxString g_CommonSectionTag( wxT( "[common]" ) );
  * This class allows the real key code changed by user from a key code list
  * file.
  */
-
-EDA_HOTKEY::EDA_HOTKEY( const wxChar* infomsg, int idcommand, int keycode, int idmenuevent ) :
-                        m_KeyCode( keycode ), m_InfoMsg( infomsg ), m_Idcommand( idcommand ), 
-                        m_IdMenuEvent( idmenuevent )
-{
-}
+EDA_HOTKEY::EDA_HOTKEY( const wxChar* infomsg, int idcommand, int keycode ) :
+        m_KeyCode( keycode ), 
+        m_InfoMsg( infomsg ), 
+        m_Idcommand( idcommand )
+{ }
 
 
 /* class to handle the printable name and the keycode
@@ -77,7 +76,7 @@ struct hotkey_name_descr
  * For instance wxT( "F1" ), WXK_F1 handle F1, AltF1, CtrlF1 ...
  * Key names are:
  *        "Space","Ctrl+Space","Alt+Space" or
- *      "Alt+A","Ctrl+F1", ...
+ *        "Alt+A","Ctrl+F1", ...
  */
 #define KEY_NON_FOUND -1
 static struct hotkey_name_descr hotkeyNameList[] =
@@ -320,11 +319,7 @@ wxString KeyNameFromCommandId( EDA_HOTKEY** aList, int aCommandId )
 
 /**
  * Function KeyCodeFromKeyName
- * return the key code from its key name
- * Only some wxWidgets key values are handled for function key
- * @param keyname = wxString key name to find in hotkeyNameList[],
- *   like F2 or space or an usual (ascii) char.
- * @return the key code
+ * return the key code from its user-friendly key name (ie: "Ctrl+M")
  */
 int KeyCodeFromKeyName( const wxString& keyname )
 {
@@ -400,26 +395,25 @@ void DisplayHotkeyList( EDA_BASE_FRAME* aParent, TOOL_MANAGER* aToolManager )
 }
 
 
-int WriteHotKeyConfig( std::map<std::string, TOOL_ACTION*> aActionMap )
+void ReadHotKeyConfig( wxString fileName, std::map<std::string, int>& aHotKeys )
 {
-    wxFileName fn( "user" );
+    if( fileName.IsEmpty() )
+    {
+        wxFileName fn( "user" );
+        fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
+        fn.SetPath( GetKicadConfigPath() );
+        fileName = fn.GetFullPath();
+    }
+    
+    if( !wxFile::Exists( fileName ) )
+        return;
 
-    fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
-    fn.SetPath( GetKicadConfigPath() );
-
-    if( !wxFile::Exists( fn.GetFullPath() ) )
-        return 0;
-
-    wxFile file( fn.GetFullPath(), wxFile::OpenMode::read );
+    wxFile file( fileName, wxFile::OpenMode::read );
 
     if( !file.IsOpened() )       // There is a problem to open file
-        return 0;
+        return;
 
-    // Read entire hotkey set into map
-    //
-    wxString                input;
-    std::map<wxString, int> hotkeys;
-
+    wxString input;
     file.ReadAll( &input );
     input.Replace( "\r\n", "\n" );  // Convert Windows files to Unix line-ends
     wxStringTokenizer fileTokenizer( input, "\n", wxTOKEN_STRTOK );
@@ -432,12 +426,24 @@ int WriteHotKeyConfig( std::map<std::string, TOOL_ACTION*> aActionMap )
         wxString keyName = lineTokenizer.GetNextToken();
 
         if( !cmdName.IsEmpty() )
-            hotkeys[ cmdName ] = KeyCodeFromKeyName( keyName );
+            aHotKeys[ cmdName.ToStdString() ] = KeyCodeFromKeyName( keyName );
     }
+}
 
-    file.Close();
+
+int WriteHotKeyConfig( std::map<std::string, TOOL_ACTION*> aActionMap )
+{
+    std::map<std::string, int> hotkeys;
+    wxFileName fn( "user" );
+
+    fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
+    fn.SetPath( GetKicadConfigPath() );
+
+    // Read the existing config (all hotkeys)
+    //
+    ReadHotKeyConfig( fn.GetFullPath(), hotkeys );
    
-    // Overlay this app's hotkey definitions onto the map
+    // Overlay the current app's hotkey definitions onto the map
     //
     for( const auto& ii : aActionMap )
     {
@@ -447,12 +453,10 @@ int WriteHotKeyConfig( std::map<std::string, TOOL_ACTION*> aActionMap )
     
     // Write entire hotkey set
     //
-    file.Open( fn.GetFullPath(), wxFile::OpenMode::write );
+    wxFile file( fn.GetFullPath(), wxFile::OpenMode::write );
     
     for( const auto& ii : hotkeys )
         file.Write( wxString::Format( "%s\t%s\n", ii.first, KeyNameFromKeyCode( ii.second ) ) );
-
-    file.Close();
 
     return 1;
 }
@@ -544,65 +548,4 @@ int ReadLegacyHotkeyConfigFile( const wxString& aFilename, std::map<std::string,
     return 1;
 }
 
-
-void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList,
-                                                 const wxString& aDefaultShortname )
-{
-    wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
-    wxString mask = wxT( "*." ) + ext;
-
-
-    wxString path = GetMruPath();
-    wxFileName fn( aDefaultShortname );
-    fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
-
-    wxString  filename = EDA_FILE_SELECTOR( _( "Read Hotkey Configuration File:" ),
-                                           path,
-                                           fn.GetFullPath(),
-                                           ext,
-                                           mask,
-                                           this,
-                                           wxFD_OPEN,
-                                           true );
-
-    if( filename.IsEmpty() )
-        return;
-
-    // JEY TODO: implement import of new hotkeys file....
-    //::ReadHotkeyConfigFile( filename, aDescList, false );
-    //WriteHotKeyConfig( aDescList );
-    SetMruPath( wxFileName( filename ).GetPath() );
-}
-
-
-void EDA_BASE_FRAME::ExportHotkeyConfigToFile( EDA_HOTKEY_CONFIG* aDescList,
-                                               const wxString& aDefaultShortname )
-{
-    wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
-    wxString mask = wxT( "*." ) + ext;
-
-#if 0
-    wxString path = wxPathOnly( Prj().GetProjectFullName() );
-#else
-    wxString path = GetMruPath();
-#endif
-    wxFileName fn( aDefaultShortname );
-    fn.SetExt( DEFAULT_HOTKEY_FILENAME_EXT );
-
-    wxString filename = EDA_FILE_SELECTOR( _( "Write Hotkey Configuration File:" ),
-                                           path,
-                                           fn.GetFullPath(),
-                                           ext,
-                                           mask,
-                                           this,
-                                           wxFD_SAVE,
-                                           true );
-
-    if( filename.IsEmpty() )
-        return;
-
-    // JEY TODO: make this whole routine oboslete?
-    //WriteHotKeyConfig( aDescList, &filename );
-    SetMruPath( wxFileName( filename ).GetPath() );
-}
 

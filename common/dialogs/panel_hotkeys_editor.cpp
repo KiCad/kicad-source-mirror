@@ -27,9 +27,13 @@
 #include <wx/panel.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
+#include <hotkeys_basic.h>
 #include <widgets/button_row_panel.h>
 #include <widgets/ui_common.h>
 #include <tool/tool_manager.h>
+#include <tool/tool_action.h>
+#include <wx/tokenzr.h>
+#include <gestfich.h>
 
 static const wxSize default_dialog_size { 500, 350 };
 static const wxSize min_dialog_size { -1, 350 };
@@ -55,8 +59,10 @@ static wxSearchCtrl* CreateTextFilterBox( wxWindow* aParent, const wxString& aDe
 }
 
 
-PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( wxWindow* aWindow, bool aReadOnly ) :
+PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow,
+                                            bool aReadOnly ) :
         wxPanel( aWindow, wxID_ANY, wxDefaultPosition, default_dialog_size ),
+        m_frame( aFrame ),
         m_readOnly( aReadOnly ),
         m_hotkeyStore()
 {
@@ -118,8 +124,7 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
             _( "Import Hotkeys..." ),
             _( "Import hotkey definitions from an external file, replacing the current values" ),
             [this]( wxCommandEvent& ){
-                // JEY TODO: implement hotkey import....
-                /*m_frame->ImportHotkeyConfigFromFile( m_hotkeys, m_nickname );*/
+                ImportHotKeys();
             }
         }
     };
@@ -158,3 +163,34 @@ void PANEL_HOTKEYS_EDITOR::OnFilterSearch( wxCommandEvent& aEvent )
     const auto searchStr = aEvent.GetString();
     m_hotkeyListCtrl->ApplyFilterString( searchStr );
 }
+
+
+void PANEL_HOTKEYS_EDITOR::ImportHotKeys()
+{
+    wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
+    wxString mask = wxT( "*." ) + ext;
+    wxString filename = EDA_FILE_SELECTOR( _( "Read Hotkeys File:" ), m_frame->GetMruPath(), 
+                                           wxEmptyString, ext, mask, this, wxFD_OPEN, true );
+
+    if( filename.IsEmpty() )
+        return;
+
+    std::map<std::string, int> importedHotKeys;
+    ReadHotKeyConfig( filename, importedHotKeys );
+    m_frame->SetMruPath( wxFileName( filename ).GetPath() );
+
+    // Overlay the imported hotkeys onto the hotkey store
+    for( HOTKEY_SECTION& section: m_hotkeyStore.GetSections() )
+    {
+        for( HOTKEY& hotkey: section.m_HotKeys )
+        {
+            if( importedHotKeys.count( hotkey.m_Parent->GetName() ) )
+                hotkey.m_EditKeycode = importedHotKeys[ hotkey.m_Parent->GetName() ];
+        }
+    }
+    
+    m_hotkeyListCtrl->TransferDataToControl();
+}
+
+
+

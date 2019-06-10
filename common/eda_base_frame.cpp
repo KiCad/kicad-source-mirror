@@ -518,7 +518,7 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
 
     book->AddPage( new PANEL_COMMON_SETTINGS( &dlg, book ), _( "Common" ) );
     
-    PANEL_HOTKEYS_EDITOR* hotkeysPanel = new PANEL_HOTKEYS_EDITOR( book, false );
+    PANEL_HOTKEYS_EDITOR* hotkeysPanel = new PANEL_HOTKEYS_EDITOR( this, book, false );
     book->AddPage( hotkeysPanel, _( "Hotkeys" ) );
 
     for( unsigned i = 0; i < KIWAY_PLAYER_COUNT;  ++i )

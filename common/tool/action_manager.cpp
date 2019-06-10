@@ -204,7 +204,7 @@ void ACTION_MANAGER::UpdateHotKeys()
     m_hotkeys.clear();
     
     ReadLegacyHotkeyConfig( m_toolMgr->GetEditFrame()->ConfigBaseName(), legacyHotKeyMap );
-    // JEY TODO: read user hotkey config...
+    ReadHotKeyConfig( wxEmptyString, userHotKeyMap );
 
     for( const auto& actionName : m_actionNameIndex )
     {
