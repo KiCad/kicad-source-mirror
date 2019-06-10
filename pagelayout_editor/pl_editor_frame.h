@@ -142,6 +142,8 @@ public:
     const TITLE_BLOCK& GetTitleBlock() const override;
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;
 
+    void DisplayGridMsg();
+
     void UpdateStatusBar() override;
 
     /**

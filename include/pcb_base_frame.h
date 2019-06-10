@@ -611,6 +611,13 @@ public:
      */
     void SetPrevGrid() override;
 
+    /**
+     * Function DisplayGridMsg()
+     *
+     * Display the current grid pane on the status bar.
+     */
+    void DisplayGridMsg();
+
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas
     virtual void UseGalCanvas( bool aEnable ) override;
 

@@ -169,7 +169,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     m_auimgr.SetFlags(wxAUI_MGR_DEFAULT);
 
-    CreateStatusBar( 6 );
+    CreateStatusBar( 7 );
 
     // set the size of the status bar subwindows:
 
@@ -191,6 +191,9 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
         // delta distances
         GetTextSize( wxT( "dx 0234.567890  dx 0234.567890  d 0234.567890" ), stsbar ).x + 10,
+
+        // grid size
+        GetTextSize( wxT( "grid X 0234.567890  Y 0234.567890" ), stsbar ).x + 10,
 
         // units display, Inches is bigger than mm
         GetTextSize( _( "Inches" ), stsbar ).x + 10,
@@ -614,6 +617,37 @@ void EDA_DRAW_FRAME::DisplayToolMsg( const wxString& msg )
 }
 
 
+/*
+ * Display the grid status.
+ */
+void EDA_DRAW_FRAME::DisplayGridMsg()
+{
+    wxString line;
+    wxString gridformatter;
+
+    switch( m_UserUnits )
+    {
+    case INCHES:
+        gridformatter = "grid %.3f";
+        break;
+
+    case MILLIMETRES:
+        gridformatter = "grid %.4f";
+        break;
+
+    default:
+        gridformatter = "grid %f";
+        break;
+    }
+
+    wxRealPoint curr_grid_size = GetScreen()->GetGridSize();
+    double grid = To_User_Unit( m_UserUnits, curr_grid_size.x );
+    line.Printf( gridformatter, grid );
+
+    SetStatusText( line, 4 );
+}
+
+
 void EDA_DRAW_FRAME::DisplayUnitsMsg()
 {
     wxString msg;
@@ -625,7 +659,7 @@ void EDA_DRAW_FRAME::DisplayUnitsMsg()
     default:          msg = _( "Units" );  break;
     }
 
-    SetStatusText( msg, 4 );
+    SetStatusText( msg, 5 );
 }
 
 

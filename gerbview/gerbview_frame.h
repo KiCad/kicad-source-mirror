@@ -403,6 +403,13 @@ public:
     void UpdateTitleAndInfo();
 
     /**
+     * Function DisplayGridMsg()
+     *
+     * Display the current grid pane on the status bar.
+     */
+    void DisplayGridMsg();
+
+    /**
      * Function GetConfigurationSettings
      * Populates the GerbView applications settings list.
      * (list of parameters that must be saved in GerbView parameters)

@@ -284,6 +284,9 @@ void SCH_BASE_FRAME::UpdateStatusBar()
     line.Printf( locformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );
     SetStatusText( line, 3 );
 
+    // refresh grid display
+    DisplayGridMsg();
+
     // refresh units display
     DisplayUnitsMsg();
 }

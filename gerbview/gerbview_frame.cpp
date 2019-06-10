@@ -1043,6 +1043,42 @@ void GERBVIEW_FRAME::SetGridColor( COLOR4D aColor )
 }
 
 
+/*
+ * Display the grid status.
+ */
+void GERBVIEW_FRAME::DisplayGridMsg()
+{
+    wxString line;
+    wxString gridformatter;
+
+    switch( m_UserUnits )
+    {
+    case INCHES:
+        gridformatter = "grid X %.6f  Y %.6f";
+        break;
+
+    case MILLIMETRES:
+        gridformatter = "grid X %.6f  Y %.6f";
+        break;
+
+    default:
+        gridformatter = "grid X %f  Y %f";
+        break;
+    }
+
+    BASE_SCREEN* screen = GetScreen();
+    wxArrayString gridsList;
+
+    int icurr = screen->BuildGridsChoiceList( gridsList, m_UserUnits != INCHES );
+    GRID_TYPE& grid = screen->GetGrid( icurr );
+    double grid_x = To_User_Unit( m_UserUnits, grid.m_Size.x );
+    double grid_y = To_User_Unit( m_UserUnits, grid.m_Size.y );
+    line.Printf( gridformatter, grid_x, grid_y );
+
+    SetStatusText( line, 4 );
+}
+
+
 void GERBVIEW_FRAME::UpdateStatusBar()
 {
     EDA_DRAW_FRAME::UpdateStatusBar();
@@ -1127,6 +1163,8 @@ void GERBVIEW_FRAME::UpdateStatusBar()
         line.Printf( relformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );
         SetStatusText( line, 3 );
     }
+
+    DisplayGridMsg();
 }
 
 
