@@ -865,7 +865,10 @@ int PCB_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
     }
 
     if( modified )
+    {
+        m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
         m_frame->OnModify();
+    }
 
     return 0;
 }

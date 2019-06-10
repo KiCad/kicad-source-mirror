@@ -1087,6 +1087,7 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::UpdateMessagePanel,   EVENTS::SelectedEvent );
     Go( &PCBNEW_CONTROL::UpdateMessagePanel,   EVENTS::UnselectedEvent );
     Go( &PCBNEW_CONTROL::UpdateMessagePanel,   EVENTS::ClearedEvent );
+    Go( &PCBNEW_CONTROL::UpdateMessagePanel,   EVENTS::SelectedItemsModified );
 }
 
 
