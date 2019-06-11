@@ -125,7 +125,7 @@ TOOL_ACTION PCB_ACTIONS::drawZoneKeepout( "pcbnew.InteractiveDrawing.keepout",
 
 TOOL_ACTION PCB_ACTIONS::drawZoneCutout( "pcbnew.InteractiveDrawing.zoneCutout",
         AS_GLOBAL, 
-        GR_KB_SHIFT + 'C', LEGACY_HK_NAME( "Add a Zone Cutout" ),
+        MD_SHIFT + 'C', LEGACY_HK_NAME( "Add a Zone Cutout" ),
         _( "Add a Zone Cutout" ), _( "Add a cutout area of an existing zone" ),
         add_zone_cutout_xpm, AF_ACTIVATE );
 

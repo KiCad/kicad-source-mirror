@@ -198,12 +198,21 @@ wxString AddHotkeyName( const wxString& aText, int aHotKey, HOTKEY_ACTION_TYPE a
         switch( aStyle )
         {
         case IS_HOTKEY:
-            msg << wxT( "\t" ) << keyname;
+        {
+            // Don't add a suffix for unassigned hotkeys:
+            // WX spews debug from wxAcceleratorEntry::ParseAccel if it doesn't
+            // recognise the keyname, which is the case for <unassigned>.
+            if( aHotKey != 0 )
+            {
+                msg << wxT( "\t" ) << keyname;
+            }
             break;
-
+        }
         case IS_COMMENT:
+        {
             msg << wxT( " (" ) << keyname << wxT( ")" );
             break;
+        }
         }
     }
 
