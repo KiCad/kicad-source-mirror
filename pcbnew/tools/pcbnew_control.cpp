@@ -969,6 +969,9 @@ int PCBNEW_CONTROL::Show3DViewer( const TOOL_EVENT& aEvent )
 {
     EDA_3D_VIEWER* draw3DFrame = m_frame->CreateAndShow3D_Frame();
 
+    // Suppress warnings on non-Mac systems
+    [&draw3DFrame] {}();
+
     if( m_frame->IsType( FRAME_PCB_MODULE_VIEWER )
      || m_frame->IsType( FRAME_PCB_MODULE_VIEWER_MODAL )
      || m_frame->IsType( FRAME_PCB_FOOTPRINT_WIZARD ) )
