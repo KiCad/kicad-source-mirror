@@ -618,6 +618,7 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
             continue;
 
         LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
+        newItem->SetParent( part );
         newItem->SetFlags( IS_NEW | IS_PASTED | SELECTED );
 
         part->GetDrawItems().push_back( newItem );
