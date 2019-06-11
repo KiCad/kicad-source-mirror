@@ -601,6 +601,16 @@ void SCH_LINE::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 }
 
 
+void SCH_LINE::GetSelectedPoints( std::vector< wxPoint >& aPoints ) const
+{
+    if( m_Flags & STARTPOINT )
+        aPoints.push_back( m_start );
+
+    if( m_Flags & ENDPOINT )
+        aPoints.push_back( m_end );
+}
+
+
 wxString SCH_LINE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
     wxString txtfmt, orient;

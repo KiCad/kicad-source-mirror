@@ -194,17 +194,16 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {
-                bool appendUndo = selection.Front()->IsNew();
+                SCH_ITEM* sch_item = (SCH_ITEM*) selection.Front();
+                bool      appendUndo = sch_item->IsNew();
 
                 //------------------------------------------------------------------------
                 // Setup a drag or a move
                 //
                 for( SCH_ITEM* it = m_frame->GetScreen()->GetDrawItems(); it; it = it->Next() )
                 {
-                    it->ClearFlags( STARTPOINT | ENDPOINT | SELECTEDNODE );
-
-                    if( it->IsSelected() )
-                        it->SetFlags( STARTPOINT | ENDPOINT );
+                    if( !it->IsSelected() )
+                        it->ClearFlags( STARTPOINT | ENDPOINT | SELECTEDNODE );
                 }
 
                 if( m_isDragOperation )
@@ -216,7 +215,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         if( static_cast<SCH_ITEM*>( item )->IsConnectable() )
                         {
                             std::vector<wxPoint> connections;
-                            static_cast<SCH_ITEM*>( item )->GetConnectionPoints( connections );
+
+                            if( item->Type() == SCH_LINE_T )
+                                static_cast<SCH_LINE*>( item )->GetSelectedPoints( connections );
+                            else
+                                static_cast<SCH_ITEM*>( item )->GetConnectionPoints( connections );
 
                             for( wxPoint point : connections )
                                 getConnectedDragItems( (SCH_ITEM*) item, point, m_dragAdditions );
@@ -301,11 +304,14 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 // For some items, moving the cursor to anchor is not good (for instance large
                 // hierarchical sheets or components can have the anchor outside the view)
-                else if( selection.Size() == 1
-                        && static_cast<SCH_ITEM*>( selection.Front() )->IsMovableFromAnchorPoint()
-                        && m_frame->GetMoveWarpsCursor() )
+                else if( selection.Size() == 1 && sch_item->IsMovableFromAnchorPoint()
+                         && m_frame->GetMoveWarpsCursor() )
                 {
-                    m_anchorPos = static_cast<SCH_ITEM*>( selection.Front() )->GetPosition();
+                    if( sch_item->Type() == SCH_LINE_T && !( sch_item->GetFlags() & STARTPOINT ) )
+                        m_anchorPos = static_cast<SCH_LINE*>( sch_item )->GetEndPoint();
+                    else
+                        m_anchorPos = sch_item->GetPosition();
+
                     getViewControls()->WarpCursor( *m_anchorPos );
                     m_cursor = *m_anchorPos;
                 }

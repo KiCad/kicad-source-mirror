@@ -33,6 +33,7 @@
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_field.h>
+#include <sch_line.h>
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <view/view_group.h>
@@ -487,7 +488,7 @@ EDA_ITEM* EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T*
 
     bool anyCollected = collector.GetCount() != 0;
 
-    // Remove unselectable items
+    // Post-process collected items
     for( int i = collector.GetCount() - 1; i >= 0; --i )
     {
         if( !selectable( collector[ i ] ) )
@@ -495,6 +496,20 @@ EDA_ITEM* EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T*
 
         if( aCheckLocked && collector[ i ]->IsLocked() )
             collector.Remove( i );
+
+        // SelectPoint, unlike other selection routines, can select line ends
+        if( collector[ i ]->Type() == SCH_LINE_T )
+        {
+            SCH_LINE* line = (SCH_LINE*) collector[ i ];
+            line->ClearFlags( STARTPOINT | ENDPOINT );
+
+            if( HitTestPoints( line->GetStartPoint(), (wxPoint) aWhere, collector.m_Threshold ) )
+                line->SetFlags( STARTPOINT );
+            else if (HitTestPoints( line->GetEndPoint(), (wxPoint) aWhere, collector.m_Threshold ) )
+                line->SetFlags( ENDPOINT );
+            else
+                line->SetFlags( STARTPOINT | ENDPOINT );
+        }
     }
 
     m_selection.ClearReferencePoint();
@@ -579,6 +594,30 @@ void EE_SELECTION_TOOL::guessSelectionCandidates( EE_COLLECTOR& collector, const
 
         if( item->Type() == SCH_FIELD_T && other->Type() == SCH_COMPONENT_T )
             collector.Remove( other );
+    }
+
+    // No need for multiple wires at a single point; if there's a junction select that;
+    // otherwise any of the wires will do
+    bool junction = false;
+    bool wiresOnly = true;
+
+    for( EDA_ITEM* item : collector )
+    {
+        if( item->Type() == SCH_JUNCTION_T )
+            junction = true;
+        else if( item->Type() != SCH_LINE_T )
+            wiresOnly = false;
+    }
+
+    if( wiresOnly )
+    {
+        for( int j = collector.GetCount() - 1; j >= 0; --j )
+        {
+            if( junction && collector[ j ]->Type() != SCH_JUNCTION_T )
+                collector.Remove( j );
+            else if( !junction && j > 0 )
+                collector.Remove( j );
+        }
     }
 }
 

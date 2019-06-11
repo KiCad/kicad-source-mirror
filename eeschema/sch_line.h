@@ -176,7 +176,9 @@ public:
 
     bool IsConnectable() const override;
 
-    void GetConnectionPoints(std::vector< wxPoint >& aPoints ) const override;
+    void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
+
+    void GetSelectedPoints( std::vector< wxPoint >& aPoints ) const;
 
     bool CanConnect( const SCH_ITEM* aItem ) const override;
 
