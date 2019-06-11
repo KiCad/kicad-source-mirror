@@ -237,7 +237,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     for( EDA_ITEM* item : selection )
                         static_cast<SCH_ITEM*>( item )->UpdateDanglingState( internalPoints );
                 }
-wxMessageBox( wxString::Format( "Size: %d", selection.Size() ) );
                 // Generic setup
                 //
                 for( EDA_ITEM* item : selection )
@@ -283,7 +282,6 @@ wxMessageBox( wxString::Format( "Size: %d", selection.Size() ) );
                     m_anchorPos = selection.GetReferencePoint();
                 }
 
-wxMessageBox( wxString::Format( "Size: %d", selection.Size() ) );
                 if( m_anchorPos )
                 {
                     VECTOR2I delta = m_cursor - (*m_anchorPos);
@@ -314,8 +312,6 @@ wxMessageBox( wxString::Format( "Size: %d", selection.Size() ) );
                 // ...otherwise modify items with regard to the grid-snapped cursor position
                 else
                 {
-wxMessageBox( wxString::Format( "WTF! Size: %d, %s", selection.Size(),
-static_cast<SCH_ITEM*>( selection.Front() )->IsMovableFromAnchorPoint() ? "is movable from anchor" : "NOT MOVABLE FROM ANCHOR" ) );
                     m_cursor = getViewControls()->GetCursorPosition( true );
                     m_anchorPos = m_cursor;
                 }
