@@ -301,7 +301,7 @@ void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aPara
         TOOL_STATE* current = m_activeState;
         processEvent( event );
         setActiveState( current );
-        UpdateUI();
+        UpdateUI( event );
     }
     else
     {
@@ -795,7 +795,7 @@ bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 #endif
     }
 
-    UpdateUI();
+    UpdateUI( aEvent );
 
     return hotkey_handled;
 }
@@ -970,13 +970,15 @@ bool TOOL_MANAGER::IsToolActive( TOOL_ID aId ) const
 }
 
 
-void TOOL_MANAGER::UpdateUI()
+void TOOL_MANAGER::UpdateUI( const TOOL_EVENT& aEvent )
 {
     EDA_BASE_FRAME* frame = GetEditFrame();
 
     if( frame )
     {
         frame->UpdateStatusBar();
-        frame->SyncToolbars();
+
+        if( !aEvent.IsMotion() )
+            frame->SyncToolbars();
     }
 }

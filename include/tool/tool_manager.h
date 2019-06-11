@@ -327,9 +327,9 @@ public:
     void RunMainStack( TOOL_BASE* aTool, std::function<void()> aFunc );
 
     /**
-     * Synchronizes toolbars.
+     * Updates the status bar and synchronizes toolbars.
      */
-    void UpdateUI();
+    void UpdateUI( const TOOL_EVENT& aEvent );
 
     /**
      * Pauses execution of a given tool until one or more events matching aConditions arrives.
