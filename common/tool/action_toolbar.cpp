@@ -65,6 +65,12 @@ void ACTION_TOOLBAR::AddButton( const TOOL_ACTION& aAction )
 }
 
 
+void ACTION_TOOLBAR::SetToolBitmap( const TOOL_ACTION& aAction, const wxBitmap& aBitmap )
+{
+    wxAuiToolBar::SetToolBitmap( aAction.GetId() + ACTION_ID, aBitmap );
+}
+
+
 void ACTION_TOOLBAR::Toggle( const TOOL_ACTION& aAction, bool aState )
 {
     int toolId = aAction.GetId() + ACTION_ID;

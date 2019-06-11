@@ -206,7 +206,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
 
     if( m_mainToolBar )
     {
-        m_mainToolBar->SetToolBitmap( PCB_ACTIONS::selectLayerPair.GetId(), *LayerPairBitmap );
+        m_mainToolBar->SetToolBitmap( PCB_ACTIONS::selectLayerPair, *LayerPairBitmap );
         m_mainToolBar->Refresh();
     }
 }

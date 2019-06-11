@@ -61,6 +61,13 @@ public:
     void AddButton( const TOOL_ACTION& aAction );
 
     /**
+     * Function SetToolBitmap()
+     * Updates the bitmap of a particular tool.  Not icon-based because we use it
+     * for the custom-drawn layer pair bitmap.
+     */
+    void SetToolBitmap( const TOOL_ACTION& aAction, const wxBitmap& aBitmap );
+    
+    /**
      * Applies the default toggle action.  For checked items this is check/uncheck; for
      * non-checked items it's enable/disable.
      */
