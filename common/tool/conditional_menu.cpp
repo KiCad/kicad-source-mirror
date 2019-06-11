@@ -103,6 +103,13 @@ SELECTION g_resolveDummySelection;
 void CONDITIONAL_MENU::Resolve()
 {
     Evaluate( g_resolveDummySelection );
+
+    runOnSubmenus( [] ( ACTION_MENU* aMenu ) {
+        CONDITIONAL_MENU* conditionalMenu = dynamic_cast<CONDITIONAL_MENU*>( aMenu );
+
+        if( conditionalMenu )
+            conditionalMenu->Resolve();
+    } );
 }
 
 
