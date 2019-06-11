@@ -207,7 +207,7 @@ bool LIB_PIN_TOOL::PlacePin( LIB_PIN* aPin )
     // Put linked pins in new position, and clear flags
     for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
     {
-        if( pin->GetEditFlags() == 0 )
+        if( ( pin->GetEditFlags() & IS_LINKED ) == 0 )
             continue;
 
         pin->MoveTo( aPin->GetPosition() );
