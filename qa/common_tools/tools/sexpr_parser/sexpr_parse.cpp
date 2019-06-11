@@ -59,7 +59,7 @@ public:
         std::unique_ptr<SEXPR::SEXPR> sexpr( m_parser.Parse( sexpr_str ) );
 
         if( m_verbose )
-            timer.Show( "S-Expression Parsing" );
+            std::cout << "S-Expression Parsing took " << timer.msecs() << "ms" << std::endl;
 
         return sexpr != nullptr;
     }

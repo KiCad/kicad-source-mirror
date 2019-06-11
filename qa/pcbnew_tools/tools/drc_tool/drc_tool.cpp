@@ -27,6 +27,7 @@
 #include <string>
 
 #include <common.h>
+#include <profile.h>
 
 #include <wx/cmdline.h>
 
@@ -36,7 +37,6 @@
 #include <drc/courtyard_overlap.h>
 #include <drc/drc_marker_factory.h>
 
-#include <qa_utils/scoped_timer.h>
 #include <qa_utils/stdstream_line_reader.h>
 
 
@@ -84,7 +84,7 @@ public:
 
         DRC_DURATION duration;
         {
-            SCOPED_TIMER<DRC_DURATION> timer( duration );
+            SCOPED_PROF_COUNTER<DRC_DURATION> timer( duration );
             drc_prov->RunDRC( aBoard );
         }
 

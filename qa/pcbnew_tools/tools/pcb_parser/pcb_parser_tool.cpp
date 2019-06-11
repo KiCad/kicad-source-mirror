@@ -27,6 +27,7 @@
 #include <string>
 
 #include <common.h>
+#include <profile.h>
 
 #include <wx/cmdline.h>
 
@@ -37,7 +38,6 @@
 
 #include <wx/cmdline.h>
 
-#include <qa_utils/scoped_timer.h>
 #include <qa_utils/stdstream_line_reader.h>
 
 using PARSE_DURATION = std::chrono::microseconds;
@@ -65,8 +65,10 @@ bool parse( std::istream& aStream, bool aVerbose )
 
     try
     {
-        SCOPED_TIMER<PARSE_DURATION> timer( duration );
+        PROF_COUNTER timer;
         board = parser.Parse();
+
+        duration = timer.SinceStart<PARSE_DURATION>();
     }
     catch( const IO_ERROR& parse_error )
     {
