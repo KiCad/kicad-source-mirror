@@ -45,6 +45,11 @@
 #include <ws_draw_item.h>
 #include <page_info.h>
 #include <title_block.h>
+#include <tool/tool_menu.h>
+#include <tool/selection_conditions.h>
+#include <tool/zoom_menu.h>
+#include <tool/grid_menu.h>
+#include <tool/common_tools.h>
 
 /**
  * Definition for enabling and disabling scroll bar setting trace output.  See the
@@ -325,6 +330,31 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
 double EDA_DRAW_FRAME::GetZoom()
 {
     return GetScreen()->GetZoom();
+}
+
+
+void EDA_DRAW_FRAME::AddStandardSubMenus( TOOL_MENU& aToolMenu )
+{
+    COMMON_TOOLS*     commonTools = m_toolManager->GetTool<COMMON_TOOLS>();
+    CONDITIONAL_MENU& aMenu = aToolMenu.GetMenu();
+
+    aMenu.AddItem( ACTIONS::zoomCenter,    SELECTION_CONDITIONS::ShowAlways, 1000 );
+    aMenu.AddItem( ACTIONS::zoomIn,        SELECTION_CONDITIONS::ShowAlways, 1000 );
+    aMenu.AddItem( ACTIONS::zoomOut,       SELECTION_CONDITIONS::ShowAlways, 1000 );
+    aMenu.AddItem( ACTIONS::zoomFitScreen, SELECTION_CONDITIONS::ShowAlways, 1000 );
+
+    aMenu.AddSeparator(SELECTION_CONDITIONS::ShowAlways, 1000 );
+
+    auto zoomMenu = std::make_shared<ZOOM_MENU>( this );
+    zoomMenu->SetTool( commonTools );
+    aToolMenu.AddSubMenu( zoomMenu );
+
+    auto gridMenu = std::make_shared<GRID_MENU>( this );
+    gridMenu->SetTool( commonTools );
+    aToolMenu.AddSubMenu( gridMenu );
+
+    aMenu.AddMenu( zoomMenu.get(),   SELECTION_CONDITIONS::ShowAlways, 1000 );
+    aMenu.AddMenu( gridMenu.get(), SELECTION_CONDITIONS::ShowAlways, 1000 );
 }
 
 

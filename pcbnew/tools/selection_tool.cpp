@@ -211,7 +211,7 @@ bool SELECTION_TOOL::Init()
     if( frame && ( frame->IsType( FRAME_PCB_MODULE_VIEWER )
                    || frame->IsType( FRAME_PCB_MODULE_VIEWER_MODAL ) ) )
     {
-        m_menu.AddStandardSubMenus( frame );
+        frame->AddStandardSubMenus( m_menu );
         return true;
     }
 
@@ -225,7 +225,7 @@ bool SELECTION_TOOL::Init()
     menu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 1000 );
 
     if( frame )
-        m_menu.AddStandardSubMenus( frame );
+        frame->AddStandardSubMenus( m_menu );
 
     return true;
 }

@@ -102,7 +102,7 @@ bool PL_SELECTION_TOOL::Init()
     menu.AddItem( PL_ACTIONS::appendImportedWorksheet, PL_CONDITIONS::Idle, 250 );
 
     menu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1000 );
-    m_menu.AddStandardSubMenus( m_frame );
+    m_frame->AddStandardSubMenus( m_menu );
 
     return true;
 }

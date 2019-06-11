@@ -76,24 +76,3 @@ void TOOL_MENU::CloseContextMenu( OPT_TOOL_EVENT& evt )
 {
 }
 
-
-// This makes the factory functions a bit less verbose
-using S_C = SELECTION_CONDITIONS;
-
-void TOOL_MENU::AddStandardSubMenus( EDA_DRAW_FRAME* aFrame )
-{
-#if defined( PCBNEW ) || defined( CVPCB ) || defined( EESCHEMA ) || defined( GERBVIEW ) || defined( PL_EDITOR )
-    m_menu.AddItem( ACTIONS::zoomCenter, S_C::ShowAlways, 1000 );
-    m_menu.AddItem( ACTIONS::zoomIn, S_C::ShowAlways, 1000  );
-    m_menu.AddItem( ACTIONS::zoomOut, S_C::ShowAlways, 1000 );
-    m_menu.AddItem( ACTIONS::zoomFitScreen, S_C::ShowAlways, 1000 );
-
-    m_menu.AddSeparator(SELECTION_CONDITIONS::ShowAlways, 1000 );
-
-    if( aFrame )
-    {
-        m_menu.AddMenu( createOwnSubMenu<ZOOM_MENU>( aFrame ).get(), S_C::ShowAlways, 1000 );
-        m_menu.AddMenu( createOwnSubMenu<GRID_MENU>( aFrame ).get(), S_C::ShowAlways, 1000 );
-    }
-#endif
-}

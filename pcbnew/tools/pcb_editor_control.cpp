@@ -382,7 +382,7 @@ bool PCB_EDITOR_CONTROL::Init()
     ctxMenu.AddSeparator( placeModuleCondition, 1000 );
 
     // Finally, add the standard zoom & grid items
-    m_menu.AddStandardSubMenus( getEditFrame<PCB_BASE_FRAME>() );
+    getEditFrame<PCB_BASE_FRAME>()->AddStandardSubMenus( m_menu );
 
     auto zoneMenu = std::make_shared<ZONE_CONTEXT_MENU>();
     zoneMenu->SetTool( this );

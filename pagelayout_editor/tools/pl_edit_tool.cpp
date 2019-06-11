@@ -80,7 +80,7 @@ bool PL_EDIT_TOOL::Init()
     ctxMenu.AddItem( PL_ACTIONS::doDelete,           SELECTION_CONDITIONS::NotEmpty, 200 );
 
     // Finally, add the standard zoom/grid items
-    m_menu.AddStandardSubMenus( m_frame );
+    m_frame->AddStandardSubMenus( m_menu );
 
     //
     // Add editing actions to the selection tool menu

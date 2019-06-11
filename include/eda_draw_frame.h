@@ -37,6 +37,7 @@
 class wxSingleInstanceChecker;
 class EDA_HOTKEY;
 class ACTION_TOOLBAR;
+class TOOL_MENU;
 
 using KIGFX::COLOR4D;
 
@@ -514,6 +515,14 @@ public:
      * @return The current zoom level.
      */
     double GetZoom();
+
+    /**
+     * Function CreateBasicMenu
+     *
+     * Construct a "basic" menu for a tool, containing only items
+     * that apply to all tools (e.g. zoom and grid)
+     */
+    void AddStandardSubMenus( TOOL_MENU& aMenu );
 
     /**
      * Prints the page layout with the frame and the basic inscriptions.

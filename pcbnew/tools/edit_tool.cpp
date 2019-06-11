@@ -282,7 +282,7 @@ bool EDIT_TOOL::Init()
     ctxMenu.AddSeparator( activeToolCondition, 1 );
 
     if( frame )
-        m_menu.AddStandardSubMenus( frame );
+        frame->AddStandardSubMenus( m_menu );
 
     return true;
 }

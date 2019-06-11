@@ -100,7 +100,7 @@ bool PL_DRAWING_TOOLS::Init()
     ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1 );
 
     // Finally, add the standard zoom/grid items
-    m_menu.AddStandardSubMenus( m_frame );
+    m_frame->AddStandardSubMenus( m_menu );
 
     return true;
 }

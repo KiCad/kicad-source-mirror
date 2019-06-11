@@ -238,7 +238,7 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::pinTable,           havePartCondition && EE_CONDITIONS::Empty, 400 );
 
     menu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1000 );
-    m_menu.AddStandardSubMenus( m_frame );
+    m_frame->AddStandardSubMenus( m_menu );
 
     return true;
 }

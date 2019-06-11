@@ -118,36 +118,7 @@ public:
      */
     void CloseContextMenu( OPT_TOOL_EVENT& evt );
 
-    /**
-     * Function CreateBasicMenu
-     *
-     * Construct a "basic" menu for a tool, containing only items
-     * that apply to all tools (e.g. zoom and grid)
-     */
-    void AddStandardSubMenus( EDA_DRAW_FRAME* aFrame );
-
 private:
-
-    /*!
-     * Helper function for factories to abe able to easily add
-     * their own new sub menus. This sets the tool to the TOOL_MENUs
-     * owner and adds to the store.
-     *
-     * Note, this won't share the menu between multiple invocations
-     * of the factory. But if different top-level tools are using the
-     * same factory, which one would be used for SetTool()?
-     */
-    template <typename T, typename ... Args>
-    std::shared_ptr<T> createOwnSubMenu( Args&& ... args )
-    {
-        auto subMenuPtr = std::make_shared<T>( args ... );
-
-        subMenuPtr->SetTool( &m_tool );
-        AddSubMenu( subMenuPtr );
-
-        return subMenuPtr;
-    }
-
     /**
      * The conditional menu displayed by the tool
      */
