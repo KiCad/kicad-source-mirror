@@ -293,7 +293,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         case BLOCK_CUT:
         case BLOCK_DELETE:
             GetScreen()->UpdatePickList();
-            DrawAndSizingBlockOutlines( m_canvas, aDC, wxDefaultPosition, false );
 
             // The CUT variant needs to copy the items from their originial position
             if( ( block->GetCommand() == BLOCK_CUT ) && block->GetCount() )
@@ -319,7 +318,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
 
         case BLOCK_COPY:    // Save a copy of items in paste buffer
             GetScreen()->UpdatePickList();
-            DrawAndSizingBlockOutlines( m_canvas, aDC, wxDefaultPosition, false );
 
             if( block->GetCount() )
             {
