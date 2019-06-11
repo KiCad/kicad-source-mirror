@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2016 CERN
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -24,36 +25,37 @@
 
 #include <cstdint>
 
-#include "pcbnew_control.h"
-#include "pcb_actions.h"
-#include "selection_tool.h"
 #include "edit_tool.h"
-#include "pcbnew_picker_tool.h"
-#include "pcb_editor_control.h"
 #include "grid_helper.h"
-#include <kiway.h>
+#include "pcb_actions.h"
+#include "pcb_editor_control.h"
+#include "pcbnew_control.h"
+#include "pcbnew_picker_tool.h"
+#include "selection_tool.h"
+#include <3d_viewer/eda_3d_viewer.h>
+#include <bitmaps.h>
+#include <board_commit.h>
 #include <class_board.h>
+#include <class_board_item.h>
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
-#include <pcb_screen.h>
 #include <confirm.h>
-#include <properties.h>
-#include <io_mgr.h>
-#include <kicad_plugin.h>
-#include <kicad_clipboard.h>
-#include <3d_viewer/eda_3d_viewer.h>
-#include <pcbnew_id.h>
-#include <pcb_edit_frame.h>
-#include <pcb_draw_panel_gal.h>
 #include <connectivity/connectivity_data.h>
-#include <tool/tool_manager.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <view/view_controls.h>
-#include <pcb_painter.h>
+#include <io_mgr.h>
+#include <kicad_clipboard.h>
+#include <kicad_plugin.h>
+#include <kiway.h>
 #include <origin_viewitem.h>
-#include <board_commit.h>
-#include <bitmaps.h>
+#include <pcb_draw_panel_gal.h>
+#include <pcb_edit_frame.h>
+#include <pcb_painter.h>
+#include <pcb_screen.h>
+#include <pcbnew_id.h>
+#include <properties.h>
+#include <tool/tool_manager.h>
+#include <view/view_controls.h>
 
 #include <functional>
 #include <footprint_viewer_frame.h>
@@ -709,22 +711,21 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 auto oldModule = static_cast<MODULE*>( clipItem );
                 auto newModule = board()->GetFirstModule();
 
-                for( auto it = oldModule->Pads().begin(); it != oldModule->Pads().end(); it++ )
+                for( auto pad : oldModule->Pads() )
                 {
-                    auto pad = *it;
-                    oldModule->Remove( pad );
                     pad->SetParent( newModule );
                     items.push_back( pad );
                 }
 
-                for( auto it = oldModule->GraphicalItems().begin();
-                        it != oldModule->GraphicalItems().end(); it++ )
+                oldModule->Pads().clear();
+
+                for( auto item : oldModule->GraphicalItems() )
                 {
-                    auto item = *it;
-                    oldModule->Remove( item );
                     item->SetParent( newModule );
                     items.push_back( item );
                 }
+
+                oldModule->GraphicalItems().clear();
             }
             else
             {

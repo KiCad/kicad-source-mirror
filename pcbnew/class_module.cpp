@@ -271,18 +271,34 @@ void MODULE::Remove( BOARD_ITEM* aBoardItem )
     {
     case PCB_MODULE_TEXT_T:
         // Only user texts can be removed this way. Reference and value are not hold in the DLIST.
-        assert( static_cast<TEXTE_MODULE*>( aBoardItem )->GetType() == TEXTE_MODULE::TEXT_is_DIVERS );
+        wxCHECK_RET(
+                static_cast<TEXTE_MODULE*>( aBoardItem )->GetType() == TEXTE_MODULE::TEXT_is_DIVERS,
+                "Please report this bug: Invalid remove operation on required text" );
 
         // no break
 
     case PCB_MODULE_EDGE_T:
-        m_drawings.erase( std::remove_if( m_drawings.begin(), m_drawings.end(),
-                [aBoardItem]( BOARD_ITEM* aItem ) { return aItem == aBoardItem; } ) );
+        for( auto it = m_drawings.begin(); it != m_drawings.end(); ++it )
+        {
+            if( *it == aBoardItem )
+            {
+                m_drawings.erase( it );
+                break;
+            }
+        }
+
         break;
 
     case PCB_PAD_T:
-        m_pads.erase( std::remove_if( m_pads.begin(), m_pads.end(),
-                [aBoardItem]( BOARD_ITEM* aItem ) { return aItem == aBoardItem; } ) );
+        for( auto it = m_pads.begin(); it != m_pads.end(); ++it )
+        {
+            if( *it == static_cast<D_PAD*>( aBoardItem ) )
+            {
+                m_pads.erase( it );
+                break;
+            }
+        }
+
         break;
 
     default:
