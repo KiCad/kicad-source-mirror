@@ -28,8 +28,12 @@
 
 #include <wx/statline.h>
 
-#include <draw_frame.h>
+#include <bitmaps.h>
+#include <confirm.h>
 #include <dialog_shim.h>
+#include <draw_frame.h>
+
+#include <panel_hotkeys_editor.h>
 
 
 /**
@@ -80,13 +84,17 @@ class HK_PROMPT_DIALOG : public DIALOG_SHIM
 
 public:
     HK_PROMPT_DIALOG( wxWindow* aParent, wxWindowID aId, const wxString& aTitle,
-            const wxString& aName, const wxString& aCurrentKey )
-        :   DIALOG_SHIM( aParent, aId, aTitle, wxDefaultPosition, wxDefaultSize )
+            const wxString& aName, const wxString& aCurrentKey, const bool aValidKey,
+            const wxString& aValidMessage )
+            : DIALOG_SHIM( aParent, aId, aTitle, wxDefaultPosition, wxDefaultSize )
     {
         wxPanel* panel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize );
         wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
         /* Dialog layout:
+         *
+         * valid_img   valid_label...........
+         * ----------------------------------
          *
          * inst_label........................
          * ----------------------------------
@@ -95,6 +103,25 @@ public:
          *                                      | fgsizer
          * key_label_0      key_label_1         /
          */
+
+        // If there is a validity error, display the error message to the user
+        wxBoxSizer* valid_sizer = new wxBoxSizer( wxHORIZONTAL );
+        if( !aValidKey )
+        {
+            wxStaticBitmap* valid_img = new wxStaticBitmap(
+                    panel, wxID_ANY, KiBitmap( cancel_xpm ), wxDefaultPosition, wxDefaultSize, 0 );
+            valid_sizer->Add( valid_img, 0, wxALL, 5 );
+
+            wxStaticText* valid_label = new wxStaticText( panel, wxID_ANY, wxEmptyString,
+                    wxDefaultPosition, wxDefaultSize, wxALIGN_CENTER_HORIZONTAL );
+
+            valid_label->SetLabelText( aValidMessage );
+            valid_sizer->Add( valid_label, 0, wxALL, 5 );
+
+            // Add the validity text to the main sizer
+            sizer->Add( valid_sizer, 0, wxALL, 5 );
+            sizer->Add( new wxStaticLine( panel ), 0, wxALL | wxEXPAND, 2 );
+        }
 
         wxStaticText* inst_label = new wxStaticText( panel, wxID_ANY, wxEmptyString,
                 wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL );
@@ -188,8 +215,21 @@ public:
 
     void OnChar( wxKeyEvent& aEvent )
     {
-        m_event = aEvent;
-        EndFlexible( wxID_OK );
+        int keyCode = WIDGET_HOTKEY_LIST::MapKeypressToKeycode( aEvent );
+
+        // Test for if the key is valid
+        wxString validMsg;
+        if( HOTKEY_STORE::CheckKeyValidity( keyCode, validMsg ) )
+        {
+            // Valid key, close the window and return
+            m_event = aEvent;
+            EndFlexible( wxID_OK );
+        }
+        else
+        {
+            // Invalid key, tell the user
+            DisplayErrorMessage( this, validMsg, wxEmptyString );
+        }
     }
 
 
@@ -206,9 +246,10 @@ public:
 
 
     static wxKeyEvent PromptForKey( wxWindow* aParent, const wxString& aName,
-            const wxString& aCurrentKey )
+            const wxString& aCurrentKey, const wxString& aValidMessage, const bool aValidKey )
     {
-        HK_PROMPT_DIALOG dialog( aParent, wxID_ANY, _( "Set Hotkey" ), aName, aCurrentKey );
+        HK_PROMPT_DIALOG dialog( aParent, wxID_ANY, _( "Set Hotkey" ), aName, aCurrentKey,
+                aValidKey, aValidMessage );
 
         if( dialog.ShowModal() == wxID_OK )
         {
@@ -311,6 +352,9 @@ WIDGET_HOTKEY_CLIENT_DATA* WIDGET_HOTKEY_LIST::getExpectedHkClientData( wxTreeLi
 
 void WIDGET_HOTKEY_LIST::UpdateFromClientData()
 {
+    // Run a validity check on the hotkey store before updating
+    m_hk_store.TestStoreValidity();
+
     for( wxTreeListItem i = GetFirstItem(); i.IsOk(); i = GetNextItem( i ) )
     {
         WIDGET_HOTKEY_CLIENT_DATA* hkdata = GetHKClientData( i );
@@ -328,12 +372,22 @@ void WIDGET_HOTKEY_LIST::UpdateFromClientData()
 
             SetItemText( i, 0, wxGetTranslation( hk.m_InfoMsg ) );
             SetItemText( i, 1, key_text);
+
+            // Add the image to the column if the item is invalid
+            if( changed_hk.IsValid() )
+                SetItemImage( i, NO_IMAGE, NO_IMAGE );
+            else
+                SetItemImage( i, 0, NO_IMAGE );
         }
     }
 
     // Trigger a resize in case column widths have changed
     wxSizeEvent dummy_evt;
     TWO_COLUMN_TREE_LIST::OnSize( dummy_evt );
+
+    // Update the panel's error message if it exists
+    if( m_parentPanel )
+        m_parentPanel->UpdateErrorMessage();
 }
 
 
@@ -367,8 +421,11 @@ void WIDGET_HOTKEY_LIST::EditItem( wxTreeListItem aItem )
 
     wxString    name = GetItemText( aItem, 0 );
     wxString    current_key = GetItemText( aItem, 1 );
+    wxString    valid_msg;
 
-    wxKeyEvent key_event = HK_PROMPT_DIALOG::PromptForKey( GetParent(), name, current_key );
+    bool       valid_key = hkdata->GetChangedHotkey().IsValid( valid_msg );
+    wxKeyEvent key_event =
+            HK_PROMPT_DIALOG::PromptForKey( GetParent(), name, current_key, valid_msg, valid_key );
     long key = MapKeypressToKeycode( key_event );
 
     if( key )
@@ -506,11 +563,29 @@ bool WIDGET_HOTKEY_LIST::ResolveKeyConflicts( long aKey, const wxString& aSectio
 }
 
 
-WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkeyStore,
-            bool aReadOnly )
-    :   TWO_COLUMN_TREE_LIST( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTL_SINGLE ),
-        m_hk_store( aHotkeyStore ),
-        m_readOnly( aReadOnly )
+WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST(
+        PANEL_HOTKEYS_EDITOR* aParent, HOTKEY_STORE& aHotkeyStore, bool aReadOnly )
+        : TWO_COLUMN_TREE_LIST( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTL_SINGLE ),
+          m_hk_store( aHotkeyStore ),
+          m_readOnly( aReadOnly ),
+          m_parentPanel( aParent )
+{
+    initializeElements();
+}
+
+
+WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST(
+        wxWindow* aParent, HOTKEY_STORE& aHotkeyStore, bool aReadOnly )
+        : TWO_COLUMN_TREE_LIST( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTL_SINGLE ),
+          m_hk_store( aHotkeyStore ),
+          m_readOnly( aReadOnly ),
+          m_parentPanel( nullptr )
+{
+    initializeElements();
+}
+
+
+void WIDGET_HOTKEY_LIST::initializeElements()
 {
     wxString command_header = _( "Command" );
 
@@ -522,6 +597,11 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
     SetRubberBandColumn( 0 );
     SetClampedMinWidth( HOTKEY_MIN_WIDTH );
 
+    // Add the image for invalid hotkey
+    m_imgList = new wxImageList();
+    m_imgList->Add( KiBitmap( cancel_xpm ) );
+    AssignImageList( m_imgList );
+
     if( !m_readOnly )
     {
         // The event only apply if the widget is in editable mode
@@ -530,7 +610,6 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
         Bind( wxEVT_MENU, &WIDGET_HOTKEY_LIST::OnMenu, this );
     }
 }
-
 
 void WIDGET_HOTKEY_LIST::ApplyFilterString( const wxString& aFilterStr )
 {
@@ -556,6 +635,12 @@ void WIDGET_HOTKEY_LIST::ResetAllHotkeys( bool aResetToDefault )
 
     UpdateFromClientData();
     Thaw();
+
+    // Update the panel's error message if it exists
+    // Call here again since the freeze/thaw seems to disrupt the update
+    // inside UpdateFromClientData
+    if( m_parentPanel )
+        m_parentPanel->UpdateErrorMessage();
 }
 
 
@@ -592,6 +677,12 @@ void WIDGET_HOTKEY_LIST::updateShownItems( const wxString& aFilterStr )
 
     UpdateFromClientData();
     Thaw();
+
+    // Update the panel's error message if it exists
+    // Call here again since the freeze/thaw seems to disrupt the update
+    // inside UpdateFromClientData
+    if( m_parentPanel )
+        m_parentPanel->UpdateErrorMessage();
 }
 
 

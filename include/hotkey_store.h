@@ -43,7 +43,10 @@ public:
         m_orig( aHotkey ),
         m_changed( aHotkey ),
         m_tag( aTag )
-    {}
+    {
+        m_isValid = false;
+        m_validMessage = _( "Hotkey never verified" );
+    }
 
     EDA_HOTKEY& GetCurrentValue()
     {
@@ -88,6 +91,40 @@ public:
         return m_tag;
     }
 
+    /**
+     * Return whether this hotkey has been flagged as invalid
+     *
+     * @param aMessage - If invalid, contains a string giving the reason for being invalid
+     * @return - true if valid, false otherwise
+     */
+    bool IsValid( wxString& aMessage ) const
+    {
+        aMessage = m_validMessage;
+        return m_isValid;
+    }
+
+    /**
+     * Return whether this hotkey has been flagged as invalid
+     *
+     * @return - true if valid, false otherwise
+     */
+    bool IsValid() const
+    {
+        return m_isValid;
+    }
+
+    /**
+     * Set if this hotkey is valid
+     *
+     * @param aValid - Flag giving true if valid, false otherwise
+     * @param amessage - Reason for being invalid (empty if hotkey is valid)
+     */
+    void SetValidity( bool aValid, wxString& aMessage )
+    {
+        m_isValid = aValid;
+        m_validMessage = aMessage;
+    }
+
 private:
     // Reference to an "original" hotkey config
     EDA_HOTKEY&     m_orig;
@@ -98,6 +135,11 @@ private:
     // The hotkey section tag, used to spot conflicts
     const wxString& m_tag;
 
+    // True if the key is a valid hotkey (has no invalid combinations)
+    bool m_isValid;
+
+    // Reason for being invalid
+    wxString m_validMessage;
 };
 
 /**
@@ -162,15 +204,48 @@ public:
     void ResetAllHotkeysToOriginal();
 
     /**
-     * Check whether the given key conflicts with anything in this store.
+     * Check whether the given key conflicts with anything in this store. If a command ID is
+     * specified, then the conflict will only trigger if the conflicting hotkey is for
+     * a different command ID.
      *
      * @param aKey - key to check
      * @param aSectionTag - section tag into which the key is proposed to be installed
      * @param aConfKey - if not NULL, outparam getting the key this one conflicts with
      * @param aConfSect - if not NULL, outparam getting the section this one conflicts with
+     * @param aIdCommand - Optional command ID for the key being tested
      */
-    bool CheckKeyConflicts( long aKey, const wxString& aSectionTag,
-            EDA_HOTKEY** aConfKey, EDA_HOTKEY_CONFIG** aConfSect );
+    bool CheckKeyConflicts( long aKey, const wxString& aSectionTag, EDA_HOTKEY** aConfKey,
+            EDA_HOTKEY_CONFIG** aConfSect, const int aIdCommand = -1 );
+
+    /**
+     * Check if a given key contains only valid key combinations
+     *
+     * @param aKey - The key to check
+     * @param aMessage - If invalid, the outparam containing the message explaining the invalidity
+     * @return - true if valid, false if invalid
+     */
+    static bool CheckKeyValidity( long aKey, wxString& aMessage );
+
+    /**
+     * Test all hotkeys in the hotkey store for validity and conflicts with other keys
+     */
+    bool TestStoreValidity();
+
+    /**
+     * Get a string containing all the errors detected during the validity test
+     * It is formatted as:
+     *    Action name 1: Reason key is invalid
+     *    Action name 2: Reason key is invalid
+     *    ...
+     *
+     * @param aMessage - outparam to store the message in
+     * @return true if no errors detected
+     */
+    bool GetStoreValidityMessage( wxString& aMessage )
+    {
+        aMessage = m_invalidityCauses;
+        return m_isValid;
+    }
 
 private:
 
@@ -182,6 +257,12 @@ private:
 
     // Internal data for every hotkey passed in
     SECTION_LIST m_hk_sections;
+
+    // String containing information on the causes of invalidity for the entire store
+    wxString m_invalidityCauses;
+
+    // Is the store valid
+    bool m_isValid;
 };
 
 #endif // HOTKEY_STORE__H

@@ -35,11 +35,13 @@
 #include <wx/treelist.h>
 #include <widgets/two_column_tree_list.h>
 
-#include <hotkeys_basic.h>
 #include <hotkey_store.h>
+#include <hotkeys_basic.h>
+#include <panel_hotkeys_editor.h>
 
 
 class WIDGET_HOTKEY_CLIENT_DATA;
+class PANEL_HOTKEYS_EDITOR;
 
 class WIDGET_HOTKEY_LIST : public TWO_COLUMN_TREE_LIST
 {
@@ -47,6 +49,8 @@ class WIDGET_HOTKEY_LIST : public TWO_COLUMN_TREE_LIST
     bool                        m_readOnly;
 
     wxTreeListItem              m_context_menu_item;
+    wxImageList*                m_imgList;
+    PANEL_HOTKEYS_EDITOR*       m_parentPanel;
 
     /**
      * Method GetHKClientData
@@ -164,8 +168,21 @@ public:
      * @param aParent - parent widget
      * @param aHotkeys - EDA_HOTKEY_CONFIG data - a hotkey store is constructed
      * from this.
+     * @param aReadOnly - true disallows edits of the hotkeys
      */
     WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkeyStore, bool aReadOnly );
+
+    /**
+     * Constructor WIDGET_HOTKEY_LIST
+     * Create a WIDGET_HOTKEY_LIST that will update the panel's error message when
+     * new validity messages are available.
+     *
+     * @param aParent - parent hotkey panel
+     * @param aHotkeys - EDA_HOTKEY_CONFIG data - a hotkey store is constructed
+     * from this.
+     * @param aReadOnly - true disallows edits of the hotkeys
+     */
+    WIDGET_HOTKEY_LIST( PANEL_HOTKEYS_EDITOR* aParent, HOTKEY_STORE& aHotkeyStore, bool aReadOnly );
 
     /**
      * Method ApplyFilterString
@@ -202,6 +219,12 @@ public:
      * Map a keypress event to the correct key code for use as a hotkey.
      */
     static long MapKeypressToKeycode( const wxKeyEvent& aEvent );
+
+private:
+    /**
+     * Initialize the elements of the widget
+     */
+    void initializeElements();
 };
 
 #endif // __widget_hotkey_list__

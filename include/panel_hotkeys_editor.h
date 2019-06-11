@@ -34,6 +34,7 @@
 
 class wxPanel;
 class wxSizer;
+class WIDGET_HOTKEY_LIST;
 
 
 class PANEL_HOTKEYS_EDITOR : public wxPanel
@@ -47,6 +48,10 @@ protected:
     HOTKEY_STORE              m_hotkeyStore;
     WIDGET_HOTKEY_LIST*       m_hotkeyListCtrl;
 
+    wxBoxSizer*               m_mainSizer;
+    wxBoxSizer*               m_errorMessageSizer;
+    wxStaticText*             m_errorMessage;
+
 public:
     PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow, bool aReadOnly,
                           EDA_HOTKEY_CONFIG* aHotkeys, EDA_HOTKEY_CONFIG* aShowHotkeys,
@@ -55,7 +60,22 @@ public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    /**
+     * Update the error message display on the panel with the new messages.
+     */
+    void UpdateErrorMessage();
+
 private:
+    /**
+     * Initialize the elements of the panel.
+     */
+    void initializeElements();
+
+    /**
+     * Import hotkey configuration data from a file and verify the validity of the
+     * imported keys. Then prompt the user with the results.
+     */
+    void onImportHotkeyConfigFromFile();
 
     /**
      * Install the button panel (global reset/default, import/export)

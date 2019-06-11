@@ -21,13 +21,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <panel_hotkeys_editor.h>
+#include <bitmaps.h>
+#include <confirm.h>
 #include <eda_base_frame.h>
+#include <panel_hotkeys_editor.h>
 
-#include <wx/srchctrl.h>
-#include <wx/panel.h>
 #include <wx/button.h>
+#include <wx/panel.h>
 #include <wx/sizer.h>
+#include <wx/srchctrl.h>
+#include <wx/statline.h>
 
 #include <widgets/button_row_panel.h>
 #include <widgets/ui_common.h>
@@ -70,7 +73,33 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
         m_hotkeyStore( aShowHotkeys )
 {
     const auto margin = KIUI::GetStdMargin();
-    auto mainSizer = new wxBoxSizer( wxVERTICAL );
+
+    m_mainSizer = new wxBoxSizer( wxVERTICAL );
+    m_errorMessageSizer = new wxBoxSizer( wxVERTICAL );
+
+    // Setup the sub-sizer to contain the bitmap and header text
+    wxBoxSizer* errImgHeadSizer = new wxBoxSizer( wxHORIZONTAL );
+
+    wxStaticBitmap* valid_img = new wxStaticBitmap(
+            this, wxID_ANY, KiBitmap( cancel_xpm ), wxDefaultPosition, wxDefaultSize, 0 );
+    wxStaticText* err_head = new wxStaticText( this, wxID_ANY, _( "Hotkey errors detected" ),
+            wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+    errImgHeadSizer->Add( valid_img, 0, wxALL, 5 );
+    errImgHeadSizer->Add( err_head, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
+    m_errorMessageSizer->Add( errImgHeadSizer, 0, wxTOP | wxLEFT | wxRIGHT, margin );
+
+    // Setup the error message to give the user information about any problems with the hotkeys,
+    // but only do this if they can actually change them
+    if( !m_readOnly )
+    {
+        m_errorMessage = new wxStaticText(
+                this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+        m_errorMessageSizer->Add( m_errorMessage, 0, wxALL, 5 );
+    }
+    m_errorMessageSizer->Add( new wxStaticLine( this ), 0, wxALL | wxEXPAND, 2 );
+
+    // Add the validity text to the main sizer and hide the entire sizer
+    m_mainSizer->Add( m_errorMessageSizer, 0, wxTOP | wxLEFT | wxRIGHT | wxEXPAND, margin );
 
     // Sub-sizer for setting a wider side margin
     // TODO: Can this be set by the parent widget- doesn't seem to be
@@ -87,9 +116,9 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
     if( !m_readOnly )
         installButtons( bMargins );
 
-    mainSizer->Add( bMargins, 1, wxEXPAND | wxRIGHT | wxLEFT, side_margins );
+    m_mainSizer->Add( bMargins, 1, wxEXPAND | wxRIGHT | wxLEFT, side_margins );
 
-    this->SetSizer( mainSizer );
+    this->SetSizer( m_mainSizer );
     this->Layout();
 
     // Connect Events
@@ -125,7 +154,7 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
             _( "Import..." ),
             _( "Import hotkey definitions from an external file, replacing the current values" ),
             [this]( wxCommandEvent& ){
-                m_frame->ImportHotkeyConfigFromFile( m_hotkeys, m_nickname );
+                onImportHotkeyConfigFromFile();
             }
         },
         {
@@ -141,6 +170,22 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
     auto btnPanel = std::make_unique<BUTTON_ROW_PANEL>( this, l_btn_defs, r_btn_defs );
 
     aSizer->Add( btnPanel.release(), 0, wxEXPAND | wxTOP, KIUI::GetStdMargin() );
+}
+
+
+void PANEL_HOTKEYS_EDITOR::onImportHotkeyConfigFromFile()
+{
+    m_frame->ImportHotkeyConfigFromFile( m_hotkeys, m_nickname );
+
+    if( !m_hotkeyStore.TestStoreValidity() )
+    {
+        wxString msg = _( "The imported file contains invalid hotkeys. "
+                          "Please correct the errors before continuing." );
+
+        wxString errKeys;
+        m_hotkeyStore.GetStoreValidityMessage( errKeys );
+        DisplayErrorMessage( this, msg, errKeys );
+    }
 }
 
 
@@ -166,4 +211,35 @@ void PANEL_HOTKEYS_EDITOR::OnFilterSearch( wxCommandEvent& aEvent )
 {
     const auto searchStr = aEvent.GetString();
     m_hotkeyListCtrl->ApplyFilterString( searchStr );
+}
+
+
+void PANEL_HOTKEYS_EDITOR::UpdateErrorMessage()
+{
+    wxString validMessage;
+    bool     isValid = m_hotkeyStore.GetStoreValidityMessage( validMessage );
+
+    if( isValid )
+    {
+        // Hide the error message sizer if all the hotkeys are valid
+        if( !m_readOnly )
+        {
+            m_errorMessage->SetLabelText( wxEmptyString );
+            m_errorMessage->Update();
+        }
+
+        m_mainSizer->Hide( m_errorMessageSizer );
+    }
+    else
+    {
+        // Update the message text and ensure it is showing if there are errors
+        if( !m_readOnly )
+        {
+            m_errorMessage->SetLabelText( validMessage );
+            m_errorMessage->Update();
+        }
+
+        m_mainSizer->Show( m_errorMessageSizer );
+    }
+    m_mainSizer->Layout();
 }
