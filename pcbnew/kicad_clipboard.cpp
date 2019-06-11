@@ -83,7 +83,7 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected )
                 ( i->Type() != PCB_PAD_T ) )
         {
             onlyModuleParts = false;
-            continue;
+            break;
         }
     }
 

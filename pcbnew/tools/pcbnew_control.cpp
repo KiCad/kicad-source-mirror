@@ -771,7 +771,7 @@ static void moveNoFlagToVector( std::deque<T>& aList, std::vector<BOARD_ITEM*>& 
 {
     std::copy_if( aList.begin(), aList.end(), std::back_inserter( aTarget ),
             [](T aItem){
-                bool retval = aItem->GetFlags() & FLAG0;
+                bool retval = ( aItem->GetFlags() & FLAG0 ) == 0;
                 aItem->ClearFlags( FLAG0 );
                 return retval;
             } );
@@ -876,27 +876,19 @@ int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
     if( !brd )
         return 1;
 
-    // Mark existing items, in order to know what are the new items
-    // to be ble to select only the new items after loadind
+    // Mark existing items, in order to know what are the new items so we can select only
+    // the new items after loading
     for( auto track : brd->Tracks() )
-    {
         track->SetFlags( FLAG0 );
-    }
 
     for( auto module : brd->Modules() )
-    {
         module->SetFlags( FLAG0 );
-    }
 
     for( auto drawing : brd->Drawings() )
-    {
         drawing->SetFlags( FLAG0 );
-    }
 
     for( auto zone : brd->Zones() )
-    {
         zone->SetFlags( FLAG0 );
-    }
 
     // Keep also the count of copper layers, to adjust if necessary
     int initialCopperLayerCount = brd->GetCopperLayerCount();
