@@ -127,7 +127,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     controls->SetSnapping( true );
-    VECTOR2I originalCursorPos = controls->GetCursorPosition();
 
     m_anchorPos.reset();
 
@@ -153,12 +152,13 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             // items so we can start again with the current m_isDragOperation.
             m_frame->RollbackSchematicFromUndo();
             m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
+            m_anchorPos = m_cursor - m_moveOffset;
             m_moveInProgress = false;
             controls->SetAutoPan( false );
 
             // And give it a kick so it doesn't have to wait for the first mouse movement to
             // refresh.
-            m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
+            m_toolMgr->RunAction( EE_ACTIONS::restartMove );
         }
 
         return 0;
@@ -187,7 +187,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
-        if( evt->IsAction( &EE_ACTIONS::moveActivate )
+        if( evt->IsAction( &EE_ACTIONS::moveActivate ) || evt->IsAction( &EE_ACTIONS::restartMove )
                 || evt->IsAction( &EE_ACTIONS::move ) || evt->IsAction( &EE_ACTIONS::drag )
                 || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
                 || evt->IsAction( &EE_ACTIONS::refreshPreview ) )
@@ -237,7 +237,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     for( EDA_ITEM* item : selection )
                         static_cast<SCH_ITEM*>( item )->UpdateDanglingState( internalPoints );
                 }
-
+wxMessageBox( wxString::Format( "Size: %d", selection.Size() ) );
                 // Generic setup
                 //
                 for( EDA_ITEM* item : selection )
@@ -274,17 +274,16 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 //
                 m_cursor = controls->GetCursorPosition();
 
-                if( selection.HasReferencePoint() )
+                if( evt->IsAction( &EE_ACTIONS::restartMove ) )
+                {
+                    wxASSERT_MSG( m_anchorPos, "Should be already set from previous cmd" );
+                }
+                else if( selection.Front()->GetFlags() & IS_NEW )
                 {
                     m_anchorPos = selection.GetReferencePoint();
-
-                    if( m_frame->GetMoveWarpsCursor() )
-                    {
-                        getViewControls()->WarpCursor( *m_anchorPos );
-                        m_cursor = *m_anchorPos;
-                    }
                 }
 
+wxMessageBox( wxString::Format( "Size: %d", selection.Size() ) );
                 if( m_anchorPos )
                 {
                     VECTOR2I delta = m_cursor - (*m_anchorPos);
@@ -302,16 +301,23 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                     m_anchorPos = m_cursor;
                 }
-                else if( selection.Size() == 1 )
+                // For some items, moving the cursor to anchor is not good (for instance large
+                // hierarchical sheets or components can have the anchor outside the view)
+                else if( selection.Size() == 1
+                        && static_cast<SCH_ITEM*>( selection.Front() )->IsMovableFromAnchorPoint()
+                        && m_frame->GetMoveWarpsCursor() )
                 {
-                    // Set the current cursor position to the first dragged item origin,
-                    // so the movement vector can be computed later
-                    updateModificationPoint( selection );
-                    m_cursor = originalCursorPos;
+                    m_anchorPos = static_cast<SCH_ITEM*>( selection.Front() )->GetPosition();
+                    getViewControls()->WarpCursor( *m_anchorPos );
+                    m_cursor = *m_anchorPos;
                 }
+                // ...otherwise modify items with regard to the grid-snapped cursor position
                 else
                 {
-                    updateModificationPoint( selection );
+wxMessageBox( wxString::Format( "WTF! Size: %d, %s", selection.Size(),
+static_cast<SCH_ITEM*>( selection.Front() )->IsMovableFromAnchorPoint() ? "is movable from anchor" : "NOT MOVABLE FROM ANCHOR" ) );
+                    m_cursor = getViewControls()->GetCursorPosition( true );
+                    m_anchorPos = m_cursor;
                 }
 
                 controls->SetCursorPosition( m_cursor, false );
@@ -639,33 +645,6 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta, bool isDrag )
     }
 
     aItem->SetFlags( IS_MOVED );
-}
-
-
-bool SCH_MOVE_TOOL::updateModificationPoint( EE_SELECTION& aSelection )
-{
-    if( m_moveInProgress && aSelection.HasReferencePoint() )
-        return false;
-
-    // When there is only one item selected, the reference point is its position...
-    if( aSelection.Size() == 1 )
-    {
-        SCH_ITEM* item =  static_cast<SCH_ITEM*>( aSelection.Front() );
-
-        // For some items, moving the cursor to anchor is not good (for instance large
-        // hierarchical sheets or components can have the anchor outside the view)
-        if( item->IsMovableFromAnchorPoint() )
-        {
-            m_anchorPos = item->GetPosition();
-            return true;
-        }
-    }
-
-    // ...otherwise modify items with regard to the grid-snapped cursor position
-    m_cursor = getViewControls()->GetCursorPosition( true );
-    m_anchorPos = m_cursor;
-
-    return true;
 }
 
 

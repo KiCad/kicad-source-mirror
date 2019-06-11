@@ -169,9 +169,13 @@ public:
      * Usually return true for small items (labels, junctions) and false for items which can
      * be large (hierarchical sheets, components).
      *
-     * @return false for a component
+     * Note: we used to try and be smart about this and return false for components in case
+     * they are big.  However, this annoyed some users and we now have a preference which
+     * controls warping on move in general, so this was switched to true for components.
+     *
+     * @return true for a component
      */
-    bool IsMovableFromAnchorPoint() override { return false; }
+    bool IsMovableFromAnchorPoint() override { return true; }
 
     void SetLibId( const LIB_ID& aName, PART_LIBS* aLibs=NULL );
     void SetLibId( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aSymLibTable, PART_LIB* aCacheLib );

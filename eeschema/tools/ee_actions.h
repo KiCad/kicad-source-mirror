@@ -186,6 +186,7 @@ public:
     static TOOL_ACTION symbolProperties;
     static TOOL_ACTION deleteItemCursor;
     static TOOL_ACTION refreshPreview;
+    static TOOL_ACTION restartMove;
     static TOOL_ACTION explicitCrossProbe;
     static TOOL_ACTION pushPinLength;
     static TOOL_ACTION pushPinNameSize;

@@ -54,6 +54,9 @@
 TOOL_ACTION EE_ACTIONS::refreshPreview( "eeschema.EditorControl.refreshPreview",
          AS_GLOBAL );
 
+TOOL_ACTION EE_ACTIONS::restartMove( "eeschema.EditorControl.restartMove",
+        AS_GLOBAL );
+
 TOOL_ACTION EE_ACTIONS::simProbe( "eeschema.Simulation.probe",
         AS_GLOBAL, 0, "",
         _( "Add a simulator probe" ), "" );
