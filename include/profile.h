@@ -35,11 +35,10 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
-#include <wx/log.h>
 
 /**
  * The class PROF_COUNTER is a small class to help profiling.
- * It allows the calculation of the elapsed time (in millisecondes) between
+ * It allows the calculation of the elapsed time (in milliseconds) between
  * its creation (or the last call to Start() ) and the last call to Stop()
  */
 class PROF_COUNTER
@@ -95,37 +94,6 @@ public:
     void Show()
     {
         std::cerr << m_name << " took " << msecs() << "ms." << std::endl;
-    }
-
-    /**
-     * Print a message and the elapsed time (in ms) since the start time
-     * and since the last call to STDERR.
-     * @param aMessage is the message to print
-     */
-    void Show( const std::string& aMessage )
-    {
-        TIME_POINT display_stoptime = m_running ? CLOCK::now() : m_stoptime;
-
-        std::chrono::duration<double, std::milli> elapsed = display_stoptime - m_starttime;
-        std::chrono::duration<double, std::milli> delta_time = display_stoptime - m_lasttime;
-        std::cerr << m_name << " (" << aMessage << ") took " << elapsed.count() << " ms."
-                  << " delta " << delta_time.count() << " ms." << std::endl;
-        m_lasttime = display_stoptime;
-    }
-
-    /**
-     * Show the elapsed time (in ms) in a wxLogMessage window.
-     */
-    void ShowDlg()
-    {
-        const double ms = msecs();
-
-        wxString msg;
-        if( ms < 1000.0 )
-            msg << m_name << " took " << ms << " ms.";
-        else
-            msg << m_name << " took " << ms / 1000.0 << " sec.";
-        wxLogMessage( msg );
     }
 
     /**
