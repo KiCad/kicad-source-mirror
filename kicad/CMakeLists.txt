@@ -76,6 +76,7 @@ else()
     target_link_libraries( kicad
         common
         gal
+        common
         ${wxWidgets_LIBRARIES}
         ${GDI_PLUS_LIBRARIES}
         )

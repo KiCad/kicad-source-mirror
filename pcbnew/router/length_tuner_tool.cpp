@@ -50,8 +50,8 @@ static TOOL_ACTION ACT_StartTuning( "pcbnew.LengthTuner.StartTuning",
         _( "New Track" ), _( "Starts laying a new track." ) );
 
 static TOOL_ACTION ACT_EndTuning( "pcbnew.LengthTuner.EndTuning", 
-        AS_CONTEXT, 
-        WXK_END,
+        AS_CONTEXT,
+        WXK_END, LEGACY_HK_NAME( "Stop laying the current track." ),
         _( "End Track" ), _( "Stops laying the current meander." ) );
 
 static TOOL_ACTION ACT_Settings( "pcbnew.LengthTuner.Settings", 
