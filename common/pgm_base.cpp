@@ -445,7 +445,7 @@ bool PGM_BASE::InitPgm()
     else
     {
         // Default user template path.
-        tmpFileName = wxStandardPaths::Get().GetDocumentsDir();
+        tmpFileName.AssignDir( wxStandardPaths::Get().GetDocumentsDir() );
         tmpFileName.AppendDir( "kicad" );
         tmpFileName.AppendDir( "template" );
         envVarItem.SetDefinedExternally( false );
