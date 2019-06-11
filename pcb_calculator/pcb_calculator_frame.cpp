@@ -24,6 +24,7 @@
 #include <pcb_calculator.h>
 #include <UnitSelector.h>
 #include <bitmaps.h>
+#include <geometry/shape_poly_set.h>
 
 
 #define KEYWORD_FRAME_POSX                      wxT( "Pcb_calculator_Pos_x" )
@@ -53,13 +54,15 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     PCB_CALCULATOR_FRAME_BASE( aParent )
 {
     SetKiway( this, aKiway );
-
     m_currTransLine     = NULL;
     m_currTransLineType = DEFAULT_TYPE;
     m_currAttenuator    = NULL;
     m_RegulatorListChanged = false;
     m_TWMode = TW_MASTER_CURRENT;
     m_TWNested = false;
+
+    SHAPE_POLY_SET dummy;   // A ugly trick to force the linker to include
+                            //some methods in code and avoid link errors
 
     // Populate transline list ordered like in dialog menu list
     const static TRANSLINE_TYPE_ID tltype_list[8] =
