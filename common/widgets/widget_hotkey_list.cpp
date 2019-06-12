@@ -600,13 +600,13 @@ long WIDGET_HOTKEY_LIST::MapKeypressToKeycode( const wxKeyEvent& aEvent )
         bool keyIsLetter = key >= 'A' && key <= 'Z';
 
         if( aEvent.ShiftDown() && ( keyIsLetter || key > 256 ) )
-            key |= GR_KB_SHIFT;
+            key |= MD_SHIFT;
 
         if( aEvent.ControlDown() )
-            key |= GR_KB_CTRL;
+            key |= MD_CTRL;
 
         if( aEvent.AltDown() )
-            key |= GR_KB_ALT;
+            key |= MD_ALT;
 
         return key;
     }
