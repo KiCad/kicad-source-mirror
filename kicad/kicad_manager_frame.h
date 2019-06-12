@@ -149,6 +149,8 @@ public:
 
     void SyncToolbars() override;
 
+    void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
+
     void SetProjectFileName( const wxString& aFullProjectProFileName );
     const wxString GetProjectFileName();
 

@@ -31,6 +31,7 @@
 #include <executable_names.h>
 #include <build_version.h>
 #include "pgm_kicad.h"
+#include <panel_hotkeys_editor.h>
 #include "tree_project_frame.h"
 #include "kicad_id.h"
 #include <tool/tool_manager.h>
@@ -478,6 +479,16 @@ void KICAD_MANAGER_FRAME::SaveSettings( wxConfigBase* aCfg )
     EDA_BASE_FRAME::SaveSettings( aCfg );
     aCfg->Write( TREE_FRAME_WIDTH_ENTRY, m_leftWin->GetSize().x );
 }
+
+
+void KICAD_MANAGER_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
+                                              PANEL_HOTKEYS_EDITOR* aHotkeysPanel  )
+{
+    aHotkeysPanel->AddHotKeys( GetToolManager() );
+}
+
+
+
 
 
 void KICAD_MANAGER_FRAME::PrintPrjInfo()

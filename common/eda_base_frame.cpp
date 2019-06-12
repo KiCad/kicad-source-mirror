@@ -529,6 +529,10 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
             frame->InstallPreferences( &dlg, hotkeysPanel );
     }
 
+    // The Kicad manager frame is not a player so we have to add it by hand
+    if( IsType( KICAD_MAIN_FRAME_T ) )
+        InstallPreferences( &dlg, hotkeysPanel );
+
     if( dlg.ShowModal() == wxID_OK )
         dlg.Kiway().CommonSettingsChanged();
 }
