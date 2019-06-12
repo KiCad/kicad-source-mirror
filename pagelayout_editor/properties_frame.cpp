@@ -37,8 +37,9 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ):
     m_parent = aParent;
 
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
+    infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
     m_staticTextSizeInfo->SetFont( infoFont );
+    infoFont.SetSymbolicSize( wxFONTSIZE_X_SMALL );
     m_staticTextInfoThickness->SetFont( infoFont );
 
     m_buttonOK->SetDefault();
