@@ -386,6 +386,13 @@ PCBNEW_SELECTION& SELECTION_TOOL::GetSelection()
 }
 
 
+void SELECTION_TOOL::ClearIfOutside( const VECTOR2I& aPt )
+{
+    if( !m_selection.Empty() && !m_selection.GetBoundingBox().Contains( aPt.x, aPt.y ) )
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+}
+
+
 PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
         std::vector<BOARD_ITEM*>* aFiltered, bool aConfirmLockedItems )
 {

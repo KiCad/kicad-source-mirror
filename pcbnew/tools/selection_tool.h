@@ -97,6 +97,13 @@ public:
     PCBNEW_SELECTION& RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
             std::vector<BOARD_ITEM*>* aFiltered = nullptr, bool aConfirmLockedItems = false );
 
+    /**
+     * Clears the selection if the selection Bounding Box doesn't fall within the given point
+     *
+     * @param aPt Point to check -- This is inclusive of the edge.
+     */
+    void ClearIfOutside( const VECTOR2I& aPt );
+
     ///> Checks if the user has agreed to modify locked items for the given selection.
     SELECTION_LOCK_FLAGS CheckLock();
 
