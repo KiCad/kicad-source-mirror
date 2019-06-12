@@ -24,7 +24,26 @@
 #include <hotkey_store.h>
 #include <tool/tool_manager.h>
 #include <tool/action_manager.h>
+#include <tool/tool_event.h>
 #include <tool/tool_action.h>
+
+
+class GESTURE_PSEUDO_ACTION : public TOOL_ACTION
+{
+public:
+    GESTURE_PSEUDO_ACTION( const wxString& aLabel, int aHotKey )
+    {
+        m_label = aLabel;
+        m_hotKey = aHotKey;
+    }
+};
+
+static GESTURE_PSEUDO_ACTION g_gesturePseudoActions[] = {
+        GESTURE_PSEUDO_ACTION( _( "Highlight Net" ), MD_CTRL + PSEUDO_WXK_LMB ),
+        GESTURE_PSEUDO_ACTION( _( "Clear Net Highlighting" ), MD_CTRL + PSEUDO_WXK_LMB ),
+        GESTURE_PSEUDO_ACTION( _( "Pan Left/Right" ), MD_CTRL + PSEUDO_WXK_WHEEL ),
+        GESTURE_PSEUDO_ACTION( _( "Pan Up/Down" ), MD_SHIFT + PSEUDO_WXK_WHEEL ),
+};
 
 
 wxString HOTKEY_STORE::GetAppName( TOOL_ACTION* aAction )
@@ -50,7 +69,7 @@ wxString HOTKEY_STORE::GetSectionName( TOOL_ACTION* aAction )
     if( s_AppNames.count( appName ) )
         return s_AppNames[ appName ];
     else
-        return wxT( "XXX" + appName );
+        return appName;
 }
 
 
@@ -81,12 +100,11 @@ void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList )
     
     wxString        currentApp;
     HOTKEY_SECTION* currentSection = nullptr;
-    HOTKEY*         currentHotKey = nullptr;
 
     for( const auto& entry : masterMap )
     {
         wxString thisApp = GetAppName( entry.second );
-        
+
         if( thisApp != currentApp )
         {
             m_hk_sections.emplace_back( HOTKEY_SECTION() );
@@ -95,11 +113,15 @@ void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList )
             currentSection->m_SectionName = GetSectionName( entry.second );
         }
 
-        currentSection->m_HotKeys.emplace_back( HOTKEY() );
-        currentHotKey = &currentSection->m_HotKeys.back();
-        currentHotKey->m_Parent = entry.second;
-        currentHotKey->m_EditKeycode = entry.second->GetHotKey();
+        currentSection->m_HotKeys.emplace_back( HOTKEY( entry.second ) );
     }
+
+    m_hk_sections.emplace_back( HOTKEY_SECTION() );
+    currentSection = &m_hk_sections.back();
+    currentSection->m_SectionName = _( "Gestures" );
+
+    for( TOOL_ACTION& gesture : g_gesturePseudoActions )
+        currentSection->m_HotKeys.emplace_back( HOTKEY( &gesture ) );
 }
 
 

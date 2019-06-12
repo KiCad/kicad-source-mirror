@@ -48,6 +48,18 @@ TOOL_ACTION::TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope,
 }
 
 
+TOOL_ACTION::TOOL_ACTION() :
+        m_scope( AS_GLOBAL ),
+        m_defaultHotKey( 0 ),
+        m_icon( nullptr ),
+        m_id( -1 ),
+        m_flags( AF_NONE ),
+        m_param( nullptr )
+{
+    SetHotKey( 0 );
+}
+
+
 TOOL_ACTION::~TOOL_ACTION()
 {
     ACTION_MANAGER::GetActionList().remove( this );

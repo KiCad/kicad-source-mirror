@@ -44,6 +44,14 @@ class TOOL_MANAGER;
 class EDA_BASE_FRAME;
 
 
+/*
+ * Keep these out of the ASCII range, and out of the WXK range
+ */
+#define PSEUDO_WXK_LMB   400
+#define PSEUDO_WXK_MMB   401
+#define PSEUDO_WXK_RMB   402
+#define PSEUDO_WXK_WHEEL 403
+
 /**
  * Function KeyCodeFromKeyName
  * return the key code from its user-friendly key name (ie: "Ctrl+M")

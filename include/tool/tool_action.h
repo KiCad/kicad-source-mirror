@@ -150,7 +150,9 @@ public:
         return m_icon;
     }
 
-private:
+protected:
+    TOOL_ACTION();
+
     friend class ACTION_MANAGER;
 
     /// Name of the action (convention is "app.tool.actionName")
@@ -161,7 +163,7 @@ private:
     int                  m_hotKey;         // The curret hotkey (post-user-settings-application)
     const std::string    m_legacyName;     // Name for reading legacy hotkey settings
 
-    const wxString       m_label;
+    wxString             m_label;
     wxString             m_menuItem;       // Label + hotkey text for menus
     wxString             m_tooltip;
     const BITMAP_OPAQUE* m_icon;           // Icon for the menu entry

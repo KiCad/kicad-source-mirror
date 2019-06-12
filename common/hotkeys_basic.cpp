@@ -43,7 +43,7 @@
 #include <tool/tool_action.h>
 
 
-/* 
+/*
  * class to handle the printable name and the keycode
  */
 struct hotkey_name_descr
@@ -97,6 +97,11 @@ static struct hotkey_name_descr hotkeyNameList[] =
     { wxT( "Space" ),        WXK_SPACE                                                },
 
     { wxT( "<unassigned>" ), 0                                                        },
+
+    { wxT( "Left Button" ),   PSEUDO_WXK_LMB                                           },
+    { wxT( "Middle Button" ), PSEUDO_WXK_MMB                                           },
+    { wxT( "Right Button" ),  PSEUDO_WXK_RMB                                           },
+    { wxT( "Mouse Wheel" ),   PSEUDO_WXK_WHEEL                                         },
 
     // Do not change this line: end of list
     { wxT( "" ),             KEY_NON_FOUND                                            }

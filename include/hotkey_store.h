@@ -25,6 +25,7 @@
 #define HOTKEY_STORE__H
 
 #include <hotkeys_basic.h>
+#include <tool/tool_action.h>
 
 class TOOL_MANAGER;
 
@@ -33,6 +34,11 @@ struct HOTKEY
 {
     TOOL_ACTION* m_Parent;
     int          m_EditKeycode;
+
+    HOTKEY( TOOL_ACTION* aParent ) :
+        m_Parent( aParent ),
+        m_EditKeycode( aParent->GetHotKey() )
+    { }
 };
 
 
