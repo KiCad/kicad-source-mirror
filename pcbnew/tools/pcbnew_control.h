@@ -92,6 +92,7 @@ public:
     int PasteItemsFromClipboard( const TOOL_EVENT& aEvent );
     int AppendBoardFromFile( const TOOL_EVENT& aEvent );
     int AppendBoard( PLUGIN& pi, wxString& fileName );
+    int ShowHotkeyList( const TOOL_EVENT& aEvent );
     int ShowHelp( const TOOL_EVENT& aEvent );
     int ToBeDone( const TOOL_EVENT& aEvent );
 

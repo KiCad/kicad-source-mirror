@@ -195,8 +195,12 @@ TOOL_ACTION PCB_ACTIONS::deleteItemCursor( "pcbnew.Control.deleteItemCursor",
         AS_GLOBAL, 0,
         "", "" );
 
-TOOL_ACTION PCB_ACTIONS::showHelp( "pcbnew.Control.showHelp",
+TOOL_ACTION PCB_ACTIONS::showHotkeyList( "pcbnew.Control.showHotkeyList",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HELP ),
+        "", "" );
+
+TOOL_ACTION PCB_ACTIONS::showHelp( "pcbnew.Control.showHelp",
+        AS_GLOBAL, 0,
         "", "" );
 
 TOOL_ACTION PCB_ACTIONS::toBeDone( "pcbnew.Control.toBeDone",
@@ -980,9 +984,19 @@ int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
 }
 
 
-int PCBNEW_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::ShowHotkeyList( const TOOL_EVENT& aEvent )
 {
     DisplayHotkeyList( m_frame, m_frame->GetHotkeyConfig() );
+
+    return 0;
+}
+
+
+int PCBNEW_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent dummyEvent;
+    dummyEvent.SetId( wxID_HELP );
+    m_frame->GetKicadHelp( dummyEvent );
 
     return 0;
 }
@@ -1038,6 +1052,7 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::SwitchCursor,       PCB_ACTIONS::switchCursor.MakeEvent() );
     Go( &PCBNEW_CONTROL::SwitchUnits,        PCB_ACTIONS::switchUnits.MakeEvent() );
     Go( &PCBNEW_CONTROL::DeleteItemCursor,   PCB_ACTIONS::deleteItemCursor.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ShowHotkeyList,     PCB_ACTIONS::showHotkeyList.MakeEvent() );
     Go( &PCBNEW_CONTROL::ShowHelp,           PCB_ACTIONS::showHelp.MakeEvent() );
     Go( &PCBNEW_CONTROL::ToBeDone,           PCB_ACTIONS::toBeDone.MakeEvent() );
 

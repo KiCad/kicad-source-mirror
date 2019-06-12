@@ -89,8 +89,12 @@ TOOL_ACTION GERBVIEW_ACTIONS::resetCoords( "gerbview.Control.resetCoords",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_RESET_LOCAL_COORD ),
         "", "" );
 
-TOOL_ACTION GERBVIEW_ACTIONS::showHelp( "gerbview.Control.showHelp",
+TOOL_ACTION GERBVIEW_ACTIONS::showHotkeyList( "gerbview.Control.showHotkeyList",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HELP ),
+        "", "" );
+
+TOOL_ACTION GERBVIEW_ACTIONS::showHelp( "gerbview.Control.showHelp",
+        AS_GLOBAL, 0,
         "", "" );
 
 GERBVIEW_CONTROL::GERBVIEW_CONTROL() :
@@ -249,9 +253,19 @@ int GERBVIEW_CONTROL::SwitchUnits( const TOOL_EVENT& aEvent )
 }
 
 
-int GERBVIEW_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
+int GERBVIEW_CONTROL::ShowHotkeyList( const TOOL_EVENT& aEvent )
 {
     DisplayHotkeyList( m_frame, m_frame->GetHotkeyConfig() );
+
+    return 0;
+}
+
+
+int GERBVIEW_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent dummyEvent;
+    dummyEvent.SetId( wxID_HELP );
+    m_frame->GetKicadHelp( dummyEvent );
 
     return 0;
 }
@@ -276,4 +290,5 @@ void GERBVIEW_CONTROL::setTransitions()
     Go( &GERBVIEW_CONTROL::ResetCoords,        GERBVIEW_ACTIONS::resetCoords.MakeEvent() );
     Go( &GERBVIEW_CONTROL::SwitchUnits,        GERBVIEW_ACTIONS::switchUnits.MakeEvent() );
     Go( &GERBVIEW_CONTROL::ShowHelp,           GERBVIEW_ACTIONS::showHelp.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::ShowHotkeyList,     GERBVIEW_ACTIONS::showHotkeyList.MakeEvent() );
 }

@@ -379,6 +379,7 @@ public:
     static TOOL_ACTION drillOrigin;
     static TOOL_ACTION crossProbeSchToPcb;
     static TOOL_ACTION appendBoard;
+    static TOOL_ACTION showHotkeyList;
     static TOOL_ACTION showHelp;
     static TOOL_ACTION toBeDone;
 

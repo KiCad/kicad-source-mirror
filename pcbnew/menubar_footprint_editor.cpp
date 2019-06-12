@@ -460,7 +460,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* helpMenu = new wxMenu;
 
     // Contents
-    AddMenuItem( helpMenu, wxID_HELP,
+    AddMenuItem( helpMenu, ID_PCBNEW_SHOW_HELP,
                  _( "Pcbnew &Manual" ),
                  _( "Open the Pcbnew Manual" ),
                  KiBitmap( online_help_xpm ) );

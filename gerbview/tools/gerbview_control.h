@@ -60,6 +60,7 @@ public:
     int ResetCoords( const TOOL_EVENT& aEvent );
     int SwitchUnits( const TOOL_EVENT& aEvent );
     int ShowHelp( const TOOL_EVENT& aEvent );
+    int ShowHotkeyList( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;

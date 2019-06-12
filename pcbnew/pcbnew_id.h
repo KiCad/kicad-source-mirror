@@ -402,6 +402,9 @@ enum pcbnew_ids
     ID_EDIT_CUT,
     ID_EDIT_COPY,
     ID_EDIT_PASTE,
+
+    ID_PCBNEW_SHOW_HELP,
+
     ID_PCBNEW_END_LIST
 };
 

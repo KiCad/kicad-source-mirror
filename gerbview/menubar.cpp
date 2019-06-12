@@ -353,7 +353,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // Help menu
     wxMenu* helpMenu = new wxMenu;
 
-    AddMenuItem( helpMenu, wxID_HELP, _( "Gerbview &Manual" ),
+    AddMenuItem( helpMenu, ID_GERBVIEW_SHOW_HELP, _( "Gerbview &Manual" ),
                  _( "Open the GerbView Manual" ),
                  KiBitmap( online_help_xpm ) );
 

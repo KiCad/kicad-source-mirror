@@ -419,7 +419,7 @@ void prepareToolsMenu( wxMenu* aParentMenu )
 void prepareHelpMenu( wxMenu* aParentMenu )
 {
 
-    AddMenuItem( aParentMenu, wxID_HELP,
+    AddMenuItem( aParentMenu, ID_PCBNEW_SHOW_HELP,
                  _( "Pcbnew &Manual" ),
                  _( "Open Pcbnew Manual" ),
                  KiBitmap( online_help_xpm ) );

@@ -219,6 +219,9 @@ OPT<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
     case ID_POPUP_PCB_AUTOPLACE_SELECTED_MODULES:
         return PCB_ACTIONS::autoplaceSelectedComponents.MakeEvent();
 
+    case ID_PCBNEW_SHOW_HELP:
+        return PCB_ACTIONS::showHelp.MakeEvent();
+
     }
 
     return OPT<TOOL_EVENT>();
