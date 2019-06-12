@@ -23,6 +23,7 @@
 
 #include <hotkey_store.h>
 #include <tool/tool_manager.h>
+#include <tool/action_manager.h>
 #include <tool/tool_action.h>
 
 
@@ -115,6 +116,9 @@ void HOTKEY_STORE::SaveAllHotkeys()
         for( HOTKEY& hotkey: section.m_HotKeys )
             hotkey.m_Parent->SetHotKey( hotkey.m_EditKeycode );
     }
+
+    if( !m_toolManagers.empty() )
+        m_toolManagers[ 0 ]->GetActionManager()->UpdateHotKeys( false );
 }
 
 

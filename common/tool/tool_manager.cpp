@@ -322,12 +322,6 @@ int TOOL_MANAGER::GetHotKey( const TOOL_ACTION& aAction )
 }
 
 
-void TOOL_MANAGER::UpdateHotKeys()
-{
-    m_actionMgr->UpdateHotKeys();
-}
-
-
 bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
 {
     wxASSERT( aTool != NULL );
@@ -469,7 +463,7 @@ void TOOL_MANAGER::InitTools()
         }
     }
 
-    m_actionMgr->UpdateHotKeys();
+    m_actionMgr->UpdateHotKeys( true );
     
     ResetTools( TOOL_BASE::RUN );
 }

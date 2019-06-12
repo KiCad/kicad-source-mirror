@@ -235,7 +235,7 @@ TOOL_ACTION ACTIONS::zoomIn( "common.Control.zoomIn",
         WXK_F1, 
 #endif
         LEGACY_HK_NAME( "Zoom In" ),
-        _( "Zoom In" ), "",
+        _( "Zoom In at Cursor" ), "",
         zoom_in_xpm );
 
 TOOL_ACTION ACTIONS::zoomOut( "common.Control.zoomOut",
@@ -246,7 +246,7 @@ TOOL_ACTION ACTIONS::zoomOut( "common.Control.zoomOut",
         WXK_F2,
 #endif
         LEGACY_HK_NAME( "Zoom Out" ),
-        _( "Zoom Out" ), "",
+        _( "Zoom Out at Cursor" ), "",
         zoom_out_xpm );
 
 TOOL_ACTION ACTIONS::zoomInCenter( "common.Control.zoomInCenter",

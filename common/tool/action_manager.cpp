@@ -140,9 +140,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
     {
         if( action->GetScope() == AS_GLOBAL )
         {
-            // Store the global action for the hot key in case there was no possible
-            // context actions to run
-            wxASSERT( global == NULL );       // there should be only one global action per hot key
+            // Store the global action in case there are no context actions to run
             global = action;
             continue;
         }
@@ -195,41 +193,35 @@ int ACTION_MANAGER::GetHotKey( const TOOL_ACTION& aAction ) const
 }
 
 
-void ACTION_MANAGER::UpdateHotKeys()
+void ACTION_MANAGER::UpdateHotKeys( bool aFullUpdate )
 {
     std::map<std::string, int> legacyHotKeyMap;
     std::map<std::string, int> userHotKeyMap;
 
     m_actionHotKeys.clear();
     m_hotkeys.clear();
-    
-    ReadLegacyHotkeyConfig( m_toolMgr->GetEditFrame()->ConfigBaseName(), legacyHotKeyMap );
-    ReadHotKeyConfig( wxEmptyString, userHotKeyMap );
+
+    if( aFullUpdate )
+    {
+        ReadLegacyHotkeyConfig( m_toolMgr->GetEditFrame()->ConfigBaseName(), legacyHotKeyMap );
+        ReadHotKeyConfig( wxEmptyString, userHotKeyMap );
+    }
 
     for( const auto& actionName : m_actionNameIndex )
     {
         TOOL_ACTION* action = actionName.second;
-        int hotkey = processHotKey( action, legacyHotKeyMap, userHotKeyMap );
+        int          hotkey = 0;
 
-        if( hotkey <= 0 )
-            continue;
+        if( aFullUpdate )
+            hotkey = processHotKey( action, legacyHotKeyMap, userHotKeyMap );
+        else
+            hotkey = action->GetHotKey();
 
-        // Second hotkey takes priority as defaults are loaded first and updates
-        // are loaded after
-        if( action->GetScope() == AS_GLOBAL && m_actionHotKeys.count( hotkey ) )
+        if( hotkey > 0 )
         {
-            for( auto it = m_actionHotKeys[hotkey].begin();
-                      it != m_actionHotKeys[hotkey].end(); )
-            {
-                if( (*it)->GetScope() == AS_GLOBAL )
-                    it = m_actionHotKeys[hotkey].erase( it );
-                else
-                    it++;
-            }
+            m_actionHotKeys[hotkey].push_back( action );
+            m_hotkeys[action->GetId()] = hotkey;
         }
-
-        m_actionHotKeys[hotkey].push_back( action );
-        m_hotkeys[action->GetId()] = hotkey;
     }
 }
 

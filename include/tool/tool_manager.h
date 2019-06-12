@@ -163,8 +163,7 @@ public:
     ///> @copydoc ACTION_MANAGER::GetHotKey()
     int GetHotKey( const TOOL_ACTION& aAction );
     
-    ///> @copydoc ACTION_MANAGER::UpdateHotKeys()
-    void UpdateHotKeys();
+    ACTION_MANAGER* GetActionManager() { return m_actionMgr; }
 
     /**
      * Function FindTool()

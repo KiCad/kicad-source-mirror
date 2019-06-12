@@ -103,10 +103,10 @@ public:
     int GetHotKey( const TOOL_ACTION& aAction ) const;
 
     /**
-     * Function ReadHotKeyConfig()
-     * Updates TOOL_ACTIONs hot key assignment according to the current frame's Hot Key Editor settings.
+     * Function UpdateHotKeys()
+     * Optionally reads the hotkey config files and then rebuilds the internal hotkey maps.
      */
-    void UpdateHotKeys();
+    void UpdateHotKeys( bool aFullUpdate );
 
     /**
      * Function GetActionList()
