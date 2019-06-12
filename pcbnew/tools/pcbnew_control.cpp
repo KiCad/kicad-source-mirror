@@ -573,7 +573,7 @@ int PCBNEW_CONTROL::GridFast2( const TOOL_EVENT& aEvent )
 }
 
 
-bool PCBNEW_CONTROL::DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
+void PCBNEW_CONTROL::DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                       BOARD_ITEM* originViewItem, const VECTOR2D& aPoint )
 {
     aFrame->SetGridOrigin( wxPoint( aPoint.x, aPoint.y ) );
@@ -581,7 +581,6 @@ bool PCBNEW_CONTROL::DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame
     originViewItem->SetPosition( wxPoint( aPoint.x, aPoint.y ) );
     aView->MarkDirty();
     aFrame->OnModify();
-    return true;
 }
 
 
@@ -589,7 +588,8 @@ bool PCBNEW_CONTROL::SetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                     BOARD_ITEM* originViewItem, const VECTOR2D& aPoint )
 {
     aFrame->SaveCopyInUndoList( originViewItem, UR_GRIDORIGIN );
-    return DoSetGridOrigin( aView, aFrame, originViewItem, aPoint );
+    DoSetGridOrigin( aView, aFrame, originViewItem, aPoint );
+    return false;   // Set grid origin is a one-shot; don't keep tool active
 }
 
 

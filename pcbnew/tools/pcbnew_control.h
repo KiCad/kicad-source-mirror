@@ -83,7 +83,7 @@ public:
                                BOARD_ITEM* originViewItem, const VECTOR2D& aPoint );
 
     // Low-level access (below undo) to setting the grid origin
-    static bool DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
+    static void DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                  BOARD_ITEM* originViewItem, const VECTOR2D& aPoint );
 
     int Undo( const TOOL_EVENT& aEvent );

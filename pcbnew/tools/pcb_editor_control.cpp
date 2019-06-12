@@ -1169,14 +1169,13 @@ int PCB_EDITOR_CONTROL::CrossProbeSchToPcb( const TOOL_EVENT& aEvent )
 }
 
 
-bool PCB_EDITOR_CONTROL::DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
+void PCB_EDITOR_CONTROL::DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                            BOARD_ITEM* originViewItem, const VECTOR2D& aPosition )
 {
     aFrame->SetAuxOrigin( wxPoint( aPosition.x, aPosition.y ) );
     originViewItem->SetPosition( wxPoint( aPosition.x, aPosition.y ) );
     aView->MarkDirty();
     aFrame->OnModify();
-    return true;
 }
 
 
@@ -1184,7 +1183,8 @@ bool PCB_EDITOR_CONTROL::SetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFr
                                          BOARD_ITEM* originViewItem, const VECTOR2D& aPosition )
 {
     aFrame->SaveCopyInUndoList( originViewItem, UR_DRILLORIGIN );
-    return DoSetDrillOrigin( aView, aFrame, originViewItem, aPosition );
+    DoSetDrillOrigin( aView, aFrame, originViewItem, aPosition );
+    return false;   // drill origin is a one-shot; don't continue with tool
 }
 
 

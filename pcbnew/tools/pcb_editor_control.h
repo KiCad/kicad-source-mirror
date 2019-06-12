@@ -121,7 +121,7 @@ public:
                                 BOARD_ITEM* aItem, const VECTOR2D& aPoint );
 
     ///> Low-level access (below undo) to setting the drill origin
-    static bool DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
+    static void DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                   BOARD_ITEM* aItem, const VECTOR2D& aPoint );
 
     ///> Highlights net belonging to the item under the cursor.
