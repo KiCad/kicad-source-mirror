@@ -1005,8 +1005,13 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         }
         else if( item->Type() == SCH_SHEET_T )
         {
-            SCH_SHEET* sheet = (SCH_SHEET*) item;
-            m_frame->LoadSheetFromFile( sheet, g_CurrentSheet, sheet->GetFileName() );
+            SCH_SHEET*  sheet = (SCH_SHEET*) item;
+            SCH_SCREEN* existingScreen = nullptr;
+
+            if( g_RootSheet->SearchHierarchy( sheet->GetFileName(), &existingScreen ) )
+                sheet->SetScreen( existingScreen );
+            else
+                m_frame->LoadSheetFromFile( sheet, g_CurrentSheet, sheet->GetFileName() );
         }
 
         item->SetFlags( IS_NEW | IS_PASTED | IS_MOVED );
