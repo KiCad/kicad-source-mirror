@@ -147,6 +147,8 @@ public:
     int ListNets( const TOOL_EVENT& aEvent );
 
 private:
+    bool highlightNet( const VECTOR2D& aPosition, bool aUseSelection );
+
     ///> Event handler to recalculate dynamic ratsnest
     void ratsnestTimer( wxTimerEvent& aEvent );
 
@@ -164,6 +166,8 @@ private:
     bool m_probingSchToPcb;     ///> Recursion guard when cross-probing to EESchema
     bool m_slowRatsnest;        ///> Indicates current selection ratsnest will be slow to calculate
     wxTimer m_ratsnestTimer;    ///> Timer to initiate lazy ratsnest calculation (ie: when slow)
+
+    int  m_lastNetcode;         ///> Used for toggling between last two highlighted nets
 
     ///> How to modify a property for selected items.
     enum MODIFY_MODE { ON, OFF, TOGGLE };

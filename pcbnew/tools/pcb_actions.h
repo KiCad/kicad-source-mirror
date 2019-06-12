@@ -361,6 +361,7 @@ public:
     static TOOL_ACTION deleteTool;
     static TOOL_ACTION clearHighlight;
     static TOOL_ACTION highlightNet;
+    static TOOL_ACTION toggleLastNetHighlight;
     static TOOL_ACTION highlightNetTool;
     static TOOL_ACTION highlightNetSelection;
     static TOOL_ACTION drillOrigin;

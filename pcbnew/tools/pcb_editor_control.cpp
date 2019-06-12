@@ -197,8 +197,13 @@ TOOL_ACTION PCB_ACTIONS::appendBoard( "pcbnew.EditorControl.appendBoard",
 TOOL_ACTION PCB_ACTIONS::highlightNet( "pcbnew.EditorControl.highlightNet",
         AS_GLOBAL );
 
+TOOL_ACTION PCB_ACTIONS::toggleLastNetHighlight( "pcbnew.EditorControl.toggleLastNetHighlight",
+        AS_GLOBAL, 0, "",
+        _( "Toggle Last Net Highlight" ), _( "Toggle between last two highlighted nets" ) );
+
 TOOL_ACTION PCB_ACTIONS::clearHighlight( "pcbnew.EditorControl.clearHighlight",
-        AS_GLOBAL );
+        AS_GLOBAL, 0, "",
+        _( "Clear Net Highlighting" ), "" );
 
 TOOL_ACTION PCB_ACTIONS::highlightNetTool( "pcbnew.EditorControl.highlightNetTool",
         AS_GLOBAL, 0, "",
@@ -336,6 +341,7 @@ PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
                                                 KIGFX::ORIGIN_VIEWITEM::CIRCLE_CROSS ) );
     m_probingSchToPcb = false;
     m_slowRatsnest = false;
+    m_lastNetcode = -1;
 }
 
 
@@ -1203,24 +1209,22 @@ int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
  * Look for a BOARD_CONNECTED_ITEM in a given spot and if one is found - it enables
  * highlight for its net.
  *
- * @param aToolMgr is the TOOL_MANAGER currently in use.
  * @param aPosition is the point where an item is expected (world coordinates).
  * @param aUseSelection is true if we should use the current selection to pick the netcode
  */
-static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition,
-                          bool aUseSelection = false )
+ bool PCB_EDITOR_CONTROL::highlightNet( const VECTOR2D& aPosition, bool aUseSelection )
 {
-    auto render = aToolMgr->GetView()->GetPainter()->GetSettings();
-    auto frame = static_cast<PCB_EDIT_FRAME*>( aToolMgr->GetEditFrame() );
+    KIGFX::RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
+    PCB_EDIT_FRAME*         frame = getEditFrame<PCB_EDIT_FRAME>();
 
-    BOARD* board = static_cast<BOARD*>( aToolMgr->GetModel() );
+    BOARD* board = static_cast<BOARD*>( m_toolMgr->GetModel() );
 
     int net = -1;
     bool enableHighlight = false;
 
     if( aUseSelection )
     {
-        auto selectionTool = aToolMgr->GetTool<SELECTION_TOOL>();
+        SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
 
         const PCBNEW_SELECTION& selection = selectionTool->GetSelection();
 
@@ -1233,18 +1237,13 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition,
                 int item_net = ci->GetNetCode();
 
                 if( net < 0 )
-                {
                     net = item_net;
-                }
-                else if( net != item_net )
-                {
-                    // more than one net selected: do nothing
-                    return 0;
-                }
+                else if( net != item_net )  // more than one net selected: do nothing
+                    return false;
             }
         }
 
-        enableHighlight = ( net >= 0 && net != render->GetHighlightNetCode() );
+        enableHighlight = ( net >= 0 && net != settings->GetHighlightNetCode() );
     }
 
     // If we didn't get a net to highlight from the selection, use the cursor
@@ -1282,13 +1281,15 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition,
     }
 
     // Toggle highlight when the same net was picked
-    if( net > 0 && net == render->GetHighlightNetCode() )
-        enableHighlight = !render->IsHighlightEnabled();
+    if( net > 0 && net == settings->GetHighlightNetCode() )
+        enableHighlight = !settings->IsHighlightEnabled();
 
-    if( enableHighlight != render->IsHighlightEnabled() || net != render->GetHighlightNetCode() )
+    if( enableHighlight != settings->IsHighlightEnabled()
+            || net != settings->GetHighlightNetCode() )
     {
-        render->SetHighlight( enableHighlight, net );
-        aToolMgr->GetView()->UpdateAllLayersColor();
+        m_lastNetcode = settings->GetHighlightNetCode();
+        settings->SetHighlight( enableHighlight, net );
+        m_toolMgr->GetView()->UpdateAllLayersColor();
     }
 
     // Store the highlighted netcode in the current board (for dialogs for instance)
@@ -1319,18 +1320,25 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition,
 
 int PCB_EDITOR_CONTROL::HighlightNet( const TOOL_EVENT& aEvent )
 {
-    int netcode = aEvent.Parameter<intptr_t>();
+    int                     netcode = aEvent.Parameter<intptr_t>();
+    KIGFX::RENDER_SETTINGS* settings = m_toolMgr->GetView()->GetPainter()->GetSettings();
 
     if( netcode > 0 )
     {
-        KIGFX::RENDER_SETTINGS* render = m_toolMgr->GetView()->GetPainter()->GetSettings();
-        render->SetHighlight( true, netcode );
+        m_lastNetcode = settings->GetHighlightNetCode();
+        settings->SetHighlight( true, netcode );
         m_toolMgr->GetView()->UpdateAllLayersColor();
     }
-    else
+    else if( aEvent.IsAction( &PCB_ACTIONS::toggleLastNetHighlight ) )
     {
-        // No net code specified, pick the net code belonging to the item under the cursor
-        highlightNet( m_toolMgr, getViewControls()->GetMousePosition() );
+        int temp = settings->GetHighlightNetCode();
+        settings->SetHighlight( true, m_lastNetcode );
+        m_toolMgr->GetView()->UpdateAllLayersColor();
+        m_lastNetcode = temp;
+    }
+    else    // Highlight the net belonging to the item under the cursor
+    {
+        highlightNet( getViewControls()->GetMousePosition(), false );
     }
 
     return 0;
@@ -1354,15 +1362,13 @@ int PCB_EDITOR_CONTROL::ClearHighlight( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 {
-    // If the keyboard hotkey was triggered, the behavior is as follows:
-    // If we are already in the highlight tool, behave the same as a left click.
-    // If we are not, highlight the net of the selected item(s), or if there is
-    // no selection, then behave like a Ctrl+Left Click.
+    // If the keyboard hotkey was triggered and we are already in the highlight tool, behave
+    // the same as a left-click.  Otherwise highlight the net of the selected item(s), or if
+    // there is no selection, then behave like a ctrl-left-click.
     if( aEvent.IsAction( &PCB_ACTIONS::highlightNetSelection ) )
     {
         bool use_selection = ( m_frame->GetToolId() != ID_PCB_HIGHLIGHT_BUTT );
-        highlightNet( m_toolMgr, getViewControls()->GetMousePosition(),
-                      use_selection );
+        highlightNet( getViewControls()->GetMousePosition(), use_selection );
     }
 
     Activate();
@@ -1371,7 +1377,9 @@ int PCB_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
     assert( picker );
 
     m_frame->SetToolID( ID_PCB_HIGHLIGHT_BUTT, wxCURSOR_HAND, _( "Highlight net" ) );
-    picker->SetClickHandler( std::bind( highlightNet, m_toolMgr, _1, false ) );
+    picker->SetClickHandler( [this] ( const VECTOR2D& pt ) -> bool {
+        return highlightNet( pt, false );
+    } );
     picker->SetLayerSet( LSET::AllCuMask() );
     picker->Activate();
     Wait();
@@ -1599,6 +1607,7 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,     EVENTS::ClearedEvent );
     Go( &PCB_EDITOR_CONTROL::CrossProbeSchToPcb,     PCB_ACTIONS::crossProbeSchToPcb.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNet,           PCB_ACTIONS::highlightNet.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::HighlightNet,           PCB_ACTIONS::toggleLastNetHighlight.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ClearHighlight,         PCB_ACTIONS::clearHighlight.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,     PCB_ACTIONS::highlightNetTool.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,     PCB_ACTIONS::highlightNetSelection.MakeEvent() );
