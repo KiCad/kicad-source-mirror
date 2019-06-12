@@ -304,7 +304,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
     const PCBNEW_SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( selection.Size() != 1 )
+    if( selection.Size() != 1 || selection.Front()->GetEditFlags() )
         return 0;
 
     Activate();
