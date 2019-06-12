@@ -89,11 +89,35 @@ public:
     }
 
     /**
-     * Print the elapsed time (in ms) to STDERR.
+     * Print the elapsed time (in a suitable unit) to a stream.
+     *
+     * The unit is automatically chosen from ns, us, ms and s, depending on the
+     * size of the current count.
+     *
+     * @param the stream to print to.
      */
-    void Show()
+    void Show( std::ostream& aStream = std::cerr )
     {
-        std::cerr << m_name << " took " << msecs() << "ms." << std::endl;
+        using DURATION = std::chrono::duration<double, std::nano>;
+
+        const auto   duration = SinceStart<DURATION>();
+        const double cnt = duration.count();
+
+        if( m_name.size() )
+        {
+            aStream << m_name << " took ";
+        }
+
+        if( cnt < 1e3 )
+            aStream << cnt << "ns";
+        else if( cnt < 1e6 )
+            aStream << cnt / 1e3 << "µs";
+        else if( cnt < 1e9 )
+            aStream << cnt / 1e6 << "ms";
+        else
+            aStream << cnt / 1e9 << "s";
+
+        aStream << std::endl;
     }
 
     /**
