@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -110,6 +110,8 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxStaticBoxSizer* m_SizerDXF_options;
 		wxCheckBox* m_DXF_plotModeOpt;
 		wxCheckBox* m_DXF_plotTextStrokeFontOpt;
+		wxStaticText* DXF_exportUnitsLabel;
+		wxChoice* m_DXF_plotUnits;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxBoxSizer* m_sizerButtons;
 		wxButton* m_buttonDRC;

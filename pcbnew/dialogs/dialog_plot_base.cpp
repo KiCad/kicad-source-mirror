@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -304,9 +304,9 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_SizerDXF_options = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("DXF Options") ), wxVERTICAL );
 
-	m_DXF_plotModeOpt = new wxCheckBox( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Plot all layers in outline (polygon) mode"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_DXF_plotModeOpt = new wxCheckBox( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Plot graphic items using their contours"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DXF_plotModeOpt->SetValue(true);
-	m_DXF_plotModeOpt->SetToolTip( _("DXF only:\nCheck to plot all layers in polygon mode.\nUncheck to plot in sketch mode layers that don't support polygons (*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\nand plot in polygon mode other layers (*.Cu, *.Adhes, *.Paste, *.Mask)") );
+	m_DXF_plotModeOpt->SetToolTip( _("Uncheck to plot graphic items using their center lines") );
 
 	m_SizerDXF_options->Add( m_DXF_plotModeOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -314,6 +314,24 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_DXF_plotTextStrokeFontOpt->SetToolTip( _("Check to use Pcbnew stroke font\nUncheck to plot oneline ASCII texts as editable text (using DXF font)") );
 
 	m_SizerDXF_options->Add( m_DXF_plotTextStrokeFontOpt, 0, wxALL, 5 );
+
+	wxBoxSizer* dxfSizer1;
+	dxfSizer1 = new wxBoxSizer( wxHORIZONTAL );
+
+	DXF_exportUnitsLabel = new wxStaticText( m_SizerDXF_options->GetStaticBox(), wxID_ANY, _("Export units:"), wxDefaultPosition, wxDefaultSize, 0 );
+	DXF_exportUnitsLabel->Wrap( -1 );
+	dxfSizer1->Add( DXF_exportUnitsLabel, 0, wxALIGN_CENTER|wxALIGN_LEFT|wxALL, 5 );
+
+	wxString m_DXF_plotUnitsChoices[] = { _("Inches"), _("Millimeters") };
+	int m_DXF_plotUnitsNChoices = sizeof( m_DXF_plotUnitsChoices ) / sizeof( wxString );
+	m_DXF_plotUnits = new wxChoice( m_SizerDXF_options->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_DXF_plotUnitsNChoices, m_DXF_plotUnitsChoices, 0 );
+	m_DXF_plotUnits->SetSelection( 0 );
+	m_DXF_plotUnits->SetToolTip( _("The units to use for the exported DXF file") );
+
+	dxfSizer1->Add( m_DXF_plotUnits, 0, wxALIGN_CENTER|wxALL, 5 );
+
+
+	m_SizerDXF_options->Add( dxfSizer1, 1, wxEXPAND, 5 );
 
 
 	m_PlotOptionsSizer->Add( m_SizerDXF_options, 0, wxEXPAND|wxALL, 5 );
