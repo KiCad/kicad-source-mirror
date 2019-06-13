@@ -1141,7 +1141,12 @@ int SCH_EDITOR_CONTROL::EnterSheet( const TOOL_EVENT& aEvent )
 
     if( selection.GetSize() == 1 )
     {
-        g_CurrentSheet->push_back( (SCH_SHEET*) selection.Front() );
+        SCH_SHEET* sheet = (SCH_SHEET*) selection.Front();
+
+        m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
+        g_CurrentSheet->push_back( sheet );
         m_frame->DisplayCurrentSheet();
     }
 
@@ -1153,6 +1158,9 @@ int SCH_EDITOR_CONTROL::LeaveSheet( const TOOL_EVENT& aEvent )
 {
     if( g_CurrentSheet->Last() != g_RootSheet )
     {
+        m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
         g_CurrentSheet->pop_back();
         m_frame->DisplayCurrentSheet();
     }

@@ -49,7 +49,8 @@
 #include <lib_pin.h>
 #include <sch_component.h>
 #include <connection_graph.h>
-
+#include <tools/ee_actions.h>
+#include <tool/tool_manager.h>
 #include <dialog_erc.h>
 #include <erc.h>
 #include <id.h>
@@ -283,6 +284,9 @@ void DIALOG_ERC::OnLeftClickMarkersList( wxHtmlLinkEvent& event )
 
     if( sheetList[i] != m_parent->GetCurrentSheet() )
     {
+        m_parent->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
+        m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
+
         m_parent->SetCurrentSheet( sheetList[i] );
         m_parent->DisplayCurrentSheet();
         sheetList[i].LastScreen()->SetZoom( m_parent->GetScreen()->GetZoom() );
