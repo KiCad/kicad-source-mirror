@@ -96,12 +96,13 @@ static struct hotkey_name_descr hotkeyNameList[] =
 
     { wxT( "Space" ),        WXK_SPACE                                                },
 
-    { wxT( "<unassigned>" ), 0                                                        },
+    { wxT( "" ),             0                                                        },
 
-    { wxT( "Left Button" ),   PSEUDO_WXK_LMB                                           },
-    { wxT( "Middle Button" ), PSEUDO_WXK_MMB                                           },
-    { wxT( "Right Button" ),  PSEUDO_WXK_RMB                                           },
-    { wxT( "Mouse Wheel" ),   PSEUDO_WXK_WHEEL                                         },
+    { wxT( "Left Button" ),   PSEUDO_WXK_LMB                                          },
+    { wxT( "Middle Button" ), PSEUDO_WXK_MMB                                          },
+    { wxT( "Right Button" ),  PSEUDO_WXK_RMB                                          },
+    { wxT( "Mouse Wheel" ),   PSEUDO_WXK_WHEEL                                        },
+    { wxT( "Double-click" ),  PSEUDO_WXK_DBLCLICK                                     },
 
     // Do not change this line: end of list
     { wxT( "" ),             KEY_NON_FOUND                                            }
