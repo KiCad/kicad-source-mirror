@@ -1256,6 +1256,7 @@ public:
         textAsLines = true;
         m_currentColor = COLOR4D::BLACK;
         m_currentLineType = 0;
+        SetUnits( DXF_PLOTTER::INCHES );
     }
 
     virtual PlotFormat GetPlotterType() const override
@@ -1338,10 +1339,60 @@ public:
                        bool                        aMultilineAllowed = false,
                        void* aData = NULL ) override;
 
+
+    // Should be the same order as in the PCB_PLOT_PARAMS class
+    enum Units
+    {
+        INCHES = 0,
+        MILIMETERS = 1
+    };
+
+    /**
+     * Set the units to use for plotting the DXF file.
+     *
+     * @param aUnit - The units to use
+     */
+    void SetUnits( Units aUnit );
+
+    /**
+     * The units currently enabled for plotting
+     *
+     * @return The currently configured units
+     */
+    Units GetUnits() const
+    {
+        return m_plotUnits;
+    }
+
+    /**
+     * Get the scale factor to apply to convert the device units to be in the
+     * currently set units.
+     *
+     * @return Scaling factor to apply for unit conversion
+     */
+    double GetUnitScaling() const
+    {
+        return m_unitScalingFactor;
+    }
+
+    /**
+     * Get the correct value for the $MEASUREMENT field given the current units
+     *
+     * @return the $MEASUREMENT directive field value
+     */
+    unsigned int GetMeasurementDirective() const
+    {
+        return m_measurementDirective;
+    }
+
 protected:
     bool textAsLines;
     COLOR4D m_currentColor;
     int m_currentLineType;
+
+    Units        m_plotUnits;
+    double       m_unitScalingFactor;
+    unsigned int m_measurementDirective;
 };
 
 class TITLE_BLOCK;

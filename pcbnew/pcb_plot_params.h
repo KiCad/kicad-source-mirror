@@ -44,6 +44,13 @@ public:
         FULL_DRILL_SHAPE  = 2
     };
 
+    // Must be in the same order as the drop-down list in the plot dialog
+    enum Units
+    {
+        INCHES = 0,
+        MILIMETERS = 1,
+    };
+
 private:
     // If true, do not plot NPTH pads
     // (mainly used to disable NPTH pads plotting on copper layers)
@@ -59,6 +66,11 @@ private:
      * polygons are merged.
      */
     bool        m_DXFplotPolygonMode;
+
+    /**
+     * DXF format: Units to use when plotting the DXF
+     */
+    Units       m_DXFplotUnits;
 
     /// Plot format type (chooses the driver to be used)
     PlotFormat  m_format;
@@ -195,6 +207,16 @@ public:
 
     void        SetDXFPlotPolygonMode( bool aFlag ) { m_DXFplotPolygonMode = aFlag; }
     bool        GetDXFPlotPolygonMode() const { return m_DXFplotPolygonMode; }
+
+    void SetDXFPlotUnits( Units aUnit )
+    {
+        m_DXFplotUnits = aUnit;
+    }
+
+    Units GetDXFPlotUnits() const
+    {
+        return m_DXFplotUnits;
+    }
 
     void        SetDrillMarksType( DrillMarksType aVal ) { m_drillMarks = aVal; }
     DrillMarksType GetDrillMarksType() const { return m_drillMarks; }
