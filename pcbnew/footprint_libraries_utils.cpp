@@ -849,7 +849,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     }
     else        // This is an insert command
     {
-        KIGFX::VIEW_CONTROLS* viewControls = pcbframe->GetGalCanvas()->GetViewControls();
+        KIGFX::VIEW_CONTROLS* viewControls = pcbframe->GetCanvas()->GetViewControls();
         VECTOR2D              cursorPos = viewControls->GetCursorPosition();
 
         commit.Add( newmodule );
@@ -1017,7 +1017,7 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
             GetScreen()->ClrModify();
 
             updateView();
-            GetGalCanvas()->Refresh();
+            GetCanvas()->Refresh();
 
             return true;
         }

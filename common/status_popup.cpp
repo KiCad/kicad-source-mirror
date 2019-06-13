@@ -59,7 +59,7 @@ void STATUS_POPUP::onCharHook( wxKeyEvent& aEvent )
     EDA_DRAW_FRAME* frame = dynamic_cast<EDA_DRAW_FRAME*>( GetParent() );
 
     if( frame )
-        frame->GetGalCanvas()->OnEvent( aEvent );
+        frame->GetCanvas()->OnEvent( aEvent );
     else
         GetParent()->GetEventHandler()->ProcessEvent( aEvent );
 }

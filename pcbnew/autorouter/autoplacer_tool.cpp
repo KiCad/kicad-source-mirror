@@ -79,12 +79,10 @@ static PCB_BASE_EDIT_FRAME* fparent;
 static int refreshCallback( MODULE* aModule )
 {
     if( aModule )
-    {
-        fparent->GetGalCanvas()->GetView()->Update( aModule );
-    }
+        fparent->GetCanvas()->GetView()->Update( aModule );
 
-    fparent->GetGalCanvas()->GetView()->MarkDirty();
-    fparent->GetGalCanvas()->Refresh();
+    fparent->GetCanvas()->GetView()->MarkDirty();
+    fparent->GetCanvas()->Refresh();
     wxSafeYield();  // Give a slice of time to refresh the display
 
     return 0;

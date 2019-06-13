@@ -45,7 +45,7 @@ static bool                 lastTextItalic = false;
 
 SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
 {
-    wxPoint  cursorPos = (wxPoint) GetGalCanvas()->GetViewControls()->GetCursorPosition();
+    wxPoint  cursorPos = (wxPoint) GetCanvas()->GetViewControls()->GetCursorPosition();
     SCH_TEXT* textItem = nullptr;
 
     switch( aType )

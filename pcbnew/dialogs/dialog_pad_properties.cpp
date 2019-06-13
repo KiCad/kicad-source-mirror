@@ -237,10 +237,10 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
     m_axisOrigin->SetDrawAtZero( true );
 
     m_panelShowPadGal->UseColorScheme( &m_parent->Settings().Colors() );
-    m_panelShowPadGal->SwitchBackend( m_parent->GetGalCanvas()->GetBackend() );
+    m_panelShowPadGal->SwitchBackend( m_parent->GetCanvas()->GetBackend() );
     m_panelShowPadGal->SetStealsFocus( false );
 
-    bool mousewheelPan = m_parent->GetGalCanvas()->GetViewControls()->IsMousewheelPanEnabled();
+    bool mousewheelPan = m_parent->GetCanvas()->GetViewControls()->IsMousewheelPanEnabled();
     m_panelShowPadGal->GetViewControls()->EnableMousewheelPan( mousewheelPan );
 
     m_panelShowPadGal->Show();
@@ -1447,7 +1447,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
     // redraw the area where the pad was, without pad (delete pad on screen)
     m_currentPad->SetFlags( DO_NOT_DRAW );
-    m_parent->GetGalCanvas()->Refresh();
+    m_parent->GetCanvas()->Refresh();
     m_currentPad->ClearFlags( DO_NOT_DRAW );
 
     // Update values
@@ -1553,7 +1553,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_parent->SetMsgPanel( m_currentPad );
 
     // redraw the area where the pad was
-    m_parent->GetGalCanvas()->Refresh();
+    m_parent->GetCanvas()->Refresh();
 
     commit.Push( _( "Modify pad" ) );
 

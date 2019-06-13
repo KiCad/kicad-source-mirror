@@ -450,7 +450,7 @@ PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCli
         for( auto item : new_items )
             highlight( static_cast<BOARD_ITEM*>( item ), SELECTED, m_selection );
 
-        m_frame->GetGalCanvas()->ForceRefresh();
+        m_frame->GetCanvas()->ForceRefresh();
     }
 
     return m_selection;
@@ -482,7 +482,7 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem, bool aForce )
     }
 
     if( m_frame )
-        m_frame->GetGalCanvas()->ForceRefresh();
+        m_frame->GetCanvas()->ForceRefresh();
 }
 
 const GENERAL_COLLECTORS_GUIDE SELECTION_TOOL::getCollectorsGuide() const
@@ -1096,12 +1096,11 @@ void SELECTION_TOOL::zoomFitSelection()
 {
     //Should recalculate the view to zoom in on the selection
     auto selectionBox = m_selection.ViewBBox();
-    auto canvas = m_frame->GetGalCanvas();
     auto view = getView();
 
-    VECTOR2D screenSize = view->ToWorld( canvas->GetClientSize(), false );
+    VECTOR2D screenSize = view->ToWorld( m_frame->GetCanvas()->GetClientSize(), false );
 
-    if( !( selectionBox.GetWidth() == 0 ) || !( selectionBox.GetHeight() == 0 ) )
+    if( selectionBox.GetWidth() != 0  || selectionBox.GetHeight() != 0 )
     {
         VECTOR2D vsize = selectionBox.GetSize();
         double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
@@ -1111,7 +1110,7 @@ void SELECTION_TOOL::zoomFitSelection()
         view->Add( &m_selection );
     }
 
-    m_frame->GetGalCanvas()->ForceRefresh();
+    m_frame->GetCanvas()->ForceRefresh();
 }
 
 
@@ -1178,7 +1177,7 @@ void SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     }
 
-    m_frame->GetGalCanvas()->ForceRefresh();
+    m_frame->GetCanvas()->ForceRefresh();
 }
 
 

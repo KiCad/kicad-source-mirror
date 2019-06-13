@@ -71,9 +71,10 @@ int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
 
 bool ZOOM_TOOL::selectRegion()
 {
-    bool cancelled = false;
-    auto view = getView();
-    auto canvas = m_frame->GetGalCanvas();
+    bool                cancelled = false;
+    KIGFX::VIEW*        view = getView();
+    EDA_DRAW_PANEL_GAL* canvas = m_frame->GetCanvas();
+
     getViewControls()->SetAutoPan( true );
 
     KIGFX::PREVIEW::SELECTION_AREA area;

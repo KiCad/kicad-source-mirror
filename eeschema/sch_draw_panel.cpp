@@ -70,7 +70,7 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
     setDefaultLayerOrder();
     setDefaultLayerDeps();
 
-    view()->UpdateAllLayersOrder();
+    GetView()->UpdateAllLayersOrder();
 
     // View controls is the first in the event handler chain, so the Tool Framework operates
     // on updated viewport data.
@@ -93,18 +93,18 @@ SCH_DRAW_PANEL::~SCH_DRAW_PANEL()
 
 void SCH_DRAW_PANEL::DisplayComponent( const LIB_PART* aComponent )
 {
-    view()->Clear();
-    view()->DisplayComponent( const_cast<LIB_PART*>(aComponent) );
+    GetView()->Clear();
+    GetView()->DisplayComponent( const_cast<LIB_PART*>(aComponent) );
 
 }
 
 
 void SCH_DRAW_PANEL::DisplaySheet( const SCH_SCREEN *aScreen )
 {
-    view()->Clear();
+    GetView()->Clear();
 
     if( aScreen )
-        view()->DisplaySheet( const_cast<SCH_SCREEN*>( aScreen ) );
+        GetView()->DisplaySheet( const_cast<SCH_SCREEN*>( aScreen ) );
 }
 
 
@@ -163,7 +163,7 @@ void SCH_DRAW_PANEL::setDefaultLayerDeps()
 }
 
 
-KIGFX::SCH_VIEW* SCH_DRAW_PANEL::view() const
+KIGFX::SCH_VIEW* SCH_DRAW_PANEL::GetView() const
 {
     return static_cast<KIGFX::SCH_VIEW*>( m_view );
 }

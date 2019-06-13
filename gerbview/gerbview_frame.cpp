@@ -98,7 +98,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
                                                    GetGalDisplayOptions(),
                                                    EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
 
-    SetGalCanvas( galCanvas );
+    SetCanvas( galCanvas );
 
     // GerbView requires draw priority for rendering negative objects
     galCanvas->GetView()->UseDrawPriority( true );
@@ -118,7 +118,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     SetScreen( new GBR_SCREEN( GetPageSettings().GetSizeIU() ) );
 
     // Create the PCB_LAYER_WIDGET *after* SetLayout():
-    m_LayersManager = new GERBER_LAYER_WIDGET( this, GetGalCanvas() );
+    m_LayersManager = new GERBER_LAYER_WIDGET( this, GetCanvas() );
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
@@ -152,7 +152,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
                       .Caption( _( "Layers Manager" ) ).PaneBorder( false )
                       .MinSize( 80, -1 ).BestSize( m_LayersManager->GetBestSize() ) );
 
-    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
     ReFillLayerWidget();                // this is near end because contents establish size
     m_auimgr.Update();
@@ -187,10 +187,8 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
                 GetToolManager()->RunAction( ACTIONS::acceleratedGraphics, true );
 
                 // Switch back to Cairo if OpenGL is not supported
-                if( GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
-                {
+                if( GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
                     GetToolManager()->RunAction( ACTIONS::standardGraphics, true );
-                }
             }
             else
             {
@@ -203,7 +201,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
         SaveSettings( config() );
     }
 
-    GetGalCanvas()->SwitchBackend( canvasType );
+    GetCanvas()->SwitchBackend( canvasType );
     ActivateGalCanvas();
 
     // Enable the axes to match legacy draw style
@@ -218,7 +216,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
 GERBVIEW_FRAME::~GERBVIEW_FRAME()
 {
-    GetGalCanvas()->GetView()->Clear();
+    GetCanvas()->GetView()->Clear();
 
     GetGerberLayout()->GetImagesList()->DeleteAllImages();
     delete m_gerberLayout;
@@ -227,14 +225,14 @@ GERBVIEW_FRAME::~GERBVIEW_FRAME()
 
 void GERBVIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    GetGalCanvas()->StopDrawing();
-    GetGalCanvas()->GetView()->Clear();
+    GetCanvas()->StopDrawing();
+    GetCanvas()->GetView()->Clear();
 
     if( m_toolManager )
         m_toolManager->DeactivateTool();
 
     // Be sure any OpenGL event cannot be fired after frame deletion:
-    GetGalCanvas()->SetEvtHandlerEnabled( false );
+    GetCanvas()->SetEvtHandlerEnabled( false );
 
     Destroy();
 }
@@ -432,7 +430,7 @@ void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
     {
         m_DisplayOptions.m_DisplayNegativeObjects = aNewState;
 
-        auto view = GetGalCanvas()->GetView();
+        auto view = GetCanvas()->GetView();
 
         view->UpdateAllItemsConditionally( KIGFX::REPAINT, []( KIGFX::VIEW_ITEM* aItem )
         {
@@ -446,7 +444,7 @@ void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
 
     case LAYER_WORKSHEET:
         m_showBorderAndTitleBlock = aNewState;
-        GetGalCanvas()->GetView()->SetLayerVisible( LAYER_WORKSHEET, aNewState );
+        GetCanvas()->GetView()->SetLayerVisible( LAYER_WORKSHEET, aNewState );
         break;
 
     case LAYER_GERBVIEW_GRID:
@@ -459,7 +457,7 @@ void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
 
     if( dcodes_changed )
     {
-        auto view = GetGalCanvas()->GetView();
+        auto view = GetCanvas()->GetView();
 
         for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; i++ )
         {
@@ -476,14 +474,13 @@ void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
 
 void GERBVIEW_FRAME::applyDisplaySettingsToGAL()
 {
-    auto view = GetGalCanvas()->GetView();
-    auto painter = static_cast<KIGFX::GERBVIEW_PAINTER*>( view->GetPainter() );
+    auto painter = static_cast<KIGFX::GERBVIEW_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
     KIGFX::GERBVIEW_RENDER_SETTINGS* settings = painter->GetSettings();
     settings->LoadDisplayOptions( &m_DisplayOptions );
 
     settings->ImportLegacyColors( m_colorsSettings );
 
-    view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+    GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 }
 
 
@@ -616,8 +613,8 @@ void GERBVIEW_FRAME::SortLayersByX2Attributes()
             GERBER_DCODE_LAYER( GERBER_DRAW_LAYER( it.second ) );
     }
 
-    GetGalCanvas()->GetView()->ReorderLayerData( view_remapping );
-    GetGalCanvas()->Refresh();
+    GetCanvas()->GetView()->ReorderLayerData( view_remapping );
+    GetCanvas()->Refresh();
 }
 
 
@@ -634,7 +631,7 @@ void GERBVIEW_FRAME::UpdateDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions )
 
     applyDisplaySettingsToGAL();
 
-    auto view = GetGalCanvas()->GetView();
+    auto view = GetCanvas()->GetView();
 
     if( update_flashed )
     {
@@ -685,7 +682,7 @@ void GERBVIEW_FRAME::UpdateDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions )
     }
 
     view->UpdateAllItems( KIGFX::COLOR );
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 }
 
 
@@ -771,10 +768,10 @@ LSET GERBVIEW_FRAME::GetVisibleLayers() const
 {
     LSET visible = LSET::AllLayersMask();
 
-    if( auto canvas = GetGalCanvas() )
+    if( GetCanvas() )
     {
         for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; i++ )
-            visible[i] = canvas->GetView()->IsLayerVisible( GERBER_DRAW_LAYER( i ) );
+            visible[i] = GetCanvas()->GetView()->IsLayerVisible( GERBER_DRAW_LAYER( i ) );
     }
 
     return visible;
@@ -783,15 +780,15 @@ LSET GERBVIEW_FRAME::GetVisibleLayers() const
 
 void GERBVIEW_FRAME::SetVisibleLayers( LSET aLayerMask )
 {
-    if( auto canvas = GetGalCanvas() )
+    if( GetCanvas() )
     {
         for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; i++ )
         {
             bool v = aLayerMask[i];
             int layer = GERBER_DRAW_LAYER( i );
-            canvas->GetView()->SetLayerVisible( layer, v );
-            canvas->GetView()->SetLayerVisible( GERBER_DCODE_LAYER( layer ),
-                                                m_DisplayOptions.m_DisplayDCodes && v );
+            GetCanvas()->GetView()->SetLayerVisible( layer, v );
+            GetCanvas()->GetView()->SetLayerVisible( GERBER_DCODE_LAYER( layer ),
+                                                     m_DisplayOptions.m_DisplayDCodes && v );
         }
     }
 }
@@ -899,11 +896,10 @@ void GERBVIEW_FRAME::SetActiveLayer( int aLayer, bool doLayerWidgetUpdate )
     UpdateTitleAndInfo();
 
     m_toolManager->RunAction( GERBVIEW_ACTIONS::layerChanged );       // notify other tools
-    GetGalCanvas()->SetFocus();                 // otherwise hotkeys are stuck somewhere
+    GetCanvas()->SetFocus();                 // otherwise hotkeys are stuck somewhere
 
-    GetGalCanvas()->SetHighContrastLayer( GERBER_DRAW_LAYER( aLayer ) );
-
-    GetGalCanvas()->Refresh();
+    GetCanvas()->SetHighContrastLayer( GERBER_DRAW_LAYER( aLayer ) );
+    GetCanvas()->Refresh();
 }
 
 
@@ -915,7 +911,7 @@ void GERBVIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
     if( screen )
         screen->InitDataPoints( aPageSettings.GetSizeIU() );
 
-    auto drawPanel = static_cast<GERBVIEW_DRAW_PANEL_GAL*>( GetGalCanvas() );
+    auto drawPanel = static_cast<GERBVIEW_DRAW_PANEL_GAL*>( GetCanvas() );
 
     // Prepare worksheet template
     auto worksheet =
@@ -977,8 +973,7 @@ void GERBVIEW_FRAME::SetAuxOrigin( const wxPoint& aPosition )
 
 void GERBVIEW_FRAME::SetGridColor( COLOR4D aColor )
 {
-    GetGalCanvas()->GetGAL()->SetGridColor( aColor );
-
+    GetCanvas()->GetGAL()->SetGridColor( aColor );
     m_gridColor = aColor;
 }
 
@@ -1029,7 +1024,7 @@ void GERBVIEW_FRAME::UpdateStatusBar()
         return;
 
     wxString line;
-    VECTOR2D cursorPos = GetGalCanvas()->GetViewControls()->GetCursorPosition();
+    VECTOR2D cursorPos = GetCanvas()->GetViewControls()->GetCursorPosition();
 
     if( GetShowPolarCoords() )  // display relative polar coordinates
     {
@@ -1130,12 +1125,12 @@ void GERBVIEW_FRAME::ActivateGalCanvas()
 {
     EDA_DRAW_FRAME::ActivateGalCanvas();
 
-    EDA_DRAW_PANEL_GAL* galCanvas = GetGalCanvas();
+    EDA_DRAW_PANEL_GAL* galCanvas = GetCanvas();
 
     if( m_toolManager )
     {
-        m_toolManager->SetEnvironment( m_gerberLayout, GetGalCanvas()->GetView(),
-                                       GetGalCanvas()->GetViewControls(), this );
+        m_toolManager->SetEnvironment( m_gerberLayout, GetCanvas()->GetView(),
+                                       GetCanvas()->GetViewControls(), this );
         m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
     }
 
@@ -1159,8 +1154,8 @@ void GERBVIEW_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( m_gerberLayout, GetGalCanvas()->GetView(),
-                                   GetGalCanvas()->GetViewControls(), this );
+    m_toolManager->SetEnvironment( m_gerberLayout, GetCanvas()->GetView(),
+                                   GetCanvas()->GetViewControls(), this );
     m_actions = new GERBVIEW_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
@@ -1235,7 +1230,7 @@ void GERBVIEW_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
     int current = 0;    // display Auto if no match found
 
     // check for a match within 1%
-    double zoom = GetGalCanvas()->GetLegacyZoom();
+    double zoom = GetCanvas()->GetLegacyZoom();
 
     for( unsigned i = 0; i < GetScreen()->m_ZoomList.size(); i++ )
     {

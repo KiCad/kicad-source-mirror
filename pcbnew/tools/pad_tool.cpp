@@ -527,7 +527,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
     statusPopup.Hide();
     frame()->SetNoToolSelected();
-    frame()->GetGalCanvas()->SetCursor( wxCURSOR_ARROW );
+    frame()->GetCanvas()->SetCursor( wxCURSOR_ARROW );
 
     return 0;
 }

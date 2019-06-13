@@ -85,12 +85,8 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
         wxMessageBox( msg );
     }
 
-    auto canvas = GetGalCanvas();
-
-    if( canvas )
+    if( GetCanvas() )
     {
-        auto view = canvas->GetView();
-
         if( gerber->m_ImageNegative )
         {
             // TODO: find a way to handle negative images
@@ -98,9 +94,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
         }
 
         for( auto item = gerber->GetItemsList(); item; item = item->Next() )
-        {
-            view->Add( (KIGFX::VIEW_ITEM*) item );
-        }
+            GetCanvas()->GetView()->Add( (KIGFX::VIEW_ITEM*) item );
     }
 
     return true;

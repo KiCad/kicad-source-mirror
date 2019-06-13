@@ -721,7 +721,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
-        m_frame->GetGalCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
         cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( reselect && module )
@@ -901,7 +901,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
-        m_frame->GetGalCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
         cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
@@ -1153,7 +1153,7 @@ int PCB_EDITOR_CONTROL::CrossProbeSchToPcb( const TOOL_EVENT& aEvent )
             // Ensure the display is refreshed, because in some installs
             // the refresh is done only when the gal canvas has the focus, and
             // that is not the case when crossprobing from Eeschema:
-            m_frame->GetGalCanvas()->Refresh();
+            m_frame->GetCanvas()->Refresh();
         }
     }
 
@@ -1507,8 +1507,8 @@ void PCB_EDITOR_CONTROL::ratsnestTimer( wxTimerEvent& aEvent )
 {
     m_ratsnestTimer.Stop();
     calculateSelectionRatsnest();
-    static_cast<PCB_DRAW_PANEL_GAL*>( m_frame->GetGalCanvas() )->RedrawRatsnest();
-    m_frame->GetGalCanvas()->Refresh();
+    m_frame->GetCanvas()->RedrawRatsnest();
+    m_frame->GetCanvas()->Refresh();
 }
 
 

@@ -86,7 +86,7 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
     if( !Clear_Pcb( true ) )
         return;
 
-    GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
+    GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     AddModuleToBoard( module );
 
     auto fp = GetBoard()->GetFirstModule();
@@ -121,7 +121,7 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
     GetScreen()->ClrModify();
 
     updateView();
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 
     // Update the save items if needed.
     if( is_last_fp_from_brd )
@@ -167,7 +167,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             if( !Clear_Pcb( true ) )
                 break;
 
-            GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
+            GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
             AddModuleToBoard( module );
 
             // Initialize data relative to nets and netclasses (for a new
@@ -193,7 +193,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             }
 
             updateView();
-            GetGalCanvas()->Refresh();
+            GetCanvas()->Refresh();
             Update3DView( true );
 
             SyncLibraryTree( false );
@@ -229,7 +229,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
                 Clear_Pcb( false );
 
-                GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
+                GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
                 //  Add the new object to board
                 AddModuleToBoard( module );
 
@@ -254,7 +254,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 }
 
                 updateView();
-                GetGalCanvas()->Refresh();
+                GetCanvas()->Refresh();
                 Update3DView( true );
 
                 SyncLibraryTree( false );
@@ -271,7 +271,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             {
                 m_toolManager->GetView()->Update( GetBoard()->GetFirstModule() );
 
-                GetGalCanvas()->ForceRefresh();
+                GetCanvas()->ForceRefresh();
                 GetScreen()->ClrModify();
             }
         }
@@ -300,7 +300,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 m_toolManager->GetView()->Update( footprint );
                 GetScreen()->ClrModify();
 
-                GetGalCanvas()->ForceRefresh();
+                GetCanvas()->ForceRefresh();
                 SyncLibraryTree( true );
             }
         }
@@ -352,7 +352,7 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 
     case PCB_MODULE_T:
         editFootprintProperties( (MODULE*) aItem );
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
         break;
 
     case PCB_MODULE_TEXT_T:
@@ -382,8 +382,8 @@ void FOOTPRINT_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
     m_Layers->SelectLayer( GetActiveLayer() );
     m_Layers->OnLayerSelected();
 
-    GetGalCanvas()->SetHighContrastLayer( aLayer );
-    GetGalCanvas()->Refresh();
+    GetCanvas()->SetHighContrastLayer( aLayer );
+    GetCanvas()->Refresh();
 }
 
 bool FOOTPRINT_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
@@ -391,7 +391,7 @@ bool FOOTPRINT_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileS
     if( ! Clear_Pcb( true ) )
         return false;                  // //this command is aborted
 
-    GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
+    GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     Import_Module( aFileSet[0] );
 
     if( GetBoard()->GetFirstModule() )
@@ -399,7 +399,7 @@ bool FOOTPRINT_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileS
 
     GetScreen()->ClrModify();
     Zoom_Automatique( false );
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 
     return true;
 }

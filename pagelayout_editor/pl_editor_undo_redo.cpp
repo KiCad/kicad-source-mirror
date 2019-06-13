@@ -69,7 +69,7 @@ void PL_EDITOR_FRAME::GetLayoutFromRedoList()
     GetScreen()->PushCommandToUndoList( undoCmd );
 
     selTool->ClearSelection();
-    redoItem->Restore( this, GetGalCanvas()->GetView() );
+    redoItem->Restore( this, GetCanvas()->GetView() );
     selTool->RebuildSelection();
 
     delete redoItem;
@@ -81,7 +81,7 @@ void PL_EDITOR_FRAME::GetLayoutFromRedoList()
     }
     else
     {
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
     }
 
     OnModify();
@@ -109,7 +109,7 @@ void PL_EDITOR_FRAME::GetLayoutFromUndoList()
     GetScreen()->PushCommandToRedoList( redoCmd );
 
     selTool->ClearSelection();
-    undoItem->Restore( this, GetGalCanvas()->GetView() );
+    undoItem->Restore( this, GetCanvas()->GetView() );
     selTool->RebuildSelection();
 
     delete undoItem;
@@ -120,7 +120,7 @@ void PL_EDITOR_FRAME::GetLayoutFromUndoList()
         HardRedraw();   // items based off of corners will need re-calculating
     }
     else
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
 
     OnModify();
 }
@@ -141,7 +141,7 @@ void PL_EDITOR_FRAME::RollbackFromUndo()
     bool                pageSettingsAndTitleBlock = undoItem->Type() == WS_PROXY_UNDO_ITEM_PLUS_T;
 
     selTool->ClearSelection();
-    undoItem->Restore( this, GetGalCanvas()->GetView() );
+    undoItem->Restore( this, GetCanvas()->GetView() );
     selTool->RebuildSelection();
 
     delete undoItem;
@@ -152,5 +152,5 @@ void PL_EDITOR_FRAME::RollbackFromUndo()
         HardRedraw();   // items based off of corners will need re-calculating
     }
     else
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
 }

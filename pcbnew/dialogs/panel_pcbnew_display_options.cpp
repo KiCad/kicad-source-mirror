@@ -25,7 +25,7 @@
 #include <config_map.h>
 #include <pcbnew_id.h>
 #include <panel_pcbnew_display_options.h>
-#include <class_draw_panel_gal.h>
+#include <pcb_draw_panel_gal.h>
 #include <pcb_view.h>
 #include <pcb_painter.h>
 #include <widgets/paged_dialog.h>
@@ -92,7 +92,7 @@ bool PANEL_PCBNEW_DISPLAY_OPTIONS::TransferDataFromWindow()
     m_galOptsPanel->TransferDataFromWindow();
 
     // Apply changes to the GAL
-    KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
+    KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
     KIGFX::PCB_PAINTER* painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
 

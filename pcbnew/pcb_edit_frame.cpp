@@ -202,16 +202,16 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_AboutTitle = "Pcbnew";
 
     // Create GAL canvas
-    auto galCanvas = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                             GetGalDisplayOptions(),
-                                             EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
+    auto canvas = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                          GetGalDisplayOptions(),
+                                          EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
 
-    SetGalCanvas( galCanvas );
+    SetCanvas( canvas );
 
     SetBoard( new BOARD() );
 
     // Create the PCB_LAYER_WIDGET *after* SetBoard():
-    m_Layers = new PCB_LAYER_WIDGET( this, GetGalCanvas() );
+    m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas() );
 
     wxIcon  icon;
     icon.CopyFromBitmap( KiBitmap( icon_pcbnew_xpm ) );
@@ -257,7 +257,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Caption( _( "Layers Manager" ) ).PaneBorder( false )
                       .MinSize( 80, -1 ).BestSize( m_Layers->GetBestSize() ) );
 
-    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( "MicrowaveToolbar" ).Show( m_show_microwave_tools );
@@ -297,10 +297,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                 GetToolManager()->RunAction( ACTIONS::acceleratedGraphics, true );
 
                 // Switch back to Cairo if OpenGL is not supported
-                if( GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
-                {
+                if( GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
                     GetToolManager()->RunAction( ACTIONS::standardGraphics, true );
-                }
             }
             else
             {
@@ -313,9 +311,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SaveSettings( config() );
     }
 
-    GetGalCanvas()->SwitchBackend( m_canvasType );
-    galCanvas->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
-    galCanvas->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
+    GetCanvas()->SwitchBackend( m_canvasType );
+    GetCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
+    GetCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
     // disable Export STEP item if kicad2step does not exist
@@ -368,8 +366,6 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
     PCB_BASE_FRAME::SetPageSettings( aPageSettings );
 
-    PCB_DRAW_PANEL_GAL* drawPanel = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
-
     // Prepare worksheet template
     KIGFX::WS_PROXY_VIEW_ITEM* worksheet;
     worksheet = new KIGFX::WS_PROXY_VIEW_ITEM( IU_PER_MILS ,&m_Pcb->GetPageSettings(),
@@ -388,7 +384,7 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
         worksheet->SetFileName(  TO_UTF8( board->GetFileName() ) );
 
     // PCB_DRAW_PANEL_GAL takes ownership of the worksheet
-    drawPanel->SetWorksheet( worksheet );
+    GetCanvas()->SetWorksheet( worksheet );
 }
 
 
@@ -405,8 +401,8 @@ void PCB_EDIT_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
-                                   GetGalCanvas()->GetViewControls(), this );
+    m_toolManager->SetEnvironment( m_Pcb, GetCanvas()->GetView(),
+                                   GetCanvas()->GetViewControls(), this );
     m_actions = new PCB_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
@@ -483,9 +479,9 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
     // See https://bugs.launchpad.net/kicad/+bug/1655858
     // I think this is certainly a OpenGL event fired after frame deletion, so this workaround
     // avoid the crash (JPC)
-    GetGalCanvas()->SetEvtHandlerEnabled( false );
+    GetCanvas()->SetEvtHandlerEnabled( false );
 
-    GetGalCanvas()->StopDrawing();
+    GetCanvas()->StopDrawing();
 
     // Delete the auto save file if it exists.
     wxFileName fn = GetBoard()->GetFileName();
@@ -531,10 +527,9 @@ void PCB_EDIT_FRAME::ActivateGalCanvas()
     PCB_BASE_EDIT_FRAME::ActivateGalCanvas();
     COLORS_DESIGN_SETTINGS& cds = Settings().Colors();
 
-    GetGalCanvas()->GetGAL()->SetGridColor( cds.GetLayerColor( LAYER_GRID ) );
-    auto view = GetGalCanvas()->GetView();
-    view->GetPainter()->GetSettings()->ImportLegacyColors( &cds );
-    GetGalCanvas()->Refresh();
+    GetCanvas()->GetGAL()->SetGridColor( cds.GetLayerColor( LAYER_GRID ) );
+    GetCanvas()->GetView()->GetPainter()->GetSettings()->ImportLegacyColors( &cds );
+    GetCanvas()->Refresh();
 }
 
 
@@ -554,9 +549,9 @@ void PCB_EDIT_FRAME::DoShowBoardSetupDialog( const wxString& aInitialPage,
         ReCreateAuxiliaryToolbar();
 
         for( auto module : GetBoard()->Modules() )
-            GetGalCanvas()->GetView()->Update( module );
+            GetCanvas()->GetView()->Update( module );
 
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
 
         //this event causes the routing tool to reload its design rules information
         TOOL_EVENT toolEvent( TC_COMMAND, TA_MODEL_CHANGE, AS_ACTIVE );
@@ -626,8 +621,7 @@ void PCB_EDIT_FRAME::SetGridColor( COLOR4D aColor )
 {
 
     Settings().Colors().SetItemColor( LAYER_GRID, aColor );
-
-    GetGalCanvas()->GetGAL()->SetGridColor( aColor );
+    GetCanvas()->GetGAL()->SetGridColor( aColor );
 }
 
 
@@ -638,10 +632,9 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
     syncLayerWidgetLayer();
 
     m_toolManager->RunAction( PCB_ACTIONS::layerChanged );  // notify other tools
-    GetGalCanvas()->SetFocus();                             // allow capture of hotkeys
-
-    GetGalCanvas()->SetHighContrastLayer( aLayer );
-    GetGalCanvas()->Refresh();
+    GetCanvas()->SetFocus();                             // allow capture of hotkeys
+    GetCanvas()->SetHighContrastLayer( aLayer );
+    GetCanvas()->Refresh();
 }
 
 
@@ -689,7 +682,7 @@ void PCB_EDIT_FRAME::syncRenderStates()
 void PCB_EDIT_FRAME::syncLayerVisibilities()
 {
     m_Layers->SyncLayerVisibilities();
-    static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->SyncLayersVisibility( m_Pcb );
+    GetCanvas()->SyncLayersVisibility( m_Pcb );
 }
 
 
@@ -709,9 +702,9 @@ void PCB_EDIT_FRAME::SetElementVisibility( GAL_LAYER_ID aElement, bool aNewState
 {
     // Force the RATSNEST visible
     if( aElement == LAYER_RATSNEST )
-        GetGalCanvas()->GetView()->SetLayerVisible( aElement, true );
+        GetCanvas()->GetView()->SetLayerVisible( aElement, true );
     else
-        GetGalCanvas()->GetView()->SetLayerVisible( aElement , aNewState );
+        GetCanvas()->GetView()->SetLayerVisible( aElement , aNewState );
 
     GetBoard()->SetElementVisibility( aElement, aNewState );
     m_Layers->SetRenderState( aElement, aNewState );
@@ -872,7 +865,7 @@ void PCB_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
     // switches currently used canvas (Cairo / OpenGL).
     PCB_BASE_FRAME::SwitchCanvas( aCanvasType );
 
-    GetGalCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
+    GetCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
 
     // The base class method *does not reinit* the layers manager. We must upate the
     // layer widget to match board visibility states, both layers and render columns.
@@ -1094,7 +1087,7 @@ void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module )
     if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_EDIT_OK )
     {
         // If something edited, push a refresh request
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
     }
     else if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_EDIT_BOARD_FOOTPRINT )
     {

@@ -89,24 +89,21 @@ bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename,
 }
 
 
-void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater,
-                                       bool* aRunDragCommand )
+void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aRunDragCommand )
 {
     BOARD* board = GetBoard();
 
     SetMsgPanel( board );
 
     // Update rendered tracks and vias net labels
-    auto view = GetGalCanvas()->GetView();
-
     // TODO is there a way to extract information about which nets were modified?
     for( auto track : board->Tracks() )
-        view->Update( track );
+        GetCanvas()->GetView()->Update( track );
 
     std::vector<MODULE*> newFootprints = aUpdater.GetAddedComponents();
 
     // Spread new footprints.
-    wxPoint areaPosition = (wxPoint) GetGalCanvas()->GetViewControls()->GetCursorPosition();
+    wxPoint areaPosition = (wxPoint) GetCanvas()->GetViewControls()->GetCursorPosition();
     EDA_RECT bbox = board->GetBoundingBox();
 
     GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -129,7 +126,7 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater,
         selection.SetReferencePoint( newFootprints[0]->GetPosition() );
     }
 
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 }
 
 

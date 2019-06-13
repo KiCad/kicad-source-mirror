@@ -103,10 +103,7 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 PCB_BASE_FRAME::~PCB_BASE_FRAME()
 {
     // Ensure m_canvasType is up to date, to save it in config
-    if( !GetGalCanvas() )
-        m_canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    else
-        m_canvasType = GetGalCanvas()->GetBackend();
+    m_canvasType = GetCanvas()->GetBackend();
 
     delete m_Pcb;
 }
@@ -448,7 +445,7 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
     GetScreen()->m_Active_Layer = layer;
 
     if( displ_opts->m_ContrastModeDisplay )
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
 }
 
 
@@ -457,12 +454,11 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
 
     displ_opts->m_DisplayPadFill = !displ_opts->m_DisplayPadFill;
-    EDA_DRAW_PANEL_GAL* gal = GetGalCanvas();
 
-    if( gal )
+    if( GetCanvas() )
     {
         // Apply new display options to the GAL canvas
-        auto view = static_cast<KIGFX::PCB_VIEW*>( gal->GetView() );
+        auto view = static_cast<KIGFX::PCB_VIEW*>( GetCanvas()->GetView() );
         view->UpdateDisplayOptions( displ_opts );
 
         // Update pads
@@ -474,7 +470,7 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
         }
     }
 
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 }
 
 
@@ -482,7 +478,7 @@ void PCB_BASE_FRAME::OnToggleGraphicDrawMode( wxCommandEvent& aEvent )
 {
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
     displ_opts->m_DisplayDrawItemsFill = !displ_opts->m_DisplayDrawItemsFill;
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 }
 
 
@@ -490,35 +486,33 @@ void PCB_BASE_FRAME::OnToggleEdgeDrawMode( wxCommandEvent& aEvent )
 {
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
     displ_opts->m_DisplayModEdgeFill = !displ_opts->m_DisplayModEdgeFill;
-    EDA_DRAW_PANEL_GAL* gal = GetGalCanvas();
 
-    if( gal )
+    if( GetCanvas() )
     {
         // Apply new display options to the GAL canvas
-        auto view = static_cast<KIGFX::PCB_VIEW*>( gal->GetView() );
+        auto view = static_cast<KIGFX::PCB_VIEW*>( GetCanvas()->GetView() );
         view->UpdateDisplayOptions( displ_opts );
         view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     }
 
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 }
 
 
 void PCB_BASE_FRAME::OnToggleTextDrawMode( wxCommandEvent& aEvent )
 {
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
     displ_opts->m_DisplayModTextFill = !displ_opts->m_DisplayModTextFill;
-    EDA_DRAW_PANEL_GAL* gal = GetGalCanvas();
 
-    if( gal )
+    if( GetCanvas() )
     {
-        // Apply new display options to the GAL canvas
-        auto view = static_cast<KIGFX::PCB_VIEW*>( gal->GetView() );
+        // Apply new display options to the canvas
+        auto view = static_cast<KIGFX::PCB_VIEW*>( GetCanvas()->GetView() );
         view->UpdateDisplayOptions( displ_opts );
         view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     }
 
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 }
 
 
@@ -530,7 +524,7 @@ void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
     int current = 0;    // display Auto if no match found
 
     // check for a match within 1%
-    double zoom = GetGalCanvas()->GetLegacyZoom();
+    double zoom = GetCanvas()->GetLegacyZoom();
 
     for( unsigned i = 0; i < GetScreen()->m_ZoomList.size(); i++ )
     {
@@ -549,7 +543,7 @@ void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 GENERAL_COLLECTORS_GUIDE PCB_BASE_FRAME::GetCollectorsGuide()
 {
     GENERAL_COLLECTORS_GUIDE guide( m_Pcb->GetVisibleLayers(), GetActiveLayer(),
-                                    GetGalCanvas()->GetView() );
+                                    GetCanvas()->GetView() );
 
     // account for the globals
     guide.SetIgnoreMTextsMarkedNoShow( ! m_Pcb->IsElementVisible( LAYER_MOD_TEXT_INVISIBLE ) );
@@ -592,7 +586,7 @@ void PCB_BASE_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
     // must do this after the tool has been set, otherwise pad::Draw() does
     // not show proper color when GetDisplayOptions().ContrastModeDisplay is true.
     if( redraw )
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
 }
 
 
@@ -645,7 +639,7 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         return;
 
     wxString line;
-    VECTOR2D cursorPos = GetGalCanvas()->GetViewControls()->GetCursorPosition();
+    VECTOR2D cursorPos = GetCanvas()->GetViewControls()->GetCursorPosition();
 
     if( GetShowPolarCoords() )  // display polar coordinates
     {
@@ -885,16 +879,22 @@ void PCB_BASE_FRAME::SetFastGrid2()
 }
 
 
+PCB_DRAW_PANEL_GAL* PCB_BASE_FRAME::GetCanvas() const
+{
+    return static_cast<PCB_DRAW_PANEL_GAL*>( EDA_DRAW_FRAME::GetCanvas() );
+}
+
+
 void PCB_BASE_FRAME::ActivateGalCanvas()
 {
     EDA_DRAW_FRAME::ActivateGalCanvas();
 
-    EDA_DRAW_PANEL_GAL* galCanvas = GetGalCanvas();
+    EDA_DRAW_PANEL_GAL* canvas = GetCanvas();
 
     if( m_toolManager )
     {
-        m_toolManager->SetEnvironment( m_Pcb, GetGalCanvas()->GetView(),
-                                       GetGalCanvas()->GetViewControls(), this );
+        m_toolManager->SetEnvironment( m_Pcb, GetCanvas()->GetView(),
+                                       GetCanvas()->GetViewControls(), this );
     }
 
     SetBoard( m_Pcb );
@@ -903,13 +903,13 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
         m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
 
     // Transfer latest current display options from legacy to GAL canvas:
-    auto painter = static_cast<KIGFX::PCB_PAINTER*>( galCanvas->GetView()->GetPainter() );
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( canvas->GetView()->GetPainter() );
     auto settings = painter->GetSettings();
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
     settings->LoadDisplayOptions( displ_opts, ShowPageLimits() );
 
-    galCanvas->GetView()->RecacheAllItems();
-    galCanvas->SetEventDispatcher( m_toolDispatcher );
-    galCanvas->StartDrawing();
+    canvas->GetView()->RecacheAllItems();
+    canvas->SetEventDispatcher( m_toolDispatcher );
+    canvas->StartDrawing();
 }
 

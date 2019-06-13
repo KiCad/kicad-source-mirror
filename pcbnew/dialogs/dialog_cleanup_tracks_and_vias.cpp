@@ -146,7 +146,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
     {
         // Clear undo and redo lists to avoid inconsistencies between lists
         commit.Push( _( "Board cleanup" ) );
-        m_parentFrame->GetGalCanvas()->Refresh( true );
+        m_parentFrame->GetCanvas()->Refresh( true );
     }
 }
 
@@ -162,9 +162,9 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnSelectItem( wxCommandEvent& event )
 
         if( item )
         {
-            m_parentFrame->FocusOnLocation( item->GetPointA(), false, true );
+            m_parentFrame->FocusOnLocation( item->GetPointA(), true );
             WINDOW_THAWER thawer( m_parentFrame );
-            m_parentFrame->GetGalCanvas()->Refresh();
+            m_parentFrame->GetCanvas()->Refresh();
         }
     }
 
@@ -185,7 +185,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnLeftDClickItem( wxMouseEvent& event )
         const DRC_ITEM* item = m_ItemsListBox->GetItem( selection );
         if( item )
         {
-            m_parentFrame->FocusOnLocation( item->GetPointA(), true, true );
+            m_parentFrame->FocusOnLocation( item->GetPointA(), true );
 
             if( !IsModal() )
                 Show( false );
@@ -213,7 +213,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnRightUpItem( wxMouseEvent& event )
 
         WINDOW_THAWER thawer( m_parentFrame );
         m_parentFrame->GetToolManager()->RunAction( PCB_ACTIONS::selectionMenu, true, &items );
-        m_parentFrame->GetGalCanvas()->Refresh();
+        m_parentFrame->GetCanvas()->Refresh();
     }
 }
 

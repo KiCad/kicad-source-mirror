@@ -363,7 +363,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         // TODO That's a big ugly workaround, somehow DRAWPANEL_GAL loses focus
         // after second LMB click and currently I have no means to do better debugging
         if( type == wxEVT_LEFT_UP )
-            static_cast<EDA_DRAW_FRAME*>( m_toolMgr->GetEditFrame() )->GetGalCanvas()->SetFocus();
+            static_cast<EDA_DRAW_FRAME*>( m_toolMgr->GetEditFrame() )->GetCanvas()->SetFocus();
 #endif /* __APPLE__ */
     }
     else if( type == wxEVT_CHAR_HOOK || type == wxEVT_CHAR )

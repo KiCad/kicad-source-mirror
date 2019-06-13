@@ -301,7 +301,7 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
         // Be sure what is displayed is what is set for item
         // (mainly, texts can be modified if they contain "\n")
         CopyPrmsFromItemToPanel( dataItem );
-        m_parent->GetGalCanvas()->GetView()->Update( drawItem );
+        m_parent->GetCanvas()->GetView()->Update( drawItem );
     }
 
     CopyPrmsFromPanelToGeneral();
@@ -312,10 +312,8 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
     m_parent->OnModify();
 
     // Rebuild the draw list with the new parameters
-    PL_DRAW_PANEL_GAL*  drawPanel = static_cast<PL_DRAW_PANEL_GAL*>( m_parent->GetGalCanvas() );
-    drawPanel->DisplayWorksheet();
-
-    drawPanel->Refresh();
+    m_parent->GetCanvas()->DisplayWorksheet();
+    m_parent->GetCanvas()->Refresh();
 }
 
 
@@ -330,10 +328,8 @@ void PROPERTIES_FRAME::OnSetDefaultValues( wxCommandEvent& event )
     CopyPrmsFromGeneralToPanel();
 
     // Rebuild the draw list with the new parameters
-    PL_DRAW_PANEL_GAL*  drawPanel = static_cast<PL_DRAW_PANEL_GAL*>( m_parent->GetGalCanvas() );
-    drawPanel->DisplayWorksheet();
-
-    drawPanel->Refresh();
+    m_parent->GetCanvas()->DisplayWorksheet();
+    m_parent->GetCanvas()->Refresh();
 }
 
 

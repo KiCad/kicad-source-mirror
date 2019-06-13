@@ -161,13 +161,13 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
     }
 
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 }
 
 
 void GERBVIEW_FRAME::OnSelectHighlightChoice( wxCommandEvent& event )
 {
-    auto settings = static_cast<KIGFX::GERBVIEW_PAINTER*>( GetGalCanvas()->GetView()->GetPainter() )->GetSettings();
+    auto settings = static_cast<KIGFX::GERBVIEW_PAINTER*>( GetCanvas()->GetView()->GetPainter() )->GetSettings();
 
     switch( event.GetId() )
     {
@@ -185,8 +185,8 @@ void GERBVIEW_FRAME::OnSelectHighlightChoice( wxCommandEvent& event )
 
     }
 
-    GetGalCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
-    GetGalCanvas()->Refresh();
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::COLOR );
+    GetCanvas()->Refresh();
 }
 
 
@@ -201,7 +201,7 @@ void GERBVIEW_FRAME::OnSelectActiveDCode( wxCommandEvent& event )
         if( tool != gerber_image->m_Selected_Tool )
         {
             gerber_image->m_Selected_Tool = tool;
-            GetGalCanvas()->Refresh();
+            GetCanvas()->Refresh();
         }
     }
 }
@@ -263,7 +263,7 @@ void GERBVIEW_FRAME::OnSelectDisplayMode( wxCommandEvent& event )
     case ID_TB_OPTIONS_SHOW_GBR_MODE_2: SetDisplayMode( 2 ); break;
     }
 
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 }
 
 

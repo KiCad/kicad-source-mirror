@@ -47,12 +47,12 @@ bool GERBVIEW_FRAME::Clear_DrawLayers( bool query )
             return false;
     }
 
-    if( auto canvas = GetGalCanvas() )
+    if( GetCanvas() )
     {
         if( m_toolManager )
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
-        canvas->GetView()->Clear();
+        GetCanvas()->GetView()->Clear();
 
         // Reinit the worksheet view, cleared by GetView()->Clear():
         SetPageSettings( GetPageSettings() );
@@ -86,5 +86,5 @@ void GERBVIEW_FRAME::Erase_Current_DrawLayer( bool query )
 
     ReFillLayerWidget();
     syncLayerBox();
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 }

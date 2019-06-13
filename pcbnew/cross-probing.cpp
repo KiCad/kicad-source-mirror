@@ -147,7 +147,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             if( netcode > 0 && bbox.GetWidth() > 0 && bbox.GetHeight() > 0 )
             {
                 auto bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
-                auto screenSize = view->ToWorld( GetGalCanvas()->GetClientSize(), false );
+                auto screenSize = view->ToWorld( GetCanvas()->GetClientSize(), false );
                 double ratio = std::max( fabs( bbSize.x / screenSize.x ),
                                          fabs( bbSize.y / screenSize.y ) );
                 double scale = view->GetScale() / ratio;
@@ -156,7 +156,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
                 view->SetCenter( bbox.Centre() );
             }
 
-            GetGalCanvas()->Refresh();
+            GetCanvas()->Refresh();
         }
 
         return;
@@ -171,7 +171,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         pcb->ResetHighLight();
         SetMsgPanel( pcb );
 
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
     }
 
     if( text == NULL )

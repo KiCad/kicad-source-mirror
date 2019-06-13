@@ -87,8 +87,7 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
     // Ignore the never show rescue setting for one last rescue of legacy symbol
     // libraries before remapping to the symbol library table.  This ensures the
     // best remapping results.
-    LEGACY_RESCUER rescuer( Prj(), &parent->GetCurrentSheet(),
-                            parent->GetGalCanvas()->GetBackend() );
+    LEGACY_RESCUER rescuer( Prj(), &parent->GetCurrentSheet(), parent->GetCanvas()->GetBackend() );
 
     if( RESCUER::RescueProject( this, rescuer, false ) )
     {

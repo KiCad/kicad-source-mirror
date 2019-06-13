@@ -71,7 +71,7 @@ void FOOTPRINT_TREE_PANE::onComponentSelected( wxCommandEvent& aEvent )
 
 void FOOTPRINT_TREE_PANE::onUpdateUI( wxUpdateUIEvent& aEvent )
 {
-    if( m_frame->GetGalCanvas()->HasFocus() )
+    if( m_frame->GetCanvas()->HasFocus() )
     {
         // Don't allow a selected item in the tree when the canvas has focus: it's too easy
         // to confuse the selected-highlighting with the being-edited-on-canvas-highlighting.

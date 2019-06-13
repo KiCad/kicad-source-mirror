@@ -394,7 +394,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL*
     m_lastSheetPinType = sheetPin->GetShape();
     m_lastSheetPinTextSize = sheetPin->GetTextSize();
 
-    sheetPin->SetPosition( (wxPoint) GetGalCanvas()->GetViewControls()->GetCursorPosition() );
+    sheetPin->SetPosition( (wxPoint) GetCanvas()->GetViewControls()->GetCursorPosition() );
 
     return sheetPin;
 }

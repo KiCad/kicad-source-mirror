@@ -92,7 +92,7 @@ public:
      * Returns a pointer to the VIEW instance used in the panel.
      * @return The instance of VIEW.
      */
-    KIGFX::VIEW* GetView() const { return m_view; }
+    virtual KIGFX::VIEW* GetView() const { return m_view; }
 
     /**
      * Function GetViewControls()

@@ -220,12 +220,11 @@ void DIALOG_SELECT_NET_FROM_LIST::HighlightNet( const wxString& aNetName )
             netCode = net->GetNet();
     }
 
-    auto galCanvas = m_frame->GetGalCanvas();
-    KIGFX::RENDER_SETTINGS* render = galCanvas->GetView()->GetPainter()->GetSettings();
+    KIGFX::RENDER_SETTINGS* render = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();
     render->SetHighlight( netCode >= 0, netCode );
 
-    galCanvas->GetView()->UpdateAllLayersColor();
-    galCanvas->Refresh();
+    m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
+    m_frame->GetCanvas()->Refresh();
 }
 
 

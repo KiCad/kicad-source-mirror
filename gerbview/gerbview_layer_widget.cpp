@@ -188,7 +188,7 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         }
 
         myframe->SetVisibleLayers( visibleLayers );
-        myframe->GetGalCanvas()->Refresh();
+        myframe->GetCanvas()->Refresh();
         break;
 
     case ID_SORT_GBR_LAYERS:
@@ -223,14 +223,10 @@ void GERBER_LAYER_WIDGET::ReFill()
 
         bool visible = true;
 
-        if( auto canvas = myframe->GetGalCanvas() )
-        {
-            visible = canvas->GetView()->IsLayerVisible( GERBER_DRAW_LAYER( layer ) );
-        }
+        if( myframe->GetCanvas() )
+            visible = myframe->GetCanvas()->GetView()->IsLayerVisible( GERBER_DRAW_LAYER( layer ) );
         else
-        {
             visible = myframe->IsLayerVisible( layer );
-        }
 
         AppendLayerRow( LAYER_WIDGET::ROW( msg, layer,
                         myframe->GetLayerColor( GERBER_DRAW_LAYER( layer ) ),
@@ -257,11 +253,11 @@ void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
     myframe->SetLayerColor( GERBER_DRAW_LAYER( aLayer ), aColor );
     myframe->m_SelLayerBox->ResyncBitmapOnly();
 
-    KIGFX::VIEW* view = myframe->GetGalCanvas()->GetView();
+    KIGFX::VIEW* view = myframe->GetCanvas()->GetView();
     view->GetPainter()->GetSettings()->ImportLegacyColors( myframe->m_colorsSettings );
     view->UpdateLayerColor( GERBER_DRAW_LAYER( aLayer ) );
 
-    myframe->GetGalCanvas()->Refresh();
+    myframe->GetCanvas()->Refresh();
 }
 
 
@@ -277,7 +273,7 @@ bool GERBER_LAYER_WIDGET::OnLayerSelect( int aLayer )
     if( layer != myframe->GetActiveLayer() )
     {
         if( ! OnLayerSelected() )
-            myframe->GetGalCanvas()->Refresh();
+            myframe->GetCanvas()->Refresh();
     }
 
     return true;
@@ -293,7 +289,7 @@ void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFin
     myframe->SetVisibleLayers( visibleLayers );
 
     if( isFinal )
-        myframe->GetGalCanvas()->Refresh();
+        myframe->GetCanvas()->Refresh();
 }
 
 
@@ -301,15 +297,14 @@ void GERBER_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
 {
     myframe->SetVisibleElementColor( aId, aColor );
 
-    auto galCanvas = myframe->GetGalCanvas();
-    auto view = galCanvas->GetView();
+    auto view = myframe->GetCanvas()->GetView();
 
     view->GetPainter()->GetSettings()->ImportLegacyColors( myframe->m_colorsSettings );
     view->UpdateLayerColor( aId );
 
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     view->UpdateAllItems( KIGFX::COLOR );
-    galCanvas->Refresh();
+    myframe->GetCanvas()->Refresh();
 }
 
 
@@ -317,20 +312,18 @@ void GERBER_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 {
     myframe->SetElementVisibility( aId, isEnabled );
 
-    auto galCanvas = myframe->GetGalCanvas();
-
-    if( galCanvas )
+    if( myframe->GetCanvas() )
     {
         if( aId == LAYER_GERBVIEW_GRID )
         {
-            galCanvas->GetGAL()->SetGridVisibility( myframe->IsGridVisible() );
-            galCanvas->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+            myframe->GetCanvas()->GetGAL()->SetGridVisibility( myframe->IsGridVisible() );
+            myframe->GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
         }
         else
-            galCanvas->GetView()->SetLayerVisible( aId, isEnabled );
+            myframe->GetCanvas()->GetView()->SetLayerVisible( aId, isEnabled );
     }
 
-    galCanvas->Refresh();
+    myframe->GetCanvas()->Refresh();
 }
 
 //-----</LAYER_WIDGET callbacks>------------------------------------------

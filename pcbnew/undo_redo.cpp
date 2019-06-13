@@ -354,7 +354,7 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
 
     m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_POST, AS_GLOBAL } );
 
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 }
 
 
@@ -383,7 +383,7 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
 
     m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_POST, AS_GLOBAL } );
 
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 }
 
 
@@ -394,7 +394,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
     bool reBuild_ratsnest = false;
     bool deep_reBuild_ratsnest = false;  // true later if pointers must be rebuilt
 
-    auto view = GetGalCanvas()->GetView();
+    auto view = GetCanvas()->GetView();
     auto connectivity = GetBoard()->GetConnectivity();
 
     // Undo in the reverse order of list creation: (this can allow stacked changes
@@ -611,5 +611,5 @@ void PCB_BASE_EDIT_FRAME::RollbackFromUndo()
     undo->ClearListAndDeleteItems();
     delete undo;
 
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 }

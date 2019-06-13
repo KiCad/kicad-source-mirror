@@ -402,7 +402,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
     }
 
     commit.Push( "Edit text and graphics properties" );
-    m_parent->GetGalCanvas()->Refresh();
+    m_parent->GetCanvas()->Refresh();
 
     return true;
 }

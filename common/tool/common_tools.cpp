@@ -167,7 +167,7 @@ int COMMON_TOOLS::ZoomInOutCenter( const TOOL_EVENT& aEvent )
 
 int COMMON_TOOLS::doZoomInOut( bool aDirection, bool aCenterOnCursor )
 {
-    double zoom = m_frame->GetGalCanvas()->GetLegacyZoom();
+    double zoom = m_frame->GetCanvas()->GetLegacyZoom();
 
     // Step must be AT LEAST 1.3
     if( aDirection )
@@ -218,14 +218,14 @@ int COMMON_TOOLS::ZoomCenter( const TOOL_EVENT& aEvent )
 
 int COMMON_TOOLS::ZoomFitScreen( const TOOL_EVENT& aEvent )
 {
-    KIGFX::VIEW* view = getView();
-    EDA_DRAW_PANEL_GAL* galCanvas = m_frame->GetGalCanvas();
-    EDA_DRAW_FRAME* frame = getEditFrame<EDA_DRAW_FRAME>();
+    KIGFX::VIEW*        view = getView();
+    EDA_DRAW_PANEL_GAL* canvas = m_frame->GetCanvas();
+    EDA_DRAW_FRAME*     frame = getEditFrame<EDA_DRAW_FRAME>();
 
-    BOX2I bBox = frame->GetDocumentExtents();
-    BOX2I defaultBox = galCanvas->GetDefaultViewBBox();
-    VECTOR2D scrollbarSize = VECTOR2D( galCanvas->GetSize() - galCanvas->GetClientSize() );
-    VECTOR2D screenSize = view->ToWorld( galCanvas->GetClientSize(), false );
+    BOX2I    bBox = frame->GetDocumentExtents();
+    BOX2I    defaultBox = canvas->GetDefaultViewBBox();
+    VECTOR2D scrollbarSize = VECTOR2D( canvas->GetSize() - canvas->GetClientSize() );
+    VECTOR2D screenSize = view->ToWorld( canvas->GetClientSize(), false );
 
     if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
         bBox = defaultBox;
@@ -258,16 +258,16 @@ int COMMON_TOOLS::ZoomFitScreen( const TOOL_EVENT& aEvent )
 
 int COMMON_TOOLS::CenterContents( const TOOL_EVENT& aEvent )
 {
-    EDA_DRAW_PANEL_GAL* galCanvas = m_frame->GetGalCanvas();
+    EDA_DRAW_PANEL_GAL* canvas = m_frame->GetCanvas();
     BOX2I bBox = getModel<EDA_ITEM>()->ViewBBox();
 
     if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
-        bBox = galCanvas->GetDefaultViewBBox();
+        bBox = canvas->GetDefaultViewBBox();
 
     getView()->SetCenter( bBox.Centre() );
 
     // Take scrollbars into account
-    VECTOR2D scrollbarSize = VECTOR2D( galCanvas->GetSize() - galCanvas->GetClientSize() );
+    VECTOR2D scrollbarSize = VECTOR2D( canvas->GetSize() - canvas->GetClientSize() );
     VECTOR2D worldScrollbarSize = getView()->ToWorld( scrollbarSize, false );
     getView()->SetCenter( getView()->GetCenter() + worldScrollbarSize / 2.0 );
 
@@ -286,7 +286,7 @@ int COMMON_TOOLS::ZoomPreset( const TOOL_EVENT& aEvent )
 int COMMON_TOOLS::doZoomToPreset( int idx, bool aCenterOnCursor )
 {
     std::vector<double>& zoomList = m_frame->GetScreen()->m_ZoomList;
-    KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
+    KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
 
     if( idx == 0 )      // Zoom Auto
     {
@@ -406,9 +406,9 @@ int COMMON_TOOLS::ToggleGrid( const TOOL_EVENT& aEvent )
 {
     m_frame->SetGridVisibility( !m_frame->IsGridVisible() );
 
-    m_frame->GetGalCanvas()->GetGAL()->SetGridVisibility( m_frame->IsGridVisible() );
+    m_frame->GetCanvas()->GetGAL()->SetGridVisibility( m_frame->IsGridVisible() );
     getView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-    m_frame->GetGalCanvas()->Refresh();
+    m_frame->GetCanvas()->Refresh();
 
     return 0;
 }

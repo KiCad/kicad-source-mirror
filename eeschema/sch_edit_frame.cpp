@@ -292,7 +292,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(1) );
-    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
     m_auimgr.Update();
@@ -300,8 +300,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     GetToolManager()->RunAction( ACTIONS::gridPreset, true, m_LastGridSizeId );
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
 
-    if( GetGalCanvas() )
-        GetGalCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
+    if( GetCanvas() )
+        GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
 
     // Net list generator
     DefaultExecFlags();
@@ -477,7 +477,7 @@ void SCH_EDIT_FRAME::SetCurrentSheet( const SCH_SHEET_PATH& aSheet )
 void SCH_EDIT_FRAME::HardRedraw()
 {
     GetCanvas()->DisplaySheet( g_CurrentSheet->LastScreen() );
-    GetGalCanvas()->ForceRefresh();
+    GetCanvas()->ForceRefresh();
 }
 
 

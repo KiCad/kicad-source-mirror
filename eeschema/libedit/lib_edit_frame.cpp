@@ -146,7 +146,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     GetScreen()->m_Center = true;
     GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
 
-    GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
+    GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     setupTools();
@@ -176,7 +176,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .BestSize( m_defaultLibWidth, -1 ).Resizable() );
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(1) );
 
-    m_auimgr.AddPane( GetGalCanvas(), wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
+    m_auimgr.AddPane( GetCanvas(), wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
 
     m_auimgr.Update();
 
@@ -188,10 +188,10 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, false );
 
     SyncView();
-    GetGalCanvas()->GetViewControls()->SetSnapping( true );
-    GetGalCanvas()->GetView()->UseDrawPriority( true );
-    GetGalCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
-    GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
+    GetCanvas()->GetViewControls()->SetSnapping( true );
+    GetCanvas()->GetView()->UseDrawPriority( true );
+    GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
+    GetCanvas()->GetGAL()->SetAxesEnabled( true );
 
     // Set the working/draw area size to display a symbol to a reasonable value:
     // A 600mm x 600mm with a origin at the area center looks like a large working area
@@ -261,7 +261,7 @@ double LIB_EDIT_FRAME::BestZoom()
 
     if( !part )
     {
-        GetGalCanvas()->GetView()->SetCenter( VECTOR2D( 0, 0 ) );
+        GetCanvas()->GetView()->SetCenter( VECTOR2D( 0, 0 ) );
         return defaultLibraryZoom;
     }
 
@@ -448,7 +448,7 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
 void LIB_EDIT_FRAME::OnImportBody( wxCommandEvent& aEvent )
 {
     m_toolManager->DeactivateTool();
-    SetToolID( ID_LIBEDIT_IMPORT_BODY_BUTT, GetGalCanvas()->GetDefaultCursor(), _( "Import" ) );
+    SetToolID( ID_LIBEDIT_IMPORT_BODY_BUTT, GetCanvas()->GetDefaultCursor(), _( "Import" ) );
     LoadOneSymbol();
     SetNoToolSelected();
 }
@@ -457,7 +457,7 @@ void LIB_EDIT_FRAME::OnImportBody( wxCommandEvent& aEvent )
 void LIB_EDIT_FRAME::OnExportBody( wxCommandEvent& aEvent )
 {
     m_toolManager->DeactivateTool();
-    SetToolID( ID_LIBEDIT_EXPORT_BODY_BUTT, GetGalCanvas()->GetDefaultCursor(), _( "Export" ) );
+    SetToolID( ID_LIBEDIT_EXPORT_BODY_BUTT, GetCanvas()->GetDefaultCursor(), _( "Export" ) );
     SaveOneSymbol();
     SetNoToolSelected();
 }
@@ -871,7 +871,7 @@ void LIB_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
     SCH_BASE_FRAME::SwitchCanvas( aCanvasType );
 
     // Set options specific to symbol editor (axies are always enabled):
-    GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
+    GetCanvas()->GetGAL()->SetAxesEnabled( true );
 }
 
 

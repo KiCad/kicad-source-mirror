@@ -586,7 +586,7 @@ bool PL_SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
         }
 
         getView()->UpdateItems();
-        m_frame->GetGalCanvas()->Refresh();
+        m_frame->GetCanvas()->Refresh();
     }
 
     if( current )
@@ -594,7 +594,7 @@ bool PL_SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
         unhighlight( current, BRIGHTENED );
 
         getView()->UpdateItems();
-        m_frame->GetGalCanvas()->Refresh();
+        m_frame->GetCanvas()->Refresh();
 
         aCollector->Empty();
         aCollector->Append( current );
@@ -644,7 +644,7 @@ void PL_SELECTION_TOOL::toggleSelection( EDA_ITEM* aItem )
     }
 
     if( m_frame )
-        m_frame->GetGalCanvas()->ForceRefresh();
+        m_frame->GetCanvas()->ForceRefresh();
 }
 
 

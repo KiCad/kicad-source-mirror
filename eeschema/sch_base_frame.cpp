@@ -186,7 +186,7 @@ void SCH_BASE_FRAME::UpdateStatusBar()
     EDA_DRAW_FRAME::UpdateStatusBar();
 
     // Display absolute coordinates:
-    VECTOR2D cursorPos = GetGalCanvas()->GetViewControls()->GetCursorPosition();
+    VECTOR2D cursorPos = GetCanvas()->GetViewControls()->GetCursorPosition();
     double   dXpos = To_User_Unit( GetUserUnits(), cursorPos.x );
     double   dYpos = To_User_Unit( GetUserUnits(), cursorPos.y );
 
@@ -333,26 +333,26 @@ void SCH_BASE_FRAME::CenterScreen( const wxPoint& aCenterPoint, bool aWarpPointe
     if( aWarpPointer )
         GetCanvas()->GetViewControls()->WarpCursor( aCenterPoint, true );
 
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 }
 
 
 void SCH_BASE_FRAME::HardRedraw()
 {
-    GetGalCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
-    GetGalCanvas()->ForceRefresh();
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+    GetCanvas()->ForceRefresh();
 }
 
 
 SCH_DRAW_PANEL* SCH_BASE_FRAME::GetCanvas() const
 {
-    return static_cast<SCH_DRAW_PANEL*>( GetGalCanvas() );
+    return static_cast<SCH_DRAW_PANEL*>( EDA_DRAW_FRAME::GetCanvas() );
 }
 
 
 KIGFX::SCH_RENDER_SETTINGS* SCH_BASE_FRAME::GetRenderSettings()
 {
-    KIGFX::PAINTER* painter = GetGalCanvas()->GetView()->GetPainter();
+    KIGFX::PAINTER* painter = GetCanvas()->GetView()->GetPainter();
     return static_cast<KIGFX::SCH_RENDER_SETTINGS*>( painter->GetSettings() );
 }
 
@@ -368,8 +368,8 @@ void SCH_BASE_FRAME::createCanvas()
         m_canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
     }
 
-    SetGalCanvas( new SCH_DRAW_PANEL( this, wxID_ANY, wxPoint( 0, 0 ), m_FrameSize,
-                                      GetGalDisplayOptions(), m_canvasType ) );
+    SetCanvas( new SCH_DRAW_PANEL( this, wxID_ANY, wxPoint( 0, 0 ), m_FrameSize,
+                                   GetGalDisplayOptions(), m_canvasType ));
     ActivateGalCanvas();
 }
 
@@ -434,10 +434,7 @@ void SCH_BASE_FRAME::RemoveFromScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen )
 
 void SCH_BASE_FRAME::SyncView()
 {
-    auto screen = GetScreen();
-    auto gal = GetGalCanvas()->GetGAL();
-
-    auto gs = screen->GetGridSize();
-    gal->SetGridSize( VECTOR2D( gs.x, gs.y ));
-    GetGalCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+    auto gs = GetScreen()->GetGridSize();
+    GetCanvas()->GetGAL()->SetGridSize( VECTOR2D( gs.x, gs.y ));
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
 }

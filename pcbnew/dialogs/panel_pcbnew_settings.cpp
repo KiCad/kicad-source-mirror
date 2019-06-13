@@ -88,7 +88,7 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataFromWindow()
 
     // Apply changes to the GAL
     PCB_DISPLAY_OPTIONS*        displ_opts = (PCB_DISPLAY_OPTIONS*) m_Frame->GetDisplayOptions();
-    KIGFX::VIEW*                view = m_Frame->GetGalCanvas()->GetView();
+    KIGFX::VIEW*                view = m_Frame->GetCanvas()->GetView();
     KIGFX::PCB_PAINTER*         painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
 
@@ -100,7 +100,7 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataFromWindow()
     view->RecacheAllItems();
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 
-    m_Frame->GetGalCanvas()->Refresh();
+    m_Frame->GetCanvas()->Refresh();
 
     return true;
 }

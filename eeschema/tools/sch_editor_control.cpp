@@ -778,7 +778,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
     for( auto redrawItem : itemsToRedraw )
         view->Update( (KIGFX::VIEW_ITEM*)redrawItem, KIGFX::VIEW_UPDATE_FLAGS::REPAINT );
 
-    m_frame->GetGalCanvas()->Refresh();
+    m_frame->GetCanvas()->Refresh();
 
     return 0;
 }

@@ -24,14 +24,9 @@
  */
 
 
-/**
- * @file pcb_layer_widget.cpp
- * @brief  Pcbnew specialization of LAYER_WIDGET layers manager
- */
-
 #include <fctsys.h>
 #include <pgm_base.h>
-#include <class_draw_panel_gal.h>
+#include <pcb_draw_panel_gal.h>
 #include <view/view.h>
 #include <painter.h>
 #include <confirm.h>
@@ -578,14 +573,14 @@ void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, COLOR4D aColor )
 {
     myframe->Settings().Colors().SetLayerColor( aLayer, aColor );
 
-    KIGFX::VIEW* view = myframe->GetGalCanvas()->GetView();
+    KIGFX::VIEW* view = myframe->GetCanvas()->GetView();
     view->GetPainter()->GetSettings()->ImportLegacyColors( &myframe->Settings().Colors() );
     view->UpdateLayerColor( aLayer );
     view->UpdateLayerColor( GetNetnameLayer( aLayer ) );
 
     myframe->ReCreateHToolbar();
 
-    myframe->GetGalCanvas()->Refresh();
+    myframe->GetCanvas()->Refresh();
 
     if( aLayer == LAYER_PCB_BACKGROUND )
         myframe->SetDrawBgColor( aColor );
@@ -607,7 +602,7 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
     if( m_alwaysShowActiveCopperLayer )
         OnLayerSelected();
     else if( displ_opts->m_ContrastModeDisplay )
-        myframe->GetGalCanvas()->Refresh();
+        myframe->GetCanvas()->Refresh();
 
     return true;
 }
@@ -644,14 +639,12 @@ void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal 
         if( !m_fp_editor_mode )
             myframe->OnModify();
 
-        EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
-
-        if( galCanvas )
-            galCanvas->GetView()->SetLayerVisible( aLayer, isVisible );
+        if( myframe->GetCanvas() )
+            myframe->GetCanvas()->GetView()->SetLayerVisible( aLayer, isVisible );
     }
 
     if( isFinal )
-        myframe->GetGalCanvas()->Refresh();
+        myframe->GetCanvas()->Refresh();
 }
 
 
@@ -667,12 +660,10 @@ void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
 
     myframe->Settings().Colors().SetItemColor( static_cast<GAL_LAYER_ID>( aId ), aColor );
 
-    EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
-
     if( aId == LAYER_GRID )
-        galCanvas->GetGAL()->SetGridColor( aColor );
+        myframe->GetCanvas()->GetGAL()->SetGridColor( aColor );
 
-    KIGFX::VIEW* view = galCanvas->GetView();
+    KIGFX::VIEW* view = myframe->GetCanvas()->GetView();
     view->GetPainter()->GetSettings()->ImportLegacyColors( &myframe->Settings().Colors() );
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );   // useful to update rastnest
     view->UpdateLayerColor( aId );
@@ -681,11 +672,9 @@ void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, COLOR4D aColor )
     if( aId == LAYER_PCB_BACKGROUND )
         view->UpdateLayerColor( LAYER_PADS_PLATEDHOLES );
 
-    galCanvas->ForceRefresh();
-
     myframe->ReCreateHToolbar();
-
-    myframe->GetGalCanvas()->Refresh();
+    myframe->GetCanvas()->ForceRefresh();
+    myframe->GetCanvas()->Refresh();
 }
 
 
@@ -704,31 +693,29 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 
     brd->SetElementVisibility( static_cast<GAL_LAYER_ID>( aId ), isEnabled );
 
-    EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
-
     if( aId == LAYER_GRID )
     {
-        galCanvas->GetGAL()->SetGridVisibility( myframe->IsGridVisible() );
-        galCanvas->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+        myframe->GetCanvas()->GetGAL()->SetGridVisibility( myframe->IsGridVisible() );
+        myframe->GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     }
     else if( aId == LAYER_RATSNEST )
     {
         // don't touch the layers. ratsnest is enabled on per-item basis.
-        galCanvas->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-        galCanvas->GetView()->SetLayerVisible( aId, true );
+        myframe->GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+        myframe->GetCanvas()->GetView()->SetLayerVisible( aId, true );
 
         if( myframe->IsType( FRAME_PCB ) )
         {
             auto opt = static_cast<PCB_DISPLAY_OPTIONS*>( myframe->GetDisplayOptions() );
             opt->m_ShowGlobalRatsnest = isEnabled;
-            static_cast<KIGFX::PCB_VIEW*>( galCanvas->GetView() )->UpdateDisplayOptions( opt );
+            myframe->GetCanvas()->GetView()->UpdateDisplayOptions( opt );
         }
     }
     else
-        galCanvas->GetView()->SetLayerVisible( aId, isEnabled );
+        myframe->GetCanvas()->GetView()->SetLayerVisible( aId, isEnabled );
 
-    galCanvas->Refresh();
-    myframe->GetGalCanvas()->Refresh();
+    myframe->GetCanvas()->Refresh();
+    myframe->GetCanvas()->Refresh();
 }
 
 //-----</LAYER_WIDGET callbacks>------------------------------------------

@@ -139,8 +139,8 @@ int PL_EDITOR_CONTROL::ToggleBackgroundColor( const TOOL_EVENT& aEvent )
     m_frame->SetDrawBgColor( m_frame->GetDrawBgColor() == WHITE ? BLACK : WHITE );
     getView()->GetPainter()->GetSettings()->SetBackgroundColor( m_frame->GetDrawBgColor() );
 
-    m_frame->GetGalCanvas()->GetView()->UpdateAllLayersColor();
-    m_frame->GetGalCanvas()->Refresh();
+    m_frame->GetCanvas()->GetView()->UpdateAllLayersColor();
+    m_frame->GetCanvas()->Refresh();
 
     return 0;
 }

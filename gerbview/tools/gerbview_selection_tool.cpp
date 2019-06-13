@@ -286,7 +286,7 @@ void GERBVIEW_SELECTION_TOOL::toggleSelection( EDA_ITEM* aItem )
         }
     }
 
-    m_frame->GetGalCanvas()->ForceRefresh();
+    m_frame->GetCanvas()->ForceRefresh();
 }
 
 
@@ -579,22 +579,21 @@ void GERBVIEW_SELECTION_TOOL::zoomFitSelection( void )
 {
     //Should recalculate the view to zoom in on the selection
     auto selectionBox = m_selection.ViewBBox();
-    auto canvas = m_frame->GetGalCanvas();
     auto view = getView();
 
-    VECTOR2D screenSize = view->ToWorld( canvas->GetClientSize(), false );
+    VECTOR2D screenSize = view->ToWorld( m_frame->GetCanvas()->GetClientSize(), false );
 
     if( !( selectionBox.GetWidth() == 0 ) || !( selectionBox.GetHeight() == 0 ) )
     {
         VECTOR2D vsize = selectionBox.GetSize();
         double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
-                fabs( vsize.y / screenSize.y ) );
+                                                    fabs( vsize.y / screenSize.y ) );
         view->SetScale( scale );
         view->SetCenter( selectionBox.Centre() );
         view->Add( &m_selection );
     }
 
-    m_frame->GetGalCanvas()->ForceRefresh();
+    m_frame->GetCanvas()->ForceRefresh();
 }
 
 

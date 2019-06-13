@@ -514,7 +514,7 @@ int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
         currentColor.a += ALPHA_STEP;
         settings.SetLayerColor( currentLayer, currentColor );
 
-        KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
+        KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
         view->GetPainter()->GetSettings()->ImportLegacyColors( &settings );
         view->UpdateLayerColor( currentLayer );
 
@@ -540,7 +540,7 @@ int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
         currentColor.a -= ALPHA_STEP;
         settings.SetLayerColor( currentLayer, currentColor );
 
-        KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
+        KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
         view->GetPainter()->GetSettings()->ImportLegacyColors( &settings );
         view->UpdateLayerColor( currentLayer );
 

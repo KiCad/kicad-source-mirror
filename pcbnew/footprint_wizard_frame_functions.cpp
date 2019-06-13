@@ -119,7 +119,7 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
     }
 
     updateView();
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 }
 
 

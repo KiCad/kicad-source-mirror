@@ -564,7 +564,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
     if( !m_Panel3D->TransferDataFromWindow() )
         return false;
 
-    auto view = m_frame->GetGalCanvas()->GetView();
+    auto view = m_frame->GetCanvas()->GetView();
     BOARD_COMMIT commit( m_frame );
     commit.Modify( m_footprint );
 

@@ -93,7 +93,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_zoomSelectBox       = NULL;
 
     m_canvasType          = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    m_galCanvas           = NULL;
+    m_canvas           = NULL;
     m_toolDispatcher      = NULL;
     m_messagePanel        = NULL;
     m_currentScreen       = NULL;
@@ -175,7 +175,7 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
     delete m_actions;
     delete m_toolManager;
     delete m_toolDispatcher;
-    delete m_galCanvas;
+    delete m_canvas;
 
     delete m_currentScreen;
     m_currentScreen = NULL;
@@ -212,7 +212,7 @@ void EDA_DRAW_FRAME::CommonSettingsChanged()
     EDA_BASE_FRAME::CommonSettingsChanged();
 
     wxConfigBase*         settings = Pgm().CommonSettings();
-    KIGFX::VIEW_CONTROLS* viewControls = GetGalCanvas()->GetViewControls();
+    KIGFX::VIEW_CONTROLS* viewControls = GetCanvas()->GetViewControls();
 
     int autosaveInterval;
     settings->Read( AUTOSAVE_INTERVAL_KEY, &autosaveInterval );
@@ -304,7 +304,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
     }
 
     UpdateStatusBar();
-    m_galCanvas->Refresh();
+    m_canvas->Refresh();
 }
 
 
@@ -322,7 +322,7 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
 
     m_toolManager->RunAction( "common.Control.zoomPreset", true, id );
     UpdateStatusBar();
-    m_galCanvas->Refresh();
+    m_canvas->Refresh();
 }
 
 
@@ -425,7 +425,7 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 
     // Change GAL canvas cursor if requested.
     if( aCursor >= 0 )
-        GetGalCanvas()->SetCurrentCursor( aCursor );
+        GetCanvas()->SetCurrentCursor( aCursor );
 
     DisplayToolMsg( aToolMsg );
 
@@ -442,13 +442,7 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 void EDA_DRAW_FRAME::SetNoToolSelected()
 {
     // Select the ID_NO_TOOL_SELECTED id tool (Idle tool)
-
-    int defaultCursor = wxCURSOR_DEFAULT;
-
-    // Change GAL canvas cursor if requested.
-    defaultCursor = GetGalCanvas()->GetDefaultCursor();
-
-    SetToolID( ID_NO_TOOL_SELECTED, defaultCursor, wxEmptyString );
+    SetToolID( ID_NO_TOOL_SELECTED, GetCanvas()->GetDefaultCursor(), wxEmptyString );
 }
 
 
@@ -468,7 +462,7 @@ const wxString EDA_DRAW_FRAME::GetZoomLevelIndicator() const
 {
     // returns a human readable value which can be displayed as zoom
     // level indicator in dialogs.
-    return wxString::Format( wxT( "Z %.2f" ), m_galCanvas->GetGAL()->GetZoomFactor() );
+    return wxString::Format( wxT( "Z %.2f" ), m_canvas->GetGAL()->GetZoomFactor() );
 }
 
 
@@ -570,10 +564,8 @@ void EDA_DRAW_FRAME::UpdateMsgPanel()
 
 void EDA_DRAW_FRAME::ActivateGalCanvas()
 {
-    EDA_DRAW_PANEL_GAL* galCanvas = GetGalCanvas();
-
-    galCanvas->SetEvtHandlerEnabled( true );
-    galCanvas->StartDrawing();
+    GetCanvas()->SetEvtHandlerEnabled( true );
+    GetCanvas()->StartDrawing();
 
     // Reset current tool on switch();
     SetNoToolSelected();
@@ -582,8 +574,8 @@ void EDA_DRAW_FRAME::ActivateGalCanvas()
 
 void EDA_DRAW_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 {
-    GetGalCanvas()->SwitchBackend( aCanvasType );
-    m_canvasType = GetGalCanvas()->GetBackend();
+    GetCanvas()->SwitchBackend( aCanvasType );
+    m_canvasType = GetCanvas()->GetBackend();
 
     ActivateGalCanvas();
 }
@@ -712,7 +704,7 @@ wxWindow* findDialog( wxWindowList& aList )
 }
 
 
-void EDA_DRAW_FRAME::FocusOnLocation( const wxPoint& aPos, bool aWarpCursor, bool aCenterView )
+void EDA_DRAW_FRAME::FocusOnLocation( const wxPoint& aPos, bool aCenterView )
 {
     if( aCenterView )
     {
@@ -721,18 +713,15 @@ void EDA_DRAW_FRAME::FocusOnLocation( const wxPoint& aPos, bool aWarpCursor, boo
         // If a dialog partly obscures the window, then center on the uncovered area.
         if( dialog )
         {
-            wxRect dialogRect( GetGalCanvas()->ScreenToClient( dialog->GetScreenPosition() ),
+            wxRect dialogRect( GetCanvas()->ScreenToClient( dialog->GetScreenPosition() ),
                                dialog->GetSize() );
-            GetGalCanvas()->GetView()->SetCenter( aPos, dialogRect );
+            GetCanvas()->GetView()->SetCenter( aPos, dialogRect );
         }
         else
-            GetGalCanvas()->GetView()->SetCenter( aPos );
+            GetCanvas()->GetView()->SetCenter( aPos );
     }
 
-    if( aWarpCursor )
-        GetGalCanvas()->GetViewControls()->SetCursorPosition( aPos );
-    else
-        GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( aPos );
+    GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( aPos );
 }
 
 

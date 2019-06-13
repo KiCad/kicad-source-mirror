@@ -79,18 +79,14 @@ bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
     GetBoard()->GetConnectivity()->Clear();
     GetBoard()->GetConnectivity()->Build( GetBoard() );
 
-    if( GetGalCanvas() )    // Update view:
+    if( GetCanvas() )    // Update view:
     {
-        auto view = GetGalCanvas()->GetView();
-
         // Update footprint positions
-        view->RecacheAllItems();
+        GetCanvas()->GetView()->RecacheAllItems();
 
         // add imported tracks (previous tracks are removed, therfore all are new)
         for( auto track : GetBoard()->Tracks() )
-        {
-            view->Add( track );
-        }
+            GetCanvas()->GetView()->Add( track );
    }
 
     SetStatusText( wxString( _( "Session file imported and merged OK." ) ) );

@@ -127,7 +127,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
                                                             GetGalDisplayOptions(), m_canvasType );
-    SetGalCanvas( drawPanel );
+    SetCanvas( drawPanel );
 
     SetBoard( new BOARD() );
     // In modedit, the default net clearance is not known.
@@ -153,7 +153,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     // no net in footprint editor: make it non visible
     GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
 
-    m_Layers = new PCB_LAYER_WIDGET( this, GetGalCanvas(), true );
+    m_Layers = new PCB_LAYER_WIDGET( this, GetCanvas(), true );
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
@@ -208,11 +208,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                       .Caption( _( "Layers Manager" ) ).PaneBorder( false )
                       .MinSize( 80, -1 ).BestSize( m_Layers->GetBestSize() ) );
 
-    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
-    GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
-    GetGalCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
-    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
+    GetCanvas()->GetGAL()->SetAxesEnabled( true );
+    GetCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
+    GetCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
     m_auimgr.Update();
@@ -240,8 +240,8 @@ void FOOTPRINT_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasTyp
     // switches currently used canvas (Cairo / OpenGL).
     PCB_BASE_FRAME::SwitchCanvas( aCanvasType );
 
-    GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
-    GetGalCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
+    GetCanvas()->GetGAL()->SetAxesEnabled( true );
+    GetCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
 
     // The base class method *does not reinit* the layers manager. We must upate the layer
     // widget to match board visibility states, both layers and render columns, and and some
@@ -253,7 +253,7 @@ void FOOTPRINT_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasTyp
 void FOOTPRINT_EDIT_FRAME::HardRedraw()
 {
     SyncLibraryTree( true );
-    GetGalCanvas()->ForceRefresh();
+    GetCanvas()->ForceRefresh();
 }
 
 
@@ -459,8 +459,8 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         }
     }
 
-    GetGalCanvas()->SetEventDispatcher( NULL );
-    GetGalCanvas()->StopDrawing();
+    GetCanvas()->SetEventDispatcher( NULL );
+    GetCanvas()->StopDrawing();
 
     // Do not show the layer manager during closing to avoid flicker
     // on some platforms (Windows) that generate useless redraw of items in
@@ -631,7 +631,7 @@ void FOOTPRINT_EDIT_FRAME::UpdateUserInterface()
 
     // update the layer widget to match board visibility states.
     m_Layers->SyncLayerVisibilities();
-    static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->SyncLayersVisibility( m_Pcb );
+    GetCanvas()->SyncLayersVisibility( m_Pcb );
     m_Layers->SelectLayer( GetActiveLayer() );
     m_Layers->OnLayerSelected();
 
@@ -641,9 +641,8 @@ void FOOTPRINT_EDIT_FRAME::UpdateUserInterface()
 
 void FOOTPRINT_EDIT_FRAME::updateView()
 {
-    auto dp = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
-    dp->UseColorScheme( &Settings().Colors() );
-    dp->DisplayBoard( GetBoard() );
+    GetCanvas()->UseColorScheme( &Settings().Colors() );
+    GetCanvas()->DisplayBoard( GetBoard() );
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     updateTitle();
@@ -738,7 +737,7 @@ bool FOOTPRINT_EDIT_FRAME::IsElementVisible( GAL_LAYER_ID aElement ) const
 
 void FOOTPRINT_EDIT_FRAME::SetElementVisibility( GAL_LAYER_ID aElement, bool aNewState )
 {
-    GetGalCanvas()->GetView()->SetLayerVisible( aElement , aNewState );
+    GetCanvas()->GetView()->SetLayerVisible( aElement , aNewState );
     GetBoard()->SetElementVisibility( aElement, aNewState );
     m_Layers->SetRenderState( aElement, aNewState );
 }
@@ -765,16 +764,14 @@ void FOOTPRINT_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 
 void FOOTPRINT_EDIT_FRAME::setupTools()
 {
-    PCB_DRAW_PANEL_GAL* drawPanel = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
-
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( GetBoard(), drawPanel->GetView(),
-                                   drawPanel->GetViewControls(), this );
+    m_toolManager->SetEnvironment( GetBoard(), GetCanvas()->GetView(),
+                                   GetCanvas()->GetViewControls(), this );
     m_actions = new PCB_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
-    drawPanel->SetEventDispatcher( m_toolDispatcher );
+    GetCanvas()->SetEventDispatcher( m_toolDispatcher );
 
     m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new COMMON_TOOLS );
@@ -806,7 +803,7 @@ void FOOTPRINT_EDIT_FRAME::ActivateGalCanvas()
     PCB_BASE_EDIT_FRAME::ActivateGalCanvas();
 
     // Be sure the axis are enabled:
-    GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
+    GetCanvas()->GetGAL()->SetAxesEnabled( true );
     updateView();
 
     // Ensure the m_Layers settings are using the canvas type:

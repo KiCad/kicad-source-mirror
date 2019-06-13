@@ -1228,7 +1228,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     while( auto evt = Wait() )
     {
         // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
-        frame()->GetGalCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+        frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         controls.SetSnapping( !evt->Modifier( MD_ALT ) );

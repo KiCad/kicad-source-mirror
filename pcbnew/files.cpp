@@ -608,7 +608,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
          * This is more a workaround than a fix.
          */
         SetFocus();
-        GetGalCanvas()->SetFocus();
+        GetCanvas()->SetFocus();
     }
 
     return true;

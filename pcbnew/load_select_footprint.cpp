@@ -127,7 +127,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     // so we force the ORPHANED dummy net info for all pads
     newModule->ClearAllNets();
 
-    GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
+    GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     PlaceModule( newModule );
     newModule->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
 
@@ -156,7 +156,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     Update3DView( true );
     updateView();
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
     m_treePane->GetLibTree()->Refresh();    // update any previously-highlighted items
 
     return true;
@@ -498,7 +498,7 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, bool aRecreateRatsnest )
 
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
 
-    aModule->SetPosition( (wxPoint) GetGalCanvas()->GetViewControls()->GetCursorPosition() );
+    aModule->SetPosition( (wxPoint) GetCanvas()->GetViewControls()->GetCursorPosition() );
     aModule->ClearFlags();
 
     delete s_ModuleInitialCopy;

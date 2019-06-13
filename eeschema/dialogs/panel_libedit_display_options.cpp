@@ -18,7 +18,7 @@
  */
 
 #include <lib_edit_frame.h>
-#include <view/view.h>
+#include <sch_view.h>
 #include <widgets/gal_options_panel.h>
 #include <widgets/paged_dialog.h>
 
@@ -57,7 +57,7 @@ bool PANEL_LIBEDIT_DISPLAY_OPTIONS::TransferDataFromWindow()
     m_galOptsPanel->TransferDataFromWindow();
 
     // refresh view
-    KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
+    KIGFX::SCH_VIEW* view = m_frame->GetCanvas()->GetView();
     view->RecacheAllItems();
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     m_frame->GetCanvas()->Refresh();

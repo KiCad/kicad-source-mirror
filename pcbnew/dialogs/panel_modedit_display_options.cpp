@@ -57,10 +57,9 @@ bool PANEL_MODEDIT_DISPLAY_OPTIONS::TransferDataFromWindow()
     m_galOptsPanel->TransferDataFromWindow();
 
     // refresh view
-    KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
-    view->RecacheAllItems();
-    view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-    m_frame->GetGalCanvas()->Refresh();
+    m_frame->GetCanvas()->GetView()->RecacheAllItems();
+    m_frame->GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+    m_frame->GetCanvas()->Refresh();
 
     return true;
 }

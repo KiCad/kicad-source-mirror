@@ -183,7 +183,7 @@ void DIALOG_MIGRATE_BUSES::onItemSelected( wxListEvent& aEvent )
 
     auto pos = driver->GetPosition();
 
-    m_frame->GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( pos, false );
+    m_frame->GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( pos, false );
     m_frame->RedrawScreen( pos, false );
 
     m_cb_new_name->Clear();

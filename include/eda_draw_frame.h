@@ -88,7 +88,7 @@ class EDA_DRAW_FRAME : public KIWAY_PLAYER
 
     BASE_SCREEN*        m_currentScreen;      ///< current used SCREEN
 
-    EDA_DRAW_PANEL_GAL* m_galCanvas;
+    EDA_DRAW_PANEL_GAL* m_canvas;
 
     ///< GAL display options - this is the frame's interface to setting GAL display options
     KIGFX::GAL_DISPLAY_OPTIONS  m_galDisplayOptions;
@@ -435,10 +435,9 @@ public:
      * Move the graphic cursor (crosshair cursor) at a given coordinate and reframes
      * the drawing if the requested point is out of view or if center on location is requested.
      * @param aPos is the point to go to.
-     * @param aWarpCursor is true if the pointer should be warped to the new position.
      * @param aCenterView is true if the new cursor position should be centered on canvas.
      */
-    void FocusOnLocation( const wxPoint& aPos, bool aWarpCursor = true, bool aCenterView = false );
+    void FocusOnLocation( const wxPoint& aPos, bool aCenterView = false );
 
     /**
      * @return The current zoom level.
@@ -566,8 +565,8 @@ public:
      *
      * @return Pointer to GAL-based canvas.
      */
-    EDA_DRAW_PANEL_GAL* GetGalCanvas() const        { return m_galCanvas; }
-    void SetGalCanvas( EDA_DRAW_PANEL_GAL* aPanel ) { m_galCanvas = aPanel; }
+    virtual EDA_DRAW_PANEL_GAL* GetCanvas() const { return m_canvas; }
+    void SetCanvas( EDA_DRAW_PANEL_GAL* aPanel ) { m_canvas = aPanel; }
 
     /**
      * A way to pass info to draw functions. the base class has no knowledge about
@@ -583,7 +582,7 @@ public:
 
     void RefreshCanvas() override
     {
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
     }
     
     virtual const BOX2I GetDocumentExtents() const;

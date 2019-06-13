@@ -27,13 +27,13 @@
 
 #include <class_draw_panel_gal.h>
 #include <layers_id_colors_and_visibility.h>
+#include <pcb_view.h>
 #include <common.h>
 
 namespace KIGFX
 {
     class WS_PROXY_VIEW_ITEM;
     class RATSNEST_VIEWITEM;
-    class PCB_VIEW;
 }
 class COLORS_DESIGN_SETTINGS;
 
@@ -107,9 +107,9 @@ public:
     ///> @copydoc EDA_DRAW_PANEL_GAL::GetDefaultViewBBox()
     BOX2I GetDefaultViewBBox() const override;
 
-protected:
+    virtual KIGFX::PCB_VIEW* GetView() const override;
 
-    KIGFX::PCB_VIEW* view() const;
+protected:
 
     ///> Reassigns layer order to the initial settings.
     void setDefaultLayerOrder();

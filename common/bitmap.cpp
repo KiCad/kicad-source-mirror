@@ -200,9 +200,9 @@ bool SaveCanvasImageToFile( EDA_DRAW_FRAME* aFrame, const wxString& aFileName,
     bool       retv = true;
 
     // Make a screen copy of the canvas:
-    wxSize image_size = aFrame->GetGalCanvas()->GetClientSize();
+    wxSize image_size = aFrame->GetCanvas()->GetClientSize();
 
-    wxClientDC dc( aFrame->GetGalCanvas() );
+    wxClientDC dc( aFrame->GetCanvas() );
     wxBitmap   bitmap( image_size.x, image_size.y );
     wxMemoryDC memdc;
 

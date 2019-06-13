@@ -90,7 +90,7 @@ bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataFromWindow()
     m_galOptsPanel->TransferDataFromWindow();
 
     // Apply changes to the GAL
-    auto view = m_Parent->GetGalCanvas()->GetView();
+    auto view = m_Parent->GetCanvas()->GetView();
     auto painter = static_cast<KIGFX::GERBVIEW_PAINTER*>( view->GetPainter() );
     auto settings = painter->GetSettings();
     settings->LoadDisplayOptions( displayOptions );
@@ -99,7 +99,7 @@ bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataFromWindow()
     if( needs_repaint )
         view->UpdateAllItems( KIGFX::REPAINT );
 
-    m_Parent->GetGalCanvas()->Refresh();
+    m_Parent->GetCanvas()->Refresh();
 
     return true;
 }

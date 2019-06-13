@@ -104,7 +104,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 #endif
     auto* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
                                                   GetGalDisplayOptions(), backend );
-    SetGalCanvas( gal_drawPanel );
+    SetCanvas( gal_drawPanel );
 
     // Now all panels are created, set the window size to the latest saved in config:
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
@@ -135,19 +135,19 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
-    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
     m_auimgr.Update();
 
     auto& galOpts = GetGalDisplayOptions();
     galOpts.m_axesEnabled = true;
 
-    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
+    GetCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
 
     ActivateGalCanvas();
 
     // Restore last zoom.  (If auto-zooming we'll adjust when we load the footprint.)
-    GetGalCanvas()->GetView()->SetScale( m_lastZoom );
+    GetCanvas()->GetView()->SetScale( m_lastZoom );
 
     updateView();
 
@@ -157,10 +157,10 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
 DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 {
-    GetGalCanvas()->StopDrawing();
-    GetGalCanvas()->GetView()->Clear();
+    GetCanvas()->StopDrawing();
+    GetCanvas()->GetView()->Clear();
     // Be sure any event cannot be fired after frame deletion:
-    GetGalCanvas()->SetEvtHandlerEnabled( false );
+    GetCanvas()->SetEvtHandlerEnabled( false );
 
     // Be sure a active tool (if exists) is desactivated:
     if( m_toolManager )
@@ -282,18 +282,18 @@ void DISPLAY_FOOTPRINTS_FRAME::SaveSettings( wxConfigBase* aCfg )
     PCB_BASE_FRAME::SaveSettings( aCfg );
 
     aCfg->Write( ConfigBaseName() + AUTO_ZOOM_KEY, m_autoZoom );
-    aCfg->Write( ConfigBaseName() + ZOOM_KEY, GetGalCanvas()->GetView()->GetScale() );
+    aCfg->Write( ConfigBaseName() + ZOOM_KEY, GetCanvas()->GetView()->GetScale() );
 }
 
 
 void DISPLAY_FOOTPRINTS_FRAME::ApplyDisplaySettingsToGAL()
 {
-    auto painter = static_cast<KIGFX::PCB_PAINTER*>( GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
-    settings->LoadDisplayOptions( &m_DisplayOptions, false );
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
 
-    GetGalCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
-    GetGalCanvas()->Refresh();
+    painter->GetSettings()->LoadDisplayOptions( &m_DisplayOptions, false );
+
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+    GetCanvas()->Refresh();
 }
 
 
@@ -376,7 +376,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
     const FOOTPRINT_INFO* module_info = nullptr;
 
     GetBoard()->DeleteAllModules();
-    GetGalCanvas()->GetView()->Clear();
+    GetCanvas()->GetView()->Clear();
 
     wxString footprintName = parentframe->GetSelectedFootprint();
 
@@ -409,14 +409,14 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
 
     UpdateStatusBar();
 
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
     Update3DView( true );
 }
 
 
 void DISPLAY_FOOTPRINTS_FRAME::updateView()
 {
-    PCB_DRAW_PANEL_GAL* dp = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
+    PCB_DRAW_PANEL_GAL* dp = static_cast<PCB_DRAW_PANEL_GAL*>( GetCanvas() );
     dp->UseColorScheme( &Settings().Colors() );
     dp->DisplayBoard( GetBoard() );
 

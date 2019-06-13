@@ -42,6 +42,7 @@
 #include <pcb_screen.h>
 #include <pcb_display_options.h>
 #include <pcb_general_settings.h>
+#include <pcb_draw_panel_gal.h>
 #include <lib_id.h>
 
 /* Forward declarations of classes. */
@@ -58,7 +59,6 @@ class BOARD_DESIGN_SETTINGS;
 class ZONE_SETTINGS;
 class PCB_PLOT_PARAMS;
 class FP_LIB_TABLE;
-class PCB_GENERAL_SETTINGS ;
 
 /**
  * class PCB_BASE_FRAME
@@ -424,6 +424,8 @@ public:
      * Display the current grid pane on the status bar.
      */
     void DisplayGridMsg();
+
+    PCB_DRAW_PANEL_GAL* GetCanvas() const override;
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas
     virtual void ActivateGalCanvas() override;

@@ -360,7 +360,7 @@ int MODULE_EDITOR_TOOLS::Properties( const TOOL_EVENT& aEvent )
     if( footprint )
     {
         getEditFrame<FOOTPRINT_EDIT_FRAME>()->OnEditItemRequest( footprint );
-        m_frame->GetGalCanvas()->Refresh();
+        m_frame->GetCanvas()->Refresh();
     }
     return 0;
 }

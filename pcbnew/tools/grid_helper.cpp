@@ -52,7 +52,7 @@ GRID_HELPER::GRID_HELPER( PCB_BASE_FRAME* aFrame ) :
     m_enableSnap = true;
     m_enableGrid = true;
     m_snapSize = 100;
-    KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
+    KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
 
     m_viewAxis.SetSize( 20000 );
     m_viewAxis.SetStyle( KIGFX::ORIGIN_VIEWITEM::CROSS );
@@ -104,18 +104,16 @@ VECTOR2I GRID_HELPER::GetOrigin() const
 
 void GRID_HELPER::SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin, bool aEnableDiagonal )
 {
-    KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
-
     if( aEnable )
     {
         m_auxAxis = aOrigin;
         m_viewAxis.SetPosition( aOrigin );
-        view->SetVisible( &m_viewAxis, true );
+        m_frame->GetCanvas()->GetView()->SetVisible( &m_viewAxis, true );
     }
     else
     {
         m_auxAxis = OPT<VECTOR2I>();
-        view->SetVisible( &m_viewAxis, false );
+        m_frame->GetCanvas()->GetView()->SetVisible( &m_viewAxis, false );
     }
 
     m_diagonalAuxAxesEnable = aEnable;
@@ -189,7 +187,7 @@ VECTOR2I GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, BOARD_ITEM* aIt
     clearAnchors();
     computeAnchors( aItem, aMousePos, true );
 
-    double worldScale = m_frame->GetGalCanvas()->GetGAL()->GetWorldScale();
+    double worldScale = m_frame->GetCanvas()->GetGAL()->GetWorldScale();
     double lineSnapMinCornerDistance = 50.0 / worldScale;
 
     ANCHOR* nearestOutline = nearestAnchor( aMousePos, OUTLINE, LSET::AllLayersMask() );
@@ -233,7 +231,7 @@ std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea,
     std::set<BOARD_ITEM*> items;
     std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
 
-    auto view = m_frame->GetGalCanvas()->GetView();
+    auto view = m_frame->GetCanvas()->GetView();
     auto activeLayers = view->GetPainter()->GetSettings()->GetActiveLayers();
     bool isHighContrast = view->GetPainter()->GetSettings()->GetHighContrast();
     view->Query( aArea, selectedItems );
@@ -243,8 +241,7 @@ std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea,
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
 
         // The item must be visible and on an active layer
-        if( view->IsVisible( item )
-                && ( !isHighContrast || activeLayers.count( it.second ) ) )
+        if( view->IsVisible( item ) && ( !isHighContrast || activeLayers.count( it.second ) ) )
             items.insert ( item );
     }
 
@@ -276,7 +273,7 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDrag
 VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
         const std::vector<BOARD_ITEM*> aSkip )
 {
-    double worldScale = m_frame->GetGalCanvas()->GetGAL()->GetWorldScale();
+    double worldScale = m_frame->GetCanvas()->GetGAL()->GetWorldScale();
     int snapRange = (int) ( m_snapSize / worldScale );
 
     BOX2I bb( VECTOR2I( aOrigin.x - snapRange / 2, aOrigin.y - snapRange / 2 ), VECTOR2I( snapRange, snapRange ) );
@@ -284,9 +281,7 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLaye
     clearAnchors();
 
     for( BOARD_ITEM* item : queryVisible( bb, aSkip ) )
-    {
         computeAnchors( item, aOrigin );
-    }
 
     ANCHOR* nearest = nearestAnchor( aOrigin, SNAPPABLE, aLayers );
     VECTOR2I nearestGrid = Align( aOrigin );
@@ -300,10 +295,10 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLaye
         {
             m_viewSnapPoint.SetPosition( nearest->pos );
 
-            if( m_frame->GetGalCanvas()->GetView()->IsVisible( &m_viewSnapPoint ) )
-                m_frame->GetGalCanvas()->GetView()->Update( &m_viewSnapPoint, KIGFX::GEOMETRY);
+            if( m_frame->GetCanvas()->GetView()->IsVisible( &m_viewSnapPoint ) )
+                m_frame->GetCanvas()->GetView()->Update( &m_viewSnapPoint, KIGFX::GEOMETRY);
             else
-                m_frame->GetGalCanvas()->GetView()->SetVisible( &m_viewSnapPoint, true );
+                m_frame->GetCanvas()->GetView()->SetVisible( &m_viewSnapPoint, true );
 
             m_snapItem = nearest;
             return nearest->pos;
@@ -311,7 +306,7 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLaye
     }
 
     m_snapItem = nullptr;
-    m_frame->GetGalCanvas()->GetView()->SetVisible( &m_viewSnapPoint, false );
+    m_frame->GetCanvas()->GetView()->SetVisible( &m_viewSnapPoint, false );
     return nearestGrid;
 }
 

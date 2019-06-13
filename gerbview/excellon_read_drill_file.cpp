@@ -282,19 +282,10 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
         dlg.ShowModal();
     }
 
-    if( success )
+    if( GetCanvas() )
     {
-        EDA_DRAW_PANEL_GAL* canvas = GetGalCanvas();
-
-        if( canvas )
-        {
-            KIGFX::VIEW* view = canvas->GetView();
-
-            for( GERBER_DRAW_ITEM* item = drill_layer->GetItemsList(); item; item = item->Next() )
-            {
-                view->Add( (KIGFX::VIEW_ITEM*) item );
-            }
-        }
+        for( GERBER_DRAW_ITEM* item = drill_layer->GetItemsList(); item; item = item->Next() )
+            GetCanvas()->GetView()->Add( (KIGFX::VIEW_ITEM*) item );
     }
 
     return success;

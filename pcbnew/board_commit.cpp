@@ -255,10 +255,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     {
         size_t num_changes = m_changes.size();
 
-        auto panel = static_cast<PCB_DRAW_PANEL_GAL*>( frame->GetGalCanvas() );
         connectivity->RecalculateRatsnest( this );
         connectivity->ClearDynamicRatsnest();
-        panel->RedrawRatsnest();
+        frame->GetCanvas()->RedrawRatsnest();
 
         if( m_changes.size() > num_changes )
         {

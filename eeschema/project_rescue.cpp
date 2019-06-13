@@ -511,7 +511,7 @@ void RESCUER::UndoRescues()
 
 bool SCH_EDIT_FRAME::RescueLegacyProject( bool aRunningOnDemand )
 {
-    LEGACY_RESCUER rescuer( Prj(), &GetCurrentSheet(), GetGalCanvas()->GetBackend() );
+    LEGACY_RESCUER rescuer( Prj(), &GetCurrentSheet(), GetCanvas()->GetBackend() );
 
     return rescueProject( rescuer, aRunningOnDemand );
 }
@@ -519,7 +519,7 @@ bool SCH_EDIT_FRAME::RescueLegacyProject( bool aRunningOnDemand )
 
 bool SCH_EDIT_FRAME::RescueSymbolLibTableProject( bool aRunningOnDemand )
 {
-    SYMBOL_LIB_TABLE_RESCUER rescuer( Prj(), &GetCurrentSheet(), GetGalCanvas()->GetBackend() );
+    SYMBOL_LIB_TABLE_RESCUER rescuer( Prj(), &GetCurrentSheet(), GetCanvas()->GetBackend() );
 
     return rescueProject( rescuer, aRunningOnDemand );
 }

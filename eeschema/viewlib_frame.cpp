@@ -135,9 +135,9 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     // Ensure axis are always drawn (initial default display was not drawn)
     KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = GetGalDisplayOptions();
     gal_opts.m_axesEnabled = true;
-    GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
+    GetCanvas()->GetGAL()->SetAxesEnabled( true );
     GetRenderSettings()->m_ShowPinsElectricalType = GetShowElectricalType();
-    GetGalCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
+    GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
@@ -180,7 +180,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_auimgr.AddPane( m_cmpList, EDA_PANE().Palette().Name( "Symbols" ).Left().Layer(1)
                       .CaptionVisible( false ).MinSize( 80, -1 ).BestSize( m_cmpListWidth, -1 ) );
 
-    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
     m_auimgr.GetPane( m_libList ).Show( aLibraryName.empty() );
 
@@ -196,7 +196,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     }
 
     SyncView();
-    GetGalCanvas()->GetViewControls()->SetSnapping( true );
+    GetCanvas()->GetViewControls()->SetSnapping( true );
 
     // Set the working/draw area size to display a symbol to a reasonable value:
     // A 450mm x 450mm with a origin at the area center looks like a large working area
@@ -411,7 +411,7 @@ double LIB_VIEW_FRAME::BestZoom()
 
     if( m_libraryName.IsEmpty() || m_entryName.IsEmpty() )
     {
-        GetGalCanvas()->GetView()->SetCenter( VECTOR2D( 0, 0 ) );
+        GetCanvas()->GetView()->SetCenter( VECTOR2D( 0, 0 ) );
         return defaultLibraryZoom;
     }
 
@@ -430,7 +430,7 @@ double LIB_VIEW_FRAME::BestZoom()
 
     if( !part )
     {
-        GetGalCanvas()->GetView()->SetCenter( VECTOR2D( 0, 0 ) );
+        GetCanvas()->GetView()->SetCenter( VECTOR2D( 0, 0 ) );
         return defaultLibraryZoom;
     }
 

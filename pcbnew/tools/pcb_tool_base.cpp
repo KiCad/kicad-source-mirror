@@ -242,7 +242,7 @@ PCB_DISPLAY_OPTIONS* PCB_TOOL_BASE::displayOptions() const
 
 PCB_DRAW_PANEL_GAL* PCB_TOOL_BASE::canvas() const
 {
-    return static_cast<PCB_DRAW_PANEL_GAL*>( frame()->GetGalCanvas() );
+    return static_cast<PCB_DRAW_PANEL_GAL*>( frame()->GetCanvas() );
 }
 
 

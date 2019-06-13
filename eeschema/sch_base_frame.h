@@ -108,7 +108,7 @@ public:
 
     void createCanvas();
 
-    SCH_DRAW_PANEL* GetCanvas() const;
+    SCH_DRAW_PANEL* GetCanvas() const override;
     SCH_SCREEN* GetScreen() const override;
     void SetScreen( BASE_SCREEN* aScreen ) override;
 

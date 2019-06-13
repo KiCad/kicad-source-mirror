@@ -415,7 +415,7 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
         panel->GetGAL()->SetGridSize( VECTOR2D( pcbnew->GetScreen()->GetGridSize() ) );
 
         // Grid color (among other things):
-        KIGFX::PAINTER* pcbnew_painter = pcbnew->GetGalCanvas()->GetView()->GetPainter();
+        KIGFX::PAINTER* pcbnew_painter = pcbnew->GetCanvas()->GetView()->GetPainter();
         panel->GetView()->GetPainter()->ApplySettings( pcbnew_painter->GetSettings() );
     }
     else

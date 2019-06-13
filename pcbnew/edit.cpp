@@ -89,7 +89,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SetActiveLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
 
         if( displ_opts->m_ContrastModeDisplay )
-            GetGalCanvas()->Refresh();
+            GetCanvas()->Refresh();
         break;
 
     case ID_MENU_ARCHIVE_MODULES_IN_LIBRARY:
@@ -147,7 +147,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
     SetActiveLayer( layer );
 
     if( displ_opts->m_ContrastModeDisplay )
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
 }
 
 

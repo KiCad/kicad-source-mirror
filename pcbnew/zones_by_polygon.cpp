@@ -102,7 +102,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE_CONTAINER* aZone )
     for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* edge_zone = GetBoard()->GetArea( ii );
-        GetGalCanvas()->GetView()->Update( edge_zone );
+        GetCanvas()->GetView()->Update( edge_zone );
     }
 
     zoneInfo.ExportSetting( *aZone );

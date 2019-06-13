@@ -158,7 +158,7 @@ bool GLOBAL_EDIT_TOOL::swapBoardItem( BOARD_ITEM* aItem, PCB_LAYER_ID* new_layer
     {
         m_commit->Modify( aItem );
         aItem->SetLayer( new_layer[ aItem->GetLayer() ] );
-        frame()->GetGalCanvas()->GetView()->Update( aItem, KIGFX::GEOMETRY );
+        frame()->GetCanvas()->GetView()->Update( aItem, KIGFX::GEOMETRY );
         return true;
     }
 
@@ -194,7 +194,7 @@ int GLOBAL_EDIT_TOOL::SwapLayers( const TOOL_EVENT& aEvent )
             {
                 m_commit->Modify( via );
                 via->SetLayerPair( new_layer[top_layer], new_layer[bottom_layer] );
-                frame()->GetGalCanvas()->GetView()->Update( via, KIGFX::GEOMETRY );
+                frame()->GetCanvas()->GetView()->Update( via, KIGFX::GEOMETRY );
                 hasChanges = true;
             }
         }
@@ -214,7 +214,7 @@ int GLOBAL_EDIT_TOOL::SwapLayers( const TOOL_EVENT& aEvent )
     {
         frame()->OnModify();
         m_commit->Push( "Layers moved" );
-        frame()->GetGalCanvas()->Refresh();
+        frame()->GetCanvas()->Refresh();
     }
 
     return 0;

@@ -66,7 +66,7 @@ void PCB_BASE_EDIT_FRAME::ActivateGalCanvas()
 {
     PCB_BASE_FRAME::ActivateGalCanvas();
 
-    static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->SyncLayersVisibility( m_Pcb );
+    GetCanvas()->SyncLayersVisibility( m_Pcb );
 }
 
 
@@ -79,22 +79,20 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
         if( m_toolManager )
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
-        GetGalCanvas()->GetView()->Clear();
+        GetCanvas()->GetView()->Clear();
     }
 
     PCB_BASE_FRAME::SetBoard( aBoard );
 
-    GetGalCanvas()->GetGAL()->SetGridOrigin( VECTOR2D( aBoard->GetGridOrigin() ) );
+    GetCanvas()->GetGAL()->SetGridOrigin( VECTOR2D( aBoard->GetGridOrigin() ) );
 
     // update the tool manager with the new board and its view.
     if( m_toolManager )
     {
-        PCB_DRAW_PANEL_GAL* drawPanel = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
-
-        drawPanel->DisplayBoard( aBoard );
-        drawPanel->UseColorScheme( &Settings().Colors() );
-        m_toolManager->SetEnvironment( aBoard, drawPanel->GetView(),
-                                       drawPanel->GetViewControls(), this );
+        GetCanvas()->DisplayBoard( aBoard );
+        GetCanvas()->UseColorScheme( &Settings().Colors() );
+        m_toolManager->SetEnvironment( aBoard, GetCanvas()->GetView(),
+                                       GetCanvas()->GetViewControls(), this );
 
         if( new_board )
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );

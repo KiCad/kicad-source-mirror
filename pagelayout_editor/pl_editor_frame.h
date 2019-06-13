@@ -31,6 +31,7 @@
 #include <eda_draw_frame.h>
 #include <pl_editor_screen.h>
 #include <pl_editor_layout.h>
+#include <pl_draw_panel_gal.h>
 
 class PROPERTIES_FRAME;
 class WS_DATA_ITEM;
@@ -109,6 +110,8 @@ public:
      * returns a human readable value which can be displayed in dialogs.
      */
     const wxString GetZoomLevelIndicator() const override;
+
+    PL_DRAW_PANEL_GAL* GetCanvas() const override;
 
     PL_EDITOR_SCREEN* GetScreen() const override
     {

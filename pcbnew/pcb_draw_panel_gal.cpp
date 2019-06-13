@@ -493,7 +493,7 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
 }
 
 
-KIGFX::PCB_VIEW* PCB_DRAW_PANEL_GAL::view() const
+KIGFX::PCB_VIEW* PCB_DRAW_PANEL_GAL::GetView() const
 {
     return static_cast<KIGFX::PCB_VIEW*>( m_view );
 }

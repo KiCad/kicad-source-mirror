@@ -108,7 +108,7 @@ void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
     case ID_GERBVIEW_ERASE_ALL:
         Clear_DrawLayers( false );
         Zoom_Automatique( false );
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
         ClearMsgPanel();
         break;
 
@@ -139,7 +139,7 @@ void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
         // Clear all layers
         Clear_DrawLayers( false );
         Zoom_Automatique( false );
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
         ClearMsgPanel();
 
         // Load the layers from stored paths
@@ -150,17 +150,17 @@ void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
 
     case ID_GERBVIEW_LOAD_DRILL_FILE:
         LoadExcellonFiles( wxEmptyString );
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
         break;
 
     case ID_GERBVIEW_LOAD_ZIP_ARCHIVE_FILE:
         LoadZipArchiveFile( wxEmptyString );
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
         break;
 
     case ID_GERBVIEW_LOAD_JOB_FILE:
         LoadGerberJobFile( wxEmptyString );
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
         break;
 
     default:
@@ -375,7 +375,7 @@ bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox( true );
 
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 
     return success;
 }

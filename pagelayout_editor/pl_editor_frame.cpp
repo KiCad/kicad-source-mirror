@@ -105,7 +105,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     auto* drawPanel = new PL_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
                                              GetGalDisplayOptions(), m_canvasType );
-    SetGalCanvas( drawPanel );
+    SetCanvas( drawPanel );
 
     LoadSettings( config() );
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
@@ -169,9 +169,9 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Caption( _( "Properties" ) ).MinSize( m_propertiesPagelayout->GetMinSize() )
                       .BestSize( m_propertiesFrameWidth, -1 ) );
 
-    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
-    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
+    GetCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
     m_auimgr.Update();
@@ -195,12 +195,12 @@ void PL_EDITOR_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( nullptr, GetGalCanvas()->GetView(),
-                                   GetGalCanvas()->GetViewControls(), this );
+    m_toolManager->SetEnvironment( nullptr, GetCanvas()->GetView(),
+                                   GetCanvas()->GetViewControls(), this );
     m_actions = new PL_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
-    GetGalCanvas()->SetEventDispatcher( m_toolDispatcher );
+    GetCanvas()->SetEventDispatcher( m_toolDispatcher );
 
     // Register tools
     m_toolManager->RegisterTool( new COMMON_CONTROL );
@@ -266,10 +266,10 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
  */
 void PL_EDITOR_FRAME::OnSelectPage( wxCommandEvent& event )
 {
-    KIGFX::VIEW* view = GetGalCanvas()->GetView();
+    KIGFX::VIEW* view = GetCanvas()->GetView();
     view->SetLayerVisible( LAYER_WORKSHEET_PAGE1, m_pageSelectBox->GetSelection() == 0 );
     view->SetLayerVisible( LAYER_WORKSHEET_PAGEn, m_pageSelectBox->GetSelection() == 1 );
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 }
 
 
@@ -280,8 +280,8 @@ void PL_EDITOR_FRAME::OnSelectCoordOriginCorner( wxCommandEvent& event )
 {
     m_originSelectChoice = m_originSelectBox->GetSelection();
     UpdateStatusBar();  // Update grid origin
-    static_cast<PL_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayWorksheet();
-    GetGalCanvas()->Refresh();
+    GetCanvas()->DisplayWorksheet();
+    GetCanvas()->Refresh();
 }
 
 
@@ -574,7 +574,7 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     }
 
     // Display absolute coordinates:
-    VECTOR2D cursorPos = GetGalCanvas()->GetViewControls()->GetCursorPosition();
+    VECTOR2D cursorPos = GetCanvas()->GetViewControls()->GetCursorPosition();
     VECTOR2D coord = cursorPos - originCoord;
     double   dXpos = To_User_Unit( GetUserUnits(), coord.x * Xsign );
     double   dYpos = To_User_Unit( GetUserUnits(), coord.y * Ysign );
@@ -630,11 +630,15 @@ void PL_EDITOR_FRAME::PrintPage( wxDC* aDC )
 }
 
 
+PL_DRAW_PANEL_GAL* PL_EDITOR_FRAME::GetCanvas() const
+{
+    return static_cast<PL_DRAW_PANEL_GAL*>( EDA_DRAW_FRAME::GetCanvas() );
+}
+
+
 void PL_EDITOR_FRAME::HardRedraw()
 {
-    PL_DRAW_PANEL_GAL*  drawPanel = static_cast<PL_DRAW_PANEL_GAL*>( GetGalCanvas() );
-
-    drawPanel->DisplayWorksheet();
+    GetCanvas()->DisplayWorksheet();
 
     PL_SELECTION_TOOL*  selTool = m_toolManager->GetTool<PL_SELECTION_TOOL>();
     PL_SELECTION&       selection = selTool->GetSelection();
@@ -645,7 +649,7 @@ void PL_EDITOR_FRAME::HardRedraw()
 
     m_propertiesPagelayout->CopyPrmsFromItemToPanel( item );
     m_propertiesPagelayout->CopyPrmsFromGeneralToPanel();
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 }
 
 
@@ -705,7 +709,7 @@ WS_DATA_ITEM* PL_EDITOR_FRAME::AddPageLayoutItem( int aType )
         return NULL;
 
     WS_DATA_MODEL::GetTheInstance().Append( item );
-    item->SyncDrawItems( nullptr, GetGalCanvas()->GetView() );
+    item->SyncDrawItems( nullptr, GetCanvas()->GetView() );
 
     return item;
 }
@@ -715,8 +719,7 @@ void PL_EDITOR_FRAME::OnNewPageLayout()
 {
     GetScreen()->ClearUndoRedoList();
     GetScreen()->ClrModify();
-
-    static_cast<PL_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayWorksheet();
+    GetCanvas()->DisplayWorksheet();
 
     m_propertiesPagelayout->CopyPrmsFromItemToPanel( nullptr );
     m_propertiesPagelayout->CopyPrmsFromGeneralToPanel();

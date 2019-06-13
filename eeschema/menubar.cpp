@@ -300,10 +300,10 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, selTool );
 
     auto acceleratedGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+        return GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
     };
     auto standardGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+        return GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
     };
 
     prefsMenu->AddItem( ACTIONS::configurePaths,           EE_CONDITIONS::ShowAlways );

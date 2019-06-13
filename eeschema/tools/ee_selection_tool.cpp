@@ -1149,7 +1149,7 @@ void EE_SELECTION_TOOL::toggleSelection( EDA_ITEM* aItem, bool aForce )
     }
 
     if( m_frame )
-        m_frame->GetGalCanvas()->ForceRefresh();
+        m_frame->GetCanvas()->ForceRefresh();
 }
 
 

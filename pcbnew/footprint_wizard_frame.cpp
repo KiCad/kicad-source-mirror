@@ -139,7 +139,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
 #endif
     PCB_DRAW_PANEL_GAL* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
                                                             GetGalDisplayOptions(), backend );
-    SetGalCanvas( gal_drawPanel );
+    SetCanvas( gal_drawPanel );
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
@@ -202,14 +202,14 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_auimgr.AddPane( m_buildMessageBox, EDA_PANE().Palette().Name( "Output" ).Left().Position(1)
                       .CaptionVisible( false ).MinSize( 360, -1 ) );
 
-    m_auimgr.AddPane( GetGalCanvas(), wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
+    m_auimgr.AddPane( GetCanvas(), wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
 
     auto& galOpts = GetGalDisplayOptions();
     galOpts.m_fullscreenCursor = true;
     galOpts.m_forceDisplayCursor = true;
     galOpts.m_axesEnabled = true;
 
-    GetGalCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
+    GetCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
     updateView();
 
@@ -230,9 +230,9 @@ FOOTPRINT_WIZARD_FRAME::~FOOTPRINT_WIZARD_FRAME()
     // Delete the GRID_TRICKS.
     m_parameterGrid->PopEventHandler( true );
 
-    GetGalCanvas()->StopDrawing();
+    GetCanvas()->StopDrawing();
     // Be sure any event cannot be fired after frame deletion:
-    GetGalCanvas()->SetEvtHandlerEnabled( false );
+    GetCanvas()->SetEvtHandlerEnabled( false );
 
     // Be sure a active tool (if exists) is desactivated:
     if( m_toolManager )
@@ -292,9 +292,8 @@ void FOOTPRINT_WIZARD_FRAME::OnSize( wxSizeEvent& SizeEv )
 
 void FOOTPRINT_WIZARD_FRAME::updateView()
 {
-    auto dp = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
-    dp->UseColorScheme( &Settings().Colors() );
-    dp->DisplayBoard( GetBoard() );
+    GetCanvas()->UseColorScheme( &Settings().Colors() );
+    GetCanvas()->DisplayBoard( GetBoard() );
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     UpdateMsgPanel();
@@ -369,7 +368,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreatePageList()
     ReCreateParameterList();
     ReCreateHToolbar();
     DisplayWizardInfos();
-    GetGalCanvas()->Refresh();
+    GetCanvas()->Refresh();
 }
 
 
@@ -498,7 +497,7 @@ void FOOTPRINT_WIZARD_FRAME::ClickOnPageList( wxCommandEvent& event )
     if( m_pageList->GetSelection() > 0 )
     {
         ReCreateParameterList();
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
         DisplayWizardInfos();
     }
 }

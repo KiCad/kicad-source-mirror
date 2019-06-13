@@ -240,10 +240,10 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     //-- Preferences menu -----------------------------------------------
     //
     auto acceleratedGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+        return GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
     };
     auto standardGraphicsCondition = [ this ] ( const SELECTION& aSel ) {
-        return GetGalCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+        return GetCanvas()->GetBackend() == EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
     };
 
     CONDITIONAL_MENU* preferencesMenu = new CONDITIONAL_MENU( false, selTool );
