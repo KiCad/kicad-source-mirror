@@ -91,7 +91,7 @@ public:
 
 private:
     int doDrawSegments( int aType, SCH_LINE* aSegment );
-    SCH_LINE* startSegments( int aType, const wxPoint& aPos );
+    SCH_LINE* startSegments( int aType, const VECTOR2D& aPos );
     SCH_LINE* doUnfoldBus( const wxString& aNet );
     void finishSegments();
 

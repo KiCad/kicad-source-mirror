@@ -78,7 +78,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_show_layer_manager_tools = true;
 
-    m_showAxis = true;                      // true to show X and Y axis on screen
     m_showBorderAndTitleBlock = false;      // true for reference drawings.
     m_SelLayerBox   = NULL;
     m_DCodeSelector = NULL;
@@ -993,24 +992,17 @@ void GERBVIEW_FRAME::UpdateStatusBar()
     if( !screen )
         return;
 
-    int dx;
-    int dy;
-    double dXpos;
-    double dYpos;
     wxString line;
+    VECTOR2D cursorPos = GetGalCanvas()->GetViewControls()->GetCursorPosition();
 
     if( GetShowPolarCoords() )  // display relative polar coordinates
     {
-        double       theta, ro;
-
-        dx = GetCrossHairPosition().x - screen->m_O_Curseur.x;
-        dy = GetCrossHairPosition().y - screen->m_O_Curseur.y;
-
-        // atan2 in the 0,0 case returns 0
-        theta = RAD2DEG( atan2( (double) -dy, (double) dx ) );
-
-        ro = hypot( dx, dy );
+        double   dx = cursorPos.x - screen->m_LocalOrigin.x;
+        double   dy = cursorPos.y - screen->m_LocalOrigin.y;
+        double   theta = RAD2DEG( atan2( -dy, dx ) );
+        double   ro = hypot( dx, dy );
         wxString formatter;
+
         switch( GetUserUnits() )
         {
         case INCHES:         formatter = wxT( "r %.6f  theta %.1f" ); break;
@@ -1025,8 +1017,8 @@ void GERBVIEW_FRAME::UpdateStatusBar()
     }
 
     // Display absolute coordinates:
-    dXpos = To_User_Unit( GetUserUnits(), GetCrossHairPosition().x );
-    dYpos = To_User_Unit( GetUserUnits(), GetCrossHairPosition().y );
+    double dXpos = To_User_Unit( GetUserUnits(), cursorPos.x );
+    double dYpos = To_User_Unit( GetUserUnits(), cursorPos.y );
 
     wxString absformatter;
     wxString relformatter;
@@ -1059,10 +1051,8 @@ void GERBVIEW_FRAME::UpdateStatusBar()
     if( !GetShowPolarCoords() )  // display relative cartesian coordinates
     {
         // Display relative coordinates:
-        dx = GetCrossHairPosition().x - screen->m_O_Curseur.x;
-        dy = GetCrossHairPosition().y - screen->m_O_Curseur.y;
-        dXpos = To_User_Unit( GetUserUnits(), dx );
-        dYpos = To_User_Unit( GetUserUnits(), dy );
+        dXpos = To_User_Unit( GetUserUnits(), cursorPos.x - screen->m_LocalOrigin.x );
+        dYpos = To_User_Unit( GetUserUnits(), cursorPos.y - screen->m_LocalOrigin.y );
 
         // We already decided the formatter above
         line.Printf( relformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );

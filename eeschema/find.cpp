@@ -137,7 +137,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
         delta = Component->GetTransform().TransformCoordinate( pos );
         pos   = delta + Component->GetPosition();
 
-        SetCrossHairPosition( pos );
+        GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( pos, false );
         CenterScreen( pos, false );
     }
 

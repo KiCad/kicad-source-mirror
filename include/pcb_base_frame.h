@@ -292,22 +292,6 @@ public:
 
     void InstallPadOptionsFrame( D_PAD* pad );
 
-    void AddPad( MODULE* Module, bool draw );
-
-    /**
-     * Function DeletePad
-     * Delete the pad aPad.
-     * Refresh the modified screen area
-     * Refresh modified parameters of the parent module (bounding box, last date)
-     * @param aPad = the pad to delete
-     * @param aQuery = true to prompt for confirmation, false to delete silently
-     */
-    void DeletePad( D_PAD* aPad, bool aQuery = true );
-
-    void PlacePad( D_PAD* Pad, wxDC* DC );
-    void Export_Pad_Settings( D_PAD* aPad );
-    void Import_Pad_Settings( D_PAD* aPad, bool aDraw );
-
     /**
      * Function SelectFootprintFromLibTree
      * opens a dialog to select a footprint.

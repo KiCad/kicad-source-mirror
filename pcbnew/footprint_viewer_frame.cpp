@@ -70,9 +70,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
     EVT_SIZE( FOOTPRINT_VIEWER_FRAME::OnSize )
     EVT_ACTIVATE( FOOTPRINT_VIEWER_FRAME::OnActivate )
 
-    // Menu (and/or hotkey) events
     EVT_MENU( wxID_EXIT, FOOTPRINT_VIEWER_FRAME::CloseFootprintViewer )
-    EVT_MENU( ID_SET_RELATIVE_OFFSET, FOOTPRINT_VIEWER_FRAME::OnSetRelativeOffset )
 
     // Toolbar events
     EVT_TOOL( ID_MODVIEW_SELECT_PART, FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint )
@@ -132,8 +130,6 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     // depending on aFrameType (needed to identify the frame by wxWidgets),
     // but only one configuration is preferable.
     m_configName = FOOTPRINT_VIEWER_FRAME_NAME;
-
-    m_showAxis   = true;         // true to draw axis.
 
     // Give an icon
     wxIcon  icon;
@@ -280,13 +276,6 @@ void FOOTPRINT_VIEWER_FRAME::OnSize( wxSizeEvent& SizeEv )
         m_auimgr.Update();
 
     SizeEv.Skip();
-}
-
-
-void FOOTPRINT_VIEWER_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
-{
-    GetScreen()->m_O_Curseur = GetCrossHairPosition();
-    UpdateStatusBar();
 }
 
 
@@ -472,13 +461,14 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& event )
         newmodule->SetParent( pcbframe->GetBoard() );
         newmodule->SetLink( 0 );
 
-        wxPoint cursor_pos = pcbframe->GetCrossHairPosition();
+        KIGFX::VIEW_CONTROLS* viewControls = pcbframe->GetGalCanvas()->GetViewControls();
+        VECTOR2D              cursorPos = viewControls->GetCursorPosition();
 
         commit.Add( newmodule );
-        pcbframe->SetCrossHairPosition( wxPoint( 0, 0 ) );
+        viewControls->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
         pcbframe->PlaceModule( newmodule );
         newmodule->SetPosition( wxPoint( 0, 0 ) );
-        pcbframe->SetCrossHairPosition( cursor_pos );
+        viewControls->SetCrossHairCursorPosition( cursorPos, false );
         newmodule->SetTimeStamp( GetNewTimeStamp() );
         commit.Push( wxT( "Insert module" ) );
 

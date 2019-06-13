@@ -23,11 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_draw_panel_gal.h:
- * @brief EDA_DRAW_PANEL_GAL class definition.
- */
-
 #ifndef  PANELGAL_WXSTRUCT_H
 #define  PANELGAL_WXSTRUCT_H
 
@@ -83,30 +78,21 @@ public:
      * Function GetBackend
      * Returns the type of backend currently used by GAL canvas.
      */
-    inline GAL_TYPE GetBackend() const
-    {
-        return m_backend;
-    }
+    inline GAL_TYPE GetBackend() const { return m_backend; }
 
     /**
      * Function GetGAL()
      * Returns a pointer to the GAL instance used in the panel.
      * @return The instance of GAL.
      */
-    KIGFX::GAL* GetGAL() const
-    {
-        return m_gal;
-    }
+    KIGFX::GAL* GetGAL() const { return m_gal; }
 
     /**
      * Function GetView()
      * Returns a pointer to the VIEW instance used in the panel.
      * @return The instance of VIEW.
      */
-    KIGFX::VIEW* GetView() const
-    {
-        return m_view;
-    }
+    KIGFX::VIEW* GetView() const { return m_view; }
 
     /**
      * Function GetViewControls()
@@ -176,10 +162,7 @@ public:
      * Function GetParentEDAFrame()
      * Returns parent EDA_DRAW_FRAME, if available or NULL otherwise.
      */
-    EDA_DRAW_FRAME* GetParentEDAFrame() const
-    {
-        return m_edaFrame;
-    }
+    EDA_DRAW_FRAME* GetParentEDAFrame() const { return m_edaFrame; }
 
     /**
      * Function OnShow()
@@ -192,20 +175,8 @@ public:
      * be true (and is by default) for any primary canvas, but can be false to make
      * well-behaved preview panes and the like.
      */
-    void SetStealsFocus( bool aStealsFocus )
-    {
-        m_stealsFocus = aStealsFocus;
-    }
+    void SetStealsFocus( bool aStealsFocus ) { m_stealsFocus = aStealsFocus; }
 
-    /**
-     * Get whether focus is taken on certain events (see SetStealsFocus()).
-     */
-    bool GetStealsFocus() const
-    {
-        return m_stealsFocus;
-    }
-
-    virtual void SetDefaultCursor();
     /**
      * Function SetCurrentCursor
      * Set the current cursor shape for this panel
@@ -224,10 +195,7 @@ public:
      *
      * @return the default bounding box for the panel
      */
-    virtual BOX2I GetDefaultViewBBox() const
-    {
-        return BOX2I();
-    }
+    virtual BOX2I GetDefaultViewBBox() const { return BOX2I(); }
 
     /**
      * Used to forward events to the canvas from popups, etc.

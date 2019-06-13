@@ -45,31 +45,32 @@ static bool                 lastTextItalic = false;
 
 SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
 {
-    SCH_TEXT* textItem = NULL;
+    wxPoint  cursorPos = (wxPoint) GetGalCanvas()->GetViewControls()->GetCursorPosition();
+    SCH_TEXT* textItem = nullptr;
 
     switch( aType )
     {
     case LAYER_NOTES:
-        textItem = new SCH_TEXT( GetCrossHairPosition() );
+        textItem = new SCH_TEXT( cursorPos );
         break;
 
     case LAYER_LOCLABEL:
-        textItem = new SCH_LABEL( GetCrossHairPosition() );
+        textItem = new SCH_LABEL( cursorPos );
         break;
 
     case LAYER_HIERLABEL:
-        textItem = new SCH_HIERLABEL( GetCrossHairPosition() );
+        textItem = new SCH_HIERLABEL( cursorPos );
         textItem->SetShape( lastGlobalLabelShape );
         break;
 
     case LAYER_GLOBLABEL:
-        textItem = new SCH_GLOBALLABEL( GetCrossHairPosition() );
+        textItem = new SCH_GLOBALLABEL( cursorPos );
         textItem->SetShape( lastGlobalLabelShape );
         break;
 
     default:
         DisplayError( this, wxT( "SCH_EDIT_FRAME::CreateNewText() Internal error" ) );
-        return NULL;
+        return nullptr;
     }
 
     textItem->SetBold( lastTextBold );
@@ -83,7 +84,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
     if( textItem->GetText().IsEmpty() )
     {
         delete textItem;
-        return NULL;
+        return nullptr;
     }
 
     lastTextBold = textItem->IsBold();

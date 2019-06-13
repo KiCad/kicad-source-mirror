@@ -204,7 +204,7 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
                 }
 
                 // Restore cursor after dialog
-                getViewControls()->WarpCursor( m_frame->GetCrossHairPosition(), true );
+                getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
 
                 if( item )
                 {

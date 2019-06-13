@@ -117,7 +117,6 @@ private:
     void ClickOnLibList( wxCommandEvent& event );
     void ClickOnFootprintList( wxCommandEvent& event );
     void DClickOnFootprintList( wxCommandEvent& event );
-    void OnSetRelativeOffset( wxCommandEvent& event );
 
     void InstallDisplayOptions( wxCommandEvent& event );
 

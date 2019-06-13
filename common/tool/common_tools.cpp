@@ -396,8 +396,8 @@ int COMMON_TOOLS::doGridPreset( int idx )
     getView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 
     // Put cursor on new grid
-    m_frame->SetCrossHairPosition( m_frame->RefPos( true ) );
-
+    VECTOR2D gridCursor = getViewControls()->GetCursorPosition( true );
+    getViewControls()->SetCrossHairCursorPosition( gridCursor, false );
     return 0;
 }
 
@@ -461,10 +461,11 @@ int COMMON_TOOLS::ResetLocalCoords( const TOOL_EVENT& aEvent )
     auto vcSettings = m_toolMgr->GetCurrentToolVC();
 
     // Use either the active tool forced cursor position or the general settings
-    VECTOR2I cursorPos = vcSettings.m_forceCursorPosition ? vcSettings.m_forcedPosition :
-                         getViewControls()->GetCursorPosition();
+    if( vcSettings.m_forceCursorPosition )
+        m_frame->GetScreen()->m_LocalOrigin = vcSettings.m_forcedPosition;
+    else
+        m_frame->GetScreen()->m_LocalOrigin = getViewControls()->GetCursorPosition();
 
-    m_frame->GetScreen()->m_O_Curseur = wxPoint( cursorPos.x, cursorPos.y );
     m_frame->UpdateStatusBar();
 
     return 0;

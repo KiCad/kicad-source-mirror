@@ -93,7 +93,6 @@ public:
     double BestZoom() override;
     void ClickOnLibList( wxCommandEvent& event );
     void ClickOnCmpList( wxCommandEvent& event );
-    void OnSetRelativeOffset( wxCommandEvent& event );
     void OnSelectSymbol( wxCommandEvent& aEvent );
 
     void LoadSettings( wxConfigBase* aCfg ) override;

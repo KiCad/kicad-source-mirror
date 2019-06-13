@@ -68,8 +68,6 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
                     wxDefaultPosition, wxDefaultSize,
                     KICAD_DEFAULT_DRAWFRAME_STYLE, FOOTPRINTVIEWER_FRAME_NAME )
 {
-    m_showAxis = true;         // true to draw axis.
-
     // Give an icon
     wxIcon  icon;
     icon.CopyFromBitmap( KiBitmap( icon_cvpcb_xpm ) );

@@ -155,9 +155,7 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     if( GetParentEDAFrame() && GetParentEDAFrame()->GetScreen() )
     {
         GetParentEDAFrame()->GetScreen()->SetZoom( GetLegacyZoom() );
-
-        VECTOR2D center = GetView()->GetCenter();
-        GetParentEDAFrame()->SetScrollCenterPosition( wxPoint( center.x, center.y ) );
+        GetParentEDAFrame()->GetScreen()->m_ScrollCenter = GetView()->GetCenter();
     }
 
     if( !m_gal->IsVisible() )
@@ -503,18 +501,10 @@ void EDA_DRAW_PANEL_GAL::onShowTimer( wxTimerEvent& aEvent )
 void EDA_DRAW_PANEL_GAL::SetCurrentCursor( int aCursor )
 {
     if ( aCursor > wxCURSOR_NONE && aCursor < wxCURSOR_MAX )
-    {
         m_currentCursor = aCursor;
-    }
     else
-    {
         m_currentCursor = wxCURSOR_ARROW;
-    }
 
     SetCursor( (wxStockCursor) m_currentCursor );
 }
 
-void EDA_DRAW_PANEL_GAL::SetDefaultCursor()
-{
-    SetCurrentCursor( m_defaultCursor );
-}

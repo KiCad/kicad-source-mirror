@@ -165,7 +165,7 @@ public:
      * as aMasterPad
      * @param aMasterPad = the template pad
      */
-    void ImportSettingsFromMaster( const D_PAD& aMasterPad );
+    void ImportSettingsFrom( const D_PAD& aMasterPad );
 
     /**
      * @return true if the pad has a footprint parent flipped

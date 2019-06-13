@@ -319,8 +319,8 @@ int SCH_WIRE_BUS_TOOL::StartWire( const TOOL_EVENT& aEvent )
 
     Activate();
 
-    getViewControls()->WarpCursor( m_frame->GetCrossHairPosition(), true );
-    SCH_LINE* segment = startSegments( LAYER_WIRE, m_frame->GetCrossHairPosition() );
+    getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
+    SCH_LINE* segment = startSegments( LAYER_WIRE, getViewControls()->GetCursorPosition() );
     return doDrawSegments( LAYER_WIRE, segment );
 }
 
@@ -351,8 +351,8 @@ int SCH_WIRE_BUS_TOOL::StartBus( const TOOL_EVENT& aEvent )
 
     Activate();
 
-    getViewControls()->WarpCursor( m_frame->GetCrossHairPosition(), true );
-    SCH_LINE* segment = startSegments( LAYER_BUS, m_frame->GetCrossHairPosition() );
+    getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
+    SCH_LINE* segment = startSegments( LAYER_BUS, getViewControls()->GetCursorPosition() );
     return doDrawSegments( LAYER_BUS, segment );
 }
 
@@ -434,7 +434,7 @@ int SCH_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 
 SCH_LINE* SCH_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
 {
-    wxPoint  pos = m_frame->GetCrossHairPosition();
+    wxPoint  pos = (wxPoint) getViewControls()->GetCursorPosition();
 
     m_busUnfold.entry = new SCH_BUS_WIRE_ENTRY( pos, '\\' );
     m_busUnfold.entry->SetParent( m_frame->GetScreen() );
@@ -449,7 +449,7 @@ SCH_LINE* SCH_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
     m_busUnfold.origin = pos;
     m_busUnfold.net_name = aNet;
 
-    m_frame->SetCrossHairPosition( m_busUnfold.entry->m_End() );
+    getViewControls()->SetCrossHairCursorPosition( m_busUnfold.entry->m_End(), false );
 
     return startSegments( LAYER_WIRE, m_busUnfold.entry->m_End() );
 }
@@ -462,8 +462,8 @@ int SCH_WIRE_BUS_TOOL::StartLine( const TOOL_EVENT& aEvent)
 {
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    getViewControls()->WarpCursor( m_frame->GetCrossHairPosition(), true );
-    SCH_LINE* segment = startSegments( LAYER_NOTES, m_frame->GetCrossHairPosition() );
+    getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
+    SCH_LINE* segment = startSegments( LAYER_NOTES, getViewControls()->GetCursorPosition() );
     return doDrawSegments( LAYER_BUS, segment );
 }
 
@@ -591,7 +591,7 @@ int SCH_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        cursorPos = (wxPoint)getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        cursorPos = (wxPoint) getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         //------------------------------------------------------------------------
         // Handle cancel:
@@ -799,16 +799,16 @@ int SCH_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
 }
 
 
-SCH_LINE* SCH_WIRE_BUS_TOOL::startSegments( int aType, const wxPoint& aPos )
+SCH_LINE* SCH_WIRE_BUS_TOOL::startSegments( int aType, const VECTOR2D& aPos )
 {
     SCH_LINE* segment = nullptr;
     bool      forceHV = m_frame->GetForceHVLines();
 
     switch( aType )
     {
-    default:         segment = new SCH_LINE( aPos, LAYER_NOTES ); break;
-    case LAYER_WIRE: segment = new SCH_LINE( aPos, LAYER_WIRE );  break;
-    case LAYER_BUS:  segment = new SCH_LINE( aPos, LAYER_BUS );   break;
+    default:         segment = new SCH_LINE( (wxPoint) aPos, LAYER_NOTES ); break;
+    case LAYER_WIRE: segment = new SCH_LINE( (wxPoint) aPos, LAYER_WIRE );  break;
+    case LAYER_BUS:  segment = new SCH_LINE( (wxPoint) aPos, LAYER_BUS );   break;
     }
 
     segment->SetFlags( IS_NEW | IS_MOVED );

@@ -849,13 +849,14 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     }
     else        // This is an insert command
     {
-        wxPoint cursor_pos = pcbframe->GetCrossHairPosition();
+        KIGFX::VIEW_CONTROLS* viewControls = pcbframe->GetGalCanvas()->GetViewControls();
+        VECTOR2D              cursorPos = viewControls->GetCursorPosition();
 
         commit.Add( newmodule );
-        pcbframe->SetCrossHairPosition( wxPoint( 0, 0 ) );
+        viewControls->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
         pcbframe->PlaceModule( newmodule );
         newmodule->SetPosition( wxPoint( 0, 0 ) );
-        pcbframe->SetCrossHairPosition( cursor_pos );
+        viewControls->SetCrossHairCursorPosition( cursorPos, false );
         newmodule->SetTimeStamp( GetNewTimeStamp() );
         commit.Push( wxT( "Insert module" ) );
 

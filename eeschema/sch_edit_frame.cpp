@@ -241,7 +241,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     g_CurrentSheet = new SCH_SHEET_PATH();
     g_ConnectionGraph = new CONNECTION_GRAPH( this );
 
-    m_showAxis = false;                 // true to show axis
     m_showBorderAndTitleBlock = true;   // true to show sheet references
     m_DefaultSchematicFileName = NAMELESS_PROJECT;
     m_DefaultSchematicFileName += wxT( ".sch" );

@@ -74,13 +74,8 @@ typedef std::vector<GRID_TYPE> GRIDS;
 class BASE_SCREEN : public EDA_ITEM
 {
 private:
-    GRIDS       m_grids;            ///< List of valid grid sizes.
     bool        m_FlagModified;     ///< Indicates current drawing has been modified.
     bool        m_FlagSave;         ///< Indicates automatic file save.
-    EDA_ITEM*   m_CurrentItem;      ///< Currently selected object
-    GRID_TYPE   m_Grid;             ///< Current grid selection.
-    wxPoint     m_scrollCenter;     ///< Current scroll center point in logical units.
-    wxPoint     m_MousePosition;    ///< Mouse cursor coordinate in logical units.
     int         m_UndoRedoCountMax; ///< undo/Redo command Max depth
 
     /**
@@ -90,6 +85,8 @@ private:
      */
     wxPoint     m_crossHairPosition;
 
+    GRIDS       m_grids;            ///< List of valid grid sizes.
+    GRID_TYPE   m_Grid;             ///< Current grid selection.
     double      m_Zoom;             ///< Current zoom coefficient.
 
     //----< Old public API now is private, and migratory>------------------------
@@ -97,72 +94,13 @@ private:
     friend class EDA_DRAW_FRAME;
 
     /**
-     * Function getCrossHairPosition
-     * return the current cross hair position in logical (drawing) coordinates.
-     * @param aInvertY Inverts the Y axis position.
-     * @return The cross hair position in drawing coordinates.
-     */
-    wxPoint getCrossHairPosition( bool aInvertY ) const
-    {
-        if( aInvertY )
-            return wxPoint( m_crossHairPosition.x, -m_crossHairPosition.y );
-
-        return wxPoint( m_crossHairPosition.x, m_crossHairPosition.y );
-    }
-
-    /**
-     * Function setCrossHairPosition
-     * sets the screen cross hair position to \a aPosition in logical (drawing) units.
-     * @param aPosition The new cross hair position.
-     * @param aGridOrigin Origin point of the snap grid.
-     * @param aSnapToGrid Sets the cross hair position to the nearest grid position to
-     *                    \a aPosition.
-     *
-     */
-    void setCrossHairPosition( const wxPoint& aPosition, const wxPoint& aGridOrigin, bool aSnapToGrid );
-
-    /**
      * Function getNearestGridPosition
      * returns the nearest \a aGridSize location to \a aPosition.
      * @param aPosition The position to check.
      * @param aGridOrigin The origin point of the snap grid.
-     * @param aGridSize The grid size to locate to if provided.  If NULL then the current
-     *                  grid size is used.
      * @return The nearst grid position.
      */
-    wxPoint getNearestGridPosition( const wxPoint& aPosition, const wxPoint& aGridOrigin,
-                                    wxRealPoint* aGridSize ) const;
-
-    /**
-     * Function getCursorPosition
-     * returns the current cursor position in logical (drawing) units.
-     * @param aOnGrid Returns the nearest grid position at the current cursor position.
-     * @param aGridOrigin Origin point of the snap grid.
-     * @param aGridSize Custom grid size instead of the current grid size.  Only valid
-     *        if \a aOnGrid is true.
-     * @return The current cursor position.
-     */
-    wxPoint getCursorPosition( bool aOnGrid, const wxPoint& aGridOrigin, wxRealPoint* aGridSize ) const;
-
-    void setMousePosition( const wxPoint& aPosition ) { m_MousePosition = aPosition; }
-
-    /**
-     * Function RefPos
-     * Return the reference position, coming from either the mouse position
-     * or the cursor position.
-     *
-     * @param useMouse If true, return mouse position, else cursor's.
-     *
-     * @return wxPoint - The reference point, either the mouse position or
-     *                   the cursor position.
-     */
-    wxPoint refPos( bool useMouse ) const
-    {
-        return useMouse ? m_MousePosition : m_crossHairPosition;
-    }
-
-    const wxPoint& getScrollCenterPosition() const          { return m_scrollCenter; }
-    void setScrollCenterPosition( const wxPoint& aPoint )   { m_scrollCenter = aPoint; }
+    wxPoint getNearestGridPosition( const wxPoint& aPosition, const wxPoint& aGridOrigin ) const;
 
     //----</Old public API now is private, and migratory>------------------------
 
@@ -173,18 +111,8 @@ public:
 
     wxPoint     m_DrawOrg;          ///< offsets for drawing the circuit on the screen
 
-    wxPoint     m_O_Curseur;        ///< Relative Screen cursor coordinate (on grid)
+    VECTOR2D    m_LocalOrigin;      ///< Relative Screen cursor coordinate (on grid)
                                     ///< in user units. (coordinates from last reset position)
-
-    // Scrollbars management:
-    int         m_ScrollPixelsPerUnitX; ///< Pixels per scroll unit in the horizontal direction.
-    int         m_ScrollPixelsPerUnitY; ///< Pixels per scroll unit in the vertical direction.
-
-    wxSize      m_ScrollbarNumber;  /**< Current virtual draw area size in scroll units.
-                                     * m_ScrollbarNumber * m_ScrollPixelsPerUnit =
-                                     * virtual draw area size in pixels */
-
-    wxPoint     m_ScrollbarPos;     ///< Current scroll bar position in scroll units.
 
     wxPoint     m_StartVisu;        /**< Coordinates in drawing units of the current
                                      * view position (upper left corner of device)
@@ -195,6 +123,9 @@ public:
                                      * > 0 except for schematics.
                                      * false: when coordinates can only be >= 0
                                      * Schematic */
+
+    VECTOR2D    m_ScrollCenter;     ///< Current scroll center point in logical units.
+
     bool        m_Initialized;
 
     // Undo/redo list of commands
@@ -209,7 +140,7 @@ public:
 
 public:
     BASE_SCREEN( KICAD_T aType = SCREEN_T );
-    ~BASE_SCREEN();
+    ~BASE_SCREEN() override { }
 
     void InitDataPoints( const wxSize& aPageSizeInternalUnits );
 
@@ -317,11 +248,6 @@ public:
      */
     virtual bool SetZoom( double iu_per_du );
 
-    bool SetNextZoom();
-    bool SetPreviousZoom();
-    bool SetFirstZoom();
-    bool SetLastZoom();
-
     /**
      * Function GetMaxAllowedZoom
      * returns the maximum allowed zoom factor, which was established as the last entry
@@ -335,32 +261,6 @@ public:
      * in m_ZoomList.
      */
     double GetMinAllowedZoom() const    { return m_ZoomList.size() ? *m_ZoomList.begin() : 1.0; }
-
-    /**
-     * Function SetScalingFactor
-     * sets the scaling factor of "internal unit per device unit".
-     * If the output device is a screen, then "device units" are pixels.  The
-     * "logical unit" is wx terminology, and corresponds to KiCad's "Internal Unit (IU)".
-     * <p>
-     * This scaling factor is "internal units per device unit".  This function is
-     * the same thing currently as SetZoom(), but clamps the argument within a
-     * legal range.
-
-     * @param iu_per_du is the current scale used to draw items onto the device
-     *   context wxDC.
-     */
-    void SetScalingFactor( double iu_per_du );
-
-    /**
-     * Function GetScalingFactor
-     * returns the inverse of the current scale used to draw items on screen.
-     * <p>
-     * This function somehow got designed to be the inverse of SetScalingFactor().
-     * <p>
-     * device coordinates = user coordinates * GetScalingFactor()
-     */
-    double GetScalingFactor() const;
-
 
     //----<grid stuff>----------------------------------------------------------
 
@@ -404,9 +304,7 @@ public:
      */
     int SetGrid( int aCommandId );
 
-    void SetGridList( GRIDS& sizelist );
-    void AddGrid( const GRID_TYPE& grid );
-    void AddGrid( const wxRealPoint& size, int id );
+    void AddGrid( const GRID_TYPE& aGrid );
     void AddGrid( const wxRealPoint& size, EDA_UNITS_T aUnit, int id );
 
     /**

@@ -99,64 +99,40 @@ protected:
 
     std::unique_ptr<wxSingleInstanceChecker> m_file_checker;    ///< prevents opening same file multiple times.
 
-    int         m_LastGridSizeId;           // the command id offset (>= 0) of the last selected grid
+    int              m_LastGridSizeId;      // the command id offset (>= 0) of the last selected grid
                                             // 0 is for the grid corresponding to
                                             // a wxCommand ID = ID_POPUP_GRID_LEVEL_1000.
-    bool        m_drawGrid;                 // hide/Show grid
-    bool        m_showPageLimits;           ///< true to display the page limits
-    COLOR4D     m_gridColor;                ///< Grid color
-    COLOR4D     m_drawBgColor;              ///< the background color of the draw canvas
+    bool             m_drawGrid;            // hide/Show grid
+    bool             m_showPageLimits;      ///< true to display the page limits
+    COLOR4D          m_gridColor;           ///< Grid color
+    COLOR4D          m_drawBgColor;         ///< the background color of the draw canvas
                                             ///< BLACK for Pcbnew, BLACK or WHITE for eeschema
-    double      m_zoomLevelCoeff;           ///< a suitable value to convert the internal zoom scaling factor
+    double           m_zoomLevelCoeff;      ///< a suitable value to convert the internal zoom scaling factor
                                             // to a zoom level value which rougly gives 1.0 when the board/schematic
                                             // is at scale = 1
-    int         m_UndoRedoCountMax;         ///< default Undo/Redo command Max depth, to be handed
+    int              m_UndoRedoCountMax;    ///< default Undo/Redo command Max depth, to be handed
                                             // to screens
-    bool        m_PolarCoords;              //< for those frames that support polar coordinates
+    bool             m_PolarCoords;         //< for those frames that support polar coordinates
 
-    TOOL_DISPATCHER*    m_toolDispatcher;
+    TOOL_DISPATCHER* m_toolDispatcher;
 
     /// Tool ID of previously active draw tool bar button.
-    int     m_lastDrawToolId;
+    int              m_lastDrawToolId;
 
-    /// True shows the X and Y axis indicators.
-    bool    m_showAxis;
 
-    /// True shows the grid axis indicators.
-    bool    m_showGridAxis;
+    bool             m_showBorderAndTitleBlock;   /// Show the worksheet (border and title block).
+    long             m_firstRunDialogSetting;     /// Show first run dialog on startup
 
-    /// True shows the origin axis used to indicate the coordinate offset for
-    /// drill, gerber, and component position files.
-    bool    m_showOriginAxis;
+    wxChoice*        m_gridSelectBox;
+    wxChoice*        m_zoomSelectBox;
 
-    /// True shows the drawing border and title block.
-    bool    m_showBorderAndTitleBlock;
+    ACTION_TOOLBAR*  m_mainToolBar;
+    ACTION_TOOLBAR*  m_auxiliaryToolBar;    // Additional tools under main toolbar
+    ACTION_TOOLBAR*  m_drawToolBar;         // Drawing tools (typically on right edge of window)
+    ACTION_TOOLBAR*  m_optionsToolBar;      // Options (typically on left edge of window)
 
-    /// Key to control whether first run dialog is shown on startup
-    long    m_firstRunDialogSetting;
-
-    wxChoice*       m_gridSelectBox;
-    wxChoice*       m_zoomSelectBox;
-
-    ACTION_TOOLBAR* m_mainToolBar;
-    /// Auxiliary tool bar typically shown below the main tool bar at the top of the
-    /// main window.
-    ACTION_TOOLBAR* m_auxiliaryToolBar;
-
-    /// The tool bar that contains the buttons for quick access to the application draw
-    /// tools.  It typically is located on the right side of the main window.
-    ACTION_TOOLBAR* m_drawToolBar;
-
-    /// The options tool bar typcially located on the left edge of the main window.
-    ACTION_TOOLBAR* m_optionsToolBar;
-
-    /// Panel used to display information at the bottom of the main window.
-    EDA_MSG_PANEL*  m_messagePanel;
-
-    int             m_MsgFrameHeight;
-
-    /// One-shot to avoid a recursive mouse event during hotkey movement
-    bool            m_movingCursorWithKeyboard;
+    EDA_MSG_PANEL*   m_messagePanel;
+    int              m_MsgFrameHeight;
 
     /// The current canvas type
     EDA_DRAW_PANEL_GAL::GAL_TYPE    m_canvasType;
@@ -194,10 +170,7 @@ protected:
      * the base version returns only CanvasTypeKeyBase.
      * Can be overriden to return a key specific of a frame name
      */
-    virtual wxString GetCanvasTypeKey()
-    {
-        return CanvasTypeKeyBase;
-    }
+    virtual wxString GetCanvasTypeKey() { return CanvasTypeKeyBase; }
 
 public:
     EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
@@ -255,56 +228,15 @@ public:
     void SetLastGridSizeId( int aId ) { m_LastGridSizeId = aId; }
 
     //-----<BASE_SCREEN API moved here>------------------------------------------
-    /**
-     * Return the current cross hair position in logical (drawing) coordinates.
-     *
-     * @param aInvertY Inverts the Y axis position.
-     * @return The cross hair position in drawing coordinates.
-     */
-    wxPoint GetCrossHairPosition( bool aInvertY = false ) const;
-
-    /**
-     * Set the screen cross hair position to \a aPosition in logical (drawing) units.
-     *
-     * @param aPosition The new cross hair position.
-     * @param aSnapToGrid Sets the cross hair position to the nearest grid position to
-     *                    \a aPosition.
-     */
-    void SetCrossHairPosition( const wxPoint& aPosition, bool aSnapToGrid = true );
-
-    /**
-     * Return the current cursor position in logical (drawing) units.
-     *
-     * @param aOnGrid Returns the nearest grid position at the current cursor position.
-     * @param aGridSize Custom grid size instead of the current grid size.  Only valid
-     *        if \a aOnGrid is true.
-     * @return The current cursor position.
-     */
-    wxPoint GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize = NULL ) const;
 
     /**
      * Return the nearest \a aGridSize location to \a aPosition.
      *
      * @param aPosition The position to check.
-     * @param aGridSize The grid size to locate to if provided.  If NULL then the current
-     *                  grid size is used.
      * @return The nearst grid position.
      */
-    wxPoint GetNearestGridPosition( const wxPoint& aPosition, wxRealPoint* aGridSize = NULL ) const;
+    wxPoint GetNearestGridPosition( const wxPoint& aPosition ) const;
 
-    /**
-     * Return the reference position, coming from either the mouse position
-     * or the cursor position.
-     *
-     * @param useMouse If true, return mouse position, else cursor's.
-     *
-     * @return wxPoint - The reference point, either the mouse position or
-     *                   the cursor position.
-     */
-    wxPoint RefPos( bool useMouse ) const;
-
-    const wxPoint& GetScrollCenterPosition() const;
-    void SetScrollCenterPosition( const wxPoint& aPoint );
 
     //-----</BASE_SCREEN API moved here>-----------------------------------------
 
@@ -323,9 +255,6 @@ public:
      */
     virtual void SetDrawBgColor( COLOR4D aColor) { m_drawBgColor= aColor ; }
 
-    bool GetShowBorderAndTitleBlock() const { return m_showBorderAndTitleBlock; }
-
-    void SetShowBorderAndTitleBlock( bool aShow ) { m_showBorderAndTitleBlock = aShow; }
     bool ShowPageLimits() const { return m_showPageLimits; }
     void SetShowPageLimits( bool aShow ) { m_showPageLimits = aShow; }
 

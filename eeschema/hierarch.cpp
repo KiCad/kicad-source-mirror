@@ -279,9 +279,8 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     }
     else
     {
-        CenterScreen( GetScrollCenterPosition(), false );
         // RedrawScreen() will set zoom to last used
-        RedrawScreen( GetScrollCenterPosition(), false );
+        RedrawScreen( (wxPoint) GetScreen()->m_ScrollCenter, false );
     }
 
     UpdateTitle();

@@ -1049,7 +1049,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
                 item->Rotate( selCenter, rotation );
                 break;
             case ROTATE_AROUND_USER_ORIGIN:
-                item->Rotate( editFrame->GetScreen()->m_O_Curseur, rotation );
+                item->Rotate( (wxPoint) editFrame->GetScreen()->m_LocalOrigin, rotation );
                 break;
             case ROTATE_AROUND_AUX_ORIGIN:
                 item->Rotate( editFrame->GetAuxOrigin(), rotation );
@@ -1395,7 +1395,7 @@ bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aP )
 }
 
 
-int EDIT_TOOL::doCopyToClipboard( bool withAnchor )
+int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 {
     CLIPBOARD_IO io;
 
@@ -1408,34 +1408,19 @@ int EDIT_TOOL::doCopyToClipboard( bool withAnchor )
     if( selection.Empty() )
         return 1;
 
-    if( withAnchor )
-    {
-        VECTOR2I refPoint;
-        bool rv = pickCopyReferencePoint( refPoint );
-        frame()->SetMsgPanel( board() );
+    VECTOR2I refPoint;
+    bool rv = pickCopyReferencePoint( refPoint );
+    frame()->SetMsgPanel( board() );
 
-        if( !rv )
-            return 1;
+    if( !rv )
+        return 1;
 
-        selection.SetReferencePoint( refPoint );
-    }
+    selection.SetReferencePoint( refPoint );
 
     io.SetBoard( board() );
     io.SaveSelection( selection );
 
     return 0;
-}
-
-
-int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
-{
-    return doCopyToClipboard( true );
-}
-
-
-int EDIT_TOOL::copyToClipboardWithAnchor( const TOOL_EVENT& aEvent )
-{
-    return doCopyToClipboard( true );
 }
 
 

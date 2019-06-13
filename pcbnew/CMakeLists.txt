@@ -259,7 +259,6 @@ set( PCBNEW_CLASS_SRCS
     menubar_pcb_editor.cpp
     microwave.cpp
     netlist.cpp
-    pad_edit_functions.cpp
     pad_naming.cpp
     pcb_base_edit_frame.cpp
     pcb_layer_box_selector.cpp

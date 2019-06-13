@@ -72,11 +72,13 @@ END_EVENT_TABLE()
 
 
 DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
-    DIALOG_ERC_BASE( parent, ID_DIALOG_ERC  // parent looks for this ID explicitly
-        )
+    DIALOG_ERC_BASE( parent, ID_DIALOG_ERC ),  // parent looks for this ID explicitly
+    m_buttonList(),
+    m_initialized( false ),
+    m_settings()
 {
     m_parent = parent;
-    m_lastMarkerFound = NULL;
+    m_lastMarkerFound = nullptr;
 
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
@@ -213,7 +215,7 @@ void DIALOG_ERC::OnResetMatrixClick( wxCommandEvent& event )
 
 void DIALOG_ERC::OnErcCmpClick( wxCommandEvent& event )
 {
-    wxBusyCursor();
+    wxBusyCursor busy;
     m_MarkersList->ClearList();
 
     m_MessagesList->Clear();
@@ -236,7 +238,7 @@ void DIALOG_ERC::OnLeftClickMarkersList( wxHtmlLinkEvent& event )
 {
     wxString link = event.GetLinkInfo().GetHref();
 
-    m_lastMarkerFound = NULL;
+    m_lastMarkerFound = nullptr;
 
     long index;
 
@@ -245,13 +247,13 @@ void DIALOG_ERC::OnLeftClickMarkersList( wxHtmlLinkEvent& event )
 
     const SCH_MARKER* marker = m_MarkersList->GetItem( index );
 
-    if( marker == NULL )
+    if( !marker )
         return;
 
     // Search for the selected marker
     unsigned i;
     SCH_SHEET_LIST  sheetList( g_RootSheet );
-    bool notFound = true;
+    bool found = false;
 
     for( i = 0;  i < sheetList.size(); i++ )
     {
@@ -261,16 +263,16 @@ void DIALOG_ERC::OnLeftClickMarkersList( wxHtmlLinkEvent& event )
         {
             if( item == marker )
             {
-                notFound = false;
+                found = true;
                 break;
             }
         }
 
-        if( notFound == false )
+        if( found )
             break;
     }
 
-    if( notFound ) // Error
+    if( !found ) // Error
     {
         wxMessageBox( _( "Marker not found" ) );
 
@@ -284,25 +286,22 @@ void DIALOG_ERC::OnLeftClickMarkersList( wxHtmlLinkEvent& event )
         m_parent->SetCurrentSheet( sheetList[i] );
         m_parent->DisplayCurrentSheet();
         sheetList[i].LastScreen()->SetZoom( m_parent->GetScreen()->GetZoom() );
-        m_parent->RedrawScreen( m_parent->GetScrollCenterPosition(), false );
+        m_parent->RedrawScreen( (wxPoint) m_parent->GetScreen()->m_ScrollCenter, false );
     }
 
     m_lastMarkerFound = marker;
     m_parent->FocusOnLocation( marker->m_Pos, false, true );
-    m_parent->SetCrossHairPosition( marker->m_Pos );
     RedrawDrawPanel();
 }
 
 
 void DIALOG_ERC::OnLeftDblClickMarkersList( wxMouseEvent& event )
 {
-    // Remember: OnLeftClickMarkersList was called just before
-    // and therefore m_lastMarkerFound was initialized.
-    // (NULL if not found)
+    // Remember: OnLeftClickMarkersList was called just before and therefore m_lastMarkerFound
+    // was initialized (NULL if not found).
     if( m_lastMarkerFound )
     {
         m_parent->FocusOnLocation( m_lastMarkerFound->m_Pos, false, true );
-        m_parent->SetCrossHairPosition( m_lastMarkerFound->m_Pos );
         RedrawDrawPanel();
     }
 
@@ -333,7 +332,7 @@ void DIALOG_ERC::ReBuildMatrixPanel()
     // compute the Y pos interval:
     pos.y = text_height;
 
-    if( m_initialized == false )
+    if( !m_initialized )
     {
         std::vector<wxStaticText*> labels;
 
@@ -398,7 +397,7 @@ void DIALOG_ERC::ReBuildMatrixPanel()
 
 void DIALOG_ERC::setDRCMatrixButtonState( wxBitmapButton *aButton, int aState )
 {
-    BITMAP_DEF bitmap_butt = NULL;
+    BITMAP_DEF bitmap_butt = nullptr;
     wxString tooltip;
 
     switch( aState )
@@ -416,6 +415,9 @@ void DIALOG_ERC::setDRCMatrixButtonState( wxBitmapButton *aButton, int aState )
     case ERR:
         bitmap_butt = ercerr_xpm;
         tooltip = _( "Generate error" );
+        break;
+
+    default:
         break;
     }
 
@@ -465,33 +467,13 @@ void DIALOG_ERC::ResetDefaultERCDiag( wxCommandEvent& event )
 
 void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
 {
-    int             id, level, ii, x, y;
-    wxPoint         pos;
-
-    id   = event.GetId();
-    ii   = id - ID_MATRIX_0;
+    int id = event.GetId();
+    int ii = id - ID_MATRIX_0;
+    int x = ii / PINTYPE_COUNT;
+    int y = ii % PINTYPE_COUNT;
     wxBitmapButton* butt = (wxBitmapButton*) event.GetEventObject();
-    pos  = butt->GetPosition();
 
-    x = ii / PINTYPE_COUNT; y = ii % PINTYPE_COUNT;
-
-    level = DiagErc[y][x];
-
-    //change to the next error level
-    switch( level )
-    {
-    case OK:
-        level = WAR;
-        break;
-
-    case WAR:
-        level = ERR;
-        break;
-
-    case ERR:
-        level = OK;
-        break;
-    }
+    int level = ( DiagErc[y][x] + 1 ) % 3;
 
     setDRCMatrixButtonState( butt, level );
 

@@ -71,8 +71,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
     EVT_LISTBOX( ID_FOOTPRINT_WIZARD_PAGE_LIST, FOOTPRINT_WIZARD_FRAME::ClickOnPageList )
     EVT_GRID_CMD_CELL_CHANGED( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
                                FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
-
-    EVT_MENU( ID_SET_RELATIVE_OFFSET, FOOTPRINT_WIZARD_FRAME::OnSetRelativeOffset )
 END_EVENT_TABLE()
 
 
@@ -91,8 +89,6 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     // This frame is always show modal:
     SetModal( true );
-
-    m_showAxis      = true;     // true to draw axis.
 
     // Give an icon
     wxIcon  icon;
@@ -291,13 +287,6 @@ void FOOTPRINT_WIZARD_FRAME::OnSize( wxSizeEvent& SizeEv )
         m_auimgr.Update();
 
     SizeEv.Skip();
-}
-
-
-void FOOTPRINT_WIZARD_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
-{
-    GetScreen()->m_O_Curseur = GetCrossHairPosition();
-    UpdateStatusBar();
 }
 
 

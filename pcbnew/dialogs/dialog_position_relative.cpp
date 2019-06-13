@@ -183,7 +183,7 @@ void DIALOG_POSITION_RELATIVE::OnUseUserOriginClick( wxCommandEvent& event )
 {
     PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) m_toolMgr->GetEditFrame();
 
-    m_anchor_position = frame->GetScreen()->m_O_Curseur;
+    m_anchor_position = (wxPoint) frame->GetScreen()->m_LocalOrigin;
     m_referenceInfo->SetLabel( _( "Reference location: local coordinates origin" ) );
 }
 

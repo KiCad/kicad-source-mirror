@@ -1477,7 +1477,7 @@ wxString LayerMaskDescribe( const BOARD *aBoard, LSET aMask )
 }
 
 
-void D_PAD::ImportSettingsFromMaster( const D_PAD& aMasterPad )
+void D_PAD::ImportSettingsFrom( const D_PAD& aMasterPad )
 {
     SetShape( aMasterPad.GetShape() );
     SetLayerSet( aMasterPad.GetLayerSet() );

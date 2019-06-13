@@ -109,7 +109,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH_LIB_EDITOR, _( "Library Editor" ),
         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, LIB_EDIT_FRAME_NAME )
 {
-    m_showAxis   = true;            // true to draw axis
     SetShowDeMorgan( false );
     m_DrawSpecificConvert = true;
     m_DrawSpecificUnit    = false;
@@ -147,8 +146,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     GetScreen()->m_Center = true;
     GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
 
-    SetCrossHairPosition( wxPoint( 0, 0 ) );
-
+    GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     setupTools();
@@ -263,7 +261,7 @@ double LIB_EDIT_FRAME::BestZoom()
 
     if( !part )
     {
-        SetScrollCenterPosition( wxPoint( 0, 0 ) );
+        GetGalCanvas()->GetView()->SetCenter( VECTOR2D( 0, 0 ) );
         return defaultLibraryZoom;
     }
 

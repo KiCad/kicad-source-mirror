@@ -33,6 +33,7 @@ using namespace std::placeholders;
 #include <kicad_string.h>
 #include <pgm_base.h>
 #include <kiway.h>
+#include <view/view_controls.h>
 #include <pcb_edit_frame.h>
 #include <dialog_helpers.h>
 #include <filter_reader.h>
@@ -126,7 +127,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     // so we force the ORPHANED dummy net info for all pads
     newModule->ClearAllNets();
 
-    SetCrossHairPosition( wxPoint( 0, 0 ) );
+    GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     PlaceModule( newModule );
     newModule->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
 
@@ -469,8 +470,6 @@ MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
 
 void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, bool aRecreateRatsnest )
 {
-    wxPoint newpos;
-
     if( aModule == 0 )
         return;
 
@@ -499,8 +498,7 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, bool aRecreateRatsnest )
 
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
 
-    newpos = GetCrossHairPosition();
-    aModule->SetPosition( newpos );
+    aModule->SetPosition( (wxPoint) GetGalCanvas()->GetViewControls()->GetCursorPosition() );
     aModule->ClearFlags();
 
     delete s_ModuleInitialCopy;

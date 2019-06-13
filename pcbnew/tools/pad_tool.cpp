@@ -219,7 +219,7 @@ int PAD_TOOL::pastePadProperties( const TOOL_EVENT& aEvent )
         if( item->Type() == PCB_PAD_T )
         {
             commit.Modify( item );
-            static_cast<D_PAD&>( *item ).ImportSettingsFromMaster( masterPad );
+            static_cast<D_PAD&>( *item ).ImportSettingsFrom( masterPad );
         }
     }
 
@@ -247,7 +247,7 @@ int PAD_TOOL::copyPadSettings( const TOOL_EVENT& aEvent )
         if( item->Type() == PCB_PAD_T )
         {
             const auto& selPad = static_cast<const D_PAD&>( *item );
-            masterPad.ImportSettingsFromMaster( selPad );
+            masterPad.ImportSettingsFrom( selPad );
             m_padCopied = true;
         }
     }
@@ -293,7 +293,7 @@ static void doPushPadProperties( BOARD& board, const D_PAD& aSrcPad, BOARD_COMMI
             commit.Modify( pad );
 
             // Apply source pad settings to this pad
-            pad->ImportSettingsFromMaster( aSrcPad );
+            pad->ImportSettingsFrom( aSrcPad );
         }
     }
 }

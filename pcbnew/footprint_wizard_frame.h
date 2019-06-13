@@ -179,7 +179,6 @@ private:
     void                ReCreateHToolbar() override;
     void                ReCreateVToolbar() override;
     void                ClickOnPageList( wxCommandEvent& event );
-    void                OnSetRelativeOffset( wxCommandEvent& event );
 
     void                LoadSettings( wxConfigBase* aCfg ) override;
     void                SaveSettings( wxConfigBase* aCfg ) override;

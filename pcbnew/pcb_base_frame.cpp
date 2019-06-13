@@ -601,42 +601,30 @@ void PCB_BASE_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
  */
 void PCB_BASE_FRAME::UpdateStatusBar()
 {
-    PCB_SCREEN* screen = GetScreen();
+    EDA_DRAW_FRAME::UpdateStatusBar();
+
+    BASE_SCREEN* screen = GetScreen();
 
     if( !screen )
         return;
 
     wxString line;
-    wxString locformatter;
-
-    EDA_DRAW_FRAME::UpdateStatusBar();
+    VECTOR2D cursorPos = GetGalCanvas()->GetViewControls()->GetCursorPosition();
 
     if( GetShowPolarCoords() )  // display polar coordinates
     {
-        double dx = (double)GetCrossHairPosition().x - (double)screen->m_O_Curseur.x;
-        double dy = (double)GetCrossHairPosition().y - (double)screen->m_O_Curseur.y;
-
-        double theta = ArcTangente( -dy, dx ) / 10;
-        double ro = hypot( dx, dy );
-
+        double   dx = cursorPos.x - screen->m_LocalOrigin.x;
+        double   dy = cursorPos.y - screen->m_LocalOrigin.y;
+        double   theta = RAD2DEG( atan2( -dy, dx ) );
+        double   ro = hypot( dx, dy );
         wxString formatter;
+
         switch( GetUserUnits() )
         {
-        case INCHES:
-            formatter = "r %.6f  theta %.1f";
-            break;
-
-        case MILLIMETRES:
-            formatter = "r %.6f  theta %.1f";
-            break;
-
-        case UNSCALED_UNITS:
-            formatter = "r %f  theta %f";
-            break;
-
-        case DEGREES:
-            wxASSERT( false );
-            break;
+        case INCHES:         formatter = wxT( "r %.6f  theta %.1f" ); break;
+        case MILLIMETRES:    formatter = wxT( "r %.6f  theta %.1f" ); break;
+        case UNSCALED_UNITS: formatter = wxT( "r %f  theta %f" );     break;
+        case DEGREES:        wxASSERT( false );                       break;
         }
 
         line.Printf( formatter, To_User_Unit( GetUserUnits(), ro ), theta );
@@ -645,11 +633,12 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     }
 
     // Display absolute coordinates:
-    double dXpos = To_User_Unit( GetUserUnits(), GetCrossHairPosition().x );
-    double dYpos = To_User_Unit( GetUserUnits(), GetCrossHairPosition().y );
+    double dXpos = To_User_Unit( GetUserUnits(), cursorPos.x );
+    double dYpos = To_User_Unit( GetUserUnits(), cursorPos.y );
 
     // The following sadly is an if Eeschema/if Pcbnew
     wxString absformatter;
+    wxString locformatter;
 
     switch( GetUserUnits() )
     {
@@ -679,10 +668,8 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     if( !GetShowPolarCoords() )  // display relative cartesian coordinates
     {
         // Display relative coordinates:
-        double dx = (double)GetCrossHairPosition().x - (double)screen->m_O_Curseur.x;
-        double dy = (double)GetCrossHairPosition().y - (double)screen->m_O_Curseur.y;
-        dXpos = To_User_Unit( GetUserUnits(), dx );
-        dYpos = To_User_Unit( GetUserUnits(), dy );
+        dXpos = To_User_Unit( GetUserUnits(), cursorPos.x - screen->m_LocalOrigin.x );
+        dYpos = To_User_Unit( GetUserUnits(), cursorPos.y - screen->m_LocalOrigin.y );
 
         // We already decided the formatter above
         line.Printf( locformatter, dXpos, dYpos, hypot( dXpos, dYpos ) );

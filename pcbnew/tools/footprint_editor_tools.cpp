@@ -307,7 +307,7 @@ int MODULE_EDITOR_TOOLS::ImportFootprint( const TOOL_EVENT& aEvent )
     if( !m_frame->Clear_Pcb( true ) )
         return -1;                  // this command is aborted
 
-    m_frame->SetCrossHairPosition( wxPoint( 0, 0 ) );
+    getViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     m_frame->Import_Module();
 
     if( m_frame->GetBoard()->GetFirstModule() )
@@ -380,7 +380,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
         std::unique_ptr<BOARD_ITEM> CreateItem() override
         {
             D_PAD* pad = new D_PAD( m_board->GetFirstModule() );
-            m_frame->Import_Pad_Settings( pad, false );     // use the global settings for pad
+            pad->ImportSettingsFrom( m_frame->GetDesignSettings().m_Pad_Master );
             pad->IncrementPadName( true, true );
             return std::unique_ptr<BOARD_ITEM>( pad );
         }
@@ -391,7 +391,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 
             if( pad )
             {
-                m_frame->Export_Pad_Settings( pad );
+                m_frame->GetDesignSettings().m_Pad_Master.ImportSettingsFrom( *pad );
                 pad->SetLocalCoord();
                 aCommit.Add( aItem );
                 return true;

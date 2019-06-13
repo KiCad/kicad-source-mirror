@@ -81,8 +81,6 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                                 // obviously depends on the monitor,
                                 // but this is an acceptable value
 
-    m_showAxis = false;                 // true to show X and Y axis on screen
-    m_showGridAxis = true;
     m_showBorderAndTitleBlock   = true; // true for reference drawings.
     m_originSelectChoice = 0;
     SetDrawBgColor( WHITE );            // default value, user option (WHITE/BLACK)
@@ -542,9 +540,10 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     }
 
     // Display absolute coordinates:
-    wxPoint coord = GetCrossHairPosition() - originCoord;
-    double dXpos = To_User_Unit( GetUserUnits(), coord.x*Xsign );
-    double dYpos = To_User_Unit( GetUserUnits(), coord.y*Ysign );
+    VECTOR2D cursorPos = GetGalCanvas()->GetViewControls()->GetCursorPosition();
+    VECTOR2D coord = cursorPos - originCoord;
+    double   dXpos = To_User_Unit( GetUserUnits(), coord.x * Xsign );
+    double   dYpos = To_User_Unit( GetUserUnits(), coord.y * Ysign );
 
     wxString pagesizeformatter = _( "Page size: width %.4g height %.4g" );
     wxString absformatter = wxT( "X %.4g  Y %.4g" );
@@ -572,8 +571,8 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     SetStatusText( line, 2 );
 
     // Display relative coordinates:
-    int dx = GetCrossHairPosition().x - screen->m_O_Curseur.x;
-    int dy = GetCrossHairPosition().y - screen->m_O_Curseur.y;
+    double dx = cursorPos.x - screen->m_LocalOrigin.x;
+    double dy = cursorPos.y - screen->m_LocalOrigin.y;
     dXpos = To_User_Unit( GetUserUnits(), dx * Xsign );
     dYpos = To_User_Unit( GetUserUnits(), dy * Ysign );
     line.Printf( locformatter, dXpos, dYpos );
@@ -581,7 +580,7 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
 
     // Display corner reference for coord origin
     line.Printf( _("coord origin: %s"),
-                m_originSelectBox->GetString( m_originSelectChoice ). GetData() );
+                m_originSelectBox->GetString( m_originSelectChoice ).GetData() );
     SetStatusText( line, 4 );
 
     // Display units

@@ -54,16 +54,9 @@ BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) :
     m_Grid.m_CmdId     = ID_POPUP_GRID_LEVEL_50;
     m_Center           = true;
     m_IsPrinting       = false;
-    m_ScrollPixelsPerUnitX = 1;
-    m_ScrollPixelsPerUnitY = 1;
 
     m_FlagModified     = false;     // Set when any change is made on board.
     m_FlagSave         = false;     // Used in auto save set when an auto save is required.
-}
-
-
-BASE_SCREEN::~BASE_SCREEN()
-{
 }
 
 
@@ -86,35 +79,7 @@ void BASE_SCREEN::InitDataPoints( const wxSize& aPageSizeIU )
         m_DrawOrg.y = 0;
     }
 
-    m_O_Curseur.x = m_O_Curseur.y = 0;
-}
-
-
-double BASE_SCREEN::GetScalingFactor() const
-{
-    double scale = 1.0 / GetZoom();
-    return scale;
-}
-
-
-void BASE_SCREEN::SetScalingFactor( double aScale )
-{
-    // Limit zoom to max and min allowed values:
-    double zoom = Clamp( GetMinAllowedZoom(), aScale, GetMaxAllowedZoom() );
-
-    SetZoom( zoom );
-}
-
-
-bool BASE_SCREEN::SetFirstZoom()
-{
-    return SetZoom( GetMinAllowedZoom() );
-}
-
-
-bool BASE_SCREEN::SetLastZoom()
-{
-    return SetZoom( GetMaxAllowedZoom() );
+    m_LocalOrigin = { 0, 0 };
 }
 
 
@@ -134,42 +99,6 @@ bool BASE_SCREEN::SetZoom( double iu_per_du )
     m_Zoom = iu_per_du;
 
     return true;
-}
-
-
-bool BASE_SCREEN::SetNextZoom()
-{
-    // Step must be AT LEAST 1.2
-    double target = m_Zoom * 1.2;
-
-    for( unsigned i=0; i < m_ZoomList.size();  ++i )
-    {
-        if( target < m_ZoomList[i] )
-        {
-            SetZoom( m_ZoomList[i] );
-            return true;
-        }
-    }
-
-    return false;
-}
-
-
-bool BASE_SCREEN::SetPreviousZoom()
-{
-    // Step must be AT LEAST 1.2
-    double target = m_Zoom / 1.2;
-
-    for( unsigned i = m_ZoomList.size(); i != 0;  --i )
-    {
-        if( target > m_ZoomList[i - 1] )
-        {
-            SetZoom( m_ZoomList[i - 1] );
-            return true;
-        }
-    }
-
-    return false;
 }
 
 
@@ -219,15 +148,6 @@ int BASE_SCREEN::BuildGridsChoiceList( wxArrayString& aGridsList, bool aMmFirst)
 }
 
 
-void BASE_SCREEN::SetGridList( GRIDS& gridlist )
-{
-    if( !m_grids.empty() )
-        m_grids.clear();
-
-    m_grids = gridlist;
-}
-
-
 int BASE_SCREEN::SetGrid( const wxRealPoint& size )
 {
     wxASSERT( !m_grids.empty() );
@@ -235,19 +155,19 @@ int BASE_SCREEN::SetGrid( const wxRealPoint& size )
     GRID_TYPE nearest_grid = m_grids[0];
     int gridIdx = 0;
 
-    for( unsigned i = 0; i < m_grids.size(); i++ )
+    for( GRID_TYPE& grid : m_grids )
     {
-        if( m_grids[i].m_Size == size )
+        if( grid.m_Size == size )
         {
-            m_Grid = m_grids[i];
-            return m_grids[i].m_CmdId - ID_POPUP_GRID_LEVEL_1000;
+            m_Grid = grid;
+            return grid.m_CmdId - ID_POPUP_GRID_LEVEL_1000;
         }
 
         // keep track of the nearest larger grid size, if the exact size is not found
-        if ( size.x < m_grids[i].m_Size.x )
+        if ( size.x < grid.m_Size.x )
         {
-            gridIdx = m_grids[i].m_CmdId - ID_POPUP_GRID_LEVEL_1000;
-            nearest_grid = m_grids[i];
+            gridIdx = grid.m_CmdId - ID_POPUP_GRID_LEVEL_1000;
+            nearest_grid = grid;
         }
     }
 
@@ -260,12 +180,12 @@ int BASE_SCREEN::SetGrid( int aCommandId  )
 {
     wxASSERT( !m_grids.empty() );
 
-    for( unsigned i = 0; i < m_grids.size(); i++ )
+    for( GRID_TYPE& grid : m_grids )
     {
-        if( m_grids[i].m_CmdId == aCommandId )
+        if( grid.m_CmdId == aCommandId )
         {
-            m_Grid = m_grids[i];
-            return m_grids[i].m_CmdId - ID_POPUP_GRID_LEVEL_1000;
+            m_Grid = grid;
+            return grid.m_CmdId - ID_POPUP_GRID_LEVEL_1000;
         }
     }
 
@@ -274,39 +194,29 @@ int BASE_SCREEN::SetGrid( int aCommandId  )
 }
 
 
-void BASE_SCREEN::AddGrid( const GRID_TYPE& grid )
+void BASE_SCREEN::AddGrid( const GRID_TYPE& aGrid )
 {
-    for( unsigned i = 0; i < m_grids.size(); i++ )
+    for( GRID_TYPE& existing : m_grids )
     {
-        if( m_grids[i].m_Size == grid.m_Size && grid.m_CmdId != ID_POPUP_GRID_USER )
+        if( existing.m_Size == aGrid.m_Size && aGrid.m_CmdId != ID_POPUP_GRID_USER )
         {
-            wxLogTrace( traceScreen,  "Discarding duplicate grid size( %g, %g ).",
-                        grid.m_Size.x, grid.m_Size.y );
+            wxLogTrace( traceScreen, "Discarding duplicate grid size( %g, %g ).",
+                        aGrid.m_Size.x, aGrid.m_Size.y );
             return;
         }
 
-        if( m_grids[i].m_CmdId == grid.m_CmdId )
+        if( existing.m_CmdId == aGrid.m_CmdId )
         {
             wxLogTrace( traceScreen, wxT( "Changing grid ID %d from size( %g, %g ) to " ) \
                         wxT( "size( %g, %g )." ),
-                        grid.m_CmdId, m_grids[i].m_Size.x,
-                        m_grids[i].m_Size.y, grid.m_Size.x, grid.m_Size.y );
-            m_grids[i].m_Size = grid.m_Size;
+                        aGrid.m_CmdId, existing.m_Size.x,
+                        existing.m_Size.y, aGrid.m_Size.x, aGrid.m_Size.y );
+            existing.m_Size = aGrid.m_Size;
             return;
         }
     }
 
-    m_grids.push_back( grid );
-}
-
-
-void BASE_SCREEN::AddGrid( const wxRealPoint& size, int id )
-{
-    GRID_TYPE grid;
-
-    grid.m_Size = size;
-    grid.m_CmdId = id;
-    AddGrid( grid );
+    m_grids.push_back( aGrid );
 }
 
 
@@ -336,9 +246,9 @@ GRID_TYPE& BASE_SCREEN::GetGrid( size_t aIndex )
 bool BASE_SCREEN::GridExists( int aCommandId )
 {
     // tests for grid command ID (not an index in grid list, but a wxID) exists in grid list.
-    for( unsigned i = 0; i < m_grids.size(); i++ )
+    for( GRID_TYPE& grid : m_grids)
     {
-        if( m_grids[i].m_CmdId == aCommandId )
+        if( grid.m_CmdId == aCommandId )
             return true;
     }
 
@@ -347,15 +257,10 @@ bool BASE_SCREEN::GridExists( int aCommandId )
 
 
 wxPoint BASE_SCREEN::getNearestGridPosition( const wxPoint& aPosition,
-    const wxPoint& aGridOrigin, wxRealPoint* aGridSize ) const
+    const wxPoint& aGridOrigin ) const
 {
     wxPoint     pt;
-    wxRealPoint gridSize;
-
-    if( aGridSize )
-        gridSize = *aGridSize;
-    else
-        gridSize = GetGridSize();
+    wxRealPoint gridSize = GetGridSize();
 
     double  offset = fmod( aGridOrigin.x, gridSize.x );
     int x = KiROUND( (aPosition.x - offset) / gridSize.x );
@@ -368,26 +273,6 @@ wxPoint BASE_SCREEN::getNearestGridPosition( const wxPoint& aPosition,
     pt.y = KiROUND ( y * gridSize.y + offset );
 
     return pt;
-}
-
-
-wxPoint BASE_SCREEN::getCursorPosition( bool aOnGrid, const wxPoint& aGridOrigin,
-                                        wxRealPoint* aGridSize ) const
-{
-    if( aOnGrid )
-        return getNearestGridPosition( m_crossHairPosition, aGridOrigin, aGridSize );
-
-    return m_crossHairPosition;
-}
-
-
-void BASE_SCREEN::setCrossHairPosition( const wxPoint& aPosition, const wxPoint& aGridOrigin,
-                                        bool aSnapToGrid )
-{
-    if( aSnapToGrid )
-        m_crossHairPosition = getNearestGridPosition( aPosition, aGridOrigin, NULL );
-    else
-        m_crossHairPosition = aPosition;
 }
 
 

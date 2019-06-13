@@ -99,10 +99,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_currentScreen       = NULL;
     m_toolId              = ID_NO_TOOL_SELECTED;
     m_lastDrawToolId      = ID_NO_TOOL_SELECTED;
-    m_showAxis            = false;      // true to draw axis.
     m_showBorderAndTitleBlock = false;  // true to display reference sheet.
-    m_showGridAxis        = false;      // true to draw the grid axis
-    m_showOriginAxis      = false;      // true to draw the grid origin
     m_LastGridSizeId      = 0;
     m_drawGrid            = true;       // hide/Show grid. default = show
     m_gridColor           = COLOR4D( DARKGRAY );   // Default grid color
@@ -110,7 +107,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_drawBgColor         = COLOR4D( BLACK );   // the background color of the draw canvas:
                                                 // BLACK for Pcbnew, BLACK or WHITE for eeschema
     m_MsgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight();
-    m_movingCursorWithKeyboard = false;
     m_zoomLevelCoeff      = 1.0;
     m_userUnits           = MILLIMETRES;
     m_PolarCoords         = false;
@@ -634,52 +630,9 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
 
 //-----< BASE_SCREEN API moved here >--------------------------------------------
 
-wxPoint EDA_DRAW_FRAME::GetCrossHairPosition( bool aInvertY ) const
+wxPoint EDA_DRAW_FRAME::GetNearestGridPosition( const wxPoint& aPosition ) const
 {
-    VECTOR2I cursor = GetGalCanvas()->GetViewControls()->GetCursorPosition();
-    return wxPoint( cursor.x, aInvertY ? -cursor.y : cursor.y );
-}
-
-
-void EDA_DRAW_FRAME::SetCrossHairPosition( const wxPoint& aPosition, bool aSnapToGrid )
-{
-    GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( aPosition, false );
-}
-
-
-wxPoint EDA_DRAW_FRAME::GetCursorPosition( bool , wxRealPoint*  ) const
-{
-    wxFAIL_MSG( "Obsolete; use VIEW_CONTROLS instead" );
-    return wxPoint();
-}
-
-
-wxPoint EDA_DRAW_FRAME::GetNearestGridPosition( const wxPoint& aPosition,
-                                                wxRealPoint* aGridSize ) const
-{
-    BASE_SCREEN* screen = GetScreen();  // virtual call
-    return screen->getNearestGridPosition( aPosition, GetGridOrigin(), aGridSize );
-}
-
-
-wxPoint EDA_DRAW_FRAME::RefPos( bool useMouse ) const
-{
-    BASE_SCREEN* screen = GetScreen();  // virtual call
-    return screen->refPos( useMouse );
-}
-
-
-const wxPoint& EDA_DRAW_FRAME::GetScrollCenterPosition() const
-{
-    BASE_SCREEN* screen = GetScreen();  // virtual call
-    return screen->getScrollCenterPosition();
-}
-
-
-void EDA_DRAW_FRAME::SetScrollCenterPosition( const wxPoint& aPoint )
-{
-    BASE_SCREEN* screen = GetScreen();  // virtual call
-    screen->setScrollCenterPosition( aPoint );
+    return GetScreen()->getNearestGridPosition( aPosition, GetGridOrigin() );
 }
 
 //-----</BASE_SCREEN API moved here >--------------------------------------------

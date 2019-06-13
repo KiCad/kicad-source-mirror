@@ -109,8 +109,7 @@ void DIALOG_MIGRATE_BUSES::updateUi()
         for( unsigned j = 1; j < item.labels.size(); j++ )
             old << ", " << item.labels[j];
 
-        auto i = m_migration_list->InsertItem( m_migration_list->GetItemCount(),
-                                               wxEmptyString );
+        auto i = m_migration_list->InsertItem( m_migration_list->GetItemCount(), wxEmptyString );
 
         m_migration_list->SetItem( i, 0, item.subgraph->m_sheet.PathHumanReadable() );
         m_migration_list->SetItem( i, 1, old );
@@ -184,12 +183,12 @@ void DIALOG_MIGRATE_BUSES::onItemSelected( wxListEvent& aEvent )
 
     auto pos = driver->GetPosition();
 
-    m_frame->SetCrossHairPosition( pos );
+    m_frame->GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( pos, false );
     m_frame->RedrawScreen( pos, false );
 
     m_cb_new_name->Clear();
 
-    for( auto option : m_items[sel].possible_labels )
+    for( const wxString& option : m_items[sel].possible_labels )
         m_cb_new_name->Append( option );
 
     m_cb_new_name->Select( 0 );

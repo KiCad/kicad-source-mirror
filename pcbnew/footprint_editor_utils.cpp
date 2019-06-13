@@ -86,7 +86,7 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
     if( !Clear_Pcb( true ) )
         return;
 
-    SetCrossHairPosition( wxPoint( 0, 0 ) );
+    GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     AddModuleToBoard( module );
 
     auto fp = GetBoard()->GetFirstModule();
@@ -167,7 +167,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             if( !Clear_Pcb( true ) )
                 break;
 
-            SetCrossHairPosition( wxPoint( 0, 0 ) );
+            GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
             AddModuleToBoard( module );
 
             // Initialize data relative to nets and netclasses (for a new
@@ -229,8 +229,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
                 Clear_Pcb( false );
 
-                SetCrossHairPosition( wxPoint( 0, 0 ) );
-
+                GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
                 //  Add the new object to board
                 AddModuleToBoard( module );
 
@@ -392,7 +391,7 @@ bool FOOTPRINT_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileS
     if( ! Clear_Pcb( true ) )
         return false;                  // //this command is aborted
 
-    SetCrossHairPosition( wxPoint( 0, 0 ) );
+    GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     Import_Module( aFileSet[0] );
 
     if( GetBoard()->GetFirstModule() )

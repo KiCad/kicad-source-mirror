@@ -82,7 +82,6 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
 
     // Menu (and/or hotkey) events
     EVT_MENU( wxID_EXIT, LIB_VIEW_FRAME::CloseLibraryViewer )
-    EVT_MENU( ID_SET_RELATIVE_OFFSET, LIB_VIEW_FRAME::OnSetRelativeOffset )
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
 
     EVT_UPDATE_UI( ID_LIBVIEW_SELECT_PART_NUMBER, LIB_VIEW_FRAME::onUpdateUnitChoice )
@@ -374,13 +373,6 @@ void LIB_VIEW_FRAME::OnSize( wxSizeEvent& SizeEv )
 }
 
 
-void LIB_VIEW_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
-{
-    GetScreen()->m_O_Curseur = GetCrossHairPosition();
-    UpdateStatusBar();
-}
-
-
 void LIB_VIEW_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
 {
     LIB_PART* part = GetSelectedSymbol();
@@ -414,12 +406,12 @@ void LIB_VIEW_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
 
 double LIB_VIEW_FRAME::BestZoom()
 {
-    LIB_PART*   part = NULL;
+    LIB_PART*   part = nullptr;
     double      defaultLibraryZoom = 7.33;
 
     if( m_libraryName.IsEmpty() || m_entryName.IsEmpty() )
     {
-        SetScrollCenterPosition( wxPoint( 0, 0 ) );
+        GetGalCanvas()->GetView()->SetCenter( VECTOR2D( 0, 0 ) );
         return defaultLibraryZoom;
     }
 
@@ -438,7 +430,7 @@ double LIB_VIEW_FRAME::BestZoom()
 
     if( !part )
     {
-        SetScrollCenterPosition( wxPoint( 0, 0 ) );
+        GetGalCanvas()->GetView()->SetCenter( VECTOR2D( 0, 0 ) );
         return defaultLibraryZoom;
     }
 

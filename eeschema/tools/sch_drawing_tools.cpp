@@ -201,12 +201,12 @@ int SCH_DRAWING_TOOLS::AddJunction( const TOOL_EVENT& aEvent )
     if( wire )
     {
         SEG seg( wire->GetStartPoint(), wire->GetEndPoint() );
-        VECTOR2I nearest = seg.NearestPoint( m_frame->GetCrossHairPosition() );
-        m_frame->SetCrossHairPosition( (wxPoint) nearest, false );
+        VECTOR2I nearest = seg.NearestPoint( getViewControls()->GetCursorPosition() );
+        getViewControls()->SetCrossHairCursorPosition( nearest, false );
     }
 
-    getViewControls()->WarpCursor( m_frame->GetCrossHairPosition(), true );
-    SCH_JUNCTION* junction = m_frame->AddJunction( m_frame->GetCrossHairPosition() );
+    getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
+    SCH_JUNCTION* junction = m_frame->AddJunction( (wxPoint) getViewControls()->GetCursorPosition() );
     m_selectionTool->AddItemToSel( junction );
 
     return 0;
@@ -345,7 +345,7 @@ int SCH_DRAWING_TOOLS::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTE
                                                            m_frame->GetShowFootprintPreviews());
 
                 // Restore cursor after dialog
-                getViewControls()->WarpCursor( m_frame->GetCrossHairPosition(), true );
+                getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
 
                 LIB_PART* part = sel.LibId.IsValid() ? m_frame->GetLibPart( sel.LibId ) : nullptr;
 
@@ -469,7 +469,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                     continue;
 
                 // Restore cursor after dialog
-                getViewControls()->WarpCursor( m_frame->GetCrossHairPosition(), true );
+                getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
 
                 wxString fullFilename = dlg.GetPath();
 
@@ -757,7 +757,7 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
                 }
 
                 // Restore cursor after dialog
-                getViewControls()->WarpCursor( m_frame->GetCrossHairPosition(), true );
+                getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
 
                 if( item )
                 {

@@ -184,9 +184,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, PCB_EDIT_FRAME_NAME )
 {
     m_showBorderAndTitleBlock = true;   // true to display sheet references
-    m_showAxis = false;                 // true to display X and Y axis
-    m_showOriginAxis = true;
-    m_showGridAxis = true;
     m_SelTrackWidthBox = NULL;
     m_SelViaSizeBox = NULL;
     m_SelLayerBox = NULL;

@@ -1004,9 +1004,9 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
 
     Activate();
 
-    bool    direction45 = false;    // 45 degrees only mode
-    bool    started = false;
-    bool    IsOCurseurSet = ( m_frame->GetScreen()->m_O_Curseur != wxPoint( 0, 0 ) );
+    bool     direction45 = false;    // 45 degrees only mode
+    bool     started = false;
+    bool     isLocalOriginSet = ( m_frame->GetScreen()->m_LocalOrigin != VECTOR2D( 0, 0 ) );
     VECTOR2I cursorPos = m_controls->GetMousePosition();
 
     if( aStartingPoint )
@@ -1015,7 +1015,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
         aGraphic->SetShape( (STROKE_T) aShape );
         aGraphic->SetWidth( m_lineWidth );
         aGraphic->SetLayer( getDrawingLayer() );
-        aGraphic->SetStart( wxPoint( aStartingPoint->x, aStartingPoint->y ) );
+        aGraphic->SetStart( (wxPoint) aStartingPoint.get() );
 
         cursorPos = grid.BestSnapAnchor( cursorPos, aGraphic );
         m_controls->ForceCursorPosition( true, cursorPos );
@@ -1025,8 +1025,8 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
         m_controls->SetAutoPan( true );
         m_controls->CaptureCursor( true );
 
-        if( !IsOCurseurSet )
-            m_frame->GetScreen()->m_O_Curseur = wxPoint( aStartingPoint->x, aStartingPoint->y );
+        if( !isLocalOriginSet )
+            m_frame->GetScreen()->m_LocalOrigin = aStartingPoint.get();
 
         started = true;
     }
@@ -1070,9 +1070,11 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
             preview.Clear();
             m_view->Update( &preview );
             delete aGraphic;
-            aGraphic = NULL;
-            if( !IsOCurseurSet )
-                m_frame->GetScreen()->m_O_Curseur = wxPoint( 0, 0 );
+            aGraphic = nullptr;
+
+            if( !isLocalOriginSet )
+                m_frame->GetScreen()->m_LocalOrigin = VECTOR2D( 0, 0 );
+
             break;
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
@@ -1100,8 +1102,8 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
                 aGraphic->SetEnd( (wxPoint) cursorPos );
                 aGraphic->SetLayer( getDrawingLayer() );
 
-                if( !IsOCurseurSet )
-                    m_frame->GetScreen()->m_O_Curseur = (wxPoint) cursorPos;
+                if( !isLocalOriginSet )
+                    m_frame->GetScreen()->m_LocalOrigin = cursorPos;
 
                 preview.Add( aGraphic );
                 frame()->SetMsgPanel( aGraphic );
@@ -1137,7 +1139,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
                         commit.Push( _( "Draw a line" ) );
 
                     delete aGraphic;
-                    aGraphic = NULL;
+                    aGraphic = nullptr;
                 }
 
                 preview.Clear();
@@ -1182,12 +1184,12 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
         }
         else if( evt->IsAction( &ACTIONS::resetLocalCoords ) )
         {
-            IsOCurseurSet = true;
+            isLocalOriginSet = true;
         }
     }
 
-    if( !IsOCurseurSet ) // reset the relative coordinte if it was not set before
-        m_frame->GetScreen()->m_O_Curseur = wxPoint( 0, 0 );
+    if( !isLocalOriginSet ) // reset the relative coordinte if it was not set before
+        m_frame->GetScreen()->m_LocalOrigin = VECTOR2D( 0, 0 );
 
     m_view->Remove( &preview );
     frame()->SetMsgPanel( board() );

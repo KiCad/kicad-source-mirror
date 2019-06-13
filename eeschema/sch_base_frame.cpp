@@ -186,8 +186,9 @@ void SCH_BASE_FRAME::UpdateStatusBar()
     EDA_DRAW_FRAME::UpdateStatusBar();
 
     // Display absolute coordinates:
-    double dXpos = To_User_Unit( GetUserUnits(), GetCrossHairPosition().x );
-    double dYpos = To_User_Unit( GetUserUnits(), GetCrossHairPosition().y );
+    VECTOR2D cursorPos = GetGalCanvas()->GetViewControls()->GetCursorPosition();
+    double   dXpos = To_User_Unit( GetUserUnits(), cursorPos.x );
+    double   dYpos = To_User_Unit( GetUserUnits(), cursorPos.y );
 
     if ( GetUserUnits() == MILLIMETRES )
     {
@@ -224,8 +225,8 @@ void SCH_BASE_FRAME::UpdateStatusBar()
     SetStatusText( line, 2 );
 
     // Display relative coordinates:
-    double dx = (double)GetCrossHairPosition().x - (double)screen->m_O_Curseur.x;
-    double dy = (double)GetCrossHairPosition().y - (double)screen->m_O_Curseur.y;
+    double dx = cursorPos.x - screen->m_LocalOrigin.x;
+    double dy = cursorPos.y - screen->m_LocalOrigin.y;
 
     dXpos = To_User_Unit( GetUserUnits(), dx );
     dYpos = To_User_Unit( GetUserUnits(), dy );

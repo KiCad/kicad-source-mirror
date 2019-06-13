@@ -387,14 +387,14 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL*
         if( sheetPin->GetText().IsEmpty() || (response == wxID_CANCEL) )
         {
             delete sheetPin;
-            return NULL;
+            return nullptr;
         }
     }
 
     m_lastSheetPinType = sheetPin->GetShape();
     m_lastSheetPinTextSize = sheetPin->GetTextSize();
 
-    sheetPin->SetPosition( GetCrossHairPosition() );
+    sheetPin->SetPosition( (wxPoint) GetGalCanvas()->GetViewControls()->GetCursorPosition() );
 
     return sheetPin;
 }
