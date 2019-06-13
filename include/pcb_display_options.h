@@ -79,10 +79,11 @@ public:
                                      * 3 show netnames on tracks and pads
                                      */
 
-    bool m_DisplayDrawItemsFill;    // How to display graphic items on board ( sketch/ filled )
+    bool m_DisplayDrawItemsFill;        // How to display graphic items on board ( sketch/ filled )
     bool m_ContrastModeDisplay;
-    int  m_MaxLinksShowed;          // in track creation: number of hairwires shown
-    bool m_Show_Module_Ratsnest;    // When moving a footprint: allows displaying a ratsnest
+    int  m_MaxLinksShowed;              // in track creation: number of hairwires shown
+    bool m_ShowModuleRatsnest;          // When moving a footprint: allows displaying a ratsnest
+    bool m_ShowGlobalRatsnest;          // If true, show all
     bool m_DisplayRatsnestLinesCurved;  // Airwires can be drawn as straight lines (false)
                                         // or curved lines (true)
 

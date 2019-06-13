@@ -1388,7 +1388,7 @@ int PCB_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 }
 
 
-static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, BOARD* aBoard, const VECTOR2D& aPosition )
+static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, BOARD* aBoard, bool aShow, const VECTOR2D& aPosition )
 {
     auto selectionTool = aToolMgr->GetTool<SELECTION_TOOL>();
 
@@ -1408,7 +1408,7 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, BOARD* aBoard, const VECT
         for( auto mod : aBoard->Modules() )
         {
             for( auto pad : mod->Pads() )
-                pad->SetLocalRatsnestVisible( aBoard->IsElementVisible( LAYER_RATSNEST ) );
+                pad->SetLocalRatsnestVisible( aShow );
         }
     }
     else
@@ -1443,20 +1443,20 @@ int PCB_EDITOR_CONTROL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
 
     auto picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
     auto board = getModel<BOARD>();
+    auto opt = displayOptions();
     wxASSERT( picker );
     wxASSERT( board );
 
     m_frame->SetToolID( ID_LOCAL_RATSNEST_BUTT, wxCURSOR_PENCIL,
                         _( "Pick Components for Local Ratsnest" ) );
-    picker->SetClickHandler( std::bind( showLocalRatsnest, m_toolMgr, board, _1 ) );
-    picker->SetFinalizeHandler( [ board ]( int aCondition ){
-        auto vis = board->IsElementVisible( LAYER_RATSNEST );
-
+    picker->SetClickHandler( std::bind(
+            showLocalRatsnest, m_toolMgr, board, opt->m_ShowGlobalRatsnest, _1 ) );
+    picker->SetFinalizeHandler( [ board, opt ]( int aCondition ){
         if( aCondition != PCBNEW_PICKER_TOOL::END_ACTIVATE )
         {
             for( auto mod : board->Modules() )
                 for( auto pad : mod->Pads() )
-                    pad->SetLocalRatsnestVisible( vis );
+                    pad->SetLocalRatsnestVisible( opt->m_ShowGlobalRatsnest );
         }
         } );
 
@@ -1533,7 +1533,9 @@ void PCB_EDITOR_CONTROL::calculateSelectionRatsnest()
     {
         auto board_item = static_cast<BOARD_CONNECTED_ITEM*>( item );
 
-        if( board_item->Type() != PCB_MODULE_T && board_item->GetLocalRatsnestVisible() )
+        if( board_item->Type() != PCB_MODULE_T
+                && ( board_item->GetLocalRatsnestVisible()
+                        || displayOptions()->m_ShowModuleRatsnest ) )
         {
             items.push_back( board_item );
         }
@@ -1541,7 +1543,7 @@ void PCB_EDITOR_CONTROL::calculateSelectionRatsnest()
         {
             for( auto pad : static_cast<MODULE*>( item )->Pads() )
             {
-                if( pad->GetLocalRatsnestVisible() )
+                if( pad->GetLocalRatsnestVisible() || displayOptions()->m_ShowModuleRatsnest )
                     items.push_back( pad );
             }
         }

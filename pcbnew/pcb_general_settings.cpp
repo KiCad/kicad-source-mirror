@@ -50,7 +50,6 @@ PCB_GENERAL_SETTINGS::PCB_GENERAL_SETTINGS( FRAME_T aFrameType )
     case FRAME_PCB_MODULE_EDITOR:
         Add( "Use45DegreeGraphicSegments", &g_Use45DegreeGraphicSegments, false);
         Add( "MagneticPads", reinterpret_cast<int*>( &g_MagneticPads ), CAPTURE_CURSOR_IN_TRACK_TOOL );
-        Add( "DragSelects", &g_DragSelects, true );
         break;
 
     default:

@@ -633,7 +633,6 @@ bool EDIT_TOOL::changeTrackWidthOnClick( const PCBNEW_SELECTION& selection )
 int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
-    VECTOR2I originalCursorPos = getViewControls()->GetCursorPosition();
 
     m_selectionTool->ClearIfOutside( getViewControls()->GetCursorPosition() );
 

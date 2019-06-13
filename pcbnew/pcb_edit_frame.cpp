@@ -661,13 +661,10 @@ void PCB_EDIT_FRAME::onBoardLoaded()
     syncLayerWidgetLayer();
     syncRenderStates();
 
+    SetElementVisibility( LAYER_RATSNEST,
+            static_cast<PCB_DISPLAY_OPTIONS*>( GetDisplayOptions() )->m_ShowGlobalRatsnest );
     // Update the tracks / vias available sizes list:
     ReCreateAuxiliaryToolbar();
-
-    // Update the RATSNEST items, which were not loaded at the time
-    // BOARD::SetVisibleElements() was called from within any PLUGIN.
-    // See case LAYER_RATSNEST: in BOARD::SetElementVisibility()
-    GetBoard()->SetVisibleElements( GetBoard()->GetVisibleElements() );
 
     // Display the loaded board:
     Zoom_Automatique( false );
@@ -713,7 +710,12 @@ bool PCB_EDIT_FRAME::IsElementVisible( GAL_LAYER_ID aElement ) const
 
 void PCB_EDIT_FRAME::SetElementVisibility( GAL_LAYER_ID aElement, bool aNewState )
 {
-    GetGalCanvas()->GetView()->SetLayerVisible( aElement , aNewState );
+    // Force the RATSNEST visible
+    if( aElement == LAYER_RATSNEST )
+        GetGalCanvas()->GetView()->SetLayerVisible( aElement, true );
+    else
+        GetGalCanvas()->GetView()->SetLayerVisible( aElement , aNewState );
+
     GetBoard()->SetElementVisibility( aElement, aNewState );
     m_Layers->SetRenderState( aElement, aNewState );
 }

@@ -45,6 +45,7 @@
 #include <menus_helpers.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <pcb_painter.h>
+#include <pcb_view.h>
 #include <class_board.h>
 #include <pcb_layer_widget.h>
 #include <pcbnew.h>
@@ -406,10 +407,16 @@ void PCB_LAYER_WIDGET::ReFillRender()
             if( renderRow.color != COLOR4D::UNSPECIFIED )       // does this row show a color?
             {
                 // this window frame must have an established BOARD, i.e. after SetBoard()
-                renderRow.color = myframe->Settings().Colors().GetItemColor( static_cast<GAL_LAYER_ID>( renderRow.id ) );
+                renderRow.color = myframe->Settings().Colors().GetItemColor(
+                        static_cast<GAL_LAYER_ID>( renderRow.id ) );
             }
 
-            renderRow.state = board->IsElementVisible( static_cast<GAL_LAYER_ID>( renderRow.id ) );
+            if( renderRow.id == LAYER_RATSNEST )
+                renderRow.state =
+                        static_cast<PCB_DISPLAY_OPTIONS*>( myframe->GetDisplayOptions() )->m_ShowGlobalRatsnest;
+            else
+                renderRow.state = board->IsElementVisible(
+                        static_cast<GAL_LAYER_ID>( renderRow.id ) );
         }
 
         AppendRenderRow( renderRow );
@@ -709,6 +716,13 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
         // don't touch the layers. ratsnest is enabled on per-item basis.
         galCanvas->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
         galCanvas->GetView()->SetLayerVisible( aId, true );
+
+        if( myframe->IsType( FRAME_PCB ) )
+        {
+            auto opt = static_cast<PCB_DISPLAY_OPTIONS*>( myframe->GetDisplayOptions() );
+            opt->m_ShowGlobalRatsnest = isEnabled;
+            static_cast<KIGFX::PCB_VIEW*>( galCanvas->GetView() )->UpdateDisplayOptions( opt );
+        }
     }
     else
         galCanvas->GetView()->SetLayerVisible( aId, isEnabled );

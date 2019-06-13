@@ -290,8 +290,12 @@ int PCBNEW_CONTROL::ToggleRatsnest( const TOOL_EVENT& aEvent )
 
     if( aEvent.IsAction( &PCB_ACTIONS::showRatsnest ) )
     {
-        PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) m_frame;
-        frame->SetElementVisibility( LAYER_RATSNEST, !frame->IsElementVisible( LAYER_RATSNEST ) );
+        // N.B. Do not disable the Ratsnest layer here.  We use it for local ratsnest
+        Flip( opts->m_ShowGlobalRatsnest );
+        view()->UpdateDisplayOptions( opts );
+        getEditFrame<PCB_EDIT_FRAME>()->SetElementVisibility( LAYER_RATSNEST,
+                opts->m_ShowGlobalRatsnest );
+
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::ratsnestLineMode ) )
     {

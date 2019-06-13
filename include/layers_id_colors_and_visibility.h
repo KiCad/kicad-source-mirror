@@ -317,7 +317,8 @@ enum GERBVIEW_LAYER_ID: int
                  ( 1 << GAL_LAYER_INDEX( LAYER_VIAS_HOLES ) ) +\
                  ( 1 << GAL_LAYER_INDEX( LAYER_DRC ) ) +\
                  ( 1 << GAL_LAYER_INDEX( LAYER_SELECT_OVERLAY ) ) +\
-                 ( 1 << GAL_LAYER_INDEX( LAYER_GP_OVERLAY ) ) )
+                 ( 1 << GAL_LAYER_INDEX( LAYER_GP_OVERLAY ) ) +\
+                 ( 1 << GAL_LAYER_INDEX( LAYER_RATSNEST ) ) )
 
 
 /// A sequence of layers, a sequence provides a certain order.

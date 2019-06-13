@@ -41,9 +41,15 @@ PANEL_PCBNEW_SETTINGS::PANEL_PCBNEW_SETTINGS( PCB_EDIT_FRAME* aFrame, PAGED_DIAL
 
 bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
 {
+    const PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*) m_Frame->GetDisplayOptions();
+
     /* Set display options */
     m_PolarDisplay->SetSelection( m_Frame->GetShowPolarCoords() ? 1 : 0 );
     m_UnitsSelection->SetSelection( m_Frame->GetUserUnits() == INCHES ? 0 : 1 );
+    m_OptDisplayCurvedRatsnestLines->SetValue( displ_opts->m_DisplayRatsnestLinesCurved );
+    m_showGlobalRatsnest->SetValue( displ_opts->m_ShowGlobalRatsnest );
+    m_showSelectedRatsnest->SetValue( displ_opts->m_ShowModuleRatsnest );
+    m_OptDisplayCurvedRatsnestLines->SetValue( displ_opts->m_DisplayRatsnestLinesCurved );
 
     wxString rotationAngle;
     rotationAngle = AngleToStringDegrees( (double)m_Frame->GetRotationAngle() );
@@ -86,7 +92,15 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataFromWindow()
     KIGFX::PCB_PAINTER*         painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
 
+    displ_opts->m_DisplayRatsnestLinesCurved = m_OptDisplayCurvedRatsnestLines->GetValue();
+    displ_opts->m_ShowGlobalRatsnest = m_showGlobalRatsnest->GetValue();
+    displ_opts->m_ShowModuleRatsnest = m_showSelectedRatsnest->GetValue();
+
     settings->LoadDisplayOptions( displ_opts, m_Frame->ShowPageLimits() );
+    view->RecacheAllItems();
+    view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+
+    m_Frame->GetGalCanvas()->Refresh();
 
     return true;
 }

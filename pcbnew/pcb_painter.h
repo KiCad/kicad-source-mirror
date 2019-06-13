@@ -166,6 +166,11 @@ public:
         return m_curvedRatsnestlines;
     }
 
+    inline bool GetGlobalRatsnestLinesEnabled() const
+    {
+        return m_globalRatsnestlines;
+    }
+
 protected:
     ///> Flag determining if items on a given layer should be drawn as an outline or a filled item
     bool    m_sketchMode[GAL_LAYER_ID_END];
@@ -196,6 +201,9 @@ protected:
 
     ///> Flag determining if ratsnest lines should be drawn curved
     bool    m_curvedRatsnestlines = true;
+
+    ///> Flag determining if ratsnest lines are shown by default
+    bool    m_globalRatsnestlines = true;
 
     ///> Maximum font size for netnames (and other dynamically shown strings)
     static const double MAX_FONT_SIZE;

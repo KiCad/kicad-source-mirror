@@ -126,11 +126,11 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             bool enable =  !sourceNode->GetNoLine() && !targetNode->GetNoLine();
             bool show;
 
-            // If the ratsnest layer is currently enabled, the local ratsnest
+            // If the global ratsnest is currently enabled, the local ratsnest
             // should be easy to turn off, so either element can disable it
-            // If the layer is off, the local ratsnest should be easy to turn on
+            // If the global ratsnest is disabled, the local ratsnest should be easy to turn on
             // so either element can enable it.
-            if( sourceNode->Parent()->GetBoard()->IsElementVisible( LAYER_RATSNEST ) )
+            if( rs->GetGlobalRatsnestLinesEnabled() )
                 show = sourceNode->Parent()->GetLocalRatsnestVisible() &&
                        targetNode->Parent()->GetLocalRatsnestVisible();
             else

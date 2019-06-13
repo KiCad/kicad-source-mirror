@@ -52,7 +52,8 @@ PCB_DISPLAY_OPTIONS::PCB_DISPLAY_OPTIONS()
                                          * 3 show netnames on tracks and pads */
     m_DisplayDrawItemsFill    = FILLED;
     m_ContrastModeDisplay     = false;
-    m_MaxLinksShowed   = 3;             // in track creation: number of hairwires shown
-    m_Show_Module_Ratsnest  = true;     // When moving a footprint: allows displaying a ratsnest
+    m_MaxLinksShowed          = 3;        // in track creation: number of hairwires shown
+    m_ShowModuleRatsnest      = true;     // When moving a footprint: allows displaying a ratsnest
     m_DisplayRatsnestLinesCurved = false;
+    m_ShowGlobalRatsnest = true;
 }

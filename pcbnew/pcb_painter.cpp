@@ -139,6 +139,7 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS* aOption
     m_sketchFpGfx       = !aOptions->m_DisplayModEdgeFill;
     m_sketchFpTxtfx     = !aOptions->m_DisplayModTextFill;
     m_curvedRatsnestlines = aOptions->m_DisplayRatsnestLinesCurved;
+    m_globalRatsnestlines = aOptions->m_ShowGlobalRatsnest;
 
     // Whether to draw tracks, vias & pads filled or as outlines
     m_sketchMode[LAYER_PADS_TH]      = !aOptions->m_DisplayPadFill;

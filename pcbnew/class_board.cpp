@@ -486,17 +486,8 @@ void BOARD::SetElementVisibility( GAL_LAYER_ID aLayer, bool isEnabled )
     {
     case LAYER_RATSNEST:
     {
-        bool visible = IsElementVisible( LAYER_RATSNEST );
-        // we must clear or set the CH_VISIBLE flags to hide/show ratsnest
         // because we have a tool to show/hide ratsnest relative to a pad or a module
         // so the hide/show option is a per item selection
-
-        for( unsigned int net = 1 /* skip "No Net" at [0] */; net < GetNetCount(); net++ )
-        {
-            auto rn = GetConnectivity()->GetRatsnestForNet( net );
-            if( rn )
-                rn->SetVisible( visible );
-        }
 
         for( auto track : Tracks() )
             track->SetLocalRatsnestVisible( isEnabled );

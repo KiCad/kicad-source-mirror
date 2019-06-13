@@ -65,7 +65,6 @@ bool PANEL_PCBNEW_DISPLAY_OPTIONS::TransferDataToWindow()
     m_OptDisplayPadNumber->SetValue( displ_opts->m_DisplayPadNum );
     m_OptDisplayPadNoConn->SetValue( m_frame->IsElementVisible( LAYER_NO_CONNECTS ) );
     m_ShowNetNamesOption->SetSelection( displ_opts->m_DisplayNetNamesMode );
-    m_OptDisplayCurvedRatsnestLines->SetValue( displ_opts->m_DisplayRatsnestLinesCurved );
 
     m_galOptsPanel->TransferDataToWindow();
 
@@ -89,7 +88,6 @@ bool PANEL_PCBNEW_DISPLAY_OPTIONS::TransferDataFromWindow()
     m_frame->SetElementVisibility( LAYER_NO_CONNECTS, m_OptDisplayPadNoConn->GetValue() );
 
     displ_opts->m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
-    displ_opts->m_DisplayRatsnestLinesCurved = m_OptDisplayCurvedRatsnestLines->GetValue();
 
     m_galOptsPanel->TransferDataFromWindow();
 
@@ -97,11 +95,12 @@ bool PANEL_PCBNEW_DISPLAY_OPTIONS::TransferDataFromWindow()
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
     KIGFX::PCB_PAINTER* painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
+
     settings->LoadDisplayOptions( displ_opts, m_frame->ShowPageLimits() );
+    m_frame->SetElementVisibility( LAYER_RATSNEST, displ_opts->m_ShowGlobalRatsnest );
+
     view->RecacheAllItems();
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-
-    m_frame->GetGalCanvas()->Refresh();
 
     return true;
 }

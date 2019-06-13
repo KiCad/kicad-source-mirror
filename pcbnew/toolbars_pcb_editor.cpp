@@ -699,7 +699,6 @@ void PCB_EDIT_FRAME::SyncToolbars()
     PCB_DISPLAY_OPTIONS*        opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
     int                         zoneMode = opts->m_DisplayZonesMode;
-    bool                        ratsnestShown = GetBoard()->IsElementVisible( LAYER_RATSNEST );
 
     m_mainToolBar->Toggle( ACTIONS::save, GetScreen() && GetScreen()->IsModify() );
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
@@ -721,7 +720,7 @@ void PCB_EDIT_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( ACTIONS::imperialUnits,            GetUserUnits() == INCHES );
     m_optionsToolBar->Toggle( ACTIONS::togglePolarCoords,        GetShowPolarCoords() );
     m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,        !galOpts.m_fullscreenCursor );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::showRatsnest,         ratsnestShown );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::showRatsnest,         opts->m_ShowGlobalRatsnest );
     m_optionsToolBar->Toggle( PCB_ACTIONS::ratsnestLineMode,     opts->m_DisplayRatsnestLinesCurved );
     m_optionsToolBar->Toggle( PCB_ACTIONS::showLayersManager,    LayerManagerShown() );
     m_optionsToolBar->Toggle( PCB_ACTIONS::showMicrowaveToolbar, MicrowaveToolbarShown() );

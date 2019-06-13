@@ -177,6 +177,10 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
                                                        &displ_opts->m_DisplayZonesMode, 0, 0, 2 ) );
         m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "CurvedRatsnestLines" ),
                                                         &displ_opts->m_DisplayRatsnestLinesCurved, false ) );
+        m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "ShowRatsnestLines" ),
+                                                        &displ_opts->m_ShowGlobalRatsnest, true) );
+        m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "ShowRatsnestModuleLines" ),
+                                                        &displ_opts->m_ShowModuleRatsnest, true) );
 
         // Miscellaneous:
         m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "RotationAngle" ),
