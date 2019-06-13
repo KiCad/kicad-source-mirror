@@ -48,7 +48,7 @@ function( make_lexer outputTarget inputFile outHeaderFile outCppFile enum )
         )
 
     add_custom_target( ${outputTarget}
-        DEPENDS ${inputFile}
+        DEPENDS ${outHeaderFile} ${outCppFile}
                 ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
         )
 
@@ -56,7 +56,7 @@ function( make_lexer outputTarget inputFile outHeaderFile outCppFile enum )
     # are known to depend on the generated outHeader.
     foreach( extra_arg ${ARGN} )
         set_source_files_properties( ${extra_arg}
-            PROPERTIES OBJECT_DEPENDS ${outputTarget}
+            PROPERTIES OBJECT_DEPENDS ${outHeaderFile}
             )
     endforeach()
 
