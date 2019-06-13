@@ -94,7 +94,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->SetTitle( _( "Export" ) );
     submenuExport->SetIcon( export_xpm );
 
-    submenuExport->AddItem( PCB_ACTIONS::exportFootprint, modifiedDocumentCondition );
+    submenuExport->AddItem( PCB_ACTIONS::exportFootprint, haveFootprintCondition );
     submenuExport->AddItem( ID_MODEDIT_SAVE_PNG, _( "Export View as &PNG..." ),
                             _( "Create a PNG file from the current view" ),
                             plot_xpm,               SELECTION_CONDITIONS::ShowAlways );
