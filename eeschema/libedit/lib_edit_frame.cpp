@@ -410,6 +410,18 @@ void LIB_EDIT_FRAME::OnToggleSearchTree( wxCommandEvent& event )
 }
 
 
+void LIB_EDIT_FRAME::FreezeSearchTree()
+{
+    m_libMgr->GetAdapter()->Freeze();
+}
+
+
+void LIB_EDIT_FRAME::ThawSearchTree()
+{
+    m_libMgr->GetAdapter()->Thaw();
+}
+
+
 void LIB_EDIT_FRAME::OnEditSymbolLibTable( wxCommandEvent& aEvent )
 {
     m_libMgr->GetAdapter()->Freeze();
@@ -1727,6 +1739,7 @@ bool LIB_EDIT_FRAME::isCurrentPart( const LIB_ID& aLibId ) const
 
 void LIB_EDIT_FRAME::emptyScreen()
 {
+    m_treePane->GetLibTree()->Unselect();
     SetCurLib( wxEmptyString );
     SetCurPart( nullptr );
     m_lastDrawItem = nullptr;
@@ -1867,4 +1880,12 @@ void LIB_EDIT_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
 
     // Set options specific to symbol editor (axies are always enabled):
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
+}
+
+
+bool LIB_EDIT_FRAME::HasLibModifications() const
+{
+    wxCHECK( m_libMgr, false );
+
+    return m_libMgr->HasModifications();
 }

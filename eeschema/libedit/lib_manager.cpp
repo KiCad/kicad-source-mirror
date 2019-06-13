@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -36,15 +37,17 @@
 #include <list>
 
 
-LIB_MANAGER::LIB_MANAGER( LIB_EDIT_FRAME& aFrame )
-    : m_frame( aFrame ), m_syncHash( 0 )
+LIB_MANAGER::LIB_MANAGER( LIB_EDIT_FRAME& aFrame ) :
+        m_frame( aFrame ),
+        m_syncHash( 0 )
 {
-    m_adapter = SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( this );
+    m_adapter = SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Create( &aFrame, this );
     m_adapter->ShowUnits( false );
 }
 
 
-void LIB_MANAGER::Sync( bool aForce, std::function<void(int, int, const wxString&)> aProgressCallback )
+void LIB_MANAGER::Sync( bool aForce,
+                        std::function<void( int, int, const wxString& )> aProgressCallback )
 {
     int libTableHash = symTable()->GetModifyHash();
 
@@ -53,6 +56,18 @@ void LIB_MANAGER::Sync( bool aForce, std::function<void(int, int, const wxString
         getAdapter()->Sync( aForce, aProgressCallback );
         m_syncHash = libTableHash;
     }
+}
+
+
+bool LIB_MANAGER::HasModifications() const
+{
+    for( auto lib : m_libs )
+    {
+        if( lib.second.IsModified() )
+            return true;
+    }
+
+    return false;
 }
 
 
@@ -506,6 +521,32 @@ bool LIB_MANAGER::RevertLibrary( const wxString& aLibrary )
 }
 
 
+bool LIB_MANAGER::RevertAll()
+{
+    bool retv = true;
+
+    // Nothing to revert.
+    if( GetHash() == 0 )
+        return true;
+
+    for( auto lib : m_libs )
+    {
+        if( !lib.second.IsModified() )
+            continue;
+
+        for( auto buffer : lib.second.GetBuffers() )
+        {
+            if( !buffer->IsModified() )
+                continue;
+
+            RevertPart( lib.first, buffer->GetOriginal()->GetName() );
+        }
+    }
+
+    return retv;
+}
+
+
 bool LIB_MANAGER::RemovePart( const wxString& aAlias, const wxString& aLibrary )
 {
     LIB_BUFFER& libBuf = getLibraryBuffer( aLibrary );
@@ -560,7 +601,8 @@ bool LIB_MANAGER::PartExists( const wxString& aAlias, const wxString& aLibrary )
     try
     {
         alias = symTable()->LoadSymbol( aLibrary, aAlias );
-    } catch( IO_ERROR& )
+    }
+    catch( IO_ERROR& )
     {
         // checking if certain symbol exists, so its absence is perfectly fine
     }
@@ -579,6 +621,7 @@ bool LIB_MANAGER::LibraryExists( const wxString& aLibrary, bool aCheckEnabled ) 
 
     return symTable()->HasLibrary( aLibrary, aCheckEnabled );
 }
+
 
 wxString LIB_MANAGER::GetUniqueLibraryName() const
 {
@@ -686,8 +729,8 @@ std::set<LIB_PART*> LIB_MANAGER::getOriginalParts( const wxString& aLibrary )
     }
     catch( const IO_ERROR& e )
     {
-        DisplayErrorMessage( &m_frame, wxString::Format( _( "Cannot enumerate library \"%s\"" ),
-                                                         aLibrary ),
+        DisplayErrorMessage( &m_frame,
+                             wxString::Format( _( "Cannot enumerate library \"%s\"" ), aLibrary ),
                              e.What() );
     }
 
@@ -713,8 +756,9 @@ LIB_MANAGER::LIB_BUFFER& LIB_MANAGER::getLibraryBuffer( const wxString& aLibrary
 }
 
 
-LIB_MANAGER::PART_BUFFER::PART_BUFFER( LIB_PART* aPart, std::unique_ptr<SCH_SCREEN> aScreen )
-    : m_screen( std::move( aScreen ) ), m_part( aPart )
+LIB_MANAGER::PART_BUFFER::PART_BUFFER( LIB_PART* aPart, std::unique_ptr<SCH_SCREEN> aScreen ) :
+        m_screen( std::move( aScreen ) ),
+        m_part( aPart )
 {
     m_original = new LIB_PART( *aPart );
 }
@@ -795,7 +839,8 @@ bool LIB_MANAGER::LIB_BUFFER::CreateBuffer( LIB_PART* aCopy, SCH_SCREEN* aScreen
 }
 
 
-bool LIB_MANAGER::LIB_BUFFER::UpdateBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf, LIB_PART* aCopy )
+bool LIB_MANAGER::LIB_BUFFER::UpdateBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf,
+                                            LIB_PART* aCopy )
 {
     bool ret = true;
 
@@ -826,7 +871,8 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
     wxCHECK( aPartBuf, false );
     LIB_PART* part = aPartBuf->GetPart();
     wxCHECK( part, false );
-    wxCHECK( aLibTable->SaveSymbol( m_libName, new LIB_PART( *part ) ) == SYMBOL_LIB_TABLE::SAVE_OK, false );
+    wxCHECK( aLibTable->SaveSymbol( m_libName,
+                                    new LIB_PART( *part ) ) == SYMBOL_LIB_TABLE::SAVE_OK, false );
 
     aPartBuf->SetOriginal( new LIB_PART( *part ) );
     ++m_hash;
@@ -862,7 +908,8 @@ bool LIB_MANAGER::LIB_BUFFER::addAliases( PART_BUFFER::PTR aPartBuf )
     for( unsigned int i = 0; i < part->GetAliasCount(); ++i )
     {
         bool newAlias;
-        std::tie( std::ignore, newAlias ) = m_aliases.emplace( part->GetAlias( i )->GetName(), aPartBuf );
+        std::tie( std::ignore, newAlias ) = m_aliases.emplace( part->GetAlias( i )->GetName(),
+                                                               aPartBuf );
 
         if( !newAlias )     // Overwrite check
         {

@@ -159,6 +159,16 @@ public:
      */
     void OnSwitchCanvas( wxCommandEvent& aEvent ) override;
 
+    /**
+     * Check if any pending libraries have been modified.
+     *
+     * This only checks for modified libraries.  If a new symbol was created and
+     * modified and no libraries have been modified, the return value will be false.
+     *
+     * @return True if there are any pending library modifications.
+     */
+    bool HasLibModifications() const;
+
     /** The nickname of the current library being edited and empty string if none. */
     wxString GetCurLib() const;
 
@@ -293,12 +303,18 @@ public:
     /**
      * Reverts unsaved changes in a part, restoring to the last saved state.
      */
-    void OnRevert( wxCommandEvent& aEvent );
+    void OnRevert( wxCommandEvent& aEvent ) { Revert(); }
 
     /**
      * Removes a part from the working copy of a library.
      */
     void OnRemovePart( wxCommandEvent& aEvent );
+    void Revert( bool aConfirm = true );
+    void RevertAll();
+
+    void DeletePartFromLibrary();
+
+    void CopyPartToClipboard();
 
     void OnDuplicatePart( wxCommandEvent& aEvent );
     void OnCopyCutPart( wxCommandEvent& aEvent );
@@ -312,6 +328,8 @@ public:
     void OnShowElectricalType( wxCommandEvent& event );
 
     void OnToggleSearchTree( wxCommandEvent& event );
+    void FreezeSearchTree();
+    void ThawSearchTree();
 
     void OnEditSymbolLibTable( wxCommandEvent& aEvent ) override;
 
@@ -757,6 +775,9 @@ public:
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 
+    ///> Restores the empty editor screen, without any part or library selected.
+    void emptyScreen();
+
 private:
     ///> Helper screen used when no part is loaded
     SCH_SCREEN* m_dummyScreen;
@@ -799,9 +820,6 @@ private:
 
     ///> Returns true if \a aLibId is an alias for the editor screen part.
     bool isCurrentPart( const LIB_ID& aLibId ) const;
-
-    ///> Restores the empty editor screen, without any part or library selected.
-    void emptyScreen();
 
     ///> Renames LIB_PART aliases to avoid conflicts before adding a component to a library
     void fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibrary );

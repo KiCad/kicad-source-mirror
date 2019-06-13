@@ -703,12 +703,58 @@ size_t PANEL_SYM_LIB_TABLE::m_pageNdx = 0;
 
 void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
 {
+    SCH_EDIT_FRAME*   schEditor = (SCH_EDIT_FRAME*) aKiway->Player( FRAME_SCH, false );
+    LIB_EDIT_FRAME*   libEditor = (LIB_EDIT_FRAME*) aKiway->Player( FRAME_SCH_LIB_EDITOR, false );
+    LIB_VIEW_FRAME*   libViewer = (LIB_VIEW_FRAME*) aKiway->Player( FRAME_SCH_VIEWER, false );
+
     SYMBOL_LIB_TABLE* globalTable = &SYMBOL_LIB_TABLE::GetGlobalLibTable();
     wxString          globalTablePath = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
     SYMBOL_LIB_TABLE* projectTable = aKiway->Prj().SchSymbolLibTable();
     wxString          projectPath = aKiway->Prj().GetProjectPath();
     wxFileName        projectTableFn( projectPath, SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
     wxString          msg;
+    wxString          currentLib;
+
+    if( libEditor )
+    {
+        currentLib = libEditor->GetCurLib();
+
+        // This prevents an ugly crash on OSX (https://bugs.launchpad.net/kicad/+bug/1765286)
+        libEditor->FreezeSearchTree();
+
+        // Check the symbol library editor for modifications to give the user a chance to save
+        // or revert changes before allowing changes to the library table.
+        if( libEditor->HasLibModifications() )
+        {
+            wxMessageDialog saveDlg( aParent,
+                                     _( "Modifications have been made to one or more symbol "
+                                        "libraries.  Changes must be saved or discared before "
+                                        "the symbol library table can be modified." ),
+                                     _( "Warning" ),
+                                     wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxCENTER );
+            saveDlg.SetYesNoCancelLabels( wxMessageDialog::ButtonLabel( _( "Save Changes" ) ),
+                                          wxMessageDialog::ButtonLabel(_( "Discard Changes" ) ),
+                                          wxMessageDialog::ButtonLabel( _( "Cancel" ) ) );
+
+            int resp = saveDlg.ShowModal();
+
+            if( resp == wxID_CANCEL )
+            {
+                libEditor->ThawSearchTree();
+                return;
+            }
+
+            if( resp == wxID_YES )
+            {
+                wxCommandEvent dummy;
+                libEditor->OnSaveAll( dummy );
+            }
+            else
+            {
+                libEditor->RevertAll();
+            }
+        }
+    }
 
     DIALOG_EDIT_LIBRARY_TABLES dlg( aParent, _( "Symbol Libraries" ) );
 
@@ -717,7 +763,12 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
                                                aKiway->Prj().GetProjectPath() ) );
 
     if( dlg.ShowModal() == wxID_CANCEL )
+    {
+        if( libEditor )
+            libEditor->ThawSearchTree();
+
         return;
+    }
 
     if( dlg.m_GlobalTableChanged )
     {
@@ -750,20 +801,25 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
 
     schematic.UpdateSymbolLinks( true );    // Update all symbol library links for all sheets.
 
-    SCH_EDIT_FRAME* schEditor = (SCH_EDIT_FRAME*) aKiway->Player( FRAME_SCH, false );
-
     if( schEditor )
         schEditor->SyncView();
 
-    auto editor = (LIB_EDIT_FRAME*) aKiway->Player( FRAME_SCH_LIB_EDITOR, false );
+    if( libEditor )
+    {
+        // Check if the currently selected symbol library been removed or disabled.
+        if( !currentLib.empty()
+          && !projectTable->HasLibrary( currentLib, true ) )
+        {
+            libEditor->SetCurLib( wxEmptyString );
+            libEditor->emptyScreen();
+        }
 
-    if( editor )
-        editor->SyncLibraries( true );
+        libEditor->SyncLibraries( true );
+        libEditor->ThawSearchTree();
+    }
 
-    LIB_VIEW_FRAME* viewer = (LIB_VIEW_FRAME*) aKiway->Player( FRAME_SCH_VIEWER, false );
-
-    if( viewer )
-        viewer->ReCreateListLib();
+    if( libViewer )
+        libViewer->ReCreateListLib();
 }
 
 

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -59,8 +60,10 @@ public:
 
     int GetHash() const;
 
+    bool HasModifications() const;
+
     /**
-     * Retruns a library hash value to determine if it has changed.
+     * Returns a library hash value to determine if it has changed.
      *
      * For buffered libraries, it returns a number corresponding to the number
      * of modifications. For original libraries, hash is computed basing on the
@@ -216,6 +219,13 @@ public:
      * @return True on success, false otherwise.
      */
     bool RevertLibrary( const wxString& aLibrary );
+
+    /**
+     * Revert all pending changes.
+     *
+     * @return True if all changes successfully reverted.
+     */
+    bool RevertAll();
 
     /**
      * Returns a library name that is not currently in use.
@@ -385,7 +395,7 @@ private:
         ///> to disk as well, depending on the row properties.
         bool SaveBuffer( PART_BUFFER::PTR aPartBuf, SYMBOL_LIB_TABLE* aLibTable );
 
-        ///> Saves stored modificatiosn using a plugin. aBuffer decides whether the changes
+        ///> Saves stored modifications using a plugin. aBuffer decides whether the changes
         ///> should be cached or stored directly to the disk (for SCH_LEGACY_PLUGIN).
         bool SaveBuffer( PART_BUFFER::PTR aPartBuf, SCH_PLUGIN* aPlugin, bool aBuffer );
 
@@ -449,7 +459,10 @@ private:
     wxString m_currentPart;
 
     SYMBOL_TREE_SYNCHRONIZING_ADAPTER::PTR m_adapter;
-    SYMBOL_TREE_SYNCHRONIZING_ADAPTER* getAdapter() { return static_cast<SYMBOL_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() ); }
+    SYMBOL_TREE_SYNCHRONIZING_ADAPTER* getAdapter()
+    {
+        return static_cast<SYMBOL_TREE_SYNCHRONIZING_ADAPTER*>( m_adapter.get() );
+    }
 };
 
 #endif /* LIB_MANAGER_H */
