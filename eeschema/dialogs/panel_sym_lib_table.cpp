@@ -713,10 +713,43 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
     wxString          projectPath = aKiway->Prj().GetProjectPath();
     wxFileName        projectTableFn( projectPath, SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
     wxString          msg;
+    wxString          currentLib;
 
-    // This prevents an ugly crash on OSX (https://bugs.launchpad.net/kicad/+bug/1765286)
     if( libEditor )
+    {
+        currentLib = libEditor->GetCurLib();
+
+        // This prevents an ugly crash on OSX (https://bugs.launchpad.net/kicad/+bug/1765286)
         libEditor->FreezeSearchTree();
+
+        // Check the symbol library editor for modifications to give the user a chance to save
+        // or revert changes before allowing changes to the library table.
+        if( libEditor->HasLibModifications() )
+        {
+            wxMessageDialog saveDlg( aParent,
+                                     _( "Modifications have been made to one or more symbol "
+                                        "libraries.  Changes must be saved or discared before "
+                                        "the symbol library table can be modified." ),
+                                     _( "Warning" ),
+                                     wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxCENTER );
+            saveDlg.SetYesNoCancelLabels( wxMessageDialog::ButtonLabel( _( "Save Changes" ) ),
+                                          wxMessageDialog::ButtonLabel(_( "Discard Changes" ) ),
+                                          wxMessageDialog::ButtonLabel( _( "Cancel" ) ) );
+
+            int resp = saveDlg.ShowModal();
+
+            if( resp == wxID_CANCEL )
+            {
+                libEditor->ThawSearchTree();
+                return;
+            }
+
+            if( resp == wxID_YES )
+                libEditor->SaveAll();
+            else
+                libEditor->RevertAll();
+        }
+    }
 
     DIALOG_EDIT_LIBRARY_TABLES dlg( aParent, _( "Symbol Libraries" ) );
 
@@ -725,7 +758,12 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
                                                aKiway->Prj().GetProjectPath() ) );
 
     if( dlg.ShowModal() == wxID_CANCEL )
+    {
+        if( libEditor )
+            libEditor->ThawSearchTree();
+
         return;
+    }
 
     if( dlg.m_GlobalTableChanged )
     {
@@ -763,6 +801,14 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
 
     if( libEditor )
     {
+        // Check if the currently selected symbol library been removed or disabled.
+        if( !currentLib.empty()
+          && !projectTable->HasLibrary( currentLib, true ) )
+        {
+            libEditor->SetCurLib( wxEmptyString );
+            libEditor->emptyScreen();
+        }
+
         libEditor->SyncLibraries( true );
         libEditor->ThawSearchTree();
     }

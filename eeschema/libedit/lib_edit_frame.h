@@ -131,6 +131,16 @@ public:
      */
     void SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) override;
 
+    /**
+     * Check if any pending libraries have been modified.
+     *
+     * This only checks for modified libraries.  If a new symbol was created and
+     * modified and no libraries have been modified, the return value will be false.
+     *
+     * @return True if there are any pending library modifications.
+     */
+    bool HasLibModifications() const;
+
     /** The nickname of the current library being edited and empty string if none. */
     wxString GetCurLib() const;
 
@@ -232,10 +242,11 @@ public:
     /**
      * Reverts unsaved changes in a part, restoring to the last saved state.
      */
-    void Revert();
+    void Revert( bool aConfirm = true );
+    void RevertAll();
 
     void DeletePartFromLibrary();
-    
+
     void CopyPartToClipboard();
 
     void LoadPart( const wxString& aLibrary, const wxString& aPart, int Unit );
@@ -467,6 +478,9 @@ public:
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 
+    ///> Restores the empty editor screen, without any part or library selected.
+    void emptyScreen();
+
 private:
     ///> Helper screen used when no part is loaded
     SCH_SCREEN* m_dummyScreen;
@@ -506,9 +520,6 @@ private:
 
     ///> Returns true if \a aLibId is an alias for the editor screen part.
     bool isCurrentPart( const LIB_ID& aLibId ) const;
-
-    ///> Restores the empty editor screen, without any part or library selected.
-    void emptyScreen();
 
     ///> Renames LIB_PART aliases to avoid conflicts before adding a component to a library
     void fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibrary );

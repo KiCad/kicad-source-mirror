@@ -196,7 +196,7 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, in
 }
 
 /**
- * Synchronise screen settings from a current screen into another screen.
+ * Synchronize screen settings from a current screen into another screen.
  *
  * This can be used, for example, when loading a new screen into a frame,
  * but you want the new screen to inherit some settings (e.g. grids) from the
@@ -205,7 +205,7 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, in
  * @param aCurrentScreen    the existing frame screen
  * @param aIncomingScreen   a screen that is intended to replace the current screen
  */
-static void synchronizeLibEditScreenSettings( const SCH_SCREEN& aCurrentScreen, 
+static void synchronizeLibEditScreenSettings( const SCH_SCREEN& aCurrentScreen,
                                               SCH_SCREEN& aIncomingScreen )
 {
     aIncomingScreen.SetGrid( aCurrentScreen.GetGridSize() );
@@ -648,7 +648,7 @@ void LIB_EDIT_FRAME::fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibr
 }
 
 
-void LIB_EDIT_FRAME::Revert()
+void LIB_EDIT_FRAME::Revert( bool aConfirm )
 {
     LIB_ID libId = getTargetLibId();
     const wxString& libName = libId.GetLibNickname();
@@ -657,7 +657,7 @@ void LIB_EDIT_FRAME::Revert()
     wxString msg = wxString::Format( _( "Revert \"%s\" to last version saved?" ),
                                      partName.IsEmpty() ? libName : partName );
 
-    if( !ConfirmRevertDialog( this, msg ) )
+    if( aConfirm && !ConfirmRevertDialog( this, msg ) )
         return;
 
     bool reload_currentPart = false;
@@ -701,6 +701,15 @@ void LIB_EDIT_FRAME::Revert()
 
     m_treePane->Refresh();
     refreshSchematic();
+}
+
+
+void LIB_EDIT_FRAME::RevertAll()
+{
+    wxCHECK_RET( m_libMgr, "Library manager object not created." );
+
+    Revert( false );
+    m_libMgr->RevertAll();
 }
 
 
@@ -854,5 +863,3 @@ bool LIB_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
 
     return true;
 }
-
-

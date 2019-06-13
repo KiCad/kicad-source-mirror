@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -61,7 +62,8 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::IsContainer( const wxDataViewItem& aItem
 
 #define PROGRESS_INTERVAL_MILLIS 120
 
-void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( bool aForce, std::function<void(int, int, const wxString&)> aProgressCallback )
+void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( bool aForce,
+        std::function<void( int, int, const wxString& )> aProgressCallback )
 {
     wxLongLong nextUpdate = wxGetUTCTimeMillis() + (PROGRESS_INTERVAL_MILLIS / 2);
 
@@ -84,7 +86,11 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( bool aForce, std::function<void(in
             nextUpdate = wxGetUTCTimeMillis() + PROGRESS_INTERVAL_MILLIS;
         }
 
-        if( !m_libMgr->LibraryExists( name, true ) )
+        // There is a bug in LIB_MANAGER::LibraryExists() that uses the buffered modified
+        // libraries before the symbol library table which prevents the library from being
+        // removed from the tree control.
+        if( !m_libMgr->LibraryExists( name, true )
+          || !m_frame->Prj().SchSymbolLibTable()->HasLibrary( name, true ) )
         {
             it = deleteLibrary( it );
             continue;
@@ -146,7 +152,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNo
     }
     else if( hashIt->second != m_libMgr->GetLibraryHash( aLibNode.Name ) )
     {
-        // update an existing libary
+        // update an existing library
         std::list<LIB_ALIAS*> aliases = m_libMgr->GetAliases( aLibNode.Name );
 
         // remove the common part from the aliases list
@@ -209,11 +215,11 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
     case 0:
         aVariant = node->Name;
 
-        // mark modified libs with an asterix
+        // mark modified libs with an asterisk
         if( node->Type == LIB_TREE_NODE::LIB && m_libMgr->IsLibraryModified( node->Name ) )
             aVariant = node->Name + " *";
 
-        // mark modified parts with an asterix
+        // mark modified parts with an aster-ix
         if( node->Type == LIB_TREE_NODE::LIBID
                 && m_libMgr->IsPartModified( node->Name, node->Parent->Name ) )
             aVariant = node->Name + " *";
@@ -256,46 +262,44 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
 
     switch( node->Type )
     {
-        case LIB_TREE_NODE::LIB:
-            // mark modified libs with bold font
-            aAttr.SetBold( m_libMgr->IsLibraryModified( node->Name ) );
+    case LIB_TREE_NODE::LIB:
+        // mark modified libs with bold font
+        aAttr.SetBold( m_libMgr->IsLibraryModified( node->Name ) );
 
 #ifdef __WXGTK__
-            // The native wxGTK+ impl ignores background colour, so set the text colour instead.
-            // This works reasonably well in dark themes, and quite poorly in light ones....
-            if( node->Name == m_libMgr->GetCurrentLib() )
-                aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+        // The native wxGTK+ impl ignores background colour, so set the text colour instead.
+        // This works reasonably well in dark themes, and quite poorly in light ones....
+        if( node->Name == m_libMgr->GetCurrentLib() )
+            aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 #else
-            // mark the current library with background color
-            if( node->Name == m_libMgr->GetCurrentLib() )
-                aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+        // mark the current library with background color
+        if( node->Name == m_libMgr->GetCurrentLib() )
+            aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 #endif
-            break;
+        break;
 
-        case LIB_TREE_NODE::LIBID:
-            // mark modified part with bold font
-            aAttr.SetBold( m_libMgr->IsPartModified( node->Name, node->Parent->Name ) );
+    case LIB_TREE_NODE::LIBID:
+        // mark modified part with bold font
+        aAttr.SetBold( m_libMgr->IsPartModified( node->Name, node->Parent->Name ) );
 
-            // mark aliases with italic font
-            aAttr.SetItalic( !node->IsRoot );
+        // mark aliases with italic font
+        aAttr.SetItalic( !node->IsRoot );
 
 #ifdef __WXGTK__
-            // The native wxGTK+ impl ignores background colour, so set the text colour instead.
-            // This works reasonably well in dark themes, and quite poorly in light ones....
-            if( node->LibId == m_libMgr->GetCurrentLibId() )
-                aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+        // The native wxGTK+ impl ignores background colour, so set the text colour instead.
+        // This works reasonably well in dark themes, and quite poorly in light ones....
+        if( node->LibId == m_libMgr->GetCurrentLibId() )
+            aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 #else
-            // mark the current part with background color
-            if( node->LibId == m_libMgr->GetCurrentLibId() )
-                aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+        // mark the current part with background color
+        if( node->LibId == m_libMgr->GetCurrentLibId() )
+            aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 #endif
-            break;
+        break;
 
-        default:
-            return false;
+    default:
+        return false;
     }
 
     return true;
 }
-
-

@@ -152,7 +152,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     setupTools();
-    
+
     m_libMgr = new LIB_MANAGER( *this );
     SyncLibraries( true );
     m_treePane = new SYMBOL_TREE_PANE( this, m_libMgr );
@@ -580,7 +580,7 @@ LIB_ID LIB_EDIT_FRAME::GetTreeLIBID( int* aUnit ) const
 LIB_PART* LIB_EDIT_FRAME::getTargetPart() const
 {
     LIB_ID libId = GetTreeLIBID();
-    
+
     if( libId.IsValid() )
     {
         LIB_ALIAS* alias = m_libMgr->GetAlias( libId.GetLibItemName(), libId.GetLibNickname() );
@@ -733,6 +733,7 @@ bool LIB_EDIT_FRAME::isCurrentPart( const LIB_ID& aLibId ) const
 
 void LIB_EDIT_FRAME::emptyScreen()
 {
+    m_treePane->GetLibTree()->Unselect();
     SetCurLib( wxEmptyString );
     SetCurPart( nullptr );
     SetScreen( m_dummyScreen );
@@ -875,3 +876,10 @@ void LIB_EDIT_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
 }
 
+
+bool LIB_EDIT_FRAME::HasLibModifications() const
+{
+    wxCHECK( m_libMgr, false );
+
+    return m_libMgr->HasModifications();
+}
