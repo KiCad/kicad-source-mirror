@@ -563,6 +563,13 @@ make_lexer(
     ${PROJECT_SOURCE_DIR}/include/lib_table_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/lib_table_keywords.cpp
     LIB_TABLE_T
+
+    # These files consume *_lexer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/fp_lib_table.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib_table_base.cpp
+    ${PROJECT_SOURCE_DIR}/pcbnew/dialogs/panel_fp_lib_table.cpp
+    ${PROJECT_SOURCE_DIR}/eeschema/symbol_lib_table.cpp
+    ${PROJECT_SOURCE_DIR}/eeschema/dialogs/panel_sym_lib_table.cpp
     )
 
 add_dependencies( common lib_table_lexer_source_files )
