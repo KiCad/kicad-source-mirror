@@ -330,6 +330,11 @@ bool DXF_PLOTTER::StartPlot()
                  style_name[i], i < 2 ? 0 : DXF_OBLIQUE_ANGLE );
     }
 
+    EDA_COLOR_T numLayers = NBCOLORS;
+
+    // If printing in monochrome, only output the black layer
+    if( !GetColorMode() )
+        numLayers = static_cast<EDA_COLOR_T>( 1 );
 
     // Layer table - one layer per color
     fprintf( outputFile,
@@ -340,7 +345,7 @@ bool DXF_PLOTTER::StartPlot()
              "  2\n"
              "LAYER\n"
              "  70\n"
-             "%d\n", NBCOLORS );
+             "%d\n", numLayers );
 
     /* The layer/colors palette. The acad/DXF palette is divided in 3 zones:
 
@@ -349,7 +354,7 @@ bool DXF_PLOTTER::StartPlot()
        - Greys (251 - 255)
      */
 
-    for( EDA_COLOR_T i = BLACK; i < NBCOLORS; i = NextColor(i) )
+    for( EDA_COLOR_T i = BLACK; i < numLayers; i = NextColor(i) )
     {
         fprintf( outputFile,
                  "  0\n"
