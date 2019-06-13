@@ -21,7 +21,7 @@
 #  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #
 
-cmake_minimum_required( VERSION 2.8.12 FATAL_ERROR )
+cmake_minimum_required( VERSION 3.0.2 FATAL_ERROR )
 # because of http://public.kitware.com/Bug/view.php?id=10395
 
 # See https://gitlab.kitware.com/cmake/cmake/issues/15943
