@@ -25,6 +25,7 @@
 #define BITMAP2COMPONENT_H
 
 #include <geometry/shape_poly_set.h>
+#include <potracelib.h>
 
 // for consistency this enum should conform to the
 // indices in m_radioBoxFormat from bitmap2cmp_gui.cpp

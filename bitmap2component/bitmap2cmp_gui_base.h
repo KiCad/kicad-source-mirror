@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -7,31 +7,34 @@
 
 #pragma once
 
-#include <wx/artprov.h>
-#include <wx/xrc/xmlres.h>
-#include <wx/intl.h>
 #include "kiway_player.h"
-#include <wx/scrolwin.h>
-#include <wx/gdicmn.h>
-#include <wx/font.h>
-#include <wx/colour.h>
-#include <wx/settings.h>
-#include <wx/string.h>
+#include <wx/artprov.h>
 #include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
-#include <wx/notebook.h>
-#include <wx/stattext.h>
-#include <wx/textctrl.h>
-#include <wx/sizer.h>
-#include <wx/statbox.h>
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
-#include <wx/radiobox.h>
-#include <wx/slider.h>
 #include <wx/checkbox.h>
-#include <wx/panel.h>
-#include <wx/statusbr.h>
+#include <wx/choice.h>
+#include <wx/colour.h>
+#include <wx/font.h>
 #include <wx/frame.h>
+#include <wx/gdicmn.h>
+#include <wx/icon.h>
+#include <wx/image.h>
+#include <wx/intl.h>
+#include <wx/notebook.h>
+#include <wx/panel.h>
+#include <wx/radiobox.h>
+#include <wx/scrolwin.h>
+#include <wx/settings.h>
+#include <wx/sizer.h>
+#include <wx/slider.h>
+#include <wx/statbox.h>
+#include <wx/stattext.h>
+#include <wx/statusbr.h>
+#include <wx/string.h>
+#include <wx/textctrl.h>
+#include <wx/valtext.h>
+#include <wx/xrc/xmlres.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -53,17 +56,21 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_SizeXValue;
 		wxStaticText* m_SizeYValue;
 		wxStaticText* m_SizePixUnits;
-		wxStaticText* m_staticTextSize1;
-		wxStaticText* m_SizeXValue_mm;
-		wxStaticText* m_SizeYValue_mm;
-		wxStaticText* m_Size_mmxUnits;
+		wxStaticText* m_staticTextDPI;
+		wxStaticText* m_InputXValueDPI;
+		wxStaticText* m_InputYValueDPI;
+		wxStaticText* m_DPIUnit;
 		wxStaticText* m_staticTextBPP;
 		wxStaticText* m_BPPValue;
 		wxStaticText* m_BPPunits;
+		wxStaticText* m_BPPunits1;
+		wxStaticText* m_BPPunits2;
+		wxBitmapButton* m_AspectRatioLockButton;
+		wxStaticText* m_BPPunits3;
 		wxStaticText* m_staticTextBPI;
-		wxTextCtrl* m_DPIValueX;
-		wxTextCtrl* m_DPIValueY;
-		wxStaticText* m_DPI_Units;
+		wxTextCtrl* m_UnitSizeX;
+		wxTextCtrl* m_UnitSizeY;
+		wxChoice* m_PixelUnit;
 		wxButton* m_buttonLoad;
 		wxButton* m_buttonExportFile;
 		wxButton* m_buttonExportClipboard;
@@ -78,10 +85,20 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 		virtual void OnPaintInit( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnPaintGreyscale( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnPaintBW( wxPaintEvent& event ) { event.Skip(); }
-		virtual void UpdatePPITextValueX( wxMouseEvent& event ) { event.Skip(); }
-		virtual void OnResolutionChange( wxCommandEvent& event ) { event.Skip(); }
-		virtual void UpdatePPITextValueY( wxMouseEvent& event ) { event.Skip(); }
-		virtual void OnLoadFile( wxCommandEvent& event ) { event.Skip(); }
+		virtual void ToggleAspectRatioLock( wxCommandEvent& event ) { event.Skip(); }
+        virtual void OnSizeChangeX( wxCommandEvent& event )
+        {
+            event.Skip();
+        }
+        virtual void OnSizeChangeY( wxCommandEvent& event )
+        {
+            event.Skip();
+        }
+        virtual void OnSizeUnitChange( wxCommandEvent& event )
+        {
+            event.Skip();
+        }
+        virtual void OnLoadFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExportToFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExportToClipboard( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFormatChange( wxCommandEvent& event ) { event.Skip(); }
@@ -90,8 +107,9 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 
 
 	public:
+        wxString m_NumericValidator;
 
-		BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Bitmap to Component Converter"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 733,616 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxTAB_TRAVERSAL );
+        BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Bitmap to Component Converter"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 746,616 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxTAB_TRAVERSAL );
 
 		~BM2CMP_FRAME_BASE();
 

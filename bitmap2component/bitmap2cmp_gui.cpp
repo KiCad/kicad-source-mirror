@@ -22,21 +22,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <macros.h>
-#include <wx/clipbrd.h>
-#include <pgm_base.h>
-#include <confirm.h>
-#include <gestfich.h>
-#include <wildcards_and_files_ext.h>
+#include "bitmap2cmp_gui.h"
+#include "bitmap2component.h"
 #include <bitmap_io.h>
 #include <bitmaps.h>
 #include <build_version.h>
-#include <kiway.h>
+#include <confirm.h>
+#include <fctsys.h>
+#include <gestfich.h>
 #include <kiface_i.h>
-#include <wx/rawbmp.h>
+#include <kiway.h>
+#include <macros.h>
+#include <pgm_base.h>
 #include <potracelib.h>
-#include "bitmap2component.h"
+#include <wildcards_and_files_ext.h>
+#include <wx/clipbrd.h>
+#include <wx/rawbmp.h>
 
 #include "bitmap2cmp_gui_base.h"
 
@@ -52,103 +53,57 @@
 #define KEYWORD_BINARY_THRESHOLD    wxT( "Threshold" )
 #define KEYWORD_BW_NEGATIVE         wxT( "Negative_choice" )
 
-#define DEFAULT_DPI 300     // Default resolution in Bit per inches
+//Default value and unit for input
+#define DEFAULT_SIZE_VALUE 10
+#define DEFAULT_SIZE_UNIT MM
 
-
-/**
- * Class BM2CMP_FRAME_BASE
- * is the main frame for this application
- */
-class BM2CMP_FRAME : public BM2CMP_FRAME_BASE
+IMAGE_SIZE::IMAGE_SIZE()
 {
-private:
-    wxImage         m_Pict_Image;
-    wxBitmap        m_Pict_Bitmap;
-    wxImage         m_Greyscale_Image;
-    wxBitmap        m_Greyscale_Bitmap;
-    wxImage         m_NB_Image;
-    wxBitmap        m_BN_Bitmap;
-    wxSize          m_imageDPI;     // The initial image resolution. When unknown,
-                                    // set to DEFAULT_DPI x DEFAULT_DPI per Inch
-    bool            m_Negative;
-    wxString        m_BitmapFileName;
-    wxString        m_ConvertedFileName;
-    wxSize          m_frameSize;
-    wxPoint         m_framePos;
-    std::unique_ptr<wxConfigBase> m_config;
-    bool            m_exportToClipboard;
+    m_value = 0;
+    m_value = MM;
+}
 
-public:
-    BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent );
-    ~BM2CMP_FRAME();
+void IMAGE_SIZE::Set( float aValue, UNIT aUnit )
+{
+    m_value = aValue;
+    m_unit = aUnit;
+}
 
-    // overload KIWAY_PLAYER virtual
-    bool OpenProjectFiles( const std::vector<wxString>& aFilenames, int aCtl=0 ) override;
+void IMAGE_SIZE::SetInputResolution( int aResolution )
+{
+    m_originalResolution = aResolution;
+}
 
-private:
 
-    // Event handlers
-    void OnPaintInit( wxPaintEvent& event ) override;
-    void OnPaintGreyscale( wxPaintEvent& event ) override;
-    void OnPaintBW( wxPaintEvent& event ) override;
-    void OnLoadFile( wxCommandEvent& event ) override;
-    void OnExportToFile( wxCommandEvent& event ) override;
-    void OnExportToClipboard( wxCommandEvent& event ) override;
+float IMAGE_SIZE::GetValue()
+{
+    return m_value;
+}
 
-    /**
-     * Generate a schematic library which contains one component:
-     * the logo
-     */
-    void exportEeschemaFormat();
-
-    /**
-     * Generate a module in S expr format
-     */
-    void exportPcbnewFormat();
-
-    /**
-     * Generate a postscript file
-     */
-    void exportPostScriptFormat();
-
-    /**
-     * Generate a file suitable to be copied into a page layout
-     * description file (.kicad_wks file
-     */
-    void OnExportLogo();
-
-    void Binarize( double aThreshold );     // aThreshold = 0.0 (black level) to 1.0 (white level)
-    void OnNegativeClicked( wxCommandEvent& event ) override;
-    void OnThresholdChange( wxScrollEvent& event ) override;
-    void OnResolutionChange( wxCommandEvent& event ) override;
-
-    // called when texts controls which handle the image resolution
-    // lose the focus, to ensure the right values are displayed
-    // because the m_imageDPI are clipped to acceptable values, and
-    // the text displayed could be differ during text editing
-    // We are using ChangeValue here to avoid generating a wxEVT_TEXT event.
-    void UpdateDPITextValueX( wxMouseEvent& event )
+int IMAGE_SIZE::GetOutputDPI()
+{
+    int outputDPI;
+    if( m_unit == MM )
     {
-        m_DPIValueX->ChangeValue( wxString::Format( wxT( "%d" ), m_imageDPI.x ) );
+        outputDPI = m_originalResolution / ( m_value / 25.4 );
     }
 
-    void UpdateDPITextValueY( wxMouseEvent& event )
+    else if( m_unit == INCH )
     {
-        m_DPIValueY->ChangeValue( wxString::Format( wxT( "%d" ), m_imageDPI.y ) );
+        outputDPI = m_originalResolution / ( m_value );
     }
 
-    void NegateGreyscaleImage( );
-    /**
-     * generate a export data of the current bitmap.
-     * @param aOutput is a string buffer to fill with data
-     * @param aFormat is the format to generate
-     */
-    void ExportToBuffer( std::string&aOutput, OUTPUT_FMT_ID aFormat );
+    else if( m_unit == MILS )
+    {
+        outputDPI = m_originalResolution / ( m_value / 1000 );
+    }
 
-    void updateImageInfo();
-    void OnFormatChange( wxCommandEvent& event ) override;
-    void exportBitmap( OUTPUT_FMT_ID aFormat );
-};
+    else
+    {
+        outputDPI = m_value;
+    }
+    return outputDPI;
+}
 
 
 BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
@@ -172,6 +127,7 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_Negative = tmp != 0;
     m_checkNegative->SetValue( m_Negative );
     m_exportToClipboard = false;
+    m_AspectRatioLocked = false;
 
     if( m_config->Read( KEYWORD_LAST_FORMAT, &tmp ) )
     {
@@ -194,6 +150,23 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
             m_radio_PCBLayer->SetSelection( tmp );
     }
 
+    for( auto const& it : m_unitMap )
+    {
+        m_PixelUnit->Append( it.second );
+    }
+    m_PixelUnit->SetSelection( DEFAULT_SIZE_UNIT );
+
+    m_UnitSizeX->ChangeValue( wxString::Format( wxT( "%d" ), DEFAULT_SIZE_VALUE ) );
+    m_UnitSizeY->ChangeValue( wxString::Format( wxT( "%d" ), DEFAULT_SIZE_VALUE ) );
+
+    m_outputSizeX.Set( DEFAULT_SIZE_VALUE, UNIT::DEFAULT_SIZE_UNIT );
+    m_outputSizeY.Set( DEFAULT_SIZE_VALUE, UNIT::DEFAULT_SIZE_UNIT );
+
+    //Set icon for aspect ratio
+    m_AspectRatioLocked = true;
+    m_AspectRatio = 1;
+    m_AspectRatioLockButton->SetBitmap( KiBitmap( locked_xpm ) );
+
     // Give an icon
     wxIcon icon;
     icon.CopyFromBitmap( KiBitmap( icon_bitmap2component_xpm ) );
@@ -206,7 +179,6 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_buttonExportFile->Enable( false );
     m_buttonExportClipboard->Enable( false );
 
-    m_imageDPI.x = m_imageDPI.y = DEFAULT_DPI;  // Default resolution in Bit per inches
 
     if ( m_framePos == wxDefaultPosition )
         Centre();
@@ -340,12 +312,17 @@ bool BM2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int 
     int h  = m_Pict_Bitmap.GetHeight();
     int w  = m_Pict_Bitmap.GetWidth();
 
+    m_outputSizeX.SetInputResolution( w );
+    m_outputSizeY.SetInputResolution( h );
+    m_AspectRatio = (float) w / (float) h;
+
     // Determine image resolution in DPI (does not existing in all formats).
     // the resolution can be given in bit per inches or bit per cm in file
-    m_imageDPI.x = m_Pict_Image.GetOptionInt( wxIMAGE_OPTION_RESOLUTIONX );
-    m_imageDPI.y = m_Pict_Image.GetOptionInt( wxIMAGE_OPTION_RESOLUTIONY );
 
-    if( m_imageDPI.x > 1 && m_imageDPI.y > 1 )
+    int imageDPIx = m_Pict_Image.GetOptionInt( wxIMAGE_OPTION_RESOLUTIONX );
+    int imageDPIy = m_Pict_Image.GetOptionInt( wxIMAGE_OPTION_RESOLUTIONY );
+
+    if( imageDPIx > 1 && imageDPIy > 1 )
     {
         if( m_Pict_Image.GetOptionInt( wxIMAGE_OPTION_RESOLUTIONUNIT ) == wxIMAGE_RESOLUTION_CM )
         {
@@ -353,17 +330,22 @@ bool BM2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int 
             // experience shows adding 1.27 to the resolution converted in dpi
             // before convert to int value reduce the conversion error
             // but it is not perfect
-            m_imageDPI.x = m_imageDPI.x * 2.54 + 1.27;
-            m_imageDPI.y = m_imageDPI.y * 2.54 + 1.27;
+            imageDPIx = imageDPIx * 2.54 + 1.27;
+            imageDPIy = imageDPIy * 2.54 + 1.27;
         }
     }
     else    // fallback to the default value
-        m_imageDPI.x = m_imageDPI.y = DEFAULT_DPI;
+    {
+        imageDPIx = imageDPIy = 0;
+    }
 
-    // Display image info:
-    // We are using ChangeValue here to avoid generating a wxEVT_TEXT event.
-    m_DPIValueX->ChangeValue( wxString::Format( wxT( "%d" ), m_imageDPI.x ) );
-    m_DPIValueY->ChangeValue( wxString::Format( wxT( "%d" ), m_imageDPI.y ) );
+    m_InputXValueDPI->SetLabel( wxString::Format( wxT( "%d" ), imageDPIx ) );
+    m_InputYValueDPI->SetLabel( wxString::Format( wxT( "%d" ), imageDPIy ) );
+
+    //Update display to keep aspectratio
+    auto fakeEvent = wxCommandEvent();
+    OnSizeChangeX( fakeEvent );
+
     updateImageInfo();
 
     m_InitialPicturePanel->SetVirtualSize( w, h );
@@ -408,40 +390,78 @@ void BM2CMP_FRAME::updateImageInfo()
     // Note: the image resolution text controls are not modified
     // here, to avoid a race between text change when entered by user and
     // a text change if it is modified here.
-    int h  = m_Pict_Bitmap.GetHeight();
-    int w  = m_Pict_Bitmap.GetWidth();
-    int nb = m_Pict_Bitmap.GetDepth();
 
-    m_SizeXValue->SetLabel( wxString::Format( wxT( "%d" ), w ) );
-    m_SizeYValue->SetLabel( wxString::Format( wxT( "%d" ), h ) );
-    m_BPPValue->SetLabel( wxString::Format( wxT( "%d" ), nb ) );
+    if( m_Pict_Bitmap.IsOk() )
+    {
+        int h = m_Pict_Bitmap.GetHeight();
+        int w = m_Pict_Bitmap.GetWidth();
+        int nb = m_Pict_Bitmap.GetDepth();
 
-    m_SizeXValue_mm->SetLabel( wxString::Format( wxT( "%.1f" ),
-        (double) w / m_imageDPI.x * 25.4 ) );
-    m_SizeYValue_mm->SetLabel( wxString::Format( wxT( "%.1f" ),
-        (double) h / m_imageDPI.y * 25.4 ) );
+        m_SizeXValue->SetLabel( wxString::Format( wxT( "%d" ), w ) );
+        m_SizeYValue->SetLabel( wxString::Format( wxT( "%d" ), h ) );
+        m_BPPValue->SetLabel( wxString::Format( wxT( "%d" ), nb ) );
+    }
 }
 
 
-void BM2CMP_FRAME::OnResolutionChange( wxCommandEvent& event )
+void BM2CMP_FRAME::OnSizeChangeX( wxCommandEvent& event )
 {
-    long tmp;
+    double setSize;
+    if( m_UnitSizeX->GetValue().ToDouble( &setSize ) )
+    {
+        m_outputSizeX.Set( setSize, (UNIT) m_PixelUnit->GetSelection() );
 
-    if( m_DPIValueX->GetValue().ToLong( &tmp ) )
-        m_imageDPI.x = tmp;
-
-    if(  m_DPIValueY->GetValue().ToLong( &tmp ) )
-        m_imageDPI.y = tmp;
-
-    if( m_imageDPI.x < 32 )
-        m_imageDPI.x = 32;
-
-    if( m_imageDPI.y < 32 )
-        m_imageDPI.y = 32;
-
+        if( m_AspectRatioLocked )
+        {
+            double calculatedY = setSize / m_AspectRatio;
+            m_UnitSizeY->ChangeValue( wxString::Format( wxT( "%.2f" ), calculatedY ) );
+            m_outputSizeY.Set( calculatedY, (UNIT) m_PixelUnit->GetSelection() );
+        }
+    }
     updateImageInfo();
 }
 
+void BM2CMP_FRAME::OnSizeChangeY( wxCommandEvent& event )
+{
+    double setSize;
+
+    if( m_UnitSizeY->GetValue().ToDouble( &setSize ) )
+    {
+        m_outputSizeY.Set( setSize, (UNIT) m_PixelUnit->GetSelection() );
+        if( m_AspectRatioLocked )
+        {
+            double calculatedX = setSize * m_AspectRatio;
+            m_UnitSizeX->ChangeValue( wxString::Format( wxT( "%.2f" ), calculatedX ) );
+            m_outputSizeX.Set( calculatedX, (UNIT) m_PixelUnit->GetSelection() );
+        }
+    }
+    updateImageInfo();
+}
+
+void BM2CMP_FRAME::OnSizeUnitChange( wxCommandEvent& event )
+{
+    m_outputSizeX.SetUnit( (UNIT) m_PixelUnit->GetSelection() );
+    m_outputSizeY.SetUnit( (UNIT) m_PixelUnit->GetSelection() );
+    updateImageInfo();
+}
+
+void BM2CMP_FRAME::ToggleAspectRatioLock( wxCommandEvent& event )
+{
+    m_AspectRatioLocked = !m_AspectRatioLocked;
+
+    if( m_AspectRatioLocked )
+    {
+        m_AspectRatioLockButton->SetBitmap( KiBitmap( locked_xpm ) );
+        //Force resolution update when aspect ratio is locked
+        auto fakeEvent = wxCommandEvent();
+        OnSizeChangeX( fakeEvent );
+    }
+
+    else
+    {
+        m_AspectRatioLockButton->SetBitmap( KiBitmap( lock_unlock_xpm ) );
+    }
+}
 
 void BM2CMP_FRAME::Binarize( double aThreshold )
 {
@@ -756,7 +776,8 @@ void BM2CMP_FRAME::ExportToBuffer( std::string& aOutput, OUTPUT_FMT_ID aFormat )
         modLayer = (BMP2CMP_MOD_LAYER) m_radio_PCBLayer->GetSelection();
 
     BITMAPCONV_INFO converter( aOutput );
-    converter.ConvertBitmap( potrace_bitmap, aFormat, m_imageDPI.x, m_imageDPI.y, modLayer );
+    converter.ConvertBitmap( potrace_bitmap, aFormat, m_outputSizeX.GetOutputDPI(),
+            m_outputSizeY.GetOutputDPI(), modLayer );
 }
 
 
