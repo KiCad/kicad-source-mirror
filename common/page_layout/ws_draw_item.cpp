@@ -188,54 +188,48 @@ wxString WS_DRAW_ITEM_TEXT::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 }
 
 
-// ============================ POLYGON ==============================
+// ============================ POLYGON
 
-void WS_DRAW_ITEM_POLYGON::PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor )
+void WS_DRAW_ITEM_POLYPOLYGONS::PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor )
 {
     std::vector<wxPoint> points_moved;
-    wxPoint *points;
 
-    if( aOffset.x || aOffset.y )
+    for( int idx = 0; idx < m_Polygons.OutlineCount(); ++idx )
     {
-        for( auto point: m_Corners )
-            points_moved.push_back( point + aOffset );
+        points_moved.clear();
+        SHAPE_LINE_CHAIN& outline = m_Polygons.Outline( idx );
 
-        points = &points_moved[0];
-    }
-    else
-    {
-        points = &m_Corners[0];
-    }
+        for( int ii = 0; ii < outline.PointCount(); ii++ )
+            points_moved.push_back( wxPoint( outline.Point( ii ).x + aOffset.x,
+                                             outline.Point( ii ).y + aOffset.y ) );
 
-    GRPoly( nullptr, aDC, m_Corners.size(), points, IsFilled() ? FILLED_SHAPE : NO_FILL,
-            GetPenWidth(), aColor, aColor );
+        GRPoly( nullptr, aDC, points_moved.size(), &points_moved[0], FILLED_SHAPE,
+                GetPenWidth(), aColor, aColor );
+    }
 }
 
 
-const EDA_RECT WS_DRAW_ITEM_POLYGON::GetBoundingBox() const
+const EDA_RECT WS_DRAW_ITEM_POLYPOLYGONS::GetBoundingBox() const
 {
-    EDA_RECT rect( GetPosition(), wxSize( 0, 0 ) );
+    EDA_RECT rect;
+    BOX2I box = m_Polygons.BBox();
 
-    for( wxPoint corner : m_Corners )
-        rect.Merge( corner );
-
+    rect.SetX( box.GetX() );
+    rect.SetY( box.GetY() );
+    rect.SetWidth( box.GetWidth() );
+    rect.SetHeight( box.GetHeight() );
+printf("bbox %f %f %f %f\n",box.GetX()/1e3,box.GetY()/1e3,box.GetWidth()/1e3,box.GetHeight()/1e3);fflush(0);
     return rect;
 }
 
 
-bool WS_DRAW_ITEM_POLYGON::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool WS_DRAW_ITEM_POLYPOLYGONS::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    for( unsigned ii = 1; ii < m_Corners.size(); ii++ )
-    {
-        if( TestSegmentHit( aPosition, m_Corners[ii - 1], m_Corners[ii], aAccuracy ) )
-            return true;
-    }
-
-    return false;
+    return m_Polygons.Contains( aPosition );
 }
 
 
-bool WS_DRAW_ITEM_POLYGON::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool WS_DRAW_ITEM_POLYPOLYGONS::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT sel = aRect;
 
@@ -249,24 +243,32 @@ bool WS_DRAW_ITEM_POLYGON::HitTest( const EDA_RECT& aRect, bool aContained, int 
     if( !sel.Intersects( GetBoundingBox() ) )
         return false;
 
-    int count = m_Corners.size();
-
-    for( int ii = 0; ii < count; ii++ )
+    for( int idx = 0; idx < m_Polygons.OutlineCount(); ++idx )
     {
-        // Test if the point is within aRect
-        if( sel.Contains( m_Corners[ ii ] ) )
-            return true;
+        const SHAPE_LINE_CHAIN& outline = m_Polygons.COutline( idx );
 
-        // Test if this edge intersects aRect
-        if( sel.Intersects( m_Corners[ ii ], m_Corners[ (ii+1) % count ] ) )
-            return true;
+        for( int ii = 0; ii < outline.PointCount(); ii++ )
+        {
+            wxPoint corner( outline.CPoint( ii ).x, outline.CPoint( ii ).y );
+
+            // Test if the point is within aRect
+            if( sel.Contains( corner ) )
+                return true;
+
+            // Test if this edge intersects aRect
+            int ii_next = (ii+1) % outline.PointCount();
+            wxPoint next_corner( outline.CPoint( ii_next ).x, outline.CPoint( ii_next ).y );
+
+            if( sel.Intersects( corner, next_corner ) )
+                return true;
+        }
     }
 
     return false;
 }
 
 
-wxString WS_DRAW_ITEM_POLYGON::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+wxString WS_DRAW_ITEM_POLYPOLYGONS::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
     return wxString::Format( _( "Imported shape at (%s, %s)" ),
                              MessageTextFromValue( aUnits, GetPosition().x ),

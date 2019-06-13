@@ -117,9 +117,20 @@ void PlotWorkSheet( PLOTTER* plotter, const TITLE_BLOCK& aTitleBlock,
 
         case WSG_POLY_T:
             {
-                WS_DRAW_ITEM_POLYGON* poly = (WS_DRAW_ITEM_POLYGON*) item;
-                plotter->PlotPoly( poly->m_Corners, poly->IsFilled() ? FILLED_SHAPE : NO_FILL,
-                                   poly->GetPenWidth() );
+                WS_DRAW_ITEM_POLYPOLYGONS* poly = (WS_DRAW_ITEM_POLYPOLYGONS*) item;
+                std::vector<wxPoint> points;
+
+                for( int idx = 0; idx < poly->GetPolygons().OutlineCount(); ++idx )
+                {
+                    points.clear();
+                    SHAPE_LINE_CHAIN& outline = poly->GetPolygons().Outline( idx );
+
+                    for( int ii = 0; ii < outline.PointCount(); ii++ )
+                        points.push_back( wxPoint( outline.Point( ii ).x ,
+                                                   outline.Point( ii ).y ) );
+
+                    plotter->PlotPoly(  points, FILLED_SHAPE, poly->GetPenWidth() );
+                }
             }
             break;
 

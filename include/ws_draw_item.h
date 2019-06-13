@@ -30,6 +30,7 @@
 #include <eda_text.h>
 #include <bitmap_base.h>
 #include "msgpanel.h"
+#include <geometry/shape_poly_set.h>
 
 class WS_DATA_ITEM;
 class TITLE_BLOCK;
@@ -139,32 +140,32 @@ public:
 };
 
 // This class draws a polygon
-class WS_DRAW_ITEM_POLYGON : public WS_DRAW_ITEM_BASE
+class WS_DRAW_ITEM_POLYPOLYGONS : public WS_DRAW_ITEM_BASE
 {
     wxPoint m_pos;      // position of reference point, from the
                         // WS_DATA_ITEM_POLYGONS parent
                         // (used only in page layout editor to draw anchors)
     int m_penWidth;
-    bool m_fill;
 
 public:
-    std::vector <wxPoint> m_Corners;
+    /** The list of polygons. Because these polygons are only for drawing purposes,
+     * each polygon is expected having no holes, jusst a main outline
+     */
+    SHAPE_POLY_SET m_Polygons;
 
 public:
-    WS_DRAW_ITEM_POLYGON( WS_DATA_ITEM* aPeer, int aIndex, wxPoint aPos, bool aFill,
-                          int aPenWidth ) :
+    WS_DRAW_ITEM_POLYPOLYGONS( WS_DATA_ITEM* aPeer, int aIndex, wxPoint aPos, int aPenWidth ) :
             WS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_POLY_T )
     {
         m_penWidth = aPenWidth;
-        m_fill = aFill;
         m_pos = aPos;
     }
 
-    virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_POLYGON" ); }
+    virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_POLYPOLYGONS" ); }
 
     // Accessors:
+    SHAPE_POLY_SET& GetPolygons() { return m_Polygons; }
     int GetPenWidth() const { return m_penWidth; }
-    bool IsFilled() const { return m_fill; }
     const wxPoint GetPosition() const override { return m_pos; }
     void SetPosition( wxPoint aPos ) override { m_pos = aPos; }
 
@@ -224,7 +225,8 @@ public:
 
 
 // This class draws a rectangle with thick segment showing the page limits
-// and a marker showing the coord origin
+// and a marker showing the coord origin. This only a draw item only.
+// Therefore m_peer ( the parent WS_DATA_ITEM item in the WS_DATA_MODEL) is always a nullptr.
 class WS_DRAW_ITEM_PAGE : public WS_DRAW_ITEM_BASE
 {
     wxPoint m_markerPos;    // position of the marker

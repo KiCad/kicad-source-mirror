@@ -116,7 +116,7 @@ public:
 private:
     void draw( const WS_DRAW_ITEM_LINE* aItem, int aLayer ) const;
     void draw( const WS_DRAW_ITEM_RECT* aItem, int aLayer ) const;
-    void draw( const WS_DRAW_ITEM_POLYGON* aItem, int aLayer ) const;
+    void draw( const WS_DRAW_ITEM_POLYPOLYGONS* aItem, int aLayer ) const;
     void draw( const WS_DRAW_ITEM_TEXT* aItem, int aLayer ) const;
     void draw( const WS_DRAW_ITEM_BITMAP* aItem, int aLayer ) const;
     void draw( const WS_DRAW_ITEM_PAGE* aItem, int aLayer ) const;

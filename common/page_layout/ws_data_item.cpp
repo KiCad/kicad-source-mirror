@@ -422,27 +422,30 @@ void WS_DATA_ITEM_POLYGONS::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX:
         if( j && !IsInsidePage( j ) )
             continue;
 
+        int pensize = GetPenSizeUi();
+        auto poly_shape = new WS_DRAW_ITEM_POLYPOLYGONS( this, j, GetStartPosUi( j ), pensize );
+        poly_shape->SetFlags( itemFlags[ j ] );
+        m_drawItems.push_back( poly_shape );
+
+        // Transfer all outlines (basic polygons)
+        SHAPE_POLY_SET& polygons = poly_shape->GetPolygons();
         for( int kk = 0; kk < GetPolyCount(); kk++ )
         {
-            const bool fill = true;
-            int pensize = GetPenSizeUi();
-            auto poly = new WS_DRAW_ITEM_POLYGON( this, j, GetStartPosUi( j ), fill, pensize );
-            poly->SetFlags( itemFlags[ j ] );
-            m_drawItems.push_back( poly );
-
-            if( aCollector )
-                aCollector->Append( poly );
-
-            if( aView )
-                aView->Add( poly );
-
-            // Create polygon outline
+            // Create new outline
             unsigned ist = GetPolyIndexStart( kk );
             unsigned iend = GetPolyIndexEnd( kk );
 
+            polygons.NewOutline();
+
             while( ist <= iend )
-                poly->m_Corners.push_back( GetCornerPositionUi( ist++, j ) );
+                polygons.Append( GetCornerPositionUi( ist++, j ) );
         }
+
+        if( aCollector )
+            aCollector->Append( poly_shape );
+
+        if( aView )
+            aView->Add( poly_shape );
     }
 }
 

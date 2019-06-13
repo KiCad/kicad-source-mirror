@@ -243,7 +243,7 @@ bool KIGFX::WS_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
     switch( item->Type() )
     {
     case WSG_LINE_T:   draw( (WS_DRAW_ITEM_LINE*) item, aLayer );         break;
-    case WSG_POLY_T:   draw( (WS_DRAW_ITEM_POLYGON*) item, aLayer );      break;
+    case WSG_POLY_T:   draw( (WS_DRAW_ITEM_POLYPOLYGONS*) item, aLayer );      break;
     case WSG_RECT_T:   draw( (WS_DRAW_ITEM_RECT*) item, aLayer );         break;
     case WSG_TEXT_T:   draw( (WS_DRAW_ITEM_TEXT*) item, aLayer );         break;
     case WSG_BITMAP_T: draw( (WS_DRAW_ITEM_BITMAP*) item, aLayer );       break;
@@ -275,28 +275,18 @@ void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_RECT* aItem, int aLayer ) const
 }
 
 
-void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_POLYGON* aItem, int aLayer ) const
+void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_POLYPOLYGONS* aItem, int aLayer ) const
 {
-    std::deque<VECTOR2D> corners;
-    for( wxPoint point : aItem->m_Corners )
-    {
-        corners.push_back( VECTOR2D( point ) );
-    }
+    m_gal->SetFillColor( m_renderSettings.GetColor( aItem, aLayer ) );
+    m_gal->SetIsFill( true );
+    m_gal->SetIsStroke( false );
 
-    if( aItem->IsFilled() )
+    WS_DRAW_ITEM_POLYPOLYGONS* item =  (WS_DRAW_ITEM_POLYPOLYGONS*)aItem;
+
+    for( int idx = 0; idx < item->GetPolygons().OutlineCount(); ++idx )
     {
-        m_gal->SetFillColor( m_renderSettings.GetColor( aItem, aLayer ) );
-        m_gal->SetIsFill( true );
-        m_gal->SetIsStroke( false );
-        m_gal->DrawPolygon( corners );
-    }
-    else
-    {
-        m_gal->SetStrokeColor( m_renderSettings.GetColor( aItem, aLayer ) );
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->SetLineWidth( aItem->GetPenWidth() );
-        m_gal->DrawPolyline( corners );
+        SHAPE_LINE_CHAIN& outline = item->GetPolygons().Outline( idx );
+        m_gal->DrawPolygon( outline );
     }
 }
 
