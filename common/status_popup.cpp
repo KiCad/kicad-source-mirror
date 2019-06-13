@@ -51,8 +51,8 @@ STATUS_POPUP::STATUS_POPUP( wxWindow* aParent ) :
 
 void STATUS_POPUP::onCharHook( wxKeyEvent& aEvent )
 {
-    // Key events from popups don't get put through the wxWidgets event system on OSX,
-    // so we have to fall back to the CHAR_HOOK to forward hotkeys from the popup to
+    // Key events from the status popup don't get put through the wxWidgets event system on
+    // OSX, so we have to fall back to the CHAR_HOOK to forward hotkeys from the popup to
     // the canvas / frame.
     aEvent.SetEventType( wxEVT_CHAR );
 

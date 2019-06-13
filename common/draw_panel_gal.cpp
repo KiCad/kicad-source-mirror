@@ -96,10 +96,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     };
 
     for( wxEventType eventType : events )
-    {
-        Connect( eventType, wxEventHandler( EDA_DRAW_PANEL_GAL::OnEvent ),
-                 NULL, m_eventDispatcher );
-    }
+        Connect( eventType, wxEventHandler( EDA_DRAW_PANEL_GAL::OnEvent ), NULL, m_eventDispatcher );
 
     m_pendingRefresh = false;
     m_drawing = false;

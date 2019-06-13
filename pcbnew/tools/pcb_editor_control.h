@@ -72,8 +72,6 @@ public:
     int ToggleMicrowaveToolbar( const TOOL_EVENT& aEvent );
     int TogglePythonConsole( const TOOL_EVENT& aEvent );
 
-    int Find( const TOOL_EVENT& aEvent );
-
     // Track & via size control
     int TrackWidthInc( const TOOL_EVENT& aEvent );
     int TrackWidthDec( const TOOL_EVENT& aEvent );

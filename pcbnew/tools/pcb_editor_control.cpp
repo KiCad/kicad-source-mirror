@@ -623,14 +623,6 @@ int PCB_EDITOR_CONTROL::TogglePythonConsole( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::Find( const TOOL_EVENT& aEvent )
-{
-    DIALOG_FIND dlg( m_frame );
-    dlg.ShowModal();
-    return 0;
-}
-
-
 // Track & via size control
 int PCB_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
 {
@@ -1582,8 +1574,6 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateReportFile.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateD356File.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateBOM.MakeEvent() );
-
-    Go( &PCB_EDITOR_CONTROL::Find,                   ACTIONS::find.MakeEvent() );
 
     // Track & via size control
     Go( &PCB_EDITOR_CONTROL::TrackWidthInc,          PCB_ACTIONS::trackWidthInc.MakeEvent() );
