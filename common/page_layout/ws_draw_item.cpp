@@ -218,7 +218,7 @@ const EDA_RECT WS_DRAW_ITEM_POLYPOLYGONS::GetBoundingBox() const
     rect.SetY( box.GetY() );
     rect.SetWidth( box.GetWidth() );
     rect.SetHeight( box.GetHeight() );
-printf("bbox %f %f %f %f\n",box.GetX()/1e3,box.GetY()/1e3,box.GetWidth()/1e3,box.GetHeight()/1e3);fflush(0);
+
     return rect;
 }
 
