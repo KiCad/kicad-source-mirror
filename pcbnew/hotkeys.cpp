@@ -121,7 +121,7 @@ static EDA_HOTKEY HkRouteTuneDecreaseAmp( _HKI( "Decrease meander amplitude by o
 static EDA_HOTKEY HkAddThroughVia( _HKI( "Add Through Via" ), HK_ADD_THROUGH_VIA, 'V' );
 static EDA_HOTKEY HkSelLayerAndAddThroughVia( _HKI( "Select Layer and Add Through Via" ),
                                               HK_SEL_LAYER_AND_ADD_THROUGH_VIA, '<' );
-static EDA_HOTKEY HkAddMicroVia( _HKI( "Add MicroVia" ), HK_ADD_MICROVIA, 'V' + GR_KB_CTRL );
+static EDA_HOTKEY HkAddMicroVia( _HKI( "Add MicroVia" ), HK_ADD_MICROVIA, 'V' + GR_KB_ALT );
 static EDA_HOTKEY HkAddBlindBuriedVia( _HKI( "Add Blind/Buried Via" ), HK_ADD_BLIND_BURIED_VIA,
                                        'V' + GR_KB_ALT + GR_KB_SHIFT );
 static EDA_HOTKEY HkSelLayerAndAddBlindBuriedVia( _HKI( "Select Layer and Add Blind/Buried Via" ),
@@ -173,7 +173,7 @@ static EDA_HOTKEY HkAddFreeVia( _HKI( "Add Vias" ), HK_ADD_FREE_VIA, 'V' + GR_KB
 static EDA_HOTKEY HkAddKeepout( _HKI( "Add Keepout Area" ), HK_ADD_KEEPOUT, 'K' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkAddZoneCutout( _HKI( "Add a Zone Cutout" ), HK_ADD_CUTOUT, 'C' + GR_KB_SHIFT );
 static EDA_HOTKEY HkAddSimilarZone( _HKI( "Add a Similar Zone" ), HK_ADD_SIMILAR_ZONE,
-                                    '.' + GR_KB_SHIFTCTRL );
+                                    '>' + GR_KB_CTRL );
 static EDA_HOTKEY HkAddDXF( _HKI( "Place DXF" ), HK_ADD_DXF, 'F' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkAddAnchor( _HKI( "Place the Footprint Anchor" ), HK_ADD_ANCHOR,
                                'N' + GR_KB_SHIFTCTRL );
@@ -292,7 +292,7 @@ static EDA_HOTKEY HkSelectCopper( _HKI( "Select Connected Tracks" ), HK_SEL_COPP
                                   'I' );
 
 static EDA_HOTKEY HkRoutingOptions( _HKI( "Routing Options" ), HK_ROUTING_OPTIONS,
-                                    ',' + GR_KB_CTRL + GR_KB_SHIFT );
+                                    '<' + GR_KB_CTRL );
 
 static EDA_HOTKEY HkCustomTrackWidth( _HKI( "Custom Track/Via Size" ), HK_CUSTOM_TRACK_WIDTH, 'Q' );
 
