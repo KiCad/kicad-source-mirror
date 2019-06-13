@@ -39,7 +39,7 @@
 
 
 TOOL_ACTION PL_ACTIONS::move( "plEditor.InteractiveEdit.move",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         'M', LEGACY_HK_NAME( "Move Item" ),
         _( "Move" ), _( "Moves the selected item(s)" ),
         move_xpm, AF_ACTIVATE );
