@@ -496,8 +496,6 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, bool aRecreateRatsnest )
         s_PickedList.ClearItemsList();
     }
 
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-
     aModule->SetPosition( (wxPoint) GetCanvas()->GetViewControls()->GetCursorPosition() );
     aModule->ClearFlags();
 

@@ -804,9 +804,11 @@ bool DIALOG_SPICE_MODEL::addPwlValue( const wxString& aTime, const wxString& aVa
     float timeF;
     m_pwlTime->GetValue().ToDouble( &timeD );
     timeF = timeD;
+    long data;
+    std::memcpy( &data, &timeF, sizeof( timeF ) );
 
     // Store the time value, so the entries can be sorted
-    m_pwlValList->SetItemData( idx, *reinterpret_cast<long*>( &timeF ) );
+    m_pwlValList->SetItemData( idx, data );
 
     // Sort items by timestamp
     m_pwlValList->SortItems( comparePwlValues, -1 );
