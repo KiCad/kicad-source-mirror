@@ -204,6 +204,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     if( !it->IsSelected() )
                         it->ClearFlags( STARTPOINT | ENDPOINT | SELECTEDNODE );
+
+                    if( !selection.IsHover() && it->IsSelected() )
+                        it->SetFlags( STARTPOINT | ENDPOINT );
                 }
 
                 if( m_isDragOperation )

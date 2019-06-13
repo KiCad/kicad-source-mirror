@@ -723,7 +723,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
              * Left > Right : Select objects that are fully enclosed by selection
              * Right > Left : Select objects that are crossed by selection
              */
-            bool windowSelection = width >= 0 ? true : false;
+            bool windowSelection = width >= 0;
 
             if( view->IsMirroredX() )
                 windowSelection = !windowSelection;
@@ -748,6 +748,8 @@ bool EE_SELECTION_TOOL::selectMultiple()
                         select( item );
                 }
             }
+
+            m_selection.SetIsHover( false );
 
             // Inform other potentially interested tools
             if( !m_selection.Empty() )
@@ -845,6 +847,7 @@ int EE_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 int EE_SELECTION_TOOL::AddItemToSel( const TOOL_EVENT& aEvent )
 {
     AddItemToSel( aEvent.Parameter<EDA_ITEM*>() );
+    m_selection.SetIsHover( false );
     return 0;
 }
 
@@ -865,6 +868,7 @@ void EE_SELECTION_TOOL::AddItemToSel( EDA_ITEM* aItem, bool aQuietMode )
 int EE_SELECTION_TOOL::AddItemsToSel( const TOOL_EVENT& aEvent )
 {
     AddItemsToSel( aEvent.Parameter<EDA_ITEMS*>(), false );
+    m_selection.SetIsHover( false );
     return 0;
 }
 
@@ -886,6 +890,7 @@ void EE_SELECTION_TOOL::AddItemsToSel( EDA_ITEMS* aList, bool aQuietMode )
 int EE_SELECTION_TOOL::RemoveItemFromSel( const TOOL_EVENT& aEvent )
 {
     RemoveItemFromSel( aEvent.Parameter<EDA_ITEM*>() );
+    m_selection.SetIsHover( false );
     return 0;
 }
 
@@ -906,6 +911,7 @@ void EE_SELECTION_TOOL::RemoveItemFromSel( EDA_ITEM* aItem, bool aQuietMode )
 int EE_SELECTION_TOOL::RemoveItemsFromSel( const TOOL_EVENT& aEvent )
 {
     RemoveItemsFromSel( aEvent.Parameter<EDA_ITEMS*>(), false );
+    m_selection.SetIsHover( false );
     return 0;
 }
 
