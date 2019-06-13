@@ -155,13 +155,12 @@ public:
     {
         EDA_RECT bbox;
 
-        bbox = Front()->GetBoundingBox();
-        auto i = m_items.begin();
-        ++i;
-
-        for( ; i != m_items.end(); ++i )
+        if( Front() )
         {
-            bbox.Merge( (*i)->GetBoundingBox() );
+            bbox = Front()->GetBoundingBox();
+
+            for( auto i = m_items.begin() + 1; i != m_items.end(); ++i )
+                bbox.Merge( (*i)->GetBoundingBox() );
         }
 
         return bbox;
