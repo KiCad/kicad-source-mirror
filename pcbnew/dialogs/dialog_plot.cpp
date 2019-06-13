@@ -573,6 +573,8 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetMirror( m_plotMirrorOpt->GetValue() );
     tempOptions.SetPlotMode( m_plotModeOpt->GetSelection() == 1 ? SKETCH : FILLED );
     tempOptions.SetDXFPlotPolygonMode( m_DXF_plotModeOpt->GetValue() );
+    tempOptions.SetDXFPlotUnits(
+            static_cast<PCB_PLOT_PARAMS::Units>( m_DXF_plotUnits->GetSelection() ) );
     tempOptions.SetPlotViaOnMaskLayer( m_plotNoViaOnMaskOpt->GetValue() );
 
     if( !m_DXF_plotTextStrokeFontOpt->IsEnabled() )     // Currently, only DXF supports this option

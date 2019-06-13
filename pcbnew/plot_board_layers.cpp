@@ -1026,7 +1026,11 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
     switch( aPlotOpts->GetFormat() )
     {
     case PLOT_FORMAT_DXF:
-        plotter = new DXF_PLOTTER();
+        DXF_PLOTTER* DXF_plotter;
+        DXF_plotter = new DXF_PLOTTER();
+        DXF_plotter->SetUnits( static_cast<DXF_PLOTTER::Units>( aPlotOpts->GetDXFPlotUnits() ) );
+
+        plotter = DXF_plotter;
         break;
 
     case PLOT_FORMAT_POST:
