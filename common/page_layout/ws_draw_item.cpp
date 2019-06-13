@@ -188,7 +188,7 @@ wxString WS_DRAW_ITEM_TEXT::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 }
 
 
-// ============================ POLYGON
+// ============================ POLYGON =================================
 
 void WS_DRAW_ITEM_POLYPOLYGONS::PrintWsItem( wxDC* aDC, const wxPoint& aOffset, COLOR4D aColor )
 {
@@ -209,6 +209,17 @@ void WS_DRAW_ITEM_POLYPOLYGONS::PrintWsItem( wxDC* aDC, const wxPoint& aOffset, 
 }
 
 
+void WS_DRAW_ITEM_POLYPOLYGONS::SetPosition( wxPoint aPos )
+{
+    // Note: m_pos is the anchor point of the shape.
+    wxPoint move_vect = aPos - m_pos;
+    m_pos = aPos;
+
+    // Move polygon corners to the new position:
+    m_Polygons.Move( move_vect );
+}
+
+
 const EDA_RECT WS_DRAW_ITEM_POLYPOLYGONS::GetBoundingBox() const
 {
     EDA_RECT rect;
@@ -218,7 +229,7 @@ const EDA_RECT WS_DRAW_ITEM_POLYPOLYGONS::GetBoundingBox() const
     rect.SetY( box.GetY() );
     rect.SetWidth( box.GetWidth() );
     rect.SetHeight( box.GetHeight() );
-
+printf("bbox %f %f %f %f\n",box.GetX()/1e3,box.GetY()/1e3,box.GetWidth()/1e3,box.GetHeight()/1e3);fflush(0);
     return rect;
 }
 

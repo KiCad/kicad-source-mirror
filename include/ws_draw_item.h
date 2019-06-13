@@ -167,7 +167,7 @@ public:
     SHAPE_POLY_SET& GetPolygons() { return m_Polygons; }
     int GetPenWidth() const { return m_penWidth; }
     const wxPoint GetPosition() const override { return m_pos; }
-    void SetPosition( wxPoint aPos ) override { m_pos = aPos; }
+    void SetPosition( wxPoint aPos ) override;
 
     const EDA_RECT GetBoundingBox() const override;
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
