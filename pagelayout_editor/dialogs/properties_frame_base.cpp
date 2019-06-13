@@ -32,7 +32,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	int m_choicePageOptNChoices = sizeof( m_choicePageOptChoices ) / sizeof( wxString );
 	m_choicePageOpt = new wxChoice( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePageOptNChoices, m_choicePageOptChoices, 0 );
 	m_choicePageOpt->SetSelection( 2 );
-	bSizerButt->Add( m_choicePageOpt, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizerButt->Add( m_choicePageOpt, 0, wxALL|wxEXPAND, 5 );
 
 
 	m_SizerItemProperties->Add( bSizerButt, 0, wxEXPAND, 5 );
