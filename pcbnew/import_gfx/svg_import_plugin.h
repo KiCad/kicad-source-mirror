@@ -46,6 +46,7 @@ public:
     {
         wxArrayString list;
         list.Add( "svg" );
+        list.Add( "SVG" );
         return list;
     }
 

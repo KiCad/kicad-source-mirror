@@ -148,6 +148,7 @@ public:
     {
         wxArrayString list;
         list.Add( "dxf" );
+        list.Add( "DXF" );
         return list;
     }
 

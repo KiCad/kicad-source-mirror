@@ -62,7 +62,7 @@ public:
 
     /**
      * Return a list of wildcards that contains the file extensions
-     * handled by this plugin, separated with a coma.
+     * handled by this plugin, separated with a semi-colon.
      */
     wxString GetWildcards() const
     {
@@ -74,7 +74,7 @@ public:
             if( first )
                 first = false;
             else
-                ret += ", ";
+                ret += ";";
 
             ret += "*." + extension;
         }
