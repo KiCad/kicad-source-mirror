@@ -486,16 +486,22 @@ EDA_ITEM* EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T*
     collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
     collector.Collect( start, aFilterList, (wxPoint) aWhere, m_unit, m_convert );
 
-    bool anyCollected = collector.GetCount() != 0;
+    bool anyCollected = collector.GetCount() > 0;
 
     // Post-process collected items
     for( int i = collector.GetCount() - 1; i >= 0; --i )
     {
         if( !selectable( collector[ i ] ) )
+        {
             collector.Remove( i );
+            continue;
+        }
 
         if( aCheckLocked && collector[ i ]->IsLocked() )
+        {
             collector.Remove( i );
+            continue;
+        }
 
         // SelectPoint, unlike other selection routines, can select line ends
         if( collector[ i ]->Type() == SCH_LINE_T )
