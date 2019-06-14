@@ -84,7 +84,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     submenuImport->SetIcon( import_xpm );
 
     submenuImport->Add( PCB_ACTIONS::importFootprint );
-    submenuImport->Add( _( "&Impot Graphics..." ),
+    submenuImport->Add( _( "&Import Graphics..." ),
                         _( "Import 2D Drawing file to Footprint Editor on Drawings layer" ),
                         ID_GEN_IMPORT_GRAPHICS_FILE, import_vector_xpm );
 

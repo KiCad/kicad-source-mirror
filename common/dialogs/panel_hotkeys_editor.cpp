@@ -172,7 +172,7 @@ void PANEL_HOTKEYS_EDITOR::ImportHotKeys()
 {
     wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
     wxString mask = wxT( "*." ) + ext;
-    wxString filename = EDA_FILE_SELECTOR( _( "Read Hotkeys File:" ), m_frame->GetMruPath(), 
+    wxString filename = EDA_FILE_SELECTOR( _( "Import Hotkeys File:" ), m_frame->GetMruPath(),
                                            wxEmptyString, ext, mask, this, wxFD_OPEN, true );
 
     if( filename.IsEmpty() )
@@ -191,7 +191,7 @@ void PANEL_HOTKEYS_EDITOR::ImportHotKeys()
                 hotkey.m_EditKeycode = importedHotKeys[ hotkey.m_Actions[ 0 ]->GetName() ];
         }
     }
-    
+
     m_hotkeyListCtrl->TransferDataToControl();
 }
 
