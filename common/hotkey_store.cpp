@@ -84,7 +84,7 @@ HOTKEY_STORE::HOTKEY_STORE()
 }
 
 
-void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList )
+void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList, bool aIncludeGestures )
 {
     m_toolManagers = std::move( aToolManagerList );
     
@@ -125,12 +125,15 @@ void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList )
         currentSection->m_HotKeys.emplace_back( HOTKEY( entry.second ) );
     }
 
-    m_hk_sections.emplace_back( HOTKEY_SECTION() );
-    currentSection = &m_hk_sections.back();
-    currentSection->m_SectionName = _( "Gestures" );
+    if( aIncludeGestures )
+    {
+        m_hk_sections.emplace_back( HOTKEY_SECTION() );
+        currentSection = &m_hk_sections.back();
+        currentSection->m_SectionName = _( "Gestures" );
 
-    for( TOOL_ACTION* gesture : g_gesturePseudoActions )
-        currentSection->m_HotKeys.emplace_back( HOTKEY( gesture ) );
+        for( TOOL_ACTION* gesture : g_gesturePseudoActions )
+            currentSection->m_HotKeys.emplace_back( HOTKEY( gesture ) );
+    }
 }
 
 

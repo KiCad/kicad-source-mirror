@@ -140,7 +140,7 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
 
 bool PANEL_HOTKEYS_EDITOR::TransferDataToWindow()
 {
-    m_hotkeyStore.Init( m_toolManagers );
+    m_hotkeyStore.Init( m_toolManagers, m_readOnly );
     return m_hotkeyListCtrl->TransferDataToControl();
 }
 
@@ -149,6 +149,9 @@ bool PANEL_HOTKEYS_EDITOR::TransferDataFromWindow()
 {
     if( !m_hotkeyListCtrl->TransferDataFromControl() )
         return false;
+
+    if( m_readOnly )
+        return true;
 
     // save the hotkeys
     for( TOOL_MANAGER* toolMgr : m_toolManagers )

@@ -69,7 +69,7 @@ public:
      */
     HOTKEY_STORE();
 
-    void Init( std::vector<TOOL_MANAGER*> aToolManagerList );
+    void Init( std::vector<TOOL_MANAGER*> aToolManagerList, bool aIncludeGestures );
     
     static wxString GetAppName( TOOL_ACTION* aAction );
     static wxString GetSectionName( TOOL_ACTION* aAction );
