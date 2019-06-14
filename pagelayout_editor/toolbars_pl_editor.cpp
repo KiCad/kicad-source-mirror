@@ -57,6 +57,9 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::zoomFitScreen );
     m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE );
 
+    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->Add( PL_ACTIONS::showInspector );
+
     // Display mode switch
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_SHOW_REAL_MODE, wxEmptyString,

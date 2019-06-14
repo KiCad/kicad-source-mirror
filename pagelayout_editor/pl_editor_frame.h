@@ -70,6 +70,11 @@ public:
 
     PROPERTIES_FRAME* GetPropertiesFrame() { return m_propertiesPagelayout; }
 
+    /**
+     * Show the dialog displaying the list of WS_DATA_ITEM items in the page layout
+     */
+    void ShowDesignInspector();
+
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl ) override;
 
     /**

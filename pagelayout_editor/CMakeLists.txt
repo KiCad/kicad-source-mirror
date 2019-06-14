@@ -17,6 +17,8 @@ set( PL_EDITOR_SRCS
     dialogs/dialogs_for_printing.cpp
     dialogs/dialog_new_dataitem_base.cpp
     dialogs/dialog_new_dataitem.cpp
+    dialogs/dialog_design_inspector_base.cpp
+    design_inspector.cpp
     pl_editor_screen.cpp
     pl_editor_layout.cpp
     files.cpp

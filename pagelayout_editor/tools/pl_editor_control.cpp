@@ -44,6 +44,11 @@ TOOL_ACTION PL_ACTIONS::toggleBackground( "plEditor.EditorControl.ToggleBackgrou
         _( "Background White" ), _( "Switch between white and black background" ),
         palette_xpm );
 
+TOOL_ACTION PL_ACTIONS::showInspector( "plEditor.EditorControl.ShowInspector",
+        AS_GLOBAL, 0, "",
+        _( "Show Design Inspector" ), _( "Show the list of items in page layout" ),
+        spreadsheet_xpm );
+
 
 bool PL_EDITOR_CONTROL::Init()
 {
@@ -146,6 +151,13 @@ int PL_EDITOR_CONTROL::ToggleBackgroundColor( const TOOL_EVENT& aEvent )
 }
 
 
+int PL_EDITOR_CONTROL::ShowInspector( const TOOL_EVENT& aEvent )
+{
+    m_frame->ShowDesignInspector();
+    return 0;
+}
+
+
 int PL_EDITOR_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 {
     PL_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PL_SELECTION_TOOL>();
@@ -192,6 +204,7 @@ void PL_EDITOR_CONTROL::setTransitions()
     Go( &PL_EDITOR_CONTROL::Quit,                  ACTIONS::quit.MakeEvent() );
 
     Go( &PL_EDITOR_CONTROL::ToggleBackgroundColor, PL_ACTIONS::toggleBackground.MakeEvent() );
+    Go( &PL_EDITOR_CONTROL::ShowInspector, PL_ACTIONS::showInspector.MakeEvent() );
 
     Go( &PL_EDITOR_CONTROL::UpdateMessagePanel,    EVENTS::SelectedEvent );
     Go( &PL_EDITOR_CONTROL::UpdateMessagePanel,    EVENTS::UnselectedEvent );

@@ -61,6 +61,7 @@ public:
     int Quit( const TOOL_EVENT& aEvent );
 
     int ToggleBackgroundColor( const TOOL_EVENT& aEvent );
+    int ShowInspector( const TOOL_EVENT& aEvent );
 
     /**
      * Update the message panel *and* the Properties frame, after change
