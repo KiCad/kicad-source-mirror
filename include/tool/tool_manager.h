@@ -95,23 +95,6 @@ public:
     bool InvokeTool( const std::string& aToolName );
 
     /**
-     * Function RegisterAction()
-     * Registers an action that can be used to control tools (eg. invoke, trigger specific
-     * behaviours).
-     *
-     * @param aAction is the action to be registered.
-     */
-    void RegisterAction( TOOL_ACTION* aAction );
-
-    /**
-     * Function UnregisterAction()
-     * Unregisters an action, so it is no longer active.
-     *
-     * @param aAction is the action to be unregistered.
-     */
-    void UnregisterAction( TOOL_ACTION* aAction );
-
-    /**
      * Function RunAction()
      * Runs the specified action. The common format for action names is "application.ToolName.Action".
      *

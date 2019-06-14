@@ -30,9 +30,6 @@
 #include <eda_base_frame.h>
 #include <kiway_player.h>
 
-#define KICAD_MANAGER_FRAME_NAME   wxT( "KicadFrame" )
-
-class LAUNCHER_PANEL;
 class TREEPROJECTFILES;
 class TREE_PROJECT_FRAME;
 class ACTION_TOOLBAR;

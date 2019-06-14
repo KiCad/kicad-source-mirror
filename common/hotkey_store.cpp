@@ -22,6 +22,7 @@
  */
 
 #include <hotkey_store.h>
+#include <eda_base_frame.h>
 #include <tool/tool_manager.h>
 #include <tool/action_manager.h>
 #include <tool/tool_event.h>
@@ -38,16 +39,16 @@ public:
     }
 };
 
-static GESTURE_PSEUDO_ACTION g_gesturePseudoActions[] = {
-    GESTURE_PSEUDO_ACTION( _( "Highlight Net" ), MD_CTRL + PSEUDO_WXK_LMB ),
-    GESTURE_PSEUDO_ACTION( _( "Clear Net Highlighting" ), MD_CTRL + PSEUDO_WXK_LMB ),
-    GESTURE_PSEUDO_ACTION( _( "Pan Left/Right" ), MD_CTRL + PSEUDO_WXK_WHEEL ),
-    GESTURE_PSEUDO_ACTION( _( "Pan Up/Down" ), MD_SHIFT + PSEUDO_WXK_WHEEL ),
-    GESTURE_PSEUDO_ACTION( _( "Finish Drawing" ), PSEUDO_WXK_DBLCLICK ),
-    GESTURE_PSEUDO_ACTION( _( "Add to Selection" ), MD_SHIFT + PSEUDO_WXK_LMB ),
-    GESTURE_PSEUDO_ACTION( _( "Remove from Selection" ), MD_CTRL + PSEUDO_WXK_LMB ),
-    GESTURE_PSEUDO_ACTION( _( "Ignore Grid Snaps" ), MD_ALT ),
-    GESTURE_PSEUDO_ACTION( _( "Ignore Other Snaps" ), MD_SHIFT ),
+static GESTURE_PSEUDO_ACTION* g_gesturePseudoActions[] = {
+    new GESTURE_PSEUDO_ACTION( _( "Highlight Net" ), MD_CTRL + PSEUDO_WXK_LMB ),
+    new GESTURE_PSEUDO_ACTION( _( "Clear Net Highlighting" ), MD_CTRL + PSEUDO_WXK_LMB ),
+    new GESTURE_PSEUDO_ACTION( _( "Pan Left/Right" ), MD_CTRL + PSEUDO_WXK_WHEEL ),
+    new GESTURE_PSEUDO_ACTION( _( "Pan Up/Down" ), MD_SHIFT + PSEUDO_WXK_WHEEL ),
+    new GESTURE_PSEUDO_ACTION( _( "Finish Drawing" ), PSEUDO_WXK_DBLCLICK ),
+    new GESTURE_PSEUDO_ACTION( _( "Add to Selection" ), MD_SHIFT + PSEUDO_WXK_LMB ),
+    new GESTURE_PSEUDO_ACTION( _( "Remove from Selection" ), MD_CTRL + PSEUDO_WXK_LMB ),
+    new GESTURE_PSEUDO_ACTION( _( "Ignore Grid Snaps" ), MD_ALT ),
+    new GESTURE_PSEUDO_ACTION( _( "Ignore Other Snaps" ), MD_SHIFT ),
 };
 
 
@@ -88,8 +89,8 @@ void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList )
     m_toolManagers = std::move( aToolManagerList );
     
     // Collect all action maps into a single master map.  This will re-group everything
-    // and elimate duplicates
-    std::map<std::string, TOOL_ACTION*> masterMap;
+    // and collect duplicates together
+    std::map<std::string, HOTKEY> masterMap;
     
     for( TOOL_MANAGER* toolMgr : m_toolManagers )
     {
@@ -98,8 +99,10 @@ void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList )
             // Internal actions probably shouldn't be allowed hotkeys
             if( entry.second->GetLabel().IsEmpty() )
                 continue;
-            
-            masterMap[ entry.first ] = entry.second;
+
+            HOTKEY& hotkey = masterMap[ entry.first ];
+            hotkey.m_Actions.push_back( entry.second );
+            hotkey.m_EditKeycode = entry.second->GetHotKey();
         }
     }
     
@@ -108,14 +111,15 @@ void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList )
 
     for( const auto& entry : masterMap )
     {
-        wxString thisApp = GetAppName( entry.second );
+        TOOL_ACTION* entryAction = entry.second.m_Actions[ 0 ];
+        wxString     entryApp = GetAppName( entryAction );
 
-        if( thisApp != currentApp )
+        if( entryApp != currentApp )
         {
             m_hk_sections.emplace_back( HOTKEY_SECTION() );
-            currentApp = thisApp;
+            currentApp = entryApp;
             currentSection = &m_hk_sections.back();
-            currentSection->m_SectionName = GetSectionName( entry.second );
+            currentSection->m_SectionName = GetSectionName( entryAction );
         }
 
         currentSection->m_HotKeys.emplace_back( HOTKEY( entry.second ) );
@@ -125,8 +129,8 @@ void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList )
     currentSection = &m_hk_sections.back();
     currentSection->m_SectionName = _( "Gestures" );
 
-    for( TOOL_ACTION& gesture : g_gesturePseudoActions )
-        currentSection->m_HotKeys.emplace_back( HOTKEY( &gesture ) );
+    for( TOOL_ACTION* gesture : g_gesturePseudoActions )
+        currentSection->m_HotKeys.emplace_back( HOTKEY( gesture ) );
 }
 
 
@@ -138,33 +142,33 @@ std::vector<HOTKEY_SECTION>& HOTKEY_STORE::GetSections()
 
 void HOTKEY_STORE::SaveAllHotkeys()
 {
-    for( HOTKEY_SECTION& section: m_hk_sections )
+    for( HOTKEY_SECTION& section : m_hk_sections )
     {
-        for( HOTKEY& hotkey: section.m_HotKeys )
-            hotkey.m_Parent->SetHotKey( hotkey.m_EditKeycode );
+        for( HOTKEY& hotkey : section.m_HotKeys )
+        {
+            for( TOOL_ACTION* action : hotkey.m_Actions )
+                action->SetHotKey( hotkey.m_EditKeycode );
+        }
     }
-
-    if( !m_toolManagers.empty() )
-        m_toolManagers[ 0 ]->GetActionManager()->UpdateHotKeys( false );
 }
 
 
 void HOTKEY_STORE::ResetAllHotkeysToDefault()
 {
-    for( HOTKEY_SECTION& section: m_hk_sections )
+    for( HOTKEY_SECTION& section : m_hk_sections )
     {
-        for( HOTKEY& hotkey: section.m_HotKeys )
-            hotkey.m_EditKeycode = hotkey.m_Parent->GetDefaultHotKey();
+        for( HOTKEY& hotkey : section.m_HotKeys )
+            hotkey.m_EditKeycode = hotkey.m_Actions[ 0 ]->GetDefaultHotKey();
     }
 }
 
 
 void HOTKEY_STORE::ResetAllHotkeysToOriginal()
 {
-    for( HOTKEY_SECTION& section: m_hk_sections )
+    for( HOTKEY_SECTION& section : m_hk_sections )
     {
-        for( HOTKEY& hotkey: section.m_HotKeys )
-            hotkey.m_EditKeycode = hotkey.m_Parent->GetHotKey();
+        for( HOTKEY& hotkey : section.m_HotKeys )
+            hotkey.m_EditKeycode = hotkey.m_Actions[ 0 ]->GetHotKey();
     }
 }
 
@@ -180,7 +184,7 @@ bool HOTKEY_STORE::CheckKeyConflicts( TOOL_ACTION* aAction, long aKey, HOTKEY** 
         
         for( HOTKEY& hotkey: section.m_HotKeys )
         {
-            if( hotkey.m_Parent == aAction )
+            if( hotkey.m_Actions[ 0 ] == aAction )
                 continue;
             
             if( hotkey.m_EditKeycode == aKey )

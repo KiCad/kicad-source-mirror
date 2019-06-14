@@ -44,8 +44,7 @@ enum ID_WHKL_MENU_IDS
     ID_EDIT_HOTKEY = 2001,
     ID_RESET,
     ID_DEFAULT,
-    ID_RESET_ALL,
-    ID_DEFAULT_ALL,
+    ID_CLEAR
 };
 
 
@@ -159,9 +158,9 @@ public:
 
         int key = aEvent.GetKeyCode();
 
-        for( size_t i = 0; i < sizeof( skipped_keys ) / sizeof( skipped_keys[0] ); ++i )
+        for( wxKeyCode skipped_key : skipped_keys )
         {
-            if( key == skipped_keys[i] )
+            if( key == skipped_key )
                 return;
         }
 
@@ -209,14 +208,9 @@ public:
         HK_PROMPT_DIALOG dialog( aParent, wxID_ANY, _( "Set Hotkey" ), aName, aCurrentKey );
 
         if( dialog.ShowModal() == wxID_OK )
-        {
             return dialog.m_event;
-        }
         else
-        {
-            wxKeyEvent dummy;
-            return dummy;
-        }
+            return wxKeyEvent();
     }
 };
 
@@ -235,7 +229,6 @@ public:
         m_valid = m_normalised_filter_str.size() > 0;
     }
 
-
     /**
      * Method FilterMatches
      *
@@ -249,7 +242,7 @@ public:
             return true;
 
         // Match in the (translated) filter string
-        const auto normedInfo = wxGetTranslation( aHotkey.m_Parent->GetLabel() ).Upper();
+        const auto normedInfo = wxGetTranslation( aHotkey.m_Actions[ 0 ]->GetLabel() ).Upper();
         if( normedInfo.Contains( m_normalised_filter_str ) )
             return true;
 
@@ -302,14 +295,14 @@ void WIDGET_HOTKEY_LIST::UpdateFromClientData()
         if( hkdata )
         {
             const auto& changed_hk = hkdata->GetChangedHotkey();
-            wxString    label = changed_hk.m_Parent->GetLabel();
+            wxString    label = changed_hk.m_Actions[ 0 ]->GetLabel();
             wxString    key_text = KeyNameFromKeyCode( changed_hk.m_EditKeycode );
 
             if( label.IsEmpty() )
-                label = changed_hk.m_Parent->GetName();
+                label = changed_hk.m_Actions[ 0 ]->GetName();
             
             // mark unsaved changes
-            if( changed_hk.m_EditKeycode != changed_hk.m_Parent->GetHotKey() )
+            if( changed_hk.m_EditKeycode != changed_hk.m_Actions[ 0 ]->GetHotKey() )
                 key_text += " *";
 
             SetItemText( i, 0, label );
@@ -331,7 +324,7 @@ void WIDGET_HOTKEY_LIST::changeHotkey( HOTKEY& aHotkey, long aKey )
 
     if( exists && aHotkey.m_EditKeycode != aKey )
     {
-        if( ResolveKeyConflicts( aHotkey.m_Parent, aKey ) )
+        if( aKey == 0 || ResolveKeyConflicts( aHotkey.m_Actions[ 0 ], aKey ) )
             aHotkey.m_EditKeycode = aKey;
     }
 }
@@ -358,7 +351,7 @@ void WIDGET_HOTKEY_LIST::EditItem( wxTreeListItem aItem )
 }
 
 
-void WIDGET_HOTKEY_LIST::ResetItem( wxTreeListItem aItem )
+void WIDGET_HOTKEY_LIST::ResetItem( wxTreeListItem aItem, int aResetId )
 {
     WIDGET_HOTKEY_CLIENT_DATA* hkdata = getExpectedHkClientData( aItem );
 
@@ -367,21 +360,13 @@ void WIDGET_HOTKEY_LIST::ResetItem( wxTreeListItem aItem )
 
     auto& changed_hk = hkdata->GetChangedHotkey();
 
-    changeHotkey( changed_hk, changed_hk.m_Parent->GetHotKey() );
-    UpdateFromClientData();
-}
+    if( aResetId == ID_RESET )
+        changeHotkey( changed_hk, changed_hk.m_Actions[ 0 ]->GetHotKey() );
+    else if( aResetId == ID_CLEAR )
+        changeHotkey( changed_hk, 0 );
+    else if( aResetId == ID_DEFAULT )
+        changeHotkey( changed_hk, changed_hk.m_Actions[ 0 ]->GetDefaultHotKey() );
 
-
-void WIDGET_HOTKEY_LIST::ResetItemToDefault( wxTreeListItem aItem )
-{
-    WIDGET_HOTKEY_CLIENT_DATA* hkdata = getExpectedHkClientData( aItem );
-
-    if( !hkdata )
-        return;
-
-    auto& changed_hk = hkdata->GetChangedHotkey();
-
-    changeHotkey( changed_hk, changed_hk.m_Parent->GetDefaultHotKey() );
     UpdateFromClientData();
 }
 
@@ -406,14 +391,12 @@ void WIDGET_HOTKEY_LIST::OnContextMenu( wxTreeListEvent& aEvent )
     {
         menu.Append( ID_EDIT_HOTKEY, _( "Edit..." ) );
         menu.Append( ID_RESET, _( "Undo Changes" ) );
+        menu.Append( ID_CLEAR, _( "Clear Assigned Hotkey" ) );
         menu.Append( ID_DEFAULT, _( "Restore Default" ) );
         menu.Append( wxID_SEPARATOR );
+
+        PopupMenu( &menu );
     }
-
-    menu.Append( ID_RESET_ALL, _( "Undo All Changes" ) );
-    menu.Append( ID_DEFAULT_ALL, _( "Restore All to Default" ) );
-
-    PopupMenu( &menu );
 }
 
 
@@ -426,19 +409,9 @@ void WIDGET_HOTKEY_LIST::OnMenu( wxCommandEvent& aEvent )
         break;
 
     case ID_RESET:
-        ResetItem( m_context_menu_item );
-        break;
-
+    case ID_CLEAR:
     case ID_DEFAULT:
-        ResetItemToDefault( m_context_menu_item );
-        break;
-
-    case ID_RESET_ALL:
-        ResetAllHotkeys( false );
-        break;
-
-    case ID_DEFAULT_ALL:
-        ResetAllHotkeys( true );
+        ResetItem( m_context_menu_item, aEvent.GetId() );
         break;
 
     default:
@@ -456,7 +429,7 @@ bool WIDGET_HOTKEY_LIST::ResolveKeyConflicts( TOOL_ACTION* aAction, long aKey )
     if( !conflictingHotKey )
         return true;
     
-    TOOL_ACTION* conflictingAction = conflictingHotKey->m_Parent;    
+    TOOL_ACTION* conflictingAction = conflictingHotKey->m_Actions[ 0 ];
     wxString msg = wxString::Format( _( "\"%s\" is already assigned to \"%s\" in section \"%s\". "
                                         "Are you sure you want to change its assignment?" ),
                                      KeyNameFromKeyCode( aKey ),
@@ -517,13 +490,9 @@ void WIDGET_HOTKEY_LIST::ResetAllHotkeys( bool aResetToDefault )
     // Should not need to check conflicts, as the state we're about
     // to set to a should be consistent
     if( aResetToDefault )
-    {
         m_hk_store.ResetAllHotkeysToDefault();
-    }
     else
-    {
         m_hk_store.ResetAllHotkeysToOriginal();
-    }
 
     UpdateFromClientData();
     Thaw();

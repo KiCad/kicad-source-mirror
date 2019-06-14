@@ -361,11 +361,8 @@ int WriteHotKeyConfig( const std::map<std::string, TOOL_ACTION*>& aActionMap )
     // Overlay the current app's hotkey definitions onto the map
     //
     for( const auto& ii : aActionMap )
-    {
-        if( ii.second->GetHotKey() )
-            hotkeys[ ii.first ] = ii.second->GetHotKey();
-    }
-    
+        hotkeys[ ii.first ] = ii.second->GetHotKey();
+
     // Write entire hotkey set
     //
     wxFile file( fn.GetFullPath(), wxFile::OpenMode::write );

@@ -105,7 +105,7 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
     const BUTTON_ROW_PANEL::BTN_DEF_LIST l_btn_defs = {
         {
             wxID_RESET,
-            _( "Reset Hotkeys" ),
+            _( "Undo All Changes" ),
             _( "Undo all changes made so far in this dialog" ),
             [this]( wxCommandEvent& ){
                 m_hotkeyListCtrl->ResetAllHotkeys( false );
@@ -113,7 +113,7 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
         },
         {
             wxID_ANY,
-            _( "Set to Defaults" ),
+            _( "Restore All to Defaults" ),
             _( "Set all hotkeys to the built-in KiCad defaults" ),
             [this]( wxCommandEvent& ){
                 m_hotkeyListCtrl->ResetAllHotkeys( true );
@@ -184,8 +184,8 @@ void PANEL_HOTKEYS_EDITOR::ImportHotKeys()
     {
         for( HOTKEY& hotkey: section.m_HotKeys )
         {
-            if( importedHotKeys.count( hotkey.m_Parent->GetName() ) )
-                hotkey.m_EditKeycode = importedHotKeys[ hotkey.m_Parent->GetName() ];
+            if( importedHotKeys.count( hotkey.m_Actions[ 0 ]->GetName() ) )
+                hotkey.m_EditKeycode = importedHotKeys[ hotkey.m_Actions[ 0 ]->GetName() ];
         }
     }
     

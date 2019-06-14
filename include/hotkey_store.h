@@ -32,13 +32,18 @@ class TOOL_MANAGER;
 
 struct HOTKEY
 {
-    TOOL_ACTION* m_Parent;
-    int          m_EditKeycode;
+    std::vector<TOOL_ACTION*> m_Actions;
+    int                       m_EditKeycode;
 
-    HOTKEY( TOOL_ACTION* aParent ) :
-        m_Parent( aParent ),
-        m_EditKeycode( aParent->GetHotKey() )
+    HOTKEY() :
+            m_EditKeycode( 0 )
     { }
+
+    HOTKEY( TOOL_ACTION* aAction ) :
+            m_EditKeycode( aAction->GetHotKey() )
+    {
+        m_Actions.push_back( aAction );
+    }
 };
 
 

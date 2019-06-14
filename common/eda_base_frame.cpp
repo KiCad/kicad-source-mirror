@@ -39,6 +39,7 @@
 #include <tool/action_menu.h>
 #include <tool/common_control.h>
 #include <tool/tool_manager.h>
+#include <tool/action_manager.h>
 #include <menus_helpers.h>
 #include <tool/actions.h>
 
@@ -318,6 +319,8 @@ void EDA_BASE_FRAME::ShowChangedLanguage()
 
 void EDA_BASE_FRAME::CommonSettingsChanged()
 {
+    GetToolManager()->GetActionManager()->UpdateHotKeys( false );
+
     if( GetMenuBar() )
     {
         // For icons in menus, icon scaling & hotkeys
@@ -530,8 +533,10 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
     }
 
     // The Kicad manager frame is not a player so we have to add it by hand
-    if( IsType( KICAD_MAIN_FRAME_T ) )
-        InstallPreferences( &dlg, hotkeysPanel );
+    wxWindow* manager = wxFindWindowByName( KICAD_MANAGER_FRAME_NAME );
+
+    if( manager )
+        static_cast<EDA_BASE_FRAME*>( manager )->InstallPreferences( &dlg, hotkeysPanel );
 
     if( dlg.ShowModal() == wxID_OK )
         dlg.Kiway().CommonSettingsChanged();

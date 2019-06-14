@@ -260,18 +260,6 @@ bool TOOL_MANAGER::InvokeTool( const std::string& aToolName )
 }
 
 
-void TOOL_MANAGER::RegisterAction( TOOL_ACTION* aAction )
-{
-    m_actionMgr->RegisterAction( aAction );
-}
-
-
-void TOOL_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
-{
-    m_actionMgr->UnregisterAction( aAction );
-}
-
-
 bool TOOL_MANAGER::RunAction( const std::string& aActionName, bool aNow, void* aParam )
 {
     TOOL_ACTION* action = m_actionMgr->FindAction( aActionName );

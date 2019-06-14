@@ -98,15 +98,9 @@ protected:
 
     /**
      * Method ResetItem
-     * Reset the item to the original from the dialog was created.
+     * Reset the item to either the default, the value when the dialog was opened, or none.
      */
-    void ResetItem( wxTreeListItem aItem );
-
-    /**
-     * Method ResetItemToDefault
-     * Reset the item to the default value.
-     */
-    void ResetItemToDefault( wxTreeListItem aItem );
+    void ResetItem( wxTreeListItem aItem, int aResetId );
 
     /**
      * Method OnActivated

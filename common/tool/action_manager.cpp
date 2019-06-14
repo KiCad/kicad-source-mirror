@@ -42,19 +42,13 @@ ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :
         if( action->m_id == -1 )
             action->m_id = MakeActionId( action->m_name );
 
-        RegisterAction( new TOOL_ACTION( *action ) );
+        RegisterAction( action );
     }
 }
 
 
 ACTION_MANAGER::~ACTION_MANAGER()
 {
-    while( !m_actionNameIndex.empty() )
-    {
-        TOOL_ACTION* action = m_actionNameIndex.begin()->second;
-        UnregisterAction( action );
-        delete action;
-    }
 }
 
 
@@ -68,22 +62,6 @@ void ACTION_MANAGER::RegisterAction( TOOL_ACTION* aAction )
     wxASSERT( m_actionNameIndex.find( aAction->m_name ) == m_actionNameIndex.end() );
 
     m_actionNameIndex[aAction->m_name] = aAction;
-}
-
-
-void ACTION_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
-{
-    m_actionNameIndex.erase( aAction->m_name );
-    int hotkey = GetHotKey( *aAction );
-
-    if( hotkey )
-    {
-        std::list<TOOL_ACTION*>& actions = m_actionHotKeys[hotkey];
-        auto action = std::find( actions.begin(), actions.end(), aAction );
-
-        if( action != actions.end() )
-            actions.erase( action );
-    }
 }
 
 
@@ -207,9 +185,9 @@ void ACTION_MANAGER::UpdateHotKeys( bool aFullUpdate )
         ReadHotKeyConfig( wxEmptyString, userHotKeyMap );
     }
 
-    for( const auto& actionName : m_actionNameIndex )
+    for( const auto& ii : m_actionNameIndex )
     {
-        TOOL_ACTION* action = actionName.second;
+        TOOL_ACTION* action = ii.second;
         int          hotkey = 0;
 
         if( aFullUpdate )
@@ -218,10 +196,9 @@ void ACTION_MANAGER::UpdateHotKeys( bool aFullUpdate )
             hotkey = action->GetHotKey();
 
         if( hotkey > 0 )
-        {
             m_actionHotKeys[hotkey].push_back( action );
-            m_hotkeys[action->GetId()] = hotkey;
-        }
+
+        m_hotkeys[action->GetId()] = hotkey;
     }
 }
 
@@ -232,10 +209,10 @@ int ACTION_MANAGER::processHotKey( TOOL_ACTION* aAction, std::map<std::string, i
     aAction->m_hotKey = aAction->m_defaultHotKey;
     
     if( !aAction->m_legacyName.empty() && aLegacyMap.count( aAction->m_legacyName ) )
-        aAction->m_hotKey = aLegacyMap[ aAction->m_legacyName ];
+        aAction->SetHotKey( aLegacyMap[ aAction->m_legacyName ] );
     
     if( aHotKeyMap.count( aAction->m_name ) )
-        aAction->m_hotKey = aHotKeyMap[ aAction->m_name ];
+        aAction->SetHotKey( aHotKeyMap[ aAction->m_name ] );
     
     return aAction->m_hotKey;
 }

@@ -52,6 +52,9 @@
 #define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS
 
 
+#define KICAD_MANAGER_FRAME_NAME   wxT( "KicadFrame" )
+
+
 // Readability helper definitions for creating backup files.
 #define CREATE_BACKUP_FILE    true
 #define NO_BACKUP_FILE        false

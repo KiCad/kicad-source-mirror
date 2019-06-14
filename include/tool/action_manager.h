@@ -63,13 +63,6 @@ public:
     void RegisterAction( TOOL_ACTION* aAction );
 
     /**
-     * Function UnregisterAction()
-     * Removes a tool action from the manager and makes it unavailable for further usage.
-     * @param aAction: action to be removed.
-     */
-    void UnregisterAction( TOOL_ACTION* aAction );
-
-    /**
      * Generates an unique ID from for an action with given name.
      */
     static int MakeActionId( const std::string& aActionName );
