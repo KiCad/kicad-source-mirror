@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -93,7 +93,18 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         }
         else
         {
-            gal->DrawLine( l.a, l.b );
+            if( curved_ratsnest )
+            {
+                auto dx = l.b.x - l.a.x;
+                auto dy = l.b.y - l.a.y;
+                const auto center = VECTOR2I( l.a.x + 0.5 * dx - 0.1 * dy,
+                        l.a.y + 0.5 * dy + 0.1 * dx );
+                gal->DrawCurve( l.a, center, center, l.b );
+            }
+            else
+            {
+                gal->DrawLine( l.a, l.b );
+            }
         }
     }
 
@@ -148,15 +159,16 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
                 }
                 else
                 {
-                    if (curved_ratsnest) {
+                    if( curved_ratsnest )
+                    {
                         auto dx = target.x - source.x;
                         auto dy = target.y - source.y;
-                        const auto center = VECTOR2I(
-                            source.x + 0.5 * dx - 0.1 * dy, 
-                            source.y + 0.5 * dy + 0.1 * dx
-                        );
+                        const auto center = VECTOR2I( source.x + 0.5 * dx - 0.1 * dy,
+                                source.y + 0.5 * dy + 0.1 * dx );
                         gal->DrawCurve( source, center, center, target );
-                    } else {
+                    }
+                    else
+                    {
                         gal->DrawLine( source, target );
                     }
                 }
