@@ -213,17 +213,17 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::explicitCrossProbe, sheetSelection && EE_CONDITIONS::Idle, 1 );
     menu.AddItem( EE_ACTIONS::leaveSheet,         belowRootSheetCondition, 1 );
 
-    menu.AddSeparator( EE_CONDITIONS::Empty, 100 );
+    menu.AddSeparator( 100 );
     menu.AddItem( EE_ACTIONS::drawWire,           schEditCondition && EE_CONDITIONS::Empty, 100 );
     menu.AddItem( EE_ACTIONS::drawBus,            schEditCondition && EE_CONDITIONS::Empty, 100 );
 
-    menu.AddSeparator( SCH_WIRE_BUS_TOOL::IsDrawingWire, 100 );
+    menu.AddSeparator( 100 );
     menu.AddItem( EE_ACTIONS::finishWire,         SCH_WIRE_BUS_TOOL::IsDrawingWire, 100 );
 
-    menu.AddSeparator( SCH_WIRE_BUS_TOOL::IsDrawingBus, 100 );
+    menu.AddSeparator( 100 );
     menu.AddItem( EE_ACTIONS::finishBus,          SCH_WIRE_BUS_TOOL::IsDrawingBus, 100 );
 
-    menu.AddSeparator( EE_CONDITIONS::NotEmpty, 200 );
+    menu.AddSeparator( 200 );
     menu.AddItem( EE_ACTIONS::selectConnection,   wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::placeJunction,      wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::placeLabel,         wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
@@ -234,11 +234,11 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::placeSheetPin,      sheetSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::importSheetPin,     sheetSelection && EE_CONDITIONS::Idle, 250 );
 
-    menu.AddSeparator( havePartCondition && EE_CONDITIONS::Empty, 400 );
+    menu.AddSeparator( 400 );
     menu.AddItem( EE_ACTIONS::symbolProperties,   havePartCondition && EE_CONDITIONS::Empty, 400 );
     menu.AddItem( EE_ACTIONS::pinTable,           havePartCondition && EE_CONDITIONS::Empty, 400 );
 
-    menu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1000 );
+    menu.AddSeparator( 1000 );
     m_frame->AddStandardSubMenus( m_menu );
 
     return true;

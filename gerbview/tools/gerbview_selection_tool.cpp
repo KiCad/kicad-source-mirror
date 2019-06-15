@@ -164,7 +164,7 @@ bool GERBVIEW_SELECTION_TOOL::Init()
     auto& menu = m_menu.GetMenu();
 
     menu.AddMenu( selectMenu.get() );
-    menu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1000 );
+    menu.AddSeparator( 1000 );
 
     getEditFrame<GERBVIEW_FRAME>()->AddStandardSubMenus( m_menu );
 

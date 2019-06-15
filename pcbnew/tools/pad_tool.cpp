@@ -199,7 +199,7 @@ bool PAD_TOOL::Init()
 
         // we need a separator only when the selection is empty
         auto separatorCond = canShowMenuCond && SELECTION_CONDITIONS::Count( 0 );
-        menu.AddSeparator( separatorCond, 1000 );
+        menu.AddSeparator( 1000 );
     }
 
     return true;

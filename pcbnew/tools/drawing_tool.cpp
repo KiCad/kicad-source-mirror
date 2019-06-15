@@ -212,13 +212,13 @@ bool DRAWING_TOOL::Init()
 
     // cancel current tool goes in main context menu at the top if present
     ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolFunctor, 1 );
-    ctxMenu.AddSeparator( activeToolFunctor, 1 );
+    ctxMenu.AddSeparator( 1 );
 
     // tool-specific actions
     ctxMenu.AddItem( closeZoneOutline, zoneActiveFunctor, 200 );
     ctxMenu.AddItem( deleteLastPoint, canUndoPoint, 200 );
 
-    ctxMenu.AddSeparator( canUndoPoint, 500 );
+    ctxMenu.AddSeparator( 500 );
 
     // Type-specific sub-menus will be added for us by other tools
     // For example, zone fill/unfill is provided by the PCB control tool

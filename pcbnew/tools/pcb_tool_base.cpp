@@ -216,7 +216,7 @@ bool PCB_TOOL_BASE::Init()
 
     // cancel current tool goes in main context menu at the top if present
     ctxMenu.AddItem( ACTIONS::cancelInteractive, SELECTION_CONDITIONS::ShowAlways, 1 );
-    ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1 );
+    ctxMenu.AddSeparator( 1 );
 
     // Finally, add the standard zoom/grid items
     getEditFrame<PCB_BASE_FRAME>()->AddStandardSubMenus( m_menu );

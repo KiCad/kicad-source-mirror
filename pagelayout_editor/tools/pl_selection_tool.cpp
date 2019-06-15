@@ -94,14 +94,14 @@ bool PL_SELECTION_TOOL::Init()
 
     auto& menu = m_menu.GetMenu();
 
-    menu.AddSeparator( PL_CONDITIONS::Idle, 200 );
+    menu.AddSeparator( 200 );
     menu.AddItem( PL_ACTIONS::addLine,                 PL_CONDITIONS::Idle, 250 );
     menu.AddItem( PL_ACTIONS::addRectangle,            PL_CONDITIONS::Idle, 250 );
     menu.AddItem( PL_ACTIONS::addText,                 PL_CONDITIONS::Idle, 250 );
     menu.AddItem( PL_ACTIONS::addImage,                PL_CONDITIONS::Idle, 250 );
     menu.AddItem( PL_ACTIONS::appendImportedWorksheet, PL_CONDITIONS::Idle, 250 );
 
-    menu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1000 );
+    menu.AddSeparator( 1000 );
     m_frame->AddStandardSubMenus( m_menu );
 
     return true;

@@ -383,11 +383,11 @@ bool PCB_EDITOR_CONTROL::Init()
 
     // "Cancel" goes at the top of the context menu when a tool is active
     ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
-    ctxMenu.AddSeparator( activeToolCondition, 1 );
+    ctxMenu.AddSeparator( 1 );
 
     // "Get and Place Footprint" should be available for Place Footprint tool
     ctxMenu.AddItem( PCB_ACTIONS::findMove, placeModuleCondition, 1000 );
-    ctxMenu.AddSeparator( placeModuleCondition, 1000 );
+    ctxMenu.AddSeparator( 1000 );
 
     // Finally, add the standard zoom & grid items
     getEditFrame<PCB_BASE_FRAME>()->AddStandardSubMenus( m_menu );
@@ -409,7 +409,7 @@ bool PCB_EDITOR_CONTROL::Init()
 
         // Add "Get and Place Footprint" when Selection tool is in an inactive state
         menu.AddItem( PCB_ACTIONS::findMove, inactiveStateCondition );
-        menu.AddSeparator( inactiveStateCondition );
+        menu.AddSeparator();
 
         toolMenu.AddSubMenu( zoneMenu );
         toolMenu.AddSubMenu( lockMenu );

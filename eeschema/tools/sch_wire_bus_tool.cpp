@@ -221,7 +221,7 @@ bool SCH_WIRE_BUS_TOOL::Init()
     //
     ctxMenu.AddItem( EE_ACTIONS::leaveSheet,         belowRootSheetCondition, 2 );
 
-    ctxMenu.AddSeparator( E_C::ShowAlways, 10 );
+    ctxMenu.AddSeparator( 10 );
     ctxMenu.AddItem( EE_ACTIONS::drawWire,           wireOrBusTool && E_C::Idle, 10 );
     ctxMenu.AddItem( EE_ACTIONS::drawBus,            wireOrBusTool && E_C::Idle, 10 );
     ctxMenu.AddItem( EE_ACTIONS::drawLines,          lineTool && E_C::Idle, 10 );
@@ -234,7 +234,7 @@ bool SCH_WIRE_BUS_TOOL::Init()
     m_menu.AddSubMenu( busUnfoldMenu );
     ctxMenu.AddMenu( busUnfoldMenu.get(),            EE_CONDITIONS::Idle, 10 );
 
-    ctxMenu.AddSeparator( wireOrBusTool && EE_CONDITIONS::Idle, 100 );
+    ctxMenu.AddSeparator( 100 );
     ctxMenu.AddItem( EE_ACTIONS::placeJunction,      wireOrBusTool && E_C::Idle, 100 );
     ctxMenu.AddItem( EE_ACTIONS::placeLabel,         wireOrBusTool && E_C::Idle, 100 );
     ctxMenu.AddItem( EE_ACTIONS::placeGlobalLabel,   wireOrBusTool && E_C::Idle, 100 );
@@ -242,7 +242,7 @@ bool SCH_WIRE_BUS_TOOL::Init()
     ctxMenu.AddItem( EE_ACTIONS::breakWire,          wireOrBusTool && E_C::Idle, 100 );
     ctxMenu.AddItem( EE_ACTIONS::breakBus,           wireOrBusTool && E_C::Idle, 100 );
 
-    ctxMenu.AddSeparator( wireOrBusTool && EE_CONDITIONS::Idle, 200 );
+    ctxMenu.AddSeparator( 200 );
     ctxMenu.AddItem( EE_ACTIONS::selectNode,         wireOrBusTool && E_C::Idle, 200 );
     ctxMenu.AddItem( EE_ACTIONS::selectConnection,   wireOrBusTool && E_C::Idle, 200 );
 

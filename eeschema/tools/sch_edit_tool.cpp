@@ -358,7 +358,7 @@ bool SCH_EDIT_TOOL::Init()
     {
         CONDITIONAL_MENU& moveMenu = moveTool->GetToolMenu().GetMenu();
 
-        moveMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
+        moveMenu.AddSeparator();
         moveMenu.AddItem( EE_ACTIONS::rotateCCW,       orientCondition );
         moveMenu.AddItem( EE_ACTIONS::rotateCW,        orientCondition );
         moveMenu.AddItem( EE_ACTIONS::mirrorX,         orientCondition );
@@ -376,7 +376,7 @@ bool SCH_EDIT_TOOL::Init()
         m_menu.AddSubMenu( symUnitMenu );
         moveMenu.AddMenu( symUnitMenu.get(), E_C::SingleMultiUnitSymbol, 1 );
 
-        moveMenu.AddSeparator( E_C::IdleSelection );
+        moveMenu.AddSeparator();
         moveMenu.AddItem( ACTIONS::cut,                E_C::IdleSelection );
         moveMenu.AddItem( ACTIONS::copy,               E_C::IdleSelection );
         moveMenu.AddItem( ACTIONS::duplicate,          duplicateCondition );
@@ -447,7 +447,7 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::toText,           toTextlCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::cleanupSheetPins, singleSheetCondition, 250 );
 
-    selToolMenu.AddSeparator( E_C::Idle, 300 );
+    selToolMenu.AddSeparator( 300 );
     selToolMenu.AddItem( ACTIONS::cut,                 E_C::IdleSelection, 300 );
     selToolMenu.AddItem( ACTIONS::copy,                E_C::IdleSelection, 300 );
     selToolMenu.AddItem( ACTIONS::paste,               E_C::Idle, 300 );

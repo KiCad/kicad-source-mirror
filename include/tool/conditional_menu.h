@@ -96,12 +96,9 @@ public:
      * Function AddSeparator()
      *
      * Adds a separator to the menu.
-     * @param aCondition is a condition that has to be fulfilled to enable the submenu entry.
-     * @param aOrder determines location of the added menu, higher numbers are put on the bottom.
-     * You may use ANY_ORDER here if you think it does not matter.
+     * @param aOrder determines location of the separator, higher numbers are put on the bottom.
      */
-    void AddSeparator( const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways,
-                       int aOrder = ANY_ORDER );
+    void AddSeparator( int aOrder = ANY_ORDER );
 
     /**
      * Function Evaluate()

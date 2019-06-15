@@ -223,7 +223,7 @@ bool SELECTION_TOOL::Init()
     auto& menu = m_menu.GetMenu();
 
     menu.AddMenu( selectMenu.get(), SELECTION_CONDITIONS::NotEmpty );
-    menu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 1000 );
+    menu.AddSeparator( 1000 );
 
     if( frame )
         frame->AddStandardSubMenus( m_menu );

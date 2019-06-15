@@ -76,7 +76,7 @@ bool PL_EDIT_TOOL::Init()
     // cancel current tool goes in main context menu at the top if present
     ctxMenu.AddItem( ACTIONS::cancelInteractive,     SELECTION_CONDITIONS::ShowAlways, 1 );
 
-    ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
+    ctxMenu.AddSeparator( 200 );
     ctxMenu.AddItem( PL_ACTIONS::doDelete,           SELECTION_CONDITIONS::NotEmpty, 200 );
 
     // Finally, add the standard zoom/grid items

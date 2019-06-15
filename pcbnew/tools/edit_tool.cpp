@@ -250,7 +250,7 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::createArray, SELECTION_CONDITIONS::NotEmpty );
 
 
-    menu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
+    menu.AddSeparator();
     menu.AddItem( ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( ACTIONS::copy, SELECTION_CONDITIONS::NotEmpty );
     // Selection tool handles the context menu for some other tools, such as the Picker.
@@ -258,13 +258,13 @@ bool EDIT_TOOL::Init()
     menu.AddItem( ACTIONS::paste, noActiveToolCondition );
 
     // Mirror only available in modedit
-    menu.AddSeparator( editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
+    menu.AddSeparator();
     menu.AddItem( PCB_ACTIONS::mirror, editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::createPadFromShapes, editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::explodePadToShapes, editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
 
     // Footprint actions
-    menu.AddSeparator( singleModuleCondition );
+    menu.AddSeparator();
     menu.AddItem( PCB_ACTIONS::editFootprintInFpEditor, singleModuleCondition );
     menu.AddItem( PCB_ACTIONS::updateFootprint, singleModuleCondition );
     menu.AddItem( PCB_ACTIONS::changeFootprint, singleModuleCondition );
@@ -279,7 +279,7 @@ bool EDIT_TOOL::Init()
 
     // "Cancel" goes at the top of the context menu when a tool is active
     ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
-    ctxMenu.AddSeparator( activeToolCondition, 1 );
+    ctxMenu.AddSeparator( 1 );
 
     if( frame )
         frame->AddStandardSubMenus( m_menu );

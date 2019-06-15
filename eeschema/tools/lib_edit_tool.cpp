@@ -63,7 +63,7 @@ bool LIB_EDIT_TOOL::Init()
     {
         CONDITIONAL_MENU& moveMenu = moveTool->GetToolMenu().GetMenu();
 
-        moveMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
+        moveMenu.AddSeparator( 200 );
         moveMenu.AddItem( EE_ACTIONS::rotateCCW,       EE_CONDITIONS::NotEmpty, 200 );
         moveMenu.AddItem( EE_ACTIONS::rotateCW,        EE_CONDITIONS::NotEmpty, 200 );
         moveMenu.AddItem( EE_ACTIONS::mirrorX,         EE_CONDITIONS::NotEmpty, 200 );
@@ -72,7 +72,7 @@ bool LIB_EDIT_TOOL::Init()
 
         moveMenu.AddItem( EE_ACTIONS::properties,      EE_CONDITIONS::Count( 1 ), 200 );
 
-        moveMenu.AddSeparator( EE_CONDITIONS::IdleSelection, 300 );
+        moveMenu.AddSeparator( 300 );
         moveMenu.AddItem( ACTIONS::cut,                EE_CONDITIONS::IdleSelection, 300 );
         moveMenu.AddItem( ACTIONS::copy,               EE_CONDITIONS::IdleSelection, 300 );
         moveMenu.AddItem( ACTIONS::duplicate,          EE_CONDITIONS::NotEmpty, 300 );
@@ -82,7 +82,7 @@ bool LIB_EDIT_TOOL::Init()
     //
     CONDITIONAL_MENU& drawMenu = drawingTools->GetToolMenu().GetMenu();
 
-    drawMenu.AddSeparator( EE_CONDITIONS::NotEmpty, 200 );
+    drawMenu.AddSeparator( 200 );
     drawMenu.AddItem( EE_ACTIONS::rotateCCW,           EE_CONDITIONS::IdleSelection, 200 );
     drawMenu.AddItem( EE_ACTIONS::rotateCW,            EE_CONDITIONS::IdleSelection, 200 );
     drawMenu.AddItem( EE_ACTIONS::mirrorX,             EE_CONDITIONS::IdleSelection, 200 );
@@ -102,7 +102,7 @@ bool LIB_EDIT_TOOL::Init()
 
     selToolMenu.AddItem( EE_ACTIONS::properties,       EE_CONDITIONS::Count( 1 ), 200 );
 
-    selToolMenu.AddSeparator( EE_CONDITIONS::Idle, 300 );
+    selToolMenu.AddSeparator( 300 );
     selToolMenu.AddItem( ACTIONS::cut,                 EE_CONDITIONS::IdleSelection, 300 );
     selToolMenu.AddItem( ACTIONS::copy,                EE_CONDITIONS::IdleSelection, 300 );
     selToolMenu.AddItem( ACTIONS::paste,               EE_CONDITIONS::Idle, 300 );

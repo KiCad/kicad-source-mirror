@@ -114,23 +114,23 @@ bool LIB_CONTROL::Init()
         ctxMenu.AddItem( ACTIONS::saveAs,                libSelectedCondition );
         ctxMenu.AddItem( ACTIONS::revert,                libSelectedCondition );
     
-        ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways );
+        ctxMenu.AddSeparator();
         ctxMenu.AddItem( EE_ACTIONS::newSymbol,          SELECTION_CONDITIONS::ShowAlways );
         ctxMenu.AddItem( EE_ACTIONS::editSymbol,         symbolSelectedCondition );
     
-        ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways );
+        ctxMenu.AddSeparator();
         ctxMenu.AddItem( ACTIONS::save,                  symbolSelectedCondition );
         ctxMenu.AddItem( ACTIONS::saveCopyAs,            symbolSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::duplicateSymbol,    symbolSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::deleteSymbol,       symbolSelectedCondition );
         ctxMenu.AddItem( ACTIONS::revert,                symbolSelectedCondition );
     
-        ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways );
+        ctxMenu.AddSeparator();
         ctxMenu.AddItem( EE_ACTIONS::cutSymbol,          symbolSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::copySymbol,         symbolSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::pasteSymbol,        SELECTION_CONDITIONS::ShowAlways );
     
-        ctxMenu.AddSeparator( symbolSelectedCondition );
+        ctxMenu.AddSeparator();
         ctxMenu.AddItem( EE_ACTIONS::importSymbol,       SELECTION_CONDITIONS::ShowAlways );
         ctxMenu.AddItem( EE_ACTIONS::exportSymbol,       symbolSelectedCondition );
     }

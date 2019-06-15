@@ -103,7 +103,7 @@ bool LIB_PIN_TOOL::Init()
 
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddSeparator( singlePinCondition, 400 );
+    selToolMenu.AddSeparator( 400 );
     selToolMenu.AddItem( EE_ACTIONS::pushPinLength,    singlePinCondition, 400 );
     selToolMenu.AddItem( EE_ACTIONS::pushPinNameSize,  singlePinCondition, 400 );
     selToolMenu.AddItem( EE_ACTIONS::pushPinNumSize,   singlePinCondition, 400 );

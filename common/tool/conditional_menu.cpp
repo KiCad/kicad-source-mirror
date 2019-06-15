@@ -92,9 +92,9 @@ void CONDITIONAL_MENU::AddMenu( ACTION_MENU* aMenu, const SELECTION_CONDITION& a
 }
 
 
-void CONDITIONAL_MENU::AddSeparator( const SELECTION_CONDITION& aCondition, int aOrder )
+void CONDITIONAL_MENU::AddSeparator( int aOrder )
 {
-    addEntry( ENTRY( aCondition, aOrder ) );
+    addEntry( ENTRY( SELECTION_CONDITIONS::ShowAlways, aOrder ) );
 }
 
 
