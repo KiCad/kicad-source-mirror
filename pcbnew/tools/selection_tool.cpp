@@ -863,7 +863,13 @@ int SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
         // Track items marked BUSY have already been visited
         //  therefore their connections have already been marked
         if( trackItem && !trackItem->GetState( BUSY ) )
-            selectAllItemsConnectedToItem( *trackItem );
+        {
+            if( aEvent.GetCommandId()
+                    && *aEvent.GetCommandId() == PCB_ACTIONS::expandSelectedConnection.GetId() )
+                selectAllItemsConnectedToItem( *trackItem );
+            else
+                selectAllItemsConnectedToTrack( *trackItem );
+        }
     }
 
     // Inform other potentially interested tools
