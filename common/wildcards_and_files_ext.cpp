@@ -29,25 +29,8 @@
  */
 #include <wildcards_and_files_ext.h>
 
-/**
- * Format wildcard extension to support case sensitive file dialogs.
- *
- * The file extension wildcards of the GTK+ file dialog are case sensitive so using all lower
- * case characters means that only file extensions that are all lower case will show up in the
- * file dialog.  The GTK+ file dialog does support regular expressions so the file extension
- * is converted to a regular expression ( sch -> [sS][cC][hH] ) when wxWidgets is built against
- * GTK+.  Please make sure you call this function when adding new file wildcards.
- *
- * @note When calling wxFileDialog with a default file defined, make sure you include the
- *       file extension along with the file name.  Otherwise, on GTK+ builds, the file
- *       dialog will append the wildcard regular expression as the file extension which is
- *       surely not what you want.
- *
- * @param aWildcard is the extension part of the wild card.
- *
- * @return the build appropriate file dialog wildcard filter.
- */
-static wxString formatWildcardExt( const wxString& aWildcard )
+
+wxString formatWildcardExt( const wxString& aWildcard )
 {
     wxString wc;
 #if defined( __WXGTK__ )
@@ -67,6 +50,7 @@ static wxString formatWildcardExt( const wxString& aWildcard )
     return wc;
 #endif
 }
+
 
 wxString AddFileExtListToFilter( const std::vector<std::string>& aExts )
 {

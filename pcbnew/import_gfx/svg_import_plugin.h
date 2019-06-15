@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 CERN
  * @author Janito V. Ferreira Filho <janito.vff@gmail.com>
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,12 +26,13 @@
 #ifndef SVG_IMPORT_PLUGIN_H
 #define SVG_IMPORT_PLUGIN_H
 
-#include "vector"
-
 #include "nanosvg.h"
 
 #include "graphics_import_plugin.h"
 #include <math/vector2d.h>
+#include <wildcards_and_files_ext.h>
+
+#include <vector>
 
 
 class SVG_IMPORT_PLUGIN : public GRAPHICS_IMPORT_PLUGIN
@@ -44,10 +45,8 @@ public:
 
     const wxArrayString GetFileExtensions() const override
     {
-        wxArrayString list;
-        list.Add( "svg" );
-        list.Add( "SVG" );
-        return list;
+
+        return wxArrayString( 1, formatWildcardExt( "svg" ) );
     }
 
     /**
