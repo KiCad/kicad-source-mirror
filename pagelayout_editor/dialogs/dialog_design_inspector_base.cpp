@@ -33,8 +33,8 @@ DIALOG_INSPECTOR_BASE::DIALOG_INSPECTOR_BASE( wxWindow* parent, wxWindowID id, c
 	m_gridListItems->EnableDragColMove( false );
 	m_gridListItems->EnableDragColSize( true );
 	m_gridListItems->SetColLabelSize( 30 );
-	m_gridListItems->SetColLabelValue( 0, _("Type") );
-	m_gridListItems->SetColLabelValue( 1, _("Name") );
+	m_gridListItems->SetColLabelValue( 0, _("-") );
+	m_gridListItems->SetColLabelValue( 1, _("Type") );
 	m_gridListItems->SetColLabelValue( 2, _("Count") );
 	m_gridListItems->SetColLabelValue( 3, _("Comment") );
 	m_gridListItems->SetColLabelValue( 4, _("Text") );

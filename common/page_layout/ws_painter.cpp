@@ -301,6 +301,8 @@ void KIGFX::WS_PAINTER::draw( const WS_DRAW_ITEM_TEXT* aItem, int aLayer ) const
     m_gal->SetStrokeColor( m_renderSettings.GetColor( aItem, aLayer ) );
     m_gal->SetLineWidth( aItem->GetThickness() );
     m_gal->SetTextAttributes( aItem );
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
     m_gal->StrokeText( aItem->GetShownText(), VECTOR2D( 0, 0 ), 0.0 );
     m_gal->Restore();
 }

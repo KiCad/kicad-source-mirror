@@ -146,7 +146,7 @@
                                     <property name="close_button">1</property>
                                     <property name="col_label_horiz_alignment">wxALIGN_CENTER</property>
                                     <property name="col_label_size">30</property>
-                                    <property name="col_label_values">&quot;Type&quot; &quot;Name&quot; &quot;Count&quot; &quot;Comment&quot; &quot;Text&quot;</property>
+                                    <property name="col_label_values">&quot;-&quot; &quot;Type&quot; &quot;Count&quot; &quot;Comment&quot; &quot;Text&quot;</property>
                                     <property name="col_label_vert_alignment">wxALIGN_CENTER</property>
                                     <property name="cols">5</property>
                                     <property name="column_sizes"></property>

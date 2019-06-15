@@ -167,11 +167,15 @@ public:
 };
 
 // Column ids for m_gridListItems
-#define COL_BITMAP 0
-#define COL_TYPENAME 1
-#define COL_COUNT 2
-#define COL_COMMENT 3
-#define COL_TEXTSTRING 4
+enum COL_INDEX
+{
+    COL_BITMAP,
+    COL_TYPENAME,
+    COL_REPEAT_NUMBER,
+    COL_COMMENT,
+    COL_TEXTSTRING,
+    COL_COUNT       //Sentinel
+};
 
 
 DIALOG_INSPECTOR::DIALOG_INSPECTOR( PL_EDITOR_FRAME* aParent ) :
@@ -194,6 +198,7 @@ DIALOG_INSPECTOR::~DIALOG_INSPECTOR()
 void DIALOG_INSPECTOR::ReCreateDesignList()
 {
     wxWindowUpdateLocker dummy( this );   // Avoid flicker when rebuilding the tree
+    const PAGE_INFO& page_info = m_editorFrame->GetPageLayout().GetPageSettings();
 
     if( m_gridListItems->GetNumberRows() > 1 )
         m_gridListItems->DeleteRows( 1, m_gridListItems->GetNumberRows() - 1 );
@@ -205,16 +210,18 @@ void DIALOG_INSPECTOR::ReCreateDesignList()
     wxFileName      fn( ((PL_EDITOR_FRAME*) GetParent())->GetCurrFileName() );
 
     if( fn.GetName().IsEmpty() )
-        SetTitle( "<default>" );
+        SetTitle( "<default page layout>" );
     else
         SetTitle( fn.GetName() );
 
-    // The first item is the entire page
+    // The first item is the layout: Display info about the page: fmt, size...
     int row = 0;
-    GetGridList()->SetCellValue( row, COL_TYPENAME, _( "Page" ) );
-    GetGridList()->SetCellValue( row, COL_COMMENT, _( "A4" ) );
-    GetGridList()->SetCellValue( row, COL_COUNT, "-" );
-    GetGridList()->SetCellValue( row, COL_TEXTSTRING, _( "The current page" ) );
+    GetGridList()->SetCellValue( row, COL_TYPENAME, _( "Layout" ) );
+    GetGridList()->SetCellValue( row, COL_COMMENT, page_info.GetType() );   // Display page format name
+    GetGridList()->SetCellValue( row, COL_REPEAT_NUMBER, "-" );
+    wxSize page_sizeIU = m_editorFrame->GetPageSizeIU();
+    GetGridList()->SetCellValue( row, COL_TEXTSTRING, wxString::Format( _( "Size: %.1fx%.1fmm" ),
+                                 Iu2Millimeter( page_sizeIU.x ), Iu2Millimeter( page_sizeIU.y ) ) );
     GetGridList()->SetCellRenderer (row, COL_BITMAP, new BitmapGridCellRenderer( root_xpm ) );
     GetGridList()->SetReadOnly( row, COL_BITMAP );
     m_itemsList.push_back( nullptr );   // this item is not a WS_DATA_ITEM, just a pseudo item
@@ -252,7 +259,7 @@ void DIALOG_INSPECTOR::ReCreateDesignList()
         GetGridList()->SetCellRenderer (row, COL_BITMAP, new BitmapGridCellRenderer( img ) );
         GetGridList()->SetReadOnly( row, COL_BITMAP );
         GetGridList()->SetCellValue( row, COL_TYPENAME,item->GetClassName() );
-        GetGridList()->SetCellValue( row, COL_COUNT,
+        GetGridList()->SetCellValue( row, COL_REPEAT_NUMBER,
                                      wxString::Format( "%d", item->m_RepeatCount ) );
         GetGridList()->SetCellValue( row, COL_COMMENT, item->m_Info );
 
@@ -264,6 +271,31 @@ void DIALOG_INSPECTOR::ReCreateDesignList()
 
         m_itemsList.push_back( item );
         row++;
+    }
+
+    // Now resize the columns:
+    int cols_to_resize[] =
+    {
+        COL_BITMAP, COL_TYPENAME, COL_REPEAT_NUMBER, COL_COMMENT, COL_TEXTSTRING, COL_COUNT
+    };
+
+    for( int ii = 0; ; ii++ )
+    {
+        int col = cols_to_resize[ii];
+
+        if( col == COL_COUNT )
+            break;
+
+        if( col == COL_BITMAP )
+        {
+            #define BITMAP_SIZE 16
+            GetGridList()->SetColMinimalWidth( col, BITMAP_SIZE*2 );
+            GetGridList()->AutoSizeColumn( col, false );
+        }
+        else
+            GetGridList()->AutoSizeColumn( col );
+
+        GetGridList()->AutoSizeColLabelSize( col );
     }
 }
 
