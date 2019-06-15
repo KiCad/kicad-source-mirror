@@ -595,6 +595,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     }
 
     aBoardItem->SetParent( this );
+    aBoardItem->ClearEditFlags();
     m_connectivity->Add( aBoardItem );
 }
 

@@ -52,6 +52,7 @@ using namespace std::placeholders;
 #include <router/router_tool.h>
 #include <connectivity/connectivity_data.h>
 #include <footprint_viewer_frame.h>
+#include <id.h>
 #include "tool_event_utils.h"
 #include "selection_tool.h"
 #include "pcb_bright_box.h"
@@ -87,14 +88,14 @@ TOOL_ACTION PCB_ACTIONS::selectionMenu( "pcbnew.InteractiveSelection.SelectionMe
 TOOL_ACTION PCB_ACTIONS::selectConnection( "pcbnew.InteractiveSelection.SelectConnection",
         AS_GLOBAL, 
         'U', LEGACY_HK_NAME( "Select Single Track" ),
-        _( "Single Track" ),
+        _( "Select Single Track" ),
         _( "Selects all track segments & vias between two junctions." ),
         add_tracks_xpm );
 
 TOOL_ACTION PCB_ACTIONS::selectCopper( "pcbnew.InteractiveSelection.SelectCopper",
         AS_GLOBAL, 
         'I', LEGACY_HK_NAME( "Select Connected Tracks" ),
-        _( "Connected Tracks" ),
+        _( "Select Connected Tracks" ),
         _( "Selects all connected tracks & vias." ),
         net_highlight_xpm );
 
@@ -105,7 +106,7 @@ TOOL_ACTION PCB_ACTIONS::expandSelectedConnection( "pcbnew.InteractiveSelection.
 
 TOOL_ACTION PCB_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",
         AS_GLOBAL, 0, "",
-        _( "All Tracks in Net" ),
+        _( "Select All Tracks in Net" ),
         _( "Selects all tracks & vias belonging to the same net." ),
         mode_track_xpm );
 
@@ -277,6 +278,11 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // Single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {
+            // JEY TODO: this is a hack, but I can't figure out why it's needed to
+            // keep from getting end-of-segment clicks when running the Draw Lines tool.
+            if( m_frame->GetToolId() != ID_NO_TOOL_SELECTED )
+                continue;
+
             if( evt->Modifier( MD_CTRL ) && !m_editModules )
             {
                 m_toolMgr->RunAction( PCB_ACTIONS::highlightNet, true );

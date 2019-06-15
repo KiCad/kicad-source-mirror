@@ -116,13 +116,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 if( !m_editModules )
                 {
                     if( aCreateUndoEntry )
-                    {
                         undoList.PushItem( ITEM_PICKER( boardItem, UR_NEW ) );
-                    }
 
                     if( !( changeFlags & CHT_DONE ) )
                         board->Add( boardItem );        // handles connectivity
-
                 }
                 else
                 {

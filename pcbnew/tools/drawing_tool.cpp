@@ -253,6 +253,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
 
     BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
     DRAWSEGMENT* line = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
+    line->SetFlags( IS_NEW );
 
     auto startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
     BOARD_COMMIT commit( m_frame );
@@ -282,6 +283,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
         }
 
         line = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
+        line->SetFlags( IS_NEW );
     }
 
     m_frame->SetNoToolSelected();
@@ -298,6 +300,8 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
     DRAWSEGMENT*    circle = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
     BOARD_COMMIT    commit( m_frame );
+
+    circle->SetFlags( IS_NEW );
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::CIRCLE );
 
@@ -319,6 +323,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
         }
 
         circle = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
+        circle->SetFlags( IS_NEW );
     }
 
     m_frame->SetNoToolSelected();
@@ -338,6 +343,8 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ARC );
 
+    arc->SetFlags( IS_NEW );
+
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_ARC_TOOL : ID_PCB_ARC_BUTT,
             wxCURSOR_PENCIL, _( "Add graphic arc" ) );
 
@@ -356,6 +363,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
         }
 
         arc = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
+        arc->SetFlags( IS_NEW );
     }
 
     m_frame->SetNoToolSelected();
@@ -1130,6 +1138,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
                     if( snapItem && aGraphic->GetLength() > 0.0 )
                     {
                         DRAWSEGMENT* l = m_editModules ? new EDGE_MODULE( mod ) : new DRAWSEGMENT;
+                        l->SetFlags( IS_NEW );
 
                         *l = *aGraphic;
                         commit.Add( l );
