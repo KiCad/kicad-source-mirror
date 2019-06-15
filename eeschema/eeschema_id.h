@@ -58,38 +58,10 @@ enum id_eeschema_frm
 
     /* Schematic editor main menubar IDs. */
     ID_RESCUE_CACHED,
-    ID_EDIT_SYM_LIB_TABLE,
     ID_REMAP_SYMBOLS,
 
     /* Schematic editor horizontal toolbar IDs */
     ID_BACKANNO_ITEMS,
-
-    /* Schematic editor vertical toolbar IDs */
-    ID_HIGHLIGHT_TOOL,
-    ID_PLACE_SYMBOL_TOOL,
-    ID_PLACE_POWER_TOOL,
-    ID_BUS_TOOL,
-    ID_WIRE_TOOL,
-    ID_BUSTOBUS_ENTRY_TOOL,
-    ID_WIRETOBUS_ENTRY_TOOL,
-    ID_LABEL_TOOL,
-    ID_GLOBALLABEL_TOOL,
-    ID_HIERLABEL_TOOL,
-    ID_IMPORT_SHEETPIN_TOOL,
-    ID_SHEETPIN_TOOL,
-    ID_NOCONNECT_TOOL,
-    ID_JUNCTION_TOOL,
-    ID_SHEET_TOOL,
-    ID_SCHEMATIC_TEXT_TOOL,
-    ID_SCHEMATIC_LINE_TOOL,
-    ID_PLACE_IMAGE_TOOL,
-    ID_DELETE_TOOL,
-
-    ID_SCH_MOVE,
-    ID_SCH_DRAG,
-    ID_SCH_UNFOLD_BUS,
-
-    ID_HOTKEY_HIGHLIGHT,
     ID_ADD_PART_TO_SCHEMATIC,
 
     /* Library editor horizontal toolbar IDs. */
@@ -97,16 +69,8 @@ enum id_eeschema_frm
     ID_LIBEDIT_SELECT_PART_NUMBER,
 
     /* Library editor vertical toolbar IDs. */
-    ID_SYMBOL_PIN_TOOL,
-    ID_SYMBOL_LINE_TOOL,
-    ID_SYMBOL_ARC_TOOL,
-    ID_SYMBOL_CIRCLE_TOOL,
-    ID_SYMBOL_RECT_TOOL,
-    ID_SYMBOL_TEXT_TOOL,
-    ID_SYMBOL_ANCHOR_TOOL,
     ID_LIBEDIT_IMPORT_BODY_BUTT,
     ID_LIBEDIT_EXPORT_BODY_BUTT,
-    ID_LIBEDIT_DELETE_ITEM_BUTT,
 
     /* Library editor menubar IDs */
     ID_LIBEDIT_GEN_PNG_FILE,

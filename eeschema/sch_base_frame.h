@@ -302,6 +302,8 @@ public:
 
     void HardRedraw() override;
 
+    std::string GetCurrentToolName();
+
     /**
      * Add an item to the screen (and view)
      * aScreen is the screen the item is located on, if not the current screen

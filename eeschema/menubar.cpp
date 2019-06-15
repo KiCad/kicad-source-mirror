@@ -61,7 +61,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
         if( openRecentMenu )
             Kiface().GetFileHistory().RemoveMenu( openRecentMenu );
 
-        openRecentMenu = new ACTION_MENU();
+        openRecentMenu = new ACTION_MENU( false );
         openRecentMenu->SetTool( selTool );
         openRecentMenu->SetTitle( _( "Open Recent" ) );
         openRecentMenu->SetIcon( recent_xpm );
@@ -92,7 +92,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddSeparator();
 
     // Import submenu
-    ACTION_MENU* submenuImport = new ACTION_MENU();
+    ACTION_MENU* submenuImport = new ACTION_MENU( false );
     submenuImport->SetTool( selTool );
     submenuImport->SetTitle( _( "Import" ) );
     submenuImport->SetIcon( import_xpm );
@@ -105,7 +105,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
 
     // Export submenu
-    ACTION_MENU* submenuExport = new ACTION_MENU();
+    ACTION_MENU* submenuExport = new ACTION_MENU( false );
     submenuExport->SetTool( selTool );
     submenuExport->SetTitle( _( "Export" ) );
     submenuExport->SetIcon( export_xpm );
@@ -234,7 +234,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->AddItem( EE_ACTIONS::placeGlobalLabel,       EE_CONDITIONS::ShowAlways );
 
     placeMenu->AddSeparator();
-    placeMenu->AddItem( EE_ACTIONS::placeHierarchicalLabel, EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::placeHierLabel, EE_CONDITIONS::ShowAlways );
     placeMenu->AddItem( EE_ACTIONS::drawSheet,              EE_CONDITIONS::ShowAlways );
     placeMenu->AddItem( EE_ACTIONS::importSheetPin,         EE_CONDITIONS::ShowAlways );
     placeMenu->AddItem( EE_ACTIONS::placeSheetPin,          EE_CONDITIONS::ShowAlways );

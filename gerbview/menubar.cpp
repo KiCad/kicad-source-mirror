@@ -56,7 +56,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     if( openRecentGbrMenu )
         Kiface().GetFileHistory().RemoveMenu( openRecentGbrMenu );
 
-    openRecentGbrMenu = new ACTION_MENU();
+    openRecentGbrMenu = new ACTION_MENU( false );
     openRecentGbrMenu->SetTool( selTool );
     openRecentGbrMenu->SetTitle( _( "Open Recent Gerber" ) );
     openRecentGbrMenu->SetIcon( recent_xpm );
@@ -68,7 +68,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     if( openRecentDrlMenu )
         m_drillFileHistory.RemoveMenu( openRecentDrlMenu );
 
-    openRecentDrlMenu = new ACTION_MENU();
+    openRecentDrlMenu = new ACTION_MENU( false );
     openRecentDrlMenu->SetTool( selTool );
     openRecentDrlMenu->SetTitle( _( "Open Recent Drill File" ) );
     openRecentDrlMenu->SetIcon( recent_xpm );
@@ -80,7 +80,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     if( openRecentJobMenu )
         m_jobFileHistory.RemoveMenu( openRecentJobMenu );
 
-    openRecentJobMenu = new ACTION_MENU();
+    openRecentJobMenu = new ACTION_MENU( false );
     openRecentJobMenu->SetTool( selTool );
     openRecentJobMenu->SetTitle( _( "Open Recent Job" ) );
 
@@ -92,7 +92,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     if( openRecentZipMenu )
         m_zipFileHistory.RemoveMenu( openRecentZipMenu );
 
-    openRecentZipMenu = new ACTION_MENU();
+    openRecentZipMenu = new ACTION_MENU( false );
     openRecentZipMenu->SetTool( selTool );
     openRecentZipMenu->SetTitle( _( "Open Recent Zip" ) );
     openRecentZipMenu->SetIcon( recent_xpm );
@@ -223,7 +223,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     //-- Tools menu -------------------------------------------------------
     //
-    ACTION_MENU* toolsMenu = new ACTION_MENU();
+    ACTION_MENU* toolsMenu = new ACTION_MENU( false );
 
     toolsMenu->Add( _( "&List DCodes..." ), _( "List D-codes defined in Gerber files" ),
                     ID_GERBVIEW_SHOW_LIST_DCODES, show_dcodenumber_xpm );

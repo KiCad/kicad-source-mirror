@@ -70,7 +70,8 @@ public:
 
     using SHOW_FUNCTOR = std::function<bool()>;
 
-    PAD_CONTEXT_MENU( bool aEditingFootprint, SHOW_FUNCTOR aHaveGlobalPadSetting ):
+    PAD_CONTEXT_MENU( bool aEditingFootprint, SHOW_FUNCTOR aHaveGlobalPadSetting ) :
+        ACTION_MENU( true ),
         m_editingFootprint( aEditingFootprint ),
         m_haveGlobalPadSettings( std::move( aHaveGlobalPadSetting ) )
     {

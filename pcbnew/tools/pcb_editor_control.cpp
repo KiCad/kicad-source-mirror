@@ -256,7 +256,8 @@ TOOL_ACTION PCB_ACTIONS::flipBoard( "pcbnew.Control.flipBoard",
 class ZONE_CONTEXT_MENU : public ACTION_MENU
 {
 public:
-    ZONE_CONTEXT_MENU()
+    ZONE_CONTEXT_MENU() :
+        ACTION_MENU( true )
     {
         SetIcon( add_zone_xpm );
         SetTitle( _( "Zones" ) );
@@ -315,7 +316,8 @@ private:
 class LOCK_CONTEXT_MENU : public ACTION_MENU
 {
 public:
-    LOCK_CONTEXT_MENU()
+    LOCK_CONTEXT_MENU() :
+        ACTION_MENU( true )
     {
         SetIcon( locked_xpm );
         SetTitle( _( "Locking" ) );

@@ -175,7 +175,7 @@ TOOL_ACTION EE_ACTIONS::pinTable( "eeschema.InteractiveEdit.pinTable",
 
 TOOL_ACTION EE_ACTIONS::deleteItemCursor( "eeschema.InteractiveEdit.deleteTool",
         AS_GLOBAL, 0, "",
-        _( "Delete Items" ), _( "Delete clicked items" ),
+        _( "Delete Tool" ), _( "Delete clicked items" ),
         delete_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::breakWire( "eeschema.InteractiveEdit.breakWire",
@@ -195,7 +195,8 @@ char g_lastBusEntryShape = '/';
 class SYMBOL_UNIT_MENU : public ACTION_MENU
 {
 public:
-    SYMBOL_UNIT_MENU()
+    SYMBOL_UNIT_MENU() :
+        ACTION_MENU( true )
     {
         SetIcon( component_select_unit_xpm );
         SetTitle( _( "Symbol Unit" ) );
@@ -268,14 +269,14 @@ bool SCH_EDIT_TOOL::Init()
     wxASSERT_MSG( drawingTools, "eeshema.InteractiveDrawing tool is not available" );
 
     auto sheetTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_SHEET_TOOL );
+        return ( m_frame->GetCurrentToolName() == EE_ACTIONS::drawSheet.GetName() );
     };
 
     auto anyTextTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_LABEL_TOOL
-              || m_frame->GetToolId() == ID_GLOBALLABEL_TOOL
-              || m_frame->GetToolId() == ID_HIERLABEL_TOOL
-              || m_frame->GetToolId() == ID_SCHEMATIC_TEXT_TOOL );
+        return ( m_frame->GetCurrentToolName() == EE_ACTIONS::placeLabel.GetName()
+              || m_frame->GetCurrentToolName() == EE_ACTIONS::placeGlobalLabel.GetName()
+              || m_frame->GetCurrentToolName() == EE_ACTIONS::placeHierLabel.GetName()
+              || m_frame->GetCurrentToolName() == EE_ACTIONS::placeSchematicText.GetName() );
     };
 
     auto duplicateCondition = [] ( const SELECTION& aSel ) {
@@ -1057,16 +1058,18 @@ static bool deleteItem( SCH_BASE_FRAME* aFrame, const VECTOR2D& aPosition )
 
 int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_BULLSEYE );
     Activate();
 
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     wxCHECK( picker, 0 );
 
-    m_frame->SetToolID( ID_DELETE_TOOL, wxCURSOR_BULLSEYE, _( "Delete item" ) );
     picker->SetClickHandler( std::bind( deleteItem, m_frame, std::placeholders::_1 ) );
     picker->Activate();
     Wait();
 
+    m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
     return 0;
 }
 

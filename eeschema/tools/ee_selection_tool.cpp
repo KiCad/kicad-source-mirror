@@ -214,8 +214,8 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::leaveSheet,         belowRootSheetCondition, 1 );
 
     menu.AddSeparator( EE_CONDITIONS::Empty, 100 );
-    menu.AddItem( EE_ACTIONS::startWire,          schEditCondition && EE_CONDITIONS::Empty, 100 );
-    menu.AddItem( EE_ACTIONS::startBus,           schEditCondition && EE_CONDITIONS::Empty, 100 );
+    menu.AddItem( EE_ACTIONS::drawWire,           schEditCondition && EE_CONDITIONS::Empty, 100 );
+    menu.AddItem( EE_ACTIONS::drawBus,            schEditCondition && EE_CONDITIONS::Empty, 100 );
 
     menu.AddSeparator( SCH_WIRE_BUS_TOOL::IsDrawingWire, 100 );
     menu.AddItem( EE_ACTIONS::finishWire,         SCH_WIRE_BUS_TOOL::IsDrawingWire, 100 );
@@ -225,14 +225,14 @@ bool EE_SELECTION_TOOL::Init()
 
     menu.AddSeparator( EE_CONDITIONS::NotEmpty, 200 );
     menu.AddItem( EE_ACTIONS::selectConnection,   wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
-    menu.AddItem( EE_ACTIONS::addJunction,        wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
-    menu.AddItem( EE_ACTIONS::addLabel,           wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
-    menu.AddItem( EE_ACTIONS::addGlobalLabel,     wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
-    menu.AddItem( EE_ACTIONS::addHierLabel,       wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::placeJunction,      wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::placeLabel,         wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::placeGlobalLabel,   wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::placeHierLabel,     wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::breakWire,          wireSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::breakBus,           busSelection && EE_CONDITIONS::Idle, 250 );
-    menu.AddItem( EE_ACTIONS::addSheetPin,        sheetSelection && EE_CONDITIONS::Idle, 250 );
-    menu.AddItem( EE_ACTIONS::addImportedSheetPin,sheetSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::placeSheetPin,      sheetSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::importSheetPin,     sheetSelection && EE_CONDITIONS::Idle, 250 );
 
     menu.AddSeparator( havePartCondition && EE_CONDITIONS::Empty, 400 );
     menu.AddItem( EE_ACTIONS::symbolProperties,   havePartCondition && EE_CONDITIONS::Empty, 400 );
@@ -293,6 +293,15 @@ int EE_SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
 }
 
 
+int EE_SELECTION_TOOL::SelectionTool( const TOOL_EVENT& aEvent )
+{
+    // Since the selection tool is always running underneath the toolStack, all we need to
+    // do is clear the stack.
+    m_frame->ClearToolStack();
+    return 0;
+}
+
+
 int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     const KICAD_T movableItems[] =
@@ -335,7 +344,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             // JEY TODO: this is a hack, but I can't figure out why it's needed to
             // keep from getting the first click when running the Place Symbol tool.
-            if( m_frame->GetToolId() != ID_NO_TOOL_SELECTED )
+            if( m_frame->GetCurrentToolName() != EE_ACTIONS::selectionTool.GetName() )
                 continue;
 
             if( evt->Modifier( MD_CTRL ) && dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
@@ -415,7 +424,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         }
 
         // context sub-menu selection?  Handle unit selection or bus unfolding
-        else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CONTEXT_MENU_CHOICE )
+        else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
             if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP
                 && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_CMP_MAX )
@@ -446,7 +455,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             ClearSelection();
         }
 
-        else if( evt->Action() == TA_CONTEXT_MENU_CLOSED )
+        else if( evt->Action() == TA_CHOICE_MENU_CLOSED )
         {
             m_menu.CloseContextMenu( evt );
         }
@@ -995,7 +1004,7 @@ int EE_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
 {
     EDA_ITEM*   current = nullptr;
-    ACTION_MENU menu;
+    ACTION_MENU menu( true );
 
     int limit = std::min( MAX_SELECT_ITEM_IDS, aCollector->GetCount() );
 
@@ -1018,7 +1027,7 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( evt->Action() == TA_CONTEXT_MENU_UPDATE )
+        if( evt->Action() == TA_CHOICE_MENU_UPDATE )
         {
             if( current )
                 unhighlight( current, BRIGHTENED );
@@ -1036,7 +1045,7 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
                 current = NULL;
             }
         }
-        else if( evt->Action() == TA_CONTEXT_MENU_CHOICE )
+        else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
             if( current )
                 unhighlight( current, BRIGHTENED );
@@ -1315,6 +1324,7 @@ void EE_SELECTION_TOOL::setTransitions()
     Go( &EE_SELECTION_TOOL::UpdateMenu,          ACTIONS::updateMenu.MakeEvent() );
 
     Go( &EE_SELECTION_TOOL::Main,                EE_ACTIONS::selectionActivate.MakeEvent() );
+    Go( &EE_SELECTION_TOOL::SelectionTool,       ACTIONS::selectionTool.MakeEvent() );
     Go( &EE_SELECTION_TOOL::SelectNode,          EE_ACTIONS::selectNode.MakeEvent() );
     Go( &EE_SELECTION_TOOL::SelectConnection,    EE_ACTIONS::selectConnection.MakeEvent() );
     Go( &EE_SELECTION_TOOL::ClearSelection,      EE_ACTIONS::clearSelection.MakeEvent() );

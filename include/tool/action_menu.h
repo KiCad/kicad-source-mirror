@@ -44,9 +44,9 @@ class ACTION_MENU : public wxMenu
 {
 public:
     ///> Default constructor
-    ACTION_MENU();
+    ACTION_MENU( bool isContextMenu );
 
-    virtual ~ACTION_MENU();
+    ~ACTION_MENU() override;
 
     ACTION_MENU( const ACTION_MENU& aMenu ) = delete;
     ACTION_MENU& operator=( const ACTION_MENU& aMenu ) = delete;
@@ -209,14 +209,16 @@ protected:
     ///> Checks if any of submenus contains a TOOL_ACTION with a specific ID.
     OPT_TOOL_EVENT findToolAction( int aId );
 
-    ///> Menu requires updating before display.
-    bool m_dirty;
+    bool m_dirty;               // Menu requires update before display
 
-    ///> Flag indicating that the menu title was set up.
     bool m_titleDisplayed;
+    bool m_isContextMenu;
 
     ///> Menu title
     wxString m_title;
+
+    ///> Optional icon
+    const BITMAP_OPAQUE* m_icon;
 
     ///> Stores the id number of selected item.
     int m_selected;
@@ -232,9 +234,6 @@ protected:
 
     ///> List of submenus.
     std::list<ACTION_MENU*> m_submenus;
-
-    ///> Optional icon
-    const BITMAP_OPAQUE* m_icon;
 
     friend class TOOL_INTERACTIVE;
 };

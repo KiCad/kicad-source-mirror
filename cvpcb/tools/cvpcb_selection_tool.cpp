@@ -93,7 +93,7 @@ int CVPCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             clearSelection();
         }
 
-        else if( evt->Action() == TA_CONTEXT_MENU_CLOSED )
+        else if( evt->Action() == TA_CHOICE_MENU_CLOSED )
         {
             m_menu.CloseContextMenu( evt );
         }

@@ -133,10 +133,11 @@ TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSel
         _( "Filter Selection..." ), _( "Filter the types of items in the selection" ),
         options_generic_xpm );
 
-class SELECT_MENU: public ACTION_MENU
+class SELECT_MENU : public ACTION_MENU
 {
 public:
-    SELECT_MENU()
+    SELECT_MENU() :
+        ACTION_MENU( true )
     {
         SetTitle( _( "Select" ) );
         SetIcon( options_generic_xpm );
@@ -364,7 +365,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_toolMgr->RunAction( PCB_ACTIONS::clearHighlight, true );
         }
 
-        else if( evt->Action() == TA_CONTEXT_MENU_CLOSED )
+        else if( evt->Action() == TA_CHOICE_MENU_CLOSED )
         {
             m_menu.CloseContextMenu( evt );
         }
@@ -1405,7 +1406,7 @@ bool SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxStr
 {
     BOARD_ITEM*      current = nullptr;
     PCBNEW_SELECTION highlightGroup;
-    ACTION_MENU      menu;
+    ACTION_MENU      menu( true );
 
     highlightGroup.SetLayer( LAYER_SELECT_OVERLAY );
     getView()->Add( &highlightGroup );
@@ -1431,7 +1432,7 @@ bool SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxStr
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( evt->Action() == TA_CONTEXT_MENU_UPDATE )
+        if( evt->Action() == TA_CHOICE_MENU_UPDATE )
         {
             if( current )
                 unhighlight( current, BRIGHTENED, highlightGroup );
@@ -1449,7 +1450,7 @@ bool SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxStr
                 current = NULL;
             }
         }
-        else if( evt->Action() == TA_CONTEXT_MENU_CHOICE )
+        else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
             if( current )
                 unhighlight( current, BRIGHTENED, highlightGroup );

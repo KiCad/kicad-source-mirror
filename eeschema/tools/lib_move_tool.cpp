@@ -41,11 +41,6 @@ LIB_MOVE_TOOL::LIB_MOVE_TOOL() :
 }
 
 
-LIB_MOVE_TOOL::~LIB_MOVE_TOOL()
-{
-}
-
-
 bool LIB_MOVE_TOOL::Init()
 {
     EE_TOOL_BASE::Init();
@@ -88,7 +83,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    m_frame->SetToolID( ID_SCH_MOVE, wxCURSOR_DEFAULT, _( "Move Items" ) );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
 
     Activate();
     controls->ShowCursor( true );
@@ -269,21 +264,21 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     if( !chain_commands )
         m_moveOffset = { 0, 0 };
 
-    m_moveInProgress = false;
-    m_frame->SetNoToolSelected();
-
-    selection.ClearReferencePoint();
-
     for( auto item : selection )
         item->ClearEditFlags();
 
     if( unselect )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    else
+        selection.ClearReferencePoint();
 
     if( restore_state )
         m_frame->RollbackPartFromUndo();
     else
         m_frame->OnModify();
+
+    m_moveInProgress = false;
+    m_frame->PopTool();
 
     return 0;
 }

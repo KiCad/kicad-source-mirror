@@ -795,7 +795,7 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     assert( picker );
 
-    m_frame->SetToolID( ID_HIGHLIGHT_TOOL, wxCURSOR_HAND, _( "Highlight specific net" ) );
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
     picker->SetClickHandler( std::bind( highlightNet, m_toolMgr, std::placeholders::_1 ) );
     picker->Activate();
     Wait();

@@ -522,7 +522,7 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
         TOOL_STATE* st = m_toolIdIndex[*it];
 
         // forward context menu events to the tool that created the menu
-        if( aEvent.IsMenu() )
+        if( aEvent.IsChoiceMenu() )
         {
             if( *it != m_menuOwner )
                 continue;
@@ -699,7 +699,7 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
         // Otherwise notify the tool of a cancelled menu
         else
         {
-            TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CHOICE, -1 );
+            TOOL_EVENT evt( TC_COMMAND, TA_CHOICE_MENU_CHOICE, -1 );
             evt.SetParameter( m );
             dispatchInternal( evt );
         }
@@ -708,7 +708,7 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
         m_warpMouseAfterContextMenu = true;
 
         // Notify the tools that menu has been closed
-        TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CLOSED );
+        TOOL_EVENT evt( TC_COMMAND, TA_CHOICE_MENU_CLOSED );
         evt.SetParameter( m );
         dispatchInternal( evt );
 

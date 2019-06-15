@@ -40,7 +40,7 @@ class LIB_DRAWING_TOOLS : public EE_TOOL_BASE<LIB_EDIT_FRAME>
 {
 public:
     LIB_DRAWING_TOOLS();
-    ~LIB_DRAWING_TOOLS();
+    ~LIB_DRAWING_TOOLS() override { }
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
@@ -54,7 +54,7 @@ public:
 
 private:
 
-    int doTwoClickPlace( KICAD_T aType );
+    int doTwoClickPlace( KICAD_T aType, bool aImmediateMode );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;

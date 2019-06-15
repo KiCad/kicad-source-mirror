@@ -64,11 +64,6 @@ SCH_MOVE_TOOL::SCH_MOVE_TOOL() :
 }
 
 
-SCH_MOVE_TOOL::~SCH_MOVE_TOOL()
-{
-}
-
-
 bool SCH_MOVE_TOOL::Init()
 {
     EE_TOOL_BASE::Init();
@@ -83,7 +78,6 @@ bool SCH_MOVE_TOOL::Init()
         return true;
     };
 
-    //
     // Add move actions to the selection tool menu
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
@@ -93,7 +87,6 @@ bool SCH_MOVE_TOOL::Init()
 
     return true;
 }
-
 
 
 /* TODO - Tom/Jeff
@@ -139,10 +132,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     else
         return 0;
 
-    if( m_isDragOperation )
-        m_frame->SetToolID( ID_SCH_DRAG, wxCURSOR_DEFAULT, _( "Drag Items" ) );
-    else
-        m_frame->SetToolID( ID_SCH_MOVE, wxCURSOR_DEFAULT, _( "Move Items" ) );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
 
     if( m_moveInProgress )
     {
@@ -349,7 +339,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( item->GetParent() && item->GetParent()->IsSelected() )
                     continue;
 
-                moveItem( item, delta, m_frame->GetToolId() == ID_SCH_DRAG );
+                moveItem( item, delta, m_isDragOperation );
                 updateView( item );
             }
 
@@ -396,7 +386,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 chain_commands = true;
                 break;
             }
-            else if( evt->Action() == TA_CONTEXT_MENU_CHOICE )
+            else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
             {
                 if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP
                     && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_CMP_MAX )
@@ -439,8 +429,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     if( !chain_commands )
         m_moveOffset = { 0, 0 };
 
-    m_moveInProgress = false;
-    m_frame->SetNoToolSelected();
     m_anchorPos.reset();
 
     for( EDA_ITEM* item : selection )
@@ -470,6 +458,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     }
 
     m_dragAdditions.clear();
+    m_moveInProgress = false;
+    m_frame->PopTool();
 
     return 0;
 }

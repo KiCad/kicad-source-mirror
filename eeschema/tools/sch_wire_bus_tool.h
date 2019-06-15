@@ -65,18 +65,6 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
-    /*
-     * These are the immediate actions.  They start drawing at the mouse location.  They
-     * do not select the tool.
-     */
-    int StartWire( const TOOL_EVENT& aEvent );
-    int StartBus( const TOOL_EVENT& aEvent );
-    int StartLine( const TOOL_EVENT& aEvent );
-
-    /*
-     * These are the two-step actions.  They select the tool on the first call, and start
-     * drawing on subsequent calls.
-     */
     int DrawWires( const TOOL_EVENT& aEvent );
     int DrawBusses( const TOOL_EVENT& aEvent );
     int DrawLines( const TOOL_EVENT& aEvent );
@@ -90,7 +78,7 @@ public:
     static bool IsDrawingLineWireOrBus( const SELECTION& aSelection );
 
 private:
-    int doDrawSegments( int aType, SCH_LINE* aSegment );
+    int doDrawSegments( int aType, SCH_LINE* aSegment, bool aImmediateMode );
     SCH_LINE* startSegments( int aType, const VECTOR2D& aPos );
     SCH_LINE* doUnfoldBus( const wxString& aNet );
     void finishSegments();

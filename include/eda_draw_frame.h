@@ -84,7 +84,6 @@ class EDA_DRAW_FRAME : public KIWAY_PLAYER
 {
     ///< Id of active button on the vertical toolbar.
     int                 m_toolId;
-    wxString            m_toolMsg;
 
     BASE_SCREEN*        m_currentScreen;      ///< current used SCREEN
 
@@ -117,8 +116,12 @@ protected:
     TOOL_DISPATCHER* m_toolDispatcher;
 
     /// Tool ID of previously active draw tool bar button.
-    int              m_lastDrawToolId;
+    int              m_lastDrawToolId;  // JEY TODO: remove this; it doesn't work in modern toolset anyway
 
+    std::deque<std::string> m_toolStack;    // stack of user-level "tools".  Used to temporarily
+                                            // invoke an immediate-mode action.  Note that these
+                                            // are "tools" in the UI sense, which are actually
+                                            // TOOL_ACTIONs internally
 
     bool             m_showBorderAndTitleBlock;   /// Show the worksheet (border and title block).
     long             m_firstRunDialogSetting;     /// Show first run dialog on startup
@@ -301,6 +304,16 @@ public:
     virtual void ReCreateAuxiliaryToolbar() { }
 
     /**
+     * The definition of "tool" is different at the user level.  The implementation uses
+     * a single TOOL_BASE derived class to implement several user "tools", such as rectangle
+     * and circle, or wire and bus.  So each user-level tool is actually a TOOL_ACTION.
+     */
+    virtual void SetTool( const std::string& actionName );
+    virtual void PushTool( const std::string& actionName );
+    virtual void PopTool();
+    virtual void ClearToolStack();
+
+    /**
      * Set the tool command ID to \a aId and sets the cursor to \a aCursor.
      *
      * The command ID must be greater or equal ::ID_NO_TOOL_SELECTED.  If the command
@@ -467,7 +480,6 @@ public:
                          COLOR4D aColor = COLOR4D::UNSPECIFIED );
 
     void            DisplayToolMsg( const wxString& msg );
-    wxString        GetToolMsg() { return m_toolMsg; }
 
     /**
      * Called when modifying the page settings.

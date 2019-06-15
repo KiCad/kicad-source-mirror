@@ -76,9 +76,7 @@ public:
     static TOOL_ACTION pickerTool;
     static TOOL_ACTION placeSymbol;
     static TOOL_ACTION placePower;
-    static TOOL_ACTION startWire;
     static TOOL_ACTION drawWire;
-    static TOOL_ACTION startBus;
     static TOOL_ACTION drawBus;
     static TOOL_ACTION unfoldBus;
     static TOOL_ACTION placeNoConnect;
@@ -87,12 +85,11 @@ public:
     static TOOL_ACTION placeBusBusEntry;
     static TOOL_ACTION placeLabel;
     static TOOL_ACTION placeGlobalLabel;
-    static TOOL_ACTION placeHierarchicalLabel;
+    static TOOL_ACTION placeHierLabel;
     static TOOL_ACTION drawSheet;
     static TOOL_ACTION placeSheetPin;
     static TOOL_ACTION importSheetPin;
     static TOOL_ACTION placeSchematicText;
-    static TOOL_ACTION startLines;
     static TOOL_ACTION drawLines;
     static TOOL_ACTION placeImage;
     static TOOL_ACTION finishLineWireOrBus;
@@ -129,12 +126,6 @@ public:
     static TOOL_ACTION showDeMorganStandard;
     static TOOL_ACTION showDeMorganAlternate;
     static TOOL_ACTION editSymbolUnit;
-    static TOOL_ACTION addJunction;
-    static TOOL_ACTION addLabel;
-    static TOOL_ACTION addGlobalLabel;
-    static TOOL_ACTION addHierLabel;
-    static TOOL_ACTION addSheetPin;
-    static TOOL_ACTION addImportedSheetPin;
     static TOOL_ACTION toShapeSlash;
     static TOOL_ACTION toShapeBackslash;
     static TOOL_ACTION toLabel;

@@ -38,12 +38,13 @@
 using namespace std::placeholders;
 
 
-ACTION_MENU::ACTION_MENU() :
+ACTION_MENU::ACTION_MENU( bool isContextMenu ) :
     m_dirty( true ),
     m_titleDisplayed( false ),
+    m_isContextMenu( isContextMenu ),
+    m_icon( nullptr ),
     m_selected( -1 ),
-    m_tool( nullptr ),
-    m_icon( nullptr )
+    m_tool( nullptr )
 {
     setupEvents();
 }
@@ -70,7 +71,7 @@ void ACTION_MENU::SetIcon( const BITMAP_OPAQUE* aIcon )
 
 void ACTION_MENU::setupEvents()
 {
-// See wxWidgets hack in EDA_DRAW_FRAME::OnMenuOpen().
+// See wxWidgets hack in EDA_BASE_FRAME::OnMenuOpen().
 //    Connect( wxEVT_MENU_OPEN, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), NULL, this );
 //    Connect( wxEVT_MENU_HIGHLIGHT, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), NULL, this );
 
@@ -276,7 +277,7 @@ ACTION_MENU* ACTION_MENU::Clone() const
 
 ACTION_MENU* ACTION_MENU::create() const
 {
-    ACTION_MENU* menu = new ACTION_MENU();
+    ACTION_MENU* menu = new ACTION_MENU( false );
 
     wxASSERT_MSG( typeid( *this ) == typeid( *menu ),
             wxString::Format( "You need to override create() method for class %s", typeid(*this).name() ) );
@@ -296,12 +297,11 @@ void ACTION_MENU::updateHotKeys()
 {
     TOOL_MANAGER* toolMgr = getToolManager();
 
-    for( std::map<int, const TOOL_ACTION*>::const_iterator it = m_toolActions.begin();
-            it != m_toolActions.end(); ++it )
+    for( auto& ii : m_toolActions )
     {
-        int id = it->first;
-        const TOOL_ACTION& action = *it->second;
-        int key = toolMgr->GetHotKey( action ) & ~MD_MODIFIER_MASK;
+        int                id = ii.first;
+        const TOOL_ACTION& action = *ii.second;
+        int                key = toolMgr->GetHotKey( action ) & ~MD_MODIFIER_MASK;
 
         if( key )
         {
@@ -328,27 +328,33 @@ void ACTION_MENU::updateHotKeys()
 
 void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
 {
+    // wxWidgets doesn't tell us when a menu command was generated from a hotkey or from
+    // a menu selection.  It's important to us because a hotkey can be an immediate action
+    // while the menu selection can not (as it has no associated position).
+    //
+    // We get around this by storing the last highlighted menuId.  If it matches the command
+    // id then we know this is a menu selection.  (You might think we could use the menuOpen
+    // menuClose events, but these are actually generated for hotkeys as well.)
+    static int highlightId = 0;
+
     OPT_TOOL_EVENT evt;
     wxString menuText;
 
     wxEventType type = aEvent.GetEventType();
 
-    if( type == wxEVT_MENU_OPEN && m_dirty )
+    if( type == wxEVT_MENU_OPEN )
     {
-        if( m_tool )
+        if( m_dirty && m_tool )
             getToolManager()->RunAction( ACTIONS::updateMenu, true, this );
 
+        highlightId = 0;
         aEvent.Skip();
-        return;
     }
-
-    // When the currently chosen item in the menu is changed, an update event is issued.
-    // For example, the selection tool can use this to dynamically highlight the current item
-    // from selection clarification popup.
     else if( type == wxEVT_MENU_HIGHLIGHT )
-        evt = TOOL_EVENT( TC_COMMAND, TA_CONTEXT_MENU_UPDATE, aEvent.GetId() );
-
-    // One of menu entries was selected..
+    {
+        highlightId = aEvent.GetId();
+        evt = TOOL_EVENT( TC_COMMAND, TA_CHOICE_MENU_UPDATE, aEvent.GetId() );
+    }
     else if( type == wxEVT_COMMAND_MENU_SELECTED )
     {
         // Store the selected position, so it can be checked by the tools
@@ -410,7 +416,7 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
               )
             {
                 menuText = GetLabelText( aEvent.GetId() );
-                evt = TOOL_EVENT( TC_COMMAND, TA_CONTEXT_MENU_CHOICE, m_selected, AS_GLOBAL,
+                evt = TOOL_EVENT( TC_COMMAND, TA_CHOICE_MENU_CHOICE, m_selected, AS_GLOBAL,
                                   &menuText );
             }
         }
@@ -420,6 +426,9 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
     // clients that don't supply a tool will have to check GetSelected() themselves
     if( evt && m_tool )
     {
+        if( highlightId == aEvent.GetId() && !m_isContextMenu )
+            evt->SetHasPosition( false );
+
         //aEvent.StopPropagation();
         if( m_tool->GetManager() )
             m_tool->GetManager()->ProcessEvent( *evt );

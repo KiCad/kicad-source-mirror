@@ -24,12 +24,8 @@
 #include <ee_actions.h>
 #include <lib_edit_frame.h>
 #include <sch_view.h>
-#include <class_draw_panel_gal.h>
-#include <project.h>
-#include <id.h>
 #include <eeschema_id.h>
 #include <confirm.h>
-#include <view/view_group.h>
 #include <view/view_controls.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>
@@ -97,11 +93,6 @@ LIB_DRAWING_TOOLS::LIB_DRAWING_TOOLS() :
 }
 
 
-LIB_DRAWING_TOOLS::~LIB_DRAWING_TOOLS()
-{
-}
-
-
 bool LIB_DRAWING_TOOLS::Init()
 {
     EE_TOOL_BASE::Init();
@@ -119,19 +110,41 @@ bool LIB_DRAWING_TOOLS::Init()
 
 int LIB_DRAWING_TOOLS::PlacePin( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_SYMBOL_PIN_TOOL, wxCURSOR_PENCIL, _( "Add pin" ) );
-    return doTwoClickPlace( LIB_PIN_T );
+    if( aEvent.HasPosition() )
+    {
+        m_frame->PushTool( aEvent.GetCommandStr().get() );
+        doTwoClickPlace( LIB_PIN_T, true );
+        m_frame->PopTool();
+    }
+    else
+    {
+        m_frame->SetTool( aEvent.GetCommandStr().get() );
+        doTwoClickPlace( LIB_PIN_T, false );
+    }
+
+    return 0;
 }
 
 
 int LIB_DRAWING_TOOLS::PlaceText( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_SYMBOL_TEXT_TOOL, wxCURSOR_PENCIL, _( "Add text" ) );
-    return doTwoClickPlace( LIB_TEXT_T );
+    if( aEvent.HasPosition() )
+    {
+        m_frame->PushTool( aEvent.GetCommandStr().get() );
+        doTwoClickPlace( LIB_TEXT_T, true );
+        m_frame->PopTool();
+    }
+    else
+    {
+        m_frame->SetTool( aEvent.GetCommandStr().get() );
+        doTwoClickPlace( LIB_TEXT_T, false );
+    }
+
+    return 0;
 }
 
 
-int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
+int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType, bool aImmediateMode )
 {
     LIB_PIN_TOOL* pinTool = aType == LIB_PIN_T ? m_toolMgr->GetTool<LIB_PIN_TOOL>() : nullptr;
     VECTOR2I      cursorPos;
@@ -141,6 +154,10 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
     getViewControls()->ShowCursor( true );
 
     Activate();
+
+    // Prime the pump
+    if( aImmediateMode )
+        m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -156,9 +173,12 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
                 delete item;
                 item = nullptr;
 
-                if( !evt->IsActivate() )
+                if( !evt->IsActivate() && !aImmediateMode )
                     continue;
             }
+
+            if( !evt->IsActivate() && !aImmediateMode )
+                m_frame->PopTool();
 
             break;
         }
@@ -240,6 +260,9 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
 
                 m_frame->RebuildView();
                 m_frame->OnModify();
+
+                if( aImmediateMode )
+                    break;
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -263,31 +286,33 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
         getViewControls()->CaptureCursor( !!item );
     }
 
-    m_frame->SetNoToolSelected();
-
     return 0;
 }
 
 
 int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
+    KICAD_T type = TYPE_NOT_INIT;
+
     // We might be running as the same shape in another co-routine.  Make sure that one
     // gets whacked.
     m_toolMgr->DeactivateTool();
 
     if( aEvent.IsAction( &EE_ACTIONS::drawSymbolArc ) )
-        m_frame->SetToolID( ID_SYMBOL_ARC_TOOL, wxCURSOR_PENCIL, _( "Draw Arc" ) );
+        type = LIB_ARC_T;
     else if( aEvent.IsAction( &EE_ACTIONS::drawSymbolCircle ) )
-        m_frame->SetToolID( ID_SYMBOL_CIRCLE_TOOL, wxCURSOR_PENCIL, _( "Draw Circle" ) );
+        type = LIB_CIRCLE_T;
     else if( aEvent.IsAction( &EE_ACTIONS::drawSymbolLines ) )
-        m_frame->SetToolID( ID_SYMBOL_LINE_TOOL, wxCURSOR_PENCIL, _( "Draw Lines" ) );
+        type = LIB_POLYLINE_T;
     else if( aEvent.IsAction( &EE_ACTIONS::drawSymbolRectangle ) )
-        m_frame->SetToolID( ID_SYMBOL_RECT_TOOL, wxCURSOR_PENCIL, _( "Draw Rectangle" ) );
+        type = LIB_RECTANGLE_T;
     else
         wxCHECK_MSG( false, 0, "Unknown action in LIB_DRAWING_TOOLS::DrawShape()" );
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
+
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
 
     Activate();
 
@@ -313,6 +338,9 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                     continue;
             }
 
+            if( !evt->IsActivate() )
+                m_frame->PopTool();
+
             break;
         }
 
@@ -323,12 +351,12 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-            switch( m_frame->GetToolId() )
+            switch( type )
             {
-            case ID_SYMBOL_ARC_TOOL:    item = new LIB_ARC( part );       break;
-            case ID_SYMBOL_CIRCLE_TOOL: item = new LIB_CIRCLE( part );    break;
-            case ID_SYMBOL_LINE_TOOL:   item = new LIB_POLYLINE( part );  break;
-            case ID_SYMBOL_RECT_TOOL:   item = new LIB_RECTANGLE( part ); break;
+            case LIB_ARC_T:       item = new LIB_ARC( part );       break;
+            case LIB_CIRCLE_T:    item = new LIB_CIRCLE( part );    break;
+            case LIB_POLYLINE_T:  item = new LIB_POLYLINE( part );  break;
+            case LIB_RECTANGLE_T: item = new LIB_RECTANGLE( part ); break;
             }
 
             item->SetWidth( LIB_EDIT_FRAME::g_LastLineWidth );
@@ -393,15 +421,13 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( !!item );
     }
 
-    m_frame->SetNoToolSelected();
-
     return 0;
 }
 
 
 int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_SYMBOL_ANCHOR_TOOL, wxCURSOR_PENCIL, _( "Move symbol anchor" ) );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
 
     getViewControls()->ShowCursor( true );
     getViewControls()->SetSnapping( true );
@@ -441,7 +467,7 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_frame->SetNoToolSelected();
+    m_frame->PopTool();
 
     return 0;
 }

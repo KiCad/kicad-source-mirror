@@ -88,16 +88,16 @@ enum TOOL_ACTIONS
 
     // Context menu update. Issued whenever context menu is open and the user hovers the mouse
     // over one of choices. Used in dynamic highligting in disambiguation menu
-    TA_CONTEXT_MENU_UPDATE  = 0x4000,
+    TA_CHOICE_MENU_UPDATE   = 0x4000,
 
     // Context menu choice. Sent if the user picked something from the context menu or
     // closed it without selecting anything.
-    TA_CONTEXT_MENU_CHOICE  = 0x8000,
+    TA_CHOICE_MENU_CHOICE   = 0x8000,
 
     // Context menu is closed, no matter whether anything has been chosen or not.
-    TA_CONTEXT_MENU_CLOSED  = 0x10000,
+    TA_CHOICE_MENU_CLOSED   = 0x10000,
 
-    TA_CONTEXT_MENU = TA_CONTEXT_MENU_UPDATE | TA_CONTEXT_MENU_CHOICE | TA_CONTEXT_MENU_CLOSED,
+    TA_CHOICE_MENU = TA_CHOICE_MENU_UPDATE | TA_CHOICE_MENU_CHOICE | TA_CHOICE_MENU_CLOSED,
 
     // This event is sent *before* undo/redo command is performed.
     TA_UNDO_REDO_PRE        = 0x20000,
@@ -183,10 +183,13 @@ public:
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
         m_modifiers( 0 ),
-        m_param( aParameter ) {}
+        m_param( aParameter )
+    {
+        m_hasPosition = ( aCategory == TC_MOUSE || aCategory == TC_COMMAND );
+    }
 
     TOOL_EVENT( TOOL_EVENT_CATEGORY aCategory, TOOL_ACTIONS aAction, int aExtraParam,
-            TOOL_ACTION_SCOPE aScope = AS_GLOBAL, void* aParameter = NULL ) :
+            TOOL_ACTION_SCOPE aScope = AS_GLOBAL, void* aParameter = nullptr ) :
         m_category( aCategory ),
         m_actions( aAction ),
         m_scope( aScope ),
@@ -212,11 +215,13 @@ public:
         {
             m_modifiers = aExtraParam & MD_MODIFIER_MASK;
         }
+
+        m_hasPosition = ( aCategory == TC_MOUSE || aCategory == TC_COMMAND );
     }
 
     TOOL_EVENT( TOOL_EVENT_CATEGORY aCategory, TOOL_ACTIONS aAction,
             const std::string& aExtraParam, TOOL_ACTION_SCOPE aScope = AS_GLOBAL,
-            void* aParameter = NULL ) :
+            void* aParameter = nullptr ) :
         m_category( aCategory ),
         m_actions( aAction ),
         m_scope( aScope ),
@@ -227,25 +232,20 @@ public:
     {
         if( aCategory == TC_COMMAND || aCategory == TC_MESSAGE )
             m_commandStr = aExtraParam;
+
+        m_hasPosition = ( aCategory == TC_MOUSE || aCategory == TC_COMMAND );
     }
 
     ///> Returns the category (eg. mouse/keyboard/action) of an event..
-    TOOL_EVENT_CATEGORY Category() const
-    {
-        return m_category;
-    }
+    TOOL_EVENT_CATEGORY Category() const { return m_category; }
 
     ///> Returns more specific information about the type of an event.
-    TOOL_ACTIONS Action() const
-    {
-        return m_actions;
-    }
+    TOOL_ACTIONS Action() const { return m_actions; }
 
-    ///> Returns if it this event has a valid position (true for mouse events)
-    bool HasPosition() const
-    {
-        return m_category == TC_MOUSE || m_category == TC_COMMAND;
-    }
+    ///> Returns if it this event has a valid position (true for mouse events and context-menu
+    ///> or hotkey-based command events)
+    bool HasPosition() const { return m_hasPosition; }
+    void SetHasPosition( bool aHasPosition ) { m_hasPosition = aHasPosition; }
 
     ///> Returns information about difference between current mouse cursor position and the place
     ///> where dragging has started.
@@ -307,9 +307,9 @@ public:
         return m_actions & ( TA_UNDO_REDO_PRE | TA_UNDO_REDO_POST );
     }
 
-    bool IsMenu() const
+    bool IsChoiceMenu() const
     {
-        return m_actions & TA_CONTEXT_MENU;
+        return m_actions & TA_CHOICE_MENU;
     }
 
     ///> Returns information about key modifiers state (Ctrl, Alt, etc.)
@@ -456,6 +456,7 @@ private:
     TOOL_EVENT_CATEGORY m_category;
     TOOL_ACTIONS m_actions;
     TOOL_ACTION_SCOPE m_scope;
+    bool m_hasPosition;
 
     ///> Difference between mouse cursor position and
     ///> the point where dragging event has started
@@ -518,9 +519,11 @@ public:
 
     OPT<const TOOL_EVENT&> Matches( const TOOL_EVENT& aEvent ) const
     {
-        for( const_iterator i = m_events.begin(); i != m_events.end(); ++i )
-            if( i->Matches( aEvent ) )
-                return *i;
+        for( const TOOL_EVENT& event : m_events )
+        {
+            if( event.Matches( aEvent ) )
+                return event;
+        }
 
         return OPT<const TOOL_EVENT&>();
     }
@@ -569,11 +572,8 @@ public:
     {
         m_events.clear();
 
-        for( std::deque<TOOL_EVENT>::const_iterator i = aEventList.m_events.begin();
-             i != aEventList.m_events.end(); ++i )
-        {
-            m_events.push_back( *i );
-        }
+        for( const TOOL_EVENT& event : aEventList.m_events )
+            m_events.push_back( event );
 
         return *this;
     }

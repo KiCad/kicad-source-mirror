@@ -226,10 +226,11 @@ ROUTER_TOOL::ROUTER_TOOL() :
 }
 
 
-class TRACK_WIDTH_MENU: public ACTION_MENU
+class TRACK_WIDTH_MENU : public ACTION_MENU
 {
 public:
     TRACK_WIDTH_MENU( PCB_EDIT_FRAME& aFrame ) :
+        ACTION_MENU( true ),
         m_frame( aFrame )
     {
         SetIcon( width_track_via_xpm );
@@ -354,10 +355,11 @@ private:
 };
 
 
-class DIFF_PAIR_MENU: public ACTION_MENU
+class DIFF_PAIR_MENU : public ACTION_MENU
 {
 public:
     DIFF_PAIR_MENU( PCB_EDIT_FRAME& aFrame ) :
+        ACTION_MENU( true ),
         m_frame( aFrame )
     {
         SetIcon( width_track_via_xpm );
@@ -448,6 +450,7 @@ class ROUTER_TOOL_MENU : public ACTION_MENU
 {
 public:
     ROUTER_TOOL_MENU( PCB_EDIT_FRAME& aFrame, PNS::ROUTER_MODE aMode ) :
+        ACTION_MENU( true ),
         m_frame( aFrame ), m_mode( aMode ), m_trackViaMenu( aFrame ), m_diffPairMenu( aFrame ),
         m_zoomMenu( &aFrame ), m_gridMenu( &aFrame )
     {

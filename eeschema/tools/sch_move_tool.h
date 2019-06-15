@@ -36,7 +36,7 @@ class SCH_MOVE_TOOL : public EE_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
     SCH_MOVE_TOOL();
-    ~SCH_MOVE_TOOL();
+    ~SCH_MOVE_TOOL() override { }
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;

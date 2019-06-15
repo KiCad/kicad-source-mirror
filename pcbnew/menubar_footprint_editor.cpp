@@ -78,7 +78,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     fileMenu->AddSeparator();
 
-    ACTION_MENU* submenuImport = new ACTION_MENU();
+    ACTION_MENU* submenuImport = new ACTION_MENU( false );
     submenuImport->SetTool( selTool );
     submenuImport->SetTitle( _( "Import" ) );
     submenuImport->SetIcon( import_xpm );

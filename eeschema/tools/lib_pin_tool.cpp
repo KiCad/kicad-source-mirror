@@ -95,11 +95,6 @@ LIB_PIN_TOOL::LIB_PIN_TOOL() :
 }
 
 
-LIB_PIN_TOOL::~LIB_PIN_TOOL()
-{
-}
-
-
 bool LIB_PIN_TOOL::Init()
 {
     EE_TOOL_BASE::Init();

@@ -448,18 +448,16 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
 void LIB_EDIT_FRAME::OnImportBody( wxCommandEvent& aEvent )
 {
     m_toolManager->DeactivateTool();
-    SetToolID( ID_LIBEDIT_IMPORT_BODY_BUTT, GetCanvas()->GetDefaultCursor(), _( "Import" ) );
     LoadOneSymbol();
-    SetNoToolSelected();
+    m_drawToolBar->ToggleTool( ID_LIBEDIT_IMPORT_BODY_BUTT, false );
 }
 
 
 void LIB_EDIT_FRAME::OnExportBody( wxCommandEvent& aEvent )
 {
     m_toolManager->DeactivateTool();
-    SetToolID( ID_LIBEDIT_EXPORT_BODY_BUTT, GetCanvas()->GetDefaultCursor(), _( "Export" ) );
     SaveOneSymbol();
-    SetNoToolSelected();
+    m_drawToolBar->ToggleTool( ID_LIBEDIT_EXPORT_BODY_BUTT, false );
 }
 
 

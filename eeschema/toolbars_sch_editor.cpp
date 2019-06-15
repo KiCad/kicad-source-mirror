@@ -130,7 +130,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( EE_ACTIONS::placeJunction,          ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeLabel,             ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeGlobalLabel,       ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::placeHierarchicalLabel, ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::placeHierLabel, ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::drawSheet,              ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::importSheetPin,         ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeSheetPin,          ACTION_TOOLBAR::TOGGLE );
@@ -168,7 +168,7 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
 
 
 void SCH_EDIT_FRAME::SyncToolbars()
-{
+{    
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
     SCH_SHEET_LIST              sheetList( g_RootSheet );
 
@@ -186,25 +186,27 @@ void SCH_EDIT_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( EE_ACTIONS::toggleForceHV,       GetForceHVLines() );
     m_optionsToolBar->Refresh();
 
-    m_drawToolBar->Toggle( EE_ACTIONS::selectionTool,          GetToolId() == ID_NO_TOOL_SELECTED );
-    m_drawToolBar->Toggle( EE_ACTIONS::highlightNetCursor,     GetToolId() == ID_HIGHLIGHT_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::placeSymbol,            GetToolId() == ID_COMPONENT_BUTT );
-    m_drawToolBar->Toggle( EE_ACTIONS::placePower,             GetToolId() == ID_PLACE_POWER_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::drawWire,               GetToolId() == ID_WIRE_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::drawBus,                GetToolId() == ID_BUS_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::placeBusWireEntry,      GetToolId() == ID_WIRETOBUS_ENTRY_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::placeBusBusEntry,       GetToolId() == ID_BUSTOBUS_ENTRY_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::placeNoConnect,         GetToolId() == ID_NOCONNECT_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::placeJunction,          GetToolId() == ID_JUNCTION_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::placeLabel,             GetToolId() == ID_LABEL_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::placeGlobalLabel,       GetToolId() == ID_GLOBALLABEL_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::placeHierarchicalLabel, GetToolId() == ID_HIERLABEL_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::drawSheet,              GetToolId() == ID_SHEET_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::importSheetPin,         GetToolId() == ID_IMPORT_SHEETPIN_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::placeSheetPin,          GetToolId() == ID_SHEETPIN_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::drawLines,              GetToolId() == ID_SCHEMATIC_LINE_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::placeSchematicText,     GetToolId() == ID_SCHEMATIC_TEXT_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::placeImage,             GetToolId() == ID_PLACE_IMAGE_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::deleteItemCursor,       GetToolId() == ID_DELETE_TOOL );
+#define TOGGLE_TOOL( tool ) m_drawToolBar->Toggle( tool, GetCurrentToolName() == tool.GetName() )
+
+    TOGGLE_TOOL( ACTIONS::selectionTool );
+    TOGGLE_TOOL( EE_ACTIONS::highlightNetCursor );
+    TOGGLE_TOOL( EE_ACTIONS::placeSymbol );
+    TOGGLE_TOOL( EE_ACTIONS::placePower );
+    TOGGLE_TOOL( EE_ACTIONS::drawWire );
+    TOGGLE_TOOL( EE_ACTIONS::drawBus );
+    TOGGLE_TOOL( EE_ACTIONS::placeBusWireEntry );
+    TOGGLE_TOOL( EE_ACTIONS::placeBusBusEntry );
+    TOGGLE_TOOL( EE_ACTIONS::placeNoConnect );
+    TOGGLE_TOOL( EE_ACTIONS::placeJunction );
+    TOGGLE_TOOL( EE_ACTIONS::placeLabel );
+    TOGGLE_TOOL( EE_ACTIONS::placeGlobalLabel );
+    TOGGLE_TOOL( EE_ACTIONS::placeHierLabel );
+    TOGGLE_TOOL( EE_ACTIONS::drawSheet );
+    TOGGLE_TOOL( EE_ACTIONS::importSheetPin );
+    TOGGLE_TOOL( EE_ACTIONS::placeSheetPin );
+    TOGGLE_TOOL( EE_ACTIONS::drawLines );
+    TOGGLE_TOOL( EE_ACTIONS::placeSchematicText );
+    TOGGLE_TOOL( EE_ACTIONS::placeImage );
+    TOGGLE_TOOL( EE_ACTIONS::deleteItemCursor );
     m_drawToolBar->Refresh();
 }

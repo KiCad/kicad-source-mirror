@@ -109,7 +109,7 @@ void ACTION_TOOLBAR::onToolEvent( wxAuiToolBarEvent& aEvent )
     // forward the action/update event to the TOOL_MANAGER
     if( evt && m_toolManager )
     {
-        //aEvent.StopPropagation();
+        evt->SetHasPosition( false );
         m_toolManager->ProcessEvent( *evt );
     }
     else

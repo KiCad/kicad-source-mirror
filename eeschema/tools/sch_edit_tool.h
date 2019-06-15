@@ -60,11 +60,7 @@ public:
 
     int CleanupSheetPins( const TOOL_EVENT& aEvent );
 
-    /**
-     * Function DoDelete()
-     *
-     * Deletes the selected items, or the item under the cursor.
-     */
+    ///> Deletes the selected items, or the item under the cursor.
     int DoDelete( const TOOL_EVENT& aEvent );
 
     ///> Runs the deletion tool.

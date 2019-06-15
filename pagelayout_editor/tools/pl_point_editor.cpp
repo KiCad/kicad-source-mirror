@@ -163,8 +163,6 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     KIGFX::VIEW*          view = getView();
-    int                   savedToolID = m_frame->GetToolId();
-    wxString              savedToolMsg = m_frame->GetToolMsg();
     EDA_ITEM*             item = (EDA_ITEM*) selection.Front();
 
     controls->ShowCursor( true );
@@ -182,11 +180,16 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( !m_editPoints
-             || evt->Matches( EVENTS::ClearedEvent )
-             || evt->Matches( EVENTS::UnselectedEvent )
-             || evt->Matches( EVENTS::SelectedEvent ) )
+        if( !m_editPoints || evt->IsCancel() || TOOL_EVT_UTILS::IsSelectionEvent( evt.get() ) )
         {
+            if( inDrag )      // Restore the last change
+            {
+                m_frame->PopTool();
+                m_frame->RollbackFromUndo();
+                inDrag = false;
+                modified = false;
+            }
+
             break;
         }
 
@@ -195,12 +198,11 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
         if( evt->IsDrag( BUT_LEFT ) && m_editedPoint )
         {
-            m_frame->SetToolID( ID_DRAG_POINT, -1, _( "Drag Point" ) );
-
             if( !inDrag )
             {
                 m_frame->SaveCopyInUndoList();
                 controls->ForceCursorPosition( false );
+                m_frame->PushTool( _( "Drag Point" ).ToStdString() );
                 inDrag = true;
                 modified = true;
             }
@@ -214,23 +216,10 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsMouseUp( BUT_LEFT ) )
         {
             controls->SetAutoPan( false );
-            m_frame->SetToolID( savedToolID, -1, savedToolMsg );
-
+            m_frame->PopTool();
             inDrag = false;
 
             m_toolMgr->PassEvent();
-        }
-
-        else if( evt->IsCancel() )
-        {
-            if( inDrag )      // Restore the last change
-            {
-                m_frame->RollbackFromUndo();
-                modified = false;
-            }
-
-            m_frame->SetToolID( savedToolID, -1, savedToolMsg );
-            break;
         }
 
         else
@@ -244,7 +233,6 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
     controls->SetAutoPan( false );
     controls->CaptureCursor( false );
-    m_frame->SetToolID( savedToolID, -1, savedToolMsg );
 
     if( m_editPoints )
     {

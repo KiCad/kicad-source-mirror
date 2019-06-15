@@ -39,6 +39,7 @@
 #include <wx/snglinst.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>
+#include <tool/action_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/actions.h>
 #include <wx/clipbrd.h>
@@ -359,7 +360,6 @@ void EDA_DRAW_FRAME::AddStandardSubMenus( TOOL_MENU& aToolMenu )
 
 void EDA_DRAW_FRAME::DisplayToolMsg( const wxString& msg )
 {
-    m_toolMsg = msg;
     SetStatusText( msg, 5 );
 }
 
@@ -415,6 +415,55 @@ void EDA_DRAW_FRAME::OnSize( wxSizeEvent& SizeEv )
     m_FrameSize = GetClientSize( );
 
     SizeEv.Skip();
+}
+
+
+void EDA_DRAW_FRAME::SetTool( const std::string& actionName )
+{
+    if( !m_toolStack.empty() )
+        m_toolStack.pop_back();
+
+    PushTool( actionName );
+}
+
+
+void EDA_DRAW_FRAME::PushTool( const std::string& actionName )
+{
+    m_toolStack.push_back( actionName );
+
+    TOOL_ACTION* action = m_toolManager->GetActionManager()->FindAction( actionName );
+
+    if( action )
+        DisplayToolMsg( action->GetLabel() );
+    else
+        DisplayToolMsg( actionName );
+}
+
+
+void EDA_DRAW_FRAME::PopTool()
+{
+    m_toolStack.pop_back();
+
+    if( !m_toolStack.empty() )
+    {
+        TOOL_ACTION* action = m_toolManager->GetActionManager()->FindAction( m_toolStack.back() );
+
+        if( action )
+        {
+            TOOL_EVENT evt = action->MakeEvent();
+            evt.SetHasPosition( false );
+            GetToolManager()->PostEvent( evt );
+        }
+    }
+    else
+        DisplayToolMsg( ACTIONS::selectionTool.GetName() );
+}
+
+
+void EDA_DRAW_FRAME::ClearToolStack()
+{
+    m_toolStack.clear();
+    DisplayToolMsg( ACTIONS::selectionTool.GetName() );
 }
 
 

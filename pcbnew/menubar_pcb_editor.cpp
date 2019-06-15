@@ -68,7 +68,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
         if( openRecentMenu )
             Kiface().GetFileHistory().RemoveMenu( openRecentMenu );
 
-        openRecentMenu = new ACTION_MENU();
+        openRecentMenu = new ACTION_MENU( false );
         openRecentMenu->SetTool( selTool );
         openRecentMenu->SetTitle( _( "Open Recent" ) );
         openRecentMenu->SetIcon( recent_xpm );
@@ -112,7 +112,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                        undo_xpm,                     SELECTION_CONDITIONS::ShowAlways );
 
     // Import submenu
-    ACTION_MENU* submenuImport = new ACTION_MENU();
+    ACTION_MENU* submenuImport = new ACTION_MENU( false );
     submenuImport->SetTool( selTool );
     submenuImport->SetTitle( _( "Import" ) );
     submenuImport->SetIcon( import_xpm );
@@ -126,7 +126,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddMenu( submenuImport,                SELECTION_CONDITIONS::ShowAlways );
 
     // Export submenu
-    ACTION_MENU* submenuExport = new ACTION_MENU();
+    ACTION_MENU* submenuExport = new ACTION_MENU( false );
     submenuExport->SetTool( selTool );
     submenuExport->SetTitle( _( "Export" ) );
     submenuExport->SetIcon( export_xpm );
@@ -151,7 +151,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddMenu( submenuExport,                SELECTION_CONDITIONS::ShowAlways );
 
     // Fabrication Outputs submenu
-    ACTION_MENU* submenuFabOutputs = new ACTION_MENU();
+    ACTION_MENU* submenuFabOutputs = new ACTION_MENU( false );
     submenuFabOutputs->SetTool( selTool );
     submenuFabOutputs->SetTitle( _( "Fabrication Outputs" ) );
     submenuFabOutputs->SetIcon( fabrication_xpm );
@@ -174,7 +174,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddItem( ACTIONS::plot,                SELECTION_CONDITIONS::ShowAlways );
 
     // Archive submenu
-    ACTION_MENU* submenuArchive = new ACTION_MENU();
+    ACTION_MENU* submenuArchive = new ACTION_MENU( false );
     submenuArchive->SetTool( selTool );
     submenuArchive->SetTitle( _( "Archive Footprints" ) );
     submenuArchive->SetIcon( library_archive_xpm );
@@ -389,7 +389,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     placeMenu->AddSeparator();
 
-    ACTION_MENU* autoplaceSubmenu = new ACTION_MENU;
+    ACTION_MENU* autoplaceSubmenu = new ACTION_MENU( false );
     autoplaceSubmenu->SetTitle( _( "Auto-Place Footprints" ) );
     autoplaceSubmenu->SetTool( selTool );
     autoplaceSubmenu->SetIcon( mode_module_xpm );
@@ -449,7 +449,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 #endif
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
-    ACTION_MENU* submenuActionPlugins = new ACTION_MENU();
+    ACTION_MENU* submenuActionPlugins = new ACTION_MENU( false );
     submenuActionPlugins->SetTool( selTool );
     submenuActionPlugins->SetTitle( _( "External Plugins" ) );
     submenuActionPlugins->SetIcon( hammer_xpm );

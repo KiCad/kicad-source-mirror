@@ -76,7 +76,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     if( strcmp( idcmd, "$NET:" ) == 0 )
     {
-        if( GetToolId() == ID_HIGHLIGHT_TOOL )
+        if( GetCurrentToolName() == EE_ACTIONS::highlightNetCursor.GetName() )
         {
             m_SelectedNetName = FROM_UTF8( text );
 

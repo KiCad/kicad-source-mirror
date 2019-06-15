@@ -211,7 +211,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             ClearSelection();
         }
 
-        else if( evt->Action() == TA_CONTEXT_MENU_CLOSED )
+        else if( evt->Action() == TA_CHOICE_MENU_CLOSED )
         {
             m_menu.CloseContextMenu( evt );
         }
@@ -528,7 +528,7 @@ int PL_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 bool PL_SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
 {
     EDA_ITEM*   current = nullptr;
-    ACTION_MENU menu;
+    ACTION_MENU menu( true );
 
     int limit = std::min( MAX_SELECT_ITEM_IDS, aCollector->GetCount() );
 
@@ -551,7 +551,7 @@ bool PL_SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( evt->Action() == TA_CONTEXT_MENU_UPDATE )
+        if( evt->Action() == TA_CHOICE_MENU_UPDATE )
         {
             if( current )
                 unhighlight( current, BRIGHTENED );
@@ -569,7 +569,7 @@ bool PL_SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
                 current = NULL;
             }
         }
-        else if( evt->Action() == TA_CONTEXT_MENU_CHOICE )
+        else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
             if( current )
                 unhighlight( current, BRIGHTENED );

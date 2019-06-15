@@ -35,7 +35,7 @@ class LIB_PIN_TOOL : public EE_TOOL_BASE<LIB_EDIT_FRAME>
 {
 public:
     LIB_PIN_TOOL();
-    ~LIB_PIN_TOOL();
+    ~LIB_PIN_TOOL() override { }
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;

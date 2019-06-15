@@ -291,7 +291,7 @@ void EDA_BASE_FRAME::ReCreateMenuBar()
 void EDA_BASE_FRAME::AddStandardHelpMenu( wxMenuBar* aMenuBar )
 {
     COMMON_CONTROL* commonControl = m_toolManager->GetTool<COMMON_CONTROL>();
-    ACTION_MENU*    helpMenu = new ACTION_MENU();
+    ACTION_MENU*    helpMenu = new ACTION_MENU( false );
 
     helpMenu->SetTool( commonControl );
 

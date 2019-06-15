@@ -72,7 +72,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddItem( EE_ACTIONS::importSymbol,     EE_CONDITIONS::ShowAlways );
 
     // Export submenu
-    ACTION_MENU* submenuExport = new ACTION_MENU();
+    ACTION_MENU* submenuExport = new ACTION_MENU( false );
     submenuExport->SetTool( selTool );
     submenuExport->SetTitle( _( "Export" ) );
     submenuExport->SetIcon( export_xpm );

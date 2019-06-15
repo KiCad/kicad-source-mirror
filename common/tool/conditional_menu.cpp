@@ -29,7 +29,7 @@
 
 
 CONDITIONAL_MENU::CONDITIONAL_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool ) :
-        m_isContextMenu( isContextMenu )
+        ACTION_MENU( isContextMenu )
 {
     m_tool = aTool;
 }
@@ -100,9 +100,11 @@ void CONDITIONAL_MENU::AddSeparator( const SELECTION_CONDITION& aCondition, int 
 
 SELECTION g_resolveDummySelection;
 
+
 void CONDITIONAL_MENU::Resolve()
 {
     Evaluate( g_resolveDummySelection );
+    UpdateAll();
 
     runOnSubmenus( [] ( ACTION_MENU* aMenu ) {
         CONDITIONAL_MENU* conditionalMenu = dynamic_cast<CONDITIONAL_MENU*>( aMenu );

@@ -94,7 +94,8 @@ LENGTH_TUNER_TOOL::LENGTH_TUNER_TOOL() :
 class TUNER_TOOL_MENU : public ACTION_MENU
 {
 public:
-    TUNER_TOOL_MENU()
+    TUNER_TOOL_MENU() :
+        ACTION_MENU( true )
     {
         SetTitle( _( "Length Tuner" ) );
         SetIcon( router_len_tuner_xpm );

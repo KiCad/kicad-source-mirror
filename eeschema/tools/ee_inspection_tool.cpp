@@ -170,8 +170,7 @@ void EE_INSPECTION_TOOL::checkPart( LIB_PART* aPart )
 
         dup_error++;
 
-        /* TODO I dare someone to find a way to make happy translators on
-           this thing! Lorenzo */
+        /* TODO I dare someone to find a way to make happy translators on this thing! Lorenzo */
 
         msg = wxString::Format( _( "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
                                    " conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>" ),
@@ -271,7 +270,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 
         if( part->GetAliasCount() > 1 )
         {
-            ACTION_MENU  popup;
+            ACTION_MENU  popup( true );
             wxString     msg;
             int          id = 0;
 

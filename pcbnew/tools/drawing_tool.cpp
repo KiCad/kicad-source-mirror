@@ -103,7 +103,7 @@ TOOL_ACTION PCB_ACTIONS::drawDimension( "pcbnew.InteractiveDrawing.dimension",
 TOOL_ACTION PCB_ACTIONS::drawZone( "pcbnew.InteractiveDrawing.zone",
         AS_GLOBAL,
 #ifdef __WXOSX_MAC__
-        GR_KB_ALT + 'Z',
+        MD_ALT + 'Z',
 #else
         MD_SHIFT + MD_CTRL + 'Z',
 #endif

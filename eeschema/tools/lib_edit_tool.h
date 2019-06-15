@@ -34,7 +34,7 @@ class LIB_EDIT_TOOL : public EE_TOOL_BASE<LIB_EDIT_FRAME>
 {
 public:
     LIB_EDIT_TOOL();
-    ~LIB_EDIT_TOOL();
+    ~LIB_EDIT_TOOL() override { }
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;

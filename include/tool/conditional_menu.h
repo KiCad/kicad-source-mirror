@@ -240,10 +240,6 @@ private:
     ///> Inserts the entry, preserving the requested order.
     void addEntry( ENTRY aEntry );
 
-    ///> Context menus include only items that resolve to true;
-    ///> Regular menus enable only menu items that resolve to true.
-    bool             m_isContextMenu;
-
     ///> List of all menu entries.
     std::list<ENTRY> m_entries;
 };

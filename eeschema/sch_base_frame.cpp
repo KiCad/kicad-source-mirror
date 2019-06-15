@@ -36,6 +36,7 @@
 #include <viewlib_frame.h>
 #include <sch_base_frame.h>
 #include <symbol_lib_table.h>
+#include <tool/action_toolbar.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tools/ee_actions.h>
@@ -438,3 +439,14 @@ void SCH_BASE_FRAME::SyncView()
     GetCanvas()->GetGAL()->SetGridSize( VECTOR2D( gs.x, gs.y ));
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
 }
+
+
+std::string SCH_BASE_FRAME::GetCurrentToolName()
+{
+    if( m_toolStack.empty() )
+        return EE_ACTIONS::selectionTool.GetName();
+    else
+        return m_toolStack.back();
+}
+
+

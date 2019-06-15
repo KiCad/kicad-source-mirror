@@ -187,13 +187,15 @@ void LIB_EDIT_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( EE_ACTIONS::showComponentTree,   IsSearchTreeShown() );
     m_optionsToolBar->Refresh();
 
-    m_drawToolBar->Toggle( EE_ACTIONS::selectionTool,       GetToolId() == ID_NO_TOOL_SELECTED );
-    m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolPin,      GetToolId() == ID_SYMBOL_PIN_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolText,     GetToolId() == ID_SYMBOL_TEXT_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolRectangle, GetToolId() == ID_SYMBOL_RECT_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolCircle,    GetToolId() == ID_SYMBOL_CIRCLE_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolArc,       GetToolId() == ID_SYMBOL_ARC_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolLines,     GetToolId() == ID_SYMBOL_LINE_TOOL );
-    m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolAnchor,   GetToolId() == ID_SYMBOL_ANCHOR_TOOL );
+#define TOGGLE_TOOL( tool ) m_drawToolBar->Toggle( tool, GetCurrentToolName() == tool.GetName() )
+
+    TOGGLE_TOOL( EE_ACTIONS::selectionTool );
+    TOGGLE_TOOL( EE_ACTIONS::placeSymbolPin );
+    TOGGLE_TOOL( EE_ACTIONS::placeSymbolText );
+    TOGGLE_TOOL( EE_ACTIONS::drawSymbolRectangle );
+    TOGGLE_TOOL( EE_ACTIONS::drawSymbolCircle );
+    TOGGLE_TOOL( EE_ACTIONS::drawSymbolArc );
+    TOGGLE_TOOL( EE_ACTIONS::drawSymbolLines );
+    TOGGLE_TOOL( EE_ACTIONS::deleteItemCursor );
     m_drawToolBar->Refresh();
 }

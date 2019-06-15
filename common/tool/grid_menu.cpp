@@ -33,7 +33,9 @@
 #include <functional>
 using namespace std::placeholders;
 
-GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) : m_parent( aParent )
+GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) :
+        ACTION_MENU( true ),
+        m_parent( aParent )
 {
     BASE_SCREEN* screen = m_parent->GetScreen();
 

@@ -53,7 +53,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     if( openRecentMenu )
         PgmTop().GetFileHistory().RemoveMenu( openRecentMenu );
 
-    openRecentMenu = new ACTION_MENU();
+    openRecentMenu = new ACTION_MENU( false );
     openRecentMenu->SetTool( controlTool );
     openRecentMenu->SetTitle( _( "Open Recent" ) );
     openRecentMenu->SetIcon( recent_xpm );

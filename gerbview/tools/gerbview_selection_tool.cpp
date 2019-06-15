@@ -59,10 +59,11 @@ TOOL_ACTION GERBVIEW_ACTIONS::selectionClear( "gerbview.InteractiveSelection.Cle
         AS_GLOBAL );
 
 
-class HIGHLIGHT_MENU: public ACTION_MENU
+class HIGHLIGHT_MENU : public ACTION_MENU
 {
 public:
-    HIGHLIGHT_MENU()
+    HIGHLIGHT_MENU() :
+        ACTION_MENU( true )
     {
         SetIcon( net_highlight_schematic_xpm );
         SetTitle( _( "Highlight" ) );
@@ -240,7 +241,7 @@ int GERBVIEW_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             clearSelection();
         }
 
-        else if( evt->Action() == TA_CONTEXT_MENU_CLOSED )
+        else if( evt->Action() == TA_CHOICE_MENU_CLOSED )
         {
             m_menu.CloseContextMenu( evt );
         }
@@ -601,7 +602,7 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
 {
     EDA_ITEM* current = NULL;
     KIGFX::VIEW_GROUP highlightGroup;
-    ACTION_MENU menu;
+    ACTION_MENU menu( true );
 
     highlightGroup.SetLayer( LAYER_SELECT_OVERLAY );
     getView()->Add( &highlightGroup );
@@ -623,7 +624,7 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( evt->Action() == TA_CONTEXT_MENU_UPDATE )
+        if( evt->Action() == TA_CHOICE_MENU_UPDATE )
         {
             if( current )
             {
@@ -649,7 +650,7 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
                 current = NULL;
             }
         }
-        else if( evt->Action() == TA_CONTEXT_MENU_CHOICE )
+        else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
             OPT<int> id = evt->GetCommandId();
 

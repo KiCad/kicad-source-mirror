@@ -125,7 +125,6 @@ int EE_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     resetPicker();
     controls->ForceCursorPosition( false );
-    getEditFrame<SCH_BASE_FRAME>()->SetNoToolSelected();
 
     return 0;
 }

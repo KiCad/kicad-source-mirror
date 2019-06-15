@@ -58,7 +58,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     //
     CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, selTool );
 
-    openRecentMenu = new ACTION_MENU();
+    openRecentMenu = new ACTION_MENU( false );
     openRecentMenu->SetTool( selTool );
     openRecentMenu->SetTitle( _( "Open Recent" ) );
     openRecentMenu->SetIcon( recent_xpm );

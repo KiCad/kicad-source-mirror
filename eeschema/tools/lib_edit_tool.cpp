@@ -30,7 +30,6 @@
 #include <ee_actions.h>
 #include <bitmaps.h>
 #include <confirm.h>
-#include <base_struct.h>
 #include <sch_view.h>
 #include <lib_edit_frame.h>
 #include <eeschema_id.h>
@@ -49,11 +48,6 @@ LIB_EDIT_TOOL::LIB_EDIT_TOOL() :
 }
 
 
-LIB_EDIT_TOOL::~LIB_EDIT_TOOL()
-{
-}
-
-
 bool LIB_EDIT_TOOL::Init()
 {
     EE_TOOL_BASE::Init();
@@ -63,7 +57,6 @@ bool LIB_EDIT_TOOL::Init()
 
     wxASSERT_MSG( drawingTools, "eeschema.SymbolDrawing tool is not available" );
 
-    //
     // Add edit actions to the move tool menu
     //
     if( moveTool )
@@ -85,7 +78,6 @@ bool LIB_EDIT_TOOL::Init()
         moveMenu.AddItem( ACTIONS::duplicate,          EE_CONDITIONS::NotEmpty, 300 );
     }
 
-    //
     // Add editing actions to the drawing tool menu
     //
     CONDITIONAL_MENU& drawMenu = drawingTools->GetToolMenu().GetMenu();
@@ -98,7 +90,6 @@ bool LIB_EDIT_TOOL::Init()
 
     drawMenu.AddItem( EE_ACTIONS::properties,          EE_CONDITIONS::Count( 1 ), 200 );
 
-    //
     // Add editing actions to the selection tool menu
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
@@ -302,16 +293,18 @@ static bool deleteItem( SCH_BASE_FRAME* aFrame, const VECTOR2D& aPosition )
 
 int LIB_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_BULLSEYE );
     Activate();
 
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     wxCHECK( picker, 0 );
 
-    m_frame->SetToolID( ID_LIBEDIT_DELETE_ITEM_BUTT, wxCURSOR_BULLSEYE, _( "Delete item" ) );
     picker->SetClickHandler( std::bind( deleteItem, m_frame, std::placeholders::_1 ) );
     picker->Activate();
     Wait();
 
+    m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
     return 0;
 }
 

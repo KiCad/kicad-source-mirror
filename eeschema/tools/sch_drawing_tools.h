@@ -46,38 +46,18 @@ class SCH_DRAWING_TOOLS : public EE_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
     SCH_DRAWING_TOOLS();
-    ~SCH_DRAWING_TOOLS();
+    ~SCH_DRAWING_TOOLS() override { }
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
-    int AddJunction( const TOOL_EVENT& aEvent );
-    int AddLabel( const TOOL_EVENT& aEvent );
-    int AddSheetPin( const TOOL_EVENT& aEvent );
-
-    int PlaceSymbol( const TOOL_EVENT& aEvent );
-    int PlacePower( const TOOL_EVENT& aEvent );
-    int PlaceNoConnect( const TOOL_EVENT& aEvent );
-    int PlaceJunction( const TOOL_EVENT& aEvent );
-    int PlaceBusWireEntry( const TOOL_EVENT& aEvent );
-    int PlaceBusBusEntry( const TOOL_EVENT& aEvent );
-    int PlaceLabel( const TOOL_EVENT& aEvent );
-    int PlaceGlobalLabel( const TOOL_EVENT& aEvent );
-    int PlaceHierarchicalLabel( const TOOL_EVENT& aEvent );
+    int PlaceComponent( const TOOL_EVENT& aEvent );
+    int SingleClickPlace( const TOOL_EVENT& aEvent );
+    int TwoClickPlace( const TOOL_EVENT& aEvent );
     int DrawSheet( const TOOL_EVENT& aEvent );
-    int PlaceSheetPin( const TOOL_EVENT& aEvent );
-    int ImportSheetPin( const TOOL_EVENT& aEvent );
-    int PlaceSchematicText( const TOOL_EVENT& aEvent );
     int PlaceImage( const TOOL_EVENT& aEvent );
 
 private:
-
-    int doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER* aFilter,
-                          SCH_BASE_FRAME::HISTORY_LIST& aHistoryList );
-
-    int doSingleClickPlace( KICAD_T aType );
-
-    int doTwoClickPlace( KICAD_T aType );
 
     void sizeSheet( SCH_SHEET* aSheet, VECTOR2I aPos );
 
