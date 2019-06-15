@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,8 +47,10 @@ public:
     ///> Dialog type. Selects appropriate icon and default dialog title
     enum KD_TYPE { KD_NONE, KD_INFO, KD_QUESTION, KD_WARNING, KD_ERROR };
 
-    KIDIALOG( wxWindow* aParent, const wxString& aMessage, const wxString& aCaption, long aStyle = wxOK );
-    KIDIALOG( wxWindow* aParent, const wxString& aMessage, KD_TYPE aType, const wxString& aCaption = "" );
+    KIDIALOG( wxWindow* aParent, const wxString& aMessage, const wxString& aCaption,
+              long aStyle = wxOK );
+    KIDIALOG( wxWindow* aParent, const wxString& aMessage, KD_TYPE aType,
+              const wxString& aCaption = "" );
 
     ///> Shows the 'do not show again' checkbox
     void DoNotShowCheckbox( wxString file, int line );
@@ -71,8 +73,7 @@ protected:
 
 
 /**
- * Function HandleUnsavedChanges
- * displays a dialog with Save, Cancel and Discard Changes buttons.
+ * Display a dialog with Save, Cancel and Discard Changes buttons.
  *
  * @param aParent = the parent window
  * @param aMessage = the main message to put in dialog
@@ -86,8 +87,7 @@ bool HandleUnsavedChanges( wxWindow* aParent, const wxString& aMessage,
 
 
 /**
- * Function UnsavedChangesDialog
- * a specialized version of HandleUnsavedChanges which handles an apply-to-all checkbox.
+ * A specialized version of HandleUnsavedChanges which handles an apply-to-all checkbox.
  *
  * @param aParent = the parent window
  * @param aMessage = the main message to put in dialog
@@ -97,46 +97,45 @@ bool HandleUnsavedChanges( wxWindow* aParent, const wxString& aMessage,
  */
 int UnsavedChangesDialog( wxWindow* aParent, const wxString& aMessage, bool* aApplyToAll );
 
+int UnsavedChangesDialog( wxWindow* aParent, const wxString& aMessage );
+
 
 /**
- * Function ConfirmRevertDialog
- * displays a confirmation for a revert action
+ * Display a confirmation dialog for a revert action.
  */
 bool ConfirmRevertDialog( wxWindow* parent, const wxString& aMessage );
 
 
 /**
- * Function DisplayError
- * displays an error or warning message box with \a aMessage.
+ * Display an error or warning message box with \a aMessage.
  *
  * @warning Setting \a displaytime does not work.  Do not use it.
  */
 void DisplayError( wxWindow* parent, const wxString& aMessage, int displaytime = 0 );
 
 /**
- * Function DisplayErrorMessage
- * displays an error message with \a aMessage
+ * Display an error message with \a aMessage
  *
  * @param aParent is the parent window
  * @param aMessage is the message text to display
  * @param aExtraInfo is extra data that can be optionally displayed in a collapsible pane
  */
-void DisplayErrorMessage( wxWindow* aParent, const wxString& aMessage, const wxString& aExtraInfo = wxEmptyString );
+void DisplayErrorMessage( wxWindow* aParent, const wxString& aMessage,
+                          const wxString& aExtraInfo = wxEmptyString );
 
 
 /**
- * Function DisplayInfoMessage
- * displays an informational message box with \a aMessage.
+ * Display an informational message box with \a aMessage.
  *
  * @param aParent is the parent window
  * @param aMessage is the message text to display
  * @param aExtraInfo is the extra data that can be optionally displayed in a collapsible pane
  */
-void DisplayInfoMessage( wxWindow* parent, const wxString& aMessage, const wxString& aExtraInfo = wxEmptyString );
+void DisplayInfoMessage( wxWindow* parent, const wxString& aMessage,
+                         const wxString& aExtraInfo = wxEmptyString );
 
 /**
- * Function IsOK
- * displays a yes/no dialog with \a aMessage and returns the user response.
+ * Display a yes/no dialog with \a aMessage and returns the user response.
  *
  * @param aParent is the parent window.  NULL can be used if the parent is the top level window.
  * @param aMessage is the message to display in the dialog box.
@@ -146,8 +145,7 @@ void DisplayInfoMessage( wxWindow* parent, const wxString& aMessage, const wxStr
 bool IsOK( wxWindow* aParent, const wxString& aMessage );
 
 /**
- * Function YesOrCancelDialog
- * displays a warning dialog with \a aMessage and returns the user response.
+ * Displays a warning dialog with \a aMessage and returns the user response.
  *
  * @param aParent is the parent window.  NULL can be used if the parent is the top level window.
  * @param aWarning is the warning to display in the top part of the dialog box using a bold font.
@@ -156,11 +154,10 @@ bool IsOK( wxWindow* aParent, const wxString& aMessage );
  * @param aOKLabel is the text to display in the OK button.
  * @param aCancelLabel is the text to display in the cancel button.
  *
- * @return wxID_YES or wxID_CANCEL depending on the button the user selected.
+ * @return wxID_OK or wxID_CANCEL depending on the button the user selected.
  */
-int YesOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxString& aMessage,
-                       const wxString& aOKLabel, const wxString& aCancelLabel,
-                       bool* aApplyToAll = nullptr );
+int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxString& aMessage,
+                      const wxString& aOKLabel, const wxString& aCancelLabel, bool* aApplyToAll );
 
 
 
@@ -171,7 +168,7 @@ int YesOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxStri
  * @param aTitle is the dialog title.
  * @param aMessage is a text label displayed in the first row of the dialog.
  * @param aOptions is a vector of possible options.
- * @return Index of the selected option or -1 when the dialog has been cancelled.
+ * @return Index of the selected option or -1 when the dialog has been canceled.
  */
 int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxString& aMessage,
         const wxArrayString& aOptions );

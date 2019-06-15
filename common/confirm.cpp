@@ -33,7 +33,6 @@
 #include <confirm.h>
 #include <bitmaps.h>
 #include <html_messagebox.h>
-#include <dialog_exit_base.h>
 
 #include <functional>
 #include <unordered_map>
@@ -153,66 +152,56 @@ long KIDIALOG::getStyle( KD_TYPE aType )
 }
 
 
-class DIALOG_EXIT: public DIALOG_EXIT_BASE
-{
-public:
-    DIALOG_EXIT( wxWindow *aParent, const wxString& aWarning, const wxString& aMessage,
-                 const wxString& aOKLabel, const wxString& aCancelLabel ) :
-        DIALOG_EXIT_BASE( aParent )
-    {
-        m_bitmap->SetBitmap( KiBitmap( dialog_warning_xpm ) );
-        m_TextInfo->SetLabel( aWarning );
-        m_staticTextWarningMessage->SetLabel( aMessage );
-
-        m_sdbSizerOK->SetLabel( aOKLabel );
-        m_sdbSizerCancel->SetLabel( aCancelLabel );
-        m_sdbSizerOK->SetFocus();
-        m_sdbSizerOK->SetDefault();
-
-        FinishDialogSettings();
-    };
-
-private:
-    void OnSave( wxCommandEvent& event ) override { EndModal( wxID_YES ); }
-    void OnDiscard( wxCommandEvent& event ) override { EndModal( wxID_NO ); }
-};
-
-
 int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage, bool* aApplyToAll )
 {
-    DIALOG_EXIT dlg( parent, aMessage,
-                     _( "If you don't save, all your changes will be permanently lost." ),
-                     _( "Save" ), _( "Cancel" ) );
+    wxRichMessageDialog dlg( parent, aMessage, wxEmptyString,
+                             wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING | wxCENTER );
+    dlg.ShowDetailedText( _( "If you don't save, all your changes will be permanently lost." ) );
+    dlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Save" ) ),
+                        wxMessageDialog::ButtonLabel( _( "Discard Changes" ) ) );
 
-    dlg.m_ApplyToAllOpt->Show( aApplyToAll != nullptr );
+    if( aApplyToAll )
+        dlg.ShowCheckBox( _( "Apply to all" ), true );
 
     int ret = dlg.ShowModal();
 
     if( aApplyToAll )
-        *aApplyToAll = dlg.m_ApplyToAllOpt->GetValue();
+        *aApplyToAll = dlg.IsCheckBoxChecked();
 
     // Returns wxID_YES, wxID_NO, or wxID_CANCEL
     return ret;
 }
 
 
+int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage )
+{
+    wxMessageDialog dlg( parent, aMessage, wxEmptyString,
+                         wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING | wxCENTER );
+    dlg.SetExtendedMessage( _( "If you don't save, all your changes will be permanently lost." ) );
+    dlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Save" ) ),
+                        wxMessageDialog::ButtonLabel( _( "Discard Changes" ) ) );
+
+    // Returns wxID_YES, wxID_NO, or wxID_CANCEL
+    return dlg.ShowModal();
+}
+
+
 bool ConfirmRevertDialog( wxWindow* parent, const wxString& aMessage )
 {
-    DIALOG_EXIT dlg( parent, aMessage,
-                     _( "Your current changes will be permanently lost." ),
-                     _( "Revert" ), _( "Cancel" ) );
+    wxMessageDialog dlg( parent, aMessage, wxEmptyString,
+                         wxOK | wxCANCEL | wxOK_DEFAULT | wxICON_WARNING | wxCENTER );
+    dlg.SetExtendedMessage( _( "Your current changes will be permanently lost." ) );
+    dlg.SetOKCancelLabels( wxMessageDialog::ButtonLabel( _( "Revert" ) ),
+                           wxMessageDialog::ButtonLabel( _( "Cancel" ) ) );
 
-    dlg.m_ApplyToAllOpt->Show( false );
-    dlg.m_DiscardButton->Show( false );
-
-    return dlg.ShowModal() == wxID_YES;
+    return dlg.ShowModal() == wxID_OK;
 }
 
 
 bool HandleUnsavedChanges( wxWindow* aParent, const wxString& aMessage,
                            const std::function<bool()>& aSaveFunction )
 {
-    switch( UnsavedChangesDialog( aParent, aMessage, nullptr ) )
+    switch( UnsavedChangesDialog( aParent, aMessage ) )
     {
     case wxID_YES:    return aSaveFunction();
     case wxID_NO:     return true;
@@ -222,20 +211,24 @@ bool HandleUnsavedChanges( wxWindow* aParent, const wxString& aMessage,
 }
 
 
-int YesOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxString& aMessage,
-                       const wxString& aOKLabel, const wxString& aCancelLabel, bool* aApplyToAll )
+int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxString& aMessage,
+                      const wxString& aOKLabel, const wxString& aCancelLabel, bool* aApplyToAll )
 {
-    DIALOG_EXIT dlg( aParent, aWarning, aMessage, aOKLabel, aCancelLabel );
+    wxRichMessageDialog dlg( aParent, aMessage, wxEmptyString,
+                             wxOK | wxCANCEL | wxOK_DEFAULT | wxICON_WARNING | wxCENTER );
+    dlg.ShowDetailedText( _( "If you don't save, all your changes will be permanently lost." ) );
+    dlg.SetOKCancelLabels( wxMessageDialog::ButtonLabel( aOKLabel ),
+                           wxMessageDialog::ButtonLabel( aCancelLabel ) );
 
-    dlg.m_ApplyToAllOpt->Show( aApplyToAll != nullptr );
-    dlg.m_DiscardButton->Show( false );
+    if( aApplyToAll )
+        dlg.ShowCheckBox( _( "Apply to all" ), true );
 
     int ret = dlg.ShowModal();
 
     if( aApplyToAll )
-        *aApplyToAll = dlg.m_ApplyToAllOpt->GetValue();
+        *aApplyToAll = dlg.IsCheckBoxChecked();
 
-    // Returns wxID_YES, wxID_NO, or wxID_CANCEL
+    // Returns wxID_OK or wxID_CANCEL
     return ret;
 }
 
@@ -301,7 +294,8 @@ bool IsOK( wxWindow* aParent, const wxString& aMessage )
 }
 
 
-int SelectSingleOption( wxWindow* aParent, const wxString& aTitle, const wxString& aMessage, const wxArrayString& aOptions )
+int SelectSingleOption( wxWindow* aParent, const wxString& aTitle,
+                        const wxString& aMessage, const wxArrayString& aOptions )
 {
     wxSingleChoiceDialog dlg( aParent, aMessage, aTitle, aOptions );
 

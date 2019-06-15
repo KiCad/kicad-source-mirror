@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -89,9 +89,11 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, KIWAY_PLAYER )
     EVT_SIZE( CVPCB_MAINFRAME::OnSize )
 
     // UI event handlers
-    EVT_UPDATE_UI( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, CVPCB_MAINFRAME::OnFilterFPbyKeywords)
-    EVT_UPDATE_UI( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST, CVPCB_MAINFRAME::OnFilterFPbyPinCount )
-    EVT_UPDATE_UI( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST, CVPCB_MAINFRAME::OnFilterFPbyLibrary )
+    EVT_UPDATE_UI( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, CVPCB_MAINFRAME::OnFilterFPbyKeywords )
+    EVT_UPDATE_UI( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST,
+                   CVPCB_MAINFRAME::OnFilterFPbyPinCount )
+    EVT_UPDATE_UI( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST,
+                   CVPCB_MAINFRAME::OnFilterFPbyLibrary )
     EVT_UPDATE_UI( ID_CVPCB_FOOTPRINT_DISPLAY_BY_NAME, CVPCB_MAINFRAME::OnFilterFPbyKeyName )
 
 END_EVENT_TABLE()
@@ -214,17 +216,27 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_initialized = true;
 
     // Connect Events
-    m_saveAndContinue->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CVPCB_MAINFRAME::OnSaveAndContinue ), NULL, this );
-    m_footprintListBox->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( CVPCB_MAINFRAME::OnFootprintRightClick ), NULL, this );
-    m_compListBox->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( CVPCB_MAINFRAME::OnComponentRightClick ), NULL, this );
+    m_saveAndContinue->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
+                                wxCommandEventHandler( CVPCB_MAINFRAME::OnSaveAndContinue ),
+                                NULL, this );
+    m_footprintListBox->Connect( wxEVT_RIGHT_DOWN,
+                                 wxMouseEventHandler( CVPCB_MAINFRAME::OnFootprintRightClick ),
+                                 NULL, this );
+    m_compListBox->Connect( wxEVT_RIGHT_DOWN,
+                            wxMouseEventHandler( CVPCB_MAINFRAME::OnComponentRightClick ),
+                            NULL, this );
 }
 
 
 CVPCB_MAINFRAME::~CVPCB_MAINFRAME()
 {
     // Disconnect Events
-    m_saveAndContinue->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( CVPCB_MAINFRAME::OnSaveAndContinue ), NULL, this );
-    m_footprintListBox->Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( CVPCB_MAINFRAME::OnFootprintRightClick ), NULL, this );
+    m_saveAndContinue->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
+                                   wxCommandEventHandler( CVPCB_MAINFRAME::OnSaveAndContinue ),
+                                   NULL, this );
+    m_footprintListBox->Disconnect( wxEVT_RIGHT_DOWN,
+                                    wxMouseEventHandler( CVPCB_MAINFRAME::OnFootprintRightClick ),
+                                    NULL, this );
 
     m_auimgr.UnInit();
 }
@@ -261,7 +273,8 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( m_modified )
     {
-        if( !HandleUnsavedChanges( this, _( "Symbol to Footprint links have been modified.\nSave before exit?" ),
+        if( !HandleUnsavedChanges( this, _( "Symbol to Footprint links have been modified. "
+                                            "Save before exit?" ),
                                    [&]()->bool { return SaveFootprintAssociation( false ); } ) )
         {
             Event.Veto();
@@ -454,7 +467,8 @@ void CVPCB_MAINFRAME::OnComponentRightClick( wxMouseEvent& event )
 {
     wxMenu menu;
 
-    menu.Append( ID_CVPCB_CREATE_SCREENCMP, _( "View Footprint" ), _( "Show the assigned footprint in the footprint viewer" ) );
+    menu.Append( ID_CVPCB_CREATE_SCREENCMP, _( "View Footprint" ),
+                 _( "Show the assigned footprint in the footprint viewer" ) );
 
     PopupMenu( &menu );
 }
@@ -464,7 +478,8 @@ void CVPCB_MAINFRAME::OnFootprintRightClick( wxMouseEvent& event )
 {
     wxMenu menu;
 
-    menu.Append( ID_CVPCB_CREATE_SCREENCMP, _( "View Footprint" ), _( "Show the current footprint in the footprint viewer" ) );
+    menu.Append( ID_CVPCB_CREATE_SCREENCMP, _( "View Footprint" ),
+                 _( "Show the current footprint in the footprint viewer" ) );
 
     PopupMenu( &menu );
 }
@@ -537,6 +552,7 @@ void CVPCB_MAINFRAME::refreshAfterComponentSearch( COMPONENT* component )
     SendMessageToEESCHEMA();
     DisplayStatus();
 }
+
 
 void CVPCB_MAINFRAME::OnSelectFilteringFootprint( wxCommandEvent& event )
 {
@@ -769,7 +785,8 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist( const std::string& aNetlist )
     }
     catch( const IO_ERROR& ioe )
     {
-        wxString msg = wxString::Format( _( "Error loading schematic.\n%s" ), ioe.What().GetData() );
+        wxString msg = wxString::Format( _( "Error loading schematic.\n%s" ),
+                                         ioe.What().GetData() );
         wxMessageBox( msg, _( "Load Error" ), wxOK | wxICON_ERROR );
         return 1;
     }
@@ -837,7 +854,7 @@ void CVPCB_MAINFRAME::BuildFOOTPRINTS_LISTBOX()
     }
 
     m_footprintListBox->SetFootprints( *m_FootprintsList, wxEmptyString, NULL,
-                    wxEmptyString, FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST );
+            wxEmptyString, FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST );
     DisplayStatus();
 }
 

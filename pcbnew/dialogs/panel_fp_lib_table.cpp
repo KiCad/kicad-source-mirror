@@ -647,8 +647,8 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
         {
             if( !applyToAll )
             {
-                int ret = YesOrCancelDialog( this, warning, wxString::Format( msg, nickname ),
-                                             _( "Skip" ), _( "Add Anyway" ), &applyToAll );
+                int ret = OKOrCancelDialog( this, warning, wxString::Format( msg, nickname ),
+                                            _( "Skip" ), _( "Add Anyway" ), &applyToAll );
                 addDuplicates = (ret == wxID_CANCEL );
             }
 
