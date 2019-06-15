@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -597,9 +597,14 @@ void WIDGET_HOTKEY_LIST::initializeElements()
     SetRubberBandColumn( 0 );
     SetClampedMinWidth( HOTKEY_MIN_WIDTH );
 
-    // Add the image for invalid hotkey
-    m_imgList = new wxImageList();
-    m_imgList->Add( KiBitmap( cancel_xpm ) );
+    // Add the bitmap image for invalid hotkey warning
+    // bitmap size is not know (depending on it is built). So get it:
+    wxSize iconsize;
+    wxBitmap bm_invalid = KiBitmap( cancel_xpm );
+    iconsize.x = bm_invalid.GetWidth();
+    iconsize.y = bm_invalid.GetHeight();
+    m_imgList = new wxImageList( iconsize.x, iconsize.y, true, 1);
+    m_imgList->Add( bm_invalid );
     AssignImageList( m_imgList );
 
     if( !m_readOnly )
