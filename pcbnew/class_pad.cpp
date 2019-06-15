@@ -496,7 +496,7 @@ void D_PAD::MirrorXPrimitives( int aX )
         {
         case S_POLYGON:         // polygon
             for( unsigned jj = 0; jj < primitive.m_Poly.size(); jj++ )
-                MIRROR( primitive.m_Poly[jj].x, aX );
+                MIRROR( primitive.m_Poly[jj].x, 0 );
             break;
 
         default:
@@ -510,7 +510,7 @@ void D_PAD::MirrorXPrimitives( int aX )
         SHAPE_LINE_CHAIN& poly = m_customShapeAsPolygon.Outline( cnt );
 
         for( int ii = 0; ii < poly.PointCount(); ++ii )
-            MIRROR( poly.Point( ii ).x, aX );
+            MIRROR( poly.Point( ii ).x, 0 );
     }
 }
 
