@@ -85,11 +85,18 @@ void PL_DRAW_PANEL_GAL::DisplayWorksheet()
 
     model.SetupDrawEnvironment( m_edaFrame->GetPageSettings(), Mils2iu( 1 ) );
 
+    // To show the formatted texts instead of raw texts in page layout editor, we need
+    // a dummy WS_DRAW_ITEM_LIST.
+    WS_DRAW_ITEM_LIST dummy;
+    dummy.SetPaperFormat( &m_edaFrame->GetPageSettings().GetType() );
+    dummy.SetTitleBlock( &m_edaFrame->GetTitleBlock() );
+
     for( WS_DATA_ITEM* dataItem : model.GetItems() )
-        dataItem->SyncDrawItems( nullptr, m_view );
+        dataItem->SyncDrawItems( &dummy, m_view );
 
     // Build and add a WS_DRAW_ITEM_PAGE to show the page limits and the corner position
     // of the selected corner for coord origin of new items
+    // Not also this item has no peer in WS_DATA_MODEL list.
     const int penWidth = 0;     // This value is to use the default thickness line
     constexpr double markerSize = Millimeter2iu( 5 );
     WS_DRAW_ITEM_PAGE* pageDrawing = new WS_DRAW_ITEM_PAGE( penWidth, markerSize );

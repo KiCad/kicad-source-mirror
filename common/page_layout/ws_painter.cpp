@@ -111,11 +111,13 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                 break;
 
             case 'D':
-                msg += m_titleBlock->GetDate();
+                if( m_titleBlock )
+                    msg += m_titleBlock->GetDate();
                 break;
 
             case 'R':
-                msg += m_titleBlock->GetRevision();
+                if( m_titleBlock )
+                    msg += m_titleBlock->GetRevision();
                 break;
 
             case 'K':
@@ -153,11 +155,13 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                 break;
 
             case 'Y':
-                msg += m_titleBlock->GetCompany();
+                if( m_titleBlock )
+                    msg += m_titleBlock->GetCompany();
                 break;
 
             case 'T':
-                msg += m_titleBlock->GetTitle();
+                if( m_titleBlock )
+                    msg += m_titleBlock->GetTitle();
                 break;
 
             case 'C':
@@ -174,7 +178,8 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                 case '7':
                 case '8':
                 case '9':
-                    msg += m_titleBlock->GetComment( format - '0');
+                    if( m_titleBlock )
+                        msg += m_titleBlock->GetComment( format - '0');
                     break;
 
                 default:

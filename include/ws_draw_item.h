@@ -389,6 +389,16 @@ public:
     }
 
     /**
+     * Set the title block (mainly for page layout editor)
+     */
+    void SetTitleBlock( const TITLE_BLOCK* aTblock ) { m_titleBlock = aTblock; }
+
+    /**
+     * Set the paper format name (mainly for page layout editor)
+     */
+    void SetPaperFormat( const wxString* aFormatName ) { m_paperFormat = aFormatName; }
+
+    /**
      * Set the filename to draw/plot
      */
     void SetFileName( const wxString& aFileName )
