@@ -335,8 +335,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     VECTOR2I originalCursorPos = controls->GetCursorPosition();
 
-    m_selectionTool->ClearIfOutside( getViewControls()->GetCursorPosition() );
-
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection)
     auto& selection = m_selectionTool->RequestSelection(
@@ -634,8 +632,6 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
-    m_selectionTool->ClearIfOutside( getViewControls()->GetCursorPosition() );
-
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             { EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS ); } );
@@ -676,8 +672,6 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
-
-    m_selectionTool->ClearIfOutside( getViewControls()->GetCursorPosition() );
 
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
@@ -760,8 +754,6 @@ static void mirrorPadX( D_PAD& aPad, const wxPoint& aMirrorPoint )
 
 int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
-    m_selectionTool->ClearIfOutside( getViewControls()->GetCursorPosition() );
-
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); }, nullptr, ! m_dragging );
@@ -842,8 +834,6 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 {
-    m_selectionTool->ClearIfOutside( getViewControls()->GetCursorPosition() );
-
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); }, nullptr, ! m_dragging );
@@ -891,7 +881,6 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         return 1;
 
     std::vector<BOARD_ITEM*> lockedItems;
-    m_selectionTool->ClearIfOutside( getViewControls()->GetCursorPosition() );
 
     // get a copy instead of reference (as we're going to clear the selection before removing items)
     PCBNEW_SELECTION selectionCopy;
@@ -1001,8 +990,6 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 {
-    m_selectionTool->ClearIfOutside( getViewControls()->GetCursorPosition() );
-
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); } );
@@ -1078,7 +1065,6 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 {
     bool increment = aEvent.IsAction( &PCB_ACTIONS::duplicateIncrement );
-    m_selectionTool->ClearIfOutside( getViewControls()->GetCursorPosition() );
 
     // Be sure that there is at least one item that we can modify
     const auto& selection = m_selectionTool->RequestSelection(
@@ -1156,8 +1142,6 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
 {
-    m_selectionTool->ClearIfOutside( getViewControls()->GetCursorPosition() );
-
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); } );
@@ -1322,8 +1306,6 @@ bool EDIT_TOOL::updateModificationPoint( PCBNEW_SELECTION& aSelection )
 
 int EDIT_TOOL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
 {
-    m_selectionTool->ClearIfOutside( getViewControls()->GetCursorPosition() );
-
     const auto& selection = m_selectionTool->RequestSelection( FootprintFilter );
 
     if( selection.Empty() )
