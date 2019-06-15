@@ -28,9 +28,11 @@
 #include "graphics_import_plugin.h"
 #include "graphics_importer_buffer.h"
 
-#include "dl_dxf.h"
-#include "dl_creationadapter.h"
-#include "wx/wx.h"
+#include <dl_creationadapter.h>
+#include <dl_dxf.h>
+#include <wildcards_and_files_ext.h>
+#include <wx/wx.h>
+
 #include <list>
 
 class BOARD;
@@ -146,10 +148,7 @@ public:
 
     const wxArrayString GetFileExtensions() const override
     {
-        wxArrayString list;
-        list.Add( "dxf" );
-        list.Add( "DXF" );
-        return list;
+        return wxArrayString( 1, formatWildcardExt( "dxf" ) );
     }
 
     bool Load( const wxString& aFileName ) override;
