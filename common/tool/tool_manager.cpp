@@ -529,7 +529,7 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
         }
 
         // the tool state handler is waiting for events (i.e. called Wait() method)
-        if( st->pendingWait )
+        if( st && st->pendingWait )
         {
             if( st->waitEvents.Matches( aEvent ) )
             {

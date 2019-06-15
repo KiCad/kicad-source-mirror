@@ -524,6 +524,8 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 case SCH_BUS_BUS_ENTRY_T:
                     item = new SCH_BUS_BUS_ENTRY( cursorPos, g_lastBusEntryShape );
                     break;
+                default:
+                    break;
                 }
             }
 
@@ -665,6 +667,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     item = m_frame->CreateSheetPin( sheet, label );
                     break;
                 }
+                default:
+                    break;
                 }
 
                 // Restore cursor after dialog
