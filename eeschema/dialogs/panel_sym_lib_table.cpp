@@ -728,7 +728,7 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
         {
             wxMessageDialog saveDlg( aParent,
                                      _( "Modifications have been made to one or more symbol "
-                                        "libraries.  Changes must be saved or discared before "
+                                        "libraries.  Changes must be saved or discarded before "
                                         "the symbol library table can be modified." ),
                                      _( "Warning" ),
                                      wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxCENTER );
