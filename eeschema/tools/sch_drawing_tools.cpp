@@ -197,7 +197,10 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
 
     // Prime the pump
     if( component )
+    {
+        getViewControls()->WarpCursor( getViewControls()->GetMousePosition( false ) );
         m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
+    }
     else if( immediateMode )
         m_toolMgr->RunAction( EE_ACTIONS::cursorClick );
 

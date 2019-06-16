@@ -111,17 +111,6 @@ void LIB_VIEW_FRAME::onSelectPreviousSymbol( wxCommandEvent& aEvent )
 }
 
 
-void LIB_VIEW_FRAME::onSelectSymbolBodyStyle( wxCommandEvent& aEvent )
-{
-    if( aEvent.GetId() == ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT )
-        m_convert = LIB_ITEM::LIB_CONVERT::DEMORGAN;
-    else
-        m_convert = LIB_ITEM::LIB_CONVERT::BASE;
-
-    updatePreviewSymbol();
-}
-
-
 void LIB_VIEW_FRAME::onSelectSymbolUnit( wxCommandEvent& aEvent )
 {
     int ii = m_unitChoice->GetSelection();

@@ -76,9 +76,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( EE_ACTIONS::showDatasheet );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_ADD_PART_TO_SCHEMATIC, wxEmptyString,
-                            KiScaledBitmap( export_xpm, this ),
-                            _( "Add symbol to schematic" ) );
+    m_mainToolBar->Add( EE_ACTIONS::addSymbolToSchematic );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();

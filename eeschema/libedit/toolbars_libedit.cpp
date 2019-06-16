@@ -30,6 +30,7 @@
 #include <dialog_helpers.h>
 #include <bitmaps.h>
 #include <lib_manager.h>
+#include <class_library.h>
 #include <tool/action_toolbar.h>
 #include <tools/ee_actions.h>
 
@@ -110,24 +111,16 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( EE_ACTIONS::showDeMorganAlternate, ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_partSelectBox = new wxComboBox( m_mainToolBar, ID_LIBEDIT_SELECT_PART_NUMBER, wxEmptyString,
+    m_unitSelectBox = new wxComboBox( m_mainToolBar, ID_LIBEDIT_SELECT_PART_NUMBER, wxEmptyString,
                                       wxDefaultPosition, wxSize( LISTBOX_WIDTH, -1 ), 0, nullptr,
                                       wxCB_READONLY );
-    m_mainToolBar->AddControl( m_partSelectBox );
+    m_mainToolBar->AddControl( m_unitSelectBox );
 
     KiScaledSeparator( m_mainToolBar, this );
-    // JEY TODO: move to an action....
-    m_mainToolBar->AddTool( ID_LIBEDIT_SYNC_PIN_EDIT, wxEmptyString,
-                            KiScaledBitmap( pin2pin_xpm, this ),
-                            _( "Synchronized pin edit mode\n"
-                               "Propagates all changes (except pin numbers) to other units.\n"
-                               "Enabled by default for multiunit parts with interchangeable units." ),
-                            wxITEM_CHECK );
+    m_mainToolBar->Add( EE_ACTIONS::toggleSyncedPinsMode, ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_ADD_PART_TO_SCHEMATIC, wxEmptyString,
-                            KiScaledBitmap( export_xpm, this ),
-                            _( "Add symbol to schematic" ) );
+    m_mainToolBar->Add( EE_ACTIONS::addSymbolToSchematic );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();
@@ -173,10 +166,15 @@ void LIB_EDIT_FRAME::SyncToolbars()
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
     m_mainToolBar->Toggle( EE_ACTIONS::showDatasheet, GetCurPart() != nullptr );
-    m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganStandard, GetShowDeMorgan(),
+    m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganStandard,
+                           GetShowDeMorgan(),
                            m_convert == LIB_ITEM::LIB_CONVERT::BASE );
-    m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganAlternate, GetShowDeMorgan(),
+    m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganAlternate,
+                           GetShowDeMorgan(),
                            m_convert == LIB_ITEM::LIB_CONVERT::DEMORGAN );
+    m_mainToolBar->Toggle( EE_ACTIONS::toggleSyncedPinsMode,
+                           GetCurPart() && GetCurPart()->IsMulti() && !GetCurPart()->UnitsLocked(),
+                           m_SyncPinEdit );
     m_mainToolBar->Refresh();
 
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,             IsGridVisible() );

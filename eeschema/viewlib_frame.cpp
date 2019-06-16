@@ -49,7 +49,6 @@
 #include <tool/common_tools.h>
 #include <tool/zoom_tool.h>
 #include <tools/lib_control.h>
-#include <tools/lib_move_tool.h>
 #include <tools/ee_inspection_tool.h>
 
 // Save previous component library viewer state.
@@ -70,10 +69,7 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_LIBVIEW_SELECT_PART, LIB_VIEW_FRAME::OnSelectSymbol )
     EVT_TOOL( ID_LIBVIEW_NEXT, LIB_VIEW_FRAME::onSelectNextSymbol )
     EVT_TOOL( ID_LIBVIEW_PREVIOUS, LIB_VIEW_FRAME::onSelectPreviousSymbol )
-    EVT_TOOL_RANGE( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT,
-                    LIB_VIEW_FRAME::onSelectSymbolBodyStyle )
     EVT_CHOICE( ID_LIBVIEW_SELECT_PART_NUMBER, LIB_VIEW_FRAME::onSelectSymbolUnit )
-    EVT_TOOL( ID_ADD_PART_TO_SCHEMATIC, LIB_VIEW_FRAME::OnAddPartToSchematic )
 
     // listbox events
     EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, LIB_VIEW_FRAME::ClickOnLibList )
@@ -230,8 +226,7 @@ void LIB_VIEW_FRAME::setupTools()
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->RegisterTool( new EE_INSPECTION_TOOL );  // manage show datasheet
     m_toolManager->RegisterTool( new EE_SELECTION_TOOL );   // manage context menu
-    m_toolManager->RegisterTool( new LIB_CONTROL );         // manage show electrical type option
-    m_toolManager->RegisterTool( new LIB_MOVE_TOOL );
+    m_toolManager->RegisterTool( new LIB_CONTROL );
 
     m_toolManager->InitTools();
 
@@ -639,7 +634,7 @@ void LIB_VIEW_FRAME::SetSelectedComponent( const wxString& aComponentName )
 
 void LIB_VIEW_FRAME::DClickOnCmpList( wxCommandEvent& event )
 {
-    OnAddPartToSchematic( event );
+    m_toolManager->RunAction( EE_ACTIONS::addSymbolToSchematic, true );
 }
 
 
@@ -749,43 +744,13 @@ const BOX2I LIB_VIEW_FRAME::GetDocumentExtents() const
 }
 
 
-void LIB_VIEW_FRAME::OnAddPartToSchematic( wxCommandEvent& aEvent )
+void LIB_VIEW_FRAME::FinishModal()
 {
-    if( IsModal() )
-    {
-        // if we're modal then we just need to return the symbol selection; the caller is
-        // already in a EE_ACTIONS::placeSymbol coroutine.
-        if( m_cmpList->GetSelection() >= 0 )
-            DismissModal( true, m_libraryName + ':' + m_cmpList->GetStringSelection() );
-        else
-            DismissModal( false );
+    if( m_cmpList->GetSelection() >= 0 )
+        DismissModal( true, m_libraryName + ':' + m_cmpList->GetStringSelection() );
+    else
+        DismissModal( false );
 
-        Close( true );
-        return;
-    }
-
-    if( GetSelectedSymbol() )
-    {
-        SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
-
-        if( schframe == NULL )      // happens when the schematic editor is not active (or closed)
-        {
-            DisplayErrorMessage( this, _("No schematic currently open." ) );
-            return;
-        }
-
-        SCH_COMPONENT* component = new SCH_COMPONENT( *GetSelectedSymbol(),
-                                                      GetSelectedAlias()->GetLibId(),
-                                                      g_CurrentSheet, m_unit, m_convert );
-
-        // Be sure the link to the corresponding LIB_PART is OK:
-        component->Resolve( *Prj().SchSymbolLibTable() );
-
-        if( schframe->GetAutoplaceFields() )
-            component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
-
-        schframe->Raise();
-        schframe->GetToolManager()->RunAction( EE_ACTIONS::placeSymbol, true, component );
-    }
+    Close( true );
 }
 

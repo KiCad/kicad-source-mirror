@@ -22,6 +22,7 @@
  */
 
 #include <fctsys.h>
+#include <kiway.h>
 #include <sch_painter.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
@@ -33,6 +34,7 @@
 #include <wildcards_and_files_ext.h>
 #include <gestfich.h>
 #include <project.h>
+#include <confirm.h>
 
 TOOL_ACTION EE_ACTIONS::newSymbol( "eeschema.SymbolLibraryControl.newSymbol",
         AS_GLOBAL, 0, "",
@@ -79,6 +81,11 @@ TOOL_ACTION EE_ACTIONS::exportSymbol( "eeschema.SymbolLibraryControl.exportSymbo
         _( "Export Symbol..." ), _( "Export a symbol to a new library file" ),
         export_part_xpm );
 
+TOOL_ACTION EE_ACTIONS::addSymbolToSchematic( "eeschema.SymbolLibraryControl.addSymbolToSchematic",
+        AS_GLOBAL, 0, "",
+        _( "Add Symbol to Schematic" ), _( "Add Symbol to Schematic" ),
+        export_xpm );
+
 TOOL_ACTION EE_ACTIONS::showElectricalTypes( "eeschema.SymbolLibraryControl.showElectricalTypes",
         AS_GLOBAL, 0, "",
         _( "Show Pin Electrical Types" ), _( "Annotate pins with their electrical types" ),
@@ -98,6 +105,14 @@ TOOL_ACTION EE_ACTIONS::exportSymbolAsSVG( "eeschema.SymbolLibraryControl.export
         AS_GLOBAL, 0, "",
         _( "Export Symbol as SVG..." ), _( "Create SVG file from the current symbol" ),
         plot_svg_xpm );
+
+TOOL_ACTION EE_ACTIONS::toggleSyncedPinsMode( "eeschema.SymbolLibraryControl.toggleSyncedPinsMode",
+        AS_GLOBAL, 0, "",
+        _( "Synchronized Pins Edit Mode" ),
+        _( "Synchronized Pins Edit Mode\n"
+           "When enabled propagates all changes (except pin numbers) to other units.\n"
+           "Enabled by default for multiunit parts with interchangeable units." ),
+        pin2pin_xpm );
 
 
 bool LIB_CONTROL::Init()
@@ -309,6 +324,18 @@ int LIB_CONTROL::ShowElectricalTypes( const TOOL_EVENT& aEvent )
 }
 
 
+int LIB_CONTROL::ToggleSyncedPinsMode( const TOOL_EVENT& aEvent )
+{
+    if( !m_isLibEdit )
+        return 0;
+
+    LIB_EDIT_FRAME* editFrame = getEditFrame<LIB_EDIT_FRAME>();
+    editFrame->m_SyncPinEdit = !editFrame->m_SyncPinEdit;
+
+    return 0;
+}
+
+
 int LIB_CONTROL::ExportView( const TOOL_EVENT& aEvent )
 {
     if( !m_isLibEdit )
@@ -394,6 +421,69 @@ int LIB_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
 }
 
 
+int LIB_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
+{
+    LIB_PART* part = nullptr;
+    LIB_ID    libId;
+    int       unit, convert;
+
+    if( m_isLibEdit )
+    {
+        LIB_EDIT_FRAME* editFrame = getEditFrame<LIB_EDIT_FRAME>();
+
+        part = editFrame->GetCurPart();
+        unit = editFrame->GetUnit();
+        convert = editFrame->GetConvert();
+
+        if( part )
+            libId = part->GetLibId();
+    }
+    else
+    {
+        LIB_VIEW_FRAME* viewFrame = getEditFrame<LIB_VIEW_FRAME>();
+
+        if( viewFrame->IsModal() )
+        {
+            // if we're modal then we just need to return the symbol selection; the caller is
+            // already in a EE_ACTIONS::placeSymbol coroutine.
+            viewFrame->FinishModal();
+            return 0;
+        }
+        else
+        {
+            part = viewFrame->GetSelectedSymbol();
+            libId = viewFrame->GetSelectedAlias()->GetLibId();
+            unit = viewFrame->GetUnit();
+            convert = viewFrame->GetConvert();
+        }
+    }
+
+    if( part )
+    {
+        SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH, false );
+
+        if( !schframe )      // happens when the schematic editor is not active (or closed)
+        {
+            DisplayErrorMessage( m_frame, _( "No schematic currently open." ) );
+            return 0;
+        }
+
+        SCH_COMPONENT* comp = new SCH_COMPONENT( *part, libId,g_CurrentSheet, unit, convert );
+
+        // Be sure the link to the corresponding LIB_PART is OK:
+        comp->Resolve( *m_frame->Prj().SchSymbolLibTable() );
+
+        if( schframe->GetAutoplaceFields() )
+            comp->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
+
+        schframe->Raise();
+        schframe->GetToolManager()->RunAction( EE_ACTIONS::placeSymbol, true, comp );
+    }
+
+    return 0;
+}
+
+
 void LIB_CONTROL::setTransitions()
 {
     Go( &LIB_CONTROL::AddLibrary,            ACTIONS::newLibrary.MakeEvent() );
@@ -416,10 +506,12 @@ void LIB_CONTROL::setTransitions()
     Go( &LIB_CONTROL::ExportSymbol,          EE_ACTIONS::exportSymbol.MakeEvent() );
     Go( &LIB_CONTROL::ExportView,            EE_ACTIONS::exportSymbolView.MakeEvent() );
     Go( &LIB_CONTROL::ExportSymbolAsSVG,     EE_ACTIONS::exportSymbolAsSVG.MakeEvent() );
+    Go( &LIB_CONTROL::AddSymbolToSchematic,  EE_ACTIONS::addSymbolToSchematic.MakeEvent() );
 
     Go( &LIB_CONTROL::OnDeMorgan,            EE_ACTIONS::showDeMorganStandard.MakeEvent() );
     Go( &LIB_CONTROL::OnDeMorgan,            EE_ACTIONS::showDeMorganAlternate.MakeEvent() );
 
     Go( &LIB_CONTROL::ShowElectricalTypes,   EE_ACTIONS::showElectricalTypes.MakeEvent() );
     Go( &LIB_CONTROL::ShowComponentTree,     EE_ACTIONS::showComponentTree.MakeEvent() );
+    Go( &LIB_CONTROL::ToggleSyncedPinsMode,  EE_ACTIONS::toggleSyncedPinsMode.MakeEvent() );
 }

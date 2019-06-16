@@ -50,33 +50,27 @@ class LIB_MANAGER;
  */
 class LIB_EDIT_FRAME : public SCH_BASE_FRAME
 {
-    LIB_PART*          m_my_part;              ///< a part I own, it is not in any library, but a copy could be.
-    wxComboBox*        m_partSelectBox;        ///< a Box to select a part to edit (if any)
-    SYMBOL_TREE_PANE*  m_treePane;             ///< component search tree widget
-    LIB_MANAGER*       m_libMgr;               ///< manager taking care of temporary modificatoins
+    LIB_PART*          m_my_part;           // a part I own, it is not in any library, but a copy
+                                            // could be.
+    wxComboBox*        m_unitSelectBox;     // a ComboBox to select a unit to edit (if the part
+                                            // has multiple units)
+    SYMBOL_TREE_PANE*  m_treePane;          // component search tree widget
+    LIB_MANAGER*       m_libMgr;            // manager taking care of temporary modificatoins
 
     // The unit number to edit and show
     int m_unit;
 
-    // Show the normal shape ( m_convert <= 1 ) or the converted shape
-    // ( m_convert > 1 )
+    // Show the normal shape ( m_convert <= 1 ) or the converted shape ( m_convert > 1 )
     int m_convert;
 
-    // true to force DeMorgan/normal tools selection enabled.
-    // They are enabled when the loaded component has
-    // Graphic items for converted shape
-    // But under some circumstances (New component created)
-    // these tools must left enabled
+    // True to force DeMorgan/normal tools selection enabled.
+    // They are enabled when the loaded component has graphic items for converted shape
+    // But under some circumstances (New component created) these tools must left enabled
     static bool m_showDeMorgan;
 
-    /// The default pin num text size setting.
-    static int m_textPinNumDefaultSize;
-
-    /// The default  pin name text size setting.
-    static int m_textPinNameDefaultSize;
-
-    ///  Default pin length
-    static int m_defaultPinLength;
+    static int m_textPinNumDefaultSize;     // The default pin num text size setting.
+    static int m_textPinNameDefaultSize;    // The default  pin name text size setting.
+    static int m_defaultPinLength;          //  Default pin length
 
     /// Default repeat offset for pins in repeat place pin
     int m_repeatPinStep;
@@ -85,25 +79,24 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
 
 public:
     /**
-     * Set to true to not synchronize pins at the same position when editing
-     * symbols with multiple units or multiple body styles.
-     * Therefore deleting, moving pins are made for all pins at the same location
-     * When units are interchangeable, synchronizing editing of pins is usually
-     * the best way, because if units are interchangeable, it imply all similar
-     * pins are on the same location.
-     * When units are non interchangeable, do not synchronize editing of pins, because
-     * each part is specific, and there are no similar pins between units.
+     * Set to true to synchronize pins at the same position when editing symbols with multiple
+     * units or multiple body styles.  Deleting or moving pins will affect all pins at the same
+     * location.
+     * When units are interchangeable, synchronizing editing of pins is usually the best way,
+     * because if units are interchangeable, it implies that all similar pins are at the same
+     * location.
+     * When units are not interchangeable, do not synchronize editing of pins, because each part
+     * is specific, and there are no (or few) similar pins between units.
      *
-     * Setting this to false allows editing each pin per part or body style
-     * regardless other pins at the same location.
-     * This requires the user to open each part or body style to make changes
-     * to the other pins at the same location.
-     * To know if others pins must be coupled when editing a pin, use
-     * SynchronizePins() instead of m_syncPinEdit, because SynchronizePins()
-     * is more reliable (takes in account the fact units are interchangeable,
-     * there are more than one unit).
+     * Setting this to false allows editing each pin per part or body style regardless other
+     * pins at the same location. This requires the user to open each part or body style to make
+     * changes to the other pins at the same location.
+     *
+     * To know if others pins must be coupled when editing a pin, use SynchronizePins() instead
+     * of m_syncPinEdit, because SynchronizePins() is more reliable (takes in account the fact
+     * units are interchangeable, there are more than one unit).
      */
-    bool m_SyncPinEdit;
+    bool          m_SyncPinEdit;
 
     /** Convert of the item currently being drawn. */
     bool          m_DrawSpecificConvert;
@@ -111,8 +104,8 @@ public:
     /**
      * Specify which component parts the current draw item applies to.
      *
-     * If true, the item being drawn or edited applies only to the selected
-     * part.  Otherwise it applies to all parts in the component.
+     * If true, the item being drawn or edited applies only to the selected part.  Otherwise
+     * it applies to all parts in the component.
      */
     bool          m_DrawSpecificUnit;
 
@@ -134,8 +127,8 @@ public:
     /**
      * Check if any pending libraries have been modified.
      *
-     * This only checks for modified libraries.  If a new symbol was created and
-     * modified and no libraries have been modified, the return value will be false.
+     * This only checks for modified libraries.  If a new symbol was created and modified
+     * and no libraries have been modified, the return value will be false.
      *
      * @return True if there are any pending library modifications.
      */
@@ -164,18 +157,12 @@ public:
      */
     void SetCurPart( LIB_PART* aPart );
 
-    /** @return the default pin num text size.
-     */
     static int GetPinNumDefaultSize() { return m_textPinNumDefaultSize; }
     static void SetPinNumDefaultSize( int aSize ) { m_textPinNumDefaultSize = aSize; }
 
-    /** @return The default pin name text size setting.
-     */
     static int GetPinNameDefaultSize() { return m_textPinNameDefaultSize; }
     static void SetPinNameDefaultSize( int aSize ) { m_textPinNameDefaultSize = aSize; }
 
-    /** @return The default pin len setting.
-     */
     static int GetDefaultPinLength() { return m_defaultPinLength; }
     static void SetDefaultPinLength( int aLength ) { m_defaultPinLength = aLength; }
 
@@ -187,17 +174,8 @@ public:
 
     void ReCreateMenuBar() override;
 
-    /**
-     * Pin editing (add, delete, move...) can be synchronized between units
-     * when units are interchangeable because in this case similar pins are expected
-     * at the same location
-     * @return true if the edit pins separately option is false and the current symbol
-     * has multiple interchengeable units.
-     * Otherwise return false.
-     */
+    // See comments for m_SyncPinEdit.
     bool SynchronizePins();
-
-    void OnSyncPinEditClick( wxCommandEvent& event );
 
     void OnImportBody( wxCommandEvent& aEvent );
     void OnExportBody( wxCommandEvent& aEvent );
@@ -214,11 +192,6 @@ public:
 
     void ImportPart();
     void ExportPart();
-
-    /**
-     * Add the current part to the schematic
-     */
-    void OnAddPartToSchematic( wxCommandEvent& event );
 
     /**
      * Saves the selected part or library.
@@ -260,7 +233,6 @@ public:
     void FreezeSearchTree();
     void ThawSearchTree();
 
-    void OnUpdateSyncPinEdit( wxUpdateUIEvent& event );
     void OnUpdatePartNumber( wxUpdateUIEvent& event );
 
     void UpdateAfterSymbolProperties( wxString* aOldName, wxArrayString* aOldAliases );
@@ -330,8 +302,8 @@ private:
     /**
      * Set the current active library to \a aLibrary.
      *
-     * @param aLibrary the nickname of the library in the symbol library table.  If wxEmptyString,
-     *                 then display list of available libraries to select from.
+     * @param aLibrary the nickname of the library in the symbol library table.  If empty,
+     *                 display list of available libraries to select from.
      */
     void SelectActiveLibrary( const wxString& aLibrary = wxEmptyString );
 
@@ -346,8 +318,8 @@ private:
     wxString SelectLibraryFromList();
 
     /**
-     * Loads a symbol from the current active library, optionally setting the selected
-     * unit and convert.
+     * Loads a symbol from the current active library, optionally setting the selected unit
+     * and convert.
      *
      * @param aAliasName The symbol alias name to load from the current library.
      * @param aUnit Unit to be selected
@@ -366,8 +338,8 @@ private:
      * @param aConvert the initial DeMorgan variant to show.
      * @return True if a copy of \a aLibEntry was successfully copied.
      */
-    bool LoadOneLibraryPartAux( LIB_ALIAS* aLibEntry, const wxString& aLibrary,
-                                int aUnit, int aConvert );
+    bool LoadOneLibraryPartAux( LIB_ALIAS* aLibEntry, const wxString& aLibrary, int aUnit,
+                                int aConvert );
 
     /**
      * Display the documentation of the selected component.

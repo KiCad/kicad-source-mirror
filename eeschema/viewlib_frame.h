@@ -65,6 +65,11 @@ public:
      */
     bool ShowModal( wxString* aSymbol, wxWindow* aParent ) override;
 
+    /**
+     * Send the selected symbol back to the caller.
+     */
+    void FinishModal();
+
     void OnSize( wxSizeEvent& event ) override;
 
     /**
@@ -151,15 +156,11 @@ private:
 
     void DClickOnCmpList( wxCommandEvent& event );
 
-    void onUpdateAltBodyStyleButton( wxUpdateUIEvent& aEvent );
-    void onUpdateNormalBodyStyleButton( wxUpdateUIEvent& aEvent );
     void onUpdateUnitChoice( wxUpdateUIEvent& aEvent );
 
     void onSelectNextSymbol( wxCommandEvent& aEvent );
     void onSelectPreviousSymbol( wxCommandEvent& aEvent );
-    void onSelectSymbolBodyStyle( wxCommandEvent& aEvent );
     void onSelectSymbolUnit( wxCommandEvent& aEvent );
-    void OnAddPartToSchematic( wxCommandEvent& aEvent );
 
     void updatePreviewSymbol();
 

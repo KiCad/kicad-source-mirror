@@ -59,11 +59,13 @@ public:
     int ExportSymbol( const TOOL_EVENT& aEvent );
     int ExportView( const TOOL_EVENT& aEvent );
     int ExportSymbolAsSVG( const TOOL_EVENT& aEvent );
+    int AddSymbolToSchematic( const TOOL_EVENT& aEvent );
 
     int OnDeMorgan( const TOOL_EVENT& aEvent );
 
     int ShowElectricalTypes( const TOOL_EVENT& aEvent );
     int ShowComponentTree( const TOOL_EVENT& aEvent );
+    int ToggleSyncedPinsMode( const TOOL_EVENT& aEvent );
 
 private:
     ///> Sets up handlers for various events.

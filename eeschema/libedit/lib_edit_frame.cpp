@@ -83,10 +83,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_CLOSE( LIB_EDIT_FRAME::OnCloseWindow )
     EVT_SIZE( LIB_EDIT_FRAME::OnSize )
 
-    // Main horizontal toolbar.
-    EVT_TOOL( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::OnSyncPinEditClick )
-    EVT_TOOL( ID_ADD_PART_TO_SCHEMATIC, LIB_EDIT_FRAME::OnAddPartToSchematic )
-
     EVT_COMBOBOX( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnSelectUnit )
 
     // Right vertical toolbar.
@@ -98,7 +94,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
 
     // Update user interface elements.
-    EVT_UPDATE_UI( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::OnUpdateSyncPinEdit )
     EVT_UPDATE_UI( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnUpdatePartNumber )
 
 END_EVENT_TABLE()
@@ -278,18 +273,18 @@ double LIB_EDIT_FRAME::BestZoom()
 
 void LIB_EDIT_FRAME::RebuildSymbolUnitsList()
 {
-    if( !m_partSelectBox )
+    if( !m_unitSelectBox )
         return;
 
-    if( m_partSelectBox->GetCount() != 0 )
-        m_partSelectBox->Clear();
+    if( m_unitSelectBox->GetCount() != 0 )
+        m_unitSelectBox->Clear();
 
     LIB_PART*      part = GetCurPart();
 
     if( !part || part->GetUnitCount() <= 1 )
     {
         m_unit = 1;
-        m_partSelectBox->Append( wxEmptyString );
+        m_unitSelectBox->Append( wxEmptyString );
     }
     else
     {
@@ -297,7 +292,7 @@ void LIB_EDIT_FRAME::RebuildSymbolUnitsList()
         {
             wxString sub  = LIB_PART::SubReference( i+1, false );
             wxString unit = wxString::Format( _( "Unit %s" ), GetChars( sub ) );
-            m_partSelectBox->Append( unit );
+            m_unitSelectBox->Append( unit );
         }
     }
 
@@ -306,7 +301,7 @@ void LIB_EDIT_FRAME::RebuildSymbolUnitsList()
     if( part && part->GetUnitCount() < m_unit )
         m_unit = 1;
 
-    m_partSelectBox->SetSelection( ( m_unit > 0 ) ? m_unit - 1 : 0 );
+    m_unitSelectBox->SetSelection(( m_unit > 0 ) ? m_unit - 1 : 0 );
 }
 
 
@@ -336,24 +331,16 @@ void LIB_EDIT_FRAME::ThawSearchTree()
 }
 
 
-void LIB_EDIT_FRAME::OnUpdateSyncPinEdit( wxUpdateUIEvent& event )
-{
-    LIB_PART* part = GetCurPart();
-    event.Enable( part && part->IsMulti() && !part->UnitsLocked() );
-    event.Check( m_SyncPinEdit );
-}
-
-
 void LIB_EDIT_FRAME::OnUpdatePartNumber( wxUpdateUIEvent& event )
 {
-    if( !m_partSelectBox )
+    if( !m_unitSelectBox )
         return;
 
     LIB_PART* part = GetCurPart();
 
     // Using the typical event.Enable() call doesn't seem to work with wxGTK
     // so use the pointer to alias combobox to directly enable or disable.
-    m_partSelectBox->Enable( part && part->GetUnitCount() > 1 );
+    m_unitSelectBox->Enable( part && part->GetUnitCount() > 1 );
 }
 
 
@@ -371,12 +358,6 @@ void LIB_EDIT_FRAME::OnSelectUnit( wxCommandEvent& event )
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     RebuildView();
-}
-
-
-void LIB_EDIT_FRAME::OnSyncPinEditClick( wxCommandEvent& event )
-{
-    m_SyncPinEdit = m_mainToolBar->GetToolToggled( ID_LIBEDIT_SYNC_PIN_EDIT );
 }
 
 
@@ -473,33 +454,6 @@ bool LIB_EDIT_FRAME::SynchronizePins()
     LIB_PART* part = GetCurPart();
 
     return m_SyncPinEdit && part && part->IsMulti() && !part->UnitsLocked();
-}
-
-
-void LIB_EDIT_FRAME::OnAddPartToSchematic( wxCommandEvent& event )
-{
-    if( GetCurPart() )
-    {
-        SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
-
-        if( !schframe )      // happens when the schematic editor is not active (or closed)
-        {
-            DisplayErrorMessage( this, _( "No schematic currently open." ) );
-            return;
-        }
-
-        SCH_COMPONENT* component = new SCH_COMPONENT( *GetCurPart(), GetCurPart()->GetLibId(),
-                                                      g_CurrentSheet, GetUnit(), GetConvert() );
-
-        // Be sure the link to the corresponding LIB_PART is OK:
-        component->Resolve( *Prj().SchSymbolLibTable() );
-
-        if( schframe->GetAutoplaceFields() )
-            component->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
-
-        schframe->Raise();
-        schframe->GetToolManager()->RunAction( EE_ACTIONS::placeSymbol, true, component );
-    }
 }
 
 

@@ -158,6 +158,7 @@ public:
     static TOOL_ACTION exportNetlist;
     static TOOL_ACTION generateBOM;
     static TOOL_ACTION runSimulation;
+    static TOOL_ACTION addSymbolToSchematic;
 
     // Library management
     static TOOL_ACTION newSymbol;
@@ -178,6 +179,7 @@ public:
     // Miscellaneous
     static TOOL_ACTION cleanupSheetPins;
     static TOOL_ACTION toggleHiddenPins;
+    static TOOL_ACTION toggleSyncedPinsMode;
     static TOOL_ACTION refreshPreview;
     static TOOL_ACTION restartMove;
     static TOOL_ACTION explicitCrossProbe;

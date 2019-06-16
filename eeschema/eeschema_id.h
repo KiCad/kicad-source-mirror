@@ -60,27 +60,17 @@ enum id_eeschema_frm
     ID_RESCUE_CACHED,
     ID_REMAP_SYMBOLS,
 
-    /* Schematic editor horizontal toolbar IDs */
-    ID_ADD_PART_TO_SCHEMATIC,
-
     /* Library editor horizontal toolbar IDs. */
-    ID_LIBEDIT_SYNC_PIN_EDIT,
     ID_LIBEDIT_SELECT_PART_NUMBER,
 
     /* Library editor vertical toolbar IDs. */
     ID_LIBEDIT_IMPORT_BODY_BUTT,
     ID_LIBEDIT_EXPORT_BODY_BUTT,
 
-    /* Library editor menubar IDs */
-    ID_LIBEDIT_GEN_PNG_FILE,
-    ID_LIBEDIT_GEN_SVG_FILE,
-
     /* Library viewer horizontal toolbar IDs */
     ID_LIBVIEW_SELECT_PART,
     ID_LIBVIEW_NEXT,
     ID_LIBVIEW_PREVIOUS,
-    ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT,
-    ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT,
     ID_LIBVIEW_SELECT_PART_NUMBER,
     ID_LIBVIEW_LIB_LIST,
     ID_LIBVIEW_CMP_LIST,
