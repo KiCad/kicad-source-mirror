@@ -118,13 +118,25 @@ inline void drawMarker( EDA_RECT* aClipBox, wxDC* aDC,
  */
 void WS_DRAW_ITEM_LIST::Draw( EDA_RECT* aClipBox, wxDC* aDC )
 {
+
+    // Draw the bitmaps in the background
+    for( WS_DRAW_ITEM_BASE* item = GetFirst(); item; item = GetNext() )
+    {
+        if( item->GetParent() && item->GetParent()->IsSelected() )
+            continue;
+
+        if( item->GetType() == WS_DRAW_ITEM_BASE::wsg_bitmap )
+            item->DrawWsItem( aClipBox, aDC );
+
+    }
     // The not selected items are drawn first (most of items)
     for( WS_DRAW_ITEM_BASE* item = GetFirst(); item; item = GetNext() )
     {
         if( item->GetParent() && item->GetParent()->IsSelected() )
             continue;
 
-        item->DrawWsItem( aClipBox, aDC );
+        if( item->GetType() != WS_DRAW_ITEM_BASE::wsg_bitmap )
+            item->DrawWsItem( aClipBox, aDC );
     }
 
     // The selected items are drawn after (usually 0 or 1)
@@ -492,7 +504,6 @@ void WS_DRAW_ITEM_BITMAP::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoi
     {
         GRSetDrawMode( aDC, ( aDrawMode == UNSPECIFIED_DRAWMODE ) ? GR_COPY : aDrawMode );
         parent->m_ImageBitmap->DrawBitmap( aDC, m_pos + aOffset );
-        GRSetDrawMode( aDC, GR_COPY );
     }
 }
 

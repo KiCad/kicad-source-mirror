@@ -36,6 +36,7 @@
 
 #include "bitmap_base.h"
 
+#include <wx/dc.h>
 #include <wx/mstream.h>
 
 
