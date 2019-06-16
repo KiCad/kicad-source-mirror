@@ -30,7 +30,6 @@
 #include <eeschema_id.h>
 #include <lib_edit_frame.h>
 #include <viewlib_frame.h>
-#include <kicad/kicad_manager_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <gestfich.h>
 #include <project.h>
