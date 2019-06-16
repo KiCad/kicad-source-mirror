@@ -87,8 +87,7 @@ static const char s_BitmapLayerIcon[BM_LAYERICON_SIZE][BM_LAYERICON_SIZE] =
 void PCB_EDIT_FRAME::PrepareLayerIndicator()
 {
     int        ii, jj;
-    COLOR4D    active_layer_color, Route_Layer_TOP_color,
-               Route_Layer_BOTTOM_color, via_color, background_color;
+    COLOR4D    active_layer_color, top_color, bottom_color, via_color, background_color;
     bool       change = false;
 
     static int previous_requested_scale;
@@ -113,21 +112,19 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
         change = true;
     }
 
-    Route_Layer_TOP_color =
-        Settings().Colors().GetLayerColor( GetScreen()->m_Route_Layer_TOP );
+    top_color = Settings().Colors().GetLayerColor( GetScreen()->m_Route_Layer_TOP );
 
-    if( previous_Route_Layer_TOP_color != Route_Layer_TOP_color )
+    if( previous_Route_Layer_TOP_color != top_color )
     {
-        previous_Route_Layer_TOP_color = Route_Layer_TOP_color;
+        previous_Route_Layer_TOP_color = top_color;
         change = true;
     }
 
-    Route_Layer_BOTTOM_color =
-        Settings().Colors().GetLayerColor( GetScreen()->m_Route_Layer_BOTTOM );
+    bottom_color = Settings().Colors().GetLayerColor( GetScreen()->m_Route_Layer_BOTTOM );
 
-    if( previous_Route_Layer_BOTTOM_color != Route_Layer_BOTTOM_color )
+    if( previous_Route_Layer_BOTTOM_color != bottom_color )
     {
-        previous_Route_Layer_BOTTOM_color = Route_Layer_BOTTOM_color;
+        previous_Route_Layer_BOTTOM_color = bottom_color;
         change = true;
     }
 
@@ -176,10 +173,10 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
                 switch( s_BitmapLayerIcon[ii][jj] )
                 {
                 default:
-                case 0: pen.SetColour( active_layer_color.ToColour() );       break;
-                case 1: pen.SetColour( Route_Layer_TOP_color.ToColour() );    break;
-                case 2: pen.SetColour( Route_Layer_BOTTOM_color.ToColour() ); break;
-                case 3: pen.SetColour( via_color.ToColour() );                break;
+                case 0: pen.SetColour( active_layer_color.ToColour() ); break;
+                case 1: pen.SetColour( top_color.ToColour() );          break;
+                case 2: pen.SetColour( bottom_color.ToColour() );       break;
+                case 3: pen.SetColour( via_color.ToColour() );          break;
                 }
 
                 buttonColor = s_BitmapLayerIcon[ii][jj];
