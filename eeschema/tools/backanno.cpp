@@ -40,7 +40,6 @@
 #include <boost/property_tree/ptree.hpp>
 #include <wx/choicdlg.h>
 #include <tools/sch_editor_control.h>
-#include <kicad/kicad_manager_frame.h>
 
 
 void SCH_EDITOR_CONTROL::BackAnnotateFootprints( const std::string& aChangedSetOfReferences )
