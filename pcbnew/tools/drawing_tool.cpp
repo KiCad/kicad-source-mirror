@@ -263,6 +263,8 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_LINE_TOOL : ID_PCB_ADD_LINE_BUTT,
             wxCURSOR_PENCIL, _( "Add graphic line" ) );
 
+    Activate();
+
     while( drawSegment( S_SEGMENT, line, startingPoint ) )
     {
         // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
@@ -307,6 +309,8 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
 
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_CIRCLE_TOOL : ID_PCB_CIRCLE_BUTT,
             wxCURSOR_PENCIL, _( "Add graphic circle" ) );
+
+    Activate();
 
     while( drawSegment( S_CIRCLE, circle ) )
     {
@@ -1009,8 +1013,6 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
-
-    Activate();
 
     bool     direction45 = false;    // 45 degrees only mode
     bool     started = false;
