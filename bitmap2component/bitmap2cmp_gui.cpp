@@ -539,7 +539,7 @@ void BM2CMP_FRAME::OnExportToClipboard( wxCommandEvent& event )
         wxTheClipboard->Close();
     }
     else
-        wxMessageBox( _( " Unable to export to the Clipboard") );
+        wxMessageBox( _( "Unable to export to the Clipboard") );
 }
 
 

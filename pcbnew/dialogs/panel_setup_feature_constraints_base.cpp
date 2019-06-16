@@ -80,7 +80,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	m_bSizerPolygonFillOption->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 
-	m_stZoneFilledPolysOpt = new wxStaticText( this, wxID_ANY, _(" Option to fill polygons in zones:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stZoneFilledPolysOpt = new wxStaticText( this, wxID_ANY, _("Option to fill polygons in zones:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stZoneFilledPolysOpt->Wrap( -1 );
 	m_stZoneFilledPolysOpt->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
