@@ -725,6 +725,17 @@ void PS_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
                 }
             }
 
+            if( aImage.HasMask() )
+            {
+                if( red == aImage.GetMaskRed() && green == aImage.GetMaskGreen()
+                        && blue == aImage.GetMaskBlue() )
+                {
+                    red = 0xFF;
+                    green = 0xFF;
+                    blue = 0xFF;
+                }
+            }
+
             if( colorMode )
                 fprintf( outputFile, "%2.2X%2.2X%2.2X", red, green, blue );
             else

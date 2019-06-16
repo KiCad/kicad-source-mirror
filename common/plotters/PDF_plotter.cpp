@@ -405,12 +405,22 @@ void PDF_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
                 }
             }
 
+            if( aImage.HasMask() )
+            {
+                if( r == aImage.GetMaskRed() && g == aImage.GetMaskGreen() && b == aImage.GetMaskBlue() )
+                {
+                    r = 0xFF;
+                    g = 0xFF;
+                    b = 0xFF;
+                }
+            }
+
             // As usual these days, stdio buffering has to suffeeeeerrrr
             if( colorMode )
             {
-            putc( r, workFile );
-            putc( g, workFile );
-            putc( b, workFile );
+                putc( r, workFile );
+                putc( g, workFile );
+                putc( b, workFile );
             }
             else
             {
