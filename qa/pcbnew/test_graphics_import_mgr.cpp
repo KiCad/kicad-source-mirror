@@ -29,6 +29,8 @@
 #include <import_gfx/graphics_import_mgr.h>
 #include <import_gfx/graphics_import_plugin.h>
 
+#include <regex>
+
 /**
  * Declares a struct as the Boost test fixture.
  */
@@ -38,7 +40,15 @@ static bool pluginHandlesExt( const GRAPHICS_IMPORT_PLUGIN& aPlugin, const std::
 {
     const auto exts = aPlugin.GetFileExtensions();
 
-    return std::find( exts.begin(), exts.end(), wxString( aExt ) ) != exts.end();
+    for( auto ext : exts )
+    {
+        std::regex ext_reg( ext.ToStdString() );
+
+        if( std::regex_match( aExt, ext_reg ) )
+            return true;
+    }
+
+    return false;
 }
 
 struct TYPE_TO_EXTS
