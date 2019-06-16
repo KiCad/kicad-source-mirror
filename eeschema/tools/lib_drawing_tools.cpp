@@ -43,7 +43,7 @@
 
 // Drawing tool actions
 TOOL_ACTION EE_ACTIONS::placeSymbolPin( "eeschema.SymbolDrawing.placeSymbolPin",
-        AS_GLOBAL, 
+        AS_GLOBAL,
         'P', LEGACY_HK_NAME( "Create Pin" ),
         _( "Add Pin" ), _( "Add a pin" ),
         pin_xpm, AF_ACTIVATE );
@@ -357,7 +357,10 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             case LIB_CIRCLE_T:    item = new LIB_CIRCLE( part );    break;
             case LIB_POLYLINE_T:  item = new LIB_POLYLINE( part );  break;
             case LIB_RECTANGLE_T: item = new LIB_RECTANGLE( part ); break;
+            default: break;     // keep compiler quiet
             }
+
+            wxASSERT( item );
 
             item->SetWidth( LIB_EDIT_FRAME::g_LastLineWidth );
             item->SetFillMode( LIB_EDIT_FRAME::g_LastFillStyle );
