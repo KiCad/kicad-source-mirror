@@ -148,7 +148,8 @@ public:
 
     const wxArrayString GetFileExtensions() const override
     {
-        return wxArrayString( 1, formatWildcardExt( "dxf" ) );
+        static wxString wildcardExt = formatWildcardExt( "dxf" );
+        return wxArrayString( 1, &wildcardExt );
     }
 
     bool Load( const wxString& aFileName ) override;

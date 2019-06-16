@@ -45,8 +45,8 @@ public:
 
     const wxArrayString GetFileExtensions() const override
     {
-
-        return wxArrayString( 1, formatWildcardExt( "svg" ) );
+        static wxString wildcardExt = formatWildcardExt( "svg" );
+        return wxArrayString( 1, &wildcardExt );
     }
 
     /**
