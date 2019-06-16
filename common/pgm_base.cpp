@@ -69,58 +69,13 @@ static const wxChar showEnvVarWarningDialog[] = wxT( "ShowEnvVarWarningDialog" )
 static const wxChar traceEnvVars[]     = wxT( "KIENVVARS" );
 
 
-FILE_HISTORY::FILE_HISTORY( size_t aMaxFiles, int aBaseFileId ) :
-        wxFileHistory( std::min( aMaxFiles, (size_t) MAX_FILE_HISTORY_SIZE ) )
-{
-    SetBaseId( aBaseFileId );
-}
-
-
-void FILE_HISTORY::SetMaxFiles( size_t aMaxFiles )
-{
-    m_fileMaxFiles = std::min( aMaxFiles, (size_t) MAX_FILE_HISTORY_SIZE );
-
-    size_t numFiles = m_fileHistory.size();
-
-    while( numFiles > m_fileMaxFiles )
-        RemoveFileFromHistory( --numFiles );
-}
-
-
 /**
- *   A small class to handle the list of existing translations.
- *   The locale translation is automatic.
- *   The selection of languages is mainly for maintainer's convenience
- *   To add a support to a new translation:
- *   create a new icon (flag of the country) (see Lang_Fr.xpm as an example)
- *   add a new item to s_Languages[].
- */
-struct LANGUAGE_DESCR
-{
-    /// wxWidgets locale identifier (See wxWidgets doc)
-    int         m_WX_Lang_Identifier;
-
-    /// KiCad identifier used in menu selection (See id.h)
-    int         m_KI_Lang_Identifier;
-
-    /// The menu language icons
-    BITMAP_DEF  m_Lang_Icon;
-
-    /// Labels used in menus
-    wxString    m_Lang_Label;
-
-    /// Set to true if the m_Lang_Label must not be translated
-    bool        m_DoNotTranslate;
-};
-
-
-/**
- * Variable s_Languages
+ * LanguagesList
  * Note: because this list is not created on the fly, wxTranslation
  * must be called when a language name must be displayed after translation.
  * Do not change this behavior, because m_Lang_Label is also used as key in config
  */
-static LANGUAGE_DESCR s_Languages[] =
+LANGUAGE_DESCR LanguagesList[] =
 {
     { wxLANGUAGE_DEFAULT,    ID_LANGUAGE_DEFAULT,    lang_def_xpm,  _( "Default" ) },
     { wxLANGUAGE_ENGLISH,    ID_LANGUAGE_ENGLISH,    lang_en_xpm, wxT( "English" ), true },
@@ -146,8 +101,27 @@ static LANGUAGE_DESCR s_Languages[] =
     { wxLANGUAGE_DUTCH,      ID_LANGUAGE_DUTCH,      lang_nl_xpm,   _( "Dutch" ) },
     { wxLANGUAGE_JAPANESE,   ID_LANGUAGE_JAPANESE,   lang_jp_xpm,   _( "Japanese" ) },
     { wxLANGUAGE_BULGARIAN,  ID_LANGUAGE_BULGARIAN,  lang_bg_xpm,   _( "Bulgarian" ) },
-    { wxLANGUAGE_LITHUANIAN, ID_LANGUAGE_LITHUANIAN, lang_lt_xpm,   _( "Lithuanian" ) }
+    { wxLANGUAGE_LITHUANIAN, ID_LANGUAGE_LITHUANIAN, lang_lt_xpm,   _( "Lithuanian" ) },
+    { 0, 0, lang_def_xpm,   "" }         // Sentinel
 };
+
+
+FILE_HISTORY::FILE_HISTORY( size_t aMaxFiles, int aBaseFileId ) :
+        wxFileHistory( std::min( aMaxFiles, (size_t) MAX_FILE_HISTORY_SIZE ) )
+{
+    SetBaseId( aBaseFileId );
+}
+
+
+void FILE_HISTORY::SetMaxFiles( size_t aMaxFiles )
+{
+    m_fileMaxFiles = std::min( aMaxFiles, (size_t) MAX_FILE_HISTORY_SIZE );
+
+    size_t numFiles = m_fileHistory.size();
+
+    while( numFiles > m_fileMaxFiles )
+        RemoveFileFromHistory( --numFiles );
+}
 
 
 PGM_BASE::PGM_BASE()
@@ -683,11 +657,11 @@ bool PGM_BASE::SetLanguage( bool first_time )
         m_common_settings->Read( languageCfgKey, &languageSel );
 
         // Search for the current selection
-        for( unsigned ii = 0; ii < arrayDim( s_Languages ); ii++ )
+        for( unsigned ii = 0; LanguagesList[ii].m_KI_Lang_Identifier != 0; ii++ )
         {
-            if( s_Languages[ii].m_Lang_Label == languageSel )
+            if( LanguagesList[ii].m_Lang_Label == languageSel )
             {
-                setLanguageId( s_Languages[ii].m_WX_Lang_Identifier );
+                setLanguageId( LanguagesList[ii].m_WX_Lang_Identifier );
                 break;
             }
         }
@@ -725,11 +699,11 @@ bool PGM_BASE::SetLanguage( bool first_time )
         wxString languageSel;
 
         // Search for the current selection language name
-        for( unsigned ii = 0; ii < arrayDim( s_Languages ); ii++ )
+        for( unsigned ii = 0;  LanguagesList[ii].m_KI_Lang_Identifier != 0; ii++ )
         {
-            if( s_Languages[ii].m_WX_Lang_Identifier == m_language_id )
+            if( LanguagesList[ii].m_WX_Lang_Identifier == m_language_id )
             {
-                languageSel = s_Languages[ii].m_Lang_Label;
+                languageSel = LanguagesList[ii].m_Lang_Label;
                 break;
             }
         }
@@ -764,13 +738,13 @@ bool PGM_BASE::SetLanguage( bool first_time )
 void PGM_BASE::SetLanguageIdentifier( int menu_id )
 {
     wxLogTrace( traceLocale, "Select language ID %d from %d possible languages.",
-                menu_id, (int)arrayDim( s_Languages ) );
+                menu_id, (int)arrayDim( LanguagesList )-1 );
 
-    for( unsigned ii = 0; ii < arrayDim( s_Languages ); ii++ )
+    for( unsigned ii = 0;  LanguagesList[ii].m_KI_Lang_Identifier != 0; ii++ )
     {
-        if( menu_id == s_Languages[ii].m_KI_Lang_Identifier )
+        if( menu_id == LanguagesList[ii].m_KI_Lang_Identifier )
         {
-            setLanguageId( s_Languages[ii].m_WX_Lang_Identifier );
+            setLanguageId( LanguagesList[ii].m_WX_Lang_Identifier );
             break;
         }
     }
@@ -808,47 +782,6 @@ void PGM_BASE::SetLanguagePath()
             wxLogTrace( traceLocale, "Adding locale lookup path: " + fn.GetPath() );
             wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
         }
-    }
-}
-
-
-void PGM_BASE::AddMenuLanguageList( wxMenu* MasterMenu )
-{
-    wxMenu*      menu = NULL;
-    wxMenuItem*  item = MasterMenu->FindItem( ID_LANGUAGE_CHOICE );
-
-    if( item )     // This menu exists, do nothing
-        return;
-
-    menu = new wxMenu;
-
-    for( unsigned ii = 0; ii < arrayDim( s_Languages ); ii++ )
-    {
-        wxString label;
-
-        if( s_Languages[ii].m_DoNotTranslate )
-            label = s_Languages[ii].m_Lang_Label;
-        else
-            label = wxGetTranslation( s_Languages[ii].m_Lang_Label );
-
-        AddMenuItem( menu, s_Languages[ii].m_KI_Lang_Identifier,
-                     label, KiBitmap(s_Languages[ii].m_Lang_Icon ),
-                     wxITEM_CHECK );
-    }
-
-    AddMenuItem( MasterMenu, menu,
-                 ID_LANGUAGE_CHOICE,
-                 _( "Set Language" ),
-                 _( "Select application language (only for testing)" ),
-                 KiBitmap( language_xpm ) );
-
-    // Set Check mark on current selected language
-    for( unsigned ii = 0;  ii < arrayDim( s_Languages );  ii++ )
-    {
-        if( m_language_id == s_Languages[ii].m_WX_Lang_Identifier )
-            menu->Check( s_Languages[ii].m_KI_Lang_Identifier, true );
-        else
-            menu->Check( s_Languages[ii].m_KI_Lang_Identifier, false );
     }
 }
 

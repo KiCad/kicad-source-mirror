@@ -35,6 +35,12 @@
 #include <wx/menuitem.h>
 #include <bitmaps.h>
 
+class CONDITIONAL_MENU;
+class TOOL_INTERACTIVE;
+
+void AddMenuLanguageList( CONDITIONAL_MENU* aMasterMenu, TOOL_INTERACTIVE* aControlTool );
+
+
 /**
  * Add a bitmap to a menuitem
  * @param aMenu is the menuitem.

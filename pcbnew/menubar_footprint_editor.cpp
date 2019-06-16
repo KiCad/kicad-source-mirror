@@ -281,7 +281,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                         preference_xpm,                      SELECTION_CONDITIONS::ShowAlways );
 
     prefsMenu->AddSeparator();
-    Pgm().AddMenuLanguageList( prefsMenu );
+    AddMenuLanguageList( prefsMenu, selTool );
 
     prefsMenu->AddSeparator();
     prefsMenu->AddCheckItem( ACTIONS::acceleratedGraphics,   acceleratedGraphicsCondition );

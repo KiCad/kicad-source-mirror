@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@
 #include <tool/common_control.h>
 #include "cvpcb_id.h"
 #include "cvpcb_mainframe.h"
+#include <menus_helpers.h>
 
 
 void CVPCB_MAINFRAME::ReCreateMenuBar()
@@ -44,11 +45,11 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     //
     CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, tool );
 
-    fileMenu->AddItem( ID_SAVE_PROJECT, 
+    fileMenu->AddItem( ID_SAVE_PROJECT,
                        _( "&Save Schematic\tCtrl+S" ),
                        _( "Save footprint associations in schematic symbol footprint fields" ),
                        save_xpm,                        SELECTION_CONDITIONS::ShowAlways );
-    
+
     fileMenu->Resolve();
 
     //-- Preferences menu -----------------------------------------------
@@ -63,14 +64,14 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
                         preference_xpm,                 SELECTION_CONDITIONS::ShowAlways );
 
     prefsMenu->AddSeparator();
-    prefsMenu->AddItem( ID_CVPCB_EQUFILES_LIST_EDIT, 
+    prefsMenu->AddItem( ID_CVPCB_EQUFILES_LIST_EDIT,
                         _( "Footprint &Association Files..." ),
                         _( "Configure footprint association file (.equ) list.  These files are "
                            "used to automatically assign footprint names from symbol values." ),
                         library_table_xpm,              SELECTION_CONDITIONS::ShowAlways );
 
     prefsMenu->AddSeparator();
-    Pgm().AddMenuLanguageList( prefsMenu );
+    AddMenuLanguageList( prefsMenu, tool );
 
     prefsMenu->Resolve();
 

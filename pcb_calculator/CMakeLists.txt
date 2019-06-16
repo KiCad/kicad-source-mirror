@@ -69,6 +69,7 @@ target_link_libraries( pcb_calculator
     # There's way too much crap coming in from common yet.
     common
     gal
+    common
     ${wxWidgets_LIBRARIES}
     )
 

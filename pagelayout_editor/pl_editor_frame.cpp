@@ -54,6 +54,7 @@
 #include <invoke_pl_editor_dialog.h>
 #include <tools/pl_editor_control.h>
 
+
 BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_CLOSE( PL_EDITOR_FRAME::OnCloseWindow )
     EVT_MENU( wxID_FILE, PL_EDITOR_FRAME::Files_io )

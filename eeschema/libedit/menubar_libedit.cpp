@@ -215,7 +215,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                         preference_xpm,                    EE_CONDITIONS::ShowAlways );
 
     prefsMenu->AddSeparator();
-    Pgm().AddMenuLanguageList( prefsMenu );
+    AddMenuLanguageList( prefsMenu, selTool );
 
     prefsMenu->AddSeparator();
     prefsMenu->AddCheckItem( ACTIONS::acceleratedGraphics, acceleratedGraphicsCondition );

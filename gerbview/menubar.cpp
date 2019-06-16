@@ -35,6 +35,7 @@
 #include <tools/gerbview_selection_tool.h>
 #include <tools/gerbview_actions.h>
 
+
 void GERBVIEW_FRAME::ReCreateMenuBar()
 {
     GERBVIEW_SELECTION_TOOL* selTool = m_toolManager->GetTool<GERBVIEW_SELECTION_TOOL>();
@@ -254,7 +255,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                               preference_xpm,                    SELECTION_CONDITIONS::ShowAlways );
 
     preferencesMenu->AddSeparator();
-    Pgm().AddMenuLanguageList( preferencesMenu );
+    AddMenuLanguageList( preferencesMenu, selTool );
 
     preferencesMenu->AddSeparator();
     preferencesMenu->AddCheckItem( ACTIONS::acceleratedGraphics, acceleratedGraphicsCondition );

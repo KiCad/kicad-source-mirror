@@ -33,7 +33,7 @@
 #include "eeschema_id.h"
 #include "sch_edit_frame.h"
 
-class CONDITIONAL_MENU;
+extern void AddMenuLanguageList( CONDITIONAL_MENU* aMasterMenu, TOOL_INTERACTIVE* aControlTool );
 
 
 void SCH_EDIT_FRAME::ReCreateMenuBar()
@@ -97,7 +97,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     submenuImport->SetTitle( _( "Import" ) );
     submenuImport->SetIcon( import_xpm );
 
-    submenuImport->Add( _( "Footprint Association File..." ), 
+    submenuImport->Add( _( "Footprint Association File..." ),
                         _( "Back-import symbol footprint associations from .cmp file created by Pcbnew" ),
                         ID_BACKANNO_ITEMS, import_footprint_names_xpm );
 
@@ -314,7 +314,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                         preference_xpm,                    EE_CONDITIONS::ShowAlways );
 
     prefsMenu->AddSeparator();
-    Pgm().AddMenuLanguageList( prefsMenu );
+    AddMenuLanguageList( prefsMenu, selTool );
 
     prefsMenu->AddSeparator();
     prefsMenu->AddCheckItem( ACTIONS::acceleratedGraphics, acceleratedGraphicsCondition );

@@ -37,6 +37,7 @@
 #include <wx/filehistory.h>
 #include <search_stack.h>
 #include <wx/gdicmn.h>
+#include <bitmaps_png/bitmap_def.h>
 
 
 ///@{
@@ -62,6 +63,32 @@ class wxSingleInstanceChecker;
 class wxApp;
 class wxMenu;
 class wxWindow;
+
+/**
+ *   A small class to handle the list of existing translations.
+ *   The locale translation is automatic.
+ *   The selection of languages is mainly for maintainer's convenience
+ *   To add a support to a new translation:
+ *   create a new icon (flag of the country) (see Lang_Fr.xpm as an example)
+ *   add a new item to s_Languages[].
+ */
+struct LANGUAGE_DESCR
+{
+    /// wxWidgets locale identifier (See wxWidgets doc)
+    int         m_WX_Lang_Identifier;
+
+    /// KiCad identifier used in menu selection (See id.h)
+    int         m_KI_Lang_Identifier;
+
+    /// The menu language icons
+    BITMAP_DEF  m_Lang_Icon;
+
+    /// Labels used in menus
+    wxString    m_Lang_Label;
+
+    /// Set to true if the m_Lang_Label must not be translated
+    bool        m_DoNotTranslate;
+};
 
 
 class FILE_HISTORY : public wxFileHistory
@@ -237,15 +264,6 @@ public:
     VTBL_ENTRY bool SetLanguage( bool first_time = false );
 
     /**
-     * Function AddMenuLanguageList
-     * creates a menu list for language choice, and add it as submenu to \a MasterMenu.
-     *
-     * @param MasterMenu The main menu. The sub menu list will be accessible from the menu
-     *                   item with id ID_LANGUAGE_CHOICE
-     */
-    VTBL_ENTRY void AddMenuLanguageList( wxMenu* MasterMenu );
-
-    /**
      * Function SetLanguageIdentifier
      * sets in .m_language_id member the wxWidgets language identifier Id  from
      * the KiCad menu id (internal menu identifier).
@@ -254,6 +272,11 @@ public:
      *                clicking on a menu item)
      */
     VTBL_ENTRY void SetLanguageIdentifier( int menu_id );
+
+    /**
+     * @return the wxWidgets language identifier Id of the language currently selected
+     */
+    VTBL_ENTRY int GetSelectedLanguageIdentifier() const { return m_language_id; }
 
     VTBL_ENTRY void SetLanguagePath();
 

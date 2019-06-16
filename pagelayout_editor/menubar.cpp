@@ -167,7 +167,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
                               preference_xpm,                SELECTION_CONDITIONS::ShowAlways );
 
     // Language submenu
-    Pgm().AddMenuLanguageList( preferencesMenu );
+    AddMenuLanguageList( preferencesMenu, selTool );
 
     //-- Menubar -----------------------------------------------------------
     //

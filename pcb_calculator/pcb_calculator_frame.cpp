@@ -62,7 +62,7 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_TWNested = false;
 
     SHAPE_POLY_SET dummy;   // A ugly trick to force the linker to include
-                            //some methods in code and avoid link errors
+                            // some methods in code and avoid link errors
 
     // Populate transline list ordered like in dialog menu list
     const static TRANSLINE_TYPE_ID tltype_list[8] =

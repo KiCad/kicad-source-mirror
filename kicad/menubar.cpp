@@ -65,10 +65,10 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     fileMenu->AddItem( KICAD_MANAGER_ACTIONS::newFromTemplate, SELECTION_CONDITIONS::ShowAlways );
     fileMenu->AddItem( KICAD_MANAGER_ACTIONS::openProject,     SELECTION_CONDITIONS::ShowAlways );
     fileMenu->AddMenu( openRecentMenu,                         SELECTION_CONDITIONS::ShowAlways );
-    
+
     fileMenu->AddSeparator();
-    fileMenu->AddItem( ID_IMPORT_EAGLE_PROJECT, 
-                       _( "Import EAGLE Project..." ), 
+    fileMenu->AddItem( ID_IMPORT_EAGLE_PROJECT,
+                       _( "Import EAGLE Project..." ),
                        _( "Import EAGLE CAD XML schematic and board" ),
                        import_project_xpm,                     SELECTION_CONDITIONS::ShowAlways );
 
@@ -79,7 +79,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                        zip_xpm,                                SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddItem( ID_READ_ZIP_ARCHIVE,
-                       _( "&Unarchive Project..." ),  
+                       _( "&Unarchive Project..." ),
                        _( "Unarchive project files from zip archive" ),
                        unzip_xpm,                              SELECTION_CONDITIONS::ShowAlways );
 
@@ -92,7 +92,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     //-- View menu -----------------------------------------------------------
     //
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, controlTool );
-    
+
     viewMenu->AddItem( ACTIONS::zoomRedraw,                    SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
@@ -126,7 +126,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     toolsMenu->AddItem( ID_EDIT_LOCAL_FILE_IN_TEXT_EDITOR,
                        _( "Edit Local File..." ), _( "Edit local file in text editor" ),
                        browse_files_xpm,                       SELECTION_CONDITIONS::ShowAlways );
-    
+
     toolsMenu->Resolve();
 
     //-- Preferences menu -----------------------------------------------
@@ -142,8 +142,8 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                         preference_xpm,                 SELECTION_CONDITIONS::ShowAlways );
 
     prefsMenu->AddSeparator();
-    Pgm().AddMenuLanguageList( prefsMenu );
-    
+    AddMenuLanguageList( prefsMenu, controlTool );
+
     prefsMenu->Resolve();
 
     //-- Menubar -------------------------------------------------------------
@@ -204,14 +204,14 @@ void KICAD_MANAGER_FRAME::RecreateLauncher()
     else
         m_launcher = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
-    
+
     m_launcher->Add( KICAD_MANAGER_ACTIONS::editSchematic );
     m_launcher->Add( KICAD_MANAGER_ACTIONS::editSymbols );
 
     KiScaledSeparator( m_launcher, this );
     m_launcher->Add( KICAD_MANAGER_ACTIONS::editPCB );
     m_launcher->Add( KICAD_MANAGER_ACTIONS::editFootprints );
-    
+
     KiScaledSeparator( m_launcher, this );
     m_launcher->Add( KICAD_MANAGER_ACTIONS::viewGerbers );
     m_launcher->Add( KICAD_MANAGER_ACTIONS::convertImage );

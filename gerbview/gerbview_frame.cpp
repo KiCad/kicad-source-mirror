@@ -51,6 +51,7 @@
 #include <tools/gerbview_control.h>
 #include <view/view.h>
 #include <gerbview_painter.h>
+#include <geometry/shape_poly_set.h>
 
 
 // Config keywords
@@ -86,6 +87,9 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_SelAperAttributesBox = nullptr;
     m_displayMode   = 0;
     m_AboutTitle = "GerbView";
+
+    SHAPE_POLY_SET dummy;   // A ugly trick to force the linker to include
+                            // some methods in code and avoid link errors
 
     int fileHistorySize;
     Pgm().CommonSettings()->Read( FILE_HISTORY_SIZE_KEY, &fileHistorySize,
