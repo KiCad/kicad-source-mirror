@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2018 CERN
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -374,11 +375,20 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
         static_cast<TOOL_INTERACTIVE*>( aTool )->resetTransitions();
 
     // If the tool is already active, bring it to the top of the active tools stack
-    if( isActive( aTool ) )
+    if( isActive( aTool ) && m_activeTools.size() > 1 )
     {
-        m_activeTools.erase( std::find( m_activeTools.begin(), m_activeTools.end(), id ) );
-        m_activeTools.push_front( id );
-        return false;
+        auto it = std::find( m_activeTools.begin(), m_activeTools.end(), id );
+
+        if( it != m_activeTools.end() )
+        {
+            if( it != m_activeTools.begin() )
+            {
+                m_activeTools.erase( it );
+                m_activeTools.push_front( id );
+            }
+
+            return false;
+        }
     }
 
     setActiveState( m_toolIdIndex[id] );
