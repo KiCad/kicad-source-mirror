@@ -27,6 +27,7 @@
 #include "dxf_import_plugin.h"
 #include "svg_import_plugin.h"
 
+#include <wx/regex.h>
 
 GRAPHICS_IMPORT_MGR::GRAPHICS_IMPORT_MGR( const TYPE_LIST& aBlacklist )
 {
@@ -71,7 +72,9 @@ std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GRAPHICS_IMPORT_MGR::GetPluginByExt(
 
         for( const auto& fileExt : fileExtensions )
         {
-            if( aExtension.IsSameAs( fileExt, false ) )
+            wxRegEx extensions( fileExt, wxRE_BASIC );
+
+            if( extensions.Matches( aExtension ) )
                 return plugin;
         }
     }
