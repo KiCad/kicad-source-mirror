@@ -38,6 +38,7 @@
 
 extern LANGUAGE_DESCR LanguagesList[];
 
+using namespace std::placeholders;
 
 /**
  * Function AddMenuLanguageList
@@ -54,11 +55,8 @@ void AddMenuLanguageList( CONDITIONAL_MENU* aMasterMenu, TOOL_INTERACTIVE* aCont
     aMasterMenu->AddMenu( langsMenu );
     wxString tooltip;
 
-    // Fix me: find the way to return true for the menutitem having the same m_WX_Lang_Identifier
-    // value as Pgm().GetSelectedLanguageIdentifier()
-    auto isCurrentLanguage = [] ( const SELECTION& aSel )
-    {
-        return false;
+    auto isCurrentLang = [] ( int aLangIdentifier ) {
+        return Pgm().GetSelectedLanguageIdentifier() == aLangIdentifier;
     };
 
     for( unsigned ii = 0;  LanguagesList[ii].m_KI_Lang_Identifier != 0; ii++ )
@@ -72,6 +70,6 @@ void AddMenuLanguageList( CONDITIONAL_MENU* aMasterMenu, TOOL_INTERACTIVE* aCont
 
         langsMenu->AddCheckItem( LanguagesList[ii].m_KI_Lang_Identifier,    // wxMenuItem wxID
                                  label, tooltip, LanguagesList[ii].m_Lang_Icon,
-                                 isCurrentLanguage );
+                                 std::bind( isCurrentLang, LanguagesList[ii].m_WX_Lang_Identifier ) );
     }
 }

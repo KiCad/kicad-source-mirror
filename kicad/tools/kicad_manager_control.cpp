@@ -398,6 +398,22 @@ int KICAD_MANAGER_CONTROL::Refresh( const TOOL_EVENT& aEvent )
 }
 
 
+int KICAD_MANAGER_CONTROL::UpdateMenu( const TOOL_EVENT& aEvent )
+{
+    ACTION_MENU*      actionMenu = aEvent.Parameter<ACTION_MENU*>();
+    CONDITIONAL_MENU* conditionalMenu = dynamic_cast<CONDITIONAL_MENU*>( actionMenu );
+    SELECTION         dummySel;
+
+    if( conditionalMenu )
+        conditionalMenu->Evaluate( dummySel );
+
+    if( actionMenu )
+        actionMenu->UpdateAll();
+
+    return 0;
+}
+
+
 int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
 {
     FRAME_T playerType = FRAME_SCH_VIEWER;
@@ -568,6 +584,7 @@ void KICAD_MANAGER_CONTROL::setTransitions()
     Go( &KICAD_MANAGER_CONTROL::OpenProject,   KICAD_MANAGER_ACTIONS::openProject.MakeEvent() );
 
     Go( &KICAD_MANAGER_CONTROL::Refresh,       ACTIONS::zoomRedraw.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::UpdateMenu,    ACTIONS::updateMenu.MakeEvent() );
 
     Go( &KICAD_MANAGER_CONTROL::ShowPlayer,    KICAD_MANAGER_ACTIONS::editSchematic.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::ShowPlayer,    KICAD_MANAGER_ACTIONS::editSymbols.MakeEvent() );

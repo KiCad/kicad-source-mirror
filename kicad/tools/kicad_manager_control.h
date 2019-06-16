@@ -50,6 +50,7 @@ public:
     int OpenProject( const TOOL_EVENT& aEvent );
 
     int Refresh( const TOOL_EVENT& aEvent );
+    int UpdateMenu( const TOOL_EVENT& aEvent );
 
     int ShowPlayer( const TOOL_EVENT& aEvent );
     int Execute( const TOOL_EVENT& aEvent );
