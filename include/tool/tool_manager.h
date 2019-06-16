@@ -335,14 +335,6 @@ public:
             CONTEXT_MENU_TRIGGER aTrigger );
 
     /**
-     * Allows a tool to pass the already handled event to the next tool on the stack.
-     */
-    void PassEvent()
-    {
-        m_passEvent = true;
-    }
-
-    /**
      * Stores an information to the system clipboard.
      * @param aText is the information to be stored.
      * @return False if error occurred.
@@ -523,9 +515,6 @@ private:
 
     /// Queue that stores events to be processed at the end of the event processing cycle.
     std::list<TOOL_EVENT> m_eventQueue;
-
-    /// Flag saying if the currently processed event should be passed to other tools.
-    bool m_passEvent;
 
     /// Right click context menu position.
     VECTOR2D m_menuCursor;

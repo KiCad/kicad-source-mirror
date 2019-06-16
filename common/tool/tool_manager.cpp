@@ -195,7 +195,6 @@ TOOL_MANAGER::TOOL_MANAGER() :
         m_view( NULL ),
         m_viewControls( NULL ),
         m_frame( NULL ),
-        m_passEvent( false ),
         m_menuActive( false ),
         m_menuOwner( -1 ),
         m_activeState( nullptr )
@@ -543,9 +542,6 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
         {
             if( st->waitEvents.Matches( aEvent ) )
             {
-                // By default only messages are passed further
-                m_passEvent = ( aEvent.Category() == TC_MESSAGE );
-
                 // got matching event? clear wait list and wake up the coroutine
                 st->wakeupEvent = aEvent;
                 st->pendingWait = false;
@@ -560,9 +556,8 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                         it = finishTool( st );
                 }
 
-                // If the tool did not request to propagate
-                // the event to other tools, we should stop it now
-                if( !m_passEvent )
+                // If the tool did not request the event be passed to other tools, we're done
+                if( !aEvent.PassEvent() )
                     break;
             }
         }

@@ -278,11 +278,6 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // Single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {
-            // JEY TODO: this is a hack, but I can't figure out why it's needed to
-            // keep from getting end-of-segment clicks when running the Draw Lines tool.
-            if( m_frame->GetToolId() != ID_NO_TOOL_SELECTED )
-                continue;
-
             if( evt->Modifier( MD_CTRL ) && !m_editModules )
             {
                 m_toolMgr->RunAction( PCB_ACTIONS::highlightNet, true );
@@ -377,7 +372,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         }
 
         else
-            m_toolMgr->PassEvent();
+            evt->SetPassEvent();
     }
 
     // This tool is supposed to be active forever

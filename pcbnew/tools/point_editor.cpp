@@ -408,9 +408,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         }
 
         else
-        {
-            m_toolMgr->PassEvent();
-        }
+            evt->SetPassEvent();
     }
 
     if( m_editPoints )

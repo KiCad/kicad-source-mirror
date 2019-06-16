@@ -327,9 +327,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
         }
 
         else
-        {
-            m_toolMgr->PassEvent();
-        }
+            evt->SetPassEvent();
 
         controls->SetAutoPan( inDrag );
         controls->CaptureCursor( inDrag );

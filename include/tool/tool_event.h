@@ -186,6 +186,9 @@ public:
         m_param( aParameter )
     {
         m_hasPosition = ( aCategory == TC_MOUSE || aCategory == TC_COMMAND );
+
+        // By default only MESSAGEs are passed to multiple recipients
+        m_passEvent = ( aCategory == TC_MESSAGE );
     }
 
     TOOL_EVENT( TOOL_EVENT_CATEGORY aCategory, TOOL_ACTIONS aAction, int aExtraParam,
@@ -216,6 +219,9 @@ public:
             m_modifiers = aExtraParam & MD_MODIFIER_MASK;
         }
 
+        // By default only MESSAGEs are passed to multiple recipients
+        m_passEvent = ( aCategory == TC_MESSAGE );
+
         m_hasPosition = ( aCategory == TC_MOUSE || aCategory == TC_COMMAND );
     }
 
@@ -233,6 +239,9 @@ public:
         if( aCategory == TC_COMMAND || aCategory == TC_MESSAGE )
             m_commandStr = aExtraParam;
 
+        // By default only MESSAGEs are passed to multiple recipients
+        m_passEvent = ( aCategory == TC_MESSAGE );
+
         m_hasPosition = ( aCategory == TC_MOUSE || aCategory == TC_COMMAND );
     }
 
@@ -241,6 +250,12 @@ public:
 
     ///> Returns more specific information about the type of an event.
     TOOL_ACTIONS Action() const { return m_actions; }
+
+    ///> These give a tool a method of informing the TOOL_MANAGER that a particular event should
+    ///> be passed on to subsequent tools on the stack.  Defaults to true for TC_MESSAGES; false
+    ///> for everything else.
+    bool PassEvent() const { return m_passEvent; }
+    void SetPassEvent() { m_passEvent = true; }
 
     ///> Returns if it this event has a valid position (true for mouse events and context-menu
     ///> or hotkey-based command events)
@@ -456,6 +471,7 @@ private:
     TOOL_EVENT_CATEGORY m_category;
     TOOL_ACTIONS m_actions;
     TOOL_ACTION_SCOPE m_scope;
+    bool m_passEvent;
     bool m_hasPosition;
 
     ///> Difference between mouse cursor position and

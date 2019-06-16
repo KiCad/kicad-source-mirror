@@ -247,7 +247,7 @@ int GERBVIEW_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         }
 
         else
-            m_toolMgr->PassEvent();
+            evt->SetPassEvent();
     }
 
     // This tool is supposed to be active forever

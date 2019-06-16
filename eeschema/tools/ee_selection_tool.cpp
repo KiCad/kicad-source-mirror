@@ -342,11 +342,6 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // Single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {
-            // JEY TODO: this is a hack, but I can't figure out why it's needed to
-            // keep from getting the first click when running the Place Symbol tool.
-            if( m_frame->GetCurrentToolName() != EE_ACTIONS::selectionTool.GetName() )
-                continue;
-
             if( evt->Modifier( MD_CTRL ) && dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
             {
                 m_toolMgr->RunAction( EE_ACTIONS::highlightNet, true );
@@ -461,7 +456,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         }
 
         else
-            m_toolMgr->PassEvent();
+            evt->SetPassEvent();
     }
 
     // This tool is supposed to be active forever

@@ -134,9 +134,7 @@ int PL_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
             // m_menu.ShowContextMenu();
         }
         else
-        {
-            m_toolMgr->PassEvent();
-        }
+            evt->SetPassEvent();
     }
 
     if( m_finalizeHandler )

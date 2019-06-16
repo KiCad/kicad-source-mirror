@@ -107,7 +107,7 @@ int EE_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else
         {
-            m_toolMgr->PassEvent();
+            evt->SetPassEvent();
         }
     }
 
