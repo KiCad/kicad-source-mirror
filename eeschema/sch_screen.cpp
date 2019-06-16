@@ -550,9 +550,44 @@ void SCH_SCREEN::Print( wxDC* aDC )
 void SCH_SCREEN::Plot( PLOTTER* aPlotter )
 {
     // Ensure links are up to date, even if a library was reloaded for some reason:
+    std::vector< SCH_ITEM* > junctions;
+    std::vector< SCH_ITEM* > bitmaps;
+    std::vector< SCH_ITEM* > other;
+
+    // Ensure links are up to date, even if a library was reloaded for some reason:
     UpdateSymbolLinks();
 
-    for( SCH_ITEM* item = m_drawList.begin();  item;  item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
+    {
+        if( item->IsMoving() || item->IsResized() )
+            continue;
+
+        if( item->Type() == SCH_JUNCTION_T )
+            junctions.push_back( item );
+        else if( item->Type() == SCH_BITMAP_T )
+            bitmaps.push_back( item );
+        else
+            // uncomment line below when there is a virtual EDA_ITEM::GetBoundingBox()
+            // if( panel->GetClipBox().Intersects( item->GetBoundingBox() ) )
+            other.push_back( item );
+    }
+
+    // Bitmaps are drawn first to ensure they are in the background
+    // This is particularly important for the wxPostscriptDC (used in *nix printers) as
+    // the bitmap PS command clears the screen
+    for( auto item : bitmaps )
+    {
+        aPlotter->SetCurrentLineWidth( item->GetPenSize() );
+        item->Plot( aPlotter );
+    }
+
+    for( auto item : other )
+    {
+        aPlotter->SetCurrentLineWidth( item->GetPenSize() );
+        item->Plot( aPlotter );
+    }
+
+    for( auto item : junctions )
     {
         aPlotter->SetCurrentLineWidth( item->GetPenSize() );
         item->Plot( aPlotter );
