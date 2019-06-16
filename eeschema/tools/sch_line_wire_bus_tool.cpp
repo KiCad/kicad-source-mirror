@@ -22,7 +22,7 @@
  */
 
 #include <connection_graph.h>
-#include <sch_wire_bus_tool.h>
+#include <sch_line_wire_bus_tool.h>
 #include <ee_selection_tool.h>
 #include <ee_actions.h>
 #include <sch_edit_frame.h>
@@ -182,21 +182,21 @@ private:
 };
 
 
-SCH_WIRE_BUS_TOOL::SCH_WIRE_BUS_TOOL() :
+SCH_LINE_WIRE_BUS_TOOL::SCH_LINE_WIRE_BUS_TOOL() :
     EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawingLineWireBus" )
 {
     m_busUnfold = {};
 }
 
 
-SCH_WIRE_BUS_TOOL::~SCH_WIRE_BUS_TOOL()
+SCH_LINE_WIRE_BUS_TOOL::~SCH_LINE_WIRE_BUS_TOOL()
 {
 }
 
 
 using E_C = EE_CONDITIONS;
 
-bool SCH_WIRE_BUS_TOOL::Init()
+bool SCH_LINE_WIRE_BUS_TOOL::Init()
 {
     EE_TOOL_BASE::Init();
 
@@ -265,28 +265,28 @@ static bool isNewSegment( SCH_ITEM* aItem )
 }
 
 
-bool SCH_WIRE_BUS_TOOL::IsDrawingLine( const SELECTION& aSelection )
+bool SCH_LINE_WIRE_BUS_TOOL::IsDrawingLine( const SELECTION& aSelection )
 {
     static KICAD_T graphicLineType[] = { SCH_LINE_LOCATE_GRAPHIC_LINE_T, EOT };
     return IsDrawingLineWireOrBus( aSelection ) && aSelection.Front()->IsType( graphicLineType );
 }
 
 
-bool SCH_WIRE_BUS_TOOL::IsDrawingWire( const SELECTION& aSelection )
+bool SCH_LINE_WIRE_BUS_TOOL::IsDrawingWire( const SELECTION& aSelection )
 {
     static KICAD_T wireType[] = { SCH_LINE_LOCATE_WIRE_T, EOT };
     return IsDrawingLineWireOrBus( aSelection ) && aSelection.Front()->IsType( wireType );
 }
 
 
-bool SCH_WIRE_BUS_TOOL::IsDrawingBus( const SELECTION& aSelection )
+bool SCH_LINE_WIRE_BUS_TOOL::IsDrawingBus( const SELECTION& aSelection )
 {
     static KICAD_T busType[] = { SCH_LINE_LOCATE_BUS_T, EOT };
     return IsDrawingLineWireOrBus( aSelection ) && aSelection.Front()->IsType( busType );
 }
 
 
-bool SCH_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( const SELECTION& aSelection )
+bool SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( const SELECTION& aSelection )
 {
     // NOTE: for immediate hotkeys, it is NOT required that the line, wire or bus tool
     // be selected
@@ -295,7 +295,7 @@ bool SCH_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( const SELECTION& aSelection )
 }
 
 
-int SCH_WIRE_BUS_TOOL::DrawWires( const TOOL_EVENT& aEvent )
+int SCH_LINE_WIRE_BUS_TOOL::DrawWires( const TOOL_EVENT& aEvent )
 {
     if( aEvent.HasPosition() )  // Start drawing
     {
@@ -315,7 +315,7 @@ int SCH_WIRE_BUS_TOOL::DrawWires( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_WIRE_BUS_TOOL::DrawBusses( const TOOL_EVENT& aEvent )
+int SCH_LINE_WIRE_BUS_TOOL::DrawBusses( const TOOL_EVENT& aEvent )
 {
     if( aEvent.HasPosition() )  // Start drawing
     {
@@ -335,7 +335,7 @@ int SCH_WIRE_BUS_TOOL::DrawBusses( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
+int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 {
     wxString* netPtr = aEvent.Parameter<wxString*>();
     wxString  net;
@@ -390,7 +390,7 @@ int SCH_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 }
 
 
-SCH_LINE* SCH_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
+SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
 {
     wxPoint  pos = (wxPoint) getViewControls()->GetCursorPosition();
 
@@ -413,7 +413,7 @@ SCH_LINE* SCH_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
 }
 
 
-int SCH_WIRE_BUS_TOOL::DrawLines( const TOOL_EVENT& aEvent)
+int SCH_LINE_WIRE_BUS_TOOL::DrawLines( const TOOL_EVENT& aEvent)
 {
     if( aEvent.HasPosition() )  // Start drawing
     {
@@ -525,7 +525,7 @@ static void computeBreakPoint( SCH_SCREEN* aScreen, SCH_LINE* aSegment, wxPoint&
 }
 
 
-int SCH_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool aImmediateMode )
+int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool aImmediateMode )
 {
     bool        forceHV = m_frame->GetForceHVLines();
     SCH_SCREEN* screen = m_frame->GetScreen();
@@ -741,7 +741,7 @@ int SCH_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool aImme
 }
 
 
-SCH_LINE* SCH_WIRE_BUS_TOOL::startSegments( int aType, const VECTOR2D& aPos )
+SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::startSegments( int aType, const VECTOR2D& aPos )
 {
     SCH_LINE* segment = nullptr;
     bool      forceHV = m_frame->GetForceHVLines();
@@ -836,7 +836,7 @@ static void removeBacktracks( DLIST<SCH_LINE>& aWires )
 }
 
 
-void SCH_WIRE_BUS_TOOL::finishSegments()
+void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
 {
     // Clear selection when done so that a new wire can be started.
     // NOTE: this must be done before RemoveBacktracks is called or we might end up with
@@ -932,11 +932,11 @@ void SCH_WIRE_BUS_TOOL::finishSegments()
 }
 
 
-void SCH_WIRE_BUS_TOOL::setTransitions()
+void SCH_LINE_WIRE_BUS_TOOL::setTransitions()
 {
-    Go( &SCH_WIRE_BUS_TOOL::DrawWires,      EE_ACTIONS::drawWire.MakeEvent() );
-    Go( &SCH_WIRE_BUS_TOOL::DrawBusses,     EE_ACTIONS::drawBus.MakeEvent() );
-    Go( &SCH_WIRE_BUS_TOOL::DrawLines,      EE_ACTIONS::drawLines.MakeEvent() );
+    Go( &SCH_LINE_WIRE_BUS_TOOL::DrawWires, EE_ACTIONS::drawWire.MakeEvent() );
+    Go( &SCH_LINE_WIRE_BUS_TOOL::DrawBusses, EE_ACTIONS::drawBus.MakeEvent() );
+    Go( &SCH_LINE_WIRE_BUS_TOOL::DrawLines, EE_ACTIONS::drawLines.MakeEvent() );
 
-    Go( &SCH_WIRE_BUS_TOOL::UnfoldBus,      EE_ACTIONS::unfoldBus.MakeEvent() );
+    Go( &SCH_LINE_WIRE_BUS_TOOL::UnfoldBus, EE_ACTIONS::unfoldBus.MakeEvent() );
 }

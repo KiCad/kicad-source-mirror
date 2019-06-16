@@ -234,7 +234,7 @@ set( EESCHEMA_SRCS
     tools/sch_drawing_tools.cpp
     tools/sch_edit_tool.cpp
     tools/sch_editor_control.cpp
-    tools/sch_wire_bus_tool.cpp
+    tools/sch_line_wire_bus_tool.cpp
     tools/sch_move_tool.cpp
     )
 

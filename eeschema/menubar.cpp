@@ -112,9 +112,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     submenuExport->Add( _( "Drawing to Clipboard" ), _( "Export drawings to clipboard" ),
                         ID_GEN_COPY_SHEET_TO_CLIPBOARD, copy_xpm );
-
-    submenuExport->Add( _( "Netlist..." ),  _( "Export netlist file" ),
-                        ID_GET_NETLIST, netlist_xpm );
+    submenuExport->Add( EE_ACTIONS::exportNetlist );
 
     fileMenu->AddMenu( submenuExport,              EE_CONDITIONS::ShowAlways );
 

@@ -37,7 +37,7 @@
 #include <tools/ee_selection.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_drawing_tools.h>
-#include <tools/sch_wire_bus_tool.h>
+#include <tools/sch_line_wire_bus_tool.h>
 #include <advanced_config.h>
 #include <simulation_cursors.h>
 #include <sim/sim_plot_frame.h>
@@ -114,6 +114,11 @@ TOOL_ACTION EE_ACTIONS::showPcbNew( "eeschema.EditorControl.showPcbNew",
         AS_GLOBAL, 0, "",
         _( "Open PCB Editor" ), _( "Run Pcbnew" ),
         pcbnew_xpm );
+
+TOOL_ACTION EE_ACTIONS::exportNetlist( "eeschema.EditorControl.exportNetlist",
+        AS_GLOBAL, 0, "",
+        _( "Export Netlist..." ), _( "Export file containing netlist in one of several formats" ),
+        netlist_xpm );
 
 TOOL_ACTION EE_ACTIONS::generateBOM( "eeschema.EditorControl.generateBOM",
         AS_GLOBAL, 0, "",
@@ -1120,6 +1125,18 @@ int SCH_EDITOR_CONTROL::UpdatePCB( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
+{
+    int result = NET_PLUGIN_CHANGE;
+
+    // If a plugin is removed or added, rebuild and reopen the new dialog
+    while( result == NET_PLUGIN_CHANGE )
+        result = InvokeDialogNetList( m_frame );
+
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::GenerateBOM( const TOOL_EVENT& aEvent )
 {
     InvokeDialogCreateBOM( m_frame );
@@ -1248,6 +1265,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::EditSymbolLibraryLinks,EE_ACTIONS::editSymbolLibraryLinks.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowPcbNew,            EE_ACTIONS::showPcbNew.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::UpdatePCB,             ACTIONS::updatePcbFromSchematic.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ExportNetlist,         EE_ACTIONS::exportNetlist.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::GenerateBOM,           EE_ACTIONS::generateBOM.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::ShowBusManager,        EE_ACTIONS::showBusManager.MakeEvent() );

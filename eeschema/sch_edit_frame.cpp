@@ -64,7 +64,7 @@
 #include <tools/ee_picker_tool.h>
 #include <tools/ee_point_editor.h>
 #include <tools/sch_drawing_tools.h>
-#include <tools/sch_wire_bus_tool.h>
+#include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
 #include <tools/sch_edit_tool.h>
 #include <tools/ee_inspection_tool.h>
@@ -227,7 +227,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_RESCUE_CACHED, SCH_EDIT_FRAME::OnRescueProject )
     EVT_MENU( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnRemapSymbols )
 
-    EVT_TOOL( ID_GET_NETLIST, SCH_EDIT_FRAME::OnCreateNetlist )
     EVT_TOOL( ID_BACKANNO_ITEMS, SCH_EDIT_FRAME::OnLoadCmpToFootprintLinkFile )
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
 END_EVENT_TABLE()
@@ -344,7 +343,7 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new EE_SELECTION_TOOL );
     m_toolManager->RegisterTool( new EE_PICKER_TOOL );
     m_toolManager->RegisterTool( new SCH_DRAWING_TOOLS );
-    m_toolManager->RegisterTool( new SCH_WIRE_BUS_TOOL );
+    m_toolManager->RegisterTool( new SCH_LINE_WIRE_BUS_TOOL );
     m_toolManager->RegisterTool( new SCH_MOVE_TOOL );
     m_toolManager->RegisterTool( new SCH_EDIT_TOOL );
     m_toolManager->RegisterTool( new EE_INSPECTION_TOOL );
@@ -670,20 +669,6 @@ void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
 
     std::string payload;
     Kiway().ExpressMail( FRAME_PCB, MAIL_PCB_UPDATE, payload, this );
-}
-
-
-void SCH_EDIT_FRAME::OnCreateNetlist( wxCommandEvent& event )
-{
-    int result;
-
-    do
-    {
-        result = InvokeDialogNetList( this );
-
-        // If a plugin is removed or added, rebuild and reopen the new dialog
-
-    } while( result == NET_PLUGIN_CHANGE );
 }
 
 

@@ -425,7 +425,7 @@ SCH_HIERLABEL* SCH_EDIT_FRAME::ImportHierLabel( SCH_SHEET* aSheet )
  * Copy the current page or block to the clipboard, to export drawings to other applications
  * (word processing ...) This is not suitable for copy command within Eeschema or Pcbnew.
  */
-void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard( wxCommandEvent& aEvt )
+void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 {
     wxRect  DrawArea;
     BASE_SCREEN* screen = GetScreen();

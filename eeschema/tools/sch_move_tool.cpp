@@ -23,7 +23,7 @@
 
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
-#include <tools/sch_wire_bus_tool.h>
+#include <tools/sch_line_wire_bus_tool.h>
 #include <ee_actions.h>
 #include <bitmaps.h>
 #include <base_struct.h>
@@ -72,7 +72,7 @@ bool SCH_MOVE_TOOL::Init()
         if( aSel.Empty() )
             return false;
 
-        if( SCH_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( aSel ) )
+        if( SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( aSel ) )
             return false;
 
         return true;

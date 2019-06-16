@@ -108,6 +108,7 @@ public:
     int EditSymbolLibraryLinks( const TOOL_EVENT& aEvent );
     int ShowPcbNew( const TOOL_EVENT& aEvent );
     int UpdatePCB( const TOOL_EVENT& aEvent );
+    int ExportNetlist( const TOOL_EVENT& aEvent );
     int GenerateBOM( const TOOL_EVENT& aEvent );
 
     int ShowBusManager( const TOOL_EVENT& aEvent );

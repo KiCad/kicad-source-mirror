@@ -563,7 +563,7 @@ public:
      * Use the wxWidgets print code to draw an image of the current sheet onto
      * the clipboard.
      */
-    void DrawCurrentSheetToClipboard( wxCommandEvent& event );
+    void DrawCurrentSheetToClipboard();
 
     /**
      * Called when modifying the page settings.
@@ -753,7 +753,6 @@ private:
     void setupTools();
 
     void OnExit( wxCommandEvent& event );
-    void OnCreateNetlist( wxCommandEvent& event );
 
     void OnLoadFile( wxCommandEvent& event );
     void OnLoadCmpToFootprintLinkFile( wxCommandEvent& event );

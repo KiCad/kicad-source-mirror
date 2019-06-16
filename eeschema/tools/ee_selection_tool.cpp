@@ -40,7 +40,7 @@
 #include <preview_items/selection_area.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
-#include <tools/sch_wire_bus_tool.h>
+#include <tools/sch_line_wire_bus_tool.h>
 #include <ee_collectors.h>
 #include <painter.h>
 #include <eeschema_id.h>
@@ -218,10 +218,10 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::drawBus,            schEditCondition && EE_CONDITIONS::Empty, 100 );
 
     menu.AddSeparator( 100 );
-    menu.AddItem( EE_ACTIONS::finishWire,         SCH_WIRE_BUS_TOOL::IsDrawingWire, 100 );
+    menu.AddItem( EE_ACTIONS::finishWire, SCH_LINE_WIRE_BUS_TOOL::IsDrawingWire, 100 );
 
     menu.AddSeparator( 100 );
-    menu.AddItem( EE_ACTIONS::finishBus,          SCH_WIRE_BUS_TOOL::IsDrawingBus, 100 );
+    menu.AddItem( EE_ACTIONS::finishBus, SCH_LINE_WIRE_BUS_TOOL::IsDrawingBus, 100 );
 
     menu.AddSeparator( 200 );
     menu.AddItem( EE_ACTIONS::selectConnection,   wireOrBusSelection && EE_CONDITIONS::Idle, 250 );

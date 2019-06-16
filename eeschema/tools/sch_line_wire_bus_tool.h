@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SCH_LINE_DRAWING_TOOL_H
-#define SCH_LINE_DRAWING_TOOL_H
+#ifndef SCH_LINE_WIRE_BUS_TOOL_H
+#define SCH_LINE_WIRE_BUS_TOOL_H
 
 #include <tools/ee_tool_base.h>
 #include <core/optional.h>
@@ -56,11 +56,11 @@ struct BUS_UNFOLDING_T
  * Tool responsible for drawing/placing items (symbols, wires, busses, labels, etc.)
  */
 
-class SCH_WIRE_BUS_TOOL : public EE_TOOL_BASE<SCH_EDIT_FRAME>
+class SCH_LINE_WIRE_BUS_TOOL : public EE_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
-    SCH_WIRE_BUS_TOOL();
-    ~SCH_WIRE_BUS_TOOL();
+    SCH_LINE_WIRE_BUS_TOOL();
+    ~SCH_LINE_WIRE_BUS_TOOL();
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
@@ -91,4 +91,4 @@ private:
     BUS_UNFOLDING_T       m_busUnfold;
 };
 
-#endif /* SCH_LINE_DRAWING_TOOL_H */
+#endif /* SCH_LINE_WIRE_BUS_TOOL_H */
