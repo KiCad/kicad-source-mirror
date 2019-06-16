@@ -310,8 +310,6 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
         {
             controls->SetAutoPan( false );
             inDrag = false;
-
-            m_toolMgr->PassEvent();
         }
 
         else if( evt->IsCancel() )
@@ -321,6 +319,9 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
                 rollbackFromUndo();
                 modified = false;
             }
+
+            // ESC should clear selection along with edit points
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
             break;
         }

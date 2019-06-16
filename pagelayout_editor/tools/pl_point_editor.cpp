@@ -180,18 +180,8 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( !m_editPoints || evt->IsCancel() || TOOL_EVT_UTILS::IsSelectionEvent( evt.get() ) )
-        {
-            if( inDrag )      // Restore the last change
-            {
-                m_frame->PopTool();
-                m_frame->RollbackFromUndo();
-                inDrag = false;
-                modified = false;
-            }
-
+        if( !m_editPoints || TOOL_EVT_UTILS::IsSelectionEvent( evt.get() ) )
             break;
-        }
 
         if ( !inDrag )
             updateEditedPoint( *evt );
@@ -218,8 +208,22 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
             controls->SetAutoPan( false );
             m_frame->PopTool();
             inDrag = false;
+        }
 
-            m_toolMgr->PassEvent();
+        else if( evt->IsCancel() )
+        {
+            if( inDrag )      // Restore the last change
+            {
+                m_frame->PopTool();
+                m_frame->RollbackFromUndo();
+                inDrag = false;
+                modified = false;
+            }
+
+            // ESC should clear selection along with edit points
+            m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
+
+            break;
         }
 
         else

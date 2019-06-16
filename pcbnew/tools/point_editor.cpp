@@ -330,7 +330,6 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     setEditedPoint( nullptr );
     m_refill = false;
     bool modified = false;
-    bool revert = false;
 
     BOARD_COMMIT commit( editFrame );
     LSET snapLayers = item->GetLayerSet();
@@ -341,20 +340,12 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( revert )
-            break;
-
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
-        if( !m_editPoints ||
-            evt->Matches( EVENTS::ClearedEvent ) ||
-            evt->Matches( EVENTS::UnselectedEvent ) ||
-            evt->Matches( EVENTS::SelectedEvent ) )
-        {
+        if( !m_editPoints || TOOL_EVT_UTILS::IsSelectionEvent( evt.get() ) )
             break;
-        }
 
         if ( !modified )
             updateEditedPoint( *evt );
@@ -403,20 +394,17 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 modified = false;
                 m_refill = true;
             }
-
-            m_toolMgr->PassEvent();
         }
 
         else if( evt->IsCancel() )
         {
             if( modified )      // Restore the last change
-                revert = true;
+                commit.Revert();
 
-            // Let the selection tool receive the event too
-            m_toolMgr->PassEvent();
+            // ESC should clear selection along with edit points
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-            // Do not exit right now, let the selection clear the selection
-            //break;
+            break;
         }
 
         else
@@ -428,9 +416,6 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     if( m_editPoints )
     {
         view->Remove( m_editPoints.get() );
-
-        if( modified && revert )
-            commit.Revert();
 
         finishItem();
         m_editPoints.reset();
