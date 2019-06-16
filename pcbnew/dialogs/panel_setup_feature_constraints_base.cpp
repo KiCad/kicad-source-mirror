@@ -89,10 +89,11 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxVERTICAL );
 
-	m_cbOutlinePolygonBestQ = new wxCheckBox( this, wxID_ANY, _("Thick outlines (best quality)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbOutlinePolygonBestQ = new wxCheckBox( this, wxID_ANY, _("Thick outlines (old algorithm)"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer5->Add( m_cbOutlinePolygonBestQ, 0, wxALL, 5 );
 
 	m_cbOutlinePolygonFastest = new wxCheckBox( this, wxID_ANY, _("No outline (fastest draw mode)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbOutlinePolygonFastest->SetValue(true);
 	bSizer5->Add( m_cbOutlinePolygonFastest, 0, wxALL, 5 );
 
 
