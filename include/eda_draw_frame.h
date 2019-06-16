@@ -166,9 +166,6 @@ protected:
      */
     bool saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
 
-    bool saveCanvasImageToFile( const wxString& aFileName,
-                                wxBitmapType aBitmapType = wxBITMAP_TYPE_PNG );
-
     /** @return the key in KifaceSettings to store the canvas type.
      * the base version returns only CanvasTypeKeyBase.
      * Can be overriden to return a key specific of a frame name
@@ -230,8 +227,6 @@ public:
     int GetLastGridSizeId() const { return m_LastGridSizeId; }
     void SetLastGridSizeId( int aId ) { m_LastGridSizeId = aId; }
 
-    //-----<BASE_SCREEN API moved here>------------------------------------------
-
     /**
      * Return the nearest \a aGridSize location to \a aPosition.
      *
@@ -239,9 +234,6 @@ public:
      * @return The nearst grid position.
      */
     wxPoint GetNearestGridPosition( const wxPoint& aPosition ) const;
-
-
-    //-----</BASE_SCREEN API moved here>-----------------------------------------
 
     virtual const TITLE_BLOCK& GetTitleBlock() const = 0;
     virtual void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) = 0;

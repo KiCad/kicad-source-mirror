@@ -869,7 +869,3 @@ bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
 }
 
 
-bool EDA_DRAW_FRAME::saveCanvasImageToFile( const wxString& aFileName, wxBitmapType aBitmapType )
-{
-    return SaveCanvasImageToFile( this, aFileName, aBitmapType );
-}

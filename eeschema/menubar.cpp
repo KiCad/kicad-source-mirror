@@ -96,11 +96,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     submenuImport->SetTool( selTool );
     submenuImport->SetTitle( _( "Import" ) );
     submenuImport->SetIcon( import_xpm );
-
-    submenuImport->Add( _( "Footprint Association File..." ),
-                        _( "Back-import symbol footprint associations from .cmp file created by Pcbnew" ),
-                        ID_BACKANNO_ITEMS, import_footprint_names_xpm );
-
+    submenuImport->Add( EE_ACTIONS::importFPAssignments );
     fileMenu->AddMenu( submenuImport,              EE_CONDITIONS::ShowAlways );
 
 
@@ -109,11 +105,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->SetTool( selTool );
     submenuExport->SetTitle( _( "Export" ) );
     submenuExport->SetIcon( export_xpm );
-
-    submenuExport->Add( _( "Drawing to Clipboard" ), _( "Export drawings to clipboard" ),
-                        ID_GEN_COPY_SHEET_TO_CLIPBOARD, copy_xpm );
+    submenuExport->Add( EE_ACTIONS::drawSheetOnClipboard );
     submenuExport->Add( EE_ACTIONS::exportNetlist );
-
     fileMenu->AddMenu( submenuExport,              EE_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
@@ -271,11 +264,11 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     toolsMenu->AddSeparator();
     toolsMenu->AddItem( ACTIONS::showSymbolEditor,          EE_CONDITIONS::ShowAlways );
-    toolsMenu->AddItem( ID_RESCUE_CACHED, _( "&Rescue Symbols..." ),
+    toolsMenu->AddItem( ID_RESCUE_CACHED, _( "Rescue Symbols..." ),
                         _( "Find old symbols in project and rename/rescue them" ),
                         rescue_xpm,                         EE_CONDITIONS::ShowAlways );
 
-    toolsMenu->AddItem( ID_REMAP_SYMBOLS, _( "Remap S&ymbols..." ),
+    toolsMenu->AddItem( ID_REMAP_SYMBOLS, _( "Remap Symbols..." ),
                         _( "Remap legacy library symbols to symbol library table" ),
                         rescue_xpm,                         remapSymbolsCondition );
 

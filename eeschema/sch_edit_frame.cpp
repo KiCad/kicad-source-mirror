@@ -221,13 +221,11 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_APPEND_PROJECT, SCH_EDIT_FRAME::OnAppendProject )
     EVT_MENU( ID_IMPORT_NON_KICAD_SCH, SCH_EDIT_FRAME::OnImportProject )
 
-    EVT_MENU( ID_GEN_COPY_SHEET_TO_CLIPBOARD, SCH_EDIT_FRAME::DrawCurrentSheetToClipboard )
     EVT_MENU( wxID_EXIT, SCH_EDIT_FRAME::OnExit )
 
     EVT_TOOL( ID_RESCUE_CACHED, SCH_EDIT_FRAME::OnRescueProject )
     EVT_MENU( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnRemapSymbols )
 
-    EVT_TOOL( ID_BACKANNO_ITEMS, SCH_EDIT_FRAME::OnLoadCmpToFootprintLinkFile )
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
 END_EVENT_TABLE()
 
@@ -743,13 +741,6 @@ void SCH_EDIT_FRAME::OnLoadFile( wxCommandEvent& event )
 
     if( fn.size() )
         OpenProjectFiles( std::vector<wxString>( 1, fn ) );
-}
-
-
-void SCH_EDIT_FRAME::OnLoadCmpToFootprintLinkFile( wxCommandEvent& event )
-{
-    LoadCmpToFootprintLinkFile();
-    GetCanvas()->Refresh();
 }
 
 

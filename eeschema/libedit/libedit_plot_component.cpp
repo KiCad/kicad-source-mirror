@@ -1,11 +1,7 @@
-/**
- * @file libedit_plot_component.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,103 +23,13 @@
 
 
 #include <fctsys.h>
-
 #include <gr_basic.h>
-#include <pgm_base.h>
 #include <sch_draw_panel.h>
-#include <confirm.h>
-#include <gestfich.h>
-#include <eeschema_id.h>
 #include <sch_screen.h>
-#include <wildcards_and_files_ext.h>
-
 #include <general.h>
 #include <lib_edit_frame.h>
 #include <class_library.h>
-#include <dialogs/dialog_plot_schematic.h>
-
-
-void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
-{
-    wxString   fullFileName;
-    wxString   file_ext;
-    wxString   mask;
-
-    LIB_PART*      part = GetCurPart();
-
-    if( !part )
-    {
-        wxMessageBox( _( "No component" ) );
-        return;
-    }
-
-    switch( event.GetId() )
-    {
-    case ID_LIBEDIT_GEN_PNG_FILE:
-    {
-        mask = wxT( "*." ) + file_ext;
-        wxFileName fn( part->GetName() );
-        fn.SetExt( "png" );
-
-        wxString projectPath = wxPathOnly( Prj().GetProjectFullName() );
-
-        wxFileDialog dlg( this, _( "Image File Name" ), projectPath,
-                          fn.GetFullName(), PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-        if( dlg.ShowModal() == wxID_CANCEL || dlg.GetPath().IsEmpty() )
-            return;
-
-        // calling wxYield is mandatory under Linux, after closing the file selector dialog
-        // to refresh the screen before creating the PNG or JPEG image from screen
-        wxYield();
-        CreateImageFile( dlg.GetPath(), wxBITMAP_TYPE_PNG );
-    }
-        break;
-
-    case ID_LIBEDIT_GEN_SVG_FILE:
-    {
-        file_ext = wxT( "svg" );
-        mask     = wxT( "*." ) + file_ext;
-        wxFileName fn( part->GetName() );
-        fn.SetExt( file_ext );
-
-        wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
-
-        fullFileName = EDA_FILE_SELECTOR( _( "Filename:" ), pro_dir,
-                                          fn.GetFullName(), file_ext, mask, this,
-                                          wxFD_SAVE, true );
-
-        if( fullFileName.IsEmpty() )
-            return;
-
-        PAGE_INFO pageSave = GetScreen()->GetPageSettings();
-        PAGE_INFO pageTemp = pageSave;
-
-        wxSize componentSize = part->GetUnitBoundingBox( m_unit, m_convert ).GetSize();
-
-        // Add a small margin to the plot bounding box
-        pageTemp.SetWidthMils(  int( componentSize.x * 1.2 ) );
-        pageTemp.SetHeightMils( int( componentSize.y * 1.2 ) );
-
-        GetScreen()->SetPageSettings( pageTemp );
-        SVG_PlotComponent( fullFileName );
-        GetScreen()->SetPageSettings( pageSave );
-    }
-        break;
-    }
-}
-
-
-void LIB_EDIT_FRAME::CreateImageFile( const wxString& aFileName, wxBitmapType aBitmapType )
-{
-    if( !saveCanvasImageToFile( aFileName, aBitmapType ) )
-    {
-        wxString msg;
-        msg.Printf( _( "Can't save file \"%s\"." ), aFileName );
-        wxMessageBox( msg );
-    }
-}
-
+#include <plotter.h>
 
 void LIB_EDIT_FRAME::SVG_PlotComponent( const wxString& aFullFileName )
 {

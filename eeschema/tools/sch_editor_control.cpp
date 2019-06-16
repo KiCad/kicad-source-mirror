@@ -100,6 +100,12 @@ TOOL_ACTION EE_ACTIONS::assignFootprints( "eeschema.EditorControl.assignFootprin
         _( "Assign Footprints..." ), _( "Run Cvpcb" ),
         cvpcb_xpm );
 
+TOOL_ACTION EE_ACTIONS::importFPAssignments( "eeschema.EditorControl.importFPAssignments",
+        AS_GLOBAL, 0, "",
+        _( "Import Footprint Assignments..." ),
+        _( "Import symbol footprint assignments from .cmp file created by Pcbnew" ),
+        import_footprint_names_xpm );
+
 TOOL_ACTION EE_ACTIONS::annotate( "eeschema.EditorControl.annotate",
         AS_GLOBAL, 0, "",
         _( "Annotate Schematic..." ), _( "Fill in schematic symbol reference designators" ),
@@ -109,6 +115,11 @@ TOOL_ACTION EE_ACTIONS::showBusManager( "eeschema.EditorControl.showBusManager",
         AS_GLOBAL, 0, "",
         _( "Bus Definitions..." ), _( "Manage bus definitions" ),
         bus_definition_tool_xpm );
+
+TOOL_ACTION EE_ACTIONS::drawSheetOnClipboard( "eeschema.EditorControl.drawSheetOnClipboard",
+        AS_GLOBAL, 0, "",
+        _( "Export Drawing to Clipboard" ), _( "Export drawing of current sheet to clipboard" ),
+        copy_xpm );
 
 TOOL_ACTION EE_ACTIONS::showPcbNew( "eeschema.EditorControl.showPcbNew",
         AS_GLOBAL, 0, "",
@@ -1144,6 +1155,13 @@ int SCH_EDITOR_CONTROL::GenerateBOM( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::DrawSheetOnClipboard( const TOOL_EVENT& aEvent )
+{
+    m_frame->DrawCurrentSheetToClipboard();
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::ShowBusManager( const TOOL_EVENT& aEvent )
 {
     InvokeDialogBusManager( m_frame );
@@ -1260,6 +1278,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
 
     Go( &SCH_EDITOR_CONTROL::EditWithLibEdit,       EE_ACTIONS::editWithLibEdit.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowCvpcb,             EE_ACTIONS::assignFootprints.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ImportFPAssignments,   EE_ACTIONS::importFPAssignments.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Annotate,              EE_ACTIONS::annotate.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::EditSymbolFields,      EE_ACTIONS::editSymbolFields.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::EditSymbolLibraryLinks,EE_ACTIONS::editSymbolLibraryLinks.MakeEvent() );
@@ -1267,6 +1286,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::UpdatePCB,             ACTIONS::updatePcbFromSchematic.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ExportNetlist,         EE_ACTIONS::exportNetlist.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::GenerateBOM,           EE_ACTIONS::generateBOM.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::DrawSheetOnClipboard,  EE_ACTIONS::drawSheetOnClipboard.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::ShowBusManager,        EE_ACTIONS::showBusManager.MakeEvent() );
 

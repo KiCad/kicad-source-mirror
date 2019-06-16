@@ -178,8 +178,6 @@ protected:
      */
     virtual bool isAutoSaveRequired() const override;
 
-    void backAnnotateFootprints( const std::string& aChangedSetOfReferences );
-
     /**
      * Verify that annotation is complete so that a proper netlist is even
      * possible.  If not, asks the user if annotation should be done.
@@ -648,38 +646,6 @@ public:
     bool AppendSchematic();
 
     /**
-     * Loads a .cmp file from CvPcb and update the footprint field of components.
-     *
-     * Prepares parameters and calls ProcessCmpToFootprintLinkFileto actually read the file and
-     * update the footprint fields
-     */
-    bool LoadCmpToFootprintLinkFile();
-
-    /**
-     * Read the footprint info from each line in the stuff file by reference designator.
-     *
-     * The footprint link file (.cmp) entries created by CvPcb:
-     *
-     *  BeginCmp
-     *  TimeStamp = /32307DE2/AA450F67;
-     *  Reference = C1;
-     *  ValeurCmp = 47uF;
-     *  IdModule  = CP6;
-     *  EndCmp
-     *
-     * @param aFullFilename = the full filename to read
-     * @param aForceVisibilityState = Set to true to change the footprint field visibility
-     *                                state to \a aVisibilityState.  False retains the
-     *                                current footprint field visibility state.
-     * @param aVisibilityState True to show the footprint field or false to hide the footprint
-     *                         field if \a aForceVisibilityState is true.
-     * @return bool = true if success.
-     */
-    bool ProcessCmpToFootprintLinkFile( const wxString& aFullFilename,
-                                        bool            aForceVisibilityState,
-                                        bool            aVisibilityState );
-
-    /**
      * Save \a aScreen to a schematic file.
      *
      * @param aScreen A pointer to the SCH_SCREEN object to save.  A NULL pointer saves
@@ -755,7 +721,6 @@ private:
     void OnExit( wxCommandEvent& event );
 
     void OnLoadFile( wxCommandEvent& event );
-    void OnLoadCmpToFootprintLinkFile( wxCommandEvent& event );
     void OnAppendProject( wxCommandEvent& event );
     void OnImportProject( wxCommandEvent& event );
 

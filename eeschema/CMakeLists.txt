@@ -130,7 +130,7 @@ set( EESCHEMA_SRCS
     sch_painter.cpp
     annotate.cpp
     autoplace_fields.cpp
-    backanno.cpp
+    tools/backanno.cpp
     bus_alias.cpp
     bus-wire-junction.cpp
     class_libentry.cpp

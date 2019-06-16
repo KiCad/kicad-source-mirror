@@ -76,15 +76,9 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->SetTool( selTool );
     submenuExport->SetTitle( _( "Export" ) );
     submenuExport->SetIcon( export_xpm );
-
     submenuExport->Add( EE_ACTIONS::exportSymbol );
-    submenuExport->Add( _( "View as PNG..." ),
-                        _( "Create a PNG file from the current view" ),
-                        ID_LIBEDIT_GEN_PNG_FILE, plot_xpm );
-    submenuExport->Add( _( "Symbol as SVG..." ),
-                        _( "Create a SVG file from the current symbol" ),
-                        ID_LIBEDIT_GEN_SVG_FILE, plot_svg_xpm );
-
+    submenuExport->Add( EE_ACTIONS::exportSymbolView );
+    submenuExport->Add( EE_ACTIONS::exportSymbolAsSVG );
     fileMenu->AddMenu( submenuExport,              EE_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();

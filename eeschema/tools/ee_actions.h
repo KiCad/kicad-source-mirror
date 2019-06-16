@@ -92,6 +92,7 @@ public:
     static TOOL_ACTION placeSchematicText;
     static TOOL_ACTION drawLines;
     static TOOL_ACTION placeImage;
+    static TOOL_ACTION deleteItemCursor;
     static TOOL_ACTION finishLineWireOrBus;
     static TOOL_ACTION finishWire;
     static TOOL_ACTION finishBus;
@@ -144,6 +145,7 @@ public:
     static TOOL_ACTION annotate;
     static TOOL_ACTION editSymbolFields;
     static TOOL_ACTION editSymbolLibraryLinks;
+    static TOOL_ACTION symbolProperties;
     static TOOL_ACTION pinTable;
     static TOOL_ACTION updateFieldsFromLibrary;
     static TOOL_ACTION assignFootprints;
@@ -152,6 +154,7 @@ public:
     // Suite operations
     static TOOL_ACTION editWithLibEdit;
     static TOOL_ACTION showPcbNew;
+    static TOOL_ACTION importFPAssignments;
     static TOOL_ACTION exportNetlist;
     static TOOL_ACTION generateBOM;
     static TOOL_ACTION runSimulation;
@@ -175,8 +178,6 @@ public:
     // Miscellaneous
     static TOOL_ACTION cleanupSheetPins;
     static TOOL_ACTION toggleHiddenPins;
-    static TOOL_ACTION symbolProperties;
-    static TOOL_ACTION deleteItemCursor;
     static TOOL_ACTION refreshPreview;
     static TOOL_ACTION restartMove;
     static TOOL_ACTION explicitCrossProbe;
@@ -186,6 +187,9 @@ public:
     static TOOL_ACTION showElectricalTypes;
     static TOOL_ACTION showComponentTree;
     static TOOL_ACTION toggleForceHV;
+    static TOOL_ACTION drawSheetOnClipboard;
+    static TOOL_ACTION exportSymbolView;
+    static TOOL_ACTION exportSymbolAsSVG;
 
     // SPICE
     static TOOL_ACTION simProbe;

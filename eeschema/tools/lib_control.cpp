@@ -29,7 +29,10 @@
 #include <eeschema_id.h>
 #include <lib_edit_frame.h>
 #include <viewlib_frame.h>
-
+#include <kicad/kicad_manager_frame.h>
+#include <wildcards_and_files_ext.h>
+#include <gestfich.h>
+#include <project.h>
 
 TOOL_ACTION EE_ACTIONS::newSymbol( "eeschema.SymbolLibraryControl.newSymbol",
         AS_GLOBAL, 0, "",
@@ -81,11 +84,20 @@ TOOL_ACTION EE_ACTIONS::showElectricalTypes( "eeschema.SymbolLibraryControl.show
         _( "Show Pin Electrical Types" ), _( "Annotate pins with their electrical types" ),
         pin_show_etype_xpm );
 
-
 TOOL_ACTION EE_ACTIONS::showComponentTree( "eeschema.SymbolLibraryControl.showComponentTree",
         AS_GLOBAL, 0, "",
         _( "Show Symbol Tree" ), "",
         search_tree_xpm );
+
+TOOL_ACTION EE_ACTIONS::exportSymbolView( "eeschema.SymbolLibraryControl.exportSymbolView",
+        AS_GLOBAL, 0, "",
+        _( "Export View as PNG..." ), _( "Create PNG file from the current view" ),
+        plot_xpm );
+
+TOOL_ACTION EE_ACTIONS::exportSymbolAsSVG( "eeschema.SymbolLibraryControl.exportSymbolAsSVG",
+        AS_GLOBAL, 0, "",
+        _( "Export Symbol as SVG..." ), _( "Create SVG file from the current symbol" ),
+        plot_svg_xpm );
 
 
 bool LIB_CONTROL::Init()
@@ -297,6 +309,91 @@ int LIB_CONTROL::ShowElectricalTypes( const TOOL_EVENT& aEvent )
 }
 
 
+int LIB_CONTROL::ExportView( const TOOL_EVENT& aEvent )
+{
+    if( !m_isLibEdit )
+        return 0;
+
+    LIB_EDIT_FRAME* editFrame = getEditFrame<LIB_EDIT_FRAME>();
+    LIB_PART*       part = editFrame->GetCurPart();
+
+    if( !part )
+    {
+        wxMessageBox( _( "No symbol to export" ) );
+        return 0;
+    }
+
+    wxString   file_ext = wxT( "png" );
+    wxString   mask = wxT( "*." ) + file_ext;
+    wxFileName fn( part->GetName() );
+    fn.SetExt( "png" );
+
+    wxString projectPath = wxPathOnly( m_frame->Prj().GetProjectFullName() );
+
+    wxFileDialog dlg( editFrame, _( "Image File Name" ), projectPath, fn.GetFullName(),
+                      PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_OK && !dlg.GetPath().IsEmpty() )
+    {
+        // calling wxYield is mandatory under Linux, after closing the file selector dialog
+        // to refresh the screen before creating the PNG or JPEG image from screen
+        wxYield();
+
+        if( !SaveCanvasImageToFile( editFrame, dlg.GetPath(), wxBITMAP_TYPE_PNG ) )
+        {
+            wxMessageBox( wxString::Format( _( "Can't save file \"%s\"." ), dlg.GetPath() ) );
+        }
+    }
+
+    return 0;
+}
+
+
+int LIB_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
+{
+    if( !m_isLibEdit )
+        return 0;
+
+    LIB_EDIT_FRAME* editFrame = getEditFrame<LIB_EDIT_FRAME>();
+    LIB_PART*       part = editFrame->GetCurPart();
+
+    if( !part )
+    {
+        wxMessageBox( _( "No symbol to export" ) );
+        return 0;
+    }
+
+    wxString   file_ext = wxT( "svg" );
+    wxString   mask     = wxT( "*." ) + file_ext;
+    wxFileName fn( part->GetName() );
+    fn.SetExt( file_ext );
+
+    wxString pro_dir = wxPathOnly( m_frame->Prj().GetProjectFullName() );
+
+    wxString fullFileName = EDA_FILE_SELECTOR( _( "Filename:" ), pro_dir, fn.GetFullName(),
+                                               file_ext, mask, m_frame, wxFD_SAVE, true );
+
+    if( !fullFileName.IsEmpty() )
+    {
+        PAGE_INFO pageSave = editFrame->GetScreen()->GetPageSettings();
+        PAGE_INFO pageTemp = pageSave;
+
+        wxSize componentSize = part->GetUnitBoundingBox( editFrame->GetUnit(),
+                                                         editFrame->GetConvert() ).GetSize();
+
+        // Add a small margin to the plot bounding box
+        pageTemp.SetWidthMils(  int( componentSize.x * 1.2 ) );
+        pageTemp.SetHeightMils( int( componentSize.y * 1.2 ) );
+
+        editFrame->GetScreen()->SetPageSettings( pageTemp );
+        editFrame->SVG_PlotComponent( fullFileName );
+        editFrame->GetScreen()->SetPageSettings( pageSave );
+    }
+
+    return 0;
+}
+
+
 void LIB_CONTROL::setTransitions()
 {
     Go( &LIB_CONTROL::AddLibrary,            ACTIONS::newLibrary.MakeEvent() );
@@ -317,6 +414,8 @@ void LIB_CONTROL::setTransitions()
     Go( &LIB_CONTROL::CutCopyDelete,         EE_ACTIONS::copySymbol.MakeEvent() );
     Go( &LIB_CONTROL::DuplicateSymbol,       EE_ACTIONS::pasteSymbol.MakeEvent() );
     Go( &LIB_CONTROL::ExportSymbol,          EE_ACTIONS::exportSymbol.MakeEvent() );
+    Go( &LIB_CONTROL::ExportView,            EE_ACTIONS::exportSymbolView.MakeEvent() );
+    Go( &LIB_CONTROL::ExportSymbolAsSVG,     EE_ACTIONS::exportSymbolAsSVG.MakeEvent() );
 
     Go( &LIB_CONTROL::OnDeMorgan,            EE_ACTIONS::showDeMorganStandard.MakeEvent() );
     Go( &LIB_CONTROL::OnDeMorgan,            EE_ACTIONS::showDeMorganAlternate.MakeEvent() );

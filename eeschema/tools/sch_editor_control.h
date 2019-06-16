@@ -108,8 +108,10 @@ public:
     int EditSymbolLibraryLinks( const TOOL_EVENT& aEvent );
     int ShowPcbNew( const TOOL_EVENT& aEvent );
     int UpdatePCB( const TOOL_EVENT& aEvent );
+    int ImportFPAssignments( const TOOL_EVENT& aEvent );
     int ExportNetlist( const TOOL_EVENT& aEvent );
     int GenerateBOM( const TOOL_EVENT& aEvent );
+    int DrawSheetOnClipboard( const TOOL_EVENT& aEvent );
 
     int ShowBusManager( const TOOL_EVENT& aEvent );
 
@@ -120,11 +122,45 @@ public:
     int ToggleHiddenPins( const TOOL_EVENT& aEvent );
     int ToggleForceHV( const TOOL_EVENT& aEvent );
 
+    void BackAnnotateFootprints( const std::string& aChangedSetOfReferences );
+
 private:
     ///> copy selection to clipboard
     bool doCopy();
 
     void doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aForce );
+
+    /**
+     * Loads a .cmp file from CvPcb and update the footprint field of components.
+     *
+     * Prepares parameters and calls ProcessCmpToFootprintLinkFileto actually read the file and
+     * update the footprint fields
+     */
+    bool loadCmpToFootprintLinkFile();
+
+    /**
+     * Read the footprint info from each line in the stuff file by reference designator.
+     *
+     * The footprint link file (.cmp) entries created by CvPcb:
+     *
+     *  BeginCmp
+     *  TimeStamp = /32307DE2/AA450F67;
+     *  Reference = C1;
+     *  ValeurCmp = 47uF;
+     *  IdModule  = CP6;
+     *  EndCmp
+     *
+     * @param aFullFilename = the full filename to read
+     * @param aForceVisibilityState = Set to true to change the footprint field visibility
+     *                                state to \a aVisibilityState.  False retains the
+     *                                current footprint field visibility state.
+     * @param aVisibilityState True to show the footprint field or false to hide the footprint
+     *                         field if \a aForceVisibilityState is true.
+     * @return bool = true if success.
+     */
+    bool processCmpToFootprintLinkFile( const wxString& aFullFilename,
+                                        bool            aForceVisibilityState,
+                                        bool            aVisibilityState );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;

@@ -95,10 +95,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->Add( EE_ACTIONS::showPcbNew );
-
-    m_mainToolBar->AddTool( ID_BACKANNO_ITEMS, wxEmptyString,
-                            KiScaledBitmap( import_footprint_names_xpm, this ),
-                            _( "Back-import symbol footprint associations from .cmp file created by Pcbnew" ) );
+    m_mainToolBar->Add( EE_ACTIONS::importFPAssignments );
 
     // after adding the tools to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();

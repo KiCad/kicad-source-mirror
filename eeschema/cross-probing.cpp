@@ -42,6 +42,7 @@
 #include <reporter.h>
 #include <netlist_exporters/netlist_exporter_kicad.h>
 #include <tools/ee_actions.h>
+#include <tools/sch_editor_control.h>
 
 /**
  * Execute a remote command sent by Pcbnew via a socket connection.
@@ -302,7 +303,8 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     case MAIL_BACKANNOTATE_FOOTPRINTS:
         try
         {
-            backAnnotateFootprints( payload );
+            SCH_EDITOR_CONTROL* controlTool = m_toolManager->GetTool<SCH_EDITOR_CONTROL>();
+            controlTool->BackAnnotateFootprints( payload );
         }
         catch( const IO_ERROR& DBG( ioe ) )
         {

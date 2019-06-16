@@ -197,10 +197,6 @@ public:
      */
     bool SynchronizePins();
 
-    /**
-     * Plot the current symbol in SVG or PNG format.
-     */
-    void OnPlotCurrentComponent( wxCommandEvent& event );
     void OnSyncPinEditClick( wxCommandEvent& event );
 
     void OnImportBody( wxCommandEvent& aEvent );
@@ -422,14 +418,6 @@ public:
      * @return true if the symbol defined by \a aLibId was loaded.
      */
     bool LoadComponentAndSelectLib( const LIB_ID& aLibId, int aUnit, int aConvert );
-
-    /**
-     * Creates an image (screenshot) of the current symbol.
-     *
-     * @param aFileName = the full filename
-     * @param aBitmapType = bitmap file format
-     */
-    void CreateImageFile( const wxString& aFileName, wxBitmapType aBitmapType = wxBITMAP_TYPE_PNG );
 
     /**
      * Print a page

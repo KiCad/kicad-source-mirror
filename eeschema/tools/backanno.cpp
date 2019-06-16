@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file backanno.cpp
- * @brief Functions for backannotating footprint information.
- */
-
 #include <fctsys.h>
 #include <confirm.h>
 #include <kicad_string.h>
@@ -36,19 +31,19 @@
 #include <sch_edit_frame.h>
 #include <build_version.h>
 #include <wildcards_and_files_ext.h>
-
 #include <general.h>
 #include <sch_sheet_path.h>
 #include <sch_component.h>
 #include <sch_reference_list.h>
-
 #include <dsnlexer.h>
 #include <ptree.h>
 #include <boost/property_tree/ptree.hpp>
 #include <wx/choicdlg.h>
+#include <tools/sch_editor_control.h>
+#include <kicad/kicad_manager_frame.h>
 
 
-void SCH_EDIT_FRAME::backAnnotateFootprints( const std::string& aChangedSetOfReferences )
+void SCH_EDITOR_CONTROL::BackAnnotateFootprints( const std::string& aChangedSetOfReferences )
 {
     // Build a flat list of components in schematic:
     SCH_REFERENCE_LIST  refs;
@@ -57,8 +52,8 @@ void SCH_EDIT_FRAME::backAnnotateFootprints( const std::string& aChangedSetOfRef
 
     sheets.GetComponents( refs, false );
 
-    DSNLEXER    lexer( aChangedSetOfReferences, FROM_UTF8( __func__ ) );
-    PTREE       doc;
+    DSNLEXER lexer( aChangedSetOfReferences, FROM_UTF8( __func__ ) );
+    PTREE    doc;
 
     try
     {
@@ -102,9 +97,7 @@ void SCH_EDIT_FRAME::backAnnotateFootprints( const std::string& aChangedSetOfRef
                     const wxString& oldfp = fpfield->GetText();
 
                     if( !oldfp && fpfield->IsVisible() )
-                    {
                         fpfield->SetVisible( false );
-                    }
 
                     if( oldfp != footprint )
                         isChanged = true;
@@ -122,16 +115,16 @@ void SCH_EDIT_FRAME::backAnnotateFootprints( const std::string& aChangedSetOfRef
 
     if( isChanged )
     {
-        SyncView();
-        GetCanvas()->Refresh();
-        OnModify();
+        m_frame->SyncView();
+        m_frame->GetCanvas()->Refresh();
+        m_frame->OnModify();
     }
 }
 
 
-bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( const wxString& aFullFilename,
-                                                    bool aForceVisibilityState,
-                                                    bool aVisibilityState )
+bool SCH_EDITOR_CONTROL::processCmpToFootprintLinkFile( const wxString& aFullFilename,
+                                                        bool aForceVisibilityState,
+                                                        bool aVisibilityState )
 {
     // Build a flat list of components in schematic:
     SCH_REFERENCE_LIST  referencesList;
@@ -179,13 +172,9 @@ bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( const wxString& aFullFilenam
             value.Trim(false);
 
             if( buffer.StartsWith( wxT( "Reference" ) ) )
-            {
                 reference = value;
-            }
             else if( buffer.StartsWith( wxT( "IdModule" ) ) )
-            {
                 footprint = value;
-            }
         }
 
         // A block is read: initialize the footprint field of the corresponding component
@@ -207,9 +196,7 @@ bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( const wxString& aFullFilenam
                 fpfield->SetText( footprint );
 
                 if( aForceVisibilityState )
-                {
                     component->GetField( FOOTPRINT )->SetVisible( aVisibilityState );
-                }
             }
         }
     }
@@ -218,17 +205,17 @@ bool SCH_EDIT_FRAME::ProcessCmpToFootprintLinkFile( const wxString& aFullFilenam
 }
 
 
-bool SCH_EDIT_FRAME::LoadCmpToFootprintLinkFile()
+int SCH_EDITOR_CONTROL::ImportFPAssignments( const TOOL_EVENT& aEvent )
 {
-    wxString path = wxPathOnly( Prj().GetProjectFullName() );
+    wxString path = wxPathOnly( m_frame->Prj().GetProjectFullName() );
 
-    wxFileDialog dlg( this, _( "Load Symbol Footprint Link File" ),
+    wxFileDialog dlg( m_frame, _( "Load Symbol Footprint Link File" ),
                       path, wxEmptyString,
                       ComponentFileWildcard(),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
-        return false;
+        return 0;
 
     wxString filename = dlg.GetPath();
 
@@ -237,27 +224,26 @@ bool SCH_EDIT_FRAME::LoadCmpToFootprintLinkFile()
     choices.Add( _( "Show all footprint fields" ) );
     choices.Add( _( "Hide all footprint fields" ) );
 
-    wxSingleChoiceDialog choiceDlg( this, _( "Select the footprint field visibility setting." ),
+    wxSingleChoiceDialog choiceDlg( m_frame, _( "Select the footprint field visibility setting." ),
                                     _( "Change Visibility" ), choices );
 
-
     if( choiceDlg.ShowModal() == wxID_CANCEL )
-        return false;
+        return 0;
 
     bool forceVisibility = (choiceDlg.GetSelection() != 0 );
     bool visibilityState = (choiceDlg.GetSelection() == 1 );
 
-    if( !ProcessCmpToFootprintLinkFile( filename, forceVisibility, visibilityState ) )
+    if( !processCmpToFootprintLinkFile( filename, forceVisibility, visibilityState ) )
     {
         wxString msg = wxString::Format( _( "Failed to open component-footprint link file \"%s\"" ),
                                          filename.GetData() );
 
-        DisplayError( this, msg );
-        return false;
+        DisplayError( m_frame, msg );
+        return 0;
     }
 
-    SyncView();
-    GetCanvas()->Refresh();
-    OnModify();
-    return true;
+    m_frame->SyncView();
+    m_frame->GetCanvas()->Refresh();
+    m_frame->OnModify();
+    return 0;
 }
