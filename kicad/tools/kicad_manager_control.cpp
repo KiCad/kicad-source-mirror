@@ -337,19 +337,7 @@ int KICAD_MANAGER_CONTROL::UpdateMenu( const TOOL_EVENT& aEvent )
 
 int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
 {
-    FRAME_T playerType = FRAME_SCH_VIEWER;
-
-    if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::editSchematic ) )
-        playerType = FRAME_SCH;
-    else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::editSymbols ) )
-        playerType = FRAME_SCH_LIB_EDITOR;
-    else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::editPCB ) )
-        playerType = FRAME_PCB;
-    else if( aEvent.IsAction( &KICAD_MANAGER_ACTIONS::editFootprints ) )
-        playerType = FRAME_PCB_MODULE_EDITOR;
-    else
-        wxFAIL_MSG( "ShowPlayer(): unexpected request" );
-
+    FRAME_T       playerType = aEvent.Parameter<FRAME_T>();
     KIWAY_PLAYER* player;
 
     try

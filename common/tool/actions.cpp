@@ -24,6 +24,7 @@
 #include <fctsys.h>
 #include <tool/actions.h>
 #include <bitmaps.h>
+#include <frame_type.h>
 
 
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
@@ -478,22 +479,22 @@ TOOL_ACTION ACTIONS::show3DViewer( "common.Control.show3DViewer",
 TOOL_ACTION ACTIONS::showSymbolBrowser( "common.Control.showSymbolBrowser",
         AS_GLOBAL, 0, "",
         _( "Symbol Library Browser" ), _( "Browse symbol libraries" ),
-        library_browse_xpm );
+        library_browse_xpm, AF_NONE, (void*) FRAME_SCH_VIEWER );
 
 TOOL_ACTION ACTIONS::showSymbolEditor( "common.Control.showSymbolEditor",
         AS_GLOBAL, 0, "",
         _( "Symbol Editor" ), _( "Create, delete and edit symbols" ),
-        libedit_xpm );
+        libedit_xpm, AF_NONE, (void*) FRAME_SCH_LIB_EDITOR );
 
 TOOL_ACTION ACTIONS::showFootprintBrowser( "common.Control.showFootprintBrowser",
         AS_GLOBAL, 0, "",
         _( "Footprint Library Browser" ), _( "Browse footprint libraries" ),
-        modview_icon_xpm );
+        modview_icon_xpm, AF_NONE, (void*) FRAME_PCB_MODULE_VIEWER );
 
 TOOL_ACTION ACTIONS::showFootprintEditor( "common.Control.showFootprintEditor",
         AS_GLOBAL, 0, "",
         _( "Footprint Editor" ), _( "Create, delete and edit footprints" ),
-        module_editor_xpm );
+        module_editor_xpm, AF_NONE, (void*) FRAME_PCB_MODULE_EDITOR );
 
 TOOL_ACTION ACTIONS::updatePcbFromSchematic( "common.Control.updatePcbFromSchematic",
         AS_GLOBAL,

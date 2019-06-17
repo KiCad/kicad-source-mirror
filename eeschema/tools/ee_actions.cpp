@@ -24,6 +24,7 @@
 #include <tool/tool_action.h>
 #include <bitmaps.h>
 #include <tools/ee_actions.h>
+#include <core/typeinfo.h>
 
 
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
@@ -199,32 +200,32 @@ TOOL_ACTION EE_ACTIONS::placeSymbolPin( "eeschema.SymbolDrawing.placeSymbolPin",
         AS_GLOBAL,
         'P', LEGACY_HK_NAME( "Create Pin" ),
         _( "Add Pin" ), _( "Add a pin" ),
-        pin_xpm, AF_ACTIVATE );
+        pin_xpm, AF_ACTIVATE, (void*) LIB_PIN_T );
 
 TOOL_ACTION EE_ACTIONS::placeSymbolText( "eeschema.SymbolDrawing.placeSymbolText",
         AS_GLOBAL, 0, "",
         _( "Add Text" ), _( "Add a text item" ),
-        text_xpm, AF_ACTIVATE );
+        text_xpm, AF_ACTIVATE, (void*) LIB_TEXT_T );
 
 TOOL_ACTION EE_ACTIONS::drawSymbolRectangle( "eeschema.SymbolDrawing.drawSymbolRectangle",
         AS_GLOBAL, 0, "",
         _( "Add Rectangle" ), _( "Add a rectangle" ),
-        add_rectangle_xpm, AF_ACTIVATE );
+        add_rectangle_xpm, AF_ACTIVATE, (void*) LIB_RECTANGLE_T );
 
 TOOL_ACTION EE_ACTIONS::drawSymbolCircle( "eeschema.SymbolDrawing.drawSymbolCircle",
         AS_GLOBAL, 0, "",
         _( "Add Circle" ), _( "Add a circle" ),
-        add_circle_xpm, AF_ACTIVATE );
+        add_circle_xpm, AF_ACTIVATE, (void*) LIB_CIRCLE_T );
 
 TOOL_ACTION EE_ACTIONS::drawSymbolArc( "eeschema.SymbolDrawing.drawSymbolArc",
         AS_GLOBAL, 0, "",
         _( "Add Arc" ), _( "Add an arc" ),
-        add_arc_xpm, AF_ACTIVATE );
+        add_arc_xpm, AF_ACTIVATE, (void*) LIB_ARC_T );
 
 TOOL_ACTION EE_ACTIONS::drawSymbolLines( "eeschema.SymbolDrawing.drawSymbolLines",
         AS_GLOBAL, 0, "",
         _( "Add Lines" ), _( "Add connected graphic lines" ),
-        add_graphical_segments_xpm, AF_ACTIVATE );
+        add_graphical_segments_xpm, AF_ACTIVATE, (void*) LIB_POLYLINE_T );
 
 TOOL_ACTION EE_ACTIONS::placeSymbolAnchor( "eeschema.SymbolDrawing.placeSymbolAnchor",
         AS_GLOBAL, 0, "",
@@ -273,65 +274,65 @@ TOOL_ACTION EE_ACTIONS::placeNoConnect( "eeschema.InteractiveDrawing.placeNoConn
         AS_GLOBAL,
         'Q', LEGACY_HK_NAME( "Add No Connect Flag" ),
         _( "Add No Connect Flag" ), _( "Add a no-connection flag" ),
-        noconn_xpm, AF_ACTIVATE );
+        noconn_xpm, AF_ACTIVATE, (void*) SCH_NO_CONNECT_T );
 
 TOOL_ACTION EE_ACTIONS::placeJunction( "eeschema.InteractiveDrawing.placeJunction",
         AS_GLOBAL,
         'J', LEGACY_HK_NAME( "Add Junction" ),
         _( "Add Junction" ), _( "Add a junction" ),
-        add_junction_xpm, AF_ACTIVATE );
+        add_junction_xpm, AF_ACTIVATE, (void*) SCH_JUNCTION_T );
 
 TOOL_ACTION EE_ACTIONS::placeBusWireEntry( "eeschema.InteractiveDrawing.placeBusWireEntry",
         AS_GLOBAL,
         'Z', LEGACY_HK_NAME( "Add Wire Entry" ),
         _( "Add Wire to Bus Entry" ), _( "Add a wire entry to a bus" ),
-        add_line2bus_xpm, AF_ACTIVATE );
+        add_line2bus_xpm, AF_ACTIVATE, (void*) SCH_BUS_WIRE_ENTRY_T );
 
 TOOL_ACTION EE_ACTIONS::placeBusBusEntry( "eeschema.InteractiveDrawing.placeBusBusEntry",
         AS_GLOBAL,
         '/', LEGACY_HK_NAME( "Add Bus Entry" ),
         _( "Add Bus to Bus Entry" ), _( "Add a bus entry to a bus" ),
-        add_bus2bus_xpm, AF_ACTIVATE );
+        add_bus2bus_xpm, AF_ACTIVATE, (void*) SCH_BUS_BUS_ENTRY_T );
 
 TOOL_ACTION EE_ACTIONS::placeLabel( "eeschema.InteractiveDrawing.placeLabel",
         AS_GLOBAL,
         'L', LEGACY_HK_NAME( "Add Label" ),
         _( "Add Label" ), _( "Add a net label" ),
-        add_line_label_xpm, AF_ACTIVATE );
+        add_line_label_xpm, AF_ACTIVATE, (void*) SCH_LABEL_T );
 
 TOOL_ACTION EE_ACTIONS::placeHierLabel( "eeschema.InteractiveDrawing.placeHierarchicalLabel",
         AS_GLOBAL,
         'H', LEGACY_HK_NAME( "Add Hierarchical Label" ),
         _( "Add Hierarchical Label" ), _( "Add a hierarchical sheet label" ),
-        add_hierarchical_label_xpm, AF_ACTIVATE );
+        add_hierarchical_label_xpm, AF_ACTIVATE, (void*) SCH_HIER_LABEL_T );
 
 TOOL_ACTION EE_ACTIONS::drawSheet( "eeschema.InteractiveDrawing.drawSheet",
         AS_GLOBAL,
         'S', LEGACY_HK_NAME( "Add Sheet" ),
         _( "Add Sheet" ), _( "Add a hierarchical sheet" ),
-        add_hierarchical_subsheet_xpm, AF_ACTIVATE );
+        add_hierarchical_subsheet_xpm, AF_ACTIVATE, (void*) SCH_SHEET_T );
 
 TOOL_ACTION EE_ACTIONS::placeSheetPin( "eeschema.InteractiveDrawing.placeSheetPin",
         AS_GLOBAL, 0, "",
         _( "Add Sheet Pin" ), _( "Add a sheet pin" ),
-        add_hierar_pin_xpm, AF_ACTIVATE );
+        add_hierar_pin_xpm, AF_ACTIVATE, (void*) SCH_SHEET_PIN_T );
 
 TOOL_ACTION EE_ACTIONS::importSheetPin( "eeschema.InteractiveDrawing.importSheetPin",
         AS_GLOBAL, 0, "",
         _( "Import Sheet Pin" ), _( "Import a hierarchical sheet pin" ),
-        import_hierarchical_label_xpm, AF_ACTIVATE );
+        import_hierarchical_label_xpm, AF_ACTIVATE, (void*) SCH_SHEET_PIN_T );
 
 TOOL_ACTION EE_ACTIONS::placeGlobalLabel( "eeschema.InteractiveDrawing.placeGlobalLabel",
         AS_GLOBAL,
         MD_CTRL + 'H', LEGACY_HK_NAME( "Add Global Label" ),
         _( "Add Global Label" ), _( "Add a global label" ),
-        add_glabel_xpm, AF_ACTIVATE );
+        add_glabel_xpm, AF_ACTIVATE, (void*) SCH_GLOBAL_LABEL_T );
 
 TOOL_ACTION EE_ACTIONS::placeSchematicText( "eeschema.InteractiveDrawing.placeSchematicText",
         AS_GLOBAL,
         'T', LEGACY_HK_NAME( "Add Graphic Text" ),
         _( "Add Text" ), _( "Add text" ),
-        text_xpm, AF_ACTIVATE );
+        text_xpm, AF_ACTIVATE, (void*) SCH_TEXT_T );
 
 TOOL_ACTION EE_ACTIONS::placeImage( "eeschema.InteractiveDrawing.placeImage",
         AS_GLOBAL, 0, "",
@@ -428,32 +429,32 @@ TOOL_ACTION EE_ACTIONS::showDeMorganAlternate( "eeschema.InteractiveEdit.showDeM
 TOOL_ACTION EE_ACTIONS::toShapeSlash( "eeschema.InteractiveEdit.toShapeSlash",
         AS_GLOBAL, 0, "",
         _( "Set Bus Entry Shape /" ), _( "Change the bus entry shape to /" ),
-        change_entry_orient_xpm );
+        change_entry_orient_xpm, AF_NONE, (void*) '/' );
 
 TOOL_ACTION EE_ACTIONS::toShapeBackslash( "eeschema.InteractiveEdit.toShapeBackslash",
         AS_GLOBAL, 0, "",
         _( "Set Bus Entry Shape \\" ), _( "Change the bus entry shape to \\" ),
-        change_entry_orient_xpm );
+        change_entry_orient_xpm, AF_NONE, (void*) '\\' );
 
 TOOL_ACTION EE_ACTIONS::toLabel( "eeschema.InteractiveEdit.toLabel",
         AS_GLOBAL, 0, "",
         _( "Change to Label" ), _( "Change existing item to a label" ),
-        add_line_label_xpm );
+        add_line_label_xpm, AF_NONE, (void*) SCH_LABEL_T );
 
 TOOL_ACTION EE_ACTIONS::toHLabel( "eeschema.InteractiveEdit.toHLabel",
         AS_GLOBAL, 0, "",
         _( "Change to Hierarchical Label" ), _( "Change existing item to a hierarchical label" ),
-        add_hierarchical_label_xpm );
+        add_hierarchical_label_xpm, AF_NONE, (void*) SCH_HIER_LABEL_T );
 
 TOOL_ACTION EE_ACTIONS::toGLabel( "eeschema.InteractiveEdit.toGLabel",
         AS_GLOBAL, 0, "",
         _( "Change to Global Label" ), _( "Change existing item to a global label" ),
-        add_glabel_xpm );
+        add_glabel_xpm, AF_NONE, (void*) SCH_GLOBAL_LABEL_T );
 
 TOOL_ACTION EE_ACTIONS::toText( "eeschema.InteractiveEdit.toText",
         AS_GLOBAL, 0, "",
         _( "Change to Text" ), _( "Change existing item to a text comment" ),
-        text_xpm );
+        text_xpm, AF_NONE, (void*) SCH_TEXT_T );
 
 TOOL_ACTION EE_ACTIONS::cleanupSheetPins( "eeschema.InteractiveEdit.cleanupSheetPins",
         AS_GLOBAL, 0, "",

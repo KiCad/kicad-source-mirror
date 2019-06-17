@@ -250,22 +250,11 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType, bool aImmediateMode )
 
 int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
-    KICAD_T type = TYPE_NOT_INIT;
+    KICAD_T type = aEvent.Parameter<KICAD_T>();
 
     // We might be running as the same shape in another co-routine.  Make sure that one
     // gets whacked.
     m_toolMgr->DeactivateTool();
-
-    if( aEvent.IsAction( &EE_ACTIONS::drawSymbolArc ) )
-        type = LIB_ARC_T;
-    else if( aEvent.IsAction( &EE_ACTIONS::drawSymbolCircle ) )
-        type = LIB_CIRCLE_T;
-    else if( aEvent.IsAction( &EE_ACTIONS::drawSymbolLines ) )
-        type = LIB_POLYLINE_T;
-    else if( aEvent.IsAction( &EE_ACTIONS::drawSymbolRectangle ) )
-        type = LIB_RECTANGLE_T;
-    else
-        wxCHECK_MSG( false, 0, "Unknown action in LIB_DRAWING_TOOLS::DrawShape()" );
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );

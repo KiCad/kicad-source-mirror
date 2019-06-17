@@ -24,6 +24,7 @@
 #include <tool/tool_action.h>
 #include <bitmaps.h>
 #include <tools/kicad_manager_actions.h>
+#include <frame_type.h>
 
 
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
@@ -55,25 +56,25 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::editSchematic( "kicad.Control.editSchematic",
         AS_GLOBAL,
         MD_CTRL + 'E', LEGACY_HK_NAME( "Run Eeschema" ),
         _( "Edit Schematic" ), "",
-        icon_eeschema_xpm );
+        icon_eeschema_xpm, AF_NONE, (void*) FRAME_SCH );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editSymbols( "kicad.Control.editSymbols",
         AS_GLOBAL,
         MD_CTRL + 'L', LEGACY_HK_NAME( "Run LibEdit" ),
         _( "Edit Schematic Symbols" ), "",
-        icon_libedit_xpm );
+        icon_libedit_xpm, AF_NONE, (void*) FRAME_SCH_LIB_EDITOR );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editPCB( "kicad.Control.editPCB",
         AS_GLOBAL,
         MD_CTRL + 'P', LEGACY_HK_NAME( "Run Pcbnew" ),
         _( "Edit PCB" ), "",
-        icon_pcbnew_xpm );
+        icon_pcbnew_xpm, AF_NONE, (void*) FRAME_PCB );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editFootprints( "kicad.Control.editFootprints",
         AS_GLOBAL,
         MD_CTRL + 'F', LEGACY_HK_NAME( "Run FpEditor" ),
         _( "Edit PCB Footprints" ), "",
-        icon_modedit_xpm );
+        icon_modedit_xpm, AF_NONE, (void*) FRAME_PCB_MODULE_EDITOR );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::viewGerbers( "kicad.Control.viewGerbers",
         AS_GLOBAL,

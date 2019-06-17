@@ -285,7 +285,7 @@ int PCBNEW_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
 // Layer control
 int PCBNEW_CONTROL::LayerSwitch( const TOOL_EVENT& aEvent )
 {
-    m_frame->SwitchLayer( NULL, (PCB_LAYER_ID) aEvent.Parameter<intptr_t>() );
+    m_frame->SwitchLayer( NULL, aEvent.Parameter<PCB_LAYER_ID>() );
 
     return 0;
 }

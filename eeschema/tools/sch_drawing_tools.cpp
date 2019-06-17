@@ -359,11 +359,9 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
 {
     bool     immediateMode = aEvent.HasPosition();
     wxPoint  cursorPos;
-    KICAD_T  type = TYPE_NOT_INIT;
+    KICAD_T  type = aEvent.Parameter<KICAD_T>();
 
-    if( aEvent.IsAction( &EE_ACTIONS::placeNoConnect ) )
-        type = SCH_NO_CONNECT_T;
-    else if( aEvent.IsAction( &EE_ACTIONS::placeJunction ) )
+    if( type == SCH_JUNCTION_T )
     {
         if( immediateMode )
         {
@@ -378,19 +376,9 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
             }
         }
-
-        type = SCH_JUNCTION_T;
     }
-    else if( aEvent.IsAction( &EE_ACTIONS::placeHierLabel ) )
-        type = SCH_HIER_LABEL_T;
     else if( aEvent.IsAction( &EE_ACTIONS::placeSheetPin ) )
         type = SCH_SHEET_PIN_T;
-    else if( aEvent.IsAction( &EE_ACTIONS::placeBusWireEntry ) )
-        type = SCH_BUS_WIRE_ENTRY_T;
-    else if( aEvent.IsAction( &EE_ACTIONS::placeBusBusEntry ) )
-        type = SCH_BUS_BUS_ENTRY_T;
-    else
-        wxFAIL_MSG( "SingleClickPlace(): unexpected request" );
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
@@ -476,22 +464,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 {
     EDA_ITEM* item = nullptr;
     bool      immediateMode = aEvent.HasPosition();
-    KICAD_T   type = TYPE_NOT_INIT;
-
-    if( aEvent.IsAction( &EE_ACTIONS::placeLabel ) )
-        type = SCH_LABEL_T;
-    else if( aEvent.IsAction( &EE_ACTIONS::placeGlobalLabel ) )
-        type = SCH_GLOBAL_LABEL_T;
-    else if( aEvent.IsAction( &EE_ACTIONS::placeHierLabel ) )
-        type = SCH_HIER_LABEL_T;
-    else if( aEvent.IsAction( &EE_ACTIONS::placeSheetPin ) )
-        type = SCH_SHEET_PIN_T;
-    else if( aEvent.IsAction( &EE_ACTIONS::importSheetPin ) )
-        type = SCH_SHEET_PIN_T;
-    else if( aEvent.IsAction( &EE_ACTIONS::placeSchematicText ) )
-        type = SCH_TEXT_T;
-    else
-        wxFAIL_MSG( "TwoClickPlace(): unexpected request" );
+    KICAD_T   type = aEvent.Parameter<KICAD_T>();
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );

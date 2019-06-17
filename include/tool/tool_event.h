@@ -176,7 +176,7 @@ public:
     const std::string Format() const;
 
     TOOL_EVENT( TOOL_EVENT_CATEGORY aCategory = TC_NONE, TOOL_ACTIONS aAction = TA_NONE,
-            TOOL_ACTION_SCOPE aScope = AS_GLOBAL, void* aParameter = NULL ) :
+                TOOL_ACTION_SCOPE aScope = AS_GLOBAL, void* aParameter = nullptr ) :
         m_category( aCategory ),
         m_actions( aAction ),
         m_scope( aScope ),
@@ -192,7 +192,7 @@ public:
     }
 
     TOOL_EVENT( TOOL_EVENT_CATEGORY aCategory, TOOL_ACTIONS aAction, int aExtraParam,
-            TOOL_ACTION_SCOPE aScope = AS_GLOBAL, void* aParameter = nullptr ) :
+                TOOL_ACTION_SCOPE aScope = AS_GLOBAL, void* aParameter = nullptr ) :
         m_category( aCategory ),
         m_actions( aAction ),
         m_scope( aScope ),
@@ -392,7 +392,13 @@ public:
     template<typename T>
     inline T Parameter() const
     {
-        return reinterpret_cast<T>( m_param );
+        // Exhibit #798 on why I love to hate C++
+        // - reinterpret_cast needs to be used for pointers
+        // - static_cast must be used for enums
+        // - templates can't usefully distinguish between pointer and non-pointer types
+        // Fortunately good old C's cast can be a reinterpret_cast or a static_cast, and
+        // C99 gave us intptr_t which is guaranteed to be round-trippable with a pointer.
+        return (T) reinterpret_cast<intptr_t>( m_param );
     }
 
     /**

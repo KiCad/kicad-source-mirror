@@ -1204,14 +1204,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 int SCH_EDIT_TOOL::ChangeShape( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION& selection = m_selectionTool->GetSelection();
-    char          shape;
-
-    if( aEvent.IsAction( &EE_ACTIONS::toShapeSlash ) )
-        shape = '/';
-    else if( aEvent.IsAction( &EE_ACTIONS::toShapeBackslash ) )
-        shape = '\\';
-    else
-        return 0;
+    char          shape = aEvent.Parameter<char>();
 
     for( unsigned int i = 0; i < selection.GetSize(); ++i )
     {
@@ -1238,20 +1231,9 @@ int SCH_EDIT_TOOL::ChangeShape( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 {
+    KICAD_T       convertTo = aEvent.Parameter<KICAD_T>();
     KICAD_T       allTextTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
     EE_SELECTION& selection = m_selectionTool->RequestSelection( allTextTypes );
-    KICAD_T       convertTo;
-
-    if( aEvent.IsAction( &EE_ACTIONS::toLabel ) )
-        convertTo = SCH_LABEL_T;
-    else if( aEvent.IsAction( &EE_ACTIONS::toHLabel ) )
-        convertTo = SCH_HIER_LABEL_T;
-    else if( aEvent.IsAction( &EE_ACTIONS::toGLabel ) )
-        convertTo = SCH_GLOBAL_LABEL_T;
-    else if( aEvent.IsAction( &EE_ACTIONS::toText ) )
-        convertTo = SCH_TEXT_T;
-    else
-        return 0;
 
     for( unsigned int i = 0; i < selection.GetSize(); ++i )
     {

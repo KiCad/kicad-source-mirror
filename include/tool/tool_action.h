@@ -54,6 +54,10 @@ public:
 
     ~TOOL_ACTION();
 
+    // TOOL_ACTIONS are singletons; don't be copying them around....
+    TOOL_ACTION( const TOOL_ACTION& ) = delete;
+    TOOL_ACTION& operator= ( const TOOL_ACTION& ) = delete;
+
     bool operator==( const TOOL_ACTION& aRhs ) const
     {
         return m_id == aRhs.m_id;
@@ -168,11 +172,6 @@ protected:
 
     TOOL_ACTION_FLAGS    m_flags;
     void*                m_param;          // Generic parameter
-
-private:
-    // TOOL_ACTIONS are singletons; don't be copying them around....
-    TOOL_ACTION( const TOOL_ACTION& ) = delete;
-    TOOL_ACTION& operator= ( const TOOL_ACTION& ) = delete;
 };
 
 #endif

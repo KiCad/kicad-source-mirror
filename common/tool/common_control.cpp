@@ -74,19 +74,7 @@ int COMMON_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
 
 int COMMON_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
 {
-    FRAME_T playerType = FRAME_SCH_VIEWER;
-    
-    if( aEvent.IsAction( &ACTIONS::showSymbolBrowser ) )
-        playerType = FRAME_SCH_VIEWER;
-    else if( aEvent.IsAction( &ACTIONS::showSymbolEditor ) )
-        playerType = FRAME_SCH_LIB_EDITOR;
-    else if( aEvent.IsAction( &ACTIONS::showFootprintBrowser ) )
-        playerType = FRAME_PCB_MODULE_VIEWER;
-    else if( aEvent.IsAction( &ACTIONS::showFootprintEditor ) )
-        playerType = FRAME_PCB_MODULE_EDITOR;
-    else
-        wxFAIL_MSG( "ShowPlayer(): unexpected request" );
-    
+    FRAME_T       playerType = aEvent.Parameter<FRAME_T>();
     KIWAY_PLAYER* editor = m_frame->Kiway().Player( playerType, true );
 
     // Needed on Windows, other platforms do not use it, but it creates no issue

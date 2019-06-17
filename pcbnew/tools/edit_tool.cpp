@@ -796,8 +796,8 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
     // get a copy instead of reference (as we're going to clear the selection before removing items)
     PCBNEW_SELECTION selectionCopy;
-    bool isCut = aEvent.Parameter<intptr_t>() == static_cast<intptr_t>( PCB_ACTIONS::REMOVE_FLAGS::CUT );
-    bool isAlt = aEvent.Parameter<intptr_t>() == static_cast<intptr_t>( PCB_ACTIONS::REMOVE_FLAGS::ALT );
+    bool isCut = aEvent.Parameter<PCB_ACTIONS::REMOVE_FLAGS>() == PCB_ACTIONS::REMOVE_FLAGS::CUT;
+    bool isAlt = aEvent.Parameter<PCB_ACTIONS::REMOVE_FLAGS>() == PCB_ACTIONS::REMOVE_FLAGS::ALT;
 
     // If we are in a "Cut" operation, then the copied selection exists already
     if( isCut )
