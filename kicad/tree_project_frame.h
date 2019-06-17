@@ -134,6 +134,13 @@ private:
     void                            OnRenameFile( wxCommandEvent& event );
 
     /**
+     * Function OnOpenDirectory
+     * Handles the right-click menu for opening a directory in the current system
+     * file browser
+     */
+    void                            OnOpenDirectory( wxCommandEvent& event );
+
+    /**
      * Function OnCreateNewDirectory
      * Creates a new subdirectory inside the current kicad project directory
      * the user is prompted to enter a directory name

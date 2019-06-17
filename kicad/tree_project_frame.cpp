@@ -123,6 +123,7 @@ BEGIN_EVENT_TABLE( TREE_PROJECT_FRAME, wxSashLayoutWindow )
     EVT_MENU( ID_PROJECT_TXTEDIT, TREE_PROJECT_FRAME::OnOpenSelectedFileWithTextEditor )
     EVT_MENU( ID_PROJECT_SWITCH_TO_OTHER, TREE_PROJECT_FRAME::OnSwitchToSelectedProject )
     EVT_MENU( ID_PROJECT_NEWDIR, TREE_PROJECT_FRAME::OnCreateNewDirectory )
+    EVT_MENU( ID_PROJECT_OPEN_DIR, TREE_PROJECT_FRAME::OnOpenDirectory )
     EVT_MENU( ID_PROJECT_DELETE, TREE_PROJECT_FRAME::OnDeleteFile )
     EVT_MENU( ID_PROJECT_RENAME, TREE_PROJECT_FRAME::OnRenameFile )
 END_EVENT_TABLE()
@@ -191,6 +192,54 @@ void TREE_PROJECT_FRAME::OnSwitchToSelectedProject( wxCommandEvent& event )
     wxString prj_filename = tree_data->GetFileName();
 
     m_Parent->LoadProject( prj_filename );
+}
+
+
+void TREE_PROJECT_FRAME::OnOpenDirectory( wxCommandEvent& event )
+{
+    // Get the root directory name:
+    TREEPROJECT_ITEM* treeData = GetSelectedData();
+
+    if( !treeData )
+        return;
+
+    TreeFileType rootType = treeData->GetType();
+    wxTreeItemId root;
+
+    if( TREE_DIRECTORY == rootType )
+    {
+        root = m_TreeProject->GetSelection();
+    }
+    else
+    {
+        root = m_TreeProject->GetItemParent( m_TreeProject->GetSelection() );
+
+        if( !root.IsOk() )
+            root = m_TreeProject->GetSelection();
+    }
+
+    wxString prj_dir = wxPathOnly( m_Parent->GetProjectFileName() );
+
+    // Ask for the new sub directory name
+    wxString curr_dir = treeData->GetDir();
+
+    if( !curr_dir.IsEmpty() )    // A subdir is selected
+    {
+        // Make this subdir name relative to the current path.
+        // It will be more easy to read by the user, in the next dialog
+        wxFileName fn;
+        fn.AssignDir( curr_dir );
+        fn.MakeRelativeTo( prj_dir );
+        curr_dir = fn.GetPath();
+
+        if( !curr_dir.IsEmpty() )
+            curr_dir += wxFileName::GetPathSeparator();
+    }
+
+    // Quote in case there are spaces in the path.
+    AddDelimiterString( curr_dir );
+
+    wxLaunchDefaultApplication( curr_dir );
 }
 
 
@@ -722,6 +771,11 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
                      _( "New D&irectory..." ),
                      _( "Create a New Directory" ),
                      KiBitmap( directory_xpm ) );
+
+        AddMenuItem( &popupMenu, ID_PROJECT_OPEN_DIR,
+                     _( "&Open Directory in System" ),
+                     _( "Opens the directory in the default system file manager" ),
+                     KiBitmap( directory_browser_xpm ) );
         break;
 
     case TREE_DIRECTORY:
@@ -729,6 +783,10 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
                      _( "New D&irectory..." ),
                      _( "Create a New Directory" ),
                      KiBitmap( directory_xpm ) );
+        AddMenuItem( &popupMenu, ID_PROJECT_OPEN_DIR,
+                     _( "&Open Directory in System" ),
+                     _( "Opens the directory in the default system file manager" ),
+                     KiBitmap( directory_browser_xpm ) );
         AddMenuItem( &popupMenu,  ID_PROJECT_DELETE,
                      _( "&Delete Directory" ),
                      _( "Delete the Directory and its content" ),
