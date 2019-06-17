@@ -36,20 +36,6 @@
 #include <pl_editor_id.h>
 #include <dialog_page_settings.h>
 
-TOOL_ACTION PL_ACTIONS::refreshPreview( "plEditor.EditorControl.refreshPreview",
-         AS_GLOBAL );
-
-TOOL_ACTION PL_ACTIONS::toggleBackground( "plEditor.EditorControl.ToggleBackground",
-        AS_GLOBAL, 0, "",
-        _( "Background White" ), _( "Switch between white and black background" ),
-        palette_xpm );
-
-TOOL_ACTION PL_ACTIONS::showInspector( "plEditor.EditorControl.ShowInspector",
-        AS_GLOBAL, 0, "",
-        _( "Show Design Inspector" ), _( "Show the list of items in page layout" ),
-        spreadsheet_xpm );
-
-
 bool PL_EDITOR_CONTROL::Init()
 {
     m_frame = getEditFrame<PL_EDITOR_FRAME>();

@@ -25,7 +25,13 @@
 #include <tool/actions.h>
 #include <bitmaps.h>
 
-// These members are static in class ACTIONS: Build them here:
+
+// Actions, being statically-defined, require specialized I18N handling.  We continue to
+// use the _() macro so that string harvesting by the I18N framework doesn't have to be
+// specialized, but we don't translate on initialization and instead do it in the getters.
+
+#undef _
+#define _(s) s
 
 TOOL_ACTION ACTIONS::doNew( "common.Control.new",
         AS_GLOBAL, 

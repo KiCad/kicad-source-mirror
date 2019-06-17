@@ -21,11 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file mocks.cpp
- * @brief Pcbnew main program for qa test.
- */
-
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
@@ -45,9 +40,7 @@
 #include <footprint_edit_frame.h>
 #include <footprint_viewer_frame.h>
 #include <footprint_wizard_frame.h>
-
 #include <pcb_edit_frame.h>
-
 #include <class_board.h>
 #include <class_track.h>
 #include <class_drawsegment.h>
@@ -57,10 +50,8 @@
 #include <class_dimension.h>
 #include <class_zone.h>
 #include <class_edge_mod.h>
-
 #include <tools/pcb_actions.h>
 #include <router/router_tool.h>
-
 #include "pcb_tool_base.h"
 #include <dialog_find.h>
 #include <dialog_block_options.h>
@@ -228,24 +219,6 @@ MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
     return nullptr;
 }
 
-TOOL_ACTION PCB_ACTIONS::hideDynamicRatsnest( "pcbnew.Control.hideLocalRatsnest", 
-        AS_GLOBAL );
-
-TOOL_ACTION PCB_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
-        AS_GLOBAL, 'F', "",
-        _( "Flip" ), _( "Flips selected item(s)" ), nullptr );
-
-
-TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
-        AS_GLOBAL, 'E', "",
-        _( "Properties..." ), _( "Displays item properties dialog" ), nullptr );
-
-TOOL_ACTION PCB_ACTIONS::highlightNet( "pcbnew.EditorControl.highlightNet",
-        AS_GLOBAL );
-
-TOOL_ACTION PCB_ACTIONS::clearHighlight( "pcbnew.EditorControl.clearHighlight",
-        AS_GLOBAL );
-
 
 DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent,
         wxWindowID id,
@@ -276,16 +249,6 @@ DIALOG_BLOCK_OPTIONS_BASE::~DIALOG_BLOCK_OPTIONS_BASE()
 {
 }
 
-
-TOOL_ACTION PCB_ACTIONS::rotateCw( "pcbnew.InteractiveEdit.rotateCw",
-        AS_GLOBAL, MD_SHIFT + 'R', "",
-        _( "Rotate Clockwise" ), _( "Rotates selected item(s) clockwise" ),
-        nullptr, AF_NONE, (void*) -1 );
-
-TOOL_ACTION PCB_ACTIONS::rotateCcw( "pcbnew.InteractiveEdit.rotateCcw",
-        AS_GLOBAL, 'R', "",
-        _( "Rotate Counterclockwise" ), _( "Rotates selected item(s) counterclockwise" ),
-        nullptr, AF_NONE, (void*) 1 );
 
 DIALOG_BLOCK_OPTIONS::DIALOG_BLOCK_OPTIONS( PCB_BASE_FRAME* aParent,
         OPTIONS& aOptions, bool aShowLegacyOptions,

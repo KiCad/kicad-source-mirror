@@ -22,7 +22,6 @@
  */
 
 #include "microwave_tool.h"
-
 #include <gal/graphics_abstraction_layer.h>
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
@@ -32,62 +31,14 @@
 #include <confirm.h>
 #include <preview_items/two_point_geom_manager.h>
 #include <preview_items/centreline_rect_item.h>
-
-// For frame ToolID values
 #include <pcbnew_id.h>
-
-// For action icons
 #include <bitmaps.h>
-
 #include <class_board_item.h>
 #include <class_module.h>
-
 #include <microwave/microwave_inductor.h>
-
 #include "pcb_actions.h"
 #include "selection_tool.h"
 #include "tool_event_utils.h"
-
-
-///> Type of items that are "simple" - just get placed on
-///> the board directly, without a graphical interactive setup stage
-enum MWAVE_TOOL_SIMPLE_ID
-{
-    GAP,
-    STUB,
-    STUB_ARC,
-    FUNCTION_SHAPE,
-};
-
-TOOL_ACTION PCB_ACTIONS::microwaveCreateGap(
-        "pcbnew.MicrowaveTool.createGap",
-        AS_GLOBAL, 0, "",
-        _( "Add Gap" ), _( "Create gap of specified length for microwave applications" ),
-        mw_add_gap_xpm, AF_ACTIVATE, (void*) MWAVE_TOOL_SIMPLE_ID::GAP );
-
-TOOL_ACTION PCB_ACTIONS::microwaveCreateStub(
-        "pcbnew.MicrowaveTool.createStub",
-        AS_GLOBAL, 0, "",
-        _( "Add Stub" ), _( "Create stub of specified length for microwave applications" ),
-        mw_add_stub_xpm, AF_ACTIVATE, (void*) MWAVE_TOOL_SIMPLE_ID::STUB );
-
-TOOL_ACTION PCB_ACTIONS::microwaveCreateStubArc(
-        "pcbnew.MicrowaveTool.createStubArc",
-        AS_GLOBAL, 0, "",
-        _( "Add Arc Stub" ), _( "Create stub (arc) of specified length for microwave applications" ),
-        mw_add_stub_arc_xpm, AF_ACTIVATE, (void*) MWAVE_TOOL_SIMPLE_ID::STUB_ARC );
-
-TOOL_ACTION PCB_ACTIONS::microwaveCreateFunctionShape(
-        "pcbnew.MicrowaveTool.createFunctionShape",
-        AS_GLOBAL, 0, "",
-        _( "Add Polynomial Shape" ), _( "Create polynomial shape for microwave applications" ),
-        mw_add_gap_xpm, AF_ACTIVATE, (void*) MWAVE_TOOL_SIMPLE_ID::FUNCTION_SHAPE );
-
-TOOL_ACTION PCB_ACTIONS::microwaveCreateLine(
-        "pcbnew.MicrowaveTool.createLine",
-        AS_GLOBAL, 0, "",
-        _( "Add Microwave Line" ), _( "Create line of specified length for microwave applications" ),
-        mw_add_line_xpm, AF_ACTIVATE );
 
 
 MICROWAVE_TOOL::MICROWAVE_TOOL() :

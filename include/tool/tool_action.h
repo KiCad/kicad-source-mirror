@@ -110,12 +110,9 @@ public:
             return TOOL_EVENT( TC_COMMAND, TA_ACTION, m_name, m_scope, m_param );
     }
 
-    const wxString& GetLabel() const { return m_label; }
-    
-    const wxString& GetMenuItem() const { return m_menuItem; }
-
-    const wxString& GetDescription() const { return m_tooltip; }
-    void SetDescription( const wxString& aDescription ) { m_tooltip = aDescription; }
+    wxString GetLabel() const;
+    wxString GetMenuItem() const;
+    wxString GetDescription() const;
 
     TOOL_ACTION_SCOPE GetScope() const { return m_scope; }
 
@@ -164,7 +161,6 @@ protected:
     const std::string    m_legacyName;     // Name for reading legacy hotkey settings
 
     wxString             m_label;
-    wxString             m_menuItem;       // Label + hotkey text for menus
     wxString             m_tooltip;
     const BITMAP_OPAQUE* m_icon;           // Icon for the menu entry
 

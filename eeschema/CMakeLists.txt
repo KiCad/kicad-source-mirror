@@ -130,7 +130,6 @@ set( EESCHEMA_SRCS
     sch_painter.cpp
     annotate.cpp
     autoplace_fields.cpp
-    tools/backanno.cpp
     bus_alias.cpp
     bus-wire-junction.cpp
     class_libentry.cpp
@@ -221,6 +220,8 @@ set( EESCHEMA_SRCS
     netlist_exporters/netlist_exporter_orcadpcb2.cpp
     netlist_exporters/netlist_exporter_pspice.cpp
 
+    tools/backanno.cpp
+    tools/ee_actions.cpp
     tools/ee_inspection_tool.cpp
     tools/ee_picker_tool.cpp
     tools/ee_point_editor.cpp

@@ -31,11 +31,6 @@ using namespace std::placeholders;
 #include <cvpcb_id.h>
 
 
-TOOL_ACTION CVPCB_ACTIONS::selectionActivate( "cvpcb.InteractiveSelection",
-        AS_GLOBAL, 0, "",
-        "", "", NULL, AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
-
-
 CVPCB_SELECTION_TOOL::CVPCB_SELECTION_TOOL() :
         TOOL_INTERACTIVE( "cvpcb.InteractiveSelection" ),
         m_frame( nullptr )

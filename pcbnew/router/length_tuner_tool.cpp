@@ -44,7 +44,14 @@
 
 using namespace KIGFX;
 
-static TOOL_ACTION ACT_StartTuning( "pcbnew.LengthTuner.StartTuning", 
+// Actions, being statically-defined, require specialized I18N handling.  We continue to
+// use the _() macro so that string harvesting by the I18N framework doesn't have to be
+// specialized, but we don't translate on initialization and instead do it in the getters.
+
+#undef _
+#define _(s) s
+
+static TOOL_ACTION ACT_StartTuning( "pcbnew.LengthTuner.StartTuning",
         AS_CONTEXT,
         'X', LEGACY_HK_NAME( "Add New Track" ),
         _( "New Track" ), _( "Starts laying a new track." ) );
@@ -83,6 +90,9 @@ static TOOL_ACTION ACT_AmplDecrease( "pcbnew.LengthTuner.AmplDecrease",
         '4', LEGACY_HK_NAME( "Decrease meander amplitude by one step." ),
         _( "Decrease Amplitude" ), _( "Decrease meander amplitude by one step." ),
         router_len_tuner_amplitude_decr_xpm );
+
+#undef _
+#define _(s) wxGetTranslation((s))
 
 
 LENGTH_TUNER_TOOL::LENGTH_TUNER_TOOL() :

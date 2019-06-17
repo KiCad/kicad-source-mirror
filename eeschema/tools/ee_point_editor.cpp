@@ -46,17 +46,6 @@ using namespace std::placeholders;
 #include <eeschema_id.h>
 
 
-// Point editor
-TOOL_ACTION EE_ACTIONS::pointEditorAddCorner( "eeschema.PointEditor.addCorner",
-        AS_GLOBAL, 0, "",
-        _( "Create Corner" ), _( "Create a corner" ), 
-        add_corner_xpm );
-
-TOOL_ACTION EE_ACTIONS::pointEditorRemoveCorner( "eeschema.PointEditor.removeCorner",
-        AS_GLOBAL, 0, "",
-        _( "Remove Corner" ), _( "Remove corner" ), 
-        delete_xpm );
-
 
 // Few constants to avoid using bare numbers for point indices
 enum ARC_POINTS

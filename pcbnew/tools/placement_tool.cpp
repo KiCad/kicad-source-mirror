@@ -37,47 +37,6 @@
 #include <confirm.h>
 #include <menus_helpers.h>
 
-// Placement tool
-TOOL_ACTION PCB_ACTIONS::alignTop( "pcbnew.AlignAndDistribute.alignTop",
-        AS_GLOBAL, 0, "",
-        _( "Align to Top" ),
-        _( "Aligns selected items to the top edge" ), align_items_top_xpm );
-
-TOOL_ACTION PCB_ACTIONS::alignBottom( "pcbnew.AlignAndDistribute.alignBottom",
-        AS_GLOBAL, 0, "",
-        _( "Align to Bottom" ),
-        _( "Aligns selected items to the bottom edge" ), align_items_bottom_xpm );
-
-TOOL_ACTION PCB_ACTIONS::alignLeft( "pcbnew.AlignAndDistribute.alignLeft",
-        AS_GLOBAL, 0, "",
-        _( "Align to Left" ),
-        _( "Aligns selected items to the left edge" ), align_items_left_xpm );
-
-TOOL_ACTION PCB_ACTIONS::alignRight( "pcbnew.AlignAndDistribute.alignRight",
-        AS_GLOBAL, 0, "",
-        _( "Align to Right" ),
-        _( "Aligns selected items to the right edge" ), align_items_right_xpm );
-
-TOOL_ACTION PCB_ACTIONS::alignCenterX( "pcbnew.AlignAndDistribute.alignCenterX",
-        AS_GLOBAL, 0, "",
-        _( "Align to Middle" ),
-        _( "Aligns selected items to the vertical center" ), align_items_middle_xpm );
-
-TOOL_ACTION PCB_ACTIONS::alignCenterY( "pcbnew.AlignAndDistribute.alignCenterY",
-        AS_GLOBAL, 0, "",
-        _( "Align to Center" ),
-        _( "Aligns selected items to the horizontal center" ), align_items_center_xpm );
-
-TOOL_ACTION PCB_ACTIONS::distributeHorizontally( "pcbnew.AlignAndDistribute.distributeHorizontally",
-        AS_GLOBAL, 0, "",
-        _( "Distribute Horizontally" ),
-        _( "Distributes selected items along the horizontal axis" ), distribute_horizontal_xpm );
-
-TOOL_ACTION PCB_ACTIONS::distributeVertically( "pcbnew.AlignAndDistribute.distributeVertically",
-        AS_GLOBAL, 0, "",
-        _( "Distribute Vertically" ),
-        _( "Distributes selected items along the vertical axis" ), distribute_vertical_xpm );
-
 
 ALIGN_DISTRIBUTE_TOOL::ALIGN_DISTRIBUTE_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.Placement" ), m_selectionTool( NULL ), m_placementMenu( NULL ),

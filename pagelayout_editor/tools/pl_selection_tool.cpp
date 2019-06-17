@@ -44,30 +44,6 @@
 #define MAX_SELECT_ITEM_IDS 40
 
 
-// Selection tool actions
-TOOL_ACTION PL_ACTIONS::selectionActivate( "plEditor.InteractiveSelection",
-        AS_GLOBAL, 0, "", "", "",       // No description, not shown anywhere
-        nullptr, AF_ACTIVATE );
-
-TOOL_ACTION PL_ACTIONS::selectionMenu( "plEditor.InteractiveSelection.SelectionMenu",
-        AS_GLOBAL );
-
-TOOL_ACTION PL_ACTIONS::addItemToSel( "plEditor.InteractiveSelection.AddItemToSel",
-        AS_GLOBAL );
-
-TOOL_ACTION PL_ACTIONS::addItemsToSel( "plEditor.InteractiveSelection.AddItemsToSel",
-        AS_GLOBAL );
-
-TOOL_ACTION PL_ACTIONS::removeItemFromSel( "plEditor.InteractiveSelection.RemoveItemFromSel",
-        AS_GLOBAL );
-
-TOOL_ACTION PL_ACTIONS::removeItemsFromSel( "plEditor.InteractiveSelection.RemoveItemsFromSel",
-        AS_GLOBAL );
-
-TOOL_ACTION PL_ACTIONS::clearSelection( "plEditor.InteractiveSelection.ClearSelection",
-        AS_GLOBAL );
-
-
 SELECTION_CONDITION PL_CONDITIONS::Idle = [] (const SELECTION& aSelection )
 {
     return ( !aSelection.Front() || aSelection.Front()->GetEditFlags() == 0 );

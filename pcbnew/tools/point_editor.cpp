@@ -50,17 +50,6 @@ using namespace std::placeholders;
 
 #include "zone_filler.h"
 
-// Point editor
-TOOL_ACTION PCB_ACTIONS::pointEditorAddCorner( "pcbnew.PointEditor.addCorner",
-        AS_GLOBAL, 
-        WXK_INSERT, "",
-        _( "Create Corner" ), _( "Create a corner" ), add_corner_xpm );
-
-TOOL_ACTION PCB_ACTIONS::pointEditorRemoveCorner( "pcbnew.PointEditor.removeCorner",
-        AS_GLOBAL, 0, "",
-        _( "Remove Corner" ), _( "Remove corner" ), delete_xpm );
-
-
 // Few constants to avoid using bare numbers for point indices
 enum SEG_POINTS
 {

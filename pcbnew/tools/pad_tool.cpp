@@ -42,27 +42,6 @@
 #include <dialogs/dialog_enum_pads.h>
 #include "pcbnew_id.h"
 
-// Pad tools
-TOOL_ACTION PCB_ACTIONS::copyPadSettings( "pcbnew.PadTool.CopyPadSettings",
-        AS_GLOBAL, 0, "",
-        _( "Copy Pad Properties" ), _( "Copy current pad's properties" ),
-        copy_pad_settings_xpm );
-
-TOOL_ACTION PCB_ACTIONS::applyPadSettings( "pcbnew.PadTool.ApplyPadSettings",
-        AS_GLOBAL, 0, "",
-        _( "Paste Pad Properties" ), _( "Replace the current pad's properties with those copied earlier" ),
-        apply_pad_settings_xpm );
-
-TOOL_ACTION PCB_ACTIONS::pushPadSettings( "pcbnew.PadTool.PushPadSettings",
-        AS_GLOBAL, 0, "",
-        _( "Push Pad Properties..." ), _( "Copy the current pad's properties to other pads" ),
-        push_pad_settings_xpm );
-
-TOOL_ACTION PCB_ACTIONS::enumeratePads( "pcbnew.PadTool.enumeratePads",
-        AS_GLOBAL, 0, "",
-        _( "Renumber Pads..." ), _( "Renumber pads by clicking on them in the desired order" ),
-        pad_enumerate_xpm, AF_ACTIVATE );
-
 
 class PAD_CONTEXT_MENU : public ACTION_MENU
 {

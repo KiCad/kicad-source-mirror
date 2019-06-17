@@ -41,23 +41,6 @@ using namespace std::placeholders;
 #include "gerbview_selection_tool.h"
 #include "gerbview_actions.h"
 
-// Selection tool actions
-TOOL_ACTION GERBVIEW_ACTIONS::selectionActivate( "gerbview.InteractiveSelection",
-        AS_GLOBAL, 0, "",
-        "", "", NULL, AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
-
-TOOL_ACTION GERBVIEW_ACTIONS::selectionCursor( "gerbview.InteractiveSelection.Cursor",
-        AS_GLOBAL );
-
-TOOL_ACTION GERBVIEW_ACTIONS::selectItem( "gerbview.InteractiveSelection.SelectItem",
-        AS_GLOBAL );
-
-TOOL_ACTION GERBVIEW_ACTIONS::unselectItem( "gerbview.InteractiveSelection.UnselectItem",
-        AS_GLOBAL );
-
-TOOL_ACTION GERBVIEW_ACTIONS::selectionClear( "gerbview.InteractiveSelection.Clear",
-        AS_GLOBAL );
-
 
 class HIGHLIGHT_MENU : public ACTION_MENU
 {

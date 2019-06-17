@@ -66,10 +66,27 @@ TOOL_ACTION::~TOOL_ACTION()
 }
 
 
+wxString TOOL_ACTION::GetLabel() const
+{
+    return wxGetTranslation( m_label );
+}
+
+
+wxString TOOL_ACTION::GetMenuItem() const
+{
+    return AddHotkeyName( wxGetTranslation( m_label ), m_hotKey, IS_HOTKEY );
+}
+
+
+wxString TOOL_ACTION::GetDescription() const
+{
+    return wxGetTranslation( m_tooltip );
+}
+
+
 void TOOL_ACTION::SetHotKey( int aKeycode )
 {
     m_hotKey = aKeycode;
-    m_menuItem = AddHotkeyName( m_label, m_hotKey, IS_HOTKEY );
 }
 
 

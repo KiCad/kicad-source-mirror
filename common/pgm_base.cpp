@@ -75,6 +75,8 @@ static const wxChar traceEnvVars[]     = wxT( "KIENVVARS" );
  * must be called when a language name must be displayed after translation.
  * Do not change this behavior, because m_Lang_Label is also used as key in config
  */
+#undef _
+#define _(s) s
 LANGUAGE_DESCR LanguagesList[] =
 {
     { wxLANGUAGE_DEFAULT,    ID_LANGUAGE_DEFAULT,    lang_def_xpm,  _( "Default" ) },
@@ -104,6 +106,8 @@ LANGUAGE_DESCR LanguagesList[] =
     { wxLANGUAGE_LITHUANIAN, ID_LANGUAGE_LITHUANIAN, lang_lt_xpm,   _( "Lithuanian" ) },
     { 0, 0, lang_def_xpm,   "" }         // Sentinel
 };
+#undef _
+#define _(s) wxGetTranslation((s))
 
 
 FILE_HISTORY::FILE_HISTORY( size_t aMaxFiles, int aBaseFileId ) :

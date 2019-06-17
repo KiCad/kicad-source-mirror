@@ -39,29 +39,6 @@
 #include "zone_filler_tool.h"
 #include "zone_filler.h"
 
-// Zone actions
-TOOL_ACTION PCB_ACTIONS::zoneFill( "pcbnew.ZoneFiller.zoneFill",
-        AS_GLOBAL, 0, "",
-        _( "Fill" ), _( "Fill zone(s)" ),
-        fill_zone_xpm );
-
-TOOL_ACTION PCB_ACTIONS::zoneFillAll( "pcbnew.ZoneFiller.zoneFillAll",
-        AS_GLOBAL, 
-        'B', LEGACY_HK_NAME( "Fill or Refill All Zones" ),
-        _( "Fill All" ), _( "Fill all zones" ),
-        fill_zone_xpm );
-
-TOOL_ACTION PCB_ACTIONS::zoneUnfill( "pcbnew.ZoneFiller.zoneUnfill",
-        AS_GLOBAL, 0, "",
-        _( "Unfill" ), _( "Unfill zone(s)" ),
-        zone_unfill_xpm );
-
-TOOL_ACTION PCB_ACTIONS::zoneUnfillAll( "pcbnew.ZoneFiller.zoneUnfillAll",
-        AS_GLOBAL, 
-        MD_CTRL + 'B', LEGACY_HK_NAME( "Remove Filled Areas in All Zones" ),
-        _( "Unfill All" ), _( "Unfill all zones" ),
-        zone_unfill_xpm );
-
 
 ZONE_FILLER_TOOL::ZONE_FILLER_TOOL() :
     PCB_TOOL_BASE( "pcbnew.ZoneFiller" )

@@ -46,39 +46,6 @@
 #include <eeschema_id.h>
 #include <menus_helpers.h>
 
-// Selection tool actions
-TOOL_ACTION EE_ACTIONS::selectionActivate( "eeschema.InteractiveSelection",
-        AS_GLOBAL, 0, "", "", "",      // No description, not shown anywhere
-        nullptr, AF_ACTIVATE );
-
-TOOL_ACTION EE_ACTIONS::selectNode( "eeschema.InteractiveSelection.SelectNode",
-        AS_GLOBAL,
-        MD_ALT + '3', LEGACY_HK_NAME( "Select Node" ),
-        _( "Select Node" ), _( "Select a connection item under the cursor" ) );
-
-TOOL_ACTION EE_ACTIONS::selectConnection( "eeschema.InteractiveSelection.SelectConnection",
-        AS_GLOBAL,
-        MD_ALT + '4', LEGACY_HK_NAME( "Select Connection" ),
-        _( "Select Connection" ), _( "Select a complete connection" ) );
-
-TOOL_ACTION EE_ACTIONS::selectionMenu( "eeschema.InteractiveSelection.SelectionMenu",
-        AS_GLOBAL );
-
-TOOL_ACTION EE_ACTIONS::addItemToSel( "eeschema.InteractiveSelection.AddItemToSel",
-        AS_GLOBAL );
-
-TOOL_ACTION EE_ACTIONS::addItemsToSel( "eeschema.InteractiveSelection.AddItemsToSel",
-        AS_GLOBAL );
-
-TOOL_ACTION EE_ACTIONS::removeItemFromSel( "eeschema.InteractiveSelection.RemoveItemFromSel",
-        AS_GLOBAL );
-
-TOOL_ACTION EE_ACTIONS::removeItemsFromSel( "eeschema.InteractiveSelection.RemoveItemsFromSel",
-        AS_GLOBAL );
-
-TOOL_ACTION EE_ACTIONS::clearSelection( "eeschema.InteractiveSelection.ClearSelection",
-        AS_GLOBAL );
-
 
 SELECTION_CONDITION EE_CONDITIONS::Empty = [] (const SELECTION& aSelection )
 {

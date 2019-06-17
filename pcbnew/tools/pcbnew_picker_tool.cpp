@@ -30,9 +30,6 @@
 #include "tool_event_utils.h"
 #include "selection_tool.h"
 
-TOOL_ACTION PCB_ACTIONS::pickerTool( "pcbnew.InteractivePicker", 
-        AS_GLOBAL, 0, "", "", "", nullptr, AF_ACTIVATE );
-
 
 PCBNEW_PICKER_TOOL::PCBNEW_PICKER_TOOL()
     : PCB_TOOL_BASE( "pcbnew.InteractivePicker" )

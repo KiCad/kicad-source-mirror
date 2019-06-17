@@ -36,20 +36,6 @@ using namespace std::placeholders;
 #include <confirm.h>
 
 
-// Position relative tool actions
-
-TOOL_ACTION PCB_ACTIONS::positionRelative( "pcbnew.PositionRelative.positionRelative",
-        AS_GLOBAL, 
-        MD_SHIFT + 'P', LEGACY_HK_NAME( "Position Item Relative" ),
-        _( "Position Relative To..." ),
-        _( "Positions the selected item(s) by an exact amount relative to another" ),
-        move_relative_xpm );
-
-
-TOOL_ACTION PCB_ACTIONS::selectpositionRelativeItem( "pcbnew.PositionRelative.selectpositionRelativeItem",
-        AS_GLOBAL );
-
-
 POSITION_RELATIVE_TOOL::POSITION_RELATIVE_TOOL() :
     PCB_TOOL_BASE( "pcbnew.PositionRelative" ),
     m_dialog( NULL ),

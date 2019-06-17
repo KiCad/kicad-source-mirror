@@ -37,21 +37,6 @@
 #include "sch_move_tool.h"
 
 
-TOOL_ACTION EE_ACTIONS::move( "eeschema.InteractiveEdit.move",
-        AS_GLOBAL, 
-        'M', LEGACY_HK_NAME( "Move Item" ),
-        _( "Move" ), _( "Moves the selected item(s)" ), move_xpm, AF_ACTIVATE );
-
-TOOL_ACTION EE_ACTIONS::drag( "eeschema.InteractiveEdit.drag",
-        AS_GLOBAL, 
-        'G', LEGACY_HK_NAME( "Drag Item" ),
-        _( "Drag" ), _( "Drags the selected item(s)" ), move_xpm, AF_ACTIVATE );
-
-TOOL_ACTION EE_ACTIONS::moveActivate( "eeschema.InteractiveMove",
-        AS_GLOBAL, 0, "",
-        _( "Move Activate" ), "", move_xpm, AF_ACTIVATE );
-
-
 // For adding to or removing from selections
 #define QUIET_MODE true
 

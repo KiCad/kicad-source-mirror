@@ -38,24 +38,6 @@
 #include <wildcards_and_files_ext.h>
 
 
-TOOL_ACTION PL_ACTIONS::move( "plEditor.InteractiveEdit.move",
-        AS_GLOBAL,
-        'M', LEGACY_HK_NAME( "Move Item" ),
-        _( "Move" ), _( "Moves the selected item(s)" ),
-        move_xpm, AF_ACTIVATE );
-
-TOOL_ACTION PL_ACTIONS::appendImportedWorksheet( "plEditor.InteractiveEdit.appendWorksheet",
-        AS_GLOBAL, 0, "",
-        _( "Append Existing Page Layout File..." ),
-        _( "Append an existing page layout design file to current file" ),
-        import_xpm, AF_ACTIVATE );
-
-TOOL_ACTION PL_ACTIONS::deleteItemCursor( "plEditor.InteractiveEdit.deleteTool",
-        AS_GLOBAL, 0, "",
-        _( "Delete Items" ), _( "Delete clicked items" ),
-        delete_xpm, AF_ACTIVATE );
-
-
 PL_EDIT_TOOL::PL_EDIT_TOOL() :
         TOOL_INTERACTIVE( "plEditor.InteractiveEdit" ),
         m_frame( nullptr ),

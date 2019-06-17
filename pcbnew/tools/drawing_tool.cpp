@@ -63,120 +63,6 @@
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 
-// Drawing tool actions
-TOOL_ACTION PCB_ACTIONS::drawLine( "pcbnew.InteractiveDrawing.line",
-        AS_GLOBAL, 
-        MD_SHIFT + MD_CTRL + 'L', LEGACY_HK_NAME( "Draw Line" ),
-        _( "Draw Line" ), _( "Draw a line" ),
-        add_graphical_segments_xpm, AF_ACTIVATE );
-
-TOOL_ACTION PCB_ACTIONS::drawPolygon( "pcbnew.InteractiveDrawing.graphicPolygon",
-        AS_GLOBAL, 
-        MD_SHIFT + MD_CTRL + 'P', LEGACY_HK_NAME( "Draw Graphic Polygon" ),
-        _( "Draw Graphic Polygon" ), _( "Draw a graphic polygon" ),
-        add_graphical_polygon_xpm, AF_ACTIVATE );
-
-TOOL_ACTION PCB_ACTIONS::drawCircle( "pcbnew.InteractiveDrawing.circle",
-        AS_GLOBAL, 
-        MD_SHIFT + MD_CTRL + 'C', LEGACY_HK_NAME( "Draw Circle" ),
-        _( "Draw Circle" ), _( "Draw a circle" ),
-        add_circle_xpm, AF_ACTIVATE );
-
-TOOL_ACTION PCB_ACTIONS::drawArc( "pcbnew.InteractiveDrawing.arc",
-        AS_GLOBAL, 
-        MD_SHIFT + MD_CTRL + 'A', LEGACY_HK_NAME( "Draw Arc" ),
-        _( "Draw Arc" ), _( "Draw an arc" ),
-        add_arc_xpm, AF_ACTIVATE );
-
-TOOL_ACTION PCB_ACTIONS::placeText( "pcbnew.InteractiveDrawing.text",
-        AS_GLOBAL,  
-        MD_SHIFT + MD_CTRL + 'T', LEGACY_HK_NAME( "Add Text" ),
-        _( "Add Text" ), _( "Add a text item" ),
-        text_xpm, AF_ACTIVATE );
-
-TOOL_ACTION PCB_ACTIONS::drawDimension( "pcbnew.InteractiveDrawing.dimension",
-        AS_GLOBAL, 
-        MD_SHIFT + MD_CTRL + 'H', LEGACY_HK_NAME(  "Add Dimension" ),
-        _( "Add Dimension" ), _( "Add a dimension" ),
-        add_dimension_xpm, AF_ACTIVATE );
-
-TOOL_ACTION PCB_ACTIONS::drawZone( "pcbnew.InteractiveDrawing.zone",
-        AS_GLOBAL,
-#ifdef __WXOSX_MAC__
-        MD_ALT + 'Z',
-#else
-        MD_SHIFT + MD_CTRL + 'Z',
-#endif
-        LEGACY_HK_NAME( "Add Filled Zone" ),
-        _( "Add Filled Zone" ), _( "Add a filled zone" ),
-        add_zone_xpm, AF_ACTIVATE );
-
-TOOL_ACTION PCB_ACTIONS::drawVia( "pcbnew.InteractiveDrawing.via",
-        AS_GLOBAL, 
-        MD_SHIFT + MD_CTRL + 'V', LEGACY_HK_NAME( "Add Vias" ),
-        _( "Add Vias" ), _( "Add free-standing vias" ),
-        add_via_xpm, AF_ACTIVATE );
-
-TOOL_ACTION PCB_ACTIONS::drawZoneKeepout( "pcbnew.InteractiveDrawing.keepout",
-        AS_GLOBAL, 
-        MD_SHIFT + MD_CTRL + 'K', LEGACY_HK_NAME( "Add Keepout Area" ),
-        _( "Add Keepout Area" ), _( "Add a keepout area" ),
-        add_keepout_area_xpm, AF_ACTIVATE );
-
-TOOL_ACTION PCB_ACTIONS::drawZoneCutout( "pcbnew.InteractiveDrawing.zoneCutout",
-        AS_GLOBAL, 
-        MD_SHIFT + 'C', LEGACY_HK_NAME( "Add a Zone Cutout" ),
-        _( "Add a Zone Cutout" ), _( "Add a cutout area of an existing zone" ),
-        add_zone_cutout_xpm, AF_ACTIVATE );
-
-TOOL_ACTION PCB_ACTIONS::drawSimilarZone( "pcbnew.InteractiveDrawing.similarZone",
-        AS_GLOBAL, 
-        MD_SHIFT + MD_CTRL + '.', LEGACY_HK_NAME( "Add a Similar Zone" ),
-        _( "Add a Similar Zone" ), _( "Add a zone with the same settings as an existing zone" ),
-        add_zone_xpm, AF_ACTIVATE );
-
-TOOL_ACTION PCB_ACTIONS::placeImportedGraphics( "pcbnew.InteractiveDrawing.placeImportedGraphics",
-        AS_GLOBAL, 
-        MD_SHIFT + MD_CTRL + 'F', LEGACY_HK_NAME( "Place DXF" ),
-        _( "Place Imported Graphics" ), "",
-        import_vector_xpm, AF_ACTIVATE );
-
-TOOL_ACTION PCB_ACTIONS::setAnchor( "pcbnew.InteractiveDrawing.setAnchor",
-        AS_GLOBAL, 
-        MD_SHIFT + MD_CTRL + 'N', LEGACY_HK_NAME( "Place the Footprint Anchor" ),
-        _( "Place the Footprint Anchor" ), "",
-        anchor_xpm, AF_ACTIVATE );
-
-TOOL_ACTION PCB_ACTIONS::incWidth( "pcbnew.InteractiveDrawing.incWidth",
-        AS_CONTEXT, 
-        MD_CTRL + '+', LEGACY_HK_NAME( "Increase Line Width" ),
-        _( "Increase Line Width" ), _( "Increase the line width" ) );
-
-TOOL_ACTION PCB_ACTIONS::decWidth( "pcbnew.InteractiveDrawing.decWidth",
-        AS_CONTEXT, 
-        MD_CTRL + '-', LEGACY_HK_NAME( "Decrease Line Width" ),
-        _( "Decrease Line Width" ), _( "Decrease the line width" ) );
-
-TOOL_ACTION PCB_ACTIONS::arcPosture( "pcbnew.InteractiveDrawing.arcPosture",
-        AS_CONTEXT, 
-        '/', LEGACY_HK_NAME( "Switch Track Posture" ),
-        _( "Switch Arc Posture" ), _( "Switch the arc posture" ) );
-
-/*
- * Contextual actions
- */
-
-static TOOL_ACTION deleteLastPoint( "pcbnew.InteractiveDrawing.deleteLastPoint",
-        AS_CONTEXT, 
-        WXK_BACK, "",
-        _( "Delete Last Point" ), _( "Delete the last point added to the current item" ),
-        undo_xpm );
-
-static TOOL_ACTION closeZoneOutline( "pcbnew.InteractiveDrawing.closeZoneOutline",
-        AS_CONTEXT, 0, "",
-        _( "Close Zone Outline" ), _( "Close the outline of a zone in progress" ),
-        checked_ok_xpm );
-
 
 DRAWING_TOOL::DRAWING_TOOL() :
     PCB_TOOL_BASE( "pcbnew.InteractiveDrawing" ),
@@ -215,8 +101,8 @@ bool DRAWING_TOOL::Init()
     ctxMenu.AddSeparator( 1 );
 
     // tool-specific actions
-    ctxMenu.AddItem( closeZoneOutline, zoneActiveFunctor, 200 );
-    ctxMenu.AddItem( deleteLastPoint, canUndoPoint, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::closeZoneOutline, zoneActiveFunctor, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::deleteLastPoint, canUndoPoint, 200 );
 
     ctxMenu.AddSeparator( 500 );
 
@@ -1287,7 +1173,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
 
             arcManager.AddPoint( cursorPos, true );
         }
-        else if( evt->IsAction( &deleteLastPoint ) )
+        else if( evt->IsAction( &PCB_ACTIONS::deleteLastPoint ) )
         {
             arcManager.RemoveLastPoint();
         }
@@ -1484,11 +1370,11 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
         // events that lock in nodes
         else if( evt->IsClick( BUT_LEFT )
                  || evt->IsDblClick( BUT_LEFT )
-                 || evt->IsAction( &closeZoneOutline ) )
+                 || evt->IsAction( &PCB_ACTIONS::closeZoneOutline ) )
         {
             // Check if it is double click / closing line (so we have to finish the zone)
             const bool endPolygon = evt->IsDblClick( BUT_LEFT )
-                                    || evt->IsAction( &closeZoneOutline )
+                                    || evt->IsAction( &PCB_ACTIONS::closeZoneOutline )
                                     || polyGeomMgr.NewPointClosesOutline( cursorPos );
 
             if( endPolygon )
@@ -1513,7 +1399,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
             }
 
         }
-        else if( evt->IsAction( &deleteLastPoint ) )
+        else if( evt->IsAction( &PCB_ACTIONS::deleteLastPoint ) )
         {
             polyGeomMgr.DeleteLastCorner();
 

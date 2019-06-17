@@ -42,51 +42,6 @@
 #include <sch_sheet.h>
 #include <advanced_config.h>
 
-TOOL_ACTION EE_ACTIONS::drawWire( "eeschema.InteractiveDrawingLineWireBus.drawWires",
-        AS_GLOBAL, 
-        'W', LEGACY_HK_NAME( "Begin Wire" ),
-        _( "Add Wire" ), _( "Add a wire" ),
-        add_line_xpm, AF_ACTIVATE );
-
-TOOL_ACTION EE_ACTIONS::drawBus( "eeschema.InteractiveDrawingLineWireBus.drawBusses",
-        AS_GLOBAL, 
-        'B', LEGACY_HK_NAME( "Begin Bus" ),
-        _( "Add Bus" ), _( "Add a bus" ),
-        add_bus_xpm, AF_ACTIVATE );
-
-TOOL_ACTION EE_ACTIONS::unfoldBus( "eeschema.InteractiveDrawingLineWireBus.unfoldBus",
-        AS_GLOBAL, 
-        'C', LEGACY_HK_NAME( "Unfold from Bus" ),
-        _( "Unfold from Bus" ), _( "Break a wire out of a bus" ),
-        nullptr, AF_ACTIVATE );
-
-TOOL_ACTION EE_ACTIONS::drawLines( "eeschema.InteractiveDrawingLineWireBus.drawLines",
-        AS_GLOBAL, 
-        'I', LEGACY_HK_NAME( "Add Graphic PolyLine" ),
-        _( "Add Lines" ), _( "Add connected graphic lines" ),
-        add_dashed_line_xpm, AF_ACTIVATE );
-
-TOOL_ACTION EE_ACTIONS::finishLineWireOrBus( "eeschema.InteractiveDrawingLineWireBus.finish",
-        AS_GLOBAL, 
-        'K', LEGACY_HK_NAME( "End Line Wire Bus" ),
-        _( "Finish Wire or Bus" ), _( "Complete drawing at current segment" ),
-        checked_ok_xpm, AF_NONE );
-
-TOOL_ACTION EE_ACTIONS::finishWire( "eeschema.InteractiveDrawingLineWireBus.finishWire",
-        AS_GLOBAL, 0,  "",
-        _( "Finish Wire" ), _( "Complete wire with current segment" ),
-        checked_ok_xpm, AF_NONE );
-
-TOOL_ACTION EE_ACTIONS::finishBus( "eeschema.InteractiveDrawingLineWireBus.finishBus",
-        AS_GLOBAL, 0,  "",
-        _( "Finish Bus" ), _( "Complete bus with current segment" ),
-        checked_ok_xpm, AF_NONE );
-
-TOOL_ACTION EE_ACTIONS::finishLine( "eeschema.InteractiveDrawingLineWireBus.finishLine",
-        AS_GLOBAL, 0,  "",
-        _( "Finish Lines" ), _( "Complete connected lines with current segment" ),
-        checked_ok_xpm, AF_NONE );
-
 
 class BUS_UNFOLD_MENU : public ACTION_MENU
 {

@@ -45,27 +45,6 @@
 #include <project.h>
 #include <dialogs/dialog_display_info_HTML_base.h>
 
-TOOL_ACTION EE_ACTIONS::runERC( "eeschema.InspectionTool.runERC",
-        AS_GLOBAL, 0, "",
-        _( "Electrical Rules &Checker" ), _( "Perform electrical rules check" ),
-        erc_xpm );
-
-TOOL_ACTION EE_ACTIONS::runSimulation( "eeschema.EditorControl.runSimulation",
-        AS_GLOBAL, 0, "",
-        _( "Simulator..." ), _( "Simulate circuit in SPICE" ),
-        simulator_xpm );
-
-TOOL_ACTION EE_ACTIONS::showDatasheet( "eeschema.InspectionTool.showDatasheet",
-        AS_GLOBAL, 
-        'D', LEGACY_HK_NAME( "Show Datasheet" ),
-        _( "Show Datasheet" ), _( "Opens the datasheet in a browser" ),
-        datasheet_xpm );
-
-TOOL_ACTION EE_ACTIONS::showMarkerInfo( "eeschema.InspectionTool.showMarkerInfo",
-        AS_GLOBAL, 0, "",
-        _( "Show Marker Info" ), _( "Display the marker's info in a dialog" ),
-        info_xpm );
-
 
 EE_INSPECTION_TOOL::EE_INSPECTION_TOOL()
     : EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.InspectionTool" )

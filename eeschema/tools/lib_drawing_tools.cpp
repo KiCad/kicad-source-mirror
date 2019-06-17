@@ -41,48 +41,6 @@
 #include <lib_polyline.h>
 #include <lib_rectangle.h>
 
-// Drawing tool actions
-TOOL_ACTION EE_ACTIONS::placeSymbolPin( "eeschema.SymbolDrawing.placeSymbolPin",
-        AS_GLOBAL,
-        'P', LEGACY_HK_NAME( "Create Pin" ),
-        _( "Add Pin" ), _( "Add a pin" ),
-        pin_xpm, AF_ACTIVATE );
-
-TOOL_ACTION EE_ACTIONS::placeSymbolText( "eeschema.SymbolDrawing.placeSymbolText",
-        AS_GLOBAL, 0, "",
-        _( "Add Text" ), _( "Add a text item" ),
-        text_xpm, AF_ACTIVATE );
-
-TOOL_ACTION EE_ACTIONS::drawSymbolRectangle( "eeschema.SymbolDrawing.drawSymbolRectangle",
-        AS_GLOBAL, 0, "",
-        _( "Add Rectangle" ), _( "Add a rectangle" ),
-        add_rectangle_xpm, AF_ACTIVATE );
-
-TOOL_ACTION EE_ACTIONS::drawSymbolCircle( "eeschema.SymbolDrawing.drawSymbolCircle",
-        AS_GLOBAL, 0, "",
-        _( "Add Circle" ), _( "Add a circle" ),
-        add_circle_xpm, AF_ACTIVATE );
-
-TOOL_ACTION EE_ACTIONS::drawSymbolArc( "eeschema.SymbolDrawing.drawSymbolArc",
-        AS_GLOBAL, 0, "",
-        _( "Add Arc" ), _( "Add an arc" ),
-        add_arc_xpm, AF_ACTIVATE );
-
-TOOL_ACTION EE_ACTIONS::drawSymbolLines( "eeschema.SymbolDrawing.drawSymbolLines",
-        AS_GLOBAL, 0, "",
-        _( "Add Lines" ), _( "Add connected graphic lines" ),
-        add_graphical_segments_xpm, AF_ACTIVATE );
-
-TOOL_ACTION EE_ACTIONS::placeSymbolAnchor( "eeschema.SymbolDrawing.placeSymbolAnchor",
-        AS_GLOBAL, 0, "",
-        _( "Move Symbol Anchor" ), _( "Specify a new location for the symbol anchor" ),
-        anchor_xpm, AF_ACTIVATE );
-
-TOOL_ACTION EE_ACTIONS::finishDrawing( "eeschema.SymbolDrawing.finishDrawing",
-        AS_GLOBAL, 0, "",
-        _( "Finish Drawing" ), _( "Finish drawing shape" ),
-        checked_ok_xpm, AF_NONE );
-
 
 static void* g_lastPinWeakPtr;
 

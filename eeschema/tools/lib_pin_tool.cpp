@@ -33,22 +33,6 @@
 #include "lib_pin_tool.h"
 
 
-TOOL_ACTION EE_ACTIONS::pushPinLength( "eeschema.PinEditing.pushPinLength",
-        AS_GLOBAL, 0, "",
-        _( "Push Pin Length" ), _( "Copy pin length to other pins in symbol" ),
-        pin_size_to_xpm );
-
-TOOL_ACTION EE_ACTIONS::pushPinNameSize( "eeschema.PinEditing.pushPinNameSize",
-        AS_GLOBAL, 0, "",
-        _( "Push Pin Name Size" ), _( "Copy pin name size to other pins in symbol" ),
-        pin_size_to_xpm );
-
-TOOL_ACTION EE_ACTIONS::pushPinNumSize( "eeschema.PinEditing.pushPinNumSize",
-        AS_GLOBAL, 0, "",
-        _( "Push Pin Number Size" ), _( "Copy pin number size to other pins in symbol" ),
-        pin_size_to_xpm );
-
-
 static ELECTRICAL_PINTYPE g_LastPinType          = PIN_INPUT;
 static int                g_LastPinOrient        = PIN_RIGHT;
 static GRAPHIC_PINSHAPE   g_LastPinShape         = PINSHAPE_LINE;
