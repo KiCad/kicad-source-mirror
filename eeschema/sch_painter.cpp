@@ -908,9 +908,8 @@ void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
     else
         color = getRenderColor( aJct, LAYER_JUNCTION, false );
 
-    m_gal->SetIsStroke(true);
+    m_gal->SetIsStroke(false);
     m_gal->SetIsFill(true);
-    m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
     m_gal->DrawCircle( aJct->GetPosition(), SCH_JUNCTION::GetEffectiveSymbolSize() / 2.0 );
 }
