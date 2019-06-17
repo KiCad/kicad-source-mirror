@@ -57,8 +57,8 @@ void PL_EDITOR_FRAME::OnFileHistory( wxCommandEvent& event )
     {
         if( GetScreen()->IsModify() )
         {
-            if( !HandleUnsavedChanges( this,
-                                       _( "The current page layout has been modified. Save changes?" ),
+            if( !HandleUnsavedChanges( this, _( "The current page layout has been modified. "
+                                                "Save changes?" ),
                                        [&]()->bool { return saveCurrentPageLayout(); } ) )
             {
                 return;
@@ -92,7 +92,8 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
     if( ( id == wxID_NEW || id == wxID_OPEN ) && GetScreen()->IsModify() )
     {
-        if( !HandleUnsavedChanges( this, _( "The current page layout has been modified. Save changes?" ),
+        if( !HandleUnsavedChanges( this, _( "The current page layout has been modified.  "
+                                            "Save changes?" ),
                                    [&]()->bool { return saveCurrentPageLayout(); } ) )
         {
             return;

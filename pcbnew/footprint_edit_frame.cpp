@@ -451,7 +451,10 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( GetScreen()->IsModify() && GetBoard()->GetFirstModule() )
     {
-        if( !HandleUnsavedChanges( this, _( "Save changes to footprint before closing?" ),
+        wxString footprintName = GetBoard()->GetFirstModule()->GetFPID().GetLibItemName();
+        wxString msg = _( "Save changes to \"%s\" before closing? " );
+
+        if( !HandleUnsavedChanges( this, wxString::Format( msg, footprintName ),
                     [&]() -> bool { return SaveFootprint( GetBoard()->GetFirstModule() ); } ) )
         {
             Event.Veto();

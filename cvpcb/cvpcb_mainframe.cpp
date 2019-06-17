@@ -274,7 +274,7 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
     if( m_modified )
     {
         if( !HandleUnsavedChanges( this, _( "Symbol to Footprint links have been modified. "
-                                            "Save before exit?" ),
+                                            "Save changes?" ),
                                    [&]()->bool { return SaveFootprintAssociation( false ); } ) )
         {
             Event.Veto();

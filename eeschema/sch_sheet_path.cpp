@@ -154,9 +154,8 @@ wxString SCH_SHEET_PATH::Path() const
 
     s = wxT( "/" );     // This is the root path
 
-    // start at 1 to avoid the root sheet,
-    // which does not need to be added to the path
-    // it's timestamp changes anyway.
+    // Start at 1 to avoid the root sheet, which does not need to be added to the path.
+    // It's timestamp changes anyway.
     for( unsigned i = 1; i < size(); i++ )
     {
         t.Printf( _( "%8.8lX/" ), (long unsigned) at( i )->GetTimeStamp() );
@@ -171,13 +170,14 @@ wxString SCH_SHEET_PATH::PathHumanReadable() const
 {
     wxString s;
 
+    if( size() == 1 )
+        return _( "<root sheet>" );
+
     s = wxT( "/" );
 
-    // start at 1 to avoid the root sheet, as above.
+    // Start at 1 to avoid the root sheet, as above.
     for( unsigned i = 1; i < size(); i++ )
-    {
         s = s + at( i )->GetName() + wxT( "/" );
-    }
 
     return s;
 }

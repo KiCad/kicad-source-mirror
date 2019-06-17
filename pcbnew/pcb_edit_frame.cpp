@@ -463,9 +463,10 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
     {
-        wxString msg = _( "Save changes to\n\"%s\"\nbefore closing?" );
+        wxFileName fileName = GetBoard()->GetFileName();
+        wxString msg = _( "Save changes to \"%s\" before closing?" );
 
-        if( !HandleUnsavedChanges( this, wxString::Format( msg, GetBoard()->GetFileName() ),
+        if( !HandleUnsavedChanges( this, wxString::Format( msg, fileName.GetFullName() ),
                                    [&]()->bool { return Files_io_from_id( ID_SAVE_BOARD ); } ) )
         {
             Event.Veto();

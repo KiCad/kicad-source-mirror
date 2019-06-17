@@ -907,7 +907,8 @@ bool SCH_EDIT_FRAME::AskToSaveChanges()
     {
         if( screen->IsModify() )
         {
-            if( !HandleUnsavedChanges( this, _( "The current schematic has been modified.  Save changes?" ),
+            if( !HandleUnsavedChanges( this, _( "The current schematic has been modified.  "
+                                                "Save changes?" ),
                                        [&]()->bool { return SaveProject(); } ) )
             {
                 return false;

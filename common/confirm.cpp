@@ -152,21 +152,25 @@ long KIDIALOG::getStyle( KD_TYPE aType )
 }
 
 
-int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage, bool* aApplyToAll )
+int UnsavedChangesDialog( wxWindow* parent, wxString aMessage, bool* aApplyToAll )
 {
+    static bool s_apply_to_all = false;
+
     wxRichMessageDialog dlg( parent, aMessage, wxEmptyString,
                              wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING | wxCENTER );
-    dlg.ShowDetailedText( _( "If you don't save, all your changes will be permanently lost." ) );
-    dlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Save" ) ),
-                        wxMessageDialog::ButtonLabel( _( "Discard Changes" ) ) );
+    dlg.SetExtendedMessage( _( "If you don't save, all your changes will be permanently lost." ) );
+    dlg.SetYesNoLabels( _( "Save" ), _( "Discard Changes" ) );
 
     if( aApplyToAll )
-        dlg.ShowCheckBox( _( "Apply to all" ), true );
+        dlg.ShowCheckBox( _( "Apply to all" ), s_apply_to_all );
 
     int ret = dlg.ShowModal();
 
     if( aApplyToAll )
+    {
         *aApplyToAll = dlg.IsCheckBoxChecked();
+        s_apply_to_all = dlg.IsCheckBoxChecked();
+    }
 
     // Returns wxID_YES, wxID_NO, or wxID_CANCEL
     return ret;
@@ -175,14 +179,18 @@ int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage, bool* aApp
 
 int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage )
 {
+#ifdef __APPLE__
+    // wxWidgets gets the button order wrong on Mac so use the other dialog.
+    return UnsavedChangesDialog( parent, aMessage, nullptr );
+#else
     wxMessageDialog dlg( parent, aMessage, wxEmptyString,
                          wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING | wxCENTER );
     dlg.SetExtendedMessage( _( "If you don't save, all your changes will be permanently lost." ) );
-    dlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Save" ) ),
-                        wxMessageDialog::ButtonLabel( _( "Discard Changes" ) ) );
+    dlg.SetYesNoLabels( _( "Save" ), _( "Discard Changes" ) );
 
     // Returns wxID_YES, wxID_NO, or wxID_CANCEL
     return dlg.ShowModal();
+#endif
 }
 
 
@@ -191,8 +199,7 @@ bool ConfirmRevertDialog( wxWindow* parent, const wxString& aMessage )
     wxMessageDialog dlg( parent, aMessage, wxEmptyString,
                          wxOK | wxCANCEL | wxOK_DEFAULT | wxICON_WARNING | wxCENTER );
     dlg.SetExtendedMessage( _( "Your current changes will be permanently lost." ) );
-    dlg.SetOKCancelLabels( wxMessageDialog::ButtonLabel( _( "Revert" ) ),
-                           wxMessageDialog::ButtonLabel( _( "Cancel" ) ) );
+    dlg.SetOKCancelLabels( _( "Revert" ), _( "Cancel" ) );
 
     return dlg.ShowModal() == wxID_OK;
 }
@@ -217,8 +224,7 @@ int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxStrin
     wxRichMessageDialog dlg( aParent, aMessage, wxEmptyString,
                              wxOK | wxCANCEL | wxOK_DEFAULT | wxICON_WARNING | wxCENTER );
     dlg.ShowDetailedText( _( "If you don't save, all your changes will be permanently lost." ) );
-    dlg.SetOKCancelLabels( wxMessageDialog::ButtonLabel( aOKLabel ),
-                           wxMessageDialog::ButtonLabel( aCancelLabel ) );
+    dlg.SetOKCancelLabels( aOKLabel, aCancelLabel );
 
     if( aApplyToAll )
         dlg.ShowCheckBox( _( "Apply to all" ), true );
@@ -241,7 +247,8 @@ void DisplayError( wxWindow* parent, const wxString& text, int displaytime )
     int icon = displaytime > 0 ? wxICON_INFORMATION : wxICON_ERROR;
 
     dialog = new wxMessageDialog( parent, text, _( "Warning" ),
-                                      wxOK | wxCENTRE | wxRESIZE_BORDER | icon | wxSTAY_ON_TOP );
+                                  wxOK | wxCENTRE | wxRESIZE_BORDER |
+                                  icon | wxSTAY_ON_TOP );
 
     dialog->ShowModal();
     dialog->Destroy();

@@ -104,8 +104,8 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
     {
         wxSafeYield( this, true );      // Allow frame to come to front before showing warning.
 
-        if( !HandleUnsavedChanges( this,
-                    _( "The current footprint has been modified.  Save changes?" ),
+        if( !HandleUnsavedChanges( this, _( "The current footprint has been modified.  "
+                                            "Save changes?" ),
                     [&]() -> bool { return SaveFootprint( GetBoard()->Modules().front() ); } ) )
         {
             return false;

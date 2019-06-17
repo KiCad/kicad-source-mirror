@@ -517,10 +517,10 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 
     if( sheetList.IsModified() )
     {
-        wxString fileName = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
-        wxString msg = _( "Save changes to\n\"%s\"\nbefore closing?" );
+        wxFileName fileName = g_RootSheet->GetScreen()->GetFileName();
+        wxString msg = _( "Save changes to \"%s\" before closing?" );
 
-        if( !HandleUnsavedChanges( this, wxString::Format( msg, fileName ),
+        if( !HandleUnsavedChanges( this, wxString::Format( msg, fileName.GetFullName() ),
                                    [&]()->bool { return SaveProject(); } ) )
         {
             aEvent.Veto();

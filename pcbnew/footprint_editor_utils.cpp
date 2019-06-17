@@ -206,8 +206,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
             {
-                if( !HandleUnsavedChanges( this,
-                            _( "The current footprint has been modified.  Save changes?" ),
+                if( !HandleUnsavedChanges( this, _( "The current footprint has been modified.  "
+                                                    "Save changes?" ),
                             [&]() -> bool {
                                 return SaveFootprint( GetBoard()->GetFirstModule() );
                             } ) )

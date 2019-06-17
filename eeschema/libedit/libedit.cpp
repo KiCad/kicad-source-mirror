@@ -148,7 +148,8 @@ bool LIB_EDIT_FRAME::LoadComponentAndSelectLib( const LIB_ID& aLibId, int aUnit,
 
     if( GetScreen()->IsModify() && GetCurPart() )
     {
-        if( !HandleUnsavedChanges( this, _( "The current symbol has been modified.  Save changes?" ),
+        if( !HandleUnsavedChanges( this, _( "The current symbol has been modified.  "
+                                            "Save changes?" ),
                                    [&]()->bool { return saveCurrentPart(); } ) )
         {
             return false;

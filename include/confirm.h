@@ -95,7 +95,7 @@ bool HandleUnsavedChanges( wxWindow* aParent, const wxString& aMessage,
  *                      written back to the bool.
  * @return wxID_YES, wxID_CANCEL, wxID_NO.
  */
-int UnsavedChangesDialog( wxWindow* aParent, const wxString& aMessage, bool* aApplyToAll );
+int UnsavedChangesDialog( wxWindow* aParent, wxString aMessage, bool* aApplyToAll );
 
 int UnsavedChangesDialog( wxWindow* aParent, const wxString& aMessage );
 
