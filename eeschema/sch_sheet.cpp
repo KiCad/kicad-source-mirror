@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -927,7 +927,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     aPlotter->SetColor( GetLayerColor( LAYER_SHEETNAME ) );
 
     bool italic = false;
-    aPlotter->Text( pos_sheetname, txtcolor, Text, name_orientation, size,
+    aPlotter->Text( pos_sheetname, txtcolor, wxT( "Sheet: " ) + Text, name_orientation, size,
                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM,
                     thickness, italic, false );
 
@@ -939,7 +939,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
 
     aPlotter->SetColor( GetLayerColor( LAYER_SHEETFILENAME ) );
 
-    aPlotter->Text( pos_filename, txtcolor, Text, name_orientation, size,
+    aPlotter->Text( pos_filename, txtcolor, wxT( "File: " ) + Text, name_orientation, size,
                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP,
                     thickness, italic, false );
 
