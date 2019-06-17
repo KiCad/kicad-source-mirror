@@ -54,7 +54,7 @@ public:
     static void SetSymbolSize( int aSize ) { m_symbolSize = aSize; }
 
     // Return the size the symbol should be drawn at.  This is GetSymbolSize() clamped to be
-    // no less than 1.5 X the current wire width.
+    // no less than the current wire width.
     static int GetEffectiveSymbolSize();
 
     void SwapData( SCH_ITEM* aItem ) override;

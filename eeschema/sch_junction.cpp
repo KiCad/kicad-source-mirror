@@ -45,7 +45,7 @@ int SCH_JUNCTION::m_symbolSize = 40;    // Default diameter of the junction symb
 
 int SCH_JUNCTION::GetEffectiveSymbolSize()
 {
-    return std::max( KiROUND( GetDefaultLineThickness() * 1.5 ), m_symbolSize );
+    return std::max( GetDefaultLineThickness(), m_symbolSize );
 }
 
 
