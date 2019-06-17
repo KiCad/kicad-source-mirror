@@ -572,6 +572,10 @@ void D_PAD::TransformShapeWithClearanceToPolygon(
 {
     wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for pads." );
 
+    // minimal segment count to approximate a circle to create the polygonal pad shape
+    // This minimal value is mainly for very small pads, like SM0402.
+    // Most of time pads are using the segment count given by aError value.
+    const int pad_min_seg_per_circle_count = 16;
     double  angle = m_Orient;
     int     dx = (m_Size.x / 2) + aClearanceValue;
     int     dy = (m_Size.y / 2) + aClearanceValue;
@@ -625,7 +629,8 @@ void D_PAD::TransformShapeWithClearanceToPolygon(
             outline.Append( corners[ii].x, corners[ii].y );
         }
 
-        int    numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, 360.0 ), 6 );
+        int    numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, 360.0 ),
+                                   pad_min_seg_per_circle_count );
         double correction = GetCircletoPolyCorrectionFactor( numSegs );
 
         int rounding_radius = KiROUND( aClearanceValue * correction );
@@ -639,7 +644,8 @@ void D_PAD::TransformShapeWithClearanceToPolygon(
     case PAD_SHAPE_ROUNDRECT:
     {
         int    radius = GetRoundRectCornerRadius() + aClearanceValue;
-        int    numSegs = std::max( GetArcToSegmentCount( radius, aError, 360.0 ), 6 );
+        int    numSegs = std::max( GetArcToSegmentCount( radius, aError, 360.0 ),
+                                   pad_min_seg_per_circle_count );
         double correction = GetCircletoPolyCorrectionFactor( numSegs );
         int    clearance = KiROUND( aClearanceValue * correction );
         int    rounding_radius = KiROUND( radius * correction );
@@ -660,7 +666,8 @@ void D_PAD::TransformShapeWithClearanceToPolygon(
 
     case PAD_SHAPE_CUSTOM:
     {
-        int    numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, 360.0 ), 6 );
+        int    numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, 360.0 ),
+                                                         pad_min_seg_per_circle_count );
         double correction = GetCircletoPolyCorrectionFactor( numSegs );
         int    clearance = KiROUND( aClearanceValue * correction );
         SHAPE_POLY_SET outline;     // Will contain the corners in board coordinates
@@ -844,7 +851,8 @@ void CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
             // The pattern roughtly is a 90 deg arc pie
             std::vector <wxPoint> corners_buffer;
 
-            int    numSegs = std::max( GetArcToSegmentCount( dx + aThermalGap, aError, 360.0 ), 6 );
+            int    numSegs = std::max( GetArcToSegmentCount( dx + aThermalGap, aError, 360.0 ),
+                                                             8 );
             double correction = GetCircletoPolyCorrectionFactor( numSegs );
             double delta = 3600.0 / numSegs;
 
@@ -902,7 +910,7 @@ void CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
                 for( unsigned ii = 0; ii < corners_buffer.size(); ii++ )
                 {
                     corner = corners_buffer[ii];
-                    RotatePoint( &corner, th_angle + angle_pad );          // Rotate by segment angle and pad orientation
+                    RotatePoint( &corner, th_angle + angle_pad );   // Rotate by segment angle and pad orientation
                     corner += padShapePos;
                     aCornerBuffer.Append( corner.x, corner.y );
                 }
@@ -915,10 +923,10 @@ void CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
     case PAD_SHAPE_OVAL:
         {
             // Oval pad support along the lines of round and rectangular pads
-            std::vector <wxPoint> corners_buffer;               // Polygon buffer as vector
+            std::vector <wxPoint> corners_buffer;       // Polygon buffer as vector
 
-            dx = (aPad.GetSize().x / 2) + aThermalGap;     // Cutout radius x
-            dy = (aPad.GetSize().y / 2) + aThermalGap;     // Cutout radius y
+            dx = (aPad.GetSize().x / 2) + aThermalGap;  // Cutout radius x
+            dy = (aPad.GetSize().y / 2) + aThermalGap;  // Cutout radius y
 
             wxPoint shape_offset;
 

@@ -228,7 +228,7 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                   const wxPoint& aPosition, const wxSize& aSize,
                                   double aRotation, int aCornerRadius,
                                   double aChamferRatio, int aChamferCorners,
-                                  int aError )
+                                  int aApproxErrorMax, int aMinSegPerCircleCount )
 {
     // Build the basic shape in orientation 0.0, position 0,0 for chamfered corners
     // or in actual position/orientation for round rect only
@@ -243,7 +243,8 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     for( int ii = 0; ii < 4; ++ii )
         outline.Append( corners[ii].x, corners[ii].y );
 
-    int     numSegs = std::max( GetArcToSegmentCount( aCornerRadius, aError, 360.0 ), 6 );
+    int     numSegs = std::max( GetArcToSegmentCount( aCornerRadius, aApproxErrorMax, 360.0 ),
+                                                      aMinSegPerCircleCount );
     outline.Inflate( aCornerRadius, numSegs );
 
     if( aChamferCorners == RECT_NO_CHAMFER )      // no chamfer
