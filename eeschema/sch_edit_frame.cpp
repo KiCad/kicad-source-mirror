@@ -742,15 +742,25 @@ wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
     wxString filename = fn.GetName();
     wxString sheetFullName =  m_CurrentSheet->PathHumanReadable();
 
-    // Remove the last '/' of the path human readable
-    // (and for the root sheet, make sheetFullName empty):
-    sheetFullName.RemoveLast();
+    if( sheetFullName == "<root sheet>" )
+    {
+        // For the root sheet, use root schematic file name.
+        sheetFullName.clear();
+    }
+    else
+    {
+        if( filename.Last() != '-' || filename.Last() != '_' )
+            filename += '-';
 
-    sheetFullName.Trim( true );
-    sheetFullName.Trim( false );
+        // Remove the first and last '/' of the path human readable
+        sheetFullName.RemoveLast();
+        sheetFullName.Remove( 0, 1 );
+        sheetFullName.Trim( true );
+        sheetFullName.Trim( false );
 
-    // Convert path human readable separator to '-'
-    sheetFullName.Replace( wxT( "/" ), wxT( "-" ) );
+        // Convert path human readable separator to '-'
+        sheetFullName.Replace( "/", "-" );
+    }
 
     if( ( filename.Len() + sheetFullName.Len() ) < FN_LEN_MAX )
         filename += sheetFullName;
