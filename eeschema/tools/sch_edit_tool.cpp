@@ -317,9 +317,27 @@ bool SCH_EDIT_TOOL::Init()
 }
 
 
+const KICAD_T rotatableItems[] = {
+    SCH_TEXT_T,
+    SCH_LABEL_T,
+    SCH_GLOBAL_LABEL_T,
+    SCH_HIER_LABEL_T,
+    SCH_FIELD_T,
+    SCH_COMPONENT_T,
+    SCH_SHEET_PIN_T,
+    SCH_SHEET_T,
+    SCH_BITMAP_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_BUS_WIRE_ENTRY_T,
+    SCH_LINE_T,
+    SCH_JUNCTION_T,
+    EOT
+};
+
+
 int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::RotatableItems );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( rotatableItems );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -489,7 +507,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::RotatableItems );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( rotatableItems );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -669,24 +687,25 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 }
 
 
+static KICAD_T duplicatableItems[] =
+{
+    SCH_JUNCTION_T,
+    SCH_LINE_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_BUS_WIRE_ENTRY_T,
+    SCH_TEXT_T,
+    SCH_LABEL_T,
+    SCH_GLOBAL_LABEL_T,
+    SCH_HIER_LABEL_T,
+    SCH_NO_CONNECT_T,
+    SCH_SHEET_T,
+    SCH_COMPONENT_T,
+    EOT
+};
+
+
 int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 {
-    static KICAD_T duplicatableItems[] =
-    {
-        SCH_JUNCTION_T,
-        SCH_LINE_T,
-        SCH_BUS_BUS_ENTRY_T,
-        SCH_BUS_WIRE_ENTRY_T,
-        SCH_TEXT_T,
-        SCH_LABEL_T,
-        SCH_GLOBAL_LABEL_T,
-        SCH_HIER_LABEL_T,
-        SCH_NO_CONNECT_T,
-        SCH_SHEET_T,
-        SCH_COMPONENT_T,
-        EOT
-    };
-
     EE_SELECTION& selection = m_selectionTool->RequestSelection( duplicatableItems );
 
     if( selection.GetSize() == 0 )
@@ -827,10 +846,29 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 }
 
 
+static KICAD_T deletableItems[] =
+{
+    SCH_MARKER_T,
+    SCH_JUNCTION_T,
+    SCH_LINE_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_BUS_WIRE_ENTRY_T,
+    SCH_TEXT_T,
+    SCH_LABEL_T,
+    SCH_GLOBAL_LABEL_T,
+    SCH_HIER_LABEL_T,
+    SCH_NO_CONNECT_T,
+    SCH_SHEET_T,
+    SCH_SHEET_PIN_T,
+    SCH_COMPONENT_T,
+    EOT
+};
+
+
 int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 {
     SCH_SCREEN*  screen = m_frame->GetScreen();
-    auto         items = m_selectionTool->RequestSelection().GetItems();
+    auto         items = m_selectionTool->RequestSelection( deletableItems ).GetItems();
     bool         appendToUndo = false;
 
     if( items.empty() )
@@ -890,44 +928,72 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 }
 
 
-static bool deleteItem( SCH_BASE_FRAME* aFrame, const VECTOR2D& aPosition )
-{
-    EE_SELECTION_TOOL* selectionTool = aFrame->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
-    wxCHECK( selectionTool, false );
-
-    aFrame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
-
-    EDA_ITEM* item = selectionTool->SelectPoint( aPosition );
-    SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
-
-    if( sch_item && sch_item->IsLocked() )
-    {
-        STATUS_TEXT_POPUP statusPopup( aFrame );
-        statusPopup.SetText( _( "Item locked." ) );
-        statusPopup.PopupFor( 2000 );
-        statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-        return true;
-    }
-
-    if( item )
-        aFrame->GetToolManager()->RunAction( EE_ACTIONS::doDelete, true );
-
-    return true;
-}
+#define HITTEST_THRESHOLD_PIXELS 5
 
 
 int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
     m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
 
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     wxCHECK( picker, 0 );
+    m_pickerItem = nullptr;
 
-    picker->SetClickHandler( std::bind( deleteItem, m_frame, std::placeholders::_1 ) );
-    picker->SetCancelHandler( [this]() { m_frame->ClearToolStack(); } );
+    picker->SetClickHandler( [this] ( const VECTOR2D& aPosition ) -> bool {
+        if( m_pickerItem )
+        {
+            SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( m_pickerItem );
+
+            if( sch_item && sch_item->IsLocked() )
+            {
+                STATUS_TEXT_POPUP statusPopup( m_frame );
+                statusPopup.SetText( _( "Item locked." ) );
+                statusPopup.PopupFor( 2000 );
+                statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+                return true;
+            }
+
+            EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+            selectionTool->AddItemToSel( m_pickerItem, true );
+            m_toolMgr->RunAction( EE_ACTIONS::doDelete, true );
+            m_pickerItem = nullptr;
+        }
+
+        return true;
+    } );
+
+    picker->SetMotionHandler( [this] ( const VECTOR2D& aPos ) {
+        EE_COLLECTOR collector;
+        collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+        collector.Collect( m_frame->GetScreen()->GetDrawItems(), deletableItems, (wxPoint) aPos );
+        EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
+
+        if( m_pickerItem != item )
+        {
+            EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+
+            if( m_pickerItem )
+                selectionTool->UnbrightenItem( m_pickerItem );
+
+            m_pickerItem = item;
+
+            if( m_pickerItem )
+                selectionTool->BrightenItem( m_pickerItem );
+        }
+    } );
+
+    picker->SetCancelHandler( [this] () {
+        m_frame->ClearToolStack();
+    } );
+
     picker->Activate();
     Wait();
+
+    if( m_pickerItem )
+        m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
 
     return 0;
 }

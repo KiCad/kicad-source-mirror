@@ -36,7 +36,7 @@ class SCH_EDIT_TOOL : public EE_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
     SCH_EDIT_TOOL();
-    ~SCH_EDIT_TOOL() { }
+    ~SCH_EDIT_TOOL() override { }
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
@@ -69,6 +69,9 @@ public:
 private:
     ///> Sets up handlers for various events.
     void setTransitions() override;
+
+private:
+    EDA_ITEM* m_pickerItem;
 };
 
 #endif //KICAD_SCH_EDIT_TOOL_H

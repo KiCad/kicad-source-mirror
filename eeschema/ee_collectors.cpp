@@ -54,24 +54,6 @@ const KICAD_T EE_COLLECTOR::EditableItems[] = {
 };
 
 
-const KICAD_T EE_COLLECTOR::RotatableItems[] = {
-    SCH_TEXT_T,
-    SCH_LABEL_T,
-    SCH_GLOBAL_LABEL_T,
-    SCH_HIER_LABEL_T,
-    SCH_FIELD_T,
-    SCH_COMPONENT_T,
-    SCH_SHEET_PIN_T,
-    SCH_SHEET_T,
-    SCH_BITMAP_T,
-    SCH_BUS_BUS_ENTRY_T,
-    SCH_BUS_WIRE_ENTRY_T,
-    SCH_LINE_T,
-    SCH_JUNCTION_T,
-    EOT
-};
-
-
 const KICAD_T EE_COLLECTOR::ComponentsOnly[] = {
     SCH_COMPONENT_T,
     EOT

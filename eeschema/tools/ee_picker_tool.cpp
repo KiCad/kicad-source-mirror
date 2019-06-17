@@ -38,25 +38,23 @@ EE_PICKER_TOOL::EE_PICKER_TOOL()
 int EE_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    int finalize_state = WAIT_CANCEL;
+    int                   finalize_state = WAIT_CANCEL;
 
     setControls();
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        VECTOR2I cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        VECTOR2D cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( evt->IsClick( BUT_LEFT ) )
         {
             bool getNext = false;
 
-            m_picked = cursorPos;
-
             if( m_clickHandler )
             {
                 try
                 {
-                    getNext = (*m_clickHandler)( *m_picked );
+                    getNext = (*m_clickHandler)( cursorPos );
                 }
                 catch( std::exception& e )
                 {
@@ -73,6 +71,21 @@ int EE_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
             }
             else
                 setControls();
+        }
+
+        else if( evt->IsMotion() )
+        {
+            if( m_motionHandler )
+            {
+                try
+                {
+                    (*m_motionHandler)( cursorPos );
+                }
+                catch( std::exception& e )
+                {
+                    std::cerr << "EE_PICKER_TOOL motion handler error: " << e.what() << std::endl;
+                }
+            }
         }
 
         else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
@@ -135,7 +148,6 @@ void EE_PICKER_TOOL::resetPicker()
     m_cursorCapture = false;
     m_autoPanning = false;
 
-    m_picked = NULLOPT;
     m_clickHandler = NULLOPT;
     m_cancelHandler = NULLOPT;
     m_finalizeHandler = NULLOPT;
