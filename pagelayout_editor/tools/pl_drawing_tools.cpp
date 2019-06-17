@@ -108,11 +108,11 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
     Activate();
 
     // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             if( item )
             {
@@ -230,11 +230,11 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     WS_DRAW_ITEM_BASE* item = nullptr;
 
     // Main loop: keep receiving events
-    while( auto evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
 

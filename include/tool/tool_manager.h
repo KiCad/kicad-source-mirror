@@ -318,8 +318,7 @@ public:
      * The pause/resume operation is done through COROUTINE object.
      * Called only from coroutines.
      */
-    OPT<TOOL_EVENT> ScheduleWait( TOOL_BASE* aTool,
-            const TOOL_EVENT_LIST& aConditions );
+    TOOL_EVENT* ScheduleWait( TOOL_BASE* aTool, const TOOL_EVENT_LIST& aConditions );
 
     /**
      * Sets behaviour of the tool's context popup menu.
@@ -331,8 +330,7 @@ public:
      *  CMENU_OFF: menu is disabled.
      * May be called from a coroutine context.
      */
-    void ScheduleContextMenu( TOOL_BASE* aTool, ACTION_MENU* aMenu,
-            CONTEXT_MENU_TRIGGER aTrigger );
+    void ScheduleContextMenu( TOOL_BASE* aTool, ACTION_MENU* aMenu, CONTEXT_MENU_TRIGGER aTrigger );
 
     /**
      * Stores an information to the system clipboard.

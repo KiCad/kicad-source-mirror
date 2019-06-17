@@ -533,7 +533,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
     bool reselect = false;
 
     // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
@@ -713,7 +713,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     m_frame->SetToolID( ID_PCB_TARGET_BUTT, wxCURSOR_PENCIL, _( "Add layer alignment target" ) );
 
     // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );

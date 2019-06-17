@@ -187,7 +187,7 @@ void LENGTH_TUNER_TOOL::performTuning()
     m_router->Move( end, NULL );
     updateStatusPopup( statusPopup );
 
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             break;
@@ -293,7 +293,7 @@ int LENGTH_TUNER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
     SetContextMenu( ctxMenu.get() );
 
     // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {

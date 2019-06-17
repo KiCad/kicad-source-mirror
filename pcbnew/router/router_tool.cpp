@@ -757,7 +757,7 @@ void ROUTER_TOOL::performRouting()
     if( !prepareInteractive() )
         return;
 
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         // Don't crash if we missed an operation that cancelled routing.
         wxCHECK2( m_router->RoutingInProgress(), break );
@@ -914,7 +914,7 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
     SetContextMenu( ctxMenu.get() );
 
     // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
@@ -1000,7 +1000,7 @@ void ROUTER_TOOL::performDragging( int aMode )
     m_gridHelper->SetAuxAxes( true, m_startSnapPoint, true );
     frame()->UndoRedoBlock( true );
 
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         ctls->ForceCursorPosition( false );
 
@@ -1153,7 +1153,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     controls()->SetAutoPan( true );
     frame()->UndoRedoBlock( true );
 
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         if( evt->IsCancel() )
         {

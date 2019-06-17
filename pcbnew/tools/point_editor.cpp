@@ -318,7 +318,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     view->Add( m_editPoints.get() );
     setEditedPoint( nullptr );
     m_refill = false;
-    bool modified = false;
+    bool inDrag = false;
 
     BOARD_COMMIT commit( editFrame );
     LSET snapLayers = item->GetLayerSet();
@@ -327,34 +327,34 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         snapLayers = LSET::AllLayersMask();
 
     // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
-        if( !m_editPoints || TOOL_EVT_UTILS::IsSelectionEvent( evt.get() ) )
+        if( !m_editPoints || TOOL_EVT_UTILS::IsSelectionEvent( *evt ) )
             break;
 
-        if ( !modified )
+        if ( !inDrag )
             updateEditedPoint( *evt );
 
         if( evt->IsDrag( BUT_LEFT ) && m_editedPoint )
         {
-            if( !modified )
+            if( !inDrag )
             {
                 commit.StageItems( selection, CHT_MODIFY );
 
                 controls->ForceCursorPosition( false );
                 m_original = *m_editedPoint;    // Save the original position
                 controls->SetAutoPan( true );
-                modified = true;
+                inDrag = true;
                 grid.SetAuxAxes( true, m_original.GetPosition(), true );
             }
 
             //TODO: unify the constraints to solve simultaneously instead of sequentially
             m_editedPoint->SetPosition( grid.BestSnapAnchor( evt->Position(),
-                    snapLayers, { item } ) );
+                                                             snapLayers, { item } ) );
             bool enableAltConstraint = !!evt->Modifier( MD_CTRL );
 
             if( enableAltConstraint != (bool) m_altConstraint )  // alternative constraint
@@ -366,28 +366,25 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 m_editedPoint->ApplyConstraint();
 
             m_editedPoint->SetPosition( grid.BestSnapAnchor( m_editedPoint->GetPosition(),
-                    snapLayers, { item } ) );
+                                                             snapLayers, { item } ) );
 
             updateItem();
             updatePoints();
         }
 
-        else if( evt->IsMouseUp( BUT_LEFT ) )
+        else if( inDrag && evt->IsMouseUp( BUT_LEFT ) )
         {
             controls->SetAutoPan( false );
             setAltConstraint( false );
 
-            if( modified )
-            {
-                commit.Push( _( "Drag a corner" ) );
-                modified = false;
-                m_refill = true;
-            }
+            commit.Push( _( "Drag a corner" ) );
+            inDrag = false;
+            m_refill = true;
         }
 
         else if( evt->IsCancel() )
         {
-            if( modified )      // Restore the last change
+            if( inDrag )      // Restore the last change
                 commit.Revert();
 
             // ESC should clear selection along with edit points

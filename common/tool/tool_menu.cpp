@@ -72,7 +72,3 @@ void TOOL_MENU::ShowContextMenu()
 }
 
 
-void TOOL_MENU::CloseContextMenu( OPT_TOOL_EVENT& evt )
-{
-}
-

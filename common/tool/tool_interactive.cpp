@@ -54,7 +54,7 @@ void TOOL_INTERACTIVE::Activate()
 }
 
 
-OPT_TOOL_EVENT TOOL_INTERACTIVE::Wait( const TOOL_EVENT_LIST& aEventList )
+TOOL_EVENT* TOOL_INTERACTIVE::Wait( const TOOL_EVENT_LIST& aEventList )
 {
     return m_toolMgr->ScheduleWait( this, aEventList );
 }

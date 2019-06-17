@@ -90,7 +90,7 @@ public:
      * Suspends execution of the tool until an event specified in aEventList arrives.
      * No parameters means waiting for any event.
      */
-    OPT_TOOL_EVENT Wait( const TOOL_EVENT_LIST& aEventList = TOOL_EVENT( TC_ANY, TA_ANY ) );
+    TOOL_EVENT* Wait( const TOOL_EVENT_LIST& aEventList = TOOL_EVENT( TC_ANY, TA_ANY ) );
 
     /** functions below are not yet implemented - their interface may change */
     /*template <class Parameters, class ReturnValue>

@@ -313,7 +313,7 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 
         SetContextMenu( &unfoldMenu, CMENU_NOW );
 
-        while( OPT_TOOL_EVENT evt = Wait() )
+        while( TOOL_EVENT* evt = Wait() )
         {
             if( evt->Action() == TA_CHOICE_MENU_CHOICE )
             {
@@ -495,14 +495,14 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool 
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         cursorPos = (wxPoint) getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         //------------------------------------------------------------------------
         // Handle cancel:
         //
-        if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             if( aSegment || m_busUnfold.in_progress )
             {

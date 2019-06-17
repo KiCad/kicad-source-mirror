@@ -271,9 +271,9 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     bool modified = false;
 
     // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
-        if( !m_editPoints || TOOL_EVT_UTILS::IsSelectionEvent( evt.get() ) )
+        if( !m_editPoints || TOOL_EVT_UTILS::IsSelectionEvent( *evt ) )
             break;
 
         if ( !inDrag )
@@ -295,7 +295,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
             updatePoints();
         }
 
-        else if( evt->IsMouseUp( BUT_LEFT ) )
+        else if( inDrag && evt->IsMouseUp( BUT_LEFT ) )
         {
             controls->SetAutoPan( false );
             inDrag = false;

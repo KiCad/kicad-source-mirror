@@ -292,7 +292,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     };
 
     // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         // Should selected items be added to the current selection or
         // become the new selection (discarding previously selected items)
@@ -415,11 +415,6 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->Action() == TA_UNDO_REDO_PRE )
         {
             ClearSelection();
-        }
-
-        else if( evt->Action() == TA_CHOICE_MENU_CLOSED )
-        {
-            m_menu.CloseContextMenu( evt );
         }
 
         else
@@ -656,7 +651,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
     KIGFX::PREVIEW::SELECTION_AREA area;
     view->Add( &area );
 
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
         {
@@ -987,7 +982,7 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
     menu.DisplayTitle( true );
     SetContextMenu( &menu, CMENU_NOW );
 
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         if( evt->Action() == TA_CHOICE_MENU_UPDATE )
         {
@@ -1004,7 +999,7 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
             }
             else
             {
-                current = NULL;
+                current = nullptr;
             }
         }
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
@@ -1018,7 +1013,7 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
             if( id && ( *id > 0 ) )
                 current = ( *aCollector )[*id - 1];
             else
-                current = NULL;
+                current = nullptr;
 
             break;
         }

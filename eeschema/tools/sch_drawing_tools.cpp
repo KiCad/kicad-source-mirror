@@ -117,11 +117,11 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
         m_toolMgr->RunAction( EE_ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             if( component )
             {
@@ -254,11 +254,11 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             if( image )
             {
@@ -408,11 +408,11 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         cursorPos = (wxPoint) getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             if( !evt->IsActivate() && !immediateMode )
                 m_frame->PopTool();
@@ -508,11 +508,11 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             if( item )
             {
@@ -621,7 +621,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
-        else if( item && TOOL_EVT_UTILS::IsSelectionEvent( evt.get() ) )
+        else if( item && TOOL_EVT_UTILS::IsSelectionEvent( *evt ) )
         {
             // This happens if our text was replaced out from under us by ConvertTextType()
             EE_SELECTION& selection = m_selectionTool->GetSelection();
@@ -644,8 +644,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         }
 
         // Enable autopanning and cursor capture only when there is a module to be placed
-        getViewControls()->SetAutoPan( !!item );
-        getViewControls()->CaptureCursor( !!item );
+        getViewControls()->SetAutoPan( item != nullptr );
+        getViewControls()->CaptureCursor( item != nullptr );
     }
 
     if( immediateMode )
@@ -675,11 +675,11 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
-    while( auto evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
             m_view->ClearPreview();

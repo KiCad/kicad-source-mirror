@@ -42,7 +42,7 @@ int EE_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     setControls();
 
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         VECTOR2I cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
@@ -75,7 +75,7 @@ int EE_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 setControls();
         }
 
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             if( m_cancelHandler )
             {

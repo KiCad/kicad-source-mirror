@@ -54,7 +54,7 @@ void CVPCB_SELECTION_TOOL::Reset( RESET_REASON aReason )
 int CVPCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         // This is kind of hacky: activate RMB drag on any event.
         // There doesn't seem to be any other good way to tell when another tool
@@ -86,11 +86,6 @@ int CVPCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO_PRE )
         {
             clearSelection();
-        }
-
-        else if( evt->Action() == TA_CHOICE_MENU_CLOSED )
-        {
-            m_menu.CloseContextMenu( evt );
         }
 
         else

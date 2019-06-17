@@ -188,7 +188,7 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
 int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         // Should selected items be added to the current selection or
         // become the new selection (discarding previously selected items)
@@ -291,11 +291,6 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             clearSelection();
             m_toolMgr->RunAction( PCB_ACTIONS::clearHighlight, true );
-        }
-
-        else if( evt->Action() == TA_CHOICE_MENU_CLOSED )
-        {
-            m_menu.CloseContextMenu( evt );
         }
 
         else
@@ -528,7 +523,7 @@ bool SELECTION_TOOL::selectMultiple()
     KIGFX::PREVIEW::SELECTION_AREA area;
     view->Add( &area );
 
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
@@ -1358,7 +1353,7 @@ bool SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxStr
     menu.DisplayTitle( true );
     SetContextMenu( &menu, CMENU_NOW );
 
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         if( evt->Action() == TA_CHOICE_MENU_UPDATE )
         {

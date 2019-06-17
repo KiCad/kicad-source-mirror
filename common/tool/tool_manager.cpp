@@ -470,9 +470,9 @@ int TOOL_MANAGER::GetPriority( int aToolId ) const
 {
     int priority = 0;
 
-    for( auto it = m_activeTools.begin(), itEnd = m_activeTools.end(); it != itEnd; ++it )
+    for( TOOL_ID tool : m_activeTools )
     {
-        if( *it == aToolId )
+        if( tool == aToolId )
             return priority;
 
         ++priority;
@@ -505,7 +505,7 @@ void TOOL_MANAGER::RunMainStack( TOOL_BASE* aTool, std::function<void()> aFunc )
 }
 
 
-OPT<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool, const TOOL_EVENT_LIST& aConditions )
+TOOL_EVENT* TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool, const TOOL_EVENT_LIST& aConditions )
 {
     TOOL_STATE* st = m_toolState[aTool];
 
@@ -519,7 +519,7 @@ OPT<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool, const TOOL_EVENT_L
     // switch context back to event dispatcher loop
     st->cofunc->KiYield();
 
-    return st->wakeupEvent;
+    return &st->wakeupEvent;
 }
 
 
@@ -557,7 +557,7 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                 }
 
                 // If the tool did not request the event be passed to other tools, we're done
-                if( !aEvent.PassEvent() )
+                if( !st->wakeupEvent.PassEvent() )
                     break;
             }
         }

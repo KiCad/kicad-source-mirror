@@ -107,10 +107,10 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     controls->ShowCursor( true );
     controls->SetAutoPan( true );
 
-    bool restore_state = false;
-    bool chain_commands = false;
-    OPT_TOOL_EVENT evt = aEvent;
-    VECTOR2I prevPos;
+    bool        restore_state = false;
+    bool        chain_commands = false;
+    TOOL_EVENT* evt = const_cast<TOOL_EVENT*>( &aEvent );
+    VECTOR2I    prevPos;
 
     if( !selection.Front()->IsNew() )
         m_frame->SaveCopyInUndoList();
@@ -184,7 +184,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         //------------------------------------------------------------------------
         // Handle cancel
         //
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             if( m_moveInProgress )
                 restore_state = true;

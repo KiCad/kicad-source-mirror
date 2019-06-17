@@ -110,14 +110,6 @@ public:
      */
     void ShowContextMenu();
 
-    /**
-     * Function CloseContextMenu
-     *
-     * Helper function to close a menu previously opened with
-     * ShowContextMenu(), if a suitable event is received
-     */
-    void CloseContextMenu( OPT_TOOL_EVENT& evt );
-
 private:
     /**
      * The conditional menu displayed by the tool

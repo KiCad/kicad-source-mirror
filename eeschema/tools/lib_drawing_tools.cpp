@@ -118,11 +118,11 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType, bool aImmediateMode )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             if( item )
             {
@@ -282,7 +282,7 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     {
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
             m_view->ClearPreview();
@@ -396,9 +396,9 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
     Activate();
 
     // Main loop: keep receiving events
-    while( OPT_TOOL_EVENT evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
-        if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             break;
         }

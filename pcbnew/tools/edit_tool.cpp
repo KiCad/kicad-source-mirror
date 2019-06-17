@@ -291,11 +291,11 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         }
     }
 
-    bool restore_state = false;
-    VECTOR2I totalMovement;
+    bool        restore_state = false;
+    VECTOR2I    totalMovement;
     GRID_HELPER grid( editFrame );
-    OPT_TOOL_EVENT evt = aEvent;
-    VECTOR2I prevPos;
+    TOOL_EVENT* evt = const_cast<TOOL_EVENT*>( &aEvent );
+    VECTOR2I    prevPos;
 
     // Main loop: keep receiving events
     do
@@ -310,8 +310,8 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( m_dragging && evt->Category() == TC_MOUSE )
             {
-                m_cursor = grid.BestSnapAnchor( controls->GetMousePosition(),
-                        item_layers, sel_items );
+                m_cursor = grid.BestSnapAnchor( controls->GetMousePosition(), item_layers,
+                                                sel_items );
                 controls->ForceCursorPosition(true, m_cursor );
                 VECTOR2I movement( m_cursor - prevPos );
                 selection.SetReferencePoint( m_cursor );

@@ -89,10 +89,10 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     controls->ShowCursor( true );
     controls->SetAutoPan( true );
 
-    bool restore_state = false;
-    bool chain_commands = false;
-    OPT_TOOL_EVENT evt = aEvent;
-    VECTOR2I prevPos;
+    bool        restore_state = false;
+    bool        chain_commands = false;
+    TOOL_EVENT* evt = const_cast<TOOL_EVENT*>( &aEvent );
+    VECTOR2I    prevPos;
 
     if( !selection.Front()->IsNew() )
         saveCopyInUndoList( m_frame->GetCurPart(), UR_LIBEDIT );
@@ -193,7 +193,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         //------------------------------------------------------------------------
         // Handle cancel
         //
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             if( m_moveInProgress )
                 restore_state = true;
@@ -254,7 +254,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             break; // Finish
         }
 
-    } while( ( evt = Wait() ) ); //Should be assignment not equality test
+    } while( ( evt = Wait() ) );  // Assignment intentional; not equality test
 
     controls->ForceCursorPosition( false );
     controls->ShowCursor( false );
