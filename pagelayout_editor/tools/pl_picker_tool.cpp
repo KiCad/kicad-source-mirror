@@ -127,8 +127,7 @@ int PL_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            // TODO...
-            // m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu();
         }
         else
             evt->SetPassEvent();

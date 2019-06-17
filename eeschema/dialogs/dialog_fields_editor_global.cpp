@@ -1048,9 +1048,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableCellClick( wxGridEvent& event )
 
 void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableItemContextMenu( wxGridEvent& event )
 {
-    /* TODO
-     * - Option to select footprint if FOOTPRINT column selected
-     */
+    // TODO: Option to select footprint if FOOTPRINT column selected
 
     event.Skip();
 }

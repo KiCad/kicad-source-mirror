@@ -382,7 +382,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             m_refill = true;
         }
 
-        else if( evt->IsCancel() )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             if( inDrag )      // Restore the last change
                 commit.Revert();

@@ -179,15 +179,11 @@ private:
     bool                m_listPowerCmpOnly;
     wxArrayString       m_allowedLibs;
 
-    // TODO(hzeller): looks like these members were chosen to be static to survive different
-    // instances of this browser and communicate it to the next instance. This looks like an
-    // ugly hack, and should be solved differently.
-    static wxString m_libraryName;
+    static wxString     m_libraryName;
+    static wxString     m_entryName;
 
-    static wxString m_entryName;
-
-    static int      m_unit;
-    static int      m_convert;
+    static int          m_unit;
+    static int          m_convert;
 
     /**
      * Updated to `true` if a list rewrite on GUI activation resulted in the component

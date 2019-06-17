@@ -217,8 +217,6 @@ int StrToInt1Units( const wxString& aStr )
 {
     double num, precision = 10;
 
-    // TODO: Is the following commented string necessary?
-    // if (pos(',',s)>0) then DecimalSeparator:=',' else DecimalSeparator:='.';
     aStr.ToDouble( &num );
     return KiROUND( num * precision );
 }

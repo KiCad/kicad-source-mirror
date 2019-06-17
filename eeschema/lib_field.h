@@ -169,8 +169,6 @@ public:
      * create a pseudo reference text.  If the base reference field is U,
      * the string U?A will be returned for unit = 1.
      *
-     * @todo This should be handled by the field object.
-     *
      * @param unit - The package unit number.  Only effects reference field.
      * @return Field text.
      */

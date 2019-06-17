@@ -705,7 +705,6 @@ void LIB_EDIT_FRAME::CommonSettingsChanged()
 
 void LIB_EDIT_FRAME::ShowChangedLanguage()
 {
-    // JEY TODO: push this down into EDA_BASE_FRAME...
     // call my base class
     SCH_BASE_FRAME::ShowChangedLanguage();
 

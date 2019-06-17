@@ -919,17 +919,16 @@ static bool deleteItem( SCH_BASE_FRAME* aFrame, const VECTOR2D& aPosition )
 int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
     m_frame->SetTool( aEvent.GetCommandStr().get() );
-    m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_BULLSEYE );
     Activate();
 
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     wxCHECK( picker, 0 );
 
     picker->SetClickHandler( std::bind( deleteItem, m_frame, std::placeholders::_1 ) );
+    picker->SetCancelHandler( [this]() { m_frame->ClearToolStack(); } );
     picker->Activate();
     Wait();
 
-    m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
     return 0;
 }
 

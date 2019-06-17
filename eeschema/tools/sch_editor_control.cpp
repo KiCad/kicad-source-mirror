@@ -478,18 +478,19 @@ static bool probeSimulation( SCH_EDIT_FRAME* aFrame, const VECTOR2D& aPosition )
 
 int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     assert( picker );
 
-    m_frame->SetToolID( ID_SIM_PROBE, wxCURSOR_DEFAULT, _( "Add a simulator probe" ) );
     m_frame->GetCanvas()->SetCursor( SIMULATION_CURSORS::GetCursor( SIMULATION_CURSORS::CURSOR::PROBE ) );
 
     picker->SetClickHandler( std::bind( probeSimulation, m_frame, std::placeholders::_1 ) );
     picker->Activate();
     Wait();
 
+    m_frame->PopTool();
     return 0;
 }
 
@@ -522,18 +523,19 @@ static bool tuneSimulation( SCH_EDIT_FRAME* aFrame, const VECTOR2D& aPosition )
 
 int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
 {
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     assert( picker );
 
-    m_frame->SetToolID( ID_SIM_TUNE, wxCURSOR_DEFAULT, _( "Select a value to be tuned" ) );
     m_frame->GetCanvas()->SetCursor( SIMULATION_CURSORS::GetCursor( SIMULATION_CURSORS::CURSOR::TUNE ) );
 
     picker->SetClickHandler( std::bind( tuneSimulation, m_frame, std::placeholders::_1 ) );
     picker->Activate();
     Wait();
 
+    m_frame->PopTool();
     return 0;
 }
 #endif /* KICAD_SPICE */
@@ -690,13 +692,14 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
     if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
         m_frame->RecalculateConnections();
 
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
 
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
-    assert( picker );
+    wxCHECK( picker, 0 );
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
     picker->SetClickHandler( std::bind( highlightNet, m_toolMgr, std::placeholders::_1 ) );
+    picker->SetCancelHandler( [this]() { m_frame->ClearToolStack(); } );
     picker->Activate();
     Wait();
 

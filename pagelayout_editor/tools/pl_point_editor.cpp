@@ -210,7 +210,7 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
             inDrag = false;
         }
 
-        else if( evt->IsCancel() )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             if( inDrag )      // Restore the last change
             {
