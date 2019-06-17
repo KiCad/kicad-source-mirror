@@ -161,8 +161,10 @@ private:
     /// Current scrollbar position
     VECTOR2I    m_scrollPos;
 
-    /// Last event timestamp to remove duplicates
+#ifdef __WXGTK3__
+    /// Last event timestamp used to de-bounce mouse wheel
     long int    m_lastTimestamp;
+#endif
 
     /// Current cursor position (world coordinates)
     VECTOR2D    m_cursorPos;
