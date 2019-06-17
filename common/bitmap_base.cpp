@@ -238,10 +238,19 @@ void BITMAP_BASE::DrawBitmap( wxDC* aDC, const wxPoint& aPos )
     aDC->SetUserScale( scale * GetScalingFactor(), scale * GetScalingFactor() );
     aDC->SetLogicalOrigin( logicalOriginX / GetScalingFactor(),
                            logicalOriginY / GetScalingFactor() );
-    aDC->DrawBitmap( *m_bitmap,
-                     KiROUND( pos.x / GetScalingFactor() ),
-                     KiROUND( pos.y / GetScalingFactor() ),
-                     true );
+
+    if( GetGRForceBlackPenState() )
+    {
+        wxBitmap result( m_bitmap->ConvertToImage().ConvertToGreyscale() );
+        aDC->DrawBitmap( result, KiROUND( pos.x / GetScalingFactor() ),
+                KiROUND( pos.y / GetScalingFactor() ), true );
+    }
+    else
+    {
+        aDC->DrawBitmap( *m_bitmap, KiROUND( pos.x / GetScalingFactor() ),
+                KiROUND( pos.y / GetScalingFactor() ), true );
+    }
+
     aDC->SetUserScale( scale, scale );
     aDC->SetLogicalOrigin( logicalOriginX, logicalOriginY );
 }
