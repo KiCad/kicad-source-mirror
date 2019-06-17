@@ -38,7 +38,7 @@
 //
 TOOL_ACTION EE_ACTIONS::runERC( "eeschema.InspectionTool.runERC",
         AS_GLOBAL, 0, "",
-        _( "Electrical Rules &Checker" ), _( "Perform electrical rules check" ),
+        _( "Electrical Rules Checker" ), _( "Perform electrical rules check" ),
         erc_xpm );
 
 TOOL_ACTION EE_ACTIONS::runSimulation( "eeschema.EditorControl.runSimulation",

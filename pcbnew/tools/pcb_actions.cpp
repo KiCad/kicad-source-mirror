@@ -400,12 +400,12 @@ TOOL_ACTION PCB_ACTIONS::swapLayers( "pcbnew.GlobalEdit.swapLayers",
 
 TOOL_ACTION PCB_ACTIONS::editTracksAndVias( "pcbnew.GlobalEdit.editTracksAndVias",
         AS_GLOBAL, 0, "",
-        _( "Edit Track && Via Properties..." ), "",
+        _( "Edit Track & Via Properties..." ), "",
         width_track_via_xpm );
 
 TOOL_ACTION PCB_ACTIONS::editTextAndGraphics( "pcbnew.GlobalEdit.editTextAndGraphics",
         AS_GLOBAL, 0, "",
-        _( "Edit Text && Graphic Properties..." ), "",
+        _( "Edit Text & Graphic Properties..." ), "",
         reset_text_xpm );
 
 TOOL_ACTION PCB_ACTIONS::globalDeletions( "pcbnew.GlobalEdit.globalDeletions",
@@ -416,7 +416,7 @@ TOOL_ACTION PCB_ACTIONS::globalDeletions( "pcbnew.GlobalEdit.globalDeletions",
 
 TOOL_ACTION PCB_ACTIONS::cleanupTracksAndVias( "pcbnew.GlobalEdit.cleanupTracksAndVias",
         AS_GLOBAL, 0, "",
-        _( "Cleanup Tracks && Vias..." ),
+        _( "Cleanup Tracks & Vias..." ),
         _( "Clean stubs, vias, delete break points or unconnected tracks" ),
         delete_xpm );
 
@@ -497,23 +497,23 @@ TOOL_ACTION PCB_ACTIONS::exportSpecctraDSN( "pcbnew.EditorControl.exportSpecctra
 
 TOOL_ACTION PCB_ACTIONS::generateGerbers( "pcbnew.EditorControl.generateGerbers",
         AS_GLOBAL, 0, "",
-        _( "&Gerbers (.gbr)..." ), _( "Generate Gerbers for fabrication" ),
+        _( "Gerbers (.gbr)..." ), _( "Generate Gerbers for fabrication" ),
         post_compo_xpm );
 
 TOOL_ACTION PCB_ACTIONS::generateDrillFiles( "pcbnew.EditorControl.generateDrillFiles",
         AS_GLOBAL, 0, "",
-        _( "&Drill Files (.drl)..." ), _( "Generate Excellon drill file(s)" ),
+        _( "Drill Files (.drl)..." ), _( "Generate Excellon drill file(s)" ),
         post_drill_xpm );
 
 TOOL_ACTION PCB_ACTIONS::generatePosFile( "pcbnew.EditorControl.generatePosFile",
         AS_GLOBAL, 0, "",
-        _( "Footprint &Positions (.pos)..." ),
+        _( "Footprint Positions (.pos)..." ),
         _( "Generate footprint position file for pick and place" ),
         post_compo_xpm );
 
 TOOL_ACTION PCB_ACTIONS::generateReportFile( "pcbnew.EditorControl.generateReportFile",
         AS_GLOBAL, 0, "",
-        _( "&Footprint Report (.rpt)..." ),
+        _( "Footprint Report (.rpt)..." ),
         _( "Create report of all footprints from current board" ),
         tools_xpm );
 
@@ -524,7 +524,7 @@ TOOL_ACTION PCB_ACTIONS::generateD356File( "pcbnew.EditorControl.generateD356Fil
 
 TOOL_ACTION PCB_ACTIONS::generateBOM( "pcbnew.EditorControl.generateBOM",
         AS_GLOBAL, 0, "",
-        _( "&BOM..." ), _( "Create bill of materials from current schematic" ),
+        _( "BOM..." ), _( "Create bill of materials from current schematic" ),
         bom_xpm );
 
 // Track & via size control
