@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Oliver Walters
- * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,12 +67,14 @@ protected:
     {
         if( m_grid->GetGridCursorCol() == FOOTPRINT )
         {
-            menu.Append( MYID_SELECT_FOOTPRINT, _( "Select Footprint..." ), _( "Browse for footprint" ) );
+            menu.Append( MYID_SELECT_FOOTPRINT, _( "Select Footprint..." ),
+                         _( "Browse for footprint" ) );
             menu.AppendSeparator();
         }
         else if( m_grid->GetGridCursorCol() == DATASHEET )
         {
-            menu.Append( MYID_SHOW_DATASHEET,   _( "Show Datasheet" ),      _( "Show datasheet in browser" ) );
+            menu.Append( MYID_SHOW_DATASHEET, _( "Show Datasheet" ),
+                         _( "Show datasheet in browser" ) );
             menu.AppendSeparator();
         }
 
@@ -85,7 +87,8 @@ protected:
         {
             // pick a footprint using the footprint picker.
             wxString      fpid = m_grid->GetCellValue( m_grid->GetGridCursorRow(), FOOTPRINT );
-            KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true, m_dlg );
+            KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true,
+                                                         m_dlg );
 
             if( frame->ShowModal( &fpid, m_dlg ) )
                 m_grid->SetCellValue( m_grid->GetGridCursorRow(), FOOTPRINT, fpid );
@@ -130,6 +133,7 @@ enum GROUP_TYPE
     GROUP_EXPANDED,
     CHILD_ITEM
 };
+
 
 struct DATA_MODEL_ROW
 {
@@ -609,10 +613,18 @@ public:
                     destField = comp.AddField( SCH_FIELD( compOrigin, -1, &comp, srcName ) );
                 }
 
-                if( destField && !srcValue.IsEmpty() )
-                    destField->SetText( srcValue );
-                else
+                if( !destField )
+                {
                     comp.RemoveField( srcName );
+                    continue;
+                }
+
+                // Reference and value fields cannot be empty.  All other fields can.
+                if( srcValue.IsEmpty()
+                  && (destField->GetId() == REFERENCE || destField->GetId() == VALUE))
+                    continue;
+
+                destField->SetText( srcValue );
             }
         }
 
@@ -667,9 +679,11 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
 
     m_bRefresh->SetBitmap( KiBitmap( refresh_xpm ) );
 
-    m_fieldsCtrl->AppendTextColumn(   _( "Field" ),    wxDATAVIEW_CELL_INERT,       0, wxALIGN_LEFT,   0 );
-    m_fieldsCtrl->AppendToggleColumn( _( "Show" ),     wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER, 0 );
-    m_fieldsCtrl->AppendToggleColumn( _( "Group By" ), wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER, 0 );
+    m_fieldsCtrl->AppendTextColumn(   _( "Field" ), wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
+    m_fieldsCtrl->AppendToggleColumn( _( "Show" ), wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER,
+                                      0 );
+    m_fieldsCtrl->AppendToggleColumn( _( "Group By" ), wxDATAVIEW_CELL_ACTIVATABLE, 0,
+                                      wxALIGN_CENTER, 0 );
 
     // SetWidth( wxCOL_WIDTH_AUTOSIZE ) fails here on GTK, so we calculate the title sizes and
     // set the column widths ourselves.
@@ -710,7 +724,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     m_grid->UseNativeColHeader( false );
     m_grid->SetTable( m_dataModel, true );
 
-    // sync m_grid's column visiblities to Show checkboxes in m_fieldsCtrl
+    // sync m_grid's column visibilities to Show checkboxes in m_fieldsCtrl
     for( int i = 0; i < m_fieldsCtrl->GetItemCount(); ++i )
     {
         if( m_fieldsCtrl->GetToggleValue( i, 1 ) )
@@ -745,8 +759,8 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     attr->SetReadOnly();
     m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
     m_grid->SetColFormatNumber( m_dataModel->GetColsCount() - 1 );
-
     m_grid->AutoSizeColumns( false );
+
     for( int col = 0; col < m_grid->GetNumberCols(); ++ col )
     {
         // Columns are hidden by setting their width to 0 so if we resize them they will
@@ -773,21 +787,23 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     Center();
 
     // Connect Events
-    m_grid->Connect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL::OnColSort ), NULL, this );
+    m_grid->Connect( wxEVT_GRID_COL_SORT,
+                     wxGridEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL::OnColSort ), NULL, this );
 }
 
 
 DIALOG_FIELDS_EDITOR_GLOBAL::~DIALOG_FIELDS_EDITOR_GLOBAL()
 {
     // Disconnect Events
-    m_grid->Disconnect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL::OnColSort ), NULL, this );
+    m_grid->Disconnect( wxEVT_GRID_COL_SORT,
+                        wxGridEventHandler( DIALOG_FIELDS_EDITOR_GLOBAL::OnColSort ), NULL, this );
 
     // Delete the GRID_TRICKS.
     m_grid->PopEventHandler( true );
 
     // we gave ownership of m_dataModel to the wxGrid...
 
-    // Clear highligted symbols, if any
+    // Clear highlighted symbols, if any
     m_parent->GetCanvas()->GetView()->HighlightItem( nullptr, nullptr );
     m_parent->GetCanvas()->Refresh();
 }
@@ -891,7 +907,8 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnAddField( wxCommandEvent& event )
     {
         if( fieldName == m_dataModel->GetColLabelValue( i ) )
         {
-            DisplayError( this, wxString::Format( _( "Field name \"%s\" already in use." ), fieldName ) );
+            DisplayError( this, wxString::Format( _( "Field name \"%s\" already in use." ),
+                                                  fieldName ) );
             return;
         }
     }
@@ -900,7 +917,8 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnAddField( wxCommandEvent& event )
 
     AddField( fieldName, true, false );
 
-    wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_INSERTED, m_fieldsCtrl->GetItemCount(), 1 );
+    wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_INSERTED,
+                            m_fieldsCtrl->GetItemCount(), 1 );
     m_grid->ProcessTableMessage( msg );
 
     // set up attributes on the new quantities column
@@ -1007,14 +1025,14 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableCellClick( wxGridEvent& event )
         m_grid->ClearSelection();
         m_grid->SetGridCursor( event.GetRow(), event.GetCol() );
 
-        // Clear highligted symbols, if any
+        // Clear highlighted symbols, if any
         m_parent->GetCanvas()->GetView()->HighlightItem( nullptr, nullptr );
         m_parent->GetCanvas()->Refresh();
 
         m_dataModel->ExpandCollapseRow( event.GetRow() );
         std::vector<SCH_REFERENCE> refs = m_dataModel->GetRowReferences( event.GetRow() );
 
-        // Focus eeschema view on the component selected in the dialog
+        // Focus Eeschema view on the component selected in the dialog
         if( refs.size() == 1 )
         {
             m_parent->FindComponentAndItem( refs[0].GetRef() + refs[0].GetRefNumber(),
