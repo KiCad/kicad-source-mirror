@@ -638,18 +638,18 @@ void D_PAD::TransformShapeWithClearanceToPolygon(
     case PAD_SHAPE_CHAMFERED_RECT:
     case PAD_SHAPE_ROUNDRECT:
     {
-        SHAPE_POLY_SET outline;
-        int            radius = GetRoundRectCornerRadius() + aClearanceValue;
-        int            numSegs = std::max( GetArcToSegmentCount( radius, aError, 360.0 ), 6 );
-        double         correction = GetCircletoPolyCorrectionFactor( numSegs );
-        int            clearance = KiROUND( aClearanceValue * correction );
-        int            rounding_radius = GetRoundRectCornerRadius() + clearance;
-        wxSize         shapesize( m_Size );
+        int    radius = GetRoundRectCornerRadius() + aClearanceValue;
+        int    numSegs = std::max( GetArcToSegmentCount( radius, aError, 360.0 ), 6 );
+        double correction = GetCircletoPolyCorrectionFactor( numSegs );
+        int    clearance = KiROUND( aClearanceValue * correction );
+        int    rounding_radius = KiROUND( radius * correction );
+        wxSize shapesize( m_Size );
 
         shapesize.x += clearance * 2;
         shapesize.y += clearance * 2;
         bool doChamfer = GetShape() == PAD_SHAPE_CHAMFERED_RECT;
 
+        SHAPE_POLY_SET outline;
         TransformRoundChamferedRectToPolygon( outline, padShapePos, shapesize, angle,
                 rounding_radius, doChamfer ? GetChamferRectRatio() : 0.0,
                 doChamfer ? GetChamferPositions() : 0, aError );
