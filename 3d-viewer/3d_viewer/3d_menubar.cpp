@@ -59,12 +59,16 @@ void EDA_3D_VIEWER::CreateMenuBar()
     // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
     fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
 
+    fileMenu->Resolve();
+
     //-- Edit menu -------------------------------------------------------
     //
     CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, tool );
 
     editMenu->AddItem( ID_TOOL_SCREENCOPY_TOCLIBBOARD, _( "Copy 3D Image" ), "",
                        copy_xpm,                       SELECTION_CONDITIONS::ShowAlways );
+
+    editMenu->Resolve();
 
     //-- View menu -------------------------------------------------------
     //
