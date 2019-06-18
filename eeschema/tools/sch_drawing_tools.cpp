@@ -467,6 +467,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 {
     EDA_ITEM* item = nullptr;
     bool      immediateMode = aEvent.HasPosition();
+    bool      importMode = aEvent.IsAction( &EE_ACTIONS::importSheetPin );
     KICAD_T   type = aEvent.Parameter<KICAD_T>();
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
@@ -544,7 +545,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                         break;
                     }
 
-                    if( aEvent.IsAction( &EE_ACTIONS::importSheetPin ) )
+                    if( importMode )
                     {
                         label = m_frame->ImportHierLabel( sheet );
 
