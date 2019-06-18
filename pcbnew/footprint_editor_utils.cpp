@@ -572,10 +572,14 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_EXPORT_PART:
-        if( getTargetFPID() == GetLoadedFPID() )
-            Export_Module( GetBoard()->m_Modules );
+    {
+        LIB_ID fpid = m_treePane->GetLibTree()->GetSelectedLibId();
+
+        if( fpid.IsValid() )
+            Export_Module( LoadFootprint( fpid ) );
         else
-            Export_Module( LoadFootprint( getTargetFPID() ) );
+            Export_Module( GetBoard()->m_Modules );
+    }
         break;
 
     case ID_MODEDIT_CREATE_NEW_LIB:
