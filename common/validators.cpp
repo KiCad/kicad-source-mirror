@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
  * Copyright (C) 2018 CERN
  *
@@ -290,6 +290,10 @@ bool LIB_ID_VALIDATOR::Validate( wxWindow *aParent )
     wxString msg;
     wxString val( text->GetValue() );
     wxString tmp = val.Clone();          // For trailing and leading white space tests.
+
+    // Allow empty string if empty filter not set to allow clearing the LIB_ID.
+    if( !(GetStyle() & wxFILTER_EMPTY) && val.IsEmpty() )
+        return true;
 
     if( tmp.Trim() != val )              // Trailing white space.
     {
