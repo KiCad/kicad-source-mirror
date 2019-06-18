@@ -717,7 +717,10 @@ bool EE_SELECTION_TOOL::selectMultiple()
                     if( m_subtractive )
                         unselect( item );
                     else
+                    {
                         select( item );
+                        item->SetFlags( STARTPOINT | ENDPOINT );
+                    }
                 }
             }
 
