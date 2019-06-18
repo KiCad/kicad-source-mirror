@@ -388,7 +388,8 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 commit.Revert();
 
             // ESC should clear selection along with edit points
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+            if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
             break;
         }
