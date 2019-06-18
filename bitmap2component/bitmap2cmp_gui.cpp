@@ -459,7 +459,7 @@ void BM2CMP_FRAME::ToggleAspectRatioLock( wxCommandEvent& event )
 
     else
     {
-        m_AspectRatioLockButton->SetBitmap( KiBitmap( lock_unlock_xpm ) );
+        m_AspectRatioLockButton->SetBitmap( KiBitmap( unlocked_xpm ) );
     }
 }
 

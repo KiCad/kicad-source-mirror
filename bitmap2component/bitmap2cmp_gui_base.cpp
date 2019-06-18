@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Dec  1 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -47,9 +47,9 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	fgSizerInfo->SetFlexibleDirection( wxBOTH );
 	fgSizerInfo->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextSize = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Input size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextSize->Wrap( -1 );
-	fgSizerInfo->Add( m_staticTextSize, 0, wxALIGN_RIGHT|wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_staticTextISize = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Input size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextISize->Wrap( -1 );
+	fgSizerInfo->Add( m_staticTextISize, 0, wxALIGN_RIGHT|wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_SizeXValue = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("0000"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeXValue->Wrap( -1 );
@@ -81,7 +81,7 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 
 	m_staticTextBPP = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("BPP:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextBPP->Wrap( -1 );
-	fgSizerInfo->Add( m_staticTextBPP, 0, wxALIGN_RIGHT|wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerInfo->Add( m_staticTextBPP, 0, wxALIGN_RIGHT|wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 	m_BPPValue = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("0000"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_BPPValue->Wrap( -1 );
@@ -92,49 +92,50 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	fgSizerInfo->Add( m_BPPunits, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	fgSizerInfo->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgSizerInfo->Add( 0, 0, 0, 0, 5 );
 
-    m_BPPunits1 = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _( "Lock Aspect Ratio" ),
-            wxDefaultPosition, wxDefaultSize, 0 );
-    m_BPPunits1->Wrap( -1 );
-	fgSizerInfo->Add( m_BPPunits1, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_BPPunits2 = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_BPPunits2->Wrap( -1 );
-	fgSizerInfo->Add( m_BPPunits2, 0, wxALL, 5 );
+	sbSizerInfo->Add( fgSizerInfo, 0, wxEXPAND|wxBOTTOM, 5 );
+
+	wxBoxSizer* bSizerLock;
+	bSizerLock = new wxBoxSizer( wxHORIZONTAL );
+
+	m_textLock = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Lock Aspect Ratio"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textLock->Wrap( -1 );
+	bSizerLock->Add( m_textLock, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_AspectRatioLockButton = new wxBitmapButton( sbSizerInfo->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	fgSizerInfo->Add( m_AspectRatioLockButton, 0, wxALL, 5 );
+	bSizerLock->Add( m_AspectRatioLockButton, 0, wxALL, 5 );
 
-	m_BPPunits3 = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_BPPunits3->Wrap( -1 );
-	fgSizerInfo->Add( m_BPPunits3, 0, wxALL, 5 );
 
-	m_staticTextBPI = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Resolution:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextBPI->Wrap( -1 );
-	fgSizerInfo->Add( m_staticTextBPI, 0, wxALIGN_RIGHT|wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	sbSizerInfo->Add( bSizerLock, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizerRes;
+	bSizerRes = new wxBoxSizer( wxHORIZONTAL );
+
+	m_staticTextOSize = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextOSize->Wrap( -1 );
+	bSizerRes->Add( m_staticTextOSize, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_UnitSizeX = new wxTextCtrl( sbSizerInfo->GetStaticBox(), wxID_ANY, _("300"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_UnitSizeX->SetMinSize( wxSize( 60,-1 ) );
 
-    m_UnitSizeX->SetValidator( wxTextValidator( wxFILTER_NUMERIC, &m_NumericValidator ) );
-
-    fgSizerInfo->Add( m_UnitSizeX, 0, wxBOTTOM|wxRIGHT|wxALIGN_BOTTOM, 5 );
+	bSizerRes->Add( m_UnitSizeX, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_UnitSizeY = new wxTextCtrl( sbSizerInfo->GetStaticBox(), wxID_ANY, _("300"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_UnitSizeY->SetMinSize( wxSize( 60,-1 ) );
 
-	fgSizerInfo->Add( m_UnitSizeY, 0, wxBOTTOM|wxRIGHT|wxALIGN_BOTTOM, 5 );
+	bSizerRes->Add( m_UnitSizeY, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	wxArrayString m_PixelUnitChoices;
 	m_PixelUnit = new wxChoice( sbSizerInfo->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_PixelUnitChoices, 0 );
 	m_PixelUnit->SetSelection( 0 );
 	m_PixelUnit->SetMinSize( wxSize( 80,-1 ) );
 
-	fgSizerInfo->Add( m_PixelUnit, 0, wxALL|wxALIGN_BOTTOM, 5 );
+	bSizerRes->Add( m_PixelUnit, 0, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbSizerInfo->Add( fgSizerInfo, 0, wxEXPAND|wxBOTTOM, 5 );
+	sbSizerInfo->Add( bSizerRes, 0, wxEXPAND, 5 );
 
 
 	brightSizer->Add( sbSizerInfo, 0, wxEXPAND|wxALL, 5 );
@@ -196,13 +197,10 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	m_GreyscalePicturePanel->Connect( wxEVT_PAINT, wxPaintEventHandler( BM2CMP_FRAME_BASE::OnPaintGreyscale ), NULL, this );
 	m_BNPicturePanel->Connect( wxEVT_PAINT, wxPaintEventHandler( BM2CMP_FRAME_BASE::OnPaintBW ), NULL, this );
 	m_AspectRatioLockButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::ToggleAspectRatioLock ), NULL, this );
-    m_UnitSizeX->Connect( wxEVT_COMMAND_TEXT_UPDATED,
-            wxCommandEventHandler( BM2CMP_FRAME_BASE::OnSizeChangeX ), NULL, this );
-    m_UnitSizeY->Connect( wxEVT_COMMAND_TEXT_UPDATED,
-            wxCommandEventHandler( BM2CMP_FRAME_BASE::OnSizeChangeY ), NULL, this );
-    m_PixelUnit->Connect( wxEVT_COMMAND_CHOICE_SELECTED,
-            wxCommandEventHandler( BM2CMP_FRAME_BASE::OnSizeUnitChange ), NULL, this );
-    m_buttonLoad->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnLoadFile ), NULL, this );
+	m_UnitSizeX->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnSizeChangeX ), NULL, this );
+	m_UnitSizeY->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnSizeChangeY ), NULL, this );
+	m_PixelUnit->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnSizeUnitChange ), NULL, this );
+	m_buttonLoad->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnLoadFile ), NULL, this );
 	m_buttonExportFile->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnExportToFile ), NULL, this );
 	m_buttonExportClipboard->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnExportToClipboard ), NULL, this );
 	m_radioBoxFormat->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnFormatChange ), NULL, this );
@@ -217,13 +215,10 @@ BM2CMP_FRAME_BASE::~BM2CMP_FRAME_BASE()
 	m_GreyscalePicturePanel->Disconnect( wxEVT_PAINT, wxPaintEventHandler( BM2CMP_FRAME_BASE::OnPaintGreyscale ), NULL, this );
 	m_BNPicturePanel->Disconnect( wxEVT_PAINT, wxPaintEventHandler( BM2CMP_FRAME_BASE::OnPaintBW ), NULL, this );
 	m_AspectRatioLockButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::ToggleAspectRatioLock ), NULL, this );
-    m_UnitSizeX->Disconnect( wxEVT_COMMAND_TEXT_UPDATED,
-            wxCommandEventHandler( BM2CMP_FRAME_BASE::OnSizeChangeX ), NULL, this );
-    m_UnitSizeY->Disconnect( wxEVT_COMMAND_TEXT_UPDATED,
-            wxCommandEventHandler( BM2CMP_FRAME_BASE::OnSizeChangeY ), NULL, this );
-    m_PixelUnit->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED,
-            wxCommandEventHandler( BM2CMP_FRAME_BASE::OnSizeUnitChange ), NULL, this );
-    m_buttonLoad->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnLoadFile ), NULL, this );
+	m_UnitSizeX->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnSizeChangeX ), NULL, this );
+	m_UnitSizeY->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnSizeChangeY ), NULL, this );
+	m_PixelUnit->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnSizeUnitChange ), NULL, this );
+	m_buttonLoad->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnLoadFile ), NULL, this );
 	m_buttonExportFile->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnExportToFile ), NULL, this );
 	m_buttonExportClipboard->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnExportToClipboard ), NULL, this );
 	m_radioBoxFormat->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( BM2CMP_FRAME_BASE::OnFormatChange ), NULL, this );
