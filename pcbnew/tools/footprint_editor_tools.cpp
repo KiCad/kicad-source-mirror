@@ -239,7 +239,7 @@ int MODULE_EDITOR_TOOLS::ExportFootprint( const TOOL_EVENT& aEvent )
     LIB_ID  fpID = m_frame->GetTreeFPID();
     MODULE* fp;
     
-    if( fpID == m_frame->GetLoadedFPID() )
+    if( !fpID.IsValid() )
         fp = m_frame->GetBoard()->GetFirstModule();
     else
         fp = m_frame->LoadFootprint( fpID );
