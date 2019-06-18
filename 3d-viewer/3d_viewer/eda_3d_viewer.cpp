@@ -166,6 +166,8 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent,
 
     m_canvas = NULL;
     m_disable_ray_tracing = false;
+    m_mainToolBar = nullptr;
+    m_AboutTitle = "3D Viewer";
 
     // Give it an icon
     wxIcon icon;
