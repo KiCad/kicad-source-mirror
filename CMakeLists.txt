@@ -60,9 +60,6 @@ option( BUILD_SMALL_DEBUG_FILES "In debug build: create smaller binaries." OFF )
 # so that build option settings can be included in bug reports.
 #
 
-option( USE_WX_GRAPHICS_CONTEXT
-    "Use wxGraphicsContext for rendering (default OFF).  Warning, this is experimental" )
-
 option( KICAD_SCRIPTING
     "Build the Python scripting support inside KiCad binaries (default ON)."
     ON )
@@ -391,10 +388,6 @@ if( KICAD_USE_CUSTOM_PADS )
     add_definitions( -DKICAD_USE_CUSTOM_PADS )
 endif()
 
-if( USE_WX_GRAPHICS_CONTEXT OR APPLE )
-    add_definitions( -DUSE_WX_GRAPHICS_CONTEXT )
-endif()
-
 
 # KIFACE_SUFFIX is the file extension used for top level program modules which
 # implement the KIFACE interface.  A valid suffix starts with a period '.'.
@@ -583,16 +576,9 @@ find_package( Boost 1.54.0 REQUIRED )
 # Include MinGW resource compiler.
 include( MinGWResourceCompiler )
 
-# Find GDI+ on windows if wxGraphicsContext is available, and only link gdiplus library
-# if wxGraphicsContext not used, because the cairo printing system uses this library
 if( WIN32 )
-    if( USE_WX_GRAPHICS_CONTEXT )
-        find_package( GdiPlus )
-        check_find_package_result( GDI_PLUS_FOUND "GDI+" )
-    else()
-        # if WX_GRAPHICS_CONTEXT is not used we just need the gdiplus library for cairo printing
-        set( GDI_PLUS_LIBRARIES gdiplus )
-    endif()
+    # we need the gdiplus library for cairo printing on windows
+    set( GDI_PLUS_LIBRARIES gdiplus )
 endif()
 
 # Find ngspice library, required for integrated circuit simulator
