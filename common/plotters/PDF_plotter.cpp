@@ -424,8 +424,9 @@ void PDF_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
             }
             else
             {
-                // Grayscale conversion
-                putc( (r + g + b) / 3, workFile );
+                // Greyscale conversion (CIE 1931)
+                unsigned char grey = KiROUND( r * 0.2126 + g * 0.7152 + b * 0.0722 );
+                putc( grey, workFile );
             }
         }
     }

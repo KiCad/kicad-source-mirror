@@ -737,7 +737,12 @@ void PS_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
             if( colorMode )
                 fprintf( outputFile, "%2.2X%2.2X%2.2X", red, green, blue );
             else
-                fprintf( outputFile, "%2.2X", (red + green + blue) / 3 );
+            {
+                // Greyscale conversion (CIE 1931)
+                unsigned char grey = KiROUND( red * 0.2126 + green * 0.7152 + blue * 0.0722 );
+
+                fprintf( outputFile, "%2.2X", grey );
+            }
         }
     }
 
