@@ -51,6 +51,7 @@ function( make_lexer outputTarget inputFile outHeaderFile outCppFile enum )
         DEPENDS ${outHeaderFile} ${outCppFile}
                 ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
         )
+    set_property( GLOBAL PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${outHeaderFile} ${outCppFile} )
 
     # extra_args, if any, are treated as source files (typically headers) which
     # are known to depend on the generated outHeader.
