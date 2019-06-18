@@ -86,7 +86,7 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
 END_EVENT_TABLE()
 
 
-KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title, 
+KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
                                           const wxPoint& pos, const wxSize&   size ) :
         EDA_BASE_FRAME( parent, KICAD_MAIN_FRAME_T, title, pos, size,
                         KICAD_DEFAULT_DRAWFRAME_STYLE, KICAD_MANAGER_FRAME_NAME, &::Kiway ),
@@ -96,7 +96,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
         m_mainToolBar( nullptr )
 {
     m_active_project = false;
-    m_leftWinWidth = 60;
+    m_leftWinWidth = 250;       // Default value
     m_AboutTitle = "KiCad";
 
     // Create the status line (bottom of the frame)
@@ -140,15 +140,23 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
 
+    // BestSize() does not always set the actual pane size of m_leftWin to the required value.
+    // It happens when m_leftWin is too large (roughly > 1/3 of the kicad manager frame width.
+    // (Well, BestSize() sets the best size... not the window size)
+    // A trick is to use MinSize() to set the required pane width,
+    // and after give a reasonable MinSize value
     m_auimgr.AddPane( m_leftWin, EDA_PANE().Palette().Name( "ProjectTree" ).Left().Layer(3)
                       .CaptionVisible( false ).PaneBorder( false )
-                      .MinSize( 150, -1 ).BestSize( m_leftWinWidth, -1 ) );
+                      .MinSize( m_leftWinWidth, -1 ).BestSize( m_leftWinWidth, -1 ) );
 
     m_auimgr.AddPane( m_launcher, EDA_PANE().HToolbar().Name( "Launcher" ).Top().Layer(1) );
 
     m_auimgr.AddPane( m_messagesBox, EDA_PANE().Messages().Name( "MsgPanel" ).Center() );
 
     m_auimgr.Update();
+
+    // Now the actual m_leftWin size is set, give it a reasonable min width
+    m_auimgr.GetPane( m_leftWin ).MinSize( 200, -1 );
 
     SetTitle( wxString( "KiCad " ) + GetBuildVersion() );
 }
