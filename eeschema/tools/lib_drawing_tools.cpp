@@ -98,16 +98,20 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 delete item;
                 item = nullptr;
 
-                if( evt->IsActivate() || immediateMode )
+                if( immediateMode )
                     break;
             }
             else
             {
                 if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                {
                     m_frame->PopTool();
-
-                break;
+                    break;
+                }
             }
+
+            if( evt->IsActivate() )
+                break;
         }
 
         else if( evt->IsClick( BUT_LEFT ) )
@@ -189,10 +193,7 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 m_frame->OnModify();
 
                 if( immediateMode )
-                {
-                    m_frame->PopTool();
                     break;
-                }
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -215,6 +216,9 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         getViewControls()->SetAutoPan( item != nullptr );
         getViewControls()->CaptureCursor( item != nullptr );
     }
+
+    if( immediateMode )
+        m_frame->PopTool();
 
     return 0;
 }
@@ -257,16 +261,20 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 delete item;
                 item = nullptr;
 
-                if( evt->IsActivate() || immediateMode )
+                if( immediateMode )
                     break;
             }
             else
             {
                 if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                {
                     m_frame->PopTool();
-
-                break;
+                    break;
+                }
             }
+
+            if( evt->IsActivate() )
+                break;
         }
 
         else if( evt->IsClick( BUT_LEFT ) && !item )
@@ -301,13 +309,11 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             m_selectionTool->AddItemToSel( item );
         }
 
-        else if( item && ( evt->IsClick( BUT_LEFT )
-                        || evt->IsDblClick( BUT_LEFT )
+        else if( item && ( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
                         || evt->IsAction( &EE_ACTIONS::finishDrawing ) ) )
         {
-            if( evt->IsDblClick( BUT_LEFT )
-             || evt->IsAction( &EE_ACTIONS::finishDrawing )
-             || !item->ContinueEdit( wxPoint( cursorPos.x, -cursorPos.y ) ) )
+            if( evt->IsDblClick( BUT_LEFT ) || evt->IsAction( &EE_ACTIONS::finishDrawing )
+                    || !item->ContinueEdit( wxPoint( cursorPos.x, -cursorPos.y ) ) )
             {
                 item->EndEdit();
                 item->ClearEditFlags();
@@ -322,14 +328,13 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
                 if( immediateMode )
                 {
-                    m_frame->PopTool();
+                    m_toolMgr->RunAction( ACTIONS::activatePointEditor );
                     break;
                 }
             }
         }
 
-        else if( item && ( evt->IsAction( &EE_ACTIONS::refreshPreview )
-                        || evt->IsMotion() ) )
+        else if( item && ( evt->IsAction( &EE_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             item->CalcEdit( wxPoint( cursorPos.x, -cursorPos.y) );
             m_view->ClearPreview();
@@ -354,6 +359,9 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         getViewControls()->SetAutoPan( item != nullptr );
         getViewControls()->CaptureCursor( item != nullptr );
     }
+
+    if( immediateMode )
+        m_frame->PopTool();
 
     return 0;
 }

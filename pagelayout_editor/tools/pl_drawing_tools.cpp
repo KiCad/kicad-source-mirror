@@ -104,16 +104,20 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
                 // There's nothing to roll-back, but we still need to pop the undo stack
                 m_frame->RollbackFromUndo();
 
-                if( evt->IsActivate() || immediateMode )
+                if( immediateMode )
                     break;
             }
             else
             {
                 if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                {
                     m_frame->PopTool();
-
-                break;
+                    break;
+                }
             }
+
+            if( evt->IsActivate() )
+                break;
         }
 
         else if( evt->IsClick( BUT_LEFT ) )
@@ -145,10 +149,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
                 m_frame->OnModify();
 
                 if( immediateMode )
-                {
-                    m_frame->PopTool();
                     break;
-                }
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -171,6 +172,9 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
         getViewControls()->SetAutoPan( item != nullptr );
         getViewControls()->CaptureCursor( item != nullptr );
     }
+
+    if( immediateMode )
+        m_frame->PopTool();
 
     return 0;
 }
@@ -210,16 +214,20 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 item = nullptr;
                 m_frame->RollbackFromUndo();
 
-                if( evt->IsActivate() || immediateMode )
+                if( immediateMode )
                     break;
             }
             else
             {
                 if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                {
                     m_frame->PopTool();
-
-                break;
+                    break;
+                }
             }
+
+            if( evt->IsActivate() )
+                break;
         }
 
         else if( evt->IsClick( BUT_LEFT ) )
@@ -245,7 +253,6 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
                 if( immediateMode )
                 {
-                    m_frame->PopTool();
                     m_toolMgr->RunAction( ACTIONS::activatePointEditor );
                     break;
                 }
@@ -275,6 +282,9 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         getViewControls()->SetAutoPan( item != nullptr );
         getViewControls()->CaptureCursor( item != nullptr );
     }
+
+    if( immediateMode )
+        m_frame->PopTool();
 
     return 0;
 }

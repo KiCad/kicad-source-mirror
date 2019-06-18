@@ -473,16 +473,20 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool 
                 m_view->ClearPreview();
                 m_view->ShowPreview( false );
 
-                if( evt->IsActivate() || aImmediateMode )
+                if( aImmediateMode )
                     break;
             }
             else
             {
                 if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                {
                     m_frame->PopTool();
-
-                break;
+                    break;
+                }
             }
+
+            if( evt->IsActivate() )
+                break;
         }
         //------------------------------------------------------------------------
         // Handle finish:
@@ -499,10 +503,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool 
             }
 
             if( aImmediateMode )
-            {
-                m_frame->PopTool();
                 break;
-            }
         }
         //------------------------------------------------------------------------
         // Handle click:
@@ -645,6 +646,9 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool 
         getViewControls()->SetAutoPan( aSegment != nullptr );
         getViewControls()->CaptureCursor( aSegment != nullptr );
     }
+
+    if( aImmediateMode )
+        m_frame->PopTool();
 
     return 0;
 }

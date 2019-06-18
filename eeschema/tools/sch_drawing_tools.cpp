@@ -127,16 +127,20 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                 delete component;
                 component = nullptr;
 
-                if( evt->IsActivate() || immediateMode )
+                if( immediateMode )
                     break;
             }
             else
             {
                 if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                {
                     m_frame->PopTool();
-
-                break;
+                    break;
+                }
             }
+
+            if( evt->IsActivate() )
+                break;
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -179,10 +183,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                 m_view->ClearPreview();
 
                 if( immediateMode )
-                {
-                    m_frame->PopTool();
                     break;
-                }
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -207,8 +208,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                 }
             }
         }
-        else if( component && ( evt->IsAction( &EE_ACTIONS::refreshPreview )
-                             || evt->IsMotion() ) )
+        else if( component && ( evt->IsAction( &EE_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             component->SetPosition( (wxPoint)cursorPos );
             m_view->ClearPreview();
@@ -219,6 +219,9 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
         getViewControls()->SetAutoPan( component != nullptr );
         getViewControls()->CaptureCursor( component != nullptr );
     }
+
+    if( immediateMode )
+        m_frame->PopTool();
 
     return 0;
 }
@@ -266,16 +269,20 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 delete image;
                 image = nullptr;
 
-                if( evt->IsActivate() || immediateMode )
+                if( immediateMode )
                     break;
             }
             else
             {
                 if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                {
                     m_frame->PopTool();
-
-                break;
+                    break;
+                }
             }
+
+            if( evt->IsActivate() )
+                break;
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -324,10 +331,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 m_view->ClearPreview();
 
                 if( immediateMode )
-                {
-                    m_frame->PopTool();
                     break;
-                }
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -338,8 +342,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
-        else if( image && ( evt->IsAction( &EE_ACTIONS::refreshPreview )
-                         || evt->IsMotion() ) )
+        else if( image && ( evt->IsAction( &EE_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             image->SetPosition( (wxPoint)cursorPos );
             m_view->ClearPreview();
@@ -351,6 +354,9 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         getViewControls()->SetAutoPan( image != nullptr );
         getViewControls()->CaptureCursor( image != nullptr );
     }
+
+    if( immediateMode )
+        m_frame->PopTool();
 
     return 0;
 }
@@ -488,16 +494,20 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 delete item;
                 item = nullptr;
 
-                if( evt->IsActivate() || immediateMode )
+                if( immediateMode )
                     break;
             }
             else
             {
                 if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                {
                     m_frame->PopTool();
-
-                break;
+                    break;
+                }
             }
+
+            if( evt->IsActivate() )
+                break;
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -579,10 +589,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 m_view->ClearPreview();
 
                 if( immediateMode )
-                {
-                    m_frame->PopTool();
                     break;
-                }
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -607,10 +614,9 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             else
                 item = nullptr;
         }
-        else if( item && ( evt->IsAction( &EE_ACTIONS::refreshPreview )
-                        || evt->IsMotion() ) )
+        else if( item && ( evt->IsAction( &EE_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
-            static_cast<SCH_ITEM*>( item )->SetPosition( (wxPoint)cursorPos );
+            static_cast<SCH_ITEM*>( item )->SetPosition( (wxPoint) cursorPos );
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
         }
@@ -619,6 +625,9 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         getViewControls()->SetAutoPan( item != nullptr );
         getViewControls()->CaptureCursor( item != nullptr );
     }
+
+    if( immediateMode )
+        m_frame->PopTool();
 
     return 0;
 }
@@ -655,16 +664,20 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 delete sheet;
                 sheet = nullptr;
 
-                if( evt->IsActivate() || immediateMode )
+                if( immediateMode )
                     break;
             }
             else
             {
                 if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                {
                     m_frame->PopTool();
-
-                break;
+                    break;
+                }
             }
+
+            if( evt->IsActivate() )
+                break;
         }
 
         else if( evt->IsClick( BUT_LEFT ) && !sheet )
@@ -700,14 +713,10 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             sheet = nullptr;
 
             if( immediateMode )
-            {
-                m_frame->PopTool();
                 break;
-            }
         }
 
-        else if( sheet && ( evt->IsAction( &EE_ACTIONS::refreshPreview )
-                         || evt->IsMotion() ) )
+        else if( sheet && ( evt->IsAction( &EE_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             sizeSheet( sheet, cursorPos );
             m_view->ClearPreview();
@@ -727,6 +736,9 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
         getViewControls()->SetAutoPan( sheet != nullptr );
         getViewControls()->CaptureCursor( sheet != nullptr);
     }
+
+    if( immediateMode )
+        m_frame->PopTool();
 
     return 0;
 }
