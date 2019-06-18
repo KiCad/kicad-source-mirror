@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
  * Copyright (C) 2018 CERN
  *
@@ -166,6 +166,9 @@ protected:
 
 /**
  * Custom validator that verifies that a string defines a valid #LIB_ID.
+ *
+ * The default validation allows empty #LIB_ID strings to allow the #LIB_ID to be cleared.
+ * Use SetStyle( wxFILTER_EMPTY ) to force a valid #LIB_ID string.
  */
 class LIB_ID_VALIDATOR : public wxTextValidator
 {
