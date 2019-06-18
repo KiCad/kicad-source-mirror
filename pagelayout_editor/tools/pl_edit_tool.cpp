@@ -101,9 +101,9 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    m_frame->SetToolID( ID_PL_MOVE_TOOL, wxCURSOR_DEFAULT, _( "Move Items" ) );
-
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
+
     controls->ShowCursor( true );
     controls->SetAutoPan( true );
 
@@ -184,7 +184,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         //------------------------------------------------------------------------
         // Handle cancel
         //
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             if( m_moveInProgress )
                 restore_state = true;
@@ -232,9 +232,6 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     if( !chain_commands )
         m_moveOffset = { 0, 0 };
 
-    m_moveInProgress = false;
-    m_frame->SetNoToolSelected();
-
     selection.ClearReferencePoint();
 
     for( auto item : selection )
@@ -248,6 +245,8 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     else
         m_frame->OnModify();
 
+    m_moveInProgress = false;
+    m_frame->PopTool();
     return 0;
 }
 

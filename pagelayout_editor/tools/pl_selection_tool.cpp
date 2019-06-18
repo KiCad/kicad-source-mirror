@@ -71,10 +71,10 @@ bool PL_SELECTION_TOOL::Init()
     auto& menu = m_menu.GetMenu();
 
     menu.AddSeparator( 200 );
-    menu.AddItem( PL_ACTIONS::addLine,                 PL_CONDITIONS::Idle, 250 );
-    menu.AddItem( PL_ACTIONS::addRectangle,            PL_CONDITIONS::Idle, 250 );
-    menu.AddItem( PL_ACTIONS::addText,                 PL_CONDITIONS::Idle, 250 );
-    menu.AddItem( PL_ACTIONS::addImage,                PL_CONDITIONS::Idle, 250 );
+    menu.AddItem( PL_ACTIONS::drawLine,                PL_CONDITIONS::Idle, 250 );
+    menu.AddItem( PL_ACTIONS::drawRectangle,           PL_CONDITIONS::Idle, 250 );
+    menu.AddItem( PL_ACTIONS::placeText,               PL_CONDITIONS::Idle, 250 );
+    menu.AddItem( PL_ACTIONS::placeImage,              PL_CONDITIONS::Idle, 250 );
     menu.AddItem( PL_ACTIONS::appendImportedWorksheet, PL_CONDITIONS::Idle, 250 );
 
     menu.AddSeparator( 1000 );
@@ -305,7 +305,7 @@ bool PL_SELECTION_TOOL::selectMultiple()
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             cancelled = true;
             break;

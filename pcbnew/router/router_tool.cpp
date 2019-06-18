@@ -808,7 +808,7 @@ void ROUTER_TOOL::performRouting()
                 still_routing = m_router->FixRoute( m_endSnapPoint, m_endItem );
             break;
         }
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate()
                  || evt->IsUndoRedo()
                  || evt->IsAction( &PCB_ACTIONS::routerInlineDrag ) )
             break;
@@ -916,7 +916,7 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             break; // Finish
         }
@@ -1014,7 +1014,8 @@ void ROUTER_TOOL::performDragging( int aMode )
             if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
                 break;
         }
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsUndoRedo() )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate()
+                   || evt->IsUndoRedo() )
         {
             break;
         }

@@ -935,7 +935,7 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
@@ -985,16 +985,13 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
         }
     } );
 
-    picker->SetCancelHandler( [this] () {
-        m_frame->ClearToolStack();
-    } );
-
     picker->Activate();
     Wait();
 
     if( m_pickerItem )
         m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
 
+    m_frame->PopTool();
     return 0;
 }
 

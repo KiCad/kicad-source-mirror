@@ -445,7 +445,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     m_dragAdditions.clear();
     m_moveInProgress = false;
     m_frame->PopTool();
-
     return 0;
 }
 

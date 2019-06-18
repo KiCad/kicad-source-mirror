@@ -100,10 +100,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
         m_selectionTool->AddItemToSel( component );
     }
 
-    if( immediateMode )
-        m_frame->PushTool( aEvent.GetCommandStr().get() );
-    else
-        m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
 
     Activate();
 
@@ -121,7 +118,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
     {
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             if( component )
             {
@@ -130,14 +127,16 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                 delete component;
                 component = nullptr;
 
-                if( !evt->IsActivate() && !immediateMode )
-                    continue;
+                if( evt->IsActivate() || immediateMode )
+                    break;
             }
+            else
+            {
+                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                    m_frame->PopTool();
 
-            if( !evt->IsActivate() && !immediateMode )
-                m_frame->PopTool();
-
-            break;
+                break;
+            }
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -178,6 +177,12 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                 component = nullptr;
 
                 m_view->ClearPreview();
+
+                if( immediateMode )
+                {
+                    m_frame->PopTool();
+                    break;
+                }
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -211,12 +216,9 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
         }
 
         // Enable autopanning and cursor capture only when there is a module to be placed
-        getViewControls()->SetAutoPan( !!component );
-        getViewControls()->CaptureCursor( !!component );
+        getViewControls()->SetAutoPan( component != nullptr );
+        getViewControls()->CaptureCursor( component != nullptr );
     }
-
-    if( immediateMode )
-        m_frame->PopTool();
 
     return 0;
 }
@@ -227,10 +229,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     SCH_BITMAP* image = aEvent.Parameter<SCH_BITMAP*>();
     bool        immediateMode = image || aEvent.HasPosition();
 
-    if( immediateMode )
-        m_frame->PushTool( aEvent.GetCommandStr().get() );
-    else
-        m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
 
     VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
 
@@ -258,7 +257,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     {
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate()  )
         {
             if( image )
             {
@@ -267,14 +266,16 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 delete image;
                 image = nullptr;
 
-                if( !evt->IsActivate() && !immediateMode )
-                    continue;
+                if( evt->IsActivate() || immediateMode )
+                    break;
             }
+            else
+            {
+                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                    m_frame->PopTool();
 
-            if( !evt->IsActivate() && !immediateMode )
-                m_frame->PopTool();
-
-            break;
+                break;
+            }
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -323,7 +324,10 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 m_view->ClearPreview();
 
                 if( immediateMode )
+                {
+                    m_frame->PopTool();
                     break;
+                }
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -344,12 +348,9 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         }
 
         // Enable autopanning and cursor capture only when there is a module to be placed
-        getViewControls()->SetAutoPan( !!image );
-        getViewControls()->CaptureCursor( !!image );
+        getViewControls()->SetAutoPan( image != nullptr );
+        getViewControls()->CaptureCursor( image != nullptr );
     }
-
-    if( immediateMode )
-        m_frame->PopTool();
 
     return 0;
 }
@@ -384,11 +385,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     getViewControls()->ShowCursor( true );
     getViewControls()->SetSnapping( true );
 
-    if( immediateMode )
-        m_frame->PushTool( aEvent.GetCommandStr().get() );
-    else
-        m_frame->SetTool( aEvent.GetCommandStr().get() );
-
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     // Prime the pump
@@ -400,9 +397,9 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     {
         cursorPos = (wxPoint) getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
-            if( !evt->IsActivate() && !immediateMode )
+            if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
                 m_frame->PopTool();
 
             break;
@@ -445,16 +442,16 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
             }
 
             if( immediateMode )
+            {
+                m_frame->PopTool();
                 break;
+            }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
     }
-
-    if( immediateMode )
-        m_frame->PopTool();
 
     return 0;
 }
@@ -469,10 +466,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
-    if( immediateMode )
-        m_frame->PushTool( aEvent.GetCommandStr().get() );
-    else
-        m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
 
     Activate();
 
@@ -485,7 +479,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     {
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             if( item )
             {
@@ -494,14 +488,16 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 delete item;
                 item = nullptr;
 
-                if( !evt->IsActivate() && !immediateMode )
-                    continue;
+                if( evt->IsActivate() || immediateMode )
+                    break;
             }
+            else
+            {
+                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                    m_frame->PopTool();
 
-            if( !evt->IsActivate() && !immediateMode )
-                m_frame->PopTool();
-
-            break;
+                break;
+            }
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -583,7 +579,10 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 m_view->ClearPreview();
 
                 if( immediateMode )
+                {
+                    m_frame->PopTool();
                     break;
+                }
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -621,9 +620,6 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
-    if( immediateMode )
-        m_frame->PopTool();
-
     return 0;
 }
 
@@ -636,10 +632,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
-    if( immediateMode )
-        m_frame->PushTool( aEvent.GetCommandStr().get() );
-    else
-        m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
 
     Activate();
 
@@ -652,7 +645,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     {
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
             m_view->ClearPreview();
@@ -662,14 +655,16 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 delete sheet;
                 sheet = nullptr;
 
-                if( !evt->IsActivate() && !immediateMode )
-                    continue;
+                if( evt->IsActivate() || immediateMode )
+                    break;
             }
+            else
+            {
+                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                    m_frame->PopTool();
 
-            if( !evt->IsActivate() && !immediateMode )
-                m_frame->PopTool();
-
-            break;
+                break;
+            }
         }
 
         else if( evt->IsClick( BUT_LEFT ) && !sheet )
@@ -705,7 +700,10 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             sheet = nullptr;
 
             if( immediateMode )
+            {
+                m_frame->PopTool();
                 break;
+            }
         }
 
         else if( sheet && ( evt->IsAction( &EE_ACTIONS::refreshPreview )
@@ -726,12 +724,9 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
         }
 
         // Enable autopanning and cursor capture only when there is a sheet to be placed
-        getViewControls()->SetAutoPan( !!sheet );
-        getViewControls()->CaptureCursor( !!sheet );
+        getViewControls()->SetAutoPan( sheet != nullptr );
+        getViewControls()->CaptureCursor( sheet != nullptr);
     }
-
-    if( immediateMode )
-        m_frame->PopTool();
 
     return 0;
 }

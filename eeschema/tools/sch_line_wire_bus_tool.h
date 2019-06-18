@@ -65,10 +65,7 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
-    int DrawWires( const TOOL_EVENT& aEvent );
-    int DrawBusses( const TOOL_EVENT& aEvent );
-    int DrawLines( const TOOL_EVENT& aEvent );
-
+    int DrawSegments( const TOOL_EVENT& aEvent );
     int UnfoldBus( const TOOL_EVENT& aEvent );
 
     // SELECTION_CONDITIONs:

@@ -293,17 +293,17 @@ static bool deleteItem( SCH_BASE_FRAME* aFrame, const VECTOR2D& aPosition )
 
 int LIB_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     wxCHECK( picker, 0 );
 
     picker->SetClickHandler( std::bind( deleteItem, m_frame, std::placeholders::_1 ) );
-    picker->SetCancelHandler( [this]() { m_frame->ClearToolStack(); } );
     picker->Activate();
     Wait();
 
+    m_frame->PopTool();
     return 0;
 }
 

@@ -254,7 +254,7 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
     {
         VECTOR2I cursorPos = controls.GetCursorPosition();
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             // overriding action, or we're cancelling without
             // an in-progress preview area

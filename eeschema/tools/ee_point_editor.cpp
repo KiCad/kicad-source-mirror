@@ -301,16 +301,18 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
             inDrag = false;
         }
 
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             if( inDrag )      // Restore the last change
             {
                 rollbackFromUndo();
+                inDrag = false;
                 modified = false;
             }
 
             // ESC should clear selection along with edit points
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+            if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
             break;
         }

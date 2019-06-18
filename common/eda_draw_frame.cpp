@@ -419,18 +419,13 @@ void EDA_DRAW_FRAME::OnSize( wxSizeEvent& SizeEv )
 }
 
 
-void EDA_DRAW_FRAME::SetTool( const std::string& actionName )
-{
-    if( !m_toolStack.empty() )
-        m_toolStack.pop_back();
-
-    PushTool( actionName );
-}
-
-
 void EDA_DRAW_FRAME::PushTool( const std::string& actionName )
 {
     m_toolStack.push_back( actionName );
+
+    // Human cognitive stacking is very shallow; deeper tool stacks just get annoying
+    if( m_toolStack.size() > 3 )
+        m_toolStack.pop_front();
 
     TOOL_ACTION* action = m_toolManager->GetActionManager()->FindAction( actionName );
 
@@ -451,6 +446,9 @@ void EDA_DRAW_FRAME::PopTool()
 
         if( action )
         {
+            // Pop the action as running it will push it back onto the stack
+            m_toolStack.pop_back();
+
             TOOL_EVENT evt = action->MakeEvent();
             evt.SetHasPosition( false );
             GetToolManager()->PostEvent( evt );

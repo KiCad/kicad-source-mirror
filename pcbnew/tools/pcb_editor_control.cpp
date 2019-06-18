@@ -542,7 +542,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         if( reselect && module )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, module );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             if( module )
             {
@@ -719,7 +719,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
         cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
             break;
 
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )

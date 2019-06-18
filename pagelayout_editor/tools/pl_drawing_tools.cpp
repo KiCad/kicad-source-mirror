@@ -73,46 +73,27 @@ void PL_DRAWING_TOOLS::Reset( RESET_REASON aReason )
 
 int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 {
-    bool isText;
-    bool isImmediate = false;
-
-    if( aEvent.IsAction( &PL_ACTIONS::placeText ) )
-    {
-        isText = true;
-        m_frame->SetToolID( ID_PL_TEXT_TOOL, wxCURSOR_PENCIL, _( "Add text" ) );
-    }
-    else if( aEvent.IsAction( &PL_ACTIONS::placeImage ) )
-    {
-        isText = false;
-        m_frame->SetToolID( ID_PL_IMAGE_TOOL, wxCURSOR_PENCIL, _( "Add image" ) );
-    }
-    else if( aEvent.IsAction( & PL_ACTIONS::addText ) )
-    {
-        isText = true;
-        isImmediate = true;
-    }
-    else if( aEvent.IsAction( & PL_ACTIONS::addImage ) )
-    {
-        isText = false;
-        isImmediate = true;
-    }
-    else
-        wxCHECK_MSG( false, 0, "Unknown action in PL_DRAWING_TOOLS::PlaceItem()" );
-
-    VECTOR2I           cursorPos;
-    WS_DRAW_ITEM_BASE* item = nullptr;
+    WS_DATA_ITEM::WS_ITEM_TYPE type = aEvent.Parameter<WS_DATA_ITEM::WS_ITEM_TYPE>();
+    bool                       immediateMode = aEvent.HasPosition();
+    VECTOR2I                   cursorPos;
+    WS_DRAW_ITEM_BASE*         item = nullptr;
 
     m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
+
+    // Prime the pump
+    if( immediateMode )
+        m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             if( item )
             {
@@ -123,14 +104,19 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
                 // There's nothing to roll-back, but we still need to pop the undo stack
                 m_frame->RollbackFromUndo();
 
-                if( !evt->IsActivate() && !isImmediate )
-                    continue;
+                if( evt->IsActivate() || immediateMode )
+                    break;
             }
+            else
+            {
+                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                    m_frame->PopTool();
 
-            break;
+                break;
+            }
         }
 
-        else if( evt->IsClick( BUT_LEFT ) || ( isImmediate && !item ) )
+        else if( evt->IsClick( BUT_LEFT ) )
         {
             // First click creates...
             if( !item )
@@ -140,8 +126,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
 
                 WS_DATA_ITEM* dataItem;
-                dataItem = m_frame->AddPageLayoutItem( isText ? WS_DATA_ITEM::WS_TEXT
-                                                              : WS_DATA_ITEM::WS_BITMAP );
+                dataItem = m_frame->AddPageLayoutItem( type );
                 item = dataItem->GetDrawItems()[0];
                 item->SetFlags( IS_NEW | IS_MOVED );
                 m_selectionTool->AddItemToSel( item );
@@ -159,8 +144,11 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 
                 m_frame->OnModify();
 
-                if( isImmediate )
+                if( immediateMode )
+                {
+                    m_frame->PopTool();
                     break;
+                }
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -180,11 +168,9 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
         }
 
         // Enable autopanning and cursor capture only when there is an item to be placed
-        getViewControls()->SetAutoPan( !!item );
-        getViewControls()->CaptureCursor( !!item );
+        getViewControls()->SetAutoPan( item != nullptr );
+        getViewControls()->CaptureCursor( item != nullptr );
     }
-
-    m_frame->SetNoToolSelected();
 
     return 0;
 }
@@ -192,49 +178,30 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 
 int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
+    WS_DATA_ITEM::WS_ITEM_TYPE type = aEvent.Parameter<WS_DATA_ITEM::WS_ITEM_TYPE>();
+    bool                       immediateMode = aEvent.HasPosition();
+    WS_DRAW_ITEM_BASE*         item = nullptr;
+
     // We might be running as the same shape in another co-routine.  Make sure that one
     // gets whacked.
     m_toolMgr->DeactivateTool();
 
-    bool isDrawLine;
-    bool isImmediate = false;
-
-    if( aEvent.IsAction( &PL_ACTIONS::drawLine ) )
-    {
-        isDrawLine = true;
-        m_frame->SetToolID( ID_PL_LINE_TOOL, wxCURSOR_PENCIL, _( "Draw line" ) );
-    }
-    else if( aEvent.IsAction( &PL_ACTIONS::drawRectangle ) )
-    {
-        isDrawLine = false;
-        m_frame->SetToolID( ID_PL_RECTANGLE_TOOL, wxCURSOR_PENCIL, _( "Draw rectangle" ) );
-    }
-    else if( aEvent.IsAction( &PL_ACTIONS::addLine ) )
-    {
-        isDrawLine = true;
-        isImmediate = true;
-    }
-    else if( aEvent.IsAction( &PL_ACTIONS::addRectangle ) )
-    {
-        isDrawLine = false;
-        isImmediate = true;
-    }
-    else
-        wxCHECK_MSG( false, 0, "Unknown action in PL_DRAWING_TOOLS::DrawShape()" );
-
     m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
-    WS_DRAW_ITEM_BASE* item = nullptr;
+    // Prime the pump
+    if( immediateMode )
+        m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
 
@@ -243,28 +210,26 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 item = nullptr;
                 m_frame->RollbackFromUndo();
 
-                if( !evt->IsActivate() && !isImmediate )
-                    continue;
+                if( evt->IsActivate() || immediateMode )
+                    break;
             }
+            else
+            {
+                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                    m_frame->PopTool();
 
-            break;
+                break;
+            }
         }
 
-        else if( evt->IsClick( BUT_LEFT ) || ( isImmediate && !item ) )
+        else if( evt->IsClick( BUT_LEFT ) )
         {
             if( !item ) // start drawing
             {
                 m_frame->SaveCopyInUndoList();
                 m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
 
-                WS_DATA_ITEM::WS_ITEM_TYPE dataType;
-
-                if( isDrawLine )
-                    dataType = WS_DATA_ITEM::WS_SEGMENT;
-                else
-                    dataType = WS_DATA_ITEM::WS_RECT;
-
-                WS_DATA_ITEM* dataItem = m_frame->AddPageLayoutItem( dataType );
+                WS_DATA_ITEM* dataItem = m_frame->AddPageLayoutItem( type );
                 dataItem->MoveToUi( (wxPoint) cursorPos );
 
                 item = dataItem->GetDrawItems()[0];
@@ -278,8 +243,9 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
                 m_frame->OnModify();
 
-                if( isImmediate )
+                if( immediateMode )
                 {
+                    m_frame->PopTool();
                     m_toolMgr->RunAction( ACTIONS::activatePointEditor );
                     break;
                 }
@@ -306,11 +272,9 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         }
 
         // Enable autopanning and cursor capture only when there is a shape being drawn
-        getViewControls()->SetAutoPan( !!item );
-        getViewControls()->CaptureCursor( !!item );
+        getViewControls()->SetAutoPan( item != nullptr );
+        getViewControls()->CaptureCursor( item != nullptr );
     }
-
-    m_frame->SetNoToolSelected();
 
     return 0;
 }
@@ -322,9 +286,4 @@ void PL_DRAWING_TOOLS::setTransitions()
     Go( &PL_DRAWING_TOOLS::DrawShape,           PL_ACTIONS::drawRectangle.MakeEvent() );
     Go( &PL_DRAWING_TOOLS::PlaceItem,           PL_ACTIONS::placeText.MakeEvent() );
     Go( &PL_DRAWING_TOOLS::PlaceItem,           PL_ACTIONS::placeImage.MakeEvent() );
-
-    Go( &PL_DRAWING_TOOLS::DrawShape,           PL_ACTIONS::addLine.MakeEvent() );
-    Go( &PL_DRAWING_TOOLS::DrawShape,           PL_ACTIONS::addRectangle.MakeEvent() );
-    Go( &PL_DRAWING_TOOLS::PlaceItem,           PL_ACTIONS::addText.MakeEvent() );
-    Go( &PL_DRAWING_TOOLS::PlaceItem,           PL_ACTIONS::addImage.MakeEvent() );
 }

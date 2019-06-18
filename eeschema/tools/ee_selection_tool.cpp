@@ -406,7 +406,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         }
 
-        else if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsCancel() )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             ClearSelection();
             m_toolMgr->RunAction( EE_ACTIONS::clearHighlight, true );
@@ -653,7 +653,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             cancelled = true;
             break;

@@ -45,8 +45,7 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
-    int PlacePin( const TOOL_EVENT& aEvent );
-    int PlaceText( const TOOL_EVENT& aEvent );
+    int TwoClickPlace( const TOOL_EVENT& aEvent );
     int DrawShape( const TOOL_EVENT& aEvent );
     int PlaceAnchor( const TOOL_EVENT& aEvent );
 

@@ -192,7 +192,6 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
             {
                 m_frame->SaveCopyInUndoList();
                 controls->ForceCursorPosition( false );
-                m_frame->PushTool( _( "Drag Point" ).ToStdString() );
                 inDrag = true;
                 modified = true;
             }
@@ -206,22 +205,21 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
         else if( inDrag && evt->IsMouseUp( BUT_LEFT ) )
         {
             controls->SetAutoPan( false );
-            m_frame->PopTool();
             inDrag = false;
         }
 
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             if( inDrag )      // Restore the last change
             {
-                m_frame->PopTool();
                 m_frame->RollbackFromUndo();
                 inDrag = false;
                 modified = false;
             }
 
             // ESC should clear selection along with edit points
-            m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
+            if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
 
             break;
         }

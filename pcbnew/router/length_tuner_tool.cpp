@@ -189,7 +189,7 @@ void LENGTH_TUNER_TOOL::performTuning()
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
             break;
         else if( evt->IsMotion() )
         {
@@ -295,7 +295,7 @@ int LENGTH_TUNER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             break; // Finish
         }

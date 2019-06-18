@@ -84,8 +84,8 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         return 0;
 
     m_frame->PushTool( aEvent.GetCommandStr().get() );
-
     Activate();
+
     controls->ShowCursor( true );
     controls->SetAutoPan( true );
 
@@ -193,7 +193,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         //------------------------------------------------------------------------
         // Handle cancel
         //
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             if( m_moveInProgress )
                 restore_state = true;
@@ -279,7 +279,6 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     m_moveInProgress = false;
     m_frame->PopTool();
-
     return 0;
 }
 

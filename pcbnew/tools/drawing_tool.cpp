@@ -294,7 +294,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         if( reselect && text )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, text );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             if( text )
             {
@@ -490,7 +490,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), nullptr );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             m_controls->SetAutoPan( false );
 
@@ -803,7 +803,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
                 m_view->Update( &preview );
             }
-            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
             {
                 preview.FreeItems();
                 break;
@@ -874,7 +874,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         {
             m_menu.ShowContextMenu( selection() );
         }
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
             break;
     }
 
@@ -961,7 +961,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
             frame()->SetMsgPanel( aGraphic );
         }
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             preview.Clear();
             m_view->Update( &preview );
@@ -1185,7 +1185,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             // update, but don't step the manager state
             arcManager.AddPoint( cursorPos, false );
         }
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             preview.Clear();
             delete aGraphic;
@@ -1340,7 +1340,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
         VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), layers );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             // pre-empted by another tool, give up
             // cancelled without an inprogress polygon, give up

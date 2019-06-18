@@ -25,6 +25,7 @@
 #include <bitmaps.h>
 #include <tools/ee_actions.h>
 #include <core/typeinfo.h>
+#include <layers_id_colors_and_visibility.h>
 
 
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
@@ -612,13 +613,13 @@ TOOL_ACTION EE_ACTIONS::drawWire( "eeschema.InteractiveDrawingLineWireBus.drawWi
         AS_GLOBAL,
         'W', LEGACY_HK_NAME( "Begin Wire" ),
         _( "Add Wire" ), _( "Add a wire" ),
-        add_line_xpm, AF_ACTIVATE );
+        add_line_xpm, AF_ACTIVATE, (void*) LAYER_WIRE );
 
 TOOL_ACTION EE_ACTIONS::drawBus( "eeschema.InteractiveDrawingLineWireBus.drawBusses",
         AS_GLOBAL,
         'B', LEGACY_HK_NAME( "Begin Bus" ),
         _( "Add Bus" ), _( "Add a bus" ),
-        add_bus_xpm, AF_ACTIVATE );
+        add_bus_xpm, AF_ACTIVATE, (void*) LAYER_BUS );
 
 TOOL_ACTION EE_ACTIONS::unfoldBus( "eeschema.InteractiveDrawingLineWireBus.unfoldBus",
         AS_GLOBAL,
@@ -630,7 +631,7 @@ TOOL_ACTION EE_ACTIONS::drawLines( "eeschema.InteractiveDrawingLineWireBus.drawL
         AS_GLOBAL,
         'I', LEGACY_HK_NAME( "Add Graphic PolyLine" ),
         _( "Add Lines" ), _( "Add connected graphic lines" ),
-        add_dashed_line_xpm, AF_ACTIVATE );
+        add_dashed_line_xpm, AF_ACTIVATE, (void*) LAYER_NOTES );
 
 TOOL_ACTION EE_ACTIONS::finishLineWireOrBus( "eeschema.InteractiveDrawingLineWireBus.finish",
         AS_GLOBAL,

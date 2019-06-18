@@ -76,7 +76,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer
         VECTOR2I cursorPos = controls()->GetCursorPosition();
         aPlacer->m_modifiers = evt->Modifier();
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             if( newItem )
             {

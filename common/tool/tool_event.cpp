@@ -176,9 +176,7 @@ bool TOOL_EVENT::IsDblClick( int aButtonMask ) const
 
 bool TOOL_EVT_UTILS::IsCancelInteractive( const TOOL_EVENT& aEvt )
 {
-    return aEvt.IsAction( &ACTIONS::cancelInteractive )
-           || aEvt.IsActivate()
-           || aEvt.IsCancel();
+    return aEvt.IsAction( &ACTIONS::cancelInteractive ) || aEvt.IsCancel();
 }
 
 

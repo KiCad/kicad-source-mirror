@@ -103,7 +103,7 @@ int PL_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 setControls();
         }
 
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             if( m_cancelHandler )
             {

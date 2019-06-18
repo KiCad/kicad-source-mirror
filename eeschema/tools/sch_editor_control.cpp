@@ -692,17 +692,17 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
     if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
         m_frame->RecalculateConnections();
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     wxCHECK( picker, 0 );
 
     picker->SetClickHandler( std::bind( highlightNet, m_toolMgr, std::placeholders::_1 ) );
-    picker->SetCancelHandler( [this]() { m_frame->ClearToolStack(); } );
     picker->Activate();
     Wait();
 
+    m_frame->PopTool();
     return 0;
 }
 

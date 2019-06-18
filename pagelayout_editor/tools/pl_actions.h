@@ -64,10 +64,6 @@ public:
     static TOOL_ACTION placeImage;
     static TOOL_ACTION drawRectangle;
     static TOOL_ACTION drawLine;
-    static TOOL_ACTION addText;
-    static TOOL_ACTION addImage;
-    static TOOL_ACTION addRectangle;
-    static TOOL_ACTION addLine;
     static TOOL_ACTION appendImportedWorksheet;
 
     // Editing

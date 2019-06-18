@@ -82,7 +82,7 @@ private:
         {
             frame->RecalculateConnections();
 
-            // Have to pick up the pointer again because it may have been changed by SchematicCleanUp
+            // Pick up the pointer again because it may have been changed by SchematicCleanUp
             selection = selTool->RequestSelection( busType );
             bus = (SCH_LINE*) selection.Front();
         }
@@ -250,43 +250,15 @@ bool SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( const SELECTION& aSelection
 }
 
 
-int SCH_LINE_WIRE_BUS_TOOL::DrawWires( const TOOL_EVENT& aEvent )
+int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
 {
-    if( aEvent.HasPosition() )  // Start drawing
-    {
+    SCH_LAYER_ID layer = aEvent.Parameter<SCH_LAYER_ID>();
+
+    if( aEvent.HasPosition() )
         getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
 
-        m_frame->PushTool( aEvent.GetCommandStr().get() );
-        doDrawSegments( LAYER_WIRE, nullptr, true );
-        m_frame->PopTool();
-    }
-    else                        // Invoke the tool
-    {
-        m_frame->SetTool( aEvent.GetCommandStr().get() );
-        doDrawSegments( LAYER_WIRE, nullptr, false );
-    }
-
-    return 0;
-}
-
-
-int SCH_LINE_WIRE_BUS_TOOL::DrawBusses( const TOOL_EVENT& aEvent )
-{
-    if( aEvent.HasPosition() )  // Start drawing
-    {
-        getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
-
-        m_frame->PushTool( aEvent.GetCommandStr().get() );
-        doDrawSegments( LAYER_BUS, nullptr, true );
-        m_frame->PopTool();
-    }
-    else                        // Invoke the tool
-    {
-        m_frame->SetTool( aEvent.GetCommandStr().get() );
-        doDrawSegments( LAYER_BUS, nullptr, false );
-    }
-
-    return 0;
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    return doDrawSegments( layer, nullptr, aEvent.HasPosition() );
 }
 
 
@@ -298,6 +270,7 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     if( netPtr )
@@ -327,20 +300,15 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
         }
     }
 
+    // Break a wire for the given net out of the bus
     if( !net.IsEmpty() )
-    {
-        // Break a wire for the given net out of the bus
         segment = doUnfoldBus( net );
-    }
 
     // If we have an unfolded wire to draw, then draw it
     if( segment )
-    {
-        m_frame->PushTool( aEvent.GetCommandStr().get() );
         doDrawSegments( LAYER_WIRE, segment, true );
-        m_frame->PopTool();
-    }
 
+    m_frame->PopTool();
     return 0;
 }
 
@@ -365,26 +333,6 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
     getViewControls()->SetCrossHairCursorPosition( m_busUnfold.entry->m_End(), false );
 
     return startSegments( LAYER_WIRE, m_busUnfold.entry->m_End() );
-}
-
-
-int SCH_LINE_WIRE_BUS_TOOL::DrawLines( const TOOL_EVENT& aEvent)
-{
-    if( aEvent.HasPosition() )  // Start drawing
-    {
-        getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
-
-        m_frame->PushTool( aEvent.GetCommandStr().get() );
-        doDrawSegments( LAYER_NOTES, nullptr, true );
-        m_frame->PopTool();
-    }
-    else                        // Invoke the tool
-    {
-        m_frame->SetTool( aEvent.GetCommandStr().get() );
-        doDrawSegments( LAYER_NOTES, nullptr, false );
-    }
-
-    return 0;
 }
 
 
@@ -491,6 +439,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool 
 
     Activate();
 
+    // Prime the pump
     if( aImmediateMode && !aSegment )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
@@ -502,7 +451,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool 
         //------------------------------------------------------------------------
         // Handle cancel:
         //
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             if( aSegment || m_busUnfold.in_progress )
             {
@@ -524,14 +473,16 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool 
                 m_view->ClearPreview();
                 m_view->ShowPreview( false );
 
-                if( !evt->IsActivate() && !aImmediateMode )
-                    continue;
+                if( evt->IsActivate() || aImmediateMode )
+                    break;
             }
+            else
+            {
+                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                    m_frame->PopTool();
 
-            if( !evt->IsActivate() && !aImmediateMode )
-                m_frame->PopTool();
-
-            break;
+                break;
+            }
         }
         //------------------------------------------------------------------------
         // Handle finish:
@@ -548,7 +499,10 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool 
             }
 
             if( aImmediateMode )
+            {
+                m_frame->PopTool();
                 break;
+            }
         }
         //------------------------------------------------------------------------
         // Handle click:
@@ -688,8 +642,8 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool 
         }
 
         // Enable autopanning and cursor capture only when there is a segment to be placed
-        getViewControls()->SetAutoPan( !!aSegment );
-        getViewControls()->CaptureCursor( !!aSegment );
+        getViewControls()->SetAutoPan( aSegment != nullptr );
+        getViewControls()->CaptureCursor( aSegment != nullptr );
     }
 
     return 0;
@@ -889,9 +843,9 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
 
 void SCH_LINE_WIRE_BUS_TOOL::setTransitions()
 {
-    Go( &SCH_LINE_WIRE_BUS_TOOL::DrawWires, EE_ACTIONS::drawWire.MakeEvent() );
-    Go( &SCH_LINE_WIRE_BUS_TOOL::DrawBusses, EE_ACTIONS::drawBus.MakeEvent() );
-    Go( &SCH_LINE_WIRE_BUS_TOOL::DrawLines, EE_ACTIONS::drawLines.MakeEvent() );
+    Go( &SCH_LINE_WIRE_BUS_TOOL::DrawSegments, EE_ACTIONS::drawWire.MakeEvent() );
+    Go( &SCH_LINE_WIRE_BUS_TOOL::DrawSegments, EE_ACTIONS::drawBus.MakeEvent() );
+    Go( &SCH_LINE_WIRE_BUS_TOOL::DrawSegments, EE_ACTIONS::drawLines.MakeEvent() );
 
-    Go( &SCH_LINE_WIRE_BUS_TOOL::UnfoldBus, EE_ACTIONS::unfoldBus.MakeEvent() );
+    Go( &SCH_LINE_WIRE_BUS_TOOL::UnfoldBus,    EE_ACTIONS::unfoldBus.MakeEvent() );
 }

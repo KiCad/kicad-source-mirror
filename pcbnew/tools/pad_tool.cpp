@@ -482,7 +482,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
         }
 
             // Now that cancel-current-action has been handled, check for cancel-tool.
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             commit.Push( _( "Renumber pads" ) );
             break;
