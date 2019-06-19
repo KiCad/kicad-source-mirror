@@ -195,6 +195,7 @@ TOOL_MANAGER::TOOL_MANAGER() :
         m_view( NULL ),
         m_viewControls( NULL ),
         m_frame( NULL ),
+        m_warpMouseAfterContextMenu( true ),
         m_menuActive( false ),
         m_menuOwner( -1 ),
         m_activeState( nullptr )
@@ -487,7 +488,7 @@ void TOOL_MANAGER::ScheduleNextState( TOOL_BASE* aTool, TOOL_STATE_FUNC& aHandle
 {
     TOOL_STATE* st = m_toolState[aTool];
 
-    st->transitions.push_back( TRANSITION( aConditions, aHandler ) );
+    st->transitions.emplace_back( TRANSITION( aConditions, aHandler ) );
 }
 
 
@@ -634,7 +635,7 @@ bool TOOL_MANAGER::dispatchActivation( const TOOL_EVENT& aEvent )
     {
         wxString cmdStr( *aEvent.GetCommandStr() );
 
-        std::map<std::string, TOOL_STATE*>::iterator tool = m_toolNameIndex.find( *aEvent.GetCommandStr() );
+        auto tool = m_toolNameIndex.find( *aEvent.GetCommandStr() );
 
         if( tool != m_toolNameIndex.end() )
         {

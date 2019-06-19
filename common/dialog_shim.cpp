@@ -100,7 +100,7 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
     {
         TOOL_MANAGER* toolMgr = static_cast<EDA_BASE_FRAME*>( kiwayHolder )->GetToolManager();
 
-        if( toolMgr )
+        if( toolMgr && toolMgr->IsContextMenuActive() )
             toolMgr->VetoContextMenuMouseWarp();
     }
 

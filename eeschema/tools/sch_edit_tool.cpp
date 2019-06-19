@@ -80,6 +80,8 @@ private:
         EE_SELECTION&      selection = selTool->GetSelection();
         SCH_COMPONENT*     component = dynamic_cast<SCH_COMPONENT*>( selection.Front() );
 
+        Clear();
+
         if( !component )
         {
             Append( ID_POPUP_SCH_UNFOLD_BUS, _( "no symbol selected" ), wxEmptyString );
