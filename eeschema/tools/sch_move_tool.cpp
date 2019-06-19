@@ -430,7 +430,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     }
     else
     {
-        addJunctionsIfNeeded( selection );
+        m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selection );
         m_frame->SchematicCleanUp();
         m_frame->TestDanglingEnds();
 
@@ -530,60 +530,6 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
         default:
             break;
         }
-    }
-}
-
-
-void SCH_MOVE_TOOL::addJunctionsIfNeeded( EE_SELECTION& aSelection )
-{
-    std::vector< wxPoint > pts;
-    std::vector< wxPoint > connections;
-
-    m_frame->GetSchematicConnections( connections );
-
-    for( unsigned ii = 0; ii < aSelection.GetSize(); ii++ )
-    {
-        SCH_ITEM* item = static_cast<SCH_ITEM*>( aSelection.GetItem( ii ) );
-        std::vector< wxPoint > new_pts;
-
-        if( !item->IsConnectable() )
-            continue;
-
-        item->GetConnectionPoints( new_pts );
-        pts.insert( pts.end(), new_pts.begin(), new_pts.end() );
-
-        // If the item is a line, we also add any connection points from the rest of the schematic
-        // that terminate on the line after it is moved.
-        if( item->Type() == SCH_LINE_T )
-        {
-            SCH_LINE* line = (SCH_LINE*) item;
-            for( auto i : connections )
-            {
-                if( IsPointOnSegment( line->GetStartPoint(), line->GetEndPoint(), i ) )
-                    pts.push_back( i );
-            }
-        }
-        else
-        {
-            // Clean up any wires that short non-wire connections in the list
-            for( auto point = new_pts.begin(); point != new_pts.end(); point++ )
-            {
-                for( auto second_point = point + 1; second_point != new_pts.end(); second_point++ )
-                   m_frame->TrimWire( *point, *second_point );
-            }
-        }
-    }
-
-    // We always have some overlapping connection points.  Drop duplicates here
-    std::sort( pts.begin(), pts.end(), []( const wxPoint& a, const wxPoint& b ) -> bool
-                                           { return a.x < b.x || (a.x == b.x && a.y < b.y); } );
-
-    pts.erase( unique( pts.begin(), pts.end() ), pts.end() );
-
-    for( auto point : pts )
-    {
-        if( m_frame->GetScreen()->IsJunctionNeeded( point, true ) )
-            m_frame->AddJunction( point, true, false );
     }
 }
 

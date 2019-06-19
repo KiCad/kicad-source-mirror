@@ -837,7 +837,13 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     newItem->ClearFlags();
 
     if( newItem->IsConnectable() )
+    {
+        auto selection = m_selectionTool->GetSelection();
+
+        m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selection );
+        m_frame->SchematicCleanUp();
         m_frame->TestDanglingEnds();
+    }
 
     // newItem newItem, now that it has been moved, thus saving new position.
     m_frame->SaveCopyForRepeatItem( newItem );

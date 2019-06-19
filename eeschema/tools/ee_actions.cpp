@@ -609,6 +609,10 @@ TOOL_ACTION EE_ACTIONS::toggleForceHV( "eeschema.EditorControl.forceHVLines",
 
 // SCH_LINE_WIRE_BUS_TOOL
 //
+TOOL_ACTION EE_ACTIONS::addNeededJunctions(
+        "eeschema.InteractiveDrawingLineWireBus.addNeededJunctions", AS_ACTIVE, 0, "",
+        _( "Add Junctions to Selection where needed" ), "", nullptr, AF_ACTIVATE );
+
 TOOL_ACTION EE_ACTIONS::drawWire( "eeschema.InteractiveDrawingLineWireBus.drawWires",
         AS_GLOBAL,
         'W', LEGACY_HK_NAME( "Begin Wire" ),

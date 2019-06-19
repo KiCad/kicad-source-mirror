@@ -74,6 +74,11 @@ public:
     static bool IsDrawingBus( const SELECTION& aSelection );
     static bool IsDrawingLineWireOrBus( const SELECTION& aSelection );
 
+    /**
+     * Handle the addition of junctions to a selection of objects
+     */
+    int AddJunctionsIfNeeded( const TOOL_EVENT& aEvent );
+
 private:
     int doDrawSegments( int aType, SCH_LINE* aSegment, bool aImmediateMode );
     SCH_LINE* startSegments( int aType, const VECTOR2D& aPos );

@@ -56,10 +56,6 @@ private:
     ///> Connected wires are included with any un-connected ends flagged (STARTPOINT or ENDPOINT).
     void getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoint, EDA_ITEMS& aList );
 
-    ///> Adds junctions if needed to each item in the list after they have been
-    ///> moved.
-    void addJunctionsIfNeeded( EE_SELECTION& aSelection );
-
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
