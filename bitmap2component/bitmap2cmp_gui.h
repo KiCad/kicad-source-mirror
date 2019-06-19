@@ -26,44 +26,60 @@
 #include "bitmap2component.h"
 
 #include "bitmap2cmp_gui_base.h"
-#include <map>
 #include <potracelib.h>
+#include <common.h>     // for EDA_UNITS_T
 
-enum UNIT
-{
-    MM = 0,
-    INCH,
-    MILS,
-    DPI
-};
 
 class IMAGE_SIZE
 {
 public:
     IMAGE_SIZE();
 
-    void Set( float aValue, UNIT aUnit );
-    void SetUnit( UNIT aUnit )
+    // Set the unit used for m_outputSize, and convert the old m_outputSize value
+    // to the value in new unit
+    void SetUnit( EDA_UNITS_T aUnit );
+
+    // Accessors:
+    void SetOriginalDPI( int aDPI )
+    {
+        m_originalDPI = aDPI;
+    }
+
+    void SetOriginalSizePixels( int aPixels )
+    {
+        m_originalSizePixels = aPixels;
+    }
+
+    double GetOutputSize()
+    {
+        return m_outputSize;
+    }
+
+    void SetOutputSize( double aSize, EDA_UNITS_T aUnit )
     {
         m_unit = aUnit;
+        m_outputSize = aSize;
     }
 
-
-    void SetInputResolution( int aResolution );
-    int  GetInputResolution()
+    int  GetOriginalSizePixels()
     {
-        return m_originalResolution;
+        return m_originalSizePixels;
     }
 
-    float GetValue();
+    // Set the m_outputSize value from the m_originalSizePixels and the selected unit
+    void SetOutputSizeFromInitialImageSize();
 
+    /** @return the pixels per inch value to build the output image.
+     * It is used by potrace to build the polygonal image
+     */
     int GetOutputDPI();
 
 private:
-    UNIT  m_unit;
-    float m_value;
-    int   m_originalDPI;
-    int   m_originalResolution;
+    EDA_UNITS_T  m_unit;            // The units for m_outputSize (mm, inch, dpi)
+    double  m_outputSize;           // The size in m_unit of the output image, depending on
+                                    // the user settings. Set to the initial image size
+    int     m_originalDPI;          // The image DPI if specified in file, or 0 if unknown
+    int     m_originalSizePixels;   // The original image size read from file, in pixels
 };
 
 class BM2CMP_FRAME : public BM2CMP_FRAME_BASE
@@ -84,6 +100,12 @@ private:
     void OnLoadFile( wxCommandEvent& event ) override;
     void OnExportToFile( wxCommandEvent& event ) override;
     void OnExportToClipboard( wxCommandEvent& event ) override;
+
+    ///> @return the EDA_UNITS_T from the m_PixelUnit choice
+    EDA_UNITS_T getUnitFromSelection();
+
+    // return a string giving the output size, according to the selected unit
+    wxString FormatOutputSize( double aSize );
 
     /**
      * Generate a schematic library which contains one component:
@@ -130,6 +152,9 @@ private:
     void OnFormatChange( wxCommandEvent& event ) override;
     void exportBitmap( OUTPUT_FMT_ID aFormat );
 
+    void LoadSettings();
+    void SaveSettings();
+
 private:
     wxImage  m_Pict_Image;
     wxBitmap m_Pict_Bitmap;
@@ -147,8 +172,6 @@ private:
     std::unique_ptr<wxConfigBase> m_config;
     bool                          m_exportToClipboard;
     bool                          m_AspectRatioLocked;
-    float                         m_AspectRatio;
-    std::map<UNIT, wxString>      m_unitMap = { { MM, _("mm") }, { INCH, _("Inch") }, { MILS, _("Mils") },
-        { DPI, _("DPI") } };
+    double                        m_AspectRatio;
 };
 #endif// BITMOP2CMP_GUI_H_

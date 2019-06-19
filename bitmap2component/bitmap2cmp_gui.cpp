@@ -52,73 +52,183 @@
 #define KEYWORD_LAST_MODLAYER       wxT( "Last_modlayer" )
 #define KEYWORD_BINARY_THRESHOLD    wxT( "Threshold" )
 #define KEYWORD_BW_NEGATIVE         wxT( "Negative_choice" )
+#define KEYWORD_UNIT_SELECTION      wxT( "Unit_selection" )
 
-//Default value and unit for input
-#define DEFAULT_SIZE_VALUE 10
-#define DEFAULT_SIZE_UNIT MM
+#define DEFAULT_DPI 300     // the image DPI used in formats that do not define a DPI
 
 IMAGE_SIZE::IMAGE_SIZE()
 {
-    m_value = 0;
-    m_value = MM;
+    m_outputSize = 0.0;
+    m_originalDPI = DEFAULT_DPI;
+    m_originalSizePixels = 0;
+    m_unit = MILLIMETRES;
 }
 
-void IMAGE_SIZE::Set( float aValue, UNIT aUnit )
+
+void IMAGE_SIZE::SetOutputSizeFromInitialImageSize()
 {
-    m_value = aValue;
-    m_unit = aUnit;
+    // Set the m_outputSize value from the m_originalSizePixels and the selected unit
+    if( m_unit == MILLIMETRES )
+    {
+        m_outputSize = (double)GetOriginalSizePixels() / m_originalDPI * 25.4;
+    }
+    else if( m_unit == INCHES )
+    {
+        m_outputSize = (double)GetOriginalSizePixels() / m_originalDPI;
+    }
+    else
+    {
+        m_outputSize = m_originalDPI;
+    }
+
 }
 
-void IMAGE_SIZE::SetInputResolution( int aResolution )
-{
-    m_originalResolution = aResolution;
-}
-
-
-float IMAGE_SIZE::GetValue()
-{
-    return m_value;
-}
 
 int IMAGE_SIZE::GetOutputDPI()
 {
     int outputDPI;
-    if( m_unit == MM )
-    {
-        outputDPI = m_originalResolution / ( m_value / 25.4 );
-    }
 
-    else if( m_unit == INCH )
+    if( m_unit == MILLIMETRES )
     {
-        outputDPI = m_originalResolution / ( m_value );
+        outputDPI = GetOriginalSizePixels() / ( m_outputSize / 25.4 );
     }
-
-    else if( m_unit == MILS )
+    else if( m_unit == INCHES )
     {
-        outputDPI = m_originalResolution / ( m_value / 1000 );
+        outputDPI = GetOriginalSizePixels() / m_outputSize;
     }
-
     else
     {
-        outputDPI = m_value;
+        outputDPI = KiROUND( m_outputSize );
     }
+
     return outputDPI;
 }
+
+
+void IMAGE_SIZE::SetUnit( EDA_UNITS_T aUnit )
+{
+    // Set the unit used for m_outputSize, and convert the old m_outputSize value
+    // to the value in new unit
+    if( aUnit == m_unit )
+        return;
+
+    // Convert m_outputSize to mm:
+    double size_mm;
+
+    if( m_unit == MILLIMETRES )
+    {
+        size_mm = m_outputSize;
+    }
+    else if( m_unit == INCHES )
+    {
+        size_mm = m_outputSize * 25.4;
+    }
+    else
+    {
+        // m_outputSize is the DPI, not an image size
+        // the image size is m_originalSizePixels / m_outputSize (in inches)
+        if( m_outputSize )
+            size_mm =  m_originalSizePixels / m_outputSize * 25.4;
+        else
+            size_mm = 0;
+    }
+
+    // Convert m_outputSize to new value:
+    if( aUnit == MILLIMETRES )
+    {
+        m_outputSize = size_mm;
+    }
+    else if( aUnit == INCHES )
+    {
+        m_outputSize = size_mm / 25.4;
+    }
+    else
+    {
+        if( size_mm )
+            m_outputSize = m_originalSizePixels / size_mm * 25.4;
+        else
+            m_outputSize = 0;
+    }
+
+    m_unit = aUnit;
+}
+
 
 
 BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     BM2CMP_FRAME_BASE( aParent )
 {
     SetKiway( this, aKiway );
-
-    int tmp;
     m_config = GetNewConfig( Pgm().App().GetAppName() );
+
+    wxString unitList[] =
+    {
+        _("mm"), _("Inch"), _("DPI")
+    };
+
+    for( int ii = 0; ii < 3; ii++ )
+        m_PixelUnit->Append( unitList[ii] );
+
+    LoadSettings();
+
+    m_outputSizeX.SetUnit( getUnitFromSelection() );
+    m_outputSizeY.SetUnit( getUnitFromSelection() );
+    m_outputSizeX.SetOutputSize( 0, getUnitFromSelection() );
+    m_outputSizeY.SetOutputSize( 0, getUnitFromSelection() );
+
+    m_UnitSizeX->ChangeValue( FormatOutputSize( m_outputSizeX.GetOutputSize() ) );
+    m_UnitSizeY->ChangeValue( FormatOutputSize( m_outputSizeY.GetOutputSize() ) );
+
+    //Set icon for aspect ratio
+    m_AspectRatioLocked = true;
+    m_AspectRatio = 1;
+    m_AspectRatioLockButton->SetBitmap( KiBitmap( locked_xpm ) );
+
+    // Give an icon
+    wxIcon icon;
+    icon.CopyFromBitmap( KiBitmap( icon_bitmap2component_xpm ) );
+    SetIcon( icon );
+
+    GetSizer()->SetSizeHints( this );
+
+    SetSize( m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
+
+    m_buttonExportFile->Enable( false );
+    m_buttonExportClipboard->Enable( false );
+
+
+    if ( m_framePos == wxDefaultPosition )
+        Centre();
+}
+
+
+BM2CMP_FRAME::~BM2CMP_FRAME()
+{
+    SaveSettings();
+    /* This needed for OSX: avoids further OnDraw processing after this
+     * destructor and before the native window is destroyed
+     */
+    this->Freeze( );
+}
+
+
+void BM2CMP_FRAME::LoadSettings()
+{
+    int tmp;
     m_config->Read( KEYWORD_FRAME_POSX, & m_framePos.x, -1 );
     m_config->Read( KEYWORD_FRAME_POSY, & m_framePos.y, -1 );
     m_config->Read( KEYWORD_FRAME_SIZEX, & m_frameSize.x, -1 );
     m_config->Read( KEYWORD_FRAME_SIZEY, & m_frameSize.y, -1 );
     m_config->Read( KEYWORD_LAST_INPUT_FILE, &m_BitmapFileName );
     m_config->Read( KEYWORD_LAST_OUTPUT_FILE, &m_ConvertedFileName );
+
+    int u_select = 0;
+    m_config->Read( KEYWORD_UNIT_SELECTION, &u_select, 0 );
+
+    if( u_select < 0 || u_select > 2 )  // Validity control
+        u_select = 0;
+
+    m_PixelUnit->SetSelection( u_select );
 
     if( m_config->Read( KEYWORD_BINARY_THRESHOLD, &tmp ) )
         m_sliderThreshold->SetValue( tmp );
@@ -149,65 +259,32 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         else
             m_radio_PCBLayer->SetSelection( tmp );
     }
-
-    for( auto const& it : m_unitMap )
-    {
-        m_PixelUnit->Append( it.second );
-    }
-    m_PixelUnit->SetSelection( DEFAULT_SIZE_UNIT );
-
-    m_UnitSizeX->ChangeValue( wxString::Format( wxT( "%d" ), DEFAULT_SIZE_VALUE ) );
-    m_UnitSizeY->ChangeValue( wxString::Format( wxT( "%d" ), DEFAULT_SIZE_VALUE ) );
-
-    m_outputSizeX.Set( DEFAULT_SIZE_VALUE, UNIT::DEFAULT_SIZE_UNIT );
-    m_outputSizeY.Set( DEFAULT_SIZE_VALUE, UNIT::DEFAULT_SIZE_UNIT );
-
-    //Set icon for aspect ratio
-    m_AspectRatioLocked = true;
-    m_AspectRatio = 1;
-    m_AspectRatioLockButton->SetBitmap( KiBitmap( locked_xpm ) );
-
-    // Give an icon
-    wxIcon icon;
-    icon.CopyFromBitmap( KiBitmap( icon_bitmap2component_xpm ) );
-    SetIcon( icon );
-
-    GetSizer()->SetSizeHints( this );
-
-    SetSize( m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
-
-    m_buttonExportFile->Enable( false );
-    m_buttonExportClipboard->Enable( false );
-
-
-    if ( m_framePos == wxDefaultPosition )
-        Centre();
 }
 
 
-BM2CMP_FRAME::~BM2CMP_FRAME()
+void BM2CMP_FRAME::SaveSettings()
 {
-    if( !m_config || IsIconized() )
+    if( !m_config )
         return;
 
     m_frameSize = GetSize();
     m_framePos  = GetPosition();
 
-    m_config->Write( KEYWORD_FRAME_POSX, (long) m_framePos.x );
-    m_config->Write( KEYWORD_FRAME_POSY, (long) m_framePos.y );
-    m_config->Write( KEYWORD_FRAME_SIZEX, (long) m_frameSize.x );
-    m_config->Write( KEYWORD_FRAME_SIZEY, (long) m_frameSize.y );
+    if( !IsIconized()  )
+    {
+        m_config->Write( KEYWORD_FRAME_POSX, (long) m_framePos.x );
+        m_config->Write( KEYWORD_FRAME_POSY, (long) m_framePos.y );
+        m_config->Write( KEYWORD_FRAME_SIZEX, (long) m_frameSize.x );
+        m_config->Write( KEYWORD_FRAME_SIZEY, (long) m_frameSize.y );
+    }
+
     m_config->Write( KEYWORD_LAST_INPUT_FILE, m_BitmapFileName );
     m_config->Write( KEYWORD_LAST_OUTPUT_FILE, m_ConvertedFileName );
     m_config->Write( KEYWORD_BINARY_THRESHOLD, m_sliderThreshold->GetValue() );
     m_config->Write( KEYWORD_BW_NEGATIVE, m_checkNegative->IsChecked() ? 1 : 0 );
     m_config->Write( KEYWORD_LAST_FORMAT,  m_radioBoxFormat->GetSelection() );
     m_config->Write( KEYWORD_LAST_MODLAYER,  m_radio_PCBLayer->GetSelection() );
-
-    /* This needed for OSX: avoids further OnDraw processing after this
-     * destructor and before the native window is destroyed
-     */
-    this->Freeze( );
+    m_config->Write( KEYWORD_UNIT_SELECTION, m_PixelUnit->GetSelection() );
 }
 
 
@@ -309,13 +386,6 @@ bool BM2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int 
 
     m_Pict_Bitmap = wxBitmap( m_Pict_Image );
 
-    int h  = m_Pict_Bitmap.GetHeight();
-    int w  = m_Pict_Bitmap.GetWidth();
-
-    m_outputSizeX.SetInputResolution( w );
-    m_outputSizeY.SetInputResolution( h );
-    m_AspectRatio = (float) w / (float) h;
-
     // Determine image resolution in DPI (does not existing in all formats).
     // the resolution can be given in bit per inches or bit per cm in file
 
@@ -326,23 +396,28 @@ bool BM2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int 
     {
         if( m_Pict_Image.GetOptionInt( wxIMAGE_OPTION_RESOLUTIONUNIT ) == wxIMAGE_RESOLUTION_CM )
         {
-            // When the initial resolution is given in bits per cm,
-            // experience shows adding 1.27 to the resolution converted in dpi
-            // before convert to int value reduce the conversion error
-            // but it is not perfect
-            imageDPIx = imageDPIx * 2.54 + 1.27;
-            imageDPIy = imageDPIy * 2.54 + 1.27;
+            imageDPIx = KiROUND( imageDPIx * 2.54 );
+            imageDPIy = KiROUND( imageDPIy * 2.54 );
         }
     }
-    else    // fallback to the default value
+    else    // fallback to a default value (DEFAULT_DPI)
     {
-        imageDPIx = imageDPIy = 0;
+        imageDPIx = imageDPIy = DEFAULT_DPI;
     }
 
     m_InputXValueDPI->SetLabel( wxString::Format( wxT( "%d" ), imageDPIx ) );
     m_InputYValueDPI->SetLabel( wxString::Format( wxT( "%d" ), imageDPIy ) );
 
-    //Update display to keep aspectratio
+    int h  = m_Pict_Bitmap.GetHeight();
+    int w  = m_Pict_Bitmap.GetWidth();
+    m_AspectRatio = (double) w / h;
+
+    m_outputSizeX.SetOriginalDPI( imageDPIx );
+    m_outputSizeX.SetOriginalSizePixels( w );
+    m_outputSizeY.SetOriginalDPI( imageDPIy );
+    m_outputSizeY.SetOriginalSizePixels( h );
+
+    // Update display to keep aspect ratio
     auto fakeEvent = wxCommandEvent();
     OnSizeChangeX( fakeEvent );
 
@@ -381,9 +456,35 @@ bool BM2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int 
     m_buttonExportFile->Enable( true );
     m_buttonExportClipboard->Enable( true );
 
+    m_outputSizeX.SetOutputSizeFromInitialImageSize();
+    m_UnitSizeX->ChangeValue( FormatOutputSize( m_outputSizeX.GetOutputSize() ) );
+    m_outputSizeY.SetOutputSizeFromInitialImageSize();
+    m_UnitSizeY->ChangeValue( FormatOutputSize( m_outputSizeY.GetOutputSize() ) );
+
     return true;
 }
 
+
+// return a string giving the output size, according to the selected unit
+wxString BM2CMP_FRAME::FormatOutputSize( double aSize )
+{
+    wxString text;
+
+    if( getUnitFromSelection() == MILLIMETRES )
+    {
+        text.Printf( "%.1f", aSize );
+    }
+    else if( getUnitFromSelection() == INCHES )
+    {
+        text.Printf( "%.2f", aSize );
+    }
+    else
+    {
+        text.Printf( "%d", KiROUND( aSize ) );
+    }
+
+    return text;
+}
 
 void BM2CMP_FRAME::updateImageInfo()
 {
@@ -404,46 +505,94 @@ void BM2CMP_FRAME::updateImageInfo()
 }
 
 
+EDA_UNITS_T BM2CMP_FRAME::getUnitFromSelection()
+{
+    // return the EDA_UNITS_T from the m_PixelUnit choice
+    switch( m_PixelUnit->GetSelection() )
+    {
+    case 1:
+        return INCHES;
+
+    case 2:
+        return UNSCALED_UNITS;
+
+    case 0:
+    default:
+        break;
+    }
+
+    return MILLIMETRES;
+}
+
+
 void BM2CMP_FRAME::OnSizeChangeX( wxCommandEvent& event )
 {
-    double setSize;
-    if( m_UnitSizeX->GetValue().ToDouble( &setSize ) )
-    {
-        m_outputSizeX.Set( setSize, (UNIT) m_PixelUnit->GetSelection() );
+    double new_size;
 
+    if( m_UnitSizeX->GetValue().ToDouble( &new_size ) )
+    {
         if( m_AspectRatioLocked )
         {
-            double calculatedY = setSize / m_AspectRatio;
-            m_UnitSizeY->ChangeValue( wxString::Format( wxT( "%.2f" ), calculatedY ) );
-            m_outputSizeY.Set( calculatedY, (UNIT) m_PixelUnit->GetSelection() );
+            double calculatedY = new_size / m_AspectRatio;
+
+            if( getUnitFromSelection() == UNSCALED_UNITS )
+            {
+                // for units in DPI, keeping aspect ratio cannot use m_AspectRatioLocked.
+                // just rescale the other dpi
+                double ratio = new_size / m_outputSizeX.GetOutputSize();
+                calculatedY = m_outputSizeY.GetOutputSize() * ratio;
+            }
+
+            m_outputSizeY.SetOutputSize( calculatedY, getUnitFromSelection() );
+            m_UnitSizeY->ChangeValue( FormatOutputSize( m_outputSizeY.GetOutputSize() ) );
         }
+
+        m_outputSizeX.SetOutputSize( new_size, getUnitFromSelection() );
     }
+
     updateImageInfo();
 }
+
 
 void BM2CMP_FRAME::OnSizeChangeY( wxCommandEvent& event )
 {
-    double setSize;
+    double new_size;
 
-    if( m_UnitSizeY->GetValue().ToDouble( &setSize ) )
+    if( m_UnitSizeY->GetValue().ToDouble( &new_size ) )
     {
-        m_outputSizeY.Set( setSize, (UNIT) m_PixelUnit->GetSelection() );
         if( m_AspectRatioLocked )
         {
-            double calculatedX = setSize * m_AspectRatio;
-            m_UnitSizeX->ChangeValue( wxString::Format( wxT( "%.2f" ), calculatedX ) );
-            m_outputSizeX.Set( calculatedX, (UNIT) m_PixelUnit->GetSelection() );
+            double calculatedX = new_size * m_AspectRatio;
+
+            if( getUnitFromSelection() == UNSCALED_UNITS )
+            {
+                // for units in DPI, keeping aspect ratio cannot use m_AspectRatioLocked.
+                // just rescale the other dpi
+                double ratio = new_size / m_outputSizeX.GetOutputSize();
+                calculatedX = m_outputSizeX.GetOutputSize() * ratio;
+            }
+
+            m_outputSizeX.SetOutputSize( calculatedX, getUnitFromSelection() );
+            m_UnitSizeX->ChangeValue( FormatOutputSize( m_outputSizeX.GetOutputSize() ) );
         }
+
+        m_outputSizeY.SetOutputSize( new_size, getUnitFromSelection() );
     }
+
     updateImageInfo();
 }
+
 
 void BM2CMP_FRAME::OnSizeUnitChange( wxCommandEvent& event )
 {
-    m_outputSizeX.SetUnit( (UNIT) m_PixelUnit->GetSelection() );
-    m_outputSizeY.SetUnit( (UNIT) m_PixelUnit->GetSelection() );
+    m_outputSizeX.SetUnit( getUnitFromSelection() );
+    m_outputSizeY.SetUnit( getUnitFromSelection() );
     updateImageInfo();
+
+    m_UnitSizeX->ChangeValue( FormatOutputSize( m_outputSizeX.GetOutputSize() ) );
+    m_UnitSizeY->ChangeValue( FormatOutputSize( m_outputSizeY.GetOutputSize() ) );
 }
+
 
 void BM2CMP_FRAME::ToggleAspectRatioLock( wxCommandEvent& event )
 {
@@ -452,7 +601,7 @@ void BM2CMP_FRAME::ToggleAspectRatioLock( wxCommandEvent& event )
     if( m_AspectRatioLocked )
     {
         m_AspectRatioLockButton->SetBitmap( KiBitmap( locked_xpm ) );
-        //Force resolution update when aspect ratio is locked
+        //Force display update when aspect ratio is locked
         auto fakeEvent = wxCommandEvent();
         OnSizeChangeX( fakeEvent );
     }
@@ -462,6 +611,7 @@ void BM2CMP_FRAME::ToggleAspectRatioLock( wxCommandEvent& event )
         m_AspectRatioLockButton->SetBitmap( KiBitmap( unlocked_xpm ) );
     }
 }
+
 
 void BM2CMP_FRAME::Binarize( double aThreshold )
 {
@@ -612,7 +762,7 @@ void BM2CMP_FRAME::OnExportLogo()
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File \"%s\" could not be created." ), GetChars( m_ConvertedFileName ) );
+        msg.Printf( _( "File \"%s\" could not be created." ), m_ConvertedFileName );
         wxMessageBox( msg );
         return;
     }
@@ -652,7 +802,7 @@ void BM2CMP_FRAME::exportPostScriptFormat()
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File \"%s\" could not be created." ), GetChars( m_ConvertedFileName ) );
+        msg.Printf( _( "File \"%s\" could not be created." ), m_ConvertedFileName );
         wxMessageBox( msg );
         return;
     }
@@ -691,7 +841,7 @@ void BM2CMP_FRAME::exportEeschemaFormat()
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File \"%s\" could not be created." ), GetChars( m_ConvertedFileName ) );
+        msg.Printf( _( "File \"%s\" could not be created." ), m_ConvertedFileName );
         wxMessageBox( msg );
         return;
     }
@@ -730,7 +880,7 @@ void BM2CMP_FRAME::exportPcbnewFormat()
     if( outfile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File \"%s\" could not be created." ), GetChars( m_ConvertedFileName ) );
+        msg.Printf( _( "File \"%s\" could not be created." ), m_ConvertedFileName );
         wxMessageBox( msg );
         return;
     }
