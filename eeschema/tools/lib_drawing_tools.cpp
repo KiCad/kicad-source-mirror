@@ -69,7 +69,6 @@ bool LIB_DRAWING_TOOLS::Init()
 int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 {
     KICAD_T       type = aEvent.Parameter<KICAD_T>();
-    bool          immediateMode = aEvent.HasPosition();
     LIB_PIN_TOOL* pinTool = type == LIB_PIN_T ? m_toolMgr->GetTool<LIB_PIN_TOOL>() : nullptr;
     VECTOR2I      cursorPos;
     EDA_ITEM*     item = nullptr;
@@ -77,11 +76,11 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
 
     // Prime the pump
-    if( immediateMode )
+    if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
@@ -97,15 +96,12 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 m_view->ClearPreview();
                 delete item;
                 item = nullptr;
-
-                if( immediateMode )
-                    break;
             }
             else
             {
                 if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
                 {
-                    m_frame->PopTool();
+                    m_frame->ClearToolStack();
                     break;
                 }
             }
@@ -191,9 +187,6 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
                 m_frame->RebuildView();
                 m_frame->OnModify();
-
-                if( immediateMode )
-                    break;
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -217,9 +210,6 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
-    if( immediateMode )
-        m_frame->PopTool();
-
     return 0;
 }
 
@@ -227,7 +217,6 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
     KICAD_T type = aEvent.Parameter<KICAD_T>();
-    bool    immediateMode = aEvent.HasPosition();
 
     // We might be running as the same shape in another co-routine.  Make sure that one
     // gets whacked.
@@ -236,14 +225,14 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
 
     LIB_PART* part = m_frame->GetCurPart();
     LIB_ITEM* item = nullptr;
 
     // Prime the pump
-    if( immediateMode )
+    if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
@@ -260,15 +249,12 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             {
                 delete item;
                 item = nullptr;
-
-                if( immediateMode )
-                    break;
             }
             else
             {
                 if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
                 {
-                    m_frame->PopTool();
+                    m_frame->ClearToolStack();
                     break;
                 }
             }
@@ -325,12 +311,7 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
                 m_frame->RebuildView();
                 m_frame->OnModify();
-
-                if( immediateMode )
-                {
-                    m_toolMgr->RunAction( ACTIONS::activatePointEditor );
-                    break;
-                }
+                m_toolMgr->RunAction( ACTIONS::activatePointEditor );
             }
         }
 
@@ -360,9 +341,6 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
-    if( immediateMode )
-        m_frame->PopTool();
-
     return 0;
 }
 
@@ -372,7 +350,7 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
     getViewControls()->ShowCursor( true );
     getViewControls()->SetSnapping( true );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
 
     // Main loop: keep receiving events
@@ -408,7 +386,7 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_frame->PopTool();
+    m_frame->ClearToolStack();
     return 0;
 }
 

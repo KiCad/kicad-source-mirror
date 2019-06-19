@@ -253,12 +253,19 @@ bool SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( const SELECTION& aSelection
 int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
 {
     SCH_LAYER_ID layer = aEvent.Parameter<SCH_LAYER_ID>();
+    SCH_LINE*    segment = nullptr;
 
     if( aEvent.HasPosition() )
         getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
-    return doDrawSegments( layer, nullptr, aEvent.HasPosition() );
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
+
+    if( aEvent.HasPosition() )
+    {
+        VECTOR2D cursorPos = getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
+        segment = startSegments( layer, cursorPos );
+    }
+    return doDrawSegments( layer, segment );
 }
 
 
@@ -306,7 +313,7 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 
     // If we have an unfolded wire to draw, then draw it
     if( segment )
-        doDrawSegments( LAYER_WIRE, segment, true );
+        doDrawSegments( LAYER_WIRE, segment );
 
     m_frame->PopTool();
     return 0;
@@ -428,7 +435,7 @@ static void computeBreakPoint( SCH_SCREEN* aScreen, SCH_LINE* aSegment, wxPoint&
 }
 
 
-int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool aImmediateMode )
+int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
 {
     bool        forceHV = m_frame->GetForceHVLines();
     SCH_SCREEN* screen = m_frame->GetScreen();
@@ -438,10 +445,6 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool 
     getViewControls()->ShowCursor( true );
 
     Activate();
-
-    // Prime the pump
-    if( aImmediateMode && !aSegment )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -472,15 +475,12 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool 
 
                 m_view->ClearPreview();
                 m_view->ShowPreview( false );
-
-                if( aImmediateMode )
-                    break;
             }
             else
             {
                 if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
                 {
-                    m_frame->PopTool();
+                    m_frame->ClearToolStack();
                     break;
                 }
             }
@@ -501,9 +501,6 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool 
                 finishSegments();
                 aSegment = nullptr;
             }
-
-            if( aImmediateMode )
-                break;
         }
         //------------------------------------------------------------------------
         // Handle click:
@@ -533,9 +530,6 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool 
                 {
                     finishSegments();
                     aSegment = nullptr;
-
-                    if( aImmediateMode )
-                        break;
                 }
                 else
                 {
@@ -558,9 +552,6 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool 
 
                 finishSegments();
                 aSegment = nullptr;
-
-                if( aImmediateMode )
-                    break;
             }
         }
         //------------------------------------------------------------------------
@@ -646,9 +637,6 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment, bool 
         getViewControls()->SetAutoPan( aSegment != nullptr );
         getViewControls()->CaptureCursor( aSegment != nullptr );
     }
-
-    if( aImmediateMode )
-        m_frame->PopTool();
 
     return 0;
 }

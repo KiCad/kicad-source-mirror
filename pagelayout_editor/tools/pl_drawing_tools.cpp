@@ -74,18 +74,17 @@ void PL_DRAWING_TOOLS::Reset( RESET_REASON aReason )
 int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 {
     WS_DATA_ITEM::WS_ITEM_TYPE type = aEvent.Parameter<WS_DATA_ITEM::WS_ITEM_TYPE>();
-    bool                       immediateMode = aEvent.HasPosition();
     VECTOR2I                   cursorPos;
     WS_DRAW_ITEM_BASE*         item = nullptr;
 
     m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
 
     // Prime the pump
-    if( immediateMode )
+    if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
@@ -103,15 +102,12 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 
                 // There's nothing to roll-back, but we still need to pop the undo stack
                 m_frame->RollbackFromUndo();
-
-                if( immediateMode )
-                    break;
             }
             else
             {
                 if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
                 {
-                    m_frame->PopTool();
+                    m_frame->ClearToolStack();
                     break;
                 }
             }
@@ -147,9 +143,6 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
                 item = nullptr;
 
                 m_frame->OnModify();
-
-                if( immediateMode )
-                    break;
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -173,9 +166,6 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
-    if( immediateMode )
-        m_frame->PopTool();
-
     return 0;
 }
 
@@ -183,7 +173,6 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
     WS_DATA_ITEM::WS_ITEM_TYPE type = aEvent.Parameter<WS_DATA_ITEM::WS_ITEM_TYPE>();
-    bool                       immediateMode = aEvent.HasPosition();
     WS_DRAW_ITEM_BASE*         item = nullptr;
 
     // We might be running as the same shape in another co-routine.  Make sure that one
@@ -193,11 +182,11 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
 
     // Prime the pump
-    if( immediateMode )
+    if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
@@ -213,15 +202,12 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             {
                 item = nullptr;
                 m_frame->RollbackFromUndo();
-
-                if( immediateMode )
-                    break;
             }
             else
             {
                 if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
                 {
-                    m_frame->PopTool();
+                    m_frame->ClearToolStack();
                     break;
                 }
             }
@@ -251,9 +237,6 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( ACTIONS::activatePointEditor );
 
                 m_frame->OnModify();
-
-                if( immediateMode )
-                    break;
             }
         }
 
@@ -280,9 +263,6 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         getViewControls()->SetAutoPan( item != nullptr );
         getViewControls()->CaptureCursor( item != nullptr );
     }
-
-    if( immediateMode )
-        m_frame->PopTool();
 
     return 0;
 }
