@@ -459,7 +459,7 @@ LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::ShowResults()
                    []( LIB_TREE_NODE const* n )
                    {
                        // return leaf nodes with some level of matching
-                       return n->Children.size() == 0 && n->Score > 1;
+                       return n->Type == LIB_TREE_NODE::TYPE::LIBID && n->Score > 1;
                    },
                    &highScore );
 
