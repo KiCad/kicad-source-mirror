@@ -31,6 +31,7 @@
 #include <tools/pcb_actions.h>
 #include <tool/tool_manager.h>
 #include <pcbnew_id.h>
+#include <tool/common_tools.h>
 
 // Max values for grid size
 static const int MAX_GRID_SIZE = KiROUND( 1000.0 * IU_PER_MM );
@@ -110,13 +111,8 @@ bool DIALOG_SET_GRID::TransferDataFromWindow()
 
     // Notify GAL
     TOOL_MANAGER* mgr = m_parent->GetToolManager();
-
-    mgr->RunAction( "common.Control.gridPreset", true,
-                    screen->GetGridCmdId() - ID_POPUP_GRID_LEVEL_1000 );
-
-    TOOL_EVENT gridOriginUpdate = ACTIONS::gridSetOrigin.MakeEvent();
-    gridOriginUpdate.SetParameter( new VECTOR2D( m_parent->GetGridOrigin() ) );
-    mgr->ProcessEvent( gridOriginUpdate );
+    mgr->GetTool<COMMON_TOOLS>()->GridPreset( screen->GetGridCmdId() - ID_POPUP_GRID_LEVEL_1000 );
+    mgr->RunAction( ACTIONS::gridSetOrigin, true, new VECTOR2D( m_parent->GetGridOrigin() ) );
 
     m_parent->UpdateGridSelectBox();
 
@@ -151,14 +147,12 @@ void DIALOG_SET_GRID::OnResetGridOrgClick( wxCommandEvent& event )
 }
 
 
-bool PCB_BASE_EDIT_FRAME::InvokeDialogGrid()
-{
-    DIALOG_SET_GRID dlg( this, m_gridSelectBox->GetStrings() );
-    return dlg.ShowModal();
-}
-
-
 void PCB_BASE_EDIT_FRAME::OnGridSettings( wxCommandEvent& event )
 {
-    InvokeDialogGrid();
+    DIALOG_SET_GRID dlg( this, m_gridSelectBox->GetStrings() );
+
+    dlg.ShowModal();
+
+    UpdateStatusBar();
+    GetCanvas()->Refresh();
 }

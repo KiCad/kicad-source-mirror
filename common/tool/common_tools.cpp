@@ -352,7 +352,7 @@ int COMMON_TOOLS::GridNext( const TOOL_EVENT& aEvent )
     const OPT<int> next_grid_id = getNextPreviousGrid( *m_frame->GetScreen(), 1 );
 
     if( next_grid_id )
-        return doGridPreset( *next_grid_id - ID_POPUP_GRID_LEVEL_1000 );
+        return GridPreset( *next_grid_id - ID_POPUP_GRID_LEVEL_1000 );
 
     return 1;
 }
@@ -363,7 +363,7 @@ int COMMON_TOOLS::GridPrev( const TOOL_EVENT& aEvent )
     const OPT<int> next_grid_id = getNextPreviousGrid( *m_frame->GetScreen(), -1 );
 
     if( next_grid_id )
-        return doGridPreset( *next_grid_id - ID_POPUP_GRID_LEVEL_1000 );
+        return GridPreset( *next_grid_id - ID_POPUP_GRID_LEVEL_1000 );
 
     return 1;
 }
@@ -371,11 +371,11 @@ int COMMON_TOOLS::GridPrev( const TOOL_EVENT& aEvent )
 
 int COMMON_TOOLS::GridPreset( const TOOL_EVENT& aEvent )
 {
-    return doGridPreset( aEvent.Parameter<intptr_t>() );
+    return GridPreset( aEvent.Parameter<intptr_t>() );
 }
 
 
-int COMMON_TOOLS::doGridPreset( int idx )
+int COMMON_TOOLS::GridPreset( int idx )
 {
     BASE_SCREEN* screen = m_frame->GetScreen();
 

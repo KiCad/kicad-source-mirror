@@ -78,13 +78,14 @@ public:
     int GridPreset( const TOOL_EVENT& aEvent );
     int ToggleGrid( const TOOL_EVENT& aEvent );
     int GridProperties( const TOOL_EVENT& aEvent );
+    int GridPreset( int idx );
 
     int SwitchCanvas( const TOOL_EVENT& aEvent );
-    
+
+private:
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
-private:
     ///> Pointer to the currently used edit frame.
     EDA_DRAW_FRAME* m_frame;
 
@@ -92,8 +93,6 @@ private:
 
     ///> Note: idx == 0 is Auto; idx == 1 is first entry in zoomList
     int doZoomToPreset( int idx, bool aCenterOnCursor );
-
-    int doGridPreset( int idx );
 };
 
 #endif

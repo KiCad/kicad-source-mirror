@@ -85,4 +85,7 @@ void SCH_BASE_FRAME::OnGridSettings( wxCommandEvent& aEvent )
     DIALOG_SET_GRID dlg( this );
 
     dlg.ShowModal();
+
+    UpdateStatusBar();
+    GetCanvas()->Refresh();
 }
