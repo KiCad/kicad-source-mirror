@@ -152,8 +152,8 @@ private:
     void OnFormatChange( wxCommandEvent& event ) override;
     void exportBitmap( OUTPUT_FMT_ID aFormat );
 
-    void LoadSettings();
-    void SaveSettings();
+    void LoadSettings( wxConfigBase* aCfg ) override;
+    void SaveSettings( wxConfigBase* aCfg ) override;
 
 private:
     wxImage  m_Pict_Image;

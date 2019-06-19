@@ -169,7 +169,7 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     for( int ii = 0; ii < 3; ii++ )
         m_PixelUnit->Append( unitList[ii] );
 
-    LoadSettings();
+    LoadSettings( m_config.get() );
 
     m_outputSizeX.SetUnit( getUnitFromSelection() );
     m_outputSizeY.SetUnit( getUnitFromSelection() );
@@ -204,42 +204,43 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 BM2CMP_FRAME::~BM2CMP_FRAME()
 {
-    SaveSettings();
-    /* This needed for OSX: avoids further OnDraw processing after this
+    SaveSettings( m_config.get() );
+    /*
+     * This needed for OSX: avoids further OnDraw processing after this
      * destructor and before the native window is destroyed
      */
     this->Freeze( );
 }
 
 
-void BM2CMP_FRAME::LoadSettings()
+void BM2CMP_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     int tmp;
-    m_config->Read( KEYWORD_FRAME_POSX, & m_framePos.x, -1 );
-    m_config->Read( KEYWORD_FRAME_POSY, & m_framePos.y, -1 );
-    m_config->Read( KEYWORD_FRAME_SIZEX, & m_frameSize.x, -1 );
-    m_config->Read( KEYWORD_FRAME_SIZEY, & m_frameSize.y, -1 );
-    m_config->Read( KEYWORD_LAST_INPUT_FILE, &m_BitmapFileName );
-    m_config->Read( KEYWORD_LAST_OUTPUT_FILE, &m_ConvertedFileName );
+    aCfg->Read( KEYWORD_FRAME_POSX, & m_framePos.x, -1 );
+    aCfg->Read( KEYWORD_FRAME_POSY, & m_framePos.y, -1 );
+    aCfg->Read( KEYWORD_FRAME_SIZEX, & m_frameSize.x, -1 );
+    aCfg->Read( KEYWORD_FRAME_SIZEY, & m_frameSize.y, -1 );
+    aCfg->Read( KEYWORD_LAST_INPUT_FILE, &m_BitmapFileName );
+    aCfg->Read( KEYWORD_LAST_OUTPUT_FILE, &m_ConvertedFileName );
 
     int u_select = 0;
-    m_config->Read( KEYWORD_UNIT_SELECTION, &u_select, 0 );
+    aCfg->Read( KEYWORD_UNIT_SELECTION, &u_select, 0 );
 
     if( u_select < 0 || u_select > 2 )  // Validity control
         u_select = 0;
 
     m_PixelUnit->SetSelection( u_select );
 
-    if( m_config->Read( KEYWORD_BINARY_THRESHOLD, &tmp ) )
+    if( aCfg->Read( KEYWORD_BINARY_THRESHOLD, &tmp ) )
         m_sliderThreshold->SetValue( tmp );
 
-    m_config->Read( KEYWORD_BW_NEGATIVE, &tmp, 0 );
+    aCfg->Read( KEYWORD_BW_NEGATIVE, &tmp, 0 );
     m_Negative = tmp != 0;
     m_checkNegative->SetValue( m_Negative );
     m_exportToClipboard = false;
     m_AspectRatioLocked = false;
 
-    if( m_config->Read( KEYWORD_LAST_FORMAT, &tmp ) )
+    if( aCfg->Read( KEYWORD_LAST_FORMAT, &tmp ) )
     {
         if( tmp < 0 || tmp > FINAL_FMT )
             tmp = PCBNEW_KICAD_MOD;
@@ -252,7 +253,7 @@ void BM2CMP_FRAME::LoadSettings()
     else
         m_rbPCBLayer->Enable( false );
 
-    if( m_config->Read( KEYWORD_LAST_MODLAYER, &tmp ) )
+    if( aCfg->Read( KEYWORD_LAST_MODLAYER, &tmp ) )
     {
         if( (unsigned) tmp > MOD_LYR_FINAL )    // Out of range
             m_rbPCBLayer->SetSelection( MOD_LYR_FSILKS );
@@ -262,9 +263,9 @@ void BM2CMP_FRAME::LoadSettings()
 }
 
 
-void BM2CMP_FRAME::SaveSettings()
+void BM2CMP_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    if( !m_config )
+    if( !aCfg )
         return;
 
     m_frameSize = GetSize();
@@ -272,19 +273,19 @@ void BM2CMP_FRAME::SaveSettings()
 
     if( !IsIconized()  )
     {
-        m_config->Write( KEYWORD_FRAME_POSX, (long) m_framePos.x );
-        m_config->Write( KEYWORD_FRAME_POSY, (long) m_framePos.y );
-        m_config->Write( KEYWORD_FRAME_SIZEX, (long) m_frameSize.x );
-        m_config->Write( KEYWORD_FRAME_SIZEY, (long) m_frameSize.y );
+        aCfg->Write( KEYWORD_FRAME_POSX, (long) m_framePos.x );
+        aCfg->Write( KEYWORD_FRAME_POSY, (long) m_framePos.y );
+        aCfg->Write( KEYWORD_FRAME_SIZEX, (long) m_frameSize.x );
+        aCfg->Write( KEYWORD_FRAME_SIZEY, (long) m_frameSize.y );
     }
 
-    m_config->Write( KEYWORD_LAST_INPUT_FILE, m_BitmapFileName );
-    m_config->Write( KEYWORD_LAST_OUTPUT_FILE, m_ConvertedFileName );
-    m_config->Write( KEYWORD_BINARY_THRESHOLD, m_sliderThreshold->GetValue() );
-    m_config->Write( KEYWORD_BW_NEGATIVE, m_checkNegative->IsChecked() ? 1 : 0 );
-    m_config->Write( KEYWORD_LAST_FORMAT,  m_rbOutputFormat->GetSelection() );
-    m_config->Write( KEYWORD_LAST_MODLAYER,  m_rbPCBLayer->GetSelection() );
-    m_config->Write( KEYWORD_UNIT_SELECTION, m_PixelUnit->GetSelection() );
+    aCfg->Write( KEYWORD_LAST_INPUT_FILE, m_BitmapFileName );
+    aCfg->Write( KEYWORD_LAST_OUTPUT_FILE, m_ConvertedFileName );
+    aCfg->Write( KEYWORD_BINARY_THRESHOLD, m_sliderThreshold->GetValue() );
+    aCfg->Write( KEYWORD_BW_NEGATIVE, m_checkNegative->IsChecked() ? 1 : 0 );
+    aCfg->Write( KEYWORD_LAST_FORMAT,  m_rbOutputFormat->GetSelection() );
+    aCfg->Write( KEYWORD_LAST_MODLAYER,  m_rbPCBLayer->GetSelection() );
+    aCfg->Write( KEYWORD_UNIT_SELECTION, m_PixelUnit->GetSelection() );
 }
 
 
