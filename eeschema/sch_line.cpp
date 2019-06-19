@@ -40,8 +40,6 @@
 #include <netlist_object.h>
 #include <sch_view.h>
 
-#include <dialogs/dialog_edit_line_style.h>
-
 
 static wxPenStyle getwxPenStyle( PlotDashType aType )
 {
@@ -383,8 +381,7 @@ bool SCH_LINE::IsSameQuadrant( SCH_LINE* aLine, const wxPoint& aPosition )
     else
         return false;
 
-    return ( sign( first.x ) == sign( second.x ) &&
-             sign( first.y ) == sign( second.y ) );
+    return ( sign( first.x ) == sign( second.x ) && sign( first.y ) == sign( second.y ) );
 }
 
 
@@ -622,20 +619,10 @@ wxString SCH_LINE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 
     switch( m_Layer )
     {
-    case LAYER_NOTES:
-        txtfmt = _( "%s Graphic Line from (%s, %s) to (%s, %s)" );
-        break;
-
-    case LAYER_WIRE:
-        txtfmt = _( "%s Wire from (%s, %s) to (%s, %s)" );
-        break;
-
-    case LAYER_BUS:
-        txtfmt = _( "%s Bus from (%s, %s) to (%s, %s)" );
-        break;
-
-    default:
-        txtfmt = _( "%s Line on Unknown Layer from (%s, %s) to (%s, %s)" );
+    case LAYER_NOTES: txtfmt = _( "%s Graphic Line from (%s, %s) to (%s, %s)" );          break;
+    case LAYER_WIRE:  txtfmt = _( "%s Wire from (%s, %s) to (%s, %s)" );                  break;
+    case LAYER_BUS:   txtfmt = _( "%s Bus from (%s, %s) to (%s, %s)" );                   break;
+    default:          txtfmt = _( "%s Line on Unknown Layer from (%s, %s) to (%s, %s)" ); break;
     }
 
     return wxString::Format( txtfmt,
@@ -782,29 +769,15 @@ void SCH_LINE::SetPosition( const wxPoint& aPosition )
 }
 
 
-wxPoint SCH_LINE::MidPoint()
-{
-    return wxPoint( ( m_start.x + m_end.x ) / 2, ( m_start.y + m_end.y ) / 2 );
-}
-
-
 void SCH_LINE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 
     switch( GetLayer() )
     {
-    case LAYER_WIRE:
-        msg = _( "Net Wire" );
-        break;
-
-    case LAYER_BUS:
-        msg = _( "Bus Wire" );
-        break;
-
-    default:
-        msg = _( "Graphical" );
-        return;
+    case LAYER_WIRE: msg = _( "Net Wire" );  break;
+    case LAYER_BUS:  msg = _( "Bus Wire" );  break;
+    default:         msg = _( "Graphical" ); return;
     }
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line Type" ), msg, DARKCYAN ) );
@@ -822,23 +795,3 @@ void SCH_LINE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
     }
 }
 
-
-int SCH_EDIT_FRAME::EditLine( SCH_LINE* aLine, bool aRedraw )
-{
-    if( aLine == NULL )
-        return wxID_CANCEL;
-
-    // We purposely disallow editing everything except graphic lines
-    if( aLine->GetLayer() != LAYER_NOTES )
-        return wxID_CANCEL;
-
-    DIALOG_EDIT_LINE_STYLE dlg( this, aLine );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return wxID_CANCEL;
-
-    if( aRedraw )
-        RefreshItem( aLine );
-
-    return wxID_OK;
-}

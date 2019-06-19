@@ -248,14 +248,12 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             {
                 item->ClearEditFlags();
                 item = nullptr;
+                m_toolMgr->RunAction( ACTIONS::activatePointEditor );
 
                 m_frame->OnModify();
 
                 if( immediateMode )
-                {
-                    m_toolMgr->RunAction( ACTIONS::activatePointEditor );
                     break;
-                }
             }
         }
 

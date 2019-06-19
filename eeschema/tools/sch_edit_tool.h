@@ -67,6 +67,8 @@ public:
     int DeleteItemCursor( const TOOL_EVENT& aEvent );
 
 private:
+    void editComponentFieldText( SCH_FIELD* aField );
+
     ///> Sets up handlers for various events.
     void setTransitions() override;
 

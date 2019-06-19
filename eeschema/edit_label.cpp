@@ -35,7 +35,7 @@
 #include <sch_text.h>
 #include <eeschema_id.h>
 #include <sch_view.h>
-
+#include "invoke_sch_dialog.h"
 
 static PINSHEETLABEL_SHAPE  lastGlobalLabelShape = NET_INPUT;
 static int                  lastTextOrientation = 0;
@@ -79,9 +79,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
     textItem->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
     textItem->SetFlags( IS_NEW | IS_MOVED );
 
-    EditSchematicText( textItem );
-
-    if( textItem->GetText().IsEmpty() )
+    if( InvokeDialogLabelEditor( this, textItem ) != wxID_OK || textItem->GetText().IsEmpty() )
     {
         delete textItem;
         return nullptr;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -36,12 +36,7 @@ class DIALOG_IMAGE_EDITOR_BASE : public DIALOG_SHIM
 	
 	protected:
 		wxPanel* m_panelDraw;
-		wxButton* m_buttonMirrorX;
-		wxButton* m_buttonMirrorY;
-		wxButton* m_buttonRotate;
 		wxButton* m_buttonGrey;
-		wxButton* m_buttonHalfSize;
-		wxButton* m_buttonUndoLast;
 		wxStaticText* m_staticTextScale;
 		wxTextCtrl* m_textCtrlScale;
 		wxStdDialogButtonSizer* m_sdbSizer;
@@ -50,12 +45,7 @@ class DIALOG_IMAGE_EDITOR_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnRedrawPanel( wxPaintEvent& event ) { event.Skip(); }
-		virtual void OnMirrorX_click( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnMirrorY_click( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRotateClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGreyScaleConvert( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnHalfSize( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnUndoLastChange( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

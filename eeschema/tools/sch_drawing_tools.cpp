@@ -327,6 +327,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             {
                 m_frame->AddItemToScreenAndUndoList( image );
                 image = nullptr;
+                m_toolMgr->RunAction( ACTIONS::activatePointEditor );
 
                 m_view->ClearPreview();
 

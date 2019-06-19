@@ -140,8 +140,6 @@ set( EESCHEMA_SRCS
     connection_graph.cpp
     cross-probing.cpp
     drc_erc_item.cpp
-    edit_bitmap.cpp
-    edit_component_in_schematic.cpp
     edit_label.cpp
     eeschema_config.cpp
     erc.cpp

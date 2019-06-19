@@ -761,27 +761,6 @@ public:
     void ConvertTextType( SCH_TEXT* aText, KICAD_T aNewType );
 
     /**
-     * Launches the "Edit Text/Label" dialog
-     */
-    void EditSchematicText( SCH_TEXT* aText );
-
-    /**
-     * Launches the "Edit Image" dialog to modify an image
-     * @param aItem Pointer to the image item to modify
-     * @return true if the image was modified, false if the user canceled
-     */
-    bool EditImage( SCH_BITMAP* aItem );
-
-    /**
-     * Function EditLine
-     * displays the dialog for editing the parameters of \a aLine.
-     * @param aLine The Line/Wire/Bus to edit.
-     * @param aRedraw = true to refresh the screen
-     * @return The user response from the edit dialog.
-     */
-    int EditLine( SCH_LINE* aLine, bool aRedraw );
-
-    /**
      * Edit an existing sheet or add a new sheet to the schematic.
      *
      * When \a aSheet is a new sheet:
@@ -837,15 +816,6 @@ public:
     SCH_SHEET_PIN* CreateSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel );
 
     /**
-     * Display the dialog for editing the parameters of \a aSheetPin.
-     *
-     * @param aSheetPin The sheet pin item to edit.
-     * @param aRedraw = true to refresh the screen
-     * @return The user response from the edit dialog.
-     */
-    int EditSheetPin( SCH_SHEET_PIN* aSheetPin, bool aRedraw );
-
-    /**
      * Import a hierarchical label with no attached sheet pin.
      *
      * @param aSheet The sheet to import the new sheet pin to.
@@ -862,22 +832,7 @@ public:
 
     int GetLabelIncrement() const { return m_repeatLabelDelta; }
 
-    /**
-     * Display the edit component dialog to edit the parameters of \a aComponent.
-     *
-     * @param aComponent is a pointer to the SCH_COMPONENT object to be edited.
-     */
-    void EditComponent( SCH_COMPONENT* aComponent );
-
 public:
-
-    /**
-     * Display the edit field dialog to edit the parameters of \a aField.
-     *
-     * @param aField is a pointer to the SCH_FIELD object to be edited.
-     */
-    void EditComponentFieldText( SCH_FIELD* aField );
-
     void ConvertPart( SCH_COMPONENT* aComponent );
 
     void SelectUnit( SCH_COMPONENT* aComponent, int aUnit );

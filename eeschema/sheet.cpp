@@ -28,6 +28,7 @@
 #include <kiface_i.h>
 #include <project.h>
 #include <wildcards_and_files_ext.h>
+#include <tool/tool_manager.h>
 #include <wx/clipbrd.h>
 #include <sch_edit_frame.h>
 #include <sch_legacy_plugin.h>
@@ -36,7 +37,7 @@
 #include <sch_view.h>
 #include <dialogs/dialog_sch_sheet_props.h>
 #include <dialogs/dialog_sch_edit_sheet_pin.h>
-
+#include <tool/actions.h>
 
 void SCH_EDIT_FRAME::InitSheet( SCH_SHEET* aSheet, const wxString& aNewFilename )
 {
@@ -347,23 +348,6 @@ const wxSize &SCH_EDIT_FRAME::GetLastSheetPinTextSize()
 }
 
 
-int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, bool aRedraw )
-{
-    if( aSheetPin == NULL )
-        return wxID_CANCEL;
-
-    DIALOG_SCH_EDIT_SHEET_PIN dlg( this, aSheetPin );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return wxID_CANCEL;
-
-    if( aRedraw )
-        RefreshItem( aSheetPin );
-
-    return wxID_OK;
-}
-
-
 SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel )
 {
     wxString       text;
@@ -382,9 +366,9 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL*
 
     if( !aLabel )
     {
-        int response = EditSheetPin( sheetPin, false );
+        DIALOG_SCH_EDIT_SHEET_PIN dlg( this, sheetPin );
 
-        if( sheetPin->GetText().IsEmpty() || (response == wxID_CANCEL) )
+        if( dlg.ShowModal() != wxID_OK || sheetPin->GetText().IsEmpty()  )
         {
             delete sheetPin;
             return nullptr;

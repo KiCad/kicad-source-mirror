@@ -46,6 +46,11 @@
 #include <status_popup.h>
 #include <wx/gdicmn.h>
 #include <invoke_sch_dialog.h>
+#include <dialogs/dialog_image_editor.h>
+#include <dialogs/dialog_edit_line_style.h>
+#include <dialogs/dialog_edit_component_in_schematic.h>
+#include <dialogs/dialog_sch_edit_sheet_pin.h>
+#include <dialogs/dialog_edit_one_field.h>
 #include "sch_drawing_tools.h"
 
 
@@ -1002,6 +1007,35 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 }
 
 
+void SCH_EDIT_TOOL::editComponentFieldText( SCH_FIELD* aField )
+{
+    SCH_COMPONENT* component = (SCH_COMPONENT*) aField->GetParent();
+
+    // Save old component in undo list if not already in edit, or moving.
+    if( aField->GetEditFlags() == 0 )    // i.e. not edited, or moved
+        m_frame->SaveCopyInUndoList( component, UR_CHANGED );
+
+    wxString title;
+    title.Printf( _( "Edit %s Field" ), GetChars( aField->GetName() ) );
+
+    DIALOG_SCH_EDIT_ONE_FIELD dlg( m_frame, title, aField );
+
+    // The dialog may invoke a kiway player for footprint fields
+    // so we must use a quasimodal
+    if( dlg.ShowQuasiModal() != wxID_OK )
+        return;
+
+    dlg.UpdateField( aField, g_CurrentSheet );
+
+    if( m_frame->GetAutoplaceFields() )
+        component->AutoAutoplaceFields( m_frame->GetScreen() );
+
+    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+    m_frame->RefreshItem( aField );
+    m_frame->OnModify();
+}
+
+
 int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 {
     static KICAD_T Nothing[]        = { EOT };
@@ -1030,15 +1064,15 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
         SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
         if( aEvent.IsAction( &EE_ACTIONS::editReference ) )
-            m_frame->EditComponentFieldText( component->GetField( REFERENCE ) );
+            editComponentFieldText( component->GetField( REFERENCE ) );
         else if( aEvent.IsAction( &EE_ACTIONS::editValue ) )
-            m_frame->EditComponentFieldText( component->GetField( VALUE ) );
+            editComponentFieldText( component->GetField( VALUE ) );
         else if( aEvent.IsAction( &EE_ACTIONS::editFootprint ) )
-            m_frame->EditComponentFieldText( component->GetField( FOOTPRINT ) );
+            editComponentFieldText( component->GetField( FOOTPRINT ) );
     }
     else if( item->Type() == SCH_FIELD_T )
     {
-        m_frame->EditComponentFieldText( (SCH_FIELD*) item );
+        editComponentFieldText( (SCH_FIELD*) item );
     }
 
     return 0;
@@ -1124,7 +1158,23 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     switch( item->Type() )
     {
     case SCH_COMPONENT_T:
-        m_frame->EditComponent( (SCH_COMPONENT*) item );
+    {
+        SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+        DIALOG_EDIT_COMPONENT_IN_SCHEMATIC dlg( m_frame, component );
+
+        // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
+        // frame. Therefore this dialog as a modal frame parent, MUST be run under
+        // quasimodal mode for the quasimodal frame support to work.  So don't use
+        // the QUASIMODAL macros here.
+        if( dlg.ShowQuasiModal() == wxID_OK )
+        {
+            if( m_frame->GetAutoplaceFields() )
+                component->AutoAutoplaceFields( m_frame->GetScreen() );
+
+            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+            m_frame->OnModify();
+        }
+    }
         break;
 
     case SCH_SHEET_T:
@@ -1157,31 +1207,72 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     }
 
     case SCH_SHEET_PIN_T:
-        m_frame->EditSheetPin( (SCH_SHEET_PIN*) item, true );
+    {
+        SCH_SHEET_PIN* pin = (SCH_SHEET_PIN*) item;
+        DIALOG_SCH_EDIT_SHEET_PIN dlg( m_frame, pin );
+
+        if( dlg.ShowModal() == wxID_OK )
+        {
+            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+            m_frame->OnModify();
+        }
+    }
         break;
 
     case SCH_TEXT_T:
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
-        m_frame->EditSchematicText( (SCH_TEXT*) item );
-        break;
-
-    case SCH_FIELD_T:
-        m_frame->EditComponentFieldText( (SCH_FIELD*) item );
-        break;
-
-    case SCH_BITMAP_T:
-        if( m_frame->EditImage( (SCH_BITMAP*) item ) )
+        if( InvokeDialogLabelEditor( m_frame, (SCH_TEXT*) item ) == wxID_OK )
         {
-            // The bitmap is cached in Opengl: clear the cache in case it has become invalid
-            getView()->RecacheAllItems();
+            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+            m_frame->OnModify();
         }
 
         break;
 
+    case SCH_FIELD_T:
+        editComponentFieldText( (SCH_FIELD*) item );
+        break;
+
+    case SCH_BITMAP_T:
+    {
+        // JEY TODO: selected image doesn't have any highlighting....
+        SCH_BITMAP*         bitmap = (SCH_BITMAP*) item;
+        DIALOG_IMAGE_EDITOR dlg( m_frame, bitmap->GetImage() );
+
+        if( dlg.ShowModal() == wxID_OK )
+        {
+            // save old image in undo list if not already in edit
+            if( bitmap->GetEditFlags() == 0 )
+                m_frame->SaveCopyInUndoList( bitmap, UR_CHANGED );
+
+            dlg.TransferToImage( bitmap->GetImage() );
+
+            // The bitmap is cached in Opengl: clear the cache in case it has become invalid
+            getView()->RecacheAllItems();
+            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+            m_frame->OnModify();
+        }
+    }
+        break;
+
     case SCH_LINE_T:
-        m_frame->EditLine( (SCH_LINE*) item, true );
+    {
+        SCH_LINE* line = (SCH_LINE*) item;
+
+        // We purposely disallow editing everything except graphic lines
+        if( line->GetLayer() != LAYER_NOTES )
+            break;
+
+        DIALOG_EDIT_LINE_STYLE dlg( m_frame, line );
+
+        if( dlg.ShowModal() == wxID_OK )
+        {
+            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+            m_frame->OnModify();
+        }
+    }
         break;
 
     case SCH_MARKER_T:        // These items have no properties to edit

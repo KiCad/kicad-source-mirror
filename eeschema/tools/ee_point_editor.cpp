@@ -37,6 +37,7 @@ using namespace std::placeholders;
 #include <status_popup.h>
 #include <sch_edit_frame.h>
 #include <sch_line.h>
+#include <sch_bitmap.h>
 #include <sch_sheet.h>
 #include <lib_edit_frame.h>
 #include <lib_arc.h>
@@ -125,6 +126,18 @@ public:
             SCH_SHEET* sheet = (SCH_SHEET*) aItem;
             wxPoint    topLeft = sheet->GetPosition();
             wxPoint    botRight = sheet->GetPosition() + sheet->GetSize();
+
+            points->AddPoint( (wxPoint) topLeft );
+            points->AddPoint( wxPoint( botRight.x, topLeft.y ) );
+            points->AddPoint( wxPoint( topLeft.x, botRight.y ) );
+            points->AddPoint( (wxPoint) botRight );
+            break;
+        }
+        case SCH_BITMAP_T:
+        {
+            SCH_BITMAP* bitmap = (SCH_BITMAP*) aItem;
+            wxPoint     topLeft = bitmap->GetPosition() - bitmap->GetSize() / 2;
+            wxPoint     botRight = bitmap->GetPosition() + bitmap->GetSize() / 2;
 
             points->AddPoint( (wxPoint) topLeft );
             points->AddPoint( wxPoint( botRight.x, topLeft.y ) );
@@ -237,15 +250,23 @@ void EE_POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
 
 int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 {
-    static KICAD_T pointTypes[] = { LIB_ARC_T, LIB_CIRCLE_T, LIB_POLYLINE_T, LIB_RECTANGLE_T,
-                                    SCH_SHEET_T, SCH_LINE_LOCATE_GRAPHIC_LINE_T, EOT };
+    static KICAD_T supportedTypes[] = {
+        LIB_ARC_T,
+        LIB_CIRCLE_T,
+        LIB_POLYLINE_T,
+        LIB_RECTANGLE_T,
+        SCH_SHEET_T,
+        SCH_LINE_LOCATE_GRAPHIC_LINE_T,
+        SCH_BITMAP_T,
+        EOT
+    };
 
     if( !m_selectionTool )
         return 0;
 
     const EE_SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( selection.Size() != 1 || !selection.Front()->IsType( pointTypes ) )
+    if( selection.Size() != 1 || !selection.Front()->IsType( supportedTypes ) )
         return 0;
 
     // Wait till drawing tool is done
@@ -450,6 +471,29 @@ void EE_POINT_EDITOR::updateItem() const
         break;
     }
 
+    case SCH_BITMAP_T:
+    {
+        SCH_BITMAP* bitmap = (SCH_BITMAP*) item;
+        VECTOR2I    topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
+        VECTOR2I    topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
+        VECTOR2I    botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
+        VECTOR2I    botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
+
+        pinEditedCorner( getEditedPointIndex(), Mils2iu( 50 ), Mils2iu( 50 ),
+                         topLeft, topRight, botLeft, botRight );
+
+        double oldWidth = bitmap->GetSize().x;
+        double newWidth = topRight.x - topLeft.x;
+        double widthRatio = newWidth / oldWidth;
+
+        double oldHeight = bitmap->GetSize().y;
+        double newHeight = botLeft.y - topLeft.y;
+        double heightRatio = newHeight / oldHeight;
+
+        bitmap->SetImageScale( bitmap->GetImageScale() * std::min( widthRatio, heightRatio ) );
+        break;
+    }
+
     case SCH_SHEET_T:
     {
         SCH_SHEET* sheet = (SCH_SHEET*) item;
@@ -589,6 +633,19 @@ void EE_POINT_EDITOR::updatePoints()
         m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( mapCoords( botRight.x, topLeft.y ) );
         m_editPoints->Point( RECT_BOTLEFT ).SetPosition( mapCoords( topLeft.x, botRight.y ) );
         m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( mapCoords( botRight ) );
+        break;
+    }
+
+    case SCH_BITMAP_T:
+    {
+        SCH_BITMAP* bitmap = (SCH_BITMAP*) item;
+        wxPoint        topLeft = bitmap->GetPosition() - bitmap->GetSize() / 2;
+        wxPoint        botRight = bitmap->GetPosition() + bitmap->GetSize() / 2;
+
+        m_editPoints->Point( RECT_TOPLEFT ).SetPosition( topLeft );
+        m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( botRight.x, topLeft.y );
+        m_editPoints->Point( RECT_BOTLEFT ).SetPosition( topLeft.x, botRight.y );
+        m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
         break;
     }
 

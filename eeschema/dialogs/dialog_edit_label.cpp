@@ -23,16 +23,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_text.h
- * @brief Implementation of the label properties dialog.
- */
-
 #include <fctsys.h>
 #include <sch_edit_frame.h>
 #include <base_units.h>
 #include <sch_validators.h>
-
+#include <tool/tool_manager.h>
 #include <sch_draw_panel.h>
 #include <general.h>
 #include <gr_text.h>
@@ -40,9 +35,9 @@
 #include <sch_text.h>
 #include <typeinfo>
 #include <widgets/unit_binder.h>
-
 #include <dialog_edit_label_base.h>
 #include <kicad_string.h>
+#include <tool/actions.h>
 
 class SCH_EDIT_FRAME;
 class SCH_TEXT;
@@ -91,14 +86,11 @@ private:
 };
 
 
-void SCH_EDIT_FRAME::EditSchematicText( SCH_TEXT* aTextItem )
+int InvokeDialogLabelEditor( SCH_EDIT_FRAME* aCaller, SCH_TEXT* aTextItem )
 {
-    if( aTextItem == NULL )
-        return;
+    DIALOG_LABEL_EDITOR dialog( aCaller, aTextItem );
 
-    DIALOG_LABEL_EDITOR dialog( this, aTextItem );
-
-    dialog.ShowModal();
+    return dialog.ShowModal();
 }
 
 

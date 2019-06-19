@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -30,23 +30,11 @@ DIALOG_IMAGE_EDITOR_BASE::DIALOG_IMAGE_EDITOR_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
 	
-	m_buttonMirrorX = new wxButton( this, wxID_ANY, _("Mirror X"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_buttonMirrorX, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_buttonMirrorY = new wxButton( this, wxID_ANY, _("Mirror Y"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_buttonMirrorY, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_buttonRotate = new wxButton( this, wxID_ANY, _("Rotate"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_buttonRotate, 0, wxEXPAND|wxALL, 5 );
-	
 	m_buttonGrey = new wxButton( this, wxID_ANY, _("Grey"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerRight->Add( m_buttonGrey, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_buttonHalfSize = new wxButton( this, wxID_ANY, _("Half Size"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_buttonHalfSize, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonUndoLast = new wxButton( this, wxID_ANY, _("Undo Last"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_buttonUndoLast, 0, wxALL|wxEXPAND, 5 );
+	bSizerRight->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 10 );
 	
 	m_staticTextScale = new wxStaticText( this, wxID_ANY, _("Image Scale:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextScale->Wrap( -1 );
@@ -56,7 +44,7 @@ DIALOG_IMAGE_EDITOR_BASE::DIALOG_IMAGE_EDITOR_BASE( wxWindow* parent, wxWindowID
 	bSizerRight->Add( m_textCtrlScale, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	
-	bSizerLeft->Add( bSizerRight, 0, wxEXPAND, 5 );
+	bSizerLeft->Add( bSizerRight, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	bUpperSizer->Add( bSizerLeft, 1, wxEXPAND, 5 );
@@ -82,23 +70,13 @@ DIALOG_IMAGE_EDITOR_BASE::DIALOG_IMAGE_EDITOR_BASE( wxWindow* parent, wxWindowID
 	
 	// Connect Events
 	m_panelDraw->Connect( wxEVT_PAINT, wxPaintEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnRedrawPanel ), NULL, this );
-	m_buttonMirrorX->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnMirrorX_click ), NULL, this );
-	m_buttonMirrorY->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnMirrorY_click ), NULL, this );
-	m_buttonRotate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnRotateClick ), NULL, this );
 	m_buttonGrey->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnGreyScaleConvert ), NULL, this );
-	m_buttonHalfSize->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnHalfSize ), NULL, this );
-	m_buttonUndoLast->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnUndoLastChange ), NULL, this );
 }
 
 DIALOG_IMAGE_EDITOR_BASE::~DIALOG_IMAGE_EDITOR_BASE()
 {
 	// Disconnect Events
 	m_panelDraw->Disconnect( wxEVT_PAINT, wxPaintEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnRedrawPanel ), NULL, this );
-	m_buttonMirrorX->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnMirrorX_click ), NULL, this );
-	m_buttonMirrorY->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnMirrorY_click ), NULL, this );
-	m_buttonRotate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnRotateClick ), NULL, this );
 	m_buttonGrey->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnGreyScaleConvert ), NULL, this );
-	m_buttonHalfSize->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnHalfSize ), NULL, this );
-	m_buttonUndoLast->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnUndoLastChange ), NULL, this );
 	
 }

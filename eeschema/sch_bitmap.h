@@ -56,51 +56,32 @@ public:
 
     SCH_ITEM& operator=( const SCH_ITEM& aItem );
 
-    /*
-     * Accessors:
-     */
-    double GetPixelScaleFactor() const { return m_image->GetPixelScaleFactor(); }
-    void SetPixelScaleFactor( double aSF ) { m_image->SetPixelScaleFactor( aSF ); }
-
     BITMAP_BASE* GetImage()
     {
-        wxCHECK_MSG( m_image != NULL, NULL, "Invalid SCH_BITMAP initialization, m_image is NULL." );
-
+        wxCHECK_MSG( m_image != NULL, NULL, "Invalid SCH_BITMAP init, m_image is NULL." );
         return m_image;
     }
 
     /**
-     * @return the scaling factor from pixel size to actual draw size
-     * this scaling factor  depend on m_pixelScaleFactor and m_Scale
-     * m_pixelScaleFactor gives the scaling factor between a pixel size and
-     * the internal schematic units
-     * m_Scale is an user dependant value, and gives the "zoom" value
-     *  m_Scale = 1.0 = original size of bitmap.
-     *  m_Scale < 1.0 = the bitmap is drawn smaller than its original size.
-     *  m_Scale > 1.0 = the bitmap is drawn bigger than its original size.
-     */
-    double GetScalingFactor() const
-    {
-        return m_image->GetScalingFactor();
-    }
-
-    /**
-     * @return the m_Scale image "zoom" value
-     * m_Scale is an user dependant value, and is similar to a "zoom" value
-     *  m_Scale = 1.0 = original size of bitmap.
-     *  m_Scale < 1.0 = the bitmap is drawn smaller than its original size.
-     *  m_Scale > 1.0 = the bitmap is drawn bigger than its original size.
+     * @return the image "zoom" value
+     *  scale = 1.0 = original size of bitmap.
+     *  scale < 1.0 = the bitmap is drawn smaller than its original size.
+     *  scale > 1.0 = the bitmap is drawn bigger than its original size.
      */
     double GetImageScale() const
     {
         return m_image->GetScale();
     }
 
+    void SetImageScale( double aScale )
+    {
+        m_image->SetScale( aScale );
+    }
+
     wxString GetClass() const override
     {
         return wxT( "SCH_BITMAP" );
     }
-
 
     /**
      * @return the actual size (in user units, not in pixels) of the image

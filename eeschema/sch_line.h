@@ -198,8 +198,6 @@ public:
 
     void Plot( PLOTTER* aPlotter ) override;
 
-    wxPoint MidPoint();
-
     EDA_ITEM* Clone() const override;
 
     void SwapData( SCH_ITEM* aItem ) override;

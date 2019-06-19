@@ -49,6 +49,7 @@ class wxDialog;
 class LIB_PART;
 class PART_LIBS;
 class SCH_COMPONENT;
+class SCH_TEXT;
 class SCH_SHEET_PATH;
 class RESCUER;
 
@@ -104,5 +105,12 @@ int InvokeDialogNetList( SCH_EDIT_FRAME* aCaller );
  * @return true if changes are made, false if no change
  */
 bool InvokeDialogEditComponentsLibId( SCH_EDIT_FRAME* aCaller );
+
+/**
+ * Launches the "Edit Text/Label" dialog
+ * @return the ShowModal() result (wxID_OK, wxID_CANCEL, etc.)
+ */
+int InvokeDialogLabelEditor( SCH_EDIT_FRAME* aCaller, SCH_TEXT* aText );
+
 
 #endif  // INVOKE_SCH_DIALOG_H_
