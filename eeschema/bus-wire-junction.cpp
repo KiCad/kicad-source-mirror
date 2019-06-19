@@ -898,11 +898,18 @@ void SCH_EDIT_FRAME::RepeatDrawItem()
             ( (SCH_TEXT*) my_clone )->IncrementLabel( GetRepeatDeltaLabel() );
 
         AddToScreen( my_clone );
+        SaveCopyInUndoList( my_clone, UR_NEW );
 
         if( my_clone->IsConnectable() )
-            TestDanglingEnds();
+        {
+            PICKED_ITEMS_LIST list;
 
-        SaveCopyInUndoList( my_clone, UR_NEW );
+            list.PushItem( ITEM_PICKER( my_clone ) );
+            CheckListConnections( list, true );
+            SchematicCleanUp( true );
+            TestDanglingEnds();
+        }
+
         my_clone->ClearFlags();
     }
 
