@@ -23,12 +23,12 @@
 #include <wx/notebook.h>
 #include <wx/stattext.h>
 #include <wx/sizer.h>
+#include <wx/statbox.h>
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
 #include <wx/choice.h>
-#include <wx/statbox.h>
 #include <wx/radiobox.h>
 #include <wx/slider.h>
 #include <wx/checkbox.h>
@@ -72,11 +72,11 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 		wxButton* m_buttonLoad;
 		wxButton* m_buttonExportFile;
 		wxButton* m_buttonExportClipboard;
-		wxRadioBox* m_radioBoxFormat;
+		wxRadioBox* m_rbOutputFormat;
 		wxStaticText* m_ThresholdText;
 		wxSlider* m_sliderThreshold;
 		wxCheckBox* m_checkNegative;
-		wxRadioBox* m_radio_PCBLayer;
+		wxRadioBox* m_rbPCBLayer;
 		wxStatusBar* m_statusBar;
 
 		// Virtual event handlers, overide them in your derived class
@@ -97,7 +97,7 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 
 	public:
 
-		BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Bitmap to Component Converter"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 746,616 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxTAB_TRAVERSAL );
+		BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Bitmap to Component Converter"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 746,684 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxTAB_TRAVERSAL );
 
 		~BM2CMP_FRAME_BASE();
 

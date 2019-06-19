@@ -62,6 +62,7 @@ private:
     potrace_path_t*    m_Paths;     // the list of paths, from potrace (list of lines and bezier curves)
     std::string m_CmpName;          // The string used as cmp/footprint name
     std::string&  m_Data;           // the buffer containing the conversion
+    std::string   m_errors;         // a buffer to return error messages
 
 public:
     BITMAPCONV_INFO( std::string& aData );
@@ -73,6 +74,7 @@ public:
                       OUTPUT_FMT_ID aFormat, int aDpi_X, int aDpi_Y,
                       BMP2CMP_MOD_LAYER aModLayer );
 
+    std::string& GetErrorMessages() {return m_errors; }
 
 private:
     /**

@@ -84,7 +84,9 @@ int BITMAPCONV_INFO::ConvertBitmap( potrace_bitmap_t* aPotrace_bitmap,
     param = potrace_param_default();
     if( !param )
     {
-        fprintf( stderr, "Error allocating parameters: %s\n", strerror( errno ) );
+        char msg[256];
+        sprintf( msg, "Error allocating parameters: %s\n", strerror( errno ) );
+        m_errors += msg;
         return 1;
     }
     param->turdsize = 0;
@@ -99,7 +101,9 @@ int BITMAPCONV_INFO::ConvertBitmap( potrace_bitmap_t* aPotrace_bitmap,
         }
         potrace_param_free( param );
 
-        fprintf( stderr, "Error tracing bitmap: %s\n", strerror( errno ) );
+        char msg[256];
+        sprintf( msg, "Error tracing bitmap: %s\n", strerror( errno ) );
+        m_errors += msg;
         return 1;
     }
 
@@ -199,7 +203,7 @@ void BITMAPCONV_INFO::outputDataHeader(  const char * aBrdLayerName )
         // fields text thickness = 1.5 / 5 = 0.3mm
         sprintf( strbuf, "(module %s (layer F.Cu)\n  (at 0 0)\n", m_CmpName.c_str() );
         m_Data += strbuf;
-        sprintf( strbuf, " (fp_text reference \"G***\" (at 0 0) (layer %s) hide\n"
+        sprintf( strbuf, " (fp_text reference \"G***\" (at 0 0) (layer %s)\n"
             "  (effects (font (thickness 0.3)))\n  )\n", aBrdLayerName );
         m_Data += strbuf;
         sprintf( strbuf, "  (fp_text value \"%s\" (at 0.75 0) (layer %s) hide\n"
@@ -399,7 +403,9 @@ void BITMAPCONV_INFO::createOutputData( BMP2CMP_MOD_LAYER aModLayer )
     potrace_path_t* paths = m_Paths;    // the list of paths
 
     if(!m_Paths)
-        printf("NULL Paths!\n");
+    {
+        m_errors += "No path in black and white image: no outline created\n";
+    }
 
     while( paths != NULL )
     {

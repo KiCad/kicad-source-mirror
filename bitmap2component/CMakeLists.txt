@@ -13,9 +13,10 @@ include_directories(
 
 set( BITMAP2COMPONENT_SRCS
     ../common/single_top.cpp
+    bitmap2cmp_main.cpp
     bitmap2component.cpp
-    bitmap2cmp_gui_base
-    bitmap2cmp_gui
+    bitmap2cmp_gui_base.cpp
+    bitmap2cmp_gui.cpp
     )
 
 set_source_files_properties( ../common/single_top.cpp PROPERTIES

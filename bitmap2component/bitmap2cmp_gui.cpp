@@ -244,20 +244,20 @@ void BM2CMP_FRAME::LoadSettings()
         if( tmp < 0 || tmp > FINAL_FMT )
             tmp = PCBNEW_KICAD_MOD;
 
-        m_radioBoxFormat->SetSelection( tmp );
+        m_rbOutputFormat->SetSelection( tmp );
     }
 
     if( tmp == PCBNEW_KICAD_MOD )
-        m_radio_PCBLayer->Enable( true );
+        m_rbPCBLayer->Enable( true );
     else
-        m_radio_PCBLayer->Enable( false );
+        m_rbPCBLayer->Enable( false );
 
     if( m_config->Read( KEYWORD_LAST_MODLAYER, &tmp ) )
     {
         if( (unsigned) tmp > MOD_LYR_FINAL )    // Out of range
-            m_radio_PCBLayer->SetSelection( MOD_LYR_FSILKS );
+            m_rbPCBLayer->SetSelection( MOD_LYR_FSILKS );
         else
-            m_radio_PCBLayer->SetSelection( tmp );
+            m_rbPCBLayer->SetSelection( tmp );
     }
 }
 
@@ -282,8 +282,8 @@ void BM2CMP_FRAME::SaveSettings()
     m_config->Write( KEYWORD_LAST_OUTPUT_FILE, m_ConvertedFileName );
     m_config->Write( KEYWORD_BINARY_THRESHOLD, m_sliderThreshold->GetValue() );
     m_config->Write( KEYWORD_BW_NEGATIVE, m_checkNegative->IsChecked() ? 1 : 0 );
-    m_config->Write( KEYWORD_LAST_FORMAT,  m_radioBoxFormat->GetSelection() );
-    m_config->Write( KEYWORD_LAST_MODLAYER,  m_radio_PCBLayer->GetSelection() );
+    m_config->Write( KEYWORD_LAST_FORMAT,  m_rbOutputFormat->GetSelection() );
+    m_config->Write( KEYWORD_LAST_MODLAYER,  m_rbPCBLayer->GetSelection() );
     m_config->Write( KEYWORD_UNIT_SELECTION, m_PixelUnit->GetSelection() );
 }
 
@@ -683,9 +683,9 @@ void BM2CMP_FRAME::OnThresholdChange( wxScrollEvent& event )
 void BM2CMP_FRAME::OnExportToFile( wxCommandEvent& event )
 {
     m_exportToClipboard = false;
-    // choices of m_radioBoxFormat are expected to be in same order as
+    // choices of m_rbOutputFormat are expected to be in same order as
     // OUTPUT_FMT_ID. See bitmap2component.h
-    OUTPUT_FMT_ID format = (OUTPUT_FMT_ID) m_radioBoxFormat->GetSelection();
+    OUTPUT_FMT_ID format = (OUTPUT_FMT_ID) m_rbOutputFormat->GetSelection();
     exportBitmap( format );
 }
 
@@ -693,9 +693,9 @@ void BM2CMP_FRAME::OnExportToFile( wxCommandEvent& event )
 void BM2CMP_FRAME::OnExportToClipboard( wxCommandEvent& event )
 {
     m_exportToClipboard = true;
-    // choices of m_radioBoxFormat are expected to be in same order as
+    // choices of m_rbOutputFormat are expected to be in same order as
     // OUTPUT_FMT_ID. See bitmap2component.h
-    OUTPUT_FMT_ID format = (OUTPUT_FMT_ID) m_radioBoxFormat->GetSelection();
+    OUTPUT_FMT_ID format = (OUTPUT_FMT_ID) m_rbOutputFormat->GetSelection();
 
     std::string buffer;
     ExportToBuffer( buffer, format );
@@ -918,97 +918,26 @@ void BM2CMP_FRAME::ExportToBuffer( std::string& aOutput, OUTPUT_FMT_ID aFormat )
         }
     }
 
-    // choices of m_radio_PCBLayer are expected to be in same order as
+    // choices of m_rbPCBLayer are expected to be in same order as
     // BMP2CMP_MOD_LAYER. See bitmap2component.h
     BMP2CMP_MOD_LAYER modLayer = MOD_LYR_FSILKS;
 
     if( aFormat == PCBNEW_KICAD_MOD )
-        modLayer = (BMP2CMP_MOD_LAYER) m_radio_PCBLayer->GetSelection();
+        modLayer = (BMP2CMP_MOD_LAYER) m_rbPCBLayer->GetSelection();
 
     BITMAPCONV_INFO converter( aOutput );
     converter.ConvertBitmap( potrace_bitmap, aFormat, m_outputSizeX.GetOutputDPI(),
             m_outputSizeY.GetOutputDPI(), modLayer );
-}
 
-
-
-//-----<KIFACE>-----------------------------------------------------------------
-
-namespace BMP2CMP {
-
-static struct IFACE : public KIFACE_I
-{
-    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override;
-
-    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 ) override
-    {
-        return new BM2CMP_FRAME( aKiway, aParent );
-    }
-
-    /**
-     * Function IfaceOrAddress
-     * return a pointer to the requested object.  The safest way to use this
-     * is to retrieve a pointer to a static instance of an interface, similar to
-     * how the KIFACE interface is exported.  But if you know what you are doing
-     * use it to retrieve anything you want.
-     *
-     * @param aDataId identifies which object you want the address of.
-     *
-     * @return void* - and must be cast into the know type.
-     */
-    void* IfaceOrAddress( int aDataId ) override
-    {
-        return NULL;
-    }
-
-    IFACE( const char* aDSOname, KIWAY::FACE_T aType ) :
-        KIFACE_I( aDSOname, aType )
-    {}
-
-} kiface( "BMP2CMP", KIWAY::FACE_BMP2CMP );
-
-}   // namespace BMP2CMP
-
-using namespace BMP2CMP;
-
-static PGM_BASE* process;
-
-KIFACE_I& Kiface()
-{
-    return kiface;
-}
-
-
-// KIFACE_GETTER's actual spelling is a substitution macro found in kiway.h.
-// KIFACE_GETTER will not have name mangling due to declaration in kiway.h.
-KIFACE* KIFACE_GETTER( int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram )
-{
-    process = (PGM_BASE*) aProgram;
-    return &kiface;
-}
-
-
-#if defined(BUILD_KIWAY_DLLS)
-PGM_BASE& Pgm()
-{
-    wxASSERT( process );    // KIFACE_GETTER has already been called.
-    return *process;
-}
-#endif
-
-
-bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
-{
-    return start_common( aCtlBits );
+    if( !converter.GetErrorMessages().empty() )
+        wxMessageBox( converter.GetErrorMessages().c_str(), _( "Errors" ) );
 }
 
 
 void BM2CMP_FRAME::OnFormatChange( wxCommandEvent& event )
 {
-    if( m_radioBoxFormat->GetSelection() == PCBNEW_KICAD_MOD )
-        m_radio_PCBLayer->Enable( true );
+    if( m_rbOutputFormat->GetSelection() == PCBNEW_KICAD_MOD )
+        m_rbPCBLayer->Enable( true );
     else
-        m_radio_PCBLayer->Enable( false );
-
-    event.Skip();
+        m_rbPCBLayer->Enable( false );
 }
