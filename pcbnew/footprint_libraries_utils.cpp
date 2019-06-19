@@ -988,6 +988,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
     wxString msg = wxString::Format( fmt, footprintName.GetData(), libraryName.GetData() );
     SetStatusText( msg );
     updateTitle();
+    ReCreateHToolbar();
 
     return true;
 }
