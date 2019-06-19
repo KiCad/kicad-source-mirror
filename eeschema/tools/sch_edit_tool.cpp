@@ -878,9 +878,10 @@ static KICAD_T deletableItems[] =
 
 int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 {
-    SCH_SCREEN*  screen = m_frame->GetScreen();
-    auto         items = m_selectionTool->RequestSelection( deletableItems ).GetItems();
-    bool         appendToUndo = false;
+    SCH_SCREEN*          screen = m_frame->GetScreen();
+    auto                 items = m_selectionTool->RequestSelection( deletableItems ).GetItems();
+    bool                 appendToUndo = false;
+    std::vector<wxPoint> pts;
 
     if( items.empty() )
         return 0;
@@ -889,16 +890,13 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     for( EDA_ITEM* item : items )
-    {
-        // Junctions, in particular, may have already been deleted if deleting wires made
-        // them redundant
-        if( item->GetEditFlags() & STRUCT_DELETED )
-            continue;
+        item->ClearFlags( STRUCT_DELETED );
 
+    for( EDA_ITEM* item : items )
+    {
         if( item->Type() == SCH_JUNCTION_T )
         {
-            m_frame->DeleteJunction( (SCH_ITEM*) item, appendToUndo );
-            appendToUndo = true;
+            // clean up junctions at the end
         }
         else
         {
@@ -906,28 +904,25 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
             saveCopyInUndoList( item, UR_DELETED, appendToUndo );
             appendToUndo = true;
 
-            updateView( item );
-
             SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
 
             if( sch_item && sch_item->IsConnectable() )
-            {
-                std::vector< wxPoint > pts;
                 sch_item->GetConnectionPoints( pts );
 
-                for( auto point : pts )
-                {
-                    SCH_ITEM* junction = screen->GetItem( point, 0, SCH_JUNCTION_T );
-                    if( junction && !screen->IsJunctionNeeded( point ) )
-                        m_frame->DeleteJunction( junction, appendToUndo );
-                }
-            }
+            updateView( item );
 
             if( item->Type() == SCH_SHEET_PIN_T )
                 static_cast<SCH_SHEET*>( item->GetParent() )->RemovePin( (SCH_SHEET_PIN*) item );
             else
                 m_frame->RemoveFromScreen( item );
         }
+    }
+
+    for( auto point : pts )
+    {
+        SCH_ITEM* junction = screen->GetItem( point, 0, SCH_JUNCTION_T );
+        if( junction && !screen->IsJunctionNeeded( point ) )
+            m_frame->DeleteJunction( junction, appendToUndo );
     }
 
     m_frame->TestDanglingEnds();
