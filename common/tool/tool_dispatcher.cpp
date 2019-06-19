@@ -442,8 +442,10 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
             evt = TOOL_EVENT( TC_KEYBOARD, TA_KEY_PRESSED, key | mods );
     }
 
+    bool handled = false;
+
     if( evt )
-        m_toolMgr->ProcessEvent( *evt );
+        handled = m_toolMgr->ProcessEvent( *evt );
 
     // pass the event to the GUI, it might still be interested in it
     // Note wxEVT_CHAR_HOOK event is already skipped for special keys not used by KiCad
@@ -466,7 +468,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     // must be Skipped (sent to GUI).
     // Otherwise accelerators and shortcuts in main menu or toolbars are not seen.
 #ifndef __APPLE__
-    if( type == wxEVT_CHAR && !keyIsSpecial )
+    if( type == wxEVT_CHAR && !keyIsSpecial && !handled )
         aEvent.Skip();
 #endif
 
