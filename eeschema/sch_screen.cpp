@@ -509,9 +509,11 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
      * library editor and library viewer do not use m_drawList, and therefore
      * their SCH_SCREEN::Draw() draws nothing
      */
-    std::vector< SCH_ITEM* > junctions;
-    std::vector< SCH_ITEM* > bitmaps;
-    std::vector< SCH_ITEM* > other;
+    std::vector< SCH_ITEM* > items;
+
+
+    // Ensure links are up to date, even if a library was reloaded for some reason:
+    UpdateSymbolLinks();
 
     // Ensure links are up to date, even if a library was reloaded for some reason:
     UpdateSymbolLinks();
@@ -521,36 +523,25 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
         if( item->IsMoving() || item->IsResized() )
             continue;
 
-        if( item->Type() == SCH_JUNCTION_T )
-            junctions.push_back( item );
-        else if( item->Type() == SCH_BITMAP_T )
-            bitmaps.push_back( item );
-        else
-            // uncomment line below when there is a virtual EDA_ITEM::GetBoundingBox()
-            // if( panel->GetClipBox().Intersects( item->GetBoundingBox() ) )
-            other.push_back( item );
+        items.push_back( item );
     }
 
-    // Bitmaps are drawn first to ensure they are in the background
-    // This is particularly important for the wxPostscriptDC (used in *nix printers) as
-    // the bitmap PS command clears the screen
-    for( auto item : bitmaps )
-        item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), aDrawMode, aColor );
+    std::sort( items.begin(), items.end(), [] ( const SCH_ITEM* a, const SCH_ITEM* b )
+    {
+        if( a->Type() == b->Type() )
+        return a->GetLayer() > b->GetLayer();
 
-    for( auto item : other )
-        item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), aDrawMode, aColor );
+        return a->Type() > b->Type();
+    } );
 
-    for( auto item : junctions )
+    for( auto item : items )
         item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), aDrawMode, aColor );
 }
 
 
 void SCH_SCREEN::Plot( PLOTTER* aPlotter )
 {
-    // Ensure links are up to date, even if a library was reloaded for some reason:
-    std::vector< SCH_ITEM* > junctions;
-    std::vector< SCH_ITEM* > bitmaps;
-    std::vector< SCH_ITEM* > other;
+    std::vector< SCH_ITEM* > items;
 
     // Ensure links are up to date, even if a library was reloaded for some reason:
     UpdateSymbolLinks();
@@ -560,32 +551,18 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter )
         if( item->IsMoving() || item->IsResized() )
             continue;
 
-        if( item->Type() == SCH_JUNCTION_T )
-            junctions.push_back( item );
-        else if( item->Type() == SCH_BITMAP_T )
-            bitmaps.push_back( item );
-        else
-            // uncomment line below when there is a virtual EDA_ITEM::GetBoundingBox()
-            // if( panel->GetClipBox().Intersects( item->GetBoundingBox() ) )
-            other.push_back( item );
+        items.push_back( item );
     }
 
-    // Bitmaps are drawn first to ensure they are in the background
-    // This is particularly important for the wxPostscriptDC (used in *nix printers) as
-    // the bitmap PS command clears the screen
-    for( auto item : bitmaps )
+    std::sort( items.begin(), items.end(), [] ( const SCH_ITEM* a, const SCH_ITEM* b )
     {
-        aPlotter->SetCurrentLineWidth( item->GetPenSize() );
-        item->Plot( aPlotter );
-    }
+        if( a->Type() == b->Type() )
+        return a->GetLayer() > b->GetLayer();
 
-    for( auto item : other )
-    {
-        aPlotter->SetCurrentLineWidth( item->GetPenSize() );
-        item->Plot( aPlotter );
-    }
+        return a->Type() > b->Type();
+    } );
 
-    for( auto item : junctions )
+    for( auto item : items )
     {
         aPlotter->SetCurrentLineWidth( item->GetPenSize() );
         item->Plot( aPlotter );

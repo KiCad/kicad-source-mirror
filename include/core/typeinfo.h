@@ -104,23 +104,22 @@ enum KICAD_T
     PCB_NETINFO_T,          ///< class NETINFO_ITEM, a description of a net
 
     // Schematic draw Items.  The order of these items effects the sort order.
-    // It is currently ordered to mimic the old Eeschema locate behavior where
-    // the smallest item is the selected item.
+    // The SCH_MARKER_T is drawn last (on top of others)
     SCH_MARKER_T,
-    SCH_JUNCTION_T,
     SCH_NO_CONNECT_T,
-    SCH_BUS_WIRE_ENTRY_T,
-    SCH_BUS_BUS_ENTRY_T,
-    SCH_LINE_T,
-    SCH_BITMAP_T,
+    SCH_JUNCTION_T,
     SCH_TEXT_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
     SCH_HIERARCHICAL_LABEL_T,
+    SCH_BUS_WIRE_ENTRY_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_LINE_T,
     SCH_FIELD_T,
     SCH_COMPONENT_T,
     SCH_SHEET_PIN_T,
     SCH_SHEET_T,
+    SCH_BITMAP_T,
 
     // Be prudent with these 3 types:
     // they should be used only to locate a specific field type
