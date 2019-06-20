@@ -915,7 +915,10 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
     ROTATION_ANCHOR rotationAnchor = selection.Size() > 1 ? ROTATE_AROUND_SEL_CENTER
                                                           : ROTATE_AROUND_ITEM_ANCHOR;
 
-    DIALOG_MOVE_EXACT dialog( editFrame, translation, rotation, rotationAnchor );
+    // TODO: Implement a visible bounding border at the edge
+    auto sel_box = selection.GetBoundingBox();
+
+    DIALOG_MOVE_EXACT dialog( editFrame, translation, rotation, rotationAnchor, sel_box );
     int ret = dialog.ShowModal();
 
     if( ret == wxID_OK )

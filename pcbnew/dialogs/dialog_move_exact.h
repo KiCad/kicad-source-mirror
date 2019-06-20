@@ -49,6 +49,7 @@ private:
     wxPoint&          m_translation;
     double&           m_rotation;
     ROTATION_ANCHOR&  m_rotationAnchor;
+    const EDA_RECT&   m_bbox;
 
     UNIT_BINDER       m_moveX;
     UNIT_BINDER       m_moveY;
@@ -59,7 +60,8 @@ private:
 public:
     // Constructor and destructor
     DIALOG_MOVE_EXACT(PCB_BASE_FRAME *aParent, wxPoint& aTranslate,
-                      double& aRotate, ROTATION_ANCHOR& aAnchor );
+                      double& aRotate, ROTATION_ANCHOR& aAnchor,
+                      const EDA_RECT& aBbox);
     ~DIALOG_MOVE_EXACT() { };
 
 private:
@@ -71,6 +73,7 @@ private:
 
     void OnPolarChanged( wxCommandEvent& event ) override;
     void OnClear( wxCommandEvent& event ) override;
+    void OnTextChanged( wxCommandEvent& event ) override;
 
     // Automatically called when clicking on the OK button
     bool TransferDataFromWindow() override;

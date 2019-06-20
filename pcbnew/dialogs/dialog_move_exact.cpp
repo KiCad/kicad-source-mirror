@@ -33,11 +33,13 @@ DIALOG_MOVE_EXACT::MOVE_EXACT_OPTIONS DIALOG_MOVE_EXACT::m_options;
 
 
 DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, wxPoint& aTranslate,
-                                      double& aRotate, ROTATION_ANCHOR& aAnchor ) :
+                                      double& aRotate, ROTATION_ANCHOR& aAnchor,
+                                      const EDA_RECT& aBbox ) :
     DIALOG_MOVE_EXACT_BASE( aParent ),
     m_translation( aTranslate ),
     m_rotation( aRotate ),
     m_rotationAnchor( aAnchor ),
+    m_bbox( aBbox ),
     m_moveX( aParent, m_xLabel, m_xEntry, m_xUnit ),
     m_moveY( aParent, m_yLabel, m_yEntry, m_yUnit ),
     m_rotate( aParent, m_rotLabel, m_rotEntry, m_rotUnit )
@@ -237,4 +239,38 @@ void DIALOG_MOVE_EXACT::OnTextFocusLost( wxFocusEvent& event )
         obj->SetValue( "0" );
 
     event.Skip();
+}
+
+
+void DIALOG_MOVE_EXACT::OnTextChanged( wxCommandEvent& event )
+{
+
+    int delta_x = m_moveX.GetValue();
+    int delta_y = m_moveY.GetValue();
+    int max_border = std::numeric_limits<int>::max() * 0.7071;
+
+    if( m_bbox.GetLeft() + delta_x < -max_border ||
+            m_bbox.GetRight() + delta_x > max_border ||
+            m_bbox.GetTop() + delta_y < -max_border ||
+            m_bbox.GetBottom() + delta_y > max_border )
+    {
+        const wxString invalid_length = _( "Invalid movement values.  Movement would place selection "
+                                           "outside of the maximum board area." );
+
+        m_xEntry->SetToolTip( invalid_length );
+        m_xEntry->SetForegroundColour( *wxRED );
+        m_yEntry->SetToolTip( invalid_length );
+        m_yEntry->SetForegroundColour( *wxRED );
+        m_stdButtons->GetAffirmativeButton()->Disable();
+    }
+    else
+    {
+        m_xEntry->SetToolTip( "" );
+        m_xEntry->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT ) );
+        m_yEntry->SetToolTip( "" );
+        m_yEntry->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT ) );
+        m_stdButtons->GetAffirmativeButton()->Enable();
+        event.Skip();
+    }
+
 }
