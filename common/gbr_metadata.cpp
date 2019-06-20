@@ -150,7 +150,8 @@ wxString GbrMakeProjectGUIDfromString( wxString& aText )
 std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribute,
                                                     bool aUseX1StructuredComment )
 {
-    std::string attribute_string;
+    std::string attribute_string;   // the specific aperture attribute (TA.xxx)
+    std::string comment_string;     // a optional G04 comment line to write before the TA. line
 
     // generate a string to print a Gerber Aperture attribute
     switch( aAttribute )
@@ -226,13 +227,18 @@ std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribu
         break;
 
     case GBR_APERTURE_ATTRIB_COMPONENTDRILL:    // print info associated to a component
-                                                // round hole in drill files
+                                                // round pad hole in drill files
         attribute_string = "TA.AperFunction,ComponentDrill";
         break;
 
-    case GBR_APERTURE_ATTRIB_SLOTDRILL:   // print info associated to a oblong hole in drill files
-        attribute_string = "TA.AperFunction,Slot";
-        break;
+    // print info associated to a component oblong pad hole in drill files
+    // Same as a round pad hole, but is a specific aperture in drill file and
+    // a G04 comment is added to the aperture function
+    case GBR_APERTURE_ATTRIB_COMPONENTOBLONGDRILL:
+        comment_string = "aperture for slot hole";
+        attribute_string = "TA.AperFunction,ComponentDrill";
+
+    break;
     }
 
     std::string full_attribute_string;
@@ -240,14 +246,19 @@ std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribu
 
     if( !attribute_string.empty() )
     {
+        if( !comment_string.empty() )
+        {
+            full_attribute_string = "G04 " + comment_string + "*\n";
+        }
+
         if( aUseX1StructuredComment )
         {
-            full_attribute_string = "G04 #@! ";
+            full_attribute_string += "G04 #@! ";
             eol_string = "*\n";
         }
         else
         {
-            full_attribute_string = "%";
+            full_attribute_string += "%";
             eol_string = "*%\n";
         }
     }
