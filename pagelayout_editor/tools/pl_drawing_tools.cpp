@@ -115,23 +115,24 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
             if( evt->IsActivate() )
                 break;
         }
-
         else if( evt->IsClick( BUT_LEFT ) )
         {
             // First click creates...
             if( !item )
             {
-                m_frame->SaveCopyInUndoList();
+                WS_DATA_ITEM* dataItem = m_frame->AddPageLayoutItem( type );
 
-                m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
+                if( dataItem )  // dataItem = nullptr can happens if the command was cancelled
+                {
+                    m_frame->SaveCopyInUndoList();
 
-                WS_DATA_ITEM* dataItem;
-                dataItem = m_frame->AddPageLayoutItem( type );
-                item = dataItem->GetDrawItems()[0];
-                item->SetFlags( IS_NEW | IS_MOVED );
-                m_selectionTool->AddItemToSel( item );
+                    m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
+
+                    item = dataItem->GetDrawItems()[0];
+                    item->SetFlags( IS_NEW | IS_MOVED );
+                    m_selectionTool->AddItemToSel( item );
+                }
             }
-
             // ... and second click places:
             else
             {
@@ -153,7 +154,6 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
-
         else if( item && ( evt->IsAction( &PL_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             item->GetPeer()->MoveStartPointToUi( (wxPoint) cursorPos );
