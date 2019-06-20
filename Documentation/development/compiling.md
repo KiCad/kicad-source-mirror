@@ -138,35 +138,40 @@ these options and their default values.
 ## Scripting Support ## {#scripting_opt}
 
 The KICAD_SCRIPTING option is used to enable building the Python scripting support into Pcbnew.
-This options is enabled by default.
+This options is enabled by default, and will disable all other KICAD_SCRIPTING_* options when
+it is disabled.
+
+## Python 3 Scripting Support ## {#python3}
+
+The KICAD_SCRIPTING_PYTHON3 option is used to enable using Python 3 for the scripting support
+instead of Python 2.  This option is disabled by default and only is relevant if
+[KICAD_SCRIPTING](#scripting_opt) is enabled.
 
 ## Scripting Module Support ## {#scripting_mod_opt}
 
 The KICAD_SCRIPTING_MODULES option is used to enable building and installing the Python modules
-supplied by KiCad.  This option is enabled by default and it will enable
-[KICAD_SCRIPTING](#scripting_opt) if disabled.
-
-## Python 3 Scripting Support ## {#python3}
-
-The KICAD_SCRIPTING_PYTHON3 option is used to enable building of the Python 3 interface instead
-of Python 2.  This option is disabled by default.
+supplied by KiCad.  This option is enabled by default, but will be disabled if
+[KICAD_SCRIPTING](#scripting_opt) is disabled.
 
 ## wxPython Scripting Support ## {#wxpython_opt}
 
 The KICAD_SCRIPTING_WXPYTHON option is used to enable building the wxPython interface into
-Pcbnew including the wxPython console.  This option is enabled by default.
+Pcbnew including the wxPython console.  This option is enabled by default, but will be disabled if
+[KICAD_SCRIPTING](#scripting_opt) is disabled.
 
 ## wxPython Phoenix Scripting Support ## {#wxpython_phoenix}
 
 The KICAD_SCRIPTING_WXPYTHON_PHOENIX option is used to enable building the wxPython interface with
-the new Phoenix binding instead of the legacy one.  This option is disabled by default.
+the new Phoenix binding instead of the legacy one.  This option is disabled by default, and
+enabling it requires [KICAD_SCRIPTING](#scripting_opt) to be enabled.
 
 ## Python Scripting Action Menu Support ## {#python_action_menu_opt}
 
 The KICAD_SCRIPTING_ACTION_MENU option allows Python scripts to be added directly to the Pcbnew
-menu.  This option is enabled by default and will enable [KICAD_SCRIPTING](#scripting_opt) if
-disabled.  Please note that this option is highly experimental and can cause Pcbnew to crash
-if Python scripts create an invalid object state within Pcbnew.
+menu.  This option is enabled by default, but will be disabled if
+[KICAD_SCRIPTING](#scripting_opt) is disabled.  Please note that this option is highly
+experimental and can cause Pcbnew to crash if Python scripts create an invalid object state
+within Pcbnew.
 
 ## GitHub Plugin ## {#github_opt}
 
