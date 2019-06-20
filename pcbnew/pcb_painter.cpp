@@ -732,180 +732,90 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         m_gal->SetFillColor( color );
     }
 
-    m_gal->Save();
-    m_gal->Translate( VECTOR2D( aPad->GetPosition() ) );
-    m_gal->Rotate( -aPad->GetOrientationRadians() );
-
-    int custom_margin = 0;     // a clearance/margin for custom shape, for solder paste/mask
-
     // Choose drawing settings depending on if we are drawing a pad itself or a hole
     if( aLayer == LAYER_PADS_PLATEDHOLES || aLayer == LAYER_NON_PLATEDHOLES )
     {
+        m_gal->Save();
+        m_gal->Translate( VECTOR2D( aPad->GetPosition() ) );
+        m_gal->Rotate( -aPad->GetOrientationRadians() );
+
         // Drawing hole: has same shape as PAD_CIRCLE or PAD_OVAL
         size  = getDrillSize( aPad ) / 2.0;
-        shape = getDrillShape( aPad ) == PAD_DRILL_SHAPE_OBLONG ? PAD_SHAPE_OVAL : PAD_SHAPE_CIRCLE;
-    }
-    else if( aLayer == F_Mask || aLayer == B_Mask )
-    {
-        // Drawing soldermask
-        int soldermaskMargin = aPad->GetSolderMaskMargin();
-        custom_margin = soldermaskMargin;
 
-        m_gal->Translate( VECTOR2D( aPad->GetOffset() ) );
-        size  = VECTOR2D( aPad->GetSize().x / 2.0 + soldermaskMargin,
-                          aPad->GetSize().y / 2.0 + soldermaskMargin );
-        shape = aPad->GetShape();
-    }
-    else if( aLayer == F_Paste || aLayer == B_Paste )
-    {
-        // Drawing solderpaste
-        wxSize solderpasteMargin = aPad->GetSolderPasteMargin();
-        // try to find a clearance which can be used for custom shapes
-        custom_margin = solderpasteMargin.x;
+        if( getDrillShape( aPad ) == PAD_DRILL_SHAPE_OBLONG )
+        {
+            if( size.y >= size.x )
+            {
+                m = ( size.y - size.x );
+                n = size.x;
 
-        m_gal->Translate( VECTOR2D( aPad->GetOffset() ) );
-        size  = VECTOR2D( aPad->GetSize().x / 2.0 + solderpasteMargin.x,
-                          aPad->GetSize().y / 2.0 + solderpasteMargin.y );
-        shape = aPad->GetShape();
+                m_gal->DrawArc( VECTOR2D( 0, -m ), n, -M_PI, 0 );
+                m_gal->DrawArc( VECTOR2D( 0, m ),  n, M_PI, 0 );
+
+                if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
+                {
+                    m_gal->DrawLine( VECTOR2D( -n, -m ), VECTOR2D( -n, m ) );
+                    m_gal->DrawLine( VECTOR2D( n, -m ),  VECTOR2D( n, m ) );
+                }
+                else
+                {
+                    m_gal->DrawRectangle( VECTOR2D( -n, -m ), VECTOR2D( n, m ) );
+                }
+            }
+            else
+            {
+                m = ( size.x - size.y );
+                n = size.y;
+                m_gal->DrawArc( VECTOR2D( -m, 0 ), n, M_PI / 2, 3 * M_PI / 2 );
+                m_gal->DrawArc( VECTOR2D( m, 0 ),  n, M_PI / 2, -M_PI / 2 );
+
+                if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
+                {
+                    m_gal->DrawLine( VECTOR2D( -m, -n ), VECTOR2D( m, -n ) );
+                    m_gal->DrawLine( VECTOR2D( -m, n ),  VECTOR2D( m, n ) );
+                }
+                else
+                {
+                    m_gal->DrawRectangle( VECTOR2D( -m, -n ), VECTOR2D( m, n ) );
+                }
+            }
+        }
+        else
+        {
+            m_gal->DrawCircle( VECTOR2D( 0.0, 0.0 ), size.x );
+        }
+
+        m_gal->Restore();
     }
     else
     {
-        // Drawing every kind of pad
-        m_gal->Translate( VECTOR2D( aPad->GetOffset() ) );
-        size  = VECTOR2D( aPad->GetSize() ) / 2.0;
-        shape = aPad->GetShape();
-    }
-
-    switch( shape )
-    {
-    case PAD_SHAPE_OVAL:
-        if( size.y >= size.x )
-        {
-            m = ( size.y - size.x );
-            n = size.x;
-
-            m_gal->DrawArc( VECTOR2D( 0, -m ), n, -M_PI, 0 );
-            m_gal->DrawArc( VECTOR2D( 0, m ),  n, M_PI, 0 );
-
-            if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
-            {
-                m_gal->DrawLine( VECTOR2D( -n, -m ), VECTOR2D( -n, m ) );
-                m_gal->DrawLine( VECTOR2D( n, -m ),  VECTOR2D( n, m ) );
-            }
-            else
-            {
-                m_gal->DrawRectangle( VECTOR2D( -n, -m ), VECTOR2D( n, m ) );
-            }
-        }
-        else
-        {
-            m = ( size.x - size.y );
-            n = size.y;
-            m_gal->DrawArc( VECTOR2D( -m, 0 ), n, M_PI / 2, 3 * M_PI / 2 );
-            m_gal->DrawArc( VECTOR2D( m, 0 ),  n, M_PI / 2, -M_PI / 2 );
-
-            if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
-            {
-                m_gal->DrawLine( VECTOR2D( -m, -n ), VECTOR2D( m, -n ) );
-                m_gal->DrawLine( VECTOR2D( -m, n ),  VECTOR2D( m, n ) );
-            }
-            else
-            {
-                m_gal->DrawRectangle( VECTOR2D( -m, -n ), VECTOR2D( m, n ) );
-            }
-        }
-        break;
-
-    case PAD_SHAPE_RECT:
-        m_gal->DrawRectangle( VECTOR2D( -size.x, -size.y ), VECTOR2D( size.x, size.y ) );
-        break;
-
-    case PAD_SHAPE_ROUNDRECT:
-    case PAD_SHAPE_CHAMFERED_RECT:
-    {
         SHAPE_POLY_SET polySet;
-        wxSize prsize( size.x * 2, size.y * 2 );    // size is the half pad area size)
-        const int corner_radius = aPad->GetRoundRectCornerRadius( prsize );
-        bool doChamfer = shape == PAD_SHAPE_CHAMFERED_RECT;
-        auto board = aPad->GetBoard();
-        int maxError = ARC_HIGH_DEF;
+        wxSize margin;
+        int clearance = 0;
 
-        if( board )
-            maxError = board->GetDesignSettings().m_MaxError;
-
-        TransformRoundChamferedRectToPolygon( polySet, wxPoint( 0, 0 ), prsize,
-                0.0, corner_radius, aPad->GetChamferRectRatio(),
-                doChamfer ? aPad->GetChamferPositions() : 0, maxError );
-        m_gal->DrawPolygon( polySet );
-        break;
-    }
-
-    case PAD_SHAPE_CUSTOM:
-    {   // Draw the complex custom shape
-
-        // Use solder[Paste/Mask]size or pad size to build pad shape
-        // however, solder[Paste/Mask] size has no actual meaning for a
-        // custom shape, because it is a set of basic shapes
-        // We use the custom_margin (good for solder mask, but approximative
-        // for solder paste).
-        if( custom_margin )
+        switch( aLayer )
         {
-            auto board = aPad->GetBoard();
-            int maxError = ARC_HIGH_DEF;
+        case F_Mask:
+        case B_Mask:
+            clearance += aPad->GetSolderMaskMargin();
+            break;
 
-            if( board )
-                maxError = board->GetDesignSettings().m_MaxError;
+        case F_Paste:
+        case B_Paste:
+            margin = aPad->GetSolderPasteMargin();
+            clearance += ( margin.x + margin.y ) / 2;
+            break;
 
-            SHAPE_POLY_SET outline;
-            outline.Append( aPad->GetCustomShapeAsPolygon() );
-            // outline polygon can have holes linked to the main outline.
-            // So use InflateWithLinkedHoles(), not Inflate() that can create
-            // bad shapes if custom_margin is < 0
-            int numSegs = std::max( GetArcToSegmentCount( custom_margin, maxError, 360.0 ), 6 );
-            outline.InflateWithLinkedHoles( custom_margin, numSegs, SHAPE_POLY_SET::PM_FAST );
-            m_gal->DrawPolygon( outline );
+        default:
+            break;
         }
-        else
-        {
-            // Draw the polygon: only one polygon is expected
-            // However we provide a multi polygon shape drawing
-            // ( for the future or  to show even an incorrect shape
-            m_gal->DrawPolygon( aPad->GetCustomShapeAsPolygon() );
-        }
-    }
-        break;
 
-    case PAD_SHAPE_TRAPEZOID:
-    {
-        std::deque<VECTOR2D> pointList;
-        wxPoint corners[4];
-
-        VECTOR2D padSize = VECTOR2D( aPad->GetSize().x, aPad->GetSize().y ) / 2;
-        VECTOR2D deltaPadSize = size - padSize; // = solder[Paste/Mask]Margin or 0
-
-        aPad->BuildPadPolygon( corners, wxSize( deltaPadSize.x, deltaPadSize.y ), 0.0 );
-        SHAPE_POLY_SET polySet;
-        polySet.NewOutline();
-        polySet.Append( VECTOR2I( corners[0] ) );
-        polySet.Append( VECTOR2I( corners[1] ) );
-        polySet.Append( VECTOR2I( corners[2] ) );
-        polySet.Append( VECTOR2I( corners[3] ) );
-
+        aPad->TransformShapeWithClearanceToPolygon( polySet, clearance );
         m_gal->DrawPolygon( polySet );
     }
-    break;
-
-    case PAD_SHAPE_CIRCLE:
-        m_gal->DrawCircle( VECTOR2D( 0.0, 0.0 ), size.x );
-        break;
-    }
-
-    m_gal->Restore();
 
     // Clearance lines
-    // It has to be called after GAL::Restore() as TransformShapeWithClearanceToPolygon()
-    // returns already transformed coordinates
-    constexpr int clearanceFlags = /*PCB_RENDER_SETTINGS::CL_EXISTING |*/ PCB_RENDER_SETTINGS::CL_PADS;
+    constexpr int clearanceFlags = PCB_RENDER_SETTINGS::CL_PADS;
 
     if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags
             && ( aLayer == LAYER_PAD_FR
