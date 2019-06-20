@@ -46,11 +46,16 @@ public:
 
 private:
 
-    void buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
-            SHAPE_POLY_SET& aFeatures ) const;
+    void addKnockout( D_PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles );
+
+    void addKnockout( BOARD_ITEM* aItem, int aGap, bool aIgnoreLineWidth, SHAPE_POLY_SET& aHoles );
+
+    void knockoutThermals( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aFill );
+
+    void knockoutCopperItems( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aFill );
 
     /**
-     * Function computeRawFilledAreas
+     * Function computeRawFilledArea
      * Add non copper areas polygons (pads and tracks with clearance)
      * to a filled copper area
      * used in BuildFilledSolidAreasPolygons when calculating filled areas in a zone
@@ -59,28 +64,21 @@ private:
      * BuildFilledSolidAreasPolygons() call this function just after creating the
      *  filled copper area polygon (without clearance areas
      * @param aPcb: the current board
-     * _NG version uses SHAPE_POLY_SET instead of Boost.Polygon
      */
-    void computeRawFilledAreas( const ZONE_CONTAINER* aZone,
-            const SHAPE_POLY_SET& aSmoothedOutline,
-            SHAPE_POLY_SET& aRawPolys,
-            SHAPE_POLY_SET& aFinalPolys ) const;
+    void computeRawFilledArea( const ZONE_CONTAINER* aZone, const SHAPE_POLY_SET& aSmoothedOutline,
+                               SHAPE_POLY_SET& aRawPolys, SHAPE_POLY_SET& aFinalPolys );
 
     /**
-     * Function buildUnconnectedThermalStubsPolygonList
+     * Function buildThermalSpokes
      * Creates a set of polygons corresponding to stubs created by thermal shapes on pads
      * which are not connected to a zone (dangling bridges)
      * @param aCornerBuffer = a SHAPE_POLY_SET where to store polygons
      * @param aPcb = the board.
      * @param aZone = a pointer to the ZONE_CONTAINER  to examine.
-     * @param aArcCorrection = a pointer to the ZONE_CONTAINER  to examine.
-     * @param aRoundPadThermalRotation = the rotation in 1.0 degree for thermal stubs in round pads
+     * @param aDanglingSpokesOnly = true to add only dangling spokes to aCornerBuffer
      */
-    void buildUnconnectedThermalStubsPolygonList( SHAPE_POLY_SET& aCornerBuffer,
-            const ZONE_CONTAINER* aZone,
-            const SHAPE_POLY_SET&       aRawFilledArea,
-            double aArcCorrection,
-            double aRoundPadThermalRotation ) const;
+    void buildThermalSpokes( SHAPE_POLY_SET& aCornerBuffer, const ZONE_CONTAINER* aZone,
+                             const SHAPE_POLY_SET& aRawFilledArea, bool aDanglingSpokesOnly);
 
     /**
      * Build the filled solid areas polygons from zone outlines (stored in m_Poly)
@@ -96,8 +94,8 @@ private:
      * by aZone->GetMinThickness() / 2 to be drawn with a outline thickness = aZone->GetMinThickness()
      * aFinalPolys are polygons that will be drawn on screen and plotted
      */
-    bool fillSingleZone( ZONE_CONTAINER* aZone,
-            SHAPE_POLY_SET& aRawPolys, SHAPE_POLY_SET& aFinalPolys ) const;
+    bool fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPolys,
+                         SHAPE_POLY_SET& aFinalPolys );
 
     /**
      * for zones having the ZONE_FILL_MODE::ZFM_HATCH_PATTERN, create a grid pattern
@@ -106,7 +104,7 @@ private:
      * @param aRawPolys: A reference to a SHAPE_POLY_SET buffer containing the initial
      * filled areas, and after adding the grid pattern, the modified filled areas with holes
      */
-    void addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPolys ) const;
+    void addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPolys );
 
     BOARD* m_board;
     SHAPE_POLY_SET m_boardOutline;      // The board outlines, if exists
@@ -114,6 +112,15 @@ private:
                                         // false if not (not closed outlines for instance)
     COMMIT* m_commit;
     WX_PROGRESS_REPORTER* m_progressReporter;
+
+    // m_high_def can be used to define a high definition arc to polygon approximation
+    int m_high_def;
+
+    // m_low_def can be used to define a low definition arc to polygon approximation
+    // Used when converting some pad shapes that can accept lower resolution, vias and track ends.
+    // Rect pads use m_low_def to reduce the number of segments. For these shapes a low def
+    // gives a good shape, because the arc is small (90 degrees) and a small part of the shape.
+    int m_low_def;
 };
 
 #endif
