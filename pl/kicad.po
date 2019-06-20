@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-20 09:42+0200\n"
-"PO-Revision-Date: 2019-06-20 09:45+0200\n"
+"PO-Revision-Date: 2019-06-20 10:04+0200\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCad Translators: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu, Daniel Dawid Majewski, Marek Ledworowski\n"
@@ -10649,7 +10649,7 @@ msgstr "Wyświetla okno dialogowe z polem wartości"
 #: eeschema/tools/ee_actions.cpp:401
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:261
 msgid "Edit Footprint..."
-msgstr "Eydycja footprintu..."
+msgstr "Edycja footprintu..."
 
 #: eeschema/tools/ee_actions.cpp:401
 msgid "Displays footprint field dialog"
@@ -11615,47 +11615,47 @@ msgstr "Pliki zadań"
 
 #: gerbview/files.cpp:193
 msgid "Gerber files (.g* .lgr .pho)"
-msgstr "Plik Gerber (.g* .lgr .pho)"
+msgstr "Pliki Gerber (.g* .lgr .pho)"
 
 #: gerbview/files.cpp:199
 msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
-msgstr "Top layer (*.GTL)|*.GTL;*.gtl|"
+msgstr "Warstwa górna (*.GTL)|*.GTL;*.gtl|"
 
 #: gerbview/files.cpp:200
 msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
-msgstr "Bottom layer (*.GBL)|*.GBL;*.gbl|"
+msgstr "Warstwa dolna (*.GBL)|*.GBL;*.gbl|"
 
 #: gerbview/files.cpp:201
 msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
-msgstr "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
+msgstr "Soldermaska dolna (*.GBS)|*.GBS;*.gbs|"
 
 #: gerbview/files.cpp:202
 msgid "Top solder resist (*.GTS)|*.GTS;*.gts|"
-msgstr "Top solder resist (*.GTS)|*.GTS;*.gts|"
+msgstr "Soldermaska górna (*.GTS)|*.GTS;*.gts|"
 
 #: gerbview/files.cpp:203
 msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
-msgstr "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
+msgstr "Warstwa opisowa dolna (*.GBO)|*.GBO;*.gbo|"
 
 #: gerbview/files.cpp:204
 msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
-msgstr "Top overlay (*.GTO)|*.GTO;*.gto|"
+msgstr "Warstwa opisowa górna (*.GTO)|*.GTO;*.gto|"
 
 #: gerbview/files.cpp:205
 msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
-msgstr "Bottom paste (*.GBP)|*.GBP;*.gbp|"
+msgstr "Warstwa pasty dolna (*.GBP)|*.GBP;*.gbp|"
 
 #: gerbview/files.cpp:206
 msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
-msgstr "Top paste (*.GTP)|*.GTP;*.gtp|"
+msgstr "Warstwa pasty górna (*.GTP)|*.GTP;*.gtp|"
 
 #: gerbview/files.cpp:207
 msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
-msgstr "Keep-out layer (*.GKO)|*.GKO;*.gko|"
+msgstr "Warstwa Keep-out (*.GKO)|*.GKO;*.gko|"
 
 #: gerbview/files.cpp:208
 msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
-msgstr "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
+msgstr "Warstwy mechaniczne (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 
 #: gerbview/files.cpp:209
 msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
@@ -16183,7 +16183,7 @@ msgstr "Zamień footprint..."
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:267
 msgid "Edit Library Footprint..."
-msgstr "Eydycja biblioteki footprintu..."
+msgstr "Edycja biblioteki footprintu..."
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:276
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:181
@@ -25018,35 +25018,35 @@ msgstr "Wyrównywanie/rozkładanie"
 
 #: pcbnew/tools/placement_tool.cpp:196
 msgid "Align to top"
-msgstr "Wyrównaj do góry"
+msgstr "Wyrównuję do góry"
 
 #: pcbnew/tools/placement_tool.cpp:229
 msgid "Align to bottom"
-msgstr "Wyrównaj do dołu"
+msgstr "Wyrównuję do dołu"
 
 #: pcbnew/tools/placement_tool.cpp:277
 msgid "Align to left"
-msgstr "Wyrównaj do lewej"
+msgstr "Wyrównuję do lewej"
 
 #: pcbnew/tools/placement_tool.cpp:325
 msgid "Align to right"
-msgstr "Wyrównaj do prawej"
+msgstr "Wyrównuję do prawej"
 
 #: pcbnew/tools/placement_tool.cpp:358
 msgid "Align to middle"
-msgstr "Wyrównaj do środka"
+msgstr "Wyrównuję do środka"
 
 #: pcbnew/tools/placement_tool.cpp:391
 msgid "Align to center"
-msgstr "Wyrównaj do środka"
+msgstr "Wyrównuję do środka"
 
 #: pcbnew/tools/placement_tool.cpp:443
 msgid "Distribute horizontally"
-msgstr "Rozłóż poziomo"
+msgstr "Rozkładam poziomo"
 
 #: pcbnew/tools/placement_tool.cpp:545
 msgid "Distribute vertically"
-msgstr "Rozłóż pionowo"
+msgstr "Rozkładam pionowo"
 
 #: pcbnew/tools/point_editor.cpp:251
 msgid "Self-intersecting polygons are not allowed."
@@ -25054,27 +25054,27 @@ msgstr "Strefy nachodzące na siebie nie są dopuszczalne."
 
 #: pcbnew/tools/point_editor.cpp:380
 msgid "Drag a corner"
-msgstr "Przeciągnij narożnik"
+msgstr "Przeciągam narożnik"
 
 #: pcbnew/tools/point_editor.cpp:641
 msgid "Refill Zones"
-msgstr "Wypełnij sterfy"
+msgstr "Wypełniam ponownie strefy"
 
 #: pcbnew/tools/point_editor.cpp:1041
 msgid "Add a zone corner"
-msgstr "Dodaj narożnik strefy"
+msgstr "Dodaję narożnik strefy"
 
 #: pcbnew/tools/point_editor.cpp:1073
 msgid "Split segment"
-msgstr "Podziel segment"
+msgstr "Dzielę segment"
 
 #: pcbnew/tools/point_editor.cpp:1147
 msgid "Remove a zone/polygon corner"
-msgstr "Usuń narożnik strefy"
+msgstr "Usuwam narożnik strefy/polygonu"
 
 #: pcbnew/tools/position_relative_tool.cpp:111
 msgid "Position Relative"
-msgstr "Pozycja względna"
+msgstr "Pozycjonuje względnie"
 
 #: pcbnew/tools/position_relative_tool.cpp:131
 msgid "Select reference item..."
@@ -25091,31 +25091,31 @@ msgstr "Wybór filtra"
 
 #: pcbnew/tools/zone_create_helper.cpp:149
 msgid "Add a zone cutout"
-msgstr "Dodaje strefę odciętą"
+msgstr "Dodaję strefę odciętą"
 
 #: pcbnew/tools/zone_create_helper.cpp:187
 msgid "Add a zone"
-msgstr "Dodaj strefę"
+msgstr "Dodaję strefę"
 
 #: pcbnew/tools/zone_create_helper.cpp:223
 msgid "Add a graphical polygon"
-msgstr "Dodaj strefę graficzną"
+msgstr "Dodaję strefę graficzną"
 
 #: pcbnew/tools/zone_filler_tool.cpp:75
 msgid "Fill Zone"
-msgstr "Wypełnij strefę"
+msgstr "Wypełniam strefę"
 
 #: pcbnew/tools/zone_filler_tool.cpp:100
 msgid "Fill All Zones"
-msgstr "Wypełnij wszystkie strefy"
+msgstr "Wypełniam wszystkie strefy"
 
 #: pcbnew/tools/zone_filler_tool.cpp:131
 msgid "Unfill Zone"
-msgstr "Usuń wypełnienia strefy"
+msgstr "Usuwam wypełnienia strefy"
 
 #: pcbnew/tools/zone_filler_tool.cpp:150
 msgid "Unfill All Zones"
-msgstr "Usuń wypełnienia wszystkich stref"
+msgstr "Usuwam wypełnienia wszystkich stref"
 
 #: pcbnew/undo_redo.cpp:564
 msgid "Incomplete undo/redo operation: some items not found"
@@ -25156,16 +25156,16 @@ msgstr "Wprowadzanie zmian..."
 
 #: pcbnew/zone_filler.cpp:331
 msgid "Fill Zone(s)"
-msgstr "Wypełnij strefę(-y)"
+msgstr "Wypełniam strefę(-y)"
 
 #: pcbnew/zones_by_polygon.cpp:94 pcbnew/zones_by_polygon.cpp:150
 msgid "Modify zone properties"
-msgstr "Zmień ustawienia strefy"
+msgstr "Zmieniam ustawienia strefy"
 
 #: pcbnew/zones_by_polygon.cpp:141
 #, c-format
 msgid "Refill %d Zones"
-msgstr "Wypełniono %d strefy"
+msgstr "Wypełniono %d stref"
 
 #: pcbnew/zones_by_polygon_fill_functions.cpp:68
 msgid "Checking Zones"
