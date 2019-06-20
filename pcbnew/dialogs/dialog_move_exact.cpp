@@ -245,9 +245,9 @@ void DIALOG_MOVE_EXACT::OnTextFocusLost( wxFocusEvent& event )
 void DIALOG_MOVE_EXACT::OnTextChanged( wxCommandEvent& event )
 {
 
-    int delta_x = m_moveX.GetValue();
-    int delta_y = m_moveY.GetValue();
-    int max_border = std::numeric_limits<int>::max() * 0.7071;
+    double delta_x = m_moveX.GetValue();
+    double delta_y = m_moveY.GetValue();
+    double max_border = std::numeric_limits<int>::max() * 0.7071;
 
     if( m_bbox.GetLeft() + delta_x < -max_border ||
             m_bbox.GetRight() + delta_x > max_border ||
