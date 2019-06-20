@@ -742,7 +742,7 @@ wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
     wxString filename = fn.GetName();
     wxString sheetFullName =  m_CurrentSheet->PathHumanReadable();
 
-    if( sheetFullName == "<root sheet>" )
+    if( sheetFullName == "<root sheet>" || sheetFullName == "/" )
     {
         // For the root sheet, use root schematic file name.
         sheetFullName.clear();
