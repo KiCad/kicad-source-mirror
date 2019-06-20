@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -218,19 +218,17 @@ void TREE_PROJECT_FRAME::OnOpenDirectory( wxCommandEvent& event )
             root = m_TreeProject->GetSelection();
     }
 
-    wxString prj_dir = wxPathOnly( m_Parent->GetProjectFileName() );
-
     // Ask for the new sub directory name
     wxString curr_dir = treeData->GetDir();
 
-    if( !curr_dir.IsEmpty() )    // A subdir is selected
+    if( curr_dir.IsEmpty() )
     {
-        // Make this subdir name relative to the current path.
-        // It will be more easy to read by the user, in the next dialog
-        wxFileName fn;
-        fn.AssignDir( curr_dir );
-        fn.MakeRelativeTo( prj_dir );
-        curr_dir = fn.GetPath();
+        // Use project path if the tree view path was empty.
+        curr_dir = wxPathOnly( m_Parent->GetProjectFileName() );
+
+        // As a last resort use the user's documents folder.
+        if( curr_dir.IsEmpty() || !wxFileName::DirExists( curr_dir ) )
+            curr_dir = wxStandardPaths::Get().GetDocumentsDir();
 
         if( !curr_dir.IsEmpty() )
             curr_dir += wxFileName::GetPathSeparator();
@@ -294,7 +292,7 @@ void TREE_PROJECT_FRAME::OnCreateNewDirectory( wxCommandEvent& event )
 
     if( wxMkdir( full_dirname ) )
     {
-        // the new itel will be added by the file watcher
+        // the new item will be added by the file watcher
         // AddItemToTreeProject( subdir, root );
     }
 }
@@ -390,9 +388,6 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
 }
 
 
-/*
- * Return the wxFileDialog wildcard string for the selected file type.
- */
 wxString TREE_PROJECT_FRAME::GetFileWildcard( TreeFileType type )
 {
     wxString ext;
