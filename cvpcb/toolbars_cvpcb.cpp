@@ -63,7 +63,7 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
                             KiScaledBitmap( auto_associe_xpm, this ),
                             _( "Perform automatic footprint association" ) );
 
-    m_mainToolBar->AddTool( ID_CVPCB_DEL_ASSOCIATIONS, wxEmptyString,
+    m_mainToolBar->AddTool( ID_CVPCB_DEL_ALL_ASSOCIATIONS, wxEmptyString,
                             KiScaledBitmap( delete_association_xpm, this ),
                             _( "Delete all footprint associations" ) );
 

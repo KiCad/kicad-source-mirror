@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,11 @@ enum id_cvpcb_frm
     ID_CVPCB_CREATE_SCREENCMP = ID_END_LIST,
     ID_CVPCB_GOTO_FIRSTNA,
     ID_CVPCB_GOTO_PREVIOUSNA,
-    ID_CVPCB_DEL_ASSOCIATIONS,
+    ID_CVPCB_DEL_ALL_ASSOCIATIONS,
+    ID_CVPCB_DEL_ASSOCIATION,
+    ID_CVPCB_CUT_ASSOCIATION,
+    ID_CVPCB_COPY_ASSOCIATION,
+    ID_CVPCB_PASTE_ASSOCIATION,
     ID_CVPCB_AUTO_ASSOCIE,
     ID_CVPCB_COMPONENT_LIST,
     ID_CVPCB_FOOTPRINT_LIST,

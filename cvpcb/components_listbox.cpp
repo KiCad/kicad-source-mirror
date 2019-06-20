@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -113,6 +113,8 @@ void COMPONENTS_LISTBOX::OnChar( wxKeyEvent& event )
 {
     int key = event.GetKeyCode();
 
+    wxCommandEvent dummy;
+
     switch( key )
     {
     case WXK_TAB:
@@ -135,6 +137,21 @@ void COMPONENTS_LISTBOX::OnChar( wxKeyEvent& event )
         event.Skip();
         return;
 
+    case WXK_DELETE:
+        GetParent()->DelAssociation( dummy );
+        return;
+
+    case WXK_CONTROL_X:
+        GetParent()->CutAssociation( dummy );
+        return;
+
+    case WXK_CONTROL_C:
+        GetParent()->CopyAssociation( dummy );
+        return;
+
+    case WXK_CONTROL_V:
+        GetParent()->PasteAssociation( dummy );
+        return;
 
     default:
         break;

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,7 +75,11 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, KIWAY_PLAYER )
     EVT_TOOL( ID_CVPCB_CREATE_SCREENCMP, CVPCB_MAINFRAME::DisplayModule )
     EVT_TOOL( ID_CVPCB_GOTO_FIRSTNA, CVPCB_MAINFRAME::ToFirstNA )
     EVT_TOOL( ID_CVPCB_GOTO_PREVIOUSNA, CVPCB_MAINFRAME::ToPreviousNA )
-    EVT_TOOL( ID_CVPCB_DEL_ASSOCIATIONS, CVPCB_MAINFRAME::DelAssociations )
+    EVT_TOOL( ID_CVPCB_DEL_ALL_ASSOCIATIONS, CVPCB_MAINFRAME::DelAllAssociations )
+    EVT_TOOL( ID_CVPCB_DEL_ASSOCIATION, CVPCB_MAINFRAME::DelAssociation )
+    EVT_TOOL( ID_CVPCB_CUT_ASSOCIATION, CVPCB_MAINFRAME::CutAssociation )
+    EVT_TOOL( ID_CVPCB_COPY_ASSOCIATION, CVPCB_MAINFRAME::CopyAssociation )
+    EVT_TOOL( ID_CVPCB_PASTE_ASSOCIATION, CVPCB_MAINFRAME::PasteAssociation )
     EVT_TOOL( ID_CVPCB_AUTO_ASSOCIE, CVPCB_MAINFRAME::AutomaticFootprintMatching )
     EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST,
               CVPCB_MAINFRAME::OnSelectFilteringFootprint )
@@ -432,9 +436,81 @@ void CVPCB_MAINFRAME::OnQuit( wxCommandEvent& event )
 }
 
 
-void CVPCB_MAINFRAME::DelAssociations( wxCommandEvent& event )
+void CVPCB_MAINFRAME::CutAssociation( wxCommandEvent& event )
 {
-    if( IsOK( this, _( "Delete selections" ) ) )
+    int itmIdx = m_compListBox->GetFirstSelected();
+
+    if( itmIdx == -1 )
+        return;
+
+    if( m_netlist.IsEmpty() )
+        return;
+
+    COMPONENT* component = m_netlist.GetComponent( itmIdx );
+
+    if( component && component->GetFPID().IsValid() )
+    {
+        m_clipboardBuffer = component->GetFPID().Format().wx_str();
+
+        SetNewPkg( wxEmptyString, itmIdx );
+        m_compListBox->RefreshItem( itmIdx );
+    }
+}
+
+
+void CVPCB_MAINFRAME::CopyAssociation( wxCommandEvent& event )
+{
+    int itmIdx = m_compListBox->GetFirstSelected();
+
+    if( itmIdx == -1 )
+        return;
+
+    if( m_netlist.IsEmpty() )
+        return;
+
+    COMPONENT* component = m_netlist.GetComponent( itmIdx );
+
+    if( component && component->GetFPID().IsValid() )
+        m_clipboardBuffer = component->GetFPID().Format().wx_str();
+}
+
+
+void CVPCB_MAINFRAME::PasteAssociation( wxCommandEvent& event )
+{
+    if( m_clipboardBuffer.IsEmpty() )
+        return;
+
+    int itmIdx = m_compListBox->GetFirstSelected();
+
+    while( itmIdx != -1 )
+    {
+        SetNewPkg( m_clipboardBuffer, itmIdx );
+        m_compListBox->RefreshItem( itmIdx );
+
+        itmIdx = m_compListBox->GetNextSelected( itmIdx );
+    }
+
+    DisplayStatus();
+}
+
+void CVPCB_MAINFRAME::DelAssociation( wxCommandEvent& event )
+{
+    int itmIdx = m_compListBox->GetFirstSelected();
+
+    while( itmIdx != -1 )
+    {
+        SetNewPkg( wxEmptyString, itmIdx );
+        m_compListBox->RefreshItem( itmIdx );
+
+        itmIdx = m_compListBox->GetNextSelected( itmIdx );
+    }
+
+    DisplayStatus();
+}
+
+void CVPCB_MAINFRAME::DelAllAssociations( wxCommandEvent& event )
+{
+    if( IsOK( this, _( "Delete all footprint assocations?" ) ) )
     {
         m_skipComponentSelect = true;
 
@@ -489,7 +565,17 @@ void CVPCB_MAINFRAME::OnComponentRightClick( wxMouseEvent& event )
     wxMenu menu;
 
     menu.Append( ID_CVPCB_CREATE_SCREENCMP, _( "View Footprint" ),
-                 _( "Show the assigned footprint in the footprint viewer" ) );
+            _( "Show the assigned footprint in the footprint viewer" ) );
+
+    menu.Append( ID_CVPCB_CUT_ASSOCIATION, _( "Cut Footprint Association" ),
+            _( "Cut the assigned footprint" ) );
+    menu.Append( ID_CVPCB_COPY_ASSOCIATION, _( "Copy Footprint Association" ),
+            _( "Copy the assigned footprint" ) );
+    menu.Append( ID_CVPCB_PASTE_ASSOCIATION, _( "Paste Footprint Association" ),
+            _( "Paste a footprint assignment" ) );
+
+    menu.Append( ID_CVPCB_DEL_ASSOCIATION, _( "Delete Footprint Association" ),
+            _( "Delete the assigned footprint" ) );
 
     PopupMenu( &menu );
 }
