@@ -1521,13 +1521,14 @@ void PCB_EDIT_FRAME::moveExact()
     wxPoint         translation;
     double          rotation;
     ROTATION_ANCHOR rotationAnchor = ROTATE_AROUND_ITEM_ANCHOR;
+    BOARD_ITEM*     item = GetScreen()->GetCurItem();
 
-    DIALOG_MOVE_EXACT dialog( this, translation, rotation, rotationAnchor );
+    DIALOG_MOVE_EXACT dialog( this, translation, rotation, rotationAnchor, item->GetBoundingBox() );
     int ret = dialog.ShowModal();
 
     if( ret == wxID_OK )
     {
-        if( BOARD_ITEM* item = GetScreen()->GetCurItem() )
+        if( item )
         {
             // When a pad is modified, the full footprint is saved
             BOARD_ITEM* itemToSave = item;

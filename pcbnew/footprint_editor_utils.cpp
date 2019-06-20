@@ -844,15 +844,15 @@ void FOOTPRINT_EDIT_FRAME::moveExact()
     wxPoint         translation;
     double          rotation;
     ROTATION_ANCHOR rotationAnchor = ROTATE_AROUND_ITEM_ANCHOR;
+    BOARD_ITEM*     item = GetScreen()->GetCurItem();
 
-    DIALOG_MOVE_EXACT dialog( this, translation, rotation, rotationAnchor );
+    DIALOG_MOVE_EXACT dialog( this, translation, rotation, rotationAnchor,
+            item->GetBoundingBox() );
     int ret = dialog.ShowModal();
 
     if( ret == wxID_OK )
     {
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
-
-        BOARD_ITEM* item = GetScreen()->GetCurItem();
 
         item->Move( translation );
 
@@ -903,7 +903,7 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
         double          rotation;
         ROTATION_ANCHOR rotationAnchor = ROTATE_AROUND_ITEM_ANCHOR;
 
-        DIALOG_MOVE_EXACT dialog( this, translation, rotation, rotationAnchor );
+        DIALOG_MOVE_EXACT dialog( this, translation, rotation, rotationAnchor, module->GetBoundingBox() );
 
         if( dialog.ShowModal() == wxID_OK )
         {

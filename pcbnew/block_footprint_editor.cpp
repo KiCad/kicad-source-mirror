@@ -191,7 +191,7 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             double          rotation;
             ROTATION_ANCHOR rotationAnchor = ROTATE_AROUND_SEL_CENTER;
 
-            DIALOG_MOVE_EXACT dialog( this, translation, rotation, rotationAnchor );
+            DIALOG_MOVE_EXACT dialog( this, translation, rotation, rotationAnchor, GetScreen()->m_BlockLocate );
 
             if( dialog.ShowModal() == wxID_OK )
             {
