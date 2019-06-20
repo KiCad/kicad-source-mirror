@@ -675,6 +675,12 @@ public:
     SCH_JUNCTION* AddJunction( const wxPoint& aPos, bool aAppendToUndo = false,
                                bool aFinal = true );
 
+    /**
+     * Gets the next queued text item
+     * @return next SCH_TEXT* or nullptr if empty
+     */
+    SCH_TEXT* GetNextNewText();
+
     SCH_TEXT* CreateNewText( int aType );
 
     /**

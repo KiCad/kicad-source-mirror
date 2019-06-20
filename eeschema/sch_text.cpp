@@ -126,6 +126,7 @@ SCH_TEXT::SCH_TEXT( const SCH_TEXT& aText ) :
     m_shape = aText.m_shape;
     m_isDangling = aText.m_isDangling;
     m_spin_style = aText.m_spin_style;
+    m_connectionType = aText.m_connectionType;
 }
 
 

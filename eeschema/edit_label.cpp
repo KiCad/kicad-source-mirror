@@ -35,6 +35,9 @@
 #include <sch_text.h>
 #include <eeschema_id.h>
 #include <sch_view.h>
+
+#include <wx/tokenzr.h>
+
 #include "invoke_sch_dialog.h"
 
 static PINSHEETLABEL_SHAPE  lastGlobalLabelShape = NET_INPUT;
@@ -42,11 +45,26 @@ static int                  lastTextOrientation = 0;
 static bool                 lastTextBold = false;
 static bool                 lastTextItalic = false;
 
+static std::deque<std::unique_ptr<SCH_TEXT>> queuedTexts;
+
+SCH_TEXT* SCH_EDIT_FRAME::GetNextNewText()
+{
+    if( queuedTexts.empty() )
+        return nullptr;
+
+    auto next_text = std::move( queuedTexts.front() );
+    queuedTexts.pop_front();
+
+    return next_text.release();
+}
+
 
 SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
 {
     wxPoint  cursorPos = (wxPoint) GetCanvas()->GetViewControls()->GetCursorPosition();
     SCH_TEXT* textItem = nullptr;
+
+    queuedTexts.clear();
 
     switch( aType )
     {
@@ -83,6 +101,19 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
     {
         delete textItem;
         return nullptr;
+    }
+
+    if( aType != LAYER_NOTES )
+    {
+        wxStringTokenizer tok( textItem->GetText(), wxDEFAULT_DELIMITERS, wxTOKEN_STRTOK );
+        textItem->SetText( tok.GetNextToken() );
+
+        while( tok.HasMoreTokens() )
+        {
+            std::unique_ptr<SCH_TEXT> nextitem( static_cast<SCH_TEXT*>( textItem->Clone() ) );
+            nextitem->SetText( tok.GetNextToken() );
+            queuedTexts.push_back( std::move( nextitem ) );
+        }
     }
 
     lastTextBold = textItem->IsBold();

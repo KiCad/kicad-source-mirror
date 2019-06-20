@@ -102,7 +102,7 @@ const int MAX_TEXTSIZE = INT_MAX;
 DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTextItem ) :
     DIALOG_LABEL_EDITOR_BASE( aParent ),
     m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, false ),
-    m_netNameValidator()
+    m_netNameValidator( true )
 {
     m_Parent = aParent;
     m_CurrentText = aTextItem;
@@ -146,6 +146,8 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
 
         if( m_CurrentText->Type() != SCH_TEXT_T )
             m_valueSingleLine->SetValidator( m_netNameValidator );
+
+        m_valueCombo->SetValidator( m_netNameValidator );
     }
 
     SetInitialFocus( m_activeTextCtrl );

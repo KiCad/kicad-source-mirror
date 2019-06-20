@@ -568,9 +568,20 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             {
                 item->ClearFlags( IS_MOVED );
                 m_frame->AddItemToScreenAndUndoList( (SCH_ITEM*) item );
-                item = nullptr;
+                item = m_frame->GetNextNewText();
 
-                m_view->ClearPreview();
+                if( item )
+                {
+                    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+                    item->SetFlags( IS_NEW | IS_MOVED );
+                    m_view->ClearPreview();
+                    m_view->AddToPreview( item->Clone() );
+                    m_selectionTool->AddItemToSel( item );
+                }
+                else
+                {
+                    m_view->ClearPreview();
+                }
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )

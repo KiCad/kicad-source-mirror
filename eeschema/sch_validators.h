@@ -72,7 +72,13 @@ class SCH_NETNAME_VALIDATOR : public wxValidator
 public:
     SCH_NETNAME_VALIDATOR( wxString *aVal = nullptr );
 
+    SCH_NETNAME_VALIDATOR( bool aAllowSpaces );
+
     SCH_NETNAME_VALIDATOR( const SCH_NETNAME_VALIDATOR& aValidator );
+
+    void SetAllowSpaces( bool aAllowSpaces = true ) { m_allowSpaces = aAllowSpaces; }
+
+    bool GetAllowSpaces() const { return m_allowSpaces; }
 
     bool Copy( const SCH_NETNAME_VALIDATOR& val );
 
@@ -91,6 +97,8 @@ protected:
     // returns the error message if the contents of 'val' are invalid
     virtual wxString IsValid( const wxString& aVal ) const;
 
+private:
+    bool m_allowSpaces;
 };
 
 #endif // _SCH_VALIDATORS_H_
