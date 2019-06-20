@@ -102,27 +102,42 @@ option( KICAD_INSTALL_DEMOS
     "Install KiCad demos and examples (default ON)"
     ON )
 
+option( KICAD_BUILD_QA_TESTS
+    "Build software Quality assurance unit tests (default ON)"
+    ON )
+
+option( BUILD_GITHUB_PLUGIN
+    "Build the GITHUB_PLUGIN for pcbnew."
+    ON )
+
+option( KICAD_SPICE
+    "Build KiCad with internal Spice simulator."
+    ON )
+
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
 # when not defined by user, the default is python.exe under Windows and python2 for others
 # python binary file should be in exec path.
 
-# KICAD_SCRIPTING_MODULES requires KICAD_SCRIPTING enable it here if KICAD_SCRIPTING_MODULES is ON
-if ( KICAD_SCRIPTING_MODULES AND NOT KICAD_SCRIPTING )
-    message(STATUS "Changing KICAD_SCRIPTING to ON as needed by KICAD_SCRIPTING_MODULES")
-    set ( KICAD_SCRIPTING ON )
+# KICAD_SCRIPTING controls the entire python scripting system. If it is off, no other scripting
+# functions are available.
+if ( NOT KICAD_SCRIPTING )
+    message( STATUS "KICAD_SCRIPTING is OFF: Disabling all python scripting support" )
+    set( KICAD_SCRIPTING_MODULES OFF )
+    set( KICAD_SCRIPTING_ACTION_MENU OFF )
+    set( KICAD_SCRIPTING_PYTHON3 OFF )
+    set( KICAD_SCRIPTING_WXPYTHON OFF )
+    set( KICAD_SCRIPTING_WXPYTHON_PHOENIX OFF)
 endif()
 
-# same with KICAD_SCRIPTING_ACTION_MENUS
-if ( KICAD_SCRIPTING_ACTION_MENU AND NOT KICAD_SCRIPTING )
-    message(STATUS "Changing KICAD_SCRIPTING to ON as needed by KICAD_SCRIPTING_ACTION_MENU")
-    set ( KICAD_SCRIPTING ON )
+# KICAD_SCRIPTING_WXPYTHON_PHOENIX requires enabling the KICAD_SCRIPTING_WXPYTHON flag
+# so that the wxWidgets library is properly versioned
+if ( KICAD_SCRIPTING AND NOT KICAD_SCRIPTING_WXPYTHON AND KICAD_SCRIPTING_WXPYTHON_PHOENIX )
+    message( STATUS
+        "KICAD_SCRIPTING_WXPYTHON_PHOENIX has been requested, setting KICAD_SCRIPTING_WXPYTHON to ON")
+    set( KICAD_SCRIPTING_WXPYTHON ON)
 endif()
-
-option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." ON )
-
-option( KICAD_SPICE "Build KiCad with internal Spice simulator." ON )
 
 # Global setting: exports are explicit
 set( CMAKE_CXX_VISIBILITY_PRESET "hidden" )
@@ -655,8 +670,9 @@ set( INC_AFTER
     ${CMAKE_BINARY_DIR}
     )
 
-
+#
 # Find Python and other scripting resources
+#
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
 
     # SWIG 3.0 or later require for C++11 support.
@@ -714,18 +730,35 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
         find_package( PythonLibs 2.6 REQUIRED )
     endif()
 
-    if( KICAD_SCRIPTING_WXPYTHON )
-        find_package( wxPython REQUIRED )
-        message( STATUS "Found ${WXPYTHON_FLAVOR} "
-            "${WXPYTHON_VERSION}/${WXPYTHON_TOOLKIT} "
-            "(wxWidgets ${WXPYTHON_WXVERSION})" )
-    endif()
-
     # Infrequently needed headers go at end of search paths, append to INC_AFTER which
     # although is used for all components, should be a harmless hit for something like eeschema
     # so long as unused search paths are at the end like this.
     set( INC_AFTER ${INC_AFTER} ${PYTHON_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/scripting )
 endif()
+
+# Find the wxPython installation if requested
+if( KICAD_SCRIPTING_WXPYTHON )
+    find_package( wxPython REQUIRED )
+
+    if( KICAD_SCRIPTING_WXPYTHON_PHOENIX AND WXPYTHON_VERSION VERSION_LESS 4.0.0 )
+        message( FATAL_ERROR
+            "Unable to find wxPython Phoenix,"
+            " instead found wxPython Classic ${WXPYTHON_VERSION}" )
+    endif()
+
+    # The test VERSION_GREATER_EQUAL is only available in cmake >3.7, so use the max possible
+    # version for the 3.0 line as the basis of the comparison
+    if( NOT KICAD_SCRIPTING_WXPYTHON_PHOENIX AND WXPYTHON_VERSION VERSION_GREATER 3.9.999 )
+        message( FATAL_ERROR
+            "Unable to find wxPython Classic,"
+            " instead found wxPython Phoenix ${WXPYTHON_VERSION}" )
+    endif()
+
+    message( STATUS "Found ${WXPYTHON_FLAVOR} "
+        "${WXPYTHON_VERSION}/${WXPYTHON_TOOLKIT} "
+        "(wxWidgets ${WXPYTHON_WXVERSION})" )
+endif()
+
 
 #
 # Find wxWidgets library, required
