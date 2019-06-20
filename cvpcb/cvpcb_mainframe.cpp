@@ -95,6 +95,9 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, KIWAY_PLAYER )
     EVT_CLOSE( CVPCB_MAINFRAME::OnCloseWindow )
     EVT_SIZE( CVPCB_MAINFRAME::OnSize )
 
+    // Handle the escape key
+    EVT_TOOL( ID_CVPCB_ESCAPE_KEY, CVPCB_MAINFRAME::OnEscapeKey )
+
     // UI event handlers
     EVT_UPDATE_UI( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, CVPCB_MAINFRAME::OnFilterFPbyKeywords )
     EVT_UPDATE_UI( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST,
@@ -228,6 +231,12 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_compListBox->Connect( wxEVT_RIGHT_DOWN,
                             wxMouseEventHandler( CVPCB_MAINFRAME::OnComponentRightClick ),
                             NULL, this );
+
+    // Add an accelerator to make escape close the window
+    wxAcceleratorEntry entries[1];
+    entries[0].Set( wxACCEL_NORMAL, WXK_ESCAPE, ID_CVPCB_ESCAPE_KEY );
+    wxAcceleratorTable accel( 1, entries );
+    SetAcceleratorTable( accel );
 }
 
 
@@ -381,6 +390,12 @@ void CVPCB_MAINFRAME::ToPreviousNA( wxCommandEvent& event )
         m_compListBox->SetSelection( candidate );
         SendMessageToEESCHEMA();
     }
+}
+
+
+void CVPCB_MAINFRAME::OnEscapeKey( wxCommandEvent& aEvent )
+{
+    Close( false );
 }
 
 

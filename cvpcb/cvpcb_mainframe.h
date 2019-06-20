@@ -122,6 +122,7 @@ public:
     void             OnCloseWindow( wxCloseEvent& Event );
     void             OnSize( wxSizeEvent& SizeEvent );
     void             OnKeyDown( wxKeyEvent& aEvent );
+    void             OnEscapeKey( wxCommandEvent& aEvent );
     void             ReCreateHToolbar();
     virtual void     ReCreateMenuBar() override;
     void             ShowChangedLanguage() override;
