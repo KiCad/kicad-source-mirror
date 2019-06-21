@@ -626,7 +626,7 @@ TOOL_ACTION PCB_ACTIONS::highlightNetSelection( "pcbnew.EditorControl.highlightN
 
 TOOL_ACTION PCB_ACTIONS::localRatsnestTool( "pcbnew.Control.localRatsnestTool",
         AS_GLOBAL, 0, "",
-        _( "Highlight Ratsnest" ), "",
+        _( "Highlight Ratsnest" ), _( "Show ratsnest of selected item(s)" ),
         tool_ratsnest_xpm );
 
 TOOL_ACTION PCB_ACTIONS::hideDynamicRatsnest( "pcbnew.Control.hideDynamicRatsnest",
