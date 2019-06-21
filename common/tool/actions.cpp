@@ -119,6 +119,12 @@ TOOL_ACTION ACTIONS::cancelInteractive( "common.Interactive.cancel",
         _( "Cancel" ), _( "Cancel current tool" ),
         cancel_xpm, AF_NONE );
 
+TOOL_ACTION ACTIONS::showContextMenu( "common.Control.showContextMenu",
+        AS_GLOBAL,
+        0, "",
+        _( "Show Context Menu" ), _( "Perform the right-mouse-button action" ),
+        nullptr, AF_NONE, (void*) CURSOR_RIGHT_CLICK );
+
 TOOL_ACTION ACTIONS::updateMenu( "common.Interactive.updateMenu",
         AS_GLOBAL );
 

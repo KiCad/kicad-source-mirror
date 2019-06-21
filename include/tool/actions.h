@@ -63,7 +63,7 @@ public:
 
     // Generic edit actions
     static TOOL_ACTION cancelInteractive;
-    static TOOL_ACTION updateMenu;
+    static TOOL_ACTION showContextMenu;
     static TOOL_ACTION undo;
     static TOOL_ACTION redo;
     static TOOL_ACTION cut;
@@ -71,7 +71,6 @@ public:
     static TOOL_ACTION paste;
     static TOOL_ACTION duplicate;
     static TOOL_ACTION doDelete;        // sadly 'delete' is a reserved word
-    static TOOL_ACTION activatePointEditor;
 
     // Find and Replace
     static TOOL_ACTION find;
@@ -149,6 +148,10 @@ public:
     static TOOL_ACTION acceleratedGraphics;
     static TOOL_ACTION standardGraphics;
 
+    // Internal
+    static TOOL_ACTION updateMenu;
+    static TOOL_ACTION activatePointEditor;
+
     // Suite
     static TOOL_ACTION configurePaths;
     static TOOL_ACTION showSymbolLibTable;
@@ -169,7 +172,8 @@ public:
 
     ///> Cursor control event types
     enum CURSOR_EVENT_TYPE { CURSOR_UP, CURSOR_DOWN, CURSOR_LEFT, CURSOR_RIGHT,
-                             CURSOR_CLICK, CURSOR_DBL_CLICK, CURSOR_FAST_MOVE = 0x8000 };
+                             CURSOR_CLICK, CURSOR_DBL_CLICK, CURSOR_RIGHT_CLICK,
+                             CURSOR_FAST_MOVE = 0x8000 };
 
     ///> Remove event modifier flags
     enum class REMOVE_FLAGS { NORMAL = 0x00, ALT = 0x01, CUT = 0x02 };

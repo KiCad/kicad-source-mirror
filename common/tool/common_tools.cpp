@@ -77,28 +77,30 @@ int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
 
     case ACTIONS::CURSOR_CLICK:              // fall through
     case ACTIONS::CURSOR_DBL_CLICK:
+    case ACTIONS::CURSOR_RIGHT_CLICK:
     {
-        TOOL_ACTIONS action = TA_NONE;
+        TOOL_ACTIONS action = TA_MOUSE_CLICK;
+        TOOL_MOUSE_BUTTONS button = BUT_LEFT;
         int modifiers = 0;
 
         modifiers |= wxGetKeyState( WXK_SHIFT ) ? MD_SHIFT : 0;
         modifiers |= wxGetKeyState( WXK_CONTROL ) ? MD_CTRL : 0;
         modifiers |= wxGetKeyState( WXK_ALT ) ? MD_ALT : 0;
 
-        if( type == ACTIONS::CURSOR_CLICK )
-            action = TA_MOUSE_CLICK;
-        else if( type == ACTIONS::CURSOR_DBL_CLICK )
+        if( type == ACTIONS::CURSOR_DBL_CLICK )
             action = TA_MOUSE_DBLCLICK;
-        else
-            wxFAIL;
 
-        TOOL_EVENT evt( TC_MOUSE, action, BUT_LEFT | modifiers );
+        if( type == ACTIONS::CURSOR_RIGHT_CLICK )
+            button = BUT_RIGHT;
+
+        TOOL_EVENT evt( TC_MOUSE, action, button | modifiers );
         evt.SetMousePosition( getViewControls()->GetCursorPosition() );
         m_toolMgr->ProcessEvent( evt );
 
         return 0;
     }
-    break;
+    default:
+        wxFAIL_MSG( "CursorControl(): unexpected request" );
     }
 
     getViewControls()->SetCursorPosition( cursor, true, true );
@@ -521,6 +523,7 @@ void COMMON_TOOLS::setTransitions()
 
     Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorClick.MakeEvent() );
     Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorDblClick.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::showContextMenu.MakeEvent() );
 
     // Pan control
     Go( &COMMON_TOOLS::PanControl,         ACTIONS::panUp.MakeEvent() );
