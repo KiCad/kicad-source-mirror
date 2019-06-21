@@ -221,7 +221,7 @@ void DLG_SELECT_3DMODEL::OnFileActivated( wxTreeEvent& event )
 
 void DLG_SELECT_3DMODEL::SetRootDir( wxCommandEvent& event )
 {
-    if( m_FileTree )
+    if( m_FileTree && dirChoices->GetSelection() > 0 )
         m_FileTree->SetPath( dirChoices->GetString( dirChoices->GetSelection() ) );
 
     return;
@@ -263,21 +263,31 @@ void DLG_SELECT_3DMODEL::updateDirChoiceList( void )
 
     if( !cl.empty() )
     {
+        unsigned int choice = 0;
         dirChoices->Clear();
+        dirChoices->Append( "" ); //Insert a blank string at the beginning to allow selection
 
         if( !prjDir.empty() )
+        {
             dirChoices->Append( prjDir );
+
+            if( prjDir == m_FileTree->GetPath() )
+                choice = 1;
+        }
 
         std::set< wxString >::const_iterator sI = cl.begin();
         std::set< wxString >::const_iterator eI = cl.end();
 
         while( sI != eI )
         {
+            if( *sI == m_FileTree->GetPath() )
+                choice = dirChoices->GetCount();
+
             dirChoices->Append( *sI );
             ++sI;
         }
 
-        dirChoices->Select( 0 );
+        dirChoices->Select( choice );
     }
 
     return;
