@@ -256,6 +256,8 @@ int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
         opts->m_DisplayZonesMode = 1;
     else if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayOutlines ) )
         opts->m_DisplayZonesMode = 2;
+    else if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayToggle ) )
+        opts->m_DisplayZonesMode = ( opts->m_DisplayZonesMode + 1 ) % 3;
     else
         wxFAIL;
 
@@ -906,6 +908,7 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayEnable.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayDisable.MakeEvent() );
     Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayOutlines.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoneDisplayMode,      PCB_ACTIONS::zoneDisplayToggle.MakeEvent() );
     Go( &PCBNEW_CONTROL::HighContrastMode,     ACTIONS::highContrastMode.MakeEvent() );
 
     // Layer control

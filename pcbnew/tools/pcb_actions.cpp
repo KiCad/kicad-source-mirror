@@ -702,7 +702,7 @@ TOOL_ACTION PCB_ACTIONS::moduleEdgeOutlines( "pcbnew.Control.graphicOutlines",
 TOOL_ACTION PCB_ACTIONS::zoneDisplayEnable( "pcbnew.Control.zoneDisplayEnable",
         AS_GLOBAL, 0, "",
         _( "Fill Zones" ), _( "Show filled areas of zones" ),
-        show_zone_xpm);
+        show_zone_xpm );
 
 TOOL_ACTION PCB_ACTIONS::zoneDisplayDisable( "pcbnew.Control.zoneDisplayDisable",
         AS_GLOBAL, 0, "",
@@ -712,7 +712,14 @@ TOOL_ACTION PCB_ACTIONS::zoneDisplayDisable( "pcbnew.Control.zoneDisplayDisable"
 TOOL_ACTION PCB_ACTIONS::zoneDisplayOutlines( "pcbnew.Control.zoneDisplayOutlines",
         AS_GLOBAL, 0, "",
         _( "Sketch Zones" ), _( "Show solid areas of zones in outline mode" ),
-        show_zone_outline_only_xpm);
+        show_zone_outline_only_xpm );
+
+TOOL_ACTION PCB_ACTIONS::zoneDisplayToggle( "pcbnew.Control.zoneDisplayToggle",
+        AS_GLOBAL,
+        'Z', "",
+        _( "Toggle Zone Display" ),
+        _( "Cycle between showing filled zones, wireframed zones and sketched zones" ),
+        show_zone_xpm );
 
 
 // Layer control

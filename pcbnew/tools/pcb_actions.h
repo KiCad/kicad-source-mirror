@@ -226,6 +226,7 @@ public:
     static TOOL_ACTION zoneDisplayEnable;
     static TOOL_ACTION zoneDisplayDisable;
     static TOOL_ACTION zoneDisplayOutlines;
+    static TOOL_ACTION zoneDisplayToggle;
 
     // Layer control
     static TOOL_ACTION layerTop;
