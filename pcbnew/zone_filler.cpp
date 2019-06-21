@@ -464,6 +464,8 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, int aGap, bool aIgnoreLineWidt
  */
 void ZONE_FILLER::knockoutThermals( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aFill )
 {
+    SHAPE_POLY_SET holes;
+
     for( auto module : m_board->Modules() )
     {
         for( auto pad : module->Pads() )
@@ -473,18 +475,16 @@ void ZONE_FILLER::knockoutThermals( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET&
                 int thermalGap = aZone->GetThermalReliefGap( pad );
                 thermalGap += aZone->GetMinThickness() / 2;
 
-                SHAPE_POLY_SET holes;
-
                 addKnockout( pad, thermalGap, holes );
-
-                holes.Simplify( SHAPE_POLY_SET::PM_FAST );
-
-                // Use SHAPE_POLY_SET::PM_STRICTLY_SIMPLE to generate strictly simple polygons
-                // needed by Gerber files and Fracture()
-                aFill.BooleanSubtract( holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
             }
         }
     }
+
+    holes.Simplify( SHAPE_POLY_SET::PM_FAST );
+
+    // Use SHAPE_POLY_SET::PM_STRICTLY_SIMPLE to generate strictly simple polygons
+    // needed by Gerber files and Fracture()
+    aFill.BooleanSubtract( holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 }
 
 
@@ -778,22 +778,22 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
     // is on a extra segment, the tested point is seen outside the solid area, but it is inside.
     // This is not a bug, just the fact when a point is on a polygon outline, it is hard to say
     // if it is inside or outside the polygon.
-    SHAPE_POLY_SET thermalHoles;
+    SHAPE_POLY_SET danglingThermals;
 
     if( aZone->GetNetCode() > 0 )
-        buildThermalSpokes( thermalHoles, aZone, solidAreas, true );
+        buildThermalSpokes( danglingThermals, aZone, solidAreas, true );
 
     // remove copper areas corresponding to not connected stubs
-    if( !thermalHoles.IsEmpty() )
+    if( !danglingThermals.IsEmpty() )
     {
-        thermalHoles.Simplify( SHAPE_POLY_SET::PM_FAST );
+        danglingThermals.Simplify( SHAPE_POLY_SET::PM_FAST );
         // Remove unconnected stubs. Use SHAPE_POLY_SET::PM_STRICTLY_SIMPLE to
         // generate strictly simple polygons
         // needed by Gerber files and Fracture()
-        solidAreas.BooleanSubtract( thermalHoles, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        solidAreas.BooleanSubtract( danglingThermals, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
         if( s_DumpZonesWhenFilling )
-            dumper->Write( &thermalHoles, "dangling-thermal-spokes" );
+            dumper->Write( &danglingThermals, "dangling-thermal-spokes" );
 
         // put these areas in m_FilledPolysList
         SHAPE_POLY_SET th_fractured = solidAreas;
