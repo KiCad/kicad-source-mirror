@@ -706,7 +706,6 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
     SHAPE_POLY_SET solidAreas = aSmoothedOutline;
 
     int numSegs = std::max( GetArcToSegmentCount( outline_half_thickness, m_high_def, 360.0 ), 6 );
-    double correction = GetCircletoPolyCorrectionFactor( numSegs );
 
     solidAreas.Inflate( -outline_half_thickness, numSegs );
     solidAreas.Simplify( SHAPE_POLY_SET::PM_FAST );
@@ -949,10 +948,10 @@ void ZONE_FILLER::buildThermalSpokes( SHAPE_POLY_SET& aCornerBuffer,
             // Thermal bridges are like a segment from a starting point inside the pad
             // to an ending point outside the pad
 
-            // calculate the ending point of the thermal pad, outside the pad
-            VECTOR2I endpoint;
-            endpoint.x = ( pad->GetSize().x / 2 ) + thermalReliefGap;
-            endpoint.y = ( pad->GetSize().y / 2 ) + thermalReliefGap;
+            // Calculate the ending points of the thermal spokes, outside the pad
+            itemBB.Offset( -pad->ShapePos() );
+            int extra = pen_radius + KiROUND( IU_PER_MM * 0.04 );
+            itemBB.Inflate( extra, extra );
 
             // This is a CIRCLE pad tweak
             // for circle pads, the thermal stubs orientation is 45 deg
@@ -960,20 +959,16 @@ void ZONE_FILLER::buildThermalSpokes( SHAPE_POLY_SET& aCornerBuffer,
 
             if( pad->GetShape() == PAD_SHAPE_CIRCLE )
             {
-                endpoint.x = KiROUND( endpoint.x * correction );
-                endpoint.y = endpoint.x;
+                extra = KiROUND( itemBB.GetX() * correction ) - itemBB.GetX();
+                itemBB.Inflate( extra, extra );
                 fAngle = s_thermalRot;
             }
 
-            // contour line width has to be taken into calculation to avoid "thermal stub bleed"
-            endpoint.x += pen_radius + KiROUND( IU_PER_MM * 0.04 );
-            endpoint.y += pen_radius + KiROUND( IU_PER_MM * 0.04 );
-
             // compute north, south, west and east points for zone connection.
-            ptTest[0] = VECTOR2I( 0, endpoint.y );       // lower point
-            ptTest[1] = VECTOR2I( 0, -endpoint.y );      // upper point
-            ptTest[2] = VECTOR2I( endpoint.x, 0 );       // right point
-            ptTest[3] = VECTOR2I( -endpoint.x, 0 );      // left point
+            ptTest[0] = VECTOR2I( 0, itemBB.GetBottom() );
+            ptTest[1] = VECTOR2I( 0, itemBB.GetTop() );
+            ptTest[2] = VECTOR2I( itemBB.GetRight(), 0 );
+            ptTest[3] = VECTOR2I( itemBB.GetLeft(), 0 );
 
             auto addStub = [&] ( int aSide ) {
                 SHAPE_LINE_CHAIN spokes;
@@ -981,29 +976,29 @@ void ZONE_FILLER::buildThermalSpokes( SHAPE_POLY_SET& aCornerBuffer,
                 switch( aSide )
                 {
                 case 0:       // lower stub
-                    spokes.Append( -spokeThickness, endpoint.y );
-                    spokes.Append( +spokeThickness, endpoint.y );
+                    spokes.Append( -spokeThickness, itemBB.GetBottom() );
+                    spokes.Append( +spokeThickness, itemBB.GetBottom() );
                     spokes.Append( +spokeThickness, 0 );
                     spokes.Append( -spokeThickness, 0 );
                     break;
 
                 case 1:       // upper stub
-                    spokes.Append( -spokeThickness, -endpoint.y );
-                    spokes.Append( +spokeThickness, -endpoint.y );
+                    spokes.Append( -spokeThickness, itemBB.GetTop() );
+                    spokes.Append( +spokeThickness, itemBB.GetTop() );
                     spokes.Append( +spokeThickness, 0 );
                     spokes.Append( -spokeThickness, 0 );
                     break;
 
                 case 2:       // right stub
-                    spokes.Append( endpoint.x, -spokeThickness );
-                    spokes.Append( endpoint.x, spokeThickness );
+                    spokes.Append( itemBB.GetRight(), -spokeThickness );
+                    spokes.Append( itemBB.GetRight(), spokeThickness );
                     spokes.Append( 0, spokeThickness );
                     spokes.Append( 0, -spokeThickness );
                     break;
 
                 case 3:       // left stub
-                    spokes.Append( -endpoint.x, -spokeThickness );
-                    spokes.Append( -endpoint.x, spokeThickness );
+                    spokes.Append( itemBB.GetLeft(), -spokeThickness );
+                    spokes.Append( itemBB.GetLeft(), spokeThickness );
                     spokes.Append( 0, spokeThickness );
                     spokes.Append( 0, -spokeThickness );
                     break;
@@ -1015,8 +1010,8 @@ void ZONE_FILLER::buildThermalSpokes( SHAPE_POLY_SET& aCornerBuffer,
                 for( int ic = 0; ic < spokes.PointCount(); ic++ )
                 {
                     auto cpos = spokes.CPoint( ic );
-                    RotatePoint( cpos, fAngle );     // Rotate according to module orientation
-                    cpos += pad->ShapePos();         // Shift origin to position
+                    RotatePoint( cpos, fAngle );
+                    cpos += pad->ShapePos();
                     aCornerBuffer.Append( cpos );
                 }
             };
@@ -1025,10 +1020,7 @@ void ZONE_FILLER::buildThermalSpokes( SHAPE_POLY_SET& aCornerBuffer,
             {
                 if( aDanglingOnly )
                 {
-                    // rotate point
                     RotatePoint( ptTest[i], fAngle );
-
-                    // translate point
                     ptTest[i] += pad->ShapePos();
 
                     if( aRawFilledArea.Contains( ptTest[i] ) )
