@@ -651,10 +651,7 @@ struct FractureEdge
 
     bool matches( int y ) const
     {
-        int y_min   = std::min( m_p1.y, m_p2.y );
-        int y_max   = std::max( m_p1.y, m_p2.y );
-
-        return ( y >= y_min ) && ( y <= y_max );
+        return ( y >= m_p1.y || y >= m_p2.y ) && ( y <= m_p1.y || y <= m_p2.y );
     }
 
     bool m_connected;
