@@ -351,10 +351,12 @@ int SHAPE_LINE_CHAIN::PathLength( const VECTOR2I& aP ) const
 
 bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aPt, int aAccuracy ) const
 {
-    BOX2I bbox = BBox();
-    bbox.Inflate( aAccuracy );
+    /*
+     * Don't check the bounding box.  Building it is about the same speed as the rigorous
+     * test below and so just slows things down by doing potentially two tests.
+     */
 
-    if( !m_closed || PointCount() < 3 || !BBox().Contains( aPt ) )
+    if( !m_closed || PointCount() < 3 )
         return false;
 
     bool inside = false;
