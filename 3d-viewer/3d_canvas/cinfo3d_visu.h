@@ -425,10 +425,6 @@ class CINFO3D_VISU
     // Helper functions to create the board
     COBJECT2D *createNewTrack( const TRACK* aTrack , int aClearanceValue ) const;
 
-    void createNewPad( const D_PAD* aPad,
-                       CGENERICCONTAINER2D *aDstContainer,
-                       wxSize aInflateValue ) const;
-
     void createNewPadWithClearance( const D_PAD *aPad,
                                     CGENERICCONTAINER2D *aDstContainer,
                                     wxSize aClearanceValue ) const;

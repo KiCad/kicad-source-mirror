@@ -572,49 +572,6 @@ COBJECT2D *CINFO3D_VISU::createNewPadDrill( const D_PAD* aPad, int aInflateValue
 }
 
 
-// This function pretends to be like the
-// void D_PAD::BuildPadShapePolygon(
-// board_items_to_polygon_shape_transform.cpp
-void CINFO3D_VISU::createNewPad( const D_PAD* aPad,
-                                       CGENERICCONTAINER2D *aDstContainer,
-                                       wxSize aInflateValue ) const
-{
-    switch( aPad->GetShape() )
-    {
-    case PAD_SHAPE_CIRCLE:
-    case PAD_SHAPE_OVAL:
-    case PAD_SHAPE_ROUNDRECT:
-    case PAD_SHAPE_CHAMFERED_RECT:
-    case PAD_SHAPE_CUSTOM:
-        createNewPadWithClearance( aPad, aDstContainer, aInflateValue );
-        break;
-
-    case PAD_SHAPE_TRAPEZOID:
-    case PAD_SHAPE_RECT:
-        wxPoint corners[4];
-        aPad->BuildPadPolygon( corners, aInflateValue, aPad->GetOrientation() );
-
-        // Note: for pad having a shape offset,
-        // the pad position is NOT the shape position
-        for( unsigned int ii = 0; ii < 4; ++ii )
-            corners[ii] += aPad->ShapePos(); // Shift origin to position
-
-        aDstContainer->Add( new CPOLYGON4PTS2D(
-                                SFVEC2F( corners[0].x * m_biuTo3Dunits,
-                                        -corners[0].y * m_biuTo3Dunits ),
-                                SFVEC2F( corners[1].x * m_biuTo3Dunits,
-                                        -corners[1].y * m_biuTo3Dunits ),
-                                SFVEC2F( corners[2].x * m_biuTo3Dunits,
-                                        -corners[2].y * m_biuTo3Dunits ),
-                                SFVEC2F( corners[3].x * m_biuTo3Dunits,
-                                        -corners[3].y * m_biuTo3Dunits ),
-                                *aPad ) );
-
-        break;
-    }
-}
-
-
 void CINFO3D_VISU::AddPadsShapesWithClearanceToContainer( const MODULE* aModule,
                                                           CGENERICCONTAINER2D *aDstContainer,
                                                           PCB_LAYER_ID aLayerId,
@@ -672,7 +629,7 @@ void CINFO3D_VISU::AddPadsShapesWithClearanceToContainer( const MODULE* aModule,
             break;
         }
 
-        createNewPad( pad, aDstContainer, margin );
+        createNewPadWithClearance( pad, aDstContainer, margin );
     }
 }
 
