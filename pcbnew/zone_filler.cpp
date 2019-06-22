@@ -234,7 +234,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
         // A filled area outside the board cutouts has all points outside cutouts,
         // so we only need to check one point for each filled polygon.
         // Note also non copper zones are already clipped
-        else if( m_brdOutlinesValid && !zone.m_zone->IsOnCopperLayer() )
+        else if( m_brdOutlinesValid && zone.m_zone->IsOnCopperLayer() )
         {
             for( int idx = 0; idx < poly.OutlineCount(); )
             {
