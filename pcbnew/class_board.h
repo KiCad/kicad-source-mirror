@@ -273,7 +273,8 @@ public:
     bool IsEmpty() const
     {
         return m_Drawings.GetCount() == 0 && m_Modules.GetCount() == 0 &&
-               m_Track.GetCount() == 0 && m_SegZoneDeprecated.GetCount() == 0;
+               m_Track.GetCount() == 0 && m_SegZoneDeprecated.GetCount() == 0 &&
+               m_ZoneDescriptorList.empty();
     }
 
     void Move( const wxPoint& aMoveVector ) override;
