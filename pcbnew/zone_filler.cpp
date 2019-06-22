@@ -861,7 +861,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
 
     int outline_half_thickness = aZone->GetMinThickness() / 2;
     int numSegs = std::max( GetArcToSegmentCount( outline_half_thickness, m_high_def, 360.0 ), 6 );
-    double circleCorrection = GetCircletoPolyCorrectionFactor( numSegs );
+    double arcCorrection = GetCircletoPolyCorrectionFactor( numSegs );
 
     // Is a point on the boundary of the polygon inside or outside?  This small correction
     // lets us avoid the question.
@@ -888,27 +888,30 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
 
             spokeThickness = spokeThickness / 2;
 
-            // Thermal spokes consist of segments from the pad origin to points just outside
-            // the thermal relief.
+            // Quick test here to possibly save us some work
+            BOX2I itemBB = pad->GetBoundingBox();
+            itemBB.Inflate( thermalReliefGap + pen_radius + boundaryCorrection );
 
-            // Calculate the ending points of the thermal spokes, outside the thermal relief
+            if( !( itemBB.Intersects( zoneBB ) ) )
+                continue;
+
+            // Thermal spokes consist of segments from the pad center to points just outside
+            // the thermal relief.
+            wxPoint padPos = pad->GetPosition();
+            double padAngle = pad->GetOrientation();
+            double spokeAngle = padAngle;
+
+            pad->SetOrientation( 0.0 );
+            pad->SetPosition( - pad->GetOffset() );
             BOX2I reliefBB = pad->GetBoundingBox();
             reliefBB.Inflate( thermalReliefGap + pen_radius + boundaryCorrection );
 
-            // Quick test here to possibly save us some work
-            if( !( reliefBB.Intersects( zoneBB ) ) )
-                continue;
-
-            reliefBB.Offset( -pad->ShapePos() );
-
             // This is a CIRCLE pad tweak
             // for circle pads, the thermal stubs orientation is 45 deg
-            double fAngle = pad->GetOrientation();
-
             if( pad->GetShape() == PAD_SHAPE_CIRCLE )
             {
-                reliefBB.Inflate( KiROUND( reliefBB.GetX() * circleCorrection ) - reliefBB.GetX() );
-                fAngle = s_thermalRot;
+                reliefBB.Inflate( ( reliefBB.GetWidth() * arcCorrection ) - reliefBB.GetWidth() );
+                spokeAngle = s_thermalRot;
             }
 
             for( int i = 0; i < 4; i++ )
@@ -948,13 +951,16 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
 
                 for( int ic = 0; ic < spoke.PointCount(); ic++ )
                 {
-                    RotatePoint( spoke.Point( ic ), fAngle );
-                    spoke.Point( ic ) += pad->ShapePos();
+                    RotatePoint( spoke.Point( ic ), spokeAngle );
+                    spoke.Point( ic ) += padPos + pad->GetOffset();
                 }
 
                 spoke.SetClosed( true );
                 aSpokesList.push_back( spoke );
             }
+
+            pad->SetPosition( padPos );
+            pad->SetOrientation( padAngle );
         }
     }
 }
