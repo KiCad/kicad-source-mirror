@@ -275,7 +275,8 @@ public:
 
     bool IsEmpty() const
     {
-        return m_drawings.empty() && m_modules.empty() && m_tracks.empty();
+        return m_drawings.empty() && m_modules.empty() && m_tracks.empty() &&
+               m_ZoneDescriptorList.empty();
     }
 
     void Move( const wxPoint& aMoveVector ) override;
