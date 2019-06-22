@@ -127,6 +127,9 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
 
     m_settings.m_FillMode = ZFM_POLYGONS;  // Use always polygon fill mode
 
+    // No option to control in non-copper zones
+    m_settings.SetCornerSmoothingType( ZONE_SETTINGS::SMOOTHING_NONE );
+
     switch( m_OutlineAppearanceCtrl->GetSelection() )
     {
     case 0: m_settings.m_Zone_HatchingStyle = ZONE_CONTAINER::NO_HATCH;      break;
