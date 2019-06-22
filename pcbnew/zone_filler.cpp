@@ -492,7 +492,8 @@ void ZONE_FILLER::knockoutThermals( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET&
  * Removes clearance from the shape for copper items which share the zone's layer but are
  * not connected to it.
  */
-void ZONE_FILLER::knockoutCopperItems( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aFill )
+void ZONE_FILLER::knockoutCopperItems( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aFill,
+                                       std::deque<SHAPE_LINE_CHAIN>& aSpokes)
 {
     SHAPE_POLY_SET holes;
 
@@ -548,7 +549,7 @@ void ZONE_FILLER::knockoutCopperItems( const ZONE_CONTAINER* aZone, SHAPE_POLY_S
                 pad = &dummypad;
             }
 
-            else if( pad->GetNetCode() != aZone->GetNetCode()
+            if( pad->GetNetCode() != aZone->GetNetCode()
                   || pad->GetNetCode() <= 0
                   || aZone->GetPadConnection( pad ) == PAD_ZONE_CONN_NONE )
             {
@@ -682,10 +683,10 @@ void ZONE_FILLER::knockoutCopperItems( const ZONE_CONTAINER* aZone, SHAPE_POLY_S
  *     so that when drawing outline with segments having a thickness of m_ZoneMinThickness the
  *     outlines will match exactly the initial outlines
  * 2 - Knocks out thermal reliefs around thermally-connected pads
- * 3 - Adds thermal spokes
- * 4 - Knocks out unconnected copper items
- * 5 - Removes unconnected copper islands
- * 6 - Removes unconnected thermal spokes
+ * 3 - Builds a set of thermal spoke for the whole zone
+ * 4 - Knocks out unconnected copper items, deleting any affected spokes
+ * 5 - Removes unconnected copper islands, deleting any affected spokes
+ * 6 - Adds in the remaining spokes
  */
 void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
                                         const SHAPE_POLY_SET& aSmoothedOutline,
@@ -704,50 +705,52 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
         dumper->BeginGroup( "clipper-zone" );
 
     SHAPE_POLY_SET solidAreas = aSmoothedOutline;
+    std::deque<SHAPE_LINE_CHAIN> thermalSpokes;
 
     int numSegs = std::max( GetArcToSegmentCount( outline_half_thickness, m_high_def, 360.0 ), 6 );
 
     solidAreas.Inflate( -outline_half_thickness, numSegs );
     solidAreas.Simplify( SHAPE_POLY_SET::PM_FAST );
 
-    // ORDER IS IMPORTANT HERE:
-    //
-    // Pad thermals MUST NOT knockout spokes of other pads.  Therefore we do ALL the knockouts
-    // first, and THEN add in all the spokes.
-    //
-    // Other copper item clearances MUST knockout spokes.  They are therefore done AFTER all
-    // the thermal spokes.
-    //
-    // Finally any spokes which are now dangling can be taken back out.
-
     knockoutThermals( aZone, solidAreas );
 
     if( s_DumpZonesWhenFilling )
         dumper->Write( &solidAreas, "solid-areas-minus-thermal-reliefs" );
 
-    SHAPE_POLY_SET spokes;
-    buildThermalSpokes( spokes, aZone, solidAreas, false );
+    buildThermalSpokes( aZone, thermalSpokes );
 
-    spokes.Simplify( SHAPE_POLY_SET::PM_FAST );
-
-    // Use SHAPE_POLY_SET::PM_STRICTLY_SIMPLE to generate strictly simple polygons
-    // needed by Gerber files and Fracture()
-    solidAreas.BooleanAdd( spokes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-
-    if( s_DumpZonesWhenFilling )
-        dumper->Write( &solidAreas, "solid-areas-with-thermal-spokes" );
-
-    knockoutCopperItems( aZone, solidAreas );
+    knockoutCopperItems( aZone, solidAreas, thermalSpokes );
 
     if( s_DumpZonesWhenFilling )
         dumper->Write( &solidAreas, "solid-areas-minus-clearances" );
+
+    if( thermalSpokes.size() )
+    {
+        SHAPE_POLY_SET amalgamatedSpokes;
+
+        for( SHAPE_LINE_CHAIN& spoke : thermalSpokes )
+        {
+            // Add together all spokes which connect to the zone's filled area
+            if( solidAreas.Contains( spoke.Point( 2 ) ) || solidAreas.Contains( spoke.Point( 3 ) ) )
+                amalgamatedSpokes.AddOutline( spoke );
+        }
+
+        amalgamatedSpokes.Simplify( SHAPE_POLY_SET::PM_FAST );
+
+        // Use SHAPE_POLY_SET::PM_STRICTLY_SIMPLE to generate strictly simple polygons
+        // needed by Gerber files and Fracture()
+        solidAreas.BooleanAdd( amalgamatedSpokes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    }
+
+    if( s_DumpZonesWhenFilling )
+        dumper->Write( &solidAreas, "solid-areas-with-thermal-spokes" );
 
     // Now remove the non filled areas due to the hatch pattern
     if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )
         addHatchFillTypeOnZone( aZone, solidAreas );
 
     if( s_DumpZonesWhenFilling )
-        dumper->Write( &solidAreas, "solid-areas-minus-holes" );
+        dumper->Write( &solidAreas, "solid-areas-minus-hatching" );
 
     // This code for non copper zones is currently a dead code:
     // computeRawFilledAreas() is no longer called for non copper zones
@@ -771,77 +774,27 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
         return;
     }
 
-    // Test thermal stubs connections and add polygons to remove unconnected stubs.
-    // (this is a refinement for thermal relief shapes)
-    // Note: we are using not fractured solid area polygons, to avoid a side effect of extra segments
-    // created by Fracture(): if a tested point used in buildUnconnectedThermalStubsPolygonList
-    // is on a extra segment, the tested point is seen outside the solid area, but it is inside.
-    // This is not a bug, just the fact when a point is on a polygon outline, it is hard to say
-    // if it is inside or outside the polygon.
-    SHAPE_POLY_SET danglingThermals;
+    SHAPE_POLY_SET areas_fractured = solidAreas;
 
-    if( aZone->GetNetCode() > 0 )
-        buildThermalSpokes( danglingThermals, aZone, solidAreas, true );
+    // Inflate polygon to recreate the polygon (without the too narrow areas)
+    // if the filled polygons have a outline thickness = 0
+    int inflate_value = aZone->GetFilledPolysUseThickness() ? 0 : outline_half_thickness;
 
-    // remove copper areas corresponding to not connected stubs
-    if( !danglingThermals.IsEmpty() )
+    if( inflate_value <= Millimeter2iu( 0.001 ) )    // avoid very small outline thickness
+        inflate_value = 0;
+
+    if( inflate_value )
     {
-        danglingThermals.Simplify( SHAPE_POLY_SET::PM_FAST );
-        // Remove unconnected stubs. Use SHAPE_POLY_SET::PM_STRICTLY_SIMPLE to
-        // generate strictly simple polygons
-        // needed by Gerber files and Fracture()
-        solidAreas.BooleanSubtract( danglingThermals, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-
-        if( s_DumpZonesWhenFilling )
-            dumper->Write( &danglingThermals, "dangling-thermal-spokes" );
-
-        // put these areas in m_FilledPolysList
-        SHAPE_POLY_SET th_fractured = solidAreas;
-
-        // Inflate polygon to recreate the polygon (without the too narrow areas)
-        // if the filled polygons have a outline thickness = 0
-        int inflate_value = aZone->GetFilledPolysUseThickness() ? 0 :outline_half_thickness;
-
-        if( inflate_value <= Millimeter2iu( 0.001 ) )    // avoid very small outline thickness
-            inflate_value = 0;
-
-        if( inflate_value )
-        {
-            th_fractured.Simplify( SHAPE_POLY_SET::PM_FAST );
-            th_fractured.Inflate( outline_half_thickness, 16 );
-        }
-
-        th_fractured.Fracture( SHAPE_POLY_SET::PM_FAST );
-
-        if( s_DumpZonesWhenFilling )
-            dumper->Write( &th_fractured, "th_fractured" );
-
-        aFinalPolys = th_fractured;
+        areas_fractured.Simplify( SHAPE_POLY_SET::PM_FAST );
+        areas_fractured.Inflate( outline_half_thickness, 16 );
     }
-    else
-    {
-        SHAPE_POLY_SET areas_fractured = solidAreas;
 
-        // Inflate polygon to recreate the polygon (without the too narrow areas)
-        // if the filled polygons have a outline thickness = 0
-        int inflate_value = aZone->GetFilledPolysUseThickness() ? 0 : outline_half_thickness;
+    areas_fractured.Fracture( SHAPE_POLY_SET::PM_FAST );
 
-        if( inflate_value <= Millimeter2iu( 0.001 ) )    // avoid very small outline thickness
-            inflate_value = 0;
+    if( s_DumpZonesWhenFilling )
+        dumper->Write( &areas_fractured, "areas_fractured" );
 
-        if( inflate_value )
-        {
-            areas_fractured.Simplify( SHAPE_POLY_SET::PM_FAST );
-            areas_fractured.Inflate( outline_half_thickness, 16 );
-        }
-
-        areas_fractured.Fracture( SHAPE_POLY_SET::PM_FAST );
-
-        if( s_DumpZonesWhenFilling )
-            dumper->Write( &areas_fractured, "areas_fractured" );
-
-        aFinalPolys = areas_fractured;
-    }
+    aFinalPolys = areas_fractured;
 
     aRawPolys = aFinalPolys;
 
@@ -896,19 +849,11 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPol
 
 /**
  * Function buildThermalSpokes
- * Creates a set of polygons corresponding to stubs created by thermal shapes on pads
- * which are not connected to a zone (dangling bridges)
- * @param aCornerBuffer = a SHAPE_POLY_SET where to store polygons
- * @param aZone = a pointer to the ZONE_CONTAINER  to examine.
  */
-void ZONE_FILLER::buildThermalSpokes( SHAPE_POLY_SET& aCornerBuffer,
-                                      const ZONE_CONTAINER* aZone,
-                                      const SHAPE_POLY_SET& aRawFilledArea,
-                                      bool aDanglingOnly )
+void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
+                                      std::deque<SHAPE_LINE_CHAIN>& aSpokesList )
 {
-    BOX2I itemBB;
-    VECTOR2I ptTest[4];
-    auto zoneBB = aRawFilledArea.BBox();
+    auto zoneBB = aZone->GetBoundingBox();
     int  zone_clearance = aZone->GetZoneClearance();
     int  biggest_clearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
     biggest_clearance = std::max( biggest_clearance, zone_clearance );
@@ -916,7 +861,11 @@ void ZONE_FILLER::buildThermalSpokes( SHAPE_POLY_SET& aCornerBuffer,
 
     int outline_half_thickness = aZone->GetMinThickness() / 2;
     int numSegs = std::max( GetArcToSegmentCount( outline_half_thickness, m_high_def, 360.0 ), 6 );
-    double correction = GetCircletoPolyCorrectionFactor( numSegs );
+    double circleCorrection = GetCircletoPolyCorrectionFactor( numSegs );
+
+    // Is a point on the boundary of the polygon inside or outside?  This small correction
+    // lets us avoid the question.
+    int boundaryCorrection = KiROUND( IU_PER_MM * 0.04 );
 
     // half size of the pen used to draw/plot zones outlines
     int pen_radius = aZone->GetMinThickness() / 2;
@@ -930,12 +879,6 @@ void ZONE_FILLER::buildThermalSpokes( SHAPE_POLY_SET& aCornerBuffer,
 
             int thermalReliefGap = aZone->GetThermalReliefGap( pad );
 
-            itemBB = pad->GetBoundingBox();
-            itemBB.Inflate( thermalReliefGap );
-
-            if( !( itemBB.Intersects( zoneBB ) ) )
-                continue;
-
             // Calculate thermal bridge half width
             int spokeThickness = aZone->GetThermalReliefCopperBridge( pad )
                                  - aZone->GetMinThickness();
@@ -945,13 +888,18 @@ void ZONE_FILLER::buildThermalSpokes( SHAPE_POLY_SET& aCornerBuffer,
 
             spokeThickness = spokeThickness / 2;
 
-            // Thermal bridges are like a segment from a starting point inside the pad
-            // to an ending point outside the pad
+            // Thermal spokes consist of segments from the pad origin to points just outside
+            // the thermal relief.
 
-            // Calculate the ending points of the thermal spokes, outside the pad
-            itemBB.Offset( -pad->ShapePos() );
-            int extra = pen_radius + KiROUND( IU_PER_MM * 0.04 );
-            itemBB.Inflate( extra, extra );
+            // Calculate the ending points of the thermal spokes, outside the thermal relief
+            BOX2I reliefBB = pad->GetBoundingBox();
+            reliefBB.Inflate( thermalReliefGap + pen_radius + boundaryCorrection );
+
+            // Quick test here to possibly save us some work
+            if( !( reliefBB.Intersects( zoneBB ) ) )
+                continue;
+
+            reliefBB.Offset( -pad->ShapePos() );
 
             // This is a CIRCLE pad tweak
             // for circle pads, the thermal stubs orientation is 45 deg
@@ -959,75 +907,53 @@ void ZONE_FILLER::buildThermalSpokes( SHAPE_POLY_SET& aCornerBuffer,
 
             if( pad->GetShape() == PAD_SHAPE_CIRCLE )
             {
-                extra = KiROUND( itemBB.GetX() * correction ) - itemBB.GetX();
-                itemBB.Inflate( extra, extra );
+                reliefBB.Inflate( KiROUND( reliefBB.GetX() * circleCorrection ) - reliefBB.GetX() );
                 fAngle = s_thermalRot;
             }
 
-            // compute north, south, west and east points for zone connection.
-            ptTest[0] = VECTOR2I( 0, itemBB.GetBottom() );
-            ptTest[1] = VECTOR2I( 0, itemBB.GetTop() );
-            ptTest[2] = VECTOR2I( itemBB.GetRight(), 0 );
-            ptTest[3] = VECTOR2I( itemBB.GetLeft(), 0 );
-
-            auto addStub = [&] ( int aSide ) {
-                SHAPE_LINE_CHAIN spokes;
+            for( int i = 0; i < 4; i++ )
+            {
+                SHAPE_LINE_CHAIN spoke;
                 // polygons are rectangles with width of copper bridge value
-                switch( aSide )
+                switch( i )
                 {
                 case 0:       // lower stub
-                    spokes.Append( -spokeThickness, itemBB.GetBottom() );
-                    spokes.Append( +spokeThickness, itemBB.GetBottom() );
-                    spokes.Append( +spokeThickness, 0 );
-                    spokes.Append( -spokeThickness, 0 );
+                    spoke.Append( +spokeThickness, 0 );
+                    spoke.Append( -spokeThickness, 0 );
+                    spoke.Append( -spokeThickness, reliefBB.GetBottom() );
+                    spoke.Append( +spokeThickness, reliefBB.GetBottom() );
                     break;
 
                 case 1:       // upper stub
-                    spokes.Append( -spokeThickness, itemBB.GetTop() );
-                    spokes.Append( +spokeThickness, itemBB.GetTop() );
-                    spokes.Append( +spokeThickness, 0 );
-                    spokes.Append( -spokeThickness, 0 );
+                    spoke.Append( +spokeThickness, 0 );
+                    spoke.Append( -spokeThickness, 0 );
+                    spoke.Append( -spokeThickness, reliefBB.GetTop() );
+                    spoke.Append( +spokeThickness, reliefBB.GetTop() );
                     break;
 
                 case 2:       // right stub
-                    spokes.Append( itemBB.GetRight(), -spokeThickness );
-                    spokes.Append( itemBB.GetRight(), spokeThickness );
-                    spokes.Append( 0, spokeThickness );
-                    spokes.Append( 0, -spokeThickness );
+                    spoke.Append( 0, spokeThickness );
+                    spoke.Append( 0, -spokeThickness );
+                    spoke.Append( reliefBB.GetRight(), -spokeThickness );
+                    spoke.Append( reliefBB.GetRight(), spokeThickness );
                     break;
 
                 case 3:       // left stub
-                    spokes.Append( itemBB.GetLeft(), -spokeThickness );
-                    spokes.Append( itemBB.GetLeft(), spokeThickness );
-                    spokes.Append( 0, spokeThickness );
-                    spokes.Append( 0, -spokeThickness );
+                    spoke.Append( 0, spokeThickness );
+                    spoke.Append( 0, -spokeThickness );
+                    spoke.Append( reliefBB.GetLeft(), -spokeThickness );
+                    spoke.Append( reliefBB.GetLeft(), spokeThickness );
                     break;
                 }
 
-                aCornerBuffer.NewOutline();
-
-                // add computed polygon to list
-                for( int ic = 0; ic < spokes.PointCount(); ic++ )
+                for( int ic = 0; ic < spoke.PointCount(); ic++ )
                 {
-                    auto cpos = spokes.CPoint( ic );
-                    RotatePoint( cpos, fAngle );
-                    cpos += pad->ShapePos();
-                    aCornerBuffer.Append( cpos );
-                }
-            };
-
-            for( int i = 0; i < 4; i++ )
-            {
-                if( aDanglingOnly )
-                {
-                    RotatePoint( ptTest[i], fAngle );
-                    ptTest[i] += pad->ShapePos();
-
-                    if( aRawFilledArea.Contains( ptTest[i] ) )
-                        continue;
+                    RotatePoint( spoke.Point( ic ), fAngle );
+                    spoke.Point( ic ) += pad->ShapePos();
                 }
 
-                addStub( i );
+                spoke.SetClosed( true );
+                aSpokesList.push_back( spoke );
             }
         }
     }

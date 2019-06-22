@@ -52,7 +52,8 @@ private:
 
     void knockoutThermals( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aFill );
 
-    void knockoutCopperItems( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aFill );
+    void knockoutCopperItems( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aFill,
+                              std::deque<SHAPE_LINE_CHAIN>& aSpokes );
 
     /**
      * Function computeRawFilledArea
@@ -70,15 +71,9 @@ private:
 
     /**
      * Function buildThermalSpokes
-     * Creates a set of polygons corresponding to stubs created by thermal shapes on pads
-     * which are not connected to a zone (dangling bridges)
-     * @param aCornerBuffer = a SHAPE_POLY_SET where to store polygons
-     * @param aPcb = the board.
-     * @param aZone = a pointer to the ZONE_CONTAINER  to examine.
-     * @param aDanglingSpokesOnly = true to add only dangling spokes to aCornerBuffer
+     * Constructs a list of all thermal spokes for the given zone.
      */
-    void buildThermalSpokes( SHAPE_POLY_SET& aCornerBuffer, const ZONE_CONTAINER* aZone,
-                             const SHAPE_POLY_SET& aRawFilledArea, bool aDanglingSpokesOnly);
+    void buildThermalSpokes( const ZONE_CONTAINER* aZone, std::deque<SHAPE_LINE_CHAIN>& aSpokes );
 
     /**
      * Build the filled solid areas polygons from zone outlines (stored in m_Poly)
