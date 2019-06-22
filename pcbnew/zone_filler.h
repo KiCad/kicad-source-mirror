@@ -109,6 +109,9 @@ private:
     void addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPolys ) const;
 
     BOARD* m_board;
+    SHAPE_POLY_SET m_boardOutline;      // The board outlines, if exists
+    bool m_brdOutlinesValid;            // true if m_boardOutline can be calculated
+                                        // false if not (not closed outlines for instance)
     COMMIT* m_commit;
     WX_PROGRESS_REPORTER* m_progressReporter;
 };

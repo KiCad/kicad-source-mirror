@@ -122,6 +122,10 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
         m_progressReporter->SetMaxProgress( toFill.size() );
     }
 
+    // The board outlines is used to clip solid areas inside the board (when outlines are valid)
+    m_boardOutline.RemoveAllContours();
+    m_brdOutlinesValid = m_board->GetBoardPolygonOutlines( m_boardOutline );
+
     for( auto zone : aZones )
     {
         // Keepout zones are not filled
@@ -206,8 +210,6 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
 
     // Now remove insulated copper islands and islands outside the board edge
     bool outOfDate = false;
-    SHAPE_POLY_SET boardOutline;
-    bool clip_to_brd_outlines = m_board->GetBoardPolygonOutlines( boardOutline );
 
     for( auto& zone : toFill )
     {
@@ -231,12 +233,13 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
         // but they can have some areas outside the board cutouts.
         // A filled area outside the board cutouts has all points outside cutouts,
         // so we only need to check one point for each filled polygon.
-        else if( clip_to_brd_outlines )
+        // Note also non copper zones are already clipped
+        else if( m_brdOutlinesValid && !zone.m_zone->IsOnCopperLayer() )
         {
-             for( int idx = 0; idx < poly.OutlineCount(); )
+            for( int idx = 0; idx < poly.OutlineCount(); )
             {
                 if( poly.Polygon( idx ).empty() ||
-                    !boardOutline.Contains( poly.Polygon( idx ).front().CPoint( 0 ) ) )
+                    !m_boardOutline.Contains( poly.Polygon( idx ).front().CPoint( 0 ) ) )
                 {
                     poly.DeletePolygon( idx );
                 }
@@ -788,8 +791,13 @@ void ZONE_FILLER::computeRawFilledAreas( const ZONE_CONTAINER* aZone,
     if( s_DumpZonesWhenFilling )
         dumper->Write( &solidAreas, "solid-areas-minus-holes" );
 
+    // This code for non copper zones is currently a dead code:
+    // computeRawFilledAreas() is no longer called for non copper zones
     if( !aZone->IsOnCopperLayer() )
     {
+        if( m_brdOutlinesValid )
+            solidAreas.BooleanIntersection( m_boardOutline, SHAPE_POLY_SET::PM_FAST );
+
         SHAPE_POLY_SET areas_fractured = solidAreas;
         areas_fractured.Fracture( SHAPE_POLY_SET::PM_FAST );
 
@@ -908,10 +916,12 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPol
     }
     else
     {
-        int numSegs = std::max(
-                GetArcToSegmentCount( aZone->GetMinThickness() / 2,
-                        m_board->GetDesignSettings().m_MaxError, 360.0 ), 6 );
-        aFinalPolys.Inflate( -aZone->GetMinThickness() / 2, numSegs );
+        if( m_brdOutlinesValid )
+            smoothedPoly.BooleanIntersection( m_boardOutline, SHAPE_POLY_SET::PM_FAST );
+
+        int numSegs = std::max( GetArcToSegmentCount( aZone->GetMinThickness() / 2,
+                                m_board->GetDesignSettings().m_MaxError, 360.0 ), 6 );
+        smoothedPoly.Inflate( -aZone->GetMinThickness() / 2, numSegs );
 
         // Remove the non filled areas due to the hatch pattern
         if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )
@@ -919,6 +929,7 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPol
 
         aRawPolys = smoothedPoly;
         aFinalPolys = smoothedPoly;
+
         aFinalPolys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
     }
 
