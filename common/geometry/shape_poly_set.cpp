@@ -626,14 +626,6 @@ void SHAPE_POLY_SET::importTree( PolyTree* tree )
 
 struct FractureEdge
 {
-    FractureEdge( bool connected, SHAPE_LINE_CHAIN* owner, int index ) :
-        m_connected( connected ),
-        m_next( NULL )
-    {
-        m_p1    = owner->CPoint( index );
-        m_p2    = owner->CPoint( index + 1 );
-    }
-
     FractureEdge( int y = 0 ) :
         m_connected( false ),
         m_next( NULL )
@@ -749,25 +741,27 @@ void SHAPE_POLY_SET::fractureSingle( POLYGON& paths )
 
     int num_unconnected = 0;
 
-    for( SHAPE_LINE_CHAIN& path : paths )
+    for( const SHAPE_LINE_CHAIN& path : paths )
     {
-        int index = 0;
+        const std::vector<VECTOR2I>& points = path.CPoints();
+        int pointCount = points.size();
 
         FractureEdge* prev = NULL, * first_edge = NULL;
 
         int x_min = std::numeric_limits<int>::max();
 
-        for( int i = 0; i < path.PointCount(); i++ )
+        for( const VECTOR2I& p : points )
         {
-            const VECTOR2I& p = path.CPoint( i );
-
             if( p.x < x_min )
                 x_min = p.x;
         }
 
-        for( int i = 0; i < path.PointCount(); i++ )
+        for( int i = 0; i < pointCount; i++ )
         {
-            FractureEdge* fe = new FractureEdge( first, &path, index++ );
+            // Do not use path.CPoint() here; open-coding it using the local variables "points"
+            // and "pointCount" gives a non-trivial performance boost to zone fill times.
+            FractureEdge* fe = new FractureEdge( first, points[ i ],
+                                                        points[ i+1 == pointCount ? 0 : i+1 ] );
 
             if( !root )
                 root = fe;
@@ -778,7 +772,7 @@ void SHAPE_POLY_SET::fractureSingle( POLYGON& paths )
             if( prev )
                 prev->m_next = fe;
 
-            if( i == path.PointCount() - 1 )
+            if( i == pointCount - 1 )
                 fe->m_next = first_edge;
 
             prev = fe;
@@ -805,14 +799,14 @@ void SHAPE_POLY_SET::fractureSingle( POLYGON& paths )
         FractureEdge* smallestX = NULL;
 
         // find the left-most hole edge and merge with the outline
-        for( FractureEdgeSet::iterator i = border_edges.begin(); i != border_edges.end(); ++i )
+        for( FractureEdge* border_edge : border_edges )
         {
-            int xt = (*i)->m_p1.x;
+            int xt = border_edge->m_p1.x;
 
-            if( ( xt < x_min ) && !(*i)->m_connected )
+            if( ( xt < x_min ) && !border_edge->m_connected )
             {
                 x_min = xt;
-                smallestX = *i;
+                smallestX = border_edge;
             }
         }
 
@@ -831,10 +825,10 @@ void SHAPE_POLY_SET::fractureSingle( POLYGON& paths )
 
     newPath.Append( e->m_p1 );
 
-    for( FractureEdgeSet::iterator i = edges.begin(); i != edges.end(); ++i )
-        delete *i;
+    for( FractureEdge* edge : edges )
+        delete edge;
 
-    paths.push_back( newPath );
+    paths.push_back( std::move( newPath ) );
 }
 
 
@@ -1445,11 +1439,11 @@ bool SHAPE_POLY_SET::containsSingle( const VECTOR2I& aP, int aSubpolyIndex, bool
             // Check that the point is not in any of the holes
             for( int holeIdx = 0; holeIdx < HoleCount( aSubpolyIndex ); holeIdx++ )
             {
-                const SHAPE_LINE_CHAIN hole = CHole( aSubpolyIndex, holeIdx );
+                const SHAPE_LINE_CHAIN& hole = CHole( aSubpolyIndex, holeIdx );
 
                 // If the point is inside a hole (and not on its edge),
                 // it is outside of the polygon
-                if( pointInPolygon( aP, hole ) && !hole.PointOnEdge( aP ) )
+                if( pointInPolygon( aP, hole ) )
                     return false;
             }
         }

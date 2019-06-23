@@ -730,8 +730,8 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
 
         for( SHAPE_LINE_CHAIN& spoke : thermalSpokes )
         {
-            // Add together all spokes which connect to the zone's filled area
-            if( solidAreas.Contains( spoke.Point( 2 ) ) || solidAreas.Contains( spoke.Point( 3 ) ) )
+            // Add together all spokes whose endpoints lie within the zone's filled area
+            if( solidAreas.Contains( spoke.Point(2) ) && solidAreas.Contains( spoke.Point(3) ) )
                 amalgamatedSpokes.AddOutline( spoke );
         }
 
@@ -859,16 +859,19 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
     biggest_clearance = std::max( biggest_clearance, zone_clearance );
     zoneBB.Inflate( biggest_clearance );
 
-    int outline_half_thickness = aZone->GetMinThickness() / 2;
-    int numSegs = std::max( GetArcToSegmentCount( outline_half_thickness, m_high_def, 360.0 ), 6 );
-    double arcCorrection = GetCircletoPolyCorrectionFactor( numSegs );
+    // half size of the pen used to draw/plot zones outlines
+    int pen_radius = aZone->GetMinThickness() / 2;
 
     // Is a point on the boundary of the polygon inside or outside?  This small correction
     // lets us avoid the question.
     int boundaryCorrection = KiROUND( IU_PER_MM * 0.04 );
 
-    // half size of the pen used to draw/plot zones outlines
-    int pen_radius = aZone->GetMinThickness() / 2;
+    // We'd normally add in an arcCorrection for circles (since a finite number of segments
+    // is only an approximation of the circle radius).  However, boundaryCorrection is already
+    // twice even our ARC_LOW_DEF error tolerance, so there's little benefit to it (and a small
+    // but existant performance penalty).
+    //int numSegs = std::max( GetArcToSegmentCount( pen_raidus, m_high_def, 360.0 ), 6 );
+    //double arcCorrection = GetCircletoPolyCorrectionFactor( numSegs );
 
     for( auto module : m_board->Modules() )
     {
@@ -906,13 +909,9 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
             BOX2I reliefBB = pad->GetBoundingBox();
             reliefBB.Inflate( thermalReliefGap + pen_radius + boundaryCorrection );
 
-            // This is a CIRCLE pad tweak
-            // for circle pads, the thermal stubs orientation is 45 deg
+            // For circle pads, the thermal stubs orientation is 45 deg
             if( pad->GetShape() == PAD_SHAPE_CIRCLE )
-            {
-                reliefBB.Inflate( ( reliefBB.GetWidth() * arcCorrection ) - reliefBB.GetWidth() );
                 spokeAngle = s_thermalRot;
-            }
 
             for( int i = 0; i < 4; i++ )
             {

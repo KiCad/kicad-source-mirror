@@ -368,11 +368,17 @@ bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aPt, int aAccuracy ) const
      *
      * Note: slope might be denormal here in the case of a horizontal line but we require our
      * y to move from above to below the point (or vice versa)
+     *
+     * Note: we open-code CPoint() here so that we don't end up calculating the size of the
+     * vector number-of-points times.  This has a non-trivial impact on zone fill times.
      */
-    for( int i = 0; i < PointCount(); i++ )
+    const std::vector<VECTOR2I>& points = CPoints();
+    int pointCount = points.size();
+
+    for( int i = 0; i < pointCount; )
     {
-        const auto p1 = CPoint( i );
-        const auto p2 = CPoint( i + 1 ); // CPoint wraps, so ignore counts
+        const auto p1 = points[ i++ ];
+        const auto p2 = points[ i == pointCount ? 0 : i ];
         const auto diff = p2 - p1;
 
         if( diff.y != 0 )
@@ -383,6 +389,7 @@ bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aPt, int aAccuracy ) const
                 inside = !inside;
         }
     }
+
     return inside && !PointOnEdge( aPt, aAccuracy );
 }
 
