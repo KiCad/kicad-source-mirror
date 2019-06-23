@@ -600,7 +600,7 @@ void FOOTPRINT_WIZARD_FRAME::OnActivate( wxActivateEvent& event )
     if( !m_wizardListShown )
     {
         m_wizardListShown = true;
-        SelectFootprintWizard();
+        wxPostEvent( this, wxCommandEvent( wxEVT_TOOL, ID_FOOTPRINT_WIZARD_SELECT_WIZARD ) );
     }
 #if 0
     // Currently, we do not have a way to see if a Python wizard has changed,
