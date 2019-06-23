@@ -1139,3 +1139,38 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents() const
 
     return BOX2I( VECTOR2I(0, 0), VECTOR2I( sizeX, sizeY ) );
 }
+
+void SCH_EDIT_FRAME::FixupJunctions()
+{
+    SCH_SHEET_LIST sheetList;
+
+    sheetList.BuildSheetList( g_RootSheet );
+
+    for( unsigned i = 0; i < sheetList.size();  i++ )
+    {
+        std::vector<wxPoint> anchors;
+
+        SetCurrentSheet( sheetList[i] );
+        GetCurrentSheet().UpdateAllScreenReferences();
+
+        auto screen = GetCurrentSheet().LastScreen();
+
+        for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
+        {
+            if( item->Type() == SCH_COMPONENT_T )
+            {
+                auto cmp = static_cast<SCH_COMPONENT*>( item );
+                auto xform = cmp->GetTransform();
+
+                for( auto pin : cmp->GetPins() )
+                {
+                    auto pos = cmp->GetPosition() + xform.TransformCoordinate( pin.GetPosition() );
+                    if ( screen->IsJunctionNeeded( pos ) )
+                    {
+                        AddJunction( pos );
+                    }
+                }
+            }
+        }
+    }
+}

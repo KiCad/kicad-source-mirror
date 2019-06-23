@@ -1026,6 +1026,8 @@ public:
 
     const BOX2I GetDocumentExtents() const override;
 
+    void FixupJunctions();
+
     DECLARE_EVENT_TABLE()
 };
 

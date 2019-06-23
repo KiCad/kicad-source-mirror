@@ -384,6 +384,13 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     SetSheetNumberAndCount();
+
+    // re-create junctions if needed. EEschema optimizes wires by merging
+    // colinear segments. If a schematic is saved without a valid
+    // cache library or missing installed libraries, this can cause connectivity errors
+    // unless junctions are added.
+    FixupJunctions();
+
     SyncView();
     GetScreen()->ClearDrawingState();
 
