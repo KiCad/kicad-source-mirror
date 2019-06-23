@@ -318,9 +318,9 @@ bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::vector<D_PAD*>& c
     }
     else
     {
-        msg.Printf( _( "This will change the net assigned to %d connected pads to %s.\n"
+        msg.Printf( _( "This will change the net assigned to %lu connected pads to %s.\n"
                        "Do you wish to continue?" ),
-                    changingPads.size(),
+                    static_cast<unsigned long>( changingPads.size() ),
                     m_netSelector->GetValue() );
     }
 
