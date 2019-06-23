@@ -52,6 +52,11 @@ add_executable( qa_eeschema
     $<TARGET_OBJECTS:eeschema_kiface_objects>
 )
 
+# Anytime we link to the kiface_objects, we have to add a dependency on the last object
+# to ensure that the generated lexer files are finished being used before the qa runs in a
+# multi-threaded build
+add_dependencies( qa_eeschema eeschema )
+
 target_link_libraries( qa_eeschema
     common
     qa_utils
