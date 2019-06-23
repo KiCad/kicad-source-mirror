@@ -54,6 +54,11 @@ add_executable( qa_pcbnew
     $<TARGET_OBJECTS:pcbnew_kiface_objects>
 )
 
+# Anytime we link to the kiface_objects, we have to add a dependency on the last object
+# to ensure that the generated lexer files are finished being used before the qa runs in a
+# multi-threaded build
+add_dependencies( qa_pcbnew pcbnew )
+
 target_link_libraries( qa_pcbnew
     qa_pcbnew_utils
     3d-viewer
