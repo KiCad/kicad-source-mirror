@@ -180,6 +180,10 @@ if( KICAD_SCRIPTING AND KICAD_SCRIPTING_ACTION_MENU )
         )
 endif()
 
+set( PCBNEW_BRDSTACKUP_MGR
+    board_stackup_manager/stackup_predefined_prms.cpp
+    )
+
 set( PCBNEW_IMPORT_GFX
     import_gfx/dialog_import_gfx_base.cpp
     import_gfx/dialog_import_gfx.cpp
@@ -191,6 +195,7 @@ set( PCBNEW_IMPORT_GFX
     import_gfx/svg_import_plugin.cpp
     import_gfx/nanosvg.cpp
     )
+
 
 set( PCBNEW_EXPORTERS
     exporters/export_hyperlynx.cpp
@@ -222,6 +227,7 @@ set( PCBNEW_CLASS_SRCS
     ${PCBNEW_EXPORTERS}
     ${PCBNEW_IMPORT_GFX}
     ${PCBNEW_DRC_SRCS}
+    ${PCBNEW_BRDSTACKUP_MGR}
 
     autorouter/rect_placement/rect_placement.cpp
     autorouter/spread_footprints.cpp

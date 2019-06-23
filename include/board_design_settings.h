@@ -29,6 +29,7 @@
 #include <class_track.h>
 #include <netclass.h>
 #include <config_params.h>
+#include <board_stackup_manager/class_board_stackup.h>
 
 #define DEFAULT_SILK_LINE_WIDTH       0.12
 #define DEFAULT_COPPER_LINE_WIDTH     0.20
@@ -250,6 +251,15 @@ public:
     D_PAD      m_Pad_Master;                ///< A dummy pad to store all default parameters
                                             // when importing values or create a new pad
 
+    /** Set to true if the board has a stackup management.
+     * if m_hasStackup is false, a default basic stackup witll be used to
+     * generate the ;gbrjob file.
+     * if m_hasStackup is true, the stackup defined for the board is used.
+     * if not up to date, a error message will be set
+     * Could be removed later, or at least always set to true
+     */
+    bool m_HasStackup;
+
 private:
     // Indicies into the trackWidth, viaSizes and diffPairDimensions lists.
     // The 0 index is always the current netclass value(s)
@@ -278,8 +288,16 @@ private:
     /// This is also the last used netclass after starting a track.
     wxString   m_currentNetClassName;
 
+    /** the description of layers stackup, for board fabrication
+     * only physical layers are in layers stackup.
+     * It includes not only layers enabled for the board edition, but also dielectic layers
+     */
+    BOARD_STACKUP m_stackup;
+
 public:
     BOARD_DESIGN_SETTINGS();
+
+    BOARD_STACKUP& GetStackupDescriptor() { return m_stackup; }
 
     /**
      * Function GetDefault

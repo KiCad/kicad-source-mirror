@@ -447,6 +447,7 @@ set( PCB_COMMON_SRCS
     ../pcbnew/class_pad.cpp
     ../pcbnew/class_pcb_target.cpp
     ../pcbnew/class_pcb_text.cpp
+    ../pcbnew/board_stackup_manager/class_board_stackup.cpp
     ../pcbnew/class_text_mod.cpp
     ../pcbnew/class_track.cpp
     ../pcbnew/class_zone.cpp

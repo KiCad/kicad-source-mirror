@@ -111,11 +111,8 @@ struct LAYER
     */
 
     wxString    m_name;         ///< The name of the layer, there should be no spaces in this name.
-
     LAYER_T     m_type;         ///< The type of the layer
-
     bool        m_visible;
-
     int         m_number;
 
     /**

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -423,8 +423,9 @@ public:
 BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_Pad_Master( NULL )
 {
-    LSET all_set = LSET().set();
+    m_HasStackup = false;                   // no stackup defined by default
 
+    LSET all_set = LSET().set();
     m_enabledLayers = all_set;              // All layers enabled at first.
                                             // SetCopperLayerCount() will adjust this.
     SetVisibleLayers( all_set );
@@ -433,7 +434,6 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_visibleElements = ~( 1 << GAL_LAYER_INDEX( LAYER_MOD_TEXT_INVISIBLE ) );
 
     SetCopperLayerCount( 2 );               // Default design is a double sided board
-
     m_CurrentViaType = VIA_THROUGH;
 
     // if true, when creating a new track starting on an existing track, use this track width

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,7 @@
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
 #include <gbr_metadata.h>
+#include <board_stackup_manager/stackup_predefined_prms.h>
 
 
 GERBER_JOBFILE_WRITER::GERBER_JOBFILE_WRITER( BOARD* aPcb, REPORTER* aReporter )
@@ -279,6 +280,29 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
     // Board thickness
     addJSONObject( wxString::Format( "\"BoardThickness\":  %.3f,\n",
              m_pcb->GetDesignSettings().GetBoardThickness()*m_conversionUnits ) );
+
+
+    // Copper finish
+    BOARD_STACKUP brd_stackup = m_pcb->GetDesignSettings().GetStackupDescriptor();
+
+    if( !brd_stackup.m_FinishType.IsEmpty() )
+        addJSONObject( wxString::Format( "\"Finish\":  \"%s\",\n", brd_stackup.m_FinishType ) );
+
+    if( brd_stackup.m_CastellatedPads )
+        addJSONObject( "\"Castellated\":  \"true\",\n" );
+
+    if( brd_stackup.m_EdgePlating )
+        addJSONObject( "\"EdgePlating\":  \"true\",\n" );
+
+    if( brd_stackup.m_EdgeConnectorConstraints )
+    {
+        addJSONObject( "\"EdgeConnector\":  \"true\",\n" );
+
+        if( brd_stackup.m_EdgeConnectorConstraints == BS_EDGE_CONNECTOR_BEVELLED )
+            addJSONObject( "\"EdgeConnectorBevelled\":  \"true\",\n" );
+        else
+            addJSONObject( "\"EdgeConnectorBevelled\":  \"false\",\n" );
+    }
 
 #if 0    // Not yet in use
     /* The board type according to IPC-2221. There are six primary board types:
@@ -555,126 +579,108 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
     addJSONObject( "\"MaterialStackup\":\n" );
     openArrayBlock();
 
-    // Build the candidates: only layers on a board are candidates:
+    // Build the candidates list:
     LSET maskLayer;
+    BOARD_STACKUP brd_stackup = m_pcb->GetDesignSettings().GetStackupDescriptor();
 
-    for( unsigned ii = 0; ii < m_params.m_GerberFileList.GetCount(); ii ++ )
-    {
-        PCB_LAYER_ID layer = m_params.m_LayerId[ii];
+    // Ensure brd_stackup is up to date (i.e. no change made by SynchronizeWithBoard() )
+    bool uptodate = not brd_stackup.SynchronizeWithBoard( &m_pcb->GetDesignSettings() );
 
-        if( layer <= B_Cu )
-            maskLayer.set( layer );
-        else
-        {
-            switch( layer )
-            {
-                case B_Paste:
-                case F_Paste:
-                case B_SilkS:
-                case F_SilkS:
-                case B_Mask:
-                case F_Mask:
-                    maskLayer.set( layer );
-                    break;
+    if( !uptodate && m_pcb->GetDesignSettings().m_HasStackup )
+        m_reporter->Report( _( "Board stackup settings not up to date\n"
+                               "Please fix the stackup" ), REPORTER::RPT_ERROR );
 
-                case Edge_Cuts:
-                case B_Adhes:
-                case F_Adhes:
-                case B_Fab:
-                case F_Fab:
-                case Dwgs_User:
-                case Cmts_User:
-                case Eco1_User:
-                case Eco2_User:
-                case Margin:
-                case B_CrtYd:
-                case F_CrtYd:
-                   break;
+    PCB_LAYER_ID last_copper_layer = F_Cu;
 
-                default:
-                    m_reporter->Report(
-                                    wxString::Format( "Unexpected layer id %d in job file", layer ),
-                                    REPORTER::RPT_ERROR );
-                    break;
-            }
-        }
-    }
-
-    // build a candidate list (in reverse order: bottom to top):
-    LSEQ list = maskLayer.SeqStackupBottom2Top();
     // Generate the list (top to bottom):
-    for( int ii = list.size()-1; ii >= 0; --ii )
+    for( int ii = 0; ii < brd_stackup.GetCount(); ++ii )
     {
-        PCB_LAYER_ID layer = list[ii];
+        BOARD_STACKUP_ITEM* item = brd_stackup.GetStackupLayer( ii );
+        double thickness = item->m_Thickness*m_conversionUnits; // layer thickness is always in mm
         wxString layer_type;
-        wxString color;
-        wxString dielectric;
-        double thickness = 0.0;     // layer thickness in mm
+        std::string layer_name;     // for comment
 
-        if( layer <= B_Cu )
+        switch( item->m_Type )
         {
+        case BS_ITEM_TYPE_COPPER:
             layer_type = "Copper";
-            //thickness = 0.035;
-        }
-        else
-        {
-            switch( layer )
-            {
-            case B_Paste:
-            case F_Paste:
-                layer_type = "SolderPaste";
-                break;
+            layer_name = formatStringToGerber( m_pcb->GetLayerName( item->m_LayerId ) );
+            last_copper_layer = item->m_LayerId;
+            break;
 
-            case B_SilkS:
-            case F_SilkS:
-                //color = "White";
-                layer_type = "Legend";
-                break;
+        case BS_ITEM_TYPE_SILKSCREEN:
+            layer_type = "Legend";
+            layer_name = formatStringToGerber( item->m_TypeName );
+            break;
 
-            case B_Mask:
-            case F_Mask:
-                //color = "Green";
-                //thickness = 0.025;
-                layer_type = "SolderMask";
-                break;
+        case BS_ITEM_TYPE_SOLDERMASK:
+            layer_type = "SolderMask";
+            layer_name = formatStringToGerber( item->m_TypeName );
+            break;
 
-            default:
-                break;
-            }
+        case BS_ITEM_TYPE_SOLDERPASTE:
+            layer_type = "SolderPaste";
+            layer_name = formatStringToGerber( item->m_TypeName );
+            break;
+
+        case BS_ITEM_TYPE_DIELECTRIC:
+            layer_type = "Dielectric";
+            layer_name = formatStringToGerber( wxString::Format( "dielectric layer %d (%s)",
+                                               item->m_DielectricLayerId, item->m_TypeName ) );
+            break;
+
+        default:
+            break;
         }
 
         openBlock();
         addJSONObject( wxString::Format( "\"Type\":  \"%s\",\n", layer_type ) );
 
-        if( !color.IsEmpty() )
-            addJSONObject( wxString::Format( "\"Color\":  \"%s\",\n", color ) );
+        if( item->IsColorEditable() && uptodate )
+        {
+            if( !item->m_Color.IsEmpty() && item->m_Color != NOT_SPECIFIED )
+                addJSONObject( wxString::Format( "\"Color\":  \"%s\",\n", item->m_Color ) );
+        }
 
-        if( thickness > 0.0 )
-            addJSONObject( wxString::Format( "\"Thickness\":  %f,\n", thickness ) );
+        if( item->IsThicknessEditable() && uptodate )
+            addJSONObject( wxString::Format( "\"Thickness\":  %.3f,\n", thickness ) );
 
-        std::string strname = formatStringToGerber(  m_pcb->GetLayerName( layer ) );
-        addJSONObject( wxString::Format( "\"Notes\":  \"Layer %s\",\n", strname.c_str() ) );
+        if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
+        {
+            addJSONObject( wxString::Format( "\"Material\":  \"%s\",\n", item->m_Material ) );
+
+            // These constrains are only written if the board has impedance controlled tracks.
+            // If the board is not impedance controlled,  they are useless.
+            // Do not add constrains that create more expensive boards.
+            if( brd_stackup.m_HasDielectricConstrains )
+            {
+                addJSONObject( wxString::Format( "\"DielectricConstant\":  %.1f,\n", item->m_EpsilonR ) );
+                addJSONObject( wxString::Format( "\"LossTangent\":  %f,\n", item->m_LossTangent ) );
+            }
+
+            PCB_LAYER_ID next_copper_layer = (PCB_LAYER_ID) (last_copper_layer+1);
+
+            // If the next_copper_layer is the last copper layer, the next layer id is B_Cu
+            if( next_copper_layer >= m_pcb->GetCopperLayerCount()-1 )
+                next_copper_layer = B_Cu;
+
+            // Add a comment ("Notes"):
+            wxString note = "\"Notes\":  ";
+
+            if( uptodate )      // We can add the dielectric variant ("core" "prepreg" ...):
+                note << wxString::Format( " \"Type: %s", layer_name.c_str() );
+
+            note << wxString::Format( " (from %s to %s)\"\n",
+                            formatStringToGerber( m_pcb->GetLayerName( last_copper_layer ) ),
+                            formatStringToGerber( m_pcb->GetLayerName( next_copper_layer ) ) );
+
+            addJSONObject( note );
+        }
+        else
+            addJSONObject( wxString::Format( "\"Notes\":  \"Layer: %s\",\n", layer_name.c_str() ) );
+
         removeJSONSepararator();
         closeBlockWithSep();
-
-        if( layer < B_Cu )     // Add dielectric between copper layers
-        {
-            dielectric = "FR4";     // Temporary
-
-            openBlock();
-            addJSONObject( wxString::Format( "\"Type\":  \"%s\",\n", "Dielectric" ) );
-
-            if( thickness > 0.0 )
-                addJSONObject( wxString::Format( "\"Thickness\":  %f,\n", color ) );
-
-            if( !dielectric.IsEmpty() )
-                addJSONObject( wxString::Format( "\"Material\":  \"%s\",\n", dielectric ) );
-
-            addJSONObject( wxString::Format( "\"Notes\":  \"Layers L%d/L%d\",\n",
-                          layer+1, layer+2 ) );
-            removeJSONSepararator();
-            closeBlockWithSep();
-        }
     }
 
     removeJSONSepararator();
