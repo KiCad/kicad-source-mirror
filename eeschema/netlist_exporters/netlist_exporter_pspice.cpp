@@ -72,6 +72,7 @@ void  NETLIST_EXPORTER_PSPICE::ReplaceForbiddenChars( wxString &aNetName )
 
     aNetName.Replace( "(", "_" );
     aNetName.Replace( ")", "_" );
+    aNetName.Replace( " ", "_" );
 }
 
 

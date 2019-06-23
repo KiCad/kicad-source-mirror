@@ -230,6 +230,12 @@ public:
     wxString PathHumanReadable() const;
 
     /**
+     * @return a PathName for the root sheet (like "/" or "<root>"
+     * @param aUseShortName: true to return "/", false to return a longer name
+     */
+    static wxString GetRootPathName( bool aUseShortName = true );
+
+    /**
      * Function UpdateAllScreenReferences
      * updates the reference and the m_Multi parameter (part selection) for all
      * components on a screen depending on the actual sheet path.
