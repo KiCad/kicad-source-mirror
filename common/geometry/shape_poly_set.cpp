@@ -1391,19 +1391,20 @@ bool SHAPE_POLY_SET::CollideEdge( const VECTOR2I& aPoint,
 }
 
 
-bool SHAPE_POLY_SET::Contains( const VECTOR2I& aP, int aSubpolyIndex, bool aIgnoreHoles ) const
+bool SHAPE_POLY_SET::Contains( const VECTOR2I& aP, int aSubpolyIndex, bool aIgnoreHoles,
+                               bool aIgnoreEdges ) const
 {
     if( m_polys.size() == 0 ) // empty set?
         return false;
 
     // If there is a polygon specified, check the condition against that polygon
     if( aSubpolyIndex >= 0 )
-        return containsSingle( aP, aSubpolyIndex, aIgnoreHoles );
+        return containsSingle( aP, aSubpolyIndex, aIgnoreHoles, aIgnoreEdges );
 
     // In any other case, check it against all polygons in the set
     for( int polygonIdx = 0; polygonIdx < OutlineCount(); polygonIdx++ )
     {
-        if( containsSingle( aP, polygonIdx, aIgnoreHoles ) )
+        if( containsSingle( aP, polygonIdx, aIgnoreHoles, aIgnoreEdges ) )
             return true;
     }
 
@@ -1429,10 +1430,11 @@ void SHAPE_POLY_SET::RemoveVertex( VERTEX_INDEX aIndex )
 }
 
 
-bool SHAPE_POLY_SET::containsSingle( const VECTOR2I& aP, int aSubpolyIndex, bool aIgnoreHoles ) const
+bool SHAPE_POLY_SET::containsSingle( const VECTOR2I& aP, int aSubpolyIndex, bool aIgnoreHoles,
+                                     bool aIgnoreEdges ) const
 {
     // Check that the point is inside the outline
-    if( pointInPolygon( aP, m_polys[aSubpolyIndex][0] ) )
+    if( pointInPolygon( aP, m_polys[aSubpolyIndex][0], aIgnoreEdges ) )
     {
         if( !aIgnoreHoles )
         {
@@ -1443,7 +1445,7 @@ bool SHAPE_POLY_SET::containsSingle( const VECTOR2I& aP, int aSubpolyIndex, bool
 
                 // If the point is inside a hole (and not on its edge),
                 // it is outside of the polygon
-                if( pointInPolygon( aP, hole ) )
+                if( pointInPolygon( aP, hole, aIgnoreEdges ) )
                     return false;
             }
         }
@@ -1455,9 +1457,10 @@ bool SHAPE_POLY_SET::containsSingle( const VECTOR2I& aP, int aSubpolyIndex, bool
 }
 
 
-bool SHAPE_POLY_SET::pointInPolygon( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aPath ) const
+bool SHAPE_POLY_SET::pointInPolygon( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aPath,
+                                     bool aIgnoreEdges ) const
 {
-    return aPath.PointInside( aP );
+    return aPath.PointInside( aP, aIgnoreEdges ? 1 : 0 );
 }
 
 
@@ -1466,9 +1469,7 @@ void SHAPE_POLY_SET::Move( const VECTOR2I& aVector )
     for( POLYGON& poly : m_polys )
     {
         for( SHAPE_LINE_CHAIN& path : poly )
-        {
             path.Move( aVector );
-        }
     }
 }
 
@@ -1478,9 +1479,7 @@ void SHAPE_POLY_SET::Rotate( double aAngle, const VECTOR2I& aCenter )
     for( POLYGON& poly : m_polys )
     {
         for( SHAPE_LINE_CHAIN& path : poly )
-        {
             path.Rotate( aAngle, aCenter );
-        }
     }
 }
 
@@ -1492,9 +1491,7 @@ int SHAPE_POLY_SET::TotalVertices() const
     for( const POLYGON& poly : m_polys )
     {
         for( const SHAPE_LINE_CHAIN& path : poly )
-        {
             c += path.PointCount();
-        }
     }
 
     return c;

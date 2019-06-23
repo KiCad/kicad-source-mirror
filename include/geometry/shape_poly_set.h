@@ -977,9 +977,12 @@ class SHAPE_POLY_SET : public SHAPE
          * @param aP is the point to check
          * @param aSubpolyIndex is the subpolygon to check, or -1 to check all
          * @param aIgnoreHoles controls whether or not internal holes are considered
+         * @param aIgnoreEdges controls whether or not a check for the point lying exactly on
+         *                     the polygon edge is made
          * @return true if the polygon contains the point
          */
-        bool Contains( const VECTOR2I& aP, int aSubpolyIndex = -1, bool aIgnoreHoles = false ) const;
+        bool Contains( const VECTOR2I& aP, int aSubpolyIndex = -1, bool aIgnoreHoles = false,
+                       bool aIgnoreEdges = false ) const;
 
         ///> Returns true if the set is empty (no polygons at all)
         bool IsEmpty() const
@@ -1136,14 +1139,14 @@ class SHAPE_POLY_SET : public SHAPE
          * if aFastMode is PM_STRICTLY_SIMPLE (default) the result is (theorically) a strictly
          * simple polygon, but calculations can be really significantly time consuming
          */
-        void booleanOp( ClipperLib::ClipType aType,
+        void booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET& aOtherShape,
+                        POLYGON_MODE aFastMode );
+
+        void booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET& aShape,
                         const SHAPE_POLY_SET& aOtherShape, POLYGON_MODE aFastMode );
 
-        void booleanOp( ClipperLib::ClipType aType,
-                        const SHAPE_POLY_SET& aShape,
-                        const SHAPE_POLY_SET& aOtherShape, POLYGON_MODE aFastMode );
-
-        bool pointInPolygon( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aPath ) const;
+        bool pointInPolygon( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aPath,
+                             bool aIgnoreEdges ) const;
 
         /**
          * containsSingle function
@@ -1154,10 +1157,13 @@ class SHAPE_POLY_SET : public SHAPE
          * @param  aSubpolyIndex is an integer specifying which polygon in the set has to be
          *                       checked.
          * @param  aIgnoreHoles  can be set to true to ignore internal holes in the polygon
+         * @param  aIgnoreEdges  can be set to true to skip checking whether or not the point
+         *                       lies directly on the edge
          * @return bool - true if aP is inside aSubpolyIndex-th polygon; false in any other
          *         case.
          */
-        bool containsSingle( const VECTOR2I& aP, int aSubpolyIndex, bool aIgnoreHoles = false ) const;
+        bool containsSingle( const VECTOR2I& aP, int aSubpolyIndex, bool aIgnoreHoles = false,
+                             bool aIgnoreEdges = false ) const;
 
         /**
          * Operations ChamferPolygon and FilletPolygon are computed under the private chamferFillet

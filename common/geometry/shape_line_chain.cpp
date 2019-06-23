@@ -390,7 +390,9 @@ bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aPt, int aAccuracy ) const
         }
     }
 
-    return inside && !PointOnEdge( aPt, aAccuracy );
+    // If aAccuracy is > 0 then by definition we don't care whether or not the point is
+    // *exactly* on the edge -- which saves us considerable processing time
+    return inside && ( aAccuracy > 0 || !PointOnEdge( aPt ) );
 }
 
 
