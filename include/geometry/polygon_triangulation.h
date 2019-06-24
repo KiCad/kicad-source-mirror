@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Modifications Copyright (C) 2018 KiCad Developers
+ * Modifications Copyright (C) 2018-2019 KiCad Developers
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -420,6 +420,7 @@ private:
                 aPoint->remove();
 
                 aPoint = nextNext;
+                stop = nextNext;
 
                 continue;
             }
