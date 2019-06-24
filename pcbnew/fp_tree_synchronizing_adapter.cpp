@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright (C)-2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -109,7 +110,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNode )
         auto footprintIt = std::lower_bound( footprints.begin(), footprints.end(), &dummy,
             []( LIB_TREE_ITEM* a, LIB_TREE_ITEM* b )
             {
-                return StrNumCmp( a->GetName(), b->GetName(), true ) < 0;
+                return StrNumCmp( a->GetName(), b->GetName(), false ) < 0;
             } );
 
         if( footprintIt != footprints.end() && dummy.GetName() == (*footprintIt)->GetName() )
@@ -164,7 +165,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
         {
             wxString currentFPName = m_frame->GetBoard()->m_Modules->GetFPID().GetLibItemName();
 
-            // mark modified part with an asterix
+            // mark modified part with an asterisk
             if( m_frame->GetScreen()->IsModify() )
                 aVariant = currentFPName + " *";
             else
@@ -207,42 +208,42 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsign
 
     switch( node->Type )
     {
-        case LIB_TREE_NODE::LIB:
-            if( node->Name == m_frame->GetLoadedFPID().GetLibNickname() )
-            {
+    case LIB_TREE_NODE::LIB:
+        if( node->Name == m_frame->GetLoadedFPID().GetLibNickname() )
+        {
 #ifdef __WXGTK__
-                // The native wxGTK+ impl ignores background colour, so set the text colour
-                // instead.  Works reasonably well in dark themes, less well in light ones....
-                aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+            // The native wxGTK+ impl ignores background colour, so set the text colour
+            // instead.  Works reasonably well in dark themes, less well in light ones....
+            aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 #else
-                aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+            aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 #endif
 
-                // mark modified libs with bold font
-                if( m_frame->GetScreen()->IsModify() && !m_frame->IsCurrentFPFromBoard() )
-                    aAttr.SetBold( true );
-            }
-            break;
+            // mark modified libs with bold font
+            if( m_frame->GetScreen()->IsModify() && !m_frame->IsCurrentFPFromBoard() )
+                aAttr.SetBold( true );
+        }
+        break;
 
-        case LIB_TREE_NODE::LIBID:
-            if( node->LibId == m_frame->GetLoadedFPID() )
-            {
+    case LIB_TREE_NODE::LIBID:
+        if( node->LibId == m_frame->GetLoadedFPID() )
+        {
 #ifdef __WXGTK__
-                // The native wxGTK+ impl ignores background colour, so set the text colour
-                // instead.  Works reasonably well in dark themes, less well in light ones....
-                aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+            // The native wxGTK+ impl ignores background colour, so set the text colour
+            // instead.  Works reasonably well in dark themes, less well in light ones....
+            aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 #else
-                aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+            aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 #endif
 
-                // mark modified part with bold font
-                if( m_frame->GetScreen()->IsModify() && !m_frame->IsCurrentFPFromBoard() )
-                    aAttr.SetBold( true );
-            }
-            break;
+            // mark modified part with bold font
+            if( m_frame->GetScreen()->IsModify() && !m_frame->IsCurrentFPFromBoard() )
+                aAttr.SetBold( true );
+        }
+        break;
 
-        default:
-            return false;
+    default:
+        return false;
     }
 
     return true;
