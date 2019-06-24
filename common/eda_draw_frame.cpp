@@ -52,12 +52,6 @@
 #include <tool/grid_menu.h>
 #include <tool/common_tools.h>
 
-/**
- * Definition for enabling and disabling scroll bar setting trace output.  See the
- * wxWidgets documentation on useing the WXTRACE environment variable.
- */
-static const wxString traceScrollSettings( wxT( "KicadScrollSettings" ) );
-
 
 ///@{
 /// \ingroup config
@@ -92,6 +86,8 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_auxiliaryToolBar    = NULL;
     m_gridSelectBox       = NULL;
     m_zoomSelectBox       = NULL;
+    m_firstRunDialogSetting = 0;
+    m_UndoRedoCountMax    = DEFAULT_MAX_UNDO_ITEMS;
 
     m_canvasType          = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
     m_canvas           = NULL;
