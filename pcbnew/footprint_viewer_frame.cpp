@@ -288,7 +288,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
         m_libList->Append( nicknames[ii] );
 
     // Search for a previous selection:
-    int index =  m_libList->FindString( getCurNickname() );
+    int index =  m_libList->FindString( getCurNickname(), true );
 
     if( index != wxNOT_FOUND )
     {
@@ -339,7 +339,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
         m_footprintList->Append( footprint->GetFootprintName() );
     }
 
-    int index = m_footprintList->FindString( getCurFootprintName() );
+    int index = m_footprintList->FindString( getCurFootprintName(), true );
 
     if( index == wxNOT_FOUND )
         setCurFootprintName( wxEmptyString );
@@ -491,7 +491,8 @@ void FOOTPRINT_VIEWER_FRAME::LoadSettings( wxConfigBase* aCfg )
     if( aCfg->Read( footprintEditor + ShowGridEntryKeyword, &btmp ) )
         SetGridVisibility( btmp );
 
-    if( wtmp.SetFromWxString( aCfg->Read( footprintEditor + GridColorEntryKeyword, wxT( "NONE" ) ) ) )
+    if( wtmp.SetFromWxString( aCfg->Read( footprintEditor + GridColorEntryKeyword,
+                                          wxT( "NONE" ) ) ) )
         SetGridColor( wtmp );
 
     // Grid shape, etc.
@@ -683,7 +684,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
         setCurNickname( fpid.GetLibNickname() );
         setCurFootprintName( fpid.GetLibItemName() );
 
-        int index = m_libList->FindString( fpid.GetLibNickname() );
+        int index = m_libList->FindString( fpid.GetLibNickname(), true );
 
         if( index != wxNOT_FOUND )
         {
@@ -703,7 +704,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
     if( !getCurNickname() )
         return;
 
-    int selection = m_footprintList->FindString( getCurFootprintName() );
+    int selection = m_footprintList->FindString( getCurFootprintName(), true );
 
     if( aMode == NEXT_PART )
     {

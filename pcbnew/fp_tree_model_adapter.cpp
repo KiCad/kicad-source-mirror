@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -68,7 +68,7 @@ std::vector<LIB_TREE_ITEM*> FP_TREE_MODEL_ADAPTER::getFootprints( const wxString
     auto libBounds = std::equal_range( fullListStart, fullListEnd, dummy,
         []( const std::unique_ptr<FOOTPRINT_INFO>& a, const std::unique_ptr<FOOTPRINT_INFO>& b )
         {
-            return StrNumCmp( a->GetLibNickname(), b->GetLibNickname(), true ) < 0;
+            return StrNumCmp( a->GetLibNickname(), b->GetLibNickname(), false ) < 0;
         } );
 
     for( auto i = libBounds.first; i != libBounds.second; ++i )

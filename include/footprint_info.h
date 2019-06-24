@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 Jean-Pierre Charras, <jp.charras@wanadoo.fr>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -167,12 +167,16 @@ protected:
 /// FOOTPRINT object list sort function.
 inline bool operator<( const FOOTPRINT_INFO& item1, const FOOTPRINT_INFO& item2 )
 {
-    int retv = StrNumCmp( item1.m_nickname, item2.m_nickname, true );
+    int retv = StrNumCmp( item1.m_nickname, item2.m_nickname, false );
 
     if( retv != 0 )
         return retv < 0;
 
-    return StrNumCmp( item1.m_fpname, item2.m_fpname, true ) < 0;
+    // Technically footprint names are not case sensitive because the file name is used
+    // as the footprint name.  On windows this would be problematic because windows does
+    // not support case sensitive file names by default.  This should not cause any issues
+    // and allow for a future change to use the name defined in the footprint file.
+    return StrNumCmp( item1.m_fpname, item2.m_fpname, false ) < 0;
 }
 
 
