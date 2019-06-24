@@ -313,13 +313,10 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 
     PAD_PLACER placer;
 
-    m_frame->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_PENCIL, _( "Add pads" ) );
+    frame()->SetTool( aEvent.GetCommandStr().get() );
 
-    wxASSERT( board()->GetFirstModule() );
-
-    doInteractiveItemPlacement( &placer,  _( "Place pad" ), IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP );
-
-    m_frame->SetNoToolSelected();
+    doInteractiveItemPlacement( &placer,  _( "Place pad" ),
+                                IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP );
 
     return 0;
 }

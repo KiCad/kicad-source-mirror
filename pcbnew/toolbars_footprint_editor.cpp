@@ -126,7 +126,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
         m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    m_drawToolBar->Add( PCB_ACTIONS::selectionTool,  ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::selectionTool,      ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_drawToolBar, this );
     m_drawToolBar->Add( PCB_ACTIONS::placePad,       ACTION_TOOLBAR::TOGGLE );
@@ -174,6 +174,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
 
 void FOOTPRINT_EDIT_FRAME::SyncToolbars()
 {
+#define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, IsCurrentTool( tool ) )
+
     PCB_DISPLAY_OPTIONS* opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
 
     if( IsCurrentFPFromBoard() )
@@ -183,7 +185,7 @@ void FOOTPRINT_EDIT_FRAME::SyncToolbars()
 
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
-    m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
+    TOGGLE_TOOL( m_mainToolBar, ACTIONS::zoomTool );
     m_mainToolBar->Toggle( PCB_ACTIONS::footprintProperties, GetBoard()->GetFirstModule() );
     m_mainToolBar->Refresh();
 
@@ -197,16 +199,16 @@ void FOOTPRINT_EDIT_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( PCB_ACTIONS::toggleFootprintTree, IsSearchTreeShown() );
     m_optionsToolBar->Refresh();
 
-    m_drawToolBar->Toggle( ACTIONS::selectionTool,     GetToolId() == ID_NO_TOOL_SELECTED );
-    m_drawToolBar->Toggle( PCB_ACTIONS::placePad,      GetToolId() == ID_MODEDIT_PAD_TOOL );
-    m_drawToolBar->Toggle( PCB_ACTIONS::drawLine,      GetToolId() == ID_MODEDIT_LINE_TOOL );
-    m_drawToolBar->Toggle( PCB_ACTIONS::drawCircle,    GetToolId() == ID_MODEDIT_CIRCLE_TOOL );
-    m_drawToolBar->Toggle( PCB_ACTIONS::drawArc,       GetToolId() == ID_MODEDIT_ARC_TOOL );
-    m_drawToolBar->Toggle( PCB_ACTIONS::drawPolygon,   GetToolId() == ID_MODEDIT_POLYGON_TOOL );
-    m_drawToolBar->Toggle( PCB_ACTIONS::placeText,     GetToolId() == ID_MODEDIT_TEXT_TOOL );
-    m_drawToolBar->Toggle( PCB_ACTIONS::deleteTool,    GetToolId() == ID_MODEDIT_DELETE_TOOL );
-    m_drawToolBar->Toggle( PCB_ACTIONS::setAnchor,     GetToolId() == ID_MODEDIT_ANCHOR_TOOL );
-    m_drawToolBar->Toggle( PCB_ACTIONS::gridSetOrigin, GetToolId() == ID_MODEDIT_PLACE_GRID_COORD );
-    m_drawToolBar->Toggle( ACTIONS::measureTool,       GetToolId() == ID_MODEDIT_MEASUREMENT_TOOL );
+    TOGGLE_TOOL( m_drawToolBar, ACTIONS::selectionTool );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::placePad );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawLine );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawCircle );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawArc );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawPolygon );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::placeText );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::deleteTool );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::setAnchor );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::gridSetOrigin );
+    TOGGLE_TOOL( m_drawToolBar, ACTIONS::measureTool );
     m_drawToolBar->Refresh();
 }

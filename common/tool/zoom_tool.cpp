@@ -46,12 +46,17 @@ void ZOOM_TOOL::Reset( RESET_REASON aReason )
 
 int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
 
     while( auto evt = Wait() )
     {
-        if( evt->IsCancel() || evt->IsActivate() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        {
+            if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                m_frame->ClearToolStack();
+
             break;
+        }
 
         else if( evt->IsDrag( BUT_LEFT ) || evt->IsDrag( BUT_RIGHT ) )
         {
@@ -64,7 +69,7 @@ int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
     }
 
     // Exit zoom tool
-    m_frame->SetNoToolSelected();
+    m_frame->PopTool();
     return 0;
 }
 

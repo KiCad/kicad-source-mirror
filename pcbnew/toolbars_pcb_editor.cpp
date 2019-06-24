@@ -367,13 +367,13 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
         m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    m_drawToolBar->Add( PCB_ACTIONS::selectionTool,        ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::selectionTool,            ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::highlightNetTool,     ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::localRatsnestTool,    ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_drawToolBar, this );
     m_drawToolBar->Add( PCB_ACTIONS::placeModule,          ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::routerActivateSingle, ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::routeSingleTrack,     ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawVia,              ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawZone,             ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawZoneKeepout,      ACTION_TOOLBAR::TOGGLE );
@@ -406,37 +406,18 @@ void PCB_EDIT_FRAME::ReCreateMicrowaveVToolbar()
     if( m_microWaveToolBar )
         m_microWaveToolBar->Clear();
     else
-        m_microWaveToolBar = new wxAuiToolBar( this, ID_MICROWAVE_V_TOOLBAR, wxDefaultPosition,
-                                               wxDefaultSize,
-                                               KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_microWaveToolBar = new ACTION_TOOLBAR( this, ID_MICROWAVE_V_TOOLBAR, wxDefaultPosition,
+                                                 wxDefaultSize,
+                                                 KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
-    m_microWaveToolBar->AddTool( ID_PCB_MUWAVE_TOOL_SELF_CMD, wxEmptyString,
-                                 KiScaledBitmap( mw_add_line_xpm, this ),
-                                 _( "Create line of specified length for microwave applications" ),
-                                 wxITEM_CHECK );
-
-    m_microWaveToolBar->AddTool( ID_PCB_MUWAVE_TOOL_GAP_CMD, wxEmptyString,
-                                 KiScaledBitmap( mw_add_gap_xpm, this ),
-                                 _( "Create gap of specified length for microwave applications" ),
-                                 wxITEM_CHECK );
+    m_microWaveToolBar->Add( PCB_ACTIONS::microwaveCreateLine,          ACTION_TOOLBAR::TOGGLE );
+    m_microWaveToolBar->Add( PCB_ACTIONS::microwaveCreateGap,           ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_microWaveToolBar, this );
-
-    m_microWaveToolBar->AddTool( ID_PCB_MUWAVE_TOOL_STUB_CMD, wxEmptyString,
-                                 KiScaledBitmap( mw_add_stub_xpm, this ),
-                                 _( "Create stub of specified length for microwave applications" ),
-                                 wxITEM_CHECK );
-
-    m_microWaveToolBar->AddTool( ID_PCB_MUWAVE_TOOL_STUB_ARC_CMD, wxEmptyString,
-                                 KiScaledBitmap( mw_add_stub_arc_xpm, this ),
-                                 _( "Create stub (arc) of specified length for microwave applications" ),
-                                 wxITEM_CHECK );
-
-    m_microWaveToolBar->AddTool( ID_PCB_MUWAVE_TOOL_FUNCTION_SHAPE_CMD, wxEmptyString,
-                                 KiScaledBitmap( mw_add_shape_xpm, this ),
-                                 _( "Create a polynomial shape for microwave applications" ),
-                                 wxITEM_CHECK );
+    m_microWaveToolBar->Add( PCB_ACTIONS::microwaveCreateStub,          ACTION_TOOLBAR::TOGGLE );
+    m_microWaveToolBar->Add( PCB_ACTIONS::microwaveCreateStubArc,       ACTION_TOOLBAR::TOGGLE );
+    m_microWaveToolBar->Add( PCB_ACTIONS::microwaveCreateFunctionShape, ACTION_TOOLBAR::TOGGLE );
 
     m_microWaveToolBar->Realize();
 }
@@ -684,15 +665,10 @@ bool PCB_EDIT_FRAME::MicrowaveToolbarShown()
 }
 
 
-void PCB_EDIT_FRAME::OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent )
-{
-    if( aEvent.GetEventObject() == m_microWaveToolBar )
-        aEvent.Check( GetToolId() == aEvent.GetId() );
-}
-
-
 void PCB_EDIT_FRAME::SyncToolbars()
 {
+#define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, IsCurrentTool( tool ) )
+
     PCB_DISPLAY_OPTIONS*        opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
     int                         zoneMode = opts->m_DisplayZonesMode;
@@ -700,7 +676,7 @@ void PCB_EDIT_FRAME::SyncToolbars()
     m_mainToolBar->Toggle( ACTIONS::save, GetScreen() && GetScreen()->IsModify() );
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
-    m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
+    TOGGLE_TOOL( m_mainToolBar, ACTIONS::zoomTool );
 #if defined(KICAD_SCRIPTING_WXPYTHON)
     if( IsWxPythonLoaded() )
     {
@@ -731,24 +707,31 @@ void PCB_EDIT_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( ACTIONS::highContrastMode,         opts->m_ContrastModeDisplay );
     m_optionsToolBar->Refresh();
 
-    m_drawToolBar->Toggle( PCB_ACTIONS::selectionTool,    GetToolId() == ID_NO_TOOL_SELECTED );
-    m_drawToolBar->Toggle( PCB_ACTIONS::highlightNetTool, GetToolId() == ID_PCB_HIGHLIGHT_BUTT );
-    m_drawToolBar->Toggle( PCB_ACTIONS::localRatsnestTool,GetToolId() == ID_LOCAL_RATSNEST_BUTT );
-    m_drawToolBar->Toggle( PCB_ACTIONS::placeModule,      GetToolId() == ID_PCB_MODULE_BUTT );
-    m_drawToolBar->Toggle( PCB_ACTIONS::routerActivateSingle, GetToolId() == ID_TRACK_BUTT );
-    m_drawToolBar->Toggle( PCB_ACTIONS::drawVia,          GetToolId() == ID_PCB_DRAW_VIA_BUTT );
-    m_drawToolBar->Toggle( PCB_ACTIONS::drawZone,         GetToolId() == ID_PCB_ZONES_BUTT );
-    m_drawToolBar->Toggle( PCB_ACTIONS::drawZoneKeepout,  GetToolId() == ID_PCB_KEEPOUT_BUTT );
-    m_drawToolBar->Toggle( PCB_ACTIONS::drawLine,         GetToolId() == ID_PCB_ADD_LINE_BUTT );
-    m_drawToolBar->Toggle( PCB_ACTIONS::drawCircle,       GetToolId() == ID_PCB_CIRCLE_BUTT );
-    m_drawToolBar->Toggle( PCB_ACTIONS::drawArc,          GetToolId() == ID_PCB_ARC_BUTT );
-    m_drawToolBar->Toggle( PCB_ACTIONS::drawPolygon,      GetToolId() == ID_PCB_ADD_POLYGON_BUTT );
-    m_drawToolBar->Toggle( PCB_ACTIONS::placeText,        GetToolId() == ID_PCB_ADD_TEXT_BUTT );
-    m_drawToolBar->Toggle( PCB_ACTIONS::drawDimension,    GetToolId() == ID_PCB_DIMENSION_BUTT );
-    m_drawToolBar->Toggle( PCB_ACTIONS::placeTarget,      GetToolId() == ID_PCB_TARGET_BUTT );
-    m_drawToolBar->Toggle( PCB_ACTIONS::deleteTool,       GetToolId() == ID_PCB_DELETE_ITEM_BUTT );
-    m_drawToolBar->Toggle( PCB_ACTIONS::drillOrigin,      GetToolId() == ID_PCB_PLACE_OFFSET_COORD_BUTT );
-    m_drawToolBar->Toggle( PCB_ACTIONS::gridSetOrigin,    GetToolId() == ID_PCB_PLACE_GRID_COORD_BUTT );
-    m_drawToolBar->Toggle( ACTIONS::measureTool,          GetToolId() == ID_PCB_MEASUREMENT_TOOL );
+    TOGGLE_TOOL( m_drawToolBar, ACTIONS::selectionTool );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::highlightNetTool );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::localRatsnestTool );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::placeModule );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::routeSingleTrack );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawVia );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawZone );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawZoneKeepout );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawLine );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawCircle );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawArc );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawPolygon );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::placeText );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawDimension );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::placeTarget );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::deleteTool );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drillOrigin );
+    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::gridSetOrigin );
+    TOGGLE_TOOL( m_drawToolBar, ACTIONS::measureTool );
     m_drawToolBar->Refresh();
+
+    TOGGLE_TOOL( m_microWaveToolBar, PCB_ACTIONS::microwaveCreateLine );
+    TOGGLE_TOOL( m_microWaveToolBar, PCB_ACTIONS::microwaveCreateGap );
+    TOGGLE_TOOL( m_microWaveToolBar, PCB_ACTIONS::microwaveCreateStub );
+    TOGGLE_TOOL( m_microWaveToolBar, PCB_ACTIONS::microwaveCreateStubArc );
+    TOGGLE_TOOL( m_microWaveToolBar, PCB_ACTIONS::microwaveCreateFunctionShape );
+    m_microWaveToolBar->Refresh();
 }

@@ -36,15 +36,12 @@ public:
 
     void Reset( RESET_REASON aReason ) override;
 
-    int TuneSingleTrace( const TOOL_EVENT& aEvent );
-    int TuneDiffPair( const TOOL_EVENT& aEvent );
-    int TuneDiffPairSkew( const TOOL_EVENT& aEvent );
+    int MainLoop( const TOOL_EVENT& aEvent );
 
     void setTransitions() override;
 
 private:
     void performTuning();
-    int mainLoop( PNS::ROUTER_MODE aMode );
     void updateStatusPopup( PNS_TUNE_STATUS_POPUP& aPopup );
 
     int routerOptionsDialog( const TOOL_EVENT& aEvent );

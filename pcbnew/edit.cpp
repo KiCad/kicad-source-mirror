@@ -64,22 +64,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     int  id = event.GetId();
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
 
-    switch( id )   // Some (not all ) edit commands must be finished or aborted
-    {
-    case ID_TOOLBARH_PCB_SELECT_LAYER:
-        break;
-
-    default:        // Finish (abort) the command
-        if( GetToolId() != id )
-        {
-            if( m_lastDrawToolId != GetToolId() )
-                m_lastDrawToolId = GetToolId();
-
-            SetNoToolSelected();
-        }
-        break;
-    }
-
     switch( id )   // Execute command
     {
     case 0:

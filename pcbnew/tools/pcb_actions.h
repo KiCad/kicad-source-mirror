@@ -43,6 +43,16 @@ enum MWAVE_TOOL_SIMPLE_ID
     FUNCTION_SHAPE,
 };
 
+
+enum class ZONE_MODE
+{
+    ADD,             ///< Add a new zone/keepout with fresh settings
+    CUTOUT,          ///< Make a cutout to an existing zone
+    SIMILAR,         ///< Add a new zone with the same settings as an existing one
+    GRAPHIC_POLYGON
+};
+
+
 /**
  * Class PCB_ACTIONS
  *
@@ -170,10 +180,10 @@ public:
     // Push and Shove Router Tool
 
     /// Activation of the Push and Shove router
-    static TOOL_ACTION routerActivateSingle;
+    static TOOL_ACTION routeSingleTrack;
 
     /// Activation of the Push and Shove router (differential pair mode)
-    static TOOL_ACTION routerActivateDiffPair;
+    static TOOL_ACTION routeDiffPair;
 
     /// Activation of the Push and Shove router (tune single line mode)
     static TOOL_ACTION routerTuneSingleTrace;

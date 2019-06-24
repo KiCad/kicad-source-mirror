@@ -120,7 +120,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
         return GetScreen() && GetScreen()->GetRedoCommandCount() > 0;
     };
     auto noActiveToolCondition = [ this ] ( const SELECTION& aSelection ) {
-        return GetToolId() == ID_NO_TOOL_SELECTED;
+        return ToolStackIsEmpty();
     };
 
     editMenu->AddItem( ACTIONS::undo,                     enableUndoCondition );

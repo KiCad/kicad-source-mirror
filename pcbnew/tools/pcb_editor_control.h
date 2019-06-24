@@ -114,10 +114,6 @@ public:
     ///> Runs the drill origin tool for setting the origin for drill and pick-and-place files.
     int DrillOrigin( const TOOL_EVENT& aEvent );
 
-    ///> UI-level access (including undo) to setting the drill origin
-    static bool SetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
-                                BOARD_ITEM* aItem, const VECTOR2D& aPoint );
-
     ///> Low-level access (below undo) to setting the drill origin
     static void DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                   BOARD_ITEM* aItem, const VECTOR2D& aPoint );

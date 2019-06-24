@@ -29,7 +29,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-
+#include <router/pns_router.h>
 
 OPT<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
 {
@@ -37,24 +37,6 @@ OPT<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
     {
     case ID_GEN_IMPORT_GRAPHICS_FILE:
         return PCB_ACTIONS::placeImportedGraphics.MakeEvent();
-
-    case ID_NO_TOOL_SELECTED:
-        return PCB_ACTIONS::selectionTool.MakeEvent();
-
-    case ID_PCB_MUWAVE_TOOL_GAP_CMD:
-        return PCB_ACTIONS::microwaveCreateGap.MakeEvent();
-
-    case ID_PCB_MUWAVE_TOOL_STUB_CMD:
-        return PCB_ACTIONS::microwaveCreateStub.MakeEvent();
-
-    case ID_PCB_MUWAVE_TOOL_STUB_ARC_CMD:
-        return PCB_ACTIONS::microwaveCreateStubArc.MakeEvent();
-
-    case ID_PCB_MUWAVE_TOOL_FUNCTION_SHAPE_CMD:
-        return PCB_ACTIONS::microwaveCreateFunctionShape.MakeEvent();
-
-    case ID_PCB_MUWAVE_TOOL_SELF_CMD:
-        return PCB_ACTIONS::microwaveCreateLine.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();
@@ -81,7 +63,7 @@ TOOL_ACTION PCB_ACTIONS::drawPolygon( "pcbnew.InteractiveDrawing.graphicPolygon"
         AS_GLOBAL,
         MD_SHIFT + MD_CTRL + 'P', LEGACY_HK_NAME( "Draw Graphic Polygon" ),
         _( "Draw Graphic Polygon" ), _( "Draw a graphic polygon" ),
-        add_graphical_polygon_xpm, AF_ACTIVATE );
+        add_graphical_polygon_xpm, AF_ACTIVATE, (void*) ZONE_MODE::GRAPHIC_POLYGON );
 
 TOOL_ACTION PCB_ACTIONS::drawCircle( "pcbnew.InteractiveDrawing.circle",
         AS_GLOBAL,
@@ -116,7 +98,7 @@ TOOL_ACTION PCB_ACTIONS::drawZone( "pcbnew.InteractiveDrawing.zone",
 #endif
         LEGACY_HK_NAME( "Add Filled Zone" ),
         _( "Add Filled Zone" ), _( "Add a filled zone" ),
-        add_zone_xpm, AF_ACTIVATE );
+        add_zone_xpm, AF_ACTIVATE, (void*) ZONE_MODE::ADD );
 
 TOOL_ACTION PCB_ACTIONS::drawVia( "pcbnew.InteractiveDrawing.via",
         AS_GLOBAL,
@@ -128,19 +110,19 @@ TOOL_ACTION PCB_ACTIONS::drawZoneKeepout( "pcbnew.InteractiveDrawing.keepout",
         AS_GLOBAL,
         MD_SHIFT + MD_CTRL + 'K', LEGACY_HK_NAME( "Add Keepout Area" ),
         _( "Add Keepout Area" ), _( "Add a keepout area" ),
-        add_keepout_area_xpm, AF_ACTIVATE );
+        add_keepout_area_xpm, AF_ACTIVATE, (void*) ZONE_MODE::ADD );
 
 TOOL_ACTION PCB_ACTIONS::drawZoneCutout( "pcbnew.InteractiveDrawing.zoneCutout",
         AS_GLOBAL,
         MD_SHIFT + 'C', LEGACY_HK_NAME( "Add a Zone Cutout" ),
         _( "Add a Zone Cutout" ), _( "Add a cutout area of an existing zone" ),
-        add_zone_cutout_xpm, AF_ACTIVATE );
+        add_zone_cutout_xpm, AF_ACTIVATE, (void*) ZONE_MODE::CUTOUT );
 
 TOOL_ACTION PCB_ACTIONS::drawSimilarZone( "pcbnew.InteractiveDrawing.similarZone",
         AS_GLOBAL,
         MD_SHIFT + MD_CTRL + '.', LEGACY_HK_NAME( "Add a Similar Zone" ),
         _( "Add a Similar Zone" ), _( "Add a zone with the same settings as an existing zone" ),
-        add_zone_xpm, AF_ACTIVATE );
+        add_zone_xpm, AF_ACTIVATE, (void*) ZONE_MODE::SIMILAR );
 
 TOOL_ACTION PCB_ACTIONS::placeImportedGraphics( "pcbnew.InteractiveDrawing.placeImportedGraphics",
         AS_GLOBAL,
@@ -924,11 +906,6 @@ TOOL_ACTION PCB_ACTIONS::layerChanged( "pcbnew.Control.layerChanged",
         nullptr, AF_NOTIFY );
 
 // Miscellaneous
-TOOL_ACTION PCB_ACTIONS::selectionTool( "pcbnew.Control.selectionTool",
-        AS_GLOBAL, 0, "",
-        _( "Select item(s)" ), "",
-        cursor_xpm, AF_ACTIVATE );
-
 TOOL_ACTION PCB_ACTIONS::deleteTool( "pcbnew.Control.deleteTool",
         AS_GLOBAL, 0, "",
         _( "Delete Items Tool" ), _( "Click on items to delete them" ),
@@ -1127,17 +1104,17 @@ TOOL_ACTION PCB_ACTIONS::autoplaceOffboardComponents( "pcbnew.Autoplacer.autopla
 
 // ROUTER_TOOL
 //
-TOOL_ACTION PCB_ACTIONS::routerActivateSingle( "pcbnew.InteractiveRouter.SingleTrack",
+TOOL_ACTION PCB_ACTIONS::routeSingleTrack( "pcbnew.InteractiveRouter.SingleTrack",
         AS_GLOBAL,
         'X', LEGACY_HK_NAME( "Add New Track" ),
-        _( "Interactive Router (Single Tracks)" ), _( "Run push & shove router (single tracks)" ),
-        add_tracks_xpm, AF_ACTIVATE );
+        _( "Route Single Track" ), _( "Run push & shove router (single tracks)" ),
+        add_tracks_xpm, AF_ACTIVATE, (void*) PNS::PNS_MODE_ROUTE_SINGLE );
 
-TOOL_ACTION PCB_ACTIONS::routerActivateDiffPair( "pcbnew.InteractiveRouter.DiffPair",
+TOOL_ACTION PCB_ACTIONS::routeDiffPair( "pcbnew.InteractiveRouter.DiffPair",
         AS_GLOBAL,
         '6', LEGACY_HK_NAME( "Route Differential Pair (Modern Toolset only)" ),
-        _( "Interactive Router (Differential Pairs)" ), _( "Run push & shove router (differential pairs)" ),
-        ps_diff_pair_xpm, AF_ACTIVATE );
+        _( "Route Differential Pair" ), _( "Run push & shove router (differential pairs)" ),
+        ps_diff_pair_xpm, AF_ACTIVATE, (void*) PNS::PNS_MODE_ROUTE_DIFF_PAIR );
 
 TOOL_ACTION PCB_ACTIONS::routerSettingsDialog( "pcbnew.InteractiveRouter.SettingsDialog",
         AS_GLOBAL,
@@ -1157,21 +1134,21 @@ TOOL_ACTION PCB_ACTIONS::selectLayerPair( "pcbnew.InteractiveRouter.SelectLayerP
 
 TOOL_ACTION PCB_ACTIONS::routerTuneSingleTrace( "pcbnew.LengthTuner.TuneSingleTrack",
         AS_GLOBAL,
-        '7', LEGACY_HK_NAME( "Tune Single Track (Modern Toolset only)" ),
+        '7', LEGACY_HK_NAME( "Tune Single Track" ),
         _( "Tune length of a single track" ), "",
-        ps_tune_length_xpm, AF_ACTIVATE );
+        ps_tune_length_xpm, AF_ACTIVATE, (void*) PNS::PNS_MODE_TUNE_SINGLE );
 
 TOOL_ACTION PCB_ACTIONS::routerTuneDiffPair( "pcbnew.LengthTuner.TuneDiffPair",
         AS_GLOBAL,
-        '8', LEGACY_HK_NAME( "Tune Differential Pair Length (Modern Toolset only)" ),
+        '8', LEGACY_HK_NAME( "Tune Differential Pair Length" ),
         _( "Tune length of a differential pair" ), "",
-        nullptr, AF_ACTIVATE );
+        nullptr, AF_ACTIVATE, (void*) PNS::PNS_MODE_TUNE_DIFF_PAIR );
 
 TOOL_ACTION PCB_ACTIONS::routerTuneDiffPairSkew( "pcbnew.LengthTuner.TuneDiffPairSkew",
         AS_GLOBAL,
-        '9', LEGACY_HK_NAME( "Tune Differential Pair Skew (Modern Toolset only)" ),
+        '9', LEGACY_HK_NAME( "Tune Differential Pair Skew" ),
         _( "Tune skew of a differential pair" ), "",
-        nullptr, AF_ACTIVATE );
+        nullptr, AF_ACTIVATE, (void*) PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW );
 
 TOOL_ACTION PCB_ACTIONS::routerInlineDrag( "pcbnew.InteractiveRouter.InlineDrag",
         AS_CONTEXT, 0, "",

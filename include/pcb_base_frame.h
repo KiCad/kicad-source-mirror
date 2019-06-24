@@ -200,7 +200,6 @@ public:
     virtual void ReCreateOptToolbar() { }
     virtual void ShowChangedLanguage() override;
     virtual void ReCreateMenuBar() override;
-    virtual void SetToolID( int aId, int aCursor, const wxString& aToolMsg ) override;
     virtual void UpdateStatusBar() override;
 
     PCB_SCREEN* GetScreen() const override { return (PCB_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }

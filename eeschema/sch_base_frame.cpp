@@ -441,12 +441,3 @@ void SCH_BASE_FRAME::SyncView()
 }
 
 
-std::string SCH_BASE_FRAME::GetCurrentToolName()
-{
-    if( m_toolStack.empty() )
-        return EE_ACTIONS::selectionTool.GetName();
-    else
-        return m_toolStack.back();
-}
-
-

@@ -87,7 +87,7 @@ class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
     friend class PCB_LAYER_WIDGET;
 
     /// The auxiliary right vertical tool bar used to access the microwave tools.
-    wxAuiToolBar* m_microWaveToolBar;
+    ACTION_TOOLBAR*   m_microWaveToolBar;
 
 protected:
     PCB_LAYER_WIDGET* m_Layers;
@@ -302,7 +302,6 @@ public:
     bool MicrowaveToolbarShown();
     void OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
-    void OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent );
     void OnLayerColorChange( wxCommandEvent& aEvent );
     void OnRunEeschema( wxCommandEvent& event );
 

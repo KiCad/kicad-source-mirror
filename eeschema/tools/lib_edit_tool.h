@@ -71,6 +71,9 @@ private:
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
+
+private:
+    EDA_ITEM* m_pickerItem;
 };
 
 #endif //KICAD_LIB_EDIT_TOOL_H

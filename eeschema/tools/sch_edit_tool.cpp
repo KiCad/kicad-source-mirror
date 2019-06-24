@@ -136,14 +136,14 @@ bool SCH_EDIT_TOOL::Init()
     wxASSERT_MSG( drawingTools, "eeshema.InteractiveDrawing tool is not available" );
 
     auto sheetTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetCurrentToolName() == EE_ACTIONS::drawSheet.GetName() );
+        return ( m_frame->IsCurrentTool( EE_ACTIONS::drawSheet ) );
     };
 
     auto anyTextTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetCurrentToolName() == EE_ACTIONS::placeLabel.GetName()
-              || m_frame->GetCurrentToolName() == EE_ACTIONS::placeGlobalLabel.GetName()
-              || m_frame->GetCurrentToolName() == EE_ACTIONS::placeHierLabel.GetName()
-              || m_frame->GetCurrentToolName() == EE_ACTIONS::placeSchematicText.GetName() );
+        return ( m_frame->IsCurrentTool( EE_ACTIONS::placeLabel )
+              || m_frame->IsCurrentTool( EE_ACTIONS::placeGlobalLabel )
+              || m_frame->IsCurrentTool( EE_ACTIONS::placeHierLabel )
+              || m_frame->IsCurrentTool( EE_ACTIONS::placeSchematicText ) );
     };
 
     auto duplicateCondition = [] ( const SELECTION& aSel ) {
@@ -947,51 +947,58 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     Activate();
 
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
-    wxCHECK( picker, 0 );
     m_pickerItem = nullptr;
 
-    picker->SetClickHandler( [this] ( const VECTOR2D& aPosition ) -> bool {
-        if( m_pickerItem )
+    picker->SetClickHandler( [this] ( const VECTOR2D& aPosition ) -> bool
         {
-            SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( m_pickerItem );
-
-            if( sch_item && sch_item->IsLocked() )
+            if( m_pickerItem )
             {
-                STATUS_TEXT_POPUP statusPopup( m_frame );
-                statusPopup.SetText( _( "Item locked." ) );
-                statusPopup.PopupFor( 2000 );
-                statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-                return true;
+                SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( m_pickerItem );
+
+                if( sch_item && sch_item->IsLocked() )
+                {
+                    STATUS_TEXT_POPUP statusPopup( m_frame );
+                    statusPopup.SetText( _( "Item locked." ) );
+                    statusPopup.PopupFor( 2000 );
+                    statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+                    return true;
+                }
+
+                EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+                selectionTool->AddItemToSel( m_pickerItem, true );
+                m_toolMgr->RunAction( EE_ACTIONS::doDelete, true );
+                m_pickerItem = nullptr;
             }
 
-            EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-            selectionTool->AddItemToSel( m_pickerItem, true );
-            m_toolMgr->RunAction( EE_ACTIONS::doDelete, true );
-            m_pickerItem = nullptr;
-        }
+            return true;
+        } );
 
-        return true;
-    } );
-
-    picker->SetMotionHandler( [this] ( const VECTOR2D& aPos ) {
-        EE_COLLECTOR collector;
-        collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-        collector.Collect( m_frame->GetScreen()->GetDrawItems(), deletableItems, (wxPoint) aPos );
-        EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
-
-        if( m_pickerItem != item )
+    picker->SetMotionHandler( [this] ( const VECTOR2D& aPos )
         {
-            EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+            EE_COLLECTOR collector;
+            collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+            collector.Collect( m_frame->GetScreen()->GetDrawItems(), deletableItems, (wxPoint) aPos );
+            EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
 
-            if( m_pickerItem )
-                selectionTool->UnbrightenItem( m_pickerItem );
+            if( m_pickerItem != item )
+            {
+                EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
 
-            m_pickerItem = item;
+                if( m_pickerItem )
+                    selectionTool->UnbrightenItem( m_pickerItem );
 
-            if( m_pickerItem )
-                selectionTool->BrightenItem( m_pickerItem );
-        }
-    } );
+                m_pickerItem = item;
+
+                if( m_pickerItem )
+                    selectionTool->BrightenItem( m_pickerItem );
+            }
+        } );
+
+    picker->SetFinalizeHandler( [&]( const int& aFinalState )
+        {
+            if( aFinalState == EE_PICKER_TOOL::EVT_CANCEL )
+                m_frame->ClearToolStack();
+        } );
 
     picker->Activate();
     Wait();

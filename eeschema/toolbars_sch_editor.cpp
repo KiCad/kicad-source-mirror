@@ -113,7 +113,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
-    m_drawToolBar->Add( EE_ACTIONS::selectionTool,          ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::selectionTool,             ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::highlightNetCursor,     ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_drawToolBar, this );
@@ -166,13 +166,15 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
 
 void SCH_EDIT_FRAME::SyncToolbars()
 {    
+#define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, IsCurrentTool( tool ) )
+
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
     SCH_SHEET_LIST              sheetList( g_RootSheet );
 
     m_mainToolBar->Toggle( ACTIONS::saveAll, sheetList.IsModified() );
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
-    m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
+    TOGGLE_TOOL( m_mainToolBar, ACTIONS::zoomTool );
     m_mainToolBar->Refresh();
 
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,             IsGridVisible() );
@@ -183,27 +185,25 @@ void SCH_EDIT_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( EE_ACTIONS::toggleForceHV,       GetForceHVLines() );
     m_optionsToolBar->Refresh();
 
-#define TOGGLE_TOOL( tool ) m_drawToolBar->Toggle( tool, GetCurrentToolName() == tool.GetName() )
-
-    TOGGLE_TOOL( ACTIONS::selectionTool );
-    TOGGLE_TOOL( EE_ACTIONS::highlightNetCursor );
-    TOGGLE_TOOL( EE_ACTIONS::placeSymbol );
-    TOGGLE_TOOL( EE_ACTIONS::placePower );
-    TOGGLE_TOOL( EE_ACTIONS::drawWire );
-    TOGGLE_TOOL( EE_ACTIONS::drawBus );
-    TOGGLE_TOOL( EE_ACTIONS::placeBusWireEntry );
-    TOGGLE_TOOL( EE_ACTIONS::placeBusBusEntry );
-    TOGGLE_TOOL( EE_ACTIONS::placeNoConnect );
-    TOGGLE_TOOL( EE_ACTIONS::placeJunction );
-    TOGGLE_TOOL( EE_ACTIONS::placeLabel );
-    TOGGLE_TOOL( EE_ACTIONS::placeGlobalLabel );
-    TOGGLE_TOOL( EE_ACTIONS::placeHierLabel );
-    TOGGLE_TOOL( EE_ACTIONS::drawSheet );
-    TOGGLE_TOOL( EE_ACTIONS::importSheetPin );
-    TOGGLE_TOOL( EE_ACTIONS::placeSheetPin );
-    TOGGLE_TOOL( EE_ACTIONS::drawLines );
-    TOGGLE_TOOL( EE_ACTIONS::placeSchematicText );
-    TOGGLE_TOOL( EE_ACTIONS::placeImage );
-    TOGGLE_TOOL( EE_ACTIONS::deleteItemCursor );
+    TOGGLE_TOOL( m_drawToolBar, ACTIONS::selectionTool );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::highlightNetCursor );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeSymbol );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placePower );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawWire );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawBus );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeBusWireEntry );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeBusBusEntry );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeNoConnect );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeJunction );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeLabel );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeGlobalLabel );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeHierLabel );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSheet );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::importSheetPin );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeSheetPin );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawLines );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeSchematicText );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeImage );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::deleteItemCursor );
     m_drawToolBar->Refresh();
 }

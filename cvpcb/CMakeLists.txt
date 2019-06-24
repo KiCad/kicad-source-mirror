@@ -33,6 +33,7 @@ set( CVPCB_SRCS
     ../pcbnew/board_items_to_polygon_shape_transform.cpp
     ../pcbnew/pcb_general_settings.cpp
     ../pcbnew/drc_item.cpp
+    ../pcbnew/tools/pcb_actions.cpp
     ../pcbnew/tools/grid_helper.cpp
     auto_associate.cpp
     cfg.cpp

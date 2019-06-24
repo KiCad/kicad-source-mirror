@@ -202,7 +202,7 @@ void GERBVIEW_FRAME::ReCreateVToolbar()
     m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                         KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    m_optionsToolBar->Add( GERBVIEW_ACTIONS::selectionTool, ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::selectionTool, ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->AddSeparator();
 
     m_drawToolBar->Realize();
@@ -467,10 +467,12 @@ void GERBVIEW_FRAME::SyncToolbars()
 {
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
 
-    m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
+#define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, IsCurrentTool( tool ) )
+
+    TOGGLE_TOOL( m_mainToolBar, ACTIONS::zoomTool );
     m_mainToolBar->Refresh();
 
-    m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::selectionTool, GetToolId() == ID_NO_TOOL_SELECTED );
+    TOGGLE_TOOL( m_optionsToolBar, ACTIONS::selectionTool );
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid,             IsGridVisible() );
     m_optionsToolBar->Toggle( ACTIONS::metricUnits,            GetUserUnits() != INCHES );
     m_optionsToolBar->Toggle( ACTIONS::imperialUnits,          GetUserUnits() == INCHES );

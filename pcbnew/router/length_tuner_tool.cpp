@@ -247,43 +247,23 @@ void LENGTH_TUNER_TOOL::performTuning()
 }
 
 
-int LENGTH_TUNER_TOOL::TuneSingleTrace( const TOOL_EVENT& aEvent )
-{
-    frame()->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Tune Trace Length" ) );
-    return mainLoop( PNS::PNS_MODE_TUNE_SINGLE );
-}
-
-
-int LENGTH_TUNER_TOOL::TuneDiffPair( const TOOL_EVENT& aEvent )
-{
-    frame()->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Tune Diff Pair Length" ) );
-    return mainLoop( PNS::PNS_MODE_TUNE_DIFF_PAIR );
-}
-
-
-int LENGTH_TUNER_TOOL::TuneDiffPairSkew( const TOOL_EVENT& aEvent )
-{
-    frame()->SetToolID( ID_TRACK_BUTT, wxCURSOR_PENCIL, _( "Tune Diff Pair Skew" ) );
-    return mainLoop( PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW );
-}
-
-
 void LENGTH_TUNER_TOOL::setTransitions()
 {
-    Go( &LENGTH_TUNER_TOOL::TuneSingleTrace, PCB_ACTIONS::routerTuneSingleTrace.MakeEvent() );
-    Go( &LENGTH_TUNER_TOOL::TuneDiffPair, PCB_ACTIONS::routerTuneDiffPair.MakeEvent() );
-    Go( &LENGTH_TUNER_TOOL::TuneDiffPairSkew, PCB_ACTIONS::routerTuneDiffPairSkew.MakeEvent() );
+    Go( &LENGTH_TUNER_TOOL::MainLoop, PCB_ACTIONS::routerTuneSingleTrace.MakeEvent() );
+    Go( &LENGTH_TUNER_TOOL::MainLoop, PCB_ACTIONS::routerTuneDiffPair.MakeEvent() );
+    Go( &LENGTH_TUNER_TOOL::MainLoop, PCB_ACTIONS::routerTuneDiffPairSkew.MakeEvent() );
 }
 
 
-int LENGTH_TUNER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
+int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 {
     // Deselect all items
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
+    frame()->SetTool( aEvent.GetCommandStr().get() );
     Activate();
 
-    m_router->SetMode( aMode );
+    m_router->SetMode( aEvent.Parameter<PNS::ROUTER_MODE>() );
 
     controls()->SetSnapping( true );
     controls()->ShowCursor( true );
@@ -315,7 +295,6 @@ int LENGTH_TUNER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
         }
     }
 
-    frame()->SetNoToolSelected();
     frame()->UndoRedoBlock( false );
 
     // Store routing settings till the next invocation

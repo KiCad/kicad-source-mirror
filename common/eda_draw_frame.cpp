@@ -139,7 +139,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
         // units display, Inches is bigger than mm
         GetTextSize( _( "Inches" ), stsbar ).x + 10,
 
-            // Size for the "Current Tool" panel; longest string from SetToolID()
+            // Size for the "Current Tool" panel; longest string from SetTool()
         GetTextSize( wxT( "Add layer alignment target" ), stsbar ).x + 10,
     };
 
@@ -480,31 +480,12 @@ void EDA_DRAW_FRAME::ClearToolStack()
 }
 
 
-void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
+bool EDA_DRAW_FRAME::IsCurrentTool( const TOOL_ACTION& aAction )
 {
-    // Keep default cursor in toolbars
-    SetCursor( wxNullCursor );
-
-    // Change GAL canvas cursor if requested.
-    if( aCursor >= 0 )
-        GetCanvas()->SetCurrentCursor( aCursor );
-
-    DisplayToolMsg( aToolMsg );
-
-    if( aId < 0 )
-        return;
-
-    wxCHECK2_MSG( aId >= ID_NO_TOOL_SELECTED, aId = ID_NO_TOOL_SELECTED,
-                  wxString::Format( wxT( "Current tool ID cannot be set to %d." ), aId ) );
-
-    m_toolId = aId;
-}
-
-
-void EDA_DRAW_FRAME::SetNoToolSelected()
-{
-    // Select the ID_NO_TOOL_SELECTED id tool (Idle tool)
-    SetToolID( ID_NO_TOOL_SELECTED, GetCanvas()->GetDefaultCursor(), wxEmptyString );
+    if( m_toolStack.empty() )
+        return &aAction == &ACTIONS::selectionTool;
+    else
+        return m_toolStack.back() == aAction.GetName();
 }
 
 
@@ -628,9 +609,6 @@ void EDA_DRAW_FRAME::ActivateGalCanvas()
 {
     GetCanvas()->SetEvtHandlerEnabled( true );
     GetCanvas()->StartDrawing();
-
-    // Reset current tool on switch();
-    SetNoToolSelected();
 }
 
 

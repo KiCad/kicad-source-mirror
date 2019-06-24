@@ -130,8 +130,6 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     reset();
     controls->ForceCursorPosition( false );
-    getEditFrame<PCB_BASE_FRAME>()->SetNoToolSelected();
-
     return 0;
 }
 

@@ -586,8 +586,8 @@ public:
         // currently: do nothing in GerbView.
     }
 
-    ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas
-    virtual void ActivateGalCanvas() override;
+    ///> @copydoc EDA_DRAW_FRAME::ActivateGalCanvas
+    void ActivateGalCanvas() override;
 
     /**
      * Allows Gerbview to install its preferences panels into the preferences dialog.

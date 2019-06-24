@@ -443,15 +443,6 @@ void PCBNEW_CONTROL::DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame
 }
 
 
-bool PCBNEW_CONTROL::SetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
-                                    BOARD_ITEM* originViewItem, const VECTOR2D& aPoint )
-{
-    aFrame->SaveCopyInUndoList( originViewItem, UR_GRIDORIGIN );
-    DoSetGridOrigin( aView, aFrame, originViewItem, aPoint );
-    return false;   // Set grid origin is a one-shot; don't keep tool active
-}
-
-
 int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 {
     VECTOR2D* origin = aEvent.Parameter<VECTOR2D*>();
@@ -465,16 +456,22 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
     }
     else
     {
+        m_frame->SetTool( aEvent.GetCommandStr().get() );
         Activate();
 
         PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
-        wxCHECK( picker, 0 );
 
-        // TODO it will not check the toolbar button in module editor, as it uses a different ID..
-        m_frame->SetToolID( ID_PCB_PLACE_GRID_COORD_BUTT, wxCURSOR_PENCIL, _( "Adjust grid origin" ) );
-        picker->SetClickHandler( std::bind( SetGridOrigin, getView(), m_frame, m_gridOrigin.get(), _1 ) );
+        picker->SetClickHandler( [this] ( const VECTOR2D& pt ) -> bool
+            {
+                m_frame->SaveCopyInUndoList( m_gridOrigin.get(), UR_GRIDORIGIN );
+                DoSetGridOrigin( getView(), m_frame, m_gridOrigin.get(), pt );
+                return false;   // drill origin is a one-shot; don't continue with tool
+            } );
+
         picker->Activate();
         Wait();
+
+        m_frame->ClearToolStack();
     }
 
     return 0;
@@ -483,8 +480,8 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::GridResetOrigin( const TOOL_EVENT& aEvent )
 {
-    SetGridOrigin( getView(), m_frame, m_gridOrigin.get(), VECTOR2D( 0, 0 ) );
-
+    m_frame->SaveCopyInUndoList( m_gridOrigin.get(), UR_GRIDORIGIN );
+    DoSetGridOrigin( getView(), m_frame, m_gridOrigin.get(), VECTOR2D( 0, 0 ) );
     return 0;
 }
 
@@ -512,14 +509,20 @@ static bool deleteItem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
 int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
 
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
     wxCHECK( picker, 0 );
 
-    m_frame->SetToolID( m_editModules ? ID_MODEDIT_DELETE_TOOL : ID_PCB_DELETE_ITEM_BUTT,
-            wxCURSOR_BULLSEYE, _( "Delete item" ) );
     picker->SetClickHandler( std::bind( deleteItem, m_toolMgr, _1 ) );
+
+    picker->SetFinalizeHandler( [&]( const int& aFinalState )
+        {
+            if( aFinalState == PCBNEW_PICKER_TOOL::EVT_CANCEL )
+                m_frame->ClearToolStack();
+        } );
+
     picker->Activate();
     Wait();
 

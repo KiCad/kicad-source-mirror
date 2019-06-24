@@ -4,7 +4,7 @@
  * Copyright (C) 2013-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -137,7 +137,7 @@ bool EDIT_TOOL::Init()
                                     && SELECTION_CONDITIONS::Count( 1 );
 
     auto noActiveToolCondition = [ this ] ( const SELECTION& aSelection ) {
-        return ( frame()->GetToolId() == ID_NO_TOOL_SELECTED );
+        return frame()->ToolStackIsEmpty();
     };
 
     // Add context menu entries that are displayed when selection tool is active
@@ -183,7 +183,7 @@ bool EDIT_TOOL::Init()
 
     // Populate the context menu displayed during the edit tool (primarily the measure tool)
     auto activeToolCondition = [ this ] ( const SELECTION& aSel ) {
-        return ( frame()->GetToolId() != ID_NO_TOOL_SELECTED );
+        return frame()->ToolStackIsEmpty();
     };
 
     auto frame = getEditFrame<PCB_BASE_FRAME>();
@@ -1104,10 +1104,9 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
     auto& view = *getView();
     auto& controls = *getViewControls();
-    int   toolID = EditingModules() ? ID_MODEDIT_MEASUREMENT_TOOL : ID_PCB_MEASUREMENT_TOOL;
 
+    frame()->SetTool( aEvent.GetCommandStr().get() );
     Activate();
-    frame()->SetToolID( toolID, wxCURSOR_PENCIL, _( "Measure distance" ) );
 
     EDA_UNITS_T units = frame()->GetUserUnits();
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
@@ -1136,7 +1135,21 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
-            break;
+            if( originSet )
+            {
+                view.SetVisible( &ruler, false );
+                controls.SetAutoPan( false );
+                controls.CaptureCursor( false );
+                originSet = false;
+            }
+            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+            {
+                frame()->ClearToolStack();
+                break;
+            }
+
+            if( evt->IsActivate() )
+                break;
         }
 
         // click or drag starts
@@ -1189,8 +1202,6 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
     view.SetVisible( &ruler, false );
     view.Remove( &ruler );
-
-    frame()->SetNoToolSelected();
 
     return 0;
 }

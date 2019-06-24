@@ -79,6 +79,8 @@ public:
      */
     int Main( const TOOL_EVENT& aEvent );
 
+    int SelectionTool( const TOOL_EVENT& aEvent );
+
     /**
      * Function GetSelection()
      *

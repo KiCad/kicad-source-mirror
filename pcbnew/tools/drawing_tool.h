@@ -25,10 +25,10 @@
 #ifndef __DRAWING_TOOL_H
 #define __DRAWING_TOOL_H
 
-#include <tools/pcb_tool_base.h>
 #include <core/optional.h>
-
 #include <tool/tool_menu.h>
+#include <tools/pcb_tool_base.h>
+#include <tools/pcb_actions.h>
 
 namespace KIGFX
 {
@@ -128,38 +128,15 @@ public:
      * is displayed. After confirmation it allows the user to set points that are going to be used
      * as a boundary polygon of the zone. Double click or clicking on the origin of the boundary
      * polyline finishes the drawing.
+     *
+     * The event parameter indicates which type of zone to draw:
+     *  ADD      add a new zone/keepout with fresh settings
+     *  CUTOUT   add a cutout to an existing zone
+     *  SIMILAR  add a new zone with the same settings as an existing one
      */
-    int DrawZone( const TOOL_EVENT& aEvent );
-    int DrawGraphicPolygon( const TOOL_EVENT& aEvent );
+    int DrawZone(  const TOOL_EVENT& aEvent );
 
     int DrawVia( const TOOL_EVENT& aEvent );
-
-    /**
-     * Function DrawZoneKeepout()
-     * Starts interactively drawing a keepout area. After invoking the function an area settings
-     * dialog is displayed. After confirmation it allows the user to set points that are going to
-     * be used as a boundary polygon of the area. Double click or clicking on the origin of the
-     * boundary polyline finishes the drawing.
-     */
-    int DrawZoneKeepout( const TOOL_EVENT& aEvent );
-
-    /**
-     * Function DrawZoneCutout()
-     * Starts interactively drawing a zone cutout area of an existing zone.
-     * The normal zone interactive tool is used, but the zone settings
-     * dialog is not shown (since the cutout affects only shape of an
-     * existing zone).
-     */
-    int DrawZoneCutout( const TOOL_EVENT& aEvent );
-
-    /**
-     * Function DrawSimilarZone()
-     * Starts interactively drawing a zone with same settings as
-     * an existing zone.
-     * The normal zone interactive tool is used, but the zone settings
-     * dialog is not shown at the start.
-     */
-    int DrawSimilarZone( const TOOL_EVENT& aEvent );
 
     /**
      * Function PlaceImportedGraphics()
@@ -178,14 +155,6 @@ public:
 
 private:
 
-    enum class ZONE_MODE
-    {
-        ADD,            ///< Add a new zone/keepout with fresh settings
-        CUTOUT,         ///< Make a cutout to an existing zone
-        SIMILAR,         ///< Add a new zone with the same settings as an existing one
-        GRAPHIC_POLYGON
-    };
-
     ///> Starts drawing a selected shape (i.e. DRAWSEGMENT).
     ///> @param aShape is the type of created shape (@see STROKE_T).
     ///> @param aGraphic is an object that is going to be used by the tool for drawing. It has to
@@ -195,15 +164,14 @@ private:
     ///> and its settings (width, layer) set to the current default values.
     ///> @return False if the tool was cancelled before the origin was set or origin and end are
     ///> the same point.
-    bool drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
-                      OPT<VECTOR2D> aStartingPoint = NULLOPT );
+    bool drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D> aStartingPoint );
 
     ///> Starts drawing an arc.
     ///> @param aGraphic is an object that is going to be used by the tool for drawing. It has to
     ///> be already created. The tool deletes the object if it is not added to a BOARD.
     ///> @return False if the tool was cancelled before the origin was set or origin and end are
     ///> the same point.
-    bool drawArc( DRAWSEGMENT*& aGraphic );
+    bool drawArc( DRAWSEGMENT*& aGraphic, bool aImmediateMode );
 
     /**
      * Draws a polygon, that is added as a zone or a keepout area.
@@ -215,7 +183,6 @@ private:
      *  CUTOUT   add a cutout to an existing zone
      *  SIMILAR  add a new zone with the same settings as an existing one
      */
-    int drawZone( bool aKeepout, ZONE_MODE aMode );
 
     /**
      * Function getSourceZoneForAction()

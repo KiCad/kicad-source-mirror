@@ -1260,3 +1260,4 @@ void GERBVIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
     Layout();
     SendSizeEvent();
 }
+

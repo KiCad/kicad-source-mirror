@@ -149,9 +149,9 @@ bool PAD_TOOL::haveFootprints()
 
 bool PAD_TOOL::Init()
 {
-    auto contextMenu = std::make_shared<PAD_CONTEXT_MENU>( EditingModules(),
-                                                           [this]() { return m_padCopied; } );
-    contextMenu->SetTool( this );
+    auto ctxMenu = std::make_shared<PAD_CONTEXT_MENU>( EditingModules(),
+                                                       [this]() { return m_padCopied; } );
+    ctxMenu->SetTool( this );
 
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
 
@@ -160,21 +160,18 @@ bool PAD_TOOL::Init()
         auto& toolMenu = selTool->GetToolMenu();
         auto& menu = toolMenu.GetMenu();
 
-        toolMenu.AddSubMenu( contextMenu );
+        toolMenu.AddSubMenu( ctxMenu );
 
-        auto canShowMenuCond = [this, contextMenu] ( const SELECTION& aSel ) {
-            contextMenu->UpdateAll();
-            return frame()->GetToolId() == ID_NO_TOOL_SELECTED
-                       && haveFootprints()
-                       && contextMenu->HasEnabledItems();
+        auto canShowMenuCond = [this, ctxMenu] ( const SELECTION& aSel ) {
+            ctxMenu->UpdateAll();
+            return frame()->ToolStackIsEmpty() && haveFootprints() && ctxMenu->HasEnabledItems();
         };
 
         // show menu when there is a footprint, and the menu has any items
         auto showCond = canShowMenuCond &&
-                        ( SELECTION_CONDITIONS::HasType( PCB_PAD_T )
-                            || SELECTION_CONDITIONS::Count( 0 ) );
+                ( SELECTION_CONDITIONS::HasType( PCB_PAD_T ) || SELECTION_CONDITIONS::Count( 0 ) );
 
-        menu.AddMenu( contextMenu.get(), showCond, 1000 );
+        menu.AddMenu( ctxMenu.get(), showCond, 1000 );
 
         // we need a separator only when the selection is empty
         auto separatorCond = canShowMenuCond && SELECTION_CONDITIONS::Count( 0 );
@@ -331,6 +328,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     if( settingsDlg.ShowModal() != wxID_OK )
         return 0;
 
+    frame()->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     GENERAL_COLLECTOR collector;
@@ -346,9 +344,6 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     int seqPadNum = settingsDlg.GetStartNumber();
     wxString padPrefix = settingsDlg.GetPrefix();
     std::deque<int> storedPadNumbers;
-
-    frame()->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_HAND,
-                        _( "Click on successive pads to renumber them" ) );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     getViewControls()->ShowCursor( true );
@@ -435,9 +430,11 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                     else
                         newval = seqPadNum;
 
-                    statusPopup.SetText( wxString::Format(
-                            _( "Click on pad %s%d\nPress Escape to cancel or double-click to commit" ),
-                            padPrefix.c_str(), newval ) );
+                    statusPopup.SetText( wxString::Format( _( "Click on pad %s%d\n"
+                                                              "Press Escape to cancel or "
+                                                              "double-click to commit" ),
+                                                           padPrefix.c_str(),
+                                                           newval ) );
                 }
 
                     // ..or restore the old name if it was enumerated and clicked again
@@ -452,9 +449,11 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                         pad->SetName( it->second.second );
                         oldNames.erase( it );
 
-                        statusPopup.SetText( wxString::Format(
-                                _( "Click on pad %s%d\nPress Escape to cancel or double-click to commit" ),
-                                padPrefix.c_str(), storedPadNumbers.front() ) );
+                        statusPopup.SetText( wxString::Format( _( "Click on pad %s%d\n"
+                                                                  "Press Escape to cancel or "
+                                                                  "double-click to commit" ),
+                                                               padPrefix.c_str(),
+                                                               storedPadNumbers.front() ) );
                     }
 
                     pad->ClearSelected();
@@ -470,8 +469,8 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
             break;
         }
 
-            // This is a cancel-current-action (ie: <esc>).
-            // Note that this must go before IsCancelInteractive() as it also checks IsCancel().
+        // This is a cancel-current-action (ie: <esc>).
+        // Note that this must go before IsCancelInteractive() as it also checks IsCancel().
         else if( evt->IsCancel() )
         {
             // Clear current selection list to avoid selection of deleted items
@@ -481,7 +480,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
             break;
         }
 
-            // Now that cancel-current-action has been handled, check for cancel-tool.
+        // Now that cancel-current-action has been handled, check for cancel-tool.
         else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             commit.Push( _( "Renumber pads" ) );
@@ -506,9 +505,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     }
 
     statusPopup.Hide();
-    frame()->SetNoToolSelected();
-    frame()->GetCanvas()->SetCursor( wxCURSOR_ARROW );
-
+    frame()->PopTool();
     return 0;
 }
 

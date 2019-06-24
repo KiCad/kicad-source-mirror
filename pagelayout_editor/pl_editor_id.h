@@ -42,13 +42,6 @@ enum pl_editor_ids
 
     ID_APPEND_DESCR_FILE,
 
-    ID_PL_MOVE_TOOL,
-    ID_PL_LINE_TOOL,
-    ID_PL_RECTANGLE_TOOL,
-    ID_PL_TEXT_TOOL,
-    ID_PL_IMAGE_TOOL,
-    ID_PL_DELETE_TOOL,
-
     ID_PLEDITOR_END_LIST
 };
 

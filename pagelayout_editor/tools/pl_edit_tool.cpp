@@ -293,8 +293,7 @@ int PL_EDIT_TOOL::ImportWorksheetContent( const TOOL_EVENT& aEvent )
     wxCommandEvent evt( wxEVT_NULL, ID_APPEND_DESCR_FILE );
     m_frame->Files_io( evt );
 
-    m_frame->SetNoToolSelected();
-
+    m_frame->ClearToolStack();
     return 0;
 }
 
@@ -352,13 +351,20 @@ static bool deleteItem( PL_EDITOR_FRAME* aFrame, const VECTOR2D& aPosition )
 
 int PL_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
 
     PL_PICKER_TOOL* picker = m_toolMgr->GetTool<PL_PICKER_TOOL>();
     wxCHECK( picker, 0 );
 
-    m_frame->SetToolID( ID_PL_DELETE_TOOL, wxCURSOR_BULLSEYE, _( "Delete item" ) );
     picker->SetClickHandler( std::bind( deleteItem, m_frame, std::placeholders::_1 ) );
+
+    picker->SetFinalizeHandler( [&]( const int& aFinalState )
+        {
+            if( aFinalState == PL_PICKER_TOOL::EVT_CANCEL )
+                m_frame->ClearToolStack();
+        } );
+
     picker->Activate();
     Wait();
 

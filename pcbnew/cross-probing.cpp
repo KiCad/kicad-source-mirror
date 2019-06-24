@@ -89,7 +89,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     if( strcmp( idcmd, "$NET:" ) == 0 )
     {
-        if( GetToolId() == ID_PCB_HIGHLIGHT_BUTT )
+        if( IsCurrentTool( PCB_ACTIONS::highlightNetTool ) )
         {
             wxString net_name = FROM_UTF8( text );
             NETINFO_ITEM* netinfo = pcb->FindNet( net_name );

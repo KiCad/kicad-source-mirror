@@ -50,7 +50,7 @@ void LIB_EDIT_FRAME::ReCreateVToolbar()
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
-    m_drawToolBar->Add( EE_ACTIONS::selectionTool,        ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::selectionTool,           ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_drawToolBar, this );
     m_drawToolBar->Add( EE_ACTIONS::placeSymbolPin,       ACTION_TOOLBAR::TOGGLE );
@@ -164,7 +164,7 @@ void LIB_EDIT_FRAME::SyncToolbars()
     m_mainToolBar->Toggle( ACTIONS::saveAll, modified );
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
-    m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
+    m_mainToolBar->Toggle( ACTIONS::zoomTool, IsCurrentTool( ACTIONS::zoomTool ) );
     m_mainToolBar->Toggle( EE_ACTIONS::showDatasheet, GetCurPart() != nullptr );
     m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganStandard,
                            GetShowDeMorgan(),
@@ -185,15 +185,15 @@ void LIB_EDIT_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( EE_ACTIONS::showComponentTree,   IsSearchTreeShown() );
     m_optionsToolBar->Refresh();
 
-#define TOGGLE_TOOL( tool ) m_drawToolBar->Toggle( tool, GetCurrentToolName() == tool.GetName() )
+#define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, IsCurrentTool( tool ) )
 
-    TOGGLE_TOOL( EE_ACTIONS::selectionTool );
-    TOGGLE_TOOL( EE_ACTIONS::placeSymbolPin );
-    TOGGLE_TOOL( EE_ACTIONS::placeSymbolText );
-    TOGGLE_TOOL( EE_ACTIONS::drawSymbolRectangle );
-    TOGGLE_TOOL( EE_ACTIONS::drawSymbolCircle );
-    TOGGLE_TOOL( EE_ACTIONS::drawSymbolArc );
-    TOGGLE_TOOL( EE_ACTIONS::drawSymbolLines );
-    TOGGLE_TOOL( EE_ACTIONS::deleteItemCursor );
+    TOGGLE_TOOL( m_drawToolBar, ACTIONS::selectionTool );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeSymbolPin );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeSymbolText );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolRectangle );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolCircle );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolArc );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolLines );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::deleteItemCursor );
     m_drawToolBar->Refresh();
 }

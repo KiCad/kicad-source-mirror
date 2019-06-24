@@ -99,8 +99,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
         m_selectionTool->AddItemToSel( component );
     }
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
-
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
 
     // Prime the pump
@@ -460,7 +459,6 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     getViewControls()->ShowCursor( true );
 
     m_frame->SetTool( aEvent.GetCommandStr().get() );
-
     Activate();
 
     // Prime the pump

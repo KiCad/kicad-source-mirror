@@ -218,7 +218,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
         return GetScreen() && GetScreen()->GetRedoCommandCount() > 0;
     };
     auto noActiveToolCondition = [ this ] ( const SELECTION& aSelection ) {
-        return GetToolId() == ID_NO_TOOL_SELECTED;
+        return ToolStackIsEmpty();
     };
 
     editMenu->AddItem( ACTIONS::undo,                       enableUndoCondition );
@@ -417,8 +417,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     routeMenu->AddItem( PCB_ACTIONS::selectLayerPair,        SELECTION_CONDITIONS::ShowAlways );
 
     routeMenu->AddSeparator();
-    routeMenu->AddItem( PCB_ACTIONS::routerActivateSingle,   SELECTION_CONDITIONS::ShowAlways );
-    routeMenu->AddItem( PCB_ACTIONS::routerActivateDiffPair, SELECTION_CONDITIONS::ShowAlways );
+    routeMenu->AddItem( PCB_ACTIONS::routeSingleTrack, SELECTION_CONDITIONS::ShowAlways );
+    routeMenu->AddItem( PCB_ACTIONS::routeDiffPair, SELECTION_CONDITIONS::ShowAlways );
 
     routeMenu->AddSeparator();
     routeMenu->AddItem( PCB_ACTIONS::routerTuneSingleTrace,  SELECTION_CONDITIONS::ShowAlways );

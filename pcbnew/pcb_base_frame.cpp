@@ -564,31 +564,6 @@ GENERAL_COLLECTORS_GUIDE PCB_BASE_FRAME::GetCollectorsGuide()
     return guide;
 }
 
-void PCB_BASE_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
-{
-    bool redraw = false;
-
-    EDA_DRAW_FRAME::SetToolID( aId, aCursor, aToolMsg );
-
-    if( aId < 0 )
-        return;
-
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-
-    // handle color changes for transitions in and out of ID_TRACK_BUTT
-    if( ( GetToolId() == ID_TRACK_BUTT && aId != ID_TRACK_BUTT )
-        || ( GetToolId() != ID_TRACK_BUTT && aId == ID_TRACK_BUTT ) )
-    {
-        if( displ_opts->m_ContrastModeDisplay )
-            redraw = true;
-    }
-
-    // must do this after the tool has been set, otherwise pad::Draw() does
-    // not show proper color when GetDisplayOptions().ContrastModeDisplay is true.
-    if( redraw )
-        GetCanvas()->Refresh();
-}
-
 
 /*
  * Display the grid status.

@@ -66,7 +66,7 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
     zoneInfo.m_NetcodeSelection = board.GetHighLightNetCode();
     zoneInfo.SetIsKeepout( m_params.m_keepout );
 
-    if( m_params.m_mode != DRAWING_TOOL::ZONE_MODE::GRAPHIC_POLYGON )
+    if( m_params.m_mode != ZONE_MODE::GRAPHIC_POLYGON )
     {
         // Get the current default settings for zones
 
@@ -165,13 +165,13 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
 
     switch ( m_params.m_mode )
     {
-        case DRAWING_TOOL::ZONE_MODE::CUTOUT:
+        case ZONE_MODE::CUTOUT:
                 // For cutouts, subtract from the source
             performZoneCutout( *m_params.m_sourceZone, *aZone );
             break;
 
-        case DRAWING_TOOL::ZONE_MODE::ADD:
-        case DRAWING_TOOL::ZONE_MODE::SIMILAR:
+        case ZONE_MODE::ADD:
+        case ZONE_MODE::SIMILAR:
         {
             BOARD_COMMIT bCommit( &m_tool );
 
@@ -188,7 +188,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
             break;
         }
 
-        case DRAWING_TOOL::ZONE_MODE::GRAPHIC_POLYGON:
+        case ZONE_MODE::GRAPHIC_POLYGON:
         {
             BOARD_COMMIT bCommit( &m_tool );
             BOARD_ITEM_CONTAINER* parent = frame.GetModel();

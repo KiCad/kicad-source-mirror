@@ -291,19 +291,62 @@ static bool deleteItem( SCH_BASE_FRAME* aFrame, const VECTOR2D& aPosition )
 }
 
 
+#define HITTEST_THRESHOLD_PIXELS 5
+
+
 int LIB_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
 
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
-    wxCHECK( picker, 0 );
+    m_pickerItem = nullptr;
 
-    picker->SetClickHandler( std::bind( deleteItem, m_frame, std::placeholders::_1 ) );
+    picker->SetClickHandler( [this] ( const VECTOR2D& aPosition ) -> bool
+        {
+            if( m_pickerItem )
+            {
+                EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+                selectionTool->AddItemToSel( m_pickerItem, true );
+                m_toolMgr->RunAction( EE_ACTIONS::doDelete, true );
+                m_pickerItem = nullptr;
+            }
+
+            return true;
+        } );
+
+    picker->SetMotionHandler( [this] ( const VECTOR2D& aPos )
+        {
+            EE_COLLECTOR collector;
+            collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+            collector.Collect( m_frame->GetCurPart(), nonFields, (wxPoint) aPos );
+            EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
+
+            if( m_pickerItem != item )
+            {
+                EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+
+                if( m_pickerItem )
+                    selectionTool->UnbrightenItem( m_pickerItem );
+
+                m_pickerItem = item;
+
+                if( m_pickerItem )
+                    selectionTool->BrightenItem( m_pickerItem );
+            }
+        } );
+
+    picker->SetFinalizeHandler( [&]( const int& aFinalState )
+        {
+            if( aFinalState == EE_PICKER_TOOL::EVT_CANCEL )
+                m_frame->ClearToolStack();
+        } );
+
     picker->Activate();
     Wait();
 
-    m_frame->PopTool();
     return 0;
 }
 

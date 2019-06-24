@@ -34,8 +34,8 @@ public:
     bool Init() override;
     void Reset( RESET_REASON aReason ) override;
 
-    int RouteSingleTrace( const TOOL_EVENT& aEvent );
-    int RouteDiffPair( const TOOL_EVENT& aEvent );
+    int MainLoop( const TOOL_EVENT& aEvent );
+
     int InlineBreakTrack( const TOOL_EVENT& aEvent );
     bool CanInlineDrag();
     int InlineDrag( const TOOL_EVENT& aEvent );
@@ -53,8 +53,6 @@ public:
     static void NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector );
 
 private:
-    int mainLoop( PNS::ROUTER_MODE aMode );
-
     void performRouting();
     void performDragging( int aMode = PNS::DM_ANY );
     void breakTrack();

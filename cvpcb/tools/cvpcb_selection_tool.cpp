@@ -60,7 +60,7 @@ int CVPCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // There doesn't seem to be any other good way to tell when another tool
         // is canceled and control returns to the selection tool, except by the
         // fact that the selection tool starts to get events again.
-        if( m_frame->GetToolId() == ID_NO_TOOL_SELECTED)
+        if( m_frame->IsCurrentTool( ACTIONS::selectionTool ) )
         {
             getViewControls()->SetAdditionalPanButtons( false, true );
         }
@@ -105,8 +105,8 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     auto& controls = *getViewControls();
     auto previous_settings = controls.GetSettings();
 
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
-    m_frame->SetToolID( ID_TB_MEASUREMENT_TOOL, wxCURSOR_PENCIL, _( "Measure distance" ) );
 
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
     KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, m_frame->GetUserUnits() );
@@ -126,12 +126,25 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancel() || evt->IsActivate() )
         {
-            break;
+            if( originSet )
+            {
+                view.SetVisible( &ruler, false );
+                controls.SetAutoPan( false );
+                controls.CaptureCursor( false );
+                originSet = false;
+            }
+            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+            {
+                m_frame->ClearToolStack();
+                break;
+            }
+
+            if( evt->IsActivate() )
+                break;
         }
 
         // click or drag starts
-        else if( !originSet &&
-                ( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
+        else if( !originSet && ( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
         {
             if( !evt->IsDrag( BUT_LEFT ) )
             {
@@ -154,8 +167,7 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
         }
 
         // second click or mouse up after drag ends
-        else if( originSet &&
-                ( evt->IsClick( BUT_LEFT ) || evt->IsMouseUp( BUT_LEFT ) ) )
+        else if( originSet && ( evt->IsClick( BUT_LEFT ) || evt->IsMouseUp( BUT_LEFT ) ) )
         {
             originSet = false;
 
@@ -166,8 +178,7 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
         }
 
         // move or drag when origin set updates rules
-        else if( originSet &&
-                ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
+        else if( originSet && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
         {
             twoPtMgr.SetAngleSnap( evt->Modifier( MD_CTRL ) );
             twoPtMgr.SetEnd( cursorPos );
@@ -186,8 +197,6 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     view.Remove( &ruler );
 
     controls.ApplySettings( previous_settings );
-
-    m_frame->SetNoToolSelected();
 
     return 0;
 }

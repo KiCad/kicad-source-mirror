@@ -125,7 +125,7 @@ void PL_EDITOR_FRAME::ReCreateVToolbar()
         m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    m_drawToolBar->Add( PL_ACTIONS::selectionTool,           ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::selectionTool,              ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_drawToolBar, this );
     m_drawToolBar->Add( PL_ACTIONS::drawLine,                ACTION_TOOLBAR::TOGGLE );
@@ -148,18 +148,20 @@ void PL_EDITOR_FRAME::ReCreateOptToolbar()
 
 void PL_EDITOR_FRAME::SyncToolbars()
 {
+#define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, IsCurrentTool( tool ) )
+
     m_mainToolBar->Toggle( ACTIONS::save, GetScreen() && GetScreen()->IsModify() );
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
-    m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
+    TOGGLE_TOOL( m_mainToolBar, ACTIONS::zoomTool );
     m_mainToolBar->Refresh();
 
-    m_drawToolBar->Toggle( PL_ACTIONS::selectionTool,    GetToolId() == ID_NO_TOOL_SELECTED );
-    m_drawToolBar->Toggle( PL_ACTIONS::drawLine,         GetToolId() == ID_PL_LINE_TOOL );
-    m_drawToolBar->Toggle( PL_ACTIONS::drawRectangle,    GetToolId() == ID_PL_RECTANGLE_TOOL );
-    m_drawToolBar->Toggle( PL_ACTIONS::placeText,        GetToolId() == ID_PL_TEXT_TOOL );
-    m_drawToolBar->Toggle( PL_ACTIONS::placeImage,       GetToolId() == ID_PL_IMAGE_TOOL );
-    m_drawToolBar->Toggle( PL_ACTIONS::deleteItemCursor, GetToolId() == ID_PL_DELETE_TOOL );
+    TOGGLE_TOOL( m_drawToolBar, ACTIONS::selectionTool );
+    TOGGLE_TOOL( m_drawToolBar, PL_ACTIONS::drawLine );
+    TOGGLE_TOOL( m_drawToolBar, PL_ACTIONS::drawRectangle );
+    TOGGLE_TOOL( m_drawToolBar, PL_ACTIONS::placeText );
+    TOGGLE_TOOL( m_drawToolBar, PL_ACTIONS::placeImage );
+    TOGGLE_TOOL( m_drawToolBar, PL_ACTIONS::deleteItemCursor );
 
     m_drawToolBar->Toggle( PL_ACTIONS::appendImportedWorksheet, false );  // Not really a tool
     m_drawToolBar->Refresh();

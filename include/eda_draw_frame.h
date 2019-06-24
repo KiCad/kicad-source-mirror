@@ -310,32 +310,16 @@ public:
     virtual void SetTool( const std::string& actionName );
     virtual void PushTool( const std::string& actionName );
     virtual void PopTool();
-
     /**
      * The selection tool runs underneath the tool stack, so clearing the stack is equivalent
      * to selecting the selection tool.
      */
     virtual void ClearToolStack();
 
-    /**
-     * Set the tool command ID to \a aId and sets the cursor to \a aCursor.
-     *
-     * The command ID must be greater or equal ::ID_NO_TOOL_SELECTED.  If the command
-     * ID is less than ::ID_NO_TOOL_SELECTED, the tool command ID is set to
-     * ::ID_NO_TOOL_SELECTED.  On debug builds, an assertion will be raised when
-     * \a aId is invalid.
-     *
-     * @param aId New tool command ID if greater than or equal to ::ID_NO_TOOL_SELECTED.
-                  If less than zero, the current tool command ID is retained.
-     * @param aCursor Sets the cursor shape if greater than or equal to zero.
-     * @param aToolMsg The tool message to set in the status bar.
-     */
-    virtual void SetToolID( int aId, int aCursor, const wxString& aToolMsg );
+    bool ToolStackIsEmpty() { return m_toolStack.empty(); }
 
-    /**
-     * Select the ID_NO_TOOL_SELECTED id tool (Idle tool)
-     */
-    virtual void SetNoToolSelected();
+    bool IsCurrentTool( const TOOL_ACTION& aAction );
+
 
     /**
      * @return the current tool ID

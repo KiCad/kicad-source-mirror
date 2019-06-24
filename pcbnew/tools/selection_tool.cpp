@@ -185,6 +185,15 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
 }
 
 
+int SELECTION_TOOL::SelectionTool( const TOOL_EVENT& aEvent )
+{
+    // Since the selection tool is always running underneath the toolStack, all we need to
+    // do is clear the stack.
+    m_frame->ClearToolStack();
+    return 0;
+}
+
+
 int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     // Main loop: keep receiving events
@@ -2195,6 +2204,7 @@ void SELECTION_TOOL::setTransitions()
     Go( &SELECTION_TOOL::UpdateMenu,          ACTIONS::updateMenu.MakeEvent() );
 
     Go( &SELECTION_TOOL::Main,                PCB_ACTIONS::selectionActivate.MakeEvent() );
+    Go( &SELECTION_TOOL::SelectionTool,       ACTIONS::selectionTool.MakeEvent() );
     Go( &SELECTION_TOOL::CursorSelection,     PCB_ACTIONS::selectionCursor.MakeEvent() );
     Go( &SELECTION_TOOL::ClearSelection,      PCB_ACTIONS::selectionClear.MakeEvent() );
 

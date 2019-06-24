@@ -86,7 +86,10 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer
                 preview.Clear();
 
                 if( aOptions & IPO_SINGLE_CLICK )
+                {
+                    frame()->ClearToolStack();
                     break;
+                }
 
                 controls()->SetAutoPan( false );
                 controls()->CaptureCursor( false );
@@ -94,6 +97,9 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer
             }
             else
             {
+                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                    frame()->ClearToolStack();
+
                 break;
             }
 

@@ -181,15 +181,15 @@ void PCB_EDITOR_CONTROL::Reset( RESET_REASON aReason )
 bool PCB_EDITOR_CONTROL::Init()
 {
     auto activeToolCondition = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
+        return ( !m_frame->ToolStackIsEmpty() );
     };
 
     auto inactiveStateCondition = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_NO_TOOL_SELECTED && aSel.Size() == 0 );
+        return ( m_frame->ToolStackIsEmpty() && aSel.Size() == 0 );
     };
 
     auto placeModuleCondition = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_PCB_MODULE_BUTT && aSel.GetSize() == 0 );
+        return ( m_frame->IsCurrentTool( PCB_ACTIONS::placeModule ) && aSel.GetSize() == 0 );
     };
 
     auto& ctxMenu = m_menu.GetMenu();
@@ -518,19 +518,20 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
     controls->ShowCursor( true );
     controls->SetSnapping( true );
 
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
-    m_frame->SetToolID( ID_PCB_MODULE_BUTT, wxCURSOR_PENCIL, _( "Add footprint" ) );
 
-    // Add all the drawable parts to preview
     VECTOR2I cursorPos = controls->GetCursorPosition();
+    bool     reselect = false;
 
+    // Prime the pump
     if( module )
     {
         module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
         m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, module );
     }
-
-    bool reselect = false;
+    else if( aEvent.HasPosition() )
+        m_toolMgr->RunAction( PCB_ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -550,8 +551,14 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
                 commit.Revert();
                 module = NULL;
             }
-            else    // let's have another chance placing a module
-                break;
+            else
+            {
+                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                {
+                    m_frame->ClearToolStack();
+                    break;
+                }
+            }
 
             if( evt->IsActivate() )  // now finish unconditionally
                 break;
@@ -618,7 +625,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         controls->CaptureCursor( !!module );
     }
 
-    m_frame->SetNoToolSelected();
+    m_frame->PopTool();
 
     return 0;
 }
@@ -709,8 +716,8 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     controls->SetSnapping( true );
 
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
-    m_frame->SetToolID( ID_PCB_TARGET_BUTT, wxCURSOR_PENCIL, _( "Add layer alignment target" ) );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -720,7 +727,12 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
         cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        {
+            if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+                m_frame->ClearToolStack();
+
             break;
+        }
 
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
@@ -771,9 +783,6 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 
     controls->SetSnapping( false );
     view->Remove( &preview );
-
-    m_frame->SetNoToolSelected();
-
     return 0;
 }
 
@@ -956,7 +965,7 @@ int PCB_EDITOR_CONTROL::CrossProbeSchToPcb( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
         // If it is a pad and the net highlighting tool is enabled, highlight the net
-        if( item->Type() == PCB_PAD_T && m_frame->GetToolId() == ID_PCB_HIGHLIGHT_BUTT )
+        if( item->Type() == PCB_PAD_T && m_frame->IsCurrentTool( PCB_ACTIONS::highlightNetTool ) )
         {
             int net = static_cast<D_PAD*>( item )->GetNetCode();
             m_toolMgr->RunAction( PCB_ACTIONS::highlightNet, false, net );
@@ -986,28 +995,25 @@ void PCB_EDITOR_CONTROL::DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* a
 }
 
 
-bool PCB_EDITOR_CONTROL::SetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
-                                         BOARD_ITEM* originViewItem, const VECTOR2D& aPosition )
-{
-    aFrame->SaveCopyInUndoList( originViewItem, UR_DRILLORIGIN );
-    DoSetDrillOrigin( aView, aFrame, originViewItem, aPosition );
-    return false;   // drill origin is a one-shot; don't continue with tool
-}
-
-
 int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
 {
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
 
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
     assert( picker );
 
-    m_frame->SetToolID( ID_PCB_PLACE_OFFSET_COORD_BUTT, wxCURSOR_HAND, _( "Adjust zero" ) );
-    picker->SetClickHandler( std::bind( SetDrillOrigin, getView(), m_frame,
-                                        m_placeOrigin.get(), _1 ) );
+    picker->SetClickHandler( [this] ( const VECTOR2D& pt ) -> bool
+        {
+            m_frame->SaveCopyInUndoList( m_placeOrigin.get(), UR_DRILLORIGIN );
+            DoSetDrillOrigin( getView(), m_frame, m_placeOrigin.get(), pt );
+            return false;   // drill origin is a one-shot; don't continue with tool
+        } );
+
     picker->Activate();
     Wait();
 
+    m_frame->ClearToolStack();
     return 0;
 }
 
@@ -1174,19 +1180,27 @@ int PCB_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
     // there is no selection, then behave like a ctrl-left-click.
     if( aEvent.IsAction( &PCB_ACTIONS::highlightNetSelection ) )
     {
-        bool use_selection = ( m_frame->GetToolId() != ID_PCB_HIGHLIGHT_BUTT );
+        bool use_selection = m_frame->IsCurrentTool( PCB_ACTIONS::highlightNetTool );
         highlightNet( getViewControls()->GetMousePosition(), use_selection );
     }
 
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
 
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
-    assert( picker );
 
-    m_frame->SetToolID( ID_PCB_HIGHLIGHT_BUTT, wxCURSOR_HAND, _( "Highlight net" ) );
-    picker->SetClickHandler( [this] ( const VECTOR2D& pt ) -> bool {
-        return highlightNet( pt, false );
-    } );
+    picker->SetClickHandler( [this] ( const VECTOR2D& pt ) -> bool
+        {
+            highlightNet( pt, false );
+            return true;
+        } );
+
+    picker->SetFinalizeHandler( [&]( const int& aFinalState )
+        {
+            if( aFinalState == PCBNEW_PICKER_TOOL::EVT_CANCEL )
+                m_frame->ClearToolStack();
+        } );
+
     picker->SetLayerSet( LSET::AllCuMask() );
     picker->Activate();
     Wait();
@@ -1231,9 +1245,7 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, BOARD* aBoard, bool aShow
                 bool enable = !( *( mod->Pads().begin() ) )->GetLocalRatsnestVisible();
 
                 for( auto modpad : mod->Pads() )
-                {
                     modpad->SetLocalRatsnestVisible( enable );
-                }
             }
         }
     }
@@ -1246,6 +1258,7 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, BOARD* aBoard, bool aShow
 
 int PCB_EDITOR_CONTROL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
 {
+    m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
 
     auto picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
@@ -1254,17 +1267,22 @@ int PCB_EDITOR_CONTROL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
     wxASSERT( picker );
     wxASSERT( board );
 
-    m_frame->SetToolID( ID_LOCAL_RATSNEST_BUTT, wxCURSOR_PENCIL,
-                        _( "Pick Components for Local Ratsnest" ) );
-    picker->SetClickHandler( std::bind(
-            showLocalRatsnest, m_toolMgr, board, opt->m_ShowGlobalRatsnest, _1 ) );
-    picker->SetFinalizeHandler( [ board, opt ]( int aCondition ){
-        if( aCondition != PCBNEW_PICKER_TOOL::END_ACTIVATE )
+    picker->SetClickHandler( std::bind( showLocalRatsnest, m_toolMgr, board,
+                                        opt->m_ShowGlobalRatsnest, _1 ) );
+
+    picker->SetFinalizeHandler( [ this, board, opt ]( int aCondition )
         {
-            for( auto mod : board->Modules() )
-                for( auto pad : mod->Pads() )
-                    pad->SetLocalRatsnestVisible( opt->m_ShowGlobalRatsnest );
-        }
+            if( aCondition != PCBNEW_PICKER_TOOL::END_ACTIVATE )
+            {
+                for( auto mod : board->Modules() )
+                {
+                    for( auto pad : mod->Pads() )
+                        pad->SetLocalRatsnestVisible( opt->m_ShowGlobalRatsnest );
+                }
+            }
+
+            if( aCondition == PCBNEW_PICKER_TOOL::EVT_CANCEL )
+                m_frame->ClearToolStack();
         } );
 
     picker->Activate();

@@ -56,7 +56,7 @@ public:
         PCB_LAYER_ID m_layer;
 
         ///> The zone mode to operate in
-        DRAWING_TOOL::ZONE_MODE m_mode;
+        ZONE_MODE m_mode;
 
         ///> Zone settings source (for similar and cutout zones)
         ZONE_CONTAINER* m_sourceZone;

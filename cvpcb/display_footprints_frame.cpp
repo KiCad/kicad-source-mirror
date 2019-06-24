@@ -445,11 +445,11 @@ void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
 
 void DISPLAY_FOOTPRINTS_FRAME::SyncToolbars()
 {
-    m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
+    m_mainToolBar->Toggle( ACTIONS::zoomTool, IsCurrentTool( ACTIONS::zoomTool ) );
     m_mainToolBar->Refresh();
 
-    m_optionsToolBar->Toggle( ACTIONS::selectionTool, GetToolId() == ID_NO_TOOL_SELECTED );
-    m_optionsToolBar->Toggle( ACTIONS::measureTool, GetToolId() == ID_TB_MEASUREMENT_TOOL );
+    m_optionsToolBar->Toggle( ACTIONS::selectionTool, IsCurrentTool( ACTIONS::selectionTool ) );
+    m_optionsToolBar->Toggle( ACTIONS::measureTool, IsCurrentTool( ACTIONS::measureTool ) );
     m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != INCHES );
     m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == INCHES );
     m_optionsToolBar->Refresh();

@@ -737,3 +737,4 @@ const wxString PL_EDITOR_FRAME::GetZoomLevelIndicator() const
 {
     return EDA_DRAW_FRAME::GetZoomLevelIndicator();
 }
+
