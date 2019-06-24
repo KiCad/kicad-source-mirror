@@ -392,7 +392,7 @@ public:
     void LoadSettings( wxConfigBase* aCfg ) override;
     void SaveSettings( wxConfigBase* aCfg ) override;
 
-    void CommonSettingsChanged() override;
+    void CommonSettingsChanged( bool aEnvVarsChanged ) override;
 
     void OnTogglePadDrawMode( wxCommandEvent& aEvent );
     void OnToggleGraphicDrawMode( wxCommandEvent& aEvent );

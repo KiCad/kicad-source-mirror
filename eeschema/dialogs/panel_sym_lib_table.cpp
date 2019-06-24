@@ -780,7 +780,6 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
 
     if( dlg.m_ProjectTableChanged )
     {
-
         try
         {
             projectTable->Save( projectTableFn.GetFullPath() );

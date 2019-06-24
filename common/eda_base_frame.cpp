@@ -317,7 +317,7 @@ void EDA_BASE_FRAME::ShowChangedLanguage()
 }
 
 
-void EDA_BASE_FRAME::CommonSettingsChanged()
+void EDA_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
     GetToolManager()->GetActionManager()->UpdateHotKeys( false );
 
@@ -539,7 +539,7 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
         static_cast<EDA_BASE_FRAME*>( manager )->InstallPreferences( &dlg, hotkeysPanel );
 
     if( dlg.ShowModal() == wxID_OK )
-        dlg.Kiway().CommonSettingsChanged();
+        dlg.Kiway().CommonSettingsChanged( false );
 }
 
 

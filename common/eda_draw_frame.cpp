@@ -204,9 +204,9 @@ void EDA_DRAW_FRAME::unitsChangeRefresh()
 }
 
 
-void EDA_DRAW_FRAME::CommonSettingsChanged()
+void EDA_DRAW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
-    EDA_BASE_FRAME::CommonSettingsChanged();
+    EDA_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged );
 
     wxConfigBase*         settings = Pgm().CommonSettings();
     KIGFX::VIEW_CONTROLS* viewControls = GetCanvas()->GetViewControls();

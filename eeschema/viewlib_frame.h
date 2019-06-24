@@ -102,6 +102,7 @@ public:
 
     void LoadSettings( wxConfigBase* aCfg ) override;
     void SaveSettings( wxConfigBase* aCfg ) override;
+    void CommonSettingsChanged( bool aEnvVarsChanged ) override;
 
     /**
      * Set a filter to display only libraries and/or components which match the filter.

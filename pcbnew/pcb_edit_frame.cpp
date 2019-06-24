@@ -1138,9 +1138,9 @@ int PCB_EDIT_FRAME::InstallExchangeModuleFrame( MODULE* aModule, bool updateMode
 }
 
 
-void PCB_EDIT_FRAME::CommonSettingsChanged()
+void PCB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
-    PCB_BASE_EDIT_FRAME::CommonSettingsChanged();
+    PCB_BASE_EDIT_FRAME::CommonSettingsChanged( aEnvVarsChanged );
 
     ReCreateMicrowaveVToolbar();
 

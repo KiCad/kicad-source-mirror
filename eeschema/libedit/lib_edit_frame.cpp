@@ -699,13 +699,17 @@ void LIB_EDIT_FRAME::emptyScreen()
 }
 
 
-void LIB_EDIT_FRAME::CommonSettingsChanged()
+void LIB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
-    SCH_BASE_FRAME::CommonSettingsChanged();
+    SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged );
 
     ReCreateHToolbar();
     ReCreateVToolbar();
     ReCreateOptToolbar();
+
+    if( aEnvVarsChanged )
+        SyncLibraries( true );
+
     Layout();
     SendSizeEvent();
 }

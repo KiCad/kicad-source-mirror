@@ -146,7 +146,7 @@ protected:
 
     void unitsChangeRefresh() override;
 
-    void CommonSettingsChanged() override;
+    void CommonSettingsChanged( bool aEnvVarsChanged ) override;
 
     /**
      * Sets the common key-pair for exiting the application (Ctrl-Q) and ties it

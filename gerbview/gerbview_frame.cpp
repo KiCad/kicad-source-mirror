@@ -1250,9 +1250,9 @@ void GERBVIEW_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 }
 
 
-void GERBVIEW_FRAME::CommonSettingsChanged()
+void GERBVIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
-    EDA_DRAW_FRAME::CommonSettingsChanged();
+    EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged );
 
     ReCreateHToolbar();
     ReCreateOptToolbar();

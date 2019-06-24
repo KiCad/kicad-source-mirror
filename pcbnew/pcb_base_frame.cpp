@@ -773,9 +773,9 @@ void PCB_BASE_FRAME::SaveSettings( wxConfigBase* aCfg )
 }
 
 
-void PCB_BASE_FRAME::CommonSettingsChanged()
+void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
-    EDA_DRAW_FRAME::CommonSettingsChanged();
+    EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged );
 
     ReCreateHToolbar();
     ReCreateAuxiliaryToolbar();
@@ -786,7 +786,7 @@ void PCB_BASE_FRAME::CommonSettingsChanged()
     EDA_3D_VIEWER* viewer = Get3DViewerFrame();
 
     if( viewer )
-        viewer->CommonSettingsChanged();
+        viewer->CommonSettingsChanged( aEnvVarsChanged );
 }
 
 

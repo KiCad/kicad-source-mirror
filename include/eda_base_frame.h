@@ -418,7 +418,7 @@ public:
      * Notification event that some of the common (suite-wide) settings have changed.
      * Update menus, toolbars, local variables, etc.
      */
-    virtual void CommonSettingsChanged();
+    virtual void CommonSettingsChanged( bool aEnvVarsChanged );
     
     /**
      * Notification to refresh the drawing canvas (if any).

@@ -1091,9 +1091,9 @@ void SCH_EDIT_FRAME::RecalculateConnections( bool aDoCleanup )
 }
 
 
-void SCH_EDIT_FRAME::CommonSettingsChanged()
+void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
-    SCH_BASE_FRAME::CommonSettingsChanged();
+    SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged );
 
     ReCreateHToolbar();
     ReCreateVToolbar();

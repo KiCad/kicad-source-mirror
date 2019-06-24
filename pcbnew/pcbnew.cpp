@@ -122,7 +122,10 @@ static struct IFACE : public KIFACE_I
         case DIALOG_CONFIGUREPATHS:
         {
             DIALOG_CONFIGURE_PATHS dlg( aParent, aKiway->Prj().Get3DFilenameResolver() );
-            dlg.ShowModal();
+
+            if( dlg.ShowModal() == wxID_OK )
+                aKiway->CommonSettingsChanged( true );
+
             // Dialog has completed; nothing to return.
             return nullptr;
         }

@@ -516,6 +516,15 @@ void FOOTPRINT_VIEWER_FRAME::SaveSettings( wxConfigBase* aCfg )
 }
 
 
+void FOOTPRINT_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
+{
+    PCB_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged );
+
+    if( aEnvVarsChanged )
+        ReCreateLibraryList();
+}
+
+
 const wxString FOOTPRINT_VIEWER_FRAME::getCurNickname()
 {
     return Prj().GetRString( PROJECT::PCB_FOOTPRINT_VIEWER_NICKNAME );

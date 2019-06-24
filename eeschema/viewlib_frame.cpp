@@ -692,6 +692,15 @@ void LIB_VIEW_FRAME::SaveSettings( wxConfigBase* aCfg )
 }
 
 
+void LIB_VIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
+{
+    SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged );
+
+    if( aEnvVarsChanged )
+        ReCreateListLib();
+}
+
+
 void LIB_VIEW_FRAME::OnActivate( wxActivateEvent& event )
 {
     bool changed = m_libList ? ReCreateListLib() : false;

@@ -136,7 +136,7 @@ public:
     void SaveSettings( wxConfigBase* aCfg ) override;
 
     void ShowChangedLanguage() override;
-    void CommonSettingsChanged() override;
+    void CommonSettingsChanged( bool aEnvVarsChanged ) override;
 
     /**
      * Called by sending a event with id = ID_INIT_WATCHED_PATHS

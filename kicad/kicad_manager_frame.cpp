@@ -462,7 +462,7 @@ void KICAD_MANAGER_FRAME::ShowChangedLanguage()
 }
 
 
-void KICAD_MANAGER_FRAME::CommonSettingsChanged()
+void KICAD_MANAGER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
     int historySize;
     Pgm().CommonSettings()->Read( FILE_HISTORY_SIZE_KEY, &historySize, DEFAULT_FILE_HISTORY_SIZE );
