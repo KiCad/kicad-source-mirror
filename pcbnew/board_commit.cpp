@@ -357,14 +357,6 @@ void BOARD_COMMIT::Revert()
 
             item->SwapData( copy );
 
-            // Update all pads/drawings/texts, as they become invalid
-            // for the VIEW after SwapData() called for modules
-            if( item->Type() == PCB_MODULE_T )
-            {
-                MODULE* newModule = static_cast<MODULE*>( item );
-                newModule->RunOnChildren( std::bind( &EDA_ITEM::ClearFlags, _1, SELECTED ) );
-            }
-
             view->Add( item );
             connectivity->Add( item );
             delete copy;
