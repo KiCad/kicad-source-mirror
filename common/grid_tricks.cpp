@@ -347,6 +347,53 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
         return;
     }
 
+    // ctrl-tab for exit grid
+#ifdef __APPLE__
+    bool ctrl = ev.RawControlDown();
+#else
+    bool ctrl = ev.ControlDown();
+#endif
+
+    if( ctrl && ev.GetKeyCode() == WXK_TAB )
+    {
+        wxWindow* test = m_grid->GetNextSibling();
+
+        if( !test )
+            test = m_grid->GetParent()->GetNextSibling();
+
+        while( test && !test->IsTopLevel() )
+        {
+            test->SetFocus();
+
+            if( test->HasFocus() )
+                break;
+
+            if( !test->GetChildren().empty() )
+                test = test->GetChildren().front();
+            else if( test->GetNextSibling() )
+                test = test->GetNextSibling();
+            else
+            {
+                while( test )
+                {
+                    test = test->GetParent();
+
+                    if( test && test->IsTopLevel() )
+                    {
+                        break;
+                    }
+                    else if( test && test->GetNextSibling() )
+                    {
+                        test = test->GetNextSibling();
+                        break;
+                    }
+                }
+            }
+        }
+
+        return;
+    }
+
     ev.Skip( true );
 }
 
