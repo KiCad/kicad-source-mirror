@@ -151,6 +151,15 @@ bool TestSegmentHit( const wxPoint &aRefPoint, wxPoint aStart, wxPoint aEnd, int
     if( aStart.y == aEnd.y && aRefPoint.x > xmin && aRefPoint.x < xmax )
         return std::abs( delta.y ) <= aDist;
 
+    // Special case for a segment with start == end (equal to a circle)
+    if ( aStart == aEnd )
+    {
+        long double length_square = (long double) delta.x * delta.x + (long double) delta.y * delta.y;
+        long double dist_square = (long double) aDist * aDist;
+
+        return ( length_square <= dist_square );
+    }
+
     wxPoint len = aEnd - aStart;
     // Precision note here:
     // These are 32-bit integers, so squaring requires 64 bits to represent
