@@ -462,6 +462,18 @@ void PL_SELECTION_TOOL::RemoveItemsFromSel( EDA_ITEMS* aList, bool aQuietMode )
 }
 
 
+void PL_SELECTION_TOOL::BrightenItem( EDA_ITEM* aItem )
+{
+    highlight( aItem, BRIGHTENED );
+}
+
+
+void PL_SELECTION_TOOL::UnbrightenItem( EDA_ITEM* aItem )
+{
+    unhighlight( aItem, BRIGHTENED );
+}
+
+
 int PL_SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 {
     ClearSelection();

@@ -275,22 +275,6 @@ int LIB_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 }
 
 
-static bool deleteItem( SCH_BASE_FRAME* aFrame, const VECTOR2D& aPosition )
-{
-    EE_SELECTION_TOOL* selectionTool = aFrame->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
-    wxCHECK( selectionTool, false );
-
-    aFrame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
-
-    EDA_ITEM* item = selectionTool->SelectPoint( aPosition );
-
-    if( item )
-        aFrame->GetToolManager()->RunAction( EE_ACTIONS::doDelete, true );
-
-    return true;
-}
-
-
 #define HITTEST_THRESHOLD_PIXELS 5
 
 
@@ -339,7 +323,7 @@ int LIB_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
         }
     } );
 
-    picker->SetFinalizeHandler( [&]( const int& aFinalState )
+    picker->SetFinalizeHandler( [this] ( const int& aFinalState )
     {
         if( m_pickerItem )
             m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );

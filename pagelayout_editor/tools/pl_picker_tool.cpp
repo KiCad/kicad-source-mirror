@@ -103,6 +103,21 @@ int PL_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 setControls();
         }
 
+        else if( evt->IsMotion() )
+        {
+            if( m_motionHandler )
+            {
+                try
+                {
+                    (*m_motionHandler)( cursorPos );
+                }
+                catch( std::exception& e )
+                {
+                    std::cerr << "PL_PICKER_TOOL motion handler error: " << e.what() << std::endl;
+                }
+            }
+        }
+
         else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             if( m_cancelHandler )
@@ -163,6 +178,7 @@ void PL_PICKER_TOOL::resetPicker()
     m_autoPanning = false;
 
     m_picked = NULLOPT;
+    m_motionHandler = NULLOPT;
     m_clickHandler = NULLOPT;
     m_cancelHandler = NULLOPT;
     m_finalizeHandler = NULLOPT;

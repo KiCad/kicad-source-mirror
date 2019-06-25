@@ -349,21 +349,70 @@ static bool deleteItem( PL_EDITOR_FRAME* aFrame, const VECTOR2D& aPosition )
 }
 
 
+#define HITTEST_THRESHOLD_PIXELS 5
+
+
 int PL_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
     m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
 
     PL_PICKER_TOOL* picker = m_toolMgr->GetTool<PL_PICKER_TOOL>();
-    wxCHECK( picker, 0 );
+    m_pickerItem = nullptr;
 
-    picker->SetClickHandler( std::bind( deleteItem, m_frame, std::placeholders::_1 ) );
-
-    picker->SetFinalizeHandler( [&]( const int& aFinalState )
+    picker->SetClickHandler( [this] ( const VECTOR2D& aPosition ) -> bool
+    {
+        if( m_pickerItem )
         {
-            if( aFinalState == PL_PICKER_TOOL::EVT_CANCEL )
-                m_frame->ClearToolStack();
-        } );
+            PL_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PL_SELECTION_TOOL>();
+            selectionTool->UnbrightenItem( m_pickerItem );
+            selectionTool->AddItemToSel( m_pickerItem, true );
+            m_toolMgr->RunAction( ACTIONS::doDelete, true );
+            m_pickerItem = nullptr;
+        }
+
+        return true;
+    } );
+
+    picker->SetMotionHandler( [this] ( const VECTOR2D& aPos )
+    {
+        int threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+        EDA_ITEM* item = nullptr;
+
+        for( WS_DATA_ITEM* dataItem : WS_DATA_MODEL::GetTheInstance().GetItems() )
+        {
+            for( WS_DRAW_ITEM_BASE* drawItem : dataItem->GetDrawItems() )
+            {
+                if( drawItem->HitTest( (wxPoint) aPos, threshold ) )
+                {
+                    item = drawItem;
+                    break;
+                }
+            }
+        }
+
+        if( m_pickerItem != item )
+        {
+            PL_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PL_SELECTION_TOOL>();
+
+            if( m_pickerItem )
+                selectionTool->UnbrightenItem( m_pickerItem );
+
+            m_pickerItem = item;
+
+            if( m_pickerItem )
+                selectionTool->BrightenItem( m_pickerItem );
+        }
+    } );
+
+    picker->SetFinalizeHandler( [this] ( const int& aFinalState )
+    {
+        if( m_pickerItem )
+            m_toolMgr->GetTool<PL_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
+
+        if( aFinalState == PL_PICKER_TOOL::EVT_CANCEL )
+            m_frame->ClearToolStack();
+    } );
 
     picker->Activate();
     Wait();
