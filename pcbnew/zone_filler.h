@@ -35,19 +35,6 @@ class COMMIT;
 class SHAPE_POLY_SET;
 class SHAPE_LINE_CHAIN;
 
-struct THERMAL_SPOKE
-{
-    SHAPE_LINE_CHAIN m_Outline;
-    VECTOR2I         m_TestPtA;
-    VECTOR2I         m_TestPtB;
-
-    THERMAL_SPOKE()
-    {
-        m_TestPtA = { 0, 0 };
-        m_TestPtB = { 0, 0 };
-    }
-};
-
 
 class ZONE_FILLER
 {
@@ -64,9 +51,9 @@ private:
 
     void addKnockout( BOARD_ITEM* aItem, int aGap, bool aIgnoreLineWidth, SHAPE_POLY_SET& aHoles );
 
-    void knockoutThermals( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aFill );
+    void knockoutThermalReliefs( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aFill );
 
-    void knockoutCopperItems( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aFill );
+    void buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aHoles );
 
     /**
      * Function computeRawFilledArea
@@ -86,7 +73,7 @@ private:
      * Function buildThermalSpokes
      * Constructs a list of all thermal spokes for the given zone.
      */
-    void buildThermalSpokes( const ZONE_CONTAINER* aZone, std::deque<THERMAL_SPOKE>& aSpokes );
+    void buildThermalSpokes( const ZONE_CONTAINER* aZone, std::deque<SHAPE_LINE_CHAIN>& aSpokes );
 
     /**
      * Build the filled solid areas polygons from zone outlines (stored in m_Poly)
