@@ -84,12 +84,13 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
 
     switch( m_fieldId )
     {
-    case FIELD_NAME: fieldName = _( "field name" );         break;
-    case REFERENCE:  fieldName = _( "reference field" );    break;
-    case VALUE:      fieldName = _( "value field" );        break;
-    case FOOTPRINT:  fieldName = _( "footprint field" );    break;
-    case DATASHEET:  fieldName = _( "datasheet field" );    break;
-    default:         fieldName = _( "user defined field" ); break;
+    case FIELD_NAME:  fieldName = _( "field name" );         break;
+    case FIELD_VALUE: fieldName = _( "field value" );        break;
+    case REFERENCE:   fieldName = _( "reference field" );    break;
+    case VALUE:       fieldName = _( "value field" );        break;
+    case FOOTPRINT:   fieldName = _( "footprint field" );    break;
+    case DATASHEET:   fieldName = _( "datasheet field" );    break;
+    default:          fieldName = _( "user defined field" ); break;
     };
 
     wxString msg;

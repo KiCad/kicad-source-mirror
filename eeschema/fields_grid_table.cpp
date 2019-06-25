@@ -54,8 +54,8 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
     m_referenceValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), REFERENCE ),
     m_valueValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), VALUE ),
     m_libIdValidator( LIB_ID::ID_PCB ),
-    m_urlValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), DATASHEET ),
-    m_nonUrlValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), DATASHEET )
+    m_urlValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_VALUE ),
+    m_nonUrlValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_VALUE )
 {
     // Build the various grid cell attributes.
     // NOTE: validators and cellAttrs are member variables to get the destruction order
