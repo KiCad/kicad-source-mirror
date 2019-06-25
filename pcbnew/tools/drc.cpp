@@ -795,7 +795,7 @@ void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
         }
 
         // Test new segment against tracks and pads, optionally against copper zones
-        if( !doTrackDrc( *seg_it, seg_it + 1, m_pcb->Tracks().end(), true, m_doZonesTest ) )
+        if( !doTrackDrc( *seg_it, seg_it + 1, m_pcb->Tracks().end(), m_doZonesTest ) )
         {
             if( m_currentMarker )
             {

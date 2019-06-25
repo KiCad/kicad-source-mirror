@@ -111,12 +111,10 @@ bool poly2segmentDRC( wxPoint* aTref, int aTrefCount, wxPoint aSegStart, wxPoint
 
 
 bool DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterator aEndIt,
-                      bool aTestPads, bool aTestZones )
+                      bool aTestZones )
 {
     TRACK*    track;
     wxPoint   delta;           // length on X and Y axis of segments
-    LSET layerMask;
-    int       net_code_ref;
     wxPoint   shape_pos;
 
     std::vector<MARKER_PCB*> markers;
@@ -156,8 +154,11 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
     m_segmEnd   = delta = aRefSeg->GetEnd() - origin;
     m_segmAngle = 0;
 
-    layerMask    = aRefSeg->GetLayerSet();
-    net_code_ref = aRefSeg->GetNetCode();
+    LSET layerMask = aRefSeg->GetLayerSet();
+    int  net_code_ref = aRefSeg->GetNetCode();
+    int  ref_seg_clearance  = netclass->GetClearance();
+    int  ref_seg_width = aRefSeg->GetWidth();
+
 
     /******************************************/
     /* Phase 0 : via DRC tests :              */
@@ -265,7 +266,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
     }
     else    // This is a track segment
     {
-        if( aRefSeg->GetWidth() < dsnSettings.m_TrackMinWidth )
+        if( ref_seg_width < dsnSettings.m_TrackMinWidth )
         {
             wxPoint refsegMiddle = ( aRefSeg->GetStart() + aRefSeg->GetEnd() ) / 2;
 
@@ -308,28 +309,18 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
     dummypad.SetLayerSet( LSET::AllCuMask() );     // Ensure the hole is on all layers
 
     // Compute the min distance to pads
-    if( aTestPads )
+    for( MODULE* mod : m_pcb->Modules() )
     {
-        unsigned pad_count = m_pcb->GetPadCount();
-
-        auto pads = m_pcb->GetPads();
-
-        for( unsigned ii = 0; ii < pad_count; ++ii )
+        for( D_PAD* pad : mod->Pads() )
         {
-            D_PAD* pad = pads[ii];
             SEG padSeg( pad->GetPosition(), pad->GetPosition() );
 
-
-            /* No problem if pads are on another layer,
-             * But if a drill hole exists	(a pad on a single layer can have a hole!)
-             * we must test the hole
-             */
+            // No problem if pads are on another layer, but if a drill hole exists (a pad on
+            // a single layer can have a hole!) we must test the hole
             if( !( pad->GetLayerSet() & layerMask ).any() )
             {
-                /* We must test the pad hole. In order to use the function
-                 * checkClearanceSegmToPad(),a pseudo pad is used, with a shape and a
-                 * size like the hole
-                 */
+                // We must test the pad hole. In order to use checkClearanceSegmToPad(), a
+                // pseudo pad is used, with a shape and a size like the hole
                 if( pad->GetDrillSize().x == 0 )
                     continue;
 
@@ -341,8 +332,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
                 m_padToTestPos = dummypad.GetPosition() - origin;
 
-                if( !checkClearanceSegmToPad( &dummypad, aRefSeg->GetWidth(),
-                                              netclass->GetClearance() ) )
+                if( !checkClearanceSegmToPad( &dummypad, ref_seg_width, ref_seg_clearance ) )
                 {
                     markers.PUSH_NEW_MARKER_4( aRefSeg, pad, padSeg, DRCE_TRACK_NEAR_THROUGH_HOLE );
 
@@ -362,8 +352,9 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             // DRC for the pad
             shape_pos = pad->ShapePos();
             m_padToTestPos = shape_pos - origin;
+            int segToPadClearance = std::max( ref_seg_clearance, pad->GetClearance() );
 
-            if( !checkClearanceSegmToPad( pad, aRefSeg->GetWidth(), aRefSeg->GetClearance( pad ) ) )
+            if( !checkClearanceSegmToPad( pad, ref_seg_width, segToPadClearance ) )
             {
                 markers.PUSH_NEW_MARKER_4( aRefSeg, pad, padSeg, DRCE_TRACK_NEAR_PAD );
 
@@ -396,8 +387,8 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
 
         // the minimum distance = clearance plus half the reference track
         // width plus half the other track's width
-        int w_dist = aRefSeg->GetClearance( track );
-        w_dist += ( aRefSeg->GetWidth() + track->GetWidth() ) / 2;
+        int w_dist = std::max( ref_seg_clearance, track->GetClearance() );
+        w_dist += ( ref_seg_width + track->GetWidth() ) / 2;
 
         // Due to many double to int conversions during calculations, which
         // create rounding issues,
@@ -680,10 +671,10 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
             if( zone->GetNetCode() && zone->GetNetCode() == net_code_ref )
                 continue;
 
-            int clearance = zone->GetClearance( aRefSeg );
+            int clearance = std::max( ref_seg_clearance, zone->GetClearance() );
             SHAPE_POLY_SET* outline = const_cast<SHAPE_POLY_SET*>( &zone->GetFilledPolysList() );
 
-            if( outline->Distance( refSeg, aRefSeg->GetWidth() ) < clearance )
+            if( outline->Distance( refSeg, ref_seg_width ) < clearance )
                 addMarkerToPcb( m_markerFactory.NewMarker( aRefSeg, zone, DRCE_TRACK_NEAR_ZONE ) );
         }
     }
@@ -694,10 +685,10 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterato
     {
         SEG test_seg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
 
-        int clearance = std::max( aRefSeg->GetClearance(), dsnSettings.m_CopperEdgeClearance );
+        int clearance = std::max( ref_seg_clearance, dsnSettings.m_CopperEdgeClearance );
 
         // the minimum distance = clearance plus half the reference track width
-        SEG::ecoord w_dist = clearance + aRefSeg->GetWidth() / 2;
+        SEG::ecoord w_dist = clearance + ref_seg_width / 2;
         SEG::ecoord w_dist_sq = w_dist * w_dist;
 
         for( auto it = m_board_outlines.IterateSegmentsWithHoles(); it; it++ )

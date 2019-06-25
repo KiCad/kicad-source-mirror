@@ -202,9 +202,8 @@ public:
 
     /**
      * Function GetClearance
-     * returns the clearance when routing near aBoardItem
      */
-    int GetClearance( BOARD_ITEM* aBoardItem )
+    int GetClearance()
     {
         wxASSERT( m_NetClass );
         return m_NetClass->GetClearance();

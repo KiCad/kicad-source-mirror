@@ -330,13 +330,12 @@ private:
      * @param aRefSeg The segment to test
      * @param aStartIt the iterator to the first track to test
      * @param aEndIt the marker for the iterator end
-     * @param aTestPads true if should do pads test
      * @param aTestZones true if should do copper zones test. This can be very time consumming
      * @return bool - true if no problems, else false and m_currentMarker is
      *          filled in with the problem information.
      */
     bool doTrackDrc( TRACK* aRefSeg, TRACKS::iterator aStartIt, TRACKS::iterator aEndIt,
-                     bool aTestPads, bool aTestZones );
+                     bool aTestZones );
 
     /**
      * Test for footprint courtyard overlaps.

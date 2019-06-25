@@ -78,75 +78,30 @@ bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
 
 int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 {
-    NETCLASSPTR myclass = GetNetClass();
+    int myClearance = m_netinfo->GetClearance();
 
-    // DO NOT use wxASSERT, because GetClearance is called inside an OnPaint event
-    // and a call to wxASSERT can crash the application.
-    if( myclass )
-    {
-        int myClearance  = myclass->GetClearance();
-        // @todo : after GetNetClass() is reliably not returning NULL, remove the
-        // tests for if( myclass )
+    if( m_netinfo->GetNet() == 0 )
+        myClearance = GetBoard()->GetDesignSettings().GetDefault()->GetClearance();
 
-        if( aItem )
-        {
-            int hisClearance = aItem->GetClearance();
-            return std::max( hisClearance, myClearance );
-        }
+    if( aItem )
+        return std::max( myClearance, aItem->GetClearance() );
 
-        return myClearance;
-    }
-    else
-    {
-        wxLogTrace( traceMask, "%s: NULL netclass,type %d", __func__, Type() );
-    }
-
-    return 0;
+    return myClearance;
 }
 
 
 NETCLASSPTR BOARD_CONNECTED_ITEM::GetNetClass() const
 {
-    // It is important that this be implemented without any sequential searching.
-    // Simple array lookups should be fine, performance-wise.
-    BOARD*  board = GetBoard();
-
-    // DO NOT use wxASSERT, because GetNetClass is called inside an OnPaint event
-    // and a call to wxASSERT can crash the application.
-
-    if( board == NULL )     // Should not occur
-    {
-        wxLogTrace( traceMask, "%s: NULL board,type %d", __func__, Type() );
-
-        return NETCLASSPTR();
-    }
-
-    NETCLASSPTR     netclass;
-    NETINFO_ITEM*   net = board->FindNet( GetNetCode() );
-
-    if( net )
-    {
-        netclass = net->GetNetClass();
-
-        //DBG( if(!netclass) printf( "%s: NULL netclass,type %d", __func__, Type() );)
-    }
+    NETCLASSPTR netclass = m_netinfo->GetNetClass();
 
     if( netclass )
         return netclass;
     else
-        return board->GetDesignSettings().GetDefault();
+        return GetBoard()->GetDesignSettings().GetDefault();
 }
 
 
 wxString BOARD_CONNECTED_ITEM::GetNetClassName() const
 {
-    wxString    name;
-    NETCLASSPTR myclass = GetNetClass();
-
-    if( myclass )
-        name = myclass->GetName();
-    else
-        name = NETCLASS::Default;
-
-    return name;
+    return m_netinfo->GetClassName();
 }
