@@ -99,13 +99,6 @@ public:
     PCBNEW_SELECTION& RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
             std::vector<BOARD_ITEM*>* aFiltered = nullptr, bool aConfirmLockedItems = false );
 
-    /**
-     * Clears the selection if the selection Bounding Box doesn't fall within the given point
-     *
-     * @param aPt Point to check -- This is inclusive of the edge.
-     */
-    void ClearIfOutside( const VECTOR2I& aPt );
-
     ///> Checks if the user has agreed to modify locked items for the given selection.
     SELECTION_LOCK_FLAGS CheckLock();
 
@@ -117,6 +110,7 @@ public:
 
     ///> Item selection event handler.
     int SelectItem( const TOOL_EVENT& aEvent );
+    void AddItemToSel( BOARD_ITEM* aItem, bool aQuietMode = false );
 
     ///> Multiple item selection event handler
     int SelectItems( const TOOL_EVENT& aEvent );
@@ -126,6 +120,9 @@ public:
 
     ///> Multiple item unselection event handler
     int UnselectItems( const TOOL_EVENT& aEvent );
+
+    void BrightenItem( BOARD_ITEM* aItem );
+    void UnbrightenItem( BOARD_ITEM* aItem );
 
     /**
      * Rebuilds the selection from the EDA_ITEMs' selection flags.  Commonly called after
@@ -306,7 +303,7 @@ private:
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to add the item to in the BRIGHTENED mode.
      */
-    void highlight( BOARD_ITEM* aItem, int aHighlightMode, PCBNEW_SELECTION& aGroup );
+    void highlight( BOARD_ITEM* aItem, int aHighlightMode, PCBNEW_SELECTION* aGroup = nullptr );
 
     /**
      * Function unhighlight()
@@ -315,7 +312,7 @@ private:
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to remove the item from.
      */
-    void unhighlight( BOARD_ITEM* aItem, int aHighlightMode, PCBNEW_SELECTION& aGroup );
+    void unhighlight( BOARD_ITEM* aItem, int aHighlightMode, PCBNEW_SELECTION* aGroup = nullptr );
 
     /**
      * Function selectionContains()

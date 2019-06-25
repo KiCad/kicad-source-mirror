@@ -269,6 +269,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
+    editFrame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
     controls->ShowCursor( true );
     controls->SetAutoPan( true );
@@ -496,6 +497,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         m_commit->Push( _( "Drag" ) );
     }
 
+    editFrame->PopTool();
     return 0;
 }
 

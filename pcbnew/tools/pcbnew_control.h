@@ -112,6 +112,8 @@ private:
     ///> Grid origin marker.
     std::unique_ptr<KIGFX::ORIGIN_VIEWITEM> m_gridOrigin;
 
+    BOARD_ITEM* m_pickerItem;
+
     ///> Applies the legacy canvas grid settings for GAL.
     void updateGrid();
 };

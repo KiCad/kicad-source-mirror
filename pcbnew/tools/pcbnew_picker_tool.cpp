@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -83,6 +84,21 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 setControls();
         }
 
+        else if( evt->IsMotion() )
+        {
+            if( m_motionHandler )
+            {
+                try
+                {
+                    (*m_motionHandler)( cursorPos );
+                }
+                catch( std::exception& e )
+                {
+                    std::cerr << "PCBNEW_PICKER_TOOL motion handler error: " << e.what() << std::endl;
+                }
+            }
+        }
+
         else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             if( m_cancelHandler )
@@ -148,6 +164,7 @@ void PCBNEW_PICKER_TOOL::reset()
 
     m_picked = NULLOPT;
     m_clickHandler = NULLOPT;
+    m_motionHandler = NULLOPT;
     m_cancelHandler = NULLOPT;
     m_finalizeHandler = NULLOPT;
 }

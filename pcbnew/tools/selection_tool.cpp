@@ -319,13 +319,6 @@ PCBNEW_SELECTION& SELECTION_TOOL::GetSelection()
 }
 
 
-void SELECTION_TOOL::ClearIfOutside( const VECTOR2I& aPt )
-{
-    if( !m_selection.Empty() && !m_selection.GetBoundingBox().Contains( aPt.x, aPt.y ) )
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-}
-
-
 PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
         std::vector<BOARD_ITEM*>* aFiltered, bool aConfirmLockedItems )
 {
@@ -378,10 +371,10 @@ PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCli
          * apply them both
          */
         for( auto item : diff )
-            unhighlight( static_cast<BOARD_ITEM*>( item ), SELECTED, m_selection );
+            unhighlight( static_cast<BOARD_ITEM*>( item ), SELECTED, &m_selection );
 
         for( auto item : new_items )
-            highlight( static_cast<BOARD_ITEM*>( item ), SELECTED, m_selection );
+            highlight( static_cast<BOARD_ITEM*>( item ), SELECTED, &m_selection );
 
         m_frame->GetCanvas()->ForceRefresh();
     }
@@ -704,18 +697,21 @@ int SELECTION_TOOL::SelectItems( const TOOL_EVENT& aEvent )
 
 int SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
 {
-    // Check if there is an item to be selected
-    BOARD_ITEM* item = aEvent.Parameter<BOARD_ITEM*>();
+    AddItemToSel( aEvent.Parameter<BOARD_ITEM*>() );
+    return 0;
+}
 
-    if( item )
+
+void SELECTION_TOOL::AddItemToSel( BOARD_ITEM* aItem, bool aQuietMode )
+{
+    if( aItem )
     {
-        select( item );
+        select( aItem );
 
         // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+        if( !aQuietMode )
+            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     }
-
-    return 0;
 }
 
 
@@ -750,6 +746,18 @@ int SELECTION_TOOL::UnselectItem( const TOOL_EVENT& aEvent )
     }
 
     return 0;
+}
+
+
+void SELECTION_TOOL::BrightenItem( BOARD_ITEM* aItem )
+{
+    highlight( aItem, BRIGHTENED );
+}
+
+
+void SELECTION_TOOL::UnbrightenItem( BOARD_ITEM* aItem )
+{
+    unhighlight( aItem, BRIGHTENED );
 }
 
 
@@ -1284,7 +1292,7 @@ void SELECTION_TOOL::clearSelection()
         return;
 
     while( m_selection.GetSize() )
-        unhighlight( static_cast<BOARD_ITEM*>( m_selection.Front() ), SELECTED, m_selection );
+        unhighlight( static_cast<BOARD_ITEM*>( m_selection.Front() ), SELECTED, &m_selection );
 
     view()->Update( &m_selection );
 
@@ -1313,7 +1321,7 @@ void SELECTION_TOOL::RebuildSelection()
             if( parent && parent->Type() == PCB_MODULE_T && parent->IsSelected() )
                 return SEARCH_CONTINUE;
 
-            highlight( (BOARD_ITEM*) item, SELECTED, m_selection );
+            highlight( (BOARD_ITEM*) item, SELECTED, &m_selection );
         }
 
         return SEARCH_CONTINUE;
@@ -1367,7 +1375,7 @@ bool SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxStr
         if( evt->Action() == TA_CHOICE_MENU_UPDATE )
         {
             if( current )
-                unhighlight( current, BRIGHTENED, highlightGroup );
+                unhighlight( current, BRIGHTENED, &highlightGroup );
 
             int id = *evt->GetCommandId();
 
@@ -1375,7 +1383,7 @@ bool SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxStr
             if( id > 0 && id <= limit )
             {
                 current = ( *aCollector )[id - 1];
-                highlight( current, BRIGHTENED, highlightGroup );
+                highlight( current, BRIGHTENED, &highlightGroup );
             }
             else
             {
@@ -1385,7 +1393,7 @@ bool SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxStr
         else if( evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
             if( current )
-                unhighlight( current, BRIGHTENED, highlightGroup );
+                unhighlight( current, BRIGHTENED, &highlightGroup );
 
             OPT<int> id = evt->GetCommandId();
 
@@ -1692,14 +1700,14 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
             return;
     }
 
-    highlight( aItem, SELECTED, m_selection );
+    highlight( aItem, SELECTED, &m_selection );
     view()->Update( &m_selection );
 }
 
 
 void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 {
-    unhighlight( aItem, SELECTED, m_selection );
+    unhighlight( aItem, SELECTED, &m_selection );
     view()->Update( &m_selection );
 
     if( m_selection.Empty() )
@@ -1707,17 +1715,20 @@ void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 }
 
 
-void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION& aGroup )
+void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* aGroup )
 {
     if( aMode == SELECTED )
         aItem->SetSelected();
     else if( aMode == BRIGHTENED )
         aItem->SetBrightened();
 
-    // Hide the original item, so it is shown only on overlay
-    view()->Hide( aItem, true );
+    if( aGroup )
+    {
+        // Hide the original item, so it is shown only on overlay
+        view()->Hide( aItem, true );
 
-    aGroup.Add( aItem );
+        aGroup->Add( aItem );
+    }
 
     // Modules are treated in a special way - when they are highlighted, we have to
     // highlight all the parts that make the module, not the module itself
@@ -1730,31 +1741,34 @@ void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION& 
             else if( aMode == BRIGHTENED )
             {
                 item->SetBrightened();
-                aGroup.Add( item );
+
+                if( aGroup )
+                    aGroup->Add( item );
             }
-            view()->Hide( item, true );
+
+            if( aGroup )
+                view()->Hide( item, true );
         });
     }
 
-    // Many selections are very temporal and updating the display each time just
-    // creates noise.
-    if( aMode == BRIGHTENED )
-        getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+    getView()->Update( aItem );
 }
 
 
-void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION& aGroup )
+void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* aGroup )
 {
     if( aMode == SELECTED )
         aItem->ClearSelected();
     else if( aMode == BRIGHTENED )
         aItem->ClearBrightened();
 
-    aGroup.Remove( aItem );
+    if( aGroup )
+    {
+        aGroup->Remove( aItem );
 
-    // Restore original item visibility
-    view()->Hide( aItem, false );
-    view()->Update( aItem );
+        // Restore original item visibility
+        view()->Hide( aItem, false );
+    }
 
     // Modules are treated in a special way - when they are highlighted, we have to
     // highlight all the parts that make the module, not the module itself
@@ -1769,16 +1783,17 @@ void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION
 
             // N.B. if we clear the selection flag for sub-elements, we need to also
             // remove the element from the selection group (if it exists)
-            aGroup.Remove( item );
-            view()->Hide( item, false );
-            view()->Update( item );
+            if( aGroup )
+            {
+                aGroup->Remove( item );
+
+                view()->Hide( item, false );
+                view()->Update( item );
+            }
         });
     }
 
-    // Many selections are very temporal and updating the display each time just
-    // creates noise.
-    if( aMode == BRIGHTENED )
-        getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+    getView()->Update( aItem );
 }
 
 

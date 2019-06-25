@@ -507,21 +507,78 @@ static bool deleteItem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 }
 
 
+#define HITTEST_THRESHOLD_PIXELS 5
+
+
 int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
     m_frame->SetTool( aEvent.GetCommandStr().get() );
     Activate();
 
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
-    wxCHECK( picker, 0 );
+    m_pickerItem = nullptr;
 
-    picker->SetClickHandler( std::bind( deleteItem, m_toolMgr, _1 ) );
+    picker->SetClickHandler( [this] ( const VECTOR2D& aPosition ) -> bool
+    {
+        if( m_pickerItem )
+        {
+            if( m_pickerItem && m_pickerItem->IsLocked() )
+            {
+                STATUS_TEXT_POPUP statusPopup( m_frame );
+                statusPopup.SetText( _( "Item locked." ) );
+                statusPopup.PopupFor( 2000 );
+                statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+                return true;
+            }
+
+            SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+            selectionTool->UnbrightenItem( m_pickerItem );
+            selectionTool->AddItemToSel( m_pickerItem, true );
+            m_toolMgr->RunAction( PCB_ACTIONS::remove, true );
+            m_pickerItem = nullptr;
+        }
+
+        return true;
+    } );
+
+    picker->SetMotionHandler( [this] ( const VECTOR2D& aPos )
+    {
+        BOARD* board = m_frame->GetBoard();
+        GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
+        GENERAL_COLLECTOR collector;
+        collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+
+        if( m_editModules )
+            collector.Collect( board, GENERAL_COLLECTOR::ModuleItems, (wxPoint) aPos, guide );
+        else
+            collector.Collect( board, GENERAL_COLLECTOR::BoardLevelItems, (wxPoint) aPos, guide );
+
+        BOARD_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
+
+        if( m_pickerItem != item )
+        {
+            SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+
+            if( m_pickerItem )
+                selectionTool->UnbrightenItem( m_pickerItem );
+
+            m_pickerItem = item;
+
+            if( m_pickerItem )
+                selectionTool->BrightenItem( m_pickerItem );
+        }
+    } );
 
     picker->SetFinalizeHandler( [&]( const int& aFinalState )
-        {
-            if( aFinalState == PCBNEW_PICKER_TOOL::EVT_CANCEL )
-                m_frame->ClearToolStack();
-        } );
+    {
+        if( m_pickerItem )
+            m_toolMgr->GetTool<SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
+
+        if( aFinalState == PCBNEW_PICKER_TOOL::EVT_CANCEL )
+            m_frame->ClearToolStack();
+    } );
 
     picker->Activate();
     Wait();

@@ -950,61 +950,62 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     m_pickerItem = nullptr;
 
     picker->SetClickHandler( [this] ( const VECTOR2D& aPosition ) -> bool
+    {
+        if( m_pickerItem )
         {
-            if( m_pickerItem )
+            SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( m_pickerItem );
+
+            if( sch_item && sch_item->IsLocked() )
             {
-                SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( m_pickerItem );
-
-                if( sch_item && sch_item->IsLocked() )
-                {
-                    STATUS_TEXT_POPUP statusPopup( m_frame );
-                    statusPopup.SetText( _( "Item locked." ) );
-                    statusPopup.PopupFor( 2000 );
-                    statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-                    return true;
-                }
-
-                EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-                selectionTool->AddItemToSel( m_pickerItem, true );
-                m_toolMgr->RunAction( EE_ACTIONS::doDelete, true );
-                m_pickerItem = nullptr;
+                STATUS_TEXT_POPUP statusPopup( m_frame );
+                statusPopup.SetText( _( "Item locked." ) );
+                statusPopup.PopupFor( 2000 );
+                statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+                return true;
             }
 
-            return true;
-        } );
+            EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+            selectionTool->UnbrightenItem( m_pickerItem );
+            selectionTool->AddItemToSel( m_pickerItem, true );
+            m_toolMgr->RunAction( EE_ACTIONS::doDelete, true );
+            m_pickerItem = nullptr;
+        }
+
+        return true;
+    } );
 
     picker->SetMotionHandler( [this] ( const VECTOR2D& aPos )
+    {
+        EE_COLLECTOR collector;
+        collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+        collector.Collect( m_frame->GetScreen()->GetDrawItems(), deletableItems, (wxPoint) aPos );
+        EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
+
+        if( m_pickerItem != item )
         {
-            EE_COLLECTOR collector;
-            collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-            collector.Collect( m_frame->GetScreen()->GetDrawItems(), deletableItems, (wxPoint) aPos );
-            EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
+            EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
 
-            if( m_pickerItem != item )
-            {
-                EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+            if( m_pickerItem )
+                selectionTool->UnbrightenItem( m_pickerItem );
 
-                if( m_pickerItem )
-                    selectionTool->UnbrightenItem( m_pickerItem );
+            m_pickerItem = item;
 
-                m_pickerItem = item;
+            if( m_pickerItem )
+                selectionTool->BrightenItem( m_pickerItem );
+        }
+    } );
 
-                if( m_pickerItem )
-                    selectionTool->BrightenItem( m_pickerItem );
-            }
-        } );
+    picker->SetFinalizeHandler( [this] ( const int& aFinalState )
+    {
+        if( m_pickerItem )
+            m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
 
-    picker->SetFinalizeHandler( [&]( const int& aFinalState )
-        {
-            if( aFinalState == EE_PICKER_TOOL::EVT_CANCEL )
-                m_frame->ClearToolStack();
-        } );
+        if( aFinalState == EE_PICKER_TOOL::EVT_CANCEL )
+            m_frame->ClearToolStack();
+    } );
 
     picker->Activate();
     Wait();
-
-    if( m_pickerItem )
-        m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
 
     m_frame->PopTool();
     return 0;

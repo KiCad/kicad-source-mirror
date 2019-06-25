@@ -149,6 +149,7 @@ void EE_PICKER_TOOL::resetPicker()
     m_autoPanning = false;
 
     m_clickHandler = NULLOPT;
+    m_motionHandler = NULLOPT;
     m_cancelHandler = NULLOPT;
     m_finalizeHandler = NULLOPT;
 }

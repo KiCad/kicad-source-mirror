@@ -39,6 +39,7 @@ public:
 
     ///> Event handler types.
     typedef std::function<bool(const VECTOR2D&)> CLICK_HANDLER;
+    typedef std::function<void(const VECTOR2D&)> MOTION_HANDLER;
     typedef std::function<void(void)> CANCEL_HANDLER;
     typedef std::function<void(const int&)> FINALIZE_HANDLER;
 
@@ -87,6 +88,16 @@ public:
     }
 
     /**
+     * Function SetMotionHandler()
+     * Sets a handler for mouse motion.  Used for roll-over highlighting.
+     */
+    inline void SetMotionHandler( MOTION_HANDLER aHandler )
+    {
+        wxASSERT( !m_motionHandler );
+        m_motionHandler = aHandler;
+    }
+
+    /**
      * Function SetCancelHandler()
      * Sets a handler for cancel events (ESC or context-menu Cancel).
      */
@@ -117,6 +128,7 @@ private:
     LSET m_layerMask;
 
     OPT<CLICK_HANDLER> m_clickHandler;
+    OPT<MOTION_HANDLER> m_motionHandler;
     OPT<CANCEL_HANDLER> m_cancelHandler;
     OPT<FINALIZE_HANDLER> m_finalizeHandler;
 
