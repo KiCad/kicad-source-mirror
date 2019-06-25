@@ -134,6 +134,7 @@ FIELDS_GRID_TABLE<T>::~FIELDS_GRID_TABLE()
     m_valueAttr->DecRef();
     m_footprintAttr->DecRef();
     m_urlAttr->DecRef();
+    m_nonUrlAttr->DecRef();
     m_vAlignAttr->DecRef();
     m_hAlignAttr->DecRef();
     m_orientationAttr->DecRef();
@@ -253,13 +254,11 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
                 m_urlAttr->IncRef();
                 return m_urlAttr;
             }
-            /*
             else
             {
                 m_nonUrlAttr->IncRef();
                 return m_nonUrlAttr;
             }
-             */
         }
         return nullptr;
 
