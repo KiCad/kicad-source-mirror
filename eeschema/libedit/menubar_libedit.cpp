@@ -82,8 +82,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddMenu( submenuExport,              EE_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-    // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
-    fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, EE_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( wxID_CLOSE, _( "Close" ), "", exit_xpm, EE_CONDITIONS::ShowAlways );
 
     fileMenu->Resolve();
 

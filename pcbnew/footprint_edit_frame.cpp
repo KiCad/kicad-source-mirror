@@ -75,7 +75,8 @@
 
 BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_CLOSE( FOOTPRINT_EDIT_FRAME::OnCloseWindow )
-    EVT_MENU( wxID_EXIT, FOOTPRINT_EDIT_FRAME::CloseModuleEditor )
+    EVT_MENU( wxID_CLOSE, FOOTPRINT_EDIT_FRAME::CloseModuleEditor )
+    EVT_MENU( wxID_EXIT, FOOTPRINT_EDIT_FRAME::OnExitKiCad )
 
     EVT_SIZE( FOOTPRINT_EDIT_FRAME::OnSize )
 
@@ -219,6 +220,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     GetToolManager()->RunAction( ACTIONS::gridPreset, true, m_LastGridSizeId );
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
     updateTitle();
+    InitExitKey();
 
     Raise();            // On some window managers, this is needed
     Show( true );
@@ -474,6 +476,12 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
     //close the editor
     Destroy();
+}
+
+
+void FOOTPRINT_EDIT_FRAME::OnExitKiCad( wxCommandEvent& event )
+{
+    Kiway().OnKiCadExit();
 }
 
 

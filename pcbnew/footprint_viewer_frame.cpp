@@ -70,7 +70,8 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
     EVT_SIZE( FOOTPRINT_VIEWER_FRAME::OnSize )
     EVT_ACTIVATE( FOOTPRINT_VIEWER_FRAME::OnActivate )
 
-    EVT_MENU( wxID_EXIT, FOOTPRINT_VIEWER_FRAME::CloseFootprintViewer )
+    EVT_MENU( wxID_EXIT, FOOTPRINT_VIEWER_FRAME::OnExitKiCad )
+    EVT_MENU( wxID_CLOSE, FOOTPRINT_VIEWER_FRAME::CloseFootprintViewer )
 
     // Toolbar events
     EVT_TOOL( ID_MODVIEW_SELECT_PART, FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint )
@@ -228,6 +229,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     GetCanvas()->GetView()->SetScale( m_lastZoom );
 
     updateView();
+    InitExitKey();
 
     if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame
     {
@@ -772,7 +774,13 @@ void FOOTPRINT_VIEWER_FRAME::updateView()
 }
 
 
+void FOOTPRINT_VIEWER_FRAME::OnExitKiCad( wxCommandEvent& event )
+{
+    Kiway().OnKiCadExit();
+}
+
+
 void FOOTPRINT_VIEWER_FRAME::CloseFootprintViewer( wxCommandEvent& event )
 {
-    Close();
+    Close( false );
 }

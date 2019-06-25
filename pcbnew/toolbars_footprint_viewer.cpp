@@ -123,9 +123,9 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
     //
     CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, selTool );
 
-    fileMenu->AddItem( wxID_EXIT, _( "Close" ), _( "Close footprint viewer" ), 
-                       exit_xpm,                  SELECTION_CONDITIONS::ShowAlways );
-    
+    fileMenu->AddItem( wxID_CLOSE, _( "Close" ), _( "Close footprint viewer" ), exit_xpm,
+            SELECTION_CONDITIONS::ShowAlways );
+
     fileMenu->Resolve();
 
     //----- View menu -----------------------------------------------------------

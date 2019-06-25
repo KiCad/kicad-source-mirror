@@ -89,6 +89,7 @@ public:
 
     void OnCloseWindow( wxCloseEvent& Event ) override;
     void CloseModuleEditor( wxCommandEvent& Event );
+    void OnExitKiCad( wxCommandEvent& aEvent );
 
     /**
      * switches currently used canvas (Cairo / OpenGL).

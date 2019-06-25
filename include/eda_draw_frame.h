@@ -149,6 +149,13 @@ protected:
     void CommonSettingsChanged() override;
 
     /**
+     * Sets the common key-pair for exiting the application (Ctrl-Q) and ties it
+     * to the wxID_EXIT event id.  This is useful in sub-applications to pass the event
+     * up to a non-owning window
+     */
+    void InitExitKey();
+
+    /**
      * @param doOpen if true runs an Open Library browser, otherwise New Library
      * @param aFilename for New may contain a default name; in both cases return the chosen
      *                  filename.

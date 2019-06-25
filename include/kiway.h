@@ -379,6 +379,8 @@ public:
      */
     void SetTop( wxFrame* aTop );
 
+    void OnKiCadExit();
+
     void OnKiwayEnd();
 
     bool ProcessEvent( wxEvent& aEvent ) override;

@@ -22,19 +22,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <kiface_i.h>
-#include <pgm_base.h>
-#include <gr_basic.h>
-#include <sch_draw_panel.h>
-#include <gestfich.h>
-#include <confirm.h>
 #include <base_units.h>
-#include <msgpanel.h>
-#include <html_messagebox.h>
-#include <executable_names.h>
+#include <confirm.h>
 #include <eda_dockart.h>
+#include <executable_names.h>
+#include <fctsys.h>
+#include <gestfich.h>
+#include <gr_basic.h>
+#include <html_messagebox.h>
+#include <kiface_i.h>
+#include <kiway.h>
+#include <msgpanel.h>
+#include <pgm_base.h>
 #include <profile.h>
+#include <sch_draw_panel.h>
 
 #include <advanced_config.h>
 #include <general.h>
@@ -222,6 +223,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_IMPORT_NON_KICAD_SCH, SCH_EDIT_FRAME::OnImportProject )
 
     EVT_MENU( wxID_EXIT, SCH_EDIT_FRAME::OnExit )
+    EVT_MENU( wxID_CLOSE, SCH_EDIT_FRAME::OnExit )
 
     EVT_TOOL( ID_RESCUE_CACHED, SCH_EDIT_FRAME::OnRescueProject )
     EVT_MENU( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnRemapSymbols )
@@ -299,6 +301,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     if( GetCanvas() )
         GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
+
+    InitExitKey();
 
     // Net list generator
     DefaultExecFlags();
@@ -899,7 +903,11 @@ void SCH_EDIT_FRAME::OnRemapSymbols( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnExit( wxCommandEvent& event )
 {
-    Close( false );
+    if( event.GetId() == wxID_EXIT )
+        Kiway().OnKiCadExit();
+
+    if( event.GetId() == wxID_CLOSE || Kiface().IsSingle() )
+        Close( false );
 }
 
 

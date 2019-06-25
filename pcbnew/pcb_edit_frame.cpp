@@ -137,6 +137,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_MENU_CREATE_LIBRARY_AND_ARCHIVE_MODULES, PCB_EDIT_FRAME::Process_Special_Functions )
 
     EVT_MENU( wxID_EXIT, PCB_EDIT_FRAME::OnQuit )
+    EVT_MENU( wxID_CLOSE, PCB_EDIT_FRAME::OnQuit )
 
     // menu Config
     EVT_MENU( ID_PCB_3DSHAPELIB_WIZARD, PCB_EDIT_FRAME::On3DShapeLibWizard )
@@ -311,6 +312,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         SaveSettings( config() );
     }
 
+    InitExitKey();
+
     GetCanvas()->SwitchBackend( m_canvasType );
     GetCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
     GetCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
@@ -455,7 +458,11 @@ void PCB_EDIT_FRAME::ReFillLayerWidget()
 
 void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 {
-    Close( false );
+    if( event.GetId() == wxID_EXIT )
+        Kiway().OnKiCadExit();
+
+    if( event.GetId() == wxID_CLOSE || Kiface().IsSingle() )
+        Close( false );
 }
 
 

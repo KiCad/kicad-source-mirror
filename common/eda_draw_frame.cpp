@@ -305,6 +305,15 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 }
 
 
+void EDA_DRAW_FRAME::InitExitKey()
+{
+    wxAcceleratorEntry entries[1];
+    entries[0].Set( wxACCEL_CTRL, int( 'Q' ), wxID_EXIT );
+    wxAcceleratorTable accel( 1, entries );
+    SetAcceleratorTable( accel );
+}
+
+
 /*
  * Respond to selections in the toolbar zoom popup
  */

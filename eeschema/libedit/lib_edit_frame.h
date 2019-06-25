@@ -239,6 +239,7 @@ public:
     void RebuildSymbolUnitsList();
 
     void OnCloseWindow( wxCloseEvent& Event );
+    void   OnExitKiCad( wxCommandEvent& event );
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;
     void ReCreateOptToolbar();

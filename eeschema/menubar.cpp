@@ -115,8 +115,16 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddItem( ACTIONS::plot,              EE_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-    // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
-    fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, EE_CONDITIONS::ShowAlways );
+
+    if( Kiface().IsSingle() ) // not when under a project mgr
+    {
+        // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
+        fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, EE_CONDITIONS::ShowAlways );
+    }
+    else
+    {
+        fileMenu->AddItem( wxID_CLOSE, _( "Close" ), "", exit_xpm, EE_CONDITIONS::ShowAlways );
+    }
 
     fileMenu->Resolve();
 

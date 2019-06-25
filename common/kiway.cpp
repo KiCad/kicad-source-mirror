@@ -499,6 +499,21 @@ bool KIWAY::ProcessEvent( wxEvent& aEvent )
 }
 
 
+void KIWAY::OnKiCadExit()
+{
+    if( m_ctl & KFCTL_CPP_PROJECT_SUITE )
+    {
+        // A dynamic_cast could be better, but creates link issues
+        // (some basic_frame functions not found) on some platforms,
+        // so a static_cast is used.
+        EDA_BASE_FRAME* top = static_cast<EDA_BASE_FRAME*>( m_top );
+
+        if( top )
+            top->Close( false );
+    }
+}
+
+
 void KIWAY::OnKiwayEnd()
 {
     for( KIFACE* i : m_kiface )

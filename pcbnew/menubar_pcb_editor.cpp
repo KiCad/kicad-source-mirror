@@ -193,8 +193,17 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddMenu( submenuArchive,               SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-    // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
-    fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
+
+    if( Kiface().IsSingle() ) // not when under a project mgr
+    {
+        // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
+        fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
+    }
+    else
+    {
+        fileMenu->AddItem(
+                wxID_CLOSE, _( "Close" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
+    }
 
     fileMenu->Resolve();
 

@@ -23,22 +23,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "kicad_id.h"
+#include "pgm_kicad.h"
+#include "tree_project_frame.h"
+#include <bitmaps.h>
+#include <build_version.h>
+#include <executable_names.h>
 #include <gestfich.h>
 #include <kiway.h>
+#include <kiway_express.h>
 #include <kiway_player.h>
-#include <wildcards_and_files_ext.h>
-#include <bitmaps.h>
-#include <executable_names.h>
-#include <build_version.h>
-#include "pgm_kicad.h"
 #include <panel_hotkeys_editor.h>
-#include "tree_project_frame.h"
-#include "kicad_id.h"
-#include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
+#include <tool/tool_manager.h>
 #include <tools/kicad_manager_actions.h>
 #include <tools/kicad_manager_control.h>
+#include <wildcards_and_files_ext.h>
 
 #ifdef __WXMAC__
 #include <MacTypes.h>

@@ -90,7 +90,8 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_LIBEDIT_EXPORT_BODY_BUTT, LIB_EDIT_FRAME::OnExportBody )
 
     // menubar commands
-    EVT_MENU( wxID_EXIT, LIB_EDIT_FRAME::CloseWindow )
+    EVT_MENU( wxID_EXIT, LIB_EDIT_FRAME::OnExitKiCad )
+    EVT_MENU( wxID_CLOSE, LIB_EDIT_FRAME::CloseWindow )
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
 
     // Update user interface elements.
@@ -152,6 +153,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateHToolbar();
     ReCreateVToolbar();
     ReCreateOptToolbar();
+    InitExitKey();
 
     updateTitle();
     DisplayCmpDoc();
@@ -328,6 +330,12 @@ void LIB_EDIT_FRAME::FreezeSearchTree()
 void LIB_EDIT_FRAME::ThawSearchTree()
 {
     m_libMgr->GetAdapter()->Thaw();
+}
+
+
+void LIB_EDIT_FRAME::OnExitKiCad( wxCommandEvent& event )
+{
+    Kiway().OnKiCadExit();
 }
 
 

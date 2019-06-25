@@ -109,6 +109,7 @@ private:
 
     void OnCloseWindow( wxCloseEvent& Event ) override;
     void CloseFootprintViewer( wxCommandEvent& event );
+    void OnExitKiCad( wxCommandEvent& event );
 
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;
