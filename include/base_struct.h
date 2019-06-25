@@ -292,7 +292,7 @@ public:
      * @param aScanTypes List of item types
      * @return true if the item type is contained in the list aScanTypes
      */
-    virtual bool IsType( const KICAD_T aScanTypes[] )
+    virtual bool IsType( const KICAD_T aScanTypes[] ) const
     {
         if( aScanTypes[0] == SCH_LOCATE_ANY_T )
             return true;

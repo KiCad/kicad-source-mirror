@@ -76,7 +76,7 @@
  *
  *  Redo command
  *  - delete item(s) old command:
- *      => deleted items are moved in GetDrawItems() list, and in
+ *      => deleted items are moved into m_tree
  *
  *  - change item(s) command
  *      => the copy of item(s) is moved in Undo list

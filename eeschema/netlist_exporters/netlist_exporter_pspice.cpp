@@ -287,31 +287,30 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
     for( unsigned sheet_idx = 0; sheet_idx < sheetList.size(); sheet_idx++ )
     {
         // Process component attributes to find Spice directives
-        for( EDA_ITEM* item = sheetList[sheet_idx].LastDrawList(); item; item = item->Next() )
+        for( auto item : sheetList[sheet_idx].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
-            SCH_COMPONENT* comp = findNextComponentAndCreatePinList( item, &sheetList[sheet_idx] );
+            SCH_COMPONENT* comp = findNextComponent( item, &sheetList[sheet_idx] );
 
             if( !comp )
-                break;
+                continue;
 
-            item = comp;
-
+            CreatePinList( comp, &sheetList[sheet_idx] );
             SPICE_ITEM spiceItem;
             spiceItem.m_parent = comp;
 
             // Obtain Spice fields
             SCH_FIELD* fieldLibFile = comp->FindField( GetSpiceFieldName( SF_LIB_FILE ) );
-            SCH_FIELD* fieldSeq = comp->FindField( GetSpiceFieldName( SF_NODE_SEQUENCE ) );
+            SCH_FIELD* fieldSeq     = comp->FindField( GetSpiceFieldName( SF_NODE_SEQUENCE ) );
 
             spiceItem.m_primitive = GetSpiceField( SF_PRIMITIVE, comp, aCtl )[0];
-            spiceItem.m_model = GetSpiceField( SF_MODEL, comp, aCtl );
-            spiceItem.m_refName = comp->GetRef( &sheetList[sheet_idx] );
+            spiceItem.m_model     = GetSpiceField( SF_MODEL, comp, aCtl );
+            spiceItem.m_refName   = comp->GetRef( &sheetList[sheet_idx] );
 
             // Duplicate references will result in simulation errors
             if( refNames.count( spiceItem.m_refName ) )
             {
                 DisplayError( NULL, wxT( "There are duplicate components. "
-                            "You need to annotate schematics first." ) );
+                                         "You need to annotate schematics first." ) );
                 return false;
             }
 
@@ -357,8 +356,8 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
 
                     while( tkz.HasMoreTokens() )
                     {
-                        wxString    pinIndex = tkz.GetNextToken();
-                        int         seq;
+                        wxString pinIndex = tkz.GetNextToken();
+                        int      seq;
 
                         // Find PinName In Standard List assign Standard List Index to Name:
                         seq = pinNames.Index( pinIndex );
@@ -388,11 +387,8 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
-        for( EDA_ITEM* item = sheetList[i].LastDrawList(); item; item = item->Next() )
+        for( auto item : sheetList[i].LastScreen()->Items().OfType( SCH_TEXT_T ) )
         {
-            if( item->Type() != SCH_TEXT_T )
-                continue;
-
             wxString text = static_cast<SCH_TEXT*>( item )->GetText();
 
             if( text.IsEmpty() )

@@ -26,12 +26,13 @@
 #include <macros.h>
 #include <trace_helpers.h>
 
-#include <sch_sheet_path.h>
-#include <transform.h>
 #include <ee_collectors.h>
+#include <lib_item.h>
+#include <sch_bus_entry.h>
 #include <sch_component.h>
 #include <sch_line.h>
-#include <sch_bus_entry.h>
+#include <sch_sheet_path.h>
+#include <transform.h>
 
 
 const KICAD_T EE_COLLECTOR::AllItems[] = {
@@ -93,8 +94,31 @@ SEARCH_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 }
 
 
-void EE_COLLECTOR::Collect( EDA_ITEM* aItem, const KICAD_T aFilterList[], const wxPoint& aPos,
-                            int aUnit, int aConvert )
+void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], const wxPoint& aPos,
+        int aUnit, int aConvert )
+{
+    Empty(); // empty the collection just in case
+
+    SetScanTypes( aFilterList );
+    m_Unit    = aUnit;
+    m_Convert = aConvert;
+
+    // remember where the snapshot was taken from and pass refPos to the Inspect() function.
+    SetRefPos( aPos );
+
+    if( aScreen )
+    {
+        for( const KICAD_T* filter = aFilterList; *filter != EOT; ++filter )
+        {
+            for( auto item : aScreen->Items().OfType( *filter ) )
+                item->Visit( m_inspector, nullptr, m_ScanTypes );
+        }
+    }
+}
+
+
+void EE_COLLECTOR::Collect( LIB_ITEMS_CONTAINER& aItems, const KICAD_T aFilterList[],
+        const wxPoint& aPos, int aUnit, int aConvert )
 {
     Empty();        // empty the collection just in case
 
@@ -105,11 +129,11 @@ void EE_COLLECTOR::Collect( EDA_ITEM* aItem, const KICAD_T aFilterList[], const 
     // remember where the snapshot was taken from and pass refPos to the Inspect() function.
     SetRefPos( aPos );
 
-    // aItem can be null for empty schematics
-    if( aItem && aItem->Type() == LIB_PART_T )
-        static_cast<LIB_PART*>( aItem )->Visit( m_inspector, nullptr, m_ScanTypes );
-    else
-        EDA_ITEM::IterateForward( aItem, m_inspector, nullptr, m_ScanTypes );
+    for( auto& item : aItems )
+    {
+        if( item.Visit( m_inspector, nullptr, m_ScanTypes ) == SEARCH_RESULT::QUIT )
+            break;
+    }
 }
 
 
@@ -141,24 +165,4 @@ bool EE_COLLECTOR::IsDraggableJunction() const
             return true;
 
     return false;
-}
-
-
-SEARCH_RESULT EE_TYPE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* testData )
-{
-    // The Vist() function only visits the testItem if its type was in the
-    // the scanList, so therefore we can collect anything given to us here.
-    Append( aItem );
-
-    return SEARCH_RESULT::CONTINUE;
-}
-
-
-void EE_TYPE_COLLECTOR::Collect( EDA_ITEM* aItem, const KICAD_T aFilterList[] )
-{
-    Empty();        // empty the collection
-
-    SetScanTypes( aFilterList );
-
-    EDA_ITEM::IterateForward( aItem, m_inspector, NULL, m_ScanTypes );
 }

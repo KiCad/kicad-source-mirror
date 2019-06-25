@@ -111,11 +111,8 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
 
         for( unsigned i = 0;  i < sheetList.size();  i++ )
         {
-            for( EDA_ITEM* item = sheetList[i].LastDrawList();  item;  item = item->Next() )
+            for( auto item : sheetList[i].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
             {
-                if( item->Type() != SCH_COMPONENT_T )
-                    continue;
-
                 SCH_COMPONENT*  comp2 = (SCH_COMPONENT*) item;
 
                 wxString ref2 = comp2->GetRef( &sheetList[i] );
@@ -215,14 +212,12 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
 
     for( unsigned i = 0;  i < sheetList.size();  i++ )
     {
-        for( EDA_ITEM* schItem = sheetList[i].LastDrawList();  schItem;  schItem = schItem->Next() )
+        for( auto item : sheetList[i].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
-            SCH_COMPONENT*  comp = findNextComponent( schItem, &sheetList[i] );
+            SCH_COMPONENT* comp = findNextComponent( item, &sheetList[i] );
 
             if( !comp )
-                break;  // No component left
-
-            schItem = comp;
+                continue;
 
             XNODE* xcomp;  // current component being constructed
 

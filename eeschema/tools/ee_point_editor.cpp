@@ -153,15 +153,15 @@ public:
             SCH_LINE* connectedStart = nullptr;
             SCH_LINE* connectedEnd = nullptr;
 
-            for( SCH_ITEM* test = frame->GetScreen()->GetDrawItems(); test; test = test->Next() )
+            for( auto test : frame->GetScreen()->Items().OfType( SCH_LINE_T ) )
             {
-                if( test->Type() != SCH_LINE_T || test->GetLayer() != LAYER_NOTES )
+                if( test->GetLayer() != LAYER_NOTES )
                     continue;
 
                 if( test == aItem )
                     continue;
 
-                SCH_LINE* testLine = (SCH_LINE*) test;
+                auto testLine = static_cast<SCH_LINE*>( test );
                 testLine->ClearFlags( STARTPOINT | ENDPOINT );
 
                 if( testLine->GetStartPoint() == line->GetStartPoint() )
@@ -185,6 +185,7 @@ public:
                     testLine->SetFlags( ENDPOINT );
                 }
             }
+
 
             points->AddPoint( line->GetStartPoint(), connectedStart );
             points->AddPoint( line->GetEndPoint(), connectedEnd );

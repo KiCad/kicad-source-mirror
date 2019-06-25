@@ -256,13 +256,11 @@ void DIALOG_ERC::OnLeftClickMarkersList( wxHtmlLinkEvent& event )
     SCH_SHEET_LIST  sheetList( g_RootSheet );
     bool found = false;
 
-    for( i = 0;  i < sheetList.size(); i++ )
+    for( i = 0; i < sheetList.size(); i++ )
     {
-        SCH_ITEM* item = (SCH_ITEM*) sheetList[i].LastDrawList();
-
-        for( ; item; item = item->Next() )
+        for( auto aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
         {
-            if( item == marker )
+            if( static_cast<const SCH_MARKER*>( aItem ) == marker )
             {
                 found = true;
                 break;
@@ -440,19 +438,12 @@ void DIALOG_ERC::DisplayERC_MarkersList()
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
-        SCH_ITEM* item = sheetList[i].LastDrawList();
-
-        for( ; item != NULL; item = item->Next() )
+        for( auto aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
         {
-            if( item->Type() != SCH_MARKER_T )
-                continue;
+            SCH_MARKER* marker = static_cast<SCH_MARKER*>( aItem );
 
-            SCH_MARKER* marker = (SCH_MARKER*) item;
-
-            if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
-                continue;
-
-            m_MarkersList->AppendToList( marker );
+            if( marker->GetMarkerType() == MARKER_BASE::MARKER_ERC )
+                m_MarkersList->AppendToList( marker );
         }
     }
 
@@ -623,11 +614,8 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     // Display new markers from the current screen:
     KIGFX::VIEW* view = m_parent->GetCanvas()->GetView();
 
-    for( auto item = m_parent->GetScreen()->GetDrawItems(); item; item = item->Next() )
-    {
-        if( item->Type() == SCH_MARKER_T )
-            view->Add( item );
-    }
+    for( auto item : m_parent->GetScreen()->Items().OfType( SCH_MARKER_T ) )
+        view->Add( item );
 
     m_parent->GetCanvas()->Refresh();
 

@@ -27,16 +27,32 @@
 #ifndef COMPONENT_CLASS_H
 #define COMPONENT_CLASS_H
 
+#include <base_struct.h>
+#include <common.h>
+#include <core/typeinfo.h>
+#include <layers_id_colors_and_visibility.h>
 #include <lib_id.h>
+#include <msgpanel.h>
 
-#include <sch_field.h>
-#include <transform.h>
-#include <general.h>
+#include <memory>
+#include <string>
+#include <unordered_map>
 #include <vector>
-#include <set>
-#include <lib_item.h>
+#include <wx/arrstr.h>
+#include <wx/chartype.h>
+#include <wx/fdrepdlg.h>
+#include <wx/gdicmn.h>
+#include <wx/string.h>
+
+#include <bitmaps.h>
+#include <class_libentry.h>
+#include <lib_pin.h>
+#include <sch_field.h>
+#include <sch_item.h>
 #include <sch_pin.h>
-#include <sch_base_frame.h>
+#include <sch_screen.h>
+#include <symbol_lib_table.h>
+#include <transform.h>
 
 class SCH_SCREEN;
 class SCH_SHEET_PATH;
@@ -133,9 +149,8 @@ public:
                    int unit = 0, int convert = 0,
                    const wxPoint& pos = wxPoint( 0, 0 )  );
 
-    SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* aSheet,
-                   SCH_BASE_FRAME::COMPONENT_SELECTION& aSel,
-                   const wxPoint& pos = wxPoint( 0, 0 ) );
+    SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* aSheet, COMPONENT_SELECTION& aSel,
+            const wxPoint& pos = wxPoint( 0, 0 ) );
     /**
      * Clones \a aComponent into a new schematic symbol object.
      *
@@ -204,17 +219,10 @@ public:
 
     bool Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib = NULL );
 
-    static void ResolveAll( const EE_COLLECTOR& aComponents, SYMBOL_LIB_TABLE& aLibTable,
-                            PART_LIB* aCacheLib = NULL );
+    static void ResolveAll( std::vector<SCH_COMPONENT*>& aComponents, SYMBOL_LIB_TABLE& aLibTable,
+            PART_LIB* aCacheLib = NULL );
 
     int GetUnit() const { return m_unit; }
-
-    /**
-     * Update the pin cache for all components in \a aComponents
-     *
-     * @param aComponents collector of components in screen
-     */
-    static void UpdatePins( const EE_COLLECTOR& aComponents );
 
     /**
      * Updates the local cache of SCH_PIN_CONNECTION objects for each pin

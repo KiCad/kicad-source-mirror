@@ -317,8 +317,8 @@ int LIB_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
             EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
             EE_COLLECTOR collector;
             collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-            collector.Collect( m_frame->GetCurPart(), nonFields, (wxPoint) aPos,
-                               m_frame->GetUnit(), m_frame->GetConvert() );
+            collector.Collect( m_frame->GetScreen(), nonFields, (wxPoint) aPos, m_frame->GetUnit(),
+                    m_frame->GetConvert() );
 
             // Remove unselectable items
             for( int i = collector.GetCount() - 1; i >= 0; --i )

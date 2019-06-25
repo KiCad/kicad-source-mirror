@@ -25,6 +25,7 @@
 
 #include <kiway.h>
 #include <kiway_holder.h>
+#include <project.h>
 
 #if defined(DEBUG)
  #include <typeinfo>

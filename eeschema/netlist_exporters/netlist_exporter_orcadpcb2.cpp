@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2018 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,14 +72,15 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
 
     for( unsigned i = 0;  i < sheetList.size();  i++ )
     {
-        for( EDA_ITEM* item = sheetList[i].LastDrawList();  item;  item = item->Next() )
+        // Process component attributes
+        for( auto item : sheetList[i].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
-            SCH_COMPONENT* comp = findNextComponentAndCreatePinList( item, &sheetList[i] );
+            SCH_COMPONENT* comp = findNextComponent( item, &sheetList[i] );
 
             if( !comp )
-                break;
+                continue;
 
-            item = comp;
+            CreatePinList( comp, &sheetList[i] );
 
             if( comp->GetPartRef() )
             {

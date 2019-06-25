@@ -66,14 +66,8 @@ static void get_components( std::vector<SCH_COMPONENT*>& aComponents )
     // Get the full list
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
-        for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
-        {
-            if( item->Type() != SCH_COMPONENT_T )
-                continue;
-
-            SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
-            aComponents.push_back( component );
-        }
+        for( auto aItem : screen->Items().OfType( SCH_COMPONENT_T ) )
+            aComponents.push_back( static_cast<SCH_COMPONENT*>( aItem ) );
     }
 
     if( aComponents.empty() )

@@ -153,9 +153,9 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sh
         m_prefix = aPart.GetReferenceField().GetText() + wxT( "?" );
 }
 
-SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* aSheet,
-                              SCH_BASE_FRAME::COMPONENT_SELECTION& aSel, const wxPoint& pos ) :
-    SCH_COMPONENT( aPart, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, pos )
+SCH_COMPONENT::SCH_COMPONENT(
+        LIB_PART& aPart, SCH_SHEET_PATH* aSheet, COMPONENT_SELECTION& aSel, const wxPoint& pos )
+        : SCH_COMPONENT( aPart, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, pos )
 {
     // Set any fields that were modified as part of the component selection
     for( auto const& i : aSel.Fields )
@@ -421,36 +421,25 @@ static bool sort_by_libid( const SCH_COMPONENT* ref, SCH_COMPONENT* cmp )
 }
 
 
-void SCH_COMPONENT::ResolveAll( const EE_COLLECTOR& aComponents, SYMBOL_LIB_TABLE& aLibTable,
-                                PART_LIB* aCacheLib )
+void SCH_COMPONENT::ResolveAll(
+        std::vector<SCH_COMPONENT*>& aComponents, SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib )
 {
-    std::vector<SCH_COMPONENT*> cmp_list;
-
-    for( int i = 0;  i < aComponents.GetCount();  ++i )
-    {
-        SCH_COMPONENT* cmp = dynamic_cast<SCH_COMPONENT*>( aComponents[i] );
-
-        wxCHECK2_MSG( cmp, continue, "Invalid SCH_COMPONENT pointer in list." );
-
-        cmp_list.push_back( cmp );
-    }
-
     // sort it by lib part. Cmp will be grouped by same lib part.
-    std::sort( cmp_list.begin(), cmp_list.end(), sort_by_libid );
+    std::sort( aComponents.begin(), aComponents.end(), sort_by_libid );
 
     LIB_ID curr_libid;
 
-    for( unsigned ii = 0; ii < cmp_list.size (); ++ii )
+    for( unsigned ii = 0; ii < aComponents.size(); ++ii )
     {
-        SCH_COMPONENT* cmp = cmp_list[ii];
+        SCH_COMPONENT* cmp = aComponents[ii];
         curr_libid = cmp->m_lib_id;
         cmp->Resolve( aLibTable, aCacheLib );
         cmp->UpdatePins();
 
         // Propagate the m_part pointer to other members using the same lib_id
-        for( unsigned jj = ii+1; jj < cmp_list.size (); ++jj )
+        for( unsigned jj = ii + 1; jj < aComponents.size(); ++jj )
         {
-            SCH_COMPONENT* next_cmp = cmp_list[jj];
+            SCH_COMPONENT* next_cmp = aComponents[jj];
 
             if( curr_libid != next_cmp->m_lib_id )
                 break;
@@ -462,18 +451,6 @@ void SCH_COMPONENT::ResolveAll( const EE_COLLECTOR& aComponents, SYMBOL_LIB_TABL
 
             ii = jj;
         }
-    }
-}
-
-
-void SCH_COMPONENT::UpdatePins( const EE_COLLECTOR& aComponents )
-{
-    for( int i = 0;  i < aComponents.GetCount();  ++i )
-    {
-        SCH_COMPONENT* cmp = dynamic_cast<SCH_COMPONENT*>( aComponents[i] );
-        wxASSERT( cmp );
-
-        cmp->UpdatePins();
     }
 }
 

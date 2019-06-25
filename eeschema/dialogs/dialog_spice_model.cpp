@@ -34,6 +34,7 @@
 #include <wx/wupdlock.h>
 
 #include <cctype>
+#include <cstring>
 
 // Helper function to shorten conditions
 static bool empty( const wxTextCtrl* aCtrl )

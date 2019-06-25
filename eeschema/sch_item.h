@@ -29,12 +29,12 @@
 #include <unordered_set>
 #include <vector>
 
-#include <base_screen.h>
+#include <base_struct.h>
 #include <general.h>
 #include <sch_sheet_path.h>
 
-class SCH_ITEM;
 class SCH_CONNECTION;
+class SCH_SHEET_PATH;
 class LINE_READER;
 class SCH_EDIT_FRAME;
 class wxFindReplaceData;
@@ -171,9 +171,6 @@ public:
      * @param aItem The item to swap the data structures with.
      */
     virtual void SwapData( SCH_ITEM* aItem );
-
-    SCH_ITEM* Next() const { return static_cast<SCH_ITEM*>( Pnext ); }
-    SCH_ITEM* Back() const { return static_cast<SCH_ITEM*>( Pback ); }
 
     /**
      * Routine to create a new copy of given item.

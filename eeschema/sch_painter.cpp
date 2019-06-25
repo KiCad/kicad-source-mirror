@@ -27,39 +27,40 @@
 
 #include <sch_item.h>
 
-#include <lib_item.h>
-#include <lib_rectangle.h>
-#include <lib_pin.h>
-#include <lib_circle.h>
-#include <lib_polyline.h>
-#include <lib_arc.h>
-#include <lib_field.h>
-#include <lib_text.h>
-#include <lib_bezier.h>
-#include <sch_line.h>
-#include <sch_component.h>
-#include <sch_field.h>
-#include <sch_junction.h>
-#include <sch_text.h>
-#include <sch_no_connect.h>
-#include <sch_bus_entry.h>
-#include <sch_bitmap.h>
-#include <sch_sheet.h>
-#include <gr_text.h>
-#include <geometry/geometry_utils.h>
-#include <lib_edit_frame.h>
-#include <plotter.h>
-#include <template_fieldnames.h>
+#include <bezier_curves.h>
 #include <class_libentry.h>
 #include <class_library.h>
-#include <sch_edit_frame.h>
-#include <view/view.h>
-#include <gal/graphics_abstraction_layer.h>
 #include <colors_design_settings.h>
 #include <connection_graph.h>
+#include <gal/graphics_abstraction_layer.h>
+#include <geometry/geometry_utils.h>
 #include <geometry/shape_line_chain.h>
-#include <bezier_curves.h>
+#include <gr_text.h>
+#include <lib_arc.h>
+#include <lib_bezier.h>
+#include <lib_circle.h>
+#include <lib_edit_frame.h>
+#include <lib_field.h>
+#include <lib_item.h>
+#include <lib_pin.h>
+#include <lib_polyline.h>
+#include <lib_rectangle.h>
+#include <lib_text.h>
 #include <math/util.h>      // for KiROUND
+#include <plotter.h>
+#include <sch_bitmap.h>
+#include <sch_bus_entry.h>
+#include <sch_component.h>
+#include <sch_edit_frame.h>
+#include <sch_field.h>
+#include <sch_junction.h>
+#include <sch_line.h>
+#include <sch_marker.h>
+#include <sch_no_connect.h>
+#include <sch_sheet.h>
+#include <sch_text.h>
+#include <template_fieldnames.h>
+#include <view/view.h>
 
 #include "sch_painter.h"
 

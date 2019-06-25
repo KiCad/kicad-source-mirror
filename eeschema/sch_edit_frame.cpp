@@ -45,6 +45,7 @@
 #include <lib_view_frame.h>
 #include <pgm_base.h>
 #include <profile.h>
+#include <project.h>
 #include <reporter.h>
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
@@ -584,8 +585,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 
     wxString fileName = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
 
-    if( !g_RootSheet->GetScreen()->GetFileName().IsEmpty() &&
-        g_RootSheet->GetScreen()->GetDrawItems() != NULL )
+    if( !g_RootSheet->GetScreen()->GetFileName().IsEmpty() && !g_RootSheet->GetScreen()->IsEmpty() )
     {
         UpdateFileHistory( fileName );
     }
@@ -1165,30 +1165,29 @@ void SCH_EDIT_FRAME::FixupJunctions()
 
     for( const SCH_SHEET_PATH& sheet : sheetList )
     {
-        std::vector<wxPoint> anchors;
+        std::vector<wxPoint> junctions;
 
         SetCurrentSheet( sheet );
         GetCurrentSheet().UpdateAllScreenReferences();
 
         auto screen = GetCurrentSheet().LastScreen();
-
-        for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
+        for( auto aItem : screen->Items().OfType( SCH_COMPONENT_T ) )
         {
-            if( item->Type() == SCH_COMPONENT_T )
+            auto cmp   = static_cast<SCH_COMPONENT*>( aItem );
+            auto xform = cmp->GetTransform();
+
+            for( const SCH_PIN& pin : cmp->GetPins() )
             {
-                auto cmp = static_cast<SCH_COMPONENT*>( item );
-                auto xform = cmp->GetTransform();
+                auto pos = cmp->GetPosition() + xform.TransformCoordinate( pin.GetPosition() );
 
-                for( const SCH_PIN& pin : cmp->GetPins() )
-                {
-                    auto pos = cmp->GetPosition() + xform.TransformCoordinate( pin.GetPosition() );
-
-                    // Test if a _new_ junction is needed, and add it if missing
-                    if ( screen->IsJunctionNeeded( pos, true ) )
-                        AddJunction( pos );
-                }
+                // Test if a _new_ junction is needed, and add it if missing
+                if( screen->IsJunctionNeeded( pos, true ) )
+                    junctions.push_back( pos );
             }
         }
+
+        for( auto& pos : junctions )
+            AddJunction( pos );
     }
 
     // Reselect the initial sheet:

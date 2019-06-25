@@ -381,16 +381,17 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
 
 const SCH_SHEET_PIN* SCH_LINE_WIRE_BUS_TOOL::getSheetPin( const wxPoint& aPosition )
 {
-    for( SCH_ITEM* item = m_frame->GetScreen()->GetDrawItems(); item; item = item->Next() )
-    {
-        if( item->Type() == SCH_SHEET_T )
-        {
-            SCH_SHEET* sheet = (SCH_SHEET*) item;
+    SCH_SCREEN* screen = m_frame->GetScreen();
 
-            for( const SCH_SHEET_PIN& pin : sheet->GetPins() )
+    for( auto item : screen->Items().Overlapping( SCH_SHEET_T, aPosition ) )
+    {
+        auto sheet = static_cast<SCH_SHEET*>( item );
+
+        for( const SCH_SHEET_PIN& pin : sheet->GetPins() )
+        {
+            if( pin.GetPosition() == aPosition )
             {
-                if( pin.GetPosition() == aPosition )
-                    return &pin;
+                return &pin;
             }
         }
     }
@@ -845,11 +846,8 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     // Correct and remove segments that need to be merged.
     m_frame->SchematicCleanUp();
 
-    for( auto item = m_frame->GetScreen()->GetDrawItems(); item; item = item->Next() )
+    for( auto item : m_frame->GetScreen()->Items().OfType( SCH_COMPONENT_T ) )
     {
-        if( item->Type() != SCH_COMPONENT_T )
-            continue;
-
         std::vector< wxPoint > pts;
         item->GetConnectionPoints( pts );
 

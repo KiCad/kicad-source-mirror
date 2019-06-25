@@ -690,27 +690,20 @@ void SCH_LEGACY_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
             try
             {
                 loadFile( fileName.GetFullPath(), aSheet->GetScreen() );
-
-                EDA_ITEM* item = aSheet->GetScreen()->GetDrawItems();
-
-                while( item )
+                for( auto aItem : aSheet->GetScreen()->Items().OfType( SCH_SHEET_T ) )
                 {
-                    if( item->Type() == SCH_SHEET_T )
-                    {
-                        SCH_SHEET* sheet = (SCH_SHEET*) item;
+                    assert( aItem->Type() == SCH_SHEET_T );
+                    auto sheet = static_cast<SCH_SHEET*>( aItem );
 
-                        // Set the parent to aSheet.  This effectively creates a method to find
-                        // the root sheet from any sheet so a pointer to the root sheet does not
-                        // need to be stored globally.  Note: this is not the same as a hierarchy.
-                        // Complex hierarchies can have multiple copies of a sheet.  This only
-                        // provides a simple tree to find the root sheet.
-                        sheet->SetParent( aSheet );
+                    // Set the parent to aSheet.  This effectively creates a method to find
+                    // the root sheet from any sheet so a pointer to the root sheet does not
+                    // need to be stored globally.  Note: this is not the same as a hierarchy.
+                    // Complex hierarchies can have multiple copies of a sheet.  This only
+                    // provides a simple tree to find the root sheet.
+                    sheet->SetParent( aSheet );
 
-                        // Recursion starts here.
-                        loadHierarchy( sheet );
-                    }
-
-                    item = item->Next();
+                    // Recursion starts here.
+                    loadHierarchy( sheet );
                 }
             }
             catch( const IO_ERROR& ioe )
@@ -1883,37 +1876,37 @@ void SCH_LEGACY_PLUGIN::Format( SCH_SCREEN* aScreen )
         saveBusAlias( alias );
     }
 
-    for( SCH_ITEM* item = aScreen->GetDrawItems(); item; item = item->Next() )
+    for( auto item : aScreen->Items() )
     {
         switch( item->Type() )
         {
         case SCH_COMPONENT_T:
-            saveComponent( static_cast< SCH_COMPONENT* >( item ) );
+            saveComponent( static_cast<SCH_COMPONENT*>( item ) );
             break;
         case SCH_BITMAP_T:
-            saveBitmap( static_cast< SCH_BITMAP* >( item ) );
+            saveBitmap( static_cast<SCH_BITMAP*>( item ) );
             break;
         case SCH_SHEET_T:
-            saveSheet( static_cast< SCH_SHEET* >( item ) );
+            saveSheet( static_cast<SCH_SHEET*>( item ) );
             break;
         case SCH_JUNCTION_T:
-            saveJunction( static_cast< SCH_JUNCTION* >( item ) );
+            saveJunction( static_cast<SCH_JUNCTION*>( item ) );
             break;
         case SCH_NO_CONNECT_T:
-            saveNoConnect( static_cast< SCH_NO_CONNECT* >( item ) );
+            saveNoConnect( static_cast<SCH_NO_CONNECT*>( item ) );
             break;
         case SCH_BUS_WIRE_ENTRY_T:
         case SCH_BUS_BUS_ENTRY_T:
-            saveBusEntry( static_cast< SCH_BUS_ENTRY_BASE* >( item ) );
+            saveBusEntry( static_cast<SCH_BUS_ENTRY_BASE*>( item ) );
             break;
         case SCH_LINE_T:
-            saveLine( static_cast< SCH_LINE* >( item ) );
+            saveLine( static_cast<SCH_LINE*>( item ) );
             break;
         case SCH_TEXT_T:
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
-            saveText( static_cast< SCH_TEXT* >( item ) );
+            saveText( static_cast<SCH_TEXT*>( item ) );
             break;
         default:
             wxASSERT( "Unexpected schematic object type in SCH_LEGACY_PLUGIN::Format()" );

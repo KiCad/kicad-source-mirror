@@ -22,9 +22,10 @@
 #ifndef _SCH_PIN_CONNECTION_H
 #define _SCH_PIN_CONNECTION_H
 
+#include <lib_pin.h>
+#include <msgpanel.h>
 #include <sch_item.h>
 #include <sch_sheet_path.h>
-#include <lib_pin.h>
 
 #include <mutex>
 #include <map>

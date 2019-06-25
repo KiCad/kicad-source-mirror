@@ -26,20 +26,29 @@
 #ifndef  SCH_EDIT_FRAME_H
 #define  SCH_EDIT_FRAME_H
 
-#include <sch_base_frame.h>
+#include <stddef.h>
+#include <vector>
+#include <wx/cmndata.h>
+#include <wx/event.h>
+#include <wx/gdicmn.h>
+#include <wx/string.h>
+#include <wx/utils.h>
+
 #include <config_params.h>
-#include <undo_redo_container.h>
-#include <template_fieldnames.h>
-#include <ee_collectors.h>
-#include <tool/selection.h>
+#include <core/typeinfo.h>
+#include <eda_base_frame.h>
 #include <erc_settings.h>
-#include <sch_draw_panel.h>
-#include <sch_text.h>               // enum PINSHEETLABEL_SHAPE
-#include <tool/selection.h>
-#include <status_popup.h>
+#include <math/box2.h>
+#include <sch_base_frame.h>
+#include <sch_text.h> // enum PINSHEETLABEL_SHAPE
+#include <template_fieldnames.h>
+#include <undo_redo_container.h>
+
+class STATUS_TEXT_POPUP;
 
 class SCH_ITEM;
 class EDA_ITEM;
+class SCH_LINE;
 class SCH_TEXT;
 class SCH_BITMAP;
 class SCH_SHEET;
@@ -916,9 +925,7 @@ public:
      *      UR_MOVED
      *
      * If it is a delete command, items are put on list with the .Flags member
-     * set to UR_DELETED.  When it will be really deleted, the GetDrawItems() and the
-     * sub-hierarchy will be deleted.  If it is only a copy, the GetDrawItems() and the
-     * sub-hierarchy must NOT be deleted.
+     * set to UR_DELETED.
      *
      * @note
      * Edit wires and buses is a bit complex.

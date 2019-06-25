@@ -72,7 +72,7 @@ public:
         return wxT( "SCH_LINE" );
     }
 
-    bool IsType( const KICAD_T aScanTypes[] ) override
+    bool IsType( const KICAD_T aScanTypes[] ) const override
     {
         if( SCH_ITEM::IsType( aScanTypes ) )
             return true;

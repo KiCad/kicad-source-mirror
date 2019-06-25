@@ -147,18 +147,13 @@ int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
     {
         m_selectionTool->ClearSelection();
 
-        INSPECTOR_FUNC inspector = [&] ( EDA_ITEM* item, void* )
+        for( auto item : m_frame->GetScreen()->Items() )
         {
             if( data && item->Matches( *data, nullptr ) )
                 m_selectionTool->BrightenItem( item );
             else if( item->IsBrightened() )
                 m_selectionTool->UnbrightenItem( item );
-
-            return SEARCH_RESULT::CONTINUE;
-        };
-
-        EDA_ITEM* start = m_frame->GetScreen()->GetDrawItems();
-        EDA_ITEM::IterateForward( start, inspector, nullptr, EE_COLLECTOR::AllItems );
+        }
     }
     else if( aEvent.Matches( EVENTS::SelectedItemsModified ) )
     {
@@ -179,33 +174,23 @@ int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
 }
 
 
-EDA_ITEM* nextMatch( SCH_SCREEN* aScreen, EDA_ITEM* after, wxFindReplaceData* data )
+SCH_ITEM* SCH_EDITOR_CONTROL::nextMatch(
+        SCH_SCREEN* aScreen, SCH_ITEM* aAfter, wxFindReplaceData* aData )
 {
-    EDA_ITEM* found = nullptr;
+    bool past_item = ( aAfter == nullptr );
 
-    INSPECTOR_FUNC inspector = [&] ( EDA_ITEM* item, void* testData )
+    for( auto item : aScreen->Items() )
     {
-        if( after )
-        {
-            if( after == item )
-                after = nullptr;
+        if( item == aAfter )
+            past_item = true;
 
-            return SEARCH_RESULT::CONTINUE;
-        }
+        if( past_item
+                && ( ( aData == &g_markersOnly && item->Type() == SCH_MARKER_T )
+                           || item->Matches( *aData, nullptr ) ) )
+            return item;
+    }
 
-        if( ( data == &g_markersOnly && item->Type() == SCH_MARKER_T )
-                || item->Matches( *data, nullptr ) )
-        {
-            found = item;
-            return SEARCH_RESULT::QUIT;
-        }
-
-        return SEARCH_RESULT::CONTINUE;
-    };
-
-    EDA_ITEM::IterateForward( aScreen->GetDrawItems(), inspector, nullptr, EE_COLLECTOR::AllItems );
-
-    return found;
+    return nullptr;
 }
 
 
@@ -231,8 +216,8 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
     bool          searchAllSheets = !( data->GetFlags() & FR_CURRENT_SHEET_ONLY );
     EE_SELECTION& selection = m_selectionTool->GetSelection();
     SCH_SCREEN*   afterScreen = m_frame->GetScreen();
-    EDA_ITEM*     afterItem = selection.Front();
-    EDA_ITEM*     item = nullptr;
+    SCH_ITEM*     afterItem       = dynamic_cast<SCH_ITEM*>( selection.Front() );
+    SCH_ITEM*     item            = nullptr;
 
     if( wrapAroundTimer.IsRunning() )
     {
@@ -341,11 +326,12 @@ int SCH_EDITOR_CONTROL::ReplaceAll( const TOOL_EVENT& aEvent )
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
-        for( EDA_ITEM* item = nextMatch( screen, nullptr, data ); item;
-             item = nextMatch( screen, item, data ) )
-        {
-            item->Replace( *data, schematic.FindSheetForScreen( screen ) );
-        }
+        //TODO(snh): Fix ReplaceAll
+        //        screen->ForEachItem() for( EDA_ITEM* item = nextMatch( screen, nullptr, data ); item;
+        //                                   item = nextMatch( screen, item, data ) )
+        //        {
+        //            item->Replace( *data, schematic.FindSheetForScreen( screen ) );
+        //        }
     }
 
     return 0;
@@ -501,7 +487,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
         {
             EE_COLLECTOR collector;
             collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-            collector.Collect( m_frame->GetScreen()->GetDrawItems(), wiresAndPins, (wxPoint) aPos );
+            collector.Collect( m_frame->GetScreen(), wiresAndPins, (wxPoint) aPos );
 
             EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
             selectionTool->GuessSelectionCandidates( collector, aPos );
@@ -606,7 +592,7 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
         {
             EE_COLLECTOR collector;
             collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-            collector.Collect( m_frame->GetScreen()->GetDrawItems(), fieldsAndComponents, (wxPoint) aPos );
+            collector.Collect( m_frame->GetScreen(), fieldsAndComponents, (wxPoint) aPos );
 
             EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
             selectionTool->GuessSelectionCandidates( collector, aPos );
@@ -717,10 +703,10 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
     if( !screen )
         return 0;
 
-    for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
+    for( auto item : screen->Items() )
     {
-        SCH_CONNECTION* conn = item->Connection( *g_CurrentSheet );
-        bool redraw = item->IsBrightened();
+        SCH_CONNECTION* conn   = item->Connection( *g_CurrentSheet );
+        bool            redraw = item->IsBrightened();
 
         if( conn && conn->Name() == selectedNetName )
             item->SetBrightened();
@@ -960,10 +946,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     }
 
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-
-    DLIST<SCH_ITEM>&   dlist = m_frame->GetScreen()->GetDrawList();
-    SCH_ITEM*          lastExisting = dlist.GetLast();
-
     std::string        text = m_toolMgr->GetClipboard();
 
     if( text.empty() )
@@ -972,14 +954,16 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     STRING_LINE_READER reader( text, "Clipboard" );
     SCH_LEGACY_PLUGIN  plugin;
 
+    SCH_SCREEN paste_screen( &m_frame->GetScreen()->Kiway() );
+
     try
     {
-        plugin.LoadContent( reader, m_frame->GetScreen() );
+        plugin.LoadContent( reader, &paste_screen );
     }
     catch( IO_ERROR& e )
     {
         // If it wasn't content, then paste as text
-        dlist.Append( new SCH_TEXT( wxPoint( 0, 0 ), text ) );
+        paste_screen.Append( new SCH_TEXT( wxPoint( 0, 0 ), text ) );
     }
 
     bool forceKeepAnnotations = false;
@@ -997,13 +981,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     if( forceDropAnnotations )
         dropAnnotations = true;
 
-    // SCH_LEGACY_PLUGIN added the items to the DLIST, but not to the view or anything
+    // SCH_LEGACY_PLUGIN added the items to the paste screen, but not to the view or anything
     // else.  Pull them back out to start with.
     //
-    SCH_ITEM*      firstNew = lastExisting ? lastExisting->Next() : dlist.GetFirst();
     EDA_ITEMS      loadedItems;
-    SCH_ITEM*      next = nullptr;
-
     bool           sheetsPasted = false;
     SCH_SHEET_LIST hierarchy( g_RootSheet );
     wxFileName     destFn = g_CurrentSheet->Last()->GetFileName();
@@ -1011,27 +992,27 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     if( destFn.IsRelative() )
         destFn.MakeAbsolute( m_frame->Prj().GetProjectPath() );
 
-    for( SCH_ITEM* item = firstNew; item; item = next )
+    for( auto item : paste_screen.Items() )
     {
-        next = item->Next();
-        dlist.Remove( item );
-
         loadedItems.push_back( item );
 
         if( item->Type() == SCH_COMPONENT_T )
         {
             if( !dropAnnotations && !forceKeepAnnotations )
             {
-                for( SCH_ITEM* temp = dlist.GetFirst(); temp != lastExisting; temp = temp->Next() )
+                for( auto existingItem : m_frame->GetScreen()->Items() )
                 {
-                    if( item->GetTimeStamp() == temp->GetTimeStamp() )
+                    if( item->GetTimeStamp() == existingItem->GetTimeStamp() )
+                    {
                         dropAnnotations = true;
+                        break;
+                    }
                 }
             }
         }
         else if( item->Type() == SCH_SHEET_T )
         {
-            SCH_SHEET* sheet = (SCH_SHEET*) item;
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
             wxFileName srcFn = sheet->GetFileName();
 
             if( srcFn.IsRelative() )
@@ -1050,6 +1031,9 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             }
         }
     }
+
+    // Remove the references from our temporary screen to prevent freeing on the DTOR
+    paste_screen.Clear( false );
 
     // Now we can resolve the components and add everything to the screen, view, etc.
     //

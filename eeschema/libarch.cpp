@@ -81,13 +81,11 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
      */
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
-        for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
-        {
-            if( item->Type() != SCH_COMPONENT_T )
-                continue;
 
+        for( auto aItem : screen->Items().OfType( SCH_COMPONENT_T ) )
+        {
             LIB_PART* part = nullptr;
-            SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+            auto      component = static_cast<SCH_COMPONENT*>( aItem );
 
             try
             {
