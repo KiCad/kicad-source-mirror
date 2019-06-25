@@ -428,6 +428,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     routeMenu->AddSeparator();
     routeMenu->AddItem( PCB_ACTIONS::routerSettingsDialog,   SELECTION_CONDITIONS::ShowAlways );
 
+    routeMenu->Resolve();
+
     //-- Inspect Menu --------------------------------------------------------
     //
     CONDITIONAL_MENU* inspectMenu = new CONDITIONAL_MENU( false, selTool );
