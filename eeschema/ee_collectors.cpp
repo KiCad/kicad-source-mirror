@@ -104,7 +104,8 @@ void EE_COLLECTOR::Collect( EDA_ITEM* aItem, const KICAD_T aFilterList[], const 
     // remember where the snapshot was taken from and pass refPos to the Inspect() function.
     SetRefPos( aPos );
 
-    if( aItem->Type() == LIB_PART_T )
+    // aItem can be null for empty schematics
+    if( aItem && aItem->Type() == LIB_PART_T )
         static_cast<LIB_PART*>( aItem )->Visit( m_inspector, nullptr, m_ScanTypes );
     else
         EDA_ITEM::IterateForward( aItem, m_inspector, nullptr, m_ScanTypes );

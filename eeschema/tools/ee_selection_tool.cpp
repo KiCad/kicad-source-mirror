@@ -764,6 +764,9 @@ static KICAD_T nodeTypes[] =
 
 EDA_ITEM* EE_SELECTION_TOOL::GetNode( VECTOR2I aPosition )
 {
+    if( m_frame->GetScreen()->GetDrawItems() == nullptr )   // Empty schematics
+        return nullptr;
+
     EE_COLLECTOR collector;
 
     int thresholdMax = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
