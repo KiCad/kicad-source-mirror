@@ -1175,7 +1175,9 @@ void SCH_EDIT_FRAME::FixupJunctions()
                 for( auto pin : cmp->GetPins() )
                 {
                     auto pos = cmp->GetPosition() + xform.TransformCoordinate( pin.GetPosition() );
-                    if ( screen->IsJunctionNeeded( pos ) )
+
+                    // Test if a _new_ junction is needed, and add it if missing
+                    if ( screen->IsJunctionNeeded( pos, true ) )
                     {
                         AddJunction( pos );
                     }
