@@ -307,6 +307,7 @@ bool TRACKS_CLEANER::deleteDanglingTracks()
                      * now perhaps is not connected and should be deleted */
                     item_erased = true;
                     modified = true;
+                    break;
                 }
             }
         }
