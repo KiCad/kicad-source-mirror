@@ -75,7 +75,7 @@ private:
 };
 
 
-static double s_thermalRot = 450;   // angle of stubs in thermal reliefs for round pads
+static const double s_RoundPadThermalSpokeAngle = 450;
 static const bool s_DumpZonesWhenFilling = false;
 
 
@@ -842,70 +842,72 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
 
             // Thermal spokes consist of segments from the pad center to points just outside
             // the thermal relief.
+            //
+            // We use the bounding-box to lay out the spokes, but for this to work the
+            // bounding box has to be built at the same rotation as the spokes.
+
+            wxPoint shapePos = pad->ShapePos();
             wxPoint padPos = pad->GetPosition();
             double padAngle = pad->GetOrientation();
-            double spokeAngle = padAngle;
-
             pad->SetOrientation( 0.0 );
-            pad->SetPosition( - pad->GetOffset() );
+            pad->SetPosition( { 0, 0 } );
             BOX2I reliefBB = pad->GetBoundingBox();
+            pad->SetPosition( padPos );
+            pad->SetOrientation( padAngle );
+
             reliefBB.Inflate( thermalReliefGap + epsilon );
 
-            // For circle pads, the thermal stubs orientation is 45 deg
+            // For circle pads, the thermal spoke orientation is 45 deg
             if( pad->GetShape() == PAD_SHAPE_CIRCLE )
-                spokeAngle = s_thermalRot;
+                padAngle = s_RoundPadThermalSpokeAngle;
 
             for( int i = 0; i < 4; i++ )
             {
                 SHAPE_LINE_CHAIN spoke;
-                // polygons are rectangles with width of copper bridge value
                 switch( i )
                 {
                 case 0:       // lower stub
-                    spoke.Append( +spoke_half_w, 0 );
-                    spoke.Append( -spoke_half_w, 0 );
-                    spoke.Append( -spoke_half_w, reliefBB.GetBottom() );
-                    spoke.Append( 0,             reliefBB.GetBottom() ); // test pt
-                    spoke.Append( +spoke_half_w, reliefBB.GetBottom() );
+                    spoke.Append( +spoke_half_w,       -spoke_half_w );
+                    spoke.Append( -spoke_half_w,       -spoke_half_w );
+                    spoke.Append( -spoke_half_w,       reliefBB.GetBottom() );
+                    spoke.Append( 0,                   reliefBB.GetBottom() );  // test pt
+                    spoke.Append( +spoke_half_w,       reliefBB.GetBottom() );
                     break;
 
                 case 1:       // upper stub
-                    spoke.Append( +spoke_half_w, 0 );
-                    spoke.Append( -spoke_half_w, 0 );
-                    spoke.Append( -spoke_half_w, reliefBB.GetTop() );
-                    spoke.Append( 0,             reliefBB.GetTop() );    // test pt
-                    spoke.Append( +spoke_half_w, reliefBB.GetTop() );
+                    spoke.Append( +spoke_half_w,       spoke_half_w );
+                    spoke.Append( -spoke_half_w,       spoke_half_w );
+                    spoke.Append( -spoke_half_w,       reliefBB.GetTop() );
+                    spoke.Append( 0,                   reliefBB.GetTop() );     // test pt
+                    spoke.Append( +spoke_half_w,       reliefBB.GetTop() );
                     break;
 
                 case 2:       // right stub
-                    spoke.Append( 0, spoke_half_w );
-                    spoke.Append( 0, -spoke_half_w );
+                    spoke.Append( -spoke_half_w,       spoke_half_w );
+                    spoke.Append( -spoke_half_w,       -spoke_half_w );
                     spoke.Append( reliefBB.GetRight(), -spoke_half_w );
-                    spoke.Append( reliefBB.GetRight(), 0 );              // test pt
+                    spoke.Append( reliefBB.GetRight(), 0 );                     // test pt
                     spoke.Append( reliefBB.GetRight(), spoke_half_w );
                     break;
 
                 case 3:       // left stub
-                    spoke.Append( 0, spoke_half_w );
-                    spoke.Append( 0, -spoke_half_w );
-                    spoke.Append( reliefBB.GetLeft(), -spoke_half_w );
-                    spoke.Append( reliefBB.GetLeft(), 0 );               // test pt
-                    spoke.Append( reliefBB.GetLeft(), spoke_half_w );
+                    spoke.Append( spoke_half_w,        spoke_half_w );
+                    spoke.Append( spoke_half_w,        -spoke_half_w );
+                    spoke.Append( reliefBB.GetLeft(),  -spoke_half_w );
+                    spoke.Append( reliefBB.GetLeft(),  0 );                     // test pt
+                    spoke.Append( reliefBB.GetLeft(),  spoke_half_w );
                     break;
                 }
 
                 for( int j = 0; j < spoke.PointCount(); j++ )
                 {
-                    RotatePoint( spoke.Point( j ), spokeAngle );
-                    spoke.Point( j ) += padPos + pad->GetOffset();
+                    RotatePoint( spoke.Point( j ), padAngle );
+                    spoke.Point( j ) += shapePos;
                 }
 
                 spoke.SetClosed( true );
                 aSpokesList.push_back( std::move( spoke ) );
             }
-
-            pad->SetPosition( padPos );
-            pad->SetOrientation( padAngle );
         }
     }
 }
