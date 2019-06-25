@@ -1150,8 +1150,10 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents() const
 
 void SCH_EDIT_FRAME::FixupJunctions()
 {
-    SCH_SHEET_LIST sheetList;
+    // Save the current sheet, to retrieve it later
+    auto currSheet = GetCurrentSheet();
 
+    SCH_SHEET_LIST sheetList;
     sheetList.BuildSheetList( g_RootSheet );
 
     for( unsigned i = 0; i < sheetList.size();  i++ )
@@ -1181,4 +1183,9 @@ void SCH_EDIT_FRAME::FixupJunctions()
             }
         }
     }
+
+    // Reselect the initial sheet:
+    SetCurrentSheet( currSheet );
+    GetCurrentSheet().UpdateAllScreenReferences();
+    SetScreen( GetCurrentSheet().LastScreen() );
 }
