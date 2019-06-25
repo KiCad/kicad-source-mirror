@@ -408,7 +408,8 @@ void ZONE_FILLER::addKnockout( D_PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles )
         // Optimizing polygon vertex count: the high definition is used for round
         // and oval pads (pads with large arcs) but low def for other shapes (with
         // small arcs)
-        if( aPad->GetShape() == PAD_SHAPE_CIRCLE || aPad->GetShape() == PAD_SHAPE_OVAL )
+        if( aPad->GetShape() == PAD_SHAPE_CIRCLE || aPad->GetShape() == PAD_SHAPE_OVAL ||
+          ( aPad->GetShape() == PAD_SHAPE_ROUNDRECT && aPad->GetRoundRectRadiusRatio() > 0.4 ) )
             aPad->TransformShapeWithClearanceToPolygon( aHoles, aGap, m_high_def );
         else
             aPad->TransformShapeWithClearanceToPolygon( aHoles, aGap, m_low_def );
@@ -471,12 +472,7 @@ void ZONE_FILLER::knockoutThermals( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET&
         for( auto pad : module->Pads() )
         {
             if( hasThermalConnection( pad, aZone ) )
-            {
-                int thermalGap = aZone->GetThermalReliefGap( pad );
-                thermalGap += aZone->GetMinThickness() / 2;
-
-                addKnockout( pad, thermalGap, holes );
-            }
+                addKnockout( pad, aZone->GetThermalReliefGap( pad ), holes );
         }
     }
 
@@ -499,12 +495,6 @@ void ZONE_FILLER::knockoutCopperItems( const ZONE_CONTAINER* aZone, SHAPE_POLY_S
     int zone_clearance = aZone->GetClearance();
     int edgeClearance = m_board->GetDesignSettings().m_CopperEdgeClearance;
     int zone_to_edgecut_clearance = std::max( aZone->GetZoneClearance(), edgeClearance );
-
-    // When removing holes, the holes must be expanded by outline_half_thickness to take in
-    // account the thickness of the zone outlines
-    int outline_half_thickness = aZone->GetMinThickness() / 2;
-    zone_clearance += outline_half_thickness;
-    zone_to_edgecut_clearance += outline_half_thickness;
 
     // items outside the zone bounding box are skipped
     // the bounding box is the zone bounding box + the biggest clearance found in Netclass list
@@ -552,10 +542,9 @@ void ZONE_FILLER::knockoutCopperItems( const ZONE_CONTAINER* aZone, SHAPE_POLY_S
                   || pad->GetNetCode() <= 0
                   || aZone->GetPadConnection( pad ) == PAD_ZONE_CONN_NONE )
             {
-                int item_clearance = pad->GetClearance() + outline_half_thickness;
-                int gap = std::max( zone_clearance, item_clearance );
+                int gap = std::max( zone_clearance, pad->GetClearance() );
                 EDA_RECT item_boundingbox = pad->GetBoundingBox();
-                item_boundingbox.Inflate( item_clearance );
+                item_boundingbox.Inflate( pad->GetClearance() );
 
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
                     addKnockout( pad, gap, holes );
@@ -573,8 +562,7 @@ void ZONE_FILLER::knockoutCopperItems( const ZONE_CONTAINER* aZone, SHAPE_POLY_S
         if( track->GetNetCode() == aZone->GetNetCode()  && ( aZone->GetNetCode() != 0) )
             continue;
 
-        int item_clearance = track->GetClearance() + outline_half_thickness;
-        int gap = std::max( zone_clearance, item_clearance );
+        int gap = std::max( zone_clearance, track->GetClearance() );
         EDA_RECT item_boundingbox = track->GetBoundingBox();
 
         if( item_boundingbox.Intersects( zone_boundingbox ) )
@@ -650,20 +638,11 @@ void ZONE_FILLER::knockoutCopperItems( const ZONE_CONTAINER* aZone, SHAPE_POLY_S
         bool useNetClearance = true;
         int  minClearance = zone_clearance;
 
-        // Do not forget to make room to draw the thick outlines
-        // of the hole created by the area of the zone to remove
-        int holeClearance = zone->GetClearance() + outline_half_thickness;
-
         // The final clearance is obviously the max value of each zone clearance
-        minClearance = std::max( minClearance, holeClearance );
+        minClearance = std::max( minClearance, zone->GetClearance() );
 
         if( zone->GetIsKeepout() || sameNet )
-        {
-            // Just take in account the fact the outline has a thickness, so
-            // the actual area to substract is inflated to take in account this fact
-            minClearance = outline_half_thickness;
             useNetClearance = false;
-        }
 
         zone->TransformOutlinesShapeWithClearanceToPolygon( holes, minClearance, useNetClearance );
     }
@@ -708,9 +687,6 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
 
     int numSegs = std::max( GetArcToSegmentCount( outline_half_thickness, m_high_def, 360.0 ), 6 );
 
-    solidAreas.Inflate( -outline_half_thickness, numSegs );
-    solidAreas.Simplify( SHAPE_POLY_SET::PM_FAST );
-
     knockoutThermals( aZone, solidAreas );
 
     if( s_DumpZonesWhenFilling )
@@ -744,6 +720,9 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
         solidAreas.BooleanAdd( amalgamatedSpokes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
     }
 
+    solidAreas.Inflate( -outline_half_thickness, numSegs );
+    solidAreas.Simplify( SHAPE_POLY_SET::PM_FAST );
+
     if( s_DumpZonesWhenFilling )
         dumper->Write( &solidAreas, "solid-areas-with-thermal-spokes" );
 
@@ -753,28 +732,6 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
 
     if( s_DumpZonesWhenFilling )
         dumper->Write( &solidAreas, "solid-areas-minus-hatching" );
-
-    // This code for non copper zones is currently a dead code:
-    // computeRawFilledAreas() is no longer called for non copper zones
-    if( !aZone->IsOnCopperLayer() )
-    {
-        if( m_brdOutlinesValid )
-            solidAreas.BooleanIntersection( m_boardOutline, SHAPE_POLY_SET::PM_FAST );
-
-        SHAPE_POLY_SET areas_fractured = solidAreas;
-        areas_fractured.Fracture( SHAPE_POLY_SET::PM_FAST );
-
-        if( s_DumpZonesWhenFilling )
-            dumper->Write( &areas_fractured, "areas_fractured" );
-
-        aFinalPolys = areas_fractured;
-        aRawPolys = aFinalPolys;
-
-        if( s_DumpZonesWhenFilling )
-            dumper->EndGroup();
-
-        return;
-    }
 
     SHAPE_POLY_SET areas_fractured = solidAreas;
 
@@ -861,19 +818,9 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
     biggest_clearance = std::max( biggest_clearance, zone_clearance );
     zoneBB.Inflate( biggest_clearance );
 
-    // half size of the pen used to draw/plot zones outlines
-    int pen_w = aZone->GetMinThickness() / 2;
-
     // Is a point on the boundary of the polygon inside or outside?  This small epsilon lets
     // us avoid the question.
-    int epsilon = KiROUND( IU_PER_MM * 0.04 );
-
-    // We'd normally add in an arcCorrection for circles (since a finite number of segments
-    // is only an approximation of the circle radius).  However, epsilon is already twice even
-    // our LOW resolution error tolerance, so there's little benefit to it (and a small but
-    // existant performance penalty).
-    //int numSegs = std::max( GetArcToSegmentCount( pen_w, m_high_def, 360.0 ), 6 );
-    //double arcCorrection = GetCircletoPolyCorrectionFactor( numSegs );
+    int epsilon = KiROUND( IU_PER_MM * 0.04 );  // about 1.5 mil
 
     for( auto module : m_board->Modules() )
     {
@@ -885,16 +832,11 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
             int thermalReliefGap = aZone->GetThermalReliefGap( pad );
 
             // Calculate thermal bridge half width
-            int spoke_w = aZone->GetThermalReliefCopperBridge( pad ) - aZone->GetMinThickness();
-
-            if( spoke_w <= 0 )
-                continue;
-
-            spoke_w = spoke_w / 2;
+            int spoke_half_w = aZone->GetThermalReliefCopperBridge( pad ) / 2;
 
             // Quick test here to possibly save us some work
             BOX2I itemBB = pad->GetBoundingBox();
-            itemBB.Inflate( thermalReliefGap + pen_w + epsilon );
+            itemBB.Inflate( thermalReliefGap + epsilon );
 
             if( !( itemBB.Intersects( zoneBB ) ) )
                 continue;
@@ -908,7 +850,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
             pad->SetOrientation( 0.0 );
             pad->SetPosition( - pad->GetOffset() );
             BOX2I reliefBB = pad->GetBoundingBox();
-            reliefBB.Inflate( thermalReliefGap + pen_w + epsilon );
+            reliefBB.Inflate( thermalReliefGap + epsilon );
 
             // For circle pads, the thermal stubs orientation is 45 deg
             if( pad->GetShape() == PAD_SHAPE_CIRCLE )
@@ -921,39 +863,39 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
                 switch( i )
                 {
                 case 0:       // lower stub
-                    spoke.m_Outline.Append( +spoke_w, 0 );
-                    spoke.m_Outline.Append( -spoke_w, 0 );
-                    spoke.m_Outline.Append( -spoke_w, reliefBB.GetBottom() );
-                    spoke.m_Outline.Append( +spoke_w, reliefBB.GetBottom() );
-                    spoke.m_TestPtA = { epsilon - spoke_w, reliefBB.GetBottom() };
-                    spoke.m_TestPtB = { spoke_w - epsilon, reliefBB.GetBottom() };
+                    spoke.m_Outline.Append( +spoke_half_w, 0 );
+                    spoke.m_Outline.Append( -spoke_half_w, 0 );
+                    spoke.m_Outline.Append( -spoke_half_w, reliefBB.GetBottom() );
+                    spoke.m_Outline.Append( +spoke_half_w, reliefBB.GetBottom() );
+                    spoke.m_TestPtA = { epsilon - spoke_half_w, reliefBB.GetBottom() };
+                    spoke.m_TestPtB = { spoke_half_w - epsilon, reliefBB.GetBottom() };
                     break;
 
                 case 1:       // upper stub
-                    spoke.m_Outline.Append( +spoke_w, 0 );
-                    spoke.m_Outline.Append( -spoke_w, 0 );
-                    spoke.m_Outline.Append( -spoke_w, reliefBB.GetTop() );
-                    spoke.m_Outline.Append( +spoke_w, reliefBB.GetTop() );
-                    spoke.m_TestPtA = { epsilon - spoke_w, reliefBB.GetTop() };
-                    spoke.m_TestPtB = { spoke_w - epsilon, reliefBB.GetTop() };
+                    spoke.m_Outline.Append( +spoke_half_w, 0 );
+                    spoke.m_Outline.Append( -spoke_half_w, 0 );
+                    spoke.m_Outline.Append( -spoke_half_w, reliefBB.GetTop() );
+                    spoke.m_Outline.Append( +spoke_half_w, reliefBB.GetTop() );
+                    spoke.m_TestPtA = { epsilon - spoke_half_w, reliefBB.GetTop() };
+                    spoke.m_TestPtB = { spoke_half_w - epsilon, reliefBB.GetTop() };
                     break;
 
                 case 2:       // right stub
-                    spoke.m_Outline.Append( 0, spoke_w );
-                    spoke.m_Outline.Append( 0, -spoke_w );
-                    spoke.m_Outline.Append( reliefBB.GetRight(), -spoke_w );
-                    spoke.m_Outline.Append( reliefBB.GetRight(), spoke_w );
-                    spoke.m_TestPtA = { reliefBB.GetRight(), epsilon - spoke_w };
-                    spoke.m_TestPtB = { reliefBB.GetRight(), spoke_w - epsilon };
+                    spoke.m_Outline.Append( 0, spoke_half_w );
+                    spoke.m_Outline.Append( 0, -spoke_half_w );
+                    spoke.m_Outline.Append( reliefBB.GetRight(), -spoke_half_w );
+                    spoke.m_Outline.Append( reliefBB.GetRight(), spoke_half_w );
+                    spoke.m_TestPtA = { reliefBB.GetRight(), epsilon - spoke_half_w };
+                    spoke.m_TestPtB = { reliefBB.GetRight(), spoke_half_w - epsilon };
                     break;
 
                 case 3:       // left stub
-                    spoke.m_Outline.Append( 0, spoke_w );
-                    spoke.m_Outline.Append( 0, -spoke_w );
-                    spoke.m_Outline.Append( reliefBB.GetLeft(), -spoke_w );
-                    spoke.m_Outline.Append( reliefBB.GetLeft(), spoke_w );
-                    spoke.m_TestPtA = { reliefBB.GetLeft(), epsilon - spoke_w };
-                    spoke.m_TestPtB = { reliefBB.GetLeft(), spoke_w - epsilon };
+                    spoke.m_Outline.Append( 0, spoke_half_w );
+                    spoke.m_Outline.Append( 0, -spoke_half_w );
+                    spoke.m_Outline.Append( reliefBB.GetLeft(), -spoke_half_w );
+                    spoke.m_Outline.Append( reliefBB.GetLeft(), spoke_half_w );
+                    spoke.m_TestPtA = { reliefBB.GetLeft(), epsilon - spoke_half_w };
+                    spoke.m_TestPtB = { reliefBB.GetLeft(), spoke_half_w - epsilon };
                     break;
                 }
 
