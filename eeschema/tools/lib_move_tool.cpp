@@ -109,8 +109,11 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 // Pick up any synchronized pins
                 //
+                // Careful when pasting.  The pasted pin will be at the same location as it
+                // was copied from, leading us to believe it's a synchronized pin.  It's not.
                 if( selection.GetSize() == 1 && selection.Front()->Type() == LIB_PIN_T
-                        && m_frame->SynchronizePins() )
+                        && m_frame->SynchronizePins()
+                        && ( selection.Front()->GetEditFlags() & IS_PASTED ) == 0 )
                 {
                     LIB_PIN*  cur_pin = (LIB_PIN*) selection.Front();
                     LIB_PART* part = m_frame->GetCurPart();
