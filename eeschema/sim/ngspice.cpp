@@ -28,6 +28,7 @@
 #include "ngspice.h"
 #include "spice_reporter.h"
 
+#include <config.h>
 #include <common.h>     // LOCALE_IO
 #include <wx/stdpaths.h>
 #include <wx/dir.h>
