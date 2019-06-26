@@ -452,10 +452,10 @@ void EDA_DRAW_FRAME::PushTool( const std::string& actionName )
 
 void EDA_DRAW_FRAME::PopTool()
 {
-    m_toolStack.pop_back();
-
-    if( !m_toolStack.empty() )
+    if( m_toolStack.size() > 1 )
     {
+        m_toolStack.pop_back();
+
         TOOL_ACTION* action = m_toolManager->GetActionManager()->FindAction( m_toolStack.back() );
 
         if( action )

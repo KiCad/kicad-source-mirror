@@ -207,12 +207,12 @@ int ACTION_MANAGER::processHotKey( TOOL_ACTION* aAction, std::map<std::string, i
                                    std::map<std::string, int> aHotKeyMap )
 {
     aAction->m_hotKey = aAction->m_defaultHotKey;
-    
+
     if( !aAction->m_legacyName.empty() && aLegacyMap.count( aAction->m_legacyName ) )
         aAction->SetHotKey( aLegacyMap[ aAction->m_legacyName ] );
-    
+
     if( aHotKeyMap.count( aAction->m_name ) )
         aAction->SetHotKey( aHotKeyMap[ aAction->m_name ] );
-    
+
     return aAction->m_hotKey;
 }
