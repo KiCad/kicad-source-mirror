@@ -176,12 +176,12 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     break;
                 case LIB_TEXT_T:
                     part->AddDrawItem( (LIB_TEXT*) item );
-                    item->ClearEditFlags();
                     break;
                 default:
                     wxFAIL_MSG( "TwoClickPlace(): unknown type" );
                 }
 
+                item->ClearEditFlags();
                 item = nullptr;
                 m_view->ClearPreview();
 
