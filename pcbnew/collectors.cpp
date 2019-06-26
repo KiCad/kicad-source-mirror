@@ -412,9 +412,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     else if( item->HitTest( m_RefPos ) )
                     {
                         if( !module || module->HitTestAccurate( m_RefPos ) )
+                        {
                             Append( item );
-
-                        goto exit;
+                            goto exit;
+                        }
                     }
                 }
             }
