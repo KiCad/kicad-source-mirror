@@ -243,9 +243,11 @@ public:
 
 public:
     PARAM_CFG_BOOL( const wxString& ident, bool* ptparam,
-                        int default_val = false, const wxChar* group = NULL );
+                    int default_val = false, const wxChar* group = NULL,
+                    const wxString& legacy_ident = wxEmptyString );
     PARAM_CFG_BOOL( bool Insetup, const wxString& ident, bool* ptparam,
-                    int default_val = false, const wxChar* group = NULL );
+                    int default_val = false, const wxChar* group = NULL,
+                    const wxString& legacy_ident = wxEmptyString );
 
     virtual void ReadParam( wxConfigBase* aConfig ) const override;
     virtual void SaveParam( wxConfigBase* aConfig ) const override;

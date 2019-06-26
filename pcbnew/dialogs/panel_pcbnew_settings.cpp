@@ -41,7 +41,8 @@ PANEL_PCBNEW_SETTINGS::PANEL_PCBNEW_SETTINGS( PCB_EDIT_FRAME* aFrame, PAGED_DIAL
 
 bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
 {
-    const PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*) m_Frame->GetDisplayOptions();
+    const PCB_DISPLAY_OPTIONS*  displ_opts = (PCB_DISPLAY_OPTIONS*) m_Frame->GetDisplayOptions();
+    const PCB_GENERAL_SETTINGS& general_opts = m_Frame->Settings();
 
     /* Set display options */
     m_PolarDisplay->SetSelection( m_Frame->GetShowPolarCoords() ? 1 : 0 );
@@ -55,12 +56,12 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
     rotationAngle = AngleToStringDegrees( (double)m_Frame->GetRotationAngle() );
     m_RotationAngle->SetValue( rotationAngle );
 
-    m_Segments_45_Only_Ctrl->SetValue( PCB_GENERAL_SETTINGS::g_Use45DegreeGraphicSegments );
-    m_magneticPadChoice->SetSelection( PCB_GENERAL_SETTINGS::g_MagneticPads );
-    m_magneticTrackChoice->SetSelection( PCB_GENERAL_SETTINGS::g_MagneticTracks );
-    m_magneticGraphicsChoice->SetSelection( !PCB_GENERAL_SETTINGS::g_MagneticGraphics );
-    m_UseEditKeyForWidth->SetValue( PCB_GENERAL_SETTINGS::g_EditHotkeyChangesTrackWidth );
-    m_dragSelects->SetValue( PCB_GENERAL_SETTINGS::g_DragSelects );
+    m_Segments_45_Only_Ctrl->SetValue( general_opts.m_Use45DegreeGraphicSegments );
+    m_magneticPadChoice->SetSelection( general_opts.m_MagneticPads );
+    m_magneticTrackChoice->SetSelection( general_opts.m_MagneticTracks );
+    m_magneticGraphicsChoice->SetSelection( !general_opts.m_MagneticGraphics );
+    m_UseEditKeyForWidth->SetValue( general_opts.m_EditHotkeyChangesTrackWidth );
+    m_dragSelects->SetValue( general_opts.m_DragSelects );
 
     m_Show_Page_Limits->SetValue( m_Frame->ShowPageLimits() );
 
@@ -77,12 +78,12 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataFromWindow()
 
     /* Updating the combobox to display the active layer. */
 
-    PCB_GENERAL_SETTINGS::g_Use45DegreeGraphicSegments = m_Segments_45_Only_Ctrl->GetValue();
-    PCB_GENERAL_SETTINGS::g_MagneticPads = (MAGNETIC_OPTIONS) m_magneticPadChoice->GetSelection();
-    PCB_GENERAL_SETTINGS::g_MagneticTracks = (MAGNETIC_OPTIONS) m_magneticTrackChoice->GetSelection();
-    PCB_GENERAL_SETTINGS::g_MagneticGraphics = !m_magneticGraphicsChoice->GetSelection();
-    PCB_GENERAL_SETTINGS::g_EditHotkeyChangesTrackWidth = m_UseEditKeyForWidth->GetValue();
-    PCB_GENERAL_SETTINGS::g_DragSelects = m_dragSelects->GetValue();
+    m_Frame->Settings().m_Use45DegreeGraphicSegments = m_Segments_45_Only_Ctrl->GetValue();
+    m_Frame->Settings().m_MagneticPads = (MAGNETIC_OPTIONS) m_magneticPadChoice->GetSelection();
+    m_Frame->Settings().m_MagneticTracks = (MAGNETIC_OPTIONS) m_magneticTrackChoice->GetSelection();
+    m_Frame->Settings().m_MagneticGraphics = !m_magneticGraphicsChoice->GetSelection();
+    m_Frame->Settings().m_EditHotkeyChangesTrackWidth = m_UseEditKeyForWidth->GetValue();
+    m_Frame->Settings().m_DragSelects = m_dragSelects->GetValue();
 
     m_Frame->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
 

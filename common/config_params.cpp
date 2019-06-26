@@ -372,21 +372,18 @@ void PARAM_CFG_DOUBLE::SaveParam( wxConfigBase* aConfig ) const
 }
 
 
-PARAM_CFG_BOOL::PARAM_CFG_BOOL( const wxString& ident, bool* ptparam,
-                                int default_val, const wxChar* group ) :
-    PARAM_CFG_BASE( ident, PARAM_BOOL, group )
+PARAM_CFG_BOOL::PARAM_CFG_BOOL( const wxString& ident, bool* ptparam, int default_val,
+                                const wxChar* group, const wxString& legacy ) :
+    PARAM_CFG_BASE( ident, PARAM_BOOL, group, legacy )
 {
     m_Pt_param = ptparam;
     m_Default  = default_val ? true : false;
 }
 
 
-PARAM_CFG_BOOL::PARAM_CFG_BOOL( bool          Insetup,
-                                const wxString& ident,
-                                bool*         ptparam,
-                                int           default_val,
-                                const wxChar* group ) :
-    PARAM_CFG_BASE( ident, PARAM_BOOL, group )
+PARAM_CFG_BOOL::PARAM_CFG_BOOL( bool Insetup, const wxString& ident, bool* ptparam,
+                                int default_val, const wxChar* group, const wxString& legacy ) :
+    PARAM_CFG_BASE( ident, PARAM_BOOL, group, legacy )
 {
     m_Pt_param = ptparam;
     m_Default  = default_val ? true : false;
@@ -399,7 +396,10 @@ void PARAM_CFG_BOOL::ReadParam( wxConfigBase* aConfig ) const
     if( !m_Pt_param || !aConfig )
         return;
 
-    int itmp = aConfig->Read( m_Ident, (int) m_Default );
+    int itmp = (int) m_Default;
+
+    if( !aConfig->Read( m_Ident, &itmp ) && m_Ident_legacy != wxEmptyString )
+        aConfig->Read( m_Ident_legacy, &itmp );
 
     *m_Pt_param = itmp ? true : false;
 }
@@ -414,8 +414,7 @@ void PARAM_CFG_BOOL::SaveParam( wxConfigBase* aConfig ) const
 }
 
 
-PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( const wxString& ident,
-                                        wxString*     ptparam,
+PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( const wxString& ident, wxString* ptparam,
                                         const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_WXSTRING, group )
 {
@@ -423,10 +422,8 @@ PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( const wxString& ident,
 }
 
 
-PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( bool Insetup, const wxString& ident,
-                                        wxString* ptparam,
-                                        const wxString& default_val,
-                                        const wxChar* group ) :
+PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( bool Insetup, const wxString& ident, wxString* ptparam,
+                                        const wxString& default_val, const wxChar* group ) :
     PARAM_CFG_BASE( ident, PARAM_WXSTRING, group )
 {
     m_Pt_param = ptparam;

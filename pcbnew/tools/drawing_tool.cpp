@@ -877,7 +877,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
         m_controls->ForceCursorPosition( true, cursorPos );
 
         // 45 degree angle constraint enabled with an option and toggled with Ctrl
-        const bool limit45 = ( frame()->Settings().g_Use45DegreeGraphicSegments != !!( evt->Modifier( MD_CTRL ) ) );
+        const bool limit45 = ( frame()->Settings().m_Use45DegreeGraphicSegments != !!( evt->Modifier( MD_CTRL ) ) );
 
         if( direction45 != limit45 && started && aShape == S_SEGMENT )
         {

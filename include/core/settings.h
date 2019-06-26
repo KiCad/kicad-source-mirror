@@ -118,7 +118,6 @@ class SETTINGS
             return aEntryName;
         }
 
-    private:
         wxString m_prefix;
         PARAM_CFG_ARRAY m_params;
 };

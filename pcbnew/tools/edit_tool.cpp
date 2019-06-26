@@ -503,7 +503,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
 bool EDIT_TOOL::changeTrackWidthOnClick( const PCBNEW_SELECTION& selection )
 {
-    if ( selection.Size() == 1 && frame()->Settings().g_EditHotkeyChangesTrackWidth )
+    if ( selection.Size() == 1 && frame()->Settings().m_EditHotkeyChangesTrackWidth )
     {
         auto item = static_cast<BOARD_ITEM *>( selection[0] );
 

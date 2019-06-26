@@ -45,9 +45,9 @@ bool PANEL_MODEDIT_SETTINGS::TransferDataToWindow()
     m_UnitsSelection->SetSelection( m_frame->GetUserUnits() == INCHES ? 0 : 1 );
 
     // Editing options
-    m_Segments_45_Only_Ctrl->SetValue( PCB_GENERAL_SETTINGS::g_Use45DegreeGraphicSegments );
-    m_MagneticPads->SetValue( PCB_GENERAL_SETTINGS::g_MagneticPads == CAPTURE_ALWAYS );
-    m_dragSelects->SetValue( PCB_GENERAL_SETTINGS::g_DragSelects );
+    m_Segments_45_Only_Ctrl->SetValue( m_frame->Settings().m_Use45DegreeGraphicSegments );
+    m_MagneticPads->SetValue( m_frame->Settings().m_MagneticPads == CAPTURE_ALWAYS );
+    m_dragSelects->SetValue( m_frame->Settings().m_DragSelects );
 
     return true;
 }
@@ -60,9 +60,9 @@ bool PANEL_MODEDIT_SETTINGS::TransferDataFromWindow()
     m_frame->SetUserUnits( m_UnitsSelection->GetSelection() == 0 ? INCHES : MILLIMETRES );
 
     // Editing options
-    PCB_GENERAL_SETTINGS::g_Use45DegreeGraphicSegments = m_Segments_45_Only_Ctrl->GetValue();
-    PCB_GENERAL_SETTINGS::g_MagneticPads = m_MagneticPads->GetValue() ? CAPTURE_ALWAYS : NO_EFFECT;
-    PCB_GENERAL_SETTINGS::g_DragSelects = m_dragSelects->GetValue();
+    m_frame->Settings().m_Use45DegreeGraphicSegments = m_Segments_45_Only_Ctrl->GetValue();
+    m_frame->Settings().m_MagneticPads = m_MagneticPads->GetValue() ? CAPTURE_ALWAYS : NO_EFFECT;
+    m_frame->Settings().m_DragSelects = m_dragSelects->GetValue();
 
     return true;
 }

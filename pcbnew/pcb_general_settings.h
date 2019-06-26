@@ -47,15 +47,15 @@ public:
 
     COLORS_DESIGN_SETTINGS& Colors() { return m_colorsSettings; }
 
-    static bool g_Use45DegreeGraphicSegments;   // True to constraint graphic lines to horizontal,
-                                                // vertical and 45º
-    static bool g_EditHotkeyChangesTrackWidth;
-    static bool g_DragSelects;                  // True: Drag gesture always draws a selection box,
-                                                // False: Drag will select an item and move it
+    bool m_Use45DegreeGraphicSegments;   // True to constraint graphic lines to horizontal,
+                                         // vertical and 45º
+    bool m_EditHotkeyChangesTrackWidth;
+    bool m_DragSelects;                  // True: Drag gesture always draws a selection box,
+                                         // False: Drag will select an item and move it
 
-    static MAGNETIC_OPTIONS g_MagneticPads;
-    static MAGNETIC_OPTIONS g_MagneticTracks;
-    static bool             g_MagneticGraphics;
+    MAGNETIC_OPTIONS m_MagneticPads;
+    MAGNETIC_OPTIONS m_MagneticTracks;
+    bool             m_MagneticGraphics;
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     std::vector< std::pair<wxString, wxString> > m_pluginSettings;  // Settings for action plugins

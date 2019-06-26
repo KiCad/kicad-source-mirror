@@ -24,32 +24,38 @@
 #include <pcb_general_settings.h>
 #include <wx/tokenzr.h>
 
-bool             PCB_GENERAL_SETTINGS::g_Use45DegreeGraphicSegments = false;
-bool             PCB_GENERAL_SETTINGS::g_EditHotkeyChangesTrackWidth = false;
-bool             PCB_GENERAL_SETTINGS::g_DragSelects = true;
 
-MAGNETIC_OPTIONS PCB_GENERAL_SETTINGS::g_MagneticPads  = CAPTURE_CURSOR_IN_TRACK_TOOL;
-MAGNETIC_OPTIONS PCB_GENERAL_SETTINGS::g_MagneticTracks = CAPTURE_CURSOR_IN_TRACK_TOOL;
-bool             PCB_GENERAL_SETTINGS::g_MagneticGraphics = true;
-
-
-PCB_GENERAL_SETTINGS::PCB_GENERAL_SETTINGS( FRAME_T aFrameType )
-    : m_frameType( aFrameType ), m_colorsSettings( aFrameType )
+PCB_GENERAL_SETTINGS::PCB_GENERAL_SETTINGS( FRAME_T aFrameType ) :
+        m_Use45DegreeGraphicSegments( false ),
+        m_EditHotkeyChangesTrackWidth( false ),
+        m_DragSelects( true ),
+        m_MagneticPads( CAPTURE_CURSOR_IN_TRACK_TOOL ),
+        m_MagneticTracks( CAPTURE_CURSOR_IN_TRACK_TOOL ),
+        m_MagneticGraphics( true ),
+        m_frameType( aFrameType ),
+        m_colorsSettings( aFrameType )
 {
     switch( m_frameType )
     {
     case FRAME_PCB:
-        Add( "Use45DegreeGraphicSegments", &g_Use45DegreeGraphicSegments, false);
-        Add( "MagneticPads", reinterpret_cast<int*>( &g_MagneticPads ), CAPTURE_CURSOR_IN_TRACK_TOOL );
-        Add( "MagneticTracks", reinterpret_cast<int*>( &g_MagneticTracks ), CAPTURE_CURSOR_IN_TRACK_TOOL );
-        Add( "MagneticGraphics", &g_MagneticGraphics, true );
-        Add( "EditActionChangesTrackWidth", &g_EditHotkeyChangesTrackWidth, false );
-        Add( "DragSelects", &g_DragSelects, true );
+        Add( "Use45DegreeGraphicSegments", &m_Use45DegreeGraphicSegments, false);
+        Add( "MagneticPads", reinterpret_cast<int*>( &m_MagneticPads ), CAPTURE_CURSOR_IN_TRACK_TOOL );
+        Add( "MagneticTracks", reinterpret_cast<int*>( &m_MagneticTracks ), CAPTURE_CURSOR_IN_TRACK_TOOL );
+        Add( "MagneticGraphics", &m_MagneticGraphics, true );
+        Add( "EditActionChangesTrackWidth", &m_EditHotkeyChangesTrackWidth, false );
+        Add( "DragSelects", &m_DragSelects, true );
         break;
 
     case FRAME_PCB_MODULE_EDITOR:
-        Add( "Use45DegreeGraphicSegments", &g_Use45DegreeGraphicSegments, false);
-        Add( "MagneticPads", reinterpret_cast<int*>( &g_MagneticPads ), CAPTURE_CURSOR_IN_TRACK_TOOL );
+        m_params.push_back( new PARAM_CFG_BOOL( "FpEditorUse45DegreeGraphicSegments",
+                &m_Use45DegreeGraphicSegments, false,
+                nullptr, "Use45DegreeGraphicSegments" ) );   // legacy location
+        m_params.push_back( new PARAM_CFG_INT( "FpEditorMagneticPads",
+                reinterpret_cast<int*>( &m_MagneticPads ),
+                CAPTURE_CURSOR_IN_TRACK_TOOL,               // default
+                NO_EFFECT,                                  // min
+                CAPTURE_ALWAYS,                             // max
+                nullptr, "MagneticPads" ) );                // legacy location
         break;
 
     default:
