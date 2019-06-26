@@ -45,6 +45,7 @@ function( make_lexer outputTarget inputFile outHeaderFile outCppFile enum )
            ${outHeaderFile} and
            ${outCppFile} from
            ${inputFile}"
+        DEPENDS ${inputFile}
         )
 
     add_custom_target( ${outputTarget}
