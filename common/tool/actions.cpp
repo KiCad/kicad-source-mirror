@@ -296,107 +296,107 @@ TOOL_ACTION ACTIONS::centerContents( "common.Control.centerContents",
 TOOL_ACTION ACTIONS::cursorUp( "common.Control.cursorUp",
         AS_GLOBAL, 
         WXK_UP, "",
-        "", "", 
+        _( "Cursor Up" ), "",
         nullptr, AF_NONE, (void*) CURSOR_UP );
 
 TOOL_ACTION ACTIONS::cursorDown( "common.Control.cursorDown",
         AS_GLOBAL, 
         WXK_DOWN, "",
-        "", "" , 
+        _( "Cursor Down" ), "" ,
         nullptr, AF_NONE, (void*) CURSOR_DOWN );
 
 TOOL_ACTION ACTIONS::cursorLeft( "common.Control.cursorLeft",
         AS_GLOBAL, 
         WXK_LEFT, "",
-        "", "" , 
+        _( "Cursor Left" ), "" ,
         nullptr, AF_NONE, (void*) CURSOR_LEFT );
 
 TOOL_ACTION ACTIONS::cursorRight( "common.Control.cursorRight",
         AS_GLOBAL, 
         WXK_RIGHT, "",
-        "", "" , 
+        _( "Cursor Right" ), "" ,
         nullptr, AF_NONE, (void*) CURSOR_RIGHT );
 
 
 TOOL_ACTION ACTIONS::cursorUpFast( "common.Control.cursorUpFast",
         AS_GLOBAL, 
         MD_CTRL + WXK_UP, "",
-        "", "", 
+        _( "Cursor Up Fast" ), "",
         nullptr, AF_NONE, (void*) ( CURSOR_UP | CURSOR_FAST_MOVE ) );
 
 TOOL_ACTION ACTIONS::cursorDownFast( "common.Control.cursorDownFast",
         AS_GLOBAL, 
         MD_CTRL + WXK_DOWN, "",
-        "", "" , 
+        _( "Cursor Down Fast" ), "" ,
         nullptr, AF_NONE, (void*) ( CURSOR_DOWN | CURSOR_FAST_MOVE ) );
 
 TOOL_ACTION ACTIONS::cursorLeftFast( "common.Control.cursorLeftFast",
         AS_GLOBAL, 
         MD_CTRL + WXK_LEFT, "",
-        "", "" , 
+        _( "Cursor Left Fast" ), "" ,
         nullptr, AF_NONE, (void*) ( CURSOR_LEFT | CURSOR_FAST_MOVE ) );
 
 TOOL_ACTION ACTIONS::cursorRightFast( "common.Control.cursorRightFast",
         AS_GLOBAL, 
         MD_CTRL + WXK_RIGHT, "",
-        "", "" , 
+        _( "Cursor Right Fast" ), "" ,
         nullptr, AF_NONE, (void*) ( CURSOR_RIGHT | CURSOR_FAST_MOVE ) );
 
 TOOL_ACTION ACTIONS::cursorClick( "common.Control.cursorClick",
         AS_GLOBAL, 
         WXK_RETURN, LEGACY_HK_NAME( "Mouse Left Click" ),
-        "", "", 
+        _( "Click" ), "Performs left mouse button click",
         nullptr, AF_NONE, (void*) CURSOR_CLICK );
 
 TOOL_ACTION ACTIONS::cursorDblClick( "common.Control.cursorDblClick",
         AS_GLOBAL, 
         WXK_END, LEGACY_HK_NAME( "Mouse Left Double Click" ),
-        "", "",
+        _( "Double-click" ), "Performs left mouse button double-click",
         nullptr, AF_NONE, (void*) CURSOR_DBL_CLICK );
 
 TOOL_ACTION ACTIONS::panUp( "common.Control.panUp",
         AS_GLOBAL, 
         MD_SHIFT + WXK_UP, "",
-        "", "", 
+        _( "Pan Up" ), "",
         nullptr, AF_NONE, (void*) CURSOR_UP );
 
 TOOL_ACTION ACTIONS::panDown( "common.Control.panDown",
         AS_GLOBAL, 
         MD_SHIFT + WXK_DOWN, "",
-        "", "" ,
+        _( "Pan Down" ), "" ,
         nullptr, AF_NONE, (void*) CURSOR_DOWN );
 
 TOOL_ACTION ACTIONS::panLeft( "common.Control.panLeft",
         AS_GLOBAL, 
         MD_SHIFT + WXK_LEFT, "",
-        "", "" ,
+        _( "Pan Left" ), "" ,
         nullptr, AF_NONE, (void*) CURSOR_LEFT );
 
 TOOL_ACTION ACTIONS::panRight( "common.Control.panRight",
         AS_GLOBAL, 
         MD_SHIFT + WXK_RIGHT, "",
-        "", "" ,
+        _( "Pan Right" ), "" ,
         nullptr, AF_NONE, (void*) CURSOR_RIGHT );
 
 // Grid control
 TOOL_ACTION ACTIONS::gridFast1( "common.Control.gridFast1",
         AS_GLOBAL, 
         MD_ALT + '1', LEGACY_HK_NAME( "Switch Grid To Fast Grid1" ),
-        "", "" );
+        _( "Switch to Fast Grid 1" ), "" );
 
 TOOL_ACTION ACTIONS::gridFast2( "common.Control.gridFast2",
         AS_GLOBAL, 
         MD_ALT + '2', LEGACY_HK_NAME( "Switch Grid To Fast Grid2" ),
-        "", "" );
+        _( "Switch to Fast Grid 2" ), "" );
 
 TOOL_ACTION ACTIONS::gridNext( "common.Control.gridNext",
         AS_GLOBAL, 
         'N', LEGACY_HK_NAME( "Switch Grid To Next" ),
-        "", "" );
+        _("Switch to Next Grid" ), "" );
 
 TOOL_ACTION ACTIONS::gridPrev( "common.Control.gridPrev",
         AS_GLOBAL, MD_SHIFT + 'N', LEGACY_HK_NAME( "Switch Grid To Previous" ),
-        "", "" );
+        _( "Switch to Previous Grid" ), "" );
 
 TOOL_ACTION ACTIONS::gridSetOrigin( "common.Control.gridSetOrigin",
         AS_GLOBAL, 
@@ -407,7 +407,7 @@ TOOL_ACTION ACTIONS::gridSetOrigin( "common.Control.gridSetOrigin",
 TOOL_ACTION ACTIONS::gridResetOrigin( "common.Control.gridResetOrigin",
         AS_GLOBAL, 
         'Z', LEGACY_HK_NAME( "Reset Grid Origin" ),
-        "", "" );
+        _( "Reset Grid Origin" ), "" );
 
 TOOL_ACTION ACTIONS::gridPreset( "common.Control.gridPreset",
         AS_GLOBAL );
@@ -446,7 +446,7 @@ TOOL_ACTION ACTIONS::togglePolarCoords( "common.Control.togglePolarCoords",
 TOOL_ACTION ACTIONS::resetLocalCoords( "common.Control.resetLocalCoords",
         AS_GLOBAL, 
         ' ', LEGACY_HK_NAME( "Reset Local Coordinates" ),
-        "", "" );
+        _( "Reset Local Coordinates" ), "" );
 
 TOOL_ACTION ACTIONS::toggleCursor( "common.Control.toggleCursor",
         AS_GLOBAL, 
