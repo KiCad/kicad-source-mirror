@@ -616,6 +616,8 @@ bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent 
             {
                 setCurNickname( nickname );
                 setCurFootprintName( fpid.GetLibItemName() );
+
+                m_libList->SetStringSelection( nickname );
                 ReCreateFootprintList();
             }
 
