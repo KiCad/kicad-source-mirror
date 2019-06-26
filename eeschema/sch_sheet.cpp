@@ -548,17 +548,21 @@ bool SCH_SHEET::SearchHierarchy( const wxString& aFilename, SCH_SCREEN** aScreen
         {
             if( item->Type() == SCH_SHEET_T )
             {
-                SCH_SHEET* sheet = (SCH_SHEET*) item;
+                // Must use the screen's path (which is always absolute) rather than the
+                // sheet's (which could be relative).
 
-                if( sheet->m_screen
-                    && sheet->m_screen->GetFileName().CmpNoCase( aFilename ) == 0 )
+                SCH_SHEET*  sheet = (SCH_SHEET*) item;
+                SCH_SCREEN* screen = sheet->m_screen;
+
+                if( screen && screen->GetFileName().CmpNoCase( aFilename ) == 0 )
                 {
-                    *aScreen = sheet->m_screen;
+                    *aScreen = screen;
                     return true;
                 }
-
-                if( sheet->SearchHierarchy( aFilename, aScreen ) )
+                else if( sheet->SearchHierarchy( aFilename, aScreen ) )
+                {
                     return true;
+                }
             }
 
             item = item->Next();

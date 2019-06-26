@@ -418,7 +418,7 @@ public:
     /**
      * Search the existing hierarchy for an instance of screen loaded from \a aFileName.
      *
-     * @param aFilename = the filename to find
+     * @param aFilename = the filename to find (MUST be absolute, and in wxPATH_UNIX encoding)
      * @param aScreen = a location to return a pointer to the screen (if found)
      * @return bool if found, and a pointer to the screen
      */

@@ -131,10 +131,10 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
                      "Cannot normalize new sheet schematic file path." );
     }
 
-    wxString newFilename = fileName.GetFullPath();
+    wxString newFilename = fileName.GetFullPath( wxPATH_UNIX );
 
-    // Search for a schematic file having the same filename
-    // already in use in the hierarchy or on disk, in order to reuse it.
+    // Search for a schematic file having the same filename already in use in the hierarchy
+    // or on disk, in order to reuse it.
     if( !g_RootSheet->SearchHierarchy( newFilename, &useScreen ) )
     {
         loadFromFile = wxFileExists( newFilename );

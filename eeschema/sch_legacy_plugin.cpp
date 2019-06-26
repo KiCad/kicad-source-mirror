@@ -670,7 +670,7 @@ void SCH_LEGACY_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
         wxLogTrace( traceSchLegacyPlugin, "Current path   \"%s\"", m_currentPath.top() );
         wxLogTrace( traceSchLegacyPlugin, "Loading        \"%s\"", fileName.GetFullPath() );
 
-        m_rootSheet->SearchHierarchy( fileName.GetFullPath(), &screen );
+        m_rootSheet->SearchHierarchy( fileName.GetFullPath( wxPATH_UNIX ), &screen );
 
         if( screen )
         {

@@ -833,8 +833,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     //
     bool           sheetsPasted = false;
     SCH_SHEET_LIST hierarchy( g_RootSheet );
-    SCH_SHEET_LIST initialHierarchy( g_RootSheet );
-
     wxFileName     destFn = g_CurrentSheet->Last()->GetFileName();
 
     if( destFn.IsRelative() )
@@ -909,12 +907,33 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         else if( item->Type() == SCH_SHEET_T )
         {
             SCH_SHEET*  sheet = (SCH_SHEET*) item;
+            wxFileName  fn = sheet->GetFileName();
             SCH_SCREEN* existingScreen = nullptr;
 
-            if( g_RootSheet->SearchHierarchy( sheet->GetFileName(), &existingScreen ) )
+            if( !fn.IsAbsolute() )
+            {
+                wxFileName currentSheetFileName = g_CurrentSheet->LastScreen()->GetFileName();
+                fn.Normalize( wxPATH_NORM_ALL, currentSheetFileName.GetPath() );
+            }
+
+            if( g_RootSheet->SearchHierarchy( fn.GetFullPath( wxPATH_UNIX ), &existingScreen ) )
+            {
                 sheet->SetScreen( existingScreen );
+
+                SCH_SHEET_PATH sheetpath = *g_CurrentSheet;
+                sheetpath.push_back( sheet );
+
+                // Clear annotation and create the AR for this path, if not exists,
+                // when the screen is shared by sheet paths.
+                // Otherwise ClearAnnotation do nothing, because the F1 field is used as
+                // reference default value and takes the latest displayed value
+                existingScreen->EnsureAlternateReferencesExist();
+                existingScreen->ClearAnnotation( &sheetpath );
+            }
             else
+            {
                 m_frame->LoadSheetFromFile( sheet, g_CurrentSheet, sheet->GetFileName() );
+            }
         }
 
         item->SetFlags( IS_NEW | IS_PASTED | IS_MOVED );
@@ -925,12 +944,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     }
 
     if( sheetsPasted )
-    {
-        // We clear annotation of new sheet paths.
-        SCH_SCREENS screensList( g_RootSheet );
-        screensList.ClearAnnotationOfNewSheetPaths( initialHierarchy );
         m_frame->SetSheetNumberAndCount();
-    }
 
     // Now clear the previous selection, select the pasted items, and fire up the "move"
     // tool.
