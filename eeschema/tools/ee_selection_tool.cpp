@@ -528,6 +528,28 @@ void EE_SELECTION_TOOL::guessSelectionCandidates( EE_COLLECTOR& collector, const
     // There are certain parent/child and enclosure combinations that can be handled
     // automatically.
 
+    // Prefer exact hits to a sloppy ones
+    int exactHits = 0;
+
+    for( int i = collector.GetCount() - 1; i >= 0; --i )
+    {
+        EDA_ITEM* item = collector[ i ];
+
+        if( item->HitTest( (wxPoint) aPos, 0 ) )
+            exactHits++;
+    }
+
+    if( exactHits > 0 && exactHits < collector.GetCount() )
+    {
+        for( int i = collector.GetCount() - 1; i >= 0; --i )
+        {
+            EDA_ITEM* item = collector[ i ];
+
+            if( !item->HitTest( (wxPoint) aPos, 0 ) )
+                collector.Remove( item );
+        }
+    }
+
     // Prefer a non-sheet to a sheet
     for( int i = 0; collector.GetCount() == 2 && i < 2; ++i )
     {
@@ -545,16 +567,6 @@ void EE_SELECTION_TOOL::guessSelectionCandidates( EE_COLLECTOR& collector, const
         EDA_ITEM* other = collector[ ( i + 1 ) % 2 ];
 
         if( item->Type() == SCH_COMPONENT_T && other->Type() == SCH_PIN_T )
-            collector.Remove( other );
-    }
-
-    // Prefer an exact hit to a sloppy one
-    for( int i = 0; collector.GetCount() == 2 && i < 2; ++i )
-    {
-        EDA_ITEM* item = collector[ i ];
-        EDA_ITEM* other = collector[ ( i + 1 ) % 2 ];
-
-        if( item->HitTest( (wxPoint) aPos, 0 ) && !other->HitTest( (wxPoint) aPos, 0 ) )
             collector.Remove( other );
     }
 
