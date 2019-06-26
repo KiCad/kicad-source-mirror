@@ -190,13 +190,21 @@ void SCH_VIEW::HideWorksheet()
 
 void SCH_VIEW::HighlightItem( EDA_ITEM *aItem, LIB_PIN* aPin )
 {
-    if( !aItem )
+    if( aItem && aItem->Type() == SCH_COMPONENT_T && aPin )
+    {
+        static_cast<SCH_COMPONENT*>( aItem )->HighlightPin( aPin );
+    }
+    else if( aItem )
+    {
+        aItem->SetFlags( HIGHLIGHTED );
+    }
+    else
     {
         for( auto item : *m_allItems )
         {
             // Not all view items can be highlighted, only EDA_ITEMs
             // So clear flag of only EDA_ITEMs.
-            auto eitem = dynamic_cast<EDA_ITEM *>( item );
+            EDA_ITEM* eitem = dynamic_cast<EDA_ITEM*>( item );
 
             if( eitem )
             {
@@ -209,15 +217,6 @@ void SCH_VIEW::HighlightItem( EDA_ITEM *aItem, LIB_PIN* aPin )
                 }
             }
         }
-    }
-    else
-    {
-        if( ( aItem->Type() == SCH_COMPONENT_T ) && aPin )
-        {
-            static_cast<SCH_COMPONENT*>( aItem )->HighlightPin( aPin );
-        }
-        else
-            aItem->SetFlags( HIGHLIGHTED );
     }
 
     // ugly but I guess OK for the moment...

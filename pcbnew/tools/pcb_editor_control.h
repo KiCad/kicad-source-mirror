@@ -108,9 +108,6 @@ public:
     ///> Notifies eeschema about the selected item.
     int CrossProbePcbToSch( const TOOL_EVENT& aEvent );
 
-    ///> Reacts to selection change in eeschema.
-    int CrossProbeSchToPcb( const TOOL_EVENT& aEvent );
-
     ///> Runs the drill origin tool for setting the origin for drill and pick-and-place files.
     int DrillOrigin( const TOOL_EVENT& aEvent );
 

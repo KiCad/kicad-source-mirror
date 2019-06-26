@@ -241,6 +241,14 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
             return m_layerColorsSel[aLayer];
         }
 
+        if( m_highlightEnabled && m_highlightItems )
+        {
+            if( item->IsHighlighted() )
+                return m_layerColorsHi[aLayer];
+            else
+                return m_layerColorsDark[aLayer];
+        }
+
         // Try to obtain the netcode for the item
         if( const BOARD_CONNECTED_ITEM* conItem = dyn_cast<const BOARD_CONNECTED_ITEM*> ( item ) )
             netCode = conItem->GetNetCode();

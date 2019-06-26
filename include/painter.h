@@ -132,15 +132,17 @@ public:
 
     /**
      * Function SetHighlight
-     * Turns on/off highlighting - it may be done for the active layer or the specified net.
+     * Turns on/off highlighting - it may be done for the active layer, the specified net, or
+     * items with their HIGHLIGHTED flags set.
      * @param aEnabled tells if highlighting should be enabled.
      * @param aNetcode is optional and if specified, turns on higlighting only for the net with
      * number given as the parameter.
      */
-    inline void SetHighlight( bool aEnabled, int aNetcode = -1 )
+    inline void SetHighlight( bool aEnabled, int aNetcode = -1, bool aHighlightItems = false )
     {
         m_highlightEnabled = aEnabled;
         m_highlightNetcode = aEnabled ? aNetcode : -1;
+        m_highlightItems = aEnabled ? aHighlightItems : false;
     }
 
     /**
@@ -282,6 +284,7 @@ protected:
     int     m_highlightNetcode;     ///< Net number that is displayed in highlight
                                     ///< -1 means that there is no specific net, and whole active
                                     ///< layer is highlighted
+    bool    m_highlightItems;       ///< Highlight items with their HIGHLIGHT flags set
     float   m_highlightFactor;      ///< Factor used for computing hightlight color
 
     float   m_selectFactor;         ///< Specifies how color of selected items is changed

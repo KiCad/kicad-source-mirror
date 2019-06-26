@@ -560,9 +560,6 @@ TOOL_ACTION PCB_ACTIONS::drillOrigin( "pcbnew.EditorControl.drillOrigin",
         _( "Drill and Place Offset" ), _( "Place origin point for drill and place files" ),
         pcb_offset_xpm );
 
-TOOL_ACTION PCB_ACTIONS::crossProbeSchToPcb( "pcbnew.EditorControl.crossProbSchToPcb",
-        AS_GLOBAL );
-
 TOOL_ACTION PCB_ACTIONS::toggleLock( "pcbnew.EditorControl.toggleLock",
         AS_GLOBAL,
         'L', LEGACY_HK_NAME( "Lock/Unlock Footprint" ),

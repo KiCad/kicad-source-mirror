@@ -954,37 +954,6 @@ int PCB_EDITOR_CONTROL::CrossProbePcbToSch( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::CrossProbeSchToPcb( const TOOL_EVENT& aEvent )
-{
-    BOARD_ITEM* item = aEvent.Parameter<BOARD_ITEM*>();
-
-    if( item )
-    {
-        m_probingSchToPcb = true;
-        getView()->SetCenter( VECTOR2D( item->GetPosition() ) );
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
-        // If it is a pad and the net highlighting tool is enabled, highlight the net
-        if( item->Type() == PCB_PAD_T && m_frame->IsCurrentTool( PCB_ACTIONS::highlightNetTool ) )
-        {
-            int net = static_cast<D_PAD*>( item )->GetNetCode();
-            m_toolMgr->RunAction( PCB_ACTIONS::highlightNet, false, net );
-        }
-        else
-        // Otherwise simply select the corresponding item
-        {
-            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, item );
-            // Ensure the display is refreshed, because in some installs
-            // the refresh is done only when the gal canvas has the focus, and
-            // that is not the case when crossprobing from Eeschema:
-            m_frame->GetCanvas()->Refresh();
-        }
-    }
-
-    return 0;
-}
-
-
 void PCB_EDITOR_CONTROL::DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                            BOARD_ITEM* originViewItem, const VECTOR2D& aPosition )
 {
@@ -1122,7 +1091,7 @@ int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
     }
     else
     {
-        board->ResetHighLight();
+        board->ResetNetHighLight();
         frame->SetMsgPanel( board );
         frame->SendCrossProbeNetName( "" );
     }
@@ -1164,7 +1133,7 @@ int PCB_EDITOR_CONTROL::ClearHighlight( const TOOL_EVENT& aEvent )
     auto board = static_cast<BOARD*>( m_toolMgr->GetModel() );
     KIGFX::RENDER_SETTINGS* render = m_toolMgr->GetView()->GetPainter()->GetSettings();
 
-    board->ResetHighLight();
+    board->ResetNetHighLight();
     render->SetHighlight( false );
     m_toolMgr->GetView()->UpdateAllLayersColor();
     frame->SetMsgPanel( board );
@@ -1430,7 +1399,6 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,     EVENTS::SelectedEvent );
     Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,     EVENTS::UnselectedEvent );
     Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,     EVENTS::ClearedEvent );
-    Go( &PCB_EDITOR_CONTROL::CrossProbeSchToPcb,     PCB_ACTIONS::crossProbeSchToPcb.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNet,           PCB_ACTIONS::highlightNet.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNet,           PCB_ACTIONS::toggleLastNetHighlight.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ClearHighlight,         PCB_ACTIONS::clearHighlight.MakeEvent() );

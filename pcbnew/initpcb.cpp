@@ -73,7 +73,7 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery, bool aFinal )
 
         GetScreen()->InitDataPoints( GetPageSizeIU() );
 
-        GetBoard()->ResetHighLight();
+        GetBoard()->ResetNetHighLight();
 
         // Enable all layers (SetCopperLayerCount() will adjust the copper layers enabled)
         GetBoard()->SetEnabledLayers( LSET().set() );

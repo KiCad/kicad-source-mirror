@@ -73,10 +73,13 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     wxString    modName;
     char*       idcmd;
     char*       text;
+    int         netcode = -1;
     MODULE*     module = NULL;
     D_PAD*      pad = NULL;
     BOARD*      pcb = GetBoard();
-    wxPoint     pos;
+
+    KIGFX::VIEW*            view = m_toolManager->GetView();
+    KIGFX::RENDER_SETTINGS* renderSettings = view->GetPainter()->GetSettings();
 
     strncpy( line, cmdline, sizeof(line) - 1 );
     line[sizeof(line) - 1] = 0;
@@ -89,125 +92,22 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     if( strcmp( idcmd, "$NET:" ) == 0 )
     {
-        if( IsCurrentTool( PCB_ACTIONS::highlightNetTool ) )
+        wxString net_name = FROM_UTF8( text );
+
+        NETINFO_ITEM* netinfo = pcb->FindNet( net_name );
+
+        if( netinfo )
         {
-            wxString net_name = FROM_UTF8( text );
-            NETINFO_ITEM* netinfo = pcb->FindNet( net_name );
-            int netcode = -1;
+            netcode = netinfo->GetNet();
 
-            if( netinfo )
-                netcode = netinfo->GetNet();
-
-            if( netcode > 0 )
-            {
-                pcb->SetHighLightNet( netcode );
-
-                if( netinfo )
-                {
-                    MSG_PANEL_ITEMS items;
-                    netinfo->GetMsgPanelInfo( GetUserUnits(), items );
-                    SetMsgPanel( items );
-                }
-            }
-
-            auto view = m_toolManager->GetView();
-            auto rs = view->GetPainter()->GetSettings();
-            rs->SetHighlight( ( netcode >= 0 ), netcode );
-            view->UpdateAllLayersColor();
-
-            BOX2I bbox;
-            bool first = true;
-
-            auto merge_area = [netcode, &bbox, &first]( BOARD_CONNECTED_ITEM* aItem )
-            {
-                if( aItem->GetNetCode() == netcode )
-                {
-                    if( first )
-                    {
-                        bbox = aItem->GetBoundingBox();
-                        first = false;
-                    }
-                    else
-                    {
-                        bbox.Merge( aItem->GetBoundingBox() );
-                    }
-                }
-            };
-
-            for( auto zone : pcb->Zones() )
-                merge_area( zone );
-
-            for( auto track : pcb->Tracks() )
-                merge_area( track );
-
-            for( auto mod : pcb->Modules() )
-                for ( auto mod_pad : mod->Pads() )
-                    merge_area( mod_pad );
-
-            if( netcode > 0 && bbox.GetWidth() > 0 && bbox.GetHeight() > 0 )
-            {
-                auto bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
-                auto screenSize = view->ToWorld( GetCanvas()->GetClientSize(), false );
-                double ratio = std::max( fabs( bbSize.x / screenSize.x ),
-                                         fabs( bbSize.y / screenSize.y ) );
-                double scale = view->GetScale() / ratio;
-
-                view->SetScale( scale );
-                view->SetCenter( bbox.Centre() );
-            }
-
-            GetCanvas()->Refresh();
+            MSG_PANEL_ITEMS items;
+            netinfo->GetMsgPanelInfo( GetUserUnits(), items );
+            SetMsgPanel( items );
         }
-
-        return;
-    }
-    else if( strcmp( idcmd, "$CLEAR" ) == 0 )
-    {
-        auto view = m_toolManager->GetView();
-        auto rs = view->GetPainter()->GetSettings();
-        rs->SetHighlight( false );
-        view->UpdateAllLayersColor();
-
-        pcb->ResetHighLight();
-        SetMsgPanel( pcb );
-
-        GetCanvas()->Refresh();
-    }
-
-    if( text == NULL )
-        return;
-
-    if( strcmp( idcmd, "$PART:" ) == 0 )
-    {
-        modName = FROM_UTF8( text );
-
-        module = pcb->FindModuleByReference( modName );
-
-        if( module )
-            msg.Printf( _( "%s found" ), modName );
-        else
-            msg.Printf( _( "%s not found" ), modName );
-
-        SetStatusText( msg );
-
-        if( module )
-            pos = module->GetPosition();
-    }
-    else if( strcmp( idcmd, "$SHEET:" ) == 0 )
-    {
-        msg.Printf( _( "Selecting all from sheet \"%s\"" ), FROM_UTF8( text ) );
-        wxString sheetStamp( FROM_UTF8( text ) );
-        SetStatusText( msg );
-        GetToolManager()->RunAction( PCB_ACTIONS::selectOnSheetFromEeschema, true,
-                                     static_cast<void*>( &sheetStamp ) );
-        return;
     }
     else if( strcmp( idcmd, "$PIN:" ) == 0 )
     {
-        wxString pinName;
-        int      netcode = -1;
-
-        pinName = FROM_UTF8( text );
+        wxString pinName = FROM_UTF8( text );
 
         text = strtok( NULL, " \n\r" );
 
@@ -222,23 +122,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             pad = module->FindPadByName( pinName );
 
         if( pad )
-        {
             netcode = pad->GetNetCode();
-
-            // put cursor on the pad:
-            pos = pad->GetPosition();
-        }
-
-        if( netcode > 0 )               // highlight the pad net
-        {
-            pcb->HighLightON();
-            pcb->SetHighLightNet( netcode );
-        }
-        else
-        {
-            pcb->HighLightOFF();
-            pcb->SetHighLightNet( -1 );
-        }
 
         if( module == NULL )
             msg.Printf( _( "%s not found" ), modName );
@@ -249,12 +133,108 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
         SetStatusText( msg );
     }
-
-    if( module )  // if found, center the module on screen, and redraw the screen.
+    else if( strcmp( idcmd, "$PART:" ) == 0 )
     {
-        GetToolManager()->RunAction( PCB_ACTIONS::crossProbeSchToPcb, true,
-                                     pad ? (BOARD_ITEM*) pad : (BOARD_ITEM*) module );
+        pcb->ResetNetHighLight();
+
+        modName = FROM_UTF8( text );
+
+        module = pcb->FindModuleByReference( modName );
+
+        if( module )
+            msg.Printf( _( "%s found" ), modName );
+        else
+            msg.Printf( _( "%s not found" ), modName );
+
+        SetStatusText( msg );
     }
+    else if( strcmp( idcmd, "$SHEET:" ) == 0 )
+    {
+        msg.Printf( _( "Selecting all from sheet \"%s\"" ), FROM_UTF8( text ) );
+        wxString sheetStamp( FROM_UTF8( text ) );
+        SetStatusText( msg );
+        GetToolManager()->RunAction( PCB_ACTIONS::selectOnSheetFromEeschema, true,
+                                     static_cast<void*>( &sheetStamp ) );
+        return;
+    }
+    else if( strcmp( idcmd, "$CLEAR" ) == 0 )
+    {
+        renderSettings->SetHighlight( false );
+        view->UpdateAllLayersColor();
+
+        pcb->ResetNetHighLight();
+        SetMsgPanel( pcb );
+
+        GetCanvas()->Refresh();
+        return;
+    }
+
+    if( module )
+    {
+        renderSettings->SetHighlight( true, -1, true );
+
+        for( MODULE* mod : pcb->Modules() )
+        {
+            mod->ClearHighlighted();
+            mod->RunOnChildren( []( BOARD_ITEM* child ) { child->ClearHighlighted(); } );
+        }
+
+        module->SetHighlighted();
+        module->RunOnChildren( []( BOARD_ITEM* child ) { child->SetHighlighted(); } );
+
+        view->SetCenter( VECTOR2D( module->GetPosition() ) );
+    }
+    else if( netcode > 0 )
+    {
+        renderSettings->SetHighlight( ( netcode >= 0 ), netcode );
+
+        pcb->SetHighLightNet( netcode );
+
+        BOX2I bbox;
+
+        auto merge_area = [netcode, &bbox]( BOARD_CONNECTED_ITEM* aItem )
+        {
+            if( aItem->GetNetCode() == netcode )
+            {
+                if( bbox.GetWidth() == 0 )
+                    bbox = aItem->GetBoundingBox();
+                else
+                    bbox.Merge( aItem->GetBoundingBox() );
+            }
+        };
+
+        for( auto zone : pcb->Zones() )
+            merge_area( zone );
+
+        for( auto track : pcb->Tracks() )
+            merge_area( track );
+
+        for( auto mod : pcb->Modules() )
+            for ( auto mod_pad : mod->Pads() )
+                merge_area( mod_pad );
+
+        if( bbox.GetWidth() > 0 && bbox.GetHeight() > 0 )
+        {
+            auto bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
+            auto screenSize = view->ToWorld( GetCanvas()->GetClientSize(), false );
+            double ratio = std::max( fabs( bbSize.x / screenSize.x ),
+                                     fabs( bbSize.y / screenSize.y ) );
+            double scale = view->GetScale() / ratio;
+
+            view->SetScale( scale );
+            view->SetCenter( bbox.Centre() );
+        }
+    }
+    else
+    {
+        renderSettings->SetHighlight( false );
+    }
+
+    view->UpdateAllLayersColor();
+    // Ensure the display is refreshed, because in some installs the refresh is done only
+    // when the gal canvas has the focus, and that is not the case when crossprobing from
+    // Eeschema:
+    GetCanvas()->Refresh();
 }
 
 

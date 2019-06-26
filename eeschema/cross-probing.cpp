@@ -127,11 +127,15 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     if( strcmp( idcmd, "$REF:" ) == 0 )
     {
-        FindComponentAndItem( part_ref, true, FIND_REFERENCE, msg );
+        // Highlighting the reference itself isn't actually that useful, and it's harder to
+        // see.  Highlight the parent and display the message.
+        FindComponentAndItem( part_ref, true, FIND_COMPONENT_ONLY, msg );
     }
     else if( strcmp( idcmd, "$VAL:" ) == 0 )
     {
-        FindComponentAndItem( part_ref, true, FIND_VALUE, msg );
+        // Highlighting the value itself isn't actually that useful, and it's harder to see.
+        // Highlight the parent and display the message.
+        FindComponentAndItem( part_ref, true, FIND_COMPONENT_ONLY, msg );
     }
     else if( strcmp( idcmd, "$PAD:" ) == 0 )
     {
@@ -151,14 +155,6 @@ std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aComp )
     // Cross probing to Pcbnew if a pin or a component is found
     switch( aItem->Type() )
     {
-    case LIB_PIN_T:
-        wxFAIL_MSG( "What are we doing with LIB_* items here?" );
-        break;
-
-    case LIB_FIELD_T:
-        wxFAIL_MSG( "What are we doing with LIB_* items here?" );
-        // fall through to SCH_FIELD_T:
-
     case SCH_FIELD_T:
         if( aComp )
             return StrPrintf( "$PART: \"%s\"", TO_UTF8( aComp->GetField( REFERENCE )->GetText() ) );

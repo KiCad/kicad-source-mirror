@@ -377,10 +377,10 @@ public:
     const wxPoint& GetGridOrigin() const            { return m_designSettings.m_GridOrigin; }
 
     /**
-     * Function ResetHighLight
+     * Function ResetNetHighLight
      * Reset all high light data to the init state
      */
-    void ResetHighLight()
+    void ResetNetHighLight()
     {
         m_highLight.Clear();
         m_highLightPrevious.Clear();
