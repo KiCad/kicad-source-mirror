@@ -698,7 +698,9 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
 
 bool GERBVIEW_SELECTION_TOOL::selectable( const EDA_ITEM* aItem ) const
 {
-    auto item = static_cast<const GERBER_DRAW_ITEM*>( aItem );
+    GERBVIEW_FRAME*         frame = getEditFrame<GERBVIEW_FRAME>();
+    const GERBER_DRAW_ITEM* item = static_cast<const GERBER_DRAW_ITEM*>( aItem );
+    int                     layer = item->GetLayer();
 
     if( item->GetLayerPolarity() )
     {
@@ -708,7 +710,11 @@ bool GERBVIEW_SELECTION_TOOL::selectable( const EDA_ITEM* aItem ) const
             return false;
     }
 
-    return getEditFrame<GERBVIEW_FRAME>()->IsLayerVisible( item->GetLayer() );
+    // We do not want to select items that are in the background
+    if( frame->m_DisplayOptions.m_HighContrastMode && layer != frame->GetActiveLayer() )
+        return false;
+
+    return frame->IsLayerVisible( layer );
 }
 
 
