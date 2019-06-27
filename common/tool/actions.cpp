@@ -450,6 +450,7 @@ TOOL_ACTION ACTIONS::resetLocalCoords( "common.Control.resetLocalCoords",
 
 TOOL_ACTION ACTIONS::toggleCursor( "common.Control.toggleCursor",
         AS_GLOBAL, 
+        // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         MD_CTRL + MD_SHIFT + 'X', LEGACY_HK_NAME( "Toggle Cursor Display (Modern Toolset only)" ),
         _( "Always Show Cursor" ), _( "Display crosshairs even in selection tool" ),
         cursor_xpm );
@@ -472,6 +473,7 @@ TOOL_ACTION ACTIONS::selectionTool( "common.InteractiveSelection.selectionTool",
 
 TOOL_ACTION ACTIONS::measureTool( "common.InteractiveEdit.measureTool",
         AS_GLOBAL,
+        // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         MD_CTRL + MD_SHIFT + 'M', LEGACY_HK_NAME( "Measure Distance (Modern Toolset only)" ),
         _( "Measure Tool" ), _( "Interactively measure distance between points" ),
         measurement_xpm, AF_ACTIVATE );

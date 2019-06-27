@@ -63,6 +63,7 @@ static TOOL_ACTION ACT_EndTuning( "pcbnew.LengthTuner.EndTuning",
 
 static TOOL_ACTION ACT_Settings( "pcbnew.LengthTuner.Settings", 
         AS_CONTEXT,
+        // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         MD_CTRL + 'L', LEGACY_HK_NAME( "Length Tuning Settings (Modern Toolset only)" ),
         _( "Length Tuning Settings..." ), _( "Sets the length tuning parameters for currently routed item." ),
         router_len_tuner_setup_xpm );

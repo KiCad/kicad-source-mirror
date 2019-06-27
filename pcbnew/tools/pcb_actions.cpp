@@ -217,6 +217,7 @@ TOOL_ACTION PCB_ACTIONS::createArray( "pcbnew.InteractiveEdit.createArray",
 
 TOOL_ACTION PCB_ACTIONS::rotateCw( "pcbnew.InteractiveEdit.rotateCw",
         AS_GLOBAL,
+        // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         MD_SHIFT + 'R', LEGACY_HK_NAME( "Rotate Item Clockwise (Modern Toolset only)" ),
         _( "Rotate Clockwise" ), _( "Rotates selected item(s) clockwise" ),
         rotate_cw_xpm, AF_NONE, (void*) -1 );
@@ -599,6 +600,7 @@ TOOL_ACTION PCB_ACTIONS::highlightNetTool( "pcbnew.EditorControl.highlightNetToo
 
 TOOL_ACTION PCB_ACTIONS::highlightNetSelection( "pcbnew.EditorControl.highlightNetSelection",
         AS_GLOBAL,
+        // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         '`', LEGACY_HK_NAME( "Toggle Highlight of Selected Net (Modern Toolset only)" ),
         _( "Highlight Net" ), _( "Highlight all copper items of a net" ),
         net_highlight_xpm );
@@ -887,12 +889,14 @@ TOOL_ACTION PCB_ACTIONS::layerToggle( "pcbnew.Control.layerToggle",
 
 TOOL_ACTION PCB_ACTIONS::layerAlphaInc( "pcbnew.Control.layerAlphaInc",
         AS_GLOBAL,
+        // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         '}', LEGACY_HK_NAME( "Increment Layer Transparency (Modern Toolset only)" ),
         _( "Increase Layer Opacity" ), _( "Make the current layer more transparent" ),
         contrast_mode_xpm );
 
 TOOL_ACTION PCB_ACTIONS::layerAlphaDec( "pcbnew.Control.layerAlphaDec",
         AS_GLOBAL,
+        // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         '{', LEGACY_HK_NAME( "Decrement Layer Transparency (Modern Toolset only)" ),
         _( "Decrease Layer Opacity" ), _( "Make the current layer more transparent" ),
         contrast_mode_xpm );
@@ -1109,6 +1113,7 @@ TOOL_ACTION PCB_ACTIONS::routeSingleTrack( "pcbnew.InteractiveRouter.SingleTrack
 
 TOOL_ACTION PCB_ACTIONS::routeDiffPair( "pcbnew.InteractiveRouter.DiffPair",
         AS_GLOBAL,
+        // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         '6', LEGACY_HK_NAME( "Route Differential Pair (Modern Toolset only)" ),
         _( "Route Differential Pair" ), _( "Run push & shove router (differential pairs)" ),
         ps_diff_pair_xpm, AF_ACTIVATE, (void*) PNS::PNS_MODE_ROUTE_DIFF_PAIR );
@@ -1131,19 +1136,22 @@ TOOL_ACTION PCB_ACTIONS::selectLayerPair( "pcbnew.InteractiveRouter.SelectLayerP
 
 TOOL_ACTION PCB_ACTIONS::routerTuneSingleTrace( "pcbnew.LengthTuner.TuneSingleTrack",
         AS_GLOBAL,
-        '7', LEGACY_HK_NAME( "Tune Single Track" ),
+        // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
+        '7', LEGACY_HK_NAME( "Tune Single Track (Modern Toolset only)" ),
         _( "Tune length of a single track" ), "",
         ps_tune_length_xpm, AF_ACTIVATE, (void*) PNS::PNS_MODE_TUNE_SINGLE );
 
 TOOL_ACTION PCB_ACTIONS::routerTuneDiffPair( "pcbnew.LengthTuner.TuneDiffPair",
         AS_GLOBAL,
-        '8', LEGACY_HK_NAME( "Tune Differential Pair Length" ),
+        // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
+        '8', LEGACY_HK_NAME( "Tune Differential Pair Length (Modern Toolset only)" ),
         _( "Tune length of a differential pair" ), "",
         nullptr, AF_ACTIVATE, (void*) PNS::PNS_MODE_TUNE_DIFF_PAIR );
 
 TOOL_ACTION PCB_ACTIONS::routerTuneDiffPairSkew( "pcbnew.LengthTuner.TuneDiffPairSkew",
         AS_GLOBAL,
-        '9', LEGACY_HK_NAME( "Tune Differential Pair Skew" ),
+        // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
+        '9', LEGACY_HK_NAME( "Tune Differential Pair Skew (Modern Toolset only)" ),
         _( "Tune skew of a differential pair" ), "",
         nullptr, AF_ACTIVATE, (void*) PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW );
 
