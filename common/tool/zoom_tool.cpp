@@ -51,12 +51,7 @@ int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
     while( auto evt = Wait() )
     {
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
-        {
-            if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-                m_frame->ClearToolStack();
-
             break;
-        }
 
         else if( evt->IsDrag( BUT_LEFT ) || evt->IsDrag( BUT_RIGHT ) )
         {
@@ -87,7 +82,7 @@ bool ZOOM_TOOL::selectRegion()
 
     while( auto evt = Wait() )
     {
-        if( evt->IsCancel() || evt->IsActivate() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             cancelled = true;
             break;

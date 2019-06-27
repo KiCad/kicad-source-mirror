@@ -999,9 +999,6 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     {
         if( m_pickerItem )
             m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
-
-        if( aFinalState == EE_PICKER_TOOL::EVT_CANCEL )
-            m_frame->ClearToolStack();
     } );
 
     picker->Activate();

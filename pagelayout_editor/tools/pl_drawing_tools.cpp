@@ -80,7 +80,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     // Prime the pump
@@ -103,13 +103,9 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
                 // There's nothing to roll-back, but we still need to pop the undo stack
                 m_frame->RollbackFromUndo();
             }
-            else
+            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             {
-                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-                {
-                    m_frame->ClearToolStack();
-                    break;
-                }
+                break;
             }
 
             if( evt->IsActivate() )
@@ -166,6 +162,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
+    m_frame->PopTool();
     return 0;
 }
 
@@ -182,7 +179,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     // Prime the pump
@@ -203,16 +200,12 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 item = nullptr;
                 m_frame->RollbackFromUndo();
             }
-            else
+            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             {
-                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-                {
-                    m_frame->ClearToolStack();
-                    break;
-                }
+                break;
             }
 
-            if( evt->IsActivate() )
+            if( evt->IsActivate() && !TOOL_EVT_UTILS::IsPointEditor( *evt ) )
                 break;
         }
 
@@ -264,6 +257,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
+    m_frame->PopTool();
     return 0;
 }
 

@@ -257,14 +257,18 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
 
     if( aEvent.HasPosition() )
     {
         VECTOR2D cursorPos = getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
         segment = startSegments( layer, cursorPos );
     }
-    return doDrawSegments( layer, segment );
+
+    doDrawSegments( layer, segment );
+
+    m_frame->PopTool();
+    return 0;
 }
 
 
@@ -477,7 +481,6 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
             }
             else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             {
-                m_frame->ClearToolStack();
                 break;
             }
 

@@ -117,11 +117,12 @@ int MICROWAVE_TOOL::addMicrowaveFootprint( const TOOL_EVENT& aEvent )
 
     MICROWAVE_PLACER placer( creator );
 
-    frame.SetTool( aEvent.GetCommandStr().get() );
+    frame.PushTool( aEvent.GetCommandStr().get() );
 
     doInteractiveItemPlacement( &placer,  _( "Place microwave feature" ),
                                 IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP | IPO_PROPERTIES );
 
+    frame.PopTool();
     return 0;
 }
 
@@ -186,7 +187,7 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS& controls = *getViewControls();
     auto& frame = *getEditFrame<PCB_EDIT_FRAME>();
 
-    frame.SetTool( aEvent.GetCommandStr().get() );
+    frame.PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     TWO_POINT_GEOMETRY_MANAGER tpGeomMgr;
@@ -225,7 +226,6 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
             }
             else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             {
-                frame.ClearToolStack();
                 break;
             }
 
@@ -282,7 +282,7 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
     controls.CaptureCursor( false );
     controls.SetAutoPan( false );
     view.Remove( &previewRect );
-
+    frame.PopTool();
     return 0;
 }
 

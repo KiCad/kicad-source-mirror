@@ -74,11 +74,6 @@ public:
      */
     int Main( const TOOL_EVENT& aEvent );
 
-    /*
-     * Main() is always running, so this just clears the frame's tool stack.
-     */
-    int SelectionTool( const TOOL_EVENT& aEvent );
-
     /**
      * Function GetSelection()
      *

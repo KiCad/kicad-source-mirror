@@ -85,21 +85,15 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer
 
                 preview.Clear();
 
-                if( aOptions & IPO_SINGLE_CLICK )
-                {
-                    frame()->ClearToolStack();
-                    break;
-                }
-
                 controls()->SetAutoPan( false );
                 controls()->CaptureCursor( false );
                 controls()->ShowCursor( true );
-            }
-            else
-            {
-                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-                    frame()->ClearToolStack();
 
+                if( aOptions & IPO_SINGLE_CLICK )
+                    break;
+            }
+            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+            {
                 break;
             }
 

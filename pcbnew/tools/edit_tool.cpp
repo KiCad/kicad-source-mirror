@@ -411,7 +411,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
         }
 
-        else if( evt->IsCancel() || evt->IsActivate() )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             restore_state = true; // Canceling the tool means that items have to be restored
             break;                // Finish
@@ -1107,7 +1107,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     auto& view = *getView();
     auto& controls = *getViewControls();
 
-    frame()->SetTool( aEvent.GetCommandStr().get() );
+    frame()->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     EDA_UNITS_T units = frame()->GetUserUnits();
@@ -1146,7 +1146,6 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
             }
             else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             {
-                frame()->ClearToolStack();
                 break;
             }
 
@@ -1204,7 +1203,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
     view.SetVisible( &ruler, false );
     view.Remove( &ruler );
-
+    frame()->PopTool();
     return 0;
 }
 

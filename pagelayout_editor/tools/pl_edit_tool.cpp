@@ -290,10 +290,11 @@ bool PL_EDIT_TOOL::updateModificationPoint( PL_SELECTION& aSelection )
 
 int PL_EDIT_TOOL::ImportWorksheetContent( const TOOL_EVENT& aEvent )
 {
+    m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
+
     wxCommandEvent evt( wxEVT_NULL, ID_APPEND_DESCR_FILE );
     m_frame->Files_io( evt );
 
-    m_frame->ClearToolStack();
     return 0;
 }
 
@@ -354,7 +355,7 @@ static bool deleteItem( PL_EDITOR_FRAME* aFrame, const VECTOR2D& aPosition )
 
 int PL_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     PL_PICKER_TOOL* picker = m_toolMgr->GetTool<PL_PICKER_TOOL>();
@@ -409,14 +410,12 @@ int PL_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     {
         if( m_pickerItem )
             m_toolMgr->GetTool<PL_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
-
-        if( aFinalState == PL_PICKER_TOOL::EVT_CANCEL )
-            m_frame->ClearToolStack();
     } );
 
     picker->Activate();
     Wait();
 
+    m_frame->PopTool();
     return 0;
 }
 

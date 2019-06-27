@@ -518,7 +518,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
     controls->ShowCursor( true );
     controls->SetSnapping( true );
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     VECTOR2I cursorPos = controls->GetCursorPosition();
@@ -551,13 +551,9 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
                 commit.Revert();
                 module = NULL;
             }
-            else
+            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             {
-                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-                {
-                    m_frame->ClearToolStack();
-                    break;
-                }
+                break;
             }
 
             if( evt->IsActivate() )  // now finish unconditionally
@@ -626,7 +622,6 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
     }
 
     m_frame->PopTool();
-
     return 0;
 }
 
@@ -716,7 +711,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     controls->SetSnapping( true );
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     // Main loop: keep receiving events
@@ -728,9 +723,6 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
-            if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-                m_frame->ClearToolStack();
-
             break;
         }
 
@@ -780,9 +772,9 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     }
 
     delete target;
-
-    controls->SetSnapping( false );
     view->Remove( &preview );
+    controls->SetSnapping( false );
+    m_frame->PopTool();
     return 0;
 }
 
@@ -966,7 +958,7 @@ void PCB_EDITOR_CONTROL::DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* a
 
 int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
@@ -982,7 +974,7 @@ int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
     picker->Activate();
     Wait();
 
-    m_frame->ClearToolStack();
+    m_frame->PopTool();
     return 0;
 }
 
@@ -1153,7 +1145,7 @@ int PCB_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
         highlightNet( getViewControls()->GetMousePosition(), use_selection );
     }
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
@@ -1164,16 +1156,11 @@ int PCB_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
             return true;
         } );
 
-    picker->SetFinalizeHandler( [&]( const int& aFinalState )
-        {
-            if( aFinalState == PCBNEW_PICKER_TOOL::EVT_CANCEL )
-                m_frame->ClearToolStack();
-        } );
-
     picker->SetLayerSet( LSET::AllCuMask() );
     picker->Activate();
     Wait();
 
+    m_frame->PopTool();
     return 0;
 }
 
@@ -1227,7 +1214,7 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, BOARD* aBoard, bool aShow
 
 int PCB_EDITOR_CONTROL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     auto picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
@@ -1249,14 +1236,12 @@ int PCB_EDITOR_CONTROL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
                         pad->SetLocalRatsnestVisible( opt->m_ShowGlobalRatsnest );
                 }
             }
-
-            if( aCondition == PCBNEW_PICKER_TOOL::EVT_CANCEL )
-                m_frame->ClearToolStack();
         } );
 
     picker->Activate();
     Wait();
 
+    m_frame->PopTool();
     return 0;
 }
 
@@ -1404,6 +1389,7 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::ClearHighlight,         PCB_ACTIONS::clearHighlight.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,     PCB_ACTIONS::highlightNetTool.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,     PCB_ACTIONS::highlightNetSelection.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ClearHighlight,         ACTIONS::cancelInteractive.MakeEvent() );
 
     Go( &PCB_EDITOR_CONTROL::LocalRatsnestTool,      PCB_ACTIONS::localRatsnestTool.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HideDynamicRatsnest,    PCB_ACTIONS::hideDynamicRatsnest.MakeEvent() );

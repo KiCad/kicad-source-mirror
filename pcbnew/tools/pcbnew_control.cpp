@@ -456,7 +456,7 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
     }
     else
     {
-        m_frame->SetTool( aEvent.GetCommandStr().get() );
+        m_frame->PushTool( aEvent.GetCommandStr().get() );
         Activate();
 
         PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
@@ -471,7 +471,7 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
         picker->Activate();
         Wait();
 
-        m_frame->ClearToolStack();
+        m_frame->PopTool();
     }
 
     return 0;
@@ -514,7 +514,7 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
@@ -575,14 +575,12 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     {
         if( m_pickerItem )
             m_toolMgr->GetTool<SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
-
-        if( aFinalState == PCBNEW_PICKER_TOOL::EVT_CANCEL )
-            m_frame->ClearToolStack();
     } );
 
     picker->Activate();
     Wait();
 
+    m_frame->PopTool();
     return 0;
 }
 

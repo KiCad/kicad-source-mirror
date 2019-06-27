@@ -217,10 +217,6 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
                 modified = false;
             }
 
-            // ESC should clear selection along with edit points
-            if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-                m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
-
             break;
         }
 

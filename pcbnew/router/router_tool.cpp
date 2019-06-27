@@ -861,7 +861,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     // Deselect all items
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    frame->SetTool( aEvent.GetCommandStr().get() );
+    frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     m_router->SetMode( mode );
@@ -883,9 +883,6 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     {
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
-            if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-                frame->ClearToolStack();
-
             break; // Finish
         }
         else if( evt->Action() == TA_UNDO_REDO_PRE )
@@ -944,6 +941,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     m_savedSettings = m_router->Settings();
     m_savedSizes = m_router->Sizes();
 
+    frame->PopTool();
     return 0;
 }
 
@@ -1131,7 +1129,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( evt->IsCancel() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             break;
         }

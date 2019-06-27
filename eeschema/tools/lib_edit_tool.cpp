@@ -282,7 +282,7 @@ int LIB_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
@@ -327,14 +327,12 @@ int LIB_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     {
         if( m_pickerItem )
             m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
-
-        if( aFinalState == EE_PICKER_TOOL::EVT_CANCEL )
-            m_frame->ClearToolStack();
     } );
 
     picker->Activate();
     Wait();
 
+    m_frame->PopTool();
     return 0;
 }
 

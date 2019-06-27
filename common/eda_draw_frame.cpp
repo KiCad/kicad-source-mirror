@@ -424,15 +424,6 @@ void EDA_DRAW_FRAME::OnSize( wxSizeEvent& SizeEv )
 }
 
 
-void EDA_DRAW_FRAME::SetTool( const std::string& actionName )
-{
-    if( !m_toolStack.empty() )
-        m_toolStack.pop_back();
-
-    PushTool( actionName );
-}
-
-
 void EDA_DRAW_FRAME::PushTool( const std::string& actionName )
 {
     m_toolStack.push_back( actionName );
@@ -471,13 +462,6 @@ void EDA_DRAW_FRAME::PopTool()
     }
     else
         DisplayToolMsg( ACTIONS::selectionTool.GetName() );
-}
-
-
-void EDA_DRAW_FRAME::ClearToolStack()
-{
-    m_toolStack.clear();
-    DisplayToolMsg( ACTIONS::selectionTool.GetName() );
 }
 
 

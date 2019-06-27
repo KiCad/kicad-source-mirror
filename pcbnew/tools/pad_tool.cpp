@@ -469,21 +469,19 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
             break;
         }
 
-        // This is a cancel-current-action (ie: <esc>).
-        // Note that this must go before IsCancelInteractive() as it also checks IsCancel().
-        else if( evt->IsCancel() )
-        {
-            // Clear current selection list to avoid selection of deleted items
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
-            commit.Revert();
-            break;
-        }
-
-        // Now that cancel-current-action has been handled, check for cancel-tool.
         else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
-            commit.Push( _( "Renumber pads" ) );
+            // This is a cancel-current-action (ie: <esc>).
+            if( evt->IsCancel() )
+            {
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+                commit.Revert();
+            }
+            else
+            {
+                commit.Push( _( "Renumber pads" ) );
+            }
+
             break;
         }
 

@@ -43,6 +43,21 @@ void COMMON_TOOLS::Reset( RESET_REASON aReason )
 }
 
 
+int COMMON_TOOLS::SelectionTool( const TOOL_EVENT& aEvent )
+{
+    // Since selection tools are run permanently underneath the toolStack, this is really
+    // just a cancel of whatever other tools might be running.
+
+    m_toolMgr->ProcessEvent( TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL ) );
+
+    // Shouldn't be necessary, but as the Irish would say: "just to be sure to be sure"
+    while( !m_frame->ToolStackIsEmpty() )
+        m_frame->PopTool();
+
+    return 0;
+}
+
+
 // Cursor control
 int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
 {
@@ -511,6 +526,8 @@ int COMMON_TOOLS::SwitchCanvas( const TOOL_EVENT& aEvent )
 
 void COMMON_TOOLS::setTransitions()
 {
+    Go( &COMMON_TOOLS::SelectionTool,      ACTIONS::selectionTool.MakeEvent() );
+
     // Cursor control
     Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorUp.MakeEvent() );
     Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorDown.MakeEvent() );

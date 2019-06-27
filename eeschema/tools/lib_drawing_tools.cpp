@@ -76,7 +76,7 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     // Prime the pump
@@ -97,13 +97,9 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 delete item;
                 item = nullptr;
             }
-            else
+            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             {
-                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-                {
-                    m_frame->ClearToolStack();
-                    break;
-                }
+                break;
             }
 
             if( evt->IsActivate() )
@@ -210,6 +206,7 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
+    m_frame->PopTool();
     return 0;
 }
 
@@ -225,7 +222,7 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     LIB_PART* part = m_frame->GetCurPart();
@@ -242,24 +239,20 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-            m_view->ClearPreview();
-
             if( item )
             {
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+                m_view->ClearPreview();
                 delete item;
                 item = nullptr;
             }
-            else
+            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             {
-                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-                {
-                    m_frame->ClearToolStack();
-                    break;
-                }
+                break;
             }
 
-            if( evt->IsActivate() )
+            // Continue on if it's just the point editor; otherwise give way to new tool
+            if( evt->IsActivate() && !TOOL_EVT_UTILS::IsPointEditor( *evt ) )
                 break;
         }
 
@@ -341,6 +334,7 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
+    m_frame->PopTool();
     return 0;
 }
 
@@ -350,7 +344,7 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
     getViewControls()->ShowCursor( true );
     getViewControls()->SetSnapping( true );
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     // Main loop: keep receiving events
@@ -386,7 +380,7 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_frame->ClearToolStack();
+    m_frame->PopTool();
     return 0;
 }
 

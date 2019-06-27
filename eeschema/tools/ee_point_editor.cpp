@@ -282,10 +282,6 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     controls->ShowCursor( true );
 
     m_editPoints = EDIT_POINTS_FACTORY::Make( item, m_frame );
-
-    if( !m_editPoints )
-        return 0;
-
     view->Add( m_editPoints.get() );
     setEditedPoint( nullptr );
     bool inDrag = false;
@@ -330,10 +326,6 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
                 inDrag = false;
                 modified = false;
             }
-
-            // ESC should clear selection along with edit points
-            if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
             break;
         }

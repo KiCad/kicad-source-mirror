@@ -260,15 +260,6 @@ int EE_SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
 }
 
 
-int EE_SELECTION_TOOL::SelectionTool( const TOOL_EVENT& aEvent )
-{
-    // Since the selection tool is always running underneath the toolStack, all we need to
-    // do is clear the stack.
-    m_frame->ClearToolStack();
-    return 0;
-}
-
-
 int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     const KICAD_T movableItems[] =
@@ -409,7 +400,6 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             ClearSelection();
-            m_toolMgr->RunAction( EE_ACTIONS::clearHighlight, true );
         }
 
         else if( evt->Action() == TA_UNDO_REDO_PRE )
@@ -1299,7 +1289,6 @@ void EE_SELECTION_TOOL::setTransitions()
     Go( &EE_SELECTION_TOOL::UpdateMenu,          ACTIONS::updateMenu.MakeEvent() );
 
     Go( &EE_SELECTION_TOOL::Main,                EE_ACTIONS::selectionActivate.MakeEvent() );
-    Go( &EE_SELECTION_TOOL::SelectionTool,       ACTIONS::selectionTool.MakeEvent() );
     Go( &EE_SELECTION_TOOL::SelectNode,          EE_ACTIONS::selectNode.MakeEvent() );
     Go( &EE_SELECTION_TOOL::SelectConnection,    EE_ACTIONS::selectConnection.MakeEvent() );
     Go( &EE_SELECTION_TOOL::ClearSelection,      EE_ACTIONS::clearSelection.MakeEvent() );

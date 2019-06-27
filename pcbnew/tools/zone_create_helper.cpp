@@ -183,8 +183,9 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
                 filler.Fill( { aZone.get() } );
             }
 
-            bCommit.Add( aZone.release() );
+            bCommit.Add( aZone.get() );
             bCommit.Push( _( "Add a zone" ) );
+            m_tool.GetManager()->RunAction( PCB_ACTIONS::selectItem, true, aZone.release() );
             break;
         }
 
@@ -202,6 +203,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
                 poly->SetLayer( m_tool.getDrawingLayer() );
                 poly->SetPolyShape ( *aZone->Outline() );
                 bCommit.Add( poly );
+                m_tool.GetManager()->RunAction( PCB_ACTIONS::selectItem, true, poly );
             }
             else
             {
@@ -235,6 +237,8 @@ bool ZONE_CREATE_HELPER::OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr )
     // of the preview
     if( !m_zone )
     {
+        m_tool.GetManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+
         if( m_params.m_sourceZone )
             m_zone = createZoneFromExisting( *m_params.m_sourceZone );
         else

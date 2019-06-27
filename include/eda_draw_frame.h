@@ -307,14 +307,8 @@ public:
      * a single TOOL_BASE derived class to implement several user "tools", such as rectangle
      * and circle, or wire and bus.  So each user-level tool is actually a TOOL_ACTION.
      */
-    virtual void SetTool( const std::string& actionName );
     virtual void PushTool( const std::string& actionName );
     virtual void PopTool();
-    /**
-     * The selection tool runs underneath the tool stack, so clearing the stack is equivalent
-     * to selecting the selection tool.
-     */
-    virtual void ClearToolStack();
 
     bool ToolStackIsEmpty() { return m_toolStack.empty(); }
 

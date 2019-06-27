@@ -48,6 +48,8 @@ public:
     /// @copydoc TOOL_BASE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
+    int SelectionTool( const TOOL_EVENT& aEvent );
+
     // View controls
     int ZoomRedraw( const TOOL_EVENT& aEvent );
     int ZoomInOut( const TOOL_EVENT& aEvent );

@@ -105,7 +105,7 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     auto& controls = *getViewControls();
     auto previous_settings = controls.GetSettings();
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
@@ -124,7 +124,7 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     {
         const VECTOR2I cursorPos = controls.GetCursorPosition();
 
-        if( evt->IsCancel() || evt->IsActivate() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             if( originSet )
             {
@@ -135,7 +135,6 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
             }
             else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             {
-                m_frame->ClearToolStack();
                 break;
             }
 
@@ -195,9 +194,8 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
     view.SetVisible( &ruler, false );
     view.Remove( &ruler );
-
     controls.ApplySettings( previous_settings );
-
+    m_frame->PopTool();
     return 0;
 }
 

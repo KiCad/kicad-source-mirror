@@ -99,7 +99,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
         m_selectionTool->AddItemToSel( component );
     }
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     // Prime the pump
@@ -125,13 +125,9 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                 delete component;
                 component = nullptr;
             }
-            else
+            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             {
-                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-                {
-                    m_frame->ClearToolStack();
-                    break;
-                }
+                break;
             }
 
             if( evt->IsActivate() )
@@ -212,6 +208,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
         getViewControls()->CaptureCursor( component != nullptr );
     }
 
+    m_frame->PopTool();
     return 0;
 }
 
@@ -220,13 +217,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 {
     SCH_BITMAP* image = aEvent.Parameter<SCH_BITMAP*>();
     bool        immediateMode = image;
-
-    if( immediateMode )
-        m_frame->PushTool( aEvent.GetCommandStr().get() );
-    else
-        m_frame->SetTool( aEvent.GetCommandStr().get() );
-
-    VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
+    VECTOR2I    cursorPos = getViewControls()->GetCursorPosition();
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
@@ -239,6 +230,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         m_view->AddToPreview( image->Clone() );
     }
 
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     // Prime the pump
@@ -264,13 +256,9 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 if( immediateMode )
                     break;
             }
-            else
+            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             {
-                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-                {
-                    m_frame->ClearToolStack();
-                    break;
-                }
+                break;
             }
 
             if( evt->IsActivate() )
@@ -348,9 +336,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( image != nullptr );
     }
 
-    if( immediateMode )
-        m_frame->PopTool();
-
+    m_frame->PopTool();
     return 0;
 }
 
@@ -383,7 +369,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     getViewControls()->ShowCursor( true );
     getViewControls()->SetSnapping( true );
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     // Prime the pump
@@ -397,9 +383,6 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
-            if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-                m_frame->ClearToolStack();
-
             break;
         }
         else if( evt->IsClick( BUT_LEFT ) )
@@ -445,6 +428,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         }
     }
 
+    m_frame->PopTool();
     return 0;
 }
 
@@ -458,7 +442,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     // Prime the pump
@@ -479,13 +463,9 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 delete item;
                 item = nullptr;
             }
-            else
+            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             {
-                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-                {
-                    m_frame->ClearToolStack();
-                    break;
-                }
+                break;
             }
 
             if( evt->IsActivate() )
@@ -616,6 +596,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
+    m_frame->PopTool();
     return 0;
 }
 
@@ -627,8 +608,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
-    m_frame->SetTool( aEvent.GetCommandStr().get() );
-
+    m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
 
     // Prime the pump
@@ -650,13 +630,9 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 delete sheet;
                 sheet = nullptr;
             }
-            else
+            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             {
-                if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-                {
-                    m_frame->ClearToolStack();
-                    break;
-                }
+                break;
             }
 
             if( evt->IsActivate() )
@@ -717,6 +693,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( sheet != nullptr);
     }
 
+    m_frame->PopTool();
     return 0;
 }
 

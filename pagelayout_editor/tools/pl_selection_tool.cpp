@@ -177,7 +177,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
         }
 
-        else if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsCancel() )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             ClearSelection();
         }
