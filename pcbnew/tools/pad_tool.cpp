@@ -364,6 +364,8 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
     while( TOOL_EVENT* evt = Wait() )
     {
+        frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_BULLSEYE );
+
         if( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
         {
             selectedPads.clear();

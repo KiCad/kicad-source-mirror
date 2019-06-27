@@ -285,6 +285,9 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
+        if( m_frame->ToolStackIsEmpty() )
+            m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+
         // Should selected items be added to the current selection or
         // become the new selection (discarding previously selected items)
         m_additive = evt->Modifier( MD_SHIFT );

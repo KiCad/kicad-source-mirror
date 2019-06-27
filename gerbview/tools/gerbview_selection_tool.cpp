@@ -183,6 +183,9 @@ int GERBVIEW_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
+        if( m_frame->ToolStackIsEmpty() )
+            m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+
         // This is kind of hacky: activate RMB drag on any event.
         // There doesn't seem to be any other good way to tell when another tool
         // is canceled and control returns to the selection tool, except by the
@@ -769,8 +772,9 @@ int GERBVIEW_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     controls.SetSnapping( true );
     controls.SetAdditionalPanButtons( false, true );
 
-    while( auto evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
+        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
         const VECTOR2I cursorPos = controls.GetCursorPosition();
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )

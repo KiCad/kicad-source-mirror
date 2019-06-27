@@ -78,6 +78,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
     Connect( wxEVT_ENTER_WINDOW, wxEventHandler( EDA_DRAW_PANEL_GAL::onEnter ), NULL, this );
     Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( EDA_DRAW_PANEL_GAL::onLostFocus ), NULL, this );
+    Connect( wxEVT_SET_CURSOR, wxSetCursorEventHandler( EDA_DRAW_PANEL_GAL::onSetCursor ), NULL, this );
 
     const wxEventType events[] =
     {
@@ -408,7 +409,11 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     // from the defaults
     m_options.NotifyChanged();
 
-    wxASSERT( new_gal );
+    wxWindow* galWindow = dynamic_cast<wxWindow*>( new_gal );
+
+    if( galWindow )
+        galWindow->Connect( wxEVT_SET_CURSOR, wxSetCursorEventHandler( EDA_DRAW_PANEL_GAL::onSetCursor ), NULL, this );
+
     delete m_gal;
     m_gal = new_gal;
 
@@ -495,6 +500,8 @@ void EDA_DRAW_PANEL_GAL::onShowTimer( wxTimerEvent& aEvent )
         OnShow();
     }
 }
+
+
 void EDA_DRAW_PANEL_GAL::SetCurrentCursor( int aCursor )
 {
     if ( aCursor > wxCURSOR_NONE && aCursor < wxCURSOR_MAX )
@@ -505,3 +512,8 @@ void EDA_DRAW_PANEL_GAL::SetCurrentCursor( int aCursor )
     SetCursor( (wxStockCursor) m_currentCursor );
 }
 
+
+void EDA_DRAW_PANEL_GAL::onSetCursor( wxSetCursorEvent& event )
+{
+    event.SetCursor( (wxStockCursor) m_currentCursor );
+}

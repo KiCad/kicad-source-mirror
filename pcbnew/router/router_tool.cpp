@@ -754,6 +754,8 @@ void ROUTER_TOOL::performRouting()
 
     while( TOOL_EVENT* evt = Wait() )
     {
+        frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+
         // Don't crash if we missed an operation that cancelled routing.
         wxCHECK2( m_router->RoutingInProgress(), break );
 
@@ -881,6 +883,8 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
+        frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             break; // Finish
@@ -1129,6 +1133,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     while( TOOL_EVENT* evt = Wait() )
     {
+        frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             break;

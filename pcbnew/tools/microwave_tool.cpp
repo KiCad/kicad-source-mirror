@@ -209,6 +209,7 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
 
     while( auto evt = Wait() )
     {
+        frame.GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
         VECTOR2I cursorPos = controls.GetCursorPosition();
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )

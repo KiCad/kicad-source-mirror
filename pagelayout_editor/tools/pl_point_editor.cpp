@@ -137,9 +137,16 @@ void PL_POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
     {
         point = m_editPoints->FindPoint( aEvent.DragOrigin(), getView() );
     }
+    else
+    {
+        point = m_editPoints->FindPoint( getViewControls()->GetCursorPosition(), getView() );
+    }
 
     if( m_editedPoint != point )
         setEditedPoint( point );
+
+    if( point )
+        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
 }
 
 
@@ -174,6 +181,7 @@ int PL_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
     view->Add( m_editPoints.get() );
     setEditedPoint( nullptr );
+    updateEditedPoint( aEvent );
     bool inDrag = false;
     bool modified = false;
 

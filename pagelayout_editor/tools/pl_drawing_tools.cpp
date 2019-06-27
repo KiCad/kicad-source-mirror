@@ -36,7 +36,7 @@
 #include <ws_draw_item.h>
 #include <ws_data_item.h>
 #include <invoke_pl_editor_dialog.h>
-
+#include "pl_point_editor.h"
 
 PL_DRAWING_TOOLS::PL_DRAWING_TOOLS() :
         TOOL_INTERACTIVE( "plEditor.InteractiveDrawing" ),
@@ -90,6 +90,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
+        m_frame->GetCanvas()->SetCurrentCursor( item ? wxCURSOR_ARROW : wxCURSOR_PENCIL );
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
@@ -169,6 +170,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 
 int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
+    PL_POINT_EDITOR*           pointEditor = m_toolMgr->GetTool<PL_POINT_EDITOR>();
     WS_DATA_ITEM::WS_ITEM_TYPE type = aEvent.Parameter<WS_DATA_ITEM::WS_ITEM_TYPE>();
     WS_DRAW_ITEM_BASE*         item = nullptr;
 
@@ -189,6 +191,9 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
+        if( !pointEditor->HasPoint() )
+            m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )

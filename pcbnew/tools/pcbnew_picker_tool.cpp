@@ -49,6 +49,7 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     while( TOOL_EVENT* evt = Wait() )
     {
+        frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_BULLSEYE );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );

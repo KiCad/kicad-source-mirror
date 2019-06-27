@@ -209,6 +209,7 @@ protected:
     void onLostFocus( wxFocusEvent& aEvent );
     void onRefreshTimer( wxTimerEvent& aEvent );
     void onShowTimer( wxTimerEvent& aEvent );
+    void onSetCursor( wxSetCursorEvent& event );
 
     static const int MinRefreshPeriod = 17;             ///< 60 FPS.
 

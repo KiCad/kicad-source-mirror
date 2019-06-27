@@ -40,7 +40,7 @@
 #include <lib_circle.h>
 #include <lib_polyline.h>
 #include <lib_rectangle.h>
-
+#include "ee_point_editor.h"
 
 static void* g_lastPinWeakPtr;
 
@@ -86,6 +86,7 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
+        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
@@ -213,7 +214,8 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
 int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
-    KICAD_T type = aEvent.Parameter<KICAD_T>();
+    KICAD_T          type = aEvent.Parameter<KICAD_T>();
+    EE_POINT_EDITOR* pointEditor = m_toolMgr->GetTool<EE_POINT_EDITOR>();
 
     // We might be running as the same shape in another co-routine.  Make sure that one
     // gets whacked.
@@ -233,8 +235,11 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
     // Main loop: keep receiving events
-    while( auto evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
+        if( !pointEditor->HasPoint() )
+            m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
@@ -350,6 +355,8 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
+        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_BULLSEYE );
+
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
             break;

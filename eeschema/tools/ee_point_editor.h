@@ -49,6 +49,12 @@ public:
 
     int Main( const TOOL_EVENT& aEvent );
 
+    /**
+     * Indicates the cursor is over an edit point.  Used to coordinate cursor shapes with
+     * other tools.
+     */
+    bool HasPoint() { return m_editedPoint != nullptr; }
+
     ///> Sets up handlers for various events.
     void setTransitions() override;
 

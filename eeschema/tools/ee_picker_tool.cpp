@@ -44,6 +44,7 @@ int EE_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     while( TOOL_EVENT* evt = Wait() )
     {
+        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_BULLSEYE );
         VECTOR2D cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( evt->IsClick( BUT_LEFT ) )

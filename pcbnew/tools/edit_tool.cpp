@@ -301,6 +301,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     do
     {
+        editFrame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
@@ -1127,8 +1128,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
     while( auto evt = Wait() )
     {
-        // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
-        frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+        frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         controls.SetSnapping( !evt->Modifier( MD_ALT ) );

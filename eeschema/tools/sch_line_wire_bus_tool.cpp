@@ -41,7 +41,7 @@
 #include <sch_text.h>
 #include <sch_sheet.h>
 #include <advanced_config.h>
-
+#include "ee_point_editor.h"
 
 class BUS_UNFOLD_MENU : public ACTION_MENU
 {
@@ -440,9 +440,10 @@ static void computeBreakPoint( SCH_SCREEN* aScreen, SCH_LINE* aSegment, wxPoint&
 
 int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
 {
-    bool        forceHV = m_frame->GetForceHVLines();
-    SCH_SCREEN* screen = m_frame->GetScreen();
-    wxPoint     cursorPos;
+    bool             forceHV = m_frame->GetForceHVLines();
+    SCH_SCREEN*      screen = m_frame->GetScreen();
+    EE_POINT_EDITOR* pointEditor = m_toolMgr->GetTool<EE_POINT_EDITOR>();
+    wxPoint          cursorPos;
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
@@ -452,6 +453,9 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
+        if( !pointEditor->HasPoint() )
+            m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+
         cursorPos = (wxPoint) getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         //------------------------------------------------------------------------

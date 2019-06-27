@@ -47,6 +47,7 @@
 #include <painter.h>
 #include <status_popup.h>
 #include "grid_helper.h"
+#include "point_editor.h"
 #include <dialogs/dialog_text_properties.h>
 #include <preview_items/arc_assistant.h>
 
@@ -153,9 +154,6 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
 
     while( drawSegment( S_SEGMENT, line, startingPoint ) )
     {
-        // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
-
         if( line )
         {
             if( m_editModules )
@@ -200,9 +198,6 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
 
     while( drawSegment( S_CIRCLE, circle, startingPoint ) )
     {
-        // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
-
         if( circle )
         {
             if( m_editModules )
@@ -242,9 +237,6 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 
     while( drawArc( arc, immediateMode ) )
     {
-        // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
-
         if( arc )
         {
             if( m_editModules )
@@ -293,8 +285,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+        m_frame->GetCanvas()->SetCurrentCursor( text ? wxCURSOR_ARROW : wxCURSOR_PENCIL );
         VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
         if( reselect && text )
@@ -461,9 +452,10 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     if( m_editModules && !m_frame->GetModel() )
         return 0;
 
-    DIMENSION* dimension = NULL;
-    BOARD_COMMIT commit( m_frame );
-    GRID_HELPER grid( m_frame );
+    POINT_EDITOR* pointEditor = m_toolMgr->GetTool<POINT_EDITOR>();
+    DIMENSION*    dimension = NULL;
+    BOARD_COMMIT  commit( m_frame );
+    GRID_HELPER  grid( m_frame );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     PCBNEW_SELECTION preview;
@@ -494,8 +486,9 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+        if( !pointEditor->HasPoint() )
+            m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
@@ -736,6 +729,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
+        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
         cursorPos = m_controls->GetCursorPosition();
 
         if( evt->IsMotion() )
@@ -814,8 +808,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_BULLSEYE );
 
         if( evt->IsClick( BUT_LEFT ) )
         {
@@ -851,7 +844,8 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
 {
     // Only two shapes are currently supported
     assert( aShape == S_SEGMENT || aShape == S_CIRCLE );
-    GRID_HELPER grid( m_frame );
+    GRID_HELPER   grid( m_frame );
+    POINT_EDITOR* pointEditor = m_toolMgr->GetTool<POINT_EDITOR>();
 
     m_lineWidth = getSegmentWidth( getDrawingLayer() );
     m_frame->SetActiveLayer( getDrawingLayer() );
@@ -874,6 +868,9 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
+        if( !pointEditor->HasPoint() )
+            m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
@@ -1103,6 +1100,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic, bool aImmediateMode )
         PCB_LAYER_ID layer = getDrawingLayer();
         aGraphic->SetLayer( layer );
 
+        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
@@ -1307,7 +1305,6 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        // This can be reset by some actions (e.g. Save Board), so ensure it stays set.
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
         LSET layers( m_frame->GetActiveLayer() );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );

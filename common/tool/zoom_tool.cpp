@@ -48,8 +48,10 @@ int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     m_frame->PushTool( aEvent.GetCommandStr().get() );
 
-    while( auto evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
+        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
+
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
             break;
 
@@ -80,7 +82,7 @@ bool ZOOM_TOOL::selectRegion()
     KIGFX::PREVIEW::SELECTION_AREA area;
     view->Add( &area );
 
-    while( auto evt = Wait() )
+    while( TOOL_EVENT* evt = Wait() )
     {
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {

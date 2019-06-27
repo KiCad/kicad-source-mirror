@@ -270,7 +270,7 @@ bool POINT_EDITOR::Init()
 
 void POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
 {
-    EDIT_POINT* point = m_editedPoint;
+    EDIT_POINT* point;
 
     if( aEvent.IsMotion() )
     {
@@ -280,9 +280,16 @@ void POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
     {
         point = m_editPoints->FindPoint( aEvent.DragOrigin(), getView() );
     }
+    else
+    {
+        point = m_editPoints->FindPoint( getViewControls()->GetCursorPosition(), getView() );
+    }
 
     if( m_editedPoint != point )
         setEditedPoint( point );
+
+    if( point )
+        frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
 }
 
 
@@ -317,6 +324,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
     view->Add( m_editPoints.get() );
     setEditedPoint( nullptr );
+    updateEditedPoint( aEvent );
     m_refill = false;
     bool inDrag = false;
 
