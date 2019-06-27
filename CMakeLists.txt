@@ -245,6 +245,10 @@ if( WIN32 )
     # define UNICODE and_UNICODE definition on Windows. KiCad uses unicode.
     # Both definitions are required
     add_definitions(-DUNICODE -D_UNICODE)
+
+    # In fully standards-compliant mode, M_PI et al. are defined only if
+    # _USE_MATH_DEFINES is set.
+    add_definitions( -D_USE_MATH_DEFINES )
 endif()
 
 
