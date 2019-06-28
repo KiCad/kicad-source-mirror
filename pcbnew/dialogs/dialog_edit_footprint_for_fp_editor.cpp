@@ -263,6 +263,15 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataToWindow()
     else
         m_SolderPasteMarginRatioCtrl->SetValue( msg );
 
+    switch( m_footprint->GetZoneConnection() )
+    {
+    default:
+    case PAD_ZONE_CONN_INHERITED: m_ZoneConnectionChoice->SetSelection( 0 ); break;
+    case PAD_ZONE_CONN_FULL:      m_ZoneConnectionChoice->SetSelection( 1 ); break;
+    case PAD_ZONE_CONN_THERMAL:   m_ZoneConnectionChoice->SetSelection( 2 ); break;
+    case PAD_ZONE_CONN_NONE:      m_ZoneConnectionChoice->SetSelection( 3 ); break;
+    }
+
     // 3D Settings
 
     wxString default_path;
@@ -635,6 +644,15 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
         dtmp = 0.0;
 
     m_footprint->SetLocalSolderPasteMarginRatio( dtmp / 100 );
+
+    switch( m_ZoneConnectionChoice->GetSelection() )
+    {
+    default:
+    case 0: m_footprint->SetZoneConnection( PAD_ZONE_CONN_INHERITED ); break;
+    case 1: m_footprint->SetZoneConnection( PAD_ZONE_CONN_FULL );      break;
+    case 2: m_footprint->SetZoneConnection( PAD_ZONE_CONN_THERMAL );   break;
+    case 3: m_footprint->SetZoneConnection( PAD_ZONE_CONN_NONE );      break;
+    }
 
     std::list<MODULE_3D_SETTINGS>* draw3D  = &m_footprint->Models();
     draw3D->clear();
