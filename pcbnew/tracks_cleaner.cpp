@@ -252,6 +252,39 @@ bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK* aTrack )
 }
 
 
+bool TRACKS_CLEANER::testTrackEndpointIsNode( TRACK* aTrack, bool aTstStart )
+{
+    // A node is a point where more than 2 items are connected.
+
+    auto connectivity = m_brd->GetConnectivity();
+    auto items = connectivity->GetConnectivityAlgo()->ItemEntry( aTrack ).GetItems();
+
+    if( items.empty() )
+        return false;
+
+    auto citem = items.front();
+
+    if( !citem->Valid() )
+        return false;
+
+    auto anchors = citem->Anchors();
+
+    VECTOR2I refpoint = aTstStart ? aTrack->GetStart() : aTrack->GetEnd();
+
+    for( const auto& anchor : anchors )
+    {
+        if( anchor->Pos() != refpoint )
+            continue;
+
+        // The right anchor point is found: if more than one other item
+        // (pad, via, track...) is connected, it is a node:
+        return anchor->ConnectedItemsCount() > 1;
+    }
+
+    return false;
+}
+
+
 bool TRACKS_CLEANER::deleteDanglingTracks()
 {
     bool item_erased = false;
@@ -362,12 +395,13 @@ bool TRACKS_CLEANER::cleanupSegments()
 
     std::set<BOARD_ITEM*> toRemove;
 
+    // Remove duplicate segments (2 superimposed identical segments):
     for( auto it = m_brd->Tracks().begin(); it != m_brd->Tracks().end(); it++ )
     {
         auto track1 = *it;
 
         if( track1->Type() != PCB_TRACE_T || ( track1->GetFlags() & IS_DELETED )
-                || track1->IsLocked() )
+            || track1->IsLocked() )
             continue;
 
         for( auto it2 = it + 1; it2 != m_brd->Tracks().end(); it2++ )
@@ -400,6 +434,13 @@ bool TRACKS_CLEANER::cleanupSegments()
     for( auto track_it = m_brd->Tracks().begin(); track_it != m_brd->Tracks().end(); track_it++ )
     {
         auto segment = *track_it;
+
+        if( segment->Type() != PCB_TRACE_T )    // one can merge only track collinear segments, not vias.
+            continue;
+
+        if( segment->GetFlags() & IS_DELETED )  // already taken in account
+            continue;
+
         auto connectivity = m_brd->GetConnectivity();
 
         auto& entry = connectivity->GetConnectivityAlgo()->ItemEntry( segment );
@@ -408,10 +449,21 @@ bool TRACKS_CLEANER::cleanupSegments()
         {
             for( auto connected : citem->ConnectedItems() )
             {
-                if( connected->Valid() && connected->Parent()->Type() == PCB_TRACE_T
-                        && !( connected->Parent()->GetFlags() & IS_DELETED ) )
+                if( !connected->Valid() || connected->Parent()->Type() != PCB_TRACE_T ||
+                    ( connected->Parent()->GetFlags() & IS_DELETED ) )
+                    continue;
+
+                if( !( connected->Parent()->GetFlags() & IS_DELETED ) )
                 {
-                    if( segment->ApproxCollinear( *static_cast<TRACK*>( connected->Parent() ) ) )
+                    TRACK* candidate = static_cast<TRACK*>( connected->Parent() );
+
+                    if( !candidate->IsOnLayer( segment->GetLayer() ) )
+                        continue;
+
+                    if( candidate->GetWidth() != segment->GetWidth() )
+                        continue;
+
+                    if( segment->ApproxCollinear( *candidate ) )
                     {
                         modified |= mergeCollinearSegments(
                                 segment, static_cast<TRACK*>( connected->Parent() ) );
@@ -432,6 +484,45 @@ bool TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
 
     auto connectivity = m_brd->GetConnectivity();
 
+    // Verify the removed point after merging is not a node.
+    // If it is a node (i.e. if more than one other item is connected, the segments cannot be merged
+    TRACK dummy_seg( *aSeg1 );
+
+    // Calculate the new ends of the segment to merge, and store them to dummy_seg:
+    int min_x = std::min( aSeg1->GetStart().x,
+            std::min( aSeg1->GetEnd().x, std::min( aSeg2->GetStart().x, aSeg2->GetEnd().x ) ) );
+    int min_y = std::min( aSeg1->GetStart().y,
+            std::min( aSeg1->GetEnd().y, std::min( aSeg2->GetStart().y, aSeg2->GetEnd().y ) ) );
+    int max_x = std::max( aSeg1->GetStart().x,
+            std::max( aSeg1->GetEnd().x, std::max( aSeg2->GetStart().x, aSeg2->GetEnd().x ) ) );
+    int max_y = std::max( aSeg1->GetStart().y,
+            std::max( aSeg1->GetEnd().y, std::max( aSeg2->GetStart().y, aSeg2->GetEnd().y ) ) );
+
+    if( ( aSeg1->GetStart().x > aSeg1->GetEnd().x )
+            == ( aSeg1->GetStart().y > aSeg1->GetEnd().y ) )
+    {
+        dummy_seg.SetStart( wxPoint( min_x, min_y ) );
+        dummy_seg.SetEnd( wxPoint( max_x, max_y ) );
+    }
+    else
+    {
+        dummy_seg.SetStart( wxPoint( min_x, max_y ) );
+        dummy_seg.SetEnd( wxPoint( max_x, min_y ) );
+    }
+
+    // Now find the removed end(s) and stop merging if it is a node:
+    if( aSeg1->GetStart() != dummy_seg.GetStart() && aSeg1->GetStart() != dummy_seg.GetEnd() )
+    {
+        if( testTrackEndpointIsNode( aSeg1, true ) )
+            return false;
+    }
+
+    if( aSeg1->GetEnd() != dummy_seg.GetStart() && aSeg1->GetEnd() != dummy_seg.GetEnd() )
+    {
+        if( testTrackEndpointIsNode( aSeg1, false ) )
+            return false;
+    }
+
     if( m_itemsList )
     {
         m_itemsList->emplace_back( new DRC_ITEM( m_units, DRCE_MERGE_TRACKS,
@@ -442,27 +533,7 @@ bool TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
     if( !m_dryRun )
     {
         m_commit.Modify( aSeg1 );
-
-        int min_x = std::min( aSeg1->GetStart().x,
-                std::min( aSeg1->GetEnd().x, std::min( aSeg2->GetStart().x, aSeg2->GetEnd().x ) ) );
-        int min_y = std::min( aSeg1->GetStart().y,
-                std::min( aSeg1->GetEnd().y, std::min( aSeg2->GetStart().y, aSeg2->GetEnd().y ) ) );
-        int max_x = std::max( aSeg1->GetStart().x,
-                std::max( aSeg1->GetEnd().x, std::max( aSeg2->GetStart().x, aSeg2->GetEnd().x ) ) );
-        int max_y = std::max( aSeg1->GetStart().y,
-                std::max( aSeg1->GetEnd().y, std::max( aSeg2->GetStart().y, aSeg2->GetEnd().y ) ) );
-
-        if( ( aSeg1->GetStart().x > aSeg1->GetEnd().x )
-                == ( aSeg1->GetStart().y > aSeg1->GetEnd().y ) )
-        {
-            aSeg1->SetStart( wxPoint( min_x, min_y ) );
-            aSeg1->SetEnd( wxPoint( max_x, max_y ) );
-        }
-        else
-        {
-            aSeg1->SetStart( wxPoint( min_x, max_y ) );
-            aSeg1->SetEnd( wxPoint( max_x, min_y ) );
-        }
+        *aSeg1 = dummy_seg;
 
         connectivity->Update( aSeg1 );
 

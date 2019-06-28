@@ -124,6 +124,12 @@ public:
      */
     bool IsDangling() const;
 
+    /**
+     * has meaning only for tracks and vias.
+     * @return the count of items connected to this anchor
+     */
+    int ConnectedItemsCount() const;
+
     // Tag used for unconnected items.
     static const int TAG_UNCONNECTED = -1;
 

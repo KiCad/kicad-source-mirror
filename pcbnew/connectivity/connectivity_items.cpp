@@ -285,6 +285,30 @@ bool CN_ANCHOR::IsDangling() const
 }
 
 
+int CN_ANCHOR::ConnectedItemsCount() const
+{
+    if( !m_cluster )
+        return 0;
+
+    int connected_count = 0;
+
+    for( auto item : m_item->ConnectedItems() )
+    {
+        if( item->Parent()->Type() == PCB_ZONE_AREA_T )
+        {
+            ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item->Parent() );
+
+            if( zone->HitTestFilledArea( wxPoint( Pos().x, Pos().y ) ) )
+                connected_count++;
+        }
+        else if( item->Parent()->HitTest( wxPoint( Pos().x, Pos().y ) ) )
+            connected_count++;
+    }
+
+    return connected_count;
+}
+
+
 CN_CLUSTER::CN_CLUSTER()
 {
     m_items.reserve( 64 );
