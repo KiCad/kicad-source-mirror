@@ -57,13 +57,6 @@ private:
     bool removeBadTrackSegments();
 
     /**
-     * Checks whether the track is connected to a pad
-     * @param aTrack pointer to the track
-     * @return true if the track has a pad
-     */
-    bool testTrackHasPad( const TRACK* aTrack ) const;
-
-    /**
      * Removes redundant vias like vias at same location
      * or on pad through
      */

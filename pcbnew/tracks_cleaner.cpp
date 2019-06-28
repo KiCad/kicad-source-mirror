@@ -45,7 +45,7 @@ int GLOBAL_EDIT_TOOL::CleanupTracksAndVias( const TOOL_EVENT& aEvent )
 {
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
     DIALOG_CLEANUP_TRACKS_AND_VIAS dlg( editFrame );
-    
+
     dlg.ShowModal();
     return 0;
 }
@@ -223,21 +223,6 @@ bool TRACKS_CLEANER::cleanupVias()
 }
 
 
-bool TRACKS_CLEANER::testTrackHasPad( const TRACK* aTrack ) const
-{
-    auto connectivity = m_brd->GetConnectivity();
-
-    // Mark track if connected to pads
-    for( auto pad : connectivity->GetConnectedPads( aTrack ) )
-    {
-        if( pad->HitTest( aTrack->GetStart() ) || pad->HitTest( aTrack->GetEnd() ) )
-            return true;
-    }
-
-    return false;
-}
-
-
 bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK* aTrack )
 {
     auto connectivity = m_brd->GetConnectivity();
@@ -275,19 +260,16 @@ bool TRACKS_CLEANER::deleteDanglingTracks()
     do // Iterate when at least one track is deleted
     {
         item_erased = false;
+        // Ensure the connectivity is up to date, especially after removind a dangling segment
+        m_brd->BuildConnectivity();
 
         for( TRACK* track : m_brd->Tracks() )
         {
             bool flag_erase = false; // Start without a good reason to erase it
 
-            if( track->Type() != PCB_TRACE_T )
-                continue;
-
-            // if a track endpoint is not connected to a pad, test if
-            // the endpoint is connected to another track or to a zone.
-
-            if( !testTrackHasPad( track ) )
-                flag_erase |= testTrackEndpointDangling( track );
+            // Tst if a track (or a via) endpoint is not connected to another track or to a zone.
+            if( testTrackEndpointDangling( track ) )
+                flag_erase = true;
 
             if( flag_erase )
             {
@@ -307,11 +289,12 @@ bool TRACKS_CLEANER::deleteDanglingTracks()
                      * now perhaps is not connected and should be deleted */
                     item_erased = true;
                     modified = true;
-                    break;
                 }
+                // Fix me: In dry run we should disable the track to erase and retry with this disabled track
+                // However the connectivity algo does not handle disabled items.
             }
         }
-    } while( item_erased );
+    } while( item_erased ); // A segment was erased: test for some new dangling segments
 
     return modified;
 }
