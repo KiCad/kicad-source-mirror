@@ -480,6 +480,9 @@ void DIALOG_BOM::OnRunGenerator( wxCommandEvent& event )
                                 fullfilename, 0, &reporter );
 
     m_Messages->SetValue( reportmsg );
+
+    // Force focus back on the dialog
+    SetFocus();
 }
 
 
