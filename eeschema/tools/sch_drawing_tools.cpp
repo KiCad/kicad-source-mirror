@@ -346,31 +346,49 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
 {
-    wxPoint  cursorPos;
-    KICAD_T  type = aEvent.Parameter<KICAD_T>();
+    wxPoint   cursorPos;
+    KICAD_T   type = aEvent.Parameter<KICAD_T>();
 
-    if( type == SCH_JUNCTION_T )
-    {
-        if( aEvent.HasPosition() )
+    auto itemFactory = [&] () -> SCH_ITEM* {
+        switch( type )
         {
-            EE_SELECTION& selection = m_selectionTool->GetSelection();
-            SCH_LINE*     wire = dynamic_cast<SCH_LINE*>( selection.Front() );
+        case SCH_NO_CONNECT_T:
+            return new SCH_NO_CONNECT( cursorPos );
+        case SCH_JUNCTION_T:
+            return new SCH_JUNCTION( cursorPos );
+        case SCH_BUS_WIRE_ENTRY_T:
+            return new SCH_BUS_WIRE_ENTRY( cursorPos, g_lastBusEntryShape );
+        case SCH_BUS_BUS_ENTRY_T:
+            return new SCH_BUS_BUS_ENTRY( cursorPos, g_lastBusEntryShape );
+        default:
+            return nullptr;
+        }
+    };
 
-            if( wire )
-            {
-                SEG seg( wire->GetStartPoint(), wire->GetEndPoint() );
-                VECTOR2I nearest = seg.NearestPoint( getViewControls()->GetCursorPosition() );
-                getViewControls()->SetCrossHairCursorPosition( nearest, false );
-                getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
-            }
+    if( type == SCH_JUNCTION_T && aEvent.HasPosition() )
+    {
+        EE_SELECTION& selection = m_selectionTool->GetSelection();
+        SCH_LINE*     wire = dynamic_cast<SCH_LINE*>( selection.Front() );
+
+        if( wire )
+        {
+            SEG seg( wire->GetStartPoint(), wire->GetEndPoint() );
+            VECTOR2I nearest = seg.NearestPoint( getViewControls()->GetCursorPosition() );
+            getViewControls()->SetCrossHairCursorPosition( nearest, false );
+            getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
         }
     }
-    else if( aEvent.IsAction( &EE_ACTIONS::placeSheetPin ) )
+
+    if( aEvent.IsAction( &EE_ACTIONS::placeSheetPin ) )
         type = SCH_SHEET_PIN_T;
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
     getViewControls()->SetSnapping( true );
+
+    SCH_ITEM* previewItem = itemFactory();
+    m_view->ClearPreview();
+    m_view->AddToPreview( previewItem->Clone() );
 
     m_frame->PushTool( aEvent.GetCommandStr().get() );
     Activate();
@@ -382,7 +400,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
+        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
         cursorPos = (wxPoint) getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
@@ -391,46 +409,38 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            SCH_ITEM* item = nullptr;
-
             if( !m_frame->GetScreen()->GetItem( cursorPos, 0, type ) )
             {
-                switch( type )
+                if( type == SCH_JUNCTION_T )
+                    m_frame->AddJunction( cursorPos );
+                else
                 {
-                case SCH_NO_CONNECT_T:
-                    item = new SCH_NO_CONNECT( cursorPos );
-                    break;
-                case SCH_JUNCTION_T:
-                    item = m_frame->AddJunction( cursorPos );
-                    break;
-                case SCH_BUS_WIRE_ENTRY_T:
-                    item = new SCH_BUS_WIRE_ENTRY( cursorPos, g_lastBusEntryShape );
-                    break;
-                case SCH_BUS_BUS_ENTRY_T:
-                    item = new SCH_BUS_BUS_ENTRY( cursorPos, g_lastBusEntryShape );
-                    break;
-                default:
-                    break;
+                    SCH_ITEM* newItem = itemFactory();
+                    newItem->SetFlags( IS_NEW );
+
+                    m_frame->AddItemToScreenAndUndoList( newItem );
+                    m_frame->SaveCopyForRepeatItem( newItem );
+
+                    m_frame->SchematicCleanUp();
+                    m_frame->TestDanglingEnds();
+                    m_frame->OnModify();
                 }
-            }
-
-            if( item )
-            {
-                item->SetFlags( IS_NEW );
-                m_frame->AddItemToScreenAndUndoList( item );
-
-                m_frame->SaveCopyForRepeatItem( item );
-
-                m_frame->SchematicCleanUp();
-                m_frame->TestDanglingEnds();
-                m_frame->OnModify();
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
+        else if( evt->IsAction( &EE_ACTIONS::refreshPreview ) || evt->IsMotion() )
+        {
+            previewItem->SetPosition( (wxPoint)cursorPos );
+            m_view->ClearPreview();
+            m_view->AddToPreview( previewItem->Clone() );
+        }
     }
+
+    delete previewItem;
+    m_view->ClearPreview();
 
     m_frame->PopTool();
     return 0;
