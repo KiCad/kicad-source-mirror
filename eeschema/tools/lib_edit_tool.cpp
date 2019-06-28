@@ -307,12 +307,14 @@ int LIB_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
         EE_COLLECTOR collector;
         collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
         collector.Collect( m_frame->GetCurPart(), nonFields, (wxPoint) aPos );
+
+        EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+        selectionTool->GuessSelectionCandidates( collector, aPos );
+
         EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
 
         if( m_pickerItem != item )
         {
-            EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-
             if( m_pickerItem )
                 selectionTool->UnbrightenItem( m_pickerItem );
 

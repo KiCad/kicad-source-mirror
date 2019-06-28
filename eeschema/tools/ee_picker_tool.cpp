@@ -40,12 +40,15 @@ int EE_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     int                   finalize_state = WAIT_CANCEL;
 
+    // To many things are off-grid in LibEdit; turn snapping off.
+    bool                  snap = !m_isLibEdit;
+
     setControls();
 
     while( TOOL_EVENT* evt = Wait() )
     {
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_BULLSEYE );
-        VECTOR2D cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        VECTOR2D cursorPos = controls->GetCursorPosition( snap && !evt->Modifier( MD_ALT ) );
 
         if( evt->IsClick( BUT_LEFT ) )
         {

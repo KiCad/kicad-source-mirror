@@ -131,6 +131,12 @@ public:
     void ClearSelection();
 
     /**
+     * Apply heuristics to try and determine a single object when multiple are found under the
+     * cursor.
+     */
+    void GuessSelectionCandidates( EE_COLLECTOR& collector, const VECTOR2I& aPos );
+
+    /**
      * Function SelectionMenu()
      * Shows a popup menu to trim the COLLECTOR passed as aEvent's parameter down to a single
      * item.
@@ -154,12 +160,6 @@ private:
      * @return true if the function was cancelled (i.e. CancelEvent was received).
      */
     bool selectMultiple();
-
-    /**
-     * Apply heuristics to try and determine a single object when multiple are found under the
-     * cursor.
-     */
-    void guessSelectionCandidates( EE_COLLECTOR& collector, const VECTOR2I& aWhere );
 
     /**
      * Allows the selection of a single item from a list via pop-up menu.  The items are

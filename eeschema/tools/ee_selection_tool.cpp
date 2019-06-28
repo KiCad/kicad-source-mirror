@@ -482,7 +482,7 @@ EDA_ITEM* EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T*
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
     if( collector.GetCount() > 1 && !m_skip_heuristics )
     {
-        guessSelectionCandidates( collector, aWhere );
+        GuessSelectionCandidates( collector, aWhere );
     }
 
     // If still more than one item we're going to have to ask the user.
@@ -516,12 +516,12 @@ EDA_ITEM* EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T*
 }
 
 
-void EE_SELECTION_TOOL::guessSelectionCandidates( EE_COLLECTOR& collector, const VECTOR2I& aPos )
+void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const VECTOR2I& aPos )
 {
     // There are certain parent/child and enclosure combinations that can be handled
     // automatically.
 
-    // Prefer exact hits to a sloppy ones
+    // Prefer exact hits to sloppy ones
     int exactHits = 0;
 
     for( int i = collector.GetCount() - 1; i >= 0; --i )
