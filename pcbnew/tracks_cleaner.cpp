@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,44 +43,45 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 
-// Helper class used to clean tracks and vias
+/**
+ * Helper class used to clean up tracks and vias.
+ */
 class TRACKS_CLEANER
 {
 public:
     TRACKS_CLEANER( BOARD* aPcb, BOARD_COMMIT& aCommit );
 
     /**
-     * the cleanup function.
-     * return true if some item was modified
+     * The cleanup function.
+     *
      * @param aCleanVias = true to remove superimposed vias
      * @param aRemoveMisConnected = true to remove segments connecting 2 different nets
-     * @param aMergeSegments = true to merge collinear segmenst and remove 0 len segm
+     * @param aMergeSegments = true to merge collinear segments and remove 0 length segments
      * @param aDeleteUnconnected = true to remove dangling tracks
-     * (short circuits)
+     * @return true if some item was modified.
      */
     bool CleanupBoard( bool aCleanVias, bool aRemoveMisConnected,
                        bool aMergeSegments, bool aDeleteUnconnected );
 
 private:
-    /* finds and remove all track segments which are connected to more than one net.
-     * (short circuits)
+    /**
+     * Find and remove all track segments which are connected to more than one net
+     * (short circuits).
      */
     bool removeBadTrackSegments();
 
     /**
-     * Removes redundant vias like vias at same location
-     * or on pad through
+     * Remove redundant vias at same location or on a through hole pad.
      */
     bool cleanupVias();
 
     /**
-     * Removes all the following THT vias on the same position of the
-     * specified one
+     * Remove all the following THT vias on the same position of the specified one.
      */
     void removeDuplicatesOfVia( const VIA *aVia, std::set<BOARD_ITEM *>& aToRemove );
 
     /**
-     * Removes all the following duplicates tracks of the specified one
+     * Remove all the duplicates tracks of the specified one.
      */
     void removeDuplicatesOfTrack( const TRACK* aTrack, std::set<BOARD_ITEM*>& aToRemove );
 
@@ -101,22 +102,20 @@ private:
     bool cleanupSegments();
 
     /**
-     * helper function
-     * Rebuild list of tracks, and connected tracks
-     * this info must be rebuilt when tracks are erased
+     * Rebuild list of tracks and connected tracks.
+     *
+     * This info must be rebuilt when tracks are erased.
      */
     void buildTrackConnectionInfo();
 
     /**
-     * helper function
-     * merge aTrackRef and aCandidate, when possible,
+     * Merge \a aTrackRef and a\ aCandidate, when possible,
      * i.e. when they are colinear, same width, and obviously same layer
      */
     TRACK* mergeCollinearSegmentIfPossible( TRACK* aTrackRef,
-                                           TRACK* aCandidate, ENDPOINT_T aEndType );
+                                            TRACK* aCandidate, ENDPOINT_T aEndType );
 
-    const ZONE_CONTAINER* zoneForTrackEndpoint( const TRACK* aTrack,
-            ENDPOINT_T aEndPoint );
+    const ZONE_CONTAINER* zoneForTrackEndpoint( const TRACK* aTrack, ENDPOINT_T aEndPoint );
 
     bool testTrackEndpointDangling( TRACK* aTrack, ENDPOINT_T aEndPoint );
 
@@ -140,8 +139,6 @@ private:
 };
 
 
-/* Install the cleanup dialog frame to know what should be cleaned
-*/
 void PCB_EDIT_FRAME::Clean_Pcb()
 {
     DIALOG_CLEANING_OPTIONS dlg( this );
@@ -160,7 +157,7 @@ void PCB_EDIT_FRAME::Clean_Pcb()
     GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
     bool modified = cleaner.CleanupBoard( dlg.m_deleteShortCircuits, dlg.m_cleanVias,
-                            dlg.m_mergeSegments, dlg.m_deleteUnconnectedSegm );
+                                          dlg.m_mergeSegments, dlg.m_deleteUnconnectedSegm );
 
     if( modified )
     {
@@ -204,12 +201,6 @@ void TRACKS_CLEANER::buildTrackConnectionInfo()
 }
 
 
-/* Main cleaning function.
- *  Delete
- * - Redundant points on tracks (merge aligned segments)
- * - vias on pad
- * - null length segments
- */
 bool TRACKS_CLEANER::CleanupBoard( bool aRemoveMisConnected,
                                    bool aCleanVias,
                                    bool aMergeSegments,
@@ -277,7 +268,8 @@ bool TRACKS_CLEANER::removeBadTrackSegments()
 
         for( auto testedTrack : connectivity->GetConnectedTracks( segment ) )
         {
-            if( segment->GetNetCode() != testedTrack->GetNetCode() && !testedTrack->GetState( FLAG0 ) )
+            if( segment->GetNetCode() != testedTrack->GetNetCode()
+              && !testedTrack->GetState( FLAG0 ) )
                 toRemove.insert( segment );
         }
     }
@@ -347,10 +339,10 @@ bool TRACKS_CLEANER::cleanupVias()
 }
 
 
-/** Utility: does the endpoint unconnected processed for one endpoint of one track
- * Returns true if the track must be deleted, false if not necessarily */
 bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK* aTrack, ENDPOINT_T aEndPoint )
 {
+    wxASSERT( aTrack != nullptr );
+
     auto connectivity = m_brd->GetConnectivity();
     VECTOR2I endpoint ;
 
@@ -359,8 +351,11 @@ bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK* aTrack, ENDPOINT_T aEndPo
     else
         endpoint = aTrack->GetStart( );
 
-    //wxASSERT ( connectivity->GetConnectivityAlgo()->ItemEntry( aTrack ) != nullptr );
-    wxASSERT ( connectivity->GetConnectivityAlgo()->ItemEntry( aTrack ).GetItems().size() != 0 );
+    // If there are no items connected to the track, it has no connectivity information so
+    // do not flag it for removal.
+    if( connectivity->GetConnectivityAlgo()->ItemEntry( aTrack ).GetItems().size() == 0 )
+        return false;
+
     auto citem = connectivity->GetConnectivityAlgo()->ItemEntry( aTrack ).GetItems().front();
 
     if( !citem->Valid() )
@@ -378,10 +373,6 @@ bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK* aTrack, ENDPOINT_T aEndPo
 }
 
 
-/* Delete dangling tracks
- *  Vias:
- *  If a via is only connected to a dangling track, it also will be removed
- */
 bool TRACKS_CLEANER::deleteDanglingTracks()
 {
     bool item_erased = false;
@@ -432,7 +423,6 @@ bool TRACKS_CLEANER::deleteDanglingTracks()
 }
 
 
-// Delete null length track segments
 bool TRACKS_CLEANER::deleteNullSegments()
 {
     std::set<BOARD_ITEM *> toRemove;
@@ -446,7 +436,9 @@ bool TRACKS_CLEANER::deleteNullSegments()
     return removeItems( toRemove );
 }
 
-void TRACKS_CLEANER::removeDuplicatesOfTrack( const TRACK *aTrack, std::set<BOARD_ITEM*>& aToRemove )
+
+void TRACKS_CLEANER::removeDuplicatesOfTrack( const TRACK *aTrack,
+                                              std::set<BOARD_ITEM*>& aToRemove )
 {
     if( aTrack->GetFlags() & STRUCT_DELETED )
         return;
@@ -515,7 +507,7 @@ bool TRACKS_CLEANER::MergeCollinearTracks( TRACK* aSegment )
                         TRACK* segDelete = mergeCollinearSegmentIfPossible( aSegment,
                                 other, endpoint );
 
-                        // Merge succesful, the other one has to go away
+                        // Merge successful, the other one has to go away
                         if( segDelete )
                         {
                             m_brd->Remove( segDelete );
@@ -529,12 +521,10 @@ bool TRACKS_CLEANER::MergeCollinearTracks( TRACK* aSegment )
     }
 
 
-
     return merged_this;
 }
 
 
-// Delete null length segments, and intermediate points ..
 bool TRACKS_CLEANER::cleanupSegments()
 {
     bool modified = false;
@@ -547,7 +537,7 @@ bool TRACKS_CLEANER::cleanupSegments()
     std::set<BOARD_ITEM*> toRemove;
 
     // Delete redundant segments, i.e. segments having the same end points and layers
-    // (can happens when blocks are copied on themselve)
+    // (can happens when blocks are copied on themselves)
     for( auto segment : m_brd->Tracks() )
         removeDuplicatesOfTrack( segment, toRemove );
 
@@ -579,7 +569,9 @@ bool TRACKS_CLEANER::cleanupSegments()
 }
 
 
-/* Utility: check for parallelism between two segments */
+/**
+ * Check for parallelism between two segments.
+ */
 static bool parallelismTest( int dx1, int dy1, int dx2, int dy2 )
 {
     /* The following condition list is ugly and repetitive, but I have
@@ -607,8 +599,8 @@ static bool parallelismTest( int dx1, int dy1, int dx2, int dy2 )
 }
 
 
-/** Function used by cleanupSegments.
- *  Test if aTrackRef and aCandidate (which must have a common end) are collinear.
+/**
+ *  Test if \a aTrackRef and \a aCandidate (which must have a common end) are collinear.
  *  and see if the common point is not on a pad (i.e. if this common point can be removed).
  *  the ending point of aTrackRef is the start point (aEndType == START)
  *  or the end point (aEndType != START)
@@ -619,7 +611,6 @@ static bool parallelismTest( int dx1, int dy1, int dx2, int dy2 )
  *    and return aCandidate (which can be deleted).
  *  else return NULL
  */
-
 static void updateConn( TRACK *track, const std::shared_ptr<CONNECTIVITY_DATA>& connectivity )
 {
     for( auto pad : connectivity->GetConnectedPads( track ) )
@@ -638,7 +629,7 @@ static void updateConn( TRACK *track, const std::shared_ptr<CONNECTIVITY_DATA>& 
 
 
 TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK* aCandidate,
-                                       ENDPOINT_T aEndType )
+                                                        ENDPOINT_T aEndType )
 {
     // First of all, they must be of the same width and must be both actual tracks
     if( ( aTrackRef->GetWidth() != aCandidate->GetWidth() ) ||
@@ -657,9 +648,9 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
 
     // Weed out non-parallel tracks
     if( !parallelismTest( aTrackRef->GetEnd().x - aTrackRef->GetStart().x,
-                aTrackRef->GetEnd().y - aTrackRef->GetStart().y,
-                aCandidate->GetEnd().x - aCandidate->GetStart().x,
-                aCandidate->GetEnd().y - aCandidate->GetStart().y ) )
+                          aTrackRef->GetEnd().y - aTrackRef->GetStart().y,
+                          aCandidate->GetEnd().x - aCandidate->GetStart().x,
+                          aCandidate->GetEnd().y - aCandidate->GetStart().y ) )
         return NULL;
 
     auto connectivity = m_brd->GetConnectivity();
