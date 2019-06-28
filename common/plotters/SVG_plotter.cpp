@@ -676,6 +676,10 @@ void SVG_PLOTTER::Text( const wxPoint&              aPos,
 
     // TODO: see if the postscript native text code can be used in SVG plotter
 
+    fprintf( outputFile,
+             "<g class=\"stroked-text\"><desc>%s</desc>\n",
+             TO_UTF8( XmlEsc( aText ) ) );
     PLOTTER::Text( aPos, aColor, aText, aOrient, aSize, aH_justify, aV_justify,
                    aWidth, aItalic, aBold, aMultilineAllowed );
+    fputs( "</g>", outputFile );
 }
