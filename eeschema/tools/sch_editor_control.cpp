@@ -725,6 +725,9 @@ int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
     List->ReversePickersListOrder();
     m_frame->GetScreen()->PushCommandToRedoList( List );
 
+    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    selTool->RebuildSelection();
+
     m_frame->SetSheetNumberAndCount();
     m_frame->TestDanglingEnds();
 
@@ -754,8 +757,10 @@ int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
     List->ReversePickersListOrder();
     m_frame->GetScreen()->PushCommandToUndoList( List );
 
-    m_frame->SetSheetNumberAndCount();
+    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    selTool->RebuildSelection();
 
+    m_frame->SetSheetNumberAndCount();
     m_frame->TestDanglingEnds();
 
     m_frame->SyncView();

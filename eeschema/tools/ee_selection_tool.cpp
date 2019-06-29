@@ -955,6 +955,9 @@ void EE_SELECTION_TOOL::RebuildSelection()
     EDA_ITEM::IterateForward( start, inspector, nullptr, EE_COLLECTOR::AllItems );
 
     updateReferencePoint();
+
+    // Inform other potentially interested tools
+    m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 }
 
 

@@ -548,6 +548,10 @@ int LIB_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 int LIB_EDIT_TOOL::Undo( const TOOL_EVENT& aEvent )
 {
     m_frame->GetComponentFromUndoList();
+
+    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    selTool->RebuildSelection();
+
     return 0;
 }
 
@@ -555,6 +559,10 @@ int LIB_EDIT_TOOL::Undo( const TOOL_EVENT& aEvent )
 int LIB_EDIT_TOOL::Redo( const TOOL_EVENT& aEvent )
 {
     m_frame->GetComponentFromRedoList();
+
+    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    selTool->RebuildSelection();
+
     return 0;
 }
 
