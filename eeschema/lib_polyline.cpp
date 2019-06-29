@@ -39,7 +39,7 @@
 #include <general.h>
 #include <lib_polyline.h>
 #include <transform.h>
-
+#include <geometry/shape_line_chain.h>
 
 LIB_POLYLINE::LIB_POLYLINE( LIB_PART*      aParent ) :
     LIB_ITEM( LIB_POLYLINE_T, aParent )
@@ -276,6 +276,18 @@ bool LIB_POLYLINE::HitTest( const wxPoint &aPosition, int aThreshold, const TRAN
 
         if( TestSegmentHit( aPosition, start, end, aThreshold ) )
             return true;
+    }
+
+    if( m_Fill != NO_FILL && GetCornerCount() > 2 )
+    {
+        SHAPE_LINE_CHAIN shape;
+
+        for( wxPoint pt : m_PolyPoints )
+            shape.Append( aTransform.TransformCoordinate( pt ) );
+
+        shape.SetClosed( true );
+
+        return shape.PointInside( aPosition );
     }
 
     return false;
