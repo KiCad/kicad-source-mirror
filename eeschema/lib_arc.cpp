@@ -334,8 +334,8 @@ const EDA_RECT LIB_ARC::GetBoundingBox() const
 
     if( ( normStart == nullPoint ) || ( normEnd == nullPoint ) || ( m_Radius == 0 ) )
     {
-        wxLogDebug( wxT("Invalid arc drawing definition, center(%d, %d) \
-start(%d, %d), end(%d, %d), radius %d" ),
+        wxLogDebug( wxT("Invalid arc drawing definition, center(%d, %d), start(%d, %d), "
+                        "end(%d, %d), radius %d" ),
                     m_Pos.x, m_Pos.y, m_ArcStart.x, m_ArcStart.y, m_ArcEnd.x,
                     m_ArcEnd.y, m_Radius );
         return rect;
@@ -491,7 +491,7 @@ void LIB_ARC::CalcEdit( const wxPoint& aPosition )
     wxPoint c2 = m - d;
     wxPoint test = ( m_editState == 4 ) ? aPosition : m_Pos;
 
-    m_Pos = ( GetLineLength( c1, test ) < GetLineLength( c2, test ) ) ? c1 : c2;
+    m_Pos = ( m_editState > 1 && GetLineLength( c1, test ) < GetLineLength( c2, test ) ) ? c1 : c2;
 
     CalcRadiusAngles();
 }

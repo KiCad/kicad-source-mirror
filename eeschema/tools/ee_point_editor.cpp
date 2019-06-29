@@ -311,7 +311,12 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
                 modified = true;
             }
 
-            m_editedPoint->SetPosition( controls->GetCursorPosition( !evt->Modifier( MD_ALT ) ) );
+            bool snap = !evt->Modifier( MD_ALT );
+
+            if( item->Type() == LIB_ARC_T && getEditedPointIndex() == ARC_CENTER )
+                snap = false;
+
+            m_editedPoint->SetPosition( controls->GetCursorPosition( snap ) );
 
             updateItem();
             updatePoints();
