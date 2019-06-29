@@ -80,6 +80,14 @@ void ZONE_FILLER::SetProgressReporter( WX_PROGRESS_REPORTER* aReporter )
     m_progressReporter = aReporter;
 }
 
+
+void ZONE_FILLER::SetProgressReporter( std::unique_ptr<WX_PROGRESS_REPORTER>&& aReporter )
+{
+    m_uniqueReporter = std::move( aReporter );
+    m_progressReporter = m_uniqueReporter.get();
+}
+
+
 bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 {
     std::vector<CN_ZONE_ISOLATED_ISLAND_LIST> toFill;

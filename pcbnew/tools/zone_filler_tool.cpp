@@ -84,21 +84,23 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
 
     BOARD_COMMIT commit( this );
 
-    for( auto item : selection() )
+    if( auto passedZone = aEvent.Parameter<ZONE_CONTAINER*>() )
     {
-        assert( item->Type() == PCB_ZONE_AREA_T );
-
-        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*> ( item );
-
-        toFill.push_back(zone);
+        if( passedZone->Type() == PCB_ZONE_AREA_T )
+            toFill.push_back( passedZone );
+    }
+    else
+    {
+        for( auto item : selection() )
+        {
+            if( auto zone = dyn_cast<ZONE_CONTAINER*>( item ) )
+                toFill.push_back( zone );
+        }
     }
 
-    std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
-            new WX_PROGRESS_REPORTER( frame(), _( "Fill Zone" ), 4 )
-            );
-
     ZONE_FILLER filler( board(), &commit );
-    filler.SetProgressReporter( progressReporter.get() );
+    filler.SetProgressReporter(
+            std::make_unique<WX_PROGRESS_REPORTER>( frame(), _( "Fill Zone" ), 4 ) );
     filler.Fill( toFill );
 
     canvas()->Refresh();
@@ -118,12 +120,9 @@ int ZONE_FILLER_TOOL::ZoneFillAll( const TOOL_EVENT& aEvent )
         toFill.push_back(zone);
     }
 
-    std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
-            new WX_PROGRESS_REPORTER( frame(), _( "Fill All Zones" ), 4 )
-            );
-
     ZONE_FILLER filler( board(), &commit );
-    filler.SetProgressReporter( progressReporter.get() );
+    filler.SetProgressReporter(
+            std::make_unique<WX_PROGRESS_REPORTER>( frame(), _( "Fill All Zones" ), 4 ) );
 
     if( filler.Fill( toFill ) )
         frame()->m_ZoneFillsDirty = false;

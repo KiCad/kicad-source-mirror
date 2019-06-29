@@ -42,6 +42,9 @@ public:
     ~ZONE_FILLER();
 
     void SetProgressReporter( WX_PROGRESS_REPORTER* aReporter );
+
+    void SetProgressReporter( std::unique_ptr<WX_PROGRESS_REPORTER>&& aReporter );
+
     bool Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck = false );
 
 private:
@@ -118,6 +121,7 @@ private:
     BOARD* m_board;
     COMMIT* m_commit;
     WX_PROGRESS_REPORTER* m_progressReporter;
+    std::unique_ptr<WX_PROGRESS_REPORTER> m_uniqueReporter;
 };
 
 #endif

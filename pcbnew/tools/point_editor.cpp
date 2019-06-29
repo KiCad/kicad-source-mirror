@@ -637,21 +637,7 @@ void POINT_EDITOR::finishItem()
         auto zone = static_cast<ZONE_CONTAINER*>( item );
 
         if( zone->IsFilled() && m_refill )
-        {
-            ZONE_FILLER filler( board() );
-            // A progress reporter can be usefull. However it works fine only on Windows
-            // so enable it only on Windows.
-            // On Linux, the filled areas are incorrectly shown: the insulated islands
-            // remain displayed, although they are removed from the actual filled areas list
-            //
-            // Fix me: try to make it working on Linux.
-            //
-            #ifdef __WINDOWS__
-            WX_PROGRESS_REPORTER reporter( getEditFrame<PCB_BASE_FRAME>(), _( "Refill Zones" ), 4 );
-            filler.SetProgressReporter( &reporter );
-            #endif
-            filler.Fill( { zone } );
-        }
+            m_toolMgr->RunAction( PCB_ACTIONS::zoneFill, true, zone );
     }
 }
 
