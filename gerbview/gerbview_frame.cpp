@@ -1043,7 +1043,7 @@ void GERBVIEW_FRAME::UpdateStatusBar()
         case INCHES:         formatter = wxT( "r %.6f  theta %.1f" ); break;
         case MILLIMETRES:    formatter = wxT( "r %.5f  theta %.1f" ); break;
         case UNSCALED_UNITS: formatter = wxT( "r %f  theta %f" );     break;
-        case DEGREES:        wxASSERT( false );                       break;
+        default:             wxASSERT( false );                       break;
         }
 
         line.Printf( formatter, To_User_Unit( GetUserUnits(), ro ), theta );
@@ -1075,7 +1075,7 @@ void GERBVIEW_FRAME::UpdateStatusBar()
         relformatter = wxT( "dx %f  dy %f  dist %f" );
         break;
 
-    case DEGREES:
+    default:
         wxASSERT( false );
         break;
     }

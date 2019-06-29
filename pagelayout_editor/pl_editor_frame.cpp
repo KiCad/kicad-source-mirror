@@ -591,7 +591,7 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     case INCHES:         SetStatusText( _("inches"), 6 );   break;
     case MILLIMETRES:    SetStatusText( _("mm"), 6 );       break;
     case UNSCALED_UNITS: SetStatusText( wxEmptyString, 6 ); break;
-    case DEGREES:        wxASSERT( false );                 break;
+    default:             wxASSERT( false );                 break;
     }
 
     wxString line;

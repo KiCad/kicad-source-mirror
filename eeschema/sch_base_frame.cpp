@@ -217,7 +217,7 @@ void SCH_BASE_FRAME::UpdateStatusBar()
         locformatter = "dx %f  dy %f  dist %f";
         break;
 
-    case DEGREES:
+    default:
         wxASSERT( false );
         break;
     }
