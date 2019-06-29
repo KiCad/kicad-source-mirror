@@ -312,7 +312,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
 
     LIB_ALIAS* rootAlias = m_libEntry->GetAlias( m_libEntry->GetName() );
     // We need to keep the name and the value the same at the moment!
-    wxString   newName = m_libEntry->GetValueField().GetText();
+    wxString   newName = m_fields->at( VALUE ).GetText();
 
     if( m_libEntry->GetName() != newName )
         m_Parent->SaveCopyInUndoList( m_libEntry, UR_LIB_RENAME );
