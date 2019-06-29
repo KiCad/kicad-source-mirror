@@ -36,7 +36,7 @@ except IOError:
 
 # Create a new csv writer object to use as the output formatter, although we
 # are created a tab delimited list instead!
-out = csv.writer(f, lineterminator='\n', delimiter='\t', quoting=csv.QUOTE_NONE)
+out = csv.writer(f, lineterminator='\n', delimiter='\t', quotechar="\"", quoting=csv.QUOTE_ALL)
 
 # override csv.writer's writerow() to support utf8 encoding:
 def writerow( acsvwriter, columns ):
