@@ -91,6 +91,9 @@ private:
      * helper function
      * merge aTrackRef and aCandidate, when possible,
      * i.e. when they are colinear, same width, and obviously same layer
+     * @return true if the segments are merged, false if not
+     * @param aSeg1 is the reference
+     * @param aSeg2 is the candidate, and after merging, the removed segment
      */
     bool mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 );
 

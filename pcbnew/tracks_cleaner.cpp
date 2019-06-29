@@ -74,6 +74,10 @@ bool TRACKS_CLEANER::CleanupBoard( bool aDryRun, DRC_LIST* aItemsList, bool aRem
     m_itemsList = aItemsList;
     bool modified = false;
 
+    // Clear the flag used to mark some segments as deleted, in dry run:
+    for( auto segment : m_brd->Tracks() )
+        segment->ClearFlags( IS_DELETED );
+
     // delete redundant vias
     if( aCleanVias )
         modified |= cleanupVias();
@@ -104,6 +108,10 @@ bool TRACKS_CLEANER::CleanupBoard( bool aDryRun, DRC_LIST* aItemsList, bool aRem
                 cleanupSegments();
         }
     }
+
+    // Clear the flag used to mark some segments:
+    for( auto segment : m_brd->Tracks() )
+        segment->ClearFlags( IS_DELETED );
 
     return modified;
 }
@@ -176,7 +184,7 @@ bool TRACKS_CLEANER::cleanupVias()
 
         // To delete through Via on THT pads at same location
         // Examine the list of connected pads:
-        // if one through pad is found, the via can be removed
+        // if a through pad is found, the via can be removed
 
         const auto pads = m_brd->GetConnectivity()->GetConnectedPads( via1 );
         for( const auto pad : pads )
@@ -457,9 +465,8 @@ bool TRACKS_CLEANER::cleanupSegments()
                 {
                     TRACK* candidate = static_cast<TRACK*>( connected->Parent() );
 
-                    if( !candidate->IsOnLayer( segment->GetLayer() ) )
-                        continue;
-
+                    // Do not merge segments having different widths: it is a frequent case
+                    // to draw a track between 2 pads:
                     if( candidate->GetWidth() != segment->GetWidth() )
                         continue;
 
@@ -530,6 +537,8 @@ bool TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
                                                  aSeg2, aSeg2->GetPosition() ) );
     }
 
+    aSeg2->SetFlags( IS_DELETED );
+
     if( !m_dryRun )
     {
         m_commit.Modify( aSeg1 );
@@ -543,18 +552,13 @@ bool TRACKS_CLEANER::mergeCollinearSegments( TRACK* aSeg1, TRACK* aSeg2 )
             aSeg1->SetState( BEGIN_ONPAD, pad->HitTest( aSeg1->GetStart() ) );
             aSeg1->SetState( END_ONPAD, pad->HitTest( aSeg1->GetEnd() ) );
         }
-    }
 
-
-    // Merge succesful, seg2 has to go away
-    if( !m_dryRun && aSeg2 )
-    {
-        aSeg2->SetFlags( IS_DELETED );
+        // Merge succesful, seg2 has to go away
         m_brd->Remove( aSeg2 );
         m_commit.Removed( aSeg2 );
     }
 
-    return !!aSeg2;
+    return true;
 }
 
 
