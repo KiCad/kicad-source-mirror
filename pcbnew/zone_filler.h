@@ -43,6 +43,7 @@ public:
     ~ZONE_FILLER();
 
     void SetProgressReporter( WX_PROGRESS_REPORTER* aReporter );
+    void SetProgressReporter( std::unique_ptr<WX_PROGRESS_REPORTER>&& aReporter );
     bool Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck = false );
 
 private:
@@ -107,6 +108,7 @@ private:
                                         // false if not (not closed outlines for instance)
     COMMIT* m_commit;
     WX_PROGRESS_REPORTER* m_progressReporter;
+    std::unique_ptr<WX_PROGRESS_REPORTER> m_uniqueReporter;
 
     // m_high_def can be used to define a high definition arc to polygon approximation
     int m_high_def;
