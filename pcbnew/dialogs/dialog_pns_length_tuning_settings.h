@@ -47,10 +47,13 @@ private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+   bool AcceptOptions();
+
     UNIT_BINDER m_minAmpl;
     UNIT_BINDER m_maxAmpl;
     UNIT_BINDER m_spacing;
     UNIT_BINDER m_targetLength;
+    UNIT_BINDER m_radius;
 
     PNS::MEANDER_SETTINGS& m_settings;
     PNS::ROUTER_MODE m_mode;

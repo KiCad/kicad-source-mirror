@@ -29,22 +29,22 @@
 #include <bitmaps.h>
 #include <eda_draw_frame.h>
 
-// TODO validators
-
 DIALOG_PNS_LENGTH_TUNING_SETTINGS::DIALOG_PNS_LENGTH_TUNING_SETTINGS( EDA_DRAW_FRAME* aParent,
                         PNS::MEANDER_SETTINGS& aSettings, PNS::ROUTER_MODE aMode )
     :
     DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( aParent ),
-    m_minAmpl( aParent, m_minAmplLabel, m_minAmplText, m_minAmplUnit ),
-    m_maxAmpl( aParent, m_maxAmplLabel, m_maxAmplText, m_maxAmplUnit ),
-    m_spacing( aParent, m_spacingLabel, m_spacingText, m_spacingUnit ),
+    m_minAmpl( aParent, m_minAmplLabel, m_minAmplText, m_minAmplUnit, true ),
+    m_maxAmpl( aParent, m_maxAmplLabel, m_maxAmplText, m_maxAmplUnit, true ),
+    m_spacing( aParent, m_spacingLabel, m_spacingText, m_spacingUnit, true ),
     m_targetLength( aParent, m_targetLengthLabel, m_targetLengthText, m_targetLengthUnit ),
+    m_radius( aParent, m_radiusLabel, m_radiusText, m_radiusUnit, false, false ),
     m_settings( aSettings ),
     m_mode( aMode )
 {
     m_stdButtonsOK->SetDefault();
     m_targetLengthText->SetSelection( -1, -1 );
     m_targetLengthText->SetFocus();
+    m_radius.SetUnits( PERCENT );
 
     GetSizer()->SetSizeHints(this);
     Centre();
@@ -53,6 +53,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS::DIALOG_PNS_LENGTH_TUNING_SETTINGS( EDA_DRAW_F
 
 bool DIALOG_PNS_LENGTH_TUNING_SETTINGS::TransferDataToWindow()
 {
+
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
@@ -104,16 +105,31 @@ bool DIALOG_PNS_LENGTH_TUNING_SETTINGS::TransferDataToWindow()
 }
 
 
-bool DIALOG_PNS_LENGTH_TUNING_SETTINGS::TransferDataFromWindow()
+bool DIALOG_PNS_LENGTH_TUNING_SETTINGS::AcceptOptions( )
 {
-    if( !wxDialog::TransferDataToWindow() )
+    if( !m_minAmpl.Validate( 0, INT_MAX ) )
+        return false;
+    if( !m_maxAmpl.Validate( m_minAmpl.GetValue(), INT_MAX ) )
+        return false;
+    if( !m_spacing.Validate( 0, INT_MAX ) )
+        return false;
+    if( !m_targetLength.Validate( 0, INT_MAX ) )
+        return false;
+    if( !m_radius.Validate( 0, 100 ) )
         return false;
 
-    // fixme: use validators and TransferDataFromWindow
+    return true;
+}
+
+bool DIALOG_PNS_LENGTH_TUNING_SETTINGS::TransferDataFromWindow()
+{
+    if( !AcceptOptions() || !wxDialog::TransferDataToWindow() )
+        return false;
+
     m_settings.m_minAmplitude = m_minAmpl.GetValue();
     m_settings.m_maxAmplitude = m_maxAmpl.GetValue();
     m_settings.m_spacing = m_spacing.GetValue();
-    m_settings.m_cornerRadiusPercentage = wxAtoi( m_radiusText->GetValue() );
+    m_settings.m_cornerRadiusPercentage = m_radius.GetValue();
 
     if( m_mode == PNS::PNS_MODE_TUNE_DIFF_PAIR_SKEW )
         m_settings.m_targetSkew = m_targetLength.GetValue();

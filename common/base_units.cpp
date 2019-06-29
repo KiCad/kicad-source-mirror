@@ -266,6 +266,10 @@ wxString StringFromValue( EDA_UNITS_T aUnits, int aValue, bool aAddUnitSymbol, b
             stringValue += wxT( " deg" );
             break;
 
+        case PERCENT:
+            stringValue += wxT( "%" );
+            break;
+
         case UNSCALED_UNITS:
             break;
         }
@@ -294,6 +298,7 @@ double From_User_Unit( EDA_UNITS_T aUnits, double aValue, bool aUseMils )
 
     default:
     case UNSCALED_UNITS:
+    case PERCENT:
         return aValue;
     }
 }
@@ -441,6 +446,9 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit, bool aUseMils )
 
     case MILLIMETRES:
         return _( "mm" );
+
+    case PERCENT:
+        return _( "%" );
 
     case UNSCALED_UNITS:
         return wxEmptyString;
