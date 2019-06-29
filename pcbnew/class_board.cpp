@@ -890,6 +890,14 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 
     case PCB_TRACE_T:
     case PCB_VIA_T:
+
+        // N.B. This inserts a small memory leak as we lose the
+        if( !IsCopperLayer( aBoardItem->GetLayer() ) )
+        {
+            wxFAIL_MSG( wxT( "BOARD::Add() Cannot place Track on non-copper layer" ) );
+            return;
+        }
+
         if( aMode == ADD_APPEND )
         {
             m_Track.PushBack( (TRACK*) aBoardItem );
