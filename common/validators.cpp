@@ -68,20 +68,14 @@ void GRID_CELL_TEXT_EDITOR::StartingKey( wxKeyEvent& event )
 }
 
 
-FILE_NAME_CHAR_VALIDATOR::FILE_NAME_CHAR_VALIDATOR( wxString* aValue ) :
+MODULE_NAME_CHAR_VALIDATOR::MODULE_NAME_CHAR_VALIDATOR( wxString* aValue ) :
     wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue )
 {
-    // The Windows (DOS) file system forbidden characters already include the forbidden
-    // file name characters for both Posix and OSX systems.  The characters \/:*?|"<> are
-    // illegal and filtered by the validator.
-    wxString illegalChars = wxFileName::GetForbiddenChars( wxPATH_DOS );
-    wxTextValidator nameValidator( wxFILTER_EXCLUDE_CHAR_LIST );
-    wxArrayString illegalCharList;
-
-    for( unsigned i = 0;  i < illegalChars.size();  i++ )
-        illegalCharList.Add( wxString( illegalChars[i] ) );
-
-    SetExcludes( illegalCharList );
+    // This list of characters follows the string from class_module.cpp
+    // which, in turn mimics the strings from lib_id.cpp
+    // TODO: Unify forbidden character lists
+    wxString illegalChars = "%$<>\t\n\r\"\\/:";
+    SetCharExcludes( illegalChars );
  }
 
 

@@ -43,6 +43,7 @@
 #include <class_edge_mod.h>
 #include <class_module.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <validators.h>
 #include <view/view.h>
 
 MODULE::MODULE( BOARD* parent ) :
@@ -1025,8 +1026,11 @@ bool MODULE::IsLibNameValid( const wxString & aName )
 
 const wxChar* MODULE::StringLibNameInvalidChars( bool aUserReadable )
 {
-    static const wxChar invalidChars[] = wxT("%$\t\n\r \"\\/:");
-    static const wxChar invalidCharsReadable[] = wxT("% $ 'tab' 'return' 'line feed' 'space' \\ \" / :");
+    // This list of characters is also duplicated in validators.cpp and
+    // lib_id.cpp
+    // TODO: Unify forbidden character lists
+    static const wxChar invalidChars[] = wxT("%$<>\t\n\r\"\\/:");
+    static const wxChar invalidCharsReadable[] = wxT("% $ < > 'tab' 'return' 'line feed' \\ \" / :");
 
     if( aUserReadable )
         return invalidCharsReadable;

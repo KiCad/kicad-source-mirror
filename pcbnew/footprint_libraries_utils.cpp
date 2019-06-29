@@ -1046,7 +1046,7 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
     if( moduleName.IsEmpty() )
     {
         WX_TEXT_ENTRY_DIALOG dlg( this, FMT_MOD_REF, FMT_MOD_CREATE, moduleName );
-        dlg.SetTextValidator( FILE_NAME_CHAR_VALIDATOR( &moduleName ) );
+        dlg.SetTextValidator( MODULE_NAME_CHAR_VALIDATOR( &moduleName ) );
 
         if( dlg.ShowModal() != wxID_OK )
             return NULL;    //Aborted by user

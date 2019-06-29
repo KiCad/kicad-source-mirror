@@ -60,10 +60,10 @@ protected:
  * footprint names cannot have any characters that would prevent file creation on any platform.
  * The characters \/:*?|"<> are illegal and filtered by the validator.
  */
-class FILE_NAME_CHAR_VALIDATOR : public wxTextValidator
+class MODULE_NAME_CHAR_VALIDATOR : public wxTextValidator
 {
 public:
-    FILE_NAME_CHAR_VALIDATOR( wxString* aValue = NULL );
+    MODULE_NAME_CHAR_VALIDATOR( wxString* aValue = NULL );
 };
 
 
