@@ -36,8 +36,9 @@
 #include <class_drawsegment.h>
 #include <class_edge_mod.h>
 #include <convert_basic_shapes_to_polygon.h>
-#include <geometry/shape_rect.h>
 #include <geometry/convex_hull.h>
+#include <geometry/shape_rect.h>
+#include <geometry/geometry_utils.h>
 
 
 void PAD_CS_PRIMITIVE::ExportTo( DRAWSEGMENT* aTarget )
@@ -193,26 +194,39 @@ bool D_PAD::buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon,
         switch( bshape.m_Shape )
         {
         case S_SEGMENT:         // usual segment : line with rounded ends
-            TransformRoundedEndsSegmentToPolygon( aux_polyset,
-                bshape.m_Start, bshape.m_End, aCircleToSegmentsCount, bshape.m_Thickness );
+        {
+            int numSegs = std::max(
+                    GetArcToSegmentCount( bshape.m_Thickness / 2, ARC_HIGH_DEF, 360.0 ),
+                    aCircleToSegmentsCount );
+            TransformRoundedEndsSegmentToPolygon( aux_polyset, bshape.m_Start, bshape.m_End,
+                    numSegs, bshape.m_Thickness );
             break;
+        }
 
         case S_ARC:             // Arc with rounded ends
-            TransformArcToPolygon( aux_polyset,
-                                   bshape.m_Start, bshape.m_End, bshape.m_ArcAngle,
-                                   aCircleToSegmentsCount, bshape.m_Thickness );
+        {
+            int numSegs = std::max( GetArcToSegmentCount( bshape.m_Radius, ARC_HIGH_DEF, 360.0 ),
+                    aCircleToSegmentsCount );
+            TransformArcToPolygon( aux_polyset, bshape.m_Start, bshape.m_End, bshape.m_ArcAngle,
+                    numSegs, bshape.m_Thickness );
             break;
+        }
 
         case S_CIRCLE:          //  ring or circle
+        {
+            int numSegs = std::max( GetArcToSegmentCount( bshape.m_Radius, ARC_HIGH_DEF, 360.0 ),
+                    aCircleToSegmentsCount );
+
             if( bshape.m_Thickness )    // ring
                 TransformRingToPolygon( aux_polyset,
                                     bshape.m_Start, bshape.m_Radius,
-                                    aCircleToSegmentsCount, bshape.m_Thickness ) ;
+                                    numSegs, bshape.m_Thickness ) ;
             else                // Filled circle
                 TransformCircleToPolygon( aux_polyset,
                                     bshape.m_Start, bshape.m_Radius,
-                                    aCircleToSegmentsCount ) ;
+                                    numSegs ) ;
             break;
+        }
 
         case S_POLYGON:         // polygon
             if( bshape.m_Poly.size() < 2 )
