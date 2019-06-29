@@ -228,19 +228,19 @@ void LIB_POLYLINE::print( wxDC* aDC, const wxPoint& aOffset, void* aData,
 
 bool LIB_POLYLINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    int     mindist = std::max( aAccuracy + GetPenSize() / 2, MINIMUM_SELECTION_DISTANCE );
-    wxPoint start, end;
+    int              delta = std::max( aAccuracy + GetPenSize() / 2, MINIMUM_SELECTION_DISTANCE );
+    SHAPE_LINE_CHAIN shape;
 
-    for( unsigned ii = 1; ii < GetCornerCount(); ii++ )
+    for( wxPoint pt : m_PolyPoints )
+        shape.Append( DefaultTransform.TransformCoordinate( pt ) );
+
+    if( m_Fill != NO_FILL && m_PolyPoints.size() > 2 )
     {
-        start = DefaultTransform.TransformCoordinate( m_PolyPoints[ii - 1] );
-        end   = DefaultTransform.TransformCoordinate( m_PolyPoints[ii] );
-
-        if( TestSegmentHit( aPosition, start, end, mindist ) )
-            return true;
+        shape.SetClosed( true );
+        return shape.PointInside( aPosition, delta );
     }
-
-    return false;
+    else
+        return shape.PointOnEdge( aPosition, delta );
 }
 
 
@@ -262,8 +262,10 @@ bool LIB_POLYLINE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccurac
         return false;
 
     // Account for the width of the line
-    sel.Inflate( GetWidth() / 2 );
-    int count = m_PolyPoints.size();
+    sel.Inflate( GetPenSize() / 2 );
+
+    // Only test closing segment if the polyline is filled
+    int count = m_Fill == NO_FILL ? m_PolyPoints.size() - 1 : m_PolyPoints.size();
 
     for( int ii = 0; ii < count; ii++ )
     {
