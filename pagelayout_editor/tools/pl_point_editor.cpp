@@ -144,9 +144,6 @@ void PL_POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
 
     if( m_editedPoint != point )
         setEditedPoint( point );
-
-    if( point )
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
 }
 
 
@@ -396,12 +393,15 @@ void PL_POINT_EDITOR::setEditedPoint( EDIT_POINT* aPoint )
 
     if( aPoint )
     {
+        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
         controls->ForceCursorPosition( true, aPoint->GetPosition() );
         controls->ShowCursor( true );
     }
     else
     {
-        controls->ShowCursor( false );
+        if( m_frame->ToolStackIsEmpty() )
+            controls->ShowCursor( false );
+
         controls->ForceCursorPosition( false );
     }
 

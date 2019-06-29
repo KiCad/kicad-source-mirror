@@ -249,9 +249,6 @@ void EE_POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
 
     if( m_editedPoint != point )
         setEditedPoint( point );
-
-    if( point )
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
 }
 
 
@@ -427,10 +424,24 @@ void EE_POINT_EDITOR::updateItem() const
     case LIB_ARC_T:
     {
         LIB_ARC* arc = (LIB_ARC*) item;
+        int      i = getEditedPointIndex();
 
-        arc->SetPosition( mapCoords( m_editPoints->Point( ARC_CENTER ).GetPosition() ) );
-        arc->SetStart( mapCoords( m_editPoints->Point( ARC_START ).GetPosition() ) );
-        arc->SetEnd( mapCoords( m_editPoints->Point( ARC_END ).GetPosition() ) );
+        if( i == ARC_CENTER )
+        {
+            arc->SetEditState( 4 );
+            arc->CalcEdit( mapCoords( m_editPoints->Point( ARC_CENTER ).GetPosition() ) );
+        }
+        else if( i == ARC_START )
+        {
+            arc->SetEditState( 2 );
+            arc->CalcEdit( mapCoords( m_editPoints->Point( ARC_START ).GetPosition() ) );
+        }
+        else if( i == ARC_END )
+        {
+            arc->SetEditState( 3 );
+            arc->CalcEdit( mapCoords( m_editPoints->Point( ARC_END ).GetPosition() ) );
+        }
+
         break;
     }
 
@@ -685,12 +696,15 @@ void EE_POINT_EDITOR::setEditedPoint( EDIT_POINT* aPoint )
 
     if( aPoint )
     {
+        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
         controls->ForceCursorPosition( true, aPoint->GetPosition() );
         controls->ShowCursor( true );
     }
     else
     {
-        controls->ShowCursor( false );
+        if( m_frame->ToolStackIsEmpty() )
+            controls->ShowCursor( false );
+
         controls->ForceCursorPosition( false );
     }
 

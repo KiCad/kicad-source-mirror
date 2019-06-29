@@ -35,6 +35,7 @@
 #include <general.h>
 #include <lib_arc.h>
 #include <transform.h>
+#include <status_popup.h>
 
 // Helper function
 static inline wxPoint twoPointVector( const wxPoint &startPoint, const wxPoint &endPoint )
@@ -52,10 +53,6 @@ LIB_ARC::LIB_ARC( LIB_PART*      aParent ) : LIB_ITEM( LIB_ARC_T, aParent )
     m_Fill          = NO_FILL;
     m_isFillable    = true;
     m_editState     = 0;
-    m_lastEditState = 0;
-    m_editCenterDistance = 0.0;
-    m_editSelectPoint = ARC_STATUS_START;
-    m_editDirection = 0;
 }
 
 
@@ -426,64 +423,76 @@ BITMAP_DEF LIB_ARC::GetMenuImage() const
 void LIB_ARC::BeginEdit( const wxPoint aPosition )
 {
     m_ArcStart  = m_ArcEnd = aPosition;
-    m_editState = m_lastEditState = 1;
-}
-
-
-bool LIB_ARC::ContinueEdit( const wxPoint aPosition )
-{
-    if( m_editState == 1 )        // Second position yields the arc segment length.
-    {
-        m_ArcEnd = aPosition;
-        m_editState = 2;
-        return true;              // Need third position to calculate center point.
-    }
-
-    return false;
-}
-
-
-void LIB_ARC::EndEdit()
-{
-    m_lastEditState = 0;
-    m_editState = 0;
+    m_editState = 1;
 }
 
 
 void LIB_ARC::CalcEdit( const wxPoint& aPosition )
 {
-    if( m_editState == 1 )
+    // Edit state 0: drawing: place ArcStart
+    // Edit state 1: drawing: place ArcEnd (center calculated for 90-degree subtended angle)
+    // Edit state 2: point editing: move ArcStart (center calculated for invariant subtended angle)
+    // Edit state 3: point editing: move ArcEnd (center calculated for invariant subtended angle)
+    // Edit state 4: point editing: move center
+
+    switch( m_editState )
     {
+    case 0:
+        m_ArcStart = aPosition;
         m_ArcEnd = aPosition;
+        m_Pos = aPosition;
+        break;
+
+    case 1:
+        m_ArcEnd = aPosition;
+        m_Radius = KiROUND( sqrt( pow( GetLineLength( m_ArcStart, m_ArcEnd ), 2 ) / 2.0 ) );
+        break;
+
+    case 2:
+    case 3:
+    {
+        wxPoint v = m_ArcStart - m_ArcEnd;
+        double chordBefore = v.x * v.x + v.y * v.y;
+
+        if( m_editState == 2 )
+            m_ArcStart = aPosition;
+        else
+            m_ArcEnd = aPosition;
+
+        v = m_ArcStart - m_ArcEnd;
+        double chordAfter = v.x * v.x + v.y * v.y;
+        double ratio = chordAfter / chordBefore;
+
+        m_Radius = KiROUND( sqrt( m_Radius * m_Radius * ratio ) );
+        break;
     }
 
-    if( m_editState != m_lastEditState )
-        m_lastEditState = m_editState;
+    case 4:
+        m_Radius = KiROUND( ( GetLineLength( m_ArcStart, aPosition )
+                              + GetLineLength( m_ArcEnd, aPosition ) ) / 2.0 );
+        break;
+    }
 
-    // Keep the arc center point up to date.  Otherwise, there will be edit graphic
-    // artifacts left behind from the initial draw.
-    int dx, dy;
-    int cX, cY;
-    double angle;
+    // Calculate center based on start, end, and radius
+    //
+    // Let 'l' be the length of the chord and 'm' the middle point of the chord
+    double  l = GetLineLength( m_ArcStart, m_ArcEnd );
+    wxPoint m = ( m_ArcStart + m_ArcEnd ) / 2;
 
-    cX = aPosition.x;
-    cY = aPosition.y;
+    // Calculate 'd', the vector from the chord midpoint to the center
+    wxPoint d;
+    d.x = KiROUND( sqrt( pow( m_Radius, 2 ) - pow( l/2, 2) ) * ( m_ArcStart.y - m_ArcEnd.y ) / l );
+    d.y = KiROUND( sqrt( pow( m_Radius, 2 ) - pow( l/2, 2) ) * ( m_ArcEnd.x - m_ArcStart.x ) / l );
 
-    dx = m_ArcEnd.x - m_ArcStart.x;
-    dy = m_ArcEnd.y - m_ArcStart.y;
-    cX -= m_ArcStart.x;
-    cY -= m_ArcStart.y;
-    angle = ArcTangente( dy, dx );
-    RotatePoint( &dx, &dy, angle );     /* The segment dx, dy is horizontal
-                                         * -> Length = dx, dy = 0 */
-    RotatePoint( &cX, &cY, angle );
-    cX = dx / 2;           /* cX, cY is on the median segment 0.0 a dx, 0 */
+    if( d.x < 0 || d.y < 0 )    // sqrt() doesn't like really small numbers...
+        d = { 0, 0 };
 
-    RotatePoint( &cX, &cY, -angle );
-    cX += m_ArcStart.x;
-    cY += m_ArcStart.y;
-    m_Pos.x = cX;
-    m_Pos.y = cY;
+    wxPoint c1 = m + d;
+    wxPoint c2 = m - d;
+    wxPoint test = ( m_editState == 4 ) ? aPosition : m_Pos;
+
+    m_Pos = ( GetLineLength( c1, test ) < GetLineLength( c2, test ) ) ? c1 : c2;
+
     CalcRadiusAngles();
 }
 

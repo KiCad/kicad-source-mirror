@@ -47,11 +47,7 @@ class LIB_ARC : public LIB_ITEM
     wxPoint  m_ArcEnd;          /* Arc end position. */
     wxPoint  m_Pos;             /* Radius center point. */
     int      m_Width;           /* Line width */
-    double   m_editCenterDistance;
-    SELECT_T m_editSelectPoint;
     int      m_editState;
-    int      m_editDirection;
-    int      m_lastEditState;
 
     void print( wxDC* aDC, const wxPoint& aOffset, void* aData,
                 const TRANSFORM& aTransform ) override;
@@ -84,8 +80,7 @@ public:
 
     void BeginEdit( const wxPoint aStartPoint ) override;
     void CalcEdit( const wxPoint& aPosition ) override;
-    bool ContinueEdit( const wxPoint aNextPoint ) override;
-    void EndEdit() override;
+    void SetEditState( int aState ) { m_editState = aState; }
 
     void Offset( const wxPoint& aOffset ) override;
 
