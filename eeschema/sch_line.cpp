@@ -279,6 +279,8 @@ int SCH_LINE::GetDefaultWidth() const
 {
     if( m_Layer == LAYER_BUS )
         return GetDefaultBusThickness();
+    else if( m_Layer == LAYER_WIRE )
+        return GetDefaultWireThickness();
 
     return GetDefaultLineThickness();
 }
@@ -297,11 +299,8 @@ int SCH_LINE::GetPenSize() const
 {
     if( m_size > 0 )
         return m_size;
-
-    if( m_Layer == LAYER_BUS )
-        return GetDefaultBusThickness();
-
-    return GetDefaultLineThickness();
+    
+    return GetDefaultWidth();
 }
 
 
