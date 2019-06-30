@@ -1,10 +1,16 @@
 #!/bin/bash
 
 # author: Maciej Suminski <maciej.suminski@cern.ch>
-# contributors: madworm
+# contributors: madworm, imcinerney
 
-SNAPSHOT_REV="99a20162d5038a328d335d11da69c9eee0549fdc"
-SNAPSHOT_GIT="git://git.code.sf.net/p/ngspice/ngspice"
+# Set to 1 to pull the tag given by NGSPICE_GIT_TAG
+# Set to 0 to pull the commit with the has given by NGSPICE_GIT_HASH
+USE_GIT_TAG=1
+
+NGSPICE_GIT_TAG="ngspice-30-2"
+NGSPICE_GIT_HASH="d6f5a32c93a46b6dec8a5097533ddf682cecf2d9"
+
+NGSPICE_GIT="git://git.code.sf.net/p/ngspice/ngspice"
 
 BUILD_DIR="/tmp/libngspice_so"
 SRC_DIR="${BUILD_DIR}/ngspice"
@@ -73,13 +79,13 @@ cd "${BUILD_DIR}" || exit
 echo "libngspice (for KiCad) builder v1.2"
 echo "(c) CERN 2016"
 echo "author: Maciej Suminski <maciej.suminski@cern.ch>"
-echo "contributors: madworm"
+echo "contributors: madworm, imcinerney"
 echo
 echo "PREREQUISITES: autoconf automake bison flex gcc git libtool make"
 echo
 
 echo "*** Downloading ngspice source code.. ***"
-git clone ${SNAPSHOT_GIT}
+git clone ${NGSPICE_GIT}
 
 if [ $? != 0 ]; then
     echo "*** An error occurred when downloading the source code ***"
@@ -94,7 +100,14 @@ else
 fi
 
 echo "*** Building libngspice shared library.. ***"
-git checkout ${SNAPSHOT_REV}
+if [ $USE_GIT_TAG == 1 ]; then
+    echo "*** Checking out tag ${NGSPICE_GIT_TAG} ***"
+    git checkout tags/${NGSPICE_GIT_TAG}
+else
+    echo "*** Checking out git commit ${NGSPICE_GIT_HASH} ***"
+    git checkout ${NGSPICE_GIT_HASH}
+fi
+
 ./autogen.sh
 ./configure --with-ngshared --enable-xspice --enable-cider ${CFG_OPTIONS}
 make
