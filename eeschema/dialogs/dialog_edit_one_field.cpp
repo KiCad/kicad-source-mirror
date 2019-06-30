@@ -43,36 +43,7 @@
 #include <sch_validators.h>
 
 #include <dialog_edit_one_field.h>
-
-
-// These should probably moved into some other file as helpers.
-EDA_TEXT_HJUSTIFY_T IntToEdaTextHorizJustify( int aHorizJustify )
-{
-    wxASSERT( aHorizJustify >= GR_TEXT_HJUSTIFY_LEFT && aHorizJustify <= GR_TEXT_HJUSTIFY_RIGHT );
-
-    if( aHorizJustify > GR_TEXT_HJUSTIFY_RIGHT )
-        return GR_TEXT_HJUSTIFY_RIGHT;
-
-    if( aHorizJustify < GR_TEXT_HJUSTIFY_LEFT )
-        return GR_TEXT_HJUSTIFY_LEFT;
-
-    return (EDA_TEXT_HJUSTIFY_T) aHorizJustify;
-}
-
-
-EDA_TEXT_VJUSTIFY_T IntToEdaTextVertJustify( int aVertJustify )
-{
-    wxASSERT( aVertJustify >= GR_TEXT_VJUSTIFY_TOP && aVertJustify <= GR_TEXT_VJUSTIFY_BOTTOM );
-
-    if( aVertJustify > GR_TEXT_VJUSTIFY_BOTTOM )
-        return GR_TEXT_VJUSTIFY_BOTTOM;
-
-    if( aVertJustify < GR_TEXT_VJUSTIFY_TOP )
-        return GR_TEXT_VJUSTIFY_TOP;
-
-    return (EDA_TEXT_VJUSTIFY_T) aVertJustify;
-}
-
+#include <sch_text.h>
 
 DIALOG_EDIT_ONE_FIELD::DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxString& aTitle,
                                               const EDA_TEXT* aTextItem ) :
@@ -221,8 +192,8 @@ void DIALOG_EDIT_ONE_FIELD::updateText( EDA_TEXT* aText )
     aText->SetTextAngle( m_isVertical ? TEXT_ANGLE_VERT : TEXT_ANGLE_HORIZ );
     aText->SetItalic( m_isItalic );
     aText->SetBold( m_isBold );
-    aText->SetHorizJustify( IntToEdaTextHorizJustify( m_horizontalJustification - 1 ) );
-    aText->SetVertJustify( IntToEdaTextVertJustify( m_verticalJustification - 1 ) );
+    aText->SetHorizJustify( EDA_TEXT::MapHorizJustify( m_horizontalJustification - 1 ) );
+    aText->SetVertJustify( EDA_TEXT::MapVertJustify( m_verticalJustification - 1 ) );
 }
 
 
@@ -285,10 +256,10 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
     if( ( aField->GetTextAngle() == TEXT_ANGLE_VERT ) != m_isVertical )
         positioningModified = true;
 
-    if( aField->GetHorizJustify() != IntToEdaTextHorizJustify( m_horizontalJustification - 1 ) )
+    if( aField->GetHorizJustify() != EDA_TEXT::MapHorizJustify( m_horizontalJustification - 1 ) )
         positioningModified = true;
 
-    if( aField->GetVertJustify() != IntToEdaTextVertJustify( m_verticalJustification - 1 ) )
+    if( aField->GetVertJustify() != EDA_TEXT::MapVertJustify( m_verticalJustification - 1 ) )
         positioningModified = true;
 
     aField->SetText( m_text );

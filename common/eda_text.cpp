@@ -37,6 +37,55 @@
 #include <base_units.h>
 #include <convert_to_biu.h>
 
+// Sadly we store the orientation of hierarchical and global labels using a different
+// int encoding than that for local labels:
+//                   Global      Local
+// Left justified      0           2
+// Up                  1           3
+// Right justified     2           0
+// Down                3           1
+int EDA_TEXT::MapOrientation( KICAD_T labelType, int aOrientation )
+{
+    if( labelType == SCH_LABEL_T )
+        return aOrientation;
+
+    switch( aOrientation )
+    {
+    case 0: return 2;
+    case 2: return 0;
+    default: return aOrientation;
+    }
+}
+
+
+EDA_TEXT_HJUSTIFY_T EDA_TEXT::MapHorizJustify( int aHorizJustify )
+{
+    wxASSERT( aHorizJustify >= GR_TEXT_HJUSTIFY_LEFT && aHorizJustify <= GR_TEXT_HJUSTIFY_RIGHT );
+
+    if( aHorizJustify > GR_TEXT_HJUSTIFY_RIGHT )
+        return GR_TEXT_HJUSTIFY_RIGHT;
+
+    if( aHorizJustify < GR_TEXT_HJUSTIFY_LEFT )
+        return GR_TEXT_HJUSTIFY_LEFT;
+
+    return (EDA_TEXT_HJUSTIFY_T) aHorizJustify;
+}
+
+
+EDA_TEXT_VJUSTIFY_T EDA_TEXT::MapVertJustify( int aVertJustify )
+{
+    wxASSERT( aVertJustify >= GR_TEXT_VJUSTIFY_TOP && aVertJustify <= GR_TEXT_VJUSTIFY_BOTTOM );
+
+    if( aVertJustify > GR_TEXT_VJUSTIFY_BOTTOM )
+        return GR_TEXT_VJUSTIFY_BOTTOM;
+
+    if( aVertJustify < GR_TEXT_VJUSTIFY_TOP )
+        return GR_TEXT_VJUSTIFY_TOP;
+
+    return (EDA_TEXT_VJUSTIFY_T) aVertJustify;
+}
+
+
 EDA_TEXT::EDA_TEXT( const wxString& text ) :
     m_Text( text ),
     m_e( 1<<TE_VISIBLE )

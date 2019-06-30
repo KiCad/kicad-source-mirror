@@ -156,6 +156,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AddItem( ACTIONS::findAndReplace,             EE_CONDITIONS::ShowAlways );
 
     editMenu->AddSeparator();
+    editMenu->AddItem( EE_ACTIONS::editTextAndGraphics,     EE_CONDITIONS::ShowAlways );
     editMenu->AddItem( EE_ACTIONS::updateFieldsFromLibrary, EE_CONDITIONS::ShowAlways );
 
     editMenu->Resolve();

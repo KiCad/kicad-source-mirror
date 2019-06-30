@@ -224,7 +224,13 @@ public:
 
     void Empty()                                { m_Text.Empty(); }
 
-    /**
+    static int MapOrientation( KICAD_T labelType, int aOrientation );
+
+    static EDA_TEXT_HJUSTIFY_T MapHorizJustify( int aHorizJustify );
+
+    static EDA_TEXT_VJUSTIFY_T MapVertJustify( int aVertJustify );
+
+        /**
      * Function Print
      * @param aDC = the current Device Context
      * @param aOffset = draw offset (usually (0,0))

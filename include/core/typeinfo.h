@@ -134,6 +134,10 @@ enum KICAD_T
     SCH_LINE_LOCATE_BUS_T,
     SCH_LINE_LOCATE_GRAPHIC_LINE_T,
 
+    // Same for picking labes attached to wires and/or busses
+    SCH_LABEL_LOCATE_WIRE_T,
+    SCH_LABEL_LOCATE_BUS_T,
+
     // matches any type
     SCH_LOCATE_ANY_T,
 

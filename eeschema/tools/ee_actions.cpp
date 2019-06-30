@@ -462,6 +462,12 @@ TOOL_ACTION EE_ACTIONS::cleanupSheetPins( "eeschema.InteractiveEdit.cleanupSheet
         _( "Cleanup Sheet Pins" ), _( "Delete unreferenced sheet pins" ),
         nullptr );
 
+TOOL_ACTION EE_ACTIONS::editTextAndGraphics( "eeschema.InteractiveEdit.editTextAndGraphics",
+        AS_GLOBAL, 0, "",
+        _( "Edit Text & Graphics Properties..." ),
+        _( "Edit text and graphics properties globally across schematic" ),
+        reset_text_xpm );
+
 TOOL_ACTION EE_ACTIONS::symbolProperties( "eeschema.InteractiveEdit.symbolProperties",
         AS_GLOBAL, 0, "",
         _( "Symbol Properties..." ), _( "Displays symbol properties dialog" ),

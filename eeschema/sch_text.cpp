@@ -661,6 +661,38 @@ EDA_ITEM* SCH_LABEL::Clone() const
 }
 
 
+bool SCH_LABEL::IsType( const KICAD_T aScanTypes[] )
+{
+    static KICAD_T wireTypes[] = { SCH_LINE_LOCATE_WIRE_T, EOT };
+    static KICAD_T busTypes[] = { SCH_LINE_LOCATE_BUS_T, EOT };
+
+    if( SCH_ITEM::IsType( aScanTypes ) )
+        return true;
+
+    for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+    {
+        if( *p == SCH_LABEL_LOCATE_WIRE_T )
+        {
+            for( SCH_ITEM* connection : m_connected_items )
+            {
+                if( connection->IsType( wireTypes ) )
+                    return true;
+            }
+        }
+        else if ( *p == SCH_LABEL_LOCATE_BUS_T )
+        {
+            for( SCH_ITEM* connection : m_connected_items )
+            {
+                if( connection->IsType( busTypes ) )
+                    return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+
 const EDA_RECT SCH_LABEL::GetBoundingBox() const
 {
     int         linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();

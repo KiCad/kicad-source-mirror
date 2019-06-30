@@ -219,6 +219,8 @@ public:
         return wxT( "SCH_LABEL" );
     }
 
+    bool IsType( const KICAD_T aScanTypes[] ) override ;
+
     const EDA_RECT GetBoundingBox() const override;
 
     bool IsConnectable() const override { return true; }
