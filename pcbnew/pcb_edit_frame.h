@@ -564,15 +564,15 @@ public:
      * @param aUnitsMM = false to use inches, true to use mm in coordinates
      * @param aForceSmdItems = true to force all footprints with smd pads in list
      *                       = false to put only footprints with option "INSERT" in list
-     * @param aSide = 0 to list footprints on BACK side,
-     *                1 to list footprints on FRONT side
-     *                2 to list footprints on both sides
+     * @param aTopSide true to list footprints on front (top) side,
+     * @param BottomSide true to list footprints on back (bottom) side,
+     * if aTopSide and aTopSide are true, list footprints on both sides
      * @param aFormatCSV = true to use a comma separated file (CSV) format; defautl = false
      * @return the number of footprints found on aSide side,
      *    or -1 if the file could not be created
      */
     int DoGenFootprintsPositionFile( const wxString& aFullFileName, bool aUnitsMM,
-                                      bool aForceSmdItems, int aSide, bool aFormatCSV = false );
+                                      bool aForceSmdItems, bool aTopSide, bool BottomSide, bool aFormatCSV = false );
 
     /**
      * Function GenFootprintsReport
@@ -1008,7 +1008,7 @@ public:
     void UpdateTitle();
 
     void On3DShapeLibWizard( wxCommandEvent& event );
-    
+
     /**
      * Allows Pcbnew to install its preferences panel into the preferences dialog.
      */
