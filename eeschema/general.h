@@ -114,6 +114,12 @@ void SetDefaultTextSize( int aSize );
 int GetDefaultBusThickness();
 void SetDefaultBusThickness( int aThickness );
 
+/**
+ * Default line thickness used to draw/plot wires.
+ */
+int GetDefaultWireThickness();
+void SetDefaultWireThickness( int aThickness );
+
 COLOR4D  GetLayerColor( SCH_LAYER_ID aLayer );
 void     SetLayerColor( COLOR4D aColor, SCH_LAYER_ID aLayer );
 

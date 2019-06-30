@@ -38,9 +38,9 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public wxPanel
 		wxStaticText* m_busWidthLabel;
 		wxTextCtrl* m_busWidthCtrl;
 		wxStaticText* m_busWidthUnits;
-		wxStaticText* m_lineWidthLabel;
-		wxTextCtrl* m_lineWidthCtrl;
-		wxStaticText* m_lineWidthUnits;
+		wxStaticText* m_wireWidthLabel;
+		wxTextCtrl* m_wireWidthCtrl;
+		wxStaticText* m_wireWidthUnits;
 		wxStaticText* m_jctSizeLabel;
 		wxTextCtrl* m_jctSizeCtrl;
 		wxStaticText* m_jctSizeUnits;

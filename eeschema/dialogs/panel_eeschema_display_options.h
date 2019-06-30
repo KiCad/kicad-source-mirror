@@ -20,6 +20,7 @@
 #ifndef KICAD_PANEL_EESCHEMA_DISPLAY_OPTIONS_H
 #define KICAD_PANEL_EESCHEMA_DISPLAY_OPTIONS_H
 
+#include <widgets/unit_binder.h>
 #include "panel_eeschema_display_options_base.h"
 
 class SCH_EDIT_FRAME;
@@ -31,6 +32,10 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS : public PANEL_EESCHEMA_DISPLAY_OPTIONS_BAS
     SCH_EDIT_FRAME*    m_frame;
 
     GAL_OPTIONS_PANEL* m_galOptsPanel;
+
+    UNIT_BINDER        m_busWidth;
+    UNIT_BINDER        m_wireWidth;
+    UNIT_BINDER        m_junctionSize;
 
 public:
     PANEL_EESCHEMA_DISPLAY_OPTIONS( SCH_EDIT_FRAME* aFrame, wxWindow* aWindow );

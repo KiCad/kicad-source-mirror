@@ -42,16 +42,16 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	m_busWidthUnits->Wrap( -1 );
 	fgSizer32->Add( m_busWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
-	m_lineWidthLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("&Line thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_lineWidthLabel->Wrap( -1 );
-	fgSizer32->Add( m_lineWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_wireWidthLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("&Wire thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_wireWidthLabel->Wrap( -1 );
+	fgSizer32->Add( m_wireWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
-	m_lineWidthCtrl = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP );
-	fgSizer32->Add( m_lineWidthCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	m_wireWidthCtrl = new wxTextCtrl( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP );
+	fgSizer32->Add( m_wireWidthCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_lineWidthUnits = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_lineWidthUnits->Wrap( -1 );
-	fgSizer32->Add( m_lineWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_wireWidthUnits = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_wireWidthUnits->Wrap( -1 );
+	fgSizer32->Add( m_wireWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_jctSizeLabel = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Junction size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_jctSizeLabel->Wrap( -1 );

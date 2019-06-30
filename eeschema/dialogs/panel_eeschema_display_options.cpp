@@ -35,7 +35,10 @@
 PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( SCH_EDIT_FRAME* aFrame,
                                                                 wxWindow* aWindow ) :
         PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( aWindow ),
-        m_frame( aFrame )
+        m_frame( aFrame ),
+        m_busWidth( aFrame, m_busWidthLabel, m_busWidthCtrl, m_busWidthUnits, true ),
+        m_wireWidth( aFrame, m_wireWidthLabel, m_wireWidthCtrl, m_wireWidthUnits, true ),
+        m_junctionSize( aFrame, m_jctSizeLabel, m_jctSizeCtrl, m_jctSizeUnits, true )
 {
     KIGFX::GAL_DISPLAY_OPTIONS& galOptions = m_frame->GetGalDisplayOptions();
     m_galOptsPanel = new GAL_OPTIONS_PANEL( this, galOptions );
@@ -60,9 +63,13 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
 
     m_choiceSeparatorRefId->SetSelection( refStyleSelection );
 
-    m_busWidthCtrl->SetValue( StringFromValue( INCHES, GetDefaultBusThickness(), false, true ) );
-    m_lineWidthCtrl->SetValue( StringFromValue( INCHES, GetDefaultLineThickness(), false, true ) );
-    m_jctSizeCtrl->SetValue( StringFromValue( INCHES, SCH_JUNCTION::GetSymbolSize(), false, true ) );
+    m_busWidth.SetUnits( INCHES, true );
+    m_wireWidth.SetUnits( INCHES, true );
+    m_junctionSize.SetUnits( INCHES, true );
+
+    m_busWidth.SetValue( GetDefaultBusThickness() );
+    m_wireWidth.SetValue( GetDefaultWireThickness() );
+    m_junctionSize.SetValue( SCH_JUNCTION::GetSymbolSize() );
     m_checkShowHiddenPins->SetValue( m_frame->GetShowAllPins() );
     m_checkPageLimits->SetValue( m_frame->ShowPageLimits() );
 
@@ -96,9 +103,9 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
         m_frame->SaveProjectSettings( false );
     }
 
-    SetDefaultBusThickness( ValueFromString( INCHES, m_busWidthCtrl->GetValue(), true ) );
-    SetDefaultLineThickness( ValueFromString( INCHES, m_lineWidthCtrl->GetValue(), true ) );
-    SCH_JUNCTION::SetSymbolSize( ValueFromString( INCHES, m_jctSizeCtrl->GetValue(), true ) );
+    SetDefaultBusThickness( m_busWidth.GetValue() );
+    SetDefaultWireThickness( m_wireWidth.GetValue() );
+    SCH_JUNCTION::SetSymbolSize( m_junctionSize.GetValue() );
     m_frame->SetShowAllPins( m_checkShowHiddenPins->GetValue() );
     m_frame->SetShowPageLimits( m_checkPageLimits->GetValue() );
 

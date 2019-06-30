@@ -68,6 +68,24 @@ void SetDefaultBusThickness( int aThickness)
 }
 
 
+static int s_defaultWireThickness  = DEFAULTDRAWLINETHICKNESS;
+
+
+int GetDefaultWireThickness()
+{
+    return s_defaultWireThickness;
+}
+
+
+void SetDefaultWireThickness( int aThickness )
+{
+    if( aThickness >=1 )
+        s_defaultWireThickness = aThickness;
+    else
+        s_defaultWireThickness = 1;
+}
+
+
 /// Default size for text (not only labels)
 static int s_defaultTextSize = DEFAULT_SIZE_TEXT;
 
@@ -259,6 +277,7 @@ static const wxChar DragActionIsMoveEntry[] =       wxT( "DragActionIsMove" );
 static const wxChar DragAlwaysSelectsEntry[] =      wxT( "DragAlwaysSelects" );
 static const wxChar FootprintPreviewEntry[] =       wxT( "FootprintPreview" );
 static const wxChar DefaultBusWidthEntry[] =        wxT( "DefaultBusWidth" );
+static const wxChar DefaultWireWidthEntry[] =       wxT( "DefaultWireWidth" );
 static const wxChar DefaultDrawLineWidthEntry[] =   wxT( "DefaultDrawLineWidth" );
 static const wxChar DefaultJctSizeEntry[] =         wxT( "DefaultJunctionSize" );
 static const wxChar ShowHiddenPinsEntry[] =         wxT( "ShowHiddenPins" );
@@ -332,7 +351,12 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
     SetDefaultBusThickness( (int) aCfg->Read( DefaultBusWidthEntry, DEFAULTBUSTHICKNESS ) );
-    SetDefaultLineThickness( (int) aCfg->Read( DefaultDrawLineWidthEntry, DEFAULTDRAWLINETHICKNESS ) );
+
+    if( !aCfg->Read( DefaultWireWidthEntry, &tmp ) )
+        aCfg->Read( DefaultDrawLineWidthEntry, &tmp, DEFAULTDRAWLINETHICKNESS );
+
+    SetDefaultWireThickness( tmp );
+
     SCH_JUNCTION::SetSymbolSize( (int) aCfg->Read( DefaultJctSizeEntry, SCH_JUNCTION::GetSymbolSize() ) );
     aCfg->Read( MoveWarpsCursorEntry, &m_moveWarpsCursor, true );
     aCfg->Read( MoveTakesCursorAsOriginEntry, &m_moveTakesCursorAsOrigin, false );
@@ -412,7 +436,7 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( DragActionIsMoveEntry, m_dragActionIsMove );
     aCfg->Write( DragAlwaysSelectsEntry, m_dragAlwaysSelects );
     aCfg->Write( DefaultBusWidthEntry, (long) GetDefaultBusThickness() );
-    aCfg->Write( DefaultDrawLineWidthEntry, (long) GetDefaultLineThickness() );
+    aCfg->Write( DefaultWireWidthEntry, (long) GetDefaultWireThickness() );
     aCfg->Write( DefaultJctSizeEntry, (long) SCH_JUNCTION::GetSymbolSize() );
     aCfg->Write( ShowHiddenPinsEntry, m_showAllPins );
     aCfg->Write( HorzVertLinesOnlyEntry, GetForceHVLines() );
