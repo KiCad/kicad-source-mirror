@@ -709,11 +709,18 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnFootprintNameText( wxCommandEvent& event )
 
 void DIALOG_FOOTPRINT_FP_EDITOR::OnFootprintNameKillFocus( wxFocusEvent& event )
 {
-    if( !m_delayedFocusCtrl && !checkFootprintName( m_FootprintNameCtrl->GetValue() ) )
+    // Only warn once on KillFocus for each error value; after that it just gets annoying.
+    // This also fixes a bug where we endlessly cycle in some edge cases.
+    static wxString lastValue = wxEmptyString;
+    wxString        valueNow = m_FootprintNameCtrl->GetValue();
+
+    if( !m_delayedFocusCtrl && valueNow != lastValue && !checkFootprintName( valueNow ) )
     {
         m_delayedFocusCtrl = m_FootprintNameCtrl;
         m_delayedFocusPage = 0;
     }
+
+    lastValue = valueNow;
 
     event.Skip();
 }
