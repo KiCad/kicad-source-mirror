@@ -1739,7 +1739,12 @@ void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* 
         });
     }
 
-    getView()->Update( aItem );
+    view()->Update( aItem );
+
+    // Many selections are very temporal and updating the display each time just
+    // creates noise.
+    if( aMode == BRIGHTENED )
+        getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
 }
 
 
@@ -1781,7 +1786,12 @@ void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION
         });
     }
 
-    getView()->Update( aItem );
+    view()->Update( aItem );
+
+    // Many selections are very temporal and updating the display each time just
+    // creates noise.
+    if( aMode == BRIGHTENED )
+        getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
 }
 
 
