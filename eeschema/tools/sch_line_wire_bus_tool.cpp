@@ -265,10 +265,7 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
         segment = startSegments( layer, cursorPos );
     }
 
-    doDrawSegments( layer, segment );
-
-    m_frame->PopTool();
-    return 0;
+    return doDrawSegments( layer, segment );
 }
 
 
@@ -316,10 +313,12 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 
     // If we have an unfolded wire to draw, then draw it
     if( segment )
-        doDrawSegments( LAYER_WIRE, segment );
-
-    m_frame->PopTool();
-    return 0;
+        return doDrawSegments( LAYER_WIRE, segment );
+    else
+    {
+        m_frame->PopTool();
+        return 0;
+    }
 }
 
 
@@ -461,35 +460,51 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
         //------------------------------------------------------------------------
         // Handle cancel:
         //
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        auto cleanup = [&] () {
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
+            aSegment = nullptr;
+            s_wires.DeleteAll();
+
+            if( m_busUnfold.entry )
+                m_frame->RemoveFromScreen( m_busUnfold.entry );
+
+            if( m_busUnfold.label && m_busUnfold.label_placed )
+                m_frame->RemoveFromScreen( m_busUnfold.label );
+
+            delete m_busUnfold.entry;
+            delete m_busUnfold.label;
+            m_busUnfold = {};
+
+            m_view->ClearPreview();
+            m_view->ShowPreview( false );
+        };
+
+        if( evt->IsCancelInteractive() )
         {
             if( aSegment || m_busUnfold.in_progress )
+                cleanup();
+            else
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-
-                aSegment = nullptr;
-                s_wires.DeleteAll();
-
-                if( m_busUnfold.entry )
-                    m_frame->RemoveFromScreen( m_busUnfold.entry );
-
-                if( m_busUnfold.label && m_busUnfold.label_placed )
-                    m_frame->RemoveFromScreen( m_busUnfold.label );
-
-                delete m_busUnfold.entry;
-                delete m_busUnfold.label;
-                m_busUnfold = {};
-
-                m_view->ClearPreview();
-                m_view->ShowPreview( false );
-            }
-            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-            {
+                m_frame->PopTool();
                 break;
             }
+        }
+        else if( evt->IsActivate() )
+        {
+            if( aSegment || m_busUnfold.in_progress )
+                cleanup();
 
-            if( evt->IsActivate() )
+            if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
                 break;
+            }
+            else
+            {
+                m_frame->PopTool();
+                break;
+            }
         }
         //------------------------------------------------------------------------
         // Handle finish:

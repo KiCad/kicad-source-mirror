@@ -185,7 +185,7 @@ TOOL_ACTION PCB_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
         _( "Edit Activate" ), "",
         move_xpm, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveEdit.move",
+TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveMove.move",
         AS_GLOBAL,
         'M', LEGACY_HK_NAME( "Move Item" ),
         _( "Move" ), _( "Moves the selected item(s)" ),

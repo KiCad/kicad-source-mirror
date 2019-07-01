@@ -295,8 +295,9 @@ static void CheckInvalidsMatchExpected( BOARD&          aBoard,
         const std::vector<COURTYARD_INVALID_INFO>&      aExpInvalids )
 {
     KI_TEST::CheckUnorderedMatches( aExpInvalids, aMarkers,
-            [&]( const COURTYARD_INVALID_INFO&         aInvalid,
-                    const std::unique_ptr<MARKER_PCB>& aMarker ) {
+            [&]( const COURTYARD_INVALID_INFO& aInvalid,
+                 const std::unique_ptr<MARKER_PCB>& aMarker )
+            {
                 return InvalidMatchesExpected( aBoard, *aMarker, aInvalid );
             } );
 }

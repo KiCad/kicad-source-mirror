@@ -295,7 +295,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( !m_editPoints || TOOL_EVT_UTILS::IsSelectionEvent( *evt ) )
+        if( !m_editPoints || evt->IsSelectionEvent() )
             break;
 
         if ( !inDrag )
@@ -328,7 +328,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
             inDrag = false;
         }
 
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
             if( inDrag )      // Restore the last change
             {
@@ -336,8 +336,11 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
                 inDrag = false;
                 modified = false;
             }
+            else if( evt->IsCancelInteractive() )
+                break;
 
-            break;
+            if( evt->IsActivate() && !evt->IsMoveTool() )
+                break;
         }
 
         else

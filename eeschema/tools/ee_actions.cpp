@@ -667,12 +667,12 @@ TOOL_ACTION EE_ACTIONS::finishLine( "eeschema.InteractiveDrawingLineWireBus.fini
 
 // SCH_MOVE_TOOL
 //
-TOOL_ACTION EE_ACTIONS::move( "eeschema.InteractiveEdit.move",
+TOOL_ACTION EE_ACTIONS::move( "eeschema.InteractiveMove.move",
         AS_GLOBAL,
         'M', LEGACY_HK_NAME( "Move Item" ),
         _( "Move" ), _( "Moves the selected item(s)" ), move_xpm, AF_ACTIVATE );
 
-TOOL_ACTION EE_ACTIONS::drag( "eeschema.InteractiveEdit.drag",
+TOOL_ACTION EE_ACTIONS::drag( "eeschema.InteractiveMove.drag",
         AS_GLOBAL,
         'G', LEGACY_HK_NAME( "Drag Item" ),
         _( "Drag" ), _( "Drags the selected item(s)" ), move_xpm, AF_ACTIVATE );

@@ -412,7 +412,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
         }
 
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
             restore_state = true; // Canceling the tool means that items have to be restored
             break;                // Finish
@@ -1135,22 +1135,39 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
         const VECTOR2I cursorPos = grid.BestSnapAnchor( controls.GetMousePosition(), nullptr );
         controls.ForceCursorPosition(true, cursorPos );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        auto clearRuler = [&] () {
+            view.SetVisible( &ruler, false );
+            controls.SetAutoPan( false );
+            controls.CaptureCursor( false );
+            originSet = false;
+        };
+
+        if( evt->IsCancelInteractive() )
         {
             if( originSet )
+                clearRuler();
+            else
             {
-                view.SetVisible( &ruler, false );
-                controls.SetAutoPan( false );
-                controls.CaptureCursor( false );
-                originSet = false;
-            }
-            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-            {
+                frame()->PopTool();
                 break;
             }
+        }
 
-            if( evt->IsActivate() )
+        else if( evt->IsActivate() )
+        {
+            if( originSet )
+                clearRuler();
+
+            if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
                 break;
+            }
+            else
+            {
+                frame()->PopTool();
+                break;
+            }
         }
 
         // click or drag starts
@@ -1203,7 +1220,6 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
     view.SetVisible( &ruler, false );
     view.Remove( &ruler );
-    frame()->PopTool();
     return 0;
 }
 

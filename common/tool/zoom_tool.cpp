@@ -52,7 +52,7 @@ int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
             break;
 
         else if( evt->IsDrag( BUT_LEFT ) || evt->IsDrag( BUT_RIGHT ) )
@@ -84,7 +84,7 @@ bool ZOOM_TOOL::selectRegion()
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
             cancelled = true;
             break;

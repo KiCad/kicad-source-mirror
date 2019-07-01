@@ -36,6 +36,12 @@ class BOARD_COMMIT;
 class BOARD_ITEM;
 class CONNECTIVITY_DATA;
 
+namespace KIGFX {
+    namespace PREVIEW {
+        class RULER_ITEM;
+    }
+}
+
 /**
  * Function EditToolSelectionFilter
  *
@@ -195,6 +201,8 @@ private:
     ///> Last cursor position (needed for getModificationPoint() to avoid changes
     ///> of edit reference point).
     VECTOR2I m_cursor;
+
+    KIGFX::PREVIEW::RULER_ITEM* m_ruler;
 
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.

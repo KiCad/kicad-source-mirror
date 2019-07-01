@@ -338,7 +338,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
-        if( !m_editPoints || TOOL_EVT_UTILS::IsSelectionEvent( *evt ) )
+        if( !m_editPoints || evt->IsSelectionEvent() )
             break;
 
         if ( !inDrag )
@@ -387,12 +387,15 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             m_refill = true;
         }
 
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
             if( inDrag )      // Restore the last change
                 commit.Revert();
+            else if( evt->IsCancelInteractive() )
+                break;
 
-            break;
+            if( evt->IsActivate() && !evt->IsMoveTool() )
+                break;
         }
 
         else

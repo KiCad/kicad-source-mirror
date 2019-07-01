@@ -76,6 +76,8 @@ protected:
     GRID_HELPER* m_gridHelper;
     PNS_KICAD_IFACE* m_iface;
     ROUTER* m_router;
+
+    bool m_cancelled;
 };
 
 }

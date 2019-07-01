@@ -93,24 +93,40 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
         m_frame->GetCanvas()->SetCurrentCursor( item ? wxCURSOR_ARROW : wxCURSOR_PENCIL );
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        auto cleanup = [&] () {
+            m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
+            delete item;
+            item = nullptr;
+
+            // There's nothing to roll-back, but we still need to pop the undo stack
+            m_frame->RollbackFromUndo();
+        };
+
+        if( evt->IsCancelInteractive() )
         {
             if( item )
+                cleanup();
+            else
             {
-                m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
-                delete item;
-                item = nullptr;
-
-                // There's nothing to roll-back, but we still need to pop the undo stack
-                m_frame->RollbackFromUndo();
-            }
-            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-            {
+                m_frame->PopTool();
                 break;
             }
+        }
+        else if( evt->IsActivate() )
+        {
+            if( item )
+                cleanup();
 
-            if( evt->IsActivate() )
+            if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
                 break;
+            }
+            else
+            {
+                m_frame->PopTool();
+                break;
+            }
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -163,7 +179,6 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
-    m_frame->PopTool();
     return 0;
 }
 
@@ -196,7 +211,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
             m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
 
@@ -205,12 +220,12 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 item = nullptr;
                 m_frame->RollbackFromUndo();
             }
-            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+            else if( evt->IsCancelInteractive() )
             {
                 break;
             }
 
-            if( evt->IsActivate() && !TOOL_EVT_UTILS::IsPointEditor( *evt ) )
+            if( evt->IsActivate() && !evt->IsPointEditor() && !evt->IsMoveTool() )
                 break;
         }
 

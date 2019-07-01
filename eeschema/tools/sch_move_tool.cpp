@@ -335,7 +335,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         //------------------------------------------------------------------------
         // Handle cancel
         //
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        else if( evt->IsCancelInteractive() )
         {
             if( m_moveInProgress )
                 restore_state = true;

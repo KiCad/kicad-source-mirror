@@ -118,22 +118,38 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
         m_frame->GetCanvas()->SetCurrentCursor( component ? wxCURSOR_ARROW : wxCURSOR_PENCIL );
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        auto cleanup = [&] () {
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+            m_view->ClearPreview();
+            delete component;
+            component = nullptr;
+        };
+
+        if( evt->IsCancelInteractive() )
         {
             if( component )
+                cleanup();
+            else
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-                m_view->ClearPreview();
-                delete component;
-                component = nullptr;
-            }
-            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-            {
+                m_frame->PopTool();
                 break;
             }
+        }
+        else if( evt->IsActivate() )
+        {
+            if( component )
+                cleanup();
 
-            if( evt->IsActivate() )
+            if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
                 break;
+            }
+            else
+            {
+                m_frame->PopTool();
+                break;
+            }
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -210,7 +226,6 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
         getViewControls()->CaptureCursor( component != nullptr );
     }
 
-    m_frame->PopTool();
     return 0;
 }
 
@@ -247,25 +262,44 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         m_frame->GetCanvas()->SetCurrentCursor( image ? wxCURSOR_ARROW : wxCURSOR_PENCIL );
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate()  )
+        auto cleanup = [&] () {
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+            m_view->ClearPreview();
+            delete image;
+            image = nullptr;
+        };
+
+        if( evt->IsCancelInteractive() )
         {
             if( image )
+                cleanup();
+            else
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-                m_view->ClearPreview();
-                delete image;
-                image = nullptr;
-
-                if( immediateMode )
-                    break;
-            }
-            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-            {
+                m_frame->PopTool();
                 break;
             }
 
-            if( evt->IsActivate() )
+            if( immediateMode )
+            {
+                m_frame->PopTool();
                 break;
+            }
+        }
+        else if( evt->IsActivate() )
+        {
+            if( image )
+                cleanup();
+
+            if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
+                break;
+            }
+            else
+            {
+                m_frame->PopTool();
+                break;
+            }
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -315,7 +349,10 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 m_view->ClearPreview();
 
                 if( immediateMode )
+                {
+                    m_frame->PopTool();
                     break;
+                }
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -339,7 +376,6 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( image != nullptr );
     }
 
-    m_frame->PopTool();
     return 0;
 }
 
@@ -403,9 +439,23 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
         cursorPos = (wxPoint) getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        if( evt->IsCancelInteractive() )
         {
+            m_frame->PopTool();
             break;
+        }
+        else if( evt->IsActivate() )
+        {
+            if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
+                break;
+            }
+            else
+            {
+                m_frame->PopTool();
+                break;
+            }
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -442,7 +492,6 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     delete previewItem;
     m_view->ClearPreview();
 
-    m_frame->PopTool();
     return 0;
 }
 
@@ -469,22 +518,42 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         m_frame->GetCanvas()->SetCurrentCursor( item ? wxCURSOR_ARROW : wxCURSOR_PENCIL );
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        auto cleanup = [&] () {
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+            m_view->ClearPreview();
+            delete item;
+            item = nullptr;
+        };
+
+        if( evt->IsCancelInteractive() )
         {
             if( item )
+                cleanup();
+            else
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-                m_view->ClearPreview();
-                delete item;
-                item = nullptr;
-            }
-            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-            {
+                m_frame->PopTool();
                 break;
             }
+        }
+        else if( evt->IsActivate() )
+        {
+            if( item )
+                cleanup();
 
-            if( evt->IsActivate() )
+            if( evt->IsPointEditor() )
+            {
+                // don't exit (the point editor runs in the background)
+            }
+            else if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
                 break;
+            }
+            else
+            {
+                m_frame->PopTool();
+                break;
+            }
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -585,7 +654,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
-        else if( item && TOOL_EVT_UTILS::IsSelectionEvent( *evt ) )
+        else if( item && evt->IsSelectionEvent() )
         {
             // This happens if our text was replaced out from under us by ConvertTextType()
             EE_SELECTION& selection = m_selectionTool->GetSelection();
@@ -611,7 +680,6 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
-    m_frame->PopTool();
     return 0;
 }
 
@@ -639,23 +707,42 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
-        {
+        auto cleanup = [&] () {
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
             m_view->ClearPreview();
+            delete sheet;
+            sheet = nullptr;
+        };
 
+        if( evt->IsCancelInteractive() )
+        {
             if( sheet )
+                cleanup();
+            else
             {
-                delete sheet;
-                sheet = nullptr;
-            }
-            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-            {
+                m_frame->PopTool();
                 break;
             }
+        }
+        else if( evt->IsActivate() )
+        {
+            if( sheet )
+                cleanup();
 
-            if( evt->IsActivate() )
+            if( evt->IsPointEditor() )
+            {
+                // don't exit (the point editor runs in the background)
+            }
+            else if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
                 break;
+            }
+            else
+            {
+                m_frame->PopTool();
+                break;
+            }
         }
 
         else if( evt->IsClick( BUT_LEFT ) && !sheet )
@@ -712,7 +799,6 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( sheet != nullptr);
     }
 
-    m_frame->PopTool();
     return 0;
 }
 

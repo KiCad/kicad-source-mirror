@@ -92,7 +92,7 @@ int EE_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
             }
         }
 
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
             if( m_cancelHandler )
             {

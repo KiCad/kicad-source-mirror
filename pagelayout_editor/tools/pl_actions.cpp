@@ -60,7 +60,7 @@ TOOL_ACTION PL_ACTIONS::placeImage( "plEditor.InteractiveDrawing.placeImage",
 
 // PL_EDIT_TOOL
 //
-TOOL_ACTION PL_ACTIONS::move( "plEditor.InteractiveEdit.move",
+TOOL_ACTION PL_ACTIONS::move( "plEditor.InteractiveMove.move",
         AS_GLOBAL,
         'M', LEGACY_HK_NAME( "Move Item" ),
         _( "Move" ), _( "Moves the selected item(s)" ),

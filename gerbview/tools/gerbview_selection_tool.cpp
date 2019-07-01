@@ -355,7 +355,7 @@ bool GERBVIEW_SELECTION_TOOL::selectMultiple()
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( evt->IsCancelInteractive() )
         {
             cancelled = true;
             break;
@@ -777,22 +777,39 @@ int GERBVIEW_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
         const VECTOR2I cursorPos = controls.GetCursorPosition();
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        auto clearRuler = [&] () {
+            view.SetVisible( &ruler, false );
+            controls.SetAutoPan( false );
+            controls.CaptureCursor( false );
+            originSet = false;
+        };
+
+        if( evt->IsCancelInteractive() )
         {
             if( originSet )
+                clearRuler();
+            else
             {
-                view.SetVisible( &ruler, false );
-                controls.SetAutoPan( false );
-                controls.CaptureCursor( false );
-                originSet = false;
-            }
-            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-            {
+                m_frame->PopTool();
                 break;
             }
+        }
 
-            if( evt->IsActivate() )
+        else if( evt->IsActivate() )
+        {
+            if( originSet )
+                clearRuler();
+
+            if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
                 break;
+            }
+            else
+            {
+                m_frame->PopTool();
+                break;
+            }
         }
 
         // click or drag starts
@@ -848,7 +865,6 @@ int GERBVIEW_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     view.SetVisible( &ruler, false );
     view.Remove( &ruler );
     controls.ApplySettings( previous_settings );
-    m_frame->PopTool();
     return 0;
 }
 

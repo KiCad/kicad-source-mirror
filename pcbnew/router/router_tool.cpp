@@ -805,10 +805,18 @@ void ROUTER_TOOL::performRouting()
                 still_routing = m_router->FixRoute( m_endSnapPoint, m_endItem );
             break;
         }
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate()
+        else if( evt->IsCancelInteractive() || evt->IsActivate()
                  || evt->IsUndoRedo()
                  || evt->IsAction( &PCB_ACTIONS::routerInlineDrag ) )
+        {
+            if( evt->IsCancelInteractive() && !m_router->RoutingInProgress() )
+                m_cancelled = true;
+
+            if( evt->IsActivate() && !evt->IsMoveTool() )
+                m_cancelled = true;
+
             break;
+        }
     }
 
     finishInteractive();
@@ -849,9 +857,7 @@ int ROUTER_TOOL::SettingsDialog( const TOOL_EVENT& aEvent )
 void ROUTER_TOOL::breakTrack()
 {
     if( m_startItem && m_startItem->OfKind( PNS::ITEM::SEGMENT_T ) )
-    {
         m_router->BreakSegment( m_startItem, m_startSnapPoint );
-    }
 }
 
 
@@ -871,6 +877,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     VIEW_CONTROLS* ctls = getViewControls();
     ctls->ShowCursor( true );
     ctls->ForceCursorPosition( false );
+    m_cancelled = false;
     m_startSnapPoint = ctls->GetCursorPosition();
 
     std::unique_ptr<ROUTER_TOOL_MENU> ctxMenu( new ROUTER_TOOL_MENU( *frame, mode ) );
@@ -885,9 +892,23 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     {
         frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        if( evt->IsCancelInteractive() )
         {
-            break; // Finish
+            frame->PopTool();
+            break;
+        }
+        else if( evt->IsActivate() )
+        {
+            if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
+                break;
+            }
+            else
+            {
+                frame->PopTool();
+                break;
+            }
         }
         else if( evt->Action() == TA_UNDO_REDO_PRE )
         {
@@ -928,14 +949,23 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 
             updateStartItem( *evt );
 
-            if( evt->Modifier( MD_CTRL ) )
-                performDragging( PNS::DM_ANY );
-            else
-                performRouting();
+            if( evt->HasPosition() )
+            {
+                if( evt->Modifier( MD_CTRL ) )
+                    performDragging( PNS::DM_ANY );
+                else
+                    performRouting();
+            }
         }
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
             m_toolMgr->RunAction( PCB_ACTIONS::layerToggle, true );
+        }
+
+        if( m_cancelled )
+        {
+            frame->PopTool();
+            break;
         }
     }
 
@@ -945,7 +975,6 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     m_savedSettings = m_router->Settings();
     m_savedSizes = m_router->Sizes();
 
-    frame->PopTool();
     return 0;
 }
 
@@ -991,9 +1020,14 @@ void ROUTER_TOOL::performDragging( int aMode )
             if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
                 break;
         }
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate()
-                   || evt->IsUndoRedo() )
+        else if( evt->IsCancelInteractive() || evt->IsActivate() || evt->IsUndoRedo() )
         {
+            if( evt->IsCancelInteractive() && !m_startItem )
+                m_cancelled = true;
+
+            if( evt->IsActivate() && !evt->IsMoveTool() )
+                m_cancelled = true;
+
             break;
         }
 
@@ -1135,7 +1169,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     {
         frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        if( evt->IsCancelInteractive() )
         {
             break;
         }

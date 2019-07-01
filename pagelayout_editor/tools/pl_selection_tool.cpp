@@ -180,7 +180,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
         }
 
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        else if( evt->IsCancelInteractive() )
         {
             ClearSelection();
         }
@@ -308,7 +308,7 @@ bool PL_SELECTION_TOOL::selectMultiple()
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
             cancelled = true;
             break;

@@ -27,14 +27,10 @@
 #include "pcb_actions.h"
 
 #include <pcb_edit_frame.h>
-#include <class_draw_panel_gal.h>
 #include <project.h>
 #include <id.h>
-#include <pcbnew_id.h>
 #include <confirm.h>
 #include <import_gfx/dialog_import_gfx.h>
-
-#include <view/view_group.h>
 #include <view/view_controls.h>
 #include <view/view.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -172,7 +168,6 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
         line->SetFlags( IS_NEW );
     }
 
-    m_frame->PopTool();
     return 0;
 }
 
@@ -214,7 +209,6 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
         startingPoint = NULLOPT;
     }
 
-    m_frame->PopTool();
     return 0;
 }
 
@@ -253,7 +247,6 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
         immediateMode = false;
     }
 
-    m_frame->PopTool();
     return 0;
 }
 
@@ -291,27 +284,40 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         if( reselect && text )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, text );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        auto cleanup = [&] () {
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+            m_controls->SetAutoPan( false );
+            m_controls->CaptureCursor( false );
+            m_controls->ShowCursor( true );
+            delete text;
+            text = NULL;
+        };
+
+        if( evt->IsCancelInteractive() )
         {
             if( text )
+                cleanup();
+            else
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
-                // Delete the old text and have another try
-                delete text;
-                text = NULL;
-
-                m_controls->SetAutoPan( false );
-                m_controls->CaptureCursor( false );
-                m_controls->ShowCursor( true );
-            }
-            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-            {
+                m_frame->PopTool();
                 break;
             }
+        }
+        else if( evt->IsActivate() )
+        {
+            if( text )
+                cleanup();
 
-            if( evt->IsActivate() )
+            if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
                 break;
+            }
+            else
+            {
+                m_frame->PopTool();
+                break;
+            }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -433,7 +439,6 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     }
 
     frame()->SetMsgPanel( board() );
-    m_frame->PopTool();
     return 0;
 }
 
@@ -495,24 +500,44 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), nullptr );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        auto cleanup = [&] () {
+            preview.Clear();
+            delete dimension;
+            dimension = nullptr;
+            step = SET_ORIGIN;
+        };
+
+        if( evt->IsCancelInteractive() )
         {
             m_controls->SetAutoPan( false );
 
             if( step != SET_ORIGIN )    // start from the beginning
+                cleanup();
+            else
             {
-                preview.Clear();
-
-                delete dimension;
-                step = SET_ORIGIN;
-            }
-            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-            {
+                m_frame->PopTool();
                 break;
             }
+        }
+        else if( evt->IsActivate() )
+        {
+            if( step != SET_ORIGIN )
+                cleanup();
 
-            if( evt->IsActivate() )
+            if( evt->IsPointEditor() )
+            {
+                // don't exit (the point editor runs in the background)
+            }
+            else if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
                 break;
+            }
+            else
+            {
+                m_frame->PopTool();
+                break;
+            }
         }
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) && step != SET_ORIGIN )
         {
@@ -647,7 +672,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
     m_view->Remove( &preview );
     frame()->SetMsgPanel( board() );
-    m_frame->PopTool();
     return 0;
 }
 
@@ -744,7 +768,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         else if( evt->Category() == TC_COMMAND )
         {
             // TODO it should be handled by EDIT_TOOL, so add items and select?
-            if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) )
+            if( evt->IsCancelInteractive() )
             {
                 const auto rotationPoint = (wxPoint) cursorPos;
                 const auto rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle( *m_frame, *evt );
@@ -761,9 +785,11 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
                 m_view->Update( &preview );
             }
-            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+            else if( evt->IsCancelInteractive() || evt->IsActivate() )
             {
                 preview.FreeItems();
+
+                m_frame->PopTool();
                 break;
             }
         }
@@ -784,7 +810,6 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     preview.Clear();
     m_view->Remove( &preview );
-    m_frame->PopTool();
     return 0;
 }
 
@@ -825,17 +850,20 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
             // Usually, we do not need to change twice the anchor position,
             // so deselect the active tool
+            m_frame->PopTool();
             break;
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu( selection() );
         }
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        else if( evt->IsCancelInteractive() || evt->IsActivate() )
+        {
+            m_frame->PopTool();
             break;
+        }
     }
 
-    m_frame->PopTool();
     return 0;
 }
 
@@ -858,6 +886,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
 
     bool     direction45 = false;    // 45 degrees only mode
     bool     started = false;
+    bool     cancelled = false;
     bool     isLocalOriginSet = ( m_frame->GetScreen()->m_LocalOrigin != VECTOR2D( 0, 0 ) );
     VECTOR2I cursorPos = m_controls->GetMousePosition();
 
@@ -905,20 +934,48 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
             frame()->SetMsgPanel( aGraphic );
         }
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        auto cleanup = [&] () {
+            preview.Clear();
+            m_view->Update( &preview );
+            delete aGraphic;
+            aGraphic = nullptr;
+
+            if( !isLocalOriginSet )
+                m_frame->GetScreen()->m_LocalOrigin = VECTOR2D( 0, 0 );
+        };
+
+        if( evt->IsCancelInteractive() )
         {
             if( started )
+                cleanup();
+            else
             {
-                preview.Clear();
-                m_view->Update( &preview );
-                delete aGraphic;
-                aGraphic = nullptr;
-
-                if( !isLocalOriginSet )
-                    m_frame->GetScreen()->m_LocalOrigin = VECTOR2D( 0, 0 );
+                m_frame->PopTool();
+                cancelled = true;
+                break;
             }
+        }
+        else if( evt->IsActivate() )
+        {
+            if( started )
+                cleanup();
 
-            break;
+            if( evt->IsPointEditor() )
+            {
+                // don't exit (the point editor runs in the background)
+            }
+            else if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
+                cancelled = true;
+                break;
+            }
+            else
+            {
+                m_frame->PopTool();
+                cancelled = true;
+                break;
+            }
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
@@ -966,7 +1023,6 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
             else
             {
                 auto snapItem = dyn_cast<DRAWSEGMENT*>( grid.GetSnapped() );
-                auto mod = dyn_cast<MODULE*>( m_frame->GetModel() );
 
                 if( aGraphic->GetEnd() == aGraphic->GetStart()
                     || ( evt->IsDblClick( BUT_LEFT ) && aShape == S_SEGMENT )
@@ -1047,7 +1103,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
     m_controls->CaptureCursor( false );
     m_controls->ForceCursorPosition( false );
 
-    return started;
+    return cancelled;
 }
 
 
@@ -1089,6 +1145,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic, bool aImmediateMode )
     m_controls->SetSnapping( true );
 
     bool firstPoint = false;
+    bool cancelled = false;
 
     // Prime the pump
     if( aImmediateMode )
@@ -1107,7 +1164,46 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic, bool aImmediateMode )
         VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), aGraphic );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( evt->IsClick( BUT_LEFT ) )
+        auto cleanup = [&] () {
+            preview.Clear();
+            delete aGraphic;
+            aGraphic = nullptr;
+        };
+
+        if( evt->IsCancelInteractive() )
+        {
+            if( firstPoint )
+                cleanup();
+            else
+            {
+                m_frame->PopTool();
+                cancelled = true;
+                break;
+            }
+        }
+        else if( evt->IsActivate() )
+        {
+            if( firstPoint )
+                cleanup();
+
+            if( evt->IsPointEditor() )
+            {
+                // don't exit (the point editor runs in the background)
+            }
+            else if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
+                cancelled = true;
+                break;
+            }
+            else
+            {
+                m_frame->PopTool();
+                cancelled = true;
+                break;
+            }
+        }
+        else if( evt->IsClick( BUT_LEFT ) )
         {
             if( !firstPoint )
             {
@@ -1140,17 +1236,6 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic, bool aImmediateMode )
 
             // update, but don't step the manager state
             arcManager.AddPoint( cursorPos, false );
-        }
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
-        {
-            if( firstPoint )
-            {
-                preview.Clear();
-                delete aGraphic;
-                aGraphic = nullptr;
-            }
-
-            break;
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
@@ -1208,7 +1293,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic, bool aImmediateMode )
     m_controls->CaptureCursor( false );
     m_controls->ForceCursorPosition( false );
 
-    return !arcManager.IsReset();
+    return cancelled;
 }
 
 
@@ -1313,25 +1398,42 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), layers );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        auto cleanup = [&] () {
+            polyGeomMgr.Reset();
+            started = false;
+            m_controls->SetAutoPan( false );
+            m_controls->CaptureCursor( false );
+        };
+
+        if( evt->IsCancelInteractive())
         {
-            if( polyGeomMgr.IsPolygonInProgress()  )
+            if( polyGeomMgr.IsPolygonInProgress() )
+                cleanup();
+            else
             {
-                polyGeomMgr.Reset();
-                // start again
-                started = false;
-
-                m_controls->SetAutoPan( false );
-                m_controls->CaptureCursor( false );
-            }
-            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-            {
+                m_frame->PopTool();
                 break;
             }
+        }
+        else if( evt->IsActivate() )
+        {
+            if( polyGeomMgr.IsPolygonInProgress() )
+                cleanup();
 
-            // pre-empted by another tool, give up
-            if( evt->IsActivate() && !TOOL_EVT_UTILS::IsPointEditor( *evt ) )
+            if( evt->IsPointEditor() )
+            {
+                // don't exit (the point editor runs in the background)
+            }
+            else if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
                 break;
+            }
+            else
+            {
+                m_frame->PopTool();
+                break;
+            }
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
@@ -1374,7 +1476,6 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                     m_controls->CaptureCursor( true );
                 }
             }
-
         }
         else if( evt->IsAction( &PCB_ACTIONS::deleteLastPoint ) )
         {
@@ -1412,7 +1513,6 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     }    // end while
 
     m_controls->ForceCursorPosition( false );
-    m_frame->PopTool();
     return 0;
 }
 
@@ -1696,10 +1796,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::VIA );
     frame()->PushTool( aEvent.GetCommandStr().get() );
 
-    doInteractiveItemPlacement( &placer, _( "Place via" ),
-                                IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP );
+    doInteractiveItemPlacement( &placer, _( "Place via" ), IPO_REPEAT | IPO_SINGLE_CLICK );
 
-    frame()->PopTool();
     return 0;
 }
 

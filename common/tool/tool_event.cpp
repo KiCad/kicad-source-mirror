@@ -54,7 +54,7 @@ static const std::string flag2string( int aFlag, const FlagString* aExps )
 void TOOL_EVENT::init()
 {
     // By default only MESSAGEs and Cancels are passed to multiple recipients
-    m_passEvent = m_category == TC_MESSAGE || TOOL_EVT_UTILS::IsCancelInteractive( *this );
+    m_passEvent = m_category == TC_MESSAGE || IsCancelInteractive();
 
     m_hasPosition = ( m_category == TC_MOUSE || m_category == TC_COMMAND );
 }
@@ -183,35 +183,42 @@ bool TOOL_EVENT::IsDblClick( int aButtonMask ) const
 }
 
 
-bool TOOL_EVT_UTILS::IsCancelInteractive( const TOOL_EVENT& aEvt )
+bool TOOL_EVENT::IsCancelInteractive()
 {
-    if( aEvt.GetCommandStr() && aEvt.GetCommandStr().get() == ACTIONS::cancelInteractive.GetName() )
+    if( GetCommandStr() && GetCommandStr().get() == ACTIONS::cancelInteractive.GetName() )
         return true;
 
-    if( aEvt.GetCommandId() && aEvt.GetCommandId().get() == ACTIONS::cancelInteractive.GetId() )
+    if( GetCommandId() && GetCommandId().get() == ACTIONS::cancelInteractive.GetId() )
         return true;
 
-    return aEvt.IsCancel();
+    return IsCancel();
 }
 
 
-bool TOOL_EVT_UTILS::IsSelectionEvent( const TOOL_EVENT& aEvt )
+bool TOOL_EVENT::IsSelectionEvent()
 {
-    return aEvt.Matches( EVENTS::ClearedEvent )
-           || aEvt.Matches( EVENTS::UnselectedEvent )
-           || aEvt.Matches( EVENTS::SelectedEvent );
+    return Matches( EVENTS::ClearedEvent )
+           || Matches( EVENTS::UnselectedEvent )
+           || Matches( EVENTS::SelectedEvent );
 }
 
 
-bool TOOL_EVT_UTILS::IsPointEditor( const TOOL_EVENT& aEvt )
+bool TOOL_EVENT::IsPointEditor()
 {
-    if( aEvt.GetCommandStr() && aEvt.GetCommandStr().get().find( "PointEditor" ) >= 0 )
+    if( GetCommandStr() && GetCommandStr().get().find( "PointEditor" ) != wxNOT_FOUND )
         return true;
 
-    if( aEvt.GetCommandId() && aEvt.GetCommandId() == ACTIONS::activatePointEditor.GetId() )
+    if( GetCommandId() && GetCommandId() == ACTIONS::activatePointEditor.GetId() )
         return true;
 
     return false;
 }
 
 
+bool TOOL_EVENT::IsMoveTool()
+{
+    if( GetCommandStr() && GetCommandStr().get().find( "InteractiveMove" ) != wxNOT_FOUND )
+        return true;
+
+    return false;
+}

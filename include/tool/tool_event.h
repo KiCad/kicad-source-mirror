@@ -376,6 +376,37 @@ public:
     bool IsAction( const TOOL_ACTION* aAction ) const;
 
     /**
+     * Function IsCancelInteractive()
+     *
+     * Indicates the event should restart/end an ongoing interactive tool's event loop (eg esc
+     * key, click cancel, start different tool).
+     */
+    bool IsCancelInteractive();
+
+    /**
+     * Function IsSelectionEvent()
+     *
+     * Indicates an selection-changed notification event.
+     */
+    bool IsSelectionEvent();
+
+    /**
+     * Function IsPointEditor
+     *
+     * Indicates if the event is from one of the point editors.  Usually used to allow the
+     * point editor to activate itself without de-activating the current drawing tool.
+     */
+    bool IsPointEditor();
+
+    /**
+     * Function IsMoveTool
+     *
+     * Indicates if the event is from one of the move tools.  Usually used to allow move to
+     * be done without de-activating the current drawing tool.
+     */
+    bool IsMoveTool();
+
+    /**
      * Function Parameter()
      * Returns a non-standard parameter assigned to the event. Its meaning depends on the
      * target tool.
@@ -635,40 +666,6 @@ inline const TOOL_EVENT_LIST operator||( const TOOL_EVENT& aEvent,
 
     l.Add( aEvent );
     return l;
-}
-
-
-/**
- * Namespace TOOL_EVT_UTILS
- *
- * Utility functions for dealing with various tool events. These are free functions, so they
- * interface with any classes exclusively via the public interfaces, so they don't need to be
- * subsumed into the "helped" classes.
- */
-namespace TOOL_EVT_UTILS
-{
-    /**
-     * Function IsCancelInteractive()
-     *
-     * Indicates the event should restart/end an ongoing interactive tool's event loop (eg esc
-     * key, click cancel, start different tool).
-     */
-    bool IsCancelInteractive( const TOOL_EVENT& aEvt );
-
-    /**
-     * Function IsSelectionEvent()
-     *
-     * Indicates an selection-changed notification event.
-     */
-    bool IsSelectionEvent( const TOOL_EVENT& aEvt );
-
-    /**
-     * Function IsPointEditor
-     *
-     * Indicates if the event is from one of the point editors.  Usually used to allow the
-     * point editor to activate itself without de-activating the current drawing tool.
-     */
-    bool IsPointEditor( const TOOL_EVENT& aEvt );
 }
 
 

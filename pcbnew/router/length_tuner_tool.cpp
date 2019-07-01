@@ -192,7 +192,7 @@ void LENGTH_TUNER_TOOL::performTuning()
     {
         frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
             break;
         else if( evt->IsMotion() )
         {
@@ -280,7 +280,7 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     {
         frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
             break; // Finish
         }

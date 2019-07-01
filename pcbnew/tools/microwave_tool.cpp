@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017-2019 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,6 @@
 #include <microwave/microwave_inductor.h>
 #include "pcb_actions.h"
 #include "selection_tool.h"
-#include "tool_event_utils.h"
 
 
 MICROWAVE_TOOL::MICROWAVE_TOOL() :
@@ -58,71 +57,44 @@ void MICROWAVE_TOOL::Reset( RESET_REASON aReason )
 
 int MICROWAVE_TOOL::addMicrowaveFootprint( const TOOL_EVENT& aEvent )
 {
-    auto& frame = *getEditFrame<PCB_EDIT_FRAME>();
-
-    std::function<std::unique_ptr<MODULE>()> creator;
-
-    switch( aEvent.Parameter<intptr_t>() )
-    {
-    case MWAVE_TOOL_SIMPLE_ID::GAP:
-        creator = [&frame] () {
-            return std::unique_ptr<MODULE>( frame.Create_MuWaveComponent( 0 ) );
-        };
-        break;
-
-    case MWAVE_TOOL_SIMPLE_ID::STUB:
-        creator = [&frame] () {
-            return std::unique_ptr<MODULE>( frame.Create_MuWaveComponent( 1 ) );
-        };
-        break;
-
-    case MWAVE_TOOL_SIMPLE_ID::STUB_ARC:
-        creator = [&frame] () {
-            return std::unique_ptr<MODULE>( frame.Create_MuWaveComponent( 2 ) );
-        };
-        break;
-
-    case MWAVE_TOOL_SIMPLE_ID::FUNCTION_SHAPE:
-        creator = [&frame] () {
-            return std::unique_ptr<MODULE>( frame.Create_MuWavePolygonShape() );
-        };
-        break;
-
-    default:
-        break;
-    };
+    PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
 
     struct MICROWAVE_PLACER : public INTERACTIVE_PLACER_BASE
     {
-        const std::function<std::unique_ptr<MODULE>()>& m_creator;
-
-        MICROWAVE_PLACER( const std::function<std::unique_ptr<MODULE>()>& aCreator ) :
-            m_creator( aCreator ) {};
+        MICROWAVE_PLACER( PCB_EDIT_FRAME* aFrame, int aType ) :
+                m_frame( aFrame ),
+                m_itemType( aType )
+        { };
 
         std::unique_ptr<BOARD_ITEM> CreateItem() override
         {
-            auto module = m_creator();
-
-            // Module has been added in the legacy backend,
-            // so we have to remove it before committing the change
-            // @todo LEGACY
-            if( module )
+            switch( m_itemType )
             {
-                m_board->Remove( module.get() );
-            }
-
-            return std::unique_ptr<BOARD_ITEM>( module.release() );
+            case MWAVE_TOOL_SIMPLE_ID::GAP:
+                return std::unique_ptr<MODULE>( m_frame->Create_MuWaveComponent( 0 ) );
+            case MWAVE_TOOL_SIMPLE_ID::STUB:
+                return std::unique_ptr<MODULE>( m_frame->Create_MuWaveComponent( 1 ) );
+            case MWAVE_TOOL_SIMPLE_ID::STUB_ARC:
+                return std::unique_ptr<MODULE>( m_frame->Create_MuWaveComponent( 2 ) );
+            case MWAVE_TOOL_SIMPLE_ID::FUNCTION_SHAPE:
+                return std::unique_ptr<MODULE>( m_frame->Create_MuWavePolygonShape() );
+            default:
+                return std::unique_ptr<MODULE>();
+            };
         }
+
+    private:
+        PCB_EDIT_FRAME* m_frame;
+        int             m_itemType;
     };
 
-    MICROWAVE_PLACER placer( creator );
+    MICROWAVE_PLACER placer( frame, aEvent.Parameter<intptr_t>() );
 
-    frame.PushTool( aEvent.GetCommandStr().get() );
+    frame->PushTool( aEvent.GetCommandStr().get() );
 
     doInteractiveItemPlacement( &placer,  _( "Place microwave feature" ),
-                                IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP | IPO_PROPERTIES );
+                                IPO_REPEAT | IPO_ROTATE | IPO_FLIP );
 
-    frame.PopTool();
     return 0;
 }
 
@@ -212,31 +184,44 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
         frame.GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
         VECTOR2I cursorPos = controls.GetCursorPosition();
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        auto cleanup = [&] () {
+            originSet = false;
+            controls.CaptureCursor( false );
+            controls.SetAutoPan( false );
+            view.SetVisible( &previewRect, false );
+            view.Update( &previewRect, KIGFX::GEOMETRY );
+        };
+
+        if( evt->IsCancelInteractive() )
         {
             if( originSet )
+                cleanup();
+            else
             {
-                // had an in-progress area, so start again but don't
-                // cancel the tool
-                originSet = false;
-                controls.CaptureCursor( false );
-                controls.SetAutoPan( false );
-
-                view.SetVisible( &previewRect, false );
-                view.Update( &previewRect, KIGFX::GEOMETRY );
-            }
-            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-            {
+                frame.PopTool();
                 break;
             }
+        }
 
-            if( evt->IsActivate() )
+        else if( evt->IsActivate() )
+        {
+            if( originSet )
+                cleanup();
+
+            if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
                 break;
+            }
+            else
+            {
+                frame.PopTool();
+                break;
+            }
         }
 
         // A click or drag starts
-        else if( !originSet &&
-                ( evt->IsClick( BUT_LEFT ) || evt->IsDrag( BUT_LEFT ) ) )
+        else if( !originSet && ( evt->IsClick( BUT_LEFT ) || evt->IsDrag( BUT_LEFT ) ) )
         {
             tpGeomMgr.SetOrigin( cursorPos );
             tpGeomMgr.SetEnd( cursorPos );
@@ -283,7 +268,6 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
     controls.CaptureCursor( false );
     controls.SetAutoPan( false );
     view.Remove( &previewRect );
-    frame.PopTool();
     return 0;
 }
 

@@ -318,7 +318,6 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
     doInteractiveItemPlacement( &placer,  _( "Place pad" ),
                                 IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP );
 
-    frame()->PopTool();
     return 0;
 }
 

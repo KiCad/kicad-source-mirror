@@ -89,22 +89,38 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_PENCIL );
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        auto cleanup = [&] () {
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+            m_view->ClearPreview();
+            delete item;
+            item = nullptr;
+        };
+
+        if( evt->IsCancelInteractive() )
         {
             if( item )
+                cleanup();
+            else
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-                m_view->ClearPreview();
-                delete item;
-                item = nullptr;
-            }
-            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-            {
+                m_frame->PopTool();
                 break;
             }
+        }
+        else if( evt->IsActivate() )
+        {
+            if( item )
+                cleanup();
 
-            if( evt->IsActivate() )
+            if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
                 break;
+            }
+            else
+            {
+                m_frame->PopTool();
+                break;
+            }
         }
 
         else if( evt->IsClick( BUT_LEFT ) )
@@ -207,7 +223,6 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
-    m_frame->PopTool();
     return 0;
 }
 
@@ -242,23 +257,43 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        auto cleanup = [&] () {
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+            m_view->ClearPreview();
+            delete item;
+            item = nullptr;
+        };
+
+        if( evt->IsCancelInteractive() )
         {
             if( item )
+                cleanup();
+            else
             {
-                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-                m_view->ClearPreview();
-                delete item;
-                item = nullptr;
-            }
-            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-            {
+                m_frame->PopTool();
                 break;
             }
+        }
 
-            // Continue on if it's just the point editor; otherwise give way to new tool
-            if( evt->IsActivate() && !TOOL_EVT_UTILS::IsPointEditor( *evt ) )
+        else if( evt->IsActivate() )
+        {
+            if( item )
+                cleanup();
+
+            if( evt->IsPointEditor() )
+            {
+                // don't exit (the point editor runs in the background)
+            }
+            else if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
                 break;
+            }
+            else
+            {
+                m_frame->PopTool();
+                break;
+            }
         }
 
         else if( evt->IsClick( BUT_LEFT ) && !item )
@@ -339,7 +374,6 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
-    m_frame->PopTool();
     return 0;
 }
 
@@ -357,8 +391,14 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
     {
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_BULLSEYE );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        if( evt->IsCancelInteractive() )
         {
+            m_frame->PopTool();
+            break;
+        }
+        else if( evt->IsActivate() )
+        {
+            m_frame->PopTool();
             break;
         }
         else if( evt->IsClick( BUT_LEFT ) )
@@ -387,7 +427,6 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_frame->PopTool();
     return 0;
 }
 

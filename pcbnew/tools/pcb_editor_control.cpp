@@ -542,21 +542,38 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         if( reselect && module )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, module );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        auto cleanup = [&] () {
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+            commit.Revert();
+            module = NULL;
+        };
+
+        if( evt->IsCancelInteractive() )
         {
             if( module )
+                cleanup();
+            else
             {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-                commit.Revert();
-                module = NULL;
-            }
-            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-            {
+                m_frame->PopTool();
                 break;
             }
+        }
 
-            if( evt->IsActivate() )  // now finish unconditionally
+        else if( evt->IsActivate() )
+        {
+            if( module )
+                cleanup();
+
+            if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
                 break;
+            }
+            else
+            {
+                frame()->PopTool();
+                break;
+            }
         }
 
         else if( evt->IsClick( BUT_LEFT ) )
@@ -620,7 +637,6 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         controls->CaptureCursor( !!module );
     }
 
-    m_frame->PopTool();
     return 0;
 }
 
@@ -719,9 +735,24 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
         frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
         cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        if( evt->IsCancelInteractive() )
         {
+            frame()->PopTool();
             break;
+        }
+
+        else if( evt->IsActivate() )
+        {
+            if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
+                break;
+            }
+            else
+            {
+                frame()->PopTool();
+                break;
+            }
         }
 
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
@@ -772,7 +803,6 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     delete target;
     view->Remove( &preview );
     controls->SetSnapping( false );
-    m_frame->PopTool();
     return 0;
 }
 

@@ -366,7 +366,24 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     {
         frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_BULLSEYE );
 
-        if( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
+        if( evt->IsCancelInteractive() )
+        {
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+            commit.Revert();
+
+            frame()->PopTool();
+            break;
+        }
+
+        else if( evt->IsActivate() )
+        {
+            commit.Push( _( "Renumber pads" ) );
+
+            frame()->PopTool();
+            break;
+        }
+
+        else if( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
         {
             selectedPads.clear();
             VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
@@ -471,22 +488,6 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
             break;
         }
 
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
-        {
-            // This is a cancel-current-action (ie: <esc>).
-            if( evt->IsCancel() )
-            {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-                commit.Revert();
-            }
-            else
-            {
-                commit.Push( _( "Renumber pads" ) );
-            }
-
-            break;
-        }
-
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu( selection() );
@@ -505,7 +506,6 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     }
 
     statusPopup.Hide();
-    frame()->PopTool();
     return 0;
 }
 

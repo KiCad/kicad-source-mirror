@@ -366,7 +366,7 @@ void EDA_DRAW_FRAME::AddStandardSubMenus( TOOL_MENU& aToolMenu )
 
 void EDA_DRAW_FRAME::DisplayToolMsg( const wxString& msg )
 {
-    SetStatusText( msg, 5 );
+    SetStatusText( msg, 6 );
 }
 
 
@@ -461,7 +461,7 @@ void EDA_DRAW_FRAME::PopTool()
         }
     }
     else
-        DisplayToolMsg( ACTIONS::selectionTool.GetName() );
+        DisplayToolMsg( ACTIONS::selectionTool.GetLabel() );
 }
 
 
