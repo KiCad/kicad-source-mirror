@@ -409,6 +409,16 @@ void LIB_EDIT_TOOL::editGraphicProperties( LIB_ITEM* aItem )
 
     aItem->SetWidth( dialog.GetWidth() );
 
+    if( dialog.GetApplyToAllConversions() )
+        aItem->SetConvert( 0 );
+    else
+        aItem->SetConvert( m_frame->GetConvert() );
+
+    if( dialog.GetApplyToAllUnits() )
+        aItem->SetUnit( 0 );
+    else
+        aItem->SetUnit( m_frame->GetUnit() );
+
     updateView( aItem );
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify( );
