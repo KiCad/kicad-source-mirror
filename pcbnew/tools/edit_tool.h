@@ -202,8 +202,6 @@ private:
     ///> of edit reference point).
     VECTOR2I m_cursor;
 
-    KIGFX::PREVIEW::RULER_ITEM* m_ruler;
-
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.
     bool updateModificationPoint( PCBNEW_SELECTION& aSelection );

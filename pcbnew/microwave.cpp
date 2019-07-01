@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,8 +33,6 @@
 #include <dialog_helpers.h>
 #include <richio.h>
 #include <filter_reader.h>
-#include <gr_basic.h>
-#include <macros.h>
 #include <base_units.h>
 #include <validators.h>
 #include <dialog_text_entry.h>
@@ -49,9 +47,6 @@ static double  ShapeScaleX, ShapeScaleY;
 static wxSize  ShapeSize;
 static int     PolyShapeType;
 
-
-///> An inductor pattern temporarily used during mu-wave inductor creation
-static MWAVE::INDUCTOR_PATTERN s_inductor_pattern;
 
 MODULE* PCB_EDIT_FRAME::CreateMuWaveBaseFootprint( const wxString& aValue,
                                                    int aTextSize, int aPadCount )
@@ -208,7 +203,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
         std::vector<wxPoint> polyPoints;
         polyPoints.reserve( numPoints );
 
-        polyPoints.push_back( wxPoint( 0, 0 ) );
+        polyPoints.emplace_back( wxPoint( 0, 0 ) );
 
         int theta = -angle / 2;
 
@@ -282,7 +277,6 @@ private:
      *  Each line is the X Y coord (normalized units from 0 to 1)
      */
     void ReadDataShapeDescr( wxCommandEvent& event );
-    void AcceptOptions( wxCommandEvent& event );
 
     DECLARE_EVENT_TABLE()
 };
@@ -321,10 +315,7 @@ MWAVE_POLYGONAL_SHAPE_DLG::MWAVE_POLYGONAL_SHAPE_DLG( PCB_EDIT_FRAME* parent,
                            _( "Read Shape Description File..." ) );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
-    wxString shapelist[3] =
-    {
-        _( "Normal" ), _( "Symmetrical" ), _( "Mirrored" )
-    };
+    wxString shapelist[] = { _( "Normal" ), _( "Symmetrical" ), _( "Mirrored" ) };
 
     m_ShapeOptionCtrl = new wxRadioBox( this, -1, _( "Shape Option" ),
                                         wxDefaultPosition, wxDefaultSize, 3,
@@ -359,10 +350,9 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
     static wxString lastpath;       // To remember the last open path during a session
     wxString mask = wxFileSelectorDefaultWildcardStr;
 
-    wxString FullFileName = EDA_FILE_SELECTOR( _( "Read descr shape file" ),
-                                               lastpath, FullFileName,
-                                               wxEmptyString, mask,
-                                               this, wxFD_OPEN, true );
+    wxString FullFileName = EDA_FILE_SELECTOR( _( "Read descr shape file" ), lastpath,
+                                               FullFileName, wxEmptyString, mask, this,
+                                               wxFD_OPEN, true );
     if( FullFileName.IsEmpty() )
         return;
 
@@ -501,21 +491,21 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     polyPoints.reserve( PolyEdges.size() + 2 );
 
     // Init start point coord:
-    polyPoints.push_back( wxPoint( offset.x, 0 ) );
+    polyPoints.emplace_back( wxPoint( offset.x, 0 ) );
 
     wxPoint last_coordinate;
 
-    for( unsigned ii = 0; ii < PolyEdges.size(); ii++ )  // Copy points
+    for( wxRealPoint& pt: PolyEdges )  // Copy points
     {
-        last_coordinate.x = KiROUND( PolyEdges[ii].x * ShapeScaleX );
-        last_coordinate.y = -KiROUND( PolyEdges[ii].y * ShapeScaleY );
+        last_coordinate.x = KiROUND( pt.x * ShapeScaleX );
+        last_coordinate.y = -KiROUND( pt.y * ShapeScaleY );
         last_coordinate += offset;
         polyPoints.push_back( last_coordinate );
     }
 
     // finish the polygonal shape
     if( last_coordinate.y != 0 )
-        polyPoints.push_back( wxPoint( last_coordinate.x, 0 ) );
+        polyPoints.emplace_back( wxPoint( last_coordinate.x, 0 ) );
 
     switch( PolyShapeType )
     {
@@ -524,7 +514,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
         break;
 
     case 1:     // Symmetric shape: add the symmetric (mirrored) shape
-        for( int ndx = polyPoints.size() - 1; ndx >= 0; --ndx )
+        for( int ndx = (int) polyPoints.size() - 1; ndx >= 0; --ndx )
         {
             wxPoint pt = polyPoints[ndx];
             pt.y = -pt.y;   // mirror about X axis

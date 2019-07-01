@@ -23,12 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <cstdint>
-
 #include "edit_tool.h"
-#include "grid_helper.h"
 #include "pcb_actions.h"
-#include "pcb_editor_control.h"
 #include "pcbnew_control.h"
 #include "pcbnew_picker_tool.h"
 #include "selection_tool.h"
@@ -48,7 +44,6 @@
 #include <kicad_plugin.h>
 #include <kiway.h>
 #include <origin_viewitem.h>
-#include <pcb_draw_panel_gal.h>
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>
 #include <pcb_screen.h>
@@ -56,7 +51,6 @@
 #include <properties.h>
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
-
 #include <functional>
 #include <footprint_viewer_frame.h>
 
@@ -483,27 +477,6 @@ int PCBNEW_CONTROL::GridResetOrigin( const TOOL_EVENT& aEvent )
     m_frame->SaveCopyInUndoList( m_gridOrigin.get(), UR_GRIDORIGIN );
     DoSetGridOrigin( getView(), m_frame, m_gridOrigin.get(), VECTOR2D( 0, 0 ) );
     return 0;
-}
-
-
-// Miscellaneous
-static bool deleteItem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
-{
-    SELECTION_TOOL* selectionTool = aToolMgr->GetTool<SELECTION_TOOL>();
-    wxCHECK( selectionTool, false );
-
-    aToolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
-    const PCBNEW_SELECTION& selection = selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED ); } );
-
-    if( selection.Empty() )
-        return true;
-
-    aToolMgr->RunAction( PCB_ACTIONS::remove, true );
-
-    return true;
 }
 
 

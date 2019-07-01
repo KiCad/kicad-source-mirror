@@ -1254,7 +1254,7 @@ int PCB_EDITOR_CONTROL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
     picker->SetClickHandler( std::bind( showLocalRatsnest, m_toolMgr, board,
                                         opt->m_ShowGlobalRatsnest, _1 ) );
 
-    picker->SetFinalizeHandler( [ this, board, opt ]( int aCondition )
+    picker->SetFinalizeHandler( [ board, opt ]( int aCondition )
         {
             if( aCondition != PCBNEW_PICKER_TOOL::END_ACTIVATE )
             {

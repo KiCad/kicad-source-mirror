@@ -32,13 +32,8 @@
 #include <dialog_drc.h>
 #include <pcb_edit_frame.h>
 #include <base_units.h>
-#include <board_design_settings.h>
-#include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <collectors.h>
-#include <tool/tool_manager.h>
-#include <tools/pcb_actions.h>
-
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 
