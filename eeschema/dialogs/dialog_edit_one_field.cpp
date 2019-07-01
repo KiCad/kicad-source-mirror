@@ -151,6 +151,11 @@ void DIALOG_EDIT_ONE_FIELD::OnTextValueSelectButtonClick( wxCommandEvent& aEvent
 
 void DIALOG_EDIT_ONE_FIELD::OnSetFocusText( wxFocusEvent& event )
 {
+
+    // Force an update of the text control before setting the text selection
+    // This is needed because GTK seems to ignore the selection on first update
+    m_TextValue->Update();
+
     if( m_fieldId == REFERENCE )
         SelectReferenceNumber( static_cast<wxTextEntry*>( m_TextValue ) );
     else
