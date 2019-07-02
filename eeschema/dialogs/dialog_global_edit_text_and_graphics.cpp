@@ -180,6 +180,8 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_Bold->Set3StateValue( wxCHK_UNDETERMINED );
     m_Visible->Set3StateValue( wxCHK_UNDETERMINED );
     m_lineWidth.SetValue( INDETERMINATE );
+    m_lineStyle->SetStringSelection( INDETERMINATE );
+    m_setColor->SetValue( false );
 
     return true;
 }
@@ -232,6 +234,15 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( const SCH_SHEET_PATH& aS
     {
         if( !m_lineWidth.IsIndeterminate() )
             lineItem->SetLineWidth( m_lineWidth.GetValue() );
+
+        if( lineItem->GetLayer() == LAYER_NOTES )
+        {
+            if( m_lineStyle->GetStringSelection() != INDETERMINATE )
+                lineItem->SetLineStyle( m_lineStyle->GetSelection() );
+
+            if( m_setColor->GetValue() )
+                lineItem->SetLineColor( m_color->GetColour() );
+        }
     }
 
     m_parent->OnModify();

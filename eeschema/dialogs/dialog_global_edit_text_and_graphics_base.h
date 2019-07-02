@@ -23,6 +23,8 @@
 #include <wx/textctrl.h>
 #include <wx/stattext.h>
 #include <wx/choice.h>
+#include <wx/statline.h>
+#include <wx/clrpicker.h>
 #include <wx/panel.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -69,9 +71,18 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_Visible;
 		wxStaticText* vAlignLabel;
 		wxChoice* m_vAlign;
+		wxStaticLine* m_staticline1;
+		wxStaticLine* m_staticline2;
+		wxStaticLine* m_staticline3;
+		wxStaticLine* m_staticline4;
+		wxStaticLine* m_staticline5;
 		wxStaticText* m_lineWidthLabel;
 		wxTextCtrl* m_LineWidthCtrl;
 		wxStaticText* m_lineWidthUnits;
+		wxStaticText* lineStyleLabel;
+		wxChoice* m_lineStyle;
+		wxCheckBox* m_setColor;
+		wxColourPickerCtrl* m_color;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;
