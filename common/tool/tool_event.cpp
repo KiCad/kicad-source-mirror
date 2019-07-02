@@ -205,7 +205,7 @@ bool TOOL_EVENT::IsSelectionEvent()
 
 bool TOOL_EVENT::IsPointEditor()
 {
-    if( GetCommandStr() && GetCommandStr().get().find( "PointEditor" ) != wxNOT_FOUND )
+    if( GetCommandStr() && GetCommandStr().get().find( "PointEditor" ) != GetCommandStr()->npos )
         return true;
 
     if( GetCommandId() && GetCommandId() == ACTIONS::activatePointEditor.GetId() )
@@ -217,7 +217,7 @@ bool TOOL_EVENT::IsPointEditor()
 
 bool TOOL_EVENT::IsMoveTool()
 {
-    if( GetCommandStr() && GetCommandStr().get().find( "InteractiveMove" ) != wxNOT_FOUND )
+    if( GetCommandStr() && GetCommandStr().get().find( "InteractiveMove" ) != GetCommandStr()->npos )
         return true;
 
     return false;
