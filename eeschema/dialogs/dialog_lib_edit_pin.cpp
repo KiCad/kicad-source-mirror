@@ -123,7 +123,7 @@ bool DIALOG_LIB_EDIT_PIN::TransferDataFromWindow()
             return false;
     }
 
-    if( !m_pin->InEditMode() )
+    if( m_pin->GetEditFlags() == 0 )
         m_frame->SaveCopyInUndoList( m_pin->GetParent() );
 
     m_pin->SetName( m_textPinName->GetValue() );

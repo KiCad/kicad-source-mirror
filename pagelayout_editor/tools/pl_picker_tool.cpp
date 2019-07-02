@@ -31,9 +31,7 @@
 
 PL_PICKER_TOOL::PL_PICKER_TOOL() :
         TOOL_INTERACTIVE( "plEditor.InteractivePicker" ),
-        m_frame( nullptr ),
-        m_cursorCapture( false ),
-        m_autoPanning( false )
+        m_frame( nullptr )
 {
     resetPicker();
 }
@@ -58,8 +56,6 @@ bool PL_PICKER_TOOL::Init()
 
 void PL_PICKER_TOOL::Reset( RESET_REASON aReason )
 {
-    m_cursorCapture = false;
-    m_autoPanning = false;
 }
 
 
@@ -175,9 +171,6 @@ void PL_PICKER_TOOL::setTransitions()
 
 void PL_PICKER_TOOL::resetPicker()
 {
-    m_cursorCapture = false;
-    m_autoPanning = false;
-
     m_picked = NULLOPT;
     m_motionHandler = NULLOPT;
     m_clickHandler = NULLOPT;
@@ -190,6 +183,6 @@ void PL_PICKER_TOOL::setControls()
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
-    controls->CaptureCursor( m_cursorCapture );
-    controls->SetAutoPan( m_autoPanning );
+    controls->CaptureCursor( false );
+    controls->SetAutoPan( false );
 }

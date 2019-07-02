@@ -353,7 +353,7 @@ int LIB_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         LIB_ITEM* item = (LIB_ITEM*) selection.Front();
 
         // Save copy for undo if not in edit (edit command already handle the save copy)
-        if( !item->InEditMode() )
+        if( item->GetEditFlags() == 0 )
             saveCopyInUndoList( item->GetParent(), UR_LIBEDIT );
 
         switch( item->Type() )

@@ -1608,23 +1608,6 @@ int LIB_PIN::GetOrientationIndex( int code )
 }
 
 
-void LIB_PIN::Rotate()
-{
-    int orient = PIN_RIGHT;
-
-    switch( GetOrientation() )
-    {
-    case PIN_UP:    orient = PIN_LEFT;  break;
-    case PIN_DOWN:  orient = PIN_RIGHT; break;
-    case PIN_LEFT:  orient = PIN_DOWN;  break;
-    case PIN_RIGHT: orient = PIN_UP;    break;
-    }
-
-    // Set the new orientation
-    SetOrientation( orient );
-}
-
-
 const BITMAP_DEF* LIB_PIN::GetOrientationSymbols()
 {
     return iconsPinsOrientations;

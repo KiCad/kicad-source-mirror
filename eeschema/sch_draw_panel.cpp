@@ -25,8 +25,6 @@
 
 
 #include <view/wx_view_controls.h>
-#include <ws_proxy_view_item.h>
-
 #include <gal/graphics_abstraction_layer.h>
 #include <sch_draw_panel.h>
 #include <sch_view.h>
@@ -38,10 +36,7 @@
 #include <functional>
 #include <sch_sheet.h>
 #include <pgm_base.h>
-#include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
-
-using namespace std::placeholders;
 
 
 SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,

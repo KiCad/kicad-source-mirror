@@ -34,9 +34,7 @@
 #include <tool/selection.h>
 #include <erc_settings.h>
 #include <sch_draw_panel.h>
-
-// enum PINSHEETLABEL_SHAPE
-#include <sch_text.h>
+#include <sch_text.h>               // enum PINSHEETLABEL_SHAPE
 #include <tool/selection.h>
 #include <status_popup.h>
 
@@ -171,12 +169,12 @@ protected:
      *
      * @return true if the auto save was successful otherwise false.
      */
-    virtual bool doAutoSave() override;
+    bool doAutoSave() override;
 
     /**
      * Returns true if the schematic has been modified.
      */
-    virtual bool isAutoSaveRequired() const override;
+    bool isAutoSaveRequired() const override;
 
     /**
      * Verify that annotation is complete so that a proper netlist is even
@@ -193,7 +191,7 @@ protected:
 
 public:
     SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
-    ~SCH_EDIT_FRAME();
+    ~SCH_EDIT_FRAME() override;
 
     SCH_SCREEN* GetScreen() const override;
 
@@ -217,7 +215,7 @@ public:
     bool GetAutoplaceJustify() const { return m_autoplaceJustify; }
     void SetAutoplaceJustify( bool aEnable ) { m_autoplaceJustify = aEnable; }
 
-    const wxString GetNetListFormatName() const { return m_netListFormat; }
+    const wxString& GetNetListFormatName() const { return m_netListFormat; }
     void SetNetListFormatName( const wxString& aFormat ) { m_netListFormat = aFormat; }
 
     bool GetSpiceAjustPassiveValues() const { return m_spiceAjustPassiveValues; }
@@ -230,10 +228,8 @@ public:
     /**
      * Return the project file parameter list for Eeschema.
      *
-     *<p>
      * Populate the project file parameter array specific to Eeschema if it hasn't
      * already been populated and return a reference to the array to the caller.
-     * </p>
      */
     PARAM_CFG_ARRAY& GetProjectFileParameters();
 
@@ -307,6 +303,9 @@ public:
      */
     void OnModify() override;
 
+    /**
+     * Return a human-readable description of the current screen.
+     */
     wxString GetScreenDesc() const override;
 
     /**
@@ -607,7 +606,6 @@ public:
     void NewProject();
     void LoadProject();
 
-    // read and save files
     void Save_File( bool doSaveAs = false );
 
     bool SaveProject();
@@ -667,8 +665,8 @@ public:
      * Checks if any of the screens has unsaved changes and asks the user whether to save or
      * drop them.
      *
-     * @return True if user decided to save or drop changes, false if the
-     * operation should be canceled.
+     * @return True if user decided to save or drop changes, false if the operation should be
+     *         canceled.
      */
     bool AskToSaveChanges();
 
@@ -684,8 +682,8 @@ public:
     SCH_TEXT* CreateNewText( int aType );
 
     /**
-     * Performs routine schematic cleaning including breaking wire and buses and
-     * deleting identical objects superimposed on top of each other.
+     * Performs routine schematic cleaning including breaking wire and buses and deleting
+     * identical objects superimposed on top of each other.
      *
      * NOTE: always appends to the existing undo state.
      *
@@ -735,17 +733,10 @@ private:
      *
      * If file name defined by SCH_SCREEN::m_FileName is not set, the title is set to the
      * application name appended with no file.
-     * Otherwise, the title is set to the hierarchical sheet path and the full file name,
-     * and read only is appended to the title if the user does not have write
-     * access to the file.
+     * Otherwise, the title is set to the hierarchical sheet path and the full file name, and
+     * read only is appended to the title if the user does not have write access to the file.
      */
     void UpdateTitle();
-
-    /**
-     * Checks all wires and adds any junctions that are missing
-     * (Intended to be called only on file load)
-     */
-    bool AddMissingJunctions( SCH_SCREEN* aScreen );
 
     /**
      * Perform all cleanup and normalization steps so that the whole schematic
@@ -800,8 +791,6 @@ public:
 
     void LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
                             const wxString& aExistingFilename );
-
-    wxPoint GetLastSheetPinPosition() const { return m_lastSheetPinPosition; }
 
 private:
     /**

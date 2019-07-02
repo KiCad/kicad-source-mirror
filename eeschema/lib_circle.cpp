@@ -269,7 +269,7 @@ BITMAP_DEF LIB_CIRCLE::GetMenuImage() const
 
 void LIB_CIRCLE::BeginEdit( const wxPoint aPosition )
 {
-    m_Pos = m_initialPos = aPosition;
+    m_Pos = aPosition;
 }
 
 

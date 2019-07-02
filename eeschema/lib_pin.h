@@ -213,8 +213,6 @@ public:
      */
     void SetOrientation( int aOrientation, bool aTestOtherPins = true );
 
-    void Rotate() override;
-
     GRAPHIC_PINSHAPE GetShape() const { return m_shape; }
 
     /**

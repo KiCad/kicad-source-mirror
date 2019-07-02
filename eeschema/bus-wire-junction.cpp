@@ -240,36 +240,6 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
 }
 
 
-bool SCH_EDIT_FRAME::AddMissingJunctions( SCH_SCREEN* aScreen )
-{
-     bool added = false;
-
-    auto add_junction = [ & ]( const wxPoint& aPosition ) -> void
-    {
-        auto junction = new SCH_JUNCTION( aPosition );
-        AddToScreen( junction, aScreen );
-        BreakSegments( aPosition );
-        added = true;
-    };
-
-    for( auto item = aScreen->GetDrawItems(); item; item = item->Next() )
-    {
-        if( item->Type() == SCH_LINE_T )
-        {
-            auto line = static_cast<SCH_LINE*>( item );
-
-             if( aScreen->IsJunctionNeeded( line->GetStartPoint(), true ) )
-                add_junction( line->GetStartPoint() );
-
-             if( aScreen->IsJunctionNeeded( line->GetEndPoint(), true ) )
-                add_junction( line->GetEndPoint() );
-        }
-    }
-
-    return added;
-}
-
-
 void SCH_EDIT_FRAME::NormalizeSchematicOnFirstLoad( bool recalculateConnections )
 {
     SCH_SHEET_LIST list( g_RootSheet );

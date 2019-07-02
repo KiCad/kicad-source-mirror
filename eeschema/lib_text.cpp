@@ -292,12 +292,6 @@ const EDA_RECT LIB_TEXT::GetBoundingBox() const
 }
 
 
-void LIB_TEXT::Rotate()
-{
-    SetTextAngle( GetTextAngle() == TEXT_ANGLE_VERT ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT );
-}
-
-
 void LIB_TEXT::SetText( const wxString& aText )
 {
     m_Text = aText;

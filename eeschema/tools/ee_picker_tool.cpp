@@ -24,7 +24,6 @@
 #include <ee_picker_tool.h>
 #include <ee_actions.h>
 #include <view/view_controls.h>
-#include <tool/tool_manager.h>
 #include <sch_base_frame.h>
 
 
@@ -149,9 +148,6 @@ void EE_PICKER_TOOL::setTransitions()
 
 void EE_PICKER_TOOL::resetPicker()
 {
-    m_cursorCapture = false;
-    m_autoPanning = false;
-
     m_clickHandler = NULLOPT;
     m_motionHandler = NULLOPT;
     m_cancelHandler = NULLOPT;
@@ -163,6 +159,6 @@ void EE_PICKER_TOOL::setControls()
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
-    controls->CaptureCursor( m_cursorCapture );
-    controls->SetAutoPan( m_autoPanning );
+    controls->CaptureCursor( false );
+    controls->SetAutoPan( false );
 }

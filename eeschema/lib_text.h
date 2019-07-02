@@ -80,14 +80,11 @@ public:
         return TextHitTest( aRect, aContained, aAccuracy );
     }
 
-
     int GetPenSize( ) const override;
 
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     const EDA_RECT GetBoundingBox() const override;
-
-    void Rotate() override;
 
     void BeginEdit( const wxPoint aStartPoint ) override;
     void CalcEdit( const wxPoint& aPosition ) override;

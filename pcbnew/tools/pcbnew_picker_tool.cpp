@@ -159,8 +159,6 @@ void PCBNEW_PICKER_TOOL::setTransitions()
 
 void PCBNEW_PICKER_TOOL::reset()
 {
-    m_cursorCapture = false;
-    m_autoPanning = false;
     m_layerMask = LSET::AllLayersMask();
 
     m_picked = NULLOPT;
@@ -178,6 +176,6 @@ void PCBNEW_PICKER_TOOL::setControls()
     // Ensure that the view controls do not handle our snapping as we use the GRID_HELPER
     controls->SetSnapping( false );
 
-    controls->CaptureCursor( m_cursorCapture );
-    controls->SetAutoPan( m_autoPanning );
+    controls->CaptureCursor( false );
+    controls->SetAutoPan( false );
 }

@@ -32,15 +32,11 @@
 #include <html_messagebox.h>
 #include <kiface_i.h>
 #include <kiway.h>
-#include <msgpanel.h>
 #include <pgm_base.h>
 #include <profile.h>
-#include <sch_draw_panel.h>
-
 #include <advanced_config.h>
 #include <general.h>
 #include <eeschema_id.h>
-#include <netlist.h>
 #include <class_library.h>
 #include <sch_edit_frame.h>
 #include <symbol_lib_table.h>
@@ -53,7 +49,6 @@
 #include <invoke_sch_dialog.h>
 #include <dialogs/dialog_schematic_find.h>
 #include <dialog_symbol_remap.h>
-#include <view/view.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/action_toolbar.h>
@@ -70,10 +65,8 @@
 #include <tools/sch_edit_tool.h>
 #include <tools/ee_inspection_tool.h>
 #include <tools/sch_editor_control.h>
-#include <build_version.h>
 #include <wildcards_and_files_ext.h>
 #include <connection_graph.h>
-#include <sch_view.h>
 #include <sch_painter.h>
 
 #include <gal/graphics_abstraction_layer.h>
@@ -235,7 +228,7 @@ END_EVENT_TABLE()
 SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     SCH_BASE_FRAME( aKiway, aParent, FRAME_SCH, wxT( "Eeschema" ),
         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, SCH_EDIT_FRAME_NAME ),
-    m_item_to_repeat( 0 )
+    m_item_to_repeat( nullptr )
 {
     g_CurrentSheet = new SCH_SHEET_PATH();
     g_ConnectionGraph = new CONNECTION_GRAPH( this );
@@ -363,7 +356,7 @@ void SCH_EDIT_FRAME::setupTools()
 void SCH_EDIT_FRAME::SaveCopyForRepeatItem( SCH_ITEM* aItem )
 {
     // we cannot store a pointer to an item in the display list here since
-    // that item may be deleted, such as part of a line concatonation or other.
+    // that item may be deleted, such as part of a line concatenation or other.
     // So simply always keep a copy of the object which is to be repeated.
 
     delete m_item_to_repeat;
@@ -388,9 +381,9 @@ void SCH_EDIT_FRAME::SetSheetNumberAndCount()
 
     // Examine all sheets path to find the current sheets path,
     // and count them from root to the current sheet path:
-    for( unsigned i = 0; i < sheetList.size(); i++ )
+    for( const SCH_SHEET_PATH& sheet : sheetList )
     {
-        wxString sheetpath = sheetList[i].Path();
+        wxString sheetpath = sheet.Path();
 
         if( sheetpath == current_sheetpath )   // Current sheet path found
             break;
@@ -656,10 +649,9 @@ void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
 
     if( Kiface().IsSingle() )
     {
-        DisplayError( this,  _( "Cannot update the PCB, because the Schematic Editor is"
-                                " opened in stand-alone mode. In order to create/update"
-                                " PCBs from schematics, you need to launch Kicad shell"
-                                " and create a PCB project." ) );
+        DisplayError( this,  _( "Cannot update the PCB, because the Schematic Editor is opened"
+                                " in stand-alone mode. In order to create/update PCBs from"
+                                " schematics, launch the Kicad shell and create a project." ) );
         return;
     }
 
@@ -702,7 +694,7 @@ void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
     if( m_findReplaceStatusPopup )
         m_findReplaceStatusPopup->Destroy();
 
-    // Must destroy statup popup first as it holds a pointer to the dialog
+    // Must destroy statusPopup first as it holds a pointer to the dialog
 
     if( m_findReplaceDialog )
         m_findReplaceDialog->Destroy();
@@ -866,7 +858,6 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
         {
             player = Kiway().Player( FRAME_CVPCB, true );
             player->Show( true );
-            // player->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
         }
 
         sendNetlistToCvpcb();
@@ -956,7 +947,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
 {
     SCH_SCREEN* screen = GetScreen();
 
-    wxCHECK_RET( aItem != NULL, wxT( "Cannot add current aItem to list." ) );
+    wxCHECK_RET( aItem != NULL, wxT( "Cannot add null item to list." ) );
 
     SCH_SHEET*     parentSheet = nullptr;
     SCH_COMPONENT* parentComponent = nullptr;
@@ -1047,7 +1038,8 @@ void SCH_EDIT_FRAME::UpdateTitle()
 
     if( GetScreen()->GetFileName() == m_DefaultSchematicFileName )
     {
-        title.Printf( _( "Eeschema" ) + wxT( " \u2014 %s" ), GetScreen()->GetFileName() );
+        title.Printf( _( "Eeschema" ) + wxT( " \u2014 %s" ),
+                      GetScreen()->GetFileName() );
     }
     else
     {
@@ -1055,7 +1047,8 @@ void SCH_EDIT_FRAME::UpdateTitle()
         wxFileName  fn = fileName;
 
         title.Printf( _( "Eeschema" ) + wxT( " \u2014 %s [%s] \u2014 %s" ),
-                      fn.GetFullName(), g_CurrentSheet->PathHumanReadable(),
+                      fn.GetFullName(),
+                      g_CurrentSheet->PathHumanReadable(),
                       fn.GetPath() );
 
         if( fn.FileExists() )
@@ -1156,11 +1149,11 @@ void SCH_EDIT_FRAME::FixupJunctions()
     SCH_SHEET_LIST sheetList;
     sheetList.BuildSheetList( g_RootSheet );
 
-    for( unsigned i = 0; i < sheetList.size();  i++ )
+    for( const SCH_SHEET_PATH& sheet : sheetList )
     {
         std::vector<wxPoint> anchors;
 
-        SetCurrentSheet( sheetList[i] );
+        SetCurrentSheet( sheet );
         GetCurrentSheet().UpdateAllScreenReferences();
 
         auto screen = GetCurrentSheet().LastScreen();
@@ -1172,15 +1165,13 @@ void SCH_EDIT_FRAME::FixupJunctions()
                 auto cmp = static_cast<SCH_COMPONENT*>( item );
                 auto xform = cmp->GetTransform();
 
-                for( auto pin : cmp->GetPins() )
+                for( const SCH_PIN& pin : cmp->GetPins() )
                 {
                     auto pos = cmp->GetPosition() + xform.TransformCoordinate( pin.GetPosition() );
 
                     // Test if a _new_ junction is needed, and add it if missing
                     if ( screen->IsJunctionNeeded( pos, true ) )
-                    {
                         AddJunction( pos );
-                    }
                 }
             }
         }

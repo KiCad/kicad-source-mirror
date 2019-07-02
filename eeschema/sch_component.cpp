@@ -75,8 +75,8 @@ std::string toUTFTildaText( const wxString& txt )
 
 
 /**
- * Used when a LIB_PART is not found in library
- * to draw a dummy shape
+ * Used to draw a dummy shape when a LIB_PART is not found in library
+ *
  * This component is a 400 mils square with the text ??
  * DEF DUMMY U 0 40 Y Y 1 0 N
  * F0 "U" 0 -350 60 H V
@@ -372,8 +372,7 @@ bool SCH_COMPONENT::Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib )
 }
 
 
-// Helper sort function, used in SCH_COMPONENT::ResolveAll, to sort
-// sch component by lib_id
+// Helper sort function, used in SCH_COMPONENT::ResolveAll, to sort sch component by lib_id
 static bool sort_by_libid( const SCH_COMPONENT* ref, SCH_COMPONENT* cmp )
 {
     if( ref->GetLibId() == cmp->GetLibId() )
@@ -615,20 +614,19 @@ const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet )
     wxStringTokenizer tokenizer;
     wxString          separators( wxT( " " ) );
 
-    for( unsigned ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
+    for( const wxString& entry : m_PathsAndReferences )
     {
-        tokenizer.SetString( m_PathsAndReferences[ii], separators );
+        tokenizer.SetString( entry, separators );
         h_path = tokenizer.GetNextToken();
 
         if( h_path.Cmp( path ) == 0 )
             return tokenizer.GetNextToken();
     }
 
-    // if it was not found in m_Paths array, then see if it is in
-    // m_Field[REFERENCE] -- if so, use this as a default for this path.
-    // this will happen if we load a version 1 schematic file.
-    // it will also mean that multiple instances of the same sheet by default
-    // all have the same component references, but perhaps this is best.
+    // If it was not found in m_Paths array, then see if it is in m_Field[REFERENCE] -- if so,
+    // use this as a default for this path.  This will happen if we load a version 1 schematic
+    // file.  It will also mean that multiple instances of the same sheet by default all have
+    // the same component references, but perhaps this is best.
     if( !GetField( REFERENCE )->GetText().IsEmpty() )
     {
         SetRef( sheet, GetField( REFERENCE )->GetText() );
@@ -650,9 +648,6 @@ bool SCH_COMPONENT::IsReferenceStringValid( const wxString& aReferenceString )
 
     if( text.IsEmpty() )
         ok = false;
-
-    // Add here other constraints
-    // Currently:no other constraint
 
     return ok;
 }
@@ -730,9 +725,9 @@ bool SCH_COMPONENT::IsAnnotated( const SCH_SHEET_PATH* aSheet )
     wxStringTokenizer tokenizer;
     wxString          separators( wxT( " " ) );
 
-    for( unsigned ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
+    for( const wxString& entry : m_PathsAndReferences )
     {
-        tokenizer.SetString( m_PathsAndReferences[ii], separators );
+        tokenizer.SetString( entry, separators );
         h_path = tokenizer.GetNextToken();
 
         if( h_path.Cmp( path ) == 0 )
@@ -754,11 +749,8 @@ void SCH_COMPONENT::SetTimeStamp( timestamp_t aNewTimeStamp )
     string_oldtimestamp.Printf( wxT( "%08lX" ), (long unsigned) m_TimeStamp );
     EDA_ITEM::SetTimeStamp( aNewTimeStamp );
 
-    for( unsigned ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
-    {
-        m_PathsAndReferences[ii].Replace( string_oldtimestamp.GetData(),
-                                          string_timestamp.GetData() );
-    }
+    for( wxString& entry : m_PathsAndReferences )
+        entry.Replace( string_oldtimestamp.GetData(), string_timestamp.GetData() );
 }
 
 
@@ -769,9 +761,9 @@ int SCH_COMPONENT::GetUnitSelection( SCH_SHEET_PATH* aSheet )
     wxStringTokenizer tokenizer;
     wxString          separators( wxT( " " ) );
 
-    for( unsigned ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
+    for( const wxString& entry : m_PathsAndReferences )
     {
-        tokenizer.SetString( m_PathsAndReferences[ii], separators );
+        tokenizer.SetString( entry, separators );
         h_path = tokenizer.GetNextToken();
 
         if( h_path.Cmp( path ) == 0 )
@@ -784,8 +776,8 @@ int SCH_COMPONENT::GetUnitSelection( SCH_SHEET_PATH* aSheet )
         }
     }
 
-    // if it was not found in m_Paths array, then use m_unit.
-    // this will happen if we load a version 1 schematic file.
+    // If it was not found in m_Paths array, then use m_unit.  This will happen if we load a
+    // version 1 schematic file.
     return m_unit;
 }
 
@@ -801,9 +793,9 @@ void SCH_COMPONENT::SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection
     wxString          separators( wxT( " " ) );
 
     //check to see if it is already there before inserting it
-    for( unsigned ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
+    for( wxString& entry : m_PathsAndReferences )
     {
-        tokenizer.SetString( m_PathsAndReferences[ii], separators );
+        tokenizer.SetString( entry, separators );
         h_path = tokenizer.GetNextToken();
 
         if( h_path.Cmp( path ) == 0 )
@@ -815,7 +807,7 @@ void SCH_COMPONENT::SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection
             h_ref << aUnitSelection;                // Add part selection
 
             // Ann the part selection
-            m_PathsAndReferences[ii] = h_ref;
+            entry = h_ref;
             notInArray = false;
         }
     }
@@ -836,17 +828,16 @@ SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
 
     wxASSERT( field );
 
-    // use cast to remove const-ness
-    return (SCH_FIELD*) field;
+    return const_cast<SCH_FIELD*>( field );
 }
 
 
 wxString SCH_COMPONENT::GetFieldText( const wxString& aFieldName, SCH_EDIT_FRAME* aFrame ) const
 {
-    for( unsigned int ii = 0; ii < m_Fields.size(); ii++ )
+    for( const SCH_FIELD& field : m_Fields )
     {
-        if( aFieldName == m_Fields[ii].GetName() )
-            return m_Fields[ii].GetText();
+        if( aFieldName == field.GetName() )
+            return field.GetText();
     }
 
     return wxEmptyString;
@@ -855,10 +846,10 @@ wxString SCH_COMPONENT::GetFieldText( const wxString& aFieldName, SCH_EDIT_FRAME
 
 void SCH_COMPONENT::GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly )
 {
-    for( SCH_FIELD& each_field : m_Fields )
+    for( SCH_FIELD& field : m_Fields )
     {
-        if( !aVisibleOnly || ( each_field.IsVisible() && !each_field.IsVoid() ) )
-            aVector.push_back( &each_field );
+        if( !aVisibleOnly || ( field.IsVisible() && !field.IsVoid() ) )
+            aVector.push_back( &field );
     }
 }
 
@@ -889,12 +880,10 @@ SCH_FIELD* SCH_COMPONENT::FindField( const wxString& aFieldName, bool aIncludeDe
 {
     unsigned start = aIncludeDefaultFields ? 0 : MANDATORY_FIELDS;
 
-    for( unsigned i = start;  i<m_Fields.size();  ++i )
+    for( unsigned i = start; i < m_Fields.size(); ++i )
     {
         if( aFieldName == m_Fields[i].GetName( false ) )
-        {
             return &m_Fields[i];
-        }
     }
 
     return NULL;
@@ -1066,18 +1055,18 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
     if( aSheetPath )
         path = GetPath( aSheetPath );
 
-    for( unsigned int ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
+    for( wxString& entry : m_PathsAndReferences )
     {
         // Break hierarchical reference in path, ref and multi selection:
-        reference_fields = wxStringTokenize( m_PathsAndReferences[ii], separators );
+        reference_fields = wxStringTokenize( entry, separators );
 
         // For all components: if aSheetPath is not NULL,
         // remove annotation only for the given path
         if( aSheetPath == NULL || reference_fields[0].Cmp( path ) == 0 )
         {
-            wxString NewHref = reference_fields[0];
-            NewHref << wxT( " " ) << defRef << wxT( " " ) << reference_fields[2];
-            m_PathsAndReferences[ii] = NewHref;
+            wxString newHref = reference_fields[0];
+            newHref << wxT( " " ) << defRef << wxT( " " ) << reference_fields[2];
+            entry = newHref;
         }
     }
 

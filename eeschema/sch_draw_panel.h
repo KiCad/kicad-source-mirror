@@ -31,12 +31,8 @@
 #include <sch_view.h>
 
 
-class SCH_SHEET;
 class LIB_PART;
-class BASE_SCREEN;
 class SCH_SCREEN;
-class COLORS_DESIGN_SETTINGS;
-class SCH_EDIT_FRAME;
 
 
 class SCH_DRAW_PANEL : public EDA_DRAW_PANEL_GAL

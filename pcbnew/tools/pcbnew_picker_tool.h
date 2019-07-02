@@ -59,18 +59,6 @@ public:
     int Main( const TOOL_EVENT& aEvent );
 
     /**
-     * Function SetAutoPanning()
-     * Sets autopanning mode for the period when the tool is active.
-     */
-    inline void SetAutoPanning( bool aEnable ) { m_autoPanning = aEnable; }
-
-    /**
-     * Function SetAutoPanning()
-     * Toggles cursor capture mode for the period when the tool is active.
-     */
-    inline void SetCursorCapture( bool aEnable ) { m_cursorCapture = aEnable; }
-
-    /**
      * Function SetLayerSet()
      * Sets the tool's snap layer set
      */
@@ -121,9 +109,6 @@ public:
     void setTransitions() override;
 
 private:
-    bool m_cursorCapture;
-    bool m_autoPanning;
-
     ///> The layer set to use for optional snapping
     LSET m_layerMask;
 

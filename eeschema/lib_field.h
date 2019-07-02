@@ -178,8 +178,6 @@ public:
 
     void BeginEdit( const wxPoint aStartPoint ) override;
 
-    void Rotate() override;
-
     /**
      * Sets the field text to \a aText.
      *

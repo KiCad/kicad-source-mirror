@@ -401,8 +401,6 @@ public:
 
     /**
      * Creates the SVG print file for the current edited component.
-     *
-     * @param aFullFileName = the full filename
      */
     void SVG_PlotComponent( const wxString& aFullFileName );
 
