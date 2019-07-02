@@ -1,11 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#ifndef __DIALOG_EDIT_FOOTPRINT_FOR_FP_EDITOR_BASE_H__
+#define __DIALOG_EDIT_FOOTPRINT_FOR_FP_EDITOR_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -20,10 +21,10 @@ class WX_GRID;
 #include <wx/font.h>
 #include <wx/grid.h>
 #include <wx/gdicmn.h>
-#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
@@ -47,7 +48,7 @@ class DIALOG_FOOTPRINT_FP_EDITOR_BASE : public DIALOG_SHIM
 {
 	private:
 		wxBoxSizer* m_GeneralBoxSizer;
-
+	
 	protected:
 		wxNotebook* m_NoteBook;
 		wxPanel* m_PanelGeneral;
@@ -97,14 +98,13 @@ class DIALOG_FOOTPRINT_FP_EDITOR_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
 		wxButton* m_sdbSizerStdButtonsOK;
 		wxButton* m_sdbSizerStdButtonsCancel;
-
+		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnGridSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteField( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnFootprintNameKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnFootprintNameText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void On3DModelCellChanged( wxGridEvent& event ) { event.Skip(); }
 		virtual void On3DModelSelected( wxGridEvent& event ) { event.Skip(); }
@@ -112,12 +112,13 @@ class DIALOG_FOOTPRINT_FP_EDITOR_BASE : public DIALOG_SHIM
 		virtual void OnAdd3DModel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemove3DModel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Cfg3DPath( wxCommandEvent& event ) { event.Skip(); }
-
-
+		
+	
 	public:
-
-		DIALOG_FOOTPRINT_FP_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_FOOTPRINT_FP_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_FOOTPRINT_FP_EDITOR_BASE();
-
+	
 };
 
+#endif //__DIALOG_EDIT_FOOTPRINT_FOR_FP_EDITOR_BASE_H__

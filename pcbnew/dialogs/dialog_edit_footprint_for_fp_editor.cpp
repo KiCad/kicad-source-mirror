@@ -498,14 +498,15 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DRow( wxCommandEvent&  )
 
 bool DIALOG_FOOTPRINT_FP_EDITOR::checkFootprintName( const wxString& aFootprintName )
 {
-    if( aFootprintName.IsEmpty() || !MODULE::IsLibNameValid( aFootprintName ) )
+    if( aFootprintName.IsEmpty() )
     {
-        if( aFootprintName.IsEmpty() )
-            m_delayedErrorMessage = _( "Footprint must have a name." );
-        else
-            m_delayedErrorMessage.Printf( _( "Footprint name may not contain \"%s\"." ),
-                                          MODULE::StringLibNameInvalidChars( true ) );
-
+        m_delayedErrorMessage = _( "Footprint must have a name." );
+        return false;
+    }
+    else if( !MODULE::IsLibNameValid( aFootprintName ) )
+    {
+        m_delayedErrorMessage.Printf( _( "Footprint name may not contain \"%s\"." ),
+                                      MODULE::StringLibNameInvalidChars( true ) );
         return false;
     }
 
@@ -704,25 +705,6 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnFootprintNameText( wxCommandEvent& event )
         // Keep Name and Value of footprints in library in sync
         m_itemsGrid->SetCellValue( 1, TMC_TEXT, m_FootprintNameCtrl->GetValue() );
     }
-}
-
-
-void DIALOG_FOOTPRINT_FP_EDITOR::OnFootprintNameKillFocus( wxFocusEvent& event )
-{
-    // Only warn once on KillFocus for each error value; after that it just gets annoying.
-    // This also fixes a bug where we endlessly cycle in some edge cases.
-    static wxString lastValue = wxEmptyString;
-    wxString        valueNow = m_FootprintNameCtrl->GetValue();
-
-    if( !m_delayedFocusCtrl && valueNow != lastValue && !checkFootprintName( valueNow ) )
-    {
-        m_delayedFocusCtrl = m_FootprintNameCtrl;
-        m_delayedFocusPage = 0;
-    }
-
-    lastValue = valueNow;
-
-    event.Skip();
 }
 
 

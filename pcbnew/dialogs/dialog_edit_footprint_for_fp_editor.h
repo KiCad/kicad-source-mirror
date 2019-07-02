@@ -83,7 +83,6 @@ private:
     void OnAdd3DRow( wxCommandEvent& event ) override;
     void Cfg3DPath( wxCommandEvent& event ) override;
     void OnGridSize( wxSizeEvent& event ) override;
-    void OnFootprintNameKillFocus( wxFocusEvent& event ) override;
     void OnFootprintNameText( wxCommandEvent& event ) override;
     void OnGridCellChanging( wxGridEvent& event );
     void OnAddField( wxCommandEvent& event ) override;
