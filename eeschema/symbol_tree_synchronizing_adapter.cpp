@@ -234,7 +234,12 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
     case 1:
         if( node->LibId == m_libMgr->GetCurrentLibId() )
         {
-            auto alias = m_libMgr->GetAlias( node->Name, node->Parent->Name );
+            LIB_ALIAS* alias = nullptr;
+
+            // When the node parent name is empty, the node is a lib name, not a symbol name
+            // However should not happen, but happens.
+            if( !node->Parent->Name.IsEmpty() )
+                alias = m_libMgr->GetAlias( node->Name, node->Parent->Name );
 
             if( alias )
                 aVariant = alias->GetDescription();
