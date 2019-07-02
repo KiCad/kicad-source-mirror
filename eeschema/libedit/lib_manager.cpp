@@ -117,8 +117,8 @@ SYMBOL_LIB_TABLE_ROW* LIB_MANAGER::GetLibrary( const wxString& aLibrary ) const
     }
     catch( const IO_ERROR& e )
     {
-        DisplayErrorMessage( &m_frame, wxString::Format( _( "Cannot find library \"%s\" in "
-                "the Symbol Library Table" ), aLibrary ), e.What() );
+        wxLogMessage( _( "Cannot find library \"%s\" in the Symbol Library Table (%s)" ),
+                      aLibrary, e.What() );
     }
 
     return row;
@@ -156,8 +156,7 @@ bool LIB_MANAGER::FlushLibrary( const wxString& aLibrary )
     }
     catch( const IO_ERROR& e )
     {
-        DisplayErrorMessage( &m_frame, wxString::Format( _( "Cannot flush "
-                        "library changes (\"%s\")" ), aLibrary ), e.What() );
+        wxLogMessage( _( "Cannot flush library changes (\"%s\") (%s)" ), aLibrary, e.What() );
     }
 
     // Assume all libraries are successfully saved
@@ -312,8 +311,7 @@ wxArrayString LIB_MANAGER::GetAliasNames( const wxString& aLibrary ) const
         }
         catch( const IO_ERROR& e )
         {
-            DisplayErrorMessage( &m_frame, wxString::Format( _( "Cannot enumerate "
-                    "library \"%s\"" ), aLibrary ), e.What() );
+            wxLogMessage( _( "Cannot enumerate library \"%s\" (%s)" ), aLibrary, e.What() );
         }
     }
     else
@@ -350,8 +348,7 @@ std::list<LIB_ALIAS*> LIB_MANAGER::GetAliases( const wxString& aLibrary ) const
         }
         catch( const IO_ERROR& e )
         {
-            DisplayErrorMessage( &m_frame, wxString::Format( _( "Cannot load "
-                "aliases from library \"%s\"" ), aLibrary ), e.What() );
+            wxLogMessage( _( "Cannot load aliases from library \"%s\" (%s)" ), aLibrary, e.What() );
         }
 
         std::copy( aliases.begin(), aliases.end(), std::back_inserter( ret ) );
@@ -384,11 +381,8 @@ LIB_PART* LIB_MANAGER::GetBufferedPart( const wxString& aAlias, const wxString& 
         }
         catch( const IO_ERROR& e )
         {
-            wxString msg = wxString::Format( _( "Error loading symbol \"%s\" from library \"%s\"." ),
-                                             aAlias,
-                                             aLibrary);
-            DisplayErrorMessage( &m_frame, msg, e.What() );
-
+            wxLogMessage( _( "Error loading symbol \"%s\" from library \"%s\". (%s)" ),
+                          aAlias, aLibrary, e.What() );
             bufferedPart = nullptr;
         }
     }
@@ -582,8 +576,8 @@ LIB_ALIAS* LIB_MANAGER::GetAlias( const wxString& aAlias, const wxString& aLibra
     }
     catch( const IO_ERROR& e )
     {
-        DisplayErrorMessage( &m_frame, wxString::Format( _( "Cannot load "
-                "symbol \"%s\" from library \"%s\"" ), aAlias, aLibrary ), e.What() );
+        wxLogMessage( _( "Cannot load symbol \"%s\" from library \"%s\" (%s)" ),
+                      aAlias, aLibrary, e.What() );
     }
 
     return alias;
@@ -729,9 +723,7 @@ std::set<LIB_PART*> LIB_MANAGER::getOriginalParts( const wxString& aLibrary )
     }
     catch( const IO_ERROR& e )
     {
-        DisplayErrorMessage( &m_frame,
-                             wxString::Format( _( "Cannot enumerate library \"%s\"" ), aLibrary ),
-                             e.What() );
+        wxLogMessage( _( "Cannot enumerate library \"%s\" (%s)" ), aLibrary, e.What() );
     }
 
     return parts;
