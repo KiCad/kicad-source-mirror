@@ -110,7 +110,7 @@ void SetDefaultTextSize( int aTextSize )
  * Default line (in Eeschema units) thickness used to draw/plot items having a
  * default thickness line value (i.e. = 0 ).
  */
-static int s_drawDefaultLineThickness  = DEFAULTDRAWLINETHICKNESS;
+static int s_drawDefaultLineThickness = -1;
 
 
 int GetDefaultLineThickness()
@@ -410,12 +410,20 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     ReadHotkeyConfig( SCH_EDIT_FRAME_NAME, g_Schematic_Hotkeys_Descr );
     wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
+    // LibEdit owns this one, but we must read it in if LibEdit hasn't set it yet
+    if( GetDefaultLineThickness() < 0 )
+    {
+        SetDefaultLineThickness( (int) aCfg->Read( DefaultDrawLineWidthEntry,
+                                                   DEFAULTDRAWLINETHICKNESS ) );
+    }
+
     SetDefaultBusThickness( (int) aCfg->Read( DefaultBusWidthEntry, DEFAULTBUSTHICKNESS ) );
 
+    // Property introduced in 6.0; use DefaultLineWidth for earlier projects
     if( !aCfg->Read( DefaultWireWidthEntry, &tmp ) )
         aCfg->Read( DefaultDrawLineWidthEntry, &tmp, DEFAULTDRAWLINETHICKNESS );
 
-    SetDefaultWireThickness( tmp );
+    SetDefaultWireThickness( (int) tmp );
 
     SCH_JUNCTION::SetSymbolSize( (int) aCfg->Read( DefaultJctSizeEntry, SCH_JUNCTION::GetSymbolSize() ) );
     aCfg->Read( ShowHiddenPinsEntry, &m_showAllPins, false );
@@ -589,6 +597,7 @@ void LIB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::SaveSettings( aCfg );
 
+    aCfg->Write( DefaultDrawLineWidthEntry, GetDefaultLineThickness() );
     aCfg->Write( DefaultPinLengthEntry, GetDefaultPinLength() );
     aCfg->Write( defaultPinNumSizeEntry, GetPinNumDefaultSize() );
     aCfg->Write( defaultPinNameSizeEntry, GetPinNameDefaultSize() );
