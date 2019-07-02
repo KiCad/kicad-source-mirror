@@ -335,22 +335,6 @@ int PL_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 }
 
 
-static bool deleteItem( PL_EDITOR_FRAME* aFrame, const VECTOR2D& aPosition )
-{
-    PL_SELECTION_TOOL* selectionTool = aFrame->GetToolManager()->GetTool<PL_SELECTION_TOOL>();
-    wxCHECK( selectionTool, false );
-
-    aFrame->GetToolManager()->RunAction( PL_ACTIONS::clearSelection, true );
-
-    EDA_ITEM* item = selectionTool->SelectPoint( aPosition );
-
-    if( item )
-        aFrame->GetToolManager()->RunAction( PL_ACTIONS::doDelete, true );
-
-    return true;
-}
-
-
 #define HITTEST_THRESHOLD_PIXELS 5
 
 

@@ -138,7 +138,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     DRAWSEGMENT*     line = m_editModules ? new EDGE_MODULE( module ) : new DRAWSEGMENT;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::LINE );
-    OPT<VECTOR2D>    startingPoint = NULLOPT;
+    OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
 
     line->SetFlags( IS_NEW );
 
@@ -181,7 +181,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     DRAWSEGMENT*     circle = m_editModules ? new EDGE_MODULE( module ) : new DRAWSEGMENT;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::CIRCLE );
-    OPT<VECTOR2D>    startingPoint = NULLOPT;
+    OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
 
     circle->SetFlags( IS_NEW );
 
