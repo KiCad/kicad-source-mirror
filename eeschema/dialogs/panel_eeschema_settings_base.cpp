@@ -119,7 +119,7 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Symbol Field Automatic Placement") ), wxVERTICAL );
 	
 	m_checkAutoplaceFields = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("A&utomatically place symbol fields"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer1->Add( m_checkAutoplaceFields, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	sbSizer1->Add( m_checkAutoplaceFields, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_checkAutoplaceJustify = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("A&llow field autoplace to change justification"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_checkAutoplaceJustify, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
