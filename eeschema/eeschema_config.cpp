@@ -105,7 +105,7 @@ void SetDefaultTextSize( int aTextSize )
  * Default line (in Eeschema units) thickness used to draw/plot items having a
  * default thickness line value (i.e. = 0 ).
  */
-static int s_drawDefaultLineThickness  = DEFAULTDRAWLINETHICKNESS;
+static int s_drawDefaultLineThickness = -1;
 
 
 int GetDefaultLineThickness()
@@ -350,14 +350,24 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
+    // LibEdit owns this one, but we must read it in if LibEdit hasn't set it yet
+    if( GetDefaultLineThickness() < 0 )
+    {
+        SetDefaultLineThickness( (int) aCfg->Read( DefaultDrawLineWidthEntry,
+                                                   DEFAULTDRAWLINETHICKNESS ) );
+    }
+
     SetDefaultBusThickness( (int) aCfg->Read( DefaultBusWidthEntry, DEFAULTBUSTHICKNESS ) );
 
+    // Property introduced in 6.0; use DefaultLineWidth for earlier projects
     if( !aCfg->Read( DefaultWireWidthEntry, &tmp ) )
         aCfg->Read( DefaultDrawLineWidthEntry, &tmp, DEFAULTDRAWLINETHICKNESS );
 
-    SetDefaultWireThickness( tmp );
+    SetDefaultWireThickness( (int) tmp );
 
-    SCH_JUNCTION::SetSymbolSize( (int) aCfg->Read( DefaultJctSizeEntry, SCH_JUNCTION::GetSymbolSize() ) );
+    if( aCfg->Read( DefaultJctSizeEntry, &tmp ) )
+        SCH_JUNCTION::SetSymbolSize( (int) tmp );
+
     aCfg->Read( MoveWarpsCursorEntry, &m_moveWarpsCursor, true );
     aCfg->Read( MoveTakesCursorAsOriginEntry, &m_moveTakesCursorAsOrigin, false );
     aCfg->Read( DragActionIsMoveEntry, &m_dragActionIsMove, true );
@@ -535,6 +545,7 @@ void LIB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::SaveSettings( aCfg );
 
+    aCfg->Write( DefaultDrawLineWidthEntry, GetDefaultLineThickness() );
     aCfg->Write( DefaultPinLengthEntry, GetDefaultPinLength() );
     aCfg->Write( defaultPinNumSizeEntry, GetPinNumDefaultSize() );
     aCfg->Write( defaultPinNameSizeEntry, GetPinNameDefaultSize() );
