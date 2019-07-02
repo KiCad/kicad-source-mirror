@@ -49,6 +49,10 @@ static wxString formatPreviewDimension( double aVal, EDA_UNITS_T aUnits )
         precision = 1;  // 0.1deg
         break;
 
+    case PERCENT:
+        precision = 1;  // 0.1%
+        break;
+
     case UNSCALED_UNITS:
         break;
     }
