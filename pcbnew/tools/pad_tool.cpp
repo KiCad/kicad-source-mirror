@@ -320,7 +320,7 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 
 int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 {
-    if( !board()->GetFirstModule() || !board()->GetFirstModule()->Pads().empty() )
+    if( !board()->GetFirstModule() || board()->GetFirstModule()->Pads().empty() )
         return 0;
 
     DIALOG_ENUM_PADS settingsDlg( frame() );
@@ -485,6 +485,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                  evt->IsDblClick( BUT_LEFT ) )
         {
             commit.Push( _( "Renumber pads" ) );
+            frame()->PopTool();
             break;
         }
 
