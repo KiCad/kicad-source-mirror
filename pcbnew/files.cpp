@@ -515,34 +515,45 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             return false;
         }
 
-
-        // 6.0 TODO: some settings didn't make it into the board file in 5.1 so as not to
-        // change the file format.  For 5.1 we must copy them across from the config-initialized
-        // board.
         BOARD_DESIGN_SETTINGS& bds = loadedBoard->m_designSettings;
-        BOARD_DESIGN_SETTINGS& configBds = GetBoard()->GetDesignSettings();
 
+        if( bds.m_CopperEdgeClearance == Millimeter2iu( LEGACY_COPPEREDGECLEARANCE ) )
+        {
+            // 5.1 boards stored some settings in the config so as not to bump the file version.
+            // These will have been loaded into the config-initialized board, so we copy them
+            // from there.
+            BOARD_DESIGN_SETTINGS& configBds = GetBoard()->GetDesignSettings();
+
+            bds.m_RequireCourtyards                 = configBds.m_RequireCourtyards;
+            bds.m_ProhibitOverlappingCourtyards     = configBds.m_ProhibitOverlappingCourtyards;
+            bds.m_HoleToHoleMin                     = configBds.m_HoleToHoleMin;
+            bds.m_LineThickness[LAYER_CLASS_OTHERS] = configBds.m_LineThickness[LAYER_CLASS_OTHERS];
+            bds.m_TextSize[LAYER_CLASS_OTHERS]      = configBds.m_TextSize[LAYER_CLASS_OTHERS];
+            bds.m_TextThickness[LAYER_CLASS_OTHERS] = configBds.m_TextThickness[LAYER_CLASS_OTHERS];
+            std::copy( configBds.m_TextItalic,  configBds.m_TextItalic + 4,  bds.m_TextItalic );
+            std::copy( configBds.m_TextUpright, configBds.m_TextUpright + 4, bds.m_TextUpright );
+            bds.m_DiffPairDimensionsList            = configBds.m_DiffPairDimensionsList;
+            bds.m_CopperEdgeClearance               = configBds.m_CopperEdgeClearance;
+
+            // Before we had a copper edge clearance setting, the edge line widths could be used
+            // as a kludge to control them.  So if there's no setting then infer it from the
+            // edge widths.
+            if( bds.m_CopperEdgeClearance == Millimeter2iu( LEGACY_COPPEREDGECLEARANCE ) )
+                bds.SetCopperEdgeClearance( inferLegacyEdgeClearance( loadedBoard ) );
+        }
+
+        // 6.0 TODO: some of the 5.1 settings still haven't moved because they're waiting on
+        // the new DRC architecture
+        BOARD_DESIGN_SETTINGS& configBds = GetBoard()->GetDesignSettings();
         bds.m_RequireCourtyards                 = configBds.m_RequireCourtyards;
         bds.m_ProhibitOverlappingCourtyards     = configBds.m_ProhibitOverlappingCourtyards;
         bds.m_HoleToHoleMin                     = configBds.m_HoleToHoleMin;
-        bds.m_LineThickness[LAYER_CLASS_OTHERS] = configBds.m_LineThickness[LAYER_CLASS_OTHERS];
-        bds.m_TextSize[LAYER_CLASS_OTHERS]      = configBds.m_TextSize[LAYER_CLASS_OTHERS];
-        bds.m_TextThickness[LAYER_CLASS_OTHERS] = configBds.m_TextThickness[LAYER_CLASS_OTHERS];
-        std::copy( configBds.m_TextItalic,  configBds.m_TextItalic + 4,  bds.m_TextItalic );
-        std::copy( configBds.m_TextUpright, configBds.m_TextUpright + 4, bds.m_TextUpright );
-        bds.m_DiffPairDimensionsList            = configBds.m_DiffPairDimensionsList;
-        bds.m_CopperEdgeClearance               = configBds.m_CopperEdgeClearance;
 
         SetBoard( loadedBoard );
 
         // we should not ask PLUGINs to do these items:
         loadedBoard->BuildListOfNets();
         loadedBoard->SynchronizeNetsAndNetClasses();
-
-        // If this is a legacy board then we set the copper edge clearance to 1/2 the edge-cut
-        // line width (which was a legacy kludge for implementing edge clearances).
-        if( bds.m_CopperEdgeClearance == Millimeter2iu( LEGACY_COPPEREDGECLEARANCE ) )
-            bds.SetCopperEdgeClearance( inferLegacyEdgeClearance( loadedBoard ) );
 
         if( loadedBoard->IsModified() )
             OnModify();

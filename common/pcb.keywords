@@ -60,7 +60,11 @@ crossbar
 custom
 outline
 convexhull
+copper_line_width
+copper_text_dims
+courtyard_line_width
 date
+defaults
 descr
 die_length
 dimension
@@ -69,6 +73,8 @@ diff_pair_gap
 drawings
 drill
 edge
+edge_clearance
+edge_cuts_line_width
 edge_width
 effects
 end
@@ -105,6 +111,7 @@ hide
 italic
 justify
 keepout
+keep_upright
 kicad_pcb
 last_trace_width
 layer
@@ -133,6 +140,8 @@ not_allowed
 np_thru_hole
 offset
 options
+other_layers_line_width
+other_layers_text_dims
 oval
 pad
 pads
@@ -167,6 +176,8 @@ scale
 segment
 segment_width
 setup
+silk_line_width
+silk_text_dims
 size
 smd
 smoothing
@@ -199,6 +210,7 @@ thru_hole_only
 tstamp
 unlocked
 user
+user_diff_pair
 user_trace_width
 user_via
 uvia_dia

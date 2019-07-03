@@ -42,6 +42,7 @@
 class BOARD;
 class BOARD_ITEM;
 class D_PAD;
+class BOARD_DESIGN_SETTINGS;
 class DIMENSION;
 class DRAWSEGMENT;
 class EDA_TEXT;
@@ -121,6 +122,8 @@ class PCB_PARSER : public PCB_LEXER
     void parseLayer( LAYER* aLayer );
 
     void parseSetup();
+    void parseDefaults( BOARD_DESIGN_SETTINGS& aSettings );
+    void parseDefaultTextDims( BOARD_DESIGN_SETTINGS& aSettings, int aLayer );
     void parseNETINFO_ITEM();
     void parseNETCLASS();
 

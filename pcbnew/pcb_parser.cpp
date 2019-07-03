@@ -1240,7 +1240,7 @@ void PCB_PARSER::parseSetup()
             {
                 int viaSize = parseBoardUnits( "user via size" );
                 int viaDrill = parseBoardUnits( "user via drill" );
-                designSettings.m_ViasDimensionsList.push_back( VIA_DIMENSION( viaSize, viaDrill ) );
+                designSettings.m_ViasDimensionsList.emplace_back( VIA_DIMENSION( viaSize, viaDrill ) );
                 NeedRIGHT();
             }
             break;
@@ -1275,46 +1275,55 @@ void PCB_PARSER::parseSetup()
             NeedRIGHT();
             break;
 
-        // 6.0 TODO: change these names, or leave them?
-        // 6.0 TODO: add LAYER_CLASS_OTHERS read/write
-        // 6.0 TODO: add m_TextItalic read/write
-        // 6.0 TODO: add m_TextUpright read/write
+        case T_user_diff_pair:
+            {
+                int width = parseBoardUnits( "user diff-pair width" );
+                int gap = parseBoardUnits( "user diff-pair gap" );
+                int viaGap = parseBoardUnits( "user diff-pair via gap" );
+                designSettings.m_DiffPairDimensionsList.emplace_back( DIFF_PAIR_DIMENSION( width, gap, viaGap ) );
+                NeedRIGHT();
+            }
+            break;
 
-        case T_segment_width:
+        case T_segment_width:   // note: legacy (pre-6.0) token
             designSettings.m_LineThickness[ LAYER_CLASS_COPPER ] = parseBoardUnits( T_segment_width );
             NeedRIGHT();
             break;
 
-        case T_edge_width:
+        case T_edge_width:      // note: legacy (pre-6.0) token
             designSettings.m_LineThickness[ LAYER_CLASS_EDGES ] = parseBoardUnits( T_edge_width );
             NeedRIGHT();
             break;
 
-        case T_mod_edge_width:
+        case T_mod_edge_width:  // note: legacy (pre-6.0) token
             designSettings.m_LineThickness[ LAYER_CLASS_SILK ] = parseBoardUnits( T_mod_edge_width );
             NeedRIGHT();
             break;
 
-        case T_pcb_text_width:
+        case T_pcb_text_width:  // note: legacy (pre-6.0) token
             designSettings.m_TextThickness[ LAYER_CLASS_COPPER ] = parseBoardUnits( T_pcb_text_width );
             NeedRIGHT();
             break;
 
-        case T_mod_text_width:
+        case T_mod_text_width:  // note: legacy (pre-6.0) token
             designSettings.m_TextThickness[ LAYER_CLASS_SILK ] = parseBoardUnits( T_mod_text_width );
             NeedRIGHT();
             break;
 
-        case T_pcb_text_size:
+        case T_pcb_text_size:   // note: legacy (pre-6.0) token
             designSettings.m_TextSize[ LAYER_CLASS_COPPER ].x = parseBoardUnits( "pcb text width" );
             designSettings.m_TextSize[ LAYER_CLASS_COPPER ].y = parseBoardUnits( "pcb text height" );
             NeedRIGHT();
             break;
 
-        case T_mod_text_size:
+        case T_mod_text_size:   // note: legacy (pre-6.0) token
             designSettings.m_TextSize[ LAYER_CLASS_SILK ].x = parseBoardUnits( "module text width" );
             designSettings.m_TextSize[ LAYER_CLASS_SILK ].y = parseBoardUnits( "module text height" );
             NeedRIGHT();
+            break;
+
+        case T_defaults:
+            parseDefaults( designSettings );
             break;
 
         case T_pad_size:
@@ -1412,6 +1421,105 @@ void PCB_PARSER::parseSetup()
 
     m_board->SetDesignSettings( designSettings );
     m_board->SetZoneSettings( zoneSettings );
+}
+
+
+void PCB_PARSER::parseDefaults( BOARD_DESIGN_SETTINGS& designSettings )
+{
+    T token;
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_edge_clearance:
+            designSettings.m_CopperEdgeClearance = parseBoardUnits( T_edge_clearance );
+            NeedRIGHT();
+            break;
+
+        case T_copper_line_width:
+            designSettings.m_LineThickness[ LAYER_CLASS_COPPER ] = parseBoardUnits( token );
+            NeedRIGHT();
+            break;
+
+        case T_copper_text_dims:
+            parseDefaultTextDims( designSettings, LAYER_CLASS_COPPER );
+            break;
+
+        case T_courtyard_line_width:
+            designSettings.m_LineThickness[ LAYER_CLASS_COURTYARD ] = parseBoardUnits( token );
+            NeedRIGHT();
+            break;
+
+        case T_edge_cuts_line_width:
+            designSettings.m_LineThickness[ LAYER_CLASS_EDGES ] = parseBoardUnits( token );
+            NeedRIGHT();
+            break;
+
+        case T_silk_line_width:
+            designSettings.m_LineThickness[ LAYER_CLASS_SILK ] = parseBoardUnits( token );
+            NeedRIGHT();
+            break;
+
+        case T_silk_text_dims:
+            parseDefaultTextDims( designSettings, LAYER_CLASS_SILK );
+            break;
+
+        case T_other_layers_line_width:
+            designSettings.m_LineThickness[ LAYER_CLASS_OTHERS ] = parseBoardUnits( token );
+            NeedRIGHT();
+            break;
+
+        case T_other_layers_text_dims:
+            parseDefaultTextDims( designSettings, LAYER_CLASS_OTHERS );
+            break;
+
+        default:
+            Unexpected( CurText() );
+        }
+    }
+}
+
+
+void PCB_PARSER::parseDefaultTextDims( BOARD_DESIGN_SETTINGS& aSettings, int aLayer )
+{
+    T token;
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( token == T_LEFT )
+            token = NextTok();
+
+        switch( token )
+        {
+        case T_size:
+            aSettings.m_TextSize[ aLayer ].x = parseBoardUnits( "default text size X" );
+            aSettings.m_TextSize[ aLayer ].y = parseBoardUnits( "default text size Y" );
+            NeedRIGHT();
+            break;
+
+        case T_thickness:
+            aSettings.m_TextThickness[ aLayer ] = parseBoardUnits( "default text width" );
+            NeedRIGHT();
+            break;
+
+        case T_italic:
+            aSettings.m_TextItalic[ aLayer ] = true;
+            break;
+
+        case T_keep_upright:
+            aSettings.m_TextUpright[ aLayer ] = true;
+            break;
+
+        default:
+            Expecting( "size, thickness, italic or keep_upright" );
+        }
+    }
 }
 
 
