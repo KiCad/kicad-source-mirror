@@ -309,7 +309,7 @@ const DPOINT WS_DATA_ITEM::GetStartPos( int ii ) const
 const wxPoint WS_DATA_ITEM::GetStartPosUi( int ii ) const
 {
     DPOINT pos = GetStartPos( ii ) * WS_DATA_MODEL::GetTheInstance().m_WSunits2Iu;
-    return (wxPoint) pos;
+    return wxPoint( KiROUND( pos.x ), KiROUND( pos.y ) );
 }
 
 
