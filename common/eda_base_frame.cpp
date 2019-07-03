@@ -158,10 +158,6 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
 EDA_BASE_FRAME::~EDA_BASE_FRAME()
 {
     delete m_autoSaveTimer;
-
-    // This is needed for OSX: avoids further OnDraw processing after this
-    // destructor and before the native window is destroyed
-    this->Freeze();
 }
 
 
