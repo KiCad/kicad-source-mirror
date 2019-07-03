@@ -33,35 +33,24 @@
 function( make_lexer outputTarget inputFile outHeaderFile outCppFile enum )
 
     add_custom_command(
-        OUTPUT  ${outHeaderFile}
-                ${outCppFile}
+        OUTPUT  ${CMAKE_CURRENT_BINARY_DIR}/${outHeaderFile}
+                ${CMAKE_CURRENT_BINARY_DIR}/${outCppFile}
         COMMAND ${CMAKE_COMMAND}
             -Denum=${enum}
-            -DinputFile=${inputFile}
-            -DoutHeaderFile=${outHeaderFile}
-            -DoutCppFile=${outCppFile}
+            -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/${inputFile}
+            -DoutHeaderFile=${CMAKE_CURRENT_BINARY_DIR}/${outHeaderFile}
+            -DoutCppFile=${CMAKE_CURRENT_BINARY_DIR}/${outCppFile}
             -P ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
         COMMENT "TokenList2DsnLexer.cmake creating:
            ${outHeaderFile} and
            ${outCppFile} from
            ${inputFile}"
-        DEPENDS ${inputFile}
-        )
-
-    add_custom_target( ${outputTarget}
-        DEPENDS ${outHeaderFile} ${outCppFile}
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${inputFile}
                 ${CMAKE_MODULE_PATH}/TokenList2DsnLexer.cmake
         )
-    set_property( GLOBAL PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${outHeaderFile} ${outCppFile} )
 
-    # extra_args, if any, are treated as source files (typically headers) which
-    # are known to depend on the generated outHeader.
-    foreach( extra_arg ${ARGN} )
-        set_source_files_properties( ${extra_arg}
-            PROPERTIES OBJECT_DEPENDS ${outHeaderFile}
-            )
-    endforeach()
-
+    target_sources( ${outputTarget} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/${outCppFile} )
+    target_include_directories( ${outputTarget} PUBLIC ${CMAKE_CURRENT_BINARY_DIR} )
 endfunction()
 
 

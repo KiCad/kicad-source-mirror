@@ -68,8 +68,7 @@ target_link_libraries( qa_eeschema
 target_include_directories( qa_eeschema PUBLIC
     # Paths for eeschema lib usage (should really be in eeschema/common
     # target_include_directories and made PUBLIC)
-    ${CMAKE_SOURCE_DIR}/eeschema
-    ${INC_AFTER}
+    $<TARGET_PROPERTY:eeschema_kiface_objects,INCLUDE_DIRECTORIES>
 )
 
 # Eeschema tests, so pretend to be eeschema (for units, etc)

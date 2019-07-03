@@ -44,7 +44,7 @@
 #include <bom_plugins.h>
 #include <make_unique.h>
 
-#include <dialog_bom_cfg_lexer.h>
+#include <dialogs/dialog_bom_cfg_lexer.h>
 
 static constexpr wxChar BOM_TRACE[] = wxT( "BOM_GENERATORS" );
 

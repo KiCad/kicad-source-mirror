@@ -220,7 +220,6 @@ set( COMMON_PAGE_LAYOUT_SRCS
     page_layout/ws_draw_item.cpp
     page_layout/ws_proxy_undo_item.cpp
     page_layout/ws_proxy_view_item.cpp
-    page_layout/page_layout_reader_keywords.cpp
     page_layout/page_layout_reader.cpp
     )
 
@@ -312,14 +311,12 @@ set( COMMON_SRCS
     languages_menu.cpp
     lib_id.cpp
     lib_table_base.cpp
-    lib_table_keywords.cpp
     lib_tree_model.cpp
     lib_tree_model_adapter.cpp
     lockfile.cpp
     marker_base.cpp
     md5_hash.cpp
     msgpanel.cpp
-    netlist_keywords.cpp
     observable.cpp
     prependpath.cpp
     printout.cpp
@@ -427,8 +424,6 @@ set( PCB_COMMON_SRCS
     lset.cpp
     origin_viewitem.cpp
     page_info.cpp
-    pcb_keywords.cpp
-    pcb_plot_params_keywords.cpp
     ../pcbnew/pcb_base_frame.cpp
     ../pcbnew/board_commit.cpp
     ../pcbnew/board_connected_item.cpp
@@ -502,77 +497,49 @@ target_link_libraries( pcbcommon PUBLIC
 
 # auto-generate netlist_lexer.h and netlist_keywords.cpp
 make_lexer(
-    netlist_lexer_source_files
-    ${CMAKE_CURRENT_SOURCE_DIR}/netlist.keywords
-    ${PROJECT_SOURCE_DIR}/include/netlist_lexer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/netlist_keywords.cpp
+    common
+    netlist.keywords
+    netlist_lexer.h
+    netlist_keywords.cpp
     NL_T
-
-    # Pass header file with dependency on *_lexer.h as extra_arg
-    ${CMAKE_PROJECT_SOURCE_DIR}/pcbnew/netlist_reader.h
     )
-
-add_dependencies( common netlist_lexer_source_files )
-add_dependencies( pcbcommon netlist_lexer_source_files )
 
 # auto-generate pcb_plot_params_lexer.h and pcb_plot_params_keywords.cpp
 make_lexer(
-    pcb_plot_lexer_source_files
-    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params.keywords
-    ${PROJECT_SOURCE_DIR}/include/pcb_plot_params_lexer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params_keywords.cpp
+    pcbcommon
+    pcb_plot_params.keywords
+    pcb_plot_params_lexer.h
+    pcb_plot_params_keywords.cpp
     PCBPLOTPARAMS_T
-
-    # Pass header file with dependencies on *_lexer.h as extra_arg
-    ${PROJECT_SOURCE_DIR}/pcbnew/pcb_plot_params.h
     )
-
-add_dependencies( pcbcommon pcb_plot_lexer_source_files )
 
 # auto-generate pcbnew_sexpr.h and pcbnew_sexpr.cpp
 make_lexer(
-    pcb_lexer_source_files
-    ${CMAKE_CURRENT_SOURCE_DIR}/pcb.keywords
-    ${PROJECT_SOURCE_DIR}/include/pcb_lexer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_keywords.cpp
+    pcbcommon
+    pcb.keywords
+    pcb_lexer.h
+    pcb_keywords.cpp
     PCB_KEYS_T
-
-    # Pass header file with dependency on *_lexer.h as extra_arg
-    ${PROJECT_SOURCE_DIR}/pcbnew/pcb_parser.h
     )
-
-add_dependencies( pcbcommon pcb_lexer_source_files )
 
 # auto-generate s-expression library table code.
 make_lexer(
-    lib_table_lexer_source_files
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib_table.keywords
-    ${PROJECT_SOURCE_DIR}/include/lib_table_lexer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib_table_keywords.cpp
+    common
+    lib_table.keywords
+    lib_table_lexer.h
+    lib_table_keywords.cpp
     LIB_TABLE_T
-
-    # These files consume *_lexer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/fp_lib_table.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib_table_base.cpp
-    ${PROJECT_SOURCE_DIR}/pcbnew/dialogs/panel_fp_lib_table.cpp
-    ${PROJECT_SOURCE_DIR}/eeschema/symbol_lib_table.cpp
-    ${PROJECT_SOURCE_DIR}/eeschema/dialogs/panel_sym_lib_table.cpp
     )
-
-add_dependencies( common lib_table_lexer_source_files )
-add_dependencies( pcbcommon lib_table_lexer_source_files )
 
 # auto-generate page layout reader s-expression page_layout_reader_lexer.h
 # and title_block_reader_keywords.cpp.
 make_lexer(
-    page_layout_lexer_source_files
-    ${CMAKE_CURRENT_SOURCE_DIR}/page_layout/page_layout_reader.keywords
-    ${PROJECT_SOURCE_DIR}/include/page_layout_reader_lexer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/page_layout/page_layout_reader_keywords.cpp
+    common
+    page_layout/page_layout_reader.keywords
+    page_layout/page_layout_reader_lexer.h
+    page_layout/page_layout_reader_keywords.cpp
     TB_READER_T
     )
-
-add_dependencies( common page_layout_lexer_source_files )
 
 # This one gets made only when testing.
 # to build it, first enable #define STAND_ALONE at top of dsnlexer.cpp

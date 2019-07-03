@@ -23,7 +23,6 @@ set( PCB_CALCULATOR_SRCS
     via.cpp
     transline_ident.cpp
     UnitSelector.cpp
-    pcb_calculator_datafile_keywords.cpp
     transline/transline.cpp
     transline/c_microstrip.cpp
     transline/microstrip.cpp
@@ -151,14 +150,11 @@ endif()
 # auto-generate pcb_calculator_datafile.h and pcb_calculator_datafile_keywords.cpp
 # for the storage data file format.
 make_lexer(
-    pcb_calculator_lexer_source_files
-    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile.keywords
-    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_lexer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_keywords.cpp
+    pcb_calculator_kiface
+    pcb_calculator_datafile.keywords
+    pcb_calculator_datafile_lexer.h
+    pcb_calculator_datafile_keywords.cpp
     PCBCALC_DATA_T
-
-    # Pass header file with dependency on *_lexer.h as extra_arg
-    datafile_read_write.h
    )
 
 #
@@ -191,5 +187,3 @@ set( DOCS_LIST
 set_source_files_properties( attenuators/attenuator_classes.cpp
     PROPERTIES OBJECT_DEPENDS "${DOCS_LIST}"
     )
-
-add_dependencies( pcb_calculator_kiface pcb_calculator_lexer_source_files )

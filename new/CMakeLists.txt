@@ -110,7 +110,19 @@ endif( false )
 #=====</on standby for possible C++ unit testing>===============================
 
 
+add_library( sweet SHARED
+    sch_lib_table.cpp
+    sch_lib.cpp
+    sch_lpid.cpp
+    sch_dir_lib_source.cpp
+    sch_part.cpp
+    sch_sweet_parser.cpp
+    ${PROJECT_SOURCE_DIR}/common/richio.cpp
+    ${PROJECT_SOURCE_DIR}/common/dsnlexer.cpp
+    )
+
 make_lexer(
+    sweet
     ${CMAKE_CURRENT_SOURCE_DIR}/sch_lib_table.keywords
     ${CMAKE_CURRENT_SOURCE_DIR}/sch_lib_table_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/sch_lib_table_keywords.cpp
@@ -118,25 +130,13 @@ make_lexer(
     )
 
 make_lexer(
+    sweet
     ${CMAKE_CURRENT_SOURCE_DIR}/sweet.keywords
     ${CMAKE_CURRENT_SOURCE_DIR}/sweet_lexer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/sweet_keywords.cpp
     PR
     )
 
-
-add_library( sweet SHARED
-    sch_lib_table.cpp
-    sch_lib_table_keywords.cpp
-    sch_lib.cpp
-    sch_lpid.cpp
-    sch_dir_lib_source.cpp
-    sch_part.cpp
-    sch_sweet_parser.cpp
-    sweet_keywords.cpp
-    ${PROJECT_SOURCE_DIR}/common/richio.cpp
-    ${PROJECT_SOURCE_DIR}/common/dsnlexer.cpp
-    )
 target_link_libraries( sweet ${wxWidgets_LIBRARIES} )
 
 # talk to import_export.h

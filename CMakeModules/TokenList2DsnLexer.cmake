@@ -150,7 +150,7 @@ set( sourceFileHeader
  * your DSN lexer.
  */
 
-#include <${result}_lexer.h>
+#include <${outHeaderFile}>
 
 using namespace ${enum};
 

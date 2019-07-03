@@ -33,7 +33,7 @@
 #include <boost/ptr_container/ptr_set.hpp>
 
 #include <fctsys.h>
-#include "specctra_lexer.h"
+#include <specctra_import_export/specctra_lexer.h>
 #include <pcbnew.h>
 
 #include <memory>
