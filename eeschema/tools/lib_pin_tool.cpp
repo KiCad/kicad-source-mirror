@@ -181,6 +181,7 @@ bool LIB_PIN_TOOL::PlacePin( LIB_PIN* aPin )
             CreateImagePins( aPin );
 
         part->AddDrawItem( aPin );
+        aPin->ClearFlags( IS_NEW );
     }
 
     // Put linked pins in new position, and clear flags
