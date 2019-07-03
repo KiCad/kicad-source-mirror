@@ -952,26 +952,30 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
             {
                 m_frame->PopTool();
                 cancelled = true;
-                break;
             }
+
+            break;
         }
         else if( evt->IsActivate() )
         {
-            if( started )
-                cleanup();
-
             if( evt->IsPointEditor() )
             {
                 // don't exit (the point editor runs in the background)
             }
             else if( evt->IsMoveTool() )
             {
+                if( started )
+                    cleanup();
+
                 // leave ourselves on the stack so we come back after the move
                 cancelled = true;
                 break;
             }
             else
             {
+                if( started )
+                    cleanup();
+
                 m_frame->PopTool();
                 cancelled = true;
                 break;
@@ -1103,7 +1107,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
     m_controls->CaptureCursor( false );
     m_controls->ForceCursorPosition( false );
 
-    return cancelled;
+    return !cancelled;
 }
 
 
@@ -1178,26 +1182,30 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic, bool aImmediateMode )
             {
                 m_frame->PopTool();
                 cancelled = true;
-                break;
             }
+
+            break;
         }
         else if( evt->IsActivate() )
         {
-            if( firstPoint )
-                cleanup();
-
             if( evt->IsPointEditor() )
             {
                 // don't exit (the point editor runs in the background)
             }
             else if( evt->IsMoveTool() )
             {
+                if( firstPoint )
+                    cleanup();
+
                 // leave ourselves on the stack so we come back after the move
                 cancelled = true;
                 break;
             }
             else
             {
+                if( firstPoint )
+                    cleanup();
+
                 m_frame->PopTool();
                 cancelled = true;
                 break;
@@ -1293,7 +1301,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic, bool aImmediateMode )
     m_controls->CaptureCursor( false );
     m_controls->ForceCursorPosition( false );
 
-    return cancelled;
+    return !cancelled;
 }
 
 
