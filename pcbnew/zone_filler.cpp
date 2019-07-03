@@ -631,11 +631,9 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
         if( !item_boundingbox.Intersects( zone_boundingbox ) )
             continue;
 
-        // Add the zone outline area.
-        // However if the zone has the same net as the current zone,
-        // do not add any clearance.
-        // the zone will be connected to the current zone, but filled areas
-        // will use different parameters (clearance, thermal shapes )
+        // Add the zone outline area.  Don't use any clearance for keepouts, or for zones with
+        // the same net (they will be connected but will honor their own clearance, thermal
+        // connections, etc.).
         bool sameNet = aZone->GetNetCode() == zone->GetNetCode();
         bool useNetClearance = true;
         int  minClearance = zone_clearance;
@@ -644,7 +642,10 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
         minClearance = std::max( minClearance, zone->GetClearance() );
 
         if( zone->GetIsKeepout() || sameNet )
+        {
+            minClearance = 0;
             useNetClearance = false;
+        }
 
         zone->TransformOutlinesShapeWithClearanceToPolygon( aHoles, minClearance, useNetClearance );
     }
