@@ -822,7 +822,7 @@ bool PNS_KICAD_IFACE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
                 std::unique_ptr< PNS::SOLID > solid( new PNS::SOLID );
 
                 solid->SetLayer( layer );
-                solid->SetNet( 0 );
+                solid->SetNet( -1 );
                 solid->SetParent( aZone );
                 solid->SetShape( triShape );
                 solid->SetRoutable( false );
