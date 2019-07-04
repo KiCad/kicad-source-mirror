@@ -509,7 +509,7 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
             SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
             selectionTool->UnbrightenItem( m_pickerItem );
             selectionTool->AddItemToSel( m_pickerItem, true );
-            m_toolMgr->RunAction( PCB_ACTIONS::remove, true );
+            m_toolMgr->RunAction( ACTIONS::doDelete, true );
             m_pickerItem = nullptr;
         }
 

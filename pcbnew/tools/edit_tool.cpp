@@ -151,14 +151,14 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::rotateCcw, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::rotateCw, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::flip, SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::remove, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( ACTIONS::doDelete, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 )
                       || SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
 
 
     menu.AddItem( PCB_ACTIONS::moveExact, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::positionRelative, SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::createArray, SELECTION_CONDITIONS::NotEmpty );
 
 
@@ -427,12 +427,12 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         // Dispatch TOOL_ACTIONs
         else if( evt->Category() == TC_COMMAND )
         {
-            if( evt->IsAction( &PCB_ACTIONS::remove ) )
+            if( evt->IsAction( &ACTIONS::doDelete ) )
             {
                 // exit the loop, as there is no further processing for removed items
                 break;
             }
-            else if( evt->IsAction( &PCB_ACTIONS::duplicate ) )
+            else if( evt->IsAction( &ACTIONS::duplicate ) )
             {
                 // On duplicate, stop moving this item
                 // The duplicate tool should then select the new item and start
@@ -1374,11 +1374,11 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::Rotate,              PCB_ACTIONS::rotateCw.MakeEvent() );
     Go( &EDIT_TOOL::Rotate,              PCB_ACTIONS::rotateCcw.MakeEvent() );
     Go( &EDIT_TOOL::Flip,                PCB_ACTIONS::flip.MakeEvent() );
-    Go( &EDIT_TOOL::Remove,              PCB_ACTIONS::remove.MakeEvent() );
+    Go( &EDIT_TOOL::Remove,              ACTIONS::doDelete.MakeEvent() );
     Go( &EDIT_TOOL::Remove,              PCB_ACTIONS::deleteFull.MakeEvent() );
     Go( &EDIT_TOOL::Properties,          PCB_ACTIONS::properties.MakeEvent() );
     Go( &EDIT_TOOL::MoveExact,           PCB_ACTIONS::moveExact.MakeEvent() );
-    Go( &EDIT_TOOL::Duplicate,           PCB_ACTIONS::duplicate.MakeEvent() );
+    Go( &EDIT_TOOL::Duplicate,           ACTIONS::duplicate.MakeEvent() );
     Go( &EDIT_TOOL::Duplicate,           PCB_ACTIONS::duplicateIncrement.MakeEvent() );
     Go( &EDIT_TOOL::CreateArray,         PCB_ACTIONS::createArray.MakeEvent() );
     Go( &EDIT_TOOL::Mirror,              PCB_ACTIONS::mirror.MakeEvent() );

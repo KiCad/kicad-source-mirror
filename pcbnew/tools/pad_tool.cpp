@@ -157,8 +157,8 @@ bool PAD_TOOL::Init()
 
     if( selTool )
     {
-        auto& toolMenu = selTool->GetToolMenu();
-        auto& menu = toolMenu.GetMenu();
+        TOOL_MENU& toolMenu = selTool->GetToolMenu();
+        CONDITIONAL_MENU& menu = toolMenu.GetMenu();
 
         toolMenu.AddSubMenu( ctxMenu );
 

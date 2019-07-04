@@ -191,16 +191,10 @@ TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveMove.move",
         _( "Move" ), _( "Moves the selected item(s)" ),
         move_xpm, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::duplicate( "pcbnew.InteractiveEdit.duplicate",
-        AS_GLOBAL,
-        MD_CTRL + 'D', LEGACY_HK_NAME( "Duplicate Item" ),
-        _( "Duplicate" ), _( "Duplicates the selected item(s)" ),
-        duplicate_xpm );
-
 TOOL_ACTION PCB_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicateIncrementPads",
         AS_GLOBAL,
         MD_SHIFT + MD_CTRL + 'D', LEGACY_HK_NAME( "Duplicate Item and Increment" ),
-        _( "Duplicate" ), _( "Duplicates the selected item(s), incrementing pad numbers" ),
+        _( "Duplicate and Increment" ), _( "Duplicates the selected item(s), incrementing pad numbers" ),
         duplicate_xpm );
 
 TOOL_ACTION PCB_ACTIONS::moveExact( "pcbnew.InteractiveEdit.moveExact",
@@ -238,12 +232,6 @@ TOOL_ACTION PCB_ACTIONS::mirror( "pcbnew.InteractiveEdit.mirror",
         AS_GLOBAL, 0, "",
         _( "Mirror" ), _( "Mirrors selected item" ),
         mirror_h_xpm );
-
-TOOL_ACTION PCB_ACTIONS::remove( "pcbnew.InteractiveEdit.remove",
-        AS_GLOBAL,
-        WXK_BACK, "",
-        _( "Delete" ), _( "Deletes selected item(s)" ),
-        delete_xpm, AF_NONE, (void*) REMOVE_FLAGS::NORMAL );
 
 TOOL_ACTION PCB_ACTIONS::deleteFull( "pcbnew.InteractiveEdit.deleteFull",
         AS_GLOBAL,
