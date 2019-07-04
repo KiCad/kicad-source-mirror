@@ -96,6 +96,9 @@ public:
     static TOOL_ACTION toggleCursorStyle;
     static TOOL_ACTION highContrastMode;
 
+    static TOOL_ACTION refreshPreview;      // Similar to a synthetic mouseMoved event, but also
+                                            // used after a rotate, mirror, etc.
+
     /// Cursor control with keyboard
     static TOOL_ACTION cursorUp;
     static TOOL_ACTION cursorDown;

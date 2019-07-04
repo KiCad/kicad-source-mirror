@@ -354,6 +354,9 @@ TOOL_ACTION ACTIONS::cursorDblClick( "common.Control.cursorDblClick",
         _( "Double-click" ), "Performs left mouse button double-click",
         nullptr, AF_NONE, (void*) CURSOR_DBL_CLICK );
 
+TOOL_ACTION ACTIONS::refreshPreview( "common.Control.refreshPreview",
+         AS_GLOBAL );
+
 TOOL_ACTION ACTIONS::panUp( "common.Control.panUp",
         AS_GLOBAL, 
         MD_SHIFT + WXK_UP, "",

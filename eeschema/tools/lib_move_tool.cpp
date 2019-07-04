@@ -104,7 +104,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
         if( evt->IsAction( &EE_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
-                || evt->IsAction( &EE_ACTIONS::refreshPreview ) )
+                || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {

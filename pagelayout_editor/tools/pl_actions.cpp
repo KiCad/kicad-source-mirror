@@ -80,9 +80,6 @@ TOOL_ACTION PL_ACTIONS::deleteItemCursor( "plEditor.InteractiveEdit.deleteTool",
 
 // PL_EDITOR_CONTROL
 //
-TOOL_ACTION PL_ACTIONS::refreshPreview( "plEditor.EditorControl.refreshPreview",
-         AS_GLOBAL );
-
 TOOL_ACTION PL_ACTIONS::toggleBackground( "plEditor.EditorControl.ToggleBackground",
         AS_GLOBAL, 0, "",
         _( "Background White" ), _( "Switch between white and black background" ),

@@ -496,9 +496,6 @@ TOOL_ACTION EE_ACTIONS::breakBus( "eeschema.InteractiveEdit.breakBus",
 
 // SCH_EDITOR_CONTROL
 //
-TOOL_ACTION EE_ACTIONS::refreshPreview( "eeschema.EditorControl.refreshPreview",
-         AS_GLOBAL );
-
 TOOL_ACTION EE_ACTIONS::restartMove( "eeschema.EditorControl.restartMove",
         AS_GLOBAL );
 

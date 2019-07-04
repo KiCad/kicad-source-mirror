@@ -308,7 +308,9 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
         if( evt->IsAction( &PCB_ACTIONS::editActivate ) ||
             evt->IsAction( &PCB_ACTIONS::move ) ||
-            evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
+            evt->IsMotion() ||
+            evt->IsDrag( BUT_LEFT ) ||
+            evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             if( m_dragging && evt->Category() == TC_MOUSE )
             {

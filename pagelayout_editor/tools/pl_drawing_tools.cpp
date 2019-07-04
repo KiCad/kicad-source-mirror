@@ -167,7 +167,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
-        else if( item && ( evt->IsAction( &PL_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             item->GetPeer()->MoveStartPointToUi( (wxPoint) cursorPos );
             item->SetPosition( item->GetPeer()->GetStartPosUi( 0 ) );
@@ -253,7 +253,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             }
         }
 
-        else if( evt->IsAction( &PL_ACTIONS::refreshPreview ) || evt->IsMotion() )
+        else if( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() )
         {
             if( item )
             {

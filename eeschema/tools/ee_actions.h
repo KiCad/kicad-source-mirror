@@ -182,7 +182,6 @@ public:
     static TOOL_ACTION editTextAndGraphics;
     static TOOL_ACTION toggleHiddenPins;
     static TOOL_ACTION toggleSyncedPinsMode;
-    static TOOL_ACTION refreshPreview;
     static TOOL_ACTION restartMove;
     static TOOL_ACTION explicitCrossProbe;
     static TOOL_ACTION pushPinLength;

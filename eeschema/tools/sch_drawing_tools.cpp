@@ -107,7 +107,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
     if( component )
     {
         getViewControls()->WarpCursor( getViewControls()->GetMousePosition( false ) );
-        m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
+        m_toolMgr->RunAction( ACTIONS::refreshPreview );
     }
     else if( aEvent.HasPosition() )
         m_toolMgr->RunAction( EE_ACTIONS::cursorClick );
@@ -210,11 +210,11 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                 if( component )
                 {
                     m_frame->SelectUnit( component, unit );
-                    m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
+                    m_toolMgr->RunAction( ACTIONS::refreshPreview );
                 }
             }
         }
-        else if( component && ( evt->IsAction( &EE_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        else if( component && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             component->SetPosition( (wxPoint)cursorPos );
             m_view->ClearPreview();
@@ -252,7 +252,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
     // Prime the pump
     if( image )
-        m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
+        m_toolMgr->RunAction( ACTIONS::refreshPreview );
     else if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
@@ -363,7 +363,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
-        else if( image && ( evt->IsAction( &EE_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        else if( image && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             image->SetPosition( (wxPoint)cursorPos );
             m_view->ClearPreview();
@@ -481,7 +481,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         {
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
-        else if( evt->IsAction( &EE_ACTIONS::refreshPreview ) || evt->IsMotion() )
+        else if( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() )
         {
             previewItem->SetPosition( (wxPoint)cursorPos );
             m_view->ClearPreview();
@@ -668,7 +668,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             else
                 item = nullptr;
         }
-        else if( item && ( evt->IsAction( &EE_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             static_cast<SCH_ITEM*>( item )->SetPosition( (wxPoint) cursorPos );
             m_view->ClearPreview();
@@ -778,7 +778,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             sheet = nullptr;
         }
 
-        else if( sheet && ( evt->IsAction( &EE_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        else if( sheet && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             sizeSheet( sheet, cursorPos );
             m_view->ClearPreview();

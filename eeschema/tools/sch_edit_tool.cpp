@@ -495,7 +495,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     if( item->IsMoving() )
     {
-        m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
+        m_toolMgr->RunAction( ACTIONS::refreshPreview );
     }
     else
     {
@@ -677,7 +677,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
     if( item->IsMoving() )
     {
-        m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
+        m_toolMgr->RunAction( ACTIONS::refreshPreview );
     }
     else
     {
@@ -1145,7 +1145,7 @@ int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
     m_frame->ConvertPart( component );
 
     if( component->IsNew() )
-        m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
+        m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
     return 0;
 }

@@ -122,7 +122,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
         if( evt->IsAction( &PL_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
-            || evt->IsAction( &PL_ACTIONS::refreshPreview ) )
+            || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             //------------------------------------------------------------------------
             // Start a move operation

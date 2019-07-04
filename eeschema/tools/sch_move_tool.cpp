@@ -166,7 +166,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         if( evt->IsAction( &EE_ACTIONS::moveActivate ) || evt->IsAction( &EE_ACTIONS::restartMove )
                 || evt->IsAction( &EE_ACTIONS::move ) || evt->IsAction( &EE_ACTIONS::drag )
                 || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
-                || evt->IsAction( &EE_ACTIONS::refreshPreview ) )
+                || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {
@@ -383,7 +383,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     if( component )
                     {
                         m_frame->SelectUnit( component, unit );
-                        m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
+                        m_toolMgr->RunAction( ACTIONS::refreshPreview );
                     }
                 }
             }
