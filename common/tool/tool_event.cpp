@@ -185,40 +185,33 @@ bool TOOL_EVENT::IsDblClick( int aButtonMask ) const
 
 bool TOOL_EVENT::IsCancelInteractive()
 {
-    if( GetCommandStr() && GetCommandStr().get() == ACTIONS::cancelInteractive.GetName() )
-        return true;
-
-    if( GetCommandId() && GetCommandId().get() == ACTIONS::cancelInteractive.GetId() )
-        return true;
-
-    return IsCancel();
+    return( ( m_commandStr.is_initialized()
+                && m_commandStr.get() == ACTIONS::cancelInteractive.GetName() )
+         || ( m_commandId.is_initialized()
+                && m_commandId.get() == ACTIONS::cancelInteractive.GetId() )
+         || ( m_actions == TA_CANCEL_TOOL ) );
 }
 
 
 bool TOOL_EVENT::IsSelectionEvent()
 {
     return Matches( EVENTS::ClearedEvent )
-           || Matches( EVENTS::UnselectedEvent )
-           || Matches( EVENTS::SelectedEvent );
+        || Matches( EVENTS::UnselectedEvent )
+        || Matches( EVENTS::SelectedEvent );
 }
 
 
 bool TOOL_EVENT::IsPointEditor()
 {
-    if( GetCommandStr() && GetCommandStr().get().find( "PointEditor" ) != GetCommandStr()->npos )
-        return true;
-
-    if( GetCommandId() && GetCommandId() == ACTIONS::activatePointEditor.GetId() )
-        return true;
-
-    return false;
+    return( ( m_commandStr.is_initialized()
+                    && m_commandStr.get().find( "PointEditor" ) != GetCommandStr()->npos )
+         || ( m_commandId.is_initialized()
+                    && m_commandId.get() == ACTIONS::activatePointEditor.GetId() ) );
 }
 
 
 bool TOOL_EVENT::IsMoveTool()
 {
-    if( GetCommandStr() && GetCommandStr().get().find( "InteractiveMove" ) != GetCommandStr()->npos )
-        return true;
-
-    return false;
+    return( m_commandStr.is_initialized()
+                && m_commandStr.get().find( "InteractiveMove" ) != GetCommandStr()->npos );
 }
