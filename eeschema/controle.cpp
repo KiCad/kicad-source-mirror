@@ -281,11 +281,11 @@ bool SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
 
     if( aHotKey )
     {
-        if( m_movingCursorWithKeyboard )    // The hotkey was a move crossahir cursor command
+        if( m_movingCursorWithKeyboard )
         {
-            // The crossair was moved. move the mouse cursor to the new crosshair position:
-            GetGalCanvas()->GetViewControls()->WarpCursor( GetCrossHairPosition(), true );
-            m_movingCursorWithKeyboard = 0;
+            // The hotkey was a move crosshair cursor command.  We've already done the work;
+            // just eat the event and reset the flag.
+            m_movingCursorWithKeyboard = false;
         }
         else
         {
