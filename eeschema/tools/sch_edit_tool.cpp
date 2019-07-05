@@ -874,6 +874,7 @@ static KICAD_T deletableItems[] =
     SCH_SHEET_T,
     SCH_SHEET_PIN_T,
     SCH_COMPONENT_T,
+    SCH_BITMAP_T,
     EOT
 };
 
