@@ -686,7 +686,7 @@ TOOL_ACTION PCB_ACTIONS::zoneDisplayOutlines( "pcbnew.Control.zoneDisplayOutline
 
 TOOL_ACTION PCB_ACTIONS::zoneDisplayToggle( "pcbnew.Control.zoneDisplayToggle",
         AS_GLOBAL,
-        'Z', "",
+        'A', "",
         _( "Toggle Zone Display" ),
         _( "Cycle between showing filled zones, wireframed zones and sketched zones" ),
         show_zone_xpm );
