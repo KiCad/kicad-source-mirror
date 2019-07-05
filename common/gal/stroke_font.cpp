@@ -304,11 +304,25 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
     auto processedText = ProcessOverbars( aText );
     const auto& text = processedText.first;
     const auto& overbars = processedText.second;
-    int i = 0;
+    int         overbar_index = 0;
 
     for( UTF8::uni_iter chIt = text.ubegin(), end = text.uend(); chIt < end; ++chIt )
     {
         int dd = *chIt - ' ';
+
+        // Handle tabs as locked to the nearest 4th column (counting in spaces)
+        // The choice of spaces is somewhat arbitrary but sufficient for aligning text
+        if( *chIt == '\t' )
+        {
+            double fourSpaces = 4.0 * glyphSize.x * m_glyphBoundingBoxes[0].GetEnd().x;
+            double addlSpace = fourSpaces - std::fmod( xOffset, fourSpaces );
+
+            // Add the remaining space (between 0 and 3 spaces)
+            xOffset += addlSpace;
+
+            // Set the character to ' ' instead of the '?' for tab
+            dd = 0;
+        }
 
         if( dd >= (int) m_glyphBoundingBoxes.size() || dd < 0 )
             dd = '?' - ' ';
@@ -316,7 +330,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
         GLYPH& glyph = m_glyphs[dd];
         BOX2D& bbox  = m_glyphBoundingBoxes[dd];
 
-        if( overbars[i] )
+        if( overbars[overbar_index] )
         {
             double overbar_start_x = xOffset;
             double overbar_start_y = - computeOverbarVerticalPosition();
@@ -368,7 +382,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
         }
 
         xOffset += glyphSize.x * bbox.GetEnd().x;
-        ++i;
+        ++overbar_index;
     }
 
     m_gal->Restore();
