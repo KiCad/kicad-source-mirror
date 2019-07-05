@@ -298,6 +298,11 @@ public:
         return m_actions == TA_MOUSE_MOTION;
     }
 
+    bool IsMouseAction() const
+    {
+        return m_actions && TA_MOUSE;
+    }
+
     bool IsCancel() const
     {
         return m_actions == TA_CANCEL_TOOL;
