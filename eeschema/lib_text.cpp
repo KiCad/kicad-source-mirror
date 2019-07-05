@@ -188,11 +188,11 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
     COLOR4D color;
 
     if( plotter->GetColorMode() )       // Used normal color or selected color
-        color = IsSelected() ? GetItemSelectedColor() : GetDefaultColor();
+        color = GetDefaultColor();
     else
         color = COLOR4D::BLACK;
 
-    plotter->Text( pos, color, GetShownText(), t1 ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT,
+    plotter->Text( pos, color, GetText(), t1 ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT,
                    GetTextSize(), GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                    GetPenSize(), IsItalic(), IsBold() );
 }
