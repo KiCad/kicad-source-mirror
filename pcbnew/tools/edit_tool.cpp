@@ -298,6 +298,9 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     TOOL_EVENT* evt = const_cast<TOOL_EVENT*>( &aEvent );
     VECTOR2I    prevPos;
 
+    // Prime the pump
+    m_toolMgr->RunAction( ACTIONS::refreshPreview );
+
     // Main loop: keep receiving events
     do
     {
@@ -348,6 +351,8 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 if( lockFlags == SELECTION_LOCKED )
                     break;
+
+                m_dragging = true;
 
                 // When editing modules, all items have the same parent
                 if( EditingModules() )
@@ -407,7 +412,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 prevPos = m_cursor;
                 controls->SetAutoPan( true );
-                m_dragging = true;
             }
 
             m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
