@@ -1391,20 +1391,32 @@ bool SHAPE_POLY_SET::CollideEdge( const VECTOR2I& aPoint,
 }
 
 
+void SHAPE_POLY_SET::BuildBBoxCaches()
+{
+    for( int polygonIdx = 0; polygonIdx < OutlineCount(); polygonIdx++ )
+    {
+        Outline( polygonIdx ).GenerateBBoxCache();
+
+        for( int holeIdx = 0; holeIdx < HoleCount( polygonIdx ); holeIdx++ )
+            Hole( polygonIdx, holeIdx ).GenerateBBoxCache();
+    }
+}
+
+
 bool SHAPE_POLY_SET::Contains( const VECTOR2I& aP, int aSubpolyIndex, bool aIgnoreHoles,
-                               bool aIgnoreEdges ) const
+                               bool aIgnoreEdges, bool aUseBBoxCaches ) const
 {
     if( m_polys.size() == 0 ) // empty set?
         return false;
 
     // If there is a polygon specified, check the condition against that polygon
     if( aSubpolyIndex >= 0 )
-        return containsSingle( aP, aSubpolyIndex, aIgnoreHoles, aIgnoreEdges );
+        return containsSingle( aP, aSubpolyIndex, aIgnoreHoles, aIgnoreEdges, aUseBBoxCaches );
 
     // In any other case, check it against all polygons in the set
     for( int polygonIdx = 0; polygonIdx < OutlineCount(); polygonIdx++ )
     {
-        if( containsSingle( aP, polygonIdx, aIgnoreHoles, aIgnoreEdges ) )
+        if( containsSingle( aP, polygonIdx, aIgnoreHoles, aIgnoreEdges, aUseBBoxCaches ) )
             return true;
     }
 
@@ -1431,7 +1443,7 @@ void SHAPE_POLY_SET::RemoveVertex( VERTEX_INDEX aIndex )
 
 
 bool SHAPE_POLY_SET::containsSingle( const VECTOR2I& aP, int aSubpolyIndex, bool aIgnoreHoles,
-                                     bool aIgnoreEdges ) const
+                                     bool aIgnoreEdges, bool aUseBBoxCaches ) const
 {
     // Check that the point is inside the outline
     if( pointInPolygon( aP, m_polys[aSubpolyIndex][0], aIgnoreEdges ) )
@@ -1445,7 +1457,7 @@ bool SHAPE_POLY_SET::containsSingle( const VECTOR2I& aP, int aSubpolyIndex, bool
 
                 // If the point is inside a hole (and not on its edge),
                 // it is outside of the polygon
-                if( pointInPolygon( aP, hole, aIgnoreEdges ) )
+                if( pointInPolygon( aP, hole, aIgnoreEdges, aUseBBoxCaches ) )
                     return false;
             }
         }
@@ -1458,9 +1470,9 @@ bool SHAPE_POLY_SET::containsSingle( const VECTOR2I& aP, int aSubpolyIndex, bool
 
 
 bool SHAPE_POLY_SET::pointInPolygon( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aPath,
-                                     bool aIgnoreEdges ) const
+                                     bool aIgnoreEdges, bool aUseBBoxCaches ) const
 {
-    return aPath.PointInside( aP, aIgnoreEdges ? 1 : 0 );
+    return aPath.PointInside( aP, aIgnoreEdges ? 1 : 0, aUseBBoxCaches );
 }
 
 

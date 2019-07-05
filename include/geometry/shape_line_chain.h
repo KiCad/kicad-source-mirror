@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Copyright (C) 2013-2017
+ * Copyright (C) 2013-2019
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -305,6 +305,11 @@ public:
         return bbox;
     }
 
+    void GenerateBBoxCache()
+    {
+        m_bbox.Compute( m_points );
+    }
+
     /**
      * Function Collide()
      *
@@ -552,9 +557,11 @@ public:
      * Checks if point aP lies inside a polygon (any type) defined by the line chain.
      * For closed shapes only.
      * @param aPt point to check
+     * @param aUseBBoxCache gives better peformance if the bounding boxe caches have been
+     *                      generated.
      * @return true if the point is inside the shape (edge is not treated as being inside).
      */
-     bool PointInside( const VECTOR2I& aPt, int aAccuracy = 0 ) const;
+     bool PointInside( const VECTOR2I& aPt, int aAccuracy = 0, bool aUseBBoxCache = false ) const;
 
     /**
      * Function PointOnEdge()

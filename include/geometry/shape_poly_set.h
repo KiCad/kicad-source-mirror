@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2017 CERN
+ * Copyright (C) 2015-2019 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  *
@@ -972,6 +972,12 @@ class SHAPE_POLY_SET : public SHAPE
                 int aClearance = 0 );
 
         /**
+         * Constructs BBoxCaches for Contains(), below.  These caches MUST be built before a
+         * group of calls to Contains().  They are NOT kept up-to-date by editing actions.
+         */
+        void BuildBBoxCaches();
+
+        /**
          * Returns true if a given subpolygon contains the point aP
          *
          * @param aP is the point to check
@@ -979,10 +985,13 @@ class SHAPE_POLY_SET : public SHAPE
          * @param aIgnoreHoles controls whether or not internal holes are considered
          * @param aIgnoreEdges controls whether or not a check for the point lying exactly on
          *                     the polygon edge is made
+         * @param aUseBBoxCaches gives faster performance when multiple calls are made with no
+         *                       editing in between, but the caller MUST cache the bbox caches
+         *                       before calling (via BuildBBoxCaches(), above)
          * @return true if the polygon contains the point
          */
         bool Contains( const VECTOR2I& aP, int aSubpolyIndex = -1, bool aIgnoreHoles = false,
-                       bool aIgnoreEdges = false ) const;
+                       bool aIgnoreEdges = false, bool aUseBBoxCaches = false ) const;
 
         ///> Returns true if the set is empty (no polygons at all)
         bool IsEmpty() const
@@ -1118,12 +1127,6 @@ class SHAPE_POLY_SET : public SHAPE
         bool IsVertexInHole( int aGlobalIdx );
 
     private:
-
-        SHAPE_LINE_CHAIN& getContourForCorner( int aCornerId, int& aIndexWithinContour );
-        VECTOR2I& vertex( int aCornerId );
-        const VECTOR2I& cvertex( int aCornerId ) const;
-
-
         void fractureSingle( POLYGON& paths );
         void unfractureSingle ( POLYGON& path );
         void importTree( ClipperLib::PolyTree* tree );
@@ -1146,7 +1149,7 @@ class SHAPE_POLY_SET : public SHAPE
                         const SHAPE_POLY_SET& aOtherShape, POLYGON_MODE aFastMode );
 
         bool pointInPolygon( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aPath,
-                             bool aIgnoreEdges ) const;
+                             bool aIgnoreEdges, bool aUseBBoxCaches = false ) const;
 
         /**
          * containsSingle function
@@ -1159,11 +1162,14 @@ class SHAPE_POLY_SET : public SHAPE
          * @param  aIgnoreHoles  can be set to true to ignore internal holes in the polygon
          * @param  aIgnoreEdges  can be set to true to skip checking whether or not the point
          *                       lies directly on the edge
+         * @param aUseBBoxCaches gives faster performance when multiple calls are made with no
+         *                       editing in between, but the caller MUST cache the bbox caches
+         *                       before calling (via BuildBBoxCaches(), above)
          * @return bool - true if aP is inside aSubpolyIndex-th polygon; false in any other
          *         case.
          */
         bool containsSingle( const VECTOR2I& aP, int aSubpolyIndex, bool aIgnoreHoles = false,
-                             bool aIgnoreEdges = false ) const;
+                             bool aIgnoreEdges = false, bool aUseBBoxCaches = false ) const;
 
         /**
          * Operations ChamferPolygon and FilletPolygon are computed under the private chamferFillet
@@ -1175,8 +1181,6 @@ class SHAPE_POLY_SET : public SHAPE
             CHAMFERED,
             FILLETED
         };
-
-
 
         /**
          * Function chamferFilletPolygon

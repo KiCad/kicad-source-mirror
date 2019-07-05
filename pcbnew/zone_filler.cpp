@@ -701,12 +701,16 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
     // Remove areas that don't meet minimum-width criteria
     testAreas.Inflate( -outline_half_thickness, numSegs, true );
     testAreas.Inflate( outline_half_thickness, numSegs, true );
+    testAreas.BuildBBoxCaches();
 
+    static const bool USE_BBOX_CACHES = true;
     buildThermalSpokes( aZone, thermalSpokes );
 
     for( const SHAPE_LINE_CHAIN& spoke : thermalSpokes )
     {
-        if( testAreas.Contains( spoke.CPoint( 3 ), -1, false, true ) )
+        const VECTOR2I& testPt = spoke.CPoint( 3 );
+
+        if( testAreas.Contains( testPt, -1, false, true, USE_BBOX_CACHES ) )
         {
             solidAreas.AddOutline( spoke );
             continue;
@@ -714,7 +718,7 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
 
         for( const SHAPE_LINE_CHAIN& other : thermalSpokes )
         {
-            if( &other != &spoke && other.PointInside( spoke.CPoint( 3 ), 1  ) )
+            if( &other != &spoke && other.PointInside( testPt, 1, USE_BBOX_CACHES  ) )
             {
                 solidAreas.AddOutline( spoke );
                 break;
@@ -914,6 +918,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
                 }
 
                 spoke.SetClosed( true );
+                spoke.GenerateBBoxCache();
                 aSpokesList.push_back( std::move( spoke ) );
             }
         }
