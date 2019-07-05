@@ -405,6 +405,9 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     OPT_TOOL_EVENT evt = aEvent;
     VECTOR2I prevPos;
 
+    // Prime the pump
+    m_toolMgr->RunAction( ACTIONS::refreshPreview );
+
     // Main loop: keep receiving events
     do
     {
@@ -454,6 +457,8 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 if( lockFlags == SELECTION_LOCKED )
                     break;
+
+                m_dragging = true;
 
                 // When editing modules, all items have the same parent
                 if( EditingModules() )
@@ -513,7 +518,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 prevPos = m_cursor;
                 controls->SetAutoPan( true );
-                m_dragging = true;
             }
 
             m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, false );
