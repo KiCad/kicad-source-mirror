@@ -267,6 +267,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
 
     m_Pcb->SynchronizeNetsAndNetClasses();
     m_BrdSettings->SetCurrentNetClass( NETCLASS::Default );
+    m_Frame->SetBoard( m_Pcb );
 
     return true;
 }
