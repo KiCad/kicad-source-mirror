@@ -82,12 +82,12 @@ TOOL_ACTION GERBVIEW_ACTIONS::highlightAttribute( "gerbview.Control.highlightAtt
 TOOL_ACTION GERBVIEW_ACTIONS::layerNext( "gerbview.Control.layerNext",
         AS_GLOBAL,
         '+', LEGACY_HK_NAME( "Switch to Next Layer" ),
-        "", "" );
+        _( "Next Layer" ), "" );
 
 TOOL_ACTION GERBVIEW_ACTIONS::layerPrev( "gerbview.Control.layerPrev",
         AS_GLOBAL,
         '-', LEGACY_HK_NAME( "Switch to Previous Layer" ),
-        "", "" );
+        _( "Previous Layer" ), "" );
 
 TOOL_ACTION GERBVIEW_ACTIONS::linesDisplayOutlines( "gerbview.Control.linesDisplayOutlines",
         AS_GLOBAL,
