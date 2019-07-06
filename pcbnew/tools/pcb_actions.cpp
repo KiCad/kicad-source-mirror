@@ -503,22 +503,22 @@ TOOL_ACTION PCB_ACTIONS::generateBOM( "pcbnew.EditorControl.generateBOM",
 TOOL_ACTION PCB_ACTIONS::trackWidthInc( "pcbnew.EditorControl.trackWidthInc",
         AS_GLOBAL,
         'W', LEGACY_HK_NAME( "Switch Track Width To Next" ),
-        "", "" );
+        _( "Switch Track Width to Next" ), "" );
 
 TOOL_ACTION PCB_ACTIONS::trackWidthDec( "pcbnew.EditorControl.trackWidthDec",
         AS_GLOBAL,
         MD_SHIFT + 'W', LEGACY_HK_NAME( "Switch Track Width To Previous" ),
-        "", "" );
+        _( "Switch Track Width to Previous" ), "" );
 
 TOOL_ACTION PCB_ACTIONS::viaSizeInc( "pcbnew.EditorControl.viaSizeInc",
         AS_GLOBAL,
         '\'', LEGACY_HK_NAME( "Increase Via Size" ),
-        "", "" );
+        _( "Increase Via Size" ), "" );
 
 TOOL_ACTION PCB_ACTIONS::viaSizeDec( "pcbnew.EditorControl.viaSizeDec",
         AS_GLOBAL,
         '\\', LEGACY_HK_NAME( "Decrease Via Size" ),
-        "", "" );
+        _( "Decrease Via Size" ), "" );
 
 TOOL_ACTION PCB_ACTIONS::trackViaSizeChanged( "pcbnew.EditorControl.trackViaSizeChanged",
         AS_GLOBAL, 0, "",
