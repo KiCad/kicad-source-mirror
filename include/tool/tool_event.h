@@ -285,12 +285,12 @@ public:
 
     bool IsDrag( int aButtonMask = BUT_ANY ) const
     {
-        return m_actions == TA_MOUSE_DRAG && ( m_mouseButtons & aButtonMask ) == aButtonMask;
+        return m_actions == TA_MOUSE_DRAG && ( m_mouseButtons & aButtonMask ) == m_mouseButtons;
     }
 
     bool IsMouseUp( int aButtonMask = BUT_ANY ) const
     {
-        return m_actions == TA_MOUSE_UP && ( m_mouseButtons & aButtonMask ) == aButtonMask;
+        return m_actions == TA_MOUSE_UP && ( m_mouseButtons & aButtonMask ) == m_mouseButtons;
     }
 
     bool IsMotion() const

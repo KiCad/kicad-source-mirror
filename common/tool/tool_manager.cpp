@@ -966,7 +966,7 @@ void TOOL_MANAGER::UpdateUI( const TOOL_EVENT& aEvent )
     {
         frame->UpdateStatusBar();
 
-        if( !aEvent.IsMouseAction() )
+        if( !aEvent.IsMotion() && !aEvent.IsDrag() )
             frame->SyncToolbars();
     }
 }
