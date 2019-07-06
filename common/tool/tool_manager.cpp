@@ -446,7 +446,7 @@ void TOOL_MANAGER::InitTools()
 
         if( !tool->Init() )
         {
-            wxMessageBox( wxString::Format( "Initialization of tool \"%s\" failed", 
+            wxMessageBox( wxString::Format( "Initialization of tool \"%s\" failed",
                                             tool->GetName() ) );
 
             // Unregister the tool
@@ -462,7 +462,7 @@ void TOOL_MANAGER::InitTools()
     }
 
     m_actionMgr->UpdateHotKeys( true );
-    
+
     ResetTools( TOOL_BASE::RUN );
 }
 

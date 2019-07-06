@@ -300,7 +300,7 @@ public:
 
     bool IsMouseAction() const
     {
-        return m_actions && TA_MOUSE;
+        return ( m_actions & TA_MOUSE );
     }
 
     bool IsCancel() const
