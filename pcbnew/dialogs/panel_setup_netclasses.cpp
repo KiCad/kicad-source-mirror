@@ -23,16 +23,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
 #include <base_units.h>
-#include <confirm.h>
-#include <pcb_edit_frame.h>
-#include <board_design_settings.h>
 #include <bitmaps.h>
-#include <widgets/wx_grid.h>
+#include <board_design_settings.h>
+#include <confirm.h>
 #include <grid_tricks.h>
 #include <panel_setup_netclasses.h>
-
+#include <pcb_edit_frame.h>
+#include <tool/tool_manager.h>
+#include <widgets/wx_grid.h>
 
 // Columns of netclasses grid
 enum {
@@ -267,7 +266,9 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
 
     m_Pcb->SynchronizeNetsAndNetClasses();
     m_BrdSettings->SetCurrentNetClass( NETCLASS::Default );
-    m_Frame->SetBoard( m_Pcb );
+
+    if( auto toolmgr = m_Frame->GetToolManager() )
+        toolmgr->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
     return true;
 }
