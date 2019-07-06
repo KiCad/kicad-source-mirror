@@ -1703,7 +1703,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
         bool PlaceItem( BOARD_ITEM* aItem, BOARD_COMMIT& aCommit ) override
         {
-            auto    via = static_cast<VIA*>( aItem );
+            VIA*    via = static_cast<VIA*>( aItem );
+            wxPoint viaPos = via->GetPosition();
             int     newNet;
             TRACK*  track = findTrack( via );
 
@@ -1712,11 +1713,14 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             if( track )
             {
-                aCommit.Modify( track );
-                TRACK* newTrack = dynamic_cast<TRACK*>( track->Clone() );
-                track->SetEnd( via->GetPosition() );
-                newTrack->SetStart( via->GetPosition() );
-                aCommit.Add( newTrack );
+                if( viaPos != track->GetStart() && viaPos != track->GetEnd() )
+                {
+                    aCommit.Modify( track );
+                    TRACK* newTrack = dynamic_cast<TRACK*>( track->Clone() );
+                    track->SetEnd( viaPos );
+                    newTrack->SetStart( viaPos );
+                    aCommit.Add( newTrack );
+                }
 
                 newNet = track->GetNetCode();
             }
