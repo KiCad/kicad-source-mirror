@@ -173,11 +173,10 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
         GetNetClasses(BOARD self) -> { wxString net_class_name : NETCLASSPTR }
         Include the "Default" netclass also.
         """
-        netclassmap = self.GetNetClasses().NetClasses()
 
-        # Add the Default one too, but this is probably modifying the NETCLASS_MAP
-        # in the BOARD.  If that causes trouble, could make a deepcopy() here first.
-        # netclassmap = deepcopy(netclassmap)
+        # Copy the NETCLASS_MAP so the one in the BOARD isn't modified
+        # when we add the Default net class.
+        netclassmap = {k:v for k,v in self.GetNetClasses().NetClasses().items()}
         netclassmap['Default'] = self.GetNetClasses().GetDefault()
         return netclassmap
     %}
