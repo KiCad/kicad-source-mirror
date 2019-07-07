@@ -41,6 +41,7 @@
 
 class TOOL_ACTION;
 class TOOL_MANAGER;
+class TOOL_BASE;
 
 /**
  * Internal (GUI-independent) event definitions.
@@ -183,7 +184,8 @@ public:
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
         m_modifiers( 0 ),
-        m_param( aParameter )
+        m_param( aParameter ),
+        m_firstResponder( nullptr )
     {
         init();
     }
@@ -196,7 +198,8 @@ public:
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
         m_modifiers( 0 ),
-        m_param( aParameter )
+        m_param( aParameter ),
+        m_firstResponder( nullptr )
     {
         if( aCategory == TC_MOUSE )
         {
@@ -228,7 +231,8 @@ public:
         m_mouseButtons( 0 ),
         m_keyCode( 0 ),
         m_modifiers( 0 ),
-        m_param( aParameter )
+        m_param( aParameter ),
+        m_firstResponder( nullptr )
     {
         if( aCategory == TC_COMMAND || aCategory == TC_MESSAGE )
             m_commandStr = aExtraParam;
@@ -252,6 +256,9 @@ public:
     ///> or hotkey-based command events)
     bool HasPosition() const { return m_hasPosition; }
     void SetHasPosition( bool aHasPosition ) { m_hasPosition = aHasPosition; }
+
+    TOOL_BASE* FirstResponder() const { return m_firstResponder; }
+    void SetFirstResponder( TOOL_BASE* aTool ) { m_firstResponder = aTool; }
 
     ///> Returns information about difference between current mouse cursor position and the place
     ///> where dragging has started.
@@ -530,6 +537,9 @@ private:
 
     ///> Generic parameter used for passing non-standard data.
     void* m_param;
+
+    ///> The first tool to receive the event
+    TOOL_BASE* m_firstResponder;
 
     OPT<int> m_commandId;
     OPT<std::string> m_commandStr;

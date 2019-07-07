@@ -1162,7 +1162,7 @@ int PCB_EDITOR_CONTROL::ClearHighlight( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
+int PCB_EDITOR_CONTROL::HighlightNetTool( const TOOL_EVENT& aEvent )
 {
     // If the keyboard hotkey was triggered and we are already in the highlight tool, behave
     // the same as a left-click.  Otherwise highlight the net of the selected item(s), or if
@@ -1413,10 +1413,10 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,     EVENTS::UnselectedEvent );
     Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,     EVENTS::ClearedEvent );
     Go( &PCB_EDITOR_CONTROL::HighlightNet,           PCB_ACTIONS::highlightNet.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::HighlightNet,           PCB_ACTIONS::highlightNetSelection.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNet,           PCB_ACTIONS::toggleLastNetHighlight.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ClearHighlight,         PCB_ACTIONS::clearHighlight.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,     PCB_ACTIONS::highlightNetTool.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,     PCB_ACTIONS::highlightNetSelection.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::HighlightNetTool,       PCB_ACTIONS::highlightNetTool.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ClearHighlight,         ACTIONS::cancelInteractive.MakeEvent() );
 
     Go( &PCB_EDITOR_CONTROL::LocalRatsnestTool,      PCB_ACTIONS::localRatsnestTool.MakeEvent() );

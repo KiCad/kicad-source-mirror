@@ -122,7 +122,7 @@ public:
     int ClearHighlight( const TOOL_EVENT& aEvent );
 
     ///> Launches a tool to pick the item whose net is going to be highlighted.
-    int HighlightNetCursor( const TOOL_EVENT& aEvent );
+    int HighlightNetTool( const TOOL_EVENT& aEvent );
 
     ///> Updates ratsnest for selected items.
     int UpdateSelectionRatsnest( const TOOL_EVENT& aEvent );

@@ -526,7 +526,7 @@ TOOL_EVENT* TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool, const TOOL_EVENT_LIST&
 
 void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 {
-    // iterate over all registered tools
+    // iterate over active tool stack
     for( auto it = m_activeTools.begin(); it != m_activeTools.end(); ++it )
     {
         TOOL_STATE* st = m_toolIdIndex[*it];
@@ -543,6 +543,9 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
         {
             if( st->waitEvents.Matches( aEvent ) )
             {
+                if( !aEvent.FirstResponder() )
+                    const_cast<TOOL_EVENT*>( &aEvent )->SetFirstResponder( st->theTool );
+
                 // got matching event? clear wait list and wake up the coroutine
                 st->wakeupEvent = aEvent;
                 st->pendingWait = false;
@@ -578,6 +581,9 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                 if( tr.first.Matches( aEvent ) )
                 {
                     auto func_copy = tr.second;
+
+                    if( !aEvent.FirstResponder() )
+                        const_cast<TOOL_EVENT*>( &aEvent )->SetFirstResponder( st->theTool );
 
                     // if there is already a context, then push it on the stack
                     // and transfer the previous view control settings to the new context

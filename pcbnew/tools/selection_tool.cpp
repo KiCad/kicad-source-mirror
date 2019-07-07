@@ -285,7 +285,15 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
         }
 
-        else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO_PRE)
+        else if( evt->IsCancel() )
+        {
+            clearSelection();
+
+            if( evt->FirstResponder() == this )
+                m_toolMgr->RunAction( PCB_ACTIONS::clearHighlight );
+        }
+
+        else if( evt->Action() == TA_UNDO_REDO_PRE )
         {
             clearSelection();
         }
