@@ -334,6 +334,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                         continue;
 
                     static_cast<BOARD_ITEM*>( item )->Move( movement );
+                    getView()->Update( item );
                 }
 
                 frame()->UpdateMsgPanel();
@@ -390,6 +391,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                             continue;
 
                         static_cast<BOARD_ITEM*>( item )->Move( delta );
+                        getView()->Update( item );
                     }
 
                     selection.SetReferencePoint( m_cursor );
