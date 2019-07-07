@@ -309,9 +309,7 @@ int PCB_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
                                                 MAX_PAGE_SIZE_PCBNEW_MILS ) );
     dlg.SetWksFileName( BASE_SCREEN::m_PageLayoutDescrFileName );
 
-    if( dlg.ShowModal() == wxID_OK )
-        m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
-    else
+    if( dlg.ShowModal() != wxID_OK )
         m_frame->RollbackFromUndo();
 
     return 0;

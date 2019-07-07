@@ -97,7 +97,6 @@ int PL_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
     }
     else
     {
-        m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
         m_frame->HardRedraw();
     }
     return 0;

@@ -99,9 +99,7 @@ int SCH_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
     DIALOG_PAGES_SETTINGS dlg( m_frame, wxSize( MAX_PAGE_SIZE_MILS, MAX_PAGE_SIZE_MILS ) );
     dlg.SetWksFileName( BASE_SCREEN::m_PageLayoutDescrFileName );
 
-    if( dlg.ShowModal() == wxID_OK )
-        m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
-    else
+    if( dlg.ShowModal() != wxID_OK )
         m_frame->RollbackSchematicFromUndo();
 
     return 0;
