@@ -226,7 +226,7 @@ TOOL_ACTION ACTIONS::zoomRedraw( "common.Control.zoomRedraw",
         WXK_F3,
 #endif
         LEGACY_HK_NAME( "Zoom Redraw" ),
-        _( "Refresh" ), "",
+        _( "Refresh" ), _( "Refresh" ),
         zoom_redraw_xpm );
 
 TOOL_ACTION ACTIONS::zoomFitScreen( "common.Control.zoomFitScreen",
@@ -237,7 +237,7 @@ TOOL_ACTION ACTIONS::zoomFitScreen( "common.Control.zoomFitScreen",
         WXK_HOME,
 #endif
         LEGACY_HK_NAME( "Zoom Auto" ),
-        _( "Zoom to Fit" ), "",
+        _( "Zoom to Fit" ), _( "Zoom to Fit" ),
         zoom_fit_in_page_xpm );
 
 TOOL_ACTION ACTIONS::zoomIn( "common.Control.zoomIn",
@@ -248,7 +248,7 @@ TOOL_ACTION ACTIONS::zoomIn( "common.Control.zoomIn",
         WXK_F1, 
 #endif
         LEGACY_HK_NAME( "Zoom In" ),
-        _( "Zoom In at Cursor" ), "",
+        _( "Zoom In at Cursor" ), _( "Zoom In at Cursor" ),
         zoom_in_xpm );
 
 TOOL_ACTION ACTIONS::zoomOut( "common.Control.zoomOut",
@@ -259,31 +259,31 @@ TOOL_ACTION ACTIONS::zoomOut( "common.Control.zoomOut",
         WXK_F2,
 #endif
         LEGACY_HK_NAME( "Zoom Out" ),
-        _( "Zoom Out at Cursor" ), "",
+        _( "Zoom Out at Cursor" ), _( "Zoom Out at Cursor" ),
         zoom_out_xpm );
 
 TOOL_ACTION ACTIONS::zoomInCenter( "common.Control.zoomInCenter",
         AS_GLOBAL, 
         0, "",
-        _( "Zoom In" ), "",
+        _( "Zoom In" ), _( "Zoom In" ),
         zoom_in_xpm );
 
 TOOL_ACTION ACTIONS::zoomOutCenter( "common.Control.zoomOutCenter",
         AS_GLOBAL, 
         0, "",
-        _( "Zoom Out" ), "",
+        _( "Zoom Out" ), _( "Zoom Out" ),
         zoom_out_xpm );
 
 TOOL_ACTION ACTIONS::zoomCenter( "common.Control.zoomCenter",
         AS_GLOBAL, 
         WXK_F4, LEGACY_HK_NAME( "Zoom Center" ),
-        _( "Center" ), "",
+        _( "Center" ), _( "Center" ),
         zoom_center_on_screen_xpm );
 
 TOOL_ACTION ACTIONS::zoomTool( "common.Control.zoomTool",
         AS_GLOBAL, 
         MD_CTRL + WXK_F5, LEGACY_HK_NAME( "Zoom to Selection" ),
-        _( "Zoom to Selection" ), "",
+        _( "Zoom to Selection" ), _( "Zoom to Selection" ),
         zoom_area_xpm, AF_ACTIVATE );
 
 TOOL_ACTION ACTIONS::zoomPreset( "common.Control.zoomPreset",

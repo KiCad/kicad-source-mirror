@@ -82,7 +82,12 @@ wxString TOOL_ACTION::GetMenuItem() const
 
 wxString TOOL_ACTION::GetDescription() const
 {
-    return wxGetTranslation( m_tooltip );
+    wxString tooltip = wxGetTranslation( m_tooltip );
+
+    if( GetHotKey() )
+        tooltip += wxString::Format( wxT( "  (%s)" ), KeyNameFromKeyCode( GetHotKey() ) );
+
+    return tooltip;
 }
 
 
