@@ -189,8 +189,14 @@ void NETLIST_EXPORTER_PSPICE_SIM::writeDirectives( OUTPUTFORMATTER* aFormatter, 
     // If we print out .save directives for currents, then it needs to be done for voltages as well
     for( const auto& netMap : GetNetIndexMap() )
     {
-        aFormatter->Print( 0, ".save %s\n",
-                (const char*) GetSpiceVector( netMap.first, SPT_VOLTAGE ).c_str() );
+        // the "0" and the "GND" nets are automaticallly saved internally by ngspice.
+        // Skip them
+        wxString netname = GetSpiceVector( netMap.first, SPT_VOLTAGE );
+
+        if( netname == "V(0)" || netname == "V(GND)" )
+            continue;
+
+        aFormatter->Print( 0, ".save %s\n", (const char*) netname.c_str() );
     }
 
     if( m_simCommand.IsEmpty() )
