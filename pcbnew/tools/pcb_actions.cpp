@@ -594,6 +594,15 @@ TOOL_ACTION PCB_ACTIONS::highlightNetSelection( "pcbnew.EditorControl.highlightN
         _( "Highlight Net" ), _( "Highlight all copper items of a net" ),
         net_highlight_xpm );
 
+TOOL_ACTION PCB_ACTIONS::showEeschema( "pcbnew.EditorControl.showEeschema",
+        AS_GLOBAL, 0, "",
+        _( "Switch to Schematic Editor" ), _( "Open schematic in Eeschema" ),
+        eeschema_xpm );
+
+
+// PCBNEW_CONTROL
+//
+
 TOOL_ACTION PCB_ACTIONS::localRatsnestTool( "pcbnew.Control.localRatsnestTool",
         AS_GLOBAL, 0, "",
         _( "Highlight Ratsnest" ), _( "Show ratsnest of selected item(s)" ),
@@ -629,10 +638,6 @@ TOOL_ACTION PCB_ACTIONS::flipBoard( "pcbnew.Control.flipBoard",
         AS_GLOBAL, 0, "",
         _( "Flip Board View" ), _( "Flip (mirror) the board view" ),
         flip_board_xpm );
-
-
-// PCBNEW_CONTROL
-//
 
 // Display modes
 TOOL_ACTION PCB_ACTIONS::showRatsnest( "pcbnew.Control.showRatsnest",
@@ -1174,5 +1179,4 @@ TOOL_ACTION PCB_ACTIONS::dragFreeAngle( "pcbnew.InteractiveRouter.DragFreeAngle"
         _( "Drag (free angle)" ),
         _( "Drags the nearest joint in the track without restricting the track angle." ),
         move_xpm );
-
 

@@ -285,7 +285,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     PrepareLayerIndicator();    // Initialize the bitmap with the active layer colors
     
     KiScaledSeparator( m_mainToolBar, this );
-    ADD_TOOL( ID_RUN_EESCHEMA, eeschema_xpm, _( "Open schematic in Eeschema" ) );
+    m_mainToolBar->Add( PCB_ACTIONS::showEeschema );
 
     // Access to the scripting console
 #if defined(KICAD_SCRIPTING_WXPYTHON)

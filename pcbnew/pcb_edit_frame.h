@@ -303,7 +303,8 @@ public:
     void OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
     void OnLayerColorChange( wxCommandEvent& aEvent );
-    void OnRunEeschema( wxCommandEvent& event );
+
+    void RunEeschema();
 
     void UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, bool aEdit = true );
     void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool aEdit = true );

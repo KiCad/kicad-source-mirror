@@ -68,6 +68,7 @@ public:
     int GenerateFabFiles( const TOOL_EVENT& aEvent );
 
     int UpdatePCBFromSchematic( const TOOL_EVENT& aEvent );
+    int ShowEeschema( const TOOL_EVENT& aEvent );
     int ToggleLayersManager( const TOOL_EVENT& aEvent );
     int ToggleMicrowaveToolbar( const TOOL_EVENT& aEvent );
     int TogglePythonConsole( const TOOL_EVENT& aEvent );

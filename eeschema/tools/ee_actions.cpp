@@ -565,7 +565,7 @@ TOOL_ACTION EE_ACTIONS::drawSheetOnClipboard( "eeschema.EditorControl.drawSheetO
 
 TOOL_ACTION EE_ACTIONS::showPcbNew( "eeschema.EditorControl.showPcbNew",
         AS_GLOBAL, 0, "",
-        _( "Open PCB Editor" ), _( "Run Pcbnew" ),
+        _( "Switch to PCB Editor" ), _( "Open PCB in Pcbnew" ),
         pcbnew_xpm );
 
 TOOL_ACTION EE_ACTIONS::exportNetlist( "eeschema.EditorControl.exportNetlist",

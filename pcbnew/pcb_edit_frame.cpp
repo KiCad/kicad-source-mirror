@@ -158,8 +158,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_TOOLBARH_PCB_ACTION_PLUGIN_REFRESH, PCB_EDIT_FRAME::OnActionPluginRefresh )
 #endif
 
-    EVT_TOOL( ID_RUN_EESCHEMA, PCB_EDIT_FRAME::OnRunEeschema )
-
     // Tracks and vias sizes general options
     EVT_MENU_RANGE( ID_POPUP_PCB_SELECT_WIDTH_START_RANGE,
                     ID_POPUP_PCB_SELECT_WIDTH_END_RANGE,
@@ -987,7 +985,7 @@ void PCB_EDIT_FRAME::DoUpdatePCBFromNetlist( NETLIST& aNetlist, bool aUseTimesta
 }
 
 
-void PCB_EDIT_FRAME::OnRunEeschema( wxCommandEvent& event )
+void PCB_EDIT_FRAME::RunEeschema()
 {
     wxString   msg;
     wxFileName schfn( Prj().GetProjectPath(), Prj().GetProjectName(), SchematicFileExtension );

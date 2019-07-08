@@ -413,6 +413,7 @@ public:
     static TOOL_ACTION highlightNetSelection;
     static TOOL_ACTION drillOrigin;
     static TOOL_ACTION appendBoard;
+    static TOOL_ACTION showEeschema;
 
     // Ratsnest
     static TOOL_ACTION localRatsnestTool;
