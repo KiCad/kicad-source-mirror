@@ -439,16 +439,46 @@ int PCB_EDITOR_CONTROL::TogglePythonConsole( const TOOL_EVENT& aEvent )
 // Track & via size control
 int PCB_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
 {
-    BOARD* board = getModel<BOARD>();
-    int widthIndex = board->GetDesignSettings().GetTrackWidthIndex() + 1;
+    BOARD_DESIGN_SETTINGS& designSettings = getModel<BOARD>()->GetDesignSettings();
+    constexpr KICAD_T      types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
+    PCBNEW_SELECTION&      selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
 
-    if( widthIndex >= (int) board->GetDesignSettings().m_TrackWidthList.size() )
-        widthIndex = board->GetDesignSettings().m_TrackWidthList.size() - 1;
+    if( m_frame->ToolStackIsEmpty() && SELECTION_CONDITIONS::OnlyTypes( types )( selection ) )
+    {
+        BOARD_COMMIT commit( this );
 
-    board->GetDesignSettings().SetTrackWidthIndex( widthIndex );
-    board->GetDesignSettings().UseCustomTrackViaSize( false );
+        for( EDA_ITEM* item : selection )
+        {
+            if( item->Type() == PCB_TRACE_T )
+            {
+                TRACK* track = (TRACK*) item;
 
-    m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
+                for( int candidate : designSettings.m_TrackWidthList )
+                {
+                    if( candidate > track->GetWidth() )
+                    {
+                        commit.Modify( track );
+                        track->SetWidth( candidate );
+                        break;
+                    }
+                }
+            }
+        }
+
+        commit.Push( "Increase Track Width" );
+    }
+    else
+    {
+        int widthIndex = designSettings.GetTrackWidthIndex() + 1;
+
+        if( widthIndex >= (int) designSettings.m_TrackWidthList.size() )
+            widthIndex = designSettings.m_TrackWidthList.size() - 1;
+
+        designSettings.SetTrackWidthIndex( widthIndex );
+        designSettings.UseCustomTrackViaSize( false );
+
+        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
+    }
 
     return 0;
 }
@@ -456,16 +486,48 @@ int PCB_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
 {
-    BOARD* board = getModel<BOARD>();
-    int widthIndex = board->GetDesignSettings().GetTrackWidthIndex() - 1;
+    BOARD_DESIGN_SETTINGS& designSettings = getModel<BOARD>()->GetDesignSettings();
+    constexpr KICAD_T      types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
+    PCBNEW_SELECTION&      selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
 
-    if( widthIndex < 0 )
-        widthIndex = 0;
+    if( m_frame->ToolStackIsEmpty() && SELECTION_CONDITIONS::OnlyTypes( types )( selection ) )
+    {
+        BOARD_COMMIT commit( this );
 
-    board->GetDesignSettings().SetTrackWidthIndex( widthIndex );
-    board->GetDesignSettings().UseCustomTrackViaSize( false );
+        for( EDA_ITEM* item : selection )
+        {
+            if( item->Type() == PCB_TRACE_T )
+            {
+                TRACK* track = (TRACK*) item;
 
-    m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
+                for( int i = designSettings.m_TrackWidthList.size() - 1; i >= 0; --i )
+                {
+                    int candidate = designSettings.m_TrackWidthList[ i ];
+
+                    if( candidate < track->GetWidth() )
+                    {
+                        commit.Modify( track );
+                        track->SetWidth( candidate );
+                        break;
+                    }
+                }
+            }
+        }
+
+        commit.Push( "Decrease Track Width" );
+    }
+    else
+    {
+        int widthIndex = designSettings.GetTrackWidthIndex() - 1;
+
+        if( widthIndex < 0 )
+            widthIndex = 0;
+
+        designSettings.SetTrackWidthIndex( widthIndex );
+        designSettings.UseCustomTrackViaSize( false );
+
+        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
+    }
 
     return 0;
 }
@@ -473,16 +535,47 @@ int PCB_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
 {
-    BOARD* board = getModel<BOARD>();
-    int sizeIndex = board->GetDesignSettings().GetViaSizeIndex() + 1;
+    BOARD_DESIGN_SETTINGS& designSettings = getModel<BOARD>()->GetDesignSettings();
+    constexpr KICAD_T      types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
+    PCBNEW_SELECTION&      selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
 
-    if( sizeIndex >= (int) board->GetDesignSettings().m_ViasDimensionsList.size() )
-        sizeIndex = board->GetDesignSettings().m_ViasDimensionsList.size() - 1;
+    if( m_frame->ToolStackIsEmpty() && SELECTION_CONDITIONS::OnlyTypes( types )( selection ) )
+    {
+        BOARD_COMMIT commit( this );
 
-    board->GetDesignSettings().SetViaSizeIndex( sizeIndex );
-    board->GetDesignSettings().UseCustomTrackViaSize( false );
+        for( EDA_ITEM* item : selection )
+        {
+            if( item->Type() == PCB_VIA_T )
+            {
+                VIA* via = (VIA*) item;
 
-    m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
+                for( VIA_DIMENSION candidate : designSettings.m_ViasDimensionsList )
+                {
+                    if( candidate.m_Diameter > via->GetWidth() )
+                    {
+                        commit.Modify( via );
+                        via->SetWidth( candidate.m_Diameter );
+                        via->SetDrill( candidate.m_Drill );
+                        break;
+                    }
+                }
+            }
+        }
+
+        commit.Push( "Increase Via Size" );
+    }
+    else
+    {
+        int sizeIndex = designSettings.GetViaSizeIndex() + 1;
+
+        if( sizeIndex >= (int) designSettings.m_ViasDimensionsList.size() )
+            sizeIndex = designSettings.m_ViasDimensionsList.size() - 1;
+
+        designSettings.SetViaSizeIndex( sizeIndex );
+        designSettings.UseCustomTrackViaSize( false );
+
+        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
+    }
 
     return 0;
 }
@@ -490,16 +583,49 @@ int PCB_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
 {
-    BOARD* board = getModel<BOARD>();
-    int sizeIndex = board->GetDesignSettings().GetViaSizeIndex() - 1;
+    BOARD_DESIGN_SETTINGS& designSettings = getModel<BOARD>()->GetDesignSettings();
+    constexpr KICAD_T      types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
+    PCBNEW_SELECTION&      selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
 
-    if( sizeIndex < 0 )
-        sizeIndex = 0;
+    if( m_frame->ToolStackIsEmpty() && SELECTION_CONDITIONS::OnlyTypes( types )( selection ) )
+    {
+        BOARD_COMMIT commit( this );
 
-    board->GetDesignSettings().SetViaSizeIndex( sizeIndex );
-    board->GetDesignSettings().UseCustomTrackViaSize( false );
+        for( EDA_ITEM* item : selection )
+        {
+            if( item->Type() == PCB_VIA_T )
+            {
+                VIA* via = (VIA*) item;
 
-    m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
+                for( int i = designSettings.m_ViasDimensionsList.size() - 1; i >= 0; --i )
+                {
+                    VIA_DIMENSION candidate = designSettings.m_ViasDimensionsList[ i ];
+
+                    if( candidate.m_Diameter < via->GetWidth() )
+                    {
+                        commit.Modify( via );
+                        via->SetWidth( candidate.m_Diameter );
+                        via->SetDrill( candidate.m_Drill );
+                        break;
+                    }
+                }
+            }
+        }
+
+        commit.Push( "Decrease Via Size" );
+    }
+    else
+    {
+        int sizeIndex = designSettings.GetViaSizeIndex() - 1;
+
+        if( sizeIndex < 0 )
+            sizeIndex = 0;
+
+        designSettings.SetViaSizeIndex( sizeIndex );
+        designSettings.UseCustomTrackViaSize( false );
+
+        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
+    }
 
     return 0;
 }
