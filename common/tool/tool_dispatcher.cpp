@@ -462,7 +462,13 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     bool handled = false;
 
     if( evt )
+    {
         handled = m_toolMgr->ProcessEvent( *evt );
+
+        // ESC is the special key for canceling tools, and is therefore seen as handled
+        if( key == WXK_ESCAPE )
+            handled = true;
+    }
 
     // pass the event to the GUI, it might still be interested in it
     // Note wxEVT_CHAR_HOOK event is already skipped for special keys not used by KiCad
