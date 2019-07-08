@@ -1161,7 +1161,6 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 
 int POINT_EDITOR::modifiedSelection( const TOOL_EVENT& aEvent )
 {
-    m_refill = true;  // zone has been modified outside the point editor tool
     updatePoints();
     return 0;
 }
