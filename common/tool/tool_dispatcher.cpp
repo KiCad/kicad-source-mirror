@@ -247,24 +247,21 @@ bool TOOL_DISPATCHER::handleMouseButton( wxEvent& aEvent, int aIndex, bool aMoti
     return false;
 }
 
-
 // Helper function to know if a special key ( see key list ) should be captured
 // or if the event can be skipped
 // on Linux, the event must be passed to the GUI if they are not used by KiCad,
 // especially the wxEVENT_CHAR_HOOK, if it is not handled
-// unfortunately, m_toolMgr->ProcessEvent( const TOOL_EVENT& aEvent)
-// does not return info about that. So the event is filtered before passed to
-// the GUI. These key codes are known to be used in Pcbnew to move the cursor
-// or change active layer, and have a default action (moving scrollbar button) if
-// the event is skipped
+// Some keys have a predefined action in wxWidgets so, even if not used,
+// the even will be not skipped
+// the unused keys listed in isKeySpecialCode() will be not skipped
 bool isKeySpecialCode( int aKeyCode )
 {
+    // These keys have predefined actions (like move thumbtrack cursor),
+    // and we do not want these actions executed
     const enum wxKeyCode special_keys[] =
     {
-        WXK_UP, WXK_DOWN, WXK_LEFT, WXK_RIGHT,
         WXK_PAGEUP, WXK_PAGEDOWN,
-        WXK_NUMPAD_UP,  WXK_NUMPAD_DOWN, WXK_NUMPAD_LEFT,  WXK_NUMPAD_RIGHT,
-        WXK_NUMPAD_PAGEUP,  WXK_NUMPAD_PAGEDOWN
+        WXK_NUMPAD_PAGEUP, WXK_NUMPAD_PAGEDOWN
     };
 
     bool isInList = false;
@@ -278,8 +275,28 @@ bool isKeySpecialCode( int aKeyCode )
     return isInList;
 }
 
+// Helper function to know if a key should be managed by DispatchWxEvent()
+// or if the event can be ignored and skipped because the key is only a modifier
+// that is not used alone in kicad
+static bool isKeyModifierOnly( int aKeyCode )
+{
+    const enum wxKeyCode special_keys[] =
+    {
+        WXK_CONTROL, WXK_RAW_CONTROL, WXK_SHIFT,WXK_ALT
+    };
 
-/* aHelper class that convert some special key codes to an equivalent.
+    bool isInList = false;
+
+    for( unsigned ii = 0; ii < arrayDim( special_keys ) && !isInList; ii++ )
+    {
+        if( special_keys[ii] == aKeyCode )
+            isInList = true;
+    }
+
+    return isInList;
+}
+
+/* A helper class that convert some special key codes to an equivalent.
  *  WXK_NUMPAD_UP to WXK_UP,
  *  WXK_NUMPAD_DOWN to WXK_DOWN,
  *  WXK_NUMPAD_LEFT to WXK_LEFT,
@@ -313,14 +330,13 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     bool motion = false, buttonEvents = false;
     OPT<TOOL_EVENT> evt;
     int key = 0;    // key = 0 if the event is not a key event
-    int unicode = 0;
     bool keyIsSpecial = false;  // True if the key is a special key code
 
     int type = aEvent.GetEventType();
 
     // Sometimes there is no window that has the focus (it happens when another PCB_BASE_FRAME
     // is opened and is iconized on Windows).
-    // In this case, give the focus to the parent frame (GAL canvas itself does not accept the 
+    // In this case, give the focus to the parent frame (GAL canvas itself does not accept the
     // focus when iconized for some obscure reason)
     if( wxWindow::FindFocus() == nullptr )
         m_toolMgr->GetEditFrame()->SetFocus();
@@ -370,24 +386,23 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     {
         wxKeyEvent* ke = static_cast<wxKeyEvent*>( &aEvent );
         key = ke->GetKeyCode();
-        keyIsSpecial = isKeySpecialCode( key );
-        unicode = ke->GetUnicodeKey();
+        int unicode_key = ke->GetUnicodeKey();
+
+        // This wxEVT_CHAR_HOOK event can be ignored: not useful in Kicad
+        if( isKeyModifierOnly( key ) )
+        {
+            aEvent.Skip();
+            return;
+        }
 
         wxLogTrace( kicadTraceKeyEvent, "TOOL_DISPATCHER::DispatchWxEvent %s", dump( *ke ) );
 
         // if the key event must be skipped, skip it here if the event is a wxEVT_CHAR_HOOK
         // and do nothing.
-        // a wxEVT_CHAR will be fired by wxWidgets later for this key.
+        keyIsSpecial = isKeySpecialCode( key );
+
         if( type == wxEVT_CHAR_HOOK )
-        {
-            if( !keyIsSpecial )
-            {
-                aEvent.Skip();
-                return;
-            }
-            else
-                key = translateSpecialCode( key );
-        }
+            key = translateSpecialCode( key );
 
         int mods = decodeModifiers( ke );
 
@@ -403,9 +418,10 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
             // Others OS return WXK_CONTROL_A to WXK_CONTROL_Z, and Ctrl+'M' returns the same code as
             // the return key, so the remapping does not use the unicode key value.
 #ifdef __APPLE__
-            if( unicode >= 'A' && unicode <= 'Z' && key >= WXK_CONTROL_A && key <= WXK_CONTROL_Z )
+            if( unicode_key >= 'A' && unicode_key <= 'Z' && key >= WXK_CONTROL_A && key <= WXK_CONTROL_Z )
 #else
-            (void) unicode; //not used: avoid compil warning
+            (void) unicode_key; //not used: avoid compil warning
+
             if( key >= WXK_CONTROL_A && key <= WXK_CONTROL_Z )
 #endif
                 key += 'A' - 1;
@@ -458,18 +474,17 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     // in Pcbnew and the footprint editor any time a hotkey is used.  The correct procedure is
     // to NOT pass wxEVT_CHAR events to the GUI under OS X.
     //
-    // On Windows, avoid to call wxEvent::Skip for special keys because some keys (ARROWS,
-    // PAGE_UP, PAGE_DOWN have predefined actions (like move thumbtrack cursor), and we do
+    // On Windows, avoid to call wxEvent::Skip for special keys because some keys
+    // (PAGE_UP, PAGE_DOWN) have predefined actions (like move thumbtrack cursor), and we do
     // not want these actions executed (most are handled by KiCad)
 
     if( !evt || type == wxEVT_LEFT_DOWN )
         aEvent.Skip();
 
-    // The suitable Skip is already called, but the wxEVT_CHAR
-    // must be Skipped (sent to GUI).
+    // Not handled wxEVT_CHAR must be Skipped (sent to GUI).
     // Otherwise accelerators and shortcuts in main menu or toolbars are not seen.
 #ifndef __APPLE__
-    if( type == wxEVT_CHAR && !keyIsSpecial && !handled )
+    if( (type == wxEVT_CHAR || type == wxEVT_CHAR_HOOK) && !keyIsSpecial && !handled )
         aEvent.Skip();
 #endif
 }
