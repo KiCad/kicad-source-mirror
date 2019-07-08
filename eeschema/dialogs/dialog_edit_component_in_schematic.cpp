@@ -639,6 +639,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::UpdateFieldsFromLibrary( wxCommandEvent
     SCH_COMPONENT copy( *m_cmp );
     copy.SetFields( *m_fields );
 
+    LIB_ID id;
+    id.Parse( m_libraryNameTextCtrl->GetValue(), LIB_ID::ID_SCH, true );
+    copy.SetLibId( id, Prj().SchSymbolLibTable(), Prj().SchLibs()->GetCacheLibrary() );
+
     // Update the requested fields in the component copy
     std::list<SCH_COMPONENT*> components;
     components.push_back( &copy );
