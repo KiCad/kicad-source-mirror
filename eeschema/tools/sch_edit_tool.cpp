@@ -444,7 +444,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     }
     else if( selection.GetSize() > 1 )
     {
-        rotPoint = (wxPoint)selection.GetReferencePoint();
+        rotPoint = m_frame->GetNearestGridPosition( (wxPoint)selection.GetCenter() );
 
         for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
         {
