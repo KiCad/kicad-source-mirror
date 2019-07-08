@@ -57,7 +57,7 @@
 #include <geometry/shape_arc.h>
 
 #include <drc/courtyard_overlap.h>
-
+#include "zone_filler_tool.h"
 
 DRC::DRC() :
         PCB_TOOL_BASE( "pcbnew.DRCTool" )
@@ -393,14 +393,14 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         if( aMessages )
             aMessages->AppendText( _( "Refilling all zones...\n" ) );
 
-        m_pcbEditorFrame->Fill_All_Zones();
+        m_toolMgr->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( caller );
     }
     else
     {
         if( aMessages )
             aMessages->AppendText( _( "Checking zone fills...\n" ) );
 
-        m_pcbEditorFrame->Check_All_Zones( caller );
+        m_toolMgr->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( caller );
     }
 
     // test track and via clearances to other tracks, pads, and vias

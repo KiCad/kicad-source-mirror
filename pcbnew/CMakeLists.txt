@@ -291,7 +291,6 @@ set( PCBNEW_CLASS_SRCS
     undo_redo.cpp
     zone_filler.cpp
     zones_by_polygon.cpp
-    zones_by_polygon_fill_functions.cpp
     zones_functions_for_undo_redo.cpp
     zones_test_and_combine_areas.cpp
 

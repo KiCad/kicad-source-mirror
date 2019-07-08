@@ -24,13 +24,9 @@
  */
 #include <cstdint>
 #include <thread>
-#include <mutex>
-
 #include <class_zone.h>
-#include <class_module.h>
 #include <connectivity/connectivity_data.h>
 #include <board_commit.h>
-
 #include <widgets/progress_reporter.h>
 #include <tool/tool_manager.h>
 #include <bitmaps.h>
@@ -55,7 +51,60 @@ void ZONE_FILLER_TOOL::Reset( RESET_REASON aReason )
 {
 }
 
-// Zone actions
+
+void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller )
+{
+    if( !getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty )
+        return;
+
+    std::vector<ZONE_CONTAINER*> toFill;
+
+    for( auto zone : board()->Zones() )
+        toFill.push_back(zone);
+
+    BOARD_COMMIT commit( this );
+
+    ZONE_FILLER filler( frame()->GetBoard(), &commit );
+    filler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( aCaller,
+                                                                        _( "Checking Zones" ),
+                                                                        4 ) );
+
+    if( filler.Fill( toFill, true ) )
+    {
+        getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty = false;
+        canvas()->Refresh();
+    }
+}
+
+
+void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller )
+{
+    std::vector<ZONE_CONTAINER*> toFill;
+
+    BOARD_COMMIT commit( this );
+
+    for( auto zone : board()->Zones() )
+        toFill.push_back(zone);
+
+    ZONE_FILLER filler( board(), &commit );
+    filler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( aCaller,
+                                                                        _( "Fill All Zones" ),
+                                                                        4 ) );
+
+    if( filler.Fill( toFill ) )
+        getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty = false;
+
+    canvas()->Refresh();
+
+    // wxWidgets has keyboard focus issues after the progress reporter.  Re-setting the focus
+    // does not fix them; moving the mouse does.  Here we warp the mouse to its existing location
+    // (which will bring it back inside the window if it was outside).  While sometimes mildly
+    // annoying, it does fix the more-often annoying loss of keybard focus.
+    VECTOR2D cursor = getViewControls()->GetRawCursorPosition( false );
+    getViewControls()->SetCursorPosition( cursor, true, true );
+}
+
+
 int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
 {
     std::vector<ZONE_CONTAINER*> toFill;
@@ -77,36 +126,19 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
     }
 
     ZONE_FILLER filler( board(), &commit );
-    filler.SetProgressReporter(
-            std::make_unique<WX_PROGRESS_REPORTER>( frame(), _( "Fill Zone" ), 4 ) );
+    filler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( frame(),
+                                                                        _( "Fill Zone" ),
+                                                                        4 ) );
     filler.Fill( toFill );
 
     canvas()->Refresh();
-
     return 0;
 }
 
 
 int ZONE_FILLER_TOOL::ZoneFillAll( const TOOL_EVENT& aEvent )
 {
-    std::vector<ZONE_CONTAINER*> toFill;
-
-    BOARD_COMMIT commit( this );
-
-    for( auto zone : board()->Zones() )
-    {
-        toFill.push_back(zone);
-    }
-
-    ZONE_FILLER filler( board(), &commit );
-    filler.SetProgressReporter(
-            std::make_unique<WX_PROGRESS_REPORTER>( frame(), _( "Fill All Zones" ), 4 ) );
-
-    if( filler.Fill( toFill ) )
-        getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty = false;
-
-    canvas()->Refresh();
-
+    FillAllZones( frame() );
     return 0;
 }
 

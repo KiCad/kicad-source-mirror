@@ -863,20 +863,6 @@ public:
                                bool               aUseNetclassValue );
 
 
-    // zone handling
-
-    /**
-     * Function Fill_All_Zones
-     */
-    void Fill_All_Zones();
-
-    /**
-     * Function Check_All_Zones
-     *  Checks for out-of-date fills and fills them if requested by the user.
-     * @param aActiveWindow
-     */
-    void Check_All_Zones( wxWindow* aActiveWindow );
-
     /**
      * Function Edit_Zone_Params
      * Edit params (layer, clearance, ...) for a zone outline

@@ -30,13 +30,15 @@
 #include <gerber_jobfile_writer.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
-#include <tool/tool_manager.h>
+#include <layers_id_colors_and_visibility.h>
 #include <bitmaps.h>
 #include <class_board.h>
 #include <dialog_plot.h>
 #include <dialog_gendrill.h>
 #include <wx_html_report_panel.h>
+#include <tool/tool_manager.h>
 #include <tools/drc.h>
+#include <tools/zone_filler_tool.h>
 
 
 DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
@@ -221,7 +223,6 @@ void DIALOG_PLOT::OnRightClick( wxMouseEvent& event )
 
 
 // Select or deselect groups of layers in the layers list:
-#include <layers_id_colors_and_visibility.h>
 void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
 {
     // Build a list of layers for usual fabrication:
@@ -740,7 +741,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     }
 
     if( m_zoneFillCheck->GetValue() )
-        m_parent->Check_All_Zones( this );
+        m_parent->GetToolManager()->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( this );
 
     m_plotOpts.SetAutoScale( false );
     m_plotOpts.SetScale( 1 );

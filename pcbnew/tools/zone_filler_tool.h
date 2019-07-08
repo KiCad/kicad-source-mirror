@@ -44,7 +44,9 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    // Zone actions
+    void CheckAllZones( wxWindow* aCaller );
+    void FillAllZones( wxWindow* aCaller );
+
     int ZoneFill( const TOOL_EVENT& aEvent );
     int ZoneFillAll( const TOOL_EVENT& aEvent );
     int ZoneUnfill( const TOOL_EVENT& aEvent );
