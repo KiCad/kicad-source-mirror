@@ -147,8 +147,8 @@ public:
      */
     ACTION_MENU* Clone() const;
 
-    ///> The default menu event handler.
     void OnMenuEvent( wxMenuEvent& aEvent );
+    void OnIdle( wxIdleEvent& event );
 
 protected:
     ///> Returns an instance of this class. It has to be overridden in inheriting classes.

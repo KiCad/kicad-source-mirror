@@ -74,8 +74,10 @@ void ACTION_MENU::setupEvents()
 // See wxWidgets hack in EDA_BASE_FRAME::OnMenuOpen().
 //    Connect( wxEVT_MENU_OPEN, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), NULL, this );
 //    Connect( wxEVT_MENU_HIGHLIGHT, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), NULL, this );
+//    Connect( wxEVT_MENU_CLOSE, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), NULL, this );
 
     Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), NULL, this );
+    Connect( wxEVT_IDLE, wxIdleEventHandler( ACTION_MENU::OnIdle ), NULL, this );
 }
 
 
@@ -326,33 +328,41 @@ void ACTION_MENU::updateHotKeys()
 }
 
 
+// wxWidgets doesn't tell us when a menu command was generated from a hotkey or from
+// a menu selection.  It's important to us because a hotkey can be an immediate action
+// while the menu selection can not (as it has no associated position).
+//
+// We get around this by storing the last highlighted menuId.  If it matches the command
+// id then we know this is a menu selection.  (You might think we could use the menuOpen
+// menuClose events, but these are actually generated for hotkeys as well.)
+
+static int g_last_menu_highlighted_id = 0;
+
+
+void ACTION_MENU::OnIdle( wxIdleEvent& event )
+{
+    g_last_menu_highlighted_id = 0;
+}
+
+
 void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
 {
-    // wxWidgets doesn't tell us when a menu command was generated from a hotkey or from
-    // a menu selection.  It's important to us because a hotkey can be an immediate action
-    // while the menu selection can not (as it has no associated position).
-    //
-    // We get around this by storing the last highlighted menuId.  If it matches the command
-    // id then we know this is a menu selection.  (You might think we could use the menuOpen
-    // menuClose events, but these are actually generated for hotkeys as well.)
-    static int highlightId = 0;
-
     OPT_TOOL_EVENT evt;
-    wxString menuText;
-
-    wxEventType type = aEvent.GetEventType();
+    wxString       menuText;
+    wxEventType    type = aEvent.GetEventType();
 
     if( type == wxEVT_MENU_OPEN )
     {
         if( m_dirty && m_tool )
             getToolManager()->RunAction( ACTIONS::updateMenu, true, this );
 
-        highlightId = 0;
-        aEvent.Skip();
+        g_last_menu_highlighted_id = 0;
     }
     else if( type == wxEVT_MENU_HIGHLIGHT )
     {
-        highlightId = aEvent.GetId();
+        if( aEvent.GetId() > 0 )
+            g_last_menu_highlighted_id = aEvent.GetId();
+
         evt = TOOL_EVENT( TC_COMMAND, TA_CHOICE_MENU_UPDATE, aEvent.GetId() );
     }
     else if( type == wxEVT_COMMAND_MENU_SELECTED )
@@ -425,7 +435,7 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
     // clients that don't supply a tool will have to check GetSelected() themselves
     if( evt && m_tool )
     {
-        if( highlightId == aEvent.GetId() && !m_isContextMenu )
+        if( g_last_menu_highlighted_id == aEvent.GetId() && !m_isContextMenu )
             evt->SetHasPosition( false );
 
         //aEvent.StopPropagation();

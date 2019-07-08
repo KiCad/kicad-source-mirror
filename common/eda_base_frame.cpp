@@ -243,18 +243,20 @@ void EDA_BASE_FRAME::OnCharHook( wxKeyEvent& event )
 
 void EDA_BASE_FRAME::OnMenuOpen( wxMenuEvent& event )
 {
-    // On wxWidgets 3.0.x Windows, EVT_MENU_OPEN and EVT_MENU_HIGHLIGHT events are not
-    // captured by the ACTON_MENU menus.  While it is fixed in wxWidgets 3.1.x, we still
-    // need a solution for the earlier verions.
     //
-    // This could be made conditional, but for now I'm going to use the same strategy
-    // everywhere so it gets wider testing.
-    // Note that if the conditional compilation is reactivated, the Connect() lines in
-    // ACTION_MENU::setupEvents() will need to be re-enabled.
-//#if defined( __WINDOWS__ ) && wxCHECK_VERSION( 3, 0, 0 ) && !wxCHECK_VERSION( 3, 1, 0 )
+    // wxWidgets has several issues that we have to work around:
+    //
+    // 1) wxWidgets 3.0.x Windows has a bug where wxEVT_MENU_OPEN and wxEVT_MENU_HIGHLIGHT
+    //    events are not captured by the ACTON_MENU menus.  So we forward them here.
+    //    (FWIW, this one is fixed in wxWidgets 3.1.x.)
+    //
+    // 2) wxWidgets doesn't pass the menu pointer for wxEVT_MENU_HIGHLIGHT events.  So we
+    //    store the menu pointer from the wxEVT_MENU_OPEN call.
+    //
+    // 3) wxWidgets has no way to tell whether a command is from a menu selection or a
+    //    hotkey.  So we keep track of menu highlighting so we can differentiate.
+    //
 
-    // As if things weren't bad enough, wxWidgets doesn't pass the menu pointer when the
-    // event is a wxEVT_MENU_HIGHLIGHT, so we store the menu from the EVT_MENU_OPEN call.
     static ACTION_MENU* currentMenu;
 
     if( event.GetEventType() == wxEVT_MENU_OPEN )
@@ -269,11 +271,13 @@ void EDA_BASE_FRAME::OnMenuOpen( wxMenuEvent& event )
         if( currentMenu )
             currentMenu->OnMenuEvent( event );
     }
-    else // if( event.GetEventType() == wxEVT_MENU_CLOSE )
+    else if( event.GetEventType() == wxEVT_MENU_CLOSE )
     {
+        if( currentMenu )
+            currentMenu->OnMenuEvent( event );
+
         currentMenu = nullptr;
     }
-//#endif
 
     event.Skip();
 }
