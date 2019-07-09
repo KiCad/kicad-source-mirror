@@ -41,7 +41,6 @@ public:
     int InlineDrag( const TOOL_EVENT& aEvent );
 
     int SelectCopperLayerPair( const TOOL_EVENT& aEvent );
-    // TODO make this private?
     int DpDimensionsDialog( const TOOL_EVENT& aEvent );
     int SettingsDialog( const TOOL_EVENT& aEvent );
     int CustomTrackWidthDialog( const TOOL_EVENT& aEvent );

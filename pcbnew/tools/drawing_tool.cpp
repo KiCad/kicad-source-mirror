@@ -756,7 +756,14 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
         cursorPos = m_controls->GetCursorPosition();
 
-        if( evt->IsMotion() )
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
+        {
+            preview.FreeItems();
+
+            m_frame->PopTool();
+            break;
+        }
+        else if( evt->IsMotion() )
         {
             delta = cursorPos - firstItem->GetPosition();
 
@@ -768,7 +775,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         else if( evt->Category() == TC_COMMAND )
         {
             // TODO it should be handled by EDIT_TOOL, so add items and select?
-            if( evt->IsCancelInteractive() )
+            if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) )
             {
                 const auto rotationPoint = (wxPoint) cursorPos;
                 const auto rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle( *m_frame, *evt );
@@ -784,13 +791,6 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
                     static_cast<BOARD_ITEM*>( item )->Flip( (wxPoint) cursorPos );
 
                 m_view->Update( &preview );
-            }
-            else if( evt->IsCancelInteractive() || evt->IsActivate() )
-            {
-                preview.FreeItems();
-
-                m_frame->PopTool();
-                break;
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )

@@ -776,9 +776,6 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     if( aBoard->Tracks().size() )
         m_out->Print( 0, "\n" );
 
-    /// @todo Add warning here that the old segment filed zones are no longer supported and
-    ///       will not be saved.
-
     // Save the polygon (which are the newer technology) zones.
     for( int i = 0; i < aBoard->GetAreaCount();  ++i )
         Format( aBoard->GetArea( i ), aNestLevel );

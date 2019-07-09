@@ -380,8 +380,6 @@ void FOOTPRINT_EDIT_FRAME::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSett
 const PCB_PLOT_PARAMS& FOOTPRINT_EDIT_FRAME::GetPlotSettings() const
 {
     // get the settings from the parent editor, not our BOARD.
-
-    // @todo(DICK) change the routing to some default or the board directly, parent may not exist
     PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) Kiway().Player( FRAME_PCB, true );
     wxASSERT( parentFrame );
 
@@ -392,8 +390,6 @@ const PCB_PLOT_PARAMS& FOOTPRINT_EDIT_FRAME::GetPlotSettings() const
 void FOOTPRINT_EDIT_FRAME::SetPlotSettings( const PCB_PLOT_PARAMS& aSettings )
 {
     // set the settings into parent editor, not our BOARD.
-
-    // @todo(DICK) change the routing to some default or the board directly, parent may not exist
     PCB_BASE_FRAME* parentFrame = (PCB_BASE_FRAME*) Kiway().Player( FRAME_PCB, true );
     wxASSERT( parentFrame );
 

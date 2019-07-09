@@ -115,15 +115,6 @@ void MICROWAVE_TOOL::createInductorBetween( const VECTOR2I& aStart, const VECTOR
     auto inductorModule = std::unique_ptr<MODULE>( CreateMicrowaveInductor( pattern, &frame,
                                                                             errorMessage ) );
 
-    if( inductorModule )
-    {
-        // legacy mode tools add to the board
-        // so remove it and add it back with the commit object
-        // this has to happen, even if we don't end up storing the module
-        // @todo LEGACY
-        board()->Remove( inductorModule.get() );
-    }
-
     // on any error, report if we can
     if ( !inductorModule || !errorMessage.IsEmpty() )
     {
