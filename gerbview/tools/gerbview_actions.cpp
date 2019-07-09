@@ -131,9 +131,6 @@ TOOL_ACTION GERBVIEW_ACTIONS::selectionActivate( "gerbview.InteractiveSelection"
         AS_GLOBAL, 0, "",
         "", "", NULL, AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
 
-TOOL_ACTION GERBVIEW_ACTIONS::selectionCursor( "gerbview.InteractiveSelection.Cursor",
-        AS_GLOBAL );
-
 TOOL_ACTION GERBVIEW_ACTIONS::selectItem( "gerbview.InteractiveSelection.SelectItem",
         AS_GLOBAL );
 

@@ -35,6 +35,7 @@ struct SELECTION_COLORS
     COLOR4D normal;
     COLOR4D additive;
     COLOR4D subtract;
+    COLOR4D exclusiveOr;
     COLOR4D outline_l2r;
     COLOR4D outline_r2l;
 };
@@ -44,6 +45,7 @@ static const SELECTION_COLORS selectionColorScheme[2] = {
         COLOR4D( 0.3, 0.3, 0.7, 0.3 ), // Slight blue
         COLOR4D( 0.3, 0.7, 0.3, 0.3 ), // Slight green
         COLOR4D( 0.7, 0.3, 0.3, 0.3 ), // Slight red
+        COLOR4D( 0.7, 0.3, 0.3, 0.3 ), // Slight red
 
         COLOR4D( 1.0, 1.0, 0.4, 1.0 ), // yellow
         COLOR4D( 0.4, 0.4, 1.0, 1.0 ) // blue
@@ -51,6 +53,7 @@ static const SELECTION_COLORS selectionColorScheme[2] = {
     { // bright background
         COLOR4D( 0.5, 0.3, 1.0, 0.5 ), // Slight blue
         COLOR4D( 0.5, 1.0, 0.5, 0.5 ), // Slight green
+        COLOR4D( 1.0, 0.5, 0.5, 0.5 ), // Slight red
         COLOR4D( 1.0, 0.5, 0.5, 0.5 ), // Slight red
 
         COLOR4D( 0.7, 0.7, 0.0, 1.0 ), // yellow
@@ -61,27 +64,10 @@ static const SELECTION_COLORS selectionColorScheme[2] = {
 
 SELECTION_AREA::SELECTION_AREA() :
         m_additive( false ),
-        m_subtractive( false )
+        m_subtractive( false ),
+        m_exclusiveOr( false )
 {
 
-}
-
-
-void SELECTION_AREA::SetAdditive( bool aAdditive )
-{
-    m_additive = aAdditive;
-
-    if( m_additive )
-        m_subtractive = false;
-}
-
-
-void SELECTION_AREA::SetSubtractive( bool aSubtractive )
-{
-    m_subtractive = aSubtractive;
-
-    if( m_subtractive )
-        m_additive = false;
 }
 
 
@@ -106,17 +92,13 @@ void SELECTION_AREA::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     // Set the fill of the selection rectangle
     // based on the selection mode
     if( m_additive )
-    {
         gal.SetFillColor( scheme.additive  );
-    }
     else if( m_subtractive )
-    {
         gal.SetFillColor( scheme.subtract );
-    }
+    else if( m_exclusiveOr )
+        gal.SetFillColor( scheme.exclusiveOr );
     else
-    {
         gal.SetFillColor( scheme.normal );
-    }
 
     gal.SetIsStroke( true );
     gal.SetIsFill( true );

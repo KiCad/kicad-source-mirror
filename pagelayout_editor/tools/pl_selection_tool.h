@@ -49,7 +49,7 @@ class PL_SELECTION_TOOL : public TOOL_INTERACTIVE
 {
 public:
     PL_SELECTION_TOOL();
-    ~PL_SELECTION_TOOL() { }
+    ~PL_SELECTION_TOOL() override { }
 
     /// @copydoc TOOL_BASE::Init()
     bool Init() override;
@@ -150,14 +150,6 @@ private:
     bool doSelectionMenu( COLLECTOR* aItems );
 
     /**
-     * Function toggleSelection()
-     * Changes selection status of a given item.
-     *
-     * @param aItem is the item to have selection status changed.
-     */
-    void toggleSelection( EDA_ITEM* aItem );
-
-    /**
      * Function select()
      * Takes necessary action mark an item as selected.
      *
@@ -208,6 +200,7 @@ private:
 
     bool m_additive;            // Items should be added to selection (instead of replacing)
     bool m_subtractive;         // Items should be removed from selection
+    bool m_exclusive_or;        // Items' selection state should be toggled
     bool m_multiple;            // Multiple selection mode is active
     bool m_skip_heuristics;     // Heuristics are not allowed when choosing item under cursor
 };

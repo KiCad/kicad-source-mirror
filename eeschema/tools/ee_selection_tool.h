@@ -101,7 +101,8 @@ public:
      */
     EDA_ITEM* SelectPoint( const VECTOR2I& aWhere,
                            const KICAD_T* aFilterList = EE_COLLECTOR::AllItems,
-                           bool* aSelectionCancelledFlag = NULL, bool aCheckLocked = false );
+                           bool* aSelectionCancelledFlag = NULL, bool aCheckLocked = false,
+                           bool aAdd = false, bool aSubtract = false, bool aExclusiveOr = false );
 
     int AddItemToSel( const TOOL_EVENT& aEvent );
     void AddItemToSel( EDA_ITEM* aItem, bool aQuietMode = false );
@@ -170,15 +171,6 @@ private:
     bool doSelectionMenu( EE_COLLECTOR* aItems );
 
     /**
-     * Function toggleSelection()
-     * Changes selection status of a given item.
-     *
-     * @param aItem is the item to have selection status changed.
-     * @param aForce causes the toggle to happen without checking selectability
-     */
-    void toggleSelection( EDA_ITEM* aItem, bool aForce = false );
-
-    /**
      * Function selectable()
      * Checks conditions for an item to be selected.
      *
@@ -242,6 +234,7 @@ private:
 
     bool m_additive;             // Items should be added to selection (instead of replacing)
     bool m_subtractive;          // Items should be removed from selection
+    bool m_exclusive_or;         // Items' selection state should be toggled
     bool m_multiple;             // Multiple selection mode is active
     bool m_skip_heuristics;      // Heuristics are not allowed when choosing item under cursor
 

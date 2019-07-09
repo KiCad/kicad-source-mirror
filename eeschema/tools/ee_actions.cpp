@@ -508,7 +508,10 @@ TOOL_ACTION EE_ACTIONS::simTune( "eeschema.Simulation.tune",
         _( "Select a value to be tuned" ), "" );
 
 TOOL_ACTION EE_ACTIONS::highlightNet( "eeschema.EditorControl.highlightNet",
-        AS_GLOBAL );
+        AS_GLOBAL,
+        '`', "",
+        _( "Highlight Net" ), _( "Highlight net under cursor" ),
+        net_highlight_schematic_xpm );
 
 TOOL_ACTION EE_ACTIONS::clearHighlight( "eeschema.EditorControl.clearHighlight",
         AS_GLOBAL );

@@ -262,15 +262,6 @@ private:
     BOARD_ITEM* pickSmallestComponent( GENERAL_COLLECTOR* aCollector );
 
     /**
-     * Function toggleSelection()
-     * Changes selection status of a given item.
-     *
-     * @param aItem is the item to have selection status changed.
-     * @param aForce causes the toggle to happen without checking selectability
-     */
-    void toggleSelection( BOARD_ITEM* aItem, bool aForce = false );
-
-    /**
      * Function selectable()
      * Checks conditions for an item to be selected.
      *
@@ -347,6 +338,7 @@ private:
 
     bool m_additive;              // Items should be added to selection (instead of replacing)
     bool m_subtractive;           // Items should be removed from selection
+    bool m_exclusive_or;          // Items' selection state should be toggled
     bool m_multiple;              // Multiple selection mode is active
     bool m_skip_heuristics;       // Heuristics are not allowed when choosing item under cursor
     bool m_locked;                // Other tools are not allowed to modify locked items

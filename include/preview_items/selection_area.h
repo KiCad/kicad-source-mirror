@@ -80,11 +80,9 @@ public:
 
     VECTOR2I GetEnd() const { return m_end; }
 
-    bool IsAdditive() const { return m_additive; }
-    bool IsSubtractive() const { return m_subtractive; }
-
-    void SetAdditive( bool aAdditive );
-    void SetSubtractive( bool aSubtractive );
+    void SetAdditive( bool aAdditive ) { m_additive = aAdditive; }
+    void SetSubtractive( bool aSubtractive ) { m_subtractive = aSubtractive; }
+    void SetExclusiveOr( bool aExclusiveOr ) { m_exclusiveOr = aExclusiveOr; }
 
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override final;
 
@@ -92,6 +90,7 @@ private:
 
     bool m_additive;
     bool m_subtractive;
+    bool m_exclusiveOr;
 
     VECTOR2I m_origin, m_end;
 };

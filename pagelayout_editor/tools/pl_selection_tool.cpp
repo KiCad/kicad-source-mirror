@@ -32,7 +32,6 @@
 #include <tool/selection.h>
 #include <tools/pl_actions.h>
 #include <ws_data_model.h>
-#include <ws_painter.h>
 #include <ws_draw_item.h>
 #include <collector.h>
 #include "pl_selection_tool.h"
@@ -58,6 +57,7 @@ PL_SELECTION_TOOL::PL_SELECTION_TOOL() :
         m_frame( nullptr ),
         m_additive( false ),
         m_subtractive( false ),
+        m_exclusive_or( false ),
         m_multiple( false ),
         m_skip_heuristics( false )
 {
@@ -114,13 +114,14 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         if( m_frame->ToolStackIsEmpty() )
             m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
 
-        // Should selected items be added to the current selection or
-        // become the new selection (discarding previously selected items)
-        m_additive = evt->Modifier( MD_SHIFT );
+        m_additive = m_subtractive = m_exclusive_or = false;
 
-        // Should selected items be REMOVED from the current selection?
-        // This will be ignored if the SHIFT modifier is pressed
-        m_subtractive = !m_additive && evt->Modifier( MD_CTRL );
+        if( evt->Modifier( MD_SHIFT ) && evt->Modifier( MD_CTRL ) )
+            m_subtractive = true;
+        else if( evt->Modifier( MD_SHIFT ) )
+            m_additive = true;
+        else if( evt->Modifier( MD_CTRL ) )
+            m_exclusive_or = true;
 
         // Is the user requesting that the selection list include all possible
         // items without removing less likely selection candidates
@@ -129,10 +130,6 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // Single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {
-            // If no modifier keys are pressed, clear the selection
-            if( !m_additive )
-                ClearSelection();
-
             SelectPoint( evt->Position());
         }
 
@@ -160,7 +157,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         else if( evt->IsDrag( BUT_LEFT ) )
         {
-            if( m_additive || m_subtractive || m_selection.Empty() )
+            if( m_additive || m_subtractive || m_exclusive_or || m_selection.Empty() )
             {
                 selectMultiple();
             }
@@ -223,8 +220,6 @@ EDA_ITEM* PL_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, bool* aSelecti
         }
     }
 
-    bool anyCollected = collector.GetCount() != 0;
-
     m_selection.ClearReferencePoint();
 
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
@@ -250,16 +245,26 @@ EDA_ITEM* PL_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, bool* aSelecti
         }
     }
 
+    if( !m_additive && !m_subtractive && !m_exclusive_or )
+        ClearSelection();
+
     if( collector.GetCount() == 1 )
     {
         EDA_ITEM* item = collector[ 0 ];
 
-        toggleSelection( item );
-        return item;
+        if( m_subtractive || ( m_exclusive_or && item->IsSelected() ) )
+        {
+            unselect( item );
+            m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+            return nullptr;
+        }
+        else
+        {
+            select( item );
+            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+            return item;
+        }
     }
-
-    if( !m_additive && anyCollected )
-        ClearSelection();
 
     return nullptr;
 }
@@ -316,11 +321,15 @@ bool PL_SELECTION_TOOL::selectMultiple()
 
         if( evt->IsDrag( BUT_LEFT ) )
         {
+            if( !m_additive && !m_subtractive && !m_exclusive_or )
+                ClearSelection();
+
             // Start drawing a selection box
             area.SetOrigin( evt->DragOrigin() );
             area.SetEnd( evt->Position() );
             area.SetAdditive( m_additive );
             area.SetSubtractive( m_subtractive );
+            area.SetExclusiveOr( m_exclusive_or );
 
             view->SetVisible( &area, true );
             view->Update( &area );
@@ -342,6 +351,8 @@ bool PL_SELECTION_TOOL::selectMultiple()
              * Right > Left : Select objects that are crossed by selection
              */
             bool windowSelection = width >= 0 ? true : false;
+            bool anyAdded = false;
+            bool anySubtracted = false;
 
             // Construct an EDA_RECT to determine EDA_ITEM selection
             EDA_RECT selectionRect( (wxPoint)area.GetOrigin(), wxSize( width, height ) );
@@ -354,17 +365,26 @@ bool PL_SELECTION_TOOL::selectMultiple()
                 {
                     if( item->HitTest( selectionRect, windowSelection ) )
                     {
-                        if( m_subtractive )
+                        if( m_subtractive || ( m_exclusive_or && item->IsSelected() ) )
+                        {
                             unselect( item );
+                            anySubtracted = true;
+                        }
                         else
+                        {
                             select( item );
+                            anyAdded = true;
+                        }
                     }
                 }
             }
 
             // Inform other potentially interested tools
-            if( !m_selection.Empty() )
+            if( anyAdded )
                 m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+            if( anySubtracted )
+                m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
 
             break;  // Stop waiting for events
         }
@@ -606,31 +626,6 @@ void PL_SELECTION_TOOL::ClearSelection()
 
     // Inform other potentially interested tools
     m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
-}
-
-
-void PL_SELECTION_TOOL::toggleSelection( EDA_ITEM* aItem )
-{
-    if( aItem->IsSelected() )
-    {
-        unselect( aItem );
-
-        // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
-    }
-    else
-    {
-        if( !m_additive )
-            ClearSelection();
-
-        select( aItem );
-
-        // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-    }
-
-    if( m_frame )
-        m_frame->GetCanvas()->ForceRefresh();
 }
 
 

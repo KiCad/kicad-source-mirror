@@ -23,27 +23,22 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#include <limits>
 
+#include <limits>
 #include <functional>
 using namespace std::placeholders;
-
 #include <class_board.h>
 #include <class_board_item.h>
 #include <class_track.h>
 #include <class_module.h>
-#include <class_pcb_text.h>
 #include <class_drawsegment.h>
 #include <class_zone.h>
-
-#include <pcb_edit_frame.h>
 #include <collectors.h>
 #include <confirm.h>
 #include <dialog_find.h>
 #include <dialog_block_options.h>
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
-#include <view/view_group.h>
 #include <preview_items/selection_area.h>
 #include <painter.h>
 #include <bitmaps.h>
@@ -119,6 +114,7 @@ SELECTION_TOOL::SELECTION_TOOL() :
         m_frame( NULL ),
         m_additive( false ),
         m_subtractive( false ),
+        m_exclusive_or( false ),
         m_multiple( false ),
         m_skip_heuristics( false ),
         m_locked( true ),
@@ -193,13 +189,15 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         if( m_frame->ToolStackIsEmpty() )
             m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
 
-        // Should selected items be added to the current selection or
-        // become the new selection (discarding previously selected items)
-        m_additive = evt->Modifier( MD_SHIFT );
+        bool dragAlwaysSelects = getEditFrame<PCB_BASE_FRAME>()->Settings().m_DragSelects;
+        m_additive = m_subtractive = m_exclusive_or = false;
 
-        // Should selected items be REMOVED from the current selection?
-        // This will be ignored if the SHIFT modifier is pressed
-        m_subtractive = !m_additive && evt->Modifier( MD_CTRL );
+        if( evt->Modifier( MD_SHIFT ) && evt->Modifier( MD_CTRL ) )
+            m_subtractive = true;
+        else if( evt->Modifier( MD_SHIFT ) )
+            m_additive = true;
+        else if( evt->Modifier( MD_CTRL ) )
+            m_exclusive_or = true;
 
         // Is the user requesting that the selection list include all possible
         // items without removing less likely selection candidates
@@ -208,18 +206,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // Single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {
-            if( evt->Modifier( MD_CTRL ) && !m_editModules )
-            {
-                m_toolMgr->RunAction( PCB_ACTIONS::highlightNet, true );
-            }
-            else
-            {
-                // If no modifier keys are pressed, clear the selection
-                if( !m_additive )
-                    clearSelection();
-
-                selectPoint( evt->Position() );
-            }
+            selectPoint( evt->Position() );
         }
 
         // right click? if there is any object - show the context menu
@@ -249,28 +236,17 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         else if( evt->IsDrag( BUT_LEFT ) )
         {
-            if( m_additive || m_subtractive )
+            if( m_additive || m_subtractive || m_exclusive_or || dragAlwaysSelects )
             {
                 selectMultiple();
             }
-            else if( m_selection.Empty() )
-            {
-                // There is nothing selected, so try to select something
-                if( getEditFrame<PCB_BASE_FRAME>()->Settings().m_DragSelects || !selectCursor() )
-                {
-                    // If nothings has been selected, user wants to select more or selection
-                    // box is preferred to dragging - draw selection box
-                    selectMultiple();
-                }
-                else
-                {
-                    m_selection.SetIsHover( true );
-                    m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
-                }
-            }
-
             else
             {
+                // selection is empty? try to start dragging the item under the point where drag
+                // started
+                if( m_selection.Empty() && selectCursor() )
+                    m_selection.SetIsHover( true );
+
                 // Check if dragging has started within any of selected items bounding box
                 if( selectionContains( evt->Position() ) )
                 {
@@ -279,8 +255,8 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    // No -> clear the selection list
-                    clearSelection();
+                    // No -> drag a selection box
+                    selectMultiple();
                 }
             }
         }
@@ -316,7 +292,8 @@ PCBNEW_SELECTION& SELECTION_TOOL::GetSelection()
 
 
 PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
-        std::vector<BOARD_ITEM*>* aFiltered, bool aConfirmLockedItems )
+                                                    std::vector<BOARD_ITEM*>* aFiltered,
+                                                    bool aConfirmLockedItems )
 {
     bool selectionEmpty = m_selection.Empty();
     m_selection.SetIsHover( selectionEmpty );
@@ -346,15 +323,17 @@ PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCli
          * This can happen if the locked pads select the module instead
          */
         std::vector<EDA_ITEM*> new_items;
-        std::set_difference( collector.begin(), collector.end(), m_selection.begin(), m_selection.end(),
-                std::back_inserter( new_items ) );
+        std::set_difference( collector.begin(), collector.end(),
+                             m_selection.begin(), m_selection.end(),
+                             std::back_inserter( new_items ) );
 
         /**
          * The second step is to find the items that were removed by the client filter
          */
         std::vector<EDA_ITEM*> diff;
-        std::set_difference( m_selection.begin(), m_selection.end(), collector.begin(), collector.end(),
-                std::back_inserter( diff ) );
+        std::set_difference( m_selection.begin(), m_selection.end(),
+                             collector.begin(), collector.end(),
+                             std::back_inserter( diff ) );
 
         if( aFiltered )
         {
@@ -378,34 +357,6 @@ PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCli
     return m_selection;
 }
 
-
-void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem, bool aForce )
-{
-    if( aItem->IsSelected() )
-    {
-        unselect( aItem );
-
-        // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
-    }
-    else
-    {
-        if( !m_additive )
-            clearSelection();
-
-        // Prevent selection of invisible or inactive items
-        if( aForce || selectable( aItem ) )
-        {
-            select( aItem );
-
-            // Inform other potentially interested tools
-            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-        }
-    }
-
-    if( m_frame )
-        m_frame->GetCanvas()->ForceRefresh();
-}
 
 const GENERAL_COLLECTORS_GUIDE SELECTION_TOOL::getCollectorsGuide() const
 {
@@ -446,8 +397,6 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
         m_editModules ? GENERAL_COLLECTOR::ModuleItems : GENERAL_COLLECTOR::AllBoardItems,
         wxPoint( aWhere.x, aWhere.y ), guide );
 
-    bool anyCollected = collector.GetCount() != 0;
-
     // Remove unselectable items
     for( int i = collector.GetCount() - 1; i >= 0; --i )
     {
@@ -472,9 +421,7 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     if( collector.GetCount() > 1 )
     {
         if( aOnDrag )
-        {
             Wait( TOOL_EVENT( TC_ANY, TA_MOUSE_UP, BUT_LEFT ) );
-        }
 
         if( !doSelectionMenu( &collector, _( "Clarify Selection" ) ) )
         {
@@ -485,16 +432,26 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
         }
     }
 
+    if( !m_additive && !m_subtractive && !m_exclusive_or )
+        clearSelection();
+
     if( collector.GetCount() == 1 )
     {
         BOARD_ITEM* item = collector[ 0 ];
 
-        toggleSelection( item );
-        return true;
+        if( m_subtractive || ( m_exclusive_or && item->IsSelected() ) )
+        {
+            unselect( item );
+            m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+            return false;
+        }
+        else
+        {
+            select( item );
+            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+            return true;
+        }
     }
-
-    if( !m_additive && anyCollected )
-        clearSelection();
 
     return false;
 }
@@ -531,11 +488,15 @@ bool SELECTION_TOOL::selectMultiple()
 
         if( evt->IsDrag( BUT_LEFT ) )
         {
+            if( !m_additive && !m_subtractive && !m_exclusive_or )
+                clearSelection();
+
             // Start drawing a selection box
             area.SetOrigin( evt->DragOrigin() );
             area.SetEnd( evt->Position() );
             area.SetAdditive( m_additive );
             area.SetSubtractive( m_subtractive );
+            area.SetExclusiveOr( m_exclusive_or );
 
             view->SetVisible( &area, true );
             view->Update( &area );
@@ -566,13 +527,14 @@ bool SELECTION_TOOL::selectMultiple()
              * Right > Left : Select objects that are crossed by selection
              */
             bool windowSelection = width >= 0 ? true : false;
+            bool anyAdded = false;
+            bool anySubtracted = false;
 
             if( view->IsMirroredX() )
                 windowSelection = !windowSelection;
 
             // Construct an EDA_RECT to determine BOARD_ITEM selection
-            EDA_RECT selectionRect( wxPoint( area.GetOrigin().x, area.GetOrigin().y ),
-                                    wxSize( width, height ) );
+            EDA_RECT selectionRect( (wxPoint) area.GetOrigin(), wxSize( width, height ) );
 
             selectionRect.Normalize();
 
@@ -585,16 +547,27 @@ bool SELECTION_TOOL::selectMultiple()
 
                 if( item->HitTest( selectionRect, windowSelection ) )
                 {
-                    if( m_subtractive )
+                    if( m_subtractive || ( m_exclusive_or && item->IsSelected() ) )
+                    {
                         unselect( item );
+                        anySubtracted = true;
+                    }
                     else
+                    {
                         select( item );
+                        anyAdded = true;
+                    }
                 }
             }
 
+            m_selection.SetIsHover( false );
+
             // Inform other potentially interested tools
-            if( !m_selection.Empty() )
+            if( anyAdded )
                 m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+            if( anySubtracted )
+                m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
 
             break;  // Stop waiting for events
         }
@@ -1142,7 +1115,8 @@ int SELECTION_TOOL::findMove( const TOOL_EVENT& aEvent )
     {
         KIGFX::VIEW_CONTROLS* viewCtrls = getViewControls();
         clearSelection();
-        toggleSelection( module, true );
+        select( module );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
         auto cursorPosition = viewCtrls->GetCursorPosition( false );
 

@@ -124,6 +124,7 @@ EE_SELECTION_TOOL::EE_SELECTION_TOOL() :
         m_frame( nullptr ),
         m_additive( false ),
         m_subtractive( false ),
+        m_exclusive_or( false ),
         m_multiple( false ),
         m_skip_heuristics( false ),
         m_isLibEdit( false ),
@@ -288,13 +289,14 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         if( m_frame->ToolStackIsEmpty() )
             m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
 
-        // Should selected items be added to the current selection or
-        // become the new selection (discarding previously selected items)
-        m_additive = evt->Modifier( MD_SHIFT );
+        m_additive = m_subtractive = m_exclusive_or = false;
 
-        // Should selected items be REMOVED from the current selection?
-        // This will be ignored if the SHIFT modifier is pressed
-        m_subtractive = !m_additive && evt->Modifier( MD_CTRL );
+        if( evt->Modifier( MD_SHIFT ) && evt->Modifier( MD_CTRL ) )
+            m_subtractive = true;
+        else if( evt->Modifier( MD_SHIFT ) )
+            m_additive = true;
+        else if( evt->Modifier( MD_CTRL ) )
+            m_exclusive_or = true;
 
         // Is the user requesting that the selection list include all possible
         // items without removing less likely selection candidates
@@ -303,18 +305,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // Single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {
-            if( evt->Modifier( MD_CTRL ) && dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
-            {
-                m_toolMgr->RunAction( EE_ACTIONS::highlightNet, true );
-            }
-            else
-            {
-                // If no modifier keys are pressed, clear the selection
-                if( !m_additive )
-                    ClearSelection();
-
-                SelectPoint( evt->Position());
-            }
+            SelectPoint( evt->Position(), EE_COLLECTOR::AllItems, nullptr, false,
+                         m_additive, m_subtractive, m_exclusive_or );
         }
 
         // right click? if there is any object - show the context menu
@@ -349,22 +341,17 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         else if( evt->IsDrag( BUT_LEFT ) )
         {
-            bool empty = m_selection.Empty();
-
-            // selection is empty? try to start dragging the item under the point where drag started
-            if( empty )
-            {
-                m_selection = RequestSelection( movableItems );
-                empty = m_selection.Empty();
-            }
-
-            // selection STILL empty? attempt a rectangle multi-selection
-            if( m_additive || m_subtractive || empty || m_frame->GetDragAlwaysSelects() )
+            if( m_additive || m_subtractive || m_exclusive_or || m_frame->GetDragAlwaysSelects() )
             {
                 selectMultiple();
             }
             else
             {
+                // selection is empty? try to start dragging the item under the point where drag
+                // started
+                if( m_selection.Empty() )
+                    m_selection = RequestSelection( movableItems );
+
                 // Check if dragging has started within any of selected items bounding box
                 if( selectionContains( evt->Position() ) )
                 {
@@ -373,8 +360,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    // No -> clear the selection list
-                    ClearSelection();
+                    // No -> drag a selection box
+                    selectMultiple();
                 }
             }
         }
@@ -428,7 +415,8 @@ EE_SELECTION& EE_SELECTION_TOOL::GetSelection()
 
 
 EDA_ITEM* EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFilterList,
-                                           bool* aSelectionCancelledFlag, bool aCheckLocked )
+                                          bool* aSelectionCancelledFlag, bool aCheckLocked,
+                                          bool aAdd, bool aSubtract, bool aExclusiveOr )
 {
     EDA_ITEM*    start;
     EE_COLLECTOR collector;
@@ -444,8 +432,6 @@ EDA_ITEM* EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T*
 
     collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
     collector.Collect( start, aFilterList, (wxPoint) aWhere, m_unit, m_convert );
-
-    bool anyCollected = collector.GetCount() > 0;
 
     // Post-process collected items
     for( int i = collector.GetCount() - 1; i >= 0; --i )
@@ -501,16 +487,26 @@ EDA_ITEM* EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T*
         }
     }
 
+    if( !aAdd && !aSubtract && !aExclusiveOr )
+        ClearSelection();
+
     if( collector.GetCount() == 1 )
     {
         EDA_ITEM* item = collector[ 0 ];
 
-        toggleSelection( item );
-        return item;
+        if( aSubtract || ( aExclusiveOr && item->IsSelected() ) )
+        {
+            unselect( item );
+            m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+            return nullptr;
+        }
+        else
+        {
+            select( item );
+            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+            return item;
+        }
     }
-
-    if( !m_additive && anyCollected )
-        ClearSelection();
 
     return nullptr;
 }
@@ -609,7 +605,10 @@ EE_SELECTION& EE_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
             EDA_ITEM* item = (EDA_ITEM*) m_selection.GetItem( i );
 
             if( !item->IsType( aFilterList ) )
-                toggleSelection( item );
+            {
+                unselect( item );
+                m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+            }
         }
 
     }
@@ -666,11 +665,15 @@ bool EE_SELECTION_TOOL::selectMultiple()
 
         if( evt->IsDrag( BUT_LEFT ) )
         {
+            if( !m_additive && !m_subtractive && !m_exclusive_or )
+                ClearSelection();
+
             // Start drawing a selection box
             area.SetOrigin( evt->DragOrigin() );
             area.SetEnd( evt->Position() );
             area.SetAdditive( m_additive );
             area.SetSubtractive( m_subtractive );
+            area.SetExclusiveOr( m_exclusive_or );
 
             view->SetVisible( &area, true );
             view->Update( &area );
@@ -701,12 +704,14 @@ bool EE_SELECTION_TOOL::selectMultiple()
              * Right > Left : Select objects that are crossed by selection
              */
             bool windowSelection = width >= 0;
+            bool anyAdded = false;
+            bool anySubtracted = false;
 
             if( view->IsMirroredX() )
                 windowSelection = !windowSelection;
 
             // Construct an EDA_RECT to determine EDA_ITEM selection
-            EDA_RECT selectionRect( (wxPoint)area.GetOrigin(), wxSize( width, height ) );
+            EDA_RECT selectionRect( (wxPoint) area.GetOrigin(), wxSize( width, height ) );
 
             selectionRect.Normalize();
 
@@ -719,12 +724,16 @@ bool EE_SELECTION_TOOL::selectMultiple()
 
                 if( item->HitTest( selectionRect, windowSelection ) )
                 {
-                    if( m_subtractive )
+                    if( m_subtractive || ( m_exclusive_or && item->IsSelected() ) )
+                    {
                         unselect( item );
+                        anySubtracted = true;
+                    }
                     else
                     {
                         select( item );
                         item->SetFlags( STARTPOINT | ENDPOINT );
+                        anyAdded = true;
                     }
                 }
             }
@@ -732,8 +741,11 @@ bool EE_SELECTION_TOOL::selectMultiple()
             m_selection.SetIsHover( false );
 
             // Inform other potentially interested tools
-            if( !m_selection.Empty() )
+            if( anyAdded )
                 m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+            if( anySubtracted )
+                m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
 
             break;  // Stop waiting for events
         }
@@ -1113,35 +1125,6 @@ void EE_SELECTION_TOOL::ClearSelection()
 
     // Inform other potentially interested tools
     m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
-}
-
-
-void EE_SELECTION_TOOL::toggleSelection( EDA_ITEM* aItem, bool aForce )
-{
-    if( aItem->IsSelected() )
-    {
-        unselect( aItem );
-
-        // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
-    }
-    else
-    {
-        if( !m_additive )
-            ClearSelection();
-
-        // Prevent selection of invisible or inactive items
-        if( aForce || selectable( aItem ) )
-        {
-            select( aItem );
-
-            // Inform other potentially interested tools
-            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-        }
-    }
-
-    if( m_frame )
-        m_frame->GetCanvas()->ForceRefresh();
 }
 
 

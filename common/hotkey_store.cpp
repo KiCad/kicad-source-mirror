@@ -40,14 +40,13 @@ public:
 };
 
 static GESTURE_PSEUDO_ACTION* g_gesturePseudoActions[] = {
-    new GESTURE_PSEUDO_ACTION( _( "Highlight Net" ), MD_CTRL + PSEUDO_WXK_CLICK ),
-    new GESTURE_PSEUDO_ACTION( _( "Clear Net Highlighting" ), MD_CTRL + PSEUDO_WXK_CLICK ),
     new GESTURE_PSEUDO_ACTION( _( "Pan Left/Right" ), MD_CTRL + PSEUDO_WXK_WHEEL ),
     new GESTURE_PSEUDO_ACTION( _( "Pan Up/Down" ), MD_SHIFT + PSEUDO_WXK_WHEEL ),
     new GESTURE_PSEUDO_ACTION( _( "Finish Drawing" ), PSEUDO_WXK_DBLCLICK ),
     new GESTURE_PSEUDO_ACTION( _( "Show Clarify Selection Menu" ), MD_ALT + PSEUDO_WXK_CLICK ),
     new GESTURE_PSEUDO_ACTION( _( "Add to Selection" ), MD_SHIFT + PSEUDO_WXK_CLICK ),
-    new GESTURE_PSEUDO_ACTION( _( "Remove from Selection" ), MD_CTRL + PSEUDO_WXK_CLICK ),
+    new GESTURE_PSEUDO_ACTION( _( "Toggle Selection State" ), MD_CTRL + PSEUDO_WXK_CLICK ),
+    new GESTURE_PSEUDO_ACTION( _( "Remove from Selection" ), MD_SHIFT + MD_CTRL + PSEUDO_WXK_CLICK ),
     new GESTURE_PSEUDO_ACTION( _( "Ignore Grid Snaps" ), MD_ALT ),
     new GESTURE_PSEUDO_ACTION( _( "Ignore Other Snaps" ), MD_SHIFT ),
 };
