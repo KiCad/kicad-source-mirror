@@ -1296,7 +1296,7 @@ bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aP )
     bool picking = true;
     bool retVal = true;
 
-    frame()->PushTool( _( "Select reference point for the copy..." ) );
+    frame()->PushTool( "pcbnew.InteractiveEdit.selectReferencePoint" );
     statusPopup.SetText( _( "Select reference point for the copy..." ) );
 
     picker->Activate();

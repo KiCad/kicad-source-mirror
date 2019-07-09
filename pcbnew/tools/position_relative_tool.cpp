@@ -128,7 +128,7 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
     STATUS_TEXT_POPUP statusPopup( frame() );
     bool picking = true;
 
-    frame()->PushTool( _( "Select reference item..." ) );
+    frame()->PushTool( "pcbnew.PositionRelative.selectReferenceItem" );
     statusPopup.SetText( _( "Select reference item..." ) );
     picker->Activate();
 
