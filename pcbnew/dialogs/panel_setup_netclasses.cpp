@@ -64,6 +64,14 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, PCB_EDIT_
 
     m_netclassesDirty = true;
 
+    // Figure out the smallest the netclass membership pane can ever be so that nothing is cutoff
+    // and force it to be that size.
+    m_membershipSize = GetSize();
+    m_membershipSize.y -= m_netclassesPane->GetSize().y;
+    m_membershipSize.x = -1;
+    m_membershipPane->SetMinSize( m_membershipSize );
+    m_membershipPane->SetMaxSize( m_membershipSize );
+
     // Prevent Size events from firing before we are ready
     Freeze();
     m_originalColWidths = new int[ m_netclassGrid->GetNumberCols() ];
@@ -472,6 +480,17 @@ void PANEL_SETUP_NETCLASSES::OnUpdateUI( wxUpdateUIEvent& event )
         rebuildNetclassDropdowns();
         m_netclassesDirty = false;
     }
+
+    // Recompute the desired size for the two content panes. We cannot leave this sizing to
+    // wxWidgets because it wants to shrink the membership panel to an unusable size when the
+    // netlist panel grows, and also it introduces undesired artifacts when the window is resized
+    // and the panes can grow/shrink.
+    wxSize netclassSize = GetClientSize();
+    netclassSize.y -= m_membershipSize.y;
+
+    m_netclassesPane->SetMinSize( netclassSize );
+    m_netclassesPane->SetMaxSize( netclassSize );
+    Layout();
 }
 
 
