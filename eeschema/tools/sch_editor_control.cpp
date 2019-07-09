@@ -1018,8 +1018,9 @@ int SCH_EDITOR_CONTROL::EditSymbolFields( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::EditSymbolLibraryLinks( const TOOL_EVENT& aEvent )
 {
-    InvokeDialogEditComponentsLibId( m_frame );
-    m_frame->GetCanvas()->Refresh( true );
+    if( InvokeDialogEditComponentsLibId( m_frame ) )
+        m_frame->HardRedraw();
+
     return 0;
 }
 
