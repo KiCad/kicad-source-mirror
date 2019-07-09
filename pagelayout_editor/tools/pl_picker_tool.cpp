@@ -159,6 +159,7 @@ int PL_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     resetPicker();
     controls->ForceCursorPosition( false );
+    m_frame->PopTool();
     return 0;
 }
 

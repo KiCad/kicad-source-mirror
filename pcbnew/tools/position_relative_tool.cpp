@@ -128,6 +128,7 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
     STATUS_TEXT_POPUP statusPopup( frame() );
     bool picking = true;
 
+    frame()->PushTool( _( "Select reference item..." ) );
     statusPopup.SetText( _( "Select reference item..." ) );
     picker->Activate();
 
@@ -168,6 +169,7 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
     {
         statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
         Wait();
+        // Picker calls PopTool() so that it gets done before activating tool's PushTool()
     }
 
     return 0;

@@ -1006,8 +1006,7 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
     picker->Activate();
     Wait();
-
-    m_frame->PopTool();
+    // Picker calls PopTool() so that it gets done before activating tool's PushTool()
     return 0;
 }
 

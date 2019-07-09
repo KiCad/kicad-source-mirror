@@ -1296,7 +1296,9 @@ bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aP )
     bool picking = true;
     bool retVal = true;
 
+    frame()->PushTool( _( "Select reference point for the copy..." ) );
     statusPopup.SetText( _( "Select reference point for the copy..." ) );
+
     picker->Activate();
     picker->SetClickHandler( [&]( const VECTOR2D& aPoint ) -> bool
                              {
@@ -1324,6 +1326,7 @@ bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aP )
     }
 
     statusPopup.Hide();
+    // Picker calls PopTool() so that it gets done before activating tool's PushTool()
     return retVal;
 }
 
