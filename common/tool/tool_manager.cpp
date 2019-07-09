@@ -524,8 +524,10 @@ TOOL_EVENT* TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool, const TOOL_EVENT_LIST&
 }
 
 
-void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
+bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 {
+    bool handled = false;
+
     // iterate over active tool stack
     for( auto it = m_activeTools.begin(); it != m_activeTools.end(); ++it )
     {
@@ -562,7 +564,10 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 
                 // If the tool did not request the event be passed to other tools, we're done
                 if( !st->wakeupEvent.PassEvent() )
+                {
+                    handled = true;
                     break;
+                }
             }
         }
     }
@@ -603,6 +608,7 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                     setActiveState( st );
                     st->idle = false;
                     st->cofunc->Call( aEvent );
+                    handled = true;
 
                     if( !st->cofunc->Running() )
                         finishTool( st ); // The couroutine has finished immediately?
@@ -619,19 +625,17 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
         if( finished )
             break;      // only the first tool gets the event
     }
+
+    return handled;
 }
 
 
-bool TOOL_MANAGER::dispatchStandardEvents( const TOOL_EVENT& aEvent )
+bool TOOL_MANAGER::dispatchHotKey( const TOOL_EVENT& aEvent )
 {
     if( aEvent.Action() == TA_KEY_PRESSED )
-    {
-        // Check if there is a hotkey associated
-        if( m_actionMgr->RunHotKey( aEvent.Modifier() | aEvent.KeyCode() ) )
-            return false;                 // hotkey event was handled so it does not go any further
-    }
+        return m_actionMgr->RunHotKey( aEvent.Modifier() | aEvent.KeyCode() );
 
-    return true;
+    return false;
 }
 
 
@@ -775,10 +779,12 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 
 bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 {
-    bool hotkey_handled = processEvent( aEvent );
+    bool handled = processEvent( aEvent );
 
-    if( TOOL_STATE* active = GetCurrentToolState() )
-        setActiveState( active );
+    TOOL_STATE* activeTool = GetCurrentToolState();
+
+    if( activeTool )
+        setActiveState( activeTool );
 
     if( m_view && m_view->IsDirty() )
     {
@@ -791,7 +797,7 @@ bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 
     UpdateUI( aEvent );
 
-    return hotkey_handled;
+    return handled;
 }
 
 
@@ -925,12 +931,14 @@ void TOOL_MANAGER::applyViewControls( TOOL_STATE* aState )
 
 bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
 {
-    // Early dispatch of events destined for the TOOL_MANAGER
-    if( !dispatchStandardEvents( aEvent ) )
+    if( dispatchHotKey( aEvent ) )
         return true;
 
-    dispatchInternal( aEvent );
-    dispatchActivation( aEvent );
+    bool handled = false;
+
+    handled |= dispatchInternal( aEvent );
+    handled |= dispatchActivation( aEvent );
+
     DispatchContextMenu( aEvent );
 
     // Dispatch queue
@@ -941,7 +949,7 @@ bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
         processEvent( event );
     }
 
-    return false;
+    return handled;
 }
 
 

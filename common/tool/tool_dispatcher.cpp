@@ -489,10 +489,8 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
     // Not handled wxEVT_CHAR must be Skipped (sent to GUI).
     // Otherwise accelerators and shortcuts in main menu or toolbars are not seen.
-#ifndef __APPLE__
     if( (type == wxEVT_CHAR || type == wxEVT_CHAR_HOOK) && !keyIsSpecial && !handled )
         aEvent.Skip();
-#endif
 }
 
 

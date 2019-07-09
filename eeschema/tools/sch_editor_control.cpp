@@ -764,7 +764,7 @@ int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
 bool SCH_EDITOR_CONTROL::doCopy()
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    EE_SELECTION&      selection = selTool->GetSelection();
+    EE_SELECTION&      selection = selTool->RequestSelection();
 
     if( !selection.GetSize() )
         return false;

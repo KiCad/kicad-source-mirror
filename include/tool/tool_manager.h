@@ -382,15 +382,15 @@ private:
      * Function dispatchInternal
      * Passes an event at first to the active tools, then to all others.
      */
-    void dispatchInternal( const TOOL_EVENT& aEvent );
+    bool dispatchInternal( const TOOL_EVENT& aEvent );
 
     /**
      * Function dispatchStandardEvents()
      * Handles specific events, that are intended for TOOL_MANAGER rather than tools.
      * @param aEvent is the event to be processed.
-     * @return False if the event was processed and should not go any further.
+     * @return true if the event was processed and should not go any further.
      */
-    bool dispatchStandardEvents( const TOOL_EVENT& aEvent );
+    bool dispatchHotKey( const TOOL_EVENT& aEvent );
 
     /**
      * Function dispatchActivation()
