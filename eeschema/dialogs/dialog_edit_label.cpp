@@ -72,7 +72,7 @@ public:
 
 private:
     virtual void OnEnterKey( wxCommandEvent& aEvent ) override;
-    void OnCharHook( wxKeyEvent& aEvent );
+    void OnCharHook( wxKeyEvent& aEvt );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -119,7 +119,7 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
     if( m_CurrentText->IsMultilineAllowed() )
     {
         m_activeTextCtrl = m_valueMultiLine;
-        m_activeTextEntry = m_valueMultiLine;
+        m_activeTextEntry = nullptr;
 
         m_labelSingleLine->Show( false );  m_valueSingleLine->Show( false );
         m_labelCombo->Show( false );       m_valueCombo->Show( false );
@@ -183,7 +183,10 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    m_activeTextEntry->SetValue( UnescapeString( m_CurrentText->GetText() ) );
+    if( m_activeTextEntry )
+        m_activeTextEntry->SetValue( UnescapeString( m_CurrentText->GetText() ) );
+    else
+        m_valueMultiLine->SetValue( UnescapeString( m_CurrentText->GetText() ) );
 
     if( m_valueCombo->IsShown() )
     {
@@ -240,28 +243,70 @@ void DIALOG_LABEL_EDITOR::OnEnterKey( wxCommandEvent& aEvent )
 }
 
 
+static bool isCtrl( int aChar, const wxKeyEvent& e )
+{
+    return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() && !e.ShiftDown() && !e.MetaDown();
+}
+
+static bool isShiftCtrl( int aChar, const wxKeyEvent& e )
+{
+    return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() && e.ShiftDown() && !e.MetaDown();
+}
+
 /*!
  * wxEVT_CHAR_HOOK event handler for multi-line control
  */
 
-void DIALOG_LABEL_EDITOR::OnCharHook( wxKeyEvent& aEvent )
+void DIALOG_LABEL_EDITOR::OnCharHook( wxKeyEvent& aEvt )
 {
-    if( aEvent.GetKeyCode() == WXK_TAB )
+    if( aEvt.GetKeyCode() == WXK_TAB )
     {
-        int flags = 0;
-        if( !aEvent.ShiftDown() )
-            flags |= wxNavigationKeyEvent::IsForward;
-        if( aEvent.ControlDown() )
-            flags |= wxNavigationKeyEvent::WinChange;
-        NavigateIn( flags );
+        if( aEvt.ControlDown() )
+        {
+            int flags = 0;
+            if( !aEvt.ShiftDown() )
+                flags |= wxNavigationKeyEvent::IsForward;
+            NavigateIn( flags );
+        }
+        else
+        {
+            m_valueMultiLine->Tab();
+        }
     }
-    else if( aEvent.GetKeyCode() == WXK_RETURN && aEvent.ShiftDown() )
+    else if( aEvt.GetKeyCode() == WXK_RETURN && aEvt.ShiftDown() )
     {
         wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
     }
+    else if( m_valueMultiLine->IsShown() && isCtrl( 'Z', aEvt ) )
+    {
+        m_valueMultiLine->Undo();
+    }
+#if defined( __WXMAC__ )
+    else if( isShiftCtrl( 'Z', aEvt ) )
+    {
+        m_valueMultiLine->Redo();
+    }
+#else
+    else if( isCtrl( 'Y', aEvt ) )
+    {
+        m_valueMultiLine->Redo();
+    }
+#endif
+    else if( isCtrl( 'X', aEvt ) )
+    {
+        m_valueMultiLine->Cut();
+    }
+    else if( isCtrl( 'C', aEvt ) )
+    {
+        m_valueMultiLine->Copy();
+    }
+    else if( isCtrl( 'V', aEvt ) )
+    {
+        m_valueMultiLine->Paste();
+    }
     else
     {
-        aEvent.Skip();
+        aEvt.Skip();
     }
 }
 
@@ -284,7 +329,7 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
 
     // Escape string only if is is a label. For a simple graphic text do not change anything
     if( m_CurrentText->Type() == SCH_TEXT_T )
-        text = m_activeTextEntry->GetValue();
+        text = m_valueMultiLine->GetValue();
     else
         text = EscapeString( m_activeTextEntry->GetValue(), CTX_NETNAME );
 
