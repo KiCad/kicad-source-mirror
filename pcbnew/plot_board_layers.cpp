@@ -422,6 +422,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 pad->SetSize( padPlotsSize );
 
                 if( aPlotOpt.GetSkipPlotNPTH_Pads() &&
+                    ( aPlotOpt.GetDrillMarksType() == PCB_PLOT_PARAMS::NO_DRILL_SHAPE ) &&
                     ( pad->GetSize() == pad->GetDrillSize() ) &&
                     ( pad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED ) )
                     break;
