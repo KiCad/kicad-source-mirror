@@ -1256,7 +1256,7 @@ public:
         textAsLines = true;
         m_currentColor = COLOR4D::BLACK;
         m_currentLineType = 0;
-        SetUnits( DXF_PLOTTER::INCHES );
+        SetUnits( DXF_PLOTTER::DXF_UNIT_INCHES );
     }
 
     virtual PlotFormat GetPlotterType() const override
@@ -1340,11 +1340,11 @@ public:
                        void* aData = NULL ) override;
 
 
-    // Should be the same order as in the PCB_PLOT_PARAMS class
-    enum Units
+    // Must be in the same order as the drop-down list in the plot dialog inside pcbnew
+    enum DXF_UNITS
     {
-        INCHES = 0,
-        MILIMETERS = 1
+        DXF_UNIT_INCHES = 0,
+        DXF_UNIT_MILLIMETERS = 1
     };
 
     /**
@@ -1352,14 +1352,14 @@ public:
      *
      * @param aUnit - The units to use
      */
-    void SetUnits( Units aUnit );
+    void SetUnits( DXF_UNITS aUnit );
 
     /**
      * The units currently enabled for plotting
      *
      * @return The currently configured units
      */
-    Units GetUnits() const
+    DXF_UNITS GetUnits() const
     {
         return m_plotUnits;
     }
@@ -1390,7 +1390,7 @@ protected:
     COLOR4D m_currentColor;
     int m_currentLineType;
 
-    Units        m_plotUnits;
+    DXF_UNITS    m_plotUnits;
     double       m_unitScalingFactor;
     unsigned int m_measurementDirective;
 };
