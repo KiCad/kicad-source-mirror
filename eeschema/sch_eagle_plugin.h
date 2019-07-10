@@ -103,9 +103,6 @@ public:
     //void Save( const wxString& aFileName, SCH_SCREEN* aSchematic, KIWAY* aKiway,
     //           const PROPERTIES* aProperties = NULL ) override;
 
-    //size_t GetSymbolLibCount( const wxString& aLibraryPath,
-    //                          const PROPERTIES* aProperties = NULL ) override;
-
     //void EnumerateSymbolLib( wxArrayString& aAliasNameList, const wxString& aLibraryPath,
     //                         const PROPERTIES* aProperties = NULL ) override;
 

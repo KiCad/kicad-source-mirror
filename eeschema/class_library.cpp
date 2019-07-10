@@ -164,28 +164,6 @@ void PART_LIB::GetAliases( std::vector<LIB_ALIAS*>& aAliases ) const
 }
 
 
-void PART_LIB::GetEntryTypePowerNames( wxArrayString& aNames ) const
-{
-    std::vector<LIB_ALIAS*> aliases;
-
-    m_plugin->EnumerateSymbolLib( aliases, fileName.GetFullPath() );
-
-    for( size_t i = 0;  i < aliases.size();  i++ )
-    {
-        LIB_ALIAS* alias = aliases[i];
-
-        LIB_PART* root = alias->GetPart();
-
-        if( !root || !root->IsPower() )
-            continue;
-
-        aNames.Add( alias->GetName() );
-    }
-
-    aNames.Sort();
-}
-
-
 LIB_ALIAS* PART_LIB::FindAlias( const wxString& aName ) const
 {
     LIB_ALIAS* alias = m_plugin->LoadSymbol( fileName.GetFullPath(), aName, m_properties.get() );
@@ -220,27 +198,6 @@ LIB_PART* PART_LIB::FindPart( const wxString& aName ) const
 LIB_PART* PART_LIB::FindPart( const LIB_ID& aLibId ) const
 {
     return FindPart( aLibId.Format().wx_str() );
-}
-
-
-bool PART_LIB::HasPowerParts() const
-{
-    // return true if at least one power part is found in lib
-    std::vector<LIB_ALIAS*> aliases;
-
-    m_plugin->EnumerateSymbolLib( aliases, fileName.GetFullPath(), m_properties.get() );
-
-    for( size_t i = 0;  i < aliases.size();  i++ )
-    {
-        LIB_ALIAS* alias = aliases[i];
-
-        LIB_PART* root = alias->GetPart();
-
-        if( !root || root->IsPower() )
-            return true;
-    }
-
-    return false;
 }
 
 

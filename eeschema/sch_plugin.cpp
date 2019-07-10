@@ -63,15 +63,6 @@ void SCH_PLUGIN::Save( const wxString& aFileName, SCH_SCREEN* aSchematic, KIWAY*
 }
 
 
-size_t SCH_PLUGIN::GetSymbolLibCount( const wxString&   aLibraryPath,
-                                      const PROPERTIES* aProperties )
-{
-    // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
-    not_implemented( this, __FUNCTION__ );
-    return 0;
-}
-
-
 void SCH_PLUGIN::EnumerateSymbolLib( wxArrayString&    aAliasNameList,
                                      const wxString&   aLibraryPath,
                                      const PROPERTIES* aProperties )

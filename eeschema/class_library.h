@@ -344,26 +344,6 @@ public:
 
     void SetFileName( const wxString& aFileName ) { fileName = aFileName; }
 
-    /**
-     * Get library entry status.
-     *
-     * @return True if there are no entries in the library.
-     */
-    bool IsEmpty() const
-    {
-        return m_plugin->GetSymbolLibCount( fileName.GetFullPath() ) == 0;
-    }
-
-    /**
-     * Return the number of entries in the library.
-     *
-     * @return The number of part and alias entries.
-     */
-    int GetCount() const
-    {
-        return (int) m_plugin->GetSymbolLibCount( fileName.GetFullPath() );
-    }
-
     bool IsModified() const
     {
         return isModified;
@@ -397,13 +377,6 @@ public:
      * @param aAliases - vector to receive the aliases.
      */
     void GetAliases( std::vector<LIB_ALIAS*>& aAliases ) const;
-
-    /**
-     * Load a string array with the names of  entries of type POWER in this library.
-     *
-     * @param aNames - String array to place entry names into.
-     */
-    void GetEntryTypePowerNames( wxArrayString& aNames ) const;
 
     /**
      * Find #LIB_ALIAS by \a aName.
@@ -501,12 +474,6 @@ public:
      * @throw IO_ERROR if there's any problem loading the library.
      */
     static PART_LIB* LoadLibrary( const wxString& aFileName );
-
-    /**
-     * @return true if at least one power part is found in lib
-     * Useful to select or list only libs containing power parts
-     */
-    bool HasPowerParts() const;
 };
 
 

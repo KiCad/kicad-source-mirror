@@ -2444,14 +2444,8 @@ void SCH_LEGACY_PLUGIN_CACHE::Load()
 {
     if( !m_libFileName.FileExists() )
     {
-        wxString msg = wxString::Format( _( "Library file \"%s\" not found.\n\n"
-                                            "Use the Manage Symbol Libraries dialog to fix the "
-                                            "path (or remove the library)." ),
-                                         m_libFileName.GetFullPath() );
-        KIDIALOG dlg( Pgm().App().GetTopWindow(), msg, KIDIALOG::KD_ERROR );
-        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
-        dlg.ShowModal();
-        return;
+        THROW_IO_ERROR( wxString::Format( _( "Library file \"%s\" not found." ),
+                                          m_libFileName.GetFullPath() ) );
     }
 
     wxCHECK_RET( m_libFileName.IsAbsolute(),
@@ -4244,19 +4238,6 @@ int SCH_LEGACY_PLUGIN::GetModifyHash() const
 
     // If the cache hasn't been loaded, it hasn't been modified.
     return 0;
-}
-
-
-size_t SCH_LEGACY_PLUGIN::GetSymbolLibCount( const wxString&   aLibraryPath,
-                                             const PROPERTIES* aProperties )
-{
-    LOCALE_IO toggle;
-
-    m_props = aProperties;
-
-    cacheLib( aLibraryPath );
-
-    return m_cache->m_aliases.size();
 }
 
 

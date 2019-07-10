@@ -146,11 +146,6 @@ public:
     //-----<PLUGIN API SUBSET, REBASED ON aNickname>---------------------------
 
     /**
-     * Return the number of symbols in the symbol library mapped to \a aNickname
-     */
-    size_t GetSymbolCount( const wxString& aNickname );
-
-    /**
      * Return a list of symbol alias names contained within the library given by @a aNickname.
      *
      * @param aNickname is a locator for the "library", it is a "name" in LIB_TABLE_ROW.

@@ -111,8 +111,6 @@ public:
 
     void Format( SELECTION* aSelection, OUTPUTFORMATTER* aFormatter );
 
-    size_t GetSymbolLibCount( const wxString&   aLibraryPath,
-                              const PROPERTIES* aProperties = nullptr ) override;
     void EnumerateSymbolLib( wxArrayString&    aAliasNameList,
                              const wxString&   aLibraryPath,
                              const PROPERTIES* aProperties = nullptr ) override;

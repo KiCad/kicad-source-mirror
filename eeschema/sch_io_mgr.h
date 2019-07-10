@@ -271,9 +271,6 @@ public:
     virtual void Save( const wxString& aFileName, SCH_SCREEN* aSchematic, KIWAY* aKiway,
                        const PROPERTIES* aProperties = NULL );
 
-    virtual size_t GetSymbolLibCount( const wxString&   aLibraryPath,
-                                      const PROPERTIES* aProperties = NULL );
-
     /**
      * Populate a list of #LIB_PART alias names contained within the library \a aLibraryPath.
      *

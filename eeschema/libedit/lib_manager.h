@@ -44,6 +44,33 @@ class LIB_EDIT_FRAME;
 class SYMBOL_LIB_TABLE;
 class SYMBOL_LIB_TABLE_ROW;
 
+
+class LIB_LOGGER : public wxLogGui
+{
+public:
+    void Activate()
+    {
+        m_previousLogger = wxLog::GetActiveTarget();
+        wxLog::SetActiveTarget( this );
+    }
+
+    void Flush() override
+    {
+        if( m_bHasMessages )
+        {
+            wxLogMessage( _( "Not all libraries could be loaded.  Use the Manage Symbol Libraries dialog \n"
+                             "to adjust paths and add or remove libraries." ) );
+
+            wxLogGui::Flush();
+            wxLog::SetActiveTarget( m_previousLogger );
+        }
+    }
+
+private:
+    wxLog* m_previousLogger;
+};
+
+
 /**
  * Class to handle modifications to the symbol libraries.
  */
@@ -80,11 +107,6 @@ public:
      * Finds a single library within the (aggregate) library table.
      */
     SYMBOL_LIB_TABLE_ROW* GetLibrary( const wxString& aLibrary ) const;
-
-    /**
-     * Returns a set containing all part names for a specific library.
-     */
-    wxArrayString GetAliasNames( const wxString& aLibrary ) const;
 
     std::list<LIB_ALIAS*> GetAliases( const wxString& aLibrary ) const;
 
@@ -232,12 +254,6 @@ public:
      * Used for generating names for new libraries.
      */
     wxString GetUniqueLibraryName() const;
-
-    /**
-     * Returns a component name that is not stored in a library.
-     * Used for generating names for new components.
-     */
-    wxString GetUniqueComponentName( const wxString& aLibrary ) const;
 
     /**
      * Returns the adapter object that provides the stored data.
@@ -449,14 +465,11 @@ private:
     ///> The library buffers
     std::map<wxString, LIB_BUFFER> m_libs;
 
-    ///> Symbol Lib Table hash value returned during the last synchronization
-    int m_syncHash;
+    LIB_LOGGER  m_logger;
+    int         m_syncHash;       // Symbol Lib Table hash value from the last synchronization
 
-    ///> Currently modified part
-    wxString m_currentLib;
-
-    ///> Currently modified library
-    wxString m_currentPart;
+    wxString    m_currentLib;     // Currently modified part
+    wxString    m_currentPart;    // Currently modified library
 
     SYMBOL_TREE_SYNCHRONIZING_ADAPTER::PTR m_adapter;
     SYMBOL_TREE_SYNCHRONIZING_ADAPTER* getAdapter()

@@ -261,15 +261,6 @@ int SYMBOL_LIB_TABLE::GetModifyHash()
 }
 
 
-size_t SYMBOL_LIB_TABLE::GetSymbolCount( const wxString& aNickname )
-{
-    SYMBOL_LIB_TABLE_ROW* row = dynamic_cast< SYMBOL_LIB_TABLE_ROW* >( findRow( aNickname ) );
-    wxCHECK( row && row->plugin, 0 );
-
-    return row->plugin->GetSymbolLibCount( row->GetFullURI( true ) );
-}
-
-
 void SYMBOL_LIB_TABLE::EnumerateSymbolLib( const wxString& aNickname, wxArrayString& aAliasNames,
                                            bool aPowerSymbolsOnly )
 {

@@ -27,7 +27,6 @@
 #include <class_libentry.h>
 #include <class_library.h>
 #include <lib_edit_frame.h>
-#include <confirm.h>
 #include <env_paths.h>
 #include <pgm_base.h>
 #include <kiway.h>
@@ -49,6 +48,8 @@ LIB_MANAGER::LIB_MANAGER( LIB_EDIT_FRAME& aFrame ) :
 void LIB_MANAGER::Sync( bool aForce,
                         std::function<void( int, int, const wxString& )> aProgressCallback )
 {
+    m_logger.Activate();
+
     int libTableHash = symTable()->GetModifyHash();
 
     if( aForce || m_syncHash != libTableHash )
@@ -61,7 +62,7 @@ void LIB_MANAGER::Sync( bool aForce,
 
 bool LIB_MANAGER::HasModifications() const
 {
-    for( auto lib : m_libs )
+    for( const auto& lib : m_libs )
     {
         if( lib.second.IsModified() )
             return true;
@@ -75,8 +76,8 @@ int LIB_MANAGER::GetHash() const
 {
     int hash = symTable()->GetModifyHash();
 
-    for( const auto& libBuf : m_libs )
-        hash += libBuf.second.GetHash();
+    for( const auto& lib : m_libs )
+        hash += lib.second.GetHash();
 
     return hash;
 }
@@ -296,33 +297,6 @@ bool LIB_MANAGER::IsLibraryReadOnly( const wxString& aLibrary ) const
 }
 
 
-wxArrayString LIB_MANAGER::GetAliasNames( const wxString& aLibrary ) const
-{
-    wxArrayString names;
-    wxCHECK( LibraryExists( aLibrary ), names );
-
-    auto it = m_libs.find( aLibrary );
-
-    if( it == m_libs.end() )
-    {
-        try
-        {
-            symTable()->EnumerateSymbolLib( aLibrary, names );
-        }
-        catch( const IO_ERROR& e )
-        {
-            wxLogMessage( _( "Cannot enumerate library \"%s\" (%s)" ), aLibrary, e.What() );
-        }
-    }
-    else
-    {
-        names = it->second.GetAliasNames();
-    }
-
-    return names;
-}
-
-
 std::list<LIB_ALIAS*> LIB_MANAGER::GetAliases( const wxString& aLibrary ) const
 {
     std::list<LIB_ALIAS*> ret;
@@ -348,7 +322,7 @@ std::list<LIB_ALIAS*> LIB_MANAGER::GetAliases( const wxString& aLibrary ) const
         }
         catch( const IO_ERROR& e )
         {
-            wxLogMessage( _( "Cannot load aliases from library \"%s\" (%s)" ), aLibrary, e.What() );
+            wxLogWarning( e.Problem() );
         }
 
         std::copy( aliases.begin(), aliases.end(), std::back_inserter( ret ) );
@@ -629,26 +603,6 @@ wxString LIB_MANAGER::GetUniqueLibraryName() const
     for( unsigned int i = 0; i < std::numeric_limits<unsigned int>::max(); ++i )
     {
         if( !LibraryExists( name + wxString::Format( "%u", i ) ) )
-            return name + wxString::Format( "%u", i );
-    }
-
-    wxFAIL;
-    return wxEmptyString;
-}
-
-
-wxString LIB_MANAGER::GetUniqueComponentName( const wxString& aLibrary ) const
-{
-    wxString name = "New_Component";
-
-    if( !PartExists( name, aLibrary ) )
-        return name;
-
-    name += "_";
-
-    for( unsigned int i = 0; i < std::numeric_limits<unsigned int>::max(); ++i )
-    {
-        if( !PartExists( name + wxString::Format( "%u", i ), aLibrary ) )
             return name + wxString::Format( "%u", i );
     }
 
