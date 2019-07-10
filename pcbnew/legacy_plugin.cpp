@@ -1120,24 +1120,21 @@ void LEGACY_PLUGIN::loadSETUP()
             m_board->SetZoneSettings( zs );
 
             // Very old *.brd file does not have  NETCLASSes
-            // "TrackWidth", "ViaSize", "ViaDrill", "ViaMinSize",
-            // and "TrackClearence", were defined in SETUP
-            // these values are put into the default NETCLASS until later board load
-            // code should override them.  *.brd files which have been
-            // saved with knowledge of NETCLASSes will override these
-            // defaults, very old boards (before 2009) will not and use the setup values.
+            // "TrackWidth", "ViaSize", "ViaDrill", "ViaMinSize", and "TrackClearence" were
+            // defined in SETUP; these values are put into the default NETCLASS until later board
+            // load code should override them.  *.brd files which have been saved with knowledge
+            // of NETCLASSes will override these defaults, very old boards (before 2009) will not
+            // and use the setup values.
             // However these values should be the same as default NETCLASS.
 
             return;     // preferred exit
         }
     }
 
-    // @todo: this code is currently unreachable, would need a goto, to get here.
-    // that may be better handled with an #ifdef
-
-    /* Ensure tracks and vias sizes lists are ok:
+    /*
+     * Ensure tracks and vias sizes lists are ok:
      * Sort lists by by increasing value and remove duplicates
-     * (the first value is not tested, because it is the netclass value
+     * (the first value is not tested, because it is the netclass value)
      */
     BOARD_DESIGN_SETTINGS& designSettings = m_board->GetDesignSettings();
     sort( designSettings.m_ViasDimensionsList.begin() + 1, designSettings.m_ViasDimensionsList.end() );
@@ -1743,15 +1740,6 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
         break;
     }
 
-    // Check for a reasonable width:
-
-    /* @todo no MAX_WIDTH in out of reach header.
-    if( width <= 1 )
-        width = 1;
-    else if( width > MAX_WIDTH )
-        width = MAX_WIDTH;
-    */
-
     // Check for a reasonable layer:
     // m_Layer must be >= FIRST_NON_COPPER_LAYER, but because microwave footprints
     // can use the copper layers m_Layer < FIRST_NON_COPPER_LAYER is allowed.
@@ -1834,7 +1822,6 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
 
     aText->SetTextAngle( orient );
 
-    // @todo put in accessors?
     // Set a reasonable width:
     if( thickn < 1 )
         thickn = 1;
@@ -2163,25 +2150,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
             BIU thickn  = biuParse( data, &data );
             double angle = degParse( data );
 
-            // Ensure the text has minimal size to see this text on screen:
-
-            /* @todo wait until we are firmly in the nanometer world
-            if( sz.x < 5 )
-                sz.x = 5;
-
-            if( sz.y < 5 )
-                sz.y = 5;
-            */
-
             pcbtxt->SetTextSize( size );
-
-            /* @todo move into an accessor
-            // Set a reasonable width:
-            if( thickn < 1 )
-                thickn = 1;
-
-            thickn = Clamp_Text_PenSize( thickn, size );
-            */
 
             pcbtxt->SetThickness( thickn );
             pcbtxt->SetTextAngle( angle );

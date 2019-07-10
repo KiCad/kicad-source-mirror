@@ -84,7 +84,7 @@ public:
     /**
      * Function Drag()
      *
-     * todo
+     * Invoke the PNS router to drag tracks.
      */
     int Drag( const TOOL_EVENT& aEvent );
 

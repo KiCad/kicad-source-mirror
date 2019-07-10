@@ -325,13 +325,7 @@ void GITHUB_PLUGIN::FootprintLibCreate( const wxString& aLibraryPath, const PROP
     cacheLib( aLibraryPath, aProperties );
 
     if( m_pretty_dir.size() )
-    {
         PCB_IO::FootprintLibCreate( m_pretty_dir, aProperties );
-    }
-    else
-    {
-        // THROW_IO_ERROR()   @todo
-    }
 }
 
 
@@ -341,14 +335,9 @@ bool GITHUB_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROP
     cacheLib( aLibraryPath, aProperties );
 
     if( m_pretty_dir.size() )
-    {
         return PCB_IO::FootprintLibDelete( m_pretty_dir, aProperties );
-    }
-    else
-    {
-        // THROW_IO_ERROR()   @todo
-        return false;
-    }
+
+    return false;
 }
 
 
