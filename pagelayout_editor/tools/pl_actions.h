@@ -74,6 +74,7 @@ public:
     static TOOL_ACTION refreshPreview;
     static TOOL_ACTION toggleBackground;
     static TOOL_ACTION showInspector;
+    static TOOL_ACTION previewSettings;
 
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
     virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override { return OPT<TOOL_EVENT>(); }

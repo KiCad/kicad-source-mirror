@@ -59,7 +59,7 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_userSizeXUnits;
 		wxStaticText* m_staticTextPreview;
 		wxStaticBitmap* m_PageLayoutExampleBitmap;
-		wxStaticText* m_staticTexttbprm;
+		wxStaticText* m_staticTextTitleBlock;
 		wxStaticLine* m_staticline3;
 		wxStaticText* m_TextSheetCount;
 		wxStaticText* m_TextSheetNumber;

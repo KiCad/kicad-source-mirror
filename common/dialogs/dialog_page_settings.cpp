@@ -96,6 +96,19 @@ DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent, wxSize aMa
 
     m_PickDate->SetValue( wxDateTime::Now() );
 
+    if( parent->GetName() == PL_EDITOR_FRAME_NAME )
+    {
+        SetTitle( _( "Preview Settings" ) );
+        m_staticTextPaper->SetLabel( _( "Preview Paper" ) );
+        m_staticTextTitleBlock->SetLabel( _( "Preview Title Block Data" ) );
+    }
+    else
+    {
+        SetTitle( _( "Page Settings" ) );
+        m_staticTextPaper->SetLabel( _( "Paper" ) );
+        m_staticTextTitleBlock->SetLabel( _( "Title Block" ) );
+    }
+
     initDialog();
 
     GetSizer()->SetSizeHints( this );

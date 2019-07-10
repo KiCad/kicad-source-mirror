@@ -90,6 +90,11 @@ TOOL_ACTION PL_ACTIONS::showInspector( "plEditor.EditorControl.ShowInspector",
         _( "Show Design Inspector" ), _( "Show the list of items in page layout" ),
         spreadsheet_xpm );
 
+TOOL_ACTION PL_ACTIONS::previewSettings( "plEditor.EditorControl.PreviewSettings",
+        AS_GLOBAL, 0, "",
+        _( "Page Preview Settings..." ), _( "Edit preview data for page size and title block" ),
+        sheetset_xpm );
+
 
 // PL_PICKER_TOOL
 //

@@ -183,13 +183,13 @@ void PL_EDITOR_CONTROL::setTransitions()
     Go( &PL_EDITOR_CONTROL::Open,                  ACTIONS::open.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::Save,                  ACTIONS::save.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::SaveAs,                ACTIONS::saveAs.MakeEvent() );
-    Go( &PL_EDITOR_CONTROL::PageSetup,             ACTIONS::pageSettings.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::Print,                 ACTIONS::print.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::Plot,                  ACTIONS::plot.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::Quit,                  ACTIONS::quit.MakeEvent() );
 
+    Go( &PL_EDITOR_CONTROL::PageSetup,             PL_ACTIONS::previewSettings.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::ToggleBackgroundColor, PL_ACTIONS::toggleBackground.MakeEvent() );
-    Go( &PL_EDITOR_CONTROL::ShowInspector, PL_ACTIONS::showInspector.MakeEvent() );
+    Go( &PL_EDITOR_CONTROL::ShowInspector,         PL_ACTIONS::showInspector.MakeEvent() );
 
     Go( &PL_EDITOR_CONTROL::UpdateMessagePanel,    EVENTS::SelectedEvent );
     Go( &PL_EDITOR_CONTROL::UpdateMessagePanel,    EVENTS::UnselectedEvent );

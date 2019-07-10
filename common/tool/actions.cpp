@@ -91,7 +91,7 @@ TOOL_ACTION ACTIONS::revert( "common.Control.revert",
 TOOL_ACTION ACTIONS::pageSettings( "common.Control.pageSettings",
         AS_GLOBAL, 
         0, "",
-        _( "Page Settings..." ), _( "Settings for paper size and frame references" ),
+        _( "Page Settings..." ), _( "Settings for paper size and title block info" ),
         sheetset_xpm );
 
 TOOL_ACTION ACTIONS::print( "common.Control.print",

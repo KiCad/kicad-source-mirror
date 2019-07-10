@@ -43,7 +43,6 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::save );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->Add( ACTIONS::pageSettings );
     m_mainToolBar->Add( ACTIONS::print );
 
     KiScaledSeparator( m_mainToolBar, this );
@@ -59,18 +58,19 @@ void PL_EDITOR_FRAME::ReCreateHToolbar()
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->Add( PL_ACTIONS::showInspector );
+    m_mainToolBar->Add( PL_ACTIONS::previewSettings );
 
     // Display mode switch
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_SHOW_REAL_MODE, wxEmptyString,
                             KiScaledBitmap( pagelayout_normal_view_mode_xpm, this ),
-                            _( "Show title block like it will be displayed in applications\n"
-                               "texts with format are replaced by the full text"),
+                            _( "Show title block in preview mode:\n"
+                               "text placeholders will be replaced with preview data"),
                             wxITEM_CHECK );
-    m_mainToolBar->AddTool( ID_SHOW_PL_EDITOR_MODE,
-                            wxEmptyString, KiScaledBitmap( pagelayout_special_view_mode_xpm, this ),
-                            _( "Show title block in edit mode: texts are shown as is:\n"
-                               "texts with format are displayed with no change"),
+    m_mainToolBar->AddTool( ID_SHOW_PL_EDITOR_MODE, wxEmptyString,
+                            KiScaledBitmap( pagelayout_special_view_mode_xpm, this ),
+                            _( "Show title block in edit mode:\n"
+                               "text placeholders show as %-tokens"),
                             wxITEM_CHECK );
 
     KiScaledSeparator( m_mainToolBar, this );

@@ -376,17 +376,35 @@ double PL_EDITOR_FRAME::BestZoom()
 static const wxChar propertiesFrameWidthKey[] = wxT( "PropertiesFrameWidth" );
 static const wxChar cornerOriginChoiceKey[] = wxT( "CornerOriginChoice" );
 static const wxChar blackBgColorKey[] = wxT( "BlackBgColor" );
+static const wxChar lastUsedPaperSizeKey[] = wxT( "LastUsedPaperSize" );
+static const wxChar lastUsedCustomWidthKey[] = wxT( "LastUsedCustomWidth" );
+static const wxChar lastUsedCustomHeightKey[] = wxT( "LastUsedCustomHeight" );
+static const wxChar lastUsedPortraitKey[] = wxT( "LastUsedWasPortrait" );
 
 
 void PL_EDITOR_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    aCfg->Read( propertiesFrameWidthKey, &m_propertiesFrameWidth, 150);
+    aCfg->Read( propertiesFrameWidthKey, &m_propertiesFrameWidth, 150 );
     aCfg->Read( cornerOriginChoiceKey, &m_originSelectChoice );
-    bool tmp;
-    aCfg->Read( blackBgColorKey, &tmp, false );
-    SetDrawBgColor( tmp ? BLACK : WHITE );
+
+    bool flag;
+    aCfg->Read( blackBgColorKey, &flag, false );
+    SetDrawBgColor( flag ? BLACK : WHITE );
+
+    int i;
+    aCfg->Read( lastUsedCustomWidthKey, &i, 17000 );
+    PAGE_INFO::SetCustomWidthMils( i );
+    aCfg->Read( lastUsedCustomHeightKey, &i, 11000 );
+    PAGE_INFO::SetCustomHeightMils( i );
+
+    PAGE_INFO pageInfo = GetPageSettings();
+    wxString msg;
+    aCfg->Read( lastUsedPaperSizeKey, &msg, "A3" );
+    aCfg->Read( lastUsedPortraitKey, &flag, false );
+    pageInfo.SetType( msg, flag );
+    SetPageSettings( pageInfo );
 }
 
 
@@ -399,6 +417,10 @@ void PL_EDITOR_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( propertiesFrameWidthKey, m_propertiesFrameWidth);
     aCfg->Write( cornerOriginChoiceKey, m_originSelectChoice );
     aCfg->Write( blackBgColorKey, GetDrawBgColor() == BLACK );
+    aCfg->Write( lastUsedPaperSizeKey, GetPageSettings().GetType() );
+    aCfg->Write( lastUsedPortraitKey, GetPageSettings().IsPortrait() );
+    aCfg->Write( lastUsedCustomWidthKey, PAGE_INFO::GetCustomWidthMils() );
+    aCfg->Write( lastUsedCustomHeightKey, PAGE_INFO::GetCustomHeightMils() );
 
     // was: wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
     wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
