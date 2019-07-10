@@ -856,39 +856,31 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
 
     // Use negation bar Y position to calculate full vertical size
     // Search for overbar symbol
-    bool hasOverBar = false;
+    wxString test = m_Text;
+    test.Replace( "~~", "" );
+    bool hasOverBar = test.find( "~" ) != wxString::npos;
 
-    for( unsigned ii = 1; ii < m_Text.size(); ii++ )
-    {
-        if( m_Text[ii-1] == '~' && m_Text[ii] != '~' )
-        {
-            hasOverBar = true;
-            break;
-        }
-    }
+    #define V_MARGIN 1.40
+    // Note: this factor is due to the fact the Y size of a few letters like '[' are bigger
+    // than the y size value, and we need a margin for the graphic symbol.
+    int y = KiROUND( halfSize * V_MARGIN );
 
-    #define Y_CORRECTION 1.40
-    // Note: this factor is due to the fact the Y size of a few letters like [
-    // are bigger than the y size value, and we need a margin for the graphic symbol.
-    int y = KiROUND( halfSize * Y_CORRECTION );
-
+    #define OVERBAR_V_MARGIN 1.2
     // Note: this factor is due to the fact we need a margin for the graphic symbol.
-    #define Y_OVERBAR_CORRECTION 1.2
     if( hasOverBar )
-        y = KiROUND( KIGFX::STROKE_FONT::GetInterline( halfSize, linewidth )
-                     * Y_OVERBAR_CORRECTION );
+        y = KiROUND( KIGFX::STROKE_FONT::GetInterline( halfSize, linewidth ) * OVERBAR_V_MARGIN );
 
     // Gives room for line thickess and margin
-    y += linewidth          // for line thickess
-         + linewidth/2;     // for margin
+    y += linewidth;         // for line thickess
+    y += linewidth / 2;     // for margin
 
     // Starting point(anchor)
-    aPoints.push_back( wxPoint( 0, 0 ) );
-    aPoints.push_back( wxPoint( 0, -y ) );     // Up
-    aPoints.push_back( wxPoint( -x, -y ) );    // left
-    aPoints.push_back( wxPoint( -x, 0 ) );     // Up left
-    aPoints.push_back( wxPoint( -x, y ) );     // left down
-    aPoints.push_back( wxPoint( 0, y ) );      // down
+    aPoints.emplace_back( wxPoint( 0, 0 ) );
+    aPoints.emplace_back( wxPoint( 0, -y ) );     // Up
+    aPoints.emplace_back( wxPoint( -x, -y ) );    // left
+    aPoints.emplace_back( wxPoint( -x, 0 ) );     // Up left
+    aPoints.emplace_back( wxPoint( -x, y ) );     // left down
+    aPoints.emplace_back( wxPoint( 0, y ) );      // down
 
     int x_offset = 0;
 
