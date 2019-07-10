@@ -122,18 +122,18 @@ static wxString getDXFColorName( COLOR4D aColor )
 }
 
 
-void DXF_PLOTTER::SetUnits( Units aUnit )
+void DXF_PLOTTER::SetUnits( DXF_UNITS aUnit )
 {
     m_plotUnits = aUnit;
 
     switch( aUnit )
     {
-    case MILIMETERS:
+    case DXF_UNIT_MILLIMETERS:
         m_unitScalingFactor = 0.00254;
         m_measurementDirective = 1;
         break;
 
-    case INCHES:
+    case DXF_UNIT_INCHES:
     default:
         m_unitScalingFactor = 0.0001;
         m_measurementDirective = 0;

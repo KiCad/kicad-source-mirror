@@ -1029,7 +1029,8 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
     case PLOT_FORMAT_DXF:
         DXF_PLOTTER* DXF_plotter;
         DXF_plotter = new DXF_PLOTTER();
-        DXF_plotter->SetUnits( static_cast<DXF_PLOTTER::Units>( aPlotOpts->GetDXFPlotUnits() ) );
+        DXF_plotter->SetUnits(
+                static_cast<DXF_PLOTTER::DXF_UNITS>( aPlotOpts->GetDXFPlotUnits() ) );
 
         plotter = DXF_plotter;
         break;
