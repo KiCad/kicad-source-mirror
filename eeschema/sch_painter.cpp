@@ -1413,6 +1413,17 @@ void SCH_PAINTER::draw( SCH_BITMAP *aBitmap, int aLayer )
 
     m_gal->DrawBitmap( *aBitmap->GetImage() );
 
+    if( aBitmap->IsSelected() || aBitmap->IsBrightened() || aBitmap->IsBrightened() )
+    {
+        COLOR4D color = getRenderColor( aBitmap, LAYER_NOTES, false );
+        m_gal->SetStrokeColor( color );
+        m_gal->SetIsStroke( true );
+        m_gal->SetIsFill( false );
+        m_gal->SetLineWidth ( 12.0 );
+        m_gal->DrawRectangle( VECTOR2D( -aBitmap->GetSize().x / 2.0, -aBitmap->GetSize().y / 2.0 ),
+                              VECTOR2D( aBitmap->GetSize().x / 2.0, aBitmap->GetSize().y / 2.0 ) );
+    }
+
     m_gal->Restore();
 }
 

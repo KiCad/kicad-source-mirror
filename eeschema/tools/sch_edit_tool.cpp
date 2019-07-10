@@ -1241,7 +1241,6 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     case SCH_BITMAP_T:
     {
-        // JEY TODO: selected image doesn't have any highlighting....
         SCH_BITMAP*         bitmap = (SCH_BITMAP*) item;
         DIALOG_IMAGE_EDITOR dlg( m_frame, bitmap->GetImage() );
 
