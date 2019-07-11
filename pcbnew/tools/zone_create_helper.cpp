@@ -56,7 +56,7 @@ ZONE_CREATE_HELPER::~ZONE_CREATE_HELPER()
 
 std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
 {
-    auto& frame = *m_tool.getEditFrame<PCB_BASE_EDIT_FRAME>();
+    auto& frame = *m_tool.getEditFrame<PCB_BASE_FRAME>();
     auto& board = *m_tool.getModel<BOARD>();
     KIGFX::VIEW_CONTROLS* controls = m_tool.GetManager()->GetViewControls();
 
@@ -160,7 +160,7 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aZone, ZONE_CONTAINE
 
 void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
 {
-    auto& frame = *m_tool.getEditFrame<PCB_EDIT_FRAME>();
+    auto& frame = *m_tool.getEditFrame<PCB_BASE_EDIT_FRAME>();
     auto board = m_tool.getModel<BOARD>();
 
     switch ( m_params.m_mode )
