@@ -80,6 +80,8 @@ bool SCH_MOVE_TOOL::Init()
   - add preferences option "Drag always selects"
   */
 
+#define STD_VECTOR_REMOVE( v, item ) v.erase( std::remove( v.begin(), v.end(), item ), v.end() )
+
 
 int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
@@ -229,6 +231,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         {
                             // Item was added in getConnectedDragItems
                             saveCopyInUndoList( (SCH_ITEM*) item, UR_NEW, appendUndo );
+                            STD_VECTOR_REMOVE( m_dragAdditions, item );
                             appendUndo = true;
                         }
                         else
