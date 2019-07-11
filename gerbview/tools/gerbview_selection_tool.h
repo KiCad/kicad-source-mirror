@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -73,19 +73,12 @@ public:
      */
     GERBVIEW_SELECTION& GetSelection();
 
-    ///> Clear current selection event handler.
     int ClearSelection( const TOOL_EVENT& aEvent );
 
-    ///> Item selection event handler.
     int SelectItem( const TOOL_EVENT& aEvent );
-
-    ///> Multiple item selection event handler
     int SelectItems( const TOOL_EVENT& aEvent );
 
-    ///> Item unselection event handler.
     int UnselectItem( const TOOL_EVENT& aEvent );
-
-    ///> Multiple item unselection event handler
     int UnselectItems( const TOOL_EVENT& aEvent );
 
     ///> Launches a tool to measure between points
@@ -97,9 +90,8 @@ public:
 private:
     /**
      * Function selectPoint()
-     * Selects an item pointed by the parameter aWhere. If there is more than
-     * one item at that place, there is a menu displayed that allows one to
-     * choose the item.
+     * Selects an item pointed by the parameter aWhere. If there is more than one item at that
+     * place, there is a menu displayed that allows one to choose the item.
      *
      * @param aWhere is the place where the item should be selected.
      * @param aAllowDisambiguation decides what to do in case of disambiguation. If true, then
@@ -110,8 +102,8 @@ private:
 
     /**
      * Function selectCursor()
-     * Selects an item under the cursor unless there is something already selected or aSelectAlways
-     * is true.
+     * Selects an item under the cursor unless there is something already selected or
+     * aSelectAlways is true.
      * @param aSelectAlways forces to select an item even if there is an item already selected.
      * @return true if eventually there is an item selected, false otherwise.
      */
@@ -176,7 +168,6 @@ private:
     bool m_additive;                // Items should be added to selection (instead of replacing)
     bool m_subtractive;             // Items should be removed from selection
     bool m_exclusive_or;            // Items' selection state should be toggled
-    bool m_multiple;                // Multiple selection mode is active
     bool m_preliminary;             // Determines if the selection is preliminary or final.
 };
 

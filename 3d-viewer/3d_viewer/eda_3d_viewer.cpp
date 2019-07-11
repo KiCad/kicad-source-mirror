@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file  eda_3d_viewer.cpp
- * @brief Implements a 3d viewer windows GUI
- */
-
 #include "eda_3d_viewer.h"
 
 #include "../3d_viewer_id.h"
@@ -42,7 +37,6 @@
 #include <tool/common_control.h>
 #include <hotkeys_basic.h>
 #include <wx/colordlg.h>
-#include <wx/colourdata.h>
 #include <wx/toolbar.h>
 
 
@@ -86,11 +80,8 @@ static const wxChar keyBoardBodyColor_Red[]     = wxT( "BoardBodyColor_Red" );
 static const wxChar keyBoardBodyColor_Green[]   = wxT( "BoardBodyColor_Green" );
 static const wxChar keyBoardBodyColor_Blue[]    = wxT( "BoardBodyColor_Blue" );
 
-static const wxChar keyMousewheelPanning[]      = wxT( "MousewheelPAN3D" );
-
 static const wxChar keyShowRealisticMode[]      = wxT( "ShowRealisticMode" );
 static const wxChar keyRenderEngine[]           = wxT( "RenderEngine" );
-//static const wxChar keyRenderTextures[]         = wxT( "Render_Textures" );
 static const wxChar keyRenderMaterial[]         = wxT( "Render_Material" );
 
 static const wxChar keyRenderOGL_ShowCopperTck[]= wxT( "Render_OGL_ShowCopperThickness" );
@@ -220,7 +211,7 @@ EDA_3D_VIEWER::~EDA_3D_VIEWER()
 
     // m_canvas delete will be called by wxWidget manager
     //delete m_canvas;
-    //m_canvas = 0;
+    //m_canvas = nullptr;
 }
 
 
@@ -260,7 +251,7 @@ void EDA_3D_VIEWER::OnCloseWindow( wxCloseEvent &event )
 
     // m_canvas delete will be called by wxWidget manager
     //delete m_canvas;
-    //m_canvas = 0;
+    //m_canvas = nullptr;
 
     Destroy();
     event.Skip( true );

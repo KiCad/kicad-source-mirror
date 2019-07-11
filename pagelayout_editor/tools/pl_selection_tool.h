@@ -105,9 +105,7 @@ public:
     void BrightenItem( EDA_ITEM* aItem );
     void UnbrightenItem( EDA_ITEM* aItem );
 
-    ///> Clear current selection event handler.
     int ClearSelection( const TOOL_EVENT& aEvent );
-
     void ClearSelection();
 
     /**

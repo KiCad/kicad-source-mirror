@@ -110,8 +110,7 @@ GERBVIEW_SELECTION_TOOL::GERBVIEW_SELECTION_TOOL() :
         m_frame( NULL ),
         m_additive( false ),
         m_subtractive( false ),
-        m_exclusive_or( false ),
-        m_multiple( false )
+        m_exclusive_or( false )
 {
     m_preliminary = true;
 }

@@ -30,8 +30,6 @@
 
 /**
  * Class CVPCB_SELECTION_TOOL
- *
- * Selection tool for GerbView, based on the one in PcbNew
  */
 class CVPCB_SELECTION_TOOL : public TOOL_INTERACTIVE
 {
@@ -65,7 +63,6 @@ public:
     void setTransitions() override;
 
 private:
-    /// Pointer to the parent frame.
     DISPLAY_FOOTPRINTS_FRAME* m_frame;
 
     /// Current state of selection (not really used: no selection in display footprints frame).

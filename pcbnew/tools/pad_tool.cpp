@@ -356,9 +356,8 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     bool isFirstPoint = true;   // used to be sure oldCursorPos will be initialized at least once.
 
     STATUS_TEXT_POPUP statusPopup( frame() );
-    statusPopup.SetText( wxString::Format(
-            _( "Click on pad %s%d\nPress Escape to cancel or double-click to commit" ),
-            padPrefix.c_str(), seqPadNum ) );
+    wxString msg = _( "Click on pad %s%d\nPress <esc> to cancel or double-click to commit" );
+    statusPopup.SetText( wxString::Format( msg, padPrefix, seqPadNum ) );
     statusPopup.Popup();
     statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
 
@@ -437,7 +436,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                     else
                         newval = seqPadNum++;
 
-                    wxString newName = wxString::Format( wxT( "%s%d" ), padPrefix.c_str(), newval );
+                    wxString newName = wxString::Format( wxT( "%s%d" ), padPrefix, newval );
                     oldNames[newName] = { newval, pad->GetName() };
                     pad->SetName( newName );
                     pad->SetSelected();
@@ -449,14 +448,10 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                     else
                         newval = seqPadNum;
 
-                    statusPopup.SetText( wxString::Format( _( "Click on pad %s%d\n"
-                                                              "Press Escape to cancel or "
-                                                              "double-click to commit" ),
-                                                           padPrefix.c_str(),
-                                                           newval ) );
+                    statusPopup.SetText( wxString::Format( msg, padPrefix, newval ) );
                 }
 
-                    // ..or restore the old name if it was enumerated and clicked again
+                // ... or restore the old name if it was enumerated and clicked again
                 else if( pad->IsSelected() && evt->IsClick( BUT_LEFT ) )
                 {
                     auto it = oldNames.find( pad->GetName() );
@@ -468,11 +463,9 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                         pad->SetName( it->second.second );
                         oldNames.erase( it );
 
-                        statusPopup.SetText( wxString::Format( _( "Click on pad %s%d\n"
-                                                                  "Press Escape to cancel or "
-                                                                  "double-click to commit" ),
-                                                               padPrefix.c_str(),
-                                                               storedPadNumbers.front() ) );
+                        int newval = storedPadNumbers.front();
+
+                        statusPopup.SetText( wxString::Format( msg, padPrefix, newval ) );
                     }
 
                     pad->ClearSelected();

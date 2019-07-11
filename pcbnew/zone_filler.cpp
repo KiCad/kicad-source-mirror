@@ -695,27 +695,34 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
     if( s_DumpZonesWhenFilling )
         dumper->Write( &solidAreas, "clearance holes" );
 
+    buildThermalSpokes( aZone, thermalSpokes );
+
+    // Create a temporary zone that we can hit-test spoke-ends against.  It's only temporary
+    // because the "real" subtract-clearance-holes has to be done after the spokes are added.
+    static const bool USE_BBOX_CACHES = true;
     SHAPE_POLY_SET testAreas = solidAreas;
     testAreas.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
 
     // Remove areas that don't meet minimum-width criteria
     testAreas.Inflate( -outline_half_thickness, numSegs, true );
     testAreas.Inflate( outline_half_thickness, numSegs, true );
-    testAreas.BuildBBoxCaches();
 
-    static const bool USE_BBOX_CACHES = true;
-    buildThermalSpokes( aZone, thermalSpokes );
+    // Spoke-end-testing is hugely expensive so we generate cached bounding-boxes to speed
+    // things up a bit.
+    testAreas.BuildBBoxCaches();
 
     for( const SHAPE_LINE_CHAIN& spoke : thermalSpokes )
     {
         const VECTOR2I& testPt = spoke.CPoint( 3 );
 
+        // Hit-test against zone body
         if( testAreas.Contains( testPt, -1, false, true, USE_BBOX_CACHES ) )
         {
             solidAreas.AddOutline( spoke );
             continue;
         }
 
+        // Hit-test against other spokes
         for( const SHAPE_LINE_CHAIN& other : thermalSpokes )
         {
             if( &other != &spoke && other.PointInside( testPt, 1, USE_BBOX_CACHES  ) )

@@ -500,7 +500,6 @@ void PL_SELECTION_TOOL::UnbrightenItem( EDA_ITEM* aItem )
 int PL_SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 {
     ClearSelection();
-
     return 0;
 }
 
