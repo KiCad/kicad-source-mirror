@@ -21,8 +21,9 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/sizer.h>
+#include <wx/gbsizer.h>
 #include <wx/bmpcbox.h>
+#include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -38,25 +39,29 @@ class DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		wxFlexGridSizer* m_fgUpperLeftGridSizer;
+		wxGridBagSizer* m_sizerLeft;
+		wxStaticText* m_startPointLabel;
 		wxStaticText* m_startXLabel;
 		wxTextCtrl* m_startXCtrl;
 		wxStaticText* m_startXUnits;
 		wxStaticText* m_startYLabel;
 		wxTextCtrl* m_startYCtrl;
 		wxStaticText* m_startYUnits;
+		wxStaticText* m_endPointLabel;
 		wxStaticText* m_endXLabel;
 		wxTextCtrl* m_endXCtrl;
 		wxStaticText* m_endXUnits;
 		wxStaticText* m_endYLabel;
 		wxTextCtrl* m_endYCtrl;
 		wxStaticText* m_endYUnits;
+		wxStaticText* m_bezierCtrlPt1Label;
 		wxStaticText* m_BezierPointC1XLabel;
 		wxTextCtrl* m_BezierC1X_Ctrl;
 		wxStaticText* m_BezierPointC1XUnit;
 		wxStaticText* m_BezierPointC1YLabel;
 		wxTextCtrl* m_BezierC1Y_Ctrl;
 		wxStaticText* m_BezierPointC1YUnit;
+		wxStaticText* m_bezierCtrlPt2Label;
 		wxStaticText* m_BezierPointC2XLabel;
 		wxTextCtrl* m_BezierC2X_Ctrl;
 		wxStaticText* m_BezierPointC2XUnit;

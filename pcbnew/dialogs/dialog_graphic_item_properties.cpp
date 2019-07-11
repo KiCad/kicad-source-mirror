@@ -55,6 +55,8 @@ private:
     UNIT_BINDER           m_bezierCtrl1X, m_bezierCtrl1Y;
     UNIT_BINDER           m_bezierCtrl2X, m_bezierCtrl2Y;
 
+    bool                  m_flipStartEnd;
+
     wxFloatingPointValidator<double>    m_AngleValidator;
     double                m_AngleValue;
 
@@ -91,6 +93,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_bezierCtrl1Y( aParent, m_BezierPointC1YLabel, m_BezierC1Y_Ctrl, m_BezierPointC1YUnit ),
     m_bezierCtrl2X( aParent, m_BezierPointC2XLabel, m_BezierC2X_Ctrl, m_BezierPointC2XUnit ),
     m_bezierCtrl2Y( aParent, m_BezierPointC2YLabel, m_BezierC2Y_Ctrl, m_BezierPointC2YUnit ),
+    m_flipStartEnd( false ),
     m_AngleValidator( 1, &m_AngleValue ),
     m_AngleValue( 0.0 )
 {
@@ -146,8 +149,10 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
     // Only a Bezeier curve has control points. So do not show these parameters for other shapes
     if( m_item->GetShape() != S_CURVE )
     {
+        m_bezierCtrlPt1Label->Show( false );
         m_bezierCtrl1X.Show( false );
         m_bezierCtrl1Y.Show( false );
+        m_bezierCtrlPt2Label->Show( false );
         m_bezierCtrl2X.Show( false );
         m_bezierCtrl2Y.Show( false );
     }
@@ -157,28 +162,30 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
     {
     case S_CIRCLE:
         SetTitle( _( "Circle Properties" ) );
-        m_startXLabel->SetLabel( _( "Center X:" ) );
-        m_startYLabel->SetLabel( _( "Center Y:" ) );
-        m_endXLabel->SetLabel( _( "Radius:" ) );
+        m_startPointLabel->SetLabel( _( "Center" ) );
+        m_endPointLabel->SetLabel( _( "Radius" ) );
         m_endY.Show( false );
         break;
 
     case S_ARC:
         SetTitle( _( "Arc Properties" ) );
-        m_startXLabel->SetLabel( _( "Center X:" ) );
-        m_startYLabel->SetLabel( _( "Center Y:" ) );
-        m_endXLabel->SetLabel( _( "Start Point X:" ) );
-        m_endYLabel->SetLabel( _( "Start Point Y:" ) );
+        m_startPointLabel->SetLabel( _( "Center" ) );
+        m_endPointLabel->SetLabel( _( "Start Point" ) );
 
         m_AngleValue = m_item->GetAngle() / 10.0;
         break;
 
     case S_POLYGON:
         SetTitle( _( "Polygon Properties" ) );
-        m_fgUpperLeftGridSizer->Show( false );
+        m_sizerLeft->Show( false );
         break;
 
     case S_SEGMENT:
+        if( m_item->GetStart().x == m_item->GetEnd().x )
+            m_flipStartEnd = m_item->GetStart().y > m_item->GetEnd().y;
+        else
+            m_flipStartEnd = m_item->GetStart().x > m_item->GetEnd().x;
+
         SetTitle( _( "Line Segment Properties" ) );
         break;
 
@@ -186,12 +193,25 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         break;
     }
 
-    m_startX.SetValue( m_item->GetStart().x );
-    m_startY.SetValue( m_item->GetStart().y );
+    if( m_flipStartEnd )
+    {
+        m_startX.SetValue( m_item->GetEnd().x );
+        m_startY.SetValue( m_item->GetEnd().y );
+    }
+    else
+    {
+        m_startX.SetValue( m_item->GetStart().x );
+        m_startY.SetValue( m_item->GetStart().y );
+    }
 
     if(  m_item->GetShape() == S_CIRCLE )
     {
         m_endX.SetValue( m_item->GetRadius() );
+    }
+    else if( m_flipStartEnd )
+    {
+        m_endX.SetValue( m_item->GetStart().x );
+        m_endY.SetValue( m_item->GetStart().y );
     }
     else
     {
@@ -228,12 +248,25 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     BOARD_COMMIT commit( m_parent );
     commit.Modify( m_item );
 
-    m_item->SetStartX( m_startX.GetValue() );
-    m_item->SetStartY( m_startY.GetValue() );
+    if( m_flipStartEnd )
+    {
+        m_item->SetEndX( m_startX.GetValue() );
+        m_item->SetEndY( m_startY.GetValue() );
+    }
+    else
+    {
+        m_item->SetStartX( m_startX.GetValue() );
+        m_item->SetStartY( m_startY.GetValue() );
+    }
 
     if( m_item->GetShape() == S_CIRCLE )
     {
         m_item->SetEnd( m_item->GetStart() + wxPoint( m_endX.GetValue(), 0 ) );
+    }
+    else if( m_flipStartEnd )
+    {
+        m_item->SetStartX( m_endX.GetValue() );
+        m_item->SetStartY( m_endY.GetValue() );
     }
     else
     {
