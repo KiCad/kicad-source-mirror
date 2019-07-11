@@ -797,7 +797,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     }
 
     // Get the last non-null wire (this is the last created segment).
-    m_frame->SaveCopyForRepeatItem( s_wires.GetLast());
+    m_frame->SaveCopyForRepeatItem( s_wires.GetLast() );
 
     // Add the new wires
     while( s_wires.GetFirst() )

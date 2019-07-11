@@ -359,11 +359,14 @@ void SCH_EDIT_FRAME::SaveCopyForRepeatItem( SCH_ITEM* aItem )
     // that item may be deleted, such as part of a line concatenation or other.
     // So simply always keep a copy of the object which is to be repeated.
 
-    delete m_item_to_repeat;
+    if( aItem )
+    {
+        delete m_item_to_repeat;
 
-    m_item_to_repeat = (SCH_ITEM*) aItem->Clone();
-    // Clone() preserves the flags, we want 'em cleared.
-    m_item_to_repeat->ClearFlags();
+        m_item_to_repeat = (SCH_ITEM*) aItem->Clone();
+        // Clone() preserves the flags, we want 'em cleared.
+        m_item_to_repeat->ClearFlags();
+    }
 }
 
 
