@@ -2012,6 +2012,22 @@ const MODULE* PCB_IO::GetEnumeratedFootprint( const wxString& aLibraryPath,
 }
 
 
+bool PCB_IO::FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
+                              const PROPERTIES* aProperties )
+{
+    // Note: checking the cache sounds like a good idea, but won't catch files which differ
+    // only in case.
+    //
+    // Since this goes out to the native filesystem, we get platform differences (ie: MSW's
+    // case-insensitive filesystem) handled "for free".
+
+    wxFileName footprintFile( aLibraryPath, aFootprintName );
+    footprintFile.SetExt( KiCadFootprintFileExtension );
+
+    return footprintFile.Exists();
+}
+
+
 MODULE* PCB_IO::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                                const PROPERTIES* aProperties )
 {
