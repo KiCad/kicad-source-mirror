@@ -350,6 +350,7 @@ int MODULE_EDITOR_TOOLS::ExplodePadToShapes( const TOOL_EVENT& aEvent )
         // Fix an arbitray draw layer for this EDGE_MODULE
         ds->SetLayer( Dwgs_User ); //pad->GetLayer() );
         ds->Move( anchor );
+        ds->Rotate( anchor, pad->GetOrientation() );
 
         commit.Add( ds );
     }
@@ -446,6 +447,8 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
         return 0;
     }
 
+    double refOrientation = 0.0;
+
     if( refPad )
     {
         pad.reset( static_cast<D_PAD*>( refPad->Clone() ) );
@@ -453,9 +456,10 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
         if( refPad->GetShape() == PAD_SHAPE_RECT )
             pad->SetAnchorPadShape( PAD_SHAPE_RECT );
 
-        // ignore the pad orientation and offset for the moment. Makes more trouble than it's worth.
-        pad->SetOrientation( 0 );
+        // ignore the pad offset for the moment. Makes more trouble than it's worth.
         pad->SetOffset( wxPoint( 0, 0 ) );
+        refOrientation = pad->GetOrientation();
+        pad->SetOrientation( 0.0 );
     }
     else
     {
@@ -497,14 +501,15 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
     for( auto& shape : shapes )
     {
         shape.Move( wxPoint( -anchor->x, -anchor->y ) );
+        shape.Rotate( wxPoint( 0, 0 ), -refOrientation );
     }
-
 
     pad->SetPosition( wxPoint( anchor->x, anchor->y ) );
     pad->AddPrimitives( shapes );
     pad->ClearFlags();
 
     bool result = pad->MergePrimitivesAsPolygon();
+    pad->Rotate( wxPoint( anchor->x, anchor->y ), refOrientation );
 
     if( !result )
     {

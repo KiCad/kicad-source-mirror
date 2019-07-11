@@ -34,6 +34,7 @@
 
 #include <bezier_curves.h>
 #include <class_board.h>
+#include <class_board_item.h>
 #include <class_drawsegment.h>
 #include <class_edge_mod.h>
 #include <class_pad.h>
@@ -84,6 +85,42 @@ void PAD_CS_PRIMITIVE::Move( wxPoint aMoveVector )
     for( auto& corner : m_Poly )
     {
         corner += aMoveVector;
+    }
+}
+
+
+void PAD_CS_PRIMITIVE::Rotate( const wxPoint& aRotCentre, double aAngle )
+{
+    switch( m_Shape )
+    {
+    case S_ARC:
+    case S_SEGMENT:
+    case S_CIRCLE:
+        // these can all be done by just rotating the start and end points
+        RotatePoint( &m_Start, aRotCentre, aAngle );
+        RotatePoint( &m_End, aRotCentre, aAngle );
+        break;
+
+    case S_POLYGON:
+        for( auto& pt : m_Poly )
+            RotatePoint( &pt, aRotCentre, aAngle );
+
+        break;
+
+    case S_CURVE:
+        RotatePoint( &m_Start, aRotCentre, aAngle );
+        RotatePoint( &m_End, aRotCentre, aAngle );
+        RotatePoint( &m_Ctrl1, aRotCentre, aAngle );
+        RotatePoint( &m_Ctrl2, aRotCentre, aAngle );
+
+        break;
+
+    case S_RECT:
+    default:
+        // un-handled edge transform
+        wxASSERT_MSG( false, wxT( "PAD_CS_PRIMITIVE::Rotate not implemented for "
+                                     + BOARD_ITEM::ShowShape( m_Shape ) ) );
+        break;
     }
 }
 

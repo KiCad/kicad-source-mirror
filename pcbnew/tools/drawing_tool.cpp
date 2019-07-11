@@ -485,6 +485,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     int step = SET_ORIGIN;
 
     // Prime the pump
+    m_toolMgr->RunAction( ACTIONS::refreshPreview );
+
     if( aEvent.HasPosition() )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
@@ -891,6 +893,8 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
     VECTOR2I cursorPos = m_controls->GetMousePosition();
 
     // Prime the pump
+    m_toolMgr->RunAction( ACTIONS::refreshPreview );
+
     if( aStartingPoint )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 
@@ -1152,6 +1156,8 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic, bool aImmediateMode )
     bool cancelled = false;
 
     // Prime the pump
+    m_toolMgr->RunAction( ACTIONS::refreshPreview );
+
     if( aImmediateMode )
         m_toolMgr->RunAction( ACTIONS::cursorClick );
 

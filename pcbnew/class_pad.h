@@ -116,6 +116,13 @@ public:
      */
     void Move( wxPoint aMoveVector );
 
+    /**
+     * Rotates the primitive about a point
+     * @param aRotCentre center of rotation
+     * @param aAngle angle in tenths of degree
+     */
+    void Rotate( const wxPoint& aRotCentre, double aAngle );
+
     /** Export the PAD_CS_PRIMITIVE parameters to a DRAWSEGMENT
      * useful to draw a primitive shape
      * @param aTarget is the DRAWSEGMENT to initialize
