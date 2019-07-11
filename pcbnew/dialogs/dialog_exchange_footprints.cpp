@@ -374,7 +374,12 @@ void processTextItem( const TEXTE_MODULE& aSrc, TEXTE_MODULE& aDest,
     }
 
     if( !resetTextEffects )
+    {
+        // Careful: the visible bit is also in Effects
+        bool visible = aDest.IsVisible();
         aDest.SetEffects( aSrc );
+        aDest.SetVisible( visible );
+    }
 }
 
 
