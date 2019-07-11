@@ -81,6 +81,14 @@ const MODULE* PLUGIN::GetEnumeratedFootprint( const wxString& aLibraryPath,
 }
 
 
+bool PLUGIN::FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
+                              const PROPERTIES* aProperties )
+{
+    // default implementation
+    return FootprintLoad( aLibraryPath, aFootprintName, aProperties ) != nullptr;
+}
+
+
 MODULE* PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                                const PROPERTIES* aProperties )
 {

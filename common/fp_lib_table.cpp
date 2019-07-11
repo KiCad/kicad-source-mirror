@@ -341,8 +341,11 @@ bool FP_LIB_TABLE::FootprintExists( const wxString& aNickname, const wxString& a
 {
     try
     {
-        std::unique_ptr<MODULE> m( FootprintLoad( aNickname, aFootprintName ) );
-        return m.get() != nullptr;
+        const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
+        wxASSERT( (PLUGIN*) row->plugin );
+
+        return row->plugin->FootprintExists( row->GetFullURI( true ), aFootprintName,
+                                             row->GetProperties() );
     }
     catch( ... )
     {

@@ -421,6 +421,13 @@ public:
                                                   const PROPERTIES* aProperties = NULL );
 
     /**
+     * Function FootprintExists
+     * check for the existence of a footprint.
+     */
+    virtual bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                  const PROPERTIES* aProperties = NULL );
+
+    /**
      * Function FootprintSave
      * will write @a aModule to an existing library located at @a aLibraryPath.
      * If a footprint by the same name already exists, it is replaced.

@@ -127,6 +127,9 @@ public:
                                           const wxString& aFootprintName,
                                           const PROPERTIES* aProperties = NULL ) override;
 
+    bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
+                          const PROPERTIES* aProperties = NULL ) override;
+
     MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                            const PROPERTIES* aProperties = NULL ) override;
 
