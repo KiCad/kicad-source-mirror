@@ -140,8 +140,8 @@ set( CMAKE_VISIBILITY_INLINES_HIDDEN ON )
 # Global setting: build everything position independent
 set( CMAKE_POSITION_INDEPENDENT_CODE ON )
 
-# Global setting: Use C++11
-set(CMAKE_CXX_STANDARD 11)
+# Global setting: Use C++14
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 

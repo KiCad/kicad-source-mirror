@@ -63,6 +63,7 @@ Some compilers have bugs or limitations to C++ standard support.
 Current versions:
 
 * Debian Stretch: [6.3.0](https://packages.debian.org/stretch/gcc)
+* Debian Buster: [8.3.0](https://packages.debian.org/buster/gcc)
 * Ubuntu 14.04: [4.8.2](https://packages.ubuntu.com/trusty/gcc)
 * Ubuntu 16.04: [5.3.1](https://packages.ubuntu.com/xenial/gcc)
 * Ubuntu 18.04: [7.3.0](https://packages.ubuntu.com/bionic/gcc)
