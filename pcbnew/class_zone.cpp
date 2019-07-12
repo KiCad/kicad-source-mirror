@@ -584,36 +584,13 @@ bool ZONE_CONTAINER::HitTest( const EDA_RECT& aRect, bool aContained, int aAccur
     else    // Test for intersection between aBox and the polygon
             // For a polygon, using its bounding box has no sense here
     {
-        // Fast test: if aBox is outside the polygon bounding box,
-        // rectangles cannot intersect
+        // Fast test: if aBox is outside the polygon bounding box, rectangles cannot intersect
         if( !arect.Intersects( bbox ) )
             return false;
 
-        // aBox is inside the polygon bounding box,
-        // and can intersect the polygon: use a fine test.
-        // aBox intersects the polygon if at least one aBox corner
-        // is inside the polygon
-
-        /*
-        wxPoint origin = arect.GetOrigin();
-
-        int w = arect.GetWidth();
-        int h = arect.GetHeight();
-
-
-        if ( HitTestInsideZone( origin ) ||
-             HitTestInsideZone( origin + wxPoint( w, 0 ) ) ||
-             HitTestInsideZone( origin + wxPoint( w, h ) ) ||
-             HitTestInsideZone( origin + wxPoint( 0, h ) ) )
-        {
-            return true;
-        }
-        */
-
-        // No corner inside aBox, but outlines can intersect aBox
-        // if one of outline corners is inside aBox
         int count = m_Poly->TotalVertices();
-        for( int ii =0; ii < count; ii++ )
+
+        for( int ii = 0; ii < count; ii++ )
         {
             auto vertex = m_Poly->Vertex( ii );
             auto vertexNext = m_Poly->Vertex( ( ii + 1 ) % count );
@@ -681,7 +658,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL
     if( m_CornerSelection != nullptr && m_CornerSelection->m_contour > 0 )
         msg << wxT( " " ) << _( "(Cutout)" );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg, DARKCYAN ) );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "Type" ), msg, DARKCYAN ) );
 
     if( GetIsKeepout() )
     {
@@ -696,7 +673,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL
         if( GetDoNotAllowCopperPour() )
             AccumulateDescription( msg, _("No copper pour") );
 
-        aList.push_back( MSG_PANEL_ITEM( _( "Keepout" ), msg, RED ) );
+        aList.emplace_back( MSG_PANEL_ITEM( _( "Keepout" ), msg, RED ) );
     }
     else if( IsOnCopperLayer() )
     {
@@ -712,25 +689,25 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL
         else    // a netcode < 0 is an error
             msg = wxT( "<error>" );
 
-        aList.push_back( MSG_PANEL_ITEM( _( "NetName" ), msg, RED ) );
+        aList.emplace_back( MSG_PANEL_ITEM( _( "NetName" ), msg, RED ) );
 
         // Display net code : (useful in test or debug)
         msg.Printf( wxT( "%d" ), GetNetCode() );
-        aList.push_back( MSG_PANEL_ITEM( _( "NetCode" ), msg, RED ) );
+        aList.emplace_back( MSG_PANEL_ITEM( _( "NetCode" ), msg, RED ) );
 
         // Display priority level
         msg.Printf( wxT( "%d" ), GetPriority() );
-        aList.push_back( MSG_PANEL_ITEM( _( "Priority" ), msg, BLUE ) );
+        aList.emplace_back( MSG_PANEL_ITEM( _( "Priority" ), msg, BLUE ) );
     }
     else
     {
-        aList.push_back( MSG_PANEL_ITEM( _( "Non Copper Zone" ), wxEmptyString, RED ) );
+        aList.emplace_back( MSG_PANEL_ITEM( _( "Non Copper Zone" ), wxEmptyString, RED ) );
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), BROWN ) );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), BROWN ) );
 
     msg.Printf( wxT( "%d" ), (int) m_Poly->TotalVertices() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Vertices" ), msg, BLUE ) );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "Vertices" ), msg, BLUE ) );
 
     switch( m_FillMode )
     {
@@ -742,16 +719,16 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL
         msg = _( "Unknown" ); break;
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Fill Mode" ), msg, BROWN ) );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "Fill Mode" ), msg, BROWN ) );
 
     // Useful for statistics :
     msg.Printf( wxT( "%d" ), (int) m_HatchLines.size() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Hatch Lines" ), msg, BLUE ) );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "Hatch Lines" ), msg, BLUE ) );
 
     if( !m_FilledPolysList.IsEmpty() )
     {
         msg.Printf( wxT( "%d" ), m_FilledPolysList.TotalVertices() );
-        aList.push_back( MSG_PANEL_ITEM( _( "Corner Count" ), msg, BLUE ) );
+        aList.emplace_back( MSG_PANEL_ITEM( _( "Corner Count" ), msg, BLUE ) );
     }
 }
 
@@ -761,16 +738,16 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL
 void ZONE_CONTAINER::Move( const wxPoint& offset )
 {
     /* move outlines */
-    m_Poly->Move( VECTOR2I( offset ) );
+    m_Poly->Move( offset );
 
     Hatch();
 
-    m_FilledPolysList.Move( VECTOR2I( offset.x, offset.y ) );
+    m_FilledPolysList.Move( offset );
 
-    for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
+    for( SEG& seg : m_FillSegmList )
     {
-        m_FillSegmList[ic].A += VECTOR2I(offset);
-        m_FillSegmList[ic].B += VECTOR2I(offset);
+        seg.A += VECTOR2I( offset );
+        seg.B += VECTOR2I( offset );
     }
 }
 
@@ -820,9 +797,9 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
 }
 
 
-void ZONE_CONTAINER::Flip( const wxPoint& aCentre )
+void ZONE_CONTAINER::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
-    Mirror( aCentre );
+    Mirror( aCentre, aFlipLeftRight );
     int copperLayerCount = GetBoard()->GetCopperLayerCount();
 
     if( GetIsKeepout() )
@@ -836,26 +813,38 @@ void ZONE_CONTAINER::Flip( const wxPoint& aCentre )
 }
 
 
-void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
+void ZONE_CONTAINER::Mirror( const wxPoint& aMirrorRef, bool aMirrorLeftRight )
 {
     for( auto iterator = m_Poly->IterateWithHoles(); iterator; iterator++ )
     {
-        int py = mirror_ref.y - iterator->y;
-        iterator->y = py + mirror_ref.y;
+        if( aMirrorLeftRight )
+            iterator->x = ( aMirrorRef.x - iterator->x ) + aMirrorRef.x;
+        else
+            iterator->y = ( aMirrorRef.y - iterator->y ) + aMirrorRef.y;
     }
 
     Hatch();
 
     for( auto ic = m_FilledPolysList.Iterate(); ic; ++ic )
     {
-        int py = mirror_ref.y - ic->y;
-        ic->y = py + mirror_ref.y;
+        if( aMirrorLeftRight )
+            ic->x = ( aMirrorRef.x - ic->x ) + aMirrorRef.x;
+        else
+            ic->y = ( aMirrorRef.y - ic->y ) + aMirrorRef.y;
     }
 
-    for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
+    for( SEG& seg : m_FillSegmList )
     {
-        MIRROR( m_FillSegmList[ic].A.y, mirror_ref.y );
-        MIRROR( m_FillSegmList[ic].B.y, mirror_ref.y );
+        if( aMirrorLeftRight )
+        {
+            MIRROR( seg.A.x, aMirrorRef.x );
+            MIRROR( seg.B.x, aMirrorRef.x );
+        }
+        else
+        {
+            MIRROR( seg.A.y, aMirrorRef.y );
+            MIRROR( seg.B.y, aMirrorRef.y );
+        }
     }
 }
 
@@ -1117,7 +1106,7 @@ void ZONE_CONTAINER::Hatch()
             // else push 2 small lines
             if( m_hatchStyle == DIAGONAL_FULL || std::abs( dx ) < 2 * hatch_line_len )
             {
-                m_HatchLines.push_back( SEG( pointbuffer[ip], pointbuffer[ip + 1] ) );
+                m_HatchLines.emplace_back( SEG( pointbuffer[ip], pointbuffer[ip + 1] ) );
             }
             else
             {
@@ -1134,9 +1123,9 @@ void ZONE_CONTAINER::Hatch()
                 int y1 = KiROUND( pointbuffer[ip].y + dx * slope );
                 int y2 = KiROUND( pointbuffer[ip + 1].y - dx * slope );
 
-                m_HatchLines.push_back(SEG(pointbuffer[ip].x, pointbuffer[ip].y, x1, y1));
+                m_HatchLines.emplace_back( SEG( pointbuffer[ip].x, pointbuffer[ip].y, x1, y1 ) );
 
-                m_HatchLines.push_back( SEG( pointbuffer[ip+1].x, pointbuffer[ip+1].y, x2, y2 ) );
+                m_HatchLines.emplace_back( SEG( pointbuffer[ip+1].x, pointbuffer[ip+1].y, x2, y2 ) );
             }
         }
     }

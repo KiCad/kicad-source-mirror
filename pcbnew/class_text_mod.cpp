@@ -147,10 +147,13 @@ void TEXTE_MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
 }
 
 
-void TEXTE_MODULE::Flip( const wxPoint& aCentre )
+void TEXTE_MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     // flipping the footprint is relative to the X axis
-    SetTextY( ::Mirror( GetTextPos().y, aCentre.y ) );
+    if( aFlipLeftRight )
+        SetTextX( ::Mirror( GetTextPos().x, aCentre.x ) );
+    else
+        SetTextY( ::Mirror( GetTextPos().y, aCentre.y ) );
 
     SetTextAngle( -GetTextAngle() );
 

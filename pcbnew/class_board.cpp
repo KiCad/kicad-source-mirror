@@ -30,34 +30,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <limits.h>
 #include <algorithm>
 #include <iterator>
-
 #include <fctsys.h>
 #include <common.h>
 #include <kicad_string.h>
 #include <pcb_base_frame.h>
 #include <msgpanel.h>
-#include <pcb_netlist.h>
 #include <reporter.h>
-#include <base_units.h>
 #include <ratsnest_data.h>
 #include <ratsnest_viewitem.h>
 #include <ws_proxy_view_item.h>
-
 #include <pcbnew.h>
 #include <collectors.h>
-
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
 #include <class_marker_pcb.h>
 #include <class_drawsegment.h>
-#include <class_pcb_text.h>
 #include <class_pcb_target.h>
-#include <class_dimension.h>
 #include <connectivity/connectivity_data.h>
 
 
@@ -100,12 +92,11 @@ DELETED_BOARD_ITEM g_DeletedItem;
  */
 wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 
-// this is a dummy colors settings (defined colors are the vdefulat values)
-// used to initialize the board.
-// these settings will be overriden later, depending on the draw frame that displays the board.
+// Dummy general settings (defined colors are the default values) used to initialize the board.
+// These settings will be overriden later, depending on the draw frame that displays the board.
 // However, when a board is created by a python script, outside a frame, the colors must be set
 // so dummyColorsSettings provide this default initialization
-static COLORS_DESIGN_SETTINGS dummyColorsSettings( FRAME_PCB );
+static PCB_GENERAL_SETTINGS dummyGeneralSettings( FRAME_PCB );
 
 BOARD::BOARD() :
     BOARD_ITEM_CONTAINER( (BOARD_ITEM*) NULL, PCB_T ),
@@ -114,7 +105,8 @@ BOARD::BOARD() :
     // we have not loaded a board yet, assume latest until then.
     m_fileFormatVersionAtLoad = LEGACY_BOARD_FILE_VERSION;
 
-    m_colorsSettings = &dummyColorsSettings;
+    m_generalSettings = &dummyGeneralSettings;
+
     m_CurrentZoneContour = NULL;            // This ZONE_CONTAINER handle the
                                             // zone contour currently in progress
 

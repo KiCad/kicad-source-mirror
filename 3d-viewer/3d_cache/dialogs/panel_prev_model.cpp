@@ -44,7 +44,7 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE*
     initPanel();
 
     // Initialize the color settings to draw the board and the footprint
-    m_dummyBoard->SetColorsSettings( &aFrame->Settings().Colors() );
+    m_dummyBoard->SetGeneralSettings( &aFrame->Settings() );
 
     m_parentModelList = aParentModelList;
 

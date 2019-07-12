@@ -403,13 +403,28 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
 {
     aDest->SetParent( GetBoard() );
 
-    /* place module without ratsnest refresh: this will be made later
-     * when all modules are on board */
     PlaceModule( aDest, false );
 
-    // Copy full placement and pad net names (when possible)
-    // but not local settings like clearances (use library values)
-    aSrc->CopyNetlistSettings( aDest, false );
+    // Copy full placement, locked flag and pad net names (when possible) but not local
+    // settings like clearances (use library values)
+    //
+    aDest->SetPosition( aSrc->GetPosition() );
+
+    if( aDest->GetLayer() != aSrc->GetLayer() )
+        aDest->Flip( aDest->GetPosition(), m_configSettings.m_FlipLeftRight );
+
+    if( aDest->GetOrientation() != aSrc->GetOrientation() )
+        aDest->Rotate( aDest->GetPosition(), aSrc->GetOrientation() );
+
+    aDest->SetLocked( aSrc->IsLocked() );
+
+    for( auto pad : aDest->Pads() )
+    {
+        D_PAD* oldPad = aSrc->FindPadByName( pad->GetName() );
+
+        if( oldPad )
+            pad->SetNetCode( oldPad->GetNetCode() );
+    }
 
     // Copy reference
     processTextItem( aSrc->Reference(), aDest->Reference(),
@@ -440,9 +455,10 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
         }
     }
 
-       // Updating other parameters
+    // Updating other parameters
     aDest->SetTimeStamp( aSrc->GetTimeStamp() );
     aDest->SetPath( aSrc->GetPath() );
+    aDest->CalculateBoundingBox();
 
     aCommit.Remove( aSrc );
     aCommit.Add( aDest );

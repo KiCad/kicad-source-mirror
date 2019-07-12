@@ -260,15 +260,16 @@ public:
      * Function Flip
      * Flip this object, i.e. change the board side for this object
      * @param aCentre - the rotation point.
+     * @param aFlipLeftRight - mirror across Y axis instead of X (the default)
      */
-    virtual void Flip( const wxPoint& aCentre )
+    virtual void Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     {
         wxMessageBox( wxT( "virtual BOARD_ITEM::Flip used, should not occur" ), GetClass() );
     }
 
-    void Flip( const VECTOR2I& aCentre )
+    void Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     {
-        Flip( wxPoint( aCentre.x, aCentre.y ) );
+        Flip( wxPoint( aCentre.x, aCentre.y ), aFlipLeftRight );
     }
 
     /**

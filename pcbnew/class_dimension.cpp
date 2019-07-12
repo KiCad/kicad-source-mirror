@@ -135,7 +135,7 @@ void DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
 }
 
 
-void DIMENSION::Flip( const wxPoint& aCentre )
+void DIMENSION::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     Mirror( aCentre );
 
@@ -145,28 +145,49 @@ void DIMENSION::Flip( const wxPoint& aCentre )
 }
 
 
-void DIMENSION::Mirror( const wxPoint& axis_pos )
+void DIMENSION::Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight )
 {
+    int axis = aMirrorLeftRight ? axis_pos.x : axis_pos.y;
     wxPoint newPos = m_Text.GetTextPos();
 
-#define INVERT( pos ) (pos) = axis_pos.y - ( (pos) - axis_pos.y )
-    INVERT( newPos.y );
+#define INVERT( pos ) (pos) = axis - ( (pos) - axis )
+
+    if( aMirrorLeftRight )
+        INVERT( newPos.x );
+    else
+        INVERT( newPos.y );
 
     m_Text.SetTextPos( newPos );
 
     // invert angle
     m_Text.SetTextAngle( -m_Text.GetTextAngle() );
 
-    INVERT( m_crossBarO.y );
-    INVERT( m_crossBarF.y );
-    INVERT( m_featureLineGO.y );
-    INVERT( m_featureLineGF.y );
-    INVERT( m_featureLineDO.y );
-    INVERT( m_featureLineDF.y );
-    INVERT( m_arrowG1F.y );
-    INVERT( m_arrowG2F.y );
-    INVERT( m_arrowD1F.y );
-    INVERT( m_arrowD2F.y );
+    if( aMirrorLeftRight )
+    {
+        INVERT( m_crossBarO.y );
+        INVERT( m_crossBarF.y );
+        INVERT( m_featureLineGO.y );
+        INVERT( m_featureLineGF.y );
+        INVERT( m_featureLineDO.y );
+        INVERT( m_featureLineDF.y );
+        INVERT( m_arrowG1F.y );
+        INVERT( m_arrowG2F.y );
+        INVERT( m_arrowD1F.y );
+        INVERT( m_arrowD2F.y );
+    }
+    else
+    {
+        INVERT( m_crossBarO.y );
+        INVERT( m_crossBarF.y );
+        INVERT( m_featureLineGO.y );
+        INVERT( m_featureLineGF.y );
+        INVERT( m_featureLineDO.y );
+        INVERT( m_featureLineDF.y );
+        INVERT( m_arrowG1F.y );
+        INVERT( m_arrowG2F.y );
+        INVERT( m_arrowD1F.y );
+        INVERT( m_arrowD2F.y );
+    }
 }
 
 

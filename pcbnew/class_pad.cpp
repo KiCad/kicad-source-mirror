@@ -434,15 +434,22 @@ void D_PAD::SetOrientation( double aAngle )
 }
 
 
-void D_PAD::Flip( const wxPoint& aCentre )
+void D_PAD::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
-    int y = GetPosition().y;
-    MIRROR( y, aCentre.y );  // invert about x axis.
-    SetY( y );
-
-    MIRROR( m_Pos0.y, 0 );
-    MIRROR( m_Offset.y, 0 );
-    MIRROR( m_DeltaSize.y, 0 );
+    if( aFlipLeftRight )
+    {
+        MIRROR( m_Pos.x, aCentre.x );
+        MIRROR( m_Pos0.x, 0 );
+        MIRROR( m_Offset.x, 0 );
+        MIRROR( m_DeltaSize.x, 0 );
+    }
+    else
+    {
+        MIRROR( m_Pos.y, aCentre.y );
+        MIRROR( m_Pos0.y, 0 );
+        MIRROR( m_Offset.y, 0 );
+        MIRROR( m_DeltaSize.y, 0 );
+    }
 
     SetOrientation( -GetOrientation() );
 
@@ -583,26 +590,6 @@ bool D_PAD::IncrementPadName( bool aSkipUnconnectable, bool aFillSequenceGaps )
         SetName( GetParent()->GetNextPadName( aFillSequenceGaps ) );
 
     return !skip;
-}
-
-
-void D_PAD::CopyNetlistSettings( D_PAD* aPad, bool aCopyLocalSettings )
-{
-    // Don't do anything foolish like trying to copy to yourself.
-    wxCHECK_RET( aPad != NULL && aPad != this, wxT( "Cannot copy to NULL or yourself." ) );
-
-    aPad->SetNetCode( GetNetCode() );
-
-    if( aCopyLocalSettings )
-    {
-        aPad->SetLocalClearance( m_LocalClearance );
-        aPad->SetLocalSolderMaskMargin( m_LocalSolderMaskMargin );
-        aPad->SetLocalSolderPasteMargin( m_LocalSolderPasteMargin );
-        aPad->SetLocalSolderPasteMarginRatio( m_LocalSolderPasteMarginRatio );
-        aPad->SetZoneConnection( m_ZoneConnection );
-        aPad->SetThermalWidth( m_ThermalWidth );
-        aPad->SetThermalGap( m_ThermalGap );
-    }
 }
 
 

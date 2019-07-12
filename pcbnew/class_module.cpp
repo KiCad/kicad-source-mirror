@@ -312,53 +312,6 @@ void MODULE::Remove( BOARD_ITEM* aBoardItem )
 }
 
 
-void MODULE::CopyNetlistSettings( MODULE* aModule, bool aCopyLocalSettings )
-{
-    // Don't do anything foolish like trying to copy to yourself.
-    wxCHECK_RET( aModule != NULL && aModule != this, wxT( "Cannot copy to NULL or yourself." ) );
-
-    // Not sure what to do with the value field.  Use netlist for now.
-    aModule->SetPosition( GetPosition() );
-
-    if( aModule->GetLayer() != GetLayer() )
-        aModule->Flip( aModule->GetPosition() );
-
-    if( aModule->GetOrientation() != GetOrientation() )
-        aModule->Rotate( aModule->GetPosition(), GetOrientation() );
-
-    aModule->SetLocked( IsLocked() );
-
-    if( aCopyLocalSettings )
-    {
-        aModule->SetLocalSolderMaskMargin( GetLocalSolderMaskMargin() );
-        aModule->SetLocalClearance( GetLocalClearance() );
-        aModule->SetLocalSolderPasteMargin( GetLocalSolderPasteMargin() );
-        aModule->SetLocalSolderPasteMarginRatio( GetLocalSolderPasteMarginRatio() );
-        aModule->SetZoneConnection( GetZoneConnection() );
-        aModule->SetThermalWidth( GetThermalWidth() );
-        aModule->SetThermalGap( GetThermalGap() );
-    }
-
-    for( auto pad : aModule->Pads() )
-    {
-        // Fix me: if aCopyLocalSettings == true, for "multiple" pads
-        // (set of pads having the same name/number) this is broken
-        // because we copy settings from the first pad found.
-        // When old and new footprints have very few differences, a better
-        // algo can be used.
-        D_PAD* oldPad = FindPadByName( pad->GetName() );
-
-        if( oldPad )
-            oldPad->CopyNetlistSettings( pad, aCopyLocalSettings );
-    }
-
-    // Not sure about copying description, keywords, 3D models or any other
-    // local user changes to footprint.  Stick with the new footprint settings
-    // called out in the footprint loaded in the netlist.
-    aModule->CalculateBoundingBox();
-}
-
-
 void MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
 {
     for( auto pad : m_pads )
@@ -1009,11 +962,16 @@ void MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
 }
 
 
-void MODULE::Flip( const wxPoint& aCentre )
+void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     // Move module to its final position:
     wxPoint finalPos = m_Pos;
-    MIRROR( finalPos.y, aCentre.y );     /// Mirror the Y position
+
+    if( aFlipLeftRight )
+        MIRROR( finalPos.x, aCentre.x );     /// Mirror the X position
+    else
+        MIRROR( finalPos.y, aCentre.y );     /// Mirror the Y position
+
     SetPosition( finalPos );
 
     // Flip layer
@@ -1023,13 +981,13 @@ void MODULE::Flip( const wxPoint& aCentre )
     m_Orient = -m_Orient;
     NORMALIZE_ANGLE_POS( m_Orient );
 
-    // Mirror pads to other side of board about the x axis, i.e. vertically.
+    // Mirror pads to other side of board.
     for( auto pad : m_pads )
-        pad->Flip( m_Pos );
+        pad->Flip( m_Pos, aFlipLeftRight );
 
     // Mirror reference and value.
-    m_Reference->Flip( m_Pos );
-    m_Value->Flip( m_Pos );
+    m_Reference->Flip( m_Pos, aFlipLeftRight );
+    m_Value->Flip( m_Pos, aFlipLeftRight );
 
     // Reverse mirror module graphics and texts.
     for( auto item : m_drawings )
@@ -1037,11 +995,11 @@ void MODULE::Flip( const wxPoint& aCentre )
         switch( item->Type() )
         {
         case PCB_MODULE_EDGE_T:
-            ( (EDGE_MODULE*) item )->Flip( m_Pos );
+            static_cast<EDGE_MODULE*>( item )->Flip( m_Pos, aFlipLeftRight );
             break;
 
         case PCB_MODULE_TEXT_T:
-            static_cast<TEXTE_MODULE*>( item )->Flip( m_Pos );
+            static_cast<TEXTE_MODULE*>( item )->Flip( m_Pos, aFlipLeftRight );
             break;
 
         default:

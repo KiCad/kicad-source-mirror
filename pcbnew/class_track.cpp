@@ -233,19 +233,36 @@ void TRACK::Rotate( const wxPoint& aRotCentre, double aAngle )
 }
 
 
-void TRACK::Flip( const wxPoint& aCentre )
+void TRACK::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
-    m_Start.y = aCentre.y - (m_Start.y - aCentre.y);
-    m_End.y   = aCentre.y - (m_End.y - aCentre.y);
+    if( aFlipLeftRight )
+    {
+        m_Start.x = aCentre.x - ( m_Start.x - aCentre.x );
+        m_End.x   = aCentre.x - ( m_End.x - aCentre.x );
+    }
+    else
+    {
+        m_Start.y = aCentre.y - ( m_Start.y - aCentre.y );
+        m_End.y   = aCentre.y - ( m_End.y - aCentre.y );
+    }
+
     int copperLayerCount = GetBoard()->GetCopperLayerCount();
     SetLayer( FlipLayer( GetLayer(), copperLayerCount ) );
 }
 
 
-void VIA::Flip( const wxPoint& aCentre )
+void VIA::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
-    m_Start.y = aCentre.y - (m_Start.y - aCentre.y);
-    m_End.y   = aCentre.y - (m_End.y - aCentre.y);
+    if( aFlipLeftRight )
+    {
+        m_Start.x = aCentre.x - ( m_Start.x - aCentre.x );
+        m_End.x   = aCentre.x - ( m_End.x - aCentre.x );
+    }
+    else
+    {
+        m_Start.y = aCentre.y - ( m_Start.y - aCentre.y );
+        m_End.y   = aCentre.y - ( m_End.y - aCentre.y );
+    }
 
     if( GetViaType() != VIA_THROUGH )
     {

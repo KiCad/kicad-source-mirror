@@ -52,6 +52,8 @@ public:
     bool m_EditHotkeyChangesTrackWidth;
     bool m_DragSelects;                  // True: Drag gesture always draws a selection box,
                                          // False: Drag will select an item and move it
+    bool m_FlipLeftRight;                // True: Flip footprints across Y axis
+                                         // False: Flip footprints across X axis
 
     MAGNETIC_OPTIONS m_MagneticPads;
     MAGNETIC_OPTIONS m_MagneticTracks;

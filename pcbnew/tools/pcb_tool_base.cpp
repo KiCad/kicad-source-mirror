@@ -190,7 +190,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer
             }
             else if( evt->IsAction( &PCB_ACTIONS::flip ) && ( aOptions & IPO_FLIP ) )
             {
-                newItem->Flip( newItem->GetPosition() );
+                newItem->Flip( newItem->GetPosition(), frame()->Settings().m_FlipLeftRight );
                 view()->Update( &preview );
             }
         }

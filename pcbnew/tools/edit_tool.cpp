@@ -765,7 +765,8 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
         return 0;
 
     updateModificationPoint( selection );
-    auto modPoint = selection.GetReferencePoint();
+    VECTOR2I modPoint = selection.GetReferencePoint();
+    bool leftRight = frame()->Settings().m_FlipLeftRight;
 
     // When editing modules, all items have the same parent
     if( EditingModules() )
@@ -776,7 +777,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
         if( !item->IsNew() && !EditingModules() )
             m_commit->Modify( item );
 
-        static_cast<BOARD_ITEM*>( item )->Flip( modPoint );
+        static_cast<BOARD_ITEM*>( item )->Flip( modPoint, leftRight );
     }
 
     if( !m_dragging )

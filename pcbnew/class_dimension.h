@@ -207,7 +207,7 @@ public:
      */
     void            Move( const wxPoint& offset ) override;
     void            Rotate( const wxPoint& aRotCentre, double aAngle ) override;
-    void            Flip( const wxPoint& aCentre ) override;
+    void            Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
     /**
      * Function Mirror
@@ -216,7 +216,7 @@ public:
      * the layer is not changed
      * @param axis_pos : vertical axis position
      */
-    void Mirror( const wxPoint& axis_pos );
+    void Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight = false );
 
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 

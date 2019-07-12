@@ -241,7 +241,7 @@ public:
 
     void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
 
-    void Flip( const wxPoint& aCentre ) override;
+    void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
     /**
      * Function MoveAnchorPosition
@@ -580,23 +580,6 @@ public:
     virtual unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
     virtual const BOX2I ViewBBox() const override;
-
-    /**
-     * Function CopyNetlistSettings
-     * copies the netlist settings to \a aModule.
-     * Used to copy some footprint parameters when replacing a footprint by an other
-     * footprint when reading a netlist, or in exchange footprint dialog
-     *
-     * The netlist settings are all of the #MODULE settings not define by a #MODULE in
-     * a netlist.  These setting include placement prms (position, orientation, side)
-     * and optionally local prms( clearances, zone connection type, etc).
-     * The reference designator, value, path, and physical geometry settings are not
-     * copied.
-     *
-     * @param aModule is the #MODULE to copy the settings to.
-     * @param aCopyLocalSettings = false to copy only module placement
-     */
-    void CopyNetlistSettings( MODULE* aModule, bool aCopyLocalSettings );
 
     /**
      * static function IsLibNameValid

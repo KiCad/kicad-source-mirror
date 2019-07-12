@@ -81,7 +81,7 @@ public:
 
     void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
 
-    void Flip( const wxPoint& aCentre ) override;
+    void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
     void Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset = ZeroOffset ) override;
 

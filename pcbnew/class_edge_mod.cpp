@@ -281,7 +281,7 @@ EDA_ITEM* EDGE_MODULE::Clone() const
 }
 
 
-void EDGE_MODULE::Flip( const wxPoint& aCentre )
+void EDGE_MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     wxPoint pt;
 
@@ -293,21 +293,29 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre )
     default:
     case S_SEGMENT:
     case S_CURVE:
-        pt = GetStart();
-        MIRROR( pt.y, aCentre.y );
-        SetStart( pt );
+        if( aFlipLeftRight )
+        {
+            MIRROR( m_Start.x, aCentre.x );
+            MIRROR( m_End.x, aCentre.x );
+            MIRROR( m_BezierC1.x, aCentre.x );
+            MIRROR( m_BezierC2.x, aCentre.x );
+            MIRROR( m_Start0.x, 0 );
+            MIRROR( m_End0.x, 0 );
+            MIRROR( m_Bezier0_C1.x, 0 );
+            MIRROR( m_Bezier0_C2.x, 0 );
+        }
+        else
+        {
+            MIRROR( m_Start.y, aCentre.y );
+            MIRROR( m_End.y, aCentre.y );
+            MIRROR( m_BezierC1.y, aCentre.y );
+            MIRROR( m_BezierC2.y, aCentre.y );
+            MIRROR( m_Start0.y, 0 );
+            MIRROR( m_End0.y, 0 );
+            MIRROR( m_Bezier0_C1.y, 0 );
+            MIRROR( m_Bezier0_C2.y, 0 );
+        }
 
-        pt = GetEnd();
-        MIRROR( pt.y, aCentre.y );
-        SetEnd( pt );
-
-        MIRROR( m_BezierC1.y, aCentre.y );
-        MIRROR( m_BezierC2.y, aCentre.y );
-
-        MIRROR( m_Start0.y, 0 );
-        MIRROR( m_End0.y, 0 );
-        MIRROR( m_Bezier0_C1.y, 0 );
-        MIRROR( m_Bezier0_C2.y, 0 );
         RebuildBezierToSegmentsPointsList( m_Width );
         break;
 
@@ -316,7 +324,10 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre )
         // footprint position, orientation 0
         for( auto iter = m_Poly.Iterate(); iter; iter++ )
         {
-            MIRROR( iter->y, 0 );
+            if( aFlipLeftRight )
+                MIRROR( iter->x, 0 );
+            else
+                MIRROR( iter->y, 0 );
         }
 	break;
     }

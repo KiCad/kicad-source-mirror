@@ -237,7 +237,7 @@ public:
 
     virtual void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
 
-    virtual void Flip( const wxPoint& aCentre ) override;
+    virtual void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
     /**
      * Function TransformShapeWithClearanceToPolygon

@@ -379,7 +379,8 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                     if( module->GetLayer() != F_Cu )
                     {
                         // module is on copper layer (back)
-                        module->Flip( module->GetPosition() );
+                        module->Flip( module->GetPosition(),
+                                      aBoard->GeneralSettings().m_FlipLeftRight );
                     }
 
                     module->SetOrientation( orientation );
@@ -391,7 +392,8 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                     if( module->GetLayer() != B_Cu )
                     {
                         // module is on component layer (front)
-                        module->Flip( module->GetPosition() );
+                        module->Flip( module->GetPosition(),
+                                      aBoard->GeneralSettings().m_FlipLeftRight );
                     }
 
                     module->SetOrientation( orientation );

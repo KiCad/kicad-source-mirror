@@ -521,7 +521,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         case UR_FLIPPED:
         {
             BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
-            item->Flip( aList->m_TransformPoint );
+            item->Flip( aList->m_TransformPoint, m_configSettings.m_FlipLeftRight );
             view->Update( item, KIGFX::LAYERS );
             connectivity->Update( item );
         }

@@ -728,7 +728,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
                 // Put it on FRONT layer,
                 // (Can be stored flipped if the lib is an archive built from a board)
                 if( module->IsFlipped() )
-                    module->Flip( module->GetPosition() );
+                    module->Flip( module->GetPosition(), m_frame->Settings().m_FlipLeftRight );
 
                 module->SetOrientation( 0 );
                 module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );

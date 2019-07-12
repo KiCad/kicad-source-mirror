@@ -347,7 +347,7 @@ public:
      */
     const SHAPE_POLY_SET& GetCustomShapeAsPolygon() const { return m_customShapeAsPolygon; }
 
-    void Flip( const wxPoint& aCentre ) override;
+    void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
     /**
      * Flip the basic shapes, in custom pads
@@ -787,23 +787,6 @@ public:
     virtual unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
     virtual const BOX2I ViewBBox() const override;
-
-    /**
-     * Function CopyNetlistSettings
-     * copies the netlist settings to \a aPad, and the net name.
-     * Used to copy some pad parameters when replacing a footprint by an other
-     * footprint when reading a netlist, or in exchange footprint dialog
-     *
-     * The netlist settings are all of the #D_PAD settings not define by a #D_PAD in
-     * a netlist.
-     * The copied settings are the net name and optionally include local clearance, etc.
-     * The pad physical geometry settings are not copied.
-     *
-     * @param aPad is the #D_PAD to copy the settings to.
-     * @param aCopyLocalSettings = false to copy only the net name
-     *   true to also copy local prms
-     */
-    void CopyNetlistSettings( D_PAD* aPad, bool aCopyLocalSettings );
 
     virtual void SwapData( BOARD_ITEM* aImage ) override;
 

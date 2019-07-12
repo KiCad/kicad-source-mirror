@@ -171,7 +171,7 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
     {
         delete m_Pcb;
         m_Pcb = aBoard;
-        m_Pcb->SetColorsSettings( &Settings().Colors() );
+        m_Pcb->SetGeneralSettings( &Settings() );
     }
 }
 
@@ -191,7 +191,7 @@ void PCB_BASE_FRAME::AddModuleToBoard( MODULE* module )
         // Put it on FRONT layer,
         // (Can be stored flipped if the lib is an archive built from a board)
         if( module->IsFlipped() )
-            module->Flip( module->GetPosition() );
+            module->Flip( module->GetPosition(), m_configSettings.m_FlipLeftRight );
 
         // Place it in orientation 0,
         // even if it is not saved with orientation 0 in lib

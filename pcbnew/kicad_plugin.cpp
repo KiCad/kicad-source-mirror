@@ -30,7 +30,6 @@
 #include <wildcards_and_files_ext.h>
 #include <base_units.h>
 #include <trace_helpers.h>
-
 #include <class_board.h>
 #include <class_module.h>
 #include <class_pcb_text.h>
@@ -44,7 +43,6 @@
 #include <zones.h>
 #include <kicad_plugin.h>
 #include <pcb_parser.h>
-
 #include <wx/dir.h>
 #include <wx/filename.h>
 #include <wx/wfstream.h>
@@ -52,6 +50,7 @@
 #include <memory.h>
 #include <connectivity/connectivity_data.h>
 #include <convert_basic_shapes_to_polygon.h>    // for enum RECT_CHAMFER_POSITIONS definition
+#include <kiface_i.h>
 
 using namespace PCB_KEYS_T;
 
@@ -2087,9 +2086,7 @@ const MODULE* PCB_IO::getFootprint( const wxString& aLibraryPath,
     MODULE_CITER it = mods.find( aFootprintName );
 
     if( it == mods.end() )
-    {
-        return NULL;
-    }
+        return nullptr;
 
     return it->second->GetModule();
 }
@@ -2214,11 +2211,11 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
     // and it's time stamp must be 0, it should have no parent, orientation should
     // be zero, and it should be on the front layer.
     module->SetTimeStamp( 0 );
-    module->SetParent( 0 );
+    module->SetParent( nullptr );
     module->SetOrientation( 0 );
 
     if( module->GetLayer() != F_Cu )
-        module->Flip( module->GetPosition() );
+        module->Flip( module->GetPosition(), m_board->GeneralSettings().m_FlipLeftRight );
 
     wxLogTrace( traceKicadPcbPlugin, wxT( "Creating s-expr footprint file '%s'." ), fullPath );
     mods.insert( footprintName, new FP_CACHE_ITEM( module, WX_FILENAME( fn.GetPath(), fullName ) ) );

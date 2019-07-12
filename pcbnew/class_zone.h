@@ -400,15 +400,16 @@ public:
      * (like Mirror() but changes layer)
      * @param aCentre - the rotation point.
      */
-    virtual void Flip( const wxPoint& aCentre ) override;
+    virtual void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
     /**
      * Function Mirror
      * Mirror the outlines , relative to a given horizontal axis
      * the layer is not changed
-     * @param mirror_ref = vertical axis position
+     * @param aMirrorRef = axis position
+     * @param aMirrorLeftRight mirror across Y axis (otherwise mirror across X)
      */
-    void Mirror( const wxPoint& mirror_ref );
+    void Mirror( const wxPoint& aMirrorRef, bool aMirrorLeftRight );
 
     /**
      * Function GetClass

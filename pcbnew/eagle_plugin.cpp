@@ -1237,8 +1237,8 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
 }
 
 
-void EAGLE_PLUGIN::orientModuleAndText( MODULE* m, const EELEMENT& e,
-                    const EATTR* nameAttr, const EATTR* valueAttr )
+void EAGLE_PLUGIN::orientModuleAndText( MODULE* m, const EELEMENT& e, const EATTR* nameAttr,
+                                        const EATTR* valueAttr )
 {
     if( e.rot )
     {
@@ -1246,7 +1246,7 @@ void EAGLE_PLUGIN::orientModuleAndText( MODULE* m, const EELEMENT& e,
         {
             double orientation = e.rot->degrees + 180.0;
             m->SetOrientation( orientation * 10 );
-            m->Flip( m->GetPosition() );
+            m->Flip( m->GetPosition(), false );
         }
         else
             m->SetOrientation( e.rot->degrees * 10 );

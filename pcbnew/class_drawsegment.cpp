@@ -164,10 +164,18 @@ void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, double aAngle )
 }
 
 
-void DRAWSEGMENT::Flip( const wxPoint& aCentre )
+void DRAWSEGMENT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
-    m_Start.y  = aCentre.y - (m_Start.y - aCentre.y);
-    m_End.y  = aCentre.y - (m_End.y - aCentre.y);
+    if( aFlipLeftRight )
+    {
+        m_Start.x = aCentre.x - ( m_Start.x - aCentre.x );
+        m_End.x   = aCentre.x - ( m_End.x - aCentre.x );
+    }
+    else
+    {
+        m_Start.y = aCentre.y - ( m_Start.y - aCentre.y );
+        m_End.y   = aCentre.y - ( m_End.y - aCentre.y );
+    }
 
     switch ( m_Shape )
     {
@@ -178,14 +186,25 @@ void DRAWSEGMENT::Flip( const wxPoint& aCentre )
     case S_POLYGON:
         for( auto iter = m_Poly.Iterate(); iter; iter++ )
         {
-            iter->y  = aCentre.y - (iter->y - aCentre.y);
+            if( aFlipLeftRight )
+                iter->x = aCentre.x - ( iter->x - aCentre.x );
+            else
+                iter->y = aCentre.y - ( iter->y - aCentre.y );
         }
         break;
 
     case S_CURVE:
         {
-            m_BezierC1.y  = aCentre.y - (m_BezierC1.y - aCentre.y);
-            m_BezierC2.y  = aCentre.y - (m_BezierC2.y - aCentre.y);
+            if( aFlipLeftRight )
+            {
+                m_BezierC1.x = aCentre.x - ( m_BezierC1.x - aCentre.x );
+                m_BezierC2.x = aCentre.x - ( m_BezierC2.x - aCentre.x );
+            }
+            else
+            {
+                m_BezierC1.y = aCentre.y - ( m_BezierC1.y - aCentre.y );
+                m_BezierC2.y = aCentre.y - ( m_BezierC2.y - aCentre.y );
+            }
 
             // Rebuild the poly points shape
             std::vector<wxPoint> ctrlPoints = { m_Start, m_BezierC1, m_BezierC2, m_End };

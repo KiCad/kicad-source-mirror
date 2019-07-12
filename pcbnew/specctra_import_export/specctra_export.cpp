@@ -1737,7 +1737,7 @@ void SPECCTRA_DB::FlipMODULEs( BOARD* aBoard )
         module->SetFlag( 0 );
         if( module->GetLayer() == B_Cu )
         {
-            module->Flip( module->GetPosition() );
+            module->Flip( module->GetPosition(), aBoard->GeneralSettings().m_FlipLeftRight );
             module->SetFlag( 1 );
         }
     }
@@ -1757,7 +1757,7 @@ void SPECCTRA_DB::RevertMODULEs( BOARD* aBoard )
     {
         if( module->GetFlag() )
         {
-            module->Flip( module->GetPosition() );
+            module->Flip( module->GetPosition(), aBoard->GeneralSettings().m_FlipLeftRight );
             module->SetFlag( 0 );
         }
     }

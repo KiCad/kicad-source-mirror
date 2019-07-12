@@ -86,7 +86,7 @@ public:
      * not usual to flip an item alone, without flipping the parent footprint.
      * (consider Mirror for a mirror transform).
      */
-    void Flip( const wxPoint& aCentre ) override;
+    void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
     bool IsParentFlipped() const;
 

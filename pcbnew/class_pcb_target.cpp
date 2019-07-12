@@ -158,9 +158,13 @@ void PCB_TARGET::Rotate(const wxPoint& aRotCentre, double aAngle)
 }
 
 
-void PCB_TARGET::Flip(const wxPoint& aCentre )
+void PCB_TARGET::Flip(const wxPoint& aCentre, bool aFlipLeftRight )
 {
-    m_Pos.y  = aCentre.y - ( m_Pos.y - aCentre.y );
+    if( aFlipLeftRight )
+        m_Pos.x = aCentre.x - ( m_Pos.x - aCentre.x );
+    else
+        m_Pos.y = aCentre.y - ( m_Pos.y - aCentre.y );
+
     SetLayer( FlipLayer( GetLayer() ) );
 }
 

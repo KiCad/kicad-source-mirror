@@ -111,7 +111,7 @@ public:
     void Rotate( const wxPoint& aOffset, double aAngle ) override;
 
     /// Flip entity during module flip
-    void Flip( const wxPoint& aCentre ) override;
+    void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
 
     bool IsParentFlipped() const;
 

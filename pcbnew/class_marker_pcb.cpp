@@ -112,9 +112,12 @@ void MARKER_PCB::Rotate(const wxPoint& aRotCentre, double aAngle)
 }
 
 
-void MARKER_PCB::Flip(const wxPoint& aCentre )
+void MARKER_PCB::Flip(const wxPoint& aCentre, bool aFlipLeftRight )
 {
-    m_Pos.y  = aCentre.y - (m_Pos.y - aCentre.y);
+    if( aFlipLeftRight )
+        m_Pos.x = aCentre.x - ( m_Pos.x - aCentre.x );
+    else
+        m_Pos.y = aCentre.y - ( m_Pos.y - aCentre.y );
 }
 
 

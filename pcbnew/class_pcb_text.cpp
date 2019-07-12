@@ -135,9 +135,12 @@ void TEXTE_PCB::Rotate( const wxPoint& aRotCentre, double aAngle )
 }
 
 
-void TEXTE_PCB::Flip( const wxPoint& aCentre )
+void TEXTE_PCB::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
-    SetTextY( aCentre.y - ( GetTextPos().y - aCentre.y ) );
+    if( aFlipLeftRight )
+        SetTextX( aCentre.x - ( GetTextPos().x - aCentre.x ) );
+    else
+        SetTextY( aCentre.y - ( GetTextPos().y - aCentre.y ) );
 
     int copperLayerCount = GetBoard()->GetCopperLayerCount();
 
