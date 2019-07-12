@@ -645,12 +645,22 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
                 m_board->Add( dseg, ADD_APPEND );
 
+                int width = c.width.ToPcbUnits();
+                int radius = c.radius.ToPcbUnits();
+
+                // with == 0 means filled circle
+                if( width <= 0 )
+                {
+                    width = radius;
+                    radius = radius / 2;
+                }
+
                 dseg->SetShape( S_CIRCLE );
                 dseg->SetTimeStamp( EagleTimeStamp( gr ) );
                 dseg->SetLayer( layer );
                 dseg->SetStart( wxPoint( kicad_x( c.x ), kicad_y( c.y ) ) );
-                dseg->SetEnd( wxPoint( kicad_x( c.x + c.radius ), kicad_y( c.y ) ) );
-                dseg->SetWidth( c.width.ToPcbUnits() );
+                dseg->SetEnd( wxPoint( kicad_x( c.x ) + radius, kicad_y( c.y ) ) );
+                dseg->SetWidth( width );
             }
             m_xpath->pop();
         }
