@@ -1199,12 +1199,15 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
         zone->SetDoNotAllowCopperPour( true );
         zone->SetHatchStyle( ZONE_CONTAINER::NO_HATCH );
     }
+    else if( p.pour == EPOLYGON::HATCH )
+    {
+        int spacing = p.spacing ? p.spacing->ToPcbUnits() : 50 * IU_PER_MILS;
 
-    // if spacing is set the zone should be hatched
-    // However, use the default hatch step, p.spacing value has no meaning for KiCad
-    // TODO: see if this parameter is related to a grid fill option.
-    if( p.spacing )
-        zone->SetHatch( ZONE_CONTAINER::DIAGONAL_EDGE, zone->GetDefaultHatchPitch(), true );
+        zone->SetFillMode( ZFM_HATCH_PATTERN );
+        zone->SetHatchFillTypeThickness( p.width.ToPcbUnits() );
+        zone->SetHatchFillTypeGap( spacing - p.width.ToPcbUnits() );
+        zone->SetHatchFillTypeOrientation( 0 );
+    }
 
     // We divide the thickness by half because we are tracing _inside_ the zone outline
     // This means the radius of curvature will be twice the size for an equivalent EAGLE zone
