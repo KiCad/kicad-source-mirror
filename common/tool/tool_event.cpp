@@ -54,7 +54,7 @@ static const std::string flag2string( int aFlag, const FlagString* aExps )
 void TOOL_EVENT::init()
 {
     // By default only MESSAGEs and Cancels are passed to multiple recipients
-    m_passEvent = m_category == TC_MESSAGE || IsCancelInteractive();
+    m_passEvent = m_category == TC_MESSAGE || IsCancelInteractive() || IsActivate();
 
     m_hasPosition = ( m_category == TC_MOUSE || m_category == TC_COMMAND );
 }
