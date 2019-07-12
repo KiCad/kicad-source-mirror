@@ -1,11 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#ifndef __PANEL_SETUP_FEATURE_CONSTRAINTS_BASE_H__
+#define __PANEL_SETUP_FEATURE_CONSTRAINTS_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -28,10 +29,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel
+class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel 
 {
 	private:
-
+	
 	protected:
 		wxCheckBox* m_OptAllowBlindBuriedVias;
 		wxCheckBox* m_OptAllowMicroVias;
@@ -68,15 +69,16 @@ class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_EdgeClearanceLabel;
 		wxTextCtrl* m_EdgeClearanceCtrl;
 		wxStaticText* m_EdgeClearanceUnits;
-
+		
 		// Virtual event handlers, overide them in your derived class
 		virtual void onChangeOutlineOpt( wxCommandEvent& event ) { event.Skip(); }
-
-
+		
+	
 	public:
-
-		PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		
+		PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL ); 
 		~PANEL_SETUP_FEATURE_CONSTRAINTS_BASE();
-
+	
 };
 
+#endif //__PANEL_SETUP_FEATURE_CONSTRAINTS_BASE_H__

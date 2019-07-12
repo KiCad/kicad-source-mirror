@@ -355,10 +355,9 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
     m_settings.m_ThermalReliefGap = m_antipadClearance.GetValue();
     m_settings.m_ThermalReliefCopperBridge = m_spokeWidth.GetValue();
 
-    if( m_settings.m_ThermalReliefCopperBridge <= m_settings.m_ZoneMinThickness )
+    if( m_settings.m_ThermalReliefCopperBridge < m_settings.m_ZoneMinThickness )
     {
-        DisplayError( this,
-                      _( "Thermal relief spoke must be greater than the minimum width." ) );
+        DisplayError( this, _( "Thermal spoke width cannot be smaller than the minimum width." ) );
         return false;
     }
 

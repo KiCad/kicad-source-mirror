@@ -840,13 +840,18 @@ class SHAPE_POLY_SET : public SHAPE
          *
          * @param aFactor - number of units to offset edges
          * @param aCircleSegmentsCount - number of segments per 360° to use in curve approx
-         * @param aPreseveCorners - If true, use square joints to keep angles preserved
+         * @param aPreserveCorners - If true, use square joints to keep angles preserved
          */
-        void Inflate( int aFactor, int aCircleSegmentsCount, bool aPreseveCorners = false );
+        void Inflate( int aFactor, int aCircleSegmentsCount, bool aPreserveCorners = false );
 
-        void Inflate( int aFactor, bool aPreseveCorners )
+        void Inflate( int aFactor, bool aPreserveCorners )
         {
-            Inflate( aFactor, 32, aPreseveCorners );
+            Inflate( aFactor, 32, aPreserveCorners );
+        }
+
+        void Deflate( int aFactor, int aCircleSegmentsCount, bool aPreserveCorners = false )
+        {
+            Inflate( -aFactor, aPreserveCorners, aPreserveCorners );
         }
 
         ///> Performs outline inflation/deflation, using round corners.

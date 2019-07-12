@@ -552,7 +552,7 @@ void SHAPE_POLY_SET::InflateWithLinkedHoles( int aFactor, int aCircleSegmentsCou
 }
 
 
-void SHAPE_POLY_SET::Inflate( int aFactor, int aCircleSegmentsCount, bool aPreseveCorners )
+void SHAPE_POLY_SET::Inflate( int aFactor, int aCircleSegmentsCount, bool aPreserveCorners )
 {
     // A static table to avoid repetitive calculations of the coefficient
     // 1.0 - cos( M_PI/aCircleSegmentsCount)
@@ -564,7 +564,7 @@ void SHAPE_POLY_SET::Inflate( int aFactor, int aCircleSegmentsCount, bool aPrese
 
     // N.B. using jtSquare here does not create square corners.  They end up mitered by
     // aFactor.  Setting jtMiter and forcing the limit to be aFactor creates sharp corners.
-    JoinType type = aPreseveCorners ? jtMiter : jtRound;
+    JoinType type = aPreserveCorners ? jtMiter : jtRound;
 
     for( const POLYGON& poly : m_polys )
     {

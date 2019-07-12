@@ -672,40 +672,46 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
 {
     m_high_def = m_board->GetDesignSettings().m_MaxError;
     m_low_def = std::min( ARC_LOW_DEF, int( m_high_def*1.5 ) );   // Reasonable value
-    int outline_half_thickness = aZone->GetMinThickness() / 2;
-    int numSegs = std::max( GetArcToSegmentCount( outline_half_thickness, m_high_def, 360.0 ), 6 );
+
+    // Features which are min_width should survive pruning; features that are *less* than
+    // min_width should not.  Therefore we subtract epsilon from the min_width when
+    // deflating/inflating.
+    int half_min_width = aZone->GetMinThickness() / 2;
+    int epsilon = Millimeter2iu( 0.001 );
+    int numSegs = std::max( GetArcToSegmentCount( half_min_width, m_high_def, 360.0 ), 6 );
+
+    std::deque<SHAPE_LINE_CHAIN> thermalSpokes;
+    SHAPE_POLY_SET clearanceHoles;
 
     std::unique_ptr<SHAPE_FILE_IO> dumper( new SHAPE_FILE_IO(
                     s_DumpZonesWhenFilling ? "zones_dump.txt" : "", SHAPE_FILE_IO::IOM_APPEND ) );
 
+    aRawPolys = aSmoothedOutline;
+
     if( s_DumpZonesWhenFilling )
         dumper->BeginGroup( "clipper-zone" );
 
-    SHAPE_POLY_SET solidAreas = aSmoothedOutline;
-    std::deque<SHAPE_LINE_CHAIN> thermalSpokes;
-    SHAPE_POLY_SET clearanceHoles;
-
-    knockoutThermalReliefs( aZone, solidAreas );
+    knockoutThermalReliefs( aZone, aRawPolys );
 
     if( s_DumpZonesWhenFilling )
-        dumper->Write( &solidAreas, "solid-areas-minus-thermal-reliefs" );
+        dumper->Write( &aRawPolys, "solid-areas-minus-thermal-reliefs" );
 
     buildCopperItemClearances( aZone, clearanceHoles );
 
     if( s_DumpZonesWhenFilling )
-        dumper->Write( &solidAreas, "clearance holes" );
+        dumper->Write( &aRawPolys, "clearance holes" );
 
     buildThermalSpokes( aZone, thermalSpokes );
 
     // Create a temporary zone that we can hit-test spoke-ends against.  It's only temporary
     // because the "real" subtract-clearance-holes has to be done after the spokes are added.
     static const bool USE_BBOX_CACHES = true;
-    SHAPE_POLY_SET testAreas = solidAreas;
+    SHAPE_POLY_SET testAreas = aRawPolys;
     testAreas.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
 
-    // Remove areas that don't meet minimum-width criteria
-    testAreas.Inflate( -outline_half_thickness, numSegs, true );
-    testAreas.Inflate( outline_half_thickness, numSegs, true );
+    // Prune features that don't meet minimum-width criteria
+    testAreas.Deflate( half_min_width - epsilon, numSegs, true );
+    testAreas.Inflate( half_min_width - epsilon, numSegs, true );
 
     // Spoke-end-testing is hugely expensive so we generate cached bounding-boxes to speed
     // things up a bit.
@@ -718,7 +724,7 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
         // Hit-test against zone body
         if( testAreas.Contains( testPt, -1, false, true, USE_BBOX_CACHES ) )
         {
-            solidAreas.AddOutline( spoke );
+            aRawPolys.AddOutline( spoke );
             continue;
         }
 
@@ -727,53 +733,49 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
         {
             if( &other != &spoke && other.PointInside( testPt, 1, USE_BBOX_CACHES  ) )
             {
-                solidAreas.AddOutline( spoke );
+                aRawPolys.AddOutline( spoke );
                 break;
             }
         }
     }
 
-    solidAreas.Simplify( SHAPE_POLY_SET::PM_FAST );
+    aRawPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
 
     if( s_DumpZonesWhenFilling )
-        dumper->Write( &solidAreas, "solid-areas-with-thermal-spokes" );
+        dumper->Write( &aRawPolys, "solid-areas-with-thermal-spokes" );
 
-    solidAreas.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
-    solidAreas.Inflate( -outline_half_thickness, numSegs );
+    aRawPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
+    // Prune features that don't meet minimum-width criteria
+    aRawPolys.Deflate( half_min_width - epsilon, numSegs );
 
     if( s_DumpZonesWhenFilling )
-        dumper->Write( &solidAreas, "solid-areas-before-hatching" );
+        dumper->Write( &aRawPolys, "solid-areas-before-hatching" );
 
     // Now remove the non filled areas due to the hatch pattern
     if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )
-        addHatchFillTypeOnZone( aZone, solidAreas );
+        addHatchFillTypeOnZone( aZone, aRawPolys );
 
     if( s_DumpZonesWhenFilling )
-        dumper->Write( &solidAreas, "solid-areas-after-hatching" );
+        dumper->Write( &aRawPolys, "solid-areas-after-hatching" );
 
-    SHAPE_POLY_SET areas_fractured = solidAreas;
-
-    // Inflate polygon to recreate the polygon (without the too narrow areas)
-    // if the filled polygons have a outline thickness = 0
-    int inflate_value = aZone->GetFilledPolysUseThickness() ? 0 : outline_half_thickness;
-
-    if( inflate_value <= Millimeter2iu( 0.001 ) )    // avoid very small outline thickness
-        inflate_value = 0;
-
-    if( inflate_value )
+    // Re-inflate after pruning of areas that don't meet minimum-width criteria
+    if( aZone->GetFilledPolysUseThickness() )
     {
-        areas_fractured.Simplify( SHAPE_POLY_SET::PM_FAST );
-        areas_fractured.Inflate( outline_half_thickness, 16 );
+        // if we're stroking the zone with a min-width stroke then this will naturally
+        // inflate the zone
+    }
+    else if( half_min_width - epsilon > epsilon ) // avoid very small outline thickness
+    {
+        aRawPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
+        aRawPolys.Inflate( half_min_width - epsilon, 16 );
     }
 
-    areas_fractured.Fracture( SHAPE_POLY_SET::PM_FAST );
+    aRawPolys.Fracture( SHAPE_POLY_SET::PM_FAST );
 
     if( s_DumpZonesWhenFilling )
-        dumper->Write( &areas_fractured, "areas_fractured" );
+        dumper->Write( &aRawPolys, "areas_fractured" );
 
-    aFinalPolys = areas_fractured;
-
-    aRawPolys = aFinalPolys;
+    aFinalPolys = aRawPolys;
 
     if( s_DumpZonesWhenFilling )
         dumper->EndGroup();
@@ -802,12 +804,17 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPol
     }
     else
     {
+        // Features which are min_width should survive pruning; features that are *less* than
+        // min_width should not.  Therefore we subtract epsilon from the min_width when
+        // deflating/inflating.
+        int half_min_width = aZone->GetMinThickness() / 2;
+        int epsilon = Millimeter2iu( 0.001 );
+        int numSegs = std::max( GetArcToSegmentCount( half_min_width, m_high_def, 360.0 ), 6 );
+
         if( m_brdOutlinesValid )
             smoothedPoly.BooleanIntersection( m_boardOutline, SHAPE_POLY_SET::PM_FAST );
 
-        int numSegs = std::max( GetArcToSegmentCount( aZone->GetMinThickness() / 2,
-                                m_board->GetDesignSettings().m_MaxError, 360.0 ), 6 );
-        smoothedPoly.Inflate( -aZone->GetMinThickness() / 2, numSegs );
+        smoothedPoly.Deflate( half_min_width - epsilon, numSegs );
 
         // Remove the non filled areas due to the hatch pattern
         if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )
@@ -1055,7 +1062,7 @@ void ZONE_FILLER::addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, SHAPE_POL
     // Clamp holes to the area of filled zones with a outline thickness
     // > aZone->GetMinThickness() to be sure the thermal pads can be built
     int outline_margin = std::max( (aZone->GetMinThickness()*10)/9, linethickness/2 );
-    filledPolys.Inflate( -outline_margin, 16 );
+    filledPolys.Deflate( outline_margin, 16 );
     holes.BooleanIntersection( filledPolys, SHAPE_POLY_SET::PM_FAST );
 
     if( orientation != 0.0 )
