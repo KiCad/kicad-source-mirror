@@ -660,6 +660,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
     {
         module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
         m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, module );
+        m_toolMgr->RunAction( ACTIONS::refreshPreview );
     }
     else if( aEvent.HasPosition() )
         m_toolMgr->RunAction( PCB_ACTIONS::cursorClick );
@@ -750,7 +751,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
             m_menu.ShowContextMenu(  selection()  );
         }
 
-        else if( module && evt->IsMotion() )
+        else if( module && ( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) ) )
         {
             module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
             selection().SetReferencePoint( cursorPos );
