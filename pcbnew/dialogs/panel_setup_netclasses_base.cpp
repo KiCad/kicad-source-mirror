@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -95,7 +95,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassesPane->SetSizer( sbSizerUpper );
 	m_netclassesPane->Layout();
 	sbSizerUpper->Fit( m_netclassesPane );
-	bMargins->Add( m_netclassesPane, 1, wxALIGN_TOP|wxALL|wxEXPAND, 5 );
+	bMargins->Add( m_netclassesPane, 1, wxALL|wxEXPAND, 5 );
 
 	m_membershipPane = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxStaticBoxSizer* sbMembership;
@@ -237,10 +237,10 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_membershipPane->SetSizer( sbMembership );
 	m_membershipPane->Layout();
 	sbMembership->Fit( m_membershipPane );
-	bMargins->Add( m_membershipPane, 1, wxALIGN_BOTTOM|wxALL|wxEXPAND, 5 );
+	bMargins->Add( m_membershipPane, 1, wxALL|wxEXPAND, 5 );
 
 
-	bpanelNetClassesSizer->Add( bMargins, 1, wxALIGN_BOTTOM|wxALIGN_TOP|wxEXPAND|wxRIGHT, 5 );
+	bpanelNetClassesSizer->Add( bMargins, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( bpanelNetClassesSizer );
