@@ -1198,9 +1198,10 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly ) const
  * Convert the zone filled areas polygons to polygons
  * inflated (optional) by max( aClearanceValue, the zone clearance)
  * and copy them in aCornerBuffer
- * param aClearanceValue = the clearance around polygons
- * param aAddClearance = true to add a clearance area to the polygon
- *                      false to create the outline polygon.
+ * @param aMinClearanceValue the min clearance around outlines
+ * @param aUseNetClearance   true to use a clearance which is the max value between
+ *                           aMinClearanceValue and the net clearance
+ *                           false to use aMinClearanceValue only
  */
 void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
         SHAPE_POLY_SET& aCornerBuffer, int aMinClearanceValue, bool aUseNetClearance ) const
@@ -1215,6 +1216,7 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
     if( aUseNetClearance && IsOnCopperLayer() )
     {
         clearance = GetClearance();
+
         if( aMinClearanceValue > clearance )
             clearance = aMinClearanceValue;
     }
@@ -1223,7 +1225,7 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
     // holes are linked to the main outline, so only one polygon is created.
     if( clearance )
     {
-        auto board = GetBoard();
+        BOARD* board = GetBoard();
         int maxError = ARC_HIGH_DEF;
 
         if( board )
@@ -1232,6 +1234,7 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
         int segCount = std::max( GetArcToSegmentCount( clearance, maxError, 360.0 ), 3 );
         polybuffer.Inflate( clearance, segCount );
     }
+
     polybuffer.Fracture( SHAPE_POLY_SET::PM_FAST );
     aCornerBuffer.Append( polybuffer );
 }

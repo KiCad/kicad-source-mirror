@@ -236,7 +236,7 @@ const EDA_RECT WS_DRAW_ITEM_POLYPOLYGONS::GetBoundingBox() const
 
 bool WS_DRAW_ITEM_POLYPOLYGONS::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return m_Polygons.Contains( aPosition );
+    return m_Polygons.Collide( aPosition, aAccuracy );
 }
 
 

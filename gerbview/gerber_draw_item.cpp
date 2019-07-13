@@ -776,12 +776,12 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos, int aAccuracy ) const
     {
     case GBR_POLYGON:
         poly = m_Polygon;
-        return poly.Contains( VECTOR2I( ref_pos ), 0 );
+        return poly.Contains( VECTOR2I( ref_pos ), 0, aAccuracy );
 
     case GBR_SPOT_POLY:
         poly = GetDcodeDescr()->m_Polygon;
         poly.Move( m_Start );
-        return poly.Contains( VECTOR2I( ref_pos ), 0 );
+        return poly.Contains( VECTOR2I( ref_pos ), 0, aAccuracy );
 
     case GBR_SPOT_RECT:
         return GetBoundingBox().Contains( aRefPos );
@@ -828,12 +828,7 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos, int aAccuracy ) const
     case GBR_SPOT_MACRO:
         // Aperture macro polygons are already in absolute coordinates
         auto p = GetDcodeDescr()->GetMacro()->GetApertureMacroShape( this, m_Start );
-        for( int i = 0; i < p->OutlineCount(); ++i )
-        {
-            if( p->Contains( VECTOR2I( aRefPos ), i ) )
-                return true;
-        }
-        return false;
+        return p->Contains( VECTOR2I( aRefPos ), -1, aAccuracy );
     }
 
     // TODO: a better analyze of the shape (perhaps create a D_CODE::HitTest for flashed items)

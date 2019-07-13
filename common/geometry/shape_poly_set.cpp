@@ -1191,28 +1191,18 @@ bool SHAPE_POLY_SET::PointOnEdge( const VECTOR2I& aP ) const
 
 bool SHAPE_POLY_SET::Collide( const SEG& aSeg, int aClearance ) const
 {
-
-    SHAPE_POLY_SET polySet = SHAPE_POLY_SET( *this );
-
-    // Inflate the polygon if necessary.
-    if( aClearance > 0 )
-    {
-        // fixme: the number of arc segments should not be hardcoded
-        polySet.Inflate( aClearance, 8 );
-    }
-
-    // We are going to check to see if the segment crosses an external
-    // boundary.  However, if the full segment is inside the polyset, this
-    // will not be true.  So we first test to see if one of the points is
-    // inside.  If true, then we collide
-    if( polySet.Contains( aSeg.A ) )
+    // We are going to check to see if the segment crosses an external boundary.  However, if
+    // the full segment is inside the polyset, this will not be true.  So we first test to see
+    // if one of the points is inside.  If true, then we collide.  Use an accuracy of "1" to
+    // indicate that a collision with the edge should be treated the same as inside.
+    if( Collide( aSeg.A, 1 ) )
         return true;
 
-    for( SEGMENT_ITERATOR iterator = polySet.IterateSegmentsWithHoles(); iterator; iterator++ )
+    for( SEGMENT_ITERATOR it = ( (SHAPE_POLY_SET*) this )->IterateSegmentsWithHoles(); it; it++ )
     {
-        SEG polygonEdge = *iterator;
+        SEG polygonEdge = *it;
 
-        if( polygonEdge.Intersect( aSeg, true ) )
+        if( polygonEdge.Collide( aSeg, aClearance ) )
             return true;
     }
 
@@ -1222,17 +1212,7 @@ bool SHAPE_POLY_SET::Collide( const SEG& aSeg, int aClearance ) const
 
 bool SHAPE_POLY_SET::Collide( const VECTOR2I& aP, int aClearance ) const
 {
-    SHAPE_POLY_SET polySet = SHAPE_POLY_SET( *this );
-
-    // Inflate the polygon if necessary.
-    if( aClearance > 0 )
-    {
-        // fixme: the number of arc segments should not be hardcoded
-        polySet.Inflate( aClearance, 8 );
-    }
-
-    // There is a collision if and only if the point is inside of the polygon.
-    return polySet.Contains( aP );
+    return Contains( aP, -1, aClearance );
 }
 
 
@@ -1403,20 +1383,20 @@ void SHAPE_POLY_SET::BuildBBoxCaches()
 }
 
 
-bool SHAPE_POLY_SET::Contains( const VECTOR2I& aP, int aSubpolyIndex, bool aIgnoreHoles,
-                               bool aIgnoreEdges, bool aUseBBoxCaches ) const
+bool SHAPE_POLY_SET::Contains( const VECTOR2I& aP, int aSubpolyIndex, int aAccuracy,
+                               bool aUseBBoxCaches ) const
 {
-    if( m_polys.size() == 0 ) // empty set?
+    if( m_polys.empty() )
         return false;
 
     // If there is a polygon specified, check the condition against that polygon
     if( aSubpolyIndex >= 0 )
-        return containsSingle( aP, aSubpolyIndex, aIgnoreHoles, aIgnoreEdges, aUseBBoxCaches );
+        return containsSingle( aP, aSubpolyIndex, aAccuracy, aUseBBoxCaches );
 
     // In any other case, check it against all polygons in the set
     for( int polygonIdx = 0; polygonIdx < OutlineCount(); polygonIdx++ )
     {
-        if( containsSingle( aP, polygonIdx, aIgnoreHoles, aIgnoreEdges, aUseBBoxCaches ) )
+        if( containsSingle( aP, polygonIdx, aAccuracy, aUseBBoxCaches ) )
             return true;
     }
 
@@ -1442,37 +1422,27 @@ void SHAPE_POLY_SET::RemoveVertex( VERTEX_INDEX aIndex )
 }
 
 
-bool SHAPE_POLY_SET::containsSingle( const VECTOR2I& aP, int aSubpolyIndex, bool aIgnoreHoles,
-                                     bool aIgnoreEdges, bool aUseBBoxCaches ) const
+bool SHAPE_POLY_SET::containsSingle( const VECTOR2I& aP, int aSubpolyIndex, int aAccuracy,
+                                     bool aUseBBoxCaches ) const
 {
     // Check that the point is inside the outline
-    if( pointInPolygon( aP, m_polys[aSubpolyIndex][0], aIgnoreEdges ) )
+    if( m_polys[aSubpolyIndex][0].PointInside( aP, aAccuracy ) )
     {
-        if( !aIgnoreHoles )
+        // Check that the point is not in any of the holes
+        for( int holeIdx = 0; holeIdx < HoleCount( aSubpolyIndex ); holeIdx++ )
         {
-            // Check that the point is not in any of the holes
-            for( int holeIdx = 0; holeIdx < HoleCount( aSubpolyIndex ); holeIdx++ )
-            {
-                const SHAPE_LINE_CHAIN& hole = CHole( aSubpolyIndex, holeIdx );
+            const SHAPE_LINE_CHAIN& hole = CHole( aSubpolyIndex, holeIdx );
 
-                // If the point is inside a hole (and not on its edge),
-                // it is outside of the polygon
-                if( pointInPolygon( aP, hole, aIgnoreEdges, aUseBBoxCaches ) )
-                    return false;
-            }
+            // If the point is inside a hole it is outside of the polygon.  Do not use aAccuracy
+            // here as it's meaning would be inverted.
+            if( hole.PointInside( aP, 1, aUseBBoxCaches ) )
+                return false;
         }
 
         return true;
     }
 
     return false;
-}
-
-
-bool SHAPE_POLY_SET::pointInPolygon( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aPath,
-                                     bool aIgnoreEdges, bool aUseBBoxCaches ) const
-{
-    return aPath.PointInside( aP, aIgnoreEdges ? 1 : 0, aUseBBoxCaches );
 }
 
 
@@ -1526,11 +1496,11 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::FilletPolygon( unsigned int aRadius,
 
 int SHAPE_POLY_SET::DistanceToPolygon( VECTOR2I aPoint, int aPolygonIndex )
 {
-    // We calculate the min dist between the segment and each outline segment
-    // However, if the segment to test is inside the outline, and does not cross
-    // any edge, it can be seen outside the polygon.
-    // Therefore test if a segment end is inside ( testing only one end is enough )
-    if( containsSingle( aPoint, aPolygonIndex ) )
+    // We calculate the min dist between the segment and each outline segment.  However, if the
+    // segment to test is inside the outline, and does not cross any edge, it can be seen outside
+    // the polygon.  Therefore test if a segment end is inside (testing only one end is enough).
+    // Use an accuracy of "1" to say that we don't care if it's exactly on the edge or not.
+    if( containsSingle( aPoint, aPolygonIndex, 1 ) )
         return 0;
 
     SEGMENT_ITERATOR iterator = IterateSegmentsWithHoles( aPolygonIndex );
@@ -1552,13 +1522,13 @@ int SHAPE_POLY_SET::DistanceToPolygon( VECTOR2I aPoint, int aPolygonIndex )
 }
 
 
-int SHAPE_POLY_SET::DistanceToPolygon( SEG aSegment, int aPolygonIndex, int aSegmentWidth )
+int SHAPE_POLY_SET::DistanceToPolygon( const SEG& aSegment, int aPolygonIndex, int aSegmentWidth )
 {
-    // We calculate the min dist between the segment and each outline segment
-    // However, if the segment to test is inside the outline, and does not cross
-    // any edge, it can be seen outside the polygon.
-    // Therefore test if a segment end is inside ( testing only one end is enough )
-    if( containsSingle( aSegment.A, aPolygonIndex ) )
+    // We calculate the min dist between the segment and each outline segment.  However, if the
+    // segment to test is inside the outline, and does not cross any edge, it can be seen outside
+    // the polygon.  Therefore test if a segment end is inside (testing only one end is enough).
+    // Use an accuracy of "1" to say that we don't care if it's exactly on the edge or not.
+    if( containsSingle( aSegment.A, aPolygonIndex, 1 ) )
         return 0;
 
     SEGMENT_ITERATOR iterator = IterateSegmentsWithHoles( aPolygonIndex );

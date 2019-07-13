@@ -111,9 +111,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
     bool filledPolyWithOutline = not m_board->GetDesignSettings().m_ZoneUseNoOutlineInFill;
 
     if( ADVANCED_CFG::GetCfg().m_forceThickOutlinesInZones )
-    {
         filledPolyWithOutline = true;
-    }
 
     std::unique_lock<std::mutex> lock( connectivity->GetLock(), std::try_to_lock );
 
@@ -722,7 +720,7 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
         const VECTOR2I& testPt = spoke.CPoint( 3 );
 
         // Hit-test against zone body
-        if( testAreas.Contains( testPt, -1, false, true, USE_BBOX_CACHES ) )
+        if( testAreas.Contains( testPt, -1, 1, USE_BBOX_CACHES ) )
         {
             aRawPolys.AddOutline( spoke );
             continue;
@@ -782,7 +780,8 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
 }
 
 
-/* Build the filled solid areas data from real outlines (stored in m_Poly)
+/*
+ * Build the filled solid areas data from real outlines (stored in m_Poly)
  * The solid areas can be more than one on copper layers, and do not have holes
  * ( holes are linked by overlapping segments to the main outline)
  */
@@ -791,7 +790,8 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPol
 {
     SHAPE_POLY_SET smoothedPoly;
 
-    /* convert outlines + holes to outlines without holes (adding extra segments if necessary)
+    /*
+     * convert outlines + holes to outlines without holes (adding extra segments if necessary)
      * m_Poly data is expected normalized, i.e. NormalizeAreaOutlines was used after building
      * this zone
      */

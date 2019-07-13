@@ -844,11 +844,6 @@ class SHAPE_POLY_SET : public SHAPE
          */
         void Inflate( int aFactor, int aCircleSegmentsCount, bool aPreserveCorners = false );
 
-        void Inflate( int aFactor, bool aPreserveCorners )
-        {
-            Inflate( aFactor, 32, aPreserveCorners );
-        }
-
         void Deflate( int aFactor, int aCircleSegmentsCount, bool aPreserveCorners = false )
         {
             Inflate( -aFactor, aPreserveCorners, aPreserveCorners );
@@ -961,7 +956,7 @@ class SHAPE_POLY_SET : public SHAPE
          * @return bool - true if there is a collision, false in any other case.
          */
         bool CollideVertex( const VECTOR2I& aPoint, VERTEX_INDEX& aClosestVertex,
-                int aClearance = 0 );
+                            int aClearance = 0 );
 
         /**
          * Function CollideEdge
@@ -974,7 +969,7 @@ class SHAPE_POLY_SET : public SHAPE
          * @return bool - true if there is a collision, false in any other case.
          */
         bool CollideEdge( const VECTOR2I& aPoint, VERTEX_INDEX& aClosestVertex,
-                int aClearance = 0 );
+                          int aClearance = 0 );
 
         /**
          * Constructs BBoxCaches for Contains(), below.  These caches MUST be built before a
@@ -987,16 +982,13 @@ class SHAPE_POLY_SET : public SHAPE
          *
          * @param aP is the point to check
          * @param aSubpolyIndex is the subpolygon to check, or -1 to check all
-         * @param aIgnoreHoles controls whether or not internal holes are considered
-         * @param aIgnoreEdges controls whether or not a check for the point lying exactly on
-         *                     the polygon edge is made
          * @param aUseBBoxCaches gives faster performance when multiple calls are made with no
          *                       editing in between, but the caller MUST cache the bbox caches
          *                       before calling (via BuildBBoxCaches(), above)
          * @return true if the polygon contains the point
          */
-        bool Contains( const VECTOR2I& aP, int aSubpolyIndex = -1, bool aIgnoreHoles = false,
-                       bool aIgnoreEdges = false, bool aUseBBoxCaches = false ) const;
+        bool Contains( const VECTOR2I& aP, int aSubpolyIndex = -1, int aAccuracy = 0,
+                       bool aUseBBoxCaches = false ) const;
 
         ///> Returns true if the set is empty (no polygons at all)
         bool IsEmpty() const
@@ -1102,7 +1094,7 @@ class SHAPE_POLY_SET : public SHAPE
          *                  aIndex-th polygon. If the point is contained in the polygon, the
          *                  distance is zero.
          */
-        int DistanceToPolygon( SEG aSegment, int aIndex, int aSegmentWidth = 0 );
+        int DistanceToPolygon( const SEG& aSegment, int aIndex, int aSegmentWidth = 0 );
 
         /**
          * Function DistanceToPolygon
@@ -1153,9 +1145,6 @@ class SHAPE_POLY_SET : public SHAPE
         void booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET& aShape,
                         const SHAPE_POLY_SET& aOtherShape, POLYGON_MODE aFastMode );
 
-        bool pointInPolygon( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aPath,
-                             bool aIgnoreEdges, bool aUseBBoxCaches = false ) const;
-
         /**
          * containsSingle function
          * Checks whether the point aP is inside the aSubpolyIndex-th polygon of the polyset. If
@@ -1164,17 +1153,15 @@ class SHAPE_POLY_SET : public SHAPE
          *                       the aSubpolyIndex-th polygon will be tested.
          * @param  aSubpolyIndex is an integer specifying which polygon in the set has to be
          *                       checked.
-         * @param  aIgnoreHoles  can be set to true to ignore internal holes in the polygon
-         * @param  aIgnoreEdges  can be set to true to skip checking whether or not the point
-         *                       lies directly on the edge
+         * @param  aAccuracy     accuracy in internal units
          * @param aUseBBoxCaches gives faster performance when multiple calls are made with no
          *                       editing in between, but the caller MUST cache the bbox caches
          *                       before calling (via BuildBBoxCaches(), above)
          * @return bool - true if aP is inside aSubpolyIndex-th polygon; false in any other
          *         case.
          */
-        bool containsSingle( const VECTOR2I& aP, int aSubpolyIndex, bool aIgnoreHoles = false,
-                             bool aIgnoreEdges = false, bool aUseBBoxCaches = false ) const;
+        bool containsSingle( const VECTOR2I& aP, int aSubpolyIndex, int aAccuracy,
+                             bool aUseBBoxCaches = false ) const;
 
         /**
          * Operations ChamferPolygon and FilletPolygon are computed under the private chamferFillet

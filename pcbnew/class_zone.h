@@ -248,18 +248,6 @@ public:
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
     /**
-     * Function HitTest
-     * tests if a point is inside the zone area, i.e. inside the main outline
-     * and outside holes.
-     * @param aPosition : the wxPoint to test
-     * @return bool - true if a hit, else false
-     */
-    bool HitTestInsideZone( const wxPoint& aPosition ) const
-    {
-        return m_Poly->Contains( VECTOR2I( aPosition ), 0 );
-    }
-
-    /**
      * Function HitTestFilledArea
      * tests if the given wxPoint is within the bounds of a filled area of this zone.
      * @param aRefPos A wxPoint to test
@@ -575,8 +563,7 @@ public:
 
     /**
      * Function GetSmoothedPoly
-     * returns a pointer to the corner-smoothed version of
-     * m_Poly if it exists, otherwise it returns m_Poly.
+     * returns a pointer to the corner-smoothed version of m_Poly.
      * @return SHAPE_POLY_SET* - pointer to the polygon.
      */
     bool BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly ) const;

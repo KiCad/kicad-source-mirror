@@ -1186,7 +1186,7 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     // We trace the zone such that the copper is completely inside.
     if( p.width.ToPcbUnits() > 0 )
     {
-        polygon.Inflate( p.width.ToPcbUnits() / 2, true );
+        polygon.Inflate( p.width.ToPcbUnits() / 2, 32, true );
         polygon.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
     }
 

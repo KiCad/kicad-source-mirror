@@ -852,10 +852,8 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     int zone_margin = 0;
 #endif
 
-    for( int ii = 0; ii < aBoard->GetAreaCount(); ii++ )
+    for( ZONE_CONTAINER* zone : aBoard->Zones() )
     {
-        ZONE_CONTAINER* zone = aBoard->GetArea( ii );
-
         if( zone->GetLayer() != layer )
             continue;
 

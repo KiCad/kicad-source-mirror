@@ -448,7 +448,7 @@ void MODULE::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >&
 {
     wxString msg;
 
-    aList.push_back( MSG_PANEL_ITEM( m_Reference->GetShownText(), m_Value->GetShownText(), DARKCYAN ) );
+    aList.emplace_back( MSG_PANEL_ITEM( m_Reference->GetShownText(), m_Value->GetShownText(), DARKCYAN ) );
 
     // Display last date the component was edited (useful in Module Editor).
     wxDateTime date( static_cast<time_t>( m_LastEditTime ) );
@@ -459,18 +459,18 @@ void MODULE::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >&
     else
         msg = _( "Unknown" );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Last Change" ), msg, BROWN ) );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "Last Change" ), msg, BROWN ) );
 
     // display schematic path
-    aList.push_back( MSG_PANEL_ITEM( _( "Netlist Path" ), m_Path, BROWN ) );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "Netlist Path" ), m_Path, BROWN ) );
 
     // display the board side placement
-    aList.push_back( MSG_PANEL_ITEM( _( "Board Side" ),
-                     IsFlipped()? _( "Back (Flipped)" ) : _( "Front" ), RED ) );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "Board Side" ),
+                        IsFlipped()? _( "Back (Flipped)" ) : _( "Front" ), RED ) );
 
 
     msg.Printf( wxT( "%zu" ), m_pads.size() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Pads" ), msg, BLUE ) );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "Pads" ), msg, BLUE ) );
 
     msg = wxT( ".." );
 
@@ -480,10 +480,10 @@ void MODULE::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >&
     if( m_ModuleStatus & MODULE_is_PLACED )
         msg[1] = 'P';
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Status" ), msg, MAGENTA ) );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "Status" ), msg, MAGENTA ) );
 
     msg.Printf( wxT( "%.1f" ), GetOrientationDegrees() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Rotation" ), msg, BROWN ) );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "Rotation" ), msg, BROWN ) );
 
     // Controls on right side of the dialog
     switch( m_Attributs & 255 )
@@ -505,8 +505,8 @@ void MODULE::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >&
         break;
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Attributes" ), msg, BROWN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), FROM_UTF8( m_fpid.Format().c_str() ), BLUE ) );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "Attributes" ), msg, BROWN ) );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "Footprint" ), FROM_UTF8( m_fpid.Format().c_str() ), BLUE ) );
 
     if( m_3D_Drawings.empty() )
         msg = _( "No 3D shape" );
@@ -515,12 +515,12 @@ void MODULE::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >&
 
     // Search the first active 3D shape in list
 
-    aList.push_back( MSG_PANEL_ITEM( _( "3D-Shape" ), msg, RED ) );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "3D-Shape" ), msg, RED ) );
 
     wxString doc, keyword;
-    doc.Printf( _( "Doc: %s" ), GetChars( m_Doc ) );
-    keyword.Printf( _( "Key Words: %s" ), GetChars( m_KeyWord ) );
-    aList.push_back( MSG_PANEL_ITEM( doc, keyword, BLACK ) );
+    doc.Printf( _( "Doc: %s" ), m_Doc );
+    keyword.Printf( _( "Key Words: %s" ), m_KeyWord );
+    aList.emplace_back( MSG_PANEL_ITEM( doc, keyword, BLACK ) );
 }
 
 
@@ -533,10 +533,7 @@ bool MODULE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
 bool MODULE::HitTestAccurate( const wxPoint& aPosition, int aAccuracy ) const
 {
-    SHAPE_POLY_SET shape = GetBoundingPoly();
-
-    shape.Inflate( aAccuracy, 4 );
-    return shape.Contains( aPosition, -1, true );
+    return GetBoundingPoly().Collide( aPosition, aAccuracy );
 }
 
 

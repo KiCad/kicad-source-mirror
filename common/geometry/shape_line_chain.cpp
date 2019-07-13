@@ -392,9 +392,16 @@ bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aPt, int aAccuracy, bool aUs
         }
     }
 
-    // If aAccuracy is > 0 then by definition we don't care whether or not the point is
-    // *exactly* on the edge -- which saves us considerable processing time
-    return inside && ( aAccuracy > 0 || !PointOnEdge( aPt ) );
+    // If accuracy is 0 then we need to make sure the point isn't actually on the edge.
+    // If accuracy is 1 then we don't really care whether or not the point is *exactly* on the
+    // edge, so we skip edge processing for performance.
+    // If accuracy is > 1, then we use "OnEdge(accuracy-1)" as a proxy for "Inside(accuracy)".
+    if( aAccuracy == 0 )
+        return inside && !PointOnEdge( aPt );
+    else if( aAccuracy == 1 )
+        return inside;
+    else
+        return inside || PointOnEdge( aPt, aAccuracy - 1 );
 }
 
 
