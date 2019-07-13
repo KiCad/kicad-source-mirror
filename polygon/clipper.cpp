@@ -5370,7 +5370,7 @@ void ClipperOffset::OffsetPoint( int j, int& k, JoinType jointype )
             if( r >= m_miterLim )
                 DoMiter( j, k, r );
             else
-                DoSquare( j, k );
+                DoRound( j, k );
 
             break;
         }
