@@ -117,7 +117,7 @@ public:
 
     void PlotDimension( DIMENSION* Dimension );
     void PlotPcbTarget( PCB_TARGET* PtMire );
-    void PlotFilledAreas( ZONE_CONTAINER* aZone );
+    void PlotFilledAreas( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aPolysList );
     void PlotTextePcb( TEXTE_PCB* pt_texte );
     void PlotDrawSegment( DRAWSEGMENT* PtSegm );
 

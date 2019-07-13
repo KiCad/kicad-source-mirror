@@ -781,7 +781,13 @@ bool PNS_KICAD_IFACE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
     if( !aZone->GetIsKeepout() || !aZone->GetDoNotAllowTracks() )
         return false;
 
-    aZone->BuildSmoothedPoly( poly );
+    // Some intersecting zones, despite being on the same layer with the same net, cannot be
+    // merged due to other parameters such as fillet radius.  The copper pour will end up
+    // effectively merged though, so we want to keep the corners of such intersections sharp.
+    std::set<VECTOR2I> colinearCorners;
+    aZone->GetColinearCorners( m_board, colinearCorners );
+
+    aZone->BuildSmoothedPoly( poly, &colinearCorners );
     poly.CacheTriangulation();
 
     if( !poly.IsTriangulationUpToDate() )

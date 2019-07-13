@@ -611,11 +611,8 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
 }
 
 
-void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
+void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& polysList )
 {
-    //Plot areas (given by .m_FilledPolysList member) in a zone
-    const SHAPE_POLY_SET& polysList = aZone->GetFilledPolysList();
-
     if( polysList.IsEmpty() )
         return;
 

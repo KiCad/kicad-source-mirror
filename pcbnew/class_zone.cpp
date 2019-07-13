@@ -1158,7 +1158,34 @@ void ZONE_CONTAINER::CacheTriangulation()
 }
 
 
-bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly ) const
+/*
+ * Some intersecting zones, despite being on the same layer with the same net, cannot be
+ * merged due to other parameters such as fillet radius.  The copper pour will end up
+ * effectively merged though, so we want to keep the corners of such intersections sharp.
+ */
+void ZONE_CONTAINER::GetColinearCorners( BOARD* aBoard, std::set<VECTOR2I>& aCorners )
+{
+    int epsilon = Millimeter2iu( 0.001 );
+
+    for( ZONE_CONTAINER* candidate : aBoard->Zones() )
+    {
+        if( candidate != this
+            && candidate->GetNetCode() == GetNetCode()
+            && candidate->GetLayerSet() == GetLayerSet()
+            && candidate->GetIsKeepout() == GetIsKeepout() )
+        {
+            for( auto iter = m_Poly->CIterate(); iter; iter++ )
+            {
+                if( candidate->m_Poly->Collide( iter.Get(), epsilon ) )
+                    aCorners.insert( VECTOR2I( iter.Get() ) );
+            }
+        }
+    }
+}
+
+
+bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly,
+                                        std::set<VECTOR2I>* aPreserveCorners ) const
 {
     if( GetNumCorners() <= 2 )  // malformed zone. polygon calculations do not like it ...
         return false;
@@ -1167,7 +1194,7 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly ) const
     switch( m_cornerSmoothingType )
     {
     case ZONE_SETTINGS::SMOOTHING_CHAMFER:
-        aSmoothedPoly = m_Poly->Chamfer( m_cornerRadius );
+        aSmoothedPoly = m_Poly->Chamfer( m_cornerRadius, aPreserveCorners );
         break;
 
     case ZONE_SETTINGS::SMOOTHING_FILLET:
@@ -1178,7 +1205,7 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly ) const
         if( board )
             maxError = board->GetDesignSettings().m_MaxError;
 
-        aSmoothedPoly = m_Poly->Fillet( m_cornerRadius, maxError );
+        aSmoothedPoly = m_Poly->Fillet( m_cornerRadius, maxError, aPreserveCorners );
         break;
     }
     default:
@@ -1187,7 +1214,7 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly ) const
         // We can avoid issues by creating a very small chamfer which remove acute angles,
         // or left it without chamfer and use only CPOLYGONS_LIST::InflateOutline to create
         // clearance areas
-        aSmoothedPoly = m_Poly->Chamfer( Millimeter2iu( 0.0 ) );
+        aSmoothedPoly = m_Poly->Chamfer( Millimeter2iu( 0.0 ), aPreserveCorners );
         break;
     }
 
@@ -1202,13 +1229,16 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly ) const
  * @param aUseNetClearance   true to use a clearance which is the max value between
  *                           aMinClearanceValue and the net clearance
  *                           false to use aMinClearanceValue only
+ * @param aPreserveCorners   an optional set of corners which should not be chamfered/filleted
  */
-void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
-        SHAPE_POLY_SET& aCornerBuffer, int aMinClearanceValue, bool aUseNetClearance ) const
+void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                   int aMinClearanceValue,
+                                                   bool aUseNetClearance,
+                                                   std::set<VECTOR2I>* aPreserveCorners ) const
 {
     // Creates the zone outline polygon (with holes if any)
     SHAPE_POLY_SET polybuffer;
-    BuildSmoothedPoly( polybuffer );
+    BuildSmoothedPoly( polybuffer, aPreserveCorners );
 
     // add clearance to outline
     int clearance = aMinClearanceValue;

@@ -67,7 +67,9 @@ private:
      *  filled copper area polygon (without clearance areas
      * @param aPcb: the current board
      */
-    void computeRawFilledArea( const ZONE_CONTAINER* aZone, const SHAPE_POLY_SET& aSmoothedOutline,
+    void computeRawFilledArea( const ZONE_CONTAINER* aZone,
+                               const SHAPE_POLY_SET& aSmoothedOutline,
+                               std::set<VECTOR2I>* aPreserveCorners,
                                SHAPE_POLY_SET& aRawPolys, SHAPE_POLY_SET& aFinalPolys );
 
     /**

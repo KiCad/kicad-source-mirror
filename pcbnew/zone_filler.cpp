@@ -665,6 +665,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
  */
 void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
                                         const SHAPE_POLY_SET& aSmoothedOutline,
+                                        std::set<VECTOR2I>* aPreserveCorners,
                                         SHAPE_POLY_SET& aRawPolys,
                                         SHAPE_POLY_SET& aFinalPolys )
 {
@@ -744,7 +745,7 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
 
     aRawPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
     // Prune features that don't meet minimum-width criteria
-    aRawPolys.Deflate( half_min_width - epsilon, numSegs );
+    aRawPolys.Deflate( half_min_width - epsilon, numSegs, true );
 
     if( s_DumpZonesWhenFilling )
         dumper->Write( &aRawPolys, "solid-areas-before-hatching" );
@@ -759,13 +760,13 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
     // Re-inflate after pruning of areas that don't meet minimum-width criteria
     if( aZone->GetFilledPolysUseThickness() )
     {
-        // if we're stroking the zone with a min-width stroke then this will naturally
-        // inflate the zone
+        // If we're stroking the zone with a min_width stroke then this will naturally
+        // inflate the zone by half_min_width
     }
     else if( half_min_width - epsilon > epsilon ) // avoid very small outline thickness
     {
         aRawPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
-        aRawPolys.Inflate( half_min_width - epsilon, 16 );
+        aRawPolys.Inflate( half_min_width - epsilon, numSegs, true );
     }
 
     aRawPolys.Fracture( SHAPE_POLY_SET::PM_FAST );
@@ -789,18 +790,20 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPol
                                   SHAPE_POLY_SET& aFinalPolys )
 {
     SHAPE_POLY_SET smoothedPoly;
+    std::set<VECTOR2I> colinearCorners;
+    aZone->GetColinearCorners( m_board, colinearCorners );
 
     /*
      * convert outlines + holes to outlines without holes (adding extra segments if necessary)
      * m_Poly data is expected normalized, i.e. NormalizeAreaOutlines was used after building
      * this zone
      */
-    if ( !aZone->BuildSmoothedPoly( smoothedPoly ) )
+    if ( !aZone->BuildSmoothedPoly( smoothedPoly, &colinearCorners ) )
         return false;
 
     if( aZone->IsOnCopperLayer() )
     {
-        computeRawFilledArea( aZone, smoothedPoly, aRawPolys, aFinalPolys );
+        computeRawFilledArea( aZone, smoothedPoly, &colinearCorners, aRawPolys, aFinalPolys );
     }
     else
     {

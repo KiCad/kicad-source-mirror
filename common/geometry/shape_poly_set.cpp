@@ -562,14 +562,18 @@ void SHAPE_POLY_SET::Inflate( int aFactor, int aCircleSegmentsCount, bool aPrese
 
     ClipperOffset c;
 
-    // N.B. using jtSquare here does not create square corners.  They end up mitered by
-    // aFactor.  Setting jtMiter and forcing the limit to be aFactor creates sharp corners.
-    JoinType type = aPreserveCorners ? jtMiter : jtRound;
+    // N.B. using jtSquare here does not create square corners; they end up mitered by aFactor.
+    // Setting jtMiter with a sufficiently high MiterLimit will preserve corners, but things
+    // get ugly at very acute angles (and we don't really want to support those anyway for peeling
+    // concerns).  Setting a MiterLimit of 1.4145 preserves corners up to 90 degrees; we set the
+    // limit a bit above that.
+    JoinType joinType = aPreserveCorners ? jtMiter : jtRound;
+    double   miterLimit = 1.5;
 
     for( const POLYGON& poly : m_polys )
     {
         for( size_t i = 0; i < poly.size(); i++ )
-            c.AddPath( poly[i].convertToClipper( i == 0 ), type, etClosedPolygon );
+            c.AddPath( poly[i].convertToClipper( i == 0 ), joinType, etClosedPolygon );
     }
 
     PolyTree solution;
@@ -595,8 +599,7 @@ void SHAPE_POLY_SET::Inflate( int aFactor, int aCircleSegmentsCount, bool aPrese
         coeff = arc_tolerance_factor[aCircleSegmentsCount];
 
     c.ArcTolerance = std::abs( aFactor ) * coeff;
-    c.MiterLimit = std::abs( aFactor );
-
+    c.MiterLimit = miterLimit;
     c.Execute( solution, aFactor );
 
     importTree( &solution );
@@ -1480,17 +1483,18 @@ int SHAPE_POLY_SET::TotalVertices() const
 }
 
 
-SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::ChamferPolygon( unsigned int aDistance, int aIndex )
+SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::ChamferPolygon( unsigned int aDistance, int aIndex,
+                                                        std::set<VECTOR2I>* aPreserveCorners )
 {
-    return chamferFilletPolygon( CORNER_MODE::CHAMFERED, aDistance, aIndex, 0 );
+    return chamferFilletPolygon( CHAMFERED, aDistance, aIndex, 0, aPreserveCorners );
 }
 
 
-SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::FilletPolygon( unsigned int aRadius,
-        int aErrorMax,
-        int aIndex )
+SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::FilletPolygon( unsigned int aRadius, int aErrorMax,
+                                                       int aIndex,
+                                                       std::set<VECTOR2I>* aPreserveCorners )
 {
-    return chamferFilletPolygon( CORNER_MODE::FILLETED, aRadius, aIndex, aErrorMax );
+    return chamferFilletPolygon( FILLETED, aRadius, aIndex, aErrorMax, aPreserveCorners );
 }
 
 
@@ -1604,32 +1608,32 @@ bool SHAPE_POLY_SET::IsVertexInHole( int aGlobalIdx )
 }
 
 
-SHAPE_POLY_SET SHAPE_POLY_SET::Chamfer( int aDistance )
+SHAPE_POLY_SET SHAPE_POLY_SET::Chamfer( int aDistance, std::set<VECTOR2I>* aPreserveCorners )
 {
     SHAPE_POLY_SET chamfered;
 
-    for( unsigned int polygonIdx = 0; polygonIdx < m_polys.size(); polygonIdx++ )
-        chamfered.m_polys.push_back( ChamferPolygon( aDistance, polygonIdx ) );
+    for( unsigned int idx = 0; idx < m_polys.size(); idx++ )
+        chamfered.m_polys.push_back( ChamferPolygon( aDistance, idx, aPreserveCorners ) );
 
     return chamfered;
 }
 
 
-SHAPE_POLY_SET SHAPE_POLY_SET::Fillet( int aRadius, int aErrorMax )
+SHAPE_POLY_SET SHAPE_POLY_SET::Fillet( int aRadius, int aErrorMax,
+                                       std::set<VECTOR2I>* aPreserveCorners )
 {
     SHAPE_POLY_SET filleted;
 
-    for( size_t polygonIdx = 0; polygonIdx < m_polys.size(); polygonIdx++ )
-        filleted.m_polys.push_back( FilletPolygon( aRadius, aErrorMax, polygonIdx ) );
+    for( size_t idx = 0; idx < m_polys.size(); idx++ )
+        filleted.m_polys.push_back( FilletPolygon( aRadius, aErrorMax, idx, aPreserveCorners ) );
 
     return filleted;
 }
 
 
 SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
-        unsigned int aDistance,
-        int aIndex,
-        int aErrorMax )
+                                        unsigned int aDistance, int aIndex, int aErrorMax,
+                                        std::set<VECTOR2I>* aPreserveCorners )
 {
     // Null segments create serious issues in calculations. Remove them:
     RemoveNullSegments();
@@ -1655,6 +1659,12 @@ SHAPE_POLY_SET::POLYGON SHAPE_POLY_SET::chamferFilletPolygon( CORNER_MODE aMode,
             // Current vertex
             int x1  = currContour.Point( currVertex ).x;
             int y1  = currContour.Point( currVertex ).y;
+
+            if( aPreserveCorners && aPreserveCorners->count( VECTOR2I( x1, y1 ) ) > 0 )
+            {
+                newContour.Append( x1, y1 );
+                continue;
+            }
 
             // Indices for previous and next vertices.
             int prevVertex;

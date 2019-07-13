@@ -192,8 +192,11 @@ int DRC::TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers )
 
     for( int ia = 0; ia < board->GetAreaCount(); ia++ )
     {
-        ZONE_CONTAINER* zoneRef = board->GetArea( ia );
-        zoneRef->BuildSmoothedPoly( smoothed_polys[ia] );
+        ZONE_CONTAINER*    zoneRef = board->GetArea( ia );
+        std::set<VECTOR2I> colinearCorners;
+        zoneRef->GetColinearCorners( board, colinearCorners );
+
+        zoneRef->BuildSmoothedPoly( smoothed_polys[ia], &colinearCorners );
     }
 
     // iterate through all areas

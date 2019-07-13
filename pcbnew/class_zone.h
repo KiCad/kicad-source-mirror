@@ -256,6 +256,13 @@ public:
     bool HitTestFilledArea( const wxPoint& aRefPos ) const;
 
     /**
+     * Some intersecting zones, despite being on the same layer with the same net, cannot be
+     * merged due to other parameters such as fillet radius.  The copper pour will end up
+     * effectively merged though, so we want to keep the corners of such intersections sharp.
+     */
+    void GetColinearCorners( BOARD* aBoard, std::set<VECTOR2I>& aCorners );
+
+    /**
      * Function TransformSolidAreasShapesToPolygonSet
      * Convert solid areas full shapes to polygon set
      * (the full shape is the polygon area with a thick outline)
@@ -279,11 +286,12 @@ public:
      * @param aUseNetClearance = true to use a clearance which is the max value between
      *          aMinClearanceValue and the net clearance
      *          false to use aMinClearanceValue only
+     * @param aPreserveCorners an optional set of corners which should not be smoothed.
      * if both aMinClearanceValue = 0 and aUseNetClearance = false: create the zone outline polygon.
      */
     void TransformOutlinesShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                        int aMinClearanceValue,
-                                                        bool aUseNetClearance ) const;
+                                int aMinClearanceValue, bool aUseNetClearance,
+                                std::set<VECTOR2I>* aPreserveCorners = nullptr ) const;
 
     /**
      * Function TransformShapeWithClearanceToPolygon
@@ -564,9 +572,11 @@ public:
     /**
      * Function GetSmoothedPoly
      * returns a pointer to the corner-smoothed version of m_Poly.
+     * @param aPreserveCorners - set of corners which should /not/ be smoothed
      * @return SHAPE_POLY_SET* - pointer to the polygon.
      */
-    bool BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly ) const;
+    bool BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly,
+                            std::set<VECTOR2I>* aPreserveCorners ) const;
 
     void SetCornerSmoothingType( int aType ) { m_cornerSmoothingType = aType; };
 
