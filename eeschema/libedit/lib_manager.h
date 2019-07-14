@@ -48,10 +48,22 @@ class SYMBOL_LIB_TABLE_ROW;
 class LIB_LOGGER : public wxLogGui
 {
 public:
+    LIB_LOGGER() : m_previousLogger( nullptr ), m_activated( false )
+    {
+    }
+
+    ~LIB_LOGGER()
+    {
+        if( m_activated )
+            wxLog::SetActiveTarget( m_previousLogger );
+    }
+
     void Activate()
     {
+        m_activated = true;
         m_previousLogger = wxLog::GetActiveTarget();
         wxLog::SetActiveTarget( this );
+        Clear();
     }
 
     void Flush() override
@@ -62,12 +74,12 @@ public:
                              "to adjust paths and add or remove libraries." ) );
 
             wxLogGui::Flush();
-            wxLog::SetActiveTarget( m_previousLogger );
         }
     }
 
 private:
     wxLog* m_previousLogger;
+    bool m_activated;
 };
 
 
