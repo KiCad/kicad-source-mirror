@@ -137,12 +137,8 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE_CONTAINER* aZone )
     if( zones_to_refill.size() )
     {
         ZONE_FILLER filler ( GetBoard() );
-        wxString title;
-        title.Printf( _( "Refill %d Zones" ), (int)zones_to_refill.size() );
-        std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
-                                new WX_PROGRESS_REPORTER( this, title, 4 ) );
-
-        filler.SetProgressReporter( progressReporter.get() );
+        wxString title = wxString::Format( _( "Refill %d Zones" ), (int) zones_to_refill.size() );
+        filler.InstallNewProgressReporter( this, title, 4 );
         filler.Fill( zones_to_refill );
     }
 

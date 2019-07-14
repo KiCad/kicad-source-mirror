@@ -42,8 +42,7 @@ public:
     ZONE_FILLER( BOARD* aBoard, COMMIT* aCommit = nullptr );
     ~ZONE_FILLER();
 
-    void SetProgressReporter( WX_PROGRESS_REPORTER* aReporter );
-    void SetProgressReporter( std::unique_ptr<WX_PROGRESS_REPORTER>&& aReporter );
+    void InstallNewProgressReporter( wxWindow* aParent, const wxString& aTitle, int aNumPhases );
     bool Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck = false );
 
 private:

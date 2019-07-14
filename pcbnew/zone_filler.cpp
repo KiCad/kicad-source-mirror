@@ -91,15 +91,10 @@ ZONE_FILLER::~ZONE_FILLER()
 }
 
 
-void ZONE_FILLER::SetProgressReporter( WX_PROGRESS_REPORTER* aReporter )
+void ZONE_FILLER::InstallNewProgressReporter( wxWindow* aParent, const wxString& aTitle,
+                                              int aNumPhases )
 {
-    m_progressReporter = aReporter;
-}
-
-
-void ZONE_FILLER::SetProgressReporter( std::unique_ptr<WX_PROGRESS_REPORTER>&& aReporter )
-{
-    m_uniqueReporter = std::move( aReporter );
+    m_uniqueReporter = std::make_unique<WX_PROGRESS_REPORTER>( aParent, aTitle, aNumPhases );
     m_progressReporter = m_uniqueReporter.get();
 }
 

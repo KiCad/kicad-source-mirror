@@ -28,6 +28,7 @@
 #include <connectivity/connectivity_data.h>
 #include <board_commit.h>
 #include <widgets/progress_reporter.h>
+#include <wx/event.h>
 #include <tool/tool_manager.h>
 #include <bitmaps.h>
 #include "pcb_actions.h"
@@ -65,15 +66,20 @@ void ZONE_FILLER_TOOL::CheckAllZones( wxWindow* aCaller )
     BOARD_COMMIT commit( this );
 
     ZONE_FILLER filler( frame()->GetBoard(), &commit );
-    filler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( aCaller,
-                                                                        _( "Checking Zones" ),
-                                                                        4 ) );
+    filler.InstallNewProgressReporter( aCaller, _( "Checking Zones" ), 4 );
 
     if( filler.Fill( toFill, true ) )
     {
         getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty = false;
         canvas()->Refresh();
     }
+}
+
+
+void ZONE_FILLER_TOOL::singleShotRefocus( wxIdleEvent& )
+{
+    canvas()->SetFocus();
+    canvas()->Unbind( wxEVT_IDLE, &ZONE_FILLER_TOOL::singleShotRefocus, this );
 }
 
 
@@ -87,9 +93,7 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller )
         toFill.push_back(zone);
 
     ZONE_FILLER filler( board(), &commit );
-    filler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( aCaller,
-                                                                        _( "Fill All Zones" ),
-                                                                        4 ) );
+    filler.InstallNewProgressReporter( aCaller, _( "Fill All Zones" ),  4 );
 
     if( filler.Fill( toFill ) )
         getEditFrame<PCB_EDIT_FRAME>()->m_ZoneFillsDirty = false;
@@ -97,11 +101,8 @@ void ZONE_FILLER_TOOL::FillAllZones( wxWindow* aCaller )
     canvas()->Refresh();
 
     // wxWidgets has keyboard focus issues after the progress reporter.  Re-setting the focus
-    // does not fix them; moving the mouse does.  Here we warp the mouse to its existing location
-    // (which will bring it back inside the window if it was outside).  While sometimes mildly
-    // annoying, it does fix the more-often annoying loss of keybard focus.
-    VECTOR2D cursor = getViewControls()->GetRawCursorPosition( false );
-    getViewControls()->SetCursorPosition( cursor, true, true );
+    // here doesn't work, so we delay it to an idle event.
+    canvas()->Bind( wxEVT_IDLE, &ZONE_FILLER_TOOL::singleShotRefocus, this );
 }
 
 
@@ -126,9 +127,7 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
     }
 
     ZONE_FILLER filler( board(), &commit );
-    filler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( frame(),
-                                                                        _( "Fill Zone" ),
-                                                                        4 ) );
+    filler.InstallNewProgressReporter( frame(), _( "Fill Zone" ), 4 );
     filler.Fill( toFill );
 
     canvas()->Refresh();

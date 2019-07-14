@@ -53,6 +53,9 @@ public:
     int ZoneUnfillAll( const TOOL_EVENT& aEvent );
 
 private:
+    ///> Refocuses on an idle event (used after the Progress Reporter messes up the focus)
+    void singleShotRefocus( wxIdleEvent& );
+
     ///> Sets up handlers for various events.
     void setTransitions() override;
 };
