@@ -637,25 +637,25 @@ void POINT_EDITOR::finishItem()
 }
 
 
-bool POINT_EDITOR::validatePolygon( SHAPE_POLY_SET& aModified, const SHAPE_POLY_SET* aOriginal ) const
+bool POINT_EDITOR::validatePolygon( SHAPE_POLY_SET& aPoly ) const
 {
-    if( !aModified.IsSelfIntersecting() )
-    {
-        m_statusPopup->Hide();
-        return true;
-    }
+    bool valid = !aPoly.IsSelfIntersecting();
 
     if( m_statusPopup )
     {
-        wxPoint p = wxGetMousePosition() + wxPoint( 20, 20 );
-        m_statusPopup->Move( p );
-        m_statusPopup->PopupFor( 1500 );
+        if( valid )
+        {
+            m_statusPopup->Hide();
+        }
+        else
+        {
+            wxPoint p = wxGetMousePosition() + wxPoint( 20, 20 );
+            m_statusPopup->Move( p );
+            m_statusPopup->PopupFor( 1500 );
+        }
     }
 
-    if( aOriginal )
-        aModified = *aOriginal;
-
-    return false;
+    return valid;
 }
 
 
@@ -1108,14 +1108,13 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
     {
         const auto& vertexIdx = vertex.second;
         auto& outline = polygon->Polygon( vertexIdx.m_polygon )[vertexIdx.m_contour];
-        bool valid = true;
 
         if( outline.PointCount() > 3 )
         {
             // the usual case: remove just the corner when there are >3 vertices
             commit.Modify( item );
             polygon->RemoveVertex( vertexIdx );
-            valid = validatePolygon( *polygon );
+            validatePolygon( *polygon );
         }
         else
         {
@@ -1135,23 +1134,13 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 
         setEditedPoint( nullptr );
 
-        if( valid )
-        {
-            commit.Push( _( "Remove a zone/polygon corner" ) );
+        commit.Push( _( "Remove a zone/polygon corner" ) );
 
-            // Refresh zone hatching
-            if( item->Type() == PCB_ZONE_AREA_T)
-                static_cast<ZONE_CONTAINER*>( item )->Hatch();
+        // Refresh zone hatching
+        if( item->Type() == PCB_ZONE_AREA_T)
+            static_cast<ZONE_CONTAINER*>( item )->Hatch();
 
-            updatePoints();
-        }
-        else
-        {
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-            getView()->Remove( m_editPoints.get() );
-            commit.Revert();
-            m_editPoints.reset();
-        }
+        updatePoints();
     }
 
     return 0;

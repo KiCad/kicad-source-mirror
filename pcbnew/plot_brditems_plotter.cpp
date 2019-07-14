@@ -749,7 +749,7 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
         {
             if( !aSeg->IsPolygonFilled() )
             {
-                for( auto it = aSeg->GetPolyShape().IterateSegments( 0 ); it; it++ )
+                for( auto it = aSeg->GetPolyShape().CIterateSegments( 0 ); it; it++ )
                 {
                     auto seg = it.Get();
                     m_plotter->ThickSegment( wxPoint( seg.A ), wxPoint( seg.B ),
