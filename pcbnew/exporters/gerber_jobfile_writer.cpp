@@ -56,6 +56,25 @@ GERBER_JOBFILE_WRITER::GERBER_JOBFILE_WRITER( BOARD* aPcb, REPORTER* aReporter )
     m_indent = 0;
 }
 
+std::string GERBER_JOBFILE_WRITER::formatStringFromUTF32( const wxString& aText )
+{
+    std::string fmt_text;     // the text after UTF32 to UTF8 conversion
+
+    for( unsigned long letter: aText )
+    {
+        if( letter >= ' ' && letter <= 0x7F )
+            fmt_text += char( letter );
+        else
+        {
+            char buff[10];
+            sprintf( buff, "\\u%4.4lX", letter );
+            fmt_text += buff;
+        }
+    }
+    return fmt_text;
+}
+
+
 enum ONSIDE GERBER_JOBFILE_WRITER::hasSilkLayers()
 {
     int flag = SIDE_NONE;
@@ -249,7 +268,7 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
     wxString guid = GbrMakeProjectGUIDfromString( msg );
 
     // build the <project id> string: this is the board short filename (without ext)
-    // and all non ASCII chars are replaced by '_'
+    // and all non ASCII chars are replaced by '_', to be compatible with .gbr files.
     msg = fn.GetName();
 
     // build the <rec> string. All non ASCII chars and comma are replaced by '_'
@@ -421,9 +440,8 @@ void GERBER_JOBFILE_WRITER::addJSONFilesAttributes()
         if( !skip_file )
         {
             // name can contain non ASCII7 chars.
-            // Only ASCII7 chars are accepted in gerber files. others must be converted to
-            // a gerber hexa sequence.
-            std::string strname = formatStringToGerber( name );
+            // Ensure the name is JSON compatible.
+            std::string strname = formatStringFromUTF32( name );
 
             openBlock();
             addJSONObject( wxString::Format( "\"Path\":  \"%s\",\n", strname.c_str() ) );
@@ -604,28 +622,28 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
         {
         case BS_ITEM_TYPE_COPPER:
             layer_type = "Copper";
-            layer_name = formatStringToGerber( m_pcb->GetLayerName( item->m_LayerId ) );
+            layer_name = formatStringFromUTF32( m_pcb->GetLayerName( item->m_LayerId ) );
             last_copper_layer = item->m_LayerId;
             break;
 
         case BS_ITEM_TYPE_SILKSCREEN:
             layer_type = "Legend";
-            layer_name = formatStringToGerber( item->m_TypeName );
+            layer_name = formatStringFromUTF32( item->m_TypeName );
             break;
 
         case BS_ITEM_TYPE_SOLDERMASK:
             layer_type = "SolderMask";
-            layer_name = formatStringToGerber( item->m_TypeName );
+            layer_name = formatStringFromUTF32( item->m_TypeName );
             break;
 
         case BS_ITEM_TYPE_SOLDERPASTE:
             layer_type = "SolderPaste";
-            layer_name = formatStringToGerber( item->m_TypeName );
+            layer_name = formatStringFromUTF32( item->m_TypeName );
             break;
 
         case BS_ITEM_TYPE_DIELECTRIC:
             layer_type = "Dielectric";
-            layer_name = formatStringToGerber( wxString::Format( "dielectric layer %d (%s)",
+            layer_name = formatStringFromUTF32( wxString::Format( "dielectric layer %d (%s)",
                                                item->m_DielectricLayerId, item->m_TypeName ) );
             break;
 
@@ -670,14 +688,16 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
             if( uptodate )      // We can add the dielectric variant ("core" "prepreg" ...):
                 note << wxString::Format( " \"Type: %s", layer_name.c_str() );
 
-            note << wxString::Format( " (from %s to %s)\"\n",
-                            formatStringToGerber( m_pcb->GetLayerName( last_copper_layer ) ),
-                            formatStringToGerber( m_pcb->GetLayerName( next_copper_layer ) ) );
+            note << wxString::Format( " \"(from %s to %s)\"\n",
+                            formatStringFromUTF32( m_pcb->GetLayerName( last_copper_layer ) ),
+                            formatStringFromUTF32( m_pcb->GetLayerName( next_copper_layer ) ) );
 
             addJSONObject( note );
         }
         else
+        {
             addJSONObject( wxString::Format( "\"Notes\":  \"Layer: %s\",\n", layer_name.c_str() ) );
+        }
 
         removeJSONSepararator();
         closeBlockWithSep();

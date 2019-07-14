@@ -25,6 +25,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <board_design_settings.h>
 #include <class_board.h>
+#include <i18n_utility.h>       // For _HKI definition
 #include "stackup_predefined_prms.h"
 
 // A reasonable thickness for copper layers:
@@ -310,6 +311,9 @@ bool BOARD_STACKUP::SynchronizeWithBoard( BOARD_DESIGN_SETTINGS* aSettings )
 void BOARD_STACKUP::BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings )
 {
     // Creates a default stackup, according to the current BOARD_DESIGN_SETTINGS settings.
+    // Note: the m_TypeName string is made translatable using _HKI marker, but is not
+    // translated when building the stackup.
+    // It will be used as this in files, and can be translated only in dialog
     LSET enabledLayer = aSettings->GetEnabledLayers();
     int copperLayerCount = aSettings->GetCopperLayerCount();
     double diel_thickness = aSettings->GetBoardThickness()
@@ -323,7 +327,7 @@ void BOARD_STACKUP::BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings )
     {
         BOARD_STACKUP_ITEM* item = new BOARD_STACKUP_ITEM( BS_ITEM_TYPE_SILKSCREEN );
         item->m_LayerId = F_SilkS;
-        item->m_TypeName = _( "Top Silk Screen" );
+        item->m_TypeName = _HKI( "Top Silk Screen" );
         Add( item );
     }
 
@@ -331,7 +335,7 @@ void BOARD_STACKUP::BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings )
     {
         BOARD_STACKUP_ITEM* item = new BOARD_STACKUP_ITEM( BS_ITEM_TYPE_SOLDERPASTE );
         item->m_LayerId = F_Paste;
-        item->m_TypeName = _( "Top Solder Paste" );
+        item->m_TypeName = _HKI( "Top Solder Paste" );
         Add( item );
     }
 
@@ -339,7 +343,7 @@ void BOARD_STACKUP::BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings )
     {
         BOARD_STACKUP_ITEM* item = new BOARD_STACKUP_ITEM( BS_ITEM_TYPE_SOLDERMASK );
         item->m_LayerId = F_Mask;
-        item->m_TypeName = _( "Top Solder Mask" );
+        item->m_TypeName = _HKI( "Top Solder Mask" );
         Add( item );
     }
 
@@ -364,12 +368,12 @@ void BOARD_STACKUP::BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings )
         // Display a dielectric default layer name:
         if( (dielectric_idx & 1) == 0 )
         {
-            item->m_TypeName = _( "core" );
+            item->m_TypeName = _HKI( "core" );
             item->m_Material = "FR4";
         }
         else
         {
-            item->m_TypeName = _( "prepreg" );
+            item->m_TypeName = _HKI( "prepreg" );
             item->m_Material = "FR4";
         }
 
@@ -382,7 +386,7 @@ void BOARD_STACKUP::BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings )
     {
         BOARD_STACKUP_ITEM* item = new BOARD_STACKUP_ITEM( BS_ITEM_TYPE_SOLDERMASK );
         item->m_LayerId = B_Mask;
-        item->m_TypeName = _( "Bottom Solder Mask" );
+        item->m_TypeName = _HKI( "Bottom Solder Mask" );
         Add( item );
     }
 
@@ -390,7 +394,7 @@ void BOARD_STACKUP::BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings )
     {
         BOARD_STACKUP_ITEM* item = new BOARD_STACKUP_ITEM( BS_ITEM_TYPE_SOLDERPASTE );
         item->m_LayerId = B_Paste;
-        item->m_TypeName = _( "Bottom Solder Paste" );
+        item->m_TypeName = _HKI( "Bottom Solder Paste" );
         Add( item );
     }
 
@@ -398,7 +402,7 @@ void BOARD_STACKUP::BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings )
     {
         BOARD_STACKUP_ITEM* item = new BOARD_STACKUP_ITEM( BS_ITEM_TYPE_SILKSCREEN );
         item->m_LayerId = B_SilkS;
-        item->m_TypeName = _( "Bottom Silk Screen" );
+        item->m_TypeName = _HKI( "Bottom Silk Screen" );
         Add( item );
     }
 

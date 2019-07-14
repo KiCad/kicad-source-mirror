@@ -202,6 +202,11 @@ private:
         addIndent(); m_JSONbuffer << aParam;
     }
 
+    /** A helper function to convert a wxString ( therefore a Unicode text ) to
+     * a JSON compatible string (a escaped unicode sequence of 4 hexa).
+     */
+    std::string formatStringFromUTF32( const wxString& aText );
+
 private:
     BOARD* m_pcb;               // The board
     REPORTER* m_reporter;       // a reporter for messages (can be null)
