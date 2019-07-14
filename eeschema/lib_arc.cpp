@@ -429,6 +429,8 @@ void LIB_ARC::BeginEdit( const wxPoint aPosition )
 
 void LIB_ARC::CalcEdit( const wxPoint& aPosition )
 {
+#define sq( x ) pow( x, 2 )
+
     // Edit state 0: drawing: place ArcStart
     // Edit state 1: drawing: place ArcEnd (center calculated for 90-degree subtended angle)
     // Edit state 2: point editing: move ArcStart (center calculated for invariant subtended angle)
@@ -441,7 +443,10 @@ void LIB_ARC::CalcEdit( const wxPoint& aPosition )
         m_ArcStart = aPosition;
         m_ArcEnd = aPosition;
         m_Pos = aPosition;
-        break;
+        m_Radius = 0;
+        m_t1 = 0;
+        m_t2 = 0;
+        return;
 
     case 1:
         m_ArcEnd = aPosition;
@@ -452,7 +457,7 @@ void LIB_ARC::CalcEdit( const wxPoint& aPosition )
     case 3:
     {
         wxPoint v = m_ArcStart - m_ArcEnd;
-        double chordBefore = v.x * v.x + v.y * v.y;
+        double chordBefore = sq( v.x ) + sq( v.y );
 
         if( m_editState == 2 )
             m_ArcStart = aPosition;
@@ -460,7 +465,7 @@ void LIB_ARC::CalcEdit( const wxPoint& aPosition )
             m_ArcEnd = aPosition;
 
         v = m_ArcStart - m_ArcEnd;
-        double chordAfter = v.x * v.x + v.y * v.y;
+        double chordAfter = sq( v.x ) + sq( v.y );
         double ratio = chordAfter / chordBefore;
 
         m_Radius = KiROUND( sqrt( m_Radius * m_Radius * ratio ) );
@@ -481,17 +486,40 @@ void LIB_ARC::CalcEdit( const wxPoint& aPosition )
 
     // Calculate 'd', the vector from the chord midpoint to the center
     wxPoint d;
-    d.x = KiROUND( sqrt( pow( m_Radius, 2 ) - pow( l/2, 2) ) * ( m_ArcStart.y - m_ArcEnd.y ) / l );
-    d.y = KiROUND( sqrt( pow( m_Radius, 2 ) - pow( l/2, 2) ) * ( m_ArcEnd.x - m_ArcStart.x ) / l );
-
-    if( d.x < 0 || d.y < 0 )    // sqrt() doesn't like really small numbers...
-        d = { 0, 0 };
+    d.x = KiROUND( sqrt( sq( m_Radius ) - sq( l/2 ) ) * ( m_ArcStart.y - m_ArcEnd.y ) / l );
+    d.y = KiROUND( sqrt( sq( m_Radius ) - sq( l/2 ) ) * ( m_ArcEnd.x - m_ArcStart.x ) / l );
 
     wxPoint c1 = m + d;
     wxPoint c2 = m - d;
-    wxPoint test = ( m_editState == 4 ) ? aPosition : m_Pos;
 
-    m_Pos = ( m_editState > 1 && GetLineLength( c1, test ) < GetLineLength( c2, test ) ) ? c1 : c2;
+    // Solution gives us 2 centers; we need to pick one:
+    switch( m_editState )
+    {
+    case 1:
+    {
+        // Keep center clockwise from chord while drawing
+        wxPoint chordVector = twoPointVector( m_ArcStart, m_ArcEnd );
+        double  chordAngle = ArcTangente( chordVector.y, chordVector.x );
+        NORMALIZE_ANGLE_POS( chordAngle );
+
+        wxPoint c1Test = c1;
+        RotatePoint( &c1Test, m_ArcStart, -chordAngle );
+
+        m_Pos = c1Test.x > 0 ? c2 : c1;
+    }
+        break;
+
+    case 2:
+    case 3:
+        // Pick the one closer to the old center
+        m_Pos = ( GetLineLength( c1, m_Pos ) < GetLineLength( c2, m_Pos ) ) ? c1 : c2;
+        break;
+
+    case 4:
+        // Pick the one closer to the mouse position
+        m_Pos = ( GetLineLength( c1, aPosition ) < GetLineLength( c2, aPosition ) ) ? c1 : c2;
+        break;
+    }
 
     CalcRadiusAngles();
 }
