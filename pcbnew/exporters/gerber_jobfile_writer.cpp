@@ -55,6 +55,26 @@ GERBER_JOBFILE_WRITER::GERBER_JOBFILE_WRITER( BOARD* aPcb, REPORTER* aReporter )
     m_indent = 0;
 }
 
+
+std::string GERBER_JOBFILE_WRITER::formatStringFromUTF32( const wxString& aText )
+{
+    std::string fmt_text;     // the text after UTF32 to UTF8 conversion
+
+    for( unsigned long letter: aText )
+    {
+        if( letter >= ' ' && letter <= 0x7F )
+            fmt_text += char( letter );
+        else
+        {
+            char buff[10];
+            sprintf( buff, "\\u%4.4lX", letter );
+            fmt_text += buff;
+        }
+    }
+    return fmt_text;
+}
+
+
 enum ONSIDE GERBER_JOBFILE_WRITER::hasSilkLayers()
 {
     int flag = SIDE_NONE;
@@ -396,10 +416,8 @@ void GERBER_JOBFILE_WRITER::addJSONFilesAttributes()
 
         if( !skip_file )
         {
-            // name can contain non ASCII7 chars.
-            // Only ASCII7 chars are accepted in gerber files. others must be converted to
-            // a gerber hexa sequence.
-            std::string strname = formatStringToGerber( name );
+            // Ensure the name is JSON compatible.
+            std::string strname = formatStringFromUTF32( name );
 
             openBlock();
             addJSONObject( wxString::Format( "\"Path\":  \"%s\",\n", strname.c_str() ) );

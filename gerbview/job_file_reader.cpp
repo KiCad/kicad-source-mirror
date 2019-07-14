@@ -92,6 +92,11 @@ private:
     REPORTER* m_reporter;
     wxFileName m_filename;
     wxArrayString m_GerberFiles;    // List of gerber files in job
+
+    // Convert a JSON string, that uses escaped sequence of 4 hexdecimal digits
+    // to encode unicode chars when not ASCII7 codes
+    // json11 converts this sequence to UTF8 string
+    wxString formatStringFromJSON( const std::string& name );
 };
 
 
@@ -136,10 +141,8 @@ bool GERBER_JOBFILE_READER::ReadGerberJobFile()
 
         for( auto& entry : json_parser["FilesAttributes"].array_items() )
         {
-            //wxLogMessage( entry.dump().c_str() );
             std::string name = entry["Path"].string_value();
-            //wxLogMessage( name.c_str() );
-            m_GerberFiles.Add( FormatStringFromGerber( name ) );
+            m_GerberFiles.Add( formatStringFromJSON( name ) );
         }
     }
     else
@@ -152,6 +155,17 @@ bool GERBER_JOBFILE_READER::ReadGerberJobFile()
     }
 
     return true;
+}
+
+
+wxString GERBER_JOBFILE_READER::formatStringFromJSON( const std::string& name )
+{
+    // Convert a JSON string, that uses a escaped sequence of 4 hexdecimal digits
+    // to encode unicode chars
+    // Our json11 library returns in this case a UTF8 sequence. Just convert it to
+    // a wxString.
+    wxString wstr = FROM_UTF8( name.c_str() );
+    return wstr;
 }
 
 
