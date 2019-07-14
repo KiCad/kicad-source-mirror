@@ -207,7 +207,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
             {
                 auto outline = aZone->Outline();
 
-                for( auto seg = outline->IterateSegments( 0 ); seg; seg++ )
+                for( auto seg = outline->CIterateSegments( 0 ); seg; seg++ )
                 {
                     auto new_seg = m_tool.m_editModules ?
                             new EDGE_MODULE( (MODULE *) parent ) :

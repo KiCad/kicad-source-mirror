@@ -396,12 +396,12 @@ bool SHAPE_POLY_SET::GetNeighbourIndexes( int aGlobalIndex, int* aPrevious, int*
 }
 
 
-bool SHAPE_POLY_SET::IsPolygonSelfIntersecting( int aPolygonIndex )
+bool SHAPE_POLY_SET::IsPolygonSelfIntersecting( int aPolygonIndex ) const
 {
-    SEGMENT_ITERATOR iterator = IterateSegmentsWithHoles( aPolygonIndex );
-    SEGMENT_ITERATOR innerIterator;
+    CONST_SEGMENT_ITERATOR iterator = CIterateSegmentsWithHoles( aPolygonIndex );
+    CONST_SEGMENT_ITERATOR innerIterator;
 
-    for( iterator = IterateSegmentsWithHoles( aPolygonIndex ); iterator; iterator++ )
+    for( iterator = CIterateSegmentsWithHoles( aPolygonIndex ); iterator; iterator++ )
     {
         SEG firstSegment = *iterator;
 
@@ -423,7 +423,7 @@ bool SHAPE_POLY_SET::IsPolygonSelfIntersecting( int aPolygonIndex )
 }
 
 
-bool SHAPE_POLY_SET::IsSelfIntersecting()
+bool SHAPE_POLY_SET::IsSelfIntersecting() const
 {
     for( unsigned int polygon = 0; polygon < m_polys.size(); polygon++ )
     {

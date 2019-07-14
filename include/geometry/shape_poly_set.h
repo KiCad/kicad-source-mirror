@@ -538,14 +538,14 @@ class SHAPE_POLY_SET : public SHAPE
          * @return bool - true if the aPolygonIndex-th polygon is self intersecting, false
          *              otherwise.
          */
-        bool IsPolygonSelfIntersecting( int aPolygonIndex );
+        bool IsPolygonSelfIntersecting( int aPolygonIndex ) const;
 
         /**
          * Function IsSelfIntersecting
          * Checks whether any of the polygons in the set is self intersecting.
          * @return bool - true if any of the polygons is self intersecting, false otherwise.
          */
-        bool IsSelfIntersecting();
+        bool IsSelfIntersecting() const;
 
         ///> Returns the number of triangulated polygons
         unsigned int TriangulatedPolyCount() const { return m_triangulatedPolys.size(); }
@@ -762,10 +762,33 @@ class SHAPE_POLY_SET : public SHAPE
             return iter;
         }
 
+        ///> Returns an iterator object, for iterating between aFirst and aLast outline, with or
+        /// without holes (default: without)
+        CONST_SEGMENT_ITERATOR CIterateSegments( int aFirst, int aLast,
+                                                 bool aIterateHoles = false ) const
+        {
+            CONST_SEGMENT_ITERATOR iter;
+
+            iter.m_poly = const_cast<SHAPE_POLY_SET*>( this );
+            iter.m_currentPolygon = aFirst;
+            iter.m_lastPolygon = aLast < 0 ? OutlineCount() - 1 : aLast;
+            iter.m_currentContour = 0;
+            iter.m_currentSegment = 0;
+            iter.m_iterateHoles = aIterateHoles;
+
+            return iter;
+        }
+
         ///> Returns an iterator object, for iterating aPolygonIdx-th polygon edges
         SEGMENT_ITERATOR IterateSegments( int aPolygonIdx )
         {
             return IterateSegments( aPolygonIdx, aPolygonIdx );
+        }
+
+        ///> Returns an iterator object, for iterating aPolygonIdx-th polygon edges
+        CONST_SEGMENT_ITERATOR CIterateSegments( int aPolygonIdx ) const
+        {
+            return CIterateSegments( aPolygonIdx, aPolygonIdx );
         }
 
         ///> Returns an iterator object, for all outlines in the set (no holes)
@@ -784,6 +807,12 @@ class SHAPE_POLY_SET : public SHAPE
         SEGMENT_ITERATOR IterateSegmentsWithHoles( int aOutline )
         {
             return IterateSegments( aOutline, aOutline, true );
+        }
+
+        ///> Returns an iterator object, for the aOutline-th outline in the set (with holes)
+        CONST_SEGMENT_ITERATOR CIterateSegmentsWithHoles( int aOutline ) const
+        {
+            return CIterateSegments( aOutline, aOutline, true );
         }
 
         /** operations on polygons use a aFastMode param
