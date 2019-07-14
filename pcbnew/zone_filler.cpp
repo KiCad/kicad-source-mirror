@@ -360,9 +360,6 @@ bool hasThermalConnection( D_PAD* pad, const ZONE_CONTAINER* aZone )
         return false;
     }
 
-    if( !pad->IsOnLayer( aZone->GetLayer() ) )
-        return false;
-
     if( pad->GetNetCode() != aZone->GetNetCode() || pad->GetNetCode() <= 0 )
         return false;
 
@@ -371,6 +368,21 @@ bool hasThermalConnection( D_PAD* pad, const ZONE_CONTAINER* aZone )
     item_boundingbox.Inflate( thermalGap, thermalGap );
 
     return item_boundingbox.Intersects( aZone->GetBoundingBox() );
+}
+
+
+/**
+ * Setup aDummyPad to have the same size and shape of aPad's hole.  This allows us to create
+ * thermal reliefs and clearances for holes using the pad code.
+ */
+static void setupDummyPadForHole( const D_PAD* aPad, D_PAD& aDummyPad )
+{
+    aDummyPad.SetNetCode( aPad->GetNetCode() );
+    aDummyPad.SetSize( aPad->GetDrillSize() );
+    aDummyPad.SetOrientation( aPad->GetOrientation() );
+    aDummyPad.SetShape( aPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ? PAD_SHAPE_OVAL
+                                                                        : PAD_SHAPE_CIRCLE );
+    aDummyPad.SetPosition( aPad->GetPosition() );
 }
 
 
@@ -467,12 +479,32 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE_CONTAINER* aZone, SHAPE_POL
 {
     SHAPE_POLY_SET holes;
 
+    // Use a dummy pad to calculate relief when a pad has a hole but is not on the zone's
+    // copper layer.  The dummy pad has the size and shape of the original pad's hole. We have
+    // to give it a parent because some functions expect a non-null parent to find clearance
+    // data, etc.
+    MODULE  dummymodule( m_board );
+    D_PAD   dummypad( &dummymodule );
+
     for( auto module : m_board->Modules() )
     {
         for( auto pad : module->Pads() )
         {
-            if( hasThermalConnection( pad, aZone ) )
-                addKnockout( pad, aZone->GetThermalReliefGap( pad ), holes );
+            if( !hasThermalConnection( pad, aZone ) )
+                continue;
+
+            // If the pad isn't on the current layer but has a hole, knock out a thermal relief
+            // for the hole.
+            if( !pad->IsOnLayer( aZone->GetLayer() ) )
+            {
+                if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
+                    continue;
+
+                setupDummyPadForHole( pad, dummypad );
+                pad = &dummypad;
+            }
+
+            addKnockout( pad, aZone->GetThermalReliefGap( pad ), holes );
         }
     }
 
@@ -513,23 +545,10 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
         {
             if( !pad->IsOnLayer( aZone->GetLayer() ) )
             {
-                /*
-                 * Test for pads that are on top or bottom only and have a hole.
-                 * There are curious pads but they can be used for some components that are
-                 * inside the board (in fact inside the hole. Some photo diodes and Leds are
-                 * like this)
-                 */
                 if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
                     continue;
 
-                // Use a dummy pad to calculate a hole shape that have the same dimension as
-                // the pad hole
-                dummypad.SetSize( pad->GetDrillSize() );
-                dummypad.SetOrientation( pad->GetOrientation() );
-                dummypad.SetShape( pad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ? PAD_SHAPE_OVAL
-                                                                              : PAD_SHAPE_CIRCLE );
-                dummypad.SetPosition( pad->GetPosition() );
-
+                setupDummyPadForHole( pad, dummypad );
                 pad = &dummypad;
             }
 
@@ -850,6 +869,10 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
         for( auto pad : module->Pads() )
         {
             if( !hasThermalConnection( pad, aZone ) )
+                continue;
+
+            // We currently only connect to pads, not pad holes
+            if( !pad->IsOnLayer( aZone->GetLayer() ) )
                 continue;
 
             int thermalReliefGap = aZone->GetThermalReliefGap( pad );
