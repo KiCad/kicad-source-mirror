@@ -35,7 +35,6 @@ set( PL_EDITOR_SRCS
     tools/pl_drawing_tools.cpp
     tools/pl_edit_tool.cpp
     tools/pl_editor_control.cpp
-    tools/pl_picker_tool.cpp
     tools/pl_point_editor.cpp
     )
 

@@ -28,7 +28,6 @@
 #include "grid_helper.h"
 #include <view/view_controls.h>
 #include <tool/tool_manager.h>
-#include "tool_event_utils.h"
 #include "selection_tool.h"
 
 
@@ -45,11 +44,13 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
     GRID_HELPER grid( frame() );
     int finalize_state = WAIT_CANCEL;
 
+    Activate();
     setControls();
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        frame()->GetCanvas()->SetCurrentCursor( wxCURSOR_BULLSEYE );
+        frame()->GetCanvas()->SetCursor( m_cursor );
+
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
@@ -153,13 +154,14 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
 void PCBNEW_PICKER_TOOL::setTransitions()
 {
-    Go( &PCBNEW_PICKER_TOOL::Main, PCB_ACTIONS::pickerTool.MakeEvent() );
+    Go( &PCBNEW_PICKER_TOOL::Main, ACTIONS::pickerTool.MakeEvent() );
 }
 
 
 void PCBNEW_PICKER_TOOL::reset()
 {
     m_layerMask = LSET::AllLayersMask();
+    m_cursor = wxStockCursor( wxCURSOR_ARROW );
 
     m_picked = NULLOPT;
     m_clickHandler = NULLOPT;

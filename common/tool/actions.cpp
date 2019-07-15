@@ -481,6 +481,9 @@ TOOL_ACTION ACTIONS::measureTool( "common.InteractiveEdit.measureTool",
         _( "Measure Tool" ), _( "Interactively measure distance between points" ),
         measurement_xpm, AF_ACTIVATE );
 
+TOOL_ACTION ACTIONS::pickerTool( "common.InteractivePicker.pickerTool",
+        AS_GLOBAL, 0, "", "", "", NULL, AF_ACTIVATE );
+
 TOOL_ACTION ACTIONS::show3DViewer( "common.Control.show3DViewer",
         AS_GLOBAL,
         MD_ALT + '3', LEGACY_HK_NAME( "3D Viewer" ),

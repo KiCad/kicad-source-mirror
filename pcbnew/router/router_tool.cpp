@@ -20,19 +20,14 @@
  */
 
 #include <wx/numdlg.h>
-
 #include <core/optional.h>
 #include <functional>
 using namespace std::placeholders;
-
-#include "class_draw_panel_gal.h"
 #include "class_board.h"
-
 #include <pcb_edit_frame.h>
 #include <id.h>
 #include <macros.h>
 #include <pcbnew_id.h>
-#include <view/view.h>
 #include <view/view_controls.h>
 #include <pcb_layer_widget.h>
 #include <pcb_painter.h>
@@ -45,14 +40,11 @@ using namespace std::placeholders;
 #include <collectors.h>
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
-#include <tool/tool_settings.h>
 #include <tool/grid_menu.h>
 #include <tool/zoom_menu.h>
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
-#include <tools/edit_tool.h>
 #include <tools/grid_helper.h>
-#include <tools/tool_event_utils.h>
 
 #include "router_tool.h"
 #include "pns_segment.h"
@@ -1004,7 +996,7 @@ void ROUTER_TOOL::performDragging( int aMode )
         highlightNet( true, m_startItem->Net() );
 
     ctls->SetAutoPan( true );
-    m_gridHelper->SetAuxAxes( true, m_startSnapPoint, true );
+    m_gridHelper->SetAuxAxes( true, m_startSnapPoint );
     frame()->UndoRedoBlock( true );
 
     while( TOOL_EVENT* evt = Wait() )
@@ -1160,7 +1152,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     if( !dragStarted )
         return 0;
 
-    m_gridHelper->SetAuxAxes( true, p, true );
+    m_gridHelper->SetAuxAxes( true, p );
     controls()->ShowCursor( true );
     controls()->ForceCursorPosition( false );
     controls()->SetAutoPan( true );

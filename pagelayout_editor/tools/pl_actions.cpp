@@ -96,12 +96,6 @@ TOOL_ACTION PL_ACTIONS::previewSettings( "plEditor.EditorControl.PreviewSettings
         sheetset_xpm );
 
 
-// PL_PICKER_TOOL
-//
-TOOL_ACTION PL_ACTIONS::pickerTool( "plEditor.InteractivePicker",
-        AS_GLOBAL, 0, "", "", "", NULL, AF_ACTIVATE );
-
-
 // PL_SELECTION_TOOL
 //
 TOOL_ACTION PL_ACTIONS::selectionActivate( "plEditor.InteractiveSelection",

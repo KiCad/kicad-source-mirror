@@ -412,7 +412,6 @@ int PCBNEW_CONTROL::GridFast1( const TOOL_EVENT& aEvent )
 {
     m_frame->SetFastGrid1();
     updateGrid();
-
     return 0;
 }
 
@@ -421,7 +420,6 @@ int PCBNEW_CONTROL::GridFast2( const TOOL_EVENT& aEvent )
 {
     m_frame->SetFastGrid2();
     updateGrid();
-
     return 0;
 }
 
@@ -444,29 +442,23 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
     if( origin )
     {
         // We can't undo the other grid dialog settings, so no sense undoing just the origin
-
         DoSetGridOrigin( getView(), m_frame, m_gridOrigin.get(), *origin );
         delete origin;
     }
     else
     {
-        std::string tool = aEvent.GetCommandStr().get();
-        m_frame->PushTool( tool );
-        Activate();
-
+        std::string         tool = aEvent.GetCommandStr().get();
         PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
 
-        picker->SetClickHandler( [this] ( const VECTOR2D& pt ) -> bool
+        picker->SetClickHandler(
+            [this] ( const VECTOR2D& pt ) -> bool
             {
                 m_frame->SaveCopyInUndoList( m_gridOrigin.get(), UR_GRIDORIGIN );
                 DoSetGridOrigin( getView(), m_frame, m_gridOrigin.get(), pt );
                 return false;   // drill origin is a one-shot; don't continue with tool
             } );
 
-        picker->Activate();
-        Wait();
-
-        m_frame->PopTool( tool );
+        m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
     }
 
     return 0;
@@ -486,76 +478,76 @@ int PCBNEW_CONTROL::GridResetOrigin( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
+    std::string         tool = aEvent.GetCommandStr().get();
+    PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
+
+    m_pickerItem = nullptr;
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    std::string tool = aEvent.GetCommandStr().get();
-    m_frame->PushTool( tool );
-    Activate();
+    picker->SetCursor( wxStockCursor( wxCURSOR_BULLSEYE ) );
 
-    PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
-    m_pickerItem = nullptr;
-
-    picker->SetClickHandler( [this] ( const VECTOR2D& aPosition ) -> bool
-    {
-        if( m_pickerItem )
+    picker->SetClickHandler(
+        [this] ( const VECTOR2D& aPosition ) -> bool
         {
-            if( m_pickerItem && m_pickerItem->IsLocked() )
+            if( m_pickerItem )
             {
-                STATUS_TEXT_POPUP statusPopup( m_frame );
-                statusPopup.SetText( _( "Item locked." ) );
-                statusPopup.PopupFor( 2000 );
-                statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-                return true;
+                if( m_pickerItem && m_pickerItem->IsLocked() )
+                {
+                    STATUS_TEXT_POPUP statusPopup( m_frame );
+                    statusPopup.SetText( _( "Item locked." ) );
+                    statusPopup.PopupFor( 2000 );
+                    statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+                    return true;
+                }
+
+                SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+                selectionTool->UnbrightenItem( m_pickerItem );
+                selectionTool->AddItemToSel( m_pickerItem, true );
+                m_toolMgr->RunAction( ACTIONS::doDelete, true );
+                m_pickerItem = nullptr;
             }
 
-            SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-            selectionTool->UnbrightenItem( m_pickerItem );
-            selectionTool->AddItemToSel( m_pickerItem, true );
-            m_toolMgr->RunAction( ACTIONS::doDelete, true );
-            m_pickerItem = nullptr;
-        }
+            return true;
+        } );
 
-        return true;
-    } );
-
-    picker->SetMotionHandler( [this] ( const VECTOR2D& aPos )
-    {
-        BOARD* board = m_frame->GetBoard();
-        GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
-        GENERAL_COLLECTOR collector;
-        collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-
-        if( m_editModules )
-            collector.Collect( board, GENERAL_COLLECTOR::ModuleItems, (wxPoint) aPos, guide );
-        else
-            collector.Collect( board, GENERAL_COLLECTOR::BoardLevelItems, (wxPoint) aPos, guide );
-
-        BOARD_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
-
-        if( m_pickerItem != item )
+    picker->SetMotionHandler(
+        [this] ( const VECTOR2D& aPos )
         {
-            SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+            BOARD* board = m_frame->GetBoard();
+            GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
+            GENERAL_COLLECTOR collector;
+            collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
 
+            if( m_editModules )
+                collector.Collect( board, GENERAL_COLLECTOR::ModuleItems, (wxPoint) aPos, guide );
+            else
+                collector.Collect( board, GENERAL_COLLECTOR::BoardLevelItems, (wxPoint) aPos, guide );
+
+            BOARD_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
+
+            if( m_pickerItem != item )
+            {
+                SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+
+                if( m_pickerItem )
+                    selectionTool->UnbrightenItem( m_pickerItem );
+
+                m_pickerItem = item;
+
+                if( m_pickerItem )
+                    selectionTool->BrightenItem( m_pickerItem );
+            }
+        } );
+
+    picker->SetFinalizeHandler(
+        [&]( const int& aFinalState )
+        {
             if( m_pickerItem )
-                selectionTool->UnbrightenItem( m_pickerItem );
+                m_toolMgr->GetTool<SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
+        } );
 
-            m_pickerItem = item;
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
-            if( m_pickerItem )
-                selectionTool->BrightenItem( m_pickerItem );
-        }
-    } );
-
-    picker->SetFinalizeHandler( [&]( const int& aFinalState )
-    {
-        if( m_pickerItem )
-            m_toolMgr->GetTool<SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
-    } );
-
-    picker->Activate();
-    Wait();
-
-    m_frame->PopTool( tool );
     return 0;
 }
 
@@ -667,7 +659,8 @@ template<typename T>
 static void moveNoFlagToVector( std::deque<T>& aList, std::vector<BOARD_ITEM*>& aTarget, bool aIsNew )
 {
     std::copy_if( aList.begin(), aList.end(), std::back_inserter( aTarget ),
-            [](T aItem){
+            [](T aItem)
+            {
                 bool retval = ( aItem->GetFlags() & FLAG0 ) == 0;
                 aItem->ClearFlags( FLAG0 );
                 return retval;
@@ -857,6 +850,7 @@ int PCBNEW_CONTROL::Redo( const TOOL_EVENT& aEvent )
 
     if( editFrame )
         editFrame->RestoreCopyFromRedoList( dummy );
+
     return 0;
 }
 
@@ -887,7 +881,6 @@ int PCBNEW_CONTROL::Show3DViewer( const TOOL_EVENT& aEvent )
 void PCBNEW_CONTROL::updateGrid()
 {
     BASE_SCREEN* screen = m_frame->GetScreen();
-    //GRID_TYPE grid = screen->GetGrid( idx );
     getView()->GetGAL()->SetGridSize( VECTOR2D( screen->GetGridSize() ) );
     getView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 }

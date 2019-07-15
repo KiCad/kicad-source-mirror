@@ -45,11 +45,11 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
+#include <tool/picker_tool.h>
 #include <tool/common_tools.h>
 #include <tool/zoom_tool.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
-#include <tools/ee_picker_tool.h>
 #include <tools/ee_inspection_tool.h>
 #include <tools/lib_pin_tool.h>
 #include <tools/lib_edit_tool.h>
@@ -218,7 +218,7 @@ void LIB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->RegisterTool( new EE_SELECTION_TOOL );
-    m_toolManager->RegisterTool( new EE_PICKER_TOOL );
+    m_toolManager->RegisterTool( new PICKER_TOOL );
     m_toolManager->RegisterTool( new EE_INSPECTION_TOOL );
     m_toolManager->RegisterTool( new LIB_PIN_TOOL );
     m_toolManager->RegisterTool( new LIB_DRAWING_TOOLS );

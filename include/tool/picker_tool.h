@@ -21,27 +21,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PL_PICKER_TOOL_H
-#define PL_PICKER_TOOL_H
+#ifndef PICKER_TOOL_H
+#define PICKER_TOOL_H
 
 #include <boost/optional/optional.hpp>
+#include <math/vector2d.h>
 #include <tool/tool_interactive.h>
-#include <tool/tool_menu.h>
 
-class PL_EDITOR_FRAME;
+class EDA_DRAW_FRAME;
 
 
-class PL_PICKER_TOOL : public TOOL_INTERACTIVE
+class PICKER_TOOL : public TOOL_INTERACTIVE
 {
 public:
-    PL_PICKER_TOOL();
-    ~PL_PICKER_TOOL() {}
+    PICKER_TOOL();
+    ~PICKER_TOOL() {}
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason ) override;
+    void Reset( RESET_REASON aReason ) override { }
 
     ///> Event handler types.
     typedef std::function<bool(const VECTOR2D&)> CLICK_HANDLER;
@@ -61,6 +61,8 @@ public:
     ///> Main event loop.
     int Main( const TOOL_EVENT& aEvent );
 
+    inline void SetCursor( const wxCursor& aCursor ) { m_cursor = aCursor; }
+
     /**
      * Function SetClickHandler()
      * Sets a handler for mouse click event. Handler may decide to receive further click by
@@ -68,7 +70,7 @@ public:
      */
     inline void SetClickHandler( CLICK_HANDLER aHandler )
     {
-        assert( !m_clickHandler );
+        wxASSERT( !m_clickHandler );
         m_clickHandler = aHandler;
     }
 
@@ -88,7 +90,7 @@ public:
      */
     inline void SetCancelHandler( CANCEL_HANDLER aHandler )
     {
-        assert( !m_cancelHandler );
+        wxASSERT( !m_cancelHandler );
         m_cancelHandler = aHandler;
     }
 
@@ -98,7 +100,7 @@ public:
      */
     inline void SetFinalizeHandler( FINALIZE_HANDLER aHandler )
     {
-        assert( !m_finalizeHandler );
+        wxASSERT( !m_finalizeHandler );
         m_finalizeHandler = aHandler;
     }
 
@@ -113,14 +115,15 @@ private:
     void setTransitions() override;
 
 private:
-    PL_EDITOR_FRAME*   m_frame;
+    EDA_DRAW_FRAME*       m_frame;
+    wxCursor              m_cursor;
 
-    OPT<CLICK_HANDLER> m_clickHandler;
-    OPT<MOTION_HANDLER> m_motionHandler;
-    OPT<CANCEL_HANDLER> m_cancelHandler;
+    OPT<CLICK_HANDLER>    m_clickHandler;
+    OPT<MOTION_HANDLER>   m_motionHandler;
+    OPT<CANCEL_HANDLER>   m_cancelHandler;
     OPT<FINALIZE_HANDLER> m_finalizeHandler;
 
-    OPT<VECTOR2D> m_picked;
+    OPT<VECTOR2D>         m_picked;
 };
 
-#endif /* PL_PICKER_TOOL_H */
+#endif /* PICKER_TOOL_H */

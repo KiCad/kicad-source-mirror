@@ -75,73 +75,61 @@ public:
 
     /**
      * Function Main()
-     *
      * Main loop in which events are handled.
-     * @param aEvent is the handled event.
      */
     int Main( const TOOL_EVENT& aEvent );
 
     /**
      * Function Drag()
-     *
      * Invoke the PNS router to drag tracks.
      */
     int Drag( const TOOL_EVENT& aEvent );
 
     /**
-     * Function Edit()
-     *
+     * Function Properties()
      * Displays properties window for the selected object.
      */
     int Properties( const TOOL_EVENT& aEvent );
 
     /**
      * Function Rotate()
-     *
      * Rotates currently selected items.
      */
     int Rotate( const TOOL_EVENT& aEvent );
 
     /**
      * Function Flip()
-     *
      * Rotates currently selected items. The rotation point is the current cursor position.
      */
     int Flip( const TOOL_EVENT& aEvent );
 
     /**
      * Function Mirror
-     *
      * Mirrors the current selection. The mirror axis passes through the current point.
      */
     int Mirror( const TOOL_EVENT& aEvent );
 
     /**
      * Function Remove()
-     *
      * Deletes currently selected items. The rotation point is the current cursor position.
      */
     int Remove( const TOOL_EVENT& aEvent );
 
     /**
      * Function Duplicate()
-     *
      * Duplicates the current selection and starts a move action.
      */
     int Duplicate( const TOOL_EVENT& aEvent );
 
     /**
      * Function MoveExact()
-     *
      * Invokes a dialog box to allow moving of the item by an exact amount.
      */
     int MoveExact( const TOOL_EVENT& aEvent );
 
     /**
      * Function CreateArray()
-     *
-     * Creates an array of the selected items, invoking the array editor dialog
-     * to set the array options
+     * Creates an array of the selected items, invoking the array editor dialog to set the options.
      */
     int CreateArray( const TOOL_EVENT& aEvent );
 
@@ -150,17 +138,13 @@ public:
 
     /**
      * Function FootprintFilter()
-     *
-     * A selection filter which prunes the selection to contain only items
-     * of type PCB_MODULE_T
+     * A selection filter which prunes the selection to contain only items of type PCB_MODULE_T
      */
     static void FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector );
 
     /**
      * Function PadFilter()
-     *
-     * A selection filter which prunes the selection to contain only items
-     * of type PCB_PAD_T
+     * A selection filter which prunes the selection to contain only items of type PCB_PAD_T
      */
     static void PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector );
 
@@ -171,7 +155,6 @@ public:
      * Function copyToClipboard()
      * Sends the current selection to the clipboard by formatting it as a fake pcb
      * see AppendBoardFromClipboard for importing
-     * @return True if it was sent succesfully
      */
     int copyToClipboard( const TOOL_EVENT& aEvent );
 
@@ -179,28 +162,17 @@ public:
      * Function cutToClipboard()
      * Cuts the current selection to the clipboard by formatting it as a fake pcb
      * see AppendBoardFromClipboard for importing
-     * @return True if it was sent succesfully
      */
     int cutToClipboard( const TOOL_EVENT& aEvent );
 
-    BOARD_COMMIT* GetCurrentCommit() const
-    {
-        return m_commit.get();
-    }
+    BOARD_COMMIT* GetCurrentCommit() const { return m_commit.get(); }
 
 private:
-    ///> Selection tool used for obtaining selected items
-    SELECTION_TOOL* m_selectionTool;
-
-    ///> Flag determining if anything is being dragged right now
-    bool m_dragging;
-
-    ///> Flag determining whether we are prompting for locked removal
-    bool m_lockedSelected;
-
-    ///> Last cursor position (needed for getModificationPoint() to avoid changes
-    ///> of edit reference point).
-    VECTOR2I m_cursor;
+    SELECTION_TOOL* m_selectionTool;   // Selection tool used for obtaining selected items
+    bool            m_dragging;        // Indicates objects are being dragged right now
+    bool            m_lockedSelected;  // Determines if we prompt before removing locked objects
+    VECTOR2I        m_cursor;          // Last cursor position (needed for getModificationPoint()
+                                       // to avoid changes of edit reference point).
 
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.

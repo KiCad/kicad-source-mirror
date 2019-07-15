@@ -44,13 +44,13 @@
 #include <tool/tool_manager.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
+#include <tool/picker_tool.h>
 #include <tool/zoom_tool.h>
 #include <tools/pl_actions.h>
 #include <tools/pl_selection_tool.h>
 #include <tools/pl_drawing_tools.h>
 #include <tools/pl_edit_tool.h>
 #include <tools/pl_point_editor.h>
-#include <tools/pl_picker_tool.h>
 #include <invoke_pl_editor_dialog.h>
 #include <tools/pl_editor_control.h>
 
@@ -212,7 +212,7 @@ void PL_EDITOR_FRAME::setupTools()
     m_toolManager->RegisterTool( new PL_DRAWING_TOOLS );
     m_toolManager->RegisterTool( new PL_EDIT_TOOL );
     m_toolManager->RegisterTool( new PL_POINT_EDITOR );
-    m_toolManager->RegisterTool( new PL_PICKER_TOOL );
+    m_toolManager->RegisterTool( new PICKER_TOOL );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active

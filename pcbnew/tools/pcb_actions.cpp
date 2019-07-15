@@ -907,12 +907,6 @@ TOOL_ACTION PCB_ACTIONS::deleteTool( "pcbnew.Control.deleteTool",
         delete_xpm );
 
 
-// PCBNEW_PICKER_TOOL
-//
-TOOL_ACTION PCB_ACTIONS::pickerTool( "pcbnew.InteractivePicker",
-        AS_GLOBAL, 0, "", "", "", nullptr, AF_ACTIVATE );
-
-
 // PLACEMENT_TOOL
 //
 TOOL_ACTION PCB_ACTIONS::alignTop( "pcbnew.AlignAndDistribute.alignTop",

@@ -22,15 +22,14 @@
  */
 
 #include <tool/tool_manager.h>
+#include <tool/picker_tool.h>
 #include <tools/sch_edit_tool.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_line_wire_bus_tool.h>
-#include <tools/ee_picker_tool.h>
 #include <tools/sch_move_tool.h>
 #include <ee_actions.h>
 #include <bitmaps.h>
 #include <confirm.h>
-#include <eda_doc.h>
 #include <base_struct.h>
 #include <sch_item.h>
 #include <sch_component.h>
@@ -39,7 +38,6 @@
 #include <sch_bitmap.h>
 #include <sch_view.h>
 #include <sch_line.h>
-#include <sch_item.h>
 #include <sch_bus_entry.h>
 #include <sch_edit_frame.h>
 #include <eeschema_id.h>
@@ -942,73 +940,73 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
+    std::string  tool = aEvent.GetCommandStr().get();
+    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-
-    std::string tool = aEvent.GetCommandStr().get();
-    m_frame->PushTool( tool );
-    Activate();
-
-    EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     m_pickerItem = nullptr;
 
-    picker->SetClickHandler( [this] ( const VECTOR2D& aPosition ) -> bool
-    {
-        if( m_pickerItem )
-        {
-            SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( m_pickerItem );
+    picker->SetCursor( wxStockCursor( wxCURSOR_BULLSEYE ) );
 
-            if( sch_item && sch_item->IsLocked() )
+    picker->SetClickHandler(
+        [this] ( const VECTOR2D& aPosition ) -> bool
+        {
+            if( m_pickerItem )
             {
-                STATUS_TEXT_POPUP statusPopup( m_frame );
-                statusPopup.SetText( _( "Item locked." ) );
-                statusPopup.PopupFor( 2000 );
-                statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-                return true;
+                SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( m_pickerItem );
+
+                if( sch_item && sch_item->IsLocked() )
+                {
+                    STATUS_TEXT_POPUP statusPopup( m_frame );
+                    statusPopup.SetText( _( "Item locked." ) );
+                    statusPopup.PopupFor( 2000 );
+                    statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+                    return true;
+                }
+
+                EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+                selectionTool->UnbrightenItem( m_pickerItem );
+                selectionTool->AddItemToSel( m_pickerItem, true );
+                m_toolMgr->RunAction( EE_ACTIONS::doDelete, true );
+                m_pickerItem = nullptr;
             }
 
+            return true;
+        } );
+
+    picker->SetMotionHandler(
+        [this] ( const VECTOR2D& aPos )
+        {
+            EE_COLLECTOR collector;
+            collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+            collector.Collect( m_frame->GetScreen()->GetDrawItems(), deletableItems, (wxPoint) aPos );
+
             EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-            selectionTool->UnbrightenItem( m_pickerItem );
-            selectionTool->AddItemToSel( m_pickerItem, true );
-            m_toolMgr->RunAction( EE_ACTIONS::doDelete, true );
-            m_pickerItem = nullptr;
-        }
+            selectionTool->GuessSelectionCandidates( collector, aPos );
 
-        return true;
-    } );
+            EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
 
-    picker->SetMotionHandler( [this] ( const VECTOR2D& aPos )
-    {
-        EE_COLLECTOR collector;
-        collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-        collector.Collect( m_frame->GetScreen()->GetDrawItems(), deletableItems, (wxPoint) aPos );
+            if( m_pickerItem != item )
+            {
+                if( m_pickerItem )
+                    selectionTool->UnbrightenItem( m_pickerItem );
 
-        EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-        selectionTool->GuessSelectionCandidates( collector, aPos );
+                m_pickerItem = item;
 
-        EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
+                if( m_pickerItem )
+                    selectionTool->BrightenItem( m_pickerItem );
+            }
+        } );
 
-        if( m_pickerItem != item )
+    picker->SetFinalizeHandler(
+        [this] ( const int& aFinalState )
         {
             if( m_pickerItem )
-                selectionTool->UnbrightenItem( m_pickerItem );
+                m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
+        } );
 
-            m_pickerItem = item;
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
-            if( m_pickerItem )
-                selectionTool->BrightenItem( m_pickerItem );
-        }
-    } );
-
-    picker->SetFinalizeHandler( [this] ( const int& aFinalState )
-    {
-        if( m_pickerItem )
-            m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
-    } );
-
-    picker->Activate();
-    Wait();
-
-    m_frame->PopTool( tool );
     return 0;
 }
 

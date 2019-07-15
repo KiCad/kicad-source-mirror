@@ -23,40 +23,33 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 #include <cstdint>
-#include <thread>
 #include <functional>
 #include "pcb_editor_control.h"
 #include "pcb_actions.h"
 #include <tool/tool_manager.h>
 #include <tools/tool_event_utils.h>
-#include <wx/progdlg.h>
 #include <ws_proxy_undo_item.h>
 #include "edit_tool.h"
 #include "selection_tool.h"
 #include "drawing_tool.h"
 #include "pcbnew_picker_tool.h"
-
 #include <painter.h>
 #include <project.h>
 #include <pcbnew_id.h>
 #include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <class_zone.h>
-#include <pcb_draw_panel_gal.h>
 #include <class_module.h>
 #include <class_pcb_target.h>
 #include <connectivity/connectivity_data.h>
 #include <collectors.h>
-#include <zones_functions_for_undo_redo.h>
 #include <board_commit.h>
-#include <confirm.h>
 #include <bitmaps.h>
 #include <view/view_group.h>
 #include <view/view_controls.h>
 #include <origin_viewitem.h>
 #include <profile.h>
 #include <widgets/progress_reporter.h>
-#include <dialogs/dialog_find.h>
 #include <dialogs/dialog_page_settings.h>
 #include <pcb_netlist.h>
 #include <dialogs/dialog_update_pcb.h>
@@ -1120,24 +1113,19 @@ void PCB_EDITOR_CONTROL::DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* a
 
 int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
 {
-    std::string tool = aEvent.GetCommandStr().get();
-    m_frame->PushTool( tool );
-    Activate();
-
+    std::string         tool = aEvent.GetCommandStr().get();
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
-    assert( picker );
 
-    picker->SetClickHandler( [this] ( const VECTOR2D& pt ) -> bool
+    picker->SetClickHandler(
+        [this] ( const VECTOR2D& pt ) -> bool
         {
             m_frame->SaveCopyInUndoList( m_placeOrigin.get(), UR_DRILLORIGIN );
             DoSetDrillOrigin( getView(), m_frame, m_placeOrigin.get(), pt );
             return false;   // drill origin is a one-shot; don't continue with tool
         } );
 
-    picker->Activate();
-    Wait();
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
-    m_frame->PopTool( tool );
     return 0;
 }
 
@@ -1299,6 +1287,9 @@ int PCB_EDITOR_CONTROL::ClearHighlight( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::HighlightNetTool( const TOOL_EVENT& aEvent )
 {
+    std::string         tool = aEvent.GetCommandStr().get();
+    PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
+
     // If the keyboard hotkey was triggered and we are already in the highlight tool, behave
     // the same as a left-click.  Otherwise highlight the net of the selected item(s), or if
     // there is no selection, then behave like a ctrl-left-click.
@@ -1308,90 +1299,78 @@ int PCB_EDITOR_CONTROL::HighlightNetTool( const TOOL_EVENT& aEvent )
         highlightNet( getViewControls()->GetMousePosition(), use_selection );
     }
 
-    std::string tool = aEvent.GetCommandStr().get();
-    m_frame->PushTool( tool );
-    Activate();
-
-    PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
-
-    picker->SetClickHandler( [this] ( const VECTOR2D& pt ) -> bool
+    picker->SetClickHandler(
+        [this] ( const VECTOR2D& pt ) -> bool
         {
             highlightNet( pt, false );
             return true;
         } );
 
     picker->SetLayerSet( LSET::AllCuMask() );
-    picker->Activate();
-    Wait();
 
-    m_frame->PopTool( tool );
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
+
     return 0;
-}
-
-
-static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, BOARD* aBoard, bool aShow, const VECTOR2D& aPosition )
-{
-    auto selectionTool = aToolMgr->GetTool<SELECTION_TOOL>();
-
-    aToolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    aToolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, EDIT_TOOL::PadFilter );
-    PCBNEW_SELECTION& selection = selectionTool->GetSelection();
-
-    if( selection.Empty() )
-    {
-        aToolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, EDIT_TOOL::FootprintFilter );
-        selection = selectionTool->GetSelection();
-    }
-
-    if( selection.Empty() )
-    {
-        // Clear the previous local ratsnest if we click off all items
-        for( auto mod : aBoard->Modules() )
-        {
-            for( auto pad : mod->Pads() )
-                pad->SetLocalRatsnestVisible( aShow );
-        }
-    }
-    else
-    {
-        for( auto item : selection )
-        {
-            if( auto pad = dyn_cast<D_PAD*>(item) )
-            {
-                pad->SetLocalRatsnestVisible( !pad->GetLocalRatsnestVisible() );
-            }
-            else if( auto mod = dyn_cast<MODULE*>(item) )
-            {
-                bool enable = !( *( mod->Pads().begin() ) )->GetLocalRatsnestVisible();
-
-                for( auto modpad : mod->Pads() )
-                    modpad->SetLocalRatsnestVisible( enable );
-            }
-        }
-    }
-
-    aToolMgr->GetView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
-
-    return true;
 }
 
 
 int PCB_EDITOR_CONTROL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
 {
-    std::string tool = aEvent.GetCommandStr().get();
-    m_frame->PushTool( tool );
-    Activate();
+    std::string          tool = aEvent.GetCommandStr().get();
+    PCBNEW_PICKER_TOOL*  picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
+    BOARD*               board = getModel<BOARD>();
+    PCB_DISPLAY_OPTIONS* opt = displayOptions();
 
-    auto picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
-    auto board = getModel<BOARD>();
-    auto opt = displayOptions();
-    wxASSERT( picker );
-    wxASSERT( board );
+    picker->SetClickHandler(
+        [&] ( const VECTOR2D& pt ) -> bool
+        {
+            SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
 
-    picker->SetClickHandler( std::bind( showLocalRatsnest, m_toolMgr, board,
-                                        opt->m_ShowGlobalRatsnest, _1 ) );
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, EDIT_TOOL::PadFilter );
+            PCBNEW_SELECTION& selection = selectionTool->GetSelection();
 
-    picker->SetFinalizeHandler( [ board, opt ]( int aCondition )
+            if( selection.Empty() )
+            {
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true,
+                                      EDIT_TOOL::FootprintFilter );
+                selection = selectionTool->GetSelection();
+            }
+
+            if( selection.Empty() )
+            {
+                // Clear the previous local ratsnest if we click off all items
+                for( auto mod : board->Modules() )
+                {
+                    for( auto pad : mod->Pads() )
+                        pad->SetLocalRatsnestVisible( opt->m_ShowGlobalRatsnest );
+                }
+            }
+            else
+            {
+                for( auto item : selection )
+                {
+                    if( auto pad = dyn_cast<D_PAD*>(item) )
+                    {
+                        pad->SetLocalRatsnestVisible( !pad->GetLocalRatsnestVisible() );
+                    }
+                    else if( auto mod = dyn_cast<MODULE*>(item) )
+                    {
+                        bool enable = !( *( mod->Pads().begin() ) )->GetLocalRatsnestVisible();
+
+                        for( auto modpad : mod->Pads() )
+                            modpad->SetLocalRatsnestVisible( enable );
+                    }
+                }
+            }
+
+            m_toolMgr->GetView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+
+            return true;
+        } );
+
+    picker->SetFinalizeHandler(
+        [ board, opt ]( int aCondition )
         {
             if( aCondition != PCBNEW_PICKER_TOOL::END_ACTIVATE )
             {
@@ -1403,10 +1382,8 @@ int PCB_EDITOR_CONTROL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
             }
         } );
 
-    picker->Activate();
-    Wait();
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
-    m_frame->PopTool( tool );
     return 0;
 }
 

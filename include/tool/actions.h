@@ -140,6 +140,7 @@ public:
     // Common Tools
     static TOOL_ACTION selectionTool;
     static TOOL_ACTION measureTool;
+    static TOOL_ACTION pickerTool;
 
     // Misc
     static TOOL_ACTION show3DViewer;

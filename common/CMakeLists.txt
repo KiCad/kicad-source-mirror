@@ -379,6 +379,7 @@ set( COMMON_SRCS
     tool/edit_constraints.cpp
     tool/edit_points.cpp
     tool/grid_menu.cpp
+    tool/picker_tool.cpp
     tool/selection_conditions.cpp
     tool/tool_action.cpp
     tool/tool_base.cpp

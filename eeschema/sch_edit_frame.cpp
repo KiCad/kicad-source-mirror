@@ -54,10 +54,10 @@
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
+#include <tool/picker_tool.h>
 #include <tool/zoom_tool.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
-#include <tools/ee_picker_tool.h>
 #include <tools/ee_point_editor.h>
 #include <tools/sch_drawing_tools.h>
 #include <tools/sch_line_wire_bus_tool.h>
@@ -336,7 +336,7 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->RegisterTool( new EE_SELECTION_TOOL );
-    m_toolManager->RegisterTool( new EE_PICKER_TOOL );
+    m_toolManager->RegisterTool( new PICKER_TOOL );
     m_toolManager->RegisterTool( new SCH_DRAWING_TOOLS );
     m_toolManager->RegisterTool( new SCH_LINE_WIRE_BUS_TOOL );
     m_toolManager->RegisterTool( new SCH_MOVE_TOOL );

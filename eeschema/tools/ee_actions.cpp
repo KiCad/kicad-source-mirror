@@ -60,12 +60,6 @@ TOOL_ACTION EE_ACTIONS::showMarkerInfo( "eeschema.InspectionTool.showMarkerInfo"
         info_xpm );
 
 
-// EE_PICKER
-//
-TOOL_ACTION EE_ACTIONS::pickerTool( "eeschema.InteractivePicker",
-        AS_GLOBAL, 0, "", "", "", NULL, AF_ACTIVATE );
-
-
 // EE_POINT_EDITOR
 //
 TOOL_ACTION EE_ACTIONS::pointEditorAddCorner( "eeschema.PointEditor.addCorner",

@@ -35,7 +35,7 @@ class PCBNEW_PICKER_TOOL : public PCB_TOOL_BASE
 {
 public:
     PCBNEW_PICKER_TOOL();
-    ~PCBNEW_PICKER_TOOL() {}
+    ~PCBNEW_PICKER_TOOL() override { }
 
     ///> Event handler types.
     typedef std::function<bool(const VECTOR2D&)> CLICK_HANDLER;
@@ -63,6 +63,8 @@ public:
      * Sets the tool's snap layer set
      */
     inline void SetLayerSet( LSET aLayerSet ) { m_layerMask = aLayerSet; }
+
+    inline void SetCursor( const wxCursor& aCursor ) { m_cursor = aCursor; }
 
     /**
      * Function SetClickHandler()
@@ -105,25 +107,27 @@ public:
         m_finalizeHandler = aHandler;
     }
 
+private:
     ///> @copydoc TOOL_INTERACTIVE::setTransitions();
     void setTransitions() override;
-
-private:
-    ///> The layer set to use for optional snapping
-    LSET m_layerMask;
-
-    OPT<CLICK_HANDLER> m_clickHandler;
-    OPT<MOTION_HANDLER> m_motionHandler;
-    OPT<CANCEL_HANDLER> m_cancelHandler;
-    OPT<FINALIZE_HANDLER> m_finalizeHandler;
-
-    OPT<VECTOR2D> m_picked;
 
     ///> Reinitializes tool to its initial state.
     void reset();
 
     ///> Applies the requested VIEW_CONTROLS settings.
     void setControls();
+
+private:
+    ///> The layer set to use for optional snapping
+    LSET                  m_layerMask;
+    wxCursor              m_cursor;
+
+    OPT<CLICK_HANDLER>    m_clickHandler;
+    OPT<MOTION_HANDLER>   m_motionHandler;
+    OPT<CANCEL_HANDLER>   m_cancelHandler;
+    OPT<FINALIZE_HANDLER> m_finalizeHandler;
+
+    OPT<VECTOR2D>         m_picked;
 };
 
 #endif /* PICKER_TOOL_H */

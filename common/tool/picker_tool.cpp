@@ -21,25 +21,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <tool/tool_manager.h>
-#include <tool/selection_conditions.h>
-#include <tools/pl_picker_tool.h>
-#include <tools/pl_actions.h>
+#include <tool/actions.h>
+#include <tool/picker_tool.h>
 #include <view/view_controls.h>
-#include <pl_editor_frame.h>
+#include <eda_draw_frame.h>
 
 
-PL_PICKER_TOOL::PL_PICKER_TOOL() :
-        TOOL_INTERACTIVE( "plEditor.InteractivePicker" ),
-        m_frame( nullptr )
+PICKER_TOOL::PICKER_TOOL()
+    : TOOL_INTERACTIVE( "common.InteractivePicker" )
 {
     resetPicker();
 }
 
 
-bool PL_PICKER_TOOL::Init()
+bool PICKER_TOOL::Init()
 {
-    m_frame = getEditFrame<PL_EDITOR_FRAME>();
+    m_frame = getEditFrame<EDA_DRAW_FRAME>();
 
     auto& ctxMenu = m_menu.GetMenu();
 
@@ -54,22 +51,24 @@ bool PL_PICKER_TOOL::Init()
 }
 
 
-void PL_PICKER_TOOL::Reset( RESET_REASON aReason )
-{
-}
-
-
-int PL_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
+int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     int finalize_state = WAIT_CANCEL;
+
+    std::string tool = *aEvent.Parameter<std::string*>();
+    m_frame->PushTool( tool );
+    Activate();
+
+    // To many things are off-grid in LibEdit; turn snapping off.
+    bool snap = !m_frame->IsType( FRAME_SCH_LIB_EDITOR );
 
     setControls();
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_BULLSEYE );
-        VECTOR2I cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        m_frame->GetCanvas()->SetCursor( m_cursor );
+        VECTOR2D cursorPos = controls->GetCursorPosition( snap && !evt->Modifier( MD_ALT ) );
 
         if( evt->IsClick( BUT_LEFT ) )
         {
@@ -85,7 +84,7 @@ int PL_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 catch( std::exception& e )
                 {
-                    std::cerr << "PL_PICKER_TOOL click handler error: " << e.what() << std::endl;
+                    std::cerr << "PICKER_TOOL click handler error: " << e.what() << std::endl;
                     finalize_state = EXCEPTION_CANCEL;
                     break;
                 }
@@ -110,7 +109,7 @@ int PL_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 catch( std::exception& e )
                 {
-                    std::cerr << "PL_PICKER_TOOL motion handler error: " << e.what() << std::endl;
+                    std::cerr << "PICKER_TOOL motion handler error: " << e.what() << std::endl;
                 }
             }
         }
@@ -125,11 +124,12 @@ int PL_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 catch( std::exception& e )
                 {
-                    std::cerr << "PL_PICKER_TOOL cancel handler error: " << e.what() << std::endl;
+                    std::cerr << "PICKER_TOOL cancel handler error: " << e.what() << std::endl;
                 }
             }
 
-            // Activating a new tool may have alternate finalization from canceling the current tool
+            // Activating a new tool may have alternate finalization from canceling the current
+            // tool
             if( evt->IsActivate() )
                 finalize_state = END_ACTIVATE;
             else
@@ -153,33 +153,36 @@ int PL_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         catch( std::exception& e )
         {
-            std::cerr << "PL_PICKER_TOOL finalize handler error: " << e.what() << std::endl;
+            std::cerr << "PICKER_TOOL finalize handler error: " << e.what() << std::endl;
         }
     }
 
     resetPicker();
     controls->ForceCursorPosition( false );
+    m_frame->PopTool( tool );
     return 0;
 }
 
 
-void PL_PICKER_TOOL::setTransitions()
+void PICKER_TOOL::setTransitions()
 {
-    Go( &PL_PICKER_TOOL::Main, PL_ACTIONS::pickerTool.MakeEvent() );
+    Go( &PICKER_TOOL::Main, ACTIONS::pickerTool.MakeEvent() );
 }
 
 
-void PL_PICKER_TOOL::resetPicker()
+void PICKER_TOOL::resetPicker()
 {
+    m_cursor = wxStockCursor( wxCURSOR_ARROW );
+
     m_picked = NULLOPT;
-    m_motionHandler = NULLOPT;
     m_clickHandler = NULLOPT;
+    m_motionHandler = NULLOPT;
     m_cancelHandler = NULLOPT;
     m_finalizeHandler = NULLOPT;
 }
 
 
-void PL_PICKER_TOOL::setControls()
+void PICKER_TOOL::setControls()
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 

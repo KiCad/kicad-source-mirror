@@ -25,7 +25,6 @@
  */
 
 #include <limits>
-
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>
@@ -33,15 +32,12 @@
 #include <collectors.h>
 #include <pcb_edit_frame.h>
 #include <kiway.h>
-#include <class_draw_panel_gal.h>
 #include <footprint_edit_frame.h>
 #include <array_creator.h>
 #include <pcbnew_id.h>
 #include <status_popup.h>
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
-#include <view/view.h>
-#include <gal/graphics_abstraction_layer.h>
 #include <connectivity/connectivity_data.h>
 #include <confirm.h>
 #include <bitmaps.h>
@@ -54,11 +50,9 @@ using namespace std::placeholders;
 #include "pcbnew_picker_tool.h"
 #include "grid_helper.h"
 #include "kicad_clipboard.h"
-#include "pcbnew_control.h"
 #include <router/router_tool.h>
 #include <dialogs/dialog_move_exact.h>
 #include <dialogs/dialog_track_via_properties.h>
-#include <dialogs/dialog_exchange_footprints.h>
 #include <tools/tool_event_utils.h>
 #include <preview_items/ruler_item.h>
 #include <board_commit.h>
@@ -155,12 +149,10 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 )
                       || SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
 
-
     menu.AddItem( PCB_ACTIONS::moveExact, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::positionRelative, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::createArray, SELECTION_CONDITIONS::NotEmpty );
-
 
     menu.AddSeparator();
     menu.AddItem( ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty );
@@ -250,8 +242,10 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection)
     auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS ); } );
+        []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+        {
+            EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS );
+        } );
 
     if( m_dragging || selection.Empty() )
         return 0;
@@ -1294,42 +1288,42 @@ int EDIT_TOOL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
 
 bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aP )
 {
-    STATUS_TEXT_POPUP statusPopup( frame() );
+    std::string         tool = "pcbnew.InteractiveEdit.selectReferencePoint";
+    STATUS_TEXT_POPUP   statusPopup( frame() );
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
-    bool picking = true;
-    bool retVal = true;
+    bool                retVal = true;
 
-    frame()->PushTool( "pcbnew.InteractiveEdit.selectReferencePoint" );
     statusPopup.SetText( _( "Select reference point for the copy..." ) );
 
-    picker->Activate();
-    picker->SetClickHandler( [&]( const VECTOR2D& aPoint ) -> bool
-                             {
-                                 aP = aPoint;
-                                 statusPopup.SetText( _( "Selection copied." ) );
-                                 statusPopup.Expire( 800 );
-                                 picking = false;
-                                 return false;  // we don't need any more points
-                             } );
-    picker->SetCancelHandler( [&]()
-                              {
-                                  statusPopup.SetText( _( "Copy cancelled." ) );
-                                  statusPopup.Expire( 800 );
-                                  picking = false;
-                                  retVal = false;
-                              } );
+    picker->SetClickHandler(
+        [&]( const VECTOR2D& aPoint ) -> bool
+        {
+            aP = aPoint;
+            statusPopup.SetText( _( "Selection copied." ) );
+            statusPopup.Expire( 800 );
+            return false;  // we don't need any more points
+        } );
+
+    picker->SetMotionHandler(
+        [&] ( const VECTOR2D& aPos )
+        {
+            statusPopup.Move( aPos + wxPoint( 20, -50 ) );
+        } );
+
+    picker->SetCancelHandler(
+        [&]()
+        {
+            statusPopup.SetText( _( "Copy cancelled." ) );
+            statusPopup.Expire( 800 );
+            retVal = false;
+        } );
 
     statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
     statusPopup.Popup();
 
-    while( picking )
-    {
-        statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
-        Wait();
-    }
+    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
     statusPopup.Hide();
-    // Picker calls PopTool() so that it gets done before activating tool's PushTool()
     return retVal;
 }
 

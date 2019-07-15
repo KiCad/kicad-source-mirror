@@ -26,13 +26,10 @@
 #define __GRID_HELPER_H
 
 #include <vector>
-
 #include <math/vector2d.h>
 #include <core/optional.h>
 #include <origin_viewitem.h>
-
 #include <layers_id_colors_and_visibility.h>
-
 #include <geometry/seg.h>
 
 class PCB_BASE_FRAME;
@@ -42,9 +39,6 @@ public:
 
     GRID_HELPER( PCB_BASE_FRAME* aFrame );
     ~GRID_HELPER();
-
-    void SetGrid( int aSize );
-    void SetOrigin( const VECTOR2I& aOrigin );
 
     VECTOR2I GetGrid() const;
     VECTOR2I GetOrigin() const;
@@ -58,7 +52,7 @@ public:
      */
     BOARD_ITEM* GetSnapped() const;
 
-    void SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin = VECTOR2I( 0, 0 ), bool aEnableDiagonal = false );
+    void SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin = VECTOR2I( 0, 0 ) );
 
     VECTOR2I Align( const VECTOR2I& aPoint ) const;
 
@@ -67,7 +61,7 @@ public:
     VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, BOARD_ITEM* aItem );
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDraggedItem );
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
-            const std::vector<BOARD_ITEM*> aSkip = {} );
+                             const std::vector<BOARD_ITEM*> aSkip = {} );
 
     void SetSnap( bool aSnap )
     {
@@ -89,8 +83,11 @@ private:
 
     struct ANCHOR
     {
-        ANCHOR( VECTOR2I aPos, int aFlags = CORNER | SNAPPABLE, BOARD_ITEM* aItem = NULL ):
-            pos( aPos ), flags( aFlags ), item( aItem ) {} ;
+        ANCHOR( VECTOR2I aPos, int aFlags = CORNER | SNAPPABLE, BOARD_ITEM* aItem = NULL ) :
+            pos( aPos ),
+            flags( aFlags ),
+            item( aItem )
+        { };
 
         VECTOR2I pos;
         int flags;
@@ -105,11 +102,11 @@ private:
     std::vector<ANCHOR> m_anchors;
 
     std::set<BOARD_ITEM*> queryVisible( const BOX2I& aArea,
-            const std::vector<BOARD_ITEM*> aSkip ) const;
+                                        const std::vector<BOARD_ITEM*> aSkip ) const;
 
-    void addAnchor( const VECTOR2I& aPos, int aFlags = CORNER | SNAPPABLE, BOARD_ITEM* aItem = NULL )
+    void addAnchor( const VECTOR2I& aPos, int aFlags, BOARD_ITEM* aItem )
     {
-        m_anchors.push_back( ANCHOR( aPos, aFlags, aItem ) );
+        m_anchors.emplace_back( ANCHOR( aPos, aFlags, aItem ) );
     }
 
     ANCHOR* nearestAnchor( const VECTOR2I& aPos, int aFlags, LSET aMatchLayers );
@@ -122,7 +119,7 @@ private:
      * @param aRefPos The point for which to compute the anchors (if used by the component)
      * @param aFrom Is this for an anchor that is designating a source point (aFrom=true) or not
      */
-    void computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, const bool aFrom = false );
+    void computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom = false );
 
     void clearAnchors()
     {
@@ -132,7 +129,6 @@ private:
     PCB_BASE_FRAME* m_frame;
     OPT<VECTOR2I> m_auxAxis;
 
-    bool m_diagonalAuxAxesEnable;   ///< If true, use the aux axis for snapping as well
     bool m_enableSnap;              ///< If true, allow snapping to other items on the layers
     bool m_enableGrid;              ///< If true, allow snapping to grid
     int m_snapSize;                 ///< Sets the radius in screen units for snapping to items
