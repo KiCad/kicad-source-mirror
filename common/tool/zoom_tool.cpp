@@ -46,7 +46,8 @@ void ZOOM_TOOL::Reset( RESET_REASON aReason )
 
 int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
 {
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
 
     while( TOOL_EVENT* evt = Wait() )
     {
@@ -66,7 +67,7 @@ int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
     }
 
     // Exit zoom tool
-    m_frame->PopTool();
+    m_frame->PopTool( tool );
     return 0;
 }
 

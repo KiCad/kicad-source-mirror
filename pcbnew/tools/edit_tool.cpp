@@ -269,7 +269,8 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    editFrame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    editFrame->PushTool( tool );
     Activate();
     controls->ShowCursor( true );
     controls->SetAutoPan( true );
@@ -506,7 +507,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         m_commit->Push( _( "Drag" ) );
     }
 
-    editFrame->PopTool();
+    editFrame->PopTool( tool );
     return 0;
 }
 
@@ -1117,7 +1118,8 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     auto& view = *getView();
     auto& controls = *getViewControls();
 
-    frame()->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    frame()->PushTool( tool );
     Activate();
 
     EDA_UNITS_T units = frame()->GetUserUnits();
@@ -1157,7 +1159,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
                 clearRuler();
             else
             {
-                frame()->PopTool();
+                frame()->PopTool( tool );
                 break;
             }
         }
@@ -1174,7 +1176,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
             }
             else
             {
-                frame()->PopTool();
+                frame()->PopTool( tool );
                 break;
             }
         }

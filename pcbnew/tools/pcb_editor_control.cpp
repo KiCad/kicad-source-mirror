@@ -649,7 +649,8 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
     controls->ShowCursor( true );
     controls->SetSnapping( true );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     VECTOR2I cursorPos = controls->GetCursorPosition();
@@ -686,7 +687,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
                 cleanup();
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }
@@ -703,7 +704,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
             }
             else
             {
-                frame()->PopTool();
+                frame()->PopTool( tool );
                 break;
             }
         }
@@ -858,7 +859,8 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     controls->SetSnapping( true );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     // Main loop: keep receiving events
@@ -869,7 +871,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() )
         {
-            frame()->PopTool();
+            frame()->PopTool( tool );
             break;
         }
 
@@ -882,7 +884,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
             }
             else
             {
-                frame()->PopTool();
+                frame()->PopTool( tool );
                 break;
             }
         }
@@ -1118,7 +1120,8 @@ void PCB_EDITOR_CONTROL::DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* a
 
 int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
 {
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
@@ -1133,7 +1136,8 @@ int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
 
     picker->Activate();
     Wait();
-    // Picker calls PopTool() so that it gets done before activating tool's PushTool()
+
+    m_frame->PopTool( tool );
     return 0;
 }
 
@@ -1304,7 +1308,8 @@ int PCB_EDITOR_CONTROL::HighlightNetTool( const TOOL_EVENT& aEvent )
         highlightNet( getViewControls()->GetMousePosition(), use_selection );
     }
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
@@ -1318,7 +1323,8 @@ int PCB_EDITOR_CONTROL::HighlightNetTool( const TOOL_EVENT& aEvent )
     picker->SetLayerSet( LSET::AllCuMask() );
     picker->Activate();
     Wait();
-    // Picker calls PopTool() so that it gets done before activating tool's PushTool()
+
+    m_frame->PopTool( tool );
     return 0;
 }
 
@@ -1372,7 +1378,8 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, BOARD* aBoard, bool aShow
 
 int PCB_EDITOR_CONTROL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
 {
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     auto picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
@@ -1398,7 +1405,8 @@ int PCB_EDITOR_CONTROL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
 
     picker->Activate();
     Wait();
-    // Picker calls PopTool() so that it gets done before activating tool's PushTool()
+
+    m_frame->PopTool( tool );
     return 0;
 }
 

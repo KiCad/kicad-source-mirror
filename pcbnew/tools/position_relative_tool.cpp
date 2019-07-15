@@ -169,9 +169,9 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
     {
         statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
         Wait();
-        // Picker calls PopTool() so that it gets done before activating tool's PushTool()
     }
 
+    frame()->PopTool( "pcbnew.PositionRelative.selectReferenceItem" );
     return 0;
 }
 

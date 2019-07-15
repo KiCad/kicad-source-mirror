@@ -164,14 +164,15 @@ private:
     ///> and its settings (width, layer) set to the current default values.
     ///> @return False if the tool was cancelled before the origin was set or origin and end are
     ///> the same point.
-    bool drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D> aStartingPoint );
+    bool drawSegment( const std::string& aTool, int aShape, DRAWSEGMENT*& aGraphic,
+                      OPT<VECTOR2D> aStartingPoint );
 
     ///> Starts drawing an arc.
     ///> @param aGraphic is an object that is going to be used by the tool for drawing. It has to
     ///> be already created. The tool deletes the object if it is not added to a BOARD.
     ///> @return False if the tool was cancelled before the origin was set or origin and end are
     ///> the same point.
-    bool drawArc( DRAWSEGMENT*& aGraphic, bool aImmediateMode );
+    bool drawArc( const std::string& aTool, DRAWSEGMENT*& aGraphic, bool aImmediateMode );
 
     /**
      * Draws a polygon, that is added as a zone or a keepout area.

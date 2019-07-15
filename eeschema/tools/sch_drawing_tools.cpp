@@ -100,7 +100,8 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
         m_selectionTool->AddItemToSel( component );
     }
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     // Prime the pump
@@ -131,7 +132,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                 cleanup();
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }
@@ -147,7 +148,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
             }
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }
@@ -247,7 +248,8 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         m_view->AddToPreview( image->Clone() );
     }
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     // Prime the pump
@@ -275,13 +277,13 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 cleanup();
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
 
             if( immediateMode )
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }
@@ -297,7 +299,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }
@@ -350,7 +352,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
                 if( immediateMode )
                 {
-                    m_frame->PopTool();
+                    m_frame->PopTool( tool );
                     break;
                 }
             }
@@ -426,7 +428,8 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     m_view->ClearPreview();
     m_view->AddToPreview( previewItem->Clone() );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     // Prime the pump
@@ -441,7 +444,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() )
         {
-            m_frame->PopTool();
+            m_frame->PopTool( tool );
             break;
         }
         else if( evt->IsActivate() )
@@ -453,7 +456,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }
@@ -505,7 +508,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     // Prime the pump
@@ -531,7 +535,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 cleanup();
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }
@@ -551,7 +555,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }
@@ -692,7 +696,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     // Prime the pump
@@ -720,7 +725,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 cleanup();
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }
@@ -740,7 +745,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }

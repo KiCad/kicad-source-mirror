@@ -478,14 +478,16 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
     m_frame->GetCanvas()->SetCursor( SIMULATION_CURSORS::GetCursor( SIMULATION_CURSORS::CURSOR::PROBE ) );
 
     picker->SetClickHandler( std::bind( probeSimulation, m_frame, std::placeholders::_1 ) );
     picker->Activate();
     Wait();
-    // Picker calls PopTool() so that it gets done before activating tool's PushTool()
+
+    m_frame->PopTool( tool );
     return 0;
 }
 
@@ -520,14 +522,16 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
 {
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
     m_frame->GetCanvas()->SetCursor( SIMULATION_CURSORS::GetCursor( SIMULATION_CURSORS::CURSOR::TUNE ) );
 
     picker->SetClickHandler( std::bind( tuneSimulation, m_frame, std::placeholders::_1 ) );
     picker->Activate();
     Wait();
-    // Picker calls PopTool() so that it gets done before activating tool's PushTool()
+
+    m_frame->PopTool( tool );
     return 0;
 }
 #endif /* KICAD_SPICE */
@@ -686,13 +690,15 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     picker->SetClickHandler( std::bind( highlightNet, m_toolMgr, std::placeholders::_1 ) );
     picker->Activate();
     Wait();
-    // Picker calls PopTool() so that it gets done before activating tool's PushTool()
+
+    m_frame->PopTool( tool );
     return 0;
 }
 

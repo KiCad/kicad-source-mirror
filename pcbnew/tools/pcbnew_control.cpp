@@ -450,7 +450,8 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
     }
     else
     {
-        m_frame->PushTool( aEvent.GetCommandStr().get() );
+        std::string tool = aEvent.GetCommandStr().get();
+        m_frame->PushTool( tool );
         Activate();
 
         PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
@@ -464,7 +465,8 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 
         picker->Activate();
         Wait();
-        // Picker calls PopTool() so that it gets done before activating tool's PushTool()
+
+        m_frame->PopTool( tool );
     }
 
     return 0;
@@ -486,7 +488,8 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
@@ -551,7 +554,8 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
     picker->Activate();
     Wait();
-    // Picker calls PopTool() so that it gets done before activating tool's PushTool()
+
+    m_frame->PopTool( tool );
     return 0;
 }
 

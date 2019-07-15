@@ -147,7 +147,6 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     reset();
     controls->ForceCursorPosition( false );
-    frame()->PopTool();
     return 0;
 }
 

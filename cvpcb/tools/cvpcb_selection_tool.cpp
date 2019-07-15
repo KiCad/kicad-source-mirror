@@ -108,7 +108,8 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     auto& controls = *getViewControls();
     auto previous_settings = controls.GetSettings();
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
@@ -141,7 +142,7 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
                 clearRuler();
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }
@@ -158,7 +159,7 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }

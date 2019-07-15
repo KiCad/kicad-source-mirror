@@ -118,7 +118,7 @@ protected:
     /// Tool ID of previously active draw tool bar button.
     int              m_lastDrawToolId;  // JEY TODO: remove this; it doesn't work in modern toolset anyway
 
-    std::deque<std::string> m_toolStack;    // stack of user-level "tools".  Used to temporarily
+    std::vector<std::string> m_toolStack;   // stack of user-level "tools".  Used to temporarily
                                             // invoke an immediate-mode action.  Note that these
                                             // are "tools" in the UI sense, which are actually
                                             // TOOL_ACTIONs internally
@@ -308,7 +308,7 @@ public:
      * and circle, or wire and bus.  So each user-level tool is actually a TOOL_ACTION.
      */
     virtual void PushTool( const std::string& actionName );
-    virtual void PopTool();
+    virtual void PopTool( const std::string& actionName );
 
     bool ToolStackIsEmpty() { return m_toolStack.empty(); }
 

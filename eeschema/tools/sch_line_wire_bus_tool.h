@@ -80,7 +80,7 @@ public:
     int AddJunctionsIfNeeded( const TOOL_EVENT& aEvent );
 
 private:
-    int doDrawSegments( int aType, SCH_LINE* aSegment );
+    int doDrawSegments( const std::string& aTool, int aType, SCH_LINE* aSegment );
     SCH_LINE* startSegments( int aType, const VECTOR2D& aPos );
     SCH_LINE* doUnfoldBus( const wxString& aNet );
     void finishSegments();

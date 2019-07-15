@@ -282,7 +282,8 @@ int LIB_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
@@ -333,7 +334,8 @@ int LIB_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
     picker->Activate();
     Wait();
-    // Picker calls PopTool() so that it gets done before activating tool's PushTool()
+
+    m_frame->PopTool( tool );
     return 0;
 }
 

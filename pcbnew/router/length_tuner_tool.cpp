@@ -263,7 +263,8 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     // Deselect all items
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    frame()->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    frame()->PushTool( tool );
     Activate();
 
     m_router->SetMode( aEvent.Parameter<PNS::ROUTER_MODE>() );
@@ -306,7 +307,7 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     m_savedSettings = m_router->Settings();
     m_savedSizes = m_router->Sizes();
 
-    frame()->PopTool();
+    frame()->PopTool( tool );
     return 0;
 }
 

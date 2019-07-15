@@ -126,7 +126,7 @@ protected:
      * @param aItemCreator the callable that will attempt to create the item
      * @param aCommitMessage the message used on a successful commit
      */
-    void doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE *aPlacer,
+    void doInteractiveItemPlacement( const std::string& aTool, INTERACTIVE_PLACER_BASE *aPlacer,
                                      const wxString& aCommitMessage,
                                      int aOptions = IPO_ROTATE | IPO_FLIP | IPO_REPEAT );
 

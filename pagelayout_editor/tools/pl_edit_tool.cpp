@@ -101,7 +101,8 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     controls->ShowCursor( true );
@@ -247,7 +248,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         m_frame->OnModify();
 
     m_moveInProgress = false;
-    m_frame->PopTool();
+    m_frame->PopTool( tool );
     return 0;
 }
 
@@ -340,7 +341,8 @@ int PL_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
 int PL_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     PL_PICKER_TOOL* picker = m_toolMgr->GetTool<PL_PICKER_TOOL>();
@@ -399,7 +401,8 @@ int PL_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
     picker->Activate();
     Wait();
-    // Picker calls PopTool() so that it gets done before activating tool's PushTool()
+
+    m_frame->PopTool( tool );
     return 0;
 }
 

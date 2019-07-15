@@ -33,12 +33,14 @@
 #include "pcb_actions.h"
 #include "tool_event_utils.h"
 
-void PCB_TOOL_BASE::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer,
+void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
+                                                INTERACTIVE_PLACER_BASE* aPlacer,
                                                 const wxString& aCommitMessage, int aOptions )
 {
     using namespace std::placeholders;
     std::unique_ptr<BOARD_ITEM> newItem;
 
+    frame()->PushTool( aTool );
     Activate();
 
     BOARD_COMMIT commit( frame() );
@@ -100,14 +102,14 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer
             if( aOptions & IPO_SINGLE_CLICK )
             {
                 cleanup();
-                frame()->PopTool();
+                frame()->PopTool( aTool );
                 break;
             }
             else if( newItem )
                 cleanup();
             else
             {
-                frame()->PopTool();
+                frame()->PopTool( aTool );
                 break;
             }
         }
@@ -127,7 +129,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer
             }
             else
             {
-                frame()->PopTool();
+                frame()->PopTool( aTool );
                 break;
             }
         }

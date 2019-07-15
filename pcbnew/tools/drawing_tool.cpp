@@ -145,10 +145,11 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         startingPoint = getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
-    while( drawSegment( S_SEGMENT, line, startingPoint ) )
+    while( drawSegment( tool, S_SEGMENT, line, startingPoint ) )
     {
         if( line )
         {
@@ -188,10 +189,11 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         startingPoint = getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
-    while( drawSegment( S_CIRCLE, circle, startingPoint ) )
+    while( drawSegment( tool, S_CIRCLE, circle, startingPoint ) )
     {
         if( circle )
         {
@@ -226,10 +228,11 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 
     arc->SetFlags( IS_NEW );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
-    while( drawArc( arc, immediateMode ) )
+    while( drawArc( tool, arc, immediateMode ) )
     {
         if( arc )
         {
@@ -266,7 +269,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::TEXT );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     bool reselect = false;
@@ -299,7 +303,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 cleanup();
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }
@@ -315,7 +319,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }
@@ -472,7 +476,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::DIMENSION );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     enum DIMENSION_STEPS
@@ -517,7 +522,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 cleanup();
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }
@@ -537,7 +542,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }
@@ -749,7 +754,8 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     m_view->Update( &preview );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     // Main loop: keep receiving events
@@ -762,7 +768,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         {
             preview.FreeItems();
 
-            m_frame->PopTool();
+            m_frame->PopTool( tool );
             break;
         }
         else if( evt->IsMotion() )
@@ -827,7 +833,8 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ANCHOR );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     m_controls->ShowCursor( true );
@@ -854,7 +861,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
             // Usually, we do not need to change twice the anchor position,
             // so deselect the active tool
-            m_frame->PopTool();
+            m_frame->PopTool( tool );
             break;
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -863,7 +870,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
-            m_frame->PopTool();
+            m_frame->PopTool( tool );
             break;
         }
     }
@@ -872,7 +879,8 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 }
 
 
-bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D> aStartingPoint )
+bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMENT*& aGraphic,
+                                OPT<VECTOR2D> aStartingPoint )
 {
     // Only two shapes are currently supported
     assert( aShape == S_SEGMENT || aShape == S_CIRCLE );
@@ -956,7 +964,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
                 cleanup();
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( aTool );
                 cancelled = true;
             }
 
@@ -982,7 +990,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
                 if( started )
                     cleanup();
 
-                m_frame->PopTool();
+                m_frame->PopTool( aTool );
                 cancelled = true;
                 break;
             }
@@ -1135,7 +1143,7 @@ static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER
 }
 
 
-bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic, bool aImmediateMode )
+bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT*& aGraphic, bool aImmediateMode )
 {
     m_lineWidth = getSegmentWidth( getDrawingLayer() );
 
@@ -1188,7 +1196,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic, bool aImmediateMode )
                 cleanup();
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( aTool );
                 cancelled = true;
             }
 
@@ -1214,7 +1222,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic, bool aImmediateMode )
                 if( firstPoint )
                     cleanup();
 
-                m_frame->PopTool();
+                m_frame->PopTool( aTool );
                 cancelled = true;
                 break;
             }
@@ -1387,7 +1395,8 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     // hands the calculated points over to the zone creator tool
     POLYGON_GEOM_MANAGER polyGeomMgr( zoneTool );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();    // register for events
 
     m_controls->ShowCursor( true );
@@ -1427,7 +1436,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                 cleanup();
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }
@@ -1447,7 +1456,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }
@@ -1814,9 +1823,9 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
     VIA_PLACER placer( frame() );
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::VIA );
-    frame()->PushTool( aEvent.GetCommandStr().get() );
 
-    doInteractiveItemPlacement( &placer, _( "Place via" ), IPO_REPEAT | IPO_SINGLE_CLICK );
+    doInteractiveItemPlacement( aEvent.GetCommandStr().get(), &placer, _( "Place via" ),
+                                IPO_REPEAT | IPO_SINGLE_CLICK );
 
     return 0;
 }

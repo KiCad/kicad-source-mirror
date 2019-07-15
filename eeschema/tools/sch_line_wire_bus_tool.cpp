@@ -257,7 +257,8 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
     if( aEvent.HasPosition() )
         getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
 
     if( aEvent.HasPosition() )
     {
@@ -265,7 +266,7 @@ int SCH_LINE_WIRE_BUS_TOOL::DrawSegments( const TOOL_EVENT& aEvent )
         segment = startSegments( layer, cursorPos );
     }
 
-    return doDrawSegments( layer, segment );
+    return doDrawSegments( tool, layer, segment );
 }
 
 
@@ -277,7 +278,8 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     if( netPtr )
@@ -313,10 +315,10 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 
     // If we have an unfolded wire to draw, then draw it
     if( segment )
-        return doDrawSegments( LAYER_WIRE, segment );
+        return doDrawSegments( tool, LAYER_WIRE, segment );
     else
     {
-        m_frame->PopTool();
+        m_frame->PopTool( tool );
         return 0;
     }
 }
@@ -437,7 +439,7 @@ static void computeBreakPoint( SCH_SCREEN* aScreen, SCH_LINE* aSegment, wxPoint&
 }
 
 
-int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
+int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType, SCH_LINE* aSegment )
 {
     bool             forceHV = m_frame->GetForceHVLines();
     SCH_SCREEN*      screen = m_frame->GetScreen();
@@ -486,7 +488,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
                 cleanup();
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( aTool );
                 break;
             }
         }
@@ -502,7 +504,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
             }
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( aTool );
                 break;
             }
         }

@@ -119,7 +119,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     else
         return 0;
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
 
     if( m_moveInProgress )
     {
@@ -448,7 +449,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     m_dragAdditions.clear();
     m_moveInProgress = false;
-    m_frame->PopTool();
+    m_frame->PopTool( tool );
     return 0;
 }
 

@@ -83,7 +83,8 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     controls->ShowCursor( true );
@@ -282,7 +283,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         m_frame->OnModify();
 
     m_moveInProgress = false;
-    m_frame->PopTool();
+    m_frame->PopTool( tool );
     return 0;
 }
 

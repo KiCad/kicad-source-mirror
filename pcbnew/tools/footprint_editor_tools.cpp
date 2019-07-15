@@ -313,9 +313,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 
     PAD_PLACER placer;
 
-    frame()->PushTool( aEvent.GetCommandStr().get() );
-
-    doInteractiveItemPlacement( &placer,  _( "Place pad" ),
+    doInteractiveItemPlacement( aEvent.GetCommandStr().get(), &placer,  _( "Place pad" ),
                                 IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP );
 
     return 0;

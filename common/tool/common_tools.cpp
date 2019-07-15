@@ -49,11 +49,6 @@ int COMMON_TOOLS::SelectionTool( const TOOL_EVENT& aEvent )
     // just a cancel of whatever other tools might be running.
 
     m_toolMgr->ProcessEvent( TOOL_EVENT( TC_COMMAND, TA_CANCEL_TOOL ) );
-
-    // Shouldn't be necessary, but as the Irish would say: "just to be sure to be sure"
-    while( !m_frame->ToolStackIsEmpty() )
-        m_frame->PopTool();
-
     return 0;
 }
 

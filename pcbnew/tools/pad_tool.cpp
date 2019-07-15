@@ -328,7 +328,8 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     if( settingsDlg.ShowModal() != wxID_OK )
         return 0;
 
-    frame()->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    frame()->PushTool( tool );
     Activate();
 
     GENERAL_COLLECTOR collector;
@@ -370,7 +371,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
             commit.Revert();
 
-            frame()->PopTool();
+            frame()->PopTool( tool );
             break;
         }
 
@@ -378,7 +379,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
         {
             commit.Push( _( "Renumber pads" ) );
 
-            frame()->PopTool();
+            frame()->PopTool( tool );
             break;
         }
 
@@ -478,7 +479,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                  evt->IsDblClick( BUT_LEFT ) )
         {
             commit.Push( _( "Renumber pads" ) );
-            frame()->PopTool();
+            frame()->PopTool( tool );
             break;
         }
 

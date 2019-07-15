@@ -869,7 +869,8 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     // Deselect all items
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    frame->PushTool( tool );
     Activate();
 
     m_router->SetMode( mode );
@@ -894,7 +895,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 
         if( evt->IsCancelInteractive() )
         {
-            frame->PopTool();
+            frame->PopTool( tool );
             break;
         }
         else if( evt->IsActivate() )
@@ -906,7 +907,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
             }
             else
             {
-                frame->PopTool();
+                frame->PopTool( tool );
                 break;
             }
         }
@@ -964,7 +965,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 
         if( m_cancelled )
         {
-            frame->PopTool();
+            frame->PopTool( tool );
             break;
         }
     }

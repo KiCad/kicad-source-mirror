@@ -80,7 +80,8 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     // Prime the pump
@@ -108,7 +109,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
                 cleanup();
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }
@@ -124,7 +125,7 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->PopTool();
+                m_frame->PopTool( tool );
                 break;
             }
         }
@@ -196,7 +197,8 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 
-    m_frame->PushTool( aEvent.GetCommandStr().get() );
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     Activate();
 
     // Prime the pump
@@ -277,7 +279,7 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
-    m_frame->PopTool();
+    m_frame->PopTool( tool );
     return 0;
 }
 
