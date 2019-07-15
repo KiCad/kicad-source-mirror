@@ -447,7 +447,7 @@ void EDA_DRAW_FRAME::PopTool( const std::string& actionName )
     // frame but not processed until the mouse is back in the Schematic frame), so make sure
     // we're popping the right stack frame.
 
-    for( size_t i = m_toolStack.size() - 1; i >= 0; --i )
+    for( int i = m_toolStack.size() - 1; i >= 0; --i )
     {
         if( m_toolStack[ i ] == actionName )
         {
