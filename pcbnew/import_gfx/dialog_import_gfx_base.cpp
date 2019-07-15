@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 23 2019)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -102,7 +102,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	bSizerPosSettings->Add( m_DxfPcbPositionUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bSizerUserPos->Add( bSizerPosSettings, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	bSizerUserPos->Add( bSizerPosSettings, 1, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	bSizerOptions->Add( bSizerUserPos, 0, wxEXPAND, 5 );
@@ -111,7 +111,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	sbSizer2->Add( bSizerOptions, 1, wxEXPAND|wxLEFT, 20 );
 
 
-	bSizerMain->Add( sbSizer2, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizerMain->Add( sbSizer2, 1, wxEXPAND|wxALL, 5 );
 
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Import parameters:") ), wxVERTICAL );
@@ -168,7 +168,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	sbSizer1->Add( bSizer7, 1, wxEXPAND, 5 );
 
 
-	bSizerMain->Add( sbSizer1, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizerMain->Add( sbSizer1, 1, wxEXPAND|wxALL, 5 );
 
 
 	bSizerMain->Add( 0, 0, 0, wxEXPAND, 5 );
