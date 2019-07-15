@@ -726,9 +726,9 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
 
         if( libEditor->HasLibModifications() )
         {
-            wxString msg = _( "Modifications have been made to one or more symbol libraries.\n"
-                              "Changes must be saved or discarded before the symbol library "
-                              "table can be modified." );
+            msg = _( "Modifications have been made to one or more symbol libraries.\n"
+                     "Changes must be saved or discarded before the symbol library "
+                     "table can be modified." );
 
             switch( UnsavedChangesDialog( aParent, msg ) )
             {
