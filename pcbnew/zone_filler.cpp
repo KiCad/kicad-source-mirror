@@ -693,6 +693,11 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
     int epsilon = Millimeter2iu( 0.001 );
     int numSegs = std::max( GetArcToSegmentCount( half_min_width, m_high_def, 360.0 ), 6 );
 
+    SHAPE_POLY_SET::CORNER_STRATEGY cornerStrategy = SHAPE_POLY_SET::CHOP_ACUTE_CORNERS;
+
+    if( aZone->GetCornerSmoothingType() == ZONE_SETTINGS::SMOOTHING_FILLET )
+        cornerStrategy = SHAPE_POLY_SET::ROUND_ACUTE_CORNERS;
+
     std::deque<SHAPE_LINE_CHAIN> thermalSpokes;
     SHAPE_POLY_SET clearanceHoles;
 
@@ -723,8 +728,11 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
     testAreas.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
 
     // Prune features that don't meet minimum-width criteria
-    testAreas.Deflate( half_min_width - epsilon, numSegs, true );
-    testAreas.Inflate( half_min_width - epsilon, numSegs, true );
+    if( half_min_width - epsilon > epsilon )
+    {
+        testAreas.Deflate( half_min_width - epsilon, numSegs, cornerStrategy );
+        testAreas.Inflate( half_min_width - epsilon, numSegs, cornerStrategy );
+    }
 
     // Spoke-end-testing is hugely expensive so we generate cached bounding-boxes to speed
     // things up a bit.
@@ -759,7 +767,8 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
 
     aRawPolys.BooleanSubtract( clearanceHoles, SHAPE_POLY_SET::PM_FAST );
     // Prune features that don't meet minimum-width criteria
-    aRawPolys.Deflate( half_min_width - epsilon, numSegs, true );
+    if( half_min_width - epsilon > epsilon )
+        aRawPolys.Deflate( half_min_width - epsilon, numSegs, cornerStrategy );
 
     if( s_DumpZonesWhenFilling )
         dumper->Write( &aRawPolys, "solid-areas-before-hatching" );
@@ -777,10 +786,15 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
         // If we're stroking the zone with a min_width stroke then this will naturally
         // inflate the zone by half_min_width
     }
-    else if( half_min_width - epsilon > epsilon ) // avoid very small outline thickness
+    else if( half_min_width - epsilon > epsilon )
     {
         aRawPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
-        aRawPolys.Inflate( half_min_width - epsilon, numSegs, true );
+        aRawPolys.Inflate( half_min_width - epsilon, numSegs, cornerStrategy );
+
+        // If we've deflated/inflated by something near our corner radius then we will have
+        // ended up with too-sharp corners.  Apply outline smoothing again.
+        if( aZone->GetMinThickness() > aZone->GetCornerRadius() )
+            aRawPolys.BooleanIntersection( aSmoothedOutline, SHAPE_POLY_SET::PM_FAST );
     }
 
     aRawPolys.Fracture( SHAPE_POLY_SET::PM_FAST );

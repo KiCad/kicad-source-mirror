@@ -165,11 +165,16 @@ class SHAPE_POLY_SET : public SHAPE
 
             operator bool() const
             {
-                return ( ( m_currentPolygon < m_lastPolygon ) || ( m_currentPolygon == m_poly->OutlineCount() - 1 &&
-                            ( m_currentContour < static_cast<int>( m_poly->CPolygon( m_currentPolygon ).size() ) - 1  ||
-                            ( m_currentVertex < m_poly->CPolygon( m_currentPolygon )[m_currentContour].PointCount() )
-                            )
-                        ) );
+                if( m_currentPolygon < m_lastPolygon )
+                    return true;
+
+                if( m_currentPolygon != m_poly->OutlineCount() - 1 )
+                    return false;
+
+                auto currentPolygon = m_poly->CPolygon( m_currentPolygon );
+
+                return m_currentContour < (int) currentPolygon.size() - 1
+                           || m_currentVertex < currentPolygon[m_currentContour].PointCount();
             }
 
             /**
@@ -859,29 +864,40 @@ class SHAPE_POLY_SET : public SHAPE
         void BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
                                   POLYGON_MODE aFastMode );
 
-        /**
-         * Performs outline inflation/deflation, using (optionally) round corners.
-         * Polygons can have holes, but not linked holes with main outlines,
-         * if aFactor < 0.
-         * When aFactor is < 0 a bad shape can result from these extra-segments used to
-         * link holes to main outlines
-         * Use InflateWithLinkedHoles for these polygons, especially if aFactor < 0
-         *
-         * @param aFactor - number of units to offset edges
-         * @param aCircleSegmentsCount - number of segments per 360° to use in curve approx
-         * @param aPreserveCorners - If true, use square joints to keep angles preserved
-         */
-        void Inflate( int aFactor, int aCircleSegmentsCount, bool aPreserveCorners = false );
-
-        void Deflate( int aFactor, int aCircleSegmentsCount, bool aPreserveCorners = false )
+        enum CORNER_STRATEGY
         {
-            Inflate( -aFactor, aPreserveCorners, aPreserveCorners );
+            ALLOW_ACUTE_CORNERS,
+            CHOP_ACUTE_CORNERS,
+            ROUND_ACUTE_CORNERS,
+            ROUND_ALL_CORNERS
+        };
+
+        /**
+         * Performs outline inflation/deflation.  Polygons can have holes, but not linked holes
+         * with main outlines, if aFactor < 0.  For those use InflateWithLinkedHoles() to avoid
+         * odd corners where the link segments meet the outline.
+         *
+         * @param aAmount - number of units to offset edges
+         * @param aCircleSegmentsCount - number of segments per 360° to use in curve approx
+         * @param aCornerStrategy - ALLOW_ACUTE_CORNERS to preserve all angles,
+         *                          CHOP_ACUTE_CORNERS to chop angles less than 90°,
+         *                          ROUND_ACUTE_CORNERS to round off angles less than 90°,
+         *                          ROUND_ALL_CORNERS to round regardless of angles
+         */
+        void Inflate( int aAmount, int aCircleSegmentsCount,
+                      CORNER_STRATEGY aCornerStrategy = CHOP_ACUTE_CORNERS );
+
+        void Deflate( int aAmount, int aCircleSegmentsCount,
+                      CORNER_STRATEGY aCornerStrategy = CHOP_ACUTE_CORNERS )
+        {
+            Inflate( -aAmount, aCircleSegmentsCount, aCornerStrategy );
         }
 
-        ///> Performs outline inflation/deflation, using round corners.
-        ///> Polygons can have holes, and/or linked holes with main outlines.
-        ///> The resulting polygons are laso polygons with linked holes to main outlines
-        ///> For aFastMode meaning, see function booleanOp
+        /**
+         * Performs outline inflation/deflation, using round corners.  Polygons can have holes,
+         * and/or linked holes with main outlines.  The resulting polygons are laso polygons with
+         * linked holes to main outlines.  For aFastMode meaning, see function booleanOp  .
+         */
         void InflateWithLinkedHoles( int aFactor, int aCircleSegmentsCount, POLYGON_MODE aFastMode );
 
         ///> Converts a set of polygons with holes to a singe outline with "slits"/"fractures"

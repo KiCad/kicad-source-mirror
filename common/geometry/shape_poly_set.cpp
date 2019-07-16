@@ -544,7 +544,8 @@ void SHAPE_POLY_SET::BooleanIntersection( const SHAPE_POLY_SET& a,
 }
 
 
-void SHAPE_POLY_SET::InflateWithLinkedHoles( int aFactor, int aCircleSegmentsCount, POLYGON_MODE aFastMode )
+void SHAPE_POLY_SET::InflateWithLinkedHoles( int aFactor, int aCircleSegmentsCount,
+                                             POLYGON_MODE aFastMode )
 {
     Simplify( aFastMode );
     Inflate( aFactor, aCircleSegmentsCount );
@@ -552,23 +553,23 @@ void SHAPE_POLY_SET::InflateWithLinkedHoles( int aFactor, int aCircleSegmentsCou
 }
 
 
-void SHAPE_POLY_SET::Inflate( int aFactor, int aCircleSegmentsCount, bool aPreserveCorners )
+void SHAPE_POLY_SET::Inflate( int aAmount, int aCircleSegmentsCount,
+                              CORNER_STRATEGY aCornerStrategy )
 {
     // A static table to avoid repetitive calculations of the coefficient
-    // 1.0 - cos( M_PI/aCircleSegmentsCount)
+    // 1.0 - cos( M_PI / aCircleSegmentsCount )
     // aCircleSegmentsCount is most of time <= 64 and usually 8, 12, 16, 32
     #define SEG_CNT_MAX 64
     static double arc_tolerance_factor[SEG_CNT_MAX + 1];
 
     ClipperOffset c;
 
-    // N.B. using jtSquare here does not create square corners; they end up mitered by aFactor.
-    // Setting jtMiter with a sufficiently high MiterLimit will preserve corners, but things
-    // get ugly at very acute angles (and we don't really want to support those anyway for peeling
-    // concerns).  Setting a MiterLimit of 1.4145 preserves corners up to 90 degrees; we set the
-    // limit a bit above that.
-    JoinType joinType = aPreserveCorners ? jtMiter : jtRound;
-    double   miterLimit = 1.5;
+    // N.B. see the Clipper documentation for jtSquare/jtMiter/jtRound.  They are poorly named
+    // and are not what you'd think they are.
+    // http://www.angusj.com/delphi/clipper/documentation/Docs/Units/ClipperLib/Types/JoinType.htm
+    JoinType joinType = aCornerStrategy == ROUND_ALL_CORNERS ? jtRound : jtMiter;
+    double   miterLimit = aCornerStrategy == ALLOW_ACUTE_CORNERS ? 10 : 1.5;
+    JoinType miterFallback = aCornerStrategy == ROUND_ACUTE_CORNERS ? jtRound : jtSquare;
 
     for( const POLYGON& poly : m_polys )
     {
@@ -578,10 +579,9 @@ void SHAPE_POLY_SET::Inflate( int aFactor, int aCircleSegmentsCount, bool aPrese
 
     PolyTree solution;
 
-    // Calculate the arc tolerance (arc error) from the seg count by circle.
-    // the seg count is nn = M_PI / acos(1.0 - c.ArcTolerance / abs(aFactor))
-    // see:
-    // www.angusj.com/delphi/clipper/documentation/Docs/Units/ClipperLib/Classes/ClipperOffset/Properties/ArcTolerance.htm
+    // Calculate the arc tolerance (arc error) from the seg count by circle. The seg count is
+    // nn = M_PI / acos(1.0 - c.ArcTolerance / abs(aAmount))
+    // http://www.angusj.com/delphi/clipper/documentation/Docs/Units/ClipperLib/Classes/ClipperOffset/Properties/ArcTolerance.htm
 
     if( aCircleSegmentsCount < 6 ) // avoid incorrect aCircleSegmentsCount values
         aCircleSegmentsCount = 6;
@@ -598,9 +598,10 @@ void SHAPE_POLY_SET::Inflate( int aFactor, int aCircleSegmentsCount, bool aPrese
     else
         coeff = arc_tolerance_factor[aCircleSegmentsCount];
 
-    c.ArcTolerance = std::abs( aFactor ) * coeff;
+    c.ArcTolerance = std::abs( aAmount ) * coeff;
     c.MiterLimit = miterLimit;
-    c.Execute( solution, aFactor );
+    c.MiterFallback = miterFallback;
+    c.Execute( solution, aAmount );
 
     importTree( &solution );
 }

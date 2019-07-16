@@ -418,6 +418,7 @@ public:
     void    Clear();
 
     double MiterLimit;
+    JoinType MiterFallback;
     double ArcTolerance;
 
 private:
