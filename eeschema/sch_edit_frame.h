@@ -89,11 +89,9 @@ enum ANNOTATE_OPTION_T {
 
 /// Schematic search type used by the socket link with Pcbnew
 enum SCH_SEARCH_T {
-    FIND_COMPONENT_ONLY,    ///< Find a component in the schematic.
-    FIND_PIN,               ///< Find a component pin in the schematic.
-    FIND_REFERENCE,         ///< Find an item by it's reference designator.
-    FIND_VALUE,             ///< Find an item by it's value field.
-    FIND_FIELD              ///< Find a component field.
+    HIGHLIGHT_PIN,
+    HIGHLIGHT_COMPONENT,
+    SELECT_COMPONENT
 };
 
 

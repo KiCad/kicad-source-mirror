@@ -169,28 +169,19 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         return;
     }
 
+    BOX2I bbox = { { 0, 0 }, { 0, 0 } };
+
     if( module )
     {
-        renderSettings->SetHighlight( true, -1, true );
-
-        for( MODULE* mod : pcb->Modules() )
-        {
-            mod->ClearHighlighted();
-            mod->RunOnChildren( []( BOARD_ITEM* child ) { child->ClearHighlighted(); } );
-        }
-
-        module->SetHighlighted();
-        module->RunOnChildren( []( BOARD_ITEM* child ) { child->SetHighlighted(); } );
-
-        view->SetCenter( VECTOR2D( module->GetPosition() ) );
+        m_toolManager->RunAction( PCB_ACTIONS::selectionClear, true );
+        m_toolManager->RunAction( PCB_ACTIONS::selectItem, true, (void*) module );
+        bbox = module->GetBoundingBox();
     }
     else if( netcode > 0 )
     {
         renderSettings->SetHighlight( ( netcode >= 0 ), netcode );
 
         pcb->SetHighLightNet( netcode );
-
-        BOX2I bbox;
 
         auto merge_area = [netcode, &bbox]( BOARD_CONNECTED_ITEM* aItem )
         {
@@ -212,22 +203,24 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         for( auto mod : pcb->Modules() )
             for ( auto mod_pad : mod->Pads() )
                 merge_area( mod_pad );
-
-        if( bbox.GetWidth() > 0 && bbox.GetHeight() > 0 )
-        {
-            auto bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
-            auto screenSize = view->ToWorld( GetCanvas()->GetClientSize(), false );
-            double ratio = std::max( fabs( bbSize.x / screenSize.x ),
-                                     fabs( bbSize.y / screenSize.y ) );
-            double scale = view->GetScale() / ratio;
-
-            view->SetScale( scale );
-            view->SetCenter( bbox.Centre() );
-        }
     }
     else
     {
         renderSettings->SetHighlight( false );
+    }
+
+    if( bbox.GetWidth() > 0 && bbox.GetHeight() > 0 )
+    {
+        auto bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
+        auto screenSize = view->ToWorld( GetCanvas()->GetClientSize(), false );
+        double ratio = std::max( fabs( bbSize.x / screenSize.x ),
+                                 fabs( bbSize.y / screenSize.y ) );
+
+        // Try not to zoom on every cross-probe; it gets very noisy
+        if( ratio < 0.1 || ratio > 1.0 )
+            view->SetScale( view->GetScale() / ratio );
+
+        view->SetCenter( bbox.Centre() );
     }
 
     view->UpdateAllLayersColor();

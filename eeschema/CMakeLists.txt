@@ -145,7 +145,6 @@ set( EESCHEMA_SRCS
     erc.cpp
     fields_grid_table.cpp
     files-io.cpp
-    find.cpp
     generate_alias_info.cpp
     getpart.cpp
     hierarch.cpp

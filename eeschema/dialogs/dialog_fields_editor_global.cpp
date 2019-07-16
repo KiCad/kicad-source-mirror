@@ -1036,7 +1036,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableCellClick( wxGridEvent& event )
         if( refs.size() == 1 )
         {
             m_parent->FindComponentAndItem( refs[0].GetRef() + refs[0].GetRefNumber(),
-                                            true, FIND_COMPONENT_ONLY, wxEmptyString );
+                                            true, HIGHLIGHT_COMPONENT, wxEmptyString );
         }
     }
     else
