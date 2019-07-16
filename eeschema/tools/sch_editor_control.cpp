@@ -439,8 +439,6 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
 #ifdef KICAD_SPICE
 int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
-    constexpr KICAD_T wiresAndComponents[] = { SCH_LINE_T, SCH_COMPONENT_T, SCH_SHEET_PIN_T, EOT };
-
     SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
     std::string     tool = aEvent.GetCommandStr().get();
     PICKER_TOOL*    picker = m_toolMgr->GetTool<PICKER_TOOL>();
@@ -450,9 +448,10 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
     picker->SetClickHandler(
         [&]( const VECTOR2D& aPosition )
         {
-            EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+            KICAD_T wiresAndComponents[] = { SCH_LINE_T, SCH_COMPONENT_T, SCH_SHEET_PIN_T, EOT };
 
-            EDA_ITEM* item = selTool->SelectPoint( aPosition, wiresAndComponents );
+            EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+            EDA_ITEM*          item = selTool->SelectPoint( aPosition, wiresAndComponents );
 
             if( !item )
                 return false;
@@ -481,8 +480,6 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
 {
-    constexpr KICAD_T fieldsAndComponents[] = { SCH_COMPONENT_T, SCH_FIELD_T, EOT };
-
     std::string     tool = aEvent.GetCommandStr().get();
     SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
     PICKER_TOOL*    picker = m_toolMgr->GetTool<PICKER_TOOL>();
@@ -492,6 +489,8 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
     picker->SetClickHandler(
         [&]( const VECTOR2D& aPosition )
         {
+            KICAD_T fieldsAndComponents[] = { SCH_COMPONENT_T, SCH_FIELD_T, EOT };
+
             EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
             EDA_ITEM*          item = selTool->SelectPoint( aPosition, fieldsAndComponents );
 
