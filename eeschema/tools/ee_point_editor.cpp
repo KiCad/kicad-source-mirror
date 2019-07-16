@@ -335,6 +335,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
                 rollbackFromUndo();
                 inDrag = false;
                 modified = false;
+                break;
             }
             else if( evt->IsCancelInteractive() )
                 break;
