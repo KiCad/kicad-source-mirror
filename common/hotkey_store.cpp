@@ -71,7 +71,7 @@ wxString HOTKEY_STORE::GetSectionName( TOOL_ACTION* aAction )
     };
 
     wxString appName = GetAppName( aAction );
-    
+
     if( s_AppNames.count( appName ) )
         return s_AppNames[ appName ];
     else
@@ -87,11 +87,11 @@ HOTKEY_STORE::HOTKEY_STORE()
 void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList, bool aIncludeGestures )
 {
     m_toolManagers = std::move( aToolManagerList );
-    
+
     // Collect all action maps into a single master map.  This will re-group everything
     // and collect duplicates together
     std::map<std::string, HOTKEY> masterMap;
-    
+
     for( TOOL_MANAGER* toolMgr : m_toolManagers )
     {
         for( const auto& entry : toolMgr->GetActions() )
@@ -105,9 +105,12 @@ void HOTKEY_STORE::Init( std::vector<TOOL_MANAGER*> aToolManagerList, bool aIncl
             hotkey.m_EditKeycode = entry.second->GetHotKey();
         }
     }
-    
+
     wxString        currentApp;
     HOTKEY_SECTION* currentSection = nullptr;
+
+    // If a previous list was built, ensure this previous list is cleared:
+    m_hk_sections.clear();
 
     for( const auto& entry : masterMap )
     {
@@ -184,12 +187,12 @@ bool HOTKEY_STORE::CheckKeyConflicts( TOOL_ACTION* aAction, long aKey, HOTKEY** 
     {
         if( section.m_SectionName != sectionName )
             continue;
-        
+
         for( HOTKEY& hotkey: section.m_HotKeys )
         {
             if( hotkey.m_Actions[ 0 ] == aAction )
                 continue;
-            
+
             if( hotkey.m_EditKeycode == aKey )
             {
                 *aConflict = &hotkey;
@@ -197,6 +200,6 @@ bool HOTKEY_STORE::CheckKeyConflicts( TOOL_ACTION* aAction, long aKey, HOTKEY** 
             }
         }
     }
-    
+
     return false;
 }

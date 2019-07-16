@@ -141,9 +141,10 @@ bool PAGED_DIALOG::TransferDataToWindow()
 {
     finishInitialization();
 
+    #if 1   // Call TransferDataToWindow() only once: this is enough
     if( !DIALOG_SHIM::TransferDataToWindow() )
         return false;
-
+    #else
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
     {
         wxWindow* page = m_treebook->GetPage( i );
@@ -151,6 +152,7 @@ bool PAGED_DIALOG::TransferDataToWindow()
         if( !page->TransferDataToWindow() )
             return false;
     }
+    #endif
 
     // Search for a page matching the lastParentPageTitle/lastPageTitle hierarchy
     wxString lastPage = g_lastPage[ m_title ];
@@ -184,9 +186,10 @@ bool PAGED_DIALOG::TransferDataToWindow()
 
 bool PAGED_DIALOG::TransferDataFromWindow()
 {
+    #if 1   // Call TransferDataFromWindow() only once: this is enough
     if( !DIALOG_SHIM::TransferDataFromWindow() )
         return false;
-
+    #else
     for( size_t i = 0; i < m_treebook->GetPageCount(); ++i )
     {
         wxWindow* page = m_treebook->GetPage( i );
@@ -194,6 +197,7 @@ bool PAGED_DIALOG::TransferDataFromWindow()
         if( !page->TransferDataFromWindow() )
             return false;
     }
+    #endif
 
     return true;
 }

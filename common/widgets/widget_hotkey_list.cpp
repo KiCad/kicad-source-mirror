@@ -300,7 +300,7 @@ void WIDGET_HOTKEY_LIST::UpdateFromClientData()
 
             if( label.IsEmpty() )
                 label = changed_hk.m_Actions[ 0 ]->GetName();
-            
+
             // mark unsaved changes
             if( changed_hk.m_EditKeycode != changed_hk.m_Actions[ 0 ]->GetHotKey() )
                 key_text += " *";
@@ -428,7 +428,7 @@ bool WIDGET_HOTKEY_LIST::ResolveKeyConflicts( TOOL_ACTION* aAction, long aKey )
 
     if( !conflictingHotKey )
         return true;
-    
+
     TOOL_ACTION* conflictingAction = conflictingHotKey->m_Actions[ 0 ];
     wxString msg = wxString::Format( _( "\"%s\" is already assigned to \"%s\" in section \"%s\". "
                                         "Are you sure you want to change its assignment?" ),
