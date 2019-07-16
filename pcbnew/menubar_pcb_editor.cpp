@@ -436,6 +436,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     inspectMenu->AddItem( PCB_ACTIONS::listNets,             SELECTION_CONDITIONS::ShowAlways );
     inspectMenu->AddItem( ACTIONS::measureTool,              SELECTION_CONDITIONS::ShowAlways );
+    inspectMenu->AddItem( PCB_ACTIONS::boardStatistics,      SELECTION_CONDITIONS::ShowAlways );
 
     inspectMenu->AddSeparator();
     inspectMenu->AddItem( PCB_ACTIONS::runDRC,               SELECTION_CONDITIONS::ShowAlways );

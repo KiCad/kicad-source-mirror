@@ -909,6 +909,11 @@ TOOL_ACTION PCB_ACTIONS::deleteTool( "pcbnew.Control.deleteTool",
         _( "Delete Items Tool" ), _( "Click on items to delete them" ),
         delete_xpm );
 
+//Show board statistics tool
+TOOL_ACTION PCB_ACTIONS::boardStatistics( "pcbnew.InspectionTool.ShowStatisticsDialog", AS_GLOBAL,
+        0, LEGACY_HK_NAME( "Show Board Statistics" ), _( "Show Board Statistics" ),
+        _( "Shows board statistics" ), pcbnew_xpm );
+
 
 // PLACEMENT_TOOL
 //

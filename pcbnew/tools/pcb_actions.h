@@ -415,6 +415,7 @@ public:
     static TOOL_ACTION drillOrigin;
     static TOOL_ACTION appendBoard;
     static TOOL_ACTION showEeschema;
+    static TOOL_ACTION boardStatistics;
 
     // Ratsnest
     static TOOL_ACTION localRatsnestTool;

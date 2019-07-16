@@ -74,6 +74,7 @@
 #include <tools/point_editor.h>
 #include <tools/pcbnew_control.h>
 #include <tools/pcb_editor_control.h>
+#include <tools/pcb_inspection_tool.h>
 #include <tools/placement_tool.h>
 #include <tools/pad_tool.h>
 #include <tools/microwave_tool.h>
@@ -420,6 +421,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new POINT_EDITOR );
     m_toolManager->RegisterTool( new PCBNEW_CONTROL );
     m_toolManager->RegisterTool( new PCB_EDITOR_CONTROL );
+    m_toolManager->RegisterTool( new PCB_INSPECTION_TOOL );
     m_toolManager->RegisterTool( new ALIGN_DISTRIBUTE_TOOL );
     m_toolManager->RegisterTool( new MICROWAVE_TOOL );
     m_toolManager->RegisterTool( new POSITION_RELATIVE_TOOL );
