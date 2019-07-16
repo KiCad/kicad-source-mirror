@@ -28,12 +28,10 @@
 #include <base_units.h>
 #include <sch_validators.h>
 #include <tool/tool_manager.h>
-#include <sch_draw_panel.h>
 #include <general.h>
 #include <gr_text.h>
 #include <confirm.h>
 #include <sch_text.h>
-#include <typeinfo>
 #include <widgets/unit_binder.h>
 #include <dialog_edit_label_base.h>
 #include <kicad_string.h>
@@ -115,6 +113,8 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
     case SCH_SHEET_PIN_T:          SetTitle( _( "Hierarchical Sheet Pin Properties" ) ); break;
     default:                       SetTitle( _( "Text Properties" ) );                   break;
     }
+
+    m_valueMultiLine->SetEOLMode( wxSTC_EOL_LF );
 
     if( m_CurrentText->IsMultilineAllowed() )
     {
