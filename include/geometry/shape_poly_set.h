@@ -885,10 +885,10 @@ class SHAPE_POLY_SET : public SHAPE
          *                          ROUND_ALL_CORNERS to round regardless of angles
          */
         void Inflate( int aAmount, int aCircleSegmentsCount,
-                      CORNER_STRATEGY aCornerStrategy = CHOP_ACUTE_CORNERS );
+                      CORNER_STRATEGY aCornerStrategy = ROUND_ALL_CORNERS );
 
         void Deflate( int aAmount, int aCircleSegmentsCount,
-                      CORNER_STRATEGY aCornerStrategy = CHOP_ACUTE_CORNERS )
+                      CORNER_STRATEGY aCornerStrategy = ROUND_ALL_CORNERS )
         {
             Inflate( -aAmount, aCircleSegmentsCount, aCornerStrategy );
         }
