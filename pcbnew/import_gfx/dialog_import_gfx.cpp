@@ -1,8 +1,3 @@
-/**
- * @file dialog_gfx_import.cpp
- * @brief Dialog to import a vector graphics file on a given board layer.
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -28,18 +23,12 @@
  */
 
 #include "dialog_import_gfx.h"
-
-#include <advanced_config.h>
-#include <convert_to_biu.h>
 #include <kiface_i.h>
 #include <pcb_layer_box_selector.h>
 #include <wildcards_and_files_ext.h>
-
 #include <class_board.h>
-#include <class_module.h>
 #include <class_edge_mod.h>
 #include <class_text_mod.h>
-#include <class_pcb_text.h>
 
 // Configuration path (group) to store entry keys below.
 #define IMPORT_GFX_GROUP                        "ImportGraphics"
@@ -82,10 +71,10 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
         // To disable SVG import, enable these 2 lines
         // if( !ADVANCED_CFG::GetCfg().m_enableSvgImport )
         //    blacklist.push_back( GRAPHICS_IMPORT_MGR::SVG );
-        // The SVG import has currently a flaw:
-        // All SVG shapes are imported as curves and converted to a lot of segments.
-        // A better approach is to convert to polylines (not yet existing in Pcbnew) and keep
-        // arcs and circles as primitives (not yet possible with tinysvg library).
+        // The SVG import has currently a flaw: all SVG shapes are imported as curves and
+        // converted to a lot of segments.  A better approach is to convert to polylines
+        // (not yet existing in Pcbnew) and keep arcs and circles as primitives (not yet
+        // possible with tinysvg library).
 
         m_gfxImportMgr = std::make_unique<GRAPHICS_IMPORT_MGR>( blacklist );
     }
@@ -182,16 +171,9 @@ double DIALOG_IMPORT_GFX::getPCBdefaultLineWidthMM()
     switch( m_lineWidthUnits )
     {
     default:
-    case 0:     // display units = mm
-        break;
-
-    case 1:     // display units = mil
-        value *= 25.4 / 1000;
-        break;
-
-    case 2:     // display units = inch
-        value *= 25.4;
-        break;
+    case 0:                       break;  // display units = mm
+    case 1: value *= 25.4 / 1000; break;  // display units = mil
+    case 2: value *= 25.4;        break;  // display units = inch
     }
 
     return value;   // value is in mm
@@ -229,17 +211,9 @@ void DIALOG_IMPORT_GFX::showPCBdefaultLineWidth()
     switch( m_lineWidthUnits )
     {
     default:
-    case 0:     // display units = mm
-        value = m_lineWidth;
-        break;
-
-    case 1:     // display units = mil
-        value = m_lineWidth / 25.4 * 1000;
-        break;
-
-    case 2:     // display units = inch
-        value = m_lineWidth / 25.4;
-        break;
+    case 0: value = m_lineWidth;               break;  // display units = mm
+    case 1: value = m_lineWidth / 25.4 * 1000; break;  // display units = mil
+    case 2: value = m_lineWidth / 25.4;        break;  // display units = inch
     }
 
     m_textCtrlLineWidth->SetValue( wxString::Format( "%f", value ) );
@@ -273,8 +247,8 @@ void DIALOG_IMPORT_GFX::onBrowseFiles( wxCommandEvent& event )
 
     wildcardsDesc = _( "All supported formats|" ) + allWildcards + wildcardsDesc;
 
-    wxFileDialog dlg( m_parent, _( "Open File" ), path, filename,
-                      wildcardsDesc, wxFD_OPEN|wxFD_FILE_MUST_EXIST );
+    wxFileDialog dlg( m_parent, _( "Open File" ), path, filename, wildcardsDesc,
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
@@ -371,11 +345,7 @@ void DIALOG_IMPORT_GFX::updatePcbImportOffsets_mm()
     m_origin.y = DoubleValueFromString( UNSCALED_UNITS, m_DxfPcbYCoord->GetValue() );
 
     if( m_originUnits )   // Units are inches
-    {
         m_origin = m_origin * 25.4;
-    }
-
-    return;
 }
 
 
