@@ -44,6 +44,8 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
     GRID_HELPER grid( frame() );
     int finalize_state = WAIT_CANCEL;
 
+    std::string tool = *aEvent.Parameter<std::string*>();
+    frame()->PushTool( tool );
     Activate();
     setControls();
 
@@ -148,6 +150,7 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     reset();
     controls->ForceCursorPosition( false );
+    frame()->PopTool( tool );
     return 0;
 }
 
