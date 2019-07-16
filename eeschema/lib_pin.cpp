@@ -560,10 +560,8 @@ int LIB_PIN::GetPenSize() const
 
 void LIB_PIN::print( wxDC* aDC, const wxPoint& aOffset, void* aData, const TRANSFORM& aTransform )
 {
-    // aData is used here as a boolean.
-    bool drawElectricalTypeName = (bool) aData;
-
-    LIB_PART* Entry = GetParent();
+    PART_DRAW_OPTIONS* opts = (PART_DRAW_OPTIONS*) aData;
+    LIB_PART*          part = GetParent();
 
     /* Calculate pin orient taking in account the component orientation. */
     int     orient = PinDrawOrient( aTransform );
@@ -571,16 +569,16 @@ void LIB_PIN::print( wxDC* aDC, const wxPoint& aOffset, void* aData, const TRANS
     /* Calculate the pin position */
     wxPoint pos1 = aTransform.TransformCoordinate( m_position ) + aOffset;
 
-    if( !IsVisible() )
-        return;
+    if( IsVisible() || ( opts && opts->draw_hidden_fields ) )
+    {
+        PrintPinSymbol( aDC, pos1, orient );
 
-    PrintPinSymbol( aDC, pos1, orient );
+        PrintPinTexts( aDC, pos1, orient, part->GetPinNameOffset(), part->ShowPinNumbers(),
+                       part->ShowPinNames() );
 
-    PrintPinTexts( aDC, pos1, orient, Entry->GetPinNameOffset(), Entry->ShowPinNumbers(),
-                  Entry->ShowPinNames() );
-
-    if( drawElectricalTypeName )
-        PrintPinElectricalTypeName( aDC, pos1, orient );
+        if( opts && opts->show_elec_type )
+            PrintPinElectricalTypeName( aDC, pos1, orient );
+    }
 }
 
 

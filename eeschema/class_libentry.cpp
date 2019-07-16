@@ -419,7 +419,7 @@ void LIB_PART::Print( wxDC* aDc, const wxPoint& aOffset, int aMulti, int aConver
 
         if( drawItem.Type() == LIB_PIN_T )
         {
-            drawItem.Print( aDc, aOffset, (void*) aOpts.show_elec_type, aOpts.transform );
+            drawItem.Print( aDc, aOffset, (void*) &aOpts, aOpts.transform );
         }
         else if( drawItem.Type() == LIB_FIELD_T )
         {

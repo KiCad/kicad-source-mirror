@@ -148,8 +148,8 @@ bool DIALOG_LIB_EDIT_PIN::TransferDataFromWindow()
  */
 void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
 {
-    wxPaintDC    dc( m_panelShowPin );
-    wxSize dc_size = dc.GetSize();
+    wxPaintDC dc( m_panelShowPin );
+    wxSize    dc_size = dc.GetSize();
     dc.SetDeviceOrigin( dc_size.x / 2, dc_size.y / 2 );
 
     // Give a parent to m_dummyPin only from draw purpose.
@@ -160,16 +160,19 @@ void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
 
     // Calculate a suitable scale to fit the available draw area
     EDA_RECT bBox = m_dummyPin->GetBoundingBox( true );
-    double xscale    = (double) dc_size.x / bBox.GetWidth();
-    double yscale = (double) dc_size.y / bBox.GetHeight();
-    double scale = std::min( xscale, yscale );
+    double   xscale = (double) dc_size.x / bBox.GetWidth();
+    double   yscale = (double) dc_size.y / bBox.GetHeight();
+    double   scale = std::min( xscale, yscale );
 
-    // Give a 10% margin
-    scale *= 0.9;
+    // Give a 10% margin and limit to no more than 100% zoom
+    scale = std::min( scale * 0.9, 1.0 );
     dc.SetUserScale( scale, scale );
     GRResetPenAndBrush( &dc );
 
-    m_dummyPin->Print( &dc, -bBox.Centre(), (void*)0, DefaultTransform );
+    PART_DRAW_OPTIONS opts = PART_DRAW_OPTIONS::Default();
+    opts.draw_hidden_fields = true;
+
+    m_dummyPin->Print( &dc, -bBox.Centre(), (void*) &opts, DefaultTransform );
 
     m_dummyPin->SetParent( nullptr );
 
