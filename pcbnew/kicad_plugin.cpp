@@ -2215,7 +2215,12 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
     module->SetOrientation( 0 );
 
     if( module->GetLayer() != F_Cu )
-        module->Flip( module->GetPosition(), m_board->GeneralSettings().m_FlipLeftRight );
+    {
+	if( m_board != nullptr )
+            module->Flip( module->GetPosition(), m_board->GeneralSettings().m_FlipLeftRight );
+	else
+	   module->Flip( module->GetPosition(), false );
+    }
 
     wxLogTrace( traceKicadPcbPlugin, wxT( "Creating s-expr footprint file '%s'." ), fullPath );
     mods.insert( footprintName, new FP_CACHE_ITEM( module, WX_FILENAME( fn.GetPath(), fullName ) ) );
