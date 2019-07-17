@@ -515,7 +515,8 @@ bool EDIT_TOOL::changeTrackWidthOnClick( const PCBNEW_SELECTION& selection )
 
         if( auto via = dyn_cast<VIA*>( item ) )
         {
-            int new_width, new_drill;
+            int new_width;
+            int new_drill;
 
             if( via->GetViaType() == VIA_MICROVIA )
             {
@@ -881,7 +882,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     else
         m_commit->Push( _( "Delete" ) );
 
-    if( !m_lockedSelected && lockedItems.size() > 0 )
+    if( !m_lockedSelected && !lockedItems.empty() )
     {
         ///> Popup nag for deleting locked items
         STATUS_TEXT_POPUP statusPopup( frame() );

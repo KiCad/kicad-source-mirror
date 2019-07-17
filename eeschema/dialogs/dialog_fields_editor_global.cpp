@@ -32,13 +32,10 @@
 #include <grid_tricks.h>
 #include <kicad_string.h>
 #include <refdes_utils.h>
-#include <build_version.h>
 #include <general.h>
-#include <sch_view.h>
 #include <class_library.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
-#include <tool/tool_manager.h>
 #include <tools/sch_editor_control.h>
 #include <kiface_i.h>
 #include <eda_doc.h>
@@ -291,25 +288,25 @@ public:
         {
             // Remove duplicates (other units of multi-unit parts)
             std::sort( references.begin(), references.end(),
-                       []( const SCH_REFERENCE& l, const SCH_REFERENCE& r ) -> bool
-                       {
-                           wxString l_ref( l.GetRef() << l.GetRefNumber() );
-                           wxString r_ref( r.GetRef() << r.GetRefNumber() );
-                           return UTIL::RefDesStringCompare( l_ref, r_ref ) < 0;
-                       } );
+                []( const SCH_REFERENCE& l, const SCH_REFERENCE& r ) -> bool
+                {
+                    wxString l_ref( l.GetRef() << l.GetRefNumber() );
+                    wxString r_ref( r.GetRef() << r.GetRefNumber() );
+                    return UTIL::RefDesStringCompare( l_ref, r_ref ) < 0;
+                } );
 
             auto logicalEnd = std::unique( references.begin(), references.end(),
-                       []( const SCH_REFERENCE& l, const SCH_REFERENCE& r ) -> bool
-                       {
-                           // If unannotated then we can't tell what units belong together
-                           // so we have to leave them all
-                           if( l.GetRefNumber() == wxT( "?" ) )
-                               return false;
+                []( const SCH_REFERENCE& l, const SCH_REFERENCE& r ) -> bool
+                {
+                    // If unannotated then we can't tell what units belong together
+                    // so we have to leave them all
+                    if( l.GetRefNumber() == wxT( "?" ) )
+                        return false;
 
-                           wxString l_ref( l.GetRef() << l.GetRefNumber() );
-                           wxString r_ref( r.GetRef() << r.GetRefNumber() );
-                           return l_ref == r_ref;
-                       } );
+                    wxString l_ref( l.GetRef() << l.GetRefNumber() );
+                    wxString r_ref( r.GetRef() << r.GetRefNumber() );
+                    return l_ref == r_ref;
+                } );
             references.erase( logicalEnd, references.end() );
         }
 
@@ -331,13 +328,11 @@ public:
         if( aCol == REFERENCE || aCol == QUANTITY_COLUMN )
             return;             // Can't modify references or quantity
 
-        wxString value = aValue;
-
         DATA_MODEL_ROW& rowGroup = m_rows[ aRow ];
         wxString fieldName = m_fieldNames[ aCol ];
 
         for( const auto& ref : rowGroup.m_Refs )
-            m_dataStore[ ref.GetComp()->GetTimeStamp() ][ fieldName ] = value;
+            m_dataStore[ ref.GetComp()->GetTimeStamp() ][ fieldName ] = aValue;
 
         m_edited = true;
     }
@@ -386,10 +381,10 @@ public:
         CollapseForSort();
 
         std::sort( m_rows.begin(), m_rows.end(),
-                   [ this ]( const DATA_MODEL_ROW& lhs, const DATA_MODEL_ROW& rhs ) -> bool
-                   {
-                       return cmp( lhs, rhs, this, m_sortColumn, m_sortAscending );
-                   } );
+               [ this ]( const DATA_MODEL_ROW& lhs, const DATA_MODEL_ROW& rhs ) -> bool
+               {
+                   return cmp( lhs, rhs, this, m_sortColumn, m_sortAscending );
+               } );
 
         ExpandAfterSort();
     }
@@ -485,7 +480,7 @@ public:
             }
 
             if( !matchFound )
-                m_rows.push_back( DATA_MODEL_ROW( ref, GROUP_SINGLETON ) );
+                m_rows.emplace_back( DATA_MODEL_ROW( ref, GROUP_SINGLETON ) );
         }
 
         if ( GetView() )
@@ -518,7 +513,7 @@ public:
             }
 
             if( !matchFound )
-                children.push_back( DATA_MODEL_ROW( ref, CHILD_ITEM ) );
+                children.emplace_back( DATA_MODEL_ROW( ref, CHILD_ITEM ) );
         }
 
         if( children.size() < 2 )
@@ -843,9 +838,9 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::AddField( const wxString& aName,
     m_config->Read( "SymbolFieldEditor/Show/" + aName, &defaultShow );
     m_config->Read( "SymbolFieldEditor/GroupBy/" + aName, &defaultSortBy );
 
-    fieldsCtrlRow.push_back( wxVariant( aName ) );
-    fieldsCtrlRow.push_back( wxVariant( defaultShow ) );
-    fieldsCtrlRow.push_back( wxVariant( defaultSortBy ) );
+    fieldsCtrlRow.emplace_back( wxVariant( aName ) );
+    fieldsCtrlRow.emplace_back( wxVariant( defaultShow ) );
+    fieldsCtrlRow.emplace_back( wxVariant( defaultSortBy ) );
 
     m_fieldsCtrl->AppendItem( fieldsCtrlRow );
 }
@@ -875,11 +870,11 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
     AddField( _( "Footprint" ), true, true  );
     AddField( _( "Datasheet" ), true, false );
 
-    for( auto fieldName : userFieldNames )
+    for( const wxString& fieldName : userFieldNames )
         AddField( fieldName, true, false );
 
     // Add any templateFieldNames which aren't already present in the userFieldNames
-    for( auto templateFieldName : m_parent->GetTemplateFieldNames() )
+    for( const TEMPLATE_FIELDNAME& templateFieldName : m_parent->GetTemplateFieldNames() )
         if( userFieldNames.count( templateFieldName.m_Name ) == 0 )
             AddField( templateFieldName.m_Name, false, false );
 }

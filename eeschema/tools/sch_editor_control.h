@@ -65,10 +65,6 @@ public:
 
     int UpdateFind( const TOOL_EVENT& aEvent );
 
-    int ToggleLockSelected( const TOOL_EVENT& aEvent );
-    int LockSelected( const TOOL_EVENT& aEvent );
-    int UnlockSelected( const TOOL_EVENT& aEvent );
-
     ///> Notifies pcbnew about the selected item.
     int CrossProbeToPcb( const TOOL_EVENT& aEvent );
 

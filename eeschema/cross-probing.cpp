@@ -29,8 +29,6 @@
 #include <kiway_express.h>
 #include <macros.h>
 #include <eda_dde.h>
-#include <sch_draw_panel.h>
-#include <tool/tool_manager.h>
 #include <sch_edit_frame.h>
 #include <general.h>
 #include <eeschema_id.h>
@@ -316,7 +314,7 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_COMPONENT
 
     std::string packet = FormatProbeItem( aObjectToSync, aLibItem );
 
-    if( packet.size() )
+    if( !packet.empty() )
     {
         if( Kiface().IsSingle() )
             SendCommand( MSG_TO_PCB, packet.c_str() );
@@ -337,7 +335,7 @@ void SCH_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
 
     std::string packet = StrPrintf( "$NET: \"%s\"", TO_UTF8( aNetName ) );
 
-    if( packet.size() )
+    if( !packet.empty() )
     {
         if( Kiface().IsSingle() )
             SendCommand( MSG_TO_PCB, packet.c_str() );
