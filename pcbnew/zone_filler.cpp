@@ -851,6 +851,15 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPol
         if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )
             addHatchFillTypeOnZone( aZone, smoothedPoly );
 
+        // Re-inflate after pruning of areas that don't meet minimum-width criteria
+        if( aZone->GetFilledPolysUseThickness() )
+        {
+            // If we're stroking the zone with a min_width stroke then this will naturally
+            // inflate the zone by half_min_width
+        }
+        else if( half_min_width - epsilon > epsilon )
+            smoothedPoly.Deflate( -( half_min_width - epsilon ), numSegs );
+
         aRawPolys = smoothedPoly;
         aFinalPolys = smoothedPoly;
 
