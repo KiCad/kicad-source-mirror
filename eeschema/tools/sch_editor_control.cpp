@@ -373,11 +373,8 @@ int SCH_EDITOR_CONTROL::ExplicitCrossProbeToPcb( const TOOL_EVENT& aEvent )
 void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aForce )
 {
     // Don't get in an infinite loop SCH -> PCB -> SCH -> PCB -> SCH -> ...
-    if( m_probingSchToPcb )
-    {
-        m_probingSchToPcb = false;
+    if( m_probingPcbToSch )
         return;
-    }
 
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     SCH_ITEM*          item = nullptr;

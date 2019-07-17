@@ -38,6 +38,8 @@
 #include <class_library.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
+#include <tool/tool_manager.h>
+#include <tools/sch_editor_control.h>
 #include <kiface_i.h>
 #include <eda_doc.h>
 #include <widgets/grid_text_button_helpers.h>
@@ -1035,8 +1037,10 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableCellClick( wxGridEvent& event )
         // Focus Eeschema view on the component selected in the dialog
         if( refs.size() == 1 )
         {
-            m_parent->FindComponentAndItem( refs[0].GetRef() + refs[0].GetRefNumber(),
-                                            true, HIGHLIGHT_COMPONENT, wxEmptyString );
+            SCH_EDITOR_CONTROL* editor = m_parent->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>();
+
+            editor->FindComponentAndItem( refs[0].GetRef() + refs[0].GetRefNumber(), true,
+                                          HIGHLIGHT_COMPONENT, wxEmptyString );
         }
     }
     else

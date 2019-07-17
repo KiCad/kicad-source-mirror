@@ -24,10 +24,7 @@
 
 /**
  * @file pcbnew/cross-probing.cpp
- * @brief Cross probing functions to handle communication to andfrom Eeschema.
- */
-
-/**
+ * @brief Cross probing functions to handle communication to and from Eeschema.
  * Handle messages between Pcbnew and Eeschema via a socket, the port numbers are
  * KICAD_PCB_PORT_SERVICE_NUMBER (currently 4242) (Eeschema to Pcbnew)
  * KICAD_SCH_PORT_SERVICE_NUMBER (currently 4243) (Pcbnew to Eeschema)
@@ -41,7 +38,6 @@
 #include <pcb_edit_frame.h>
 #include <eda_dde.h>
 #include <macros.h>
-
 #include <pcbnew_id.h>
 #include <class_board.h>
 #include <class_module.h>
@@ -53,7 +49,6 @@
 #include <tools/pcb_actions.h>
 #include <tool/tool_manager.h>
 #include <tools/selection_tool.h>
-#include <pcb_draw_panel_gal.h>
 #include <pcb_painter.h>
 
 /* Execute a remote command send by Eeschema via a socket,
@@ -173,8 +168,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     if( module )
     {
-        m_toolManager->RunAction( PCB_ACTIONS::selectionClear, true );
-        m_toolManager->RunAction( PCB_ACTIONS::selectItem, true, (void*) module );
+        m_toolManager->RunAction( PCB_ACTIONS::highlightItem, true, (void*) module );
         bbox = module->GetBoundingBox();
     }
     else if( netcode > 0 )
@@ -297,7 +291,7 @@ void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* aSyncItem )
 {
     std::string packet = FormatProbeItem( aSyncItem );
 
-    if( packet.size() )
+    if( !packet.empty() )
     {
         if( Kiface().IsSingle() )
             SendCommand( MSG_TO_SCH, packet.c_str() );
@@ -316,7 +310,7 @@ void PCB_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
 {
     std::string packet = StrPrintf( "$NET: \"%s\"", TO_UTF8( aNetName ) );
 
-    if( packet.size() )
+    if( !packet.empty() )
     {
         if( Kiface().IsSingle() )
             SendCommand( MSG_TO_SCH, packet.c_str() );

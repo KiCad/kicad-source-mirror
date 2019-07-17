@@ -125,6 +125,9 @@ public:
     ///> Launches a tool to pick the item whose net is going to be highlighted.
     int HighlightNetTool( const TOOL_EVENT& aEvent );
 
+    ///> Performs the appropriate action in response to an eeschema cross-probe.
+    int HighlightItem( const TOOL_EVENT& aEvent );
+
     ///> Updates ratsnest for selected items.
     int UpdateSelectionRatsnest( const TOOL_EVENT& aEvent );
 

@@ -324,20 +324,6 @@ public:
     void AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppend = false );
 
     /**
-     * Finds a component in the schematic and an item in this component.
-     *
-     * @param aReference The component reference designator to find.
-     * @param aSearchHierarchy If false, search the current sheet only.  Otherwise,
-     *                         the entire hierarchy
-     * @param aSearchType A #SCH_SEARCH_T value used to determine what to search for.
-     * @param aSearchText The text to search for, either in value, reference or elsewhere.
-     */
-    SCH_ITEM* FindComponentAndItem( const wxString& aReference,
-                                    bool            aSearchHierarchy,
-                                    SCH_SEARCH_T    aSearchType,
-                                    const wxString& aSearchText );
-
-    /**
      * Run the Find or Find & Replace dialog.
      */
     void ShowFindReplaceDialog( bool aReplace );

@@ -1084,10 +1084,7 @@ int PCB_EDITOR_CONTROL::CrossProbePcbToSch( const TOOL_EVENT& aEvent )
 {
     // Don't get in an infinite loop PCB -> SCH -> PCB -> SCH -> ...
     if( m_probingSchToPcb )
-    {
-        m_probingSchToPcb = false;
         return 0;
-    }
 
     SELECTION_TOOL*         selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     const PCBNEW_SELECTION& selection = selTool->GetSelection();
@@ -1096,6 +1093,23 @@ int PCB_EDITOR_CONTROL::CrossProbePcbToSch( const TOOL_EVENT& aEvent )
         m_frame->SendMessageToEESCHEMA( static_cast<BOARD_ITEM*>( selection.Front() ) );
     else
         m_frame->SendMessageToEESCHEMA( nullptr );
+
+    return 0;
+}
+
+
+int PCB_EDITOR_CONTROL::HighlightItem( const TOOL_EVENT& aEvent )
+{
+    BOARD_ITEM* item = aEvent.Parameter<BOARD_ITEM*>();
+
+    m_probingSchToPcb = true;   // recursion guard
+    {
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
+        if( item )
+            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, (void*) item );
+    }
+    m_probingSchToPcb = false;
 
     return 0;
 }
@@ -1532,6 +1546,7 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::ClearHighlight,         PCB_ACTIONS::clearHighlight.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNetTool,       PCB_ACTIONS::highlightNetTool.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ClearHighlight,         ACTIONS::cancelInteractive.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::HighlightItem,          PCB_ACTIONS::highlightItem.MakeEvent() );
 
     Go( &PCB_EDITOR_CONTROL::LocalRatsnestTool,      PCB_ACTIONS::localRatsnestTool.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HideDynamicRatsnest,    PCB_ACTIONS::hideDynamicRatsnest.MakeEvent() );

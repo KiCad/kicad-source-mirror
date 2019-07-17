@@ -45,10 +45,10 @@
 #include <tools/sch_editor_control.h>
 
 
-SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
-                                                bool            aSearchHierarchy,
-                                                SCH_SEARCH_T    aSearchType,
-                                                const wxString& aSearchText )
+SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
+                                                    bool            aSearchHierarchy,
+                                                    SCH_SEARCH_T    aSearchType,
+                                                    const wxString& aSearchText )
 {
     SCH_SHEET_PATH* sheetWithComponentFound = NULL;
     SCH_ITEM*       item = NULL;
@@ -107,9 +107,9 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
     {
         if( *sheetWithComponentFound != *g_CurrentSheet )
         {
-            sheetWithComponentFound->LastScreen()->SetZoom( GetScreen()->GetZoom() );
+            sheetWithComponentFound->LastScreen()->SetZoom( m_frame->GetScreen()->GetZoom() );
             *g_CurrentSheet = *sheetWithComponentFound;
-            DisplayCurrentSheet();
+            m_frame->DisplayCurrentSheet();
         }
 
         wxPoint delta;
@@ -117,8 +117,8 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
         delta = Component->GetTransform().TransformCoordinate( pos );
         pos   = delta + Component->GetPosition();
 
-        GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( pos, false );
-        CenterScreen( pos, false );
+        m_frame->GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( pos, false );
+        m_frame->CenterScreen( pos, false );
     }
 
     /* Print diag */
@@ -140,16 +140,20 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
     else
         msg.Printf( _( "Component %s not found" ), aReference );
 
-    SetStatusText( msg );
+    m_frame->SetStatusText( msg );
 
-    // Clear any existing highlighting
-    GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
-    GetCanvas()->GetView()->HighlightItem( nullptr, nullptr );
+    m_probingPcbToSch = true;   // recursion guard
+    {
+        // Clear any existing highlighting
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+        m_frame->GetCanvas()->GetView()->HighlightItem( nullptr, nullptr );
 
-    if( foundItem )
-        GetCanvas()->GetView()->HighlightItem( foundItem, pin );
+        if( foundItem )
+            m_frame->GetCanvas()->GetView()->HighlightItem( foundItem, pin );
+    }
+    m_probingPcbToSch = false;
 
-    GetCanvas()->Refresh();
+    m_frame->GetCanvas()->Refresh();
 
     return item;
 }
@@ -175,7 +179,8 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
  */
 void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 {
-    char     line[1024];
+    SCH_EDITOR_CONTROL* editor = m_toolManager->GetTool<SCH_EDITOR_CONTROL>();
+    char                line[1024];
 
     strncpy( line, cmdline, sizeof(line) - 1 );
     line[ sizeof(line) - 1 ] = '\0';
@@ -220,7 +225,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     if( idcmd == NULL )    // Highlight component only (from Cvpcb or Pcbnew)
     {
         // Highlight component part_ref, or clear Highlight, if part_ref is not existing
-        FindComponentAndItem( part_ref, true, HIGHLIGHT_COMPONENT, wxEmptyString );
+        editor->FindComponentAndItem( part_ref, true, HIGHLIGHT_COMPONENT, wxEmptyString );
         return;
     }
 
@@ -235,21 +240,21 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     {
         // Highlighting the reference itself isn't actually that useful, and it's harder to
         // see.  Highlight the parent and display the message.
-        FindComponentAndItem( part_ref, true, HIGHLIGHT_COMPONENT, msg );
+        editor->FindComponentAndItem( part_ref, true, HIGHLIGHT_COMPONENT, msg );
     }
     else if( strcmp( idcmd, "$VAL:" ) == 0 )
     {
         // Highlighting the value itself isn't actually that useful, and it's harder to see.
         // Highlight the parent and display the message.
-        FindComponentAndItem( part_ref, true, HIGHLIGHT_COMPONENT, msg );
+        editor->FindComponentAndItem( part_ref, true, HIGHLIGHT_COMPONENT, msg );
     }
     else if( strcmp( idcmd, "$PAD:" ) == 0 )
     {
-        FindComponentAndItem( part_ref, true, HIGHLIGHT_PIN, msg );
+        editor->FindComponentAndItem( part_ref, true, HIGHLIGHT_PIN, msg );
     }
     else
     {
-        FindComponentAndItem( part_ref, true, HIGHLIGHT_COMPONENT, wxEmptyString );
+        editor->FindComponentAndItem( part_ref, true, HIGHLIGHT_COMPONENT, wxEmptyString );
     }
 }
 

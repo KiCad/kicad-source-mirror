@@ -594,6 +594,9 @@ TOOL_ACTION PCB_ACTIONS::highlightNetSelection( "pcbnew.EditorControl.highlightN
         _( "Highlight Net" ), _( "Highlight all copper items of a net" ),
         net_highlight_xpm );
 
+TOOL_ACTION PCB_ACTIONS::highlightItem( "pcbnew.EditorControl.highlightItem",
+        AS_GLOBAL );
+
 TOOL_ACTION PCB_ACTIONS::showEeschema( "pcbnew.EditorControl.showEeschema",
         AS_GLOBAL, 0, "",
         _( "Switch to Schematic Editor" ), _( "Open schematic in Eeschema" ),

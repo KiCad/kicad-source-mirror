@@ -411,6 +411,7 @@ public:
     static TOOL_ACTION toggleLastNetHighlight;
     static TOOL_ACTION highlightNetTool;
     static TOOL_ACTION highlightNetSelection;
+    static TOOL_ACTION highlightItem;
     static TOOL_ACTION drillOrigin;
     static TOOL_ACTION appendBoard;
     static TOOL_ACTION showEeschema;

@@ -40,8 +40,8 @@ class SCH_EDITOR_CONTROL : public wxEvtHandler, public EE_TOOL_BASE<SCH_EDIT_FRA
 {
 public:
     SCH_EDITOR_CONTROL()  :
-        EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.EditorControl" ),
-        m_probingSchToPcb( false )
+            EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.EditorControl" ),
+            m_probingPcbToSch( false )
     { }
 
     ~SCH_EDITOR_CONTROL() { }
@@ -124,6 +124,20 @@ public:
 
     void BackAnnotateFootprints( const std::string& aChangedSetOfReferences );
 
+    /**
+     * Finds a component in the schematic and an item in this component.
+     *
+     * @param aReference The component reference designator to find.
+     * @param aSearchHierarchy If false, search the current sheet only.  Otherwise,
+     *                         the entire hierarchy
+     * @param aSearchType A #SCH_SEARCH_T value used to determine what to search for.
+     * @param aSearchText The text to search for, either in value, reference or elsewhere.
+     */
+    SCH_ITEM* FindComponentAndItem( const wxString& aReference,
+                                    bool            aSearchHierarchy,
+                                    SCH_SEARCH_T    aSearchType,
+                                    const wxString& aSearchText );
+
 private:
     ///> copy selection to clipboard
     bool doCopy();
@@ -166,7 +180,7 @@ private:
     void setTransitions() override;
 
 private:
-    bool m_probingSchToPcb;     ///> Recursion guard when cross-probing to PCBNew
+    bool m_probingPcbToSch;     ///> Recursion guard when cross-probing to PCBNew
 };
 
 
