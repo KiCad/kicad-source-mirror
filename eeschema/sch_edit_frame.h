@@ -90,8 +90,7 @@ enum ANNOTATE_OPTION_T {
 /// Schematic search type used by the socket link with Pcbnew
 enum SCH_SEARCH_T {
     HIGHLIGHT_PIN,
-    HIGHLIGHT_COMPONENT,
-    SELECT_COMPONENT
+    HIGHLIGHT_COMPONENT
 };
 
 

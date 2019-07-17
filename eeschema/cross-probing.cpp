@@ -147,12 +147,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
     GetCanvas()->GetView()->HighlightItem( nullptr, nullptr );
 
     if( foundItem )
-    {
-        if( aSearchType == SELECT_COMPONENT )
-            GetToolManager()->RunAction( EE_ACTIONS::addItemToSel, true, foundItem );
-        else
-            GetCanvas()->GetView()->HighlightItem( foundItem, pin );
-    }
+        GetCanvas()->GetView()->HighlightItem( foundItem, pin );
 
     GetCanvas()->Refresh();
 
@@ -225,7 +220,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     if( idcmd == NULL )    // Highlight component only (from Cvpcb or Pcbnew)
     {
         // Highlight component part_ref, or clear Highlight, if part_ref is not existing
-        FindComponentAndItem( part_ref, true, SELECT_COMPONENT, wxEmptyString );
+        FindComponentAndItem( part_ref, true, HIGHLIGHT_COMPONENT, wxEmptyString );
         return;
     }
 
@@ -240,13 +235,13 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     {
         // Highlighting the reference itself isn't actually that useful, and it's harder to
         // see.  Highlight the parent and display the message.
-        FindComponentAndItem( part_ref, true, SELECT_COMPONENT, msg );
+        FindComponentAndItem( part_ref, true, HIGHLIGHT_COMPONENT, msg );
     }
     else if( strcmp( idcmd, "$VAL:" ) == 0 )
     {
         // Highlighting the value itself isn't actually that useful, and it's harder to see.
         // Highlight the parent and display the message.
-        FindComponentAndItem( part_ref, true, SELECT_COMPONENT, msg );
+        FindComponentAndItem( part_ref, true, HIGHLIGHT_COMPONENT, msg );
     }
     else if( strcmp( idcmd, "$PAD:" ) == 0 )
     {
@@ -254,7 +249,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     }
     else
     {
-        FindComponentAndItem( part_ref, true, SELECT_COMPONENT, wxEmptyString );
+        FindComponentAndItem( part_ref, true, HIGHLIGHT_COMPONENT, wxEmptyString );
     }
 }
 
