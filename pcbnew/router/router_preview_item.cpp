@@ -173,8 +173,9 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         // Cairo doesn't current support z-ordering, so we need
         // to draw the clearance first to ensure it is in the background
         gal->SetLayerDepth( ClearanceOverlayDepth );
-        gal->SetStrokeColor( COLOR4D( DARKDARKGRAY ) );
-        gal->SetFillColor( COLOR4D( DARKDARKGRAY ) );
+        //TODO(snh) Add configuration option for the color/alpha here
+        gal->SetStrokeColor( COLOR4D( DARKDARKGRAY ).WithAlpha( 0.9 ) );
+        gal->SetFillColor( COLOR4D( DARKDARKGRAY ).WithAlpha( 0.7 ) );
         gal->SetIsStroke( m_width ? true : false );
         gal->SetIsFill( true );
 
