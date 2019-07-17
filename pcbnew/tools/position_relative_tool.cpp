@@ -125,6 +125,7 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
     std::string         tool = "pcbnew.PositionRelative.selectReferenceItem";
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
     STATUS_TEXT_POPUP   statusPopup( frame() );
+    bool                done = false;
 
     statusPopup.SetText( _( "Select reference item..." ) );
 
@@ -153,7 +154,7 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
     picker->SetMotionHandler(
         [&] ( const VECTOR2D& aPos )
         {
-            statusPopup.Move( aPos + wxPoint( 20, -50 ) );
+            statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
         } );
 
     picker->SetCancelHandler(
@@ -165,12 +166,20 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
                 m_dialog->UpdateAnchor( m_anchor_item );
         } );
 
+    picker->SetFinalizeHandler(
+        [&]( const int& aFinalState )
+        {
+            done = true;
+        } );
+
     statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
     statusPopup.Popup();
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
-    statusPopup.Hide();
+    while( !done )
+        Wait();
+
     return 0;
 }
 

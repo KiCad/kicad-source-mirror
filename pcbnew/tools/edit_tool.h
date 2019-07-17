@@ -35,6 +35,7 @@
 class BOARD_COMMIT;
 class BOARD_ITEM;
 class CONNECTIVITY_DATA;
+class STATUS_TEXT_POPUP;
 
 namespace KIGFX {
     namespace PREVIEW {
@@ -168,12 +169,6 @@ public:
     BOARD_COMMIT* GetCurrentCommit() const { return m_commit.get(); }
 
 private:
-    SELECTION_TOOL* m_selectionTool;   // Selection tool used for obtaining selected items
-    bool            m_dragging;        // Indicates objects are being dragged right now
-    bool            m_lockedSelected;  // Determines if we prompt before removing locked objects
-    VECTOR2I        m_cursor;          // Last cursor position (needed for getModificationPoint()
-                                       // to avoid changes of edit reference point).
-
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.
     bool updateModificationPoint( PCBNEW_SELECTION& aSelection );
@@ -184,8 +179,14 @@ private:
     bool isInteractiveDragEnabled() const;
 
     bool changeTrackWidthOnClick( const PCBNEW_SELECTION& selection );
-    bool pickCopyReferencePoint( VECTOR2I& aP );
+    bool pickCopyReferencePoint( VECTOR2I& aReferencePoint );
 
+private:
+    SELECTION_TOOL* m_selectionTool;   // Selection tool used for obtaining selected items
+    bool            m_dragging;        // Indicates objects are being dragged right now
+    bool            m_lockedSelected;  // Determines if we prompt before removing locked objects
+    VECTOR2I        m_cursor;          // Last cursor position (needed for getModificationPoint()
+                                       // to avoid changes of edit reference point).
     std::unique_ptr<BOARD_COMMIT> m_commit;
 };
 

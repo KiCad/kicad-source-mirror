@@ -1286,19 +1286,20 @@ int EDIT_TOOL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
 }
 
 
-bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aP )
+bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aReferencePoint )
 {
     std::string         tool = "pcbnew.InteractiveEdit.selectReferencePoint";
     STATUS_TEXT_POPUP   statusPopup( frame() );
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
-    bool                retVal = true;
+    OPT<VECTOR2I>       pickedPoint;
+    bool                done = false;
 
     statusPopup.SetText( _( "Select reference point for the copy..." ) );
 
     picker->SetClickHandler(
         [&]( const VECTOR2D& aPoint ) -> bool
         {
-            aP = aPoint;
+            pickedPoint = aPoint;
             statusPopup.SetText( _( "Selection copied." ) );
             statusPopup.Expire( 800 );
             return false;  // we don't need any more points
@@ -1307,7 +1308,7 @@ bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aP )
     picker->SetMotionHandler(
         [&] ( const VECTOR2D& aPos )
         {
-            statusPopup.Move( aPos + wxPoint( 20, -50 ) );
+            statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
         } );
 
     picker->SetCancelHandler(
@@ -1315,7 +1316,12 @@ bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aP )
         {
             statusPopup.SetText( _( "Copy cancelled." ) );
             statusPopup.Expire( 800 );
-            retVal = false;
+        } );
+
+    picker->SetFinalizeHandler(
+        [&]( const int& aFinalState )
+        {
+            done = true;
         } );
 
     statusPopup.Move( wxGetMousePosition() + wxPoint( 20, -50 ) );
@@ -1323,8 +1329,13 @@ bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aP )
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
-    statusPopup.Hide();
-    return retVal;
+    while( !done )
+        Wait();
+
+    if( pickedPoint.is_initialized() )
+        aReferencePoint = pickedPoint.get();
+
+    return pickedPoint.is_initialized();
 }
 
 
