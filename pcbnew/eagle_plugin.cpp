@@ -1526,7 +1526,11 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
         shape = m_rules->psBottom;
 
     pad->SetDrillSize( wxSize( e.drill.ToPcbUnits(), e.drill.ToPcbUnits() ) );
-    pad->SetLayerSet( LSET::AllCuMask().set( B_Mask ).set( F_Mask ) );
+    pad->SetLayerSet( LSET::AllCuMask() );
+
+    // Solder mask
+    if( !e.stop || *e.stop == true )         // enabled by default
+        pad->SetLayerSet( pad->GetLayerSet().set( B_Mask ).set( F_Mask ) );
 
     if( shape == EPAD::ROUND || shape == EPAD::SQUARE || shape == EPAD::OCTAGON )
         e.shape = shape;
@@ -1970,6 +1974,15 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
                 (int) ( m_rules->mvCreamFrame * minPadSize ),
                 m_rules->mlMaxCreamFrame ) );
 
+    // Solder mask
+    if( e.stop && *e.stop == false )         // enabled by default
+    {
+        if( layer == F_Cu )
+            pad->SetLayerSet( pad->GetLayerSet().set( F_Mask, false ) );
+        else if( layer == B_Cu )
+            pad->SetLayerSet( pad->GetLayerSet().set( B_Mask, false ) );
+    }
+
     // Solder paste (only for SMD pads)
     if( e.cream && *e.cream == false )         // enabled by default
     {
@@ -1993,12 +2006,9 @@ void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, D_PAD* aPad ) cons
     // Solder mask
     const wxSize& padSize( aPad->GetSize() );
 
-    if( !aEaglePad.stop || !*aEaglePad.stop )     // enabled by default
-    {
-        aPad->SetLocalSolderMaskMargin( eagleClamp( m_rules->mlMinStopFrame,
-                    (int)( m_rules->mvStopFrame * std::min( padSize.x, padSize.y ) ),
-                    m_rules->mlMaxStopFrame ) );
-    }
+    aPad->SetLocalSolderMaskMargin( eagleClamp( m_rules->mlMinStopFrame,
+                (int)( m_rules->mvStopFrame * std::min( padSize.x, padSize.y ) ),
+                m_rules->mlMaxStopFrame ) );
 
     // Solid connection to copper zones
     if( aEaglePad.thermals && !*aEaglePad.thermals )
