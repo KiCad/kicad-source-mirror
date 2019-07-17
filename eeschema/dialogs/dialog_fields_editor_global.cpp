@@ -838,9 +838,9 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::AddField( const wxString& aName,
     m_config->Read( "SymbolFieldEditor/Show/" + aName, &defaultShow );
     m_config->Read( "SymbolFieldEditor/GroupBy/" + aName, &defaultSortBy );
 
-    fieldsCtrlRow.emplace_back( wxVariant( aName ) );
-    fieldsCtrlRow.emplace_back( wxVariant( defaultShow ) );
-    fieldsCtrlRow.emplace_back( wxVariant( defaultSortBy ) );
+    fieldsCtrlRow.push_back( wxVariant( aName ) );
+    fieldsCtrlRow.push_back( wxVariant( defaultShow ) );
+    fieldsCtrlRow.push_back( wxVariant( defaultSortBy ) );
 
     m_fieldsCtrl->AppendItem( fieldsCtrlRow );
 }
