@@ -64,8 +64,9 @@ protected:
 
     /**
      * Return scale value selected in the dialog.
+     * if this value is outside limits, it will be clamped
      */
-    double getScaleValue() const;
+    double getScaleValue();
 
     /**
     * Select a corresponding scale radio button and update custom scale value if needed.
