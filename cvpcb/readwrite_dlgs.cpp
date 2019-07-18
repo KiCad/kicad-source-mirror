@@ -26,15 +26,15 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#include <fctsys.h>
-#include <kiway.h>
+#include <build_version.h>
 #include <common.h>
 #include <confirm.h>
-#include <build_version.h>
-#include <macros.h>
-#include <lib_id.h>
+#include <fctsys.h>
 #include <fp_lib_table.h>
 #include <html_messagebox.h>
+#include <kiway.h>
+#include <lib_id.h>
+#include <macros.h>
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
@@ -389,6 +389,9 @@ bool CVPCB_MAINFRAME::SaveFootprintAssociation( bool doSaveSchematic )
         if( payload == "success" )
             SetStatusText( _( "Schematic saved" ), 1 );
     }
+
+    // Changes are saved, so reset the flag
+    m_modified = false;
 
     return true;
 }

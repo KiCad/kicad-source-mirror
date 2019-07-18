@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -26,9 +26,9 @@
 #ifndef CVPCB_ACTIONS_H
 #define CVPCB_ACTIONS_H
 
-#include <tool/tool_action.h>
-#include <tool/actions.h>
 #include <core/optional.h>
+#include <tool/actions.h>
+#include <tool/tool_action.h>
 
 class TOOL_EVENT;
 class TOOL_MANAGER;
@@ -45,6 +45,28 @@ public:
     // Selection Tool
     /// Activation of the selection tool
     static TOOL_ACTION selectionActivate;
+
+    /// Open the footprint viewer
+    static TOOL_ACTION showFootprintViewer;
+
+    /// Navigate the component tree
+    static TOOL_ACTION gotoPreviousNA;
+    static TOOL_ACTION gotoNextNA;
+
+    /// Management actions
+    static TOOL_ACTION saveAssociations;
+    static TOOL_ACTION showEquFileTable;
+
+    /// Footprint Association actions
+    static TOOL_ACTION autoAssociate;
+    static TOOL_ACTION associate;
+    static TOOL_ACTION deleteAll;
+
+    /// Footprint Filtering actions
+    static TOOL_ACTION filterFPbyKeywords;
+    static TOOL_ACTION filterFPbyPin;
+    static TOOL_ACTION filterFPbyLibrary;
+    static TOOL_ACTION filterFPbyDisplayName;
 
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
     virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override { return OPT<TOOL_EVENT>(); }

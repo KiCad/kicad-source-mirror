@@ -23,13 +23,16 @@
  * @file tool_cvpcb.cpp
  */
 
+#include <bitmaps.h>
+#include <common.h>
 #include <fctsys.h>
 #include <kiface_i.h>
-#include <common.h>
+#include <tool/action_toolbar.h>
+#include <tool/actions.h>
 
-#include <bitmaps.h>
-#include <cvpcb_mainframe.h>
 #include <cvpcb_id.h>
+#include <cvpcb_mainframe.h>
+#include <tools/cvpcb_actions.h>
 
 
 void CVPCB_MAINFRAME::ReCreateHToolbar()
@@ -37,35 +40,22 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
     if( m_mainToolBar )
         m_mainToolBar->Clear();
     else
-        m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
-    m_mainToolBar->AddTool( ID_CVPCB_LIB_TABLE_EDIT, wxEmptyString,
-                            KiScaledBitmap( config_xpm, this ),
-                            _( "Edit footprint library table" ) );
+    m_mainToolBar->Add( ACTIONS::showFootprintLibTable );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_CVPCB_CREATE_SCREENCMP, wxEmptyString,
-                            KiScaledBitmap( show_footprint_xpm, this ),
-                            _( "View selected footprint" ) );
+    m_mainToolBar->Add( CVPCB_ACTIONS::showFootprintViewer );
+
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_CVPCB_GOTO_PREVIOUSNA, wxEmptyString,
-                            KiScaledBitmap( left_xpm, this ),
-                            _( "Select previous unlinked symbol" ) );
-
-    m_mainToolBar->AddTool( ID_CVPCB_GOTO_FIRSTNA, wxEmptyString,
-                            KiScaledBitmap( right_xpm, this ),
-                            _( "Select next unlinked symbol" ) );
+    m_mainToolBar->Add( CVPCB_ACTIONS::gotoPreviousNA );
+    m_mainToolBar->Add( CVPCB_ACTIONS::gotoNextNA );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_CVPCB_AUTO_ASSOCIE, wxEmptyString,
-                            KiScaledBitmap( auto_associe_xpm, this ),
-                            _( "Perform automatic footprint association" ) );
-
-    m_mainToolBar->AddTool( ID_CVPCB_DEL_ASSOCIATIONS, wxEmptyString,
-                            KiScaledBitmap( delete_association_xpm, this ),
-                            _( "Delete all footprint associations" ) );
+    m_mainToolBar->Add( CVPCB_ACTIONS::autoAssociate );
+    m_mainToolBar->Add( CVPCB_ACTIONS::deleteAll );
 
     // Add tools for footprint names filtering:
     KiScaledSeparator( m_mainToolBar, this );
@@ -75,32 +65,12 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
 	text->SetFont( m_mainToolBar->GetFont().Bold() );
     m_mainToolBar->AddControl( text );
 
-    m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST,
-                            KiScaledBitmap( module_filtered_list_xpm, this ),
-                            wxNullBitmap,
-                            true, NULL,
-                            _( "Filter footprint list by schematic symbol keywords" ),
-                            wxEmptyString );
-
-    m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST,
-                            KiScaledBitmap( module_pin_filtered_list_xpm, this ),
-                            wxNullBitmap,
-                            true, NULL,
-                            _( "Filter footprint list by pin count" ),
-                            wxEmptyString );
-
-    m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST,
-                            KiScaledBitmap( module_library_list_xpm, this ),
-                            wxNullBitmap, true, NULL,
-                            _( "Filter footprint list by library" ),
-                            wxEmptyString );
+    m_mainToolBar->Add( CVPCB_ACTIONS::filterFPbyKeywords, true );
+    m_mainToolBar->Add( CVPCB_ACTIONS::filterFPbyPin, true );
+    m_mainToolBar->Add( CVPCB_ACTIONS::filterFPbyLibrary, true );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_NAME,
-                            KiScaledBitmap( module_name_filtered_list_xpm, this ),
-                            wxNullBitmap, true, NULL,
-                            _( "Filter footprint list using a partial name or a pattern" ),
-                            wxEmptyString );
+    m_mainToolBar->Add( CVPCB_ACTIONS::filterFPbyDisplayName, true );
 
     m_tcFilterString = new wxTextCtrl( m_mainToolBar, ID_CVPCB_FILTER_TEXT_EDIT );
 
@@ -109,4 +79,20 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();
+}
+
+
+void CVPCB_MAINFRAME::SyncToolbars()
+{
+#define filterActive( filt ) ( m_filteringOptions & filt )
+
+    m_mainToolBar->Toggle( CVPCB_ACTIONS::filterFPbyKeywords,
+            filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_KEYWORD ) );
+    m_mainToolBar->Toggle( CVPCB_ACTIONS::filterFPbyLibrary,
+            filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY ) );
+    m_mainToolBar->Toggle( CVPCB_ACTIONS::filterFPbyPin,
+            filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT ) );
+    m_mainToolBar->Toggle( CVPCB_ACTIONS::filterFPbyDisplayName,
+            filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_NAME ) );
+    m_mainToolBar->Refresh();
 }

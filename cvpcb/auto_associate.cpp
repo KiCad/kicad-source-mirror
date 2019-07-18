@@ -167,7 +167,7 @@ int CVPCB_MAINFRAME::buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wx
 }
 
 
-void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
+void CVPCB_MAINFRAME::AutomaticFootprintMatching()
 {
     FOOTPRINT_EQUIVALENCE_LIST equiv_List;
     wxString             msg, error_msg;

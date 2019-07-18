@@ -211,10 +211,9 @@ void LIBRARY_LISTBOX::OnChar( wxKeyEvent& event )
 
 void LIBRARY_LISTBOX::OnSelectLibrary( wxListEvent& event )
 {
-    wxCommandEvent setLibraryFilterEvent;
-    setLibraryFilterEvent.SetId( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST );
-    setLibraryFilterEvent.SetInt( 1 );
-    GetParent()->OnSelectFilteringFootprint( setLibraryFilterEvent );
+    // Apply the filter
+    GetParent()->SetFootprintFilter(
+            FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY, CVPCB_MAINFRAME::FILTER_ENABLE );
 
     SetFocus();
     GetParent()->OnSelectComponent( event );

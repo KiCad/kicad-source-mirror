@@ -25,22 +25,20 @@
 #ifndef _CVPCB_MAINFRAME_H_
 #define _CVPCB_MAINFRAME_H_
 
-#include <wx/listctrl.h>
-#include <wx/filename.h>
-#include <pcb_netlist.h>
-#include <footprint_info.h>
-
-#include <pcb_base_frame.h>
 #include <config_params.h>
-#include <auto_associate.h>
+#include <footprint_info.h>
 #include <memory>
+#include <pcb_base_frame.h>
+#include <pcb_netlist.h>
+#include <wx/filename.h>
+#include <wx/listctrl.h>
 
+#include <auto_associate.h>
+#include <listboxes.h>
+#include <tool/action_menu.h>
 
 /*  Forward declarations of all top-level window classes. */
 class wxAuiToolBar;
-class FOOTPRINTS_LISTBOX;
-class COMPONENTS_LISTBOX;
-class LIBRARY_LISTBOX;
 class DISPLAY_FOOTPRINTS_FRAME;
 class COMPONENT;
 class FP_LIB_TABLE;
@@ -57,7 +55,7 @@ class CVPCB_MAINFRAME : public KIWAY_PLAYER
     wxString                  m_currentSearchPattern;
     NETLIST                   m_netlist;
     int                       m_filteringOptions;
-    wxAuiToolBar*             m_mainToolBar;
+    ACTION_TOOLBAR*           m_mainToolBar;
     FOOTPRINTS_LISTBOX*       m_footprintListBox;
     LIBRARY_LISTBOX*          m_libListBox;
     COMPONENTS_LISTBOX*       m_compListBox;
@@ -90,6 +88,16 @@ public:
     void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
 
     /**
+     * The action to apply to a footprint filter when it is modified.
+     */
+    enum CVPCB_FILTER_ACTION
+    {
+        FILTER_DISABLE,     ///< Turn off the filter
+        FILTER_ENABLE,      ///< Turn on the filter
+        FILTER_TOGGLE       ///< Toggle the filter state
+    };
+
+    /**
      * @return a pointer on the Footprint Viewer frame, if exists, or NULL
      */
     DISPLAY_FOOTPRINTS_FRAME* GetFootprintViewerFrame();
@@ -103,16 +111,8 @@ public:
      */
     void             OnSelectComponent( wxListEvent& event );
 
-    /**
-     * Function OnEditFootprintLibraryTable
-     * displays the footprint library table editing dialog and updates the global and local
-     * footprint tables accordingly.
-     */
-    void             OnEditFootprintLibraryTable( wxCommandEvent& event );
-
     void             OnCancel( wxCommandEvent& aEvent );
     void             OnOK( wxCommandEvent& aEvent );
-    void             OnSaveAndContinue( wxCommandEvent& aEvent );
     void             OnQuit( wxCommandEvent& event );
     void             OnCloseWindow( wxCloseEvent& Event );
     void             OnSize( wxSizeEvent& SizeEvent );
@@ -123,22 +123,21 @@ public:
 
     void             ChangeFocus( bool aMoveRight );
 
-    void             ToFirstNA( wxCommandEvent& event );
-    void             ToPreviousNA( wxCommandEvent& event );
+    /**
+     * Move to the next not associated component.
+     */
+    void ToNextNA();
 
     /**
-     * Function DelAssociations
+     * Move to the previous not associated component.
+     */
+    void ToPreviousNA();
+
+    /**
+     * Function DeleteAll
      * removes all component footprint associations already made
      */
-    void             DelAssociations( wxCommandEvent& event );
-
-    /**
-     * Function OnEditEquFilesList
-     * envokes the equ files list edit dialog.
-     */
-    void             OnEditEquFilesList( wxCommandEvent& aEvent );
-
-    void             DisplayModule( wxCommandEvent& event );
+    void DeleteAll();
 
     void             OnComponentRightClick( wxMouseEvent& event );
 
@@ -152,13 +151,17 @@ public:
      * format of a line:
      * 'cmp_ref' 'footprint_name'
      */
-    void             AutomaticFootprintMatching( wxCommandEvent& event );
+    void AutomaticFootprintMatching();
 
     /**
-     * Function OnSelectFilteringFootprint
-     * is the command event handler for enabling and disabling footprint filtering.
+     * Function SetFootprintFilter
+     * Set a filter criteria to either on/off or toggle the criteria.
+     *
+     * @param aFilter The filter to modify
+     * @param aAction What action (on, off or toggle) to take
      */
-    void             OnSelectFilteringFootprint( wxCommandEvent& event );
+    void SetFootprintFilter(
+            FOOTPRINTS_LISTBOX::FP_FILTER_T aFilter, CVPCB_MAINFRAME::CVPCB_FILTER_ACTION aAction );
 
     /**
      * Function OnEnterFilteringText
@@ -186,12 +189,6 @@ public:
     void             BuildCmpListBox();
     void             BuildFOOTPRINTS_LISTBOX();
     void             BuildLIBRARY_LISTBOX();
-
-    /**
-     * Create or Update the frame showing the current highlighted footprint
-     * and (if showed) the 3D display frame
-     */
-    void             CreateScreenCmp();
 
     /**
      * Function SaveFootprintAssociation
@@ -297,13 +294,16 @@ public:
 
     void SetStatusText( const wxString& aText, int aNumber = 0 ) override;
 
+    /**
+     * Syncronize the toolbar state with the current tool state.
+     */
+    void SyncToolbars() override;
+
 private:
-    // UI event handlers.
-    // Keep consistent the display state of toggle menus or tools in toolbar
-    void OnFilterFPbyKeywords( wxUpdateUIEvent& event );
-    void OnFilterFPbyPinCount( wxUpdateUIEvent& event );
-    void OnFilterFPbyLibrary( wxUpdateUIEvent& event );
-    void OnFilterFPbyKeyName( wxUpdateUIEvent& event );
+    /**
+     * Setup the tool system for the CVPCB main frame.
+     */
+    void setupTools();
 
     /**
      * read the .equ files and populate the list of equvalents
@@ -315,6 +315,10 @@ private:
     int buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wxString * aErrorMessages = NULL );
 
     void refreshAfterComponentSearch (COMPONENT* component);
+
+    // Context menus for the list boxes
+    ACTION_MENU* m_footprintContextMenu;
+    ACTION_MENU* m_componentContextMenu;
 
     DECLARE_EVENT_TABLE()
 };

@@ -27,16 +27,17 @@
  * class to display the list of available footprints
  */
 
+#include <eda_pattern_match.h>
 #include <fctsys.h>
+#include <footprint_filter.h>
+#include <tool/tool_manager.h>
 #include <wx/wupdlock.h>
 
 #include <cvpcb.h>
+#include <cvpcb_id.h>
 #include <cvpcb_mainframe.h>
 #include <listboxes.h>
-#include <cvpcb_id.h>
-#include <eda_pattern_match.h>
-#include <footprint_filter.h>
-
+#include <tools/cvpcb_actions.h>
 
 FOOTPRINTS_LISTBOX::FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent,
                                         wxWindowID id, const wxPoint& loc,
@@ -215,7 +216,7 @@ void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
 
     // If the footprint view window is displayed, update the footprint.
     if( GetParent()->GetFootprintViewerFrame() )
-        GetParent()->CreateScreenCmp();
+        GetParent()->GetToolManager()->RunAction( CVPCB_ACTIONS::showFootprintViewer, true );
 
     GetParent()->DisplayStatus();
 

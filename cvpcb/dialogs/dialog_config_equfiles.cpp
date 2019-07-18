@@ -59,14 +59,6 @@ DIALOG_CONFIG_EQUFILES::DIALOG_CONFIG_EQUFILES( CVPCB_MAINFRAME* aParent ) :
 }
 
 
-void CVPCB_MAINFRAME::OnEditEquFilesList( wxCommandEvent& aEvent )
-{
-    DIALOG_CONFIG_EQUFILES dlg( this );
-
-    dlg.ShowModal();
-}
-
-
 void DIALOG_CONFIG_EQUFILES::Init()
 {
     m_sdbSizerOK->SetDefault();
