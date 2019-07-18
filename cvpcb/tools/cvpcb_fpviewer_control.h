@@ -23,35 +23,37 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <cstdint>
-#include <functional>
-#include <tool/actions.h>
-#include <tools/cvpcb_control.h>
-using namespace std::placeholders;
+#ifndef CVPCB_FOOTPRINT_VIEWER_CONTROL_H_
+#define CVPCB_FOOTPRINT_VIEWER_CONTROL_H_
+
+#include <display_footprints_frame.h>
+#include <tool/tool_interactive.h>
 
 
-CVPCB_CONTROL::CVPCB_CONTROL() :
-    TOOL_INTERACTIVE( "cvpcb.Control" ),
-    m_frame( nullptr )
+/**
+ * Class CVPCB_FOOTPRINT_VIEWER_CONTROL
+ *
+ * Handles control actions for the cvpcb footprint display frame.
+ */
+
+class CVPCB_FOOTPRINT_VIEWER_CONTROL : public TOOL_INTERACTIVE
 {
-}
+public:
+    CVPCB_FOOTPRINT_VIEWER_CONTROL();
+    ~CVPCB_FOOTPRINT_VIEWER_CONTROL() {}
 
+    /// @copydoc TOOL_INTERACTIVE::Reset()
+    void Reset( RESET_REASON aReason ) override;
 
-void CVPCB_CONTROL::Reset( RESET_REASON aReason )
-{
-    m_frame = getEditFrame<DISPLAY_FOOTPRINTS_FRAME>();
-}
+    ///> Show the 3D viewer with the currently selected footprint
+    int Show3DViewer( const TOOL_EVENT& aEvent );
 
+    ///> Sets up handlers for various events.
+    void setTransitions() override;
 
-int CVPCB_CONTROL::Show3DViewer( const TOOL_EVENT& aEvent )
-{
-    m_frame->CreateAndShow3D_Frame();
-    return 0;
-}
+private:
+    ///> Pointer to the currently used edit/draw frame.
+    DISPLAY_FOOTPRINTS_FRAME* m_frame;
+};
 
-
-void CVPCB_CONTROL::setTransitions()
-{
-    // Miscellaneous
-    Go( &CVPCB_CONTROL::Show3DViewer,       ACTIONS::show3DViewer.MakeEvent() );
-}
+#endif

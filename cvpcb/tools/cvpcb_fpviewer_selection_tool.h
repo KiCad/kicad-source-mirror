@@ -17,25 +17,27 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CVPCB_SELECTION_TOOL_H
-#define CVPCB_SELECTION_TOOL_H
+#ifndef CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL_H_
+#define CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL_H_
 
+#include <display_footprints_frame.h>
 
-#include <tool/tool_interactive.h>
 #include <tool/action_menu.h>
 #include <tool/selection.h>
+#include <tool/tool_interactive.h>
 #include <tool/tool_menu.h>
-#include <display_footprints_frame.h>
 
 
 /**
- * Class CVPCB_SELECTION_TOOL
+ * Class CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL
+ *
+ * Selection tool for the footprint viewer in cvpcb.
  */
-class CVPCB_SELECTION_TOOL : public TOOL_INTERACTIVE
+class CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL : public TOOL_INTERACTIVE
 {
 public:
-    CVPCB_SELECTION_TOOL();
-    ~CVPCB_SELECTION_TOOL() { }
+    CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL();
+    ~CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL() {}
 
     /// @copydoc TOOL_BASE::Init()
     bool Init() override;
@@ -53,8 +55,12 @@ public:
     /**
      * Selections aren't currently supported in the footprint viewer.
      */
-    SELECTION& GetSelection() { return m_selection; }
-    void clearSelection() {};
+    SELECTION& GetSelection()
+    {
+        return m_selection;
+    }
+
+    void clearSelection() {}
 
     ///> Launches a tool to measure between points
     int MeasureTool( const TOOL_EVENT& aEvent );
@@ -63,6 +69,7 @@ public:
     void setTransitions() override;
 
 private:
+    /// Pointer to the parent frame.
     DISPLAY_FOOTPRINTS_FRAME* m_frame;
 
     /// Current state of selection (not really used: no selection in display footprints frame).

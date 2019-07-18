@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014-2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2007-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,36 +23,35 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef CVPCB_CONTROL_H
-#define CVPCB_CONTROL_H
+#include <cstdint>
+#include <functional>
+using namespace std::placeholders;
 
-#include <tool/tool_interactive.h>
-#include <display_footprints_frame.h>
+#include <tool/actions.h>
+#include <tools/cvpcb_fpviewer_control.h>
 
 
-/**
- * Class CVPCB_CONTROL
- *
- * Handles actions in cvpcb display frame.
- */
-
-class CVPCB_CONTROL : public TOOL_INTERACTIVE
+CVPCB_FOOTPRINT_VIEWER_CONTROL::CVPCB_FOOTPRINT_VIEWER_CONTROL() :
+        TOOL_INTERACTIVE( "cvpcb.FootprintViewerControl" ),
+        m_frame( nullptr )
 {
-public:
-    CVPCB_CONTROL();
-    ~CVPCB_CONTROL() { }
+}
 
-    /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason ) override;
 
-    int Show3DViewer( const TOOL_EVENT& aEvent );
+void CVPCB_FOOTPRINT_VIEWER_CONTROL::Reset( RESET_REASON aReason )
+{
+    m_frame = getEditFrame<DISPLAY_FOOTPRINTS_FRAME>();
+}
 
-    ///> Sets up handlers for various events.
-    void setTransitions() override;
 
-private:
-    ///> Pointer to the currently used edit/draw frame.
-    DISPLAY_FOOTPRINTS_FRAME* m_frame;
-};
+int CVPCB_FOOTPRINT_VIEWER_CONTROL::Show3DViewer( const TOOL_EVENT& aEvent )
+{
+    m_frame->CreateAndShow3D_Frame();
+    return 0;
+}
 
-#endif
+
+void CVPCB_FOOTPRINT_VIEWER_CONTROL::setTransitions()
+{
+    Go( &CVPCB_FOOTPRINT_VIEWER_CONTROL::Show3DViewer, ACTIONS::show3DViewer.MakeEvent() );
+}

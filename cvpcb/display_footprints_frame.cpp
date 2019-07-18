@@ -48,8 +48,8 @@
 #include <tool/common_tools.h>
 #include <tool/zoom_tool.h>
 #include <tools/cvpcb_actions.h>
-#include <tools/cvpcb_selection_tool.h>
-#include <tools/cvpcb_control.h>
+#include <tools/cvpcb_fpviewer_control.h>
+#include <tools/cvpcb_fpviewer_selection_tool.h>
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings( FRAME_CVPCB_DISPLAY );
@@ -119,8 +119,8 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
-    m_toolManager->RegisterTool( new CVPCB_SELECTION_TOOL );
-    m_toolManager->RegisterTool( new CVPCB_CONTROL );
+    m_toolManager->RegisterTool( new CVPCB_FOOTPRINT_VIEWER_CONTROL );
+    m_toolManager->RegisterTool( new CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL );
     m_toolManager->InitTools();
 
     // Run the control tool, it is supposed to be always active

@@ -17,41 +17,41 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <limits>
 #include <functional>
+#include <limits>
 using namespace std::placeholders;
-#include <class_draw_panel_gal.h>
-#include <view/view.h>
+
 #include <bitmaps.h>
+#include <class_draw_panel_gal.h>
+#include <cvpcb_id.h>
+#include <preview_items/ruler_item.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <tools/cvpcb_actions.h>
-#include <tools/cvpcb_selection_tool.h>
-#include <preview_items/ruler_item.h>
-#include <cvpcb_id.h>
+#include <tools/cvpcb_fpviewer_selection_tool.h>
+#include <view/view.h>
 
-
-CVPCB_SELECTION_TOOL::CVPCB_SELECTION_TOOL() :
-        TOOL_INTERACTIVE( "cvpcb.InteractiveSelection" ),
+CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL() :
+        TOOL_INTERACTIVE( "cvpcb.FootprintViewerInteractiveSelection" ),
         m_frame( nullptr )
 {
 }
 
 
-bool CVPCB_SELECTION_TOOL::Init()
+bool CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::Init()
 {
     getEditFrame<DISPLAY_FOOTPRINTS_FRAME>()->AddStandardSubMenus( m_menu );
     return true;
 }
 
 
-void CVPCB_SELECTION_TOOL::Reset( RESET_REASON aReason )
+void CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<DISPLAY_FOOTPRINTS_FRAME>();
 }
 
 
-int CVPCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
+int CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -102,18 +102,18 @@ int CVPCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
+int CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 {
     auto& view = *getView();
     auto& controls = *getViewControls();
-    auto previous_settings = controls.GetSettings();
+    auto  previous_settings = controls.GetSettings();
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
     Activate();
 
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
-    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, m_frame->GetUserUnits() );
+    KIGFX::PREVIEW::RULER_ITEM                 ruler( twoPtMgr, m_frame->GetUserUnits() );
 
     view.Add( &ruler );
     view.SetVisible( &ruler, false );
@@ -129,7 +129,7 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
         const VECTOR2I cursorPos = controls.GetCursorPosition();
 
-        auto clearRuler = [&] () {
+        auto clearRuler = [&]() {
             view.SetVisible( &ruler, false );
             controls.SetAutoPan( false );
             controls.CaptureCursor( false );
@@ -223,9 +223,9 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-void CVPCB_SELECTION_TOOL::setTransitions()
+void CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::setTransitions()
 {
-    Go( &CVPCB_SELECTION_TOOL::Main,             CVPCB_ACTIONS::selectionActivate.MakeEvent() );
-    Go( &CVPCB_SELECTION_TOOL::MeasureTool,      ACTIONS::measureTool.MakeEvent() );
+    Go( &CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::Main,
+            CVPCB_ACTIONS::selectionActivate.MakeEvent() );
+    Go( &CVPCB_FOOTPRINT_VIEWER_SELECTION_TOOL::MeasureTool, ACTIONS::measureTool.MakeEvent() );
 }
-
