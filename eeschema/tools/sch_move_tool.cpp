@@ -44,6 +44,7 @@
 SCH_MOVE_TOOL::SCH_MOVE_TOOL() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveMove" ),
         m_moveInProgress( false ),
+        m_isDragOperation( false ),
         m_moveOffset( 0, 0 )
 {
 }
@@ -124,7 +125,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     if( m_moveInProgress )
     {
-        if( !m_selectionTool->GetSelection().Front()->IsNew() )
+        auto sel = m_selectionTool->GetSelection().Front();
+
+        if( sel && !sel->IsNew() )
         {
             // User must have switched from move to drag or vice-versa.  Reset the selected
             // items so we can start again with the current m_isDragOperation.
@@ -174,7 +177,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {
                 SCH_ITEM* sch_item = (SCH_ITEM*) selection.Front();
-                bool      appendUndo = sch_item->IsNew();
+                bool      appendUndo = sch_item && sch_item->IsNew();
 
                 //------------------------------------------------------------------------
                 // Setup a drag or a move
