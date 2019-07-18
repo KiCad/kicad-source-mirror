@@ -66,7 +66,7 @@ std::string GERBER_JOBFILE_WRITER::formatStringFromUTF32( const wxString& aText 
             fmt_text += char( letter );
         else
         {
-            char buff[10];
+            char buff[16];
             sprintf( buff, "\\u%4.4lX", letter );
             fmt_text += buff;
         }
