@@ -37,7 +37,6 @@
 
 class LIB_ALIAS;
 class LIB_PART;
-class LIB_BUFFER;
 class PART_LIB;
 class SCH_PLUGIN;
 class LIB_EDIT_FRAME;
@@ -48,11 +47,12 @@ class SYMBOL_LIB_TABLE_ROW;
 class LIB_LOGGER : public wxLogGui
 {
 public:
-    LIB_LOGGER() : m_previousLogger( nullptr ), m_activated( false )
-    {
-    }
+    LIB_LOGGER() :
+            m_previousLogger( nullptr ),
+            m_activated( false )
+    { }
 
-    ~LIB_LOGGER()
+    ~LIB_LOGGER() override
     {
         if( m_activated )
             wxLog::SetActiveTarget( m_previousLogger );
@@ -72,14 +72,13 @@ public:
         {
             wxLogMessage( _( "Not all libraries could be loaded.  Use the Manage Symbol Libraries dialog \n"
                              "to adjust paths and add or remove libraries." ) );
-
             wxLogGui::Flush();
         }
     }
 
 private:
     wxLog* m_previousLogger;
-    bool m_activated;
+    bool   m_activated;
 };
 
 
@@ -104,9 +103,9 @@ public:
     /**
      * Returns a library hash value to determine if it has changed.
      *
-     * For buffered libraries, it returns a number corresponding to the number
-     * of modifications. For original libraries, hash is computed basing on the
-     * library URI. Returns -1 when the requested library does not exist.
+     * For buffered libraries, it returns a number corresponding to the number of modifications.
+     * For original libraries, hash is computed basing on the library URI. Returns -1 when the
+     * requested library does not exist.
      */
     int GetLibraryHash( const wxString& aLibrary ) const;
 
@@ -220,26 +219,12 @@ public:
     bool FlushPart( const wxString& aAlias, const wxString& aLibrary );
 
     /**
-     * Saves changes to the library copy used by the schematic editor. Note it is not
-     * necessarily saved to the file.
-     * @param aLibrary is the library name.
-     * @return True on success, false otherwise.
-     */
-    bool FlushLibrary( const wxString& aLibrary );
-
-    /**
      * Saves library to a file, including unsaved changes.
      * @param aLibrary is the library name.
      * @param aFileName is the target file name.
      * @return True on success, false otherwise.
      */
     bool SaveLibrary( const wxString& aLibrary, const wxString& aFileName );
-
-    /**
-     * Saves all changes to libraries.
-     * @return True if all changes have been flushed successfully, false otherwise.
-     */
-    bool FlushAll();
 
     /**
      * Reverts unsaved changes for a particular part.
@@ -275,34 +260,14 @@ public:
     /**
      * Returns the currently modified library name.
      */
-    const wxString& GetCurrentLib() const
-    {
-        return m_currentLib;
-    }
-
-    /**
-     * Sets the currently modified library name.
-     */
-    void SetCurrentLib( const wxString& aLibrary )
-    {
-        m_currentLib = aLibrary;
-    }
+    const wxString& GetCurrentLib() const { return m_currentLib; }
+    void SetCurrentLib( const wxString& aLibrary ) { m_currentLib = aLibrary; }
 
     /**
      * Returns the currently modified part name.
      */
-    const wxString& GetCurrentPart() const
-    {
-        return m_currentPart;
-    }
-
-    /**
-     * Sets the currently modified part name.
-     */
-    void SetCurrentPart( const wxString& aPart )
-    {
-        m_currentPart = aPart;
-    }
+    const wxString& GetCurrentPart() const { return m_currentPart; }
+    void SetCurrentPart( const wxString& aPart ) { m_currentPart = aPart; }
 
     /**
      * Returns the current library and part name as LIB_ID.
@@ -313,9 +278,6 @@ public:
     }
 
 private:
-    ///> Parent frame
-    LIB_EDIT_FRAME& m_frame;
-
     ///> Extracts library name basing on the file name
     static wxString getLibraryName( const wxString& aFilePath );
 
@@ -360,11 +322,8 @@ private:
     private:
         std::unique_ptr<SCH_SCREEN> m_screen;
 
-        ///> Working copy
-        LIB_PART* m_part;
-
-        ///> Initial state of the part
-        LIB_PART* m_original;
+        LIB_PART* m_part;        // Working copy
+        LIB_PART* m_original;    // Initial state of the part
     };
 
 
@@ -372,10 +331,10 @@ private:
     class LIB_BUFFER
     {
     public:
-        LIB_BUFFER( const wxString& aLibrary )
-            : m_libName( aLibrary ), m_hash( 1 )
-        {
-        }
+        LIB_BUFFER( const wxString& aLibrary ) :
+                m_libName( aLibrary ),
+                m_hash( 1 )
+        { }
 
         bool IsModified() const
         {
@@ -391,13 +350,7 @@ private:
             return false;
         }
 
-        int GetHash() const
-        {
-            return m_hash;
-        }
-
-        ///> Returns all alias names for stored parts
-        wxArrayString GetAliasNames() const;
+        int GetHash() const { return m_hash; }
 
         ///> Returns the working copy of a LIB_PART object with specified alias
         LIB_PART* GetPart( const wxString& aAlias ) const
@@ -435,16 +388,7 @@ private:
         }
 
         ///> Returns all buffered parts
-        const std::deque<PART_BUFFER::PTR>& GetBuffers() const
-        {
-            return m_parts;
-        }
-
-        ///> Returns all aliases of buffered parts
-        const std::map<wxString, PART_BUFFER::WEAK_PTR>& GetAliases() const
-        {
-            return m_aliases;
-        }
+        const std::deque<PART_BUFFER::PTR>& GetBuffers() const { return m_parts; }
 
     private:
         ///> Creates alias entries for a particular part buffer
@@ -455,16 +399,9 @@ private:
 
         std::map<wxString, PART_BUFFER::WEAK_PTR> m_aliases;
         std::deque<PART_BUFFER::PTR> m_parts;
-
-        ///> Buffer to keep deleted parts until the library is saved
-        std::deque<PART_BUFFER::PTR> m_deleted;
-
-        /// Buffered library name
-        const wxString m_libName;
-
-        int m_hash;
-
-        friend class PART_BUFFER;
+        std::deque<PART_BUFFER::PTR> m_deleted;  // Buffer for deleted parts until library is saved
+        const wxString               m_libName;  // Buffered library name
+        int                          m_hash;
     };
 
     ///> Returns a set of LIB_PART objects belonging to the original library
@@ -477,11 +414,12 @@ private:
     ///> The library buffers
     std::map<wxString, LIB_BUFFER> m_libs;
 
-    LIB_LOGGER  m_logger;
-    int         m_syncHash;       // Symbol Lib Table hash value from the last synchronization
+    LIB_EDIT_FRAME& m_frame;         // Parent frame
+    LIB_LOGGER      m_logger;
+    int             m_syncHash;      // Symbol Lib Table hash value from the last synchronization
 
-    wxString    m_currentLib;     // Currently modified part
-    wxString    m_currentPart;    // Currently modified library
+    wxString        m_currentLib;    // Currently modified part
+    wxString        m_currentPart;   // Currently modified library
 
     SYMBOL_TREE_SYNCHRONIZING_ADAPTER::PTR m_adapter;
     SYMBOL_TREE_SYNCHRONIZING_ADAPTER* getAdapter()

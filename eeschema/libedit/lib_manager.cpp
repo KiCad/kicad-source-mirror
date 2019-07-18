@@ -126,59 +126,6 @@ SYMBOL_LIB_TABLE_ROW* LIB_MANAGER::GetLibrary( const wxString& aLibrary ) const
 }
 
 
-bool LIB_MANAGER::FlushAll()
-{
-    bool result = true;
-
-    for( auto& libBuf : m_libs )
-        result &= FlushLibrary( libBuf.first );
-
-    return result;
-}
-
-
-bool LIB_MANAGER::FlushLibrary( const wxString& aLibrary )
-{
-    auto it = m_libs.find( aLibrary );
-
-    if( it == m_libs.end() )    // no changes to flush
-        return true;
-
-    LIB_BUFFER& libBuf = it->second;
-    wxArrayString aliases;
-
-    try
-    {
-        symTable()->EnumerateSymbolLib( aLibrary, aliases );
-
-        // TODO probably this could be implemented more efficiently
-        for( const auto& alias : aliases )
-            symTable()->DeleteAlias( aLibrary, alias );
-    }
-    catch( const IO_ERROR& e )
-    {
-        wxLogMessage( _( "Cannot flush library changes (\"%s\") (%s)" ), aLibrary, e.What() );
-    }
-
-    // Assume all libraries are successfully saved
-    bool res = true;
-
-    for( const auto& partBuf : libBuf.GetBuffers() )
-    {
-        if( !libBuf.SaveBuffer( partBuf, symTable() ) )
-        {
-            // Something went wrong but try to save other libraries
-            res = false;
-        }
-    }
-
-    if( res )
-        libBuf.ClearDeletedBuffer();
-
-    return res;
-}
-
-
 bool LIB_MANAGER::SaveLibrary( const wxString& aLibrary, const wxString& aFileName )
 {
     wxCHECK( LibraryExists( aLibrary ), false );
@@ -752,17 +699,6 @@ void LIB_MANAGER::PART_BUFFER::SetOriginal( LIB_PART* aPart )
 bool LIB_MANAGER::PART_BUFFER::IsModified() const
 {
     return m_screen && m_screen->IsModify();
-}
-
-
-wxArrayString LIB_MANAGER::LIB_BUFFER::GetAliasNames() const
-{
-    wxArrayString ret;
-
-    for( const auto& alias : m_aliases )
-        ret.push_back( alias.first );
-
-    return ret;
 }
 
 
