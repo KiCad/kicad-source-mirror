@@ -285,6 +285,9 @@ int MODULE_EDITOR_TOOLS::DefaultPadProperties( const TOOL_EVENT& aEvent )
 
 int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 {
+    if( !m_frame->GetBoard()->GetFirstModule() )
+        return 0;
+
     struct PAD_PLACER : public INTERACTIVE_PLACER_BASE
     {
         std::unique_ptr<BOARD_ITEM> CreateItem() override

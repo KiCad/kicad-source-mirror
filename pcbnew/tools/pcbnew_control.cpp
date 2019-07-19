@@ -447,6 +447,9 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
     }
     else
     {
+        if( m_editModules && !getEditFrame<PCB_BASE_EDIT_FRAME>()->GetModel() )
+            return 0;
+
         std::string         tool = aEvent.GetCommandStr().get();
         PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
 
@@ -481,6 +484,9 @@ int PCBNEW_CONTROL::GridResetOrigin( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
+    if( m_editModules && !m_frame->GetBoard()->GetFirstModule() )
+        return 0;
+
     std::string         tool = aEvent.GetCommandStr().get();
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
 

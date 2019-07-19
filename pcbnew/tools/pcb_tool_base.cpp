@@ -61,7 +61,8 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
 
     auto makeNewItem = [&] ( VECTOR2I aPosition )
     {
-        newItem = aPlacer->CreateItem();
+        if( frame()->GetModel() )
+            newItem = aPlacer->CreateItem();
 
         if( newItem )
         {

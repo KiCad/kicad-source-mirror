@@ -1130,7 +1130,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
  * of an Arc Geometry Manager
  */
 static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER& aMgr,
-        DRAWSEGMENT& aArc )
+                                          DRAWSEGMENT& aArc )
 {
     auto vec = aMgr.GetOrigin();
 
@@ -1357,6 +1357,9 @@ bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER*& aZo
 
 int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 {
+    if( m_editModules && !m_frame->GetModel() )
+        return 0;
+
     ZONE_MODE zoneMode = aEvent.Parameter<ZONE_MODE>();
     MODE      drawMode = MODE::ZONE;
 
