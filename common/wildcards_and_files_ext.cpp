@@ -91,7 +91,6 @@ wxString AddFileExtListToFilter( const std::vector<std::string>& aExts )
 
 const std::string SchematicSymbolFileExtension( "sym" );
 const std::string SchematicLibraryFileExtension( "lib" );
-const std::string SchematicBackupFileExtension( "bak" );
 
 const std::string VrmlFileExtension( "wrl" );
 
