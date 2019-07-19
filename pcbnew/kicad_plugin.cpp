@@ -2108,9 +2108,9 @@ bool PCB_IO::FootprintExists( const wxString& aLibraryPath, const wxString& aFoo
     //
     // Since this goes out to the native filesystem, we get platform differences (ie: MSW's
     // case-insensitive filesystem) handled "for free".
-
-    wxFileName footprintFile( aLibraryPath, aFootprintName );
-    footprintFile.SetExt( KiCadFootprintFileExtension );
+    // Warning: footprint names frequently contain a point. So be careful when initializing
+    // wxFileName, and use a CTOR with extension specified
+    wxFileName footprintFile( aLibraryPath, aFootprintName, KiCadFootprintFileExtension );
 
     return footprintFile.Exists();
 }

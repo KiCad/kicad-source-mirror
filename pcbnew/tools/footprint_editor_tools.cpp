@@ -114,7 +114,7 @@ bool MODULE_EDITOR_TOOLS::Init()
     ctxMenu.AddSeparator();
     ctxMenu.AddItem( PCB_ACTIONS::importFootprint,   SELECTION_CONDITIONS::ShowAlways );
     ctxMenu.AddItem( PCB_ACTIONS::exportFootprint,   fpSelectedCondition );
-    
+
     return true;
 }
 
@@ -166,7 +166,7 @@ int MODULE_EDITOR_TOOLS::CutCopyFootprint( const TOOL_EVENT& aEvent )
         m_copiedModule.reset( new MODULE( *m_frame->GetBoard()->GetFirstModule() ) );
     else
         m_copiedModule.reset( m_frame->LoadFootprint( fpID ) );
-    
+
     if( aEvent.IsAction( &PCB_ACTIONS::cutFootprint ) )
         DeleteFootprint(aEvent );
 
@@ -238,12 +238,12 @@ int MODULE_EDITOR_TOOLS::ExportFootprint( const TOOL_EVENT& aEvent )
 {
     LIB_ID  fpID = m_frame->GetTreeFPID();
     MODULE* fp;
-    
+
     if( !fpID.IsValid() )
         fp = m_frame->GetBoard()->GetFirstModule();
     else
         fp = m_frame->LoadFootprint( fpID );
-    
+
     m_frame->Export_Module( fp );
     return 0;
 }

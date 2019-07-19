@@ -73,7 +73,7 @@ public:
      */
     inline void SetClickHandler( CLICK_HANDLER aHandler )
     {
-        assert( !m_clickHandler );
+        wxASSERT( !m_clickHandler );
         m_clickHandler = aHandler;
     }
 
@@ -93,7 +93,7 @@ public:
      */
     inline void SetCancelHandler( CANCEL_HANDLER aHandler )
     {
-        assert( !m_cancelHandler );
+        wxASSERT( !m_cancelHandler );
         m_cancelHandler = aHandler;
     }
 
@@ -103,7 +103,7 @@ public:
      */
     inline void SetFinalizeHandler( FINALIZE_HANDLER aHandler )
     {
-        assert( !m_finalizeHandler );
+        wxASSERT( !m_finalizeHandler );
         m_finalizeHandler = aHandler;
     }
 
