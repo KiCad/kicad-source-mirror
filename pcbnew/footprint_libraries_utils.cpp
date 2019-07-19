@@ -706,6 +706,9 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString&
 
 bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aModule )
 {
+    if( !aModule )      // Happen if no footprint loaded
+        return false;
+
     wxString libraryName = aModule->GetFPID().GetLibNickname();
     wxString footprintName = aModule->GetFPID().GetLibItemName();
     bool nameChanged = m_footprintNameWhenLoaded != footprintName;

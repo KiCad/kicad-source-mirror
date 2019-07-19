@@ -255,6 +255,9 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_SAVE:
+        if( !GetBoard()->GetFirstModule() )     // no loaded footprint
+            break;
+
         if( GetTargetFPID() == GetLoadedFPID() )
         {
             if( SaveFootprint( GetBoard()->GetFirstModule() ) )
