@@ -94,8 +94,8 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
     {
         wxFileName backupFileName = schematicFileName;
 
-        // Rename the old file to a '.bak' one:
-        backupFileName.SetExt( SchematicBackupFileExtension );
+        // Rename the old file to a '-bak' suffixed one:
+        backupFileName.SetExt( schematicFileName.GetExt() + GetBackupSuffix()  );
 
         if( backupFileName.FileExists() )
             wxRemoveFile( backupFileName.GetFullPath() );
