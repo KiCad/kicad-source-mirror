@@ -450,6 +450,9 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
         std::string         tool = aEvent.GetCommandStr().get();
         PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
 
+        // Deactivate other tools; particularly important if another PICKER is currently running
+        Activate();
+
         picker->SetClickHandler(
             [this] ( const VECTOR2D& pt ) -> bool
             {
@@ -483,6 +486,9 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
     m_pickerItem = nullptr;
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
+    // Deactivate other tools; particularly important if another PICKER is currently running
+    Activate();
 
     picker->SetCursor( wxStockCursor( wxCURSOR_BULLSEYE ) );
 

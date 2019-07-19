@@ -341,6 +341,9 @@ int PL_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     std::string  tool = aEvent.GetCommandStr().get();
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
+    // Deactivate other tools; particularly important if another PICKER is currently running
+    Activate();
+
     picker->SetCursor( wxStockCursor( wxCURSOR_BULLSEYE ) );
     m_pickerItem = nullptr;
 

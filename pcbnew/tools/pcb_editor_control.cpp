@@ -1130,6 +1130,9 @@ int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
     std::string         tool = aEvent.GetCommandStr().get();
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
 
+    // Deactivate other tools; particularly important if another PICKER is currently running
+    Activate();
+
     picker->SetClickHandler(
         [this] ( const VECTOR2D& pt ) -> bool
         {
@@ -1304,6 +1307,9 @@ int PCB_EDITOR_CONTROL::HighlightNetTool( const TOOL_EVENT& aEvent )
     std::string         tool = aEvent.GetCommandStr().get();
     PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
 
+    // Deactivate other tools; particularly important if another PICKER is currently running
+    Activate();
+
     // If the keyboard hotkey was triggered and we are already in the highlight tool, behave
     // the same as a left-click.  Otherwise highlight the net of the selected item(s), or if
     // there is no selection, then behave like a ctrl-left-click.
@@ -1334,6 +1340,9 @@ int PCB_EDITOR_CONTROL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
     PCBNEW_PICKER_TOOL*  picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
     BOARD*               board = getModel<BOARD>();
     PCB_DISPLAY_OPTIONS* opt = displayOptions();
+
+    // Deactivate other tools; particularly important if another PICKER is currently running
+    Activate();
 
     picker->SetClickHandler(
         [&] ( const VECTOR2D& pt ) -> bool

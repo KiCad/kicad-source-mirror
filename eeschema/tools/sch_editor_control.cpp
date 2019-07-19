@@ -438,6 +438,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
     PICKER_TOOL*    picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
+    // Deactivate other tools; particularly important if another PICKER is currently running
+    Activate();
+
     picker->SetCursor( SIMULATION_CURSORS::GetCursor( SIMULATION_CURSORS::CURSOR::PROBE ) );
 
     picker->SetClickHandler(
@@ -480,6 +483,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
 {
     PICKER_TOOL*    picker = m_toolMgr->GetTool<PICKER_TOOL>();
+
+    // Deactivate other tools; particularly important if another PICKER is currently running
+    Activate();
 
     picker->SetCursor( SIMULATION_CURSORS::GetCursor( SIMULATION_CURSORS::CURSOR::TUNE ) );
 
@@ -671,6 +677,9 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 
     std::string  tool = aEvent.GetCommandStr().get();
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+
+    // Deactivate other tools; particularly important if another PICKER is currently running
+    Activate();
 
     picker->SetCursor( wxStockCursor( wxCURSOR_BULLSEYE ) );
 

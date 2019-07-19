@@ -946,6 +946,9 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     m_pickerItem = nullptr;
 
+    // Deactivate other tools; particularly important if another PICKER is currently running
+    Activate();
+
     picker->SetCursor( wxStockCursor( wxCURSOR_BULLSEYE ) );
 
     picker->SetClickHandler(
