@@ -436,8 +436,6 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
 #ifdef KICAD_SPICE
 int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
-    SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
-    std::string     tool = aEvent.GetCommandStr().get();
     PICKER_TOOL*    picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
     picker->SetCursor( SIMULATION_CURSORS::GetCursor( SIMULATION_CURSORS::CURSOR::PROBE ) );
@@ -459,6 +457,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
             {
                 if( obj->m_Comp == item )
                 {
+                    SIM_PLOT_FRAME* simFrame =
+                        (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
+
                     if( simFrame )
                         simFrame->AddVoltagePlot( obj->GetNetName() );
 
@@ -469,6 +470,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
             return true;
         } );
 
+    std::string     tool = aEvent.GetCommandStr().get();
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
     return 0;
@@ -477,8 +479,6 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
 {
-    std::string     tool = aEvent.GetCommandStr().get();
-    SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
     PICKER_TOOL*    picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
     picker->SetCursor( SIMULATION_CURSORS::GetCursor( SIMULATION_CURSORS::CURSOR::TUNE ) );
@@ -502,12 +502,15 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
                     return false;
             }
 
+            SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
+
             if( simFrame )
                 simFrame->AddTuner( static_cast<SCH_COMPONENT*>( item ) );
 
             return true;
         } );
 
+    std::string tool = aEvent.GetCommandStr().get();
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
     return 0;
