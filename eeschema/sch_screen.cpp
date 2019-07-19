@@ -1357,6 +1357,18 @@ int SCH_SCREENS::ChangeSymbolLibNickname( const wxString& aFrom, const wxString&
 }
 
 
+bool SCH_SCREENS::HasSchematic( const wxString& aSchematicFileName )
+{
+    for( const SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
+    {
+        if( screen->GetFileName() == aSchematicFileName )
+            return true;
+    }
+
+    return false;
+}
+
+
 void SCH_SCREENS::BuildClientSheetPathList()
 {
     SCH_SHEET_LIST sheetList( g_RootSheet );
