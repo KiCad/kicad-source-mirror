@@ -65,7 +65,8 @@ void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer,
     {
         VECTOR2I cursorPos = controls()->GetCursorPosition();
 
-        newItem = aPlacer->CreateItem();
+        if( frame()->GetModel() )
+            newItem = aPlacer->CreateItem();
 
         if( newItem )
         {

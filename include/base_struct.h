@@ -257,6 +257,14 @@ public:
     void ClearFlags( STATUS_FLAGS aMask = EDA_ITEM_ALL_FLAGS ) { m_Flags &= ~aMask; }
     STATUS_FLAGS GetFlags() const { return m_Flags; }
 
+    STATUS_FLAGS GetEditFlags() const
+    {
+        int mask = EDA_ITEM_ALL_FLAGS - ( SELECTED | SELECTEDNODE | HIGHLIGHTED | BRIGHTENED |
+                                          STARTPOINT | ENDPOINT |
+                                          BEGIN_ONPAD | END_ONPAD | DP_COUPLED );
+        return m_Flags & mask;
+    }
+
     /**
      * Function IsType
      * Checks whether the item is one of the listed types

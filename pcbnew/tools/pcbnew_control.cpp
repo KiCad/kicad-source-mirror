@@ -594,6 +594,9 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
     }
     else
     {
+        if( m_editModules && !getEditFrame<PCB_BASE_EDIT_FRAME>()->GetModel() )
+            return 0;
+
         Activate();
 
         PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
@@ -683,6 +686,9 @@ static bool deleteItem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
 int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
+    if( m_editModules && !m_frame->GetBoard()->m_Modules )
+        return 0;
+
     Activate();
 
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();

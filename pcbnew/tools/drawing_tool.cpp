@@ -1193,7 +1193,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
  * of an Arc Geometry Manager
  */
 static void updateArcFromConstructionMgr( const KIGFX::PREVIEW::ARC_GEOM_MANAGER& aMgr,
-        DRAWSEGMENT& aArc )
+                                          DRAWSEGMENT& aArc )
 {
     auto vec = aMgr.GetOrigin();
 
@@ -1378,6 +1378,9 @@ bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER*& aZo
 
 int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
 {
+    if( m_editModules && !m_frame->GetModel() )
+        return 0;
+
     // get a source zone, if we need one. We need it for:
     // ZONE_MODE::CUTOUT (adding a hole to the source zone)
     // ZONE_MODE::SIMILAR (creating a new zone using settings of source zone

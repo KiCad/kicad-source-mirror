@@ -99,6 +99,9 @@ void MODULE_EDITOR_TOOLS::Reset( RESET_REASON aReason )
 
 int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 {
+    if( !frame()->GetBoard()->m_Modules )
+        return 0;
+
     struct PAD_PLACER : public INTERACTIVE_PLACER_BASE
     {
         std::unique_ptr<BOARD_ITEM> CreateItem() override
@@ -128,8 +131,6 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
     PAD_PLACER placer;
 
     frame()->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_PENCIL, _( "Add pads" ) );
-
-    wxASSERT( board()->m_Modules );
 
     doInteractiveItemPlacement( &placer,  _( "Place pad" ), IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP );
 
