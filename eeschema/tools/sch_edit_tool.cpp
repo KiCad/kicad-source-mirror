@@ -1022,13 +1022,22 @@ void SCH_EDIT_TOOL::editComponentFieldText( SCH_FIELD* aField )
     if( aField->GetEditFlags() == 0 )    // i.e. not edited, or moved
         m_frame->SaveCopyInUndoList( component, UR_CHANGED );
 
-    wxString title;
-    title.Printf( _( "Edit %s Field" ), GetChars( aField->GetName() ) );
+    wxString title = wxString::Format( _( "Edit %s Field" ), aField->GetName() );
 
     DIALOG_SCH_EDIT_ONE_FIELD dlg( m_frame, title, aField );
 
-    // The dialog may invoke a kiway player for footprint fields
-    // so we must use a quasimodal
+#ifdef  __WXMAC__
+    // This dialog, like no other that we currently know of, sometimes provokes Apple's
+    // "[NSAlert runModal] may not be invoked inside of transaction begin/commit pair"
+    // bug, and these seem to prevent it.  Don't ask.
+    // Note: this doesn't seem to have anything to do with it being a quasi-modal: the
+    // bug happens even if it's changed to a normal modal.
+    wxSafeYield();  // Apple: strike 1
+    wxSafeYield();  // Apple: strike 2
+    wxSafeYield();  // Apple: strike 3; you're out
+#endif
+
+    // The footprint field dialog can invoke a KIWAY_PLAYER so we must use a quasi-modal
     if( dlg.ShowQuasiModal() != wxID_OK )
         return;
 
