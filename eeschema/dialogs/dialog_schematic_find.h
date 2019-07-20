@@ -134,6 +134,7 @@ class DIALOG_SCH_FIND : public DIALOG_SCH_FIND_BASE
 protected:
     // Handlers for DIALOG_SCH_FIND_BASE events.
     void OnClose( wxCloseEvent& aEvent ) override;
+    void OnCancel( wxCommandEvent& aEvent ) override;
     void OnSearchForText( wxCommandEvent& aEvent ) override;
     void OnTextEnter( wxCommandEvent& event ) override;
     void OnOptions( wxCommandEvent& event ) override;

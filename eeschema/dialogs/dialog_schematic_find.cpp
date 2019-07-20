@@ -101,6 +101,13 @@ void DIALOG_SCH_FIND::OnClose( wxCloseEvent& aEvent )
 }
 
 
+void DIALOG_SCH_FIND::OnCancel( wxCommandEvent& aEvent )
+{
+    wxCloseEvent dummy;
+    OnClose( dummy );
+}
+
+
 void DIALOG_SCH_FIND::OnUpdateReplaceUI( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( HasFlag( wxFR_REPLACEDIALOG ) && !m_comboFind->GetValue().empty() &&

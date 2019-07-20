@@ -66,6 +66,7 @@ class DIALOG_SCH_FIND_BASE : public DIALOG_SHIM
 		virtual void OnReplace( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdateReplaceUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnUpdateReplaceAllUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

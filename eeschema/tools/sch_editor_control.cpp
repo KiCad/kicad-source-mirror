@@ -290,7 +290,7 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
     if( item )
     {
         m_selectionTool->AddItemToSel( item );
-        getView()->SetCenter( item->GetBoundingBox().GetCenter() );
+        m_frame->FocusOnLocation( item->GetBoundingBox().GetCenter(), true );
         m_frame->GetCanvas()->Refresh();
     }
     else
