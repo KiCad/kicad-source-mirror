@@ -127,6 +127,8 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
     STATUS_TEXT_POPUP   statusPopup( frame() );
     bool                done = false;
 
+    Activate();
+
     statusPopup.SetText( _( "Select reference item..." ) );
 
     picker->SetClickHandler(
