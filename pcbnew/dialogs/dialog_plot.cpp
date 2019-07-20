@@ -157,7 +157,11 @@ void DIALOG_PLOT::init_Dialog()
     // Option to exclude pads from silkscreen layers
     m_excludePadsFromSilkscreen->SetValue( !m_plotOpts.GetPlotPadsOnSilkLayer() );
 
+    // Option to tent vias
     m_subtractMaskFromSilk->SetValue( m_plotOpts.GetSubtractMaskFromSilk() );
+
+    // Option to use aux origin
+    m_useAuxOriginCheckBox->SetValue( m_plotOpts.GetUseAuxOrigin() );
 
     // Option to plot page references:
     m_plotSheetRef->SetValue( m_plotOpts.GetPlotFrameRef() );
@@ -176,12 +180,13 @@ void DIALOG_PLOT::init_Dialog()
     // Plot mode
     setPlotModeChoiceSelection( m_plotOpts.GetPlotMode() );
 
-    // Plot outline mode
+    // DXF outline mode
     m_DXF_plotModeOpt->SetValue( m_plotOpts.GetDXFPlotPolygonMode() );
 
-    // Plot text mode
+    // DXF text mode
     m_DXF_plotTextStrokeFontOpt->SetValue( m_plotOpts.GetTextMode() == PLOTTEXTMODE_DEFAULT );
 
+    // DXF units selection
     m_DXF_plotUnits->SetSelection( static_cast<int>( m_plotOpts.GetDXFPlotUnits() ) );
 
     // Plot mirror option
