@@ -238,6 +238,10 @@ int COMMON_TOOLS::ZoomFitScreen( const TOOL_EVENT& aEvent )
     BOX2I    bBox = frame->GetDocumentExtents();
     BOX2I    defaultBox = canvas->GetDefaultViewBBox();
     VECTOR2D scrollbarSize = VECTOR2D( canvas->GetSize() - canvas->GetClientSize() );
+
+    view->SetScale( 1.0 );  // the best scale will be fixed later, from this initial value
+                            // but this call ensure all view parameters are up to date
+                            // especially at init time
     VECTOR2D screenSize = view->ToWorld( canvas->GetClientSize(), false );
 
     if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
