@@ -183,7 +183,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_auimgr.Update();
 
     GetToolManager()->RunAction( ACTIONS::gridPreset, true, m_LastGridSizeId );
-    GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
 
     if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame
     {
@@ -202,6 +201,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     bbox.SetOrigin( -max_size_x /2, -max_size_y/2 );
     bbox.SetSize( max_size_x, max_size_y );
     GetCanvas()->GetView()->SetBoundary( bbox );
+    GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
 }
 
 
