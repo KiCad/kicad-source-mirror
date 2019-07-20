@@ -1091,9 +1091,7 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
     SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged );
 
-    ReCreateHToolbar();
-    ReCreateVToolbar();
-    ReCreateOptToolbar();
+    RecreateToolbars();
     Layout();
     SendSizeEvent();
 }
@@ -1112,9 +1110,7 @@ void SCH_EDIT_FRAME::ShowChangedLanguage()
     SCH_BASE_FRAME::ShowChangedLanguage();
 
     // tooltips in toolbars
-    ReCreateHToolbar();
-    ReCreateVToolbar();
-    ReCreateOptToolbar();
+    RecreateToolbars();
 
     // status bar
     UpdateMsgPanel();

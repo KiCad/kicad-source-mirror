@@ -858,3 +858,21 @@ bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
 }
 
 
+void EDA_DRAW_FRAME::RecreateToolbars()
+{
+    // Rebuild all toolbars, and update the checked state of check tools
+    if( m_mainToolBar )
+        ReCreateHToolbar();
+
+    if( m_drawToolBar )         // Drawing tools (typically on right edge of window)
+        ReCreateVToolbar();
+
+    if( m_optionsToolBar )      // Options (typically on left edge of window)
+        ReCreateOptToolbar();
+
+    if( m_auxiliaryToolBar )    // Additional tools under main toolbar
+       ReCreateOptToolbar();
+
+    // Update the checked state of tools
+    SyncToolbars();
+}

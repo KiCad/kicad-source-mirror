@@ -215,6 +215,9 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_LayersManager->ReFill();
     m_LayersManager->ReFillRender();    // Update colors in Render after the config is read
+
+    // Update the checked state of tools
+    SyncToolbars();
 }
 
 
@@ -401,6 +404,8 @@ void GERBVIEW_FRAME::ReFillLayerWidget()
     m_LayersManager->ReFill();
     m_SelLayerBox->Resync();
     ReCreateAuxiliaryToolbar();
+    // Update the checked state of tools
+    SyncToolbars();
 
     wxAuiPaneInfo&  lyrs = m_auimgr.GetPane( m_LayersManager );
     wxSize          bestz = m_LayersManager->GetBestSize();
@@ -1151,6 +1156,9 @@ void GERBVIEW_FRAME::ActivateGalCanvas()
 
     ReCreateOptToolbar();
     ReCreateMenuBar();
+
+    // Update the checked state of tools
+    SyncToolbars();
 }
 
 
@@ -1254,9 +1262,7 @@ void GERBVIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
     EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged );
 
-    ReCreateHToolbar();
-    ReCreateOptToolbar();
-    ReCreateAuxiliaryToolbar();
+    RecreateToolbars();
     Layout();
     SendSizeEvent();
 }

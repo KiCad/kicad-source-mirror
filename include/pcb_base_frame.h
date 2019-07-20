@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -197,7 +197,7 @@ public:
 
     // General
     virtual void OnCloseWindow( wxCloseEvent& Event ) = 0;
-    virtual void ReCreateOptToolbar() { }
+    virtual void ReCreateOptToolbar() override { }
     virtual void ShowChangedLanguage() override;
     virtual void ReCreateMenuBar() override;
     virtual void UpdateStatusBar() override;

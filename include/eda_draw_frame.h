@@ -300,6 +300,7 @@ public:
     void ReCreateMenuBar() override { }
     virtual void ReCreateHToolbar() = 0;
     virtual void ReCreateVToolbar() = 0;
+    virtual void ReCreateOptToolbar() = 0;
     virtual void ReCreateAuxiliaryToolbar() { }
 
     /**
@@ -474,7 +475,7 @@ public:
      * Update the status bar information.
      *
      * The EDA_DRAW_FRAME level updates the absolute and relative coordinates and the
-     * zoom information.  If you override this virtual method, make sure to call this 
+     * zoom information.  If you override this virtual method, make sure to call this
      * subclassed method.
      */
     void UpdateStatusBar() override;
@@ -578,8 +579,13 @@ public:
     {
         GetCanvas()->Refresh();
     }
-    
+
     virtual const BOX2I GetDocumentExtents() const;
+
+    /**
+     * Rebuild all toolbars, and update the checked state of ckeck tools
+     */
+    void RecreateToolbars();
 };
 
 #endif  // DRAW_FRAME_H_

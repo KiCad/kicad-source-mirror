@@ -291,7 +291,7 @@ public:
     void CreateScreens();
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;
-    void ReCreateOptToolbar();
+    void ReCreateOptToolbar() override;
     void ReCreateMenuBar() override;
 
     /**

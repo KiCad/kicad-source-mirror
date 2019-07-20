@@ -255,7 +255,6 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
     // do not show the window because we do not want any paint event
     Show( false );
 
-    // was: Pgm().SaveCurrentSetupValues( m_configSettings );
     wxConfigSaveSetups( Kiface().KifaceSettings(), m_configSettings );
 
     // On Linux, m_propertiesPagelayout must be destroyed
@@ -422,7 +421,6 @@ void PL_EDITOR_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( lastUsedCustomWidthKey, PAGE_INFO::GetCustomWidthMils() );
     aCfg->Write( lastUsedCustomHeightKey, PAGE_INFO::GetCustomHeightMils() );
 
-    // was: wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
     wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
 }
 

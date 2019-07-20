@@ -220,7 +220,7 @@ public:
     /**
      * Create or update the left vertical toolbar (option toolbar
      */
-    void ReCreateOptToolbar();
+    void ReCreateOptToolbar() override;
 
     void ReCreateMenuBar() override;
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );

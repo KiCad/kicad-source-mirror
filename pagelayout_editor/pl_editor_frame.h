@@ -167,7 +167,7 @@ public:
      * Create or update the left vertical toolbar (option toolbar
      * @note This is currently not used.
      */
-    void    ReCreateOptToolbar();
+    void    ReCreateOptToolbar() override;
 
     void    ReCreateMenuBar() override;
     double  BestZoom() override;

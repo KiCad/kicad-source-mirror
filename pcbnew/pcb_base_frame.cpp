@@ -373,10 +373,7 @@ void PCB_BASE_FRAME::ShowChangedLanguage()
     EDA_DRAW_FRAME::ShowChangedLanguage();
 
     // tooltips in toolbars
-    ReCreateHToolbar();
-    ReCreateAuxiliaryToolbar();
-    ReCreateVToolbar();
-    ReCreateOptToolbar();
+    RecreateToolbars();
 
     // status bar
     UpdateMsgPanel();
@@ -752,10 +749,7 @@ void PCB_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
     EDA_DRAW_FRAME::CommonSettingsChanged( aEnvVarsChanged );
 
-    ReCreateHToolbar();
-    ReCreateAuxiliaryToolbar();
-    ReCreateVToolbar();
-    ReCreateOptToolbar();
+    RecreateToolbars();
 
     // The 3D viewer isn't in the Kiway, so send its update manually
     EDA_3D_VIEWER* viewer = Get3DViewerFrame();

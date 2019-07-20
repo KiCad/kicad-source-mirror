@@ -242,7 +242,7 @@ public:
     void   OnExitKiCad( wxCommandEvent& event );
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;
-    void ReCreateOptToolbar();
+    void ReCreateOptToolbar() override;
     double BestZoom() override;         // Returns the best zoom
 
     void LoadSettings( wxConfigBase* aCfg ) override;

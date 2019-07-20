@@ -93,6 +93,7 @@ public:
     void CloseLibraryViewer( wxCommandEvent& event );
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;
+    void ReCreateOptToolbar() override {}
     void ReCreateMenuBar() override;
 
     double BestZoom() override;

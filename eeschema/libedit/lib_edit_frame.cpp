@@ -175,8 +175,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Raise();
     Show( true );
 
-    m_toolManager->RunAction( ACTIONS::zoomFitScreen, false );
-
     SyncView();
     GetCanvas()->GetViewControls()->SetSnapping( true );
     GetCanvas()->GetView()->UseDrawPriority( true );
@@ -191,6 +189,8 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     bbox.SetOrigin( -max_size_x /2, -max_size_y/2 );
     bbox.SetSize( max_size_x, max_size_y );
     GetCanvas()->GetView()->SetBoundary( bbox );
+
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
 }
 
 
@@ -697,9 +697,7 @@ void LIB_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
     SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged );
 
-    ReCreateHToolbar();
-    ReCreateVToolbar();
-    ReCreateOptToolbar();
+    RecreateToolbars();
 
     if( aEnvVarsChanged )
         SyncLibraries( true );
@@ -715,9 +713,7 @@ void LIB_EDIT_FRAME::ShowChangedLanguage()
     SCH_BASE_FRAME::ShowChangedLanguage();
 
     // tooltips in toolbars
-    ReCreateHToolbar();
-    ReCreateVToolbar();
-    ReCreateOptToolbar();
+    RecreateToolbars();
 
     // status bar
     UpdateMsgPanel();
