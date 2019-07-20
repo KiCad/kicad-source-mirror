@@ -40,12 +40,33 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
     m_gridBoard->SetColMinimalAcceptableWidth( 80 );
 
     // Make labels for grids
-    m_gridBoard->SetCellValue( 0, 0, _( "Width" ) );
-    m_gridBoard->SetCellValue( 1, 0, _( "Height" ) );
-    m_gridBoard->SetCellValue( 2, 0, _( "Area" ) );
+    wxFont headingFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    headingFont.SetSymbolicSize( wxFONTSIZE_SMALL );
     m_gridComponents->SetCellValue( 0, 1, _( "Front Side" ) );
+    m_gridComponents->SetCellFont( 0, 1, headingFont );
     m_gridComponents->SetCellValue( 0, 2, _( "Bottom Side" ) );
+    m_gridComponents->SetCellFont( 0, 2, headingFont );
     m_gridComponents->SetCellValue( 0, 3, _( "Total" ) );
+    m_gridComponents->SetCellFont( 0, 3, headingFont );
+
+    m_gridComponents->SetCellAlignment( wxALIGN_LEFT, 0, 0 );
+    m_gridComponents->SetCellAlignment( wxALIGN_LEFT, 1, 0 );
+    m_gridComponents->SetCellAlignment( wxALIGN_LEFT, 2, 0 );
+    m_gridComponents->SetCellAlignment( wxALIGN_LEFT, 3, 0 );
+    m_gridComponents->SetCellAlignment( wxALIGN_LEFT, 4, 0 );
+
+    m_gridPads->SetCellAlignment( wxALIGN_LEFT, 0, 0 );
+    m_gridPads->SetCellAlignment( wxALIGN_LEFT, 1, 0 );
+    m_gridPads->SetCellAlignment( wxALIGN_LEFT, 2, 0 );
+    m_gridPads->SetCellAlignment( wxALIGN_LEFT, 3, 0 );
+    m_gridPads->SetCellAlignment( wxALIGN_LEFT, 4, 0 );
+
+    m_gridBoard->SetCellValue( 0, 0, _( "Width:" ) );
+    m_gridBoard->SetCellAlignment( wxALIGN_LEFT, 0, 0 );
+    m_gridBoard->SetCellValue( 1, 0, _( "Height:" ) );
+    m_gridBoard->SetCellAlignment( wxALIGN_LEFT, 1, 0 );
+    m_gridBoard->SetCellValue( 2, 0, _( "Area:" ) );
+    m_gridBoard->SetCellAlignment( wxALIGN_LEFT, 2, 0 );
 }
 
 void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
@@ -54,15 +75,15 @@ void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
 
     // If you need some more types to be shown, simply add them to the
     // corresponding list
-    m_componentsTypes.push_back( componentsType_t( MOD_CMS, _( "THT" ) ) );
-    m_componentsTypes.push_back( componentsType_t( MOD_DEFAULT, _( "SMD" ) ) );
-    m_componentsTypes.push_back( componentsType_t( MOD_VIRTUAL, _( "Virtual" ) ) );
+    m_componentsTypes.push_back( componentsType_t( MOD_CMS, _( "THT:" ) ) );
+    m_componentsTypes.push_back( componentsType_t( MOD_DEFAULT, _( "SMD:" ) ) );
+    m_componentsTypes.push_back( componentsType_t( MOD_VIRTUAL, _( "Virtual:" ) ) );
 
     m_padsTypes.clear();
-    m_padsTypes.push_back( padsType_t( PAD_ATTRIB_STANDARD, _( "THT" ) ) );
-    m_padsTypes.push_back( padsType_t( PAD_ATTRIB_SMD, _( "SMD" ) ) );
-    m_padsTypes.push_back( padsType_t( PAD_ATTRIB_CONN, _( "Connector" ) ) );
-    m_padsTypes.push_back( padsType_t( PAD_ATTRIB_HOLE_NOT_PLATED, _( "NPH" ) ) );
+    m_padsTypes.push_back( padsType_t( PAD_ATTRIB_STANDARD, _( "Through hole:" ) ) );
+    m_padsTypes.push_back( padsType_t( PAD_ATTRIB_SMD, _( "SMD:" ) ) );
+    m_padsTypes.push_back( padsType_t( PAD_ATTRIB_CONN, _( "Connector:" ) ) );
+    m_padsTypes.push_back( padsType_t( PAD_ATTRIB_HOLE_NOT_PLATED, _( "NPTH:" ) ) );
 
     // If there not enough rows in grids, append some
     size_t appendRows = m_componentsTypes.size() + 2 - m_gridComponents->GetNumberRows();
