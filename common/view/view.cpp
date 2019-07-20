@@ -633,9 +633,7 @@ void VIEW::SetCenter( VECTOR2D aCenter, const BOX2D& occultingScreenRect )
         return;
     }
 
-    BOX2D occultedRect = screenRect.Intersect( occultingScreenRect );
-    VECTOR2D offset( occultedRect.GetWidth() / 2, occultedRect.GetHeight() / 2 );
-
+    BOX2D  occultedRect  = screenRect.Intersect( occultingScreenRect );
     double topExposed    = occultedRect.GetTop() - screenRect.GetTop();
     double bottomExposed = screenRect.GetBottom() - occultedRect.GetBottom();
     double leftExposed   = occultedRect.GetLeft() - screenRect.GetLeft();
@@ -644,16 +642,16 @@ void VIEW::SetCenter( VECTOR2D aCenter, const BOX2D& occultingScreenRect )
     if( std::max( topExposed, bottomExposed ) > std::max( leftExposed, rightExposed ) )
     {
         if( topExposed > bottomExposed )
-            aCenter.y += ToWorld( occultedRect.GetHeight() / 2 );
+            aCenter.y += ToWorld( screenRect.GetHeight() / 2 - topExposed / 2 );
         else
-            aCenter.y -= ToWorld( occultedRect.GetHeight() / 2 );
+            aCenter.y -= ToWorld( screenRect.GetHeight() / 2 - bottomExposed / 2 );
     }
     else
     {
         if( leftExposed > rightExposed )
-            aCenter.x += ToWorld( occultedRect.GetWidth() / 2 );
+            aCenter.x += ToWorld( screenRect.GetWidth() / 2 - leftExposed / 2 );
         else
-            aCenter.x -= ToWorld( occultedRect.GetWidth() / 2 );
+            aCenter.x -= ToWorld( screenRect.GetWidth() / 2 - rightExposed / 2 );
     }
 
     SetCenter( aCenter );
