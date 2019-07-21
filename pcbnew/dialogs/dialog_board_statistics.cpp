@@ -26,6 +26,10 @@
 #include "dialog_board_statistics.h"
 
 
+#define COL_FRONT_SIDE 1
+#define COL_BOTTOM_SIDE 2
+#define COL_TOTAL 3
+
 DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
         : DIALOG_BOARD_STATISTICS_BASE( aParentFrame )
 {
@@ -42,12 +46,12 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
     // Make labels for grids
     wxFont headingFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     headingFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-    m_gridComponents->SetCellValue( 0, 1, _( "Front Side" ) );
-    m_gridComponents->SetCellFont( 0, 1, headingFont );
-    m_gridComponents->SetCellValue( 0, 2, _( "Bottom Side" ) );
-    m_gridComponents->SetCellFont( 0, 2, headingFont );
-    m_gridComponents->SetCellValue( 0, 3, _( "Total" ) );
-    m_gridComponents->SetCellFont( 0, 3, headingFont );
+    m_gridComponents->SetCellValue( 0, COL_FRONT_SIDE, _( "Front Side" ) );
+    m_gridComponents->SetCellFont( 0, COL_FRONT_SIDE, headingFont );
+    m_gridComponents->SetCellValue( 0, COL_BOTTOM_SIDE, _( "Bottom Side" ) );
+    m_gridComponents->SetCellFont( 0, COL_BOTTOM_SIDE, headingFont );
+    m_gridComponents->SetCellValue( 0, COL_TOTAL, _( "Total" ) );
+    m_gridComponents->SetCellFont( 0, COL_TOTAL, headingFont );
 
     m_gridComponents->SetCellAlignment( 0, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
     m_gridComponents->SetCellAlignment( 1, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
@@ -75,8 +79,8 @@ void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
 
     // If you need some more types to be shown, simply add them to the
     // corresponding list
-    m_componentsTypes.push_back( componentsType_t( MOD_CMS, _( "THT:" ) ) );
-    m_componentsTypes.push_back( componentsType_t( MOD_DEFAULT, _( "SMD:" ) ) );
+    m_componentsTypes.push_back( componentsType_t( MOD_DEFAULT, _( "THT:" ) ) );
+    m_componentsTypes.push_back( componentsType_t( MOD_CMS, _( "SMD:" ) ) );
     m_componentsTypes.push_back( componentsType_t( MOD_VIRTUAL, _( "Virtual:" ) ) );
 
     m_padsTypes.clear();
@@ -87,10 +91,12 @@ void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
 
     // If there not enough rows in grids, append some
     size_t appendRows = m_componentsTypes.size() + 2 - m_gridComponents->GetNumberRows();
+
     if( appendRows > 0 )
         m_gridComponents->AppendRows( appendRows );
 
     appendRows = m_padsTypes.size() + 1 - m_gridPads->GetNumberRows();
+
     if( appendRows > 0 )
         m_gridPads->AppendRows( appendRows );
 }
@@ -123,9 +129,9 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
             if( module->GetAttributes() == type.attribute )
             {
                 if( module->IsFlipped() )
-                    type.frontSideQty++;
-                else
                     type.backSideQty++;
+                else
+                    type.frontSideQty++;
                 break;
             }
         }
@@ -221,9 +227,9 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     {
         m_gridComponents->SetCellValue( currentRow, 0, type.title );
         m_gridComponents->SetCellValue(
-                currentRow, 1, wxString::Format( wxT( "%i " ), type.frontSideQty ) );
+                currentRow, COL_FRONT_SIDE, wxString::Format( wxT( "%i " ), type.frontSideQty ) );
         m_gridComponents->SetCellValue(
-                currentRow, 2, wxString::Format( wxT( "%i " ), type.backSideQty ) );
+                currentRow, COL_BOTTOM_SIDE, wxString::Format( wxT( "%i " ), type.backSideQty ) );
         m_gridComponents->SetCellValue( currentRow, 3,
                 wxString::Format( wxT( "%i " ), type.frontSideQty + type.backSideQty ) );
         totalFront += type.frontSideQty;
@@ -231,10 +237,11 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
         currentRow++;
     }
     m_gridComponents->SetCellValue( currentRow, 0, _( "Total" ) );
-    m_gridComponents->SetCellValue( currentRow, 1, wxString::Format( wxT( "%i " ), totalFront ) );
-    m_gridComponents->SetCellValue( currentRow, 2, wxString::Format( wxT( "%i " ), totalBack ) );
+    m_gridComponents->SetCellValue( currentRow, COL_FRONT_SIDE,
+                                    wxString::Format( wxT( "%i " ), totalFront ) );
+    m_gridComponents->SetCellValue( currentRow, COL_BOTTOM_SIDE, wxString::Format( wxT( "%i " ), totalBack ) );
     m_gridComponents->SetCellValue(
-            currentRow, 3, wxString::Format( wxT( "%i " ), totalFront + totalBack ) );
+            currentRow, COL_TOTAL, wxString::Format( wxT( "%i " ), totalFront + totalBack ) );
 
     if( m_hasOutline )
     {
