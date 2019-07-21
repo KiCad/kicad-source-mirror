@@ -22,7 +22,6 @@
 #include <undo_redo_container.h>
 #include <class_board.h>
 #include <board_connected_item.h>
-#include <class_module.h>
 #include <class_text_mod.h>
 #include <class_edge_mod.h>
 #include <class_track.h>
@@ -46,20 +45,15 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_arc.h>
-#include <geometry/convex_hull.h>
 
 #include "tools/pcb_tool_base.h"
 
 #include "pns_kicad_iface.h"
-
 #include "../../include/geometry/shape_simple.h"
 #include "pns_routing_settings.h"
-#include "pns_sizes_settings.h"
 #include "pns_item.h"
 #include "pns_solid.h"
 #include "pns_segment.h"
-#include "pns_solid.h"
-#include "pns_itemset.h"
 #include "pns_node.h"
 #include "pns_topology.h"
 #include "pns_router.h"
@@ -88,7 +82,7 @@ private:
     };
 
     int localPadClearance( const PNS::ITEM* aItem ) const;
-    int matchDpSuffix( wxString aNetName, wxString& aComplementNet, wxString& aBaseDpName );
+    int matchDpSuffix( const wxString& aNetName, wxString& aComplementNet, wxString& aBaseDpName );
 
     PNS::ROUTER* m_router;
     BOARD*       m_board;
@@ -212,7 +206,8 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( int aNetCode ) const
 }
 
 
-int PNS_PCBNEW_RULE_RESOLVER::matchDpSuffix( wxString aNetName, wxString& aComplementNet, wxString& aBaseDpName )
+int PNS_PCBNEW_RULE_RESOLVER::matchDpSuffix( const wxString& aNetName, wxString& aComplementNet,
+                                             wxString& aBaseDpName )
 {
     int rv = 0;
 

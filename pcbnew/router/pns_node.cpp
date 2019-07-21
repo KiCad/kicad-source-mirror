@@ -25,9 +25,7 @@
 #include <math/vector2d.h>
 
 #include <geometry/seg.h>
-#include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
-#include <geometry/shape_index.h>
 
 #include "pns_item.h"
 #include "pns_line.h"
@@ -36,7 +34,6 @@
 #include "pns_solid.h"
 #include "pns_joint.h"
 #include "pns_index.h"
-#include "pns_router.h"
 
 
 namespace PNS {
@@ -83,10 +80,10 @@ NODE::~NODE()
 
     m_joints.clear();
 
-    for( INDEX::ITEM_SET::iterator i = m_index->begin(); i != m_index->end(); ++i )
+    for( ITEM* item : *m_index )
     {
-        if( (*i)->BelongsTo( this ) )
-            delete *i;
+        if( item->BelongsTo( this ) )
+            delete item;
     }
 
     releaseGarbage();
@@ -118,15 +115,14 @@ NODE* NODE::Branch()
     child->m_root = isRoot() ? this : m_root;
     child->m_maxClearance = m_maxClearance;
 
-    // immmediate offspring of the root branch needs not copy anything.
-    // For the rest, deep-copy joints, overridden item map and pointers
-    // to stored items.
+    // Immmediate offspring of the root branch needs not copy anything. For the rest, deep-copy
+    // joints, overridden item maps and pointers to stored items.
     if( !isRoot() )
     {
         JOINT_MAP::iterator j;
 
-        for( INDEX::ITEM_SET::iterator i = m_index->begin(); i != m_index->end(); ++i )
-            child->m_index->Add( *i );
+        for( ITEM* item : *m_index )
+            child->m_index->Add( item );
 
         child->m_joints = m_joints;
         child->m_override = m_override;
@@ -154,7 +150,6 @@ OBSTACLE_VISITOR::OBSTACLE_VISITOR( const ITEM* aItem ) :
     m_override( NULL ),
     m_extraClearance( 0 )
 {
-
 }
 
 
@@ -301,7 +296,7 @@ int NODE::QueryColliding( const ITEM* aItem,
 
 
 NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aItem, int aKindMask,
-                                                  const std::set<ITEM*>* aRestrictedSet )
+                                          const std::set<ITEM*>* aRestrictedSet )
 {
     OBSTACLES obs_list;
     bool found_isects = false;
@@ -330,9 +325,9 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aItem, int aKindMask,
     nearest.m_item = NULL;
     nearest.m_distFirst = INT_MAX;
 
-    for( OBSTACLE obs : obs_list )
+    for( const OBSTACLE& obs : obs_list )
     {
-        VECTOR2I ip_first, ip_last;
+        VECTOR2I ip_last;
         int dist_max = INT_MIN;
 
         if( aRestrictedSet && aRestrictedSet->find( obs.m_item ) == aRestrictedSet->end() )
