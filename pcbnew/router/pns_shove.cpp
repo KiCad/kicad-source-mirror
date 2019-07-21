@@ -19,12 +19,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define PNS_DEBUG
-
 #include <deque>
 #include <cassert>
-
-#include "range.h"
 
 #include "pns_line.h"
 #include "pns_node.h"
@@ -35,13 +31,9 @@
 #include "pns_via.h"
 #include "pns_utils.h"
 #include "pns_router.h"
-#include "pns_shove.h"
-#include "pns_utils.h"
 #include "pns_topology.h"
 
 #include "time_limit.h"
-
-#include <profile.h>
 
 namespace PNS {
 
@@ -128,12 +120,13 @@ bool SHOVE::checkBumpDirection( const LINE& aCurrent, const LINE& aShoved ) cons
 }
 
 
-SHOVE::SHOVE_STATUS SHOVE::walkaroundLoneVia( LINE& aCurrent, LINE& aObstacle,
-                                                      LINE& aShoved )
+SHOVE::SHOVE_STATUS SHOVE::walkaroundLoneVia( LINE& aCurrent, LINE& aObstacle, LINE& aShoved )
 {
     int clearance = getClearance( &aCurrent, &aObstacle );
     const SHAPE_LINE_CHAIN hull = aCurrent.Via().Hull( clearance, aObstacle.Width() );
-    SHAPE_LINE_CHAIN path_cw, path_ccw;
+    SHAPE_LINE_CHAIN path_cw;
+    SHAPE_LINE_CHAIN path_ccw;
+    VECTOR2I dummy;
 
     if( ! aObstacle.Walkaround( hull, path_cw, true ) )
         return SH_INCOMPLETE;
@@ -261,8 +254,7 @@ SHOVE::SHOVE_STATUS SHOVE::processHullSet( LINE& aCurrent, LINE& aObstacle,
 }
 
 
-SHOVE::SHOVE_STATUS SHOVE::ProcessSingleLine( LINE& aCurrent, LINE& aObstacle,
-                                                      LINE& aShoved )
+SHOVE::SHOVE_STATUS SHOVE::ProcessSingleLine( LINE& aCurrent, LINE& aObstacle, LINE& aShoved )
 {
     aShoved.ClearSegmentLinks();
 
@@ -610,6 +602,9 @@ SHOVE::SHOVE_STATUS SHOVE::pushVia( VIA* aVia, const VECTOR2I& aForce, int aCurr
     if( aVia->IsLocked() )
         return SH_TRY_WALK;
 
+    if( jt->IsStitchingVia() )
+        return SH_TRY_WALK;
+
     if( jt->IsLocked() )
         return SH_INCOMPLETE;
 
@@ -723,9 +718,13 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
 {
     int clearance = getClearance( aCurrent, aObstacleVia ) ;
     LINE_PAIR_VEC draggedLines;
-    bool colLine = false, colVia = false;
+    bool lineCollision = false;
+    bool viaCollision = false;
     LINE* currentLine = NULL;
-    VECTOR2I mtvLine, mtvVia, mtv, mtvSolid;
+    VECTOR2I mtvLine;
+    VECTOR2I mtvVia;
+    VECTOR2I mtvSolid;
+    VECTOR2I mtv;
     int rank = -1;
 
     if( aCurrent->OfKind( ITEM::LINE_T ) )
@@ -736,20 +735,22 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
 #endif
 
         currentLine = (LINE*) aCurrent;
-        colLine = CollideShapes( aObstacleVia->Shape(), currentLine->Shape(),
-                                 clearance + currentLine->Width() / 2 + PNS_HULL_MARGIN,
-                                 true, mtvLine );
+        lineCollision = CollideShapes( aObstacleVia->Shape(), currentLine->Shape(),
+                                       clearance + currentLine->Width() / 2 + PNS_HULL_MARGIN,
+                                       true, mtvLine );
 
         if( currentLine->EndsWithVia() )
-             colVia = CollideShapes( currentLine->Via().Shape(), aObstacleVia->Shape(),
-                                     clearance + PNS_HULL_MARGIN, true, mtvVia );
+        {
+            viaCollision = CollideShapes( currentLine->Via().Shape(), aObstacleVia->Shape(),
+                                          clearance + PNS_HULL_MARGIN, true, mtvVia );
+        }
 
-        if( !colLine && !colVia )
+        if( !lineCollision && !viaCollision )
              return SH_OK;
 
-        if( colLine && colVia )
+        if( lineCollision && viaCollision )
             mtv = mtvVia.EuclideanNorm() > mtvLine.EuclideanNorm() ? mtvVia : mtvLine;
-        else if( colLine )
+        else if( lineCollision )
             mtv = mtvLine;
         else
             mtv = mtvVia;
@@ -1005,9 +1006,8 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
             st = onCollidingSegment( currentLine, (SEGMENT*) ni );
 
             if( st == SH_TRY_WALK )
-            {
                 st = onCollidingSolid( currentLine, ni );
-            }
+
             break;
 
         case ITEM::VIA_T:
@@ -1015,9 +1015,8 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
             st = onCollidingVia( &currentLine, (VIA*) ni );
 
             if( st == SH_TRY_WALK )
-            {
                 st = onCollidingSolid( currentLine, ni );
-            }
+
             break;
 
         case ITEM::SOLID_T:
@@ -1077,7 +1076,8 @@ OPT_BOX2I SHOVE::totalAffectedArea() const
     {
         if( m_affectedAreaSum )
             area->Merge( *m_affectedAreaSum );
-    } else
+    }
+    else
         area = m_affectedAreaSum;
 
     return area;
@@ -1268,8 +1268,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveMultiLines( const ITEM_SET& aHeadSet )
 }
 
 
-SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( VIA* aVia, const VECTOR2I& aWhere,
-                                                     VIA** aNewVia )
+SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( VIA* aVia, const VECTOR2I& aWhere, VIA** aNewVia )
 {
     SHOVE_STATUS st = SH_OK;
 
@@ -1309,9 +1308,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( VIA* aVia, const VECTOR2I& aWhere,
     else
     {
         if( aNewVia )
-        {
             *aNewVia = nullptr;
-        }
 
         delete m_currentNode;
         m_currentNode = parent;
@@ -1324,7 +1321,8 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( VIA* aVia, const VECTOR2I& aWhere,
 void SHOVE::runOptimizer( NODE* aNode )
 {
     OPTIMIZER optimizer( aNode );
-    int optFlags = 0, n_passes = 0;
+    int optFlags = 0;
+    int n_passes = 0;
 
     PNS_OPTIMIZATION_EFFORT effort = Settings().OptimizerEffort();
 
@@ -1332,16 +1330,11 @@ void SHOVE::runOptimizer( NODE* aNode )
 
     int maxWidth = 0;
 
-    for( std::vector<LINE>::iterator i = m_optimizerQueue.begin();
-             i != m_optimizerQueue.end(); ++i )
-    {
-        maxWidth = std::max( i->Width(), maxWidth );
-    }
+    for( LINE& line : m_optimizerQueue )
+        maxWidth = std::max( line.Width(), maxWidth );
 
     if( area )
-    {
         area->Inflate( 10 * maxWidth );
-    }
 
     switch( effort )
     {
@@ -1378,11 +1371,8 @@ void SHOVE::runOptimizer( NODE* aNode )
     {
         std::reverse( m_optimizerQueue.begin(), m_optimizerQueue.end() );
 
-        for( std::vector<LINE>::iterator i = m_optimizerQueue.begin();
-             i != m_optimizerQueue.end(); ++i )
+        for( LINE& line : m_optimizerQueue)
         {
-            LINE& line = *i;
-
             if( !( line.Marker() & MK_HEAD ) )
             {
                 LINE optimized;

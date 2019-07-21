@@ -118,6 +118,11 @@ public:
         return ( m_linkedItems.Size() == 3 && vias == 1 && segs == 2 );
     }
 
+    bool IsStitchingVia() const
+    {
+        return ( m_linkedItems.Size() == 1 && m_linkedItems.Count( VIA_T ) == 1 );
+    }
+
     bool IsTraceWidthChange() const
     {
         if( m_linkedItems.Size() != 2 )
