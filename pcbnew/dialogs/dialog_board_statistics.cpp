@@ -49,24 +49,24 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
     m_gridComponents->SetCellValue( 0, 3, _( "Total" ) );
     m_gridComponents->SetCellFont( 0, 3, headingFont );
 
-    m_gridComponents->SetCellAlignment( wxALIGN_LEFT, 0, 0 );
-    m_gridComponents->SetCellAlignment( wxALIGN_LEFT, 1, 0 );
-    m_gridComponents->SetCellAlignment( wxALIGN_LEFT, 2, 0 );
-    m_gridComponents->SetCellAlignment( wxALIGN_LEFT, 3, 0 );
-    m_gridComponents->SetCellAlignment( wxALIGN_LEFT, 4, 0 );
+    m_gridComponents->SetCellAlignment( 0, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
+    m_gridComponents->SetCellAlignment( 1, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
+    m_gridComponents->SetCellAlignment( 2, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
+    m_gridComponents->SetCellAlignment( 3, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
+    m_gridComponents->SetCellAlignment( 4, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
 
-    m_gridPads->SetCellAlignment( wxALIGN_LEFT, 0, 0 );
-    m_gridPads->SetCellAlignment( wxALIGN_LEFT, 1, 0 );
-    m_gridPads->SetCellAlignment( wxALIGN_LEFT, 2, 0 );
-    m_gridPads->SetCellAlignment( wxALIGN_LEFT, 3, 0 );
-    m_gridPads->SetCellAlignment( wxALIGN_LEFT, 4, 0 );
+    m_gridPads->SetCellAlignment( 0, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
+    m_gridPads->SetCellAlignment( 1, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
+    m_gridPads->SetCellAlignment( 2, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
+    m_gridPads->SetCellAlignment( 3, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
+    m_gridPads->SetCellAlignment( 4, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
 
     m_gridBoard->SetCellValue( 0, 0, _( "Width:" ) );
-    m_gridBoard->SetCellAlignment( wxALIGN_LEFT, 0, 0 );
+    m_gridBoard->SetCellAlignment( 0, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
     m_gridBoard->SetCellValue( 1, 0, _( "Height:" ) );
-    m_gridBoard->SetCellAlignment( wxALIGN_LEFT, 1, 0 );
+    m_gridBoard->SetCellAlignment( 1, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
     m_gridBoard->SetCellValue( 2, 0, _( "Area:" ) );
-    m_gridBoard->SetCellAlignment( wxALIGN_LEFT, 2, 0 );
+    m_gridBoard->SetCellAlignment( 2, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
 }
 
 void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
