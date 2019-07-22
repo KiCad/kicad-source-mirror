@@ -410,8 +410,8 @@ TEXTE_MODULE* getMatchingTextItem( TEXTE_MODULE* aRefItem, MODULE* aModule )
 
 
 void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT& aCommit,
-                                      bool deleteExtraTexts,
-                                      bool resetTextLayers, bool resetTextEffects )
+                                      bool deleteExtraTexts, bool resetTextLayers,
+                                      bool resetTextEffects )
 {
     aDest->SetParent( GetBoard() );
 
@@ -419,9 +419,24 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
      * when all modules are on board */
     PlaceModule( aDest, nullptr, false );
 
-    // Copy full placement and pad net names (when possible)
-    // but not local settings like clearances (use library values)
-    aSrc->CopyNetlistSettings( aDest, false );
+    if( aDest->GetLayer() != aSrc->GetLayer() )
+        aDest->Flip( aSrc->GetPosition() );
+
+    if( aDest->GetOrientation() != aSrc->GetOrientation() )
+        aDest->Rotate( aDest->GetPosition(), aSrc->GetOrientation() );
+
+    aDest->SetLocked( aSrc->IsLocked() );
+
+    for( auto pad : aDest->Pads() )
+    {
+        D_PAD* oldPad = aSrc->FindPadByName( pad->GetName() );
+
+        if( oldPad )
+        {
+            pad->SetLocalRatsnestVisible( oldPad->GetLocalRatsnestVisible() );
+            pad->SetNetCode( oldPad->GetNetCode() );
+        }
+    }
 
     // Copy reference
     processTextItem( aSrc->Reference(), aDest->Reference(),
