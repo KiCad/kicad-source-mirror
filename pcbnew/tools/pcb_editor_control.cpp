@@ -1466,30 +1466,26 @@ void PCB_EDITOR_CONTROL::ratsnestTimer( wxTimerEvent& aEvent )
 
 void PCB_EDITOR_CONTROL::calculateSelectionRatsnest()
 {
-    auto selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    auto& selection = selectionTool->GetSelection();
-    auto connectivity = board()->GetConnectivity();
-
+    SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    SELECTION& selection = selectionTool->GetSelection();
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = board()->GetConnectivity();
     std::vector<BOARD_ITEM*> items;
-    items.reserve( selection.Size() );
 
-    for( auto item : selection )
+    for( EDA_ITEM* item : selection )
     {
-        auto board_item = static_cast<BOARD_CONNECTED_ITEM*>( item );
+        BOARD_CONNECTED_ITEM* boardItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
 
-        if( board_item->Type() != PCB_MODULE_T
-                && ( board_item->GetLocalRatsnestVisible()
-                        || displayOptions()->m_ShowModuleRatsnest ) )
-        {
-            items.push_back( board_item );
-        }
-        else if( board_item->Type() == PCB_MODULE_T )
+        if( boardItem->Type() == PCB_MODULE_T )
         {
             for( auto pad : static_cast<MODULE*>( item )->Pads() )
             {
                 if( pad->GetLocalRatsnestVisible() || displayOptions()->m_ShowModuleRatsnest )
                     items.push_back( pad );
             }
+        }
+        else if( boardItem->GetLocalRatsnestVisible() || displayOptions()->m_ShowModuleRatsnest )
+        {
+            items.push_back( boardItem );
         }
     }
 

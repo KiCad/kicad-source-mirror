@@ -398,8 +398,8 @@ TEXTE_MODULE* getMatchingTextItem( TEXTE_MODULE* aRefItem, MODULE* aModule )
 
 
 void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT& aCommit,
-                                      bool deleteExtraTexts,
-                                      bool resetTextLayers, bool resetTextEffects )
+                                      bool deleteExtraTexts, bool resetTextLayers,
+                                      bool resetTextEffects )
 {
     aDest->SetParent( GetBoard() );
 
@@ -423,7 +423,10 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
         D_PAD* oldPad = aSrc->FindPadByName( pad->GetName() );
 
         if( oldPad )
+        {
+            pad->SetLocalRatsnestVisible( oldPad->GetLocalRatsnestVisible() );
             pad->SetNetCode( oldPad->GetNetCode() );
+        }
     }
 
     // Copy reference
