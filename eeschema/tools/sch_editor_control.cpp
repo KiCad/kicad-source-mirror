@@ -436,7 +436,7 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
 #ifdef KICAD_SPICE
 int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
-    PICKER_TOOL*    picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
     // Deactivate other tools; particularly important if another PICKER is currently running
     Activate();
@@ -444,7 +444,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
     picker->SetCursor( SIMULATION_CURSORS::GetCursor( SIMULATION_CURSORS::CURSOR::PROBE ) );
 
     picker->SetClickHandler(
-        [&]( const VECTOR2D& aPosition )
+        [this] ( const VECTOR2D& aPosition )
         {
             KICAD_T wiresAndComponents[] = { SCH_LINE_T, SCH_COMPONENT_T, SCH_SHEET_PIN_T, EOT };
 
@@ -473,7 +473,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
             return true;
         } );
 
-    std::string     tool = aEvent.GetCommandStr().get();
+    std::string tool = aEvent.GetCommandStr().get();
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
     return 0;
@@ -482,7 +482,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
 {
-    PICKER_TOOL*    picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
 
     // Deactivate other tools; particularly important if another PICKER is currently running
     Activate();
@@ -490,7 +490,7 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
     picker->SetCursor( SIMULATION_CURSORS::GetCursor( SIMULATION_CURSORS::CURSOR::TUNE ) );
 
     picker->SetClickHandler(
-        [&]( const VECTOR2D& aPosition )
+        [this] ( const VECTOR2D& aPosition )
         {
             KICAD_T fieldsAndComponents[] = { SCH_COMPONENT_T, SCH_FIELD_T, EOT };
 
@@ -684,7 +684,7 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
     picker->SetCursor( wxStockCursor( wxCURSOR_BULLSEYE ) );
 
     picker->SetClickHandler(
-        [this]( const VECTOR2D& aPos )
+        [this] ( const VECTOR2D& aPos )
         {
             return highlightNet( m_toolMgr, aPos );
         } );

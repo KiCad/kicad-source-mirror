@@ -552,7 +552,7 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
         } );
 
     picker->SetFinalizeHandler(
-        [&]( const int& aFinalState )
+        [this] ( const int& aFinalState )
         {
             if( m_pickerItem )
                 m_toolMgr->GetTool<SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );

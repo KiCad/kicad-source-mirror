@@ -1345,7 +1345,7 @@ int PCB_EDITOR_CONTROL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
     Activate();
 
     picker->SetClickHandler(
-        [&] ( const VECTOR2D& pt ) -> bool
+        [this, board, opt]( const VECTOR2D& pt ) -> bool
         {
             SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
 
@@ -1393,7 +1393,7 @@ int PCB_EDITOR_CONTROL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
         } );
 
     picker->SetFinalizeHandler(
-        [ board, opt ]( int aCondition )
+        [board, opt] ( int aCondition )
         {
             if( aCondition != PCBNEW_PICKER_TOOL::END_ACTIVATE )
             {
