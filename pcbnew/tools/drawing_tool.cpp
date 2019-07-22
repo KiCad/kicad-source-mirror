@@ -1557,8 +1557,10 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
         TRACK* findTrack( VIA* aVia )
         {
             const LSET lset = aVia->GetLayerSet();
-            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
+            wxPoint position = aVia->GetPosition();
             BOX2I bbox = aVia->GetBoundingBox();
+
+            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
             auto view = m_frame->GetCanvas()->GetView();
             std::vector<TRACK*> possible_tracks;
 
@@ -1573,7 +1575,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
                 if( auto track = dyn_cast<TRACK*>( item ) )
                 {
-                    if( TestSegmentHit( aVia->GetPosition(), track->GetStart(), track->GetEnd(),
+                    if( TestSegmentHit( position, track->GetStart(), track->GetEnd(),
                                         ( track->GetWidth() + aVia->GetWidth() ) / 2 ) )
                         possible_tracks.push_back( track );
                 }
@@ -1584,8 +1586,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             for( auto track : possible_tracks )
             {
                 SEG test( track->GetStart(), track->GetEnd() );
-                auto dist = ( test.NearestPoint( aVia->GetPosition() ) -
-                        VECTOR2I( aVia->GetPosition() ) ).EuclideanNorm();
+                auto dist = ( test.NearestPoint( position ) - position ).EuclideanNorm();
 
                 if( dist < min_d )
                 {
@@ -1601,11 +1602,15 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
         bool hasDRCViolation( VIA* aVia )
         {
             const LSET lset = aVia->GetLayerSet();
+            wxPoint position = aVia->GetPosition();
+            int drillRadius = aVia->GetDrillValue() / 2;
+            BOX2I bbox = aVia->GetBoundingBox();
+
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
             int net = 0;
             int clearance = 0;
-            BOX2I bbox = aVia->GetBoundingBox();
             auto view = m_frame->GetCanvas()->GetView();
+            int holeToHoleMin = m_frame->GetBoard()->GetDesignSettings().m_HoleToHoleMin;
 
             view->Query( bbox, items );
 
@@ -1620,7 +1625,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 {
                     int max_clearance = std::max( clearance, track->GetClearance() );
 
-                    if( TestSegmentHit( aVia->GetPosition(), track->GetStart(), track->GetEnd(),
+                    if( TestSegmentHit( position, track->GetStart(), track->GetEnd(),
                             ( track->GetWidth() + aVia->GetWidth() ) / 2  + max_clearance ) )
                     {
                         if( net && track->GetNetCode() != net )
@@ -1631,9 +1636,17 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                     }
                 }
 
+                if( auto via = dyn_cast<VIA*>( item ) )
+                {
+                    int dist = KiROUND( GetLineLength( position, via->GetPosition() ) );
+
+                    if( dist < drillRadius + via->GetDrillValue() / 2 + holeToHoleMin )
+                        return true;
+                }
+
                 if( auto mod = dyn_cast<MODULE*>( item ) )
                 {
-                    for( auto pad : mod->Pads() )
+                    for( D_PAD* pad : mod->Pads() )
                     {
                         int max_clearance = std::max( clearance, pad->GetClearance() );
 
@@ -1645,6 +1658,14 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                             net = pad->GetNetCode();
                             clearance = pad->GetClearance();
                         }
+
+                        if( pad->GetDrillSize().x && pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
+                        {
+                            int dist = KiROUND( GetLineLength( position, pad->GetPosition() ) );
+
+                            if( dist < drillRadius + pad->GetDrillSize().x / 2 + holeToHoleMin )
+                                return true;
+                        }
                     }
                 }
             }
@@ -1655,42 +1676,41 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
         int findStitchedZoneNet( VIA* aVia )
         {
-            const auto  pos     = aVia->GetPosition();
-            const auto  lset    = aVia->GetLayerSet();
+            const wxPoint position = aVia->GetPosition();
+            const LSET    lset = aVia->GetLayerSet();
 
             for( auto mod : m_board->Modules() )
             {
                 for( D_PAD* pad : mod->Pads() )
                 {
-                    if( pad->HitTest( pos ) && ( pad->GetLayerSet() & lset ).any() )
+                    if( pad->HitTest( position ) && ( pad->GetLayerSet() & lset ).any() )
                         return -1;
                 }
             }
 
             std::vector<ZONE_CONTAINER*> foundZones;
 
-            for( auto zone : m_board->Zones() )
+            for( ZONE_CONTAINER* zone : m_board->Zones() )
             {
-                if( zone->HitTestFilledArea( pos ) )
-                {
+                if( zone->HitTestFilledArea( position ) )
                     foundZones.push_back( zone );
-                }
             }
 
             std::sort( foundZones.begin(), foundZones.end(),
-                    [] ( const ZONE_CONTAINER* a, const ZONE_CONTAINER* b ) {
-                return a->GetLayer() < b->GetLayer();
-            } );
+                [] ( const ZONE_CONTAINER* a, const ZONE_CONTAINER* b )
+                {
+                    return a->GetLayer() < b->GetLayer();
+                } );
 
             // first take the net of the active layer
-            for( auto z : foundZones )
+            for( ZONE_CONTAINER* z : foundZones )
             {
                 if( m_frame->GetActiveLayer() == z->GetLayer() )
                     return z->GetNetCode();
             }
 
             // none? take the topmost visible layer
-            for( auto z : foundZones )
+            for( ZONE_CONTAINER* z : foundZones )
             {
                 if( m_board->IsLayerVisible( z->GetLayer() ) )
                     return z->GetNetCode();
@@ -1709,13 +1729,13 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             m_gridHelper.SetSnap( !( m_modifiers & MD_SHIFT ) );
             auto    via = static_cast<VIA*>( aItem );
-            wxPoint pos = via->GetPosition();
+            wxPoint position = via->GetPosition();
             TRACK*  track = findTrack( via );
 
             if( track )
             {
-                SEG         trackSeg( track->GetStart(), track->GetEnd() );
-                VECTOR2I    snap = m_gridHelper.AlignToSegment( pos, trackSeg );
+                SEG      trackSeg( track->GetStart(), track->GetEnd() );
+                VECTOR2I snap = m_gridHelper.AlignToSegment( position, trackSeg );
 
                 aItem->SetPosition( (wxPoint) snap );
             }
