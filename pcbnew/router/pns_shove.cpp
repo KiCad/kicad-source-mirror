@@ -530,17 +530,20 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle )
 }
 
 
-bool SHOVE::reduceSpringback( const ITEM_SET& aHeadSet )
+/*
+ * Pops NODE stackframes which no longer collide with aHeadSet.  Optionally sets aDraggedVia
+ * to the dragged via of the last unpopped state.
+ */
+NODE* SHOVE::reduceSpringback( const ITEM_SET& aHeadSet, VIA** aDraggedVia )
 {
-    bool rv = false;
-
     while( !m_nodeStack.empty() )
     {
         SPRINGBACK_TAG spTag = m_nodeStack.back();
 
         if( !spTag.m_node->CheckColliding( aHeadSet ) )
         {
-            rv = true;
+            if( aDraggedVia )
+                *aDraggedVia = spTag.m_draggedVia;
 
             delete spTag.m_node;
             m_nodeStack.pop_back();
@@ -549,11 +552,15 @@ bool SHOVE::reduceSpringback( const ITEM_SET& aHeadSet )
            break;
     }
 
-    return rv;
+    return m_nodeStack.empty() ? m_root : m_nodeStack.back().m_node;
 }
 
 
-bool SHOVE::pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea )
+/*
+ * Push the current NODE on to the stack.  aDraggedVia is the dragged via *before* the push
+ * (which will be restored in the event the stackframe is popped).
+ */
+bool SHOVE::pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea, VIA* aDraggedVia )
 {
     SPRINGBACK_TAG st;
     OPT_BOX2I prev_area;
@@ -561,6 +568,7 @@ bool SHOVE::pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea )
     if( !m_nodeStack.empty() )
         prev_area = m_nodeStack.back().m_affectedArea;
 
+    st.m_draggedVia = aDraggedVia;
     st.m_node = aNode;
 
     if( aAffectedArea )
@@ -1026,6 +1034,13 @@ SHOVE::SHOVE_STATUS SHOVE::shoveMainLoop()
 
     timeLimit.Restart();
 
+    if( m_lineStack.empty() && m_draggedVia )
+    {
+        // If we're shoving a free via then push a proxy LINE (with the via on the end) onto
+        // the stack.
+        pushLine( LINE( *m_draggedVia ) );
+    }
+
     while( !m_lineStack.empty() )
     {
         st = shoveIteration( m_iter );
@@ -1081,9 +1096,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveLines( const LINE& aCurrentHead )
     ITEM_SET headSet;
     headSet.Add( aCurrentHead );
 
-    reduceSpringback( headSet );
-
-    NODE* parent = m_nodeStack.empty() ? m_root : m_nodeStack.back().m_node;
+    NODE* parent = reduceSpringback( headSet, nullptr );
 
     m_currentNode = parent->Branch();
     m_currentNode->ClearRanks();
@@ -1136,7 +1149,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveLines( const LINE& aCurrentHead )
 
     if( st == SH_OK || st == SH_HEAD_MODIFIED )
     {
-        pushSpringback( m_currentNode, m_affectedArea );
+        pushSpringback( m_currentNode, m_affectedArea, nullptr );
     }
     else
     {
@@ -1183,9 +1196,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveMultiLines( const ITEM_SET& aHeadSet )
     m_optimizerQueue.clear();
     m_logger.Clear();
 
-    reduceSpringback( headSet );
-
-    NODE* parent = m_nodeStack.empty() ? m_root : m_nodeStack.back().m_node;
+    NODE* parent = reduceSpringback( headSet, nullptr );
 
     m_currentNode = parent->Branch();
     m_currentNode->ClearRanks();
@@ -1231,7 +1242,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveMultiLines( const ITEM_SET& aHeadSet )
 
     if( st == SH_OK )
     {
-        pushSpringback( m_currentNode, m_affectedArea );
+        pushSpringback( m_currentNode, m_affectedArea, nullptr );
     }
     else
     {
@@ -1252,15 +1263,29 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( VIA* aVia, const VECTOR2I& aWhere, 
     m_newHead = OPT_LINE();
     m_draggedVia = NULL;
 
-    NODE* parent = m_nodeStack.empty() ? m_root : m_nodeStack.back().m_node;
+    ITEM_SET headSet;
+    headSet.Add( *aVia );
 
+    // Pop NODEs containing previous shoves which are no longer necessary
+    //
+    NODE* parent = reduceSpringback( headSet, &aVia );
+
+    // Create a new NODE
+    //
     m_currentNode = parent->Branch();
     m_currentNode->ClearRanks();
 
     aVia->Mark( MK_HEAD );
+    aVia->SetRank( 100000 );
 
+    // Push the via to its new location
+    //
     st = pushVia( aVia, ( aWhere - aVia->Pos() ), 0 );
-    st = shoveMainLoop();
+
+    // Shove any colliding objects out of the way
+    //
+    if( st == SH_OK )
+        st = shoveMainLoop();
 
     if( st == SH_OK )
         runOptimizer( m_currentNode );
@@ -1270,7 +1295,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( VIA* aVia, const VECTOR2I& aWhere, 
         wxLogTrace( "PNS","setNewV %p", m_draggedVia );
         *aNewVia = m_draggedVia;
 
-        pushSpringback( m_currentNode, m_affectedArea );
+        pushSpringback( m_currentNode, m_affectedArea, aVia );
     }
     else
     {

@@ -89,6 +89,22 @@ public:
         m_hasVia = false;
     }
 
+    /**
+     * Constructor
+     * Constructs a LINE for a lone VIA (ie a stitching via).
+     * @param aVia
+     */
+    LINE( const VIA& aVia ) :
+        ITEM( LINE_T )
+    {
+        m_hasVia = true;
+        m_via = aVia;
+        m_width = aVia.Diameter();
+        m_net = aVia.Net();
+        m_layers = aVia.Layers();
+        m_rank = aVia.Rank();
+    }
+
     ~LINE();
 
     static inline bool ClassOf( const ITEM* aItem )

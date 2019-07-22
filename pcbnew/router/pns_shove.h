@@ -93,7 +93,7 @@ private:
     struct SPRINGBACK_TAG
     {
         int64_t m_length;
-        int m_segments;
+        VIA* m_draggedVia;
         VECTOR2I m_p;
         NODE* m_node;
         OPT_BOX2I m_affectedArea;
@@ -102,8 +102,8 @@ private:
     SHOVE_STATUS processHullSet( LINE& aCurrent, LINE& aObstacle,
                                  LINE& aShoved, const HULL_SET& hulls );
 
-    bool reduceSpringback( const ITEM_SET& aHeadItems );
-    bool pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea );
+    NODE* reduceSpringback( const ITEM_SET& aHeadItems, VIA** aDraggedVia );
+    bool pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea, VIA* aDraggedVia );
 
     SHOVE_STATUS walkaroundLoneVia( LINE& aCurrent, LINE& aObstacle, LINE& aShoved );
     bool checkBumpDirection( const LINE& aCurrent, const LINE& aShoved ) const;
