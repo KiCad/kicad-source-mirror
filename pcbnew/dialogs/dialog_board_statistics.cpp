@@ -25,45 +25,61 @@
 
 #include "dialog_board_statistics.h"
 
+#define COL_LABEL 0
+#define COL_AMOUNT 1
 
+// Defines for components view
+#define ROW_LABEL 0
 #define COL_FRONT_SIDE 1
 #define COL_BOTTOM_SIDE 2
 #define COL_TOTAL 3
+
+// Defines for board view
+#define ROW_BOARD_WIDTH 0
+#define ROW_BOARD_HEIGHT 1
+#define ROW_BOARD_AREA 2
+
+/**
+ * Struct containing the dialog last saved state
+ */
+struct DIALOG_BOARD_STATISTICS_SAVED_STATE
+{
+    DIALOG_BOARD_STATISTICS_SAVED_STATE()
+            : excludeNoPins( false ),
+            subtractHoles( false ),
+            saveReportInitialized(false)
+    {
+    }
+
+    // Flags to remember last checkboxes state
+    bool excludeNoPins;
+    bool subtractHoles;
+
+    // Variables to save last report file name and folder
+    bool     saveReportInitialized;
+    wxString saveReportFolder;
+    wxString saveReportName;
+};
+
+static DIALOG_BOARD_STATISTICS_SAVED_STATE s_savedDialogState;
 
 DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
         : DIALOG_BOARD_STATISTICS_BASE( aParentFrame )
 {
     m_parentFrame = aParentFrame;
 
-    // Remove wxgrid's selection boxes
-    m_gridComponents->SetCellHighlightPenWidth( 0 );
-    m_gridPads->SetCellHighlightPenWidth( 0 );
-    m_gridBoard->SetCellHighlightPenWidth( 0 );
-    m_gridComponents->SetColMinimalAcceptableWidth( 80 );
-    m_gridPads->SetColMinimalAcceptableWidth( 80 );
-    m_gridBoard->SetColMinimalAcceptableWidth( 80 );
+    m_checkBoxExcludeComponentsNoPins->SetValue( s_savedDialogState.excludeNoPins );
+    m_checkBoxSubtractHoles->SetValue( s_savedDialogState.subtractHoles );
 
     // Make labels for grids
     wxFont headingFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     headingFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-    m_gridComponents->SetCellValue( 0, COL_FRONT_SIDE, _( "Front Side" ) );
-    m_gridComponents->SetCellFont( 0, COL_FRONT_SIDE, headingFont );
-    m_gridComponents->SetCellValue( 0, COL_BOTTOM_SIDE, _( "Bottom Side" ) );
-    m_gridComponents->SetCellFont( 0, COL_BOTTOM_SIDE, headingFont );
-    m_gridComponents->SetCellValue( 0, COL_TOTAL, _( "Total" ) );
-    m_gridComponents->SetCellFont( 0, COL_TOTAL, headingFont );
-
-    m_gridComponents->SetCellAlignment( 0, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
-    m_gridComponents->SetCellAlignment( 1, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
-    m_gridComponents->SetCellAlignment( 2, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
-    m_gridComponents->SetCellAlignment( 3, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
-    m_gridComponents->SetCellAlignment( 4, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
-
-    m_gridPads->SetCellAlignment( 0, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
-    m_gridPads->SetCellAlignment( 1, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
-    m_gridPads->SetCellAlignment( 2, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
-    m_gridPads->SetCellAlignment( 3, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
-    m_gridPads->SetCellAlignment( 4, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
+    m_gridComponents->SetCellValue( ROW_LABEL, COL_FRONT_SIDE, _( "Front Side" ) );
+    m_gridComponents->SetCellFont( ROW_LABEL, COL_FRONT_SIDE, headingFont );
+    m_gridComponents->SetCellValue( ROW_LABEL, COL_BOTTOM_SIDE, _( "Bottom Side" ) );
+    m_gridComponents->SetCellFont( ROW_LABEL, COL_BOTTOM_SIDE, headingFont );
+    m_gridComponents->SetCellValue( ROW_LABEL, COL_TOTAL, _( "Total" ) );
+    m_gridComponents->SetCellFont( ROW_LABEL, COL_TOTAL, headingFont );
 
     m_gridBoard->SetCellValue( 0, 0, _( "Width:" ) );
     m_gridBoard->SetCellAlignment( 0, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
@@ -71,6 +87,27 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
     m_gridBoard->SetCellAlignment( 1, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
     m_gridBoard->SetCellValue( 2, 0, _( "Area:" ) );
     m_gridBoard->SetCellAlignment( 2, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
+
+
+    wxGrid* grids[] = { m_gridComponents, m_gridPads, m_gridVias, m_gridBoard };
+    for( auto& grid : grids )
+    {
+        // Remove wxgrid's selection boxes
+        grid->SetCellHighlightPenWidth( 0 );
+        grid->SetColMinimalAcceptableWidth( 80 );
+        for( int i = 0; i < grid->GetNumberRows(); i++ )
+            grid->SetCellAlignment( i, COL_LABEL, wxALIGN_LEFT, wxALIGN_CENTRE );
+    }
+
+    wxFileName fn = m_parentFrame->GetBoard()->GetFileName();
+    if( !s_savedDialogState.saveReportInitialized )
+    {
+        fn.SetName( fn.GetName() + "_report" );
+        fn.SetExt( "txt" );
+        s_savedDialogState.saveReportName = fn.GetFullName();
+        s_savedDialogState.saveReportFolder = wxPathOnly( Prj().GetProjectFullName() );
+        s_savedDialogState.saveReportInitialized = true;
+    }
 }
 
 void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
@@ -89,8 +126,13 @@ void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
     m_padsTypes.push_back( padsType_t( PAD_ATTRIB_CONN, _( "Connector:" ) ) );
     m_padsTypes.push_back( padsType_t( PAD_ATTRIB_HOLE_NOT_PLATED, _( "NPTH:" ) ) );
 
+    m_viasTypes.clear();
+    m_viasTypes.push_back( viasType_t( VIA_THROUGH, _( "Through hole:" ) ) );
+    m_viasTypes.push_back( viasType_t( VIA_BLIND_BURIED, _( "Blind/buried:" ) ) );
+    m_viasTypes.push_back( viasType_t( VIA_MICROVIA, _( "Micro via:" ) ) );
+
     // If there not enough rows in grids, append some
-    size_t appendRows = m_componentsTypes.size() + 2 - m_gridComponents->GetNumberRows();
+    int appendRows = m_componentsTypes.size() + 2 - m_gridComponents->GetNumberRows();
 
     if( appendRows > 0 )
         m_gridComponents->AppendRows( appendRows );
@@ -99,6 +141,10 @@ void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
 
     if( appendRows > 0 )
         m_gridPads->AppendRows( appendRows );
+
+    appendRows = m_viasTypes.size() + 1 - m_gridVias->GetNumberRows();
+    if( appendRows )
+        m_gridVias->AppendRows( appendRows );
 }
 
 bool DIALOG_BOARD_STATISTICS::TransferDataToWindow()
@@ -115,6 +161,7 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
 {
     auto board = m_parentFrame->GetBoard();
 
+    // Get modules and pads count
     for( MODULE* module : board->Modules() )
     {
         auto& pads = module->Pads();
@@ -145,6 +192,29 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
                 {
                     type.qty++;
                     break;
+                }
+            }
+        }
+    }
+
+    // Get vias count
+    VIA* via;
+    for( auto& track : board->Tracks() )
+    {
+        if( track->Type() == PCB_VIA_T )
+        {
+            via = dynamic_cast<VIA*>( track );
+
+            // We have to check if cast was successful
+            if( via )
+            {
+                for( auto& type : m_viasTypes )
+                {
+                    if( via->GetViaType() == type.attribute )
+                    {
+                        type.qty++;
+                        break;
+                    }
                 }
             }
         }
@@ -189,6 +259,11 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
                 }
             }
 
+            if( GetUserUnits() == INCHES )
+                m_boardArea /= ( IU_PER_MILS * IU_PER_MILS * 1000000 );
+            else
+                m_boardArea /= ( IU_PER_MM * IU_PER_MM );
+
             if( boundingBoxCreated )
             {
                 bbox.Merge( outline.BBox() );
@@ -210,13 +285,28 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     int currentRow = 0;
     for( auto& type : m_padsTypes )
     {
-        m_gridPads->SetCellValue( currentRow, 0, type.title );
-        m_gridPads->SetCellValue( currentRow, 1, wxString::Format( wxT( "%i " ), type.qty ) );
+        m_gridPads->SetCellValue( currentRow, COL_LABEL, type.title );
+        m_gridPads->SetCellValue(
+                currentRow, COL_AMOUNT, wxString::Format( wxT( "%i " ), type.qty ) );
         totalPads += type.qty;
         currentRow++;
     }
-    m_gridPads->SetCellValue( currentRow, 0, _( "Total" ) );
-    m_gridPads->SetCellValue( currentRow, 1, wxString::Format( wxT( "%i " ), totalPads ) );
+    m_gridPads->SetCellValue( currentRow, COL_LABEL, _( "Total:" ) );
+    m_gridPads->SetCellValue( currentRow, COL_AMOUNT, wxString::Format( wxT( "%i " ), totalPads ) );
+
+    int totalVias = 0;
+    currentRow = 0;
+    for( auto& type : m_viasTypes )
+    {
+        m_gridVias->SetCellValue( currentRow, COL_LABEL, type.title );
+        m_gridVias->SetCellValue(
+                currentRow, COL_AMOUNT, wxString::Format( wxT( "%i " ), type.qty ) );
+        totalVias += type.qty;
+        currentRow++;
+    }
+    m_gridVias->SetCellValue( currentRow, COL_LABEL, _( "Total:" ) );
+    m_gridVias->SetCellValue( currentRow, COL_AMOUNT, wxString::Format( wxT( "%i " ), totalVias ) );
+
 
     int totalFront = 0;
     int totalBack = 0;
@@ -225,7 +315,7 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     currentRow = 1;
     for( auto& type : m_componentsTypes )
     {
-        m_gridComponents->SetCellValue( currentRow, 0, type.title );
+        m_gridComponents->SetCellValue( currentRow, COL_LABEL, type.title );
         m_gridComponents->SetCellValue(
                 currentRow, COL_FRONT_SIDE, wxString::Format( wxT( "%i " ), type.frontSideQty ) );
         m_gridComponents->SetCellValue(
@@ -236,7 +326,7 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
         totalBack += type.backSideQty;
         currentRow++;
     }
-    m_gridComponents->SetCellValue( currentRow, 0, _( "Total" ) );
+    m_gridComponents->SetCellValue( currentRow, COL_LABEL, _( "Total:" ) );
     m_gridComponents->SetCellValue( currentRow, COL_FRONT_SIDE,
                                     wxString::Format( wxT( "%i " ), totalFront ) );
     m_gridComponents->SetCellValue( currentRow, COL_BOTTOM_SIDE, wxString::Format( wxT( "%i " ), totalBack ) );
@@ -245,34 +335,152 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
 
     if( m_hasOutline )
     {
-        m_gridBoard->SetCellValue( 0, 1,
+        m_gridBoard->SetCellValue( ROW_BOARD_WIDTH, COL_AMOUNT,
                 MessageTextFromValue( m_parentFrame->GetUserUnits(), m_boardWidth, false ) + " " );
-        m_gridBoard->SetCellValue( 1, 1,
+        m_gridBoard->SetCellValue( ROW_BOARD_HEIGHT, COL_AMOUNT,
                 MessageTextFromValue( m_parentFrame->GetUserUnits(), m_boardHeight, false ) + " " );
-        if( GetUserUnits() == INCHES )
-            m_boardArea /= ( IU_PER_MILS * IU_PER_MILS * 1000000 );
-        else
-            m_boardArea /= ( IU_PER_MM * IU_PER_MM );
-        m_gridBoard->SetCellValue( 2, 1,
+        m_gridBoard->SetCellValue( ROW_BOARD_AREA, COL_AMOUNT,
                 wxString::Format( wxT( "%.3f %s²" ), m_boardArea,
                         GetAbbreviatedUnitsLabel( GetUserUnits(), false ) ) );
     }
     else
     {
-        m_gridBoard->SetCellValue( 0, 1, _( "unknown" ) );
-        m_gridBoard->SetCellValue( 1, 1, _( "unknown" ) );
-        m_gridBoard->SetCellValue( 2, 1, _( "unknown" ) );
+        m_gridBoard->SetCellValue( ROW_BOARD_WIDTH, COL_AMOUNT, _( "unknown" ) );
+        m_gridBoard->SetCellValue( ROW_BOARD_HEIGHT, COL_AMOUNT, _( "unknown" ) );
+        m_gridBoard->SetCellValue( ROW_BOARD_AREA, COL_AMOUNT, _( "unknown" ) );
     }
 
     m_gridComponents->AutoSize();
     m_gridPads->AutoSize();
     m_gridBoard->AutoSize();
+    m_gridVias->AutoSize();
 }
 
 // If any checkbox clicked, we have to refresh dialog data
 void DIALOG_BOARD_STATISTICS::checkboxClicked( wxCommandEvent& event )
 {
-    TransferDataToWindow();
+    s_savedDialogState.excludeNoPins = m_checkBoxExcludeComponentsNoPins->GetValue();
+    s_savedDialogState.subtractHoles = m_checkBoxSubtractHoles->GetValue();
+    refreshItemsTypes();
+    getDataFromPCB();
+    updateWidets();
+    Layout();
+    Fit();
+}
+
+void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& event )
+{
+    FILE*    outFile;
+    wxString msg;
+    wxString boardName;
+
+    wxFileName fn = m_parentFrame->GetBoard()->GetFileName();
+    boardName = fn.GetName();
+    wxFileDialog saveFileDialog( this, _( "Save Report File" ), s_savedDialogState.saveReportFolder,
+            s_savedDialogState.saveReportName, _( "text files (*.txt)|*.txt" ),
+            wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( saveFileDialog.ShowModal() == wxID_CANCEL )
+        return;
+
+    s_savedDialogState.saveReportFolder = wxPathOnly( saveFileDialog.GetPath() );
+    s_savedDialogState.saveReportName = saveFileDialog.GetFilename();
+
+    outFile = wxFopen( saveFileDialog.GetPath(), wxT( "wt" ) );
+
+    if( outFile == NULL )
+    {
+        msg.Printf( _( "Unable to create file \"%s\"" ), GetChars( saveFileDialog.GetPath() ) );
+        DisplayErrorMessage( this, msg );
+        return;
+    }
+    msg << _( "PCB statistics report\n" );
+    msg << _( "Date: " ) << wxDateTime::Now().Format() << "\n";
+    msg << _( "Project: " ) << Prj().GetProjectName() << "\n";
+    msg << _( "Board name: " ) << boardName << "\n";
+
+    msg << "\n";
+    msg << "Board\n";
+
+    if( m_hasOutline )
+    {
+        msg << _( "Width: " )
+            << MessageTextFromValue( m_parentFrame->GetUserUnits(), m_boardWidth, false ) << "\n";
+        msg << _( "Height: " )
+            << MessageTextFromValue( m_parentFrame->GetUserUnits(), m_boardHeight, false ) << "\n";
+        msg << _( "Area: " )
+            << wxString::Format( wxT( "%.3f %s²" ), m_boardArea,
+                       GetAbbreviatedUnitsLabel( GetUserUnits(), false ) )
+            << "\n";
+    }
+    else
+    {
+        msg << _( "Width: " ) << _( "unknown" ) << "\n";
+        msg << _( "Height: " ) << _( "unknown" ) << "\n";
+        msg << _( "Area: " ) << _( "unknown" ) << "\n";
+    }
+
+    msg << "\n";
+    msg << "Pads\n";
+    for( auto& type : m_padsTypes )
+        msg << type.title << " " << type.qty << "\n";
+
+    msg << "\n";
+    msg << "Vias\n";
+    for( auto& type : m_viasTypes )
+        msg << type.title << " " << type.qty << "\n";
+
+    // We will save data about components in the table.
+    // We have to calculate column widths
+    size_t   colsWidth[4];
+    wxString columns[4] = { "", _( "Front Side" ), _( "Back Side" ), _( "Total" ) };
+    wxString tmp;
+    for( int i = 0; i < 4; i++ )
+    {
+        colsWidth[i] = columns[i].size();
+    }
+    int frontTotal = 0;
+    int backTotal = 0;
+    for( auto& type : m_componentsTypes )
+    {
+        // Get maximum width for left label column
+        colsWidth[0] = std::max( type.title.size(), colsWidth[0] );
+        frontTotal += type.frontSideQty;
+        backTotal += type.backSideQty;
+    }
+
+    // Get maximum width for other columns
+    tmp.Printf( "%d", frontTotal );
+    colsWidth[1] = std::max( tmp.size(), colsWidth[1] );
+    tmp.Printf( "%d", backTotal );
+    colsWidth[2] = std::max( tmp.size(), colsWidth[2] );
+    tmp.Printf( "%d", frontTotal + backTotal );
+    colsWidth[3] = std::max( tmp.size(), colsWidth[3] );
+
+    //Write components amount to file
+    msg << "\n";
+    msg << _( "Components\n" );
+    tmp.Printf( "%-*s | %*s | %*s | %*s |\n", colsWidth[0], columns[0], colsWidth[1], columns[1],
+            colsWidth[2], columns[2], colsWidth[3], columns[3] );
+    msg += tmp;
+    for( auto& type : m_componentsTypes )
+    {
+        tmp.Printf( "%-*s | %*d | %*d | %*d |\n", colsWidth[0], type.title, colsWidth[1],
+                type.frontSideQty, colsWidth[2], type.backSideQty, colsWidth[3],
+                type.backSideQty + type.frontSideQty );
+        msg += tmp;
+    }
+    tmp.Printf( "%-*s | %*d | %*d | %*d |\n", colsWidth[0], _( "Total:" ), colsWidth[1], frontTotal,
+            colsWidth[2], backTotal, colsWidth[3], frontTotal + backTotal );
+    msg += tmp;
+
+    int success = fprintf( outFile, "%s", TO_UTF8( msg ) );
+    if( success < 0 )
+    {
+        msg.Printf( _( "Error writing to file \"%s\"" ), GetChars( saveFileDialog.GetPath() ) );
+        DisplayErrorMessage( this, msg );
+    }
+    fclose( outFile );
 }
 
 DIALOG_BOARD_STATISTICS::~DIALOG_BOARD_STATISTICS()

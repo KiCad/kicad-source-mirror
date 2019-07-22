@@ -30,11 +30,14 @@
 #include <base_units.h>
 #include <class_board.h>
 #include <class_drawsegment.h>
+#include <class_track.h>
+#include <confirm.h>
 #include <dialog_board_statistics_base.h>
 #include <pad_shapes.h>
 #include <pcb_base_frame.h>
 #include <pcb_edit_frame.h>
-
+#include <project.h>
+#include <wx/datetime.h>
 
 /**
  * Class DIALOG_BOARD_STATISTIC
@@ -45,22 +48,24 @@ class DIALOG_BOARD_STATISTICS : public DIALOG_BOARD_STATISTICS_BASE
 {
 public:
     /**
-     * Struct holds information about pad type (such as SMD, THT, NPH
-     * and so on), which will be shown in the dialog. Also holds quantity
-     * of pads
+     * Struct to hold type information, which will be shown in dialog.
      */
-    struct padsType_t
+    template <typename T>
+    struct typeContainer_t
     {
-        padsType_t( PAD_ATTR_T aAttribute, wxString aTitle )
+        typeContainer_t<T>( T aAttribute, wxString aTitle )
                 : attribute( aAttribute ),
                   title( aTitle ),
                   qty( 0 )
         {
         }
-        PAD_ATTR_T attribute;
+        T          attribute;
         wxString   title;
         int        qty;
     };
+
+    using padsType_t = typeContainer_t<PAD_ATTR_T>;
+    using viasType_t = typeContainer_t<VIATYPE_T>;
 
     /**
      * Struct holds information about component type (such as SMD, THT,
@@ -84,6 +89,7 @@ public:
 
     using componentsTypeList_t = std::deque<componentsType_t>;
     using padsTypeList_t = std::deque<padsType_t>;
+    using viasTypeList_t = std::deque<viasType_t>;
 
     DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame );
     ~DIALOG_BOARD_STATISTICS();
@@ -92,15 +98,13 @@ public:
     bool TransferDataToWindow() override;
 
     ///> Function to fill up all items types to be shown in the dialog.
-    void inline refreshItemsTypes();
+    void refreshItemsTypes();
 
     ///> Gets data from board
-    void inline getDataFromPCB();
+    void getDataFromPCB();
 
     ///> Applies data to dialog widgets
-    void inline updateWidets();
-
-    void checkboxClicked( wxCommandEvent& event ) override;
+    void updateWidets();
 
 private:
     PCB_EDIT_FRAME* m_parentFrame;
@@ -116,6 +120,13 @@ private:
 
     ///> Holds all pads types to be shown in the dialog
     padsTypeList_t  m_padsTypes;
+
+    ///> Holds all vias types to be shown in the dialog
+    viasTypeList_t m_viasTypes;
+
+    ///> Save board statistics to a file
+    void saveReportClicked( wxCommandEvent& event ) override;
+    void checkboxClicked( wxCommandEvent& event ) override;
 };
 
 #endif // __DIALOG_BOARD_STATISTICS_H
