@@ -68,8 +68,7 @@ public:
     SHOVE_STATUS ShoveMultiLines( const ITEM_SET& aHeadSet );
 
     SHOVE_STATUS ShoveDraggingVia( VIA* aVia, const VECTOR2I& aWhere, VIA** aNewVia );
-    SHOVE_STATUS ProcessSingleLine( LINE& aCurrent, LINE& aObstacle,
-                                    LINE& aShoved );
+    SHOVE_STATUS ProcessSingleLine( LINE& aCurrent, LINE& aObstacle, LINE& aShoved );
 
     void ForceClearance ( bool aEnabled, int aClearance )
     {
@@ -97,8 +96,6 @@ private:
         int m_segments;
         VECTOR2I m_p;
         NODE* m_node;
-        ITEM_SET m_headItems;
-        COST_ESTIMATOR m_cost;
         OPT_BOX2I m_affectedArea;
     };
 
@@ -106,8 +103,7 @@ private:
                                  LINE& aShoved, const HULL_SET& hulls );
 
     bool reduceSpringback( const ITEM_SET& aHeadItems );
-    bool pushSpringback( NODE* aNode, const ITEM_SET& aHeadItems,
-                                const COST_ESTIMATOR& aCost, const OPT_BOX2I& aAffectedArea );
+    bool pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea );
 
     SHOVE_STATUS walkaroundLoneVia( LINE& aCurrent, LINE& aObstacle, LINE& aShoved );
     bool checkBumpDirection( const LINE& aCurrent, const LINE& aShoved ) const;
@@ -117,7 +113,7 @@ private:
     SHOVE_STATUS onCollidingSolid( LINE& aCurrent, ITEM* aObstacle );
     SHOVE_STATUS onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia );
     SHOVE_STATUS onReverseCollidingVia( LINE& aCurrent, VIA* aObstacleVia );
-    SHOVE_STATUS pushVia( VIA* aVia, const VECTOR2I& aForce, int aCurrentRank, bool aDryRun = false );
+    SHOVE_STATUS pushVia( VIA* aVia, const VECTOR2I& aForce, int aCurrentRank );
 
     OPT_BOX2I totalAffectedArea() const;
 
@@ -134,7 +130,7 @@ private:
     void replaceItems( ITEM* aOld, std::unique_ptr< ITEM > aNew );
     void replaceLine( LINE& aOld, LINE& aNew );
 
-    OPT_BOX2I                   m_affectedAreaSum;
+    OPT_BOX2I                   m_affectedArea;
 
     SHOVE_STATUS shoveIteration( int aIter );
     SHOVE_STATUS shoveMainLoop();
@@ -152,7 +148,6 @@ private:
 
     LOGGER                      m_logger;
     VIA*                        m_draggedVia;
-    ITEM_SET                    m_draggedViaHeadSet;
 
     int                         m_iter;
     int m_forceClearance;
