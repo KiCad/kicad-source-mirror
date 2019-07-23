@@ -253,27 +253,25 @@ wxString* PROJECT_TEMPLATE::GetTitle(void)
         while( input.IsOk() && !input.Eof() && !done )
         {
             wxString line = text.ReadLine();
+            wxString upperline = line.Clone().Upper();
 
-            start = line.Find( wxT( "<title>" ) );
-            if( start == wxNOT_FOUND )
-                start = line.Find( wxT( "<TITLE>" ) );
-
-            finish = line.Find( wxT( "</title>" ) );
-            if( finish == wxNOT_FOUND )
-                finish = line.Find( wxT( "</TITLE>" ) );
+            start = upperline.Find( wxT( "<TITLE>" ) );
+            finish = upperline.Find( wxT( "</TITLE>" ) );
+            int length = finish - start - 7;
 
             // find the opening tag
             if( start != wxNOT_FOUND )
             {
                 if( finish != wxNOT_FOUND )
                 {
-                    title = line.SubString( start + 7, finish );
+                    title = line( start + 7, length );
                 }
                 else
                 {
-                    title = line.SubString( start + 7, line.Len() - 1 );
-                    done = true;
+                    title = line.Mid( start + 7 );
                 }
+
+                done = true;
             }
             else
             {
@@ -282,15 +280,11 @@ wxString* PROJECT_TEMPLATE::GetTitle(void)
                     title += line.SubString( 0, finish );
                     done = true;
                 }
-                else
-                {
-                    title += line;
-                }
             }
 
             // Remove line endings
-            title.Replace( wxT( "\r" ), wxT( "" ) );
-            title.Replace( wxT( "\n" ), wxT( "" ) );
+            title.Replace( wxT( "\r" ), wxT( " " ) );
+            title.Replace( wxT( "\n" ), wxT( " " ) );
         }
     }
 
