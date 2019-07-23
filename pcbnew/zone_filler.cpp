@@ -760,6 +760,9 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
         }
     }
 
+    // Ensure previous changes (adding thermal stubs) do not add
+    // filled areas outside the zone boundary
+    aRawPolys.BooleanIntersection( aSmoothedOutline, SHAPE_POLY_SET::PM_FAST );
     aRawPolys.Simplify( SHAPE_POLY_SET::PM_FAST );
 
     if( s_DumpZonesWhenFilling )
@@ -793,7 +796,7 @@ void ZONE_FILLER::computeRawFilledArea( const ZONE_CONTAINER* aZone,
 
         // If we've deflated/inflated by something near our corner radius then we will have
         // ended up with too-sharp corners.  Apply outline smoothing again.
-        if( aZone->GetMinThickness() > aZone->GetCornerRadius() )
+        if( aZone->GetMinThickness() > (int)aZone->GetCornerRadius() )
             aRawPolys.BooleanIntersection( aSmoothedOutline, SHAPE_POLY_SET::PM_FAST );
     }
 
@@ -901,7 +904,14 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
             int thermalReliefGap = aZone->GetThermalReliefGap( pad );
 
             // Calculate thermal bridge half width
-            int spoke_half_w = aZone->GetThermalReliefCopperBridge( pad ) / 2;
+            int spoke_w = aZone->GetThermalReliefCopperBridge( pad );
+            // Avoid spoke_w bigger than the smaller pad size, because
+            // it is not possible to create stubs bigger than the pad.
+            // Possible refinement: have a separate size for vertical and horizontal stubs
+            spoke_w = std::min( spoke_w, pad->GetSize().x );
+            spoke_w = std::min( spoke_w, pad->GetSize().y );
+
+            int spoke_half_w = spoke_w / 2;
 
             // Quick test here to possibly save us some work
             BOX2I itemBB = pad->GetBoundingBox();
