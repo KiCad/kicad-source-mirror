@@ -113,17 +113,17 @@ private:
     SHOVE_STATUS onCollidingSolid( LINE& aCurrent, ITEM* aObstacle );
     SHOVE_STATUS onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia );
     SHOVE_STATUS onReverseCollidingVia( LINE& aCurrent, VIA* aObstacleVia );
-    SHOVE_STATUS pushVia( VIA* aVia, const VECTOR2I& aForce, int aCurrentRank );
+    SHOVE_STATUS pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, int aCurrentRank );
 
     OPT_BOX2I totalAffectedArea() const;
 
-    void unwindStack( SEGMENT* aSeg );
-    void unwindStack( ITEM* aItem );
+    void unwindLineStack( SEGMENT* aSeg );
+    void unwindLineStack( ITEM* aItem );
 
     void runOptimizer( NODE* aNode );
 
-    bool pushLine( const LINE& aL, bool aKeepCurrentOnTop = false );
-    void popLine();
+    bool pushLineStack( const LINE& aL, bool aKeepCurrentOnTop = false );
+    void popLineStack();
 
     LINE assembleLine( const SEGMENT* aSeg, int* aIndex = NULL );
 

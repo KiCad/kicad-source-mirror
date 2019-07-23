@@ -354,7 +354,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSegment( LINE& aCurrent, SEGMENT* aObstacl
         sanityCheck( &obstacleLine, &shovedLine );
         replaceLine( obstacleLine, shovedLine );
 
-        if( !pushLine( shovedLine ) )
+        if( !pushLineStack( shovedLine ) )
             rv = SH_INCOMPLETE;
     }
 
@@ -392,7 +392,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingLine( LINE& aCurrent, LINE& aObstacle )
         shovedLine.SetRank( rank - 1 );
 
 
-        if( !pushLine( shovedLine ) )
+        if( !pushLineStack( shovedLine ) )
         {
             rv = SH_INCOMPLETE;
         }
@@ -521,9 +521,9 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle )
     m_logger.Log( &walkaroundLine, 3, "walk-line" );
 #endif
 
-    popLine();
+    popLineStack();
 
-    if( !pushLine( walkaroundLine ) )
+    if( !pushLineStack( walkaroundLine ) )
         return SH_INCOMPLETE;
 
     return SH_OK;
@@ -586,7 +586,7 @@ bool SHOVE::pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea, VIA* aD
 }
 
 
-SHOVE::SHOVE_STATUS SHOVE::pushVia( VIA* aVia, const VECTOR2I& aForce, int aCurrentRank )
+SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, int aCurrentRank )
 {
     LINE_PAIR_VEC draggedLines;
     VECTOR2I p0( aVia->Pos() );
@@ -676,14 +676,14 @@ SHOVE::SHOVE_STATUS SHOVE::pushVia( VIA* aVia, const VECTOR2I& aForce, int aCurr
             m_newHead = lp.second;
         }
 
-        unwindStack( &lp.first );
+        unwindLineStack( &lp.first );
 
         if( lp.second.SegmentCount() )
         {
             replaceLine( lp.first, lp.second );
             lp.second.SetRank( aCurrentRank - 1 );
 
-            if( !pushLine( lp.second, true ) )
+            if( !pushLineStack( lp.second, true ) )
                 return SH_INCOMPLETE;
         }
         else
@@ -752,7 +752,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
         rank = aCurrent->Rank() + 10000;
     }
 
-    return pushVia( aObstacleVia, mtv, rank );
+    return pushOrShoveVia( aObstacleVia, mtv, rank );
 }
 
 
@@ -767,7 +767,7 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
     shoved.ClearSegmentLinks();
 
     cur.RemoveVia();
-    unwindStack( &aCurrent );
+    unwindLineStack( &aCurrent );
 
     for( ITEM* item : jt->LinkList() )
     {
@@ -830,7 +830,7 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
     int currentRank = aCurrent.Rank();
     replaceLine( aCurrent, shoved );
 
-    if( !pushLine( shoved ) )
+    if( !pushLineStack( shoved ) )
         return SH_INCOMPLETE;
 
     shoved.SetRank( currentRank );
@@ -839,7 +839,7 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
 }
 
 
-void SHOVE::unwindStack( SEGMENT* aSeg )
+void SHOVE::unwindLineStack( SEGMENT* aSeg )
 {
     for( std::vector<LINE>::iterator i = m_lineStack.begin(); i != m_lineStack.end() ; )
     {
@@ -859,21 +859,21 @@ void SHOVE::unwindStack( SEGMENT* aSeg )
 }
 
 
-void SHOVE::unwindStack( ITEM* aItem )
+void SHOVE::unwindLineStack( ITEM* aItem )
 {
     if( aItem->OfKind( ITEM::SEGMENT_T ) )
-        unwindStack( static_cast<SEGMENT*>( aItem ) );
+        unwindLineStack( static_cast<SEGMENT*>( aItem ));
     else if( aItem->OfKind( ITEM::LINE_T ) )
     {
         LINE* l = static_cast<LINE*>( aItem );
 
         for( SEGMENT* seg : l->LinkedSegments() )
-            unwindStack( seg );
+            unwindLineStack( seg );
     }
 }
 
 
-bool SHOVE::pushLine( const LINE& aL, bool aKeepCurrentOnTop )
+bool SHOVE::pushLineStack( const LINE& aL, bool aKeepCurrentOnTop )
 {
     if( !aL.IsLinkedChecked() && aL.SegmentCount() != 0 )
         return false;
@@ -892,7 +892,7 @@ bool SHOVE::pushLine( const LINE& aL, bool aKeepCurrentOnTop )
     return true;
 }
 
-void SHOVE::popLine( )
+void SHOVE::popLineStack( )
 {
     LINE& l = m_lineStack.back();
 
@@ -940,7 +940,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
     ITEM* ni = nearest->m_item;
 
-    unwindStack( ni );
+    unwindLineStack( ni );
 
     if( !ni->OfKind( ITEM::SOLID_T ) && ni->Rank() >= 0 && ni->Rank() > currentLine.Rank() )
     {
@@ -969,9 +969,9 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
             wxLogTrace( "PNS", "iter %d: reverse-collide-segment ", aIter );
             LINE revLine = assembleLine( seg );
 
-            popLine();
+            popLineStack();
             st = onCollidingLine( revLine, currentLine );
-            if( !pushLine( revLine ) )
+            if( !pushLineStack( revLine ) )
                 return SH_INCOMPLETE;
 
             break;
@@ -1038,7 +1038,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveMainLoop()
     {
         // If we're shoving a free via then push a proxy LINE (with the via on the end) onto
         // the stack.
-        pushLine( LINE( *m_draggedVia ) );
+        pushLineStack( LINE( *m_draggedVia ));
     }
 
     while( !m_lineStack.empty() )
@@ -1122,7 +1122,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveLines( const LINE& aCurrentHead )
         m_currentNode->Add( std::move( headVia ) );
     }
 
-    if( !pushLine( head ) )
+    if( !pushLineStack( head ) )
     {
         delete m_currentNode;
         m_currentNode = parent;
@@ -1214,7 +1214,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveMultiLines( const ITEM_SET& aHeadSet )
         head.SetRank( 100000 );
         n++;
 
-        if( !pushLine( head ) )
+        if( !pushLineStack( head ) )
             return SH_INCOMPLETE;
 
         if( head.EndsWithVia() )
@@ -1280,7 +1280,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( VIA* aVia, const VECTOR2I& aWhere, 
 
     // Push the via to its new location
     //
-    st = pushVia( aVia, ( aWhere - aVia->Pos() ), 0 );
+    st = pushOrShoveVia( aVia, ( aWhere - aVia->Pos()), 0 );
 
     // Shove any colliding objects out of the way
     //
