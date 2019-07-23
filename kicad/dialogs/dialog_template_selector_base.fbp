@@ -14,6 +14,7 @@
         <property name="file">dialog_template_selector_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">DIALOG_TEMPLATE_SELECTOR_BASE</property>
@@ -25,6 +26,7 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
+        <property name="use_array_enum">0</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -644,7 +646,7 @@
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
             <property name="maximum_size">74,-1</property>
-            <property name="minimum_size">74,-1</property>
+            <property name="minimum_size">74,150</property>
             <property name="name">TEMPLATE_WIDGET_BASE</property>
             <property name="pos"></property>
             <property name="size">74,118</property>
