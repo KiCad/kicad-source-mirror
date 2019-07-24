@@ -94,6 +94,7 @@ VIA* VIA::Clone() const
     v->m_rank = m_rank;
     v->m_marker = m_marker;
     v->m_viaType = m_viaType;
+    v->m_parent = m_parent;
 
     return v;
 }

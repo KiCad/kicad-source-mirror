@@ -58,11 +58,15 @@ class RULE_RESOLVER
 public:
     virtual ~RULE_RESOLVER() {}
 
+    virtual bool CollideHoles( const ITEM* aA, const ITEM* aB,
+                               bool aNeedMTV, VECTOR2I* aMTV ) const = 0;
+
     virtual int Clearance( const ITEM* aA, const ITEM* aB ) const = 0;
     virtual int Clearance( int aNetCode ) const = 0;
     virtual int DpCoupledNet( int aNet ) = 0;
     virtual int DpNetPolarity( int aNet ) = 0;
     virtual bool DpNetPair( ITEM* aItem, int& aNetP, int& aNetN ) = 0;
+
     virtual wxString NetName( int aNet ) = 0;
 };
 
@@ -164,7 +168,7 @@ public:
         m_ruleResolver = aFunc;
     }
 
-    RULE_RESOLVER* GetRuleResolver()
+    RULE_RESOLVER* GetRuleResolver() const
     {
         return m_ruleResolver;
     }
@@ -401,8 +405,7 @@ public:
 
     void ClearRanks( int aMarkerMask = MK_HEAD | MK_VIOLATION );
 
-    int FindByMarker( int aMarker, ITEM_SET& aItems );
-    int RemoveByMarker( int aMarker );
+    void RemoveByMarker( int aMarker );
 
     ITEM* FindItemByParent( const BOARD_CONNECTED_ITEM* aParent );
 

@@ -201,26 +201,8 @@ public:
      * @param aMTV the minimum translation vector
      * @return true, if a collision was found.
      */
-    virtual bool Collide( const ITEM* aOther, int aClearance, bool aNeedMTV, VECTOR2I& aMTV,
-                          bool aDifferentNetsOnly = true ) const;
-
-    /**
-     * Function CollideHoles()
-     *
-     * Similar to Collide(), above, but checks for hole-to-hole-minimum violations.
-     */
-    bool CollideHoles( const ITEM* aOther, bool aNeedMTV, VECTOR2I& aMTV ) const;
-
-    /**
-     * Function Collide()
-     *
-     * A shortcut for ITEM::Colllide() without MTV stuff.
-     */
-  	bool Collide( const ITEM* aOther, int aClearance, bool aDifferentNetsOnly = true ) const
-    {
-        VECTOR2I dummy;
-        return Collide( aOther, aClearance, false, dummy, aDifferentNetsOnly );
-    }
+    virtual bool Collide( const ITEM* aOther, int aClearance, bool aNeedMTV, VECTOR2I* aMTV,
+                          const NODE* aParentNode, bool aDifferentNetsOnly = true ) const;
 
     /**
      * Function Shape()
@@ -259,8 +241,8 @@ public:
     bool IsRoutable() const { return m_routable; }
 
 private:
-    bool collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV,
-                        VECTOR2I& aMTV, bool aDifferentNetsOnly ) const;
+    bool collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV, VECTOR2I* aMTV,
+                        const NODE* aParentNode, bool aDifferentNetsOnly ) const;
 
 protected:
     PnsKind                 m_kind;

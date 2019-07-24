@@ -60,17 +60,23 @@
 #include "pns_debug_decorator.h"
 #include "router_preview_item.h"
 
+typedef VECTOR2I::extended_type ecoord;
+
 class PNS_PCBNEW_RULE_RESOLVER : public PNS::RULE_RESOLVER
 {
 public:
     PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER* aRouter );
     virtual ~PNS_PCBNEW_RULE_RESOLVER();
 
+    virtual bool CollideHoles( const PNS::ITEM* aA, const PNS::ITEM* aB,
+                               bool aNeedMTV, VECTOR2I* aMTV ) const override;
+
     virtual int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB ) const override;
     virtual int Clearance( int aNetCode ) const override;
     virtual int DpCoupledNet( int aNet ) override;
     virtual int DpNetPolarity( int aNet ) override;
     virtual bool DpNetPair( PNS::ITEM* aItem, int& aNetP, int& aNetN ) override;
+
     virtual wxString NetName( int aNet ) override;
 
 private:
@@ -81,6 +87,7 @@ private:
         int clearance;
     };
 
+    int holeRadius( const PNS::ITEM* aItem ) const;
     int localPadClearance( const PNS::ITEM* aItem ) const;
     int matchDpSuffix( const wxString& aNetName, wxString& aComplementNet, wxString& aBaseDpName );
 
@@ -157,6 +164,65 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER* 
 
 PNS_PCBNEW_RULE_RESOLVER::~PNS_PCBNEW_RULE_RESOLVER()
 {
+}
+
+
+int PNS_PCBNEW_RULE_RESOLVER::holeRadius( const PNS::ITEM* aItem ) const
+{
+    if( aItem->Kind() == PNS::ITEM::SOLID_T )
+    {
+        const D_PAD* pad = dynamic_cast<const D_PAD*>( aItem->Parent() );
+
+        if( pad && pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
+            return pad->GetDrillSize().x / 2;
+    }
+    else if( aItem->Kind() == PNS::ITEM::VIA_T )
+    {
+        const ::VIA* via = dynamic_cast<const ::VIA*>( aItem->Parent() );
+
+        if( via )
+            return via->GetDrillValue() / 2;
+    }
+
+    return 0;
+}
+
+
+bool PNS_PCBNEW_RULE_RESOLVER::CollideHoles( const PNS::ITEM* aA, const PNS::ITEM* aB,
+                                             bool aNeedMTV, VECTOR2I* aMTV ) const
+{
+    VECTOR2I pos_a = aA->Shape()->Centre();
+    VECTOR2I pos_b = aB->Shape()->Centre();
+
+    // Holes with identical locations are allowable
+    if( pos_a == pos_b )
+        return false;
+
+    int radius_a = holeRadius( aA );
+    int radius_b = holeRadius( aB );
+
+    // Do both objects have holes?
+    if( radius_a > 0 && radius_b > 0 )
+    {
+        int holeToHoleMin = m_board->GetDesignSettings().m_HoleToHoleMin;
+
+        ecoord min_dist = holeToHoleMin + radius_a + radius_b;
+        ecoord min_dist_sq = min_dist * min_dist;
+
+        const VECTOR2I delta = pos_b - pos_a;
+
+        ecoord dist_sq = delta.SquaredEuclideanNorm();
+
+        if( dist_sq < min_dist_sq )
+        {
+            if( aNeedMTV )
+                *aMTV = delta.Resize( min_dist - sqrt( dist_sq ) + 3 );  // fixme: apparent rounding error
+
+            return true;
+        }
+    }
+
+    return false;
 }
 
 

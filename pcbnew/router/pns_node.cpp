@@ -234,7 +234,7 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
         if( m_forceClearance >= 0 )
             clearance = m_forceClearance;
 
-        if( !aCandidate->Collide( m_item, clearance, m_differentNetsOnly ) )
+        if( !aCandidate->Collide( m_item, clearance, false, nullptr, m_node, m_differentNetsOnly ) )
             return true;
 
         OBSTACLE obs;
@@ -269,8 +269,8 @@ int NODE::QueryColliding( const ITEM* aItem, OBSTACLE_VISITOR& aVisitor )
 }
 
 
-int NODE::QueryColliding( const ITEM* aItem,
-        NODE::OBSTACLES& aObstacles, int aKindMask, int aLimitCount, bool aDifferentNetsOnly, int aForceClearance )
+int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles, int aKindMask,
+                          int aLimitCount, bool aDifferentNetsOnly, int aForceClearance )
 {
     DEFAULT_OBSTACLE_VISITOR visitor( aObstacles, aItem, aKindMask, aDifferentNetsOnly );
 
@@ -469,7 +469,7 @@ bool NODE::CheckColliding( const ITEM* aItemA, const ITEM* aItemB, int aKindMask
     if( aItemB->Kind() == ITEM::LINE_T )
         clearance += static_cast<const LINE*>( aItemB )->Width() / 2;
 
-    return aItemA->Collide( aItemB, clearance );
+    return aItemA->Collide( aItemB, clearance, false, nullptr, this );
 }
 
 
@@ -608,22 +608,11 @@ void NODE::Add( std::unique_ptr< ITEM > aItem, bool aAllowRedundant )
 {
     switch( aItem->Kind() )
     {
-    case ITEM::SOLID_T:
-        Add( ItemCast<SOLID>( std::move( aItem ) ) );
-        break;
-
-    case ITEM::SEGMENT_T:
-        Add( ItemCast<SEGMENT>( std::move( aItem ) ), aAllowRedundant );
-        break;
+    case ITEM::SOLID_T:   Add( ItemCast<SOLID>( std::move( aItem ) ) );                    break;
+    case ITEM::SEGMENT_T: Add( ItemCast<SEGMENT>( std::move( aItem ) ), aAllowRedundant ); break;
+    case ITEM::VIA_T:     Add( ItemCast<VIA>( std::move( aItem ) ) );                      break;
 
     case ITEM::LINE_T:
-        assert( false );
-        break;
-
-    case ITEM::VIA_T:
-        Add( ItemCast<VIA>( std::move( aItem ) ) );
-        break;
-
     default:
         assert( false );
     }
@@ -660,7 +649,8 @@ void NODE::removeSegmentIndex( SEGMENT* aSeg )
 void NODE::removeViaIndex( VIA* aVia )
 {
     // We have to split a single joint (associated with a via, binding together multiple layers)
-    // into multiple independent joints. As I'm a lazy bastard, I simply delete the via and all its links and re-insert them.
+    // into multiple independent joints. As I'm a lazy bastard, I simply delete the via and all
+    // its links and re-insert them.
 
     JOINT::HASH_TAG tag;
 
@@ -1258,36 +1248,18 @@ void NODE::ClearRanks( int aMarkerMask )
 }
 
 
-int NODE::FindByMarker( int aMarker, ITEM_SET& aItems )
-{
-    for( INDEX::ITEM_SET::iterator i = m_index->begin(); i != m_index->end(); ++i )
-    {
-        if( (*i)->Marker() & aMarker )
-            aItems.Add( *i );
-    }
-
-    return 0;
-}
-
-
-int NODE::RemoveByMarker( int aMarker )
+void NODE::RemoveByMarker( int aMarker )
 {
     std::list<ITEM*> garbage;
 
-    for( INDEX::ITEM_SET::iterator i = m_index->begin(); i != m_index->end(); ++i )
+    for( ITEM* item : *m_index )
     {
-        if( (*i)->Marker() & aMarker )
-        {
-            garbage.push_back( *i );
-        }
+        if( item->Marker() & aMarker )
+            garbage.push_back( item );
     }
 
-    for( std::list<ITEM*>::const_iterator i = garbage.begin(), end = garbage.end(); i != end; ++i )
-    {
-        Remove( *i );
-    }
-
-    return 0;
+    for( ITEM* item : garbage )
+        Remove( item );
 }
 
 SEGMENT* NODE::findRedundantSegment( const VECTOR2I& A, const VECTOR2I& B, const LAYER_RANGE& lr,

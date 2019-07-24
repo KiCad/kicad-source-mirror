@@ -35,6 +35,9 @@
 
 #include "time_limit.h"
 
+
+typedef VECTOR2I::extended_type ecoord;
+
 namespace PNS {
 
 void SHOVE::replaceItems( ITEM* aOld, std::unique_ptr< ITEM > aNew )
@@ -149,6 +152,9 @@ SHOVE::SHOVE_STATUS SHOVE::walkaroundLoneVia( LINE& aCurrent, LINE& aObstacle, L
 }
 
 
+/*
+ * TODO describe....
+ */
 SHOVE::SHOVE_STATUS SHOVE::processHullSet( LINE& aCurrent, LINE& aObstacle,
                                                    LINE& aShoved, const HULL_SET& aHulls )
 {
@@ -249,6 +255,9 @@ SHOVE::SHOVE_STATUS SHOVE::processHullSet( LINE& aCurrent, LINE& aObstacle,
 }
 
 
+/*
+ * TODO describe....
+ */
 SHOVE::SHOVE_STATUS SHOVE::ProcessSingleLine( LINE& aCurrent, LINE& aObstacle, LINE& aShoved )
 {
     aShoved.ClearSegmentLinks();
@@ -304,6 +313,9 @@ SHOVE::SHOVE_STATUS SHOVE::ProcessSingleLine( LINE& aCurrent, LINE& aObstacle, L
 }
 
 
+/*
+ * TODO describe....
+ */
 SHOVE::SHOVE_STATUS SHOVE::onCollidingSegment( LINE& aCurrent, SEGMENT* aObstacleSeg )
 {
     int segIndex;
@@ -362,6 +374,9 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSegment( LINE& aCurrent, SEGMENT* aObstacl
 }
 
 
+/*
+ * TODO describe....
+ */
 SHOVE::SHOVE_STATUS SHOVE::onCollidingLine( LINE& aCurrent, LINE& aObstacle )
 {
     LINE shovedLine( aObstacle );
@@ -401,6 +416,10 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingLine( LINE& aCurrent, LINE& aObstacle )
     return rv;
 }
 
+
+/*
+ * TODO describe....
+ */
 SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle )
 {
     WALKAROUND walkaround( m_currentNode, Router() );
@@ -586,6 +605,10 @@ bool SHOVE::pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea, VIA* aD
 }
 
 
+/*
+ * Push or shove a via by at least aForce.  (The via might be pushed or shoved slightly further
+ * to keep it from landing on an existing joint.)
+ */
 SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, int aCurrentRank )
 {
     LINE_PAIR_VEC draggedLines;
@@ -659,8 +682,15 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
     m_logger.Log( pushedVia.get(), 1, "pushed-via" );
 #endif
 
-    if( aVia->Marker() & MK_HEAD )
+    if( aVia->Marker() & MK_HEAD )      // push
+    {
         m_draggedVia = pushedVia.get();
+    }
+    else
+    {                                   // shove
+        if( jt->IsStitchingVia() )
+            pushLineStack( LINE( *pushedVia ) );
+    }
 
     replaceItems( aVia, std::move( pushedVia ) );
 
@@ -701,17 +731,24 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
 }
 
 
+/*
+ * Calculate the minimum translation vector required to resolve a collision with a via and
+ * shove the via by that distance.
+ */
 SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
 {
+    RULE_RESOLVER* rr = m_currentNode->GetRuleResolver();
     int clearance = getClearance( aCurrent, aObstacleVia ) ;
     LINE_PAIR_VEC draggedLines;
     bool lineCollision = false;
     bool viaCollision = false;
+    bool holeCollision = false;
     LINE* currentLine = NULL;
-    VECTOR2I mtvLine;
-    VECTOR2I mtvVia;
-    VECTOR2I mtvSolid;
-    VECTOR2I mtv;
+    VECTOR2I mtvLine;       // Minimum translation vector to correct line collisions
+    VECTOR2I mtvVia;        // MTV to correct via collisions
+    VECTOR2I mtvHoles;      // MTV to correct hole collisions
+    VECTOR2I mtvSolid;      // MTV to correct solid collisions
+    VECTOR2I mtv;           // Union of relevant MTVs (will correct all collisions)
     int rank = -1;
 
     if( aCurrent->OfKind( ITEM::LINE_T ) )
@@ -728,19 +765,32 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
 
         if( currentLine->EndsWithVia() )
         {
-            viaCollision = CollideShapes( currentLine->Via().Shape(), aObstacleVia->Shape(),
-                                          clearance + PNS_HULL_MARGIN, true, mtvVia );
+            int currentNet = currentLine->Net();
+            int obstacleNet = aObstacleVia->Net();
+
+            if( currentNet != obstacleNet && currentNet >= 0 && obstacleNet >= 0 )
+            {
+                viaCollision = CollideShapes( currentLine->Via().Shape(), aObstacleVia->Shape(),
+                                              clearance + PNS_HULL_MARGIN, true, mtvVia );
+            }
+
+            // hole-to-hole is a mechanical constraint (broken drill bits), not an electrical
+            // one, so it has to be checked irrespective of matching nets.
+            holeCollision = rr->CollideHoles( &currentLine->Via(), aObstacleVia, true, &mtvHoles );
         }
 
-        if( !lineCollision && !viaCollision )
-             return SH_OK;
+        // These aren't /actually/ lengths as we don't bother to do the square-root part,
+        // but we're just comparing them to each other so it's faster this way.
+        ecoord lineMTVLength = lineCollision ? mtvLine.SquaredEuclideanNorm() : 0;
+        ecoord viaMTVLength = viaCollision ? mtvVia.SquaredEuclideanNorm() : 0;
+        ecoord holeMTVLength = holeCollision ? mtvHoles.SquaredEuclideanNorm() : 0;
 
-        if( lineCollision && viaCollision )
-            mtv = mtvVia.EuclideanNorm() > mtvLine.EuclideanNorm() ? mtvVia : mtvLine;
-        else if( lineCollision )
+        if( lineMTVLength >= viaMTVLength && lineMTVLength >= holeMTVLength )
             mtv = mtvLine;
-        else
+        else if( viaMTVLength >= lineMTVLength && viaMTVLength >= holeMTVLength )
             mtv = mtvVia;
+        else
+            mtv = mtvHoles;
 
         rank = currentLine->Rank();
     }
@@ -756,6 +806,9 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
 }
 
 
+/*
+ * TODO describe....
+ */
 SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacleVia )
 {
     int n = 0;
@@ -918,6 +971,9 @@ void SHOVE::popLineStack( )
 }
 
 
+/*
+ * Resolve the next collision.
+ */
 SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 {
     LINE currentLine = m_lineStack.back();
@@ -944,20 +1000,22 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
     if( !ni->OfKind( ITEM::SOLID_T ) && ni->Rank() >= 0 && ni->Rank() > currentLine.Rank() )
     {
+        // Collision with a higher-ranking object (ie: one that we've already shoved)
+        //
         switch( ni->Kind() )
         {
         case ITEM::VIA_T:
         {
-            VIA* revVia = (VIA*) ni;
             wxLogTrace( "PNS", "iter %d: reverse-collide-via", aIter );
 
-            if( currentLine.EndsWithVia() && m_currentNode->CheckColliding( &currentLine.Via(), revVia ) )
+            if( currentLine.EndsWithVia()
+                    && m_currentNode->CheckColliding( &currentLine.Via(), (VIA*) ni ) )
             {
                 st = SH_INCOMPLETE;
             }
             else
             {
-                st = onReverseCollidingVia( currentLine, revVia );
+                st = onReverseCollidingVia( currentLine, (VIA*) ni );
             }
 
             break;
@@ -965,9 +1023,8 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 
         case ITEM::SEGMENT_T:
         {
-            SEGMENT* seg = (SEGMENT*) ni;
             wxLogTrace( "PNS", "iter %d: reverse-collide-segment ", aIter );
-            LINE revLine = assembleLine( seg );
+            LINE revLine = assembleLine( (SEGMENT*) ni );
 
             popLineStack();
             st = onCollidingLine( revLine, currentLine );
@@ -982,7 +1039,9 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
         }
     }
     else
-    { // "forward" collisions
+    {
+        // Collision with a lower-ranking object or a solid
+        //
         switch( ni->Kind() )
         {
         case ITEM::SEGMENT_T:
@@ -1018,6 +1077,12 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
 }
 
 
+/*
+ * Resolve collisions.
+ * Each iteration pushes the next colliding object out of the way.  Iterations are continued as
+ * long as they propagate further collisions, or until the iteration timeout or max iteration
+ * count is reached.
+ */
 SHOVE::SHOVE_STATUS SHOVE::shoveMainLoop()
 {
     SHOVE_STATUS st = SH_OK;
@@ -1093,11 +1158,15 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveLines( const LINE& aCurrentHead )
     m_newHead = OPT_LINE();
     m_logger.Clear();
 
+    // Pop NODEs containing previous shoves which are no longer necessary
+    //
     ITEM_SET headSet;
     headSet.Add( aCurrentHead );
 
     NODE* parent = reduceSpringback( headSet, nullptr );
 
+    // Create a new NODE to store this version of the world
+    //
     m_currentNode = parent->Branch();
     m_currentNode->ClearRanks();
     m_currentNode->Add( head );
@@ -1263,14 +1332,14 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( VIA* aVia, const VECTOR2I& aWhere, 
     m_newHead = OPT_LINE();
     m_draggedVia = NULL;
 
+    // Pop NODEs containing previous shoves which are no longer necessary
+    //
     ITEM_SET headSet;
     headSet.Add( *aVia );
 
-    // Pop NODEs containing previous shoves which are no longer necessary
-    //
     NODE* parent = reduceSpringback( headSet, &aVia );
 
-    // Create a new NODE
+    // Create a new NODE to store this version of the world
     //
     m_currentNode = parent->Branch();
     m_currentNode->ClearRanks();

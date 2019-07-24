@@ -154,7 +154,7 @@ struct OPTIMIZER::CACHE_VISITOR
 
         int clearance = m_node->GetClearance( aOtherItem, m_ourItem );
 
-        if( !aOtherItem->Collide( m_ourItem, clearance ) )
+        if( !aOtherItem->Collide( m_ourItem, clearance, false, nullptr, m_node ) )
             return true;
 
         m_collidingItem = aOtherItem;

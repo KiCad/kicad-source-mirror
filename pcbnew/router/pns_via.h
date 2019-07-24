@@ -66,7 +66,7 @@ public:
 
 
     VIA( const VIA& aB ) :
-        ITEM( VIA_T )
+        ITEM( aB )
     {
         SetNet( aB.Net() );
         SetLayers( aB.Layers() );
