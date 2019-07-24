@@ -227,9 +227,7 @@ void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
 
 void FOOTPRINTS_LISTBOX::OnLeftDClick( wxListEvent& event )
 {
-    wxString footprintName = GetSelectedFootprint();
-
-    GetParent()->SetNewPkg( footprintName );
+    GetParent()->GetToolManager()->RunAction( CVPCB_ACTIONS::associate, true );
 }
 
 

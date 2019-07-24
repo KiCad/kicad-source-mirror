@@ -44,6 +44,7 @@
 #include <wx/statline.h>
 
 #include <cvpcb.h>
+#include <cvpcb_association.h>
 #include <cvpcb_id.h>
 #include <cvpcb_mainframe.h>
 #include <display_footprints_frame.h>
@@ -403,6 +404,47 @@ void CVPCB_MAINFRAME::OnQuit( wxCommandEvent& event )
 }
 
 
+void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation )
+{
+    // Ensure there is data to work with
+    COMPONENT* component;
+
+    if( m_netlist.IsEmpty() )
+        return;
+
+    component = m_netlist.GetComponent( aAssociation.GetComponentIndex() );
+
+    if( component == NULL )
+        return;
+
+    LIB_ID fpid = aAssociation.GetNewFootprint();
+
+    // Test for validity of the requested footprint
+    if( !fpid.empty() && !fpid.IsValid() )
+    {
+        wxString msg =
+                wxString::Format( _( "\"%s\" is not a valid footprint." ), fpid.Format().wx_str() );
+        DisplayErrorMessage( this, msg );
+    }
+
+    // Set the new footprint
+    component->SetFPID( fpid );
+
+    // create the new component description and set it
+    wxString description = wxString::Format( CMP_FORMAT, aAssociation.GetComponentIndex() + 1,
+            GetChars( component->GetReference() ), GetChars( component->GetValue() ),
+            GetChars( FROM_UTF8( component->GetFPID().Format().c_str() ) ) );
+    m_compListBox->SetString( aAssociation.GetComponentIndex(), description );
+
+    // Mark the data as being modified
+    m_modified = true;
+
+    // Update the statusbar and refresh the list
+    DisplayStatus();
+    m_compListBox->Refresh();
+}
+
+
 void CVPCB_MAINFRAME::DeleteAll()
 {
     if( IsOK( this, _( "Delete all associations?" ) ) )
@@ -414,10 +456,7 @@ void CVPCB_MAINFRAME::DeleteAll()
 
         for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
         {
-            LIB_ID fpid;
-
-            m_netlist.GetComponent( i )->SetFPID( fpid );
-            SetNewPkg( wxEmptyString );
+            AssociateFootprint( CVPCB_ASSOCIATION( i, LIB_ID() ) );
         }
 
         // Remove all selections after setting the fpids
@@ -850,6 +889,29 @@ COMPONENT* CVPCB_MAINFRAME::GetSelectedComponent()
         return m_netlist.GetComponent( selection );
 
     return NULL;
+}
+
+
+std::vector<unsigned int> CVPCB_MAINFRAME::GetSelectedComponentIndices()
+{
+    std::vector<unsigned int> idx;
+
+    // Check to see if anything is selected
+    if( m_compListBox->GetSelectedItemCount() < 1 )
+        return idx;
+
+    // Get the components
+    int lastIdx = m_compListBox->GetFirstSelected();
+    idx.emplace_back( lastIdx );
+
+    lastIdx = m_compListBox->GetNextSelected( lastIdx );
+    while( lastIdx > 0 )
+    {
+        idx.emplace_back( lastIdx );
+        lastIdx = m_compListBox->GetNextSelected( lastIdx );
+    }
+
+    return idx;
 }
 
 

@@ -30,6 +30,7 @@
 // 'FT232BL'		'QFP:LQFP-32_7x7mm_Pitch0.8mm'
 //
 
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class FOOTPRINT_EQUIVALENCE
 {

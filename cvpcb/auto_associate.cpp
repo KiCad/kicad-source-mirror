@@ -40,10 +40,11 @@
 #include <kicad_string.h>
 #include <macros.h>
 
+#include <auto_associate.h>
 #include <cvpcb.h>
+#include <cvpcb_association.h>
 #include <cvpcb_mainframe.h>
 #include <listboxes.h>
-#include <auto_associate.h>
 
 #define QUOTE   '\''
 
@@ -231,7 +232,7 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
             // If the equivalence is unique, no ambiguity: use the association
             if( module && equ_is_unique )
             {
-                SetNewPkg( equivItem.m_FootprintFPID, kk );
+                AssociateFootprint( CVPCB_ASSOCIATION( kk, equivItem.m_FootprintFPID ) );
                 found = true;
                 break;
             }
@@ -269,7 +270,7 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
 
             if( found )
             {
-                SetNewPkg( equivItem.m_FootprintFPID, kk );
+                AssociateFootprint( CVPCB_ASSOCIATION( kk, equivItem.m_FootprintFPID ) );
                 break;
             }
         }
@@ -278,7 +279,7 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
             continue;
         else if( !fpid_candidate.IsEmpty() )
         {
-            SetNewPkg( fpid_candidate, kk );
+            AssociateFootprint( CVPCB_ASSOCIATION( kk, fpid_candidate ) );
             continue;
         }
 
@@ -290,9 +291,7 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
             const FOOTPRINT_INFO* module = m_FootprintsList->GetModuleInfo( component->GetFootprintFilters()[0] );
 
             if( module )
-            {
-                SetNewPkg( component->GetFootprintFilters()[0], kk );
-            }
+                AssociateFootprint( CVPCB_ASSOCIATION( kk, component->GetFootprintFilters()[0] ) );
         }
     }
 

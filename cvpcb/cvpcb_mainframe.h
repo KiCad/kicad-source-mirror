@@ -34,6 +34,7 @@
 #include <wx/listctrl.h>
 
 #include <auto_associate.h>
+#include <cvpcb_association.h>
 #include <listboxes.h>
 #include <tool/action_menu.h>
 
@@ -170,21 +171,11 @@ public:
     void             OnEnterFilteringText( wxCommandEvent& event );
 
     /**
-     * Function SetNewPkg
-     * set the footprint name for all selected components in component list
-     * and selects the next component.
-     * @param aFootprintName = the new footprint name
-     */
-    void             SetNewPkg( const wxString& aFootprintName );
-
-    /**
-     * Function SetNewPkg
-     * Set the footprint name for the component of position aIndex in the component list
+     * Associate a footprint with a specific component in the list.
      *
-     * @param aFootprintName = the new footprint name
-     * @param aIndex = the index of the component to modify in the component list
+     * @param aAssociation is the association to perform
      */
-    void             SetNewPkg( const wxString& aFootprintName, int aIndex );
+    void AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation );
 
     void             BuildCmpListBox();
     void             BuildFOOTPRINTS_LISTBOX();
@@ -285,6 +276,13 @@ public:
     void SendMessageToEESCHEMA( bool aClearHighligntOnly = false );
 
     COMPONENT* GetSelectedComponent();
+
+    /**
+     * Get the indices for all the selected components in the components listbox.
+     *
+     * @return a vector containing all the indices
+     */
+    std::vector<unsigned int> GetSelectedComponentIndices();
 
     /**
      * @return the LIB_ID of the selected footprint in footprint listview

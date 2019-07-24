@@ -78,6 +78,12 @@ TOOL_ACTION CVPCB_ACTIONS::gotoPreviousNA( "cvpcb.Control.GotoPreviousNA", AS_GL
 
 
 // Actions to modify component associations
+TOOL_ACTION CVPCB_ACTIONS::associate( "cvpcb.Control.Associate", AS_GLOBAL,
+        0, "",
+        _( "Associate footprint" ),
+        _( "Associate selected footprint with selected components" ),
+        auto_associe_xpm );
+
 TOOL_ACTION CVPCB_ACTIONS::autoAssociate( "cvpcb.Control.AutoAssociate", AS_GLOBAL,
         0, "",
         _( "Automatically associate footprints" ),

@@ -18,10 +18,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <confirm.h>
 #include <cstdint>
 #include <functional>
 #include <kiface_i.h>
 #include <kiway_express.h>
+#include <lib_id.h>
 #include <tool/actions.h>
 
 #include <cvpcb_mainframe.h>
@@ -94,6 +96,38 @@ int CVPCB_CONTROL::ToggleFootprintFilter( const TOOL_EVENT& aEvent )
 }
 
 
+int CVPCB_CONTROL::Associate( const TOOL_EVENT& aEvent )
+{
+    // Get the currently selected footprint
+    LIB_ID   fpid;
+    wxString fp = m_frame->GetSelectedFootprint();
+    fpid.Parse( fp, LIB_ID::ID_PCB );
+
+    // Ignore the action if the footprint is empty (nothing selected)
+    if( fpid.empty() )
+        return 0;
+
+    // Test for validity of the requested footprint
+    if( !fpid.IsValid() )
+    {
+        wxString msg =
+                wxString::Format( _( "\"%s\" is not a valid footprint." ), fpid.Format().wx_str() );
+        DisplayErrorMessage( m_frame, msg );
+    }
+
+    // Get all the components that are selected and associate them with the current footprint
+    std::vector<unsigned int> sel = m_frame->GetSelectedComponentIndices();
+
+    for( auto i : sel )
+    {
+        CVPCB_ASSOCIATION newfp( i, fpid );
+        m_frame->AssociateFootprint( newfp );
+    }
+
+    return 0;
+}
+
+
 int CVPCB_CONTROL::AutoAssociate( const TOOL_EVENT& aEvent )
 {
     m_frame->AutomaticFootprintMatching();
@@ -155,6 +189,7 @@ void CVPCB_CONTROL::setTransitions()
     Go( &CVPCB_CONTROL::ToPreviousNA,          CVPCB_ACTIONS::gotoPreviousNA.MakeEvent() );
 
     // Footprint association actions
+    Go( &CVPCB_CONTROL::Associate,             CVPCB_ACTIONS::associate.MakeEvent() );
     Go( &CVPCB_CONTROL::AutoAssociate,         CVPCB_ACTIONS::autoAssociate.MakeEvent() );
 
     // Filter the footprints
