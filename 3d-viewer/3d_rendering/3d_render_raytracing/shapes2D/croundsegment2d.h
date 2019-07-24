@@ -85,7 +85,7 @@ public:
     bool IsPointInside( const SFVEC2F &aPoint ) const override;
 };
 
-static const float s_min_dot = (FLT_EPSILON * 4.0f) ;
+static const float s_min_dot = (FLT_EPSILON * 4.0f * FLT_EPSILON * 4.0f) ;
 
 /**
  * @brief Segment_is_a_circle - check if segment start and end is very close to each other
