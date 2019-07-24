@@ -76,7 +76,7 @@ void addTextSegmToContainer( int x0, int y0, int xf, int yf, void* aData )
 
     if( Is_segment_a_circle( start3DU, end3DU ) )
         s_dstcontainer->Add( new CFILLEDCIRCLE2D( start3DU,
-                                                  s_textWidth * s_biuTo3Dunits,
+                                                  ( s_textWidth / 2 ) * s_biuTo3Dunits,
                                                   *s_boardItem) );
     else
         s_dstcontainer->Add( new CROUNDSEGMENT2D( start3DU,
