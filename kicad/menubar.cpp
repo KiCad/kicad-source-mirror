@@ -224,7 +224,7 @@ void KICAD_MANAGER_FRAME::RecreateLauncher()
     m_launcher->Add( KICAD_MANAGER_ACTIONS::showCalculator );
     m_launcher->Add( KICAD_MANAGER_ACTIONS::editWorksheet );
 
-    // Now stt big icons for these tools:
+    // Now set big icons for these tools:
     m_launcher->SetToolBitmap( KICAD_MANAGER_ACTIONS::editSchematic,
                                KiScaledBitmap( icon_eeschema_xpm, this ) );
     m_launcher->SetToolBitmap( KICAD_MANAGER_ACTIONS::editSymbols,
@@ -244,6 +244,9 @@ void KICAD_MANAGER_FRAME::RecreateLauncher()
 
     // Create mlauncher
     m_launcher->Realize();
+
+    // And update the visual tools state:
+    SyncToolbars();
 }
 
 
