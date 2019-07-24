@@ -82,6 +82,7 @@ int BITMAPCONV_INFO::ConvertBitmap( potrace_bitmap_t* aPotrace_bitmap,
 
     // set tracing parameters, starting from defaults
     param = potrace_param_default();
+
     if( !param )
     {
         char msg[256];
@@ -89,10 +90,15 @@ int BITMAPCONV_INFO::ConvertBitmap( potrace_bitmap_t* aPotrace_bitmap,
         m_errors += msg;
         return 1;
     }
-    param->turdsize = 0;
+
+    // For parameters: see http://potrace.sourceforge.net/potracelib.pdf
+    param->turdsize = 0;        // area (in pixels) of largest path to be ignored.
+                                // Potrace default is 2
+    param->opttolerance = 0.2;  // curve optimization tolerance. Potrace default is 0.2
 
     /* convert the bitmap to curves */
     st = potrace_trace( param, aPotrace_bitmap );
+
     if( !st || st->status != POTRACE_STATUS_OK )
     {
         if( st )
@@ -304,7 +310,7 @@ void BITMAPCONV_INFO::ouputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char* 
 
     case PCBNEW_KICAD_MOD:
     {
-        double width = 0.01;     // outline thickness in mm
+        double width = 0.0;         // outline thickness in mm: no thickness
         m_Data += "  (fp_poly (pts";
 
         jj = 0;
@@ -355,7 +361,11 @@ void BITMAPCONV_INFO::ouputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char* 
         break;
 
     case EESCHEMA_FMT:
-        sprintf( strbuf, "P %d 0 0 1", (int) aPolygon.PointCount() + 1 );
+        // The polygon outline thickness is fixed here to 1 mil, the minimal
+        // value in Eeschema (0 means use default thickness for graphics)
+        #define EE_LINE_THICKNESS 1
+        sprintf( strbuf, "P %d 0 0 %d",
+                 (int) aPolygon.PointCount() + 1, EE_LINE_THICKNESS );
         m_Data += strbuf;
         for( ii = 0; ii < aPolygon.PointCount(); ii++ )
         {
