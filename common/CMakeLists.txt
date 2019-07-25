@@ -380,6 +380,14 @@ if( BUILD_GITHUB_PLUGIN )
     )
 endif()
 
+# Link-time optimization (LTO) on GCC conflicts with embedded assembly (__asm),
+# following GCC's recommendation to disable LTO per translation unit.
+if( "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    set_source_files_properties( system/libcontext.cpp PROPERTIES
+        COMPILE_FLAGS "-fno-lto"
+        )
+endif()
+
 set( COMMON_SRCS
     ${COMMON_SRCS}
     system/libcontext.cpp
