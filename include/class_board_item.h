@@ -110,6 +110,14 @@ public:
     }
 
     /**
+     * @return true if the object is on any copper layer, false otherwise.
+     */
+    virtual bool IsOnCopperLayer() const
+    {
+        return IsCopperLayer( GetLayer() );
+    }
+
+    /**
      * A value of wxPoint(0,0) which can be passed to the Draw() functions.
      */
     static wxPoint ZeroOffset;

@@ -295,7 +295,8 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
     {
         COMPONENT_NET net = aNewComponent->GetNet( pad->GetName() );
 
-        if( !net.IsValid() )                // New footprint pad has no net.
+        // Test if new footprint pad has no net (pads not on copper layers have no net).
+        if( !net.IsValid() || !pad->IsOnCopperLayer() )
         {
             if( !pad->GetNetname().IsEmpty() )
             {

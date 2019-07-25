@@ -112,7 +112,7 @@ void CN_CONNECTIVITY_ALGO::markItemNetAsDirty( const BOARD_ITEM* aItem )
 
 bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
 {
-    if( !IsCopperLayer( aItem->GetLayer() ) )
+    if( !aItem->IsOnCopperLayer() )
         return false;
 
     markItemNetAsDirty ( aItem );

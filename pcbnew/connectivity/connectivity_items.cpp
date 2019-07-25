@@ -123,6 +123,9 @@ void CN_ITEM::RemoveInvalidRefs()
 
 CN_ITEM* CN_LIST::Add( D_PAD* pad )
  {
+    if( !pad->IsOnCopperLayer() )
+         return nullptr;
+
      auto item = new CN_ITEM( pad, false, 1 );
      item->AddAnchor( pad->ShapePos() );
      item->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
@@ -153,7 +156,7 @@ CN_ITEM* CN_LIST::Add( D_PAD* pad )
      m_items.push_back( item );
      SetDirty();
      return item;
- }
+}
 
  CN_ITEM* CN_LIST::Add( TRACK* track )
  {

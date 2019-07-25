@@ -2761,14 +2761,19 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
             if( ! pad->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
                 THROW_IO_ERROR(
                     wxString::Format( _( "Invalid net ID in\nfile: \"%s\"\nline: %d\noffset: %d" ),
-                                      GetChars( CurSource() ), CurLineNumber(), CurOffset() )
+                                      CurSource(), CurLineNumber(), CurOffset() )
                     );
+
             NeedSYMBOLorNUMBER();
-            if( m_board && FromUTF8() != m_board->FindNet( pad->GetNetCode() )->GetNetname() )
+
+            // Test validity of the netname in file for netcodes expected having a net name
+            if( m_board && pad->GetNetCode() > 0 &&
+                FromUTF8() != m_board->FindNet( pad->GetNetCode() )->GetNetname() )
                 THROW_IO_ERROR(
                     wxString::Format( _( "Invalid net ID in\nfile: \"%s\"\nline: %d\noffset: %d" ),
-                        GetChars( CurSource() ), CurLineNumber(), CurOffset() )
+                                      CurSource(), CurLineNumber(), CurOffset() )
                     );
+
             NeedRIGHT();
             break;
 

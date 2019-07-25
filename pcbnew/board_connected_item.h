@@ -102,12 +102,13 @@ public:
     }
 
     /**
-     * Function SetNetCode
-     * sets net using a net code.
+     * Sets net using a net code.
      * @param aNetCode is a net code for the new net. It has to exist in NETINFO_LIST held by BOARD.
      * @param aNoAssert if true, do not assert that the net exists.
      * Otherwise, item is assigned to the unconnected net.
      * @return true on success, false if the net did not exist
+     * Note also items (in fact pads) not on copper layers will have
+     * their net code always set to 0 (not connected)
      */
     bool SetNetCode( int aNetCode, bool aNoAssert=false );
 

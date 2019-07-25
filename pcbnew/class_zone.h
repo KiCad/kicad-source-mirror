@@ -130,7 +130,7 @@ public:
      * Function IsOnCopperLayer
      * @return true if this zone is on a copper layer, false if on a technical layer
      */
-    bool IsOnCopperLayer() const;
+    bool IsOnCopperLayer() const override;
 
     /**
      * Function CommonLayerExist

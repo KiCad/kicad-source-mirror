@@ -228,6 +228,14 @@ public:
 
     virtual void SwapData( BOARD_ITEM* aImage ) override;
 
+    /**
+     * @return true because a track or a via is always on a copper layer.
+     */
+    bool IsOnCopperLayer() const override
+    {
+        return true;
+    }
+
 #if defined (DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 

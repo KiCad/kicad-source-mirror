@@ -261,6 +261,16 @@ public:
         m_boundingRadius = -1;
     }
 
+    /**
+     * @return true if the pad is on any copper layer, false otherwise.
+     * pads can be only on tech layers to build special pads.
+     * they are therefore not always on a copper layer
+     */
+    bool IsOnCopperLayer() const override
+    {
+        return ( GetLayerSet() & LSET::AllCuMask() ) != 0;
+    }
+
     void SetY( int y )                          { m_Pos.y = y; }
     void SetX( int x )                          { m_Pos.x = x; }
 
