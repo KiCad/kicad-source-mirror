@@ -573,7 +573,7 @@ D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 {
     for( auto pad : m_pads )
     {
-        if( pad->GetName().CmpNoCase( aPadName ) == 0 )    // why case insensitive?
+        if( pad->GetName() == aPadName )
             return pad;
     }
 
