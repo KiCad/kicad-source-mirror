@@ -34,6 +34,7 @@
 %include <std_map.i>
 %include <std_shared_ptr.i>
 %include <std_set.i>
+%include <stdint.i>
 
 %include "ki_exception.i"   // affects all that follow it
 
