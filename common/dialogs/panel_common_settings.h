@@ -34,6 +34,7 @@ class PANEL_COMMON_SETTINGS : public PANEL_COMMON_SETTINGS_BASE
 {
 public:
     PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aParent );
+    ~PANEL_COMMON_SETTINGS() override;
 
 protected:
     bool TransferDataFromWindow() override;
@@ -48,7 +49,7 @@ protected:
     /**
      * Event fired when the canvas scale field is modified
      */
-    void OnCanvasScaleChange( wxCommandEvent& aEvent ) override;
+    void OnCanvasScaleChange( wxCommandEvent& aEvent );
 
     /**
      * Event fired when the canvas auto-scale option is changed

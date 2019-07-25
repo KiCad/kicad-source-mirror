@@ -189,7 +189,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         if( m_frame->ToolStackIsEmpty() )
             m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_ARROW );
 
-        bool dragAlwaysSelects = getEditFrame<PCB_BASE_FRAME>()->Settings().m_DragSelects;
+        bool dragAlwaysSelects = getEditFrame<PCB_BASE_FRAME>()->GetDragSelects();
         m_additive = m_subtractive = m_exclusive_or = false;
 
         if( evt->Modifier( MD_SHIFT ) && evt->Modifier( MD_CTRL ) )

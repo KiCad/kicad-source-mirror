@@ -32,6 +32,7 @@
 #include <tool/action_menu.h>
 #include <wx/log.h>
 #include <menus_helpers.h>
+#include <eda_base_frame.h>
 #include <id.h>
 
 
@@ -435,10 +436,21 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
     // clients that don't supply a tool will have to check GetSelected() themselves
     if( evt && m_tool )
     {
+        TOOL_MANAGER* toolMgr = m_tool->GetManager();
+
         if( g_last_menu_highlighted_id == aEvent.GetId() && !m_isContextMenu )
             evt->SetHasPosition( false );
 
-        //aEvent.StopPropagation();
+        if( toolMgr->GetEditFrame() && !toolMgr->GetEditFrame()->GetDoImmediateActions() )
+        {
+            // An tool-selection-event has no position
+            if( evt->GetCommandStr().is_initialized()
+                    && evt->GetCommandStr().get() != toolMgr->GetEditFrame()->CurrentToolName() )
+            {
+                evt->SetHasPosition( false );
+            }
+        }
+
         if( m_tool->GetManager() )
             m_tool->GetManager()->ProcessEvent( *evt );
     }

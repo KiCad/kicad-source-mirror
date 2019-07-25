@@ -114,28 +114,37 @@ class EDA_BASE_FRAME : public wxFrame, public KIWAY_HOLDER
     wxWindow* findQuasiModalDialog();
 
 protected:
-    FRAME_T         m_Ident;             // Id Type (pcb, schematic, library..)
+    FRAME_T         m_Ident;                // Id Type (pcb, schematic, library..)
     wxPoint         m_FramePos;
     wxSize          m_FrameSize;
 
-    wxString        m_AboutTitle;        // Name of program displayed in About.
+    wxString        m_AboutTitle;           // Name of program displayed in About.
 
     wxAuiManager    m_auimgr;
 
-    wxString        m_configName;        // prefix used to identify some params (frame size...) 
-                                         // and to name some config files (legacy hotkey files)
+    wxString        m_configName;           // Prefix used to identify some params (frame size...)
+                                            // and to name some config files (legacy hotkey files)
 
     TOOL_MANAGER*   m_toolManager;
     ACTIONS*        m_actions;
 
+    std::vector<std::string> m_toolStack;   // Stack of user-level "tools".  Not to be confused
+                                            // with TOOL_BASE-derived instances, many of which
+                                            // implement multiple user-level "tools".  The user-
+                                            // level "tools" are TOOL_ACTIONSs internally.
+
+    bool            m_immediateActions;     // Preference for immediate actions.  If false, the
+                                            // first invocation of a hotkey will just select the
+                                            // relevant tool.
+    bool            m_dragSelects;          // Prefer selection to dragging.
     bool            m_hasAutoSave;
     bool            m_autoSaveState;
-    int             m_autoSaveInterval;  // The auto save interval time in seconds.
+    int             m_autoSaveInterval;     // The auto save interval time in seconds.
     wxTimer*        m_autoSaveTimer;
 
-    wxString        m_perspective;       // wxAuiManager perspective.
+    wxString        m_perspective;          // wxAuiManager perspective.
 
-    wxString        m_mruPath;           // Most recently used path.
+    wxString        m_mruPath;              // Most recently used path.
 
     EDA_UNITS_T     m_userUnits;
 
@@ -212,20 +221,46 @@ public:
     TOOL_MANAGER* GetToolManager() const { return m_toolManager; }
 
     /**
+     * NB: the definition of "tool" is different at the user level.  The implementation uses
+     * a single TOOL_BASE derived class to implement several user "tools", such as rectangle
+     * and circle, or wire and bus.  So each user-level tool is actually a TOOL_ACTION.
+     */
+    virtual void PushTool( const std::string& actionName );
+    virtual void PopTool( const std::string& actionName );
+
+    bool ToolStackIsEmpty() { return m_toolStack.empty(); }
+
+    std::string CurrentToolName() const;
+    bool IsCurrentTool( const TOOL_ACTION& aAction ) const;
+
+    virtual void DisplayToolMsg( const wxString& msg ) {};
+
+    /**
+     * Indicates that hotkeys should perform an immediate action even if another tool is
+     * currently active.  If false, the first hotkey should select the relevant tool.
+     */
+    bool GetDoImmediateActions() const { return m_immediateActions; }
+
+    /**
+     * Indicates that a drag should draw a selection rectangle, even when started over an
+     * item.
+     */
+    bool GetDragSelects() const { return m_dragSelects; }
+
+    /**
      * Override the default process event handler to implement the auto save feature.
      *
-     * @warning If you override this function in a derived class, make sure you call
-     *          down to this or the auto save feature will be disabled.
+     * @warning If you override this function in a derived class, make sure you call down to
+     *          this or the auto save feature will be disabled.
      */
     bool ProcessEvent( wxEvent& aEvent ) override;
 
     /**
      * Capture the key event before it is sent to the GUI.
      *
-     * the basic frame does not capture this event.
-     * editor frames should override this event function to capture and filter
-     * these keys when they are used as hotkeys, and skip it if the key is not
-     * used as hotkey (otherwise the key events will be not sent to menus)
+     * The basic frame does not capture this event.  Editor frames should override this event
+     * function to capture and filter these keys when they are used as hotkeys, and skip it if
+     * the key is not used as hotkey (otherwise the key events will be not sent to menus).
      */
     virtual void OnCharHook( wxKeyEvent& event );
 
@@ -364,31 +399,28 @@ public:
     /**
      * Checks if \a aFileName can be written.
      * <p>
-     * The function performs a number of tests on \a aFileName to verify that it
-     * can be saved.  If \a aFileName defines a path with no file name, them the
-     * path is tested for user write permission.  If \a aFileName defines a file
-     * name that does not exist in the path, the path is tested for user write
-     * permission.  If \a aFileName defines a file that already exits, the file
-     * name is tested for user write permissions.
+     * The function performs a number of tests on \a aFileName to verify that it can be saved.
+     * If \a aFileName defines a path with no file name, them the path is tested for user write
+     * permission.  If \a aFileName defines a file name that does not exist in the path, the
+     * path is tested for user write permission.  If \a aFileName defines a file that already
+     * exits, the file name is tested for user write permissions.
      * </p>
-     *
-     * @note The file name path must be set or an assertion will be raised on debug
-     *       builds and return false on release builds.
+     * @note The file name path must be set or an assertion will be raised on debug builds and
+     *       return false on release builds.
      * @param aFileName The full path and/or file name of the file to test.
      * @return False if \a aFileName cannot be written.
      */
     bool IsWritable( const wxFileName& aFileName );
 
     /**
-     * Check if an auto save file exists for \a aFileName and takes the appropriate
-     * action depending on the user input.
+     * Check if an auto save file exists for \a aFileName and takes the appropriate action
+     * depending on the user input.
      * <p>
-     * If an auto save file exists for \a aFileName, the user is prompted if they wish
-     * to replace file \a aFileName with the auto saved file.  If the user chooses to
-     * replace the file, the backup file of \a aFileName is removed, \a aFileName is
-     * renamed to the backup file name, and the auto save file is renamed to \a aFileName.
-     * If user chooses to keep the existing version of \a aFileName, the auto save file
-     * is removed.
+     * If an auto save file exists for \a aFileName, the user is prompted if they wish to
+     * replace file \a aFileName with the auto saved file.  If the user chooses to replace the
+     * file, the backup file of \a aFileName is removed, \a aFileName is renamed to the backup
+     * file name, and the auto save file is renamed to \a aFileName.  If user chooses to keep
+     * the existing version of \a aFileName, the auto save file is removed.
      * </p>
      * @param aFileName A wxFileName object containing the file name to check.
      */

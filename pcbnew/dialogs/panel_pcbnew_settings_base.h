@@ -46,7 +46,6 @@ class PANEL_PCBNEW_SETTINGS_BASE : public wxPanel
 		wxRadioBox* m_UnitsSelection;
 		wxCheckBox* m_Segments_45_Only_Ctrl;
 		wxCheckBox* m_UseEditKeyForWidth;
-		wxCheckBox* m_dragSelects;
 		wxCheckBox* m_FlipLeftRight;
 		wxStaticText* m_staticTextRotationAngle;
 		wxTextCtrl* m_RotationAngle;

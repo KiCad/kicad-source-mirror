@@ -31,9 +31,6 @@
 #include <pgm_base.h>
 #include <id.h>
 
-#include <wx/graphics.h>
-
-
 static constexpr int dpi_scaling_precision = 1;
 static constexpr double dpi_scaling_increment = 0.5;
 
@@ -69,6 +66,14 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aP
 
     m_textEditorBtn->SetBitmap( KiBitmap( folder_xpm ) );
     m_pdfViewerBtn->SetBitmap( KiBitmap( folder_xpm ) );
+
+    m_canvasScaleCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnCanvasScaleChange ), NULL, this );
+}
+
+
+PANEL_COMMON_SETTINGS::~PANEL_COMMON_SETTINGS()
+{
+    m_canvasScaleCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnCanvasScaleChange ), NULL, this );
 }
 
 
@@ -127,6 +132,17 @@ bool PANEL_COMMON_SETTINGS::TransferDataToWindow()
     commonSettings->Read( ENBL_AUTO_PAN_KEY, &option );
     m_AutoPANOpt->SetValue( option );
 
+    if( !commonSettings->Read( PREFER_SELECT_TO_DRAG_KEY, &option ) )
+    {
+        // Legacy versions stored the property only for PCBNew, so see if we have it there
+        std::unique_ptr<wxConfigBase> pcbSettings = GetNewConfig( wxT( "pcbnew" ) );
+        pcbSettings->Read( "DragSelects", &option, true );
+    }
+    m_PreferSelectToDrag->SetValue( option );
+
+    commonSettings->Read( IMMEDIATE_ACTIONS_KEY, &option );
+    m_NonImmediateActions->SetValue( !option );
+
     m_textEditorPath->SetValue( Pgm().GetEditorName( false ) );
     m_defaultPDFViewer->SetValue( Pgm().UseSystemPdfBrowser() );
     m_otherPDFViewer->SetValue( !Pgm().UseSystemPdfBrowser() );
@@ -160,6 +176,8 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     commonSettings->Write( ENBL_ZOOM_NO_CENTER_KEY, !m_ZoomCenterOpt->GetValue() );
     commonSettings->Write( ENBL_MOUSEWHEEL_PAN_KEY, m_MousewheelPANOpt->GetValue() );
     commonSettings->Write( ENBL_AUTO_PAN_KEY, m_AutoPANOpt->GetValue() );
+    commonSettings->Write( PREFER_SELECT_TO_DRAG_KEY, m_PreferSelectToDrag->GetValue() );
+    commonSettings->Write( IMMEDIATE_ACTIONS_KEY, !m_NonImmediateActions->GetValue() );
 
     Pgm().SetEditorName( m_textEditorPath->GetValue() );
 

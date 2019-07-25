@@ -45,18 +45,10 @@ PANEL_MODEDIT_SETTINGS_BASE::PANEL_MODEDIT_SETTINGS_BASE( wxWindow* parent, wxWi
 	m_MagneticPads = new wxCheckBox( sbSizerEditOptions->GetStaticBox(), wxID_ANY, _("Magnetic pads"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerEditOptions->Add( m_MagneticPads, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	
-	sbSizerEditOptions->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
-	
 	m_Segments_45_Only_Ctrl = new wxCheckBox( sbSizerEditOptions->GetStaticBox(), wxID_SEGMENTS45, _("L&imit graphic lines to H, V and 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Segments_45_Only_Ctrl->SetToolTip( _("Force line segment directions to H, V or 45 degrees when drawing on technical layers.") );
 	
-	sbSizerEditOptions->Add( m_Segments_45_Only_Ctrl, 0, wxALL, 5 );
-	
-	m_dragSelects = new wxCheckBox( sbSizerEditOptions->GetStaticBox(), wxID_ANY, _("Prefer selection to dragging"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_dragSelects->SetToolTip( _("When enabled and nothing is selected, drag gesture will draw a selection box, even if there are items under the cursor that could be immediately dragged.") );
-	
-	sbSizerEditOptions->Add( m_dragSelects, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizerEditOptions->Add( m_Segments_45_Only_Ctrl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
 	bSizerColumns->Add( sbSizerEditOptions, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );

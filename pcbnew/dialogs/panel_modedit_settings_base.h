@@ -40,7 +40,6 @@ class PANEL_MODEDIT_SETTINGS_BASE : public wxPanel
 		wxRadioBox* m_UnitsSelection;
 		wxCheckBox* m_MagneticPads;
 		wxCheckBox* m_Segments_45_Only_Ctrl;
-		wxCheckBox* m_dragSelects;
 	
 	public:
 		

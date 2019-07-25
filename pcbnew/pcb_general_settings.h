@@ -50,8 +50,6 @@ public:
     bool m_Use45DegreeGraphicSegments;   // True to constraint graphic lines to horizontal,
                                          // vertical and 45º
     bool m_EditHotkeyChangesTrackWidth;
-    bool m_DragSelects;                  // True: Drag gesture always draws a selection box,
-                                         // False: Drag will select an item and move it
     bool m_FlipLeftRight;                // True: Flip footprints across Y axis
                                          // False: Flip footprints across X axis
 
