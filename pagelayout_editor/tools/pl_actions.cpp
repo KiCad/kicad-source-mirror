@@ -72,7 +72,7 @@ TOOL_ACTION PL_ACTIONS::appendImportedWorksheet( "plEditor.InteractiveEdit.appen
         _( "Append an existing page layout design file to current file" ),
         import_xpm, AF_ACTIVATE );
 
-TOOL_ACTION PL_ACTIONS::deleteItemCursor( "plEditor.InteractiveEdit.deleteTool",
+TOOL_ACTION PL_ACTIONS::deleteTool( "plEditor.InteractiveEdit.deleteTool",
         AS_GLOBAL, 0, "",
         _( "Delete Items" ), _( "Delete clicked items" ),
         delete_xpm, AF_ACTIVATE );

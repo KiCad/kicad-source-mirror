@@ -668,7 +668,8 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         if( reselect && module )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, module );
 
-        auto cleanup = [&] () {
+        auto cleanup = [&] ()
+        {
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
             commit.Revert();
             module = NULL;
@@ -927,6 +928,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
         }
     }
 
+    preview.Clear();
     delete target;
     view->Remove( &preview );
     controls->SetSnapping( false );

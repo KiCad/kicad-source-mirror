@@ -149,7 +149,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AddItem( ACTIONS::duplicate,                  EE_CONDITIONS::NotEmpty );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( EE_ACTIONS::deleteItemCursor,        EE_CONDITIONS::ShowAlways );
+    editMenu->AddItem( EE_ACTIONS::deleteTool,              EE_CONDITIONS::ShowAlways );
 
     editMenu->AddSeparator();
     editMenu->AddItem( ACTIONS::find,                       EE_CONDITIONS::ShowAlways );

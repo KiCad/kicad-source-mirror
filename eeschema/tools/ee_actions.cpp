@@ -472,7 +472,7 @@ TOOL_ACTION EE_ACTIONS::pinTable( "eeschema.InteractiveEdit.pinTable",
         _( "Pin Table..." ), _( "Displays pin table for bulk editing of pins" ),
         pin_table_xpm );
 
-TOOL_ACTION EE_ACTIONS::deleteItemCursor( "eeschema.InteractiveEdit.deleteTool",
+TOOL_ACTION EE_ACTIONS::deleteTool( "eeschema.InteractiveEdit.deleteTool",
         AS_GLOBAL, 0, "",
         _( "Delete Tool" ), _( "Delete clicked items" ),
         delete_xpm, AF_ACTIVATE );
@@ -513,7 +513,7 @@ TOOL_ACTION EE_ACTIONS::clearHighlight( "eeschema.EditorControl.clearHighlight",
 TOOL_ACTION EE_ACTIONS::updateNetHighlighting( "eeschema.EditorControl.updateNetHighlighting",
         AS_GLOBAL );
 
-TOOL_ACTION EE_ACTIONS::highlightNetCursor( "eeschema.EditorControl.highlightNetTool",
+TOOL_ACTION EE_ACTIONS::highlightNetTool( "eeschema.EditorControl.highlightNetTool",
         AS_GLOBAL, 0, "",
         _( "Highlight Nets" ), _( "Highlight wires and pins of a net" ),
         net_highlight_schematic_xpm, AF_ACTIVATE );

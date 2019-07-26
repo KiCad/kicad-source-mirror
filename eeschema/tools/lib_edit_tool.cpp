@@ -743,7 +743,7 @@ void LIB_EDIT_TOOL::setTransitions()
     Go( &LIB_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorX.MakeEvent() );
     Go( &LIB_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorY.MakeEvent() );
     Go( &LIB_EDIT_TOOL::DoDelete,           EE_ACTIONS::doDelete.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::DeleteItemCursor,   EE_ACTIONS::deleteItemCursor.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::DeleteItemCursor,   EE_ACTIONS::deleteTool.MakeEvent() );
 
     Go( &LIB_EDIT_TOOL::Properties,         EE_ACTIONS::properties.MakeEvent() );
     Go( &LIB_EDIT_TOOL::Properties,         EE_ACTIONS::symbolProperties.MakeEvent() );

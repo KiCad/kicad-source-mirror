@@ -548,7 +548,7 @@ TOOL_ACTION PCB_ACTIONS::placeModule( "pcbnew.EditorControl.placeModule",
 TOOL_ACTION PCB_ACTIONS::drillOrigin( "pcbnew.EditorControl.drillOrigin",
         AS_GLOBAL, 0, "",
         _( "Drill and Place Offset" ), _( "Place origin point for drill and place files" ),
-        pcb_offset_xpm );
+        pcb_offset_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::toggleLock( "pcbnew.EditorControl.toggleLock",
         AS_GLOBAL,
@@ -585,7 +585,7 @@ TOOL_ACTION PCB_ACTIONS::clearHighlight( "pcbnew.EditorControl.clearHighlight",
 TOOL_ACTION PCB_ACTIONS::highlightNetTool( "pcbnew.EditorControl.highlightNetTool",
         AS_GLOBAL, 0, "",
         _( "Highlight Nets" ), _( "Highlight all copper items of a net" ),
-        net_highlight_xpm );
+        net_highlight_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::highlightNetSelection( "pcbnew.EditorControl.highlightNetSelection",
         AS_GLOBAL,
@@ -609,7 +609,7 @@ TOOL_ACTION PCB_ACTIONS::showEeschema( "pcbnew.EditorControl.showEeschema",
 TOOL_ACTION PCB_ACTIONS::localRatsnestTool( "pcbnew.Control.localRatsnestTool",
         AS_GLOBAL, 0, "",
         _( "Highlight Ratsnest" ), _( "Show ratsnest of selected item(s)" ),
-        tool_ratsnest_xpm );
+        tool_ratsnest_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::hideDynamicRatsnest( "pcbnew.Control.hideDynamicRatsnest",
         AS_GLOBAL );
@@ -907,7 +907,7 @@ TOOL_ACTION PCB_ACTIONS::layerChanged( "pcbnew.Control.layerChanged",
 TOOL_ACTION PCB_ACTIONS::deleteTool( "pcbnew.Control.deleteTool",
         AS_GLOBAL, 0, "",
         _( "Delete Items Tool" ), _( "Click on items to delete them" ),
-        delete_xpm );
+        delete_xpm, AF_ACTIVATE );
 
 //Show board statistics tool
 TOOL_ACTION PCB_ACTIONS::boardStatistics( "pcbnew.InspectionTool.ShowStatisticsDialog", AS_GLOBAL,

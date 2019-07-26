@@ -114,7 +114,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
 
     // Set up toolbar
     m_drawToolBar->Add( ACTIONS::selectionTool,             ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::highlightNetCursor,     ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::highlightNetTool, ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_drawToolBar, this );
     m_drawToolBar->Add( EE_ACTIONS::placeSymbol,            ACTION_TOOLBAR::TOGGLE );
@@ -136,7 +136,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( EE_ACTIONS::drawLines,              ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeSchematicText,     ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeImage,             ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::deleteItemCursor,       ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::deleteTool,             ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->Realize();
 }
@@ -186,7 +186,7 @@ void SCH_EDIT_FRAME::SyncToolbars()
     m_optionsToolBar->Refresh();
 
     TOGGLE_TOOL( m_drawToolBar, ACTIONS::selectionTool );
-    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::highlightNetCursor );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::highlightNetTool );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeSymbol );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placePower );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawWire );
@@ -204,6 +204,6 @@ void SCH_EDIT_FRAME::SyncToolbars()
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawLines );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeSchematicText );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeImage );
-    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::deleteItemCursor );
+    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::deleteTool );
     m_drawToolBar->Refresh();
 }

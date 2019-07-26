@@ -135,7 +135,7 @@ void PL_EDITOR_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( PL_ACTIONS::appendImportedWorksheet, ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_drawToolBar, this );
-    m_drawToolBar->Add( PL_ACTIONS::deleteItemCursor,        ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PL_ACTIONS::deleteTool,              ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->Realize();
 }
@@ -161,7 +161,7 @@ void PL_EDITOR_FRAME::SyncToolbars()
     TOGGLE_TOOL( m_drawToolBar, PL_ACTIONS::drawRectangle );
     TOGGLE_TOOL( m_drawToolBar, PL_ACTIONS::placeText );
     TOGGLE_TOOL( m_drawToolBar, PL_ACTIONS::placeImage );
-    TOGGLE_TOOL( m_drawToolBar, PL_ACTIONS::deleteItemCursor );
+    TOGGLE_TOOL( m_drawToolBar, PL_ACTIONS::deleteTool );
 
     m_drawToolBar->Toggle( PL_ACTIONS::appendImportedWorksheet, false );  // Not really a tool
     m_drawToolBar->Refresh();

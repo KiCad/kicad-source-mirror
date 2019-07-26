@@ -93,7 +93,7 @@ public:
     static TOOL_ACTION placeSchematicText;
     static TOOL_ACTION drawLines;
     static TOOL_ACTION placeImage;
-    static TOOL_ACTION deleteItemCursor;
+    static TOOL_ACTION deleteTool;
     static TOOL_ACTION finishLineWireOrBus;
     static TOOL_ACTION finishWire;
     static TOOL_ACTION finishBus;
@@ -202,7 +202,7 @@ public:
     static TOOL_ACTION highlightNet;
     static TOOL_ACTION clearHighlight;
     static TOOL_ACTION updateNetHighlighting;
-    static TOOL_ACTION highlightNetCursor;
+    static TOOL_ACTION highlightNetTool;
 
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
     virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override 

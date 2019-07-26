@@ -500,7 +500,7 @@ void PL_EDIT_TOOL::setTransitions()
     Go( &PL_EDIT_TOOL::Main,                   PL_ACTIONS::move.MakeEvent() );
 
     Go( &PL_EDIT_TOOL::ImportWorksheetContent, PL_ACTIONS::appendImportedWorksheet.MakeEvent() );
-    Go( &PL_EDIT_TOOL::DeleteItemCursor,       PL_ACTIONS::deleteItemCursor.MakeEvent() );
+    Go( &PL_EDIT_TOOL::DeleteItemCursor,       PL_ACTIONS::deleteTool.MakeEvent() );
 
     Go( &PL_EDIT_TOOL::Undo,                   ACTIONS::undo.MakeEvent() );
     Go( &PL_EDIT_TOOL::Redo,                   ACTIONS::redo.MakeEvent() );
