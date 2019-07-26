@@ -106,13 +106,20 @@ public:
         case LIB_RECTANGLE_T:
         {
             LIB_RECTANGLE* rect = (LIB_RECTANGLE*) aItem;
-            wxPoint        topLeft = rect->GetPosition();
-            wxPoint        botRight = rect->GetEnd();
+            // point editor works only with rectangles having width and height > 0
+            // Some symbols can have rectangles with width or height < 0
+            // So normalize the size:
+            BOX2I dummy;
+            dummy.SetOrigin( mapCoords( rect->GetPosition() ) );
+            dummy.SetEnd( mapCoords( rect->GetEnd() ) );
+            dummy.Normalize();
+            VECTOR2I topLeft = dummy.GetPosition();
+            VECTOR2I botRight = dummy.GetEnd();
 
-            points->AddPoint( mapCoords( topLeft ) );
-            points->AddPoint( mapCoords( botRight.x, topLeft.y ) );
-            points->AddPoint( mapCoords( topLeft.x, botRight.y ) );
-            points->AddPoint( mapCoords( botRight ) );
+            points->AddPoint( topLeft );
+            points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
+            points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
+            points->AddPoint( botRight );
             break;
         }
         case SCH_SHEET_T:
@@ -471,7 +478,6 @@ void EE_POINT_EDITOR::updateItem() const
 
     case LIB_RECTANGLE_T:
     {
-        LIB_RECTANGLE* rect = (LIB_RECTANGLE*) item;
         VECTOR2I       topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
         VECTOR2I       topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
         VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
@@ -480,6 +486,7 @@ void EE_POINT_EDITOR::updateItem() const
         pinEditedCorner( getEditedPointIndex(), Mils2iu( 1 ), Mils2iu( 1 ),
                          topLeft, topRight, botLeft, botRight );
 
+        LIB_RECTANGLE* rect = (LIB_RECTANGLE*) item;
         rect->SetPosition( mapCoords( topLeft ) );
         rect->SetEnd( mapCoords( botRight ) );
         break;
@@ -640,13 +647,20 @@ void EE_POINT_EDITOR::updatePoints()
     case LIB_RECTANGLE_T:
     {
         LIB_RECTANGLE* rect = (LIB_RECTANGLE*) item;
-        wxPoint        topLeft = rect->GetPosition();
-        wxPoint        botRight = rect->GetEnd();
+        // point editor works only with rectangles having width and height > 0
+        // Some symbols can have rectangles with width or height < 0
+        // So normalize the size:
+        BOX2I dummy;
+        dummy.SetOrigin( mapCoords( rect->GetPosition() ) );
+        dummy.SetEnd( mapCoords( rect->GetEnd() ) );
+        dummy.Normalize();
+        VECTOR2I topLeft = dummy.GetPosition();
+        VECTOR2I botRight = dummy.GetEnd();
 
-        m_editPoints->Point( RECT_TOPLEFT ).SetPosition( mapCoords( topLeft ) );
-        m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( mapCoords( botRight.x, topLeft.y ) );
-        m_editPoints->Point( RECT_BOTLEFT ).SetPosition( mapCoords( topLeft.x, botRight.y ) );
-        m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( mapCoords( botRight ) );
+        m_editPoints->Point( RECT_TOPLEFT ).SetPosition( topLeft );
+        m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( VECTOR2I( botRight.x, topLeft.y ) );
+        m_editPoints->Point( RECT_BOTLEFT ).SetPosition( VECTOR2I( topLeft.x, botRight.y ) );
+        m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
         break;
     }
 
