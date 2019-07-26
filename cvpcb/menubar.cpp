@@ -53,6 +53,24 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     //-- Preferences menu -----------------------------------------------
     //
+    CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, tool );
+
+    auto enableUndoCondition = [ this ] ( const SELECTION& sel )
+    {
+        return m_undoList.size() > 0;
+    };
+    auto enableRedoCondition = [ this ] ( const SELECTION& sel )
+    {
+        return m_redoList.size() > 0;
+    };
+
+    editMenu->AddItem( ACTIONS::undo, enableUndoCondition );
+    editMenu->AddItem( ACTIONS::redo, enableRedoCondition );
+
+    editMenu->Resolve();
+
+    //-- Preferences menu -----------------------------------------------
+    //
     CONDITIONAL_MENU* prefsMenu = new CONDITIONAL_MENU( false, tool );
 
     prefsMenu->AddItem( ACTIONS::configurePaths,         SELECTION_CONDITIONS::ShowAlways );
@@ -72,6 +90,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     //-- Menubar -------------------------------------------------------------
     //
     menuBar->Append( fileMenu, _( "&File" ) );
+    menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( prefsMenu, _( "&Preferences" ) );
     AddStandardHelpMenu( menuBar );
 

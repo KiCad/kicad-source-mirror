@@ -60,7 +60,7 @@ public:
      *
      * @return the reversed association
      */
-    CVPCB_ASSOCIATION Reverse()
+    CVPCB_ASSOCIATION Reverse() const
     {
         return CVPCB_ASSOCIATION( m_componentIndex, m_oldFootprint, m_newFootprint );
     }

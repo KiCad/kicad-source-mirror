@@ -193,6 +193,7 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
     m_skipComponentSelect = true;
     error_msg.Empty();
 
+    bool firstAssoc = true;
     for( unsigned kk = 0;  kk < m_netlist.GetCount();  kk++ )
     {
         COMPONENT* component = m_netlist.GetComponent( kk );
@@ -232,7 +233,9 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
             // If the equivalence is unique, no ambiguity: use the association
             if( module && equ_is_unique )
             {
-                AssociateFootprint( CVPCB_ASSOCIATION( kk, equivItem.m_FootprintFPID ) );
+                AssociateFootprint( CVPCB_ASSOCIATION( kk, equivItem.m_FootprintFPID ),
+                        firstAssoc );
+                firstAssoc = false;
                 found = true;
                 break;
             }
@@ -270,7 +273,8 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
 
             if( found )
             {
-                AssociateFootprint( CVPCB_ASSOCIATION( kk, equivItem.m_FootprintFPID ) );
+                AssociateFootprint( CVPCB_ASSOCIATION( kk, equivItem.m_FootprintFPID ), firstAssoc );
+                firstAssoc = false;
                 break;
             }
         }
@@ -279,7 +283,8 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
             continue;
         else if( !fpid_candidate.IsEmpty() )
         {
-            AssociateFootprint( CVPCB_ASSOCIATION( kk, fpid_candidate ) );
+            AssociateFootprint( CVPCB_ASSOCIATION( kk, fpid_candidate ), firstAssoc );
+            firstAssoc = false;
             continue;
         }
 
@@ -291,7 +296,11 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching()
             const FOOTPRINT_INFO* module = m_FootprintsList->GetModuleInfo( component->GetFootprintFilters()[0] );
 
             if( module )
-                AssociateFootprint( CVPCB_ASSOCIATION( kk, component->GetFootprintFilters()[0] ) );
+            {
+                AssociateFootprint( CVPCB_ASSOCIATION( kk, component->GetFootprintFilters()[0] ),
+                        firstAssoc );
+                firstAssoc = false;
+            }
         }
     }
 

@@ -54,6 +54,8 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
     m_mainToolBar->Add( CVPCB_ACTIONS::gotoNextNA );
 
     KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->Add( ACTIONS::undo );
+    m_mainToolBar->Add( ACTIONS::redo );
     m_mainToolBar->Add( CVPCB_ACTIONS::autoAssociate );
     m_mainToolBar->Add( CVPCB_ACTIONS::deleteAll );
 
@@ -85,6 +87,9 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
 void CVPCB_MAINFRAME::SyncToolbars()
 {
 #define filterActive( filt ) ( m_filteringOptions & filt )
+
+    m_mainToolBar->Toggle( ACTIONS::undo, m_undoList.size() > 0 );
+    m_mainToolBar->Toggle( ACTIONS::redo, m_redoList.size() > 0 );
 
     m_mainToolBar->Toggle( CVPCB_ACTIONS::filterFPbyKeywords,
             filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_KEYWORD ) );

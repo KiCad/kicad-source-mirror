@@ -96,6 +96,22 @@ int CVPCB_CONTROL::ToggleFootprintFilter( const TOOL_EVENT& aEvent )
 }
 
 
+int CVPCB_CONTROL::Undo( const TOOL_EVENT& aEvent )
+{
+    m_frame->UndoAssociation();
+
+    return 0;
+}
+
+
+int CVPCB_CONTROL::Redo( const TOOL_EVENT& aEvent )
+{
+    m_frame->RedoAssociation();
+
+    return 0;
+}
+
+
 int CVPCB_CONTROL::Associate( const TOOL_EVENT& aEvent )
 {
     // Get the currently selected footprint
@@ -118,10 +134,12 @@ int CVPCB_CONTROL::Associate( const TOOL_EVENT& aEvent )
     // Get all the components that are selected and associate them with the current footprint
     std::vector<unsigned int> sel = m_frame->GetSelectedComponentIndices();
 
+    bool firstAssoc = true;
     for( auto i : sel )
     {
         CVPCB_ASSOCIATION newfp( i, fpid );
-        m_frame->AssociateFootprint( newfp );
+        m_frame->AssociateFootprint( newfp, firstAssoc );
+        firstAssoc = false;
     }
 
     return 0;
@@ -174,8 +192,27 @@ int CVPCB_CONTROL::ToPreviousNA( const TOOL_EVENT& aEvent )
 }
 
 
+int CVPCB_CONTROL::UpdateMenu( const TOOL_EVENT& aEvent )
+{
+    ACTION_MENU*      actionMenu = aEvent.Parameter<ACTION_MENU*>();
+    CONDITIONAL_MENU* conditionalMenu = dynamic_cast<CONDITIONAL_MENU*>( actionMenu );
+    SELECTION         dummySel;
+
+    if( conditionalMenu )
+        conditionalMenu->Evaluate( dummySel );
+
+    if( actionMenu )
+        actionMenu->UpdateAll();
+
+    return 0;
+}
+
+
 void CVPCB_CONTROL::setTransitions()
 {
+    // Update the menu
+    Go( &CVPCB_CONTROL::UpdateMenu,            ACTIONS::updateMenu.MakeEvent() );
+
     // Run the footprint viewer
     Go( &CVPCB_CONTROL::ShowFootprintViewer,   CVPCB_ACTIONS::showFootprintViewer.MakeEvent() );
 
@@ -189,6 +226,8 @@ void CVPCB_CONTROL::setTransitions()
     Go( &CVPCB_CONTROL::ToPreviousNA,          CVPCB_ACTIONS::gotoPreviousNA.MakeEvent() );
 
     // Footprint association actions
+    Go( &CVPCB_CONTROL::Undo,                  ACTIONS::undo.MakeEvent() );
+    Go( &CVPCB_CONTROL::Redo,                  ACTIONS::redo.MakeEvent() );
     Go( &CVPCB_CONTROL::Associate,             CVPCB_ACTIONS::associate.MakeEvent() );
     Go( &CVPCB_CONTROL::AutoAssociate,         CVPCB_ACTIONS::autoAssociate.MakeEvent() );
 

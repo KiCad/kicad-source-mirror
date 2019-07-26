@@ -404,7 +404,47 @@ void CVPCB_MAINFRAME::OnQuit( wxCommandEvent& event )
 }
 
 
-void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation )
+void CVPCB_MAINFRAME::UndoAssociation()
+{
+    if( m_undoList.size() == 0 )
+        return;
+
+    CVPCB_UNDO_REDO_ENTRIES redoEntries;
+    CVPCB_UNDO_REDO_ENTRIES curEntry = m_undoList.back();
+    m_undoList.pop_back();
+
+    // Iterate over the entries to undo
+    for( auto assoc : curEntry )
+    {
+        AssociateFootprint( assoc, true, false );
+        redoEntries.emplace_back( assoc.Reverse() );
+    }
+
+    // Add the redo entries to the redo stack
+    m_redoList.emplace_back( redoEntries );
+}
+
+
+void CVPCB_MAINFRAME::RedoAssociation()
+{
+    if( m_redoList.size() == 0 )
+        return;
+
+    CVPCB_UNDO_REDO_ENTRIES curEntry = m_redoList.back();
+    m_redoList.pop_back();
+
+    // Iterate over the entries to undo
+    bool firstAssoc = true;
+    for( auto assoc : curEntry )
+    {
+        AssociateFootprint( assoc, firstAssoc );
+        firstAssoc = false;
+    }
+}
+
+
+void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation,
+                                          bool aNewEntry, bool aAddUndoItem )
 {
     // Ensure there is data to work with
     COMPONENT* component;
@@ -417,7 +457,8 @@ void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation 
     if( component == NULL )
         return;
 
-    LIB_ID fpid = aAssociation.GetNewFootprint();
+    LIB_ID fpid    = aAssociation.GetNewFootprint();
+    LIB_ID oldFpid = component->GetFPID();
 
     // Test for validity of the requested footprint
     if( !fpid.empty() && !fpid.IsValid() )
@@ -442,6 +483,26 @@ void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation 
     // Update the statusbar and refresh the list
     DisplayStatus();
     m_compListBox->Refresh();
+
+    if( !aAddUndoItem )
+        return;
+
+    // Update the undo list
+    if ( aNewEntry )
+    {
+        // Create a new entry for this association
+        CVPCB_UNDO_REDO_ENTRIES newEntry;
+        newEntry.emplace_back(  CVPCB_ASSOCIATION( aAssociation.GetComponentIndex(), oldFpid,
+                aAssociation.GetNewFootprint() ) );
+        m_undoList.emplace_back( newEntry );
+
+        // Clear the redo list
+        m_redoList.clear();
+    }
+    else
+        m_undoList.back().emplace_back( CVPCB_ASSOCIATION( aAssociation.GetComponentIndex(),
+                oldFpid, aAssociation.GetNewFootprint() ) );
+
 }
 
 
@@ -454,9 +515,11 @@ void CVPCB_MAINFRAME::DeleteAll()
         // Remove all selections to avoid issues when setting the fpids
         m_compListBox->DeselectAll();
 
+        bool firstAssoc = true;
         for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
         {
-            AssociateFootprint( CVPCB_ASSOCIATION( i, LIB_ID() ) );
+            AssociateFootprint( CVPCB_ASSOCIATION( i, LIB_ID() ), firstAssoc );
+            firstAssoc = false;
         }
 
         // Remove all selections after setting the fpids

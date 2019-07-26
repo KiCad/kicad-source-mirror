@@ -46,6 +46,12 @@ class FP_LIB_TABLE;
 
 namespace CV { struct IFACE; }
 
+// The undo/redo list is composed of vectors of associations
+typedef std::vector< CVPCB_ASSOCIATION >       CVPCB_UNDO_REDO_ENTRIES;
+
+// The undo list is a vector of undo entries
+typedef std::vector< CVPCB_UNDO_REDO_ENTRIES > CVPCB_UNDO_REDO_LIST;
+
 /**
  * The CvPcb application main window.
  */
@@ -170,12 +176,30 @@ public:
      */
     void             OnEnterFilteringText( wxCommandEvent& event );
 
+
+    /**
+     * Undo the most recent associations that were performed.
+     */
+    void UndoAssociation();
+
+    /**
+     * Redo the most recently undone association
+     */
+    void RedoAssociation();
+
     /**
      * Associate a footprint with a specific component in the list.
      *
+     * Associations can be chained into a single undo/redo step by setting aNewEntry to false
+     * for every association other than the first one. This will create a new list entry for
+     * the first association, and add the subsequent associations to that list.
+     *
      * @param aAssociation is the association to perform
+     * @param aNewEntry specifies if this association should be a new entry in the undo list
+     * @param aAddUndoItem specifies if an undo item should be created for this association
      */
-    void AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation );
+    void AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation, bool aNewEntry = true,
+            bool aAddUndoItem = true );
 
     void             BuildCmpListBox();
     void             BuildFOOTPRINTS_LISTBOX();
@@ -317,6 +341,10 @@ private:
     // Context menus for the list boxes
     ACTION_MENU* m_footprintContextMenu;
     ACTION_MENU* m_componentContextMenu;
+
+    // Undo/Redo item lists
+    CVPCB_UNDO_REDO_LIST    m_undoList;
+    CVPCB_UNDO_REDO_LIST    m_redoList;
 
     DECLARE_EVENT_TABLE()
 };
