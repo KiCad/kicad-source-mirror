@@ -1016,6 +1016,33 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
 void SCH_EDIT_TOOL::editComponentFieldText( SCH_FIELD* aField )
 {
+#ifdef  __WXMAC__
+    // This dialog, like no other that we currently know of, sometimes provokes Apple's
+    // "[NSAlert runModal] may not be invoked inside of transaction begin/commit pair"
+    // bug.  See: https://bugs.launchpad.net/kicad/+bug/1837225
+    //
+    // Note: this bug occurs irrespecitve of whether the dialog is a modal or quasi-modal.
+
+    static bool g_initialized = false;
+    static bool g_idleSeen = false;
+
+    if( !g_initialized )
+    {
+        g_initialized = true;
+        m_frame->Bind( wxEVT_IDLE, [&] ( wxIdleEvent& aEvent ) { g_idleSeen = true; } );
+    }
+
+    g_idleSeen = false;
+    while (!g_idleSeen )
+        wxSafeYield();
+
+    // The above should work around the bug, but it doesn't.  Doing it again cures most
+    // instances, but I'm not yet sure whether or not it cures all.
+    g_idleSeen = false;
+    while (!g_idleSeen )
+        wxSafeYield();
+#endif
+
     SCH_COMPONENT* component = (SCH_COMPONENT*) aField->GetParent();
 
     // Save old component in undo list if not already in edit, or moving.
@@ -1025,17 +1052,6 @@ void SCH_EDIT_TOOL::editComponentFieldText( SCH_FIELD* aField )
     wxString title = wxString::Format( _( "Edit %s Field" ), aField->GetName() );
 
     DIALOG_SCH_EDIT_ONE_FIELD dlg( m_frame, title, aField );
-
-#ifdef  __WXMAC__
-    // This dialog, like no other that we currently know of, sometimes provokes Apple's
-    // "[NSAlert runModal] may not be invoked inside of transaction begin/commit pair"
-    // bug, and these seem to prevent it.  Don't ask.
-    // Note: this doesn't seem to have anything to do with it being a quasi-modal: the
-    // bug happens even if it's changed to a normal modal.
-    wxSafeYield();  // Apple: strike 1
-    wxSafeYield();  // Apple: strike 2
-    wxSafeYield();  // Apple: strike 3; you're out
-#endif
 
     // The footprint field dialog can invoke a KIWAY_PLAYER so we must use a quasi-modal
     if( dlg.ShowQuasiModal() != wxID_OK )
