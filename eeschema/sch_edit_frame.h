@@ -126,11 +126,8 @@ private:
     bool                    m_autoplaceAlign;     ///< align autoplaced fields to the grid
     bool                    m_footprintPreview;   ///< whether to show footprint previews
 
-    wxFindReplaceData*      m_findReplaceData;
     DIALOG_SCH_FIND*        m_findReplaceDialog;
     STATUS_TEXT_POPUP*      m_findReplaceStatusPopup;
-    wxArrayString           m_findStringHistoryList;
-    wxArrayString           m_replaceStringHistoryList;
 
     /// Flag to indicate show hidden pins.
     bool        m_showAllPins;

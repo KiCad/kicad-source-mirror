@@ -245,7 +245,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
     m_AboutTitle = "Eeschema";
 
-    m_findReplaceData = new wxFindReplaceData( wxFR_DOWN );
     m_findReplaceDialog = nullptr;
     m_findReplaceStatusPopup = nullptr;
 
@@ -313,7 +312,6 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
     delete g_CurrentSheet;          // a SCH_SHEET_PATH, on the heap.
     delete g_ConnectionGraph;
     delete m_undoItem;
-    delete m_findReplaceData;
     delete g_RootSheet;
 
     g_CurrentSheet = nullptr;

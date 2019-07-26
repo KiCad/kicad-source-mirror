@@ -74,6 +74,11 @@ public:
         return aItem && PCB_MODULE_TEXT_T == aItem->Type();
     }
 
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override
+    {
+        return BOARD_ITEM::Matches( GetShownText(), aSearchData );
+    }
+
     virtual const wxPoint GetPosition() const override
     {
         return EDA_TEXT::GetTextPos();

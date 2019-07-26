@@ -24,7 +24,6 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
 #include <confirm.h>
 #include <kicad_string.h>
 #include <pcb_edit_frame.h>
@@ -33,42 +32,44 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_marker_pcb.h>
+#include <class_text_mod.h>
+#include <class_pcb_text.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <dialog_find.h>
+#include <wx/fdrepdlg.h>
 
 
-// Initialize static member variables
-wxString DIALOG_FIND::prevSearchString;
-bool DIALOG_FIND::warpMouse = true;
-
-
-DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aParent ) : DIALOG_FIND_BASE( aParent )
+DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aFrame ) :
+        DIALOG_FIND_BASE( aFrame )
 {
-    parent = aParent;
-    foundItem = NULL;
+    m_frame = aFrame;
+    m_foundItem = NULL;
     GetSizer()->SetSizeHints( this );
 
-    m_SearchTextCtrl->AppendText( prevSearchString );
-    m_NoMouseWarpCheckBox->SetValue( !warpMouse );
+    m_SearchCombo->Append( m_frame->GetFindHistoryList() );
 
-    itemCount = markerCount = 0;
+    if( m_SearchCombo->GetCount() )
+    {
+        m_SearchCombo->SetSelection( 0 );
+        m_SearchCombo->SelectAll();
+    }
+
+    m_matchCase->SetValue( ( m_frame->GetFindReplaceData().GetFlags() & wxFR_MATCHCASE ) > 0 );
+    m_matchWords->SetValue( ( m_frame->GetFindReplaceData().GetFlags() & wxFR_WHOLEWORD ) > 0 );
+    m_wildcards->SetValue( ( m_frame->GetFindReplaceData().GetFlags() & FR_MATCH_WILDCARD ) > 0 );
+
+    m_itemCount = m_markerCount = 0;
+
+    SetInitialFocus( m_SearchCombo );
 
     Center();
 }
 
 
-void DIALOG_FIND::OnInitDialog( wxInitDialogEvent& event )
+void DIALOG_FIND::OnTextEnter( wxCommandEvent& aEvent )
 {
-    m_SearchTextCtrl->SetFocus();
-    m_SearchTextCtrl->SetSelection( -1, -1 );
-}
-
-
-void DIALOG_FIND::EnableWarp( bool aEnabled )
-{
-    m_NoMouseWarpCheckBox->SetValue( !aEnabled );
-    warpMouse = aEnabled;
+    onButtonFindItemClick( aEvent );
 }
 
 
@@ -80,117 +81,159 @@ void DIALOG_FIND::onButtonCloseClick( wxCommandEvent& aEvent )
 
 void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
 {
-    PCB_SCREEN* screen = parent->GetScreen();
-    wxPoint     pos;
+    PCB_SCREEN* screen = m_frame->GetScreen();
+    int         flags = 0;
+    wxString    msg;
 
+    if( m_matchCase->GetValue() )
+        flags |= wxFR_MATCHCASE;
 
-    parent->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
-    wxString searchString = m_SearchTextCtrl->GetValue();
+    if( m_matchWords->GetValue() )
+        flags |= wxFR_WHOLEWORD;
 
-    if( !searchString.IsSameAs( prevSearchString, false ) )
+    if( m_wildcards->GetValue() )
+        flags |= FR_MATCH_WILDCARD;
+
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+    wxString searchString = m_SearchCombo->GetValue();
+    wxString last;
+
+    if( !m_frame->GetFindHistoryList().empty() )
+        last = m_frame->GetFindHistoryList().back();
+
+    if( !searchString.IsSameAs( last, false ) )
     {
-        itemCount = 0;
-        foundItem = NULL;
+        m_itemCount = 0;
+        m_foundItem = NULL;
+        m_frame->GetFindHistoryList().push_back( searchString );
     }
 
-    prevSearchString = searchString;
+    m_frame->GetFindReplaceData().SetFindString( searchString );
+    m_frame->GetFindReplaceData().SetFlags( flags );
 
-    parent->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
+    m_frame->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
 
     int count = 0;
 
-    for( auto module : parent->GetBoard()->Modules() )
+    for( MODULE* module : m_frame->GetBoard()->Modules() )
     {
-        if( WildCompareString( searchString, module->GetReference().GetData(), false ) )
+        if( module->Reference().Matches( m_frame->GetFindReplaceData(), nullptr )
+            || module->Value().Matches( m_frame->GetFindReplaceData(), nullptr ) )
         {
             count++;
 
-            if( count > itemCount )
+            if( count > m_itemCount )
             {
-                foundItem = module;
-                pos = module->GetPosition();
-                itemCount++;
+                m_foundItem = module;
+                m_itemCount++;
                 break;
             }
         }
 
-        if( WildCompareString( searchString, module->GetValue().GetData(), false ) )
+        for( BOARD_ITEM* item : module->GraphicalItems() )
+        {
+            TEXTE_MODULE* textItem = dynamic_cast<TEXTE_MODULE*>( item );
+
+            if( textItem && textItem->Matches( m_frame->GetFindReplaceData(), nullptr ) )
+            {
+                count++;
+
+                if( count > m_itemCount )
+                {
+                    m_foundItem = module;
+                    m_itemCount++;
+                    break;
+                }
+            }
+        }
+    }
+
+    for( BOARD_ITEM* item : m_frame->GetBoard()->Drawings() )
+    {
+        TEXTE_PCB* textItem = dynamic_cast<TEXTE_PCB*>( item );
+
+        if( textItem && textItem->Matches( m_frame->GetFindReplaceData(), nullptr ) )
         {
             count++;
 
-            if( count > itemCount )
+            if( count > m_itemCount )
             {
-                foundItem = module;
-                pos = module->GetPosition();
-                itemCount++;
+                m_foundItem = textItem;
+                m_itemCount++;
                 break;
             }
         }
     }
 
-    wxString msg;
-
-    if( foundItem )
+    if( m_foundItem )
     {
-        parent->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, foundItem );
-        parent->FocusOnLocation( pos, true );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, m_foundItem );
+        m_frame->FocusOnLocation( m_foundItem->GetPosition(), true );
         msg.Printf( _( "\"%s\" found" ), GetChars( searchString ) );
-        parent->SetStatusText( msg );
+        m_frame->SetStatusText( msg );
     }
     else
     {
-        parent->SetStatusText( wxEmptyString );
+        m_frame->SetStatusText( wxEmptyString );
         msg.Printf( _( "\"%s\" not found" ), GetChars( searchString ) );
         DisplayError( this, msg, 10 );
-        itemCount = 0;
+        m_itemCount = 0;
     }
 
-    if( callback )
-        callback( foundItem );
+    if( m_highlightCallback )
+        m_highlightCallback( m_foundItem );
 }
 
 
 void DIALOG_FIND::onButtonFindMarkerClick( wxCommandEvent& aEvent )
 {
-    PCB_SCREEN* screen = parent->GetScreen();
-    wxPoint     pos;
-    foundItem = NULL;
+    PCB_SCREEN* screen = m_frame->GetScreen();
+    wxString    msg;
 
-    parent->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
-    parent->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
+    m_foundItem = nullptr;
 
-    MARKER_PCB* marker = parent->GetBoard()->GetMARKER( markerCount++ );
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_frame->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
+
+    MARKER_PCB* marker = m_frame->GetBoard()->GetMARKER( m_markerCount++ );
 
     if( marker )
-    {
-        foundItem = marker;
-        pos = marker->GetPosition();
-    }
+        m_foundItem = marker;
 
-    wxString msg;
-    if( foundItem )
+    if( m_foundItem )
     {
-        parent->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, foundItem );
-        parent->FocusOnLocation( pos );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, m_foundItem );
+        m_frame->FocusOnLocation( m_foundItem->GetPosition() );
         msg = _( "Marker found" );
-        parent->SetStatusText( msg );
+        m_frame->SetStatusText( msg );
     }
     else
     {
-        parent->SetStatusText( wxEmptyString );
+        m_frame->SetStatusText( wxEmptyString );
         msg = _( "No marker found" );
         DisplayError( this, msg, 10 );
-        markerCount = 0;
+        m_markerCount = 0;
     }
 
-    if( callback )
-        callback( foundItem );
+    if( m_highlightCallback )
+        m_highlightCallback( m_foundItem );
 }
 
 
 void DIALOG_FIND::onClose( wxCloseEvent& aEvent )
 {
-    warpMouse = !m_NoMouseWarpCheckBox->IsChecked();
+    int flags = 0;
+
+    if( m_matchCase->GetValue() )
+        flags |= wxFR_MATCHCASE;
+
+    if( m_matchWords->GetValue() )
+        flags |= wxFR_WHOLEWORD;
+
+    if( m_wildcards->GetValue() )
+        flags |= FR_MATCH_WILDCARD;
+
+    m_frame->GetFindReplaceData().SetFlags( flags );
 
     EndModal( 1 );
 }

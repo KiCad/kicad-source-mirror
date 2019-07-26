@@ -24,7 +24,6 @@
 
 #include <dialog_schematic_find.h>
 #include <tool/actions.h>
-#include <tool/tool_manager.h>
 #include <sch_edit_frame.h>
 #include <tools/sch_editor_control.h>
 

@@ -32,6 +32,7 @@
 #include <gal/gal_display_options.h>
 #include <gal/color4d.h>
 #include <class_draw_panel_gal.h>
+#include <wx/fdrepdlg.h>
 #include "hotkeys_basic.h"
 
 class wxSingleInstanceChecker;
@@ -93,36 +94,40 @@ protected:
 
     std::unique_ptr<wxSingleInstanceChecker> m_file_checker;    ///< prevents opening same file multiple times.
 
-    int              m_LastGridSizeId;      // The command id offset (>= 0) of the last selected
+    int                m_LastGridSizeId;    // The command id offset (>= 0) of the last selected
                                             // grid 0 is for the grid corresponding to a
                                             // wxCommand ID = ID_POPUP_GRID_LEVEL_1000.
-    bool             m_drawGrid;            // Hide/Show grid
-    bool             m_showPageLimits;      // True to display the page limits
-    COLOR4D          m_gridColor;           // Grid color
-    COLOR4D          m_drawBgColor;         // The background color of the draw canvas; BLACK for
+    bool               m_drawGrid;          // Hide/Show grid
+    bool               m_showPageLimits;    // True to display the page limits
+    COLOR4D            m_gridColor;         // Grid color
+    COLOR4D            m_drawBgColor;       // The background color of the draw canvas; BLACK for
                                             // Pcbnew, BLACK or WHITE for eeschema
-    double           m_zoomLevelCoeff;      // A suitable value to convert the internal zoom
+    double             m_zoomLevelCoeff;    // A suitable value to convert the internal zoom
                                             // scaling factor to a zoom level value which rougly
                                             // gives 1.0 when the board/schematic is at scale = 1
-    int              m_UndoRedoCountMax;    // Default Undo/Redo command Max depth, to be handed
+    int                m_UndoRedoCountMax;  // Default Undo/Redo command Max depth, to be handed
                                             // to screens
-    bool             m_PolarCoords;         // For those frames that support polar coordinates
+    bool               m_PolarCoords;       // For those frames that support polar coordinates
 
-    TOOL_DISPATCHER* m_toolDispatcher;
+    TOOL_DISPATCHER*   m_toolDispatcher;
 
-    bool             m_showBorderAndTitleBlock;   /// Show the worksheet (border and title block).
-    long             m_firstRunDialogSetting;     /// Show first run dialog on startup
+    bool               m_showBorderAndTitleBlock;  // Show the worksheet (border and title block).
+    long               m_firstRunDialogSetting;    // Show first run dialog on startup
 
-    wxChoice*        m_gridSelectBox;
-    wxChoice*        m_zoomSelectBox;
+    wxChoice*          m_gridSelectBox;
+    wxChoice*          m_zoomSelectBox;
 
-    ACTION_TOOLBAR*  m_mainToolBar;
-    ACTION_TOOLBAR*  m_auxiliaryToolBar;    // Additional tools under main toolbar
-    ACTION_TOOLBAR*  m_drawToolBar;         // Drawing tools (typically on right edge of window)
-    ACTION_TOOLBAR*  m_optionsToolBar;      // Options (typically on left edge of window)
+    ACTION_TOOLBAR*    m_mainToolBar;
+    ACTION_TOOLBAR*    m_auxiliaryToolBar;  // Additional tools under main toolbar
+    ACTION_TOOLBAR*    m_drawToolBar;       // Drawing tools (typically on right edge of window)
+    ACTION_TOOLBAR*    m_optionsToolBar;    // Options (typically on left edge of window)
 
-    EDA_MSG_PANEL*   m_messagePanel;
-    int              m_MsgFrameHeight;
+    wxFindReplaceData* m_findReplaceData;
+    wxArrayString      m_findStringHistoryList;
+    wxArrayString      m_replaceStringHistoryList;
+
+    EDA_MSG_PANEL*     m_messagePanel;
+    int                m_MsgFrameHeight;
 
     /// The current canvas type
     EDA_DRAW_PANEL_GAL::GAL_TYPE    m_canvasType;
@@ -188,6 +193,9 @@ public:
      * Release the current file marked in use.  See m_file_checker.
      */
     void ReleaseFile();
+
+    wxFindReplaceData& GetFindReplaceData() { return *m_findReplaceData; }
+    wxArrayString& GetFindHistoryList() { return m_findStringHistoryList; }
 
     virtual void SetPageSettings( const PAGE_INFO& aPageSettings ) = 0;
     virtual const PAGE_INFO& GetPageSettings() const = 0;

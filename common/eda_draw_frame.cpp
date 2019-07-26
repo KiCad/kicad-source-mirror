@@ -42,7 +42,6 @@
 #include <tool/action_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/actions.h>
-#include <wx/clipbrd.h>
 #include <ws_draw_item.h>
 #include <page_info.h>
 #include <title_block.h>
@@ -55,9 +54,16 @@
 
 ///@{
 /// \ingroup config
-static const wxString FirstRunShownKeyword( wxT( "FirstRunShown" ) );
+static const wxChar FirstRunShownKeyword[] =        wxT( "FirstRunShown" );
 
+static const wxChar FindReplaceFlagsEntry[] =       wxT( "LastFindReplaceFlags" );
+static const wxChar FindStringEntry[] =             wxT( "LastFindString" );
+static const wxChar ReplaceStringEntry[] =          wxT( "LastReplaceString" );
+static const wxChar FindStringHistoryEntry[] =      wxT( "FindStringHistoryList%d" );
+static const wxChar ReplaceStringHistoryEntry[] =   wxT( "ReplaceStringHistoryList%d" );
 ///@}
+
+#define FR_HISTORY_LIST_CNT     10   ///< Maximum size of the find/replace history stacks.
 
 /**
  * Integer to set the maximum number of undo items on the stack. If zero,
@@ -90,7 +96,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_UndoRedoCountMax    = DEFAULT_MAX_UNDO_ITEMS;
 
     m_canvasType          = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    m_canvas           = NULL;
+    m_canvas              = NULL;
     m_toolDispatcher      = NULL;
     m_messagePanel        = NULL;
     m_currentScreen       = NULL;
@@ -105,6 +111,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_zoomLevelCoeff      = 1.0;
     m_userUnits           = MILLIMETRES;
     m_PolarCoords         = false;
+    m_findReplaceData     = new wxFindReplaceData( wxFR_DOWN );
 
     m_auimgr.SetFlags(wxAUI_MGR_DEFAULT);
 
@@ -174,6 +181,8 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 
     delete m_currentScreen;
     m_currentScreen = NULL;
+
+    delete m_findReplaceData;
 
     m_auimgr.UnInit();
 
@@ -474,6 +483,30 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( baseCfgName + FirstRunShownKeyword, &m_firstRunDialogSetting, 0L );
 
     m_galDisplayOptions.ReadConfig( *cmnCfg, *aCfg, baseCfgName, this );
+
+    long tmp;
+    aCfg->Read( FindReplaceFlagsEntry, &tmp, (long) wxFR_DOWN );
+    m_findReplaceData->SetFlags( (wxUint32) tmp & ~FR_REPLACE_ITEM_FOUND );
+    m_findReplaceData->SetFindString( aCfg->Read( FindStringEntry, wxEmptyString ) );
+    m_findReplaceData->SetReplaceString( aCfg->Read( ReplaceStringEntry, wxEmptyString ) );
+
+    // Load the find and replace string history list.
+    for( int i = 0; i < FR_HISTORY_LIST_CNT; ++i )
+    {
+        wxString tmpHistory;
+        wxString entry;
+        entry.Printf( FindStringHistoryEntry, i );
+        tmpHistory = aCfg->Read( entry, wxEmptyString );
+
+        if( !tmpHistory.IsEmpty() )
+            m_findStringHistoryList.Add( tmpHistory );
+
+        entry.Printf( ReplaceStringHistoryEntry, i );
+        tmpHistory = aCfg->Read( entry, wxEmptyString );
+
+        if( !tmpHistory.IsEmpty() )
+            m_replaceStringHistoryList.Add( tmpHistory );
+    }
 }
 
 
@@ -492,6 +525,28 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
         aCfg->Write( baseCfgName + MaxUndoItemsEntry, long( GetScreen()->GetMaxUndoItems() ) );
 
     m_galDisplayOptions.WriteConfig( *aCfg, baseCfgName );
+
+    // Save find dialog session setting.
+    aCfg->Write( FindReplaceFlagsEntry, (long) m_findReplaceData->GetFlags() );
+    aCfg->Write( FindStringEntry, m_findReplaceData->GetFindString() );
+    aCfg->Write( ReplaceStringEntry, m_findReplaceData->GetReplaceString() );
+
+    // Save the find and replace string history list.
+    unsigned i;
+    wxString tmpHistory;
+    wxString entry;     // invoke constructor outside of any loops
+
+    for( i = 0; i < m_findStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
+    {
+        entry.Printf( FindStringHistoryEntry, i );
+        aCfg->Write( entry, m_findStringHistoryList[ i ] );
+    }
+
+    for( i = 0; i < m_replaceStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
+    {
+        entry.Printf( ReplaceStringHistoryEntry, i );
+        aCfg->Write( entry, m_replaceStringHistoryList[ i ] );
+    }
 }
 
 

@@ -33,21 +33,24 @@ class DIALOG_FIND : public DIALOG_FIND_BASE
 {
 public:
     DIALOG_FIND( PCB_BASE_FRAME* aParent );
-    void OnInitDialog( wxInitDialogEvent& event ) override;
-    inline BOARD_ITEM* GetItem() const { return foundItem; }
-    void EnableWarp( bool aEnabled );
-    void SetCallback( boost::function<void (BOARD_ITEM*)> aCallback ) { callback = aCallback; }
+
+    inline BOARD_ITEM* GetItem() const { return m_foundItem; }
+
+    void SetCallback( boost::function<void (BOARD_ITEM*)> aCallback )
+    {
+        m_highlightCallback = aCallback;
+    }
+
+    void OnTextEnter( wxCommandEvent& event ) override;
 
 private:
-    PCB_BASE_FRAME* parent;
+    PCB_BASE_FRAME* m_frame;
 
-    int itemCount, markerCount;
-    static wxString prevSearchString;
-    static bool warpMouse;
-    BOARD_ITEM* foundItem;
+    int             m_itemCount;
+    int             m_markerCount;
+    BOARD_ITEM*     m_foundItem;
 
-    // Function called when an item is found
-    boost::function<void (BOARD_ITEM*)> callback;
+    boost::function<void (BOARD_ITEM*)> m_highlightCallback;
 
     void onButtonFindItemClick( wxCommandEvent& event ) override;
     void onButtonFindMarkerClick( wxCommandEvent& event ) override;

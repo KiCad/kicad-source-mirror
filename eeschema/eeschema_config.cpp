@@ -43,15 +43,15 @@
 #include <widgets/widget_eeschema_color_config.h>
 #include <widgets/symbol_tree_pane.h>
 #include <dialogs/panel_libedit_settings.h>
-#include <sch_view.h>
 #include <sch_painter.h>
 #include "sch_junction.h"
 #include "eeschema_id.h"
 
-#define FR_HISTORY_LIST_CNT     10   ///< Maximum number of find and replace strings.
-
-
 static int s_defaultBusThickness = DEFAULTBUSTHICKNESS;
+static int s_defaultWireThickness  = DEFAULTDRAWLINETHICKNESS;
+static int s_defaultTextSize = DEFAULT_SIZE_TEXT;
+static int s_drawDefaultLineThickness = -1;
+
 
 int GetDefaultBusThickness()
 {
@@ -61,14 +61,8 @@ int GetDefaultBusThickness()
 
 void SetDefaultBusThickness( int aThickness)
 {
-    if( aThickness >= 1 )
-        s_defaultBusThickness = aThickness;
-    else
-        s_defaultBusThickness = 1;
+    s_defaultBusThickness = std::max( 1, aThickness );
 }
-
-
-static int s_defaultWireThickness  = DEFAULTDRAWLINETHICKNESS;
 
 
 int GetDefaultWireThickness()
@@ -79,15 +73,9 @@ int GetDefaultWireThickness()
 
 void SetDefaultWireThickness( int aThickness )
 {
-    if( aThickness >=1 )
-        s_defaultWireThickness = aThickness;
-    else
-        s_defaultWireThickness = 1;
+    s_defaultWireThickness = std::max( 1, aThickness );
 }
 
-
-/// Default size for text (not only labels)
-static int s_defaultTextSize = DEFAULT_SIZE_TEXT;
 
 int GetDefaultTextSize()
 {
@@ -101,13 +89,6 @@ void SetDefaultTextSize( int aTextSize )
 }
 
 
-/*
- * Default line (in Eeschema units) thickness used to draw/plot items having a
- * default thickness line value (i.e. = 0 ).
- */
-static int s_drawDefaultLineThickness = -1;
-
-
 int GetDefaultLineThickness()
 {
     return s_drawDefaultLineThickness;
@@ -116,10 +97,7 @@ int GetDefaultLineThickness()
 
 void SetDefaultLineThickness( int aThickness )
 {
-    if( aThickness >=1 )
-        s_drawDefaultLineThickness = aThickness;
-    else
-        s_drawDefaultLineThickness = 1;
+    s_drawDefaultLineThickness = std::max( 1, aThickness );
 }
 
 
@@ -164,19 +142,9 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters()
                                         &m_plotDirectoryName ) );
 
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "SubpartIdSeparator" ),
-                                        LIB_PART::SubpartIdSeparatorPtr(),
-                                        0, 0, 126 ) );
+                                        LIB_PART::SubpartIdSeparatorPtr(), 0, 0, 126 ) );
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "SubpartFirstId" ),
-                                        LIB_PART::SubpartFirstIdPtr(),
-                                        'A', '1', 'z' ) );
-
-    /* moved to library load/save specific code, in a specific section in .pro file
-    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ),
-                                                           &m_userLibraryPath ) );
-    m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
-                                                               &m_componentLibFiles,
-                                                               GROUP_SCH_LIBS ) );
-    */
+                                        LIB_PART::SubpartFirstIdPtr(), 'A', '1', 'z' ) );
 
     m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "NetFmtName" ),
                                             &m_netListFormat) );
@@ -184,8 +152,7 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters()
                                             &m_spiceAjustPassiveValues, false ) );
 
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "LabSize" ),
-                                            &s_defaultTextSize,
-                                            DEFAULT_SIZE_TEXT, 5, 1000 ) );
+                                            &s_defaultTextSize, DEFAULT_SIZE_TEXT, 5, 1000 ) );
 
     m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "ERC_WriteFile" ),
                                    &m_ercSettings.write_erc_file, false ) );
@@ -282,11 +249,6 @@ static const wxChar DefaultDrawLineWidthEntry[] =   wxT( "DefaultDrawLineWidth" 
 static const wxChar DefaultJctSizeEntry[] =         wxT( "DefaultJunctionSize" );
 static const wxChar ShowHiddenPinsEntry[] =         wxT( "ShowHiddenPins" );
 static const wxChar HorzVertLinesOnlyEntry[] =      wxT( "HorizVertLinesOnly" );
-static const wxChar FindReplaceFlagsEntry[] =       wxT( "LastFindReplaceFlags" );
-static const wxChar FindStringEntry[] =             wxT( "LastFindString" );
-static const wxChar ReplaceStringEntry[] =          wxT( "LastReplaceString" );
-static const wxChar FindStringHistoryEntry[] =      wxT( "FindStringHistoryList%d" );
-static const wxChar ReplaceStringHistoryEntry[] =   wxT( "ReplaceStringHistoryList%d" );
 static const wxChar FieldNamesEntry[] =             wxT( "FieldNames" );
 static const wxChar SimulatorCommandEntry[] =       wxT( "SimCmdLine" );
 static const wxString ShowPageLimitsEntry =         "ShowPageLimits";
@@ -326,18 +288,14 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings()
                                                     &m_printSheetReference, true ) );
 
     m_configSettings.push_back( new PARAM_CFG_INT( true, RepeatStepXEntry,
-                                                   &m_repeatStep.x,
-                                                   DEFAULT_REPEAT_OFFSET_X,
-                                                   -REPEAT_OFFSET_MAX,
-                                                   REPEAT_OFFSET_MAX ) );
+                                                   &m_repeatStep.x, DEFAULT_REPEAT_OFFSET_X,
+                                                   -REPEAT_OFFSET_MAX, REPEAT_OFFSET_MAX ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, RepeatStepYEntry,
-                                                   &m_repeatStep.y,
-                                                   DEFAULT_REPEAT_OFFSET_Y,
-                                                   -REPEAT_OFFSET_MAX,
-                                                   REPEAT_OFFSET_MAX ) );
+                                                   &m_repeatStep.y, DEFAULT_REPEAT_OFFSET_Y,
+                                                   -REPEAT_OFFSET_MAX, REPEAT_OFFSET_MAX ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, RepeatLabelIncrementEntry,
-                                                   &m_repeatDeltaLabel,
-                                                   DEFAULT_REPEAT_LABEL_INC, -10, +10 ) );
+                                                   &m_repeatDeltaLabel, DEFAULT_REPEAT_LABEL_INC,
+                                                   -10, +10 ) );
     return m_configSettings;
 }
 
@@ -381,32 +339,6 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     // Load netlists options:
     aCfg->Read( SimulatorCommandEntry, &m_simulatorCommand );
-
-    wxASSERT_MSG( m_findReplaceData,
-                  wxT( "Find dialog data settings object not created. Bad programmer!" ) );
-
-    aCfg->Read( FindReplaceFlagsEntry, &tmp, (long) wxFR_DOWN );
-    m_findReplaceData->SetFlags( (wxUint32) tmp & ~FR_REPLACE_ITEM_FOUND );
-    m_findReplaceData->SetFindString( aCfg->Read( FindStringEntry, wxEmptyString ) );
-    m_findReplaceData->SetReplaceString( aCfg->Read( ReplaceStringEntry, wxEmptyString ) );
-
-    // Load the find and replace string history list.
-    for( int i = 0; i < FR_HISTORY_LIST_CNT; ++i )
-    {
-        wxString tmpHistory;
-        wxString entry;
-        entry.Printf( FindStringHistoryEntry, i );
-        tmpHistory = aCfg->Read( entry, wxEmptyString );
-
-        if( !tmpHistory.IsEmpty() )
-            m_findStringHistoryList.Add( tmpHistory );
-
-        entry.Printf( ReplaceStringHistoryEntry, i );
-        tmpHistory = aCfg->Read( entry, wxEmptyString );
-
-        if( !tmpHistory.IsEmpty() )
-            m_replaceStringHistoryList.Add( tmpHistory );
-    }
 
     wxString templateFieldNames = aCfg->Read( FieldNamesEntry, wxEmptyString );
 
@@ -457,31 +389,6 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     // Save netlists options:
     aCfg->Write( SimulatorCommandEntry, m_simulatorCommand );
-
-    // Save find dialog session setting.
-    wxASSERT_MSG( m_findReplaceData,
-                  wxT( "Find dialog data settings object not created. Bad programmer!" ) );
-    aCfg->Write( FindReplaceFlagsEntry,
-                (long) m_findReplaceData->GetFlags() & ~FR_REPLACE_ITEM_FOUND );
-    aCfg->Write( FindStringEntry, m_findReplaceData->GetFindString() );
-    aCfg->Write( ReplaceStringEntry, m_findReplaceData->GetReplaceString() );
-
-    // Save the find and replace string history list.
-    unsigned i;
-    wxString tmpHistory;
-    wxString entry;     // invoke constructor outside of any loops
-
-    for( i = 0; i < m_findStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
-    {
-        entry.Printf( FindStringHistoryEntry, i );
-        aCfg->Write( entry, m_findStringHistoryList[ i ] );
-    }
-
-    for( i = 0; i < m_replaceStringHistoryList.GetCount() && i < FR_HISTORY_LIST_CNT; i++ )
-    {
-        entry.Printf( ReplaceStringHistoryEntry, i );
-        aCfg->Write( entry, m_replaceStringHistoryList[ i ] );
-    }
 
     // Save template fieldnames
     STRING_FORMATTER sf;

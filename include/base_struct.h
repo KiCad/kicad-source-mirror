@@ -4,7 +4,7 @@
  * Copyright (C) 2013-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,11 +24,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file  base_struct.h
- * @brief Basic classes for most KiCad items.
- */
-
 #ifndef BASE_STRUCT_H_
 #define BASE_STRUCT_H_
 
@@ -36,7 +31,7 @@
 
 #include <core/typeinfo.h>
 #include "common.h"
-
+#include <wx/fdrepdlg.h>
 #include <bitmap_types.h>
 #include <view/view_item.h>
 
@@ -59,6 +54,24 @@ enum FILL_T {
 enum SEARCH_RESULT {
     SEARCH_QUIT,
     SEARCH_CONTINUE
+};
+
+
+/**
+ * Additional flag values wxFindReplaceData::m_Flags
+ */
+enum FIND_REPLACE_FLAGS
+{
+    // The last wxFindReplaceFlag enum is wxFR_MATCHCASE = 0x4.
+    FR_CURRENT_SHEET_ONLY = wxFR_MATCHCASE << 1,   // Search the current sheet only.
+    FR_SEARCH_ALL_FIELDS  = wxFR_MATCHCASE << 2,   // Search user fields as well as ref and value.
+    FR_SEARCH_ALL_PINS    = wxFR_MATCHCASE << 3,   // Search pin name and number.
+    FR_MATCH_WILDCARD     = wxFR_MATCHCASE << 4,   // Use simple wild card matching (* & ?).
+    FR_SEARCH_WRAP        = wxFR_MATCHCASE << 5,   // Wrap around the start or end of search.
+    FR_SEARCH_REPLACE     = wxFR_MATCHCASE << 7,   // Search for a item that has replaceable text.
+    FR_REPLACE_ITEM_FOUND = wxFR_MATCHCASE << 8,   // Indicates an item with replaceable text has
+                                                   // been found.
+    FR_REPLACE_REFERENCES = wxFR_MATCHCASE << 9    // Don't replace in references.
 };
 
 

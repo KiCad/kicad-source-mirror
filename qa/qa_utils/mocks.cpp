@@ -25,24 +25,14 @@
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <confirm.h>
-#include <macros.h>
 #include <pcb_edit_frame.h>
 #include <eda_dde.h>
-#include <wx/stdpaths.h>
 #include <wx/file.h>
 #include <wx/snglinst.h>
-#include <wx/dir.h>
-#include <gestfich.h>
-#include <pcbnew.h>
-#include <wildcards_and_files_ext.h>
 #include <class_board.h>
 #include <fp_lib_table.h>
-#include <footprint_edit_frame.h>
 #include <footprint_viewer_frame.h>
 #include <footprint_wizard_frame.h>
-#include <pcb_edit_frame.h>
-#include <class_board.h>
-#include <class_track.h>
 #include <class_drawsegment.h>
 #include <class_pcb_text.h>
 #include <class_pcb_target.h>
@@ -52,7 +42,6 @@
 #include <class_edge_mod.h>
 #include <tools/pcb_actions.h>
 #include <router/router_tool.h>
-#include "pcb_tool_base.h"
 #include <dialog_find.h>
 #include <dialog_block_options.h>
 
@@ -149,25 +138,17 @@ void BOARD::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
 }
 
 
-// Initialize static member variables
-wxString DIALOG_FIND::prevSearchString;
-bool DIALOG_FIND::warpMouse = true;
 
 DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aParent ) : DIALOG_FIND_BASE( aParent )
 {
     // these members are initialized to avoid warnings about non initialized vars
-    parent = aParent;
-    itemCount = markerCount = 0;
-    foundItem = nullptr;
+    m_frame = aParent;
+    m_itemCount = m_markerCount = 0;
+    m_foundItem = nullptr;
 }
 
 
-void DIALOG_FIND::OnInitDialog( wxInitDialogEvent& event )
-{
-}
-
-
-void DIALOG_FIND::EnableWarp( bool aEnabled )
+void DIALOG_FIND::OnTextEnter( wxCommandEvent& event )
 {
 }
 
@@ -201,8 +182,7 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent,
 {
     // these members are initialized only to avoid warnings about non initialized vars
     m_staticText1 = nullptr;
-    m_SearchTextCtrl = nullptr;
-    m_NoMouseWarpCheckBox = nullptr;
+    m_SearchCombo = nullptr;
     m_button1 = nullptr;
     m_button2 = nullptr;
     m_button3 = nullptr;
