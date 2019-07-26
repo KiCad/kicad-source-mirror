@@ -192,7 +192,7 @@ bool PCB_EDITOR_CONTROL::Init()
     ctxMenu.AddSeparator( 1 );
 
     // "Get and Place Footprint" should be available for Place Footprint tool
-    ctxMenu.AddItem( PCB_ACTIONS::findMove, placeModuleCondition, 1000 );
+    ctxMenu.AddItem( PCB_ACTIONS::getAndPlace, placeModuleCondition, 1000 );
     ctxMenu.AddSeparator( 1000 );
 
     // Finally, add the standard zoom & grid items
@@ -214,7 +214,7 @@ bool PCB_EDITOR_CONTROL::Init()
         auto& menu = toolMenu.GetMenu();
 
         // Add "Get and Place Footprint" when Selection tool is in an inactive state
-        menu.AddItem( PCB_ACTIONS::findMove, inactiveStateCondition );
+        menu.AddItem( PCB_ACTIONS::getAndPlace, inactiveStateCondition );
         menu.AddSeparator();
 
         toolMenu.AddSubMenu( zoneMenu );

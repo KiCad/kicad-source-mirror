@@ -1087,7 +1087,7 @@ void SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
     if( aItem )
     {
         select( aItem );
-        getView()->SetCenter( aItem->GetPosition() );
+        m_frame->FocusOnLocation( aItem->GetPosition() );
 
         // Inform other potentially interested tools
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
@@ -1107,7 +1107,7 @@ int SELECTION_TOOL::find( const TOOL_EVENT& aEvent )
 }
 
 
-int SELECTION_TOOL::findMove( const TOOL_EVENT& aEvent )
+int SELECTION_TOOL::GetAndPlace( const TOOL_EVENT& aEvent )
 {
     MODULE* module = m_frame->GetFootprintFromBoardByReference();
 
@@ -2209,7 +2209,7 @@ void SELECTION_TOOL::setTransitions()
     Go( &SELECTION_TOOL::SelectionMenu,       PCB_ACTIONS::selectionMenu.MakeEvent() );
 
     Go( &SELECTION_TOOL::find,                ACTIONS::find.MakeEvent() );
-    Go( &SELECTION_TOOL::findMove,            PCB_ACTIONS::findMove.MakeEvent() );
+    Go( &SELECTION_TOOL::GetAndPlace,         PCB_ACTIONS::getAndPlace.MakeEvent() );
 
     Go( &SELECTION_TOOL::filterSelection,     PCB_ACTIONS::filterSelection.MakeEvent() );
     Go( &SELECTION_TOOL::selectConnection,    PCB_ACTIONS::selectConnection.MakeEvent() );

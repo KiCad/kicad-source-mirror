@@ -1046,7 +1046,7 @@ TOOL_ACTION PCB_ACTIONS::selectSameSheet( "pcbnew.InteractiveSelection.SelectSam
         _( "Selects all modules and tracks in the same schematic sheet" ),
         select_same_sheet_xpm );
 
-TOOL_ACTION PCB_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
+TOOL_ACTION PCB_ACTIONS::getAndPlace( "pcbnew.InteractiveSelection.FindMove",
         AS_GLOBAL,
         'T', LEGACY_HK_NAME( "Get and Move Footprint" ),
         _( "Get and Move Footprint" ),

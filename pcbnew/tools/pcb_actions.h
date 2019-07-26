@@ -426,7 +426,7 @@ public:
     static TOOL_ACTION find;
 
     /// Find an item and start moving
-    static TOOL_ACTION findMove;
+    static TOOL_ACTION getAndPlace;
 
     static TOOL_ACTION autoplaceOffboardComponents;
     static TOOL_ACTION autoplaceSelectedComponents;
