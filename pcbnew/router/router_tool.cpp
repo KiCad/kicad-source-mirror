@@ -954,6 +954,18 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
         {
             m_toolMgr->RunAction( PCB_ACTIONS::layerToggle, true );
         }
+        else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
+        {
+            m_router->SwitchLayer( frame->GetActiveLayer() );
+            updateStartItem( *evt );
+        }
+        else if( evt->IsKeyPressed() )
+        {
+            // wxWidgets fails to correctly translate shifted keycodes on the wxEVT_CHAR_HOOK
+            // event so we need to process the wxEVT_CHAR event that will follow as long as we
+            // pass the event.
+            evt->SetPassEvent();
+        }
 
         if( m_cancelled )
         {

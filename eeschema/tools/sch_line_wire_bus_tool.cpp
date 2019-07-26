@@ -651,6 +651,8 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
                 aSegment = doUnfoldBus( net );
             }
         }
+        else
+            evt->SetPassEvent();
 
         // Enable autopanning and cursor capture only when there is a segment to be placed
         getViewControls()->SetAutoPan( aSegment != nullptr );

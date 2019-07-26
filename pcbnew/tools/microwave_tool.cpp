@@ -254,6 +254,9 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
         {
             m_menu.ShowContextMenu( selection() );
         }
+
+        else
+            evt->SetPassEvent();
     }
 
     controls.CaptureCursor( false );

@@ -220,6 +220,8 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             break; // Finish
         }
+        else
+            evt->SetPassEvent();
 
     } while( ( evt = Wait() ) ); //Should be assignment not equality test
 

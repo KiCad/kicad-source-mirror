@@ -219,6 +219,9 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             m_view->AddToPreview( item->Clone() );
         }
 
+        else
+            evt->SetPassEvent();
+
         // Enable autopanning and cursor capture only when there is an item to be placed
         getViewControls()->SetAutoPan( item != nullptr );
         getViewControls()->CaptureCursor( item != nullptr );
@@ -371,6 +374,9 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
 
+        else
+            evt->SetPassEvent();
+
         // Enable autopanning and cursor capture only when there is a shape being drawn
         getViewControls()->SetAutoPan( item != nullptr );
         getViewControls()->CaptureCursor( item != nullptr );
@@ -428,6 +434,8 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
         {
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
+        else
+            evt->SetPassEvent();
     }
 
     return 0;

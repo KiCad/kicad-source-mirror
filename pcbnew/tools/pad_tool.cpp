@@ -488,6 +488,9 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
             m_menu.ShowContextMenu( selection() );
         }
 
+        else
+            evt->SetPassEvent();
+
         // Prepare the next loop by updating the old cursor mouse position
         // to this last mouse cursor position
         oldCursorPos = getViewControls()->GetCursorPosition();

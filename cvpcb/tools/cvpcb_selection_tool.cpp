@@ -212,6 +212,9 @@ int CVPCB_SELECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
         {
             m_menu.ShowContextMenu( m_selection );
         }
+
+        else
+            evt->SetPassEvent();
     }
 
     view.SetVisible( &ruler, false );

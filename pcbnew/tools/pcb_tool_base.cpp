@@ -207,6 +207,9 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
             // Show a preview of the item
             view()->Update( &preview );
         }
+
+        else
+            evt->SetPassEvent();
     }
 
     view()->Remove( &preview );

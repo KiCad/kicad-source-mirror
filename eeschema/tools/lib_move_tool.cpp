@@ -258,6 +258,8 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
             break; // Finish
         }
+        else
+            evt->SetPassEvent();
 
     } while( ( evt = Wait() ) );  // Assignment intentional; not equality test
 

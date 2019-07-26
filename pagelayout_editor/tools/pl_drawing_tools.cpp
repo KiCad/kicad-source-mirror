@@ -174,6 +174,8 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
             item->SetPosition( item->GetPeer()->GetStartPosUi( 0 ) );
             getView()->Update( item );
         }
+        else
+            evt->SetPassEvent();
 
         // Enable autopanning and cursor capture only when there is an item to be placed
         getViewControls()->SetAutoPan( item != nullptr );
@@ -273,6 +275,9 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
+
+        else
+            evt->SetPassEvent();
 
         // Enable autopanning and cursor capture only when there is a shape being drawn
         getViewControls()->SetAutoPan( item != nullptr );

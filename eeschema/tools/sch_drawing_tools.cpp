@@ -221,6 +221,8 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
             m_view->ClearPreview();
             m_view->AddToPreview( component->Clone() );
         }
+        else
+            evt->SetPassEvent();
 
         // Enable autopanning and cursor capture only when there is a module to be placed
         getViewControls()->SetAutoPan( component != nullptr );
@@ -372,6 +374,8 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             m_view->AddToPreview( image->Clone() );
             m_view->RecacheAllItems();  // Bitmaps are cached in Opengl
         }
+        else
+            evt->SetPassEvent();
 
         // Enable autopanning and cursor capture only when there is a module to be placed
         getViewControls()->SetAutoPan( image != nullptr );
@@ -490,6 +494,8 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
             m_view->ClearPreview();
             m_view->AddToPreview( previewItem->Clone() );
         }
+        else
+            evt->SetPassEvent();
     }
 
     delete previewItem;
@@ -678,6 +684,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
         }
+        else
+            evt->SetPassEvent();
 
         // Enable autopanning and cursor capture only when there is a module to be placed
         getViewControls()->SetAutoPan( item != nullptr );
@@ -798,6 +806,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
+        else
+            evt->SetPassEvent();
 
         // Enable autopanning and cursor capture only when there is a sheet to be placed
         getViewControls()->SetAutoPan( sheet != nullptr );

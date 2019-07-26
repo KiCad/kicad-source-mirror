@@ -409,6 +409,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             break; // Finish
         }
+        else
+            evt->SetPassEvent();
 
         controls->SetAutoPan( m_moveInProgress );
 

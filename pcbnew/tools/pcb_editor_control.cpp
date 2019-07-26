@@ -759,6 +759,9 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
             reselect = true;
         }
 
+        else
+            evt->SetPassEvent();
+
         // Enable autopanning and cursor capture only when there is a module to be placed
         controls->SetAutoPan( !!module );
         controls->CaptureCursor( !!module );
@@ -926,6 +929,9 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
             target->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
             view->Update( &preview );
         }
+
+        else
+            evt->SetPassEvent();
     }
 
     preview.Clear();

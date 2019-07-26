@@ -440,6 +440,9 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             // Calling 'Properties' action clears the selection, so we need to restore it
             reselect = true;
         }
+
+        else
+            evt->SetPassEvent();
     }
 
     frame()->SetMsgPanel( board() );
@@ -669,6 +672,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             else
                 frame()->SetMsgPanel( board() );
         }
+        else
+            evt->SetPassEvent();
     }
 
     if( step != SET_ORIGIN )
@@ -816,6 +821,8 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
             commit.Push( _( "Place a DXF_SVG drawing" ) );
             break;
         }
+        else
+            evt->SetPassEvent();
     }
 
     preview.Clear();
@@ -873,6 +880,8 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
             m_frame->PopTool( tool );
             break;
         }
+        else
+            evt->SetPassEvent();
     }
 
     return 0;
@@ -1110,6 +1119,8 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, int aShape, DRAWSEGMEN
         {
             isLocalOriginSet = true;
         }
+        else
+            evt->SetPassEvent();
     }
 
     if( !isLocalOriginSet ) // reset the relative coordinte if it was not set before
@@ -1291,6 +1302,8 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, DRAWSEGMENT*& aGraphic, bo
         {
             arcManager.ToggleClockwise();
         }
+        else
+            evt->SetPassEvent();
 
         if( arcManager.IsComplete() )
         {
@@ -1538,6 +1551,9 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                 status.Hide();
             }
         }
+        else
+            evt->SetPassEvent();
+
     }    // end while
 
     m_controls->ForceCursorPosition( false );
