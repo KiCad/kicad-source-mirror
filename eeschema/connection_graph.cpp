@@ -1346,7 +1346,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
             for( CONNECTION_SUBGRAPH* parent : it.second )
             {
-                if( parent->m_absorbed )
+                while( parent->m_absorbed )
                     parent = parent->m_absorbed_by;
 
                 SCH_CONNECTION* match = matchBusMember( parent->m_driver_connection, link_member );
@@ -1372,7 +1372,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                     for( CONNECTION_SUBGRAPH* old_sg : m_net_name_to_subgraphs_map.at( old_name ) )
                     {
-                        if( old_sg->m_absorbed )
+                        while( old_sg->m_absorbed )
                             old_sg = old_sg->m_absorbed_by;
 
                         old_sg->m_driver_connection->Clone( *conn );
@@ -1530,7 +1530,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
             for( CONNECTION_SUBGRAPH* neighbor : kv.second )
             {
                 // May have been absorbed but won't have been deleted
-                if( neighbor->m_absorbed )
+                while( neighbor->m_absorbed )
                     neighbor = neighbor->m_absorbed_by;
 
                 SCH_CONNECTION* parent = aParentGraph->m_driver_connection;
