@@ -144,6 +144,12 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName,
     case PLOT_FORMAT_DXF:
     {
         DXF_PLOTTER* dxf_plotter = new DXF_PLOTTER;
+
+        if( m_unitsMetric )
+            dxf_plotter->SetUnits( DXF_PLOTTER::DXF_UNIT_MILLIMETERS );
+        else
+            dxf_plotter->SetUnits( DXF_PLOTTER::DXF_UNIT_INCHES );
+
         plotter = dxf_plotter;
         plotter->SetPageSettings( page_info );
         plotter->SetViewport( offset, IU_PER_MILS/10, scale, false );
