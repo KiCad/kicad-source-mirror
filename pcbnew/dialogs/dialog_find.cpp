@@ -84,6 +84,8 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
     PCB_SCREEN* screen = m_frame->GetScreen();
     int         flags = 0;
     wxString    msg;
+    wxString    searchString = m_SearchCombo->GetValue();
+    int         index = m_SearchCombo->FindString( searchString, true );
 
     if( m_matchCase->GetValue() )
         flags |= wxFR_MATCHCASE;
@@ -94,8 +96,18 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
     if( m_wildcards->GetValue() )
         flags |= FR_MATCH_WILDCARD;
 
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
-    wxString searchString = m_SearchCombo->GetValue();
+    if( index == wxNOT_FOUND )
+    {
+        m_SearchCombo->Insert( searchString, 0 );
+    }
+    else if( index != 0 )
+    {
+        /* Move the search string to the top of the list if it isn't already there. */
+        m_SearchCombo->Delete( index );
+        m_SearchCombo->Insert( searchString, 0 );
+        m_SearchCombo->SetSelection( 0 );
+    }
+
     wxString last;
 
     if( !m_frame->GetFindHistoryList().empty() )
@@ -111,6 +123,7 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
     m_frame->GetFindReplaceData().SetFindString( searchString );
     m_frame->GetFindReplaceData().SetFlags( flags );
 
+    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
     m_frame->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
 
     int count = 0;
