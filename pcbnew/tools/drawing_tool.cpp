@@ -263,6 +263,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
     BOARD_COMMIT commit( m_frame );
 
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
     // do not capture or auto-pan until we start placing some text
@@ -474,6 +475,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
     m_view->Add( &preview );
 
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -844,6 +846,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
     m_frame->PushTool( tool );
     Activate();
 
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
     m_controls->SetAutoPan( true );
