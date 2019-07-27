@@ -275,6 +275,7 @@ void SCH_TEXT::SwapData( SCH_ITEM* aItem )
     SCH_TEXT* item = (SCH_TEXT*) aItem;
 
     std::swap( m_Text, item->m_Text );
+    std::swap( m_shown_text, item->m_shown_text );
     std::swap( m_Layer, item->m_Layer );
 
     std::swap( m_shape, item->m_shape );
