@@ -463,6 +463,8 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
     if( evt )
     {
+        wxLogTrace( kicadTraceToolStack, "TOOL_DISPATCHER::DispatchWxEvent %s", evt->Format() );
+
         handled = m_toolMgr->ProcessEvent( *evt );
 
         // ESC is the special key for canceling tools, and is therefore seen as handled
@@ -499,7 +501,11 @@ void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
     OPT<TOOL_EVENT> evt = m_actions->TranslateLegacyId( aEvent.GetId() );
 
     if( evt )
+    {
+        wxLogTrace( kicadTraceToolStack, "TOOL_DISPATCHER::DispatchWxCommand %s", evt->Format() );
+
         m_toolMgr->ProcessEvent( *evt );
+    }
     else
         aEvent.Skip();
 }

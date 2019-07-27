@@ -23,10 +23,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <tool/action_manager.h>
-#include <tool/tool_manager.h>
-#include <tool/tool_action.h>
 #include <eda_draw_frame.h>
+#include <tool/action_manager.h>
+#include <tool/tool_action.h>
+#include <tool/tool_manager.h>
+#include <trace_helpers.h>
 
 #include <hotkeys_basic.h>
 #include <cctype>
@@ -92,6 +93,9 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
     if( key >= 'a' && key <= 'z' )
         key = std::toupper( key );
 
+    wxLogTrace( kicadTraceToolStack, "ACTION_MANAGER::RunHotKey Key: %s",
+            KeyNameFromKeyCode( aHotKey ) );
+
     HOTKEY_LIST::const_iterator it = m_actionHotKeys.find( key | mod );
 
     // If no luck, try without Shift, to handle keys that require it
@@ -100,6 +104,9 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
     // different combination
     if( it == m_actionHotKeys.end() )
     {
+        wxLogTrace( kicadTraceToolStack,
+                "ACTION_MANAGER::RunHotKey No actions found, searching with key: %s",
+                KeyNameFromKeyCode( key | ( mod & ~MD_SHIFT ) ) );
         it = m_actionHotKeys.find( key | ( mod & ~MD_SHIFT ) );
 
         if( it == m_actionHotKeys.end() )
@@ -141,14 +148,25 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
 
     if( context )
     {
+        wxLogTrace( kicadTraceToolStack,
+                "ACTION_MANAGER::RunHotKey Running action %s for hotkey %s", context->GetName(),
+                KeyNameFromKeyCode( aHotKey ) );
+
         m_toolMgr->RunAction( *context, true );
         return true;
     }
     else if( global )
     {
+        wxLogTrace( kicadTraceToolStack,
+                "ACTION_MANAGER::RunHotKey Running action: %s for hotkey %s", global->GetName(),
+                KeyNameFromKeyCode( aHotKey ) );
+
         m_toolMgr->RunAction( *global, true );
         return true;
     }
+
+    wxLogTrace( kicadTraceToolStack, "ACTION_MANAGER::RunHotKey No action found for key %s",
+            KeyNameFromKeyCode( aHotKey ) );
 
     return false;
 }

@@ -24,10 +24,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <map>
-#include <stack>
 #include <algorithm>
 #include <core/optional.h>
+#include <map>
+#include <stack>
+#include <trace_helpers.h>
 
 #include <wx/event.h>
 #include <wx/clipbrd.h>
@@ -528,6 +529,8 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 {
     bool handled = false;
 
+    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::dispatchInternal %s", aEvent.Format() );
+
     // iterate over active tool stack
     for( auto it = m_activeTools.begin(); it != m_activeTools.end(); ++it )
     {
@@ -555,6 +558,10 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 
                 if( st->cofunc )
                 {
+                    wxLogTrace( kicadTraceToolStack,
+                            "TOOL_MANAGER::dispatchInternal Waking tool %s for event: %s",
+                            st->theTool->GetName(), aEvent.Format() );
+
                     setActiveState( st );
                     bool end = !st->cofunc->Resume();
 
@@ -565,6 +572,10 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                 // If the tool did not request the event be passed to other tools, we're done
                 if( !st->wakeupEvent.PassEvent() )
                 {
+                    wxLogTrace( kicadTraceToolStack,
+                            "TOOL_MANAGER::dispatchInternal %s stopped passing event: %s",
+                            st->theTool->GetName(), aEvent.Format() );
+
                     handled = true;
                     break;
                 }
@@ -604,6 +615,10 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                     // as the state changes, the transition table has to be set up again
                     st->transitions.clear();
 
+                    wxLogTrace( kicadTraceToolStack,
+                            "TOOL_MANAGER::dispatchInternal Running tool %s for event: %s",
+                            st->theTool->GetName(), aEvent.Format() );
+
                     // got match? Run the handler.
                     setActiveState( st );
                     st->idle = false;
@@ -626,6 +641,9 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
             break;      // only the first tool gets the event
     }
 
+    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::dispatchInternal handled: %s  %s",
+            ( handled ? "true" : "false" ), aEvent.Format() );
+
     return handled;
 }
 
@@ -641,6 +659,7 @@ bool TOOL_MANAGER::dispatchHotKey( const TOOL_EVENT& aEvent )
 
 bool TOOL_MANAGER::dispatchActivation( const TOOL_EVENT& aEvent )
 {
+    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::dispatchActivation %s", aEvent.Format() );
     if( aEvent.IsActivate() )
     {
         wxString cmdStr( *aEvent.GetCommandStr() );
@@ -649,6 +668,10 @@ bool TOOL_MANAGER::dispatchActivation( const TOOL_EVENT& aEvent )
 
         if( tool != m_toolNameIndex.end() )
         {
+            wxLogTrace( kicadTraceToolStack,
+                    "TOOL_MANAGER::dispatchActivation Running tool %s for event: %s",
+                    tool->second->theTool->GetName(), aEvent.Format() );
+
             runTool( tool->second->theTool );
             return true;
         }
@@ -931,6 +954,8 @@ void TOOL_MANAGER::applyViewControls( TOOL_STATE* aState )
 
 bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
 {
+    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::processEvent %s", aEvent.Format() );
+
     if( dispatchHotKey( aEvent ) )
         return true;
 
@@ -948,6 +973,9 @@ bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
         m_eventQueue.pop_front();
         processEvent( event );
     }
+
+    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::processEvent handled: %s  %s",
+            ( handled ? "true" : "false" ), aEvent.Format() );
 
     return handled;
 }

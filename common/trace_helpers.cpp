@@ -33,6 +33,7 @@
 const wxChar* const traceFindReplace = wxT( "KICAD_FIND_REPLACE" );
 const wxChar* const kicadTraceCoords = wxT( "KICAD_COORDS" );
 const wxChar* const kicadTraceKeyEvent = wxT( "KICAD_KEY_EVENTS" );
+const wxChar* const kicadTraceToolStack = wxT( "KICAD_TOOL_STACK" );
 const wxChar* const traceSchLibMem = wxT( "KICAD_SCH_LIB_MEM" );
 const wxChar* const traceFindItem = wxT( "KICAD_FIND_ITEM" );
 const wxChar* const traceSchLegacyPlugin = wxT( "KICAD_SCH_LEGACY_PLUGIN" );

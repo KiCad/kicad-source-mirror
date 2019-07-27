@@ -24,16 +24,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <eda_base_frame.h>
 #include <functional>
+#include <id.h>
+#include <menus_helpers.h>
+#include <tool/action_menu.h>
 #include <tool/actions.h>
 #include <tool/tool_event.h>
-#include <tool/tool_manager.h>
 #include <tool/tool_interactive.h>
-#include <tool/action_menu.h>
+#include <tool/tool_manager.h>
+#include <trace_helpers.h>
 #include <wx/log.h>
-#include <menus_helpers.h>
-#include <eda_base_frame.h>
-#include <id.h>
 
 
 using namespace std::placeholders;
@@ -436,6 +437,9 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
     // clients that don't supply a tool will have to check GetSelected() themselves
     if( evt && m_tool )
     {
+
+        wxLogTrace( kicadTraceToolStack, "ACTION_MENU::OnMenuEvent %s", evt->Format() );
+
         TOOL_MANAGER* toolMgr = m_tool->GetManager();
 
         if( g_last_menu_highlighted_id == aEvent.GetId() && !m_isContextMenu )

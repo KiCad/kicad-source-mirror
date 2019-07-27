@@ -76,6 +76,13 @@ extern const wxChar* const kicadTraceCoords;
 extern const wxChar* const kicadTraceKeyEvent;
 
 /**
+ * Flag to enable tracing of the tool handling stack.
+ *
+ * Use "KICAD_TOOL_STACK" to enable.
+ */
+extern const wxChar* const kicadTraceToolStack;
+
+/**
  * Flag to enable auto save feature debug tracing.
  *
  * Use "KICAD_AUTOSAVE" to enable.
