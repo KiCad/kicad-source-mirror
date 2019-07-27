@@ -33,6 +33,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_marker_pcb.h>
+#include <class_pcb_text.h>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -121,6 +122,48 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
             {
                 foundItem = module;
                 pos = module->GetPosition();
+                itemCount++;
+                break;
+            }
+        }
+
+        for( BOARD_ITEM* item : module->GraphicalItems() )
+        {
+            if( item->Type() != PCB_MODULE_TEXT_T )
+                continue;
+
+            TEXTE_MODULE* textItem = static_cast<TEXTE_MODULE*>( item );
+
+            if( WildCompareString( searchString, textItem->GetShownText().GetData(), false ) )
+            {
+                count++;
+
+                if( count > itemCount )
+                {
+                    foundItem = module;
+                    pos = module->GetPosition();
+                    itemCount++;
+                    break;
+                }
+            }
+        }
+    }
+
+    for( BOARD_ITEM* item : parent->GetBoard()->Drawings() )
+    {
+        if( item->Type() != PCB_MODULE_TEXT_T )
+            continue;
+
+        TEXTE_PCB* textItem = static_cast<TEXTE_PCB*>( item );
+
+        if( WildCompareString( searchString, textItem->GetShownText().GetData(), false ) )
+        {
+            count++;
+
+            if( count > itemCount )
+            {
+                foundItem = textItem;
+                pos = textItem->GetPosition();
                 itemCount++;
                 break;
             }
