@@ -148,16 +148,9 @@ int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
         INSPECTOR_FUNC inspector = [&] ( EDA_ITEM* item, void* )
         {
             if( data && item->Matches( *data, nullptr ) )
-            {
                 m_selectionTool->BrightenItem( item );
-
-                if( m_selectionTool->GetSelection().GetSize() == 0 )
-                    m_selectionTool->AddItemToSel( item );
-            }
             else if( item->IsBrightened() )
-            {
                 m_selectionTool->UnbrightenItem( item );
-            }
 
             return SEARCH_CONTINUE;
         };
