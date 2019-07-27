@@ -1183,7 +1183,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                         if( driver->Type() == SCH_PIN_T )
                         {
-                            if( static_cast<SCH_PIN*>( driver )->GetName() == test_name )
+                            auto pin = static_cast<SCH_PIN*>( driver );
+
+                            if( pin->IsPowerConnection() && pin->GetName() == test_name )
                             {
                                 match = true;
                                 break;
