@@ -30,12 +30,14 @@ class PANEL_SETUP_TEXT_AND_GRAPHICS;
 class PANEL_SETUP_NETCLASSES;
 class PANEL_SETUP_TRACKS_AND_VIAS;
 class PANEL_SETUP_MASK_AND_PASTE;
+class PANEL_SETUP_BOARD_STACKUP;
 
 
 class DIALOG_BOARD_SETUP : public PAGED_DIALOG
 {
 public:
     DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame );
+    ~DIALOG_BOARD_SETUP();
 
 protected:
     void OnAuxiliaryAction( wxCommandEvent& event ) override;
@@ -48,6 +50,13 @@ protected:
     PANEL_SETUP_NETCLASSES*          m_netclasses;
     PANEL_SETUP_TRACKS_AND_VIAS*     m_tracksAndVias;
     PANEL_SETUP_MASK_AND_PASTE*      m_maskAndPaste;
+    PANEL_SETUP_BOARD_STACKUP*       m_physicalStackup;
+
+    // event handlers
+    void OnPageChange( wxBookCtrlEvent& event );
+
+private:
+    int m_physicalStackupPage;      // the page index of the PANEL_SETUP_BOARD_STACKUP page
 };
 
 

@@ -136,11 +136,9 @@ static const LSET presets[] =
 
 PANEL_SETUP_LAYERS::PANEL_SETUP_LAYERS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_LAYERS_BASE( aParent->GetTreebook() ),
-        m_Parent( aParent ), m_frame( aFrame ),
-        m_pcbThickness( aFrame, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true )
+        m_Parent( aParent ), m_frame( aFrame )
 {
     m_pcb = aFrame->GetBoard();
-
     m_LayersListPanel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX) );
 }
 
@@ -237,7 +235,6 @@ bool PANEL_SETUP_LAYERS::TransferDataToWindow()
 
     showCopperChoice( m_pcb->GetCopperLayerCount() );
     setCopperLayerCheckBoxes( m_pcb->GetCopperLayerCount() );
-    m_pcbThickness.SetValue( m_pcb->GetDesignSettings().GetBoardThickness() );
 
     showBoardLayerNames();
     showSelectedLayerCheckBoxes( m_enabledLayers );
@@ -340,7 +337,7 @@ void PANEL_SETUP_LAYERS::showLayerTypes()
 }
 
 
-LSET PANEL_SETUP_LAYERS::getUILayerMask()
+LSET PANEL_SETUP_LAYERS::GetUILayerMask()
 {
     LSET layerMaskResult;
 
@@ -408,7 +405,7 @@ void PANEL_SETUP_LAYERS::setCopperLayerCheckBoxes( int copperCount )
 
 void PANEL_SETUP_LAYERS::OnCheckBox( wxCommandEvent& event )
 {
-    m_enabledLayers = getUILayerMask();
+    m_enabledLayers = GetUILayerMask();
 
     showPresets( m_enabledLayers );
 }
@@ -444,7 +441,7 @@ void PANEL_SETUP_LAYERS::DenyChangeCheckBox( wxCommandEvent& event )
 
         if( source == mandatory )
         {
-            msg.Printf( _( "The %s layer is mandatory." ), getLayerName( layer ) );
+            msg.Printf( _( "The %s layer is mandatory." ), GetLayerName( layer ) );
             DisplayError( this, msg );
             mandatory->SetValue( true );
             return;
@@ -479,7 +476,7 @@ void PANEL_SETUP_LAYERS::OnPresetsChoice( wxCommandEvent& event )
 void PANEL_SETUP_LAYERS::OnCopperLayersChoice( wxCommandEvent& event )
 {
     setCopperLayerCheckBoxes( m_CopperLayersChoice->GetCurrentSelection() * 2 + 2 );
-    m_enabledLayers = getUILayerMask();
+    m_enabledLayers = GetUILayerMask();
     showPresets( m_enabledLayers );
 }
 
@@ -490,8 +487,6 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
         return false;
 
     wxString msg;
-
-    int thickness = m_pcbThickness.GetValue();
 
     // Check for removed layers with items which will get deleted from the board.
     LSEQ removedLayers = getRemovedLayersWithItems();
@@ -545,7 +540,7 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
         }
     }
 
-    m_enabledLayers = getUILayerMask();
+    m_enabledLayers = GetUILayerMask();
 
     if( m_enabledLayers != m_pcb->GetEnabledLayers() )
     {
@@ -564,13 +559,11 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 
         if( m_enabledLayers[layer] )
         {
-            m_pcb->SetLayerName( layer, getLayerName( layer ) );
+            m_pcb->SetLayerName( layer, GetLayerName( layer ) );
             LAYER_T t = (LAYER_T) getLayerTypeIndex( layer );
             m_pcb->SetLayerType( layer, t );
         }
     }
-
-    m_pcb->GetDesignSettings().SetBoardThickness( thickness );
 
     // If some board items are deleted: rebuild the connectivity,
     // because it is likely some tracks and vias where removed
@@ -593,7 +586,7 @@ int PANEL_SETUP_LAYERS::getLayerTypeIndex( LAYER_NUM aLayer )
 }
 
 
-wxString PANEL_SETUP_LAYERS::getLayerName( LAYER_NUM aLayer )
+wxString PANEL_SETUP_LAYERS::GetLayerName( LAYER_NUM aLayer )
 {
     wxControl* control = getName( aLayer );
 
@@ -629,7 +622,7 @@ bool PANEL_SETUP_LAYERS::testLayerNames()
         if( !m_enabledLayers[layer] )
             continue;
 
-        wxString name = getLayerName( layer );
+        wxString name = GetLayerName( layer );
 
         ctl = (wxTextCtrl*) getName( layer );
 
@@ -683,7 +676,7 @@ bool PANEL_SETUP_LAYERS::testLayerNames()
 LSEQ PANEL_SETUP_LAYERS::getRemovedLayersWithItems()
 {
     LSEQ removedLayers;
-    LSET newLayers = getUILayerMask();
+    LSET newLayers = GetUILayerMask();
     LSET curLayers = m_pcb->GetEnabledLayers();
 
     if( newLayers == curLayers )    // return a empty list if no change
@@ -712,7 +705,7 @@ LSEQ PANEL_SETUP_LAYERS::getNonRemovableLayers()
 {
      //Build the list of non copper layers in use in footprints.
     LSEQ inUseLayers;
-    LSET newLayers = getUILayerMask();
+    LSET newLayers = GetUILayerMask();
     LSET curLayers = m_pcb->GetEnabledLayers();
 
     if( newLayers == curLayers )    // return a empty list if no change

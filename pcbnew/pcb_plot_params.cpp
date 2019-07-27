@@ -224,7 +224,8 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                        m_scaleSelection );
     aFormatter->Print( aNestLevel+1, "(%s \"%s\")", getTokenName( T_outputdirectory ),
                        (const char*) m_outputDirectory.utf8_str() );
-    aFormatter->Print( 0, ")\n" );
+    aFormatter->Print( 0, "\n" );
+    aFormatter->Print( aNestLevel, ")\n" );
 }
 
 

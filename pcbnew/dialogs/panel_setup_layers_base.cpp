@@ -42,17 +42,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 
 	bSizerLayerCnt->Add( 15, 0, 0, 0, 5 );
 
-	m_thicknessLabel = new wxStaticText( this, wxID_ANY, _("PCB thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_thicknessLabel->Wrap( -1 );
-	bSizerLayerCnt->Add( m_thicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
-
-	m_thicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerLayerCnt->Add( m_thicknessCtrl, 0, wxEXPAND|wxALL, 3 );
-
-	m_thicknessUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_thicknessUnits->Wrap( -1 );
-	bSizerLayerCnt->Add( m_thicknessUnits, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
-
 
 	bSizerMargins->Add( bSizerLayerCnt, 0, wxEXPAND, 5 );
 

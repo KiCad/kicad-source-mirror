@@ -28,25 +28,22 @@
 #include <i18n_utility.h>       // For _HKI definition
 #include "stackup_predefined_prms.h"
 
-// A reasonable thickness for copper layers:
-const int copperDefaultThickness = Millimeter2iu( 0.035 );
-// A reasonable thickness for solder mask:
-const int maskDefaultThickness = Millimeter2iu( 0.01 );
-
 BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
 {
     m_LayerId = UNDEFINED_LAYER;
     m_Type = aType;
+    m_Enabled = true;
     m_DielectricLayerId = 0;
     m_EpsilonR = 0;
     m_LossTangent = 0.0;
+    m_ThicknessLocked = false;
 
     // Initialize parameters to a usual value for allowed types:
     switch( m_Type )
     {
     case BS_ITEM_TYPE_COPPER:
         m_TypeName = "copper";
-        m_Thickness = copperDefaultThickness;
+        m_Thickness = GetCopperDefaultThickness();
         break;
 
     case BS_ITEM_TYPE_DIELECTRIC:
@@ -66,7 +63,7 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
     case BS_ITEM_TYPE_SOLDERMASK:
         m_TypeName = "soldermask";
         m_Color = NOT_SPECIFIED;
-        m_Thickness = maskDefaultThickness;
+        m_Thickness = GetMaskDefaultThickness();
         m_EpsilonR = 3.5;
         m_LossTangent = 0.0;
         break;
@@ -88,13 +85,29 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM& aOther )
 {
     m_LayerId = aOther.m_LayerId;
     m_Type = aOther.m_Type;
+    m_Enabled = aOther.m_Enabled;
     m_DielectricLayerId = aOther.m_DielectricLayerId;
     m_TypeName = aOther.m_TypeName;
     m_Material = aOther.m_Material;
     m_Color = aOther.m_Color;
     m_Thickness = aOther.m_Thickness;
+    m_ThicknessLocked = aOther.m_ThicknessLocked;
     m_EpsilonR = aOther.m_EpsilonR;
     m_LossTangent = aOther.m_LossTangent;
+}
+
+
+int BOARD_STACKUP_ITEM::GetCopperDefaultThickness()
+{
+    // A reasonable thickness for copper layers:
+    return Millimeter2iu( 0.035 );
+}
+
+
+int BOARD_STACKUP_ITEM::GetMaskDefaultThickness()
+{
+    // A reasonable thickness for solder mask:
+    return Millimeter2iu( 0.01 );
 }
 
 
@@ -227,7 +240,7 @@ int BOARD_STACKUP::BuildBoardTicknessFromStackup() const
 
     for( auto item : m_list )
     {
-        if( item->IsThicknessEditable() )
+        if( item->IsThicknessEditable() && item->m_Enabled )
             thickness += item->m_Thickness;
     }
 
@@ -308,17 +321,32 @@ bool BOARD_STACKUP::SynchronizeWithBoard( BOARD_DESIGN_SETTINGS* aSettings )
 }
 
 
-void BOARD_STACKUP::BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings )
+void BOARD_STACKUP::BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings,
+                                             int aActiveCopperLayersCount )
 {
     // Creates a default stackup, according to the current BOARD_DESIGN_SETTINGS settings.
     // Note: the m_TypeName string is made translatable using _HKI marker, but is not
     // translated when building the stackup.
     // It will be used as this in files, and can be translated only in dialog
-    LSET enabledLayer = aSettings->GetEnabledLayers();
-    int copperLayerCount = aSettings->GetCopperLayerCount();
-    double diel_thickness = aSettings->GetBoardThickness()
-                            - (copperDefaultThickness * copperLayerCount);
-    diel_thickness /= copperLayerCount - 1;
+    // if aSettings == NULL, build a full stackup (with 32 copper layers)
+    LSET enabledLayer = aSettings ? aSettings->GetEnabledLayers() : StackupAllowedBrdLayers();
+    int copperLayerCount = aSettings ? aSettings->GetCopperLayerCount() : B_Cu+1;
+
+    // We need to calculate a suitable dielectric layer thickness.
+    // If no settings, and if aActiveCopperLayersCount is given, use it
+    // (If no settings, and no aActiveCopperLayersCount, the full 32 layers are used)
+    int activeCuLayerCount = copperLayerCount;
+
+    if( aSettings == nullptr && aActiveCopperLayersCount > 0 )
+        activeCuLayerCount = aActiveCopperLayersCount;
+
+    int brd__thickness = aSettings ? aSettings->GetBoardThickness() : Millimeter2iu( 1.6 );
+    int diel_thickness = brd__thickness -
+                         ( BOARD_STACKUP_ITEM::GetCopperDefaultThickness() * activeCuLayerCount );
+
+    // Take in account the solder mask thickness:
+    int sm_count = ( enabledLayer & LSET( 2, F_Mask, B_Mask) ).count();
+    diel_thickness -= BOARD_STACKUP_ITEM::GetMaskDefaultThickness() * sm_count;
 
     int dielectric_idx = 0;
 
@@ -407,12 +435,15 @@ void BOARD_STACKUP::BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings )
     }
 
     // Transfer other stackup settings from aSettings
-    BOARD_STACKUP& source_stackup = aSettings->GetStackupDescriptor();
-    m_HasDielectricConstrains = source_stackup.m_HasDielectricConstrains;
-    m_EdgeConnectorConstraints = source_stackup.m_EdgeConnectorConstraints;
-    m_CastellatedPads = source_stackup.m_CastellatedPads;
-    m_EdgePlating = source_stackup.m_EdgePlating;
-    m_FinishType = source_stackup.m_FinishType;
+    if( aSettings )
+    {
+        BOARD_STACKUP& source_stackup = aSettings->GetStackupDescriptor();
+        m_HasDielectricConstrains = source_stackup.m_HasDielectricConstrains;
+        m_EdgeConnectorConstraints = source_stackup.m_EdgeConnectorConstraints;
+        m_CastellatedPads = source_stackup.m_CastellatedPads;
+        m_EdgePlating = source_stackup.m_EdgePlating;
+        m_FinishType = source_stackup.m_FinishType;
+    }
 }
 
 
@@ -425,7 +456,7 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
     if( m_list.empty() )
         return;
 
-    aFormatter->Print( aNestLevel, "(board_stackup\n" );
+    aFormatter->Print( aNestLevel, "(stackup\n" );
     int nest_level = aNestLevel+1;
 
     for( BOARD_STACKUP_ITEM* item: m_list )
@@ -444,8 +475,14 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
                            aFormatter->Quotew( item->m_TypeName ).c_str() );
 
         if( item->IsThicknessEditable() )
-            aFormatter->Print( 0, " (thickness %s)",
-                               FormatInternalUnits( (int)item->m_Thickness ).c_str() );
+        {
+            if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC && item->m_ThicknessLocked )
+                aFormatter->Print( 0, " (thickness %s locked)",
+                                   FormatInternalUnits( (int)item->m_Thickness ).c_str() );
+            else
+                aFormatter->Print( 0, " (thickness %s)",
+                                   FormatInternalUnits( (int)item->m_Thickness ).c_str() );
+        }
 
         if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
             aFormatter->Print( 0, " (material %s)",
@@ -455,7 +492,7 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
             aFormatter->Print( 0, " (epsilon_r %g)", item->m_EpsilonR );
 
         if( item->HasLossTangentValue() )
-            aFormatter->Print( 0, " (loss %s)",
+            aFormatter->Print( 0, " (loss_tangent %s)",
                                Double2Str(item->m_LossTangent ).c_str() );
 
         if( item->IsColorEditable() && !item->m_Color.IsEmpty()
@@ -471,7 +508,7 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
         aFormatter->Print( nest_level, "(copper_finish %s)\n",
                            aFormatter->Quotew( m_FinishType ).c_str() );
 
-    aFormatter->Print( nest_level, "(dielectric_constrains %s)\n",
+    aFormatter->Print( nest_level, "(dielectric_constraints %s)\n",
                        m_HasDielectricConstrains ? "yes" : "no" );
 
     if( m_EdgeConnectorConstraints > 0 )

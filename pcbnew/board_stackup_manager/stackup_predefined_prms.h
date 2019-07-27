@@ -44,7 +44,13 @@
 struct FAB_LAYER_COLOR
 {
     wxString m_ColorName;   // the name (in job file) of the color
+                            // User values are the HTML coding #rrggbb hexa value.
     wxColor m_Color;        // the color in r,g,b values (0..255)
+
+    FAB_LAYER_COLOR() {}
+    FAB_LAYER_COLOR( const wxString& aColorName, const wxColor& aColor )
+        : m_ColorName( aColorName ), m_Color( aColor )
+    {}
 };
 
 
@@ -68,6 +74,16 @@ wxArrayString GetCopperFinishStandardList( bool aTranslate );
  * @return a list of standard FAB_LAYER_COLOR items for silkscreen and solder mask.
  */
 const FAB_LAYER_COLOR* GetColorStandardList();
+
+/**
+ * @return the count of colors in ColorStandardList
+ */
+int GetColorStandardListCount();
+
+/**
+ * @return the index of the user defined color in ColorStandardList
+ */
+int GetColorUserDefinedListIdx();
 
 /**
  * @return a list of standard material items for dielectric.

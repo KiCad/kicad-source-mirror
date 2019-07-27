@@ -35,7 +35,7 @@ class OUTPUTFORMATTER;
 
 // A enum to manage the different layers inside the stackup layers.
 // Note the stackup layers include both dielectric and some layers handled by the board editor
-// Therfore a stackup layer item is not exactely like a board layer
+// Therefore a stackup layer item is not exactely like a board layer
 enum BOARD_STACKUP_ITEM_TYPE
 {
     BS_ITEM_TYPE_UNDEFINED,     // For not yet initialized BOARD_STACKUP_ITEM item
@@ -66,11 +66,16 @@ public:
     BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM& aOther );
 
     BOARD_STACKUP_ITEM_TYPE m_Type;
+    bool m_Enabled;         /// true if this stackup item must be taken in account,
+                            /// false to ignore it. Mainly used in dialog stackup editor.
     wxString m_TypeName;    /// type name of layer (copper, silk screen, core, prepreg ...)
     wxString m_Material;    /// type of material (has meaning only for dielectric
-    int m_DielectricLayerId;/// the "layer" id for dielectric layers, from 1 (top) to 32 (bottom)
+    int m_DielectricLayerId;/// the "layer" id for dielectric layers,
+                            /// from 1 (top) to 31 (bottom)
     wxString m_Color;       /// mainly for silkscreen and solder mask
     int m_Thickness;        /// the physical layer thickness in internal units
+    bool m_ThicknessLocked; /// true for dielectric layers with a fixed thickness
+                            /// (for impendace controled purposes), unused for other layers
     double m_EpsilonR;      /// For dielectric (and solder mask) the dielectric constant
     double m_LossTangent;   /// For dielectric (and solder mask) the dielectric loss
     PCB_LAYER_ID m_LayerId; /// the layer id (F.Cu to B.Cu, F.Silk, B.silk, F.Mask, B.Mask)
@@ -93,6 +98,12 @@ public:
 
     /// @return true if Thickness is editable
     bool IsThicknessEditable();
+
+    /// @return a reasonable default value for a copper layer thickness
+    static int GetCopperDefaultThickness();
+
+    /// @return a reasonable default value for a solder mask layer thickness
+    static int GetMaskDefaultThickness();
 };
 
 
@@ -150,6 +161,16 @@ public:
     /// @return a reference to the layer aIndex, or nullptr if not exists
     BOARD_STACKUP_ITEM* GetStackupLayer( int aIndex );
 
+    /** @return  the board layers full mask allowed in the stackup list
+     * i.e. the SilkS, Mask, Paste and all copper layers
+     */
+    static LSET StackupAllowedBrdLayers()
+    {
+        return LSET( 6, F_SilkS, F_Mask, F_Paste, B_SilkS, B_Mask, B_Paste )
+               | LSET::ExternalCuMask() | LSET::InternalCuMask();
+    }
+
+
     /// Delete all items in list and clear the list
     void RemoveAll();
 
@@ -174,8 +195,12 @@ public:
     /**
      * Creates a default stackup, according to the current BOARD_DESIGN_SETTINGS settings.
      * @param aSettings is the current board setting.
+     * if nullptr, build a full stackup (with 32 copper layers)
+     * @param aActiveCopperLayersCount is used only if aSettings == nullptr is the number
+     * of copper layers to use to calculate a default dielectric thickness.
+     * ((<= 0 to use all copper layers)
      */
-    void BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings );
+    void BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings, int aActiveCopperLayersCount = 0 );
 
     /**
      * Writes the stackup info on board file

@@ -32,11 +32,13 @@
 #include <layers_id_colors_and_visibility.h>
 #include <board_design_settings.h>
 #include <i18n_utility.h>       // _HKI definition
+#include <macros.h>
 #include "stackup_predefined_prms.h"
 
 // A list of copper finish standard type names
 // They are standard names in .gbdjob files, so avoid changing them or
 // ensure they are compatible with .gbrjob file spec.
+// These names are in fact usual copper finish names.
 static wxString CopperFinishType[] =
 {
     _HKI( NOT_SPECIFIED ),      // Not specified, not in .gbrjob file
@@ -51,7 +53,7 @@ static wxString CopperFinishType[] =
     _HKI("Immersion gold"),     // used in .gbrjob file
     _HKI("HT_OSP"),             // used in .gbrjob file
     _HKI("OSP"),                // used in .gbrjob file
-    _HKI("None"),                // used in .gbrjob file
+    _HKI("None"),               // used in .gbrjob file
     _HKI("User defined")        // keep this option at end
 };
 
@@ -59,17 +61,18 @@ static wxString CopperFinishType[] =
 // A list of available colors for solder mask and silkscreen
 // These names are used in .gbrjob file, so they are not fully free.
 // Use only what is allowed in .gbrjob files.
+// for other colors (user defined), the defined value is the html color syntax.
 static FAB_LAYER_COLOR solderMaskColors[]  =
 {
-    { _HKI( NOT_SPECIFIED ), wxColor( 0, 128, 0 ) },    // Not specified, not in .gbrjob file
-    { _HKI( "Green" ), wxColor( 0, 128, 0 ) },          // used in .gbrjob file
+    { _HKI( NOT_SPECIFIED ), wxColor( 80, 80, 80 ) },   // Not specified, not in .gbrjob file
+    { _HKI( "Green" ), wxColor( 60, 150, 80 ) },         // used in .gbrjob file
     { _HKI( "Red" ), wxColor( 128, 0, 0 ) },            // used in .gbrjob file
     { _HKI( "Blue" ), wxColor( 0, 0, 128 ) },           // used in .gbrjob file
     { _HKI( "Black" ), wxColor( 20, 20, 20 ) },         // used in .gbrjob file
     { _HKI( "White" ), wxColor( 200, 200, 200 ) },      // used in .gbrjob file
     { _HKI( "Yellow" ), wxColor( 128, 128, 0 ) },       // used in .gbrjob file
     { _HKI( "Purple" ), wxColor( 100, 0, 100 ) },       // used in .gbrjob file
-    { _HKI( "user defined" ), wxColor( 128, 128, 128 ) }, //free
+    { _HKI( "user defined" ), wxColor( 128, 128, 128 ) }, //free. the name is a dummy name here
     { "", wxColor( 0, 0, 0 ) }                          // Sentinel
 };
 
@@ -77,6 +80,7 @@ static FAB_LAYER_COLOR solderMaskColors[]  =
 // A list of available substrate material
 // These names are used in .gbrjob file, so they are not fully free.
 // Use only what is allowed in .gbrjob files.
+// These names are in fact usual substrate names.
 static FAB_SUBSTRATE substrateMaterial[]  =
 {
     { _HKI( NOT_SPECIFIED ), 0.0, 0.0 },    // Not specified, not in .gbrjob file
@@ -106,6 +110,18 @@ wxArrayString GetCopperFinishStandardList( bool aTranslate )
 const FAB_LAYER_COLOR* GetColorStandardList()
 {
     return solderMaskColors;
+}
+
+
+int GetColorStandardListCount()
+{
+    return arrayDim( solderMaskColors ) - 1;
+}
+
+
+int GetColorUserDefinedListIdx()
+{
+    return GetColorStandardListCount() - 1;
 }
 
 

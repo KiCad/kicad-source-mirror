@@ -113,6 +113,13 @@ class PCB_PARSER : public PCB_LEXER
      */
     void createOldLayerMapping( std::unordered_map< std::string, std::string >& aMap );
 
+    /**
+     * Function skipCurrent
+     * Skip the current token level, i.e
+     * search for the RIGHT parenthesis which closes the current description
+     */
+    void skipCurrent();
+
     void parseHeader();
     void parseGeneralSection();
     void parsePAGE_INFO();
@@ -120,6 +127,8 @@ class PCB_PARSER : public PCB_LEXER
 
     void parseLayers();
     void parseLayer( LAYER* aLayer );
+
+    void parseBoardStackup();
 
     void parseSetup();
     void parseDefaults( BOARD_DESIGN_SETTINGS& aSettings );

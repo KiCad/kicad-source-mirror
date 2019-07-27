@@ -364,6 +364,12 @@ double DoubleValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue, bo
             aUnits = INCHES;
             aUseMils = true;
         }
+        else if( unit == "oz" )  // 1 oz = 1.37 mils
+        {
+            aUnits = INCHES;
+            aUseMils = true;
+            dtmp *= 1.37;
+        }
     }
     else if( aUnits == DEGREES )
     {

@@ -17,10 +17,10 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/stattext.h>
-#include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/checkbox.h>
+#include <wx/textctrl.h>
 #include <wx/scrolwin.h>
 #include <wx/panel.h>
 
@@ -186,9 +186,6 @@ class PANEL_SETUP_LAYERS_BASE : public wxPanel
 		wxChoice* m_PresetsChoice;
 		wxStaticText* m_staticTextCopperLayers;
 		wxChoice* m_CopperLayersChoice;
-		wxStaticText* m_thicknessLabel;
-		wxTextCtrl* m_thicknessCtrl;
-		wxStaticText* m_thicknessUnits;
 		wxStaticLine* m_staticline2;
 		wxScrolledWindow* m_LayersListPanel;
 		wxFlexGridSizer* m_LayerListFlexGridSizer;

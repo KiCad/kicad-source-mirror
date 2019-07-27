@@ -112,6 +112,27 @@ void PCB_PARSER::init()
 }
 
 
+void PCB_PARSER::skipCurrent()
+{
+    int curr_level = 0;
+    T token;
+
+    while( ( token = NextTok() ) != T_EOF )
+    {
+        if( token == T_LEFT )
+            curr_level--;
+
+        if( token == T_RIGHT )
+        {
+            curr_level++;
+
+            if( curr_level > 0 )
+                return;
+        }
+    }
+}
+
+
 void PCB_PARSER::pushValueIntoMap( int aIndex, int aValue )
 {
     // Add aValue in netcode mapping (m_netCodes) at index aNetCode
@@ -122,6 +143,7 @@ void PCB_PARSER::pushValueIntoMap( int aIndex, int aValue )
 
     m_netCodes[aIndex] = aValue;
 }
+
 
 double PCB_PARSER::parseDouble()
 {
@@ -952,6 +974,182 @@ void PCB_PARSER::parseLayer( LAYER* aLayer )
 }
 
 
+void PCB_PARSER::parseBoardStackup()
+{
+    T token;
+    wxString name;
+    int dielectric_idx = 1;     // the index of dielectric layers
+    BOARD_STACKUP& stackup = m_board->GetDesignSettings().GetStackupDescriptor();
+
+    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    {
+        if( CurTok() != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        if( token != T_layer )
+        {
+            switch( token )
+            {
+            case T_copper_finish:
+                NeedSYMBOL();
+                stackup.m_FinishType = FromUTF8();
+                NeedRIGHT();
+                break;
+
+            case T_edge_plating:
+                token = NextTok();
+                stackup.m_EdgePlating = token == T_yes;
+                NeedRIGHT();
+                break;
+
+            case T_dielectric_constraints:
+                token = NextTok();
+                stackup.m_HasDielectricConstrains = token == T_yes;
+                NeedRIGHT();
+                break;
+
+            case T_edge_connector:
+                token = NextTok();
+                stackup.m_EdgeConnectorConstraints = BS_EDGE_CONNECTOR_NONE;
+
+                if( token == T_yes )
+                    stackup.m_EdgeConnectorConstraints = BS_EDGE_CONNECTOR_IN_USE;
+                else if( token == T_bevelled )
+                    stackup.m_EdgeConnectorConstraints = BS_EDGE_CONNECTOR_BEVELLED;
+
+                NeedRIGHT();
+                break;
+
+            case T_castellated_pads:
+                token = NextTok();
+                stackup.m_CastellatedPads = token == T_yes;
+                NeedRIGHT();
+                break;
+
+            default:
+                // Currently, skip this item if not defined, because the stackup def
+                // is a moving target
+                //Expecting( "copper_finish, edge_plating, dielectric_constrains, edge_connector, castellated_pads" );
+                skipCurrent();
+                break;
+            }
+
+            continue;
+        }
+
+        NeedSYMBOL();
+        name = FromUTF8();
+
+        // init the layer id. For dielectric, layer id = UNDEFINED_LAYER
+        PCB_LAYER_ID layerId = m_board->GetLayerID( name );
+
+        // Init the type
+        BOARD_STACKUP_ITEM_TYPE type = BS_ITEM_TYPE_UNDEFINED;
+
+        if( layerId == F_SilkS || layerId == B_SilkS )
+            type = BS_ITEM_TYPE_SILKSCREEN;
+        else if( layerId == F_Mask || layerId == B_Mask )
+            type = BS_ITEM_TYPE_SOLDERMASK;
+        else if( layerId == F_Paste || layerId == B_Paste )
+            type = BS_ITEM_TYPE_SOLDERPASTE;
+        else if( layerId == UNDEFINED_LAYER )
+            type = BS_ITEM_TYPE_DIELECTRIC;
+        else if( layerId >= F_Cu && layerId <= B_Cu )
+            type = BS_ITEM_TYPE_COPPER;
+
+        BOARD_STACKUP_ITEM* item = nullptr;
+
+        if( type != BS_ITEM_TYPE_UNDEFINED )
+        {
+            item = new BOARD_STACKUP_ITEM( type );
+            item->m_LayerId = layerId;
+
+            if( type == BS_ITEM_TYPE_DIELECTRIC )
+                item->m_DielectricLayerId = dielectric_idx++;
+
+            stackup.Add( item );
+        }
+        else
+            Expecting( "layer_name" );
+
+        // Dielectric thickness can be locked (for impedance controled layers)
+        bool thickness_locked = false;
+
+        for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+        {
+            if( token == T_LEFT )
+            {
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_type:
+                    NeedSYMBOL();
+                    item->m_TypeName = FromUTF8();
+                    NeedRIGHT();
+                    break;
+
+                case T_thickness:
+                    item->m_Thickness = parseBoardUnits( T_thickness );
+                    token = NextTok();
+                    if( token == T_LEFT )
+                        break;
+                    if( token == T_locked )
+                    {
+                        thickness_locked = true;
+                        NeedRIGHT();
+                    }
+                    break;
+
+                case T_material:
+                    NeedSYMBOL();
+                    item->m_Material = FromUTF8();
+                    NeedRIGHT();
+                    break;
+
+                case T_epsilon_r:
+                    NextTok();
+                    item->m_EpsilonR = parseDouble();
+                    NeedRIGHT();
+                    break;
+
+                case T_loss_tangent:
+                    NextTok();
+                    item->m_LossTangent = parseDouble();
+                    NeedRIGHT();
+                    break;
+
+                case T_color:
+                    NeedSYMBOL();
+                    item->m_Color = FromUTF8();
+                    NeedRIGHT();
+                    break;
+
+                default:
+                    // Currently, skip this item if not defined, because the stackup def
+                    // is a moving target
+                    //Expecting( "type, thickness, material, epsilon_r, loss_tangent, color" );
+                    skipCurrent();
+                }
+            }
+        }
+
+        if( type == BS_ITEM_TYPE_DIELECTRIC && thickness_locked )
+            item->m_ThicknessLocked = true;
+    }
+
+    if( token != T_RIGHT )
+    {
+        Expecting( ")" );
+    }
+
+    // Success:
+    m_board->GetDesignSettings().m_HasStackup = true;
+}
+
+
 void PCB_PARSER::createOldLayerMapping( std::unordered_map< std::string, std::string >& aMap )
 {
     // N.B. This mapping only includes Italian, Polish and French as they were the only languages that
@@ -1193,9 +1391,7 @@ void PCB_PARSER::parseSetup()
 
     T token;
     NETCLASSPTR defaultNetClass = m_board->GetDesignSettings().GetDefault();
-    // TODO Orson: is it really necessary to first operate on a copy and then apply it?
-    // would not it be better to use reference here and apply all the changes instantly?
-    BOARD_DESIGN_SETTINGS designSettings = m_board->GetDesignSettings();
+    BOARD_DESIGN_SETTINGS& designSettings = m_board->GetDesignSettings();
     ZONE_SETTINGS zoneSettings = m_board->GetZoneSettings();
 
     // Missing soldermask min width value means that the user has set the value to 0 and
@@ -1211,6 +1407,10 @@ void PCB_PARSER::parseSetup()
 
         switch( token )
         {
+        case T_stackup:
+            parseBoardStackup();
+            break;
+
         case T_last_trace_width:    // not used now
             /* lastTraceWidth =*/ parseBoardUnits( T_last_trace_width );
             NeedRIGHT();
@@ -1370,7 +1570,7 @@ void PCB_PARSER::parseSetup()
             break;
 
         case T_pad_to_mask_clearance:
-             designSettings.m_SolderMaskMargin = parseBoardUnits( T_pad_to_mask_clearance );
+            designSettings.m_SolderMaskMargin = parseBoardUnits( T_pad_to_mask_clearance );
             NeedRIGHT();
             break;
 
@@ -1444,7 +1644,7 @@ void PCB_PARSER::parseSetup()
         }
     }
 
-    m_board->SetDesignSettings( designSettings );
+    //m_board->SetDesignSettings( designSettings );
     m_board->SetZoneSettings( zoneSettings );
 }
 

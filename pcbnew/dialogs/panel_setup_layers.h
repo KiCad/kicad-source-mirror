@@ -59,13 +59,17 @@ public:
 
     void ImportSettingsFrom( BOARD* aBoard );
 
+    ///> @return the selected layer mask within the UI checkboxes
+    LSET GetUILayerMask();
+    ///> @return the layer name within the UI wxTextCtrl
+    wxString GetLayerName( LAYER_NUM layer );
+
 private:
     PAGED_DIALOG*   m_Parent;
     PCB_EDIT_FRAME* m_frame;
 
     BOARD*          m_pcb;
     LSET            m_enabledLayers;
-    UNIT_BINDER     m_pcbThickness;
 
     void setLayerCheckBox( LAYER_NUM layer, bool isChecked );
     void setCopperLayerCheckBoxes( int copperCount );
@@ -77,9 +81,6 @@ private:
     void showLayerTypes();
     void showPresets( LSET enabledLayerMask );
 
-    /** Return the selected layer mask within the UI checkboxes */
-    LSET getUILayerMask();
-    wxString getLayerName( LAYER_NUM layer );
     int getLayerTypeIndex( LAYER_NUM layer );
 
     void OnCheckBox( wxCommandEvent& event ) override;

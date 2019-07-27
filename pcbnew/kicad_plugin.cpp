@@ -466,12 +466,19 @@ void PCB_IO::formatLayer( const BOARD_ITEM* aItem ) const
         m_out->Print( 0, " (layer %s)", m_out->Quotew( aItem->GetLayerName() ).c_str() );
 }
 
+
 void PCB_IO::formatSetup( BOARD* aBoard, int aNestLevel ) const
 {
     const BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
 
     // Setup
     m_out->Print( aNestLevel, "(setup\n" );
+
+    // Save the board physical stackup structure
+    BOARD_STACKUP& stackup = aBoard->GetDesignSettings().GetStackupDescriptor();
+
+    if( aBoard->GetDesignSettings().m_HasStackup )
+        stackup.FormatBoardStackup( m_out,aBoard, aNestLevel+1 );
 
     // Save current default track width, for compatibility with older Pcbnew version;
     m_out->Print( aNestLevel+1, "(last_trace_width %s)\n",
@@ -741,10 +748,12 @@ void PCB_IO::formatNetInformation( BOARD* aBoard, int aNestLevel ) const
 void PCB_IO::formatHeader( BOARD* aBoard, int aNestLevel ) const
 {
     formatGeneral( aBoard, aNestLevel );
-    // Layers.
+    // Layers list.
     formatBoardLayers( aBoard, aNestLevel );
+
     // Setup
     formatSetup( aBoard, aNestLevel );
+
     // Save net codes and names
     formatNetInformation( aBoard, aNestLevel );
 }
