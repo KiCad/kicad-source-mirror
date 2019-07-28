@@ -86,12 +86,11 @@ static const char s_BitmapLayerIcon[BM_LAYERICON_SIZE][BM_LAYERICON_SIZE] =
 
 void PCB_EDIT_FRAME::PrepareLayerIndicator()
 {
-    static bool toolbarInitialized = false;
-    int         ii, jj;
-    COLOR4D     active_layer_color, top_color, bottom_color, via_color, background_color;
-    bool        changed = false;
+    int        ii, jj;
+    COLOR4D    active_layer_color, top_color, bottom_color, via_color, background_color;
+    bool       change = false;
 
-    static int     previous_requested_scale = 0;
+    static int previous_requested_scale;
     static COLOR4D previous_active_layer_color = COLOR4D::UNSPECIFIED;
     static COLOR4D previous_Route_Layer_TOP_color = COLOR4D::UNSPECIFIED;
     static COLOR4D previous_Route_Layer_BOTTOM_color = COLOR4D::UNSPECIFIED;
@@ -104,7 +103,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     if( requested_scale != previous_requested_scale )
     {
         previous_requested_scale = requested_scale;
-        changed = true;
+        change = true;
     }
 
     active_layer_color = Settings().Colors().GetLayerColor(GetActiveLayer());
@@ -112,7 +111,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     if( previous_active_layer_color != active_layer_color )
     {
         previous_active_layer_color = active_layer_color;
-        changed = true;
+        change = true;
     }
 
     top_color = Settings().Colors().GetLayerColor( GetScreen()->m_Route_Layer_TOP );
@@ -120,7 +119,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     if( previous_Route_Layer_TOP_color != top_color )
     {
         previous_Route_Layer_TOP_color = top_color;
-        changed = true;
+        change = true;
     }
 
     bottom_color = Settings().Colors().GetLayerColor( GetScreen()->m_Route_Layer_BOTTOM );
@@ -128,7 +127,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     if( previous_Route_Layer_BOTTOM_color != bottom_color )
     {
         previous_Route_Layer_BOTTOM_color = bottom_color;
-        changed = true;
+        change = true;
     }
 
     int via_type = GetDesignSettings().m_CurrentViaType;
@@ -137,7 +136,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     if( previous_via_color != via_color )
     {
         previous_via_color = via_color;
-        changed = true;
+        change = true;
     }
 
     background_color = Settings().Colors().GetItemColor( LAYER_PCB_BACKGROUND );
@@ -145,10 +144,10 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     if( previous_background_color != background_color )
     {
         previous_background_color = background_color;
-        changed = true;
+        change = true;
     }
 
-    if( changed || !LayerPairBitmap )
+    if( change || !LayerPairBitmap )
     {
         LayerPairBitmap = std::make_unique<wxBitmap>( 24, 24 );
 
@@ -203,9 +202,8 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
         LayerPairBitmap = std::make_unique<wxBitmap>( image );
     }
 
-    if( m_mainToolBar && ( changed || !toolbarInitialized ) )
+    if( m_mainToolBar )
     {
-        toolbarInitialized = true;
         m_mainToolBar->SetToolBitmap( PCB_ACTIONS::selectLayerPair, *LayerPairBitmap );
         m_mainToolBar->Refresh();
     }
