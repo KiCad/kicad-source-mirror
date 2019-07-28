@@ -1036,8 +1036,8 @@ void SCH_EDIT_TOOL::editComponentFieldText( SCH_FIELD* aField )
     while (!g_idleSeen )
         wxSafeYield();
 
-    // The above should work around the bug, but it doesn't.  Doing it again cures most
-    // instances, but I'm not yet sure whether or not it cures all.
+    // The above should work around the bug, but it doesn't.  Doing it again cures many
+    // instances, but not all of them.
     g_idleSeen = false;
     while (!g_idleSeen )
         wxSafeYield();
@@ -1054,7 +1054,7 @@ void SCH_EDIT_TOOL::editComponentFieldText( SCH_FIELD* aField )
     DIALOG_SCH_EDIT_ONE_FIELD dlg( m_frame, title, aField );
 
     // The footprint field dialog can invoke a KIWAY_PLAYER so we must use a quasi-modal
-    if( dlg.ShowQuasiModal() != wxID_OK )
+    if( dlg.ShowModal() != wxID_OK )
         return;
 
     dlg.UpdateField( aField, g_CurrentSheet );
