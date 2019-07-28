@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 25 2019)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -35,31 +35,31 @@
 ///////////////////////////////////////////////////////////////////////////////
 class DIALOG_BOARD_STATISTICS_BASE : public DIALOG_SHIM
 {
-    private:
+	private:
 
-    protected:
-        wxGrid* m_gridComponents;
-        wxGrid* m_gridPads;
-        wxGrid* m_gridBoard;
-        wxStaticText* viasLabel;
-        wxGrid* m_gridVias;
-        wxStaticLine* m_staticline1;
-        wxCheckBox* m_checkBoxSubtractHoles;
-        wxCheckBox* m_checkBoxExcludeComponentsNoPins;
-        wxStaticLine* m_staticline2;
-        wxButton* m_buttonSaveReport;
-        wxStdDialogButtonSizer* m_sdbControlSizer;
-        wxButton* m_sdbControlSizerOK;
+	protected:
+		wxGrid* m_gridComponents;
+		wxGrid* m_gridPads;
+		wxGrid* m_gridBoard;
+		wxStaticText* viasLabel;
+		wxGrid* m_gridVias;
+		wxStaticLine* m_staticline1;
+		wxCheckBox* m_checkBoxSubtractHoles;
+		wxCheckBox* m_checkBoxExcludeComponentsNoPins;
+		wxStaticLine* m_staticline2;
+		wxButton* m_buttonSaveReport;
+		wxStdDialogButtonSizer* m_sdbControlSizer;
+		wxButton* m_sdbControlSizerOK;
 
-        // Virtual event handlers, overide them in your derived class
-        virtual void checkboxClicked( wxCommandEvent& event ) { event.Skip(); }
-        virtual void saveReportClicked( wxCommandEvent& event ) { event.Skip(); }
+		// Virtual event handlers, overide them in your derived class
+		virtual void checkboxClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void saveReportClicked( wxCommandEvent& event ) { event.Skip(); }
 
 
-    public:
+	public:
 
-        DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Board Statistics"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
-        ~DIALOG_BOARD_STATISTICS_BASE();
+		DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Board Statistics"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+		~DIALOG_BOARD_STATISTICS_BASE();
 
 };
 

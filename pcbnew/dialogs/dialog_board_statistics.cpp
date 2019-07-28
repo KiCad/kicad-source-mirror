@@ -127,7 +127,7 @@ void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
     m_padsTypes.push_back( padsType_t( PAD_ATTRIB_HOLE_NOT_PLATED, _( "NPTH:" ) ) );
 
     m_viasTypes.clear();
-    m_viasTypes.push_back( viasType_t( VIA_THROUGH, _( "Through hole:" ) ) );
+    m_viasTypes.push_back( viasType_t( VIA_THROUGH, _( "Through vias:" ) ) );
     m_viasTypes.push_back( viasType_t( VIA_BLIND_BURIED, _( "Blind/buried:" ) ) );
     m_viasTypes.push_back( viasType_t( VIA_MICROVIA, _( "Micro via:" ) ) );
 
