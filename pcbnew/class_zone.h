@@ -260,7 +260,7 @@ public:
      * merged due to other parameters such as fillet radius.  The copper pour will end up
      * effectively merged though, so we want to keep the corners of such intersections sharp.
      */
-    void GetColinearCorners( BOARD* aBoard, std::set<VECTOR2I>& aCorners );
+    void GetColinearCorners( BOARD* aBoard, std::set<VECTOR2I>& colinearCorners );
 
     /**
      * Function TransformSolidAreasShapesToPolygonSet

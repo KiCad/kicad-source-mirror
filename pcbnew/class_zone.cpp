@@ -1167,19 +1167,41 @@ void ZONE_CONTAINER::GetColinearCorners( BOARD* aBoard, std::set<VECTOR2I>& aCor
 {
     int epsilon = Millimeter2iu( 0.001 );
 
+    // Things get messy when zone of different nets intersect.  To do it right we'd need to
+    // run our colinear test with the final filled regions rather than the outline regions.
+    // However, since there's no order dependance the only way to do that is to iterate
+    // through successive zone fills until the results are no longer changing -- and that's
+    // not going to happen.  So we punt and ignore any "messy" corners.
+    std::set<VECTOR2I> colinearCorners;
+    std::set<VECTOR2I> messyCorners;
+
     for( ZONE_CONTAINER* candidate : aBoard->Zones() )
     {
-        if( candidate != this
-            && candidate->GetNetCode() == GetNetCode()
-            && candidate->GetLayerSet() == GetLayerSet()
-            && candidate->GetIsKeepout() == GetIsKeepout() )
+        if( candidate == this )
+            continue;
+
+        if( candidate->GetLayerSet() != GetLayerSet() )
+            continue;
+
+        if( candidate->GetIsKeepout() != GetIsKeepout() )
+            continue;
+
+        for( auto iter = m_Poly->CIterate(); iter; iter++ )
         {
-            for( auto iter = m_Poly->CIterate(); iter; iter++ )
+            if( candidate->m_Poly->Collide( iter.Get(), epsilon ) )
             {
-                if( candidate->m_Poly->Collide( iter.Get(), epsilon ) )
-                    aCorners.insert( VECTOR2I( iter.Get() ) );
+                if( candidate->GetNetCode() == GetNetCode() )
+                    colinearCorners.insert( VECTOR2I( iter.Get() ) );
+                else
+                    messyCorners.insert( VECTOR2I( iter.Get() ) );
             }
         }
+    }
+
+    for( VECTOR2I corner : colinearCorners )
+    {
+        if( messyCorners.count( corner ) == 0 )
+            aCorners.insert( corner );
     }
 }
 
