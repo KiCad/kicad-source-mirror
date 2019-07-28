@@ -526,6 +526,7 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
         [this] ( const VECTOR2D& aPos )
         {
             BOARD* board = m_frame->GetBoard();
+            SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
             GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
             GENERAL_COLLECTOR collector;
             collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
@@ -535,11 +536,20 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
             else
                 collector.Collect( board, GENERAL_COLLECTOR::BoardLevelItems, (wxPoint) aPos, guide );
 
+            // Remove unselectable items
+            for( int i = collector.GetCount() - 1; i >= 0; --i )
+            {
+                if( !selectionTool->Selectable( collector[ i ] ) )
+                    collector.Remove( i );
+            }
+
+            if( collector.GetCount() > 1 )
+                selectionTool->GuessSelectionCandidates( collector, aPos );
+
             BOARD_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
 
             if( m_pickerItem != item )
             {
-                SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
 
                 if( m_pickerItem )
                     selectionTool->UnbrightenItem( m_pickerItem );

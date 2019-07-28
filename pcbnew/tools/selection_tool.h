@@ -123,10 +123,21 @@ public:
     void UnbrightenItem( BOARD_ITEM* aItem );
 
     /**
-     * Rebuilds the selection from the EDA_ITEMs' selection flags.  Commonly called after
-     * rolling back an undo state to make sure there aren't any stale pointers.
+     * Function selectable()
+     * Checks conditions for an item to be selected.
+     *
+     * @return True if the item fulfills conditions to be selected.
      */
-    void RebuildSelection();
+    bool Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOnly = false ) const;
+
+    /**
+     * Function guessSelectionCandidates()
+     * Tries to guess best selection candidates in case multiple items are clicked, by doing
+     * some brain-dead heuristics.
+     * @param aCollector is the collector that has a list of items to be queried.
+     * @param aWhere is the selection point to consider
+     */
+    void GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector, const VECTOR2I& aWhere ) const;
 
     /**
      * Function SelectionMenu()
@@ -136,6 +147,12 @@ public:
      * NOTE: this routine DOES NOT modify the selection.
      */
     int SelectionMenu( const TOOL_EVENT& aEvent );
+
+    /**
+     * Rebuilds the selection from the EDA_ITEMs' selection flags.  Commonly called after
+     * rolling back an undo state to make sure there aren't any stale pointers.
+     */
+    void RebuildSelection();
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
@@ -262,14 +279,6 @@ private:
     BOARD_ITEM* pickSmallestComponent( GENERAL_COLLECTOR* aCollector );
 
     /**
-     * Function selectable()
-     * Checks conditions for an item to be selected.
-     *
-     * @return True if the item fulfills conditions to be selected.
-     */
-    bool selectable( const BOARD_ITEM* aItem, bool checkVisibilityOnly = false ) const;
-
-    /**
      * Function select()
      * Takes necessary action mark an item as selected.
      *
@@ -310,15 +319,6 @@ private:
      * @return True if the given point is contained in any of selected items' bouding box.
      */
     bool selectionContains( const VECTOR2I& aPoint ) const;
-
-    /**
-     * Function guessSelectionCandidates()
-     * Tries to guess best selection candidates in case multiple items are clicked, by
-     * doing some braindead heuristics.
-     * @param aCollector is the collector that has a list of items to be queried.
-     * @param aWhere is the selection point to consider
-     */
-    void guessSelectionCandidates( GENERAL_COLLECTOR& aCollector, const VECTOR2I& aWhere ) const;
 
     /**
      * Event handler to update the selection VIEW_ITEM.

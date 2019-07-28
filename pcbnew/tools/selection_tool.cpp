@@ -400,7 +400,7 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     // Remove unselectable items
     for( int i = collector.GetCount() - 1; i >= 0; --i )
     {
-        if( !selectable( collector[i] ) || ( aOnDrag && collector[i]->IsLocked() ) )
+        if( !Selectable( collector[ i ] ) || ( aOnDrag && collector[i]->IsLocked() ) )
             collector.Remove( i );
     }
 
@@ -414,7 +414,7 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
     if( collector.GetCount() > 1 && !m_skip_heuristics )
     {
-        guessSelectionCandidates( collector, aWhere );
+        GuessSelectionCandidates( collector, aWhere );
     }
 
     // If still more than one item we're going to have to ask the user.
@@ -542,7 +542,7 @@ bool SELECTION_TOOL::selectMultiple()
             {
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
 
-                if( !item || !selectable( item ) )
+                if( !item || !Selectable( item ) )
                     continue;
 
                 if( item->HitTest( selectionRect, windowSelection ) )
@@ -1426,7 +1426,7 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
 }
 
 
-bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem, bool checkVisibilityOnly ) const
+bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOnly ) const
 {
     // Is high contrast mode enabled?
     bool highContrast = getView()->GetPainter()->GetSettings()->GetHighContrast();
@@ -1535,13 +1535,13 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 
         for( auto item : module->GraphicalItems() )
         {
-            if( selectable( item, true ) )
+            if( Selectable( item, true ) )
                 return true;
         }
 
         for( auto pad : module->Pads() )
         {
-            if( selectable( pad, true ) )
+            if( Selectable( pad, true ) )
                 return true;
         }
 
@@ -1884,8 +1884,8 @@ double calcRatio( double a, double b )
 // We currently check for pads and text mostly covering a footprint, but we don’t check for
 // smaller footprints mostly covering a larger footprint.
 //
-void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
-        const VECTOR2I& aWhere ) const
+void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
+                                               const VECTOR2I& aWhere ) const
 {
     std::set<BOARD_ITEM*> preferred;
     std::set<BOARD_ITEM*> rejected;
