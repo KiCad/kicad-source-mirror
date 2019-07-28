@@ -1,11 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#ifndef __DIALOG_COPPER_ZONES_BASE_H__
+#define __DIALOG_COPPER_ZONES_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -22,11 +23,11 @@
 #include <wx/listbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/button.h>
+#include <wx/checkbox.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
-#include <wx/checkbox.h>
 #include <wx/statbmp.h>
 #include <wx/spinctrl.h>
 #include <wx/choice.h>
@@ -42,7 +43,7 @@
 class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 {
 	private:
-
+	
 	protected:
 		enum
 		{
@@ -59,7 +60,7 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 			wxID_COPPER_BRIDGE_VALUE,
 			wxID_BUTTON_EXPORT
 		};
-
+		
 		wxBoxSizer* m_MainBoxSizer;
 		wxDataViewListCtrl* m_layers;
 		wxListBox* m_ListNetNameSelection;
@@ -117,7 +118,7 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-
+		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
@@ -127,12 +128,13 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		virtual void OnStyleSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ExportSetupToOtherCopperZones( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }
-
-
+		
+	
 	public:
-
-		DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID id = ID_DIALOG_COPPER_ZONE_BASE, const wxString& title = _("Copper Zone Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 825,528 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID id = ID_DIALOG_COPPER_ZONE_BASE, const wxString& title = _("Copper Zone Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_COPPER_ZONE_BASE();
-
+	
 };
 
+#endif //__DIALOG_COPPER_ZONES_BASE_H__
