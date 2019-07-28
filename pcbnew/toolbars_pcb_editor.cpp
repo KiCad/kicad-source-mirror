@@ -86,11 +86,12 @@ static const char s_BitmapLayerIcon[BM_LAYERICON_SIZE][BM_LAYERICON_SIZE] =
 
 void PCB_EDIT_FRAME::PrepareLayerIndicator()
 {
-    int        ii, jj;
-    COLOR4D    active_layer_color, top_color, bottom_color, via_color, background_color;
-    bool       change = false;
+    static bool toolbarInitialized = false;
+    int         ii, jj;
+    COLOR4D     active_layer_color, top_color, bottom_color, via_color, background_color;
+    bool        changed = false;
 
-    static int previous_requested_scale;
+    static int     previous_requested_scale = 0;
     static COLOR4D previous_active_layer_color = COLOR4D::UNSPECIFIED;
     static COLOR4D previous_Route_Layer_TOP_color = COLOR4D::UNSPECIFIED;
     static COLOR4D previous_Route_Layer_BOTTOM_color = COLOR4D::UNSPECIFIED;
@@ -103,7 +104,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     if( requested_scale != previous_requested_scale )
     {
         previous_requested_scale = requested_scale;
-        change = true;
+        changed = true;
     }
 
     active_layer_color = Settings().Colors().GetLayerColor(GetActiveLayer());
@@ -111,7 +112,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     if( previous_active_layer_color != active_layer_color )
     {
         previous_active_layer_color = active_layer_color;
-        change = true;
+        changed = true;
     }
 
     top_color = Settings().Colors().GetLayerColor( GetScreen()->m_Route_Layer_TOP );
@@ -119,7 +120,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     if( previous_Route_Layer_TOP_color != top_color )
     {
         previous_Route_Layer_TOP_color = top_color;
-        change = true;
+        changed = true;
     }
 
     bottom_color = Settings().Colors().GetLayerColor( GetScreen()->m_Route_Layer_BOTTOM );
@@ -127,7 +128,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     if( previous_Route_Layer_BOTTOM_color != bottom_color )
     {
         previous_Route_Layer_BOTTOM_color = bottom_color;
-        change = true;
+        changed = true;
     }
 
     int via_type = GetDesignSettings().m_CurrentViaType;
@@ -136,7 +137,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     if( previous_via_color != via_color )
     {
         previous_via_color = via_color;
-        change = true;
+        changed = true;
     }
 
     background_color = Settings().Colors().GetItemColor( LAYER_PCB_BACKGROUND );
@@ -144,67 +145,67 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     if( previous_background_color != background_color )
     {
         previous_background_color = background_color;
-        change = true;
+        changed = true;
     }
 
-    if( !change && LayerPairBitmap )
-        return;
-
-    LayerPairBitmap = std::make_unique<wxBitmap>( 24, 24 );
-
-    /* Draw the icon, with colors according to the active layer and layer
-     * pairs for via command (change layer)
-     */
-    wxMemoryDC iconDC;
-    iconDC.SelectObject( *LayerPairBitmap );
-    wxBrush    brush;
-    wxPen      pen;
-    int buttonColor = -1;
-
-    brush.SetStyle( wxBRUSHSTYLE_SOLID );
-    brush.SetColour( background_color.WithAlpha(1.0).ToColour() );
-    iconDC.SetBrush( brush );
-    iconDC.DrawRectangle( 0, 0, BM_LAYERICON_SIZE, BM_LAYERICON_SIZE );
-
-    for( ii = 0; ii < BM_LAYERICON_SIZE; ii++ )
+    if( changed || !LayerPairBitmap )
     {
-        for( jj = 0; jj < BM_LAYERICON_SIZE; jj++ )
+        LayerPairBitmap = std::make_unique<wxBitmap>( 24, 24 );
+
+        // Draw the icon, with colors according to the active layer and layer pairs for via
+        // command (change layer)
+        wxMemoryDC iconDC;
+        iconDC.SelectObject( *LayerPairBitmap );
+        wxBrush    brush;
+        wxPen      pen;
+        int buttonColor = -1;
+
+        brush.SetStyle( wxBRUSHSTYLE_SOLID );
+        brush.SetColour( background_color.WithAlpha(1.0).ToColour() );
+        iconDC.SetBrush( brush );
+        iconDC.DrawRectangle( 0, 0, BM_LAYERICON_SIZE, BM_LAYERICON_SIZE );
+
+        for( ii = 0; ii < BM_LAYERICON_SIZE; ii++ )
         {
-            if( s_BitmapLayerIcon[ii][jj] != buttonColor )
+            for( jj = 0; jj < BM_LAYERICON_SIZE; jj++ )
             {
-                switch( s_BitmapLayerIcon[ii][jj] )
+                if( s_BitmapLayerIcon[ii][jj] != buttonColor )
                 {
-                default:
-                case 0: pen.SetColour( active_layer_color.ToColour() ); break;
-                case 1: pen.SetColour( top_color.ToColour() );          break;
-                case 2: pen.SetColour( bottom_color.ToColour() );       break;
-                case 3: pen.SetColour( via_color.ToColour() );          break;
+                    switch( s_BitmapLayerIcon[ii][jj] )
+                    {
+                    default:
+                    case 0: pen.SetColour( active_layer_color.ToColour() ); break;
+                    case 1: pen.SetColour( top_color.ToColour() );          break;
+                    case 2: pen.SetColour( bottom_color.ToColour() );       break;
+                    case 3: pen.SetColour( via_color.ToColour() );          break;
+                    }
+
+                    buttonColor = s_BitmapLayerIcon[ii][jj];
+                    iconDC.SetPen( pen );
                 }
 
-                buttonColor = s_BitmapLayerIcon[ii][jj];
-                iconDC.SetPen( pen );
+                iconDC.DrawPoint( jj, ii );
             }
-
-            iconDC.DrawPoint( jj, ii );
         }
+
+        // Deselect the bitmap from the DC in order to delete the MemoryDC safely without
+        // deleting the bitmap
+        iconDC.SelectObject( wxNullBitmap );
+
+        // Scale the bitmap
+        const int scale = ( requested_scale <= 0 ) ? KiIconScale( this ) : requested_scale;
+        wxImage image = LayerPairBitmap->ConvertToImage();
+
+        // "NEAREST" causes less mixing of colors
+        image.Rescale( scale * image.GetWidth() / 4, scale * image.GetHeight() / 4,
+                       wxIMAGE_QUALITY_NEAREST );
+
+        LayerPairBitmap = std::make_unique<wxBitmap>( image );
     }
 
-    /* Deselect the Tool Bitmap from DC,
-     *  in order to delete the MemoryDC safely without deleting the bitmap */
-    iconDC.SelectObject( wxNullBitmap );
-
-    // Scale the bitmap
-    const int scale = ( requested_scale <= 0 ) ? KiIconScale( this ) : requested_scale;
-    wxImage image = LayerPairBitmap->ConvertToImage();
-
-    // "NEAREST" causes less mixing of colors
-    image.Rescale( scale * image.GetWidth() / 4, scale * image.GetHeight() / 4,
-                   wxIMAGE_QUALITY_NEAREST );
-
-    LayerPairBitmap = std::make_unique<wxBitmap>( image );
-
-    if( m_mainToolBar )
+    if( m_mainToolBar && ( changed || !toolbarInitialized ) )
     {
+        toolbarInitialized = true;
         m_mainToolBar->SetToolBitmap( PCB_ACTIONS::selectLayerPair, *LayerPairBitmap );
         m_mainToolBar->Refresh();
     }
