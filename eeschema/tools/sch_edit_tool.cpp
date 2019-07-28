@@ -1054,7 +1054,7 @@ void SCH_EDIT_TOOL::editComponentFieldText( SCH_FIELD* aField )
     DIALOG_SCH_EDIT_ONE_FIELD dlg( m_frame, title, aField );
 
     // The footprint field dialog can invoke a KIWAY_PLAYER so we must use a quasi-modal
-    if( dlg.ShowModal() != wxID_OK )
+    if( dlg.ShowQuasiModal() != wxID_OK )
         return;
 
     dlg.UpdateField( aField, g_CurrentSheet );
