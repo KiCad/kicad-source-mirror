@@ -21,7 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <tool/tool_manager.h>
 #include <tool/picker_tool.h>
 #include <tools/sch_edit_tool.h>
 #include <tools/ee_selection_tool.h>
@@ -1016,33 +1015,6 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
 void SCH_EDIT_TOOL::editComponentFieldText( SCH_FIELD* aField )
 {
-#ifdef  __WXMAC__
-    // This dialog, like no other that we currently know of, sometimes provokes Apple's
-    // "[NSAlert runModal] may not be invoked inside of transaction begin/commit pair"
-    // bug.  See: https://bugs.launchpad.net/kicad/+bug/1837225
-    //
-    // Note: this bug occurs irrespecitve of whether the dialog is a modal or quasi-modal.
-
-    static bool g_initialized = false;
-    static bool g_idleSeen = false;
-
-    if( !g_initialized )
-    {
-        g_initialized = true;
-        m_frame->Bind( wxEVT_IDLE, [&] ( wxIdleEvent& aEvent ) { g_idleSeen = true; } );
-    }
-
-    g_idleSeen = false;
-    while (!g_idleSeen )
-        wxSafeYield();
-
-    // The above should work around the bug, but it doesn't.  Doing it again cures many
-    // instances, but not all of them.
-    g_idleSeen = false;
-    while (!g_idleSeen )
-        wxSafeYield();
-#endif
-
     SCH_COMPONENT* component = (SCH_COMPONENT*) aField->GetParent();
 
     // Save old component in undo list if not already in edit, or moving.

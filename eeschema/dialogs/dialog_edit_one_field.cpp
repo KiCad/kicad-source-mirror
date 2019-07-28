@@ -1,8 +1,3 @@
-/**
- * @file dialog_edit_one_field.cpp
- * @brief dialog to editing a field ( not a graphic text) in current component.
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -37,7 +32,6 @@
 #include <sch_component.h>
 #include <class_libentry.h>
 #include <lib_field.h>
-#include <sch_component.h>
 #include <template_fieldnames.h>
 #include <class_library.h>
 #include <sch_validators.h>
@@ -122,10 +116,15 @@ void DIALOG_EDIT_ONE_FIELD::OnTextValueSelectButtonClick( wxCommandEvent& aEvent
 
 void DIALOG_EDIT_ONE_FIELD::OnSetFocusText( wxFocusEvent& event )
 {
-
+#ifdef __WXGTK__
     // Force an update of the text control before setting the text selection
     // This is needed because GTK seems to ignore the selection on first update
+    //
+    // Note that we can't do this on OSX as it tends to provoke Apple's
+    // "[NSAlert runModal] may not be invoked inside of transaction begin/commit pair"
+    // bug.  See: https://bugs.launchpad.net/kicad/+bug/1837225
     m_TextValue->Update();
+#endif
 
     if( m_fieldId == REFERENCE )
         SelectReferenceNumber( static_cast<wxTextEntry*>( m_TextValue ) );
