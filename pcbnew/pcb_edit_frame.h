@@ -554,7 +554,7 @@ public:
 
     /* toolbars update UI functions: */
 
-    void PrepareLayerIndicator();
+    void PrepareLayerIndicator( bool aForceRebuild = false );
 
     void ToggleLayersManager();
     void ToggleMicrowaveToolbar();

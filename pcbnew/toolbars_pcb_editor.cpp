@@ -84,11 +84,11 @@ static const char s_BitmapLayerIcon[BM_LAYERICON_SIZE][BM_LAYERICON_SIZE] =
 };
 
 
-void PCB_EDIT_FRAME::PrepareLayerIndicator()
+void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
 {
     int        ii, jj;
     COLOR4D    active_layer_color, top_color, bottom_color, via_color, background_color;
-    bool       change = false;
+    bool       change = aForceRebuild;
 
     static int previous_requested_scale;
     static COLOR4D previous_active_layer_color = COLOR4D::UNSPECIFIED;
@@ -283,8 +283,8 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddControl( m_SelLayerBox );
 
     m_mainToolBar->Add( PCB_ACTIONS::selectLayerPair );
-    PrepareLayerIndicator();    // Initialize the bitmap with the active layer colors
-    
+    PrepareLayerIndicator( true );    // Force rebuild of the bitmap with the active layer colors
+
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->Add( PCB_ACTIONS::showEeschema );
 
