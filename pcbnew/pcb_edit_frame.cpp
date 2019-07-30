@@ -306,6 +306,13 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_Layers = nullptr;
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
 
+    m_previous_requested_scale = 0;
+    m_previous_active_layer_color = COLOR4D::UNSPECIFIED;
+    m_previous_Route_Layer_TOP_color = COLOR4D::UNSPECIFIED;
+    m_previous_Route_Layer_BOTTOM_color = COLOR4D::UNSPECIFIED;
+    m_previous_via_color = COLOR4D::UNSPECIFIED;
+    m_previous_background_color = COLOR4D::UNSPECIFIED;
+
     // We don't know what state board was in when it was lasat saved, so we have to
     // assume dirty
     m_ZoneFillsDirty = true;

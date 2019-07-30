@@ -100,6 +100,14 @@ protected:
 
     wxString          m_lastNetListRead;        ///< Last net list read with relative path.
 
+    // For PrepareLayerIndicator():
+    int     m_previous_requested_scale;
+    COLOR4D m_previous_active_layer_color;
+    COLOR4D m_previous_Route_Layer_TOP_color;
+    COLOR4D m_previous_Route_Layer_BOTTOM_color;
+    COLOR4D m_previous_via_color;
+    COLOR4D m_previous_background_color;
+
     // The Tool Framework initalization
     void setupTools();
 
