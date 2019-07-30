@@ -106,7 +106,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
     viewMenu->AddItem( ID_ROTATE3D_Z_POS, _( "Rotate Z Counterclockwise\tZ" ), "",
                        rotate_pos_z_xpm,               SELECTION_CONDITIONS::ShowAlways );
 
-    viewMenu->AppendSeparator();
+    viewMenu->AddSeparator();
     viewMenu->AddItem( ID_MOVE3D_LEFT, _( "Move Left\tLeft" ), "",
                        left_xpm,                       SELECTION_CONDITIONS::ShowAlways );
 
@@ -319,7 +319,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
 
     prefsMenu->AddMenu( gridSubmenu,                           SELECTION_CONDITIONS::ShowAlways );
 
-    prefsMenu->AppendSeparator();
+    prefsMenu->AddSeparator();
     prefsMenu->AddItem( ID_MENU3D_RESET_DEFAULTS, _( "Reset to Default Settings" ), "",
                         tools_xpm,                             SELECTION_CONDITIONS::ShowAlways );
 
