@@ -167,7 +167,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
     auto showAxesCondition = [ this ] ( const SELECTION& aSel ) {
         return m_settings.GetFlag( FL_AXIS );
     };
-    
+
     prefsMenu->AddItem( ID_TOOL_SET_VISIBLE_ITEMS, _( "Display Options" ), "",
                         read_setup_xpm,                SELECTION_CONDITIONS::ShowAlways );
 
@@ -281,7 +281,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
                            setcolor_board_body_xpm,            SELECTION_CONDITIONS::ShowAlways );
 
     prefsMenu->AddMenu( colorSubmenu );
-    
+
     prefsMenu->AddCheckItem( ID_MENU3D_AXIS_ONOFF, _( "Show 3D &Axis" ), "",
                              axis3d_front_xpm,                 showAxesCondition );
 
@@ -306,25 +306,25 @@ void EDA_3D_VIEWER::CreateMenuBar()
         return m_settings.GridGet() == GRID3D_1MM;
     };
 
-    gridSubmenu->AddItem( ID_MENU3D_GRID_NOGRID, _( "No 3D Grid" ), "",
-                          nullptr,                             noGridCondition );
-    gridSubmenu->AddItem( ID_MENU3D_GRID_10_MM, _( "3D Grid 10mm" ), "",
-                          nullptr,                             grid10mmCondition );
-    gridSubmenu->AddItem( ID_MENU3D_GRID_5_MM, _( "3D Grid 5mm" ), "",
-                          nullptr,                             grid5mmCondition );
-    gridSubmenu->AddItem( ID_MENU3D_GRID_2P5_MM, _( "3D Grid 2.5mm" ), "",
-                          nullptr,                             grid2p5mmCondition );
-    gridSubmenu->AddItem( ID_MENU3D_GRID_1_MM, _( "3D Grid 1mm" ), "",
-                          nullptr,                             grid_1mmCondition );
-    
+    gridSubmenu->AddCheckItem( ID_MENU3D_GRID_NOGRID, _( "No 3D Grid" ), "",
+                               nullptr, noGridCondition );
+    gridSubmenu->AddCheckItem( ID_MENU3D_GRID_10_MM, _( "3D Grid 10mm" ), "",
+                               nullptr, grid10mmCondition );
+    gridSubmenu->AddCheckItem( ID_MENU3D_GRID_5_MM, _( "3D Grid 5mm" ), "",
+                               nullptr, grid5mmCondition );
+    gridSubmenu->AddCheckItem( ID_MENU3D_GRID_2P5_MM, _( "3D Grid 2.5mm" ), "",
+                               nullptr, grid2p5mmCondition );
+    gridSubmenu->AddCheckItem( ID_MENU3D_GRID_1_MM, _( "3D Grid 1mm" ), "",
+                               nullptr, grid_1mmCondition );
+
     prefsMenu->AddMenu( gridSubmenu,                           SELECTION_CONDITIONS::ShowAlways );
-    
+
     prefsMenu->AppendSeparator();
     prefsMenu->AddItem( ID_MENU3D_RESET_DEFAULTS, _( "Reset to Default Settings" ), "",
                         tools_xpm,                             SELECTION_CONDITIONS::ShowAlways );
 
     prefsMenu->Resolve();
-    
+
     //-- Menubar -------------------------------------------------------------
     //
     menuBar->Append( fileMenu, _( "&File" ) );

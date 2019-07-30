@@ -70,7 +70,7 @@ static const wxString entryMaximized = "Maximized";  ///< Nonzero iff frame is m
 BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
     EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::OnKicadAbout )
     EVT_MENU( wxID_PREFERENCES, EDA_BASE_FRAME::OnPreferences )
-    
+
     EVT_CHAR_HOOK( EDA_BASE_FRAME::OnCharHook )
     EVT_MENU_OPEN( EDA_BASE_FRAME::OnMenuOpen )
     EVT_MENU_CLOSE( EDA_BASE_FRAME::OnMenuOpen )
@@ -192,7 +192,7 @@ void EDA_BASE_FRAME::PopTool( const std::string& actionName )
 
             // If there's something underneath us, and it's now the top of the stack, then
             // re-activate it
-            if( ( --i ) >= 0 && i == m_toolStack.size() - 1 )
+            if( ( --i ) >= 0 && i == (int)m_toolStack.size() - 1 )
             {
                 std::string  back = m_toolStack[ i ];
                 TOOL_ACTION* action = m_toolManager->GetActionManager()->FindAction( back );
@@ -372,7 +372,7 @@ void EDA_BASE_FRAME::AddStandardHelpMenu( wxMenuBar* aMenuBar )
     helpMenu->Add( ACTIONS::gettingStarted );
     helpMenu->Add( ACTIONS::listHotKeys );
     helpMenu->Add( ACTIONS::getInvolved );
-    
+
     helpMenu->AppendSeparator();
     helpMenu->Add( _( "&About KiCad" ), "", wxID_ABOUT, about_xpm );
 
@@ -608,7 +608,7 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
     wxTreebook* book = dlg.GetTreebook();
 
     book->AddPage( new PANEL_COMMON_SETTINGS( &dlg, book ), _( "Common" ) );
-    
+
     PANEL_HOTKEYS_EDITOR* hotkeysPanel = new PANEL_HOTKEYS_EDITOR( this, book, false );
     book->AddPage( hotkeysPanel, _( "Hotkeys" ) );
 

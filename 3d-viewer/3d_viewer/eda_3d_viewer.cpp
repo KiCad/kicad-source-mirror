@@ -571,6 +571,21 @@ void EDA_3D_VIEWER::On3DGridSelection( wxCommandEvent &event )
     default: wxFAIL_MSG( "Invalid event in EDA_3D_VIEWER::On3DGridSelection()" );
     }
 
+    int menu_ids[]
+    {
+        ID_MENU3D_GRID_NOGRID, ID_MENU3D_GRID_10_MM, ID_MENU3D_GRID_5_MM,
+        ID_MENU3D_GRID_2P5_MM, ID_MENU3D_GRID_1_MM
+    };
+
+    // Refresh checkmarks
+    wxMenuBar* menuBar = GetMenuBar();
+
+    for( int ii = 0; ii < 5; ii++ )
+    {
+        wxMenuItem* item = menuBar->FindItem( menu_ids[ii] );
+        item->Check( menu_ids[ii] == id );
+    }
+
     if( m_canvas )
         m_canvas->Request_refresh();
 }
