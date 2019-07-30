@@ -218,9 +218,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AddItem( ACTIONS::cut,                        SELECTION_CONDITIONS::NotEmpty );
     editMenu->AddItem( ACTIONS::copy,                       SELECTION_CONDITIONS::NotEmpty );
     editMenu->AddItem( ACTIONS::paste,                      noActiveToolCondition );
-
-    editMenu->AddSeparator();
-    editMenu->AddItem( PCB_ACTIONS::deleteTool,             SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( ACTIONS::doDelete,                   SELECTION_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::duplicate,                  SELECTION_CONDITIONS::NotEmpty );
 
     editMenu->AddSeparator();
     editMenu->AddItem( ACTIONS::find,                       SELECTION_CONDITIONS::ShowAlways );
@@ -236,6 +235,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AddItem( PCB_ACTIONS::zoneUnfillAll,          SELECTION_CONDITIONS::ShowAlways );
 
     editMenu->AddSeparator();
+    editMenu->AddItem( PCB_ACTIONS::deleteTool,             SELECTION_CONDITIONS::ShowAlways );
     editMenu->AddItem( PCB_ACTIONS::globalDeletions,        SELECTION_CONDITIONS::ShowAlways );
     editMenu->AddItem( PCB_ACTIONS::cleanupTracksAndVias,   SELECTION_CONDITIONS::ShowAlways );
 

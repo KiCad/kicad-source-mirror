@@ -131,7 +131,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AddItem( ACTIONS::cut,                      SELECTION_CONDITIONS::NotEmpty );
     editMenu->AddItem( ACTIONS::copy,                     SELECTION_CONDITIONS::NotEmpty );
     editMenu->AddItem( ACTIONS::paste,                    noActiveToolCondition );
-    editMenu->AddItem( PCB_ACTIONS::deleteFootprint,      footprintTargettedCondition );
+    editMenu->AddItem( ACTIONS::doDelete,                 SELECTION_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::duplicate,                SELECTION_CONDITIONS::NotEmpty );
 
     editMenu->AddSeparator();
     editMenu->AddItem( PCB_ACTIONS::footprintProperties,  haveFootprintCondition );
