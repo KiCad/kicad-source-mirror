@@ -78,7 +78,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     fileMenu->AddItem( ACTIONS::pageSettings,  SELECTION_CONDITIONS::ShowAlways );
     fileMenu->AddItem( ACTIONS::print,         SELECTION_CONDITIONS::ShowAlways );
 
-    fileMenu->AppendSeparator();
+    fileMenu->AddSeparator();
     // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
     fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
 

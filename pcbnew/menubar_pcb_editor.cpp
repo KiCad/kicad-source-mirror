@@ -319,7 +319,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->AddItem( ACTIONS::zoomTool,                      SELECTION_CONDITIONS::ShowAlways );
     viewMenu->AddItem( ACTIONS::zoomRedraw,                    SELECTION_CONDITIONS::ShowAlways );
 
-    viewMenu->AppendSeparator();
+    viewMenu->AddSeparator();
     viewMenu->AddCheckItem( ACTIONS::toggleGrid,               gridShownCondition );
     viewMenu->AddItem( ACTIONS::gridProperties,                SELECTION_CONDITIONS::ShowAlways );
     viewMenu->AddCheckItem( PCB_ACTIONS::togglePolarCoords,    polarCoordsCondition );
@@ -367,7 +367,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->AddCheckItem( PCB_ACTIONS::flipBoard,                     boardFlippedCondition );
 
 #ifdef __APPLE__
-    viewMenu->AppendSeparator();
+    viewMenu->AddSeparator();
 #endif
 
     viewMenu->Resolve();
