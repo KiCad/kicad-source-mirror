@@ -81,8 +81,9 @@ const EDA_RECT SCH_NO_CONNECT::GetBoundingBox() const
 
 void SCH_NO_CONNECT::ViewGetLayers( int aLayers[], int& aCount ) const
 {
+    aCount = 2;
     aLayers[0] = LAYER_NOCONNECT;
-    aCount = 1;
+    aLayers[1] = LAYER_SELECTION_SHADOWS;
 }
 
 

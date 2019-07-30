@@ -90,21 +90,22 @@ void SCH_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSet
 
 const COLOR4D& SCH_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
 {
-  return m_layerColors[ aLayer ];
+    return m_layerColors[ aLayer ];
 }
 
 
 /**
  * Used when a LIB_PART is not found in library to draw a dummy shape.
  * This component is a 400 mils square with the text "??"
- * DEF DUMMY U 0 40 Y Y 1 0 N
- * F0 "U" 0 -350 60 H V
- * F1 "DUMMY" 0 350 60 H V
- * DRAW
- * T 0 0 0 150 0 0 0 ??
- * S -200 200 200 -200 0 1 0
- * ENDDRAW
- * ENDDEF
+ *
+ *   DEF DUMMY U 0 40 Y Y 1 0 N
+ *     F0 "U" 0 -350 60 H V
+ *     F1 "DUMMY" 0 350 60 H V
+ *     DRAW
+ *       T 0 0 0 150 0 0 0 ??
+ *       S -200 200 200 -200 0 1 0
+ *     ENDDRAW
+ *   ENDDEF
  */
 static LIB_PART* dummy()
 {
@@ -138,7 +139,7 @@ SCH_PAINTER::SCH_PAINTER( GAL* aGal ) :
 
 
 #define HANDLE_ITEM( type_id, type_name ) \
-    case type_id: draw( (type_name *) item, aLayer ); break;
+    case type_id: draw( (type_name *) item, aLayer ); break
 
 
 bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
@@ -223,37 +224,83 @@ bool SCH_PAINTER::isUnitAndConversionShown( const LIB_ITEM* aItem )
 }
 
 
-COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aOnBackgroundLayer )
+float SCH_PAINTER::getShadowWidth()
 {
+    const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
+
+    if( matrix.GetScale().x < 5 )
+        return (float) fabs( matrix.GetScale().x * 4 );
+    else
+        return (float) fabs( matrix.GetScale().x * 3 );
+}
+
+
+COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows )
+{
+    static COLOR4D highlightColor( 1.0, 0.3, 0.3, 1.0 );
+
     COLOR4D color = m_schSettings.GetLayerColor( aLayer );
 
     if( aItem->Type() == SCH_LINE_T )
         color = static_cast<const SCH_LINE*>( aItem )->GetLineColor();
 
-    if( aItem->IsBrightened() )
+    if( aItem->IsBrightened() )         // Selection disambiguation, etc.
     {
         color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
-
-        if( aOnBackgroundLayer )
-            color = color.WithAlpha( 0.2 );
     }
-
-    if( aItem->IsSelected() )
+    else if( aItem->IsSelected() )
     {
-        if( aOnBackgroundLayer )
-            return color.Brightened( 0.2 );
-        else
-            return color.Brightened( 0.5 );
+        if( aDrawingShadows )
+        {
+            // Synthesize a "drop-shadow" color
+            double h, s, l;
+            color.ToHSL( h, s, l );
+            // Must allow saturation of 0 to allow greys to stay grey
+            color.FromHSL( h, std::min( s, 0.25 ), 0.90 );
+        }
     }
-    else if( aItem->IsHighlighted() )
+    else if( aItem->IsHighlighted() )   // Cross-probing
     {
-        if ( aOnBackgroundLayer )
-            return COLOR4D( color.GetBrightness(), 0.0, 0.0, 0.3 );
-        else
-            return COLOR4D( 1.0, 0.3, 0.3, 1.0 );
+        color = highlightColor;
     }
 
     return color;
+}
+
+
+float SCH_PAINTER::getLineWidth( const LIB_ITEM* aItem, bool aDrawingShadows )
+{
+    float width = (float) aItem->GetPenSize();
+
+    if( aItem->IsSelected() && aDrawingShadows )
+        width += getShadowWidth();
+
+    return width;
+}
+
+
+float SCH_PAINTER::getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows )
+{
+   float width = (float) aItem->GetPenSize();
+
+   if( aItem->IsSelected() && aDrawingShadows )
+       width += getShadowWidth();
+
+   return width;
+}
+
+
+float SCH_PAINTER::getTextThickness( const SCH_TEXT* aItem, bool aDrawingShadows )
+{
+    float width = (float) aItem->GetThickness();
+
+    if( width == 0 )
+        width = (float) GetDefaultLineThickness();
+
+    if( aItem->IsSelected() && aDrawingShadows )
+        width += getShadowWidth();
+
+    return width;
 }
 
 
@@ -314,42 +361,51 @@ void SCH_PAINTER::triLine( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D 
 }
 
 
-bool SCH_PAINTER::setColors( const LIB_ITEM* aItem, int aLayer )
+bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
 {
-    if( aLayer == LAYER_DEVICE_BACKGROUND && aItem->GetFillMode() == FILLED_WITH_BG_BODYCOLOR )
+    switch( aLayer )
     {
-        COLOR4D color = getRenderColor( aItem, LAYER_DEVICE_BACKGROUND, true );
-
-        // These actions place the item over others, so allow a modest transparency here
-        if( aItem->IsMoving() || aItem->IsDragging() || aItem->IsResized() )
-            color = color.WithAlpha( 0.75 );
-
-        m_gal->SetIsFill( true );
-        m_gal->SetFillColor( color );
-
-        m_gal->SetIsStroke( false );
-        return true;
-    }
-    else if( aLayer == LAYER_DEVICE )
-    {
-        COLOR4D color = getRenderColor( aItem, LAYER_DEVICE, false );
-
-        m_gal->SetStrokeColor( color );
-        m_gal->SetIsFill( aItem->GetFillMode() == FILLED_SHAPE );
-        m_gal->SetFillColor( color );
-
-        if( aItem->GetPenSize() > 0 )
+    case LAYER_SELECTION_SHADOWS:
+        if( aItem->IsSelected() )
         {
+            m_gal->SetIsFill( false );
             m_gal->SetIsStroke( true );
-            m_gal->SetLineWidth( aItem->GetPenSize() );
+            m_gal->SetLineWidth( getLineWidth( aItem, true ) );
+            m_gal->SetStrokeColor( getRenderColor( aItem, LAYER_DEVICE, true ) );
+            return true;
         }
-        else
+
+        return false;
+
+    case LAYER_DEVICE_BACKGROUND:
+        if( aItem->GetFillMode() == FILLED_WITH_BG_BODYCOLOR )
+        {
+            COLOR4D fillColor = getRenderColor( aItem, LAYER_DEVICE_BACKGROUND, false );
+
+            // These actions place the item over others, so allow a modest transparency here
+            if( aItem->IsMoving() || aItem->IsDragging() || aItem->IsResized() )
+                fillColor = fillColor.WithAlpha( 0.75 );
+
+            m_gal->SetIsFill( aItem->GetFillMode() == FILLED_WITH_BG_BODYCOLOR );
+            m_gal->SetFillColor( fillColor );
             m_gal->SetIsStroke( false );
+            return true;
+        }
+
+        return false;
+
+    case LAYER_DEVICE:
+        m_gal->SetIsFill( aItem->GetFillMode() == FILLED_SHAPE );
+        m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE, false ) );
+        m_gal->SetIsStroke( aItem->GetPenSize() > 0 );
+        m_gal->SetLineWidth( getLineWidth( aItem, false ) );
+        m_gal->SetStrokeColor( getRenderColor( aItem, LAYER_DEVICE, false ) );
 
         return true;
-    }
 
-    return false;
+    default:
+        return false;
+    }
 }
 
 
@@ -358,7 +414,7 @@ void SCH_PAINTER::draw( LIB_RECTANGLE *aRect, int aLayer )
     if( !isUnitAndConversionShown( aRect ) )
         return;
 
-    if( setColors( aRect, aLayer ) )
+    if( setDeviceColors( aRect, aLayer ) )
         m_gal->DrawRectangle( mapCoords( aRect->GetPosition() ), mapCoords( aRect->GetEnd() ) );
 
 }
@@ -369,7 +425,7 @@ void SCH_PAINTER::draw( LIB_CIRCLE *aCircle, int aLayer )
     if( !isUnitAndConversionShown( aCircle ) )
         return;
 
-    if( setColors( aCircle, aLayer ) )
+    if( setDeviceColors( aCircle, aLayer ) )
         m_gal->DrawCircle( mapCoords( aCircle->GetPosition() ), aCircle->GetRadius() );
 }
 
@@ -379,19 +435,21 @@ void SCH_PAINTER::draw( LIB_ARC *aArc, int aLayer )
     if( !isUnitAndConversionShown( aArc ) )
         return;
 
-    int sai = aArc->GetFirstRadiusAngle();
-    int eai = aArc->GetSecondRadiusAngle();
+    if( setDeviceColors( aArc, aLayer ) )
+    {
+        int sai = aArc->GetFirstRadiusAngle();
+        int eai = aArc->GetSecondRadiusAngle();
 
-    if( TRANSFORM().MapAngles( &sai, &eai ) )
-        std::swap( sai, eai );
+        if( TRANSFORM().MapAngles( &sai, &eai ) )
+            std::swap( sai, eai );
 
-    double sa = (double) sai * M_PI / 1800.0;
-    double ea = (double) eai * M_PI / 1800.0 ;
+        double sa = (double) sai * M_PI / 1800.0;
+        double ea = (double) eai * M_PI / 1800.0 ;
 
-    VECTOR2D pos = mapCoords( aArc->GetPosition() );
+        VECTOR2D pos = mapCoords( aArc->GetPosition() );
 
-    if( setColors( aArc, aLayer ) )
         m_gal->DrawArc( pos, aArc->GetRadius(), sa, ea );
+    }
 }
 
 
@@ -400,22 +458,30 @@ void SCH_PAINTER::draw( LIB_POLYLINE *aLine, int aLayer )
     if( !isUnitAndConversionShown( aLine ) )
         return;
 
-    const std::vector<wxPoint>& pts = aLine->GetPolyPoints();
-    std::deque<VECTOR2D> vtx;
+    if( setDeviceColors( aLine, aLayer ) )
+    {
+        const std::vector<wxPoint>& pts = aLine->GetPolyPoints();
+        std::deque<VECTOR2D> vtx;
 
-    for( auto p : pts )
-        vtx.push_back( mapCoords( p ) );
+        for( auto p : pts )
+            vtx.push_back( mapCoords( p ) );
 
-    if( setColors( aLine, aLayer ) )
         m_gal->DrawPolygon( vtx );
+    }
 }
 
 
 void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
 {
+    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( drawingShadows && !aField->IsSelected() )
+        return;
+
     // Must check layer as fields are sometimes drawn by their parent rather than
     // directly from the view.
-    int layers[KIGFX::VIEW::VIEW_MAX_LAYERS], layers_count;
+    int layers[KIGFX::VIEW::VIEW_MAX_LAYERS];
+    int layers_count;
     aField->ViewGetLayers( layers, layers_count );
 
     if( aLayer != layers[0] )
@@ -424,19 +490,17 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
     if( !isUnitAndConversionShown( aField ) )
         return;
 
-    auto color = getRenderColor( aField, aLayer, false );
+    COLOR4D color = getRenderColor( aField, aLayer, drawingShadows );
 
     if( !aField->IsVisible() )
     {
         if( m_schSettings.m_ShowHiddenText )
-            color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
+            color = getRenderColor( aField, LAYER_HIDDEN, drawingShadows );
         else
             return;
     }
 
-    int linewidth = aField->GetPenSize();
-
-    m_gal->SetLineWidth( linewidth );
+    m_gal->SetLineWidth( getLineWidth( aField, drawingShadows ) );
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
@@ -466,17 +530,21 @@ void SCH_PAINTER::draw( LIB_TEXT *aText, int aLayer )
     if( !isUnitAndConversionShown( aText ) )
         return;
 
-    auto color = getRenderColor( aText, LAYER_DEVICE, false );
+    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( drawingShadows && !aText->IsSelected() )
+        return;
+
+    COLOR4D color = getRenderColor( aText, LAYER_DEVICE, drawingShadows );
 
     if( !aText->IsVisible() )
     {
         if( m_schSettings.m_ShowHiddenText )
-            color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
+            color = getRenderColor( aText, LAYER_HIDDEN, drawingShadows );
         else
             return;
     }
 
-    int linewidth = aText->GetPenSize();
     EDA_RECT bBox = aText->GetBoundingBox();
     bBox.RevertYAxis();
     VECTOR2D pos = mapCoords( bBox.Centre() );
@@ -484,7 +552,7 @@ void SCH_PAINTER::draw( LIB_TEXT *aText, int aLayer )
 
     m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
     m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-    m_gal->SetLineWidth( linewidth );
+    m_gal->SetLineWidth( getLineWidth( aText, drawingShadows ) );
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
@@ -509,76 +577,77 @@ static int ExternalPinDecoSize( const LIB_PIN &aPin )
 }
 
 
-// Draw the target (an open circle) for a pin which has no connection or is being
-// moved.
-static void drawPinDanglingSymbol( GAL* aGal, const VECTOR2I& aPos, const COLOR4D& aColor )
+// Draw the target (an open circle) for a pin which has no connection or is being moved.
+void SCH_PAINTER::drawPinDanglingSymbol( const VECTOR2I& aPos, bool aDrawingShadows )
 {
-    aGal->SetIsStroke( true );
-    aGal->SetIsFill( false );
-    aGal->SetStrokeColor( aColor );
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+    m_gal->SetLineWidth( aDrawingShadows ? getShadowWidth() : 1.0F );
 
-    aGal->SetLineWidth ( 1.0 );
-    aGal->DrawCircle( aPos, TARGET_PIN_RADIUS );
+    m_gal->DrawCircle( aPos, TARGET_PIN_RADIUS );
 }
 
 
 void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
 {
-    if( aLayer != LAYER_DEVICE )
-        return;
-
     if( !isUnitAndConversionShown( aPin ) )
         return;
 
+    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( drawingShadows && !aPin->IsSelected() )
+        return;
+
     VECTOR2I pos = mapCoords( aPin->GetPosition() );
-    COLOR4D  color = getRenderColor( aPin, LAYER_PIN, false );
+    COLOR4D  color = getRenderColor( aPin, LAYER_PIN, drawingShadows );
 
     if( !aPin->IsVisible() )
     {
         if( m_schSettings.m_ShowHiddenPins )
         {
-            color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
+            color = getRenderColor( aPin, LAYER_HIDDEN, drawingShadows );
         }
         else
         {
             if( ( aPin->GetFlags() & IS_DANGLING ) && aPin->IsPowerConnection() )
-                drawPinDanglingSymbol( m_gal, pos, color );
+                drawPinDanglingSymbol( pos, drawingShadows );
 
             return;
         }
     }
 
-    VECTOR2I p0, dir;
+    VECTOR2I p0;
+    VECTOR2I dir;
 	int len = aPin->GetLength();
-	int width = aPin->GetPenSize();
 	int shape = aPin->GetShape();
     int orient = aPin->GetOrientation();
 
     switch( orient )
 	{
-		case PIN_UP:
-			p0 = VECTOR2I( pos.x, pos.y - len );
-			dir = VECTOR2I(0, 1);
-			break;
-		case PIN_DOWN:
-			p0 = VECTOR2I( pos.x, pos.y + len );
-			dir = VECTOR2I(0, -1);
-			break;
-		case PIN_LEFT:
-			p0 = VECTOR2I( pos.x - len, pos.y );
-			dir = VECTOR2I(1, 0);
-			break;
-		case PIN_RIGHT:
-            p0 = VECTOR2I( pos.x + len, pos.y );
-			dir = VECTOR2I(-1, 0);
-			break;
+    case PIN_UP:
+        p0 = VECTOR2I( pos.x, pos.y - len );
+        dir = VECTOR2I(0, 1);
+        break;
+    case PIN_DOWN:
+        p0 = VECTOR2I( pos.x, pos.y + len );
+        dir = VECTOR2I(0, -1);
+        break;
+    case PIN_LEFT:
+        p0 = VECTOR2I( pos.x - len, pos.y );
+        dir = VECTOR2I(1, 0);
+        break;
+	default:
+    case PIN_RIGHT:
+        p0 = VECTOR2I( pos.x + len, pos.y );
+        dir = VECTOR2I(-1, 0);
+        break;
 	}
 
     VECTOR2D pc;
 
     m_gal->SetIsStroke( true );
     m_gal->SetIsFill( false );
-    m_gal->SetLineWidth( width );
+    m_gal->SetLineWidth( getLineWidth( aPin, drawingShadows ) );
     m_gal->SetStrokeColor( color );
     m_gal->SetFontBold( false );
     m_gal->SetFontItalic( false );
@@ -666,24 +735,24 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     }
 
     if( ( aPin->GetFlags() & IS_DANGLING ) && ( aPin->IsVisible() || aPin->IsPowerConnection() ) )
-        drawPinDanglingSymbol( m_gal, pos, color );
+        drawPinDanglingSymbol( pos, drawingShadows );
 
     // Draw the labels
 
     LIB_PART* libEntry = aPin->GetParent();
     int textOffset = libEntry->GetPinNameOffset();
 
-    int nameLineWidth = aPin->GetPenSize();
+    float nameLineWidth = getLineWidth( aPin, drawingShadows );
     nameLineWidth = Clamp_Text_PenSize( nameLineWidth, aPin->GetNameTextSize(), false );
-    int numLineWidth = aPin->GetPenSize();
+    float numLineWidth = getLineWidth( aPin, drawingShadows );
     numLineWidth = Clamp_Text_PenSize( numLineWidth, aPin->GetNumberTextSize(), false );
 
-    #define PIN_TEXT_MARGIN 4
+    #define PIN_TEXT_MARGIN 4.0
 
     // Four locations around a pin where text can be drawn
     enum { INSIDE = 0, OUTSIDE, ABOVE, BELOW };
     int size[4] = { 0, 0, 0, 0 };
-    int thickness[4] = { numLineWidth, numLineWidth, numLineWidth, numLineWidth };
+    float thickness[4] = { numLineWidth, numLineWidth, numLineWidth, numLineWidth };
     COLOR4D colour[4];
     wxString text[4];
 
@@ -692,12 +761,12 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     {
         size     [INSIDE] = libEntry->ShowPinNames() ? aPin->GetNameTextSize() : 0;
         thickness[INSIDE] = nameLineWidth;
-        colour   [INSIDE] = getRenderColor( aPin, LAYER_PINNAM, false );
+        colour   [INSIDE] = getRenderColor( aPin, LAYER_PINNAM, drawingShadows );
         text     [INSIDE] = aPin->GetName();
 
         size     [ABOVE] = libEntry->ShowPinNumbers() ? aPin->GetNumberTextSize() : 0;
         thickness[ABOVE] = numLineWidth;
-        colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNUM, false );
+        colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows );
         text     [ABOVE] = aPin->GetNumber();
     }
     // Otherwise pin NAMES go above and pin NUMBERS go below
@@ -705,38 +774,45 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     {
         size     [ABOVE] = libEntry->ShowPinNames() ? aPin->GetNameTextSize() : 0;
         thickness[ABOVE] = nameLineWidth;
-        colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNAM, false );
+        colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNAM, drawingShadows );
         text     [ABOVE] = aPin->GetName();
 
         size     [BELOW] = libEntry->ShowPinNumbers() ? aPin->GetNumberTextSize() : 0;
         thickness[BELOW] = numLineWidth;
-        colour   [BELOW] = getRenderColor( aPin, LAYER_PINNUM, false );
+        colour   [BELOW] = getRenderColor( aPin, LAYER_PINNUM, drawingShadows );
         text     [BELOW] = aPin->GetNumber();
     }
 
     if( m_schSettings.m_ShowPinsElectricalType )
     {
         size     [OUTSIDE] = std::max( aPin->GetNameTextSize() * 3 / 4, Millimeter2iu( 0.7 ) );
-        thickness[OUTSIDE] = size[OUTSIDE] / 6;
-        colour   [OUTSIDE] = getRenderColor( aPin, LAYER_NOTES, false );
+        thickness[OUTSIDE] = float( size[OUTSIDE] ) / 6.0F;
+        colour   [OUTSIDE] = getRenderColor( aPin, LAYER_NOTES, drawingShadows );
         text     [OUTSIDE] = aPin->GetElectricalTypeName();
     }
 
     if( !aPin->IsVisible() )
     {
         for( COLOR4D& c : colour )
-            c = m_schSettings.GetLayerColor( LAYER_HIDDEN );
+            c = getRenderColor( aPin, LAYER_HIDDEN, drawingShadows );
     }
 
-    int insideOffset = textOffset;
-    int outsideOffset = 10;
-    int aboveOffset = PIN_TEXT_MARGIN + ( thickness[ABOVE] + GetDefaultLineThickness() ) / 2;
-    int belowOffset = PIN_TEXT_MARGIN + ( thickness[BELOW] + GetDefaultLineThickness() ) / 2;
+    int   insideOffset = textOffset;
+    int   outsideOffset = 10;
+    float lineThickness = (float) GetDefaultLineThickness();
+    float aboveOffset = PIN_TEXT_MARGIN + ( thickness[ABOVE] + lineThickness ) / 2.0;
+    float belowOffset = PIN_TEXT_MARGIN + ( thickness[BELOW] + lineThickness ) / 2.0;
+
+    if( drawingShadows )
+    {
+        for( float& t : thickness )
+            t += getShadowWidth();
+    }
 
     #define SET_DC( i ) \
         m_gal->SetGlyphSize( VECTOR2D( size[i], size[i] ) ); \
         m_gal->SetLineWidth( thickness[i] ); \
-        m_gal->SetStrokeColor( colour[i] );
+        m_gal->SetStrokeColor( colour[i] )
 
     switch( orient )
     {
@@ -876,7 +952,7 @@ void SCH_PAINTER::draw( LIB_BEZIER *aCurve, int aLayer )
     if( !isUnitAndConversionShown( aCurve ) )
         return;
 
-    if( setColors( aCurve, aLayer ) )
+    if( setDeviceColors( aCurve, aLayer ) )
     {
         BEZIER_POLY poly ( aCurve->GetPoints() );
         std::vector<wxPoint> pts;
@@ -884,9 +960,7 @@ void SCH_PAINTER::draw( LIB_BEZIER *aCurve, int aLayer )
         poly.GetPoly( pts );
 
         for( const auto &p : pts )
-        {
             pts_xformed.push_back( mapCoords( p ) );
-        }
 
         m_gal->DrawPolygon( pts_xformed );
     }
@@ -895,30 +969,37 @@ void SCH_PAINTER::draw( LIB_BEZIER *aCurve, int aLayer )
 
 // Draw the target (an open square) for a wire or label which has no connection or is
 // being moved.
-static void drawDanglingSymbol( GAL* aGal, const wxPoint& aPos )
+void SCH_PAINTER::drawDanglingSymbol( const wxPoint& aPos, bool aDrawingShadows )
 {
     wxPoint radius( DANGLING_SYMBOL_SIZE, DANGLING_SYMBOL_SIZE );
 
-    aGal->SetIsStroke( true );
-    aGal->SetIsFill( false );
-    aGal->SetLineWidth ( 1.0 );
+    m_gal->SetIsStroke( true );
+    m_gal->SetIsFill( false );
+    m_gal->SetLineWidth ( aDrawingShadows ? getShadowWidth() : 1.0F );
 
-    aGal->DrawRectangle( aPos - radius, aPos + radius );
+    m_gal->DrawRectangle( aPos - radius, aPos + radius );
 }
 
 
 void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
 {
+    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( drawingShadows && !aJct->IsSelected() )
+        return;
+
     COLOR4D color;
     auto    conn = aJct->Connection( *g_CurrentSheet );
 
     if( conn && conn->IsBus() )
-        color = getRenderColor( aJct, LAYER_BUS, false );
+        color = getRenderColor( aJct, LAYER_BUS, drawingShadows );
     else
-        color = getRenderColor( aJct, LAYER_JUNCTION, false );
+        color = getRenderColor( aJct, LAYER_JUNCTION, drawingShadows );
 
-    m_gal->SetIsStroke(false);
-    m_gal->SetIsFill(true);
+    m_gal->SetIsStroke( drawingShadows );
+    m_gal->SetLineWidth( getLineWidth( aJct, drawingShadows ) );
+    m_gal->SetStrokeColor( color );
+    m_gal->SetIsFill( !drawingShadows );
     m_gal->SetFillColor( color );
     m_gal->DrawCircle( aJct->GetPosition(), SCH_JUNCTION::GetEffectiveSymbolSize() / 2.0 );
 }
@@ -926,15 +1007,19 @@ void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
 
 void SCH_PAINTER::draw( SCH_LINE *aLine, int aLayer )
 {
-    COLOR4D color = getRenderColor( aLine, aLine->GetLayer(), false );
+    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
-    int width = aLine->GetPenSize();
+    if( drawingShadows && !aLine->IsSelected() )
+        return;
+
+    COLOR4D color = getRenderColor( aLine, aLine->GetLayer(), drawingShadows );
+    float   width = getLineWidth( aLine, drawingShadows );
 
     m_gal->SetIsStroke( true );
-    m_gal->SetStrokeColor(color);
+    m_gal->SetStrokeColor( color );
     m_gal->SetLineWidth( width );
 
-    if( aLine->GetLineStyle() <= PLOTDASHTYPE_SOLID )
+    if( aLine->GetLineStyle() <= PLOTDASHTYPE_SOLID || drawingShadows )
     {
         m_gal->DrawLine( aLine->GetStartPoint(), aLine->GetEndPoint() );
     }
@@ -985,55 +1070,57 @@ void SCH_PAINTER::draw( SCH_LINE *aLine, int aLayer )
     }
 
     if( aLine->IsStartDangling() )
-        drawDanglingSymbol( m_gal, aLine->GetStartPoint());
+        drawDanglingSymbol( aLine->GetStartPoint(), drawingShadows );
 
     if( aLine->IsEndDangling() )
-        drawDanglingSymbol( m_gal, aLine->GetEndPoint());
+        drawDanglingSymbol( aLine->GetEndPoint(), drawingShadows );
 }
 
 
 void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 {
-    SCH_CONNECTION* conn = aText->Connection( *g_CurrentSheet );
-    COLOR4D         color;
+    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( drawingShadows && !aText->IsSelected() )
+        return;
 
     switch( aText->Type() )
     {
-    case SCH_SHEET_PIN_T:     color = getRenderColor( aText, LAYER_SHEETLABEL, false ); break;
-    case SCH_HIER_LABEL_T:    color = getRenderColor( aText, LAYER_HIERLABEL, false );  break;
-    case SCH_GLOBAL_LABEL_T:  color = getRenderColor( aText, LAYER_GLOBLABEL, false );  break;
-    case SCH_LABEL_T:         color = getRenderColor( aText, LAYER_LOCLABEL, false );   break;
-    default:                  color = getRenderColor( aText, LAYER_NOTES, false );      break;
+    case SCH_SHEET_PIN_T:     aLayer = LAYER_SHEETLABEL; break;
+    case SCH_HIER_LABEL_T:    aLayer = LAYER_HIERLABEL;  break;
+    case SCH_GLOBAL_LABEL_T:  aLayer = LAYER_GLOBLABEL;  break;
+    case SCH_LABEL_T:         aLayer = LAYER_LOCLABEL;   break;
+    default:                  aLayer = LAYER_NOTES;      break;
     }
 
+    COLOR4D         color = getRenderColor( aText, aLayer, drawingShadows );
+    SCH_CONNECTION* conn = aText->Connection( *g_CurrentSheet );
+
     if( conn && conn->IsBus() )
-        color = getRenderColor( aText, LAYER_BUS, false );
+        color = getRenderColor( aText, LAYER_BUS, drawingShadows );
 
     if( !aText->IsVisible() )
     {
         if( m_schSettings.m_ShowHiddenText )
-            color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
+            color = getRenderColor( aText, LAYER_HIDDEN, drawingShadows );
         else
             return;
     }
 
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+    m_gal->SetLineWidth( getLineWidth( aText, drawingShadows ) );
     m_gal->SetStrokeColor( color );
-
-    if( aText->IsDangling() )
-        drawDanglingSymbol( m_gal, aText->GetTextPos() );
+    m_gal->SetTextAttributes( aText );
 
     wxPoint  text_offset = aText->GetTextPos() + aText->GetSchematicTextOffset();
-    int      linewidth = aText->GetPenSize();
     wxString shownText( aText->GetShownText() );
 
     if( !shownText.IsEmpty() )
-    {
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->SetTextAttributes( aText );
-        m_gal->SetLineWidth( linewidth );
         m_gal->StrokeText( shownText, text_offset, aText->GetTextAngleRadians() );
-    }
+
+    if( aText->IsDangling() )
+        drawDanglingSymbol( aText->GetTextPos(), drawingShadows );
 }
 
 
@@ -1126,8 +1213,7 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
 
     draw( &tempPart, aLayer, false, aComp->GetUnit(), aComp->GetConvert() );
 
-    // The fields are SCH_COMPONENT-specific and so don't need to be copied/
-    // oriented/translated.
+    // The fields are SCH_COMPONENT-specific so don't need to be copied/oriented/translated
     std::vector<SCH_FIELD*> fields;
     aComp->GetFields( fields, false );
 
@@ -1138,20 +1224,24 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
 
 void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
 {
-    COLOR4D        color;
-    SCH_COMPONENT* parentComponent = (SCH_COMPONENT*) aField->GetParent();
+    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( drawingShadows && !aField->IsSelected() )
+        return;
 
     switch( aField->GetId() )
     {
-    case REFERENCE: color = getRenderColor( aField, LAYER_REFERENCEPART, false ); break;
-    case VALUE:     color = getRenderColor( aField, LAYER_VALUEPART, false );     break;
-    default:        color = getRenderColor( aField, LAYER_FIELDS, false );        break;
+    case REFERENCE: aLayer = LAYER_REFERENCEPART; break;
+    case VALUE:     aLayer = LAYER_VALUEPART;     break;
+    default:        aLayer = LAYER_FIELDS;        break;
     }
+
+    COLOR4D color = getRenderColor( aField, aLayer, drawingShadows );
 
     if( !aField->IsVisible() )
     {
         if( m_schSettings.m_ShowHiddenText )
-            color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
+            color = getRenderColor( aField, LAYER_HIDDEN, drawingShadows );
         else
             return;
     }
@@ -1160,7 +1250,8 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
         return;
 
     // Calculate the text orientation according to the component orientation.
-    int orient = (int) aField->GetTextAngle();
+    SCH_COMPONENT* parentComponent = (SCH_COMPONENT*) aField->GetParent();
+    int            orient = (int) aField->GetTextAngle();
 
     if( parentComponent->GetTransform().y1 )  // Rotate component 90 degrees.
     {
@@ -1170,20 +1261,18 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
             orient = TEXT_ANGLE_HORIZ;
     }
 
-    /* Calculate the text justification, according to the component
-     * orientation/mirror this is a bit complicated due to cumulative
-     * calculations:
+    /* Calculate the text justification, according to the component orientation/mirror.
+     * Tthis is a bit complicated due to cumulative calculations:
      * - numerous cases (mirrored or not, rotation)
-     * - the DrawGraphicText function recalculate also H and H justifications
-     *      according to the text orientation.
-     * - When a component is mirrored, the text is not mirrored and
-     *   justifications are complicated to calculate
-     * so the more easily way is to use no justifications ( Centered text )
-     * and use GetBoundaryBox to know the text coordinate considered as centered
+     * - the DrawGraphicText function recalculate also H and H justifications according to the
+     *   text orientation.
+     * - When a component is mirrored, the text is not mirrored and justifications are
+     *   complicated to calculate
+     * so the easier way is to use no justifications (centered text) and use GetBoundingBox
+     * to know the text coordinate considered as centered
      */
     EDA_RECT boundaryBox = aField->GetBoundingBox();
     wxPoint textpos = boundaryBox.Centre();
-    int lineWidth = aField->GetPenSize();
 
     m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
     m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
@@ -1194,7 +1283,7 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
     m_gal->SetFontBold( aField->IsBold() );
     m_gal->SetFontItalic( aField->IsItalic() );
     m_gal->SetTextMirrored( aField->IsMirrored() );
-    m_gal->SetLineWidth( lineWidth );
+    m_gal->SetLineWidth( getLineWidth( aField, drawingShadows ) );
     m_gal->StrokeText( aField->GetFullyQualifiedText(), textpos, orient == TEXT_ANGLE_VERT ? M_PI/2 : 0 );
 
     // Draw the umbilical line
@@ -1209,9 +1298,12 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
 
 void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
 {
-    auto color = getRenderColor( aLabel, LAYER_GLOBLABEL, false );
-    auto back_color = m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
-    int  width = aLabel->GetThickness() ? aLabel->GetThickness() : GetDefaultLineThickness();
+    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( drawingShadows && !aLabel->IsSelected() )
+        return;
+
+    COLOR4D color = getRenderColor( aLabel, LAYER_GLOBLABEL, drawingShadows );
 
     std::vector<wxPoint> pts;
     std::deque<VECTOR2D> pts2;
@@ -1222,9 +1314,9 @@ void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
         pts2.emplace_back( VECTOR2D( p.x, p.y ) );
 
     m_gal->SetIsFill( true );
-    m_gal->SetFillColor( back_color );
+    m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
     m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( width );
+    m_gal->SetLineWidth( getTextThickness( aLabel, drawingShadows ) );
     m_gal->SetStrokeColor( color );
     m_gal->DrawPolyline( pts2 );
 
@@ -1234,14 +1326,17 @@ void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
 
 void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
 {
-    auto color = getRenderColor( aLabel, LAYER_SHEETLABEL, false );
-    auto back_color = m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
-    int  width = aLabel->GetThickness() ? aLabel->GetThickness() : GetDefaultLineThickness();
+    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
-    auto conn = aLabel->Connection( *g_CurrentSheet );
+    if( drawingShadows && !aLabel->IsSelected() )
+        return;
+
+    COLOR4D color = getRenderColor( aLabel, LAYER_SHEETLABEL, drawingShadows );
+
+    SCH_CONNECTION* conn = aLabel->Connection( *g_CurrentSheet );
 
     if( conn && conn->IsBus() )
-        color = getRenderColor( aLabel, LAYER_BUS, false );
+        color = getRenderColor( aLabel, LAYER_BUS, drawingShadows );
 
     std::vector<wxPoint> pts;
     std::deque<VECTOR2D> pts2;
@@ -1252,9 +1347,9 @@ void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
         pts2.emplace_back( VECTOR2D( p.x, p.y ) );
 
     m_gal->SetIsFill( true );
-    m_gal->SetFillColor( back_color );
+    m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
     m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( width );
+    m_gal->SetLineWidth( getTextThickness( aLabel, drawingShadows ) );
     m_gal->SetStrokeColor( color );
     m_gal->DrawPolyline( pts2 );
 
@@ -1263,12 +1358,47 @@ void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
 
 void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
 {
+    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( aLayer == LAYER_HIERLABEL || drawingShadows )
+    {
+        for( auto& sheetPin : aSheet->GetPins() )
+        {
+            if( drawingShadows && !aSheet->IsSelected() && !sheetPin.IsSelected() )
+                continue;
+
+            int     width = aSheet->GetPenSize();
+            wxPoint initial_pos = sheetPin.GetTextPos();
+            wxPoint offset_pos = initial_pos;
+
+            // For aesthetic reasons, the SHEET_PIN is drawn with a small offset of width / 2
+            switch( sheetPin.GetEdge() )
+            {
+            case SHEET_TOP_SIDE:    offset_pos.y += KiROUND( width / 2.0 ); break;
+            case SHEET_BOTTOM_SIDE: offset_pos.y -= KiROUND( width / 2.0 ); break;
+            case SHEET_RIGHT_SIDE:  offset_pos.x -= KiROUND( width / 2.0 ); break;
+            case SHEET_LEFT_SIDE:   offset_pos.x += KiROUND( width / 2.0 ); break;
+            default: break;
+            }
+
+            sheetPin.SetTextPos( offset_pos );
+            draw( static_cast<SCH_HIERLABEL*>( &sheetPin ), aLayer );
+            m_gal->DrawLine( offset_pos, initial_pos );
+            sheetPin.SetTextPos( initial_pos );
+        }
+    }
+
+    if( drawingShadows && !aSheet->IsSelected() )
+        return;
+
     VECTOR2D pos = aSheet->GetPosition();
     VECTOR2D size = aSheet->GetSize();
 
     if( aLayer == LAYER_SHEET_BACKGROUND )
     {
-        m_gal->SetIsStroke( false );
+        m_gal->SetIsStroke( aSheet->IsSelected() );
+        m_gal->SetLineWidth( getShadowWidth() );
+        m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEET_BACKGROUND, true ) );
 
         if( aSheet->IsMoving() )    // Gives a filled background when moving for a better look
         {
@@ -1280,18 +1410,18 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
         else
         {
             // Could be modified later, when sheets can have their own fill color
-            return;
+            m_gal->SetIsFill( false );
         }
 
         m_gal->DrawRectangle( pos, pos + size );
     }
-    else if( aLayer == LAYER_SHEET )
-    {
-        m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEET, false ) );
-        m_gal->SetIsStroke( true );
 
+    if( aLayer == LAYER_SHEET || drawingShadows )
+    {
+        m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEET, drawingShadows ) );
+        m_gal->SetIsStroke( true );
+        m_gal->SetLineWidth( getLineWidth( aSheet, drawingShadows ) );
         m_gal->SetIsFill( false );
-        m_gal->SetLineWidth( aSheet->GetPenSize() );
 
         m_gal->DrawRectangle( pos, pos + size );
 
@@ -1302,7 +1432,7 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
         if( aSheet->IsVerticalOrientation() )
             nameAngle = M_PI/2;
 
-        m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEETNAME, false ) );
+        m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEETNAME, drawingShadows ) );
 
         auto text = wxT( "Sheet: " ) + aSheet->GetName();
 
@@ -1319,53 +1449,29 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
 
         txtSize = aSheet->GetFileNameSize();
         m_gal->SetGlyphSize( VECTOR2D( txtSize, txtSize ) );
-        m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEETFILENAME, false ) );
+        m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEETFILENAME, drawingShadows ) );
         m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
 
         text = wxT( "File: " ) + aSheet->GetFileName();
         m_gal->StrokeText( text, pos_filename, nameAngle );
-    }
-    else if( aLayer == LAYER_HIERLABEL )
-    {
-        for( auto& sheetPin : aSheet->GetPins() )
-        {
-            // For aesthetic reasons, the SHEET_PIN is drawn with a small offset
-            // of width / 2
-            int width = aSheet->GetPenSize();
-            wxPoint initial_pos = sheetPin.GetTextPos();
-            wxPoint offset_pos = initial_pos;
-
-            switch( sheetPin.GetEdge() )
-            {
-            case SHEET_TOP_SIDE:    offset_pos.y += width / 2; break;
-            case SHEET_BOTTOM_SIDE: offset_pos.y -= width / 2; break;
-            case SHEET_RIGHT_SIDE:  offset_pos.x -= width / 2; break;
-            case SHEET_LEFT_SIDE:   offset_pos.x += width / 2; break;
-            default: break;
-            }
-
-            sheetPin.SetTextPos( offset_pos );
-            draw( static_cast<SCH_HIERLABEL*>( &sheetPin ), aLayer );
-            m_gal->DrawLine( offset_pos, initial_pos );
-            sheetPin.SetTextPos( initial_pos );
-        }
     }
 }
 
 
 void SCH_PAINTER::draw( SCH_NO_CONNECT *aNC, int aLayer )
 {
-    int delta = aNC->GetSize() / 2;
-    int width = GetDefaultLineThickness();
+    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
-    COLOR4D color = getRenderColor( aNC, LAYER_NOCONNECT, false );
+    if( drawingShadows && !aNC->IsSelected() )
+        return;
 
-    m_gal->SetStrokeColor( color );
     m_gal->SetIsStroke( true );
+    m_gal->SetLineWidth( getLineWidth( aNC, drawingShadows ) );
+    m_gal->SetStrokeColor( getRenderColor( aNC, LAYER_NOCONNECT, drawingShadows ) );
     m_gal->SetIsFill( false );
-    m_gal->SetLineWidth( width );
 
     VECTOR2D p = aNC->GetPosition();
+    int      delta = aNC->GetSize() / 2;
 
     m_gal->DrawLine( p + VECTOR2D( -delta, -delta ), p + VECTOR2D( delta, delta ) );
     m_gal->DrawLine( p + VECTOR2D( -delta, delta ), p + VECTOR2D( delta, -delta ) );
@@ -1374,13 +1480,19 @@ void SCH_PAINTER::draw( SCH_NO_CONNECT *aNC, int aLayer )
 
 void SCH_PAINTER::draw( SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
 {
-    COLOR4D color = aEntry->Type() == SCH_BUS_BUS_ENTRY_T
-                        ? getRenderColor( aEntry, LAYER_BUS, false )
-                        : getRenderColor( aEntry, LAYER_WIRE, false );
+    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
-    m_gal->SetStrokeColor( color );
+    if( drawingShadows && !aEntry->IsSelected() )
+        return;
+
+    COLOR4D color = getRenderColor( aEntry, LAYER_WIRE, drawingShadows );
+
+    if( aEntry->Type() == SCH_BUS_BUS_ENTRY_T )
+        color = getRenderColor( aEntry, LAYER_BUS, drawingShadows );
+
     m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( aEntry->GetPenSize() );
+    m_gal->SetLineWidth( getLineWidth( aEntry, drawingShadows ) );
+    m_gal->SetStrokeColor( color );
     m_gal->SetIsFill( false );
 
     VECTOR2D pos = aEntry->GetPosition();
@@ -1389,7 +1501,7 @@ void SCH_PAINTER::draw( SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
     m_gal->DrawLine( pos, endPos );
 
     // Draw dangling symbols:
-    m_gal->SetLineWidth ( 1.0 );
+    m_gal->SetLineWidth ( getLineWidth( aEntry, drawingShadows ) );
 
     if( aEntry->IsDanglingStart() )
         m_gal->DrawCircle( pos, TARGET_BUSENTRY_RADIUS );
@@ -1413,13 +1525,13 @@ void SCH_PAINTER::draw( SCH_BITMAP *aBitmap, int aLayer )
 
     m_gal->DrawBitmap( *aBitmap->GetImage() );
 
-    if( aBitmap->IsSelected() || aBitmap->IsBrightened() || aBitmap->IsBrightened() )
+    if( aBitmap->IsSelected() || aBitmap->IsBrightened() || aBitmap->IsHighlighted() )
     {
         COLOR4D color = getRenderColor( aBitmap, LAYER_NOTES, false );
         m_gal->SetStrokeColor( color );
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( false );
-        m_gal->SetLineWidth ( 12.0 );
+        m_gal->SetLineWidth ( getShadowWidth() );
         m_gal->DrawRectangle( VECTOR2D( -aBitmap->GetSize().x / 2.0, -aBitmap->GetSize().y / 2.0 ),
                               VECTOR2D( aBitmap->GetSize().x / 2.0, aBitmap->GetSize().y / 2.0 ) );
     }
@@ -1430,20 +1542,29 @@ void SCH_PAINTER::draw( SCH_BITMAP *aBitmap, int aLayer )
 
 void SCH_PAINTER::draw( SCH_MARKER *aMarker, int aLayer )
 {
+    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( drawingShadows && !aMarker->IsSelected() )
+        return;
+
+    int layer = LAYER_ERC_WARN;
+
+    if( aMarker->GetErrorLevel() == MARKER_BASE::MARKER_SEVERITY_ERROR )
+        layer = LAYER_ERC_ERR;
+
+    COLOR4D color = getRenderColor( aMarker, layer, drawingShadows );
+
+    m_gal->Translate( aMarker->GetPosition() );
+    m_gal->SetIsFill( !drawingShadows );
+    m_gal->SetFillColor( color );
+    m_gal->SetIsStroke( drawingShadows );
+    m_gal->SetLineWidth( getLineWidth( aMarker, drawingShadows ) );
+    m_gal->SetStrokeColor( color );
+
     SHAPE_LINE_CHAIN polygon;
     aMarker->ShapeToPolygon( polygon );
 
-    int layer = aMarker->GetErrorLevel() == MARKER_BASE::MARKER_SEVERITY_ERROR ? LAYER_ERC_ERR
-                                                                               : LAYER_ERC_WARN;
-    COLOR4D color = getRenderColor( aMarker, layer, false );
-
-    m_gal->Save();
-    m_gal->Translate( aMarker->GetPosition() );
-    m_gal->SetFillColor( color );
-    m_gal->SetIsFill( true );
-    m_gal->SetIsStroke( false );
     m_gal->DrawPolygon( polygon );
-    m_gal->Restore();
 }
 
 

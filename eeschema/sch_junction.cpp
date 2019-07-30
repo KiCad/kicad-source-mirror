@@ -76,8 +76,9 @@ void SCH_JUNCTION::SwapData( SCH_ITEM* aItem )
 
 void SCH_JUNCTION::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount      = 1;
-    aLayers[0]  = LAYER_JUNCTION;
+    aCount     = 2;
+    aLayers[0] = LAYER_JUNCTION;
+    aLayers[1] = LAYER_SELECTION_SHADOWS;
 }
 
 

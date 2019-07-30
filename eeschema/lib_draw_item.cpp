@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +21,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file lib_draw_item.cpp
  */
 
 #include <fctsys.h>
@@ -133,9 +129,10 @@ void LIB_ITEM::Print( wxDC* aDC, const wxPoint& aOffset, void* aData, const TRAN
 void LIB_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     // Basic fallback
-    aCount      = 2;
+    aCount      = 3;
     aLayers[0]  = LAYER_DEVICE;
     aLayers[1]  = LAYER_DEVICE_BACKGROUND;
+    aLayers[2]  = LAYER_SELECTION_SHADOWS;
 }
 
 

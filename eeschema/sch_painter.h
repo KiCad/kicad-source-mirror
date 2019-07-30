@@ -137,7 +137,6 @@ private:
 	void draw( LIB_RECTANGLE* aRect, int aLayer );
 	void draw( LIB_PIN* aPin, int aLayer );
 	void draw( LIB_CIRCLE* aCircle, int aLayer );
-	void draw( LIB_ITEM *, int aLayer );
 	void draw( LIB_PART* aPart, int, bool aDrawFields = true,  int aUnit = 0, int aConvert = 0 );
     void draw( LIB_ALIAS* aAlias, int aLayer );
     void draw( LIB_ARC* aArc, int aLayer );
@@ -158,11 +157,18 @@ private:
     void draw( SCH_LINE* aLine, int aLayer );
     void draw( SCH_BUS_ENTRY_BASE* aEntry, int aLayer );
 
+    void drawPinDanglingSymbol( const VECTOR2I& aPos, bool aDrawingShadows );
+    void drawDanglingSymbol( const wxPoint& aPos, bool aDrawingShadows );
+
     bool isUnitAndConversionShown( const LIB_ITEM* aItem );
 
-    COLOR4D getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aOnBackgroundLayer );
+    float getShadowWidth();
+    COLOR4D getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows );
+    float getLineWidth( const LIB_ITEM* aItem, bool aDrawingShadows );
+    float getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows );
+    float getTextThickness( const SCH_TEXT* aItem, bool aDrawingShadows );
 
-    bool setColors( const LIB_ITEM* aItem, int aLayer );
+    bool setDeviceColors( const LIB_ITEM* aItem, int aLayer );
 
     void triLine ( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c );
 

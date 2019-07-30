@@ -52,8 +52,9 @@ LIB_TEXT::LIB_TEXT( LIB_PART * aParent ) :
 
 void LIB_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount      = 1;
+    aCount      = 2;
     aLayers[0]  = LAYER_DEVICE;
+    aLayers[1]  = LAYER_SELECTION_SHADOWS;
 }
 
 

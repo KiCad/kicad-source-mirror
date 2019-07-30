@@ -54,11 +54,8 @@ int GetPenSizeForBold( int aTextSize )
 
 /**
  * Function  Clamp_Text_PenSize
- * As a rule, pen width should not be >1/4em, otherwise the character
- * will be cluttered up in its own fatness
- * so pen width max is aSize/4 for bold text, and aSize/6 for normal text
- * The "best" pen width is aSize/5 for bold texts,
- * so the clamp is consistant with bold option.
+ * Don't allow text to become cluttered up in its own fatness.  Bold fonts are generally around
+ * aSize/5 in width, so we limit them to aSize/4, and normal text to aSize/6.
  * @param aPenSize = the pen size to clamp
  * @param aSize the char size (height or width)
  * @param aBold = true if text accept bold pen size
@@ -66,14 +63,19 @@ int GetPenSizeForBold( int aTextSize )
  */
 int Clamp_Text_PenSize( int aPenSize, int aSize, bool aBold )
 {
-    int     penSize     = aPenSize;
-    double  scale       = aBold ? 4.0 : 6.0;
-    int     maxWidth    = KiROUND( std::abs( aSize ) / scale );
+    double scale    = aBold ? 4.0 : 6.0;
+    int    maxWidth = KiROUND( (double) aSize / scale );
 
-    if( penSize > maxWidth )
-        penSize = maxWidth;
+    return std::min( aPenSize, maxWidth );
+}
 
-    return penSize;
+
+float Clamp_Text_PenSize( float aPenSize, int aSize, bool aBold )
+{
+    float scale    = aBold ? 4.0 : 6.0;
+    float maxWidth = (float) aSize / scale;
+
+    return std::min( aPenSize, maxWidth );
 }
 
 

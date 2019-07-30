@@ -426,10 +426,11 @@ wxPoint SCH_SHEET::GetFileNamePosition()
 
 void SCH_SHEET::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount      = 3;
+    aCount      = 4;
     aLayers[0]  = LAYER_HIERLABEL;
     aLayers[1]  = LAYER_SHEET;
     aLayers[2]  = LAYER_SHEET_BACKGROUND;
+    aLayers[3]  = LAYER_SELECTION_SHADOWS;
 }
 
 

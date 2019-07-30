@@ -110,8 +110,9 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone )
 void SCH_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     // Basic fallback
-    aCount      = 1;
-    aLayers[0]  = LAYER_DEVICE;
+    aCount     = 2;
+    aLayers[0] = LAYER_DEVICE;
+    aLayers[1] = LAYER_SELECTION_SHADOWS;
 }
 
 

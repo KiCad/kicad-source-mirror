@@ -236,9 +236,10 @@ EDA_ITEM* SCH_COMPONENT::Clone() const
 
 void SCH_COMPONENT::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount      = 2;
+    aCount      = 3;
     aLayers[0]  = LAYER_DEVICE;
     aLayers[1]  = LAYER_DEVICE_BACKGROUND;
+    aLayers[2]  = LAYER_SELECTION_SHADOWS;
 }
 
 

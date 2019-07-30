@@ -63,6 +63,7 @@ class PLOTTER;
  * @return the max pen size allowed
  */
 int Clamp_Text_PenSize( int aPenSize, int aSize, bool aBold = true );
+float Clamp_Text_PenSize( float aPenSize, int aSize, bool aBold = true );
 int Clamp_Text_PenSize( int aPenSize, wxSize aSize, bool aBold = true );
 
 /**

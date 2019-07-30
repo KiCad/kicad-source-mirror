@@ -105,8 +105,9 @@ void SCH_BUS_ENTRY_BASE::SwapData( SCH_ITEM* aItem )
 
 void SCH_BUS_ENTRY_BASE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount      = 1;
-    aLayers[0]  = Type() == SCH_BUS_BUS_ENTRY_T ? LAYER_BUS : LAYER_WIRE;
+    aCount     = 2;
+    aLayers[0] = Type() == SCH_BUS_BUS_ENTRY_T ? LAYER_BUS : LAYER_WIRE;
+    aLayers[1] = LAYER_SELECTION_SHADOWS;
 }
 
 
@@ -386,6 +387,16 @@ char SCH_BUS_ENTRY_BASE::GetBusEntryShape() const
 
 void SCH_BUS_ENTRY_BASE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 {
+    wxString msg;
+
+    switch( GetLayer() )
+    {
+    default:
+    case LAYER_WIRE: msg = _( "Wire" ); break;
+    case LAYER_BUS:  msg = _( "Bus" );  break;
+    }
+
+    aList.push_back( MSG_PANEL_ITEM( _( "Bus Entry Type" ), msg, DARKCYAN ) );
     if( auto conn = Connection( *g_CurrentSheet ) )
     {
 #if defined(DEBUG)

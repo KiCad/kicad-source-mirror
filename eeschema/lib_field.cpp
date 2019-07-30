@@ -340,7 +340,7 @@ const EDA_RECT LIB_FIELD::GetBoundingBox() const
 
 void LIB_FIELD::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount      = 1;
+    aCount      = 2;
 
     switch( m_id )
     {
@@ -348,6 +348,8 @@ void LIB_FIELD::ViewGetLayers( int aLayers[], int& aCount ) const
     case VALUE:     aLayers[0] = LAYER_VALUEPART;     break;
     default:        aLayers[0] = LAYER_FIELDS;        break;
     }
+
+    aLayers[1] = LAYER_SELECTION_SHADOWS;
 }
 
 

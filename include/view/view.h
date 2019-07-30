@@ -247,7 +247,7 @@ public:
      * (depending on correct GAL unit length & DPI settings).
      * @param aScale: the scalefactor
      */
-    inline void SetScale( double aScale )
+    virtual void SetScale( double aScale )
     {
         SetScale( aScale, m_center );
     }
@@ -259,7 +259,7 @@ public:
      * @param aAnchor: the zooming  anchor point
      * @param aScale: the scale factor
      */
-    void SetScale( double aScale, const VECTOR2D& aAnchor );
+    virtual void SetScale( double aScale, const VECTOR2D& aAnchor );
 
     /**
      * Function GetScale()

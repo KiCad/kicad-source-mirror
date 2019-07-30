@@ -23,10 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_libentry.cpp
- */
-
 #include <fctsys.h>
 #include <macros.h>
 #include <kicad_string.h>
@@ -35,9 +31,7 @@
 #include <gr_basic.h>
 #include <sch_screen.h>
 #include <richio.h>
-#include <kicad_string.h>
 #include <trace_helpers.h>
-
 #include <general.h>
 #include <template_fieldnames.h>
 #include <transform.h>
@@ -45,11 +39,6 @@
 #include <class_libentry.h>
 #include <lib_pin.h>
 #include <lib_arc.h>
-#include <lib_bezier.h>
-#include <lib_circle.h>
-#include <lib_polyline.h>
-#include <lib_rectangle.h>
-#include <lib_text.h>
 
 
 // the separator char between the subpart id and the reference
@@ -205,12 +194,13 @@ void LIB_ALIAS::ViewGetLayers( int aLayers[], int& aCount ) const
     // An alias's fields don't know how to fetch their parent's values so we don't let
     // them draw themselves.  This means the alias always has to draw them, which means
     // it has to "own" their layers as well.
-    aCount      = 5;
+    aCount      = 6;
     aLayers[0]  = LAYER_DEVICE;
     aLayers[1]  = LAYER_DEVICE_BACKGROUND;
     aLayers[2]  = LAYER_REFERENCEPART;
     aLayers[3]  = LAYER_VALUEPART;
     aLayers[4]  = LAYER_FIELDS;
+    aLayers[5]  = LAYER_SELECTION_SHADOWS;
 }
 
 
@@ -717,9 +707,10 @@ const EDA_RECT LIB_PART::GetUnitBoundingBox( int aUnit, int aConvert ) const
 
 void LIB_PART::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount      = 2;
+    aCount      = 3;
     aLayers[0]  = LAYER_DEVICE;
     aLayers[1]  = LAYER_DEVICE_BACKGROUND;
+    aLayers[2]  = LAYER_SELECTION_SHADOWS;
 }
 
 
