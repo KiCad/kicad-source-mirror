@@ -151,7 +151,7 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
 
     for( BOARD_ITEM* item : parent->GetBoard()->Drawings() )
     {
-        if( item->Type() != PCB_MODULE_TEXT_T )
+        if( item->Type() != PCB_TEXT_T )
             continue;
 
         TEXTE_PCB* textItem = static_cast<TEXTE_PCB*>( item );
