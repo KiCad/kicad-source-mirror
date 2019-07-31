@@ -405,9 +405,8 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
 
     PlaceModule( aDest, false );
 
-    // Copy full placement, locked flag and pad net names (when possible) but not local
-    // settings like clearances (use library values)
-    //
+    // PlaceModule will move the module to the cursor position, which we don't want.  Copy
+    // the original position across.
     aDest->SetPosition( aSrc->GetPosition() );
 
     if( aDest->GetLayer() != aSrc->GetLayer() )
