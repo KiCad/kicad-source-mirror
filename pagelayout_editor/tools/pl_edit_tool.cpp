@@ -66,9 +66,9 @@ bool PL_EDIT_TOOL::Init()
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( PL_ACTIONS::cut,            SELECTION_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( PL_ACTIONS::copy,           SELECTION_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( PL_ACTIONS::paste,          SELECTION_CONDITIONS::ShowAlways, 200 );
+    selToolMenu.AddItem( ACTIONS::cut,               SELECTION_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( ACTIONS::copy,              SELECTION_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( ACTIONS::paste,             SELECTION_CONDITIONS::ShowAlways, 200 );
     selToolMenu.AddItem( PL_ACTIONS::move,           SELECTION_CONDITIONS::NotEmpty, 200 );
     selToolMenu.AddItem( ACTIONS::doDelete,          SELECTION_CONDITIONS::NotEmpty, 200 );
 
