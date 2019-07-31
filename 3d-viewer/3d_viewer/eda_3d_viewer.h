@@ -172,6 +172,9 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
 
     void Install3DViewOptionDialog( wxCommandEvent &event );
 
+    void OnUpdateUIEngine( wxUpdateUIEvent& aEvent );
+    void OnUpdateUIMaterial( wxUpdateUIEvent& aEvent );
+
     void CreateMenuBar();
 
     /**

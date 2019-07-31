@@ -128,6 +128,11 @@ BEGIN_EVENT_TABLE( EDA_3D_VIEWER, EDA_BASE_FRAME )
 
     EVT_MENU_RANGE( ID_MENU3D_GRID, ID_MENU3D_GRID_END, EDA_3D_VIEWER::On3DGridSelection )
 
+    EVT_UPDATE_UI( ID_RENDER_CURRENT_VIEW, EDA_3D_VIEWER::OnUpdateUIEngine )
+    EVT_UPDATE_UI_RANGE( ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL,
+                         ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE,
+                         EDA_3D_VIEWER::OnUpdateUIMaterial )
+
     EVT_CLOSE( EDA_3D_VIEWER::OnCloseWindow )
 END_EVENT_TABLE()
 
@@ -1111,6 +1116,35 @@ bool EDA_3D_VIEWER::Set3DSolderPasteColorFromUser()
     }
 
     return false;
+}
+
+
+void EDA_3D_VIEWER::OnUpdateUIEngine( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Check( m_settings.RenderEngineGet() != RENDER_ENGINE_OPENGL_LEGACY );
+}
+
+
+void EDA_3D_VIEWER::OnUpdateUIMaterial( wxUpdateUIEvent& aEvent )
+{
+    // Set the state of toggle menus according to the current display options
+    switch( aEvent.GetId() )
+    {
+    case ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL:
+        aEvent.Check( m_settings.MaterialModeGet() == MATERIAL_MODE_NORMAL );
+        break;
+
+    case ID_MENU3D_FL_RENDER_MATERIAL_MODE_DIFFUSE_ONLY:
+        aEvent.Check( m_settings.MaterialModeGet() == MATERIAL_MODE_DIFFUSE_ONLY );
+        break;
+
+    case ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE:
+        aEvent.Check( m_settings.MaterialModeGet() == MATERIAL_MODE_CAD_MODE );
+        break;
+
+    default:
+        wxFAIL_MSG( "Invalid event in EDA_3D_VIEWER::OnUpdateUIMaterial()" );
+    }
 }
 
 
