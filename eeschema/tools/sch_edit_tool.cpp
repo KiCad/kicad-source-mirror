@@ -1397,7 +1397,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorX.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorY.MakeEvent() );
     Go( &SCH_EDIT_TOOL::DoDelete,           EE_ACTIONS::doDelete.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::DeleteItemCursor,   EE_ACTIONS::deleteTool.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::DeleteItemCursor,   ACTIONS::deleteTool.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::Properties,         EE_ACTIONS::properties.MakeEvent() );
     Go( &SCH_EDIT_TOOL::EditField,          EE_ACTIONS::editReference.MakeEvent() );

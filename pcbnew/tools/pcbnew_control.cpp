@@ -1008,7 +1008,7 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::Redo,                 ACTIONS::redo.MakeEvent() );
 
     // Miscellaneous
-    Go( &PCBNEW_CONTROL::DeleteItemCursor,     PCB_ACTIONS::deleteTool.MakeEvent() );
+    Go( &PCBNEW_CONTROL::DeleteItemCursor,     ACTIONS::deleteTool.MakeEvent() );
     Go( &PCBNEW_CONTROL::Show3DViewer,         ACTIONS::show3DViewer.MakeEvent() );
 
     // Append control

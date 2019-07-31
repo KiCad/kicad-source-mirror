@@ -472,11 +472,6 @@ TOOL_ACTION EE_ACTIONS::pinTable( "eeschema.InteractiveEdit.pinTable",
         _( "Pin Table..." ), _( "Displays pin table for bulk editing of pins" ),
         pin_table_xpm );
 
-TOOL_ACTION EE_ACTIONS::deleteTool( "eeschema.InteractiveEdit.deleteTool",
-        AS_GLOBAL, 0, "",
-        _( "Delete Tool" ), _( "Delete clicked items" ),
-        delete_xpm, AF_ACTIVATE );
-
 TOOL_ACTION EE_ACTIONS::breakWire( "eeschema.InteractiveEdit.breakWire",
         AS_GLOBAL, 0, "",
         _( "Break Wire" ), _( "Divide a wire into segments which can be dragged independently" ),

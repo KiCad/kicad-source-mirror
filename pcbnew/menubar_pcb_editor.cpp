@@ -235,7 +235,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AddItem( PCB_ACTIONS::zoneUnfillAll,          SELECTION_CONDITIONS::ShowAlways );
 
     editMenu->AddSeparator();
-    editMenu->AddItem( PCB_ACTIONS::deleteTool,             SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( ACTIONS::deleteTool,                 SELECTION_CONDITIONS::ShowAlways );
     editMenu->AddItem( PCB_ACTIONS::globalDeletions,        SELECTION_CONDITIONS::ShowAlways );
     editMenu->AddItem( PCB_ACTIONS::cleanupTracksAndVias,   SELECTION_CONDITIONS::ShowAlways );
 

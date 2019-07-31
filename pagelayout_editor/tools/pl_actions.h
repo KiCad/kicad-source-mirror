@@ -70,7 +70,6 @@ public:
     static TOOL_ACTION move;
 
     // Miscellaneous
-    static TOOL_ACTION deleteTool;
     static TOOL_ACTION refreshPreview;
     static TOOL_ACTION toggleBackground;
     static TOOL_ACTION showInspector;

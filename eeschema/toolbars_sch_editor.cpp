@@ -136,7 +136,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( EE_ACTIONS::drawLines,              ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeSchematicText,     ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeImage,             ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( EE_ACTIONS::deleteTool,             ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::deleteTool,                ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->Realize();
 }
@@ -204,6 +204,6 @@ void SCH_EDIT_FRAME::SyncToolbars()
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawLines );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeSchematicText );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeImage );
-    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::deleteTool );
+    TOGGLE_TOOL( m_drawToolBar, ACTIONS::deleteTool );
     m_drawToolBar->Refresh();
 }

@@ -401,7 +401,6 @@ public:
     static TOOL_ACTION pickerTool;
     static TOOL_ACTION measureTool;
     static TOOL_ACTION updateUnits;
-    static TOOL_ACTION deleteTool;
     static TOOL_ACTION clearHighlight;
     static TOOL_ACTION highlightNet;
     static TOOL_ACTION toggleLastNetHighlight;

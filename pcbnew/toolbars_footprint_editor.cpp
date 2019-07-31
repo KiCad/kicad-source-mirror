@@ -135,7 +135,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( PCB_ACTIONS::drawArc,        ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::drawPolygon,    ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( PCB_ACTIONS::placeText,      ACTION_TOOLBAR::TOGGLE );
-    m_drawToolBar->Add( PCB_ACTIONS::deleteTool,     ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::deleteTool,         ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_drawToolBar, this );
     m_drawToolBar->Add( PCB_ACTIONS::setAnchor,      ACTION_TOOLBAR::TOGGLE );
@@ -206,7 +206,7 @@ void FOOTPRINT_EDIT_FRAME::SyncToolbars()
     TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawArc );
     TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawPolygon );
     TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::placeText );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::deleteTool );
+    TOGGLE_TOOL( m_drawToolBar, ACTIONS::deleteTool );
     TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::setAnchor );
     TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::gridSetOrigin );
     TOGGLE_TOOL( m_drawToolBar, ACTIONS::measureTool );

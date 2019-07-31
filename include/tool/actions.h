@@ -71,6 +71,7 @@ public:
     static TOOL_ACTION paste;
     static TOOL_ACTION duplicate;
     static TOOL_ACTION doDelete;        // sadly 'delete' is a reserved word
+    static TOOL_ACTION deleteTool;
 
     // Find and Replace
     static TOOL_ACTION find;

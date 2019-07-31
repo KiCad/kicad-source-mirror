@@ -93,7 +93,6 @@ public:
     static TOOL_ACTION placeSchematicText;
     static TOOL_ACTION drawLines;
     static TOOL_ACTION placeImage;
-    static TOOL_ACTION deleteTool;
     static TOOL_ACTION finishLineWireOrBus;
     static TOOL_ACTION finishWire;
     static TOOL_ACTION finishBus;

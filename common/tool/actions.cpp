@@ -175,6 +175,11 @@ TOOL_ACTION ACTIONS::doDelete( "common.Interactive.delete",
         _( "Delete" ), _( "Deletes selected item(s)" ),
         delete_xpm );
 
+TOOL_ACTION ACTIONS::deleteTool( "common.Interactive.deleteTool",
+        AS_GLOBAL, 0, "",
+        _( "Interactive Delete Tool" ), _( "Delete clicked items" ),
+        delete_xpm, AF_ACTIVATE );
+
 TOOL_ACTION ACTIONS::activatePointEditor( "common.Control.activatePointEditor",
         AS_GLOBAL );
 

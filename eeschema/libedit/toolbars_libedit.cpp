@@ -69,7 +69,7 @@ void LIB_EDIT_FRAME::ReCreateVToolbar()
                             KiScaledBitmap( export_xpm, this ),
                             _( "Export current drawing" ), wxITEM_CHECK  );
 
-    m_drawToolBar->Add( EE_ACTIONS::deleteTool,           ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( ACTIONS::deleteTool,              ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->Realize();
 }
@@ -194,6 +194,6 @@ void LIB_EDIT_FRAME::SyncToolbars()
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolCircle );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolArc );
     TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolLines );
-    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::deleteTool );
+    TOGGLE_TOOL( m_drawToolBar, ACTIONS::deleteTool );
     m_drawToolBar->Refresh();
 }
