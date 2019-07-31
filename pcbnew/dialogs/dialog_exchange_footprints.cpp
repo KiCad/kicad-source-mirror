@@ -419,6 +419,10 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
      * when all modules are on board */
     PlaceModule( aDest, nullptr, false );
 
+    // Copy full placement, locked flag and pad net names (when possible) but not local
+    // settings like clearances (use library values)
+    aDest->SetPosition( aSrc->GetPosition() );
+
     if( aDest->GetLayer() != aSrc->GetLayer() )
         aDest->Flip( aSrc->GetPosition() );
 
