@@ -68,7 +68,7 @@ bool LIB_EDIT_TOOL::Init()
         moveMenu.AddItem( EE_ACTIONS::rotateCW,        EE_CONDITIONS::NotEmpty, 200 );
         moveMenu.AddItem( EE_ACTIONS::mirrorX,         EE_CONDITIONS::NotEmpty, 200 );
         moveMenu.AddItem( EE_ACTIONS::mirrorY,         EE_CONDITIONS::NotEmpty, 200 );
-        moveMenu.AddItem( EE_ACTIONS::doDelete,        EE_CONDITIONS::NotEmpty, 200 );
+        moveMenu.AddItem( ACTIONS::doDelete,           EE_CONDITIONS::NotEmpty, 200 );
 
         moveMenu.AddItem( EE_ACTIONS::properties,      EE_CONDITIONS::Count( 1 ), 200 );
 
@@ -98,7 +98,7 @@ bool LIB_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::rotateCW,         EE_CONDITIONS::NotEmpty, 200 );
     selToolMenu.AddItem( EE_ACTIONS::mirrorX,          EE_CONDITIONS::NotEmpty, 200 );
     selToolMenu.AddItem( EE_ACTIONS::mirrorY,          EE_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::doDelete,         EE_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( ACTIONS::doDelete,            EE_CONDITIONS::NotEmpty, 200 );
 
     selToolMenu.AddItem( EE_ACTIONS::properties,       EE_CONDITIONS::Count( 1 ), 200 );
 
@@ -303,7 +303,7 @@ int LIB_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
                 EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
                 selectionTool->UnbrightenItem( m_pickerItem );
                 selectionTool->AddItemToSel( m_pickerItem, true );
-                m_toolMgr->RunAction( EE_ACTIONS::doDelete, true );
+                m_toolMgr->RunAction( ACTIONS::doDelete, true );
                 m_pickerItem = nullptr;
             }
 
@@ -753,7 +753,7 @@ void LIB_EDIT_TOOL::setTransitions()
     Go( &LIB_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCCW.MakeEvent() );
     Go( &LIB_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorX.MakeEvent() );
     Go( &LIB_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorY.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::DoDelete,           EE_ACTIONS::doDelete.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::DoDelete,           ACTIONS::doDelete.MakeEvent() );
     Go( &LIB_EDIT_TOOL::DeleteItemCursor,   ACTIONS::deleteTool.MakeEvent() );
 
     Go( &LIB_EDIT_TOOL::Properties,         EE_ACTIONS::properties.MakeEvent() );

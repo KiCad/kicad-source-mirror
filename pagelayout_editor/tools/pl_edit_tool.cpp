@@ -56,7 +56,7 @@ bool PL_EDIT_TOOL::Init()
     ctxMenu.AddItem( ACTIONS::cancelInteractive,     SELECTION_CONDITIONS::ShowAlways, 1 );
 
     ctxMenu.AddSeparator( 200 );
-    ctxMenu.AddItem( PL_ACTIONS::doDelete,           SELECTION_CONDITIONS::NotEmpty, 200 );
+    ctxMenu.AddItem( ACTIONS::doDelete,              SELECTION_CONDITIONS::NotEmpty, 200 );
 
     // Finally, add the standard zoom/grid items
     m_frame->AddStandardSubMenus( m_menu );
@@ -70,7 +70,7 @@ bool PL_EDIT_TOOL::Init()
     selToolMenu.AddItem( PL_ACTIONS::copy,           SELECTION_CONDITIONS::NotEmpty, 200 );
     selToolMenu.AddItem( PL_ACTIONS::paste,          SELECTION_CONDITIONS::ShowAlways, 200 );
     selToolMenu.AddItem( PL_ACTIONS::move,           SELECTION_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( PL_ACTIONS::doDelete,       SELECTION_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( ACTIONS::doDelete,          SELECTION_CONDITIONS::NotEmpty, 200 );
 
     return true;
 }
@@ -200,7 +200,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->Category() == TC_COMMAND )
         {
-            if( evt->IsAction( &PL_ACTIONS::doDelete ) )
+            if( evt->IsAction( &ACTIONS::doDelete ) )
             {
                 // Exit on a remove operation; there is no further processing for removed items.
                 break;

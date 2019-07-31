@@ -359,7 +359,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->Category() == TC_COMMAND )
         {
-            if( evt->IsAction( &EE_ACTIONS::doDelete ) )
+            if( evt->IsAction( &ACTIONS::doDelete ) )
             {
                 // Exit on a remove operation; there is no further processing for removed items.
                 break;

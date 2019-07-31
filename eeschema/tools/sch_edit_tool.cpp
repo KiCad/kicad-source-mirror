@@ -227,7 +227,7 @@ bool SCH_EDIT_TOOL::Init()
         moveMenu.AddItem( EE_ACTIONS::rotateCW,        orientCondition );
         moveMenu.AddItem( EE_ACTIONS::mirrorX,         orientCondition );
         moveMenu.AddItem( EE_ACTIONS::mirrorY,         orientCondition );
-        moveMenu.AddItem( EE_ACTIONS::doDelete,        E_C::NotEmpty );
+        moveMenu.AddItem( ACTIONS::doDelete,           E_C::NotEmpty );
 
         moveMenu.AddItem( EE_ACTIONS::properties,      propertiesCondition );
         moveMenu.AddItem( EE_ACTIONS::editReference,   singleComponentCondition );
@@ -287,7 +287,7 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::rotateCW,         orientCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::mirrorX,          orientCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::mirrorY,          orientCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::doDelete,         E_C::NotEmpty, 200 );
+    selToolMenu.AddItem( ACTIONS::doDelete,            E_C::NotEmpty, 200 );
 
     selToolMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::editReference,    E_C::SingleSymbol, 200 );
@@ -969,7 +969,7 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
                 EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
                 selectionTool->UnbrightenItem( m_pickerItem );
                 selectionTool->AddItemToSel( m_pickerItem, true );
-                m_toolMgr->RunAction( EE_ACTIONS::doDelete, true );
+                m_toolMgr->RunAction( ACTIONS::doDelete, true );
                 m_pickerItem = nullptr;
             }
 
@@ -1396,7 +1396,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCCW.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorX.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorY.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::DoDelete,           EE_ACTIONS::doDelete.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::DoDelete,           ACTIONS::doDelete.MakeEvent() );
     Go( &SCH_EDIT_TOOL::DeleteItemCursor,   ACTIONS::deleteTool.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::Properties,         EE_ACTIONS::properties.MakeEvent() );

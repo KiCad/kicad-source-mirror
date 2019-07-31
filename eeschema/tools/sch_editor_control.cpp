@@ -862,7 +862,7 @@ int SCH_EDITOR_CONTROL::Cut( const TOOL_EVENT& aEvent )
     }
 
     if( doCopy() )
-        m_toolMgr->RunAction( EE_ACTIONS::doDelete, true );
+        m_toolMgr->RunAction( ACTIONS::doDelete, true );
 
     return 0;
 }
