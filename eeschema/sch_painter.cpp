@@ -1533,8 +1533,16 @@ void SCH_PAINTER::draw( SCH_BITMAP *aBitmap, int aLayer )
             m_gal->SetLineWidth ( getShadowWidth() );
             m_gal->SetIsFill( false );
 
-            VECTOR2D origin( -aBitmap->GetSize().x / 2.0, -aBitmap->GetSize().y / 2.0 );
-            VECTOR2D end = origin + aBitmap->GetSize();
+            // Draws a bounding box.
+            VECTOR2D bm_size( aBitmap->GetSize() );
+            // bm_size is the actual image size in UI.
+            // but m_gal scale was previously set to img_scale
+            // so recalculate size relative to this image size.
+            bm_size.x /= img_scale;
+            bm_size.y /= img_scale;
+            VECTOR2D origin( -bm_size.x / 2.0, -bm_size.y / 2.0 );
+            VECTOR2D end = origin + bm_size;
+
             m_gal->DrawRectangle( origin, end );
         }
     }
