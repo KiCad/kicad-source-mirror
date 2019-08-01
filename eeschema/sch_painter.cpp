@@ -228,10 +228,10 @@ float SCH_PAINTER::getShadowWidth()
 {
     const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
 
-    if( matrix.GetScale().x < 5 )
-        return (float) fabs( matrix.GetScale().x * 4 );
+    if( matrix.GetScale().x > 20 )
+        return (float) fabs( matrix.GetScale().x * 5 );
     else
-        return (float) fabs( matrix.GetScale().x * 3 );
+        return (float) fabs( matrix.GetScale().x * 4 );
 }
 
 
