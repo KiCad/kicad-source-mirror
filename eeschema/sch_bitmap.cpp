@@ -204,6 +204,7 @@ void SCH_BITMAP::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 
 void SCH_BITMAP::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount = 1;
+    aCount = 2;
     aLayers[0] = LAYER_DRAW_BITMAPS;
+    aLayers[1] = LAYER_SELECTION_SHADOWS;
 }

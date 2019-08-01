@@ -238,6 +238,7 @@ float SCH_PAINTER::getShadowWidth()
 COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows )
 {
     static COLOR4D highlightColor( 1.0, 0.3, 0.3, 1.0 );
+    static COLOR4D selectionColor = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
 
     COLOR4D color = m_schSettings.GetLayerColor( aLayer );
 
@@ -251,13 +252,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
     else if( aItem->IsSelected() )
     {
         if( aDrawingShadows )
-        {
-            // Synthesize a "drop-shadow" color
-            double h, s, l;
-            color.ToHSL( h, s, l );
-            // Must allow saturation of 0 to allow greys to stay grey
-            color.FromHSL( h, std::min( s, 0.25 ), 0.90 );
-        }
+            color = selectionColor.WithAlpha( 0.8 );
     }
     else if( aItem->IsHighlighted() )   // Cross-probing
     {
@@ -1516,24 +1511,32 @@ void SCH_PAINTER::draw( SCH_BITMAP *aBitmap, int aLayer )
     m_gal->Save();
     m_gal->Translate( aBitmap->GetPosition() );
 
-    // When the image scale factor is not 1.0, we need to modify the actual
-    // as the image scale factor is similar to a local zoom
+    // When the image scale factor is not 1.0, we need to modify the actual as the image scale
+    // factor is similar to a local zoom
     double img_scale = aBitmap->GetImageScale();
 
     if( img_scale != 1.0 )
         m_gal->Scale( VECTOR2D( img_scale, img_scale ) );
 
-    m_gal->DrawBitmap( *aBitmap->GetImage() );
-
-    if( aBitmap->IsSelected() || aBitmap->IsBrightened() || aBitmap->IsHighlighted() )
+    if( aLayer == LAYER_DRAW_BITMAPS )
     {
-        COLOR4D color = getRenderColor( aBitmap, LAYER_NOTES, false );
-        m_gal->SetStrokeColor( color );
-        m_gal->SetIsStroke( true );
-        m_gal->SetIsFill( false );
-        m_gal->SetLineWidth ( getShadowWidth() );
-        m_gal->DrawRectangle( VECTOR2D( -aBitmap->GetSize().x / 2.0, -aBitmap->GetSize().y / 2.0 ),
-                              VECTOR2D( aBitmap->GetSize().x / 2.0, aBitmap->GetSize().y / 2.0 ) );
+        m_gal->DrawBitmap( *aBitmap->GetImage() );
+    }
+
+    if( aLayer == LAYER_SELECTION_SHADOWS )
+    {
+        if( aBitmap->IsSelected() || aBitmap->IsBrightened() || aBitmap->IsHighlighted() )
+        {
+            COLOR4D color = getRenderColor( aBitmap, LAYER_DRAW_BITMAPS, true );
+            m_gal->SetIsStroke( true );
+            m_gal->SetStrokeColor( color );
+            m_gal->SetLineWidth ( getShadowWidth() );
+            m_gal->SetIsFill( false );
+
+            VECTOR2D origin( -aBitmap->GetSize().x / 2.0, -aBitmap->GetSize().y / 2.0 );
+            VECTOR2D end = origin + aBitmap->GetSize();
+            m_gal->DrawRectangle( origin, end );
+        }
     }
 
     m_gal->Restore();
