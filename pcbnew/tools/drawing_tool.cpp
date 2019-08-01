@@ -379,6 +379,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
                 m_controls->SetAutoPan( false );
                 m_controls->CaptureCursor( false );
+                m_controls->ForceCursorPosition( false );
                 m_controls->ShowCursor( true );
             }
             else
@@ -444,23 +445,16 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     } );
 
                     if( textPcb->GetText().IsEmpty() )
-                    {
-                        m_controls->ForceCursorPosition( false );
                         delete textPcb;
-                    }
                     else
                         text = textPcb;
                 }
 
-                if( text == NULL )
-                    continue;
-
-                m_controls->WarpCursor( text->GetPosition(), true );
-                m_controls->ForceCursorPosition( false );
-                m_controls->CaptureCursor( true );
-                m_controls->SetAutoPan( true );
-
-                m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, text );
+                if( text )
+                {
+                    m_controls->WarpCursor( text->GetPosition(), true );
+                    m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, text );
+                }
             }
             else
             {
@@ -470,12 +464,13 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 commit.Add( text );
                 commit.Push( _( "Place a text" ) );
 
-                m_controls->CaptureCursor( false );
-                m_controls->SetAutoPan( false );
-                m_controls->ShowCursor( true );
-
-                text = NULL;
+                text = nullptr;
             }
+
+            m_controls->ForceCursorPosition( false );
+            m_controls->ShowCursor( true );
+            m_controls->CaptureCursor( text != nullptr );
+            m_controls->SetAutoPan( text != nullptr );
         }
         else if( text && evt->IsMotion() )
         {
