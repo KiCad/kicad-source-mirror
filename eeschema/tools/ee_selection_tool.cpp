@@ -436,7 +436,7 @@ EDA_ITEM* EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T*
     // Post-process collected items
     for( int i = collector.GetCount() - 1; i >= 0; --i )
     {
-        if( !selectable( collector[ i ] ) )
+        if( !Selectable( collector[ i ] ) )
         {
             collector.Remove( i );
             continue;
@@ -719,7 +719,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
             {
                 EDA_ITEM* item = static_cast<EDA_ITEM*>( it->first );
 
-                if( !item || !selectable( item ) )
+                if( !item || !Selectable( item ) )
                     continue;
 
                 if( item->HitTest( selectionRect, windowSelection ) )
@@ -1064,7 +1064,7 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
 }
 
 
-bool EE_SELECTION_TOOL::selectable( const EDA_ITEM* aItem, bool checkVisibilityOnly ) const
+bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityOnly ) const
 {
     // NOTE: in the future this is where eeschema layer/itemtype visibility will be handled
 
@@ -1083,20 +1083,12 @@ bool EE_SELECTION_TOOL::selectable( const EDA_ITEM* aItem, bool checkVisibilityO
         LIB_EDIT_FRAME* editFrame = (LIB_EDIT_FRAME*) m_frame;
         LIB_PIN*        pin = (LIB_PIN*) aItem;
 
-        if( ( pin->GetUnit() && pin->GetUnit() != editFrame->GetUnit() )
-         || ( pin->GetConvert() && pin->GetConvert() != editFrame->GetConvert() ) )
-        {
-            // Specific rules for pins:
-            // - do not select pins in other units when synchronized pin edit mode is disabled
-            // - do not select pins in other units when units are not interchangeable
-            // - in other cases verify if the pin belongs to the requested DeMorgan variant
-            if( !editFrame->SynchronizePins()
-                || editFrame->GetCurPart()->UnitsLocked()
-                || ( pin->GetConvert() && pin->GetConvert() != editFrame->GetConvert() ) )
-            {
-                return false;
-            }
-        }
+        if( pin->GetUnit() && pin->GetUnit() != editFrame->GetUnit() )
+            return false;
+
+        if( pin->GetConvert() && pin->GetConvert() != editFrame->GetConvert() )
+            return false;
+
         break;
     }
     case SCH_MARKER_T:  // Always selectable

@@ -309,12 +309,21 @@ int LIB_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     picker->SetMotionHandler(
         [this] ( const VECTOR2D& aPos )
         {
+            EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
             EE_COLLECTOR collector;
             collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-            collector.Collect( m_frame->GetCurPart(), nonFields, (wxPoint) aPos );
+            collector.Collect( m_frame->GetCurPart(), nonFields, (wxPoint) aPos,
+                               m_frame->GetUnit(), m_frame->GetConvert() );
 
-            EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-            selectionTool->GuessSelectionCandidates( collector, aPos );
+            // Remove unselectable items
+            for( int i = collector.GetCount() - 1; i >= 0; --i )
+            {
+                if( !selectionTool->Selectable( collector[ i ] ) )
+                    collector.Remove( i );
+            }
+
+            if( collector.GetCount() > 1 )
+                selectionTool->GuessSelectionCandidates( collector, aPos );
 
             EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
 

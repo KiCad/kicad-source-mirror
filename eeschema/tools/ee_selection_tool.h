@@ -132,6 +132,13 @@ public:
     void ClearSelection();
 
     /**
+     * Function Selectable()
+     * Checks conditions for an item to be selected.
+     * @return True if the item fulfills conditions to be selected.
+     */
+    bool Selectable( const EDA_ITEM* aItem, bool checkVisibilityOnly = false ) const;
+
+    /**
      * Apply heuristics to try and determine a single object when multiple are found under the
      * cursor.
      */
@@ -169,14 +176,6 @@ private:
      * @return true if an item was picked
      */
     bool doSelectionMenu( EE_COLLECTOR* aItems );
-
-    /**
-     * Function selectable()
-     * Checks conditions for an item to be selected.
-     *
-     * @return True if the item fulfills conditions to be selected.
-     */
-    bool selectable( const EDA_ITEM* aItem, bool checkVisibilityOnly = false ) const;
 
     /**
      * Function select()
