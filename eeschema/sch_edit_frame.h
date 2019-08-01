@@ -107,7 +107,7 @@ private:
     PARAM_CFG_ARRAY         m_configSettings;
     ERC_SETTINGS            m_ercSettings;
     wxPageSetupDialogData   m_pageSetupData;
-    bool                    m_printMonochrome;     ///< Print monochrome instead of grey scale.
+    bool                    m_printMonochrome;    ///< Print monochrome instead of grey scale.
     bool                    m_printSheetReference;
     SCH_ITEM*               m_item_to_repeat;     ///< Last item to insert by the repeat command.
     int                     m_repeatLabelDelta;   ///< Repeat label number increment step.
@@ -125,6 +125,7 @@ private:
     bool                    m_autoplaceJustify;   ///< allow autoplace to change justification
     bool                    m_autoplaceAlign;     ///< align autoplaced fields to the grid
     bool                    m_footprintPreview;   ///< whether to show footprint previews
+    bool                    m_showIllegalSymbolLibDialog;
 
     DIALOG_SCH_FIND*        m_findReplaceDialog;
     STATUS_TEXT_POPUP*      m_findReplaceStatusPopup;

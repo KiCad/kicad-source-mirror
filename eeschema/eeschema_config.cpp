@@ -115,7 +115,7 @@ COLOR4D GetInvisibleItemColor()
 }
 
 
-void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent, 
+void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
                                          PANEL_HOTKEYS_EDITOR* aHotkeysPanel  )
 {
     wxTreebook* book = aParent->GetTreebook();
@@ -123,8 +123,9 @@ void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
     book->AddPage( new PANEL_EESCHEMA_SETTINGS( this, book ), _( "Eeschema" ) );
     book->AddSubPage( new PANEL_EESCHEMA_DISPLAY_OPTIONS( this, book ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_EESCHEMA_COLOR_CONFIG( this, book ), _( "Colors" ) );
-    book->AddSubPage( new PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( this, book ), _( "Field Name Templates" ) );
-    
+    book->AddSubPage( new PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( this, book ),
+                      _( "Field Name Templates" ) );
+
     aHotkeysPanel->AddHotKeys( GetToolManager() );
 }
 
@@ -258,6 +259,7 @@ static const wxString PrintSheetRefEntry =          "PrintSheetReferenceAndTitle
 static const wxString RepeatStepXEntry =            "RepeatStepX";
 static const wxString RepeatStepYEntry =            "RepeatStepY";
 static const wxString RepeatLabelIncrementEntry =   "RepeatLabelIncrement";
+static const wxString ShowIllegalSymboLibDialog =   "ShowIllegalSymbolLibDialog";
 
 // Library editor wxConfig entry names.
 static const wxChar defaultLibWidthEntry[] =        wxT( "LibeditLibWidth" );
@@ -296,6 +298,9 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings()
     m_configSettings.push_back( new PARAM_CFG_INT( true, RepeatLabelIncrementEntry,
                                                    &m_repeatDeltaLabel, DEFAULT_REPEAT_LABEL_INC,
                                                    -10, +10 ) );
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, ShowIllegalSymboLibDialog,
+                                                    &m_showIllegalSymbolLibDialog, true ) );
+
     return m_configSettings;
 }
 
@@ -406,7 +411,8 @@ void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    SetDefaultLineThickness( (int) aCfg->Read( DefaultDrawLineWidthEntry, DEFAULTDRAWLINETHICKNESS ) );
+    SetDefaultLineThickness( (int) aCfg->Read( DefaultDrawLineWidthEntry,
+                                               DEFAULTDRAWLINETHICKNESS ) );
     SetDefaultPinLength( (int) aCfg->Read( DefaultPinLengthEntry, DEFAULTPINLENGTH ) );
     m_textPinNumDefaultSize = (int) aCfg->Read( defaultPinNumSizeEntry, DEFAULTPINNUMSIZE );
     m_textPinNameDefaultSize = (int) aCfg->Read( defaultPinNameSizeEntry, DEFAULTPINNAMESIZE );
