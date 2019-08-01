@@ -1702,7 +1702,8 @@ static void create_vrml_plane( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX color
     std::vector< int > idxPlane;
     std::vector< int > idxSide;
 
-    if( !(*layer).Get2DTriangles( vertices, idxPlane, top_z, aTopPlane ) )
+    if( !( *layer ).Get2DTriangles( vertices, idxPlane, top_z, aTopPlane ) || idxPlane.empty()
+            || idxSide.empty() )
     {
 #ifdef DEBUG
         do {
@@ -1788,7 +1789,8 @@ static void create_vrml_shell( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX color
         bottom_z = tmp;
     }
 
-    if( !(*layer).Get3DTriangles( vertices, idxPlane, idxSide, top_z, bottom_z ) )
+    if( !( *layer ).Get3DTriangles( vertices, idxPlane, idxSide, top_z, bottom_z )
+            || idxPlane.empty() || idxSide.empty() )
     {
 #ifdef DEBUG
         do {
