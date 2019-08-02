@@ -75,14 +75,9 @@ void PL_EDITOR_FRAME::GetLayoutFromRedoList()
     delete redoItem;
 
     if( pageSettingsAndTitleBlock )
-    {
-        GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
         HardRedraw();   // items based off of corners will need re-calculating
-    }
     else
-    {
         GetCanvas()->Refresh();
-    }
 
     OnModify();
 }
@@ -115,10 +110,7 @@ void PL_EDITOR_FRAME::GetLayoutFromUndoList()
     delete undoItem;
 
     if( pageSettingsAndTitleBlock )
-    {
-        GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
         HardRedraw();   // items based off of corners will need re-calculating
-    }
     else
         GetCanvas()->Refresh();
 
