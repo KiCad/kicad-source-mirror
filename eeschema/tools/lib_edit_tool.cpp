@@ -712,15 +712,13 @@ int LIB_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     if( !selection.Front()->IsMoving() )
         saveCopyInUndoList( m_frame->GetCurPart(), UR_LIBEDIT );
 
-    EDA_ITEMS newItems;
-
     for( unsigned ii = 0; ii < selection.GetSize(); ++ii )
     {
         LIB_ITEM* oldItem = static_cast<LIB_ITEM*>( selection.GetItem( ii ) );
         LIB_ITEM* newItem = (LIB_ITEM*) oldItem->Clone();
         oldItem->ClearFlags( SELECTED );
         newItem->SetFlags( IS_NEW | IS_PASTED | SELECTED );
-        newItems.push_back( newItem );
+        newItem->SetParent( part );
 
         part->GetDrawItems().push_back( newItem );
         getView()->Add( newItem );
