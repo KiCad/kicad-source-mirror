@@ -38,7 +38,7 @@ DIALOG_UPDATE_PCB_BASE::DIALOG_UPDATE_PCB_BASE( wxWindow* parent, wxWindowID id,
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_cbUpdateFootprints = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Replace footprints of symbols whose footprint assignments have changed"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbUpdateFootprints->SetToolTip( _("Used primarily after changing footprint assignments via Eeschema's Assign Footprints dialog (Cvpcb)") );
+	m_cbUpdateFootprints->SetToolTip( _("Normally footprints on the board should be changed to match footprint assignment changes made in the schematic. Uncheck this only if you don't want to change existing footprints on the board.") );
 	
 	gbSizer1->Add( m_cbUpdateFootprints, wxGBPosition( 0, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
