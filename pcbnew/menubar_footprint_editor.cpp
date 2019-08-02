@@ -105,7 +105,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddItem( ACTIONS::print,              haveFootprintCondition );
 
     fileMenu->AddSeparator();
-    fileMenu->AddItem( wxID_CLOSE, _( "Close" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( wxID_CLOSE, _( "Close\tCTRL+W" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->Resolve();
 
