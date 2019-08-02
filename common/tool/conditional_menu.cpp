@@ -197,6 +197,18 @@ void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
                 menuItem->Enable( result );
         }
     }
+
+    // Recursively call Evaluate on all the submenus that are CONDITIONAL_MENUs to ensure
+    // they are updated. This is also required on GTK to make sure the menus have the proper
+    // size when created.
+    runOnSubmenus(
+        [&aSelection]( ACTION_MENU* aMenu )
+        {
+            CONDITIONAL_MENU* conditionalMenu = dynamic_cast<CONDITIONAL_MENU*>( aMenu );
+
+            if( conditionalMenu )
+                conditionalMenu->Evaluate( aSelection );
+        } );
 }
 
 
