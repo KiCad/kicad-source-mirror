@@ -117,13 +117,6 @@ int PL_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
 }
 
 
-int PL_EDITOR_CONTROL::Quit( const TOOL_EVENT& aEvent )
-{
-    m_frame->Close( false );
-    return 0;
-}
-
-
 int PL_EDITOR_CONTROL::ToggleBackgroundColor( const TOOL_EVENT& aEvent )
 {
     m_frame->SetDrawBgColor( m_frame->GetDrawBgColor() == WHITE ? BLACK : WHITE );
@@ -185,7 +178,6 @@ void PL_EDITOR_CONTROL::setTransitions()
     Go( &PL_EDITOR_CONTROL::SaveAs,                ACTIONS::saveAs.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::Print,                 ACTIONS::print.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::Plot,                  ACTIONS::plot.MakeEvent() );
-    Go( &PL_EDITOR_CONTROL::Quit,                  ACTIONS::quit.MakeEvent() );
 
     Go( &PL_EDITOR_CONTROL::PageSetup,             PL_ACTIONS::previewSettings.MakeEvent() );
     Go( &PL_EDITOR_CONTROL::ToggleBackgroundColor, PL_ACTIONS::toggleBackground.MakeEvent() );

@@ -57,6 +57,9 @@
 
 BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_CLOSE( PL_EDITOR_FRAME::OnCloseWindow )
+    EVT_MENU( wxID_CLOSE, PL_EDITOR_FRAME::OnExit )
+    EVT_MENU( wxID_EXIT, PL_EDITOR_FRAME::OnExit )
+
     EVT_MENU( wxID_FILE, PL_EDITOR_FRAME::Files_io )
 
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, PL_EDITOR_FRAME::OnFileHistory )
@@ -177,6 +180,9 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.Update();
 
+    // Add the exit key handler
+    InitExitKey();
+
     wxPoint originCoord = ReturnCoordOriginCorner();
     SetGridOrigin( originCoord );
 
@@ -237,7 +243,17 @@ bool PL_EDITOR_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, i
 }
 
 
-void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
+void PL_EDITOR_FRAME::OnExit( wxCommandEvent& aEvent )
+{
+    if( aEvent.GetId() == wxID_EXIT )
+        Kiway().OnKiCadExit();
+
+    if( aEvent.GetId() == wxID_CLOSE || Kiface().IsSingle() )
+        Close( false );
+}
+
+
+void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
     if( GetScreen()->IsModify() )
     {
@@ -247,7 +263,7 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
         if( !HandleUnsavedChanges( this, wxString::Format( msg, filename.GetFullName() ),
                                    [&]()->bool { return saveCurrentPageLayout(); } ) )
         {
-            Event.Veto();
+            aEvent.Veto();
             return;
         }
     }

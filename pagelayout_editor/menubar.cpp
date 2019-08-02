@@ -75,12 +75,21 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     fileMenu->AddItem( ACTIONS::saveAs,        SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-    fileMenu->AddItem( ACTIONS::pageSettings,  SELECTION_CONDITIONS::ShowAlways );
     fileMenu->AddItem( ACTIONS::print,         SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-    // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
-    fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
+
+    if( Kiface().IsSingle() )
+    {
+        // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
+        fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm,
+                SELECTION_CONDITIONS::ShowAlways );
+    }
+    else
+    {
+        fileMenu->AddItem( wxID_CLOSE, _( "Close" ), "", exit_xpm,
+                SELECTION_CONDITIONS::ShowAlways );
+    }
 
     fileMenu->Resolve();
 
@@ -135,6 +144,9 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     viewMenu->AddCheckItem( ACTIONS::toggleGrid,             gridShownCondition );
     viewMenu->AddCheckItem( ACTIONS::toggleCursorStyle,      fullCrosshairCondition );
 
+    viewMenu->AddSeparator();
+    viewMenu->AddItem( PL_ACTIONS::previewSettings,          SELECTION_CONDITIONS::ShowAlways );
+
     viewMenu->Resolve();
 
     //-- Inspector menu -------------------------------------------------------
@@ -168,6 +180,8 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
     // Language submenu
     AddMenuLanguageList( preferencesMenu, selTool );
+
+    preferencesMenu->Resolve();
 
     //-- Menubar -----------------------------------------------------------
     //

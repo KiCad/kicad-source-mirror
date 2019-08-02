@@ -98,7 +98,18 @@ public:
      */
     bool InsertPageLayoutDescrFile( const wxString& aFullFileName );
 
-    void    OnCloseWindow( wxCloseEvent& Event );
+
+    /*
+     * Function OnExit
+     * Event handler for the wxID_EXIT and wxID_CLOSE events
+     */
+    void OnExit( wxCommandEvent& aEvent );
+
+    /*
+     * Function OnCloseWindow
+     * Event handler for the close event
+     */
+    void OnCloseWindow( wxCloseEvent& aEvent );
 
     // The Tool Framework initalization
     void setupTools();

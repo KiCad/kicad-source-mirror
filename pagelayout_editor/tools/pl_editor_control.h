@@ -58,7 +58,6 @@ public:
     int PageSetup( const TOOL_EVENT& aEvent );
     int Print( const TOOL_EVENT& aEvent );
     int Plot( const TOOL_EVENT& aEvent );
-    int Quit( const TOOL_EVENT& aEvent );
 
     int ToggleBackgroundColor( const TOOL_EVENT& aEvent );
     int ShowInspector( const TOOL_EVENT& aEvent );
