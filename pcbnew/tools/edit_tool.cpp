@@ -758,13 +758,14 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 {
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); }, nullptr, ! m_dragging );
+            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); },
+            nullptr, ! m_dragging );
 
     if( selection.Empty() )
         return 0;
 
     updateModificationPoint( selection );
-    VECTOR2I modPoint = selection.GetReferencePoint();
+    VECTOR2I modPoint = selection.GetCenter();
     bool leftRight = frame()->Settings().m_FlipLeftRight;
 
     // When editing modules, all items have the same parent
