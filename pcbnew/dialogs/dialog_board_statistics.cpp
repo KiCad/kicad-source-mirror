@@ -24,6 +24,7 @@
 
 
 #include "dialog_board_statistics.h"
+#include <wildcards_and_files_ext.h>
 
 #define COL_LABEL 0
 #define COL_AMOUNT 1
@@ -56,9 +57,11 @@ struct DIALOG_BOARD_STATISTICS_SAVED_STATE
     bool subtractHoles;
 
     // Variables to save last report file name and folder
-    bool     saveReportInitialized;
-    wxString saveReportFolder;
-    wxString saveReportName;
+    bool     saveReportInitialized; // true after the 3 next string are initialized
+    wxString saveReportFolder;      // last report folder
+    wxString saveReportName;        // last report filename
+    wxString m_project;             // name of the project used to create the last report
+                                    // used to reinit last state after a project change
 };
 
 static DIALOG_BOARD_STATISTICS_SAVED_STATE s_savedDialogState;
@@ -76,7 +79,7 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
     headingFont.SetSymbolicSize( wxFONTSIZE_SMALL );
     m_gridComponents->SetCellValue( ROW_LABEL, COL_FRONT_SIDE, _( "Front Side" ) );
     m_gridComponents->SetCellFont( ROW_LABEL, COL_FRONT_SIDE, headingFont );
-    m_gridComponents->SetCellValue( ROW_LABEL, COL_BOTTOM_SIDE, _( "Bottom Side" ) );
+    m_gridComponents->SetCellValue( ROW_LABEL, COL_BOTTOM_SIDE, _( "Back Side" ) );
     m_gridComponents->SetCellFont( ROW_LABEL, COL_BOTTOM_SIDE, headingFont );
     m_gridComponents->SetCellValue( ROW_LABEL, COL_TOTAL, _( "Total" ) );
     m_gridComponents->SetCellFont( ROW_LABEL, COL_TOTAL, headingFont );
@@ -100,14 +103,22 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
     }
 
     wxFileName fn = m_parentFrame->GetBoard()->GetFileName();
-    if( !s_savedDialogState.saveReportInitialized )
+
+    if( !s_savedDialogState.saveReportInitialized ||
+        s_savedDialogState.m_project != Prj().GetProjectFullName()
+        )
     {
         fn.SetName( fn.GetName() + "_report" );
         fn.SetExt( "txt" );
         s_savedDialogState.saveReportName = fn.GetFullName();
         s_savedDialogState.saveReportFolder = wxPathOnly( Prj().GetProjectFullName() );
+        s_savedDialogState.m_project = Prj().GetProjectFullName();
         s_savedDialogState.saveReportInitialized = true;
     }
+
+    // The wxStdDialogButtonSizer wxID_CANCLE button is in fact a close button
+    // Nothing to cancel:
+    m_sdbControlSizerCancel->SetLabel( _( "Close" ) );
 }
 
 void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
@@ -129,7 +140,7 @@ void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
     m_viasTypes.clear();
     m_viasTypes.push_back( viasType_t( VIA_THROUGH, _( "Through vias:" ) ) );
     m_viasTypes.push_back( viasType_t( VIA_BLIND_BURIED, _( "Blind/buried:" ) ) );
-    m_viasTypes.push_back( viasType_t( VIA_MICROVIA, _( "Micro via:" ) ) );
+    m_viasTypes.push_back( viasType_t( VIA_MICROVIA, _( "Micro vias:" ) ) );
 
     // If there not enough rows in grids, append some
     int appendRows = m_componentsTypes.size() + 2 - m_gridComponents->GetNumberRows();
@@ -292,7 +303,7 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
         currentRow++;
     }
     m_gridPads->SetCellValue( currentRow, COL_LABEL, _( "Total:" ) );
-    m_gridPads->SetCellValue( currentRow, COL_AMOUNT, wxString::Format( wxT( "%i " ), totalPads ) );
+    m_gridPads->SetCellValue( currentRow, COL_AMOUNT, wxString::Format( "%i ", totalPads ) );
 
     int totalVias = 0;
     currentRow = 0;
@@ -300,12 +311,12 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     {
         m_gridVias->SetCellValue( currentRow, COL_LABEL, type.title );
         m_gridVias->SetCellValue(
-                currentRow, COL_AMOUNT, wxString::Format( wxT( "%i " ), type.qty ) );
+                currentRow, COL_AMOUNT, wxString::Format( "%i ", type.qty ) );
         totalVias += type.qty;
         currentRow++;
     }
     m_gridVias->SetCellValue( currentRow, COL_LABEL, _( "Total:" ) );
-    m_gridVias->SetCellValue( currentRow, COL_AMOUNT, wxString::Format( wxT( "%i " ), totalVias ) );
+    m_gridVias->SetCellValue( currentRow, COL_AMOUNT, wxString::Format( "%i ", totalVias ) );
 
 
     int totalFront = 0;
@@ -317,9 +328,9 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     {
         m_gridComponents->SetCellValue( currentRow, COL_LABEL, type.title );
         m_gridComponents->SetCellValue(
-                currentRow, COL_FRONT_SIDE, wxString::Format( wxT( "%i " ), type.frontSideQty ) );
+                currentRow, COL_FRONT_SIDE, wxString::Format( "%i ", type.frontSideQty ) );
         m_gridComponents->SetCellValue(
-                currentRow, COL_BOTTOM_SIDE, wxString::Format( wxT( "%i " ), type.backSideQty ) );
+                currentRow, COL_BOTTOM_SIDE, wxString::Format( "%i ", type.backSideQty ) );
         m_gridComponents->SetCellValue( currentRow, 3,
                 wxString::Format( wxT( "%i " ), type.frontSideQty + type.backSideQty ) );
         totalFront += type.frontSideQty;
@@ -328,10 +339,11 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
     }
     m_gridComponents->SetCellValue( currentRow, COL_LABEL, _( "Total:" ) );
     m_gridComponents->SetCellValue( currentRow, COL_FRONT_SIDE,
-                                    wxString::Format( wxT( "%i " ), totalFront ) );
-    m_gridComponents->SetCellValue( currentRow, COL_BOTTOM_SIDE, wxString::Format( wxT( "%i " ), totalBack ) );
+                                    wxString::Format( "%i ", totalFront ) );
+    m_gridComponents->SetCellValue( currentRow, COL_BOTTOM_SIDE,
+                                    wxString::Format( "%i ", totalBack ) );
     m_gridComponents->SetCellValue(
-            currentRow, COL_TOTAL, wxString::Format( wxT( "%i " ), totalFront + totalBack ) );
+            currentRow, COL_TOTAL, wxString::Format( "%i ", totalFront + totalBack ) );
 
     if( m_hasOutline )
     {
@@ -377,7 +389,7 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& event )
     wxFileName fn = m_parentFrame->GetBoard()->GetFileName();
     boardName = fn.GetName();
     wxFileDialog saveFileDialog( this, _( "Save Report File" ), s_savedDialogState.saveReportFolder,
-            s_savedDialogState.saveReportName, _( "text files (*.txt)|*.txt" ),
+            s_savedDialogState.saveReportName, TextFileWildcard(),
             wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveFileDialog.ShowModal() == wxID_CANCEL )
@@ -386,15 +398,15 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& event )
     s_savedDialogState.saveReportFolder = wxPathOnly( saveFileDialog.GetPath() );
     s_savedDialogState.saveReportName = saveFileDialog.GetFilename();
 
-    outFile = wxFopen( saveFileDialog.GetPath(), wxT( "wt" ) );
+    outFile = wxFopen( saveFileDialog.GetPath(), "wt" );
 
     if( outFile == NULL )
     {
-        msg.Printf( _( "Unable to create file \"%s\"" ), GetChars( saveFileDialog.GetPath() ) );
+        msg.Printf( _( "Unable to create file \"%s\"" ), saveFileDialog.GetPath() );
         DisplayErrorMessage( this, msg );
         return;
     }
-    msg << _( "PCB statistics report\n" );
+    msg << _( "PCB statistics report" ) << "\n";
     msg << _( "Date: " ) << wxDateTime::Now().Format() << "\n";
     msg << _( "Project: " ) << Prj().GetProjectName() << "\n";
     msg << _( "Board name: " ) << boardName << "\n";
@@ -459,15 +471,16 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& event )
 
     //Write components amount to file
     msg << "\n";
-    msg << _( "Components\n" );
-    tmp.Printf( "%-*s | %*s | %*s | %*s |\n", colsWidth[0], columns[0], colsWidth[1], columns[1],
-            colsWidth[2], columns[2], colsWidth[3], columns[3] );
+    msg << _( "Components" ) << "\n";
+    tmp.Printf( "%-*s | %*s | %*s | %*s |\n",
+                colsWidth[0], columns[0], colsWidth[1], columns[1],
+                colsWidth[2], columns[2], colsWidth[3], columns[3] );
     msg += tmp;
     for( auto& type : m_componentsTypes )
     {
         tmp.Printf( "%-*s | %*d | %*d | %*d |\n", colsWidth[0], type.title, colsWidth[1],
-                type.frontSideQty, colsWidth[2], type.backSideQty, colsWidth[3],
-                type.backSideQty + type.frontSideQty );
+                    type.frontSideQty, colsWidth[2], type.backSideQty, colsWidth[3],
+                    type.backSideQty + type.frontSideQty );
         msg += tmp;
     }
     tmp.Printf( "%-*s | %*d | %*d | %*d |\n", colsWidth[0], _( "Total:" ), colsWidth[1], frontTotal,
@@ -477,7 +490,7 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& event )
     int success = fprintf( outFile, "%s", TO_UTF8( msg ) );
     if( success < 0 )
     {
-        msg.Printf( _( "Error writing to file \"%s\"" ), GetChars( saveFileDialog.GetPath() ) );
+        msg.Printf( _( "Error writing to file \"%s\"" ), saveFileDialog.GetPath() );
         DisplayErrorMessage( this, msg );
     }
     fclose( outFile );

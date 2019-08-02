@@ -49,7 +49,7 @@ class DIALOG_BOARD_STATISTICS_BASE : public DIALOG_SHIM
 		wxStaticLine* m_staticline2;
 		wxButton* m_buttonSaveReport;
 		wxStdDialogButtonSizer* m_sdbControlSizer;
-		wxButton* m_sdbControlSizerOK;
+		wxButton* m_sdbControlSizerCancel;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void checkboxClicked( wxCommandEvent& event ) { event.Skip(); }
@@ -58,7 +58,7 @@ class DIALOG_BOARD_STATISTICS_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Board Statistics"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+		DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Board Statistics"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_BOARD_STATISTICS_BASE();
 
 };

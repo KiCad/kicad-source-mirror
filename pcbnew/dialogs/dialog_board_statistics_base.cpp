@@ -211,12 +211,12 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 
 	bSizerBottom->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_buttonSaveReport = new wxButton( this, wxID_ANY, _("Save report"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonSaveReport = new wxButton( this, wxID_ANY, _("Generate Report File"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerBottom->Add( m_buttonSaveReport, 0, wxALL, 5 );
 
 	m_sdbControlSizer = new wxStdDialogButtonSizer();
-	m_sdbControlSizerOK = new wxButton( this, wxID_OK );
-	m_sdbControlSizer->AddButton( m_sdbControlSizerOK );
+	m_sdbControlSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbControlSizer->AddButton( m_sdbControlSizerCancel );
 	m_sdbControlSizer->Realize();
 
 	bSizerBottom->Add( m_sdbControlSizer, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );

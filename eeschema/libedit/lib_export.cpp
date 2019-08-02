@@ -46,7 +46,7 @@ void LIB_EDIT_FRAME::ImportPart()
             return;
     }
 
-    wxFileDialog dlg( this, _( "Import Symbol" ), m_mruPath, wxEmptyString, 
+    wxFileDialog dlg( this, _( "Import Symbol" ), m_mruPath, wxEmptyString,
                       SchematicLibraryFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -156,7 +156,7 @@ void LIB_EDIT_FRAME::ExportPart()
 
     if( fn.Exists() && !fn.IsDirWritable() )
     {
-        msg.Printf( _( "Write permissions are required to save library \"%s\"." ), 
+        msg.Printf( _( "Write permissions are required to save library \"%s\"." ),
                     fn.GetFullPath() );
         DisplayError( this, msg );
         return;
@@ -171,7 +171,7 @@ void LIB_EDIT_FRAME::ExportPart()
     }
     catch( const IO_ERROR& ioe )
     {
-        msg = _( "Failed to create symbol library file " ) + fn.GetFullPath();
+        msg.Printf( _( "Failed to create symbol library file \"%s\"" ), fn.GetFullPath() );
         DisplayErrorMessage( this, msg, ioe.What() );
         msg.Printf( _( "Error creating symbol library \"%s\"" ), fn.GetFullName() );
         SetStatusText( msg );

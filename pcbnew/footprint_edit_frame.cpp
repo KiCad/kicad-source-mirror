@@ -450,7 +450,7 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
     if( GetScreen()->IsModify() && GetBoard()->GetFirstModule() )
     {
         wxString footprintName = GetBoard()->GetFirstModule()->GetFPID().GetLibItemName();
-        wxString msg = _( "Save changes to \"%s\" before closing? " );
+        wxString msg = _( "Save changes to \"%s\" before closing?" );
 
         if( !HandleUnsavedChanges( this, wxString::Format( msg, footprintName ),
                     [&]() -> bool { return SaveFootprint( GetBoard()->GetFirstModule() ); } ) )
@@ -756,7 +756,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateLayerAlpha( wxUpdateUIEvent & )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent, 
+void FOOTPRINT_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
                                                PANEL_HOTKEYS_EDITOR* aHotkeysPanel )
 {
     wxTreebook* book = aParent->GetTreebook();
@@ -764,7 +764,7 @@ void FOOTPRINT_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
     book->AddPage( new PANEL_MODEDIT_SETTINGS( this, aParent ), _( "Footprint Editor" ) );
     book->AddSubPage( new PANEL_MODEDIT_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_MODEDIT_DEFAULTS( this, aParent ), _( "Default Values" ) );
-    
+
     aHotkeysPanel->AddHotKeys( GetToolManager() );
 }
 
