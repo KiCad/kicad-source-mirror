@@ -138,8 +138,9 @@ EDA_ITEM* SCH_TEXT::Clone() const
 
 void SCH_TEXT::IncrementLabel( int aIncrement )
 {
-    IncrementLabelMember( m_Text, aIncrement );
-    m_shown_text = UnescapeString( m_Text );
+    wxString text = GetText();
+    IncrementLabelMember( text, aIncrement );
+    SetText(text );
 }
 
 
@@ -160,14 +161,6 @@ wxPoint SCH_TEXT::GetSchematicTextOffset() const
     }
 
     return text_offset;
-}
-
-
-bool SCH_TEXT::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
-{
-    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( MILLIMETRES ) );
-
-    return SCH_ITEM::Matches( m_Text, aSearchData );
 }
 
 
@@ -274,14 +267,13 @@ void SCH_TEXT::SwapData( SCH_ITEM* aItem )
 {
     SCH_TEXT* item = (SCH_TEXT*) aItem;
 
-    std::swap( m_Text, item->m_Text );
-    std::swap( m_shown_text, item->m_shown_text );
     std::swap( m_Layer, item->m_Layer );
 
     std::swap( m_shape, item->m_shape );
     std::swap( m_isDangling, item->m_isDangling );
     std::swap( m_spin_style, item->m_spin_style );
 
+    SwapText( *item );
     SwapEffects( *item );
 }
 
@@ -478,13 +470,13 @@ void SCH_TEXT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
     else if( GetLayer() == LAYER_HIERLABEL )
         item->m_Type = NET_HIERLABEL;
 
-    item->m_Label = m_Text;
+    item->m_Label = GetText();
     item->m_Start = item->m_End = GetTextPos();
 
     aNetListItems.push_back( item );
 
     // If a bus connects to label
-    if( Connection( *aSheetPath )->IsBusLabel( m_Text ) )
+    if( Connection( *aSheetPath )->IsBusLabel( GetText() ) )
         item->ConvertBusToNetListItems( aNetListItems );
 }
 
@@ -639,7 +631,7 @@ void SCH_TEXT::Show( int nestLevel, std::ostream& os ) const
                                  << " shape=\"" << m_shape << '"'
                                  << " dangling=\"" << m_isDangling << '"'
                                  << '>'
-                                 << TO_UTF8( m_Text )
+                                 << TO_UTF8( GetText() )
                                  << "</" << s.Lower().mb_str() << ">\n";
 }
 
@@ -857,7 +849,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
 
     // Use negation bar Y position to calculate full vertical size
     // Search for overbar symbol
-    wxString test = m_Text;
+    wxString test = GetText();
     test.Replace( "~~", "" );
     bool hasOverBar = test.find( "~" ) != wxString::npos;
 

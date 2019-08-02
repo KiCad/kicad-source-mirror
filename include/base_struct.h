@@ -506,7 +506,7 @@ public:
      *              replaced.
      * @return True if \a aText was modified, otherwise false.
      */
-    bool Replace( wxFindReplaceData& aSearchData, wxString& aText );
+    static bool Replace( wxFindReplaceData& aSearchData, wxString& aText );
 
     /**
      * Function Replace

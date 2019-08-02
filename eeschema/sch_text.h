@@ -161,11 +161,14 @@ public:
     void MirrorX( int aXaxis_position ) override;
     void Rotate( wxPoint aPosition ) override;
 
-    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override;
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override
+    {
+        return SCH_ITEM::Matches( GetText(), aSearchData );
+    }
 
     bool Replace( wxFindReplaceData& aSearchData, void* aAuxData ) override
     {
-        return EDA_ITEM::Replace( aSearchData, m_Text );
+        return EDA_TEXT::Replace( aSearchData );
     }
 
     virtual bool IsReplaceable() const override { return true; }

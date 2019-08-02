@@ -28,14 +28,11 @@
 #include <gr_text.h>
 #include <plotter.h>
 #include <trigo.h>
-#include <richio.h>
 #include <sch_edit_frame.h>
 #include <bitmaps.h>
-
 #include <general.h>
 #include <sch_sheet.h>
 #include <kicad_string.h>
-#include <trace_helpers.h>
 
 
 SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxString& text ) :
@@ -195,17 +192,6 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
 }
 
 
-bool SCH_SHEET_PIN::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
-{
-    wxCHECK_MSG( GetParent() != NULL, false,
-                 wxT( "Sheet pin " ) + m_Text + wxT( " does not have a parent sheet!" ) );
-
-    wxLogTrace( traceFindItem, wxT( "    child item " ) + GetSelectMenuText( MILLIMETRES ) );
-
-    return SCH_ITEM::Matches( m_Text, aSearchData );
-}
-
-
 void SCH_SHEET_PIN::MirrorX( int aXaxis_position )
 {
     int p = GetTextPos().y - aXaxis_position;
@@ -255,8 +241,9 @@ void SCH_SHEET_PIN::Rotate( wxPoint aPosition )
 
 void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& aPos )
 {
-     /* This is the same icon shapes as SCH_HIERLABEL
-     * but the graphic icon is slightly different in 2 cases:
+    /*
+     * These are the same icon shapes as SCH_HIERLABEL but the graphic icon is slightly
+     * different in 2 cases:
      * for INPUT type the icon is the OUTPUT shape of SCH_HIERLABEL
      * for OUTPUT type the icon is the INPUT shape of SCH_HIERLABEL
      */
@@ -264,16 +251,9 @@ void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wx
 
     switch( m_shape )
     {
-    case NET_INPUT:
-        m_shape = NET_OUTPUT;
-        break;
-
-    case NET_OUTPUT:
-        m_shape = NET_INPUT;
-        break;
-
-    default:
-        break;
+    case NET_INPUT:  m_shape = NET_OUTPUT; break;
+    case NET_OUTPUT: m_shape = NET_INPUT;  break;
+    default:                               break;
     }
 
     SCH_HIERLABEL::CreateGraphicShape( aPoints, aPos );
@@ -292,6 +272,7 @@ wxString SCH_SHEET_PIN::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
     return wxString::Format( _( "Hierarchical Sheet Pin %s" ), ShortenedShownText() );
 }
+
 
 BITMAP_DEF SCH_SHEET_PIN::GetMenuImage() const
 {
@@ -314,13 +295,9 @@ bool SCH_SHEET_PIN::HitTest( const wxPoint& aPoint, int aAccuracy ) const
 void SCH_SHEET_PIN::Show( int nestLevel, std::ostream& os ) const
 {
     // XML output:
-    wxString s = GetClass();
-
-    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">"
-                                 << " pin_name=\"" << TO_UTF8( m_Text )
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">"
+                                 << " pin_name=\"" << TO_UTF8( GetText() )
                                  << '"' << "/>\n" << std::flush;
-
-//    NestedSpace( nestLevel, os ) << "</" << s.Lower().mb_str() << ">\n";
 }
 
 #endif

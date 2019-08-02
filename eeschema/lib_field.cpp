@@ -71,10 +71,10 @@ LIB_FIELD::~LIB_FIELD()
 LIB_FIELD& LIB_FIELD::operator=( const LIB_FIELD& field )
 {
     m_id = field.m_id;
-    m_Text = field.m_Text;
     m_name = field.m_name;
     m_Parent = field.m_Parent;
 
+    SetText( field.GetText() );
     SetEffects( field );
 
     return *this;
@@ -126,7 +126,7 @@ void LIB_FIELD::print( wxDC* aDC, const wxPoint& aOffset, void* aData,
     COLOR4D  color = IsVisible() ? GetDefaultColor() : GetInvisibleItemColor();
     int      linewidth = GetPenSize();
     wxPoint  text_pos = aTransform.TransformCoordinate( GetTextPos() ) + aOffset;
-    wxString text = aData ? *static_cast<wxString*>( aData ) : m_Text;
+    wxString text = aData ? *static_cast<wxString*>( aData ) : GetText();
 
     GRText( aDC, text_pos, color, text, GetTextAngle(), GetTextSize(), GetHorizJustify(),
             GetVertJustify(), linewidth, IsItalic(), IsBold() );
@@ -135,8 +135,8 @@ void LIB_FIELD::print( wxDC* aDC, const wxPoint& aOffset, void* aData,
 
 bool LIB_FIELD::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    // Because HitTest is mainly used to select the field return false if it is void
-    if( IsVoid() )
+    // Because HitTest is mainly used to select the field return false if it is empty
+    if( GetText().IsEmpty() )
         return false;
 
     // Build a temporary copy of the text for hit testing
@@ -177,9 +177,9 @@ EDA_ITEM* LIB_FIELD::Clone() const
 
 void LIB_FIELD::Copy( LIB_FIELD* aTarget ) const
 {
-    aTarget->m_Text = m_Text;
     aTarget->m_name = m_name;
 
+    aTarget->SetText( GetText() );
     aTarget->SetEffects( *this );
     aTarget->SetParent( m_Parent );
 }
@@ -194,7 +194,7 @@ int LIB_FIELD::compare( const LIB_ITEM& other ) const
     if( m_id != tmp->m_id )
         return m_id - tmp->m_id;
 
-    int result = m_Text.CmpNoCase( tmp->m_Text );
+    int result = GetText().CmpNoCase( tmp->GetText() );
 
     if( result != 0 )
         return result;
@@ -272,7 +272,7 @@ void LIB_FIELD::Rotate( const wxPoint& center, bool aRotateCCW )
 void LIB_FIELD::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                       const TRANSFORM& aTransform )
 {
-    if( IsVoid() )
+    if( GetText().IsEmpty() )
         return;
 
     // Calculate the text orientation, according to the component orientation/mirror
@@ -406,12 +406,6 @@ void LIB_FIELD::SetName( const wxString& aName )
         m_name = aName;
         SetModified();
     }
-}
-
-
-void LIB_FIELD::SetText( const wxString& aText )
-{
-    m_Text = aText;
 }
 
 

@@ -74,7 +74,7 @@ EDA_ITEM* SCH_FIELD::Clone() const
 
 const wxString SCH_FIELD::GetFullyQualifiedText() const
 {
-    wxString text = m_Text;
+    wxString text = GetText();
 
     /* For more than one part per package, we must add the part selection
      * A, B, ... or 1, 2, .. to the reference. */
@@ -185,9 +185,8 @@ void SCH_FIELD::SwapData( SCH_ITEM* aItem )
 
     SCH_FIELD* item = (SCH_FIELD*) aItem;
 
-    std::swap( m_Text, item->m_Text );
     std::swap( m_Layer, item->m_Layer );
-
+    SwapText( *item );
     SwapEffects( *item );
 }
 
@@ -257,7 +256,7 @@ bool SCH_FIELD::IsHorizJustifyFlipped() const
 
 bool SCH_FIELD::IsVoid() const
 {
-    return m_Text.Len() == 0;
+    return GetText().Len() == 0;
 }
 
 
@@ -347,7 +346,7 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
     }
     else
     {
-        isReplaced = EDA_ITEM::Replace( aSearchData, m_Text );
+        isReplaced = EDA_TEXT::Replace( aSearchData );
     }
 
     return isReplaced;

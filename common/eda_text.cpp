@@ -87,8 +87,8 @@ EDA_TEXT_VJUSTIFY_T EDA_TEXT::MapVertJustify( int aVertJustify )
 
 
 EDA_TEXT::EDA_TEXT( const wxString& text ) :
-    m_Text( text ),
-    m_e( 1<<TE_VISIBLE )
+        m_text( text ),
+        m_e( 1<<TE_VISIBLE )
 {
     int sz = Mils2iu( DEFAULT_SIZE_TEXT );
     SetTextSize( wxSize( sz, sz ) );
@@ -97,10 +97,10 @@ EDA_TEXT::EDA_TEXT( const wxString& text ) :
 
 
 EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText ) :
-    m_Text( aText.m_Text ),
-    m_e( aText.m_e )
+        m_text( aText.m_text ),
+        m_e( aText.m_e )
 {
-    m_shown_text = UnescapeString( m_Text );
+    m_shown_text = UnescapeString( m_text );
 }
 
 
@@ -111,7 +111,7 @@ EDA_TEXT::~EDA_TEXT()
 
 void EDA_TEXT::SetText( const wxString& aText )
 {
-    m_Text = aText;
+    m_text = aText;
     m_shown_text = UnescapeString( aText );
 }
 
@@ -122,9 +122,22 @@ void EDA_TEXT::SetEffects( const EDA_TEXT& aSrc )
 }
 
 
+void EDA_TEXT::SwapText( EDA_TEXT& aTradingPartner )
+{
+    std::swap( m_text, aTradingPartner.m_text );
+    std::swap( m_shown_text, aTradingPartner.m_shown_text );
+}
+
+
 void EDA_TEXT::SwapEffects( EDA_TEXT& aTradingPartner )
 {
     std::swap( m_e, aTradingPartner.m_e );
+}
+
+
+bool EDA_TEXT::Replace( wxFindReplaceData& aSearchData )
+{
+    return EDA_ITEM::Replace( aSearchData, m_text );
 }
 
 
@@ -132,7 +145,7 @@ int EDA_TEXT::LenSize( const wxString& aLine, int aThickness ) const
 {
     basic_gal.SetFontItalic( IsItalic() );
     basic_gal.SetFontBold( IsBold() );
-    basic_gal.SetLineWidth( aThickness );
+    basic_gal.SetLineWidth( (float) aThickness );
     basic_gal.SetGlyphSize( VECTOR2D( GetTextSize() ) );
 
     VECTOR2D tsize = basic_gal.GetTextLineSize( aLine );

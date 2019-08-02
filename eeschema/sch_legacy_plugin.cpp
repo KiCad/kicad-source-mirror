@@ -2923,6 +2923,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_PART>& aPart,
 
     wxCHECK_RET( *line == 'F', "Invalid field line" );
 
+    wxString    text;
     int         id;
 
     if( sscanf( line + 1, "%d", &id ) != 1 || id < 0 )
@@ -2952,12 +2953,16 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_PART>& aPart,
     if( *line == 0 )
         SCH_PARSE_ERROR( _( "unexpected end of line" ), aReader, line );
 
-    parseQuotedString( field->m_Text, aReader, line, &line, true );
+    parseQuotedString( text, aReader, line, &line, true );
+
+    field->SetText( text );
 
     // Doctor the *.lib file field which has a "~" in blank fields.  New saves will
     // not save like this.
-    if( field->m_Text.size() == 1 && field->m_Text[0] == '~' )
-        field->m_Text.clear();
+    if( text.size() == 1 && text[0] == '~' )
+        field->SetText( wxEmptyString );
+    else
+        field->SetText( text );
 
     wxPoint pos;
 
@@ -3050,7 +3055,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_PART>& aPart,
         // Ensure the VALUE field = the part name (can be not the case
         // with malformed libraries: edited by hand, or converted from other tools)
         if( id == VALUE )
-            field->m_Text = aPart->GetName();
+            field->SetText( aPart->GetName() );
     }
     else
     {
@@ -3873,7 +3878,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveField( LIB_FIELD* aField,
 
     int      hjustify, vjustify;
     int      id = aField->GetId();
-    wxString text = aField->m_Text;
+    wxString text = aField->GetText();
 
     hjustify = 'C';
 

@@ -61,18 +61,6 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    /**
-     * Sets the text item string to \a aText.
-     *
-     * This method does more than just set the set the text string.  There are special
-     * cases when changing the text string alone is not enough.  If the text item is
-     * being moved, the name change must be delayed until the next redraw to prevent
-     * drawing artifacts.
-     *
-     * @param aText - New text value.
-     */
-    void SetText( const wxString& aText ) override;
-
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override

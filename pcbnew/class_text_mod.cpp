@@ -204,7 +204,7 @@ void TEXTE_MODULE::Move( const wxPoint& aMoveVector )
 
 int TEXTE_MODULE::GetLength() const
 {
-    return m_Text.Len();
+    return GetText().Len();
 }
 
 
@@ -461,11 +461,11 @@ unsigned int TEXTE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         return HIDE;
 
     // Handle Render tab switches
-    if( ( m_Type == TEXT_is_VALUE || m_Text == wxT( "%V" ) )
+    if( ( m_Type == TEXT_is_VALUE || GetText() == wxT( "%V" ) )
             && !aView->IsLayerVisible( LAYER_MOD_VALUES ) )
         return HIDE;
 
-    if( ( m_Type == TEXT_is_REFERENCE || m_Text == wxT( "%R" ) )
+    if( ( m_Type == TEXT_is_REFERENCE || GetText() == wxT( "%R" ) )
             && !aView->IsLayerVisible( LAYER_MOD_REFERENCES ) )
         return HIDE;
 
@@ -495,13 +495,13 @@ wxString TEXTE_MODULE::GetShownText() const
      * Also it seems wise to only expand macros in user text (but there
      * is no technical reason, probably) */
 
-    if( (m_Type != TEXT_is_DIVERS) || (wxString::npos == m_Text.find('%')) )
-        return m_Text;
+    if( (m_Type != TEXT_is_DIVERS) || (wxString::npos == GetText().find('%')) )
+        return GetText();
 
     wxString newbuf;
     const MODULE *module = static_cast<MODULE*>( GetParent() );
 
-    for( wxString::const_iterator it = m_Text.begin(); it != m_Text.end(); ++it )
+    for( wxString::const_iterator it = GetText().begin(); it != GetText().end(); ++it )
     {
         // Process '%' and copy everything else
         if( *it != '%' )
@@ -512,7 +512,7 @@ wxString TEXTE_MODULE::GetShownText() const
              * its expansion */
             ++it;
 
-            if( it != m_Text.end() )
+            if( it != GetText().end() )
             {
                 switch( char(*it) )
                 {
