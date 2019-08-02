@@ -78,18 +78,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     fileMenu->AddItem( ACTIONS::print,         SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-
-    if( Kiface().IsSingle() )
-    {
-        // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via wxID_EXIT
-        fileMenu->AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm,
-                SELECTION_CONDITIONS::ShowAlways );
-    }
-    else
-    {
-        fileMenu->AddItem( wxID_CLOSE, _( "Close" ), "", exit_xpm,
-                SELECTION_CONDITIONS::ShowAlways );
-    }
+    fileMenu->AddQuitOrClose( &Kiface() );
 
     fileMenu->Resolve();
 

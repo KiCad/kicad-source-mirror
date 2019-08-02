@@ -26,6 +26,7 @@
 #include <tool/conditional_menu.h>
 #include <tool/action_menu.h>
 #include <menus_helpers.h>
+#include <kiface_i.h>
 
 
 CONDITIONAL_MENU::CONDITIONAL_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool ) :
@@ -95,6 +96,21 @@ void CONDITIONAL_MENU::AddMenu( ACTION_MENU* aMenu, const SELECTION_CONDITION& a
 void CONDITIONAL_MENU::AddSeparator( int aOrder )
 {
     addEntry( ENTRY( SELECTION_CONDITIONS::ShowAlways, aOrder ) );
+}
+
+
+void CONDITIONAL_MENU::AddQuitOrClose( KIFACE_I* aKiface )
+{
+    if( !aKiface || aKiface->IsSingle() ) // not when under a project mgr
+    {
+        // Don't use ACTIONS::quit; wxWidgets moves this on OSX and expects to find it via
+        // wxID_EXIT
+        AddItem( wxID_EXIT, _( "Quit" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
+    }
+    else
+    {
+        AddItem( wxID_CLOSE, _( "Close\tCTRL+W" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
+    }
 }
 
 

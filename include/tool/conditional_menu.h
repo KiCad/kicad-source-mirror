@@ -30,10 +30,10 @@
 #include <list>
 #include <wx/wx.h>
 
-
 class SELECTION_TOOL;
 class TOOL_ACTION;
 class TOOL_INTERACTIVE;
+class KIFACE_I;
 
 
 class CONDITIONAL_MENU : public ACTION_MENU
@@ -99,6 +99,14 @@ public:
      * @param aOrder determines location of the separator, higher numbers are put on the bottom.
      */
     void AddSeparator( int aOrder = ANY_ORDER );
+
+    /**
+     * Functions AddQuitOrClose()
+     *
+     * Adds either a standard Quit or Close item to the menu (depending on whether or not the
+     * app was launched stand-alone).
+     */
+    void AddQuitOrClose( KIFACE_I* aKiface );
 
     /**
      * Function Evaluate()
