@@ -54,23 +54,13 @@
 
 void PCB_EDIT_FRAME::InstallNetlistFrame()
 {
-    wxString netlistName = GetLastNetListRead();
+    wxString netlistName = GetLastPath( LAST_PATH_NETLIST );
 
     DIALOG_NETLIST dlg( this, netlistName );
 
     dlg.ShowModal();
 
-    // Save project settings if needed.
-    // Project settings are saved in the corresponding <board name>.pro file
-    bool configChanged = !GetLastNetListRead().IsEmpty() && ( netlistName != GetLastNetListRead() );
-
-    if( configChanged && !GetBoard()->GetFileName().IsEmpty() )
-    {
-        wxFileName fn = Prj().AbsolutePath( GetBoard()->GetFileName() );
-        fn.SetExt( ProjectFileExtension );
-        wxString path = fn.GetFullPath();
-        Prj().ConfigSave( Kiface().KifaceSearch(), GROUP_PCB, GetProjectFileParameters(), path );
-    }
+    SetLastPath( LAST_PATH_NETLIST, netlistName );
 }
 
 
@@ -124,7 +114,7 @@ void DIALOG_NETLIST::OnOpenNetlistClick( wxCommandEvent& event )
 {
     wxString dirPath = wxFileName( Prj().GetProjectFullName() ).GetPath();
 
-    wxString filename = m_parent->GetLastNetListRead();
+    wxString filename = m_parent->GetLastPath( LAST_PATH_NETLIST );
 
     if( !filename.IsEmpty() )
     {

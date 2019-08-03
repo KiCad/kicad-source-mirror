@@ -352,17 +352,26 @@ int PCB_EDITOR_CONTROL::ImportSpecctraSession( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::ExportSpecctraDSN( const TOOL_EVENT& aEvent )
 {
-    wxString    fullFileName;
-    wxFileName  fn( frame()->GetBoard()->GetFileName() );
+    wxString    fullFileName = m_frame->GetLastPath( LAST_PATH_SPECCTRADSN );
+    wxFileName  fn;
 
-    fn.SetExt( SpecctraDsnFileExtension );
+    if( fullFileName.IsEmpty() )
+    {
+        fn = m_frame->GetBoard()->GetFileName();
+        fn.SetExt( SpecctraDsnFileExtension );
+    }
+    else
+        fn = fullFileName;
 
     fullFileName = EDA_FILE_SELECTOR( _( "Specctra DSN File" ), fn.GetPath(), fn.GetFullName(),
                                       SpecctraDsnFileExtension, SpecctraDsnFileWildcard(), 
                                       frame(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, false );
 
     if( !fullFileName.IsEmpty() )
+    {
+        m_frame->SetLastPath( LAST_PATH_SPECCTRADSN, fullFileName );
         getEditFrame<PCB_EDIT_FRAME>()->ExportSpecctraFile( fullFileName );
+    }
     
     return 0;
 }

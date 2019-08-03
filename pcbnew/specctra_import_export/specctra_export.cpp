@@ -40,19 +40,14 @@
 #include <set>                  // std::set
 #include <map>                  // std::map
 
-#include <boost/utility.hpp>    // boost::addressof()
-
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>
 #include <class_track.h>
 #include <class_zone.h>
-#include <class_drawsegment.h>
 #include <base_units.h>
 #include <wildcards_and_files_ext.h>
-
 #include <collectors.h>
-
 #include <geometry/shape_poly_set.h>
 #include <geometry/convex_hull.h>
 #include <convert_basic_shapes_to_polygon.h>
@@ -104,7 +99,7 @@ bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
     {
         GetBoard()->SynchronizeNetsAndNetClasses();
         db.FromBOARD( GetBoard() );
-        db.ExportPCB(  aFullFilename, true );
+        db.ExportPCB( aFullFilename, true );
 
         // if an exception is thrown by FromBOARD or ExportPCB(), then
         // ~SPECCTRA_DB() will close the file.

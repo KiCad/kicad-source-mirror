@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -31,40 +31,30 @@
 #include <project.h>
 #include <confirm.h>
 #include <wildcards_and_files_ext.h>
-
+#include <wx/filepicker.h>
 #include <wx/statline.h>
-#include <wx/button.h>
 
-DIALOG_GENCAD_EXPORT_OPTIONS::DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aParent )
+
+DIALOG_GENCAD_EXPORT_OPTIONS::DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aParent,
+                                                            const wxString& aPath )
     : DIALOG_SHIM( aParent, wxID_ANY, _( "Export to GenCAD settings" ), wxDefaultPosition,
                    wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
-    // Obtain a potential filename for the exported file
-    wxFileName fn = aParent->GetBoard()->GetFileName();
-    fn.SetExt( "cad" );
-
     // Create widgets
     SetSizeHints( wxSize( 500, 200 ), wxDefaultSize );
 
     wxBoxSizer* m_mainSizer= new wxBoxSizer( wxVERTICAL );
 
-    wxBoxSizer* m_fileSizer = new wxBoxSizer( wxHORIZONTAL );
-
-    m_filePath = new wxTextCtrl( this, wxID_ANY, fn.GetFullPath() );
-    m_fileSizer->Add( m_filePath, 1, wxEXPAND | wxRIGHT, 5 );
-
-    wxButton* m_browseBtn = new wxButton( this, wxID_ANY, _( "Browse" ) );
-    m_browseBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-            wxCommandEventHandler( DIALOG_GENCAD_EXPORT_OPTIONS::onBrowse ), NULL, this );
-    m_fileSizer->Add( m_browseBtn, 0 );
-
-    m_mainSizer->Add( m_fileSizer, 0, wxEXPAND | wxALL, 5 );
-
+    m_filePicker = new wxFilePickerCtrl( this, wxID_ANY, aPath,
+                                         _("Select a GenCAD export filename"),
+                                         GencadFileWildcard(),
+                                         wxDefaultPosition, wxSize( -1,-1 ),
+                                         wxFLP_SAVE|wxFLP_USE_TEXTCTRL );
+    m_mainSizer->Add( m_filePicker, 0, wxEXPAND | wxRIGHT, 5 );
 
     m_optsSizer = new wxGridSizer( 0, 1, 3, 3 );
     createOptCheckboxes();
     m_mainSizer->Add( m_optsSizer, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
-
 
     wxSizer* stdButtons = CreateSeparatedButtonSizer( wxOK | wxCANCEL );
     m_mainSizer->Add( stdButtons, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
@@ -109,7 +99,7 @@ std::map<GENCAD_EXPORT_OPT, bool> DIALOG_GENCAD_EXPORT_OPTIONS::GetAllOptions() 
 
 wxString DIALOG_GENCAD_EXPORT_OPTIONS::GetFileName() const
 {
-    return m_filePath->GetValue();
+    return m_filePicker->GetPath();
 }
 
 
@@ -138,11 +128,11 @@ void DIALOG_GENCAD_EXPORT_OPTIONS::createOptCheckboxes()
 {
     std::map<GENCAD_EXPORT_OPT, wxString> opts =
     {
-        { FLIP_BOTTOM_PADS,         _( "Flip bottom footprint padstacks" ) },
-        { UNIQUE_PIN_NAMES,         _( "Generate unique pin names" ) },
-        { INDIVIDUAL_SHAPES,        _( "Generate a new shape for each footprint instance (do not reuse shapes)" ) },
-        { USE_AUX_ORIGIN,           _( "Use auxiliary axis as origin" ) },
-        { STORE_ORIGIN_COORDS,      _( "Save the origin coordinates in the file" ) }
+        { FLIP_BOTTOM_PADS,    _( "Flip bottom footprint padstacks" ) },
+        { UNIQUE_PIN_NAMES,    _( "Generate unique pin names" ) },
+        { INDIVIDUAL_SHAPES,   _( "Generate a new shape for each footprint instance (do not reuse shapes)" ) },
+        { USE_AUX_ORIGIN,      _( "Use auxiliary axis as origin" ) },
+        { STORE_ORIGIN_COORDS, _( "Save the origin coordinates in the file" ) }
     };
 
     for( const auto& option : opts )
@@ -153,17 +143,3 @@ void DIALOG_GENCAD_EXPORT_OPTIONS::createOptCheckboxes()
     }
 }
 
-
-void DIALOG_GENCAD_EXPORT_OPTIONS::onBrowse( wxCommandEvent& aEvent )
-{
-    wxFileDialog dlg( this, _( "Save GenCAD Board File" ),
-                      wxPathOnly( Prj().GetProjectFullName() ),
-                      m_filePath->GetValue(),
-                      GencadFileWildcard(),
-                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    m_filePath->SetValue( dlg.GetPath() );
-}

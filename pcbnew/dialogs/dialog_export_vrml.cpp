@@ -187,33 +187,27 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
 {
     // These variables are static to keep info during the session.
     static wxString subDirFor3Dshapes;
-    static wxString last_brdName;   // the last board name used to build the vrml filename
-    static wxString last_vrmlName;  // the last wrml file name built
 
-    // If the board name has changed since the last export,
-    // do not use the old path, initialized by another board
-    if( last_brdName.IsEmpty() || last_brdName != GetBoard()->GetFileName() )
+    // Build default output file name
+    wxString path = GetLastPath( LAST_PATH_VRML );
+
+    if( path.IsEmpty() )
     {
-        last_brdName = GetBoard()->GetFileName();
-        last_vrmlName = last_brdName;
+        wxFileName brdFile = GetBoard()->GetFileName();
+        brdFile.SetExt( "wrl" );
+        path = brdFile.GetFullPath();
     }
 
     if( subDirFor3Dshapes.IsEmpty() )
-    {
         subDirFor3Dshapes = wxT( "shapes3D" );
-    }
 
     // The general VRML scale factor
     // Assuming the VRML default unit is the mm
     // this is the mm to VRML scaling factor for mm, 0.1 inch, and inch
     double scaleList[4] = { 1.0, 0.001, 10.0/25.4, 1.0/25.4 };
 
-    // Build default file name, to display in the file picker
-    wxFileName fn = last_vrmlName;
-    fn.SetExt( wxT( "wrl" ) );
-
     DIALOG_EXPORT_3DFILE dlg( this );
-    dlg.FilePicker()->SetPath( fn.GetFullPath() );
+    dlg.FilePicker()->SetPath( path );
     dlg.SetSubdir( subDirFor3Dshapes );
 
     if( dlg.ShowModal() != wxID_OK )
@@ -234,8 +228,10 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     bool useRelativePaths = dlg.GetUseRelativePathsOption();
     bool usePlainPCB = dlg.GetUsePlainPCBOption();
 
-    last_vrmlName = dlg.FilePicker()->GetPath();
-    wxFileName modelPath = last_vrmlName;
+    path = dlg.FilePicker()->GetPath();
+    SetLastPath( LAST_PATH_VRML, path );
+    wxFileName modelPath = path;
+
     wxBusyCursor dummy;
 
     subDirFor3Dshapes = dlg.GetSubdir3Dshapes();
@@ -246,11 +242,11 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
         modelPath.Mkdir();
     }
 
-    if( !ExportVRML_File( last_vrmlName, scale, export3DFiles, useRelativePaths,
+    if( !ExportVRML_File( path, scale, export3DFiles, useRelativePaths,
                           usePlainPCB, modelPath.GetPath(), aXRef, aYRef ) )
     {
         wxString msg;
-        msg.Printf( _( "Unable to create file \"%s\"" ), GetChars( last_vrmlName ) );
+        msg.Printf( _( "Unable to create file \"%s\"" ), path );
         wxMessageBox( msg );
         return;
     }

@@ -28,7 +28,7 @@
 #include <dialog_shim.h>
 
 class PCB_EDIT_FRAME;
-class wxTextCtrl;
+class wxFilePickerCtrl;
 
 ///> Settings for GenCAD exporter
 enum GENCAD_EXPORT_OPT
@@ -43,33 +43,30 @@ enum GENCAD_EXPORT_OPT
 
 class DIALOG_GENCAD_EXPORT_OPTIONS : public DIALOG_SHIM
 {
-    public:
-        DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aParent );
-        ~DIALOG_GENCAD_EXPORT_OPTIONS();
+public:
+    DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aParent, const wxString& aPath );
+    ~DIALOG_GENCAD_EXPORT_OPTIONS();
 
-        ///> Checks whether an option has been selected
-        bool GetOption( GENCAD_EXPORT_OPT aOption ) const;
+    ///> Checks whether an option has been selected
+    bool GetOption( GENCAD_EXPORT_OPT aOption ) const;
 
-        ///> Returns all export settings
-        std::map<GENCAD_EXPORT_OPT, bool> GetAllOptions() const;
+    ///> Returns all export settings
+    std::map<GENCAD_EXPORT_OPT, bool> GetAllOptions() const;
 
-        ///> Returns the selected file path
-        wxString GetFileName() const;
+    ///> Returns the selected file path
+    wxString GetFileName() const;
 
-    protected:
-        bool TransferDataFromWindow() override;
+protected:
+    bool TransferDataFromWindow() override;
 
-        ///> Creates checkboxes for GenCAD export options
-        void createOptCheckboxes();
+    ///> Creates checkboxes for GenCAD export options
+    void createOptCheckboxes();
 
-        ///> Browse output file event handler
-        void onBrowse( wxCommandEvent& aEvent );
+    std::map<GENCAD_EXPORT_OPT, wxCheckBox*> m_options;
 
-        std::map<GENCAD_EXPORT_OPT, wxCheckBox*> m_options;
-
-        // Widgets
-        wxGridSizer* m_optsSizer;
-        wxTextCtrl* m_filePath;
+    // Widgets
+    wxGridSizer*      m_optsSizer;
+    wxFilePickerCtrl* m_filePicker;
 };
 
 #endif //__DIALOG_GENCAD_EXPORT_OPTIONS_H__

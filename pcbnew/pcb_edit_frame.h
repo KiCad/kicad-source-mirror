@@ -73,6 +73,18 @@ enum TRACK_ACTION_RESULT
     TRACK_ACTION_NONE           //!< TRACK_ACTION_NONE - Nothing to change
 };
 
+enum LAST_PATH_TYPE
+{
+    LAST_PATH_NETLIST = 0,
+    LAST_PATH_STEP,
+    LAST_PATH_IDF,
+    LAST_PATH_VRML,
+    LAST_PATH_SPECCTRADSN,
+    LAST_PATH_GENCAD,
+
+    LAST_PATH_SIZE
+};
+
 /**
  * Class PCB_EDIT_FRAME
  * is the main frame for Pcbnew.
@@ -92,10 +104,10 @@ class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
 protected:
     PCB_LAYER_WIDGET* m_Layers;
 
-    PARAM_CFG_ARRAY   m_configParams;         ///< List of Pcbnew configuration settings.
+    PARAM_CFG_ARRAY   m_configParams;           // List of Pcbnew configuration settings.
     PARAM_CFG_ARRAY   m_projectFileParams;
 
-    wxString          m_lastNetListRead;        ///< Last net list read with relative path.
+    wxString          m_lastPath[ LAST_PATH_SIZE ];
 
     // The Tool Framework initalization
     void setupTools();
@@ -422,13 +434,13 @@ public:
     wxConfigBase* GetSettings() { return config(); };
 
     /**
-     * Get the last net list read with the net list dialog box.
-     * @return - Absolute path and file name of the last net list file successfully read.
+     * Get the last path for a particular type.
+     * @return - Absolute path and file name of the last file successfully read.
      */
-    wxString GetLastNetListRead();
+    wxString GetLastPath( LAST_PATH_TYPE aType );
 
     /**
-     * Set the last net list successfully read by the net list dialog box.
+     * Set the path of the last file successfully read.
      *
      * Note: the file path is converted to a path relative to the project file path.  If
      *       the path cannot be made relative, than m_lastNetListRead is set to and empty
@@ -436,27 +448,13 @@ public:
      *       the project file.  The advantage of relative paths is that is more likely to
      *       work when opening the same project from both Windows and Linux.
      *
-     * @param aNetListFile - The last net list file with full path successfully read.
+     * @param aLastPath - The last file with full path successfully read.
      */
-    void SetLastNetListRead( const wxString& aNetListFile );
+    void SetLastPath( LAST_PATH_TYPE aType, const wxString& aLastPath );
 
     void OnCloseWindow( wxCloseEvent& Event ) override;
     void Process_Special_Functions( wxCommandEvent& event );
     void Tracks_and_Vias_Size_Event( wxCommandEvent& event );
-
-    /**
-     * Function OnEditTextAndGraphics
-     * Dialog for editing properties of text and graphic items, selected by type, layer,
-     * and/or parent footprint.
-     */
-    void OnEditTextAndGraphics( wxCommandEvent& event );
-
-    /**
-     * Function OnEditTracksAndVias
-     * Dialog for editing the properties of tracks and vias, selected by net, netclass,
-     * and/or layer.
-     */
-    void OnEditTracksAndVias( wxCommandEvent& event );
 
     void ReCreateHToolbar() override;
     void ReCreateAuxiliaryToolbar() override;

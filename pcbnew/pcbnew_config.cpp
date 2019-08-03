@@ -133,9 +133,25 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetProjectFileParameters()
     // so pointers into that cannot be saved for long.
 
     m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "PageLayoutDescrFile" ),
-                                          &BASE_SCREEN::m_PageLayoutDescrFileName ) );
+                                                           &BASE_SCREEN::m_PageLayoutDescrFileName ) );
 
-    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LastNetListRead" ), &m_lastNetListRead ) );
+    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LastNetListRead" ),
+                                                           &m_lastPath[ LAST_PATH_NETLIST ] ) );
+
+    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LastSTEPExportPath" ),
+                                                           &m_lastPath[ LAST_PATH_STEP ] ) );
+
+    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LastIDFExportPath" ),
+                                                           &m_lastPath[ LAST_PATH_IDF ] ) );
+
+    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LastVRMLExportPath" ),
+                                                           &m_lastPath[ LAST_PATH_VRML ] ) );
+
+    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LastSpecctraDSNExportPath" ),
+                                                           &m_lastPath[ LAST_PATH_SPECCTRADSN ] ) );
+
+    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LastGenCADExportPath" ),
+                                                           &m_lastPath[ LAST_PATH_GENCAD ] ) );
 
     GetBoard()->GetDesignSettings().AppendConfigs( GetBoard(), &m_projectFileParams);
 
@@ -153,40 +169,40 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
                                                         &m_PolarCoords, false ) );
         // Display options and modes:
         m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "ShowNetNamesMode" ),
-                                                       &displ_opts->m_DisplayNetNamesMode, 3, 0, 3 ) );
+                                                     &displ_opts->m_DisplayNetNamesMode, 3, 0, 3 ) );
         m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "DisplayTrackFilled" ),
-                                                        &displ_opts->m_DisplayPcbTrackFill, true ) );
+                                                      &displ_opts->m_DisplayPcbTrackFill, true ) );
         m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "TrackDisplayClearance" ),
-                                                       (int*) &displ_opts->m_ShowTrackClearanceMode,
-                                                       PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS ) );
+                                                     (int*) &displ_opts->m_ShowTrackClearanceMode,
+                                                     PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS ) );
         m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "PadFill" ),
-                                                        &displ_opts->m_DisplayPadFill, true ) );
+                                                      &displ_opts->m_DisplayPadFill, true ) );
         m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "ViaFill" ),
-                                                        &displ_opts->m_DisplayViaFill, true ) );
+                                                      &displ_opts->m_DisplayViaFill, true ) );
         m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "PadAffG" ),
-                                                        &displ_opts->m_DisplayPadIsol, true ) );
+                                                      &displ_opts->m_DisplayPadIsol, true ) );
         m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "PadSNum" ),
-                                                        &displ_opts->m_DisplayPadNum, true ) );
+                                                      &displ_opts->m_DisplayPadNum, true ) );
         m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "ModAffC" ),
-                                                       &displ_opts->m_DisplayModEdgeFill, FILLED ) );
+                                                     &displ_opts->m_DisplayModEdgeFill, FILLED ) );
         m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "ModAffT" ),
-                                                       &displ_opts->m_DisplayModTextFill, FILLED ) );
+                                                     &displ_opts->m_DisplayModTextFill, FILLED ) );
         m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "PcbAffT" ),
-                                                       &displ_opts->m_DisplayDrawItemsFill, FILLED ) );
+                                                     &displ_opts->m_DisplayDrawItemsFill, FILLED ) );
         m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "PcbShowZonesMode" ),
-                                                       &displ_opts->m_DisplayZonesMode, 0, 0, 2 ) );
+                                                     &displ_opts->m_DisplayZonesMode, 0, 0, 2 ) );
         m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "CurvedRatsnestLines" ),
-                                                        &displ_opts->m_DisplayRatsnestLinesCurved, false ) );
+                                                      &displ_opts->m_DisplayRatsnestLinesCurved, false ) );
         m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "ShowRatsnestLines" ),
-                                                        &displ_opts->m_ShowGlobalRatsnest, true) );
+                                                      &displ_opts->m_ShowGlobalRatsnest, true) );
         m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "ShowRatsnestModuleLines" ),
-                                                        &displ_opts->m_ShowModuleRatsnest, true) );
+                                                      &displ_opts->m_ShowModuleRatsnest, true) );
 
         // Miscellaneous:
         m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "RotationAngle" ),
-                                                       &m_rotationAngle, 900, 1, 900 ) );
+                                                     &m_rotationAngle, 900, 1, 900 ) );
         m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "MaxLnkS" ),
-                                                       &displ_opts->m_MaxLinksShowed, 3, 0, 15 ) );
+                                                     &displ_opts->m_MaxLinksShowed, 3, 0, 15 ) );
     }
 
     return m_configParams;

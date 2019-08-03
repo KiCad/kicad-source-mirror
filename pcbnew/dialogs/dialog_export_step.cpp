@@ -1,7 +1,3 @@
-/**
- * @file dialog_export_step.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -33,8 +29,6 @@
 #include "kiface_i.h"
 #include "confirm.h"
 #include "reporter.h"
-
-#include "pcbnew.h"
 #include "class_board.h"
 #include "dialog_export_step_base.h"
 #include <widgets/text_ctrl_eval.h>
@@ -124,9 +118,16 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     m_sdbSizer->Layout();
 
     // Build default output file name
-    wxFileName brdFile = m_parent->GetBoard()->GetFileName();
-    brdFile.SetExt( "step" );
-    m_filePickerSTEP->SetPath( brdFile.GetFullPath() );
+    wxString path = m_parent->GetLastPath( LAST_PATH_STEP );
+
+    if( path.IsEmpty() )
+    {
+        wxFileName brdFile = m_parent->GetBoard()->GetFileName();
+        brdFile.SetExt( "step" );
+        path = brdFile.GetFullPath();
+    }
+
+    m_filePickerSTEP->SetPath( path );
 
     SetFocus();
 
@@ -226,6 +227,8 @@ extern bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
 
 void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 {
+    m_parent->SetLastPath( LAST_PATH_STEP, m_filePickerSTEP->GetPath() );
+
     SHAPE_POLY_SET outline;
     wxString msg;
 

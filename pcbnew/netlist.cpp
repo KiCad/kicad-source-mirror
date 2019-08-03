@@ -72,7 +72,7 @@ bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename,
             return false;
         }
 
-        SetLastNetListRead( aFilename );
+        SetLastPath( LAST_PATH_NETLIST, aFilename );
         netlistReader->LoadNetlist();
         LoadFootprints( aNetlist, aReporter );
     }
@@ -83,7 +83,7 @@ bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename,
         return false;
     }
 
-    SetLastNetListRead( aFilename );
+    SetLastPath( LAST_PATH_NETLIST, aFilename );
 
     return true;
 }

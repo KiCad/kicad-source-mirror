@@ -754,30 +754,30 @@ void PCB_EDIT_FRAME::ShowChangedLanguage()
 }
 
 
-wxString PCB_EDIT_FRAME::GetLastNetListRead()
+wxString PCB_EDIT_FRAME::GetLastPath( LAST_PATH_TYPE aType )
 {
-    wxFileName absoluteFileName = m_lastNetListRead;
+    if( m_lastPath[ aType ].IsEmpty() )
+        return wxEmptyString;
+
+    wxFileName absoluteFileName = m_lastPath[ aType ];
     wxFileName pcbFileName = GetBoard()->GetFileName();
 
-    if( !absoluteFileName.MakeAbsolute( pcbFileName.GetPath() ) || !absoluteFileName.FileExists() )
-    {
-        absoluteFileName.Clear();
-        m_lastNetListRead = wxEmptyString;
-    }
-
+    absoluteFileName.MakeAbsolute( pcbFileName.GetPath() );
     return absoluteFileName.GetFullPath();
 }
 
 
-void PCB_EDIT_FRAME::SetLastNetListRead( const wxString& aLastNetListRead )
+void PCB_EDIT_FRAME::SetLastPath( LAST_PATH_TYPE aType, const wxString& aLastPath )
 {
-    wxFileName relativeFileName = aLastNetListRead;
+    wxFileName relativeFileName = aLastPath;
     wxFileName pcbFileName = GetBoard()->GetFileName();
 
-    if( relativeFileName.MakeRelativeTo( pcbFileName.GetPath() )
-        && relativeFileName.GetFullPath() != aLastNetListRead )
+    relativeFileName.MakeRelativeTo( pcbFileName.GetPath() );
+
+    if( relativeFileName.GetFullPath() != m_lastPath[ aType ] )
     {
-        m_lastNetListRead = relativeFileName.GetFullPath();
+        m_lastPath[ aType ] = relativeFileName.GetFullPath();
+        SaveProjectSettings( false );
     }
 }
 
