@@ -199,6 +199,14 @@ void SCH_LINE::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
+void SCH_LINE::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount     = 2;
+    aLayers[0] = m_Layer;
+    aLayers[1] = LAYER_SELECTION_SHADOWS;
+}
+
+
 const EDA_RECT SCH_LINE::GetBoundingBox() const
 {
     int      width = 25;

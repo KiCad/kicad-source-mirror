@@ -120,6 +120,8 @@ public:
 
     int GetLineSize() const { return m_size; }
 
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
     const EDA_RECT GetBoundingBox() const override;
 
     /**
