@@ -362,14 +362,17 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 void SCH_EDIT_FRAME::RollbackSchematicFromUndo()
 {
     PICKED_ITEMS_LIST* undo = GetScreen()->PopCommandFromUndoList();
-    PutDataInPreviousState( undo, false );
 
-    undo->ClearListAndDeleteItems();
-    delete undo;
+    if( undo )
+    {
+        PutDataInPreviousState( undo, false );
+        undo->ClearListAndDeleteItems();
+        delete undo;
 
-    SetSheetNumberAndCount();
+        SetSheetNumberAndCount();
 
-    TestDanglingEnds();
+        TestDanglingEnds();
+    }
 
     SyncView();
     GetCanvas()->Refresh();
