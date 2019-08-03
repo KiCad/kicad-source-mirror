@@ -158,7 +158,7 @@
                                 <property name="style">wxRA_SPECIFY_COLS</property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
-                                <property name="tooltip">Footprint references are normally updated to follow edits in the schematic.&#x0A;However, updating footprint associations usually works better after re-annotating the schematic.&#x0A;For best results, update footprint references before re-annotating, then re-annotate, and then update footprint associations.</property>
+                                <property name="tooltip">The first option uses the existing links between symbols and their footprints to update the footprints based on changes made to their symbols.  &#x0A;&#x0A;The second option uses the symbol and footprint references to establish a new set of links between symbols and footprints, and then updates the footprints accordingly.</property>
                                 <property name="validator_data_type"></property>
                                 <property name="validator_style">wxFILTER_NONE</property>
                                 <property name="validator_type">wxDefaultValidator</property>
