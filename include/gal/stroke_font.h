@@ -108,10 +108,9 @@ public:
      * @brief Compute the distance (interline) between 2 lines of text (for multiline texts).
      *
      * @param aGlyphHeight is the height (vertical size) of the text.
-     * @param aGlyphThickness is the thickness of the lines used to draw the text.
      * @return the interline.
      */
-    static double GetInterline( double aGlyphHeight, double aGlyphThickness );
+    static double GetInterline( double aGlyphHeight );
 
 
 
@@ -135,13 +134,6 @@ private:
      * @return the relative position of the overbar axis.
      */
     double computeOverbarVerticalPosition() const;
-
-    /**
-     * @brief Returns a single line height using current settings.
-     *
-     * @return The line height.
-     */
-    int getInterline() const;
 
     /**
      * @brief Compute the bounding box of a given glyph.

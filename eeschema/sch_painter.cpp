@@ -821,6 +821,9 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     {
         for( float& t : thickness )
             t += getShadowWidth();
+
+        insideOffset -= KiROUND( getShadowWidth() / 2 );
+        outsideOffset -= KiROUND( getShadowWidth() / 2 );
     }
 
     #define SET_DC( i ) \
@@ -1127,8 +1130,33 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
     m_gal->SetStrokeColor( color );
     m_gal->SetTextAttributes( aText );
 
-    wxPoint  text_offset = aText->GetTextPos() + aText->GetSchematicTextOffset();
+    VECTOR2D text_offset = aText->GetTextPos() + aText->GetSchematicTextOffset();
     wxString shownText( aText->GetShownText() );
+
+    if( drawingShadows )
+    {
+        switch( aText->GetLabelSpinStyle() )
+        {
+        case 0:
+            if( aText->Type() == SCH_LABEL_T || aText->Type() == SCH_TEXT_T )
+                text_offset.x -= getShadowWidth() / 2;
+            else
+                text_offset.x += getShadowWidth() / 2;
+            break;
+        case 1:
+            text_offset.y += getShadowWidth() / 2;
+            break;
+        case 2:
+            if( aText->Type() == SCH_LABEL_T || aText->Type() == SCH_TEXT_T )
+                text_offset.x += getShadowWidth() / 2;
+            else
+                text_offset.x -= getShadowWidth() / 2;
+            break;
+        case 3:
+            text_offset.y -= getShadowWidth() / 2;
+            break;
+        }
+    }
 
     if( !shownText.IsEmpty() )
         m_gal->StrokeText( shownText, text_offset, aText->GetTextAngleRadians() );
@@ -1445,6 +1473,20 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
 
         if( aSheet->IsVerticalOrientation() )
             nameAngle = M_PI/2;
+
+        if( drawingShadows )
+        {
+            if( aSheet->IsVerticalOrientation() )
+            {
+                pos_sheetname.y += getShadowWidth() / 2;
+                pos_filename.y += getShadowWidth() / 2;
+            }
+            else
+            {
+                pos_sheetname.x -= getShadowWidth() / 2;
+                pos_filename.x -= getShadowWidth() / 2;
+            }
+        }
 
         m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEETNAME, drawingShadows ) );
 

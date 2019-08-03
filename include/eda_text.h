@@ -324,17 +324,11 @@ public:
     /**
      * Return the distance between two lines of text.
      *
-     * <p>
      * Calculates the distance (pitch) between two lines of text.  This distance includes the
      * interline distance plus room for characters like j, {, and [.  It also used for single
      * line text, to calculate the text bounding box.
-     * </p>
-     *
-     * @param aTextThickness Overrides the current thickness when greater than 0.
-     * this is needed when the current m_Thickness is 0 and a default line thickness
-     * is used
      */
-    int GetInterline( int aTextThickness = -1 ) const;
+    int GetInterline() const;
 
     /**
      * Function GetTextStyleName

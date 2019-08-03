@@ -169,11 +169,9 @@ wxString EDA_TEXT::ShortenedShownText() const
 }
 
 
-int EDA_TEXT::GetInterline( int aTextThickness ) const
+int EDA_TEXT::GetInterline() const
 {
-    int thickness = aTextThickness <= 0 ? GetThickness() : aTextThickness;
-
-    return KiROUND( KIGFX::STROKE_FONT::GetInterline( GetTextHeight(), thickness ) );
+    return KiROUND( KIGFX::STROKE_FONT::GetInterline( GetTextHeight() ) );
 }
 
 
@@ -215,7 +213,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
     // calculate the H and V size
     int dx = KiROUND( basic_gal.GetStrokeFont().ComputeStringBoundaryLimits(
                             text, VECTOR2D( GetTextSize() ), double( thickness ) ).x );
-    int dy = GetInterline( thickness );
+    int dy = GetInterline();
 
     // Creates bounding box (rectangle) for an horizontal
     // and left and top justified text. the bounding box will be moved later
@@ -317,7 +315,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
             break;
 
         case GR_TEXT_VJUSTIFY_BOTTOM:
-            yoffset = linecount * GetInterline( aThickness );
+            yoffset = linecount * GetInterline();
             rect.SetY( rect.GetY() - yoffset );
             break;
         }

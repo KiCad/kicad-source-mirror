@@ -861,7 +861,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
     #define OVERBAR_V_MARGIN 1.2
     // Note: this factor is due to the fact we need a margin for the graphic symbol.
     if( hasOverBar )
-        y = KiROUND( KIGFX::STROKE_FONT::GetInterline( halfSize, linewidth ) * OVERBAR_V_MARGIN );
+        y = KiROUND( KIGFX::STROKE_FONT::GetInterline( halfSize ) * OVERBAR_V_MARGIN );
 
     // Gives room for line thickess and margin
     y += linewidth;         // for line thickess

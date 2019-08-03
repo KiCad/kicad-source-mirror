@@ -34,7 +34,7 @@
 
 using namespace KIGFX;
 
-const double STROKE_FONT::INTERLINE_PITCH_RATIO = 1.5;
+const double STROKE_FONT::INTERLINE_PITCH_RATIO = 1.61;
 const double STROKE_FONT::OVERBAR_POSITION_FACTOR = 1.22;
 const double STROKE_FONT::BOLD_FACTOR = 1.3;
 const double STROKE_FONT::STROKE_FONT_SCALE = 1.0 / 21.0;
@@ -124,15 +124,11 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 
 
 // Static function:
-double STROKE_FONT::GetInterline( double aGlyphHeight, double aGlyphThickness )
+double STROKE_FONT::GetInterline( double aGlyphHeight )
 {
-    return ( aGlyphHeight * INTERLINE_PITCH_RATIO ) + aGlyphThickness;
-}
-
-
-int STROKE_FONT::getInterline() const
-{
-    return KiROUND( GetInterline( m_gal->GetGlyphSize().y, m_gal->GetLineWidth() ) );
+    // Do not add the glyph thickness to the interline.  This makes bold text line-spacing
+    // different from normal text, which is poor typography.
+    return ( aGlyphHeight * INTERLINE_PITCH_RATIO );
 }
 
 
@@ -172,7 +168,7 @@ void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRo
     m_gal->Rotate( -aRotationAngle );
 
     // Single line height
-    int lineHeight = getInterline( );
+    int lineHeight = KiROUND( GetInterline( m_gal->GetGlyphSize().y ) );
     int lineCount = linesCount( aText );
     const VECTOR2D& glyphSize = m_gal->GetGlyphSize();
 
@@ -450,7 +446,7 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
     string_bbox.x = std::max( maxX, curX );
     string_bbox.x *= aGlyphSize.x;
     string_bbox.x += aGlyphThickness;
-    string_bbox.y = line_count * GetInterline( aGlyphSize.y, aGlyphThickness );
+    string_bbox.y = line_count * GetInterline( aGlyphSize.y );
 
     // For italic correction, take in account italic tilt
     if( m_gal->IsFontItalic() )
