@@ -48,8 +48,8 @@ using namespace std::placeholders;
 const LAYER_NUM GAL_LAYER_ORDER[] =
 {
     LAYER_GP_OVERLAY,
-    LAYER_DRC,
     LAYER_SELECT_OVERLAY,
+    LAYER_DRC,
     LAYER_PADS_NETNAMES, LAYER_VIAS_NETNAMES,
     Dwgs_User, Cmts_User, Eco1_User, Eco2_User, Edge_Cuts,
 
