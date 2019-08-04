@@ -175,8 +175,8 @@ DIALOG_BUS_MANAGER::DIALOG_BUS_MANAGER( SCH_EDIT_FRAME* aParent )
     m_btn_rename_signal->Disable();
     m_btn_remove_signal->Disable();
 
-    m_bus_edit->SetHint( _T( "Bus Alias Name" ) );
-    m_signal_edit->SetHint( _T( "Net or Bus Name" ) );
+    m_bus_edit->SetHint( _( "Bus Alias Name" ) );
+    m_signal_edit->SetHint( _( "Net or Bus Name" ) );
 
     FinishDialogSettings();
 }
