@@ -909,6 +909,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         return 1;
 
     std::vector<BOARD_ITEM*> lockedItems;
+    Activate();
 
     // get a copy instead of reference (as we're going to clear the selection before removing items)
     SELECTION selectionCopy;
