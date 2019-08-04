@@ -298,7 +298,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     else
                         m_anchorPos = sch_item->GetPosition();
 
-                    getViewControls()->WarpCursor( *m_anchorPos );
+                    getViewControls()->WarpCursor( *m_anchorPos, true, true );
                     m_cursor = *m_anchorPos;
                 }
                 // ...otherwise modify items with regard to the grid-snapped cursor position
