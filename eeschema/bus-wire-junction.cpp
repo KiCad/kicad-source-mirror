@@ -745,7 +745,6 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
     {
         aItem->SetFlags( STRUCT_DELETED );
         itemList.PushItem( ITEM_PICKER( aItem, UR_DELETED ) );
-        RemoveFromScreen( aItem );
     };
 
     remove_item( aJunction );
