@@ -26,7 +26,6 @@
 #include <confirm.h>
 #include <gr_text.h>
 #include <fctsys.h>
-#include <gr_basic.h>
 #include <widgets/tab_traversal.h>
 #include <widgets/unit_binder.h>
 #include <board_commit.h>
@@ -41,17 +40,13 @@
 #include <wx/valnum.h>
 
 
-/**
- *  DIALOG_PCB_TEXT_PROPERTIES, derived from DIALOG_PCB_TEXT_PROPERTIES_BASE
- *  @see dialog_dialog_pcb_text_properties_base.h and
- *  dialog_dialog_pcb_text_properties_base.cpp, automatically created by
- *  wxFormBuilder.
- */
-
 DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BOARD_ITEM* aItem ) :
     DIALOG_TEXT_PROPERTIES_BASE( aParent ),
-    m_Parent( aParent ), m_item( aItem ),
-    m_edaText( nullptr ), m_modText( nullptr ), m_pcbText( nullptr ),
+    m_Parent( aParent ),
+    m_item( aItem ),
+    m_edaText( nullptr ),
+    m_modText( nullptr ),
+    m_pcbText( nullptr ),
     m_textWidth( aParent, m_SizeXLabel, m_SizeXCtrl, m_SizeXUnits, true ),
     m_textHeight( aParent, m_SizeYLabel, m_SizeYCtrl, m_SizeYUnits, true ),
     m_thickness( aParent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnits, true ),
@@ -204,12 +199,13 @@ void DIALOG_TEXT_PROPERTIES::OnCharHook( wxKeyEvent& aEvent )
     }
     else if( aEvent.GetKeyCode() == WXK_RETURN )
     {
-        if( FindFocus() == m_MultiLineText && !aEvent.ShiftDown() )
+        // Allow typing returns into a multi-line text
+        if( m_MultiLineText->IsShown() && m_MultiLineText->HasFocus() && !aEvent.ShiftDown() )
             aEvent.Skip();
         else
         {
-            TransferDataFromWindow();
-            EndModal( wxID_OK );
+            if( TransferDataFromWindow() )
+                EndModal( wxID_OK );
         }
     }
     else
