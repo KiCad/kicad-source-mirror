@@ -126,7 +126,7 @@ private:
     wxPageSetupDialogData   m_pageSetupData;
     wxFindReplaceData*      m_findReplaceData;
     wxString*               m_findReplaceStatus;
-    bool                    m_printMonochrome;    ///< Print monochrome instead of grey scale.
+    bool                    m_printMonochrome;     ///< Print monochrome instead of grey scale.
     bool                    m_printSheetReference;
     DIALOG_SCH_FIND*        m_dlgFindReplace;
     wxArrayString           m_findStringHistoryList;
@@ -150,7 +150,6 @@ private:
     bool                    m_autoplaceJustify;   ///< allow autoplace to change justification
     bool                    m_autoplaceAlign;     ///< align autoplaced fields to the grid
     bool                    m_footprintPreview;   ///< whether to show footprint previews
-    bool                    m_showIllegalSymbolLibDialog;
 
     /// An index to the last find item in the found items list #m_foundItems.
     int         m_foundItemIndex;

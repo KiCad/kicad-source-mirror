@@ -351,36 +351,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
         else
         {
-            // Double check to ensure no legacy library list entries have been
-            // added to the projec file symbol library list.
-            wxString paths;
-            wxArrayString libNames;
-
-            PART_LIBS::LibNamesAndPaths( &Prj(), false, &paths, &libNames );
-
-            if( !libNames.IsEmpty() )
-            {
-                if( m_showIllegalSymbolLibDialog )
-                {
-                    wxRichMessageDialog invalidLibDlg(
-                            this,
-                            _( "Illegal entry found in project file symbol library list." ),
-                            _( "Project Load Warning" ),
-                            wxOK | wxCENTER | wxICON_EXCLAMATION );
-                    invalidLibDlg.SetExtendedMessage(
-                            _( "Symbol libraries defined in the project file symbol library list "
-                               "are no longer supported and will be\nremoved.  This may cause "
-                               "broken symbol library links under certain conditions." ) );
-                    invalidLibDlg.ShowCheckBox( _( "Do not show this dialog again." ) );
-                    invalidLibDlg.ShowModal();
-                    m_showIllegalSymbolLibDialog = !invalidLibDlg.IsCheckBoxChecked();
-                }
-
-                libNames.Clear();
-                paths.Clear();
-                PART_LIBS::LibNamesAndPaths( &Prj(), true, &paths, &libNames );
-            }
-
             // Check to see whether some old library parts need to be rescued
             // Only do this if RescueNeverShow was not set.
             wxConfigBase *config = Kiface().KifaceSettings();
