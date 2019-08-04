@@ -802,13 +802,13 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 case SCH_HIER_LABEL_T:
                 {
                     auto text = static_cast<SCH_TEXT*>( driver );
-                    connection->ConfigureFromLabel( text->GetShownText() );
+                    connection->ConfigureFromLabel( text->GetText() );
                     break;
                 }
                 case SCH_SHEET_PIN_T:
                 {
                     auto pin = static_cast<SCH_SHEET_PIN*>( driver );
-                    connection->ConfigureFromLabel( pin->GetShownText() );
+                    connection->ConfigureFromLabel( pin->GetText() );
                     break;
                 }
                 case SCH_PIN_T:
@@ -1116,7 +1116,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                     {
                         auto text = static_cast<SCH_TEXT*>( possible_driver );
                         auto c = std::make_shared<SCH_CONNECTION>( text, aSubgraph->m_sheet );
-                        c->ConfigureFromLabel( text->GetShownText() );
+                        c->ConfigureFromLabel( text->GetText() );
 
                         if( c->Type() != aSubgraph->m_driver_connection->Type() )
                             continue;
