@@ -703,33 +703,9 @@ public:
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
     /**
-     * Import a KiCad schematic into the current page.
+     * Import a KiCad schematic into the current sheet.
      *
-     * In order to import a schematic a lot of things have to happen to before the contents
-     * of the imported schematic can be appended to the current page.  The following list
-     * describes this process:
-     *
-     * - Load the schematic into a temporary SCH_SHEET object.
-     * - Make sure the imported schematic does not cause any hierarchy recursion issues.
-     * - Verify the imported schematic uses fully qualified #LIB_ID objects (symbol library table).
-     * - Check to see if any symbol libraries need to be added to the current project's symbol
-     *   library table.  This includes:
-     *   - Check if the symbol library already exists in the project or global symbol library
-     *     table.
-     *   - Convert symbol library URLS that use the ${KIPRJMOD} environment variable to absolute
-     *     paths.  ${KIPRJMOD} will not be the same for this project.
-     *   - Check for duplicate symbol library nicknames and change the new symbol library nickname
-     *     to prevent library name clashes.
-     *   - Update all schematic symbol LIB_ID object library nicknames when the library nickname
-     *     was changed to prevent clashes.
-     * - Check for duplicate sheet names which is illegal and automatically rename any duplicate
-     *   sheets in the imported schematic.
-     * - Clear all of the annotation in the imported schematic to prevent clashes.
-     * - Append the objects from the temporary sheet to the current page.
-     * - Replace any duplicate time stamps.
-     * - Refresh the symbol library links.
-     *
-     * @return True if the project was imported properly.
+     * @return True if the schematic was imported properly.
      */
     bool AppendSchematic();
 
@@ -981,6 +957,35 @@ private:
     void ChangeTextOrient( SCH_TEXT* aTextItem );
 
     /**
+     * Verify that \a aSheet will not cause a recursion error in \a aHierarchy.
+     *
+     * @param aSheet is the #SCH_SHEET object to test.
+     * @param aHierarchy is the #SCH_SHEET_PATH where \a aSheet is going to reside.
+     *
+     * @return true if \a aSheet will cause a resursion error in \a aHierarchy.
+     */
+    bool checkSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy );
+
+    /**
+     * Verify that the symbol library links \a aSheet and all of it's child sheets have
+     * been remapped to the symbol library table.
+     *
+     * @param aSheet is the #SCH_SHEET object to test.
+     *
+     * @return true if \a aSheet and it's child sheets have not been remapped.
+     */
+    bool checkForNoFullyDefinedLibIds( SCH_SHEET* aSheet );
+
+    /**
+     *  Load the given filename but sets the path to the current project path.
+     *
+     *  @param full filepath of file to be imported.
+     *  @param aFileType SCH_FILE_T value for file type
+     */
+    bool importFile( const wxString& aFileName, int aFileType );
+
+public:
+    /**
      * Command event handler to change a text type to another one.
      *
      * The new text, label, hierarchical label, or global label is created from the old text
@@ -1102,15 +1107,54 @@ public:
     wxPoint GetLastSheetPinPosition() const { return m_lastSheetPinPosition; }
 
 private:
-    /**
-     *  Load the given filename but sets the path to the current project path.
-     *
-     *  @param full filepath of file to be imported.
-     *  @param aFileType SCH_FILE_T value for file type
-     */
-    bool importFile( const wxString& aFileName, int aFileType );
+    void InitSheet( SCH_SHEET* aSheet, const wxString& aNewFilename );
 
-    bool validateSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy );
+    /**
+     * Load a the KiCad schematic file \a aFileName into the sheet \a aSheet.
+     *
+     * If \a aSheet does not have a valid #SCH_SCREEN object, the schematic is loaded into
+     * \a Sheet.  Otherwise, it is appended to the current #SCH_SCREEN object.
+     *
+     * In order to import a schematic a lot of things have to happen to before the contents
+     * of the imported schematic can be appended to the current page.  The following list
+     * describes this process:
+     *
+     * - Load the schematic into a temporary #SCH_SHEET object.
+     * - Make sure the imported schematic does not cause any hierarchy recursion issues.
+     * - Verify the imported schematic uses fully qualified #LIB_ID objects (symbol library table).
+     * - Check all of the possible combinations that could cause broken symbol library links
+     *   and give the user the option to cancel the append process.  The following conditions
+     *   are check but they still do not guarantee that there will not be any broken symbol
+     *   library links:
+     *   - The source schematic is in the current project path and contains symbol library
+     *     nicknames not found in the project symbol library table.  This can happen if the
+     *     schematic is copied to the current project path from another project.
+     *   - The source schematic is in a different path and there are symbol library link nicknames
+     *     that do not exist in either the current symbol library table or the source project
+     *     symbol library table if it exists in the source path.
+     *   - The source schematic is in a different path and contains duplicate symbol library
+     *     nicknames that point to different libraries.
+     * - Check to see if any symbol libraries need to be added to the current project's symbol
+     *   library table.  This includes:
+     *   - Check if the symbol library already exists in the project or global symbol library
+     *     table.
+     *   - Convert symbol library URLS that use the ${KIPRJMOD} environment variable to absolute
+     *     paths.  ${KIPRJMOD} will not be the same for this project.
+     * - Clear all of the annotation in the imported schematic to prevent clashes.
+     * - Append the objects from the temporary sheet to the current page.
+     * - Replace any duplicate time stamps.
+     * - Refresh the symbol library links.
+     *
+     * @param aSheet is the sheet to either append or load the schematic.
+     * @param aHierarchy is the current position in the schematic hierarchy used to test for
+     *                   possible file recursion issues.
+     * @param aFileName is the file name to load.  The file name is expected to have an absolute
+     *                  path.
+     *
+     * @return True if the schematic was imported properly.
+     */
+    bool LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
+                            const wxString& aFileName );
 
     /**
      * Create a new SCH_SHEET_PIN object and add it to \a aSheet at the current cursor position.
@@ -1210,7 +1254,6 @@ public:
      */
     void OrientComponent( COMPONENT_ORIENTATION_T aOrientation = CMP_NORMAL );
 
-private:
     void OnSelectUnit( wxCommandEvent& aEvent );
     void ConvertPart( SCH_COMPONENT* DrawComponent );
 
@@ -1229,7 +1272,6 @@ private:
     void PasteListOfItems( wxDC* DC );
 
     /* Undo - redo */
-public:
 
     /**
      * Create a copy of the current schematic item, and put it in the undo list.
