@@ -112,8 +112,6 @@ private:
     SCH_ITEM*               m_item_to_repeat;     ///< Last item to insert by the repeat command.
     int                     m_repeatLabelDelta;   ///< Repeat label number increment step.
     SCH_ITEM*               m_undoItem;           ///< Copy of the current item being edited.
-    wxString                m_simulatorCommand;   ///< Command line used to call the circuit
-                                                  ///< simulator (gnucap, spice, ...)
     wxString                m_netListerCommand;   ///< Command line to call a custom net list
                                                   ///< generator.
     int                     m_exec_flags;         ///< Flags of the wxExecute() function
@@ -214,7 +212,7 @@ public:
     void SetNetListFormatName( const wxString& aFormat ) { m_netListFormat = aFormat; }
 
     bool GetSpiceAjustPassiveValues() const { return m_spiceAjustPassiveValues; }
-    void SetSpiceAjustPassiveValues( bool aEnable ) { m_spiceAjustPassiveValues = aEnable; }
+    void SetSpiceAdjustPassiveValues( bool aEnable ) { m_spiceAjustPassiveValues = aEnable; }
 
     /// accessor to the destination directory to use when generating plot files.
     const wxString& GetPlotDirectoryName() const { return m_plotDirectoryName; }
@@ -980,10 +978,6 @@ public:
      * @param aDC = wxDC given by the calling print function
      */
     virtual void PrintPage( wxDC* aDC ) override;
-
-    void SetSimulatorCommand( const wxString& aCommand ) { m_simulatorCommand = aCommand; }
-
-    wxString GetSimulatorCommand() const { return m_simulatorCommand; }
 
     void SetNetListerCommand( const wxString& aCommand ) { m_netListerCommand = aCommand; }
 

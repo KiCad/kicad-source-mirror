@@ -251,7 +251,6 @@ static const wxChar DefaultJctSizeEntry[] =         wxT( "DefaultJunctionSize" )
 static const wxChar ShowHiddenPinsEntry[] =         wxT( "ShowHiddenPins" );
 static const wxChar HorzVertLinesOnlyEntry[] =      wxT( "HorizVertLinesOnly" );
 static const wxChar FieldNamesEntry[] =             wxT( "FieldNames" );
-static const wxChar SimulatorCommandEntry[] =       wxT( "SimCmdLine" );
 static const wxString ShowPageLimitsEntry =         "ShowPageLimits";
 static const wxString UnitsEntry =                  "Units";
 static const wxString PrintMonochromeEntry =        "PrintMonochrome";
@@ -342,9 +341,6 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( AutoplaceAlignEntry, &m_autoplaceAlign, false );
     aCfg->Read( FootprintPreviewEntry, &m_footprintPreview, false );
 
-    // Load netlists options:
-    aCfg->Read( SimulatorCommandEntry, &m_simulatorCommand );
-
     wxString templateFieldNames = aCfg->Read( FieldNamesEntry, wxEmptyString );
 
     if( !templateFieldNames.IsEmpty() )
@@ -391,9 +387,6 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( AutoplaceJustifyEntry, m_autoplaceJustify );
     aCfg->Write( AutoplaceAlignEntry, m_autoplaceAlign );
     aCfg->Write( FootprintPreviewEntry, m_footprintPreview );
-
-    // Save netlists options:
-    aCfg->Write( SimulatorCommandEntry, m_simulatorCommand );
 
     // Save template fieldnames
     STRING_FORMATTER sf;

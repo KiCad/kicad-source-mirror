@@ -250,7 +250,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_findReplaceStatusPopup = nullptr;
 
     SetForceHVLines( true );
-    SetSpiceAjustPassiveValues( false );
+    SetSpiceAdjustPassiveValues( false );
 
     // Give an icon
     wxIcon icon;
