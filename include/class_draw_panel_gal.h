@@ -181,13 +181,8 @@ public:
      * Function SetCurrentCursor
      * Set the current cursor shape for this panel
      */
-    virtual void SetCurrentCursor( int aCursor );
-
-    /**
-     * Function GetDefaultCursor
-     * @return the default cursor shape
-     */
-    virtual int GetDefaultCursor() const  { return m_defaultCursor; }
+    void SetCurrentCursor( int aStockCursorID );
+    void SetCurrentCursor( const wxCursor& aCursor );
 
     /**
      * Returns the bounding box of the view that should be used if model is not valid
@@ -213,31 +208,21 @@ protected:
 
     static const int MinRefreshPeriod = 17;             ///< 60 FPS.
 
-    /// Current mouse cursor shape id.
-    int     m_currentCursor;
-    /// The default mouse cursor shape id.
-    int     m_defaultCursor;
+    wxCursor                 m_currentCursor;    /// Current mouse cursor shape id.
+    wxCursor                 m_defaultCursor;    /// The default mouse cursor shape id.
 
-    /// Pointer to the parent window
-    wxWindow*                m_parent;
+    wxWindow*                m_parent;           /// Pointer to the parent window
+    EDA_DRAW_FRAME*          m_edaFrame;         /// Parent EDA_DRAW_FRAME (if available)
 
-    /// Parent EDA_DRAW_FRAME (if available)
-    EDA_DRAW_FRAME*          m_edaFrame;
-
-    /// Last timestamp when the panel was refreshed
-    wxLongLong               m_lastRefresh;
-
-    /// Is there a redraw event requested?
-    bool                     m_pendingRefresh;
+    wxLongLong               m_lastRefresh;      /// Last timestamp when the panel was refreshed
+    bool                     m_pendingRefresh;   /// Is there a redraw event requested?
+    wxTimer                  m_refreshTimer;     /// Timer to prevent too-frequent refreshing
 
     /// True if GAL is currently redrawing the view
     bool                     m_drawing;
 
     /// Flag that determines if VIEW may use GAL for redrawing the screen.
     bool                     m_drawingEnabled;
-
-    /// Timer responsible for preventing too frequent refresh
-    wxTimer                  m_refreshTimer;
 
     /// Timer used to execute OnShow() when the window finally appears on the screen.
     wxTimer                  m_onShowTimer;

@@ -1262,6 +1262,9 @@ void SIM_PLOT_FRAME::onClose( wxCloseEvent& aEvent )
     if( IsSimulationRunning() )
         m_simulator->Stop();
 
+    // Cancel a running simProbe or simTune tool
+    m_schematicFrame->GetToolManager()->RunAction( ACTIONS::cancelInteractive );
+
     Destroy();
 }
 

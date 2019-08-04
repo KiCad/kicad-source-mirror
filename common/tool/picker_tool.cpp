@@ -67,7 +67,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     while( TOOL_EVENT* evt = Wait() )
     {
-        m_frame->GetCanvas()->SetCursor( m_cursor );
+        m_frame->GetCanvas()->SetCurrentCursor( m_cursor );
         VECTOR2D cursorPos = controls->GetCursorPosition( snap && !evt->Modifier( MD_ALT ) );
 
         if( evt->IsClick( BUT_LEFT ) )

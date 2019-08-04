@@ -61,11 +61,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_lostFocus  = false;
     m_stealsFocus = true;
 
-#ifdef __WXMAC__
-    m_defaultCursor = m_currentCursor = wxCURSOR_CROSS;
-#else
-    m_defaultCursor = m_currentCursor = wxCURSOR_ARROW;
-#endif
+    m_defaultCursor = m_currentCursor = wxStockCursor( wxCURSOR_ARROW );
 
     SetLayoutDirection( wxLayout_LeftToRight );
 
@@ -502,18 +498,23 @@ void EDA_DRAW_PANEL_GAL::onShowTimer( wxTimerEvent& aEvent )
 }
 
 
-void EDA_DRAW_PANEL_GAL::SetCurrentCursor( int aCursor )
+void EDA_DRAW_PANEL_GAL::SetCurrentCursor( int aStockCursorID )
 {
-    if ( aCursor > wxCURSOR_NONE && aCursor < wxCURSOR_MAX )
-        m_currentCursor = aCursor;
-    else
-        m_currentCursor = wxCURSOR_ARROW;
+    if ( aStockCursorID <= wxCURSOR_NONE || aStockCursorID >= wxCURSOR_MAX )
+        aStockCursorID = wxCURSOR_ARROW;
 
-    SetCursor( (wxStockCursor) m_currentCursor );
+    SetCurrentCursor( wxCursor( aStockCursorID ) );
+}
+
+
+void EDA_DRAW_PANEL_GAL::SetCurrentCursor( const wxCursor& aCursor )
+{
+    m_currentCursor = aCursor;
+    SetCursor( m_currentCursor );
 }
 
 
 void EDA_DRAW_PANEL_GAL::onSetCursor( wxSetCursorEvent& event )
 {
-    event.SetCursor( (wxStockCursor) m_currentCursor );
+    event.SetCursor( m_currentCursor );
 }
