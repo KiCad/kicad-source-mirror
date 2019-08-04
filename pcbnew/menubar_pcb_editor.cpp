@@ -407,8 +407,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     routeMenu->AddItem( PCB_ACTIONS::selectLayerPair,        SELECTION_CONDITIONS::ShowAlways );
 
     routeMenu->AddSeparator();
-    routeMenu->AddItem( PCB_ACTIONS::routeSingleTrack, SELECTION_CONDITIONS::ShowAlways );
-    routeMenu->AddItem( PCB_ACTIONS::routeDiffPair, SELECTION_CONDITIONS::ShowAlways );
+    routeMenu->AddItem( PCB_ACTIONS::routeSingleTrack,       SELECTION_CONDITIONS::ShowAlways );
+    routeMenu->AddItem( PCB_ACTIONS::routeDiffPair,          SELECTION_CONDITIONS::ShowAlways );
 
     routeMenu->AddSeparator();
     routeMenu->AddItem( PCB_ACTIONS::routerTuneSingleTrace,  SELECTION_CONDITIONS::ShowAlways );
