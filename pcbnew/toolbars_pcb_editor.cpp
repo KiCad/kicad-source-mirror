@@ -90,60 +90,53 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator( bool aForceRebuild )
     COLOR4D    active_layer_color, top_color, bottom_color, via_color, background_color;
     bool       change = aForceRebuild;
 
-    static int previous_requested_scale;
-    static COLOR4D previous_active_layer_color = COLOR4D::UNSPECIFIED;
-    static COLOR4D previous_Route_Layer_TOP_color = COLOR4D::UNSPECIFIED;
-    static COLOR4D previous_Route_Layer_BOTTOM_color = COLOR4D::UNSPECIFIED;
-    static COLOR4D previous_via_color = COLOR4D::UNSPECIFIED;
-    static COLOR4D previous_background_color = COLOR4D::UNSPECIFIED;
-
     int requested_scale;
     Pgm().CommonSettings()->Read( ICON_SCALE_KEY, &requested_scale, 0 );
 
-    if( requested_scale != previous_requested_scale )
+    if( m_prevIconVal.previous_requested_scale != requested_scale )
     {
-        previous_requested_scale = requested_scale;
+        m_prevIconVal.previous_requested_scale = requested_scale;
         change = true;
     }
 
-    active_layer_color = Settings().Colors().GetLayerColor(GetActiveLayer());
+    active_layer_color = Settings().Colors().GetLayerColor( GetActiveLayer() );
 
-    if( previous_active_layer_color != active_layer_color )
+    if( m_prevIconVal.previous_active_layer_color != active_layer_color )
     {
-        previous_active_layer_color = active_layer_color;
+        m_prevIconVal.previous_active_layer_color = active_layer_color;
         change = true;
     }
 
     top_color = Settings().Colors().GetLayerColor( GetScreen()->m_Route_Layer_TOP );
 
-    if( previous_Route_Layer_TOP_color != top_color )
+    if( m_prevIconVal.previous_Route_Layer_TOP_color != top_color )
     {
-        previous_Route_Layer_TOP_color = top_color;
+        m_prevIconVal.previous_Route_Layer_TOP_color = top_color;
         change = true;
     }
 
     bottom_color = Settings().Colors().GetLayerColor( GetScreen()->m_Route_Layer_BOTTOM );
 
-    if( previous_Route_Layer_BOTTOM_color != bottom_color )
+    if( m_prevIconVal.previous_Route_Layer_BOTTOM_color != bottom_color )
     {
-        previous_Route_Layer_BOTTOM_color = bottom_color;
+        m_prevIconVal.previous_Route_Layer_BOTTOM_color = bottom_color;
         change = true;
     }
 
     int via_type = GetDesignSettings().m_CurrentViaType;
     via_color = Settings().Colors().GetItemColor( LAYER_VIAS + via_type );
 
-    if( previous_via_color != via_color )
+    if( m_prevIconVal.previous_via_color != via_color )
     {
-        previous_via_color = via_color;
+        m_prevIconVal.previous_via_color = via_color;
         change = true;
     }
 
     background_color = Settings().Colors().GetItemColor( LAYER_PCB_BACKGROUND );
 
-    if( previous_background_color != background_color )
+    if( m_prevIconVal.previous_background_color != background_color )
     {
-        previous_background_color = background_color;
+        m_prevIconVal.previous_background_color = background_color;
         change = true;
     }
 
