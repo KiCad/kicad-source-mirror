@@ -278,8 +278,9 @@ bool TOOL_MANAGER::RunAction( const std::string& aActionName, bool aNow, void* a
 }
 
 
-void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aParam )
+bool TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aParam )
 {
+    bool       handled = false;
     TOOL_EVENT event = aAction.MakeEvent();
 
     // Allow to override the action parameter
@@ -289,7 +290,7 @@ void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aPara
     if( aNow )
     {
         TOOL_STATE* current = m_activeState;
-        processEvent( event );
+        handled = processEvent( event );
         setActiveState( current );
         UpdateUI( event );
     }
@@ -297,6 +298,8 @@ void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aPara
     {
         PostEvent( event );
     }
+
+    return handled;
 }
 
 
@@ -956,22 +959,26 @@ bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
 {
     wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::processEvent %s", aEvent.Format() );
 
-    if( dispatchHotKey( aEvent ) )
-        return true;
+    // First try to dispatch the action associated with the event if it is a key press event
+    bool handled = dispatchHotKey( aEvent );
 
-    bool handled = false;
-
-    handled |= dispatchInternal( aEvent );
-    handled |= dispatchActivation( aEvent );
-
-    DispatchContextMenu( aEvent );
-
-    // Dispatch queue
-    while( !m_eventQueue.empty() )
+    if( !handled )
     {
-        TOOL_EVENT event = m_eventQueue.front();
-        m_eventQueue.pop_front();
-        processEvent( event );
+        // If the event is not handled through a hotkey activation, pass it to the currently
+        // running tool loops
+        handled |= dispatchInternal( aEvent );
+        handled |= dispatchActivation( aEvent );
+
+        // Open the context menu if requested by a tool
+        DispatchContextMenu( aEvent );
+
+        // Dispatch any remaining events in the event queue
+        while( !m_eventQueue.empty() )
+        {
+            TOOL_EVENT event = m_eventQueue.front();
+            m_eventQueue.pop_front();
+            processEvent( event );
+        }
     }
 
     wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::processEvent handled: %s  %s",

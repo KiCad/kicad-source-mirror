@@ -122,30 +122,35 @@ public:
      * Function RunAction()
      * Runs the specified action.
      *
+     * This function will only return if the action has been handled when the action is run
+     * immediately (aNow = true), otherwise it will always return false.
+     *
      * @param aAction is the action to be invoked.
      * @param aNow decides if the action has to be run immediately or after the current coroutine
      * is preemptied.
      * @param aParam is an optional parameter that might be used by the invoked action. Its meaning
      * depends on the action.
+     *
+     * @return True if the action was handled immediately
      */
-    template<typename T>
-    void RunAction( const TOOL_ACTION& aAction, bool aNow = false, T aParam = NULL )
+    template <typename T>
+    bool RunAction( const TOOL_ACTION& aAction, bool aNow = false, T aParam = NULL )
     {
-        RunAction( aAction, aNow, reinterpret_cast<void*>( aParam ) );
+        return RunAction( aAction, aNow, reinterpret_cast<void*>( aParam ) );
     }
 
-    void RunAction( const TOOL_ACTION& aAction, bool aNow, void* aParam );
+    bool RunAction( const TOOL_ACTION& aAction, bool aNow, void* aParam );
 
-    void RunAction( const TOOL_ACTION& aAction, bool aNow = false )
+    bool RunAction( const TOOL_ACTION& aAction, bool aNow = false )
     {
-        RunAction( aAction, aNow, (void*) NULL );
+        return RunAction( aAction, aNow, (void*) NULL );
     }
 
     const std::map<std::string, TOOL_ACTION*>& GetActions();
-    
+
     ///> @copydoc ACTION_MANAGER::GetHotKey()
     int GetHotKey( const TOOL_ACTION& aAction );
-    
+
     ACTION_MANAGER* GetActionManager() { return m_actionMgr; }
 
     /**

@@ -152,8 +152,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
                 "ACTION_MANAGER::RunHotKey Running action %s for hotkey %s", context->GetName(),
                 KeyNameFromKeyCode( aHotKey ) );
 
-        m_toolMgr->RunAction( *context, true );
-        return true;
+        return m_toolMgr->RunAction( *context, true );
     }
     else if( global )
     {
@@ -161,8 +160,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
                 "ACTION_MANAGER::RunHotKey Running action: %s for hotkey %s", global->GetName(),
                 KeyNameFromKeyCode( aHotKey ) );
 
-        m_toolMgr->RunAction( *global, true );
-        return true;
+        return m_toolMgr->RunAction( *global, true );
     }
 
     wxLogTrace( kicadTraceToolStack, "ACTION_MANAGER::RunHotKey No action found for key %s",
