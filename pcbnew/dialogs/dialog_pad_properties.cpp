@@ -563,7 +563,6 @@ void DIALOG_PAD_PROPERTIES::initValues()
     // because nets are living only in the board managed by the board editor
     m_canEditNetName = m_parent->IsType( FRAME_PCB );
 
-
     // Setup layers names from board
     // Should be made first, before calling m_rbCopperLayersSel->SetSelection()
     m_rbCopperLayersSel->SetString( 0, m_board->GetLayerName( F_Cu ) );
@@ -736,7 +735,10 @@ void DIALOG_PAD_PROPERTIES::initValues()
     enablePrimitivePage( PAD_SHAPE_CUSTOM == m_dummyPad->GetShape() );
 
     // Type of pad selection
-    if( m_dummyPad->GetAttribute() == PAD_ATTRIB_CONN && m_dummyPad->IsAperturePad() )
+    bool aperture = m_dummyPad->GetAttribute() == PAD_ATTRIB_CONN && m_dummyPad->IsAperturePad();
+    bool mechanical = m_dummyPad->GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED;
+
+    if( aperture )
     {
         m_PadType->SetSelection( 4 );
     }
@@ -751,14 +753,12 @@ void DIALOG_PAD_PROPERTIES::initValues()
         }
     }
 
-    // Disable Pad name,and pad to die length for NPTH pads (mechanical pads)
-    bool enable = m_dummyPad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED;
-
-    m_PadNumText->Enable( enable );
-    m_PadNumCtrl->Enable( enable );
-    m_PadNameText->Enable( enable && m_canEditNetName && m_currentPad );
-    m_PadNetSelector->Enable( enable && m_canEditNetName && m_currentPad );
-    m_padToDie.Enable( enable );
+    // Disable Pad name,and pad to die length for mechanical and aperture pads
+    m_PadNumText->Enable( !mechanical && !aperture );
+    m_PadNumCtrl->Enable( !mechanical && !aperture );
+    m_PadNameText->Enable( !mechanical && !aperture && m_canEditNetName && m_currentPad );
+    m_PadNetSelector->Enable( !mechanical && !aperture && m_canEditNetName && m_currentPad );
+    m_padToDie.Enable( !mechanical && !aperture );
 
     if( m_dummyPad->GetDrillShape() != PAD_DRILL_SHAPE_OBLONG )
         m_holeShapeCtrl->SetSelection( 0 );
