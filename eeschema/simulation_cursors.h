@@ -29,16 +29,17 @@
 /**
  * Simple class to provide cursors for simulation functions.
  *
- * For now, it's using simple static-access, but could be made more advanced
- * in future.
+ * For now, it's using simple static-access, but could be made more advanced in future.
  */
-class SIMULATION_CURSORS
+class SIM_CURSORS
 {
 public:
     ///> Probe cursor, used by circuit simulator
-    enum class CURSOR
+    enum CURSOR
     {
-        PROBE,
+        VOLTAGE_PROBE,
+        CURRENT_PROBE,
+        WATTAGE_PROBE,
         TUNE,
     };
 

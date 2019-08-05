@@ -428,7 +428,8 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
 
 #ifdef KICAD_SPICE
 
-static KICAD_T wiresAndPins[] = { SCH_LINE_T, SCH_PIN_T, SCH_SHEET_PIN_T, EOT };
+static KICAD_T wires[] = { SCH_LINE_LOCATE_WIRE_T, EOT };
+static KICAD_T wiresAndPins[] = { SCH_LINE_LOCATE_WIRE_T, SCH_PIN_T, SCH_SHEET_PIN_T, EOT };
 static KICAD_T fieldsAndComponents[] = { SCH_COMPONENT_T, SCH_FIELD_T, EOT };
 
 #define HITTEST_THRESHOLD_PIXELS 5
@@ -436,15 +437,19 @@ static KICAD_T fieldsAndComponents[] = { SCH_COMPONENT_T, SCH_FIELD_T, EOT };
 
 int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
-    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    auto picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    auto simFrame = (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
+
+    if( !simFrame )     // Defensive coding; shouldn't happen.
+        return 0;
 
     // Deactivate other tools; particularly important if another PICKER is currently running
     Activate();
 
-    picker->SetCursor( SIMULATION_CURSORS::GetCursor( SIMULATION_CURSORS::CURSOR::PROBE ) );
+    picker->SetCursor( SIM_CURSORS::GetCursor( SIM_CURSORS::VOLTAGE_PROBE ) );
 
     picker->SetClickHandler(
-        [this] ( const VECTOR2D& aPosition )
+        [this, simFrame] ( const VECTOR2D& aPosition )
         {
             EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
             EDA_ITEM*          item = selTool->SelectPoint( aPosition, wiresAndPins );
@@ -452,27 +457,33 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
             if( !item )
                 return false;
 
-            std::unique_ptr<NETLIST_OBJECT_LIST> netlist( m_frame->BuildNetListBase() );
-
-            for( NETLIST_OBJECT* obj : *netlist )
+            if( item->IsType( wires ) )
             {
-                if( obj->m_Comp == item )
+                std::unique_ptr<NETLIST_OBJECT_LIST> netlist( m_frame->BuildNetListBase() );
+
+                for( NETLIST_OBJECT* obj : *netlist )
                 {
-                    SIM_PLOT_FRAME* simFrame =
-                            (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
-
-                    if( simFrame )
+                    if( obj->m_Comp == item )
+                    {
                         simFrame->AddVoltagePlot( UnescapeString( obj->GetNetName() ) );
-
-                    break;
+                        break;
+                    }
                 }
+            }
+            else if( item->Type() == SCH_PIN_T )
+            {
+                SCH_PIN*       pin = (SCH_PIN*) item;
+                SCH_COMPONENT* comp = (SCH_COMPONENT*) item->GetParent();
+                wxString       param = wxString::Format( _T( "I%s" ), pin->GetName().Lower() );
+
+                simFrame->AddCurrentPlot( comp->GetRef( g_CurrentSheet ), param );
             }
 
             return true;
         } );
 
     picker->SetMotionHandler(
-        [this] ( const VECTOR2D& aPos )
+        [this, picker] ( const VECTOR2D& aPos )
         {
             EE_COLLECTOR collector;
             collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
@@ -485,6 +496,11 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 
             if( m_pickerItem != item )
             {
+                if( item && item->Type() == SCH_PIN_T )
+                    picker->SetCursor( SIM_CURSORS::GetCursor( SIM_CURSORS::CURRENT_PROBE ) );
+                else
+                    picker->SetCursor( SIM_CURSORS::GetCursor( SIM_CURSORS::VOLTAGE_PROBE ) );
+
                 if( m_pickerItem )
                     selectionTool->UnbrightenItem( m_pickerItem );
 
@@ -516,7 +532,7 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
     // Deactivate other tools; particularly important if another PICKER is currently running
     Activate();
 
-    picker->SetCursor( SIMULATION_CURSORS::GetCursor( SIMULATION_CURSORS::CURSOR::TUNE ) );
+    picker->SetCursor( SIM_CURSORS::GetCursor( SIM_CURSORS::CURSOR::TUNE ) );
 
     picker->SetClickHandler(
         [this] ( const VECTOR2D& aPosition )
