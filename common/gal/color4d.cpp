@@ -362,6 +362,6 @@ COLOR4D& COLOR4D::Saturate( double aFactor )
     return *this;
 }
 
-const COLOR4D COLOR4D::UNSPECIFIED( 0, 0, 0, 0 );
-const COLOR4D COLOR4D::WHITE( 1, 1, 1, 1 );
-const COLOR4D COLOR4D::BLACK( 0, 0, 0, 1 );
+constexpr COLOR4D COLOR4D::UNSPECIFIED( 0, 0, 0, 0 );
+constexpr COLOR4D COLOR4D::WHITE( 1, 1, 1, 1 );
+constexpr COLOR4D COLOR4D::BLACK( 0, 0, 0, 1 );

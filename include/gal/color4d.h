@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2017 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2019 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Color class
  *
@@ -53,7 +53,7 @@ public:
      * @param aBlue  is the blue component  [0.0 .. 1.0].
      * @param aAlpha is the alpha value     [0.0 .. 1.0].
      */
-    COLOR4D( double aRed, double aGreen, double aBlue, double aAlpha ) :
+    constexpr COLOR4D( double aRed, double aGreen, double aBlue, double aAlpha ) :
         r( aRed ), g( aGreen ), b( aBlue ), a( aAlpha )
     {
         assert( r >= 0.0 && r <= 1.0 );
