@@ -45,7 +45,7 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
     EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalType ),
     m_parent( aParentWindow )
 {
-    m_defaultCursor = m_currentCursor = wxCURSOR_ARROW;
+    m_currentCursor = wxCURSOR_ARROW;
     m_view = new KIGFX::SCH_VIEW( true, dynamic_cast<SCH_BASE_FRAME*>( aParentWindow ) );
     m_view->SetGAL( m_gal );
 

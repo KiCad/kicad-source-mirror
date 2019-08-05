@@ -61,7 +61,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_lostFocus  = false;
     m_stealsFocus = true;
 
-    m_defaultCursor = m_currentCursor = wxStockCursor( wxCURSOR_ARROW );
+    m_currentCursor = wxStockCursor( wxCURSOR_ARROW );
 
     SetLayoutDirection( wxLayout_LeftToRight );
 

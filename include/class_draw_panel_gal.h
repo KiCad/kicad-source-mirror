@@ -209,7 +209,6 @@ protected:
     static const int MinRefreshPeriod = 17;             ///< 60 FPS.
 
     wxCursor                 m_currentCursor;    /// Current mouse cursor shape id.
-    wxCursor                 m_defaultCursor;    /// The default mouse cursor shape id.
 
     wxWindow*                m_parent;           /// Pointer to the parent window
     EDA_DRAW_FRAME*          m_edaFrame;         /// Parent EDA_DRAW_FRAME (if available)
