@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version May 13 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __PANEL_PCBNEW_SETTINGS_BASE_H__
-#define __PANEL_PCBNEW_SETTINGS_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -30,10 +29,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_PCBNEW_SETTINGS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_PCBNEW_SETTINGS_BASE : public wxPanel 
+class PANEL_PCBNEW_SETTINGS_BASE : public wxPanel
 {
 	private:
-	
+
 	protected:
 		enum
 		{
@@ -41,7 +40,7 @@ class PANEL_PCBNEW_SETTINGS_BASE : public wxPanel
 			wxID_UNITS,
 			wxID_SEGMENTS45
 		};
-		
+
 		wxRadioBox* m_PolarDisplay;
 		wxRadioBox* m_UnitsSelection;
 		wxCheckBox* m_Segments_45_Only_Ctrl;
@@ -59,12 +58,11 @@ class PANEL_PCBNEW_SETTINGS_BASE : public wxPanel
 		wxCheckBox* m_showSelectedRatsnest;
 		wxCheckBox* m_OptDisplayCurvedRatsnestLines;
 		wxCheckBox* m_Show_Page_Limits;
-	
+
 	public:
-		
-		PANEL_PCBNEW_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL ); 
+
+		PANEL_PCBNEW_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_PCBNEW_SETTINGS_BASE();
-	
+
 };
 
-#endif //__PANEL_PCBNEW_SETTINGS_BASE_H__
