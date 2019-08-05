@@ -56,7 +56,8 @@ void EDA_3D_VIEWER::CreateMenuBar()
                        export_xpm,                     SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-    fileMenu->AddItem( wxID_CLOSE, _( "Close" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddItem( wxID_CLOSE, _( "Close\tCTRL+W" ), "",
+                       exit_xpm,                       SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->Resolve();
 
