@@ -41,7 +41,8 @@ class SCH_EDITOR_CONTROL : public wxEvtHandler, public EE_TOOL_BASE<SCH_EDIT_FRA
 public:
     SCH_EDITOR_CONTROL()  :
             EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.EditorControl" ),
-            m_probingPcbToSch( false )
+            m_probingPcbToSch( false ),
+            m_pickerItem( nullptr )
     { }
 
     ~SCH_EDITOR_CONTROL() { }
@@ -176,7 +177,8 @@ private:
     void setTransitions() override;
 
 private:
-    bool m_probingPcbToSch;     ///> Recursion guard when cross-probing to PCBNew
+    bool      m_probingPcbToSch;    // Recursion guard when cross-probing to PCBNew
+    EDA_ITEM* m_pickerItem;         // Current item for picker highlighting.
 };
 
 

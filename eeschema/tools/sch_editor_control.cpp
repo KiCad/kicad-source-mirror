@@ -427,6 +427,13 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
 
 
 #ifdef KICAD_SPICE
+
+static KICAD_T wiresAndPins[] = { SCH_LINE_T, SCH_PIN_T, SCH_SHEET_PIN_T, EOT };
+static KICAD_T fieldsAndComponents[] = { SCH_COMPONENT_T, SCH_FIELD_T, EOT };
+
+#define HITTEST_THRESHOLD_PIXELS 5
+
+
 int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
@@ -439,10 +446,8 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
     picker->SetClickHandler(
         [this] ( const VECTOR2D& aPosition )
         {
-            KICAD_T wiresAndComponents[] = { SCH_LINE_T, SCH_COMPONENT_T, SCH_SHEET_PIN_T, EOT };
-
             EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-            EDA_ITEM*          item = selTool->SelectPoint( aPosition, wiresAndComponents );
+            EDA_ITEM*          item = selTool->SelectPoint( aPosition, wiresAndPins );
 
             if( !item )
                 return false;
@@ -454,16 +459,47 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 if( obj->m_Comp == item )
                 {
                     SIM_PLOT_FRAME* simFrame =
-                        (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
+                            (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
 
                     if( simFrame )
-                        simFrame->AddVoltagePlot( obj->GetNetName() );
+                        simFrame->AddVoltagePlot( UnescapeString( obj->GetNetName() ) );
 
                     break;
                 }
             }
 
             return true;
+        } );
+
+    picker->SetMotionHandler(
+        [this] ( const VECTOR2D& aPos )
+        {
+            EE_COLLECTOR collector;
+            collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+            collector.Collect( m_frame->GetScreen()->GetDrawItems(), wiresAndPins, (wxPoint) aPos );
+
+            EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+            selectionTool->GuessSelectionCandidates( collector, aPos );
+
+            EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
+
+            if( m_pickerItem != item )
+            {
+                if( m_pickerItem )
+                    selectionTool->UnbrightenItem( m_pickerItem );
+
+                m_pickerItem = item;
+
+                if( m_pickerItem )
+                    selectionTool->BrightenItem( m_pickerItem );
+            }
+        } );
+
+    picker->SetFinalizeHandler(
+        [this] ( const int& aFinalState )
+        {
+            if( m_pickerItem )
+                m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
         } );
 
     std::string tool = aEvent.GetCommandStr().get();
@@ -485,8 +521,6 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
     picker->SetClickHandler(
         [this] ( const VECTOR2D& aPosition )
         {
-            KICAD_T fieldsAndComponents[] = { SCH_COMPONENT_T, SCH_FIELD_T, EOT };
-
             EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
             EDA_ITEM*          item = selTool->SelectPoint( aPosition, fieldsAndComponents );
 
@@ -501,12 +535,44 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
                     return false;
             }
 
-            SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
+            SIM_PLOT_FRAME* simFrame =
+                    (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
 
             if( simFrame )
                 simFrame->AddTuner( static_cast<SCH_COMPONENT*>( item ) );
 
             return true;
+        } );
+
+    picker->SetMotionHandler(
+        [this] ( const VECTOR2D& aPos )
+        {
+            EE_COLLECTOR collector;
+            collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+            collector.Collect( m_frame->GetScreen()->GetDrawItems(), fieldsAndComponents, (wxPoint) aPos );
+
+            EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+            selectionTool->GuessSelectionCandidates( collector, aPos );
+
+            EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
+
+            if( m_pickerItem != item )
+            {
+                if( m_pickerItem )
+                    selectionTool->UnbrightenItem( m_pickerItem );
+
+                m_pickerItem = item;
+
+                if( m_pickerItem )
+                    selectionTool->BrightenItem( m_pickerItem );
+            }
+        } );
+
+    picker->SetFinalizeHandler(
+        [this] ( const int& aFinalState )
+        {
+            if( m_pickerItem )
+                m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
         } );
 
     std::string tool = aEvent.GetCommandStr().get();

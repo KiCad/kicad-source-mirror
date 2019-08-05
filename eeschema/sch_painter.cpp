@@ -245,16 +245,19 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
     if( aItem->Type() == SCH_LINE_T )
         color = static_cast<const SCH_LINE*>( aItem )->GetLineColor();
 
-    if( aItem->IsBrightened() )         // Selection disambiguation, etc.
+    if( aItem->IsBrightened() && !aDrawingShadows ) // Selection disambiguation, etc.
     {
         color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
+
+        if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_SHEET_BACKGROUND )
+            color = color.WithAlpha( 0.2 );
     }
     else if( aItem->IsSelected() )
     {
         if( aDrawingShadows )
             color = selectionColor.WithAlpha( 0.8 );
     }
-    else if( aItem->IsHighlighted() )   // Cross-probing
+    else if( aItem->IsHighlighted() )               // Cross-probing
     {
         color = highlightColor;
     }
