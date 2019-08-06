@@ -770,18 +770,17 @@ void NETLIST_OBJECT_LIST::TestforSimilarLabels()
 
     // build global labels and compare
     std::set<NETLIST_OBJECT*, compare_label_names> loc_labelList;
-    std::set<NETLIST_OBJECT*>::const_iterator it;
 
-    for( it = uniqueLabelList.begin(); it != uniqueLabelList.end(); ++it )
+    for( auto it = uniqueLabelList.begin(); it != uniqueLabelList.end(); ++it )
     {
         if( (*it)->IsLabelGlobal() )
             loc_labelList.insert( *it );
     }
 
     // compare global labels (same label names appears only once in list)
-    for( it = loc_labelList.begin(); it != loc_labelList.end(); ++it )
+    for( auto it = loc_labelList.begin(); it != loc_labelList.end(); ++it )
     {
-        std::set<NETLIST_OBJECT*>::const_iterator it_aux = it;
+        auto it_aux = it;
 
         for( ++it_aux; it_aux != loc_labelList.end(); ++it_aux )
         {
@@ -802,48 +801,47 @@ void NETLIST_OBJECT_LIST::TestforSimilarLabels()
     // Build paths list
     std::set<NETLIST_OBJECT*, compare_paths> pathsList;
 
-    for( it = uniqueLabelList.begin(); it != uniqueLabelList.end(); ++it )
+    for( auto it = uniqueLabelList.begin(); it != uniqueLabelList.end(); ++it )
         pathsList.insert( *it );
 
     // Examine each label inside a sheet path:
-    for( it = pathsList.begin(); it != pathsList.end(); ++it )
+    for( auto it = pathsList.begin(); it != pathsList.end(); ++it )
     {
         loc_labelList.clear();
 
-        std::set<NETLIST_OBJECT*>::const_iterator it_aux = uniqueLabelList.begin();
+        auto it_uniq = uniqueLabelList.begin();
 
-        for( ; it_aux != uniqueLabelList.end(); ++it_aux )
+        for( ; it_uniq != uniqueLabelList.end(); ++it_uniq )
         {
-            if( (*it)->m_SheetPath.Path() == (*it_aux)->m_SheetPath.Path() )
-                loc_labelList.insert( *it_aux );
+            if( ( *it )->m_SheetPath.Path() == ( *it_uniq )->m_SheetPath.Path() )
+                loc_labelList.insert( *it_uniq );
         }
 
         // at this point, loc_labelList contains labels of the current sheet path.
         // Detect similar labels (same label names appears only once in list)
-        std::set<NETLIST_OBJECT*>::const_iterator ref_it;
 
-        for( ref_it = loc_labelList.begin(); ref_it != loc_labelList.end(); ++ref_it )
+        for( auto ref_it = loc_labelList.begin(); ref_it != loc_labelList.end(); ++ref_it )
         {
             NETLIST_OBJECT* ref_item = *ref_it;
-            it_aux = ref_it;
+            auto it_aux = ref_it;
 
             for( ++it_aux; it_aux != loc_labelList.end(); ++it_aux )
             {
                 // global label versus global label was already examined.
                 // here, at least one label must be local
-                if( ref_item->IsLabelGlobal() && (*it_aux)->IsLabelGlobal() )
+                if( ref_item->IsLabelGlobal() && ( *it_aux )->IsLabelGlobal() )
                     continue;
 
-                if( ref_item->m_Label.CmpNoCase( (*it_aux)->m_Label ) == 0 )
+                if( ref_item->m_Label.CmpNoCase( ( *it_aux )->m_Label ) == 0 )
                 {
                     // Create new marker for ERC.
                     int cntA = countIndenticalLabels( fullLabelList, ref_item );
                     int cntB = countIndenticalLabels( fullLabelList, *it_aux );
 
                     if( cntA <= cntB )
-                        SimilarLabelsDiagnose( ref_item, (*it_aux) );
+                        SimilarLabelsDiagnose( ref_item, ( *it_aux ) );
                     else
-                        SimilarLabelsDiagnose( (*it_aux), ref_item );
+                        SimilarLabelsDiagnose( ( *it_aux ), ref_item );
                 }
             }
         }
