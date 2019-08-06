@@ -506,6 +506,7 @@ public:
 
     void SetZoneConnection( ZoneConnection aType ) { m_ZoneConnection = aType; }
     ZoneConnection GetZoneConnection() const;
+    ZoneConnection GetLocalZoneConnection() const { return m_ZoneConnection; }
 
     void SetThermalWidth( int aWidth ) { m_ThermalWidth = aWidth; }
     int GetThermalWidth() const;

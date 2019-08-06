@@ -669,7 +669,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     else
         m_SolderPasteMarginRatioCtrl->SetValue( msg );
 
-    switch( m_dummyPad->GetZoneConnection() )
+    switch( m_dummyPad->GetLocalZoneConnection() )
     {
     default:
     case PAD_ZONE_CONN_INHERITED: m_ZoneConnectionChoice->SetSelection( 0 ); break;
