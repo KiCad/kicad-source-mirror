@@ -371,9 +371,8 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
 
     m_libraries.clear();
 
-    for( std::set<LIB_PART*>::iterator it = m_LibParts.begin(); it!=m_LibParts.end();  ++it )
+    for( auto lcomp : m_LibParts )
     {
-        LIB_PART* lcomp = *it;
         wxString libNickname = lcomp->GetLibId().GetLibNickname();;
 
         // The library nickname will be empty if the cache library is used.
