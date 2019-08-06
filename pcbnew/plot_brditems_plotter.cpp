@@ -505,13 +505,13 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
     case S_POLYGON:
         if( aEdge->IsPolyShapeValid() )
         {
-            const std::vector<wxPoint>& polyPoints = aEdge->BuildPolyPointsList();
+            const std::vector<wxPoint> &polyPoints = aEdge->BuildPolyPointsList();
 
             // We must compute true coordinates from m_PolyList
             // which are relative to module position, orientation 0
-            MODULE* module = aEdge->GetParentModule();
+            MODULE *module = aEdge->GetParentModule();
 
-            std::vector< wxPoint > cornerList;
+            std::vector<wxPoint> cornerList;
 
             cornerList.reserve( polyPoints.size() );
 
@@ -530,17 +530,31 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
             {
                 for( size_t i = 1; i < cornerList.size(); i++ )
                 {
-                    m_plotter->ThickSegment( cornerList[i-1], cornerList[i], thickness,
-                                             GetPlotMode(), &gbr_metadata );
+                    m_plotter->ThickSegment( cornerList[i - 1], cornerList[i], thickness,
+                            GetPlotMode(), &gbr_metadata );
                 }
 
                 m_plotter->ThickSegment( cornerList.back(), cornerList.front(), thickness,
-                                         GetPlotMode(), &gbr_metadata );
+                        GetPlotMode(), &gbr_metadata );
 
             }
             else
             {
-                m_plotter->PlotPoly( cornerList, FILLED_SHAPE, thickness, &gbr_metadata );
+                // This must be simplified and fractured to prevent overlapping polygons
+                // from generating invalid Gerber files
+
+                SHAPE_LINE_CHAIN line( cornerList );
+                SHAPE_POLY_SET tmpPoly;
+
+                line.SetClosed( true );
+                tmpPoly.AddOutline( line );
+                tmpPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+                for( int jj = 0; jj < tmpPoly.OutlineCount(); ++jj )
+                {
+                    SHAPE_LINE_CHAIN &poly = tmpPoly.Outline( jj );
+                    m_plotter->PlotPoly( poly, FILLED_SHAPE, thickness, &gbr_metadata );
+                }
             }
         }
     break;

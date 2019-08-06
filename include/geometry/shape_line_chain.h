@@ -127,6 +127,17 @@ public:
             m_points[i] = *aV++;
     }
 
+
+    SHAPE_LINE_CHAIN( const std::vector<wxPoint>& aV ) :
+        SHAPE( SH_LINE_CHAIN ),
+        m_closed( false )
+    {
+        m_points.reserve( aV.size() );
+
+        for( auto pt : aV )
+            m_points.emplace_back( pt.x, pt.y );
+    }
+
     SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath ) :
         SHAPE( SH_LINE_CHAIN ),
         m_closed( true )
