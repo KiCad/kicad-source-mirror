@@ -27,12 +27,10 @@
 #include <fctsys.h>
 #include <tool/conditional_menu.h>
 #include <eda_3d_viewer.h>
-#include <3d_canvas/cinfo3d_visu.h>
 #include <menus_helpers.h>
 #include <3d_viewer_id.h>
 #include <3d_actions.h>
 #include <tool/tool_manager.h>
-#include <tool/conditional_menu.h>
 #include <tool/common_control.h>
 #include "help_common_strings.h"
 
@@ -323,6 +321,13 @@ void EDA_3D_VIEWER::CreateMenuBar()
     prefsMenu->AddSeparator();
     prefsMenu->AddItem( ID_MENU3D_RESET_DEFAULTS, _( "Reset to Default Settings" ), "",
                         tools_xpm,                             SELECTION_CONDITIONS::ShowAlways );
+
+#ifdef __APPLE__    // Note: will get moved to Apple menu by wxWidgets
+    prefsMenu->AddItem( wxID_PREFERENCES,
+                        _( "Preferences...\tCTRL+," ),
+                        _( "Show preferences for all open tools" ),
+                        preference_xpm,                        SELECTION_CONDITIONS::ShowAlways );
+#endif
 
     prefsMenu->Resolve();
 

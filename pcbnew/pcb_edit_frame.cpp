@@ -25,8 +25,6 @@
 #include <pgm_base.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
-#include <collectors.h>
-#include <build_version.h>
 #include <3d_viewer/eda_3d_viewer.h>
 #include <fp_lib_table.h>
 #include <bitmaps.h>
@@ -38,13 +36,11 @@
 #include <pcb_layer_widget.h>
 #include <config_params.h>
 #include <footprint_edit_frame.h>
-#include <dialog_helpers.h>
 #include <dialog_plot.h>
 #include <dialog_edit_footprint_for_BoardEditor.h>
 #include <dialogs/dialog_exchange_footprints.h>
 #include <dialog_board_setup.h>
 #include <convert_to_biu.h>
-#include <view/view.h>
 #include <view/view_controls.h>
 #include <pcb_painter.h>
 #include <invoke_pcb_dialog.h>
@@ -57,7 +53,6 @@
 #include <wildcards_and_files_ext.h>
 #include <kicad_string.h>
 #include <pcb_draw_panel_gal.h>
-#include <gal/graphics_abstraction_layer.h>
 #include <functional>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -116,6 +111,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_CHOICE( ID_ON_ZOOM_SELECT, PCB_EDIT_FRAME::OnSelectZoom )
     EVT_CHOICE( ID_ON_GRID_SELECT, PCB_EDIT_FRAME::OnSelectGrid )
 
+    EVT_ACTIVATE( PCB_EDIT_FRAME::OnActivate )
+    EVT_IDLE( PCB_EDIT_FRAME::OnIdle )
     EVT_CLOSE( PCB_EDIT_FRAME::OnCloseWindow )
     EVT_SIZE( PCB_EDIT_FRAME::OnSize )
 
@@ -461,6 +458,20 @@ void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 
     if( event.GetId() == wxID_CLOSE || Kiface().IsSingle() )
         Close( false );
+}
+
+
+void PCB_EDIT_FRAME::OnActivate( wxActivateEvent& event )
+{
+    // Work around wxWidgets bug where the Preferences item gets lost...
+    m_menuBarDirty = true;
+}
+
+
+void PCB_EDIT_FRAME::OnIdle( wxIdleEvent& event )
+{
+    if( m_menuBarDirty )
+        ReCreateMenuBar();
 }
 
 
