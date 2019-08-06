@@ -443,10 +443,10 @@ void GERBVIEW_FRAME::SetElementVisibility( int aLayerID, bool aNewState )
 
         view->UpdateAllItemsConditionally( KIGFX::REPAINT, []( KIGFX::VIEW_ITEM* aItem )
         {
-            auto item = static_cast<GERBER_DRAW_ITEM*>( aItem );
+            auto item = dynamic_cast<GERBER_DRAW_ITEM*>( aItem );
 
             // GetLayerPolarity() returns true for negative items
-            return item->GetLayerPolarity();
+            return ( item && item->GetLayerPolarity() );
         } );
         break;
     }
