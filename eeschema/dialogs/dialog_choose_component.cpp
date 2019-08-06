@@ -44,7 +44,7 @@
 #include <widgets/footprint_preview_widget.h>
 #include <widgets/footprint_select_widget.h>
 #include <widgets/symbol_preview_widget.h>
-
+#include <wx/clipbrd.h>
 
 wxSize DIALOG_CHOOSE_COMPONENT::m_last_dlg_size( -1, -1 );
 int DIALOG_CHOOSE_COMPONENT::m_h_sash_pos = 0;
@@ -64,14 +64,15 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
           m_vsplitter( nullptr ),
           m_fp_sel_ctrl( nullptr ),
           m_fp_preview( nullptr ),
+          m_tree( nullptr ),
+          m_details( nullptr ),
           m_parent( aParent ),
           m_deMorganConvert( aDeMorganConvert >= 0 ? aDeMorganConvert : 0 ),
           m_allow_field_edits( aAllowFieldEdits ),
           m_show_footprints( aShowFootprints ),
           m_external_browser_requested( false )
 {
-    auto          sizer = new wxBoxSizer( wxVERTICAL );
-    wxHtmlWindow* details = nullptr;
+    auto sizer = new wxBoxSizer( wxVERTICAL );
 
     // Use a slightly different layout, with a details pane spanning the entire window,
     // if we're not showing footprints.
@@ -100,9 +101,9 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
         auto detailsSizer = new wxBoxSizer( wxVERTICAL );
         detailsPanel->SetSizer( detailsSizer );
 
-        details = new wxHtmlWindow( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                    wxHW_SCROLLBAR_AUTO );
-        detailsSizer->Add( details, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
+        m_details = new wxHtmlWindow( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                      wxHW_SCROLLBAR_AUTO );
+        detailsSizer->Add( m_details, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
         detailsPanel->Layout();
         detailsSizer->Fit( detailsPanel );
 
@@ -114,7 +115,7 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     }
 
     m_tree = new LIB_TREE( m_hsplitter, Prj().SchSymbolLibTable(), aAdapter,
-                           LIB_TREE::WIDGETS::ALL, details );
+                           LIB_TREE::WIDGETS::ALL, m_details );
 
     m_hsplitter->SetSashGravity( 0.8 );
     m_hsplitter->SetMinimumPaneSize( 20 );
@@ -171,6 +172,9 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     if( m_fp_sel_ctrl )
         m_fp_sel_ctrl->Bind( EVT_FOOTPRINT_SELECTED,
                              &DIALOG_CHOOSE_COMPONENT::OnFootprintSelected, this );
+
+    m_details->Connect( wxEVT_CHAR_HOOK,
+                        wxKeyEventHandler( DIALOG_CHOOSE_COMPONENT::OnCharHook ), NULL, this );
 }
 
 
@@ -189,8 +193,10 @@ DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
         m_fp_sel_ctrl->Unbind( EVT_FOOTPRINT_SELECTED,
                                &DIALOG_CHOOSE_COMPONENT::OnFootprintSelected, this );
 
-    // I am not sure the following two lines are necessary,
-    // but they will not hurt anyone
+    m_details->Disconnect( wxEVT_CHAR_HOOK,
+                           wxKeyEventHandler( DIALOG_CHOOSE_COMPONENT::OnCharHook ), NULL, this );
+
+    // I am not sure the following two lines are necessary, but they will not hurt anyone
     m_dbl_click_timer->Stop();
     delete m_dbl_click_timer;
 
@@ -255,6 +261,25 @@ void DIALOG_CHOOSE_COMPONENT::OnInitDialog( wxInitDialogEvent& aEvent )
 
     if( m_fp_sel_ctrl )
         m_fp_sel_ctrl->Load( Kiway(), Prj() );
+}
+
+
+void DIALOG_CHOOSE_COMPONENT::OnCharHook( wxKeyEvent& e )
+{
+    if( e.GetKeyCode() == 'C' && e.ControlDown() && !e.AltDown() && !e.ShiftDown() && !e.MetaDown() )
+    {
+        wxString txt = m_details->SelectionToText();
+
+        if( wxTheClipboard->Open() )
+        {
+            wxTheClipboard->SetData( new wxTextDataObject( txt ) );
+            wxTheClipboard->Close();
+        }
+    }
+    else
+    {
+        e.Skip();
+    }
 }
 
 

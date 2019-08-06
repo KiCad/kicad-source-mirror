@@ -151,6 +151,7 @@ protected:
     wxPanel* ConstructRightPanel( wxWindow* aParent );
 
     void OnInitDialog( wxInitDialogEvent& aEvent );
+    void OnCharHook( wxKeyEvent& aEvt );
     void OnCloseTimer( wxTimerEvent& aEvent );
     void OnUseBrowser( wxCommandEvent& aEvent );
 
@@ -197,6 +198,7 @@ protected:
     FOOTPRINT_SELECT_WIDGET*  m_fp_sel_ctrl;
     FOOTPRINT_PREVIEW_WIDGET* m_fp_preview;
     LIB_TREE*                 m_tree;
+    wxHtmlWindow*             m_details;
 
     static int                m_h_sash_pos;     // remember sash positions during a session
     static int                m_v_sash_pos;
