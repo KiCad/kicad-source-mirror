@@ -108,6 +108,14 @@ option( KICAD_SPICE
     "Build KiCad with internal Spice simulator."
     ON )
 
+option( KICAD_SANITIZE
+    "Build KiCad with sanitizer options. WARNING: Not compatible with gold linker"
+    OFF )
+
+option( KICAD_STDLIB_DEBUG
+    "Build KiCad with libstdc++ debug flags enabled."
+    OFF )
+
 option( KICAD_BUILD_PARALLEL_CL_MP
     "Build in parallel using the /MP compiler option (default OFF for safety reasons)"
     OFF )
@@ -320,6 +328,14 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     else()
         set( CMAKE_C_FLAGS_DEBUG   "-g3 -ggdb3 -DDEBUG" )
         set( CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb3 -DDEBUG -Wno-deprecated-declarations" )
+    endif()
+    
+    if( KICAD_SANITIZE )
+        set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_SANITIZE_VECTOR -fsanitize=address -fno-optimize-sibling-calls -fsanitize-address-use-after-scope -fno-omit-frame-pointer" )
+    endif()
+
+    if( KICAD_STDLIB_DEBUG )
+        set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GLIBCXX_DEBUG" )
     endif()
 
     if( MINGW )
