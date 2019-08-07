@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file dialog_erc.cpp
- * @brief Electrical Rules Check dialog implementation.
- */
-
 #include <fctsys.h>
-#include <sch_draw_panel.h>
-#include <kicad_string.h>
 #include <gestfich.h>
 #include <pgm_base.h>
 #include <sch_screen.h>
@@ -42,7 +35,6 @@
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <sch_view.h>
-#include <netlist.h>
 #include <netlist_object.h>
 #include <sch_marker.h>
 #include <sch_sheet.h>
@@ -117,10 +109,10 @@ void DIALOG_ERC::Init()
 {
     m_initialized = false;
 
-    for( int ii = 0; ii < PINTYPE_COUNT; ii++ )
+    for( auto& buttonRow : m_buttonList )
     {
-        for( int jj = 0; jj < PINTYPE_COUNT; jj++ )
-            m_buttonList[ii][jj] = NULL;
+        for( auto& button : buttonRow )
+            button = NULL;
     }
 
     m_settings = m_parent->GetErcSettings();
@@ -133,6 +125,14 @@ void DIALOG_ERC::Init()
 
     // Init Panel Matrix
     ReBuildMatrixPanel();
+}
+
+
+void DIALOG_ERC::OnUpdateUI( wxUpdateUIEvent& event )
+{
+    m_buttondelmarkers->Show( m_NoteBook->GetSelection() == 0 );
+    m_ResetOptButton->Show( m_NoteBook->GetSelection() == 1 );
+    m_buttonsSizer->Layout();
 }
 
 

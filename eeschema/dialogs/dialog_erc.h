@@ -60,6 +60,7 @@ private:
     void OnEraseDrcMarkersClick( wxCommandEvent& event ) override;
     void OnButtonCloseClick( wxCommandEvent& event ) override;
     void OnResetMatrixClick( wxCommandEvent& event ) override;
+    void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
     void RedrawDrawPanel();
 
