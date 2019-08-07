@@ -173,8 +173,10 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
         m_fp_sel_ctrl->Bind( EVT_FOOTPRINT_SELECTED,
                              &DIALOG_CHOOSE_COMPONENT::OnFootprintSelected, this );
 
-    m_details->Connect( wxEVT_CHAR_HOOK,
-                        wxKeyEventHandler( DIALOG_CHOOSE_COMPONENT::OnCharHook ), NULL, this );
+    if( m_details )
+        m_details->Connect( wxEVT_CHAR_HOOK,
+                            wxKeyEventHandler( DIALOG_CHOOSE_COMPONENT::OnCharHook ),
+                                               NULL, this );
 }
 
 
@@ -193,8 +195,10 @@ DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
         m_fp_sel_ctrl->Unbind( EVT_FOOTPRINT_SELECTED,
                                &DIALOG_CHOOSE_COMPONENT::OnFootprintSelected, this );
 
-    m_details->Disconnect( wxEVT_CHAR_HOOK,
-                           wxKeyEventHandler( DIALOG_CHOOSE_COMPONENT::OnCharHook ), NULL, this );
+    if( m_details )
+        m_details->Disconnect( wxEVT_CHAR_HOOK,
+                               wxKeyEventHandler( DIALOG_CHOOSE_COMPONENT::OnCharHook ),
+                                                  NULL, this );
 
     // I am not sure the following two lines are necessary, but they will not hurt anyone
     m_dbl_click_timer->Stop();
@@ -266,7 +270,8 @@ void DIALOG_CHOOSE_COMPONENT::OnInitDialog( wxInitDialogEvent& aEvent )
 
 void DIALOG_CHOOSE_COMPONENT::OnCharHook( wxKeyEvent& e )
 {
-    if( e.GetKeyCode() == 'C' && e.ControlDown() && !e.AltDown() && !e.ShiftDown() && !e.MetaDown() )
+    if( m_details && e.GetKeyCode() == 'C' && e.ControlDown() &&
+        !e.AltDown() && !e.ShiftDown() && !e.MetaDown() )
     {
         wxString txt = m_details->SelectionToText();
 
