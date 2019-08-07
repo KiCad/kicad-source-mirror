@@ -30,11 +30,6 @@ namespace PNS {
 bool ITEM::collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV, VECTOR2I* aMTV,
                           const NODE* aParentNode, bool aDifferentNetsOnly ) const
 {
-    // hole-to-hole is a mechanical constraint (broken drill bits) not an electrical one, so
-    // it must be checked before checking aDifferentNetsOnly
-    if( aParentNode->GetRuleResolver()->CollideHoles( this, aOther, aNeedMTV, aMTV ) )
-        return true;
-
     // same nets? no collision!
     if( aDifferentNetsOnly && m_net == aOther->m_net && m_net >= 0 && aOther->m_net >= 0 )
         return false;

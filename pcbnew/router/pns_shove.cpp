@@ -776,7 +776,10 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
 
             // hole-to-hole is a mechanical constraint (broken drill bits), not an electrical
             // one, so it has to be checked irrespective of matching nets.
-            holeCollision = rr->CollideHoles( &currentLine->Via(), aObstacleVia, true, &mtvHoles );
+
+            // temporarily removed hole-to-hole collision check due to conflicts with the springback algorithm...
+            // we need to figure out a better solution here - TW
+            holeCollision = false; //rr->CollideHoles( &currentLine->Via(), aObstacleVia, true, &mtvHoles );
         }
 
         // These aren't /actually/ lengths as we don't bother to do the square-root part,
