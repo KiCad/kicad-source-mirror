@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Brian Sidebotham <brian.sidebotham@gmail.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,7 +180,13 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
 
         // Replace the template filename with the project filename for the new project creation
         wxString currname = destination.GetName();
-        currname.Replace( basename, aNewProjectPath.GetName() );
+
+        // Do not rename project specific symbol libraries.  This will break the symbol library
+        // table which will cause broken symbol library links in the schematic.
+        if( !( destination.GetExt() == "dcm"
+             || ( destination.GetExt() == "lib" && !destination.GetName().EndsWith( "-cache" ) ) ) )
+            currname.Replace( basename, aNewProjectPath.GetName() );
+
         destination.SetName( currname );
 
         // Replace the template path with the project path for the new project creation
