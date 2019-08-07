@@ -50,8 +50,6 @@
 #include "pns_meander_skew_placer.h"
 #include "pns_dp_meander_placer.h"
 
-#include <router/router_preview_item.h>
-
 namespace PNS {
 
 // an ugly singleton for drawing debug items within the router context.
