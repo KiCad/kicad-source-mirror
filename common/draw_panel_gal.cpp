@@ -498,7 +498,7 @@ void EDA_DRAW_PANEL_GAL::onShowTimer( wxTimerEvent& aEvent )
 }
 
 
-void EDA_DRAW_PANEL_GAL::SetCurrentCursor( int aStockCursorID )
+void EDA_DRAW_PANEL_GAL::SetCurrentCursor( wxStockCursor aStockCursorID )
 {
     if ( aStockCursorID <= wxCURSOR_NONE || aStockCursorID >= wxCURSOR_MAX )
         aStockCursorID = wxCURSOR_ARROW;

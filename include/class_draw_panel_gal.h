@@ -181,7 +181,7 @@ public:
      * Function SetCurrentCursor
      * Set the current cursor shape for this panel
      */
-    void SetCurrentCursor( int aStockCursorID );
+    void SetCurrentCursor( wxStockCursor aStockCursorID );
     void SetCurrentCursor( const wxCursor& aCursor );
 
     /**
