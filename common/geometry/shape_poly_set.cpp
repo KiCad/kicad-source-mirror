@@ -38,8 +38,6 @@
 #include <md5_hash.h>
 #include <map>
 
-#include <make_unique.h>
-
 #include <geometry/geometry_utils.h>
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>

@@ -23,8 +23,6 @@
 
 #include <widgets/wx_busy_indicator.h>
 
-#include <make_unique.h>
-
 #include <wx/cursor.h>
 
 

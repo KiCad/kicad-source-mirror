@@ -42,7 +42,6 @@
 #include <html_messagebox.h>
 #include <reporter.h>
 #include <bom_plugins.h>
-#include <make_unique.h>
 
 #include <dialogs/dialog_bom_cfg_lexer.h>
 

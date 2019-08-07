@@ -38,7 +38,6 @@
 #include <kiface_ids.h>
 #include <confirm.h>
 #include <macros.h>
-#include <make_unique.h>
 #include <pcb_edit_frame.h>
 #include <eda_dde.h>
 #include <wx/stdpaths.h>

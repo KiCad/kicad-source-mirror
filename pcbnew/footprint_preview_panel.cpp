@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2016 Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -32,7 +32,6 @@
 #include <mutex>
 #include <eda_draw_frame.h>
 #include <utility>
-#include <make_unique.h>
 #include <colors_design_settings.h>
 #include <pcb_edit_frame.h>
 #include <wx/stattext.h>
