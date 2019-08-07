@@ -67,7 +67,7 @@ public:
     SHOVE_STATUS ShoveLines( const LINE& aCurrentHead );
     SHOVE_STATUS ShoveMultiLines( const ITEM_SET& aHeadSet );
 
-    SHOVE_STATUS ShoveDraggingVia( VIA* aVia, const VECTOR2I& aWhere, VIA** aNewVia );
+    SHOVE_STATUS ShoveDraggingVia( const VIA_HANDLE aOldVia, const VECTOR2I& aWhere, VIA_HANDLE& aNewVia );
     SHOVE_STATUS ProcessSingleLine( LINE& aCurrent, LINE& aObstacle, LINE& aShoved );
 
     void ForceClearance ( bool aEnabled, int aClearance )
@@ -93,7 +93,7 @@ private:
     struct SPRINGBACK_TAG
     {
         int64_t m_length;
-        VIA* m_draggedVia;
+        VIA_HANDLE m_draggedVia;
         VECTOR2I m_p;
         NODE* m_node;
         OPT_BOX2I m_affectedArea;
@@ -102,7 +102,8 @@ private:
     SHOVE_STATUS processHullSet( LINE& aCurrent, LINE& aObstacle,
                                  LINE& aShoved, const HULL_SET& hulls );
 
-    NODE* reduceSpringback( const ITEM_SET& aHeadItems, VIA** aDraggedVia );
+    NODE* reduceSpringback( const ITEM_SET& aHeadSet, VIA_HANDLE& aDraggedVia );
+
     bool pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea, VIA* aDraggedVia );
 
     SHOVE_STATUS walkaroundLoneVia( LINE& aCurrent, LINE& aObstacle, LINE& aShoved );

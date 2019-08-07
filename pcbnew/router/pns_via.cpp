@@ -112,4 +112,14 @@ OPT_BOX2I VIA::ChangedArea( const VIA* aOther ) const
     return OPT_BOX2I();
 }
 
+const VIA_HANDLE VIA::MakeHandle() const
+{
+    VIA_HANDLE h;
+    h.pos = Pos();
+    h.layers = Layers();
+    h.net = Net();
+    h.valid = true;
+    return h;
+}
+
 }

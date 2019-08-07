@@ -24,6 +24,7 @@
 
 #include "pns_line.h"
 #include "pns_node.h"
+#include "pns_debug_decorator.h"
 #include "pns_walkaround.h"
 #include "pns_shove.h"
 #include "pns_solid.h"
@@ -82,6 +83,7 @@ SHOVE::SHOVE( NODE* aWorld, ROUTER* aRouter ) :
     m_forceClearance = -1;
     m_root = aWorld;
     m_currentNode = aWorld;
+    SetDebugDecorator( aRouter->GetInterface()->GetDebugDecorator() );
 
     // Initialize other temporary variables:
     m_draggedVia = NULL;
@@ -553,16 +555,18 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle )
  * Pops NODE stackframes which no longer collide with aHeadSet.  Optionally sets aDraggedVia
  * to the dragged via of the last unpopped state.
  */
-NODE* SHOVE::reduceSpringback( const ITEM_SET& aHeadSet, VIA** aDraggedVia )
+NODE* SHOVE::reduceSpringback( const ITEM_SET& aHeadSet, VIA_HANDLE& aDraggedVia )
 {
     while( !m_nodeStack.empty() )
     {
-        SPRINGBACK_TAG spTag = m_nodeStack.back();
+        SPRINGBACK_TAG& spTag = m_nodeStack.back();
 
-        if( !spTag.m_node->CheckColliding( aHeadSet ) )
+        auto obs = spTag.m_node->CheckColliding( aHeadSet );
+
+        if( !obs )
         {
-            if( aDraggedVia )
-                *aDraggedVia = spTag.m_draggedVia;
+            aDraggedVia = spTag.m_draggedVia;
+            aDraggedVia.valid = true;
 
             delete spTag.m_node;
             m_nodeStack.pop_back();
@@ -587,7 +591,11 @@ bool SHOVE::pushSpringback( NODE* aNode, const OPT_BOX2I& aAffectedArea, VIA* aD
     if( !m_nodeStack.empty() )
         prev_area = m_nodeStack.back().m_affectedArea;
 
-    st.m_draggedVia = aDraggedVia;
+    if( aDraggedVia )
+    {
+        st.m_draggedVia = aDraggedVia->MakeHandle();
+    }
+
     st.m_node = aNode;
 
     if( aAffectedArea )
@@ -1166,7 +1174,9 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveLines( const LINE& aCurrentHead )
     ITEM_SET headSet;
     headSet.Add( aCurrentHead );
 
-    NODE* parent = reduceSpringback( headSet, nullptr );
+    VIA_HANDLE dummyVia;
+
+    NODE* parent = reduceSpringback( headSet, dummyVia );
 
     // Create a new NODE to store this version of the world
     //
@@ -1268,7 +1278,9 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveMultiLines( const ITEM_SET& aHeadSet )
     m_optimizerQueue.clear();
     m_logger.Clear();
 
-    NODE* parent = reduceSpringback( headSet, nullptr );
+    VIA_HANDLE dummyVia;
+
+    NODE* parent = reduceSpringback( headSet, dummyVia );
 
     m_currentNode = parent->Branch();
     m_currentNode->ClearRanks();
@@ -1325,34 +1337,67 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveMultiLines( const ITEM_SET& aHeadSet )
     return st;
 }
 
-
-SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( VIA* aVia, const VECTOR2I& aWhere, VIA** aNewVia )
+static VIA* findViaByHandle ( NODE *aNode, const VIA_HANDLE& handle )
 {
-    SHOVE_STATUS st = SH_OK;
+    JOINT* jt = aNode->FindJoint( handle.pos, handle.layers.Start(), handle.net );
+
+    if( !jt )
+        return nullptr;
+
+    for( ITEM* item : jt->LinkList() )
+    {
+        if ( item->OfKind( ITEM::VIA_T )) 
+        {
+            if( item->Net() == handle.net && item->Layers().Overlaps(handle.layers) )
+                return static_cast<VIA*>( item );
+        }
+    }
+
+    return nullptr;
+}
+
+SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( const VIA_HANDLE aOldVia, const VECTOR2I& aWhere, VIA_HANDLE& aNewVia )
+{
+     SHOVE_STATUS st = SH_OK;
 
     m_lineStack.clear();
     m_optimizerQueue.clear();
     m_newHead = OPT_LINE();
     m_draggedVia = NULL;
 
-    // Pop NODEs containing previous shoves which are no longer necessary
-    //
-    ITEM_SET headSet;
-    headSet.Add( *aVia );
+    auto viaToDrag = findViaByHandle( m_currentNode, aOldVia );
 
-    NODE* parent = reduceSpringback( headSet, &aVia );
+    if( !viaToDrag )
+    {
+        return SH_INCOMPLETE;
+    }
+
+    // Pop NODEs containing previous shoves which are no longer necessary
+    ITEM_SET headSet;
+    
+    VIA headVia ( *viaToDrag );
+    headVia.SetPos( aWhere );
+    headSet.Add( headVia );
+    VIA_HANDLE prevViaHandle;
+    NODE* parent = reduceSpringback( headSet, prevViaHandle );
+
+    if( prevViaHandle.valid )
+    {
+        aNewVia = prevViaHandle;
+        viaToDrag = findViaByHandle( parent, prevViaHandle );
+    }
 
     // Create a new NODE to store this version of the world
     //
     m_currentNode = parent->Branch();
     m_currentNode->ClearRanks();
 
-    aVia->Mark( MK_HEAD );
-    aVia->SetRank( 100000 );
+    viaToDrag->Mark( MK_HEAD );
+    viaToDrag->SetRank( 100000 );
 
     // Push the via to its new location
     //
-    st = pushOrShoveVia( aVia, ( aWhere - aVia->Pos()), 0 );
+    st = pushOrShoveVia( viaToDrag, ( aWhere - viaToDrag->Pos()), 0 );
 
     // Shove any colliding objects out of the way
     //
@@ -1365,14 +1410,16 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( VIA* aVia, const VECTOR2I& aWhere, 
     if( st == SH_OK || st == SH_HEAD_MODIFIED )
     {
         wxLogTrace( "PNS","setNewV %p", m_draggedVia );
-        *aNewVia = m_draggedVia;
 
-        pushSpringback( m_currentNode, m_affectedArea, aVia );
+        if (!m_draggedVia)
+            m_draggedVia = viaToDrag;
+
+        aNewVia = m_draggedVia->MakeHandle();
+
+        pushSpringback( m_currentNode, m_affectedArea, viaToDrag );
     }
     else
     {
-        *aNewVia = nullptr;
-
         delete m_currentNode;
         m_currentNode = parent;
     }

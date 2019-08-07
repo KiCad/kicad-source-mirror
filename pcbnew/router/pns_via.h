@@ -33,6 +33,17 @@ namespace PNS {
 
 class NODE;
 
+// uniquely identifies a VIA within a NODE without using pointers. Used to
+// simplify (or complexifiy, depending on the point of view) the pointer management
+// in PNS::NODE. Sooner or later I'll have to fix it for good using smart pointers - twl
+struct VIA_HANDLE
+{
+    bool valid = false;
+    VECTOR2I pos;
+    LAYER_RANGE layers;
+    int net;
+};
+
 class VIA : public ITEM
 {
 public:
@@ -153,6 +164,8 @@ public:
     }
 
     OPT_BOX2I ChangedArea( const VIA* aOther ) const;
+
+    const VIA_HANDLE MakeHandle() const;
 
 private:
     int m_diameter;
