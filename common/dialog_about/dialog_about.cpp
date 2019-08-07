@@ -589,6 +589,28 @@ void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
 #else
     aMsg << OFF;
 #endif
+
+#ifndef NDEBUG
+        aMsg << indent4 << "KICAD_STDLIB_DEBUG=";
+    #ifdef KICAD_STDLIB_DEBUG
+        aMsg << ON;
+    #else
+        aMsg << OFF;
+        aMsg << indent4 << "KICAD_STDLIB_LIGHT_DEBUG=";
+        #ifdef KICAD_STDLIB_LIGHT_DEBUG
+            aMsg << ON;
+        #else
+            aMsg << OFF;
+        #endif
+    #endif
+
+        aMsg << indent4 << "KICAD_SANITIZE=";
+    #ifdef KICAD_SANITIZE
+        aMsg << ON;
+    #else
+        aMsg << OFF;
+    #endif
+#endif
 }
 
 

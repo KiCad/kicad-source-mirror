@@ -108,12 +108,17 @@ option( KICAD_SPICE
     "Build KiCad with internal Spice simulator."
     ON )
 
+# Not supported by all platforms (for instance mingw)
 option( KICAD_SANITIZE
     "Build KiCad with sanitizer options. WARNING: Not compatible with gold linker"
     OFF )
 
 option( KICAD_STDLIB_DEBUG
     "Build KiCad with libstdc++ debug flags enabled."
+    OFF )
+
+option( KICAD_STDLIB_LIGHT_DEBUG
+    "Build KiCad with libstdc++ with -Wp,-D_GLIBCXX_ASSERTIONS flag enabled. Not as intrusive as KICAD_STDLIB_DEBUG"
     OFF )
 
 option( KICAD_BUILD_PARALLEL_CL_MP
@@ -329,13 +334,20 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( CMAKE_C_FLAGS_DEBUG   "-g3 -ggdb3 -DDEBUG" )
         set( CMAKE_CXX_FLAGS_DEBUG "-g3 -ggdb3 -DDEBUG -Wno-deprecated-declarations" )
     endif()
-    
+
     if( KICAD_SANITIZE )
+        add_definitions( -DKICAD_SANITIZE )
         set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_SANITIZE_VECTOR -fsanitize=address -fno-optimize-sibling-calls -fsanitize-address-use-after-scope -fno-omit-frame-pointer" )
     endif()
 
     if( KICAD_STDLIB_DEBUG )
+        add_definitions( -DKICAD_STDLIB_DEBUG )
         set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GLIBCXX_DEBUG" )
+    elseif( KICAD_STDLIB_LIGHT_DEBUG )
+        # useless if KICAD_STDLIB_DEBUG is ON.
+        # this option makes some controls to trap out of bound memory access.
+        add_definitions( -DKICAD_STDLIB_LIGHT_DEBUG )
+        set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wp,-D_GLIBCXX_ASSERTIONS" )
     endif()
 
     if( MINGW )
