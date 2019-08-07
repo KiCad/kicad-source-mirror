@@ -22,6 +22,7 @@
 #ifndef __PNS_DRAGGER_H
 #define __PNS_DRAGGER_H
 
+#include <memory>
 #include <math/vector2d.h>
 
 #include "pns_node.h"
@@ -29,6 +30,8 @@
 #include "pns_line.h"
 #include "pns_algo_base.h"
 #include "pns_itemset.h"
+#include "pns_layerset.h"
+
 
 namespace PNS {
 
@@ -101,25 +104,28 @@ public:
 
 private:
 
-
+    const ITEM_SET findViaFanoutByHandle ( NODE *aNode, const VIA_HANDLE& handle );
+    
     bool dragMarkObstacles( const VECTOR2I& aP );
     bool dragShove(const VECTOR2I& aP );
     bool startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg );
-    bool startDragVia( const VECTOR2D& aP, VIA* aVia );
-    void dumbDragVia( VIA* aVia, NODE* aNode, const VECTOR2I& aP );
+    bool startDragVia( VIA* aVia );
+    void dumbDragVia( const VIA_HANDLE& aHandle, NODE* aNode, const VECTOR2I& aP );
+
+    VIA_HANDLE m_initialVia;
+    VIA_HANDLE m_draggedVia;
 
     NODE*    m_world;
     NODE*    m_lastNode;
     int      m_mode;
     LINE     m_draggedLine;
-    VIA*     m_draggedVia;
-    LINE     m_lastValidDraggedLine;
-    SHOVE*   m_shove;
+    //VIA*     m_draggedVia;
+    //LINE     m_lastValidDraggedLine;
+    std::unique_ptr<SHOVE> m_shove;
     int      m_draggedSegmentIndex;
     bool     m_dragStatus;
     PNS_MODE m_currentMode;
     ITEM_SET m_origViaConnections;
-    VIA*     m_initialVia;
     ITEM_SET m_draggedItems;
     bool     m_freeAngleMode;
 };
