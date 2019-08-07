@@ -86,7 +86,7 @@ public:
         m_movable = aOther.m_movable;
         m_kind = aOther.m_kind;
         m_parent = aOther.m_parent;
-        m_owner = NULL;
+        m_owner = aOther.m_owner; // fixme: wtf this was null?
         m_marker = aOther.m_marker;
         m_rank = aOther.m_rank;
         m_routable = aOther.m_routable;
