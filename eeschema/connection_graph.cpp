@@ -2106,8 +2106,8 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph,
                 wxPoint pos = pin->GetTransformedPosition();
 
                 msg.Printf( _( "Pin %s of component %s has a no-connect marker but is connected" ),
-                        GetChars( pin->GetName() ),
-                        GetChars( pin->GetParentComponent()->GetRef( &aSubgraph->m_sheet ) ) );
+                            pin->GetName(),
+                            pin->GetParentComponent()->GetRef( &aSubgraph->m_sheet ) );
 
                 auto marker = new SCH_MARKER();
                 marker->SetTimeStamp( GetNewTimeStamp() );
@@ -2158,22 +2158,22 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph,
                     pin = static_cast<SCH_PIN*>( item );
                 else
                     has_other_connections = true;
+
                 break;
 
             default:
                 if( item->IsConnectable() )
                     has_other_connections = true;
+
                 break;
             }
         }
 
-        // Check if invisible power pins connect to anything else
-        // Note this won't catch if a component has multiple invisible power
-        // pins but these don't connect to any other net; maybe that should be
-        // added as a further optional ERC check.
+        // Check if invisible power pins connect to anything else.
+        // Note this won't catch a component with multiple invisible power pins but these don't
+        // connect to any other net; maybe that should be added as a further optional ERC check?
 
-        if( pin && !has_other_connections &&
-            pin->IsPowerConnection() && !pin->IsVisible() )
+        if( pin && !has_other_connections && pin->IsPowerConnection() && !pin->IsVisible() )
         {
             wxString name = pin->Connection( sheet )->Name();
             wxString local_name = pin->Connection( sheet )->Name( true );
@@ -2192,8 +2192,8 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph,
                 wxPoint pos = pin->GetTransformedPosition();
 
                 msg.Printf( _( "Pin %s of component %s is unconnected." ),
-                        GetChars( pin->GetName() ),
-                        GetChars( pin->GetParentComponent()->GetRef( &aSubgraph->m_sheet ) ) );
+                            pin->GetName(),
+                            pin->GetParentComponent()->GetRef( &aSubgraph->m_sheet ) );
 
                 auto marker = new SCH_MARKER();
                 marker->SetTimeStamp( GetNewTimeStamp() );

@@ -32,15 +32,12 @@
 #include <sch_draw_panel.h>
 #include <kicad_string.h>
 #include <sch_edit_frame.h>
-
-#include <netlist.h>
 #include <netlist_object.h>
 #include <lib_pin.h>
 #include <erc.h>
 #include <sch_marker.h>
 #include <sch_sheet.h>
 #include <sch_reference_list.h>
-
 #include <wx/ffile.h>
 
 
@@ -227,65 +224,44 @@ int TestDuplicateSheetNames( bool aCreateMarker )
 
 int TestConflictingBusAliases( bool aCreateMarker )
 {
-    using std::pair;
-    using std::shared_ptr;
-    using std::vector;
-
-    int err_count = 0;
+    wxString    msg;
+    wxPoint     dummyPos( 0, 0 );
+    int         err_count = 0;
     SCH_SCREENS screens;
-    vector< shared_ptr<BUS_ALIAS> > aliases;
-    vector< pair< shared_ptr<BUS_ALIAS>, shared_ptr<BUS_ALIAS> > > conflicts;
+    std::vector< std::shared_ptr<BUS_ALIAS> > aliases;
 
     for( auto screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
     {
-        auto screen_aliases = screen->GetBusAliases();
+        std::unordered_set< std::shared_ptr<BUS_ALIAS> > screen_aliases = screen->GetBusAliases();
 
-        for( auto alias : screen_aliases )
+        for( const std::shared_ptr<BUS_ALIAS>& alias : screen_aliases )
         {
-            for( auto test : aliases )
+            for( const std::shared_ptr<BUS_ALIAS>& test : aliases )
             {
-                if( alias->GetName() == test->GetName() &&
-                    alias->Members() != test->Members() )
+                if( alias->GetName() == test->GetName() && alias->Members() != test->Members() )
                 {
-                    conflicts.push_back( std::make_pair( alias, test ) );
+                    if( aCreateMarker )
+                    {
+                        msg = wxString::Format( _( "Bus alias %s has conflicting definitions on"
+                                                   "multiple sheets: %s and %s" ),
+                                                alias->GetName(),
+                                                alias->GetParent()->GetFileName(),
+                                                test->GetParent()->GetFileName() );
+
+                        SCH_MARKER* marker = new SCH_MARKER();
+                        marker->SetData( ERCE_BUS_ALIAS_CONFLICT, dummyPos, msg, dummyPos );
+                        marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
+                        marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_ERROR );
+
+                        test->GetParent()->Append( marker );
+                    }
+
+                    ++err_count;
                 }
             }
         }
 
-        aliases.insert( aliases.end(),
-                        screen_aliases.begin(), screen_aliases.end() );
-    }
-
-    if( !conflicts.empty() )
-    {
-        if( aCreateMarker )
-        {
-            wxString msg;
-
-            for( auto conflict : conflicts )
-            {
-                auto marker = new SCH_MARKER();
-                auto a1 = conflict.first;
-                auto a2 = conflict.second;
-
-                msg.Printf( _( "Bus alias %s has conflicting definitions on multiple sheets: " ),
-                            GetChars( a1->GetName() ) );
-
-                wxFileName f1 = a1->GetParent()->GetFileName();
-                wxFileName f2 = a2->GetParent()->GetFileName();
-
-                msg << f1.GetFullName() << " and " << f2.GetFullName();
-
-                marker->SetData( ERCE_BUS_ALIAS_CONFLICT, wxPoint( 0, 0 ),
-                                 msg,  wxPoint( 0, 0 ) );
-                marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-                marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_ERROR );
-
-                a2->GetParent()->Append( marker );
-
-                ++err_count;
-            }
-        }
+        aliases.insert( aliases.end(), screen_aliases.begin(), screen_aliases.end() );
     }
 
     return err_count;
@@ -313,7 +289,7 @@ int TestMultiunitFootprints( SCH_SHEET_LIST& aSheetList )
         wxString fp;
         wxString unitName;
 
-        for( unsigned i = 0; i < component.second.GetCount(); ++i )
+        for( int i = 0; i < component.second.GetCount(); ++i )
         {
             SCH_COMPONENT* cmp = refList.GetItem( i ).GetComp();
             SCH_SHEET_PATH sheetPath = refList.GetItem( i ).GetSheetPath();
@@ -327,7 +303,7 @@ int TestMultiunitFootprints( SCH_SHEET_LIST& aSheetList )
             }
         }
 
-        for( unsigned i = 0; i < component.second.GetCount(); ++i )
+        for( int i = 0; i < component.second.GetCount(); ++i )
         {
             SCH_REFERENCE& ref = refList.GetItem( i );
             SCH_COMPONENT* unit = ref.GetComp();
@@ -362,8 +338,7 @@ int TestMultiunitFootprints( SCH_SHEET_LIST& aSheetList )
 }
 
 
-void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
-               int aMinConn, int aDiag )
+void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst, int aMinConn, int aDiag )
 {
     SCH_MARKER*     marker = NULL;
     SCH_SCREEN*     screen;
@@ -403,10 +378,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
                         GetChars( GetText( ii ) ),
                         GetChars( cmp_ref ),
                         aNetItemRef->GetNet() );
-            marker->SetData( ERCE_PIN_NOT_DRIVEN,
-                             aNetItemRef->m_Start,
-                             msg,
-                             aNetItemRef->m_Start );
+            marker->SetData( ERCE_PIN_NOT_DRIVEN, aNetItemRef->m_Start, msg, aNetItemRef->m_Start );
             return;
         }
     }
@@ -442,8 +414,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
 }
 
 
-void TestOthersItems( NETLIST_OBJECT_LIST* aList,
-                      unsigned aNetItemRef, unsigned aNetStart,
+void TestOthersItems( NETLIST_OBJECT_LIST* aList, unsigned aNetItemRef, unsigned aNetStart,
                       int* aMinConnexion )
 {
     unsigned netItemTst = aNetStart;
@@ -597,17 +568,12 @@ int NETLIST_OBJECT_LIST::CountPinsInNet( unsigned aNetStart )
 
 bool WriteDiagnosticERC( EDA_UNITS_T aUnits, const wxString& aFullFileName )
 {
-    wxString    msg;
-
     wxFFile file( aFullFileName, wxT( "wt" ) );
 
     if( !file.IsOpened() )
         return false;
 
-    msg = _( "ERC report" );
-    msg << wxT(" (") << DateAndTime() << wxT( ", " )
-        << _( "Encoding UTF8" ) << wxT( " )\n" );
-
+    wxString msg = wxString::Format( _( "ERC report (%s, Encoding UTF8)\n" ), DateAndTime() );
     int err_count = 0;
     int warn_count = 0;
     int total_count = 0;
@@ -724,7 +690,7 @@ struct compare_paths
 };
 
 // Helper functions to build the warning messages about Similar Labels:
-static int countIndenticalLabels( std::vector<NETLIST_OBJECT*>& aList, NETLIST_OBJECT* aLabel );
+static int countIndenticalLabels( std::vector<NETLIST_OBJECT*>& aList, NETLIST_OBJECT* aRef );
 static void SimilarLabelsDiagnose( NETLIST_OBJECT* aItemA, NETLIST_OBJECT* aItemB );
 
 
@@ -851,28 +817,23 @@ void NETLIST_OBJECT_LIST::TestforSimilarLabels()
 // Helper function: count the number of labels identical to aLabel
 //  for global label: global labels in the full project
 //  for local label: all labels in the current sheet
-static int countIndenticalLabels( std::vector<NETLIST_OBJECT*>& aList, NETLIST_OBJECT* aLabel )
+static int countIndenticalLabels( std::vector<NETLIST_OBJECT*>& aList, NETLIST_OBJECT* aRef )
 {
     int count = 0;
 
-    if( aLabel->IsLabelGlobal() )
+    if( aRef->IsLabelGlobal() )
     {
-        for( unsigned netItem = 0; netItem < aList.size(); ++netItem )
+        for( auto i : aList)
         {
-            NETLIST_OBJECT* item = aList[netItem];
-
-            if( item->IsLabelGlobal() && item->m_Label == aLabel->m_Label )
+            if( i->IsLabelGlobal() && i->m_Label == aRef->m_Label )
                 count++;
         }
     }
     else
     {
-        for( unsigned netItem = 0; netItem < aList.size(); ++netItem )
+        for( auto i : aList)
         {
-            NETLIST_OBJECT* item = aList[netItem];
-
-            if( item->m_Label == aLabel->m_Label &&
-                item->m_SheetPath.Path() == aLabel->m_SheetPath.Path() )
+            if( i->m_Label == aRef->m_Label && i->m_SheetPath.Path() == aRef->m_SheetPath.Path() )
                 count++;
         }
     }
@@ -892,18 +853,17 @@ static void SimilarLabelsDiagnose( NETLIST_OBJECT* aItemA, NETLIST_OBJECT* aItem
     SCH_SCREEN* screen = aItemA->m_SheetPath.LastScreen();
     screen->Append( marker );
 
-    wxString fmt = aItemA->IsLabelGlobal() ?
-                            _( "Global label \"%s\" (sheet \"%s\") looks like:" ) :
-                            _( "Local label \"%s\" (sheet \"%s\") looks like:" );
+    wxString fmt = aItemA->IsLabelGlobal() ? _( "Global label '%s' (sheet '%s') looks like:" ) :
+                                             _( "Local label '%s' (sheet '%s') looks like:" );
     wxString msg;
 
-    msg.Printf( fmt, GetChars( aItemA->m_Label ), GetChars( aItemA->m_SheetPath.PathHumanReadable() ) );
+    msg.Printf( fmt, aItemA->m_Label, aItemA->m_SheetPath.PathHumanReadable() );
     marker->SetData( aItemA->IsLabelGlobal() && aItemB->IsLabelGlobal() ?
                             ERCE_SIMILAR_GLBL_LABELS : ERCE_SIMILAR_LABELS,
                      aItemA->m_Start, msg, aItemA->m_Start );
 
     fmt = aItemB->IsLabelGlobal() ? _( "Global label \"%s\" (sheet \"%s\")" ) :
                                     _( "Local label \"%s\" (sheet \"%s\")" );
-    msg.Printf( fmt, GetChars( aItemB->m_Label ), GetChars( aItemB->m_SheetPath.PathHumanReadable() ) );
+    msg.Printf( fmt, aItemB->m_Label, aItemB->m_SheetPath.PathHumanReadable() );
     marker->SetAuxiliaryData( msg, aItemB->m_Start );
 }

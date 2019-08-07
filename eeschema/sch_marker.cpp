@@ -30,7 +30,6 @@
 #include <base_units.h>
 
 #include <sch_marker.h>
-#include <erc.h>
 
 /// Factor to convert the maker unit shape to internal units:
 #define SCALING_FACTOR  Millimeter2iu( 0.1 )
@@ -65,8 +64,7 @@ void SCH_MARKER::SwapData( SCH_ITEM* aItem )
 void SCH_MARKER::Show( int nestLevel, std::ostream& os ) const
 {
     // for now, make it look like XML:
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
-                                 << GetPos() << "/>\n";
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << GetPos() << "/>\n";
 }
 
 #endif
@@ -97,8 +95,9 @@ bool SCH_MARKER::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 
 void SCH_MARKER::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount      = 1;
-    aLayers[0]  = this->m_ErrorLevel == MARKER_SEVERITY_ERROR ? LAYER_ERC_ERR : LAYER_ERC_WARN;
+    aCount     = 2;
+    aLayers[0] = this->m_ErrorLevel == MARKER_SEVERITY_ERROR ? LAYER_ERC_ERR : LAYER_ERC_WARN;
+    aLayers[1] = LAYER_SELECTION_SHADOWS;
 }
 
 

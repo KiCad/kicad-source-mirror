@@ -1622,13 +1622,14 @@ void SCH_PAINTER::draw( SCH_MARKER *aMarker, int aLayer )
     if( drawingShadows && !aMarker->IsSelected() )
         return;
 
-    int layer = LAYER_ERC_WARN;
-
     if( aMarker->GetErrorLevel() == MARKER_BASE::MARKER_SEVERITY_ERROR )
-        layer = LAYER_ERC_ERR;
+        aLayer = LAYER_ERC_ERR;
+    else
+        aLayer = LAYER_ERC_WARN;
 
-    COLOR4D color = getRenderColor( aMarker, layer, drawingShadows );
+    COLOR4D color = getRenderColor( aMarker, aLayer, drawingShadows );
 
+    m_gal->Save();
     m_gal->Translate( aMarker->GetPosition() );
     m_gal->SetIsFill( !drawingShadows );
     m_gal->SetFillColor( color );
@@ -1640,6 +1641,7 @@ void SCH_PAINTER::draw( SCH_MARKER *aMarker, int aLayer )
     aMarker->ShapeToPolygon( polygon );
 
     m_gal->DrawPolygon( polygon );
+    m_gal->Restore();
 }
 
 
