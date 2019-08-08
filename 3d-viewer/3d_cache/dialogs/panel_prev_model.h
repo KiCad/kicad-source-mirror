@@ -50,8 +50,8 @@
 #define SCALE_INCREMENT_FINE       0.02
 #define SCALE_INCREMENT            0.1
 
-#define ROTATION_INCREMENT 5             // in degrees, for spin button command
-#define ROTATION_INCREMENT_WHEEL 15      // in degrees, for mouse wheel command
+#define ROTATION_INCREMENT 90            // in degrees, for spin button command
+#define ROTATION_INCREMENT_WHEEL 90      // in degrees, for mouse wheel command
 #define ROTATION_INCREMENT_WHEEL_FINE 1  // in degrees, for mouse wheel command
 
 #define OFFSET_INCREMENT_MM        0.5

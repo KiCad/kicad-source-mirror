@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,8 +25,6 @@
  */
 
 #include <fctsys.h>
-#include <base_units.h>
-#include <view/view.h>
 #include <confirm.h>
 #include <dialog_text_entry.h>
 #include <pcbnew.h>
@@ -358,6 +356,10 @@ void DIALOG_FOOTPRINT_FP_EDITOR::On3DModelCellChanged( wxGridEvent& aEvent )
         FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
         wxString           filename = m_modelsGrid->GetCellValue( aEvent.GetRow(), 0 );
 
+        filename.Replace( "\n", "" );
+        filename.Replace( "\r", "" );
+        filename.Replace( "\t", "" );
+
         if( filename.empty() || !res->ValidateFileName( filename, hasAlias ) )
         {
             m_delayedErrorMessage = wxString::Format( _( "Invalid filename: %s" ), filename );
@@ -378,6 +380,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::On3DModelCellChanged( wxGridEvent& aEvent )
 #endif
 
         m_shapes3D_list[ aEvent.GetRow() ].m_Filename = filename;
+        m_modelsGrid->SetCellValue( aEvent.GetRow(), 0, filename );
     }
     else if( aEvent.GetCol() == 1 )
     {

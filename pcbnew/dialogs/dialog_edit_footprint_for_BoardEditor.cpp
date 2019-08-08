@@ -26,8 +26,6 @@
 
 #include <fctsys.h>
 #include <kiface_i.h>
-#include <view/view.h>
-#include <gr_basic.h>
 #include <confirm.h>
 #include <pcbnew.h>
 #include <pgm_base.h>
@@ -437,6 +435,10 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::On3DModelCellChanged( wxGridEvent& aEvent )
         FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
         wxString           filename = m_modelsGrid->GetCellValue( aEvent.GetRow(), 0 );
 
+        filename.Replace( "\n", "" );
+        filename.Replace( "\r", "" );
+        filename.Replace( "\t", "" );
+
         if( filename.empty() || !res->ValidateFileName( filename, hasAlias ) )
         {
             m_delayedErrorMessage = wxString::Format( _( "Invalid filename: %s" ), filename );
@@ -456,6 +458,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::On3DModelCellChanged( wxGridEvent& aEvent )
 #endif
 
         m_shapes3D_list[ aEvent.GetRow() ].m_Filename = filename;
+        m_modelsGrid->SetCellValue( aEvent.GetRow(), 0, filename );
     }
     else if( aEvent.GetCol() == 1 )
     {

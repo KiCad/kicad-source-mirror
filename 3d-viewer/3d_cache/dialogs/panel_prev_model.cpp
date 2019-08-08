@@ -100,8 +100,8 @@ void PANEL_PREV_3D::initPanel()
         m_spinXoffset,m_spinYoffset, m_spinZoffset
     };
 
-    for( int ii = 0; ii < 9; ii++ )
-        spinButtonList[ii]->SetRange( INT_MIN, INT_MAX );
+    for( wxSpinButton* button : spinButtonList )
+        button->SetRange(INT_MIN, INT_MAX );
 }
 
 
