@@ -138,10 +138,12 @@ int LIB_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         m_frame->RefreshItem( item );
     }
 
-    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
-
-    if( !item->IsMoving() )
+    if( item->IsMoving() )
+        m_toolMgr->RunAction( ACTIONS::refreshPreview, true );
+    else
     {
+        m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+
         if( selection.IsHover() )
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
@@ -185,7 +187,9 @@ int LIB_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
 
-    if( !item->IsMoving() )
+    if( item->IsMoving() )
+        m_toolMgr->RunAction( ACTIONS::refreshPreview, true );
+    else
     {
         if( selection.IsHover() )
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
