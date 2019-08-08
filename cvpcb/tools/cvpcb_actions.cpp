@@ -41,6 +41,12 @@ TOOL_ACTION CVPCB_ACTIONS::selectionActivate( "cvpcb.InteractiveSelection", AS_G
         "",
         NULL, AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
 
+TOOL_ACTION CVPCB_ACTIONS::controlActivate( "cvpcb.Control", AS_GLOBAL,
+        0, "",
+        "",
+        "",
+        NULL, AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
+
 
 // Action to show the footprint viewer window
 TOOL_ACTION CVPCB_ACTIONS::showFootprintViewer( "cvpcb.Control.ShowFootprintViewer", AS_GLOBAL,
@@ -64,6 +70,21 @@ TOOL_ACTION CVPCB_ACTIONS::saveAssociations( "cvpcb.Control.SaveAssocations", AS
         _( "Save footprint associations in schematic symbol footprint fields" ),
         save_xpm );
 
+// Actions to navigate the display
+TOOL_ACTION CVPCB_ACTIONS::changeFocusRight( "cvpcb.Control.changeFocusRight", AS_GLOBAL,
+        WXK_TAB, "",
+        "",
+        "",
+        nullptr, AF_NONE,
+        (void*) CVPCB_MAINFRAME::CHANGE_FOCUS_RIGHT );
+
+TOOL_ACTION CVPCB_ACTIONS::changeFocusLeft( "cvpcb.Control.changeFocusLeft", AS_GLOBAL,
+        MD_SHIFT + WXK_TAB, "",
+        "",
+        "",
+        nullptr, AF_NONE,
+        (void*) CVPCB_MAINFRAME::CHANGE_FOCUS_LEFT );
+
 // Actions to navigate the component list
 TOOL_ACTION CVPCB_ACTIONS::gotoNextNA( "cvpcb.Control.GotoNextNA", AS_GLOBAL,
         0, "",
@@ -82,7 +103,7 @@ TOOL_ACTION CVPCB_ACTIONS::gotoPreviousNA( "cvpcb.Control.GotoPreviousNA", AS_GL
 
 // Actions to modify component associations
 TOOL_ACTION CVPCB_ACTIONS::associate( "cvpcb.Control.Associate", AS_GLOBAL,
-        0, "",
+        WXK_RETURN, "",
         _( "Associate footprint" ),
         _( "Associate selected footprint with selected components" ),
         auto_associe_xpm );

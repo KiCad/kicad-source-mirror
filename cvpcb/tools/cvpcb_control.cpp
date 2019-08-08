@@ -25,6 +25,7 @@
 #include <kiway_express.h>
 #include <lib_id.h>
 #include <tool/actions.h>
+#include <tool/tool_manager.h>
 
 #include <cvpcb_mainframe.h>
 #include <dialogs/dialog_config_equfiles.h>
@@ -46,6 +47,113 @@ CVPCB_CONTROL::CVPCB_CONTROL() :
 void CVPCB_CONTROL::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<CVPCB_MAINFRAME>();
+}
+
+
+int CVPCB_CONTROL::Main( const TOOL_EVENT& aEvent )
+{
+    // Main loop: keep receiving events
+    while( TOOL_EVENT* evt = Wait() )
+    {
+        bool handled = false;
+
+        // The escape key maps to the cancel event, which is used to close the window
+        if( evt->IsCancel() )
+        {
+            wxCloseEvent dummy;
+            m_frame->OnCloseWindow( dummy );
+            handled = true;
+        }
+        else if( evt->IsKeyPressed() )
+        {
+            switch( evt->KeyCode() )
+            {
+            // The right arrow moves focus to the focusable object to the right
+            case WXK_RIGHT:
+                m_toolMgr->RunAction( CVPCB_ACTIONS::changeFocusRight );
+                handled = true;
+                break;
+
+            // The left arrow moves focus to the focusable object to the left
+            case WXK_LEFT:
+                m_toolMgr->RunAction( CVPCB_ACTIONS::changeFocusLeft );
+                handled = true;
+                break;
+
+            default:
+                // Let every other key continue processing to the controls of the window
+                break;
+            }
+        }
+
+        if( !handled )
+            evt->SetPassEvent();
+    }
+
+    // This tool is supposed to be active forever
+    wxASSERT( false );
+
+    return 0;
+}
+
+
+int CVPCB_CONTROL::ChangeFocus( const TOOL_EVENT& aEvent )
+{
+    int tmp = aEvent.Parameter<intptr_t>();
+    CVPCB_MAINFRAME::FOCUS_DIR dir =
+            static_cast<CVPCB_MAINFRAME::FOCUS_DIR>( tmp );
+
+    switch( dir )
+    {
+    case CVPCB_MAINFRAME::CHANGE_FOCUS_RIGHT:
+        switch( m_frame->GetFocusedControl() )
+        {
+        case CVPCB_MAINFRAME::CONTROL_LIBRARY:
+            m_frame->SetFocusedControl( CVPCB_MAINFRAME::CONTROL_COMPONENT );
+            break;
+
+        case CVPCB_MAINFRAME::CONTROL_COMPONENT:
+            m_frame->SetFocusedControl( CVPCB_MAINFRAME::CONTROL_FOOTPRINT );
+            break;
+
+        case CVPCB_MAINFRAME::CONTROL_FOOTPRINT:
+            m_frame->SetFocusedControl( CVPCB_MAINFRAME::CONTROL_LIBRARY );
+            break;
+
+        case CVPCB_MAINFRAME::CONTROL_NONE:
+        default:
+            break;
+        }
+
+        break;
+
+    case CVPCB_MAINFRAME::CHANGE_FOCUS_LEFT:
+        switch( m_frame->GetFocusedControl() )
+        {
+        case CVPCB_MAINFRAME::CONTROL_LIBRARY:
+            m_frame->SetFocusedControl( CVPCB_MAINFRAME::CONTROL_FOOTPRINT );
+            break;
+
+        case CVPCB_MAINFRAME::CONTROL_COMPONENT:
+            m_frame->SetFocusedControl( CVPCB_MAINFRAME::CONTROL_LIBRARY );
+            break;
+
+        case CVPCB_MAINFRAME::CONTROL_FOOTPRINT:
+            m_frame->SetFocusedControl( CVPCB_MAINFRAME::CONTROL_COMPONENT );
+            break;
+
+        case CVPCB_MAINFRAME::CONTROL_NONE:
+        default:
+            break;
+        }
+
+        break;
+
+    default:
+        break;
+    }
+
+    return 0;
 }
 
 
@@ -280,8 +388,11 @@ int CVPCB_CONTROL::UpdateMenu( const TOOL_EVENT& aEvent )
 
 void CVPCB_CONTROL::setTransitions()
 {
-    // Update the menu
+    // Control actions
     Go( &CVPCB_CONTROL::UpdateMenu,            ACTIONS::updateMenu.MakeEvent() );
+    Go( &CVPCB_CONTROL::Main,                  CVPCB_ACTIONS::controlActivate.MakeEvent() );
+    Go( &CVPCB_CONTROL::ChangeFocus,           CVPCB_ACTIONS::changeFocusRight.MakeEvent() );
+    Go( &CVPCB_CONTROL::ChangeFocus,           CVPCB_ACTIONS::changeFocusLeft.MakeEvent() );
 
     // Run the footprint viewer
     Go( &CVPCB_CONTROL::ShowFootprintViewer,   CVPCB_ACTIONS::showFootprintViewer.MakeEvent() );

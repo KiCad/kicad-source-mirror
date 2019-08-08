@@ -42,9 +42,13 @@ class TOOL_MANAGER;
 class CVPCB_ACTIONS : public ACTIONS
 {
 public:
-    // Selection Tool
-    /// Activation of the selection tool
+    /// Activation actions
     static TOOL_ACTION selectionActivate;
+    static TOOL_ACTION controlActivate;
+
+    /// Window control actions
+    static TOOL_ACTION changeFocusRight;
+    static TOOL_ACTION changeFocusLeft;
 
     /// Open the footprint viewer
     static TOOL_ACTION showFootprintViewer;

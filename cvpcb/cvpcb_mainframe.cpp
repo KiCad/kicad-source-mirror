@@ -40,6 +40,7 @@
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/conditional_menu.h>
+#include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <widgets/progress_reporter.h>
 #include <wx/statline.h>
@@ -189,19 +190,10 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_initialized = true;
 
     // Connect Events
-    m_footprintListBox->Connect( wxEVT_RIGHT_DOWN,
-                                 wxMouseEventHandler( CVPCB_MAINFRAME::OnFootprintRightClick ),
-                                 NULL, this );
-    m_compListBox->Connect( wxEVT_RIGHT_DOWN,
-                            wxMouseEventHandler( CVPCB_MAINFRAME::OnComponentRightClick ),
-                            NULL, this );
+    setupEventHandlers();
 
-    // Use Bind for this one to allow the lambda expression
-    m_saveAndContinue->Bind( wxEVT_COMMAND_BUTTON_CLICKED,
-            [this]( wxCommandEvent& )
-            {
-                this->GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociations );
-            } );
+    // Start the main processing loop
+    m_toolManager->InvokeTool( "cvpcb.Control" );
 
     // Ensure the toolbars are sync'd properly so the filtering options display correct
     SyncToolbars();
@@ -210,10 +202,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 CVPCB_MAINFRAME::~CVPCB_MAINFRAME()
 {
-    // Disconnect Events
-    m_footprintListBox->Disconnect( wxEVT_RIGHT_DOWN,
-                                    wxMouseEventHandler( CVPCB_MAINFRAME::OnFootprintRightClick ),
-                                    NULL, this );
+    // No events to disconnect since they are using lambdas as the handlers
 
     m_auimgr.UnInit();
 }
@@ -222,8 +211,10 @@ CVPCB_MAINFRAME::~CVPCB_MAINFRAME()
 void CVPCB_MAINFRAME::setupTools()
 {
     // Create the manager
+    m_actions = new CVPCB_ACTIONS();
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( nullptr, nullptr, nullptr, this );
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
     // Register tools
     m_toolManager->RegisterTool( new COMMON_CONTROL );
@@ -241,6 +232,34 @@ void CVPCB_MAINFRAME::setupTools()
     m_footprintContextMenu = new ACTION_MENU( true );
     m_footprintContextMenu->SetTool( tool );
     m_footprintContextMenu->Add( CVPCB_ACTIONS::showFootprintViewer );
+}
+
+void CVPCB_MAINFRAME::setupEventHandlers()
+{
+    // Connect the handlers to launch the context menus in the listboxes
+    m_footprintListBox->Bind( wxEVT_RIGHT_DOWN,
+            [this]( wxMouseEvent& )
+            {
+                PopupMenu( m_footprintContextMenu );
+            } );
+
+    m_compListBox->Bind( wxEVT_RIGHT_DOWN,
+            [this]( wxMouseEvent& )
+            {
+                PopupMenu( m_componentContextMenu );
+            } );
+
+    // Connect the handler for the save button
+    m_saveAndContinue->Bind( wxEVT_COMMAND_BUTTON_CLICKED,
+            [this]( wxCommandEvent& )
+            {
+                this->GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociations );
+            } );
+
+    // Attach the events to the tool dispatcher
+    Bind( wxEVT_TOOL, &TOOL_DISPATCHER::DispatchWxCommand, m_toolDispatcher );
+    Bind( wxEVT_CHAR, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
+    Bind( wxEVT_CHAR_HOOK, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
 }
 
 void CVPCB_MAINFRAME::LoadSettings( wxConfigBase* aCfg )
@@ -294,31 +313,6 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
 
     // Delete window
     Destroy();
-}
-
-
-void CVPCB_MAINFRAME::ChangeFocus( bool aMoveRight )
-{
-    wxWindow* hasFocus = wxWindow::FindFocus();
-
-    if( aMoveRight )
-    {
-        if( hasFocus == m_libListBox )
-            m_compListBox->SetFocus();
-        else if( hasFocus == m_compListBox )
-            m_footprintListBox->SetFocus();
-        else if( hasFocus == m_footprintListBox )
-            m_libListBox->SetFocus();
-    }
-    else
-    {
-        if( hasFocus == m_libListBox )
-            m_footprintListBox->SetFocus();
-        else if( hasFocus == m_compListBox )
-            m_libListBox->SetFocus();
-        else if( hasFocus == m_footprintListBox )
-            m_compListBox->SetFocus();
-    }
 }
 
 
@@ -450,18 +444,6 @@ void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation,
 bool CVPCB_MAINFRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
     return true;
-}
-
-
-void CVPCB_MAINFRAME::OnComponentRightClick( wxMouseEvent& event )
-{
-    PopupMenu( m_componentContextMenu );
-}
-
-
-void CVPCB_MAINFRAME::OnFootprintRightClick( wxMouseEvent& event )
-{
-    PopupMenu( m_footprintContextMenu );
 }
 
 
@@ -951,6 +933,54 @@ DISPLAY_FOOTPRINTS_FRAME* CVPCB_MAINFRAME::GetFootprintViewerFrame()
     // returns the Footprint Viewer frame, if exists, or NULL
     return dynamic_cast<DISPLAY_FOOTPRINTS_FRAME*>
             ( wxWindow::FindWindowByName( FOOTPRINTVIEWER_FRAME_NAME ) );
+}
+
+
+CVPCB_MAINFRAME::CONTROL_TYPE CVPCB_MAINFRAME::GetFocusedControl()
+{
+    if( m_libListBox->HasFocus() )
+        return CVPCB_MAINFRAME::CONTROL_LIBRARY;
+    else if( m_compListBox->HasFocus() )
+        return CVPCB_MAINFRAME::CONTROL_COMPONENT;
+    else if( m_footprintListBox->HasFocus() )
+        return CVPCB_MAINFRAME::CONTROL_FOOTPRINT;
+
+    return CVPCB_MAINFRAME::CONTROL_NONE;
+}
+
+
+wxControl* CVPCB_MAINFRAME::GetFocusedControlObject()
+{
+    if( m_libListBox->HasFocus() )
+        return m_libListBox;
+    else if( m_compListBox->HasFocus() )
+        return m_compListBox;
+    else if( m_footprintListBox->HasFocus() )
+        return m_footprintListBox;
+
+    return nullptr;
+}
+
+
+void CVPCB_MAINFRAME::SetFocusedControl( CVPCB_MAINFRAME::CONTROL_TYPE aLB )
+{
+    switch( aLB )
+    {
+    case CVPCB_MAINFRAME::CONTROL_LIBRARY:
+        m_libListBox->SetFocus();
+        break;
+
+    case CVPCB_MAINFRAME::CONTROL_COMPONENT:
+        m_compListBox->SetFocus();
+        break;
+
+    case CVPCB_MAINFRAME::CONTROL_FOOTPRINT:
+        m_footprintListBox->SetFocus();
+        break;
+
+    default:
+        break;
+    }
 }
 
 

@@ -28,6 +28,7 @@
 
 #include <fctsys.h>
 #include <macros.h>
+#include <trace_helpers.h>
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
@@ -144,21 +145,12 @@ END_EVENT_TABLE()
 
 void LIBRARY_LISTBOX::OnChar( wxKeyEvent& event )
 {
+    wxLogTrace( kicadTraceKeyEvent, "LIBRARY_LISTBOX::OnChar %s", dump( event ) );
+
     int key = event.GetKeyCode();
 
     switch( key )
     {
-    case WXK_TAB:
-    case WXK_RIGHT:
-    case WXK_NUMPAD_RIGHT:
-        GetParent()->ChangeFocus( true );
-        return;
-
-    case WXK_LEFT:
-    case WXK_NUMPAD_LEFT:
-        GetParent()->ChangeFocus( false );
-        return;
-
     case WXK_HOME:
     case WXK_END:
     case WXK_UP:

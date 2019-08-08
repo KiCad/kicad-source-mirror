@@ -105,6 +105,26 @@ public:
     };
 
     /**
+     * The type of the controls present in the application
+     */
+    enum CONTROL_TYPE
+    {
+        CONTROL_NONE,            ///< No controls have focus
+        CONTROL_LIBRARY,         ///< Library listbox
+        CONTROL_COMPONENT,       ///< Component listbox
+        CONTROL_FOOTPRINT        ///< Footprint listbox
+    };
+
+    /**
+     * Directions to rotate the focus through the listboxes is
+     */
+    enum FOCUS_DIR
+    {
+        CHANGE_FOCUS_RIGHT,
+        CHANGE_FOCUS_LEFT
+    };
+
+    /**
      * Directions to move when selecting items
      */
     enum ITEM_DIR
@@ -117,6 +137,27 @@ public:
      * @return a pointer on the Footprint Viewer frame, if exists, or NULL
      */
     DISPLAY_FOOTPRINTS_FRAME* GetFootprintViewerFrame();
+
+    /**
+     * Find out which control currently has focus.
+     *
+     * @return the contorl that currently has focus
+     */
+    CVPCB_MAINFRAME::CONTROL_TYPE GetFocusedControl();
+
+    /**
+     * Get a pointer to the currently focused control
+     *
+     * @return the control that currently has focus
+     */
+    wxControl* GetFocusedControlObject();
+
+    /**
+     * Set the focus to a specific control.
+     *
+     * @param aControl the contorl to set focus to
+     */
+    void SetFocusedControl( CVPCB_MAINFRAME::CONTROL_TYPE aControl );
 
     /**
      * Function OnSelectComponent
@@ -136,12 +177,6 @@ public:
     void             ReCreateHToolbar();
     void             ReCreateMenuBar() override;
     void             ShowChangedLanguage() override;
-
-    void             ChangeFocus( bool aMoveRight );
-
-    void             OnComponentRightClick( wxMouseEvent& event );
-
-    void             OnFootprintRightClick( wxMouseEvent& event );
 
     /**
      * Called by the automatic association button
@@ -348,6 +383,11 @@ private:
     void setupTools();
 
     /**
+     * Setup event handlers
+     */
+    void setupEventHandlers();
+
+    /**
      * read the .equ files and populate the list of equvalents
      * @param aList the list to populate
      * @param aErrorMessages is a pointer to a wxString to store error messages
@@ -357,6 +397,9 @@ private:
     int buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wxString * aErrorMessages = NULL );
 
     void refreshAfterComponentSearch (COMPONENT* component);
+
+    // Tool dispatcher
+    TOOL_DISPATCHER* m_toolDispatcher;
 
     // Context menus for the list boxes
     ACTION_MENU* m_footprintContextMenu;

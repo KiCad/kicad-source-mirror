@@ -26,6 +26,7 @@
  */
 
 #include <fctsys.h>
+#include <trace_helpers.h>
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
@@ -111,21 +112,12 @@ void COMPONENTS_LISTBOX::SetSelection( int index, bool State )
 
 void COMPONENTS_LISTBOX::OnChar( wxKeyEvent& event )
 {
+    wxLogTrace( kicadTraceKeyEvent, "COMPONENTS_LISTBOX::OnChar %s", dump( event ) );
+
     int key = event.GetKeyCode();
 
     switch( key )
     {
-    case WXK_TAB:
-    case WXK_RIGHT:
-    case WXK_NUMPAD_RIGHT:
-        GetParent()->ChangeFocus( true );
-        return;
-
-    case WXK_LEFT:
-    case WXK_NUMPAD_LEFT:
-        GetParent()->ChangeFocus( false );
-        return;
-
     case WXK_HOME:
     case WXK_END:
     case WXK_UP:

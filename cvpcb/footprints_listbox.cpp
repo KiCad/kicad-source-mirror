@@ -31,6 +31,7 @@
 #include <fctsys.h>
 #include <footprint_filter.h>
 #include <tool/tool_manager.h>
+#include <trace_helpers.h>
 #include <wx/wupdlock.h>
 
 #include <cvpcb.h>
@@ -233,21 +234,12 @@ void FOOTPRINTS_LISTBOX::OnLeftDClick( wxListEvent& event )
 
 void FOOTPRINTS_LISTBOX::OnChar( wxKeyEvent& event )
 {
+    wxLogTrace( kicadTraceKeyEvent, "FOOTPRINTS_LISTBOX::OnChar %s", dump( event ) );
+
     int key = event.GetKeyCode();
 
     switch( key )
     {
-    case WXK_TAB:
-    case WXK_RIGHT:
-    case WXK_NUMPAD_RIGHT:
-        GetParent()->ChangeFocus( true );
-        return;
-
-    case WXK_LEFT:
-    case WXK_NUMPAD_LEFT:
-        GetParent()->ChangeFocus( false );
-        return;
-
     case WXK_HOME:
     case WXK_END:
     case WXK_UP:
