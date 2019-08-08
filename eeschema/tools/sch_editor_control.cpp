@@ -853,6 +853,14 @@ bool SCH_EDITOR_CONTROL::doCopy()
 
 int SCH_EDITOR_CONTROL::Cut( const TOOL_EVENT& aEvent )
 {
+    wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( wxWindow::FindFocus() );
+
+    if( textEntry )
+    {
+        textEntry->Cut();
+        return 0;
+    }
+
     if( doCopy() )
         m_toolMgr->RunAction( EE_ACTIONS::doDelete, true );
 
@@ -862,6 +870,14 @@ int SCH_EDITOR_CONTROL::Cut( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::Copy( const TOOL_EVENT& aEvent )
 {
+    wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( wxWindow::FindFocus() );
+
+    if( textEntry )
+    {
+        textEntry->Copy();
+        return 0;
+    }
+
     doCopy();
 
     return 0;
@@ -870,6 +886,14 @@ int SCH_EDITOR_CONTROL::Copy( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 {
+    wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( wxWindow::FindFocus() );
+
+    if( textEntry )
+    {
+        textEntry->Paste();
+        return 0;
+    }
+
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
 
     DLIST<SCH_ITEM>&   dlist = m_frame->GetScreen()->GetDrawList();
