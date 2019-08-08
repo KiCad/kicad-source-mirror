@@ -227,6 +227,8 @@ void CVPCB_MAINFRAME::setupTools()
     m_componentContextMenu = new ACTION_MENU( true );
     m_componentContextMenu->SetTool( tool );
     m_componentContextMenu->Add( CVPCB_ACTIONS::showFootprintViewer );
+    m_componentContextMenu->AppendSeparator();
+    m_componentContextMenu->Add( CVPCB_ACTIONS::deleteAssoc );
 
     // Create the context menu for the footprint list box
     m_footprintContextMenu = new ACTION_MENU( true );

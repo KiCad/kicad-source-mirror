@@ -65,6 +65,7 @@ public:
     static TOOL_ACTION autoAssociate;
     static TOOL_ACTION associate;
     static TOOL_ACTION deleteAll;
+    static TOOL_ACTION deleteAssoc;
 
     /// Footprint Filtering actions
     static TOOL_ACTION filterFPbyKeywords;

@@ -262,6 +262,23 @@ int CVPCB_CONTROL::AutoAssociate( const TOOL_EVENT& aEvent )
 }
 
 
+int CVPCB_CONTROL::DeleteAssoc( const TOOL_EVENT& aEvent )
+{
+    // Get all the components that are selected
+    std::vector<unsigned int> sel = m_frame->GetComponentIndices( CVPCB_MAINFRAME::SEL_COMPONENTS );
+
+    // Delete the association
+    bool firstAssoc = true;
+    for( auto i : sel )
+    {
+        m_frame->AssociateFootprint( CVPCB_ASSOCIATION( i, LIB_ID() ), firstAssoc );
+        firstAssoc = false;
+    }
+
+    return 0;
+}
+
+
 int CVPCB_CONTROL::DeleteAll( const TOOL_EVENT& aEvent )
 {
     if( IsOK( m_frame, _( "Delete all associations?" ) ) )
@@ -401,6 +418,7 @@ void CVPCB_CONTROL::setTransitions()
     Go( &CVPCB_CONTROL::ShowEquFileTable,      CVPCB_ACTIONS::showEquFileTable.MakeEvent() );
     Go( &CVPCB_CONTROL::SaveAssociations,      CVPCB_ACTIONS::saveAssociations.MakeEvent() );
     Go( &CVPCB_CONTROL::DeleteAll,             CVPCB_ACTIONS::deleteAll.MakeEvent() );
+    Go( &CVPCB_CONTROL::DeleteAssoc,           CVPCB_ACTIONS::deleteAssoc.MakeEvent() );
 
     // Navigation actions
     Go( &CVPCB_CONTROL::ToNA,                  CVPCB_ACTIONS::gotoNextNA.MakeEvent() );

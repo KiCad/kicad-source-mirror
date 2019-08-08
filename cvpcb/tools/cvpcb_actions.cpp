@@ -114,6 +114,12 @@ TOOL_ACTION CVPCB_ACTIONS::autoAssociate( "cvpcb.Control.AutoAssociate", AS_GLOB
         _( "Perform automatic footprint association" ),
         auto_associe_xpm );
 
+TOOL_ACTION CVPCB_ACTIONS::deleteAssoc( "cvpcb.Control.Delete", AS_GLOBAL,
+        WXK_DELETE, "",
+        _( "Delete association" ),
+        _( "Delete selected footprint associations" ),
+        delete_association_xpm );
+
 TOOL_ACTION CVPCB_ACTIONS::deleteAll( "cvpcb.Control.DeleteAll", AS_GLOBAL,
         0, "",
         _( "Delete all footprint associations" ),
