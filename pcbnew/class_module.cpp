@@ -261,6 +261,7 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     }
     }
 
+    aBoardItem->ClearEditFlags();
     aBoardItem->SetParent( this );
 }
 
