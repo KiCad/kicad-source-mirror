@@ -132,7 +132,7 @@ bool DIALOG_SET_GRID::TransferDataToWindow()
     m_comboBoxGrid2->SetSelection( m_parent->m_FastGrid2 );
 
     int hk1 = ACTIONS::gridFast1.GetHotKey();
-    int hk2 = ACTIONS::gridFast1.GetHotKey();
+    int hk2 = ACTIONS::gridFast2.GetHotKey();
     m_grid1HotKey->SetLabel( wxString::Format( wxT( "(%s)" ), KeyNameFromKeyCode( hk1 ) ) );
     m_grid2HotKey->SetLabel( wxString::Format( wxT( "(%s)" ), KeyNameFromKeyCode( hk2 ) ) );
 
