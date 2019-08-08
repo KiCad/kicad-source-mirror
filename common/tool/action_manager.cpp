@@ -118,15 +118,16 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
     // Choose the action that has the highest priority on the active tools stack
     // If there is none, run the global action associated with the hot key
     int highestPriority = -1, priority = -1;
-    const TOOL_ACTION* context = NULL;  // pointer to context action of the highest priority tool
-    const TOOL_ACTION* global = NULL;   // pointer to global action, if there is no context action
+    const TOOL_ACTION* context = NULL;      // pointer to context action of the highest priority tool
+    std::vector<const TOOL_ACTION*> global; // pointers to global actions
+                                            // if there is no context action
 
     for( const TOOL_ACTION* action : actions )
     {
         if( action->GetScope() == AS_GLOBAL )
         {
             // Store the global action in case there are no context actions to run
-            global = action;
+            global.emplace_back( action );
             continue;
         }
 
@@ -154,13 +155,17 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
 
         return m_toolMgr->RunAction( *context, true );
     }
-    else if( global )
+    else if( !global.empty() )
     {
-        wxLogTrace( kicadTraceToolStack,
-                "ACTION_MANAGER::RunHotKey Running action: %s for hotkey %s", global->GetName(),
-                KeyNameFromKeyCode( aHotKey ) );
+        for( auto act : global )
+        {
+            wxLogTrace( kicadTraceToolStack,
+                    "ACTION_MANAGER::RunHotKey Running action: %s for hotkey %s", act->GetName(),
+                    KeyNameFromKeyCode( aHotKey ) );
 
-        return m_toolMgr->RunAction( *global, true );
+            if( m_toolMgr->RunAction( *act, true ) )
+                return true;
+        }
     }
 
     wxLogTrace( kicadTraceToolStack, "ACTION_MANAGER::RunHotKey No action found for key %s",
