@@ -463,8 +463,10 @@ void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::OnActivate( wxActivateEvent& event )
 {
+#ifdef __WXMAC__
     // Work around wxWidgets bug where the Preferences item gets lost...
     m_menuBarDirty = true;
+#endif
 }
 
 
