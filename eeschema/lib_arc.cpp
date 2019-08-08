@@ -468,14 +468,22 @@ void LIB_ARC::CalcEdit( const wxPoint& aPosition )
         double chordAfter = sq( v.x ) + sq( v.y );
         double ratio = chordAfter / chordBefore;
 
-        m_Radius = KiROUND( sqrt( m_Radius * m_Radius * ratio ) );
+        if( ratio > 0 )
+        {
+            m_Radius = int( sqrt( m_Radius * m_Radius * ratio ) ) + 1;
+            m_Radius = std::max( m_Radius, int( sqrt( chordAfter ) / 2 ) + 1 );
+        }
+
         break;
     }
 
     case 4:
-        m_Radius = KiROUND( ( GetLineLength( m_ArcStart, aPosition )
-                              + GetLineLength( m_ArcEnd, aPosition ) ) / 2.0 );
+    {
+        double chordA = GetLineLength( m_ArcStart, aPosition );
+        double chordB = GetLineLength( m_ArcEnd, aPosition );
+        m_Radius = int( ( chordA + chordB ) / 2.0 ) + 1;
         break;
+    }
     }
 
     // Calculate center based on start, end, and radius
