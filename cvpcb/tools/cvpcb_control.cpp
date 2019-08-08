@@ -132,7 +132,7 @@ int CVPCB_CONTROL::Associate( const TOOL_EVENT& aEvent )
     }
 
     // Get all the components that are selected and associate them with the current footprint
-    std::vector<unsigned int> sel = m_frame->GetSelectedComponentIndices();
+    std::vector<unsigned int> sel = m_frame->GetComponentIndices( CVPCB_MAINFRAME::SEL_COMPONENTS );
 
     bool firstAssoc = true;
     for( auto i : sel )
@@ -156,7 +156,27 @@ int CVPCB_CONTROL::AutoAssociate( const TOOL_EVENT& aEvent )
 
 int CVPCB_CONTROL::DeleteAll( const TOOL_EVENT& aEvent )
 {
-    m_frame->DeleteAll();
+    if( IsOK( m_frame, _( "Delete all associations?" ) ) )
+    {
+        // Remove all selections to avoid issues when setting the fpids
+        m_frame->SetSelectedComponent( -1, true );
+        std::vector<unsigned int> idx
+                = m_frame->GetComponentIndices( CVPCB_MAINFRAME::ALL_COMPONENTS );
+
+        bool firstAssoc = true;
+        for( auto i : idx )
+        {
+            m_frame->AssociateFootprint( CVPCB_ASSOCIATION( i, LIB_ID() ), firstAssoc );
+            firstAssoc = false;
+        }
+
+        // Remove all selections after setting the fpids and select the first component
+        m_frame->SetSelectedComponent( -1, true );
+        m_frame->SetSelectedComponent( 0 );
+    }
+
+    // Update the status display
+    m_frame->DisplayStatus();
 
     return 0;
 }
@@ -178,16 +198,66 @@ int CVPCB_CONTROL::SaveAssociations( const TOOL_EVENT& aEvent )
 }
 
 
-int CVPCB_CONTROL::ToNextNA( const TOOL_EVENT& aEvent )
+int CVPCB_CONTROL::ToNA( const TOOL_EVENT& aEvent )
 {
-    m_frame->ToNextNA();
-    return 0;
-}
+    int tmp = aEvent.Parameter<intptr_t>();
+    CVPCB_MAINFRAME::ITEM_DIR dir =
+            static_cast<CVPCB_MAINFRAME::ITEM_DIR>( tmp );
 
+    std::vector<unsigned int> naComp = m_frame->GetComponentIndices( CVPCB_MAINFRAME::NA_COMPONENTS );
+    std::vector<unsigned int> tempSel = m_frame->GetComponentIndices( CVPCB_MAINFRAME::SEL_COMPONENTS );
 
-int CVPCB_CONTROL::ToPreviousNA( const TOOL_EVENT& aEvent )
-{
-    m_frame->ToPreviousNA();
+    // No unassociated components
+    if( naComp.empty() )
+        return 0;
+
+    // Extract the current selection
+    unsigned int curSel = -1;
+    unsigned int newSel = -1;
+    switch( dir )
+    {
+    case CVPCB_MAINFRAME::ITEM_NEXT:
+        if( !tempSel.empty() )
+            newSel = tempSel.front();
+
+        // Find the next index in the component list
+        for( unsigned int i : naComp )
+        {
+            if( i > newSel )
+            {
+                newSel = i;
+                break;
+            }
+        }
+
+        break;
+
+    case CVPCB_MAINFRAME::ITEM_PREV:
+        if( !tempSel.empty() )
+        {
+            newSel = tempSel.front();
+            curSel = newSel - 1;        // Break one before the current selection
+        }
+
+        break;
+
+    default:
+        wxASSERT_MSG( false, "Invalid direction" );
+    }
+
+    // Find the next index in the component list
+    for( unsigned int i : naComp )
+    {
+        if( i >= curSel )
+        {
+            newSel = i;
+            break;
+        }
+    }
+
+    // Set the component selection
+    m_frame->SetSelectedComponent( newSel );
+
     return 0;
 }
 
@@ -222,8 +292,8 @@ void CVPCB_CONTROL::setTransitions()
     Go( &CVPCB_CONTROL::DeleteAll,             CVPCB_ACTIONS::deleteAll.MakeEvent() );
 
     // Navigation actions
-    Go( &CVPCB_CONTROL::ToNextNA,              CVPCB_ACTIONS::gotoNextNA.MakeEvent() );
-    Go( &CVPCB_CONTROL::ToPreviousNA,          CVPCB_ACTIONS::gotoPreviousNA.MakeEvent() );
+    Go( &CVPCB_CONTROL::ToNA,                  CVPCB_ACTIONS::gotoNextNA.MakeEvent() );
+    Go( &CVPCB_CONTROL::ToNA,                  CVPCB_ACTIONS::gotoPreviousNA.MakeEvent() );
 
     // Footprint association actions
     Go( &CVPCB_CONTROL::Undo,                  ACTIONS::undo.MakeEvent() );

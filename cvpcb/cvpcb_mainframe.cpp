@@ -36,6 +36,7 @@
 #include <kiway_express.h>
 #include <macros.h>
 #include <netlist_reader.h>
+#include <numeric>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
 #include <tool/conditional_menu.h>
@@ -321,66 +322,6 @@ void CVPCB_MAINFRAME::ChangeFocus( bool aMoveRight )
 }
 
 
-void CVPCB_MAINFRAME::ToNextNA()
-{
-    if( m_netlist.IsEmpty() )
-        return;
-
-    int first_selected = m_compListBox->GetFirstSelected();
-
-    if( first_selected < 0 )
-        first_selected = -1;     // We will start to 0 for the first search , if no item selected
-
-    int candidate = -1;
-
-    for( int jj = first_selected+1; jj < (int)m_netlist.GetCount(); jj++ )
-    {
-        if( m_netlist.GetComponent( jj )->GetFPID().empty() )
-        {
-            candidate = jj;
-            break;
-        }
-    }
-
-    if( candidate >= 0 )
-    {
-        m_compListBox->DeselectAll();
-        m_compListBox->SetSelection( candidate );
-        SendMessageToEESCHEMA();
-    }
-}
-
-
-void CVPCB_MAINFRAME::ToPreviousNA()
-{
-    if( m_netlist.IsEmpty() )
-        return;
-
-    int first_selected = m_compListBox->GetFirstSelected();
-
-    if( first_selected < 0 )
-        first_selected = m_compListBox->GetCount();
-
-    int candidate = -1;
-
-    for( int jj = first_selected-1; jj >= 0; jj-- )
-    {
-        if( m_netlist.GetComponent( jj )->GetFPID().empty() )
-        {
-            candidate = jj;
-            break;
-        }
-    }
-
-    if( candidate >= 0 )
-    {
-        m_compListBox->DeselectAll();
-        m_compListBox->SetSelection( candidate );
-        SendMessageToEESCHEMA();
-    }
-}
-
-
 void CVPCB_MAINFRAME::OnOK( wxCommandEvent& aEvent )
 {
     SaveFootprintAssociation( false );
@@ -503,33 +444,6 @@ void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation,
         m_undoList.back().emplace_back( CVPCB_ASSOCIATION( aAssociation.GetComponentIndex(),
                 oldFpid, aAssociation.GetNewFootprint() ) );
 
-}
-
-
-void CVPCB_MAINFRAME::DeleteAll()
-{
-    if( IsOK( this, _( "Delete all associations?" ) ) )
-    {
-        m_skipComponentSelect = true;
-
-        // Remove all selections to avoid issues when setting the fpids
-        m_compListBox->DeselectAll();
-
-        bool firstAssoc = true;
-        for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
-        {
-            AssociateFootprint( CVPCB_ASSOCIATION( i, LIB_ID() ), firstAssoc );
-            firstAssoc = false;
-        }
-
-        // Remove all selections after setting the fpids
-        m_compListBox->DeselectAll();
-
-        m_skipComponentSelect = false;
-        m_compListBox->SetSelection( 0 );
-    }
-
-    DisplayStatus();
 }
 
 
@@ -955,23 +869,77 @@ COMPONENT* CVPCB_MAINFRAME::GetSelectedComponent()
 }
 
 
-std::vector<unsigned int> CVPCB_MAINFRAME::GetSelectedComponentIndices()
+void CVPCB_MAINFRAME::SetSelectedComponent( int aIndex, bool aSkipUpdate )
+{
+    m_skipComponentSelect = aSkipUpdate;
+
+    if( aIndex < 0 )
+    {
+        m_compListBox->DeselectAll();
+    }
+    else if( aIndex < m_compListBox->GetCount() )
+    {
+        m_compListBox->DeselectAll();
+        m_compListBox->SetSelection( aIndex );
+        SendMessageToEESCHEMA();
+    }
+
+    m_skipComponentSelect = false;
+}
+
+
+std::vector<unsigned int> CVPCB_MAINFRAME::GetComponentIndices(
+        CVPCB_MAINFRAME::CRITERIA aCriteria )
 {
     std::vector<unsigned int> idx;
 
-    // Check to see if anything is selected
-    if( m_compListBox->GetSelectedItemCount() < 1 )
+    // Make sure a netlist has been loaded and the box has contents
+    if( m_netlist.IsEmpty() || m_compListBox->GetCount() == 0 )
         return idx;
 
-    // Get the components
-    int lastIdx = m_compListBox->GetFirstSelected();
-    idx.emplace_back( lastIdx );
-
-    lastIdx = m_compListBox->GetNextSelected( lastIdx );
-    while( lastIdx > 0 )
+    switch( aCriteria )
     {
+    case CVPCB_MAINFRAME::ALL_COMPONENTS:
+        idx.resize( m_netlist.GetCount() );
+        std::iota( idx.begin(), idx.end(), 0 );
+        break;
+
+    case CVPCB_MAINFRAME::SEL_COMPONENTS:
+    {
+        // Check to see if anything is selected
+        if( m_compListBox->GetSelectedItemCount() < 1 )
+            break;
+
+        // Get the components
+        int lastIdx = m_compListBox->GetFirstSelected();
         idx.emplace_back( lastIdx );
+
         lastIdx = m_compListBox->GetNextSelected( lastIdx );
+        while( lastIdx > 0 )
+        {
+            idx.emplace_back( lastIdx );
+            lastIdx = m_compListBox->GetNextSelected( lastIdx );
+        }
+        break;
+    }
+    case CVPCB_MAINFRAME::NA_COMPONENTS:
+        for( unsigned int i = 0; i < m_netlist.GetCount(); i++ )
+        {
+            if( m_netlist.GetComponent( i )->GetFPID().empty() )
+                idx.emplace_back( i );
+        }
+        break;
+
+    case CVPCB_MAINFRAME::ASOC_COMPONENTS:
+        for( unsigned int i = 0; i < m_netlist.GetCount(); i++ )
+        {
+            if( !m_netlist.GetComponent( i )->GetFPID().empty() )
+                idx.emplace_back( i );
+        }
+        break;
+
+    default:
+        wxASSERT_MSG( false, "Invalid component selection criteria" );
     }
 
     return idx;

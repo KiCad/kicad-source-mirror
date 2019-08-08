@@ -22,6 +22,7 @@
 #include <frame_type.h>
 #include <tool/tool_manager.h>
 
+#include <cvpcb_mainframe.h>
 #include <listboxes.h>
 #include <tools/cvpcb_actions.h>
 
@@ -68,13 +69,15 @@ TOOL_ACTION CVPCB_ACTIONS::gotoNextNA( "cvpcb.Control.GotoNextNA", AS_GLOBAL,
         0, "",
         _( "Select next unassociated symbol" ),
         _( "Select next unassociated symbol" ),
-        right_xpm );
+        right_xpm, AF_NONE,
+        (void*) CVPCB_MAINFRAME::ITEM_NEXT );
 
 TOOL_ACTION CVPCB_ACTIONS::gotoPreviousNA( "cvpcb.Control.GotoPreviousNA", AS_GLOBAL,
         0, "",
         _( "Select previous unassociated symbol" ),
         _( "Select previous unassociated symbol" ),
-        left_xpm );
+        left_xpm, AF_NONE,
+        (void*) CVPCB_MAINFRAME::ITEM_PREV );
 
 
 // Actions to modify component associations

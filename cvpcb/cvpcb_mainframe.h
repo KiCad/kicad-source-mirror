@@ -105,6 +105,15 @@ public:
     };
 
     /**
+     * Directions to move when selecting items
+     */
+    enum ITEM_DIR
+    {
+        ITEM_NEXT,  ///< The next item
+        ITEM_PREV   ///< The previous item
+    };
+
+    /**
      * @return a pointer on the Footprint Viewer frame, if exists, or NULL
      */
     DISPLAY_FOOTPRINTS_FRAME* GetFootprintViewerFrame();
@@ -129,22 +138,6 @@ public:
     void             ShowChangedLanguage() override;
 
     void             ChangeFocus( bool aMoveRight );
-
-    /**
-     * Move to the next not associated component.
-     */
-    void ToNextNA();
-
-    /**
-     * Move to the previous not associated component.
-     */
-    void ToPreviousNA();
-
-    /**
-     * Function DeleteAll
-     * removes all component footprint associations already made
-     */
-    void DeleteAll();
 
     void             OnComponentRightClick( wxMouseEvent& event );
 
@@ -299,14 +292,41 @@ public:
      */
     void SendMessageToEESCHEMA( bool aClearHighligntOnly = false );
 
+    /**
+     * Get the selected component from the component listbox.
+     *
+     * @return the selected component
+     */
     COMPONENT* GetSelectedComponent();
 
     /**
-     * Get the indices for all the selected components in the components listbox.
+     * Set the currently selected component in the components listbox
      *
+     * @param aIndex the index of the component to select, -1 to clear selection
+     * @param aSkipUpdate skips running the OnSelectComponent event to update the other windows
+     */
+    void SetSelectedComponent( int aIndex, bool aSkipUpdate = false );
+
+    /**
+     * Criteria to use to identify sets of components
+     */
+    enum CRITERIA
+    {
+        ALL_COMPONENTS,     ///< All components
+        SEL_COMPONENTS,     ///< Selected components
+        NA_COMPONENTS,      ///< Not associated components
+        ASOC_COMPONENTS     ///< Associated components
+    };
+
+    /**
+     * Get the indices for all the components meeting the specified criteria in the components
+     *  listbox.
+     *
+     * @param aCriteria is the criteria to use for finding the indices
      * @return a vector containing all the indices
      */
-    std::vector<unsigned int> GetSelectedComponentIndices();
+    std::vector<unsigned int> GetComponentIndices(
+            CVPCB_MAINFRAME::CRITERIA aCriteria = CVPCB_MAINFRAME::ALL_COMPONENTS );
 
     /**
      * @return the LIB_ID of the selected footprint in footprint listview
