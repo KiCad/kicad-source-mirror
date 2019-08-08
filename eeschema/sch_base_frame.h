@@ -320,6 +320,11 @@ public:
     void RefreshItem( EDA_ITEM* aItem, bool isAddOrDelete = false );
 
     /**
+     * Mark selected items for refresh.
+     */
+    void RefreshSelection();
+
+    /**
      * Mark all items for refresh.
      */
     void SyncView();

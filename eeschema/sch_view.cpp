@@ -68,6 +68,16 @@ SCH_VIEW::~SCH_VIEW()
 }
 
 
+void SCH_VIEW::SetScale( double aScale, VECTOR2D aAnchor )
+{
+    VIEW::SetScale( aScale, aAnchor );
+
+    //Redraw selection halos since their width is dependant on zoom
+    if( m_frame )
+        m_frame->RefreshSelection();
+}
+
+
 void SCH_VIEW::ResizeSheetWorkingArea( SCH_SCREEN* aScreen )
 {
     const PAGE_INFO& page_info = aScreen->GetPageSettings();
@@ -153,20 +163,6 @@ void SCH_VIEW::AddToPreview( EDA_ITEM* aItem, bool aTakeOwnership )
     SetVisible( m_preview.get(), true );
     Hide( m_preview.get(), false );
     Update( m_preview.get() );
-}
-
-
-void SCH_VIEW::ShowSelectionArea( bool aShow )
-{
-    if( aShow )
-    {
-        // Reset seleciton area so the previous one doesn't flash before the first
-        // mouse move updates it
-        m_selectionArea->SetOrigin( VECTOR2I() );
-        m_selectionArea->SetEnd( VECTOR2I() );
-    }
-
-    SetVisible( m_selectionArea.get(), aShow );
 }
 
 

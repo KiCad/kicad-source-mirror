@@ -40,7 +40,7 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tools/ee_actions.h>
-
+#include <tools/ee_selection_tool.h>
 
 LIB_ALIAS* SchGetLibAlias( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PART_LIB* aCacheLib,
                            wxWindow* aParent, bool aShowErrorMsg )
@@ -396,6 +396,20 @@ void SCH_BASE_FRAME::RefreshItem( EDA_ITEM* aItem, bool isAddOrDelete )
     }
 
     GetCanvas()->Refresh();
+}
+
+
+void SCH_BASE_FRAME::RefreshSelection()
+{
+    if( m_toolManager )
+    {
+        EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+        SELECTION&         selection = selectionTool->GetSelection();
+        KIGFX::SCH_VIEW*   view = GetCanvas()->GetView();
+
+        for( EDA_ITEM* item : selection )
+            view->Update( item, KIGFX::REPAINT );
+    }
 }
 
 

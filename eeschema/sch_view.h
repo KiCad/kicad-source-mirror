@@ -42,21 +42,21 @@ class SCH_BASE_FRAME;
 constexpr double SCH_WORLD_UNIT = 0.001;
 
 static const LAYER_NUM SCH_LAYER_ORDER[] =
-    {
-        LAYER_GP_OVERLAY, LAYER_SELECT_OVERLAY,
-        LAYER_ERC_ERR, LAYER_ERC_WARN,
-        LAYER_REFERENCEPART, LAYER_VALUEPART, LAYER_FIELDS,
-        LAYER_JUNCTION, LAYER_NOCONNECT,
-        LAYER_HIERLABEL,
-        LAYER_WIRE, LAYER_BUS,
-        LAYER_DEVICE,
-        LAYER_NOTES,
-        LAYER_SHEET,
-        LAYER_SELECTION_SHADOWS,
-        LAYER_DEVICE_BACKGROUND,
-        LAYER_SHEET_BACKGROUND,
-        LAYER_WORKSHEET
-    };
+{
+    LAYER_GP_OVERLAY, LAYER_SELECT_OVERLAY,
+    LAYER_ERC_ERR, LAYER_ERC_WARN,
+    LAYER_REFERENCEPART, LAYER_VALUEPART, LAYER_FIELDS,
+    LAYER_JUNCTION, LAYER_NOCONNECT,
+    LAYER_HIERLABEL,
+    LAYER_WIRE, LAYER_BUS,
+    LAYER_DEVICE,
+    LAYER_NOTES,
+    LAYER_SHEET,
+    LAYER_SELECTION_SHADOWS,
+    LAYER_DEVICE_BACKGROUND,
+    LAYER_SHEET_BACKGROUND,
+    LAYER_WORKSHEET
+};
 
 
 namespace KIGFX
@@ -84,15 +84,12 @@ public:
     // Call it to set new draw area limits (max working and draw area size)
     void ResizeSheetWorkingArea( SCH_SCREEN *aScreen );
 
-    KIGFX::PREVIEW::SELECTION_AREA* GetSelectionArea() const { return m_selectionArea.get(); }
-
-    KIGFX::VIEW_GROUP* GetPreview() const { return m_preview.get(); }
-
     void ClearPreview();
     void AddToPreview( EDA_ITEM* aItem, bool aTakeOwnership = true );
 
-    void ShowSelectionArea( bool aShow = true );
     void ShowPreview( bool aShow = true );
+
+    void SetScale( double aScale, VECTOR2D aAnchor = { 0, 0 } ) override;
 
     /**
      * Clear the hide flag of all items in the view

@@ -243,23 +243,12 @@ public:
 
     /**
      * Function SetScale()
-     * Sets the scaling factor. Scale = 1 corresponds to the real world size of the objects
-     * (depending on correct GAL unit length & DPI settings).
-     * @param aScale: the scalefactor
-     */
-    virtual void SetScale( double aScale )
-    {
-        SetScale( aScale, m_center );
-    }
-
-    /**
-     * Function SetScale()
      * Sets the scaling factor, zooming around a given anchor point.
      * (depending on correct GAL unit length & DPI settings).
      * @param aAnchor: the zooming  anchor point
      * @param aScale: the scale factor
      */
-    virtual void SetScale( double aScale, const VECTOR2D& aAnchor );
+    virtual void SetScale( double aScale, VECTOR2D aAnchor = { 0, 0 } );
 
     /**
      * Function GetScale()

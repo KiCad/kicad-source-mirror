@@ -228,10 +228,9 @@ float SCH_PAINTER::getShadowWidth()
 {
     const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
 
-    if( matrix.GetScale().x > 20 )
-        return (float) fabs( matrix.GetScale().x * 5 );
-    else
-        return (float) fabs( matrix.GetScale().x * 4 );
+    // For best visuals the selection width must be a cross between the zoom level and the
+    // default line width.
+    return (float) ( ( fabs( matrix.GetScale().x * 5.5 ) + GetDefaultLineThickness() ) / 2.0 );
 }
 
 

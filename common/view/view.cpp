@@ -575,8 +575,11 @@ void VIEW::SetMirror( bool aMirrorX, bool aMirrorY )
 }
 
 
-void VIEW::SetScale( double aScale, const VECTOR2D& aAnchor )
+void VIEW::SetScale( double aScale, VECTOR2D aAnchor )
 {
+    if( aAnchor == VECTOR2D( 0, 0 ) )
+        aAnchor = m_center;
+
     VECTOR2D a = ToScreen( aAnchor );
 
     if( aScale < m_minScale )
