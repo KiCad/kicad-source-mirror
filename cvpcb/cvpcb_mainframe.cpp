@@ -45,7 +45,6 @@
 #include <widgets/progress_reporter.h>
 #include <wx/statline.h>
 
-#include <cvpcb.h>
 #include <cvpcb_association.h>
 #include <cvpcb_id.h>
 #include <cvpcb_mainframe.h>

@@ -53,6 +53,12 @@ typedef std::vector< CVPCB_ASSOCIATION >       CVPCB_UNDO_REDO_ENTRIES;
 typedef std::vector< CVPCB_UNDO_REDO_ENTRIES > CVPCB_UNDO_REDO_LIST;
 
 /**
+ * The print format to display a schematic component line.
+ * format: idx reference - value : footprint_id
+ */
+#define CMP_FORMAT wxT( "%3d %8s - %16s : %s" )
+
+/**
  * The CvPcb application main window.
  */
 class CVPCB_MAINFRAME : public KIWAY_PLAYER

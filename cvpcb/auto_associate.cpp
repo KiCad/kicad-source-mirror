@@ -41,7 +41,6 @@
 #include <macros.h>
 
 #include <auto_associate.h>
-#include <cvpcb.h>
 #include <cvpcb_association.h>
 #include <cvpcb_mainframe.h>
 #include <listboxes.h>

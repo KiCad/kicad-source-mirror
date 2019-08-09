@@ -104,6 +104,7 @@ extern const std::string NetlistFileExtension;
 extern const std::string GerberFileExtension;
 extern const std::string GerberJobFileExtension;
 extern const std::string HtmlFileExtension;
+extern const std::string EquFileExtension;
 
 extern const std::string LegacyPcbFileExtension;
 extern const std::string KiCadPcbFileExtension;

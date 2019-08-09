@@ -35,9 +35,7 @@
 #include <project.h>            // For PROJECT_VAR_NAME definition
 #include <fp_lib_table.h>       // For KISYSMOD definition
 
-#include <cvpcb.h>
 #include <cvpcb_mainframe.h>
-
 #include <dialog_config_equfiles.h>
 #include <wildcards_and_files_ext.h>
 

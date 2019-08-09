@@ -37,7 +37,6 @@
 #include <fp_lib_table.h>
 #include <confirm.h>
 
-#include <cvpcb.h>
 #include <cvpcb_mainframe.h>
 #include <display_footprints_frame.h>
 

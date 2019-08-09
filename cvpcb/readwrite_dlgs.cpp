@@ -36,7 +36,6 @@
 #include <lib_id.h>
 #include <macros.h>
 
-#include <cvpcb.h>
 #include <cvpcb_mainframe.h>
 #include <listboxes.h>
 #include <fp_conflict_assignment_selector.h>

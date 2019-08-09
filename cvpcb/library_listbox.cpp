@@ -30,7 +30,6 @@
 #include <macros.h>
 #include <trace_helpers.h>
 
-#include <cvpcb.h>
 #include <cvpcb_mainframe.h>
 #include <listboxes.h>
 #include <cvpcb_id.h>
