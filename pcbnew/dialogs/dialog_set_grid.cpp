@@ -26,8 +26,6 @@
 #include <common.h>
 #include <widgets/unit_binder.h>
 #include <pcb_base_edit_frame.h>
-#include <class_draw_panel_gal.h>
-#include <gal/graphics_abstraction_layer.h>
 #include <tools/pcb_actions.h>
 #include <tool/tool_manager.h>
 #include <pcbnew_id.h>
@@ -69,8 +67,8 @@ DIALOG_SET_GRID::DIALOG_SET_GRID( PCB_BASE_FRAME* aParent, const wxArrayString& 
     m_userGridX( aParent, m_staticTextSizeX, m_OptGridSizeX, m_TextSizeXUnits ),
     m_userGridY( aParent, m_staticTextSizeY, m_OptGridSizeY, m_TextSizeYUnits )
 {
-    m_comboBoxGrid1->Append( m_fast_grid_opts );
-    m_comboBoxGrid2->Append( m_fast_grid_opts );
+    m_grid1Ctrl->Append( m_fast_grid_opts );
+    m_grid2Ctrl->Append( m_fast_grid_opts );
 
     m_sdbSizerOK->SetDefault();         // set OK button as default response to 'Enter' key
     SetInitialFocus( m_GridOriginXCtrl );
@@ -97,8 +95,8 @@ bool DIALOG_SET_GRID::TransferDataFromWindow()
     m_parent->OnModify();
     m_parent->SetGridOrigin( wxPoint( m_gridOriginX.GetValue(), m_gridOriginY.GetValue() ) );
     m_parent->m_UserGridSize = wxPoint( m_userGridX.GetValue(), m_userGridY.GetValue() );
-    m_parent->m_FastGrid1 = m_comboBoxGrid1->GetSelection();
-    m_parent->m_FastGrid2 = m_comboBoxGrid2->GetSelection();
+    m_parent->m_FastGrid1 = m_grid1Ctrl->GetSelection();
+    m_parent->m_FastGrid2 = m_grid2Ctrl->GetSelection();
 
     // User grid
     BASE_SCREEN* screen = m_parent->GetScreen();
@@ -128,8 +126,8 @@ bool DIALOG_SET_GRID::TransferDataToWindow()
     m_gridOriginX.SetValue( m_parent->GetGridOrigin().x );
     m_gridOriginY.SetValue( m_parent->GetGridOrigin().y );
 
-    m_comboBoxGrid1->SetSelection( m_parent->m_FastGrid1 );
-    m_comboBoxGrid2->SetSelection( m_parent->m_FastGrid2 );
+    m_grid1Ctrl->SetSelection( m_parent->m_FastGrid1 );
+    m_grid2Ctrl->SetSelection( m_parent->m_FastGrid2 );
 
     int hk1 = ACTIONS::gridFast1.GetHotKey();
     int hk2 = ACTIONS::gridFast2.GetHotKey();
