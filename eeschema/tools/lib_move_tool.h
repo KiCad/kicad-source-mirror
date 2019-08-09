@@ -70,6 +70,7 @@ private:
     ///> Last cursor position (needed for getModificationPoint() to avoid changes
     ///> of edit reference point).
     VECTOR2I              m_cursor;
+    VECTOR2I              m_anchorPos;
 };
 
 #endif //KICAD_LIB_MOVE_TOOL_H
