@@ -24,16 +24,10 @@ set( CVPCB_DIALOGS
     dialogs/dialog_display_options_base.cpp
     dialogs/dialog_config_equfiles_base.cpp
     dialogs/dialog_config_equfiles.cpp
-    ../pcbnew/dialogs/dialog_fp_plugin_options.cpp
-    ../pcbnew/dialogs/dialog_fp_plugin_options_base.cpp
     )
 
 set( CVPCB_SRCS
     ../common/base_units.cpp
-    ../pcbnew/board_items_to_polygon_shape_transform.cpp
-    ../pcbnew/pcb_general_settings.cpp
-    ../pcbnew/drc_item.cpp
-    ../pcbnew/tools/pcb_actions.cpp
     ../pcbnew/tools/grid_helper.cpp
     auto_associate.cpp
     cfg.cpp
@@ -74,62 +68,6 @@ if( false )
     set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-pcb.kicad )
     set( MACOSX_BUNDLE_NAME cvpcb )
 endif()
-
-
-if( false ) # no CVPCB exe any more, only the *.kiface
-    add_executable( cvpcb WIN32 MACOSX_BUNDLE
-        ../common/single_top.cpp
-        ../common/pgm_base.cpp
-        ${CVPCB_RESOURCES}
-        )
-    set_source_files_properties( ../common/single_top.cpp PROPERTIES
-        COMPILE_DEFINITIONS "TOP_FRAME=FRAME_CVPCB;PGM_DATA_FILE_EXT=\"net\";BUILD_KIWAY_DLL"
-        )
-    target_link_libraries( cvpcb
-        #singletop  # replaces common, giving us restrictive control and link warnings.
-        # There's way too much crap coming in from common yet.
-        common
-        ${wxWidgets_LIBRARIES}
-        )
-    if( MAKE_LINK_MAPS )
-        set_target_properties( cvpcb PROPERTIES
-            LINK_FLAGS "-Wl,-cref,-Map=cvpcb.map" )
-    endif()
-
-    if( APPLE )
-        include( ${CMAKE_MODULE_PATH}/KiCadVersion.cmake )
-        configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist @ONLY )
-
-        set_target_properties( cvpcb PROPERTIES
-            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
-            )
-
-        # put individual bundle outside of main bundle as a first step
-        # will be pulled into the main bundle when creating main bundle
-        install( TARGETS cvpcb
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-        install( CODE "
-                # override default embedded path settings
-                ${OSX_BUNDLE_OVERRIDE_PATHS}
-
-                # do all the work
-                include( BundleUtilities )
-                fixup_bundle( ${KICAD_BIN}/cvpcb.app/Contents/MacOS/cvpcb
-                    \"\"
-                    \"\"
-                    )
-                " COMPONENT Runtime
-            )
-    else()
-        install( TARGETS cvpcb
-            DESTINATION ${KICAD_BIN}
-            COMPONENT binary
-            )
-    endif()
-
-endif() # no CVPCB exe
 
 
 # the main cvpcb program, in DSO form.
