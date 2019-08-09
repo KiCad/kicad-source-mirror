@@ -41,6 +41,7 @@ set( CVPCB_SRCS
     readwrite_dlgs.cpp
     toolbars_cvpcb.cpp
     tools/cvpcb_actions.cpp
+    tools/cvpcb_association_tool.cpp
     tools/cvpcb_control.cpp
     tools/cvpcb_fpviewer_control.cpp
     tools/cvpcb_fpviewer_selection_tool.cpp

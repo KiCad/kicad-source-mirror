@@ -62,8 +62,12 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
         return m_redoList.size() > 0;
     };
 
-    editMenu->AddItem( ACTIONS::undo, enableUndoCondition );
-    editMenu->AddItem( ACTIONS::redo, enableRedoCondition );
+    editMenu->AddItem( ACTIONS::undo,  enableUndoCondition );
+    editMenu->AddItem( ACTIONS::redo,  enableRedoCondition );
+    editMenu->AddSeparator();
+    editMenu->AddItem( ACTIONS::cut,   SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( ACTIONS::copy,  SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( ACTIONS::paste, SELECTION_CONDITIONS::ShowAlways );
 
     editMenu->Resolve();
 

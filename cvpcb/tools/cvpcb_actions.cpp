@@ -100,25 +100,25 @@ TOOL_ACTION CVPCB_ACTIONS::gotoPreviousNA( "cvpcb.Control.GotoPreviousNA", AS_GL
 
 
 // Actions to modify component associations
-TOOL_ACTION CVPCB_ACTIONS::associate( "cvpcb.Control.Associate", AS_GLOBAL,
+TOOL_ACTION CVPCB_ACTIONS::associate( "cvpcb.Association.Associate", AS_GLOBAL,
         WXK_RETURN, "",
         _( "Associate footprint" ),
         _( "Associate selected footprint with selected components" ),
         auto_associe_xpm );
 
-TOOL_ACTION CVPCB_ACTIONS::autoAssociate( "cvpcb.Control.AutoAssociate", AS_GLOBAL,
+TOOL_ACTION CVPCB_ACTIONS::autoAssociate( "cvpcb.Association.AutoAssociate", AS_GLOBAL,
         0, "",
         _( "Automatically associate footprints" ),
         _( "Perform automatic footprint association" ),
         auto_associe_xpm );
 
-TOOL_ACTION CVPCB_ACTIONS::deleteAssoc( "cvpcb.Control.Delete", AS_GLOBAL,
+TOOL_ACTION CVPCB_ACTIONS::deleteAssoc( "cvpcb.Association.Delete", AS_GLOBAL,
         WXK_DELETE, "",
         _( "Delete association" ),
         _( "Delete selected footprint associations" ),
         delete_association_xpm );
 
-TOOL_ACTION CVPCB_ACTIONS::deleteAll( "cvpcb.Control.DeleteAll", AS_GLOBAL,
+TOOL_ACTION CVPCB_ACTIONS::deleteAll( "cvpcb.Association.DeleteAll", AS_GLOBAL,
         0, "",
         _( "Delete all footprint associations" ),
         _( "Delete all footprint associations" ),

@@ -204,109 +204,6 @@ int CVPCB_CONTROL::ToggleFootprintFilter( const TOOL_EVENT& aEvent )
 }
 
 
-int CVPCB_CONTROL::Undo( const TOOL_EVENT& aEvent )
-{
-    m_frame->UndoAssociation();
-
-    return 0;
-}
-
-
-int CVPCB_CONTROL::Redo( const TOOL_EVENT& aEvent )
-{
-    m_frame->RedoAssociation();
-
-    return 0;
-}
-
-
-int CVPCB_CONTROL::Associate( const TOOL_EVENT& aEvent )
-{
-    // Get the currently selected footprint
-    LIB_ID   fpid;
-    wxString fp = m_frame->GetSelectedFootprint();
-    fpid.Parse( fp, LIB_ID::ID_PCB );
-
-    // Ignore the action if the footprint is empty (nothing selected)
-    if( fpid.empty() )
-        return 0;
-
-    // Test for validity of the requested footprint
-    if( !fpid.IsValid() )
-    {
-        wxString msg =
-                wxString::Format( _( "\"%s\" is not a valid footprint." ), fpid.Format().wx_str() );
-        DisplayErrorMessage( m_frame, msg );
-    }
-
-    // Get all the components that are selected and associate them with the current footprint
-    std::vector<unsigned int> sel = m_frame->GetComponentIndices( CVPCB_MAINFRAME::SEL_COMPONENTS );
-
-    bool firstAssoc = true;
-    for( auto i : sel )
-    {
-        CVPCB_ASSOCIATION newfp( i, fpid );
-        m_frame->AssociateFootprint( newfp, firstAssoc );
-        firstAssoc = false;
-    }
-
-    return 0;
-}
-
-
-int CVPCB_CONTROL::AutoAssociate( const TOOL_EVENT& aEvent )
-{
-    m_frame->AutomaticFootprintMatching();
-
-    return 0;
-}
-
-
-int CVPCB_CONTROL::DeleteAssoc( const TOOL_EVENT& aEvent )
-{
-    // Get all the components that are selected
-    std::vector<unsigned int> sel = m_frame->GetComponentIndices( CVPCB_MAINFRAME::SEL_COMPONENTS );
-
-    // Delete the association
-    bool firstAssoc = true;
-    for( auto i : sel )
-    {
-        m_frame->AssociateFootprint( CVPCB_ASSOCIATION( i, LIB_ID() ), firstAssoc );
-        firstAssoc = false;
-    }
-
-    return 0;
-}
-
-
-int CVPCB_CONTROL::DeleteAll( const TOOL_EVENT& aEvent )
-{
-    if( IsOK( m_frame, _( "Delete all associations?" ) ) )
-    {
-        // Remove all selections to avoid issues when setting the fpids
-        m_frame->SetSelectedComponent( -1, true );
-        std::vector<unsigned int> idx
-                = m_frame->GetComponentIndices( CVPCB_MAINFRAME::ALL_COMPONENTS );
-
-        bool firstAssoc = true;
-        for( auto i : idx )
-        {
-            m_frame->AssociateFootprint( CVPCB_ASSOCIATION( i, LIB_ID() ), firstAssoc );
-            firstAssoc = false;
-        }
-
-        // Remove all selections after setting the fpids and select the first component
-        m_frame->SetSelectedComponent( -1, true );
-        m_frame->SetSelectedComponent( 0 );
-    }
-
-    // Update the status display
-    m_frame->DisplayStatus();
-
-    return 0;
-}
-
-
 int CVPCB_CONTROL::ShowEquFileTable( const TOOL_EVENT& aEvent )
 {
     DIALOG_CONFIG_EQUFILES dlg( m_frame );
@@ -417,18 +314,10 @@ void CVPCB_CONTROL::setTransitions()
     // Management actions
     Go( &CVPCB_CONTROL::ShowEquFileTable,      CVPCB_ACTIONS::showEquFileTable.MakeEvent() );
     Go( &CVPCB_CONTROL::SaveAssociations,      CVPCB_ACTIONS::saveAssociations.MakeEvent() );
-    Go( &CVPCB_CONTROL::DeleteAll,             CVPCB_ACTIONS::deleteAll.MakeEvent() );
-    Go( &CVPCB_CONTROL::DeleteAssoc,           CVPCB_ACTIONS::deleteAssoc.MakeEvent() );
 
     // Navigation actions
     Go( &CVPCB_CONTROL::ToNA,                  CVPCB_ACTIONS::gotoNextNA.MakeEvent() );
     Go( &CVPCB_CONTROL::ToNA,                  CVPCB_ACTIONS::gotoPreviousNA.MakeEvent() );
-
-    // Footprint association actions
-    Go( &CVPCB_CONTROL::Undo,                  ACTIONS::undo.MakeEvent() );
-    Go( &CVPCB_CONTROL::Redo,                  ACTIONS::redo.MakeEvent() );
-    Go( &CVPCB_CONTROL::Associate,             CVPCB_ACTIONS::associate.MakeEvent() );
-    Go( &CVPCB_CONTROL::AutoAssociate,         CVPCB_ACTIONS::autoAssociate.MakeEvent() );
 
     // Filter the footprints
     Go( &CVPCB_CONTROL::ToggleFootprintFilter, CVPCB_ACTIONS::filterFPbyKeywords.MakeEvent() );

@@ -45,6 +45,7 @@
 #include <display_footprints_frame.h>
 #include <listboxes.h>
 #include <tools/cvpcb_actions.h>
+#include <tools/cvpcb_association_tool.h>
 #include <tools/cvpcb_control.h>
 
 wxSize const FRAME_MIN_SIZE_DU( 350, 250 );
@@ -212,6 +213,7 @@ void CVPCB_MAINFRAME::setupTools()
     // Register tools
     m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new CVPCB_CONTROL );
+    m_toolManager->RegisterTool( new CVPCB_ASSOCIATION_TOOL );
     m_toolManager->InitTools();
 
     CVPCB_CONTROL* tool = m_toolManager->GetTool<CVPCB_CONTROL>();
@@ -220,6 +222,10 @@ void CVPCB_MAINFRAME::setupTools()
     m_componentContextMenu = new ACTION_MENU( true );
     m_componentContextMenu->SetTool( tool );
     m_componentContextMenu->Add( CVPCB_ACTIONS::showFootprintViewer );
+    m_componentContextMenu->AppendSeparator();
+    m_componentContextMenu->Add( ACTIONS::cut );
+    m_componentContextMenu->Add( ACTIONS::copy );
+    m_componentContextMenu->Add( ACTIONS::paste );
     m_componentContextMenu->AppendSeparator();
     m_componentContextMenu->Add( CVPCB_ACTIONS::deleteAssoc );
 
