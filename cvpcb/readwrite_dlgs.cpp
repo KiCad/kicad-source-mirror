@@ -1,7 +1,3 @@
-/**
- * @file cvpcb/readwrite_dlgs.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -26,8 +22,7 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#include <build_version.h>
-#include <common.h>
+
 #include <confirm.h>
 #include <fctsys.h>
 #include <fp_lib_table.h>

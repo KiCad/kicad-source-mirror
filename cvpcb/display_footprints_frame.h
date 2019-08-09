@@ -33,8 +33,6 @@
 // The name (for wxWidgets) of the footprint viewer frame
 #define FOOTPRINTVIEWER_FRAME_NAME wxT( "FootprintViewerFrame" )
 
-class CVPCB_MAINFRAME;
-
 
 /**
  * Class DISPLAY_FOOTPRINTS_FRAME

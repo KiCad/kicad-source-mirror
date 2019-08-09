@@ -24,22 +24,16 @@
  */
 
 #include <bitmaps.h>
-#include <build_version.h>
 #include <confirm.h>
 #include <eda_dde.h>
-#include <fctsys.h>
 #include <fp_lib_table.h>
-#include <html_messagebox.h>
-#include <invoke_pcb_dialog.h>
 #include <kiface_i.h>
-#include <kiface_ids.h>
 #include <kiway_express.h>
 #include <macros.h>
 #include <netlist_reader.h>
 #include <numeric>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>
-#include <tool/conditional_menu.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <widgets/progress_reporter.h>

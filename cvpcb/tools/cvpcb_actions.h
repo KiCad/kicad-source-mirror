@@ -28,10 +28,8 @@
 
 #include <core/optional.h>
 #include <tool/actions.h>
-#include <tool/tool_action.h>
-
-class TOOL_EVENT;
-class TOOL_MANAGER;
+#include <tool/tool_event.h>
+class TOOL_ACTION;
 
 /**
  * Class CVPCB_ACTIONS

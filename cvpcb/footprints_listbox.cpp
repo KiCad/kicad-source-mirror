@@ -27,8 +27,6 @@
  * class to display the list of available footprints
  */
 
-#include <eda_pattern_match.h>
-#include <fctsys.h>
 #include <footprint_filter.h>
 #include <tool/tool_manager.h>
 #include <trace_helpers.h>

@@ -25,6 +25,7 @@
 #define ACTION_TOOLBAR_H
 
 #include <map>
+#include <wx/bitmap.h>          // Needed for the auibar include
 #include <wx/aui/auibar.h>
 #include <tool/tool_event.h>
 
@@ -52,11 +53,11 @@ public:
      * a TOOL_EVENT command containing name of the action is sent.
      */
     void Add( const TOOL_ACTION& aAction, bool aIsToggleEntry = false );
-    
+
     /**
      * Function AddButton()
      * Adds a large button such as used in the Kicad Manager Frame's launch bar.
-     * @param aAction 
+     * @param aAction
      */
     void AddButton( const TOOL_ACTION& aAction );
 
@@ -66,7 +67,7 @@ public:
      * for the custom-drawn layer pair bitmap.
      */
     void SetToolBitmap( const TOOL_ACTION& aAction, const wxBitmap& aBitmap );
-    
+
     /**
      * Applies the default toggle action.  For checked items this is check/uncheck; for
      * non-checked items it's enable/disable.

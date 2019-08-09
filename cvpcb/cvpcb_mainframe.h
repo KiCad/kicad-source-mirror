@@ -26,23 +26,19 @@
 #define _CVPCB_MAINFRAME_H_
 
 #include <config_params.h>
-#include <footprint_info.h>
-#include <memory>
-#include <pcb_base_frame.h>
+#include <kiway_player.h>
 #include <pcb_netlist.h>
-#include <wx/filename.h>
-#include <wx/listctrl.h>
 
 #include <auto_associate.h>
 #include <cvpcb_association.h>
 #include <listboxes.h>
-#include <tool/action_menu.h>
 
-/*  Forward declarations of all top-level window classes. */
+/*  Forward declarations */
+class ACTION_TOOLBAR;
+class ACTION_MENU;
+class TOOL_DISPATCHER;
 class wxAuiToolBar;
 class DISPLAY_FOOTPRINTS_FRAME;
-class COMPONENT;
-class FP_LIB_TABLE;
 
 namespace CV { struct IFACE; }
 

@@ -31,12 +31,7 @@
 // 'FT232BL'		'QFP:LQFP-32_7x7mm_Pitch0.8mm'
 
 
-#include <fctsys.h>
-#include <common.h>
 #include <kiface_i.h>
-#include <project.h>
-#include <gestfich.h>
-#include <pgm_base.h>
 #include <kicad_string.h>
 #include <macros.h>
 

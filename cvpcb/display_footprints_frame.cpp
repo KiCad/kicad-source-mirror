@@ -23,30 +23,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <common.h>
-#include <pcb_draw_panel_gal.h>
-#include <confirm.h>
-#include <macros.h>
 #include <bitmaps.h>
-#include <msgpanel.h>
-#include <wildcards_and_files_ext.h>
-#include <lib_id.h>
-#include <fp_lib_table.h>
-#include <eda_dockart.h>
-#include <class_module.h>
 #include <class_board.h>
+#include <class_module.h>
+#include <common.h>
+#include <confirm.h>
+#include <eda_dockart.h>
+#include <fp_lib_table.h>
+#include <id.h>
+#include <lib_id.h>
+#include <macros.h>
+#include <msgpanel.h>
+#include <pcb_draw_panel_gal.h>
 #include <pcb_painter.h>
-#include <cvpcb_mainframe.h>
-#include <display_footprints_frame.h>
-#include <cvpcb_id.h>
-#include <listboxes.h>
-#include <view/view.h>
-#include <tool/tool_manager.h>
-#include <tool/tool_dispatcher.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_tools.h>
+#include <tool/tool_dispatcher.h>
+#include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
+
+#include <cvpcb_mainframe.h>
+#include <display_footprints_frame.h>
 #include <tools/cvpcb_actions.h>
 #include <tools/cvpcb_fpviewer_control.h>
 #include <tools/cvpcb_fpviewer_selection_tool.h>

@@ -24,13 +24,11 @@
 
 #include <bitmaps.h>
 #include <menus_helpers.h>
-#include <pgm_base.h>
 #include <tool/actions.h>
 #include <tool/common_control.h>
 #include <tool/conditional_menu.h>
 #include <tool/tool_manager.h>
 
-#include <cvpcb_id.h>
 #include <cvpcb_mainframe.h>
 #include <tools/cvpcb_actions.h>
 

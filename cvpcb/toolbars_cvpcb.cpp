@@ -24,9 +24,6 @@
  */
 
 #include <bitmaps.h>
-#include <common.h>
-#include <fctsys.h>
-#include <kiface_i.h>
 #include <tool/action_toolbar.h>
 #include <tool/actions.h>
 

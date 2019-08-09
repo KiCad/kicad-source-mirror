@@ -28,10 +28,8 @@
  */
 
 #include <confirm.h>
-#include <fctsys.h>
 #include <fp_lib_table.h>
 #include <kiface_i.h>
-#include <macros.h>
 #include <pgm_base.h>
 
 #include <cvpcb_mainframe.h>

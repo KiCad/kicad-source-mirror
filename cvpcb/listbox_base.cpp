@@ -26,12 +26,8 @@
  * @brief Implementation of class for displaying footprint list and component lists.
  */
 
-#include <fctsys.h>
-#include <macros.h>
-
 #include <cvpcb_mainframe.h>
 #include <listboxes.h>
-#include <cvpcb_id.h>
 
 
 /******************************************************************************

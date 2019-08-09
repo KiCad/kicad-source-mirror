@@ -19,8 +19,6 @@
  */
 
 #include <bitmaps.h>
-#include <frame_type.h>
-#include <tool/tool_manager.h>
 
 #include <cvpcb_mainframe.h>
 #include <listboxes.h>

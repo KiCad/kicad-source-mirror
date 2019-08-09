@@ -25,7 +25,6 @@
  * @file class_components_listbox.cpp
  */
 
-#include <fctsys.h>
 #include <trace_helpers.h>
 
 #include <cvpcb_mainframe.h>

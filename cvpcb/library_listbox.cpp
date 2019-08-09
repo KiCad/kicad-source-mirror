@@ -26,8 +26,6 @@
  * class to display used library and selecting it
  */
 
-#include <fctsys.h>
-#include <macros.h>
 #include <trace_helpers.h>
 
 #include <cvpcb_mainframe.h>
