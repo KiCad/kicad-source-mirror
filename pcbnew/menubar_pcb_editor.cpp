@@ -515,7 +515,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     SetMenuBar( menuBar );
     delete oldMenuBar;
-    m_menuBarDirty = false;
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     // Populate the Action Plugin sub-menu

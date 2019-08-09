@@ -280,7 +280,6 @@ public:
     wxChoice* m_SelTrackWidthBox;           // a choice box to display and select current track width
     wxChoice* m_SelViaSizeBox;              // a choice box to display and select current via diameter
 
-    bool m_menuBarDirty;
     bool m_show_microwave_tools;
     bool m_show_layer_manager_tools;
 
@@ -298,9 +297,6 @@ public:
      *           occurs while reading footprint library files.
      */
     void LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter );
-
-    void OnActivate( wxActivateEvent& event );
-    void OnIdle( wxIdleEvent& event );
 
     void OnQuit( wxCommandEvent& event );
 

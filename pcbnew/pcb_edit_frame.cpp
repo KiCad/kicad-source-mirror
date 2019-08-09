@@ -111,8 +111,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_CHOICE( ID_ON_ZOOM_SELECT, PCB_EDIT_FRAME::OnSelectZoom )
     EVT_CHOICE( ID_ON_GRID_SELECT, PCB_EDIT_FRAME::OnSelectGrid )
 
-    EVT_ACTIVATE( PCB_EDIT_FRAME::OnActivate )
-    EVT_IDLE( PCB_EDIT_FRAME::OnIdle )
     EVT_CLOSE( PCB_EDIT_FRAME::OnCloseWindow )
     EVT_SIZE( PCB_EDIT_FRAME::OnSize )
 
@@ -458,22 +456,6 @@ void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 
     if( event.GetId() == wxID_CLOSE || Kiface().IsSingle() )
         Close( false );
-}
-
-
-void PCB_EDIT_FRAME::OnActivate( wxActivateEvent& event )
-{
-#ifdef __WXMAC__
-    // Work around wxWidgets bug where the Preferences item gets lost...
-    m_menuBarDirty = true;
-#endif
-}
-
-
-void PCB_EDIT_FRAME::OnIdle( wxIdleEvent& event )
-{
-    if( m_menuBarDirty )
-        ReCreateMenuBar();
 }
 
 

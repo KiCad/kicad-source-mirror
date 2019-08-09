@@ -114,6 +114,7 @@ protected:
     bool               m_showBorderAndTitleBlock;  // Show the worksheet (border and title block).
     long               m_firstRunDialogSetting;    // Show first run dialog on startup
 
+    bool               m_menuBarDirty;
     wxChoice*          m_gridSelectBox;
     wxChoice*          m_zoomSelectBox;
 
@@ -131,6 +132,9 @@ protected:
 
     /// The current canvas type
     EDA_DRAW_PANEL_GAL::GAL_TYPE    m_canvasType;
+
+    void onActivate( wxActivateEvent& event );
+    void onIdle( wxIdleEvent& event );
 
     virtual void SetScreen( BASE_SCREEN* aScreen )  { m_currentScreen = aScreen; }
 
