@@ -136,7 +136,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     auto bottomPanel = new wxPanel( this );
     auto panelSizer = new wxBoxSizer( wxVERTICAL );
 
-    wxFlexGridSizer* fgSizerStatus = new wxFlexGridSizer( 2, 1, 0, 0 );
+    wxFlexGridSizer* fgSizerStatus = new wxFlexGridSizer( 3, 1, 0, 0 );
     fgSizerStatus->SetFlexibleDirection( wxBOTH );
     fgSizerStatus->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -144,7 +144,10 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     fgSizerStatus->Add( m_statusLine1, 0, 0, 5 );
 
     m_statusLine2 = new wxStaticText( bottomPanel, wxID_ANY, wxEmptyString );
-    fgSizerStatus->Add( m_statusLine2, 0, wxBOTTOM, 3 );
+    fgSizerStatus->Add( m_statusLine2, 0, 0, 5 );
+
+    m_statusLine3 = new wxStaticText( bottomPanel, wxID_ANY, wxEmptyString );
+    fgSizerStatus->Add( m_statusLine3, 0, wxBOTTOM, 3 );
 
     panelSizer->Add( fgSizerStatus, 1, wxEXPAND|wxLEFT, 2 );
 
@@ -155,6 +158,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     statusFont.SetSymbolicSize( wxFONTSIZE_SMALL );
     m_statusLine1->SetFont( statusFont );
     m_statusLine2->SetFont( statusFont );
+    m_statusLine3->SetFont( statusFont );
 
     // Add buttons:
     auto buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -653,6 +657,37 @@ void CVPCB_MAINFRAME::DisplayStatus()
     }
 
     SetStatusText( msg, 1 );
+
+    msg.Empty();
+    wxString lib;
+
+    // Choose the footprint to get the information on
+    if( module )
+    {
+        // Use the footprint in the footprint viewer
+        lib = module->GetLibNickname();
+    }
+    else if( GetFocusedControl() == CVPCB_MAINFRAME::CONTROL_COMPONENT )
+    {
+        // Use the footprint of the selected component
+        if( component )
+            lib = component->GetFPID().GetLibNickname();
+    }
+    else if( GetFocusedControl() == CVPCB_MAINFRAME::CONTROL_LIBRARY )
+    {
+        // Use the library that is selected
+        lib = m_libListBox->GetSelectedLibrary();
+    }
+
+    // Extract the library information
+    FP_LIB_TABLE* fptbl = Prj().PcbFootprintLibs( Kiway() );
+
+    if( fptbl->HasLibrary( lib ) )
+        msg = wxString::Format( _( "Library location: %s" ), fptbl->GetFullURI( lib ) );
+    else
+        msg = wxString::Format( _( "Library location: unknown" ) );
+
+    SetStatusText( msg, 2 );
 }
 
 
@@ -995,12 +1030,23 @@ wxString CVPCB_MAINFRAME::GetSelectedFootprint()
 
 void CVPCB_MAINFRAME::SetStatusText( const wxString& aText, int aNumber )
 {
-    wxASSERT( aNumber < 2 );
-
-    if( aNumber == 1 )
-        m_statusLine2->SetLabel( aText );
-    else
+    switch( aNumber )
+    {
+    case 0:
         m_statusLine1->SetLabel( aText );
+        break;
+
+    case 1:
+        m_statusLine2->SetLabel( aText );
+        break;
+
+    case 2:
+        m_statusLine3->SetLabel( aText );
+        break;
+
+    default:
+        wxASSERT_MSG( false, "Invalid status row number" );
+    }
 }
 
 
