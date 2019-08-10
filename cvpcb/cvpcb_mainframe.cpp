@@ -57,23 +57,6 @@ wxSize const FRAME_DEFAULT_SIZE_DU( 450, 300 );
 static const wxString FilterFootprintEntry = "FilterFootprint";
 ///@}
 
-BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, KIWAY_PLAYER )
-
-    // Control events
-    EVT_MENU( wxID_EXIT, CVPCB_MAINFRAME::OnQuit )
-    EVT_BUTTON( wxID_OK, CVPCB_MAINFRAME::OnOK )
-    EVT_BUTTON( wxID_CANCEL, CVPCB_MAINFRAME::OnCancel )
-
-    // Toolbar events
-    EVT_TEXT( ID_CVPCB_FILTER_TEXT_EDIT, CVPCB_MAINFRAME::OnEnterFilteringText )
-
-    // Frame events
-    EVT_CLOSE( CVPCB_MAINFRAME::OnCloseWindow )
-    EVT_SIZE( CVPCB_MAINFRAME::OnSize )
-
-END_EVENT_TABLE()
-
-
 #define CVPCB_MAINFRAME_NAME wxT( "CvpcbFrame" )
 
 
@@ -200,7 +183,10 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 CVPCB_MAINFRAME::~CVPCB_MAINFRAME()
 {
-    // No events to disconnect since they are using lambdas as the handlers
+    // Clean up the tool infrastructure
+    delete m_actions;
+    delete m_toolManager;
+    delete m_toolDispatcher;
 
     m_auimgr.UnInit();
 }
@@ -261,36 +247,48 @@ void CVPCB_MAINFRAME::setupEventHandlers()
                 this->GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociations );
             } );
 
+    // Connect the handlers for the ok/cancel buttons
+    Bind( wxEVT_BUTTON,
+            [this]( wxCommandEvent& )
+            {
+                this->GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociations );
+                Close( true );
+            }, wxID_OK );
+    Bind( wxEVT_BUTTON,
+            [this]( wxCommandEvent& )
+            {
+                // Throw away modifications on a Cancel
+                m_modified = false;
+                Close( false );
+            }, wxID_CANCEL );
+
+    // Connect the handlers for the close events
+    Bind( wxEVT_CLOSE_WINDOW, &CVPCB_MAINFRAME::OnCloseWindow, this );
+    Bind( wxEVT_MENU,
+            [this]( wxCommandEvent& )
+            {
+                Close( false );
+            }, wxID_CLOSE );
+    Bind( wxEVT_MENU,
+            [this]( wxCommandEvent& )
+            {
+                Close( false );
+            }, wxID_EXIT );
+
+    // Toolbar events
+    Bind( wxEVT_TEXT, &CVPCB_MAINFRAME::OnEnterFilteringText, this, ID_CVPCB_FILTER_TEXT_EDIT );
+
+    // Just skip the resize events
+    Bind( wxEVT_SIZE,
+        []( wxSizeEvent& aEvent )
+        {
+            aEvent.Skip();
+        } );
+
     // Attach the events to the tool dispatcher
     Bind( wxEVT_TOOL, &TOOL_DISPATCHER::DispatchWxCommand, m_toolDispatcher );
     Bind( wxEVT_CHAR, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
     Bind( wxEVT_CHAR_HOOK, &TOOL_DISPATCHER::DispatchWxEvent, m_toolDispatcher );
-}
-
-void CVPCB_MAINFRAME::LoadSettings( wxConfigBase* aCfg )
-{
-    EDA_BASE_FRAME::LoadSettings( aCfg );
-
-    wxSize const frame_default( ConvertDialogToPixels( FRAME_DEFAULT_SIZE_DU ) );
-
-    if( m_FrameSize == wxDefaultSize )
-        m_FrameSize = frame_default;
-
-    aCfg->Read( FilterFootprintEntry, &m_filteringOptions, FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST );
-}
-
-
-void CVPCB_MAINFRAME::SaveSettings( wxConfigBase* aCfg )
-{
-    EDA_BASE_FRAME::SaveSettings( aCfg );
-
-    aCfg->Write( FilterFootprintEntry, m_filteringOptions );
-}
-
-
-void CVPCB_MAINFRAME::OnSize( wxSizeEvent& event )
-{
-    event.Skip();
 }
 
 
@@ -321,26 +319,61 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
 }
 
 
-void CVPCB_MAINFRAME::OnOK( wxCommandEvent& aEvent )
+void CVPCB_MAINFRAME::OnEnterFilteringText( wxCommandEvent& aEvent )
 {
-    SaveFootprintAssociation( false );
+    // Called when changing the filter string in main toolbar.
+    // If the option FOOTPRINTS_LISTBOX::FILTERING_BY_NAME is set, update the list of
+    // available footprints which match the filter
 
-    Close( true );
+    m_currentSearchPattern = m_tcFilterString->GetValue();
+
+    if( ( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_NAME ) == 0 )
+        return;
+
+    wxListEvent l_event;
+    OnSelectComponent( l_event );
 }
 
 
-void CVPCB_MAINFRAME::OnCancel( wxCommandEvent& event )
+void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
 {
-    // Throw away modifications on a Cancel
-    m_modified = false;
+    if( m_skipComponentSelect )
+        return;
 
-    Close( false );
+    wxString   libraryName;
+    COMPONENT* component = GetSelectedComponent();
+    libraryName = m_libListBox->GetSelectedLibrary();
+
+    m_footprintListBox->SetFootprints( *m_FootprintsList, libraryName, component,
+                                       m_currentSearchPattern, m_filteringOptions);
+
+    if( component && component->GetFPID().IsValid() )
+        m_footprintListBox->SetSelectedFootprint( component->GetFPID() );
+    else
+        m_footprintListBox->SetSelection( m_footprintListBox->GetSelection(), false );
+
+    refreshAfterComponentSearch( component );
 }
 
 
-void CVPCB_MAINFRAME::OnQuit( wxCommandEvent& event )
+void CVPCB_MAINFRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    Close( false );
+    EDA_BASE_FRAME::LoadSettings( aCfg );
+
+    wxSize const frame_default( ConvertDialogToPixels( FRAME_DEFAULT_SIZE_DU ) );
+
+    if( m_FrameSize == wxDefaultSize )
+        m_FrameSize = frame_default;
+
+    aCfg->Read( FilterFootprintEntry, &m_filteringOptions, FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST );
+}
+
+
+void CVPCB_MAINFRAME::SaveSettings( wxConfigBase* aCfg )
+{
+    EDA_BASE_FRAME::SaveSettings( aCfg );
+
+    aCfg->Write( FilterFootprintEntry, m_filteringOptions );
 }
 
 
@@ -452,27 +485,6 @@ bool CVPCB_MAINFRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, i
 }
 
 
-void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
-{
-    if( m_skipComponentSelect )
-        return;
-
-    wxString   libraryName;
-    COMPONENT* component = GetSelectedComponent();
-    libraryName = m_libListBox->GetSelectedLibrary();
-
-    m_footprintListBox->SetFootprints( *m_FootprintsList, libraryName, component,
-                                       m_currentSearchPattern, m_filteringOptions);
-
-    if( component && component->GetFPID().IsValid() )
-        m_footprintListBox->SetSelectedFootprint( component->GetFPID() );
-    else
-        m_footprintListBox->SetSelection( m_footprintListBox->GetSelection(), false );
-
-    refreshAfterComponentSearch (component);
-}
-
-
 void CVPCB_MAINFRAME::refreshAfterComponentSearch( COMPONENT* component )
 {
     // Tell AuiMgr that objects are changed !
@@ -555,22 +567,6 @@ void CVPCB_MAINFRAME::SetFootprintFilter(
         m_filteringOptions ^= option;
         break;
     }
-
-    wxListEvent l_event;
-    OnSelectComponent( l_event );
-}
-
-
-void CVPCB_MAINFRAME::OnEnterFilteringText( wxCommandEvent& aEvent )
-{
-    // Called when changing the filter string in main toolbar.
-    // If the option FOOTPRINTS_LISTBOX::FILTERING_BY_NAME is set, update the list of
-    // available footprints which match the filter
-
-    m_currentSearchPattern = m_tcFilterString->GetValue();
-
-    if( ( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_NAME ) == 0 )
-        return;
 
     wxListEvent l_event;
     OnSelectComponent( l_event );

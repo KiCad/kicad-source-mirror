@@ -46,6 +46,8 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, tool );
 
     fileMenu->AddItem( CVPCB_ACTIONS::saveAssociations, SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddSeparator();
+    fileMenu->AddItem( wxID_CLOSE, _( "Close" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->Resolve();
 

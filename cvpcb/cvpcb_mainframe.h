@@ -169,17 +169,22 @@ public:
      * * Updates the current selected footprint in footprint list
      * * Updates the footprint shown in footprint display window (if opened)
      */
-    void             OnSelectComponent( wxListEvent& event );
+    void OnSelectComponent( wxListEvent& event );
 
-    void             OnCancel( wxCommandEvent& aEvent );
-    void             OnOK( wxCommandEvent& aEvent );
-    void             OnQuit( wxCommandEvent& event );
-    void             OnCloseWindow( wxCloseEvent& Event );
-    void             OnSize( wxSizeEvent& SizeEvent );
-    void             OnKeyDown( wxKeyEvent& aEvent );
-    void             ReCreateHToolbar();
-    void             ReCreateMenuBar() override;
-    void             ShowChangedLanguage() override;
+    /**
+     * OnCloseWindow
+     *
+     * Called by a close event to close the window
+     */
+    void OnCloseWindow( wxCloseEvent& Event );
+
+    /*
+     * Functions to rebuild the toolbars and menubars
+     */
+    void ReCreateHToolbar();
+    void ReCreateMenuBar() override;
+
+    void ShowChangedLanguage() override;
 
     /**
      * Called by the automatic association button
@@ -205,7 +210,7 @@ public:
      * Function OnEnterFilteringText
      * Is called each time the text of m_tcFilterString is changed.
      */
-    void             OnEnterFilteringText( wxCommandEvent& event );
+    void OnEnterFilteringText( wxCommandEvent& event );
 
 
     /**
@@ -232,9 +237,12 @@ public:
     void AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation, bool aNewEntry = true,
             bool aAddUndoItem = true );
 
-    void             BuildCmpListBox();
-    void             BuildFOOTPRINTS_LISTBOX();
-    void             BuildLIBRARY_LISTBOX();
+    /*
+     * Functions to build the listboxes and their contents
+     */
+    void BuildCmpListBox();
+    void BuildFOOTPRINTS_LISTBOX();
+    void BuildLIBRARY_LISTBOX();
 
     /**
      * Function SaveFootprintAssociation
@@ -251,7 +259,7 @@ public:
      * @param aNetlist is the netlist from eeschema in kicad s-expr format.
      * (see CVPCB_MAINFRAME::KiwayMailIn() to know how to get this netlist)
      */
-    bool             ReadNetListAndFpFiles( const std::string& aNetlist );
+    bool ReadNetListAndFpFiles( const std::string& aNetlist );
 
     /**
      * Function ReadSchematicNetlist
@@ -260,7 +268,7 @@ public:
      * It is the same netlist as the .net file created by Eeschema.
      * (This method is called by ReadNetListAndFpFiles)
      */
-    int              ReadSchematicNetlist( const std::string& aNetlist );
+    int ReadSchematicNetlist( const std::string& aNetlist );
 
     /**
      * Function LoadProjectFile
@@ -290,7 +298,7 @@ public:
      * displayed in the second status bar pane.  The third status bar pane always displays the
      * current footprint list filtering.
      */
-    void             DisplayStatus();
+    void DisplayStatus();
 
     /**
      * Function LoadFootprintFiles
@@ -303,7 +311,7 @@ public:
      * fills m_footprints
      * @return true if libraries are found, false otherwise.
      */
-    bool             LoadFootprintFiles();
+    bool LoadFootprintFiles();
 
     /**
      * Function GetProjectFileParameters
@@ -411,8 +419,6 @@ private:
     // Undo/Redo item lists
     CVPCB_UNDO_REDO_LIST    m_undoList;
     CVPCB_UNDO_REDO_LIST    m_redoList;
-
-    DECLARE_EVENT_TABLE()
 };
 
 #endif  //#ifndef _CVPCB_MAINFRAME_H_
