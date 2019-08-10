@@ -406,7 +406,7 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
         wxAffineMatrix2D matrix = dc->GetTransformMatrix();
 
         // Check for portrait/landscape mismatch:
-        if( fitRect.width > fitRect.height != pageSizeIU.x > pageSizeIU.y )
+        if( ( fitRect.width > fitRect.height ) != ( pageSizeIU.x > pageSizeIU.y ) )
         {
             matrix.Rotate( M_PI_2 );
             xoffset = ( fitRect.height - pageSizeIU.x ) / 2;

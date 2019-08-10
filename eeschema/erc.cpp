@@ -289,7 +289,7 @@ int TestMultiunitFootprints( SCH_SHEET_LIST& aSheetList )
         wxString fp;
         wxString unitName;
 
-        for( int i = 0; i < component.second.GetCount(); ++i )
+        for( unsigned i = 0; i < component.second.GetCount(); ++i )
         {
             SCH_COMPONENT* cmp = refList.GetItem( i ).GetComp();
             SCH_SHEET_PATH sheetPath = refList.GetItem( i ).GetSheetPath();
@@ -303,7 +303,7 @@ int TestMultiunitFootprints( SCH_SHEET_LIST& aSheetList )
             }
         }
 
-        for( int i = 0; i < component.second.GetCount(); ++i )
+        for( unsigned i = 0; i < component.second.GetCount(); ++i )
         {
             SCH_REFERENCE& ref = refList.GetItem( i );
             SCH_COMPONENT* unit = ref.GetComp();
