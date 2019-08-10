@@ -220,6 +220,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( "Daniel Majewski" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Lorenzo Marcantonio" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Marco Mattila" ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( "Ian McInerney" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Russell Oliver" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Alexis Lockwood" ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( "Miguel Angel Ajo Pelayo" ) );
@@ -370,6 +371,11 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           "Bulgarian (BG)",
                                           aInfo.CreateKiBitmap( lang_bg_xpm ) ) );
     aInfo.AddTranslator( new CONTRIBUTOR( "Liu Guang",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Simplified Chinese (zh_CN)",
+                                          aInfo.CreateKiBitmap( lang_zh_xpm ) ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Taotieren",
                                           wxEmptyString,
                                           wxEmptyString,
                                           "Simplified Chinese (zh_CN)",
