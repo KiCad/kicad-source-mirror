@@ -233,7 +233,7 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
+int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
@@ -241,7 +241,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection)
-    auto& selection = m_selectionTool->RequestSelection(
+    PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
         []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
         {
             EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS );
@@ -253,12 +253,13 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     LSET item_layers = static_cast<BOARD_ITEM*>( selection.Front() )->GetLayerSet();
     bool unselect = selection.IsHover(); //N.B. This must be saved before the re-selection below
 
-    // Filter out locked pads here
-    // We cannot do this in the selection filter as we need the pad layers
-    // when it is the curr_item.
+    // Now filter out locked pads.  We cannot do this in the first RequestSelection() as we need
+    // the item_layers when a pad is the selection front (ie: will become curr_tiem).
     selection = m_selectionTool->RequestSelection(
         []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-        { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS ); } );
+        {
+            EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS );
+        } );
 
     if( selection.Empty() )
         return 0;
@@ -304,10 +305,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
-        if( evt->IsAction( &PCB_ACTIONS::editActivate ) ||
-            evt->IsAction( &PCB_ACTIONS::move ) ||
-            evt->IsMotion() ||
-            evt->IsDrag( BUT_LEFT ) ||
+        if( evt->IsAction( &PCB_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ||
             evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             if( m_dragging && evt->Category() == TC_MOUSE )
@@ -1061,7 +1059,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         // If items were duplicated, pick them up
         // this works well for "dropping" copies around and pushes the commit
         TOOL_EVENT evt = PCB_ACTIONS::move.MakeEvent();
-        Main( evt );
+        Move( evt );
     }
 
     return 0;
@@ -1395,8 +1393,7 @@ int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
 
 void EDIT_TOOL::setTransitions()
 {
-    Go( &EDIT_TOOL::Main,                PCB_ACTIONS::editActivate.MakeEvent() );
-    Go( &EDIT_TOOL::Main,                PCB_ACTIONS::move.MakeEvent() );
+    Go( &EDIT_TOOL::Move,                PCB_ACTIONS::move.MakeEvent() );
     Go( &EDIT_TOOL::Drag,                PCB_ACTIONS::drag45Degree.MakeEvent() );
     Go( &EDIT_TOOL::Drag,                PCB_ACTIONS::dragFreeAngle.MakeEvent() );
     Go( &EDIT_TOOL::Rotate,              PCB_ACTIONS::rotateCw.MakeEvent() );

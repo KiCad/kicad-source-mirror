@@ -104,10 +104,6 @@ public:
     /// Filters the items in the current selection (invokes dialog)
     static TOOL_ACTION filterSelection;
 
-    // Edit Tool
-    /// Activation of the edit tool
-    static TOOL_ACTION editActivate;
-
     /// move an item
     static TOOL_ACTION move;
 

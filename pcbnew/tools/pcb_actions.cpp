@@ -180,11 +180,6 @@ TOOL_ACTION PCB_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.EditFp
         _( "Opens the selected footprint in the Footprint Editor" ),
         module_editor_xpm );
 
-TOOL_ACTION PCB_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
-        AS_GLOBAL, 0, "",
-        _( "Edit Activate" ), "",
-        move_xpm, AF_ACTIVATE );
-
 TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveMove.move",
         AS_GLOBAL,
         'M', LEGACY_HK_NAME( "Move Item" ),

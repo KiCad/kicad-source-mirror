@@ -78,7 +78,7 @@ public:
      * Function Main()
      * Main loop in which events are handled.
      */
-    int Main( const TOOL_EVENT& aEvent );
+    int Move( const TOOL_EVENT& aEvent );
 
     /**
      * Function Drag()
