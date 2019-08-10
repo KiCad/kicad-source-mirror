@@ -1410,7 +1410,6 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
 void EDIT_TOOL::setTransitions()
 {
-    Go( &EDIT_TOOL::Main,       PCB_ACTIONS::editActivate.MakeEvent() );
     Go( &EDIT_TOOL::Main,       PCB_ACTIONS::move.MakeEvent() );
     Go( &EDIT_TOOL::Drag,       PCB_ACTIONS::drag45Degree.MakeEvent() );
     Go( &EDIT_TOOL::Drag,       PCB_ACTIONS::dragFreeAngle.MakeEvent() );

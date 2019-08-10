@@ -193,6 +193,11 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
 }
 
 
+TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveEdit.move",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_ITEM ),
+        _( "Move" ), _( "Moves the selected item(s)" ), nullptr, AF_ACTIVATE );
+
+
 // Initialize static member variables
 wxString DIALOG_FIND::prevSearchString;
 bool DIALOG_FIND::warpMouse = true;
