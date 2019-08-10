@@ -159,9 +159,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
                                          wxSize( m_FrameSize.x, m_MsgFrameHeight ) );
 
     m_messagePanel->SetBackgroundColour( COLOR4D( LIGHTGRAY ).ToColour() );
-
-    Connect( wxEVT_ACTIVATE, wxActivateEventHandler( EDA_DRAW_FRAME::onActivate ), NULL, this );
-    Connect( wxEVT_IDLE, wxIdleEventHandler( EDA_DRAW_FRAME::onIdle ), NULL, this );
 }
 
 
@@ -190,29 +187,6 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
     m_auimgr.UnInit();
 
     ReleaseFile();
-
-    Disconnect( wxEVT_ACTIVATE, wxActivateEventHandler( EDA_DRAW_FRAME::onActivate ), NULL, this );
-    Disconnect( wxEVT_IDLE, wxIdleEventHandler( EDA_DRAW_FRAME::onIdle ), NULL, this );
-}
-
-
-void EDA_DRAW_FRAME::onActivate( wxActivateEvent& event )
-{
-#ifdef __WXMAC__
-    // Work around wxWidgets bug where the OSX Preferences item gets lost when reactivating
-    // a draw frame...
-    m_menuBarDirty = true;
-#endif
-}
-
-
-void EDA_DRAW_FRAME::onIdle( wxIdleEvent& event )
-{
-    if( m_menuBarDirty )
-    {
-        m_menuBarDirty = false;
-        ReCreateMenuBar();
-    }
 }
 
 
