@@ -125,6 +125,10 @@ option( KICAD_BUILD_PARALLEL_CL_MP
     "Build in parallel using the /MP compiler option (default OFF for safety reasons)"
     OFF )
 
+option( KICAD_USE_VALGRIND
+    "Build KiCad with valgrind stack tracking enabled."
+    OFF )
+
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
@@ -161,6 +165,10 @@ set( CMAKE_POSITION_INDEPENDENT_CODE ON )
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Enable additional valgrind instrumentation for stack tracking in libcontext
+if( KICAD_USE_VALGRIND )
+    add_definitions( -DKICAD_USE_VALGRIND )
+endif()
 
 # CMP0063: CMake < 3.3 does not handle hidden visibility for static libraries,
 # and 3.3 is backwards compatible when the minimum version is smaller than 3.3.

@@ -31,6 +31,10 @@
 
 #include <type_traits>
 
+#ifdef KICAD_USE_VALGRIND
+#include <valgrind/valgrind.h>
+#endif
+
 #include <system/libcontext.h>
 #include <memory>
 
@@ -65,8 +69,8 @@ private:
     {
         enum
         {
-            FROM_ROOT,      // a stub was called/a corutine was resumed from the main-stack context
-            FROM_ROUTINE,   // a stub was called/a coroutine was resumed fron a coroutine context
+            FROM_ROOT,      // a stub was called/a coroutine was resumed from the main-stack context
+            FROM_ROUTINE,   // a stub was called/a coroutine was resumed from a coroutine context
             CONTINUE_AFTER_ROOT // a function sent a request to invoke a function on the main
                                 // stack context
         } type; // invocation type
@@ -140,11 +144,17 @@ public:
         m_callContext( nullptr ),
         m_callee( nullptr ),
         m_retVal( 0 )
+#ifdef KICAD_USE_VALGRIND
+        ,valgrind_stack( 0 )
+#endif
     {
     }
 
     ~COROUTINE()
     {
+#ifdef KICAD_USE_VALGRIND
+        VALGRIND_STACK_DEREGISTER( valgrind_stack );
+#endif
     }
 
 public:
@@ -306,6 +316,10 @@ private:
 
         // correct the stack size
         stackSize -= size_t( ( (ptrdiff_t) m_stack.get() + stackSize ) - (ptrdiff_t) sp );
+
+#ifdef KICAD_USE_VALGRIND
+        valgrind_stack = VALGRIND_STACK_REGISTER( sp, m_stack.get() );
+#endif
         #endif
 
         m_callee = libcontext::make_fcontext( sp, stackSize, callerStub );
@@ -389,6 +403,10 @@ private:
     CALLEE_STORAGE m_callee;
 
     ReturnType m_retVal;
+
+#ifdef KICAD_USE_VALGRIND
+    uint32_t valgrind_stack;
+#endif
 };
 
 #endif
