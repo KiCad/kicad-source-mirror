@@ -40,6 +40,11 @@ public:
         m_textCtrlName->SetValue( aRegName );
         m_textCtrlName->Enable( aRegName.IsEmpty() );
         UpdateDialog();
+
+        m_sdbSizerOK->SetDefault();
+
+        // Now all widgets have the size fixed, call FinishDialogSettings
+        FinishDialogSettings();
     }
 
     ~DIALOG_EDITOR_DATA() {};
@@ -221,8 +226,7 @@ void PCB_CALCULATOR_FRAME::OnDataFileSelection( wxCommandEvent& event )
 
     wxString wildcard;
     wildcard.Printf( _("PCB Calculator data file (*.%s)|*.%s"),
-                     GetChars( DataFileNameExt ),
-                     GetChars( DataFileNameExt ) );
+                     DataFileNameExt, DataFileNameExt );
 
     wxFileDialog dlg( m_panelRegulators,
                       _("Select PCB Calculator Data File"),
@@ -256,7 +260,7 @@ void PCB_CALCULATOR_FRAME::OnDataFileSelection( wxCommandEvent& event )
     else
     {
         wxString msg;
-        msg.Printf( _("Unable to read data file \"%s\""), GetChars( fullfilename ) );
+        msg.Printf( _("Unable to read data file \"%s\""), fullfilename );
         wxMessageBox( msg );
     }
 }
