@@ -53,6 +53,9 @@ using namespace std::placeholders;
 #include <tools/selection_tool.h>
 #include <view/view.h>
 
+extern void SpreadFootprints( std::vector<MODULE*>* aFootprints,
+                              wxPoint aSpreadAreaPosition );
+
 
 bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename,
                                           NETLIST& aNetlist,
@@ -108,7 +111,7 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
 
     GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    SpreadFootprints( &newFootprints, false, false, areaPosition, false );
+    SpreadFootprints( &newFootprints, areaPosition );
 
     // Start drag command for new modules
     if( !newFootprints.empty() )

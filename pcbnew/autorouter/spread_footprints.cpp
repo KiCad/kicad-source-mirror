@@ -1,11 +1,11 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2019 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -166,49 +166,28 @@ void moveFootprintsInArea( CRectPlacement& aPlacementArea,
 
 static bool sortFootprintsbySheetPath( MODULE* ref, MODULE* compare );
 
-/* Function to move components in a rectangular area format 4 / 3,
- * starting from the mouse cursor.
- * Footprints are grouped by sheet.
- * Components with the LOCKED status set are not moved
+
+/**
+ * Footprints (after loaded by reading a netlist for instance) are moved
+ * to be in a small free area (outside the current board) without overlapping.
+ * @param aBoard is the board to edit.
+ * @param aFootprints: a list of footprints to be spread out.
+ * @param aSpreadAreaPosition the position of the upper left corner of the
+ *        area allowed to spread footprints
  */
-void PCB_EDIT_FRAME::SpreadFootprints( std::vector<MODULE*>* aFootprints,
-                                       bool aMoveFootprintsOutsideBoardOnly,
-                                       bool aCheckForBoardEdges,
-                                       wxPoint aSpreadAreaPosition,
-                                       bool aPrepareUndoCommand )
+void SpreadFootprints( std::vector<MODULE*>* aFootprints,
+                       wxPoint aSpreadAreaPosition )
 {
-    EDA_RECT bbox = GetBoard()->GetBoardEdgesBoundingBox();
-    bool     edgesExist = bbox.GetWidth() || bbox.GetHeight();
-    // if aFootprintsOutsideBoardOnly is true, and if board outline exists,
-    // we have to filter footprints to move:
-    bool outsideBrdFilter = aMoveFootprintsOutsideBoardOnly && edgesExist;
-
-    // no edges exist
-    if( aMoveFootprintsOutsideBoardOnly && !edgesExist )
-    {
-        DisplayError( this,
-                      _( "Could not automatically place footprints. No board outlines detected." ) );
-        return;
-    }
-
-
     // Build candidate list
     // calculate also the area needed by these footprints
     std::vector <MODULE*> footprintList;
 
     for( MODULE* footprint : *aFootprints )
     {
-        footprint->CalculateBoundingBox();
-
-        if( outsideBrdFilter )
-        {
-            if( bbox.Contains( footprint->GetPosition() ) )
-                continue;
-        }
-
         if( footprint->IsLocked() )
             continue;
 
+        footprint->CalculateBoundingBox();
         footprintList.push_back( footprint );
     }
 
@@ -218,55 +197,16 @@ void PCB_EDIT_FRAME::SpreadFootprints( std::vector<MODULE*>* aFootprints,
     // sort footprints by sheet path. we group them later by sheet
     sort( footprintList.begin(), footprintList.end(), sortFootprintsbySheetPath );
 
-    // Undo command: init undo list. If aPrepareUndoCommand == false
-    // no undo command will be initialized.
-    // Useful when a undo command is already initialized by the caller
-    PICKED_ITEMS_LIST  undoList;
-
-    if( aPrepareUndoCommand )
-    {
-        undoList.m_Status = UR_CHANGED;
-        ITEM_PICKER        picker( NULL, UR_CHANGED );
-
-        for( MODULE* footprint : footprintList )
-        {
-            // Undo: add copy of the footprint to undo list
-            picker.SetItem( footprint );
-            picker.SetLink( footprint->Clone() );
-            undoList.PushItem( picker );
-        }
-    }
-
     // Extract and place footprints by sheet
     std::vector <MODULE*> footprintListBySheet;
     std::vector <EDA_RECT> placementSheetAreas;
     double subsurface;
     double placementsurface = 0.0;
 
-    // put the placement area position on mouse cursor.
-    // this position will be adjusted later
-    wxPoint placementAreaPosition = aSpreadAreaPosition;
-
-    // We sometimes do not want to move footprints inside an existing board.
-    // Therefore, move the placement area position outside the board bounding box
-    // to the left of the board
-    if( aCheckForBoardEdges && edgesExist )
-    {
-        if( placementAreaPosition.x < bbox.GetEnd().x &&
-            placementAreaPosition.y < bbox.GetEnd().y )
-        {
-            // the placement area could overlap the board
-            // move its position to a safe location
-            placementAreaPosition.x = bbox.GetEnd().x;
-            placementAreaPosition.y = bbox.GetOrigin().y;
-        }
-    }
-
     // The placement uses 2 passes:
     // the first pass creates the rectangular areas to place footprints
     // each sheet in schematic creates one rectangular area.
     // the second pass moves footprints inside these areas
-    MODULE* footprint;
     for( int pass = 0; pass < 2; pass++ )
     {
         int subareaIdx = 0;
@@ -275,7 +215,7 @@ void PCB_EDIT_FRAME::SpreadFootprints( std::vector<MODULE*>* aFootprints,
 
         for( unsigned ii = 0; ii < footprintList.size(); ii++ )
         {
-            footprint = footprintList[ii];
+            MODULE* footprint = footprintList[ii];
             bool islastItem = false;
 
             if( ii == footprintList.size() - 1 ||
@@ -301,7 +241,7 @@ void PCB_EDIT_FRAME::SpreadFootprints( std::vector<MODULE*>* aFootprints,
                 if( pass == 1 )
                 {
                     wxPoint areapos = placementSheetAreas[subareaIdx].GetOrigin()
-                                      + placementAreaPosition;
+                                      + aSpreadAreaPosition;
                     freeArea.SetOrigin( areapos );
                 }
 
@@ -354,14 +294,6 @@ void PCB_EDIT_FRAME::SpreadFootprints( std::vector<MODULE*>* aFootprints,
             }
         }
     }   // End pass
-
-    // Undo: commit list
-    if( aPrepareUndoCommand )
-        SaveCopyInUndoList( undoList, UR_CHANGED );
-
-    OnModify();
-
-    GetCanvas()->Refresh();
 }
 
 
