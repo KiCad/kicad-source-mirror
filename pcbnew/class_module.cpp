@@ -142,9 +142,20 @@ MODULE::MODULE( const MODULE& aModule ) :
 
 MODULE::~MODULE()
 {
+    // Clean up the owned elements
     delete m_Reference;
     delete m_Value;
     delete m_initial_comments;
+
+    for( auto p : m_pads )
+        delete p;
+
+    m_pads.clear();
+
+    for( auto d : m_drawings )
+        delete d;
+
+    m_drawings.clear();
 }
 
 

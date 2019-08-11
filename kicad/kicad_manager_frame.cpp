@@ -165,6 +165,13 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
 KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
 {
+    // Ensure there are no active tools
+    if( m_toolManager )
+        m_toolManager->DeactivateTool();
+
+    delete m_actions;
+    delete m_toolManager;
+
     m_auimgr.UnInit();
 }
 

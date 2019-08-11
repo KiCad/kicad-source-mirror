@@ -146,8 +146,27 @@ BOARD::~BOARD()
         Delete( area_to_remove );
     }
 
+    // Clean up the owned elements
     DeleteMARKERs();
     DeleteZONEOutlines();
+
+    // Delete the modules
+    for( auto m : m_modules )
+        delete m;
+
+    m_modules.clear();
+
+    // Delete the tracks
+    for( auto t : m_tracks )
+        delete t;
+
+    m_tracks.clear();
+
+    // Delete the drawings
+    for (auto d : m_drawings )
+        delete d;
+
+    m_drawings.clear();
 
     delete m_CurrentZoneContour;
     m_CurrentZoneContour = NULL;
