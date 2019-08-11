@@ -84,9 +84,6 @@ public:
      */
     bool UpdateNetlist( NETLIST& aNetlist );
 
-    // @todo: implement and move NETLIST::ReadPcbNetlist here
-    bool UpdateNetlist( const wxString& aNetlistFileName, const wxString& aCmpFileName );
-
     ///> Sets the reporter object
     void SetReporter( REPORTER* aReporter )
     {

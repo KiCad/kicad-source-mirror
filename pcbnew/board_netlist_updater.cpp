@@ -816,10 +816,3 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     m_reporter->ReportTail( _( "Netlist update successful!" ), REPORTER::RPT_ACTION );
     return true;
 }
-
-
-bool BOARD_NETLIST_UPDATER::UpdateNetlist( const wxString& aNetlistFileName,
-                                           const wxString& aCmpFileName )
-{
-    return false;
-}
