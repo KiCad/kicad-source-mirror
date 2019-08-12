@@ -243,7 +243,7 @@ int TestConflictingBusAliases( bool aCreateMarker )
                     if( aCreateMarker )
                     {
                         msg = wxString::Format( _( "Bus alias %s has conflicting definitions on"
-                                                   "multiple sheets: %s and %s" ),
+                                                   " multiple sheets: %s and %s" ),
                                                 alias->GetName(),
                                                 alias->GetParent()->GetFileName(),
                                                 test->GetParent()->GetFileName() );
