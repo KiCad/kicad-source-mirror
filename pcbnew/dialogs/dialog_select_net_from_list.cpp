@@ -25,7 +25,7 @@
 #include <fctsys.h>
 #include <kicad_string.h>
 #include <pcbnew.h>
-#include <tools/pcb_editor_control.h>
+#include <tools/pcb_inspection_tool.h>
 #include <class_board.h>
 #include <dialog_select_net_from_list_base.h>
 #include <eda_pattern_match.h>
@@ -76,7 +76,7 @@ private:
 };
 
 
-int PCB_EDITOR_CONTROL::ListNets( const TOOL_EVENT& aEvent )
+int PCB_INSPECTION_TOOL::ListNets( const TOOL_EVENT& aEvent )
 {
     DIALOG_SELECT_NET_FROM_LIST dlg( m_frame );
     wxString netname;

@@ -36,10 +36,16 @@
  *
  * Tool for pcb inspection.
  */
-class PCB_INSPECTION_TOOL : public PCB_TOOL_BASE
+class PCB_INSPECTION_TOOL : public wxEvtHandler, public PCB_TOOL_BASE
 {
 public:
     PCB_INSPECTION_TOOL();
+
+    /// @copydoc TOOL_INTERACTIVE::Init()
+    bool Init() override;
+
+    /// @copydoc TOOL_INTERACTIVE::Reset()
+    void Reset( RESET_REASON aReason ) override;
 
     /**
      * Function ShowStatisticDialog()
@@ -48,8 +54,54 @@ public:
      */
     int ShowStatisticsDialog( const TOOL_EVENT& aEvent );
 
+    ///> Notifies eeschema about the selected item.
+    int CrossProbePcbToSch( const TOOL_EVENT& aEvent );
+
+    ///> Highlights net belonging to the item under the cursor.
+    int HighlightNet( const TOOL_EVENT& aEvent );
+
+    ///> Clears all board highlights
+    int ClearHighlight( const TOOL_EVENT& aEvent );
+
+    ///> Launches a tool to pick the item whose net is going to be highlighted.
+    int HighlightNetTool( const TOOL_EVENT& aEvent );
+
+    ///> Performs the appropriate action in response to an eeschema cross-probe.
+    int HighlightItem( const TOOL_EVENT& aEvent );
+
+    ///> Updates ratsnest for selected items.
+    int UpdateSelectionRatsnest( const TOOL_EVENT& aEvent );
+
+    ///> Hides ratsnest for selected items. Called when there are no items selected.
+    int HideDynamicRatsnest( const TOOL_EVENT& aEvent );
+
+    ///> Shows local ratsnest of a component
+    int LocalRatsnestTool( const TOOL_EVENT& aEvent );
+
+    int FlipPcbView( const TOOL_EVENT& aEvent );
+
+    int ListNets( const TOOL_EVENT& aEvent );
+
+private:
+    ///> Event handler to recalculate dynamic ratsnest
+    void ratsnestTimer( wxTimerEvent& aEvent );
+
+    ///> Recalculates dynamic ratsnest for the current selection
+    void calculateSelectionRatsnest();
+
+    bool highlightNet( const VECTOR2D& aPosition, bool aUseSelection );
+
     ///> Bind handlers to corresponding TOOL_ACTIONs
     void setTransitions() override;
+
+private:
+    PCB_EDIT_FRAME* m_frame;    // Pointer to the currently used edit frame.
+
+    bool m_probingSchToPcb;     // Recursion guard when cross-probing to EESchema
+    int  m_lastNetcode;         // Used for toggling between last two highlighted nets
+
+    bool m_slowRatsnest;        // Indicates current selection ratsnest will be slow to calculate
+    wxTimer m_ratsnestTimer;    // Timer to initiate lazy ratsnest calculation (ie: when slow)
 };
 
 #endif //__BOARD_STATISTICS_TOOL_H

@@ -29,7 +29,6 @@
 #include <tool/tool_manager.h>
 #include <tools/tool_event_utils.h>
 #include <ws_proxy_undo_item.h>
-#include "edit_tool.h"
 #include "selection_tool.h"
 #include "drawing_tool.h"
 #include "pcbnew_picker_tool.h"
@@ -41,15 +40,12 @@
 #include <class_zone.h>
 #include <class_module.h>
 #include <class_pcb_target.h>
-#include <connectivity/connectivity_data.h>
 #include <collectors.h>
 #include <board_commit.h>
 #include <bitmaps.h>
 #include <view/view_group.h>
 #include <view/view_controls.h>
 #include <origin_viewitem.h>
-#include <profile.h>
-#include <widgets/progress_reporter.h>
 #include <dialogs/dialog_page_settings.h>
 #include <pcb_netlist.h>
 #include <dialogs/dialog_update_pcb.h>
@@ -147,9 +143,6 @@ PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
 {
     m_placeOrigin.reset( new KIGFX::ORIGIN_VIEWITEM( KIGFX::COLOR4D( 0.8, 0.0, 0.0, 1.0 ),
                                                 KIGFX::ORIGIN_VIEWITEM::CIRCLE_CROSS ) );
-    m_probingSchToPcb = false;
-    m_slowRatsnest = false;
-    m_lastNetcode = -1;
 }
 
 
@@ -245,10 +238,6 @@ bool PCB_EDITOR_CONTROL::Init()
 
         menu.AddMenu( zoneMenu.get(), toolActiveFunctor( DRAWING_TOOL::MODE::ZONE ), 200 );
     }
-
-    m_ratsnestTimer.SetOwner( this );
-    Connect( m_ratsnestTimer.GetId(), wxEVT_TIMER,
-            wxTimerEventHandler( PCB_EDITOR_CONTROL::ratsnestTimer ), NULL, this );
 
     return true;
 }
@@ -1097,41 +1086,6 @@ int PCB_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::CrossProbePcbToSch( const TOOL_EVENT& aEvent )
-{
-    // Don't get in an infinite loop PCB -> SCH -> PCB -> SCH -> ...
-    if( m_probingSchToPcb )
-        return 0;
-
-    SELECTION_TOOL*         selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const PCBNEW_SELECTION& selection = selTool->GetSelection();
-
-    if( selection.Size() == 1 )
-        m_frame->SendMessageToEESCHEMA( static_cast<BOARD_ITEM*>( selection.Front() ) );
-    else
-        m_frame->SendMessageToEESCHEMA( nullptr );
-
-    return 0;
-}
-
-
-int PCB_EDITOR_CONTROL::HighlightItem( const TOOL_EVENT& aEvent )
-{
-    BOARD_ITEM* item = aEvent.Parameter<BOARD_ITEM*>();
-
-    m_probingSchToPcb = true;   // recursion guard
-    {
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
-        if( item )
-            m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, (void*) item );
-    }
-    m_probingSchToPcb = false;
-
-    return 0;
-}
-
-
 void PCB_EDITOR_CONTROL::DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                            BOARD_ITEM* originViewItem, const VECTOR2D& aPosition )
 {
@@ -1161,352 +1115,6 @@ int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
     return 0;
-}
-
-
-/**
- * Look for a BOARD_CONNECTED_ITEM in a given spot and if one is found - it enables
- * highlight for its net.
- *
- * @param aPosition is the point where an item is expected (world coordinates).
- * @param aUseSelection is true if we should use the current selection to pick the netcode
- */
- bool PCB_EDITOR_CONTROL::highlightNet( const VECTOR2D& aPosition, bool aUseSelection )
-{
-    KIGFX::RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
-    PCB_EDIT_FRAME*         frame = getEditFrame<PCB_EDIT_FRAME>();
-
-    BOARD* board = static_cast<BOARD*>( m_toolMgr->GetModel() );
-
-    int net = -1;
-    bool enableHighlight = false;
-
-    if( aUseSelection )
-    {
-        SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-
-        const PCBNEW_SELECTION& selection = selectionTool->GetSelection();
-
-        for( auto item : selection )
-        {
-            if( BOARD_CONNECTED_ITEM::ClassOf( item ) )
-            {
-                auto ci = static_cast<BOARD_CONNECTED_ITEM*>( item );
-
-                int item_net = ci->GetNetCode();
-
-                if( net < 0 )
-                    net = item_net;
-                else if( net != item_net )  // more than one net selected: do nothing
-                    return false;
-            }
-        }
-
-        enableHighlight = ( net >= 0 && net != settings->GetHighlightNetCode() );
-    }
-
-    // If we didn't get a net to highlight from the selection, use the cursor
-    if( net < 0 )
-    {
-        auto guide = frame->GetCollectorsGuide();
-        GENERAL_COLLECTOR collector;
-
-        // Find a connected item for which we are going to highlight a net
-        collector.Collect( board, GENERAL_COLLECTOR::PadsOrTracks, (wxPoint) aPosition, guide );
-
-        if( collector.GetCount() == 0 )
-            collector.Collect( board, GENERAL_COLLECTOR::Zones, (wxPoint) aPosition, guide );
-
-        // Clear the previous highlight
-        frame->SendMessageToEESCHEMA( nullptr );
-
-        for( int i = 0; i < collector.GetCount(); i++ )
-        {
-            if( ( collector[i]->GetLayerSet() & LSET::AllCuMask() ).none() )
-                collector.Remove( i );
-
-            if( collector[i]->Type() == PCB_PAD_T )
-            {
-                frame->SendMessageToEESCHEMA( static_cast<BOARD_CONNECTED_ITEM*>( collector[i] ) );
-                break;
-            }
-        }
-
-        enableHighlight = ( collector.GetCount() > 0 );
-
-        // Obtain net code for the clicked item
-        if( enableHighlight )
-            net = static_cast<BOARD_CONNECTED_ITEM*>( collector[0] )->GetNetCode();
-    }
-
-    // Toggle highlight when the same net was picked
-    if( net > 0 && net == settings->GetHighlightNetCode() )
-        enableHighlight = !settings->IsHighlightEnabled();
-
-    if( enableHighlight != settings->IsHighlightEnabled()
-            || net != settings->GetHighlightNetCode() )
-    {
-        m_lastNetcode = settings->GetHighlightNetCode();
-        settings->SetHighlight( enableHighlight, net );
-        m_toolMgr->GetView()->UpdateAllLayersColor();
-    }
-
-    // Store the highlighted netcode in the current board (for dialogs for instance)
-    if( enableHighlight && net >= 0 )
-    {
-        board->SetHighLightNet( net );
-
-        NETINFO_ITEM* netinfo = board->FindNet( net );
-
-        if( netinfo )
-        {
-            MSG_PANEL_ITEMS items;
-            netinfo->GetMsgPanelInfo( frame->GetUserUnits(), items );
-            frame->SetMsgPanel( items );
-            frame->SendCrossProbeNetName( netinfo->GetNetname() );
-        }
-    }
-    else
-    {
-        board->ResetNetHighLight();
-        frame->SetMsgPanel( board );
-        frame->SendCrossProbeNetName( "" );
-    }
-
-    return true;
-}
-
-
-int PCB_EDITOR_CONTROL::HighlightNet( const TOOL_EVENT& aEvent )
-{
-    int                     netcode = aEvent.Parameter<intptr_t>();
-    KIGFX::RENDER_SETTINGS* settings = m_toolMgr->GetView()->GetPainter()->GetSettings();
-
-    if( netcode > 0 )
-    {
-        m_lastNetcode = settings->GetHighlightNetCode();
-        settings->SetHighlight( true, netcode );
-        m_toolMgr->GetView()->UpdateAllLayersColor();
-    }
-    else if( aEvent.IsAction( &PCB_ACTIONS::toggleLastNetHighlight ) )
-    {
-        int temp = settings->GetHighlightNetCode();
-        settings->SetHighlight( true, m_lastNetcode );
-        m_toolMgr->GetView()->UpdateAllLayersColor();
-        m_lastNetcode = temp;
-    }
-    else    // Highlight the net belonging to the item under the cursor
-    {
-        highlightNet( getViewControls()->GetMousePosition(), false );
-    }
-
-    return 0;
-}
-
-
-int PCB_EDITOR_CONTROL::ClearHighlight( const TOOL_EVENT& aEvent )
-{
-    auto frame = static_cast<PCB_EDIT_FRAME*>( m_toolMgr->GetEditFrame() );
-    auto board = static_cast<BOARD*>( m_toolMgr->GetModel() );
-    KIGFX::RENDER_SETTINGS* render = m_toolMgr->GetView()->GetPainter()->GetSettings();
-
-    board->ResetNetHighLight();
-    render->SetHighlight( false );
-    m_toolMgr->GetView()->UpdateAllLayersColor();
-    frame->SetMsgPanel( board );
-    frame->SendCrossProbeNetName( "" );
-    return 0;
-}
-
-
-int PCB_EDITOR_CONTROL::HighlightNetTool( const TOOL_EVENT& aEvent )
-{
-    std::string         tool = aEvent.GetCommandStr().get();
-    PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
-
-    // Deactivate other tools; particularly important if another PICKER is currently running
-    Activate();
-
-    // If the keyboard hotkey was triggered and we are already in the highlight tool, behave
-    // the same as a left-click.  Otherwise highlight the net of the selected item(s), or if
-    // there is no selection, then behave like a ctrl-left-click.
-    if( aEvent.IsAction( &PCB_ACTIONS::highlightNetSelection ) )
-    {
-        bool use_selection = m_frame->IsCurrentTool( PCB_ACTIONS::highlightNetTool );
-        highlightNet( getViewControls()->GetMousePosition(), use_selection );
-    }
-
-    picker->SetClickHandler(
-        [this] ( const VECTOR2D& pt ) -> bool
-        {
-            highlightNet( pt, false );
-            return true;
-        } );
-
-    picker->SetLayerSet( LSET::AllCuMask() );
-
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
-
-    return 0;
-}
-
-
-int PCB_EDITOR_CONTROL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
-{
-    std::string          tool = aEvent.GetCommandStr().get();
-    PCBNEW_PICKER_TOOL*  picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
-    BOARD*               board = getModel<BOARD>();
-    PCB_DISPLAY_OPTIONS* opt = displayOptions();
-
-    // Deactivate other tools; particularly important if another PICKER is currently running
-    Activate();
-
-    picker->SetClickHandler(
-        [this, board, opt]( const VECTOR2D& pt ) -> bool
-        {
-            SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, EDIT_TOOL::PadFilter );
-            PCBNEW_SELECTION& selection = selectionTool->GetSelection();
-
-            if( selection.Empty() )
-            {
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true,
-                                      EDIT_TOOL::FootprintFilter );
-                selection = selectionTool->GetSelection();
-            }
-
-            if( selection.Empty() )
-            {
-                // Clear the previous local ratsnest if we click off all items
-                for( auto mod : board->Modules() )
-                {
-                    for( auto pad : mod->Pads() )
-                        pad->SetLocalRatsnestVisible( opt->m_ShowGlobalRatsnest );
-                }
-            }
-            else
-            {
-                for( auto item : selection )
-                {
-                    if( auto pad = dyn_cast<D_PAD*>(item) )
-                    {
-                        pad->SetLocalRatsnestVisible( !pad->GetLocalRatsnestVisible() );
-                    }
-                    else if( auto mod = dyn_cast<MODULE*>(item) )
-                    {
-                        bool enable = !( *( mod->Pads().begin() ) )->GetLocalRatsnestVisible();
-
-                        for( auto modpad : mod->Pads() )
-                            modpad->SetLocalRatsnestVisible( enable );
-                    }
-                }
-            }
-
-            m_toolMgr->GetView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
-
-            return true;
-        } );
-
-    picker->SetFinalizeHandler(
-        [board, opt] ( int aCondition )
-        {
-            if( aCondition != PCBNEW_PICKER_TOOL::END_ACTIVATE )
-            {
-                for( auto mod : board->Modules() )
-                {
-                    for( auto pad : mod->Pads() )
-                        pad->SetLocalRatsnestVisible( opt->m_ShowGlobalRatsnest );
-                }
-            }
-        } );
-
-    m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
-
-    return 0;
-}
-
-
-int PCB_EDITOR_CONTROL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
-{
-    auto selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    auto& selection = selectionTool->GetSelection();
-    auto connectivity = getModel<BOARD>()->GetConnectivity();
-
-    if( selection.Empty() )
-    {
-        connectivity->ClearDynamicRatsnest();
-    }
-    else if( m_slowRatsnest )
-    {
-        // Compute ratsnest only when user stops dragging for a moment
-        connectivity->HideDynamicRatsnest();
-        m_ratsnestTimer.Start( 20 );
-    }
-    else
-    {
-        // Check how much time doest it take to calculate ratsnest
-        PROF_COUNTER counter;
-        calculateSelectionRatsnest();
-        counter.Stop();
-
-        // If it is too slow, then switch to 'slow ratsnest' mode when
-        // ratsnest is calculated when user stops dragging items for a moment
-        if( counter.msecs() > 25 )
-        {
-            m_slowRatsnest = true;
-            connectivity->HideDynamicRatsnest();
-        }
-    }
-
-    return 0;
-}
-
-
-int PCB_EDITOR_CONTROL::HideDynamicRatsnest( const TOOL_EVENT& aEvent )
-{
-    getModel<BOARD>()->GetConnectivity()->HideDynamicRatsnest();
-    m_slowRatsnest = false;
-    return 0;
-}
-
-
-void PCB_EDITOR_CONTROL::ratsnestTimer( wxTimerEvent& aEvent )
-{
-    m_ratsnestTimer.Stop();
-    calculateSelectionRatsnest();
-    m_frame->GetCanvas()->RedrawRatsnest();
-    m_frame->GetCanvas()->Refresh();
-}
-
-
-void PCB_EDITOR_CONTROL::calculateSelectionRatsnest()
-{
-    SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    SELECTION& selection = selectionTool->GetSelection();
-    std::shared_ptr<CONNECTIVITY_DATA> connectivity = board()->GetConnectivity();
-    std::vector<BOARD_ITEM*> items;
-
-    for( EDA_ITEM* item : selection )
-    {
-        BOARD_CONNECTED_ITEM* boardItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
-
-        if( boardItem->Type() == PCB_MODULE_T )
-        {
-            for( auto pad : static_cast<MODULE*>( item )->Pads() )
-            {
-                if( pad->GetLocalRatsnestVisible() || displayOptions()->m_ShowModuleRatsnest )
-                    items.push_back( pad );
-            }
-        }
-        else if( boardItem->GetLocalRatsnestVisible() || displayOptions()->m_ShowModuleRatsnest )
-        {
-            items.push_back( boardItem );
-        }
-    }
-
-    connectivity->ComputeDynamicRatsnest( items );
 }
 
 
@@ -1559,22 +1167,7 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::ToggleLockSelected,     PCB_ACTIONS::toggleLock.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::LockSelected,           PCB_ACTIONS::lock.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::UnlockSelected,         PCB_ACTIONS::unlock.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,     EVENTS::SelectedEvent );
-    Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,     EVENTS::UnselectedEvent );
-    Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,     EVENTS::ClearedEvent );
-    Go( &PCB_EDITOR_CONTROL::HighlightNet,           PCB_ACTIONS::highlightNet.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::HighlightNet,           PCB_ACTIONS::highlightNetSelection.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::HighlightNet,           PCB_ACTIONS::toggleLastNetHighlight.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ClearHighlight,         PCB_ACTIONS::clearHighlight.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::HighlightNetTool,       PCB_ACTIONS::highlightNetTool.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ClearHighlight,         ACTIONS::cancelInteractive.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::HighlightItem,          PCB_ACTIONS::highlightItem.MakeEvent() );
 
-    Go( &PCB_EDITOR_CONTROL::LocalRatsnestTool,      PCB_ACTIONS::localRatsnestTool.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::HideDynamicRatsnest,    PCB_ACTIONS::hideDynamicRatsnest.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::UpdateSelectionRatsnest,PCB_ACTIONS::updateLocalRatsnest.MakeEvent() );
-
-    Go( &PCB_EDITOR_CONTROL::ListNets,               PCB_ACTIONS::listNets.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::UpdatePCBFromSchematic, ACTIONS::updatePcbFromSchematic.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ShowEeschema,           PCB_ACTIONS::showEeschema.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ToggleLayersManager,    PCB_ACTIONS::showLayersManager.MakeEvent() );

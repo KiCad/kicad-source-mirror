@@ -39,7 +39,7 @@ class PCB_EDIT_FRAME;
  *
  * Handles actions specific to the board editor in pcbnew.
  */
-class PCB_EDITOR_CONTROL : public wxEvtHandler, public PCB_TOOL_BASE
+class PCB_EDITOR_CONTROL : public PCB_TOOL_BASE
 {
 public:
     PCB_EDITOR_CONTROL();
@@ -106,9 +106,6 @@ public:
     ///> Unlocks selected items.
     int UnlockSelected( const TOOL_EVENT& aEvent );
 
-    ///> Notifies eeschema about the selected item.
-    int CrossProbePcbToSch( const TOOL_EVENT& aEvent );
-
     ///> Runs the drill origin tool for setting the origin for drill and pick-and-place files.
     int DrillOrigin( const TOOL_EVENT& aEvent );
 
@@ -116,61 +113,23 @@ public:
     static void DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                   BOARD_ITEM* aItem, const VECTOR2D& aPoint );
 
-    ///> Highlights net belonging to the item under the cursor.
-    int HighlightNet( const TOOL_EVENT& aEvent );
-
-    ///> Clears all board highlights
-    int ClearHighlight( const TOOL_EVENT& aEvent );
-
-    ///> Launches a tool to pick the item whose net is going to be highlighted.
-    int HighlightNetTool( const TOOL_EVENT& aEvent );
-
-    ///> Performs the appropriate action in response to an eeschema cross-probe.
-    int HighlightItem( const TOOL_EVENT& aEvent );
-
-    ///> Updates ratsnest for selected items.
-    int UpdateSelectionRatsnest( const TOOL_EVENT& aEvent );
-
-    ///> Hides ratsnest for selected items. Called when there are no items selected.
-    int HideDynamicRatsnest( const TOOL_EVENT& aEvent );
-
-    ///> Shows local ratsnest of a component
-    int LocalRatsnestTool( const TOOL_EVENT& aEvent );
-
     int FlipPcbView( const TOOL_EVENT& aEvent );
 
-    int ListNets( const TOOL_EVENT& aEvent );
-
 private:
-    bool highlightNet( const VECTOR2D& aPosition, bool aUseSelection );
-
-    ///> Event handler to recalculate dynamic ratsnest
-    void ratsnestTimer( wxTimerEvent& aEvent );
-
-    ///> Recalculates dynamic ratsnest for the current selection
-    void calculateSelectionRatsnest();
-
-    ///> Sets up handlers for various events.
-    void setTransitions() override;
-
-    ///> Pointer to the currently used edit frame.
-    PCB_EDIT_FRAME* m_frame;
-
-    std::unique_ptr<KIGFX::ORIGIN_VIEWITEM> m_placeOrigin;    ///> Place & drill origin marker
-
-    bool m_probingSchToPcb;     ///> Recursion guard when cross-probing to EESchema
-    bool m_slowRatsnest;        ///> Indicates current selection ratsnest will be slow to calculate
-    wxTimer m_ratsnestTimer;    ///> Timer to initiate lazy ratsnest calculation (ie: when slow)
-
-    int  m_lastNetcode;         ///> Used for toggling between last two highlighted nets
-
     ///> How to modify a property for selected items.
     enum MODIFY_MODE { ON, OFF, TOGGLE };
 
     int modifyLockSelected( MODIFY_MODE aMode );
 
-    // How does line width change after one -/+ key press.
-    static const int WIDTH_STEP;
+    ///> Sets up handlers for various events.
+    void setTransitions() override;
+
+private:
+    PCB_EDIT_FRAME* m_frame;     ///> Pointer to the currently used edit frame.
+
+    std::unique_ptr<KIGFX::ORIGIN_VIEWITEM> m_placeOrigin;    ///> Place & drill origin marker
+
+    static const int WIDTH_STEP; ///> How does line width change after one -/+ key press.
 };
 
 #endif
