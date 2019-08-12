@@ -767,10 +767,16 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
             editTool->GetCurrentCommit()->Added( item );
     }
 
-    selection.SetReferencePoint( VECTOR2I( 0, 0 ) );
+    if( selection.Size() > 0 )
+    {
+        BOARD_ITEM* item = (BOARD_ITEM*) selection.GetTopLeftItem();
 
-    m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-    m_toolMgr->RunAction( PCB_ACTIONS::move, true );
+        selection.SetReferencePoint( item->GetPosition() );
+        getViewControls()->SetCursorPosition( getViewControls()->GetMousePosition(), false );
+
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+        m_toolMgr->RunAction( PCB_ACTIONS::move, true );
+    }
 
     return 0;
 }
