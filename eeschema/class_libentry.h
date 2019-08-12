@@ -87,9 +87,6 @@ protected:
     wxString        keyWords;       ///< keyword list (used for search for parts by keyword)
     wxString        docFileName;    ///< Associate doc file name
 
-    int             tmpUnit;        ///< Temporary unit designator (used for rendering)
-    int             tmpConversion;  ///< Temporary conversion designator (used for rendering)
-
 public:
     LIB_ALIAS( const wxString& aName, LIB_PART* aRootComponent );
     LIB_ALIAS( const LIB_ALIAS& aAlias, LIB_PART* aRootComponent = NULL );
@@ -173,12 +170,6 @@ public:
      * For symbols with units, return an identifier for unit x.
      */
     wxString GetUnitReference( int aUnit ) override;
-
-    /**
-     * A temporary conversion (deMorgan) designation for rendering, preview, etc.
-     */
-    void SetTmpConversion( int aConversion ) { tmpConversion = aConversion; }
-    int GetTmpConversion() { return tmpConversion; }
 
     /**
      * KEEPCASE sensitive comparison of the part entry name.
@@ -271,8 +262,6 @@ class LIB_PART : public EDA_ITEM
                                             ///< other values have no sense.
 private:
     void deleteAllFields();
-
-
 
 public:
 
@@ -376,26 +365,6 @@ public:
     {
         return GetUnitBoundingBox( 0, 0 );
     }
-
-    /**
-     * Write the date and time of part to \a aFile in the format:
-     * "Ti yy/mm/jj hh:mm:ss"
-     *
-     * @param aFormatter A reference to an #OUTPUTFORMATTER object containing the
-     *                   output format to write to.
-     * @return True if the date and time were successfully written to \a aFormatter.
-     */
-    bool SaveDateAndTime( OUTPUTFORMATTER& aFormatter );
-
-    bool LoadDateAndTime( char* aLine );
-
-    /**
-     * Write the data structures out to \a aFormatter in the part library "*.lib" format.
-     *
-     * @param aFormatter A reference to an OUTPUTFORMATTER to write to.
-     * @return True if success writing else false.
-     */
-    bool Save( OUTPUTFORMATTER& aFormatter );
 
     bool IsPower() const  { return m_options == ENTRY_POWER; }
     bool IsNormal() const { return m_options == ENTRY_NORMAL; }
