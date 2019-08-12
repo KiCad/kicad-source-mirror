@@ -24,7 +24,7 @@ DIALOG_UPDATE_PCB_BASE::DIALOG_UPDATE_PCB_BASE( wxWindow* parent, wxWindowID id,
 	wxString m_matchByTimestampChoices[] = { _("Update footprint references to match any changed symbol references"), _("Update footprint associations by existing references") };
 	int m_matchByTimestampNChoices = sizeof( m_matchByTimestampChoices ) / sizeof( wxString );
 	m_matchByTimestamp = new wxRadioBox( this, wxID_ANY, _("Match Method"), wxDefaultPosition, wxDefaultSize, m_matchByTimestampNChoices, m_matchByTimestampChoices, 1, wxRA_SPECIFY_COLS );
-	m_matchByTimestamp->SetSelection( 1 );
+	m_matchByTimestamp->SetSelection( 0 );
 	m_matchByTimestamp->SetToolTip( _("The first option uses the existing links between symbols and their footprints to update the footprints based on changes made to their symbols.  \n\nThe second option uses the symbol and footprint references to establish a new set of links between symbols and footprints, and then updates the footprints accordingly.") );
 	
 	bUpperSizer->Add( m_matchByTimestamp, 0, wxALIGN_TOP|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
