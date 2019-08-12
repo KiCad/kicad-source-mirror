@@ -136,10 +136,8 @@ bool DRAGGER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_currentMode = Settings().Mode();
     m_freeAngleMode = (m_mode & DM_FREE_ANGLE);
 
-    if( m_currentMode == RM_Shove )
-    {
-        m_shove.reset( new SHOVE( m_world, Router() ) );
-    }
+    if( m_currentMode != RM_MarkObstacles )
+        m_shove = std::make_unique<SHOVE>( m_world, Router() );
 
     aStartItem->Unmark( MK_LOCKED );
 
@@ -184,6 +182,7 @@ bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
         int thresh = Settings().SmoothDraggedSegments() ? m_draggedLine.Width() / 4 : 0;
         LINE origLine( m_draggedLine );
         LINE dragged( m_draggedLine );
+        dragged.ClearSegmentLinks();
 
         if( m_mode == DM_SEGMENT )
             dragged.DragSegment( aP, m_draggedSegmentIndex, thresh );
