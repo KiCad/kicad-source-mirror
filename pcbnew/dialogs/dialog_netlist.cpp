@@ -41,6 +41,7 @@
 #include <bitmaps.h>
 #include <tool/tool_manager.h>
 #include <board_design_settings.h>
+#include <tools/pcb_actions.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <connectivity/connectivity_data.h>
@@ -119,7 +120,11 @@ DIALOG_NETLIST::~DIALOG_NETLIST()
     m_config->Write( NETLIST_FILTER_MESSAGES_KEY, (long) m_MessageWindow->GetVisibleSeverities() );
 
     if( m_runDragCommand )
-        m_parent->GetToolManager()->InvokeTool( "pcbnew.InteractiveEdit" );
+    {
+        KIGFX::VIEW_CONTROLS* controls = m_parent->GetGalCanvas()->GetViewControls();
+        controls->SetCursorPosition( controls->GetMousePosition() );
+        m_parent->GetToolManager()->RunAction( PCB_ACTIONS::move, true );
+    }
 }
 
 

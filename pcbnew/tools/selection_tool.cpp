@@ -1289,7 +1289,7 @@ int SELECTION_TOOL::findMove( const TOOL_EVENT& aEvent )
         viewCtrls->ForceCursorPosition( true, module->GetPosition() );
 
         // pick the component up and start moving
-        m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
+        m_toolMgr->RunAction( PCB_ACTIONS::move, true );
 
         // restore the previous cursor position
         viewCtrls->SetCursorPosition( cursorPosition, false );
