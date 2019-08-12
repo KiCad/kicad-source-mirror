@@ -26,25 +26,21 @@
 #include <kiface_i.h>
 #include <confirm.h>
 #include <macros.h>
-#include <dialog_helpers.h>
 #include <html_messagebox.h>
-#include <base_units.h>
 #include <pcb_edit_frame.h>
 #include <pcb_netlist.h>
-#include <netlist_reader.h>
 #include <reporter.h>
 #include <bitmaps.h>
 #include <tool/tool_manager.h>
-#include <board_design_settings.h>
+#include <tools/drc.h>
+#include <tools/pcb_actions.h>
 #include <class_board.h>
-#include <class_module.h>
 #include <connectivity/connectivity_data.h>
 #include <wildcards_and_files_ext.h>
 #include <board_netlist_updater.h>
 
 #include <dialog_netlist.h>
 #include <wx_html_report_panel.h>
-#include <tools/drc.h>
 
 #define NETLIST_FILTER_MESSAGES_KEY wxT("NetlistReportFilterMsg")
 #define NETLIST_UPDATEFOOTPRINTS_KEY wxT("NetlistUpdateFootprints")
@@ -106,7 +102,11 @@ DIALOG_NETLIST::~DIALOG_NETLIST()
     m_config->Write( NETLIST_FILTER_MESSAGES_KEY, (long) m_MessageWindow->GetVisibleSeverities() );
 
     if( m_runDragCommand )
-        m_parent->GetToolManager()->InvokeTool( "pcbnew.InteractiveEdit" );
+    {
+        KIGFX::VIEW_CONTROLS* controls = m_parent->GetCanvas()->GetViewControls();
+        controls->SetCursorPosition( controls->GetMousePosition() );
+        m_parent->GetToolManager()->RunAction( PCB_ACTIONS::move, true );
+    }
 }
 
 

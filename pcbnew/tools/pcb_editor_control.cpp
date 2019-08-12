@@ -393,11 +393,6 @@ int PCB_EDITOR_CONTROL::UpdatePCBFromSchematic( const TOOL_EVENT& aEvent )
     {
         DIALOG_UPDATE_PCB updateDialog( m_frame, &netlist );
         updateDialog.ShowModal();
-
-        SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-
-        if( !selectionTool->GetSelection().Empty() )
-            m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
     }
 
     return 0;

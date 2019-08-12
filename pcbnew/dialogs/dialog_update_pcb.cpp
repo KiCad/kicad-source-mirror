@@ -92,7 +92,11 @@ DIALOG_UPDATE_PCB::~DIALOG_UPDATE_PCB()
     m_config->Write( NETLIST_FILTER_MESSAGES_KEY, (long) m_messagePanel->GetVisibleSeverities() );
 
     if( m_runDragCommand )
-        m_frame->GetToolManager()->InvokeTool( "pcbnew.InteractiveEdit" );
+    {
+        KIGFX::VIEW_CONTROLS* controls = m_frame->GetCanvas()->GetViewControls();
+        controls->SetCursorPosition( controls->GetMousePosition() );
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::move, true );
+    }
 }
 
 
