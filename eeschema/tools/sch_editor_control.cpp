@@ -26,6 +26,7 @@
 #include <sch_view.h>
 #include <sch_edit_frame.h>
 #include <sch_sheet.h>
+#include <sch_line.h>
 #include <connection_graph.h>
 #include <erc.h>
 #include <eeschema_id.h>
@@ -493,13 +494,24 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
             selectionTool->GuessSelectionCandidates( collector, aPos );
 
             EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
+            SCH_LINE* wire = dynamic_cast<SCH_LINE*>( item );
+            wxString  netName;
+
+            if( wire )
+            {
+                item = nullptr;
+
+                if( wire->Connection( *g_CurrentSheet ) )
+                    netName = wire->Connection( *g_CurrentSheet )->Name();
+            }
+
+            if( item && item->Type() == SCH_PIN_T )
+                picker->SetCursor( SIM_CURSORS::GetCursor( SIM_CURSORS::CURRENT_PROBE ) );
+            else
+                picker->SetCursor( SIM_CURSORS::GetCursor( SIM_CURSORS::VOLTAGE_PROBE ) );
 
             if( m_pickerItem != item )
             {
-                if( item && item->Type() == SCH_PIN_T )
-                    picker->SetCursor( SIM_CURSORS::GetCursor( SIM_CURSORS::CURRENT_PROBE ) );
-                else
-                    picker->SetCursor( SIM_CURSORS::GetCursor( SIM_CURSORS::VOLTAGE_PROBE ) );
 
                 if( m_pickerItem )
                     selectionTool->UnbrightenItem( m_pickerItem );
@@ -509,6 +521,14 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 if( m_pickerItem )
                     selectionTool->BrightenItem( m_pickerItem );
             }
+
+            if( m_frame->GetSelectedNetName() != netName )
+            {
+                m_frame->SetSelectedNetName( netName );
+
+                TOOL_EVENT dummyEvent;
+                UpdateNetHighlighting( dummyEvent );
+            }
         } );
 
     picker->SetFinalizeHandler(
@@ -516,6 +536,14 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
         {
             if( m_pickerItem )
                 m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
+
+            if( !m_frame->GetSelectedNetName().IsEmpty() )
+            {
+                m_frame->SetSelectedNetName( wxEmptyString );
+
+                TOOL_EVENT dummyEvent;
+                UpdateNetHighlighting( dummyEvent );
+            }
         } );
 
     std::string tool = aEvent.GetCommandStr().get();

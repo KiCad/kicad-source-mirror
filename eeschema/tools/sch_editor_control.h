@@ -179,6 +179,7 @@ private:
 private:
     bool      m_probingPcbToSch;    // Recursion guard when cross-probing to PCBNew
     EDA_ITEM* m_pickerItem;         // Current item for picker highlighting.
+    wxString  m_pickerNet;
 };
 
 
