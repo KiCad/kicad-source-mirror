@@ -53,9 +53,7 @@ int LIB_PART::m_subpartFirstId = 'A';
 
 LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_PART* aRootPart ) :
     EDA_ITEM( LIB_ALIAS_T ),
-    shared( aRootPart ),
-    tmpUnit( 0 ),
-    tmpConversion( 0 )
+    shared( aRootPart )
 {
     SetName( aName );
 }
@@ -63,9 +61,7 @@ LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_PART* aRootPart ) :
 
 LIB_ALIAS::LIB_ALIAS( const LIB_ALIAS& aAlias, LIB_PART* aRootPart ) :
     EDA_ITEM( aAlias ),
-    shared( aRootPart ),
-    tmpUnit( 0 ),
-    tmpConversion( 0 )
+    shared( aRootPart )
 {
     name   = aAlias.name;
 
@@ -843,45 +839,6 @@ LIB_FIELD& LIB_PART::GetFootprintField()
     LIB_FIELD* field = GetField( FOOTPRINT );
     wxASSERT( field != NULL );
     return *field;
-}
-
-
-bool LIB_PART::SaveDateAndTime( OUTPUTFORMATTER& aFormatter )
-{
-    int year, mon, day, hour, min, sec;
-
-    if( m_dateLastEdition == 0 )
-        return true;
-
-    sec  = m_dateLastEdition & 63;
-    min  = ( m_dateLastEdition >> 6 ) & 63;
-    hour = ( m_dateLastEdition >> 12 ) & 31;
-    day  = ( m_dateLastEdition >> 17 ) & 31;
-    mon  = ( m_dateLastEdition >> 22 ) & 15;
-    year = ( m_dateLastEdition >> 26 ) + 1990;
-
-    aFormatter.Print( 0, "Ti %d/%d/%d %d:%d:%d\n", year, mon, day, hour, min, sec );
-
-    return true;
-}
-
-
-bool LIB_PART::LoadDateAndTime( char* aLine )
-{
-    int   year, mon, day, hour, min, sec;
-
-    year = mon = day = hour = min = sec = 0;
-    strtok( aLine, " \r\t\n" );
-    strtok( NULL, " \r\t\n" );
-
-    if( sscanf( aLine, "%d/%d/%d %d:%d:%d", &year, &mon, &day, &hour, &min, &sec ) != 6 )
-        return false;
-
-    m_dateLastEdition = ( sec & 63 ) + ( ( min & 63 ) << 6 ) +
-                     ( ( hour & 31 ) << 12 ) + ( ( day & 31 ) << 17 ) +
-                     ( ( mon & 15 ) << 22 ) + ( ( year - 1990 ) << 26 );
-
-    return true;
 }
 
 
