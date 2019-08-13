@@ -82,7 +82,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddMenu( submenuExport,              EE_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-    fileMenu->AddItem( wxID_CLOSE, _( "Close\tCTRL+W" ), "", exit_xpm, EE_CONDITIONS::ShowAlways );
+    fileMenu->AddClose( _( "Library Editor" ) );
 
     fileMenu->Resolve();
 

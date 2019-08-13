@@ -102,8 +102,7 @@ void LIB_VIEW_FRAME::ReCreateMenuBar()
     //
     CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, libControl );
 
-    fileMenu->AddItem( wxID_CLOSE, _( "Close" ), _( "Close footprint viewer" ), exit_xpm,
-            EE_CONDITIONS::ShowAlways );
+    fileMenu->AddClose( _( "Footprint Viewer" ) );
 
     fileMenu->Resolve();
 

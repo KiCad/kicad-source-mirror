@@ -193,7 +193,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddMenu( submenuArchive,               SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-    fileMenu->AddQuitOrClose( &Kiface() );
+    fileMenu->AddQuitOrClose( &Kiface(), _( "Pcbnew" ) );
 
     fileMenu->Resolve();
 

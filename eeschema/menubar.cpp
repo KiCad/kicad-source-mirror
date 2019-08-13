@@ -115,7 +115,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AddItem( ACTIONS::plot,              EE_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-    fileMenu->AddQuitOrClose( &Kiface() );
+    fileMenu->AddQuitOrClose( &Kiface(), _( "Eeschema" ) );
 
     fileMenu->Resolve();
 

@@ -84,7 +84,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                        unzip_xpm,                              SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-    fileMenu->AddQuitOrClose( nullptr );
+    fileMenu->AddQuitOrClose( nullptr, _( "KiCad" ) );
 
     fileMenu->Resolve();
 

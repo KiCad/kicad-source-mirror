@@ -47,7 +47,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     fileMenu->AddItem( CVPCB_ACTIONS::saveAssociations, SELECTION_CONDITIONS::ShowAlways );
     fileMenu->AddSeparator();
-    fileMenu->AddItem( wxID_CLOSE, _( "Close" ), "", exit_xpm, SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddClose( _( "Assign Footprints" ) );
 
     fileMenu->Resolve();
 

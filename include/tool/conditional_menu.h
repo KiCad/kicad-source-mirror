@@ -101,12 +101,24 @@ public:
     void AddSeparator( int aOrder = ANY_ORDER );
 
     /**
+     * Function AddClose()
+     *
+     * Add a standard close item to the menu with the accelerator key CTRL-W.
+     * Emits the wxID_CLOSE event.
+     *
+     * @param aAppname is the application name to append to the tooltip
+     */
+    void AddClose( wxString aAppname = "" );
+
+    /**
      * Functions AddQuitOrClose()
      *
-     * Adds either a standard Quit or Close item to the menu (depending on whether or not the
-     * app was launched stand-alone).
+     * Adds either a standard Quit or Close item to the menu. If aKiface is NULL or in
+     * single-instance then Quite (wxID_QUIT) is used, otherwise Close (wxID_CLOSE) is used.
+     *
+     * @param aAppname is the application name to append to the tooltip
      */
-    void AddQuitOrClose( KIFACE_I* aKiface );
+    void AddQuitOrClose( KIFACE_I* aKiface, wxString aAppname = "" );
 
     /**
      * Function Evaluate()

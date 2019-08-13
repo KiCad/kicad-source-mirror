@@ -78,7 +78,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     fileMenu->AddItem( ACTIONS::print,         SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
-    fileMenu->AddQuitOrClose( &Kiface() );
+    fileMenu->AddQuitOrClose( &Kiface(), _( "Page Layout Editor" ) );
 
     fileMenu->Resolve();
 
