@@ -61,6 +61,7 @@ BEGIN_EVENT_TABLE( DIALOG_SHIM, wxDialog )
     // Esc key closes cell editor, otherwise Esc key closes the dialog.
     EVT_GRID_EDITOR_SHOWN( DIALOG_SHIM::OnGridEditorShown )
     EVT_GRID_EDITOR_HIDDEN( DIALOG_SHIM::OnGridEditorHidden )
+    EVT_CHAR_HOOK( DIALOG_SHIM::OnCharHook )
 END_EVENT_TABLE()
 
 
@@ -482,6 +483,16 @@ void DIALOG_SHIM::OnButton( wxCommandEvent& aEvent )
 
     // This is mandatory to allow wxDialogBase::OnButton() to be called.
     aEvent.Skip();
+}
+
+
+void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
+{
+    // shift-return (Mac default) or Ctrl-Return (GTK) for OK
+    if( aEvt.GetKeyCode() == WXK_RETURN && ( aEvt.ShiftDown() || aEvt.ControlDown() ) )
+        wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+    else
+        aEvt.Skip();
 }
 
 

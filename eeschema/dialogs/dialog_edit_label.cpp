@@ -264,8 +264,10 @@ void DIALOG_LABEL_EDITOR::OnCharHook( wxKeyEvent& aEvt )
         if( aEvt.ControlDown() )
         {
             int flags = 0;
+
             if( !aEvt.ShiftDown() )
                 flags |= wxNavigationKeyEvent::IsForward;
+
             NavigateIn( flags );
         }
         else
@@ -273,25 +275,18 @@ void DIALOG_LABEL_EDITOR::OnCharHook( wxKeyEvent& aEvt )
             m_valueMultiLine->Tab();
         }
     }
-    else if( aEvt.GetKeyCode() == WXK_RETURN && aEvt.ShiftDown() )
-    {
-        wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
-    }
     else if( m_valueMultiLine->IsShown() && isCtrl( 'Z', aEvt ) )
     {
         m_valueMultiLine->Undo();
     }
 #if defined( __WXMAC__ )
-    else if( isShiftCtrl( 'Z', aEvt ) )
-    {
-        m_valueMultiLine->Redo();
-    }
+    else if( m_valueMultiLine->IsShown() && isShiftCtrl( 'Z', aEvt ) )
 #else
-    else if( isCtrl( 'Y', aEvt ) )
+    else if( m_valueMultiLine->IsShown() && isCtrl( 'Y', aEvt ) )
+#endif
     {
         m_valueMultiLine->Redo();
     }
-#endif
     else if( isCtrl( 'X', aEvt ) )
     {
         m_valueMultiLine->Cut();

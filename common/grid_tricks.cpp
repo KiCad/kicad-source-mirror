@@ -340,13 +340,6 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
             return;
     }
 
-    // shift-return (Mac default) or Ctrl-Return (GTK) for OK
-    if( ev.GetKeyCode() == WXK_RETURN && ( ev.ShiftDown() || ev.ControlDown() ) )
-    {
-        wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
-        return;
-    }
-
     // ctrl-tab for exit grid
 #ifdef __APPLE__
     bool ctrl = ev.RawControlDown();

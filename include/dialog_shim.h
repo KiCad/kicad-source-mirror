@@ -98,6 +98,8 @@ class DIALOG_SHIM : public wxDialog, public KIWAY_HOLDER
      */
     void OnButton( wxCommandEvent& aEvent );
 
+    void OnCharHook( wxKeyEvent& aEvt );
+
 public:
 
     DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& title,
