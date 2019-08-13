@@ -361,6 +361,11 @@ public:
      */
     void SaveCommonSettings();
 
+    /**
+     * wxWidgets on MSW tends to crash if you spool up more than one print job at a time.
+     */
+    bool m_Printing;
+
 protected:
 
     /**

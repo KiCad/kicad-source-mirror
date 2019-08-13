@@ -21,7 +21,7 @@
 #include <confirm.h>
 #include <eda_draw_frame.h>
 #include <printout.h>
-#include <enabler.h>
+#include <pgm_base.h>
 
 // Define min and max reasonable values for print scale
 static constexpr double MIN_SCALE = 0.01;
@@ -222,6 +222,12 @@ void DIALOG_PRINT_GENERIC::onPrintPreview( wxCommandEvent& event )
 
 void DIALOG_PRINT_GENERIC::onPrintButtonClick( wxCommandEvent& event )
 {
+    if( Pgm().m_Printing )
+    {
+        DisplayError( this, _( "Previous print job not yet complete." ) );
+        return;
+    }
+
     m_settings->m_pageCount = 0;    // it needs to be set by a derived dialog
     saveSettings();
 
@@ -237,19 +243,19 @@ void DIALOG_PRINT_GENERIC::onPrintButtonClick( wxCommandEvent& event )
     wxPrinter printer( &printDialogData );
     auto printout = std::unique_ptr<wxPrintout>( createPrintout( _( "Print" ) ) );
 
-    // Disable 'Print' button to prevent issuing another print
-    // command before the previous one is finished (causes problems on Windows)
-    ENABLER printBtnDisable( *m_sdbSizer1OK, false );
-
-    if( !printer.Print( this, printout.get(), true ) )
+    Pgm().m_Printing = true;
     {
-        if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
-            DisplayError( this, _( "There was a problem printing." ) );
+        if( !printer.Print( this, printout.get(), true ) )
+        {
+            if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
+                DisplayError( this, _( "There was a problem printing." ) );
+        }
+        else
+        {
+            *s_PrintData = printer.GetPrintDialogData().GetPrintData();
+        }
     }
-    else
-    {
-        *s_PrintData = printer.GetPrintDialogData().GetPrintData();
-    }
+    Pgm().m_Printing = false;
 }
 
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2015-2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015-2019 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,37 +25,21 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <gr_basic.h>
-#include <sch_draw_panel.h>
 #include <confirm.h>
 #include <sch_screen.h>
 #include <sch_edit_frame.h>
 #include <base_units.h>
-
 #include <general.h>
-#include <eeschema_config.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
-
-#include <invoke_sch_dialog.h>
 #include <dialog_print_using_printer_base.h>
 
 
-/**
- * Class DIALOG_PRINT_USING_PRINTER
- * offers to print a schematic dialog.
- *
- * Derived from DIALOG_PRINT_USING_PRINTER_base created by wxFormBuilder
- */
 class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_BASE
 {
 public:
     DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent );
     ~DIALOG_PRINT_USING_PRINTER() override;
-
-    SCH_EDIT_FRAME* GetParent() const
-    {
-        return ( SCH_EDIT_FRAME* ) wxWindow::GetParent();
-    }
 
 private:
     bool TransferDataToWindow() override;
@@ -65,6 +49,8 @@ private:
     void OnPrintPreview( wxCommandEvent& event ) override;
 
     void GetPrintOptions();
+
+    SCH_EDIT_FRAME* m_parent;
 };
 
 
@@ -84,6 +70,7 @@ public:
         wxASSERT( aParent != NULL );
         m_parent = aParent;
     }
+
     bool OnPrintPage( int page ) override;
     bool HasPage( int page ) override;
     bool OnBeginDocument( int startPage, int endPage ) override;
@@ -142,7 +129,8 @@ wxSize  SCH_PREVIEW_FRAME::s_size;
 
 
 DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent ) :
-    DIALOG_PRINT_USING_PRINTER_BASE( aParent )
+    DIALOG_PRINT_USING_PRINTER_BASE( aParent ),
+    m_parent( aParent )
 {
     wxASSERT( aParent != NULL );
 
@@ -177,11 +165,9 @@ DIALOG_PRINT_USING_PRINTER::~DIALOG_PRINT_USING_PRINTER()
 
 bool DIALOG_PRINT_USING_PRINTER::TransferDataToWindow()
 {
-    SCH_EDIT_FRAME* parent = GetParent();
-
     // Initialize page specific print setup dialog settings.
-    const PAGE_INFO& pageInfo = parent->GetScreen()->GetPageSettings();
-    wxPageSetupDialogData& pageSetupDialogData = parent->GetPageSetupData();
+    const PAGE_INFO& pageInfo = m_parent->GetScreen()->GetPageSettings();
+    wxPageSetupDialogData& pageSetupDialogData = m_parent->GetPageSetupData();
 
     pageSetupDialogData.SetPaperId( pageInfo.GetPaperId() );
 
@@ -203,10 +189,8 @@ bool DIALOG_PRINT_USING_PRINTER::TransferDataToWindow()
 
 void DIALOG_PRINT_USING_PRINTER::GetPrintOptions()
 {
-    SCH_EDIT_FRAME* parent = GetParent();
-
-    parent->SetPrintMonochrome( m_checkMonochrome->IsChecked() );
-    parent->SetPrintSheetReference( m_checkReference->IsChecked() );
+    m_parent->SetPrintMonochrome( m_checkMonochrome->IsChecked() );
+    m_parent->SetPrintSheetReference( m_checkReference->IsChecked() );
 }
 
 
@@ -214,13 +198,10 @@ void DIALOG_PRINT_USING_PRINTER::GetPrintOptions()
  */
 void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
 {
-    SCH_EDIT_FRAME* parent = GetParent();
-
-    wxPageSetupDialog pageSetupDialog( this, &parent->GetPageSetupData() );
-
+    wxPageSetupDialog pageSetupDialog( this, &m_parent->GetPageSetupData() );
     pageSetupDialog.ShowModal();
 
-    parent->GetPageSetupData() = pageSetupDialog.GetPageSetupDialogData();
+    m_parent->GetPageSetupData() = pageSetupDialog.GetPageSetupDialogData();
 }
 
 
@@ -228,15 +209,13 @@ void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
  */
 void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 {
-    SCH_EDIT_FRAME* parent = GetParent();
-
     GetPrintOptions();
 
     // Pass two printout objects: for preview, and possible printing.
     wxString        title   = _( "Preview" );
-    wxPrintPreview* preview = new wxPrintPreview( new SCH_PRINTOUT( parent, title ),
-                                                  new SCH_PRINTOUT( parent, title ),
-                                                  &parent->GetPageSetupData().GetPrintData() );
+    wxPrintPreview* preview = new wxPrintPreview( new SCH_PRINTOUT( m_parent, title ),
+                                                  new SCH_PRINTOUT( m_parent, title ),
+                                                  &m_parent->GetPageSetupData().GetPrintData() );
 
     preview->SetZoom( 100 );
 
@@ -245,7 +224,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 
     // on first invocation in this runtime session, set to 2/3 size of my parent,
     // but will be changed in Show() if not first time as will position.
-    frame->SetSize( (parent->GetSize() * 2) / 3 );
+    frame->SetSize( (m_parent->GetSize() * 2) / 3 );
     frame->Center();
 
     // On wxGTK, set the flag wxTOPLEVEL_EX_DIALOG is mandatory, if we want
@@ -268,33 +247,36 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 
 bool DIALOG_PRINT_USING_PRINTER::TransferDataFromWindow()
 {
-    SCH_EDIT_FRAME* parent = GetParent();
+    if( Pgm().m_Printing )
+    {
+        DisplayError( this, _( "Previous print job not yet complete." ) );
+        return false;
+    }
 
     GetPrintOptions();
 
-    wxPrintDialogData printDialogData( parent->GetPageSetupData().GetPrintData() );
+    wxPrintDialogData printDialogData( m_parent->GetPageSetupData().GetPrintData() );
     printDialogData.SetMaxPage( g_RootSheet->CountSheets() );
 
     if( g_RootSheet->CountSheets() > 1 )
         printDialogData.EnablePageNumbers( true );
 
     wxPrinter printer( &printDialogData );
-    SCH_PRINTOUT printout( parent, _( "Print Schematic" ) );
+    SCH_PRINTOUT printout( m_parent, _( "Print Schematic" ) );
 
-    // Disable 'Print' button to prevent issuing another print
-    // command before the previous one is finished (causes problems on Windows)
-    m_sdbSizer1OK->Enable( false );
-
-    if( !printer.Print( this, &printout, true ) )
+    Pgm().m_Printing = true;
     {
-        if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
-            wxMessageBox( _( "An error occurred attempting to print the schematic." ),
-                          _( "Printing" ), wxOK );
+        if( !printer.Print( this, &printout, true ) )
+        {
+            if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
+                DisplayError( this, _( "An error occurred attempting to print the schematic." ) );
+        }
+        else
+        {
+            m_parent->GetPageSetupData() = printer.GetPrintDialogData().GetPrintData();
+        }
     }
-    else
-    {
-        parent->GetPageSetupData() = printer.GetPrintDialogData().GetPrintData();
-    }
+    Pgm().m_Printing = false;
 
     return true;
 }
