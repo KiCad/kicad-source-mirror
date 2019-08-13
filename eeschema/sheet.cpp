@@ -55,7 +55,7 @@ bool SCH_EDIT_FRAME::checkSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* 
     // something is seriously broken.
     wxASSERT( destFile.IsAbsolute() );
 
-    if( hierarchy.TestForRecursion( sheetHierarchy, destFile.GetFullPath( wxPATH_UNIX ) ) )
+    if( hierarchy.TestForRecursion( sheetHierarchy, destFile.GetFullPath() ) )
     {
         msg.Printf( _( "The sheet changes cannot be made because the destination sheet already "
                        "has the sheet \"%s\" or one of it's subsheets as a parent somewhere in "
@@ -189,22 +189,19 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
             else if( rsp == wxID_NO )
             {
                 topLevelSheetPath = fileName.GetPathWithSep();
-
-                if( wxFileName::GetPathSeparator() == '\\' )
-                    topLevelSheetPath.Replace( "\\", "/" );
             }
             else
             {
-                topLevelSheetPath = tmp.GetPathWithSep( wxPATH_UNIX );
+                topLevelSheetPath = tmp.GetPathWithSep();
             }
         }
         else
         {
             topLevelSheetPath = tmp.GetPathWithSep();
-
-            if( wxFileName::GetPathSeparator() == '\\' )
-                topLevelSheetPath.Replace( "\\", "/" );
         }
+
+        if( wxFileName::GetPathSeparator() == '\\' )
+            topLevelSheetPath.Replace( "\\", "/" );
     }
 
     // Make sure any new sheet changes do not cause any recursion issues.
@@ -441,7 +438,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
                 const SYMBOL_LIB_TABLE_ROW* row = table.FindRow( libName );
 
                 auto newRow = new SYMBOL_LIB_TABLE_ROW( libName, uri, row->GetType(),
-                                                            row->GetOptions(), row->GetDescr() );
+                                                        row->GetOptions(), row->GetDescr() );
 
                 Prj().SchSymbolLibTable()->InsertRow( newRow );
                 libTableChanged = true;
@@ -555,7 +552,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
                      "Cannot normalize new sheet schematic file path." );
     }
 
-    wxString newFilename = fileName.GetFullPath( wxPATH_UNIX );
+    wxString newFilename = fileName.GetFullPath();
 
     // Search for a schematic file having the same filename already in use in the hierarchy
     // or on disk, in order to reuse it.
@@ -701,7 +698,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
         // Create a temporary sheet for recursion testing to prevent a possible recursion error.
         std::unique_ptr< SCH_SHEET> tmpSheet( new SCH_SHEET );
         tmpSheet->SetName( dlg.GetSheetName() );
-        tmpSheet->SetFileName( userFileName.GetFullPath( wxPATH_UNIX ) );
+        tmpSheet->SetFileName( userFileName.GetFullPath() );
         tmpSheet->SetScreen( useScreen );
 
         // No need to check for valid library IDs if we are using an existing screen.
@@ -738,7 +735,12 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
             aHierarchy->LastScreen()->Append( aSheet );
     }
 
-    aSheet->SetFileName( userFileName.GetFullPath( wxPATH_UNIX ) );
+    wxString tmpFn = userFileName.GetFullPath();
+
+    if( wxFileName::GetPathSeparator() == '\\' )
+        tmpFn.Replace( "\\", "/" );
+
+    aSheet->SetFileName( tmpFn );
     aSheet->SetFileNameSize( dlg.GetFileNameTextSize() );
     aSheet->SetName( dlg.GetSheetName() );
     aSheet->SetSheetNameSize( dlg.GetSheetNameTextSize() );
