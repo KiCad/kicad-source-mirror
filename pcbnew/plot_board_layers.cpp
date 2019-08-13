@@ -300,19 +300,17 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
      // Plot edge layer and graphic items
     itemplotter.PlotBoardGraphicItems();
 
-    // Draw footprint shapes without pads (pads will plotted later)
-    // We plot here module texts, but they are usually on silkscreen layer,
-    // so they are not plot here but plot by PlotSilkScreen()
-    // Plot footprints fields (ref, value ...)
+    // Draw footprint texts:
     for( auto module : aBoard->Modules() )
     {
         if( ! itemplotter.PlotAllTextsModule( module ) )
         {
             wxLogMessage( _( "Your BOARD has a bad layer number for footprint %s" ),
-                           GetChars( module->GetReference() ) );
+                          module->GetReference() );
         }
     }
 
+    // Draw footprint other graphic items:
     for( auto module : aBoard->Modules() )
     {
         for( auto item : module->GraphicalItems() )
@@ -779,14 +777,17 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
     itemplotter.SetLayerSet( aLayerMask );
 
-    // Plot edge layer and graphic items.  They do not have a solder Mask margin, because they
-    // are only graphic items on this layer (like logos), not actually areas around pads.
+    // Plot edge layer and graphic items.
+    // They do not have a solder Mask margin, because they  graphic items
+    // on this layer (like logos), not actually areas around pads.
     itemplotter.PlotBoardGraphicItems();
 
     for( auto module : aBoard->Modules() )
     {
         for( auto item : module->GraphicalItems() )
         {
+            itemplotter.PlotAllTextsModule( module );
+
             if( item->Type() == PCB_MODULE_EDGE_T && item->GetLayer() == layer )
                 itemplotter.Plot_1_EdgeModule( (EDGE_MODULE*) item );
         }

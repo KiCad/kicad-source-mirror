@@ -223,6 +223,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     TEXTE_MODULE* textModule = &aModule->Reference();
     LAYER_NUM     textLayer = textModule->GetLayer();
 
+    // Reference and value are specfic items, not in graphic items list
     if( GetPlotReference() && m_layerMask[textLayer]
         && ( textModule->IsVisible() || GetPlotInvisibleText() ) )
     {
