@@ -1107,31 +1107,6 @@ int SELECTION_TOOL::find( const TOOL_EVENT& aEvent )
 }
 
 
-int SELECTION_TOOL::GetAndPlace( const TOOL_EVENT& aEvent )
-{
-    MODULE* module = m_frame->GetFootprintFromBoardByReference();
-
-    if( module )
-    {
-        KIGFX::VIEW_CONTROLS* viewCtrls = getViewControls();
-        clearSelection();
-        select( module );
-        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-
-        auto cursorPosition = viewCtrls->GetCursorPosition( false );
-
-        // Set a reference point so InteractiveEdit will move it to the
-        // cursor before waiting for mouse move events
-        m_selection.SetReferencePoint( module->GetPosition() );
-
-        // pick the component up and start moving
-        m_toolMgr->RunAction( PCB_ACTIONS::move, true );
-    }
-
-    return 0;
-}
-
-
 /**
  * Function itemIsIncludedByFilter()
  *
@@ -2202,7 +2177,6 @@ void SELECTION_TOOL::setTransitions()
     Go( &SELECTION_TOOL::SelectionMenu,       PCB_ACTIONS::selectionMenu.MakeEvent() );
 
     Go( &SELECTION_TOOL::find,                ACTIONS::find.MakeEvent() );
-    Go( &SELECTION_TOOL::GetAndPlace,         PCB_ACTIONS::getAndPlace.MakeEvent() );
 
     Go( &SELECTION_TOOL::filterSelection,     PCB_ACTIONS::filterSelection.MakeEvent() );
     Go( &SELECTION_TOOL::selectConnection,    PCB_ACTIONS::selectConnection.MakeEvent() );

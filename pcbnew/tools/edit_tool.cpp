@@ -37,6 +37,12 @@
 #include <pcbnew_id.h>
 #include <status_popup.h>
 #include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
+#include <tools/selection_tool.h>
+#include <tools/edit_tool.h>
+#include <tools/pcbnew_picker_tool.h>
+#include <tools/tool_event_utils.h>
+#include <tools/grid_helper.h>
 #include <view/view_controls.h>
 #include <connectivity/connectivity_data.h>
 #include <confirm.h>
@@ -44,16 +50,10 @@
 #include <cassert>
 #include <functional>
 using namespace std::placeholders;
-#include "pcb_actions.h"
-#include "selection_tool.h"
-#include "edit_tool.h"
-#include "pcbnew_picker_tool.h"
-#include "grid_helper.h"
 #include "kicad_clipboard.h"
 #include <router/router_tool.h>
 #include <dialogs/dialog_move_exact.h>
 #include <dialogs/dialog_track_via_properties.h>
-#include <tools/tool_event_utils.h>
 #include <preview_items/ruler_item.h>
 #include <board_commit.h>
 
@@ -192,9 +192,27 @@ bool EDIT_TOOL::Init()
 }
 
 
+int EDIT_TOOL::GetAndPlace( const TOOL_EVENT& aEvent )
+{
+    SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    MODULE*         module = getEditFrame<PCB_BASE_FRAME>()->GetFootprintFromBoardByReference();
+
+    if( module )
+    {
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, (void*) module );
+
+        selectionTool->GetSelection().SetReferencePoint( module->GetPosition() );
+        m_toolMgr->RunAction( PCB_ACTIONS::move, true );
+    }
+
+    return 0;
+}
+
+
 bool EDIT_TOOL::invokeInlineRouter( int aDragMode )
 {
-    auto theRouter = static_cast<ROUTER_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveRouter" ) );
+    ROUTER_TOOL* theRouter = m_toolMgr->GetTool<ROUTER_TOOL>();
 
     if( !theRouter )
         return false;
@@ -1393,6 +1411,7 @@ int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
 
 void EDIT_TOOL::setTransitions()
 {
+    Go( &EDIT_TOOL::GetAndPlace,         PCB_ACTIONS::getAndPlace.MakeEvent() );
     Go( &EDIT_TOOL::Move,                PCB_ACTIONS::move.MakeEvent() );
     Go( &EDIT_TOOL::Drag,                PCB_ACTIONS::drag45Degree.MakeEvent() );
     Go( &EDIT_TOOL::Drag,                PCB_ACTIONS::dragFreeAngle.MakeEvent() );

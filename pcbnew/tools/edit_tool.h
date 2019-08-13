@@ -74,8 +74,11 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
+    ///> Find an item and start moving.
+    int GetAndPlace( const TOOL_EVENT& aEvent );
+
     /**
-     * Function Main()
+     * Function Move()
      * Main loop in which events are handled.
      */
     int Move( const TOOL_EVENT& aEvent );

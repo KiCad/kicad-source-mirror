@@ -258,9 +258,6 @@ private:
     ///> Find an item.
     int find( const TOOL_EVENT& aEvent );
 
-    ///> Find an item and start moving.
-    int GetAndPlace( const TOOL_EVENT& aEvent );
-
     ///> Invoke filter dialog and modify current selection
     int filterSelection( const TOOL_EVENT& aEvent );
 

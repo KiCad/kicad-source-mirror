@@ -28,7 +28,6 @@
 #include <bitmaps.h>
 #include <layers_id_colors_and_visibility.h>
 #include <tool/tool_manager.h>
-#include <tools/pcb_actions.h>
 #include <router/pns_router.h>
 
 OPT<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
@@ -179,6 +178,13 @@ TOOL_ACTION PCB_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.EditFp
         _( "Open in Footprint Editor" ),
         _( "Opens the selected footprint in the Footprint Editor" ),
         module_editor_xpm );
+
+TOOL_ACTION PCB_ACTIONS::getAndPlace( "pcbnew.InteractiveEdit.FindMove",
+        AS_GLOBAL,
+        'T', LEGACY_HK_NAME( "Get and Move Footprint" ),
+        _( "Get and Move Footprint" ),
+        _( "Selects a footprint by reference and places it under the cursor for moving"),
+        move_xpm );
 
 TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveMove.move",
         AS_GLOBAL,
@@ -1034,13 +1040,6 @@ TOOL_ACTION PCB_ACTIONS::selectSameSheet( "pcbnew.InteractiveSelection.SelectSam
         _( "Items in Same Hierarchical Sheet" ),
         _( "Selects all modules and tracks in the same schematic sheet" ),
         select_same_sheet_xpm );
-
-TOOL_ACTION PCB_ACTIONS::getAndPlace( "pcbnew.InteractiveSelection.FindMove",
-        AS_GLOBAL,
-        'T', LEGACY_HK_NAME( "Get and Move Footprint" ),
-        _( "Get and Move Footprint" ),
-        _( "Selects a footprint by reference and places it under the cursor for moving"),
-        move_xpm );
 
 TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSelection",
         AS_GLOBAL, 0, "",
