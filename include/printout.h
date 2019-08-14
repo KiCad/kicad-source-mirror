@@ -49,14 +49,8 @@ struct PRINTOUT_SETTINGS
 
     /**
      * Returns true if the drawing border and title block should be printed.
-     *
-     * For scale factors greater than one, the border is not printed because it will end up
-     * scaling off of the page.
      */
-    bool PrintBorderAndTitleBlock() const
-    {
-        return m_scale <= 1.0 && m_titleBlock;
-    }
+    bool PrintBorderAndTitleBlock() const { return m_titleBlock; }
 };
 
 #endif /* PRINTOUT_H */
