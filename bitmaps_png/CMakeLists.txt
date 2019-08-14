@@ -163,7 +163,6 @@ set( BMAPS_MID
     axis3d
     bitmap2component
     bom
-    book
     break_bus
     break_line
     browse_files
@@ -187,25 +186,10 @@ set( BMAPS_MID
     custom_pad_to_primitives
     cut
     cvpcb
-    dashline
     datasheet
     delete_association
-    delete_bus
-    delete_circle
-    delete_connection
-    delete_dimension
-    delete_field
     delete_gerber
-    delete_glabel
-    delete_line
-    delete_module
-    delete_net
-    delete_node
-    delete_pad
-    delete_polygon
-    delete_rectangle
     delete_sheet
-    delete_track
     delete
     directory
     directory_browser
@@ -214,13 +198,10 @@ set( BMAPS_MID
     distribute_vertical
     down
     drag
-    drag_outline_segment
-    drag_pad
     drag_segment_withslope
     drc_off
     drc
     duplicate
-    edges_sketch
     edit_comp_footprint
     edit_comp_ref
     edit_comp_value
@@ -264,9 +245,6 @@ set( BMAPS_MID
     gerbview_clear_layers
     general_deletions
     general_ratsnest
-    glabel2label
-    glabel2text
-    gl_change
     go_down
     go_up
     green
@@ -279,8 +257,6 @@ set( BMAPS_MID
     hierarchy_nav
     highlight_remove
     hotkeys
-    hotkeys_import
-    hotkeys_export
     html
     icon
     icon_cvpcb_small
@@ -294,15 +270,12 @@ set( BMAPS_MID
     import_module
     import_part
     import_project
-    import_setup
     import_vector
     import
     info
     insert_module_board
     invisible_text
     kicad_icon_small
-    label2glabel
-    label2text
     label
     lang_ca
     lang_bg
@@ -353,7 +326,6 @@ set( BMAPS_MID
     mirror_v
     mode_module
     mode_track
-    modratsnest
     module_check
     module_editor
     module_wizard
@@ -363,18 +335,11 @@ set( BMAPS_MID
     module_pin_filtered_list
     module_library_list
     module_name_filtered_list
-    module_ratsnest
     module
     modview_icon
     morgan1
     morgan2
-    move_glabel
     move_exactly
-    move_pad
-    move_polygon
-    move_rectangle
-    move_sheet
-    move_target
     move
     move_relative
     mw_add_gap
@@ -401,34 +366,15 @@ set( BMAPS_MID
     noconn
     normal
     online_help
-    open_brd_file
-    open_library
-    open_page_layout
     open_project
-    open_document
     options_3drender
-    options_all_tracks_and_vias
-    options_all_tracks
-    options_all_vias
-    options_arc
     options_board
-    options_circle
     options_generic
-    options_module
     options_pad
-    options_pinsheet
-    options_pin
-    options_rectangle
-    options_segment
-    options_tracks
-    options_track
-    options_vias
     opt_show_polygon
-    orient
     ortho
     pad_sketch
     pad
-    pad_dimensions
     pad_enumerate
     pads_mask_layers
     path
@@ -442,18 +388,11 @@ set( BMAPS_MID
     pcbcalculator
     pcb_offset
     pin2pin
-    pin_name_to
-    pin_number_to
     pin_size_to
     pin_show_etype
     pin_table
-    pin_to
     pin
     plot
-    plot_dxf
-    plot_hpg
-    plot_pdf
-    plot_ps
     plot_svg
     plus
     polar_coord
@@ -500,10 +439,6 @@ set( BMAPS_MID
     rotate_pos_z
     save_as
     save_fp_to_board
-    save_gerber
-    save_library
-    save_project
-    save_setup
     save
     select_grid
     select_layer_pair
@@ -547,7 +482,6 @@ set( BMAPS_MID
     track_locked
     track_sketch
     track_unlocked
-    transistor
     undelete
     undo
     unit_inch
@@ -557,7 +491,6 @@ set( BMAPS_MID
     unzip
     up
     update_fields
-    update_module_board
     update_pcb_from_sch
     use_3D_copper_thickness
     via
@@ -565,14 +498,9 @@ set( BMAPS_MID
     via_microvia
     via_sketch
     warning
-    web_support
-    width_net
-    width_segment
     width_track_via
     width_track
-    width_vias
     wizard_add_fplib_small
-    zip_tool
     zip
     zone_duplicate
     zone_unfill
