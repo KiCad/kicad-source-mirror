@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __PANEL_SETUP_LAYERS_BASE_H__
-#define __PANEL_SETUP_LAYERS_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -179,10 +178,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_SETUP_LAYERS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_SETUP_LAYERS_BASE : public wxPanel 
+class PANEL_SETUP_LAYERS_BASE : public wxPanel
 {
 	private:
-	
+
 	protected:
 		wxChoice* m_PresetsChoice;
 		wxStaticText* m_staticTextCopperLayers;
@@ -343,19 +342,18 @@ class PANEL_SETUP_LAYERS_BASE : public wxPanel
 		wxCheckBox* m_DrawingsCheckBox;
 		wxStaticText* m_DrawingsName;
 		wxStaticText* m_DrawingsStaticText;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnPresetsChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCopperLayersChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void DenyChangeCheckBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckBox( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 585,545 ), long style = wxTAB_TRAVERSAL ); 
+
+		PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 585,545 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_SETUP_LAYERS_BASE();
-	
+
 };
 
-#endif //__PANEL_SETUP_LAYERS_BASE_H__
