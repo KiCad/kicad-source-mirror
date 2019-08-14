@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 CERN
+ * Copyright (C) 2015-2019 CERN
  * Copyright (C) 2015-2019 KiCad Developers, see CHANGELOG.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
