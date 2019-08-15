@@ -1048,10 +1048,24 @@ bool PNS_KICAD_IFACE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem )
     return true;
 }
 
+
 void PNS_KICAD_IFACE::SetBoard( BOARD* aBoard )
 {
     m_board = aBoard;
     wxLogTrace( "PNS", "m_board = %p", m_board );
+}
+
+
+bool PNS_KICAD_IFACE::IsAnyLayerVisible( const LAYER_RANGE& aLayer )
+{
+    if( !m_view )
+        return false;
+
+    for( int i = aLayer.Start(); i <= aLayer.End(); i++ )
+        if( m_view->IsLayerVisible( i ) )
+            return true;
+
+    return false;
 }
 
 

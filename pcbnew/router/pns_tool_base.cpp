@@ -137,6 +137,9 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
         if( !IsCopperLayer( item->Layers().Start() ) )
             continue;
 
+        if( !m_iface->IsAnyLayerVisible( item->Layers() ) )
+            continue;
+
         if( std::find( aAvoidItems.begin(), aAvoidItems.end(), item ) != aAvoidItems.end() )
             continue;
 

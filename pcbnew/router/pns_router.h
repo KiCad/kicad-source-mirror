@@ -28,6 +28,7 @@
 #include <core/optional.h>
 #include <boost/unordered_set.hpp>
 
+#include <layers_id_colors_and_visibility.h>
 #include <geometry/shape_line_chain.h>
 
 #include "pns_routing_settings.h"
@@ -93,6 +94,7 @@ enum DRAG_MODE
         virtual void SyncWorld( NODE* aNode ) = 0;
         virtual void AddItem( ITEM* aItem ) = 0;
         virtual void RemoveItem( ITEM* aItem ) = 0;
+        virtual bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) = 0;
         virtual void DisplayItem( const ITEM* aItem, int aColor = -1, int aClearance = -1, bool aEdit = false ) = 0;
         virtual void HideItem( ITEM* aItem ) = 0;
         virtual void Commit() = 0;
