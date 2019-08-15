@@ -600,7 +600,7 @@ void LIB_EDIT_FRAME::DuplicatePart( bool aFromClipboard )
         }
         catch( IO_ERROR& e )
         {
-            wxLogError( wxString::Format( "Malformed clipboard: %s" ), GetChars( e.What() ) );
+            wxLogMessage( "Can not paste: %s", GetChars( e.Problem() ) );
             return;
         }
     }

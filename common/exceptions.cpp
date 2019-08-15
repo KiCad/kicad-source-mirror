@@ -27,7 +27,7 @@
 
 
 #define THROWERS_WHERE  _( "from %s : %s() line:%d" )
-#define PARSE_PROBLEM   _( "%s in input/source\n\"%s\"\nline %d, offset %d" )
+#define PARSE_PROBLEM   _( "%s in \"%s\", line %d, offset %d" )
 
 
 const wxString IO_ERROR::What() const

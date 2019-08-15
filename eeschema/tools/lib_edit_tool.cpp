@@ -40,6 +40,7 @@
 #include <dialogs/dialog_edit_component_in_lib.h>
 #include <dialogs/dialog_lib_edit_pin_table.h>
 #include <sch_legacy_plugin.h>
+#include <lib_text.h>
 #include "lib_edit_tool.h"
 
 
@@ -661,8 +662,11 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     }
     catch( IO_ERROR& e )
     {
-        wxLogError( wxString::Format( "Malformed clipboard: %s" ), GetChars( e.What() ) );
-        return -1;
+        // If it's not a part then paste as text
+        newPart = new LIB_PART( "dummy_part" );
+        LIB_TEXT* newText = new LIB_TEXT( newPart );
+        newText->SetText( text );
+        newPart->AddDrawItem( newText );
     }
 
     if( !newPart )

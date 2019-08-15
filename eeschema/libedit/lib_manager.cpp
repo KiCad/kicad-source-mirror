@@ -49,14 +49,16 @@ void LIB_MANAGER::Sync( bool aForce,
                         std::function<void( int, int, const wxString& )> aProgressCallback )
 {
     m_logger.Activate();
-
-    int libTableHash = symTable()->GetModifyHash();
-
-    if( aForce || m_syncHash != libTableHash )
     {
-        getAdapter()->Sync( aForce, aProgressCallback );
-        m_syncHash = libTableHash;
+        int libTableHash = symTable()->GetModifyHash();
+
+        if( aForce || m_syncHash != libTableHash )
+        {
+            getAdapter()->Sync( aForce, aProgressCallback );
+            m_syncHash = libTableHash;
+        }
     }
+    m_logger.Deactivate();
 }
 
 
@@ -577,8 +579,8 @@ bool LIB_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate, SYMBOL_LI
     if( relPath.IsEmpty() )
         relPath = aFilePath;
 
-    SYMBOL_LIB_TABLE_ROW* libRow = new SYMBOL_LIB_TABLE_ROW( libName, relPath,
-            SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) );
+    wxString typeName = SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY );
+    SYMBOL_LIB_TABLE_ROW* libRow = new SYMBOL_LIB_TABLE_ROW( libName, relPath, typeName );
     aTable->InsertRow( libRow );
 
     if( aCreate )
@@ -748,13 +750,13 @@ bool LIB_MANAGER::LIB_BUFFER::DeleteBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartB
 
 
 bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf,
-        SYMBOL_LIB_TABLE* aLibTable )
+                                          SYMBOL_LIB_TABLE* aLibTable )
 {
     wxCHECK( aPartBuf, false );
     LIB_PART* part = aPartBuf->GetPart();
     wxCHECK( part, false );
-    wxCHECK( aLibTable->SaveSymbol( m_libName,
-                                    new LIB_PART( *part ) ) == SYMBOL_LIB_TABLE::SAVE_OK, false );
+    SYMBOL_LIB_TABLE::SAVE_T result = aLibTable->SaveSymbol( m_libName, new LIB_PART( *part ) );
+    wxCHECK( result == SYMBOL_LIB_TABLE::SAVE_OK, false );
 
     aPartBuf->SetOriginal( new LIB_PART( *part ) );
     ++m_hash;
@@ -763,7 +765,7 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
 
 
 bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf,
-        SCH_PLUGIN* aPlugin, bool aBuffer )
+                                          SCH_PLUGIN* aPlugin, bool aBuffer )
 {
     wxCHECK( aPartBuf, false );
     LIB_PART* part = aPartBuf->GetPart();

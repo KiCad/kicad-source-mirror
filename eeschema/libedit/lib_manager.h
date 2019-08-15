@@ -54,16 +54,27 @@ public:
 
     ~LIB_LOGGER() override
     {
-        if( m_activated )
-            wxLog::SetActiveTarget( m_previousLogger );
+        Deactivate();
     }
 
     void Activate()
     {
-        m_activated = true;
-        m_previousLogger = wxLog::GetActiveTarget();
-        wxLog::SetActiveTarget( this );
-        Clear();
+        if( !m_activated )
+        {
+            m_previousLogger = wxLog::GetActiveTarget();
+            wxLog::SetActiveTarget( this );
+            m_activated = true;
+        }
+    }
+
+    void Deactivate()
+    {
+        if( m_activated )
+        {
+            Flush();
+            m_activated = false;
+            wxLog::SetActiveTarget( m_previousLogger );
+        }
     }
 
     void Flush() override

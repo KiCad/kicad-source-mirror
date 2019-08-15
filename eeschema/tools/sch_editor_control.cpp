@@ -929,6 +929,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     SCH_ITEM*          last = dlist.GetLast();
 
     std::string        text = m_toolMgr->GetClipboard();
+
+    if( text.empty() )
+        return 0;
+
     STRING_LINE_READER reader( text, "Clipboard" );
     SCH_LEGACY_PLUGIN  plugin;
 
@@ -938,8 +942,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     }
     catch( IO_ERROR& e )
     {
-        wxLogError( wxString::Format( "Malformed clipboard: %s" ), GetChars( e.What() ) );
-        return 0;
+        // If it wasn't content, then paste as text
+        dlist.Append( new SCH_TEXT( wxPoint( 0, 0 ), text ) );
     }
 
     // SCH_LEGACY_PLUGIN added the items to the DLIST, but not to the view or anything

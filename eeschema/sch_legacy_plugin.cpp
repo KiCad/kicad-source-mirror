@@ -787,6 +787,8 @@ void SCH_LEGACY_PLUGIN::LoadContent( LINE_READER& aReader, SCH_SCREEN* aScreen, 
             aScreen->AddBusAlias( loadBusAlias( aReader, aScreen ) );
         else if( strCompare( "$EndSCHEMATC", line ) )
             return;
+        else
+            SCH_PARSE_ERROR( "unrecognized token", aReader, line );
     }
 }
 
@@ -2699,7 +2701,8 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVer
     while( *line == '#' )
         aReader.ReadLine();
 
-    wxCHECK( strCompare( "DEF", line, &line ), NULL );
+    if( !strCompare( "DEF", line, &line ) )
+        SCH_PARSE_ERROR( "invalid symbol definition", aReader, line );
 
     long num;
     size_t pos = 4;                               // "DEF" plus the first space.
