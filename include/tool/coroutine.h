@@ -28,13 +28,13 @@
 
 #include <cassert>
 #include <cstdlib>
-
 #include <type_traits>
 
 #ifdef KICAD_USE_VALGRIND
 #include <valgrind/valgrind.h>
 #endif
 
+#include <advanced_config.h>
 #include <system/libcontext.h>
 #include <memory>
 
@@ -148,6 +148,7 @@ public:
         ,valgrind_stack( 0 )
 #endif
     {
+        m_stacksize = ADVANCED_CFG::GetCfg().m_coroutineStackSize;
     }
 
     ~COROUTINE()
@@ -304,7 +305,7 @@ private:
 
         assert( m_stack == nullptr );
 
-        size_t stackSize = c_defaultStackSize;
+        size_t stackSize = m_stacksize;
         void* sp = nullptr;
 
         #ifndef LIBCONTEXT_HAS_OWN_STACK
@@ -380,10 +381,10 @@ private:
         }
     }
 
-    static constexpr int c_defaultStackSize = 2000000;    // fixme: make configurable
-
     ///< coroutine stack
     std::unique_ptr<char[]> m_stack;
+
+    int m_stacksize;
 
     std::function<ReturnType( ArgType )> m_func;
 

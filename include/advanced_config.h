@@ -85,6 +85,11 @@ public:
     bool m_forceThickOutlinesInZones;
 
     /**
+     * Set the stack size for coroutines
+     */
+    int m_coroutineStackSize;
+
+    /**
      * Helper to determine if legacy canvas is allowed (according to platform
      * and config)
      * @return true if legacy canvas should be shown

@@ -40,6 +40,18 @@
 static const wxChar AdvancedConfigMask[] = wxT( "KICAD_ADVANCED_CONFIG" );
 
 /**
+ * Limits and default settings for the coroutine stack size allowed.
+ * Warning! Setting the stack size below the default may lead to unexplained crashes
+ * This configuration setting is intended for developers only.
+ */
+namespace AC_STACK
+{
+    static constexpr int min_stack = 32 * 4096;
+    static constexpr int default_stack = 256 * 4096;
+    static constexpr int max_stack = 4096 * 4096;
+}
+
+/**
  * List of known keys for advanced configuration options.
  *
  * Set these options in the file `kicad_advanced` in the
@@ -71,6 +83,12 @@ static const wxChar RealtimeConnectivity[] = wxT( "RealtimeConnectivity" );
  * on other platforms
  */
 static const wxChar AllowLegacyCanvasInGtk3[] = wxT( "AllowLegacyCanvasInGtk3" );
+
+/**
+ * Configure the coroutine stack size in bytes.  This should be allocated in multiples of
+ * the system page size (n*4096 is generally safe)
+ */
+static const wxChar CoroutineStackSize[] = wxT( "CoroutineStackSize" );
 
 /**
  * Draw zones in pcbnew with the stroked outline.
@@ -158,6 +176,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_allowLegacyCanvasInGtk3 = false;
     m_realTimeConnectivity = true;
     m_forceThickOutlinesInZones = true;
+    m_coroutineStackSize = AC_STACK::default_stack;
 
     loadFromConfigFile();
 }
@@ -199,6 +218,10 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back(
             new PARAM_CFG_BOOL( true, AC_KEYS::RealtimeConnectivity, &m_realTimeConnectivity, false ) );
+
+    configParams.push_back(
+            new PARAM_CFG_INT( true, AC_KEYS::CoroutineStackSize, &m_coroutineStackSize,
+                    AC_STACK::default_stack, AC_STACK::min_stack, AC_STACK::max_stack ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ForceThickZones,
                                                 &m_forceThickOutlinesInZones, true ) );
