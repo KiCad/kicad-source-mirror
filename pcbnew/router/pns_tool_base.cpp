@@ -137,6 +137,9 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
         if( !IsCopperLayer( item->Layers().Start() ) )
             continue;
 
+        if( !m_iface->IsAnyLayerVisible( item->Layers() ) )
+            continue;
+
         // fixme: this causes flicker with live loop removal...
         //if( item->Parent() && !item->Parent()->ViewIsVisible() )
         //    continue;
