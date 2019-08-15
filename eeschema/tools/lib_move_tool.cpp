@@ -43,7 +43,7 @@ LIB_MOVE_TOOL::LIB_MOVE_TOOL() :
 bool LIB_MOVE_TOOL::Init()
 {
     EE_TOOL_BASE::Init();
-    
+
     //
     // Add move actions to the selection tool menu
     //
@@ -159,7 +159,9 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 else if( selection.Size() == 1 && m_frame->GetMoveWarpsCursor() )
                 {
-                    m_anchorPos = lib_item->GetPosition();
+                    wxPoint itemPos = lib_item->GetPosition();
+                    m_anchorPos = wxPoint( itemPos.x, -itemPos.y );
+
                     getViewControls()->WarpCursor( m_anchorPos, true, true );
                     m_cursor = m_anchorPos;
                 }

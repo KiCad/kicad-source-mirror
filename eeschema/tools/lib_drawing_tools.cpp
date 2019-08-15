@@ -141,14 +141,14 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 {
                 case LIB_PIN_T:
                 {
-                    item = pinTool->CreatePin( wxPoint( cursorPos.x, -cursorPos.y), part );
+                    item = pinTool->CreatePin( wxPoint( cursorPos.x, -cursorPos.y ), part );
                     g_lastPinWeakPtr = item;
                     break;
                 }
                 case LIB_TEXT_T:
                 {
                     LIB_TEXT* text = new LIB_TEXT( part );
-                    text->SetPosition( wxPoint( cursorPos.x, -cursorPos.y) );
+                    text->SetPosition( wxPoint( cursorPos.x, -cursorPos.y ) );
                     text->SetTextSize( wxSize( m_frame->g_LastTextSize, m_frame->g_LastTextSize ) );
                     text->SetTextAngle( m_frame->g_LastTextAngle );
 
@@ -215,7 +215,7 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
-            static_cast<LIB_ITEM*>( item )->SetPosition( wxPoint( cursorPos.x, -cursorPos.y) );
+            static_cast<LIB_ITEM*>( item )->SetPosition( wxPoint( cursorPos.x, -cursorPos.y ) );
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
         }
