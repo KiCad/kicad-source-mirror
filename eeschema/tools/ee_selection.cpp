@@ -26,7 +26,7 @@
 #include <functional>
 #include <tools/ee_selection.h>
 #include <sch_item.h>
-#include <lib_draw_item.h>
+#include <lib_item.h>
 
 EDA_ITEM* EE_SELECTION::GetTopLeftItem( bool onlyModules ) const
 {

@@ -26,7 +26,7 @@
 #define LIB_TEXT_H
 
 #include <eda_text.h>
-#include <lib_draw_item.h>
+#include <lib_item.h>
 
 
 /**

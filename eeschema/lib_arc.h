@@ -26,7 +26,7 @@
 #ifndef LIB_ARC_H
 #define LIB_ARC_H
 
-#include <lib_draw_item.h>
+#include <lib_item.h>
 
 
 class TRANSFORM;

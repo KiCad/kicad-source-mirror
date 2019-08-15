@@ -32,7 +32,7 @@
 #include <sch_edit_frame.h>
 #include <general.h>
 #include <eeschema_id.h>
-#include <lib_draw_item.h>
+#include <lib_item.h>
 #include <lib_pin.h>
 #include <sch_component.h>
 #include <sch_sheet.h>

@@ -28,7 +28,7 @@
 #include <sch_line.h>
 #include <sch_io_mgr.h>
 #include <eagle_parser.h>
-#include <lib_draw_item.h>
+#include <lib_item.h>
 #include <geometry/seg.h>
 #include <dlist.h>
 

@@ -26,7 +26,7 @@
 
 #include <sch_item.h>
 
-#include <lib_draw_item.h>
+#include <lib_item.h>
 #include <lib_rectangle.h>
 #include <lib_pin.h>
 #include <lib_circle.h>

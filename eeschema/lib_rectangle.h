@@ -25,7 +25,7 @@
 #ifndef LIB_RECTANGLE_H
 #define LIB_RECTANGLE_H
 
-#include <lib_draw_item.h>
+#include <lib_item.h>
 
 
 class LIB_RECTANGLE  : public LIB_ITEM

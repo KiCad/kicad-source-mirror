@@ -30,7 +30,7 @@
 #define CLASS_LIBENTRY_FIELDS_H
 
 #include <eda_text.h>
-#include <lib_draw_item.h>
+#include <lib_item.h>
 
 
 class SCH_LEGACY_PLUGIN_CACHE;

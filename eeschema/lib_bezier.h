@@ -25,7 +25,7 @@
 #ifndef LIB_BEZIER_H
 #define LIB_BEZIER_H
 
-#include <lib_draw_item.h>
+#include <lib_item.h>
 
 
 /**

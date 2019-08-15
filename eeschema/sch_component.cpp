@@ -42,7 +42,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <netlist_object.h>
-#include <lib_draw_item.h>
+#include <lib_item.h>
 #include <symbol_lib_table.h>
 
 #include <dialogs/dialog_schematic_find.h>

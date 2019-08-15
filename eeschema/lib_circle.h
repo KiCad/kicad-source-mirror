@@ -25,7 +25,7 @@
 #ifndef LIB_CIRCLE_H
 #define LIB_CIRCLE_H
 
-#include <lib_draw_item.h>
+#include <lib_item.h>
 
 
 class LIB_CIRCLE : public LIB_ITEM

@@ -37,7 +37,7 @@
 #include <sch_screen.h>
 #include <class_library.h>
 #include <class_libentry.h>
-#include <lib_draw_item.h>
+#include <lib_item.h>
 #include <lib_id.h>
 #include <sch_component.h>
 #include <sch_connection.h>

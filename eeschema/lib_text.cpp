@@ -36,7 +36,7 @@
 #include <msgpanel.h>
 #include <bitmaps.h>
 
-#include <lib_draw_item.h>
+#include <lib_item.h>
 #include <general.h>
 #include <transform.h>
 #include <lib_text.h>

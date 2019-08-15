@@ -30,7 +30,7 @@
 
 #include <sch_base_frame.h>
 #include <sch_screen.h>
-#include <lib_draw_item.h>
+#include <lib_item.h>
 #include <ee_collectors.h>
 #include <core/optional.h>
 

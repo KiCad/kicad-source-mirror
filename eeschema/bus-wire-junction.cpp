@@ -24,7 +24,7 @@
 
 #include <fctsys.h>
 #include <sch_edit_frame.h>
-#include <lib_draw_item.h>
+#include <lib_item.h>
 #include <general.h>
 #include <sch_bus_entry.h>
 #include <sch_junction.h>

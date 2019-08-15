@@ -33,7 +33,7 @@
 class SCH_COMPONENT;
 
 #include <eda_rect.h>
-#include <lib_draw_item.h>
+#include <lib_item.h>
 
 #include "pin_shape.h"
 #include "pin_type.h"

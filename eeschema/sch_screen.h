@@ -29,7 +29,7 @@
 #include <macros.h>
 #include <dlist.h>
 #include <sch_item.h>
-#include <lib_draw_item.h>
+#include <lib_item.h>
 #include <base_screen.h>
 #include <title_block.h>
 #include <page_info.h>

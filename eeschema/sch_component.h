@@ -34,7 +34,7 @@
 #include <general.h>
 #include <vector>
 #include <set>
-#include <lib_draw_item.h>
+#include <lib_item.h>
 #include <sch_pin.h>
 #include <sch_base_frame.h>
 

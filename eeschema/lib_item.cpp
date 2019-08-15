@@ -29,7 +29,7 @@
 #include <msgpanel.h>
 
 #include <general.h>
-#include <lib_draw_item.h>
+#include <lib_item.h>
 
 const int fill_tab[3] = { 'N', 'F', 'f' };
 

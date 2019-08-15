@@ -1079,15 +1079,21 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityO
     case LIB_PART_T:    // In libedit we do not want to select the symbol itself.
         return false;
 
+    case LIB_ARC_T:
+    case LIB_CIRCLE_T:
+    case LIB_TEXT_T:
+    case LIB_RECTANGLE_T:
+    case LIB_POLYLINE_T:
+    case LIB_BEZIER_T:
     case LIB_PIN_T:
     {
         LIB_EDIT_FRAME* editFrame = (LIB_EDIT_FRAME*) m_frame;
-        LIB_PIN*        pin = (LIB_PIN*) aItem;
+        LIB_ITEM*       lib_item = (LIB_ITEM*) aItem;
 
-        if( pin->GetUnit() && pin->GetUnit() != editFrame->GetUnit() )
+        if( lib_item->GetUnit() && lib_item->GetUnit() != editFrame->GetUnit() )
             return false;
 
-        if( pin->GetConvert() && pin->GetConvert() != editFrame->GetConvert() )
+        if( lib_item->GetConvert() && lib_item->GetConvert() != editFrame->GetConvert() )
             return false;
 
         break;
