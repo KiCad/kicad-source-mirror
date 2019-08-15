@@ -235,7 +235,7 @@ GRIDCELL_AUTOWRAP_STRINGRENDERER::BreakWord(wxDC& dc,
 }
 
 
-#define GRID_CELL_MARGIN   3
+#define GRID_CELL_MARGIN   4
 
 int GRIDCELL_AUTOWRAP_STRINGRENDERER::GetHeight( wxDC& aDC, wxGrid* aGrid, int aRow, int aCol )
 {
@@ -246,7 +246,7 @@ int GRIDCELL_AUTOWRAP_STRINGRENDERER::GetHeight( wxDC& aDC, wxGrid* aGrid, int a
     rect.SetWidth( aGrid->GetColSize( aCol ) - ( 2 * GRID_CELL_MARGIN ) );
 
     const size_t numLines = GetTextLines( *aGrid, aDC, *attr, rect, aRow, aCol ).size();
-    const int textHeight = numLines *aDC.GetCharHeight();
+    const int textHeight = numLines * aDC.GetCharHeight();
 
     attr->DecRef();
 
@@ -778,8 +778,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
         if( new_libid.IsEmpty() || new_libid == m_grid->GetCellValue( row, COL_CURR_LIBID ) )
             continue;
 
-        // a new lib id is found and was already validated.
-        // set this new value
+        // A new lib id is found and was already validated.
         LIB_ID id;
         id.Parse( new_libid, LIB_ID::ID_SCH, true );
 
@@ -787,6 +786,12 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
         {
             if( cmp.m_Row != row )
                 continue;
+
+            SCH_FIELD* value = cmp.m_Component->GetField( VALUE );
+
+            // If value is a proxy for the itemName then make sure it gets updated
+            if( cmp.m_Component->GetLibId().GetLibItemName().wx_str() == value->GetText() )
+                value->SetText( id.GetLibItemName().wx_str() );
 
             cmp.m_Component->SetLibId( id );
             change = true;
