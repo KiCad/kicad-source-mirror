@@ -731,7 +731,7 @@ void EDA_3D_VIEWER::LoadSettings( wxConfigBase *aCfg )
     aCfg->Read( keyRenderRAY_Shadows, &tmp, true );
     m_settings.SetFlag( FL_RENDER_RAYTRACING_SHADOWS, tmp );
 
-    aCfg->Read( keyRenderRAY_Backfloor, &tmp, true );
+    aCfg->Read( keyRenderRAY_Backfloor, &tmp, false );
     m_settings.SetFlag( FL_RENDER_RAYTRACING_BACKFLOOR, tmp );
 
     aCfg->Read( keyRenderRAY_Refractions, &tmp, true );
