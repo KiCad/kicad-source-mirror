@@ -17,52 +17,47 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizerMargins;
 	bSizerMargins = new wxBoxSizer( wxVERTICAL );
 
+	wxBoxSizer* bSizerLayerCnt;
+	bSizerLayerCnt = new wxBoxSizer( wxHORIZONTAL );
+
 	wxString m_PresetsChoiceChoices[] = { _("Custom layer set"), _("Two layers, parts on Front"), _("Two layers, parts on Back"), _("Two layers, parts on Front & Back"), _("Four layers, parts on Front"), _("Four layers, parts on Front & Back"), _("All layers on") };
 	int m_PresetsChoiceNChoices = sizeof( m_PresetsChoiceChoices ) / sizeof( wxString );
 	m_PresetsChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_PresetsChoiceNChoices, m_PresetsChoiceChoices, 0 );
 	m_PresetsChoice->SetSelection( 0 );
-	bSizerMargins->Add( m_PresetsChoice, 0, wxALL|wxEXPAND, 5 );
+	bSizerLayerCnt->Add( m_PresetsChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+
+	bSizerLayerCnt->Add( 15, 0, 0, 0, 5 );
 
 	m_staticTextCopperLayers = new wxStaticText( this, wxID_ANY, _("Copper layers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextCopperLayers->Wrap( -1 );
-	bSizer4->Add( m_staticTextCopperLayers, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	bSizerLayerCnt->Add( m_staticTextCopperLayers, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 
 	wxString m_CopperLayersChoiceChoices[] = { _("2"), _("4"), _("6"), _("8"), _("10"), _("12"), _("14"), _("16"), _("18"), _("20"), _("22"), _("24"), _("26"), _("28"), _("30"), _("32") };
 	int m_CopperLayersChoiceNChoices = sizeof( m_CopperLayersChoiceChoices ) / sizeof( wxString );
 	m_CopperLayersChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_CopperLayersChoiceNChoices, m_CopperLayersChoiceChoices, 0 );
 	m_CopperLayersChoice->SetSelection( 0 );
-	bSizer4->Add( m_CopperLayersChoice, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	bSizerLayerCnt->Add( m_CopperLayersChoice, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
 
 
-	bSizer4->Add( 40, 0, 0, 0, 5 );
+	bSizerLayerCnt->Add( 15, 0, 0, 0, 5 );
 
 	m_thicknessLabel = new wxStaticText( this, wxID_ANY, _("PCB thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessLabel->Wrap( -1 );
-	bSizer4->Add( m_thicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	bSizerLayerCnt->Add( m_thicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 
 	m_thicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_thicknessCtrl->SetMinSize( wxSize( 190,-1 ) );
-
-	bSizer4->Add( m_thicknessCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	bSizerLayerCnt->Add( m_thicknessCtrl, 0, wxEXPAND|wxALL, 3 );
 
 	m_thicknessUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessUnits->Wrap( -1 );
-	bSizer4->Add( m_thicknessUnits, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
+	bSizerLayerCnt->Add( m_thicknessUnits, 0, wxALL|wxALIGN_CENTER_VERTICAL, 3 );
 
 
-	bSizerMargins->Add( bSizer4, 1, wxEXPAND, 5 );
-
-	wxBoxSizer* bLineMargins;
-	bLineMargins = new wxBoxSizer( wxVERTICAL );
+	bSizerMargins->Add( bSizerLayerCnt, 0, wxEXPAND, 5 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bLineMargins->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
-
-
-	bSizerMargins->Add( bLineMargins, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	bSizerMargins->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	m_LayersListPanel = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTAB_TRAVERSAL|wxVSCROLL );
 	m_LayersListPanel->SetScrollRate( 0, 5 );
@@ -767,7 +762,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	bSizerMargins->Add( m_LayersListPanel, 1, wxEXPAND|wxALL, 5 );
 
 
-	bMainSizer->Add( bSizerMargins, 1, wxEXPAND|wxRIGHT, 10 );
+	bMainSizer->Add( bSizerMargins, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 
 
 	this->SetSizer( bMainSizer );
