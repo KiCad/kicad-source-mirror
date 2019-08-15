@@ -203,7 +203,7 @@ int EDIT_TOOL::GetAndPlace( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, (void*) module );
 
         selectionTool->GetSelection().SetReferencePoint( module->GetPosition() );
-        m_toolMgr->RunAction( PCB_ACTIONS::move, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::move, false );
     }
 
     return 0;
