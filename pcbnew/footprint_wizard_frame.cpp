@@ -2,9 +2,9 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2015 Miguel Angel Ajo Pelayo <miguelangel@nbee.es>
- * Copyright (C) 2012-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2012-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -195,7 +195,8 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_auimgr.SetArtProvider( new EDA_DOCKART() );
 
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
-    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6)
+                      .BestSize( -1, m_MsgFrameHeight ) );
 
     m_auimgr.AddPane( m_parametersPanel, EDA_PANE().Palette().Name( "Params" ).Left().Position(0)
                       .Caption( _( "Parameters" ) ).MinSize( 360, 180 ) );
@@ -494,7 +495,7 @@ void FOOTPRINT_WIZARD_FRAME::ResizeParamColumns()
 
 void FOOTPRINT_WIZARD_FRAME::ClickOnPageList( wxCommandEvent& event )
 {
-    if( m_pageList->GetSelection() > 0 )
+    if( m_pageList->GetSelection() >= 0 )
     {
         ReCreateParameterList();
         GetCanvas()->Refresh();
