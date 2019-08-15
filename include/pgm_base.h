@@ -55,6 +55,7 @@
 #define GAL_DISPLAY_OPTIONS_KEY         wxT( "GalDisplayOptions" )
 #define GAL_ANTIALIASING_MODE_KEY       wxT( "OpenGLAntialiasingMode" )
 #define CAIRO_ANTIALIASING_MODE_KEY     wxT( "CairoAntialiasingMode" )
+#define WARP_MOUSE_ON_MOVE_KEY           wxT( "MoveWarpsCursor" )
 #define IMMEDIATE_ACTIONS_KEY           wxT( "ImmediateActions" )
 #define PREFER_SELECT_TO_DRAG_KEY       wxT( "PreferSelectionToDragging" )
 

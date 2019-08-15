@@ -403,6 +403,7 @@ void EDA_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 
     wxConfigBase* settings = Pgm().CommonSettings();
 
+    settings->Read( WARP_MOUSE_ON_MOVE_KEY, &m_moveWarpsCursor );
     settings->Read( PREFER_SELECT_TO_DRAG_KEY, &m_dragSelects );
     settings->Read( IMMEDIATE_ACTIONS_KEY, &m_immediateActions );
 }
@@ -467,6 +468,14 @@ void EDA_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( baseCfgName + entryMruPath, &m_mruPath );
 
     wxConfigBase* settings = Pgm().CommonSettings();
+
+    if( !settings->Read( WARP_MOUSE_ON_MOVE_KEY, &m_moveWarpsCursor ) )
+    {
+        // Legacy versions stored the property only for Eeschema, so see if we have it there
+        std::unique_ptr<wxConfigBase> pcbSettings = GetNewConfig( wxT( "eeschema" ) );
+        pcbSettings->Read( "MoveWarpsCursor", &m_moveWarpsCursor, true );
+    }
+
     if( !settings->Read( PREFER_SELECT_TO_DRAG_KEY, &m_dragSelects ) )
     {
         // Legacy versions stored the property only for PCBNew, so see if we have it there

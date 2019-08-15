@@ -72,6 +72,7 @@ class PANEL_COMMON_SETTINGS_BASE : public wxPanel
 		wxCheckBox* m_MousewheelPANOpt;
 		wxCheckBox* m_AutoPANOpt;
 		wxCheckBox* m_PreferSelectToDrag;
+		wxCheckBox* m_warpMouseOnMove;
 		wxCheckBox* m_NonImmediateActions;
 		
 		// Virtual event handlers, overide them in your derived class

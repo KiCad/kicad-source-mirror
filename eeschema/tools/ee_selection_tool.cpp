@@ -342,7 +342,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         else if( evt->IsDrag( BUT_LEFT ) )
         {
-            if( m_additive || m_subtractive || m_exclusive_or || m_frame->GetDragAlwaysSelects() )
+            if( m_additive || m_subtractive || m_exclusive_or || m_frame->GetDragSelects() )
             {
                 selectMultiple();
             }

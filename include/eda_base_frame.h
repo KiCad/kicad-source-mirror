@@ -137,6 +137,7 @@ protected:
                                             // first invocation of a hotkey will just select the
                                             // relevant tool.
     bool            m_dragSelects;          // Prefer selection to dragging.
+    bool            m_moveWarpsCursor;      // cursor is warped to move/drag origin
     bool            m_hasAutoSave;
     bool            m_autoSaveState;
     int             m_autoSaveInterval;     // The auto save interval time in seconds.
@@ -246,6 +247,12 @@ public:
      * item.
      */
     bool GetDragSelects() const { return m_dragSelects; }
+
+    /**
+     * Indicates that a move operation should warp the mouse pointer to the origin of the
+     * move object.  This improves snapping, but some users are alergic to mouse warping.
+     */
+    bool GetMoveWarpsCursor() const { return m_moveWarpsCursor; }
 
     /**
      * Override the default process event handler to implement the auto save feature.

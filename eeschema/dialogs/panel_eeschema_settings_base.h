@@ -53,11 +53,8 @@ class PANEL_EESCHEMA_SETTINGS_BASE : public wxPanel
 		wxStaticText* m_vPitchUnits;
 		wxStaticText* m_staticText16;
 		wxSpinCtrl* m_spinRepeatLabel;
-		wxStaticText* m_staticText161;
-		wxChoice* m_choiceMouseAction;
 		wxCheckBox* m_checkHVOrientation;
-		wxCheckBox* m_moveWarpsCursor;
-		wxCheckBox* m_moveTakesCursorAsOrigin;
+		wxCheckBox* m_mouseDragIsDrag;
 		wxCheckBox* m_checkAutoplaceFields;
 		wxCheckBox* m_checkAutoplaceJustify;
 		wxCheckBox* m_checkAutoplaceAlign;

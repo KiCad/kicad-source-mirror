@@ -11,7 +11,6 @@
 
 BEGIN_EVENT_TABLE( PANEL_EESCHEMA_SETTINGS_BASE, wxPanel )
 	EVT_CHOICE( wxID_ANY, PANEL_EESCHEMA_SETTINGS_BASE::_wxFB_OnChooseUnits )
-	EVT_CHOICE( wxID_ANY, PANEL_EESCHEMA_SETTINGS_BASE::_wxFB_OnChooseUnits )
 END_EVENT_TABLE()
 
 PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
@@ -86,16 +85,6 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 	
 	fgSizer3->Add( 0, 0, 1, wxEXPAND, 3 );
 	
-	m_staticText161 = new wxStaticText( this, wxID_ANY, _("Mouse drag action"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText161->Wrap( -1 );
-	fgSizer3->Add( m_staticText161, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
-	
-	wxString m_choiceMouseActionChoices[] = { _("Move"), _("Drag"), _("Rectanguar selection") };
-	int m_choiceMouseActionNChoices = sizeof( m_choiceMouseActionChoices ) / sizeof( wxString );
-	m_choiceMouseAction = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceMouseActionNChoices, m_choiceMouseActionChoices, 0 );
-	m_choiceMouseAction->SetSelection( 2 );
-	fgSizer3->Add( m_choiceMouseAction, 0, 0, 5 );
-	
 	
 	bLeftColumn->Add( fgSizer3, 0, wxLEFT|wxRIGHT, 5 );
 	
@@ -106,11 +95,10 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 	m_checkHVOrientation->SetValue(true); 
 	sbSizer11->Add( m_checkHVOrientation, 0, wxRIGHT|wxLEFT, 5 );
 	
-	m_moveWarpsCursor = new wxCheckBox( sbSizer11->GetStaticBox(), wxID_ANY, _("Warp mouse to origin of moved object"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer11->Add( m_moveWarpsCursor, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_mouseDragIsDrag = new wxCheckBox( sbSizer11->GetStaticBox(), wxID_ANY, _("Mouse drag performs drag (G) operation"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_mouseDragIsDrag->SetToolTip( _("If unchecked, mouse drag will perform move (M) operation") );
 	
-	m_moveTakesCursorAsOrigin = new wxCheckBox( sbSizer11->GetStaticBox(), wxID_ANY, _("Use cursor position as editing anchor"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer11->Add( m_moveTakesCursorAsOrigin, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	sbSizer11->Add( m_mouseDragIsDrag, 0, wxALL, 5 );
 	
 	
 	bLeftColumn->Add( sbSizer11, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );

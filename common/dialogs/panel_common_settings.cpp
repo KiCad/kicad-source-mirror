@@ -140,6 +140,9 @@ bool PANEL_COMMON_SETTINGS::TransferDataToWindow()
     }
     m_PreferSelectToDrag->SetValue( option );
 
+    commonSettings->Read( WARP_MOUSE_ON_MOVE_KEY, &option );
+    m_warpMouseOnMove->SetValue( option );
+
     commonSettings->Read( IMMEDIATE_ACTIONS_KEY, &option );
     m_NonImmediateActions->SetValue( !option );
 
@@ -177,6 +180,7 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     commonSettings->Write( ENBL_MOUSEWHEEL_PAN_KEY, m_MousewheelPANOpt->GetValue() );
     commonSettings->Write( ENBL_AUTO_PAN_KEY, m_AutoPANOpt->GetValue() );
     commonSettings->Write( PREFER_SELECT_TO_DRAG_KEY, m_PreferSelectToDrag->GetValue() );
+    commonSettings->Write( WARP_MOUSE_ON_MOVE_KEY, m_warpMouseOnMove->GetValue() );
     commonSettings->Write( IMMEDIATE_ACTIONS_KEY, !m_NonImmediateActions->GetValue() );
 
     Pgm().SetEditorName( m_textEditorPath->GetValue() );
