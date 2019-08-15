@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Aug 15 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_LIB_EDIT_PIN_BASE_H__
-#define __DIALOG_LIB_EDIT_PIN_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -40,48 +39,32 @@ class wxBitmapComboBox;
 class DIALOG_LIB_EDIT_PIN_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
-		enum
-		{
-			ID_M_TEXTPINNAME = 1000,
-			ID_M_STATICTEXTPADNAME,
-			ID_M_TEXTPADNAME,
-			ID_M_STATICTEXTPINLEN,
-			ID_M_TEXTLENGTH,
-			ID_M_STATICLENGTHUNITS,
-			ID_M_STATICTEXTNAMESIZE,
-			ID_M_TEXTPINNAMETEXTSIZE,
-			ID_M_STATICNAMETEXTSIZEUNITS,
-			ID_M_STATICTEXTPADNAMESIZE,
-			ID_M_TEXTPADNAMETEXTSIZE,
-			ID_M_STATICNUMBERTEXTSIZEUNITS
-		};
-		
 		wxStaticText* m_pinNameLabel;
 		wxTextCtrl* m_textPinName;
 		wxStaticText* m_pinNumberLabel;
 		wxTextCtrl* m_textPinNumber;
+		wxStaticText* m_posXLabel;
+		wxTextCtrl* m_posXCtrl;
+		wxStaticText* m_posYLabel;
+		wxTextCtrl* m_posYCtrl;
+		wxStaticText* m_pinLengthLabel;
+		wxTextCtrl* m_pinLengthCtrl;
+		wxStaticText* m_nameSizeLabel;
+		wxTextCtrl* m_nameSizeCtrl;
+		wxStaticText* m_numberSizeLabel;
+		wxTextCtrl* m_numberSizeCtrl;
 		wxStaticText* m_staticTextEType;
 		PinTypeComboBox* m_choiceElectricalType;
 		wxStaticText* m_staticTextGstyle;
 		PinShapeComboBox* m_choiceStyle;
-		wxStaticText* m_posXLabel;
-		wxTextCtrl* m_posXCtrl;
-		wxStaticText* m_posXUnits;
-		wxStaticText* m_posYLabel;
-		wxTextCtrl* m_posYCtrl;
-		wxStaticText* m_posYUnits;
 		wxStaticText* m_staticTextOrient;
 		wxBitmapComboBox* m_choiceOrientation;
-		wxStaticText* m_pinLengthLabel;
-		wxTextCtrl* m_pinLengthCtrl;
+		wxStaticText* m_posXUnits;
+		wxStaticText* m_posYUnits;
 		wxStaticText* m_pinLengthUnits;
-		wxStaticText* m_nameSizeLabel;
-		wxTextCtrl* m_nameSizeCtrl;
 		wxStaticText* m_nameSizeUnits;
-		wxStaticText* m_numberSizeLabel;
-		wxTextCtrl* m_numberSizeCtrl;
 		wxStaticText* m_numberSizeUnits;
 		wxCheckBox* m_checkApplyToAllParts;
 		wxCheckBox* m_checkApplyToAllConversions;
@@ -91,17 +74,16 @@ class DIALOG_LIB_EDIT_PIN_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnPropertiesChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPaintShowPanel( wxPaintEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_LIB_EDIT_PIN_BASE();
-	
+
 };
 
-#endif //__DIALOG_LIB_EDIT_PIN_BASE_H__
