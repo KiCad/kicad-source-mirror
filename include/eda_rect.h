@@ -46,13 +46,15 @@ class EDA_RECT
 private:
     wxPoint m_Pos;      // Rectangle Origin
     wxSize  m_Size;     // Rectangle Size
+    bool    m_init;     // Is the rectangle initialized
 
 public:
-    EDA_RECT() { };
+    EDA_RECT() : m_init( false ) { };
 
     EDA_RECT( const wxPoint& aPos, const wxSize& aSize ) :
         m_Pos( aPos ),
-        m_Size( aSize )
+        m_Size( aSize ),
+        m_init( true )
     { }
 
     virtual ~EDA_RECT() { };
@@ -121,20 +123,83 @@ public:
     int GetTop() const { return m_Pos.y; }
     int GetBottom() const { return m_Pos.y + m_Size.y; }    // Y axis from top to bottom
 
-    void SetOrigin( const wxPoint& pos ) { m_Pos = pos; }
-    void SetOrigin( int x, int y ) { m_Pos.x = x; m_Pos.y = y; }
-    void SetSize( const wxSize& size ) { m_Size = size; }
-    void SetSize( int w, int h ) { m_Size.x = w; m_Size.y = h; }
-    void Offset( int dx, int dy ) { m_Pos.x += dx; m_Pos.y += dy; }
-    void Offset( const wxPoint& offset ) { m_Pos += offset; }
-    void SetX( int val ) { m_Pos.x = val; }
-    void SetY( int val ) { m_Pos.y = val; }
-    void SetWidth( int val ) { m_Size.x = val; }
-    void SetHeight( int val ) { m_Size.y = val; }
-    void SetEnd( int x, int y ) { SetEnd( wxPoint( x, y ) ); }
-    void SetEnd( const wxPoint& pos )
+    bool IsValid() const
     {
-        m_Size.x = pos.x - m_Pos.x; m_Size.y = pos.y - m_Pos.y;
+        return m_init;
+    }
+
+    void SetOrigin( const wxPoint &pos )
+    {
+        m_Pos = pos;
+        m_init = true;
+    }
+
+    void SetOrigin( int x, int y )
+    {
+        m_Pos.x = x;
+        m_Pos.y = y;
+        m_init = true;
+    }
+
+    void SetSize( const wxSize &size )
+    {
+        m_Size = size;
+        m_init = true;
+    }
+
+    void SetSize( int w, int h )
+    {
+        m_Size.x = w;
+        m_Size.y = h;
+        m_init = true;
+    }
+
+    void Offset( int dx, int dy )
+    {
+        m_Pos.x += dx;
+        m_Pos.y += dy;
+    }
+
+    void Offset( const wxPoint &offset )
+    {
+        m_Pos += offset;
+    }
+
+    void SetX( int val )
+    {
+        m_Pos.x = val;
+        m_init = true;
+    }
+
+    void SetY( int val )
+    {
+        m_Pos.y = val;
+        m_init = true;
+    }
+
+    void SetWidth( int val )
+    {
+        m_Size.x = val;
+        m_init = true;
+    }
+
+    void SetHeight( int val )
+    {
+        m_Size.y = val;
+        m_init = true;
+    }
+
+    void SetEnd( int x, int y )
+    {
+        SetEnd( wxPoint( x, y ) );
+        m_init = true;
+    }
+
+    void SetEnd( const wxPoint &pos )
+    {
+        m_Size.x = pos.x - m_Pos.x;
+        m_Size.y = pos.y - m_Pos.y;
+        m_init = true;
     }
 
     /**
