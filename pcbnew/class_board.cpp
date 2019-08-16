@@ -1128,84 +1128,60 @@ unsigned BOARD::GetUnconnectedNetCount() const
 
 EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
 {
-    bool hasItems = false;
     EDA_RECT area;
     LSET visible = GetVisibleLayers();
 
     // Check segments, dimensions, texts, and fiducials
     for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
     {
-        if( aBoardEdgesOnly && (item->Type() != PCB_LINE_T || item->GetLayer() != Edge_Cuts ) )
+        if( aBoardEdgesOnly && ( item->GetLayer() != Edge_Cuts ) )
             continue;
 
-        if( !( item->GetLayerSet() & visible ).any() )
-            continue;
-
-        if( !hasItems )
-            area = item->GetBoundingBox();
-        else
+        if( ( item->GetLayerSet() & visible ).any() )
             area.Merge( item->GetBoundingBox() );
+    }
 
-        hasItems = true;
+    // Check modules
+    for( MODULE* module = m_Modules; module; module = module->Next() )
+    {
+        if( !( module->GetLayerSet() & visible ).any() )
+            continue;
+
+        if( aBoardEdgesOnly )
+        {
+            for( const auto edge : module->GraphicalItems() )
+            {
+                if( edge->GetLayer() == Edge_Cuts )
+                    area.Merge( edge->GetBoundingBox() );
+            }
+        }
+        else
+        {
+            area.Merge( module->GetBoundingBox() );
+        }
     }
 
     if( !aBoardEdgesOnly )
     {
-        // Check modules
-        for( MODULE* module = m_Modules; module; module = module->Next() )
-        {
-            if( !( module->GetLayerSet() & visible ).any() )
-                continue;
-
-            if( !hasItems )
-                area = module->GetBoundingBox();
-            else
-                area.Merge( module->GetBoundingBox() );
-
-            hasItems = true;
-        }
-
         // Check tracks
         for( TRACK* track = m_Track; track; track = track->Next() )
         {
-            if( !( track->GetLayerSet() & visible ).any() )
-                continue;
-
-            if( !hasItems )
-                area = track->GetBoundingBox();
-            else
+            if( ( track->GetLayerSet() & visible ).any() )
                 area.Merge( track->GetBoundingBox() );
-
-            hasItems = true;
         }
 
         // Check segment zones
         for( TRACK* track = m_SegZoneDeprecated; track; track = track->Next() )
         {
-            if( !( track->GetLayerSet() & visible ).any() )
-                continue;
-
-            if( !hasItems )
-                area = track->GetBoundingBox();
-            else
+            if( ( track->GetLayerSet() & visible ).any() )
                 area.Merge( track->GetBoundingBox() );
-
-            hasItems = true;
         }
 
         // Check polygonal zones
         for( auto aZone : m_ZoneDescriptorList )
         {
-            if( !( aZone->GetLayerSet() & visible ).any() )
-                continue;
-
-            if( !hasItems )
-                area = aZone->GetBoundingBox();
-            else
+            if( ( aZone->GetLayerSet() & visible ).any() )
                 area.Merge( aZone->GetBoundingBox() );
-
-            area.Merge( aZone->GetBoundingBox() );
-            hasItems = true;
         }
     }
 
