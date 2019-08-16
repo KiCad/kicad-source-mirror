@@ -1028,6 +1028,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         {
             SCH_COMPONENT* component = (SCH_COMPONENT*) item;
             component->Resolve( *symLibTable, partLib );
+            component->UpdatePins();
         }
         else if( item->Type() == SCH_SHEET_T )
         {
