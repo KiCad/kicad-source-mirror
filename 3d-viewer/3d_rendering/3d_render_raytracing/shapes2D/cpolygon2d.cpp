@@ -711,35 +711,6 @@ void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
 }
 
 
-void Polygon_Calc_BBox_3DU( const SHAPE_POLY_SET &aPolysList,
-                            CBBOX2D &aOutBBox ,
-                            float aBiuTo3DunitsScale )
-{
-    aOutBBox.Reset();
-
-    for( int idx = 0; idx < aPolysList.OutlineCount(); ++idx )
-    {
-        // Each polygon in aPolysList is a polygon with holes
-        const SHAPE_POLY_SET::POLYGON& curr_polywithholes = aPolysList.CPolygon( idx );
-
-        for( unsigned ipoly = 0; ipoly < curr_polywithholes.size(); ++ipoly )
-        {
-            const SHAPE_LINE_CHAIN& path = curr_polywithholes[ipoly]; // a simple polygon
-
-             for( int jj = 0; jj < path.PointCount(); jj++ )
-             {
-                 const VECTOR2I& a = path.CPoint( jj );
-
-                 aOutBBox.Union( SFVEC2F( (float) a.x * aBiuTo3DunitsScale,
-                                          (float)-a.y * aBiuTo3DunitsScale ) );
-             }
-        }
-    }
-
-    aOutBBox.ScaleNextUp();
-}
-
-
 #ifdef DEBUG
 static void polygon_Convert( const ClipperLib::Path &aPath,
                              SEGMENTS &aOutSegment,

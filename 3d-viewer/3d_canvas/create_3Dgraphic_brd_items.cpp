@@ -62,13 +62,11 @@
 static int s_textWidth;
 static CGENERICCONTAINER2D *s_dstcontainer = NULL;
 static float s_biuTo3Dunits;
-static const CBBOX2D *s_boardBBox3DU = NULL;
 static const BOARD_ITEM *s_boardItem = NULL;
 
 // This is a call back function, used by GRText to draw the 3D text shape:
 void addTextSegmToContainer( int x0, int y0, int xf, int yf, void* aData )
 {
-    wxASSERT( s_boardBBox3DU != NULL );
     wxASSERT( s_dstcontainer != NULL );
 
     const SFVEC2F start3DU( x0 * s_biuTo3Dunits, -y0 * s_biuTo3Dunits );
@@ -103,7 +101,6 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const TEXTE_PCB* aText,
     s_dstcontainer = aDstContainer;
     s_textWidth    = aText->GetThickness() + ( 2 * aClearanceValue );
     s_biuTo3Dunits = m_biuTo3Dunits;
-    s_boardBBox3DU = &m_board2dBBox3DU;
 
     // not actually used, but needed by GRText
     const COLOR4D dummy_color = COLOR4D::BLACK;
@@ -221,7 +218,6 @@ void CINFO3D_VISU::AddGraphicsShapesWithClearanceToContainer( const MODULE* aMod
     s_boardItem    = (const BOARD_ITEM *)&aModule->Value();
     s_dstcontainer = aDstContainer;
     s_biuTo3Dunits = m_biuTo3Dunits;
-    s_boardBBox3DU = &m_board2dBBox3DU;
 
     for( TEXTE_MODULE* text : texts )
     {
