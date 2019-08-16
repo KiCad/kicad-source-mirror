@@ -550,9 +550,6 @@ class CINFO3D_VISU
     /// 3d bouding box of the pcb board in 3d units
     CBBOX   m_boardBoudingBox;
 
-    /// 2d bouding box of the pcb board in 3d units
-    CBBOX2D m_board2dBBox3DU;
-
     /// It contains polygon contours for each layer
     MAP_POLY          m_layers_poly;
 

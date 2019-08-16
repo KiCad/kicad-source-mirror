@@ -66,7 +66,6 @@ CINFO3D_VISU::CINFO3D_VISU() :
     m_boardCenter = SFVEC3F( 0.0f );
 
     m_boardBoudingBox.Reset();
-    m_board2dBBox3DU.Reset();
 
     m_layers_container2D.clear();
     m_layers_holes2D.clear();
@@ -462,8 +461,6 @@ void CINFO3D_VISU::createBoardPolygon()
         errmsg.append( _( "Cannot determine the board outline." ) );
         wxLogMessage( errmsg );
     }
-
-    Polygon_Calc_BBox_3DU( m_board_poly, m_board2dBBox3DU, m_biuTo3Dunits );
 }
 
 

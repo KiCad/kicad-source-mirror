@@ -150,10 +150,6 @@ void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
         float aDivFactor,
         const BOARD_ITEM &aBoardItem );
 
-void Polygon_Calc_BBox_3DU( const SHAPE_POLY_SET &aPolysList,
-                            CBBOX2D &aOutBBox,
-                            float aBiuTo3DunitsScale );
-
 void Polygon2d_TestModule();
 
 #endif // _CPOLYGON2D_H_
