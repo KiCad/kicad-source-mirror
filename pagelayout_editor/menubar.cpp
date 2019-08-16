@@ -138,12 +138,6 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
     viewMenu->Resolve();
 
-    //-- Inspector menu -------------------------------------------------------
-    //
-    CONDITIONAL_MENU* inspectorMenu = new CONDITIONAL_MENU( false, selTool );
-    inspectorMenu->AddItem( PL_ACTIONS::showInspector,       SELECTION_CONDITIONS::ShowAlways );
-    inspectorMenu->Resolve();
-
     //-- Place menu -------------------------------------------------------
     //
     CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
@@ -157,6 +151,13 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     placeMenu->AddItem( PL_ACTIONS::appendImportedWorksheet, SELECTION_CONDITIONS::ShowAlways );
 
     placeMenu->Resolve();
+
+    //-- Inspector menu -------------------------------------------------------
+    //
+    CONDITIONAL_MENU* inspectorMenu = new CONDITIONAL_MENU( false, selTool );
+    inspectorMenu->AddItem( PL_ACTIONS::showInspector,       SELECTION_CONDITIONS::ShowAlways );
+
+    inspectorMenu->Resolve();
 
     //-- Preferences menu --------------------------------------------------
     //
@@ -177,8 +178,8 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
-    menuBar->Append( inspectorMenu, _( "&Inspect" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
+    menuBar->Append( inspectorMenu, _( "&Inspect" ) );
     menuBar->Append( preferencesMenu, _( "P&references" ) );
     AddStandardHelpMenu( menuBar );
 

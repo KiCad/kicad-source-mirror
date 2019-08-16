@@ -172,8 +172,7 @@ wxMenuItem* ACTION_MENU::Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry
 
     m_toolActions[getMenuId( aAction )] = &aAction;
 
-    wxMenuItem* i = Append( item );
-    return i;
+    return Append( item );
 }
 
 
