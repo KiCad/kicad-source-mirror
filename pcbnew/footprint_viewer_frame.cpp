@@ -85,6 +85,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_ADD_FOOTPRINT_TO_BOARD, FOOTPRINT_VIEWER_FRAME::OnUpdateFootprintButton )
 
     EVT_TEXT( ID_MODVIEW_LIB_FILTER, FOOTPRINT_VIEWER_FRAME::OnLibFilter )
+    EVT_CHAR_HOOK( FOOTPRINT_VIEWER_FRAME::OnCharHook )
     EVT_TEXT( ID_MODVIEW_FOOTPRINT_FILTER, FOOTPRINT_VIEWER_FRAME::OnFPFilter )
 
     // listbox events
@@ -336,19 +337,26 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
     // Search for a previous selection:
     int index =  m_libList->FindString( getCurNickname(), true );
 
-    if( index != wxNOT_FOUND )
+    if( index == wxNOT_FOUND )
     {
-        m_libList->SetSelection( index, true );
+        if( m_libList->GetCount() > 0 )
+        {
+            m_libList->SetSelection( 0 );
+            wxCommandEvent dummy;
+            ClickOnLibList( dummy );
+        }
+        else
+        {
+            setCurNickname( wxEmptyString );
+            setCurFootprintName( wxEmptyString );
+        }
     }
     else
     {
-        // If not found, clear current library selection because it can be
-        // deleted after a configuration change.
-        setCurNickname( wxEmptyString );
-        setCurFootprintName( wxEmptyString );
+        m_libList->SetSelection( index, true );
+        wxCommandEvent dummy;
+        ClickOnLibList( dummy );
     }
-
-    ReCreateFootprintList();
 
     GetCanvas()->Refresh();
 }
@@ -415,7 +423,16 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
     int index = m_fpList->FindString( getCurFootprintName(), true );
 
     if( index == wxNOT_FOUND )
-        setCurFootprintName( wxEmptyString );
+    {
+        if( m_fpList->GetCount() > 0 )
+        {
+            m_fpList->SetSelection( 0 );
+            wxCommandEvent dummy;
+            ClickOnFootprintList( dummy );
+        }
+        else
+            setCurFootprintName( wxEmptyString );
+    }
     else
     {
         m_fpList->SetSelection( index, true );
@@ -441,6 +458,72 @@ void FOOTPRINT_VIEWER_FRAME::OnFPFilter( wxCommandEvent& aEvent )
     // Required to avoid interaction with SetHint()
     // See documentation for wxTextEntry::SetHint
     aEvent.Skip();
+}
+
+
+void FOOTPRINT_VIEWER_FRAME::OnCharHook( wxKeyEvent& aEvent )
+{
+    if( aEvent.GetKeyCode() == WXK_UP )
+    {
+        if( m_libFilter->HasFocus() )
+            selectPrev( m_libList );
+        else
+            selectPrev( m_fpList );
+    }
+    else if( aEvent.GetKeyCode() == WXK_DOWN )
+    {
+        if( m_libFilter->HasFocus() )
+            selectNext( m_libList );
+        else
+            selectNext( m_fpList );
+    }
+    else if( aEvent.GetKeyCode() == WXK_TAB && m_libFilter->HasFocus() )
+    {
+        m_fpFilter->SetFocus();
+    }
+    else if( aEvent.GetKeyCode() == WXK_RETURN && m_fpList->GetSelection() >= 0 )
+    {
+        wxCommandEvent dummy;
+        AddFootprintToPCB( dummy );
+    }
+    else
+        aEvent.Skip();
+}
+
+
+void FOOTPRINT_VIEWER_FRAME::selectPrev( wxListBox* aListBox )
+{
+    int prev = aListBox->GetSelection() - 1;
+
+    if( prev >= 0 )
+    {
+        aListBox->SetSelection( prev );
+
+        wxCommandEvent dummy;
+
+        if( aListBox == m_libList )
+            ClickOnLibList( dummy );
+        else
+            ClickOnFootprintList( dummy );
+    }
+}
+
+
+void FOOTPRINT_VIEWER_FRAME::selectNext( wxListBox* aListBox )
+{
+    int next = aListBox->GetSelection() + 1;
+
+    if( next < aListBox->GetCount() )
+    {
+        aListBox->SetSelection( next );
+
+        wxCommandEvent dummy;
+
+        if( aListBox == m_libList )
+            ClickOnLibList( dummy );
+        else
+            ClickOnFootprintList( dummy );
+    }
 }
 
 
@@ -494,12 +577,11 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& aEvent )
         }
         catch( const IO_ERROR& ioe )
         {
-            wxString msg = wxString::Format(
-                        _( "Could not load footprint \"%s\" from library \"%s\".\n\nError %s." ),
-                        GetChars( getCurFootprintName() ),
-                        GetChars( getCurNickname() ),
-                        GetChars( ioe.What() ) );
-
+            wxString msg = wxString::Format( _( "Could not load footprint '%s' from library '%s'."
+                                                "\n\n%s" ),
+                                             getCurFootprintName(),
+                                             getCurNickname(),
+                                             ioe.Problem() );
             DisplayError( this, msg );
         }
 
@@ -716,7 +798,10 @@ bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent 
         }
     }
 
-    return KIWAY_PLAYER::ShowModal( aFootprint, aParent );
+    bool retval = KIWAY_PLAYER::ShowModal( aFootprint, aParent );
+
+    m_libFilter->SetFocus();
+    return retval;
 }
 
 

@@ -118,7 +118,10 @@ private:
 
     void OnLibFilter( wxCommandEvent& aEvent );
     void OnFPFilter( wxCommandEvent& aEvent );
+    void OnCharHook( wxKeyEvent& aEvent );
 
+    void selectPrev( wxListBox* aListBox );
+    void selectNext( wxListBox* aListBox );
     void ClickOnLibList( wxCommandEvent& aEvent );
     void ClickOnFootprintList( wxCommandEvent& aEvent );
     void DClickOnFootprintList( wxCommandEvent& aEvent );
