@@ -85,7 +85,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_ADD_FOOTPRINT_TO_BOARD, FOOTPRINT_VIEWER_FRAME::OnUpdateFootprintButton )
 
     EVT_TEXT( ID_MODVIEW_LIB_FILTER, FOOTPRINT_VIEWER_FRAME::OnLibFilter )
-    EVT_CHAR_HOOK( FOOTPRINT_VIEWER_FRAME::OnCharHook )
     EVT_TEXT( ID_MODVIEW_FOOTPRINT_FILTER, FOOTPRINT_VIEWER_FRAME::OnFPFilter )
 
     // listbox events
@@ -427,6 +426,8 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
         if( m_fpList->GetCount() > 0 )
         {
             m_fpList->SetSelection( 0 );
+            m_fpList->EnsureVisible( 0 );
+
             wxCommandEvent dummy;
             ClickOnFootprintList( dummy );
         }
@@ -498,6 +499,7 @@ void FOOTPRINT_VIEWER_FRAME::selectPrev( wxListBox* aListBox )
     if( prev >= 0 )
     {
         aListBox->SetSelection( prev );
+        aListBox->EnsureVisible( prev );
 
         wxCommandEvent dummy;
 
@@ -516,6 +518,7 @@ void FOOTPRINT_VIEWER_FRAME::selectNext( wxListBox* aListBox )
     if( next < (int)aListBox->GetCount() )
     {
         aListBox->SetSelection( next );
+        aListBox->EnsureVisible( next );
 
         wxCommandEvent dummy;
 
