@@ -135,6 +135,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
     viewMenu->AddSeparator();
     viewMenu->AddItem( PL_ACTIONS::previewSettings,          SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddSeparator();
 
     viewMenu->Resolve();
 
