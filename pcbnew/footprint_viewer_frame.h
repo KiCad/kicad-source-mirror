@@ -118,7 +118,7 @@ private:
 
     void OnLibFilter( wxCommandEvent& aEvent );
     void OnFPFilter( wxCommandEvent& aEvent );
-    void OnCharHook( wxKeyEvent& aEvent );
+    void OnCharHook( wxKeyEvent& aEvent ) override;
 
     void selectPrev( wxListBox* aListBox );
     void selectNext( wxListBox* aListBox );

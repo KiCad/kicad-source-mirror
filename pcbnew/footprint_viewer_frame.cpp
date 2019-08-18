@@ -406,7 +406,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
                 bool     matched = matcher.Find( search.Lower(), matches, position );
 
                 if( !matched && term.IsNumber() )
-                    matched = wxAtoi( term ) == footprint->GetPadCount();
+                    matched = ( wxAtoi( term ) == (int)footprint->GetPadCount() );
 
                 if( !matched )
                     excludes.insert( footprint->GetFootprintName() );
@@ -513,7 +513,7 @@ void FOOTPRINT_VIEWER_FRAME::selectNext( wxListBox* aListBox )
 {
     int next = aListBox->GetSelection() + 1;
 
-    if( next < aListBox->GetCount() )
+    if( next < (int)aListBox->GetCount() )
     {
         aListBox->SetSelection( next );
 
