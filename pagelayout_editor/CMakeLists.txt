@@ -43,6 +43,7 @@ set( PL_EDITOR_EXTRA_SRCS
     ../common/base_units.cpp
     ../common/eda_text.cpp
     ../common/dialogs/dialog_page_settings.cpp
+    ../common/dialogs/panel_display_options.cpp
     ../common/page_info.cpp
 )
 

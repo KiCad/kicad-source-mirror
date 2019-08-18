@@ -36,6 +36,9 @@
 #include <pl_editor_screen.h>
 #include <ws_data_model.h>
 #include <properties_frame.h>
+#include <widgets/paged_dialog.h>
+#include <panel_display_options.h>
+#include <panel_hotkeys_editor.h>
 #include <view/view.h>
 #include <confirm.h>
 #include <tool/selection.h>
@@ -53,7 +56,6 @@
 #include <tools/pl_point_editor.h>
 #include <invoke_pl_editor_dialog.h>
 #include <tools/pl_editor_control.h>
-
 
 BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_CLOSE( PL_EDITOR_FRAME::OnCloseWindow )
@@ -116,11 +118,6 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     wxSize pageSizeIU = GetPageLayout().GetPageSettings().GetSizeIU();
     SetScreen( new PL_EDITOR_SCREEN( pageSizeIU ) );
-
-    if( !GetScreen()->GridExists( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 ) )
-        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_1MM - ID_POPUP_GRID_LEVEL_1000;
-
-    GetScreen()->SetGrid( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 );
 
     setupTools();
     ReCreateMenuBar();
@@ -185,6 +182,11 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     wxPoint originCoord = ReturnCoordOriginCorner();
     SetGridOrigin( originCoord );
+
+    if( !GetScreen()->GridExists( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 ) )
+        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_1MM - ID_POPUP_GRID_LEVEL_1000;
+
+    GetToolManager()->RunAction( "common.Control.gridPreset", true, m_LastGridSizeId );
 
     // Initialize the current page layout
     WS_DATA_MODEL& pglayout = WS_DATA_MODEL::GetTheInstance();
@@ -388,6 +390,17 @@ double PL_EDITOR_FRAME::BestZoom()
 }
 
 
+void PL_EDITOR_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
+                                          PANEL_HOTKEYS_EDITOR* aHotkeysPanel  )
+{
+    wxTreebook* book = aParent->GetTreebook();
+
+    book->AddPage( new PANEL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
+
+    aHotkeysPanel->AddHotKeys( GetToolManager() );
+}
+
+
 static const wxChar propertiesFrameWidthKey[] = wxT( "PropertiesFrameWidth" );
 static const wxChar cornerOriginChoiceKey[] = wxT( "CornerOriginChoice" );
 static const wxChar blackBgColorKey[] = wxT( "BlackBgColor" );
@@ -550,17 +563,9 @@ void PL_EDITOR_FRAME::DisplayGridMsg()
 
     switch( m_userUnits )
     {
-    case INCHES:
-        gridformatter = "grid %.3f";
-        break;
-
-    case MILLIMETRES:
-        gridformatter = "grid %.4f";
-        break;
-
-    default:
-        gridformatter = "grid %f";
-        break;
+    case INCHES:      gridformatter = "grid %.3f"; break;
+    case MILLIMETRES: gridformatter = "grid %.4f"; break;
+    default:          gridformatter = "grid %f";   break;
     }
 
     wxRealPoint curr_grid_size = GetScreen()->GetGridSize();
@@ -681,7 +686,7 @@ void PL_EDITOR_FRAME::HardRedraw()
 
     PL_SELECTION_TOOL*  selTool = m_toolManager->GetTool<PL_SELECTION_TOOL>();
     PL_SELECTION&       selection = selTool->GetSelection();
-    WS_DATA_ITEM* item = nullptr;
+    WS_DATA_ITEM*       item = nullptr;
 
     if( selection.GetSize() == 1 )
         item = static_cast<WS_DRAW_ITEM_BASE*>( selection.Front() )->GetPeer();

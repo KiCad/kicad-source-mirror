@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,16 +17,15 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <lib_edit_frame.h>
-#include <sch_view.h>
+#include <eda_draw_frame.h>
+#include <view/view.h>
 #include <widgets/gal_options_panel.h>
 #include <widgets/paged_dialog.h>
 
-#include <panel_libedit_display_options.h>
+#include <panel_display_options.h>
 
 
-PANEL_LIBEDIT_DISPLAY_OPTIONS::PANEL_LIBEDIT_DISPLAY_OPTIONS( LIB_EDIT_FRAME* aFrame,
-                                                              PAGED_DIALOG* aParent ) :
+PANEL_DISPLAY_OPTIONS::PANEL_DISPLAY_OPTIONS( EDA_DRAW_FRAME* aFrame, PAGED_DIALOG* aParent ) :
     wxPanel( aParent->GetTreebook(), wxID_ANY ),
     m_frame( aFrame )
 {
@@ -45,19 +44,19 @@ PANEL_LIBEDIT_DISPLAY_OPTIONS::PANEL_LIBEDIT_DISPLAY_OPTIONS( LIB_EDIT_FRAME* aF
 }
 
 
-bool PANEL_LIBEDIT_DISPLAY_OPTIONS::TransferDataToWindow()
+bool PANEL_DISPLAY_OPTIONS::TransferDataToWindow()
 {
     m_galOptsPanel->TransferDataToWindow();
     return true;
 }
 
 
-bool PANEL_LIBEDIT_DISPLAY_OPTIONS::TransferDataFromWindow()
+bool PANEL_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
     m_galOptsPanel->TransferDataFromWindow();
 
     // refresh view
-    KIGFX::SCH_VIEW* view = m_frame->GetCanvas()->GetView();
+    KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
     view->RecacheAllItems();
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     m_frame->GetCanvas()->Refresh();

@@ -206,6 +206,8 @@ public:
      */
     void UpdateTitleAndInfo();
 
+    void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
+
     /**
      * Populates the applicatios settings list.
      * (list of parameters that must be saved in project parameters)

@@ -18,26 +18,26 @@
  */
 
 
-#ifndef KICAD_PANEL_LIBEDIT_DISPLAY_OPTIONS_H
-#define KICAD_PANEL_LIBEDIT_DISPLAY_OPTIONS_H
+#ifndef PANEL_DISPLAY_OPTIONS_H
+#define PANEL_DISPLAY_OPTIONS_H
 
 #include <wx/panel.h>
 
 class GAL_OPTIONS_PANEL;
-class LIB_EDIT_FRAME;
+class EDA_DRAW_FRAME;
 class PAGED_DIALOG;
 
-class PANEL_LIBEDIT_DISPLAY_OPTIONS : public wxPanel
+class PANEL_DISPLAY_OPTIONS : public wxPanel
 {
 public:
-    PANEL_LIBEDIT_DISPLAY_OPTIONS( LIB_EDIT_FRAME* aParent, PAGED_DIALOG* aWindow );
+    PANEL_DISPLAY_OPTIONS( EDA_DRAW_FRAME* aParent, PAGED_DIALOG* aWindow );
 
 private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    LIB_EDIT_FRAME*     m_frame;
+    EDA_DRAW_FRAME*     m_frame;
     GAL_OPTIONS_PANEL*  m_galOptsPanel;
 };
 
-#endif //KICAD_PANEL_LIBEDIT_DISPLAY_OPTIONS_H
+#endif //PANEL_DISPLAY_OPTIONS_H
