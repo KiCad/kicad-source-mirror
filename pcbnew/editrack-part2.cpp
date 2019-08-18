@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -293,7 +293,10 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     wxASSERT( aNewTrack );
 
     TRACK* bufStart = m_Pcb->m_Track->GetStartNetCode( netcode ); // Beginning of tracks of the net
-    TRACK* bufEnd = bufStart->GetEndNetCode( netcode );           // End of tracks of the net
+    TRACK* bufEnd;
+
+    if ( bufStart != NULL)
+        bufEnd = bufStart->GetEndNetCode( netcode );           // End of tracks of the net
 
     // Flags for cleaning the net.
     for( pt_del = bufStart;  pt_del;  pt_del = pt_del->Next() )

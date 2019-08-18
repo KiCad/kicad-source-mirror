@@ -509,9 +509,6 @@ TRACK* TRACK::GetEndNetCode( int NetCode )
     TRACK* NextS, * Track = this;
     int    ii = 0;
 
-    if( Track == NULL )
-        return NULL;
-
     if( NetCode == -1 )
         NetCode = GetNetCode();
 
