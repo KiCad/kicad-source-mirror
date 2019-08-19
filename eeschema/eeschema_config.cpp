@@ -120,8 +120,9 @@ void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 {
     wxTreebook* book = aParent->GetTreebook();
 
-    book->AddPage( new PANEL_EESCHEMA_SETTINGS( this, book ), _( "Eeschema" ) );
+    book->AddPage( new wxPanel( this ), _( "Eeschema" ) );
     book->AddSubPage( new PANEL_EESCHEMA_DISPLAY_OPTIONS( this, book ), _( "Display Options" ) );
+    book->AddSubPage( new PANEL_EESCHEMA_SETTINGS( this, book ), _( "Editing Options" ) );
     book->AddSubPage( new PANEL_EESCHEMA_COLOR_CONFIG( this, book ), _( "Colors" ) );
     book->AddSubPage( new PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( this, book ),
                       _( "Field Name Templates" ) );
@@ -460,8 +461,9 @@ void LIB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 {
     wxTreebook* book = aParent->GetTreebook();
 
-    book->AddPage( new PANEL_LIBEDIT_SETTINGS( this, book ), _( "Symbol Editor" ) );
+    book->AddPage( new wxPanel( this ), _( "Symbol Editor" ) );
     book->AddSubPage( new PANEL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
+    book->AddSubPage( new PANEL_LIBEDIT_SETTINGS( this, book ), _( "Defaults" ) );
 
     aHotkeysPanel->AddHotKeys( GetToolManager() );
 }

@@ -40,17 +40,20 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_maskAndPaste = new PANEL_SETUP_MASK_AND_PASTE( this, aFrame );
 
     /*
-     * WARNING: If you change page names you MUST update callers which specifiy a
-     * particular page to be in sync.
+     * WARNING: If you change page names you MUST update calls to DoShowBoardSetupDialog().
      */
 
-    m_treebook->AddPage( m_layers,  _( "Layers" ) );
-    m_treebook->AddSubPage( m_textAndGraphics,  _( "Text & Graphics" ) );
+    m_treebook->AddPage( new wxPanel( this ),  _( "Board Stack-up" ) );
+    m_treebook->AddSubPage( m_layers,  _( "Layers" ) );
 
-    m_treebook->AddPage( m_constraints,  _( "Design Rules" ) );
-    m_treebook->AddSubPage( m_netclasses,  _( "Net Classes" ) );
+    m_treebook->AddPage( new wxPanel( this ),  _( "Defaults" ) );
+    m_treebook->AddSubPage( m_textAndGraphics,  _( "Text & Graphics" ) );
     m_treebook->AddSubPage( m_tracksAndVias, _( "Tracks & Vias" ) );
     m_treebook->AddSubPage( m_maskAndPaste,  _( "Solder Mask/Paste" ) );
+
+    m_treebook->AddPage( new wxPanel( this ),  _( "Design Rules" ) );
+    m_treebook->AddSubPage( m_constraints,  _( "Constraints" ) );
+    m_treebook->AddSubPage( m_netclasses,  _( "Net Classes" ) );
 }
 
 

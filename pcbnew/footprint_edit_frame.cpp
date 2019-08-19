@@ -761,8 +761,9 @@ void FOOTPRINT_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 {
     wxTreebook* book = aParent->GetTreebook();
 
-    book->AddPage( new PANEL_MODEDIT_SETTINGS( this, aParent ), _( "Footprint Editor" ) );
+    book->AddPage( new wxPanel( this ), _( "Footprint Editor" ) );
     book->AddSubPage( new PANEL_MODEDIT_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
+    book->AddSubPage( new PANEL_MODEDIT_SETTINGS( this, aParent ), _( "Editing Options" ) );
     book->AddSubPage( new PANEL_MODEDIT_DEFAULTS( this, aParent ), _( "Default Values" ) );
 
     aHotkeysPanel->AddHotKeys( GetToolManager() );

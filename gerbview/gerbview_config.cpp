@@ -39,9 +39,10 @@ void GERBVIEW_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 {
     wxTreebook* book = aParent->GetTreebook();
 
-    book->AddPage( new PANEL_GERBVIEW_SETTINGS( this, book ), _( "Gerbview" ) );
+    book->AddPage( new wxPanel( this ), _( "Gerbview" ) );
     book->AddSubPage( new PANEL_GERBVIEW_DISPLAY_OPTIONS( this, book ), _( "Display Options" ) );
-    
+    book->AddSubPage( new PANEL_GERBVIEW_SETTINGS( this, book ), _( "Editing Options" ) );
+
     aHotkeysPanel->AddHotKeys( GetToolManager() );
 }
 
