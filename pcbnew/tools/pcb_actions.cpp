@@ -192,6 +192,10 @@ TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveMove.move",
         _( "Move" ), _( "Moves the selected item(s)" ),
         move_xpm, AF_ACTIVATE );
 
+TOOL_ACTION PCB_ACTIONS::drag( "pcbnew.InteractiveMove.drag",
+        AS_GLOBAL, 0, "", "", "",
+        move_xpm, AF_ACTIVATE );
+
 TOOL_ACTION PCB_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicateIncrementPads",
         AS_GLOBAL,
         MD_SHIFT + MD_CTRL + 'D', LEGACY_HK_NAME( "Duplicate Item and Increment" ),

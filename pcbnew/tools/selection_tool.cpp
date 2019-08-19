@@ -251,7 +251,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( selectionContains( evt->Position() ) )
                 {
                     // Yes -> run the move tool and wait till it finishes
-                    m_toolMgr->RunAction( PCB_ACTIONS::move, true );
+                    m_toolMgr->RunAction( PCB_ACTIONS::drag, true );
                 }
                 else
                 {

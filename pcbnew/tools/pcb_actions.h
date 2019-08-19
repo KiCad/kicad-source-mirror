@@ -104,8 +104,9 @@ public:
     /// Filters the items in the current selection (invokes dialog)
     static TOOL_ACTION filterSelection;
 
-    /// move an item
+    /// move or drag an item
     static TOOL_ACTION move;
+    static TOOL_ACTION drag;
 
     /// Rotation of selected objects
     static TOOL_ACTION rotateCw;
