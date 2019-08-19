@@ -73,6 +73,7 @@
 #include <gestfich.h>
 #include <executable_names.h>
 #include <eda_dockart.h>
+#include <wx/wupdlock.h>
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
@@ -563,6 +564,7 @@ void PCB_EDIT_FRAME::setupTools()
 
 void PCB_EDIT_FRAME::ReFillLayerWidget()
 {
+    wxWindowUpdateLocker no_update( m_Layers );
     m_Layers->ReFill();
 
     wxAuiPaneInfo& lyrs = m_auimgr.GetPane( m_Layers );
