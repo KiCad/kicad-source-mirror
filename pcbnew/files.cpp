@@ -50,6 +50,8 @@
 #include <build_version.h>      // LEGACY_BOARD_FILE_VERSION
 
 #include <wx/stdpaths.h>
+#include <pcb_layer_widget.h>
+#include <wx/wupdlock.h>
 
 
 //#define     USE_INSTRUMENTATION     1
@@ -445,6 +447,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         if( !IsOK( this, ask ) )
             return false;
     }
+
+    wxWindowUpdateLocker no_update( m_Layers );     // Avoid flicker when rebuilding m_Layers
 
     Clear_Pcb( false );     // pass false since we prompted above for a modified board
 

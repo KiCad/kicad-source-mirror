@@ -85,6 +85,7 @@
 #include <board_netlist_updater.h>
 #include <netlist_reader.h>
 #include <pcb_netlist.h>
+#include <wx/wupdlock.h>
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
@@ -255,8 +256,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( "MicrowaveToolbar" ).Show( m_show_microwave_tools );
 
-    ReFillLayerWidget();        // this is near end because contents establish size
     m_Layers->ReFillRender();   // Update colors in Render after the config is read
+    ReFillLayerWidget();        // this is near end and after ReFillRender()
+                                // because contents establish size
     syncLayerWidgetLayer();
 
     m_auimgr.Update();
@@ -432,6 +434,7 @@ void PCB_EDIT_FRAME::setupTools()
 
 void PCB_EDIT_FRAME::ReFillLayerWidget()
 {
+    wxWindowUpdateLocker no_update( m_Layers );
     m_Layers->ReFill();
 
     wxAuiPaneInfo& lyrs = m_auimgr.GetPane( m_Layers );
