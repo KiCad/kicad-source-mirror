@@ -227,21 +227,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
         break;
 
     case 1:
-        if( node->LibId == m_libMgr->GetCurrentLibId() )
-        {
-            LIB_ALIAS* alias = nullptr;
-
-            // When the node parent name is empty, the node is a lib name, not a symbol name
-            if( !node->Parent->Name.IsEmpty() )
-                alias = m_libMgr->GetAlias( node->Name, node->Parent->Name );
-
-            if( alias )
-                aVariant = alias->GetDescription();
-            else
-                aVariant = node->Desc;
-        }
-        else
-            aVariant = node->Desc;
+        aVariant = node->Desc;
         break;
 
     default:    // column == -1 is used for default Compare function
