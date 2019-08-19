@@ -197,6 +197,9 @@ TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveEdit.move",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_ITEM ),
         _( "Move" ), _( "Moves the selected item(s)" ), nullptr, AF_ACTIVATE );
 
+TOOL_ACTION PCB_ACTIONS::drag( "pcbnew.InteractiveMove.drag",
+        AS_GLOBAL, 0, "", "", nullptr, AF_ACTIVATE );
+
 
 // Initialize static member variables
 wxString DIALOG_FIND::prevSearchString;

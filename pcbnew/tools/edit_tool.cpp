@@ -87,6 +87,9 @@ TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveEdit.move",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_ITEM ),
         _( "Move" ), _( "Moves the selected item(s)" ), move_xpm, AF_ACTIVATE );
 
+TOOL_ACTION PCB_ACTIONS::drag( "pcbnew.InteractiveMove.drag",
+        AS_GLOBAL, 0, "", "", move_xpm, AF_ACTIVATE );
+
 TOOL_ACTION PCB_ACTIONS::duplicate( "pcbnew.InteractiveEdit.duplicate",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE_ITEM ),
         _( "Duplicate" ), _( "Duplicates the selected item(s)" ), duplicate_xpm );
@@ -416,9 +419,8 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
         if( evt->IsAction( &PCB_ACTIONS::editActivate ) ||
-            evt->IsAction( &PCB_ACTIONS::move ) ||
-            evt->IsMotion() ||
-            evt->IsDrag( BUT_LEFT ) ||
+            evt->IsAction( &PCB_ACTIONS::move ) || evt->IsMotion() ||
+            evt->IsAction( &PCB_ACTIONS::drag ) || evt->IsDrag( BUT_LEFT ) ||
             evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             if( m_dragging && evt->Category() == TC_MOUSE )
@@ -1411,6 +1413,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 void EDIT_TOOL::setTransitions()
 {
     Go( &EDIT_TOOL::Main,       PCB_ACTIONS::move.MakeEvent() );
+    Go( &EDIT_TOOL::Main,       PCB_ACTIONS::drag.MakeEvent() );
     Go( &EDIT_TOOL::Drag,       PCB_ACTIONS::drag45Degree.MakeEvent() );
     Go( &EDIT_TOOL::Drag,       PCB_ACTIONS::dragFreeAngle.MakeEvent() );
     Go( &EDIT_TOOL::Rotate,     PCB_ACTIONS::rotateCw.MakeEvent() );

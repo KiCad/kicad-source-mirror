@@ -92,8 +92,9 @@ public:
     /// Activation of the edit tool
     static TOOL_ACTION editActivate;
 
-    /// move an item
+    /// move or drag an item
     static TOOL_ACTION move;
+    static TOOL_ACTION drag;
 
     /// Rotation of selected objects clockwise
     static TOOL_ACTION rotateCw;
