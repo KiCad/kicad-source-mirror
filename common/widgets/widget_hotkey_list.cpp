@@ -599,12 +599,10 @@ void WIDGET_HOTKEY_LIST::initializeElements()
 
     // Add the bitmap image for invalid hotkey warning
     // bitmap size is not know (depending on it is built). So get it:
-    wxSize iconsize;
-    wxBitmap bm_invalid = KiBitmap( cancel_xpm );
-    iconsize.x = bm_invalid.GetWidth();
-    iconsize.y = bm_invalid.GetHeight();
-    m_imgList = new wxImageList( iconsize.x, iconsize.y, true, 1);
-    m_imgList->Add( bm_invalid );
+    wxIcon icon;
+    icon.CopyFromBitmap( KiBitmap( cancel_xpm ) );
+    m_imgList = new wxImageList( icon.GetSize().x, icon.GetSize().y, true, 1 );
+    m_imgList->Add( icon );
     AssignImageList( m_imgList );
 
     if( !m_readOnly )
