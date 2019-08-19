@@ -1084,7 +1084,19 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
         m_libMgr->UpdatePart( GetCurPart(), GetCurLib() );
 
         if( oldAliases != GetCurPart()->GetAliasNames( false ) )
+        {
+            // If the number of aliases (or their names) have changed, do a full re-sync
             SyncLibraries( false );
+        }
+        else
+        {
+            // Otherwise just update each alias
+            for( LIB_ALIAS* alias : GetCurPart()->GetAliases() )
+            {
+                wxDataViewItem item = m_libMgr->GetAdapter()->FindItem( alias->GetLibId() );
+                static_cast<LIB_TREE_NODE_LIB_ID*>( item.GetID() )->Update( alias );
+            }
+        }
     }
 
     UpdatePartSelectList();
