@@ -1198,7 +1198,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
             // Clear annotation of g_CurrentSheet itself, because its sheetpath
             // is not a new path, but components managed by its sheet path must have
-            // their annotation cleared, becuase they are new:
+            // their annotation cleared, because they are new:
             ((SCH_SHEET*) item)->GetScreen()->ClearAnnotation( g_CurrentSheet );
         }
 

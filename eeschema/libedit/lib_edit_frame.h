@@ -309,7 +309,7 @@ private:
     void SelectActiveLibrary( const wxString& aLibrary = wxEmptyString );
 
     /**
-     * Dispaly a list of loaded libraries in the symbol library and allows the user to select
+     * Display a list of loaded libraries in the symbol library and allows the user to select
      * a library.
      *
      * This list is sorted, with the library cache always at end of the list

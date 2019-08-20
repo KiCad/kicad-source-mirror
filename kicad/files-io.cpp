@@ -133,7 +133,7 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
 void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 {
     // List of file extensions to save.
-    static const wxChar* extentionList[] = {
+    static const wxChar* extensionList[] = {
         wxT( "*.pro" ),
         wxT( "*.sch" ), wxT( "*.lib" ), wxT( "*.dcm" ), // Schematic related files
         wxT( "*.cmp" ),
@@ -196,8 +196,8 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 
 	wxArrayString files;
 
-    for( unsigned ii = 0; ii < arrayDim( extentionList ); ii++ )
-        wxDir::GetAllFiles( currdirname, &files, extentionList[ii] );
+    for( unsigned ii = 0; ii < arrayDim( extensionList ); ii++ )
+        wxDir::GetAllFiles( currdirname, &files, extensionList[ii] );
 
     files.Sort();
 

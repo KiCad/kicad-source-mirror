@@ -117,7 +117,7 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
     if( m_ctl & (KFCTL_STANDALONE | KFCTL_CPP_PROJECT_SUITE) )
     {
         // The 2 *.cpp program launchers: single_top.cpp and kicad.cpp expect
-        // the *.kiface's to reside in same diretory as their binaries do.
+        // the *.kiface's to reside in same directory as their binaries do.
         // Not so for python launcher, identified by KFCTL_PY_PROJECT_SUITE
         path = wxStandardPaths::Get().GetExecutablePath();
     }

@@ -400,7 +400,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           OTHERS_IN_TRANSLATION ) );
 
-    // Programm credits for icons
+    // Program credits for icons
     #define ICON_CONTRIBUTION _( "Icons by" )
     aInfo.AddArtist( new CONTRIBUTOR( wxT( "Iñigo Zuluaga" ),
                                       wxEmptyString,

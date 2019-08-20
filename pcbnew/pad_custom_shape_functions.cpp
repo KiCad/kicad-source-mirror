@@ -375,7 +375,7 @@ bool D_PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon )
     if( !buildCustomPadPolygon( aMergedPolygon, maxError ) )
         return false;
 
-    m_boundingRadius = -1;  // The current bouding radius is no more valid.
+    m_boundingRadius = -1;  // The current bounding radius is no longer valid.
 
     return aMergedPolygon->OutlineCount() <= 1;
 }

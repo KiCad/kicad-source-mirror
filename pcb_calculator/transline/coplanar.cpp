@@ -152,7 +152,7 @@ void COPLANAR::calc()
     double v = 0.43 - (0.86 - 0.54 * p) * p;
     double G = exp( u * log( w / s ) + v );
 
-    // loss constant factors (computed only once for efficency sake)
+    // loss constant factors (computed only once for efficiency's sake)
     double ac = 0;
     if( t > 0 )
     {

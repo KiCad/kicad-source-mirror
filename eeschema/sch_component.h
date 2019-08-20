@@ -54,7 +54,7 @@ class SYMBOL_LIB_TABLE;
 /// A container for several SCH_PIN items
 typedef std::vector<SCH_PIN>      SCH_PINS;
 
-/// A map from the libary pin pointer to the SCH_PIN's index
+/// A map from the library pin pointer to the SCH_PIN's index
 typedef std::unordered_map<LIB_PIN*, unsigned> SCH_PIN_MAP;
 
 /// A container for several SCH_FIELD items

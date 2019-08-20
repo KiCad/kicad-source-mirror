@@ -366,7 +366,7 @@ int PSLIKE_PLOTTER::returnPostscriptTextWidth( const wxString& aText, int aXSize
  * Computes the x coordinates for the overlining in a string of text.
  * Fills the passed vector with couples of (start, stop) values to be
  * used in the text coordinate system (use computeTextParameters to
- * obtain the parameters to estabilish such a system)
+ * obtain the parameters to establish such a system)
  */
 void PSLIKE_PLOTTER::postscriptOverlinePositions( const wxString& aText, int aXSize,
                                                   bool aItalic, bool aBold,
@@ -998,7 +998,7 @@ void PS_PLOTTER::Text( const wxPoint&       aPos,
                 : (aBold ? "/KicadFont-Bold"
                 : "/KicadFont");
 
-        // Compute the copious tranformation parameters
+        // Compute the copious transformation parameters
         double ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f;
         double wideningFactor, heightFactor;
         computeTextParameters( aPos, aText, aOrient, aSize, m_plotMirror, aH_justify,

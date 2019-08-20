@@ -54,7 +54,7 @@ public:
      * Function Format
      * outputs this s-expression netlist into @a aOutputFormatter.
      * @param aOutputFormatter is the destination of the serialization to text.
-     * @param aCtl is bit set composed by OR-ing together enum GNL bits, it allows ouputting
+     * @param aCtl is bit set composed by OR-ing together enum GNL bits, it allows outputting
      *  a subset of the full document model.
      * @throw IO_ERROR if any problems.
      */

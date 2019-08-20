@@ -44,7 +44,7 @@ CACHED_CONTAINER_GPU::CACHED_CONTAINER_GPU( unsigned int aSize ) :
 
     wxString vendor( glGetString(GL_VENDOR) );
     
-    // workaround for intel GPU drivers: diable glCopyBuffer, causes crashes/freezes on certain driver versions
+    // workaround for intel GPU drivers: disable glCopyBuffer, causes crashes/freezes on certain driver versions
     if( vendor.Contains ( "Intel ") )
     {
         wxLogDebug("Disabling glCopyBuffer() on intel GPU\n");

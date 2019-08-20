@@ -285,7 +285,7 @@ protected:
                                     ///< -1 means that there is no specific net, and whole active
                                     ///< layer is highlighted
     bool    m_highlightItems;       ///< Highlight items with their HIGHLIGHT flags set
-    float   m_highlightFactor;      ///< Factor used for computing hightlight color
+    float   m_highlightFactor;      ///< Factor used for computing highlight color
 
     float   m_selectFactor;         ///< Specifies how color of selected items is changed
     float   m_layerOpacity;         ///< Determines opacity of all layers

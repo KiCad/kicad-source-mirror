@@ -77,19 +77,19 @@ enum RS274X_PARAMETERS {
     AP_DEFINITION   = CODE( 'A', 'D' ),
     AP_MACRO = CODE( 'A', 'M' ),
 
-    // X2 extention attribute commands
+    // X2 extension attribute commands
     // Mainly are found standard attributes and user attributes
     // standard attributes commands are:
     // TF (file attribute) TO (net attribute)
     // TA (aperture attribute) and TD (delete aperture attribute)
     FILE_ATTRIBUTE   = CODE( 'T', 'F' ),
 
-    // X2 extention Net attribute info
+    // X2 extension Net attribute info
     // Net attribute options are:
     // TO (net attribute data): TO.CN or TO.P TO.N or TO.C
     NET_ATTRIBUTE   = CODE( 'T', 'O' ),
 
-    // X2 extention Aperture attribute TA
+    // X2 extension Aperture attribute TA
     APERTURE_ATTRIBUTE   = CODE( 'T', 'A' ),
 
     // TD (delete aperture/object attribute):
@@ -100,7 +100,7 @@ enum RS274X_PARAMETERS {
 
     // Layer specific parameters
     // May be used singly or may be layer specfic
-    // theses parameters are at the beginning of the file or layer
+    // These parameters are at the beginning of the file or layer
     // and reset some layer parameters (like interpolation)
     KNOCKOUT = CODE( 'K', 'O' ),                // Default: off
     STEP_AND_REPEAT = CODE( 'S', 'R' ),         //  Default: A = 1, B = 1

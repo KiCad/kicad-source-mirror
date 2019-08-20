@@ -159,7 +159,7 @@ public:
     LAST_EXTRA_ARC_DATA_TYPE m_LastArcDataType;                 // Identifier for arc data type (IJ (center) or A## (radius))
     FILE*              m_Current_File;                          // Current file to read
 
-    int                m_Selected_Tool;                         // For hightlight: current selected Dcode
+    int                m_Selected_Tool;                         // For highlight: current selected Dcode
     bool               m_Has_DCode;                             // true = DCodes in file
                                                                 // (false = no DCode -> separate DCode file
     bool               m_360Arc_enbl;                           // Enbl 360 deg circular interpolation

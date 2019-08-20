@@ -144,7 +144,7 @@ bool DIALOG_LIB_EDIT_PIN::TransferDataFromWindow()
 
 
 /*
- * Draw (on m_panelShowPin) the pin currently edited accroding to current settings in dialog
+ * Draw (on m_panelShowPin) the pin according to current settings in dialog
  */
 void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
 {

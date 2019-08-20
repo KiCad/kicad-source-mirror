@@ -180,7 +180,7 @@ void DIALOG_DRC_CONTROL::InitValues()
 }
 
 
-void DIALOG_DRC_CONTROL::SetDrcParmeters( )
+void DIALOG_DRC_CONTROL::SetDRCParameters( )
 {
     m_BrdSettings.m_TrackMinWidth = m_trackMinWidth.GetValue();
     m_BrdSettings.m_ViasMinSize = m_viaMinSize.GetValue();
@@ -224,7 +224,7 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
             reportName = makeValidFileNameReport();
     }
 
-    SetDrcParmeters();
+    SetDRCParameters();
     m_tester->m_doZonesTest            = m_cbReportTracksToZonesErrors->GetValue();
     m_tester->m_rptFilename            = reportName;
     m_tester->m_doCreateRptFile        = make_report;
@@ -293,7 +293,7 @@ void DIALOG_DRC_CONTROL::OnButtonBrowseRptFileClick( wxCommandEvent&  )
 void DIALOG_DRC_CONTROL::OnCancelClick( wxCommandEvent& event )
 {
     SetReturnCode( wxID_CANCEL );
-    SetDrcParmeters();
+    SetDRCParameters();
 
     // The dialog can be modal or not modal.
     // Leave the DRC caller destroy (or not) the dialog

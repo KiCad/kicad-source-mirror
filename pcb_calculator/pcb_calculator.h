@@ -225,14 +225,14 @@ private:
     /**
      * Function OnTranslineAnalyse
      * Run a new analyse for the current transline with current parameters
-     * and displays the electrical parmeters
+     * and displays the electrical parameters
      */
     void OnTranslineAnalyse( wxCommandEvent& event ) override;
 
     /**
      * Function OnTranslineSynthetize
      * Run a new synthezis for the current transline with current parameters
-     * and displays the geometrical parmeters
+     * and displays the geometrical parameters
      */
     void OnTranslineSynthetize( wxCommandEvent& event ) override;
 

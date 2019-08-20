@@ -27,7 +27,7 @@
 /**
  * Migrates buses using legacy multi-label joining behavior.
  *
- * In KiCad verions before 6.0, you were allowed to place multiple labels
+ * In KiCad versions before 6.0, you were allowed to place multiple labels
  * on a given bus subgraph, and that would have the effect of making those
  * bus descriptions equivalent according to the bus vector number.
  *

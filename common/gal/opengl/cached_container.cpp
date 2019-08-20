@@ -172,8 +172,8 @@ void CACHED_CONTAINER::Delete( VERTEX_ITEM* aItem )
 #endif
 
     // This dynamic memory freeing optimize memory usage, but in fact can create
-    // out of memory issues because freeing and reallocation large chuncks of memory
-    // can create memory fragmentation and no room to reallocate large chuncks
+    // out of memory issues because freeing and reallocation large chunks of memory
+    // can create memory fragmentation and no room to reallocate large chunks
     // after many free/reallocate cycles during a session using the same complex board
     // So it can be disable.
     // Currently: it is disable to avoid "out of memory" issues

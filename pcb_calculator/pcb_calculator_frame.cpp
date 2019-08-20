@@ -47,7 +47,7 @@
 #define KEYWORD_REGUL_LAST_PARAM                wxT( "RegulLastParam" )
 #define KEYWORD_DATAFILE_FILENAME               wxT( "DataFilename" )
 
-// extention of pcb_calculator data filename:
+// extension of pcb_calculator data filename:
 const wxString DataFileNameExt( wxT("pcbcalc") );
 
 PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
@@ -283,7 +283,7 @@ void PCB_CALCULATOR_FRAME::SaveSettings( wxConfigBase* aCfg )
 /**
  * Function OnTranslineAnalyse
  * Run a new analyse for the current transline with current parameters
- * and displays the electrical parmeters
+ * and displays the electrical parameters
  */
 void PCB_CALCULATOR_FRAME::OnTranslineAnalyse( wxCommandEvent& event )
 {
@@ -298,7 +298,7 @@ void PCB_CALCULATOR_FRAME::OnTranslineAnalyse( wxCommandEvent& event )
 /**
  * Function OnTranslineSynthetize
  * Run a new synthezis for the current transline with current parameters
- * and displays the geometrical parmeters
+ * and displays the geometrical parameters
  */
 void PCB_CALCULATOR_FRAME::OnTranslineSynthetize( wxCommandEvent& event )
 {
@@ -328,7 +328,7 @@ void PCB_CALCULATOR_FRAME::OnPaintTranslinePanel( wxPaintEvent& event )
 }
 
 /* returns the full filename of the selected pcb_calculator data file
- * the extention file is forced
+ * the extension file is forced
  */
 const wxString PCB_CALCULATOR_FRAME::GetDataFilename()
 {

@@ -761,7 +761,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
             itemsToRedraw.push_back( item );
     }
 
-    // Be sure hightlight change will be redrawn
+    // Be sure highlight change will be redrawn
     KIGFX::VIEW* view = getView();
 
     for( auto redrawItem : itemsToRedraw )

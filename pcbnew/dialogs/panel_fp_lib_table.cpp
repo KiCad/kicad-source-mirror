@@ -498,9 +498,9 @@ void PANEL_FP_LIB_TABLE::deleteRowHandler( wxCommandEvent& event )
     int curCol = m_cur_grid->GetGridCursorCol();
 
     // In a wxGrid, collect rows that have a selected cell, or are selected
-    // is not so easy: it depend on the way the selection was made.
-    // Here, we collect row selected by clicking on a row label, and
-    // row that contain a cell previously selected.
+    // It is not so easy: it depends on the way the selection was made.
+    // Here, we collect rows selected by clicking on a row label, and rows that contain any
+    // previously-selected cells.
     // If no candidate, just delete the row with the grid cursor.
     wxArrayInt selectedRows	= m_cur_grid->GetSelectedRows();
     wxGridCellCoordsArray cells = m_cur_grid->GetSelectedCells();

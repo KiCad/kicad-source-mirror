@@ -99,14 +99,14 @@ private:
      * @return the board layer name depending on the board layer selected
      * @param aChoice = the choice (MOD_LYR_FSILKS to MOD_LYR_FINAL)
      */
-    const char * getBrdLayerName( BMP2CMP_MOD_LAYER aChoice );
+    const char * getBoardLayerName( BMP2CMP_MOD_LAYER aChoice );
 
     /**
-     * Function ouputOnePolygon
+     * Function outputOnePolygon
      * write one polygon to output file.
      * Polygon coordinates are expected scaled by the polygon extraction function
      */
-    void ouputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char* aBrdLayerName );
+    void outputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char* aBrdLayerName );
 
 };
 

@@ -109,9 +109,9 @@ public:
                             float *aOutT,
                             SFVEC2F *aNormalOut ) const = 0;
 
-    /** Function IsBBoxInside
-     * @brief Tests if the bouding is out, intersects or is complety inside
-     * @param aBBox - The bounding box to test
+    /**
+     * Function IsBBoxInside
+     * @brief Tests if the bounding is out, intersects or is complety inside
      * @return INTERSECTION_RESULT
      */
     virtual INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const = 0;

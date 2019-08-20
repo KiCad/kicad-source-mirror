@@ -112,7 +112,7 @@ void GERBER_PLOTTER::clearNetAttribute()
     if( m_objectAttributesDictionnary.empty() )     // No net attribute or not X2 mode
         return;
 
-    // Remove all net attributes from object attributes dictionnary
+    // Remove all net attributes from object attributes dictionary
     if( m_useX2format )
         fputs( "%TD*%\n", outputFile );
     else
@@ -131,7 +131,7 @@ void GERBER_PLOTTER::StartBlock( void* aData )
 
 void GERBER_PLOTTER::EndBlock( void* aData )
 {
-    // Remove all net attributes from object attributes dictionnary
+    // Remove all net attributes from object attributes dictionary
     clearNetAttribute();
 }
 
@@ -139,7 +139,7 @@ void GERBER_PLOTTER::EndBlock( void* aData )
 void GERBER_PLOTTER::formatNetAttribute( GBR_NETLIST_METADATA* aData )
 {
     // print a Gerber net attribute record.
-    // it is added to the object attributes dictionnary
+    // it is added to the object attributes dictionary
     // On file, only modified or new attributes are printed.
     if( aData == NULL )
         return;
@@ -187,7 +187,7 @@ bool GERBER_PLOTTER::StartPlot()
     }
 
     // Set coordinate format to 3.6 or 4.5 absolute, leading zero omitted
-    // the number of digits for the integer part of coordintes is needed
+    // the number of digits for the integer part of coordinates is needed
     // in gerber format, but is not very important when omitting leading zeros
     // It is fixed here to 3 (inch) or 4 (mm), but is not actually used
     int leadingDigitCount = m_gerberUnitInch ? 3 : 4;

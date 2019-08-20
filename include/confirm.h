@@ -111,7 +111,7 @@ bool ConfirmRevertDialog( wxWindow* parent, const wxString& aMessage );
  *
  * @warning Setting \a displaytime does not work.  Do not use it.
  */
-void DisplayError( wxWindow* parent, const wxString& aMessage, int displaytime = 0 );
+void DisplayError( wxWindow* aParent, const wxString& aText, int aDisplayTime = 0 );
 
 /**
  * Display an error message with \a aMessage

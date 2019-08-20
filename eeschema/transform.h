@@ -35,12 +35,12 @@
 class EDA_RECT;
 
 /**
- * Class for tranforming drawing coordinates for a wxDC device context.
+ * Class for transforming drawing coordinates for a wxDC device context.
  *
- * This probably should be a base class with all pure methods and a derived class
- * named WXDC_TRANFORM be created.  Then in the future if some new device context
- * is used, a new transform could be derived from the base class and all the drawable
- * objects would have to do is provide overloaded draw methods to use the new transorm.
+ * This probably should be a base class with all pure virtual methods and a WXDC_TRANSFORM
+ * derived class.  Then in the future if some new device context is used, a new transform could
+ * be derived from the base class and all the drawable objects would have to do is provide
+ * overloaded draw methods to use the new transorm.
  */
 class TRANSFORM
 {
@@ -51,7 +51,7 @@ public:
     int y2;
 
     /**
-     * The default construct creates a tranform that draws object is the normal orientation.
+     * The default construct creates a transform that draws object is the normal orientation.
      */
     TRANSFORM() : x1( 1 ), y1( 0 ), x2( 0 ), y2( -1 ) {}
 

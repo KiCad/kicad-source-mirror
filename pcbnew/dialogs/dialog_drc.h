@@ -89,7 +89,7 @@ private:
 
     void DisplayDRCValues( );
 
-    void SetDrcParmeters( );
+    void SetDRCParameters( );
 
     /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_CHECKBOX_RPT_FILE
     void OnReportCheckBoxClicked( wxCommandEvent& event ) override;

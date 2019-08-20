@@ -3,7 +3,7 @@
     Based on Stefan Helmert bom2csv.xsl
 
     Note:
-        The project infomation (i.e title, company and revision) is taken from the root sheet.
+        The project information (i.e title, company and revision) is taken from the root sheet.
 
     Arthur:
         Ronald Sousa HashDefineElectronics.com

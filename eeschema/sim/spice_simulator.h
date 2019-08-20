@@ -46,7 +46,7 @@ public:
     ///> Creates a simulator instance of particular type (currently only ngspice is handled)
     static std::shared_ptr<SPICE_SIMULATOR> CreateInstance( const std::string& aName );
 
-    ///> Intializes the simulator
+    ///> Initializes the simulator
     virtual void Init() = 0;
 
     /*

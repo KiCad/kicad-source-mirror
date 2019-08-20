@@ -36,7 +36,7 @@
  * dialogs in eeschema and pcbnew. Provides error filtering functionality
  * and saving report files.
  *
- * The messages are reported throuth a REPORTER object
+ * The messages are reported through a REPORTER object
  */
 class WX_HTML_REPORT_PANEL : public WX_HTML_REPORT_PANEL_BASE
 {

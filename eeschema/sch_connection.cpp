@@ -355,7 +355,7 @@ void SCH_CONNECTION::AppendDebugInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
     if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
         return;
 
-    // These messages are not flagged as translatable, because they are only debug messges
+    // These messages are not flagged as translatable, because they are only debug messages
     wxString msg;
 
     AppendInfoToMsgPanel( aList );

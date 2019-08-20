@@ -42,7 +42,7 @@
  * Because the starting point of a segment is also the ending point of the previous, only one must be used.
  * And we do no use twice the same segment, so we do NOT use both starting and ending points of these 2 segments.
  * So we must use only one ending point of each segment when calculating intersections
- * but it cannot be always the starting or the ending point. This depend on relative position of 2 consectutive segments
+ * but it cannot be always the starting or the ending point. This depends on relative position of 2 consectutive segments
  * Here, the ending point above the Y reference position is used
  *   and the ending point below or equal the Y reference position is NOT used
  * Obviously, others cases are irrelevant because there is not intersection.

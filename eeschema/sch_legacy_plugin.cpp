@@ -1987,7 +1987,7 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
 
     // Fixed fields:
     // Save mandatory fields even if they are blank,
-    // because the visibility, size and orientation are set from libary editor.
+    // because the visibility, size and orientation are set from library editor.
     for( unsigned i = 0;  i < MANDATORY_FIELDS;  ++i )
         saveField( aComponent->GetField( i ) );
 

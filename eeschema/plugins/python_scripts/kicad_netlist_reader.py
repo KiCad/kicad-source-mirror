@@ -435,7 +435,7 @@ class netlist():
 
         self._curr_element = None
 
-        # component blacklist regexs, made from exluded_* above.
+        # component blacklist regexs, made from excluded_* above.
         self.excluded_references = []
         self.excluded_values = []
         self.excluded_footprints = []
@@ -569,7 +569,7 @@ class netlist():
         Omit those that should not, by consulting the blacklists:
         excluded_values, excluded_refs, and excluded_footprints, which hold one
         or more regular expressions.  If any of the the regular expressions match
-        the corresponding field's value in a component, then the component is exluded.
+        the corresponding field's value in a component, then the component is excluded.
         """
 
         # pre-compile all the regex expressions:

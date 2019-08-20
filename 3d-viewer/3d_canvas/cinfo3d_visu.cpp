@@ -65,7 +65,7 @@ CINFO3D_VISU::CINFO3D_VISU() :
     m_boardSize = wxSize();
     m_boardCenter = SFVEC3F( 0.0f );
 
-    m_boardBoudingBox.Reset();
+    m_boardBoundingBox.Reset();
 
     m_layers_container2D.clear();
     m_layers_holes2D.clear();
@@ -415,7 +415,7 @@ void CINFO3D_VISU::InitSettings( REPORTER *aStatusTextReporter )
     boardMin.z = m_layerZcoordTop[B_Adhes];
     boardMax.z = m_layerZcoordTop[F_Adhes];
 
-    m_boardBoudingBox = CBBOX( boardMin, boardMax );
+    m_boardBoundingBox = CBBOX( boardMin, boardMax );
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
     unsigned stats_startCreateBoardPolyTime = GetRunningMicroSecs();

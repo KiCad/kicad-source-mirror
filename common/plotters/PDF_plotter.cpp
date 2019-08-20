@@ -359,7 +359,7 @@ void PDF_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
        they kept the matrix stack to save restore environments. Also images
        are always emitted at the origin with a size of 1x1 user units.
        What we need to do is:
-       1) save the CTM end estabilish the new one
+       1) save the CTM end establish the new one
        2) plot the image
        3) restore the CTM
        4) profit
@@ -690,7 +690,7 @@ bool PDF_PLOTTER::EndPlot()
     };
 
     /* Declare the font resources. Since they're builtin fonts, no descriptors (yay!)
-       We'll need metrics anyway to do any aligment (these are in the shared with
+       We'll need metrics anyway to do any alignment (these are in the shared with
        the postscript engine) */
     for( int i = 0; i < 4; i++ )
     {
@@ -838,7 +838,7 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
     const char *fontname = aItalic ? (aBold ? "/KicadFontBI" : "/KicadFontI")
         : (aBold ? "/KicadFontB" : "/KicadFont");
 
-    // Compute the copious tranformation parameters of the Curent Transform Matrix
+    // Compute the copious transformation parameters of the Curent Transform Matrix
     double ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f;
     double wideningFactor, heightFactor;
 

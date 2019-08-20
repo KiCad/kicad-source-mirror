@@ -138,8 +138,8 @@ private:
 
     /**
      * Create a file name with an absolute path name
-     * @param aOutputDirectoryName the diretory name to plot,
-     *      this can be a relative name of the current project diretory or an absolute directory name.
+     * @param aOutputDirectoryName the directory name to plot, this can be a relative name of the
+     *                             current project directory or an absolute directory name.
      * @param aPlotFileName the name for the file to plot without a path
      * @param aExtension the extension for the file to plot
      * @param aReporter a point to a REPORTER object use to show messages (can be NULL)

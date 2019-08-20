@@ -614,7 +614,7 @@ mpFXY::mpFXY( const wxString& name, int flags )
 
 void mpFXY::UpdateViewBoundary( wxCoord xnew, wxCoord ynew )
 {
-    // Keep track of how many points have been drawn and the bouding box
+    // Keep track of how many points have been drawn and the bounding box
     maxDrawX    = (xnew > maxDrawX) ? xnew : maxDrawX;
     minDrawX    = (xnew < minDrawX) ? xnew : minDrawX;
     maxDrawY    = (maxDrawY > ynew) ? maxDrawY : ynew;

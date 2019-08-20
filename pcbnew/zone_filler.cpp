@@ -637,7 +637,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
         if( zone->GetIsKeepout() && !zone->GetDoNotAllowCopperPour() )
             continue;
 
-        // A highter priority zone or keepout area is found: remove this area
+        // A higher priority zone or keepout area is found: remove this area
         EDA_RECT item_boundingbox = zone->GetBoundingBox();
 
         if( !item_boundingbox.Intersects( zone_boundingbox ) )

@@ -1200,8 +1200,8 @@ protected:
     void formatNetAttribute( GBR_NETLIST_METADATA* aData );
 
     /**
-     * clear a Gerber net attribute record (clear object attribute dictionnary)
-     * and output the clear object attribute dictionnary command to gerber file
+     * clear a Gerber net attribute record (clear object attribute dictionary)
+     * and output the clear object attribute dictionary command to gerber file
      */
     void clearNetAttribute();
 
@@ -1216,7 +1216,7 @@ protected:
     std::vector<APERTURE>::iterator getAperture( const wxSize& aSize,
                     APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
 
-    // the attributes dictionnary created/modifed by %TO, attached the objects, when they are created
+    // the attributes dictionary created/modifed by %TO, attached the objects, when they are created
     // by D01, D03 G36/G37 commands
     // standard attributes are .P, .C and .N
     // this is used by gerber readers when creating a new object. Cleared by %TD command

@@ -88,7 +88,7 @@ bool CPOLYGON4PTS2D::Intersects( const CBBOX2D &aBBox ) const
     if( !m_bbox.Intersects( aBBox ) )
         return false;
 
-    // Check if the bouding box complety have inside the small bouding box
+    // Check if the bounding box complety have inside the small bounding box
     if( (aBBox.Max().x > m_bbox.Max().x) &&
         (aBBox.Max().y > m_bbox.Max().x) &&
         (aBBox.Min().x < m_bbox.Min().x) &&

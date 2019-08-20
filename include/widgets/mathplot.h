@@ -536,7 +536,7 @@ public:
 
     /** Layer plot handler.
      *  This implementation will plot the function in the visible area and
-     *  put a label according to the aligment specified.
+     *  put a label according to the alignment specified.
      */
     virtual void Plot( wxDC& dc, mpWindow& w ) override;
 
@@ -568,7 +568,7 @@ public:
 
     /** Layer plot handler.
      *  This implementation will plot the function in the visible area and
-     *  put a label according to the aligment specified.
+     *  put a label according to the alignment specified.
      */
     virtual void Plot( wxDC& dc, mpWindow& w ) override;
 
@@ -661,7 +661,7 @@ public:
 
     /** Layer plot handler.
      *  This implementation will plot the function in the visible area and
-     *  put a label according to the aligment specified.
+     *  put a label according to the alignment specified.
      */
     virtual void Plot( wxDC& dc, mpWindow& w ) override;
 

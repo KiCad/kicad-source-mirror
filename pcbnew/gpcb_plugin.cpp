@@ -406,7 +406,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
 
     // gEDA/pcb aligns top/left, not pcbnew's default, center/center.
     // Compensate for this by shifting the insertion point instead of the
-    // aligment, because alignment isn't changeable in the GUI.
+    // alignment, because alignment isn't changeable in the GUI.
     textPos.x = textPos.x + twsize * module->GetReference().Len() / 2;
     textPos.y += thsize / 2;
 

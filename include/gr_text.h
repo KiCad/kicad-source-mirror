@@ -23,7 +23,7 @@
  */
 
 /**
- * This file is part of the common libary
+ * This file is part of the common library
  * @file  drawtxt.h
  * @see   common.h
  */

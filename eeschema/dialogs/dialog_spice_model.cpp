@@ -495,7 +495,7 @@ bool DIALOG_SPICE_MODEL::parsePowerSource( const wxString& aModel )
             }
         }
 
-        // Get the next token now, so if any of the branches catches an expection, try to
+        // Get the next token now, so if any of the branches catches an exception, try to
         // process it in another branch
         tkn = tokenizer.GetNextToken().Lower();
     }

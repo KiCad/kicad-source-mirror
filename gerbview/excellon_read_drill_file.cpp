@@ -236,7 +236,7 @@ static EXCELLON_CMD excellon_G_CmdList[] =
     { "G01", DRILL_G_LINEARMOVE,  1 },  // Linear (Straight Line) routing Mode
     { "G02", DRILL_G_CWMOVE,      1 },  // Circular CW Mode
     { "G03", DRILL_G_CCWMOVE,     1 },  // Circular CCW Mode
-    { "G93", DRILL_G_ZERO_SET,    1 },  // Zero Set (XnnYmm and coordintes origin)
+    { "G93", DRILL_G_ZERO_SET,    1 },  // Zero Set (XnnYmm and coordinates origin)
     { "",    DRILL_G_UNKNOWN,     0 },  // last item in list
 };
 

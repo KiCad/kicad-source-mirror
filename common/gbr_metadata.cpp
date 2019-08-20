@@ -374,7 +374,7 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
     }
 
     // print a Gerber net attribute record.
-    // it is added to the object attributes dictionnary
+    // it is added to the object attributes dictionary
     // On file, only modified or new attributes are printed.
     if( aData == NULL )
         return false;
@@ -451,7 +451,7 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
     {
         // first, remove no more existing attributes.
         // Because in Kicad the full attribute list is evaluated for each object,
-        // the entire dictionnary is cleared
+        // the entire dictionary is cleared
         bool clearDict = false;
 
         if( aLastNetAttributes.find( "TO.P," ) != std::string::npos )

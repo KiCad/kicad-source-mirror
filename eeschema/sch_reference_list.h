@@ -259,7 +259,7 @@ public:
 
     /* Sort functions:
      * Sort functions are used to sort components for annotation or BOM generation.
-     * Because sorting depend on we want to do, there are many sort functions.
+     * Because sorting depends on what we want to do, there are many sort functions.
      * Note:
      *    When creating BOM, components are fully annotated.
      *    references are something like U3, U5 or R4, R8

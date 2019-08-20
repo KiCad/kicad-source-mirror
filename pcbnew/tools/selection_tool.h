@@ -311,9 +311,7 @@ private:
 
     /**
      * Function selectionContains()
-     * Checks if the given point is placed within any of selected items' bounding box.
-     *
-     * @return True if the given point is contained in any of selected items' bouding box.
+     * @return True if the given point is contained in any of selected items' bounding box.
      */
     bool selectionContains( const VECTOR2I& aPoint ) const;
 

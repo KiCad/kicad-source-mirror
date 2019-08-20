@@ -161,7 +161,7 @@ int BITMAPCONV_INFO::ConvertBitmap( potrace_bitmap_t* aPotrace_bitmap,
 }
 
 
-const char* BITMAPCONV_INFO::getBrdLayerName( BMP2CMP_MOD_LAYER aChoice )
+const char* BITMAPCONV_INFO::getBoardLayerName( BMP2CMP_MOD_LAYER aChoice )
 {
     const char * layerName = "F.SilkS";
 
@@ -270,7 +270,7 @@ void BITMAPCONV_INFO::outputDataEnd()
 }
 
 
-void BITMAPCONV_INFO::ouputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char* aBrdLayerName )
+void BITMAPCONV_INFO::outputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char* aBrdLayerName )
 {
     // write one polygon to output file.
     // coordinates are expected in target unit.
@@ -403,7 +403,7 @@ void BITMAPCONV_INFO::createOutputData( BMP2CMP_MOD_LAYER aModLayer )
     // The layer name has meaning only for .kicad_mod files.
     // For these files the header creates 2 invisible texts: value and ref
     // (needed but not usefull) on silk screen layer
-    outputDataHeader( getBrdLayerName( MOD_LYR_FSILKS ) );
+    outputDataHeader( getBoardLayerName( MOD_LYR_FSILKS ) );
 
     bool main_outline = true;
 
@@ -484,7 +484,7 @@ void BITMAPCONV_INFO::createOutputData( BMP2CMP_MOD_LAYER aModLayer )
             for( int ii = 0; ii < polyset_areas.OutlineCount(); ii++ )
             {
                 SHAPE_LINE_CHAIN& poly = polyset_areas.Outline( ii );
-                ouputOnePolygon(poly, getBrdLayerName( aModLayer ) );
+                outputOnePolygon( poly, getBoardLayerName( aModLayer ));
             }
 
             polyset_areas.RemoveAllContours();

@@ -23,21 +23,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file eeschema/netlist_object_list.cpp
- */
-
-#include <netlist.h>
 #include <netlist_object.h>
 #include <class_library.h>
-#include <lib_pin.h>
 #include <sch_junction.h>
 #include <sch_component.h>
 #include <sch_line.h>
-#include <sch_no_connect.h>
 #include <sch_text.h>
 #include <sch_sheet.h>
-#include <sch_screen.h>
 #include <algorithm>
 
 #define IS_WIRE false
@@ -395,15 +387,13 @@ void NETLIST_OBJECT_LIST::findBestNetNameForEachNet()
         case NET_PINLABEL:
         case NET_GLOBLABEL:
         case NET_GLOBBUSLABELMEMBER:
-            // A candidate is found: select the better between the previous
-            // and this one
+            // A candidate is found: select the better between the previous and this one
             if( candidate == NULL )
                 candidate = item;
             else
             {
                 if( evalLabelsPriority( item, candidate ) )
-                    // item has a highter priority than candidate
-                    // so update the best candidate
+                    // item has a higher priority than candidate so update the best candidate
                     candidate = item;
             }
             break;

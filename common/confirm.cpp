@@ -22,18 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file confirm.cpp
- * @brief utilities to display some error, warning and info short messges
- */
-
 #include <wx/stockitem.h>
 #include <wx/richmsgdlg.h>
-
 #include <confirm.h>
 #include <bitmaps.h>
 #include <html_messagebox.h>
-
 #include <functional>
 #include <unordered_map>
 
@@ -124,11 +117,11 @@ wxString KIDIALOG::getCaption( KD_TYPE aType, const wxString& aCaption )
 
     switch( aType )
     {
-        case KD_NONE:       /* fall through */
-        case KD_INFO:       return _( "Message" );
-        case KD_QUESTION:   return _( "Question" );
-        case KD_WARNING:    return _( "Warning" );
-        case KD_ERROR:      return _( "Error" );
+    case KD_NONE:       /* fall through */
+    case KD_INFO:       return _( "Message" );
+    case KD_QUESTION:   return _( "Question" );
+    case KD_WARNING:    return _( "Warning" );
+    case KD_ERROR:      return _( "Error" );
     }
 
     return wxEmptyString;
@@ -141,11 +134,11 @@ long KIDIALOG::getStyle( KD_TYPE aType )
 
     switch( aType )
     {
-        case KD_NONE:       break;
-        case KD_INFO:       style |= wxICON_INFORMATION; break;
-        case KD_QUESTION:   style |= wxICON_QUESTION; break;
-        case KD_WARNING:    style |= wxICON_WARNING; break;
-        case KD_ERROR:      style |= wxICON_ERROR; break;
+    case KD_NONE:       break;
+    case KD_INFO:       style |= wxICON_INFORMATION; break;
+    case KD_QUESTION:   style |= wxICON_QUESTION; break;
+    case KD_WARNING:    style |= wxICON_WARNING; break;
+    case KD_ERROR:      style |= wxICON_ERROR; break;
     }
 
     return style;
@@ -240,33 +233,29 @@ int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxStrin
 
 
 // DisplayError should be deprecated, use DisplayErrorMessage instead
-void DisplayError( wxWindow* parent, const wxString& text, int displaytime )
+void DisplayError( wxWindow* aParent, const wxString& aText, int aDisplayTime )
 {
-    wxMessageDialog* dialog;
+    wxMessageDialog* dlg;
+    int              icon = aDisplayTime > 0 ? wxICON_INFORMATION : wxICON_ERROR;
 
-    int icon = displaytime > 0 ? wxICON_INFORMATION : wxICON_ERROR;
+    dlg = new wxMessageDialog( aParent, aText, _( "Warning" ),
+                               wxOK | wxCENTRE | wxRESIZE_BORDER | icon | wxSTAY_ON_TOP );
 
-    dialog = new wxMessageDialog( parent, text, _( "Warning" ),
-                                  wxOK | wxCENTRE | wxRESIZE_BORDER |
-                                  icon | wxSTAY_ON_TOP );
-
-    dialog->ShowModal();
-    dialog->Destroy();
+    dlg->ShowModal();
+    dlg->Destroy();
 }
 
 
 void DisplayErrorMessage( wxWindow* aParent, const wxString& aText, const wxString& aExtraInfo )
 {
     wxRichMessageDialog* dlg;
+    int                  icon = wxICON_ERROR;
 
     dlg = new wxRichMessageDialog( aParent, aText, _( "Error" ),
-                                   wxOK | wxCENTRE | wxRESIZE_BORDER |
-                                   wxICON_ERROR | wxSTAY_ON_TOP );
+                                   wxOK | wxCENTRE | wxRESIZE_BORDER | icon | wxSTAY_ON_TOP );
 
     if( !aExtraInfo.IsEmpty() )
-    {
         dlg->ShowDetailedText( aExtraInfo );
-    }
 
     dlg->ShowModal();
     dlg->Destroy();
@@ -276,15 +265,13 @@ void DisplayErrorMessage( wxWindow* aParent, const wxString& aText, const wxStri
 void DisplayInfoMessage( wxWindow* aParent, const wxString& aMessage, const wxString& aExtraInfo )
 {
     wxRichMessageDialog* dlg;
+    int                  icon = wxICON_INFORMATION;
 
     dlg = new wxRichMessageDialog( aParent, aMessage, _( "Info" ),
-                                   wxOK | wxCENTRE | wxRESIZE_BORDER |
-                                   wxICON_INFORMATION | wxSTAY_ON_TOP );
+                                   wxOK | wxCENTRE | wxRESIZE_BORDER | icon | wxSTAY_ON_TOP );
 
     if( !aExtraInfo.IsEmpty() )
-    {
         dlg->ShowDetailedText( aExtraInfo );
-    }
 
     dlg->ShowModal();
     dlg->Destroy();

@@ -114,7 +114,7 @@ public:
     /**
      * Function GetScalingFactor
      * @return the scaling factor from pixel size to actual draw size
-     * this scaling factor  depend on m_pixelScaleFactor and m_scale
+     * this scaling factor depends on m_pixelScaleFactor and m_scale
      * m_pixelScaleFactor gives the scaling factor between a pixel size and
      * the internal schematic units
      * m_scale is an user dependant value, and gives the "zoom" value

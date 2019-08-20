@@ -144,7 +144,7 @@ class CINFO3D_VISU
      * @brief GetBBox3DU - Get the bbox of the pcb board
      * @return the board bbox in 3d units
      */
-    const CBBOX &GetBBox3DU() const { return m_boardBoudingBox; }
+    const CBBOX &GetBBox3DU() const { return m_boardBoundingBox; }
 
     /**
      * @brief GetEpoxyThickness3DU - Get the current epoxy thickness
@@ -541,8 +541,8 @@ private:
 
     // Pcb board bounding boxes
 
-    /// 3d bouding box of the pcb board in 3d units
-    CBBOX   m_boardBoudingBox;
+    /// 3d bounding box of the pcb board in 3d units
+    CBBOX   m_boardBoundingBox;
 
     /// It contains polygon contours for each layer
     MAP_POLY          m_layers_poly;

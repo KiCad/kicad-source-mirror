@@ -685,14 +685,11 @@ private:
     int m_CntRot90;         ///< Horizontal automatic placement cost ( 0..10 ).
     int m_CntRot180;        ///< Vertical automatic placement cost ( 0..10 ).
 
-    // Local tolerances. When zero, this means the corresponding netclass value
-    // is used. Usually theses local tolerances zero, in deference to the
-    // corresponding netclass values.
-    int m_LocalClearance;
-    int m_LocalSolderMaskMargin;            ///< Solder mask margin
-    int m_LocalSolderPasteMargin;           ///< Solder paste margin absolute value
-    double m_LocalSolderPasteMarginRatio;   ///< Solder mask margin ratio
-                                            ///< value of pad size
+    // Local tolerances. When zero, this means the corresponding netclass value is used.
+    int    m_LocalClearance;
+    int    m_LocalSolderMaskMargin;         ///< Solder mask margin
+    int    m_LocalSolderPasteMargin;        ///< Solder paste margin absolute value
+    double m_LocalSolderPasteMarginRatio;   ///< Solder mask margin ratio value of pad size
 
     wxArrayString* m_initial_comments;      ///< leading s-expression comments in the module,
                                             ///< lazily allocated only if needed for speed

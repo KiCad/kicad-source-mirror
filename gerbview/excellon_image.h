@@ -204,7 +204,7 @@ private:
  *  see http://www.excellon.com/manuals/program.htm
  */
 
-/* coordintes units:
+/* coordinates units:
  *  Coordinates are measured either in inch or metric (millimeters).
  *  Inch coordinates are in six digits (00.0000) with increments as small as 0.0001 (1/10,000).
  *  Metric coordinates can be measured in microns (thousandths of a millimeter)

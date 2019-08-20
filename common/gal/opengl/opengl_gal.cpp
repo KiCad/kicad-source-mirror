@@ -112,7 +112,7 @@ GLuint GL_BITMAP_CACHE::RequestBitmap( const BITMAP_BASE* aBitmap )
     if ( it != m_bitmaps.end() )
     {
         // A bitmap is found in cache bitmap.
-        // Ensure the associated texture is still valide (can be destoyed somewhere)
+        // Ensure the associated texture is still valid (can be destroyed somewhere)
         if( glIsTexture( it->second.id ) )
             return it->second.id;
 

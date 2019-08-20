@@ -268,7 +268,7 @@ public:
 
     /**
      * Constructor ( LINE_READER* )
-     * intializes a lexer and prepares to read from @a aLineReader which
+     * initializes a lexer and prepares to read from @a aLineReader which
      * is assumed ready, and may be in use by other DSNLEXERs also.  No ownership
      * is taken of @a aLineReader. This enables it to be used by other lexers also.
      * The transition between grammars in such a case, must happen on a text
