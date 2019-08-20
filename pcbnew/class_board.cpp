@@ -51,7 +51,7 @@
 #include <class_drawsegment.h>
 #include <class_pcb_target.h>
 #include <connectivity/connectivity_data.h>
-
+#include <pgm_base.h>
 
 /**
  * A singleton item of this class is returned for a weak reference that no longer exists.
@@ -779,7 +779,8 @@ unsigned BOARD::GetUnconnectedNetCount() const
 EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
 {
     EDA_RECT area;
-    LSET visible = GetVisibleLayers();
+    LSET     visible = GetVisibleLayers();
+    bool     showInvisibleText = IsElementVisible( LAYER_MOD_TEXT_INVISIBLE ) && !Pgm().m_Printing;
 
     // Check segments, dimensions, texts, and fiducials
     for( auto item : m_drawings )
@@ -807,7 +808,7 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
         }
         else
         {
-            area.Merge( module->GetBoundingBox() );
+            area.Merge( module->GetBoundingBox( showInvisibleText ) );
         }
     }
 

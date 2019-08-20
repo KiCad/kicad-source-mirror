@@ -160,6 +160,8 @@ public:
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;
 
+    const EDA_RECT GetBoundingBox( bool aIncludeInvisibleText ) const;
+
     PADS& Pads()
     {
          return m_pads;

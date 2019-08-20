@@ -407,6 +407,27 @@ const EDA_RECT MODULE::GetBoundingBox() const
 }
 
 
+const EDA_RECT MODULE::GetBoundingBox( bool aIncludeInvisibleText ) const
+{
+    EDA_RECT area = GetFootprintRect();
+
+    // Add in items not collected by GetFootprintRect():
+    for( auto item : m_drawings )
+    {
+        if( item->Type() != PCB_MODULE_EDGE_T )
+            area.Merge( item->GetBoundingBox() );
+    }
+
+    if( m_Value->IsVisible() || aIncludeInvisibleText )
+        area.Merge( m_Value->GetBoundingBox() );
+
+    if( m_Reference->IsVisible() || aIncludeInvisibleText  )
+        area.Merge( m_Reference->GetBoundingBox() );
+
+    return area;
+}
+
+
 /**
  * This is a bit hacky right now for performance reasons.
  *
