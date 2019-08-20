@@ -38,6 +38,7 @@
  */
 
 #include <fctsys.h>
+#include <vector>
 
 #include <trigo.h>
 #include <eda_base_frame.h>
@@ -164,7 +165,17 @@ void PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int r
     /* Please NOTE the different sign due to Y-axis flip */
     start.x = centre.x + KiROUND( cosdecideg( radius, -StAngle ) );
     start.y = centre.y + KiROUND( sindecideg( radius, -StAngle ) );
-    MoveTo( start );
+
+    if( fill != NO_FILL )
+    {
+        MoveTo( centre );
+        LineTo( start );
+    }
+    else
+    {
+        MoveTo( start );
+    }
+
     for( int ii = StAngle + delta; ii < EndAngle; ii += delta )
     {
         end.x = centre.x + KiROUND( cosdecideg( radius, -ii ) );
@@ -174,7 +185,16 @@ void PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int r
 
     end.x = centre.x + KiROUND( cosdecideg( radius, -EndAngle ) );
     end.y = centre.y + KiROUND( sindecideg( radius, -EndAngle ) );
-    FinishTo( end );
+
+    if( fill != NO_FILL )
+    {
+        LineTo( end );
+        FinishTo( centre );
+    }
+    else
+    {
+        FinishTo( end );
+    }
 }
 
 
@@ -529,6 +549,9 @@ void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill,
 
     for( int ii = 0; ii < aCornerList.PointCount(); ii++ )
         cornerList.push_back( wxPoint( aCornerList.CPoint( ii ) ) );
+
+    if( aCornerList.IsClosed() && cornerList.front() != cornerList.back() )
+        cornerList.push_back( wxPoint( aCornerList.CPoint( 0 ) ) );
 
     PlotPoly( cornerList , aFill, aWidth, aData );
 }
