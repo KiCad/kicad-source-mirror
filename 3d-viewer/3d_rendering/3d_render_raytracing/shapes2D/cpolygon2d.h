@@ -86,7 +86,7 @@ typedef struct
 class  CPOLYGONBLOCK2D : public COBJECT2D
 {
 private:
-    /// This is the outter part of the polygon. This list is used to test a ray
+    /// This is the outer part of the polygon. This list is used to test a ray
     /// intersection with the boundaries of this sub polygon.
     /// It contains also the interpolated normals that are passed from the main
     /// polygon.

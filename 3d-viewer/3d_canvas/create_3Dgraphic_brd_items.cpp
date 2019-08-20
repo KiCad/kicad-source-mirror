@@ -724,14 +724,13 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSeg
         const SFVEC2F center3DU(  aDrawSegment->GetCenter().x * m_biuTo3Dunits,
                                  -aDrawSegment->GetCenter().y * m_biuTo3Dunits );
 
-        const float inner_radius  =
-                std::max<float>( (aDrawSegment->GetRadius() - linewidth / 2) * m_biuTo3Dunits, 0.0 );
-        const float outter_radius = (aDrawSegment->GetRadius() + linewidth / 2) * m_biuTo3Dunits;
+        float inner_radius = ( aDrawSegment->GetRadius() - linewidth / 2 ) * m_biuTo3Dunits;
+        float outer_radius = ( aDrawSegment->GetRadius() + linewidth / 2 ) * m_biuTo3Dunits;
 
-        aDstContainer->Add( new CRING2D( center3DU,
-                                         inner_radius,
-                                         outter_radius,
-                                         *aDrawSegment ) );
+        if( inner_radius < 0 )
+            inner_radius = 0;
+
+        aDstContainer->Add( new CRING2D( center3DU, inner_radius, outer_radius, *aDrawSegment ) );
     }
     break;
 
@@ -891,13 +890,10 @@ void CINFO3D_VISU::buildPadShapeThickOutlineAsSegments( const D_PAD*  aPad,
                                  -aPad->ShapePos().y * m_biuTo3Dunits );
 
         const int radius = aPad->GetSize().x / 2;
-        const float inner_radius  = (radius - aWidth / 2) * m_biuTo3Dunits;
-        const float outter_radius = (radius + aWidth / 2) * m_biuTo3Dunits;
+        const float inner_radius = ( radius - aWidth / 2 ) * m_biuTo3Dunits;
+        const float outer_radius = ( radius + aWidth / 2 ) * m_biuTo3Dunits;
 
-        aDstContainer->Add( new CRING2D( center3DU,
-                                         inner_radius,
-                                         outter_radius,
-                                         *aPad ) );
+        aDstContainer->Add( new CRING2D( center3DU, inner_radius, outer_radius, *aPad ) );
 
         return;
     }

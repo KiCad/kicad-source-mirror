@@ -87,15 +87,15 @@ bool CRING2D::Intersect( const RAYSEG2D &aSegRay,
     // dd*t^2 + (2*qd)*t + (qq-r^2) = 0
 
     const float discriminantsqr = qd * qd - qq;
-    const float discriminantsqr_outter = discriminantsqr + m_outer_radius_squared;
+    const float discriminantsqr_outer = discriminantsqr + m_outer_radius_squared;
 
     // If the discriminant is less than zero, there is no intersection
-    if( discriminantsqr_outter < FLT_EPSILON )
+    if( discriminantsqr_outer < FLT_EPSILON )
         return false;
 
     // Otherwise check and make sure that the intersections occur on the ray (t
     // > 0) and return the closer one
-    const float discriminant = sqrt( discriminantsqr_outter );
+    const float discriminant = sqrt( discriminantsqr_outer );
     float t = (-qd - discriminant);
 
     if( (t > FLT_EPSILON) && (t < aSegRay.m_Length) )

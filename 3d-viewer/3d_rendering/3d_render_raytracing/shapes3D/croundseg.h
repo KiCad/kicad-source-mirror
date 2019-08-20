@@ -83,7 +83,7 @@ public:
     CROUNDSEG( const SFVEC2F &aStart,
                const SFVEC2F &aEnd,
                float aInnerRadius,
-               float aOutterRadius,
+               float aOuterRadius,
                float aZmin,
                float aZmax );
 
@@ -102,9 +102,9 @@ private:
     float    m_inner_radius;
     float    m_inner_radius_squared;
     float    m_inner_inv_radius;
-    float    m_outter_radius;
-    float    m_outter_radius_squared;
-    float    m_outter_inv_radius;
+    float    m_outer_radius;
+    float    m_outer_radius_squared;
+    float    m_outer_inv_radius;
     float    m_width;
     float    m_seglen_over_two_squared;
 };

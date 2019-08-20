@@ -751,7 +751,7 @@ void Polygon2d_TestModule()
     aPath[2] = ClipperLib::IntPoint(  2,  2 );
     aPath[3] = ClipperLib::IntPoint( -2,  2 );
 
-    // It must be an outter polygon
+    // It must be an outer polygon
     wxASSERT( ClipperLib::Orientation( aPath ) );
 
     polygon_Convert( aPath, aSegments, 1.0f );

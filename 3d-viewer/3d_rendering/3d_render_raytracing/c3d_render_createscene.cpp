@@ -1076,7 +1076,7 @@ void C3D_RENDER_RAYTRACING::insert3DPadHole( const D_PAD* aPad )
                                     width * m_settings.BiuTo3Dunits(),
                                     *aPad );
 
-        CROUNDSEGMENT2D *outterSeg = new CROUNDSEGMENT2D(
+        CROUNDSEGMENT2D *outerSeg = new CROUNDSEGMENT2D(
                                     SFVEC2F( start.x * m_settings.BiuTo3Dunits(),
                                             -start.y * m_settings.BiuTo3Dunits() ),
                                     SFVEC2F( end.x   * m_settings.BiuTo3Dunits(),
@@ -1090,14 +1090,14 @@ void C3D_RENDER_RAYTRACING::insert3DPadHole( const D_PAD* aPad )
         std::vector<const COBJECT2D *> *object2d_B = new std::vector<const COBJECT2D *>();
         object2d_B->push_back( innerSeg );
 
-        CITEMLAYERCSG2D *itemCSG2d = new CITEMLAYERCSG2D( outterSeg,
+        CITEMLAYERCSG2D *itemCSG2d = new CITEMLAYERCSG2D( outerSeg,
                                                           object2d_B,
                                                           CSGITEM_FULL,
                                                           *aPad );
 
         m_containerWithObjectsToDelete.Add( itemCSG2d );
         m_containerWithObjectsToDelete.Add( innerSeg );
-        m_containerWithObjectsToDelete.Add( outterSeg );
+        m_containerWithObjectsToDelete.Add( outerSeg );
 
         object2d_A = itemCSG2d;
     }

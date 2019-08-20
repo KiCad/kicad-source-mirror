@@ -44,26 +44,19 @@ public:
     {
     }
 
-    virtual ~BOARD_ITEM_CONTAINER()
-    {
-    }
-
     /**
      * @brief Adds an item to the container.
-     * @param aItem is an item to be added.
      * @param aMode decides whether the item is added in the beginning or at the end of the list.
      */
     virtual void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_INSERT ) = 0;
 
     /**
      * @brief Removes an item from the container.
-     * @param aItem is an item to be removed.
      */
     virtual void Remove( BOARD_ITEM* aItem ) = 0;
 
     /**
-     * @brief Removes an item from the containter and deletes it.
-     * @param aItem is an item to be deleted.
+     * @brief Removes an item from the container and deletes it.
      */
     virtual void Delete( BOARD_ITEM* aItem )
     {

@@ -382,7 +382,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
                     // Add VIA hole contourns
                     // /////////////////////////////////////////////////////////
 
-                    // Add outter holes of VIAs
+                    // Add outer holes of VIAs
                     SHAPE_POLY_SET *layerOuterHolesPoly = NULL;
                     SHAPE_POLY_SET *layerInnerHolesPoly = NULL;
 
