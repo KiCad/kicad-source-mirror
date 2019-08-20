@@ -45,8 +45,8 @@
  */
 struct DIALOG_BOARD_STATISTICS_SAVED_STATE
 {
-    DIALOG_BOARD_STATISTICS_SAVED_STATE()
-            : excludeNoPins( false ),
+    DIALOG_BOARD_STATISTICS_SAVED_STATE() :
+            excludeNoPins( false ),
             subtractHoles( false ),
             saveReportInitialized(false)
     {
@@ -66,8 +66,8 @@ struct DIALOG_BOARD_STATISTICS_SAVED_STATE
 
 static DIALOG_BOARD_STATISTICS_SAVED_STATE s_savedDialogState;
 
-DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
-        : DIALOG_BOARD_STATISTICS_BASE( aParentFrame )
+DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame ) :
+        DIALOG_BOARD_STATISTICS_BASE( aParentFrame )
 {
     m_parentFrame = aParentFrame;
 
@@ -104,9 +104,8 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
 
     wxFileName fn = m_parentFrame->GetBoard()->GetFileName();
 
-    if( !s_savedDialogState.saveReportInitialized ||
-        s_savedDialogState.m_project != Prj().GetProjectFullName()
-        )
+    if( !s_savedDialogState.saveReportInitialized
+            || s_savedDialogState.m_project != Prj().GetProjectFullName() )
     {
         fn.SetName( fn.GetName() + "_report" );
         fn.SetExt( "txt" );
@@ -154,6 +153,7 @@ void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
         m_gridPads->AppendRows( appendRows );
 
     appendRows = m_viasTypes.size() + 1 - m_gridVias->GetNumberRows();
+
     if( appendRows )
         m_gridVias->AppendRows( appendRows );
 }
@@ -257,13 +257,14 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
         int outlinesCount = polySet.OutlineCount();
         for( int i = 0; i < outlinesCount; i++ )
         {
-            auto& outline = polySet.Outline( i );
+            SHAPE_LINE_CHAIN& outline = polySet.Outline( i );
             m_boardArea += abs( outline.Area() );
 
             // If checkbox "subtract holes" is checked
             if( m_checkBoxSubtractHoles->GetValue() )
             {
                 int holesCount = polySet.HoleCount( i );
+
                 for( int j = 0; j < holesCount; j++ )
                 {
                     m_boardArea -= abs( polySet.Hole( i, j ).Area() );
@@ -294,6 +295,7 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
 {
     int totalPads = 0;
     int currentRow = 0;
+
     for( auto& type : m_padsTypes )
     {
         m_gridPads->SetCellValue( currentRow, COL_LABEL, type.title );
@@ -302,11 +304,13 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
         totalPads += type.qty;
         currentRow++;
     }
+
     m_gridPads->SetCellValue( currentRow, COL_LABEL, _( "Total:" ) );
     m_gridPads->SetCellValue( currentRow, COL_AMOUNT, wxString::Format( "%i ", totalPads ) );
 
     int totalVias = 0;
     currentRow = 0;
+
     for( auto& type : m_viasTypes )
     {
         m_gridVias->SetCellValue( currentRow, COL_LABEL, type.title );
@@ -315,6 +319,7 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
         totalVias += type.qty;
         currentRow++;
     }
+
     m_gridVias->SetCellValue( currentRow, COL_LABEL, _( "Total:" ) );
     m_gridVias->SetCellValue( currentRow, COL_AMOUNT, wxString::Format( "%i ", totalVias ) );
 
@@ -324,6 +329,7 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
 
     // We don't use row 0, as there labels are
     currentRow = 1;
+
     for( auto& type : m_componentsTypes )
     {
         m_gridComponents->SetCellValue( currentRow, COL_LABEL, type.title );
@@ -342,18 +348,19 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
                                     wxString::Format( "%i ", totalFront ) );
     m_gridComponents->SetCellValue( currentRow, COL_BOTTOM_SIDE,
                                     wxString::Format( "%i ", totalBack ) );
-    m_gridComponents->SetCellValue(
-            currentRow, COL_TOTAL, wxString::Format( "%i ", totalFront + totalBack ) );
+    m_gridComponents->SetCellValue( currentRow, COL_TOTAL,
+                                    wxString::Format( "%i ", totalFront + totalBack ) );
 
     if( m_hasOutline )
     {
         m_gridBoard->SetCellValue( ROW_BOARD_WIDTH, COL_AMOUNT,
-                MessageTextFromValue( m_parentFrame->GetUserUnits(), m_boardWidth, false ) + " " );
+                                   MessageTextFromValue( GetUserUnits(), m_boardWidth ) + " " );
         m_gridBoard->SetCellValue( ROW_BOARD_HEIGHT, COL_AMOUNT,
-                MessageTextFromValue( m_parentFrame->GetUserUnits(), m_boardHeight, false ) + " " );
+                                   MessageTextFromValue( GetUserUnits(), m_boardHeight ) + " " );
         m_gridBoard->SetCellValue( ROW_BOARD_AREA, COL_AMOUNT,
-                wxString::Format( wxT( "%.3f %s²" ), m_boardArea,
-                        GetAbbreviatedUnitsLabel( GetUserUnits(), false ) ) );
+                                   wxString::Format( wxT( "%.3f %s²" ),
+                                                     m_boardArea,
+                                                     GetAbbreviatedUnitsLabel( GetUserUnits() ) ) );
     }
     else
     {
@@ -388,9 +395,11 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& event )
 
     wxFileName fn = m_parentFrame->GetBoard()->GetFileName();
     boardName = fn.GetName();
-    wxFileDialog saveFileDialog( this, _( "Save Report File" ), s_savedDialogState.saveReportFolder,
-            s_savedDialogState.saveReportName, TextFileWildcard(),
-            wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog saveFileDialog( this, _( "Save Report File" ),
+                                 s_savedDialogState.saveReportFolder,
+                                 s_savedDialogState.saveReportName,
+                                 TextFileWildcard(),
+                                 wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveFileDialog.ShowModal() == wxID_CANCEL )
         return;
@@ -406,6 +415,7 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& event )
         DisplayErrorMessage( this, msg );
         return;
     }
+
     msg << _( "PCB statistics report" ) << "\n";
     msg << _( "Date: " ) << wxDateTime::Now().Format() << "\n";
     msg << _( "Project: " ) << Prj().GetProjectName() << "\n";
@@ -416,14 +426,10 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& event )
 
     if( m_hasOutline )
     {
-        msg << _( "Width: " )
-            << MessageTextFromValue( m_parentFrame->GetUserUnits(), m_boardWidth, false ) << "\n";
-        msg << _( "Height: " )
-            << MessageTextFromValue( m_parentFrame->GetUserUnits(), m_boardHeight, false ) << "\n";
-        msg << _( "Area: " )
-            << wxString::Format( wxT( "%.3f %s²" ), m_boardArea,
-                       GetAbbreviatedUnitsLabel( GetUserUnits(), false ) )
-            << "\n";
+        msg << _( "Width: " ) << MessageTextFromValue( GetUserUnits(), m_boardWidth ) << "\n";
+        msg << _( "Height: " ) << MessageTextFromValue( GetUserUnits(), m_boardHeight ) << "\n";
+        msg << _( "Area: " ) << wxString::Format( wxT( "%.3f %s²" ), m_boardArea,
+                                                  GetAbbreviatedUnitsLabel( GetUserUnits() ) ) << "\n";
     }
     else
     {
@@ -434,11 +440,13 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& event )
 
     msg << "\n";
     msg << "Pads\n";
+
     for( auto& type : m_padsTypes )
         msg << type.title << " " << type.qty << "\n";
 
     msg << "\n";
     msg << "Vias\n";
+
     for( auto& type : m_viasTypes )
         msg << type.title << " " << type.qty << "\n";
 
@@ -447,12 +455,13 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& event )
     size_t   colsWidth[4];
     wxString columns[4] = { "", _( "Front Side" ), _( "Back Side" ), _( "Total" ) };
     wxString tmp;
+
     for( int i = 0; i < 4; i++ )
-    {
         colsWidth[i] = columns[i].size();
-    }
+
     int frontTotal = 0;
     int backTotal = 0;
+
     for( auto& type : m_componentsTypes )
     {
         // Get maximum width for left label column
@@ -473,26 +482,35 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& event )
     msg << "\n";
     msg << _( "Components" ) << "\n";
     tmp.Printf( "%-*s | %*s | %*s | %*s |\n",
-                colsWidth[0], columns[0], colsWidth[1], columns[1],
-                colsWidth[2], columns[2], colsWidth[3], columns[3] );
-    msg += tmp;
-    for( auto& type : m_componentsTypes )
-    {
-        tmp.Printf( "%-*s | %*d | %*d | %*d |\n", colsWidth[0], type.title, colsWidth[1],
-                    type.frontSideQty, colsWidth[2], type.backSideQty, colsWidth[3],
-                    type.backSideQty + type.frontSideQty );
-        msg += tmp;
-    }
-    tmp.Printf( "%-*s | %*d | %*d | %*d |\n", colsWidth[0], _( "Total:" ), colsWidth[1], frontTotal,
-            colsWidth[2], backTotal, colsWidth[3], frontTotal + backTotal );
+                colsWidth[0], columns[0],
+                colsWidth[1], columns[1],
+                colsWidth[2], columns[2],
+                colsWidth[3], columns[3] );
     msg += tmp;
 
-    int success = fprintf( outFile, "%s", TO_UTF8( msg ) );
-    if( success < 0 )
+    for( auto& type : m_componentsTypes )
+    {
+        tmp.Printf( "%-*s | %*d | %*d | %*d |\n",
+                    colsWidth[0], type.title,
+                    colsWidth[1], type.frontSideQty,
+                    colsWidth[2], type.backSideQty,
+                    colsWidth[3], type.backSideQty + type.frontSideQty );
+        msg += tmp;
+    }
+
+    tmp.Printf( "%-*s | %*d | %*d | %*d |\n",
+                colsWidth[0], _( "Total:" ),
+                colsWidth[1], frontTotal,
+                colsWidth[2], backTotal,
+                colsWidth[3], frontTotal + backTotal );
+    msg += tmp;
+
+    if( fprintf( outFile, "%s", TO_UTF8( msg ) ) < 0 )
     {
         msg.Printf( _( "Error writing to file \"%s\"" ), saveFileDialog.GetPath() );
         DisplayErrorMessage( this, msg );
     }
+
     fclose( outFile );
 }
 
