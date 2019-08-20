@@ -530,7 +530,7 @@ void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
     }
 
     // Not filled items and filled shapes are now plotted
-    // (plot only items which are not already plotted)
+    // Items that have BG fills only get re-stroked to ensure the edges are in the foreground
     for( LIB_ITEM& item : m_drawings )
     {
         if( item.Type() == LIB_FIELD_T )
@@ -542,8 +542,7 @@ void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
         if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
             continue;
 
-        if( item.m_Fill != FILLED_WITH_BG_BODYCOLOR )
-            item.Plot( aPlotter, aOffset, fill, aTransform );
+        item.Plot( aPlotter, aOffset, fill && ( item.m_Fill != FILLED_WITH_BG_BODYCOLOR ), aTransform );
     }
 }
 
