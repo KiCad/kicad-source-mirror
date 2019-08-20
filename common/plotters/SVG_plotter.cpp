@@ -424,9 +424,6 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
     if( StAngle > EndAngle )
         std::swap( StAngle, EndAngle );
 
-    setFillMode( fill );
-    SetCurrentLineWidth( width );
-
     // Calculate start point.
     DPOINT  centre_dev  = userToDeviceCoordinates( centre );
     double  radius_dev  = userToDeviceSize( radius );
@@ -487,6 +484,21 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
     // flag arc size (0 = small arc > 180 deg, 1 = large arc > 180 deg),
     // sweep arc ( 0 = CCW, 1 = CW),
     // end point
+    if( fill != NO_FILL )
+    {
+        // Filled arcs (in eeschema) consist of the pie wedge and a stroke only on the arc
+        // This needs to be drawn in two steps.
+        setFillMode( fill );
+        SetCurrentLineWidth( 0 );
+
+        fprintf( outputFile, "<path d=\"M%g %g A%g %g 0.0 %d %d %g %g L %g %g Z\" />\n",
+                 start.x, start.y, radius_dev, radius_dev,
+                 flg_arc, flg_sweep,
+                 end.x, end.y, centre_dev.x, centre_dev.y  );
+    }
+
+    setFillMode( NO_FILL );
+    SetCurrentLineWidth( width );
     fprintf( outputFile, "<path d=\"M%g %g A%g %g 0.0 %d %d %g %g \" />\n",
              start.x, start.y, radius_dev, radius_dev,
              flg_arc, flg_sweep,
@@ -517,15 +529,22 @@ void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
     }
 
     DPOINT pos = userToDeviceCoordinates( aCornerList[0] );
-    fprintf( outputFile, "d=\"M %d,%d\n", (int) pos.x, (int) pos.y );
+    fprintf( outputFile, "d=\"M %g,%g\n", pos.x, pos.y );
 
-    for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
+    for( unsigned ii = 1; ii < aCornerList.size() - 1; ii++ )
     {
         pos = userToDeviceCoordinates( aCornerList[ii] );
-        fprintf( outputFile, "%d,%d\n", (int) pos.x, (int) pos.y );
+        fprintf( outputFile, "%g,%g\n", pos.x, pos.y );
     }
 
-    fprintf( outputFile, "Z\" /> \n" );
+    // If the cornerlist ends where it begins, then close the poly
+    if( aCornerList.front() == aCornerList.back() )
+        fprintf( outputFile, "Z\" /> \n" );
+    else
+    {
+        pos = userToDeviceCoordinates( aCornerList.back() );
+        fprintf( outputFile, "%g,%g\n\" /> \n", pos.x, pos.y );
+    }
 }
 
 
