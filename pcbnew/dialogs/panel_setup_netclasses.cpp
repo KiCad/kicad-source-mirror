@@ -70,6 +70,9 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, PCB_EDIT_
 
     // Prevent Size events from firing before we are ready
     Freeze();
+    m_netclassGrid->BeginBatch();
+    m_membershipGrid->BeginBatch();
+
     m_originalColWidths = new int[ m_netclassGrid->GetNumberCols() ];
     // Calculate a min best size to handle longest usual numeric values:
     // (The 'M' large char is used to give a margin)
@@ -111,6 +114,8 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, PCB_EDIT_
     // wxFormBuilder doesn't include this event...
     m_netclassGrid->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging ), NULL, this );
 
+    m_netclassGrid->EndBatch();
+    m_membershipGrid->EndBatch();
     Thaw();
 }
 
