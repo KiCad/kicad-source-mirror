@@ -786,39 +786,41 @@ int PCB_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 {
     SELECTION_TOOL*         selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     const PCBNEW_SELECTION& selection = selTool->GetSelection();
+    BOARD_COMMIT            commit( m_frame );
 
     if( selection.Empty() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
 
     bool modified = false;
 
-    for( auto i : selection )
+    for( EDA_ITEM* item : selection )
     {
-        auto item = static_cast<BOARD_ITEM*>( i );
-        bool prevState = item->IsLocked();
+        BOARD_ITEM* board_item = static_cast<BOARD_ITEM*>( item );
+        bool        prevState = board_item->IsLocked();
+
+        commit.Modify( board_item );
 
         switch( aMode )
         {
-            case ON:
-                item->SetLocked( true );
-                break;
-
-            case OFF:
-                item->SetLocked( false );
-                break;
-
-            case TOGGLE:
-                item->SetLocked( !prevState );
-                break;
+        case ON:     board_item->SetLocked( true );       break;
+        case OFF:    board_item->SetLocked( false );      break;
+        case TOGGLE: board_item->SetLocked( !prevState ); break;
         }
 
         // Check if we really modified an item
-        if( !modified && prevState != item->IsLocked() )
+        if( !modified && prevState != board_item->IsLocked() )
             modified = true;
     }
 
     if( modified )
     {
+        switch( aMode )
+        {
+        case ON:     commit.Push( _( "Lock" ) );           break;
+        case OFF:    commit.Push( _( "Unlock" ) );         break;
+        case TOGGLE: commit.Push( _( "Toggle Locking" ) ); break;
+        }
+
         m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
         m_frame->OnModify();
     }
