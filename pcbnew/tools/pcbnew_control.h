@@ -97,14 +97,17 @@ public:
     void setTransitions() override;
 
 private:
-    int placeBoardItems( BOARD* aBoard );
-
-    /** add and selec or just select for move/place command a list of board items.
+    /**
+     * Add and select or just select for move/place command a list of board items.
      * @param aItems is the list of items
      * @param aIsNew = true to add items to the current board, false to just select if
-     * items are already managed by the current board
+     *               items are already managed by the current board
+     * @param aAnchorAtOrigin = true if the items are translated so that the anchor is {0, 0}
+     *                        (if false, the top-left item's origin will be used)
      */
-    int placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew );
+    int placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew, bool aAnchorAtOrigin );
+
+    int placeBoardItems( BOARD* aBoard, bool aAnchorAtOrigin );
 
     ///> Pointer to the currently used edit frame.
     PCB_BASE_FRAME* m_frame;

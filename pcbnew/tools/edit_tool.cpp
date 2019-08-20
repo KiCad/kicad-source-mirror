@@ -331,7 +331,7 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
             {
                 m_cursor = grid.BestSnapAnchor( controls->GetMousePosition(), item_layers,
                                                 sel_items );
-                controls->ForceCursorPosition(true, m_cursor );
+                controls->ForceCursorPosition( true, m_cursor );
                 VECTOR2I movement( m_cursor - prevPos );
                 selection.SetReferencePoint( m_cursor );
 

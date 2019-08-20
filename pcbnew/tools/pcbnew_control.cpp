@@ -606,7 +606,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 return 0;
             }
 
-            placeBoardItems( static_cast<BOARD*>( clipItem ) );
+            placeBoardItems( static_cast<BOARD*>( clipItem ), true );
             break;
         }
 
@@ -642,7 +642,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 items.push_back( clipItem );
             }
 
-            placeBoardItems( items, true );
+            placeBoardItems( items, true, true );
             break;
         }
 
@@ -731,7 +731,7 @@ static void moveNoFlagToVector(  ZONE_CONTAINERS& aList, std::vector<BOARD_ITEM*
 
 
 
-int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard )
+int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard, bool aAnchorAtOrigin  )
 {
     // items are new if the current board is not the board source
     bool isNew = board() != aBoard;
@@ -742,11 +742,12 @@ int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard )
     moveNoFlagToVector( aBoard->Drawings(), items, isNew );
     moveNoFlagToVector( aBoard->Zones(), items, isNew );
 
-    return placeBoardItems( items, isNew );
+    return placeBoardItems( items, isNew, aAnchorAtOrigin );
 }
 
 
-int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew )
+int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
+                                     bool aAnchorAtOrigin )
 {
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
@@ -769,9 +770,16 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
 
     if( selection.Size() > 0 )
     {
-        BOARD_ITEM* item = (BOARD_ITEM*) selection.GetTopLeftItem();
+        if( aAnchorAtOrigin )
+        {
+            selection.SetReferencePoint( VECTOR2I( 0, 0 ) );
+        }
+        else
+        {
+            BOARD_ITEM* item = (BOARD_ITEM*) selection.GetTopLeftItem();
+            selection.SetReferencePoint( item->GetPosition() );
+        }
 
-        selection.SetReferencePoint( item->GetPosition() );
         getViewControls()->SetCursorPosition( getViewControls()->GetMousePosition(), false );
 
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
@@ -855,7 +863,7 @@ int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
     brd->SetEnabledLayers( enabledLayers );
     brd->SetVisibleLayers( enabledLayers );
 
-    return placeBoardItems( brd );
+    return placeBoardItems( brd, false );
 }
 
 

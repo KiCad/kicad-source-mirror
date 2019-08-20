@@ -131,7 +131,7 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected )
             partialModule.Add( clone );
 
             // locate the reference point at (0, 0) in the copied items
-            clone->Move( wxPoint(-refPoint.x, -refPoint.y ) );
+            clone->Move( (wxPoint) -refPoint );
         }
 
         // Set the new relative internal local coordinates of copied items
@@ -173,7 +173,7 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected )
                 std::unique_ptr<BOARD_ITEM> clone( static_cast<BOARD_ITEM*> ( item->Clone() ) );
 
                 // locate the reference point at (0, 0) in the copied items
-                clone->Move( wxPoint(-refPoint.x, -refPoint.y ) );
+                clone->Move( (wxPoint) -refPoint );
 
                 Format( clone.get(), 1 );
             }
