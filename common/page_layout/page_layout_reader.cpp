@@ -220,7 +220,12 @@ void PAGE_LAYOUT_READER_PARSER::parseSetup( WS_DATA_MODEL* aLayout )
             break;
         }
     }
+
+    // The file is well-formed.  If it has no further items, then that's the way the
+    // user wants it.
+    aLayout->AllowVoidList( true );
 }
+
 
 void PAGE_LAYOUT_READER_PARSER::parsePolygon( WS_DATA_ITEM_POLYGONS * aItem )
 {
