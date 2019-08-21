@@ -93,9 +93,11 @@ public:
         wxString    tooltip;    ///< if not empty, use this tooltip on row
         bool        changeable; ///< if true, the state can be changed
         bool        spacer;     ///< if true, this row is a spacer
+        COLOR4D     defaultColor; ///< The default color for the row
 
         ROW( const wxString& aRowName, int aId, COLOR4D aColor = COLOR4D::UNSPECIFIED,
-            const wxString& aTooltip = wxEmptyString, bool aState = true, bool aChangeable = true )
+             const wxString& aTooltip = wxEmptyString, bool aState = true,
+             bool aChangeable = true, COLOR4D aDefaultColor = COLOR4D::UNSPECIFIED )
         {
             rowName = aRowName;
             id      = aId;
@@ -104,6 +106,7 @@ public:
             tooltip = aTooltip;
             changeable = aChangeable;
             spacer = false;
+            defaultColor = aDefaultColor;
         }
 
         ROW()
@@ -113,6 +116,7 @@ public:
             state = true;
             changeable = true;
             spacer = true;
+            defaultColor = COLOR4D::UNSPECIFIED;
         }
     };
 

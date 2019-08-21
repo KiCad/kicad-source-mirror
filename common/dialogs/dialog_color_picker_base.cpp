@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 28 2019)
+// C++ code generated with wxFormBuilder (version Aug 21 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -206,6 +206,9 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 
 	bButtonsSizer->Add( m_NewColorRect, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
+	m_resetToDefault = new wxButton( this, wxID_ANY, _("Reset to Default"), wxDefaultPosition, wxDefaultSize, 0 );
+	bButtonsSizer->Add( m_resetToDefault, 0, wxALL, 5 );
+
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );
@@ -253,6 +256,7 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	m_sliderTransparency->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
 	m_sliderTransparency->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
 	m_sliderTransparency->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_resetToDefault->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COLOR_PICKER_BASE::OnResetButton ), NULL, this );
 }
 
 DIALOG_COLOR_PICKER_BASE::~DIALOG_COLOR_PICKER_BASE()
@@ -285,5 +289,6 @@ DIALOG_COLOR_PICKER_BASE::~DIALOG_COLOR_PICKER_BASE()
 	m_sliderTransparency->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
 	m_sliderTransparency->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
 	m_sliderTransparency->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_resetToDefault->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COLOR_PICKER_BASE::OnResetButton ), NULL, this );
 
 }

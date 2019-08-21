@@ -404,6 +404,8 @@ void PCB_LAYER_WIDGET::ReFillRender()
                 // this window frame must have an established BOARD, i.e. after SetBoard()
                 renderRow.color = myframe->Settings().Colors().GetItemColor(
                         static_cast<GAL_LAYER_ID>( renderRow.id ) );
+                renderRow.defaultColor = myframe->Settings().Colors().GetDefaultItemColor(
+                        static_cast<GAL_LAYER_ID>( renderRow.id ) );
             }
 
             if( renderRow.id == LAYER_RATSNEST )
@@ -506,9 +508,9 @@ void PCB_LAYER_WIDGET::ReFill()
             break;
         }
 
-        AppendLayerRow( LAYER_WIDGET::ROW(
-            brd->GetLayerName( layer ), layer, myframe->Settings().Colors().GetLayerColor( layer ),
-            dsc, true ) );
+        AppendLayerRow( LAYER_WIDGET::ROW( brd->GetLayerName( layer ), layer,
+                myframe->Settings().Colors().GetLayerColor( layer ), dsc, true, true,
+                myframe->Settings().Colors().GetDefaultLayerColor( layer ) ) );
 
         if( m_fp_editor_mode && LSET::ForbiddenFootprintLayers().test( layer ) )
         {
@@ -554,9 +556,10 @@ void PCB_LAYER_WIDGET::ReFill()
         if( !enabled[layer] )
             continue;
 
-        AppendLayerRow( LAYER_WIDGET::ROW(
-            brd->GetLayerName( layer ), layer,  myframe->Settings().Colors().GetLayerColor( layer ),
-            wxGetTranslation( non_cu_seq[i].tooltip ), true ) );
+        AppendLayerRow( LAYER_WIDGET::ROW( brd->GetLayerName( layer ), layer,
+                myframe->Settings().Colors().GetLayerColor( layer ),
+                wxGetTranslation( non_cu_seq[i].tooltip ), true, true,
+                myframe->Settings().Colors().GetDefaultLayerColor( layer ) ) );
 
         if( m_fp_editor_mode && LSET::ForbiddenFootprintLayers().test( layer ) )
         {

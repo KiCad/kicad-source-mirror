@@ -76,7 +76,8 @@ public:
      * @param aUserColors: if not null is a list of defined colors replacing the dialog predefined colors
      */
 	DIALOG_COLOR_PICKER( wxWindow* aParent, KIGFX::COLOR4D& aCurrentColor,
-                         bool aAllowOpacityControl, CUSTOM_COLORS_LIST* aUserColors = nullptr );
+                         bool aAllowOpacityControl, CUSTOM_COLORS_LIST* aUserColors = nullptr,
+                         const KIGFX::COLOR4D& aDefaultColor = KIGFX::COLOR4D::UNSPECIFIED );
 	~DIALOG_COLOR_PICKER();
 
 	KIGFX::COLOR4D GetColor() { return m_newColor4D; };
@@ -95,6 +96,8 @@ private:
                                         ///< false to keep alpha channel = 1.0
     KIGFX::COLOR4D m_previousColor4D;   ///< the inital color4d
     KIGFX::COLOR4D m_newColor4D;        ///< the current color4d
+    KIGFX::COLOR4D m_defaultColor;      ///< The default color4d
+
     /// the list of color4d ordered by button ID, for predefined colors
     std::vector<KIGFX::COLOR4D> m_Color4DList;
     int m_cursorsSize;
@@ -144,6 +147,9 @@ private:
 	void onRGBMouseDrag( wxMouseEvent& event ) override;
 	void onHSVMouseClick( wxMouseEvent& event ) override;
 	void onHSVMouseDrag( wxMouseEvent& event ) override;
+
+    ///< Event handler for the reset button press
+    void OnResetButton( wxCommandEvent& aEvent ) override;
 
     /** manage the Hue and Saturation settings when the mouse cursor
      * is at aMouseCursor.

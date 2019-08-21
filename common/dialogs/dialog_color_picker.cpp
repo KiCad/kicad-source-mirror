@@ -24,7 +24,8 @@
 #define ALPHA_MAX 100   // the max value returned by the alpha (opacity) slider
 
 DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, KIGFX::COLOR4D& aCurrentColor,
-                                          bool aAllowOpacityControl, CUSTOM_COLORS_LIST* aUserColors )
+                                          bool aAllowOpacityControl, CUSTOM_COLORS_LIST* aUserColors,
+                                          const KIGFX::COLOR4D& aDefaultColor )
 	: DIALOG_COLOR_PICKER_BASE( aParent )
 {
     m_allowMouseEvents = false;
@@ -36,6 +37,7 @@ DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, KIGFX::COLOR4D& aCu
     m_bitmapRGB = nullptr;
     m_bitmapHSV = nullptr;
     m_selectedCursor = nullptr;
+    m_defaultColor = aDefaultColor;
 
     if( !m_allowOpacityCtrl )
     {
@@ -49,6 +51,10 @@ DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, KIGFX::COLOR4D& aCu
 
     // Build the defined colors panel:
     initDefinedColors( aUserColors );
+
+    // If there is no default color, don't give the option to reset to default
+    if( aDefaultColor == KIGFX::COLOR4D::UNSPECIFIED )
+        m_resetToDefault->Hide();
 
     m_sdbSizerOK->SetDefault();
 }
@@ -791,6 +797,19 @@ void DIALOG_COLOR_PICKER::OnChangeBrightness( wxScrollEvent& event )
     m_newColor4D.FromHSV( m_hue, m_sat, m_val );
 
     SetEditVals( VAL_CHANGED );
+
+    drawAll();
+}
+
+
+void DIALOG_COLOR_PICKER::OnResetButton( wxCommandEvent& aEvent )
+{
+    m_newColor4D.r = m_defaultColor.r;
+    m_newColor4D.g = m_defaultColor.g;
+    m_newColor4D.b = m_defaultColor.b;
+
+    m_newColor4D.ToHSV( m_hue, m_sat, m_val, true );
+    SetEditVals( ALL_CHANGED );
 
     drawAll();
 }

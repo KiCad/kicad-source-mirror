@@ -70,28 +70,35 @@ static const EDA_COLOR_T default_layer_color[] = {
 
 // for color order, see enum GAL_LAYER_ID
 static const EDA_COLOR_T default_items_color[] = {
-    LIGHTGRAY, // unused
-    CYAN,      // LAYER_VIA_MICROVIA
-    BROWN,     // LAYER_VIA_BBLIND
-    LIGHTGRAY, // LAYER_VIA_THROUGH
-    YELLOW,    // LAYER_NON_PLATED
-    LIGHTGRAY, // LAYER_MOD_TEXT_FR
-    BLUE,      // LAYER_MOD_TEXT_BK
-    DARKGRAY,  // LAYER_MOD_TEXT_INVISIBLE
-    BLUE,      // LAYER_ANCHOR
-    RED,       // LAYER_PAD_FR
-    GREEN,     // LAYER_PAD_BK
-    LIGHTGRAY, // LAYER_RATSNEST
-    DARKGRAY,  // LAYER_GRID
-    LIGHTRED,  // LAYER_GRID_AXES
-    BLUE,      // LAYER_NO_CONNECTS
-    LIGHTGRAY, LIGHTGRAY,   // LAYER_MOD_FR, LAYER_MOD_BK
-    LIGHTGRAY, LIGHTGRAY,   // LAYER_MOD_VALUES, LAYER_MOD_REFERENCES
-    LIGHTGRAY, // LAYER_TRACKS
-    YELLOW,    // LAYER_PADS
-    LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
-    LIGHTGRAY, LIGHTGRAY, LIGHTGRAY, LIGHTGRAY,
-    LIGHTGRAY, LIGHTGRAY, LIGHTGRAY
+    LIGHTGRAY,            // unused (LAYER_VIAS = GAL_LAYER_ID_START)
+    CYAN,                 // LAYER_VIA_MICROVIA
+    BROWN,                // LAYER_VIA_BBLIND
+    LIGHTGRAY,            // LAYER_VIA_THROUGH
+    YELLOW,               // LAYER_NON_PLATED
+    LIGHTGRAY,            // LAYER_MOD_TEXT_FR
+    BLUE,                 // LAYER_MOD_TEXT_BK
+    DARKGRAY,             // LAYER_MOD_TEXT_INVISIBLE
+    BLUE,                 // LAYER_ANCHOR
+    RED,                  // LAYER_PAD_FR
+    GREEN,                // LAYER_PAD_BK
+    LIGHTGRAY,            // LAYER_RATSNEST
+    DARKGRAY,             // LAYER_GRID
+    LIGHTRED,             // LAYER_GRID_AXES
+    BLUE,                 // LAYER_NO_CONNECTS
+    LIGHTGRAY, LIGHTGRAY, // LAYER_MOD_FR, LAYER_MOD_BK
+    LIGHTGRAY, LIGHTGRAY, // LAYER_MOD_VALUES, LAYER_MOD_REFERENCES
+    LIGHTGRAY,            // LAYER_TRACKS
+    YELLOW, LIGHTGRAY,    // LAYER_PADS, LAYER_PADS_PLATEDHOLES
+    LIGHTGRAY,            // LAYER_VIAS_HOLES
+    LIGHTGRAY,            // LAYER_DRC
+    DARKRED,              // LAYER_WORKSHEET
+    LIGHTGRAY,            // LAYER_GP_OVERLAY
+    LIGHTGRAY,            // LAYER_SELECT_OVERLAY
+    BLACK,                // LAYER_PCB_BACKGROUND
+    WHITE,                // LAYER_CURSOR
+    WHITE,                // LAYER_AUX_ITEMS
+    LIGHTGRAY,            // LAYER_DRAW_BITMAPS
+    LIGHTGRAY             // unused (GAL_LAYER_ID_BITMASK_END)
 };
 
 
@@ -112,13 +119,16 @@ COLORS_DESIGN_SETTINGS::COLORS_DESIGN_SETTINGS( FRAME_T aFrameType )
         m_LayersColors[dst] = COLOR4D( default_items_color[src] );
     }
 
-    m_LayersColors[ LAYER_PCB_BACKGROUND ] = BLACK;
-    m_LayersColors[ LAYER_CURSOR ] = WHITE;
-    m_LayersColors[ LAYER_AUX_ITEMS ] = WHITE;
-    m_LayersColors[ LAYER_WORKSHEET ] = DARKRED;
-    m_LayersColors[ LAYER_GRID ] = DARKGRAY;
-
     setupConfigParams();
+}
+
+
+COLOR4D COLORS_DESIGN_SETTINGS::GetDefaultLayerColor( LAYER_NUM aLayer )
+{
+    if( (unsigned) aLayer < arrayDim( default_layer_color ) )
+        return COLOR4D( default_layer_color[aLayer] );
+
+    return COLOR4D::UNSPECIFIED;
 }
 
 
@@ -135,6 +145,16 @@ void COLORS_DESIGN_SETTINGS::SetLayerColor( LAYER_NUM aLayer, COLOR4D aColor )
 {
     if( (unsigned) aLayer < arrayDim( m_LayersColors ) )
         m_LayersColors[aLayer] = aColor;
+}
+
+
+COLOR4D COLORS_DESIGN_SETTINGS::GetDefaultItemColor( int aItemIdx )
+{
+    unsigned int idx = (unsigned) aItemIdx - LAYER_VIAS;
+    if( idx < arrayDim( default_items_color ) )
+        return COLOR4D( default_items_color[idx] );
+
+    return COLOR4D::UNSPECIFIED;
 }
 
 

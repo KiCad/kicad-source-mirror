@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 28 2019)
+// C++ code generated with wxFormBuilder (version Aug 21 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -68,6 +68,7 @@ class DIALOG_COLOR_PICKER_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextOldColor;
 		wxStaticBitmap* m_OldColorRect;
 		wxStaticBitmap* m_NewColorRect;
+		wxButton* m_resetToDefault;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -84,6 +85,7 @@ class DIALOG_COLOR_PICKER_BASE : public DIALOG_SHIM
 		virtual void OnChangeEditSat( wxSpinEvent& event ) { event.Skip(); }
 		virtual void OnChangeBrightness( wxScrollEvent& event ) { event.Skip(); }
 		virtual void OnChangeAlpha( wxScrollEvent& event ) { event.Skip(); }
+		virtual void OnResetButton( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

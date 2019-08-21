@@ -59,29 +59,46 @@ public:
 
     virtual void Load( wxConfigBase *aConfig ) override;
     virtual void Save( wxConfigBase *aConfig ) override;
+
+    /**
+     * Function GetDefaultLayerColor
+     * @return the default color for aLayer which is one of the item indices given in
+     * enum PCB_LAYER_ID
+     */
+    static COLOR4D GetDefaultLayerColor( LAYER_NUM aLayer );
+
     /**
      * Function GetLayerColor
-     * @return the color for aLayer which
+     * @return the color for aLayer which is one of the item indices given in
+     * enum PCB_LAYER_ID
      */
     COLOR4D GetLayerColor( LAYER_NUM aLayer ) const;
 
     /**
      * Function SetLayerColor
-     * sets the color for aLayer
+     * sets the color for aLayer which is one of the item indices given in
+     * enum PCB_LAYER_ID
      */
     void SetLayerColor( LAYER_NUM aLayer, COLOR4D aColor );
 
     /**
+     * Function GetDefaultItemColor
+     * @return the default color for the an item which is one of the item
+     * indices given in enum GAL_LAYER_ID
+     */
+    static COLOR4D GetDefaultItemColor( int aItemIdx );
+
+    /**
      * Function GetItemColor
      * @return the color for an item which is one of the item indices given
-     * in enum PCB_LAYER_ID
+     * in enum GAL_LAYER_ID
      */
     COLOR4D GetItemColor( int aItemIdx ) const;
 
     /**
      * Function SetItemColor
      * sets the color for an item which is one of the item indices given
-     * in enum PCB_LAYER_ID
+     * in enum GAL_LAYER_ID
      */
     void SetItemColor( int aItemIdx, COLOR4D aColor );
 

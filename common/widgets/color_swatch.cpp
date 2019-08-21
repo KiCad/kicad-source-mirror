@@ -79,10 +79,12 @@ static std::unique_ptr<wxStaticBitmap> makeColorSwatch( wxWindow* aParent, COLOR
 }
 
 
-COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, COLOR4D aColor, int aID, COLOR4D aBackground ):
+COLOR_SWATCH::COLOR_SWATCH( wxWindow* aParent, COLOR4D aColor, int aID, COLOR4D aBackground,
+        const COLOR4D aDefault ) :
         wxPanel( aParent, aID ),
         m_color( aColor ),
-        m_background( aBackground )
+        m_background( aBackground ),
+        m_default( aDefault )
 {
     auto sizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( sizer );
@@ -157,7 +159,7 @@ void COLOR_SWATCH::GetNewSwatchColor()
 {
     COLOR4D newColor = COLOR4D::UNSPECIFIED;
 
-    DIALOG_COLOR_PICKER dialog( ::wxGetTopLevelParent( this ), m_color, true );
+    DIALOG_COLOR_PICKER dialog( ::wxGetTopLevelParent( this ), m_color, true, nullptr, m_default );
 
     if( dialog.ShowModal() == wxID_OK )
         newColor = dialog.GetColor();

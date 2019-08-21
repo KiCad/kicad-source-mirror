@@ -46,7 +46,8 @@ public:
      * @param aColor initial swatch color
      * @param aID id to use when sending swatch events
      */
-    COLOR_SWATCH( wxWindow* aParent, KIGFX::COLOR4D aColor, int aID, KIGFX::COLOR4D aBackground );
+    COLOR_SWATCH( wxWindow* aParent, KIGFX::COLOR4D aColor, int aID, KIGFX::COLOR4D aBackground,
+            const KIGFX::COLOR4D aDefault = KIGFX::COLOR4D::UNSPECIFIED );
 
     /**
      * Set the current swatch color directly.
@@ -84,6 +85,9 @@ private:
 
     ///> The background colour to show the swatch over
     KIGFX::COLOR4D m_background;
+
+    ///> The default color for the swatch
+    KIGFX::COLOR4D m_default;
 
     ///> Handle of the actual swatch shown
     wxStaticBitmap* m_swatch;
