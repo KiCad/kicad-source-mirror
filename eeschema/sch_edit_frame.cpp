@@ -1028,6 +1028,9 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
         }
 
         TestDanglingEnds();
+
+        for( SCH_ITEM* item : aItem->ConnectedItems() )
+            RefreshItem( item );
     }
 
     GetCanvas()->Refresh();
