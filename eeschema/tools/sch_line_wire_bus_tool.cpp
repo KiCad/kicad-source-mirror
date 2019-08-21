@@ -277,8 +277,6 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
     wxString  net;
     SCH_LINE* segment = nullptr;
 
-    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
     Activate();
@@ -327,6 +325,8 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 
 SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
 {
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
     wxPoint  pos = (wxPoint) getViewControls()->GetCursorPosition();
 
     m_busUnfold.entry = new SCH_BUS_WIRE_ENTRY( pos, '\\' );
