@@ -309,6 +309,9 @@ public:
             ascending = GetView()->IsSortOrderAscending();
         }
 
+        for( LIB_PINS& row : m_rows )
+            SortPins( row );
+
         SortRows( sortCol, ascending );
 
         if ( GetView() )
@@ -321,8 +324,19 @@ public:
     void SortRows( int aSortCol, bool ascending )
     {
         std::sort( m_rows.begin(), m_rows.end(),
-                   [ aSortCol, ascending, this ]( LIB_PINS lhs, LIB_PINS rhs ) -> bool
-                        { return compare( lhs, rhs, aSortCol, ascending, m_userUnits ); } );
+                   [ aSortCol, ascending, this ]( LIB_PINS& lhs, LIB_PINS& rhs ) -> bool
+                   {
+                       return compare( lhs, rhs, aSortCol, ascending, m_userUnits );
+                   } );
+    }
+
+    void SortPins( LIB_PINS& aRow )
+    {
+        std::sort( aRow.begin(), aRow.end(),
+                   []( LIB_PIN* lhs, LIB_PIN* rhs ) -> bool
+                   {
+                       return PinNumbers::Compare( lhs->GetNumber(), rhs->GetNumber() ) < 0;
+                   } );
     }
 
     void AppendRow( LIB_PIN* aPin )
