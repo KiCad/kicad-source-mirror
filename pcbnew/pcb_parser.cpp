@@ -849,22 +849,47 @@ void PCB_PARSER::parseTITLE_BLOCK()
                 {
                 case 1:
                     NextTok();
-                    titleBlock.SetComment1( FromUTF8() );
+                    titleBlock.SetComment( 0, FromUTF8() );
                     break;
 
                 case 2:
                     NextTok();
-                    titleBlock.SetComment2( FromUTF8() );
+                    titleBlock.SetComment( 1, FromUTF8() );
                     break;
 
                 case 3:
                     NextTok();
-                    titleBlock.SetComment3( FromUTF8() );
+                    titleBlock.SetComment( 2, FromUTF8() );
                     break;
 
                 case 4:
                     NextTok();
-                    titleBlock.SetComment4( FromUTF8() );
+                    titleBlock.SetComment( 3, FromUTF8() );
+                    break;
+
+                case 5:
+                    NextTok();
+                    titleBlock.SetComment( 4, FromUTF8() );
+                    break;
+
+                case 6:
+                    NextTok();
+                    titleBlock.SetComment( 5, FromUTF8() );
+                    break;
+
+                case 7:
+                    NextTok();
+                    titleBlock.SetComment( 6, FromUTF8() );
+                    break;
+
+                case 8:
+                    NextTok();
+                    titleBlock.SetComment( 7, FromUTF8() );
+                    break;
+
+                case 9:
+                    NextTok();
+                    titleBlock.SetComment( 8, FromUTF8() );
                     break;
 
                 default:

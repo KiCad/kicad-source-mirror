@@ -101,7 +101,7 @@ public:
         return getTbText( companyIdx );
     }
 
-    void SetComment(  int aIdx, const wxString& aComment )
+    void SetComment( int aIdx, const wxString& aComment )
     {
         aIdx += m_commentIdx;
         return setTbText( aIdx, aComment );
@@ -112,17 +112,6 @@ public:
         aIdx += m_commentIdx;
         return getTbText( aIdx );
     }
-
-    // Only for old code compatibility. Will be removed later
-    void SetComment1( const wxString& aComment ) { SetComment( 0, aComment ); }
-    void SetComment2( const wxString& aComment ) { SetComment( 1, aComment ); }
-    void SetComment3( const wxString& aComment ) { SetComment( 2, aComment ); }
-    void SetComment4( const wxString& aComment ) { SetComment( 3, aComment ); }
-    const wxString& GetComment1( ) const { return GetComment( 0 ); }
-    const wxString& GetComment2( ) const { return GetComment( 1 ); }
-    const wxString& GetComment3( ) const { return GetComment( 2 ); }
-    const wxString& GetComment4( ) const { return GetComment( 3 ); }
-
 
     void Clear()
     {

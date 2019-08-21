@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_PAGE_SETTINGS_BASE_H__
-#define __DIALOG_PAGE_SETTINGS_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -42,7 +41,7 @@
 class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxStaticText* m_staticTextPaper;
 		wxStaticLine* m_staticline2;
@@ -74,7 +73,7 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextTitle;
 		wxTextCtrl* m_TextTitle;
 		wxCheckBox* m_TitleExport;
-		wxStaticText* m_staticText13;
+		wxStaticText* m_staticTextCompany;
 		wxTextCtrl* m_TextCompany;
 		wxCheckBox* m_CompanyExport;
 		wxStaticText* m_staticTextComment1;
@@ -89,13 +88,28 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextComment4;
 		wxTextCtrl* m_TextComment4;
 		wxCheckBox* m_Comment4Export;
+		wxStaticText* m_staticTextComment5;
+		wxTextCtrl* m_TextComment5;
+		wxCheckBox* m_Comment5Export;
+		wxStaticText* m_staticTextComment6;
+		wxTextCtrl* m_TextComment6;
+		wxCheckBox* m_Comment6Export;
+		wxStaticText* m_staticTextComment7;
+		wxTextCtrl* m_TextComment7;
+		wxCheckBox* m_Comment7Export;
+		wxStaticText* m_staticTextComment8;
+		wxTextCtrl* m_TextComment8;
+		wxCheckBox* m_Comment8Export;
+		wxStaticText* m_staticTextComment9;
+		wxTextCtrl* m_TextComment9;
+		wxCheckBox* m_Comment9Export;
 		wxStaticText* m_staticTextfilename;
 		wxTextCtrl* m_textCtrlFilePicker;
 		wxButton* m_buttonBrowse;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnPaperSizeChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPageOrientationChoice( wxCommandEvent& event ) { event.Skip(); }
@@ -111,15 +125,19 @@ class DIALOG_PAGES_SETTINGS_BASE : public DIALOG_SHIM
 		virtual void OnComment2TextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnComment3TextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnComment4TextUpdated( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnComment5TextUpdated( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnComment6TextUpdated( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnComment7TextUpdated( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnComment8TextUpdated( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnComment9TextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnWksFileSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Page Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Page Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_PAGES_SETTINGS_BASE();
-	
+
 };
 
-#endif //__DIALOG_PAGE_SETTINGS_BASE_H__

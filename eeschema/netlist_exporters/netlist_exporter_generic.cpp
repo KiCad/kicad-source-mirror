@@ -320,19 +320,39 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeDesignHeader()
 
         xtitleBlock->AddChild( xcomment = node( "comment" ) );
         xcomment->AddAttribute( "number", "1" );
-        xcomment->AddAttribute( "value", tb.GetComment1() );
+        xcomment->AddAttribute( "value", tb.GetComment( 0 ) );
 
         xtitleBlock->AddChild( xcomment = node( "comment" ) );
         xcomment->AddAttribute( "number", "2" );
-        xcomment->AddAttribute( "value", tb.GetComment2() );
+        xcomment->AddAttribute( "value", tb.GetComment( 1 ) );
 
         xtitleBlock->AddChild( xcomment = node( "comment" ) );
         xcomment->AddAttribute( "number", "3" );
-        xcomment->AddAttribute( "value", tb.GetComment3() );
+        xcomment->AddAttribute( "value", tb.GetComment( 2 ) );
 
         xtitleBlock->AddChild( xcomment = node( "comment" ) );
         xcomment->AddAttribute( "number", "4" );
-        xcomment->AddAttribute( "value", tb.GetComment4() );
+        xcomment->AddAttribute( "value", tb.GetComment( 3 ) );
+
+        xtitleBlock->AddChild( xcomment = node( "comment" ) );
+        xcomment->AddAttribute( "number", "5" );
+        xcomment->AddAttribute( "value", tb.GetComment( 4 ) );
+
+        xtitleBlock->AddChild( xcomment = node( "comment" ) );
+        xcomment->AddAttribute( "number", "6" );
+        xcomment->AddAttribute( "value", tb.GetComment( 5 ) );
+
+        xtitleBlock->AddChild( xcomment = node( "comment" ) );
+        xcomment->AddAttribute( "number", "7" );
+        xcomment->AddAttribute( "value", tb.GetComment( 6 ) );
+
+        xtitleBlock->AddChild( xcomment = node( "comment" ) );
+        xcomment->AddAttribute( "number", "8" );
+        xcomment->AddAttribute( "value", tb.GetComment( 7 ) );
+
+        xtitleBlock->AddChild( xcomment = node( "comment" ) );
+        xcomment->AddAttribute( "number", "9" );
+        xcomment->AddAttribute( "value", tb.GetComment( 8 ) );
     }
 
     return xdesign;

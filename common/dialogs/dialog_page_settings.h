@@ -94,6 +94,11 @@ private:
     void OnComment2TextUpdated( wxCommandEvent& event ) override;
     void OnComment3TextUpdated( wxCommandEvent& event ) override;
     void OnComment4TextUpdated( wxCommandEvent& event ) override;
+    void OnComment5TextUpdated( wxCommandEvent& event ) override;
+    void OnComment6TextUpdated( wxCommandEvent& event ) override;
+    void OnComment7TextUpdated( wxCommandEvent& event ) override;
+    void OnComment8TextUpdated( wxCommandEvent& event ) override;
+    void OnComment9TextUpdated( wxCommandEvent& event ) override;
 
     // Handle button click for setting the date from the picker
     void OnDateApplyClick( wxCommandEvent& event ) override;

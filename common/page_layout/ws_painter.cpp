@@ -229,7 +229,7 @@ void TITLE_BLOCK::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aCont
             aFormatter->Print( aNestLevel+1, "(company %s)\n",
                                aFormatter->Quotew( GetCompany() ).c_str() );
 
-        for( int ii = 0; ii < 4; ii++ )
+        for( int ii = 0; ii < 9; ii++ )
         {
             if( !GetComment(ii).IsEmpty() )
                 aFormatter->Print( aNestLevel+1, "(comment %d %s)\n", ii+1,

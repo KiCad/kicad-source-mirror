@@ -39,10 +39,10 @@ struct TitleBlockFixture
         //m_tb.SetRevision( "revision" );
 
         // set more than one comment to make sure the indexing of comments works
-        m_tb.SetComment1( "comment1" );
-        m_tb.SetComment2( "comment2" );
-        m_tb.SetComment3( "comment3" );
-        m_tb.SetComment4( "comment4" );
+        m_tb.SetComment( 0, "comment1" );
+        m_tb.SetComment( 1, "comment2" );
+        m_tb.SetComment( 2, "comment3" );
+        m_tb.SetComment( 3, "comment4" );
     }
 
     TITLE_BLOCK m_tb;
@@ -66,10 +66,10 @@ BOOST_AUTO_TEST_CASE( SimpleAccess )
     // This one is blank
     BOOST_CHECK_EQUAL( "", m_tb.GetRevision() );
 
-    BOOST_CHECK_EQUAL( "comment1", m_tb.GetComment1() );
-    BOOST_CHECK_EQUAL( "comment2", m_tb.GetComment2() );
-    BOOST_CHECK_EQUAL( "comment3", m_tb.GetComment3() );
-    BOOST_CHECK_EQUAL( "comment4", m_tb.GetComment4() );
+    BOOST_CHECK_EQUAL( "comment1", m_tb.GetComment( 0 ) );
+    BOOST_CHECK_EQUAL( "comment2", m_tb.GetComment( 1 ) );
+    BOOST_CHECK_EQUAL( "comment3", m_tb.GetComment( 2 ) );
+    BOOST_CHECK_EQUAL( "comment4", m_tb.GetComment( 3 ) );
 }
 
 /*
@@ -81,8 +81,8 @@ BOOST_AUTO_TEST_CASE( Copy )
 
     // Check that values came through
     BOOST_CHECK_EQUAL( "title", tb_cpy.GetTitle() );
-    BOOST_CHECK_EQUAL( "comment1", tb_cpy.GetComment1() );
-    BOOST_CHECK_EQUAL( "comment2", tb_cpy.GetComment2() );
+    BOOST_CHECK_EQUAL( "comment1", tb_cpy.GetComment( 0 ) );
+    BOOST_CHECK_EQUAL( "comment2", tb_cpy.GetComment( 1 ) );
 }
 
 

@@ -907,22 +907,47 @@ void SCH_LEGACY_PLUGIN::loadPageSettings( LINE_READER& aReader, SCH_SCREEN* aScr
         else if( strCompare( "Comment1", line, &line ) )
         {
             parseQuotedString( buf, aReader, line, &line, true );
-            tb.SetComment1( buf );
+            tb.SetComment( 0, buf );
         }
         else if( strCompare( "Comment2", line, &line ) )
         {
             parseQuotedString( buf, aReader, line, &line, true );
-            tb.SetComment2( buf );
+            tb.SetComment( 1, buf );
         }
         else if( strCompare( "Comment3", line, &line ) )
         {
             parseQuotedString( buf, aReader, line, &line, true );
-            tb.SetComment3( buf );
+            tb.SetComment( 2, buf );
         }
         else if( strCompare( "Comment4", line, &line ) )
         {
             parseQuotedString( buf, aReader, line, &line, true );
-            tb.SetComment4( buf );
+            tb.SetComment( 3, buf );
+        }
+        else if( strCompare( "Comment5", line, &line ) )
+        {
+            parseQuotedString( buf, aReader, line, &line, true );
+            tb.SetComment( 4, buf );
+        }
+        else if( strCompare( "Comment6", line, &line ) )
+        {
+            parseQuotedString( buf, aReader, line, &line, true );
+            tb.SetComment( 5, buf );
+        }
+        else if( strCompare( "Comment7", line, &line ) )
+        {
+            parseQuotedString( buf, aReader, line, &line, true );
+            tb.SetComment( 6, buf );
+        }
+        else if( strCompare( "Comment8", line, &line ) )
+        {
+            parseQuotedString( buf, aReader, line, &line, true );
+            tb.SetComment( 7, buf );
+        }
+        else if( strCompare( "Comment9", line, &line ) )
+        {
+            parseQuotedString( buf, aReader, line, &line, true );
+            tb.SetComment( 8, buf );
         }
         else if( strCompare( "$EndDescr", line ) )
         {
@@ -1814,10 +1839,15 @@ void SCH_LEGACY_PLUGIN::Format( SCH_SCREEN* aScreen )
     m_out->Print( 0, "Date %s\n",     EscapedUTF8( tb.GetDate() ).c_str() );
     m_out->Print( 0, "Rev %s\n",      EscapedUTF8( tb.GetRevision() ).c_str() );
     m_out->Print( 0, "Comp %s\n",     EscapedUTF8( tb.GetCompany() ).c_str() );
-    m_out->Print( 0, "Comment1 %s\n", EscapedUTF8( tb.GetComment1() ).c_str() );
-    m_out->Print( 0, "Comment2 %s\n", EscapedUTF8( tb.GetComment2() ).c_str() );
-    m_out->Print( 0, "Comment3 %s\n", EscapedUTF8( tb.GetComment3() ).c_str() );
-    m_out->Print( 0, "Comment4 %s\n", EscapedUTF8( tb.GetComment4() ).c_str() );
+    m_out->Print( 0, "Comment1 %s\n", EscapedUTF8( tb.GetComment( 0 ) ).c_str() );
+    m_out->Print( 0, "Comment2 %s\n", EscapedUTF8( tb.GetComment( 1 ) ).c_str() );
+    m_out->Print( 0, "Comment3 %s\n", EscapedUTF8( tb.GetComment( 2 ) ).c_str() );
+    m_out->Print( 0, "Comment4 %s\n", EscapedUTF8( tb.GetComment( 3 ) ).c_str() );
+    m_out->Print( 0, "Comment5 %s\n", EscapedUTF8( tb.GetComment( 4 ) ).c_str() );
+    m_out->Print( 0, "Comment6 %s\n", EscapedUTF8( tb.GetComment( 5 ) ).c_str() );
+    m_out->Print( 0, "Comment7 %s\n", EscapedUTF8( tb.GetComment( 6 ) ).c_str() );
+    m_out->Print( 0, "Comment8 %s\n", EscapedUTF8( tb.GetComment( 7 ) ).c_str() );
+    m_out->Print( 0, "Comment9 %s\n", EscapedUTF8( tb.GetComment( 8 ) ).c_str() );
     m_out->Print( 0, "$EndDescr\n" );
 
     for( auto alias : aScreen->GetBusAliases() )

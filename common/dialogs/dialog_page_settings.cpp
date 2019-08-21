@@ -177,10 +177,15 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     m_TextDate->SetValue( m_tb.GetDate() );
     m_TextTitle->SetValue( m_tb.GetTitle() );
     m_TextCompany->SetValue( m_tb.GetCompany() );
-    m_TextComment1->SetValue( m_tb.GetComment1() );
-    m_TextComment2->SetValue( m_tb.GetComment2() );
-    m_TextComment3->SetValue( m_tb.GetComment3() );
-    m_TextComment4->SetValue( m_tb.GetComment4() );
+    m_TextComment1->SetValue( m_tb.GetComment( 0 ) );
+    m_TextComment2->SetValue( m_tb.GetComment( 1 ) );
+    m_TextComment3->SetValue( m_tb.GetComment( 2 ) );
+    m_TextComment4->SetValue( m_tb.GetComment( 3 ) );
+    m_TextComment5->SetValue( m_tb.GetComment( 4 ) );
+    m_TextComment6->SetValue( m_tb.GetComment( 5 ) );
+    m_TextComment7->SetValue( m_tb.GetComment( 6 ) );
+    m_TextComment8->SetValue( m_tb.GetComment( 7 ) );
+    m_TextComment9->SetValue( m_tb.GetComment( 8 ) );
 
 #ifndef EESCHEMA
     // these options have meaning only for Eeschema.
@@ -193,6 +198,11 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     m_Comment2Export->Show( false );
     m_Comment3Export->Show( false );
     m_Comment4Export->Show( false );
+    m_Comment5Export->Show( false );
+    m_Comment6Export->Show( false );
+    m_Comment7Export->Show( false );
+    m_Comment8Export->Show( false );
+    m_Comment9Export->Show( false );
 #endif
 
     GetPageLayoutInfoFromDialog();
@@ -345,7 +355,7 @@ void DIALOG_PAGES_SETTINGS::OnComment1TextUpdated( wxCommandEvent& event )
     if( m_initialized && m_TextComment1->IsModified() )
     {
         GetPageLayoutInfoFromDialog();
-        m_tb.SetComment1( m_TextComment1->GetValue() );
+        m_tb.SetComment( 0, m_TextComment1->GetValue() );
         UpdatePageLayoutExample();
     }
 }
@@ -356,7 +366,7 @@ void DIALOG_PAGES_SETTINGS::OnComment2TextUpdated( wxCommandEvent& event )
     if( m_initialized && m_TextComment2->IsModified() )
     {
         GetPageLayoutInfoFromDialog();
-        m_tb.SetComment2( m_TextComment2->GetValue() );
+        m_tb.SetComment( 1, m_TextComment2->GetValue() );
         UpdatePageLayoutExample();
     }
 }
@@ -367,7 +377,7 @@ void DIALOG_PAGES_SETTINGS::OnComment3TextUpdated( wxCommandEvent& event )
     if( m_initialized && m_TextComment3->IsModified() )
     {
         GetPageLayoutInfoFromDialog();
-        m_tb.SetComment3( m_TextComment3->GetValue() );
+        m_tb.SetComment( 2, m_TextComment3->GetValue() );
         UpdatePageLayoutExample();
     }
 }
@@ -378,7 +388,62 @@ void DIALOG_PAGES_SETTINGS::OnComment4TextUpdated( wxCommandEvent& event )
     if( m_initialized && m_TextComment4->IsModified() )
     {
         GetPageLayoutInfoFromDialog();
-        m_tb.SetComment4( m_TextComment4->GetValue() );
+        m_tb.SetComment( 3, m_TextComment4->GetValue() );
+        UpdatePageLayoutExample();
+    }
+}
+
+
+void DIALOG_PAGES_SETTINGS::OnComment5TextUpdated( wxCommandEvent& event )
+{
+    if( m_initialized && m_TextComment5->IsModified() )
+    {
+        GetPageLayoutInfoFromDialog();
+        m_tb.SetComment( 4, m_TextComment5->GetValue() );
+        UpdatePageLayoutExample();
+    }
+}
+
+
+void DIALOG_PAGES_SETTINGS::OnComment6TextUpdated( wxCommandEvent& event )
+{
+    if( m_initialized && m_TextComment6->IsModified() )
+    {
+        GetPageLayoutInfoFromDialog();
+        m_tb.SetComment( 5, m_TextComment6->GetValue() );
+        UpdatePageLayoutExample();
+    }
+}
+
+
+void DIALOG_PAGES_SETTINGS::OnComment7TextUpdated( wxCommandEvent& event )
+{
+    if( m_initialized && m_TextComment7->IsModified() )
+    {
+        GetPageLayoutInfoFromDialog();
+        m_tb.SetComment( 6, m_TextComment7->GetValue() );
+        UpdatePageLayoutExample();
+    }
+}
+
+
+void DIALOG_PAGES_SETTINGS::OnComment8TextUpdated( wxCommandEvent& event )
+{
+    if( m_initialized && m_TextComment8->IsModified() )
+    {
+        GetPageLayoutInfoFromDialog();
+        m_tb.SetComment( 7, m_TextComment8->GetValue() );
+        UpdatePageLayoutExample();
+    }
+}
+
+
+void DIALOG_PAGES_SETTINGS::OnComment9TextUpdated( wxCommandEvent& event )
+{
+    if( m_initialized && m_TextComment9->IsModified() )
+    {
+        GetPageLayoutInfoFromDialog();
+        m_tb.SetComment( 8, m_TextComment9->GetValue() );
         UpdatePageLayoutExample();
     }
 }
@@ -493,10 +558,15 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
     m_tb.SetDate(     m_TextDate->GetValue() );
     m_tb.SetCompany(  m_TextCompany->GetValue() );
     m_tb.SetTitle(    m_TextTitle->GetValue() );
-    m_tb.SetComment1( m_TextComment1->GetValue() );
-    m_tb.SetComment2( m_TextComment2->GetValue() );
-    m_tb.SetComment3( m_TextComment3->GetValue() );
-    m_tb.SetComment4( m_TextComment4->GetValue() );
+    m_tb.SetComment( 0, m_TextComment1->GetValue() );
+    m_tb.SetComment( 1, m_TextComment2->GetValue() );
+    m_tb.SetComment( 2, m_TextComment3->GetValue() );
+    m_tb.SetComment( 3, m_TextComment4->GetValue() );
+    m_tb.SetComment( 4, m_TextComment5->GetValue() );
+    m_tb.SetComment( 5, m_TextComment6->GetValue() );
+    m_tb.SetComment( 6, m_TextComment7->GetValue() );
+    m_tb.SetComment( 7, m_TextComment8->GetValue() );
+    m_tb.SetComment( 8, m_TextComment9->GetValue() );
 
     m_parent->SetTitleBlock( m_tb );
 
@@ -529,16 +599,31 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
             tb2.SetCompany( m_tb.GetCompany() );
 
         if( m_Comment1Export->IsChecked() )
-            tb2.SetComment1( m_tb.GetComment1() );
+            tb2.SetComment( 0, m_tb.GetComment( 0 ) );
 
         if( m_Comment2Export->IsChecked() )
-            tb2.SetComment2( m_tb.GetComment2() );
+            tb2.SetComment( 1, m_tb.GetComment( 1 ) );
 
         if( m_Comment3Export->IsChecked() )
-            tb2.SetComment3( m_tb.GetComment3() );
+            tb2.SetComment( 2, m_tb.GetComment( 2 ) );
 
         if( m_Comment4Export->IsChecked() )
-            tb2.SetComment4( m_tb.GetComment4() );
+            tb2.SetComment( 3, m_tb.GetComment( 3 ) );
+
+        if( m_Comment5Export->IsChecked() )
+            tb2.SetComment( 4, m_tb.GetComment( 4 ) );
+
+        if( m_Comment6Export->IsChecked() )
+            tb2.SetComment( 5, m_tb.GetComment( 5 ) );
+
+        if( m_Comment7Export->IsChecked() )
+            tb2.SetComment( 6, m_tb.GetComment( 6 ) );
+
+        if( m_Comment8Export->IsChecked() )
+            tb2.SetComment( 7, m_tb.GetComment( 7 ) );
+
+        if( m_Comment9Export->IsChecked() )
+            tb2.SetComment( 8, m_tb.GetComment( 8 ) );
 
         screen->SetTitleBlock( tb2 );
     }

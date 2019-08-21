@@ -793,25 +793,55 @@ void LEGACY_PLUGIN::loadSHEET()
         else if( TESTLINE( "Comment1" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            tb.SetComment1( FROM_UTF8( buf ) );
+            tb.SetComment( 0, FROM_UTF8( buf ) );
         }
 
         else if( TESTLINE( "Comment2" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            tb.SetComment2( FROM_UTF8( buf ) );
+            tb.SetComment( 1, FROM_UTF8( buf ) );
         }
 
         else if( TESTLINE( "Comment3" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            tb.SetComment3( FROM_UTF8( buf ) );
+            tb.SetComment( 2, FROM_UTF8( buf ) );
         }
 
         else if( TESTLINE( "Comment4" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            tb.SetComment4( FROM_UTF8( buf ) );
+            tb.SetComment( 3, FROM_UTF8( buf ) );
+        }
+
+        else if( TESTLINE( "Comment5" ) )
+        {
+            ReadDelimitedText( buf, line, sizeof(buf) );
+            tb.SetComment( 4, FROM_UTF8( buf ) );
+        }
+
+        else if( TESTLINE( "Comment6" ) )
+        {
+            ReadDelimitedText( buf, line, sizeof(buf) );
+            tb.SetComment( 5, FROM_UTF8( buf ) );
+        }
+
+        else if( TESTLINE( "Comment7" ) )
+        {
+            ReadDelimitedText( buf, line, sizeof(buf) );
+            tb.SetComment( 6, FROM_UTF8( buf ) );
+        }
+
+        else if( TESTLINE( "Comment8" ) )
+        {
+            ReadDelimitedText( buf, line, sizeof(buf) );
+            tb.SetComment( 7, FROM_UTF8( buf ) );
+        }
+
+        else if( TESTLINE( "Comment9" ) )
+        {
+            ReadDelimitedText( buf, line, sizeof(buf) );
+            tb.SetComment( 8, FROM_UTF8( buf ) );
         }
 
         else if( TESTLINE( "$EndSHEETDESCR" ) )
