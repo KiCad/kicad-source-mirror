@@ -45,10 +45,10 @@ int COST_ESTIMATOR::CornerCost( const SEG& aA, const SEG& aB )
     switch( dir_a.Angle( dir_b ) )
     {
     case DIRECTION_45::ANG_OBTUSE:
-        return 1;
+        return 10;
 
     case DIRECTION_45::ANG_STRAIGHT:
-        return 0;
+        return 5;
 
     case DIRECTION_45::ANG_ACUTE:
         return 50;
@@ -674,7 +674,7 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::customBreakouts( int aWidth,
     BOX2I bbox = convex->BBox( 0 );
     VECTOR2I p0 = static_cast<const SOLID*>( aItem )->Pos();
     // must be large enough to guarantee intersecting the convex polygon
-    int length = bbox.GetSize().EuclideanNorm() / 2 + 5;
+    int length = std::max( bbox.GetWidth(), bbox.GetHeight() ) / 2 + 5;
 
     for( int angle = 0; angle < 360; angle += ( aPermitDiagonal ? 45 : 90 ) )
     {
@@ -694,10 +694,10 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::customBreakouts( int aWidth,
             //l.Append( intersections[0].p + (v0 - p0).Resize( (intersections[0].p - p0).EuclideanNorm() * 0.4 ) );
 
             // for an absolute breakout distance, e.g. 0.1 mm
-            l.Append( intersections[0].p + (v0 - p0).Resize( 100000 ) );
+            //l.Append( intersections[0].p + (v0 - p0).Resize( 100000 ) );
 
             // for the breakout right on the polygon edge
-            //l.Append( intersections[0].p );
+            l.Append( intersections[0].p );
 
             breakouts.push_back( l );
         }
@@ -828,8 +828,6 @@ ITEM* OPTIMIZER::findPadOrVia( int aLayer, int aNet, const VECTOR2I& aP ) const
 
 int OPTIMIZER::smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVertex )
 {
-    int min_cost = INT_MAX; // COST_ESTIMATOR::CornerCost( line );
-    int min_len = INT_MAX;
     DIRECTION_45 dir;
 
     const int ForbiddenAngles = DIRECTION_45::ANG_ACUTE | DIRECTION_45::ANG_RIGHT |
@@ -845,39 +843,40 @@ int OPTIMIZER::smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVert
         return -1;
 
 
-    BREAKOUT_LIST breakouts = computeBreakouts( aLine->Width(), aPad, true );
-
+    BREAKOUT_LIST    breakouts = computeBreakouts( aLine->Width(), aPad, true );
     SHAPE_LINE_CHAIN line = ( aEnd ? aLine->CLine().Reverse() : aLine->CLine() );
+    int              p_end = std::min( aEndVertex, std::min( 3, line.PointCount() - 1 ) );
 
-
-    int p_end = std::min( aEndVertex, std::min( 3, line.PointCount() - 1 ) );
-
+    // Start at 1 to find a potentially better breakout (0 is the pad connection)
     for( int p = 1; p <= p_end; p++ )
     {
-        for( SHAPE_LINE_CHAIN & l : breakouts ) {
+        // If the line is contained inside the pad, don't optimize
+        if( solid->Shape() && !solid->Shape()->Collide(
+                SEG( line.CPoint( 0 ), line.CPoint( p ) ), aLine->Width() / 2 ) )
+            continue;
+
+        for( SHAPE_LINE_CHAIN & breakout : breakouts ) {
 
             for( int diag = 0; diag < 2; diag++ )
             {
                 SHAPE_LINE_CHAIN v;
-                SHAPE_LINE_CHAIN connect = dir.BuildInitialTrace( l.CPoint( -1 ),
-                                                                  line.CPoint( p ), diag == 0 );
+                SHAPE_LINE_CHAIN connect = dir.BuildInitialTrace(
+                        breakout.CPoint( -1 ), line.CPoint( p ), diag == 0 );
 
-                DIRECTION_45 dir_bkout( l.CSegment( -1 ) );
+                DIRECTION_45 dir_bkout( breakout.CSegment( -1 ) );
 
                 if(!connect.SegmentCount())
                     continue;
 
                 int ang1 = dir_bkout.Angle( DIRECTION_45( connect.CSegment( 0 ) ) );
-                int ang2 = 0;
 
-                if( (ang1 | ang2) & ForbiddenAngles )
+                if( ang1 & ForbiddenAngles )
                     continue;
 
-                if( l.Length() > line.Length() )
+                if( breakout.Length() > line.Length() )
                     continue;
 
-                v = l;
-
+                v = breakout;
                 v.Append( connect );
 
                 for( int i = p + 1; i < line.PointCount(); i++ )
@@ -898,6 +897,12 @@ int OPTIMIZER::smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVert
         }
     }
 
+    // We attempt to minimize the corner cost (minimizes the segments and types of corners)
+    // but given two, equally valid costs, we want to pick the longer pad exit.  The logic
+    // here is that if the pad is oblong, the track should not exit the shorter side and parallel
+    // the pad but should follow the pad's preferential direction before exiting.
+    int min_cost = INT_MAX;
+    int max_length = 0;
     SHAPE_LINE_CHAIN l_best;
     bool found = false;
     int p_best = -1;
@@ -910,14 +915,14 @@ int OPTIMIZER::smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVert
 
         if( !checkColliding( &tmp ) )
         {
-            if( cost < min_cost || ( cost == min_cost && len < min_len ) )
+            if( cost < min_cost || ( cost == min_cost && len > max_length ) )
             {
                 l_best = vp.second;
                 p_best = vp.first;
                 found  = true;
 
-                if( cost == min_cost )
-                    min_len = std::min( len, min_len );
+                if( cost <= min_cost )
+                    max_length = std::max<int>( len, max_length );
 
                 min_cost = std::min( cost, min_cost );
             }
