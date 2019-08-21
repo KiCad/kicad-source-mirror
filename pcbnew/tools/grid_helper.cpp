@@ -167,10 +167,12 @@ VECTOR2I GRID_HELPER::AlignToSegment( const VECTOR2I& aPoint, const SEG& aSeg )
 }
 
 
-VECTOR2I GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, BOARD_ITEM* aItem )
+VECTOR2I GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, std::vector<BOARD_ITEM*>& aItems )
 {
     clearAnchors();
-    computeAnchors( aItem, aMousePos, true );
+
+    for( auto item : aItems )
+        computeAnchors( item, aMousePos, true );
 
     double worldScale = m_frame->GetCanvas()->GetGAL()->GetWorldScale();
     double lineSnapMinCornerDistance = 50.0 / worldScale;
@@ -211,7 +213,7 @@ VECTOR2I GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, BOARD_ITEM* aIt
 
 
 std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea,
-        const std::vector<BOARD_ITEM*> aSkip ) const
+        const std::vector<BOARD_ITEM*>& aSkip ) const
 {
     std::set<BOARD_ITEM*> items;
     std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
@@ -256,7 +258,7 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDrag
 
 
 VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
-        const std::vector<BOARD_ITEM*> aSkip )
+        const std::vector<BOARD_ITEM*>& aSkip )
 {
     double worldScale = m_frame->GetCanvas()->GetGAL()->GetWorldScale();
     int snapRange = (int) ( m_snapSize / worldScale );

@@ -108,3 +108,19 @@ const KIGFX::VIEW_GROUP::ITEMS PCBNEW_SELECTION::updateDrawList() const
 
     return items;
 }
+
+
+const LSET PCBNEW_SELECTION::GetSelectionLayers()
+{
+    LSET retval;
+
+    for( auto item : m_items )
+    {
+        auto board_item = dynamic_cast<BOARD_ITEM*>( item );
+
+        if( board_item )
+            retval |= board_item->GetLayerSet();
+    }
+
+    return retval;
+}

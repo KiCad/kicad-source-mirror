@@ -24,6 +24,7 @@
 #ifndef PCBNEW_SELECTION_H
 #define PCBNEW_SELECTION_H
 
+#include <layers_id_colors_and_visibility.h>
 #include <tool/selection.h>
 
 
@@ -33,6 +34,8 @@ public:
     EDA_ITEM* GetTopLeftItem( bool onlyModules = false ) const override;
     
     const KIGFX::VIEW_GROUP::ITEMS updateDrawList() const override;
+
+    const LSET GetSelectionLayers();
 };
 
 #endif  //  PCBNEW_SELECTION_H

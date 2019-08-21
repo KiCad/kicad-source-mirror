@@ -58,10 +58,10 @@ public:
 
     VECTOR2I AlignToSegment ( const VECTOR2I& aPoint, const SEG& aSeg );
 
-    VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, BOARD_ITEM* aItem );
+    VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, std::vector<BOARD_ITEM*>& aItem );
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDraggedItem );
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
-                             const std::vector<BOARD_ITEM*> aSkip = {} );
+                             const std::vector<BOARD_ITEM*>& aSkip = {} );
 
     void SetSnap( bool aSnap )
     {
@@ -102,7 +102,7 @@ private:
     std::vector<ANCHOR> m_anchors;
 
     std::set<BOARD_ITEM*> queryVisible( const BOX2I& aArea,
-                                        const std::vector<BOARD_ITEM*> aSkip ) const;
+                                        const std::vector<BOARD_ITEM*>& aSkip ) const;
 
     void addAnchor( const VECTOR2I& aPos, int aFlags, BOARD_ITEM* aItem )
     {

@@ -268,7 +268,7 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
     if( m_dragging || selection.Empty() )
         return 0;
 
-    LSET item_layers = static_cast<BOARD_ITEM*>( selection.Front() )->GetLayerSet();
+    LSET item_layers = selection.GetSelectionLayers();
     bool unselect = selection.IsHover(); //N.B. This must be saved before the re-selection below
 
     // Now filter out locked pads.  We cannot do this in the first RequestSelection() as we need
@@ -408,18 +408,18 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
 
                     selection.SetReferencePoint( m_cursor );
                 }
-                else if( selection.Size() == 1 )
-                {
-                    // Set the current cursor position to the first dragged item origin, so the
-                    // movement vector could be computed later
-                    updateModificationPoint( selection );
-                    m_cursor = grid.BestDragOrigin( originalCursorPos, curr_item );
-                    grid.SetAuxAxes( true, m_cursor );
-                }
                 else
                 {
-                    updateModificationPoint( selection );
-                    m_cursor = grid.Align( m_cursor );
+                    std::vector<BOARD_ITEM*> items;
+
+                    for( auto item : selection.Items() )
+                        items.push_back( static_cast<BOARD_ITEM*>( item ) );
+
+                    // Set the current cursor position to the first dragged item origin, so the
+                    // movement vector could be computed later
+                    m_cursor = grid.BestDragOrigin( originalCursorPos, items );
+                    selection.SetReferencePoint( m_cursor );
+                    grid.SetAuxAxes( true, m_cursor );
                 }
 
                 controls->SetCursorPosition( m_cursor, false );
