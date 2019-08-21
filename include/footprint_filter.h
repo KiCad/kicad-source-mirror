@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -136,13 +136,13 @@ private:
 
     FOOTPRINT_LIST* m_list;
 
-    wxString                    m_lib_name;
-    wxString                    m_filter_pattern;
-    int                         m_pin_count;
-    int                         m_filter_type;
-    EDA_PATTERN_MATCH_WILDCARD  m_filter;
+    wxString        m_lib_name;
+    wxString        m_filter_pattern;
+    int             m_pin_count;
+    int             m_filter_type;
 
-    std::vector<std::unique_ptr<EDA_PATTERN_MATCH>> m_footprint_filters;
+    std::vector<std::unique_ptr<EDA_COMBINED_MATCHER>> m_pattern_filters;
+    std::vector<std::unique_ptr<EDA_PATTERN_MATCH>>    m_footprint_filters;
 };
 
 #endif // FOOTPRINT_FILTER_H

@@ -401,7 +401,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
 
             for( const unique_ptr<FOOTPRINT_INFO>& footprint : fp_info_list->GetList() )
             {
-                wxString search = footprint->GetFootprintName() + footprint->GetSearchText();
+                wxString search = footprint->GetFootprintName() + " " + footprint->GetSearchText();
                 bool     matched = matcher.Find( search.Lower(), matches, position );
 
                 if( !matched && term.IsNumber() )
