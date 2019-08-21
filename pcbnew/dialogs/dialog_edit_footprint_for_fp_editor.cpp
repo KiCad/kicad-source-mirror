@@ -113,9 +113,12 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
     m_allow90Label->SetFont( infoFont );
     m_allow180Label->SetFont( infoFont );
+    m_staticTextInfoCopper->SetFont( infoFont );
+    m_staticTextInfoPaste->SetFont( infoFont );
+
+    infoFont.SetStyle( wxFONTSTYLE_ITALIC );
     m_staticTextInfoValNeg->SetFont( infoFont );
     m_staticTextInfoValPos->SetFont( infoFont );
-    m_staticTextInfoCopper->SetFont( infoFont );
 
     if( m_page >= 0 )
         m_NoteBook->SetSelection( (unsigned) m_page );

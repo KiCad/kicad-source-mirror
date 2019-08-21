@@ -118,9 +118,12 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     m_allow180Label->SetFont( infoFont );
     m_libraryIDLabel->SetFont( infoFont );
     m_staticLibraryID->SetFont( infoFont );
+    m_staticTextInfoCopper->SetFont( infoFont );
+    m_staticTextInfoPaste->SetFont( infoFont );
+
+    infoFont.SetStyle( wxFONTSTYLE_ITALIC );
     m_staticTextInfoValNeg->SetFont( infoFont );
     m_staticTextInfoValPos->SetFont( infoFont );
-    m_staticTextInfoCopper->SetFont( infoFont );
 
     m_NoteBook->SetSelection( m_page );
 

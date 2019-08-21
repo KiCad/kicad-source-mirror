@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __PANEL_SETUP_MASK_AND_PASTE_BASE_H__
-#define __PANEL_SETUP_MASK_AND_PASTE_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -26,10 +25,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_SETUP_MASK_AND_PASTE_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_SETUP_MASK_AND_PASTE_BASE : public wxPanel 
+class PANEL_SETUP_MASK_AND_PASTE_BASE : public wxPanel
 {
 	private:
-	
+
 	protected:
 		wxStaticText* m_staticTextInfoValPos;
 		wxStaticText* m_staticTextInfoValNeg;
@@ -46,12 +45,12 @@ class PANEL_SETUP_MASK_AND_PASTE_BASE : public wxPanel
 		wxTextCtrl* m_SolderPasteMarginRatioCtrl;
 		wxStaticText* m_SolderPasteRatioMarginUnits;
 		wxStaticText* m_staticTextInfoCopper;
-	
+		wxStaticText* m_staticTextInfoPaste;
+
 	public:
-		
-		PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL ); 
+
+		PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_SETUP_MASK_AND_PASTE_BASE();
-	
+
 };
 
-#endif //__PANEL_SETUP_MASK_AND_PASTE_BASE_H__

@@ -156,9 +156,12 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     m_techLayersLabel->SetFont( infoFont );
     m_parentInfoLine1->SetFont( infoFont );
     m_parentInfoLine2->SetFont( infoFont );
+    m_nonCopperNote->SetFont( infoFont );
+    m_staticTextInfoPaste->SetFont( infoFont );
+
+    infoFont.SetStyle( wxFONTSTYLE_ITALIC );
     m_staticTextInfoNegVal->SetFont( infoFont );
     m_staticTextInfoPosValue->SetFont( infoFont );
-    m_nonCopperNote->SetFont( infoFont );
 
     // Usually, TransferDataToWindow is called by OnInitDialog
     // calling it here fixes all widget sizes so FinishDialogSettings can safely fix minsizes

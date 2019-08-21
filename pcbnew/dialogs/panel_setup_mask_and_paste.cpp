@@ -42,9 +42,12 @@ PANEL_SETUP_MASK_AND_PASTE::PANEL_SETUP_MASK_AND_PASTE( PAGED_DIALOG* aParent,
 
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
+    m_staticTextInfoCopper->SetFont( infoFont );
+    m_staticTextInfoPaste->SetFont( infoFont );
+
+    infoFont.SetStyle( wxFONTSTYLE_ITALIC );
     m_staticTextInfoValPos->SetFont( infoFont );
     m_staticTextInfoValNeg->SetFont( infoFont );
-    m_staticTextInfoCopper->SetFont( infoFont );
 }
 
 
