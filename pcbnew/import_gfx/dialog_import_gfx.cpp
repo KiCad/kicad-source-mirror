@@ -320,7 +320,8 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
         m_importer->SetImportOffsetMM( m_origin );
         m_scaleImport = DoubleValueFromString( UNSCALED_UNITS, m_textCtrlImportScale->GetValue() );
 
-        m_importer->SetLineWidthMM( m_lineWidth );
+        // The line width is meant to be in pcbnew units, so we scale the import width before applying
+        m_importer->SetLineWidthMM( m_lineWidth * m_scaleImport );
         m_importer->SetPlugin( std::move( plugin ) );
 
         LOCALE_IO dummy;    // Ensure floats can be read.
