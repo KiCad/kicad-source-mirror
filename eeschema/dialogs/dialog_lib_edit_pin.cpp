@@ -33,7 +33,7 @@
 
 #include <dialog_lib_edit_pin.h>
 #include <confirm.h>
-
+#include <widgets/tab_traversal.h>
 
 DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( LIB_EDIT_FRAME* parent, LIB_PIN* aPin ) :
     DIALOG_LIB_EDIT_PIN_BASE( parent ),
@@ -61,6 +61,19 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( LIB_EDIT_FRAME* parent, LIB_PIN* aPin 
 
     for ( unsigned ii = 0; ii < orientationNames.GetCount(); ii++ )
         m_choiceOrientation->Insert( orientationNames[ii], KiBitmap( orientationBitmaps[ii] ), ii );
+
+    KIUI::SetControlsTabOrder( {
+        m_textPinName,
+        m_textPinNumber,
+        m_choiceElectricalType,
+        m_choiceStyle,
+        m_posXCtrl,
+        m_posYCtrl,
+        m_choiceOrientation,
+        m_pinLengthCtrl,
+        m_nameSizeCtrl,
+        m_numberSizeCtrl
+    } );
 
     m_sdbSizerButtonsOK->SetDefault();
     SetInitialFocus( m_textPinName );
