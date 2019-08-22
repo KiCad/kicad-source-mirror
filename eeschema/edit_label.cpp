@@ -45,15 +45,15 @@ static int                  lastTextOrientation = 0;
 static bool                 lastTextBold = false;
 static bool                 lastTextItalic = false;
 
-static std::deque<std::unique_ptr<SCH_TEXT>> queuedTexts;
+static std::deque<std::unique_ptr<SCH_TEXT>> s_queuedTexts;
 
 SCH_TEXT* SCH_EDIT_FRAME::GetNextNewText()
 {
-    if( queuedTexts.empty() )
+    if( s_queuedTexts.empty() )
         return nullptr;
 
-    auto next_text = std::move( queuedTexts.front() );
-    queuedTexts.pop_front();
+    auto next_text = std::move( s_queuedTexts.front() );
+    s_queuedTexts.pop_front();
 
     return next_text.release();
 }
@@ -64,7 +64,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
     wxPoint  cursorPos = (wxPoint) GetCanvas()->GetViewControls()->GetCursorPosition();
     SCH_TEXT* textItem = nullptr;
 
-    queuedTexts.clear();
+    s_queuedTexts.clear();
 
     switch( aType )
     {
@@ -105,15 +105,49 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
 
     if( aType != LAYER_NOTES )
     {
-        wxStringTokenizer tok( textItem->GetText(), wxDEFAULT_DELIMITERS, wxTOKEN_STRTOK );
-        textItem->SetText( tok.GetNextToken() );
+        wxString          delimiters = wxT( " {}[]\t\r\n" );
+        wxStringTokenizer tok( textItem->GetText(), delimiters, wxTOKEN_STRTOK );
 
         while( tok.HasMoreTokens() )
         {
+            wxString term = tok.GetNextToken();
+
+            // Consume bus definitions as single terms
+            if( tok.GetLastDelimiter() == L'{' )
+            {
+                term << tok.GetLastDelimiter();
+
+                while( tok.HasMoreTokens() )
+                {
+                    term << tok.GetNextToken() << tok.GetLastDelimiter();
+
+                    if( tok.GetLastDelimiter() == L'}' )
+                        break;
+                }
+            }
+            else if( tok.GetLastDelimiter() == L'[' )
+            {
+                term << tok.GetLastDelimiter();
+
+                while( tok.HasMoreTokens() )
+                {
+                    term << tok.GetNextToken() << tok.GetLastDelimiter();
+
+                    if( tok.GetLastDelimiter() == L']' )
+                        break;
+                }
+            }
+
             std::unique_ptr<SCH_TEXT> nextitem( static_cast<SCH_TEXT*>( textItem->Clone() ) );
-            nextitem->SetText( tok.GetNextToken() );
-            queuedTexts.push_back( std::move( nextitem ) );
+            nextitem->SetText( term );
+            s_queuedTexts.push_back( std::move( nextitem ) );
         }
+
+        delete textItem;
+        textItem = GetNextNewText();
+
+        if( !textItem )
+            return nullptr;
     }
 
     lastTextBold = textItem->IsBold();
