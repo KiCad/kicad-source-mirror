@@ -851,7 +851,7 @@ int OPTIMIZER::smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVert
     for( int p = 1; p <= p_end; p++ )
     {
         // If the line is contained inside the pad, don't optimize
-        if( solid->Shape() && !solid->Shape()->Collide(
+        if( solid && solid->Shape() && !solid->Shape()->Collide(
                 SEG( line.CPoint( 0 ), line.CPoint( p ) ), aLine->Width() / 2 ) )
             continue;
 
