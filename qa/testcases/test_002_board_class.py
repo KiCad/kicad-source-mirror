@@ -94,7 +94,7 @@ class TestBoardClass(unittest.TestCase):
     def test_pcb_save_and_load(self):
         pcb = BOARD()
         pcb.GetTitleBlock().SetTitle(self.TITLE)
-        pcb.GetTitleBlock().SetComment1(self.COMMENT1)
+        pcb.GetTitleBlock().SetComment(0,self.COMMENT1)
         result = SaveBoard(self.FILENAME,pcb)
         self.assertTrue(result)
 
@@ -103,7 +103,7 @@ class TestBoardClass(unittest.TestCase):
 
         tb = pcb2.GetTitleBlock()
         self.assertEqual(tb.GetTitle(),self.TITLE)
-        self.assertEqual(tb.GetComment1(),self.COMMENT1)
+        self.assertEqual(tb.GetComment(0),self.COMMENT1)
 
         os.remove(self.FILENAME)
 
