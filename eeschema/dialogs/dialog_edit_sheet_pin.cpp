@@ -25,7 +25,7 @@
 #include <sch_edit_frame.h>
 #include <sch_sheet.h>
 #include <sch_validators.h>
-#include <dialog_sch_edit_sheet_pin.h>
+#include <dialog_edit_sheet_pin.h>
 
 
 static wxString sheetPinTypes[] =
@@ -38,8 +38,8 @@ static wxString sheetPinTypes[] =
 };
 
 
-DIALOG_SCH_EDIT_SHEET_PIN::DIALOG_SCH_EDIT_SHEET_PIN( SCH_EDIT_FRAME* parent, SCH_SHEET_PIN* aPin ) :
-    DIALOG_SCH_EDIT_SHEET_PIN_BASE( parent ),
+DIALOG_EDIT_SHEET_PIN::DIALOG_EDIT_SHEET_PIN( SCH_EDIT_FRAME* parent, SCH_SHEET_PIN* aPin ) :
+    DIALOG_EDIT_SHEET_PIN_BASE( parent ),
     m_frame( parent ),
     m_sheetPin( aPin ),
     m_textWidth( parent, m_widthLabel, m_widthCtrl, m_widthUnits, true ),
@@ -75,9 +75,9 @@ DIALOG_SCH_EDIT_SHEET_PIN::DIALOG_SCH_EDIT_SHEET_PIN( SCH_EDIT_FRAME* parent, SC
 }
 
 
-bool DIALOG_SCH_EDIT_SHEET_PIN::TransferDataToWindow()
+bool DIALOG_EDIT_SHEET_PIN::TransferDataToWindow()
 {
-    m_textName->SetValue( m_sheetPin->GetText() );
+    m_textName->SetValue( UnescapeString( m_sheetPin->GetText() ) );
     m_textName->SelectAll();
     m_textWidth.SetValue( m_sheetPin->GetTextWidth() );
     m_textHeight.SetValue( m_sheetPin->GetTextHeight() );
@@ -87,12 +87,12 @@ bool DIALOG_SCH_EDIT_SHEET_PIN::TransferDataToWindow()
 }
 
 
-bool DIALOG_SCH_EDIT_SHEET_PIN::TransferDataFromWindow()
+bool DIALOG_EDIT_SHEET_PIN::TransferDataFromWindow()
 {
     if( !m_sheetPin->IsNew() )
         m_frame->SaveCopyInUndoList( (SCH_ITEM*) m_sheetPin->GetParent(), UR_CHANGED );
 
-    m_sheetPin->SetText( m_textName->GetValue() );
+    m_sheetPin->SetText( EscapeString( m_textName->GetValue(), CTX_NETNAME ) );
     m_sheetPin->SetTextSize( wxSize( m_textWidth.GetValue(), m_textHeight.GetValue() ) );
 
     auto shape = static_cast<PINSHEETLABEL_SHAPE>( m_choiceConnectionType->GetCurrentSelection() );
@@ -106,7 +106,7 @@ bool DIALOG_SCH_EDIT_SHEET_PIN::TransferDataFromWindow()
 }
 
 
-void DIALOG_SCH_EDIT_SHEET_PIN::onOKButton( wxCommandEvent& event )
+void DIALOG_EDIT_SHEET_PIN::onOKButton( wxCommandEvent& event )
 {
     event.Skip();
 }

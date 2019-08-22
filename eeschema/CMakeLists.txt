@@ -51,6 +51,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_edit_line_style.cpp
     dialogs/dialog_edit_line_style_base.cpp
     dialogs/dialog_edit_one_field.cpp
+    dialogs/dialog_edit_sheet_pin.cpp
+    dialogs/dialog_edit_sheet_pin_base.cpp
     dialogs/dialog_erc.cpp
     dialogs/dialog_erc_base.cpp
     dialogs/dialog_global_sym_lib_table_config.cpp
@@ -76,8 +78,7 @@ set( EESCHEMA_DLGS
     dialogs/dialog_print_using_printer_base.cpp
     dialogs/dialog_rescue_each.cpp
     dialogs/dialog_rescue_each_base.cpp
-    dialogs/dialog_sch_edit_sheet_pin.cpp
-    dialogs/dialog_sch_edit_sheet_pin_base.cpp
+    dialogs/dialog_edit_sheet_pin.cpp
     dialogs/dialog_sch_sheet_props.cpp
     dialogs/dialog_sch_sheet_props_base.cpp
     dialogs/dialog_schematic_find.cpp

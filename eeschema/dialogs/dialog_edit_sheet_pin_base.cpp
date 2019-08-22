@@ -5,11 +5,11 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "dialog_sch_edit_sheet_pin_base.h"
+#include "dialog_edit_sheet_pin_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_SCH_EDIT_SHEET_PIN_BASE::DIALOG_SCH_EDIT_SHEET_PIN_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_EDIT_SHEET_PIN_BASE::DIALOG_EDIT_SHEET_PIN_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 
@@ -97,12 +97,12 @@ DIALOG_SCH_EDIT_SHEET_PIN_BASE::DIALOG_SCH_EDIT_SHEET_PIN_BASE( wxWindow* parent
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_EDIT_SHEET_PIN_BASE::onOKButton ), NULL, this );
+	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_SHEET_PIN_BASE::onOKButton ), NULL, this );
 }
 
-DIALOG_SCH_EDIT_SHEET_PIN_BASE::~DIALOG_SCH_EDIT_SHEET_PIN_BASE()
+DIALOG_EDIT_SHEET_PIN_BASE::~DIALOG_EDIT_SHEET_PIN_BASE()
 {
 	// Disconnect Events
-	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SCH_EDIT_SHEET_PIN_BASE::onOKButton ), NULL, this );
+	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_SHEET_PIN_BASE::onOKButton ), NULL, this );
 
 }

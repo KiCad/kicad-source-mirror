@@ -37,7 +37,7 @@
 #include <sch_view.h>
 #include <symbol_lib_table.h>
 #include <dialogs/dialog_sch_sheet_props.h>
-#include <dialogs/dialog_sch_edit_sheet_pin.h>
+#include <dialogs/dialog_edit_sheet_pin.h>
 #include <tool/actions.h>
 
 
@@ -794,7 +794,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL*
 
     if( !aLabel )
     {
-        DIALOG_SCH_EDIT_SHEET_PIN dlg( this, sheetPin );
+        DIALOG_EDIT_SHEET_PIN dlg( this, sheetPin );
 
         if( dlg.ShowModal() != wxID_OK || sheetPin->GetText().IsEmpty()  )
         {

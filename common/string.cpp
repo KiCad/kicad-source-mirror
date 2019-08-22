@@ -53,11 +53,7 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
 
     for( wxUniChar c: aSource )
     {
-        if( c == '{' )
-        {
-            converted += "{brace}";
-        }
-        else if( aContext == CTX_NETNAME )
+        if( aContext == CTX_NETNAME )
         {
             if( c == '/' )
                 converted += "{slash}";
@@ -66,21 +62,27 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
         }
         else if( aContext == CTX_LIBID )
         {
-            if( c == ':' )
+            if( c == '{' )
+                converted += "{brace}";
+            else if( c == ':' )
                 converted += "{colon}";
             else
                 converted += c;
         }
         else if( aContext == CTX_QUOTED_STR )
         {
-            if( c == '\"' )
+            if( c == '{' )
+                converted += "{brace}";
+            else if( c == '\"' )
                 converted += "{dblquote}";
             else
                 converted += c;
         }
         else if( aContext == CTX_DELIMITED_STR )
         {
-            if( c == ' ' )
+            if( c == '{' )
+                converted += "{brace}";
+            else if( c == ' ' )
                 converted += "{space}";
             else if( c == '\t' )
                 converted += "{tab}";
@@ -91,7 +93,9 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
         }
         else if( aContext == CTX_FILENAME )
         {
-            if( c == '/' )
+            if( c == '{' )
+                converted += "{brace}";
+            else if( c == '/' )
                 converted += "{slash}";
             else if( c == '\\' )
                 converted += "{backslash}";
