@@ -148,8 +148,6 @@ void EDA_DRAW_PANEL_GAL::SetFocus()
 
 void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 {
-    m_viewControls->UpdateScrollbars();
-
     // Update current zoom settings if the canvas is managed by a EDA frame
     // (i.e. not by a preview panel in a dialog)
     if( GetParentEDAFrame() && GetParentEDAFrame()->GetScreen() )
@@ -159,6 +157,8 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
         VECTOR2D center = GetView()->GetCenter();
         GetParentEDAFrame()->SetScrollCenterPosition( wxPoint( center.x, center.y ) );
     }
+
+    m_viewControls->UpdateScrollbars();
 
     if( !m_gal->IsVisible() )
         return;

@@ -660,30 +660,25 @@ void WX_VIEW_CONTROLS::UpdateScrollbars()
     VECTOR2I newScroll( ( viewport.Centre().x - boundary.GetLeft() ) * m_scrollScale.x,
                 ( viewport.Centre().y - boundary.GetTop() ) * m_scrollScale.y );
 
+    // We add the width of the scroll bar thumb to the range because the scroll range is given by
+    // the full bar while the position is given by the left/top position of the thumb
+    VECTOR2I newRange( m_scrollScale.x * boundary.GetWidth() + m_parentPanel->GetScrollThumb( wxSB_HORIZONTAL ),
+            m_scrollScale.y * boundary.GetHeight() + m_parentPanel->GetScrollThumb( wxSB_VERTICAL ) );
+
     // Flip scroll direction in flipped view
     if( m_view->IsMirroredX() )
         newScroll.x = ( boundary.GetRight() - viewport.Centre().x ) * m_scrollScale.x;
 
-    // Adjust scrollbars only if it is needed. Otherwise there are cases when canvas is continuosly
+    // Adjust scrollbars only if it is needed. Otherwise there are cases when canvas is continuously
     // refreshed (Windows)
-    if( m_scrollPos != newScroll )
+    if( m_scrollPos != newScroll || newRange.x != m_parentPanel->GetScrollRange( wxSB_HORIZONTAL )
+            || newRange.y != m_parentPanel->GetScrollRange( wxSB_VERTICAL ) )
     {
-        // Another example of wxWidgets being broken by design: scroll position is determined by the
-        // left (or top, if vertical) edge of the slider. Fortunately, slider size seems to be constant
-        // (at least for wxGTK and wxMSW), so we have to add its size to allow user to scroll the workspace
-        // till the end.
-
-        m_parentPanel->SetScrollbars( 1, 1,
-#if defined(__LINUX__)
-            m_scrollScale.x * boundary.GetWidth() + 1623, m_scrollScale.y * boundary.GetHeight() + 1623,
-#elif defined(__WIN32__) || defined(__WIN64__)
-            m_scrollScale.x * boundary.GetWidth() + 1377, m_scrollScale.y * boundary.GetHeight() + 741,
-#else
-            m_scrollScale.x * boundary.GetWidth(), m_scrollScale.y * boundary.GetHeight(),
-#endif
-            newScroll.x, newScroll.y, false );
-
+        m_parentPanel->SetScrollbars( 1, 1, newRange.x, newRange.y, newScroll.x, newScroll.y, true );
         m_scrollPos = newScroll;
+
+        // Trigger a mouse refresh to get the canvas update in GTK (re-draws the scrollbars)
+        refreshMouse();
     }
 }
 
