@@ -490,10 +490,41 @@ void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
 {
     // shift-return (Mac default) or Ctrl-Return (GTK) for OK
     if( aEvt.GetKeyCode() == WXK_RETURN && ( aEvt.ShiftDown() || aEvt.ControlDown() ) )
+    {
         wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
-    else
-        aEvt.Skip();
+        return;
+    }
+    else if( aEvt.GetKeyCode() == WXK_TAB && !aEvt.ControlDown() )
+    {
+        wxWindow* currentWindow = wxWindow::FindFocus();
+        int       currentIdx = -1;
+        int       delta = aEvt.ShiftDown() ? -1 : 1;
+
+        for( size_t i = 0; i < m_tabOrder.size(); ++i )
+        {
+            if( m_tabOrder[i] == currentWindow )
+            {
+                currentIdx = (int) i + delta;
+
+                if( currentIdx < 0 )
+                    currentIdx = m_tabOrder.size() - 1;
+                else if ( currentIdx >= m_tabOrder.size() )
+                    currentIdx = 0;
+
+                break;
+            }
+        }
+
+        if( currentIdx >= 0 )
+        {
+            m_tabOrder[ currentIdx ]->SetFocus();
+            return;
+        }
+    }
+
+    aEvt.Skip();
 }
+
 
 
 void DIALOG_SHIM::OnGridEditorShown( wxGridEvent& event )

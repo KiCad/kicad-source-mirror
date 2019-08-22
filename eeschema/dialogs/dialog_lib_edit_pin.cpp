@@ -62,7 +62,7 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( LIB_EDIT_FRAME* parent, LIB_PIN* aPin 
     for ( unsigned ii = 0; ii < orientationNames.GetCount(); ii++ )
         m_choiceOrientation->Insert( orientationNames[ii], KiBitmap( orientationBitmaps[ii] ), ii );
 
-    KIUI::SetControlsTabOrder( {
+    m_tabOrder =  {
         m_textPinName,
         m_textPinNumber,
         m_choiceElectricalType,
@@ -73,7 +73,7 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( LIB_EDIT_FRAME* parent, LIB_PIN* aPin 
         m_pinLengthCtrl,
         m_nameSizeCtrl,
         m_numberSizeCtrl
-    } );
+    };
 
     m_sdbSizerButtonsOK->SetDefault();
     SetInitialFocus( m_textPinName );

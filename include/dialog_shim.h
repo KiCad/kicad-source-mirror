@@ -172,19 +172,21 @@ protected:
      */
     int VertPixelsFromDU( int y );
 
-    EDA_UNITS_T         m_units;        // userUnits for display and parsing
-    std::string         m_hash_key;     // alternate for class_map when classname re-used
+    EDA_UNITS_T            m_units;        // userUnits for display and parsing
+    std::string            m_hash_key;     // alternate for class_map when classname re-used
 
     // On MacOS (at least) SetFocus() calls made in the constructor will fail because a
     // window that isn't yet visible will return false to AcceptsFocus().  So we must delay
     // the initial-focus SetFocus() call to the first paint event.
-    bool                m_firstPaintEvent;
-    wxWindow*           m_initialFocusTarget;
+    bool                   m_firstPaintEvent;
+    wxWindow*              m_initialFocusTarget;
 
-    // variables for quasi-modal behavior support, only used by a few derivatives.
-    WX_EVENT_LOOP*      m_qmodal_loop;      // points to nested event_loop, NULL means not qmodal and dismissed
-    bool                m_qmodal_showing;
-    WDO_ENABLE_DISABLE* m_qmodal_parent_disabler;
+    WX_EVENT_LOOP*         m_qmodal_loop;  // points to nested event_loop, NULL means not qmodal
+                                           // and dismissed
+    bool                   m_qmodal_showing;
+    WDO_ENABLE_DISABLE*    m_qmodal_parent_disabler;
+
+    std::vector<wxWindow*> m_tabOrder;
 
 private:
     void OnGridEditorShown( wxGridEvent& event );
