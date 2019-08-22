@@ -726,7 +726,7 @@ void GERBVIEW_SELECTION_TOOL::select( EDA_ITEM* aItem )
     }
 
     m_selection.Add( aItem );
-    getView()->Add( &m_selection );
+    getView()->Add( &m_selection, std::numeric_limits<int>::max() );
     selectVisually( aItem );
 
     if( m_selection.Size() == 1 )
