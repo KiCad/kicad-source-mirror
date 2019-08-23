@@ -597,17 +597,22 @@ void CN_CONNECTIVITY_ALGO::MarkNetAsDirty( int aNet )
 
 void CN_VISITOR::checkZoneItemConnection( CN_ZONE* aZone, CN_ITEM* aItem )
 {
-    auto zoneItem = static_cast<CN_ZONE*> ( aZone );
-
-    if( zoneItem->Net() != aItem->Net() && !aItem->CanChangeNet() )
+    if( aZone->Net() != aItem->Net() && !aItem->CanChangeNet() )
         return;
 
-    if( zoneItem->ContainsPoint( aItem->GetAnchor( 0 ) ) ||
-            ( aItem->Parent()->Type() == PCB_TRACE_T &&
-              zoneItem->ContainsPoint( aItem->GetAnchor( 1 ) ) ) )
+    if( !aZone->Parent()->GetBoundingBox().Intersects( aItem->Parent()->GetBoundingBox() ) )
+        return;
+
+    auto zoneItem = static_cast<CN_ZONE*> ( aZone );
+
+    for( int i = 0; i < aItem->AnchorCount(); ++i )
     {
-        zoneItem->Connect( aItem );
-        aItem->Connect( zoneItem );
+        if( zoneItem->ContainsPoint( aItem->GetAnchor( i ) ) )
+        {
+            zoneItem->Connect( aItem );
+            aItem->Connect( zoneItem );
+            return;
+        }
     }
 }
 

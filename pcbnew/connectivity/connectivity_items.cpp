@@ -31,36 +31,99 @@ int CN_ITEM::AnchorCount() const
     if( !m_valid )
         return 0;
 
-    return m_parent->Type() == PCB_TRACE_T ? 2 : 1;
+    switch( m_parent->Type() )
+    {
+    case PCB_PAD_T:
+        return 5;  // center, north, south, east and west
+    case PCB_TRACE_T:
+        return 2;  // stard and end
+    default:
+        return 1;
+    }
 }
 
 
 const VECTOR2I CN_ITEM::GetAnchor( int n ) const
 {
+    VECTOR2I pt0;
+
     if( !m_valid )
-        return VECTOR2I();
+        return pt0;
 
     switch( m_parent->Type() )
     {
-        case PCB_PAD_T:
-            return static_cast<const D_PAD*>( m_parent )->ShapePos();
-            break;
+    case PCB_PAD_T:
+    {
+        D_PAD* pad = (D_PAD*) m_parent;
 
-        case PCB_TRACE_T:
+        pt0 = pad->ShapePos();
+
+        if( n == 0 )
+            return pt0;
+
+        EDA_RECT bbox = pad->GetBoundingBox();
+        VECTOR2I pt1 = pt0;
+
+        switch( n )
         {
-            auto tr = static_cast<const TRACK*>( m_parent );
-            return ( n == 0 ? tr->GetStart() : tr->GetEnd() );
-
-            break;
+        case 1: pt1.y = bbox.GetTop();    break;    // North
+        case 2: pt1.y = bbox.GetBottom(); break;    // South
+        case 3: pt1.x = bbox.GetLeft();   break;    // East
+        case 4: pt1.x = bbox.GetRight();  break;    // West
+        default:                          break;    // Wicked witch
         }
 
-        case PCB_VIA_T:
-            return static_cast<const VIA*>( m_parent )->GetStart();
+        switch( pad->GetShape() )
+        {
+        case PAD_SHAPE_RECT:
+        case PAD_SHAPE_OVAL:
+        case PAD_SHAPE_ROUNDRECT:
+        case PAD_SHAPE_CHAMFERED_RECT:
+            return pt1;
 
-        default:
-            assert( false );
-            return VECTOR2I();
+        case PAD_SHAPE_CIRCLE:
+            // Thermal spokes on circular pads form an 'X' instead of a '+'
+            RotatePoint( pt1, pad->ShapePos(), 450 );
+            return pt1;
+
+        case PAD_SHAPE_TRAPEZOID:
+        case PAD_SHAPE_CUSTOM:
+        {
+            SHAPE_POLY_SET padPolySet;
+            pad->BuildPadShapePolygon( padPolySet, wxSize( 0, 0 ), ARC_LOW_DEF );
+            const SHAPE_LINE_CHAIN& padOutline = padPolySet.COutline( 0 );
+            SHAPE_LINE_CHAIN::INTERSECTIONS intersections;
+
+            padOutline.Intersect( SEG( pt0, pt1 ), intersections );
+
+            if( intersections.empty() )
+            {
+                // There should always be at least some copper outside the hole
+                assert( false );
+                return pt0;
+            }
+
+            return intersections[ intersections.size() - 1 ].p;
+        }
+        }
+
+        break;
     }
+    case PCB_TRACE_T:
+        if( n == 0 )
+            return static_cast<const TRACK*>( m_parent )->GetStart();
+        else
+            return static_cast<const TRACK*>( m_parent )->GetEnd();
+
+    case PCB_VIA_T:
+        return static_cast<const VIA*>( m_parent )->GetStart();
+
+    default:
+        assert( false );
+        break;
+    }
+
+    return pt0;
 }
 
 
