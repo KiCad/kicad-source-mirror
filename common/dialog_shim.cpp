@@ -500,23 +500,34 @@ void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
         int       currentIdx = -1;
         int       delta = aEvt.ShiftDown() ? -1 : 1;
 
+        auto advance = [&]( int& idx )
+        {
+            idx += delta;
+
+            if( idx < 0 )
+                idx = m_tabOrder.size() - 1;
+            else if ( idx >= m_tabOrder.size() )
+                idx = 0;
+        };
+
         for( size_t i = 0; i < m_tabOrder.size(); ++i )
         {
             if( m_tabOrder[i] == currentWindow )
             {
-                currentIdx = (int) i + delta;
-
-                if( currentIdx < 0 )
-                    currentIdx = m_tabOrder.size() - 1;
-                else if ( currentIdx >= m_tabOrder.size() )
-                    currentIdx = 0;
-
+                currentIdx = (int) i;
                 break;
             }
         }
 
         if( currentIdx >= 0 )
         {
+            advance( currentIdx );
+
+#ifdef __APPLE__
+            while( dynamic_cast<wxTextEntry*>( m_tabOrder[ currentIdx ] ) == nullptr )
+                advance( currentIdx );
+#endif
+
             m_tabOrder[ currentIdx ]->SetFocus();
             return;
         }

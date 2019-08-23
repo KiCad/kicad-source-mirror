@@ -72,7 +72,10 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( LIB_EDIT_FRAME* parent, LIB_PIN* aPin 
         m_choiceOrientation,
         m_pinLengthCtrl,
         m_nameSizeCtrl,
-        m_numberSizeCtrl
+        m_numberSizeCtrl,
+        m_checkApplyToAllParts,
+      	m_checkApplyToAllConversions,
+      	m_checkShow
     };
 
     m_sdbSizerButtonsOK->SetDefault();
