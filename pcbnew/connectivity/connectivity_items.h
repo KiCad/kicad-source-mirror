@@ -355,7 +355,7 @@ public:
     bool ContainsPoint( const VECTOR2I p ) const
     {
         auto zone = static_cast<ZONE_CONTAINER*> ( Parent() );
-        return m_cachedPoly->ContainsPoint( p, zone->GetMinThickness() );
+        return m_cachedPoly->ContainsPoint( p, zone->GetMinThickness() / 2 );
     }
 
     const BOX2I& BBox()
