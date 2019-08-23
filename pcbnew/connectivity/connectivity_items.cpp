@@ -61,16 +61,15 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
         if( n == 0 )
             return pt0;
 
-        EDA_RECT bbox = pad->GetBoundingBox();
         VECTOR2I pt1 = pt0;
 
         switch( n )
         {
-        case 1: pt1.y = bbox.GetTop();    break;    // North
-        case 2: pt1.y = bbox.GetBottom(); break;    // South
-        case 3: pt1.x = bbox.GetLeft();   break;    // East
-        case 4: pt1.x = bbox.GetRight();  break;    // West
-        default:                          break;    // Wicked witch
+        case 1: pt1.y = m_bbox.GetTop();    break;    // North
+        case 2: pt1.y = m_bbox.GetBottom(); break;    // South
+        case 3: pt1.x = m_bbox.GetLeft();   break;    // East
+        case 4: pt1.x = m_bbox.GetRight();  break;    // West
+        default:                            break;    // Wicked witch
         }
 
         switch( pad->GetShape() )
