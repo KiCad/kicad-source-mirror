@@ -361,7 +361,7 @@ public:
     bool ContainsPoint( const VECTOR2I p ) const
     {
         auto zone = static_cast<ZONE_CONTAINER*> ( Parent() );
-        int clearance = zone->GetFilledPolysUseThickness() ? zone->GetMinThickness() : 0;
+        int clearance = zone->GetFilledPolysUseThickness() ? zone->GetMinThickness() / 2 : 0;
         return m_cachedPoly->ContainsPoint( p, clearance );
     }
 
