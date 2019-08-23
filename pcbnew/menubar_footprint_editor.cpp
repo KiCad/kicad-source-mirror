@@ -50,11 +50,11 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     auto modifiedDocumentCondition = [this]( const SELECTION& sel ) {
         return !GetBoard()->Modules().empty() && GetScreen()->IsModify();
     };
-    auto haveFootprintCondition = [ this ] ( const SELECTION& aSelection ) {
+    auto haveFootprintCondition = [this]( const SELECTION& aSelection ) {
         return GetBoard()->GetFirstModule() != nullptr;
     };
-    auto footprintTargettedCondition = [ this ] ( const SELECTION& aSelection ) {
-        return GetTargetFPID().IsValid();
+    auto footprintTargettedCondition = [this]( const SELECTION& aSelection ) {
+        return !GetTargetFPID().GetLibItemName().empty();
     };
 
     //-- File menu ----------------------------------------------------------
