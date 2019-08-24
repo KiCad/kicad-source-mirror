@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,6 @@
 
 
 #include "pad_tool.h"
-
-#include <pcb_base_edit_frame.h>
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
 #include <view/view.h>
@@ -35,93 +33,11 @@
 #include <board_commit.h>
 #include <dialogs/dialog_push_pad_properties.h>
 #include <tools/pcb_actions.h>
-#include <tools/pcbnew_selection.h>
 #include <tools/selection_tool.h>
 #include <tools/pcb_selection_conditions.h>
 #include <tools/edit_tool.h>
 #include <dialogs/dialog_enum_pads.h>
 #include "pcbnew_id.h"
-
-
-class PAD_CONTEXT_MENU : public ACTION_MENU
-{
-public:
-
-    using SHOW_FUNCTOR = std::function<bool()>;
-
-    PAD_CONTEXT_MENU( bool aEditingFootprint, SHOW_FUNCTOR aHaveGlobalPadSetting ) :
-        ACTION_MENU( true ),
-        m_editingFootprint( aEditingFootprint ),
-        m_haveGlobalPadSettings( std::move( aHaveGlobalPadSetting ) )
-    {
-        SetIcon( pad_xpm );
-        SetTitle( _( "Pads" ) );
-
-        Add( PCB_ACTIONS::copyPadSettings );
-        Add( PCB_ACTIONS::applyPadSettings );
-        Add( PCB_ACTIONS::pushPadSettings );
-
-        // show modedit-specific items
-        if( m_editingFootprint )
-        {
-            AppendSeparator();
-            Add( PCB_ACTIONS::enumeratePads );
-        }
-    }
-
-protected:
-
-    ACTION_MENU* create() const override
-    {
-        return new PAD_CONTEXT_MENU( m_editingFootprint, m_haveGlobalPadSettings );
-    }
-
-private:
-
-    struct ENABLEMENTS
-    {
-        bool canImport;
-        bool canExport;
-        bool canPush;
-    };
-
-    ENABLEMENTS getEnablements( const SELECTION& aSelection )
-    {
-        using S_C = SELECTION_CONDITIONS;
-        ENABLEMENTS enablements;
-
-        auto anyPadSel = S_C::HasType( PCB_PAD_T );
-        auto singlePadSel = S_C::Count( 1 ) && S_C::OnlyType( PCB_PAD_T );
-
-        // Apply pads enabled when any pads selected (it applies to each one
-        // individually), plus need a valid global pad setting
-        enablements.canImport = m_haveGlobalPadSettings() && ( anyPadSel )( aSelection );
-
-        // Copy pads item enabled only when there is a single pad selected
-        // (otherwise how would we know which one to copy?)
-        enablements.canExport = ( singlePadSel )( aSelection );
-
-        // Push pads available when there is a single pad to push from
-        enablements.canPush = ( singlePadSel )( aSelection );
-
-        return enablements;
-    }
-
-    void update() override
-    {
-        auto selTool = getToolManager()->GetTool<SELECTION_TOOL>();
-        const PCBNEW_SELECTION& selection = selTool->GetSelection();
-
-        auto enablements = getEnablements( selection );
-
-        Enable( getMenuId( PCB_ACTIONS::applyPadSettings ), enablements.canImport );
-        Enable( getMenuId( PCB_ACTIONS::copyPadSettings ), enablements.canExport );
-        Enable( getMenuId( PCB_ACTIONS::pushPadSettings ), enablements.canPush );
-    }
-
-    bool m_editingFootprint;
-    SHOW_FUNCTOR m_haveGlobalPadSettings;
-};
 
 
 PAD_TOOL::PAD_TOOL() :
@@ -140,42 +56,25 @@ void PAD_TOOL::Reset( RESET_REASON aReason )
 }
 
 
-bool PAD_TOOL::haveFootprints()
-{
-    auto& board = *getModel<BOARD>();
-    return board.Modules().size() > 0;
-}
-
-
 bool PAD_TOOL::Init()
 {
-    auto ctxMenu = std::make_shared<PAD_CONTEXT_MENU>( EditingModules(),
-                                                       [this]() { return m_padCopied; } );
-    ctxMenu->SetTool( this );
-
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
 
     if( selTool )
     {
-        TOOL_MENU& toolMenu = selTool->GetToolMenu();
-        CONDITIONAL_MENU& menu = toolMenu.GetMenu();
+        // Add context menu entries that are displayed when selection tool is active
+        CONDITIONAL_MENU& menu = selTool->GetToolMenu().GetMenu();
 
-        toolMenu.AddSubMenu( ctxMenu );
+        auto padSel = SELECTION_CONDITIONS::HasType( PCB_PAD_T );
+        auto singlePadSel = SELECTION_CONDITIONS::Count( 1 ) && SELECTION_CONDITIONS::OnlyType( PCB_PAD_T );
 
-        auto canShowMenuCond = [this, ctxMenu] ( const SELECTION& aSel ) {
-            ctxMenu->UpdateAll();
-            return frame()->ToolStackIsEmpty() && haveFootprints() && ctxMenu->HasEnabledItems();
-        };
-
-        // show menu when there is a footprint, and the menu has any items
-        auto showCond = canShowMenuCond &&
-                ( SELECTION_CONDITIONS::HasType( PCB_PAD_T ) || SELECTION_CONDITIONS::Count( 0 ) );
-
-        menu.AddMenu( ctxMenu.get(), showCond, 1000 );
-
-        // we need a separator only when the selection is empty
-        auto separatorCond = canShowMenuCond && SELECTION_CONDITIONS::Count( 0 );
-        menu.AddSeparator( 1000 );
+        menu.AddSeparator( 400 );
+        menu.AddItem( PCB_ACTIONS::createPadFromShapes,  SELECTION_CONDITIONS::NotEmpty, 400 );
+        menu.AddItem( PCB_ACTIONS::explodePadToShapes,   singlePadSel, 400 );
+        menu.AddItem( PCB_ACTIONS::copyPadSettings,      singlePadSel, 400 );
+        menu.AddItem( PCB_ACTIONS::applyPadSettings,     padSel, 400 );
+        menu.AddItem( PCB_ACTIONS::pushPadSettings,      singlePadSel, 400 );
+        menu.AddItem( PCB_ACTIONS::enumeratePads,        SELECTION_CONDITIONS::ShowAlways, 400 );
     }
 
     return true;
@@ -407,14 +306,11 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
             for( int j = 0; j < segments; ++j )
             {
-                wxPoint testpoint( cursorPos.x - j * line_step.x,
-                                   cursorPos.y - j * line_step.y );
+                wxPoint testpoint( cursorPos.x - j * line_step.x, cursorPos.y - j * line_step.y );
                 collector.Collect( board(), types, testpoint, guide );
 
                 for( int i = 0; i < collector.GetCount(); ++i )
-                {
                     selectedPads.push_back( static_cast<D_PAD*>( collector[i] ) );
-                }
             }
 
             selectedPads.unique();

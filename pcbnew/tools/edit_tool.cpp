@@ -153,6 +153,7 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::positionRelative, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::createArray, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::mirror, editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
 
     menu.AddSeparator();
     menu.AddItem( ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty );
@@ -160,12 +161,6 @@ bool EDIT_TOOL::Init()
     // Selection tool handles the context menu for some other tools, such as the Picker.
     // Don't add things like Paste when another tool is active.
     menu.AddItem( ACTIONS::paste, noActiveToolCondition );
-
-    // Mirror only available in modedit
-    menu.AddSeparator();
-    menu.AddItem( PCB_ACTIONS::mirror, editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::createPadFromShapes, editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::explodePadToShapes, editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
 
     // Footprint actions
     menu.AddSeparator();
