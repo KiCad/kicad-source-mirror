@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016 - 2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016 - 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +23,12 @@
  */
 
 #include <fctsys.h>
-#include <macros.h>
 #include <gr_basic.h>
 #include <bitmaps.h>
 #include <sch_painter.h>
 #include <lib_edit_frame.h>
 #include <class_libentry.h>
 #include <lib_pin.h>
-
 #include <dialog_lib_edit_pin.h>
 #include <confirm.h>
 #include <widgets/tab_traversal.h>
@@ -62,6 +60,8 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( LIB_EDIT_FRAME* parent, LIB_PIN* aPin 
     for ( unsigned ii = 0; ii < orientationNames.GetCount(); ii++ )
         m_choiceOrientation->Insert( orientationNames[ii], KiBitmap( orientationBitmaps[ii] ), ii );
 
+    // We can't set the tab order through wxWidgets due to shortcomings in their mnemonics
+    // implementation on MSW
     m_tabOrder =  {
         m_textPinName,
         m_textPinNumber,
@@ -75,7 +75,9 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( LIB_EDIT_FRAME* parent, LIB_PIN* aPin 
         m_numberSizeCtrl,
         m_checkApplyToAllParts,
       	m_checkApplyToAllConversions,
-      	m_checkShow
+      	m_checkShow,
+      	m_sdbSizerButtonsCancel,
+      	m_sdbSizerButtonsOK
     };
 
     m_sdbSizerButtonsOK->SetDefault();
@@ -84,9 +86,8 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( LIB_EDIT_FRAME* parent, LIB_PIN* aPin 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 
-    // On some windows manager (Unity, XFCE), this dialog is
-    // not always raised, depending on this dialog is run.
-    // Force it to be raised
+    // On some window managers (Unity, XFCE) the dialog is not always raised, depending on
+    // how it is is run.
     Raise();
 }
 
