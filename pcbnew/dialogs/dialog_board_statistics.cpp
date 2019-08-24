@@ -67,7 +67,11 @@ struct DIALOG_BOARD_STATISTICS_SAVED_STATE
 static DIALOG_BOARD_STATISTICS_SAVED_STATE s_savedDialogState;
 
 DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame ) :
-        DIALOG_BOARD_STATISTICS_BASE( aParentFrame )
+        DIALOG_BOARD_STATISTICS_BASE( aParentFrame ),
+        m_boardWidth( 0 ),
+        m_boardHeight( 0 ),
+        m_boardArea( 0.0 ),
+        m_hasOutline( false )
 {
     m_parentFrame = aParentFrame;
 
@@ -263,12 +267,8 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
             // If checkbox "subtract holes" is checked
             if( m_checkBoxSubtractHoles->GetValue() )
             {
-                int holesCount = polySet.HoleCount( i );
-
-                for( int j = 0; j < holesCount; j++ )
-                {
-                    m_boardArea -= abs( polySet.Hole( i, j ).Area() );
-                }
+                for( int j = 0; j < polySet.HoleCount( i ); j++ )
+                    m_boardArea -= std::fabs( polySet.Hole( i, j ).Area() );
             }
 
             if( GetUserUnits() == INCHES )
@@ -286,6 +286,7 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
                 boundingBoxCreated = true;
             }
         }
+
         m_boardWidth = bbox.GetWidth();
         m_boardHeight = bbox.GetHeight();
     }
