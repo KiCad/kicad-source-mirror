@@ -406,6 +406,9 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
     {
         delete m_my_part;
         m_my_part = aPart;
+
+        // Datasheet field is special; copy it to the root alias docfilename
+        m_my_part->GetField( DATASHEET )->SetText( aPart->GetRootAlias()->GetDocFileName() );
     }
 
     // select the current component in the tree widget

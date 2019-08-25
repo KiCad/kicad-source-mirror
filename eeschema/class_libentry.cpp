@@ -1112,22 +1112,34 @@ void LIB_PART::RemoveAllAliases()
 }
 
 
-LIB_ALIAS* LIB_PART::GetAlias( const wxString& aName )
+LIB_ALIAS* LIB_PART::GetAlias( const wxString& aName ) const
 {
     wxCHECK2_MSG( !aName.IsEmpty(), return NULL,
                   wxT( "Cannot get alias with an empty name.  Bad programmer!" ) );
 
-    for( size_t i = 0; i < m_aliases.size(); i++ )
+    for( LIB_ALIAS* alias : m_aliases)
     {
-        if( aName == m_aliases[i]->GetName() )
-            return m_aliases[i];
+        if( alias->GetName() == aName )
+            return alias;
     }
 
     return NULL;
 }
 
 
-LIB_ALIAS* LIB_PART::GetAlias( size_t aIndex )
+LIB_ALIAS* LIB_PART::GetRootAlias() const
+{
+    for( LIB_ALIAS* alias : m_aliases )
+    {
+        if( alias->IsRoot() )
+            return alias;
+    }
+
+    return NULL;
+}
+
+
+LIB_ALIAS* LIB_PART::GetAlias( size_t aIndex ) const
 {
     wxCHECK2_MSG( aIndex < m_aliases.size(), return NULL,
                   wxT( "Illegal alias list index, bad programmer." ) );

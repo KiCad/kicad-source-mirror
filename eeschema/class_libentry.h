@@ -281,8 +281,9 @@ public:
 
     size_t GetAliasCount() const    { return m_aliases.size(); }
 
-    LIB_ALIAS* GetAlias( size_t aIndex );
-    LIB_ALIAS* GetAlias( const wxString& aName );
+    LIB_ALIAS* GetAlias( size_t aIndex ) const;
+    LIB_ALIAS* GetAlias( const wxString& aName ) const;
+    LIB_ALIAS* GetRootAlias() const;
 
     timestamp_t GetDateLastEdition() const { return m_dateLastEdition; }
 

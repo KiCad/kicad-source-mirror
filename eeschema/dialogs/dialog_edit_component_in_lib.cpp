@@ -330,7 +330,6 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
 
     // Datasheet field is special; copy it to the root alias docfilename
     rootAlias->SetDocFileName( m_fields->at( DATASHEET ).GetText() );
-    m_fields->at( DATASHEET ).SetText( wxEmptyString );
 
     m_libEntry->SetFields( *m_fields );
 
