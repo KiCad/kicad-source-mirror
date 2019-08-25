@@ -848,7 +848,8 @@ public:
      */
     void Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT& aCommit,
                           bool deleteExtraTexts = true,
-                          bool resetTextLayers = true, bool resetTextEffects = true );
+                          bool resetTextLayers = true, bool resetTextEffects = true,
+                          bool reset3DModels = true );
 
     // loading modules: see PCB_BASE_FRAME
 

@@ -349,7 +349,8 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processModule( MODULE* aModule, const LIB_ID& a
     m_parent->Exchange_Module( aModule, newModule, m_commit,
                                m_removeExtraBox->GetValue(),
                                m_resetTextItemLayers->GetValue(),
-                               m_resetTextItemEffects->GetValue() );
+                               m_resetTextItemEffects->GetValue(),
+                               m_reset3DModels->GetValue() );
 
     if( aModule == m_currentModule )
         m_currentModule = newModule;
@@ -399,7 +400,7 @@ TEXTE_MODULE* getMatchingTextItem( TEXTE_MODULE* aRefItem, MODULE* aModule )
 
 void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT& aCommit,
                                       bool deleteExtraTexts, bool resetTextLayers,
-                                      bool resetTextEffects )
+                                      bool resetTextEffects, bool reset3DModels )
 {
     aDest->SetParent( GetBoard() );
 
@@ -456,6 +457,10 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
                 aDest->Add( new TEXTE_MODULE( *srcItem ) );
         }
     }
+
+    // Copy 3D model settings in accordance with the reset* flag
+    if( !reset3DModels )
+        aDest->Models() = aSrc->Models();  // Linked list of 3D models.
 
     // Updating other parameters
     aDest->SetTimeStamp( aSrc->GetTimeStamp() );

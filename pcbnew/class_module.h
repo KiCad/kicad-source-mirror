@@ -655,41 +655,35 @@ public:
 #endif
 
 private:
+    DRAWINGS       m_drawings;          // BOARD_ITEMs for drawings on the board, owned by pointer.
+    PADS           m_pads;              // D_PAD items, owned by pointer
+    std::list<MODULE_3D_SETTINGS> m_3D_Drawings;  // Linked list of 3D models.
 
-    /// BOARD_ITEMs for drawings on the board, owned by pointer.
-    DRAWINGS                m_drawings;
+    double         m_Orient;            // Orientation in tenths of a degree, 900=90.0 degrees.
+    wxPoint        m_Pos;               // Position of module on the board in internal units.
+    TEXTE_MODULE*  m_Reference;         // Component reference designator value (U34, R18..)
+    TEXTE_MODULE*  m_Value;             // Component value (74LS00, 22K..)
+    LIB_ID         m_fpid;              // The #LIB_ID of the MODULE.
+    int            m_Attributs;         // Flag bits ( see Mod_Attribut )
+    int            m_ModuleStatus;      // For autoplace: flags (LOCKED, AUTOPLACED)
+    EDA_RECT       m_BoundaryBox;       // Bounding box : coordinates on board, real orientation.
 
-    /// D_PAD items, owned by pointer
-    PADS                    m_pads;
-
-    std::list<MODULE_3D_SETTINGS> m_3D_Drawings;  ///< Linked list of 3D models.
-    double m_Orient;                    ///< Orientation in tenths of a degree, 900=90.0 degrees.
-    wxPoint m_Pos;                      ///< Position of module on the board in internal units.
-    TEXTE_MODULE* m_Reference;          ///< Component reference designator value (U34, R18..)
-    TEXTE_MODULE* m_Value;              ///< Component value (74LS00, 22K..)
-    LIB_ID m_fpid;                      ///< The #LIB_ID of the MODULE.
-    int m_Attributs;                    ///< Flag bits ( see Mod_Attribut )
-    int m_ModuleStatus;                 ///< For autoplace: flags (LOCKED, AUTOPLACED)
-    EDA_RECT m_BoundaryBox;             ///< Bounding box : coordinates on board, real orientation.
-
-    // The final margin is the sum of these 2 values
-    int m_ThermalWidth;
-    int m_ThermalGap;
-    wxString m_Doc;             ///< File name and path for documentation file.
-    wxString m_KeyWord;         ///< Search keywords to find module in library.
-    wxString m_Path;
     ZoneConnection m_ZoneConnection;
-    timestamp_t m_LastEditTime;
-    int m_arflag;           ///< Use to trace ratsnest and auto routing.
-    timestamp_t m_Link;     ///< Temporary logical link used during editing
-    int m_CntRot90;         ///< Horizontal automatic placement cost ( 0..10 ).
-    int m_CntRot180;        ///< Vertical automatic placement cost ( 0..10 ).
+    int            m_ThermalWidth;
+    int            m_ThermalGap;
+    int            m_LocalClearance;
+    int            m_LocalSolderMaskMargin;       // Solder mask margin
+    int            m_LocalSolderPasteMargin;      // Solder paste margin absolute value
+    double         m_LocalSolderPasteMarginRatio; // Solder mask margin ratio value of pad size
 
-    // Local tolerances. When zero, this means the corresponding netclass value is used.
-    int    m_LocalClearance;
-    int    m_LocalSolderMaskMargin;         ///< Solder mask margin
-    int    m_LocalSolderPasteMargin;        ///< Solder paste margin absolute value
-    double m_LocalSolderPasteMarginRatio;   ///< Solder mask margin ratio value of pad size
+    wxString       m_Doc;               // File name and path for documentation file.
+    wxString       m_KeyWord;           // Search keywords to find module in library.
+    wxString       m_Path;
+    timestamp_t    m_LastEditTime;
+    int            m_arflag;            // Use to trace ratsnest and auto routing.
+    timestamp_t    m_Link;              // Temporary logical link used during editing
+    int            m_CntRot90;          // Horizontal automatic placement cost ( 0..10 ).
+    int            m_CntRot180;         // Vertical automatic placement cost ( 0..10 ).
 
     wxArrayString* m_initial_comments;      ///< leading s-expression comments in the module,
                                             ///< lazily allocated only if needed for speed
