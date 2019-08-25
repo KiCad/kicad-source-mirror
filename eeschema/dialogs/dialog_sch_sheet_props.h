@@ -48,6 +48,8 @@ public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    void OnBrowseClicked( wxCommandEvent& event ) override;
+
     const wxString GetFileName();
     wxString GetSheetName() { return m_textSheetName->GetValue(); }
     int GetFileNameTextSize() { return m_filenameTextSize.GetValue(); }

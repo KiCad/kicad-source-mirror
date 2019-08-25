@@ -778,6 +778,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                          || evt->IsAction( &EE_ACTIONS::finishSheet ) ) )
         {
             m_view->ClearPreview();
+            getViewControls()->SetAutoPan( false );
+            getViewControls()->CaptureCursor( false );
 
             if( m_frame->EditSheet( (SCH_SHEET*)sheet, g_CurrentSheet, nullptr ) )
             {
@@ -812,7 +814,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
         // Enable autopanning and cursor capture only when there is a sheet to be placed
         getViewControls()->SetAutoPan( sheet != nullptr );
-        getViewControls()->CaptureCursor( sheet != nullptr);
+        getViewControls()->CaptureCursor( sheet != nullptr );
     }
 
     return 0;

@@ -23,18 +23,15 @@
  */
 
 #include <dialog_sch_sheet_props.h>
-
+#include <kiface_i.h>
 #include <wx/string.h>
-
 #include <confirm.h>
 #include <validators.h>
 #include <wildcards_and_files_ext.h>
-
 #include <widgets/tab_traversal.h>
-
 #include <sch_edit_frame.h>
 #include <sch_sheet.h>
-
+#include <bitmaps.h>
 
 DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* parent, SCH_SHEET* aSheet ) :
     DIALOG_SCH_SHEET_PROPS_BASE( parent ),
@@ -46,8 +43,9 @@ DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* parent, SCH_SHEE
     m_textFileName->SetFocus();
     m_sdbSizer1OK->SetDefault();
 
-    // Normally, the file and sheet name are the "main" edited fields
-    // so put them first
+    m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
+
+    // Normally, the file and sheet name are the "main" edited fields so put them first
     KIUI::SetControlsTabOrder( {
             m_textFileName,
             m_textSheetName,
@@ -60,11 +58,10 @@ DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* parent, SCH_SHEE
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 
-    /* This ugly hack fixes a bug in wxWidgets 2.8.7 and likely earlier
-     * versions for the flex grid sizer in wxGTK that prevents the last
-     * column from being sized correctly.  It doesn't cause any problems
-     * on win32 so it doesn't need to wrapped in ugly #ifdef __WXGTK__
-     * #endif.
+    /*
+     * This ugly hack fixes a bug in wxWidgets 2.8.7 and likely earlier versions for the flex
+     * grid sizer in wxGTK that prevents the last column from being sized correctly.  It doesn't
+     * appear to cause any problems on other platforms so we don't use conditional compilation.
      * Still present in wxWidgets 3.0.2
      */
     Layout();
@@ -119,6 +116,25 @@ bool DIALOG_SCH_SHEET_PROPS::TransferDataFromWindow()
     }
 
     return true;
+}
+
+
+void DIALOG_SCH_SHEET_PROPS::OnBrowseClicked( wxCommandEvent& event )
+{
+    // Build the absolute path of current sheet to preselect it when opening the dialog.
+    wxString    path = Prj().AbsolutePath( m_textFileName->GetValue() );
+    wxFileName  fn( path );
+
+    wxFileDialog fileDialog( this, _( "Sheet File" ), fn.GetPath(), fn.GetFullName(),
+                             SchematicFileExtension, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    if( fileDialog.ShowModal() == wxID_OK )
+    {
+        fn.Assign( fileDialog.GetPath() );
+        fn.MakeRelativeTo( Prj().GetProjectPath() );
+
+        m_textFileName->ChangeValue( fn.GetFullPath() );
+    }
 }
 
 
