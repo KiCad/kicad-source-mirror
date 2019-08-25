@@ -659,12 +659,13 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& p
     m_plotter->SetColor( getColor( aZone->GetLayer() ) );
 
     /* Plot all filled areas: filled areas have a filled area and a thick
-     * outline we must plot the filled area itself ( as a filled polygon
-     * OR a set of segments ) and plot the thick outline itself,
-     * if the thickness has meaning (at least is > 1)
+     * outline (depending on the fill area option we must plot the filled area itself
+     * and plot the thick outline itself, if the thickness has meaning (at least is > 1)
      *
      * in non filled mode the outline is plotted, but not the filling items
      */
+    int outline_thickness = aZone->GetFilledPolysUseThickness() ? aZone->GetMinThickness() : 0;
+
     for( auto ic = polysList.CIterate(); ic; ++ic )
     {
         wxPoint pos( ic->x, ic->y );
@@ -677,8 +678,6 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& p
                 cornerList.push_back( cornerList[0] );
 
             // Plot the current filled area and its outline
-            int outline_thickness = aZone->GetFilledPolysUseThickness() ? aZone->GetMinThickness() : 0;
-
             if( GetPlotMode() == FILLED )
             {
                 m_plotter->PlotPoly( cornerList, FILLED_SHAPE, outline_thickness, &gbr_metadata );

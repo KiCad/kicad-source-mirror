@@ -8,7 +8,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -580,6 +580,19 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 continue;
 
             if( candidate->GetNetCode() != zone->GetNetCode() )
+                continue;
+
+            // Merging zones of the same net can be done only for areas
+            // having compatible settings for drawings:
+            // use or not outline thickness, and if using outline thickness,
+            // having the same thickness
+            // becuase after merging only one outline thickness is used
+            if( candidate->GetFilledPolysUseThickness() != zone->GetFilledPolysUseThickness() )
+                // Should not happens, because usually the same option is used for filling
+                continue;
+
+            if( zone->GetFilledPolysUseThickness() &&
+                ( candidate->GetMinThickness() != zone->GetMinThickness() ) )
                 continue;
 
             plotted.insert( candidate );
