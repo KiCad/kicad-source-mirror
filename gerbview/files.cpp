@@ -269,10 +269,7 @@ bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
     wxString msg;
     WX_STRING_REPORTER reporter( &msg );
 
-    // Show progress dialog after 1 second of loading
-    static const long long progressShowDelay = 1000;
-
-    auto startTime = wxGetUTCTimeMillis();
+    // Create progress dialog (only used if more than 1 file to load
     std::unique_ptr<WX_PROGRESS_REPORTER> progress = nullptr;
 
     for( unsigned ii = 0; ii < aFilenameList.GetCount(); ii++ )
@@ -294,19 +291,22 @@ bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
             continue;
         }
 
-        if( !progress && wxGetUTCTimeMillis() - startTime > progressShowDelay )
+        m_lastFileName = filename.GetFullPath();
+
+        if( !progress && ( aFilenameList.GetCount() > 1 ) )
         {
             progress = std::make_unique<WX_PROGRESS_REPORTER>( this,
                             _( "Loading Gerber files..." ), 1, false );
             progress->SetMaxProgress( aFilenameList.GetCount() - 1 );
-            progress->Report( _("Loading Gerber files..." ) );
+            progress->Report( wxString::Format( _("Loading %d/%d %s" ), ii+1,
+                                            aFilenameList.GetCount(), m_lastFileName ) );
         }
         else if( progress )
         {
+            progress->Report( wxString::Format( _("Loading %d/%d %s" ), ii+1,
+                                            aFilenameList.GetCount(), m_lastFileName ) );
             progress->KeepRefreshing();
         }
-
-        m_lastFileName = filename.GetFullPath();
 
         SetActiveLayer( layer, false );
 
