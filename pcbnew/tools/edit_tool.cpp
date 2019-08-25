@@ -283,7 +283,6 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
     controls->ShowCursor( true );
     controls->SetAutoPan( true );
 
-    auto curr_item = static_cast<BOARD_ITEM*>( selection.Front() );
     std::vector<BOARD_ITEM*> sel_items;
 
     for( EDA_ITEM* item : selection )

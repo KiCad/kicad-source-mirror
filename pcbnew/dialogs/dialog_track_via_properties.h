@@ -29,7 +29,6 @@
 
 class PCBNEW_SELECTION;
 class COMMIT;
-class NET_SELECTOR_COMBO_POPUP;
 class PCB_BASE_FRAME;
 class D_PAD;
 
@@ -43,11 +42,11 @@ public:
 
 private:
     void onTrackNetclassCheck( wxCommandEvent& aEvent ) override;
-    void onWidthSelect( wxCommandEvent& aEvent );
-    void onWidthEdit( wxCommandEvent& aEvent );
+    void onWidthSelect( wxCommandEvent& aEvent ) override;
+    void onWidthEdit( wxCommandEvent& aEvent ) override;
     void onViaNetclassCheck( wxCommandEvent& aEvent ) override;
-    void onViaSelect( wxCommandEvent& aEvent );
-    void onViaEdit( wxCommandEvent& aEvent );
+    void onViaSelect( wxCommandEvent& aEvent ) override;
+    void onViaEdit( wxCommandEvent& aEvent ) override;
 
     bool confirmPadChange( const std::vector<D_PAD*>& connectedPads );
 

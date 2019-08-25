@@ -30,8 +30,6 @@
 #include <pcb_edit_frame.h>
 #include <confirm.h>
 #include <connectivity/connectivity_data.h>
-#include <class_module.h>
-#include <widgets/net_selector.h>
 #include <board_commit.h>
 
 DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent,
@@ -45,11 +43,11 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     m_trackStartY( aParent, m_TrackStartYLabel, m_TrackStartYCtrl, m_TrackStartYUnit ),
     m_trackEndX( aParent, m_TrackEndXLabel, m_TrackEndXCtrl, m_TrackEndXUnit ),
     m_trackEndY( aParent, m_TrackEndYLabel, m_TrackEndYCtrl, m_TrackEndYUnit ),
-    m_trackWidth( aParent, m_TrackWidthLabel, m_TrackWidthCtrl, m_TrackWidthUnit, true ),
+    m_trackWidth( aParent, m_TrackWidthLabel, m_TrackWidthCtrl, m_TrackWidthUnit, true, false ),
     m_viaX( aParent, m_ViaXLabel, m_ViaXCtrl, m_ViaXUnit ),
     m_viaY( aParent, m_ViaYLabel, m_ViaYCtrl, m_ViaYUnit ),
-    m_viaDiameter( aParent, m_ViaDiameterLabel, m_ViaDiameterCtrl, m_ViaDiameterUnit, true ),
-    m_viaDrill( aParent, m_ViaDrillLabel, m_ViaDrillCtrl, m_ViaDrillUnit, true ),
+    m_viaDiameter( aParent, m_ViaDiameterLabel, m_ViaDiameterCtrl, m_ViaDiameterUnit, true, false ),
+    m_viaDrill( aParent, m_ViaDrillLabel, m_ViaDrillCtrl, m_ViaDrillUnit, true, false ),
     m_tracks( false ),
     m_vias( false )
 {
@@ -222,11 +220,6 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
         m_DesignRuleViasCtrl->SetSelection( viaSelection );
 
-        m_DesignRuleViasCtrl->Connect( wxEVT_CHOICE, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onViaSelect ), NULL, this );
-        m_ViaDiameterCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onViaEdit ), NULL, this );
-        m_ViaDrillCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onViaEdit ), NULL, this );
-        m_ViaTypeChoice->Connect( wxEVT_CHOICE, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onViaEdit ), NULL, this );
-
         SetInitialFocus( m_ViaDiameterCtrl );
 
         m_ViaTypeChoice->Enable();
@@ -264,9 +257,6 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         }
 
         m_DesignRuleWidthsCtrl->SetSelection( widthSelection );
-
-        m_DesignRuleWidthsCtrl->Connect( wxEVT_CHOICE, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onWidthSelect ), NULL, this );
-        m_TrackWidthCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onWidthEdit ), NULL, this );
 
         SetInitialFocus( m_TrackWidthCtrl );
     }
@@ -557,12 +547,13 @@ void DIALOG_TRACK_VIA_PROPERTIES::onTrackNetclassCheck( wxCommandEvent& aEvent )
 void DIALOG_TRACK_VIA_PROPERTIES::onWidthSelect( wxCommandEvent& aEvent )
 {
     m_TrackWidthCtrl->ChangeValue( m_DesignRuleWidthsCtrl->GetStringSelection() );
+    m_TrackWidthCtrl->SelectAll();
 }
 
 
 void DIALOG_TRACK_VIA_PROPERTIES::onWidthEdit( wxCommandEvent& aEvent )
 {
-    m_DesignRuleWidthsCtrl->SetSelection( wxNOT_FOUND );
+    m_DesignRuleWidthsCtrl->SetStringSelection( m_TrackWidthCtrl->GetValue() );
 }
 
 
