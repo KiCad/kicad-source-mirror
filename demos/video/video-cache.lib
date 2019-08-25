@@ -661,7 +661,7 @@ ENDDEF
 #
 # video_schlib_CONN_1
 #
-DEF ~video_schlib_CONN_1 P 0 30 N N 1 F N
+DEF video_schlib_CONN_1 P 0 30 N N 1 F N
 F0 "P" 80 0 40 H V L CNN
 F1 "video_schlib_CONN_1" 0 55 30 H I C CNN
 F2 "" 0 0 60 H V C CNN
@@ -831,7 +831,7 @@ ENDDEF
 #
 # video_schlib_GND
 #
-DEF ~video_schlib_GND #PWR 0 0 Y Y 1 F P
+DEF video_schlib_GND #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 0 30 H I C CNN
 F1 "video_schlib_GND" 0 -70 30 H I C CNN
 F2 "" 0 0 60 H V C CNN
@@ -1203,7 +1203,7 @@ X VCC 30 0 1900 0 D 60 60 1 1 W N
 X A8 31 -800 1000 300 R 60 60 1 1 I
 X A9 32 -800 900 300 R 60 60 1 1 I
 X RAS2 34 -800 100 300 R 60 60 1 1 I I
-X GND 39 0 -1950 0 U 60 60 1 1 W N
+X GND 39 0 -1900 0 U 60 60 1 1 W N
 X DQ1 4 800 1700 300 L 60 60 1 1 T
 X CAS0 40 -800 -200 300 R 60 60 1 1 I I
 X CAS1 41 -800 -300 300 R 60 60 1 1 I I

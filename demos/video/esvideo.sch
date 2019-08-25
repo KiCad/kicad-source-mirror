@@ -1,6 +1,6 @@
-EESchema Schematic File Version 4
+EESchema Schematic File Version 5
 LIBS:video-cache
-EELAYER 29 0
+EELAYER 30 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
@@ -1267,4 +1267,7 @@ Wire Wire Line
 	5550 2200 5650 2200
 Wire Wire Line
 	5450 2200 5550 2200
+Connection ~ 10550 2750
+Connection ~ 4450 4200
+Connection ~ 4450 3800
 $EndSCHEMATC

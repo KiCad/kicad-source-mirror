@@ -1,6 +1,6 @@
-EESchema Schematic File Version 4
+EESchema Schematic File Version 5
 LIBS:video-cache
-EELAYER 29 0
+EELAYER 30 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
@@ -1748,4 +1748,12 @@ F 3 "" H 3600 3000 60  0001 C CNN
 	1    3600 3000
 	1    0    0    -1  
 $EndComp
+Connection ~ 11300 7150
+Connection ~ 8500 7150
+Connection ~ 5650 7150
+Connection ~ 2800 7150
+Connection ~ 11300 2700
+Connection ~ 8500 2700
+Connection ~ 5650 2700
+Connection ~ 2800 2700
 $EndSCHEMATC
