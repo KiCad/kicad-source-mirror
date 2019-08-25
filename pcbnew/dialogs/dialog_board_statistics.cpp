@@ -213,23 +213,16 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
     }
 
     // Get vias count
-    VIA* via;
     for( auto& track : board->Tracks() )
     {
-        if( track->Type() == PCB_VIA_T )
+        if( auto via = dyn_cast<VIA*>( track ) )
         {
-            via = dynamic_cast<VIA*>( track );
-
-            // We have to check if cast was successful
-            if( via )
+            for( auto& type : m_viasTypes )
             {
-                for( auto& type : m_viasTypes )
+                if( via->GetViaType() == type.attribute )
                 {
-                    if( via->GetViaType() == type.attribute )
-                    {
-                        type.qty++;
-                        break;
-                    }
+                    type.qty++;
+                    break;
                 }
             }
         }
@@ -257,12 +250,12 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
 
     if( m_hasOutline )
     {
-        m_boardArea = 0;
-        int outlinesCount = polySet.OutlineCount();
-        for( int i = 0; i < outlinesCount; i++ )
+        m_boardArea = 0.0;
+
+        for( int i = 0; i < polySet.OutlineCount(); i++ )
         {
             SHAPE_LINE_CHAIN& outline = polySet.Outline( i );
-            m_boardArea += abs( outline.Area() );
+            m_boardArea += std::fabs( outline.Area() );
 
             // If checkbox "subtract holes" is checked
             if( m_checkBoxSubtractHoles->GetValue() )
@@ -270,11 +263,6 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
                 for( int j = 0; j < polySet.HoleCount( i ); j++ )
                     m_boardArea -= std::fabs( polySet.Hole( i, j ).Area() );
             }
-
-            if( GetUserUnits() == INCHES )
-                m_boardArea /= ( IU_PER_MILS * IU_PER_MILS * 1000000 );
-            else
-                m_boardArea /= ( IU_PER_MM * IU_PER_MM );
 
             if( boundingBoxCreated )
             {
@@ -286,6 +274,11 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
                 boundingBoxCreated = true;
             }
         }
+
+        if( GetUserUnits() == INCHES )
+            m_boardArea /= ( IU_PER_MILS * IU_PER_MILS * 1000000 );
+        else
+            m_boardArea /= ( IU_PER_MM * IU_PER_MM );
 
         m_boardWidth = bbox.GetWidth();
         m_boardHeight = bbox.GetHeight();
@@ -453,7 +446,7 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& event )
 
     // We will save data about components in the table.
     // We have to calculate column widths
-    size_t   colsWidth[4];
+    int      colsWidth[4];
     wxString columns[4] = { "", _( "Front Side" ), _( "Back Side" ), _( "Total" ) };
     wxString tmp;
 
@@ -466,18 +459,18 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& event )
     for( auto& type : m_componentsTypes )
     {
         // Get maximum width for left label column
-        colsWidth[0] = std::max( type.title.size(), colsWidth[0] );
+        colsWidth[0] = std::max<int>( type.title.size(), colsWidth[0] );
         frontTotal += type.frontSideQty;
         backTotal += type.backSideQty;
     }
 
     // Get maximum width for other columns
     tmp.Printf( "%d", frontTotal );
-    colsWidth[1] = std::max( tmp.size(), colsWidth[1] );
+    colsWidth[1] = std::max<int>( tmp.size(), colsWidth[1] );
     tmp.Printf( "%d", backTotal );
-    colsWidth[2] = std::max( tmp.size(), colsWidth[2] );
+    colsWidth[2] = std::max<int>( tmp.size(), colsWidth[2] );
     tmp.Printf( "%d", frontTotal + backTotal );
-    colsWidth[3] = std::max( tmp.size(), colsWidth[3] );
+    colsWidth[3] = std::max<int>( tmp.size(), colsWidth[3] );
 
     //Write components amount to file
     msg << "\n";
