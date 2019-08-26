@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -215,7 +215,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_buttonReport = new wxButton( this, wxID_ANY, _("Generate Report File"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonReport = new wxButton( this, wxID_ANY, _("Generate Report File..."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonsSizer->Add( m_buttonReport, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
