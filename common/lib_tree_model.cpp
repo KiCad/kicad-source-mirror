@@ -87,13 +87,13 @@ void LIB_TREE_NODE::AssignIntrinsicRanks( bool presorted )
 void LIB_TREE_NODE::SortNodes()
 {
     std::sort( Children.begin(), Children.end(),
-            []( std::unique_ptr<LIB_TREE_NODE> const& a, std::unique_ptr<LIB_TREE_NODE> const& b )
-                { return Compare( *a, *b ) > 0; } );
+               []( std::unique_ptr<LIB_TREE_NODE>& a, std::unique_ptr<LIB_TREE_NODE>& b )
+               {
+                   return Compare( *a, *b ) > 0;
+               } );
 
-    for( auto& node: Children )
-    {
+    for( std::unique_ptr<LIB_TREE_NODE>& node: Children )
         node->SortNodes();
-    }
 }
 
 

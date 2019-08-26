@@ -299,7 +299,6 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
 std::string PLACE_FILE_EXPORTER::GenReportData()
 {
     std::string buffer;
-    wxPoint  module_pos;
 
     m_place_Offset = wxPoint( 0, 0 );
 
@@ -336,46 +335,69 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
     buffer += "$EndBOARD\n\n";
 
-    for( auto Module : m_board->Modules() )
+    std::vector<MODULE*> sortedModules;
+
+    for( MODULE* module : m_board->Modules() )
+        sortedModules.push_back( module );
+
+    std::sort( sortedModules.begin(), sortedModules.end(),
+               []( MODULE* a, MODULE* b ) -> bool
+               {
+                   return StrNumCmp( a->GetReference(), b->GetReference(), true ) < 0;
+               });
+
+    for( MODULE* module : sortedModules )
     {
-        sprintf( line, "$MODULE %s\n", EscapedUTF8( Module->GetReference() ).c_str() );
+        sprintf( line, "$MODULE %s\n", EscapedUTF8( module->GetReference() ).c_str() );
         buffer += line;
 
-        sprintf( line, "reference %s\n", EscapedUTF8( Module->GetReference() ).c_str() );
-        sprintf( line, "value %s\n", EscapedUTF8( Module->GetValue() ).c_str() );
+        sprintf( line, "reference %s\n", EscapedUTF8( module->GetReference() ).c_str() );
+        sprintf( line, "value %s\n", EscapedUTF8( module->GetValue() ).c_str() );
         sprintf( line, "footprint %s\n",
-                 EscapedUTF8( FROM_UTF8( Module->GetFPID().Format().c_str() ) ).c_str() );
+                 EscapedUTF8( FROM_UTF8( module->GetFPID().Format().c_str() ) ).c_str() );
         buffer += line;
 
         buffer += "attribut";
 
-        if( Module->GetAttributes() & MOD_VIRTUAL )
+        if( module->GetAttributes() & MOD_VIRTUAL )
             buffer += " virtual";
 
-        if( Module->GetAttributes() & MOD_CMS )
+        if( module->GetAttributes() & MOD_CMS )
             buffer += " smd";
 
-        if( ( Module->GetAttributes() & (MOD_VIRTUAL | MOD_CMS) ) == 0 )
+        if(( module->GetAttributes() & ( MOD_VIRTUAL | MOD_CMS) ) == 0 )
             buffer += " none";
 
         buffer += "\n";
 
-        module_pos = Module->GetPosition();
+        wxPoint module_pos = module->GetPosition();
         module_pos -= m_place_Offset;
 
         sprintf( line, "position %9.6f %9.6f  orientation %.2f\n",
-                 module_pos.x * conv_unit, module_pos.y * conv_unit,
-                 Module->GetOrientation() / 10.0 );
+                 module_pos.x * conv_unit,
+                 module_pos.y * conv_unit,
+                 module->GetOrientation() / 10.0 );
         buffer += line;
 
-        if( Module->GetLayer() == F_Cu )
+        if( module->GetLayer() == F_Cu )
             buffer += "layer front\n";
-        else if( Module->GetLayer() == B_Cu )
+        else if( module->GetLayer() == B_Cu )
             buffer += "layer back\n";
         else
             buffer += "layer other\n";
 
-        for( auto pad : Module->Pads() )
+        std::vector<D_PAD*> sortedPads;
+
+        for( D_PAD* pad : module->Pads() )
+            sortedPads.push_back( pad );
+
+        std::sort( sortedPads.begin(), sortedPads.end(),
+                   []( D_PAD* a, D_PAD* b ) -> bool
+                   {
+                       return StrNumCmp( a->GetName(), b->GetName(), true ) < 0;
+                   });
+
+        for( D_PAD* pad : sortedPads )
         {
             sprintf( line, "$PAD \"%s\"\n", TO_UTF8( pad->GetName() ) );
             buffer += line;
@@ -389,26 +411,31 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
                 layer |= 2;
 
             static const char* layer_name[4] = { "nocopper", "back", "front", "both" };
-            sprintf( line, "Shape %s Layer %s\n", TO_UTF8( pad->ShowPadShape() ), layer_name[layer] );
+            sprintf( line, "Shape %s Layer %s\n",
+                     TO_UTF8( pad->ShowPadShape() ),
+                     layer_name[layer] );
             buffer += line;
 
             sprintf( line, "position %9.6f %9.6f  size %9.6f %9.6f  orientation %.2f\n",
-                     pad->GetPos0().x * conv_unit, pad->GetPos0().y * conv_unit,
-                     pad->GetSize().x * conv_unit, pad->GetSize().y * conv_unit,
-                     (pad->GetOrientation() - Module->GetOrientation()) / 10.0 );
+                     pad->GetPos0().x * conv_unit,
+                     pad->GetPos0().y * conv_unit,
+                     pad->GetSize().x * conv_unit,
+                     pad->GetSize().y * conv_unit,
+                     ( pad->GetOrientation() - module->GetOrientation()) / 10.0 );
             buffer += line;
 
             sprintf( line, "drill %9.6f\n", pad->GetDrillSize().x * conv_unit );
             buffer += line;
 
             sprintf( line, "shape_offset %9.6f %9.6f\n",
-                     pad->GetOffset().x * conv_unit, pad->GetOffset().y * conv_unit );
+                     pad->GetOffset().x * conv_unit,
+                     pad->GetOffset().y * conv_unit );
             buffer += line;
 
             buffer += "$EndPAD\n";
         }
 
-        sprintf( line, "$EndMODULE  %s\n\n", TO_UTF8 (Module->GetReference() ) );
+        sprintf( line, "$EndMODULE  %s\n\n", TO_UTF8 ( module->GetReference() ) );
         buffer += line;
     }
 
