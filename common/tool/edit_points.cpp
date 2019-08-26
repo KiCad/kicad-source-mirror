@@ -37,30 +37,27 @@ bool EDIT_POINT::WithinPoint( const VECTOR2I& aPoint, unsigned int aSize ) const
 }
 
 
-EDIT_POINTS::EDIT_POINTS( EDA_ITEM* aParent ) :
-    EDA_ITEM( NOT_USED ), m_parent( aParent )
+EDIT_POINTS::EDIT_POINTS( EDA_ITEM* aParent )
+        : EDA_ITEM( NOT_USED ), m_parent( aParent ), m_allowPoints( true )
 {
 }
 
 
 EDIT_POINT* EDIT_POINTS::FindPoint( const VECTOR2I& aLocation, KIGFX::VIEW *aView ) // fixme: ugly
 {
-    float size = aView->ToWorld( EDIT_POINT::POINT_SIZE );
+    unsigned size = std::abs<int>( KiROUND( aView->ToWorld( EDIT_POINT::POINT_SIZE ) ) );
 
-    std::deque<EDIT_POINT>::iterator pit, pitEnd;
-    for( pit = m_points.begin(), pitEnd = m_points.end(); pit != pitEnd; ++pit )
+    if( m_allowPoints )
     {
-        EDIT_POINT& point = *pit;
-
-        if( point.WithinPoint( aLocation, size ) )
-            return &point;
+        for( auto& point : m_points )
+        {
+            if( point.WithinPoint( aLocation, size ) )
+                return &point;
+        }
     }
 
-    std::deque<EDIT_LINE>::iterator lit, litEnd;
-    for( lit = m_lines.begin(), litEnd = m_lines.end(); lit != litEnd; ++lit )
+    for( auto& line : m_lines )
     {
-        EDIT_LINE& line = *lit;
-
         if( line.WithinPoint( aLocation, size ) )
             return &line;
     }

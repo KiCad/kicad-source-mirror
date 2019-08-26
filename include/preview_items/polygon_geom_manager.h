@@ -95,6 +95,11 @@ public:
      */
     void SetLeaderMode( LEADER_MODE aMode );
 
+    LEADER_MODE GetLeaderMode() const
+    {
+        return m_leaderMode;
+    }
+
     /**
      * Enables/disables self-intersecting polygons.
      * @param aEnabled true if self-intersecting polygons are enabled.

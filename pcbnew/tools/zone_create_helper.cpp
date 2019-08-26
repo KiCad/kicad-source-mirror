@@ -278,6 +278,22 @@ void ZONE_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
         for( int i = 0; i < finalPoints.PointCount(); ++i )
             outline->Append( finalPoints.CPoint( i ) );
 
+        // In DEG45 mode, we may have intermediate points in the leader that should be
+        // included as they are shown in the preview.  These typically maintain the
+        // 45 constraint
+        if( aMgr.GetLeaderMode() == POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 )
+        {
+            auto pts = aMgr.GetLeaderLinePoints();
+
+            if( outline->TotalVertices() > 0 )
+                outline->RemoveVertex( outline->TotalVertices() - 1 );
+
+            // The first 2 points of the leader are the continuation of the previous segment
+            // The third point is where it intersects with the extension from the 0-th segment
+            for( int i = 2; i < pts.PointCount(); i++ )
+                outline->Append( pts.CPoint( i ) );
+        }
+
         outline->Outline( 0 ).SetClosed( true );
         outline->RemoveNullSegments();
 
