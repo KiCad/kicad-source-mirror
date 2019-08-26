@@ -44,8 +44,24 @@
 #include <ws_painter.h>
 #include <dialog_page_settings.h>
 #include <tool/actions.h>
+#include <kiface_i.h>
 
 #define MAX_PAGE_EXAMPLE_SIZE 200
+
+
+#define KEY_EXPORT_REVISION      wxT( "PageSettingsExportRevision" )
+#define KEY_EXPORT_DATE          wxT( "PageSettingsExportDate" )
+#define KEY_EXPORT_TITLE         wxT( "PageSettingsExportTitle" )
+#define KEY_EXPORT_COMPANY       wxT( "PageSettingsExportCompany" )
+#define KEY_EXPORT_COMMENT1      wxT( "PageSettingsExportComment1" )
+#define KEY_EXPORT_COMMENT2      wxT( "PageSettingsExportComment2" )
+#define KEY_EXPORT_COMMENT3      wxT( "PageSettingsExportComment3" )
+#define KEY_EXPORT_COMMENT4      wxT( "PageSettingsExportComment4" )
+#define KEY_EXPORT_COMMENT5      wxT( "PageSettingsExportComment5" )
+#define KEY_EXPORT_COMMENT6      wxT( "PageSettingsExportComment6" )
+#define KEY_EXPORT_COMMENT7      wxT( "PageSettingsExportComment7" )
+#define KEY_EXPORT_COMMENT8      wxT( "PageSettingsExportComment8" )
+#define KEY_EXPORT_COMMENT9      wxT( "PageSettingsExportComment9" )
 
 
 // List of page formats.
@@ -118,6 +134,24 @@ DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent, wxSize aMa
 
 DIALOG_PAGES_SETTINGS::~DIALOG_PAGES_SETTINGS()
 {
+    wxConfigBase* config = Kiface().KifaceSettings();
+
+#ifdef EESCHEMA
+    config->Write( KEY_EXPORT_REVISION, m_RevisionExport->GetValue() );
+    config->Write( KEY_EXPORT_DATE, m_DateExport->GetValue() );
+    config->Write( KEY_EXPORT_TITLE, m_TitleExport->GetValue() );
+    config->Write( KEY_EXPORT_COMPANY, m_CompanyExport->GetValue() );
+    config->Write( KEY_EXPORT_COMMENT1, m_Comment1Export->GetValue() );
+    config->Write( KEY_EXPORT_COMMENT2, m_Comment2Export->GetValue() );
+    config->Write( KEY_EXPORT_COMMENT3, m_Comment3Export->GetValue() );
+    config->Write( KEY_EXPORT_COMMENT4, m_Comment4Export->GetValue() );
+    config->Write( KEY_EXPORT_COMMENT5, m_Comment5Export->GetValue() );
+    config->Write( KEY_EXPORT_COMMENT6, m_Comment6Export->GetValue() );
+    config->Write( KEY_EXPORT_COMMENT7, m_Comment7Export->GetValue() );
+    config->Write( KEY_EXPORT_COMMENT8, m_Comment8Export->GetValue() );
+    config->Write( KEY_EXPORT_COMMENT9, m_Comment9Export->GetValue() );
+#endif
+
     delete m_page_bitmap;
     delete m_pagelayout;
 }
@@ -125,7 +159,8 @@ DIALOG_PAGES_SETTINGS::~DIALOG_PAGES_SETTINGS()
 
 void DIALOG_PAGES_SETTINGS::initDialog()
 {
-    wxString    msg;
+    wxConfigBase* config = Kiface().KifaceSettings();
+    wxString      msg;
 
     // initialize page format choice box and page format list.
     // The first shows translated strings, the second contains not translated strings
@@ -187,9 +222,21 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     m_TextComment8->SetValue( m_tb.GetComment( 7 ) );
     m_TextComment9->SetValue( m_tb.GetComment( 8 ) );
 
-#ifndef EESCHEMA
-    // these options have meaning only for Eeschema.
-    // disable them for other apps
+#ifdef EESCHEMA
+    m_RevisionExport->SetValue( config->ReadBool( KEY_EXPORT_REVISION, false ) );
+    m_DateExport->SetValue( config->ReadBool( KEY_EXPORT_DATE, false ) );
+    m_TitleExport->SetValue( config->ReadBool( KEY_EXPORT_TITLE, false ) );
+    m_CompanyExport->SetValue( config->ReadBool( KEY_EXPORT_COMPANY, false ) );
+    m_Comment1Export->SetValue( config->ReadBool( KEY_EXPORT_COMMENT1, false ) );
+    m_Comment2Export->SetValue( config->ReadBool( KEY_EXPORT_COMMENT2, false ) );
+    m_Comment3Export->SetValue( config->ReadBool( KEY_EXPORT_COMMENT3, false ) );
+    m_Comment4Export->SetValue( config->ReadBool( KEY_EXPORT_COMMENT4, false ) );
+    m_Comment5Export->SetValue( config->ReadBool( KEY_EXPORT_COMMENT5, false ) );
+    m_Comment6Export->SetValue( config->ReadBool( KEY_EXPORT_COMMENT6, false ) );
+    m_Comment7Export->SetValue( config->ReadBool( KEY_EXPORT_COMMENT7, false ) );
+    m_Comment8Export->SetValue( config->ReadBool( KEY_EXPORT_COMMENT8, false ) );
+    m_Comment9Export->SetValue( config->ReadBool( KEY_EXPORT_COMMENT9, false ) );
+#else
     m_RevisionExport->Show( false );
     m_DateExport->Show( false );
     m_TitleExport->Show( false );

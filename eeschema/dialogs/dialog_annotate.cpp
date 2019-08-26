@@ -146,34 +146,24 @@ void DIALOG_ANNOTATE::InitValues()
     m_rbOptions->SetSelection( 0 );
 
     m_Config->Read( KEY_ANNOTATE_SORT_OPTION, &option, 0L );
+
     switch( option )
     {
     default:
-    case 0:
-        m_rbSortBy_X_Position->SetValue( 1 );
-        break;
-
-    case 1:
-        m_rbSortBy_Y_Position->SetValue( 1 );
-        break;
+    case 0: m_rbSortBy_X_Position->SetValue( 1 ); break;
+    case 1: m_rbSortBy_Y_Position->SetValue( 1 ); break;
     }
 
     m_Config->Read( KEY_ANNOTATE_ALGO_OPTION, &option, 0L );
+
     switch( option )
     {
     default:
-    case 0:
-        m_rbFirstFree->SetValue( 1 );
-        break;
-
-    case 1:
-        m_rbSheetX100->SetValue( 100 );
-        break;
-
-    case 2:
-        m_rbSheetX1000->SetValue( 1000 );
-        break;
+    case 0: m_rbFirstFree->SetValue( 1 );     break;
+    case 1: m_rbSheetX100->SetValue( 100 );   break;
+    case 2: m_rbSheetX1000->SetValue( 1000 ); break;
     }
+
     m_textNumberAfter->SetValue( wxT( "0" ) );
 
     annotate_down_right_bitmap->SetBitmap( KiBitmap( annotate_down_right_xpm ) );
