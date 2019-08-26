@@ -295,12 +295,9 @@ public:
      * Function SelectFootprintFromLibTree
      * opens a dialog to select a footprint.
      *
-     * @param aPreslect = if valid, the LIB_ID to select (otherwise the global history is
-     *                    used)
-     * @param aAllowBroswer = allow selection via the footprint viewer (false when already
-     *                        called from footprint viewer)
+     * @param aPreslect = if valid, the LIB_ID to select (otherwise the global history is used)
      */
-    MODULE* SelectFootprintFromLibTree( LIB_ID aPreselect = LIB_ID(), bool aAllowBroswer = true );
+    MODULE* SelectFootprintFromLibTree( LIB_ID aPreselect = LIB_ID() );
 
     /**
      * Adds the given module to the board.

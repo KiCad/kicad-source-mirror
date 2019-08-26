@@ -1,4 +1,4 @@
-/* -*- c++ -*-
+/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
@@ -57,6 +57,8 @@ public:
      */
     LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAPTER::PTR& aAdapter,
               WIDGETS aWidgets = ALL, wxHtmlWindow *aDetails = nullptr );
+
+    ~LIB_TREE() override;
 
     /**
      * For multi-unit components, if the user selects the component itself
@@ -150,21 +152,23 @@ protected:
 
     void onTreeSelect( wxDataViewEvent& aEvent );
     void onTreeActivate( wxDataViewEvent& aEvent );
-    void onExpandCollapse( wxDataViewEvent& aEvent );
 
     void onDetailsLink( wxHtmlLinkEvent& aEvent );
     void onPreselect( wxCommandEvent& aEvent );
     void onContextMenu( wxDataViewEvent& aEvent );
 
-    LIB_TABLE*      m_lib_table;
+protected:
+    wxConfigBase*               m_config;
+    wxString                    m_configPrefix;
+
+    LIB_TABLE*                  m_lib_table;
     LIB_TREE_MODEL_ADAPTER::PTR m_adapter;
 
-    wxTextCtrl*     m_query_ctrl;
-    wxDataViewCtrl* m_tree_ctrl;
-    wxHtmlWindow*   m_details_ctrl;
+    wxTextCtrl*                 m_query_ctrl;
+    wxDataViewCtrl*             m_tree_ctrl;
+    wxHtmlWindow*               m_details_ctrl;
 
-    ///> State of the widget before any filters applied
-    STATE m_unfilteredState;
+    STATE                       m_unfilteredState;
 };
 
 ///> Custom event sent when a new component is preselected

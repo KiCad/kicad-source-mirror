@@ -18,8 +18,6 @@
  */
 
 #include <wx/tokenzr.h>
-#include <wx/progdlg.h>
-
 #include <eda_pattern_match.h>
 #include <fp_lib_table.h>
 #include <footprint_info.h>
@@ -36,10 +34,6 @@ FP_TREE_MODEL_ADAPTER::PTR FP_TREE_MODEL_ADAPTER::Create( LIB_TABLE* aLibs )
 
 FP_TREE_MODEL_ADAPTER::FP_TREE_MODEL_ADAPTER( LIB_TABLE* aLibs )
     : m_libs( (FP_LIB_TABLE*) aLibs )
-{}
-
-
-FP_TREE_MODEL_ADAPTER::~FP_TREE_MODEL_ADAPTER()
 {}
 
 

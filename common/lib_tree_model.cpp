@@ -119,8 +119,7 @@ LIB_TREE_NODE::LIB_TREE_NODE()
       Score( kLowestDefaultScore ),
       Normalized( false ),
       Unit( 0 ),
-      IsRoot( false ),
-      VisLen( 0 )
+      IsRoot( false )
 {}
 
 

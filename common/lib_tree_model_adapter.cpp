@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -20,10 +20,7 @@
  */
 
 #include <lib_tree_model_adapter.h>
-
 #include <eda_pattern_match.h>
-
-#include <wx/progdlg.h>
 #include <wx/tokenzr.h>
 #include <wx/wupdlock.h>
 
@@ -97,17 +94,6 @@ void LIB_TREE_MODEL_ADAPTER::ShowUnits( bool aShow )
 }
 
 
-void LIB_TREE_MODEL_ADAPTER::UpdateWidth( int aCol )
-{
-    auto col = m_widget->GetColumn( aCol );
-
-    if( col )
-    {
-        col->SetWidth( ColWidth( m_tree, aCol, col->GetTitle() ) );
-    }
-}
-
-
 void LIB_TREE_MODEL_ADAPTER::SetPreselectNode( LIB_ID const& aLibId, int aUnit )
 {
     m_preselect_lib_id = aLibId;
@@ -119,18 +105,10 @@ void LIB_TREE_MODEL_ADAPTER::DoAddLibrary( wxString const& aNodeName, wxString c
                                            std::vector<LIB_TREE_ITEM*> const& aItemList,
                                            bool presorted )
 {
-    auto& lib_node = m_tree.AddLib( aNodeName, aDesc );
+    LIB_TREE_NODE_LIB& lib_node = m_tree.AddLib( aNodeName, aDesc );
 
-    lib_node.VisLen = wxTheApp->GetTopWindow()->GetTextExtent( lib_node.Name ).x;
-
-    for( auto item: aItemList )
-    {
-        if( item )
-        {
-            auto& child_node = lib_node.AddItem( item );
-            child_node.VisLen = wxTheApp->GetTopWindow()->GetTextExtent( child_node.Name ).x;
-        }
-    }
+    for( LIB_TREE_ITEM* item: aItemList )
+        lib_node.AddItem( item );
 
     lib_node.AssignIntrinsicRanks( presorted );
 }
@@ -200,29 +178,35 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
 
         m_widget->EnsureVisible( item );
     }
-
-    UpdateWidth( 0 );
 }
 
 
 void LIB_TREE_MODEL_ADAPTER::AttachTo( wxDataViewCtrl* aDataViewCtrl )
 {
+    wxString partHead = _( "Item" );
+    int      partWidth = 360;
+    wxString descHead = _( "Description" );
+    int      descWidth = 2000;
+
+    if( aDataViewCtrl->GetColumnCount() > 0 )
+    {
+        partWidth = aDataViewCtrl->GetColumn( 0 )->GetWidth();
+        descWidth = aDataViewCtrl->GetColumn( 1 )->GetWidth();
+    }
+
     m_widget = aDataViewCtrl;
     aDataViewCtrl->SetIndent( kDataViewIndent );
     aDataViewCtrl->AssociateModel( this );
     aDataViewCtrl->ClearColumns();
 
-    wxString part_head = _( "Item" );
-    wxString desc_head = _( "Description" );
-
-    m_col_part = aDataViewCtrl->AppendTextColumn( part_head, 0, wxDATAVIEW_CELL_INERT, 360 );
-    m_col_desc = aDataViewCtrl->AppendTextColumn( desc_head, 1, wxDATAVIEW_CELL_INERT, 2000 );
+    m_col_part = aDataViewCtrl->AppendTextColumn( partHead, 0, wxDATAVIEW_CELL_INERT, partWidth );
+    m_col_desc = aDataViewCtrl->AppendTextColumn( descHead, 1, wxDATAVIEW_CELL_INERT, descWidth );
 }
 
 
 LIB_ID LIB_TREE_MODEL_ADAPTER::GetAliasFor( const wxDataViewItem& aSelection ) const
 {
-    auto node = ToNode( aSelection );
+    const LIB_TREE_NODE* node = ToNode( aSelection );
 
     LIB_ID emptyId;
 
@@ -235,14 +219,14 @@ LIB_ID LIB_TREE_MODEL_ADAPTER::GetAliasFor( const wxDataViewItem& aSelection ) c
 
 int LIB_TREE_MODEL_ADAPTER::GetUnitFor( const wxDataViewItem& aSelection ) const
 {
-    auto node = ToNode( aSelection );
+    const LIB_TREE_NODE* node = ToNode( aSelection );
     return node ? node->Unit : 0;
 }
 
 
 LIB_TREE_NODE::TYPE LIB_TREE_MODEL_ADAPTER::GetTypeFor( const wxDataViewItem& aSelection ) const
 {
-    auto node = ToNode( aSelection );
+    const LIB_TREE_NODE* node = ToNode( aSelection );
     return node ? node->Type : LIB_TREE_NODE::INVALID;
 }
 
@@ -251,7 +235,7 @@ int LIB_TREE_MODEL_ADAPTER::GetItemCount() const
 {
     int n = 0;
 
-    for( auto& lib: m_tree.Children )
+    for( const std::unique_ptr<LIB_TREE_NODE>& lib: m_tree.Children )
         n += lib->Children.size();
 
     return n;
@@ -374,52 +358,6 @@ bool LIB_TREE_MODEL_ADAPTER::GetAttr( wxDataViewItem const&   aItem,
     {
         return false;
     }
-}
-
-
-int LIB_TREE_MODEL_ADAPTER::ColWidth( LIB_TREE_NODE& aTree, int aCol, wxString const& aHeading )
-{
-    if( aCol == 0 )
-    {
-        int padding = m_widget->GetTextExtent( "M" ).x;
-        int indent = m_widget->GetIndent();
-        int longest = m_widget->GetTextExtent( aHeading ).x;
-
-        for( auto& node : aTree.Children )
-        {
-            auto item = ToItem( &*node );
-
-            if( !item.IsOk() )
-                continue;
-
-            if( node->Score > 0 )
-            {
-                // Ensure the text size is up to date:
-                if( node->VisLen == 0 )
-                    node->VisLen = m_widget->GetTextExtent( node->Name ).x;
-
-                longest = std::max( longest, node->VisLen + padding + indent );
-            }
-
-            if( !m_widget->IsExpanded( item ) )
-                continue;
-
-            for( auto& childNode : node->Children )
-            {
-                if( childNode->Score > 0 )
-                {
-                    if( childNode->VisLen == 0 )
-                        childNode->VisLen = m_widget->GetTextExtent( childNode->Name ).x;
-
-                    longest = std::max( longest, childNode->VisLen + padding + 2 * indent );
-                }
-            }
-        }
-
-        return longest;
-    }
-    else
-        return 2000;
 }
 
 

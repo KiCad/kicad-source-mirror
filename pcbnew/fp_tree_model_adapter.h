@@ -32,11 +32,6 @@ class FP_TREE_MODEL_ADAPTER : public LIB_TREE_MODEL_ADAPTER
 {
 public:
     /**
-     * Destructor. Do NOT delete this class manually; it is reference-counted by wxObject.
-     */
-    ~FP_TREE_MODEL_ADAPTER();
-
-    /**
      * Factory function: create a model adapter in a reference-counting container.
      *
      * @param aLibs library set from which parts will be loaded

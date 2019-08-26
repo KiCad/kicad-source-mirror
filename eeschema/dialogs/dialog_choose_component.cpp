@@ -23,19 +23,14 @@
  */
 
 #include <dialog_choose_component.h>
-
 #include <algorithm>
-#include <set>
 #include <wx/utils.h>
-
 #include <wx/button.h>
 #include <wx/dataview.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/splitter.h>
 #include <wx/timer.h>
-#include <wx/utils.h>
-
 #include <class_library.h>
 #include <sch_base_frame.h>
 #include <template_fieldnames.h>
@@ -45,10 +40,13 @@
 #include <widgets/footprint_select_widget.h>
 #include <widgets/symbol_preview_widget.h>
 #include <wx/clipbrd.h>
+#include <kiface_i.h>
 
-wxSize DIALOG_CHOOSE_COMPONENT::m_last_dlg_size( -1, -1 );
-int DIALOG_CHOOSE_COMPONENT::m_h_sash_pos = 0;
-int DIALOG_CHOOSE_COMPONENT::m_v_sash_pos = 0;
+#define SYM_CHOOSER_HSASH       wxT( "SymbolChooserHSashPosition" )
+#define SYM_CHOOSER_VSASH       wxT( "SymbolChooserVSashPosition" )
+#define SYM_CHOOSER_WIDTH_KEY   wxT( "SymbolChooserWidth" )
+#define SYM_CHOOSER_HEIGHT_KEY  wxT( "SymbolChooserHeight" )
+
 
 std::mutex DIALOG_CHOOSE_COMPONENT::g_Mutex;
 
@@ -72,6 +70,8 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
           m_show_footprints( aShowFootprints ),
           m_external_browser_requested( false )
 {
+    m_config = Kiface().KifaceSettings();
+
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
     // Use a slightly different layout, with a details pane spanning the entire window,
@@ -147,15 +147,14 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
 
     // We specify the width of the right window (m_symbol_view_panel), because specify
     // the width of the left window does not work as expected when SetSashGravity() is called
-    m_hsplitter->SetSashPosition( m_h_sash_pos ? m_h_sash_pos : HorizPixelsFromDU( 240 ) );
+    m_hsplitter->SetSashPosition( m_config->Read( SYM_CHOOSER_HSASH, HorizPixelsFromDU( 220 ) ) );
 
     if( m_vsplitter )
-        m_vsplitter->SetSashPosition( m_v_sash_pos ? m_v_sash_pos : VertPixelsFromDU( 170 ) );
+        m_vsplitter->SetSashPosition( m_config->Read( SYM_CHOOSER_VSASH, VertPixelsFromDU( 230 ) ) );
 
-    if( m_last_dlg_size == wxSize( -1, -1 ) )
-        SetSizeInDU( 360, 280 );
-    else
-        SetSize( m_last_dlg_size );
+    wxSize dlgSize( m_config->Read( SYM_CHOOSER_WIDTH_KEY, HorizPixelsFromDU( 390 ) ),
+                    m_config->Read( SYM_CHOOSER_HEIGHT_KEY, VertPixelsFromDU( 300 ) ) );
+    SetSize( dlgSize );
 
     SetInitialFocus( m_tree );
     okButton->SetDefault();
@@ -204,11 +203,13 @@ DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
     m_dbl_click_timer->Stop();
     delete m_dbl_click_timer;
 
-    m_last_dlg_size = GetSize();
-    m_h_sash_pos = m_hsplitter->GetSashPosition();
+    m_config->Write( SYM_CHOOSER_WIDTH_KEY, GetSize().x );
+    m_config->Write( SYM_CHOOSER_HEIGHT_KEY, GetSize().y );
+
+    m_config->Write( SYM_CHOOSER_HSASH, m_hsplitter->GetSashPosition() );
 
     if( m_vsplitter )
-        m_v_sash_pos = m_vsplitter->GetSashPosition();
+        m_config->Write( SYM_CHOOSER_VSASH, m_vsplitter->GetSashPosition() );
 }
 
 
@@ -229,7 +230,6 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
 
         if ( fp_list )
         {
-
             if( m_allow_field_edits )
                 m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( panel, fp_list, true );
 
@@ -431,10 +431,13 @@ void DIALOG_CHOOSE_COMPONENT::OnFootprintSelected( wxCommandEvent& aEvent )
 
     m_field_edits.erase(
             std::remove_if( m_field_edits.begin(), m_field_edits.end(),
-                    []( std::pair<int, wxString> const& i ) { return i.first == FOOTPRINT; } ),
+                            []( std::pair<int, wxString> const& i )
+                            {
+                                return i.first == FOOTPRINT;
+                            } ),
             m_field_edits.end() );
 
-    m_field_edits.push_back( std::make_pair( FOOTPRINT, m_fp_override ) );
+    m_field_edits.emplace_back( std::make_pair( FOOTPRINT, m_fp_override ) );
 
     ShowFootprint( m_fp_override );
 }
@@ -445,7 +448,6 @@ void DIALOG_CHOOSE_COMPONENT::OnComponentPreselected( wxCommandEvent& aEvent )
     int unit = 0;
 
     LIB_ID id = m_tree->GetSelectedLibId( &unit );
-
 
     if( id.IsValid() )
     {

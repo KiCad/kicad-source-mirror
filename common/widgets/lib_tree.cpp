@@ -1,4 +1,4 @@
-/* -*- c++ -*-
+/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
@@ -26,10 +26,13 @@
 #include <wxdataviewctrl_helpers.h>
 #include <wx/artprov.h>
 #include <wx/sizer.h>
-#include <wx/statbmp.h>
 #include <wx/html/htmlwin.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
+#include <kiface_i.h>
+
+#define LIST_COLUMN_WIDTH_KEY          wxT( "SelectorColumnWidth" )
+
 
 LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAPTER::PTR& aAdapter,
                     WIDGETS aWidgets, wxHtmlWindow* aDetails )
@@ -40,6 +43,9 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAP
       m_query_ctrl( nullptr ),
       m_details_ctrl( nullptr )
 {
+    m_config = Kiface().KifaceSettings();
+    m_configPrefix = typeid( m_adapter ).name();
+
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
     // Search text control
@@ -73,7 +79,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAP
 
     // Tree control
     m_tree_ctrl = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                      wxDV_SINGLE | wxDV_NO_HEADER );
+                                      wxDV_SINGLE );
     m_adapter->AttachTo( m_tree_ctrl );
 
     if( aWidgets & DETAILS )
@@ -107,10 +113,13 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAP
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &LIB_TREE::onTreeActivate, this );
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED, &LIB_TREE::onTreeSelect, this );
     m_tree_ctrl->Bind( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, &LIB_TREE::onContextMenu, this );
-    m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_EXPANDED, &LIB_TREE::onExpandCollapse, this );
-    m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_COLLAPSED, &LIB_TREE::onExpandCollapse, this );
 
     Bind( COMPONENT_PRESELECTED, &LIB_TREE::onPreselect, this );
+
+    int colWidth = 0;
+
+    if( m_config->Read( m_configPrefix + LIST_COLUMN_WIDTH_KEY, &colWidth ) )
+        m_tree_ctrl->GetColumn( 0 )->SetWidth( colWidth );
 
     // If wxTextCtrl::SetHint() is called before binding wxEVT_TEXT, the event
     // handler will intermittently fire.
@@ -124,7 +133,6 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAP
 
     // There may be a part preselected in the model. Make sure it is displayed.
     postPreselectEvent();
-    m_adapter->UpdateWidth( 0 );
 
     Layout();
     sizer->Fit( this );
@@ -135,6 +143,13 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAP
     if( m_details_ctrl )
         m_details_ctrl->ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
 #endif /* __WXGTK__ */
+}
+
+
+LIB_TREE::~LIB_TREE()
+{
+    int colWidth = m_tree_ctrl->GetColumn( 0 )->GetWidth();
+    m_config->Write( m_configPrefix + LIST_COLUMN_WIDTH_KEY, colWidth );
 }
 
 
@@ -223,7 +238,6 @@ void LIB_TREE::selectIfValid( const wxDataViewItem& aTreeId )
     if( aTreeId.IsOk() )
     {
         m_tree_ctrl->EnsureVisible( aTreeId );
-        m_adapter->UpdateWidth( 0 );
         m_tree_ctrl->Select( aTreeId );
         postPreselectEvent();
     }
@@ -233,10 +247,7 @@ void LIB_TREE::selectIfValid( const wxDataViewItem& aTreeId )
 void LIB_TREE::centerIfValid( const wxDataViewItem& aTreeId )
 {
     if( aTreeId.IsOk() )
-    {
         m_tree_ctrl->EnsureVisible( aTreeId );
-        m_adapter->UpdateWidth( 0 );
-    }
 }
 
 
@@ -357,12 +368,6 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
 void LIB_TREE::onTreeSelect( wxDataViewEvent& aEvent )
 {
     postPreselectEvent();
-}
-
-
-void LIB_TREE::onExpandCollapse( wxDataViewEvent& aEvent )
-{
-    m_adapter->UpdateWidth( 0 );
 }
 
 

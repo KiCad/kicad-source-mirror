@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2016-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,35 +23,29 @@
  */
 
 #include <dialog_choose_footprint.h>
-
 #include <algorithm>
-#include <set>
 #include <wx/utils.h>
-
 #include <wx/button.h>
-#include <wx/dataview.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/splitter.h>
 #include <wx/timer.h>
-#include <wx/utils.h>
-
 #include <pcb_base_frame.h>
 #include <fp_lib_table.h>
 #include <widgets/lib_tree.h>
 #include <widgets/footprint_preview_widget.h>
 #include <widgets/footprint_select_widget.h>
+#include <kiface_i.h>
 
-
-wxSize DIALOG_CHOOSE_FOOTPRINT::m_last_dlg_size( -1, -1 );
-int DIALOG_CHOOSE_FOOTPRINT::m_h_sash_pos = 0;
-int DIALOG_CHOOSE_FOOTPRINT::m_v_sash_pos = 0;
+#define FP_CHOOSER_HSASH       wxT( "FootprintChooserHSashPosition" )
+#define FP_CHOOSER_VSASH       wxT( "FootprintChooserVSashPosition" )
+#define FP_CHOOSER_WIDTH_KEY   wxT( "FootprintChooserWidth" )
+#define FP_CHOOSER_HEIGHT_KEY  wxT( "FootprintChooserHeight" )
 
 
 DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
                                                   const wxString& aTitle,
-                                                  FP_TREE_MODEL_ADAPTER::PTR& aAdapter,
-                                                  bool aAllowBrowser )
+                                                  FP_TREE_MODEL_ADAPTER::PTR& aAdapter )
         : DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxDefaultSize,
                        wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
           m_browser_button( nullptr ),
@@ -60,6 +54,8 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
           m_parent( aParent ),
           m_external_browser_requested( false )
 {
+    m_config = Kiface().KifaceSettings();
+
     auto          sizer = new wxBoxSizer( wxVERTICAL );
     wxHtmlWindow* details = nullptr;
 
@@ -99,11 +95,8 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
 
     auto buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
-    if( aAllowBrowser )
-    {
-        m_browser_button = new wxButton( this, wxID_ANY, _( "Select with Browser" ) );
-        buttonsSizer->Add( m_browser_button, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
-    }
+    m_browser_button = new wxButton( this, wxID_ANY, _( "Select with Browser" ) );
+    buttonsSizer->Add( m_browser_button, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
 
     auto sdbSizer = new wxStdDialogButtonSizer();
     auto okButton = new wxButton( this, wxID_OK );
@@ -120,23 +113,20 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
     Bind( wxEVT_TIMER, &DIALOG_CHOOSE_FOOTPRINT::OnCloseTimer, this, m_dbl_click_timer->GetId() );
     Bind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_FOOTPRINT::OnComponentPreselected, this );
     Bind( COMPONENT_SELECTED, &DIALOG_CHOOSE_FOOTPRINT::OnComponentSelected, this );
-
-    if( m_browser_button )
-        m_browser_button->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_CHOOSE_FOOTPRINT::OnUseBrowser, this );
+    m_browser_button->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_CHOOSE_FOOTPRINT::OnUseBrowser, this );
 
     Layout();
 
     // We specify the width of the right window (m_symbol_view_panel), because specify
     // the width of the left window does not work as expected when SetSashGravity() is called
-    m_hsplitter->SetSashPosition( m_h_sash_pos ? m_h_sash_pos : HorizPixelsFromDU( 220 ) );
+    m_hsplitter->SetSashPosition( m_config->Read( FP_CHOOSER_HSASH, HorizPixelsFromDU( 220 ) ) );
 
     if( m_vsplitter )
-        m_vsplitter->SetSashPosition( m_v_sash_pos ? m_v_sash_pos : VertPixelsFromDU( 230 ) );
+        m_vsplitter->SetSashPosition( m_config->Read( FP_CHOOSER_VSASH, VertPixelsFromDU( 230 ) ) );
 
-    if( m_last_dlg_size == wxSize( -1, -1 ) )
-        SetSizeInDU( 440, 340 );
-    else
-        SetSize( m_last_dlg_size );
+    wxSize dlgSize( m_config->Read( FP_CHOOSER_WIDTH_KEY, HorizPixelsFromDU( 440 ) ),
+                    m_config->Read( FP_CHOOSER_HEIGHT_KEY, VertPixelsFromDU( 340 ) ) );
+    SetSize( dlgSize );
 
     SetInitialFocus( m_tree );
     okButton->SetDefault();
@@ -148,20 +138,20 @@ DIALOG_CHOOSE_FOOTPRINT::~DIALOG_CHOOSE_FOOTPRINT()
     Unbind( wxEVT_TIMER, &DIALOG_CHOOSE_FOOTPRINT::OnCloseTimer, this );
     Unbind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_FOOTPRINT::OnComponentPreselected, this );
     Unbind( COMPONENT_SELECTED, &DIALOG_CHOOSE_FOOTPRINT::OnComponentSelected, this );
-
-    if( m_browser_button )
-        m_browser_button->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_CHOOSE_FOOTPRINT::OnUseBrowser, this );
+    m_browser_button->Unbind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_CHOOSE_FOOTPRINT::OnUseBrowser, this );
 
     // I am not sure the following two lines are necessary,
     // but they will not hurt anyone
     m_dbl_click_timer->Stop();
     delete m_dbl_click_timer;
 
-    m_last_dlg_size = GetSize();
-    m_h_sash_pos = m_hsplitter->GetSashPosition();
+    m_config->Write( FP_CHOOSER_WIDTH_KEY, GetSize().x );
+    m_config->Write( FP_CHOOSER_HEIGHT_KEY, GetSize().y );
+
+    m_config->Write( FP_CHOOSER_HSASH, m_hsplitter->GetSashPosition() );
 
     if( m_vsplitter )
-        m_v_sash_pos = m_vsplitter->GetSashPosition();
+        m_config->Write( FP_CHOOSER_VSASH, m_vsplitter->GetSashPosition() );
 }
 
 

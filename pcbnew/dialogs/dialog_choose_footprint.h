@@ -1,4 +1,4 @@
-/* -*- c++ -*-
+/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
@@ -94,7 +94,7 @@ public:
      *                  for documentation.
      */
     DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent, const wxString& aTitle,
-                             FP_TREE_MODEL_ADAPTER::PTR& aAdapter, bool aAllowBrowser );
+                             FP_TREE_MODEL_ADAPTER::PTR& aAdapter );
 
     ~DIALOG_CHOOSE_FOOTPRINT();
 
@@ -133,22 +133,18 @@ protected:
      */
     void OnComponentSelected( wxCommandEvent& aEvent );
 
+    wxConfigBase*             m_config;
+
     wxTimer*                  m_dbl_click_timer;
     wxButton*                 m_browser_button;
     wxSplitterWindow*         m_hsplitter;
     wxSplitterWindow*         m_vsplitter;
 
-    static int                m_h_sash_pos;     // remember sash positions during a session
-    static int                m_v_sash_pos;
-
     FOOTPRINT_PREVIEW_WIDGET* m_preview_ctrl;
-    LIB_TREE*           m_tree;
+    LIB_TREE*                 m_tree;
 
     PCB_BASE_FRAME*           m_parent;
     bool                      m_external_browser_requested;
-
-    // Remember the dialog size during a session
-    static wxSize             m_last_dlg_size;
 };
 
 #endif /* DIALOG_CHOOSE_FOOTPRINT_H */

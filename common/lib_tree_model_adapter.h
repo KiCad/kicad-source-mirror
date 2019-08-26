@@ -135,13 +135,6 @@ public:
     void ShowUnits( bool aShow );
 
     /**
-     * Update the column size based on the displayed contents
-     *
-     * @param aCol Which column to resize
-     */
-    void UpdateWidth( int aCol );
-
-    /**
      * Set the component name to be selected if there are no search results.
      * May be set at any time; updates at the next UpdateSearchString().
      *
@@ -328,16 +321,6 @@ private:
     wxDataViewColumn*   m_col_part;
     wxDataViewColumn*   m_col_desc;
     wxDataViewCtrl*     m_widget;
-
-    /**
-     * Compute the width required for the given column of a node and its
-     * children.
-     *
-     * @param aTree - root node of the tree
-     * @param aCol - column number
-     * @param aHeading - heading text, to set the minimum width
-     */
-    int ColWidth( LIB_TREE_NODE& aTree, int aCol, wxString const& aHeading );
 
     /**
      * Find any results worth highlighting and expand them, according to given

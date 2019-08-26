@@ -195,7 +195,7 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
 }
 
 
-MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect, bool aAllowBrowser )
+MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
 {
     FP_LIB_TABLE*   fpTable = Prj().PcbFootprintLibs();
     wxString        moduleName;
@@ -240,7 +240,7 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect, bool aAll
     wxString title;
     title.Printf( _( "Choose Footprint (%d items loaded)" ), adapter->GetItemCount() );
 
-    DIALOG_CHOOSE_FOOTPRINT dialog( this, title, adapterPtr, aAllowBrowser );
+    DIALOG_CHOOSE_FOOTPRINT dialog( this, title, adapterPtr );
 
     if( dialog.ShowQuasiModal() == wxID_CANCEL )
         return NULL;

@@ -1,8 +1,8 @@
-/* -*- c++ -*-
+/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,9 +70,7 @@ class SCH_DRAW_PANEL;
  *     libNicknames = libs->GetLogicalLibs();
  *
  *     for( auto nickname : libNicknames )
- *     {
  *         adapter->AddLibrary( nickname );
- *     }
  *
  *     // Create and display dialog
  *     DIALOG_CHOOSE_COMPONENT dlg( this, title, adapter, 1 );
@@ -183,11 +181,7 @@ protected:
      */
     void PopulateFootprintSelector( LIB_ID const& aLibId );
 
-    /**
-     * Display a given symbol into the schematic symbol preview.
-     * when no symbol selected, display a tooltip
-     */
-    void RenderPreview( LIB_PART* aComponent, int aUnit );
+    wxConfigBase*             m_config;
 
     wxTimer*                  m_dbl_click_timer;
     SYMBOL_PREVIEW_WIDGET*    m_symbol_preview;
@@ -200,9 +194,6 @@ protected:
     LIB_TREE*                 m_tree;
     wxHtmlWindow*             m_details;
 
-    static int                m_h_sash_pos;     // remember sash positions during a session
-    static int                m_v_sash_pos;
-
     SCH_BASE_FRAME*           m_parent;
     int                       m_deMorganConvert;
     bool                      m_allow_field_edits;
@@ -211,9 +202,6 @@ protected:
     wxString                  m_fp_override;
 
     std::vector<std::pair<int, wxString>>  m_field_edits;
-
-    // Remember the dialog size during a session
-    static wxSize             m_last_dlg_size;
 };
 
 #endif /* DIALOG_CHOOSE_COMPONENT_H */
