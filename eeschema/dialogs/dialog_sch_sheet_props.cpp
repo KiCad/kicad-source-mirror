@@ -45,13 +45,17 @@ DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* parent, SCH_SHEE
 
     m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
-    // Normally, the file and sheet name are the "main" edited fields so put them first
-    KIUI::SetControlsTabOrder( {
-            m_textFileName,
-            m_textSheetName,
-            m_filenameSizeCtrl,
-            m_sheetnameSizeCtrl,
-    } );
+    // We can't set the tab order through wxWidgets due to shortcomings in their mnemonics
+    // implementation on MSW
+    m_tabOrder = {
+        m_textFileName,
+        m_browseButton,
+        m_textSheetName,
+        m_filenameSizeCtrl,
+        m_sheetnameSizeCtrl,
+        m_sdbSizer1OK,
+        m_sdbSizer1Cancel
+    };
 
     SetInitialFocus( m_textFileName );
 

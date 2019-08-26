@@ -142,8 +142,9 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
     m_sdbSizerOK->SetDefault();
 
-    // Tab down the left side first
-    KIUI::SetControlsTabOrder( {
+    // We can't set the tab order through wxWidgets due to shortcomings in their mnemonics
+    // implementation on MSW
+    m_tabOrder = {
             m_LayerLabel,
             m_LayerSelectionCtrl,
             m_SizeXCtrl,
@@ -157,7 +158,9 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
             m_OrientCtrl,
             m_Mirrored,
             m_KeepUpright,
-    } );
+            m_sdbSizerOK,
+            m_sdbSizerCancel
+    };
 
     // wxTextCtrls fail to generate wxEVT_CHAR events when the wxTE_MULTILINE flag is set,
     // so we have to listen to wxEVT_CHAR_HOOK events instead.

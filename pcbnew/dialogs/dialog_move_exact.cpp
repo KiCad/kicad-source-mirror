@@ -23,9 +23,7 @@
  */
 
 #include <dialogs/dialog_move_exact.h>
-
 #include <widgets/tab_traversal.h>
-
 #include <pcb_edit_frame.h>
 
 // initialise statics
@@ -44,13 +42,16 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, wxPoint& aTransla
     m_moveY( aParent, m_yLabel, m_yEntry, m_yUnit ),
     m_rotate( aParent, m_rotLabel, m_rotEntry, m_rotUnit )
 {
-    // tabbing goes through the entries in sequence
-    KIUI::SetControlsTabOrder( {
-            m_xEntry,
-            m_yEntry,
-            m_rotEntry,
-            m_anchorOptions,
-    } );
+    // We can't set the tab order through wxWidgets due to shortcomings in their mnemonics
+    // implementation on MSW
+    m_tabOrder = {
+        m_xEntry,
+        m_yEntry,
+        m_rotEntry,
+        m_anchorOptions,
+        m_stdButtonsOK,
+        m_stdButtonsCancel
+    };
 
     updateDialogControls( m_options.polarCoords );
 

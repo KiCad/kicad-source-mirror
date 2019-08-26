@@ -22,11 +22,8 @@
  */
 
 #include <dialogs/dialog_position_relative.h>
-
 #include <tools/pcb_actions.h>
-
 #include <widgets/tab_traversal.h>
-
 #include <pcb_edit_frame.h>
 
 // initialise statics
@@ -42,11 +39,14 @@ DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, wxP
     m_xOffset( aParent, m_xLabel, m_xEntry, m_xUnit ),
     m_yOffset( aParent, m_yLabel, m_yEntry, m_yUnit )
 {
-    // tabbing goes through the entries in sequence
-    KIUI::SetControlsTabOrder( {
-            m_xEntry,
-            m_yEntry,
-    } );
+    // We can't set the tab order through wxWidgets due to shortcomings in their mnemonics
+    // implementation on MSW
+    m_tabOrder = {
+        m_xEntry,
+        m_yEntry,
+        m_stdButtonsOK,
+        m_stdButtonsCancel
+    };
 
     SetInitialFocus( m_xEntry );
 

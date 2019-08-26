@@ -62,7 +62,7 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( LIB_EDIT_FRAME* parent, LIB_PIN* aPin 
 
     // We can't set the tab order through wxWidgets due to shortcomings in their mnemonics
     // implementation on MSW
-    m_tabOrder =  {
+    m_tabOrder = {
         m_textPinName,
         m_textPinNumber,
         m_choiceElectricalType,
@@ -76,8 +76,8 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( LIB_EDIT_FRAME* parent, LIB_PIN* aPin 
         m_checkApplyToAllParts,
       	m_checkApplyToAllConversions,
       	m_checkShow,
-      	m_sdbSizerButtonsCancel,
-      	m_sdbSizerButtonsOK
+      	m_sdbSizerButtonsOK,
+        m_sdbSizerButtonsCancel
     };
 
     m_sdbSizerButtonsOK->SetDefault();
