@@ -1098,6 +1098,10 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 
         orientModuleAndText( m, e, nameAttr, valueAttr );
 
+        // Set the local coordinates for the footprint text items
+        m->Reference().SetLocalCoord();
+        m->Value().SetLocalCoord();
+
         // Get next element
         element = element->GetNext();
     }
