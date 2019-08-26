@@ -20,6 +20,7 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+#include <limits>
 
 #include <preview_items/polygon_geom_manager.h>
 
@@ -67,6 +68,7 @@ bool POLYGON_GEOM_MANAGER::AddPoint( const VECTOR2I& aPt )
 
 void POLYGON_GEOM_MANAGER::SetFinished()
 {
+
     m_client.OnComplete( *this );
 }
 
@@ -144,16 +146,44 @@ void POLYGON_GEOM_MANAGER::updateLeaderPoints( const VECTOR2I& aEndPoint, LEADER
 {
     wxCHECK( m_lockedPoints.PointCount() > 0, /*void*/ );
     const VECTOR2I& lastPt = m_lockedPoints.CLastPoint();
-    auto newEnd = VECTOR2I( aEndPoint );
 
     if( m_leaderMode == LEADER_MODE::DEG45 || aModifier == LEADER_MODE::DEG45 )
     {
         const VECTOR2I lineVector( aEndPoint - lastPt );
         // get a restricted 45/H/V line from the last fixed point to the cursor
-        newEnd = lastPt + GetVectorSnapped45( lineVector );
+        auto newEnd = lastPt + GetVectorSnapped45( lineVector );
+
+        SEG first( lastPt, newEnd );
+        SEG test_seg = m_lockedPoints.CSegment( 0 );
+
+        auto pt = first.IntersectLines( m_lockedPoints.CSegment( 0 ) );
+        int  dist = pt ? ( aEndPoint - *pt ).EuclideanNorm() : std::numeric_limits<int>::max();
+
+        for( int i = 1; i < 8; i++ )
+        {
+            test_seg.B = ( test_seg.B - test_seg.A ).Rotate( M_PI_4 ) + test_seg.A;
+            auto pt2 = first.IntersectLines( test_seg );
+            if( pt2 )
+            {
+                int dist2 = ( aEndPoint - *pt2 ).EuclideanNorm();
+                if( dist2 < dist )
+                {
+                    dist = dist2;
+                    pt = pt2;
+                }
+            }
+        }
+
+        m_leaderPts = SHAPE_LINE_CHAIN( lastPt, newEnd );
+
+        if( pt )
+            m_leaderPts.Append( *pt );
+    }
+    else
+    {
+        // direct segment
+        m_leaderPts = SHAPE_LINE_CHAIN( lastPt, aEndPoint );
     }
 
-    // direct segment
-    m_leaderPts = SHAPE_LINE_CHAIN( lastPt, newEnd );
     m_client.OnGeometryChange( *this );
 }

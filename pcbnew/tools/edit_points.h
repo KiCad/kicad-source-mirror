@@ -219,11 +219,11 @@ public:
     ///> @copydoc EDIT_POINT::ApplyConstraint()
     virtual void ApplyConstraint() override
     {
-        m_origin.ApplyConstraint();
-        m_end.ApplyConstraint();
-
         if( m_constraint )
             m_constraint->Apply();
+
+        m_origin.ApplyConstraint();
+        m_end.ApplyConstraint();
     }
 
     /**
@@ -492,6 +492,17 @@ public:
         return m_lines.size();
     }
 
+    void SetAllowPoints( bool aAllow = true )
+    {
+        m_allowPoints = aAllow;
+    }
+
+    bool GetAllowPoints() const
+    {
+        return m_allowPoints;
+    }
+
+
     ///> @copydoc VIEW_ITEM::ViewBBox()
     virtual const BOX2I ViewBBox() const override;
 
@@ -524,6 +535,7 @@ private:
     std::deque<EDIT_POINT> m_points;    ///< EDIT_POINTs for modifying m_parent
     std::deque<EDIT_LINE> m_lines;      ///< EDIT_LINEs for modifying m_parent
     std::list<int> m_contours;          ///< Indices of end contour points
+    bool m_allowPoints;                 ///< If false, only allow editing of EDIT_LINES
 };
 
 #endif /* EDIT_POINTS_H_ */
