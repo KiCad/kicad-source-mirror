@@ -751,30 +751,34 @@ void FOOTPRINT_VIEWER_FRAME::setCurFootprintName( const wxString& aName )
 
 void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
 {
-    // Ensure we do not have old selection:
-    if( !event.GetActive() )
-        return;
-
-    // Ensure we have the right library list:
-    std::vector< wxString > libNicknames = Prj().PcbFootprintLibs()->GetLogicalLibs();
-
-    if( libNicknames.size() == m_libList->GetCount() )
+    if( event.GetActive() )
     {
-        unsigned ii;
+        // Ensure we have the right library list:
+        std::vector< wxString > libNicknames = Prj().PcbFootprintLibs()->GetLogicalLibs();
+        bool                    stale = false;
 
-        for( ii = 0;  ii < libNicknames.size();  ii++ )
+        if( libNicknames.size() != m_libList->GetCount() )
+            stale = true;
+        else
         {
-            if( libNicknames[ii] != m_libList->GetString( ii ) )
-                break;
+            for( unsigned ii = 0;  ii < libNicknames.size();  ii++ )
+            {
+                if( libNicknames[ii] != m_libList->GetString( ii ) )
+                {
+                    stale = true;
+                    break;
+                }
+            }
         }
 
-        if( ii == libNicknames.size() )
-            return;
+        if( stale )
+        {
+            ReCreateLibraryList();
+            UpdateTitle();
+        }
     }
 
-    // If we are here, the library list has changed, rebuild it
-    ReCreateLibraryList();
-    UpdateTitle();
+    event.Skip();    // required under wxMAC
 }
 
 

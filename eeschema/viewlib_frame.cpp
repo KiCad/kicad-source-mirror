@@ -703,14 +703,19 @@ void LIB_VIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 
 void LIB_VIEW_FRAME::OnActivate( wxActivateEvent& event )
 {
-    bool changed = m_libList ? ReCreateListLib() : false;
+    if( event.GetActive() )
+    {
+        bool changed = m_libList ? ReCreateListLib() : false;
 
-    if (changed)
-        m_selection_changed = true;
+        if (changed)
+            m_selection_changed = true;
 
-    updatePreviewSymbol();
+        updatePreviewSymbol();
 
-    DisplayLibInfos();
+        DisplayLibInfos();
+    }
+
+    event.Skip();    // required under wxMAC
 }
 
 
