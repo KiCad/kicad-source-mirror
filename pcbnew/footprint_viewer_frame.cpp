@@ -466,29 +466,45 @@ void FOOTPRINT_VIEWER_FRAME::OnCharHook( wxKeyEvent& aEvent )
 {
     if( aEvent.GetKeyCode() == WXK_UP )
     {
-        if( m_libFilter->HasFocus() )
+        wxWindow* focused = FindFocus();
+
+        if( m_libFilter->HasFocus() || m_libList->HasFocus() )
             selectPrev( m_libList );
         else
             selectPrev( m_fpList );
+
+        // Need to reset the focus after selection due to GTK mouse-refresh
+        // that captures the mouse into the canvas to update scrollbars
+        if( focused )
+            focused->SetFocus();
     }
     else if( aEvent.GetKeyCode() == WXK_DOWN )
     {
+        wxWindow* focused = FindFocus();
+
+        if( m_libFilter->HasFocus() || m_libList->HasFocus() )
+            selectNext( m_libList );
+        else
+            selectNext( m_fpList );
+
         // Need to reset the focus after selection due to GTK mouse-refresh
         // that captures the mouse into the canvas to update scrollbars
-        if( m_libFilter->HasFocus() )
-        {
-            selectNext( m_libList );
-            m_libFilter->SetFocus();
-        }
-        else
-        {
-            selectNext( m_fpList );
-            m_fpList->SetFocus();
-        }
+        if( focused )
+            focused->SetFocus();
     }
     else if( aEvent.GetKeyCode() == WXK_TAB && m_libFilter->HasFocus() )
     {
-        m_fpFilter->SetFocus();
+        if( !aEvent.ShiftDown() )
+            m_fpFilter->SetFocus();
+        else
+            aEvent.Skip();
+    }
+    else if( aEvent.GetKeyCode() == WXK_TAB && m_fpFilter->HasFocus() )
+    {
+        if( aEvent.ShiftDown() )
+            m_libFilter->SetFocus();
+        else
+            aEvent.Skip();
     }
     else if( aEvent.GetKeyCode() == WXK_RETURN && m_fpList->GetSelection() >= 0 )
     {
