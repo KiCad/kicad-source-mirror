@@ -134,9 +134,8 @@ DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent, wxSize aMa
 
 DIALOG_PAGES_SETTINGS::~DIALOG_PAGES_SETTINGS()
 {
-    wxConfigBase* config = Kiface().KifaceSettings();
-
 #ifdef EESCHEMA
+    wxConfigBase* config = Kiface().KifaceSettings();
     config->Write( KEY_EXPORT_REVISION, m_RevisionExport->GetValue() );
     config->Write( KEY_EXPORT_DATE, m_DateExport->GetValue() );
     config->Write( KEY_EXPORT_TITLE, m_TitleExport->GetValue() );
@@ -159,7 +158,6 @@ DIALOG_PAGES_SETTINGS::~DIALOG_PAGES_SETTINGS()
 
 void DIALOG_PAGES_SETTINGS::initDialog()
 {
-    wxConfigBase* config = Kiface().KifaceSettings();
     wxString      msg;
 
     // initialize page format choice box and page format list.
@@ -223,6 +221,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     m_TextComment9->SetValue( m_tb.GetComment( 8 ) );
 
 #ifdef EESCHEMA
+    wxConfigBase* config = Kiface().KifaceSettings();
     m_RevisionExport->SetValue( config->ReadBool( KEY_EXPORT_REVISION, false ) );
     m_DateExport->SetValue( config->ReadBool( KEY_EXPORT_DATE, false ) );
     m_TitleExport->SetValue( config->ReadBool( KEY_EXPORT_TITLE, false ) );

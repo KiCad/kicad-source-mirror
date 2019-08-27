@@ -45,7 +45,7 @@ EDIT_POINTS::EDIT_POINTS( EDA_ITEM* aParent )
 
 EDIT_POINT* EDIT_POINTS::FindPoint( const VECTOR2I& aLocation, KIGFX::VIEW *aView ) // fixme: ugly
 {
-    unsigned size = std::abs<int>( KiROUND( aView->ToWorld( EDIT_POINT::POINT_SIZE ) ) );
+    unsigned size = std::abs( KiROUND( aView->ToWorld( EDIT_POINT::POINT_SIZE ) ) );
 
     if( m_allowPoints )
     {
