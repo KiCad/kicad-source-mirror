@@ -45,11 +45,11 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     m_trackStartY( aParent, m_TrackStartYLabel, m_TrackStartYCtrl, m_TrackStartYUnit ),
     m_trackEndX( aParent, m_TrackEndXLabel, m_TrackEndXCtrl, m_TrackEndXUnit ),
     m_trackEndY( aParent, m_TrackEndYLabel, m_TrackEndYCtrl, m_TrackEndYUnit ),
-    m_trackWidth( aParent, m_TrackWidthLabel, m_TrackWidthCtrl, m_TrackWidthUnit, true ),
+    m_trackWidth( aParent, m_TrackWidthLabel, m_TrackWidthCtrl, m_TrackWidthUnit, true, false ),
     m_viaX( aParent, m_ViaXLabel, m_ViaXCtrl, m_ViaXUnit ),
     m_viaY( aParent, m_ViaYLabel, m_ViaYCtrl, m_ViaYUnit ),
-    m_viaDiameter( aParent, m_ViaDiameterLabel, m_ViaDiameterCtrl, m_ViaDiameterUnit, true ),
-    m_viaDrill( aParent, m_ViaDrillLabel, m_ViaDrillCtrl, m_ViaDrillUnit, true ),
+    m_viaDiameter( aParent, m_ViaDiameterLabel, m_ViaDiameterCtrl, m_ViaDiameterUnit, true, false ),
+    m_viaDrill( aParent, m_ViaDrillLabel, m_ViaDrillCtrl, m_ViaDrillUnit, true, false ),
     m_tracks( false ),
     m_vias( false )
 {
@@ -557,12 +557,13 @@ void DIALOG_TRACK_VIA_PROPERTIES::onTrackNetclassCheck( wxCommandEvent& aEvent )
 void DIALOG_TRACK_VIA_PROPERTIES::onWidthSelect( wxCommandEvent& aEvent )
 {
     m_TrackWidthCtrl->ChangeValue( m_DesignRuleWidthsCtrl->GetStringSelection() );
+    m_TrackWidthCtrl->SelectAll();
 }
 
 
 void DIALOG_TRACK_VIA_PROPERTIES::onWidthEdit( wxCommandEvent& aEvent )
 {
-    m_DesignRuleWidthsCtrl->SetSelection( wxNOT_FOUND );
+    m_DesignRuleWidthsCtrl->SetStringSelection( m_TrackWidthCtrl->GetValue() );
 }
 
 
