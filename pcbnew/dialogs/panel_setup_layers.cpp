@@ -114,10 +114,10 @@ static const LSET presets[] =
     LSET(),     // shift the array index up by one, matches with "Custom".
 
     // "Two layers, parts on Front only"
-    LSET( 2, F_Cu, B_Cu ) | LSET::FrontTechMask() | LSET::UserMask(),
+    LSET( 2, F_Cu, B_Cu ) | LSET::FrontTechMask() | LSET( 1, B_Mask ) | LSET::UserMask(),
 
     // "Two layers, parts on Back only",
-    LSET( 2, F_Cu, B_Cu ) | LSET::BackTechMask() | LSET::UserMask(),
+    LSET( 2, F_Cu, B_Cu ) | LSET::BackTechMask() | LSET( 1, F_Mask ) | LSET::UserMask(),
 
     // "Two layers, parts on Front and Back",
     LSET( 2, F_Cu, B_Cu ) | LSET::FrontTechMask() | LSET::BackTechMask() | LSET::UserMask(),
