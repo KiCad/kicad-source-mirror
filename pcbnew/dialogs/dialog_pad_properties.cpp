@@ -940,20 +940,13 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
     m_staticTextCornerSizeRatioUnit->Enable( m_PadShape->GetSelection() == CHOICE_SHAPE_ROUNDRECT );
     m_cornerRadius.Enable( m_PadShape->GetSelection() == CHOICE_SHAPE_ROUNDRECT );
 
-    // PAD_SHAPE_CUSTOM type has constraints for zone connection and thermal shape:
-    // only not connected or solid connection is allowed to avoid destroying the shape.
-    // Enable/disable options only available for custom shaped pads
-    m_ZoneConnectionChoice->Enable( !is_custom );
-    m_ZoneConnectionCustom->Enable( is_custom );
-    m_spokeWidth.Enable( !is_custom );
-    m_thermalGap.Enable( !is_custom );
-
     m_sbSizerZonesSettings->Show( !is_custom );
     m_sbSizerCustomShapedZonesSettings->Show( is_custom );
 
     transferDataToPad( m_dummyPad );
 
     updateRoundRectCornerValues();
+    m_localSettingsPanel->SetSize( m_localSettingsPanel->GetEffectiveMinSize() );
     redraw();
 }
 
