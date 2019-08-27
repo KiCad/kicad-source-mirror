@@ -473,10 +473,18 @@ void FOOTPRINT_VIEWER_FRAME::OnCharHook( wxKeyEvent& aEvent )
     }
     else if( aEvent.GetKeyCode() == WXK_DOWN )
     {
+        // Need to reset the focus after selection due to GTK mouse-refresh
+        // that captures the mouse into the canvas to update scrollbars
         if( m_libFilter->HasFocus() )
+        {
             selectNext( m_libList );
+            m_libFilter->SetFocus();
+        }
         else
+        {
             selectNext( m_fpList );
+            m_fpList->SetFocus();
+        }
     }
     else if( aEvent.GetKeyCode() == WXK_TAB && m_libFilter->HasFocus() )
     {
