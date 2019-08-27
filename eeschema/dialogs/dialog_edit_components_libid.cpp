@@ -456,20 +456,8 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
         candidate.m_Screen = item.GetSheetPath().LastScreen();
         SCH_SHEET_PATH sheetpath = item.GetSheetPath();
         candidate.m_Reference = candidate.m_Component->GetRef( &sheetpath );
-        // For multi units per package , add unit id.
-        // however, there is a problem: the unit id stored is always >= 1
-        // and 1 for no multi units.
-        // so add unit id only if unit > 1 if the unit count is > 1
-        // (can be 0 if the symbol is not found)
-        int unit = candidate.m_Component->GetUnitSelection( &sheetpath );
         int unitcount = candidate.m_Component->GetUnitCount();
         candidate.m_IsOrphan = ( unitcount == 0 );
-
-        if( unitcount > 1 || unit > 1 )
-        {
-            candidate.m_Reference << wxChar( ('A' + unit -1) );
-        }
-
         m_components.push_back( candidate );
     }
 #endif
@@ -484,14 +472,12 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
     wxString last_str_libid = m_components.front().GetStringLibId();
     int row = 0;
     wxString refs;
+    wxString last_ref;
     bool mark_cell = m_components.front().m_IsOrphan;
-    CMP_CANDIDATE* cmp = nullptr;
 
-    for( unsigned ii = 0; ii < m_components.size(); ii++ )
+    for( auto& cmp : m_components )
     {
-        cmp = &m_components[ii];
-
-        wxString str_libid = cmp->GetStringLibId();
+        wxString str_libid = cmp.GetStringLibId();
 
         if( last_str_libid != str_libid )
         {
@@ -499,17 +485,24 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
             AddRowToGrid( mark_cell, refs, last_str_libid );
 
             // prepare next entry
-            mark_cell = cmp->m_IsOrphan;
+            mark_cell = cmp.m_IsOrphan;
             last_str_libid = str_libid;
             refs.Empty();
             row++;
         }
+        else if( cmp.GetSchematicReference() == last_ref )
+        {
+            cmp.m_Row = row;
+            continue;
+        }
+
+        last_ref = cmp.GetSchematicReference();
 
         if( !refs.IsEmpty() )
             refs += wxT( ", " );
 
-        refs += cmp->GetSchematicReference();
-        cmp->m_Row = row;
+        refs += cmp.GetSchematicReference();
+        cmp.m_Row = row;
     }
 
     // Add last component group:
