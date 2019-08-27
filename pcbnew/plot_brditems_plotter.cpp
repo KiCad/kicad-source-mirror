@@ -653,8 +653,7 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& p
     }
 
     // We need a buffer to store corners coordinates:
-    static std::vector< wxPoint > cornerList;
-    cornerList.clear();
+    std::vector< wxPoint > cornerList;
 
     m_plotter->SetColor( getColor( aZone->GetLayer() ) );
 
@@ -666,12 +665,20 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& p
      */
     int outline_thickness = aZone->GetFilledPolysUseThickness() ? aZone->GetMinThickness() : 0;
 
-    for( auto ic = polysList.CIterate(); ic; ++ic )
+    for( int idx = 0; idx < polysList.OutlineCount(); ++idx )
     {
-        wxPoint pos( ic->x, ic->y );
-        cornerList.push_back( pos );
+        SHAPE_LINE_CHAIN& outline = polysList.Outline( idx );
 
-        if( ic.IsEndContour() )   // Plot the current filled area outline
+        cornerList.clear();
+        cornerList.reserve( outline.PointCount() );
+
+        for( int ic = 0; ic < outline.PointCount(); ++ic )
+        {
+            VECTOR2I& point = outline.Point( ic );
+            cornerList.emplace_back( wxPoint( point.x, point.y ) );
+        }
+
+        if( cornerList.size() )   // Plot the current filled area outline
         {
             // First, close the outline
             if( cornerList[0] != cornerList[cornerList.size() - 1] )
@@ -696,8 +703,6 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& p
 
                 m_plotter->SetCurrentLineWidth( -1 );
             }
-
-            cornerList.clear();
         }
     }
 }

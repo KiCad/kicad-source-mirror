@@ -851,14 +851,16 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             plotter->EndPlot();
             delete plotter;
 
-            msg.Printf( _( "Plot file \"%s\" created." ), GetChars( fn.GetFullPath() ) );
+            msg.Printf( _( "Plot file \"%s\" created." ), fn.GetFullPath() );
             reporter.Report( msg, REPORTER::RPT_ACTION );
         }
         else
         {
-            msg.Printf( _( "Unable to create file \"%s\"." ), GetChars( fn.GetFullPath() ) );
+            msg.Printf( _( "Unable to create file \"%s\"." ), fn.GetFullPath() );
             reporter.Report( msg, REPORTER::RPT_ERROR );
         }
+
+        wxSafeYield();      // displays report message.
     }
 
     if( m_plotOpts.GetFormat() == PLOT_FORMAT_GERBER && m_plotOpts.GetCreateGerberJobFile() )

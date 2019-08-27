@@ -573,6 +573,9 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         plotted.insert( zone );
 
         SHAPE_POLY_SET aggregateArea = zone->GetFilledPolysList();
+        bool needFracture = false;  // If 2 or more filled areas are combined, resulting
+                                    // aggregateArea will be simplified and fractured
+                                    // (Long calculation time)
 
         for( ZONE_CONTAINER* candidate : aBoard->Zones() )
         {
@@ -586,7 +589,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             // having compatible settings for drawings:
             // use or not outline thickness, and if using outline thickness,
             // having the same thickness
-            // becuase after merging only one outline thickness is used
+            // because after merging only one outline thickness is used
             if( candidate->GetFilledPolysUseThickness() != zone->GetFilledPolysUseThickness() )
                 // Should not happens, because usually the same option is used for filling
                 continue;
@@ -596,10 +599,16 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 continue;
 
             plotted.insert( candidate );
-            aggregateArea.BooleanAdd( candidate->GetFilledPolysList(), SHAPE_POLY_SET::PM_FAST );
+            aggregateArea.Append( candidate->GetFilledPolysList() );
+            needFracture = true;
         }
 
-        aggregateArea.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        if( needFracture )
+        {
+            aggregateArea.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            aggregateArea.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        }
+
         itemplotter.PlotFilledAreas( zone, aggregateArea );
     }
     aPlotter->EndBlock( NULL );
