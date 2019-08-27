@@ -237,7 +237,6 @@ float SCH_PAINTER::getShadowWidth()
 COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows )
 {
     static COLOR4D highlightColor( 1.0, 0.3, 0.3, 1.0 );
-    static COLOR4D selectionColor = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
 
     COLOR4D color = m_schSettings.GetLayerColor( aLayer );
 
@@ -254,7 +253,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
     else if( aItem->IsSelected() )
     {
         if( aDrawingShadows )
-            color = selectionColor.WithAlpha( 0.8 );
+            color = m_schSettings.GetLayerColor( LAYER_SELECTION_SHADOWS ).WithAlpha( 0.8 );
     }
     else if( aItem->IsHighlighted() )               // Cross-probing
     {
