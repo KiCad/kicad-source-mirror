@@ -73,7 +73,7 @@ void PCB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 {
     wxTreebook* book = aParent->GetTreebook();
 
-    book->AddPage( new wxPanel( this ), _( "Pcbnew" ) );
+    book->AddPage( new wxPanel( book ), _( "Pcbnew" ) );
     book->AddSubPage( new PANEL_PCBNEW_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
     book->AddSubPage( new PANEL_PCBNEW_SETTINGS( this, aParent ), _( "Editing Options" ) );
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
