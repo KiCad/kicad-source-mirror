@@ -47,10 +47,11 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_tools.h>
-#include "tools/selection_tool.h"
-#include "tools/pcbnew_control.h"
-#include "tools/pcb_actions.h"
-#include "board_commit.h"
+#include <tool/common_control.h>
+#include <tools/selection_tool.h>
+#include <tools/pcbnew_control.h>
+#include <tools/pcb_actions.h>
+#include <board_commit.h>
 #include <memory>
 #include <eda_pattern_match.h>
 #include <wx/tokenzr.h>
@@ -203,6 +204,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_toolManager->RegisterTool( new PCBNEW_CONTROL );
     m_toolManager->RegisterTool( new SELECTION_TOOL );
     m_toolManager->RegisterTool( new COMMON_TOOLS );    // for std context menus (zoom & grid)
+    m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->InitTools();
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 

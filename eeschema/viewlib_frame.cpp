@@ -26,14 +26,11 @@
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
-#include <sch_draw_panel.h>
 #include <sch_view.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
 #include <eda_dockart.h>
-#include <sch_edit_frame.h>
 #include <eeschema_id.h>
-#include <general.h>
 #include <viewlib_frame.h>
 #include <symbol_lib_table.h>
 #include <dialog_helpers.h>
@@ -45,9 +42,10 @@
 #include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_dispatcher.h>
-#include <tools/ee_actions.h>
 #include <tool/common_tools.h>
+#include <tool/common_control.h>
 #include <tool/zoom_tool.h>
+#include <tools/ee_actions.h>
 #include <tools/lib_control.h>
 #include <tools/ee_inspection_tool.h>
 
@@ -223,6 +221,7 @@ void LIB_VIEW_FRAME::setupTools()
 
     // Register tools
     m_toolManager->RegisterTool( new COMMON_TOOLS );
+    m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->RegisterTool( new EE_INSPECTION_TOOL );  // manage show datasheet
     m_toolManager->RegisterTool( new EE_SELECTION_TOOL );   // manage context menu
