@@ -493,16 +493,24 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
     if( drawingShadows && !aField->IsSelected() )
         return;
 
-    // Must check layer as fields are sometimes drawn by their parent rather than
-    // directly from the view.
-    int layers[KIGFX::VIEW::VIEW_MAX_LAYERS];
-    int layers_count;
-    aField->ViewGetLayers( layers, layers_count );
-
-    if( aLayer != layers[0] )
+    if( !isUnitAndConversionShown( aField ) )
         return;
 
-    if( !isUnitAndConversionShown( aField ) )
+    // Must check layer as fields are sometimes drawn by their parent rather than
+    // directly from the view.
+    int  layers[KIGFX::VIEW::VIEW_MAX_LAYERS];
+    int  layers_count;
+    bool foundLayer = false;
+
+    aField->ViewGetLayers( layers, layers_count );
+
+    for( int i = 0; i < layers_count; ++i )
+    {
+        if( layers[i] == aLayer )
+            foundLayer = true;
+    }
+
+    if( !foundLayer )
         return;
 
     COLOR4D color = getRenderColor( aField, aLayer, drawingShadows );
