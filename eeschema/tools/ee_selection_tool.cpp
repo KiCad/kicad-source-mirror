@@ -695,6 +695,19 @@ bool EE_SELECTION_TOOL::selectMultiple()
             BOX2I selectionBox = area.ViewBBox();
             view->Query( selectionBox, selectedItems );         // Get the list of selected items
 
+            // Sheet pins aren't in the view; add them by hand
+            for( KIGFX::VIEW::LAYER_ITEM_PAIR& pair : selectedItems )
+            {
+                if( static_cast<EDA_ITEM*>( pair.first )->Type() == SCH_SHEET_T )
+                {
+                    SCH_SHEET* sheet = (SCH_SHEET*) pair.first;
+                    int        layer = pair.second;
+
+                    for( SCH_SHEET_PIN& pin : sheet->GetPins() )
+                        selectedItems.emplace_back( KIGFX::VIEW::LAYER_ITEM_PAIR( &pin, layer ) );
+                }
+            }
+
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR>::iterator it, it_end;
 
             int width = area.GetEnd().x - area.GetOrigin().x;
