@@ -895,34 +895,46 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : items )
     {
-        if( item->Type() == SCH_JUNCTION_T )
+        SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
+
+        if( sch_item->Type() == SCH_JUNCTION_T )
         {
+            sch_item->SetFlags( STRUCT_DELETED );
+            sch_item->GetConnectionPoints( pts );
+
             // clean up junctions at the end
         }
         else
         {
-            item->SetFlags( STRUCT_DELETED );
+            sch_item->SetFlags( STRUCT_DELETED );
             saveCopyInUndoList( item, UR_DELETED, appendToUndo );
             appendToUndo = true;
-
-            SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
 
             if( sch_item && sch_item->IsConnectable() )
                 sch_item->GetConnectionPoints( pts );
 
-            updateView( item );
+            updateView( sch_item );
 
-            if( item->Type() == SCH_SHEET_PIN_T )
-                static_cast<SCH_SHEET*>( item->GetParent() )->RemovePin( (SCH_SHEET_PIN*) item );
+            if( sch_item->Type() == SCH_SHEET_PIN_T )
+            {
+                SCH_SHEET_PIN* pin = (SCH_SHEET_PIN*) sch_item;
+                SCH_SHEET*     sheet = pin->GetParent();
+
+                sheet->RemovePin( pin );
+            }
             else
-                m_frame->RemoveFromScreen( item );
+                m_frame->RemoveFromScreen( sch_item );
         }
     }
 
     for( auto point : pts )
     {
         SCH_ITEM* junction = screen->GetItem( point, 0, SCH_JUNCTION_T );
-        if( junction && !screen->IsJunctionNeeded( point ) )
+
+        if( !junction )
+            continue;
+
+        if( ( junction->GetFlags() & STRUCT_DELETED ) > 0 || !screen->IsJunctionNeeded( point ) )
             m_frame->DeleteJunction( junction, appendToUndo );
     }
 
