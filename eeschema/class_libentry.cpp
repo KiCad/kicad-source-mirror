@@ -253,7 +253,7 @@ LIB_PART::LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary ) :
 
     for( LIB_ITEM& oldItem : aPart.m_drawings )
     {
-        if( ( oldItem.GetFlags() & ( IS_NEW | STRUCT_DELETED ) ) != 0 )
+        if( oldItem.HasFlag( IS_NEW ) || oldItem.HasFlag( STRUCT_DELETED ) )
             continue;
 
         newItem = (LIB_ITEM*) oldItem.Clone();
@@ -261,11 +261,8 @@ LIB_PART::LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary ) :
         m_drawings.push_back( newItem );
     }
 
-    for( size_t i = 0; i < aPart.m_aliases.size(); i++ )
-    {
-        LIB_ALIAS* alias = new LIB_ALIAS( *aPart.m_aliases[i], this );
-        m_aliases.push_back( alias );
-    }
+    for( LIB_ALIAS* alias : aPart.m_aliases )
+        m_aliases.emplace_back( new LIB_ALIAS( *alias, this ) );
 }
 
 

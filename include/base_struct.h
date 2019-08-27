@@ -265,6 +265,7 @@ public:
     void SetFlags( STATUS_FLAGS aMask ) { m_Flags |= aMask; }
     void ClearFlags( STATUS_FLAGS aMask = EDA_ITEM_ALL_FLAGS ) { m_Flags &= ~aMask; }
     STATUS_FLAGS GetFlags() const { return m_Flags; }
+    bool HasFlag( STATUS_FLAGS aFlag ) { return ( m_Flags & aFlag ) == aFlag; }
 
     STATUS_FLAGS GetEditFlags() const
     {

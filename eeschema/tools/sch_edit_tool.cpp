@@ -457,10 +457,10 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                 {
                     SCH_LINE* line = (SCH_LINE*) item;
 
-                    if( item->GetFlags() & STARTPOINT )
+                    if( item->HasFlag( STARTPOINT ) )
                         line->RotateStart( rotPoint );
 
-                    if( item->GetFlags() & ENDPOINT )
+                    if( item->HasFlag( ENDPOINT ) )
                         line->RotateEnd( rotPoint );
                 }
                 else if( item->Type() == SCH_SHEET_PIN_T )
@@ -934,7 +934,7 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         if( !junction )
             continue;
 
-        if( ( junction->GetFlags() & STRUCT_DELETED ) > 0 || !screen->IsJunctionNeeded( point ) )
+        if( junction->HasFlag( STRUCT_DELETED ) || !screen->IsJunctionNeeded( point ) )
             m_frame->DeleteJunction( junction, appendToUndo );
     }
 

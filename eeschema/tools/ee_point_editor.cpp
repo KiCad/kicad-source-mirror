@@ -561,9 +561,9 @@ void EE_POINT_EDITOR::updateItem() const
 
         if( connection )
         {
-            if( ( connection->GetFlags() & STARTPOINT ) != 0 )
+            if( connection->HasFlag( STARTPOINT ) )
                 connection->SetStartPoint( line->GetPosition() );
-            else if( ( connection->GetFlags() & ENDPOINT ) != 0 )
+            else if( connection->HasFlag( ENDPOINT ) )
                 connection->SetEndPoint( line->GetPosition() );
 
             getView()->Update( connection, KIGFX::GEOMETRY );
@@ -573,9 +573,9 @@ void EE_POINT_EDITOR::updateItem() const
 
         if( connection )
         {
-            if( ( connection->GetFlags() & STARTPOINT ) != 0 )
+            if( connection->HasFlag( STARTPOINT ) )
                 connection->SetStartPoint( line->GetEndPoint() );
-            else if( ( connection->GetFlags() & ENDPOINT ) != 0 )
+            else if( connection->HasFlag( ENDPOINT ) )
                 connection->SetEndPoint( line->GetEndPoint() );
 
             getView()->Update( connection, KIGFX::GEOMETRY );

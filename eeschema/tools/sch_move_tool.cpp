@@ -232,7 +232,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     if( item->IsNew() )
                     {
-                        if( ( item->GetFlags() & SELECTEDNODE ) != 0 && m_isDragOperation )
+                        if( item->HasFlag( SELECTEDNODE ) && m_isDragOperation )
                         {
                             // Item was added in getConnectedDragItems
                             saveCopyInUndoList( (SCH_ITEM*) item, UR_NEW, appendUndo );
@@ -267,7 +267,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     wxASSERT_MSG( m_anchorPos, "Should be already set from previous cmd" );
                 }
-                else if( selection.Front()->GetFlags() & IS_NEW )
+                else if( selection.Front()->HasFlag( IS_NEW ) )
                 {
                     m_anchorPos = selection.GetReferencePoint();
                 }
@@ -294,7 +294,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 else if( selection.Size() == 1 && sch_item->IsMovableFromAnchorPoint()
                          && m_frame->GetMoveWarpsCursor() )
                 {
-                    if( sch_item->Type() == SCH_LINE_T && !( sch_item->GetFlags() & STARTPOINT ) )
+                    if( sch_item->Type() == SCH_LINE_T && !sch_item->HasFlag( STARTPOINT ) )
                         m_anchorPos = static_cast<SCH_LINE*>( sch_item )->GetEndPoint();
                     else
                         m_anchorPos = sch_item->GetPosition();
@@ -477,14 +477,14 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
 
             if( testLine->GetStartPoint() == aPoint )
             {
-                if( !( testLine->GetFlags() & SELECTEDNODE ) )
+                if( !testLine->HasFlag( SELECTEDNODE ) )
                     aList.push_back( testLine );
 
                 testLine->SetFlags( STARTPOINT | SELECTEDNODE );
             }
             else if( testLine->GetEndPoint() == aPoint )
             {
-                if( !( testLine->GetFlags() & SELECTEDNODE ) )
+                if( !testLine->HasFlag( SELECTEDNODE ) )
                     aList.push_back( testLine );
 
                 testLine->SetFlags( ENDPOINT | SELECTEDNODE );
@@ -550,10 +550,10 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta, bool isDrag )
     switch( aItem->Type() )
     {
     case SCH_LINE_T:
-        if( aItem->GetFlags() & STARTPOINT )
+        if( aItem->HasFlag( STARTPOINT ) )
             static_cast<SCH_LINE*>( aItem )->MoveStart( (wxPoint) aDelta );
 
-        if( aItem->GetFlags() & ENDPOINT )
+        if( aItem->HasFlag( ENDPOINT ) )
             static_cast<SCH_LINE*>( aItem )->MoveEnd( (wxPoint) aDelta );
 
         break;

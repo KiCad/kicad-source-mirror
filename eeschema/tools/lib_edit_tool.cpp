@@ -620,7 +620,7 @@ int LIB_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
         if( item.Type() == LIB_FIELD_T )
             continue;
 
-        wxASSERT( ( item.GetFlags() & STRUCT_DELETED ) == 0 );
+        wxASSERT( !item.HasFlag( STRUCT_DELETED ) );
 
         if( !item.IsSelected() )
             item.SetFlags( STRUCT_DELETED );

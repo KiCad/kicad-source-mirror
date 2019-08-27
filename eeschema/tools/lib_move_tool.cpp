@@ -143,7 +143,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 //
                 m_cursor = controls->GetCursorPosition();
 
-                if( ( lib_item->GetFlags() & IS_NEW ) != 0 )
+                if( lib_item->IsNew() )
                 {
                     m_anchorPos = selection.GetReferencePoint();
                     VECTOR2I delta = m_cursor - mapCoords( m_anchorPos );

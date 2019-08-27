@@ -624,7 +624,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         }
         else
         {
-            if( ( aPin->GetFlags() & IS_DANGLING ) && aPin->IsPowerConnection() )
+            if( aPin->HasFlag( IS_DANGLING ) && aPin->IsPowerConnection() )
                 drawPinDanglingSymbol( pos, drawingShadows );
 
             return;
@@ -749,7 +749,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         aPin->ClearFlags( IS_DANGLING ); // PIN_NC pin type is always not connected and dangling.
     }
 
-    if( ( aPin->GetFlags() & IS_DANGLING ) && ( aPin->IsVisible() || aPin->IsPowerConnection() ) )
+    if( aPin->HasFlag( IS_DANGLING ) && ( aPin->IsVisible() || aPin->IsPowerConnection() ) )
         drawPinDanglingSymbol( pos, drawingShadows );
 
     // Draw the labels

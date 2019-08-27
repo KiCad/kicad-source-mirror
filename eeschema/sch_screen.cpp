@@ -309,7 +309,7 @@ void SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
 
     for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
     {
-        if( item->GetFlags() & CANDIDATE )
+        if( item->HasFlag( CANDIDATE ) )
             continue;
 
         if( item->Type() == SCH_JUNCTION_T )

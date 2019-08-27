@@ -408,15 +408,14 @@ bool TRACKS_CLEANER::cleanupSegments()
     {
         auto track1 = *it;
 
-        if( track1->Type() != PCB_TRACE_T || ( track1->GetFlags() & IS_DELETED )
-            || track1->IsLocked() )
+        if( track1->Type() != PCB_TRACE_T || track1->HasFlag( IS_DELETED ) || track1->IsLocked() )
             continue;
 
         for( auto it2 = it + 1; it2 != m_brd->Tracks().end(); it2++ )
         {
             auto track2 = *it2;
 
-            if( track2->GetFlags() & IS_DELETED )
+            if( track2->HasFlag( IS_DELETED ) )
                 continue;
 
             if( track1->IsPointOnEnds( track2->GetStart() )
@@ -446,7 +445,7 @@ bool TRACKS_CLEANER::cleanupSegments()
         if( segment->Type() != PCB_TRACE_T )    // one can merge only track collinear segments, not vias.
             continue;
 
-        if( segment->GetFlags() & IS_DELETED )  // already taken in account
+        if( segment->HasFlag( IS_DELETED ) )  // already taken in account
             continue;
 
         auto connectivity = m_brd->GetConnectivity();
@@ -457,24 +456,22 @@ bool TRACKS_CLEANER::cleanupSegments()
         {
             for( auto connected : citem->ConnectedItems() )
             {
-                if( !connected->Valid() || connected->Parent()->Type() != PCB_TRACE_T ||
-                    ( connected->Parent()->GetFlags() & IS_DELETED ) )
+                if( !connected->Valid() )
                     continue;
 
-                if( !( connected->Parent()->GetFlags() & IS_DELETED ) )
+                BOARD_CONNECTED_ITEM* candidateItem = connected->Parent();
+
+                if( candidateItem->Type() == PCB_TRACE_T && !candidateItem->HasFlag( IS_DELETED ) )
                 {
-                    TRACK* candidate = static_cast<TRACK*>( connected->Parent() );
+                    TRACK* candidateSegment = static_cast<TRACK*>( candidateItem );
 
                     // Do not merge segments having different widths: it is a frequent case
                     // to draw a track between 2 pads:
-                    if( candidate->GetWidth() != segment->GetWidth() )
+                    if( candidateSegment->GetWidth() != segment->GetWidth() )
                         continue;
 
-                    if( segment->ApproxCollinear( *candidate ) )
-                    {
-                        modified |= mergeCollinearSegments(
-                                segment, static_cast<TRACK*>( connected->Parent() ) );
-                    }
+                    if( segment->ApproxCollinear( *candidateSegment ) )
+                        modified |= mergeCollinearSegments( segment, candidateSegment );
                 }
             }
         }

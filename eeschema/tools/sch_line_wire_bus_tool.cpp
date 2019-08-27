@@ -779,7 +779,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     // Check each new segment for possible junctions and add/split if needed
     for( SCH_LINE* wire = s_wires.GetFirst(); wire; wire = wire->Next() )
     {
-        if( wire->GetFlags() & SKIP_STRUCT )
+        if( wire->HasFlag( SKIP_STRUCT ) )
             continue;
 
         wire->GetConnectionPoints( new_ends );

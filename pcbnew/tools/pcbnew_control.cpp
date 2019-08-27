@@ -709,7 +709,7 @@ static void moveNoFlagToVector(  ZONE_CONTAINERS& aList, std::vector<BOARD_ITEM*
 
     for( ; obj ; )
     {
-        if( obj->GetFlags() & FLAG0 )
+        if( obj->HasFlag( FLAG0 ) )
             obj->ClearFlags( FLAG0 );
         else
             aTarget.push_back( obj );

@@ -829,7 +829,7 @@ int EE_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item = m_frame->GetScreen()->GetDrawItems(); item; item = item->Next() )
     {
-        if( item->GetFlags() & CANDIDATE )
+        if( item->HasFlag( CANDIDATE ) )
             select( item );
     }
 

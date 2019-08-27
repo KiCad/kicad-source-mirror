@@ -172,7 +172,7 @@ bool LIB_PIN_TOOL::PlacePin( LIB_PIN* aPin )
         }
     }
 
-    if( aPin->IsNew() && !( aPin->GetFlags() & IS_PASTED ) )
+    if( aPin->IsNew() && !aPin->HasFlag( IS_PASTED ) )
     {
         g_LastPinOrient = aPin->GetOrientation();
         g_LastPinType   = aPin->GetType();
