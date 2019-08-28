@@ -52,7 +52,6 @@ public:
     int Open( const TOOL_EVENT& aEvent );
     int Save( const TOOL_EVENT& aEvent );
     int SaveAs( const TOOL_EVENT& aEvent );
-    int SaveAll( const TOOL_EVENT& aEvent );
     int PageSetup( const TOOL_EVENT& aEvent );
     int Print( const TOOL_EVENT& aEvent );
     int Plot( const TOOL_EVENT& aEvent );

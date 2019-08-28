@@ -78,7 +78,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     fileMenu->AddItem( ACTIONS::save,              modifiedDocumentCondition );
     fileMenu->AddItem( ACTIONS::saveAs,            EE_CONDITIONS::ShowAlways );
-    fileMenu->AddItem( ACTIONS::saveAll,           modifiedDocumentCondition );
 
     fileMenu->AddSeparator();
 
