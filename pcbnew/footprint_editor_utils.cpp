@@ -372,9 +372,11 @@ void FOOTPRINT_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 {
     PCB_BASE_FRAME::SetActiveLayer( aLayer );
 
-    m_Layers->SelectLayer( GetActiveLayer() );
+    m_Layers->SelectLayer( aLayer );
     m_Layers->OnLayerSelected();
 
+    m_toolManager->RunAction( PCB_ACTIONS::layerChanged );  // notify other tools
+    GetCanvas()->SetFocus();                             // allow capture of hotkeys
     GetCanvas()->SetHighContrastLayer( aLayer );
     GetCanvas()->Refresh();
 }

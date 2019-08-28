@@ -279,7 +279,7 @@ void ZONE_CONTAINER::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& off
         return;
 
     wxPoint      seg_start, seg_end;
-    PCB_LAYER_ID curr_layer = ( (PCB_SCREEN*) aFrame->GetScreen() )->m_Active_Layer;
+    PCB_LAYER_ID curr_layer = aFrame->GetActiveLayer();
     BOARD*       brd   = GetBoard();
     PCB_LAYER_ID draw_layer = UNDEFINED_LAYER;
 

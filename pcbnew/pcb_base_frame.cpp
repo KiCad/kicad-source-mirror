@@ -439,7 +439,7 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
     // layer, or when switching between a copper layer and a non-copper layer, or vice-versa?
     // ...
 
-    GetScreen()->m_Active_Layer = layer;
+    SetActiveLayer( layer );
 
     if( displ_opts->m_ContrastModeDisplay )
         GetCanvas()->Refresh();
