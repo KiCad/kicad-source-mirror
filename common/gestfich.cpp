@@ -269,6 +269,8 @@ void OpenFile( const wxString& file )
 
     if( !command.IsEmpty() )
         ProcessExecute( command );
+
+    DisplayError( NULL, wxString::Format( _( "Cannot print '%s'.\n\nUnknown filetype." ), file ) );
 }
 
 
@@ -276,55 +278,67 @@ void PrintFile( const wxString& file )
 {
     wxFileName  fileName( file );
     wxString    ext = fileName.GetExt();
-    wxString    command;
-
-#ifdef __WXMAC__
-    wxString    application;
-
-    if( ext == "ps" || ext == "pdf" )
-        application = "Preview";
-    else if( ext == "csv" )
-        application = "Numbers";
-    else if( ext == "txt" || ext == "rpt" )
-        application = "TextEdit";
-
-    if( !application.IsEmpty() )
-    {
-        command.Printf( "osascript -e 'tell application \"%s\"' "
-                                  "-e '   set srcFileRef to (open POSIX file \"%s\")' "
-                                  "-e '   activate' "
-                                  "-e '   print srcFileRef print dialog true' "
-                                  "-e 'end tell' ",
-                        application,
-                        file );
-    }
-    else
-    {
-        // Let the Finder find an associated application.  Note that this method doesn't
-        // support opening the print dialog, and if the app doesn't support the AppleScript
-        // print command then it won't do that either -- but it's better than nothing.
-        command.Printf( "osascript -e 'tell application \"Finder\"' "
-                                  "-e '   set srcFileRef to (open POSIX file \"%s\")' "
-                                  "-e '   print srcFileRef' "
-                                  "-e 'end tell' ",
-                        file );
-    }
-
-    system( command.c_str() );
-#else
     wxFileType* filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( ext );
 
     if( !filetype )
         return;
 
+    wxString    printCommand;
+    wxString    openCommand;
+    wxString    application;
+
     wxFileType::MessageParameters params( file );
-    filetype->GetPrintCommand( &command, params );
+    filetype->GetPrintCommand( &printCommand, params );
+    filetype->GetOpenCommand( &openCommand, params );
     delete filetype;
 
-    if( !command.IsEmpty() )
-        ProcessExecute( command );
+    if( !printCommand.IsEmpty() )
+    {
+        ProcessExecute( printCommand );
+        return;
+    }
+
+#ifdef __WXMAC__
+    if( ext == "ps" || ext == "pdf" )
+        application = "Preview";
+    else if( ext == "csv" )
+        application = "Numbers";
+    else if( ext == "txt" || ext == "rpt" || ext == "pos" || ext == "cmp" || ext == "net" )
+        application = "TextEdit";
+
+    if( !application.IsEmpty() )
+    {
+        printCommand.Printf( "osascript -e 'tell application \"%s\"' "
+                                  "-e '   set srcFileRef to (open POSIX file \"%s\")' "
+                                  "-e '   activate' "
+                                  "-e '   print srcFileRef print dialog true' "
+                                  "-e 'end tell' ",
+                             application,
+                             file );
+        system( printCommand.c_str() );
+        return;
+    }
 #endif
 
+#ifdef __WXGTK__
+    if( ext == "ps" || ext == "pdf"
+            || ext == "csv"
+            || ext == "txt" || ext == "rpt" || ext == "pos" || ext == "cmp" || ext == "net" )
+    {
+        printCommand.Printf( "lp \"%s\"", file );
+        ProcessExecute( printCommand );
+        return;
+    }
+#endif
+
+    // everything else failed; try to open the file
+    if( !openCommand.IsEmpty() )
+    {
+        ProcessExecute( openCommand );
+        return;
+    }
+
+    DisplayError( NULL, wxString::Format( _( "Cannot print '%s'.\n\nUnknown filetype." ), file ) );
 }
 
 
