@@ -280,7 +280,7 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMod
         return;
 
     wxPoint     seg_start, seg_end;
-    PCB_LAYER_ID    curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+    PCB_LAYER_ID curr_layer = ( ( PCB_SCREEN* ) panel->GetScreen() )->m_Active_Layer;
     BOARD*      brd   = GetBoard();
 
     auto frame = static_cast<PCB_BASE_FRAME*> ( panel->GetParent() );

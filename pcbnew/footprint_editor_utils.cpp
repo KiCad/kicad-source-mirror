@@ -1066,11 +1066,13 @@ void FOOTPRINT_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 {
     PCB_BASE_FRAME::SetActiveLayer( aLayer );
 
-    m_Layers->SelectLayer( GetActiveLayer() );
+    m_Layers->SelectLayer( aLayer );
     m_Layers->OnLayerSelected();
 
     if( IsGalCanvasActive() )
     {
+        m_toolManager->RunAction( PCB_ACTIONS::layerChanged );  // notify other tools
+        GetCanvas()->SetFocus();                             // allow capture of hotkeys
         GetGalCanvas()->SetHighContrastLayer( aLayer );
         GetGalCanvas()->Refresh();
     }

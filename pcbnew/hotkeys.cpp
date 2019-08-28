@@ -512,6 +512,10 @@ EDA_HOTKEY* module_edit_Hotkey_List[] = {
     &HkSwitchGridToNext,
     &HkSwitchGridToPrevious,
 
+    // Active Layer
+    &HkSwitch2ComponentLayer,
+    &HkSwitch2CopperLayer,
+
     // Display
     &HkSwitchHighContrastMode,
     &HkCanvasDefault,
