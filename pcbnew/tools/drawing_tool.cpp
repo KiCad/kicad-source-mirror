@@ -836,6 +836,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         return 0;
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ANCHOR );
+    GRID_HELPER      grid( m_frame );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
@@ -851,6 +852,12 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
     {
         m_frame->GetCanvas()->SetCurrentCursor( wxCURSOR_BULLSEYE );
 
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
+        m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
+        VECTOR2I    cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), LSET::AllLayersMask() );
+        m_controls->ForceCursorPosition( true, cursorPos );
+
         if( evt->IsClick( BUT_LEFT ) )
         {
             MODULE* module = (MODULE*) m_frame->GetModel();
@@ -858,7 +865,6 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
             commit.Modify( module );
 
             // set the new relative internal local coordinates of footprint items
-            VECTOR2I    cursorPos = m_controls->GetCursorPosition();
             wxPoint     moveVector = module->GetPosition() - (wxPoint) cursorPos;
             module->MoveAnchorPosition( moveVector );
 
