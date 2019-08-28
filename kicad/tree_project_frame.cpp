@@ -92,6 +92,7 @@ static const wxChar* s_allowedExtensionsToList[] =
     wxT( "^.*\\.nc$" ),             // Excellon NC drill files (alternate file ext)
     wxT( "^.*\\.xnc$" ),            // Excellon NC drill files (alternate file ext)
     wxT( "^.*\\.svg$" ),            // SVG print/plot files
+    wxT( "^.*\\.ps$" ),             // Postscript plot files
     NULL                            // end of list
 };
 
@@ -124,6 +125,7 @@ BEGIN_EVENT_TABLE( TREE_PROJECT_FRAME, wxSashLayoutWindow )
     EVT_MENU( ID_PROJECT_NEWDIR, TREE_PROJECT_FRAME::OnCreateNewDirectory )
     EVT_MENU( ID_PROJECT_OPEN_DIR, TREE_PROJECT_FRAME::OnOpenDirectory )
     EVT_MENU( ID_PROJECT_DELETE, TREE_PROJECT_FRAME::OnDeleteFile )
+    EVT_MENU( ID_PROJECT_PRINT, TREE_PROJECT_FRAME::OnPrintFile )
     EVT_MENU( ID_PROJECT_RENAME, TREE_PROJECT_FRAME::OnRenameFile )
 END_EVENT_TABLE()
 
@@ -317,14 +319,13 @@ bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
         for( unsigned i = 0; i < m_filters.size(); i++ )
         {
             wxCHECK2_MSG( reg.Compile( m_filters[i], wxRE_ICASE ), continue,
-                          wxT( "Regular expression " ) + m_filters[i] +
-                          wxT( " failed to compile." ) );
+                          wxString::Format( "Regex %s failed to compile.", m_filters[i] ) );
 
             if( reg.Matches( aName ) )
             {
                 addFile = true;
 
-                if( i==0 )
+                if( i == 0 )
                     isSchematic = true;
 
                 break;
@@ -599,6 +600,8 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
                      _( "Opens the directory in the default system file manager" ),
 #endif
                      KiBitmap( directory_browser_xpm ) );
+
+        popupMenu.AppendSeparator();
         AddMenuItem( &popupMenu,  ID_PROJECT_DELETE,
                      _( "&Delete Directory" ),
                      _( "Delete the Directory and its content" ),
@@ -614,10 +617,18 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
                      _( "&Rename File..." ),
                      _( "Rename file" ),
                      KiBitmap( right_xpm ) );
+
+        popupMenu.AppendSeparator();
         AddMenuItem( &popupMenu,  ID_PROJECT_DELETE,
                      _( "&Delete File" ),
-                     _( "Delete the Directory and its content" ),
+                     _( "Delete the file and its content" ),
                      KiBitmap( delete_xpm ) );
+
+        popupMenu.AppendSeparator();
+        AddMenuItem( &popupMenu, ID_PROJECT_PRINT,
+                     _( "&Print..." ),
+                     _( "Print the cotnents of the file" ),
+                     KiBitmap( print_button_xpm ) );
         break;
     }
 
@@ -645,10 +656,17 @@ void TREE_PROJECT_FRAME::OnDeleteFile( wxCommandEvent& )
 {
     TREEPROJECT_ITEM* tree_data = GetSelectedData();
 
-    if( !tree_data )
-        return;
+    if( tree_data )
+        tree_data->Delete();
+}
 
-    tree_data->Delete();
+
+void TREE_PROJECT_FRAME::OnPrintFile( wxCommandEvent& )
+{
+    TREEPROJECT_ITEM* tree_data = GetSelectedData();
+
+    if( tree_data )
+        tree_data->Print();
 }
 
 

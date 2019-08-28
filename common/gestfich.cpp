@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,12 +28,10 @@
  * @brief Functions for file management
  */
 
+#include <fctsys.h>
 #include <wx/mimetype.h>
 #include <wx/filename.h>
 #include <wx/dir.h>
-
-// For compilers that support precompilation, includes "wx.h".
-#include <fctsys.h>
 #include <pgm_base.h>
 #include <confirm.h>
 #include <common.h>
@@ -48,34 +46,6 @@ void AddDelimiterString( wxString& string )
         string.Prepend ( wxT( "\"" ) );
         string.Append ( wxT( "\"" ) );
     }
-}
-
-
-bool EDA_PATH_SELECTOR( const wxString& aTitle,
-                        wxString&       aPath,
-                        int             aFlags,
-                        wxWindow*       aParent,
-                        const wxPoint&  aPosition )
-{
-    int          ii;
-    bool         selected = false;
-
-    wxDirDialog* DirFrame = new wxDirDialog( aParent,
-                                             aTitle,
-                                             aPath,
-                                             aFlags,
-                                             aPosition );
-
-    ii = DirFrame->ShowModal();
-
-    if( ii == wxID_OK )
-    {
-        aPath    = DirFrame->GetPath();
-        selected = true;
-    }
-
-    DirFrame->Destroy();
-    return selected;
 }
 
 
@@ -236,112 +206,6 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
 }
 
 
-wxString KicadDatasPath()
-{
-    bool     found = false;
-    wxString data_path;
-
-    if( Pgm().IsKicadEnvVariableDefined() ) // Path defined by the KICAD environment variable.
-    {
-        data_path = Pgm().GetKicadEnvVariable();
-        found = true;
-    }
-    else    // Path of executables.
-    {
-#ifndef __WXMAC__
-        wxString tmp = Pgm().GetExecutablePath();
-#ifdef __WINDOWS__
-        tmp.MakeLower();
-#endif
-        if( tmp.Contains( wxT( "kicad" ) ) )
-        {
-#ifdef __WINDOWS__
-            tmp = Pgm().GetExecutablePath();
-#endif
-            if( tmp.Last() == '/' )
-                tmp.RemoveLast();
-
-            data_path  = tmp.BeforeLast( '/' ); // id cd ../
-            data_path += UNIX_STRING_DIR_SEP;
-
-            // Old versions of KiCad use kicad/ as default for data
-            // and last versions kicad/share/
-            // So we search for kicad/share/ first
-            wxString old_path = data_path;
-            data_path += wxT( "share/" );
-
-            if( wxDirExists( data_path ) )
-            {
-                found = true;
-            }
-            else if( wxDirExists( old_path ) )
-            {
-                data_path = old_path;
-                found = true;
-            }
-        }
-    }
-
-    if( !found )
-    {
-        // find KiCad from possibilities list:
-        //  /usr/local/kicad/ or c:/kicad/
-
-        const static wxChar*  possibilities[] = {
-#ifdef __WINDOWS__
-            wxT( "c:/kicad/share/" ),
-            wxT( "d:/kicad/share/" ),
-            wxT( "c:/kicad/" ),
-            wxT( "d:/kicad/" ),
-            wxT( "c:/Program Files/kicad/share/" ),
-            wxT( "d:/Program Files/kicad/share/" ),
-            wxT( "c:/Program Files/kicad/" ),
-            wxT( "d:/Program Files/kicad/" ),
-#else
-            wxT( "/usr/share/kicad/" ),
-            wxT( "/usr/local/share/kicad/" ),
-            wxT( "/usr/local/kicad/share/" ),   // default data path for "universal
-                                                // tarballs" and build for a server
-                                                // (new)
-            wxT( "/usr/local/kicad/" ),         // default data path for "universal
-                                                // tarballs" and build for a server
-                                                // (old)
-#endif
-        };
-
-        for( unsigned i=0;  i<arrayDim(possibilities);  ++i )
-        {
-            data_path = possibilities[i];
-
-            if( wxDirExists( data_path ) )
-            {
-                found = true;
-                break;
-            }
-        }
-#else
-        // On OSX point to Contents/SharedSupport folder of main bundle
-        data_path = GetOSXKicadDataDir();
-        found = true;
-#endif
-    }
-
-    if( found )
-    {
-        data_path.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
-
-        if( data_path.Last() != '/' )
-            data_path += UNIX_STRING_DIR_SEP;
-    }
-    else
-    {
-        data_path.Empty();
-    }
-
-    return data_path;
-}
-
-
 bool OpenPDF( const wxString& file )
 {
     wxString command;
@@ -391,26 +255,76 @@ bool OpenPDF( const wxString& file )
 
 void OpenFile( const wxString& file )
 {
+    wxFileName  fileName( file );
+    wxFileType* filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( fileName.GetExt() );
+
+    if( !filetype )
+        return;
+
     wxString    command;
+    wxFileType::MessageParameters params( file );
 
-    wxFileName  currentFileName( file );
-    wxString    ext;
-    wxString    type;
-
-    ext = currentFileName.GetExt();
-    wxFileType* filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( ext );
-
-    bool        success = false;
-
-    wxFileType::MessageParameters params( file, type );
-
-    if( filetype )
-        success = filetype->GetOpenCommand( &command, params );
-
+    filetype->GetOpenCommand( &command, params );
     delete filetype;
 
-    if( success && !command.IsEmpty() )
+    if( !command.IsEmpty() )
         ProcessExecute( command );
+}
+
+
+void PrintFile( const wxString& file )
+{
+    wxFileName  fileName( file );
+    wxString    ext = fileName.GetExt();
+    wxString    command;
+
+#ifdef __WXMAC__
+    wxString    application;
+
+    if( ext == "ps" || ext == "pdf" )
+        application = "Preview";
+    else if( ext == "csv" )
+        application = "Numbers";
+    else if( ext == "txt" || ext == "rpt" )
+        application = "TextEdit";
+
+    if( !application.IsEmpty() )
+    {
+        command.Printf( "osascript -e 'tell application \"%s\"' "
+                                  "-e '   set srcFileRef to (open POSIX file \"%s\")' "
+                                  "-e '   activate' "
+                                  "-e '   print srcFileRef print dialog true' "
+                                  "-e 'end tell' ",
+                        application,
+                        file );
+    }
+    else
+    {
+        // Let the Finder find an associated application.  Note that this method doesn't
+        // support opening the print dialog, and if the app doesn't support the AppleScript
+        // print command then it won't do that either -- but it's better than nothing.
+        command.Printf( "osascript -e 'tell application \"Finder\"' "
+                                  "-e '   set srcFileRef to (open POSIX file \"%s\")' "
+                                  "-e '   print srcFileRef' "
+                                  "-e 'end tell' ",
+                        file );
+    }
+
+    system( command.c_str() );
+#else
+    wxFileType* filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( ext );
+
+    if( !filetype )
+        return;
+
+    wxFileType::MessageParameters params( file );
+    filetype->GetPrintCommand( &command, params );
+    delete filetype;
+
+    if( !command.IsEmpty() )
+        ProcessExecute( command );
+#endif
+
 }
 
 

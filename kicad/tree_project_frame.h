@@ -110,22 +110,25 @@ private:
 
     /**
      * Function OnOpenSelectedFileWithTextEditor
-     * Called via the popup menu, when right clicking on a file name
      * Call the text editor to open the selected file in the tree project
      */
     void OnOpenSelectedFileWithTextEditor( wxCommandEvent& event );
 
     /**
      * Function OnDeleteFile
-     * Called via the popup menu, when right clicking on a file name or a directory name to
-     * delete the selected file or directory in the tree project
+     * Delete the selected file or directory in the tree project
      */
     void OnDeleteFile( wxCommandEvent& event );
 
     /**
+     * Function OnDeleteFile
+     * Print the selected file or directory in the tree project
+     */
+    void OnPrintFile( wxCommandEvent& event );
+
+    /**
      * Function OnRenameFile
-     * Called via the popup menu, when right clicking on a file name or a directory name to
-     * rename the selected file or directory in the tree project
+     * Rename the selected file or directory in the tree project
      */
     void OnRenameFile( wxCommandEvent& event );
 

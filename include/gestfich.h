@@ -57,25 +57,7 @@ bool OpenPDF( const wxString& file );
 
 void OpenFile( const wxString& file );
 
-/**
- * Function EDA_PATH_SELECTOR
- *
- * is a helper function that wraps wxDirDialog.
- *
- * @param aTitle is a string to display in the dialog title bar.
- * @param aPath is a string contain the default path for the path dialog.  This string also
- *              contains the result of the wxDirDialog when the OK button is used to dismiss
- *              the dialog.
- * @param aFlags is the style of the path dialog, wxDD_???.
- * @param aParent is the parent window of the dialog.
- * @param aPosition is the position of the dialog.
- * @return true if a path was selected.
- */
-bool EDA_PATH_SELECTOR( const wxString& aTitle,
-                        wxString&       aPath,
-                        int             aFlags,       /* reserve */
-                        wxWindow*       aParent,
-                        const wxPoint&  aPosition = wxDefaultPosition );
+void PrintFile( const wxString& file );
 
 /**
  * Function EDA_FILE_SELECTOR

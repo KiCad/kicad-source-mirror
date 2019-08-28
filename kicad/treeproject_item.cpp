@@ -32,7 +32,6 @@
 #include <wx/regex.h>
 
 #include <gestfich.h>
-#include <executable_names.h>
 #include <kiway.h>
 #include <tool/tool_manager.h>
 #include <tools/kicad_manager_actions.h>
@@ -127,12 +126,12 @@ bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
 }
 
 
-bool TREEPROJECT_ITEM::Delete( bool check )
+void TREEPROJECT_ITEM::Delete()
 {
     wxString msg = wxString::Format( _( "Are you sure you want to delete '%s'?" ), GetFileName() );
     wxMessageDialog dialog( m_parent, msg, _( "Delete File" ), wxYES_NO | wxICON_QUESTION );
 
-    if( !check || wxID_YES == dialog.ShowModal() )
+    if( dialog.ShowModal() == wxID_YES )
     {
         bool success;
 
@@ -152,11 +151,13 @@ bool TREEPROJECT_ITEM::Delete( bool check )
 
         if( success )
             m_parent->Delete( GetId() );
-
-        return success;
     }
+}
 
-    return false;
+
+void TREEPROJECT_ITEM::Print()
+{
+    PrintFile( GetFileName() );
 }
 
 
@@ -246,7 +247,6 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
         break;
 
     default:
-        AddDelimiterString( fullFileName );
         OpenFile( fullFileName );
         break;
     }

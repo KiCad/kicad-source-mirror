@@ -73,7 +73,8 @@ public:
     const wxString GetDir() const;
 
     bool Rename( const wxString& name, bool check = true );
-    bool Delete( bool check = true );
+    void Delete();
+    void Print();
     void Activate( TREE_PROJECT_FRAME* aTreePrjFrame );
     void SetState( int state );
 
