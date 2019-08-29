@@ -176,7 +176,7 @@ void CAIRO_COMPOSITOR::clean()
     {
         cairo_destroy( it->context );
         cairo_surface_destroy( it->surface );
-        delete it->bitmap;
+        delete[] it->bitmap;
     }
 
     m_buffers.clear();
