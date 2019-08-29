@@ -125,7 +125,7 @@ typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested u
 #define STARTPOINT     (1 << 9)    ///< When a line is selected, these flags indicate which
 #define ENDPOINT       (1 << 10)   ///< ends.  (Used to support dragging.)
 #define SELECTED       (1 << 11)
-#define SELECTEDNODE   (1 << 12)   ///< flag indicating that the structure has already selected
+#define TEMP_SELECTED  (1 << 12)   ///< flag indicating that the structure has already selected
 #define STRUCT_DELETED (1 << 13)   ///< flag indication structures to be erased
 #define CANDIDATE      (1 << 14)   ///< flag indicating that the structure is connected
 #define SKIP_STRUCT    (1 << 15)   ///< flag indicating that the structure should be ignored

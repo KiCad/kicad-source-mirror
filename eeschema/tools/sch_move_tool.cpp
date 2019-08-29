@@ -82,8 +82,6 @@ bool SCH_MOVE_TOOL::Init()
   - add preferences option "Drag always selects"
   */
 
-#define STD_VECTOR_REMOVE( v, item ) v.erase( std::remove( v.begin(), v.end(), item ), v.end() )
-
 
 int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
@@ -185,8 +183,10 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 //
                 for( SCH_ITEM* it = m_frame->GetScreen()->GetDrawItems(); it; it = it->Next() )
                 {
+                    it->ClearFlags(TEMP_SELECTED );
+
                     if( !it->IsSelected() )
-                        it->ClearFlags( STARTPOINT | ENDPOINT | SELECTEDNODE );
+                        it->ClearFlags( STARTPOINT | ENDPOINT );
 
                     if( !selection.IsHover() && it->IsSelected() )
                         it->SetFlags( STARTPOINT | ENDPOINT );
@@ -232,11 +232,10 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     if( item->IsNew() )
                     {
-                        if( item->HasFlag( SELECTEDNODE ) && m_isDragOperation )
+                        if( item->HasFlag(TEMP_SELECTED ) && m_isDragOperation )
                         {
                             // Item was added in getConnectedDragItems
                             saveCopyInUndoList( (SCH_ITEM*) item, UR_NEW, appendUndo );
-                            STD_VECTOR_REMOVE( m_dragAdditions, item );
                             appendUndo = true;
                         }
                         else
@@ -433,11 +432,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     if( restore_state )
     {
         m_frame->RollbackSchematicFromUndo();
-
-        if( unselect )
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-        else
-            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     }
     else
     {
@@ -445,12 +439,22 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         m_frame->SchematicCleanUp();
         m_frame->TestDanglingEnds();
 
-        if( unselect )
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-        else
-            m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
-
         m_frame->OnModify();
+    }
+
+    if( unselect )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    else
+    {
+        m_dragAdditions.clear();
+
+        for( SCH_ITEM* it = m_frame->GetScreen()->GetDrawItems(); it; it = it->Next() )
+        {
+            if( it->HasFlag( TEMP_SELECTED ) )
+                m_dragAdditions.push_back( it );
+        }
+
+        m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
     }
 
     m_dragAdditions.clear();
@@ -477,17 +481,17 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
 
             if( testLine->GetStartPoint() == aPoint )
             {
-                if( !testLine->HasFlag( SELECTEDNODE ) )
+                if( !testLine->HasFlag(TEMP_SELECTED ) )
                     aList.push_back( testLine );
 
-                testLine->SetFlags( STARTPOINT | SELECTEDNODE );
+                testLine->SetFlags(STARTPOINT | TEMP_SELECTED );
             }
             else if( testLine->GetEndPoint() == aPoint )
             {
-                if( !testLine->HasFlag( SELECTEDNODE ) )
+                if( !testLine->HasFlag(TEMP_SELECTED ) )
                     aList.push_back( testLine );
 
-                testLine->SetFlags( ENDPOINT | SELECTEDNODE );
+                testLine->SetFlags(ENDPOINT | TEMP_SELECTED );
             }
             break;
         }
@@ -506,7 +510,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
                 newWire->SetFlags( IS_NEW );
                 m_frame->AddToScreen( newWire, m_frame->GetScreen() );
 
-                newWire->SetFlags( SELECTEDNODE | STARTPOINT );
+                newWire->SetFlags(TEMP_SELECTED | STARTPOINT );
                 aList.push_back( newWire );
             }
             break;
@@ -514,8 +518,11 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
         case SCH_NO_CONNECT_T:
         case SCH_JUNCTION_T:
             // Select no-connects and junctions that are connected to items being moved.
-            if( test->IsConnected( aPoint ) )
+            if( !test->HasFlag(TEMP_SELECTED ) && test->IsConnected( aPoint ) )
+            {
                 aList.push_back( test );
+                test->SetFlags(TEMP_SELECTED );
+            }
 
             break;
 
@@ -525,7 +532,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
         case SCH_BUS_WIRE_ENTRY_T:
         case SCH_BUS_BUS_ENTRY_T:
             // Select labels and bus entries that are connected to a wire being moved.
-            if( aOriginalItem->Type() == SCH_LINE_T )
+            if( !test->HasFlag(TEMP_SELECTED ) && aOriginalItem->Type() == SCH_LINE_T )
             {
                 std::vector<wxPoint> connections;
                 test->GetConnectionPoints( connections );
@@ -533,7 +540,11 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
                 for( wxPoint& point : connections )
                 {
                     if( aOriginalItem->HitTest( point ) )
+                    {
+                        test->SetFlags(TEMP_SELECTED );
                         aList.push_back( test );
+                        break;
+                    }
                 }
             }
             break;
