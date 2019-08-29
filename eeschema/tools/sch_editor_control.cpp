@@ -1051,7 +1051,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             }
             else
             {
-                m_frame->LoadSheetFromFile( sheet, g_CurrentSheet, sheet->GetFileName() );
+                if( !m_frame->LoadSheetFromFile( sheet, g_CurrentSheet, fn.GetFullPath() ) )
+                    m_frame->InitSheet( sheet, sheet->GetFileName() );
             }
         }
 
