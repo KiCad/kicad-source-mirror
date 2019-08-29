@@ -341,7 +341,7 @@ protected:
 
 
     /// Format used to store pixels
-    static constexpr cairo_format_t GAL_FORMAT = CAIRO_FORMAT_RGB24;
+    static constexpr cairo_format_t GAL_FORMAT = CAIRO_FORMAT_ARGB32;
 };
 
 
@@ -378,10 +378,6 @@ public:
     virtual void ResizeScreen( int aWidth, int aHeight ) override;
 
     virtual bool Show( bool aShow ) override;
-
-    virtual void SaveScreen() override;
-
-    virtual void RestoreScreen() override;
 
     virtual int BeginGroup() override;
 
@@ -433,8 +429,7 @@ protected:
     unsigned char*          wxOutput;               ///< wxImage comaptible buffer
 
     // Variables related to Cairo <-> wxWidgets
-    unsigned int*       bitmapBuffer;           ///< Storage of the cairo image
-    unsigned int*       bitmapBufferBackup;     ///< Backup storage of the cairo image
+    unsigned char*      bitmapBuffer;           ///< Storage of the cairo image
     int                 stride;                 ///< Stride value for Cairo
     int                 wxBufferWidth;
     bool                isInitialized;          ///< Are Cairo image & surface ready to use

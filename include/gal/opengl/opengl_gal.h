@@ -218,12 +218,6 @@ public:
     // Handling the world <-> screen transformation
     // --------------------------------------------------------
 
-    /// @copydoc GAL::SaveScreen()
-    virtual void SaveScreen() override;
-
-    /// @copydoc GAL::RestoreScreen()
-    virtual void RestoreScreen() override;
-
     /// @copydoc GAL::SetTarget()
     virtual void SetTarget( RENDER_TARGET aTarget ) override;
 

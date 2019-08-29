@@ -801,16 +801,6 @@ public:
     // ---------------------------
 
     /**
-     * @brief Save the screen contents.
-     */
-    virtual void SaveScreen() {};
-
-    /**
-     * @brief Restore the screen contents.
-     */
-    virtual void RestoreScreen() {};
-
-    /**
      * @brief Sets the target for rendering.
      *
      * @param aTarget is the new target for rendering.

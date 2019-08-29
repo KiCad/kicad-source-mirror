@@ -1257,6 +1257,7 @@ void CAIRO_GAL::endDrawing()
 
     // Now translate the raw context data from the format stored
     // by cairo into a format understood by wxImage.
+
     pixman_image_t* dstImg = pixman_image_create_bits( PIXMAN_r8g8b8,
             screenSize.x, screenSize.y, (uint32_t*) wxOutput, wxBufferWidth * 3 );
     pixman_image_t* srcImg = pixman_image_create_bits( PIXMAN_a8b8g8r8,
@@ -1269,7 +1270,7 @@ void CAIRO_GAL::endDrawing()
     pixman_image_unref( srcImg );
     pixman_image_unref( dstImg );
 
-    wxImage img( wxBufferWidth, screenSize.y, (unsigned char*) wxOutput, true );
+    wxImage img( wxBufferWidth, screenSize.y, wxOutput, true );
     wxBitmap bmp( img );
     wxMemoryDC mdc( bmp );
     wxClientDC clientDC( this );
@@ -1307,37 +1308,6 @@ bool CAIRO_GAL::Show( bool aShow )
         wxWindow::Raise();
 
     return s;
-}
-
-
-void CAIRO_GAL::SaveScreen()
-{
-    // Copy the current bitmap to the backup buffer
-    int offset = 0;
-
-    for( int j = 0; j < screenSize.y; j++ )
-    {
-        for( int i = 0; i < stride; i++ )
-        {
-            bitmapBufferBackup[offset + i] = bitmapBuffer[offset + i];
-            offset += stride;
-        }
-    }
-}
-
-
-void CAIRO_GAL::RestoreScreen()
-{
-    int offset = 0;
-
-    for( int j = 0; j < screenSize.y; j++ )
-    {
-        for( int i = 0; i < stride; i++ )
-        {
-            bitmapBuffer[offset + i] = bitmapBufferBackup[offset + i];
-            offset += stride;
-        }
-    }
 }
 
 
@@ -1420,7 +1390,7 @@ void CAIRO_GAL::initSurface()
     if( isInitialized )
         return;
 
-    surface = cairo_image_surface_create_for_data( (unsigned char*) bitmapBuffer, GAL_FORMAT,
+    surface = cairo_image_surface_create_for_data( bitmapBuffer, GAL_FORMAT,
                                                 wxBufferWidth, screenSize.y, stride );
 
     context = cairo_create( surface );
@@ -1458,8 +1428,7 @@ void CAIRO_GAL::allocateBitmaps()
     stride     = cairo_format_stride_for_width( GAL_FORMAT, wxBufferWidth );
     bufferSize = stride * screenSize.y;
 
-    bitmapBuffer        = new unsigned int[bufferSize];
-    bitmapBufferBackup  = new unsigned int[bufferSize];
+    bitmapBuffer        = new unsigned char[bufferSize * 4];
     wxOutput            = new unsigned char[wxBufferWidth * 3 * screenSize.y];
 }
 
@@ -1467,7 +1436,6 @@ void CAIRO_GAL::allocateBitmaps()
 void CAIRO_GAL::deleteBitmaps()
 {
     delete[] bitmapBuffer;
-    delete[] bitmapBufferBackup;
     delete[] wxOutput;
 }
 

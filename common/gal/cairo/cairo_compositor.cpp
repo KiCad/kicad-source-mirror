@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -93,13 +94,11 @@ void CAIRO_COMPOSITOR::Resize( unsigned int aWidth, unsigned int aHeight )
 unsigned int CAIRO_COMPOSITOR::CreateBuffer()
 {
     // Pixel storage
-    BitmapPtr bitmap( new unsigned int[m_bufferSize] );
-
-    memset( bitmap.get(), 0x00, m_bufferSize * sizeof(int) );
+    BitmapPtr bitmap = new uint32_t[m_bufferSize]();
 
     // Create the Cairo surface
     cairo_surface_t* surface = cairo_image_surface_create_for_data(
-                                                        (unsigned char*) bitmap.get(),
+                                                        (unsigned char*) bitmap,
                                                         CAIRO_FORMAT_ARGB32, m_width,
                                                         m_height, m_stride );
     cairo_t* context = cairo_create( surface );
@@ -144,7 +143,7 @@ void CAIRO_COMPOSITOR::Begin()
 void CAIRO_COMPOSITOR::ClearBuffer( const COLOR4D& aColor )
 {
     // Clear the pixel storage
-    memset( m_buffers[m_current].bitmap.get(), 0x00, m_bufferSize * sizeof(int) );
+    memset( m_buffers[m_current].bitmap, 0x00, m_bufferSize * sizeof(int) );
 }
 
 
@@ -177,6 +176,7 @@ void CAIRO_COMPOSITOR::clean()
     {
         cairo_destroy( it->context );
         cairo_surface_destroy( it->surface );
+        delete it->bitmap;
     }
 
     m_buffers.clear();

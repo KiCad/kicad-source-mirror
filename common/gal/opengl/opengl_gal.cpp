@@ -1526,18 +1526,6 @@ void OPENGL_GAL::ClearCache()
 }
 
 
-void OPENGL_GAL::SaveScreen()
-{
-    wxASSERT_MSG( false, wxT( "Not implemented yet" ) );
-}
-
-
-void OPENGL_GAL::RestoreScreen()
-{
-    wxASSERT_MSG( false, wxT( "Not implemented yet" ) );
-}
-
-
 void OPENGL_GAL::SetTarget( RENDER_TARGET aTarget )
 {
     switch( aTarget )
