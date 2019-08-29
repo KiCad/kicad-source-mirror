@@ -769,8 +769,6 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
             preview.FreeItems();
-
-            m_frame->PopTool( tool );
             break;
         }
         else if( evt->IsMotion() )
@@ -816,7 +814,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
                 commit.Add( item );
 
             commit.Push( _( "Place a DXF_SVG drawing" ) );
-            break;
+            break;   // This is a one-shot command, not a tool
         }
         else
             evt->SetPassEvent();
@@ -824,6 +822,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     preview.Clear();
     m_view->Remove( &preview );
+    m_frame->PopTool( tool );
     return 0;
 }
 
