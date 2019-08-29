@@ -148,7 +148,12 @@ void WX_GRID::DrawColLabel( wxDC& dc, int col )
 
     // It is reported that we need to erase the background to avoid display
     // artefacts, see #12055.
+    // wxWidgets renamed this variable between 3.1.2 and 3.1.3 ...
+#if wxCHECK_VERSION( 3, 1, 3 )
+    wxDCBrushChanger setBrush( dc, m_colLabelWin->GetBackgroundColour() );
+#else
     wxDCBrushChanger setBrush( dc, m_colWindow->GetBackgroundColour() );
+#endif
     dc.DrawRectangle(rect);
 
     rend.DrawBorder( *this, dc, rect );
