@@ -39,16 +39,6 @@
 
 #include <memory>
 
-#if defined(__WXMSW__)
-#define SCREEN_DEPTH 24
-#else
-#if wxCHECK_VERSION( 2, 9, 0 )
-#define SCREEN_DEPTH    wxBITMAP_SCREEN_DEPTH
-#else
-#define SCREEN_DEPTH    32
-#endif
-#endif
-
 /**
  * @brief Class CAIRO_GAL is the cairo implementation of the graphics abstraction layer.
  *
