@@ -591,6 +591,7 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta, bool isDrag )
         break;
     }
 
+    getView()->Hide( aItem, false );
     aItem->SetFlags( IS_MOVED );
 }
 
