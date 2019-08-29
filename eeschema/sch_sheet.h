@@ -91,6 +91,11 @@ public:
 
     ~SCH_SHEET_PIN() { }
 
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && SCH_SHEET_PIN_T == aItem->Type();
+    }
+
     wxString GetClass() const override
     {
         return wxT( "SCH_SHEET_PIN" );
@@ -242,6 +247,11 @@ public:
     SCH_SHEET( const SCH_SHEET& aSheet );
 
     ~SCH_SHEET();
+
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && SCH_SHEET_T == aItem->Type();
+    }
 
     wxString GetClass() const override
     {

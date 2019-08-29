@@ -696,12 +696,13 @@ bool EE_SELECTION_TOOL::selectMultiple()
             view->Query( selectionBox, selectedItems );         // Get the list of selected items
 
             // Sheet pins aren't in the view; add them by hand
-            for( KIGFX::VIEW::LAYER_ITEM_PAIR& pair : selectedItems )
+            for( auto& pair : selectedItems )
             {
-                if( static_cast<EDA_ITEM*>( pair.first )->Type() == SCH_SHEET_T )
+                auto item = dynamic_cast<EDA_ITEM*>( pair.first );
+
+                if( auto sheet = dyn_cast<SCH_SHEET*>( item ) )
                 {
-                    SCH_SHEET* sheet = (SCH_SHEET*) pair.first;
-                    int        layer = pair.second;
+                    int layer = pair.second;
 
                     for( SCH_SHEET_PIN& pin : sheet->GetPins() )
                         selectedItems.emplace_back( KIGFX::VIEW::LAYER_ITEM_PAIR( &pin, layer ) );

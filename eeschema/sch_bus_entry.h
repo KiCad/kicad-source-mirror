@@ -132,6 +132,11 @@ public:
 
     ~SCH_BUS_WIRE_ENTRY() { }
 
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && SCH_BUS_WIRE_ENTRY_T == aItem->Type();
+    }
+
     wxString GetClass() const override
     {
         return wxT( "SCH_BUS_WIRE_ENTRY" );
@@ -173,6 +178,11 @@ public:
     SCH_BUS_BUS_ENTRY( const wxPoint& pos = wxPoint( 0, 0 ), char shape = '\\' );
 
     ~SCH_BUS_BUS_ENTRY() { }
+
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && SCH_BUS_BUS_ENTRY_T == aItem->Type();
+    }
 
     wxString GetClass() const override
     {

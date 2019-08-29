@@ -93,6 +93,11 @@ public:
 
     ~SCH_TEXT() { }
 
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && SCH_TEXT_T == aItem->Type();
+    }
+
     virtual wxString GetClass() const override
     {
         return wxT( "SCH_TEXT" );
@@ -217,6 +222,11 @@ public:
 
     ~SCH_LABEL() { }
 
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && SCH_LABEL_T == aItem->Type();
+    }
+
     wxString GetClass() const override
     {
         return wxT( "SCH_LABEL" );
@@ -257,6 +267,11 @@ public:
     ~SCH_GLOBALLABEL() { }
 
     void Print( wxDC* DC, const wxPoint& offset ) override;
+
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && SCH_GLOBAL_LABEL_T == aItem->Type();
+    }
 
     wxString GetClass() const override
     {
@@ -302,6 +317,11 @@ public:
     ~SCH_HIERLABEL() { }
 
     void Print( wxDC* DC, const wxPoint& offset ) override;
+
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && SCH_HIER_LABEL_T == aItem->Type();
+    }
 
     wxString GetClass() const override
     {
