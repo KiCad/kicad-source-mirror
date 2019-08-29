@@ -54,10 +54,10 @@ class EDA_LIST_DIALOG;
  * @return true is success, false if no PDF viewer found
  */
 bool OpenPDF( const wxString& file );
-
 void OpenFile( const wxString& file );
 
 void PrintFile( const wxString& file );
+bool CanPrintFile( const wxString& file );
 
 /**
  * Function EDA_FILE_SELECTOR

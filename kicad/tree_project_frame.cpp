@@ -624,11 +624,18 @@ void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
                      _( "Delete the file and its content" ),
                      KiBitmap( delete_xpm ) );
 
-        popupMenu.AppendSeparator();
-        AddMenuItem( &popupMenu, ID_PROJECT_PRINT,
-                     _( "&Print..." ),
-                     _( "Print the cotnents of the file" ),
-                     KiBitmap( print_button_xpm ) );
+        if( CanPrintFile( fullFileName ) )
+        {
+            popupMenu.AppendSeparator();
+            AddMenuItem( &popupMenu, ID_PROJECT_PRINT,
+#ifdef __APPLE__
+                         _( "Print..." ),
+#else
+                         _( "&Print" ),
+#endif
+                         _( "Print the contents of the file" ),
+                         KiBitmap( print_button_xpm ) );
+        }
         break;
     }
 

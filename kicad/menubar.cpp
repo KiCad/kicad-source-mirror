@@ -25,7 +25,6 @@
  */
 
 #include <bitmaps.h>
-#include <hotkeys_basic.h>
 #include <menus_helpers.h>
 #include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>

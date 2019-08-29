@@ -274,14 +274,14 @@ void OpenFile( const wxString& file )
 }
 
 
-void PrintFile( const wxString& file )
+bool doPrintFile( const wxString& file, bool aDryRun )
 {
     wxFileName  fileName( file );
     wxString    ext = fileName.GetExt();
     wxFileType* filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( ext );
 
     if( !filetype )
-        return;
+        return false;
 
     wxString    printCommand;
     wxString    openCommand;
@@ -294,8 +294,10 @@ void PrintFile( const wxString& file )
 
     if( !printCommand.IsEmpty() )
     {
-        ProcessExecute( printCommand );
-        return;
+        if( !aDryRun )
+            ProcessExecute( printCommand );
+
+        return true;
     }
 
 #ifdef __WXMAC__
@@ -315,8 +317,11 @@ void PrintFile( const wxString& file )
                                   "-e 'end tell' ",
                              application,
                              file );
-        system( printCommand.c_str() );
-        return;
+
+        if( !aDryRun )
+            system( printCommand.c_str() );
+
+        return true;
     }
 #endif
 
@@ -326,19 +331,27 @@ void PrintFile( const wxString& file )
             || ext == "txt" || ext == "rpt" || ext == "pos" || ext == "cmp" || ext == "net" )
     {
         printCommand.Printf( "lp \"%s\"", file );
-        ProcessExecute( printCommand );
-        return;
+
+        if( !aDryRun )
+            ProcessExecute( printCommand );
+
+        return true;
     }
 #endif
 
-    // everything else failed; try to open the file
-    if( !openCommand.IsEmpty() )
-    {
-        ProcessExecute( openCommand );
-        return;
-    }
+    return false;
+}
 
-    DisplayError( NULL, wxString::Format( _( "Cannot print '%s'.\n\nUnknown filetype." ), file ) );
+
+void PrintFile( const wxString& file )
+{
+    doPrintFile( file, false );
+}
+
+
+bool CanPrintFile( const wxString& file )
+{
+    return doPrintFile( file, true );
 }
 
 
