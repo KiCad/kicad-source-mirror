@@ -508,7 +508,12 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         m_controls->ForceCursorPosition( true, cursorPos );
 
         auto cleanup = [&] () {
+            m_controls->SetAutoPan( false );
+            m_controls->CaptureCursor( false );
+
             preview.Clear();
+            m_view->Update( &preview );
+
             delete dimension;
             dimension = nullptr;
             step = SET_ORIGIN;
@@ -678,6 +683,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
     m_controls->SetAutoPan( false );
     m_controls->ForceCursorPosition( false );
+    m_controls->CaptureCursor( false );
 
     m_view->Remove( &preview );
     frame()->SetMsgPanel( board() );
