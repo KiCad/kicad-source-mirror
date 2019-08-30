@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-30 07:41-0300\n"
-"PO-Revision-Date: 2019-08-30 07:40-0300\n"
+"POT-Creation-Date: 2019-08-30 15:28-0300\n"
+"PO-Revision-Date: 2019-08-30 10:32-0300\n"
 "Last-Translator: Francisco R. Pereira <frosch_bin@yahoo.com.br>\n"
 "Language-Team: kicad team\n"
 "Language: pt_BR\n"
@@ -4869,14 +4869,12 @@ msgid "Associate footprint"
 msgstr "Associar footprint"
 
 #: cvpcb/tools/cvpcb_actions.cpp:106
-#, fuzzy
 msgid "Associate selected footprint with selected components"
-msgstr "Abre o footprint selecionado no Editor de Footprint"
+msgstr "Associar o footprint selecionado aos componentes selecionados"
 
 #: cvpcb/tools/cvpcb_actions.cpp:111
-#, fuzzy
 msgid "Automatically associate footprints"
-msgstr "Dispor automaticamente todos os footprints"
+msgstr "Associar footprints automaticamente"
 
 #: cvpcb/tools/cvpcb_actions.cpp:112
 msgid "Perform automatic footprint association"
@@ -4887,9 +4885,8 @@ msgid "Delete association"
 msgstr "Excluir associação"
 
 #: cvpcb/tools/cvpcb_actions.cpp:118
-#, fuzzy
 msgid "Delete selected footprint associations"
-msgstr "Apagar todas as associações de footprint"
+msgstr "Apagar as associações de footprint selecionadas"
 
 #: cvpcb/tools/cvpcb_actions.cpp:123 cvpcb/tools/cvpcb_actions.cpp:124
 msgid "Delete all footprint associations"
@@ -4963,15 +4960,15 @@ msgid "Annotation complete."
 msgstr "Anotação completa."
 
 #: eeschema/bom_plugins.cpp:34
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Script file:\n"
 "%s\n"
 "not found. Script not available."
 msgstr ""
-"Arquivo de plugin:\n"
+"Arquivo de script:\n"
 "%s\n"
-"não encontrado. Plugin não disponível."
+"não encontrado. Script não disponível."
 
 #: eeschema/class_libentry.cpp:512
 #, c-format
@@ -5287,9 +5284,8 @@ msgid "Generator files:"
 msgstr "Arquivos do gerador:"
 
 #: eeschema/dialogs/dialog_bom.cpp:578
-#, fuzzy
 msgid "Generator file name not found."
-msgstr "Nome do arquivo de plugin não encontrado."
+msgstr "Nome do arquivo de gerador não encontrado."
 
 #: eeschema/dialogs/dialog_bom.cpp:588
 msgid "No text editor selected in KiCad.  Please choose one."
@@ -5304,19 +5300,18 @@ msgid "BOM generator scripts:"
 msgstr "Scripts geradores de Lista de Materiais:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:69
-#, fuzzy
 msgid "Add a new BOM generator and its command line to the list"
-msgstr "Adicionar um novo plugin e sua linha de comando à lista"
+msgstr ""
+"Adicionar um novo gerador de Lista de Materiais e sua linha de comando à "
+"lista"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:74
-#, fuzzy
 msgid "Edit the script file in the text editor"
-msgstr "Editar o arquivo de plug-in no editor de texto"
+msgstr "Edite o arquivo de script no editor de texto"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:82
-#, fuzzy
 msgid "Remove the current generator script from list"
-msgstr "Remover o plugin atual da lista"
+msgstr "Remove o script do gerador atual da lista"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:92
 msgid "Command line running the generator:"
@@ -5327,15 +5322,14 @@ msgid "Show console window"
 msgstr "Mostre a janela de comando"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:102
-#, fuzzy
 msgid ""
 "By default, command line runs with hidden console window and output is "
 "redirected to the info display.\n"
 "Set this option to show the window of the running command."
 msgstr ""
-"Por padrão a linha de comando roda numa janela de console invisível e a "
-"saída é redirecionada para o campo . Marque esta opção para mostrar a janela "
-"que está rodando o comando."
+"Por padrão, a linha de comando é executada em uma janela de console oculta e "
+"sua saída é redirecionada para a tela de informações.\n"
+"Marque esta opção para exibir a janela de console em execução."
 
 #: eeschema/dialogs/dialog_bom_base.h:80
 msgid "Bill of Material"
@@ -6423,53 +6417,44 @@ msgid "Scope"
 msgstr "Escopo"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
-#, fuzzy
 msgid "Symbol references"
-msgstr "Referências de Biblioteca de Símbolos"
+msgstr "Referências de símbolo"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
-#, fuzzy
 msgid "Symbol values"
-msgstr "Nome do Símbolo"
+msgstr "Valores de símbolo"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
-#, fuzzy
 msgid "Other symbol fields"
-msgstr "Editar campos de símbolos"
+msgstr "Outros campos de símbolo"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
-#, fuzzy
 msgid "Wires && wire labels"
-msgstr "Testar rótulos semelhantes"
+msgstr "Fios && rótulos de fios"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
 msgid "Busses && bus labels"
 msgstr "Barramentos && rótulos de barramento"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:43
-#, fuzzy
 msgid "Global labels"
-msgstr "Rótulo global"
+msgstr "Rótulos globais"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:49
-#, fuzzy
 msgid "Hierarchical labels"
-msgstr "Rótulo hieráquico"
+msgstr "Rótulos hierárquicos"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
-#, fuzzy
 msgid "Sheet titles"
-msgstr "Legenda da folha"
+msgstr "Títulos da folha"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:55
-#, fuzzy
 msgid "Sheet pins"
-msgstr "Adicionar pinos da folha"
+msgstr "Pinos da folha"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:61
-#, fuzzy
 msgid "Schematic text && graphics"
-msgstr "Propriedades da Folha de Esquema"
+msgstr "Texto esquemático && gráficos"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:68
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
@@ -6477,19 +6462,16 @@ msgid "Filters"
 msgstr "Filtros"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:76
-#, fuzzy
 msgid "Filter fields by name:"
-msgstr "Filtrar itens por rede:"
+msgstr "Filtrar campos por nome:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:88
-#, fuzzy
 msgid "Filter items by parent symbol reference:"
-msgstr "Filtrar itens pela referência do footprint pai:"
+msgstr "Filtrar itens pela referência do símbolo pai:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:96
-#, fuzzy
 msgid "Filter items by parent symbol library id:"
-msgstr "Filtrar itens pelo ID da biblioteca de footprint pai:"
+msgstr "Filtrar itens pelo ID da biblioteca de símbolos pai:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:108
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:51
@@ -6497,9 +6479,8 @@ msgid "Filter items by net:"
 msgstr "Filtrar itens por rede:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:130
-#, fuzzy
 msgid "Set To"
-msgstr "Definir Tecla de Atalho"
+msgstr "Definir Como"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:142
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:126
@@ -6680,9 +6661,8 @@ msgid "Pin &name:"
 msgstr "&Nome do Pino:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:41
-#, fuzzy
 msgid "Pin num&ber:"
-msgstr "Números dos pinos:"
+msgstr "Número do &pino:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:43
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
@@ -6705,14 +6685,12 @@ msgid "N&ame text size:"
 msgstr "T&amanho do texto do Nome:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:80
-#, fuzzy
 msgid "Number text si&ze:"
-msgstr "Tamanho do te&xto do Número:"
+msgstr "Tamanho de te&xto do número:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:87
-#, fuzzy
 msgid "Electrical type:"
-msgstr "Tipo &elétrico:"
+msgstr "Tipo elétrico:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:89
 msgid "Used by the ERC."
@@ -6927,13 +6905,12 @@ msgid "Updated"
 msgstr "Atualizado"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:19
-#, fuzzy
 msgid ""
 "This schematic has one or more buses with more than one label.\n"
 "This was allowed in previous KiCad versions but is no longer permitted."
 msgstr ""
-"Este esquema tem um ou mais barramentos com mais de um rótulo.  Isso foi "
-"permitido em versões anteriores do KiCad, mas não é mais permitido."
+"Este esquema tem um ou mais baramentos com mais de um rótulo.\n"
+"Isso foi permitido em versões anteriores do KiCad, mas não é mais permitido."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:23
 msgid ""
@@ -6986,9 +6963,8 @@ msgid "%s Export"
 msgstr "%s Exportar"
 
 #: eeschema/dialogs/dialog_netlist.cpp:533
-#, fuzzy
 msgid "Schematic netlist not available"
-msgstr "Arquivo fonte : \"%s\" não disponível"
+msgstr "Netlist do esquema não disponível"
 
 #: eeschema/dialogs/dialog_netlist.cpp:669
 msgid "This plugin already exists."
@@ -7008,28 +6984,24 @@ msgstr ""
 "Não esqueça de escolher um título para esta página de controle de netlist"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:39
-#, fuzzy
 msgid "Add Generator..."
-msgstr "Adicionar Biblioteca…"
+msgstr "Adicionar Gerador..."
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:42
-#, fuzzy
 msgid "Remove Generator"
-msgstr "Remover Regulador"
+msgstr "Remover Gerador"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:92
 msgid "Command line to run the generator:"
 msgstr "Linha de comando para executar o gerador:"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:107
-#, fuzzy
 msgid "Browse Generators..."
-msgstr "Navegar…"
+msgstr "Procurar Geradores..."
 
 #: eeschema/dialogs/dialog_netlist_base.h:109
-#, fuzzy
 msgid "Script Generator Properties"
-msgstr "Propriedades da Folha de Esquema"
+msgstr "Propriedades do Gerador de Script"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:79
 msgid "Plot All Pages"
@@ -7352,9 +7324,8 @@ msgid "A sheet named \"%s\" already exists."
 msgstr "Um folha de nome \"%s\" já existe."
 
 #: eeschema/dialogs/dialog_sch_sheet_props.cpp:132
-#, fuzzy
 msgid "Sheet File"
-msgstr "Selecionar um Arquivo"
+msgstr "Arquivo de Folha de Desenho"
 
 #: eeschema/dialogs/dialog_sch_sheet_props_base.cpp:32
 msgid "&File name:"
@@ -8290,9 +8261,8 @@ msgid "millimeters"
 msgstr "millimetros"
 
 #: eeschema/dialogs/panel_eeschema_settings_base.cpp:45
-#, fuzzy
 msgid "Default schematic text size:"
-msgstr "Tamanho p&adrão de texto:"
+msgstr "Tamanho padrão de texto esquemático:"
 
 #: eeschema/dialogs/panel_eeschema_settings_base.cpp:56
 #: eeschema/dialogs/panel_libedit_settings_base.cpp:99
@@ -8423,14 +8393,14 @@ msgid "Add Anyway"
 msgstr "Adicionar Assim Mesmo"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:729
-#, fuzzy
 msgid ""
 "Modifications have been made to one or more symbol libraries.\n"
 "Changes must be saved or discarded before the symbol library table can be "
 "modified."
 msgstr ""
-"Modificações foram feitas para uma ou mais biblioteca de símbolos. Mudanças "
-"devem ser salvas ou descartadas antes da tabela de biblioteca ser modificada."
+"Foram feitas alterações em uma ou mais bibliotecas de símbolos.\n"
+"As alterações devem ser salvas ou descartadas antes que a tabela de "
+"biblioteca de símbolos possa ser modificada."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:743
 msgid "Symbol Libraries"
@@ -8563,9 +8533,8 @@ msgid "A \"no connection\" flag is not connected to anything"
 msgstr "Um sinalizador “não conectado” não está conectado a nada"
 
 #: eeschema/drc_erc_item.cpp:58
-#, fuzzy
 msgid "Label not connected anywhere else in the schematic"
-msgstr "Um rótulo não conectado a nenhum outro item"
+msgstr "Rótulo não conectado a qualquer outro lugar no esquema"
 
 #: eeschema/drc_erc_item.cpp:60
 msgid "Labels are similar (lower/upper case difference only)"
@@ -14159,7 +14128,7 @@ msgstr "Diâmetro do furo de folga:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:592
 msgid "Diameter of clearance hole in ground plane(s)"
-msgstr ""
+msgstr "Diâmetro do isolamento do furo em plano(s) de terra"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:604
 #: pcb_calculator/transline_ident.cpp:187
@@ -14204,7 +14173,7 @@ msgstr "Constantes Dielétricas Relativas"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:655
 msgid "Maximum acceptable rise in temperature"
-msgstr ""
+msgstr "Aumento máximo aceitável na temperatura"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:666
 #, fuzzy
@@ -14213,7 +14182,7 @@ msgstr "Tempo de subida:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:668
 msgid "Pulse rise time to calculate reactance"
-msgstr ""
+msgstr "Tempo de ascensão do pulso para calcular a reatância"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:675
 msgid "ns"
@@ -14240,7 +14209,7 @@ msgstr "Afastamento térmico:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:742
 msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
-msgstr ""
+msgstr "Utilizando o valor de condutividade térmica 401 Watts/(metro-Kelvin)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:750
 msgid "deg C/Watt"
@@ -14274,6 +14243,7 @@ msgstr "Constante de subida:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:784
 msgid "Rise time degradation for given Z0 and calculated capacitance"
 msgstr ""
+"Degradação do tempo de subida para o dado Z0 e a capacitância calculada"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:792
 msgid "ps"
@@ -14302,6 +14272,7 @@ msgstr "Reatância:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:814
 msgid "Inductive reactance for given rise time and calculated inductance"
 msgstr ""
+"Reatância indutiva para o tempo de subida fornecido e a indutância calculada"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:836
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:191
@@ -16134,7 +16105,6 @@ msgstr "THT:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:134
 #: pcbnew/dialogs/dialog_board_statistics.cpp:139
-#, fuzzy
 msgid "SMD:"
 msgstr "SMD:"
 
@@ -16300,7 +16270,7 @@ msgstr "Apagar Trilhas em Ilhas"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:45
 msgid "Delete tracks that have both start and end positions inside of a pad"
-msgstr ""
+msgstr "Apaga as trilhas que têm posições de início e fim dentro de uma ilha"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:56
 msgid "Changes To Be Applied:"
@@ -17288,6 +17258,8 @@ msgid ""
 "Note: solder paste clearances (absolute and relative) are added to determine "
 "final clearance."
 msgstr ""
+"Nota: isolamentos (absolutos e relativos) são adicionados a pasta de solda "
+"para determinar o isolamento final."
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:395
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:297
@@ -17436,6 +17408,8 @@ msgid ""
 "Note: solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
 msgstr ""
+"Nota: isolamentos (absolutos e relativos) são adicionados a pasta de solda "
+"para determinar o isolamento final."
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -20569,10 +20543,18 @@ msgid ""
 "new set of links between symbols and footprints, and then updates the "
 "footprints accordingly."
 msgstr ""
+"A primeira opção utiliza os vínculos existentes entre símbolos e footprints "
+"para atualizar os footprints com base nas alterações feitas em seus "
+"símbolos.  \n"
+"\n"
+"A segunda opção utiliza as referências de símbolo e footprint para "
+"estabelecer um novo conjunto de vínculos entre símbolos e footprints e, em "
+"seguida, atualiza os footprints de acordo."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:40
 msgid "Replace footprints of symbols whose footprint assignments have changed"
 msgstr ""
+"Substituir footprints de símbolos cujas atribuições de footprint mudaram"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:41
 msgid ""
@@ -20580,6 +20562,10 @@ msgid ""
 "assignment changes made in the schematic. Uncheck this only if you don't "
 "want to change existing footprints on the board."
 msgstr ""
+"Normalmente, os footprints na placa devem ser alterados para corresponder às "
+"alterações de atribuições de footprint feitas no esquema. Desmarque esta "
+"opção somente se você não quiser alterar os footprints já existentes na "
+"placa."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:45
 #, fuzzy
@@ -20588,7 +20574,7 @@ msgstr "Apagar todas as associações de footprint"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:48
 msgid "Delete nets containing only a single pad"
-msgstr ""
+msgstr "Excluir redes contendo apenas uma única ilha"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:58
 msgid "Update PCB from Schematic"
@@ -20809,7 +20795,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:52
 msgid "Flip board items L/R (default is T/B)"
-msgstr ""
+msgstr "Inverter itens da placa D/E (o padrão é T/B)"
 
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:61
 msgid "&Rotation angle:"
@@ -20923,6 +20909,9 @@ msgid ""
 "approximate it.\n"
 "The error max defines the number of segments of this polygon."
 msgstr ""
+"Esta é a distância máxima entre um círculo e a forma poligonal que o "
+"aproxima.\n"
+"O erro máximo define o número de segmentos deste polígono."
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:83
 msgid "Zone fill strategy"
@@ -20930,7 +20919,7 @@ msgstr "Estratégia de preenchimento de zona"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:92
 msgid "Stroked outlines (legacy)"
-msgstr ""
+msgstr "Contornos traçados (legado)"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:95
 msgid "Smoothed polygons (best performance)"
@@ -22175,7 +22164,7 @@ msgstr "Nenhum footprint para posicionamento automático."
 #: pcbnew/exporters/gen_footprints_placefile.cpp:229
 #, c-format
 msgid "footprint %s (not set as SMD) forced in list"
-msgstr ""
+msgstr "footprint %s (não definido como SMD) forçado na lista"
 
 #: pcbnew/exporters/gen_footprints_placefile.cpp:280
 #, c-format
@@ -22248,6 +22237,8 @@ msgid ""
 "Board stackup settings not up to date\n"
 "Please fix the stackup"
 msgstr ""
+"Configurações de empilhamento de placa não atualizadas\n"
+"Por favor, corrija o empilhamento"
 
 #: pcbnew/files.cpp:130
 msgid "Open Board File"
@@ -22600,6 +22591,11 @@ msgid ""
 "Search terms are separated by spaces.  All search terms must match.\n"
 "A term which is a number will also match against the pad count."
 msgstr ""
+"Filtrar no nome do footprint, palavras-chave, descrição e contagem de "
+"ilhas.\n"
+"Os termos de pesquisa são separados por espaços.  Todos os termos de "
+"pesquisa devem corresponder.\n"
+"Um termo que é um número também irá corresponder contra a contagem de ilhas."
 
 #: pcbnew/footprint_viewer_frame.cpp:609
 #, c-format
@@ -22877,6 +22873,7 @@ msgstr "Não há um plugin para tratar este tipo de arquivo."
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:37
 msgid "Only vectors will be imported.  Bitmaps and fonts will be ignored."
 msgstr ""
+"Somente os vetores serão importados.  Bitmaps e fontes serão ignorados."
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:45
 msgid "Placement:"
@@ -25139,7 +25136,7 @@ msgstr "Propriedades de Ilha Padrão…"
 
 #: pcbnew/tools/pcb_actions.cpp:344
 msgid "Edit the pad properties used when creating new pads"
-msgstr ""
+msgstr "Edita as propriedades de ilha utilizadas ao criar novas ilhas"
 
 #: pcbnew/tools/pcb_actions.cpp:352
 msgid "Update Footprint..."
@@ -25652,124 +25649,100 @@ msgid "Switch to Inner layer 6"
 msgstr "Alternar para a camada interna 6"
 
 #: pcbnew/tools/pcb_actions.cpp:753
-#, fuzzy
 msgid "Switch to Inner layer 7"
-msgstr "Alternar para a camada interna 1"
+msgstr "Alternar para a camada interna 7"
 
 #: pcbnew/tools/pcb_actions.cpp:758
-#, fuzzy
 msgid "Switch to Inner layer 8"
-msgstr "Alternar para a camada interna 1"
+msgstr "Alternar para a camada interna 8"
 
 #: pcbnew/tools/pcb_actions.cpp:763
-#, fuzzy
 msgid "Switch to Inner layer 9"
-msgstr "Alternar para a camada interna 1"
+msgstr "Alternar para a camada interna 9"
 
 #: pcbnew/tools/pcb_actions.cpp:768
-#, fuzzy
 msgid "Switch to Inner layer 10"
-msgstr "Alternar para a camada interna 1"
+msgstr "Alternar para a camada interna 10"
 
 #: pcbnew/tools/pcb_actions.cpp:773
-#, fuzzy
 msgid "Switch to Inner layer 11"
-msgstr "Alternar para a camada interna 1"
+msgstr "Alternar para a camada interna 11"
 
 #: pcbnew/tools/pcb_actions.cpp:778
-#, fuzzy
 msgid "Switch to Inner layer 12"
-msgstr "Alternar para a camada interna 1"
+msgstr "Alternar para a camada interna 12"
 
 #: pcbnew/tools/pcb_actions.cpp:783
-#, fuzzy
 msgid "Switch to Inner layer 13"
-msgstr "Alternar para a camada interna 1"
+msgstr "Alternar para a camada interna 13"
 
 #: pcbnew/tools/pcb_actions.cpp:788
-#, fuzzy
 msgid "Switch to Inner layer 14"
-msgstr "Alternar para a camada interna 1"
+msgstr "Alternar para a camada interna 14"
 
 #: pcbnew/tools/pcb_actions.cpp:793
-#, fuzzy
 msgid "Switch to Inner layer 15"
-msgstr "Alternar para a camada interna 1"
+msgstr "Alternar para a camada interna 15"
 
 #: pcbnew/tools/pcb_actions.cpp:798
-#, fuzzy
 msgid "Switch to Inner layer 16"
-msgstr "Alternar para a camada interna 1"
+msgstr "Alternar para a camada interna 16"
 
 #: pcbnew/tools/pcb_actions.cpp:803
-#, fuzzy
 msgid "Switch to Inner layer 17"
-msgstr "Alternar para a camada interna 1"
+msgstr "Alternar para a camada interna 17"
 
 #: pcbnew/tools/pcb_actions.cpp:808
-#, fuzzy
 msgid "Switch to Inner layer 18"
-msgstr "Alternar para a camada interna 1"
+msgstr "Alternar para a camada interna 18"
 
 #: pcbnew/tools/pcb_actions.cpp:813
-#, fuzzy
 msgid "Switch to Inner layer 19"
-msgstr "Alternar para a camada interna 1"
+msgstr "Alternar para a camada interna 19"
 
 #: pcbnew/tools/pcb_actions.cpp:818
-#, fuzzy
 msgid "Switch to Inner layer 20"
-msgstr "Alternar para a camada interna 2"
+msgstr "Alternar para a camada interna 20"
 
 #: pcbnew/tools/pcb_actions.cpp:823
-#, fuzzy
 msgid "Switch to Inner layer 21"
-msgstr "Alternar para a camada interna 2"
+msgstr "Alternar para a camada interna 21"
 
 #: pcbnew/tools/pcb_actions.cpp:828
-#, fuzzy
 msgid "Switch to Inner layer 22"
-msgstr "Alternar para a camada interna 2"
+msgstr "Alternar para a camada interna 22"
 
 #: pcbnew/tools/pcb_actions.cpp:833
-#, fuzzy
 msgid "Switch to Inner layer 23"
-msgstr "Alternar para a camada interna 2"
+msgstr "Alternar para a camada interna 23"
 
 #: pcbnew/tools/pcb_actions.cpp:838
-#, fuzzy
 msgid "Switch to Inner layer 24"
-msgstr "Alternar para a camada interna 2"
+msgstr "Alternar para a camada interna 24"
 
 #: pcbnew/tools/pcb_actions.cpp:843
-#, fuzzy
 msgid "Switch to Inner layer 25"
-msgstr "Alternar para a camada interna 2"
+msgstr "Alternar para a camada interna 25"
 
 #: pcbnew/tools/pcb_actions.cpp:848
-#, fuzzy
 msgid "Switch to Inner layer 26"
-msgstr "Alternar para a camada interna 2"
+msgstr "Alternar para a camada interna 26"
 
 #: pcbnew/tools/pcb_actions.cpp:853
-#, fuzzy
 msgid "Switch to Inner layer 27"
-msgstr "Alternar para a camada interna 2"
+msgstr "Alternar para a camada interna 27"
 
 #: pcbnew/tools/pcb_actions.cpp:858
-#, fuzzy
 msgid "Switch to Inner layer 28"
-msgstr "Alternar para a camada interna 2"
+msgstr "Alternar para a camada interna 28"
 
 #: pcbnew/tools/pcb_actions.cpp:863
-#, fuzzy
 msgid "Switch to Inner layer 29"
-msgstr "Alternar para a camada interna 2"
+msgstr "Alternar para a camada interna 29"
 
 #: pcbnew/tools/pcb_actions.cpp:868
-#, fuzzy
 msgid "Switch to Inner layer 30"
-msgstr "Alternar para a camada interna 3"
+msgstr "Alternar para a camada interna 30"
 
 #: pcbnew/tools/pcb_actions.cpp:874
 msgid "Switch to Copper (B.Cu) layer"
@@ -25788,28 +25761,24 @@ msgid "Add Through Via"
 msgstr "Adicionar Via Passante"
 
 #: pcbnew/tools/pcb_actions.cpp:896
-#, fuzzy
 msgid "Increase Layer Opacity"
-msgstr "&Aumentar Opacidade da Camada"
+msgstr "Aumentar Opacidade da Camada"
 
 #: pcbnew/tools/pcb_actions.cpp:896 pcbnew/tools/pcb_actions.cpp:903
 msgid "Make the current layer more transparent"
 msgstr "Tornar a camada atual mais transparente"
 
 #: pcbnew/tools/pcb_actions.cpp:903
-#, fuzzy
 msgid "Decrease Layer Opacity"
-msgstr "&Diminuir Opacidade da Camada"
+msgstr "Diminuir Opacidade da Camada"
 
 #: pcbnew/tools/pcb_actions.cpp:913
-#, fuzzy
 msgid "Show Board Statistics"
-msgstr "Exibir emaranhado da placa"
+msgstr "Exibir Estatísticas da Placa"
 
 #: pcbnew/tools/pcb_actions.cpp:914
-#, fuzzy
 msgid "Shows board statistics"
-msgstr "Exibir emaranhado da placa"
+msgstr "Exibe estatísticas da placa"
 
 #: pcbnew/tools/pcb_actions.cpp:921
 msgid "Align to Top"
@@ -25911,9 +25880,8 @@ msgstr ""
 "Expande a seleção atual para selecionar uma conexão entre duas junções."
 
 #: pcbnew/tools/pcb_actions.cpp:1032
-#, fuzzy
 msgid "Select All Tracks in Net"
-msgstr "Todas as Trilhas na Rede"
+msgstr "Selecionar Todas as Trilhas na Rede"
 
 #: pcbnew/tools/pcb_actions.cpp:1033
 msgid "Selects all tracks & vias belonging to the same net."
@@ -25988,16 +25956,14 @@ msgstr ""
 "placa"
 
 #: pcbnew/tools/pcb_actions.cpp:1099
-#, fuzzy
 msgid "Route Single Track"
-msgstr "Trilha Única"
+msgstr "Rotear uma Única Trilha"
 
 #: pcbnew/tools/pcb_actions.cpp:1099
 msgid "Run push & shove router (single tracks)"
 msgstr "Executar roteamento de empurrar & arrastar (trilhas únicas)"
 
 #: pcbnew/tools/pcb_actions.cpp:1106
-#, fuzzy
 msgid "Route Differential Pair"
 msgstr "Rotear Par Diferencial"
 
@@ -26022,14 +25988,12 @@ msgid "Open Differential Pair Dimension settings"
 msgstr "Abrir Configurações de Dimensão do Par Diferencial"
 
 #: pcbnew/tools/pcb_actions.cpp:1122
-#, fuzzy
 msgid "Set Layer Pair..."
-msgstr "Definir Par de &Camadas..."
+msgstr "Definir Par de Camadas..."
 
 #: pcbnew/tools/pcb_actions.cpp:1122
-#, fuzzy
 msgid "Change active layer pair for routing"
-msgstr "Alterar par de camadas ativas"
+msgstr "Alterar par de camadas ativa para roteamento"
 
 #: pcbnew/tools/pcb_actions.cpp:1129
 msgid "Tune length of a single track"
@@ -26092,9 +26056,8 @@ msgid "Place a module"
 msgstr "Inserir um módulo"
 
 #: pcbnew/tools/pcb_editor_control.cpp:821
-#, fuzzy
 msgid "Toggle Locking"
-msgstr "Bloqueio"
+msgstr "Alternar Bloqueio"
 
 #: pcbnew/tools/pcb_editor_control.cpp:908
 msgid "Place a layer alignment target"
@@ -26239,9 +26202,8 @@ msgid "Checking zone fills..."
 msgstr "Verificando preenchimentos da zona..."
 
 #: pcbnew/zone_filler.cpp:118
-#, fuzzy
 msgid "Building zone fills..."
-msgstr "Verificando preenchimentos da zona..."
+msgstr "Construindo preenchimentos da zona..."
 
 #: pcbnew/zone_filler.cpp:201
 msgid "Removing insulated copper islands..."
@@ -26278,7 +26240,7 @@ msgstr "Modificar propriedades da zona"
 #: pcbnew/zones_by_polygon.cpp:140
 #, c-format
 msgid "Refill %d Zones"
-msgstr "Preencher Zonas %d"
+msgstr "Recarregar %d Zonas"
 
 #~ msgid "&Exit"
 #~ msgstr "&Sair"
