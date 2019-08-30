@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -314,9 +314,6 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizeLeft->Add( sbSizerTW_Prms, 0, wxALL|wxEXPAND, 5 );
 
 	m_htmlWinFormulas = new wxHtmlWindow( m_panelTrackWidth, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_NO_SELECTION|wxHW_SCROLLBAR_AUTO|wxBORDER_SIMPLE );
-	m_htmlWinFormulas->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
-	m_htmlWinFormulas->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
-
 	bSizeLeft->Add( m_htmlWinFormulas, 1, wxTOP|wxEXPAND, 5 );
 
 
