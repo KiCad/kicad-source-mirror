@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,7 +105,7 @@ public:
     DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& title,
             const   wxPoint& pos = wxDefaultPosition,
             const   wxSize&  size = wxDefaultSize,
-            long    style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER,
+            long    style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER,
             const   wxString& name = wxDialogNameStr
             );
 

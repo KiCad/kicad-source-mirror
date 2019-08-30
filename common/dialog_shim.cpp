@@ -66,7 +66,7 @@ END_EVENT_TABLE()
 
 
 DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& title,
-                          const wxPoint& pos, const wxSize& size, long style, 
+                          const wxPoint& pos, const wxSize& size, long style,
                           const wxString& name ) :
         wxDialog( aParent, id, title, pos, size, style, name ),
         KIWAY_HOLDER( nullptr, KIWAY_HOLDER::DIALOG ),
