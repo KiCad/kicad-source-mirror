@@ -190,6 +190,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     SyncView();
     GetCanvas()->GetViewControls()->SetSnapping( true );
+    GetCanvas()->SetCanFocus( false );
 
     // Set the working/draw area size to display a symbol to a reasonable value:
     // A 450mm x 450mm with a origin at the area center looks like a large working area
@@ -590,6 +591,7 @@ void LIB_VIEW_FRAME::SetSelectedLibrary( const wxString& aLibraryName )
     // (which is not necessary the case if SetSelectedLibrary is called
     // by another caller than ClickOnLibList.
     m_libList->SetStringSelection( m_libraryName, true );
+    m_libList->SetFocus();
 }
 
 
@@ -603,6 +605,7 @@ void LIB_VIEW_FRAME::ClickOnCmpList( wxCommandEvent& event )
     m_selection_changed = true;
 
     SetSelectedComponent( m_cmpList->GetString( ii ) );
+    m_cmpList->SetFocus();
 }
 
 
