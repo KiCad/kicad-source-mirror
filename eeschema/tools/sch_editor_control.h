@@ -139,6 +139,8 @@ private:
     ///> copy selection to clipboard
     bool doCopy();
 
+    bool searchSupplementaryClipboard( const wxString& aSheetFilename, SCH_SCREEN** aScreen );
+
     void doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aForce );
 
     /**
@@ -179,7 +181,10 @@ private:
 private:
     bool      m_probingPcbToSch;    // Recursion guard when cross-probing to PCBNew
     EDA_ITEM* m_pickerItem;         // Current item for picker highlighting.
-    wxString  m_pickerNet;
+
+    // A map of sheet paths --> screens for the clipboard contents.  We use these to hook up
+    // cut/paste operations for unsaved sheet content.
+    std::map<wxString, SCH_SCREEN*> m_supplementaryClipboard;
 };
 
 

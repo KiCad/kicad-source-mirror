@@ -864,12 +864,36 @@ bool SCH_EDITOR_CONTROL::doCopy()
     if( !selection.GetSize() )
         return false;
 
+    m_supplementaryClipboard.clear();
+
+    for( EDA_ITEM* item : selection )
+    {
+        if( item->Type() == SCH_SHEET_T )
+        {
+            SCH_SHEET* sheet = (SCH_SHEET*) item;
+            m_supplementaryClipboard[ sheet->GetFileName() ] = sheet->GetScreen();
+        }
+    }
+
     STRING_FORMATTER formatter;
     SCH_LEGACY_PLUGIN plugin;
 
     plugin.Format( &selection, &formatter );
 
     return m_toolMgr->SaveClipboard( formatter.GetString() );
+}
+
+
+bool SCH_EDITOR_CONTROL::searchSupplementaryClipboard( const wxString& aSheetFilename,
+                                                       SCH_SCREEN** aScreen )
+{
+    if( m_supplementaryClipboard.count( aSheetFilename ) > 0 )
+    {
+        *aScreen = m_supplementaryClipboard[ aSheetFilename ];
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -1035,7 +1059,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 fn.Normalize( wxPATH_NORM_ALL, currentSheetFileName.GetPath() );
             }
 
-            if( g_RootSheet->SearchHierarchy( fn.GetFullPath( wxPATH_UNIX ), &existingScreen ) )
+            if( g_RootSheet->SearchHierarchy( fn.GetFullPath( wxPATH_UNIX ), &existingScreen )
+                    || searchSupplementaryClipboard( sheet->GetFileName(), &existingScreen ) )
             {
                 sheet->SetScreen( existingScreen );
 
