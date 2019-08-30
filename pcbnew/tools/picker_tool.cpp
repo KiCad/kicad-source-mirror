@@ -108,6 +108,11 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
             break;
         }
 
+        else if( evt->IsDblClick( BUT_LEFT ) || evt->IsDrag( BUT_LEFT ) )
+        {
+            // Not currently used, but we don't want to pass them either.
+        }
+
         else if( evt->IsClick( BUT_RIGHT ) )
             m_menu.ShowContextMenu();
 
