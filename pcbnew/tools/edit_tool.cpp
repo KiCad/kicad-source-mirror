@@ -463,8 +463,7 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
                 for( auto item : selection )
                 {
                     BOARD_ITEM* i = static_cast<BOARD_ITEM*>( item );
-                    auto delta = VECTOR2I( i->GetPosition() ) - totalMovement;
-                    i->SetPosition( wxPoint( delta.x, delta.y ) );
+                    i->Move( -totalMovement );
 
                     // And what about flipping and rotation?
                     // for now, they won't be undone, but maybe that is how
