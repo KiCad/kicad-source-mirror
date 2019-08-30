@@ -59,7 +59,30 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         VECTOR2I cursorPos = grid.BestSnapAnchor( controls->GetMousePosition(), nullptr );
         controls->ForceCursorPosition(true, cursorPos );
 
-        if( evt->IsClick( BUT_LEFT ) )
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
+        {
+            if( m_cancelHandler )
+            {
+                try
+                {
+                    (*m_cancelHandler)();
+                }
+                catch( std::exception& e )
+                {
+                    std::cerr << "PCBNEW_PICKER_TOOL cancelHandler error: " << e.what() << std::endl;
+                }
+            }
+
+            // Activating a new tool may have alternate finalization from canceling the current tool
+            if( evt->IsActivate() )
+                finalize_state = END_ACTIVATE;
+            else
+                finalize_state = EVT_CANCEL;
+
+            break;
+        }
+
+        else if( evt->IsClick( BUT_LEFT ) )
         {
             bool getNext = false;
 
@@ -103,27 +126,9 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
             }
         }
 
-        else if( evt->IsCancelInteractive() || evt->IsActivate() )
+        else if( evt->IsDblClick( BUT_LEFT ) || evt->IsDrag( BUT_LEFT ) )
         {
-            if( m_cancelHandler )
-            {
-                try
-                {
-                    (*m_cancelHandler)();
-                }
-                catch( std::exception& e )
-                {
-                    std::cerr << "PCBNEW_PICKER_TOOL cancelHandler error: " << e.what() << std::endl;
-                }
-            }
-
-            // Activating a new tool may have alternate finalization from canceling the current tool
-            if( evt->IsActivate() )
-                finalize_state = END_ACTIVATE;
-            else
-                finalize_state = EVT_CANCEL;
-
-            break;
+            // Not currently used, but we don't want to pass them either
         }
 
         else if( evt->IsClick( BUT_RIGHT ) )

@@ -71,7 +71,31 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         m_frame->GetCanvas()->SetCurrentCursor( m_cursor );
         VECTOR2D cursorPos = controls->GetCursorPosition( snap && !evt->Modifier( MD_ALT ) );
 
-        if( evt->IsClick( BUT_LEFT ) )
+        if( evt->IsCancelInteractive() || evt->IsActivate() )
+        {
+            if( m_cancelHandler )
+            {
+                try
+                {
+                    (*m_cancelHandler)();
+                }
+                catch( std::exception& e )
+                {
+                    std::cerr << "PICKER_TOOL cancel handler error: " << e.what() << std::endl;
+                }
+            }
+
+            // Activating a new tool may have alternate finalization from canceling the current
+            // tool
+            if( evt->IsActivate() )
+                finalize_state = END_ACTIVATE;
+            else
+                finalize_state = EVT_CANCEL;
+
+            break;
+        }
+
+        else if( evt->IsClick( BUT_LEFT ) )
         {
             bool getNext = false;
 
@@ -115,33 +139,16 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
             }
         }
 
-        else if( evt->IsCancelInteractive() || evt->IsActivate() )
+        else if( evt->IsDblClick( BUT_LEFT ) || evt->IsDrag( BUT_LEFT ) )
         {
-            if( m_cancelHandler )
-            {
-                try
-                {
-                    (*m_cancelHandler)();
-                }
-                catch( std::exception& e )
-                {
-                    std::cerr << "PICKER_TOOL cancel handler error: " << e.what() << std::endl;
-                }
-            }
-
-            // Activating a new tool may have alternate finalization from canceling the current
-            // tool
-            if( evt->IsActivate() )
-                finalize_state = END_ACTIVATE;
-            else
-                finalize_state = EVT_CANCEL;
-
-            break;
+            // Not currently used, but we don't want to pass them either
         }
+
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu();
         }
+
         else
             evt->SetPassEvent();
     }
