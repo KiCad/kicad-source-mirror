@@ -245,6 +245,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     // after changing something to the aui manager call Update() to reflect the changes
     m_auimgr.Update();
 
+    // The canvas should not steal the focus from the list boxes
+    GetCanvas()->SetCanFocus( false );
     GetCanvas()->GetGAL()->SetAxesEnabled( true );
     GetCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
