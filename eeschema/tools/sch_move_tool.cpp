@@ -181,6 +181,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 //------------------------------------------------------------------------
                 // Setup a drag or a move
                 //
+                m_dragAdditions.clear();
+
                 for( SCH_ITEM* it = m_frame->GetScreen()->GetDrawItems(); it; it = it->Next() )
                 {
                     it->ClearFlags(TEMP_SELECTED );
@@ -445,17 +447,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     if( unselect )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     else
-    {
-        m_dragAdditions.clear();
-
-        for( SCH_ITEM* it = m_frame->GetScreen()->GetDrawItems(); it; it = it->Next() )
-        {
-            if( it->HasFlag( TEMP_SELECTED ) )
-                m_dragAdditions.push_back( it );
-        }
-
-        m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
-    }
+        m_selectionTool->RebuildSelection();  // Schematic cleanup might have merged lines, etc.
 
     m_dragAdditions.clear();
     m_moveInProgress = false;
@@ -481,17 +473,17 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
 
             if( testLine->GetStartPoint() == aPoint )
             {
-                if( !testLine->HasFlag(TEMP_SELECTED ) )
+                if( !testLine->HasFlag( TEMP_SELECTED ) )
                     aList.push_back( testLine );
 
-                testLine->SetFlags(STARTPOINT | TEMP_SELECTED );
+                testLine->SetFlags( STARTPOINT | TEMP_SELECTED );
             }
             else if( testLine->GetEndPoint() == aPoint )
             {
-                if( !testLine->HasFlag(TEMP_SELECTED ) )
+                if( !testLine->HasFlag( TEMP_SELECTED ) )
                     aList.push_back( testLine );
 
-                testLine->SetFlags(ENDPOINT | TEMP_SELECTED );
+                testLine->SetFlags( ENDPOINT | TEMP_SELECTED );
             }
             break;
         }
@@ -510,7 +502,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
                 newWire->SetFlags( IS_NEW );
                 m_frame->AddToScreen( newWire, m_frame->GetScreen() );
 
-                newWire->SetFlags(TEMP_SELECTED | STARTPOINT );
+                newWire->SetFlags( TEMP_SELECTED | STARTPOINT );
                 aList.push_back( newWire );
             }
             break;
@@ -518,10 +510,10 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
         case SCH_NO_CONNECT_T:
         case SCH_JUNCTION_T:
             // Select no-connects and junctions that are connected to items being moved.
-            if( !test->HasFlag(TEMP_SELECTED ) && test->IsConnected( aPoint ) )
+            if( !test->HasFlag( TEMP_SELECTED ) && test->IsConnected( aPoint ) )
             {
                 aList.push_back( test );
-                test->SetFlags(TEMP_SELECTED );
+                test->SetFlags( TEMP_SELECTED );
             }
 
             break;
@@ -531,8 +523,12 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
         case SCH_HIER_LABEL_T:
         case SCH_BUS_WIRE_ENTRY_T:
         case SCH_BUS_BUS_ENTRY_T:
+            // Performance optimization:
+            if( test->HasFlag( TEMP_SELECTED ) )
+                break;
+
             // Select labels and bus entries that are connected to a wire being moved.
-            if( !test->HasFlag(TEMP_SELECTED ) && aOriginalItem->Type() == SCH_LINE_T )
+            if( aOriginalItem->Type() == SCH_LINE_T )
             {
                 std::vector<wxPoint> connections;
                 test->GetConnectionPoints( connections );
@@ -541,7 +537,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
                 {
                     if( aOriginalItem->HitTest( point ) )
                     {
-                        test->SetFlags(TEMP_SELECTED );
+                        test->SetFlags( TEMP_SELECTED );
                         aList.push_back( test );
                         break;
                     }

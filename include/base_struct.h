@@ -269,7 +269,7 @@ public:
 
     STATUS_FLAGS GetEditFlags() const
     {
-        int mask = EDA_ITEM_ALL_FLAGS - ( SELECTED | HIGHLIGHTED | BRIGHTENED |
+        int mask = EDA_ITEM_ALL_FLAGS - ( SELECTED | TEMP_SELECTED | HIGHLIGHTED | BRIGHTENED |
                                           STARTPOINT | ENDPOINT | IS_DANGLING |
                                           BEGIN_ONPAD | END_ONPAD | DP_COUPLED );
         return m_Flags & mask;

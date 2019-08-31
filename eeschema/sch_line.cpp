@@ -459,12 +459,15 @@ EDA_ITEM* SCH_LINE::MergeOverlap( SCH_LINE* aLine )
     }
 
     // Search for a common end:
-    if( ( leftmost_start == other_start ) &&
-        ( leftmost_end == other_end ) )     // Trivial case
+    if( ( leftmost_start == other_start ) && ( leftmost_end == other_end ) )  // Trivial case
     {
         auto ret = new SCH_LINE( *aLine );
         ret->SetStartPoint( leftmost_start );
         ret->SetEndPoint( leftmost_end );
+
+        if( IsSelected() || aLine->IsSelected() )
+            ret->SetSelected();
+
         return ret;
     }
 
@@ -504,6 +507,10 @@ EDA_ITEM* SCH_LINE::MergeOverlap( SCH_LINE* aLine )
         auto ret = new SCH_LINE( *aLine );
         ret->SetStartPoint( leftmost_start );
         ret->SetEndPoint( leftmost_end );
+
+        if( IsSelected() || aLine->IsSelected() )
+            ret->SetSelected();
+
         return ret;
     }
 

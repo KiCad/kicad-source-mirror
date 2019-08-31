@@ -258,7 +258,8 @@ void FP_CACHE::Load()
 
     if( !dir.IsOpened() )
     {
-        wxString msg = wxString::Format( _( "Footprint library path \"%s\" does not exist" ),
+        wxString msg = wxString::Format( _( "Footprint library path '%s' does not exist "
+                                            "(or is not a directory)." ),
                                          m_lib_raw_path );
         THROW_IO_ERROR( msg );
     }
