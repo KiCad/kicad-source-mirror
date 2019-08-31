@@ -26,8 +26,8 @@
 #include <preview_items/preview_utils.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <layers_id_colors_and_visibility.h>
+#include <painter.h>
 #include <view/view.h>
-#include <pcb_painter.h>
 
 #include <base_units.h>
 #include <common.h>
@@ -122,7 +122,7 @@ void drawTicksAlongLine( KIGFX::VIEW *aView, const VECTOR2D& aOrigin,
     auto gal = aView->GetGAL();
     double tickSpace;
     TICK_FORMAT tickF = getTickFormatForScale( gal->GetWorldScale(), tickSpace, aUnits );
-    auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
+    auto rs = aView->GetPainter()->GetSettings();
 
     // number of ticks in whole ruler
     int numTicks = (int) std::ceil( aLine.EuclideanNorm() / tickSpace );
@@ -226,7 +226,7 @@ void RULER_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     auto& gal = *aView->GetGAL();
-    auto rs = static_cast<KIGFX::RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
+    auto rs = aView->GetPainter()->GetSettings();
 
     VECTOR2D origin = m_geomMgr.GetOrigin();
     VECTOR2D end = m_geomMgr.GetEnd();

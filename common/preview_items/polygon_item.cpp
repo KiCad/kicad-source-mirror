@@ -26,8 +26,8 @@
 #include <preview_items/preview_utils.h>
 
 #include <gal/graphics_abstraction_layer.h>
+#include <painter.h>
 #include <view/view.h>
-#include <pcb_painter.h>
 
 using namespace KIGFX::PREVIEW;
 
@@ -58,7 +58,7 @@ void POLYGON_ITEM::SetPoints( const SHAPE_LINE_CHAIN& aLockedInPts,
 void POLYGON_ITEM::drawPreviewShape( KIGFX::VIEW* aView ) const
 {
     auto& gal = *aView->GetGAL();
-    auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
+    auto rs = aView->GetPainter()->GetSettings();
 
     gal.DrawPolyline( m_lockedChain );
     gal.DrawPolygon( m_polyfill );

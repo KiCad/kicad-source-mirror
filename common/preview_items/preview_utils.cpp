@@ -20,7 +20,7 @@
 #include <preview_items/preview_utils.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <base_units.h>
-#include <pcb_painter.h>
+#include <painter.h>
 #include <view/view.h>
 
 double KIGFX::PREVIEW::PreviewOverlayDeemphAlpha( bool aDeemph )
@@ -99,7 +99,7 @@ void KIGFX::PREVIEW::DrawTextNextToCursor( KIGFX::VIEW* aView,
 {
     auto gal = aView->GetGAL();
     auto glyphSize = gal->GetGlyphSize();
-    auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
+    auto rs = aView->GetPainter()->GetSettings();
 
     const auto lineSpace = glyphSize.y * 0.2;
     auto linePitch = glyphSize.y + lineSpace;

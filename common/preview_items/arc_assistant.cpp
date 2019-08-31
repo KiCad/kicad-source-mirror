@@ -28,7 +28,6 @@
 
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view.h>
-#include <pcb_painter.h>
 
 #include <common.h>
 #include <base_units.h>
