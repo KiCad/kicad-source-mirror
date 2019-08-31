@@ -353,10 +353,12 @@ public:
      *
      * @param aFootprintNames is the array of available footprint names inside a library.
      *
+     * @param aBestEfforts if true, don't throw on errors, just return an empty list.
+     *
      * @throw IO_ERROR if the library cannot be found, or footprint cannot be loaded.
      */
     virtual void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                                     const PROPERTIES* aProperties = NULL );
+                                     bool aBestEfforts, const PROPERTIES* aProperties = NULL );
 
     /**
      * Generate a timestamp representing all the files in the library (including the library

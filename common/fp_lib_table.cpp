@@ -259,11 +259,12 @@ long long FP_LIB_TABLE::GenerateTimestamp( const wxString* aNickname )
 }
 
 
-void FP_LIB_TABLE::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aNickname )
+void FP_LIB_TABLE::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aNickname,
+                                       bool aBestEfforts )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
     wxASSERT( (PLUGIN*) row->plugin );
-    row->plugin->FootprintEnumerate( aFootprintNames, row->GetFullURI( true ),
+    row->plugin->FootprintEnumerate( aFootprintNames, row->GetFullURI( true ), aBestEfforts,
                                      row->GetProperties() );
 }
 

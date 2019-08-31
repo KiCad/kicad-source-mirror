@@ -1938,20 +1938,18 @@ void PCB_IO::validateCache( const wxString& aLibraryPath, bool checkModified )
 }
 
 
-void PCB_IO::FootprintEnumerate( wxArrayString&    aFootprintNames,
-                                 const wxString&   aLibraryPath,
-                                 const PROPERTIES* aProperties )
+void PCB_IO::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibPath,
+                                 bool aBestEfforts, const PROPERTIES* aProperties )
 {
-    LOCALE_IO     toggle;     // toggles on, then off, the C locale.
-    wxDir         dir( aLibraryPath );
+    LOCALE_IO toggle;     // toggles on, then off, the C locale.
+    wxDir     dir( aLibPath );
+    wxString  errorMsg;
 
     init( aProperties );
 
-    wxString errorMsg;
-
     try
     {
-        validateCache( aLibraryPath );
+        validateCache( aLibPath );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -1961,14 +1959,10 @@ void PCB_IO::FootprintEnumerate( wxArrayString&    aFootprintNames,
     // Some of the files may have been parsed correctly so we want to add the valid files to
     // the library.
 
-    const MODULE_MAP& mods = m_cache->GetModules();
-
-    for( MODULE_CITER it = mods.begin();  it != mods.end();  ++it )
-    {
+    for( MODULE_CITER it = m_cache->GetModules().begin(); it != m_cache->GetModules().end(); ++it )
         aFootprintNames.Add( it->first );
-    }
 
-    if( !errorMsg.IsEmpty() )
+    if( !errorMsg.IsEmpty() && !aBestEfforts )
         THROW_IO_ERROR( errorMsg );
 }
 

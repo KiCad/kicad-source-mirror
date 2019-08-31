@@ -2469,14 +2469,29 @@ void EAGLE_PLUGIN::cacheLib( const wxString& aLibPath )
 
 
 void EAGLE_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                                       const PROPERTIES* aProperties )
+                                       bool aBestEfforts, const PROPERTIES* aProperties )
 {
+    wxString errorMsg;
+
     init( aProperties );
 
-    cacheLib( aLibraryPath );
+    try
+    {
+        cacheLib( aLibraryPath );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        errorMsg = ioe.What();
+    }
+
+    // Some of the files may have been parsed correctly so we want to add the valid files to
+    // the library.
 
     for( MODULE_CITER it = m_templates.begin();  it != m_templates.end();  ++it )
         aFootprintNames.Add( FROM_UTF8( it->first.c_str() ) );
+
+    if( !errorMsg.IsEmpty() && !aBestEfforts )
+        THROW_IO_ERROR( errorMsg );
 }
 
 

@@ -411,7 +411,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
 
         wxArrayString footprints;
 
-        cur->FootprintEnumerate( footprints, curLibPath );
+        cur->FootprintEnumerate( footprints, curLibPath, false );
 
         for( unsigned i = 0;  i < footprints.size();  ++i )
         {

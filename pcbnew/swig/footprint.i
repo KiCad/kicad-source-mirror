@@ -77,18 +77,7 @@
     {
         wxArrayString footprintNames;
 
-        if( aExitOnError )
-            self->FootprintEnumerate( footprintNames, aLibraryPath );
-        else
-        {
-            try
-            {
-                self->FootprintEnumerate( footprintNames, aLibraryPath );
-            }
-            catch( const IO_ERROR& error )
-            {
-            }
-        }
+        self->FootprintEnumerate( footprintNames, aLibraryPath, !aExitOnError );
 
         return footprintNames;
     }

@@ -138,34 +138,38 @@ const wxString GITHUB_PLUGIN::GetFileExtension() const
 }
 
 
-void GITHUB_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames,
-        const wxString& aLibraryPath, const PROPERTIES* aProperties )
+void GITHUB_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibPath,
+                                        bool aBestEfforts, const PROPERTIES* aProperties )
 {
-    //D(printf("%s: this:%p  aLibraryPath:\"%s\"\n", __func__, this, TO_UTF8(aLibraryPath) );)
-    cacheLib( aLibraryPath, aProperties );
-
-    typedef std::set<wxString>      MYSET;
-
-    MYSET   unique;
-
-    if( m_pretty_dir.size() )
+    try
     {
-        wxArrayString locals;
+        //D(printf("%s: this:%p  aLibPath:\"%s\"\n", __func__, this, TO_UTF8(aLibraryPath) );)
+        cacheLib( aLibPath, aProperties );
 
-        PCB_IO::FootprintEnumerate( locals, m_pretty_dir );
+        typedef std::set<wxString>      MYSET;
 
-        for( unsigned i=0; i<locals.GetCount();  ++i )
-            unique.insert( locals[i] );
+        MYSET   unique;
+
+        if( m_pretty_dir.size() )
+        {
+            wxArrayString locals;
+
+            PCB_IO::FootprintEnumerate( locals, m_pretty_dir, aBestEfforts );
+
+            for( unsigned i=0; i<locals.GetCount();  ++i )
+                unique.insert( locals[i] );
+        }
+
+        for( MODULE_ITER it = m_gh_cache->begin();  it!=m_gh_cache->end();  ++it )
+            unique.insert( it->first );
+
+        for( MYSET::const_iterator it = unique.begin();  it != unique.end();  ++it )
+            aFootprintNames.Add( *it );
     }
-
-    for( MODULE_ITER it = m_gh_cache->begin();  it!=m_gh_cache->end();  ++it )
+    catch( const IO_ERROR& ioe )
     {
-        unique.insert( it->first );
-    }
-
-    for( MYSET::const_iterator it = unique.begin();  it != unique.end();  ++it )
-    {
-        aFootprintNames.Add( *it );
+        if( !aBestEfforts )
+            throw ioe;
     }
 }
 

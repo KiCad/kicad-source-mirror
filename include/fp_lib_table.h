@@ -147,10 +147,12 @@ public:
      * @param aFootprintNames is the list to fill with the footprint names found in \a aNickname
      *
      * @param aNickname is a locator for the "library", it is a "name" in LIB_TABLE_ROW.
+     * @param aBestEfforts if true, don't throw on errors
      *
      * @throw IO_ERROR if the library cannot be found, or footprint cannot be loaded.
      */
-    void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aNickname );
+    void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aNickname,
+                             bool aBestEfforts );
 
     /**
      * Generate a hashed timestamp representing the last-mod-times of the library indicated
