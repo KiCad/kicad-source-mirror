@@ -3269,10 +3269,10 @@ void LP_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
     char* saveptr;
 
     if( !line )
-        goto L_bad_library;
+        THROW_IO_ERROR( wxString::Format( _( "File '%s' is empty." ), m_lib_path ) );
 
     if( !TESTLINE( "PCBNEW-LibModule-V1" ) )
-        goto L_bad_library;
+        THROW_IO_ERROR( wxString::Format( _( "File '%s' is not a legacy library." ), m_lib_path ) );
 
     while( ( line = aReader->ReadLine() ) != NULL )
     {
@@ -3281,18 +3281,12 @@ void LP_CACHE::ReadAndVerifyHeader( LINE_READER* aReader )
             const char* units = strtok_r( line + SZ( "Units" ), delims, &saveptr );
 
             if( !strcmp( units, "mm" ) )
-            {
                 m_owner->diskToBiu = IU_PER_MM;
-            }
 
         }
         else if( TESTLINE( "$INDEX" ) )
             return;
     }
-
-L_bad_library:
-    THROW_IO_ERROR( wxString::Format( _( "File \"%s\" is empty or is not a legacy library" ),
-        m_lib_path.GetData() ) );
 }
 
 
@@ -3432,22 +3426,31 @@ void LEGACY_PLUGIN::cacheLib( const wxString& aLibraryPath )
 }
 
 
-void LEGACY_PLUGIN::FootprintEnumerate( wxArrayString&    aFootprintNames,
-                                        const wxString&   aLibraryPath,
-                                        const PROPERTIES* aProperties )
+void LEGACY_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibPath,
+                                        bool aBestEfforts, const PROPERTIES* aProperties )
 {
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
+    LOCALE_IO toggle;     // toggles on, then off, the C locale.
+    wxString  errorMsg;
 
     init( aProperties );
 
-    cacheLib( aLibraryPath );
-
-    const MODULE_MAP&   mods = m_cache->m_modules;
-
-    for( MODULE_CITER it = mods.begin();  it != mods.end();  ++it )
+    try
     {
-        aFootprintNames.Add( FROM_UTF8( it->first.c_str() ) );
+        cacheLib( aLibPath );
     }
+    catch( const IO_ERROR& ioe )
+    {
+        errorMsg = ioe.What();
+    }
+
+    // Some of the files may have been parsed correctly so we want to add the valid files to
+    // the library.
+
+    for( MODULE_CITER it = m_cache->m_modules.begin(); it != m_cache->m_modules.end(); ++it )
+        aFootprintNames.Add( FROM_UTF8( it->first.c_str() ) );
+
+    if( !errorMsg.IsEmpty() && !aBestEfforts )
+        THROW_IO_ERROR( errorMsg );
 }
 
 

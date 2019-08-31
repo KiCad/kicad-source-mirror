@@ -58,7 +58,7 @@ void PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* a
 
 
 void PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                                 const PROPERTIES* aProperties )
+                                 bool aBestEfforts, const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
     not_implemented( this, __FUNCTION__ );

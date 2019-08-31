@@ -261,7 +261,7 @@ bool FOOTPRINT_LIST_IMPL::JoinWorkers()
 
                 try
                 {
-                    m_lib_table->FootprintEnumerate( fpnames, nickname );
+                    m_lib_table->FootprintEnumerate( fpnames, nickname, false );
                 }
                 catch( const IO_ERROR& ioe )
                 {

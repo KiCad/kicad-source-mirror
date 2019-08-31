@@ -127,7 +127,7 @@ public:
     const wxString GetFileExtension() const override;
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                             const PROPERTIES* aProperties = NULL) override;
+                             bool aBestEfforts, const PROPERTIES* aProperties = NULL) override;
 
     MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
             const PROPERTIES* aProperties = NULL ) override;

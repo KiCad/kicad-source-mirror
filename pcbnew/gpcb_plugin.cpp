@@ -867,25 +867,26 @@ void GPCB_PLUGIN::validateCache( const wxString& aLibraryPath, bool checkModifie
 }
 
 
-void GPCB_PLUGIN::FootprintEnumerate( wxArrayString&    aFootprintNames,
-                                      const wxString&   aLibraryPath,
-                                      const PROPERTIES* aProperties )
+void GPCB_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
+                                      bool aBestEfforts, const PROPERTIES* aProperties )
 {
-    LOCALE_IO     toggle;     // toggles on, then off, the C locale.
-    wxDir         dir( aLibraryPath );
+    LOCALE_IO toggle;     // toggles on, then off, the C locale.
+    wxDir     dir( aLibraryPath );
+    wxString  errorMsg;
 
     if( !dir.IsOpened() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "footprint library path \"%s\" does not exist" ),
-                                          GetChars( aLibraryPath ) ) );
+        if( aBestEfforts )
+            return;
+        else
+        {
+            THROW_IO_ERROR( wxString::Format( _( "footprint library path \"%s\" does not exist" ),
+                                              aLibraryPath ) );
+        }
     }
 
     init( aProperties );
 
-    wxString errorMsg;
-
-    // Some of the files may have been parsed correctly so we want to add the valid files to
-    // the library.
     try
     {
         validateCache( aLibraryPath );
@@ -895,14 +896,13 @@ void GPCB_PLUGIN::FootprintEnumerate( wxArrayString&    aFootprintNames,
         errorMsg = ioe.What();
     }
 
-    const MODULE_MAP& mods = m_cache->GetModules();
+    // Some of the files may have been parsed correctly so we want to add the valid files to
+    // the library.
 
-    for( MODULE_CITER it = mods.begin();  it != mods.end();  ++it )
-    {
+    for( MODULE_CITER it = m_cache->GetModules().begin(); it != m_cache->GetModules().end(); ++it )
         aFootprintNames.Add( FROM_UTF8( it->first.c_str() ) );
-    }
 
-    if( !errorMsg.IsEmpty() )
+    if( !errorMsg.IsEmpty() && !aBestEfforts )
         THROW_IO_ERROR( errorMsg );
 }
 
