@@ -316,6 +316,7 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( ACTIONS::cut,                 E_C::IdleSelection, 300 );
     selToolMenu.AddItem( ACTIONS::copy,                E_C::IdleSelection, 300 );
     selToolMenu.AddItem( ACTIONS::paste,               E_C::Idle, 300 );
+    selToolMenu.AddItem( ACTIONS::pasteSpecial,        E_C::Idle, 300 );
     selToolMenu.AddItem( ACTIONS::duplicate,           duplicateCondition, 300 );
 
     return true;

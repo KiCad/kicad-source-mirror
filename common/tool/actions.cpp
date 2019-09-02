@@ -164,6 +164,11 @@ TOOL_ACTION ACTIONS::paste( "common.Interactive.paste",
         _( "Paste" ), _( "Paste clipboard into schematic" ),
         paste_xpm );
 
+TOOL_ACTION ACTIONS::pasteSpecial( "common.Interactive.pasteSpecial",
+        AS_GLOBAL, 0, "",
+        _( "Paste Special..." ), _( "Paste clipboard into schematic with options" ),
+        paste_xpm );
+
 TOOL_ACTION ACTIONS::duplicate( "common.Interactive.duplicate",
         AS_GLOBAL, 
         MD_CTRL + 'D', LEGACY_HK_NAME( "Duplicate" ),

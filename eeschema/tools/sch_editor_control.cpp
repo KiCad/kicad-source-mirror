@@ -50,7 +50,7 @@
 #include <dialogs/dialog_page_settings.h>
 #include <dialogs/dialog_fields_editor_global.h>
 #include <invoke_sch_dialog.h>
-
+#include <dialogs/dialog_paste_special.h>
 
 int SCH_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
 {
@@ -943,7 +943,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
 
     DLIST<SCH_ITEM>&   dlist = m_frame->GetScreen()->GetDrawList();
-    SCH_ITEM*          last = dlist.GetLast();
+    SCH_ITEM*          lastExisting = dlist.GetLast();
 
     std::string        text = m_toolMgr->GetClipboard();
 
@@ -963,16 +963,28 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         dlist.Append( new SCH_TEXT( wxPoint( 0, 0 ), text ) );
     }
 
+    bool forceKeepAnnotations = false;
+    bool forceDropAnnotations = false;
+    bool dropAnnotations = false;
+
+    if( aEvent.IsAction( &ACTIONS::pasteSpecial ) )
+    {
+        DIALOG_PASTE_SPECIAL dlg( m_frame, &forceKeepAnnotations, &forceDropAnnotations );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return 0;
+    }
+
+    if( forceDropAnnotations )
+        dropAnnotations = true;
+
     // SCH_LEGACY_PLUGIN added the items to the DLIST, but not to the view or anything
     // else.  Pull them back out to start with.
     //
-    EDA_ITEMS loadedItems;
-    SCH_ITEM* next = nullptr;
+    SCH_ITEM*      firstNew = lastExisting ? lastExisting->Next() : dlist.GetFirst();
+    EDA_ITEMS      loadedItems;
+    SCH_ITEM*      next = nullptr;
 
-    // We also make sure any pasted sheets will not cause recursion in the destination.
-    // Moreover new sheets create new sheetpaths, and component alternate references must
-    // be created and cleared
-    //
     bool           sheetsPasted = false;
     SCH_SHEET_LIST hierarchy( g_RootSheet );
     wxFileName     destFn = g_CurrentSheet->Last()->GetFileName();
@@ -980,7 +992,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     if( destFn.IsRelative() )
         destFn.MakeAbsolute( m_frame->Prj().GetProjectPath() );
 
-    for( SCH_ITEM* item = last ? last->Next() : dlist.GetFirst(); item; item = next )
+    for( SCH_ITEM* item = firstNew; item; item = next )
     {
         next = item->Next();
         dlist.Remove( item );
@@ -989,16 +1001,16 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
         if( item->Type() == SCH_COMPONENT_T )
         {
-            SCH_COMPONENT* component = (SCH_COMPONENT*) item;
-
-            component->SetTimeStamp( GetNewTimeStamp() );
-
-            // clear the annotation, but preserve the selected unit
-            int unit = component->GetUnit();
-            component->ClearAnnotation( nullptr );
-            component->SetUnit( unit );
+            if( !dropAnnotations && !forceKeepAnnotations )
+            {
+                for( SCH_ITEM* temp = dlist.GetFirst(); temp != lastExisting; temp = temp->Next() )
+                {
+                    if( item->GetTimeStamp() == temp->GetTimeStamp() )
+                        dropAnnotations = true;
+                }
+            }
         }
-        if( item->Type() == SCH_SHEET_T )
+        else if( item->Type() == SCH_SHEET_T )
         {
             SCH_SHEET* sheet = (SCH_SHEET*) item;
             wxFileName srcFn = sheet->GetFileName();
@@ -1017,18 +1029,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 DisplayError( m_frame, msg );
                 loadedItems.pop_back();
             }
-            else
-            {
-                // Duplicate sheet names and sheet time stamps are not valid.  Use a time stamp
-                // based sheet name and update the time stamp for each sheet in the block.
-                timestamp_t uid = GetNewTimeStamp();
-
-                sheet->SetName( wxString::Format( wxT( "sheet%8.8lX" ), (unsigned long)uid ) );
-                sheet->SetTimeStamp( uid );
-                sheet->SetParent( g_CurrentSheet->Last() );
-                sheet->SetScreen( nullptr );
-                sheetsPasted = true;
-            }
         }
     }
 
@@ -1044,6 +1044,17 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         if( item->Type() == SCH_COMPONENT_T )
         {
             SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+
+            if( dropAnnotations )
+            {
+                component->SetTimeStamp( GetNewTimeStamp() );
+
+                // clear the annotation, but preserve the selected unit
+                int unit = component->GetUnit();
+                component->ClearAnnotation( nullptr );
+                component->SetUnit( unit );
+            }
+
             component->Resolve( *symLibTable, partLib );
             component->UpdatePins();
         }
@@ -1052,6 +1063,17 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             SCH_SHEET*  sheet = (SCH_SHEET*) item;
             wxFileName  fn = sheet->GetFileName();
             SCH_SCREEN* existingScreen = nullptr;
+            bool        dropSheetAnnotations = false;
+
+            // Duplicate sheet names and timestamps are not valid.  Generate new timestamps
+            // and timestamp-based sheet names.
+            timestamp_t uid = GetNewTimeStamp();
+
+            sheet->SetName( wxString::Format( wxT( "sheet%8.8lX" ), (unsigned long)uid ) );
+            sheet->SetTimeStamp( uid );
+            sheet->SetParent( g_CurrentSheet->Last() );
+            sheet->SetScreen( nullptr );
+            sheetsPasted = true;
 
             if( !fn.IsAbsolute() )
             {
@@ -1059,8 +1081,12 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 fn.Normalize( wxPATH_NORM_ALL, currentSheetFileName.GetPath() );
             }
 
-            if( g_RootSheet->SearchHierarchy( fn.GetFullPath( wxPATH_UNIX ), &existingScreen )
-                    || searchSupplementaryClipboard( sheet->GetFileName(), &existingScreen ) )
+            if( g_RootSheet->SearchHierarchy( fn.GetFullPath( wxPATH_UNIX ), &existingScreen ) )
+                dropSheetAnnotations = true;
+            else
+                searchSupplementaryClipboard( sheet->GetFileName(), &existingScreen );
+
+            if( existingScreen )
             {
                 sheet->SetScreen( existingScreen );
 
@@ -1072,7 +1098,9 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 // Otherwise ClearAnnotation do nothing, because the F1 field is used as
                 // reference default value and takes the latest displayed value
                 existingScreen->EnsureAlternateReferencesExist();
-                existingScreen->ClearAnnotation( &sheetpath );
+
+                if( forceDropAnnotations || dropSheetAnnotations )
+                    existingScreen->ClearAnnotation( &sheetpath );
             }
             else
             {
@@ -1318,6 +1346,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::Cut,                   ACTIONS::cut.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Copy,                  ACTIONS::copy.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Paste,                 ACTIONS::paste.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Paste,                 ACTIONS::pasteSpecial.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::EditWithLibEdit,       EE_ACTIONS::editWithLibEdit.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowCvpcb,             EE_ACTIONS::assignFootprints.MakeEvent() );

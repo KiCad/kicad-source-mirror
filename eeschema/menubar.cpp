@@ -137,6 +137,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AddItem( ACTIONS::cut,                        EE_CONDITIONS::NotEmpty );
     editMenu->AddItem( ACTIONS::copy,                       EE_CONDITIONS::NotEmpty );
     editMenu->AddItem( ACTIONS::paste,                      EE_CONDITIONS::Idle );
+    editMenu->AddItem( ACTIONS::pasteSpecial,               EE_CONDITIONS::Idle );
     editMenu->AddItem( ACTIONS::doDelete,                   EE_CONDITIONS::NotEmpty );
     editMenu->AddItem( ACTIONS::duplicate,                  EE_CONDITIONS::NotEmpty );
 

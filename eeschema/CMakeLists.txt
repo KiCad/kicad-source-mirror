@@ -72,6 +72,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_migrate_buses_base.cpp
     dialogs/dialog_netlist.cpp
     dialogs/dialog_netlist_base.cpp
+    dialogs/dialog_paste_special.cpp
+    dialogs/dialog_paste_special_base.cpp
     dialogs/dialog_plot_schematic.cpp
     dialogs/dialog_plot_schematic_base.cpp
     dialogs/dialog_print_using_printer.cpp
