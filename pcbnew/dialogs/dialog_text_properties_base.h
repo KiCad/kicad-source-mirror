@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -75,9 +75,9 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_PositionYCtrl;
 		wxStaticText* m_PositionYUnits;
 		wxCheckBox* m_KeepUpright;
-		wxStaticText* m_LinesThicknessLabel;
-		wxTextCtrl* m_LinesThicknessCtrl;
-		wxStaticText* m_LinesThicknessUnits;
+		wxStaticText* m_LineThicknessLabel;
+		wxTextCtrl* m_LineThicknessCtrl;
+		wxStaticText* m_LineThicknessUnits;
 		wxStaticText* m_statusLine;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;

@@ -52,23 +52,31 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_thickness( aParent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnits, true ),
     m_posX( aParent, m_PositionXLabel, m_PositionXCtrl, m_PositionXUnits ),
     m_posY( aParent, m_PositionYLabel, m_PositionYCtrl, m_PositionYUnits ),
-    m_linesThickness( aParent, m_LinesThicknessLabel, m_LinesThicknessCtrl,
-                      m_LinesThicknessUnits, true ),
+    m_linesThickness( aParent, m_LineThicknessLabel, m_LineThicknessCtrl,
+                      m_LineThicknessUnits, true ),
     m_OrientValidator( 1, &m_OrientValue )
 {
     wxString title;
 
-    m_LinesThicknessLabel->Show( m_item->Type() == PCB_DIMENSION_T );
-    m_LinesThicknessCtrl->Show( m_item->Type() == PCB_DIMENSION_T );
-    m_LinesThicknessUnits->Show( m_item->Type() == PCB_DIMENSION_T );
+    m_linesThickness.Show( m_item->Type() == PCB_DIMENSION_T );
 
     if( m_item->Type() == PCB_DIMENSION_T )
     {
-        title = _( "Dimension Text Properties" );
+        title = _( "Dimension Properties" );
 
         DIMENSION* dimension = (DIMENSION*) m_item;
         m_edaText = &dimension->Text();
         m_pcbText = &dimension->Text();
+
+        // Since this is really the object properties for a dimension (rather than just the
+        // text properties), make some of the propertie labels more explicit.
+        for( wxStaticText* label : { m_SizeXLabel, m_SizeYLabel, m_ThicknessLabel,
+                                     m_PositionXLabel, m_PositionYLabel, m_OrientLabel } )
+        {
+            label->SetLabel( label->GetToolTipText() + wxT( ":" ) );
+        }
+
+        m_Mirrored->SetLabel( m_Mirrored->GetToolTipText() );
 
         SetInitialFocus( m_DimensionText );
         m_SingleLineSizer->Show( false );
@@ -158,7 +166,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
             m_ThicknessCtrl,
             m_PositionXCtrl,
             m_PositionYCtrl,
-            m_LinesThicknessCtrl,
+            m_LineThicknessCtrl,
             m_Visible,
             m_Italic,
             m_JustifyChoice,

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -69,7 +69,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_DimensionTextSizer->Add( m_DimensionUnitsOpt, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
-	bMainSizer->Add( m_DimensionTextSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	bMainSizer->Add( m_DimensionTextSizer, 0, wxEXPAND|wxALL, 10 );
 
 	wxFlexGridSizer* fgSizerSetup;
 	fgSizerSetup = new wxFlexGridSizer( 0, 5, 4, 0 );
@@ -80,22 +80,24 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	m_LayerLabel = new wxStaticText( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerLabel->Wrap( -1 );
-	fgSizerSetup->Add( m_LayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	fgSizerSetup->Add( m_LayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_LayerSelectionCtrl = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	fgSizerSetup->Add( m_LayerSelectionCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizerSetup->Add( m_LayerSelectionCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM, 5 );
 
 
 	fgSizerSetup->Add( 0, 0, 0, wxRIGHT|wxLEFT, 40 );
 
 	m_Visible = new wxCheckBox( this, wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerSetup->Add( m_Visible, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	fgSizerSetup->Add( m_Visible, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	fgSizerSetup->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_SizeXLabel = new wxStaticText( this, wxID_ANY, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeXLabel->Wrap( -1 );
+	m_SizeXLabel->SetToolTip( _("Text width") );
+
 	fgSizerSetup->Add( m_SizeXLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_SizeXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
@@ -113,6 +115,8 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	m_SizeYLabel = new wxStaticText( this, wxID_ANY, _("Height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeYLabel->Wrap( -1 );
+	m_SizeYLabel->SetToolTip( _("Text height") );
+
 	fgSizerSetup->Add( m_SizeYLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_SizeYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
@@ -130,10 +134,12 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	int m_JustifyChoiceNChoices = sizeof( m_JustifyChoiceChoices ) / sizeof( wxString );
 	m_JustifyChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_JustifyChoiceNChoices, m_JustifyChoiceChoices, 0 );
 	m_JustifyChoice->SetSelection( 0 );
-	fgSizerSetup->Add( m_JustifyChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 3 );
+	fgSizerSetup->Add( m_JustifyChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 3 );
 
 	m_ThicknessLabel = new wxStaticText( this, wxID_ANY, _("Thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThicknessLabel->Wrap( -1 );
+	m_ThicknessLabel->SetToolTip( _("Text thickness") );
+
 	fgSizerSetup->Add( m_ThicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_ThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
@@ -145,6 +151,8 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	m_OrientLabel = new wxStaticText( this, wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_OrientLabel->Wrap( -1 );
+	m_OrientLabel->SetToolTip( _("Text orientation") );
+
 	fgSizerSetup->Add( m_OrientLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_OrientCtrl = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
@@ -156,6 +164,8 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	m_PositionXLabel = new wxStaticText( this, wxID_ANY, _("Position X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PositionXLabel->Wrap( -1 );
+	m_PositionXLabel->SetToolTip( _("Text pos X") );
+
 	fgSizerSetup->Add( m_PositionXLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_PositionXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
@@ -166,6 +176,8 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	fgSizerSetup->Add( m_PositionXUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_Mirrored = new wxCheckBox( this, wxID_ANY, _("Mirrored"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Mirrored->SetToolTip( _("Mirror text") );
+
 	fgSizerSetup->Add( m_Mirrored, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
@@ -173,31 +185,35 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 
 	m_PositionYLabel = new wxStaticText( this, wxID_ANY, _("Position Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PositionYLabel->Wrap( -1 );
-	fgSizerSetup->Add( m_PositionYLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_PositionYLabel->SetToolTip( _("Text pos Y") );
+
+	fgSizerSetup->Add( m_PositionYLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_PositionYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	fgSizerSetup->Add( m_PositionYCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizerSetup->Add( m_PositionYCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM, 5 );
 
 	m_PositionYUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PositionYUnits->Wrap( -1 );
-	fgSizerSetup->Add( m_PositionYUnits, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizerSetup->Add( m_PositionYUnits, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_KeepUpright = new wxCheckBox( this, wxID_ANY, _("Keep Upright"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerSetup->Add( m_KeepUpright, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_KeepUpright = new wxCheckBox( this, wxID_ANY, _("Keep upright"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_KeepUpright->SetToolTip( _("Keep text upright") );
+
+	fgSizerSetup->Add( m_KeepUpright, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
 
 	fgSizerSetup->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_LinesThicknessLabel = new wxStaticText( this, wxID_ANY, _("Lines thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_LinesThicknessLabel->Wrap( -1 );
-	fgSizerSetup->Add( m_LinesThicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_LineThicknessLabel = new wxStaticText( this, wxID_ANY, _("Line thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LineThicknessLabel->Wrap( -1 );
+	fgSizerSetup->Add( m_LineThicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_LinesThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	fgSizerSetup->Add( m_LinesThicknessCtrl, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	m_LineThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	fgSizerSetup->Add( m_LineThicknessCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
-	m_LinesThicknessUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_LinesThicknessUnits->Wrap( -1 );
-	fgSizerSetup->Add( m_LinesThicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_LineThicknessUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_LineThicknessUnits->Wrap( -1 );
+	fgSizerSetup->Add( m_LineThicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bMainSizer->Add( fgSizerSetup, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
@@ -255,7 +271,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_OrientCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_PositionXCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_PositionYCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
-	m_LinesThicknessCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
+	m_LineThicknessCtrl->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 }
 
@@ -272,7 +288,7 @@ DIALOG_TEXT_PROPERTIES_BASE::~DIALOG_TEXT_PROPERTIES_BASE()
 	m_OrientCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_PositionXCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_PositionYCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
-	m_LinesThicknessCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
+	m_LineThicknessCtrl->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 
 }
