@@ -422,7 +422,6 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
                 controls->SetAutoPan( true );
             }
 
-            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
         }
 
@@ -511,6 +510,7 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
     }
     else
     {
+        m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
         m_commit->Push( _( "Drag" ) );
     }
 
