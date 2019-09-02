@@ -220,12 +220,22 @@ bool SCH_SHEET::HasPin( const wxString& aName )
 
 bool SCH_SHEET::IsVerticalOrientation() const
 {
+    int leftRight = 0;
+    int topBottom = 0;
+
     for( const SCH_SHEET_PIN& pin : m_pins )
     {
-        if( pin.GetEdge() > 1 )
-            return true;
+        switch( pin.GetEdge() )
+        {
+        case SHEET_LEFT_SIDE:   leftRight++; break;
+        case SHEET_RIGHT_SIDE:  leftRight++; break;
+        case SHEET_TOP_SIDE:    topBottom++; break;
+        case SHEET_BOTTOM_SIDE: topBottom++; break;
+        default:                             break;
+        }
     }
-    return false;
+
+    return topBottom > 0 && leftRight == 0;
 }
 
 
@@ -506,6 +516,13 @@ const EDA_RECT SCH_SHEET::GetBoundingBox() const
     box.Inflate( lineWidth / 2 );
 
     return box;
+}
+
+
+wxPoint SCH_SHEET::GetRotationCenter() const
+{
+    EDA_RECT box( m_pos, m_size );
+    return box.GetCenter();
 }
 
 
@@ -846,12 +863,6 @@ bool SCH_SHEET::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
         return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
-}
-
-
-wxPoint SCH_SHEET::GetResizePosition() const
-{
-    return wxPoint( m_pos.x + m_size.GetWidth(), m_pos.y + m_size.GetHeight() );
 }
 
 

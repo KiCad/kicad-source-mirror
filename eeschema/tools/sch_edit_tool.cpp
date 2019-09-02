@@ -428,10 +428,14 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                 break;
 
             case SCH_SHEET_T:
+            {
+                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
                 // Rotate the sheet on itself. Sheets do not have an anchor point.
-                rotPoint = m_frame->GetNearestGridPosition( item->GetBoundingBox().Centre() );
-                item->Rotate( rotPoint );
+                rotPoint = m_frame->GetNearestGridPosition( sheet->GetRotationCenter() );
+                sheet->Rotate( rotPoint );
                 break;
+            }
 
             default:
                 break;

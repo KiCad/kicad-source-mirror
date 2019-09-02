@@ -413,11 +413,11 @@ public:
     EDA_RECT const GetBoundingBox() const override;
 
     /**
-     * Return the position of the lower right corner of the sheet in drawing units.
-     *
-     * @return A wxPoint containing lower right corner of the sheet in drawing units.
+     * Rotating around the boundingBox's center can cause walking when the sheetname or
+     * filename is longer than the edge it's on.  Use this instead, which always returns
+     * the center of the sheet itself.
      */
-    wxPoint GetResizePosition() const;
+    wxPoint GetRotationCenter() const;
 
     void SwapData( SCH_ITEM* aItem ) override;
 
