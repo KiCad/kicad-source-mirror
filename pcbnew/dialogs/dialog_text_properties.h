@@ -56,6 +56,7 @@ private:
     UNIT_BINDER          m_thickness;
     UNIT_BINDER          m_posX;
     UNIT_BINDER          m_posY;
+    UNIT_BINDER          m_linesThickness;  // lines thikness for dimension graphic
 
     wxFloatingPointValidator<double>    m_OrientValidator;
     double               m_OrientValue;

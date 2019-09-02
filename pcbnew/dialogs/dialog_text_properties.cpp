@@ -63,9 +63,15 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_thickness( aParent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnits, true ),
     m_posX( aParent, m_PositionXLabel, m_PositionXCtrl, m_PositionXUnits ),
     m_posY( aParent, m_PositionYLabel, m_PositionYCtrl, m_PositionYUnits ),
+    m_linesThickness( aParent, m_LinesThicknessLabel, m_LinesThicknessCtrl,
+                      m_LinesThicknessUnits, true ),
     m_OrientValidator( 1, &m_OrientValue )
 {
     wxString title;
+
+    m_LinesThicknessLabel->Show( m_item->Type() == PCB_DIMENSION_T );
+    m_LinesThicknessCtrl->Show( m_item->Type() == PCB_DIMENSION_T );
+    m_LinesThicknessUnits->Show( m_item->Type() == PCB_DIMENSION_T );
 
     if( m_item->Type() == PCB_DIMENSION_T )
     {
@@ -162,6 +168,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
             m_ThicknessCtrl,
             m_PositionXCtrl,
             m_PositionYCtrl,
+            m_LinesThicknessCtrl,
             m_Visible,
             m_Italic,
             m_JustifyChoice,
@@ -296,6 +303,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         dimension->GetUnits( units, useMils );
 
         m_DimensionUnitsOpt->SetSelection( units == MILLIMETRES ? 2 : useMils ? 1 : 0 );
+        m_linesThickness.SetValue( dimension->GetWidth() );
     }
 
     if( m_item->Type() == PCB_MODULE_TEXT_T && m_modText )
@@ -403,6 +411,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         case 2: dimension->SetUnits( MILLIMETRES, false ); break;
         default: break;
         }
+
+        dimension->SetWidth( m_linesThickness.GetValue() );
     }
 
     m_item->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
