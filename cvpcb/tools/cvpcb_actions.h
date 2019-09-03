@@ -66,10 +66,10 @@ public:
     static TOOL_ACTION deleteAssoc;
 
     /// Footprint Filtering actions
-    static TOOL_ACTION filterFPbyKeywords;
+    static TOOL_ACTION FilterFPbyFPFilters;
     static TOOL_ACTION filterFPbyPin;
-    static TOOL_ACTION filterFPbyLibrary;
-    static TOOL_ACTION filterFPbyDisplayName;
+    static TOOL_ACTION FilterFPbyLibrary;
+    static TOOL_ACTION FilterFPbyTextPattern;
 
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
     virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override { return OPT<TOOL_EVENT>(); }

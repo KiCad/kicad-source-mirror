@@ -320,8 +320,8 @@ void CVPCB_CONTROL::setTransitions()
     Go( &CVPCB_CONTROL::ToNA,                  CVPCB_ACTIONS::gotoPreviousNA.MakeEvent() );
 
     // Filter the footprints
-    Go( &CVPCB_CONTROL::ToggleFootprintFilter, CVPCB_ACTIONS::filterFPbyKeywords.MakeEvent() );
-    Go( &CVPCB_CONTROL::ToggleFootprintFilter, CVPCB_ACTIONS::filterFPbyLibrary.MakeEvent() );
+    Go( &CVPCB_CONTROL::ToggleFootprintFilter, CVPCB_ACTIONS::FilterFPbyFPFilters.MakeEvent() );
+    Go( &CVPCB_CONTROL::ToggleFootprintFilter, CVPCB_ACTIONS::FilterFPbyLibrary.MakeEvent() );
     Go( &CVPCB_CONTROL::ToggleFootprintFilter, CVPCB_ACTIONS::filterFPbyPin.MakeEvent() );
-    Go( &CVPCB_CONTROL::ToggleFootprintFilter, CVPCB_ACTIONS::filterFPbyDisplayName.MakeEvent() );
+    Go( &CVPCB_CONTROL::ToggleFootprintFilter, CVPCB_ACTIONS::FilterFPbyTextPattern.MakeEvent() );
 }

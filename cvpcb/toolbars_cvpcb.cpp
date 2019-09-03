@@ -64,12 +64,12 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
 	text->SetFont( m_mainToolBar->GetFont().Bold() );
     m_mainToolBar->AddControl( text );
 
-    m_mainToolBar->Add( CVPCB_ACTIONS::filterFPbyKeywords, true );
+    m_mainToolBar->Add( CVPCB_ACTIONS::FilterFPbyFPFilters, true );
     m_mainToolBar->Add( CVPCB_ACTIONS::filterFPbyPin, true );
-    m_mainToolBar->Add( CVPCB_ACTIONS::filterFPbyLibrary, true );
+    m_mainToolBar->Add( CVPCB_ACTIONS::FilterFPbyLibrary, true );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->Add( CVPCB_ACTIONS::filterFPbyDisplayName, true );
+    m_mainToolBar->Add( CVPCB_ACTIONS::FilterFPbyTextPattern, true );
 
     m_tcFilterString = new wxTextCtrl( m_mainToolBar, ID_CVPCB_FILTER_TEXT_EDIT );
 
@@ -88,13 +88,13 @@ void CVPCB_MAINFRAME::SyncToolbars()
     m_mainToolBar->Toggle( ACTIONS::undo, m_undoList.size() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, m_redoList.size() > 0 );
 
-    m_mainToolBar->Toggle( CVPCB_ACTIONS::filterFPbyKeywords,
+    m_mainToolBar->Toggle( CVPCB_ACTIONS::FilterFPbyFPFilters,
                            filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_FP_FILTERS ) );
-    m_mainToolBar->Toggle( CVPCB_ACTIONS::filterFPbyLibrary,
+    m_mainToolBar->Toggle( CVPCB_ACTIONS::FilterFPbyLibrary,
                            filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY ) );
     m_mainToolBar->Toggle( CVPCB_ACTIONS::filterFPbyPin,
                            filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT ) );
-    m_mainToolBar->Toggle( CVPCB_ACTIONS::filterFPbyDisplayName,
+    m_mainToolBar->Toggle( CVPCB_ACTIONS::FilterFPbyTextPattern,
                            filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN ) );
     m_mainToolBar->Refresh();
 }

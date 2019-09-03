@@ -126,30 +126,30 @@ TOOL_ACTION CVPCB_ACTIONS::deleteAll( "cvpcb.Association.DeleteAll", AS_GLOBAL,
 
 
 // Actions to filter the footprint list
-TOOL_ACTION CVPCB_ACTIONS::filterFPbyKeywords( "cvpcb.Control.FilterFPByKeyword", AS_GLOBAL,
-        0, "",
-        _( "Filter by keyword" ),
-        _( "Filter footprint list by schematic symbol keywords" ),
+TOOL_ACTION CVPCB_ACTIONS::FilterFPbyFPFilters( "cvpcb.Control.FilterFPbyFPFilters",
+        AS_GLOBAL, 0, "",
+        _( "Use symbol footprint filters" ),
+        _( "Filter footprint list by footprint filters defined in the symbol" ),
         module_filtered_list_xpm, AF_NONE,
         (void*) FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_FP_FILTERS );
 
-TOOL_ACTION CVPCB_ACTIONS::filterFPbyPin( "cvpcb.Control.FilterFPByPin", AS_GLOBAL,
-        0, "",
+TOOL_ACTION CVPCB_ACTIONS::filterFPbyPin( "cvpcb.Control.FilterFPByPin",
+        AS_GLOBAL, 0, "",
         _( "Filter by pin count" ),
         _( "Filter footprint list by pin count" ),
         module_pin_filtered_list_xpm, AF_NONE,
         (void*) FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT );
 
-TOOL_ACTION CVPCB_ACTIONS::filterFPbyLibrary( "cvpcb.Control.FilterFPByLibrary", AS_GLOBAL,
-        0, "",
+TOOL_ACTION CVPCB_ACTIONS::FilterFPbyLibrary( "cvpcb.Control.FilterFPbyLibrary",
+        AS_GLOBAL, 0, "",
         _( "Filter by library" ),
         _( "Filter footprint list by library" ),
         module_library_list_xpm, AF_NONE,
         (void*) FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY );
 
-TOOL_ACTION CVPCB_ACTIONS::filterFPbyDisplayName( "cvpcb.Control.FilterFPByDisplayName", AS_GLOBAL,
-        0, "",
+TOOL_ACTION CVPCB_ACTIONS::FilterFPbyTextPattern( "cvpcb.Control.FilterFPbyTextPattern",
+        AS_GLOBAL, 0, "",
         _( "Filter by display name" ),
-        _( "Filter footprint list using a partial name or a pattern" ),
+        _( "Filter footprint list using plain text matching or regular expressions" ),
         module_name_filtered_list_xpm, AF_NONE,
         (void*) FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN );
