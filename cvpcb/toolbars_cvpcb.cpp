@@ -79,7 +79,7 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
                             KiScaledBitmap( module_filtered_list_xpm, this ),
                             wxNullBitmap,
                             true, NULL,
-                            _( "Filter footprint list by schematic symbol keywords" ),
+                            _( "Use schematic symbol footprint filters" ),
                             wxEmptyString );
 
     m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST,
