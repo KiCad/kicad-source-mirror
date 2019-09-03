@@ -99,15 +99,15 @@ bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 }
 
 
-int MEANDER_SKEW_PLACER::origPathLength( ) const
+long long int MEANDER_SKEW_PLACER::origPathLength() const
 {
     return itemsetLength ( m_tunedPath );
 }
 
 
-int MEANDER_SKEW_PLACER::itemsetLength( const ITEM_SET& aSet ) const
+long long int MEANDER_SKEW_PLACER::itemsetLength( const ITEM_SET& aSet ) const
 {
-    int total = 0;
+    long long int total = 0;
     for( const ITEM* item : aSet.CItems() )
     {
         if( const LINE* l = dyn_cast<const LINE*>( item ) )
@@ -120,7 +120,7 @@ int MEANDER_SKEW_PLACER::itemsetLength( const ITEM_SET& aSet ) const
 }
 
 
-int MEANDER_SKEW_PLACER::currentSkew() const
+long long int MEANDER_SKEW_PLACER::currentSkew() const
 {
     return m_lastLength - m_coupledLength;
 }

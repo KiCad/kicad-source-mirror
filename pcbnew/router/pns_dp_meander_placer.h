@@ -98,7 +98,7 @@ public:
 
     int CurrentLayer() const override;
 
-    int totalLength();
+    long long int totalLength();
 
     const wxString TuningInfo( EDA_UNITS_T aUnits ) const override;
     TUNING_STATUS TuningStatus() const override;
@@ -120,7 +120,7 @@ private:
     void setWorld( NODE* aWorld );
     void release();
 
-    int origPathLength() const;
+    long long int origPathLength() const;
 
     ///> pointer to world to search colliding items
     NODE* m_world;
@@ -141,7 +141,7 @@ private:
     MEANDERED_LINE m_result;
     SEGMENT* m_initialSegment;
 
-    int m_lastLength;
+    long long int m_lastLength;
     TUNING_STATUS m_lastStatus;
 };
 

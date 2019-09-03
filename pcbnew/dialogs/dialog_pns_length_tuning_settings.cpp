@@ -107,13 +107,13 @@ bool DIALOG_PNS_LENGTH_TUNING_SETTINGS::TransferDataToWindow()
 
 bool DIALOG_PNS_LENGTH_TUNING_SETTINGS::AcceptOptions( )
 {
-    if( !m_minAmpl.Validate( 0, INT_MAX ) )
+    if( !m_minAmpl.Validate( 0, std::numeric_limits<int>::max() ) )
         return false;
-    if( !m_maxAmpl.Validate( m_minAmpl.GetValue(), INT_MAX ) )
+    if( !m_maxAmpl.Validate( m_minAmpl.GetValue(), std::numeric_limits<int>::max() ) )
         return false;
-    if( !m_spacing.Validate( 0, INT_MAX ) )
+    if( !m_spacing.Validate( 0, std::numeric_limits<int>::max() ) )
         return false;
-    if( !m_targetLength.Validate( 0, INT_MAX ) )
+    if( !m_targetLength.Validate( 0, std::numeric_limits<long long int>::max() ) )
         return false;
     if( !m_radius.Validate( 0, 100 ) )
         return false;

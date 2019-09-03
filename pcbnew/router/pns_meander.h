@@ -80,8 +80,8 @@ public:
     int m_spacing;
     ///> amplitude/spacing adjustment step
     int m_step;
-    ///> desired length of the tuned line/diff pair
-    int m_targetLength;
+    ///> desired length of the tuned line/diff pair (this is in nm, so allow more than board width)
+    long long int m_targetLength;
     ///> type of corners for the meandered line
     MEANDER_STYLE m_cornerStyle;
     ///> rounding percentage (0 - 100)

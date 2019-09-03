@@ -364,7 +364,7 @@ public:
      * Returns length of the line chain in Euclidean metric.
      * @return length of the line chain
      */
-    int Length() const;
+    long long int Length() const;
 
     /**
      * Function Append()

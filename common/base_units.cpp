@@ -124,7 +124,14 @@ double To_User_Unit( EDA_UNITS_T aUnit, double aValue, bool aUseMils )
 // A lower-precision (for readability) version of StringFromValue()
 wxString MessageTextFromValue( EDA_UNITS_T aUnits, int aValue, bool aUseMils )
 {
-    return MessageTextFromValue( aUnits, (double) aValue, aUseMils );
+    return MessageTextFromValue( aUnits, double( aValue ), aUseMils );
+}
+
+
+// A lower-precision (for readability) version of StringFromValue()
+wxString MessageTextFromValue( EDA_UNITS_T aUnits, long long int aValue, bool aUseMils )
+{
+    return MessageTextFromValue( aUnits, double( aValue ), aUseMils );
 }
 
 
@@ -207,7 +214,7 @@ void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed )
  * otherwise the actual value is rounded when read from dialog and converted
  * in internal units, and therefore modified.
  */
-wxString StringFromValue( EDA_UNITS_T aUnits, int aValue, bool aAddUnitSymbol, bool aUseMils )
+wxString StringFromValue( EDA_UNITS_T aUnits, double aValue, bool aAddUnitSymbol, bool aUseMils )
 {
     double  value_to_print = To_User_Unit( aUnits, aValue, aUseMils );
 
@@ -411,10 +418,10 @@ void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS_T& aUnits, bool
 }
 
 
-int ValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue, bool aUseMils )
+long long int ValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue, bool aUseMils )
 {
     double value = DoubleValueFromString( aUnits, aTextValue, aUseMils );
-    return KiROUND( value );
+    return KiROUND<double, long long int>( value );
 }
 
 

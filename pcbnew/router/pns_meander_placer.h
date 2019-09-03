@@ -89,12 +89,11 @@ public:
     bool CheckFit ( MEANDER_SHAPE* aShape ) override;
 
 protected:
-
-    bool doMove( const VECTOR2I& aP, ITEM* aEndItem, int aTargetLength );
+    bool doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int aTargetLength );
 
     void setWorld( NODE* aWorld );
 
-    virtual int origPathLength() const;
+    virtual long long int origPathLength() const;
 
     ///> pointer to world to search colliding items
     NODE* m_world;
@@ -113,7 +112,7 @@ protected:
     MEANDERED_LINE   m_result;
     SEGMENT*         m_initialSegment;
 
-    int m_lastLength;
+    long long int m_lastLength;
     TUNING_STATUS m_lastStatus;
 };
 

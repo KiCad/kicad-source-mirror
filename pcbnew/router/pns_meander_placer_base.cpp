@@ -106,9 +106,9 @@ void MEANDER_PLACER_BASE::cutTunedLine( const SHAPE_LINE_CHAIN& aOrigin,
 }
 
 
-void MEANDER_PLACER_BASE::tuneLineLength( MEANDERED_LINE& aTuned, int aElongation )
+void MEANDER_PLACER_BASE::tuneLineLength( MEANDERED_LINE& aTuned, long long int aElongation )
 {
-    int remaining = aElongation;
+    long long int remaining = aElongation;
     bool finished = false;
 
     for( MEANDER_SHAPE* m : aTuned.Meanders() )
@@ -155,7 +155,7 @@ void MEANDER_PLACER_BASE::tuneLineLength( MEANDERED_LINE& aTuned, int aElongatio
         }
     }
 
-    int balance = 0;
+    long long int balance = 0;
 
     if( meanderCount )
         balance = -remaining / meanderCount;
@@ -166,7 +166,8 @@ void MEANDER_PLACER_BASE::tuneLineLength( MEANDERED_LINE& aTuned, int aElongatio
         {
             if( m->Type() != MT_CORNER && m->Type() != MT_EMPTY )
             {
-                m->Resize( std::max( m->Amplitude() - balance / 2, m_settings.m_minAmplitude ) );
+                m->Resize( std::max( m->Amplitude() - balance / 2,
+                        (long long int) ( m_settings.m_minAmplitude ) ) );
             }
         }
     }
@@ -179,7 +180,8 @@ const MEANDER_SETTINGS& MEANDER_PLACER_BASE::MeanderSettings() const
 }
 
 
-int MEANDER_PLACER_BASE::compareWithTolerance( int aValue, int aExpected, int aTolerance ) const
+int MEANDER_PLACER_BASE::compareWithTolerance(
+        long long int aValue, long long int aExpected, long long int aTolerance ) const
 {
     if( aValue < aExpected - aTolerance )
         return -1;

@@ -100,9 +100,9 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Reverse() const
 }
 
 
-int SHAPE_LINE_CHAIN::Length() const
+long long int SHAPE_LINE_CHAIN::Length() const
 {
-    int l = 0;
+    long long int l = 0;
 
     for( int i = 0; i < SegmentCount(); i++ )
         l += CSegment( i ).Length();

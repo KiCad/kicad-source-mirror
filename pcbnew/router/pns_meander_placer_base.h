@@ -147,14 +147,15 @@ protected:
      * Takes a set of meanders in aTuned and tunes their length to
      * extend the original line length by aElongation.
      */
-    void tuneLineLength( MEANDERED_LINE& aTuned, int aElongation );
+    void tuneLineLength( MEANDERED_LINE& aTuned, long long int aElongation );
 
     /**
      * Function compareWithTolerance()
      *
      * Compares aValue against aExpected with given tolerance.
      */
-    int compareWithTolerance ( int aValue, int aExpected, int aTolerance = 0 ) const;
+    int compareWithTolerance(
+            long long int aValue, long long int aExpected, long long int aTolerance = 0 ) const;
 
     ///> width of the meandered trace(s)
     int m_currentWidth;

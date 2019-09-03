@@ -85,7 +85,7 @@ public:
      * Function GetValue
      * Returns the current value in Internal Units.
      */
-    virtual int GetValue();
+    virtual long long int GetValue();
 
     /**
      * Function IsIndeterminate
@@ -102,7 +102,7 @@ public:
      * @param aMax a maximum value (in internal units) for validation
      * @return false on error.
      */
-    virtual bool Validate( int aMin, int aMax, bool setFocusOnError = true );
+    virtual bool Validate( long long int aMin, long long int aMax, bool setFocusOnError = true );
 
     void SetLabel( const wxString& aLabel );
 

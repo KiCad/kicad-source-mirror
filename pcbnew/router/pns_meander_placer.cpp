@@ -89,9 +89,9 @@ bool MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 }
 
 
-int MEANDER_PLACER::origPathLength() const
+long long int MEANDER_PLACER::origPathLength() const
 {
-    int total = 0;
+    long long int total = 0;
     for( const ITEM* item : m_tunedPath.CItems() )
     {
         if( const LINE* l = dyn_cast<const LINE*>( item ) )
@@ -110,7 +110,7 @@ bool MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 }
 
 
-bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, int aTargetLength )
+bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, long long int aTargetLength )
 {
     SHAPE_LINE_CHAIN pre, tuned, post;
 
@@ -133,7 +133,7 @@ bool MEANDER_PLACER::doMove( const VECTOR2I& aP, ITEM* aEndItem, int aTargetLeng
         m_result.AddCorner( s.B );
     }
 
-    int lineLen = origPathLength();
+    long long int lineLen = origPathLength();
 
     m_lastLength = lineLen;
     m_lastStatus = TUNED;

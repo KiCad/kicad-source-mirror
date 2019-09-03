@@ -43,7 +43,9 @@
 #include <gal/color4d.h>
 
 #include <atomic>
+#include <limits>
 #include <memory>
+#include <type_traits>
 
 class wxAboutDialogInfo;
 class SEARCH_STACK;
@@ -105,48 +107,19 @@ enum pseudokeys {
 /**
  * Round a floating point number to an integer using "round halfway cases away from zero".
  *
- * In Debug build an assert fires if will not fit into an int.
+ * In Debug build an assert fires if will not fit into the return type.
  */
-
-#if !defined( DEBUG )
-
-/// KiROUND: a function so v is not evaluated twice.  Unfortunately, compiler
-/// is unable to pre-compute constants using this.
-static inline int KiROUND( double v )
+template <typename fp_type, typename ret_type = int>
+constexpr ret_type KiROUND( fp_type v )
 {
-    return int( v < 0 ? v - 0.5 : v + 0.5 );
+    using max_ret = long long int;
+    fp_type ret = v < 0 ? v - 0.5 : v + 0.5;
+
+    wxASSERT( ret <= std::numeric_limits<ret_type>::max()
+              && ret >= std::numeric_limits<ret_type>::lowest() );
+
+    return ret_type( max_ret( ret ) );
 }
-
-/// KIROUND: a macro so compiler can pre-compute constants.  Use this with compile
-/// time constants rather than the inline function above.
-#define KIROUND( v )    int( (v) < 0 ? (v) - 0.5 : (v) + 0.5 )
-
-#else
-
-// DEBUG: KiROUND() is a macro to capture line and file, then calls this inline
-
-static inline int kiRound_( double v, int line, const char* filename )
-{
-    v = v < 0 ? v - 0.5 : v + 0.5;
-    if( v > INT_MAX + 0.5 )
-    {
-        printf( "%s: in file %s on line %d, val: %.16g too ' > 0 ' for int\n",
-                __FUNCTION__, filename, line, v );
-    }
-    else if( v < INT_MIN - 0.5 )
-    {
-        printf( "%s: in file %s on line %d, val: %.16g too ' < 0 ' for int\n",
-                __FUNCTION__, filename, line, v );
-    }
-    return int( v );
-}
-
-#define KiROUND( v )    kiRound_( v, __LINE__, __FILE__ )
-
-// in Debug build, use the overflow catcher since code size is immaterial
-#define KIROUND( v )    KiROUND( v )
-
-#endif
 
 //-----</KiROUND KIT>-----------------------------------------------------------
 

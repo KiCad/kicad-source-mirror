@@ -119,10 +119,10 @@ void DP_MEANDER_PLACER::release()
 }
 
 
-int DP_MEANDER_PLACER::origPathLength() const
+long long int DP_MEANDER_PLACER::origPathLength() const
 {
-    int totalP = 0;
-    int totalN = 0;
+    long long int totalP = 0;
+    long long int totalN = 0;
 
     for( const ITEM* item : m_tunedPathP.CItems() )
     {
@@ -243,7 +243,7 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     while( curIndexN < tunedN.PointCount() )
         m_result.AddCorner( tunedP.CPoint( -1 ), tunedN.CPoint( curIndexN++ ) );
 
-    int dpLen = origPathLength();
+    long long int dpLen = origPathLength();
 
     m_lastStatus = TUNED;
 

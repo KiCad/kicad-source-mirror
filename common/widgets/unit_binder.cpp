@@ -123,7 +123,7 @@ void UNIT_BINDER::delayedFocusHandler( wxCommandEvent& )
 }
 
 
-bool UNIT_BINDER::Validate( int aMin, int aMax, bool setFocusOnError )
+bool UNIT_BINDER::Validate( long long int aMin, long long int aMax, bool setFocusOnError )
 {
     auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
 
@@ -212,7 +212,7 @@ void UNIT_BINDER::ChangeValue( wxString aValue )
 }
 
 
-int UNIT_BINDER::GetValue()
+long long int UNIT_BINDER::GetValue()
 {
     auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
     auto staticText = dynamic_cast<wxStaticText*>( m_value );
