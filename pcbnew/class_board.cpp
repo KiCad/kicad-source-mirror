@@ -1645,8 +1645,7 @@ bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE_CONTAI
 }
 
 
-BOARD_ITEM* BOARD::Duplicate( const BOARD_ITEM* aItem,
-                              bool aAddToBoard )
+BOARD_ITEM* BOARD::Duplicate( const BOARD_ITEM* aItem, bool aAddToBoard )
 {
     BOARD_ITEM* new_item = NULL;
 

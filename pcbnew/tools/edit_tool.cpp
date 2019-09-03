@@ -323,14 +323,14 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
         {
             if( m_dragging && evt->Category() == TC_MOUSE )
             {
-                m_cursor = grid.BestSnapAnchor( controls->GetMousePosition(), item_layers,
-                                                sel_items );
+                VECTOR2I mousePos( controls->GetMousePosition() );
+                m_cursor = grid.BestSnapAnchor( mousePos, item_layers, sel_items );
                 controls->ForceCursorPosition( true, m_cursor );
-                VECTOR2I movement( m_cursor - prevPos );
                 selection.SetReferencePoint( m_cursor );
 
-                totalMovement += movement;
+                VECTOR2I movement( m_cursor - prevPos );
                 prevPos = m_cursor;
+                totalMovement += movement;
 
                 // Drag items to the current cursor position
                 //
@@ -375,7 +375,7 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
                 else
                 {
                     // Save items, so changes can be undone
-                    for( auto item : selection )
+                    for( EDA_ITEM* item : selection )
                     {
                         // Don't double move footprint pads, fields, etc.
                         if( item->GetParent() && item->GetParent()->IsSelected() )
@@ -396,7 +396,7 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
                     auto delta = m_cursor - selection.GetReferencePoint();
 
                     // Drag items to the current cursor position
-                    for( auto item : selection )
+                    for( EDA_ITEM* item : selection )
                     {
                         // Don't double move footprint pads, fields, etc.
                         if( item->GetParent() && item->GetParent()->IsSelected() )
@@ -411,7 +411,7 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
                 {
                     std::vector<BOARD_ITEM*> items;
 
-                    for( auto item : selection.Items() )
+                    for( EDA_ITEM* item : selection )
                         items.push_back( static_cast<BOARD_ITEM*>( item ) );
 
                     // Set the current cursor position to the first dragged item origin, so the
@@ -448,50 +448,34 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
         {
             if( evt->IsAction( &ACTIONS::doDelete ) )
             {
-                // exit the loop, as there is no further processing for removed items
-                break;
+                break;  // finish -- there is no further processing for removed items
             }
             else if( evt->IsAction( &ACTIONS::duplicate ) )
             {
-                // On duplicate, stop moving this item
-                // The duplicate tool should then select the new item and start
-                // a new move procedure
-                break;
+                break;  // finish -- Duplicate tool will start a new Move with the dup'ed items
             }
             else if( evt->IsAction( &PCB_ACTIONS::moveExact ) )
             {
-                // Can't do this, because the selection will then contain
-                // stale pointers and it will all go horribly wrong...
-                //editFrame->RestoreCopyFromUndoList( dummy );
-                //
-                // So, instead, reset the position manually
-                for( auto item : selection )
+                // Reset positions so the Move Exactly is from the start.
+                for( EDA_ITEM* item : selection )
                 {
                     BOARD_ITEM* i = static_cast<BOARD_ITEM*>( item );
                     i->Move( -totalMovement );
-
-                    // And what about flipping and rotation?
-                    // for now, they won't be undone, but maybe that is how
-                    // it should be, so you can flip and move exact in the
-                    // same action?
                 }
 
-                // This causes a double event, so we will get the dialogue
-                // correctly, somehow - why does Rotate not?
-                //MoveExact( aEvent );
-                break;      // exit the loop - we move exactly, so we have finished moving
+                break;  // finish -- we moved exactly, so we are finished
             }
         }
 
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
         {
-            break; // Finish
+            break;     // finish
         }
 
         else
             evt->SetPassEvent();
 
-    } while( ( evt = Wait() ) ); //Should be assignment not equality test
+    } while( ( evt = Wait() ) ); // Assignment (instead of equality test) is intentional
 
     m_lockedSelected = false;
     controls->ForceCursorPosition( false );
@@ -1030,25 +1014,12 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     // Old selection is cleared, and new items are then selected.
     for( EDA_ITEM* item : selection )
     {
-        if( !item )
-            continue;
-
         orig_item = static_cast<BOARD_ITEM*>( item );
 
         if( m_editModules )
-        {
             dupe_item = editFrame->GetBoard()->GetFirstModule()->Duplicate( orig_item, increment );
-        }
         else
-        {
-#if 0
-            // @TODO: see if we allow zone duplication here
-            // Duplicate zones is especially tricky (overlaping zones must be merged)
-            // so zones are not duplicated
-            if( item->Type() != PCB_ZONE_AREA_T )
-#endif
             dupe_item = editFrame->GetBoard()->Duplicate( orig_item );
-        }
 
         if( dupe_item )
         {
