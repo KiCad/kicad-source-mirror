@@ -226,7 +226,6 @@ void SCH_SHEET_PIN::Rotate( wxPoint aPosition )
 {
     wxPoint pt = GetTextPos();
     RotatePoint( &pt, aPosition, 900 );
-    SetTextPos( pt );
 
     switch( m_edge )
     {
@@ -236,6 +235,8 @@ void SCH_SHEET_PIN::Rotate( wxPoint aPosition )
     case SHEET_BOTTOM_SIDE: SetEdge( SHEET_RIGHT_SIDE );  break;
     default: break;
     }
+
+    ConstrainOnEdge( pt );
 }
 
 
