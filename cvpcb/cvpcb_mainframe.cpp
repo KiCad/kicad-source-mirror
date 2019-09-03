@@ -326,12 +326,12 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
 void CVPCB_MAINFRAME::OnEnterFilteringText( wxCommandEvent& aEvent )
 {
     // Called when changing the filter string in main toolbar.
-    // If the option FOOTPRINTS_LISTBOX::FILTERING_BY_NAME is set, update the list of
-    // available footprints which match the filter
+    // If the option FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN is set, update the list
+    // of available footprints which match the filter
 
     m_currentSearchPattern = m_tcFilterString->GetValue();
 
-    if( ( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_NAME ) == 0 )
+    if(( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN ) == 0 )
         return;
 
     wxListEvent l_event;
@@ -545,14 +545,14 @@ void CVPCB_MAINFRAME::SetFootprintFilter(
     // Extract the needed information about the filter
     switch( aFilter )
     {
-    case FOOTPRINTS_LISTBOX::FILTERING_BY_NAME:
+    case FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN:
         // Extract the current search patten when needed
         m_currentSearchPattern = m_tcFilterString->GetValue();
 
     case FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST:
     case FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT:
     case FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY:
-    case FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_KEYWORD:
+    case FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_FP_FILTERS:
         option = aFilter;
     }
 
@@ -585,7 +585,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
     wxString   filters, msg;
     COMPONENT* component = GetSelectedComponent();
 
-    if( ( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_KEYWORD ) )
+    if( ( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_FP_FILTERS ) )
     {
         msg.Empty();
 
@@ -626,7 +626,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
         filters += _( "library" ) + wxString::Format( wxT( " (%s)" ), msg );
     }
 
-    if( ( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_NAME ) )
+    if( ( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN ) )
     {
         if( !filters.IsEmpty() )
             filters += wxT( ", " );

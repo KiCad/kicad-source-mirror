@@ -148,7 +148,7 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
 
     FOOTPRINT_FILTER filter( aList );
 
-    if( aFilterType & FILTERING_BY_COMPONENT_KEYWORD && aComponent )
+    if( aFilterType & FILTERING_BY_COMPONENT_FP_FILTERS && aComponent )
         filter.FilterByFootprintFilters( aComponent->GetFootprintFilters() );
 
     if( aFilterType & FILTERING_BY_PIN_COUNT && aComponent )
@@ -157,8 +157,8 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
     if( aFilterType & FILTERING_BY_LIBRARY )
         filter.FilterByLibrary( aLibName );
 
-    if( aFilterType & FILTERING_BY_NAME )
-        filter.FilterByPattern( aFootPrintFilterPattern );
+    if( aFilterType & FILTERING_BY_TEXT_PATTERN )
+        filter.FilterByTextPattern( aFootPrintFilterPattern );
 
     if( GetSelection() >= 0 && GetSelection() < (int)m_footprintList.GetCount() )
         oldSelection = m_footprintList[ GetSelection() ];

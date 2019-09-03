@@ -83,18 +83,18 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
 
 void CVPCB_MAINFRAME::SyncToolbars()
 {
-#define filterActive( filt ) ( m_filteringOptions & filt )
+#define filterActive( filter ) ( m_filteringOptions & filter )
 
     m_mainToolBar->Toggle( ACTIONS::undo, m_undoList.size() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, m_redoList.size() > 0 );
 
     m_mainToolBar->Toggle( CVPCB_ACTIONS::filterFPbyKeywords,
-            filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_KEYWORD ) );
+                           filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_FP_FILTERS ) );
     m_mainToolBar->Toggle( CVPCB_ACTIONS::filterFPbyLibrary,
-            filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY ) );
+                           filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY ) );
     m_mainToolBar->Toggle( CVPCB_ACTIONS::filterFPbyPin,
-            filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT ) );
+                           filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT ) );
     m_mainToolBar->Toggle( CVPCB_ACTIONS::filterFPbyDisplayName,
-            filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_NAME ) );
+                           filterActive( FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN ) );
     m_mainToolBar->Refresh();
 }

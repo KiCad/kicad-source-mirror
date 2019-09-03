@@ -97,11 +97,11 @@ public:
      */
     enum FP_FILTER_T: int
     {
-        UNFILTERED_FP_LIST              = 0,
-        FILTERING_BY_COMPONENT_KEYWORD  = 0x0001,
-        FILTERING_BY_PIN_COUNT          = 0x0002,
-        FILTERING_BY_LIBRARY            = 0x0004,
-        FILTERING_BY_NAME               = 0x0008
+        UNFILTERED_FP_LIST                = 0,
+        FILTERING_BY_COMPONENT_FP_FILTERS = 0x0001,
+        FILTERING_BY_PIN_COUNT            = 0x0002,
+        FILTERING_BY_LIBRARY              = 0x0004,
+        FILTERING_BY_TEXT_PATTERN         = 0x0008
     };
 
     FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id,

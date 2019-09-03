@@ -68,7 +68,7 @@ void FOOTPRINT_FILTER_IT::increment()
                 continue;
         }
 
-        if( filter_type & FOOTPRINT_FILTER::FILTERING_BY_COMPONENT_KEYWORD )
+        if( filter_type & FOOTPRINT_FILTER::FILTERING_BY_COMPONENT_FP_FILTER )
         {
             if( !FootprintFilterMatch( candidate ) )
                 continue;
@@ -80,7 +80,7 @@ void FOOTPRINT_FILTER_IT::increment()
                 continue;
         }
 
-        if( ( filter_type & FOOTPRINT_FILTER::FILTERING_BY_NAME ) )
+        if( ( filter_type & FOOTPRINT_FILTER::FILTERING_BY_TEXT_PATTERN ) )
         {
             wxString searchStr = wxString::Format( wxT( "%s:%s %s" ),
                                                    candidate.GetLibNickname(),
@@ -209,11 +209,11 @@ void FOOTPRINT_FILTER::FilterByFootprintFilters( const wxArrayString& aFilters )
         m_footprint_filters.back()->SetPattern( each_pattern.Lower() );
     }
 
-    m_filter_type |= FILTERING_BY_COMPONENT_KEYWORD;
+    m_filter_type |= FILTERING_BY_COMPONENT_FP_FILTER;
 }
 
 
-void FOOTPRINT_FILTER::FilterByPattern( wxString const& aPattern )
+void FOOTPRINT_FILTER::FilterByTextPattern( wxString const& aPattern )
 {
     m_filter_pattern = aPattern;
 
@@ -225,7 +225,7 @@ void FOOTPRINT_FILTER::FilterByPattern( wxString const& aPattern )
         m_pattern_filters.push_back( std::make_unique<EDA_COMBINED_MATCHER>( term ) );
     }
 
-    m_filter_type |= FILTERING_BY_NAME;
+    m_filter_type |= FILTERING_BY_TEXT_PATTERN;
 }
 
 

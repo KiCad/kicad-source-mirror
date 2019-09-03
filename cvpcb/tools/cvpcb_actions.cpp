@@ -131,7 +131,7 @@ TOOL_ACTION CVPCB_ACTIONS::filterFPbyKeywords( "cvpcb.Control.FilterFPByKeyword"
         _( "Filter by keyword" ),
         _( "Filter footprint list by schematic symbol keywords" ),
         module_filtered_list_xpm, AF_NONE,
-        (void*) FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_KEYWORD );
+        (void*) FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_FP_FILTERS );
 
 TOOL_ACTION CVPCB_ACTIONS::filterFPbyPin( "cvpcb.Control.FilterFPByPin", AS_GLOBAL,
         0, "",
@@ -152,4 +152,4 @@ TOOL_ACTION CVPCB_ACTIONS::filterFPbyDisplayName( "cvpcb.Control.FilterFPByDispl
         _( "Filter by display name" ),
         _( "Filter footprint list using a partial name or a pattern" ),
         module_name_filtered_list_xpm, AF_NONE,
-        (void*) FOOTPRINTS_LISTBOX::FILTERING_BY_NAME );
+        (void*) FOOTPRINTS_LISTBOX::FILTERING_BY_TEXT_PATTERN );
