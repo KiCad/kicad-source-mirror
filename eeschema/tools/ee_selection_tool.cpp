@@ -696,11 +696,11 @@ bool EE_SELECTION_TOOL::selectMultiple()
             view->Query( selectionBox, selectedItems );         // Get the list of selected items
 
             // Sheet pins aren't in the view; add them by hand
-            for( auto& pair : selectedItems )
+            for( KIGFX::VIEW::LAYER_ITEM_PAIR& pair : selectedItems )
             {
-                auto item = dynamic_cast<EDA_ITEM*>( pair.first );
+                SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( pair.first );
 
-                if( auto sheet = dyn_cast<SCH_SHEET*>( item ) )
+                if( sheet )
                 {
                     int layer = pair.second;
 
@@ -708,8 +708,6 @@ bool EE_SELECTION_TOOL::selectMultiple()
                         selectedItems.emplace_back( KIGFX::VIEW::LAYER_ITEM_PAIR( &pin, layer ) );
                 }
             }
-
-            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR>::iterator it, it_end;
 
             int width = area.GetEnd().x - area.GetOrigin().x;
             int height = area.GetEnd().y - area.GetOrigin().y;
@@ -730,14 +728,11 @@ bool EE_SELECTION_TOOL::selectMultiple()
 
             selectionRect.Normalize();
 
-            for( it = selectedItems.begin(), it_end = selectedItems.end(); it != it_end; ++it )
+            for( KIGFX::VIEW::LAYER_ITEM_PAIR& pair : selectedItems )
             {
-                EDA_ITEM* item = static_cast<EDA_ITEM*>( it->first );
+                EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( pair.first );
 
-                if( !item || !Selectable( item ) )
-                    continue;
-
-                if( item->HitTest( selectionRect, windowSelection ) )
+                if( item && Selectable( item ) && item->HitTest( selectionRect, windowSelection ) )
                 {
                     if( m_subtractive || ( m_exclusive_or && item->IsSelected() ) )
                     {
