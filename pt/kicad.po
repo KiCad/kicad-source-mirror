@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-03 07:30-0300\n"
-"PO-Revision-Date: 2019-09-02 16:14-0300\n"
+"POT-Creation-Date: 2019-09-03 07:44-0300\n"
+"PO-Revision-Date: 2019-09-03 07:44-0300\n"
 "Last-Translator: Francisco R. Pereira <frosch_bin@yahoo.com.br>\n"
 "Language-Team: kicad team\n"
 "Language: pt_BR\n"
@@ -3019,6 +3019,9 @@ msgid ""
 "\n"
 "Unknown filetype."
 msgstr ""
+"Não é possível imprimir '%s'.\n"
+"\n"
+"Tipo de arquivo desconhecido."
 
 #: common/grid_tricks.cpp:237
 msgid "Cut\tCTRL+X"
@@ -3583,12 +3586,11 @@ msgstr "Cola o conteúdo da área de transferência no esquema"
 
 #: common/tool/actions.cpp:169
 msgid "Paste Special..."
-msgstr ""
+msgstr "Colar Especial..."
 
 #: common/tool/actions.cpp:169
-#, fuzzy
 msgid "Paste clipboard into schematic with options"
-msgstr "Cola o conteúdo da área de transferência no esquema"
+msgstr "Cola o conteúdo da área de transferência no esquema com opções"
 
 #: common/tool/actions.cpp:175
 msgid "Duplicate"
@@ -7022,24 +7024,20 @@ msgid "Script Generator Properties"
 msgstr "Propriedades do Gerador de Script"
 
 #: eeschema/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Paste Options"
-msgstr "Opções de Atualização"
+msgstr "Opções de Colagem"
 
 #: eeschema/dialogs/dialog_paste_special_base.cpp:26
-#, fuzzy
 msgid "Keep existing annotations, even if they are duplicated"
-msgstr "Limpar as anotações existentes em todo o esquema?"
+msgstr "Manter as anotações existentes, mesmo que sejam duplicadas"
 
 #: eeschema/dialogs/dialog_paste_special_base.cpp:29
-#, fuzzy
 msgid "Clear annotations on pasted items"
-msgstr "Limpar Anotação"
+msgstr "Limpar anotações em itens colados"
 
 #: eeschema/dialogs/dialog_paste_special_base.h:53
-#, fuzzy
 msgid "Paste Special"
-msgstr "Símbolo de alimentação"
+msgstr "Colar Especial"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:79
 msgid "Plot All Pages"
@@ -13240,12 +13238,10 @@ msgid "Delete the file and its content"
 msgstr "Excluir o arquivo e seu conteúdo"
 
 #: kicad/tree_project_frame.cpp:634
-#, fuzzy
 msgid "&Print"
-msgstr "Imprimir"
+msgstr "&Imprimir"
 
 #: kicad/tree_project_frame.cpp:636
-#, fuzzy
 msgid "Print the contents of the file"
 msgstr "Imprime o conteúdo do arquivo"
 
@@ -20232,9 +20228,8 @@ msgid "Target Properties"
 msgstr "Propriedades do Destino"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:65
-#, fuzzy
 msgid "Dimension Properties"
-msgstr "Propriedades de Texto da Cota"
+msgstr "Propriedades da Cota"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:90
 msgid "Footprint Text Properties"
@@ -20274,52 +20269,44 @@ msgid "Dimension text:"
 msgstr "Texto da cota:"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:99
-#, fuzzy
 msgid "Text width"
-msgstr "Largura do texto:"
+msgstr "Largura do texto"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:118
-#, fuzzy
 msgid "Text height"
-msgstr "Altura do texto:"
+msgstr "Altura do texto"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:129
 msgid "Justification:"
 msgstr "Justificação:"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:141
-#, fuzzy
 msgid "Text thickness"
-msgstr "Espessura do texto:"
+msgstr "Espessura do texto"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:154
-#, fuzzy
 msgid "Text orientation"
-msgstr "Orientação"
+msgstr "Orientação do texto"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:167
-#, fuzzy
 msgid "Text pos X"
-msgstr "Arquivos de texto"
+msgstr "Posição X do texto"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:178 pcbnew/microwave.cpp:318
 msgid "Mirrored"
 msgstr "Espelhado"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:179
-#, fuzzy
 msgid "Mirror text"
-msgstr "Espelhar X"
+msgstr "Espelhar texto"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:188
-#, fuzzy
 msgid "Text pos Y"
-msgstr "Arquivos de texto"
+msgstr "Posição Y to texto"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:200
-#, fuzzy
 msgid "Keep text upright"
-msgstr "Manter na vertical"
+msgstr "Manter texto na vertical"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:227
 msgid "Parent footprint description"
@@ -22893,9 +22880,10 @@ msgstr ""
 "biblioteca de footprint \"%s\""
 
 #: pcbnew/kicad_plugin.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint library path '%s' does not exist (or is not a directory)."
-msgstr "O diretório da biblioteca de footprint \"%s\" não existe"
+msgstr ""
+"O caminho da biblioteca de footprint '%s' não existe (ou não é um diretório)."
 
 #: pcbnew/kicad_plugin.cpp:1294 pcbnew/legacy_plugin.cpp:96
 #, c-format
@@ -23103,14 +23091,14 @@ msgstr ""
 "linha: %d, posição: %d"
 
 #: pcbnew/legacy_plugin.cpp:3272
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' is empty."
-msgstr "Arquivo \"%s\" inserido"
+msgstr "O arquivo '%s' está vazio."
 
 #: pcbnew/legacy_plugin.cpp:3275
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' is not a legacy library."
-msgstr "O arquivo \"%s\" está vazio ou não é uma biblioteca legada"
+msgstr "O arquivo '%s' não é uma biblioteca legada."
 
 #: pcbnew/load_select_footprint.cpp:241
 #, c-format
