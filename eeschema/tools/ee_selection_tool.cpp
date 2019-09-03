@@ -705,7 +705,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
                     int layer = pair.second;
 
                     for( SCH_SHEET_PIN& pin : sheet->GetPins() )
-                        selectedItems.emplace_back( KIGFX::VIEW::LAYER_ITEM_PAIR( &pin, layer ) );
+                        selectedItems.emplace_back( &pin, layer );
                 }
             }
 
