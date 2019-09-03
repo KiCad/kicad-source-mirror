@@ -333,14 +333,20 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
                 prevPos = m_cursor;
 
                 // Drag items to the current cursor position
-                for( EDA_ITEM* item : selection )
+                //
+                // We also refresh the selection VIEW_GROUP here.  I'm not sure exactly what
+                // needs refreshing, but updating the RTREE (via remove/add) doesn't work, nor
+                // does updating the hidden flag in the view.  See bug 1813038.
+                m_selectionTool->ClearSelection( TOOL_EVENT() );
+
+                for( EDA_ITEM* item : sel_items )
                 {
                     // Don't double move footprint pads, fields, etc.
                     if( item->GetParent() && item->GetParent()->IsSelected() )
                         continue;
 
                     static_cast<BOARD_ITEM*>( item )->Move( movement );
-                    getView()->Update( item );
+                    m_selectionTool->AddItemToSel( static_cast<BOARD_ITEM*>( item ), true );
                 }
 
                 frame()->UpdateMsgPanel();
@@ -397,7 +403,6 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
                             continue;
 
                         static_cast<BOARD_ITEM*>( item )->Move( delta );
-                        getView()->Update( item );
                     }
 
                     selection.SetReferencePoint( m_cursor );
@@ -422,6 +427,7 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
                 controls->SetAutoPan( true );
             }
 
+            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
         }
 
@@ -510,7 +516,6 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
     }
     else
     {
-        m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
         m_commit->Push( _( "Drag" ) );
     }
 
