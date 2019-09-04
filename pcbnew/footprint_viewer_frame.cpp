@@ -189,8 +189,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
     // Create GAL canvas
+    m_canvasType = LoadCanvasTypeSetting();
     auto drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                             GetGalDisplayOptions(), LoadCanvasTypeSetting() );
+                                             GetGalDisplayOptions(), m_canvasType );
     SetCanvas( drawPanel );
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
