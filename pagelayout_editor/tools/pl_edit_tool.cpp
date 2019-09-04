@@ -96,7 +96,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     PL_SELECTION& selection = m_selectionTool->RequestSelection();
     bool          unselect = selection.IsHover();
 
-    if( selection.Empty() )
+    if( selection.Empty() || m_moveInProgress )
         return 0;
 
     std::string tool = aEvent.GetCommandStr().get();
