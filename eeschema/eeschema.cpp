@@ -220,7 +220,12 @@ static PARAM_CFG_ARRAY& cfg_params()
         CLR( "Color4DBrightenedEx",       LAYER_BRIGHTENED,           COLOR4D( PUREMAGENTA ) )
         CLR( "Color4DHiddenEx",           LAYER_HIDDEN,               COLOR4D( LIGHTGRAY ) )
         CLR( "Color4DWorksheetEx",        LAYER_WORKSHEET,            COLOR4D( RED ) )
+// Macs look better with a lighter shadow
+#ifdef __WXMAC__
         CLR( "Color4DShadowEx",           LAYER_SELECTION_SHADOWS,    COLOR4D( .78, .92, 1.0, 0.8 ) )
+#else
+        CLR( "Color4DShadowEx",           LAYER_SELECTION_SHADOWS,    COLOR4D( .4, .7, 1.0, 0.8 ) )
+#endif
     }
 
     return ca;
