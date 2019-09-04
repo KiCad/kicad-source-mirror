@@ -502,12 +502,9 @@ void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
 
         auto advance = [&]( int& idx )
         {
-            idx += delta;
-
-            if( idx < 0 )
-                idx = m_tabOrder.size() - 1;
-            else if ( idx >= m_tabOrder.size() )
-                idx = 0;
+            // Wrap-around modulus
+            int size = m_tabOrder.size();
+            idx = ( ( idx + delta ) % size + size ) % size;
         };
 
         for( size_t i = 0; i < m_tabOrder.size(); ++i )
@@ -523,6 +520,8 @@ void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
         {
             advance( currentIdx );
 
+            //todo: We don't currently have non-textentry dialog boxes but this will break if
+            // we add them.
 #ifdef __APPLE__
             while( dynamic_cast<wxTextEntry*>( m_tabOrder[ currentIdx ] ) == nullptr )
                 advance( currentIdx );
