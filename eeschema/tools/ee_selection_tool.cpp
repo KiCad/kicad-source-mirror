@@ -690,6 +690,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
 
             // Mark items within the selection box as selected
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
+            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> sheetPins;
 
             // Filter the view items based on the selection box
             BOX2I selectionBox = area.ViewBBox();
@@ -705,9 +706,11 @@ bool EE_SELECTION_TOOL::selectMultiple()
                     int layer = pair.second;
 
                     for( SCH_SHEET_PIN& pin : sheet->GetPins() )
-                        selectedItems.emplace_back( &pin, layer );
+                        sheetPins.emplace_back( KIGFX::VIEW::LAYER_ITEM_PAIR( &pin, layer ) );
                 }
             }
+
+            selectedItems.insert( selectedItems.end(), sheetPins.begin(), sheetPins.end() );
 
             int width = area.GetEnd().x - area.GetOrigin().x;
             int height = area.GetEnd().y - area.GetOrigin().y;
