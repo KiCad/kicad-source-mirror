@@ -46,6 +46,7 @@
 #include <limits>
 #include <memory>
 #include <type_traits>
+#include <typeinfo>
 
 class wxAboutDialogInfo;
 class SEARCH_STACK;
@@ -115,8 +116,13 @@ constexpr ret_type KiROUND( fp_type v )
     using max_ret = long long int;
     fp_type ret = v < 0 ? v - 0.5 : v + 0.5;
 
-    wxASSERT( ret <= std::numeric_limits<ret_type>::max()
-              && ret >= std::numeric_limits<ret_type>::lowest() );
+    if( std::numeric_limits<ret_type>::max() > ret ||
+        std::numeric_limits<ret_type>::lowest() < ret )
+    {
+        wxLogDebug
+        ( "Overflow KiROUND converting value %f to %s", double( v ), typeid(ret_type).name() );
+        return 0;
+    }
 
     return ret_type( max_ret( ret ) );
 }
