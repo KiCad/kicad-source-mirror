@@ -126,7 +126,7 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 PCB_BASE_FRAME::~PCB_BASE_FRAME()
 {
     // Ensure m_canvasType is up to date, to save it in config
-    if( !GetGalCanvas() )
+    if( !IsGalCanvasActive() )
         m_canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
     else
         m_canvasType = GetGalCanvas()->GetBackend();
