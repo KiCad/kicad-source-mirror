@@ -192,9 +192,15 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     UpdateTitle();
 
     // Create GAL canvas
+    m_canvasType = LoadCanvasTypeSetting();
+
+    // Legacy canvas is deprecated and does not work fine in footprint viewer.
+    // So force cairo canvas in this case
+    if( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
+         m_canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+
     PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                                            GetGalDisplayOptions(),
-                                                            LoadCanvasTypeSetting() );
+                                                            GetGalDisplayOptions(), m_canvasType );
     SetGalCanvas( drawPanel );
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
@@ -244,12 +250,13 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_auimgr.Update();
 
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
-    UseGalCanvas( true );
 
     // Restore last zoom.  (If auto-zooming we'll adjust when we load the footprint.)
     GetGalCanvas()->GetView()->SetScale( m_lastZoom );
 
     updateView();
+
+    UseGalCanvas( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
 
     if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame
     {

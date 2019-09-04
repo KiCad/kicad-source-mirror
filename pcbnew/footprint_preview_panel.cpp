@@ -247,7 +247,11 @@ public:
 FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aParent,
                                                   std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aOpts,
                                                   GAL_TYPE aGalType )
-    : PCB_DRAW_PANEL_GAL ( aParent, -1, wxPoint( 0, 0 ), wxSize(200, 200), *aOpts, aGalType  ),
+    : PCB_DRAW_PANEL_GAL ( aParent, -1, wxPoint( 0, 0 ), wxSize(200, 200), *aOpts,
+                // Note: legacy canvas does not work in FOOTPRINT_PREVIEW_PANEL:
+                // force opengl or cairo canvas
+                aGalType == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL ? aGalType
+                            : EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ),
       KIWAY_HOLDER( aKiway ),
       m_DisplayOptions( std::move( aOpts ) ),
       m_footprintDisplayed( true )
