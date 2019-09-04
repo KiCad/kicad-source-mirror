@@ -356,6 +356,8 @@ void FOOTPRINT_EDIT_FRAME::AddModuleToBoard( MODULE* aFootprint )
     aFootprint->SetPadsLocked( false );
 
     PCB_BASE_EDIT_FRAME::AddModuleToBoard( aFootprint );
+
+    UpdateMsgPanel();
 }
 
 

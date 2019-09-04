@@ -53,6 +53,7 @@
 #include <view/view_controls.h>
 #include <functional>
 #include <footprint_viewer_frame.h>
+#include <footprint_edit_frame.h>
 
 using namespace std::placeholders;
 
@@ -940,7 +941,44 @@ int PCBNEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         MSG_PANEL_ITEMS msgItems;
         wxString        msg = wxString::Format( wxT( "%d" ), selection.GetSize() );
 
-        msgItems.push_back( MSG_PANEL_ITEM( _( "Selected Items" ), msg, DARKCYAN ) );
+        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Selected Items" ), msg, DARKCYAN ) );
+        m_frame->SetMsgPanel( msgItems );
+    }
+    else if( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) )
+    {
+        FOOTPRINT_EDIT_FRAME* editFrame = static_cast<FOOTPRINT_EDIT_FRAME*>( m_frame );
+        MODULE*               footprint = (MODULE*) editFrame->GetModel();
+
+        if( !footprint )
+            return 0;
+
+        MSG_PANEL_ITEMS msgItems;
+        wxString        msg;
+
+        msg = footprint->GetFPID().GetLibNickname().wx_str();
+        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Library" ), msg, DARKCYAN ) );
+
+        msg = footprint->GetFPID().GetLibItemName().wx_str();
+        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Footprint Name" ), msg, DARKCYAN ) );
+
+        wxDateTime date( static_cast<time_t>( footprint->GetLastEditTime() ) );
+
+        if( footprint->GetLastEditTime() && date.IsValid() )
+        // Date format: see http://www.cplusplus.com/reference/ctime/strftime
+            msg = date.Format( wxT( "%b %d, %Y" ) ); // Abbreviated_month_name Day, Year
+        else
+            msg = _( "Unknown" );
+
+        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Last Change" ), msg, BROWN ) );
+
+        msg.Printf( wxT( "%zu" ), (size_t) footprint->GetPadCount( DO_NOT_INCLUDE_NPTH ) );
+        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Pads" ), msg, BLUE ) );
+
+        wxString doc, keyword;
+        doc.Printf( _( "Doc: %s" ), footprint->GetDescription() );
+        keyword.Printf( _( "Key Words: %s" ), footprint->GetKeywords() );
+        msgItems.emplace_back( MSG_PANEL_ITEM( doc, keyword, BLACK ) );
+
         m_frame->SetMsgPanel( msgItems );
     }
     else

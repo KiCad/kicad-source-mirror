@@ -324,6 +324,22 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 }
 
 
+class BASIC_FOOTPRINT_INFO : public FOOTPRINT_INFO
+{
+public:
+    BASIC_FOOTPRINT_INFO( MODULE* aModule )
+    {
+        m_nickname = aModule->GetFPID().GetLibNickname().wx_str();
+        m_fpname = aModule->GetFPID().GetLibItemName().wx_str();
+        m_pad_count = aModule->GetPadCount( DO_NOT_INCLUDE_NPTH );
+        m_unique_pad_count = aModule->GetUniquePadCount( DO_NOT_INCLUDE_NPTH );
+        m_keywords = aModule->GetKeywords();
+        m_doc = aModule->GetDescription();
+        m_loaded = true;
+    }
+};
+
+
 void FOOTPRINT_EDIT_FRAME::editFootprintProperties( MODULE* aModule )
 {
     LIB_ID oldFPID = aModule->GetFPID();
@@ -331,7 +347,15 @@ void FOOTPRINT_EDIT_FRAME::editFootprintProperties( MODULE* aModule )
     DIALOG_FOOTPRINT_FP_EDITOR dialog( this, aModule );
     dialog.ShowModal();
 
+    // Update library tree
+    BASIC_FOOTPRINT_INFO footprintInfo( aModule );
+    wxDataViewItem       treeItem = m_adapter->FindItem( oldFPID );
+    static_cast<LIB_TREE_NODE_LIB_ID*>( treeItem.GetID() )->Update( &footprintInfo );
+    m_treePane->GetLibTree()->Refresh();
+
     updateTitle();      // in case of a name change...
+
+    UpdateMsgPanel();
 }
 
 
