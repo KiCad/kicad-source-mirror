@@ -353,10 +353,8 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
             return;
         }
 
-#if wxCHECK_VERSION( 3, 0, 0 )
         if( !m_parentPanel->HasFocus() )
             break;
-#endif
 
         double borderSize = std::min( m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().x,
                                       m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().y );
@@ -653,16 +651,9 @@ void WX_VIEW_CONTROLS::refreshMouse()
     moveEvent.SetY( msp.y );
 
     // Set the modifiers state
-#if wxCHECK_VERSION( 3, 0, 0 )
     moveEvent.SetControlDown( wxGetKeyState( WXK_CONTROL ) );
     moveEvent.SetShiftDown( wxGetKeyState( WXK_SHIFT ) );
     moveEvent.SetAltDown( wxGetKeyState( WXK_ALT ) );
-#else
-    // wx <3.0 do not have accessors, but the fields are exposed
-    moveEvent.m_controlDown = wxGetKeyState( WXK_CONTROL );
-    moveEvent.m_shiftDown = wxGetKeyState( WXK_SHIFT );
-    moveEvent.m_altDown = wxGetKeyState( WXK_ALT );
-#endif
 
     m_cursorPos = m_view->ToWorld( VECTOR2D( msp.x, msp.y ) );
     wxPostEvent( m_parentPanel, moveEvent );
