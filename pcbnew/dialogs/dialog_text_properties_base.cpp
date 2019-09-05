@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Apr 23 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,11 +25,39 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	textLabel->Wrap( -1 );
 	m_MultiLineSizer->Add( textLabel, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_MultiLineText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+	m_MultiLineText = new wxStyledTextCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, wxEmptyString );
+	m_MultiLineText->SetUseTabs( true );
+	m_MultiLineText->SetTabWidth( 4 );
+	m_MultiLineText->SetIndent( 4 );
+	m_MultiLineText->SetTabIndents( false );
+	m_MultiLineText->SetBackSpaceUnIndents( false );
+	m_MultiLineText->SetViewEOL( false );
+	m_MultiLineText->SetViewWhiteSpace( false );
+	m_MultiLineText->SetMarginWidth( 2, 0 );
+	m_MultiLineText->SetIndentationGuides( true );
+	m_MultiLineText->SetMarginWidth( 1, 0 );
+	m_MultiLineText->SetMarginWidth( 0, 0 );
+	m_MultiLineText->MarkerDefine( wxSTC_MARKNUM_FOLDER, wxSTC_MARK_BOXPLUS );
+	m_MultiLineText->MarkerSetBackground( wxSTC_MARKNUM_FOLDER, wxColour( wxT("BLACK") ) );
+	m_MultiLineText->MarkerSetForeground( wxSTC_MARKNUM_FOLDER, wxColour( wxT("WHITE") ) );
+	m_MultiLineText->MarkerDefine( wxSTC_MARKNUM_FOLDEROPEN, wxSTC_MARK_BOXMINUS );
+	m_MultiLineText->MarkerSetBackground( wxSTC_MARKNUM_FOLDEROPEN, wxColour( wxT("BLACK") ) );
+	m_MultiLineText->MarkerSetForeground( wxSTC_MARKNUM_FOLDEROPEN, wxColour( wxT("WHITE") ) );
+	m_MultiLineText->MarkerDefine( wxSTC_MARKNUM_FOLDERSUB, wxSTC_MARK_EMPTY );
+	m_MultiLineText->MarkerDefine( wxSTC_MARKNUM_FOLDEREND, wxSTC_MARK_BOXPLUS );
+	m_MultiLineText->MarkerSetBackground( wxSTC_MARKNUM_FOLDEREND, wxColour( wxT("BLACK") ) );
+	m_MultiLineText->MarkerSetForeground( wxSTC_MARKNUM_FOLDEREND, wxColour( wxT("WHITE") ) );
+	m_MultiLineText->MarkerDefine( wxSTC_MARKNUM_FOLDEROPENMID, wxSTC_MARK_BOXMINUS );
+	m_MultiLineText->MarkerSetBackground( wxSTC_MARKNUM_FOLDEROPENMID, wxColour( wxT("BLACK") ) );
+	m_MultiLineText->MarkerSetForeground( wxSTC_MARKNUM_FOLDEROPENMID, wxColour( wxT("WHITE") ) );
+	m_MultiLineText->MarkerDefine( wxSTC_MARKNUM_FOLDERMIDTAIL, wxSTC_MARK_EMPTY );
+	m_MultiLineText->MarkerDefine( wxSTC_MARKNUM_FOLDERTAIL, wxSTC_MARK_EMPTY );
+	m_MultiLineText->SetSelBackground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
+	m_MultiLineText->SetSelForeground( true, wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
 	m_MultiLineText->SetToolTip( _("Enter the text placed on selected layer.") );
 	m_MultiLineText->SetMinSize( wxSize( 400,60 ) );
 
-	m_MultiLineSizer->Add( m_MultiLineText, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_MultiLineSizer->Add( m_MultiLineText, 1, wxEXPAND | wxALL, 5 );
 
 
 	bMainSizer->Add( m_MultiLineSizer, 20, wxEXPAND|wxALL, 10 );

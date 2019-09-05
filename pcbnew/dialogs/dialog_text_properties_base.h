@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Apr 23 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,8 +19,9 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/textctrl.h>
+#include <wx/stc/stc.h>
 #include <wx/sizer.h>
+#include <wx/textctrl.h>
 #include <wx/choice.h>
 #include <wx/bmpcbox.h>
 #include <wx/checkbox.h>
@@ -41,7 +42,7 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 
 	protected:
 		wxBoxSizer* m_MultiLineSizer;
-		wxTextCtrl* m_MultiLineText;
+		wxStyledTextCtrl* m_MultiLineText;
 		wxBoxSizer* m_SingleLineSizer;
 		wxStaticText* m_TextLabel;
 		wxTextCtrl* m_SingleLineText;

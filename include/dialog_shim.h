@@ -134,6 +134,16 @@ public:
 
     EDA_UNITS_T GetUserUnits() const { return m_units; }
 
+    static bool IsCtrl( int aChar, const wxKeyEvent& e )
+    {
+        return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() && !e.ShiftDown() && !e.MetaDown();
+    }
+
+    static bool IsShiftCtrl( int aChar, const wxKeyEvent& e )
+    {
+        return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() && e.ShiftDown() && !e.MetaDown();
+    }
+
 protected:
 
     /**

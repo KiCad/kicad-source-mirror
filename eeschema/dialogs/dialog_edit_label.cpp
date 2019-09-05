@@ -236,27 +236,15 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
 /*!
  * wxEVT_COMMAND_ENTER event handler for single-line control
  */
-
 void DIALOG_LABEL_EDITOR::OnEnterKey( wxCommandEvent& aEvent )
 {
     wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
 }
 
 
-static bool isCtrl( int aChar, const wxKeyEvent& e )
-{
-    return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() && !e.ShiftDown() && !e.MetaDown();
-}
-
-static bool isShiftCtrl( int aChar, const wxKeyEvent& e )
-{
-    return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() && e.ShiftDown() && !e.MetaDown();
-}
-
 /*!
  * wxEVT_CHAR_HOOK event handler for multi-line control
  */
-
 void DIALOG_LABEL_EDITOR::OnCharHook( wxKeyEvent& aEvt )
 {
     if( aEvt.GetKeyCode() == WXK_TAB )
@@ -275,27 +263,23 @@ void DIALOG_LABEL_EDITOR::OnCharHook( wxKeyEvent& aEvt )
             m_valueMultiLine->Tab();
         }
     }
-    else if( m_valueMultiLine->IsShown() && isCtrl( 'Z', aEvt ) )
+    else if( m_valueMultiLine->IsShown() && IsCtrl( 'Z', aEvt ) )
     {
         m_valueMultiLine->Undo();
     }
-#if defined( __WXMAC__ )
-    else if( m_valueMultiLine->IsShown() && isShiftCtrl( 'Z', aEvt ) )
-#else
-    else if( m_valueMultiLine->IsShown() && isCtrl( 'Y', aEvt ) )
-#endif
+    else if( m_valueMultiLine->IsShown() && ( IsShiftCtrl( 'Z', aEvt ) || IsCtrl( 'Y', aEvt ) ) )
     {
         m_valueMultiLine->Redo();
     }
-    else if( isCtrl( 'X', aEvt ) )
+    else if( IsCtrl( 'X', aEvt ) )
     {
         m_valueMultiLine->Cut();
     }
-    else if( isCtrl( 'C', aEvt ) )
+    else if( IsCtrl( 'C', aEvt ) )
     {
         m_valueMultiLine->Copy();
     }
-    else if( isCtrl( 'V', aEvt ) )
+    else if( IsCtrl( 'V', aEvt ) )
     {
         m_valueMultiLine->Paste();
     }

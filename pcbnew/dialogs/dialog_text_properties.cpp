@@ -205,15 +205,39 @@ void DIALOG_TEXT_PROPERTIES::OnCharHook( wxKeyEvent& aEvent )
 {
     if( aEvent.GetKeyCode() == WXK_TAB )
     {
-        int flags = 0;
-
-        if( !aEvent.ShiftDown() )
-            flags |= wxNavigationKeyEvent::IsForward;
-
         if( aEvent.ControlDown() )
-            flags |= wxNavigationKeyEvent::WinChange;
+        {
+            int flags = 0;
 
-        NavigateIn( flags );
+            if( !aEvent.ShiftDown() )
+                flags |= wxNavigationKeyEvent::IsForward;
+
+            NavigateIn( flags );
+        }
+        else
+        {
+            m_MultiLineText->Tab();
+        }
+    }
+    else if( m_MultiLineText->IsShown() && IsCtrl( 'Z', aEvent ) )
+    {
+        m_MultiLineText->Undo();
+    }
+    else if( m_MultiLineText->IsShown() && ( IsShiftCtrl( 'Z', aEvent ) || IsCtrl( 'Y', aEvent ) ) )
+    {
+        m_MultiLineText->Redo();
+    }
+    else if( IsCtrl( 'X', aEvent ) )
+    {
+        m_MultiLineText->Cut();
+    }
+    else if( IsCtrl( 'C', aEvent ) )
+    {
+        m_MultiLineText->Copy();
+    }
+    else if( IsCtrl( 'V', aEvent ) )
+    {
+        m_MultiLineText->Paste();
     }
     else if( aEvent.GetKeyCode() == WXK_RETURN )
     {
