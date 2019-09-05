@@ -64,56 +64,52 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 	m_staticText7->Wrap( -1 );
 	m_staticText7->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	m_fgGridSizer->Add( m_staticText7, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_fgGridSizer->Add( m_staticText7, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText8 = new wxStaticText( m_scGridWin, wxID_ANY, _("Name"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText8->Wrap( -1 );
 	m_staticText8->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	m_fgGridSizer->Add( m_staticText8, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_fgGridSizer->Add( m_staticText8, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText9 = new wxStaticText( m_scGridWin, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
 	m_staticText9->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	m_fgGridSizer->Add( m_staticText9, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_fgGridSizer->Add( m_staticText9, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText10 = new wxStaticText( m_scGridWin, wxID_ANY, _("Material"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText10->Wrap( -1 );
 	m_staticText10->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	m_fgGridSizer->Add( m_staticText10, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_fgGridSizer->Add( m_staticText10, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText101 = new wxStaticText( m_scGridWin, wxID_ANY, _("Thickness"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText101->Wrap( -1 );
 	m_staticText101->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	m_fgGridSizer->Add( m_staticText101, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_fgGridSizer->Add( m_staticText101, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_staticTextLock = new wxStaticText( m_scGridWin, wxID_ANY, _("Lock"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextLock->Wrap( -1 );
-	m_staticTextLock->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
-	m_staticTextLock->SetToolTip( _("If  lock is  enabled, the dielectric thickness calculation will not change the thickness") );
-
-	m_fgGridSizer->Add( m_staticTextLock, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_bitmapLockThickness = new wxStaticBitmap( m_scGridWin, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_fgGridSizer->Add( m_bitmapLockThickness, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText102 = new wxStaticText( m_scGridWin, wxID_ANY, _("Color"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText102->Wrap( -1 );
 	m_staticText102->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	m_fgGridSizer->Add( m_staticText102, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_fgGridSizer->Add( m_staticText102, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText103 = new wxStaticText( m_scGridWin, wxID_ANY, _("Epsilon R"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText103->Wrap( -1 );
 	m_staticText103->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	m_fgGridSizer->Add( m_staticText103, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_fgGridSizer->Add( m_staticText103, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText104 = new wxStaticText( m_scGridWin, wxID_ANY, _("Loss tg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText104->Wrap( -1 );
 	m_staticText104->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	m_fgGridSizer->Add( m_staticText104, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_fgGridSizer->Add( m_staticText104, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	m_scGridWin->SetSizer( m_fgGridSizer );

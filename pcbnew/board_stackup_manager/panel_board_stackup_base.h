@@ -23,6 +23,7 @@
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
+#include <wx/statbmp.h>
 #include <wx/scrolwin.h>
 #include <wx/radiobox.h>
 #include <wx/checkbox.h>
@@ -54,7 +55,7 @@ class PANEL_SETUP_BOARD_STACKUP_BASE : public wxPanel
 		wxStaticText* m_staticText9;
 		wxStaticText* m_staticText10;
 		wxStaticText* m_staticText101;
-		wxStaticText* m_staticTextLock;
+		wxStaticBitmap* m_bitmapLockThickness;
 		wxStaticText* m_staticText102;
 		wxStaticText* m_staticText103;
 		wxStaticText* m_staticText104;

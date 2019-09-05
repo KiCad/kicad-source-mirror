@@ -34,6 +34,7 @@
 #include "panel_board_stackup.h"
 #include "stackup_predefined_prms.h"
 #include <panel_setup_layers.h>
+#include <bitmaps.h>
 
 // Some wx widget ID to know what widget has fired a event:
 #define ID_INCREMENT 128    // space between 2 ID type. Bigger than the layer count max
@@ -84,8 +85,8 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB
     m_numericTextCtrlSize.y = -1;     // Use default for the vertical size
 
     // The grid column containing the lock checkbox it kept to a minimal
-    // size. So give it a very short label
-    m_staticTextLock->SetLabel( "X" );
+    // size. So we use a wxStaticBitmap: set the bitmap itself
+    m_bitmapLockThickness->SetBitmap( KiScaledBitmap( locked_xpm, aFrame ) );
 
     // Gives a minimal size of wxTextCtrl showing dimensions+units
     m_thicknessCtrl->SetMinSize( m_numericTextCtrlSize );
@@ -479,7 +480,9 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
                 wxCheckBox* cb_box = new wxCheckBox( m_scGridWin, ID_ITEM_THICKNESS_LOCKED+row,
                                                      wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
                 cb_box->SetValue( item->m_ThicknessLocked );
-                m_fgGridSizer->Add( cb_box, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 1 );
+                m_fgGridSizer->Add( cb_box, 0,
+                                    wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL,
+                                    1 );
                 ui_row_item.m_ThicknessLockCtrl = cb_box;
             }
             else
