@@ -181,7 +181,6 @@ public:
     void    ReCreateOptToolbar() override;
 
     void    ReCreateMenuBar() override;
-    double  BestZoom() override;
 
     void    SyncToolbars() override;
 

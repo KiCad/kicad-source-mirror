@@ -22,7 +22,6 @@
 #include <kiface_i.h>
 #include <pgm_base.h>
 #include <eda_base_frame.h>
-#include <build_version.h>
 #include <trigo.h>
 #include <base_units.h>
 #include <gbr_layer_box_selector.h>
@@ -35,7 +34,6 @@
 #include <gerbview_id.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
-#include <dialog_helpers.h>
 #include <DCodeSelectionbox.h>
 #include <gerbview_layer_widget.h>
 #include <gerbview_draw_panel_gal.h>
@@ -300,28 +298,6 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     Zoom_Automatique( true );        // Zoom fit in frame
 
     return true;
-}
-
-
-double GERBVIEW_FRAME::BestZoom()
-{
-    EDA_RECT bbox = GetGerberLayout()->ComputeBoundingBox();
-
-    // Reserve a margin around the bounding box, for a better display.
-    double margin_scale_factor = 1.05;
-
-    // If there is not item loaded, use the current page size
-    if( bbox.GetWidth() == 0 || bbox.GetHeight() == 0 )
-    {
-        bbox.SetSize( GetPageSizeIU() );
-        bbox.SetOrigin( 0, 0 );
-    }
-
-    double  sizeX = (double) bbox.GetWidth();
-    double  sizeY = (double) bbox.GetHeight();
-    wxPoint centre = bbox.Centre();
-
-    return bestZoom( sizeX, sizeY, margin_scale_factor, centre );
 }
 
 

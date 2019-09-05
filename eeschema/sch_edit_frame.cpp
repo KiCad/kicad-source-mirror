@@ -575,20 +575,6 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 }
 
 
-double SCH_EDIT_FRAME::BestZoom()
-{
-    double  sizeX = (double) GetScreen()->GetPageSettings().GetWidthIU();
-    double  sizeY = (double) GetScreen()->GetPageSettings().GetHeightIU();
-    wxPoint centre( wxPoint( sizeX / 2, sizeY / 2 ) );
-
-    // The sheet boundary already affords us some margin, so add only an
-    // additional 5%.
-    double margin_scale_factor = 1.05;
-
-    return bestZoom( sizeX, sizeY, margin_scale_factor, centre );
-}
-
-
 wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
 {
     wxFileName fn = GetScreen()->GetFileName();

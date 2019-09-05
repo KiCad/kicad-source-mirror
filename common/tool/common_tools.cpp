@@ -254,12 +254,15 @@ int COMMON_TOOLS::ZoomFitScreen( const TOOL_EVENT& aEvent )
     // Reserve a 10% margin around component bounding box.
     double margin_scale_factor = 1.1;
 
-    // Leave 20% for library editors & viewers
-    if( frame->IsType( FRAME_PCB_MODULE_VIEWER ) || frame->IsType( FRAME_PCB_MODULE_VIEWER_MODAL )
-            || frame->IsType( FRAME_SCH_VIEWER ) || frame->IsType( FRAME_SCH_VIEWER_MODAL )
-            || frame->IsType( FRAME_SCH_LIB_EDITOR ) || frame->IsType( FRAME_PCB_MODULE_EDITOR ) )
+    // Leave a bigger margin for library editors & viewers
+    if( frame->IsType( FRAME_SCH_LIB_EDITOR ) || frame->IsType( FRAME_PCB_MODULE_EDITOR ) )
     {
-        margin_scale_factor = 1.2;
+        margin_scale_factor = 2;
+    }
+    else if( frame->IsType( FRAME_PCB_MODULE_VIEWER ) || frame->IsType( FRAME_PCB_MODULE_VIEWER_MODAL )
+            || frame->IsType( FRAME_SCH_VIEWER ) || frame->IsType( FRAME_SCH_VIEWER_MODAL ) )
+    {
+        margin_scale_factor = 1.4;
     }
 
     view->SetScale( scale / margin_scale_factor );

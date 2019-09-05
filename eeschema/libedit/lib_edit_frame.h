@@ -243,7 +243,6 @@ public:
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;
     void ReCreateOptToolbar() override;
-    double BestZoom() override;         // Returns the best zoom
 
     void LoadSettings( wxConfigBase* aCfg ) override;
     void SaveSettings( wxConfigBase* aCfg ) override;

@@ -54,17 +54,10 @@ static struct IFACE : public KIFACE_I
     {
         switch( aClassId )
         {
-        case FRAME_CVPCB:
-            return new CVPCB_MAINFRAME( aKiway, aParent );
-
-        case FRAME_CVPCB_DISPLAY:
-            return new DISPLAY_FOOTPRINTS_FRAME( aKiway, aParent );
-
-        default:
-            ;
+        case FRAME_CVPCB:         return new CVPCB_MAINFRAME( aKiway, aParent );
+        case FRAME_CVPCB_DISPLAY: return new DISPLAY_FOOTPRINTS_FRAME( aKiway, aParent );
+        default:                  return NULL;
         }
-
-        return NULL;
     }
 
     /**

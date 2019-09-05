@@ -311,8 +311,6 @@ public:
 
     void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
 
-    double BestZoom() override;
-
     /**
      * Add an item to the schematic and adds the changes to the undo/redo container.
      * @param aUndoAppend True if the action should be appended to the current undo record.

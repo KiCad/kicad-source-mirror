@@ -134,8 +134,6 @@ protected:
 
     virtual void SetScreen( BASE_SCREEN* aScreen )  { m_currentScreen = aScreen; }
 
-    double bestZoom( double sizeX, double sizeY, double scaleFactor, wxPoint centre );
-
     void unitsChangeRefresh() override;
 
     void CommonSettingsChanged( bool aEnvVarsChanged ) override;
@@ -350,9 +348,6 @@ public:
      * that shows all the page or the board
      */
     virtual void Zoom_Automatique( bool aWarpPointer );
-
-    /** Return the zoom level which displays the full page on screen */
-    virtual double BestZoom() = 0;
 
     /**
      * Useful to focus on a particular location, in find functions

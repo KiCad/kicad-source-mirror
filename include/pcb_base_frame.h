@@ -207,12 +207,6 @@ public:
     void UpdateGridSelectBox();
 
     /**
-     * Function BestZoom
-     * @return the "best" zoom to show the entire board or footprint on the screen.
-     */
-    virtual double BestZoom() override;
-
-    /**
      * Function GetZoomLevelIndicator
      * returns a human readable value which can be displayed as zoom
      * level indicator in dialogs.

@@ -705,17 +705,6 @@ void EDA_DRAW_FRAME::HardRedraw()
 }
 
 
-// Factor out the calculation portion of the various BestZoom() implementations.
-//
-// Note that like it's forerunners this routine has an intentional side-effect: it
-// sets the scroll centre position.  While I'm not happy about that, it's probably
-// not worth fixing as its days are numbered (GAL canvases use a different method).
-double EDA_DRAW_FRAME::bestZoom( double sizeX, double sizeY, double scaleFactor, wxPoint centre )
-{
-	return 1.0;
-}
-
-
 void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 {
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );

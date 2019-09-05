@@ -28,12 +28,9 @@
 #include <pcb_draw_panel_gal.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
-#include <dialog_helpers.h>
 #include <3d_viewer/eda_3d_viewer.h>
-#include <msgpanel.h>
 #include <fp_lib_table.h>
 #include <bitmaps.h>
-#include <gal/graphics_abstraction_layer.h>
 #include <eda_dockart.h>
 #include <class_board.h>
 #include <class_module.h>
@@ -43,7 +40,6 @@
 #include <footprint_viewer_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <pcb_layer_widget.h>
-#include <invoke_pcb_dialog.h>
 #include <tool/tool_manager.h>
 #include <tool/common_control.h>
 #include <tool/common_tools.h>
@@ -52,7 +48,6 @@
 #include <tool/zoom_tool.h>
 #include <footprint_tree_pane.h>
 #include <widgets/lib_tree.h>
-#include <fp_lib_table.h>
 #include <footprint_info_impl.h>
 #include <widgets/paged_dialog.h>
 #include <dialogs/panel_modedit_settings.h>
@@ -432,18 +427,14 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 }
 
 
-double FOOTPRINT_EDIT_FRAME::BestZoom()
+const BOX2I FOOTPRINT_EDIT_FRAME::GetDocumentExtents() const
 {
-    EDA_RECT    ibbbox  = GetBoardBoundingBox();
+    MODULE* module = GetBoard()->GetFirstModule();
 
-    double sizeX = (double) ibbbox.GetWidth();
-    double sizeY = (double) ibbbox.GetHeight();
-
-    wxPoint centre = ibbbox.Centre();
-
-    // Reserve a 20% margin around "board" bounding box.
-    double margin_scale_factor = 1.2;
-    return bestZoom( sizeX, sizeY, margin_scale_factor, centre );
+    if( module )
+        return module->GetFootprintRect();
+    else
+        return GetBoardBoundingBox( false );
 }
 
 

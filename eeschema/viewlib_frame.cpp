@@ -399,49 +399,6 @@ void LIB_VIEW_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
 }
 
 
-double LIB_VIEW_FRAME::BestZoom()
-{
-    LIB_PART*   part = nullptr;
-    double      defaultLibraryZoom = 7.33;
-
-    if( m_libraryName.IsEmpty() || m_entryName.IsEmpty() )
-    {
-        GetCanvas()->GetView()->SetCenter( VECTOR2D( 0, 0 ) );
-        return defaultLibraryZoom;
-    }
-
-    LIB_ALIAS* alias = nullptr;
-
-    try
-    {
-        alias = Prj().SchSymbolLibTable()->LoadSymbol( m_libraryName, m_entryName );
-    }
-    catch( ... )
-    {
-    }
-
-    if( alias )
-        part = alias->GetPart();
-
-    if( !part )
-    {
-        GetCanvas()->GetView()->SetCenter( VECTOR2D( 0, 0 ) );
-        return defaultLibraryZoom;
-    }
-
-    EDA_RECT boundingBox = part->GetUnitBoundingBox( m_unit, m_convert );
-
-    double  sizeX  = (double) boundingBox.GetWidth();
-    double  sizeY  = (double) boundingBox.GetHeight();
-    wxPoint centre = boundingBox.Centre();
-
-    // Reserve a 20% margin around component bounding box.
-    double  margin_scale_factor = 1.2;
-
-    return bestZoom( sizeX, sizeY, margin_scale_factor, centre );
-}
-
-
 bool LIB_VIEW_FRAME::ReCreateListLib()
 {
     if( !m_libList )

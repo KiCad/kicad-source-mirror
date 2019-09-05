@@ -72,7 +72,7 @@ public:
     void LoadSettings( wxConfigBase* aCfg ) override;
     void SaveSettings( wxConfigBase* aCfg ) override;
 
-    double BestZoom() override;
+    const BOX2I GetDocumentExtents() const override;
 
     /**
      * Return the footprint editor settings list.

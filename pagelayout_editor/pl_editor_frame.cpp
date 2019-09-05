@@ -376,20 +376,6 @@ const BOX2I PL_EDITOR_FRAME::GetDocumentExtents() const
 }
 
 
-double PL_EDITOR_FRAME::BestZoom()
-{
-    double  sizeX = (double) GetPageLayout().GetPageSettings().GetWidthIU();
-    double  sizeY = (double) GetPageLayout().GetPageSettings().GetHeightIU();
-    wxPoint centre( KiROUND( sizeX / 2 ), KiROUND( sizeY / 2 ) );
-
-    // The sheet boundary already affords us some margin, so add only an
-    // additional 5%.
-    double margin_scale_factor = 1.05;
-
-    return bestZoom( sizeX, sizeY, margin_scale_factor, centre );
-}
-
-
 void PL_EDITOR_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
                                           PANEL_HOTKEYS_EDITOR* aHotkeysPanel  )
 {

@@ -96,7 +96,6 @@ public:
     void ReCreateOptToolbar() override {}
     void ReCreateMenuBar() override;
 
-    double BestZoom() override;
     void ClickOnLibList( wxCommandEvent& event );
     void ClickOnCmpList( wxCommandEvent& event );
     void OnSelectSymbol( wxCommandEvent& aEvent );

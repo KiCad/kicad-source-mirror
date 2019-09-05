@@ -224,7 +224,6 @@ public:
 
     void ReCreateMenuBar() override;
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
-    double BestZoom() override;
     void UpdateStatusBar() override;
 
     /**

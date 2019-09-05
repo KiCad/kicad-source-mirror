@@ -184,18 +184,17 @@ void PCB_BASE_FRAME::AddModuleToBoard( MODULE* module )
 
         module->SetFlags( IS_NEW );
 
-        module->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
+        module->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized yet
 
         module->SetTimeStamp( GetNewTimeStamp() );
 
-        // Put it on FRONT layer,
-        // (Can be stored flipped if the lib is an archive built from a board)
+        // Put it on FRONT layer (note that it might be stored flipped if the lib is an archive
+        // built from a board)
         if( module->IsFlipped() )
             module->Flip( module->GetPosition(), m_configSettings.m_FlipLeftRight );
 
-        // Place it in orientation 0,
-        // even if it is not saved with orientation 0 in lib
-        // (Can happen if the lib is an archive built from a board)
+        // Place it in orientation 0 even if it is not saved with orientation 0 in lib (note that
+        // it might be stored in another orientation if the lib is an archive built from a board)
         module->SetOrientation( 0 );
     }
 }
@@ -343,21 +342,6 @@ EDA_RECT PCB_BASE_FRAME::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
     }
 
     return area;
-}
-
-
-double PCB_BASE_FRAME::BestZoom()
-{
-    EDA_RECT    ibbbox  = GetBoardBoundingBox();
-
-    double  sizeX = (double) ibbbox.GetWidth();
-    double  sizeY = (double) ibbbox.GetHeight();
-    wxPoint centre = ibbbox.Centre();
-
-    // Reserve a 10% margin around board bounding box.
-    double margin_scale_factor = 1.1;
-
-    return bestZoom( sizeX, sizeY, margin_scale_factor, centre );
 }
 
 
