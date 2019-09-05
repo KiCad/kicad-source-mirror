@@ -107,6 +107,12 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     m_hatchPitch = aZone.m_hatchPitch;
     m_HatchLines = aZone.m_HatchLines;
 
+    m_HatchFillTypeThickness = aZone.m_HatchFillTypeThickness;
+    m_HatchFillTypeGap = aZone.m_HatchFillTypeGap;
+    m_HatchFillTypeOrientation = aZone.m_HatchFillTypeOrientation;
+    m_HatchFillTypeSmoothingLevel = aZone.m_HatchFillTypeSmoothingLevel;
+    m_HatchFillTypeSmoothingValue = aZone.m_HatchFillTypeSmoothingValue;
+
     SetLayerSet( aZone.GetLayerSet() );
     SetLocalFlags( aZone.GetLocalFlags() );
 
@@ -137,6 +143,12 @@ ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
     m_FilledPolysList.Append( aOther.m_FilledPolysList );
     m_FillSegmList.clear();
     m_FillSegmList = aOther.m_FillSegmList;
+
+    m_HatchFillTypeThickness = aOther.m_HatchFillTypeThickness;
+    m_HatchFillTypeGap = aOther.m_HatchFillTypeGap;
+    m_HatchFillTypeOrientation = aOther.m_HatchFillTypeOrientation;
+    m_HatchFillTypeSmoothingLevel = aOther.m_HatchFillTypeSmoothingLevel;
+    m_HatchFillTypeSmoothingValue = aOther.m_HatchFillTypeSmoothingValue;
 
     SetLayerSet( aOther.GetLayerSet() );
 

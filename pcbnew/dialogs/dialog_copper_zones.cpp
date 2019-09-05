@@ -302,8 +302,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
     if( !m_spokeWidth.Validate( 0, INT_MAX ) )
         return false;
 
-    if( !m_gridStyleRotation.Validate( -1800, 1800 ) )
-        return false;
+    m_gridStyleRotation.SetValue( NormalizeAngle180( m_gridStyleRotation.GetValue() ) );
 
     if( m_settings.m_FillMode == ZFM_HATCH_PATTERN )
     {
