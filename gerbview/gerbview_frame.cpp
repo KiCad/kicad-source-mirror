@@ -28,7 +28,6 @@
 #include <msgpanel.h>
 #include <bitmaps.h>
 #include <wildcards_and_files_ext.h>
-#include <eda_dockart.h>
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
@@ -143,7 +142,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     ReCreateAuxiliaryToolbar();
 
     m_auimgr.SetManagedWindow( this );
-    m_auimgr.SetArtProvider( new EDA_DOCKART() );
 
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
     m_auimgr.AddPane( m_auxiliaryToolBar, EDA_PANE().HToolbar().Name( "AuxToolbar" ).Top().Layer(4) );

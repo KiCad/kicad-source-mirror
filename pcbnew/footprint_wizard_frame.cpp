@@ -33,13 +33,10 @@
 #include <macros.h>
 #include <bitmaps.h>
 #include <grid_tricks.h>
-#include <eda_dockart.h>
 #include <class_board.h>
-#include <class_module.h>
 #include <footprint_edit_frame.h>
 #include <pcbnew_id.h>
 #include "footprint_wizard_frame.h"
-#include <footprint_info.h>
 #include <wx/tokenzr.h>
 #include <wx/numformatter.h>
 #include <wildcards_and_files_ext.h>
@@ -192,7 +189,6 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     DisplayWizardInfos();
 
     m_auimgr.SetManagedWindow( this );
-    m_auimgr.SetArtProvider( new EDA_DOCKART() );
 
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6)

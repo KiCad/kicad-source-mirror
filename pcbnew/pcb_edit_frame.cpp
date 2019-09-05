@@ -81,7 +81,6 @@
 #include <autorouter/autoplacer_tool.h>
 #include <gestfich.h>
 #include <executable_names.h>
-#include <eda_dockart.h>
 #include <board_netlist_updater.h>
 #include <netlist_reader.h>
 #include <pcb_netlist.h>
@@ -235,7 +234,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateMicrowaveVToolbar();
 
     m_auimgr.SetManagedWindow( this );
-    m_auimgr.SetArtProvider( new EDA_DOCKART() );
 
     // Horizontal items; layers 4 - 6
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );

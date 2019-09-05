@@ -30,7 +30,6 @@
 #include <sch_draw_panel.h>
 #include <base_screen.h>
 #include <confirm.h>
-#include <eda_dockart.h>
 #include <general.h>
 #include <eeschema_id.h>
 #include <lib_edit_frame.h>
@@ -155,7 +154,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     RebuildSymbolUnitsList();
 
     m_auimgr.SetManagedWindow( this );
-    m_auimgr.SetArtProvider( new EDA_DOCKART() );
 
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );

@@ -29,7 +29,6 @@
 #include <sch_view.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
-#include <eda_dockart.h>
 #include <eeschema_id.h>
 #include <viewlib_frame.h>
 #include <symbol_lib_table.h>
@@ -163,7 +162,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     DisplayLibInfos();
 
     m_auimgr.SetManagedWindow( this );
-    m_auimgr.SetArtProvider( new EDA_DOCKART() );
 
     // Manage main toolbar
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );

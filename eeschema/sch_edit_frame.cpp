@@ -24,7 +24,6 @@
 
 #include <base_units.h>
 #include <confirm.h>
-#include <eda_dockart.h>
 #include <executable_names.h>
 #include <fctsys.h>
 #include <gestfich.h>
@@ -279,7 +278,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_pageSetupData.GetPrintData().SetNoCopies( 1 );
 
     m_auimgr.SetManagedWindow( this );
-    m_auimgr.SetArtProvider( new EDA_DOCKART() );
 
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );

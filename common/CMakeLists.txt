@@ -282,7 +282,6 @@ set( COMMON_SRCS
     eda_base_frame.cpp
     eda_dde.cpp
     eda_doc.cpp
-    eda_dockart.cpp
     eda_draw_frame.cpp
     eda_pattern_match.cpp
     eda_size_ctrl.cpp

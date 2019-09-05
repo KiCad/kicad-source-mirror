@@ -28,7 +28,6 @@
 #include <class_module.h>
 #include <common.h>
 #include <confirm.h>
-#include <eda_dockart.h>
 #include <fp_lib_table.h>
 #include <id.h>
 #include <lib_id.h>
@@ -41,7 +40,6 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
-
 #include <cvpcb_mainframe.h>
 #include <display_footprints_frame.h>
 #include <tools/cvpcb_actions.h>
@@ -128,7 +126,6 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     ReCreateOptToolbar();
 
     m_auimgr.SetManagedWindow( this );
-    m_auimgr.SetArtProvider( new EDA_DOCKART() );
 
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );

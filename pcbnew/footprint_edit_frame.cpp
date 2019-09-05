@@ -31,7 +31,6 @@
 #include <3d_viewer/eda_3d_viewer.h>
 #include <fp_lib_table.h>
 #include <bitmaps.h>
-#include <eda_dockart.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <pcbnew.h>
@@ -187,7 +186,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_Layers->OnLayerSelected();
 
     m_auimgr.SetManagedWindow( this );
-    m_auimgr.SetArtProvider( new EDA_DOCKART() );
 
     // Horizontal items; layers 4 - 6
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );

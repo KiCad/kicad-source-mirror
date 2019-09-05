@@ -29,7 +29,6 @@
 #include <base_units.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
-#include <eda_dockart.h>
 #include <pl_editor_frame.h>
 #include <pl_editor_id.h>
 #include <pl_draw_panel_gal.h>
@@ -155,7 +154,6 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetStatusWidths( arrayDim( dims ), dims );
 
     m_auimgr.SetManagedWindow( this );
-    m_auimgr.SetArtProvider( new EDA_DOCKART() );
 
     m_propertiesPagelayout = new PROPERTIES_FRAME( this );
 
