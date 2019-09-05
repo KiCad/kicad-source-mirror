@@ -730,8 +730,6 @@ void TREE_PROJECT_FRAME::OnExpand( wxTreeEvent& Event )
     wxTreeItemIdValue   cookie;
     wxTreeItemId        kid = m_TreeProject->GetFirstChild( itemId, cookie );
 
-    bool subdir_populated = false;
-
     for( ; kid.IsOk(); kid = m_TreeProject->GetNextChild( itemId, cookie ) )
     {
         TREEPROJECT_ITEM* itemData = GetItemIdData( kid );
@@ -759,7 +757,6 @@ void TREE_PROJECT_FRAME::OnExpand( wxTreeEvent& Event )
             }
 
             itemData->SetPopulated( true );       // set state to populated
-            subdir_populated = true;
         }
 
         // Sort filenames by alphabetic order

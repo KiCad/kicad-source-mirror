@@ -745,7 +745,6 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
  */
 SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
 {
-    RULE_RESOLVER* rr = m_currentNode->GetRuleResolver();
     int clearance = getClearance( aCurrent, aObstacleVia ) ;
     LINE_PAIR_VEC draggedLines;
     bool lineCollision = false;
