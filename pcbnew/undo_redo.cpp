@@ -565,7 +565,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
     
     // Rebuild pointers and connectivity that can be changed.
     // connectivity can be rebuilt only in the board editor frame
-    if( IsType( FRAME_PCB ) && ( reBuild_ratsnest || deep_reBuild_ratsnest ) )
+    if( IsType( FRAME_PCB_EDITOR ) && ( reBuild_ratsnest || deep_reBuild_ratsnest ) )
     {
         Compile_Ratsnest( false );
     }

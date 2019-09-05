@@ -37,7 +37,7 @@ PCB_GENERAL_SETTINGS::PCB_GENERAL_SETTINGS( FRAME_T aFrameType ) :
 {
     switch( m_frameType )
     {
-    case FRAME_PCB:
+    case FRAME_PCB_EDITOR:
         Add( "Use45DegreeGraphicSegments", &m_Use45DegreeGraphicSegments, false);
         Add( "MagneticPads", reinterpret_cast<int*>( &m_MagneticPads ), CAPTURE_CURSOR_IN_TRACK_TOOL );
         Add( "MagneticTracks", reinterpret_cast<int*>( &m_MagneticTracks ), CAPTURE_CURSOR_IN_TRACK_TOOL );
@@ -46,7 +46,7 @@ PCB_GENERAL_SETTINGS::PCB_GENERAL_SETTINGS( FRAME_T aFrameType ) :
         Add( "FlipLeftRight", &m_FlipLeftRight, false );
         break;
 
-    case FRAME_PCB_MODULE_EDITOR:
+    case FRAME_FOOTPRINT_EDITOR:
         m_params.push_back( new PARAM_CFG_BOOL( "FpEditorUse45DegreeGraphicSegments",
                 &m_Use45DegreeGraphicSegments, false,
                 nullptr, "Use45DegreeGraphicSegments" ) );   // legacy location

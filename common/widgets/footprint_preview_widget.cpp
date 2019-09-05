@@ -116,7 +116,7 @@ FOOTPRINT_PREVIEW_PANEL_BASE* FOOTPRINT_PREVIEW_PANEL_BASE::Create(
     try {
         KIFACE* kiface = aKiway.KiFACE( KIWAY::FACE_PCB );
 
-        auto window = kiface->CreateWindow( aParent, FRAME_PCB_FOOTPRINT_PREVIEW, &aKiway );
+        auto window = kiface->CreateWindow( aParent, FRAME_FOOTPRINT_PREVIEW, &aKiway );
 
         panel = dynamic_cast<FOOTPRINT_PREVIEW_PANEL_BASE*>( window );
 

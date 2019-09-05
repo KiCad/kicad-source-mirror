@@ -323,7 +323,7 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_COMPONENT
             // Typically ExpressMail is going to be s-expression packets, but since
             // we have existing interpreter of the cross probe packet on the other
             // side in place, we use that here.
-            Kiway().ExpressMail( FRAME_PCB, MAIL_CROSS_PROBE, packet, this );
+            Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_CROSS_PROBE, packet, this );
         }
     }
 }
@@ -344,7 +344,7 @@ void SCH_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
             // Typically ExpressMail is going to be s-expression packets, but since
             // we have existing interpreter of the cross probe packet on the other
             // side in place, we use that here.
-            Kiway().ExpressMail( FRAME_PCB, MAIL_CROSS_PROBE, packet, this );
+            Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_CROSS_PROBE, packet, this );
         }
     }
 }
@@ -361,7 +361,7 @@ void SCH_EDIT_FRAME::SendCrossProbeClearHighlight()
         // Typically ExpressMail is going to be s-expression packets, but since
         // we have existing interpreter of the cross probe packet on the other
         // side in place, we use that here.
-        Kiway().ExpressMail( FRAME_PCB, MAIL_CROSS_PROBE, packet, this );
+        Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_CROSS_PROBE, packet, this );
     }
 }
 

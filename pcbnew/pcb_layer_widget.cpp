@@ -686,7 +686,7 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
     BOARD*  brd = myframe->GetBoard();
     wxASSERT( aId > GAL_LAYER_ID_START && aId < GAL_LAYER_ID_END );
 
-    if( myframe->IsType( FRAME_PCB ) )
+    if( myframe->IsType( FRAME_PCB_EDITOR ) )
     {
         // The layer visibility status is saved in the board file so set the board
         // modified state so the user has the option to save the changes.
@@ -707,7 +707,7 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
         myframe->GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
         myframe->GetCanvas()->GetView()->SetLayerVisible( aId, true );
 
-        if( myframe->IsType( FRAME_PCB ) )
+        if( myframe->IsType( FRAME_PCB_EDITOR ) )
         {
             auto opt = static_cast<PCB_DISPLAY_OPTIONS*>( myframe->GetDisplayOptions() );
             opt->m_ShowGlobalRatsnest = isEnabled;

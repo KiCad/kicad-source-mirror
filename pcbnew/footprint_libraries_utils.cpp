@@ -568,7 +568,7 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename )
         return false;
     }
 
-    auto editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, false );
+    auto editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, false );
 
     if( editor )
     {
@@ -577,7 +577,7 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename )
         editor->FocusOnLibID( libID );
     }
 
-    auto viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
+    auto viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_VIEWER, false );
 
     if( viewer )
         viewer->ReCreateLibraryList();
@@ -791,7 +791,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
 {
     // update module in the current board,
     // not just add it to the board with total disregard for the netlist...
-    PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, false );
+    PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 
     if( pcbframe == NULL )      // happens when the board editor is not active (or closed)
     {

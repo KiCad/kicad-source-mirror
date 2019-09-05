@@ -93,7 +93,7 @@ void PCBNEW_CONTROL::Reset( RESET_REASON aReason )
 
 int PCBNEW_CONTROL::AddLibrary( const TOOL_EVENT& aEvent )
 {
-    if( m_frame->IsType( FRAME_PCB_MODULE_EDITOR ) || m_frame->IsType( FRAME_PCB ) )
+    if( m_frame->IsType( FRAME_FOOTPRINT_EDITOR ) || m_frame->IsType( FRAME_PCB_EDITOR ) )
     {
         if( aEvent.IsAction( &ACTIONS::newLibrary ) )
             static_cast<PCB_BASE_EDIT_FRAME*>( m_frame )->CreateNewLibrary();
@@ -586,7 +586,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
     if( clipItem->Type() == PCB_T )
         static_cast<BOARD*>( clipItem )->ClearAllNetCodes();
 
-    bool editModules = m_editModules || frame()->IsType( FRAME_PCB_MODULE_EDITOR );
+    bool editModules = m_editModules || frame()->IsType( FRAME_FOOTPRINT_EDITOR );
 
     // The clipboard can contain two different things, an entire kicad_pcb
     // or a single module
@@ -899,9 +899,9 @@ int PCBNEW_CONTROL::Show3DViewer( const TOOL_EVENT& aEvent )
     // Suppress warnings on non-Mac systems
     [&draw3DFrame] {}();
 
-    if( m_frame->IsType( FRAME_PCB_MODULE_VIEWER )
-     || m_frame->IsType( FRAME_PCB_MODULE_VIEWER_MODAL )
-     || m_frame->IsType( FRAME_PCB_FOOTPRINT_WIZARD ) )
+    if( m_frame->IsType( FRAME_FOOTPRINT_VIEWER )
+     || m_frame->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
+     || m_frame->IsType( FRAME_FOOTPRINT_WIZARD ) )
     {
         m_frame->Update3DView( true );
 

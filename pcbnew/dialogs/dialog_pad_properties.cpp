@@ -564,7 +564,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     // Disable pad net name wxTextCtrl if the caller is the footprint editor
     // because nets are living only in the board managed by the board editor
-    m_canEditNetName = m_parent->IsType( FRAME_PCB );
+    m_canEditNetName = m_parent->IsType( FRAME_PCB_EDITOR );
 
     // Setup layers names from board
     // Should be made first, before calling m_rbCopperLayersSel->SetSelection()

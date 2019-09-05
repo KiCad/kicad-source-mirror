@@ -525,7 +525,7 @@ void FIELDS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     {
         // pick a footprint using the footprint picker.
         wxString      fpid = m_grid->GetCellValue( FOOTPRINT, FDC_VALUE );
-        KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true, m_dlg );
+        KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, true, m_dlg );
 
         if( frame->ShowModal( &fpid, m_dlg ) )
             m_grid->SetCellValue( FOOTPRINT, FDC_VALUE, fpid );

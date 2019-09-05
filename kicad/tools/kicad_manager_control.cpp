@@ -360,7 +360,7 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
         {
             filepath = m_frame->SchFileName();
         }
-        else if( playerType == FRAME_PCB )
+        else if( playerType == FRAME_PCB_EDITOR )
         {
             wxFileName  kicad_board( m_frame->PcbFileName() );
             wxFileName  legacy_board( m_frame->PcbLegacyFileName() );

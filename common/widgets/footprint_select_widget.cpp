@@ -41,16 +41,15 @@ enum
 wxDEFINE_EVENT( EVT_FOOTPRINT_SELECTED, wxCommandEvent );
 
 
-FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( wxWindow* aParent,
-        FOOTPRINT_LIST* aFpList, bool aUpdate,
-        int aMaxItems )
-        : wxPanel( aParent ),
-          m_kiway( nullptr ),
-          m_update( aUpdate ),
-          m_finished_loading( false ),
-          m_max_items( aMaxItems ),
-          m_last_item( 0 ),
-          m_fp_list( aFpList )
+FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( wxWindow* aParent, FOOTPRINT_LIST* aFpList,
+                                                  bool aUpdate, int aMaxItems ) :
+        wxPanel( aParent ),
+        m_kiway( nullptr ),
+        m_update( aUpdate ),
+        m_finished_loading( false ),
+        m_max_items( aMaxItems ),
+        m_last_item( 0 ),
+        m_fp_list( aFpList )
 {
     m_zero_filter = true;
     m_sizer = new wxBoxSizer( wxVERTICAL );
@@ -167,7 +166,7 @@ wxString FOOTPRINT_SELECT_WIDGET::ShowPicker()
     // event loop goes all silly.
     wxASSERT( !dsparent || dsparent->IsQuasiModal() );
 
-    auto frame = m_kiway->Player( FRAME_PCB_MODULE_VIEWER_MODAL, true );
+    auto frame = m_kiway->Player( FRAME_FOOTPRINT_VIEWER_MODAL, true );
 
     if( !frame->ShowModal( &fpname, parent ) )
     {
@@ -195,14 +194,10 @@ void FOOTPRINT_SELECT_WIDGET::FilterByPinCount( int aPinCount )
 }
 
 
-void FOOTPRINT_SELECT_WIDGET::FilterByFootprintFilters(
-        wxArrayString const& aFilters, bool aZeroFilters )
+void FOOTPRINT_SELECT_WIDGET::FilterByFootprintFilters( wxArrayString const& aFilters,
+                                                        bool aZeroFilters )
 {
-    if( aZeroFilters && aFilters.size() == 0 )
-        m_zero_filter = true;
-    else
-        m_zero_filter = false;
-
+    m_zero_filter = ( aZeroFilters && aFilters.size() == 0 );
     m_fp_filter.FilterByFootprintFilters( aFilters );
 }
 

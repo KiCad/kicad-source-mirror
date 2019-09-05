@@ -69,13 +69,13 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::editPCB( "kicad.Control.editPCB",
         AS_GLOBAL,
         MD_CTRL + 'P', LEGACY_HK_NAME( "Run Pcbnew" ),
         _( "Edit PCB" ), _( "Edit PCB" ),
-        pcbnew_xpm, AF_NONE, (void*) FRAME_PCB );
+        pcbnew_xpm, AF_NONE, (void*) FRAME_PCB_EDITOR );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editFootprints( "kicad.Control.editFootprints",
         AS_GLOBAL,
         MD_CTRL + 'F', LEGACY_HK_NAME( "Run FpEditor" ),
         _( "Edit PCB Footprints" ), _( "Edit PCB Footprints" ),
-        module_editor_xpm, AF_NONE, (void*) FRAME_PCB_MODULE_EDITOR );
+        module_editor_xpm, AF_NONE, (void*) FRAME_FOOTPRINT_EDITOR );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::viewGerbers( "kicad.Control.viewGerbers",
         AS_GLOBAL,

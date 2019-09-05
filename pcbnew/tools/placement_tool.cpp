@@ -187,7 +187,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
         BOARD_ITEM* item = i.first;
 
         // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
             item = item->GetParent();
 
         item->Move( wxPoint( 0, difference ) );
@@ -220,7 +220,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
         BOARD_ITEM* item = i.first;
 
         // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
             item = item->GetParent();
 
         item->Move( wxPoint( 0, difference ) );
@@ -268,7 +268,7 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignLeft()
         BOARD_ITEM* item = i.first;
 
         // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
             item = item->GetParent();
 
         item->Move( wxPoint( difference, 0 ) );
@@ -316,7 +316,7 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
         BOARD_ITEM* item = i.first;
 
         // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
             item = item->GetParent();
 
         item->Move( wxPoint( difference, 0 ) );
@@ -349,7 +349,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
         BOARD_ITEM* item = i.first;
 
         // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
             item = item->GetParent();
 
         item->Move( wxPoint( difference, 0 ) );
@@ -382,7 +382,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
         BOARD_ITEM* item = i.first;
 
         // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
             item = item->GetParent();
 
         item->Move( wxPoint( 0, difference ) );
@@ -461,7 +461,7 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeGapsHorizontally( ALIGNMENT_RECTS& items
             continue;
 
         // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
             item = item->GetParent();
 
         int difference = targetX - i.second.GetX();
@@ -486,7 +486,7 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersHorizontally( ALIGNMENT_RECTS &it
         BOARD_ITEM* item = i.first;
 
         // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
             item = item->GetParent();
 
         int difference = targetX - i.second.GetCenter().x;
@@ -563,7 +563,7 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeGapsVertically( ALIGNMENT_RECTS& itemsTo
             continue;
 
         // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
             item = item->GetParent();
 
         int difference = targetY - i.second.GetY();
@@ -588,7 +588,7 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersVertically( ALIGNMENT_RECTS& item
         BOARD_ITEM* item = i.first;
 
         // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
             item = item->GetParent();
 
         int difference = targetY - i.second.GetCenter().y;

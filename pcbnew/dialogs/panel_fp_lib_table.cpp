@@ -853,12 +853,12 @@ void InvokePcbLibTableEditor( KIWAY* aKiway, wxWindow* aCaller )
         }
     }
 
-    auto editor = (FOOTPRINT_EDIT_FRAME*) aKiway->Player( FRAME_PCB_MODULE_EDITOR, false );
+    auto editor = (FOOTPRINT_EDIT_FRAME*) aKiway->Player( FRAME_FOOTPRINT_EDITOR, false );
 
     if( editor )
         editor->SyncLibraryTree( true );
 
-    auto viewer = (FOOTPRINT_VIEWER_FRAME*) aKiway->Player( FRAME_PCB_MODULE_VIEWER, false );
+    auto viewer = (FOOTPRINT_VIEWER_FRAME*) aKiway->Player( FRAME_FOOTPRINT_VIEWER, false );
 
     if( viewer )
         viewer->ReCreateLibraryList();

@@ -133,8 +133,8 @@ bool SELECTION_TOOL::Init()
 {
     auto frame = getEditFrame<PCB_BASE_FRAME>();
 
-    if( frame && ( frame->IsType( FRAME_PCB_MODULE_VIEWER )
-                   || frame->IsType( FRAME_PCB_MODULE_VIEWER_MODAL ) ) )
+    if( frame && ( frame->IsType( FRAME_FOOTPRINT_VIEWER )
+                   || frame->IsType( FRAME_FOOTPRINT_VIEWER_MODAL ) ) )
     {
         frame->AddStandardSubMenus( m_menu );
         return true;

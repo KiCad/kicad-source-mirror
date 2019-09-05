@@ -234,7 +234,7 @@ protected:
         if( fpid.IsEmpty() )
             fpid = m_preselect;
 
-        KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true, m_dlg );
+        KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, true, m_dlg );
 
         if( frame->ShowModal( &fpid, m_dlg ) )
             SetValue( fpid );

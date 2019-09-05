@@ -317,9 +317,9 @@ bool PGM_SINGLE_TOP::OnPgmInit()
         wxString name;
         FRAME_T type;
     } frameTypes[] = {
-        { wxT( "pcb" ), FRAME_PCB },
-        { wxT( "fpedit" ), FRAME_PCB_MODULE_EDITOR },
-        { wxT( "" ), FRAME_T_COUNT }
+        { wxT( "pcb" ),    FRAME_PCB_EDITOR },
+        { wxT( "fpedit" ), FRAME_FOOTPRINT_EDITOR },
+        { wxT( "" ),       FRAME_T_COUNT }
     };
 
     if( argc > 2 )

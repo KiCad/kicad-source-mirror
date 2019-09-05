@@ -255,14 +255,14 @@ int COMMON_TOOLS::ZoomFitScreen( const TOOL_EVENT& aEvent )
     double margin_scale_factor = 1.1;
 
     // Leave a bigger margin for library editors & viewers
-    if( frame->IsType( FRAME_SCH_LIB_EDITOR ) || frame->IsType( FRAME_PCB_MODULE_EDITOR ) )
-    {
-        margin_scale_factor = 2;
-    }
-    else if( frame->IsType( FRAME_PCB_MODULE_VIEWER ) || frame->IsType( FRAME_PCB_MODULE_VIEWER_MODAL )
-            || frame->IsType( FRAME_SCH_VIEWER ) || frame->IsType( FRAME_SCH_VIEWER_MODAL ) )
+    if( frame->IsType( FRAME_FOOTPRINT_VIEWER ) || frame->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
+         || frame->IsType( FRAME_SCH_VIEWER ) || frame->IsType( FRAME_SCH_VIEWER_MODAL ) )
     {
         margin_scale_factor = 1.4;
+    }
+    else if( frame->IsType( FRAME_SCH_LIB_EDITOR ) || frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
+    {
+        margin_scale_factor = 2;
     }
 
     view->SetScale( scale / margin_scale_factor );

@@ -112,15 +112,14 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
                                                 FRAME_T aFrameType ) :
     PCB_BASE_FRAME( aKiway, aParent, aFrameType, _( "Footprint Library Browser" ),
             wxDefaultPosition, wxDefaultSize,
-            aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL ? ( aParent ? PARENT_STYLE : MODAL_STYLE )
-                                                        : NONMODAL_STYLE,
-            aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL ? FOOTPRINT_VIEWER_FRAME_NAME_MODAL
-                                                        : FOOTPRINT_VIEWER_FRAME_NAME )
+            aFrameType == FRAME_FOOTPRINT_VIEWER_MODAL ? ( aParent ? PARENT_STYLE : MODAL_STYLE )
+                                                       : NONMODAL_STYLE,
+            aFrameType == FRAME_FOOTPRINT_VIEWER_MODAL ? FOOTPRINT_VIEWER_FRAME_NAME_MODAL
+                                                       : FOOTPRINT_VIEWER_FRAME_NAME )
 {
-    wxASSERT( aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL ||
-              aFrameType == FRAME_PCB_MODULE_VIEWER );
+    wxASSERT( aFrameType == FRAME_FOOTPRINT_VIEWER_MODAL || aFrameType == FRAME_FOOTPRINT_VIEWER );
 
-    if( aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL )
+    if( aFrameType == FRAME_FOOTPRINT_VIEWER_MODAL )
         SetModal( true );
 
     // Force the frame name used in config. the footprint viewer frame has a name
@@ -651,7 +650,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
     }
     else if( GetBoard()->GetFirstModule() )
     {
-        PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, false );
+        PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 
         if( pcbframe == NULL )      // happens when the board editor is not active (or closed)
         {

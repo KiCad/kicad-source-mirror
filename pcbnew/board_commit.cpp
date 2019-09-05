@@ -48,7 +48,7 @@ BOARD_COMMIT::BOARD_COMMIT( PCB_TOOL_BASE* aTool )
 BOARD_COMMIT::BOARD_COMMIT( EDA_DRAW_FRAME* aFrame )
 {
     m_toolMgr = aFrame->GetToolManager();
-    m_editModules = aFrame->IsType( FRAME_PCB_MODULE_EDITOR );
+    m_editModules = aFrame->IsType( FRAME_FOOTPRINT_EDITOR );
 }
 
 

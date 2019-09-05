@@ -261,7 +261,7 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aPare
     EnableScrolling( false, false );    // otherwise Zoom Auto disables GAL canvas
 
     m_dummyBoard = std::make_unique<BOARD>();
-    m_colorsSettings = std::make_unique<COLORS_DESIGN_SETTINGS>( FRAME_PCB_FOOTPRINT_PREVIEW );
+    m_colorsSettings = std::make_unique<COLORS_DESIGN_SETTINGS>( FRAME_FOOTPRINT_PREVIEW );
     m_colorsSettings->Load( Kiface().KifaceSettings() );
 
     UseColorScheme( m_colorsSettings.get() );
@@ -368,7 +368,7 @@ wxWindow* FOOTPRINT_PREVIEW_PANEL::GetWindow()
 
 FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* aParent )
 {
-    PCB_EDIT_FRAME* pcbnew = static_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB, false ) );
+    PCB_EDIT_FRAME* pcbnew = static_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
     wxConfigBase*   cfg = Kiface().KifaceSettings();
     wxConfigBase*   commonCfg = Pgm().CommonSettings();
     bool            btemp;

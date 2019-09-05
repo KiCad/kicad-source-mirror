@@ -47,7 +47,7 @@ DIALOG_PUSH_PAD_PROPERTIES::DIALOG_PUSH_PAD_PROPERTIES( PCB_BASE_FRAME* aParent 
     // that requires us to correct the button labels here.
     m_sdbSizer1OK->SetLabel( _( "Change Pads on Current Footprint" ) );
 
-    if( aParent->IsType( FRAME_PCB_MODULE_EDITOR ) )
+    if( aParent->IsType( FRAME_FOOTPRINT_EDITOR ) )
         m_sdbSizer1Apply->Show( false );
     else
         m_sdbSizer1Apply->SetLabel( _( "Change Pads on Identical Footprints" ) );

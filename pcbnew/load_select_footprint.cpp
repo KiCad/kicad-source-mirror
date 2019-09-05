@@ -92,7 +92,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     bool is_last_fp_from_brd = IsCurrentFPFromBoard();
 
     MODULE* newModule;
-    PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, false );
+    PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 
     if( frame == NULL )     // happens if no board editor opened
         return false;
@@ -167,7 +167,7 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
 {
     // Close the current non-modal Lib browser if opened, and open a new one, in "modal" mode:
     FOOTPRINT_VIEWER_FRAME* viewer;
-    viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
+    viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_VIEWER, false );
 
     if( viewer )
     {
@@ -183,7 +183,7 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
     SetFocus();
 
     // Creates the modal Lib browser:
-    viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true, this );
+    viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, true, this );
 
     wxString    fpid;
     int ret = viewer->ShowModal( &fpid, this );

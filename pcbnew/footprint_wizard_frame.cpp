@@ -85,7 +85,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
                         FOOTPRINT_WIZARD_FRAME_NAME ),
         m_wizardListShown( false )
 {
-    wxASSERT( aFrameType == FRAME_PCB_FOOTPRINT_WIZARD );
+    wxASSERT( aFrameType == FRAME_FOOTPRINT_WIZARD );
 
     // This frame is always show modal:
     SetModal( true );
@@ -626,8 +626,7 @@ void FOOTPRINT_WIZARD_FRAME::PythonPluginsReload()
     // Because the board editor has also a plugin python menu,
     // call PCB_EDIT_FRAME::PythonPluginsReload() if the board editor
     // is running
-    PCB_EDIT_FRAME* brd_frame =
-        static_cast<PCB_EDIT_FRAME*>( Kiway().Player( FRAME_PCB, false ) );
+    auto brd_frame = static_cast<PCB_EDIT_FRAME*>( Kiway().Player( FRAME_PCB_EDITOR, false ) );
 
     if( brd_frame )
         brd_frame->PythonPluginsReload();

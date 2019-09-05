@@ -576,7 +576,7 @@ add_executable( pcbnew WIN32 MACOSX_BUNDLE
     ${PCBNEW_RESOURCES}
     )
 set_source_files_properties( ../common/single_top.cpp pcbnew.cpp PROPERTIES
-    COMPILE_DEFINITIONS "TOP_FRAME=FRAME_PCB;PGM_DATA_FILE_EXT=\"kicad_pcb\";BUILD_KIWAY_DLL"
+    COMPILE_DEFINITIONS "TOP_FRAME=FRAME_PCB_EDITOR;PGM_DATA_FILE_EXT=\"kicad_pcb\";BUILD_KIWAY_DLL"
     )
 target_link_libraries( pcbnew
     #singletop  # replaces common, giving us restrictive control and link warnings.

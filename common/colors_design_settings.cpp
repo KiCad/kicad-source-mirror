@@ -192,18 +192,18 @@ void COLORS_DESIGN_SETTINGS::setupConfigParams()
     switch( m_frameType )
     {
     case FRAME_GERBER:
-    case FRAME_PCB:                      /* no prefix */               break;
+    case FRAME_PCB_EDITOR:              /* no prefix */               break;
 
     case FRAME_CVPCB_DISPLAY:
-    case FRAME_PCB_MODULE_VIEWER:
-    case FRAME_PCB_MODULE_VIEWER_MODAL:
-    case FRAME_PCB_FOOTPRINT_WIZARD:
-    case FRAME_PCB_FOOTPRINT_PREVIEW:
-    case FRAME_PCB_MODULE_EDITOR:        SetConfigPrefix( "ModEdit" ); break;
+    case FRAME_FOOTPRINT_VIEWER:
+    case FRAME_FOOTPRINT_VIEWER_MODAL:
+    case FRAME_FOOTPRINT_WIZARD:
+    case FRAME_FOOTPRINT_PREVIEW:
+    case FRAME_FOOTPRINT_EDITOR:        SetConfigPrefix( "ModEdit" ); break;
 
-    case FRAME_PCB_DISPLAY3D:            SetConfigPrefix( "fp3d_" );   break;
+    case FRAME_PCB_DISPLAY3D:           SetConfigPrefix( "fp3d_" );   break;
 
-    default:                                                           break;
+    default:                                                          break;
     }
 
     wxString fmt( "Color4DPCBLayer_%s" );
@@ -230,7 +230,7 @@ void COLORS_DESIGN_SETTINGS::setupConfigParams()
 
 
     // Add prms only relevant in board editor
-    if( m_frameType == FRAME_PCB )
+    if( m_frameType == FRAME_PCB_EDITOR )
     {
         Add( "Color4DViaThruEx", ITEM_COLOR( LAYER_VIA_THROUGH ), LIGHTGRAY );
         Add( "Color4DViaBBlindEx", ITEM_COLOR( LAYER_VIA_BBLIND ), BROWN );

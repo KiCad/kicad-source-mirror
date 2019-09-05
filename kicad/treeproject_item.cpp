@@ -237,7 +237,7 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
     case TREE_FOOTPRINT_FILE:
         toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editFootprints, true );
         packet = fullFileName.ToStdString();
-        kiway.ExpressMail( FRAME_PCB_MODULE_EDITOR, MAIL_FP_EDIT, packet );
+        kiway.ExpressMail( FRAME_FOOTPRINT_EDITOR, MAIL_FP_EDIT, packet );
         break;
 
     case TREE_SCHEMATIC_LIBFILE:

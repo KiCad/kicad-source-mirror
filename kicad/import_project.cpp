@@ -160,13 +160,13 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
     if( pcb.FileExists() )
     {
-        KIWAY_PLAYER* pcbframe = Kiway().Player( FRAME_PCB, false );
+        KIWAY_PLAYER* pcbframe = Kiway().Player( FRAME_PCB_EDITOR, false );
 
         if( !pcbframe )
         {
             try     // PCB frame was not available, try to start it
             {
-                pcbframe = Kiway().Player( FRAME_PCB, true );
+                pcbframe = Kiway().Player( FRAME_PCB_EDITOR, true );
             }
             catch( const IO_ERROR& err )
             {
@@ -186,7 +186,7 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
 
         std::string packet = StrPrintf( "%d\n%s", IO_MGR::EAGLE,
                                                   TO_UTF8( pcb.GetFullPath() ) );
-        pcbframe->Kiway().ExpressMail( FRAME_PCB, MAIL_IMPORT_FILE, packet, this );
+        pcbframe->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_IMPORT_FILE, packet, this );
 
         // On Windows, Raise() does not bring the window on screen, when iconized
         if( pcbframe->IsIconized() )

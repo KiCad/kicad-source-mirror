@@ -198,16 +198,16 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             {
                 if( !HandleUnsavedChanges( this, _( "The current footprint has been modified.  "
                                                     "Save changes?" ),
-                            [&]() -> bool {
-                                return SaveFootprint( GetBoard()->GetFirstModule() );
-                            } ) )
+                                           [&]() -> bool {
+                                               return SaveFootprint( GetBoard()->GetFirstModule() );
+                                           } ) )
                 {
                     break;
                 }
             }
 
-            FOOTPRINT_WIZARD_FRAME* wizard = (FOOTPRINT_WIZARD_FRAME*) Kiway().Player(
-                        FRAME_PCB_FOOTPRINT_WIZARD, true, this );
+            auto wizard = (FOOTPRINT_WIZARD_FRAME*) Kiway().Player( FRAME_FOOTPRINT_WIZARD, true,
+                                                                    this );
 
             if( wizard->ShowModal( NULL, this ) )
             {

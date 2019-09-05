@@ -643,7 +643,7 @@ void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
         return;
     }
 
-    KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB, true );
+    KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_EDITOR, true );
 
     // a pcb frame can be already existing, but not yet used.
     // this is the case when running the footprint editor, or the footprint viewer first
@@ -661,7 +661,7 @@ void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
     frame->Raise();
 
     std::string payload;
-    Kiway().ExpressMail( FRAME_PCB, MAIL_PCB_UPDATE, payload, this );
+    Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_PCB_UPDATE, payload, this );
 }
 
 
@@ -805,7 +805,7 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
         }
         else
         {
-            KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB, true );
+            KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB_EDITOR, true );
 
             // a pcb frame can be already existing, but not yet used.
             // this is the case when running the footprint editor, or the footprint viewer first

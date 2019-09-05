@@ -58,7 +58,7 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, wxPoint& aTransla
     m_menuIDs.push_back( aAnchor );
     m_menuIDs.push_back( ROTATE_AROUND_USER_ORIGIN );
 
-    if( aParent->IsType( FRAME_PCB ) )
+    if( aParent->IsType( FRAME_PCB_EDITOR ) )
         m_menuIDs.push_back( ROTATE_AROUND_AUX_ORIGIN );
 
     buildRotationAnchorMenu();

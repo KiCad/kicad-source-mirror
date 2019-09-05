@@ -80,7 +80,7 @@ static struct IFACE : public KIFACE_I
     {
         switch( aClassId )
         {
-        case FRAME_PCB:
+        case FRAME_PCB_EDITOR:
         {
             auto frame = new PCB_EDIT_FRAME( aKiway, aParent );
 
@@ -98,18 +98,18 @@ static struct IFACE : public KIFACE_I
             return frame;
         }
 
-        case FRAME_PCB_MODULE_EDITOR:
+        case FRAME_FOOTPRINT_EDITOR:
             return new FOOTPRINT_EDIT_FRAME( aKiway, aParent,
                                              EDA_DRAW_PANEL_GAL::GAL_TYPE_UNKNOWN );
 
-        case FRAME_PCB_MODULE_VIEWER:
-        case FRAME_PCB_MODULE_VIEWER_MODAL:
+        case FRAME_FOOTPRINT_VIEWER:
+        case FRAME_FOOTPRINT_VIEWER_MODAL:
             return new FOOTPRINT_VIEWER_FRAME( aKiway, aParent, FRAME_T( aClassId ) );
 
-        case FRAME_PCB_FOOTPRINT_WIZARD:
+        case FRAME_FOOTPRINT_WIZARD:
             return new FOOTPRINT_WIZARD_FRAME( aKiway, aParent, FRAME_T( aClassId ) );
 
-        case FRAME_PCB_FOOTPRINT_PREVIEW:
+        case FRAME_FOOTPRINT_PREVIEW:
             return dynamic_cast< wxWindow* >( FOOTPRINT_PREVIEW_PANEL::New( aKiway, aParent ) );
 
         case DIALOG_CONFIGUREPATHS:

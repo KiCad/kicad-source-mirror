@@ -96,7 +96,7 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 // These settings will be overriden later, depending on the draw frame that displays the board.
 // However, when a board is created by a python script, outside a frame, the colors must be set
 // so dummyColorsSettings provide this default initialization
-static PCB_GENERAL_SETTINGS dummyGeneralSettings( FRAME_PCB );
+static PCB_GENERAL_SETTINGS dummyGeneralSettings( FRAME_PCB_EDITOR );
 
 BOARD::BOARD() :
     BOARD_ITEM_CONTAINER( (BOARD_ITEM*) NULL, PCB_T ),
