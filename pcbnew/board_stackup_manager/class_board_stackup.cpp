@@ -42,12 +42,12 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
     switch( m_Type )
     {
     case BS_ITEM_TYPE_COPPER:
-        m_TypeName = "copper";
+        m_TypeName = KEY_COPPER;
         m_Thickness = GetCopperDefaultThickness();
         break;
 
     case BS_ITEM_TYPE_DIELECTRIC:
-        m_TypeName = "core";        // or prepreg
+        m_TypeName = KEY_CORE;      // or prepreg
         m_Material = "FR4";         // or other dielectric name
         m_DielectricLayerId = 1;
         m_Thickness = 0;            // will be set later
@@ -381,6 +381,7 @@ void BOARD_STACKUP::BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings,
     {
         BOARD_STACKUP_ITEM* item = new BOARD_STACKUP_ITEM( BS_ITEM_TYPE_COPPER );
         item->m_LayerId = ( PCB_LAYER_ID )ii;
+        item->m_TypeName = KEY_COPPER;
         Add( item );
 
         if( ii == copperLayerCount-1 )
@@ -397,12 +398,12 @@ void BOARD_STACKUP::BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings,
         // Display a dielectric default layer name:
         if( (dielectric_idx & 1) == 0 )
         {
-            item->m_TypeName = _HKI( "core" );
+            item->m_TypeName = KEY_CORE;
             item->m_Material = "FR4";
         }
         else
         {
-            item->m_TypeName = _HKI( "prepreg" );
+            item->m_TypeName = KEY_PREPREG;
             item->m_Material = "FR4";
         }
 

@@ -97,6 +97,8 @@ public:
     std::vector<wxColor> m_UserColors;  // the list of user colors for each grid row
                                         // other colors are defined colors, and are not stored
 private:
+    wxControl* addSpacer();
+
     /** Populate m_fgGridSizer with items to handle stackup parameters
      * This is a full list:
      * all copper layers and all tech layers that are supported by the stackup
@@ -173,12 +175,8 @@ private:
     wxSize          m_numericFieldsSize;    // Best size to enter double values in wxTextCtrl
     wxArrayString   m_core_prepreg_choice;  // Used to display the option list in dialog
     wxSize          m_colorSwatchesSize;    // the size of color swatches in the wxBitmapComboBox.
-                                            // this is the size of the "XX" string to give
-                                            // a reasonable size to color swatches
-
+    wxSize          m_colorComboSize;       // the size of the wxBitmapComboBox.
     wxSize          m_colorIconsSize;       // the size of color swatches in grid, left column.
-                                            // this is the size of the "XXXXXX" string to give
-                                            // a reasonable size to color swatches (icons)
 
     // The list of controls (wxChoice, wxBitmapComboBox, wxTextCtrl) added to the panel
     // when building the BOARD_STACKUP_ITEM list editor and connected to command events

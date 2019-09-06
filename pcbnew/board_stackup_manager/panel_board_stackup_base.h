@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -48,6 +48,7 @@ class PANEL_SETUP_BOARD_STACKUP_BASE : public wxPanel
 		wxTextCtrl* m_tcCTValue;
 		wxButton* m_buttonSetDielectricThickness;
 		wxStaticLine* m_staticline;
+		wxBoxSizer* m_sizerStackup;
 		wxScrolledWindow* m_scGridWin;
 		wxFlexGridSizer* m_fgGridSizer;
 		wxStaticText* m_staticText7;
@@ -76,7 +77,7 @@ class PANEL_SETUP_BOARD_STACKUP_BASE : public wxPanel
 
 	public:
 
-		PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 673,317 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 754,412 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_SETUP_BOARD_STACKUP_BASE();
 
 };

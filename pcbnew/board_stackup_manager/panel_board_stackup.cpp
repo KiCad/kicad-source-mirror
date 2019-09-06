@@ -54,7 +54,7 @@ enum WIDGETS_IDS
 
 // Default colors to draw icons:
 static wxColor copperColor( 220, 180, 30 );
-static wxColor dielectricColor( 50, 60, 20 );
+static wxColor dielectricColor( 75, 120, 75 );
 static wxColor pasteColor( 200, 200, 200 );
 
 static void drawBitmap( wxBitmap& aBitmap, wxColor aColor );
@@ -75,19 +75,20 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB
     // Calculates a good size for color swatches (icons) in this dialog
     wxClientDC dc( this );
     m_colorSwatchesSize = dc.GetTextExtent( "XX" );
-    m_colorIconsSize = dc.GetTextExtent( "XXXXXX" );
+    m_colorComboSize = dc.GetTextExtent( "XXX Undefined XXX" );
+    m_colorIconsSize = dc.GetTextExtent( "XXXX" );
 
-    // Calculates a good size for wxTextCtrl to enter Epsilon R and Loss tg
+    // Calculates a good size for wxTextCtrl to enter Epsilon R and Loss tan
     // ("0.000000" + margins)
-    m_numericFieldsSize = dc.GetTextExtent( "X.XXXXXXXX" );
+    m_numericFieldsSize = dc.GetTextExtent( "X.XXXXXXX" );
     m_numericFieldsSize.y = -1;     // Use default for the vertical size
 
     // Calculates a minimal size for wxTextCtrl to enter a dim with units
     // ("000.0000000 mils" + margins)
-    m_numericTextCtrlSize = dc.GetTextExtent( "XXX.XXXXXXXX mils" );
+    m_numericTextCtrlSize = dc.GetTextExtent( "XXX.XXXXXXX mils" );
     m_numericTextCtrlSize.y = -1;     // Use default for the vertical size
 
-    // The grid column containing the lock checkbox it kept to a minimal
+    // The grid column containing the lock checkbox is kept to a minimal
     // size. So we use a wxStaticBitmap: set the bitmap itself
     m_bitmapLockThickness->SetBitmap( KiScaledBitmap( locked_xpm, aFrame ) );
 
@@ -291,10 +292,8 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
 
             if( item->IsColorEditable() )
             {
-                wxBitmapComboBox* bm_combo = dynamic_cast<wxBitmapComboBox*>
-                                                    ( ui_row_item.m_ColorCtrl );
-
-                int color_idx = 0;
+                auto bm_combo = dynamic_cast<wxBitmapComboBox*>( ui_row_item.m_ColorCtrl );
+                int  color_idx = 0;
 
                 if( item->m_Color.StartsWith( "#" ) )  // User defined color
                 {
@@ -306,8 +305,7 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
                     {
                         bm_combo->SetString( color_idx, color.GetAsString( wxC2S_HTML_SYNTAX ) );
                         wxBitmap layerbmp( m_colorSwatchesSize.x, m_colorSwatchesSize.y );
-                        LAYER_SELECTOR::DrawColorSwatch( layerbmp, COLOR4D( 0, 0, 0, 0 ),
-                                                         COLOR4D( color ) );
+                        LAYER_SELECTOR::DrawColorSwatch( layerbmp, COLOR4D(), COLOR4D( color ) );
                         bm_combo->SetItemBitmap( color_idx, layerbmp );
                     }
                 }
@@ -381,6 +379,14 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
 }
 
 
+wxControl* PANEL_SETUP_BOARD_STACKUP::addSpacer()
+{
+    wxStaticText* emptyText = new wxStaticText( m_scGridWin, wxID_ANY, wxEmptyString );
+    m_fgGridSizer->Add( emptyText, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND );
+    return emptyText;
+}
+
+
 void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
 {
     // for dielectric: layer type keyword is "core"
@@ -417,7 +423,7 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
         // Add color swatch icon. The color will be updated later,
         // when all widgets are initialized
         wxStaticBitmap* bitmap = new wxStaticBitmap( m_scGridWin, wxID_ANY, wxNullBitmap );
-        m_fgGridSizer->Add( bitmap, 0, wxALL|wxALIGN_CENTER_VERTICAL, 1 );
+        m_fgGridSizer->Add( bitmap, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT );
         ui_row_item.m_Icon = bitmap;
 
         if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
@@ -425,47 +431,37 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
             wxString lname;
             lname.Printf( _( "Dielectric %d" ), item->m_DielectricLayerId );
             wxStaticText* st_text = new wxStaticText( m_scGridWin, wxID_ANY, lname );
-            m_fgGridSizer->Add( st_text, 0, wxALL|wxALIGN_CENTER_VERTICAL, 1 );
+            m_fgGridSizer->Add( st_text, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
             ui_row_item.m_LayerName = st_text;
 
             wxChoice* choice = new wxChoice( m_scGridWin, wxID_ANY, wxDefaultPosition,
                                              wxDefaultSize, m_core_prepreg_choice );
-            if( item->m_TypeName == KEY_CORE )
-            {
-                choice->SetSelection( 0 );
-                m_fgGridSizer->Add( choice, 0, wxALL, 1 );
-            }
-            else
-            {
-                choice->SetSelection( 1 );
-                m_fgGridSizer->Add( choice, 0, wxALL, 1 );
-            }
+            choice->SetSelection( item->m_TypeName == KEY_CORE ? 0 : 1 );
+            m_fgGridSizer->Add( choice, 0, wxEXPAND|wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
 
             ui_row_item.m_LayerTypeCtrl = choice;
         }
         else
         {
-//            item->m_LayerName = BOARD::GetStandardLayerName( item->m_LayerId );
             item->m_LayerName = m_board->GetLayerName( item->m_LayerId );
             wxStaticText* st_text =  new wxStaticText( m_scGridWin, wxID_ANY, item->m_LayerName );
             m_fgGridSizer->Add( st_text, 0, wxALL|wxALIGN_CENTER_VERTICAL, 1 );
             st_text->Show( show_item );
             ui_row_item.m_LayerName = st_text;
 
-            st_text = new wxStaticText( m_scGridWin, wxID_ANY, item->m_TypeName );
-            m_fgGridSizer->Add( st_text, 0, wxALL|wxALIGN_CENTER_VERTICAL, 1 );
+            wxString lname;
+
+            if( item->m_TypeName == KEY_COPPER )
+                lname = _( "Copper" );
+            else
+                lname = wxGetTranslation( item->m_TypeName );
+
+            st_text = new wxStaticText( m_scGridWin, wxID_ANY, lname );
+            m_fgGridSizer->Add( st_text, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
             ui_row_item.m_LayerTypeCtrl = st_text;
         }
 
-        if( !item->IsMaterialEditable() )
-        {
-            // Add spacer.
-            wxStaticLine* staticline = new wxStaticLine( m_scGridWin, wxID_ANY,
-                                        wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-            m_fgGridSizer->Add( staticline, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 1 );
-            ui_row_item.m_MaterialCtrl = staticline;
-        }
-        else
+        if( item->IsMaterialEditable() )
         {
             wxChoice* choice = new wxChoice( m_scGridWin, ID_ITEM_MATERIAL+row, wxDefaultPosition,
                                              wxDefaultSize, materialChoices );
@@ -477,12 +473,17 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
                     choice->SetSelection( ii );
             }
 
-            m_fgGridSizer->Add( choice, 0, wxALL, 1 );
+            m_fgGridSizer->Add( choice, 0, wxEXPAND|wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
 
             choice->Connect( wxEVT_COMMAND_CHOICE_SELECTED,
-                              wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP::onMaterialChange ), NULL, this );
+                             wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP::onMaterialChange ),
+                             NULL, this );
             m_controlItemsList.push_back( choice );
             ui_row_item.m_MaterialCtrl = choice;
+        }
+        else
+        {
+            ui_row_item.m_MaterialCtrl = addSpacer();
         }
 
         if( item->IsThicknessEditable() )
@@ -490,7 +491,7 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
             wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, ID_ITEM_THICKNESS+row );
             textCtrl->SetMinSize( m_numericTextCtrlSize );
             textCtrl->SetValue( StringFromValue( m_units, item->m_Thickness, true, true ) );
-            m_fgGridSizer->Add( textCtrl, 0, wxALL, 1 );
+            m_fgGridSizer->Add( textCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
             m_controlItemsList.push_back( textCtrl );
             textCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED,
                                wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP::onThicknessChange ),
@@ -500,46 +501,23 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
             if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
             {
                 wxCheckBox* cb_box = new wxCheckBox( m_scGridWin, ID_ITEM_THICKNESS_LOCKED+row,
-                                                     wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+                                                     wxEmptyString );
                 cb_box->SetValue( item->m_ThicknessLocked );
-                m_fgGridSizer->Add( cb_box, 0,
-                                    wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL,
-                                    1 );
+                m_fgGridSizer->Add( cb_box, 0, wxALIGN_CENTER_VERTICAL, 2 );
                 ui_row_item.m_ThicknessLockCtrl = cb_box;
             }
             else
             {
-                // Add spacer for lock column.
-                wxStaticLine* staticline = new wxStaticLine( m_scGridWin, wxID_ANY,
-                                            wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-                m_fgGridSizer->Add( staticline, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 1 );
-                ui_row_item.m_ThicknessLockCtrl = staticline;
+                ui_row_item.m_ThicknessLockCtrl = addSpacer();
             }
         }
         else
         {
-            // Add spacer for thickness column.
-            wxStaticLine* staticline = new wxStaticLine( m_scGridWin, wxID_ANY,
-                                        wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-            m_fgGridSizer->Add( staticline, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 1 );
-            ui_row_item.m_ThicknessCtrl = staticline;
-
-            // Add spacer for lock column.
-            staticline = new wxStaticLine( m_scGridWin, wxID_ANY,
-                                           wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-            m_fgGridSizer->Add( staticline, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 1 );
-            ui_row_item.m_ThicknessLockCtrl = staticline;
+            ui_row_item.m_ThicknessCtrl = addSpacer();
+            ui_row_item.m_ThicknessLockCtrl = addSpacer();
         }
 
-        if( !item->IsColorEditable() )
-        {
-            // Add spacer.
-            wxStaticLine* staticline = new wxStaticLine( m_scGridWin, wxID_ANY,
-                                        wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-            m_fgGridSizer->Add( staticline, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 1 );
-            ui_row_item.m_ColorCtrl = staticline;
-        }
-        else
+        if( item->IsColorEditable() )
         {
             int color_idx = 0;
 
@@ -562,11 +540,16 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
             }
 
             wxBitmapComboBox* bm_combo = createBmComboBox( item, row );
-            m_fgGridSizer->Add( bm_combo, 0, wxALL, 1 );
+            m_colorComboSize.y = bm_combo->GetSize().y;
+            bm_combo->SetMinSize( m_colorComboSize );
+            m_fgGridSizer->Add( bm_combo, 0, wxEXPAND|wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
             bm_combo->SetSelection( color_idx );
             ui_row_item.m_ColorCtrl = bm_combo;
         }
-
+        else
+        {
+            ui_row_item.m_ColorCtrl = addSpacer();
+        }
 
         if( item->HasEpsilonRValue() )
         {
@@ -575,16 +558,12 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
             wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, wxID_ANY, wxEmptyString,
                                                    wxDefaultPosition, m_numericFieldsSize );
             textCtrl->SetValue( txt );
-            m_fgGridSizer->Add( textCtrl, 0, wxALL, 1 );
+            m_fgGridSizer->Add( textCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
             ui_row_item.m_EpsilonCtrl = textCtrl;
-         }
+        }
         else
         {
-            // Add spacer.
-            wxStaticLine* staticline = new wxStaticLine( m_scGridWin, wxID_ANY,
-                                        wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-            m_fgGridSizer->Add( staticline, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 1 );
-            ui_row_item.m_EpsilonCtrl = staticline;
+            ui_row_item.m_EpsilonCtrl = addSpacer();
         }
 
         if( item->HasLossTangentValue() )
@@ -594,16 +573,12 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
             wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, wxID_ANY, wxEmptyString,
                                                    wxDefaultPosition, m_numericFieldsSize );
             textCtrl->SetValue( txt );
-            m_fgGridSizer->Add( textCtrl, 0, wxALL, 1 );
+            m_fgGridSizer->Add( textCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
             ui_row_item.m_LossTgCtrl = textCtrl;
         }
         else
         {
-            // Add spacer.
-            wxStaticLine* staticline = new wxStaticLine( m_scGridWin, wxID_ANY,
-                                        wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-            m_fgGridSizer->Add( staticline, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 1 );
-            ui_row_item.m_LossTgCtrl = staticline;
+            ui_row_item.m_LossTgCtrl = addSpacer();
         }
 
         m_rowUiItemsList.push_back( ui_row_item );
@@ -1032,7 +1007,7 @@ void PANEL_SETUP_BOARD_STACKUP::updateIconColor( int aRow )
     {
         wxStaticBitmap* st_bitmap = m_rowUiItemsList[aRow].m_Icon;
         // explicit depth important under MSW
-        wxBitmap bmp(m_colorIconsSize.x, m_colorIconsSize.y, 24);
+        wxBitmap bmp(m_colorIconsSize.x, m_colorIconsSize.y / 2, 24);
         drawBitmap( bmp, getColorIconItem( aRow ) );
         st_bitmap->SetBitmap( bmp );
         return;
@@ -1041,7 +1016,7 @@ void PANEL_SETUP_BOARD_STACKUP::updateIconColor( int aRow )
     for( unsigned row = 0; row < m_rowUiItemsList.size(); row++ )
     {
         // explicit depth important under MSW
-        wxBitmap bmp(m_colorIconsSize.x, m_colorIconsSize.y, 24);
+        wxBitmap bmp(m_colorIconsSize.x, m_colorIconsSize.y / 2, 24);
         drawBitmap( bmp, getColorIconItem( row ) );
         m_rowUiItemsList[row].m_Icon->SetBitmap( bmp );
     }

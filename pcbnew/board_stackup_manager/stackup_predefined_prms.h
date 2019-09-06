@@ -37,6 +37,8 @@
 #define KEY_CORE "core"
 #define KEY_PREPREG "prepreg"
 
+#define KEY_COPPER "copper"
+
 // key string used for not specified parameters
 #define NOT_SPECIFIED "Undefined"
 
