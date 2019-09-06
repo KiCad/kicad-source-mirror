@@ -34,7 +34,10 @@
 #include "panel_board_stackup.h"
 #include "stackup_predefined_prms.h"
 #include <panel_setup_layers.h>
+#include "board_stackup_reporter.h"
 #include <bitmaps.h>
+#include <wx/clipbrd.h>
+#include <wx/dataobj.h>
 
 // Some wx widget ID to know what widget has fired a event:
 #define ID_INCREMENT 128    // space between 2 ID type. Bigger than the layer count max
@@ -129,6 +132,25 @@ void PANEL_SETUP_BOARD_STACKUP::disconnectEvents()
                                wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP::onThicknessChange ),
                                NULL, this );
     }
+}
+
+
+void PANEL_SETUP_BOARD_STACKUP::onExportToClipboard( wxCommandEvent& event )
+{
+    if( !transferDataFromUIToStackup() )
+        return;
+
+    // Build a ascii representation of stackup and copy it in the clipboard
+    wxString report = BuildStackupReport( m_stackup, m_units );
+
+    if( wxTheClipboard->Open() )
+    {
+        // This data objects are held by the clipboard,
+        // so do not delete them in the app.
+        wxTheClipboard->SetData( new wxTextDataObject( report ) );
+        wxTheClipboard->Close();
+    }
+
 }
 
 
@@ -423,9 +445,9 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
         }
         else
         {
-//            wxString lname = BOARD::GetStandardLayerName( item->m_LayerId );
-            wxString lname = m_board->GetLayerName( item->m_LayerId );
-            wxStaticText* st_text =  new wxStaticText( m_scGridWin, wxID_ANY, lname );
+//            item->m_LayerName = BOARD::GetStandardLayerName( item->m_LayerId );
+            item->m_LayerName = m_board->GetLayerName( item->m_LayerId );
+            wxStaticText* st_text =  new wxStaticText( m_scGridWin, wxID_ANY, item->m_LayerName );
             m_fgGridSizer->Add( st_text, 0, wxALL|wxALIGN_CENTER_VERTICAL, 1 );
             st_text->Show( show_item );
             ui_row_item.m_LayerName = st_text;
@@ -598,8 +620,11 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
 }
 
 
-bool PANEL_SETUP_BOARD_STACKUP::TransferDataFromWindow()
+
+// Transfer current UI settings to m_stackup but not to the board
+bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
 {
+
     // First, verify the list of layers currently in stackup:
     // if it does not mach the list of layers set in PANEL_SETUP_LAYERS
     // prompt the user to update the stackup
@@ -659,6 +684,8 @@ bool PANEL_SETUP_BOARD_STACKUP::TransferDataFromWindow()
             row++;
             continue;
         }
+
+        item->m_LayerName = m_rowUiItemsList[row].m_LayerName->GetLabel();
 
         if( item->HasEpsilonRValue() )
         {
@@ -752,15 +779,30 @@ bool PANEL_SETUP_BOARD_STACKUP::TransferDataFromWindow()
         return false;
     }
 
-    BOARD_STACKUP& brd_stackup = m_brdSettings->GetStackupDescriptor();
-
     wxArrayString finish_list = GetCopperFinishStandardList( false );
     int finish = m_choiceFinish->GetSelection() >= 0 ? m_choiceFinish->GetSelection() : 0;
-    brd_stackup.m_FinishType = finish_list[finish];
-    brd_stackup.m_HasDielectricConstrains = m_rbDielectricConstraint->GetSelection() == 1;
-    brd_stackup.m_EdgeConnectorConstraints = (BS_EDGE_CONNECTOR_CONSTRAINTS)m_choiceEdgeConn->GetSelection();
-    brd_stackup.m_CastellatedPads = m_cbCastellatedPads->GetValue();
-    brd_stackup.m_EdgePlating = m_cbEgdesPlated->GetValue();
+    m_stackup.m_FinishType = finish_list[finish];
+    m_stackup.m_HasDielectricConstrains = m_rbDielectricConstraint->GetSelection() == 1;
+    m_stackup.m_EdgeConnectorConstraints = (BS_EDGE_CONNECTOR_CONSTRAINTS)m_choiceEdgeConn->GetSelection();
+    m_stackup.m_CastellatedPads = m_cbCastellatedPads->GetValue();
+    m_stackup.m_EdgePlating = m_cbEgdesPlated->GetValue();
+
+    return true;
+}
+
+
+bool PANEL_SETUP_BOARD_STACKUP::TransferDataFromWindow()
+{
+    if( !transferDataFromUIToStackup() )
+        return false;
+
+    BOARD_STACKUP& brd_stackup = m_brdSettings->GetStackupDescriptor();
+
+    brd_stackup.m_FinishType = m_stackup.m_FinishType;
+    brd_stackup.m_HasDielectricConstrains = m_stackup.m_HasDielectricConstrains;
+    brd_stackup.m_EdgeConnectorConstraints = m_stackup.m_EdgeConnectorConstraints;
+    brd_stackup.m_CastellatedPads = m_stackup.m_CastellatedPads;
+    brd_stackup.m_EdgePlating = m_stackup.m_EdgePlating;
 
     // copy enabled items to the new board stackup
     brd_stackup.RemoveAll();

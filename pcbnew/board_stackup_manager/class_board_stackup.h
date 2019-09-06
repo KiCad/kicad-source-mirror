@@ -68,6 +68,7 @@ public:
     BOARD_STACKUP_ITEM_TYPE m_Type;
     bool m_Enabled;         /// true if this stackup item must be taken in account,
                             /// false to ignore it. Mainly used in dialog stackup editor.
+    wxString m_LayerName;   /// name of layer as shown in layer manager. Usefull to create reports
     wxString m_TypeName;    /// type name of layer (copper, silk screen, core, prepreg ...)
     wxString m_Material;    /// type of material (has meaning only for dielectric
     int m_DielectricLayerId;/// the "layer" id for dielectric layers,

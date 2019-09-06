@@ -88,6 +88,7 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM& aOther )
     m_Enabled = aOther.m_Enabled;
     m_DielectricLayerId = aOther.m_DielectricLayerId;
     m_TypeName = aOther.m_TypeName;
+    m_LayerName = aOther.m_LayerName;
     m_Material = aOther.m_Material;
     m_Color = aOther.m_Color;
     m_Thickness = aOther.m_Thickness;

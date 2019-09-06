@@ -66,10 +66,12 @@ class PANEL_SETUP_BOARD_STACKUP_BASE : public wxPanel
 		wxChoice* m_choiceFinish;
 		wxStaticText* m_staticTextEdgeConn;
 		wxChoice* m_choiceEdgeConn;
+		wxButton* m_buttonExport;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void onUpdateThicknessValue( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onCalculateDielectricThickness( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onExportToClipboard( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

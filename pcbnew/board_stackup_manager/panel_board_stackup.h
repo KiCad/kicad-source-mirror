@@ -37,22 +37,6 @@
 class wxBitmapComboBox;
 class PANEL_SETUP_LAYERS;
 
-#if 0
-// Indexes of columns of the grid to show a layer setup
-enum LAYER_COLUMN_INDEX
-{
-    LCOL_IDX_BITMAP,            // The column displaying the material color
-    LCOL_IDX_BRD_LAYERNAME,     // The column displaying the layer name from the board editor
-    LCOL_IDX_LAYERTYPENAME,     // The column displaying the layer type name
-    LCOL_IDX_LAYER_MATERIAL,    // The column displaying the name of the material
-    LCOL_IDX_LAYER_THICKNESS,
-    LCOL_IDX_LAYER_THICKNESS_LOCK,
-    LCOL_IDX_LAYER_COLOR,
-    LCOL_IDX_LAYER_EPSILON_R,
-    LCOL_IDX_LAYER_DIELECTRIC_LOSS,
-    LCOL_COUNT_MAX              // Sentinel
-};
-#endif
 
 // A helper class to handle UI items managed by m_fgGridSizer
 // in PANEL_SETUP_BOARD_STACKUP
@@ -91,11 +75,12 @@ public:
 
     void ImportSettingsFrom( BOARD* aBoard );
 
-    // Must be called if the copper layers count has changed
-    // or solder mask, solder paste or silkscreen layers are
-    // enabled or disabled
-    // Rebuild the Layer Stack Panel if the new layer set differs
-    // from the current layet set
+    /** Must be called if the copper layers count has changed
+     * or solder mask, solder paste or silkscreen layers are
+     * enabled or disabled
+     * Rebuild the Layer Stack Panel if the new layer set differs
+     * from the current layet set
+     */
     void OnLayersOptionsChanged( LSET aNewLayerSet );
 
     BOARD_STACKUP_ITEM* GetStackupItem( int aIndex );
@@ -105,6 +90,8 @@ public:
 
     BOARD_STACKUP&  GetStackup() { return m_stackup; }
     int GetPcbTickness();
+
+    // Called by wxWidgets: transfer current settings stored in m_stackup to the board
     bool TransferDataFromWindow() override;
 
     std::vector<wxColor> m_UserColors;  // the list of user colors for each grid row
@@ -130,12 +117,17 @@ private:
      */
     void RebuildLayerStackPanel();
 
+    /** Transfer current UI settings to m_stackup but not to the board
+     */
+    bool transferDataFromUIToStackup();
+
 	void onUpdateThicknessValue( wxUpdateUIEvent& event ) override;
 	void onCalculateDielectricThickness( wxCommandEvent& event ) override;
 
     void onColorSelected( wxCommandEvent& event );
 	void onMaterialChange( wxCommandEvent& event );
 	void onThicknessChange( wxCommandEvent& event );
+	void onExportToClipboard( wxCommandEvent& event ) override;
 
     /** Update the icons color (swatches in first grid column)
      * @param aRow is the row (index in m_rowUiItemsList) that manages the icon to update.
