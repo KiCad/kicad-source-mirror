@@ -28,16 +28,20 @@
 #include <common.h>
 
 
-HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* parent, const wxString& aTitle) :
-    DIALOG_DISPLAY_HTML_TEXT_BASE( parent, wxID_ANY, aTitle )
+HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* aParent, const wxString& aTitle,
+                                    const wxPoint& aPosition, const wxSize& aSize ) :
+    DIALOG_DISPLAY_HTML_TEXT_BASE( aParent, wxID_ANY, aTitle, aPosition, aSize )
 {
     m_htmlWindow->SetLayoutDirection( wxLayout_LeftToRight );
     ListClear();
 
     // Gives a default logical size (the actual size depends on the display definition)
-    SetSizeInDU( 320, 120 );
+    if( aSize != wxDefaultSize )
+        SetSizeInDU( aSize.x, aSize.y );
 
     Center();
+
+    m_sdbSizer1OK->SetDefault();
 }
 
 
@@ -49,12 +53,14 @@ HTML_MESSAGE_BOX::~HTML_MESSAGE_BOX()
 }
 
 
-void HTML_MESSAGE_BOX::OnCloseButtonClick( wxCommandEvent& event )
+void HTML_MESSAGE_BOX::OnOKButtonClick( wxCommandEvent& event )
 {
-    // the dialog can be shown modal or not modal.
+    // the dialog can be shown quasi-model, modal, or not modeless.
     // therefore, use the right way to close it.
-    if( IsModal() )
-        EndModal( 0 );
+    if( IsQuasiModal() )
+        EndQuasiModal( wxID_OK );
+    else if( IsModal() )
+        EndModal( wxID_OK );
     else
         Destroy();
 }

@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <html_messagebox.h>
+
 #include "dialog_import_gfx.h"
 #include <kiface_i.h>
 #include <pcb_layer_box_selector.h>
@@ -300,7 +302,8 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
         m_importer->SetImportOffsetMM( m_origin );
         m_scaleImport = DoubleValueFromString( UNSCALED_UNITS, m_textCtrlImportScale->GetValue() );
 
-        // The line width is meant to be in pcbnew units, so we scale the import width before applying
+        // The line width is meant to be in pcbnew units, so we scale the import width before
+        // applying
         m_importer->SetLineWidthMM( m_lineWidth * m_scaleImport );
         m_importer->SetPlugin( std::move( plugin ) );
 
@@ -310,11 +313,17 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
             m_importer->Import( m_scaleImport );
 
         // Get warning messages:
-        const std::string& warnings = m_importer->GetMessages();
+        wxString warnings = m_importer->GetMessages();
 
         // This isn't a fatal error so allow the dialog to close with wxID_OK.
         if( !warnings.empty() )
-            wxMessageBox( warnings.c_str(), _( "Items Not Handled" ) );
+        {
+            HTML_MESSAGE_BOX dlg( this, _( "Warning" ) );
+            dlg.MessageSet( _( "Items in the imported file could not be handled properly." ) );
+            warnings.Replace( "\n", "<br/>" );
+            dlg.AddHTML_Text( warnings );
+            dlg.ShowModal();
+        }
     }
     else
     {
