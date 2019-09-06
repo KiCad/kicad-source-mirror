@@ -45,6 +45,8 @@
 #include <netlist_object.h>
 #include <trace_helpers.h>
 
+#include <wx/debug.h>
+
 
 extern void IncrementLabelMember( wxString& name, int aIncrement );
 
@@ -251,7 +253,10 @@ void SCH_TEXT::SetLabelSpinStyle( int aSpinStyle )
     switch( aSpinStyle )
     {
     default:
-    case 0: // Horiz Normal Orientation (left justified)
+        wxASSERT_MSG( 1, "Bad spin style" );
+    case 0: // Horiz Normal Orientation
+        //
+        m_spin_style = 0; // Handle the error spin style by resetting
         SetTextAngle( TEXT_ANGLE_HORIZ );
         SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
         SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
@@ -773,7 +778,10 @@ void SCH_GLOBALLABEL::SetLabelSpinStyle( int aSpinStyle )
     switch( aSpinStyle )
     {
     default:
+        wxASSERT_MSG( 1, "Bad spin style" );
     case 0: // Horiz Normal Orientation
+        //
+        m_spin_style = 0; // Handle the error spin style by resetting
         SetTextAngle( TEXT_ANGLE_HORIZ );
         SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
         SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
@@ -1037,7 +1045,10 @@ void SCH_HIERLABEL::SetLabelSpinStyle( int aSpinStyle )
     switch( aSpinStyle )
     {
     default:
+        wxASSERT_MSG( 1, "Bad spin style" );
     case 0: // Horiz Normal Orientation
+        //
+        m_spin_style = 0; // Handle the error spin style by resetting
         SetTextAngle( TEXT_ANGLE_HORIZ );
         SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
         SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
