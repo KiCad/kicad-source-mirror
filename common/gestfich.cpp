@@ -211,27 +211,27 @@ bool OpenPDF( const wxString& file )
     wxString command;
     wxString filename = file;
 
-    // Quote in case there are spaces in the file name.
-    AddDelimiterString( filename );
-
     Pgm().ReadPdfBrowserInfos();
 
     if( !Pgm().UseSystemPdfBrowser() )    //  Run the preferred PDF Browser
     {
-        command = Pgm().GetPdfBrowserName() + wxT( " " ) + filename;
+        command = Pgm().GetPdfBrowserName() + wxT( " '" ) + filename + wxT( "'" );
     }
     else
     {
         if( wxLaunchDefaultApplication( filename ) )
             return true;
 
+#ifdef __WXMAC__
+        command = wxT( "/usr/bin/open -a '" ) + filename + wxT( "'" );
+#endif
         // If launching the system default PDF viewer fails, fall through with empty command
         // string so the error message is displayed.
     }
 
     if( !command.IsEmpty() )
     {
-        if( ProcessExecute( command ) )
+        if( ProcessExecute( command ) != -1 )
         {
             return true;
         }
@@ -269,8 +269,6 @@ void OpenFile( const wxString& file )
 
     if( !command.IsEmpty() )
         ProcessExecute( command );
-
-    DisplayError( NULL, wxString::Format( _( "Cannot print '%s'.\n\nUnknown filetype." ), file ) );
 }
 
 
@@ -339,6 +337,7 @@ bool doPrintFile( const wxString& file, bool aDryRun )
     }
 #endif
 
+    DisplayError( NULL, wxString::Format( _( "Cannot print '%s'.\n\nUnknown filetype." ), file ) );
     return false;
 }
 
