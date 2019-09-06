@@ -81,6 +81,15 @@ public:
 
     void SetEndPoint( const wxPoint& aPosition ) { m_end = aPosition; }
 
+    /**
+     * Find the end point of the line (either start or end) that is closest
+     * to the provided point.
+     *
+     * @param aPoint the point to compare against
+     * @return The coordinates of the closest end point
+     */
+    wxPoint GetClosestPoint( const wxPoint& aPoint );
+
     int GetDefaultStyle() const;
 
     void SetLineStyle( const int aStyle );

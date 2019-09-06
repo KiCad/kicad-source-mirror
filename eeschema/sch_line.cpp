@@ -30,6 +30,7 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <macros.h>
+#include <trigo.h>
 #include <sch_draw_panel.h>
 #include <plotter.h>
 #include <base_units.h>
@@ -299,7 +300,7 @@ int SCH_LINE::GetPenSize() const
 {
     if( m_size > 0 )
         return m_size;
-    
+
     return GetDefaultWidth();
 }
 
@@ -484,6 +485,19 @@ EDA_ITEM* SCH_LINE::MergeOverlap( SCH_LINE* aLine )
     }
 
     return NULL;
+}
+
+
+wxPoint SCH_LINE::GetClosestPoint( const wxPoint& aPoint )
+{
+    // Compute the euclidean distance between the reference and the ends
+    double startDis  = GetLineLength( aPoint, m_start );
+    double endDis    = GetLineLength( aPoint, m_end );
+
+    if( startDis < endDis )
+        return m_start;
+    else
+        return m_end;
 }
 
 

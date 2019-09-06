@@ -150,7 +150,15 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
             return false;
 
         if( item )
-            SetCrossHairPosition( item->GetPosition(), false );
+        {
+            SCH_LINE* line = dynamic_cast<SCH_LINE*>( item );
+
+            // The schematic lines have two possible points to use
+            if( line )
+                SetCrossHairPosition( line->GetClosestPoint( aPosition ), false );
+            else
+                SetCrossHairPosition( item->GetPosition(), false );
+        }
     }
 
     // If a command is in progress: add "cancel" and "end tool" menu
