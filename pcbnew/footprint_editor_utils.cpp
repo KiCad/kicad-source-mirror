@@ -854,8 +854,13 @@ void FOOTPRINT_EDIT_FRAME::editFootprintProperties( MODULE* aModule )
     // Update library tree
     BASIC_FOOTPRINT_INFO footprintInfo( aModule );
     wxDataViewItem       treeItem = m_adapter->FindItem( oldFPID );
-    static_cast<LIB_TREE_NODE_LIB_ID*>( treeItem.GetID() )->Update( &footprintInfo );
-    m_treePane->GetLibTree()->Refresh();
+
+    if( treeItem.IsOk() )   // Can be not found in tree if the current footprint is imported from file
+                            // therefore not yet in tree.
+    {
+        static_cast<LIB_TREE_NODE_LIB_ID*>( treeItem.GetID() )->Update( &footprintInfo );
+        m_treePane->GetLibTree()->Refresh();
+    }
 
     updateTitle();      // in case of a name change...
 }
