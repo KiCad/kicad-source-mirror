@@ -105,9 +105,6 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
     auto connectivity = m_board->GetConnectivity();
     bool filledPolyWithOutline = not m_board->GetDesignSettings().m_ZoneUseNoOutlineInFill;
 
-    if( ADVANCED_CFG::GetCfg().m_forceThickOutlinesInZones )
-        filledPolyWithOutline = true;
-
     std::unique_lock<std::mutex> lock( connectivity->GetLock(), std::try_to_lock );
 
     if( !lock )

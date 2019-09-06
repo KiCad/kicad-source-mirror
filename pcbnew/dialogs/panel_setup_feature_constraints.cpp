@@ -45,10 +45,6 @@ PANEL_SETUP_FEATURE_CONSTRAINTS::PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* 
 {
     m_Frame = aFrame;
     m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
-
-    // Temporary option: allows zone fill option only if the advanced config option allow it
-    if( ADVANCED_CFG::GetCfg().m_forceThickOutlinesInZones )
-        m_bSizerPolygonFillOption->Show( false );
 }
 
 

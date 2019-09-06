@@ -79,12 +79,6 @@ public:
     bool m_realTimeConnectivity;
 
     /**
-     * Force filled polygons with outlines in zone -- To be removed after testing
-     * default = true (legacy mode)
-     */
-    bool m_forceThickOutlinesInZones;
-
-    /**
      * Set the stack size for coroutines
      */
     int m_coroutineStackSize;

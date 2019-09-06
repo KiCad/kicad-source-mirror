@@ -90,11 +90,6 @@ static const wxChar AllowLegacyCanvasInGtk3[] = wxT( "AllowLegacyCanvasInGtk3" )
  */
 static const wxChar CoroutineStackSize[] = wxT( "CoroutineStackSize" );
 
-/**
- * Draw zones in pcbnew with the stroked outline.
- */
-static const wxChar ForceThickZones[] = wxT( "ForceThickZones" );
-
 } // namespace KEYS
 
 
@@ -175,7 +170,6 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_enableSvgImport = false;
     m_allowLegacyCanvasInGtk3 = false;
     m_realTimeConnectivity = true;
-    m_forceThickOutlinesInZones = true;
     m_coroutineStackSize = AC_STACK::default_stack;
 
     loadFromConfigFile();
@@ -222,9 +216,6 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back(
             new PARAM_CFG_INT( true, AC_KEYS::CoroutineStackSize, &m_coroutineStackSize,
                     AC_STACK::default_stack, AC_STACK::min_stack, AC_STACK::max_stack ) );
-
-    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ForceThickZones,
-                                                &m_forceThickOutlinesInZones, true ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
 
