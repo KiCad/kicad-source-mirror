@@ -57,6 +57,8 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
         {
             if( c == '/' )
                 converted += "{slash}";
+            else if( c == '\n' || c == '\r' )
+                converted += "";    // drop
             else
                 converted += c;
         }
@@ -66,6 +68,8 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
                 converted += "{brace}";
             else if( c == ':' )
                 converted += "{colon}";
+            else if( c == '\n' || c == '\r' )
+                converted += "";    // drop
             else
                 converted += c;
         }
