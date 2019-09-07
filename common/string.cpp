@@ -246,8 +246,12 @@ int ReadDelimitedText( char* aDest, const char* aSource, int aDestSize )
 }
 
 
-std::string EscapedUTF8( const wxString& aString )
+std::string EscapedUTF8( wxString aString )
 {
+    // No new-lines allowed in quoted strings
+    aString.Replace( "\r\n", "\r" );
+    aString.Replace( "\n", "\r" );
+
     std::string utf8 = TO_UTF8( aString );
 
     std::string ret;

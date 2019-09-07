@@ -87,7 +87,7 @@ int ReadDelimitedText( wxString* aDest, const char* aSource );
  * @param aString is the input string to convert.
  * @return std::string - the escaped input text, without the wrapping double quotes.
  */
-std::string EscapedUTF8( const wxString& aString );
+std::string EscapedUTF8( wxString aString );
 
 /**
  * Return a new wxString escaped for embedding in HTML.

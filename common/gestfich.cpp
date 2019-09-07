@@ -337,7 +337,12 @@ bool doPrintFile( const wxString& file, bool aDryRun )
     }
 #endif
 
-    DisplayError( NULL, wxString::Format( _( "Cannot print '%s'.\n\nUnknown filetype." ), file ) );
+    if( !aDryRun )
+    {
+        DisplayError( nullptr, wxString::Format( _( "Cannot print '%s'.\n\nUnknown filetype." ),
+                                                 file ) );
+    }
+
     return false;
 }
 
