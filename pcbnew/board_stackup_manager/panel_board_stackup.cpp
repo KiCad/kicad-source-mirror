@@ -592,6 +592,7 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
     m_choiceFinish->SetSelection( 0 );      // Will be correctly set later
 
     updateIconColor();
+    m_scGridWin->Layout();
 }
 
 
@@ -599,7 +600,6 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
 // Transfer current UI settings to m_stackup but not to the board
 bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
 {
-
     // First, verify the list of layers currently in stackup:
     // if it does not mach the list of layers set in PANEL_SETUP_LAYERS
     // prompt the user to update the stackup
