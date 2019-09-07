@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/clipbrd.h>
 #include <wx/stattext.h>
 #include <wx/textentry.h>
 #include <limits>
@@ -46,6 +47,8 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
     m_useMils = aUseMils;
     m_allowEval = allowEval && dynamic_cast<wxTextEntry*>( m_value );
     m_needsEval = false;
+    m_selStart = 0;
+    m_selEnd = 0;
 
     auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
     if( textEntry )
@@ -79,7 +82,10 @@ void UNIT_BINDER::onSetFocus( wxFocusEvent& aEvent )
         wxString oldStr = m_eval.OriginalText();
 
         if( oldStr.length() )
+        {
             textEntry->SetValue( oldStr );
+            textEntry->SetSelection( m_selStart, m_selEnd );
+        }
 
         m_needsEval = true;
     }
@@ -95,7 +101,24 @@ void UNIT_BINDER::onKillFocus( wxFocusEvent& aEvent )
     if( m_allowEval && textEntry )
     {
         if( m_eval.Process( textEntry->GetValue() ) )
+        {
+            textEntry->GetSelection( &m_selStart, &m_selEnd );
+            wxString sel = textEntry->GetStringSelection();
+
             textEntry->ChangeValue( m_eval.Result() );
+
+#ifdef __WXGTK__
+            // Manually copy the selected text to the primary selection clipboard
+            if( wxTheClipboard->Open() )
+            {
+                bool clipTarget = wxTheClipboard->IsUsingPrimarySelection();
+                wxTheClipboard->UsePrimarySelection( true );
+                wxTheClipboard->SetData( new wxTextDataObject( sel ) );
+                wxTheClipboard->UsePrimarySelection( clipTarget );
+                wxTheClipboard->Close();
+            }
+#endif
+        }
 
         m_needsEval = false;
     }
