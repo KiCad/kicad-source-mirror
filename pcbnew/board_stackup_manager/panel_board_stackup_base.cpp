@@ -43,10 +43,10 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 	bSizerBrdThickness->Add( m_buttonSetDielectricThickness, 0, wxALL, 5 );
 
 
-	bMainSizer->Add( bSizerBrdThickness, 0, wxEXPAND|wxRIGHT, 5 );
+	bMainSizer->Add( bSizerBrdThickness, 0, wxEXPAND|wxALL, 5 );
 
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline, 0, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( m_staticline, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 	m_sizerStackup = new wxBoxSizer( wxHORIZONTAL );
 
@@ -55,7 +55,7 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 
 	m_scGridWin = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
 	m_scGridWin->SetScrollRate( 5, 5 );
-	m_fgGridSizer = new wxFlexGridSizer( 0, 9, 0, 3 );
+	m_fgGridSizer = new wxFlexGridSizer( 0, 9, 0, 2 );
 	m_fgGridSizer->SetFlexibleDirection( wxHORIZONTAL );
 	m_fgGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -114,10 +114,10 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 	m_scGridWin->SetSizer( m_fgGridSizer );
 	m_scGridWin->Layout();
 	m_fgGridSizer->Fit( m_scGridWin );
-	bSizer5->Add( m_scGridWin, 1, wxEXPAND | wxALL, 5 );
+	bSizer5->Add( m_scGridWin, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
-	m_sizerStackup->Add( bSizer5, 1, wxEXPAND|wxRIGHT, 5 );
+	m_sizerStackup->Add( bSizer5, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerRight;
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
@@ -175,6 +175,7 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 
 	// Connect Events
 	m_thicknessCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onUpdateThicknessValue ), NULL, this );

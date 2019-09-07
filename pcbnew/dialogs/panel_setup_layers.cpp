@@ -29,8 +29,6 @@
 #include <confirm.h>
 #include <pcbnew.h>
 #include <pcb_edit_frame.h>
-#include <view/view.h>
-#include <invoke_pcb_dialog.h>
 #include <class_board.h>
 #include <collectors.h>
 #include <panel_setup_layers.h>
@@ -139,7 +137,6 @@ PANEL_SETUP_LAYERS::PANEL_SETUP_LAYERS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* a
         m_Parent( aParent ), m_frame( aFrame )
 {
     m_pcb = aFrame->GetBoard();
-    m_LayersListPanel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX) );
 }
 
 

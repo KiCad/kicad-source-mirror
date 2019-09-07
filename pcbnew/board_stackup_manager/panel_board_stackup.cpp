@@ -151,7 +151,6 @@ void PANEL_SETUP_BOARD_STACKUP::onExportToClipboard( wxCommandEvent& event )
         wxTheClipboard->SetData( new wxTextDataObject( report ) );
         wxTheClipboard->Close();
     }
-
 }
 
 
@@ -228,13 +227,13 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
 
     int row = 0;
 
-    for( auto item : m_stackup.GetList() )
+    for( BOARD_STACKUP_ITEM* item : m_stackup.GetList() )
     {
         BOARD_STACKUP_ROW_UI_ITEM& ui_row_item = m_rowUiItemsList[row];
         BOARD_STACKUP_ITEM* brd_stack_item = nullptr;
 
         // test for existing stackup items in board:
-        for( BOARD_STACKUP_ITEM* brd_item: brd_stackup.GetList() )
+        for( BOARD_STACKUP_ITEM* brd_item : brd_stackup.GetList() )
         {
             if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
             {
