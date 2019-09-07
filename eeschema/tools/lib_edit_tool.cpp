@@ -721,6 +721,8 @@ int LIB_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     if( !selection.Front()->IsMoving() )
         saveCopyInUndoList( m_frame->GetCurPart(), UR_LIBEDIT );
 
+    EDA_ITEMS newItems;
+
     for( unsigned ii = 0; ii < selection.GetSize(); ++ii )
     {
         LIB_ITEM* oldItem = static_cast<LIB_ITEM*>( selection.GetItem( ii ) );
@@ -728,18 +730,17 @@ int LIB_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         oldItem->ClearFlags( SELECTED );
         newItem->SetFlags( IS_NEW | IS_PASTED | SELECTED );
         newItem->SetParent( part );
+        newItems.push_back( newItem );
 
         part->GetDrawItems().push_back( newItem );
         getView()->Add( newItem );
     }
 
-    m_selectionTool->RebuildSelection();
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::addItemsToSel, true, &newItems );
 
-    if( !selection.Empty() )
-    {
-        selection.SetReferencePoint( mapCoords( getViewControls()->GetCursorPosition( true ) ) );
-        m_toolMgr->RunAction( EE_ACTIONS::move, false );
-    }
+    selection.SetReferencePoint( mapCoords( getViewControls()->GetCursorPosition( true ) ) );
+    m_toolMgr->RunAction( EE_ACTIONS::move, false );
 
     return 0;
 }
