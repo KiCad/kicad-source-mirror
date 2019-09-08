@@ -155,8 +155,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
 #endif
 
     // Tracks and vias sizes general options
-    EVT_MENU_RANGE( ID_POPUP_PCB_SELECT_WIDTH_START_RANGE,
-                    ID_POPUP_PCB_SELECT_WIDTH_END_RANGE,
+    EVT_MENU_RANGE( ID_POPUP_PCB_SELECT_WIDTH_START_RANGE, ID_POPUP_PCB_SELECT_WIDTH_END_RANGE,
                     PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event )
 
     // User interface update event handlers.
@@ -307,7 +306,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     InitExitKey();
 
     GetCanvas()->SwitchBackend( m_canvasType );
-    GetCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
     GetCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
@@ -529,6 +527,8 @@ void PCB_EDIT_FRAME::ActivateGalCanvas()
     PCB_BASE_EDIT_FRAME::ActivateGalCanvas();
     COLORS_DESIGN_SETTINGS& cds = Settings().Colors();
 
+    GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
+    GetCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
     GetCanvas()->GetGAL()->SetGridColor( cds.GetLayerColor( LAYER_GRID ) );
     GetCanvas()->GetView()->GetPainter()->GetSettings()->ImportLegacyColors( &cds );
     GetCanvas()->Refresh();
