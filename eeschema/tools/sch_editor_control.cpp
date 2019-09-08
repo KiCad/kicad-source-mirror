@@ -469,7 +469,12 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
             {
                 SCH_PIN*       pin = (SCH_PIN*) item;
                 SCH_COMPONENT* comp = (SCH_COMPONENT*) item->GetParent();
-                wxString       param = wxString::Format( _T( "I%s" ), pin->GetName().Lower() );
+                wxString       param;
+
+                if( comp->GetPins().size() <= 2 )
+                    param = wxT( "I" );
+                else
+                    param = wxString::Format( wxT( "I%s" ), pin->GetName().Lower() );
 
                 simFrame->AddCurrentPlot( comp->GetRef( g_CurrentSheet ), param );
             }
