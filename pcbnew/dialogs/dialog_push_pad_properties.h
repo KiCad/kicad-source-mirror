@@ -41,6 +41,7 @@ public:
     static bool m_Pad_Shape_Filter;
     static bool m_Pad_Layer_Filter;
     static bool m_Pad_Orient_Filter;
+    static bool m_Pad_Type_Filter;
 
 public:
     DIALOG_PUSH_PAD_PROPERTIES( PCB_BASE_FRAME* aParent );

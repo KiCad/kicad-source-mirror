@@ -136,7 +136,8 @@ static void doPushPadProperties( BOARD& board, const D_PAD& aSrcPad, BOARD_COMMI
                                  bool aSameFootprints,
                                  bool aPadShapeFilter,
                                  bool aPadOrientFilter,
-                                 bool aPadLayerFilter )
+                                 bool aPadLayerFilter,
+                                 bool aPadTypeFilter )
 {
     const MODULE* moduleRef = aSrcPad.GetParent();
 
@@ -163,8 +164,15 @@ static void doPushPadProperties( BOARD& board, const D_PAD& aSrcPad, BOARD_COMMI
             if( aPadLayerFilter && ( pad->GetLayerSet() != aSrcPad.GetLayerSet() ) )
                 continue;
 
-            if( aPadLayerFilter && ( pad->GetLayerSet() != aSrcPad.GetLayerSet() ) )
-                continue;
+            if( aPadTypeFilter && ( pad->GetAttribute() != aSrcPad.GetAttribute() ) )
+                    continue;
+
+            // Special-case for aperture pads
+            if( aPadTypeFilter && pad->GetAttribute() == PAD_ATTRIB_CONN )
+            {
+                if( pad->IsAperturePad() != aSrcPad.IsAperturePad() )
+                    continue;
+            }
 
             commit.Modify( pad );
 
@@ -206,7 +214,8 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
     doPushPadProperties( *getModel<BOARD>(), *srcPad, commit, edit_Same_Modules,
                          DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Shape_Filter,
                          DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Orient_Filter,
-                         DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Layer_Filter );
+                         DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Layer_Filter,
+                         DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Type_Filter );
 
     commit.Push( _( "Push Pad Settings" ) );
 

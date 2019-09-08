@@ -32,6 +32,7 @@
 bool DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Shape_Filter  = true;
 bool DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Layer_Filter  = true;
 bool DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Orient_Filter = true;
+bool DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Type_Filter   = true;
 
 
 DIALOG_PUSH_PAD_PROPERTIES::DIALOG_PUSH_PAD_PROPERTIES( PCB_BASE_FRAME* aParent ) :
@@ -42,6 +43,7 @@ DIALOG_PUSH_PAD_PROPERTIES::DIALOG_PUSH_PAD_PROPERTIES( PCB_BASE_FRAME* aParent 
     m_Pad_Shape_Filter_CB->SetValue( m_Pad_Shape_Filter );
     m_Pad_Layer_Filter_CB->SetValue( m_Pad_Layer_Filter );
     m_Pad_Orient_Filter_CB->SetValue( m_Pad_Orient_Filter );
+    m_Pad_Type_Filter_CB->SetValue( m_Pad_Type_Filter );
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
     // that requires us to correct the button labels here.
@@ -77,6 +79,7 @@ void DIALOG_PUSH_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         m_Pad_Shape_Filter  = m_Pad_Shape_Filter_CB->GetValue();
         m_Pad_Layer_Filter  = m_Pad_Layer_Filter_CB->GetValue();
         m_Pad_Orient_Filter = m_Pad_Orient_Filter_CB->GetValue();
+        m_Pad_Type_Filter   = m_Pad_Type_Filter_CB->GetValue();
         EndModal( returncode );
         break;
     }
