@@ -616,11 +616,23 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
     // so verify that compatibility
     int pcbTickness = GetPcbTickness() ;
     int stackup_thickness = 0;
+    bool thickness_error = false;   // Set to true if a negative thickness value is found
 
     for( auto item : m_stackup.GetList() )
     {
         if( item->IsThicknessEditable() && item->m_Enabled )
-           stackup_thickness += item->m_Thickness;
+        {
+            stackup_thickness += item->m_Thickness;
+
+            if( item->m_Thickness < 0 )
+                thickness_error = true;
+        }
+    }
+
+    if( thickness_error )
+    {
+        wxMessageBox( _( " A layer thickness is < 0. Fix it" ) );
+        return false;
     }
 
     int delta = std::abs( stackup_thickness - pcbTickness );
@@ -837,6 +849,7 @@ void PANEL_SETUP_BOARD_STACKUP::onCalculateDielectricThickness( wxCommandEvent& 
     // Collect thickness of all layers but dielectric
     int thickness = 0;
     int fixed_thickness_cnt = 0;
+    bool thickness_error = false;   // True if a locked thickness value in list is < 0
 
     int row = 0;
     for( auto item : m_stackup.GetList() )
@@ -857,22 +870,49 @@ void PANEL_SETUP_BOARD_STACKUP::onCalculateDielectricThickness( wxCommandEvent& 
                 continue;
             }
             else
+            {
                 fixed_thickness_cnt++;
+
+                if( item->m_Thickness < 0 )
+                    thickness_error = true;
+            }
         }
 
         thickness += item->m_Thickness;
         row++;
     }
 
-    int dielectric_thickness = GetPcbTickness() - thickness;
-
-    if( dielectric_thickness <= 0 ) // fixed thickness is too big: cannot calculate free thickness
-        wxMessageBox( _( "Cannot calculate dielectric thickness\n"
-                         "Fixed thickness too big or board thickness too small") );
+    if( thickness_error )
+    {
+        wxMessageBox( _( "A locked dielectric thickness is < 0\n"
+                         "Unlock it or change its thickness") );
+        return;
+    }
 
     LSET copperMask = m_enabledLayers & ( LSET::ExternalCuMask() | LSET::InternalCuMask() );
     int copperLayersCount = copperMask.count();
-    dielectric_thickness /= copperLayersCount - 1 - fixed_thickness_cnt;
+
+    // the number of adjustable dielectric layers must obvioulsly be > 0
+    // So verify the user has at least one dielectric layer free
+    int adjustableDielectricCount = copperLayersCount - 1 - fixed_thickness_cnt;
+
+    if( adjustableDielectricCount <= 0 )
+    {
+        wxMessageBox( _( "Cannot calculate dielectric thickness\n"
+                         "At least one dielectric layer must be not locked") );
+        return;
+    }
+
+    int dielectric_thickness = GetPcbTickness() - thickness;
+
+    if( dielectric_thickness <= 0 ) // fixed thickness is too big: cannot calculate free thickness
+    {
+        wxMessageBox( _( "Cannot calculate dielectric thickness\n"
+                         "Fixed thickness too big or board thickness too small") );
+        return;
+    }
+
+    dielectric_thickness /= adjustableDielectricCount;
 
     // Update items thickness, and the values displayed on screen
     row = 0;
