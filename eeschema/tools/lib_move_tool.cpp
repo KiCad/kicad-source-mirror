@@ -129,7 +129,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                          && pin->GetOrientation() == cur_pin->GetOrientation()
                          && pin->GetConvert() == cur_pin->GetConvert() )
                         {
-                            m_selectionTool->AddItemToSel( pin, true );
+                            m_selectionTool->AddItemToSel( pin, true /*quiet mode*/ );
                         }
                     }
                 }

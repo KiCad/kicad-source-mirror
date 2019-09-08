@@ -986,7 +986,7 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
                 EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
                 selectionTool->UnbrightenItem( m_pickerItem );
-                selectionTool->AddItemToSel( m_pickerItem, true );
+                selectionTool->AddItemToSel( m_pickerItem, true /*quiet mode*/ );
                 m_toolMgr->RunAction( ACTIONS::doDelete, true );
                 m_pickerItem = nullptr;
             }

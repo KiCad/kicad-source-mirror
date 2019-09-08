@@ -172,7 +172,7 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
     else
     {
         // Restore previous properties of selected items and remove them from containers
-        clearSelection();
+        ClearSelection( true );
     }
 
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
@@ -263,7 +263,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         else if( evt->IsCancel() )
         {
-            clearSelection();
+            ClearSelection();
 
             if( evt->FirstResponder() == this )
                 m_toolMgr->RunAction( PCB_ACTIONS::clearHighlight );
@@ -271,7 +271,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         else if( evt->Action() == TA_UNDO_REDO_PRE )
         {
-            clearSelection();
+            ClearSelection();
         }
 
         else
@@ -306,7 +306,7 @@ PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCli
 
     if ( aConfirmLockedItems && CheckLock() == SELECTION_LOCKED )
     {
-        clearSelection();
+        ClearSelection();
     }
 
     if( aClientFilter )
@@ -433,7 +433,7 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     }
 
     if( !m_additive && !m_subtractive && !m_exclusive_or )
-        clearSelection();
+        ClearSelection();
 
     if( collector.GetCount() == 1 )
     {
@@ -461,7 +461,7 @@ bool SELECTION_TOOL::selectCursor( bool aForceSelect, CLIENT_SELECTION_FILTER aC
 {
     if( aForceSelect || m_selection.Empty() )
     {
-        clearSelection();
+        ClearSelection();
         selectPoint( getViewControls()->GetCursorPosition( false ), false, NULL, aClientFilter );
     }
 
@@ -489,7 +489,7 @@ bool SELECTION_TOOL::selectMultiple()
         if( evt->IsDrag( BUT_LEFT ) )
         {
             if( !m_additive && !m_subtractive && !m_exclusive_or )
-                clearSelection();
+                ClearSelection();
 
             // Start drawing a selection box
             area.SetOrigin( evt->DragOrigin() );
@@ -641,7 +641,7 @@ int SELECTION_TOOL::CursorSelection( const TOOL_EVENT& aEvent )
 
 int SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 {
-    clearSelection();
+    ClearSelection();
 
     return 0;
 }
@@ -1032,7 +1032,7 @@ void SELECTION_TOOL::zoomFitSelection()
 
 int SELECTION_TOOL::selectSheetContents( const TOOL_EVENT& aEvent )
 {
-    clearSelection();
+    ClearSelection();
     wxString* sheetpath = aEvent.Parameter<wxString*>();
 
     selectAllItemsOnSheet( *sheetpath );
@@ -1063,7 +1063,7 @@ int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 
     auto mod = dynamic_cast<MODULE*>( item );
 
-    clearSelection();
+    ClearSelection();
 
     // get the lowest subsheet name for this.
     wxString sheetPath = mod->GetPath();
@@ -1082,7 +1082,7 @@ int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 
 void SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
 {
-    clearSelection();
+    ClearSelection();
 
     if( aItem )
     {
@@ -1206,7 +1206,7 @@ int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
     auto selection = m_selection.GetItems();
 
     // clear current selection
-    clearSelection();
+    ClearSelection();
 
     // copy selection items from the saved selection
     // according to the dialog options
@@ -1224,7 +1224,7 @@ int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::clearSelection()
+void SELECTION_TOOL::ClearSelection( bool aQuietMode )
 {
     if( m_selection.Empty() )
         return;
@@ -1240,8 +1240,11 @@ void SELECTION_TOOL::clearSelection()
     m_locked = true;
 
     // Inform other potentially interested tools
-    m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
-    m_toolMgr->RunAction( PCB_ACTIONS::hideDynamicRatsnest, true );
+    if( !aQuietMode )
+    {
+        m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
+        m_toolMgr->RunAction( PCB_ACTIONS::hideDynamicRatsnest, true );
+    }
 }
 
 

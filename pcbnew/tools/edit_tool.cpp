@@ -337,16 +337,18 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
                 // We also refresh the selection VIEW_GROUP here.  I'm not sure exactly what
                 // needs refreshing, but updating the RTREE (via remove/add) doesn't work, nor
                 // does updating the hidden flag in the view.  See bug 1813038.
-                m_selectionTool->ClearSelection( TOOL_EVENT() );
+                m_selectionTool->ClearSelection( true /*quiet mode*/ );
 
                 for( EDA_ITEM* item : sel_items )
                 {
+                    BOARD_ITEM* board_item = (BOARD_ITEM*) item;
+
                     // Don't double move footprint pads, fields, etc.
                     if( item->GetParent() && item->GetParent()->IsSelected() )
                         continue;
 
-                    static_cast<BOARD_ITEM*>( item )->Move( movement );
-                    m_selectionTool->AddItemToSel( static_cast<BOARD_ITEM*>( item ), true );
+                    board_item->Move( movement );
+                    m_selectionTool->AddItemToSel( board_item, true /*quiet mode*/ );
                 }
 
                 frame()->UpdateMsgPanel();

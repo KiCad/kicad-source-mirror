@@ -105,6 +105,7 @@ public:
 
     ///> Clear current selection event handler.
     int ClearSelection( const TOOL_EVENT& aEvent );
+    void ClearSelection( bool aQuietMode = false );
 
     ///> Item selection event handler.
     int SelectItem( const TOOL_EVENT& aEvent );
@@ -260,12 +261,6 @@ private:
 
     ///> Invoke filter dialog and modify current selection
     int filterSelection( const TOOL_EVENT& aEvent );
-
-    /**
-     * Function clearSelection()
-     * Clears the current selection.
-     */
-    void clearSelection();
 
     /**
      * Function pickSmallestComponent()
