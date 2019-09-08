@@ -995,7 +995,8 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
     case WXK_TAB:
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_EASING_IN_OUT );
         m_settings.CameraGet().SetT0_and_T1_current_T();
-        m_settings.CameraGet().RotateZ_T1( glm::radians( 45.0f ) );
+        // m_settings.CameraGet().RotateZ_T1( glm::radians( 45.0f ) );
+        m_settings.CameraGet().RotateY_T1( glm::radians( 15.0f ) );  // maui       
         request_start_moving_camera();
         handled = true;
         break;
@@ -1022,7 +1023,6 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
     case '-':
         break;
 
-    case 't':
     case 'T':
         m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL,
                             !m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL ) );
@@ -1030,7 +1030,6 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         handled = true;
         break;
 
-    case 's':
     case 'S':
         m_settings.SetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT,
                             !m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT ) );
@@ -1038,7 +1037,6 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         handled = true;
         break;
 
-    case 'v':
     case 'V':
         m_settings.SetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL,
                             !m_settings.GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL ) );
@@ -1046,7 +1044,78 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         handled = true;
         break;
 
-    case 'r':
+    case 'Q': // toggle Quality Realistic rendering maui
+        m_settings.SetFlag( FL_USE_REALISTIC_MODE,
+                            !m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
+        ReloadRequest();
+        handled = true;
+        break;
+
+    case 'B': // toggle body visibility maui
+        m_settings.SetFlag( FL_SHOW_BOARD_BODY,
+                            !m_settings.GetFlag( FL_SHOW_BOARD_BODY ) );
+        ReloadRequest();
+        handled = true;
+        break;
+
+    case 'F': // toggle fill zone visibility maui
+        m_settings.SetFlag( FL_ZONE,
+                            !m_settings.GetFlag( FL_ZONE ) );
+        ReloadRequest();
+        handled = true;
+        break;
+
+    case 'K': // toggle silK screen visibility maui
+        m_settings.SetFlag( FL_SILKSCREEN,
+                            !m_settings.GetFlag( FL_SILKSCREEN ) );
+        ReloadRequest();
+        handled = true;
+        break;
+
+    case 'M': // toggle solder Mask visibility maui
+        m_settings.SetFlag( FL_SOLDERMASK,
+                            !m_settings.GetFlag( FL_SOLDERMASK ) );
+        ReloadRequest();
+        handled = true;
+        break;
+
+    case 'P': // toggle solder Paste visibility maui
+        m_settings.SetFlag( FL_SOLDERPASTE,
+                            !m_settings.GetFlag( FL_SOLDERPASTE ) );
+        ReloadRequest();
+        handled = true;
+        break;
+
+    case 'A': // toggle Appearance material Properties visibility maui 
+              // missing update menu properties
+        // wxLogMessage( wxT( "MATERIAL_MODE %d" ),
+        //               m_settings.MaterialModeGet () );
+                      
+        if ( m_settings.MaterialModeGet () == MATERIAL_MODE_NORMAL )
+        {
+            m_settings.MaterialModeSet( MATERIAL_MODE_DIFFUSE_ONLY );
+        }
+        else {
+            m_settings.MaterialModeSet( MATERIAL_MODE_NORMAL );
+        }
+        ReloadRequest();
+        handled = true;
+        break;
+
+    case 'C': // toggle Comments and Drawings visibility maui
+        m_settings.SetFlag( FL_COMMENTS,
+                            !m_settings.GetFlag( FL_COMMENTS ) );
+        ReloadRequest();
+        handled = true;
+        break;
+
+    case 'E': // toggle Eco layers visibility maui
+        m_settings.SetFlag( FL_ECO,
+                            !m_settings.GetFlag( FL_ECO ) );
+        ReloadRequest();
+        handled = true;
+        break;
+
     case 'R':
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
@@ -1089,21 +1158,41 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         request_start_moving_camera();
         return true;
 
-    case 'Z':
+    case 'Z':  //maui
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Reset_T1();
-        request_start_moving_camera(
-                    glm::min( glm::max( m_settings.CameraGet().ZoomGet(), 0.5f ), 1.125f ) );
+        request_start_moving_camera();  // maui
+        // request_start_moving_camera(
+        //            glm::min( glm::max( m_settings.CameraGet().ZoomGet(), 0.5f ), 1.125f ) );
         return true;
 
-    case GR_KB_SHIFT + 'Z':
+    case GR_KB_SHIFT + 'Z':  //maui
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Reset_T1();
-        m_settings.CameraGet().RotateY_T1( glm::radians( 180.0f ) );
+        //m_settings.CameraGet().RotateX_T1( glm::radians( 180.0f ) );
+        m_settings.CameraGet().RotateY_T1( glm::radians( 180.0f ) ); //maui
+        request_start_moving_camera();  // maui
+        //request_start_moving_camera(  //maui
+        //            glm::min( glm::max( m_settings.CameraGet().ZoomGet(), 0.5f ), 1.125f ) );
+        return true;
+
+    case 'O':  //maui
+        m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
+        m_settings.CameraGet().SetT0_and_T1_current_T();
+        m_settings.CameraGet().Reset_T1();
         request_start_moving_camera(
-                    glm::min( glm::max( m_settings.CameraGet().ZoomGet(), 0.5f ), 1.125f ) );
+                   glm::min( glm::max( m_settings.CameraGet().ZoomGet(), 0.5f ), 1.125f ) );
+        return true;
+
+    case GR_KB_SHIFT + 'O':  //maui
+        m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
+        m_settings.CameraGet().SetT0_and_T1_current_T();
+        m_settings.CameraGet().Reset_T1();
+        m_settings.CameraGet().RotateY_T1( glm::radians( 180.0f ) ); //maui
+        request_start_moving_camera(
+                   glm::min( glm::max( m_settings.CameraGet().ZoomGet(), 0.5f ), 1.125f ) );
         return true;
 
     default:

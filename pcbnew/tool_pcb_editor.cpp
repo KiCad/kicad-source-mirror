@@ -263,7 +263,12 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     ADD_TOOL( ID_SHEET_SET, sheetset_xpm, _( "Page settings for paper size and texts" ) );
     ADD_TOOL( wxID_PRINT, print_button_xpm, _( "Print board" ) );
     ADD_TOOL( ID_GEN_PLOT, plot_xpm, _( "Plot (HPGL, PostScript, or GERBER format)" ) );
-
+	// maui 03.2013 // 3D view & Flip
+	ADD_TOOL( ID_MENU_PCB_SHOW_3D_FRAME, three_d_xpm ,
+                            _( "Show board in 3D viewer" ) );
+    m_mainToolBar->AddTool( ID_MENU_PCB_FLIP_VIEW, wxEmptyString, KiBitmap( flip_board_xpm ),
+                            _( "Flip board View" ), wxITEM_CHECK  );
+	// maui 03.2013 end // 3D view
     KiScaledSeparator( m_mainToolBar, this );
     msg = AddHotkeyName( HELP_UNDO, g_Board_Editor_Hotkeys_Descr, HK_UNDO, IS_COMMENT );
     ADD_TOOL( wxID_UNDO, undo_xpm, msg );

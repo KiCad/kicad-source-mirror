@@ -158,7 +158,7 @@ void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
                  _( "Show preferences for all open tools" ),
                  KiBitmap( preference_xpm ) );
 
-    if( ADVANCED_CFG::GetCfg().AllowLegacyCanvas() )
+    if( 1 ) // maui allow Legacy canvas // ADVANCED_CFG::GetCfg().AllowLegacyCanvas() )
     {
         text = AddHotkeyName(
                 _( "Legacy Tool&set" ), g_Board_Editor_Hotkeys_Descr, HK_CANVAS_LEGACY );

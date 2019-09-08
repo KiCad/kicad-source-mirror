@@ -85,7 +85,8 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
     PCB_SCREEN* screen = parent->GetScreen();
     wxPoint     pos;
 
-    wxString searchString = m_SearchTextCtrl->GetValue();
+    //wxString searchString = m_SearchTextCtrl->GetValue();
+    wxString searchString = "*" + m_SearchTextCtrl->GetValue() + "*";  // maui
 
     if( !searchString.IsSameAs( prevSearchString, false ) )
     {
