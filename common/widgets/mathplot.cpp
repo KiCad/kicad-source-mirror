@@ -715,8 +715,11 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
                     continue;
                 }
 
-                if( x0 == x1 )      // continue until a new X coordinate is reached
-                    continue;
+//                This gives disastrous results with very high-frequency plots where the
+//                X coordinate may not increment until several waves later
+//
+//                if( x0 == x1 )      // continue until a new X coordinate is reached
+//                    continue;
 
                 bool outDown = ( y0 > maxYpx ) && ( y1 > maxYpx );
                 bool outUp = ( y0 < minYpx ) && ( y1 < minYpx );
