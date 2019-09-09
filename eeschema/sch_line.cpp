@@ -719,6 +719,10 @@ bool SCH_LINE::operator <( const SCH_ITEM& aItem ) const
 
 bool SCH_LINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
+    // Performance enhancement for connection-building
+    if( aPosition == m_start || aPosition == m_end )
+        return true;
+
     return TestSegmentHit( aPosition, m_start, m_end, aAccuracy );
 }
 
