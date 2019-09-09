@@ -40,9 +40,9 @@ bool SEG::PointCloserThan( const VECTOR2I& aP, int aDist ) const
     SEG::ecoord t = d.Dot( aP - A );
 
     if( t <= 0 || !l_squared )
-        return ( aP - A ).SquaredEuclideanNorm() < dist_sq;
+        return ( aP - A ).SquaredEuclideanNorm() <= dist_sq;
     else if( t >= l_squared )
-        return ( aP - B ).SquaredEuclideanNorm() < dist_sq;
+        return ( aP - B ).SquaredEuclideanNorm() <= dist_sq;
 
     int dxdy = abs( d.x ) - abs( d.y );
 
