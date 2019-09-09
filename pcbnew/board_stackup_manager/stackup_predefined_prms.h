@@ -59,48 +59,6 @@ struct FAB_LAYER_COLOR
 };
 
 
-// A minor struct to handle substrates prms in gerber job file and dialog
-struct FAB_SUBSTRATE
-{
-    wxString m_Name;            // the name (in job file) of material
-    double m_EpsilonR;          // the epsilon r of this material
-    double m_LossTangent;       // the loss tangent (tanD) of this material
-    wxString FormatEpsilonR();  // return a wxString to print/display Epsilon R
-    wxString FormatLossTangent();// return a wxString to print/display Loss Tangent
-};
-
-
-// A struct to handle a list of substrates prms in gerber job file and dialogs
-class FAB_SUBSTRATE_LIST
-{
-    ///> The list of available substrates. It contians at least predefined substrates
-    std::vector<FAB_SUBSTRATE> m_substrateList;
-
-public:
-    FAB_SUBSTRATE_LIST();
-
-    /**
-     * @return the number of substrates in list
-     */
-    int GetCount() { return (int)m_substrateList.size(); }
-
-    /**
-     * @return the substrate in list of index aIdx
-     *  if incorrect return nullptr
-     * @param aIdx is the index in substrate list.
-     */
-    FAB_SUBSTRATE* GetSubstrate( int aIdx );
-
-    /**
-     * @return the substrate in list of name aName
-     *  if not found return nullptr
-     * @param aName is the name of the substrate in substrate list.
-     * the comparison is case insensitve
-     */
-    FAB_SUBSTRATE* GetSubstrate( const wxString& aName );
-};
-
-
 /**
  * @return a wxArray of standard copper finish names.
  * @param aTranslate = false for the initial names, true for translated names

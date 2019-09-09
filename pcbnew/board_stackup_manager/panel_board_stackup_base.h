@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -51,15 +51,15 @@ class PANEL_SETUP_BOARD_STACKUP_BASE : public wxPanel
 		wxBoxSizer* m_sizerStackup;
 		wxScrolledWindow* m_scGridWin;
 		wxFlexGridSizer* m_fgGridSizer;
-		wxStaticText* m_staticText7;
+		wxStaticText* m_staticTextLayer;
 		wxStaticText* m_staticText8;
-		wxStaticText* m_staticText9;
-		wxStaticText* m_staticText10;
-		wxStaticText* m_staticText101;
+		wxStaticText* m_staticTextType;
+		wxStaticText* m_staticTextMaterial;
+		wxStaticText* m_staticTextThickness;
 		wxStaticBitmap* m_bitmapLockThickness;
-		wxStaticText* m_staticText102;
-		wxStaticText* m_staticText103;
-		wxStaticText* m_staticText104;
+		wxStaticText* m_staticTextColor;
+		wxStaticText* m_staticTextEpsilonR;
+		wxStaticText* m_staticTextLossTg;
 		wxRadioBox* m_rbDielectricConstraint;
 		wxCheckBox* m_cbCastellatedPads;
 		wxCheckBox* m_cbEgdesPlated;

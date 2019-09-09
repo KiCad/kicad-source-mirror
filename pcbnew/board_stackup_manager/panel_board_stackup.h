@@ -34,6 +34,7 @@
 #include "panel_board_stackup_base.h"
 #include "class_board_stackup.h"
 #include "stackup_predefined_prms.h"
+#include "dielectric_material.h"
 
 class wxBitmapComboBox;
 class PANEL_SETUP_LAYERS;
@@ -52,7 +53,8 @@ struct BOARD_STACKUP_ROW_UI_ITEM
     wxStaticBitmap* m_Icon;             // Color icon in first column (column 1)
     wxStaticText*   m_LayerName;        // string shown in column 2
     wxControl*      m_LayerTypeCtrl;    // control shown in column 3
-    wxControl*      m_MaterialCtrl;     // control shown in column 4
+    wxControl*      m_MaterialCtrl;     // control shown in column 4, with m_MaterialButt
+    wxButton*       m_MaterialButt;     // control shown in column 4, with m_MaterialCtrl
     wxControl*      m_ThicknessCtrl;    // control shown in column 5
     wxControl*      m_ThicknessLockCtrl;// control shown in column 6
     wxControl*      m_ColorCtrl;        // control shown in column 7
@@ -61,8 +63,10 @@ struct BOARD_STACKUP_ROW_UI_ITEM
 
     BOARD_STACKUP_ROW_UI_ITEM() :
         m_isEnabled( true ), m_Icon( nullptr ), m_LayerName( nullptr ),
-        m_LayerTypeCtrl( nullptr ), m_MaterialCtrl( nullptr ),
+        m_LayerTypeCtrl( nullptr ),
+        m_MaterialCtrl( nullptr ),m_MaterialButt( nullptr ),
         m_ThicknessCtrl( nullptr ), m_ThicknessLockCtrl( nullptr ),
+        m_ColorCtrl( nullptr ),
         m_EpsilonCtrl( nullptr ), m_LossTgCtrl( nullptr )
     {}
 };
@@ -98,7 +102,18 @@ public:
     std::vector<wxColor> m_UserColors;  // the list of user colors for each grid row
                                         // other colors are defined colors, and are not stored
 private:
+    /** add a Spacer in m_fgGridSizer when a empty cell is needed
+     */
     wxControl* addSpacer();
+
+    /** add a control (a wxTextCtrl + a button) in m_fgGridSizer to select a material
+     * @param aId is the wxControl id, used to know the event source
+     * @param aMaterialName is the the name of the currently selected material (can be null)
+     * @param aUiRowItem is the the BOARD_STACKUP_ROW_UI_ITEM to store the controls
+     * created
+     */
+    void addMaterialChooser( wxWindowID aId, const wxString * aMaterialName,
+                             BOARD_STACKUP_ROW_UI_ITEM& aUiRowItem );
 
     /** Populate m_fgGridSizer with items to handle stackup parameters
      * This is a full list:
@@ -167,7 +182,7 @@ private:
                                             // restricted to allowed layers in stackup.
                                             // when do not match the enabled layers
                                             // in PANEL_SETUP_LAYERS the stackup is not up to date
-    FAB_SUBSTRATE_LIST m_materialList;      // a list of currently available materials
+    DIELECTRIC_SUBSTRATE_LIST m_materialList;      // a list of currently available materials
     std::vector<BOARD_STACKUP_ROW_UI_ITEM> m_rowUiItemsList;    // List of items in m_fgGridSizer
     BOARD*          m_board;
     BOARD_DESIGN_SETTINGS*  m_brdSettings;

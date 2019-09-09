@@ -183,10 +183,13 @@ if( KICAD_SCRIPTING AND KICAD_SCRIPTING_ACTION_MENU )
 endif()
 
 set( PCBNEW_BRDSTACKUP_MGR
+    board_stackup_manager/dielectric_material.cpp
     board_stackup_manager/stackup_predefined_prms.cpp
     board_stackup_manager/panel_board_stackup.cpp
     board_stackup_manager/panel_board_stackup_base.cpp
     board_stackup_manager/board_stackup_reporter.cpp
+    board_stackup_manager/dialog_dielectric_list_manager_base.cpp
+    board_stackup_manager/dialog_dielectric_list_manager.cpp
     )
 
 set( PCBNEW_IMPORT_GFX
