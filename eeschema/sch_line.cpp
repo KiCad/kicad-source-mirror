@@ -319,7 +319,7 @@ int SCH_LINE::GetPenSize() const
 {
     if( m_size > 0 )
         return m_size;
-    
+
     return GetDefaultWidth();
 }
 
@@ -708,6 +708,10 @@ bool SCH_LINE::operator <( const SCH_ITEM& aItem ) const
 
 bool SCH_LINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
+    // Performance enhancement for connection-building
+    if( aPosition == m_start || aPosition == m_end )
+        return true;
+
     // Insure minimum accuracy
     if( aAccuracy == 0 )
         aAccuracy = ( GetPenSize() / 2 ) + 4;
