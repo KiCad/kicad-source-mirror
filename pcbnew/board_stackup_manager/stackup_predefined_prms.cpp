@@ -72,7 +72,7 @@ static FAB_LAYER_COLOR solderMaskColors[]  =
     { _HKI( "White" ), wxColor( 200, 200, 200 ) },      // used in .gbrjob file
     { _HKI( "Yellow" ), wxColor( 128, 128, 0 ) },       // used in .gbrjob file
     { _HKI( "Purple" ), wxColor( 100, 0, 100 ) },       // used in .gbrjob file
-    { _HKI( "user defined" ), wxColor( 128, 128, 128 ) }, //free. the name is a dummy name here
+    { _HKI( USER_DEFINED ), wxColor( 128, 128, 128 ) }, //free. the name is a dummy name here
     { "", wxColor( 0, 0, 0 ) }                          // Sentinel
 };
 
@@ -91,9 +91,55 @@ static FAB_SUBSTRATE substrateMaterial[]  =
     { _HKI( "PTFE" ), 2.1, 0.0002 },        // used in .gbrjob file
     { _HKI( "Teflon" ), 2.1, 0.0002 },      // used in .gbrjob file
     { _HKI( "Ceramic" ), 1.0, 0.0 },        // used in .gbrjob file
-    { _HKI( "user defined" ), 1.0, 0.0 },   // Free
-    { "", 0.0, 0.0 }                        // Sentinel
+    { _HKI( USER_DEFINED ), 1.0, 0.0 },     // Free string
 };
+
+
+wxString FAB_SUBSTRATE::FormatEpsilonR()
+{
+    // return a wxString to print/display Epsilon R
+    wxString txt;
+    txt.Printf( "%.1f", m_EpsilonR );
+    return txt;
+}
+
+
+wxString FAB_SUBSTRATE::FormatLossTangent()
+{
+    // return a wxString to print/display Loss Tangent
+    wxString txt;
+    txt.Printf( "%g", m_LossTangent );
+    return txt;
+}
+
+
+FAB_SUBSTRATE_LIST::FAB_SUBSTRATE_LIST()
+{
+    // Fills the m_substrateList with predefined params:
+    for( unsigned ii = 0; ii < arrayDim( substrateMaterial ); ++ii )
+        m_substrateList.push_back( substrateMaterial[ii] );
+}
+
+
+FAB_SUBSTRATE* FAB_SUBSTRATE_LIST::GetSubstrate( int aIdx )
+{
+    if( aIdx >= 0 && aIdx < GetCount() )
+        return &m_substrateList[aIdx];
+
+    return nullptr;
+}
+
+
+FAB_SUBSTRATE* FAB_SUBSTRATE_LIST::GetSubstrate( const wxString& aName )
+{
+    for( FAB_SUBSTRATE& item : m_substrateList )
+    {
+        if( item.m_Name.CmpNoCase( aName ) == 0 )
+            return &item;
+    }
+
+    return nullptr;
+}
 
 
 wxArrayString GetCopperFinishStandardList( bool aTranslate )
@@ -124,8 +170,3 @@ int GetColorUserDefinedListIdx()
     return GetColorStandardListCount() - 1;
 }
 
-
-const FAB_SUBSTRATE* GetSubstrateMaterialStandardList()
-{
-    return substrateMaterial;
-}

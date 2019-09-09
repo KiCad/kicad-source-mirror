@@ -105,6 +105,12 @@ public:
 
     /// @return a reasonable default value for a solder mask layer thickness
     static int GetMaskDefaultThickness();
+
+    /// @return a wxString to print/display Epsilon R
+    wxString FormatEpsilonR();
+
+    /// @return a wxString to print/display Loss Tangent
+    wxString FormatLossTangent();
 };
 
 

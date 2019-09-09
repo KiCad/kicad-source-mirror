@@ -32,7 +32,6 @@
 #include <wx/rawbmp.h>
 
 #include "panel_board_stackup.h"
-#include "stackup_predefined_prms.h"
 #include <panel_setup_layers.h>
 #include "board_stackup_reporter.h"
 #include <bitmaps.h>
@@ -259,12 +258,11 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
 
             if( item->IsMaterialEditable() )
             {
-                const FAB_SUBSTRATE* material_list = GetSubstrateMaterialStandardList();
                 wxChoice* choice = dynamic_cast<wxChoice*>( ui_row_item.m_MaterialCtrl );
 
-                for( int ii = 0; !material_list->m_Name.IsEmpty(); ++material_list, ii++ )
+                for( int ii = 0; ii < m_materialList.GetCount(); ii++ )
                 {
-                    if( material_list->m_Name == item->m_Material )
+                    if( m_materialList.GetSubstrate( ii )->m_Name == item->m_Material )
                     {
                         if( choice )
                             choice->SetSelection( ii );
@@ -394,11 +392,10 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
     m_core_prepreg_choice.Add( _( "PrePreg" ) );
 
     // Build an array string of available materials (for substrate/dielectric)
-    const FAB_SUBSTRATE* material_list = GetSubstrateMaterialStandardList();
     wxArrayString materialChoices;
 
-    for( ; !material_list->m_Name.IsEmpty(); ++material_list )
-        materialChoices.Add( wxGetTranslation( material_list->m_Name ) );
+    for( int ii = 0; ii < m_materialList.GetCount(); ii++ )
+        materialChoices.Add( wxGetTranslation( m_materialList.GetSubstrate( ii )->m_Name ) );
 
     // Build a full stackup for the dialog, with a active copper layer count
     // = current board layer count to calculate a reasonable default
@@ -464,11 +461,10 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
         {
             wxChoice* choice = new wxChoice( m_scGridWin, ID_ITEM_MATERIAL+row, wxDefaultPosition,
                                              wxDefaultSize, materialChoices );
-            material_list = GetSubstrateMaterialStandardList();
 
-            for( int ii = 0; !material_list->m_Name.IsEmpty(); ++material_list, ii++ )
+            for( int ii = 0; ii < m_materialList.GetCount(); ii++ )
             {
-                if( material_list->m_Name == item->m_Material )
+                if( m_materialList.GetSubstrate( ii )->m_Name == item->m_Material )
                     choice->SetSelection( ii );
             }
 
@@ -709,10 +705,9 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
 
         if( item->IsMaterialEditable() )
         {
-            const FAB_SUBSTRATE* material_list = GetSubstrateMaterialStandardList();
             wxChoice* choice = static_cast<wxChoice*>(  m_rowUiItemsList[row].m_MaterialCtrl );
             int idx = choice->GetSelection();
-            item->m_Material = material_list[idx].m_Name;
+            item->m_Material = m_materialList.GetSubstrate( idx )->m_Name;
         }
 
         if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
@@ -972,19 +967,18 @@ void PANEL_SETUP_BOARD_STACKUP::onMaterialChange( wxCommandEvent& event )
 {
     int row  = event.GetId() - ID_ITEM_MATERIAL;
     int selection = event.GetSelection();
-    const FAB_SUBSTRATE* material_list = GetSubstrateMaterialStandardList();
 
     // Update Epsilon R and Loss tg
+    BOARD_STACKUP_ITEM* item = GetStackupItem( row );
+    item->m_Material = m_materialList.GetSubstrate( selection )->m_Name;
+    item->m_EpsilonR = m_materialList.GetSubstrate( selection )->m_EpsilonR;
+    item->m_LossTangent = m_materialList.GetSubstrate( selection )->m_LossTangent;
+
     wxTextCtrl* textCtrl = static_cast<wxTextCtrl*>( m_rowUiItemsList[row].m_EpsilonCtrl );
-    textCtrl->SetValue( wxString::Format( "%.1f", material_list[selection].m_EpsilonR ) );
+    textCtrl->SetValue( item->FormatEpsilonR() );
 
     textCtrl = static_cast<wxTextCtrl*>( m_rowUiItemsList[row].m_LossTgCtrl );
-    textCtrl->SetValue( wxString::Format( "%g", material_list[selection].m_Loss ) );
-
-    BOARD_STACKUP_ITEM* item = GetStackupItem( row );
-    item->m_Material = material_list[selection].m_Name;
-    item->m_EpsilonR = material_list[selection].m_EpsilonR;
-    item->m_LossTangent = material_list[selection].m_Loss;
+    textCtrl->SetValue( item->FormatLossTangent() );
 }
 
 

@@ -164,6 +164,25 @@ bool BOARD_STACKUP_ITEM::IsThicknessEditable()
 }
 
 
+wxString BOARD_STACKUP_ITEM::FormatEpsilonR()
+{
+    // return a wxString to print/display Epsilon R
+    wxString txt;
+    txt.Printf( "%.1f", m_EpsilonR );
+    return txt;
+}
+
+
+wxString BOARD_STACKUP_ITEM::FormatLossTangent()
+{
+    // return a wxString to print/display Loss Tangent
+    wxString txt;
+    txt.Printf( "%g", m_LossTangent );
+    return txt;
+}
+
+
+
 BOARD_STACKUP::BOARD_STACKUP()
 {
     m_HasDielectricConstrains = false;  // True if some dielectric layers have constrains

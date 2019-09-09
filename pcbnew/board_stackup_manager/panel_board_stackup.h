@@ -33,6 +33,7 @@
 
 #include "panel_board_stackup_base.h"
 #include "class_board_stackup.h"
+#include "stackup_predefined_prms.h"
 
 class wxBitmapComboBox;
 class PANEL_SETUP_LAYERS;
@@ -166,6 +167,7 @@ private:
                                             // restricted to allowed layers in stackup.
                                             // when do not match the enabled layers
                                             // in PANEL_SETUP_LAYERS the stackup is not up to date
+    FAB_SUBSTRATE_LIST m_materialList;      // a list of currently available materials
     std::vector<BOARD_STACKUP_ROW_UI_ITEM> m_rowUiItemsList;    // List of items in m_fgGridSizer
     BOARD*          m_board;
     BOARD_DESIGN_SETTINGS*  m_brdSettings;

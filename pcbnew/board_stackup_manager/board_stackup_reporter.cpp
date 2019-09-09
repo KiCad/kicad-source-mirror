@@ -59,13 +59,13 @@ wxString BuildStackupReport( BOARD_STACKUP& aStackup, EDA_UNITS_T aUnits )
 
         if( item->HasEpsilonRValue() )
         {
-            txt.Printf( " EpsilonR %f", item->m_EpsilonR );
+            txt.Printf( " EpsilonR %s", item->FormatEpsilonR() );
             report << txt;
         }
 
         if( item->HasLossTangentValue() )
         {
-            txt.Printf( " LossTg %f", item->m_LossTangent );
+            txt.Printf( " LossTg %s", item->FormatLossTangent() );
             report << txt;
         }
 
