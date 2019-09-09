@@ -131,8 +131,8 @@ void CINFO3D_VISU::buildPadShapeThickOutlineAsPolygon( const D_PAD* aPad,
         const VECTOR2I& a = path.CPoint( ii );
         const VECTOR2I& b = path.CPoint( ii + 1 );
 
-        TransformRoundedEndsSegmentToPolygon( aCornerBuffer, wxPoint( a.x, a.y ),
-                wxPoint( b.x, b.y ), ARC_HIGH_DEF, aWidth );
+        TransformSegmentToPolygon( aCornerBuffer, wxPoint( a.x, a.y ),
+                                   wxPoint( b.x, b.y ), ARC_HIGH_DEF, aWidth );
     }
 }
 

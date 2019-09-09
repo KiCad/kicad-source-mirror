@@ -258,15 +258,15 @@ bool D_PAD::buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError )
 
             for( unsigned ii = 1; ii < poly.size(); ii++ )
             {
-                TransformRoundedEndsSegmentToPolygon(
-                        aux_polyset, poly[ii - 1], poly[ii], aError, bshape.m_Thickness );
+                TransformSegmentToPolygon(
+                        aux_polyset, poly[ ii - 1 ], poly[ ii ], aError, bshape.m_Thickness );
             }
             break;
         }
 
         case S_SEGMENT:         // usual segment : line with rounded ends
         {
-            TransformRoundedEndsSegmentToPolygon(
+            TransformSegmentToPolygon(
                     aux_polyset, bshape.m_Start, bshape.m_End, aError, bshape.m_Thickness );
             break;
         }

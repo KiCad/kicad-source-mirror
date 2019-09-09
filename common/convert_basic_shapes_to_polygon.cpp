@@ -59,8 +59,7 @@ void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aBuffer,
 }
 
 
-void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                               wxPoint aCenter, int aRadius,
+void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, int aRadius,
                                int aError )
 {
     wxPoint corner_position;
@@ -84,9 +83,8 @@ void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 }
 
 
-void TransformOvalClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                      wxPoint aStart, wxPoint aEnd, int aWidth,
-                                      int aError )
+void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoint aEnd,
+                             int aWidth, int aError )
 {
     // To build the polygonal shape outside the actual shape, we use a bigger
     // radius to build rounded ends.
@@ -314,9 +312,9 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 }
 
 
-void TransformRoundedEndsSegmentToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                           wxPoint aStart, wxPoint aEnd,
-                                           int aError, int aWidth )
+void TransformSegmentToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                wxPoint aStart, wxPoint aEnd,
+                                int aError, int aWidth )
 {
     int      radius  = aWidth / 2;
     wxPoint  endp    = aEnd - aStart; // end point coordinate for the same segment starting at (0,0)
@@ -414,13 +412,13 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     {
         curr_end = arc_start;
         RotatePoint( &curr_end, aCentre, -ii );
-        TransformRoundedEndsSegmentToPolygon( aCornerBuffer, curr_start, curr_end, aError,
-                aWidth );
+        TransformSegmentToPolygon( aCornerBuffer, curr_start, curr_end, aError,
+                                   aWidth );
         curr_start = curr_end;
     }
 
     if( curr_end != arc_end )
-        TransformRoundedEndsSegmentToPolygon( aCornerBuffer, curr_end, arc_end, aError, aWidth );
+        TransformSegmentToPolygon( aCornerBuffer, curr_end, arc_end, aError, aWidth );
 }
 
 

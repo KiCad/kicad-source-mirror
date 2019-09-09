@@ -63,9 +63,8 @@ enum RECT_CHAMFER_POSITIONS : int
  * Note: the polygon is inside the circle, so if you want to have the polygon
  * outside the circle, you should give aRadius calculated with a correction factor
  */
-void TransformCircleToPolygon( SHAPE_POLY_SET&  aCornerBuffer,
-                                                wxPoint aCenter, int aRadius,
-                                                int aError );
+void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCenter, int aRadius,
+                               int aError );
 
 
 /**
@@ -82,9 +81,8 @@ void TransformCircleToPolygon( SHAPE_POLY_SET&  aCornerBuffer,
  * @param aWidth = the width of the segment
  * @param aError = the IU allowed for error in approximation
  */
-void TransformOvalClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                wxPoint aStart, wxPoint aEnd, int aWidth,
-                                int aError );
+void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoint aEnd,
+                             int aWidth, int aError );
 
 
 /**
@@ -97,8 +95,8 @@ void TransformOvalClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
  * @param aSize = size of the of the round rect.
  * @param aRotation = rotation of the of the round rect
  */
-void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius,
-            const wxPoint& aPosition, const wxSize& aSize, double aRotation );
+void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius, const wxPoint& aPosition,
+                                const wxSize& aSize, double aRotation );
 
 
 /**
@@ -124,10 +122,10 @@ void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius,
  * (must be a multiple of 4 becauseusually arcs are 90 deg.
  */
 void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                  const wxPoint& aPosition, const wxSize& aSize,
-                                  double aRotation, int aCornerRadius,
-                                  double aChamferRatio, int aChamferCorners,
-                                  int aApproxErrorMax, int aMinSegPerCircleCount = 16 );
+                                           const wxPoint& aPosition, const wxSize& aSize,
+                                           double aRotation, int aCornerRadius,
+                                           double aChamferRatio, int aChamferCorners,
+                                           int aApproxErrorMax, int aMinSegPerCircleCount = 16 );
 
 /**
  * Function TransformRoundedEndsSegmentToPolygon
@@ -141,10 +139,8 @@ void TransformRoundChamferedRectToPolygon( SHAPE_POLY_SET& aCornerBuffer,
  * Note: the polygon is inside the arc ends, so if you want to have the polygon
  * outside the circle, you should give aStart and aEnd calculated with a correction factor
  */
-void TransformRoundedEndsSegmentToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                           wxPoint aStart, wxPoint aEnd,
-                                           int aError,
-                                           int aWidth );
+void TransformSegmentToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPoint aEnd,
+                                int aError, int aWidth );
 
 
 /**
@@ -158,9 +154,8 @@ void TransformRoundedEndsSegmentToPolygon( SHAPE_POLY_SET& aCornerBuffer,
  * @param aError = the IU allowed for error in approximation
  * @param aWidth = width (thickness) of the line
  */
-void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                            wxPoint aCentre, wxPoint aStart, double aArcAngle,
-                            int aError, int aWidth );
+void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCentre, wxPoint aStart,
+                            double aArcAngle, int aError, int aWidth );
 
 /**
  * Function TransformRingToPolygon
@@ -172,8 +167,7 @@ void TransformArcToPolygon( SHAPE_POLY_SET& aCornerBuffer,
  * @param aError = the IU allowed for error in approximation
  * @param aWidth = width (thickness) of the ring
  */
-void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                            wxPoint aCentre, int aRadius,
-                            int aError, int aWidth );
+void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aCentre, int aRadius,
+                             int aError, int aWidth );
 
 #endif     // CONVERT_BASIC_SHAPES_TO_POLYGON_H

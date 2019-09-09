@@ -528,8 +528,8 @@ void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
     // enter outline as polygon:
     for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
     {
-        TransformRoundedEndsSegmentToPolygon( bufferOutline,
-            aCornerList[ii-1], aCornerList[ii], GetPlotterArcHighDef(), aWidth );
+        TransformSegmentToPolygon( bufferOutline,
+                                   aCornerList[ ii - 1 ], aCornerList[ ii ], GetPlotterArcHighDef(), aWidth );
     }
 
     // enter the initial polygon:
@@ -615,8 +615,7 @@ void DXF_PLOTTER::ThickSegment( const wxPoint& aStart, const wxPoint& aEnd, int 
     {
         std::vector<wxPoint> cornerList;
         SHAPE_POLY_SET outlineBuffer;
-        TransformOvalClearanceToPolygon( outlineBuffer,
-                aStart, aEnd, aWidth, GetPlotterArcHighDef() );
+        TransformOvalToPolygon( outlineBuffer, aStart, aEnd, aWidth, GetPlotterArcHighDef());
         const SHAPE_LINE_CHAIN& path = outlineBuffer.COutline(0 );
 
         for( int jj = 0; jj < path.PointCount(); jj++ )
