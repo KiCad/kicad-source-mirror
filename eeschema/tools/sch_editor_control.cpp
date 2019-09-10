@@ -51,6 +51,7 @@
 #include <dialogs/dialog_fields_editor_global.h>
 #include <invoke_sch_dialog.h>
 #include <dialogs/dialog_paste_special.h>
+#include <netlist_exporters/netlist_exporter_pspice.h>
 
 int SCH_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
 {
@@ -470,9 +471,15 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 SCH_PIN*       pin = (SCH_PIN*) item;
                 SCH_COMPONENT* comp = (SCH_COMPONENT*) item->GetParent();
                 wxString       param;
+                wxString       primitive;
 
-                if( comp->GetPins().size() <= 2 )
+                primitive = NETLIST_EXPORTER_PSPICE::GetSpiceField( SF_PRIMITIVE, comp, 0 );
+                primitive.LowerCase();
+
+                if( primitive == "c" || primitive == "l" || primitive == "r" )
                     param = wxT( "I" );
+                else if( primitive == "d" )
+                    param = wxT( "Id" );
                 else
                     param = wxString::Format( wxT( "I%s" ), pin->GetName().Lower() );
 
