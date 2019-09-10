@@ -1836,6 +1836,8 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
     dwg->SetStart0( *pts.begin() );
     dwg->SetEnd0( pts.back() );
     dwg->SetDrawCoord();
+    dwg->GetPolyShape().Inflate( p.width.ToPcbUnits() / 2, 32,
+                                 SHAPE_POLY_SET::ALLOW_ACUTE_CORNERS );
 }
 
 void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
