@@ -403,7 +403,16 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     else if( m_MultiLineText->IsShown() )
     {
         if( !m_MultiLineText->GetValue().IsEmpty() )
-            m_edaText->SetText( m_MultiLineText->GetValue() );
+        {
+            // On Windows, a new line is coded as \r\n.
+            // We use only \n in kicad files and in drawing routines.
+            // so strip the \r char
+            wxString txt = m_MultiLineText->GetValue();
+#ifdef __WINDOWS__
+            txt.Replace( "\r", "" );
+#endif
+            m_edaText->SetText( txt );
+        }
     }
     else if( m_DimensionText->IsShown() )
     {
