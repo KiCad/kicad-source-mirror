@@ -198,6 +198,7 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
                                               0.00f, 0.30f );
 
         m_materials.m_Copper.m_Shininess = shininessfactor * 128.0f;
+        m_materials.m_Copper.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
 
         // Paste material mixed with paste color
@@ -213,6 +214,7 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
                                                   m_settings.m_SolderPasteColor.b );
 
         m_materials.m_Paste.m_Shininess = 0.1f * 128.0f;
+        m_materials.m_Paste.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
 
         // Silk screen material mixed with silk screen color
@@ -228,6 +230,7 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
                                                   m_settings.m_SilkScreenColor.b + 0.10f );
 
         m_materials.m_SilkS.m_Shininess = 0.078125f * 128.0f;
+        m_materials.m_SilkS.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
 
         // Solder mask material mixed with solder mask color
@@ -244,6 +247,7 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
 
         m_materials.m_SolderMask.m_Shininess = 0.8f * 128.0f;
         m_materials.m_SolderMask.m_Transparency = 0.17f;
+        m_materials.m_SolderMask.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
 
         // Epoxy material
@@ -258,6 +262,7 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
                                                         20.0f / 255.0f );
 
         m_materials.m_EpoxyBoard.m_Shininess = 0.1f * 128.0f;
+        m_materials.m_EpoxyBoard.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
     }
     else    // Technical Mode
     {
@@ -269,34 +274,40 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
         m_materials.m_Copper.m_Ambient   = matAmbientColor;
         m_materials.m_Copper.m_Specular  = matSpecularColor;
         m_materials.m_Copper.m_Shininess = matShininess;
+        m_materials.m_Copper.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
         // Paste material
         m_materials.m_Paste.m_Ambient   = matAmbientColor;
         m_materials.m_Paste.m_Specular  = matSpecularColor;
         m_materials.m_Paste.m_Shininess = matShininess;
+        m_materials.m_Paste.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
         // Silk screen material
         m_materials.m_SilkS.m_Ambient   = matAmbientColor;
         m_materials.m_SilkS.m_Specular  = matSpecularColor;
         m_materials.m_SilkS.m_Shininess = matShininess;
+        m_materials.m_SilkS.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
         // Solder mask material
         m_materials.m_SolderMask.m_Ambient   = matAmbientColor;
         m_materials.m_SolderMask.m_Specular  = matSpecularColor;
         m_materials.m_SolderMask.m_Shininess = matShininess;
         m_materials.m_SolderMask.m_Transparency = 0.17f;
+        m_materials.m_SolderMask.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
         // Epoxy material
         m_materials.m_EpoxyBoard.m_Ambient   = matAmbientColor;
         m_materials.m_EpoxyBoard.m_Diffuse   = m_settings.m_BoardBodyColor;
         m_materials.m_EpoxyBoard.m_Specular  = matSpecularColor;
         m_materials.m_EpoxyBoard.m_Shininess = matShininess;
+        m_materials.m_EpoxyBoard.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
         // Gray material (used for example in technical vias and pad holes)
         m_materials.m_GrayMaterial.m_Ambient    = SFVEC3F( 0.8f, 0.8f, 0.8f );
         m_materials.m_GrayMaterial.m_Diffuse    = SFVEC3F( 0.3f, 0.3f, 0.3f );
         m_materials.m_GrayMaterial.m_Specular   = SFVEC3F( 0.4f, 0.4f, 0.4f );
         m_materials.m_GrayMaterial.m_Shininess  = 0.01f * 128.0f;
+        m_materials.m_GrayMaterial.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
     }
 }
 
@@ -347,6 +358,7 @@ void C3D_RENDER_OGL_LEGACY::set_layer_material( PCB_LAYER_ID aLayerID )
                                     m_materials.m_Plastic.m_Diffuse.b * 0.7f );
 
             m_materials.m_Plastic.m_Shininess = 0.078125f * 128.0f;
+            m_materials.m_Plastic.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
             OGL_SetMaterial( m_materials.m_Plastic );
         break;
 
