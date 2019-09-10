@@ -203,51 +203,40 @@ void PCB_BASE_EDIT_FRAME::InstallTextOptionsFrame( BOARD_ITEM* aText )
 
 void DIALOG_TEXT_PROPERTIES::OnCharHook( wxKeyEvent& aEvent )
 {
-    if( aEvent.GetKeyCode() == WXK_TAB )
+    if( aEvent.GetKeyCode() == WXK_RETURN && aEvent.ShiftDown() )
     {
-        if( aEvent.ControlDown() )
-        {
-            int flags = 0;
-
-            if( !aEvent.ShiftDown() )
-                flags |= wxNavigationKeyEvent::IsForward;
-
-            NavigateIn( flags );
-        }
-        else
+        if( TransferDataFromWindow() )
+            EndModal( wxID_OK );
+    }
+    else if( m_MultiLineText->IsShown() && m_MultiLineText->HasFocus() )
+    {
+        if( aEvent.GetKeyCode() == WXK_TAB && !aEvent.ControlDown() )
         {
             m_MultiLineText->Tab();
         }
-    }
-    else if( m_MultiLineText->IsShown() && IsCtrl( 'Z', aEvent ) )
-    {
-        m_MultiLineText->Undo();
-    }
-    else if( m_MultiLineText->IsShown() && ( IsShiftCtrl( 'Z', aEvent ) || IsCtrl( 'Y', aEvent ) ) )
-    {
-        m_MultiLineText->Redo();
-    }
-    else if( IsCtrl( 'X', aEvent ) )
-    {
-        m_MultiLineText->Cut();
-    }
-    else if( IsCtrl( 'C', aEvent ) )
-    {
-        m_MultiLineText->Copy();
-    }
-    else if( IsCtrl( 'V', aEvent ) )
-    {
-        m_MultiLineText->Paste();
-    }
-    else if( aEvent.GetKeyCode() == WXK_RETURN )
-    {
-        // Allow typing returns into a multi-line text
-        if( m_MultiLineText->IsShown() && m_MultiLineText->HasFocus() && !aEvent.ShiftDown() )
-            aEvent.Skip();
+        else if( IsCtrl( 'Z', aEvent ) )
+        {
+            m_MultiLineText->Undo();
+        }
+        else if( IsShiftCtrl( 'Z', aEvent ) || IsCtrl( 'Y', aEvent ) )
+        {
+            m_MultiLineText->Redo();
+        }
+        else if( IsCtrl( 'X', aEvent ) )
+        {
+            m_MultiLineText->Cut();
+        }
+        else if( IsCtrl( 'C', aEvent ) )
+        {
+            m_MultiLineText->Copy();
+        }
+        else if( IsCtrl( 'V', aEvent ) )
+        {
+            m_MultiLineText->Paste();
+        }
         else
         {
-            if( TransferDataFromWindow() )
-                EndModal( wxID_OK );
+            aEvent.Skip();
         }
     }
     else
