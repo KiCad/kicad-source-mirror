@@ -1217,7 +1217,9 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             // First ask for the amount of desired soldermask clearance
             wxString clearanceString;
             
-            std::string label = (g_UserUnit == INCHES) ? "Clearance (in inches):" : "Clearance (in mm):";
+            EDA_UNITS_T    m_units = GetUserUnits();  // maui RF clearance
+            // wxLogMessage( wxString::Format( _( "m_units value '%d'" ), m_units));
+            std::string label = (m_units == INCHES) ? "Clearance (in inches):" : "Clearance (in mm):";
             wxTextEntryDialog dlg( this, _( label ), _( "Create Soldermask Clearance Around Net" ), clearanceString );
 
             if( dlg.ShowModal() != wxID_OK ) break;
@@ -1229,7 +1231,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             double clearance;
             if( !clearanceString.ToDouble(&clearance) ) break;
 
-            clearance = From_User_Unit( g_UserUnit, clearance );
+            clearance = From_User_Unit( m_units, clearance );
             
             BOARD *pcb = GetBoard();
             PICKED_ITEMS_LIST newItemsList;
