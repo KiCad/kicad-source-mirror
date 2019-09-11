@@ -45,6 +45,7 @@
 # 1) inkscape - command line mode is used, must be on your PATH
 # 2) pngcrush - this program must be on your PATH
 #
+# maui RF round netlist_update round_track soldermask_clearance stitching_vias shielding_vias
 
 # lower case is used for local variables, uppercase for global variables
 
@@ -482,6 +483,7 @@ set( BMAPS_MID
     resize_sheet
     rescue
     right
+    round_track
     router_len_tuner
     router_len_tuner_setup
     router_len_tuner_amplitude_decr

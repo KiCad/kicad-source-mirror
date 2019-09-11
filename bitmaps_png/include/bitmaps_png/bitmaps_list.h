@@ -449,6 +449,7 @@ EXTERN_BITMAP( reset_text_xpm )
 EXTERN_BITMAP( resize_sheet_xpm )
 EXTERN_BITMAP( rescue_xpm )
 EXTERN_BITMAP( right_xpm )
+EXTERN_BITMAP( round_track_xpm )    //maui RF round
 EXTERN_BITMAP( router_len_tuner_xpm )
 EXTERN_BITMAP( router_len_tuner_setup_xpm )
 EXTERN_BITMAP( router_len_tuner_amplitude_decr_xpm )

@@ -461,6 +461,9 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
                 msg = AddHotkeyName( _( "Move" ), g_Board_Editor_Hotkeys_Descr, HK_MOVE_ITEM );
                 AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_TRACK_NODE,
                              msg, KiBitmap( move_xpm ) );
+                AddMenuItem( PopMenu, ID_POPUP_PCB_CREATE_ROUND_CORNER, // maui RF round
+                            _( "Create Round Corner" ), KiBitmap( round_track_xpm ) ); // ( add_tracks_xpm ) ); //( round_track_xpm ) ); // maui RF
+                            //TODO: Make new bitmap for this action in root/bitmaps_png/sources/...
             }
             else
             {

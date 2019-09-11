@@ -129,6 +129,12 @@ TOOL_ACTION PCB_ACTIONS::breakTrack( "pcbnew.InteractiveRouter.BreakTrack",
         _( "Splits the track segment into two segments connected at the cursor position." ),
         break_line_xpm );
 
+TOOL_ACTION PCB_ACTIONS::createRoundCorner( "pcbnew.InteractiveRouter.CreateRoundCorner",  // maui RF round
+        AS_GLOBAL, 0,
+        _( "Create Round Corner" ),
+        _( "Create Round Corner at the two tracks corner." ),
+        round_track_xpm );   // maui RF round end
+
 TOOL_ACTION PCB_ACTIONS::drag45Degree( "pcbnew.InteractiveRouter.Drag45Degree",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DRAG_TRACK_KEEP_SLOPE ),
         _( "Drag (45 degree mode)" ),
