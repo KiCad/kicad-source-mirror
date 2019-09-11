@@ -119,40 +119,40 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_sizeYLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Size Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sizeYLabel->Wrap( -1 );
-	fgSizerShapeType->Add( m_sizeYLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 3 );
+	fgSizerShapeType->Add( m_sizeYLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 3 );
 
 	m_sizeYCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeType->Add( m_sizeYCtrl, 0, wxEXPAND|wxALL, 3 );
+	fgSizerShapeType->Add( m_sizeYCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_sizeYUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_sizeYUnits->Wrap( -1 );
-	fgSizerShapeType->Add( m_sizeYUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 3 );
+	fgSizerShapeType->Add( m_sizeYUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 3 );
 
 	m_PadOrientText = new wxStaticText( m_panelGeneral, wxID_ANY, _("Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PadOrientText->Wrap( -1 );
-	fgSizerShapeType->Add( m_PadOrientText, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 3 );
+	fgSizerShapeType->Add( m_PadOrientText, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 3 );
 
 	m_orientation = new wxComboBox( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_orientation->Append( _("0") );
 	m_orientation->Append( _("90") );
 	m_orientation->Append( _("-90") );
 	m_orientation->Append( _("180") );
-	fgSizerShapeType->Add( m_orientation, 0, wxALL|wxEXPAND, 5 );
+	fgSizerShapeType->Add( m_orientation, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_staticText491 = new wxStaticText( m_panelGeneral, wxID_ANY, _("deg"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText491->Wrap( -1 );
-	fgSizerShapeType->Add( m_staticText491, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 3 );
+	fgSizerShapeType->Add( m_staticText491, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 3 );
 
 	m_offsetXLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Shape offset X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_offsetXLabel->Wrap( -1 );
-	fgSizerShapeType->Add( m_offsetXLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP, 3 );
+	fgSizerShapeType->Add( m_offsetXLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
 
 	m_offsetXCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeType->Add( m_offsetXCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
+	fgSizerShapeType->Add( m_offsetXCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 3 );
 
 	m_offsetXUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_offsetXUnits->Wrap( -1 );
-	fgSizerShapeType->Add( m_offsetXUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 3 );
+	fgSizerShapeType->Add( m_offsetXUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
 
 	m_offsetYLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Shape offset Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_offsetYLabel->Wrap( -1 );
@@ -165,39 +165,26 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_offsetYUnits->Wrap( -1 );
 	fgSizerShapeType->Add( m_offsetYUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 3 );
 
-	m_padToDieLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Pad to die length:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_padToDieLabel->Wrap( -1 );
-	m_padToDieLabel->SetToolTip( _("Wire length from pad to die on chip ( used to calculate actual track length)") );
-
-	fgSizerShapeType->Add( m_padToDieLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 3 );
-
-	m_padToDieCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeType->Add( m_padToDieCtrl, 0, wxEXPAND|wxALL, 3 );
-
-	m_padToDieUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_padToDieUnits->Wrap( -1 );
-	fgSizerShapeType->Add( m_padToDieUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 3 );
-
 	m_trapDeltaLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Trapezoid delta:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_trapDeltaLabel->Wrap( -1 );
-	fgSizerShapeType->Add( m_trapDeltaLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 3 );
+	fgSizerShapeType->Add( m_trapDeltaLabel, 0, wxTOP|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_trapDeltaCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeType->Add( m_trapDeltaCtrl, 0, wxEXPAND|wxALL, 3 );
+	fgSizerShapeType->Add( m_trapDeltaCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_trapDeltaUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_trapDeltaUnits->Wrap( -1 );
-	fgSizerShapeType->Add( m_trapDeltaUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 3 );
+	fgSizerShapeType->Add( m_trapDeltaUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 3 );
 
 	m_trapAxisLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Trapezoid axis:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_trapAxisLabel->Wrap( -1 );
-	fgSizerShapeType->Add( m_trapAxisLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 3 );
+	fgSizerShapeType->Add( m_trapAxisLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 3 );
 
 	wxString m_trapAxisCtrlChoices[] = { _("Horizontal"), _("Vertical") };
 	int m_trapAxisCtrlNChoices = sizeof( m_trapAxisCtrlChoices ) / sizeof( wxString );
 	m_trapAxisCtrl = new wxChoice( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_trapAxisCtrlNChoices, m_trapAxisCtrlChoices, 0 );
 	m_trapAxisCtrl->SetSelection( 0 );
-	fgSizerShapeType->Add( m_trapAxisCtrl, 0, wxEXPAND|wxALL, 3 );
+	fgSizerShapeType->Add( m_trapAxisCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
 
 
 	fgSizerShapeType->Add( 0, 0, 1, wxEXPAND|wxTOP, 15 );
@@ -206,65 +193,65 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_staticTextCornerSizeRatio->Wrap( -1 );
 	m_staticTextCornerSizeRatio->SetToolTip( _("Corner radius in percent  of the pad width.\nThe width is the smaller value between size X and size Y.\nThe max value is 50 percent.") );
 
-	fgSizerShapeType->Add( m_staticTextCornerSizeRatio, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
+	fgSizerShapeType->Add( m_staticTextCornerSizeRatio, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 3 );
 
 	m_tcCornerSizeRatio = new TEXT_CTRL_EVAL( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeType->Add( m_tcCornerSizeRatio, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	fgSizerShapeType->Add( m_tcCornerSizeRatio, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 3 );
 
 	m_staticTextCornerSizeRatioUnit = new wxStaticText( m_panelGeneral, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextCornerSizeRatioUnit->Wrap( -1 );
-	fgSizerShapeType->Add( m_staticTextCornerSizeRatioUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
+	fgSizerShapeType->Add( m_staticTextCornerSizeRatioUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 3 );
 
 	m_cornerRadiusLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Corner radius:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cornerRadiusLabel->Wrap( -1 );
 	m_cornerRadiusLabel->SetToolTip( _("Corner radius.\nCan be no more than half pad width.\nThe width is the smaller value between size X and size Y.\nNote: IPC norm gives a max value = 0.25mm.") );
 
-	fgSizerShapeType->Add( m_cornerRadiusLabel, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
+	fgSizerShapeType->Add( m_cornerRadiusLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 3 );
 
 	m_tcCornerRadius = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeType->Add( m_tcCornerRadius, 0, wxALL|wxEXPAND, 3 );
+	fgSizerShapeType->Add( m_tcCornerRadius, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_cornerRadiusUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cornerRadiusUnits->Wrap( -1 );
-	fgSizerShapeType->Add( m_cornerRadiusUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
+	fgSizerShapeType->Add( m_cornerRadiusUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 3 );
 
 	m_staticTextChamferRatio = new wxStaticText( m_panelGeneral, wxID_ANY, _("Chamfer size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextChamferRatio->Wrap( -1 );
 	m_staticTextChamferRatio->SetToolTip( _("Chamfer size in percent of the pad width.\nThe width is the smaller value between size X and size Y.\nThe max value is 50 percent.") );
 
-	fgSizerShapeType->Add( m_staticTextChamferRatio, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerShapeType->Add( m_staticTextChamferRatio, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 
 	m_tcChamferRatio = new TEXT_CTRL_EVAL( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeType->Add( m_tcChamferRatio, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
+	fgSizerShapeType->Add( m_tcChamferRatio, 0, wxEXPAND|wxALL|wxALIGN_CENTER_VERTICAL, 3 );
 
 	m_staticTextChamferRatioUnit = new wxStaticText( m_panelGeneral, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextChamferRatioUnit->Wrap( -1 );
-	fgSizerShapeType->Add( m_staticTextChamferRatioUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerShapeType->Add( m_staticTextChamferRatioUnit, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
-	m_staticTextChamferCorner = new wxStaticText( m_panelGeneral, wxID_ANY, _("Chamfered corner:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextChamferCorner = new wxStaticText( m_panelGeneral, wxID_ANY, _("Chamfers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextChamferCorner->Wrap( -1 );
 	m_staticTextChamferCorner->SetToolTip( _("Chamfered corners. The position is relative to a pad orientation 0 degree.") );
 
-	fgSizerShapeType->Add( m_staticTextChamferCorner, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerShapeType->Add( m_staticTextChamferCorner, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 
-	wxBoxSizer* bSizerChamferedCorners;
-	bSizerChamferedCorners = new wxBoxSizer( wxVERTICAL );
+	wxGridSizer* gSizer1;
+	gSizer1 = new wxGridSizer( 0, 2, 3, 6 );
 
 	m_cbTopLeft = new wxCheckBox( m_panelGeneral, wxID_ANY, _("Top left"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbTopLeft->SetValue(true);
-	bSizerChamferedCorners->Add( m_cbTopLeft, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	gSizer1->Add( m_cbTopLeft, 0, 0, 5 );
 
 	m_cbTopRight = new wxCheckBox( m_panelGeneral, wxID_ANY, _("Top right"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerChamferedCorners->Add( m_cbTopRight, 0, wxRIGHT|wxLEFT, 5 );
+	gSizer1->Add( m_cbTopRight, 0, 0, 5 );
 
 	m_cbBottomLeft = new wxCheckBox( m_panelGeneral, wxID_ANY, _("Bottom left"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerChamferedCorners->Add( m_cbBottomLeft, 0, wxRIGHT|wxLEFT, 5 );
+	gSizer1->Add( m_cbBottomLeft, 0, 0, 5 );
 
 	m_cbBottomRight = new wxCheckBox( m_panelGeneral, wxID_ANY, _("Bottom right"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerChamferedCorners->Add( m_cbBottomRight, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gSizer1->Add( m_cbBottomRight, 0, 0, 5 );
 
 
-	fgSizerShapeType->Add( bSizerChamferedCorners, 0, wxEXPAND, 5 );
+	fgSizerShapeType->Add( gSizer1, 1, wxEXPAND|wxTOP|wxLEFT, 3 );
 
 
 	m_LeftBoxSizer->Add( fgSizerShapeType, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
@@ -272,8 +259,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	bGeneralSizer->Add( m_LeftBoxSizer, 0, wxALL|wxEXPAND, 5 );
 
-	wxBoxSizer* bSizer10;
-	bSizer10 = new wxBoxSizer( wxVERTICAL );
+	m_middleBoxSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerGeometry;
 	fgSizerGeometry = new wxFlexGridSizer( 14, 3, 0, 0 );
@@ -308,17 +294,30 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_holeYLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Hole size Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_holeYLabel->Wrap( -1 );
-	fgSizerGeometry->Add( m_holeYLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
+	fgSizerGeometry->Add( m_holeYLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
 	m_holeYCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerGeometry->Add( m_holeYCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxTOP, 5 );
+	fgSizerGeometry->Add( m_holeYCtrl, 0, wxEXPAND|wxTOP|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_holeYUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_holeYUnits->Wrap( -1 );
-	fgSizerGeometry->Add( m_holeYUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	fgSizerGeometry->Add( m_holeYUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 5 );
+
+	m_padToDieLabel = new wxStaticText( m_panelGeneral, wxID_ANY, _("Pad to die:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_padToDieLabel->Wrap( -1 );
+	m_padToDieLabel->SetToolTip( _("Wire length from pad to die on chip ( used to calculate actual track length)") );
+
+	fgSizerGeometry->Add( m_padToDieLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
+
+	m_padToDieCtrl = new wxTextCtrl( m_panelGeneral, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerGeometry->Add( m_padToDieCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
+
+	m_padToDieUnits = new wxStaticText( m_panelGeneral, wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_padToDieUnits->Wrap( -1 );
+	fgSizerGeometry->Add( m_padToDieUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT, 3 );
 
 
-	bSizer10->Add( fgSizerGeometry, 0, wxEXPAND, 5 );
+	m_middleBoxSizer->Add( fgSizerGeometry, 0, wxEXPAND, 5 );
 
 	wxStaticBoxSizer* m_LayersSizer;
 	m_LayersSizer = new wxStaticBoxSizer( new wxStaticBox( m_panelGeneral, wxID_ANY, wxEmptyString ), wxVERTICAL );
@@ -335,7 +334,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_FlippedWarningSizer->Add( m_staticText86, 1, wxALIGN_TOP|wxBOTTOM|wxLEFT|wxRIGHT, 8 );
 
 
-	m_LayersSizer->Add( m_FlippedWarningSizer, 1, wxEXPAND, 5 );
+	m_LayersSizer->Add( m_FlippedWarningSizer, 0, wxEXPAND|wxBOTTOM, 5 );
 
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
@@ -393,10 +392,10 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_LayersSizer->Add( m_PadLayerECO2, 0, wxALL, 4 );
 
 
-	bSizer10->Add( m_LayersSizer, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_middleBoxSizer->Add( m_LayersSizer, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
-	bGeneralSizer->Add( bSizer10, 0, wxALL|wxEXPAND, 5 );
+	bGeneralSizer->Add( m_middleBoxSizer, 0, wxEXPAND|wxALL, 3 );
 
 
 	m_panelGeneral->SetSizer( bGeneralSizer );

@@ -91,9 +91,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_offsetYLabel;
 		wxTextCtrl* m_offsetYCtrl;
 		wxStaticText* m_offsetYUnits;
-		wxStaticText* m_padToDieLabel;
-		wxTextCtrl* m_padToDieCtrl;
-		wxStaticText* m_padToDieUnits;
 		wxStaticText* m_trapDeltaLabel;
 		wxTextCtrl* m_trapDeltaCtrl;
 		wxStaticText* m_trapDeltaUnits;
@@ -113,6 +110,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbTopRight;
 		wxCheckBox* m_cbBottomLeft;
 		wxCheckBox* m_cbBottomRight;
+		wxBoxSizer* m_middleBoxSizer;
 		wxStaticText* m_holeShapeLabel;
 		wxChoice* m_holeShapeCtrl;
 		wxStaticText* m_staticText51;
@@ -122,6 +120,9 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_holeYLabel;
 		wxTextCtrl* m_holeYCtrl;
 		wxStaticText* m_holeYUnits;
+		wxStaticText* m_padToDieLabel;
+		wxTextCtrl* m_padToDieCtrl;
+		wxStaticText* m_padToDieUnits;
 		wxBoxSizer* m_FlippedWarningSizer;
 		wxStaticBitmap* m_FlippedWarningIcon;
 		wxStaticText* m_staticText86;
