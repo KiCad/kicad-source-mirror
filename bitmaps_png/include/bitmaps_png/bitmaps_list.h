@@ -500,6 +500,7 @@ EXTERN_BITMAP( small_edit_xpm )
 EXTERN_BITMAP( small_library_xpm )
 EXTERN_BITMAP( small_plus_xpm )
 EXTERN_BITMAP( small_up_xpm )
+EXTERN_BITMAP( soldermask_clearance_xpm )    //maui RF clearance mask
 EXTERN_BITMAP( spreadsheet_xpm )
 EXTERN_BITMAP( svg_file_xpm )
 EXTERN_BITMAP( swap_layer_xpm )

@@ -494,6 +494,8 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
 
                 AddMenuItem( PopMenu, ID_POPUP_PCB_BREAK_TRACK,
                              _( "Break Track" ), KiBitmap( break_line_xpm ) );
+                AddMenuItem( PopMenu, ID_POPUP_PCB_CREATE_TRACK_SOLDER_CLEARANCE, // maui RF clearance
+                             _( "Create Soldermask Clearance" ), KiBitmap( soldermask_clearance_xpm ) );  // maui RF clearance
             }
         }
 
