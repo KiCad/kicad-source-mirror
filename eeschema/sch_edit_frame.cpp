@@ -992,7 +992,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
         SaveUndoItemInUndoList( undoItem, aUndoAppend );
     }
 
-    aItem->ClearEditFlags();
+    aItem->ClearFlags( IS_NEW );
 
     screen->SetModify();
     RefreshItem( aItem );
@@ -1017,6 +1017,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
             RefreshItem( item );
     }
 
+    aItem->ClearEditFlags();
     GetCanvas()->Refresh();
 }
 
