@@ -161,6 +161,7 @@ EDA_BASE_FRAME::~EDA_BASE_FRAME()
 }
 
 
+// TODO: Implement an RAII mechanism for the stack PushTool/PopTool pairs
 void EDA_BASE_FRAME::PushTool( const std::string& actionName )
 {
     m_toolStack.push_back( actionName );

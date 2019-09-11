@@ -119,9 +119,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     else
         return 0;
 
-    std::string tool = aEvent.GetCommandStr().get();
-    m_frame->PushTool( tool );
-
     if( m_moveInProgress )
     {
         auto sel = m_selectionTool->GetSelection().Front();
@@ -160,6 +157,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     TOOL_EVENT* evt = const_cast<TOOL_EVENT*>( &aEvent );
     VECTOR2I    prevPos;
 
+    std::string tool = aEvent.GetCommandStr().get();
+    m_frame->PushTool( tool );
     m_cursor = controls->GetCursorPosition();
 
     // Main loop: keep receiving events
