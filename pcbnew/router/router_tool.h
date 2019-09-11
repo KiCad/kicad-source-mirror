@@ -57,6 +57,8 @@ private:
     void performRouting();
     void performDragging( int aMode = PNS::DM_ANY );
     void breakTrack();
+    void createRoundCorner();    // maui RF round GAL
+    void createSolderMaskClearance();    // maui RF clearance GAL
 
     void handleCommonEvents( const TOOL_EVENT& evt );
 

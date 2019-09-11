@@ -259,8 +259,10 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::inlineBreakTrack, SELECTION_CONDITIONS::Count( 1 )
                       && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
     // ToDo: add if( Track->IsPointOnEnds( cursorPosition, -1 ) != 0 ) // maui RF round
-    menu.AddItem( PCB_ACTIONS::createRoundCorner, SELECTION_CONDITIONS::Count( 1 )   // maui RF round
-                      && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );   // maui RF round                      
+    menu.AddItem( PCB_ACTIONS::createRoundCorner, SELECTION_CONDITIONS::Count( 1 )   // maui RF round GAL menu
+                      && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );   // maui RF round
+    menu.AddItem( PCB_ACTIONS::createSolderMaskClearance, SELECTION_CONDITIONS::Count( 1 )   // maui RF clearance GAL menu
+                      && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );   // maui RF clearance
     menu.AddItem( PCB_ACTIONS::drag45Degree, SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
     menu.AddItem( PCB_ACTIONS::dragFreeAngle, SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
     menu.AddItem( PCB_ACTIONS::rotateCcw, SELECTION_CONDITIONS::NotEmpty );

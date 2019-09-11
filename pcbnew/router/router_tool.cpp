@@ -129,11 +129,17 @@ TOOL_ACTION PCB_ACTIONS::breakTrack( "pcbnew.InteractiveRouter.BreakTrack",
         _( "Splits the track segment into two segments connected at the cursor position." ),
         break_line_xpm );
 
-TOOL_ACTION PCB_ACTIONS::createRoundCorner( "pcbnew.InteractiveRouter.CreateRoundCorner",  // maui RF round
+TOOL_ACTION PCB_ACTIONS::createRoundCorner( "pcbnew.InteractiveRouter.CreateRoundCorner",  // maui RF round GAL
         AS_GLOBAL, 0,
         _( "Create Round Corner" ),
         _( "Create Round Corner at the two tracks corner." ),
         round_track_xpm );   // maui RF round end
+
+TOOL_ACTION PCB_ACTIONS::createSolderMaskClearance( "pcbnew.InteractiveRouter.CreateSolderMaskClearance",  // maui RF clearance GAL
+        AS_GLOBAL, 0,
+        _( "Create Soldermask Clearance" ),
+        _( "Create Soldermask Clearance to the track." ),
+        soldermask_clearance_xpm );   // maui RF clearance end
 
 TOOL_ACTION PCB_ACTIONS::drag45Degree( "pcbnew.InteractiveRouter.Drag45Degree",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DRAG_TRACK_KEEP_SLOPE ),
@@ -937,6 +943,15 @@ void ROUTER_TOOL::breakTrack()
     }
 }
 
+void ROUTER_TOOL::createRoundCorner()      // maui RF round GAL menu
+{
+    // the new GAL code should be in here
+}      // maui RF round end
+
+void ROUTER_TOOL::createSolderMaskClearance()      // maui RF clearance GAL menu
+{
+// the new GAL code should be in here
+}      // maui RF clearance end
 
 int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
 {
