@@ -39,7 +39,7 @@ wxString NETLIST_EXPORTER_PSPICE_SIM::GetSpiceVector( const wxString& aName, SIM
         // netnames are escaped (can contain "{slash}" for '/') Unscape them:
         wxString spicenet = UnescapeString( aName );
 
-        // Spice netlist netnames does not accept some chars, whicyh are replaced
+        // Spice netlist netnames does not accept some chars, which are replaced
         // by eeschema netlist generator.
         // Replace these forbidden chars to find the actual spice net name
         NETLIST_EXPORTER_PSPICE::ReplaceForbiddenChars( spicenet );
@@ -49,8 +49,19 @@ wxString NETLIST_EXPORTER_PSPICE_SIM::GetSpiceVector( const wxString& aName, SIM
 
     else if( aType & SPT_CURRENT )
     {
-        return wxString::Format( "@%s[%s]", GetSpiceDevice( aName ).Lower(),
-                aParam.IsEmpty() ? "i" : aParam.Lower() );
+        wxString device = GetSpiceDevice( aName ).Lower();
+        wxString param = aParam.Lower();
+
+        if( device[0] == 'x' )
+        {
+            return "current probe of .subckt not yet implemented";
+        }
+        else
+        {
+            return wxString::Format( "@%s[%s]",
+                                     device,
+                                     param.IsEmpty() ? "i" : param );
+        }
     }
 
     return res;
