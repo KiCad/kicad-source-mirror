@@ -27,11 +27,7 @@
  * @file dielectric_material.cpp
  */
 
-//#include "class_board_stackup.h"
-//#include <convert_to_biu.h>
-//#include <board_design_settings.h>
-//#include <macros.h>
-#include "stackup_predefined_prms.h"
+#include "stackup_predefined_prms.h"    // For NOT_SPECIFIED definition
 #include "dielectric_material.h"
 
 
