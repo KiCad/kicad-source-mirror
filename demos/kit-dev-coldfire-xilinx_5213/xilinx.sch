@@ -1,6 +1,6 @@
-EESchema Schematic File Version 4
+EESchema Schematic File Version 5
 LIBS:kit-dev-coldfire-xilinx_5213-cache
-EELAYER 26 0
+EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -13,6 +13,11 @@ Comment1 ""
 Comment2 ""
 Comment3 ""
 Comment4 ""
+Comment5 ""
+Comment6 ""
+Comment7 ""
+Comment8 ""
+Comment9 ""
 $EndDescr
 NoConn ~ 3600 5700
 NoConn ~ 3600 2400
@@ -344,10 +349,10 @@ NoConn ~ 3600 6900
 Text Label 9600 3900 0    60   ~ 0
 +3,3V_OUT
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR0105
+L kit-coldfire_schlib:GND #PWR0308
 U 1 1 480DCF5A
 P 3500 4100
-F 0 "#PWR0105" H 3500 4100 30  0001 C CNN
+F 0 "#PWR0308" H 3500 4100 30  0001 C CNN
 F 1 "GND" H 3500 4030 30  0001 C CNN
 F 2 "" H 3500 4100 60  0001 C CNN
 F 3 "" H 3500 4100 60  0001 C CNN
@@ -355,10 +360,10 @@ F 3 "" H 3500 4100 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:+3,3V #PWR0106
+L kit-coldfire_schlib:+3,3V #PWR0306
 U 1 1 4791D619
 P 10850 3900
-F 0 "#PWR0106" H 10850 3860 30  0001 C CNN
+F 0 "#PWR0306" H 10850 3860 30  0001 C CNN
 F 1 "+3,3V" H 10850 4010 40  0000 C CNN
 F 2 "" H 10850 3900 60  0001 C CNN
 F 3 "" H 10850 3900 60  0001 C CNN
@@ -366,10 +371,10 @@ F 3 "" H 10850 3900 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:R R64
+L kit-coldfire_schlib:R R302
 U 1 1 4791D59D
 P 10450 3900
-F 0 "R64" V 10350 3900 50  0000 C CNN
+F 0 "R302" V 10350 3900 50  0000 C CNN
 F 1 "3,3" V 10450 3900 50  0000 C CNN
 F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" H 10450 3900 60  0001 C CNN
 F 3 "" H 10450 3900 60  0001 C CNN
@@ -401,10 +406,10 @@ NoConn ~ 5500 1100
 NoConn ~ 5500 1000
 NoConn ~ 5500 900 
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR0107
+L kit-coldfire_schlib:GND #PWR0303
 U 1 1 470F3BF2
 P 3450 1250
-F 0 "#PWR0107" H 3450 1250 30  0001 C CNN
+F 0 "#PWR0303" H 3450 1250 30  0001 C CNN
 F 1 "GND" H 3450 1180 30  0001 C CNN
 F 2 "" H 3450 1250 60  0001 C CNN
 F 3 "" H 3450 1250 60  0001 C CNN
@@ -451,10 +456,10 @@ XIL_IRQ2
 Text Label 5650 2200 0    60   ~ 0
 XIL_IRQ1
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:CONN_2X2 P3
+L kit-coldfire_schlib:CONN_2X2 P302
 U 1 1 46A76EB2
 P 6600 1250
-F 0 "P3" H 6600 1400 50  0000 C CNN
+F 0 "P302" H 6600 1400 50  0000 C CNN
 F 1 "CONN_2X2" H 6610 1120 40  0000 C CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_2x02_P2.54mm_Vertical" H 6600 1250 60  0001 C CNN
 F 3 "" H 6600 1250 60  0001 C CNN
@@ -462,10 +467,10 @@ F 3 "" H 6600 1250 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:XCR3256-TQ144 U9
+L kit-coldfire_schlib:XCR3256-TQ144 U301
 U 1 1 470F38BE
 P 4550 4100
-F 0 "U9" H 4550 7550 70  0000 C CNN
+F 0 "U301" H 4550 7550 70  0000 C CNN
 F 1 "XCR3256-TQ144" H 4550 500 60  0000 C CNN
 F 2 "Package_QFP:TQFP-144_20x20mm_P0.5mm" H 4550 4100 60  0001 C CNN
 F 3 "" H 4550 4100 60  0001 C CNN
@@ -563,10 +568,10 @@ XIL_D36
 Text Label 3100 2100 0    60   ~ 0
 XIL_D35
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR0108
+L kit-coldfire_schlib:GND #PWR0307
 U 1 1 46ADE620
 P 9650 4000
-F 0 "#PWR0108" H 9650 4000 30  0001 C CNN
+F 0 "#PWR0307" H 9650 4000 30  0001 C CNN
 F 1 "GND" H 9650 3930 30  0001 C CNN
 F 2 "" H 9650 4000 60  0001 C CNN
 F 3 "" H 9650 4000 60  0001 C CNN
@@ -574,10 +579,10 @@ F 3 "" H 9650 4000 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR0109
+L kit-coldfire_schlib:GND #PWR0305
 U 1 1 46ADE61B
 P 9650 2100
-F 0 "#PWR0109" H 9650 2100 30  0001 C CNN
+F 0 "#PWR0305" H 9650 2100 30  0001 C CNN
 F 1 "GND" H 9650 2030 30  0001 C CNN
 F 2 "" H 9650 2100 60  0001 C CNN
 F 3 "" H 9650 2100 60  0001 C CNN
@@ -643,10 +648,10 @@ XIL_D7
 Text Label 5600 6600 0    60   ~ 0
 XIL_D6
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:CONN_20X2 P4
+L kit-coldfire_schlib:CONN_20X2 P303
 U 1 1 46ADE55A
 P 9200 3050
-F 0 "P4" H 9200 4100 60  0000 C CNN
+F 0 "P303" H 9200 4100 60  0000 C CNN
 F 1 "CONN_20X2" V 9200 3050 50  0000 C CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_2x20_P2.54mm_Vertical" H 9200 3050 60  0001 C CNN
 F 3 "" H 9200 3050 60  0001 C CNN
@@ -684,10 +689,10 @@ XIL_IRQ1
 Text HLabel 3400 3800 0    60   Input ~ 0
 GLCK2
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:+3,3V #PWR0110
+L kit-coldfire_schlib:+3,3V #PWR0304
 U 1 1 46A76BD3
 P 2750 1300
-F 0 "#PWR0110" H 2750 1260 30  0001 C CNN
+F 0 "#PWR0304" H 2750 1260 30  0001 C CNN
 F 1 "+3,3V" V 2750 1500 40  0000 C CNN
 F 2 "" H 2750 1300 60  0001 C CNN
 F 3 "" H 2750 1300 60  0001 C CNN
@@ -695,10 +700,10 @@ F 3 "" H 2750 1300 60  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:+3,3V #PWR0111
+L kit-coldfire_schlib:+3,3V #PWR0301
 U 1 1 46A76BD2
 P 3600 650
-F 0 "#PWR0111" H 3600 610 30  0001 C CNN
+F 0 "#PWR0301" H 3600 610 30  0001 C CNN
 F 1 "+3,3V" H 3600 760 40  0000 C CNN
 F 2 "" H 3600 650 60  0001 C CNN
 F 3 "" H 3600 650 60  0001 C CNN
@@ -706,10 +711,10 @@ F 3 "" H 3600 650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:R R57
+L kit-coldfire_schlib:R R301
 U 1 1 46A76BCA
 P 3300 650
-F 0 "R57" V 3200 650 50  0000 C CNN
+F 0 "R301" V 3200 650 50  0000 C CNN
 F 1 "4K7" V 3300 650 50  0000 C CNN
 F 2 "Resistor_SMD:R_0805_2012Metric" H 3300 650 60  0001 C CNN
 F 3 "" H 3300 650 60  0001 C CNN
@@ -719,10 +724,10 @@ $EndComp
 Text Label 8350 5100 0    60   ~ 0
 LED_TEST1
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR0112
+L kit-coldfire_schlib:GND #PWR0309
 U 1 1 46A76BC5
 P 10050 5100
-F 0 "#PWR0112" H 10050 5100 40  0001 C CNN
+F 0 "#PWR0309" H 10050 5100 40  0001 C CNN
 F 1 "GND" H 10050 5030 40  0001 C CNN
 F 2 "" H 10050 5100 60  0001 C CNN
 F 3 "" H 10050 5100 60  0001 C CNN
@@ -730,10 +735,10 @@ F 3 "" H 10050 5100 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:LED D8
+L kit-coldfire_schlib:LED D301
 U 1 1 46A76BC4
 P 9800 5100
-F 0 "D8" H 9800 5200 50  0000 C CNN
+F 0 "D301" H 9800 5200 50  0000 C CNN
 F 1 "LED" H 9800 5000 50  0000 C CNN
 F 2 "LED_SMD:LED_1206_3216Metric" H 9800 5100 60  0001 C CNN
 F 3 "" H 9800 5100 60  0001 C CNN
@@ -741,10 +746,10 @@ F 3 "" H 9800 5100 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:R R62
+L kit-coldfire_schlib:R R303
 U 1 1 46A76BC3
 P 9250 5100
-F 0 "R62" V 9330 5100 50  0000 C CNN
+F 0 "R303" V 9330 5100 50  0000 C CNN
 F 1 "1K" V 9250 5100 50  0000 C CNN
 F 2 "Resistor_SMD:R_0805_2012Metric" H 9250 5100 60  0001 C CNN
 F 3 "" H 9250 5100 60  0001 C CNN
@@ -752,10 +757,10 @@ F 3 "" H 9250 5100 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR0113
+L kit-coldfire_schlib:GND #PWR0312
 U 1 1 46A76BC1
 P 7600 6450
-F 0 "#PWR0113" H 7600 6450 30  0001 C CNN
+F 0 "#PWR0312" H 7600 6450 30  0001 C CNN
 F 1 "GND" H 7600 6380 30  0001 C CNN
 F 2 "" H 7600 6450 60  0001 C CNN
 F 3 "" H 7600 6450 60  0001 C CNN
@@ -763,10 +768,10 @@ F 3 "" H 7600 6450 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:+3,3V #PWR0114
+L kit-coldfire_schlib:+3,3V #PWR0311
 U 1 1 46A76BBF
 P 7600 5850
-F 0 "#PWR0114" H 7600 5810 30  0001 C CNN
+F 0 "#PWR0311" H 7600 5810 30  0001 C CNN
 F 1 "+3,3V" H 7600 5960 40  0000 C CNN
 F 2 "" H 7600 5850 60  0001 C CNN
 F 3 "" H 7600 5850 60  0001 C CNN
@@ -774,10 +779,10 @@ F 3 "" H 7600 5850 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:C C61
+L kit-coldfire_schlib:C C311
 U 1 1 46A76BBC
 P 10600 6150
-F 0 "C61" H 10650 6250 50  0000 L CNN
+F 0 "C311" H 10650 6250 50  0000 L CNN
 F 1 "100nF" H 10600 6050 50  0000 L CNN
 F 2 "Resistor_SMD:R_0805_2012Metric" H 10600 6150 60  0001 C CNN
 F 3 "" H 10600 6150 60  0001 C CNN
@@ -785,10 +790,10 @@ F 3 "" H 10600 6150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:C C60
+L kit-coldfire_schlib:C C310
 U 1 1 46A76BBB
 P 10300 6150
-F 0 "C60" H 10350 6250 50  0000 L CNN
+F 0 "C310" H 10350 6250 50  0000 L CNN
 F 1 "100nF" H 10300 6050 50  0000 L CNN
 F 2 "Resistor_SMD:R_0805_2012Metric" H 10300 6150 60  0001 C CNN
 F 3 "" H 10300 6150 60  0001 C CNN
@@ -796,10 +801,10 @@ F 3 "" H 10300 6150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:C C59
+L kit-coldfire_schlib:C C309
 U 1 1 46A76BBA
 P 10000 6150
-F 0 "C59" H 10050 6250 50  0000 L CNN
+F 0 "C309" H 10050 6250 50  0000 L CNN
 F 1 "100nF" H 10000 6050 50  0000 L CNN
 F 2 "Resistor_SMD:R_0805_2012Metric" H 10000 6150 60  0001 C CNN
 F 3 "" H 10000 6150 60  0001 C CNN
@@ -807,10 +812,10 @@ F 3 "" H 10000 6150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:C C54
+L kit-coldfire_schlib:C C304
 U 1 1 46A76BB5
 P 8500 6150
-F 0 "C54" H 8550 6250 50  0000 L CNN
+F 0 "C304" H 8550 6250 50  0000 L CNN
 F 1 "100nF" H 8500 6050 50  0000 L CNN
 F 2 "Resistor_SMD:R_0805_2012Metric" H 8500 6150 60  0001 C CNN
 F 3 "" H 8500 6150 60  0001 C CNN
@@ -818,10 +823,10 @@ F 3 "" H 8500 6150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:C C53
+L kit-coldfire_schlib:C C303
 U 1 1 46A76BB4
 P 8200 6150
-F 0 "C53" H 8250 6250 50  0000 L CNN
+F 0 "C303" H 8250 6250 50  0000 L CNN
 F 1 "100nF" H 8200 6050 50  0000 L CNN
 F 2 "Resistor_SMD:R_0805_2012Metric" H 8200 6150 60  0001 C CNN
 F 3 "" H 8200 6150 60  0001 C CNN
@@ -829,10 +834,10 @@ F 3 "" H 8200 6150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:C C52
+L kit-coldfire_schlib:C C302
 U 1 1 46A76BB3
 P 7900 6150
-F 0 "C52" H 7950 6250 50  0000 L CNN
+F 0 "C302" H 7950 6250 50  0000 L CNN
 F 1 "100nF" H 7900 6050 50  0000 L CNN
 F 2 "Resistor_SMD:R_0805_2012Metric" H 7900 6150 60  0001 C CNN
 F 3 "" H 7900 6150 60  0001 C CNN
@@ -840,10 +845,10 @@ F 3 "" H 7900 6150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:C C51
+L kit-coldfire_schlib:C C301
 U 1 1 46A76BB2
 P 7600 6150
-F 0 "C51" H 7650 6250 50  0000 L CNN
+F 0 "C301" H 7650 6250 50  0000 L CNN
 F 1 "100nF" H 7600 6050 50  0000 L CNN
 F 2 "Resistor_SMD:R_0805_2012Metric" H 7600 6150 60  0001 C CNN
 F 3 "" H 7600 6150 60  0001 C CNN
@@ -851,10 +856,10 @@ F 3 "" H 7600 6150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:C C58
+L kit-coldfire_schlib:C C308
 U 1 1 46A76BB1
 P 9700 6150
-F 0 "C58" H 9750 6250 50  0000 L CNN
+F 0 "C308" H 9750 6250 50  0000 L CNN
 F 1 "100nF" H 9700 6050 50  0000 L CNN
 F 2 "Resistor_SMD:R_0805_2012Metric" H 9700 6150 60  0001 C CNN
 F 3 "" H 9700 6150 60  0001 C CNN
@@ -862,10 +867,10 @@ F 3 "" H 9700 6150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:C C57
+L kit-coldfire_schlib:C C307
 U 1 1 46A76BB0
 P 9400 6150
-F 0 "C57" H 9450 6250 50  0000 L CNN
+F 0 "C307" H 9450 6250 50  0000 L CNN
 F 1 "100nF" H 9400 6050 50  0000 L CNN
 F 2 "Resistor_SMD:R_0805_2012Metric" H 9400 6150 60  0001 C CNN
 F 3 "" H 9400 6150 60  0001 C CNN
@@ -873,10 +878,10 @@ F 3 "" H 9400 6150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:C C56
+L kit-coldfire_schlib:C C306
 U 1 1 46A76BAF
 P 9100 6150
-F 0 "C56" H 9150 6250 50  0000 L CNN
+F 0 "C306" H 9150 6250 50  0000 L CNN
 F 1 "100nF" H 9100 6050 50  0000 L CNN
 F 2 "Resistor_SMD:R_0805_2012Metric" H 9100 6150 60  0001 C CNN
 F 3 "" H 9100 6150 60  0001 C CNN
@@ -884,10 +889,10 @@ F 3 "" H 9100 6150 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:C C55
+L kit-coldfire_schlib:C C305
 U 1 1 46A76BAE
 P 8800 6150
-F 0 "C55" H 8850 6250 50  0000 L CNN
+F 0 "C305" H 8850 6250 50  0000 L CNN
 F 1 "100nF" H 8800 6050 50  0000 L CNN
 F 2 "Resistor_SMD:R_0805_2012Metric" H 8800 6150 60  0001 C CNN
 F 3 "" H 8800 6150 60  0001 C CNN
@@ -899,10 +904,10 @@ LED_TEST2
 Text Label 2800 900  0    60   ~ 0
 TCK
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR0115
+L kit-coldfire_schlib:GND #PWR0310
 U 1 1 46A76BA9
 P 10050 5400
-F 0 "#PWR0115" H 10050 5400 40  0001 C CNN
+F 0 "#PWR0310" H 10050 5400 40  0001 C CNN
 F 1 "GND" H 10050 5330 40  0001 C CNN
 F 2 "" H 10050 5400 60  0001 C CNN
 F 3 "" H 10050 5400 60  0001 C CNN
@@ -910,10 +915,10 @@ F 3 "" H 10050 5400 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:LED D9
+L kit-coldfire_schlib:LED D302
 U 1 1 46A76BA8
 P 9800 5400
-F 0 "D9" H 9800 5500 50  0000 C CNN
+F 0 "D302" H 9800 5500 50  0000 C CNN
 F 1 "LED" H 9800 5300 50  0000 C CNN
 F 2 "LED_SMD:LED_1206_3216Metric" H 9800 5400 60  0001 C CNN
 F 3 "" H 9800 5400 60  0001 C CNN
@@ -921,10 +926,10 @@ F 3 "" H 9800 5400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:R R63
+L kit-coldfire_schlib:R R304
 U 1 1 46A76BA7
 P 9250 5400
-F 0 "R63" V 9330 5400 50  0000 C CNN
+F 0 "R304" V 9330 5400 50  0000 C CNN
 F 1 "1K" V 9250 5400 50  0000 C CNN
 F 2 "Resistor_SMD:R_0805_2012Metric" H 9250 5400 60  0001 C CNN
 F 3 "" H 9250 5400 60  0001 C CNN
@@ -938,10 +943,10 @@ TDI
 Text Label 2800 800  0    60   ~ 0
 TDO
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:CONN_6 P1
+L kit-coldfire_schlib:CONN_6 P301
 U 1 1 46A76BA6
 P 2350 1050
-F 0 "P1" V 2300 1050 60  0000 C CNN
+F 0 "P301" V 2300 1050 60  0000 C CNN
 F 1 "CONN_6" V 2400 1050 60  0000 C CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical" H 2350 1050 60  0001 C CNN
 F 3 "" H 2350 1050 60  0001 C CNN
@@ -949,10 +954,10 @@ F 3 "" H 2350 1050 60  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L kit-dev-coldfire-xilinx_5213_schlib:GND #PWR0116
+L kit-coldfire_schlib:GND #PWR0302
 U 1 1 46A76BA5
 P 2750 1200
-F 0 "#PWR0116" H 2750 1200 40  0001 C CNN
+F 0 "#PWR0302" H 2750 1200 40  0001 C CNN
 F 1 "GND" H 2750 1130 40  0001 C CNN
 F 2 "" H 2750 1200 60  0001 C CNN
 F 3 "" H 2750 1200 60  0001 C CNN
