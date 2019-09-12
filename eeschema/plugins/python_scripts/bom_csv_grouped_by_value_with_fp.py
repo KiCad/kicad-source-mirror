@@ -6,7 +6,7 @@
 
 """
     @package
-    Generate a Tab delimited list (csv file type).
+    Generate a comma delimited list (csv file type).
     Components are sorted by ref and grouped by value with same footprint
     Fields are (if exist)
     'Ref', 'Qnty', 'Value', 'Cmp name', 'Footprint', 'Description', 'Vendor'
