@@ -408,7 +408,7 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
     //
 
     // If there are three or more endpoints
-    if( pin_count + end_count[0] > 2 )
+    if( pin_count && pin_count + end_count[0] > 2 )
         return true;
 
     // If there is at least one segment that ends on a non-parallel line or

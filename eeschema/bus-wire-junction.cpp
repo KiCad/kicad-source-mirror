@@ -138,6 +138,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
     SCH_ITEM*           item = NULL;
     SCH_ITEM*           secondItem = NULL;
     PICKED_ITEMS_LIST   itemList;
+    EE_SELECTION_TOOL*  selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
 
     if( aScreen == nullptr )
         aScreen = GetScreen();
@@ -215,7 +216,12 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
                     remove_item( item );
                     remove_item( secondItem );
                     itemList.PushItem( ITEM_PICKER( line, UR_NEW ) );
+
                     AddToScreen( line, aScreen );
+
+                    if( line->IsSelected() )
+                        selectionTool->AddItemToSel( line, true /*quiet mode*/ );
+
                     break;
                 }
             }
@@ -230,7 +236,12 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
         secondItem = item->Next();
 
         if( item->GetEditFlags() & STRUCT_DELETED )
+        {
+            if( item->IsSelected() )
+                selectionTool->RemoveItemFromSel( item, true /*quiet mode*/ );
+
             RemoveFromScreen( item, aScreen );
+        }
     }
 
     if( itemList.GetCount() )
@@ -329,8 +340,9 @@ bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( SCH_SCREEN* aScreen )
 
 void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
 {
-    SCH_SCREEN* screen = GetScreen();
-    PICKED_ITEMS_LIST itemList;
+    SCH_SCREEN*        screen = GetScreen();
+    PICKED_ITEMS_LIST  itemList;
+    EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
 
     auto remove_item = [ & ]( SCH_ITEM* aItem ) -> void
     {
@@ -372,7 +384,12 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
                 remove_item( item );
                 remove_item( secondItem );
                 itemList.PushItem( ITEM_PICKER( line, UR_NEW ) );
+
                 AddToScreen( line );
+
+                if( line->IsSelected() )
+                    selectionTool->AddItemToSel( line, true /*quiet mode*/ );
+
                 break;
             }
         }
@@ -386,7 +403,12 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
         nextitem = item->Next();
 
         if( item->GetEditFlags() & STRUCT_DELETED )
+        {
+            if( item->IsSelected() )
+                selectionTool->RemoveItemFromSel( item, true /*quiet mode*/ );
+
             RemoveFromScreen( item );
+        }
     }
 }
 
