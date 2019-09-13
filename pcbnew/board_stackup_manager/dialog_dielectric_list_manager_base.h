@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -29,7 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_DIELECTRIC_MATERIAL_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_DIELECTRIC_MATERIAL_BASE : public wxDialog
+class DIALOG_DIELECTRIC_MATERIAL_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -54,7 +55,7 @@ class DIALOG_DIELECTRIC_MATERIAL_BASE : public wxDialog
 
 	public:
 
-		DIALOG_DIELECTRIC_MATERIAL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 581,353 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_DIELECTRIC_MATERIAL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Dielectric Materials"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 581,353 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_DIELECTRIC_MATERIAL_BASE();
 
 };

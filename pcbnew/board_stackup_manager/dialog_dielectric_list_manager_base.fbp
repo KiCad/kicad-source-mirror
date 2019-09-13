@@ -49,8 +49,8 @@
             <property name="pos"></property>
             <property name="size">581,353</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
-            <property name="subclass">; ; forward_declare</property>
-            <property name="title"></property>
+            <property name="subclass">DIALOG_SHIM; dialog_shim.h; forward_declare</property>
+            <property name="title">Dielectric Materials</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
