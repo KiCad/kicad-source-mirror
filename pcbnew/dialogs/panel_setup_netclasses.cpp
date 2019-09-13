@@ -492,9 +492,16 @@ void PANEL_SETUP_NETCLASSES::OnUpdateUI( wxUpdateUIEvent& event )
     wxSize netclassSize = GetClientSize();
     netclassSize.y -= m_membershipSize.y;
 
-    m_netclassesPane->SetMinSize( netclassSize );
-    m_netclassesPane->SetMaxSize( netclassSize );
-    Layout();
+    // Modify m_netclassesPane size only if needed, because calling Layout()
+    // has a annoying effect if a wxChoice is open, it is closed by this call.
+    // So it cannot blindly called inside each wxUpdateUIEvent event,
+    // at least on Windows + wxWidgets 3.0 (do not happens with 3.1.1).
+    if( netclassSize.y != m_netclassesPane->GetSize().y )
+    {
+        m_netclassesPane->SetMinSize( netclassSize );
+        m_netclassesPane->SetMaxSize( netclassSize );
+        Layout();
+    }
 }
 
 
