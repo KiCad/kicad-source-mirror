@@ -139,6 +139,10 @@ public:
     /// Breaks track when router is not activated
     static TOOL_ACTION inlineBreakTrack;
 
+    /// Create a Round Corner at the cursor
+    static TOOL_ACTION createRoundCorner;   // maui RF round GAL
+    static TOOL_ACTION createSolderMaskClearance; // maui RF clearance GAL
+
     static TOOL_ACTION drag45Degree;
     static TOOL_ACTION dragFreeAngle;
 

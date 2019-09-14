@@ -1320,6 +1320,9 @@ public:
 
     bool PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC );
 
+    bool PlaceRoundTrackSegment( TRACK* Track, wxDC* DC ); // maui RF round
+    void Start_DragRoundCorner( TRACK* track, wxDC* DC ); // maui RF round
+    
     /**
      * @todo This function is broken, because it merge segments having different
      *       widths or without any connectivity test.

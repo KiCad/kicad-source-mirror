@@ -2,6 +2,9 @@ boost_root
 .downloads-by-cmake
 Build*
 build*
+!build_version.cpp
+!build_BOM_from_board.cpp
+!build_version.h
 common/fp_lib_table_keywords.cpp
 common/netlist_keywords.*
 common/netlist_lexer.h

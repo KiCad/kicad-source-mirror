@@ -48,6 +48,7 @@
 #include <class_track.h>
 #include <class_zone.h>
 #include <class_pcb_text.h>
+#include <class_drawsegment.h> // maui RF round 
 #include <footprint_viewer_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <dialog_drc.h>
@@ -127,7 +128,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_LAYER_PAIR:
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
     case ID_POPUP_PCB_MOVE_TRACK_NODE:
-    case ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST:
+    case ID_POPUP_PCB_CREATE_ROUND_CORNER: // maui RF round
     case ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE:
     case ID_POPUP_PCB_DRAG_TRACK_SEGMENT:
     case ID_POPUP_PCB_MOVE_TRACK_SEGMENT:
@@ -1172,6 +1173,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         StartMoveOneNodeOrSegment( (TRACK*) GetScreen()->GetCurItem(), &dc, id );
         break;
 
+    case ID_POPUP_PCB_CREATE_ROUND_CORNER:  // maui RF round start
+        m_canvas->MoveCursorToCrossHair();
+        Start_DragRoundCorner( (TRACK*) GetScreen()->GetCurItem(), &dc );
+        break;  // maui RF end
+
     case ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE:
         m_canvas->MoveCursorToCrossHair();
         Start_DragTrackSegmentAndKeepSlope( (TRACK*) GetScreen()->GetCurItem(), &dc );
@@ -1196,6 +1202,59 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             TestNetConnection( &dc, track->GetNetCode() );
         }
         break;
+
+    case ID_POPUP_PCB_CREATE_TRACK_SOLDER_CLEARANCE:  // maui RF clearance start
+        m_canvas->MoveCursorToCrossHair();
+        {
+            TRACK*  track = (TRACK*) GetScreen()->GetCurItem();
+            int net_code = track->GetNetCode();
+            PCB_LAYER_ID cur_layer = track->GetLayer();
+            PCB_LAYER_ID mask_layer;
+            if(cur_layer == B_Cu) mask_layer = B_Mask;
+            else if(cur_layer == F_Cu) mask_layer = F_Mask;
+            else break;
+
+            // First ask for the amount of desired soldermask clearance
+            wxString clearanceString;
+            
+            EDA_UNITS_T    m_units = GetUserUnits();  // maui RF clearance
+            // wxLogMessage( wxString::Format( _( "m_units value '%d'" ), m_units));
+            std::string label = (m_units == INCHES) ? "Clearance (in inches):" : "Clearance (in mm):";
+            wxTextEntryDialog dlg( this, _( label ), _( "Create Soldermask Clearance Around Net" ), clearanceString );
+
+            if( dlg.ShowModal() != wxID_OK ) break;
+
+            clearanceString = dlg.GetValue();
+            clearanceString.Trim( true );
+            clearanceString.Trim( false );
+
+            double clearance;
+            if( !clearanceString.ToDouble(&clearance) ) break;
+
+            clearance = From_User_Unit( m_units, clearance );
+            
+            BOARD *pcb = GetBoard();
+            PICKED_ITEMS_LIST newItemsList;
+
+            // Now loop through all tracks, creating the desired soldermask clearance for all 
+            for( TRACK* track = pcb->m_Track;  track;  track = track->Next() ) {
+                if( track->GetNetCode() == net_code ) {
+                    DRAWSEGMENT *new_soldermask_line = new DRAWSEGMENT( pcb, PCB_LINE_T );
+                    new_soldermask_line->SetFlags( IS_NEW );
+                    new_soldermask_line->SetLayer( mask_layer );
+                    new_soldermask_line->SetWidth( track->GetWidth() + clearance * 2 );
+                    new_soldermask_line->SetStart( track->GetStart() );
+                    new_soldermask_line->SetEnd( track->GetEnd() );
+                    pcb->Add( new_soldermask_line );
+                    newItemsList.PushItem( new_soldermask_line );
+                }
+            }
+
+            SaveCopyInUndoList( newItemsList, UR_NEW );
+            m_canvas->Refresh();
+
+        } 
+        break;  // maui RF end solder
 
     case ID_POPUP_PCB_MOVE_EXACT:
         moveExact();

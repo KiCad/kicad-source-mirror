@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="27.733334"
+   width="27.733334"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   sodipodi:docname="soldermask_clearance.svg"
+   viewBox="0 0 26 26"
+   inkscape:export-filename="C:\kicad-wb-1602\msys64\home\userC\RF-round-diff\new-solder-mask\bitmaps_png\sources\soldermask_clearance-26.png"
+   inkscape:export-xdpi="82.105263"
+   inkscape:export-ydpi="82.105263">
+  <metadata
+     id="metadata40">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1361"
+     id="namedview38"
+     showgrid="true"
+     inkscape:snap-to-guides="false"
+     inkscape:snap-grids="true"
+     inkscape:zoom="18.443509"
+     inkscape:cx="16.696068"
+     inkscape:cy="12.507182"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2"
+     showguides="true"
+     inkscape:guide-bbox="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3017"
+       empspacing="2"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       spacingx="0.5"
+       spacingy="0.5"
+       originx="0"
+       originy="0" />
+  </sodipodi:namedview>
+  <defs
+     id="defs4">
+    <filter
+       id="c"
+       height="1.3651"
+       width="1.2097"
+       y="-0.18257"
+       x="-0.10484"
+       style="color-interpolation-filters:sRGB">
+      <feGaussianBlur
+         stdDeviation="1.5978799"
+         id="feGaussianBlur7" />
+    </filter>
+    <filter
+       id="d"
+       height="1.4696"
+       width="1.4809999"
+       y="-0.23481999"
+       x="-0.24049"
+       style="color-interpolation-filters:sRGB">
+      <feGaussianBlur
+         stdDeviation="1.5978799"
+         id="feGaussianBlur10" />
+    </filter>
+  </defs>
+  <path
+     style="fill:#b3b3b3;fill-opacity:1;stroke:#b3b3b3;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M -1.7193647e-8,-1.7193646e-8 V 26 H 26 V 11.5 H 14 14.03125 14.0625 C 12.8522,13.592433 10.591084,15 8,15 4.1340066,15 0.99999996,11.865993 0.99999996,8 0.99999996,4.1340066 4.1340066,0.99999996 8,0.99999996 c 2.591084,0 4.8522,1.40756694 6.0625,3.50000004 3.645833,0 8.291667,0 11.9375,0 V -1.7193646e-8 Z"
+     id="rect3811"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccccccssscccc"
+     inkscape:export-xdpi="82.105263"
+     inkscape:export-ydpi="82.105263" />
+  <path
+     d="m 11.5,8 h 13 m -13,0 C 11.5,9.932997 9.932997,11.5 8,11.5 6.0670034,11.5 4.5,9.932997 4.5,8 4.5,6.0670034 6.0670034,4.5 8,4.5 c 1.932997,0 3.5,1.5670034 3.5,3.5 z"
+     style="opacity:1;fill:none;stroke:#ffcc00;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="path3867"
+     inkscape:connector-curvature="0"
+     inkscape:export-xdpi="82.105263"
+     inkscape:export-ydpi="82.105263" />
+  <g
+     transform="matrix(1.6382539,0,0,1.5572263,1.2572207,0.36314149)"
+     id="g16"
+     inkscape:export-xdpi="82.105263"
+     inkscape:export-ydpi="82.105263">
+    <rect
+       height="16"
+       width="16"
+       y="0"
+       x="0"
+       id="rect18"
+       style="fill-opacity:0" />
+  </g>
+  <path
+     style="fill:#1a1a1a;fill-opacity:1;stroke:none;stroke-width:1"
+     d="M 0,-1.7193646e-8 V 25.999145 H 25.999145 V 10.394897 H 13.500366 c -0.924775,2.12164 -3.038255,3.605347 -5.5004882,3.605347 -3.3137084,0 -6.0003661,-2.686658 -6.0003661,-6.0003661 0,-3.313709 2.6866577,-6.0003662 6.0003661,-6.0003662 2.4692872,0 4.5872392,1.494109 5.5078122,3.6254883 H 25.999145 V -1.7193647e-8 Z"
+     id="rect3869"
+     inkscape:connector-curvature="0"
+     inkscape:export-xdpi="82.105263"
+     inkscape:export-ydpi="82.105263" />
+  <path
+     id="path3002"
+     style="opacity:0.25;fill:none;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 11.5,8 h 13 m -13,0 C 11.5,9.932997 9.932997,11.5 8,11.5 6.0670034,11.5 4.5,9.932997 4.5,8 4.5,6.0670034 6.0670034,4.5 8,4.5 c 1.932997,0 3.5,1.5670034 3.5,3.5 z"
+     inkscape:connector-curvature="0"
+     inkscape:export-xdpi="82.105263"
+     inkscape:export-ydpi="82.105263" />
+  <path
+     sodipodi:nodetypes="cccccccssscccc"
+     inkscape:connector-curvature="0"
+     id="path3872"
+     d="M -1.7193647e-8,-1.7193646e-8 V 26 H 26 V 11.5 H 14 14.03125 14.0625 C 12.8522,13.592433 10.591084,15 8,15 4.1340066,15 0.99999996,11.865993 0.99999996,8 0.99999996,4.1340066 4.1340066,0.99999996 8,0.99999996 c 2.591084,0 4.8522,1.40756694 6.0625,3.50000004 3.645833,0 8.291667,0 11.9375,0 V -1.7193646e-8 Z"
+     style="opacity:0.25;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     inkscape:export-xdpi="82.105263"
+     inkscape:export-ydpi="82.105263" />
+  <circle
+     style="opacity:0.76300001;fill:#1a1a1a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:14.23387146;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="path825"
+     cx="8.0107536"
+     cy="8.0024424"
+     r="1.8978496" />
+</svg>

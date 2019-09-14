@@ -1,3 +1,6 @@
+## maui RF round mod: search for drag_round_corner.cpp
+## maui RF stitching dialog_zone_via_stitching
+## maui RF stitching dialog_zone_via_shielding
 
 if( UNIX AND NOT APPLE )
     # Setting this ON slows down linking and is a advanced (=hidden) developer option for
@@ -243,6 +246,7 @@ set( PCBNEW_CLASS_SRCS
     deltrack.cpp
     dimension.cpp
     dragsegm.cpp
+    drag_round_corner.cpp
     drc.cpp
     drc_clearance_test_functions.cpp
     edgemod.cpp
