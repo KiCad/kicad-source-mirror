@@ -32,6 +32,7 @@
 #include <trigo.h>
 #include <common.h>
 #include <math_for_graphics.h>
+#include <geometry/seg.h>
 
 // Returns true if the point P is on the segment S.
 // faster than TestSegmentHit() because P should be exactly on S
@@ -151,32 +152,8 @@ bool TestSegmentHit( const wxPoint &aRefPoint, wxPoint aStart, wxPoint aEnd, int
     if( aStart.y == aEnd.y && aRefPoint.x > xmin && aRefPoint.x < xmax )
         return std::abs( delta.y ) <= aDist;
 
-    // Special case for a segment with start == end (equal to a circle)
-    if ( aStart == aEnd )
-    {
-        long double length_square = (long double) delta.x * delta.x + (long double) delta.y * delta.y;
-        long double dist_square = (long double) aDist * aDist;
-
-        return ( length_square <= dist_square );
-    }
-
-    wxPoint len = aEnd - aStart;
-    // Precision note here:
-    // These are 32-bit integers, so squaring requires 64 bits to represent
-    // exactly.  64-bit Doubles have only 52 bits in the mantissa, so we start to lose
-    // precision at 2^53, which corresponds to ~ ±1nm @ 9.5cm, 2nm at 90cm, etc...
-    // Long doubles avoid this ambiguity as well as the more expensive denormal double calc
-    // Long doubles usually (sometimes more if SIMD) have at least 64 bits in the mantissa
-    long double length_square = (long double) len.x * len.x + (long double) len.y * len.y;
-    long double cross = std::abs( (long double) len.x * delta.y - (long double) len.y * delta.x );
-    long double dist_square = (long double) aDist * aDist;
-
-    // The perpendicular distance to a line is the vector magnitude of the line from
-    // a test point to the test line.  That is the 2d determinant.  Because we handled
-    // the zero length case above, so we are guaranteed a unique solution.
-
-    return ( ( length_square >= cross && dist_square >= cross ) ||
-             ( length_square * dist_square >= cross * cross ) );
+    SEG segment( aStart, aEnd );
+    return segment.PointCloserThan( aRefPoint, aDist + 1 );
 }
 
 

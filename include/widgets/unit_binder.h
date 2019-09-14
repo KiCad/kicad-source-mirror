@@ -140,6 +140,10 @@ protected:
     NUMERIC_EVALUATOR m_eval;
     bool              m_allowEval;
     bool              m_needsEval;
+
+    ///> Selection start and end of the original text
+    long              m_selStart;
+    long              m_selEnd;
 };
 
 #endif /* __UNIT_BINDER_H_ */

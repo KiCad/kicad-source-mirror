@@ -58,6 +58,8 @@ DIALOG_PAD_PRIMITIVES_PROPERTIES::DIALOG_PAD_PRIMITIVES_PROPERTIES( wxWindow* aP
 {
     SetInitialFocus( m_startXCtrl );
 
+    TransferDataToWindow();
+
     m_sdbSizerOK->SetDefault();
 
     FinishDialogSettings();
@@ -87,11 +89,11 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
 
     case S_ARC:             // Arc with rounded ends
         SetTitle( _( "Arc" ) );
+        m_startX.SetValue( m_shape->m_End.x );     // confusingly, the start point of the arc
+        m_startY.SetValue( m_shape->m_End.y );
         m_staticTextPosEnd->SetLabel( _( "Center" ) );
-        m_startX.SetValue( m_shape->m_Start.x ); // Start point of arc
-        m_startY.SetValue( m_shape->m_Start.y );
-        m_endX.SetValue( m_shape->m_End.x );   // arc center
-        m_endY.SetValue( m_shape->m_End.y );
+        m_endX.SetValue( m_shape->m_Start.x );     // arc center
+        m_endY.SetValue( m_shape->m_Start.y );
         m_radiusLabel->SetLabel( _( "Angle:" ) );
         m_radius.SetUnits( DEGREES );
         m_radius.SetValue( m_shape->m_ArcAngle );
@@ -142,12 +144,12 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
         break;
 
     case S_ARC:             // Arc with rounded ends
-        // Start point of arc
-        m_shape->m_Start.x = m_startX.GetValue();
-        m_shape->m_Start.y = m_startY.GetValue();
-        // arc center
-        m_shape->m_End.x = m_endX.GetValue();
-        m_shape->m_End.y = m_endY.GetValue();
+        // NB: we store the center of the arc in m_Start, and, confusingly,
+        // the start point in m_End
+        m_shape->m_Start.x = m_endX.GetValue();
+        m_shape->m_Start.y = m_endY.GetValue();
+        m_shape->m_End.x = m_startX.GetValue();
+        m_shape->m_End.y = m_startY.GetValue();
         // arc angle
         m_shape->m_ArcAngle = m_radius.GetValue();
         break;
@@ -194,6 +196,9 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS::DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aPar
 
     // TODO: move wxEVT_GRID_CELL_CHANGING in wxFormbuilder, when it support it
 	m_gridCornersList->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging ), NULL, this );
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 
