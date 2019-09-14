@@ -682,6 +682,13 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
             if( next_copper_layer >= m_pcb->GetCopperLayerCount()-1 )
                 next_copper_layer = B_Cu;
 
+
+            addJSONObject( wxString::Format( "\"Name\":  \"%s %s/%s\",\n",
+                                formatStringFromUTF32( item->m_TypeName ),     // core or prepreg
+                                formatStringFromUTF32( m_pcb->GetLayerName( last_copper_layer ) ),
+                                formatStringFromUTF32( m_pcb->GetLayerName( next_copper_layer ) ) )
+                         );
+
             // Add a comment ("Notes"):
             wxString note = "\"Notes\":  ";
 
@@ -696,7 +703,7 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
         }
         else
         {
-            addJSONObject( wxString::Format( "\"Notes\":  \"Layer: %s\",\n", layer_name.c_str() ) );
+            addJSONObject( wxString::Format( "\"Name\":  \"%s\",\n", layer_name.c_str() ) );
         }
 
         removeJSONSepararator();
