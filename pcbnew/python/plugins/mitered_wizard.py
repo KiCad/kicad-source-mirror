@@ -1,6 +1,6 @@
 # This python script wizard creates a mitered bend for microwave applications
 # https://lists.launchpad.net/kicad-developers/msg17996.html
-# Author  Henrik Forstén
+# Author  Henrik Forsten
 
 from __future__ import division
 import FootprintWizardBase
