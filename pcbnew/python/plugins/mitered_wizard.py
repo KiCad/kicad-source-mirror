@@ -252,7 +252,7 @@ class UWMiterFootprintWizard(FootprintWizardBase.FootprintWizard):
         posx += (pad_l/2)*math.sin(angle)
         posy += (pad_l/2)*math.cos(angle)
         size_pad = wxSize(pad_l, width)
-        module.Add(self.smdRectPad(module, size_pad, wxPoint(posx,posy), "2", (angle_deg-90)*10))
+        module.Add(self.smdRectPad(module, size_pad, wxPoint(posx,posy), "1", (angle_deg-90)*10))
 
 
 # create our footprint wizard
