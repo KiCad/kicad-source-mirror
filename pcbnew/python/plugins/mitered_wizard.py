@@ -16,8 +16,8 @@ class UWMiterFootprintWizard(FootprintWizardBase.FootprintWizard):
         return "Mitered Bend Footprint Wizard"
 
     def GenerateParameterList(self):
-        self.AddParam("Corner", "width", self.uMM, 0.34)
-        self.AddParam("Corner", "height", self.uMM, 0.17)
+        self.AddParam("Corner", "width", self.uMM, 1.0)
+        self.AddParam("Corner", "height", self.uMM, 1.428)
         self.AddParam("Corner", "*angle", self.uDegrees, 90)
         
 
@@ -148,10 +148,12 @@ class UWMiterFootprintWizard(FootprintWizardBase.FootprintWizard):
         return self.bilinear_interpolation(wh, angle, [x1,x2,y1,y2])/100.0
 
     # build the footprint from parameters
+    #def BuildThisFootprint(self):
     def BuildFootprint(self):
 
         module = MODULE(None) # create a new module
         self.module = module
+        self.buildmessages = ""
 
         if not self.CheckParameters():
             return
@@ -168,6 +170,7 @@ class UWMiterFootprintWizard(FootprintWizardBase.FootprintWizard):
         textposy = width + FromMM(1)
         size_text = wxSize( FromMM( 0.6), FromMM( 0.5) )
         
+        module.name = "'uwm_{0:.2f}_{1:0.2f}_{2:.0f}'".format(ToMM(width),ToMM(height),angle_deg)
         module.SetReference("uwm_{0:.2f}_{1:0.2f}_{2:.0f}".format(ToMM(width),ToMM(height),angle_deg))
         module.Reference().SetPos0(wxPoint(0, textposy))
         module.Reference().SetPosition(module.Reference().GetPos0())
@@ -193,6 +196,7 @@ class UWMiterFootprintWizard(FootprintWizardBase.FootprintWizard):
 
         #Get proportion of width to cut
         cut = self.OptimalMiter(width, height, angle_deg)
+        cut_pc = cut
         print ("Cut: {0:.2f}%".format(cut*100))
 
         #Distance from uncut outside corner point to point 7
@@ -255,6 +259,14 @@ class UWMiterFootprintWizard(FootprintWizardBase.FootprintWizard):
         module.Add(self.smdRectPad(module, size_pad, wxPoint(posx,posy), "1", (angle_deg-90)*10))
         # moving anchor to center of first pad
         module.MoveAnchorPosition(wxPoint(-width/2,pad_l/2))
+        self.buildmessages = (
+            "Building new {name} footprint with the following parameters:\n\n"
+            .format(name=module.name))
+        self.buildmessages += ("Width: {0:.4f}mm\n".format(ToMM(width)))
+        self.buildmessages += ("Height: {0:.4f}mm\n".format(ToMM(height)))
+        self.buildmessages += ("Angle: {0:f}deg\n\n".format(angle_deg))
+        self.buildmessages += ("Cut: {0:.2f}%".format(cut_pc*100))
+        
 
 # create our footprint wizard
 uwmiter_wizard = UWMiterFootprintWizard()
