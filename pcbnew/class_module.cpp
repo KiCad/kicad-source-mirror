@@ -1393,9 +1393,24 @@ bool MODULE::BuildPolyCourtyard()
     return success;
 }
 
+
 void MODULE::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_MODULE_T );
 
     std::swap( *((MODULE*) this), *((MODULE*) aImage) );
+}
+
+
+bool MODULE::HasNonSMDPins() const
+{
+    // returns true if the given module has at lesat one non smd pin, such as through hole
+
+    for( auto pad : Pads() )
+    {
+        if( pad->GetAttribute() != PAD_ATTRIB_SMD )
+            return true;
+    }
+
+    return false;
 }

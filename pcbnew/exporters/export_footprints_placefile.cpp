@@ -62,24 +62,6 @@ static bool sortFPlist( const LIST_MOD& ref, const LIST_MOD& tst )
 }
 
 
-/**
- * Helper function HasNonSMDPins
- * returns true if the given module has any non smd pins, such as through hole
- * and therefore cannot be placed automatically.
- */
-static bool HasNonSMDPins( MODULE* aModule )
-{
-    for( auto pad : aModule->Pads() )
-    {
-        if( pad->GetAttribute() != PAD_ATTRIB_SMD )
-            return true;
-    }
-
-    return false;
-}
-
-
-
 enum SELECT_SIDE
 {
     PCB_NO_SIDE,
@@ -150,7 +132,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
         {
             if( m_forceSmdItems )    // true to fix a bunch of mis-labeled footprints:
             {
-                if( !HasNonSMDPins( footprint ) )
+                if( !footprint->HasNonSMDPins() )
                 {
                     // all footprint's pins are SMD, mark the part for pick and place
                     // Note: they are not necessary to pick and place,

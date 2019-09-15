@@ -182,6 +182,13 @@ public:
         return m_drawings;
     }
 
+    /**
+     * @return true if the given module has any non smd pins, such as through hole
+     * and therefore cannot be placed automatically.
+     * Used in Pick and Place files writers
+     */
+    bool HasNonSMDPins() const;
+
     std::list<MODULE_3D_SETTINGS>& Models()             { return m_3D_Drawings; }
     const std::list<MODULE_3D_SETTINGS>& Models() const { return m_3D_Drawings; }
 

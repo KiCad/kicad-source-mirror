@@ -244,7 +244,9 @@ bool GERBER_PLOTTER::EndPlot()
     {
         fputs( line, outputFile );
 
-        if( strcmp( strtok( line, "\n\r" ), "G04 APERTURE LIST*" ) == 0 )
+        char* substr = strtok( line, "\n\r" );
+
+        if( substr && strcmp( substr, "G04 APERTURE LIST*" ) == 0 )
         {
             writeApertureList();
             fputs( "G04 APERTURE END LIST*\n", outputFile );
