@@ -17,7 +17,7 @@ class UWMiterFootprintWizard(FootprintWizardBase.FootprintWizard):
 
     def GenerateParameterList(self):
         self.AddParam("Corner", "width", self.uMM, 1.0)
-        self.AddParam("Corner", "height", self.uMM, 1.428)
+        self.AddParam("Corner", "height", self.uMM, 1.57)
         self.AddParam("Corner", "*angle", self.uDegrees, 90)
         
 
@@ -262,9 +262,9 @@ class UWMiterFootprintWizard(FootprintWizardBase.FootprintWizard):
         self.buildmessages = (
             "Building new {name} footprint with the following parameters:\n\n"
             .format(name=module.name))
-        self.buildmessages += ("Width: {0:.4f}mm\n".format(ToMM(width)))
-        self.buildmessages += ("Height: {0:.4f}mm\n".format(ToMM(height)))
-        self.buildmessages += ("Angle: {0:f}deg\n\n".format(angle_deg))
+        self.buildmessages += ("Track Width: {0:.4f}mm\n".format(ToMM(width)))
+        self.buildmessages += ("PCB Height: {0:.4f}mm\n".format(ToMM(height)))
+        self.buildmessages += ("Angle: {:.1f}deg\n\n".format(angle_deg))
         self.buildmessages += ("Cut: {0:.2f}%".format(cut_pc*100))
         
 
