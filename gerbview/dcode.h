@@ -66,10 +66,10 @@ enum APERTURE_DEF_HOLETYPE {
 };
 
 /* define min and max values for D Codes values.
- * note: values >= 0 and > FIRST_DCODE can be used for special purposes
+ * note: values >= 0 and < FIRST_DCODE can be used for special purposes
  */
 #define FIRST_DCODE     10
-#define LAST_DCODE      999
+#define LAST_DCODE      10000
 #define TOOLS_MAX_COUNT (LAST_DCODE + 1)
 
 struct APERTURE_MACRO;

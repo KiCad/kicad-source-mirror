@@ -106,7 +106,8 @@ private:
  */
 class GERBER_FILE_IMAGE : public EDA_ITEM
 {
-    D_CODE*            m_Aperture_List[TOOLS_MAX_COUNT];    ///< Dcode (Aperture) List for this layer (max 999)
+    D_CODE*            m_Aperture_List[TOOLS_MAX_COUNT];    ///< Dcode (Aperture) List for this layer
+                                                            ///< (max TOOLS_MAX_COUNT: see dcode.h)
     bool               m_Exposure;                          ///< whether an aperture macro tool is flashed on or off
 
     GERBER_LAYER       m_GBRLayerParams; // hold params for the current gerber layer
