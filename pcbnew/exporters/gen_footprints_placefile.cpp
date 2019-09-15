@@ -45,6 +45,7 @@
 #include <wx_html_report_panel.h>
 #include <dialog_gen_footprint_position_file_base.h>
 #include <export_footprints_placefile.h>
+#include "gerber_placefile_writer.h"
 
 
 #define PLACEFILE_UNITS_KEY  wxT( "PlaceFileUnits" )
@@ -93,7 +94,23 @@ private:
     void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
     void OnGenerate( wxCommandEvent& event ) override;
 
-    bool CreateFiles();
+	void onUpdateUIUnits( wxUpdateUIEvent& event ) override
+    {
+        m_radioBoxUnits->Enable( m_rbFormat->GetSelection() != 2 );
+    }
+
+	void onUpdateUIFileOpt( wxUpdateUIEvent& event ) override
+    {
+        m_radioBoxFilesCount->Enable( m_rbFormat->GetSelection() != 2 );
+    }
+
+    /** Creates files in text or csv format
+     */
+    bool CreateAsciiFiles();
+
+    /** Creates placement files in gerber format
+     */
+    bool CreateGerberFiles();
 
     // accessors to options:
     wxString GetOutputDirectory()
@@ -135,6 +152,8 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
 
     // Output directory
     m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
+
+    // Update Options
     m_radioBoxUnits->SetSelection( m_unitsOpt );
     m_radioBoxFilesCount->SetSelection( m_fileOpt );
     m_rbFormat->SetSelection( m_fileFormat );
@@ -193,11 +212,95 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
     m_plotOpts.SetOutputDirectory( dirStr );
     m_parent->SetPlotSettings( m_plotOpts );
 
-    CreateFiles();
+    if( m_fileFormat == 2 )
+        CreateGerberFiles();
+    else
+        CreateAsciiFiles();
+}
+
+bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
+{
+    BOARD* brd = m_parent->GetBoard();
+    wxFileName  fn;
+    wxString    msg;
+    int fullcount = 0;
+
+    // Create output directory if it does not exist.
+    // Also transform it in absolute path.
+    // Bail if it fails
+    wxFileName  outputDir = wxFileName::DirName( m_plotOpts.GetOutputDirectory() );
+    wxString    boardFilename = m_parent->GetBoard()->GetFileName();
+
+    m_reporter = &m_messagesPanel->Reporter();
+
+    if( !EnsureFileDirectoryExists( &outputDir, boardFilename, m_reporter ) )
+    {
+        msg.Printf( _( "Could not write plot files to folder \"%s\"." ),
+                    outputDir.GetPath() );
+        DisplayError( this, msg );
+        return false;
+    }
+
+    fn = m_parent->GetBoard()->GetFileName();
+    fn.SetPath( outputDir.GetPath() );
+
+    // Create the the Front or Top side placement file, or a single file
+
+    // Test for any footprint candidate in list, and display the list of forced footprints
+    // if ForceAllSmd() is true
+    PLACEFILE_GERBER_WRITER exporter( brd );
+    wxString filename = exporter.GetPlaceFileName( fn.GetFullPath(), F_Cu );
+
+    int fpcount = exporter.CreatePlaceFile( filename, F_Cu );
+
+    if( fpcount < 0 )
+    {
+        msg.Printf( _( "Unable to create \"%s\"." ), fn.GetFullPath() );
+        wxMessageBox( msg );
+        m_reporter->Report( msg, REPORTER::RPT_ERROR );
+        return false;
+    }
+
+    msg.Printf( _( "Front side (top side) place file: \"%s\"." ), filename );
+    m_reporter->Report( msg, REPORTER::RPT_INFO );
+
+    msg.Printf( _( "Component count: %d." ), fpcount );
+    m_reporter->Report( msg, REPORTER::RPT_INFO );
+
+    // Create the Back or Bottom side placement file
+    fullcount = fpcount;
+
+    filename = exporter.GetPlaceFileName( fn.GetFullPath(), B_Cu );
+
+    fpcount = exporter.CreatePlaceFile( filename, B_Cu );
+
+    if( fpcount < 0 )
+    {
+        msg.Printf( _( "Unable to create file \"%s\"." ), filename );
+        m_reporter->Report( msg, REPORTER::RPT_ERROR );
+        wxMessageBox( msg );
+        return false;
+    }
+
+    // Display results
+    msg.Printf( _( "Back side (bottom side) place file: \"%s\"." ), filename );
+    m_reporter->Report( msg, REPORTER::RPT_INFO );
+
+    msg.Printf( _( "Component count: %d." ), fpcount );
+
+    m_reporter->Report( msg, REPORTER::RPT_INFO );
+
+    fullcount += fpcount;
+    msg.Printf( _( "Full component count: %d\n" ), fullcount );
+    m_reporter->Report( msg, REPORTER::RPT_INFO );
+
+    m_reporter->Report( _( "Component Placement File generation OK." ), REPORTER::RPT_ACTION );
+
+    return true;
 }
 
 
-bool DIALOG_GEN_FOOTPRINT_POSITION::CreateFiles()
+bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 {
     BOARD * brd = m_parent->GetBoard();
     wxFileName  fn;

@@ -245,9 +245,42 @@ std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribu
         attribute_string = "TA.AperFunction,ComponentMain";
         break;
 
-    case GBR_APERTURE_ATTRIB_CMP_COURTYARD:     // print info associated to a component
-                                                // print the component courtyard polygon
+    case GBR_APERTURE_ATTRIB_PAD1_POSITION:     // print info associated to a component
+                                                // flashed shape at pad 1 position
+                                                // (pad 1 is also pad A1 or pad AA1)
                                                 // in placement files
+        attribute_string = "TA.AperFunction,ComponentPin";
+        break;
+
+    case GBR_APERTURE_ATTRIB_PADOTHER_POSITION: // print info associated to a component
+                                                // flashed shape at pads position (all but pad 1)
+                                                // in placement files
+                                                // Currently: (could be changed later) same as
+                                                // GBR_APERTURE_ATTRIB_PADOTHER_POSITION
+        attribute_string = "TA.AperFunction,ComponentPin";
+        break;
+
+    case GBR_APERTURE_ATTRIB_CMP_BODY:          // print info associated to a component
+                                                // print the component physical body
+                                                // polygon in placement files
+        attribute_string = "TA.AperFunction,ComponentOutline,Body";
+        break;
+
+    case GBR_APERTURE_ATTRIB_CMP_LEAD2LEAD:     // print info associated to a component
+                                                // print the component physical lead to lead
+                                                // polygon in placement files
+        attribute_string = "TA.AperFunction,ComponentOutline,Lead2Lead";
+        break;
+
+    case GBR_APERTURE_ATTRIB_CMP_FOOTPRINT:     // print info associated to a component
+                                                // print the component footprint bounding box
+                                                // polygon in placement files
+        attribute_string = "TA.AperFunction,ComponentOutline,Footprint";
+        break;
+
+    case GBR_APERTURE_ATTRIB_CMP_COURTYARD:     // print info associated to a component
+                                                // print the component courtyard
+                                                // polygon in placement files
         attribute_string = "TA.AperFunction,ComponentOutline,Courtyard";
         break;
 
@@ -511,4 +544,54 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
     }
 
     return true;
+}
+
+
+/************  class GBR_CMP_PNP_METADATA *************/
+
+void GBR_CMP_PNP_METADATA::ClearData()
+{
+    // Clear all strings
+    m_Orientation = 0.0;
+    m_Manufacturer.Clear();
+    m_MPN.Clear();
+    m_Package.Clear();
+    m_Value.Clear();
+    m_MountType = MOUNT_TYPE_UNSPECIFIED;
+}
+/**
+ * @return a string containing the formated metadata in X2 syntax.
+ * one line by non empty data
+ * the orientation is always generated
+ */
+wxString GBR_CMP_PNP_METADATA::FormatCmpPnPMetadata()
+{
+    wxString text;
+    wxString start_of_line( "%TO.");
+    wxString end_of_line( "*%\n" );
+
+    wxString mounType[] =
+    {
+        "Other", "SMD", "BGA", "TH"
+    };
+
+    if( !m_Manufacturer.IsEmpty() )
+        text << start_of_line << "CMfr," << m_Manufacturer << end_of_line;
+
+    if( !m_MPN.IsEmpty() )
+        text << start_of_line << "CMPN," << m_MPN << end_of_line;
+
+    if( !m_Package.IsEmpty() )
+        text << start_of_line << "Cpkg," << m_Package << end_of_line;
+
+    if( !m_Footprint.IsEmpty() )
+        text << start_of_line << "CFtp," << m_Footprint << end_of_line;
+
+    if( !m_Value.IsEmpty() )
+        text << start_of_line << "CVal," << m_Value << end_of_line;
+
+    text << start_of_line << "CMnt," << mounType[m_MountType] << end_of_line;
+    text << start_of_line << "CRot," << m_Orientation << end_of_line;
+
+    return text;
 }

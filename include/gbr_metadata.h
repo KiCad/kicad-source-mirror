@@ -94,9 +94,17 @@ public:
         GBR_APERTURE_ATTRIB_WASHERPAD,      ///< aperture used for mechanical pads (NPTH)
         GBR_APERTURE_ATTRIB_HEATSINKPAD,    ///< aperture used for heat sink pad (typically for SMDs)
         GBR_APERTURE_ATTRIB_VIADRILL,       ///< aperture used for via holes in drill files
-        GBR_APERTURE_ATTRIB_CMP_DRILL,       ///< aperture used for pad holes in drill files
+        GBR_APERTURE_ATTRIB_CMP_DRILL,      ///< aperture used for pad holes in drill files
         GBR_APERTURE_ATTRIB_CMP_OBLONG_DRILL, ///< aperture used for pads oblong holes in drill files
-        GBR_APERTURE_ATTRIB_CMP_POSITION,   ///< aperture used for flashed shape in placement files
+        GBR_APERTURE_ATTRIB_CMP_POSITION,   ///< aperture used for flashed cmp position in placement files
+        GBR_APERTURE_ATTRIB_PAD1_POSITION,  ///< aperture used for flashed pin 1 (or A1 or AA1) position in placement files
+        GBR_APERTURE_ATTRIB_PADOTHER_POSITION,  ///< aperture used for flashed pads position in placement files
+        GBR_APERTURE_ATTRIB_CMP_BODY,       ///< aperture used to draw component physical body outline
+                                            ///< (without pins) in placement files
+        GBR_APERTURE_ATTRIB_CMP_LEAD2LEAD,  ///< aperture used to draw component physical body outline
+                                            ///< (with pins) in placement files
+        GBR_APERTURE_ATTRIB_CMP_FOOTPRINT,  ///< aperture used to draw component footprint bounding box
+                                            ///< in placement files
         GBR_APERTURE_ATTRIB_CMP_COURTYARD,  ///< aperture used to draw component outline courtyard
                                             ///< in placement files
         GBR_APERTURE_ATTRIB_END             ///< sentinel: max value

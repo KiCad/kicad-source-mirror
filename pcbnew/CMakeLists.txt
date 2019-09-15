@@ -219,6 +219,7 @@ set( PCBNEW_EXPORTERS
     exporters/gendrill_file_writer_base.cpp
     exporters/gendrill_gerber_writer.cpp
     exporters/gerber_jobfile_writer.cpp
+    exporters/gerber_placefile_writer.cpp
     )
 
 set( PCBNEW_MICROWAVE_SRCS
