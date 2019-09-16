@@ -17,6 +17,7 @@
 # This python script wizard creates an arc track for microwave applications
 # Author  easyw
 # taskkill -im pcbnew.exe /f &  C:\KiCad-v5-nightly\bin\pcbnew
+# version 1.1
 
 from __future__ import division
 
@@ -111,7 +112,10 @@ class uwArcPrimitive_wizard(FootprintWizardBase.FootprintWizard):
         
         angle_deg = float(pads["angle"]*10)
         angle = math.radians(angle_deg/10) #To radians
-
+        sign = 1.
+        if angle < 0:
+            sign = -1.
+        
         pos = pcbnew.wxPoint(0,0)
         module = self.module
         size_pad = pcbnew.wxSize(width, width)
@@ -124,11 +128,11 @@ class uwArcPrimitive_wizard(FootprintWizardBase.FootprintWizard):
         end_coord = (radius) * cmath.exp(math.radians(angle_deg/10-90)*1j)
         if pads['rectangle'] or angle_deg == 0 or radius == 0:
             if not line:
-                module.Add(self.smdPad(module, size_pad, pcbnew.wxPoint(0-width/2,0), "1", PAD_SHAPE_RECT,0,F_Cu))
+                module.Add(self.smdPad(module, size_pad, pcbnew.wxPoint(0-sign*width/2,0), "1", PAD_SHAPE_RECT,0,F_Cu))
             else:
                 module.Add(self.smdPad(module, size_pad, pcbnew.wxPoint(0,0), "1", PAD_SHAPE_RECT,0,F_Cu))
-            pos = pcbnew.wxPoint(end_coord.real+(width/2)*math.cos(angle),end_coord.imag+(width/2)*math.sin(angle)+radius)
             if not line:
+                pos = pcbnew.wxPoint(end_coord.real+(sign*width/2)*math.cos(angle),end_coord.imag+(sign*width/2)*math.sin(angle)+radius)
                 module.Add(self.smdPad(module, size_pad, pos, "1", PAD_SHAPE_RECT,angle_deg,F_Cu))
             else:
                 pos = pcbnew.wxPoint(radius,0) #+width/2,0)
@@ -136,11 +140,11 @@ class uwArcPrimitive_wizard(FootprintWizardBase.FootprintWizard):
             if sold_clear > 0:
                 size_pad = pcbnew.wxSize(sold_clear,sold_clear)
                 if not line:
-                    module.Add(self.smdPad(module, size_pad, pcbnew.wxPoint(0-width/2,0), "1", PAD_SHAPE_RECT,0,F_Mask))
+                    module.Add(self.smdPad(module, size_pad, pcbnew.wxPoint(0-sign*width/2,0), "1", PAD_SHAPE_RECT,0,F_Mask))
                 else:
                     module.Add(self.smdPad(module, size_pad, pcbnew.wxPoint(0,0), "1", PAD_SHAPE_RECT,0,F_Mask))
                 if not line:
-                    pos = pcbnew.wxPoint(end_coord.real+(width/2)*math.cos(angle),end_coord.imag+(width/2)*math.sin(angle)+radius)
+                    pos = pcbnew.wxPoint(end_coord.real+(sign*width/2)*math.cos(angle),end_coord.imag+(sign*width/2)*math.sin(angle)+radius)
                     module.Add(self.smdPad(module, size_pad, pos, "1", PAD_SHAPE_RECT,angle_deg,F_Mask))
                 else:
                     pos = pcbnew.wxPoint(radius,0) #+width/2,0)
