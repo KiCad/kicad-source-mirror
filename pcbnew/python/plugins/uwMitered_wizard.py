@@ -246,7 +246,7 @@ class UWMiterFootprintWizard(FootprintWizardBase.FootprintWizard):
         self.Polygon(points, F_Cu)
 
         #Create pads
-        pad_l = width/10
+        pad_l = width/2 #10 allowing big track to join the fp
         size_pad = wxSize(width,pad_l)
         module.Add(self.smdRectPad(module, size_pad, wxPoint(width/2,-pad_l/2), "1", 0))
         size_pad = wxSize(pad_l,width)
