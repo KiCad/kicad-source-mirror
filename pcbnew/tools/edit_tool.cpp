@@ -766,7 +766,15 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
         return 0;
 
     updateModificationPoint( selection );
+
+    // Use the bounding box center as flip position
     VECTOR2I modPoint = selection.GetCenter();
+
+    // If only one item selected, flip around the item anchor point, instead
+    // of the bounding box center, to avoid moving the item anchor
+    if( selection.GetSize() == 1 )
+        modPoint = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) )->GetPosition();
+
     bool leftRight = frame()->Settings().m_FlipLeftRight;
 
     // When editing modules, all items have the same parent
