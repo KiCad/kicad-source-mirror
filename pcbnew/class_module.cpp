@@ -997,10 +997,17 @@ void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     // Move module to its final position:
     wxPoint finalPos = m_Pos;
 
-    if( aFlipLeftRight )
-        MIRROR( finalPos.x, aCentre.x );     /// Mirror the X position
-    else
-        MIRROR( finalPos.y, aCentre.y );     /// Mirror the Y position
+    // Now Flip the footprint.
+    // Flipping a footprint is a specific transform:
+    // it is not mirrored like a text.
+    // We have to change the side, and ensure the footprint rotation is
+    // modified accordint to the transform, because this parameter is used
+    // in pick and place files, and when updating the footprint from library.
+    // When flipped around the X axis (Y coordinates changed) orientation is negated
+    // When flipped around the Y axis (X coordinates changed) orientation is 180 - old orient.
+    // Because it is specfic to a footprint, we flip around the X axis, and after rotate 180 deg
+
+    MIRROR( finalPos.y, aCentre.y );     /// Mirror the Y position (around the X axis)
 
     SetPosition( finalPos );
 
@@ -1009,15 +1016,16 @@ void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 
     // Reverse mirror orientation.
     m_Orient = -m_Orient;
+
     NORMALIZE_ANGLE_POS( m_Orient );
 
     // Mirror pads to other side of board.
     for( auto pad : m_pads )
-        pad->Flip( m_Pos, aFlipLeftRight );
+        pad->Flip( m_Pos, false );
 
     // Mirror reference and value.
-    m_Reference->Flip( m_Pos, aFlipLeftRight );
-    m_Value->Flip( m_Pos, aFlipLeftRight );
+    m_Reference->Flip( m_Pos, false );
+    m_Value->Flip( m_Pos, false );
 
     // Reverse mirror module graphics and texts.
     for( auto item : m_drawings )
@@ -1025,11 +1033,11 @@ void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         switch( item->Type() )
         {
         case PCB_MODULE_EDGE_T:
-            static_cast<EDGE_MODULE*>( item )->Flip( m_Pos, aFlipLeftRight );
+            static_cast<EDGE_MODULE*>( item )->Flip( m_Pos, false );
             break;
 
         case PCB_MODULE_TEXT_T:
-            static_cast<TEXTE_MODULE*>( item )->Flip( m_Pos, aFlipLeftRight );
+            static_cast<TEXTE_MODULE*>( item )->Flip( m_Pos, false );
             break;
 
         default:
@@ -1037,6 +1045,10 @@ void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
             break;
         }
     }
+
+    // Now rotate 180 deg if required
+    if( aFlipLeftRight )
+        Rotate( aCentre, 1800.0 );
 
     CalculateBoundingBox();
 }
