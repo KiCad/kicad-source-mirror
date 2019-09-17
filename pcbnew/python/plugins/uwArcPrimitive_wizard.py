@@ -51,7 +51,8 @@ class uwArcPrimitive_wizard(FootprintWizardBase.FootprintWizard):
         
 
     def GetValue(self):
-        name = str(pcbnew.ToMM(self.parameters["Corner"]["width"])) + '_' + str(pcbnew.ToMM(self.parameters["Corner"]["radius"])) + '_' + str((self.parameters["Corner"]["angle"]))
+        #name = str(pcbnew.ToMM(self.parameters["Corner"]["width"])) + '_' + str(pcbnew.ToMM(self.parameters["Corner"]["radius"])) + '_' + str((self.parameters["Corner"]["angle"]))
+        name = "{0:.2f}_{1:0.2f}_{2:.0f}".format(pcbnew.ToMM(self.parameters["Corner"]["width"]),pcbnew.ToMM(self.parameters["Corner"]["radius"]),(self.parameters["Corner"]["angle"]))
         if not self.parameters["Corner"]["line"]:
             pref = "uwArc"
         else:
@@ -59,7 +60,16 @@ class uwArcPrimitive_wizard(FootprintWizardBase.FootprintWizard):
         if self.parameters["Corner"]["rectangle"]:
             pref += "R"
         return pref + "%s" % name
-        
+    
+    def GetReferencePrefix(self):
+        if not self.parameters["Corner"]["line"]:
+            pref = "uwA"
+        else:
+            pref = "uwL"
+        #if self.parameters["Corner"]["rectangle"]:
+        #    pref += "R"
+        return pref + "***"
+
     # build a custom pad
     def smdCustomArcPad(self, module, size, pos, rad, name, angle_D, layer, ln):
         pad = D_PAD(module)

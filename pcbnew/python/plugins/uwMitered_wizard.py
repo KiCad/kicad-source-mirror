@@ -171,7 +171,9 @@ class UWMiterFootprintWizard(FootprintWizardBase.FootprintWizard):
         size_text = wxSize( FromMM( 0.6), FromMM( 0.5) )
         
         module.name = "'uwm_{0:.2f}_{1:0.2f}_{2:.0f}'".format(ToMM(width),ToMM(height),angle_deg)
-        module.SetReference("uwm_{0:.2f}_{1:0.2f}_{2:.0f}".format(ToMM(width),ToMM(height),angle_deg))
+        
+        #module.SetReference("uwm_{0:.2f}_{1:0.2f}_{2:.0f}".format(ToMM(width),ToMM(height),angle_deg))
+        module.SetReference("uwM***")           # give it a default value
         module.Reference().SetPos0(wxPoint(0, textposy))
         module.Reference().SetPosition(module.Reference().GetPos0())
         module.Reference().SetTextSize( size_text )
@@ -179,7 +181,8 @@ class UWMiterFootprintWizard(FootprintWizardBase.FootprintWizard):
         module.Reference().SetVisible(True)
 
         textposy = textposy + FromMM(1)
-        module.SetValue("Val***")           # give it a default value
+        #module.SetValue("Val***")           # give it a default value
+        module.SetValue("uwm_{0:.2f}_{1:0.2f}_{2:.0f}".format(ToMM(width),ToMM(height),angle_deg))
         module.Value().SetPos0( wxPoint(0, textposy) )
         module.Value().SetPosition(module.Value().GetPos0())
         module.Value().SetTextSize( size_text )
