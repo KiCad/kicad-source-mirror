@@ -1,6 +1,6 @@
 EESchema Schematic File Version 5
 LIBS:pic_programmer-cache
-EELAYER 29 0
+EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -13,6 +13,11 @@ Comment1 ""
 Comment2 ""
 Comment3 ""
 Comment4 ""
+Comment5 ""
+Comment6 ""
+Comment7 ""
+Comment8 ""
+Comment9 ""
 $EndDescr
 Wire Wire Line
 	5700 1250 6100 1250
@@ -420,14 +425,6 @@ F3 "CLOCK-RB6" I L 9200 4150 60
 F4 "DATA-RB7" I L 9200 3850 60 
 F5 "VCC_PIC" I L 9200 3200 60 
 $EndSheet
-Text Label 1850 3800 0    60   ~ 0
-DTR
-Text Label 1850 3700 0    60   ~ 0
-CTS
-Text Label 1850 3600 0    60   ~ 0
-TXD
-Text Label 1850 3500 0    60   ~ 0
-RTS
 Text Notes 850  6500 0    60   ~ 0
 8 to 15V
 NoConn ~ 6750 5150
@@ -1527,4 +1524,12 @@ Connection ~ 8800 5150
 Connection ~ 8000 6100
 Connection ~ 7450 6100
 Connection ~ 5450 1500
+Text Notes 1850 3500 0    60   ~ 0
+RTS
+Text Notes 1850 3600 0    60   ~ 0
+TXD
+Text Notes 1850 3700 0    60   ~ 0
+CTS
+Text Notes 1850 3800 0    60   ~ 0
+DTR
 $EndSCHEMATC
