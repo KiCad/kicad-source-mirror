@@ -1813,10 +1813,6 @@ void SCH_LEGACY_PLUGIN::Format( SCH_SCREEN* aScreen )
     // Write the header
     m_out->Print( 0, "%s %s %d\n", "EESchema", SCHEMATIC_HEAD_STRING, EESCHEMA_VERSION );
 
-    // Write the project libraries.
-    for( const PART_LIB& lib : *m_kiway->Prj().SchLibs() )
-        m_out->Print( 0, "LIBS:%s\n", TO_UTF8( lib.GetName() ) );
-
     // This section is not used, but written for file compatibility
     m_out->Print( 0, "EELAYER %d %d\n", SCH_LAYER_ID_COUNT, 0 );
     m_out->Print( 0, "EELAYER END\n" );
