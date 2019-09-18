@@ -226,17 +226,30 @@ std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribu
         attribute_string = "TA.AperFunction,ViaDrill";
         break;
 
-    case GBR_APERTURE_ATTRIB_COMPONENTDRILL:    // print info associated to a component
-                                                // round pad hole in drill files
+    case GBR_APERTURE_ATTRIB_CMP_DRILL:     // print info associated to a component
+                                            // round pad hole in drill files
         attribute_string = "TA.AperFunction,ComponentDrill";
         break;
 
     // print info associated to a component oblong pad hole in drill files
     // Same as a round pad hole, but is a specific aperture in drill file and
     // a G04 comment is added to the aperture function
-    case GBR_APERTURE_ATTRIB_COMPONENTOBLONGDRILL:
+    case GBR_APERTURE_ATTRIB_CMP_OBLONG_DRILL:
         comment_string = "aperture for slot hole";
         attribute_string = "TA.AperFunction,ComponentDrill";
+        break;
+
+    case GBR_APERTURE_ATTRIB_CMP_POSITION:      // print info associated to a component
+                                                // flashed shape at the component position
+                                                // in placement files
+        attribute_string = "TA.AperFunction,ComponentMain";
+        break;
+
+    case GBR_APERTURE_ATTRIB_CMP_COURTYARD:     // print info associated to a component
+                                                // print the component courtyard polygon
+                                                // in placement files
+        attribute_string = "TA.AperFunction,ComponentOutline,Courtyard";
+        break;
 
     break;
     }

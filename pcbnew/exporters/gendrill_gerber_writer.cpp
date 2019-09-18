@@ -195,18 +195,14 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
             // Good practice of oblong pad holes (slots) is to use a specific aperture for routing, not used
             // in drill commands
             if( hole_descr.m_Hole_Shape )
-                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_COMPONENTOBLONGDRILL );
+                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_OBLONG_DRILL );
             else
-                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_COMPONENTDRILL );
+                gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_DRILL );
 
             // Add object attribute: component reference to pads (mainly usefull for users)
             const D_PAD* pad = dyn_cast<const D_PAD*>( hole_descr.m_ItemParent );
             wxString ref = pad->GetParent()->GetReference();
 
-#if 0   // Set to 1 to force a dummy reference for the parent pad.
-            if( ref.IsEmpty() )
-                ref = "<undefinedref>";
-#endif
             gbr_metadata.SetCmpReference( ref );
             gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
         }

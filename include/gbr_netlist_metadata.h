@@ -62,8 +62,26 @@ public:
     wxString m_Cmpref;          ///< the component reference parent of the data
     wxString m_Netname;         ///< for items associated to a net: the netname
 
+    wxString m_ExtraData;       ///< a string to print after %TO object attributes, if not empty
+                                ///< it is printed "as this"
+
+
     GBR_NETLIST_METADATA(): m_NetAttribType( GBR_NETINFO_UNSPECIFIED ), m_NotInNet( false )
     {
+    }
+
+    /** Clear the extra data string printed at end of net attributes
+     */
+    void ClearExtraData()
+    {
+        m_ExtraData.Clear();
+    }
+
+    /** Set the extra data string printed at end of net attributes
+     */
+    void SetExtraData( const wxString& aExtraData)
+    {
+        m_ExtraData = aExtraData;
     }
 
     /**

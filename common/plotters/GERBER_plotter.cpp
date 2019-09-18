@@ -161,6 +161,12 @@ void GERBER_PLOTTER::formatNetAttribute( GBR_NETLIST_METADATA* aData )
 
     if( !short_attribute_string.empty() )
         fputs( short_attribute_string.c_str(), outputFile );
+
+    if( m_useX2format && !aData->m_ExtraData.IsEmpty() )
+    {
+        std::string extra_data = TO_UTF8( aData->m_ExtraData );
+        fputs( extra_data.c_str(), outputFile );
+    }
 }
 
 
@@ -500,7 +506,7 @@ void GERBER_PLOTTER::Arc( const wxPoint& aCenter, double aStAngle, double aEndAn
 }
 
 
-void GERBER_PLOTTER:: PlotPoly( const std::vector< wxPoint >& aCornerList,
+void GERBER_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
                                FILL_T aFill, int aWidth, void * aData )
 {
     if( aCornerList.size() <= 1 )

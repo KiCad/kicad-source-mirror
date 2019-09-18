@@ -277,7 +277,8 @@ public:
     /**
      * Function PlotPoly
      * @brief Draw a polygon ( filled or not )
-     * @param aCornerList = corners list (a SHAPE_LINE_CHAIN)
+     * @param aCornerList = corners list (a SHAPE_LINE_CHAIN).
+     * must be closed (IsClosed() == true) for a polygon. Otherwise this is a polyline
      * @param aFill = type of fill
      * @param aWidth = line width
      * @param aData an auxiliary info (mainly for gerber format)
