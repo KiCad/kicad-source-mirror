@@ -48,8 +48,8 @@
 #include <tools/cvpcb_association_tool.h>
 #include <tools/cvpcb_control.h>
 
-wxSize const FRAME_MIN_SIZE_DU( 350, 250 );
-wxSize const FRAME_DEFAULT_SIZE_DU( 450, 300 );
+wxSize const FRAME_MIN_SIZE_DU( 400, 300 );
+wxSize const FRAME_DEFAULT_SIZE_DU( 500, 400 );
 
 ///@{
 /// \ingroup config
@@ -255,7 +255,8 @@ void CVPCB_MAINFRAME::setupEventHandlers()
     Bind( wxEVT_BUTTON,
             [this]( wxCommandEvent& )
             {
-                this->GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociations );
+                // saveAssociations must be run immediatley, before running Close( true )
+                this->GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociations, true );
                 Close( true );
             }, wxID_OK );
     Bind( wxEVT_BUTTON,
@@ -317,6 +318,13 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
 
     // clear highlight symbol in schematic:
     SendMessageToEESCHEMA( true );
+
+    // Save config. Because the wxCloseEvent is captured,
+    // the EDA_BASE_FRAME will not see the event and will not save the config.
+    wxConfigBase* cfg = config();
+
+    if( cfg )
+        SaveSettings( cfg );
 
     // Delete window
     Destroy();
@@ -948,7 +956,7 @@ std::vector<unsigned int> CVPCB_MAINFRAME::GetComponentIndices(
         }
         break;
 
-    case CVPCB_MAINFRAME::ASOC_COMPONENTS:
+    case CVPCB_MAINFRAME::ASSOC_COMPONENTS:
         for( unsigned int i = 0; i < m_netlist.GetCount(); i++ )
         {
             if( !m_netlist.GetComponent( i )->GetFPID().empty() )

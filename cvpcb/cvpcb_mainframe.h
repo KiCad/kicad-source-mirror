@@ -361,7 +361,7 @@ public:
         ALL_COMPONENTS,     ///< All components
         SEL_COMPONENTS,     ///< Selected components
         NA_COMPONENTS,      ///< Not associated components
-        ASOC_COMPONENTS     ///< Associated components
+        ASSOC_COMPONENTS    ///< Associated components
     };
 
     /**
