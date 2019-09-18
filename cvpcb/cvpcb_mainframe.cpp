@@ -248,7 +248,8 @@ void CVPCB_MAINFRAME::setupEventHandlers()
     m_saveAndContinue->Bind( wxEVT_COMMAND_BUTTON_CLICKED,
             [this]( wxCommandEvent& )
             {
-                this->GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociations );
+                // saveAssociations must be run immediatley
+                this->GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociations, true );
             } );
 
     // Connect the handlers for the ok/cancel buttons
