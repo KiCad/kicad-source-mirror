@@ -19,11 +19,14 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <lib_tree_model_adapter.h>
 #include <eda_pattern_match.h>
+#include <kiface_i.h>
+#include <lib_tree_model_adapter.h>
 #include <wx/tokenzr.h>
 #include <wx/wupdlock.h>
 
+
+#define LIST_COLUMN_WIDTH_KEY wxT( "SelectorColumnWidth" )
 
 static const int kDataViewIndent = 20;
 
@@ -75,11 +78,38 @@ LIB_TREE_MODEL_ADAPTER::LIB_TREE_MODEL_ADAPTER()
      m_col_part( nullptr ),
      m_col_desc( nullptr ),
      m_widget( nullptr )
-{}
+{
+    // Default column widths
+    m_colWidths[PART_COL] = 360;
+    m_colWidths[DESC_COL] = 2000;
+
+    m_config = Kiface().KifaceSettings();
+    m_configPrefix = typeid( this ).name();
+
+    // Read the column width from the config
+    int colWidth = 0;
+
+    if( m_config->Read( m_configPrefix + LIST_COLUMN_WIDTH_KEY, &colWidth ) )
+        m_colWidths[PART_COL] = colWidth;
+}
 
 
 LIB_TREE_MODEL_ADAPTER::~LIB_TREE_MODEL_ADAPTER()
 {}
+
+
+void LIB_TREE_MODEL_ADAPTER::SaveColWidths()
+{
+    if( m_widget )
+    {
+        int colWidth = m_widget->GetColumn( PART_COL )->GetWidth();
+        m_config->Write( m_configPrefix + LIST_COLUMN_WIDTH_KEY, colWidth );
+    }
+    else
+    {
+        wxLogDebug( "Error saving column size, tree view doesn't exist" );
+    }
+}
 
 
 void LIB_TREE_MODEL_ADAPTER::SetFilter( CMP_FILTER_TYPE aFilter )
@@ -184,14 +214,21 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
 void LIB_TREE_MODEL_ADAPTER::AttachTo( wxDataViewCtrl* aDataViewCtrl )
 {
     wxString partHead = _( "Item" );
-    int      partWidth = 360;
     wxString descHead = _( "Description" );
-    int      descWidth = 2000;
 
     if( aDataViewCtrl->GetColumnCount() > 0 )
     {
-        partWidth = aDataViewCtrl->GetColumn( 0 )->GetWidth();
-        descWidth = aDataViewCtrl->GetColumn( 1 )->GetWidth();
+        int partWidth = aDataViewCtrl->GetColumn( PART_COL )->GetWidth();
+        int descWidth = aDataViewCtrl->GetColumn( DESC_COL )->GetWidth();
+
+        // Only use the widths read back if they are non-zero.
+        // GTK returns the displayed width of the column, which is not calculated immediately
+        // this leads to cases of 0 column width if the user types too fast in the filter
+        if( descWidth > 0 )
+        {
+            m_colWidths[PART_COL] = partWidth;
+            m_colWidths[DESC_COL] = descWidth;
+        }
     }
 
     m_widget = aDataViewCtrl;
@@ -199,8 +236,10 @@ void LIB_TREE_MODEL_ADAPTER::AttachTo( wxDataViewCtrl* aDataViewCtrl )
     aDataViewCtrl->AssociateModel( this );
     aDataViewCtrl->ClearColumns();
 
-    m_col_part = aDataViewCtrl->AppendTextColumn( partHead, 0, wxDATAVIEW_CELL_INERT, partWidth );
-    m_col_desc = aDataViewCtrl->AppendTextColumn( descHead, 1, wxDATAVIEW_CELL_INERT, descWidth );
+    m_col_part = aDataViewCtrl->AppendTextColumn( partHead, PART_COL, wxDATAVIEW_CELL_INERT,
+                                                  m_colWidths[PART_COL] );
+    m_col_desc = aDataViewCtrl->AppendTextColumn( descHead, DESC_COL, wxDATAVIEW_CELL_INERT,
+                                                  m_colWidths[DESC_COL] );
 }
 
 

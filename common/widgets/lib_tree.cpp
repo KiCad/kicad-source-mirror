@@ -29,9 +29,6 @@
 #include <wx/html/htmlwin.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
-#include <kiface_i.h>
-
-#define LIST_COLUMN_WIDTH_KEY          wxT( "SelectorColumnWidth" )
 
 
 LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAPTER::PTR& aAdapter,
@@ -43,9 +40,6 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAP
       m_query_ctrl( nullptr ),
       m_details_ctrl( nullptr )
 {
-    m_config = Kiface().KifaceSettings();
-    m_configPrefix = typeid( m_adapter ).name();
-
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
     // Search text control
@@ -116,11 +110,6 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAP
 
     Bind( COMPONENT_PRESELECTED, &LIB_TREE::onPreselect, this );
 
-    int colWidth = 0;
-
-    if( m_config->Read( m_configPrefix + LIST_COLUMN_WIDTH_KEY, &colWidth ) )
-        m_tree_ctrl->GetColumn( 0 )->SetWidth( colWidth );
-
     // If wxTextCtrl::SetHint() is called before binding wxEVT_TEXT, the event
     // handler will intermittently fire.
     if( m_query_ctrl )
@@ -148,8 +137,8 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAP
 
 LIB_TREE::~LIB_TREE()
 {
-    int colWidth = m_tree_ctrl->GetColumn( 0 )->GetWidth();
-    m_config->Write( m_configPrefix + LIST_COLUMN_WIDTH_KEY, colWidth );
+    // Save the column widths to the config file
+    m_adapter->SaveColWidths();
 }
 
 
@@ -412,7 +401,7 @@ void LIB_TREE::onPreselect( wxCommandEvent& aEvent )
 void LIB_TREE::onContextMenu( wxDataViewEvent& aEvent )
 {
     TOOL_INTERACTIVE* tool = m_adapter->GetContextMenuTool();
-    
+
     if( tool )
     {
         tool->Activate();

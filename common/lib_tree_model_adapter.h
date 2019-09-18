@@ -87,7 +87,7 @@
  * - `Compare()` - compare two rows, for sorting
  * - `HasDefaultCompare()` - whether sorted by default
  */
- 
+
 class TOOL_INTERACTIVE;
 
 class LIB_TREE_MODEL_ADAPTER: public wxDataViewModel
@@ -113,6 +113,22 @@ public:
         CMP_FILTER_NONE,        ///< no filtering
         CMP_FILTER_POWER,       ///< list components flagged PWR
     };
+
+    /**
+     * This enum defines the order of the columns in the tree view
+     */
+    enum TREE_COLS
+    {
+        PART_COL = 0,   ///< Part name column
+        DESC_COL,       ///< Part description column
+        NUM_COLS        ///< The number of tree columns
+    };
+
+    /**
+     * Save the column widths to the config file. This requires the tree view to still be
+     * valid.
+     */
+    void SaveColWidths();
 
     /**
      * Set the component filter type. Must be set before adding libraries
@@ -273,7 +289,7 @@ protected:
      */
     wxDataViewItem GetParent( wxDataViewItem const& aItem ) const override;
 
-    unsigned int GetColumnCount() const override { return 2; }
+    unsigned int GetColumnCount() const override { return NUM_COLS; }
 
     /**
      * Return the type of data stored in the column as indicated by wxVariant::GetType()
@@ -321,6 +337,11 @@ private:
     wxDataViewColumn*   m_col_part;
     wxDataViewColumn*   m_col_desc;
     wxDataViewCtrl*     m_widget;
+
+    int                 m_colWidths[NUM_COLS];
+
+    wxConfigBase*       m_config;
+    wxString            m_configPrefix;
 
     /**
      * Find any results worth highlighting and expand them, according to given

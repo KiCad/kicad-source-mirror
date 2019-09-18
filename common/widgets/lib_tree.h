@@ -158,9 +158,6 @@ protected:
     void onContextMenu( wxDataViewEvent& aEvent );
 
 protected:
-    wxConfigBase*               m_config;
-    wxString                    m_configPrefix;
-
     LIB_TABLE*                  m_lib_table;
     LIB_TREE_MODEL_ADAPTER::PTR m_adapter;
 
