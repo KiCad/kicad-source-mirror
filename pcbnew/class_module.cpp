@@ -1017,7 +1017,7 @@ void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     // Reverse mirror orientation.
     m_Orient = -m_Orient;
 
-    NORMALIZE_ANGLE_POS( m_Orient );
+    NORMALIZE_ANGLE_180( m_Orient );
 
     // Mirror pads to other side of board.
     for( auto pad : m_pads )
@@ -1157,7 +1157,7 @@ void MODULE::SetOrientation( double newangle )
 {
     double  angleChange = newangle - m_Orient;  // change in rotation
 
-    NORMALIZE_ANGLE_POS( newangle );
+    NORMALIZE_ANGLE_180( newangle );
 
     m_Orient = newangle;
 
