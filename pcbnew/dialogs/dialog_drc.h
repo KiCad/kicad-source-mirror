@@ -46,6 +46,7 @@ class BOARD_DESIGN_SETTINGS;
 /*!
  * DrcDialog class declaration
  */
+#define DIALOG_DRC_WINDOW_NAME "DialogDrcWindowName"
 
 class DIALOG_DRC_CONTROL: public DIALOG_DRC_CONTROL_BASE
 {

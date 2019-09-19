@@ -320,15 +320,9 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
     // clear highlight symbol in schematic:
     SendMessageToEESCHEMA( true );
 
-    // Save config. Because the wxCloseEvent is captured,
-    // the EDA_BASE_FRAME will not see the event and will not save the config.
-    wxConfigBase* cfg = config();
-
-    if( cfg )
-        SaveSettings( cfg );
-
-    // Delete window
-    Destroy();
+    // Skip the close event. Looks like needed to have the close event sent to the
+    // root class EDA_BASE_FRAME, and save config
+    Event.Skip();
 }
 
 

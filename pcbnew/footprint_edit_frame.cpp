@@ -461,8 +461,8 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
     Clear_Pcb( false );
 
-    //close the editor
-    Destroy();
+    // Close the editor
+    Event.Skip();
 }
 
 

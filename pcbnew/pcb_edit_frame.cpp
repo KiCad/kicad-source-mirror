@@ -85,6 +85,7 @@
 #include <netlist_reader.h>
 #include <pcb_netlist.h>
 #include <wx/wupdlock.h>
+#include <dialog_drc.h>     // for DIALOG_DRC_WINDOW_NAME definition
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
@@ -460,6 +461,15 @@ void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
+    // First close the DRC dialog.
+    // For some reason, if the board editor frame is destroyed when the DRC
+    // dialog currently open, Pcbnew crashes, At least on Windows.
+    DIALOG_DRC_CONTROL* open_dlg = static_cast<DIALOG_DRC_CONTROL*>(
+                                        wxWindow::FindWindowByName( DIALOG_DRC_WINDOW_NAME ) );
+
+    if( open_dlg )
+        open_dlg->Close( true );
+
     if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
     {
         wxFileName fileName = GetBoard()->GetFileName();
@@ -518,7 +528,8 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
     // want any paint event
     Show( false );
 
-    Destroy();
+    // Close frame:
+    Event.Skip();
 }
 
 

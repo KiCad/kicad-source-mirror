@@ -56,6 +56,8 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFra
     m_uviaMinSize( aEditorFrame, m_MicroViaMinTitle, m_SetMicroViakMinSizeCtrl,
                    m_MicroViaMinUnit, true )
 {
+    SetName( DIALOG_DRC_WINDOW_NAME );  // Set a window name to be able to find it
+
     m_config = Kiface().KifaceSettings();
     m_tester = aTester;
     m_brdEditor = aEditorFrame;

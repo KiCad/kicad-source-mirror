@@ -149,7 +149,7 @@ void EDA_BASE_FRAME::windowClosing( wxCloseEvent& event )
     wxConfigBase* cfg = config();
 
     if( cfg )
-        SaveSettings( cfg );       // virtual, wxFrame specific
+        SaveSettings( cfg );    // virtual, wxFrame specific
 
     event.Skip();       // we did not "handle" the event, only eavesdropped on it.
 }
