@@ -56,11 +56,11 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
     {
         D_PAD* pad = (D_PAD*) m_parent;
 
-        pt0 = pad->ShapePos();
-
         if( n == 0 )
-            return pt0;
+            return VECTOR2I( pad->GetPosition() );
 
+        // ShapePos() is the geometric center (not anchor) for the pad
+        pt0 = pad->ShapePos();
         VECTOR2I pt1 = pt0;
 
         switch( n )
