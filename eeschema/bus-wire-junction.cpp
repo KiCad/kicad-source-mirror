@@ -341,13 +341,13 @@ bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( SCH_SCREEN* aScreen )
 void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
 {
     SCH_SCREEN*        screen = GetScreen();
-    PICKED_ITEMS_LIST  itemList;
+    PICKED_ITEMS_LIST  undoList;
     EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
 
     auto remove_item = [ & ]( SCH_ITEM* aItem ) -> void
     {
         aItem->SetFlags( STRUCT_DELETED );
-        itemList.PushItem( ITEM_PICKER( aItem, UR_DELETED ) );
+        undoList.PushItem( ITEM_PICKER( aItem, UR_DELETED ) );
     };
 
     remove_item( aJunction );
@@ -383,7 +383,7 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
             {
                 remove_item( item );
                 remove_item( secondItem );
-                itemList.PushItem( ITEM_PICKER( line, UR_NEW ) );
+                undoList.PushItem( ITEM_PICKER( line, UR_NEW ) );
 
                 AddToScreen( line );
 
@@ -395,12 +395,11 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
         }
     }
 
-    SaveCopyInUndoList( itemList, UR_DELETED, aAppend );
+    SaveCopyInUndoList( undoList, UR_DELETED, aAppend );
 
-    SCH_ITEM* nextitem;
-    for( SCH_ITEM* item = screen->GetDrawItems(); item; item = nextitem )
+    for( unsigned ii = 0; ii < undoList.GetCount(); ii++ )
     {
-        nextitem = item->Next();
+        EDA_ITEM* item = undoList.GetPickedItem( ii );
 
         if( item->GetEditFlags() & STRUCT_DELETED )
         {
