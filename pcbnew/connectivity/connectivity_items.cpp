@@ -43,7 +43,7 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
     switch( m_parent->Type() )
     {
         case PCB_PAD_T:
-            return static_cast<const D_PAD*>( m_parent )->ShapePos();
+            return VECTOR2I( static_cast<const D_PAD*>( m_parent )->GetPosition() );
             break;
 
         case PCB_TRACE_T:
