@@ -342,12 +342,12 @@ F 3 "" H 7650 2900 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L pic_programmer_schlib:PNP Q3
+L pic_programmer_schlib:BC307 Q3
 U 1 1 4639B996
 P 8200 2900
 F 0 "Q3" H 8350 2900 60  0000 C CNN
 F 1 "BC307" H 8104 3050 60  0000 C CNN
-F 2 "footprints:TO-92_BC237_307" H 8100 3100 20  0000 C CNN
+F 2 "Package_TO_SOT_THT:TO-92" H 8100 3100 20  0000 C CNN
 F 3 "" H 8200 2900 60  0001 C CNN
 	1    8200 2900
 	1    0    0    1   
@@ -825,12 +825,12 @@ F 3 "" H 6100 700 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L pic_programmer_schlib:PNP Q2
+L pic_programmer_schlib:BC307 Q2
 U 1 1 442A4F30
 P 6450 1400
 F 0 "Q2" H 6400 1250 60  0000 C CNN
 F 1 "BC307" H 6354 1550 60  0000 C CNN
-F 2 "footprints:TO-92_BC237_307" H 6348 1617 30  0000 C CNN
+F 2 "Package_TO_SOT_THT:TO-92" H 6348 1617 30  0000 C CNN
 F 3 "" H 6450 1400 60  0001 C CNN
 	1    6450 1400
 	1    0    0    1   
@@ -875,12 +875,12 @@ CLOCK-RB6
 Text Label 5500 3150 0    60   ~ 0
 DATA-RB7
 $Comp
-L pic_programmer_schlib:NPN Q1
+L pic_programmer_schlib:BC237 Q1
 U 1 1 442A4EB9
 P 5350 1700
 F 0 "Q1" H 5500 1700 50  0000 C CNN
 F 1 "BC237" H 5252 1850 50  0000 C CNN
-F 2 "footprints:TO-92_BC237_307" H 5200 1550 30  0000 C CNN
+F 2 "Package_TO_SOT_THT:TO-92" H 5200 1550 30  0000 C CNN
 F 3 "" H 5350 1700 60  0001 C CNN
 	1    5350 1700
 	1    0    0    -1  

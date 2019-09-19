@@ -71,6 +71,46 @@ X VO 3 400 50 200 L 40 40 1 1 w
 ENDDRAW
 ENDDEF
 #
+# pic_programmer_schlib_BC237
+#
+DEF pic_programmer_schlib_BC237 Q 0 0 Y Y 1 F N
+F0 "Q" 0 -150 50 H V R CNN
+F1 "pic_programmer_schlib_BC237" 0 150 50 H V R CNN
+F2 "Package_TO_SOT_THT:TO-92" -100 -200 15 H V C CNN
+F3 "" 0 0 60 H V C CNN
+DRAW
+C 50 0 111 0 1 10 N
+P 2 0 1 0 0 0 100 100 N
+P 3 0 1 10 0 75 0 -75 0 -75 N
+P 3 0 1 0 50 -50 0 0 0 0 N
+P 3 0 1 0 90 -90 100 -100 100 -100 N
+P 5 0 1 0 90 -90 70 -30 30 -70 90 -90 90 -90 F
+X C 1 100 200 100 D 40 40 1 1 P
+X B 2 -200 0 200 R 40 40 1 1 I
+X E 3 100 -200 100 U 40 40 1 1 P
+ENDDRAW
+ENDDEF
+#
+# pic_programmer_schlib_BC307
+#
+DEF pic_programmer_schlib_BC307 Q 0 0 Y Y 1 F N
+F0 "Q" 0 -150 60 H V R CNN
+F1 "pic_programmer_schlib_BC307" 0 150 60 H V R CNN
+F2 "Package_TO_SOT_THT:TO-92" -100 -200 15 H V C CNN
+F3 "" 0 0 60 H V C CNN
+DRAW
+C 50 0 111 0 1 10 N
+P 2 0 1 0 0 0 100 100 N
+P 3 0 1 10 0 75 0 -75 0 -75 F
+P 3 0 1 0 25 -25 0 0 0 0 N
+P 3 0 1 0 100 -100 65 -65 65 -65 N
+P 5 0 1 0 25 -25 50 -75 75 -50 25 -25 25 -25 F
+X C 1 100 200 100 D 40 40 1 1 P
+X B 2 -200 0 200 R 40 40 1 1 I
+X E 3 100 -200 100 U 40 40 1 1 P
+ENDDRAW
+ENDDEF
+#
 # pic_programmer_schlib_C
 #
 DEF pic_programmer_schlib_C C 0 10 N Y 1 F N
@@ -340,26 +380,6 @@ C 0 0 31 0 1 0 N
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib_NPN
-#
-DEF pic_programmer_schlib_NPN Q 0 0 Y Y 1 F N
-F0 "Q" 0 -150 50 H V R CNN
-F1 "pic_programmer_schlib_NPN" 0 150 50 H V R CNN
-F2 "" 0 0 60 H V C CNN
-F3 "" 0 0 60 H V C CNN
-DRAW
-C 50 0 111 0 1 10 N
-P 2 0 1 0 0 0 100 100 N
-P 3 0 1 10 0 75 0 -75 0 -75 N
-P 3 0 1 0 50 -50 0 0 0 0 N
-P 3 0 1 0 90 -90 100 -100 100 -100 N
-P 5 0 1 0 90 -90 70 -30 30 -70 90 -90 90 -90 F
-X E 1 100 -200 100 U 40 40 1 1 P
-X B 2 -200 0 200 R 40 40 1 1 I
-X C 3 100 200 100 D 40 40 1 1 P
-ENDDRAW
-ENDDEF
-#
 # pic_programmer_schlib_PIC12C508A
 #
 DEF pic_programmer_schlib_PIC12C508A U 0 40 Y Y 1 F N
@@ -434,26 +454,6 @@ X RB0 6 -800 -150 300 R 50 50 1 2 B
 X RB1 7 -800 -300 300 R 50 50 1 2 B
 X RB2 8 -800 -450 300 R 50 50 1 2 B
 X RB3 9 -800 -600 300 R 50 50 1 2 B
-ENDDRAW
-ENDDEF
-#
-# pic_programmer_schlib_PNP
-#
-DEF pic_programmer_schlib_PNP Q 0 0 Y Y 1 F N
-F0 "Q" 0 -150 60 H V R CNN
-F1 "pic_programmer_schlib_PNP" 0 150 60 H V R CNN
-F2 "" 0 0 60 H V C CNN
-F3 "" 0 0 60 H V C CNN
-DRAW
-C 50 0 111 0 1 10 N
-P 2 0 1 0 0 0 100 100 N
-P 3 0 1 10 0 75 0 -75 0 -75 F
-P 3 0 1 0 25 -25 0 0 0 0 N
-P 3 0 1 0 100 -100 65 -65 65 -65 N
-P 5 0 1 0 25 -25 50 -75 75 -50 25 -25 25 -25 F
-X E 1 100 -200 100 U 40 40 1 1 P
-X B 2 -200 0 200 R 40 40 1 1 I
-X C 3 100 200 100 D 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
