@@ -698,17 +698,24 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
 
     // Items do not necessarily have reciprocity as we only check for anchors
     //  therefore, we check HitTest both directions A->B & B->A
-    // TODO: Check for collision geometry on extended features
-    wxPoint ptA1( aCandidate->GetAnchor( 0 ).x, aCandidate->GetAnchor( 0 ).y );
-    wxPoint ptA2( aCandidate->GetAnchor( 1 ).x, aCandidate->GetAnchor( 1 ).y );
-    wxPoint ptB1( m_item->GetAnchor( 0 ).x, m_item->GetAnchor( 0 ).y );
-    wxPoint ptB2( m_item->GetAnchor( 1 ).x, m_item->GetAnchor( 1 ).y );
-    if( parentA->HitTest( ptB1 ) || parentB->HitTest( ptA1 ) ||
-            ( parentA->Type() == PCB_TRACE_T && parentB->HitTest( ptA2 ) ) ||
-            ( parentB->Type() == PCB_TRACE_T && parentA->HitTest( ptB2 ) ) )
+    for( int i = 0; i < aCandidate->AnchorCount(); ++i )
     {
-        m_item->Connect( aCandidate );
-        aCandidate->Connect( m_item );
+        if( parentB->HitTest( wxPoint( aCandidate->GetAnchor( i ) ) ) )
+        {
+            m_item->Connect( aCandidate );
+            aCandidate->Connect( m_item );
+            return true;
+        }
+    }
+
+    for( int i = 0; i < m_item->AnchorCount(); ++i )
+    {
+        if( parentA->HitTest( wxPoint( m_item->GetAnchor( i ) ) ) )
+        {
+            m_item->Connect( aCandidate );
+            aCandidate->Connect( m_item );
+            return true;
+        }
     }
 
     return true;
