@@ -330,7 +330,7 @@ wxString ErcFileWildcard()
 
 wxString SpiceLibraryFileWildcard()
 {
-    return _( "Spice library file" ) + AddFileExtListToFilter( { "lib" } );
+    return _( "Spice library file" ) + AddFileExtListToFilter( { "lib", "mod" } );
 }
 
 
