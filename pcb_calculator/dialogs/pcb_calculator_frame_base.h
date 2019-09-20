@@ -208,6 +208,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_staticTextReactance;
 		wxStaticText* m_Reactance;
 		wxStaticText* m_staticTextReactanceUnits;
+		wxStaticText* m_staticTextWarning;
 		wxPanel* m_panelElectricalSpacing;
 		UNIT_SELECTOR_LEN* m_ElectricalSpacingUnitsSelector;
 		wxStaticLine* m_staticline2;
@@ -355,6 +356,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		virtual void OnViaCalculate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnViaRho_Button( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnViaEpsilonR_Button( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onUpdateViaCalcErrorText( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnElectricalSpacingUnitsSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnElectricalSpacingRefresh( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineSelection( wxCommandEvent& event ) { event.Skip(); }

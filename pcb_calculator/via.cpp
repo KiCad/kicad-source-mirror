@@ -98,10 +98,25 @@ void PCB_CALCULATOR_FRAME::OnViaRho_Button( wxCommandEvent& event )
     wxArrayString list = StandardResistivityList();
 
     wxString value = wxGetSingleChoice( wxEmptyString,
-            _("Specific Resistance"), list).BeforeFirst( ' ' );
+            _("Electrical Resistivity in Ohm*m"), list).BeforeFirst( ' ' );
     if( ! value.IsEmpty() )
         m_textCtrlPlatingResistivity->SetValue( value );
 }
+
+
+void PCB_CALCULATOR_FRAME::onUpdateViaCalcErrorText( wxUpdateUIEvent& event )
+{
+    // Update the Error message if a via has a external diameter
+    // bigger than the clearance area diameter
+    // (therefore the via is inside a copper zone and some parameters connot be calculated)
+    double clearanceDia = std::abs( DoubleFromString( m_textCtrlClearanceDia->GetValue() ) );
+    clearanceDia *= m_choiceClearanceDia->GetUnitScale();
+    double padDia = std::abs( DoubleFromString( m_textCtrlViaPadDia->GetValue() ) );
+    padDia *= m_choiceViaPadDia->GetUnitScale();
+
+    m_staticTextWarning->Show( clearanceDia <= padDia );
+}
+
 
 void PCB_CALCULATOR_FRAME::VS_Init( wxConfigBase* aCfg )
 {
@@ -196,7 +211,7 @@ void PCB_CALCULATOR_FRAME::OnViaCalculate( wxCommandEvent& event )
     padDia             *= m_choiceViaPadDia->GetUnitScale();
     clearanceDia       *= m_choiceClearanceDia->GetUnitScale();
     charImpedance      *= m_choiceImpedance->GetUnitScale();
-    platingResistivity  = platingResistivity / 100; // Ohm-cm to Ohm-m
+    // platingResistivity is ok: it is in Ohm*m in tables
 
     // Calculate cross-sectional area of the via's cylindrical structure [3]
     double area = M_PI * (finishedHoleDia + platingThickness) * platingThickness; // m^2

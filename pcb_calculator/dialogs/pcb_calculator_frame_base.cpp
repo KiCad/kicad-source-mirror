@@ -623,7 +623,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_staticTextAppliedCurrentUnits->Wrap( -1 );
 	fgSizerVS_Inputs->Add( m_staticTextAppliedCurrentUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_staticTextResistivity = new wxStaticText( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, _("Plating resistivity:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextResistivity = new wxStaticText( sbSizerVS_Inputs->GetStaticBox(), wxID_ANY, _("Plating resistivity (Ohm.m):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextResistivity->Wrap( -1 );
 	m_staticTextResistivity->SetToolTip( _("Specific resistance in ohms * meters") );
 
@@ -822,6 +822,15 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 
 
 	sbSizerVS_Result->Add( fgSizerTW_Results11, 0, wxEXPAND, 5 );
+
+
+	sbSizerVS_Result->Add( 30, 30, 0, 0, 5 );
+
+	m_staticTextWarning = new wxStaticText( sbSizerVS_Result->GetStaticBox(), wxID_ANY, _("Warning:\nVia pad diameter >= Clearance hole diameter.\nSome parameters cannot be calculated for a via\ninside a copper zone."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextWarning->Wrap( -1 );
+	m_staticTextWarning->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+
+	sbSizerVS_Result->Add( m_staticTextWarning, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 
 	bSizerViaSize->Add( sbSizerVS_Result, 1, wxEXPAND|wxALL, 5 );
@@ -1694,6 +1703,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_button_Permittivity->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnViaEpsilonR_Button ), NULL, this );
 	m_textCtrlTemperatureDiff->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnViaCalculate ), NULL, this );
 	m_textCtrlRiseTime->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnViaCalculate ), NULL, this );
+	m_staticTextWarning->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PCB_CALCULATOR_FRAME_BASE::onUpdateViaCalcErrorText ), NULL, this );
 	m_ElectricalSpacingUnitsSelector->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnElectricalSpacingUnitsSelection ), NULL, this );
 	m_buttonElectSpacingRefresh->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnElectricalSpacingRefresh ), NULL, this );
 	m_TranslineSelection->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnTranslineSelection ), NULL, this );
@@ -1756,6 +1766,7 @@ PCB_CALCULATOR_FRAME_BASE::~PCB_CALCULATOR_FRAME_BASE()
 	m_button_Permittivity->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnViaEpsilonR_Button ), NULL, this );
 	m_textCtrlTemperatureDiff->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnViaCalculate ), NULL, this );
 	m_textCtrlRiseTime->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnViaCalculate ), NULL, this );
+	m_staticTextWarning->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PCB_CALCULATOR_FRAME_BASE::onUpdateViaCalcErrorText ), NULL, this );
 	m_ElectricalSpacingUnitsSelector->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnElectricalSpacingUnitsSelection ), NULL, this );
 	m_buttonElectSpacingRefresh->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnElectricalSpacingRefresh ), NULL, this );
 	m_TranslineSelection->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( PCB_CALCULATOR_FRAME_BASE::OnTranslineSelection ), NULL, this );

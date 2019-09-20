@@ -203,6 +203,11 @@ private:
     void OnViaRho_Button( wxCommandEvent& event ) override;
 
     /**
+     * Update the Error message in Via calculation panel
+     */
+	void onUpdateViaCalcErrorText( wxUpdateUIEvent& event ) override;
+
+    /**
      * Function VSDisplayValues
      * Displays the results of the calculation.
      */
