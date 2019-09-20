@@ -609,7 +609,7 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
 
     if( m_enabledLayers != layersList )
     {
-        wxMessageBox( _( "Stackup not up to date. Pleasy verify it" ) );
+        wxMessageBox( _( "Stackup not up to date. Verify it" ) );
         return false;
     }
 
@@ -632,7 +632,7 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
 
     if( thickness_error )
     {
-        wxMessageBox( _( " A layer thickness is < 0. Fix it" ) );
+        wxMessageBox( _( "A layer thickness is < 0. Fix it" ) );
         return false;
     }
 
