@@ -657,7 +657,18 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
         if( item->IsColorEditable() && uptodate )
         {
             if( !item->m_Color.IsEmpty() && item->m_Color != NOT_SPECIFIED )
-                addJSONObject( wxString::Format( "\"Color\":  \"%s\",\n", item->m_Color ) );
+            {
+                wxString colorName = item->m_Color;
+
+                if( colorName.StartsWith( "#" ) )     // This is a user defined color.
+                {
+                    // In job file a color can be given by its RGB values (0...255)
+                    wxColor color( colorName );
+                    colorName.Printf( "R%dG%dB%d", color.Red(), color.Green(), color.Blue() );
+                }
+
+                addJSONObject( wxString::Format( "\"Color\":  \"%s\",\n", colorName ) );
+            }
         }
 
         if( item->IsThicknessEditable() && uptodate )
@@ -672,8 +683,8 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
             // Do not add constrains that create more expensive boards.
             if( brd_stackup.m_HasDielectricConstrains )
             {
-                addJSONObject( wxString::Format( "\"DielectricConstant\":  %.1f,\n", item->m_EpsilonR ) );
-                addJSONObject( wxString::Format( "\"LossTangent\":  %f,\n", item->m_LossTangent ) );
+                addJSONObject( wxString::Format( "\"DielectricConstant\":  %s,\n", item->FormatEpsilonR() ) );
+                addJSONObject( wxString::Format( "\"LossTangent\":  %s,\n", item->FormatLossTangent() ) );
             }
 
             PCB_LAYER_ID next_copper_layer = (PCB_LAYER_ID) (last_copper_layer+1);
