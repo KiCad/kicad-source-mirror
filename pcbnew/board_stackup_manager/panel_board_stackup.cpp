@@ -704,7 +704,7 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
                 success = false;
                 if( !error_msg.IsEmpty() )
                     error_msg << "\n";
-                error_msg << _( "Incorrect value for Loss tg (Loss tg must be or null if not used)" );
+                error_msg << _( "Incorrect value for Loss tg (Loss tg must be positive or null if not used)" );
             }
         }
 
