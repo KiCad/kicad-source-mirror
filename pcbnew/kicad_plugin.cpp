@@ -1775,8 +1775,13 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
         }
 
         if( !is_closed )    // Should not happen, but...
-            m_out->Print( aNestLevel+1, ")\n" );
+        {
+            if( newLine != 0 )
+                m_out->Print( 0, "\n" );
 
+            m_out->Print( aNestLevel+2, ")\n" );
+            m_out->Print( aNestLevel+1, ")\n" );
+        }
     }
 
     // Save the PolysList (filled areas)
