@@ -50,6 +50,8 @@ PCB_BASE_EDIT_FRAME::~PCB_BASE_EDIT_FRAME()
 {
     wxTextFile footprintInfoCache( Prj().GetProjectPath() + "fp-info-cache" );
     GFootprintList.WriteCacheToFile( &footprintInfoCache );
+
+    GetCanvas()->GetView()->Clear();
 }
 
 
