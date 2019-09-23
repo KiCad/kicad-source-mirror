@@ -211,13 +211,12 @@ void PCB_EDIT_FRAME::OnActionPluginButton( wxCommandEvent& aEvent )
 
 void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
 {
+
     PICKED_ITEMS_LIST itemsList;
     BOARD*  currentPcb  = GetBoard();
     bool    fromEmpty   = false;
 
     itemsList.m_Status = UR_CHANGED;
-
-    OnModify();
 
     // Append tracks:
     for( auto item : currentPcb->Tracks() )
@@ -275,8 +274,25 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     }
 
     // Try do discover what was modified
-
     PICKED_ITEMS_LIST deletedItemsList;
+
+    // The list of existing items after running the action script
+    std::set<BOARD_ITEM*> currItemList;
+    // Append tracks:
+    for( auto item : currentPcb->Tracks() )
+        currItemList.insert( item );
+
+    // Append modules:
+    for( auto item : currentPcb->Modules() )
+        currItemList.insert( item );
+
+    // Append drawings
+    for( auto item : currentPcb->Drawings() )
+        currItemList.insert( item );
+
+    // Append zones outlines
+    for( int ii = 0; ii < currentPcb->GetAreaCount(); ii++ )
+        currItemList.insert( currentPcb->GetArea( ii ) );
 
     // Found deleted modules
     for( unsigned int i = 0; i < oldBuffer->GetCount(); i++ )
@@ -286,49 +302,8 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
 
         wxASSERT( item );
 
-        switch( item->Type() )
-        {
-        case PCB_NETINFO_T:
-        case PCB_MARKER_T:
-        case PCB_MODULE_T:
-        case PCB_TRACE_T:
-        case PCB_VIA_T:
-        case PCB_LINE_T:
-        case PCB_TEXT_T:
-        case PCB_DIMENSION_T:
-        case PCB_TARGET_T:
-
-            // If item has a list it's mean that the element is on the board
-            if( item->GetList() == NULL )
-            {
-                deletedItemsList.PushItem( picker );
-            }
-
-            break;
-
-        case PCB_ZONE_AREA_T:
-        {
-            bool zoneFound = false;
-
-            for( int ii = 0; ii < currentPcb->GetAreaCount(); ii++ )
-                zoneFound |= currentPcb->GetArea( ii ) == item;
-
-            if( !zoneFound )
-            {
-                deletedItemsList.PushItem( picker );
-            }
-
-            break;
-        }
-
-        default:
-            wxString msg;
-            msg.Printf( _( "(PCB_EDIT_FRAME::OnActionPlugin) needs work: "
-                                "BOARD_ITEM type (%d) not handled" ),
-                    item->Type() );
-            wxFAIL_MSG( msg );
-            break;
-        }
+        if( currItemList.find( item ) == currItemList.end() )
+            deletedItemsList.PushItem( picker );
     }
 
     // Mark deleted elements in undolist
@@ -375,8 +350,11 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         }
     }
 
-
-    GetScreen()->PushCommandToUndoList( oldBuffer );
+    if( oldBuffer->GetCount() )
+    {
+        OnModify();
+        GetScreen()->PushCommandToUndoList( oldBuffer );
+    }
 
     ActivateGalCanvas();
 }
