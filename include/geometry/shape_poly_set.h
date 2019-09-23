@@ -171,7 +171,7 @@ class SHAPE_POLY_SET : public SHAPE
                 if( m_currentPolygon != m_poly->OutlineCount() - 1 )
                     return false;
 
-                auto currentPolygon = m_poly->CPolygon( m_currentPolygon );
+                const auto& currentPolygon = m_poly->CPolygon( m_currentPolygon );
 
                 return m_currentContour < (int) currentPolygon.size() - 1
                            || m_currentVertex < currentPolygon[m_currentContour].PointCount();
