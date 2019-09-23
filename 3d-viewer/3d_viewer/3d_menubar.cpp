@@ -84,24 +84,24 @@ void EDA_3D_VIEWER::CreateMenuBar()
                        zoom_redraw_xpm,                SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
-    viewMenu->AddItem( ID_ROTATE3D_X_NEG, _( "Rotate X Clockwise\tShift+X" ), "",
+    viewMenu->AddItem( ID_ROTATE3D_X_NEG, _( "Rotate X Clockwise\tCtrl+Shift+X" ), "",
                        rotate_neg_x_xpm,               SELECTION_CONDITIONS::ShowAlways );
 
-    viewMenu->AddItem( ID_ROTATE3D_X_POS, _( "Rotate X Counterclockwise\tX" ), "",
+    viewMenu->AddItem( ID_ROTATE3D_X_POS, _( "Rotate X Counterclockwise\tCtrl+X" ), "",
                        rotate_pos_x_xpm,               SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
-    viewMenu->AddItem( ID_ROTATE3D_Y_NEG, _( "Rotate Y Clockwise\tShift+Y" ), "",
+    viewMenu->AddItem( ID_ROTATE3D_Y_NEG, _( "Rotate Y Clockwise\tCtrl+Shift+Y" ), "",
                        rotate_neg_y_xpm,               SELECTION_CONDITIONS::ShowAlways );
 
-    viewMenu->AddItem( ID_ROTATE3D_Y_POS, _( "Rotate Y Counterclockwise\tY" ), "",
+    viewMenu->AddItem( ID_ROTATE3D_Y_POS, _( "Rotate Y Counterclockwise\tCtrl+Y" ), "",
                        rotate_pos_y_xpm,               SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
-    viewMenu->AddItem( ID_ROTATE3D_Z_NEG, _( "Rotate Z Clockwise\tShift+Z" ), "",
+    viewMenu->AddItem( ID_ROTATE3D_Z_NEG, _( "Rotate Z Clockwise\tCtrl+Shift+Z" ), "",
                        rotate_neg_z_xpm,               SELECTION_CONDITIONS::ShowAlways );;
 
-    viewMenu->AddItem( ID_ROTATE3D_Z_POS, _( "Rotate Z Counterclockwise\tZ" ), "",
+    viewMenu->AddItem( ID_ROTATE3D_Z_POS, _( "Rotate Z Counterclockwise\tCtrl+Z" ), "",
                        rotate_pos_z_xpm,               SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
