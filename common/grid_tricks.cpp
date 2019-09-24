@@ -63,6 +63,7 @@ bool GRID_TRICKS::toggleCell( int aRow, int aCol )
 
     if( isCheckbox )
     {
+        m_grid->ClearSelection();
         m_grid->SetGridCursor( aRow, aCol );
 
         wxGridTableBase* model = m_grid->GetTable();
@@ -102,6 +103,8 @@ bool GRID_TRICKS::showEditor( int aRow, int aCol )
 
     if( m_grid->IsEditable() && !m_grid->IsReadOnly( aRow, aCol ) )
     {
+        m_grid->ClearSelection();
+
         if( m_grid->GetSelectionMode() == wxGrid::wxGridSelectRows )
         {
             wxArrayInt rows = m_grid->GetSelectedRows();
