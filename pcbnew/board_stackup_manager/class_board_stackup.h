@@ -44,6 +44,7 @@ enum BOARD_STACKUP_ITEM_TYPE
                                 // dielectric between copper layers
     BS_ITEM_TYPE_SOLDERPASTE,   // A initialized BOARD_STACKUP_ITEM item for solder paste layers
     BS_ITEM_TYPE_SOLDERMASK,    // A initialized BOARD_STACKUP_ITEM item for solder mask layers
+                                // note: this is a specialized dielectric material
     BS_ITEM_TYPE_SILKSCREEN,    // A initialized BOARD_STACKUP_ITEM item for silkscreen layers
 };
 
@@ -70,7 +71,7 @@ public:
                             /// false to ignore it. Mainly used in dialog stackup editor.
     wxString m_LayerName;   /// name of layer as shown in layer manager. Usefull to create reports
     wxString m_TypeName;    /// type name of layer (copper, silk screen, core, prepreg ...)
-    wxString m_Material;    /// type of material (has meaning only for dielectric
+    wxString m_Material;    /// type of material (has meaning only for dielectric and solder mask)
     int m_DielectricLayerId;/// the "layer" id for dielectric layers,
                             /// from 1 (top) to 31 (bottom)
     wxString m_Color;       /// mainly for silkscreen and solder mask
@@ -90,6 +91,9 @@ public:
     /// @return true if the layer has a meaningfull Dielectric Loss parameter
     /// namely dielectric layers: dielectric and solder mask
     bool HasLossTangentValue();
+
+    /// @return true if the material is specified
+    bool HasMaterialValue();
 
     /// @return true if the material is editable
     bool IsMaterialEditable();

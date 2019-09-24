@@ -676,15 +676,25 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
 
         if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
         {
-            addJSONObject( wxString::Format( "\"Material\":  \"%s\",\n", item->m_Material ) );
-
-            // These constrains are only written if the board has impedance controlled tracks.
-            // If the board is not impedance controlled,  they are useless.
-            // Do not add constrains that create more expensive boards.
-            if( brd_stackup.m_HasDielectricConstrains )
+            if( item->HasMaterialValue() )
             {
-                addJSONObject( wxString::Format( "\"DielectricConstant\":  %s,\n", item->FormatEpsilonR() ) );
-                addJSONObject( wxString::Format( "\"LossTangent\":  %s,\n", item->FormatLossTangent() ) );
+                addJSONObject( wxString::Format( "\"Material\":  \"%s\",\n", item->m_Material ) );
+
+                // These constrains are only written if the board has impedance controlled tracks.
+                // If the board is not impedance controlled,  they are useless.
+                // Do not add constrains that create more expensive boards.
+                if( brd_stackup.m_HasDielectricConstrains )
+                {
+                    // Generate Epsilon R if > 1.0 (value <= 1.0 means not specified: it is not
+                    // a possible value
+                    if( item->m_EpsilonR > 1.0 )
+                        addJSONObject( wxString::Format( "\"DielectricConstant\":  %s,\n", item->FormatEpsilonR() ) );
+
+                    // Generate LossTangent > 0.0 (value <= 0.0 means not specified: it is not
+                    // a possible value
+                    if( item->m_LossTangent > 0.0 )
+                        addJSONObject( wxString::Format( "\"LossTangent\":  %s,\n", item->FormatLossTangent() ) );
+                }
             }
 
             PCB_LAYER_ID next_copper_layer = (PCB_LAYER_ID) (last_copper_layer+1);
@@ -711,6 +721,31 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
                             formatStringFromUTF32( m_pcb->GetLayerName( next_copper_layer ) ) );
 
             addJSONObject( note );
+        }
+        else if( item->m_Type == BS_ITEM_TYPE_SOLDERMASK || item->m_Type == BS_ITEM_TYPE_SILKSCREEN )
+        {
+            if( item->HasMaterialValue() )
+            {
+                addJSONObject( wxString::Format( "\"Material\":  \"%s\",\n", item->m_Material ) );
+
+                // These constrains are only written if the board has impedance controlled tracks.
+                // If the board is not impedance controlled,  they are useless.
+                // Do not add constrains that create more expensive boards.
+                if( brd_stackup.m_HasDielectricConstrains )
+                {
+                    // Generate Epsilon R if > 1.0 (value <= 1.0 means not specified: it is not
+                    // a possible value
+                    if( item->m_EpsilonR > 1.0 )
+                        addJSONObject( wxString::Format( "\"DielectricConstant\":  %s,\n", item->FormatEpsilonR() ) );
+
+                    // Generate LossTangent > 0.0 (value <= 0.0 means not specified: it is not
+                    // a possible value
+                    if( item->m_LossTangent > 0.0 )
+                        addJSONObject( wxString::Format( "\"LossTangent\":  %s,\n", item->FormatLossTangent() ) );
+                }
+            }
+
+            addJSONObject( wxString::Format( "\"Name\":  \"%s\",\n", layer_name.c_str() ) );
         }
         else
         {

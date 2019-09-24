@@ -45,6 +45,12 @@
 // String in wxChoice to use user defined material or solder mask color
 #define USER_DEFINED "user defined"
 
+// A reasonable Epsilon R value for solder mask dielectric
+#define DEFAULT_EPSILON_R_SOLDERMASK 3.3
+
+// A default Epsilon R value for silkscreen dielectric
+#define DEFAULT_EPSILON_R_SILKSCREEN 1.0
+
 // A minor struct to handle color in gerber job file and dialog
 struct FAB_LAYER_COLOR
 {

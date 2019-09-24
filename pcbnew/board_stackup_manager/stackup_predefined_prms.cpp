@@ -61,12 +61,13 @@ static wxString CopperFinishType[] =
 // A list of available colors for solder mask and silkscreen
 // These names are used in .gbrjob file, so they are not fully free.
 // Use only what is allowed in .gbrjob files.
-// for other colors (user defined), the defined value is the html color syntax
+// for other colors (user defined), the defined value is the
+// html color syntax in .kicad_pcb files
 // and R<integer>G<integer>B<integer> In gbrjob file.
 static FAB_LAYER_COLOR solderMaskColors[]  =
 {
     { _HKI( NOT_SPECIFIED ), wxColor( 80, 80, 80 ) },   // Not specified, not in .gbrjob file
-    { _HKI( "Green" ), wxColor( 60, 150, 80 ) },         // used in .gbrjob file
+    { _HKI( "Green" ), wxColor( 60, 150, 80 ) },        // used in .gbrjob file
     { _HKI( "Red" ), wxColor( 128, 0, 0 ) },            // used in .gbrjob file
     { _HKI( "Blue" ), wxColor( 0, 0, 128 ) },           // used in .gbrjob file
     { _HKI( "Black" ), wxColor( 20, 20, 20 ) },         // used in .gbrjob file

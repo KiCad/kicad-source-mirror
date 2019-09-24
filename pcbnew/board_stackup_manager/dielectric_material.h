@@ -51,7 +51,19 @@ class DIELECTRIC_SUBSTRATE_LIST
     std::vector<DIELECTRIC_SUBSTRATE> m_substrateList;
 
 public:
-    DIELECTRIC_SUBSTRATE_LIST();
+    enum DL_MATERIAL_LIST_TYPE
+    {
+        DL_MATERIAL_DIELECTRIC,
+        DL_MATERIAL_SOLDERMASK,
+        DL_MATERIAL_SILKSCREEN
+    };
+
+    /** Ctor
+     * @param aForDielectric =
+     * DL_MATERIAL_DIELECTRIC to build a dielectric material list
+     * DL_MATERIAL_SOLDERMASK to build a solder mask material list
+     */
+    DIELECTRIC_SUBSTRATE_LIST( DL_MATERIAL_LIST_TYPE aListType);
 
     /**
      * @return the number of substrates in list

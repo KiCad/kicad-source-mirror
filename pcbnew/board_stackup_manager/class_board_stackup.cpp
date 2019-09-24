@@ -62,16 +62,19 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
 
     case BS_ITEM_TYPE_SOLDERMASK:
         m_TypeName = "soldermask";
-        m_Color = NOT_SPECIFIED;
+        m_Color = "Green";
+        m_Material = NOT_SPECIFIED; // or other solder mask material name
         m_Thickness = GetMaskDefaultThickness();
-        m_EpsilonR = 3.5;
+        m_EpsilonR = DEFAULT_EPSILON_R_SOLDERMASK;
         m_LossTangent = 0.0;
         break;
 
     case BS_ITEM_TYPE_SILKSCREEN:
         m_TypeName = "silkscreen";
         m_Color = NOT_SPECIFIED;
-        m_Thickness = 0.0;          // Not used
+        m_Material = NOT_SPECIFIED; // or other silkscreen material name
+        m_EpsilonR = DEFAULT_EPSILON_R_SILKSCREEN;
+        m_Thickness = 0.0;          // to be specified
         break;
 
     case BS_ITEM_TYPE_UNDEFINED:
@@ -114,20 +117,35 @@ int BOARD_STACKUP_ITEM::GetMaskDefaultThickness()
 
 bool BOARD_STACKUP_ITEM::HasEpsilonRValue()
 {
-    return m_Type == BS_ITEM_TYPE_DIELECTRIC || m_Type == BS_ITEM_TYPE_SOLDERMASK;
+    return m_Type == BS_ITEM_TYPE_DIELECTRIC
+           || m_Type == BS_ITEM_TYPE_SOLDERMASK
+           //|| m_Type == BS_ITEM_TYPE_SILKSCREEN
+            ;
 };
 
 
 bool BOARD_STACKUP_ITEM::HasLossTangentValue()
 {
-    return m_Type == BS_ITEM_TYPE_DIELECTRIC || m_Type == BS_ITEM_TYPE_SOLDERMASK;
+    return m_Type == BS_ITEM_TYPE_DIELECTRIC
+           || m_Type == BS_ITEM_TYPE_SOLDERMASK
+           //|| m_Type == BS_ITEM_TYPE_SILKSCREEN
+            ;
 };
+
+
+bool BOARD_STACKUP_ITEM::HasMaterialValue()
+{
+    // return true if the material is specified
+    return IsMaterialEditable() && ( m_Material.CmpNoCase( NOT_SPECIFIED ) != 0 );
+}
 
 
 bool BOARD_STACKUP_ITEM::IsMaterialEditable()
 {
     // The material is editable only for dielectric
-    return m_Type == BS_ITEM_TYPE_DIELECTRIC;
+    return m_Type == BS_ITEM_TYPE_DIELECTRIC ||
+           m_Type == BS_ITEM_TYPE_SOLDERMASK ||
+           m_Type == BS_ITEM_TYPE_SILKSCREEN;
 }
 
 
@@ -505,14 +523,14 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
                                    FormatInternalUnits( (int)item->m_Thickness ).c_str() );
         }
 
-        if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
+        if( item->HasMaterialValue() )
             aFormatter->Print( 0, " (material %s)",
                                aFormatter->Quotew( item->m_Material ).c_str() );
 
-        if( item->HasEpsilonRValue() )
+        if( item->HasEpsilonRValue()&& item->HasMaterialValue() )
             aFormatter->Print( 0, " (epsilon_r %g)", item->m_EpsilonR );
 
-        if( item->HasLossTangentValue() )
+        if( item->HasLossTangentValue()&& item->HasMaterialValue() )
             aFormatter->Print( 0, " (loss_tangent %s)",
                                Double2Str(item->m_LossTangent ).c_str() );
 

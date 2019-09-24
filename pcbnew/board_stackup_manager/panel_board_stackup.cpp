@@ -62,7 +62,10 @@ static void drawBitmap( wxBitmap& aBitmap, wxColor aColor );
 
 PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame,
                                                       PANEL_SETUP_LAYERS* aPanelLayers ):
-    PANEL_SETUP_BOARD_STACKUP_BASE( aParent->GetTreebook() )
+        PANEL_SETUP_BOARD_STACKUP_BASE( aParent->GetTreebook() ),
+        m_delectricMatList( DIELECTRIC_SUBSTRATE_LIST::DL_MATERIAL_DIELECTRIC ),
+        m_solderMaskMatList( DIELECTRIC_SUBSTRATE_LIST::DL_MATERIAL_SOLDERMASK ),
+        m_silkscreenMatList( DIELECTRIC_SUBSTRATE_LIST::DL_MATERIAL_SILKSCREEN )
 {
     m_frame = aFrame;
     m_panelLayers = aPanelLayers;
@@ -967,32 +970,64 @@ void PANEL_SETUP_BOARD_STACKUP::onColorSelected( wxCommandEvent& event )
 
 void PANEL_SETUP_BOARD_STACKUP::onMaterialChange( wxCommandEvent& event )
 {
-    // Ensure m_materialList contains all materials already in use in stacjup list
+    // Ensure m_materialList contains all materials already in use in stackup list
     // and add it is missing
     if( !transferDataFromUIToStackup() )
         return;
 
     for( BOARD_STACKUP_ITEM* item : m_stackup.GetList() )
     {
-        if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
-        {
-            int idx = m_materialList.FindSubstrate( item->m_Material,
-                                                    item->m_EpsilonR,
-                                                    item->m_LossTangent );
+        DIELECTRIC_SUBSTRATE_LIST* mat_list = nullptr;
 
-            if( idx < 0 && !item->m_Material.IsEmpty() )
-            {
-                // This material is not in list: add it
-                DIELECTRIC_SUBSTRATE new_mat;
-                new_mat.m_Name = item->m_Material;
-                new_mat.m_EpsilonR = item->m_EpsilonR;
-                new_mat.m_LossTangent = item->m_LossTangent;
-                m_materialList.AppendSubstrate( new_mat );
-            }
+        if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
+            mat_list = &m_delectricMatList;
+        else if( item->m_Type == BS_ITEM_TYPE_SOLDERMASK )
+            mat_list = &m_solderMaskMatList;
+        else if( item->m_Type == BS_ITEM_TYPE_SILKSCREEN )
+            mat_list = &m_silkscreenMatList;
+
+        else
+            continue;
+
+        int idx = mat_list->FindSubstrate( item->m_Material,
+                                           item->m_EpsilonR,
+                                           item->m_LossTangent );
+
+        if( idx < 0 && !item->m_Material.IsEmpty() )
+        {
+            // This material is not in list: add it
+            DIELECTRIC_SUBSTRATE new_mat;
+            new_mat.m_Name = item->m_Material;
+            new_mat.m_EpsilonR = item->m_EpsilonR;
+            new_mat.m_LossTangent = item->m_LossTangent;
+            mat_list->AppendSubstrate( new_mat );
         }
     }
 
-    DIALOG_DIELECTRIC_MATERIAL dlg( this, m_materialList );
+    int row  = event.GetId() - ID_ITEM_MATERIAL;
+    BOARD_STACKUP_ITEM* item = GetStackupItem( row );
+    DIELECTRIC_SUBSTRATE_LIST* item_mat_list = nullptr;
+
+    switch( item->m_Type )
+    {
+    case BS_ITEM_TYPE_DIELECTRIC:
+        item_mat_list = &m_delectricMatList;
+        break;
+
+    case BS_ITEM_TYPE_SOLDERMASK:
+        item_mat_list = &m_solderMaskMatList;
+        break;
+
+    case BS_ITEM_TYPE_SILKSCREEN:
+        item_mat_list = &m_silkscreenMatList;
+        break;
+
+    default:
+        item_mat_list = nullptr;
+        break;
+    }
+
+    DIALOG_DIELECTRIC_MATERIAL dlg( this, *item_mat_list );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
@@ -1002,10 +1037,7 @@ void PANEL_SETUP_BOARD_STACKUP::onMaterialChange( wxCommandEvent& event )
     if( substrate.m_Name.IsEmpty() )    // No substrate specified
         return;
 
-    int row  = event.GetId() - ID_ITEM_MATERIAL;
-
     // Update Name, Epsilon R and Loss tg
-    BOARD_STACKUP_ITEM* item = GetStackupItem( row );
     item->m_Material = substrate.m_Name;
     item->m_EpsilonR = substrate.m_EpsilonR;
     item->m_LossTangent = substrate.m_LossTangent;

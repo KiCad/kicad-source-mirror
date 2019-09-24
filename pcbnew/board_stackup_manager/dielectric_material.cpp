@@ -50,6 +50,21 @@ static DIELECTRIC_SUBSTRATE substrateMaterial[]  =
                                     // Other names are free
 };
 
+static DIELECTRIC_SUBSTRATE solderMaskMaterial[]  =
+{
+    { NOT_SPECIFIED, DEFAULT_EPSILON_R_SOLDERMASK, 0.0 },   // Not specified, not in .gbrjob file
+    { "Epoxy", DEFAULT_EPSILON_R_SOLDERMASK, 0.0 },         // Epoxy Liquid material (usual)
+    { "Liquid Ink", DEFAULT_EPSILON_R_SOLDERMASK, 0.0 },    // Liquid Ink Photoimageable
+    { "Dry Film", DEFAULT_EPSILON_R_SOLDERMASK, 0.0 }       // Dry Film Photoimageable
+};
+
+static DIELECTRIC_SUBSTRATE silkscreenMaterial[]  =
+{
+    { NOT_SPECIFIED, DEFAULT_EPSILON_R_SILKSCREEN, 0.0 },       // Not specified, not in .gbrjob file
+    { "Liquid Photo", DEFAULT_EPSILON_R_SILKSCREEN, 0.0 },      // Liquid Ink Photoimageable
+    { "Direct Printing", DEFAULT_EPSILON_R_SILKSCREEN, 0.0 }    // Direct Legend Printing
+};
+
 
 wxString DIELECTRIC_SUBSTRATE::FormatEpsilonR()
 {
@@ -69,11 +84,26 @@ wxString DIELECTRIC_SUBSTRATE::FormatLossTangent()
 }
 
 
-DIELECTRIC_SUBSTRATE_LIST::DIELECTRIC_SUBSTRATE_LIST()
+DIELECTRIC_SUBSTRATE_LIST::DIELECTRIC_SUBSTRATE_LIST( DL_MATERIAL_LIST_TYPE aListType )
 {
     // Fills the m_substrateList with predefined params:
-    for( unsigned ii = 0; ii < arrayDim( substrateMaterial ); ++ii )
-        m_substrateList.push_back( substrateMaterial[ii] );
+    switch( aListType )
+    {
+    case DL_MATERIAL_DIELECTRIC:
+        for( unsigned ii = 0; ii < arrayDim( substrateMaterial ); ++ii )
+            m_substrateList.push_back( substrateMaterial[ii] );
+        break;
+
+    case DL_MATERIAL_SOLDERMASK:
+        for( unsigned ii = 0; ii < arrayDim( solderMaskMaterial ); ++ii )
+            m_substrateList.push_back( solderMaskMaterial[ii] );
+        break;
+
+    case DL_MATERIAL_SILKSCREEN:
+        for( unsigned ii = 0; ii < arrayDim( silkscreenMaterial ); ++ii )
+            m_substrateList.push_back( silkscreenMaterial[ii] );
+        break;
+    }
 }
 
 

@@ -75,7 +75,9 @@ struct BOARD_STACKUP_ROW_UI_ITEM
 class PANEL_SETUP_BOARD_STACKUP : public PANEL_SETUP_BOARD_STACKUP_BASE
 {
 public:
-    PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame, PANEL_SETUP_LAYERS* aPanelLayers );
+    PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent,
+                               PCB_EDIT_FRAME* aFrame,
+                               PANEL_SETUP_LAYERS* aPanelLayers );
     ~PANEL_SETUP_BOARD_STACKUP();
 
     void ImportSettingsFrom( BOARD* aBoard );
@@ -182,8 +184,14 @@ private:
                                             // restricted to allowed layers in stackup.
                                             // when do not match the enabled layers
                                             // in PANEL_SETUP_LAYERS the stackup is not up to date
-    DIELECTRIC_SUBSTRATE_LIST m_materialList;      // a list of currently available materials
-    std::vector<BOARD_STACKUP_ROW_UI_ITEM> m_rowUiItemsList;    // List of items in m_fgGridSizer
+    // a list of currently available dielectric materials
+    DIELECTRIC_SUBSTRATE_LIST m_delectricMatList;
+    // a list of currently available solder mask materials
+    DIELECTRIC_SUBSTRATE_LIST m_solderMaskMatList;
+    // a list of currently available solder mask materials
+    DIELECTRIC_SUBSTRATE_LIST m_silkscreenMatList;
+    // List of items in m_fgGridSizer
+    std::vector<BOARD_STACKUP_ROW_UI_ITEM> m_rowUiItemsList;
     BOARD*          m_board;
     BOARD_DESIGN_SETTINGS*  m_brdSettings;
     EDA_UNITS_T     m_units;
