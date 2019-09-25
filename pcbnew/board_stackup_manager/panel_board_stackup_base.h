@@ -52,7 +52,7 @@ class PANEL_SETUP_BOARD_STACKUP_BASE : public wxPanel
 		wxScrolledWindow* m_scGridWin;
 		wxFlexGridSizer* m_fgGridSizer;
 		wxStaticText* m_staticTextLayer;
-		wxStaticText* m_staticText8;
+		wxStaticText* m_staticTextLayerId;
 		wxStaticText* m_staticTextType;
 		wxStaticText* m_staticTextMaterial;
 		wxStaticText* m_staticTextThickness;

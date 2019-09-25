@@ -65,11 +65,11 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 
 	m_fgGridSizer->Add( m_staticTextLayer, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 2 );
 
-	m_staticText8 = new wxStaticText( m_scGridWin, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
-	m_staticText8->Wrap( -1 );
-	m_staticText8->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+	m_staticTextLayerId = new wxStaticText( m_scGridWin, wxID_ANY, _("Id"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+	m_staticTextLayerId->Wrap( -1 );
+	m_staticTextLayerId->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	m_fgGridSizer->Add( m_staticText8, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_fgGridSizer->Add( m_staticTextLayerId, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 	m_staticTextType = new wxStaticText( m_scGridWin, wxID_ANY, _("Type"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_staticTextType->Wrap( -1 );

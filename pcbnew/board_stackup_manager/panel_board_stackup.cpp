@@ -132,9 +132,9 @@ void PANEL_SETUP_BOARD_STACKUP::disconnectEvents()
         wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( item );
 
         if( textCtrl )
-           textCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED,
-                                 wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP::onThicknessChange ),
-                                 NULL, this );
+            textCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED,
+                                  wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP::onThicknessChange ),
+                                  NULL, this );
     }
 }
 
