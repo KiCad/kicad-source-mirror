@@ -63,11 +63,13 @@ CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxDC* aDC )
 #ifdef __WXGTK__
     m_ctx = static_cast<cairo_t*>( gctx->GetNativeContext() );
     m_surface = cairo_get_target( m_ctx );
-    // On linux, cairo printers are 72 DPI by default. This is an ususable resolution for us.
-    // A reasonable resolution is 600 DPI
+    // On linux, cairo printers have 72 DPI by default.
+    // This is an unusable resolution for us.
+    // A better resolution could be 4800 DPI (at 600 DPI, we still have minor
+    // but visible artifacts, for instance with arcs, but not at 4800 DPI)
     // so modify the default:
     #define DEFAULT_DPI 72.0
-    #define KICAD_PRINTER_DPI 600.0
+    #define KICAD_PRINTER_DPI 4800.0
     // our device scale is DEFAULT_DPI / KICAD_PRINTER_DPI
     cairo_surface_set_device_scale( m_surface, DEFAULT_DPI/KICAD_PRINTER_DPI, DEFAULT_DPI/KICAD_PRINTER_DPI );
     m_dpi = KICAD_PRINTER_DPI;
