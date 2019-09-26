@@ -19441,7 +19441,7 @@ msgstr "Umgehen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:21
 msgid "Mode:"
-msgstr "Farbmodus:"
+msgstr "Modus:"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:34
 msgid "Mouse drag behavior:"
