@@ -1046,11 +1046,23 @@ void PANEL_SETUP_BOARD_STACKUP::onMaterialChange( wxCommandEvent& event )
     textCtrl = static_cast<wxTextCtrl*>( m_rowUiItemsList[row].m_MaterialCtrl );
     textCtrl->SetValue( item->m_Material );
 
-    textCtrl = static_cast<wxTextCtrl*>( m_rowUiItemsList[row].m_EpsilonCtrl );
-    textCtrl->SetValue( item->FormatEpsilonR() );
+    // some layers have a material choice but not EpsilonR ctrl
+    if( item->HasEpsilonRValue() )
+    {
+        textCtrl = dynamic_cast<wxTextCtrl*>( m_rowUiItemsList[row].m_EpsilonCtrl );
 
-    textCtrl = static_cast<wxTextCtrl*>( m_rowUiItemsList[row].m_LossTgCtrl );
-    textCtrl->SetValue( item->FormatLossTangent() );
+        if( textCtrl )
+            textCtrl->SetValue( item->FormatEpsilonR() );
+    }
+
+    // some layers have a material choice but not loss tg ctrl
+    if( item->HasLossTangentValue() )
+    {
+        textCtrl = dynamic_cast<wxTextCtrl*>( m_rowUiItemsList[row].m_LossTgCtrl );
+
+        if( textCtrl )
+            textCtrl->SetValue( item->FormatLossTangent() );
+    }
 }
 
 
