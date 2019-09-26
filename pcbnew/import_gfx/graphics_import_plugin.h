@@ -26,6 +26,7 @@
 #ifndef GRAPHICS_IMPORT_PLUGIN_H
 #define GRAPHICS_IMPORT_PLUGIN_H
 
+#include <wildcards_and_files_ext.h>
 #include <wx/arrstr.h>
 
 class GRAPHICS_IMPORTER;
@@ -56,9 +57,9 @@ public:
     virtual const wxString GetName() const = 0;
 
     /**
-     * Return a string array of the file extensions handled by this plugin.
+     * Return a vector of the file extensions handled by this plugin.
      */
-    virtual const wxArrayString GetFileExtensions() const = 0;
+    virtual const std::vector<std::string> GetFileExtensions() const = 0;
 
     /**
      * Return a list of wildcards that contains the file extensions
@@ -76,7 +77,7 @@ public:
             else
                 ret += ";";
 
-            ret += "*." + extension;
+            ret += "*." + formatWildcardExt( extension );
         }
 
         return ret;

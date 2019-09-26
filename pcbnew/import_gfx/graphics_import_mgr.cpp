@@ -70,13 +70,8 @@ std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GRAPHICS_IMPORT_MGR::GetPluginByExt(
         auto plugin = GetPlugin( fileType );
         auto fileExtensions = plugin->GetFileExtensions();
 
-        for( const auto& fileExt : fileExtensions )
-        {
-            wxRegEx extensions( fileExt, wxRE_ICASE );
-
-            if( extensions.Matches( aExtension ) )
-                return plugin;
-        }
+        if( compareFileExtensions( aExtension.ToStdString(), fileExtensions ) )
+            return plugin;
     }
 
     return {};

@@ -70,6 +70,57 @@ static constexpr bool should_use_regex_filters()
 }
 
 
+// Structure used to store the extensions to test and the expected comparison result
+struct testExtensions
+{
+    std::string ext;
+    bool        insense_result;
+    bool        sense_result;
+};
+
+const static std::vector<std::string>    extensionList = { "dxf", "svg", "SCH", "^g.*" };
+const static std::vector<testExtensions> testExtensionList = {
+    {
+            "dxf",
+            true, // Case insensitive comparison result
+            true  // Case sensitive comparison result
+    },
+    {
+            "sch",
+            true, // Case insensitive comparison result
+            false // Case sensitive comparison result
+    },
+    {
+            "gbr",
+            true, // Case insensitive comparison result
+            true  // Case sensitive comparison result
+    },
+    {
+            "pcb",
+            false, // Case insensitive comparison result
+            false  // Case sensitive comparison result
+    }
+};
+
+/**
+ * Check correct comparison of file names
+ */
+BOOST_AUTO_TEST_CASE( FileNameComparison )
+{
+    for( const auto& testExt : testExtensionList )
+    {
+        bool extPresent_insense = compareFileExtensions( testExt.ext, extensionList, false );
+        bool extPresent_sense = compareFileExtensions( testExt.ext, extensionList, true );
+
+        BOOST_TEST_INFO( "Case insensitive test for extension " + testExt.ext );
+        BOOST_CHECK_EQUAL( extPresent_insense, testExt.insense_result );
+
+        BOOST_TEST_INFO( "Case sensitive test for extension " + testExt.ext );
+        BOOST_CHECK_EQUAL( extPresent_sense, testExt.sense_result );
+    }
+}
+
+
 /**
  * Check correct handling of filter strings (as used by WX)
  */

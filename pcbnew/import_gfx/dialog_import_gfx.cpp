@@ -261,10 +261,10 @@ void DIALOG_IMPORT_GFX::onBrowseFiles( wxCommandEvent& event )
     for( auto pluginType : m_gfxImportMgr->GetImportableFileTypes() )
     {
         auto       plugin = m_gfxImportMgr->GetPlugin( pluginType );
-        const auto wildcards = plugin->GetWildcards();
+        const auto extensions = plugin->GetFileExtensions();
 
-        wildcardsDesc += "|" + plugin->GetName() + " (" + wildcards + ")|" + wildcards;
-        allWildcards += wildcards + ";";
+        wildcardsDesc += "|" + plugin->GetName() + AddFileExtListToFilter( extensions );
+        allWildcards += plugin->GetWildcards() + ";";
     }
 
     wildcardsDesc = _( "All supported formats|" ) + allWildcards + wildcardsDesc;

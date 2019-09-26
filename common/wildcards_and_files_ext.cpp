@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,32 @@
  * @file wildcards_and_files_ext.cpp
  * Definition of file extensions used in Kicad.
  */
+#include <regex>
 #include <wildcards_and_files_ext.h>
+
+
+bool compareFileExtensions( const std::string& aExtension,
+        const std::vector<std::string>& aReference, bool aCaseSensitive )
+{
+    // Form the regular expression string by placing all possible extensions into it as alternatives
+    std::string regexString = "(";
+    bool        first = true;
+    for( auto ext : aReference )
+    {
+        // The | separate goes between the extensions
+        if( !first )
+            regexString += "|";
+        else
+            first = false;
+
+        regexString += ext;
+    }
+    regexString += ")";
+
+    // Create the regex and see if it matches
+    std::regex extRegex( regexString, aCaseSensitive ? std::regex::ECMAScript : std::regex::icase );
+    return std::regex_match( aExtension, extRegex );
+}
 
 
 wxString formatWildcardExt( const wxString& aWildcard )

@@ -43,10 +43,10 @@ public:
         return "Scalable Vector Graphics";
     }
 
-    const wxArrayString GetFileExtensions() const override
+    const std::vector<std::string> GetFileExtensions() const override
     {
-        static wxString wildcardExt = formatWildcardExt( "svg" );
-        return wxArrayString( 1, &wildcardExt );
+        static std::vector<std::string> exts = { "svg" };
+        return exts;
     }
 
     /**
