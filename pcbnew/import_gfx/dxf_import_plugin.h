@@ -146,10 +146,10 @@ public:
         return "AutoCAD DXF";
     }
 
-    const wxArrayString GetFileExtensions() const override
+    const std::vector<std::string> GetFileExtensions() const override
     {
-        static wxString wildcardExt = formatWildcardExt( "dxf" );
-        return wxArrayString( 1, &wildcardExt );
+        static std::vector<std::string> exts = { "dxf" };
+        return exts;
     }
 
     bool Load( const wxString& aFileName ) override;

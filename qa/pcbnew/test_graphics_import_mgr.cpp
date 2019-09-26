@@ -42,7 +42,7 @@ static bool pluginHandlesExt( const GRAPHICS_IMPORT_PLUGIN& aPlugin, const std::
 
     for( auto ext : exts )
     {
-        std::regex ext_reg( ext.ToStdString() );
+        std::regex ext_reg( ext );
 
         if( std::regex_match( aExt, ext_reg ) )
             return true;

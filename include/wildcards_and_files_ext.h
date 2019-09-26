@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2007-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,26 @@
  *
  * @{
  */
+
+
+/**
+ * Compare the given extension against the reference extensions to see if it matches any
+ * of the reference extensions.
+ *
+ * This function uses the C++ regular expression functionality to perform the comparison,
+ * so the reference extensions can be regular expressions of their own right. This means
+ * that partial searches can be made, for example ^g.* can be used to see if the first
+ * character of the extension is g. The reference extensions are concatenated together
+ * as alternatives when doing the evaluation (e.g. (dxf|svg|^g.*) ).
+ *
+ * @param aExtension is the extension to test
+ * @param aReference is a vector containing the extensions to test against
+ * @param aCaseSensitive says if the comparison should be case sensitive or not
+ *
+ * @return if the extension matches any reference extensions
+ */
+bool compareFileExtensions( const std::string& aExtension,
+        const std::vector<std::string>& aReference, bool aCaseSensitive = false );
 
 /**
  * Build the wildcard extension file dialog wildcard filter to add to the base message dialog.
