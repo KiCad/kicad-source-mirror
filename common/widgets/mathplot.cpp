@@ -2171,9 +2171,11 @@ void mpWindow::AdjustLimitedView()
     if( !m_enableLimitedView )
         return;
 
+    // m_min and m_max are plot limits for curves
+    // xMin, xMax, yMin, yMax are the full limits (plot limit + margin)
     const double    xMin    = m_minX - m_marginLeft / m_scaleX;
-    const double    xMax    = m_maxX - m_marginRight / m_scaleX;
-    const double    yMin    = m_minY + m_marginTop / m_scaleY;
+    const double    xMax    = m_maxX + m_marginRight / m_scaleX;
+    const double    yMin    = m_minY - m_marginTop / m_scaleY;
     const double    yMax    = m_maxY + m_marginBottom / m_scaleY;
 
     if( m_desiredXmin < xMin )

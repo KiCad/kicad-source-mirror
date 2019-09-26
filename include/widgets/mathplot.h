@@ -1237,12 +1237,14 @@ public:
               wxCoord* printSizeX = NULL, wxCoord* printSizeY = NULL );
 
     /** Zoom into current view and refresh display
-     * @param centerPoint The point (pixel coordinates) that will stay in the same position on the screen after the zoom (by default, the center of the mpWindow).
+     * @param centerPoint The point (pixel coordinates) that will stay in the same
+     * position on the screen after the zoom (by default, the center of the mpWindow).
      */
     void ZoomIn( const wxPoint& centerPoint = wxDefaultPosition );
 
     /** Zoom out current view and refresh display
-     * @param centerPoint The point (pixel coordinates) that will stay in the same position on the screen after the zoom (by default, the center of the mpWindow).
+     * @param centerPoint The point (pixel coordinates) that will stay in the same
+     * position on the screen after the zoom (by default, the center of the mpWindow).
      */
     void ZoomOut( const wxPoint& centerPoint = wxDefaultPosition );
 
@@ -1258,7 +1260,8 @@ public:
     /** Zoom out current view along Y and refresh display */
     void ZoomOutY();
 
-    /** Zoom view fitting given coordinates to the window (p0 and p1 do not need to be in any specific order) */
+    /** Zoom view fitting given coordinates to the window (p0 and p1 do not need to be in any specific order)
+     */
     void ZoomRect( wxPoint p0, wxPoint p1 );
 
     /** Refresh display */
@@ -1266,7 +1269,8 @@ public:
 
     // Added methods by Davide Rondini
 
-    /** Counts the number of plot layers, excluding axes or text: this is to count only the layers which have a bounding box.
+    /** Counts the number of plot layers, excluding axes or text: this is to count only the layers
+     * which have a bounding box.
      *  \return The number of profiles plotted.
      */
     unsigned int CountLayers();
@@ -1282,28 +1286,33 @@ public:
     void PrintGraph(mpPrintout *print);
 #endif
 
-    /** Returns the left-border layer coordinate that the user wants the mpWindow to show (it may be not exactly the actual shown coordinate in the case of locked aspect ratio).
+    /** Returns the left-border layer coordinate that the user wants the mpWindow to show
+     * (it may be not exactly the actual shown coordinate in the case of locked aspect ratio).
      * @sa Fit
      */
     double GetDesiredXmin() { return m_desiredXmin; }
 
-    /** Returns the right-border layer coordinate that the user wants the mpWindow to show (it may be not exactly the actual shown coordinate in the case of locked aspect ratio).
+    /** Returns the right-border layer coordinate that the user wants the mpWindow to show
+     * (it may be not exactly the actual shown coordinate in the case of locked aspect ratio).
      * @sa Fit
      */
     double GetDesiredXmax() { return m_desiredXmax; }
 
-    /** Returns the bottom-border layer coordinate that the user wants the mpWindow to show (it may be not exactly the actual shown coordinate in the case of locked aspect ratio).
+    /** Returns the bottom-border layer coordinate that the user wants the mpWindow to show
+     * (it may be not exactly the actual shown coordinate in the case of locked aspect ratio).
      * @sa Fit
      */
     double GetDesiredYmin() { return m_desiredYmin; }
 
-    /** Returns the top layer-border coordinate that the user wants the mpWindow to show (it may be not exactly the actual shown coordinate in the case of locked aspect ratio).
+    /** Returns the top layer-border coordinate that the user wants the mpWindow to show
+     * (it may be not exactly the actual shown coordinate in the case of locked aspect ratio).
      * @sa Fit
      */
     double GetDesiredYmax() { return m_desiredYmax; }
 
     /** Returns the bounding box coordinates
-     *  @param bbox Pointer to a 6-element double array where to store bounding box coordinates. */
+     *  @param bbox Pointer to a 6-element double array where to store bounding box coordinates.
+     */
     void GetBoundingBox( double* bbox );
 
     /** Enable/disable scrollbars
@@ -1323,10 +1332,13 @@ public:
                          wxSize imageSize = wxDefaultSize, bool fit = false );
 
     /** This value sets the zoom steps whenever the user clicks "Zoom in/out" or performs zoom with the mouse wheel.
-     *  It must be a number above unity. This number is used for zoom in, and its inverse for zoom out. Set to 1.5 by default. */
+     *  It must be a number above unity. This number is used for zoom in, and its inverse for zoom out.
+     * Set to 1.5 by default.
+     */
     static double zoomIncrementalFactor;
 
-    /** Set window margins, creating a blank area where some kinds of layers cannot draw. This is useful for example to draw axes outside the area where the plots are drawn.
+    /** Set window margins, creating a blank area where some kinds of layers cannot draw.
+     * This is useful for example to draw axes outside the area where the plots are drawn.
      *  @param top Top border
      *  @param right Right border
      *  @param bottom Bottom border
@@ -1492,7 +1504,8 @@ protected:
     int m_clickedX;         // !< Last mouse click X position, for centering and zooming the view
     int m_clickedY;         // !< Last mouse click Y position, for centering and zooming the view
 
-    /** These are updated in Fit() only, and may be different from the real borders (layer coordinates) only if lock aspect ratio is true.
+    /** These are updated in Fit() only, and may be different from the real borders
+     * (layer coordinates) only if lock aspect ratio is true.
      */
     double m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax;
 
@@ -1808,7 +1821,8 @@ class WXDLLIMPEXP_MATHPLOT mpCovarianceEllipse : public mpMovableObject
 {
 public:
     /** Default constructor.
-     * Initializes to a unity diagonal covariance matrix, a 95% confidence interval (2 sigmas), 32 segments, and a continuous plot (m_continuous=true).
+     * Initializes to a unity diagonal covariance matrix, a 95% confidence interval (2 sigmas),
+     * 32 segments, and a continuous plot (m_continuous=true).
      */
     mpCovarianceEllipse( double cov_00 = 1,
             double cov_11 = 1,
