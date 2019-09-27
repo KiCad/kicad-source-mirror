@@ -41,7 +41,7 @@
 // These names are in fact usual copper finish names.
 static wxString CopperFinishType[] =
 {
-    _HKI( NOT_SPECIFIED ),      // Not specified, not in .gbrjob file
+    NotSpecifiedPrm(),          // Not specified, not in .gbrjob file
     _HKI("ENIG"),               // used in .gbrjob file
     _HKI("ENEPIG"),             // used in .gbrjob file
     _HKI("HAL SnPb"),           // used in .gbrjob file
@@ -66,15 +66,14 @@ static wxString CopperFinishType[] =
 // and R<integer>G<integer>B<integer> In gbrjob file.
 static FAB_LAYER_COLOR solderMaskColors[]  =
 {
-    { _HKI( NOT_SPECIFIED ), wxColor( 80, 80, 80 ) },   // Not specified, not in .gbrjob file
+    { NotSpecifiedPrm(), wxColor( 80, 80, 80 ) },       // Not specified, not in .gbrjob file
     { _HKI( "Green" ), wxColor( 60, 150, 80 ) },        // used in .gbrjob file
     { _HKI( "Red" ), wxColor( 128, 0, 0 ) },            // used in .gbrjob file
     { _HKI( "Blue" ), wxColor( 0, 0, 128 ) },           // used in .gbrjob file
     { _HKI( "Black" ), wxColor( 20, 20, 20 ) },         // used in .gbrjob file
     { _HKI( "White" ), wxColor( 200, 200, 200 ) },      // used in .gbrjob file
     { _HKI( "Yellow" ), wxColor( 128, 128, 0 ) },       // used in .gbrjob file
-    { _HKI( USER_DEFINED ), wxColor( 128, 128, 128 ) }, //free. the name is a dummy name here
-    { "", wxColor( 0, 0, 0 ) }                          // Sentinel
+    { _HKI( "User defined" ), wxColor( 128, 128, 128 ) }//free. the name is a dummy name here
 };
 
 
@@ -97,12 +96,12 @@ const FAB_LAYER_COLOR* GetColorStandardList()
 
 int GetColorStandardListCount()
 {
-    return arrayDim( solderMaskColors ) - 1;
+    return arrayDim( solderMaskColors );
 }
 
 
 int GetColorUserDefinedListIdx()
 {
+    // this is the last item in list
     return GetColorStandardListCount() - 1;
 }
-

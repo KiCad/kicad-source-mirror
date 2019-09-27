@@ -45,13 +45,13 @@ bool DIALOG_DIELECTRIC_MATERIAL::TransferDataFromWindow()
 
     if( !m_tcEpsilonR->GetValue().ToDouble( &dummy ) || dummy < 0.0 )
     {
-        wxMessageBox( _( " Incorrect value for Epsilon R" ) );
+        wxMessageBox( _( "Incorrect value for Epsilon R" ) );
         return false;
     }
 
     if( !m_tcLossTg->GetValue().ToDouble( &dummy ) || dummy < 0.0 )
     {
-        wxMessageBox( _( " Incorrect value for Loss Tangent" ) );
+        wxMessageBox( _( "Incorrect value for Loss Tangent" ) );
         return false;
     }
 
@@ -96,14 +96,14 @@ void DIALOG_DIELECTRIC_MATERIAL::initMaterialList()
     m_lcMaterials->AppendColumn( _( "Loss Tg" ) );
 
     // Fills m_lcMaterials with available materials
+    // The first item is expected a not specified material
+    // Other names are proper nouns, and are not translated
     for( int idx = 0; idx < m_materialList.GetCount(); ++idx )
     {
         DIELECTRIC_SUBSTRATE* item = m_materialList.GetSubstrate( idx );
 
-        if( item->m_Name == USER_DEFINED )
-            break;
-
-        long tmp = m_lcMaterials->InsertItem( idx, item->m_Name );
+        long tmp = m_lcMaterials->InsertItem( idx,
+            idx == 0 ? wxGetTranslation( item->m_Name ) : item->m_Name );
 
         m_lcMaterials->SetItemData(tmp, idx);
         m_lcMaterials->SetItem(tmp, 1, item->FormatEpsilonR() );
@@ -119,7 +119,10 @@ void DIALOG_DIELECTRIC_MATERIAL::onListItemSelected( wxListEvent& event )
     if( idx < 0 )
         return;
 
-    m_tcMaterial->SetValue( m_materialList.GetSubstrate( idx )->m_Name );
+    if( idx == 0 )
+        m_tcMaterial->SetValue( wxGetTranslation( m_materialList.GetSubstrate( 0 )->m_Name ) );
+    else
+        m_tcMaterial->SetValue( m_materialList.GetSubstrate( idx )->m_Name );
     m_tcEpsilonR->SetValue( m_materialList.GetSubstrate( idx )->FormatEpsilonR() );
     m_tcLossTg->SetValue( m_materialList.GetSubstrate( idx )->FormatLossTangent() );
 }

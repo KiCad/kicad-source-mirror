@@ -656,7 +656,7 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
 
         if( item->IsColorEditable() && uptodate )
         {
-            if( !item->m_Color.IsEmpty() && item->m_Color != NOT_SPECIFIED )
+            if( IsPrmSpecified( item->m_Color ) )
             {
                 wxString colorName = item->m_Color;
 

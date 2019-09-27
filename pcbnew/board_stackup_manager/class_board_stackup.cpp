@@ -28,6 +28,7 @@
 #include <i18n_utility.h>       // For _HKI definition
 #include "stackup_predefined_prms.h"
 
+
 BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
 {
     m_LayerId = UNDEFINED_LAYER;
@@ -63,7 +64,7 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
     case BS_ITEM_TYPE_SOLDERMASK:
         m_TypeName = "soldermask";
         m_Color = "Green";
-        m_Material = NOT_SPECIFIED; // or other solder mask material name
+        m_Material = NotSpecifiedPrm(); // or other solder mask material name
         m_Thickness = GetMaskDefaultThickness();
         m_EpsilonR = DEFAULT_EPSILON_R_SOLDERMASK;
         m_LossTangent = 0.0;
@@ -71,8 +72,8 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
 
     case BS_ITEM_TYPE_SILKSCREEN:
         m_TypeName = "silkscreen";
-        m_Color = NOT_SPECIFIED;
-        m_Material = NOT_SPECIFIED; // or other silkscreen material name
+        m_Color = NotSpecifiedPrm();
+        m_Material = NotSpecifiedPrm(); // or other silkscreen material name
         m_EpsilonR = DEFAULT_EPSILON_R_SILKSCREEN;
         m_Thickness = 0.0;          // to be specified
         break;
@@ -136,7 +137,7 @@ bool BOARD_STACKUP_ITEM::HasLossTangentValue()
 bool BOARD_STACKUP_ITEM::HasMaterialValue()
 {
     // return true if the material is specified
-    return IsMaterialEditable() && ( m_Material.CmpNoCase( NOT_SPECIFIED ) != 0 );
+    return IsMaterialEditable() && IsPrmSpecified( m_Material );
 }
 
 
@@ -498,6 +499,8 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
     aFormatter->Print( aNestLevel, "(stackup\n" );
     int nest_level = aNestLevel+1;
 
+    // Note:
+    // Unspecified parameters are not stored in file.
     for( BOARD_STACKUP_ITEM* item: m_list )
     {
         wxString layer_name;
@@ -527,15 +530,14 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
             aFormatter->Print( 0, " (material %s)",
                                aFormatter->Quotew( item->m_Material ).c_str() );
 
-        if( item->HasEpsilonRValue()&& item->HasMaterialValue() )
+        if( item->HasEpsilonRValue() && item->HasMaterialValue() )
             aFormatter->Print( 0, " (epsilon_r %g)", item->m_EpsilonR );
 
-        if( item->HasLossTangentValue()&& item->HasMaterialValue() )
+        if( item->HasLossTangentValue() && item->HasMaterialValue() )
             aFormatter->Print( 0, " (loss_tangent %s)",
                                Double2Str(item->m_LossTangent ).c_str() );
 
-        if( item->IsColorEditable() && !item->m_Color.IsEmpty()
-            && item->m_Color != NOT_SPECIFIED )
+        if( item->IsColorEditable() && IsPrmSpecified( item->m_Color ) )
             aFormatter->Print( 0, " (color %s)",
                                aFormatter->Quotew( item->m_Color ).c_str() );
 
@@ -543,7 +545,7 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
     }
 
     // Other infos about board, related to layers and other fabrication specifications
-    if( !m_FinishType.IsEmpty() && m_FinishType != NOT_SPECIFIED )
+    if( IsPrmSpecified( m_FinishType ) )
         aFormatter->Print( nest_level, "(copper_finish %s)\n",
                            aFormatter->Quotew( m_FinishType ).c_str() );
 
@@ -561,4 +563,17 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
         aFormatter->Print( nest_level, "(edge_plating yes)\n" );
 
     aFormatter->Print( aNestLevel, ")\n" );
+}
+
+
+bool IsPrmSpecified( const wxString& aPrmValue )
+{
+    // return true if the param value is specified:
+
+    if( !aPrmValue.IsEmpty()
+        && ( aPrmValue.CmpNoCase( NotSpecifiedPrm() ) != 0 )
+        && aPrmValue != wxGetTranslation( NotSpecifiedPrm() ) )
+        return true;
+
+    return false;
 }

@@ -32,6 +32,7 @@
 
 #include <wx/string.h>
 #include <layers_id_colors_and_visibility.h>
+#include <i18n_utility.h>       // For _HKI definition
 
 // Keyword used in file to identify the dielectric layer type
 #define KEY_CORE "core"
@@ -40,10 +41,19 @@
 #define KEY_COPPER "copper"
 
 // key string used for not specified parameters
-#define NOT_SPECIFIED "Undefined"
+// Can be translated in dialogs, and is also a keyword
+// outside dialogs
+wxString inline NotSpecifiedPrm()
+{
+    return _HKI( "Not specified" );
+}
 
-// String in wxChoice to use user defined material or solder mask color
-#define USER_DEFINED "user defined"
+/**
+ * @return true if the param value is specified:
+ * not empty
+ * not NotSpecifiedPrm() value or its translation
+ */
+bool IsPrmSpecified( const wxString& aPrmValue );
 
 // A reasonable Epsilon R value for solder mask dielectric
 #define DEFAULT_EPSILON_R_SOLDERMASK 3.3

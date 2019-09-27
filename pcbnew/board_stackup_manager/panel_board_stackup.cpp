@@ -78,7 +78,8 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB
     // Calculates a good size for color swatches (icons) in this dialog
     wxClientDC dc( this );
     m_colorSwatchesSize = dc.GetTextExtent( "XX" );
-    m_colorComboSize = dc.GetTextExtent( "XXX Undefined XXX" );
+    m_colorComboSize = dc.GetTextExtent( wxString::Format( "XXX %s XXX",
+                                         wxGetTranslation( NotSpecifiedPrm() ) ) );
     m_colorIconsSize = dc.GetTextExtent( "XXXX" );
 
     // Calculates a good size for wxTextCtrl to enter Epsilon R and Loss tan
@@ -265,7 +266,12 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
                 wxTextCtrl* matName = dynamic_cast<wxTextCtrl*>( ui_row_item.m_MaterialCtrl );
 
                 if( matName )
-                    matName->SetValue( item->m_Material );
+                {
+                    if( IsPrmSpecified( item->m_Material ) )
+                        matName->SetValue( item->m_Material );
+                    else
+                        matName->SetValue( wxGetTranslation( NotSpecifiedPrm() ) );
+                }
             }
 
             if( item->IsThicknessEditable() )
@@ -386,7 +392,12 @@ void PANEL_SETUP_BOARD_STACKUP::addMaterialChooser( wxWindowID aId,
     wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, wxID_ANY );
 
     if( aMaterialName )
-        textCtrl->SetValue( *aMaterialName );
+    {
+        if( IsPrmSpecified( *aMaterialName ) )
+            textCtrl->SetValue( *aMaterialName );
+        else
+            textCtrl->SetValue( wxGetTranslation( NotSpecifiedPrm() ) );
+    }
 
     textCtrl->SetMinSize( m_numericTextCtrlSize );
 	bSizerMat->Add( textCtrl, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
@@ -715,6 +726,11 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
         {
             wxTextCtrl* textCtrl = static_cast<wxTextCtrl*>(  m_rowUiItemsList[row].m_MaterialCtrl );
             item->m_Material = textCtrl->GetValue();
+
+            // Ensure the not specified mat name is the keyword, not its translation
+            // to avoid any issue is the language setting changes
+            if( !IsPrmSpecified( item->m_Material ) )
+                item->m_Material = NotSpecifiedPrm();
         }
 
         if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
@@ -1146,17 +1162,18 @@ wxBitmapComboBox* PANEL_SETUP_BOARD_STACKUP::createBmComboBox( BOARD_STACKUP_ITE
                                                     wxEmptyString, wxDefaultPosition,
                                                     wxDefaultSize, 0, nullptr, wxCB_READONLY );
     // Fills the combo box with choice list + bitmaps
-    for( const FAB_LAYER_COLOR* item = GetColorStandardList(); ; ++item )
-    {
-        if( item->m_ColorName.IsEmpty() )
-            break;
+    const FAB_LAYER_COLOR* color_list = GetColorStandardList();
 
-        wxColor curr_color = item->m_Color;
+    for( int ii = 0; ii < GetColorStandardListCount(); ii++ )
+    {
+        const FAB_LAYER_COLOR& item = color_list[ii];
+
+        wxColor curr_color = item.m_Color;
         wxString label;
 
         // Defined colors have a name, the user color uses the HTML notation ( i.e. #FF0000)
         if( GetColorStandardListCount()-1 > (int)combo->GetCount() )
-            label = wxGetTranslation( item->m_ColorName );
+            label = wxGetTranslation( item.m_ColorName );
         else    // Append the user color, if specified, else add a default user color
         {
             if( aStackupItem && aStackupItem->m_Color.StartsWith( "#" ) )
