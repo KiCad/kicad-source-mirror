@@ -92,7 +92,9 @@ EDA_TEXT::EDA_TEXT( const wxString& text ) :
 {
     int sz = Mils2iu( DEFAULT_SIZE_TEXT );
     SetTextSize( wxSize( sz, sz ) );
-    m_shown_text = UnescapeString( text );
+
+    if( !text.IsEmpty() )
+        m_shown_text = UnescapeString( text );
 }
 
 
@@ -113,6 +115,13 @@ void EDA_TEXT::SetText( const wxString& aText )
 {
     m_text = aText;
     m_shown_text = UnescapeString( aText );
+}
+
+
+void EDA_TEXT::CopyText( const EDA_TEXT& aSrc )
+{
+    m_text = aSrc.m_text;
+    m_shown_text = aSrc.m_shown_text;
 }
 
 

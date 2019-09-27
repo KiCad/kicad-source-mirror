@@ -98,7 +98,6 @@ void LIB_FIELD::Init( int id )
     // template fieldsnames' initial visibility is controlled by the template fieldname config.
     if( id == DATASHEET || id == FOOTPRINT )
         SetVisible( false );
-
 }
 
 
@@ -179,7 +178,7 @@ void LIB_FIELD::Copy( LIB_FIELD* aTarget ) const
 {
     aTarget->m_name = m_name;
 
-    aTarget->SetText( GetText() );
+    aTarget->CopyText( *this );
     aTarget->SetEffects( *this );
     aTarget->SetParent( m_Parent );
 }

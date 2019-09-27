@@ -1925,6 +1925,18 @@ void SCH_COMPONENT::ClearHighlightedPins()
 }
 
 
+bool SCH_COMPONENT::HasHighlightedPins()
+{
+    for( const SCH_PIN& pin : m_pins )
+    {
+        if( pin.IsHighlighted() )
+            return true;
+    }
+
+    return false;
+}
+
+
 void SCH_COMPONENT::HighlightPin( LIB_PIN* aPin )
 {
     if( m_pinMap.count( aPin ) )
@@ -1932,14 +1944,32 @@ void SCH_COMPONENT::HighlightPin( LIB_PIN* aPin )
 }
 
 
-void SCH_COMPONENT::ClearAllHighlightFlags()
+bool SCH_COMPONENT::ClearAllHighlightFlags()
 {
-    ClearFlags( HIGHLIGHTED );
+    bool retVal = false;
+
+    if( IsHighlighted() )
+    {
+        ClearFlags( HIGHLIGHTED );
+        retVal = true;
+    }
 
     // Clear the HIGHLIGHTED flag of pins
-    ClearHighlightedPins();
+    if( HasHighlightedPins() )
+    {
+        ClearHighlightedPins();
+        retVal = true;
+    }
 
     // Clear the HIGHLIGHTED flag of other items, currently only fields
     for( SCH_FIELD& each_field : m_Fields )
-        each_field.ClearFlags( HIGHLIGHTED );
+    {
+        if( each_field.IsHighlighted() )
+        {
+            each_field.ClearFlags( HIGHLIGHTED );
+            retVal = true;
+        }
+    }
+
+    return retVal;
 }

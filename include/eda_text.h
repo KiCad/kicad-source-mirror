@@ -205,6 +205,8 @@ public:
 
     void SwapText( EDA_TEXT& aTradingPartner );
 
+    void CopyText( const EDA_TEXT& aSrc );
+
     /**
      * Helper function used in search and replace dialog
      * performs a text replace using the find and replace criteria in \a aSearchData.

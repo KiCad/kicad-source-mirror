@@ -307,6 +307,7 @@ PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCli
     if ( aConfirmLockedItems && CheckLock() == SELECTION_LOCKED )
     {
         ClearSelection();
+        return m_selection;
     }
 
     if( aClientFilter )
@@ -387,9 +388,10 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
                                   bool* aSelectionCancelledFlag,
                                   CLIENT_SELECTION_FILTER aClientFilter )
 {
-    auto guide = getCollectorsGuide();
-    GENERAL_COLLECTOR collector;
-    auto displayOpts = (PCB_DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
+    GENERAL_COLLECTORS_GUIDE guide = getCollectorsGuide();
+    GENERAL_COLLECTOR        collector;
+    PCB_DISPLAY_OPTIONS*     displayOpts = (PCB_DISPLAY_OPTIONS*) m_frame->GetDisplayOptions();
+    bool                     cleared = false;
 
     guide.SetIgnoreZoneFills( displayOpts->m_DisplayZonesMode != 0 );
 
@@ -433,7 +435,15 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     }
 
     if( !m_additive && !m_subtractive && !m_exclusive_or )
-        ClearSelection();
+    {
+        if( m_selection.GetSize() > 0 )
+        {
+            // Don't fire an event now as it will end up redundant if we fire a SelectedEvent
+            // or an UnselectedEvent.
+            cleared = true;
+            ClearSelection( true );
+        }
+    }
 
     if( collector.GetCount() == 1 )
     {
@@ -453,6 +463,9 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
         }
     }
 
+    if( cleared )
+        m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
+
     return false;
 }
 
@@ -461,7 +474,7 @@ bool SELECTION_TOOL::selectCursor( bool aForceSelect, CLIENT_SELECTION_FILTER aC
 {
     if( aForceSelect || m_selection.Empty() )
     {
-        ClearSelection();
+        ClearSelection( true /*quiet mode*/ );
         selectPoint( getViewControls()->GetCursorPosition( false ), false, NULL, aClientFilter );
     }
 
@@ -478,6 +491,9 @@ bool SELECTION_TOOL::selectMultiple()
     KIGFX::PREVIEW::SELECTION_AREA area;
     view->Add( &area );
 
+    bool anyAdded = false;
+    bool anySubtracted = false;
+
     while( TOOL_EVENT* evt = Wait() )
     {
         if( evt->IsCancelInteractive() || evt->IsActivate() )
@@ -489,7 +505,13 @@ bool SELECTION_TOOL::selectMultiple()
         if( evt->IsDrag( BUT_LEFT ) )
         {
             if( !m_additive && !m_subtractive && !m_exclusive_or )
-                ClearSelection();
+            {
+                if( m_selection.GetSize() > 0 )
+                {
+                    anySubtracted = true;
+                    ClearSelection( true /*quiet mode*/ );
+                }
+            }
 
             // Start drawing a selection box
             area.SetOrigin( evt->DragOrigin() );
@@ -527,8 +549,6 @@ bool SELECTION_TOOL::selectMultiple()
              * Right > Left : Select objects that are crossed by selection
              */
             bool windowSelection = width >= 0 ? true : false;
-            bool anyAdded = false;
-            bool anySubtracted = false;
 
             if( view->IsMirroredX() )
                 windowSelection = !windowSelection;
@@ -565,8 +585,7 @@ bool SELECTION_TOOL::selectMultiple()
             // Inform other potentially interested tools
             if( anyAdded )
                 m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-
-            if( anySubtracted )
+            else if( anySubtracted )
                 m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
 
             break;  // Stop waiting for events
@@ -732,9 +751,8 @@ void SELECTION_TOOL::UnbrightenItem( BOARD_ITEM* aItem )
 
 void connectedTrackFilter( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
 {
-    /* Narrow the collection down to a single TRACK item for a trivial
-     * connection, or multiple TRACK items for non-trivial connections.
-     */
+    // Narrow the collection down to a single TRACK item for a trivial connection, or
+    // multiple TRACK items for non-trivial connections.
     for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
     {
         if( !dynamic_cast<TRACK*>( aCollector[i] ) )
@@ -792,9 +810,8 @@ int SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 
 void connectedItemFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
 {
-    /* Narrow the collection down to a single BOARD_CONNECTED_ITEM for each
-     * represented net.  All other items types are removed.
-     */
+    // Narrow the collection down to a single BOARD_CONNECTED_ITEM for each represented net.
+    // All other items types are removed.
     std::set<int> representedNets;
 
     for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
@@ -1032,7 +1049,7 @@ void SELECTION_TOOL::zoomFitSelection()
 
 int SELECTION_TOOL::selectSheetContents( const TOOL_EVENT& aEvent )
 {
-    ClearSelection();
+    ClearSelection( true /*quiet mode*/ );
     wxString* sheetpath = aEvent.Parameter<wxString*>();
 
     selectAllItemsOnSheet( *sheetpath );
@@ -1063,7 +1080,7 @@ int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 
     auto mod = dynamic_cast<MODULE*>( item );
 
-    ClearSelection();
+    ClearSelection( true /*quiet mode*/ );
 
     // get the lowest subsheet name for this.
     wxString sheetPath = mod->GetPath();
@@ -1082,7 +1099,15 @@ int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 
 void SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
 {
-    ClearSelection();
+    bool cleared = false;
+
+    if( m_selection.GetSize() > 0 )
+    {
+        // Don't fire an event now; most of the time it will be redundant as we're about to
+        // fire a SelectedEvent.
+        cleared = true;
+        ClearSelection(  true /*quiet mode*/ );
+    }
 
     if( aItem )
     {
@@ -1091,6 +1116,10 @@ void SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
 
         // Inform other potentially interested tools
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+    }
+    else if( cleared )
+    {
+        m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
     }
 
     m_frame->GetCanvas()->ForceRefresh();
@@ -1192,34 +1221,32 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem,
 
 int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
 {
-    auto& opts = m_priv->m_filterOpts;
-    DIALOG_BLOCK_OPTIONS dlg( m_frame, opts, false, _( "Filter selection" ) );
+    const BOARD&                   board = *getModel<BOARD>();
+    DIALOG_BLOCK_OPTIONS::OPTIONS& opts = m_priv->m_filterOpts;
+    DIALOG_BLOCK_OPTIONS           dlg( m_frame, opts, false, _( "Filter selection" ) );
 
     const int cmd = dlg.ShowModal();
 
     if( cmd != wxID_OK )
         return 0;
 
-    const auto& board = *getModel<BOARD>();
-
     // copy current selection
-    auto selection = m_selection.GetItems();
+    std::deque<EDA_ITEM*> selection = m_selection.GetItems();
 
-    // clear current selection
-    ClearSelection();
+    ClearSelection( true /*quiet mode*/ );
 
-    // copy selection items from the saved selection
-    // according to the dialog options
-    for( auto i : selection )
+    // re-select items from the saved selection according to the dialog options
+    for( EDA_ITEM* i : selection )
     {
-        auto item = static_cast<BOARD_ITEM*>( i );
-        bool include = itemIsIncludedByFilter( *item, board, opts );
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( i );
+        bool        include = itemIsIncludedByFilter( *item, board, opts );
 
         if( include )
-        {
             select( item );
-        }
     }
+
+    m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
     return 0;
 }
 
@@ -1642,14 +1669,12 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
     }
 
     highlight( aItem, SELECTED, &m_selection );
-    view()->Update( &m_selection );
 }
 
 
 void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 {
     unhighlight( aItem, SELECTED, &m_selection );
-    view()->Update( &m_selection );
 
     if( m_selection.Empty() )
         m_locked = true;

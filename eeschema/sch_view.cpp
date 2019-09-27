@@ -189,10 +189,12 @@ void SCH_VIEW::HighlightItem( EDA_ITEM *aItem, LIB_PIN* aPin )
     if( aItem && aItem->Type() == SCH_COMPONENT_T && aPin )
     {
         static_cast<SCH_COMPONENT*>( aItem )->HighlightPin( aPin );
+        Update( aItem, REPAINT );
     }
     else if( aItem )
     {
         aItem->SetFlags( HIGHLIGHTED );
+        Update( aItem, REPAINT );
     }
     else
     {
@@ -204,7 +206,11 @@ void SCH_VIEW::HighlightItem( EDA_ITEM *aItem, LIB_PIN* aPin )
 
             if( eitem )
             {
-                eitem->ClearFlags( HIGHLIGHTED );
+                if( eitem->IsHighlighted() )
+                {
+                    eitem->ClearFlags( HIGHLIGHTED );
+                    Update( eitem, REPAINT );
+                }
 
                 if( eitem->Type() == SCH_COMPONENT_T )
                 {
@@ -214,9 +220,6 @@ void SCH_VIEW::HighlightItem( EDA_ITEM *aItem, LIB_PIN* aPin )
             }
         }
     }
-
-    // ugly but I guess OK for the moment...
-    UpdateAllItems( ALL );
 }
 
 }; // namespace KIGFX
