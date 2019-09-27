@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-26 10:39+0300\n"
-"PO-Revision-Date: 2019-09-26 10:46+0300\n"
+"POT-Creation-Date: 2019-09-27 11:38+0300\n"
+"PO-Revision-Date: 2019-09-27 11:47+0300\n"
 "Last-Translator: Baranovskiy Konstantin <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -48,7 +48,7 @@ msgstr "Пути:"
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:137
 #: common/dialogs/dialog_configure_paths_base.h:73
 msgid "Configure Paths"
-msgstr "Настроить пути"
+msgstr "Настройка путей"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:142
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:181
@@ -2114,39 +2114,51 @@ msgstr "Организация:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:212
 msgid "Comment1:"
-msgstr "Обозначение и код документа:"
+msgstr ""
+"Комментарий 1:\n"
+"(Децимальный номер)"
 
 #: common/dialogs/dialog_page_settings_base.cpp:224
 msgid "Comment2:"
-msgstr "Разработал:"
+msgstr ""
+"Комментарий 2:\n"
+"(Разработал)"
 
 #: common/dialogs/dialog_page_settings_base.cpp:236
 msgid "Comment3:"
-msgstr "Проверил:"
+msgstr ""
+"Комментарий 3:\n"
+"(Проверил)"
 
 #: common/dialogs/dialog_page_settings_base.cpp:248
 msgid "Comment4:"
-msgstr "Утвердил:"
+msgstr ""
+"Комментарий 4:\n"
+"(Утвердил)"
 
 #: common/dialogs/dialog_page_settings_base.cpp:260
 msgid "Comment5:"
-msgstr "Н. контр.:"
+msgstr ""
+"Комментарий 5:\n"
+"(Т. контр.)"
 
 #: common/dialogs/dialog_page_settings_base.cpp:272
 msgid "Comment6:"
-msgstr "Комментарий 1:"
+msgstr ""
+"Комментарий 6:\n"
+"(Н. контр.)"
 
 #: common/dialogs/dialog_page_settings_base.cpp:284
 msgid "Comment7:"
-msgstr "Комментарий 2:"
+msgstr "Комментарий 7:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:296
 msgid "Comment8:"
-msgstr "Комментарий 3:"
+msgstr "Комментарий 8:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:308
 msgid "Comment9:"
-msgstr "Комментарий 4:"
+msgstr "Комментарий 9:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:326
 msgid "Page layout description file"
@@ -2983,36 +2995,36 @@ msgstr ""
 "\n"
 "Неизвестный тип файла."
 
-#: common/grid_tricks.cpp:237
+#: common/grid_tricks.cpp:240
 msgid "Cut\tCTRL+X"
 msgstr "Вырезать\tCTRL+X"
 
-#: common/grid_tricks.cpp:237
+#: common/grid_tricks.cpp:240
 msgid "Clear selected cells placing original contents on clipboard"
 msgstr ""
 "Копировать содержимое выбранных ячеек в буфер обмена и, затем, очистить"
 
-#: common/grid_tricks.cpp:238
+#: common/grid_tricks.cpp:241
 msgid "Copy\tCTRL+C"
 msgstr "Копировать\tCTRL+C"
 
-#: common/grid_tricks.cpp:238
+#: common/grid_tricks.cpp:241
 msgid "Copy selected cells to clipboard"
 msgstr "Копировать содержимое выбранных ячеек в буфер обмена"
 
-#: common/grid_tricks.cpp:239
+#: common/grid_tricks.cpp:242
 msgid "Paste\tCTRL+V"
 msgstr "Вставить\tCTRL+V"
 
-#: common/grid_tricks.cpp:239
+#: common/grid_tricks.cpp:242
 msgid "Paste clipboard cells to matrix at current cell"
 msgstr "Вставить элементы из буфера обмена в текущем месте"
 
-#: common/grid_tricks.cpp:240
+#: common/grid_tricks.cpp:243
 msgid "Select All\tCTRL+A"
 msgstr "Выбрать всё\tCTRL+A"
 
-#: common/grid_tricks.cpp:240
+#: common/grid_tricks.cpp:243
 msgid "Select all cells"
 msgstr "Выбрать все ячейки"
 
@@ -13959,18 +13971,18 @@ msgstr "Пропускаемый ток:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:626
 msgid "Plating resistivity (Ohm.m):"
-msgstr "Удельное сопротивление металлизации (Ом.м):"
+msgstr "Удельное сопр. метал. (Ом.м):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:628
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:992
 msgid "Specific resistance in ohms * meters"
-msgstr "Значение удельного сопротивления в Ом*м"
+msgstr "Значение удельного сопротивления металлизации в Ом*метрах"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:638
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:970
 #: pcb_calculator/transline_ident.cpp:138
 msgid "Er:"
-msgstr "Отн. диэл. проницаемость:"
+msgstr "Er:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:640
 msgid "Relative dielectric constant (epsilon r)"
@@ -14646,7 +14658,7 @@ msgstr "Удельное сопротивление"
 
 #: pcb_calculator/transline_ident.cpp:138
 msgid "Epsilon R: substrate relative dielectric constant"
-msgstr "Epsilon R: относительная диэлектрическая проницаемость подложки"
+msgstr "Относительная диэлектрическая проницаемость подложки (эпсилон эр)"
 
 #: pcb_calculator/transline_ident.cpp:141
 msgid "Tangent delta: dielectric loss factor."
@@ -14656,8 +14668,7 @@ msgstr "Тангенс угла потерь в диэлектрике."
 msgid ""
 "Electrical resistivity or specific electrical resistance of conductor "
 "(Ohm*meter)"
-msgstr ""
-"Электрическое сопротивление или погонное сопротивление проводника (Ом*метр)"
+msgstr "Удельное (погонное) электрическое сопротивление проводника (Ом*метр)"
 
 #: pcb_calculator/transline_ident.cpp:152
 msgid "Frequency of the input signal"
@@ -15265,7 +15276,7 @@ msgstr "Толщина платы:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:30
 msgid "Current thickness from stackup:"
-msgstr "Текущая толщина набора:"
+msgstr "Текущая толщина пакета:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:40
 msgid "Set Dielectric Thickness"
@@ -15310,11 +15321,12 @@ msgid ""
 "Loss tangent and EpsilonR will be added to constraints."
 msgstr ""
 "Если контроль импеданса включён,\n"
-"Тан.угла диэл.потерь и отн.диэл.проницаемость будут добавлены к ограничениям."
+"Тан.угла диэл.потерь и отн.диэл.проницаемость \n"
+"будут добавлены к ограничениям."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:134
 msgid "Board Finish"
-msgstr "Покрытие платы"
+msgstr "Покрытия платы"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:136
 msgid "Has castellated pads"
@@ -15330,7 +15342,7 @@ msgstr "Покрытие меди:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:151
 msgid "Edge card connectors:"
-msgstr "Краевые соединители:"
+msgstr "Краевой соединитель:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:155
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:56
@@ -15343,7 +15355,7 @@ msgstr "Краевые соединители:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 #: pcbnew/dialogs/dialog_plot_base.cpp:119
 msgid "None"
-msgstr "Отсутствует"
+msgstr "Нет"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:155
 msgid "Yes, bevelled"
