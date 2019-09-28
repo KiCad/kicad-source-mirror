@@ -50,6 +50,7 @@
 #include <tool/zoom_menu.h>
 #include <tool/grid_menu.h>
 #include <tool/common_tools.h>
+#include <dialog_shim.h>
 
 
 ///@{

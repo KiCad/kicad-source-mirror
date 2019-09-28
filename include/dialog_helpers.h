@@ -33,7 +33,6 @@
 
 
 #include <common.h>             // EDA_UNITS_T
-#include <dialog_shim.h>
 #include <../common/dialogs/dialog_list_selector_base.h>
 
 
