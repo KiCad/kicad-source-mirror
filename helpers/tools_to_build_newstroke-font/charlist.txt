@@ -2912,3 +2912,6 @@ skipcodes 256 0
 
 // Miscellaneous Symbols and Arrows (2B00-2BFF)
 skipcodes 256 0
+
+// Skip to CJK
+skipcodes 8704 0
