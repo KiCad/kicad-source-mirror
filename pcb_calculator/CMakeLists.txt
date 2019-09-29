@@ -171,8 +171,22 @@ function( html_doc2h inputFile )
         COMMENT "creating ${inputFile}.h from ${inputFile}.html"
         )
 endfunction()
+#
+# Conversion of .md doc source files to .h files included in cpp sources
+#
+# Function md_doc2h : converts a single *.md text file to a *.h header
+function( md_doc2h inputFile )
+    add_custom_command(
+        OUTPUT ${inputFile}.h
 
-    html_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/bridget_tee_formula )
+        COMMAND ${CMAKE_COMMAND} -DinputFile=${inputFile}.md -DoutputFile=${inputFile}.h
+            -P ${CMAKE_MODULE_PATH}/markdown2C.cmake
+        DEPENDS ${inputFile}.md ${CMAKE_MODULE_PATH}/markdown2C.cmake
+        COMMENT "creating ${inputFile}.h from ${inputFile}.md"
+        )
+endfunction()
+
+    md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/bridget_tee_formula )
     html_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/splitter_formula )
     html_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/pi_formula )
     html_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/tee_formula )

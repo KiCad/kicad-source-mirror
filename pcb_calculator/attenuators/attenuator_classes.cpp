@@ -8,6 +8,7 @@
 #include <cmath>
 
 #include <attenuator_classes.h>
+#include <i18n_utility.h>
 
 // Bitmaps:
 #include <att_pi.xpm>
@@ -25,9 +26,9 @@ wxString tee_formula(
 #include <tee_formula.h>
 );
 
-wxString bridget_tee_formula(
+wxString bridget_tee_formula =
 #include <bridget_tee_formula.h>
-);
+;
 
 wxString splitter_formula(
 #include <splitter_formula.h>

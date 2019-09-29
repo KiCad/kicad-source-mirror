@@ -35,6 +35,7 @@
 #include <common.h>             // EDA_UNITS_T
 #include <../common/dialogs/dialog_list_selector_base.h>
 
+void ConvertMarkdown2Html( const wxString& aMarkdownInput, wxString& aHtmlOutput );
 
 class EDA_DRAW_FRAME;
 

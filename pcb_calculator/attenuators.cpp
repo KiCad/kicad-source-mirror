@@ -28,7 +28,7 @@
 #include <wx/wx.h>
 
 #include <pcb_calculator.h>
-#include <attenuator_classes.h>
+#include <dialog_helpers.h>
 
 
 extern double DoubleFromString( const wxString& TextValue );
@@ -97,7 +97,16 @@ void PCB_CALCULATOR_FRAME::TransfAttenuatorDataToPanel()
     m_ZoutValueCtrl->SetValue( msg );
 
     if( m_currAttenuator->m_FormulaName )
-        m_panelAttFormula->SetPage( *m_currAttenuator->m_FormulaName );
+    {
+        if( m_currAttenuator->m_FormulaName->StartsWith( "<!" ) )
+            m_panelAttFormula->SetPage( *m_currAttenuator->m_FormulaName );
+        else
+        {
+            wxString html_txt;
+            ConvertMarkdown2Html( wxGetTranslation( *m_currAttenuator->m_FormulaName ), html_txt );
+            m_panelAttFormula->SetPage( html_txt );
+        }
+    }
     else
         m_panelAttFormula->SetPage( wxEmptyString );
 }
