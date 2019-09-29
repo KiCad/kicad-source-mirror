@@ -187,7 +187,7 @@ function( md_doc2h inputFile )
 endfunction()
 
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/bridget_tee_formula )
-    html_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/splitter_formula )
+    md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/splitter_formula )
     html_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/pi_formula )
     html_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/tee_formula )
 
