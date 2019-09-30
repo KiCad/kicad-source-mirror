@@ -192,6 +192,7 @@ void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
 void DIALOG_NETLIST::OnFilenameKillFocus( wxFocusEvent& event )
 {
     onFilenameChanged();
+    event.Skip();
 }
 
 
