@@ -1,4 +1,5 @@
 (sym_lib_table
-  (lib (name font)(type Legacy)(uri ${KIPRJMOD}/font.lib)(options "")(descr ""))
-  (lib (name symbol)(type Legacy)(uri ${KIPRJMOD}/symbol.lib)(options "")(descr ""))
+  (lib (name "font")(type "Legacy")(uri "${KIPRJMOD}/font.lib")(options "")(descr ""))
+  (lib (name "symbol")(type "Legacy")(uri "${KIPRJMOD}/symbol.lib")(options "")(descr ""))
+  (lib (name "CKJ")(type "Legacy")(uri "${KIPRJMOD}/CKJ.lib")(options "")(descr ""))
 )
