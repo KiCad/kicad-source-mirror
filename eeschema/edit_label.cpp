@@ -163,20 +163,22 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
 
 void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aNewType )
 {
-    bool selected = aText->IsSelected();
+    KICAD_T oldType = aText->Type();
+    bool    selected = aText->IsSelected();
 
     wxCHECK_RET( aText->CanIncrementLabel(), "Cannot convert text type." );
 
-    if( aText->Type() == aNewType )
+    if( oldType == aNewType )
         return;
 
-    SCH_TEXT* newtext = nullptr;
+    SCH_TEXT*      newtext = nullptr;
     const wxPoint& position = aText->GetPosition();
-    wxString txt = UnescapeString( aText->GetText() );
+    int            orientation = aText->GetLabelSpinStyle();
+    wxString       txt = UnescapeString( aText->GetText() );
 
     // There can be characters in a SCH_TEXT object that can break labels so we have to
     // fix them here.
-    if( aText->Type() == SCH_TEXT_T )
+    if( oldType == SCH_TEXT_T )
     {
         txt.Replace( "\n", "_" );
         txt.Replace( "\r", "_" );
@@ -196,7 +198,7 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aNewType )
     case SCH_TEXT_T:         newtext = new SCH_TEXT( position, txt );         break;
 
     default:
-        wxASSERT_MSG( false, wxString::Format( "Invalid text type: %d.", aNewType ) );
+        wxFAIL_MSG( wxString::Format( "Invalid text type: %d.", aNewType ) );
         return;
     }
 
@@ -206,7 +208,7 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aNewType )
     //
     newtext->SetFlags( aText->GetEditFlags() );
     newtext->SetShape( aText->GetShape() );
-    newtext->SetLabelSpinStyle( aText->GetLabelSpinStyle() );
+    newtext->SetLabelSpinStyle( EDA_TEXT::MapOrientation( oldType, aNewType, orientation ) );
     newtext->SetTextSize( aText->GetTextSize() );
     newtext->SetThickness( aText->GetThickness() );
     newtext->SetItalic( aText->IsItalic() );
@@ -231,6 +233,17 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aNewType )
     // Otherwise, pointer is owned by the undo stack
     if( aText->IsNew() )
         delete aText;
+
+    if( aNewType == SCH_TEXT_T )
+    {
+        if( newtext->IsDangling() )
+        {
+            newtext->SetIsDangling( false );
+            GetCanvas()->GetView()->Update( newtext, KIGFX::REPAINT );
+        }
+    }
+    else
+        TestDanglingEnds();
 
     OnModify();
 }

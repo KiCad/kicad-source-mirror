@@ -58,6 +58,18 @@ int EDA_TEXT::MapOrientation( KICAD_T labelType, int aOrientation )
 }
 
 
+int EDA_TEXT::MapOrientation( KICAD_T fromLabelType, KICAD_T toLabelType, int aOrientation )
+{
+    bool fromNormal = ( ( fromLabelType == SCH_TEXT_T ) || ( fromLabelType == SCH_LABEL_T ) );
+    bool toNormal =   ( ( toLabelType   == SCH_TEXT_T ) || ( toLabelType   == SCH_LABEL_T ) );
+
+    if( fromNormal != toNormal )
+        return MapOrientation( SCH_GLOBAL_LABEL_T, aOrientation );
+    else
+        return aOrientation;
+}
+
+
 EDA_TEXT_HJUSTIFY_T EDA_TEXT::MapHorizJustify( int aHorizJustify )
 {
     wxASSERT( aHorizJustify >= GR_TEXT_HJUSTIFY_LEFT && aHorizJustify <= GR_TEXT_HJUSTIFY_RIGHT );
