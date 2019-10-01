@@ -60,15 +60,16 @@ void PCB_EDIT_FRAME::InstallNetlistFrame()
 }
 
 
-DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, const wxString & aNetlistFullFilename )
+DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullFilename )
     : DIALOG_NETLIST_BASE( aParent ),
       m_parent( aParent ),
+      m_netlistPath( aNetlistFullFilename ),
       m_initialized( false ),
       m_runDragCommand( false )
 {
     m_config = Kiface().KifaceSettings();
 
-    m_NetlistFilenameCtrl->SetValue( aNetlistFullFilename );
+    m_NetlistFilenameCtrl->SetValue( m_netlistPath );
     m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
     m_cbUpdateFootprints->SetValue( m_config->Read( NETLIST_UPDATEFOOTPRINTS_KEY, 0l ) );
@@ -201,17 +202,19 @@ void DIALOG_NETLIST::onFilenameChanged()
     if( m_initialized )
     {
         wxFileName fn = m_NetlistFilenameCtrl->GetValue();
+
         if( fn.IsOk() )
         {
             if( fn.FileExists() )
             {
+                m_netlistPath = m_NetlistFilenameCtrl->GetValue();
                 loadNetlist( true );
             }
             else
             {
                 m_MessageWindow->Clear();
                 REPORTER& reporter = m_MessageWindow->Reporter();
-                reporter.Report( _("The netlist file does not exist."), REPORTER::RPT_ERROR );
+                reporter.Report( _( "The netlist file does not exist." ), REPORTER::RPT_ERROR );
             }
         }
     }

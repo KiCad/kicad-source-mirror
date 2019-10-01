@@ -39,12 +39,13 @@ class DIALOG_NETLIST : public DIALOG_NETLIST_BASE
 {
 private:
     PCB_EDIT_FRAME* m_parent;
+    wxString&       m_netlistPath;
     wxConfigBase*   m_config;
     bool            m_initialized;
     bool            m_runDragCommand;
 
 public:
-    DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, const wxString & aNetlistFullFilename );
+    DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullFilename );
     ~DIALOG_NETLIST();
 
 private:
