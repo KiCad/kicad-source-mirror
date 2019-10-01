@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-21 09:13+0200\n"
-"PO-Revision-Date: 2019-09-21 09:19+0200\n"
+"POT-Creation-Date: 2019-10-01 09:59+0200\n"
+"PO-Revision-Date: 2019-10-01 10:00+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -229,7 +229,7 @@ msgid "Move Up ^\tUp"
 msgstr "Déplacer vers le Haut ^\tHaut"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:698
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:117
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:118
 msgid "Move Down\tDown"
 msgstr "Déplacer vers le Bas\tBas"
 
@@ -294,63 +294,65 @@ msgstr "Exporter la Vue en Cours en JPEG..."
 msgid "3D Viewer"
 msgstr "Visu 3D"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:65
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:66
 msgid "Copy 3D Image"
 msgstr "Copie Image 3D"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:74
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:75
 msgid "Zoom In\tF1"
 msgstr "Zoom In\tF1"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:77
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:78
 msgid "Zoom Out\tF2"
 msgstr "Zoom Out\tF2"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:80 common/tool/actions.cpp:251
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:81 common/tool/actions.cpp:251
 msgid "Zoom to Fit"
 msgstr "Zoom Optimal"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:83
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:84
 msgid "Redraw\tR"
 msgstr "Rafraîchir\tR"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:87
-msgid "Rotate X Clockwise\tShift+X"
-msgstr "Rotation X Horaire\tMaj+X"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:88 3d-viewer/3d_viewer/3d_toolbar.cpp:98
+msgid "Rotate X Clockwise"
+msgstr "Rotation X Horaire"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:90
-msgid "Rotate X Counterclockwise\tX"
-msgstr "Rotation X Anti-horaire\tX"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:91 3d-viewer/3d_viewer/3d_toolbar.cpp:102
+msgid "Rotate X Counterclockwise"
+msgstr "Rotation X Anti-horaire"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:94
-msgid "Rotate Y Clockwise\tShift+Y"
-msgstr "Rotation Y Horaire\tMaj+Y"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:95 3d-viewer/3d_viewer/3d_toolbar.cpp:108
+msgid "Rotate Y Clockwise"
+msgstr "Rotation Y Horaire"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:97
-msgid "Rotate Y Counterclockwise\tY"
-msgstr "Rotation Y Anti-horaire\tY"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:98 3d-viewer/3d_viewer/3d_toolbar.cpp:112
+msgid "Rotate Y Counterclockwise"
+msgstr "Rotation Y Anti-horaire"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:101
-msgid "Rotate Z Clockwise\tShift+Z"
-msgstr "Rotation Z Horaire\tMaj+Z"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:102
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:118
+msgid "Rotate Z Clockwise"
+msgstr "Rotation Z Horaire"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:104
-msgid "Rotate Z Counterclockwise\tZ"
-msgstr "Rotation Z Anti-horaire\tZ"
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:105
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:122
+msgid "Rotate Z Counterclockwise"
+msgstr "Rotation Z Anti-horaire"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:108
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:109
 msgid "Move Left\tLeft"
 msgstr "Déplacer vers la gauche\tGauche"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:111
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:112
 msgid "Move Right\tRight"
 msgstr "Déplacer vers la Droite\tDroite"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:114
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:115
 msgid "Move Up\tUp"
 msgstr "Déplacer vers le Haut\tHaut"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:169
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:170
 #: cvpcb/dialogs/dialog_display_options_base.h:56
 #: eeschema/eeschema_config.cpp:124 eeschema/eeschema_config.cpp:465
 #: gerbview/gerbview_config.cpp:43 pagelayout_editor/pl_editor_frame.cpp:382
@@ -359,117 +361,117 @@ msgstr "Déplacer vers le Haut\tHaut"
 msgid "Display Options"
 msgstr "Options d'Affichage"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:172
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:173
 msgid "Raytracing"
 msgstr "Raytracing"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:177
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:178
 msgid "Render Options"
 msgstr "Options de Rendu"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:182
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:183
 msgid "Material Properties"
 msgstr "Propriétés du matériau"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:186
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:187
 msgid "Use All Properties"
 msgstr "Utiliser Toutes les Propriétés"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:187
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:188
 msgid "Use all material properties from each 3D model file"
 msgstr ""
 "Utiliser toutes les propriétés du materiau de chaque fichier de modèle 3D"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:191
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:192
 msgid "Use Diffuse Only"
 msgstr "Utiliser Diffusion Uniquement"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:192
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:193
 msgid "Use only the diffuse color property from model 3D model file"
 msgstr ""
 "Utiliser uniquement la propriété couleur de diffusion venant du fichier "
 "modèle 3D"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:196
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:197
 msgid "CAD Color Style"
 msgstr "Style de Couleur CAD"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:197
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:198
 msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr ""
 "Utiliser un style de couleur CAD basé sur la couleur de diffusion du matériau"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:203
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:204
 msgid "Show Copper Thickness"
 msgstr "Monter Epaisseur Cuivre"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:204
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:205
 msgid "Shows the copper thickness on copper layers (slower loading)"
 msgstr ""
 "Montrer l'épaisseur de cuivre sur des couches de cuivre (chargement plus "
 "lent)"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:208
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:209
 msgid "Show Model Bounding Boxes"
 msgstr "Montrer les Volumes d'Encadrement des Modèles"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:213
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:214
 msgid "Raytracing Options"
 msgstr "Options Raytracing"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:217
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:218
 msgid "Render Shadows"
 msgstr "Rendre les Ombres"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:221
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:222
 msgid "Procedural Textures"
 msgstr "Textures Procédurales"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:222
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:223
 msgid "Apply procedural textures to materials (slow)"
 msgstr "Appliquer les textures procédurales aux matériaux (lent)"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:226
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:227
 msgid "Add Floor"
 msgstr "Ajouter Plan de Référence"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:227
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:228
 msgid "Adds a floor plane below the board (slow)"
 msgstr "Ajouter un plan de référence au-dessous de la carte (lent)"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:231
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:232
 msgid "Refractions"
 msgstr "Réfractions"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:232
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:233
 msgid "Render materials with refractions properties on final render (slow)"
 msgstr ""
 "Rendre les matériaux avec leurs propriétés de refraction pour le rendu final "
 "(lent)"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:236
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:237
 msgid "Reflections"
 msgstr "Réflexions"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:237
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:238
 msgid "Render materials with reflections properties on final render (slow)"
 msgstr ""
 "Rendre les matériaux avec leurs propriétés de reflexion pour le rendu final "
 "(lent)"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:241
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:242
 msgid "Anti-aliasing"
 msgstr "Anti-aliasing"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:242
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:243
 msgid "Render with improved quality on final render (slow)"
 msgstr "Rendu avec qualité améliorée pour le rendu final (lent)"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:246
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:247
 msgid "Post-processing"
 msgstr "Post-traitement"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:247
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:248
 msgid ""
 "Apply Screen Space Ambient Occlusion and Global Illumination reflections on "
 "final render (slow)"
@@ -477,71 +479,71 @@ msgstr ""
 "Apliquer l'occlusion ambiante et les reflexions de l'illumination globale "
 "sur le rendu final (lent)"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:257
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:258
 msgid "Choose Colors"
 msgstr "Choix Couleurs"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:260
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:261
 msgid "Background Top Color..."
 msgstr "Couleur de Fond, Haut d'Ecran..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:263
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:264
 msgid "Background Bottom Color..."
 msgstr "Couleur de Fond, Bas d'Ecran..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:266
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:267
 msgid "Silkscreen Color..."
 msgstr "Couleur de Sérigraphie..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:269
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:270
 msgid "Solder Mask Color..."
 msgstr "Couleur Masque de Soudure..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:272
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:273
 msgid "Solder Paste Color..."
 msgstr "Couleur de Paste à Souder..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:275
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:276
 msgid "Copper/Surface Finish Color..."
 msgstr "Couleur du Cuivre/Finition de Surface..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:278
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:279
 msgid "Board Body Color..."
 msgstr "Couleur du Corps du PCB..."
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:283
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:284
 msgid "Show 3D &Axis"
 msgstr "Montrer &Axes 3D"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:288
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:289
 msgid "3D Grid"
 msgstr "Grille 3D"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:307
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:308
 msgid "No 3D Grid"
 msgstr "Pas de Grille 3D"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:309
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:310
 msgid "3D Grid 10mm"
 msgstr "Grille 3D 10 mm"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:311
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:312
 msgid "3D Grid 5mm"
 msgstr "Grille 3D 5 mm"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:313
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:314
 msgid "3D Grid 2.5mm"
 msgstr "Grille 3D 2,5 mm"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:315
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:316
 msgid "3D Grid 1mm"
 msgstr "Grille 3D 1 mm"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:321
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:322
 msgid "Reset to Default Settings"
 msgstr "Rétablir les Paramètres par Défaut"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:326 cvpcb/menubar.cpp:83
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:327 cvpcb/menubar.cpp:83
 #: eeschema/libedit/menubar_libedit.cpp:207 eeschema/menubar.cpp:303
 #: gerbview/menubar.cpp:250 kicad/menubar.cpp:139
 #: pagelayout_editor/menubar.cpp:168 pcbnew/menubar_footprint_editor.cpp:279
@@ -549,7 +551,7 @@ msgstr "Rétablir les Paramètres par Défaut"
 msgid "Preferences...\tCTRL+,"
 msgstr "Préférences...\tCtrl+,"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:327 cvpcb/menubar.cpp:84
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:328 cvpcb/menubar.cpp:84
 #: eeschema/libedit/menubar_libedit.cpp:208 eeschema/menubar.cpp:304
 #: gerbview/menubar.cpp:251 kicad/menubar.cpp:140
 #: pagelayout_editor/menubar.cpp:169 pcbnew/menubar_footprint_editor.cpp:280
@@ -557,7 +559,7 @@ msgstr "Préférences...\tCtrl+,"
 msgid "Show preferences for all open tools"
 msgstr "Afficher les préférences pour tous les outils ouverts"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:335 cvpcb/menubar.cpp:96
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:336 cvpcb/menubar.cpp:96
 #: eeschema/libedit/menubar_libedit.cpp:222 eeschema/menubar.cpp:318
 #: eeschema/toolbars_viewlib.cpp:138 gerbview/menubar.cpp:265
 #: kicad/menubar.cpp:150 pagelayout_editor/menubar.cpp:179
@@ -566,14 +568,14 @@ msgstr "Afficher les préférences pour tous les outils ouverts"
 msgid "&File"
 msgstr "&Fichiers"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:336 cvpcb/menubar.cpp:97
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:337 cvpcb/menubar.cpp:97
 #: eeschema/libedit/menubar_libedit.cpp:223 eeschema/menubar.cpp:319
 #: pagelayout_editor/menubar.cpp:180 pcbnew/menubar_footprint_editor.cpp:295
 #: pcbnew/menubar_pcb_editor.cpp:507
 msgid "&Edit"
 msgstr "&Editer"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:337
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:338
 #: eeschema/libedit/menubar_libedit.cpp:224 eeschema/menubar.cpp:320
 #: eeschema/toolbars_viewlib.cpp:139 gerbview/menubar.cpp:266
 #: kicad/menubar.cpp:151 pagelayout_editor/menubar.cpp:181
@@ -582,7 +584,7 @@ msgstr "&Editer"
 msgid "&View"
 msgstr "&Affichage"
 
-#: 3d-viewer/3d_viewer/3d_menubar.cpp:338 cvpcb/menubar.cpp:98
+#: 3d-viewer/3d_viewer/3d_menubar.cpp:339 cvpcb/menubar.cpp:98
 #: gerbview/menubar.cpp:268 kicad/menubar.cpp:153
 msgid "&Preferences"
 msgstr "&Préférences"
@@ -618,30 +620,6 @@ msgstr "Rafraîchir l'écran"
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:92
 msgid "Zoom to fit 3D model"
 msgstr "Zoom pour ajuster le modèle 3D à l'écran"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:98
-msgid "Rotate X Clockwise"
-msgstr "Rotation X Horaire"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:102
-msgid "Rotate X Counterclockwise"
-msgstr "Rotation X Anti-horaire"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:108
-msgid "Rotate Y Clockwise"
-msgstr "Rotation Y Horaire"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:112
-msgid "Rotate Y Counterclockwise"
-msgstr "Rotation Y Anti-horaire"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:118
-msgid "Rotate Z Clockwise"
-msgstr "Rotation Z Horaire"
-
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:122
-msgid "Rotate Z Counterclockwise"
-msgstr "Rotation Z Anti-horaire"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:128
 msgid "Move left"
@@ -788,7 +766,7 @@ msgid "Solder Paste Color"
 msgstr "Couleur de Paste à Souder"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:166 common/base_units.cpp:461
-#: common/eda_draw_frame.cpp:418
+#: common/eda_draw_frame.cpp:419
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:32
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:93
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:129
@@ -926,7 +904,7 @@ msgstr "Erreur d’allocation de mémoire pour bitmap potrace"
 #: bitmap2component/bitmap2cmp_gui.cpp:934
 #: common/dialogs/wx_html_report_panel_base.cpp:42 gerbview/files.cpp:356
 #: gerbview/files.cpp:471 gerbview/readgerb.cpp:72
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:763
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:782
 msgid "Errors"
 msgstr "Erreurs"
 
@@ -1149,7 +1127,7 @@ msgid "deg"
 msgstr "deg"
 
 #: common/colors.cpp:39
-#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:72
+#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:73
 msgid "Black"
 msgstr "Noir"
 
@@ -1166,7 +1144,7 @@ msgid "Gray 3"
 msgstr "Gris 3"
 
 #: common/colors.cpp:43
-#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:73
+#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:74
 msgid "White"
 msgstr "Blanc"
 
@@ -1483,20 +1461,20 @@ msgstr "Packagers"
 msgid "License"
 msgstr "Licence"
 
-#: common/dialog_about/dialog_about.cpp:622
+#: common/dialog_about/dialog_about.cpp:623
 msgid "Version Info"
 msgstr "Infos de Version"
 
-#: common/dialog_about/dialog_about.cpp:634
+#: common/dialog_about/dialog_about.cpp:635
 msgid "Could not open clipboard to write version information."
 msgstr ""
 "Impossible d'ouvrir le presse-papier pour écrire les informations de version."
 
-#: common/dialog_about/dialog_about.cpp:635
+#: common/dialog_about/dialog_about.cpp:636
 msgid "Clipboard Error"
 msgstr "Erreur de presse-papier"
 
-#: common/dialog_about/dialog_about.cpp:644
+#: common/dialog_about/dialog_about.cpp:645
 msgid "Copied..."
 msgstr "Copié..."
 
@@ -2756,7 +2734,7 @@ msgstr "Fichier Doc \"%s\" non trouvé"
 msgid "Unknown MIME type for doc file \"%s\""
 msgstr "MIME type inconnu pour fichier doc \"%s\""
 
-#: common/eda_draw_frame.cpp:145 common/eda_draw_frame.cpp:417
+#: common/eda_draw_frame.cpp:146 common/eda_draw_frame.cpp:418
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:28
 #: pagelayout_editor/pl_editor_frame.cpp:151
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:58
@@ -2768,7 +2746,7 @@ msgstr "MIME type inconnu pour fichier doc \"%s\""
 msgid "Inches"
 msgstr "Pouces"
 
-#: common/eda_draw_frame.cpp:419
+#: common/eda_draw_frame.cpp:420
 #: gerbview/dialogs/panel_gerbview_settings_base.cpp:30
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:60
 #: pcbnew/dialogs/panel_modedit_settings_base.cpp:33
@@ -2777,13 +2755,13 @@ msgstr "Pouces"
 msgid "Units"
 msgstr "Unités"
 
-#: common/eda_draw_frame.cpp:810 eeschema/dialogs/panel_sym_lib_table.cpp:354
+#: common/eda_draw_frame.cpp:811 eeschema/dialogs/panel_sym_lib_table.cpp:354
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:618
 #: pcbnew/footprint_libraries_utils.cpp:75
 msgid "Select Library"
 msgstr "Sélection Librairie"
 
-#: common/eda_draw_frame.cpp:810
+#: common/eda_draw_frame.cpp:811
 msgid "New Library"
 msgstr "Nouvelle Librairie"
 
@@ -2795,7 +2773,7 @@ msgstr " X:"
 msgid " Y:"
 msgstr " Y:"
 
-#: common/eda_text.cpp:450 eeschema/dialogs/dialog_edit_label_base.cpp:111
+#: common/eda_text.cpp:459 eeschema/dialogs/dialog_edit_label_base.cpp:111
 #: eeschema/libedit/symbedit.cpp:227 eeschema/sch_text.cpp:586
 #: gerbview/gerber_file_image.cpp:355 gerbview/gerber_file_image.cpp:359
 #: gerbview/gerber_file_image.cpp:362 pcbnew/class_module.cpp:525
@@ -2803,7 +2781,7 @@ msgstr " Y:"
 msgid "Normal"
 msgstr "Normal"
 
-#: common/eda_text.cpp:451
+#: common/eda_text.cpp:460
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:61
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:330
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:53
@@ -2823,7 +2801,7 @@ msgstr "Normal"
 msgid "Italic"
 msgstr "Italique"
 
-#: common/eda_text.cpp:452
+#: common/eda_text.cpp:461
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:62
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:331
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:54
@@ -2835,7 +2813,7 @@ msgstr "Italique"
 msgid "Bold"
 msgstr "Gras"
 
-#: common/eda_text.cpp:453
+#: common/eda_text.cpp:462
 msgid "Bold+Italic"
 msgstr "Gras+Italique"
 
@@ -3030,38 +3008,38 @@ msgstr ""
 "\n"
 "Type de fichier inconnu."
 
-#: common/grid_tricks.cpp:237
+#: common/grid_tricks.cpp:240
 msgid "Cut\tCTRL+X"
 msgstr "Couper\tCTRL+X"
 
-#: common/grid_tricks.cpp:237
+#: common/grid_tricks.cpp:240
 msgid "Clear selected cells placing original contents on clipboard"
 msgstr ""
 "Supprimer le contenu des cellules sélectionnées et placer ce contenu "
 "originel dans le Presse papier"
 
-#: common/grid_tricks.cpp:238
+#: common/grid_tricks.cpp:241
 msgid "Copy\tCTRL+C"
 msgstr "Copier\tCTRL+C"
 
-#: common/grid_tricks.cpp:238
+#: common/grid_tricks.cpp:241
 msgid "Copy selected cells to clipboard"
 msgstr "Copier les cellules sélectionnées dans le Presse papier"
 
-#: common/grid_tricks.cpp:239
+#: common/grid_tricks.cpp:242
 msgid "Paste\tCTRL+V"
 msgstr "Coller\tCTRL+V"
 
-#: common/grid_tricks.cpp:239
+#: common/grid_tricks.cpp:242
 msgid "Paste clipboard cells to matrix at current cell"
 msgstr ""
 "Copier les cellules sauvées dans le presss-papier dans  la cellule courante"
 
-#: common/grid_tricks.cpp:240
+#: common/grid_tricks.cpp:243
 msgid "Select All\tCTRL+A"
 msgstr "Sélectionner Tout\tCTRL+A"
 
-#: common/grid_tricks.cpp:240
+#: common/grid_tricks.cpp:243
 msgid "Select all cells"
 msgstr "Sélection toutes Cellules"
 
@@ -4629,7 +4607,7 @@ msgstr "Fichiers Association Symboles/Empreintes (*.equ)"
 #: eeschema/dialogs/dialog_bus_manager.cpp:72
 #: eeschema/dialogs/dialog_bus_manager.cpp:106
 #: eeschema/dialogs/dialog_spice_model_base.cpp:610
-#: eeschema/libedit/lib_edit_frame.cpp:608
+#: eeschema/libedit/lib_edit_frame.cpp:612
 msgid "Add"
 msgstr "Ajouter"
 
@@ -4663,8 +4641,8 @@ msgstr "Variables d'env. pour chemins relatifs:"
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:868
 #: eeschema/dialogs/dialog_rescue_each.cpp:136
 #: eeschema/dialogs/panel_sym_lib_table.cpp:227
-#: eeschema/fields_grid_table.cpp:150 eeschema/lib_field.cpp:374
-#: eeschema/lib_field.cpp:450 eeschema/sch_component.cpp:1393
+#: eeschema/fields_grid_table.cpp:150 eeschema/lib_field.cpp:373
+#: eeschema/lib_field.cpp:449 eeschema/sch_component.cpp:1393
 #: eeschema/sch_component.cpp:1432 eeschema/template_fieldnames.cpp:48
 #: eeschema/widgets/widget_eeschema_color_config.cpp:76
 #: pcbnew/class_text_mod.cpp:351
@@ -5029,7 +5007,7 @@ msgstr ""
 msgid "Unable to load project's \"%s\" file"
 msgstr "Impossible de charger le fichier projet \"%s\""
 
-#: eeschema/class_library.cpp:534 eeschema/libedit/lib_edit_frame.cpp:547
+#: eeschema/class_library.cpp:534 eeschema/libedit/lib_edit_frame.cpp:551
 #: eeschema/symbol_tree_model_adapter.cpp:61
 msgid "Loading Symbol Libraries"
 msgstr "Chargement des Librairies de Symboles"
@@ -6090,7 +6068,7 @@ msgstr "Bas"
 msgid "Bold and italic"
 msgstr "Gras +  italique"
 
-#: eeschema/dialogs/dialog_edit_label_base.cpp:113 eeschema/lib_field.cpp:438
+#: eeschema/dialogs/dialog_edit_label_base.cpp:113 eeschema/lib_field.cpp:437
 #: eeschema/lib_pin.cpp:1402 eeschema/sch_text.cpp:595
 msgid "Style"
 msgstr "Style"
@@ -6383,7 +6361,7 @@ msgid "Qty"
 msgstr "Qté"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:678
-#: eeschema/lib_field.cpp:447 eeschema/lib_field.h:102
+#: eeschema/lib_field.cpp:446 eeschema/lib_field.h:102
 #: eeschema/template_fieldnames.cpp:51
 msgid "Field"
 msgstr "Champ"
@@ -6393,7 +6371,7 @@ msgid "Group By"
 msgstr "Grouper Par"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:867
-#: eeschema/dialogs/dialog_rescue_each.cpp:132 eeschema/lib_field.cpp:373
+#: eeschema/dialogs/dialog_rescue_each.cpp:132 eeschema/lib_field.cpp:372
 #: eeschema/sch_component.cpp:1390 eeschema/sch_component.cpp:1429
 #: eeschema/template_fieldnames.cpp:47
 #: eeschema/widgets/widget_eeschema_color_config.cpp:75
@@ -6404,7 +6382,7 @@ msgid "Reference"
 msgstr "Référence"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:869
-#: eeschema/lib_field.cpp:375 eeschema/sch_component.cpp:1418
+#: eeschema/lib_field.cpp:374 eeschema/sch_component.cpp:1418
 #: eeschema/template_fieldnames.cpp:49 pcbnew/class_edge_mod.cpp:255
 #: pcbnew/class_module.cpp:542 pcbnew/class_pad.cpp:768
 #: pcbnew/class_text_mod.cpp:355 pcbnew/load_select_footprint.cpp:351
@@ -6412,7 +6390,7 @@ msgid "Footprint"
 msgstr "Empreinte"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:870
-#: eeschema/lib_field.cpp:376 eeschema/libedit/symbedit.cpp:239
+#: eeschema/lib_field.cpp:375 eeschema/libedit/symbedit.cpp:239
 #: eeschema/template_fieldnames.cpp:50
 msgid "Datasheet"
 msgstr "Documentation"
@@ -6538,7 +6516,7 @@ msgstr "Taille texte:"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:977
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:987
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:999
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:391
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:405
 msgid "..."
 msgstr "..."
 
@@ -8443,7 +8421,7 @@ msgid "A library nicknamed \"%s\" already exists."
 msgstr "Une librairie de nom logique \"%s\" existe déjà."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:385
-#: eeschema/libedit/lib_edit_frame.cpp:607
+#: eeschema/libedit/lib_edit_frame.cpp:611
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:651
 msgid "Skip"
 msgstr "Passer"
@@ -9039,17 +9017,17 @@ msgstr "Centre cercle (%s, %s), rayon %s"
 msgid "Circle"
 msgstr "Cercle"
 
-#: eeschema/lib_field.cpp:381
+#: eeschema/lib_field.cpp:380
 #, c-format
 msgid "Field%d"
 msgstr "Champ%d"
 
-#: eeschema/lib_field.cpp:414
+#: eeschema/lib_field.cpp:413
 #, c-format
 msgid "Field %s \"%s\""
 msgstr "Champ %s \"%s\""
 
-#: eeschema/lib_field.cpp:441 eeschema/sch_bitmap.cpp:200
+#: eeschema/lib_field.cpp:440 eeschema/sch_bitmap.cpp:200
 #: pcbnew/class_drawsegment.cpp:522 pcbnew/class_pad.cpp:782
 #: pcbnew/class_pcb_text.cpp:110 pcbnew/class_text_mod.cpp:387
 #: pcbnew/class_track.cpp:879
@@ -9061,7 +9039,7 @@ msgstr "Champ %s \"%s\""
 msgid "Width"
 msgstr "Largeur"
 
-#: eeschema/lib_field.cpp:444 eeschema/sch_bitmap.cpp:201
+#: eeschema/lib_field.cpp:443 eeschema/sch_bitmap.cpp:201
 #: pcbnew/class_pad.cpp:785 pcbnew/class_pcb_text.cpp:113
 #: pcbnew/class_text_mod.cpp:390
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:56
@@ -9181,12 +9159,12 @@ msgstr "Librairies"
 msgid "Unit %s"
 msgstr "Unité %s"
 
-#: eeschema/libedit/lib_edit_frame.cpp:465
+#: eeschema/libedit/lib_edit_frame.cpp:469
 #, c-format
 msgid "Library \"%s\" already exists"
 msgstr "La librairie \"%s\" existe déjà"
 
-#: eeschema/libedit/lib_edit_frame.cpp:479
+#: eeschema/libedit/lib_edit_frame.cpp:483
 #, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -9195,41 +9173,41 @@ msgstr ""
 "Impossible de créer le fichier librairie \"%s\".\n"
 "Vérifier l’autorisation d’écriture."
 
-#: eeschema/libedit/lib_edit_frame.cpp:489 eeschema/libedit/lib_export.cpp:193
+#: eeschema/libedit/lib_edit_frame.cpp:493 eeschema/libedit/lib_export.cpp:193
 msgid "Could not open the library file."
 msgstr "Le fichier librairie n'a pas pu être ouvert."
 
-#: eeschema/libedit/lib_edit_frame.cpp:552
+#: eeschema/libedit/lib_edit_frame.cpp:556
 #: eeschema/symbol_tree_model_adapter.cpp:71
 #, c-format
 msgid "Loading library \"%s\""
 msgstr "Chargement librairie  \"%s\""
 
-#: eeschema/libedit/lib_edit_frame.cpp:599
+#: eeschema/libedit/lib_edit_frame.cpp:603
 #: pcbnew/footprint_libraries_utils.cpp:530
 msgid "Global"
 msgstr "Global"
 
-#: eeschema/libedit/lib_edit_frame.cpp:600
+#: eeschema/libedit/lib_edit_frame.cpp:604
 #: pcbnew/footprint_libraries_utils.cpp:531
 msgid "Project"
 msgstr "Projet"
 
-#: eeschema/libedit/lib_edit_frame.cpp:602
+#: eeschema/libedit/lib_edit_frame.cpp:606
 #: pcbnew/footprint_libraries_utils.cpp:534
 msgid "Choose the Library Table to add the library to:"
 msgstr "Choisissez la Table des Librairies où ajouter la librairie:"
 
-#: eeschema/libedit/lib_edit_frame.cpp:603
+#: eeschema/libedit/lib_edit_frame.cpp:607
 msgid "Add To Library Table"
 msgstr "Ajouter à Table des Librairies"
 
-#: eeschema/libedit/lib_edit_frame.cpp:635
+#: eeschema/libedit/lib_edit_frame.cpp:639
 #, c-format
 msgid "Failed to save backup to \"%s\""
 msgstr "Échec de l’enregistrement de la sauvegarde \"%s\""
 
-#: eeschema/libedit/lib_edit_frame.cpp:760
+#: eeschema/libedit/lib_edit_frame.cpp:764
 #, c-format
 msgid ""
 "The current configuration does not include the symbol library\n"
@@ -9240,11 +9218,11 @@ msgstr ""
 "\" %s\".\n"
 "Utilisez Gérer les Librairies de symboles pour modifier la configuration."
 
-#: eeschema/libedit/lib_edit_frame.cpp:763
+#: eeschema/libedit/lib_edit_frame.cpp:767
 msgid "Library not found in symbol library table."
 msgstr "Librairie non trouvée dans la table des librairies de symboles."
 
-#: eeschema/libedit/lib_edit_frame.cpp:771 eeschema/viewlib_frame.cpp:325
+#: eeschema/libedit/lib_edit_frame.cpp:775 eeschema/viewlib_frame.cpp:325
 #, c-format
 msgid ""
 "The library with the nickname \"%s\" is not enabled\n"
@@ -9256,7 +9234,7 @@ msgstr ""
 "\n"
 " Utilisez gérer les bibliothèques de symboles pour modifier la configuration."
 
-#: eeschema/libedit/lib_edit_frame.cpp:774 eeschema/viewlib_frame.cpp:328
+#: eeschema/libedit/lib_edit_frame.cpp:778 eeschema/viewlib_frame.cpp:328
 msgid "Symbol library not enabled."
 msgstr "Librairie de symboles non activée."
 
@@ -11623,7 +11601,7 @@ msgstr "Pas de  pins doublées ou hors grille trouvées."
 
 #: eeschema/tools/ee_selection_tool.cpp:478
 #: pagelayout_editor/tools/pl_selection_tool.cpp:235
-#: pcbnew/tools/selection_tool.cpp:426
+#: pcbnew/tools/selection_tool.cpp:428
 msgid "Clarify Selection"
 msgstr "Clarification Sélection"
 
@@ -13805,10 +13783,101 @@ msgstr "Ohm"
 msgid "KOhm"
 msgstr "KOhm"
 
-#: pcb_calculator/attenuators.cpp:114
+#: pcb_calculator/attenuators.cpp:123
 #, c-format
 msgid "Attenuation more than %f dB"
 msgstr "Atténuation ajustée à plus que %f dB"
+
+#: pcb_calculator/attenuators/bridget_tee_formula.h:2
+msgid ""
+"### Bridged tee attenuator:\n"
+"__Zin__ desired input impedance in &#x2126<br>\n"
+"__Zout__ desired output impedance<br>\n"
+"__Z<sub>0</sub> = Zin = Zout__<br><br>\n"
+"\n"
+"* __a__ attenuation in dB\n"
+"* __L = 10<sup>a/20</sup>__ (the loss)<br><br>\n"
+"* ___R1 = Z<sub>0</sub> * (L - 1)___\n"
+"* ___R2 = Z<sub>0</sub> / (L - 1)___"
+msgstr ""
+"### Atténuateur en T ponté:\n"
+"__Zin__  impédance d'entrée désirée en  &#x2126<br>\n"
+"__Zout__  impédance de sortie désirée<br>\n"
+"__Z<sub>0</sub> = Zin = Zout__<br><br>\n"
+"\n"
+"* __a__ atténuation en dB\n"
+"* __L = 10<sup>a/20</sup>__ (l'atténuation)\n"
+"* ___R1 = Z<sub>0</sub> * (L - 1)___\n"
+"* ___R2 = Z<sub>0</sub> / (L - 1)___"
+
+#: pcb_calculator/attenuators/pi_formula.h:2
+msgid ""
+"## Pi attenuator\n"
+"__Zin__ desired input impedance in &#x2126<br>\n"
+"__Zout__ desired output impedance<br>\n"
+"__Zin = Zout__<br><br>\n"
+"\n"
+"* __a__ attenuation in dB\n"
+"* __L = 10<sup>a/20</sup>__ (the loss)\n"
+"* __A = (L + 1)/(L - 1)__<br><br>\n"
+"* ___R2 = (L- 1)/2 . &radic ( (Zin . Zout) / L)___\n"
+"* ___R1 = 1/( A/Zin - 1/R2 )___\n"
+"* ___R3 = 1/ (A/Zout - 1/R2 )___"
+msgstr ""
+"## Atténuateur en PI\n"
+"__Zin__  impédance d'entrée désirée en  &#x2126<br>\n"
+"__Zout__  impédance de sortie désirée<br>\n"
+"__Zin = Zout__\n"
+"\n"
+"* __a__ atténuation en dB\n"
+"* __L = 10<sup>a/20</sup>__ (l'atténuation)\n"
+"* ___R2 = (L- 1)/2 . &radic ((Zin . Zout)/L)___\n"
+"* ___R1 = 1/( A/Zin - 1/R2)___\n"
+"* ___R3 = 1/ (A/Zout - 1/R2)___"
+
+#: pcb_calculator/attenuators/splitter_formula.h:2
+msgid ""
+"## Splitted attenuator\n"
+"### Attenuation is 6dB\n"
+"___Z<sub>in</sub>___ desired input impedance in &#x2126<br>\n"
+"___Z<sub>out</sub>___ desired output impedance in &#x2126<br>\n"
+"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"\n"
+"___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
+msgstr ""
+"## Séparateur résistif\n"
+"### L'atténuation est 6dB\n"
+"___Z<sub>in</sub>___  impédance d'entrée desirée en  &#x2126<br>\n"
+"___Z<sub>out</sub>___ impédance de sortie desirée en  &#x2126<br>\n"
+"___Z<sub>in</sub> = Z<sub>out</sub>___\n"
+"\n"
+"___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
+
+#: pcb_calculator/attenuators/tee_formula.h:2
+msgid ""
+"## Tee attenuator\n"
+"__Zin__ desired input impedance in &#x2126<br>\n"
+"__Zout__ desired output impedance<br>\n"
+"__Zin = Zout__<br><br>\n"
+"\n"
+"* __a__ attenuation in dB\n"
+"* __L = 10<sup>a/20</sup>__ (the loss)\n"
+"* ___A = (L + 1)/(L - 1)___<br><br>\n"
+"* ___R2 = 2&radic (L . Z<sub>in</sub> . Z<sub>out</sub> )/(L - 1)___\n"
+"* ___R1 = Z<sub>in</sub> * A - R2___\n"
+"* ___R3 = Z<sub>out</sub> * A - R2___\n"
+msgstr ""
+"## Atténuateur en T\n"
+"__Zin__  impédance d'entrée désirée en  &#x2126<br>\n"
+"__Zout__  impédance de sortie désirée <br>\n"
+"__Zin = Zout__\n"
+"\n"
+"* __a__ atténuation en dB\n"
+"* __L = 10<sup>a/20</sup>__ (l'atténuation)\n"
+"* ___A = (L + 1)/(L - 1)___<br><br>\n"
+"* ___R2 = 2&radic (L . Z<sub>in</sub> . Z<sub>out</sub> )/(L - 1)___\n"
+"* ___R1 = Z<sub>in</sub> * A - R2___\n"
+"* ___R3 = Z<sub>out</sub> * A - R2___\n"
 
 #: pcb_calculator/datafile_read_write.cpp:72
 msgid "Data file error."
@@ -15301,36 +15370,36 @@ msgstr ""
 msgid "Netlist update successful!"
 msgstr "Mise à jour Netliste réussie!"
 
-#: pcbnew/board_stackup_manager/class_board_stackup.cpp:378
+#: pcbnew/board_stackup_manager/class_board_stackup.cpp:397
 msgid "Top Silk Screen"
 msgstr "Sérigraphie Dessus"
 
-#: pcbnew/board_stackup_manager/class_board_stackup.cpp:386
+#: pcbnew/board_stackup_manager/class_board_stackup.cpp:405
 msgid "Top Solder Paste"
 msgstr "Pâte à Souder Dessus"
 
-#: pcbnew/board_stackup_manager/class_board_stackup.cpp:394
+#: pcbnew/board_stackup_manager/class_board_stackup.cpp:413
 msgid "Top Solder Mask"
 msgstr "Masque de Soudure Dessus"
 
-#: pcbnew/board_stackup_manager/class_board_stackup.cpp:438
+#: pcbnew/board_stackup_manager/class_board_stackup.cpp:457
 msgid "Bottom Solder Mask"
 msgstr "Masque de Soudure Dessous"
 
-#: pcbnew/board_stackup_manager/class_board_stackup.cpp:446
+#: pcbnew/board_stackup_manager/class_board_stackup.cpp:465
 msgid "Bottom Solder Paste"
 msgstr "Pâte à Souder Dessous"
 
-#: pcbnew/board_stackup_manager/class_board_stackup.cpp:454
+#: pcbnew/board_stackup_manager/class_board_stackup.cpp:473
 msgid "Bottom Silk Screen"
 msgstr "Sérigraphie Dessous"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:48
-msgid " Incorrect value for Epsilon R"
+msgid "Incorrect value for Epsilon R"
 msgstr "Valeur incorrecte pour Epsilon R"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:54
-msgid " Incorrect value for Loss Tangent"
+msgid "Incorrect value for Loss Tangent"
 msgstr "Valeur incorrecte pour Tangente de Perte"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:94
@@ -15344,6 +15413,7 @@ msgid "Epsilon R"
 msgstr "Epsilon R"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:96
+#: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:107
 msgid "Loss Tg"
 msgstr "Tg Perte"
 
@@ -15367,32 +15437,32 @@ msgstr "Matériaux disponibles:"
 msgid "Dielectric Materials"
 msgstr "Matériaux Diélectriques"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:416
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:430
 msgid "Core"
 msgstr "Core"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:418
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:432
 msgid "PrePreg"
 msgstr "PrePreg"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:448
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:462
 #, c-format
 msgid "Dielectric %d"
 msgstr "Diélectrique %d"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:471
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:485
 msgid "Copper"
 msgstr "Cuivre"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:612
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:626
 msgid "Stackup not up to date. Verify it"
 msgstr "Stackup pas à jour. Vérifier le"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:635
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:649
 msgid "A layer thickness is < 0. Fix it"
 msgstr "L'épaisseur d'une couche est < 0. Régler le problème"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:648
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:662
 #, c-format
 msgid ""
 "Board thickness %s differs from stackup thickness %s\n"
@@ -15401,7 +15471,7 @@ msgstr ""
 "L'épaisseur du circuit imprimé %s diffère de l'épaisseur de stackup %s\n"
 "Erreur max autorisée %s"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:689
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:703
 msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
 "used)"
@@ -15409,14 +15479,14 @@ msgstr ""
 "Valeur incorrecte pour Epsilon R (Epsilon R doit être positif ou nul s'il "
 "n'est pas utilisé)"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:707
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:721
 msgid ""
 "Incorrect value for Loss tg (Loss tg must be positive or null if not used)"
 msgstr ""
 "Valeur incorrecte pour Tg de Perte (Tg de Perte doit être positive ou nulle "
 "si non utilisée)"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:886
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:905
 msgid ""
 "A locked dielectric thickness is < 0\n"
 "Unlock it or change its thickness"
@@ -15424,7 +15494,7 @@ msgstr ""
 "Une épaisseur de diélectrique verrouillée est < 0\n"
 "Débloquez-la ou changez son épaisseur"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:900
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:919
 msgid ""
 "Cannot calculate dielectric thickness\n"
 "At least one dielectric layer must be not locked"
@@ -15432,7 +15502,7 @@ msgstr ""
 "Impossible de calculer l'épaisseur du diélectrique\n"
 "Au moins une couche de diélectrique ne doit pas être verrouillée"
 
-#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:909
+#: pcbnew/board_stackup_manager/panel_board_stackup.cpp:928
 msgid ""
 "Cannot calculate dielectric thickness\n"
 "Fixed thickness too big or board thickness too small"
@@ -15446,7 +15516,7 @@ msgstr "Epaisseur du circuit imprimé:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:30
 msgid "Current thickness from stackup:"
-msgstr "Épaisseur actuelle de du stackup :"
+msgstr "Épaisseur actuelle du stackup :"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:40
 msgid "Set Dielectric Thickness"
@@ -15461,6 +15531,11 @@ msgstr ""
 "L'épaisseur sera la même pour toutes les couches diélectriques non "
 "verrouillées."
 
+#: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:68
+#: pcbnew/build_BOM_from_board.cpp:114
+msgid "Id"
+msgstr "Id"
+
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:86
 #: pcbnew/class_pcb_text.cpp:107 pcbnew/class_text_mod.cpp:384
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:57
@@ -15468,10 +15543,6 @@ msgstr ""
 #: pcbnew/text_mod_grid_table.cpp:89
 msgid "Thickness"
 msgstr "Épaisseur"
-
-#: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:107
-msgid "Loss Tan"
-msgstr "Tg Perte"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:125
 msgid "No constraint"
@@ -15579,24 +15650,29 @@ msgid "OSP"
 msgstr "OSP"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:57
+#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:76
 msgid "User defined"
 msgstr "Défini utilisateur"
 
-#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:69
+#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:70
 msgid "Green"
 msgstr "Vert"
 
-#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:70
+#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:71
 msgid "Red"
 msgstr "Rouge"
 
-#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:71
+#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:72
 msgid "Blue"
 msgstr "Bleu"
 
-#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:74
+#: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:75
 msgid "Yellow"
 msgstr "Jaune"
+
+#: pcbnew/board_stackup_manager/stackup_predefined_prms.h:48
+msgid "Not specified"
+msgstr "Non spécifié"
 
 #: pcbnew/build_BOM_from_board.cpp:84
 msgid "Cannot export BOM: there are no footprints in the PCB"
@@ -15613,10 +15689,6 @@ msgstr "Sauver Liste du Matériel"
 #, c-format
 msgid "Unable to create file \"%s\""
 msgstr "Impossible de créer le  fichier \"%s\""
-
-#: pcbnew/build_BOM_from_board.cpp:114
-msgid "Id"
-msgstr "Id"
 
 #: pcbnew/build_BOM_from_board.cpp:115
 msgid "Designator"
@@ -18898,7 +18970,7 @@ msgstr "Sélection Netliste"
 msgid "Please, choose a valid netlist file."
 msgstr "S'il vous plaît, choisissez un fichier netlist valide."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:149 pcbnew/dialogs/dialog_netlist.cpp:213
+#: pcbnew/dialogs/dialog_netlist.cpp:149 pcbnew/dialogs/dialog_netlist.cpp:214
 msgid "The netlist file does not exist."
 msgstr "Le fichier netliste n'existe pas."
 
@@ -18922,16 +18994,16 @@ msgstr "Pas d'empreinte."
 msgid "Check footprints"
 msgstr "Test empreintes"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:262
+#: pcbnew/dialogs/dialog_netlist.cpp:263
 #, c-format
 msgid "Reading netlist file \"%s\".\n"
 msgstr "Lecture Netliste <%s>\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:266
+#: pcbnew/dialogs/dialog_netlist.cpp:267
 msgid "Using references to match components and footprints.\n"
 msgstr "Utilisation des références pour associer composants et empreintes.\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:268
+#: pcbnew/dialogs/dialog_netlist.cpp:269
 msgid "Using tstamp fields to match components and footprints.\n"
 msgstr ""
 "Utilisation des signatures temporelles pour associer composants et "
@@ -22713,7 +22785,7 @@ msgid "Select Library Table"
 msgstr "Sélection Table des Librairies"
 
 #: pcbnew/footprint_libraries_utils.cpp:609 pcbnew/gpcb_plugin.cpp:961
-#: pcbnew/kicad_plugin.cpp:2160 pcbnew/kicad_plugin.cpp:2246
+#: pcbnew/kicad_plugin.cpp:2165 pcbnew/kicad_plugin.cpp:2251
 #, c-format
 msgid "Library \"%s\" is read only"
 msgstr "Librairie \"%s\" est en lecture seule"
@@ -22981,23 +23053,23 @@ msgstr "mot clé \"%s\" inconnu"
 msgid "Element token contains %d parameters."
 msgstr "Element token contains %d parameters."
 
-#: pcbnew/gpcb_plugin.cpp:980 pcbnew/kicad_plugin.cpp:2290
+#: pcbnew/gpcb_plugin.cpp:980 pcbnew/kicad_plugin.cpp:2295
 #, c-format
 msgid "user does not have permission to delete directory \"%s\""
 msgstr ""
 "Vous n'avez pas la permission d'écriture pour supprimer le répertoire \"%s\""
 
-#: pcbnew/gpcb_plugin.cpp:988 pcbnew/kicad_plugin.cpp:2298
+#: pcbnew/gpcb_plugin.cpp:988 pcbnew/kicad_plugin.cpp:2303
 #, c-format
 msgid "library directory \"%s\" has unexpected sub-directories"
 msgstr "le répertoire librairie \"%s\" a des sous-répertoires inattendus"
 
-#: pcbnew/gpcb_plugin.cpp:1007 pcbnew/kicad_plugin.cpp:2317
+#: pcbnew/gpcb_plugin.cpp:1007 pcbnew/kicad_plugin.cpp:2322
 #, c-format
 msgid "unexpected file \"%s\" was found in library path \"%s\""
 msgstr "fichier inattendu \"%s\" trouvé dans le chemin de librairie \"%s\""
 
-#: pcbnew/gpcb_plugin.cpp:1025 pcbnew/kicad_plugin.cpp:2335
+#: pcbnew/gpcb_plugin.cpp:1025 pcbnew/kicad_plugin.cpp:2340
 #, c-format
 msgid "footprint library \"%s\" cannot be deleted"
 msgstr "la librairie d'empreintes  \"%s\" ne peut pas être supprimée"
@@ -23176,11 +23248,11 @@ msgstr "type via inconnu %d"
 msgid "unknown zone corner smoothing type %d"
 msgstr "unknown zone corner smoothing type %d"
 
-#: pcbnew/kicad_plugin.cpp:2007
+#: pcbnew/kicad_plugin.cpp:2012
 msgid "this file does not contain a PCB"
 msgstr "ce fichier ne contient pas de PCB"
 
-#: pcbnew/kicad_plugin.cpp:2148
+#: pcbnew/kicad_plugin.cpp:2153
 #, c-format
 msgid ""
 "Library \"%s\" does not exist.\n"
@@ -23189,21 +23261,21 @@ msgstr ""
 "La librairie\"%s\" n'existe pas.\n"
 "Voulez vous la créer?"
 
-#: pcbnew/kicad_plugin.cpp:2152
+#: pcbnew/kicad_plugin.cpp:2157
 msgid "Library Not Found"
 msgstr "Librairie non trouvée"
 
-#: pcbnew/kicad_plugin.cpp:2191
+#: pcbnew/kicad_plugin.cpp:2196
 #, c-format
 msgid "Footprint file name \"%s\" is not valid."
 msgstr "Nom de fichier d'empreinte \"%s\" non valide."
 
-#: pcbnew/kicad_plugin.cpp:2197
+#: pcbnew/kicad_plugin.cpp:2202
 #, c-format
 msgid "No write permissions to delete file \"%s\""
 msgstr "Pas de permission d'écriture pour supprimer  le fichier \"%s\""
 
-#: pcbnew/kicad_plugin.cpp:2265
+#: pcbnew/kicad_plugin.cpp:2270
 #, c-format
 msgid "cannot overwrite library path \"%s\""
 msgstr "impossible de remplacer le chemin librairie  \"%s\""
@@ -24650,14 +24722,6 @@ msgstr "Methode \"%s\" non trouvée, ou non appelable"
 #: pcbnew/swig/pcbnew_footprint_wizards.cpp:83
 msgid "Unknown Method"
 msgstr "Méthode Inconnue"
-
-#: pcbnew/swig/pcbnew_action_plugins.cpp:326
-#, c-format
-msgid ""
-"(PCB_EDIT_FRAME::OnActionPlugin) needs work: BOARD_ITEM type (%d) not handled"
-msgstr ""
-"(PCB_EDIT_FRAME :: OnActionPlugin) a besoin de travail: le type BOARD_ITEM "
-"(% d) n'est pas géré"
 
 #: pcbnew/swig/pcbnew_footprint_wizards.cpp:69
 msgid "Exception on python footprint wizard code"
@@ -26277,12 +26341,12 @@ msgstr "Position Relative"
 msgid "Select reference item..."
 msgstr "Sélectionnez l'élément de référence..."
 
-#: pcbnew/tools/selection_tool.cpp:619
+#: pcbnew/tools/selection_tool.cpp:638
 msgid "Selection contains locked items. Do you want to continue?"
 msgstr ""
 "La sélection contient des éléments verrouillés. Voulez vous continuer ?"
 
-#: pcbnew/tools/selection_tool.cpp:1196
+#: pcbnew/tools/selection_tool.cpp:1226
 msgid "Filter selection"
 msgstr "Filtre de sélection"
 
@@ -26368,6 +26432,34 @@ msgstr "Modifier les propriétés de la zone"
 #, c-format
 msgid "Refill %d Zones"
 msgstr "Remplissage %d Zones"
+
+#~ msgid "Rotate X Clockwise\tCtrl+Shift+X"
+#~ msgstr "Rotation X Horaire\tCtrl+Maj+X"
+
+#~ msgid "Rotate X Counterclockwise\tCtrl+X"
+#~ msgstr "Rotation X Anti-horaire\tCtrl+X"
+
+#~ msgid "Rotate Y Clockwise\tCtrl+Shift+Y"
+#~ msgstr "Rotation Y Horaire\tCtrl+Maj+Y"
+
+#~ msgid "Rotate Y Counterclockwise\tCtrl+Y"
+#~ msgstr "Rotation Y Anti-horaire\tCtrl+Y"
+
+#~ msgid "Rotate Z Clockwise\tCtrl+Shift+Z"
+#~ msgstr "Rotation Z Horaire\tCtrl+Maj+Z"
+
+#~ msgid "Rotate Z Counterclockwise\tCtrl+Z"
+#~ msgstr "Rotation Z Anti-horaire\tCtrl+Z"
+
+#~ msgid "Loss Tan"
+#~ msgstr "Tg Perte"
+
+#~ msgid ""
+#~ "(PCB_EDIT_FRAME::OnActionPlugin) needs work: BOARD_ITEM type (%d) not "
+#~ "handled"
+#~ msgstr ""
+#~ "(PCB_EDIT_FRAME :: OnActionPlugin) a besoin de travail: le type "
+#~ "BOARD_ITEM (% d) n'est pas géré"
 
 #~ msgid "Purple"
 #~ msgstr "Violet"
