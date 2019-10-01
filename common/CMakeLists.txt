@@ -312,7 +312,6 @@ set( COMMON_SRCS
     lib_tree_model.cpp
     lib_tree_model_adapter.cpp
     lockfile.cpp
-    ../markdown2html/markdown2html.cpp
     marker_base.cpp
     md5_hash.cpp
     msgpanel.cpp

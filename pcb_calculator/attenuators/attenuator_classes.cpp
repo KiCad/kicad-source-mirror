@@ -18,21 +18,21 @@
 
 
 // Html texts showing the formulas
-wxString pi_formula(
+wxString pi_formula =
 #include <pi_formula.h>
-);
 
-wxString tee_formula(
+
+wxString tee_formula =
 #include <tee_formula.h>
-);
+
 
 wxString bridget_tee_formula =
 #include <bridget_tee_formula.h>
-;
 
-wxString splitter_formula(
+
+wxString splitter_formula =
 #include <splitter_formula.h>
-);
+
 
 
 #ifndef NULL
