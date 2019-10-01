@@ -284,7 +284,7 @@ add_custom_command(
         -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help.html
         -DoutputFile=${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help_html.h
         -P ${CMAKE_MODULE_PATH}/Html2C.cmake
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help.html
+    DEPENDS ${CMAKE_MODULE_PATH}/Html2C.cmake ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help.html
     COMMENT "creating ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help_html.h
        from ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/dialog_bom_help.html"
     )

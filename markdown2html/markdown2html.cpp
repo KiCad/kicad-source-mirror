@@ -17,13 +17,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <memory>
 #include <string>
-#include <iostream>
-
-#include <fctsys.h>
 #include <macros.h>
 
+#if USE_MADDY_CONVERTER
+#include <memory>
+#include <iostream>
 #include "md2html/parser.h"
 
 
@@ -36,3 +35,35 @@ void ConvertMarkdown2Html( const wxString& aMarkdownInput, wxString& aHtmlOutput
 
     aHtmlOutput = FROM_UTF8( htmlOutput.c_str() );
 }
+
+#else
+#include "markdown.h"
+#include "html.h"
+#include "buffer.h"
+
+
+void ConvertMarkdown2Html( const wxString& aMarkdownInput, wxString& aHtmlOutput )
+{
+    std::string markdownInput( TO_UTF8( aMarkdownInput ) );
+
+    /* performing markdown parsing */
+    struct sd_callbacks callbacks;
+    struct html_renderopt   options;
+
+#define OUTPUT_UNIT 64
+    struct buf* ob = bufnew( OUTPUT_UNIT );
+
+    sdhtml_renderer( &callbacks, &options, 0 );
+    struct sd_markdown* markdown = sd_markdown_new( 0, 16, &callbacks, &options );
+
+    sd_markdown_render( ob, (uint8_t*)markdownInput.data(), markdownInput.size(), markdown );
+    sd_markdown_free( markdown );
+
+    std::string out( (char*)ob->data, ob->size );
+    aHtmlOutput = FROM_UTF8( out.data() );
+
+    /* cleanup */
+    bufrelease( ob );
+
+}
+#endif
