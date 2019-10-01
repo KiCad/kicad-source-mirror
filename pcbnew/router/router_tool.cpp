@@ -550,13 +550,13 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         // Cannot place microvias or blind vias if not allowed (obvious)
         if( ( viaType == VIA_BLIND_BURIED ) && ( !bds.m_BlindBuriedViaAllowed ) )
         {
-            DisplayError( frame(), _( "Blind/buried vias have to be enabled in the design settings." ) );
+            DisplayError( frame(), _( "Blind/buried vias have to be enabled in Board Setup > Design Rules > Constraints." ) );
             return false;
         }
 
         if( ( viaType == VIA_MICROVIA ) && ( !bds.m_MicroViasAllowed ) )
         {
-            DisplayError( frame(), _( "Microvias have to be enabled in the design settings." ) );
+            DisplayError( frame(), _( "Microvias have to be enabled in Board Setup > Design Rules > Constraints." ) );
             return false;
         }
 
