@@ -767,8 +767,8 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
     updateModificationPoint( selection );
 
-    // Use the bounding box center as flip position
-    VECTOR2I modPoint = selection.GetCenter();
+    // Flip around the anchor for footprints, and the bounding box center for board items
+    VECTOR2I modPoint = EditingModules() ? VECTOR2I( 0, 0 ) : selection.GetCenter();
 
     // If only one item selected, flip around the item anchor point, instead
     // of the bounding box center, to avoid moving the item anchor

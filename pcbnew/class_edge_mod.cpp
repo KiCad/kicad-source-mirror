@@ -283,7 +283,7 @@ EDA_ITEM* EDGE_MODULE::Clone() const
 
 void EDGE_MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
-    wxPoint pt;
+    wxPoint pt( 0, 0 );
 
     switch( GetShape() )
     {
@@ -293,16 +293,21 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     default:
     case S_SEGMENT:
     case S_CURVE:
+        // If Start0 and Start are equal (ie: ModEdit), then flip both sets around the
+        // centre point.
+        if( m_Start == m_Start0 )
+            pt = aCentre;
+
         if( aFlipLeftRight )
         {
             MIRROR( m_Start.x, aCentre.x );
             MIRROR( m_End.x, aCentre.x );
             MIRROR( m_BezierC1.x, aCentre.x );
             MIRROR( m_BezierC2.x, aCentre.x );
-            MIRROR( m_Start0.x, 0 );
-            MIRROR( m_End0.x, 0 );
-            MIRROR( m_Bezier0_C1.x, 0 );
-            MIRROR( m_Bezier0_C2.x, 0 );
+            MIRROR( m_Start0.x, pt.x );
+            MIRROR( m_End0.x, pt.x );
+            MIRROR( m_Bezier0_C1.x, pt.x );
+            MIRROR( m_Bezier0_C2.x, pt.x );
         }
         else
         {
@@ -310,10 +315,10 @@ void EDGE_MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
             MIRROR( m_End.y, aCentre.y );
             MIRROR( m_BezierC1.y, aCentre.y );
             MIRROR( m_BezierC2.y, aCentre.y );
-            MIRROR( m_Start0.y, 0 );
-            MIRROR( m_End0.y, 0 );
-            MIRROR( m_Bezier0_C1.y, 0 );
-            MIRROR( m_Bezier0_C2.y, 0 );
+            MIRROR( m_Start0.y, pt.y );
+            MIRROR( m_End0.y, pt.y );
+            MIRROR( m_Bezier0_C1.y, pt.y );
+            MIRROR( m_Bezier0_C2.y, pt.y );
         }
 
         RebuildBezierToSegmentsPointsList( m_Width );
