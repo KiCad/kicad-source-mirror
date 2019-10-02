@@ -226,6 +226,8 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
         m_canvas->Refresh();
     }
 
+    m_canvasType = GetGalCanvas()->GetBackend();
+
     // Enable the axes to match legacy draw style
     auto& galOptions = GetGalDisplayOptions();
     galOptions.m_axesEnabled = true;
