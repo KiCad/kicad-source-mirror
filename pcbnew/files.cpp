@@ -549,9 +549,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // 6.0 TODO: some of the 5.1 settings still haven't moved because they're waiting on
         // the new DRC architecture
         BOARD_DESIGN_SETTINGS& configBds = GetBoard()->GetDesignSettings();
-        bds.m_RequireCourtyards                 = configBds.m_RequireCourtyards;
-        bds.m_ProhibitOverlappingCourtyards     = configBds.m_ProhibitOverlappingCourtyards;
-        bds.m_HoleToHoleMin                     = configBds.m_HoleToHoleMin;
+        bds.m_RequireCourtyards             = configBds.m_RequireCourtyards;
+        bds.m_ProhibitOverlappingCourtyards = configBds.m_ProhibitOverlappingCourtyards;
+        bds.m_HoleToHoleMin                 = configBds.m_HoleToHoleMin;
 
         SetBoard( loadedBoard );
 

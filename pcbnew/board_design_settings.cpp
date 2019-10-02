@@ -447,14 +447,14 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
                                              Millimeter2iu( DEFAULT_SILK_TEXT_SIZE ) );
     m_TextThickness[ LAYER_CLASS_SILK ] = Millimeter2iu( DEFAULT_SILK_TEXT_WIDTH );
     m_TextItalic[ LAYER_CLASS_SILK ] = false;
-    m_TextUpright[ LAYER_CLASS_SILK ] = true;
+    m_TextUpright[ LAYER_CLASS_SILK ] = false;
 
     m_LineThickness[ LAYER_CLASS_COPPER ] = Millimeter2iu( DEFAULT_COPPER_LINE_WIDTH );
     m_TextSize[ LAYER_CLASS_COPPER ] = wxSize( Millimeter2iu( DEFAULT_COPPER_TEXT_SIZE ),
                                                Millimeter2iu( DEFAULT_COPPER_TEXT_SIZE ) );
     m_TextThickness[ LAYER_CLASS_COPPER ] = Millimeter2iu( DEFAULT_COPPER_TEXT_WIDTH );
     m_TextItalic[ LAYER_CLASS_COPPER ] = false;
-    m_TextUpright[ LAYER_CLASS_COPPER ] = true;
+    m_TextUpright[ LAYER_CLASS_COPPER ] = false;
 
     // Edges & Courtyards; text properties aren't used but better to have them holding
     // reasonable values than not.
@@ -463,21 +463,21 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
                                               Millimeter2iu( DEFAULT_TEXT_SIZE ) );
     m_TextThickness[ LAYER_CLASS_EDGES ] = Millimeter2iu( DEFAULT_TEXT_WIDTH );
     m_TextItalic[ LAYER_CLASS_EDGES ] = false;
-    m_TextUpright[ LAYER_CLASS_EDGES ] = true;
+    m_TextUpright[ LAYER_CLASS_EDGES ] = false;
 
     m_LineThickness[ LAYER_CLASS_COURTYARD ] = Millimeter2iu( DEFAULT_COURTYARD_WIDTH );
     m_TextSize[ LAYER_CLASS_COURTYARD ] = wxSize( Millimeter2iu( DEFAULT_TEXT_SIZE ),
                                                   Millimeter2iu( DEFAULT_TEXT_SIZE ) );
     m_TextThickness[ LAYER_CLASS_COURTYARD ] = Millimeter2iu( DEFAULT_TEXT_WIDTH );
     m_TextItalic[ LAYER_CLASS_COURTYARD ] = false;
-    m_TextUpright[ LAYER_CLASS_COURTYARD ] = true;
+    m_TextUpright[ LAYER_CLASS_COURTYARD ] = false;
 
     m_LineThickness[ LAYER_CLASS_OTHERS ] = Millimeter2iu( DEFAULT_LINE_WIDTH );
     m_TextSize[ LAYER_CLASS_OTHERS ] = wxSize( Millimeter2iu( DEFAULT_TEXT_SIZE ),
                                                Millimeter2iu( DEFAULT_TEXT_SIZE ) );
     m_TextThickness[ LAYER_CLASS_OTHERS ] = Millimeter2iu( DEFAULT_TEXT_WIDTH );
     m_TextItalic[ LAYER_CLASS_OTHERS ] = false;
-    m_TextUpright[ LAYER_CLASS_OTHERS ] = true;
+    m_TextUpright[ LAYER_CLASS_OTHERS ] = false;
 
     m_useCustomTrackVia = false;
     m_customTrackWidth  = Millimeter2iu( DEFAULT_CUSTOMTRACKWIDTH );
