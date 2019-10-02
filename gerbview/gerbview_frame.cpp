@@ -201,8 +201,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
         SaveSettings( config() );
     }
 
-    GetCanvas()->SwitchBackend( canvasType );
-    ActivateGalCanvas();
+    SwitchCanvas( canvasType );
 
     // Enable the axes to match legacy draw style
     auto& galOptions = GetGalDisplayOptions();
