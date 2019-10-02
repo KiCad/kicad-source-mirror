@@ -826,6 +826,16 @@ void DXF_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorner
     FinishTo( coord[0] );
 }
 
+
+void DXF_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos,
+                            int aRadius, int aCornerCount,
+                            double aOrient, EDA_DRAW_MODE_T aTraceMode, void* aData )
+{
+    // Do nothing
+    wxASSERT( 0 );
+}
+
+
 /**
  * Checks if a given string contains non-ASCII characters.
  * FIXME: the performance of this code is really poor, but in this case it can be

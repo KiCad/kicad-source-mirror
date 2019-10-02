@@ -290,7 +290,7 @@ void GERBER_PLOTTER::SetCurrentLineWidth( int width, void* aData )
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
     int aperture_attribute = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
 
-    selectAperture( wxSize( pen_width, pen_width ), APERTURE::Plotting, aperture_attribute );
+    selectAperture( wxSize( pen_width, pen_width ), APERTURE::AT_PLOTTING, aperture_attribute );
     currentPenWidth = pen_width;
 }
 
@@ -348,6 +348,22 @@ void GERBER_PLOTTER::selectAperture( const wxSize&           aSize,
     }
 }
 
+void GERBER_PLOTTER::selectAperture( int aDiameter, double aPolygonRotation,
+                     APERTURE::APERTURE_TYPE aType, int aApertureAttribute )
+{
+    // Pick an existing aperture or create a new one, matching the
+    // aDiameter, aPolygonRotation, type and attributes for type =
+    // AT_REGULAR_POLY3 to AT_REGULAR_POLY12
+
+    wxASSERT( aType>= APERTURE::APERTURE_TYPE::AT_REGULAR_POLY3 &&
+                      aType <= APERTURE::APERTURE_TYPE::AT_REGULAR_POLY12 );
+
+    // To use selectAperture( size, ... ) calculate a equivalent aperture size:
+    // for AT_REGULAR_POLYxx the parameter APERTURE::m_Size contains
+    // aDiameter (in m_Size.x) and aPolygonRotation in 1/1000 degree (in m_Size.y)
+    wxSize size( aDiameter, (int)( aPolygonRotation * 1000.0 ) );
+    selectAperture( size, aType, aApertureAttribute );
+}
 
 void GERBER_PLOTTER::writeApertureList()
 {
@@ -390,24 +406,37 @@ void GERBER_PLOTTER::writeApertureList()
 
         switch( tool->m_Type )
         {
-        case APERTURE::Circle:
+        case APERTURE::AT_CIRCLE:
+            sprintf( text, "C,%#f*%%\n", tool->GetDiameter() * fscale );
+            break;
+
+        case APERTURE::AT_RECT:
+            sprintf( text, "R,%#fX%#f*%%\n", tool->m_Size.x * fscale,
+                                             tool->m_Size.y * fscale );
+            break;
+
+        case APERTURE::AT_PLOTTING:
             sprintf( text, "C,%#f*%%\n", tool->m_Size.x * fscale );
             break;
 
-        case APERTURE::Rect:
-            sprintf( text, "R,%#fX%#f*%%\n",
-	             tool->m_Size.x * fscale,
-                     tool->m_Size.y * fscale );
+        case APERTURE::AT_OVAL:
+            sprintf( text, "O,%#fX%#f*%%\n", tool->m_Size.x * fscale,
+                                             tool->m_Size.y * fscale );
             break;
 
-        case APERTURE::Plotting:
-            sprintf( text, "C,%#f*%%\n", tool->m_Size.x * fscale );
-            break;
-
-        case APERTURE::Oval:
-            sprintf( text, "O,%#fX%#f*%%\n",
-	            tool->m_Size.x * fscale,
-		    tool->m_Size.y * fscale );
+        case APERTURE::AT_REGULAR_POLY:
+        case APERTURE::AT_REGULAR_POLY3:
+        case APERTURE::AT_REGULAR_POLY4:
+        case APERTURE::AT_REGULAR_POLY5:
+        case APERTURE::AT_REGULAR_POLY6:
+        case APERTURE::AT_REGULAR_POLY7:
+        case APERTURE::AT_REGULAR_POLY8:
+        case APERTURE::AT_REGULAR_POLY9:
+        case APERTURE::AT_REGULAR_POLY10:
+        case APERTURE::AT_REGULAR_POLY11:
+        case APERTURE::AT_REGULAR_POLY12:
+            sprintf( text, "P,%#fX%dX%#f*%%\n", tool->GetDiameter() * fscale,
+                     tool->GetVerticeCount(), tool->GetRotation() );
             break;
         }
 
@@ -667,7 +696,7 @@ void GERBER_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre, EDA_DRAW_
         DPOINT pos_dev = userToDeviceCoordinates( pos );
 
         int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
-        selectAperture( size, APERTURE::Circle, aperture_attrib );
+        selectAperture( size, APERTURE::AT_CIRCLE, aperture_attrib );
 
         if( gbr_metadata )
             formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
@@ -693,7 +722,7 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
 
         DPOINT pos_dev = userToDeviceCoordinates( pos );
         int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
-        selectAperture( size, APERTURE::Oval, aperture_attrib );
+        selectAperture( size, APERTURE::AT_OVAL, aperture_attrib );
 
         if( gbr_metadata )
             formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
@@ -790,7 +819,7 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
         {
             DPOINT pos_dev = userToDeviceCoordinates( pos );
             int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
-            selectAperture( size, APERTURE::Rect, aperture_attrib );
+            selectAperture( size, APERTURE::AT_RECT, aperture_attrib );
 
             if( gbr_metadata )
                 formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
@@ -996,6 +1025,52 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
     PlotPoly( cornerList, aTrace_Mode == FILLED ? FILLED_SHAPE : NO_FILL,
               aTrace_Mode == FILLED ? 0 : GetCurrentLineWidth(),
               &metadata );
+}
+
+
+void GERBER_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos,
+                                          int aDiameter, int aCornerCount,
+                                          double aOrient, EDA_DRAW_MODE_T aTraceMode,
+                                          void* aData )
+{
+    GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
+
+    if( aTraceMode == SKETCH )
+    {
+        // Build the polygon:
+        std::vector< wxPoint > cornerList;
+
+        double angle_delta = 3600.0 / aCornerCount; // in 0.1 degree
+
+        for( int ii = 0; ii < aCornerCount; ii++ )
+        {
+            double rot = aOrient + (angle_delta*ii);
+            wxPoint vertice( aDiameter/2, 0 );
+            RotatePoint( &vertice, rot );
+            vertice += aShapePos;
+            cornerList.push_back( vertice );
+        }
+
+        cornerList.push_back( cornerList[0] );  // Close the shape
+
+        SetCurrentLineWidth( aDiameter/8, gbr_metadata );
+        PlotPoly( cornerList, NO_FILL, GetCurrentLineWidth(), gbr_metadata );
+    }
+    else
+    {
+        DPOINT pos_dev = userToDeviceCoordinates( aShapePos );
+
+        int aperture_attrib = gbr_metadata ? gbr_metadata->GetApertureAttrib() : 0;
+
+        APERTURE::APERTURE_TYPE apert_type =
+                (APERTURE::APERTURE_TYPE)(APERTURE::AT_REGULAR_POLY3 + aCornerCount - 3);
+        selectAperture( aDiameter, aOrient, apert_type, aperture_attrib );
+
+        if( gbr_metadata )
+            formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
+
+        emitDcode( pos_dev, 3 );
+    }
 }
 
 

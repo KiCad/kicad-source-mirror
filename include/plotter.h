@@ -381,6 +381,16 @@ public:
                                  double aPadOrient, EDA_DRAW_MODE_T aTraceMode,
                                  void* aData ) = 0;
 
+    /** Flash a regular polygon. Usefull only in Gerber files to flash a regular polygon
+     * @param aShapePos is the center of the circle containing the polygon
+     * @param aRadius is the radius of the circle containing the polygon
+     * @param aCornerCount is the number of vertices
+     * @param aOrient is the polygon rotation in degrees
+     * @param aData is a auxiliary parameter used (if needed) to handle extra info
+     * specific to the plotter
+     */
+    virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
+                            double aOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) = 0 ;
 
     /**
      * Draws text with the plotter. For convenience it accept the color to use
@@ -649,6 +659,8 @@ public:
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
                                  double aPadOrient, EDA_DRAW_MODE_T aTraceMode,
                                  void* aData ) override;
+    virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
+                            double aOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
 
 protected:
     void penControl( char plume );
@@ -707,6 +719,8 @@ public:
                                  EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
                                  double aPadOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+    virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
+                            double aOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
 
     /** The SetColor implementation is split with the subclasses:
      * The PSLIKE computes the rgb values, the subclass emits the
@@ -1009,25 +1023,101 @@ protected:
     void setFillMode( FILL_T fill );
 };
 
-/* Class to handle a D_CODE when plotting a board : */
+/* Class to handle a D_CODE when plotting a board using Standard Aperture Templates
+ * (complex apertures need aperture macros
+ * 5 types:
+ * Circle (round)
+ * Rectangle
+ * Obround (oval)
+ * regular polygon
+ *
+ * We need round apertures to plot lines, so we also defined a aperture type for plotting
+ */
 #define FIRST_DCODE_VALUE 10    // D_CODE < 10 is a command, D_CODE >= 10 is a tool
 
 class APERTURE
 {
 public:
     enum APERTURE_TYPE {
-        Circle   = 1,
-        Rect     = 2,
-        Plotting = 3,
-        Oval     = 4
+        AT_CIRCLE   = 1,    // round aperture, to flash pads
+        AT_RECT     = 2,    // rect aperture, to flash pads
+        AT_PLOTTING = 3,    // round aperture, to plot lines
+        AT_OVAL     = 4,    // oval aperture, to flash pads
+        AT_REGULAR_POLY = 5,// Regular polygon (n vertices, n = 3 .. 12, with rotation)
+        AT_REGULAR_POLY3,   // Regular polygon 3 vertices, with rotation
+        AT_REGULAR_POLY4,   // Regular polygon 4 vertices, with rotation
+        AT_REGULAR_POLY5,   // Regular polygon 5 vertices, with rotation
+        AT_REGULAR_POLY6,   // Regular polygon 6 vertices, with rotation
+        AT_REGULAR_POLY7,   // Regular polygon 7 vertices, with rotation
+        AT_REGULAR_POLY8,   // Regular polygon 8 vertices, with rotation
+        AT_REGULAR_POLY9,   // Regular polygon 9 vertices, with rotation
+        AT_REGULAR_POLY10,  // Regular polygon 10 vertices, with rotation
+        AT_REGULAR_POLY11,  // Regular polygon 11 vertices, with rotation
+        AT_REGULAR_POLY12,  // Regular polygon 12 vertices, with rotation
     };
 
-    wxSize        m_Size;     // horiz and Vert size
-    APERTURE_TYPE m_Type;     // Type ( Line, rect , circulaire , ovale .. )
-    int           m_DCode;    // code number ( >= 10 );
-    int           m_ApertureAttribute;  // the attribute attached to this aperture
-                                        // Only one attribute is allowed by aperture
-                                        // 0 = no specific aperture attribute
+    void SetSize( const wxSize& aSize )
+    {
+        m_Size = aSize;
+    }
+
+    const wxSize GetSize()
+    {
+        return m_Size;
+    }
+
+    void SetDiameter( int aDiameter )
+    {
+        m_Size.x = aDiameter;
+    }
+
+    int GetDiameter()
+    {
+        return m_Size.x;
+    }
+
+    void SetVerticeCount( int aCount )
+    {
+        if( aCount < 3 )
+            aCount = 3;
+        else if( aCount > 12 )
+            aCount = 12;
+
+        m_Type = (APERTURE_TYPE)(AT_REGULAR_POLY3 - 3 + aCount);
+    }
+
+    int GetVerticeCount()
+    {
+        return m_Type - AT_REGULAR_POLY3 + 3;
+    }
+
+    void SetRotation( double aRotDegree )
+    {
+        // The rotation is stored in 1/1000 degree
+        m_Size.y = int( aRotDegree * 1000.0 );
+    }
+
+    double GetRotation()
+    {
+        // The rotation is stored in 1/1000 degree
+        return m_Size.y / 1000.0;
+    }
+
+    // Type ( Line, rect , circulaire , ovale poly 3 to 12 vertices )
+    APERTURE_TYPE m_Type;
+
+    // horiz and Vert size, or diameter and rotation for regular polygon
+    // The diameter (for  circle and polygons) is stored in m_Size.x
+    // the rotation is stored in m_Size.y in 1/1000 degree
+    wxSize        m_Size;
+
+    // code number ( >= 10 )
+    int           m_DCode;
+
+    // the attribute attached to this aperture
+    // Only one attribute is allowed by aperture
+    // 0 = no specific aperture attribute
+    int           m_ApertureAttribute;
 };
 
 
@@ -1139,6 +1229,9 @@ public:
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
                                  double aPadOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
 
+    virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
+                            double aOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+
     /**
      * Change the plot polarity and begin a new layer
      * Used to 'scratch off' silk screen away from solder mask
@@ -1183,6 +1276,14 @@ protected:
      */
     void selectAperture( const wxSize& aSize, APERTURE::APERTURE_TYPE aType,
                          int aApertureAttribute );
+    /**
+     * Pick an existing aperture or create a new one, matching the
+     * aDiameter, aPolygonRotation, type and attributes.
+     * It apply only to apertures with type = AT_REGULAR_POLY3 to AT_REGULAR_POLY12
+     * write the DCode selection on gerber file
+     */
+    void selectAperture( int aDiameter, double aPolygonRotation,
+                         APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
 
     /**
      * Emit a D-Code record, using proper conversions
@@ -1329,6 +1430,8 @@ public:
                                  EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
                                  double aPadOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
+    virtual void FlashRegularPolygon( const wxPoint& aShapePos, int aDiameter, int aCornerCount,
+                            double aOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
 
     virtual void Text( const wxPoint&              aPos,
                        const COLOR4D               aColor,

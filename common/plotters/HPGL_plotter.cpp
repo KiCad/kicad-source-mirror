@@ -700,3 +700,12 @@ void HPGL_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint* aCorne
 
     PlotPoly( cornerList, aTraceMode == FILLED ? FILLED_SHAPE : NO_FILL );
 }
+
+
+void HPGL_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos,
+                            int aRadius, int aCornerCount,
+                            double aOrient, EDA_DRAW_MODE_T aTraceMode, void* aData )
+{
+    // Do nothing
+    wxASSERT( 0 );
+}

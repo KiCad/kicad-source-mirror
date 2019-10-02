@@ -297,6 +297,15 @@ void PSLIKE_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCor
 }
 
 
+void PSLIKE_PLOTTER::FlashRegularPolygon( const wxPoint& aShapePos,
+                            int aRadius, int aCornerCount,
+                            double aOrient, EDA_DRAW_MODE_T aTraceMode, void* aData )
+{
+    // Do nothing
+    wxASSERT( 0 );
+}
+
+
 /**
  * Write on a stream a string escaped for postscript/PDF
  */
