@@ -278,13 +278,31 @@ bool TOOL_MANAGER::RunAction( const std::string& aActionName, bool aNow, void* a
 }
 
 
+VECTOR2D TOOL_MANAGER::GetMousePosition()
+{
+    if( m_viewControls )
+        return m_viewControls->GetMousePosition();
+    else
+        return wxGetMousePosition();
+}
+
+
+VECTOR2D TOOL_MANAGER::GetCursorPosition()
+{
+   if( m_viewControls )
+       return m_viewControls->GetCursorPosition();
+   else
+       return wxGetMousePosition();
+}
+
+
 bool TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aParam )
 {
     bool       handled = false;
     TOOL_EVENT event = aAction.MakeEvent();
 
     if( event.Category() == TC_COMMAND )
-        event.SetMousePosition( m_viewControls->GetCursorPosition() );
+        event.SetMousePosition( GetCursorPosition() );
 
     // Allow to override the action parameter
     if( aParam )

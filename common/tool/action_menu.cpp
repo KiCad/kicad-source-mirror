@@ -457,7 +457,7 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
         if( type == wxEVT_COMMAND_MENU_SELECTED )
             evt->SetMousePosition( g_menu_open_position );
         else
-            evt->SetMousePosition( getToolManager()->GetViewControls()->GetMousePosition() );
+            evt->SetMousePosition( getToolManager()->GetMousePosition() );
 
         if( g_last_menu_highlighted_id == aEvent.GetId() && !m_isContextMenu )
             evt->SetHasPosition( false );

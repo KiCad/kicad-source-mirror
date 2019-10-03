@@ -257,6 +257,9 @@ public:
         return m_viewControls;
     }
 
+    VECTOR2D GetMousePosition();
+    VECTOR2D GetCursorPosition();
+
     inline EDA_ITEM* GetModel() const
     {
         return m_model;
