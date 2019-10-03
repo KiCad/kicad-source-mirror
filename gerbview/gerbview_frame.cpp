@@ -133,8 +133,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     if( m_LastGridSizeId > ID_POPUP_GRID_LEVEL_0_0_1MM-ID_POPUP_GRID_LEVEL_1000 )
         m_LastGridSizeId = ID_POPUP_GRID_LEVEL_0_0_1MM-ID_POPUP_GRID_LEVEL_1000;
 
-    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
-
     setupTools();
     ReCreateMenuBar();
     ReCreateHToolbar();
@@ -210,6 +208,12 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_LayersManager->ReFill();
     m_LayersManager->ReFillRender();    // Update colors in Render after the config is read
+
+    GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
+    GetToolManager()->RunAction( ACTIONS::gridPreset, true, m_LastGridSizeId );
+
+    if( GetCanvas() )
+        GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
 
     // Update the checked state of tools
     SyncToolbars();

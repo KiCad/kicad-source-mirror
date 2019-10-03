@@ -1386,13 +1386,16 @@ bool MODULE::BuildPolyCourtyard()
 
     wxString error_msg;
 
+    #define ARC_ERROR_MAX 0.02      /* error max in mm to approximate a arc by segments */
     bool success = ConvertOutlineToPolygon( list_front, m_poly_courtyard_front,
-                                            &error_msg, (unsigned) Millimeter2iu( 0.05 ) );
+                                            &error_msg,
+                                            (unsigned) Millimeter2iu( ARC_ERROR_MAX ) );
 
     if( success )
     {
         success = ConvertOutlineToPolygon( list_back, m_poly_courtyard_back,
-                                           &error_msg, (unsigned) Millimeter2iu( 0.05 ) );
+                                           &error_msg,
+                                           (unsigned) Millimeter2iu( ARC_ERROR_MAX ) );
     }
 
     if( !error_msg.IsEmpty() )
