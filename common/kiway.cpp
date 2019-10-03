@@ -94,6 +94,7 @@ void KIWAY::SetTop( wxFrame* aTop )
 const wxString KIWAY::dso_search_path( FACE_T aFaceId )
 {
     const char*   name;
+    const char*   dirName;
 
     switch( aFaceId )
     {
@@ -108,6 +109,13 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
     default:
         wxASSERT_MSG( 0, wxT( "caller has a bug, passed a bad aFaceId" ) );
         return wxEmptyString;
+    }
+
+    // The subdirectories usually have the same name as the kiface
+    switch( aFaceId )
+    {
+        case FACE_PL_EDITOR: dirName = "pagelayout_editor";   break;
+        default:             dirName = name + 1;              break;
     }
 
 #ifndef __WXMAC__
@@ -130,6 +138,25 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
 #endif
 
     fn.SetName( name );
+
+#ifdef DEBUG
+    // To speed up development, it's sometimes nice to run kicad from inside
+    // the build path.  In that case, each program will be in a subdirectory.
+    // To find the DSOs, we need to go up one directory and then enter a subdirectory.
+
+    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    {
+#ifdef __WXMAC__
+        fn = wxStandardPaths::Get().GetExecutablePath();
+        fn.RemoveLastDir();
+        fn.AppendDir( wxT( "PlugIns" ) );
+        fn.SetName( name );
+#else
+        fn.RemoveLastDir();
+        fn.AppendDir( dirName );
+#endif
+    }
+#endif
 
     // Here a "suffix" == an extension with a preceding '.',
     // so skip the preceding '.' to get an extension
