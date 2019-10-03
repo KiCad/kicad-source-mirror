@@ -1236,7 +1236,6 @@ int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
     if( item->Type() != PCB_TRACE_T )
         return 0;
 
-    Init();
     Activate();
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
