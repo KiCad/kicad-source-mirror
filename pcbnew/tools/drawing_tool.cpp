@@ -493,7 +493,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( ACTIONS::refreshPreview );
 
     if( aEvent.HasPosition() )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
+        m_toolMgr->PrimeTool( aEvent.Position() );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -504,7 +504,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
-        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), nullptr );
+        VECTOR2I cursorPos = grid.BestSnapAnchor(
+                evt->IsPrime() ? evt->Position() : m_controls->GetMousePosition(), nullptr );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         auto cleanup = [&] () {
@@ -1435,7 +1436,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 
     // Prime the pump
     if( aEvent.HasPosition() )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
+        m_toolMgr->PrimeTool( aEvent.Position() );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -1445,7 +1446,8 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
-        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), layers );
+        VECTOR2I cursorPos = grid.BestSnapAnchor(
+                evt->IsPrime() ? evt->Position() : m_controls->GetMousePosition(), layers );
         m_controls->ForceCursorPosition( true, cursorPos );
 
         auto cleanup = [&] () {

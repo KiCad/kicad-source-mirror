@@ -878,7 +878,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
 
     // Prime the pump
     if( aEvent.HasPosition() )
-        m_toolMgr->RunAction( ACTIONS::cursorClick );
+        m_toolMgr->PrimeTool( m_startSnapPoint );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
