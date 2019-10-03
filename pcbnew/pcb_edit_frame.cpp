@@ -568,6 +568,7 @@ void PCB_EDIT_FRAME::DoShowBoardSetupDialog( const wxString& aInitialPage,
 
         //this event causes the routing tool to reload its design rules information
         TOOL_EVENT toolEvent( TC_COMMAND, TA_MODEL_CHANGE, AS_ACTIVE );
+        toolEvent.SetHasPosition( false );
         m_toolManager->ProcessEvent( toolEvent );
 
         OnModify();

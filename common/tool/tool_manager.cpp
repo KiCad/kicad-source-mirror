@@ -283,6 +283,9 @@ bool TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aPara
     bool       handled = false;
     TOOL_EVENT event = aAction.MakeEvent();
 
+    if( event.Category() == TC_COMMAND )
+        event.SetMousePosition( m_viewControls->GetCursorPosition() );
+
     // Allow to override the action parameter
     if( aParam )
         event.SetParameter( aParam );
@@ -303,6 +306,20 @@ bool TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aPara
 }
 
 
+void TOOL_MANAGER::PrimeTool( const VECTOR2D& aPosition )
+{
+    int modifiers = 0;
+    modifiers |= wxGetKeyState( WXK_SHIFT ) ? MD_SHIFT : 0;
+    modifiers |= wxGetKeyState( WXK_CONTROL ) ? MD_CTRL : 0;
+    modifiers |= wxGetKeyState( WXK_ALT ) ? MD_ALT : 0;
+
+    TOOL_EVENT evt( TC_MOUSE, TA_PRIME, BUT_LEFT | modifiers );
+    evt.SetMousePosition( aPosition );
+
+    PostEvent( evt );
+}
+
+
 const std::map<std::string, TOOL_ACTION*>& TOOL_MANAGER::GetActions()
 {
     return m_actionMgr->GetActions();
@@ -320,6 +337,7 @@ bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
     wxASSERT( aTool != NULL );
 
     TOOL_EVENT evt( TC_COMMAND, TA_ACTIVATE, aTool->GetName() );
+    evt.SetMousePosition( m_viewControls->GetCursorPosition() );
     processEvent( evt );
 
     if( TOOL_STATE* active = GetCurrentToolState() )
@@ -742,6 +760,7 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
         else
         {
             TOOL_EVENT evt( TC_COMMAND, TA_CHOICE_MENU_CHOICE, -1 );
+            evt.SetHasPosition( false );
             evt.SetParameter( m );
             dispatchInternal( evt );
         }
@@ -751,6 +770,7 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
 
         // Notify the tools that menu has been closed
         TOOL_EVENT evt( TC_COMMAND, TA_CHOICE_MENU_CLOSED );
+        evt.SetHasPosition( false );
         evt.SetParameter( m );
         dispatchInternal( evt );
 

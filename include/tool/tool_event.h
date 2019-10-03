@@ -115,6 +115,9 @@ enum TOOL_ACTIONS
     // Model has changed (partial update).
     TA_MODEL_CHANGE         = 0x200000,
 
+    // Tool priming event (a special mouse click)
+    TA_PRIME                = 0x400001,
+
     TA_ANY = 0xffffffff
 };
 
@@ -328,6 +331,11 @@ public:
     bool IsChoiceMenu() const
     {
         return m_actions & TA_CHOICE_MENU;
+    }
+
+    bool IsPrime() const
+    {
+        return m_actions == TA_PRIME;
     }
 
     ///> Returns information about key modifiers state (Ctrl, Alt, etc.)

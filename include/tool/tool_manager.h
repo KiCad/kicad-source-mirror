@@ -148,6 +148,15 @@ public:
 
     const std::map<std::string, TOOL_ACTION*>& GetActions();
 
+    /**
+     * Function PrimeTool()
+     * "Primes" a tool by sending a cursor left-click event with the mouse position set
+     * to the passed in position.
+     *
+     * @param aPosition is the mouse position to use in the event
+     */
+    void PrimeTool( const VECTOR2D& aPosition );
+
     ///> @copydoc ACTION_MANAGER::GetHotKey()
     int GetHotKey( const TOOL_ACTION& aAction );
 

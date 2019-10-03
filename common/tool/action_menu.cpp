@@ -339,10 +339,16 @@ void ACTION_MENU::updateHotKeys()
 
 static int g_last_menu_highlighted_id = 0;
 
+// We need to store the position of the mouse when the menu was opened so it can be passed
+// to the command event generated when the menu item is selected.
+static VECTOR2D g_menu_open_position;
+
 
 void ACTION_MENU::OnIdle( wxIdleEvent& event )
 {
     g_last_menu_highlighted_id = 0;
+    g_menu_open_position.x = 0.0;
+    g_menu_open_position.y = 0.0;
 }
 
 
@@ -356,6 +362,12 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
     {
         if( m_dirty && m_tool )
             getToolManager()->RunAction( ACTIONS::updateMenu, true, this );
+
+        wxMenu* parent = dynamic_cast<wxMenu*>( GetParent() );
+
+        // Don't update the position if this menu has a parent
+        if( !parent && m_tool )
+            g_menu_open_position = getToolManager()->GetViewControls()->GetMousePosition();
 
         g_last_menu_highlighted_id = 0;
     }
@@ -440,6 +452,12 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
         wxLogTrace( kicadTraceToolStack, "ACTION_MENU::OnMenuEvent %s", evt->Format() );
 
         TOOL_MANAGER* toolMgr = m_tool->GetManager();
+
+        // Pass the position the menu was opened from into the generated event if it is a select event
+        if( type == wxEVT_COMMAND_MENU_SELECTED )
+            evt->SetMousePosition( g_menu_open_position );
+        else
+            evt->SetMousePosition( getToolManager()->GetViewControls()->GetMousePosition() );
 
         if( g_last_menu_highlighted_id == aEvent.GetId() && !m_isContextMenu )
             evt->SetHasPosition( false );

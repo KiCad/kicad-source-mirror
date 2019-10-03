@@ -57,6 +57,10 @@ void TOOL_EVENT::init()
     m_passEvent = m_category == TC_MESSAGE || IsCancelInteractive() || IsActivate();
 
     m_hasPosition = ( m_category == TC_MOUSE || m_category == TC_COMMAND );
+
+    // Cancel tool doesn't contain a position
+    if( IsCancel() )
+        m_hasPosition = false;
 }
 
 
@@ -173,7 +177,7 @@ const std::string TOOL_EVENT_LIST::Format() const
 
 bool TOOL_EVENT::IsClick( int aButtonMask ) const
 {
-    return m_actions == TA_MOUSE_CLICK && ( m_mouseButtons & aButtonMask ) == m_mouseButtons;
+    return ( m_actions & TA_MOUSE_CLICK ) && ( m_mouseButtons & aButtonMask ) == m_mouseButtons;
 }
 
 
