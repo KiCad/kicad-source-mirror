@@ -76,32 +76,32 @@ enum VIA_ACTION_FLAGS
 #define _(s) s
 
 static const TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack",
-        AS_CONTEXT, 
+        AS_CONTEXT,
         WXK_END, "",
         _( "Finish Track" ),  _( "Stops laying the current track." ),
         checked_ok_xpm );
 
-static const TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute", 
-        AS_CONTEXT, 
+static const TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute",
+        AS_CONTEXT,
         'F', "",
         _( "Auto-finish Track" ),  _( "Automagically finishes laying the current track." ) );
 
 static const TOOL_ACTION ACT_PlaceThroughVia( "pcbnew.InteractiveRouter.PlaceVia",
-        AS_CONTEXT, 
+        AS_CONTEXT,
         'V', LEGACY_HK_NAME( "Add Through Via" ),
         _( "Place Through Via" ),
         _( "Adds a through-hole via at the end of currently routed track." ),
         via_xpm, AF_NONE, (void*) VIA_ACTION_FLAGS::VIA );
 
 static const TOOL_ACTION ACT_PlaceBlindVia( "pcbnew.InteractiveRouter.PlaceBlindVia",
-        AS_CONTEXT, 
+        AS_CONTEXT,
         MD_ALT + MD_SHIFT + 'V', LEGACY_HK_NAME( "Add Blind/Buried Via" ),
         _( "Place Blind/Buried Via" ),
         _( "Adds a blind or buried via at the end of currently routed track."),
         via_buried_xpm, AF_NONE, (void*) VIA_ACTION_FLAGS::BLIND_VIA );
 
 static const TOOL_ACTION ACT_PlaceMicroVia( "pcbnew.InteractiveRouter.PlaceMicroVia",
-        AS_CONTEXT, 
+        AS_CONTEXT,
         MD_CTRL + 'V', LEGACY_HK_NAME( "Add MicroVia" ),
         _( "Place Microvia" ), _( "Adds a microvia at the end of currently routed track." ),
         via_microvia_xpm, AF_NONE, (void*) VIA_ACTION_FLAGS::MICROVIA );
@@ -115,7 +115,7 @@ static const TOOL_ACTION ACT_SelLayerAndPlaceThroughVia( "pcbnew.InteractiveRout
         (void*) ( VIA_ACTION_FLAGS::VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
 
 static const TOOL_ACTION ACT_SelLayerAndPlaceBlindVia( "pcbnew.InteractiveRouter.SelLayerAndPlaceBlindVia",
-        AS_CONTEXT, 
+        AS_CONTEXT,
         MD_ALT + '<', LEGACY_HK_NAME( "Select Layer and Add Blind/Buried Via" ),
         _( "Select Layer and Place Blind/Buried Via..." ),
         _( "Select a layer, then add a blind or buried via at the end of currently routed track."),
@@ -123,13 +123,13 @@ static const TOOL_ACTION ACT_SelLayerAndPlaceBlindVia( "pcbnew.InteractiveRouter
         (void*) ( VIA_ACTION_FLAGS::BLIND_VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
 
 static const TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackViaSize",
-        AS_CONTEXT, 
+        AS_CONTEXT,
         'Q', LEGACY_HK_NAME( "Custom Track/Via Size" ),
         _( "Custom Track/Via Size..." ),
         _( "Shows a dialog for changing the track width and via size." ),
         width_track_xpm );
 
-static const TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture", 
+static const TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture",
         AS_CONTEXT,
         '/', LEGACY_HK_NAME( "Switch Track Posture" ),
         _( "Switch Track Posture" ),
@@ -1215,7 +1215,6 @@ int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
     if( item->Type() != PCB_TRACE_T )
         return 0;
 
-    Init();
     Activate();
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
