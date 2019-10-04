@@ -109,7 +109,7 @@ public:
         m_cluster = aCluster;
     }
 
-    inline std::shared_ptr<CN_CLUSTER> GetCluster() const
+    inline const std::shared_ptr<CN_CLUSTER>& GetCluster() const
     {
         return m_cluster;
     }
@@ -159,7 +159,7 @@ typedef std::vector<CN_ANCHOR_PTR>  CN_ANCHORS;
 class CN_ITEM : public INTRUSIVE_LIST<CN_ITEM>
 {
 public:
-    using CONNECTED_ITEMS = std::set<CN_ITEM*>;
+    using CONNECTED_ITEMS = std::vector<CN_ITEM*>;
 
 private:
     BOARD_CONNECTED_ITEM* m_parent;
@@ -201,15 +201,16 @@ public:
         m_visited = false;
         m_valid = true;
         m_dirty = true;
-        m_anchors.reserve( 2 );
+        m_anchors.reserve( std::max( 6, aAnchorCount ) );
         m_layers = LAYER_RANGE( 0, PCB_LAYER_ID_COUNT );
+        m_connected.reserve( 8 );
     }
 
     virtual ~CN_ITEM() {};
 
     void AddAnchor( const VECTOR2I& aPos )
     {
-        m_anchors.emplace_back( std::make_unique<CN_ANCHOR>( aPos, this ) );
+        m_anchors.emplace_back( std::make_shared<CN_ANCHOR>( aPos, this ) );
     }
 
     CN_ANCHORS& Anchors()
@@ -320,7 +321,13 @@ public:
     void Connect( CN_ITEM* b )
     {
         std::lock_guard<std::mutex> lock( m_listLock );
-        m_connected.insert( b );
+
+        auto i = std::lower_bound( m_connected.begin(), m_connected.end(), b );
+
+        if( i != m_connected.end() && *i == b )
+          return;
+
+        m_connected.insert( i, b );
     }
 
     void RemoveInvalidRefs();

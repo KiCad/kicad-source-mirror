@@ -339,10 +339,10 @@ bool CN_ANCHOR::IsDangling() const
         {
             ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item->Parent() );
 
-            if( zone->HitTestFilledArea( wxPoint( Pos().x, Pos().y ) ) )
+            if( zone->HitTestFilledArea( (wxPoint) Pos() ) )
                 connected_count++;
         }
-        else if( item->Parent()->HitTest( wxPoint( Pos().x, Pos().y ) ) )
+        else if( item->Parent()->HitTest( (wxPoint) Pos() ) )
             connected_count++;
     }
 
