@@ -191,12 +191,14 @@ endfunction()
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/splitter_formula )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/pi_formula )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/tee_formula )
+    md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/tracks_width_versus_current_formula )
 
 set( DOCS_LIST
         ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/pi_formula.h
         ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/tee_formula.h
         ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/bridget_tee_formula.h
         ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/splitter_formula.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/tracks_width_versus_current_formula.h
     )
 
 set_source_files_properties( attenuators/attenuator_classes.cpp

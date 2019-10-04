@@ -28,12 +28,16 @@
 #include <cmath>
 #include <wx/wx.h>
 #include <wx/config.h>
+#include <dialog_helpers.h>
 
 #include <pcb_calculator_frame_base.h>
 
 #include <pcb_calculator.h>
 #include <UnitSelector.h>
 #include <units_scales.h>
+
+wxString tracks_width_versus_current_formula =
+#include <tracks_width_versus_current_formula.h>
 
 extern double DoubleFromString( const wxString& TextValue );
 
@@ -440,30 +444,14 @@ void PCB_CALCULATOR_FRAME::TW_Init( wxConfigBase* aCfg )
     aCfg->Read( KEYWORD_TW_INTTRACK_THICKNESS_UNIT, &tmp, 0 );
     m_IntTrackThicknessUnit->SetSelection( tmp );
 
-    // Init formulas text
-    msg = "<br>";
-    msg << _( "If you specify the maximum current, then the trace "
-              "widths will be calculated to suit." )
-        << "<br>" << _( "If you specify one of the trace widths, the maximum "
-                        "current it can handle will be calculated. The width "
-                        "for the other trace to also handle this current will "
-                        "then be calculated." )
-        << "<br>" << _( "The controlling value is shown in bold." ) << "<br><br>"
-        <<  _( "The calculations are valid for currents up to 35A "
-               "(external) or 17.5A (internal), temperature rises "
-               "up to 100 deg C, and widths of up to 400mil (10mm)." )<< "<br>"
-        << _( "The formula, from IPC 2221, is" )
-        << "<center><b>I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup></b></center>"
-        << _( "where:" ) << "<br><b>I</b> = "
-        << _( "maximum current in amps" )
-        << "<br><b>dT</b> = "
-        << _( "temperature rise above ambient in deg C" )
-        << "<br><b>W,H</b> = "
-        << _( "width and thickness in mils" ) << "<br>"
-        << "<b>K</b> = "
-        << _( "0.024 for internal traces or 0.048 for external traces" );
-
-    m_htmlWinFormulas->AppendToPage( msg );
+    if( tracks_width_versus_current_formula.StartsWith( "<!" ) )
+        m_htmlWinFormulas->SetPage( tracks_width_versus_current_formula );
+    else
+    {
+        wxString html_txt;
+        ConvertMarkdown2Html( wxGetTranslation( tracks_width_versus_current_formula ), html_txt );
+        m_htmlWinFormulas->SetPage( html_txt );
+    }
 
     // Make sure the correct master mode is displayed.
     TWUpdateModeDisplay();
