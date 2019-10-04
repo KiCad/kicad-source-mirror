@@ -600,7 +600,7 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE* aZone, CN_ITEM* aItem )
     if( aZone->Net() != aItem->Net() && !aItem->CanChangeNet() )
         return;
 
-    if( !aZone->Parent()->GetBoundingBox().Intersects( aItem->Parent()->GetBoundingBox() ) )
+    if( !aZone->BBox().Intersects( aItem->BBox() ) )
         return;
 
     auto zoneItem = static_cast<CN_ZONE*> ( aZone );
