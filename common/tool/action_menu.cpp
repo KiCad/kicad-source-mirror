@@ -367,7 +367,7 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
 
         // Don't update the position if this menu has a parent
         if( !parent && m_tool )
-            g_menu_open_position = getToolManager()->GetViewControls()->GetMousePosition();
+            g_menu_open_position = getToolManager()->GetMousePosition();
 
         g_last_menu_highlighted_id = 0;
     }
