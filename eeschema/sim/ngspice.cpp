@@ -423,10 +423,11 @@ string NGSPICE::findCmPath() const
         "/Applications/ngspice/lib/ngspice",
         "Contents/Frameworks",
         wxStandardPaths::Get().GetPluginsDir() + "/sim/ngspice",
-        wxFileName( wxStandardPaths::Get().GetExecutablePath() ).GetPath() + "/../../../../../Contents/PlugIns/sim/ngspice"
+        wxFileName( wxStandardPaths::Get().GetExecutablePath() ).GetPath() + "/../../../../../Contents/PlugIns/sim/ngspice",
+        "../Plugins/sim/ngspice",
 #endif /* __WXMAC__ */
         "../lib/ngspice",
-        "../../lib/ngspice"
+        "../../lib/ngspice",
         "lib/ngspice",
         "ngspice"
     };
