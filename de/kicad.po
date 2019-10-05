@@ -1617,7 +1617,7 @@ msgstr "Name"
 #: common/dialogs/dialog_configure_paths_base.cpp:97
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:41
 msgid "Path"
-msgstr "Pfadvariante"
+msgstr "Dateipfad"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:78
 msgid "3D Search Paths"
@@ -2356,7 +2356,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:185
 msgid "&Pan while moving object"
-msgstr "Autoverschieben während ein &Objekt bewegt wird"
+msgstr "Verschieben Bildausschnitt wenn ein &Objekt bewegt wird"
 
 #: common/dialogs/panel_common_settings_base.cpp:186
 msgid ""
@@ -20127,7 +20127,7 @@ msgstr "Icons"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:37
 msgid "Show button"
-msgstr "Anzeige Button"
+msgstr "Schaltfläche anzeigen"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:39
 msgid "Category"
@@ -21242,7 +21242,7 @@ msgstr "Abbruch durch Benutzer"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:25
 msgid "Welcome to the 3D shape Libraries downloader Wizard!"
-msgstr "Willkommen beim Download-Wizard für 3D-Formen!"
+msgstr "Willkommen beim Downloadassistent für 3D-Formen!"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:35
 msgid "Please select the URL for the 3D libraries to download"
@@ -21294,7 +21294,7 @@ msgstr "Bibliotheken mit 3D-Formen zum herunterladen:"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.h:82
 msgid "Add 3D Shape Libraries Wizard"
-msgstr "Wizard um 3D-Formen hinzufügen"
+msgstr "Assistent um 3D-Bibliotheken hinzufügen"
 
 #: pcbnew/drc_item.cpp:41
 msgid "Unconnected items"
@@ -22044,7 +22044,7 @@ msgstr "Footprintbibliothek nicht gefunden."
 #: pcbnew/footprint_wizard_frame.cpp:81
 #: pcbnew/footprint_wizard_frame_functions.cpp:79
 msgid "Footprint Wizard"
-msgstr "Footprintwizard"
+msgstr "Footprintassistent"
 
 #: pcbnew/footprint_wizard_frame.cpp:201
 msgid "Parameters"
@@ -22061,11 +22061,11 @@ msgstr "ModView: 3D-Betrachter [%s]"
 
 #: pcbnew/footprint_wizard_frame.cpp:577
 msgid "Select wizard script to run"
-msgstr "Auswahl Wizard-Skript welches geladen und gestartet werden soll"
+msgstr "Auswahl des Skript welches geladen und gestartet werden soll"
 
 #: pcbnew/footprint_wizard_frame.cpp:582
 msgid "Reset wizard parameters to default"
-msgstr "Zurücksetzen der Wizard-Parameter auf Standardwerte"
+msgstr "Zurücksetzen der Parameter auf Standardwerte"
 
 #: pcbnew/footprint_wizard_frame.cpp:587
 msgid "Select previous parameters page"
@@ -22081,11 +22081,11 @@ msgstr "Footprint an den Editor exportieren"
 
 #: pcbnew/footprint_wizard_frame_functions.cpp:85
 msgid "no wizard selected"
-msgstr "Es wurde noch kein Wizard ausgewählt"
+msgstr "Es wurde noch kein Assistent ausgewählt"
 
 #: pcbnew/footprint_wizard_frame_functions.cpp:141
 msgid "Couldn't reload footprint wizard"
-msgstr "Konnte den Footprintwizard nicht aufrufen"
+msgstr "Konnte den Footprintassistent nicht aufrufen"
 
 #: pcbnew/generate_footprint_info.cpp:36
 msgid "Keywords"
@@ -22799,7 +22799,7 @@ msgstr "Alle Python-Plugins neu laden und Plugin-Menüs aktualisieren"
 
 #: pcbnew/menubar_pcb_editor.cpp:484
 msgid "Add &3D Shapes Libraries Wizard..."
-msgstr "Wizard um &3D-Formen hinzufügen..."
+msgstr "Assistent um &3D-Formen hinzufügen..."
 
 #: pcbnew/menubar_pcb_editor.cpp:485
 msgid "Download 3D shape libraries from GitHub"
@@ -24021,7 +24021,7 @@ msgstr ""
 #: pcbnew/swig/pcbnew_footprint_wizards.cpp:69
 msgid "Exception on python footprint wizard code"
 msgstr ""
-"Ausnahmefall (Exception) während der Ausführung des Python Footprint-Wizard "
+"Ausnahmefall (Exception) während der Ausführung des Python Footprintassistent "
 "Codes"
 
 #: pcbnew/toolbars_footprint_editor.cpp:83
@@ -24557,7 +24557,7 @@ msgstr "Footprint erstellen..."
 
 #: pcbnew/tools/footprint_editor_tools.cpp:70
 msgid "Create a new footprint using the Footprint Wizard"
-msgstr "Neuen Footprint mittels des Footprint Wizards erstellen"
+msgstr "Neuen Footprint mittels des Footprintassistent erstellen"
 
 #: pcbnew/tools/footprint_editor_tools.cpp:75
 msgid "Save to Board"
@@ -26243,7 +26243,7 @@ msgstr "Flächen prüfen"
 #~ msgstr "Kopie Speichern unter..."
 
 #~ msgid "&Create Footprint from Wizard..."
-#~ msgstr "&Erstelle Footprint mittels Wizard..."
+#~ msgstr "&Erstelle Footprint mittels Assistent..."
 
 #~ msgid "Save &As..."
 #~ msgstr "Speichern unter..."
@@ -26521,7 +26521,7 @@ msgstr "Flächen prüfen"
 #~ msgstr "Neuer Footprint"
 
 #~ msgid "New footprint using footprint wizard"
-#~ msgstr "Neuer Footprint mittels Wizard"
+#~ msgstr "Neuer Footprint mittels Assistent"
 
 #~ msgid "Print footprint"
 #~ msgstr "Drucke Footprint"
