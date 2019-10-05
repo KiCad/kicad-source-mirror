@@ -125,6 +125,14 @@ PGM_BASE& Pgm()
 }
 
 
+// Similar to PGM_BASE& Pgm(), but return nullptr when a *.ki_face
+// is run from a python script, mot from a Kicad application
+PGM_BASE* PgmOrNull()
+{
+    return &program;
+}
+
+
 KIFACE_I& Kiface()
 {
     return kiface;
@@ -136,7 +144,6 @@ FP_LIB_TABLE GFootprintTable;
 void BOARD::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
 {
 }
-
 
 
 DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aParent ) : DIALOG_FIND_BASE( aParent )
