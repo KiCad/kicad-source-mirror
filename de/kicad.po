@@ -22044,7 +22044,7 @@ msgstr "Footprintbibliothek nicht gefunden."
 #: pcbnew/footprint_wizard_frame.cpp:81
 #: pcbnew/footprint_wizard_frame_functions.cpp:79
 msgid "Footprint Wizard"
-msgstr "Footprintassistent"
+msgstr "Footprint-Assistent"
 
 #: pcbnew/footprint_wizard_frame.cpp:201
 msgid "Parameters"
@@ -22085,7 +22085,7 @@ msgstr "Es wurde noch kein Assistent ausgewählt"
 
 #: pcbnew/footprint_wizard_frame_functions.cpp:141
 msgid "Couldn't reload footprint wizard"
-msgstr "Konnte den Footprintassistent nicht aufrufen"
+msgstr "Konnte den Footprint-Assistent nicht aufrufen"
 
 #: pcbnew/generate_footprint_info.cpp:36
 msgid "Keywords"
@@ -24021,7 +24021,7 @@ msgstr ""
 #: pcbnew/swig/pcbnew_footprint_wizards.cpp:69
 msgid "Exception on python footprint wizard code"
 msgstr ""
-"Ausnahmefall (Exception) während der Ausführung des Python Footprintassistent "
+"Ausnahmefall (Exception) während der Ausführung des Python Footprint-Assistent "
 "Codes"
 
 #: pcbnew/toolbars_footprint_editor.cpp:83
@@ -24557,7 +24557,7 @@ msgstr "Footprint erstellen..."
 
 #: pcbnew/tools/footprint_editor_tools.cpp:70
 msgid "Create a new footprint using the Footprint Wizard"
-msgstr "Neuen Footprint mittels des Footprintassistent erstellen"
+msgstr "Neuen Footprint mittels des Footprint-Assistent erstellen"
 
 #: pcbnew/tools/footprint_editor_tools.cpp:75
 msgid "Save to Board"
