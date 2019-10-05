@@ -194,6 +194,40 @@ passed via the OCE_DIR flag.  This option is enabled by default.
 Alternatively KICAD_USE_OCC can be used instead of OCE. Both options are not supposed to be enabled
 at the same time.
 
+## Development Analysis Tools ## {#dev_tools}
+
+KiCad can be compiled with support for several features to aid in the catching and debugging of
+runtime memory issues
+
+### Valgrind support
+
+The KICAD_USE_VALGRIND option is used to enable Valgrind's stack annotation feature in the tool framework.
+This provides the ability for Valgrind to trace memory allocations and accesses in the tool framework
+and reduce the number of false positives reported. This option is disabled by default.
+
+### C++ standard library debugging
+
+KiCad provides two options to enable debugging assertions contained in the GCC C++ standard library:
+KICAD_STDLIB_DEBUG and KICAD_STDLIB_LIGHT_DEBUG. Both these options are disabled by default, and only
+one should be turned on at a time with KICAD_STDLIB_DEBUG taking precedence.
+
+The KICAD_STDLIB_LIGHT_DEBUG option enables the light-weight standard library assertions by passing
+`_GLIBCXX_ASSERTIONS ` into CXXFLAGS. This enables things such as bounds checking on strings, arrays
+and vectors, as well as null pointer checks for smart pointers.
+
+The KICAD_STDLIB_DEBUG option enables the full set of standard library assertions by passing
+`_GLIBCXX_DEBUG` into CXXFLAGS. This enables full debugging support for the standard library.
+
+### Address Sanitizer support
+
+The KICAD_SANITIZE option enables Address Sanitizer support to trace memory allocations and
+accesses to identify problems. This option is disabled by default. The Address Sanitizer
+contains several runtime options to tailor its behavior that are described in more detail in its
+[documentation](https://github.com/google/sanitizers/wiki/AddressSanitizerFlags).
+
+This option is not supported on all build systems, and is known to have problems when using
+mingw.
+
 ## Demos and Examples ## {#demo_install_opt}
 
 The KiCad source code includes some demos and examples to showcase the program. You can choose
