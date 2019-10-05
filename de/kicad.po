@@ -2336,7 +2336,7 @@ msgstr "Bildschwenk und Zoom"
 
 #: common/dialogs/panel_common_settings_base.cpp:175
 msgid "Ce&nter and warp cursor on zoom"
-msgstr "Curs&or beim Zoomen nicht zentrieren und umpositionieren"
+msgstr "Curs&or beim Zoomen zentrieren und umpositionieren"
 
 #: common/dialogs/panel_common_settings_base.cpp:176
 msgid "Center the cursor on screen when zooming."
