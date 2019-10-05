@@ -424,4 +424,9 @@ protected:
 /// Implemented in: 1) common/single_top.cpp,  2) kicad/kicad.cpp, and 3) scripting/kiway.i
 extern PGM_BASE& Pgm();
 
+/// similat to PGM_BASE& Pgm(), but return a reference that can be nullptr
+/// when running a shared lib from a script, not from a kicad appl
+extern PGM_BASE* PgmOrNull();
+
+
 #endif  // PGM_BASE_H_

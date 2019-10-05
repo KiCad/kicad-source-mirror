@@ -761,7 +761,8 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
 {
     EDA_RECT area;
     LSET     visible = GetVisibleLayers();
-    bool     showInvisibleText = IsElementVisible( LAYER_MOD_TEXT_INVISIBLE ) && !Pgm().m_Printing;
+    bool     showInvisibleText = IsElementVisible( LAYER_MOD_TEXT_INVISIBLE )
+                                 && PgmOrNull() && !PgmOrNull()->m_Printing;
 
     // Check segments, dimensions, texts, and fiducials
     for( auto item : m_drawings )

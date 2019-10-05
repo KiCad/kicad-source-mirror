@@ -105,6 +105,14 @@ PGM_BASE& Pgm()
 }
 
 
+// Similar to PGM_BASE& Pgm(), but return nullptr when a *.ki_face
+// is run from a python script, mot from a Kicad application
+PGM_BASE* PgmOrNull()
+{
+    return process;
+}
+
+
 //!!!!!!!!!!!!!!! This code is obsolete because of the merge into pcbnew, don't bother with it.
 
 FP_LIB_TABLE GFootprintTable;
