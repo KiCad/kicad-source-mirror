@@ -619,6 +619,14 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
                 m_Drawings.Append( gbritem );
                 gbritem->m_Shape = GBR_POLYGON;
                 gbritem->m_Flashed = false;
+                gbritem->m_DCode = 0;   // No DCode for a Polygon (Region in Gerber dialect)
+
+
+                if( gbritem->m_GerberImageFile )
+                {
+                    gbritem->SetNetAttributes( gbritem->m_GerberImageFile->m_NetAttributeDict );
+                    gbritem->m_AperFunction = gbritem->m_GerberImageFile->m_AperFunction;
+                }
             }
 
             switch( m_Iterpolation )
@@ -676,6 +684,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             m_Exposure = true;
 
             tool = GetDCODE( m_Current_Tool );
+
             if( tool )
             {
                 size     = tool->m_Size;
