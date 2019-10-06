@@ -49,10 +49,10 @@ PLACEFILE_GERBER_WRITER::PLACEFILE_GERBER_WRITER( BOARD* aPcb )
 {
     m_pcb = aPcb;
     /* Set conversion scale depending on drill file units */
-    m_conversionUnits = 1.0 / IU_PER_MM;        // Gerber units = mm
+    m_conversionUnits = 1.0 / IU_PER_MM;    // Gerber units = mm
     m_forceSmdItems = false;
-    m_plotPad1Marker = true;            // Place a marker to pin 1 (or A1) position
-    m_plotOtherPadsMarker = false;      // Place a marker to other pins position
+    m_plotPad1Marker = true;                // Place a marker to pin 1 (or A1) position
+    m_plotOtherPadsMarker = true;           // Place a marker to other pins position
 }
 
 
@@ -146,8 +146,12 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
         pnpAttrib.m_Value = FormatStringFromGerber( footprint->GetValue() );
 
         // Add component footprint info:
-        wxString fp_name = FROM_UTF8( footprint->GetFPID().GetLibItemName().c_str() );
-        pnpAttrib.m_Footprint = FormatStringFromGerber( fp_name );
+        wxString fp_info = FROM_UTF8( footprint->GetFPID().GetLibItemName().c_str() );
+        pnpAttrib.m_Footprint = FormatStringFromGerber( fp_info );
+
+        // Add footprint lib name:
+        fp_info = FROM_UTF8( footprint->GetFPID().GetLibNickname().c_str() );
+        pnpAttrib.m_LibraryName = FormatStringFromGerber( fp_info );
 
         gbr_metadata.m_NetlistMetadata.SetExtraData( pnpAttrib.FormatCmpPnPMetadata() );
 
@@ -174,13 +178,13 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
             }
         }
 
-        D_PAD* pad1 = nullptr;
+        std::vector<D_PAD*>pad_key_list;
 
         if( m_plotPad1Marker )
         {
-            pad1 = findPad1( footprint );
+            findPads1( pad_key_list, footprint );
 
-            if( pad1 )
+            for( D_PAD* pad1 : pad_key_list )
             {
                 gbr_metadata.SetApertureAttrib(
                         GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_PAD1_POSITION );
@@ -205,7 +209,18 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
 
             for( D_PAD* pad: footprint->Pads() )
             {
-                if( pad == pad1 )   // Already plotted
+                bool skip_pad = false;
+
+                for( D_PAD* pad1 : pad_key_list )
+                {
+                    if( pad == pad1 )   // Already plotted
+                    {
+                        skip_pad = true;
+                        break;
+                    }
+                }
+
+                if( skip_pad )
                     continue;
 
                 // Skip also pads not on the current layer, like pads only
@@ -216,13 +231,13 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
                 gbr_metadata.SetPadName( pad->GetName() );
 
                 // Flashes a round, 0 sized round shape at pad position
-                int mark_size = Millimeter2iu( 0.1 );
+                int mark_size = 0;
                 plotter.FlashPadCircle( pad->GetPosition() + m_offset, mark_size,
-                                             FILLED, &gbr_metadata );
+                                        FILLED, &gbr_metadata );
             }
         }
 
-        plotter.EndBlock( nullptr );    // Close all .TO attributes
+        plotter.ClearAllAttributes();    // Unconditionally close all .TO attributes
 
         cmp_count++;
     }
@@ -241,13 +256,11 @@ double PLACEFILE_GERBER_WRITER::mapRotationAngle( double aAngle )
 }
 
 
-D_PAD* PLACEFILE_GERBER_WRITER::findPad1( MODULE* aFootprint )
+void PLACEFILE_GERBER_WRITER::findPads1( std::vector<D_PAD*>& aPadList, MODULE* aFootprint ) const
 {
     // Fint the pad "1" or pad "A1"
     // this is possible only if only one pad is found
     // Usefull to place a marker in this position
-
-    std::vector<D_PAD*> pad1_list;
 
     for( D_PAD* pad : aFootprint->Pads() )
     {
@@ -255,13 +268,8 @@ D_PAD* PLACEFILE_GERBER_WRITER::findPad1( MODULE* aFootprint )
             continue;
 
         if( pad->GetName() == "1" || pad->GetName() == "A1")
-            pad1_list.push_back( pad );
+            aPadList.push_back( pad );
     }
-
-    if( pad1_list.size() == 1 )
-        return pad1_list[0];
-
-    return nullptr;
 }
 
 

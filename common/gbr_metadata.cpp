@@ -590,6 +590,12 @@ wxString GBR_CMP_PNP_METADATA::FormatCmpPnPMetadata()
     if( !m_Value.IsEmpty() )
         text << start_of_line << "CVal," << m_Value << end_of_line;
 
+    if( !m_LibraryName.IsEmpty() )
+        text << start_of_line << "CLbN," << m_LibraryName << end_of_line;
+
+    if( !m_LibraryDescr.IsEmpty() )
+        text << start_of_line << "CLbD," << m_LibraryDescr << end_of_line;
+
     text << start_of_line << "CMnt," << mounType[m_MountType] << end_of_line;
     text << start_of_line << "CRot," << m_Orientation << end_of_line;
 

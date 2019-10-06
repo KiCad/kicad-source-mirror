@@ -1174,7 +1174,7 @@ public:
      */
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
                            FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
-                           void * aData = NULL ) override;
+                           void* aData = nullptr ) override;
 
     virtual void PenTo( const wxPoint& pos, char plume ) override;
 
@@ -1233,6 +1233,14 @@ public:
                             double aOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
 
     /**
+     * Plot a Gerber region: similar to PlotPoly but plot only filled polygon,
+     * and add the TA.AperFunction if aData contains this attribute, and clear it
+     * after plotting
+     */
+    void PlotGerberRegion( const std::vector< wxPoint >& aCornerList,
+                           void * aData = NULL );
+
+    /**
      * Change the plot polarity and begin a new layer
      * Used to 'scratch off' silk screen away from solder mask
      */
@@ -1267,6 +1275,11 @@ public:
      * @param aData can define any parameter
      */
     virtual void EndBlock( void* aData ) override;
+
+    /** Remove (clear) all attributes from object attributes dictionary (TO. and TA commands)
+     * similar to clearNetAttribute(), this is an unconditional reset of TO. and TA. attributes
+     */
+    void ClearAllAttributes();
 
 protected:
     /**
@@ -1304,9 +1317,11 @@ protected:
     /**
      * clear a Gerber net attribute record (clear object attribute dictionary)
      * and output the clear object attribute dictionary command to gerber file
+     * has effect only if a net attribute is stored in m_objectAttributesDictionnary
      */
     void clearNetAttribute();
 
+    // Remove all attributes from object attributes dictionary (TO. and TA commands)
     /**
      * Function getAperture returns a reference to the aperture which meets the size anf type of tool
      * if the aperture does not exist, it is created and entered in aperture list

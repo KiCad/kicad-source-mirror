@@ -93,10 +93,12 @@ private:
      */
     double      mapRotationAngle( double aAngle );
 
-    /** Find the pad 1 (or pad "A1") of a footprint
-     * Usefull to plot a marker at this position
+    /** Find the pad(s) 1 (or pad "A1") of a footprint
+     * Usefull to plot a marker at this (these) position(s)
+     * @param aPadList is the list to fill
+     * @param aFootprint is the footprint to test
      */
-    D_PAD*        findPad1( MODULE* aFootprint );
+    void findPads1( std::vector<D_PAD*>& aPadList, MODULE* aFootprint ) const;
 };
 
 #endif  //  #ifndef PLACEFILE_GERBER_WRITER_H

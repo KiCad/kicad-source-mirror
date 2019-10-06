@@ -105,6 +105,17 @@ void GERBER_PLOTTER::emitDcode( const DPOINT& pt, int dcode )
 	    KiROUND( pt.x ), KiROUND( pt.y ), dcode );
 }
 
+void GERBER_PLOTTER::ClearAllAttributes()
+{
+    // Remove all attributes from object attributes dictionary (TO. and TA commands)
+    if( m_useX2format )
+        fputs( "%TD*%\n", outputFile );
+    else
+        fputs( "G04 #@! TD*\n", outputFile );
+
+    m_objectAttributesDictionnary.clear();
+}
+
 
 void GERBER_PLOTTER::clearNetAttribute()
 {
@@ -535,6 +546,43 @@ void GERBER_PLOTTER::Arc( const wxPoint& aCenter, double aStAngle, double aEndAn
 }
 
 
+void GERBER_PLOTTER::PlotGerberRegion( const std::vector< wxPoint >& aCornerList,
+                                 void * aData )
+{
+    if( aCornerList.size() <= 2 )
+        return;
+
+    GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
+
+    bool clearTA_AperFunction = false;     // true if a TA.AperFunction is used
+
+    if( gbr_metadata )
+    {
+        std::string attrib = gbr_metadata->m_ApertureMetadata.FormatAttribute( !m_useX2format );
+
+        if( !attrib.empty() )
+        {
+            fputs( attrib.c_str(), outputFile );
+            clearTA_AperFunction = true;
+        }
+    }
+
+    PlotPoly( aCornerList, FILLED_SHAPE, 0 , gbr_metadata );
+
+    // Clear the TA attribute, to avoid the next item to inherit it:
+    if( clearTA_AperFunction )
+    {
+        if( m_useX2format )
+        {
+            fputs( "%TD,.AperFunction*%\n", outputFile );
+        }
+        else
+        {
+            fputs( "G04 #@! TD,.AperFunction*\n", outputFile );
+        }
+    }
+}
+
 void GERBER_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
                                FILL_T aFill, int aWidth, void * aData )
 {
@@ -546,7 +594,8 @@ void GERBER_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
     // one should plot outline as thick segments
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
 
-    SetCurrentLineWidth( aWidth, gbr_metadata );
+    if( !aFill )
+        SetCurrentLineWidth( aWidth, gbr_metadata );
 
     if( gbr_metadata )
         formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
@@ -716,7 +765,7 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
     wxSize size( aSize );
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
 
-    /* Plot a flashed shape. */
+    // Flash a vertical or horizontal shape (this is a basic aperture).
     if( ( orient == 0 || orient == 900 || orient == 1800 || orient == 2700 )
         && trace_mode == FILLED )
     {
@@ -732,7 +781,7 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
 
         emitDcode( pos_dev, 3 );
     }
-    else /* Plot pad as a segment. */
+    else    // Plot pad as a segment.
     {
         if( size.x > size.y )
         {
@@ -747,10 +796,8 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
         if( trace_mode == FILLED )
         {
             // TODO: use an aperture macro to declare the rotated pad
-
-            // Flash a pad anchor, if a netlist attribute is set
-            if( aData )
-                FlashPadCircle( pos, size.x, trace_mode, aData );
+            // to be able to flash the shape
+            // For now, the pad is painted.
 
             // The pad is reduced to an segment with dy > dx
             int delta = size.y - size.x;
@@ -766,14 +813,12 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
             {
                 metadata = *gbr_metadata;
 
-                // If the pad is drawn on a copper layer,
-                // set attribute to GBR_APERTURE_ATTRIB_CONDUCTOR
-                if( metadata.IsCopper() )
-                    metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
-
+#if 0   // See if one can use TO.P attribute in this case (only one segment to draw a pad)
                 // Clear .P attribute, only allowed for flashed items
+                // (not allowed for painted pads)
                 wxString attrname( ".P" );
                 metadata.m_NetlistMetadata.ClearAttribute( &attrname );
+#endif
             }
 
             ThickSegment( wxPoint( pos.x + x0, pos.y + y0 ),
@@ -861,22 +906,10 @@ void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
                                      EDA_DRAW_MODE_T aTraceMode, void* aData )
 
 {
-    GBR_METADATA gbr_metadata;
+    GBR_METADATA* gbr_metadata;
 
     if( aData )
-    {
-        gbr_metadata = *static_cast<GBR_METADATA*>( aData );
-        // If the pad is drawn on a copper layer,
-        // set attribute to GBR_APERTURE_ATTRIB_CONDUCTOR
-        if( gbr_metadata.IsCopper() )
-            gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
-
-        wxString attrname( ".P" );
-        gbr_metadata.m_NetlistMetadata.ClearAttribute( &attrname );   // not allowed on inner layers
-    }
-
-    if( aTraceMode != FILLED )
-        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH, &gbr_metadata );
+        gbr_metadata = static_cast<GBR_METADATA*>( aData );
 
     // Currently, a Pad RoundRect is plotted as polygon.
     // TODO: use Aperture macro and flash it
@@ -898,16 +931,10 @@ void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
     // Close polygon
     cornerList.push_back( cornerList[0] );
 
-    PlotPoly( cornerList, aTraceMode == FILLED ? FILLED_SHAPE : NO_FILL,
-              aTraceMode == FILLED ? 0 : GetCurrentLineWidth(), &gbr_metadata );
-
-    // Now, flash a pad anchor, if a netlist attribute is set
-    // (remove me when a Aperture macro will be used)
-    if( aData && aTraceMode == FILLED )
-    {
-        int diameter = std::min( aSize.x, aSize.y );
-        FlashPadCircle( aPadPos, diameter, aTraceMode , aData );
-    }
+    if( aTraceMode == SKETCH )
+        PlotPoly( cornerList, NO_FILL, GetCurrentLineWidth(), gbr_metadata );
+    else
+        PlotGerberRegion( cornerList, gbr_metadata );
 }
 
 void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
@@ -915,28 +942,12 @@ void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
                                      EDA_DRAW_MODE_T aTraceMode, void* aData )
 
 {
-    // A Pad custom is plotted as polygon.
-
-    // A flashed circle @aPadPos is added (anchor pad)
-    // However, because the anchor pad can be circle or rect, we use only
-    // a circle not bigger than the rect.
-    // the main purpose is to print a flashed DCode as pad anchor
-    if( aTraceMode == FILLED )
-        FlashPadCircle( aPadPos, std::min( aSize.x, aSize.y ), aTraceMode, aData );
+    // A Pad custom is plotted as polygon (a region in Gerber language).
 
     GBR_METADATA gbr_metadata;
 
     if( aData )
-    {
         gbr_metadata = *static_cast<GBR_METADATA*>( aData );
-        // If the pad is drawn on a copper layer,
-        // set attribute to GBR_APERTURE_ATTRIB_CONDUCTOR
-        if( gbr_metadata.IsCopper() )
-            gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
-
-        wxString attrname( ".P" );
-        gbr_metadata.m_NetlistMetadata.ClearAttribute( &attrname );   // not allowed on inner layers
-    }
 
     SHAPE_POLY_SET polyshape = *aPolygons;
 
@@ -960,9 +971,10 @@ void GERBER_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
         // Close polygon
         cornerList.push_back( cornerList[0] );
 
-        PlotPoly( cornerList,
-                  aTraceMode == FILLED ? FILLED_SHAPE : NO_FILL,
-                  aTraceMode == FILLED ? 0 : GetCurrentLineWidth(), &gbr_metadata );
+        if( aTraceMode == SKETCH )
+            PlotPoly( cornerList, NO_FILL, GetCurrentLineWidth(), &gbr_metadata );
+        else
+            PlotGerberRegion( cornerList, &gbr_metadata );
     }
 }
 
@@ -971,7 +983,6 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
                                      double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode, void* aData )
 
 {
-    // Currently, a Pad Trapezoid is plotted as polygon.
     // TODO: use Aperture macro and flash it
 
     // polygon corners list
@@ -979,25 +990,6 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
 
     for( int ii = 0; ii < 4; ii++ )
         cornerList.push_back( aCorners[ii] );
-
-    // Now, flash a pad anchor, if a netlist attribute is set
-    // (remove me when a Aperture macro will be used)
-    if( aData && ( aTrace_Mode == FILLED ) )
-    {
-        // Calculate the radius of the circle inside the shape
-        // It is the smaller dist from shape pos to edges
-        int radius = INT_MAX;
-
-        for( unsigned ii = 0, jj = cornerList.size()-1; ii < cornerList.size();
-             jj = ii, ii++ )
-        {
-            SEG segment( aCorners[ii], aCorners[jj] );
-            int dist = segment.LineDistance( VECTOR2I( 0, 0) );
-            radius = std::min( radius, dist );
-        }
-
-        FlashPadCircle( aPadPos, radius*2, aTrace_Mode, aData );
-    }
 
     // Draw the polygon and fill the interior as required
     for( unsigned ii = 0; ii < 4; ii++ )
@@ -1013,21 +1005,13 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
     GBR_METADATA metadata;
 
     if( gbr_metadata )
-    {
         metadata = *gbr_metadata;
-        // If the pad is drawn on a copper layer,
-        // set attribute to GBR_APERTURE_ATTRIB_CONDUCTOR
-        if( metadata.IsCopper() )
-            metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
 
-        wxString attrname( ".P" );
-        metadata.m_NetlistMetadata.ClearAttribute( &attrname );   // not allowed on inner layers
-    }
-
-    SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH, &metadata );
-    PlotPoly( cornerList, aTrace_Mode == FILLED ? FILLED_SHAPE : NO_FILL,
-              aTrace_Mode == FILLED ? 0 : GetCurrentLineWidth(),
-              &metadata );
+    if( aTrace_Mode == SKETCH )
+        PlotPoly( cornerList, NO_FILL, USE_DEFAULT_LINE_WIDTH,
+                  &metadata );
+    else
+        PlotGerberRegion( cornerList, &metadata );
 }
 
 
