@@ -212,8 +212,12 @@ void CVPCB_MAINFRAME::setupTools()
 
     CVPCB_CONTROL* tool = m_toolManager->GetTool<CVPCB_CONTROL>();
 
+    // Even though these menus will open with the right-click, we treat them as a normal
+    // menu instead of a context menu because we don't care about their position and want
+    // to be able to tell the difference between a menu click and a hotkey activation.
+
     // Create the context menu for the component list box
-    m_componentContextMenu = new ACTION_MENU( true );
+    m_componentContextMenu = new ACTION_MENU( false );
     m_componentContextMenu->SetTool( tool );
     m_componentContextMenu->Add( CVPCB_ACTIONS::showFootprintViewer );
     m_componentContextMenu->AppendSeparator();
@@ -224,7 +228,7 @@ void CVPCB_MAINFRAME::setupTools()
     m_componentContextMenu->Add( CVPCB_ACTIONS::deleteAssoc );
 
     // Create the context menu for the footprint list box
-    m_footprintContextMenu = new ACTION_MENU( true );
+    m_footprintContextMenu = new ACTION_MENU( false );
     m_footprintContextMenu->SetTool( tool );
     m_footprintContextMenu->Add( CVPCB_ACTIONS::showFootprintViewer );
 }
@@ -248,7 +252,7 @@ void CVPCB_MAINFRAME::setupEventHandlers()
     m_saveAndContinue->Bind( wxEVT_COMMAND_BUTTON_CLICKED,
             [this]( wxCommandEvent& )
             {
-                // saveAssociations must be run immediatley
+                // saveAssociations must be run immediately
                 this->GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociations, true );
             } );
 
@@ -256,7 +260,7 @@ void CVPCB_MAINFRAME::setupEventHandlers()
     Bind( wxEVT_BUTTON,
             [this]( wxCommandEvent& )
             {
-                // saveAssociations must be run immediatley, before running Close( true )
+                // saveAssociations must be run immediately, before running Close( true )
                 this->GetToolManager()->RunAction( CVPCB_ACTIONS::saveAssociations, true );
                 Close( true );
             }, wxID_OK );
@@ -446,6 +450,7 @@ void CVPCB_MAINFRAME::AssociateFootprint( const CVPCB_ASSOCIATION& aAssociation,
         wxString msg =
                 wxString::Format( _( "\"%s\" is not a valid footprint." ), fpid.Format().wx_str() );
         DisplayErrorMessage( this, msg );
+        return;
     }
 
     // Set the new footprint

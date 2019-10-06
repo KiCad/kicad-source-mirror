@@ -60,8 +60,7 @@ int CVPCB_CONTROL::Main( const TOOL_EVENT& aEvent )
         // The escape key maps to the cancel event, which is used to close the window
         if( evt->IsCancel() )
         {
-            wxCloseEvent dummy;
-            m_frame->OnCloseWindow( dummy );
+            m_frame->Close( false );
             handled = true;
         }
         else if( evt->IsKeyPressed() )

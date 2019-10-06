@@ -50,7 +50,15 @@ int CVPCB_ASSOCIATION_TOOL::CopyAssoc( const TOOL_EVENT& aEvent )
 {
     COMPONENT* comp;
     LIB_ID     fpid;
-    switch( m_frame->GetFocusedControl() )
+
+    // Default to using the component control as the source of the copy
+    CVPCB_MAINFRAME::CONTROL_TYPE copyControl = CVPCB_MAINFRAME::CONTROL_COMPONENT;
+
+    // If using the keyboard to copy, find out what control we are in and use that.
+    if( aEvent.HasPosition() )
+        copyControl = m_frame->GetFocusedControl();
+
+    switch( copyControl )
     {
     case CVPCB_MAINFRAME::CONTROL_FOOTPRINT:
         fpid.Parse( m_frame->GetSelectedFootprint(), LIB_ID::ID_PCB );
@@ -84,6 +92,8 @@ int CVPCB_ASSOCIATION_TOOL::CopyAssoc( const TOOL_EVENT& aEvent )
         wxTheClipboard->Flush();
         wxTheClipboard->Close();
     }
+    else
+        wxLogDebug( "Failed to open the clipboard" );
 
     return 0;
 }
@@ -91,8 +101,9 @@ int CVPCB_ASSOCIATION_TOOL::CopyAssoc( const TOOL_EVENT& aEvent )
 
 int CVPCB_ASSOCIATION_TOOL::CutAssoc( const TOOL_EVENT& aEvent )
 {
-    // Only cut when in the component frame
-    if( m_frame->GetFocusedControl() != CVPCB_MAINFRAME::CONTROL_COMPONENT )
+    // If using the keyboard, only cut in the component frame
+    if( aEvent.HasPosition()
+            && ( m_frame->GetFocusedControl() != CVPCB_MAINFRAME::CONTROL_COMPONENT ) )
         return 0;
 
     // Get the selection, but only use the first one
@@ -123,6 +134,11 @@ int CVPCB_ASSOCIATION_TOOL::CutAssoc( const TOOL_EVENT& aEvent )
         wxTheClipboard->Flush();
         wxTheClipboard->Close();
     }
+    else
+    {
+        wxLogDebug( "Failed to open the clipboard" );
+        return 0;
+    }
 
     // Remove the association
     m_frame->AssociateFootprint( CVPCB_ASSOCIATION( idx.front(), "" ) );
@@ -147,6 +163,11 @@ int CVPCB_ASSOCIATION_TOOL::PasteAssoc( const TOOL_EVENT& aEvent )
     {
         wxTheClipboard->GetData( data );
         wxTheClipboard->Close();
+    }
+    else
+    {
+        wxLogDebug( "Failed to open the clipboard" );
+        return 0;
     }
 
     if( fpid.Parse( data.GetText(), LIB_ID::ID_PCB ) >= 0 )
