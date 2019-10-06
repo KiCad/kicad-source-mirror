@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-01 09:59+0200\n"
-"PO-Revision-Date: 2019-10-01 10:00+0200\n"
+"POT-Creation-Date: 2019-10-05 11:43+0200\n"
+"PO-Revision-Date: 2019-10-05 12:06+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: f:/kicad-launchpad/git_testing\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -357,7 +357,7 @@ msgstr "Déplacer vers le Haut\tHaut"
 #: eeschema/eeschema_config.cpp:124 eeschema/eeschema_config.cpp:465
 #: gerbview/gerbview_config.cpp:43 pagelayout_editor/pl_editor_frame.cpp:382
 #: pcbnew/dialogs/dialog_fp_browser_display_options_base.h:56
-#: pcbnew/footprint_edit_frame.cpp:756 pcbnew/pcbnew_config.cpp:77
+#: pcbnew/footprint_edit_frame.cpp:756 pcbnew/pcbnew_config.cpp:67
 msgid "Display Options"
 msgstr "Options d'Affichage"
 
@@ -2191,7 +2191,7 @@ msgstr "Prévisualisation"
 #: pcbnew/dialogs/dialog_export_step.cpp:116
 #: pcbnew/dialogs/dialog_export_svg.cpp:103
 #: pcbnew/dialogs/dialog_find_base.cpp:57 pcbnew/dialogs/dialog_gendrill.cpp:86
-#: pcbnew/dialogs/dialog_netlist.cpp:86 pcbnew/dialogs/dialog_plot.cpp:59
+#: pcbnew/dialogs/dialog_netlist.cpp:87 pcbnew/dialogs/dialog_plot.cpp:59
 #: pcbnew/dialogs/dialog_update_pcb.cpp:76
 #: pcbnew/exporters/gen_footprints_placefile.cpp:73
 msgid "Close"
@@ -2773,7 +2773,7 @@ msgstr " X:"
 msgid " Y:"
 msgstr " Y:"
 
-#: common/eda_text.cpp:459 eeschema/dialogs/dialog_edit_label_base.cpp:111
+#: common/eda_text.cpp:471 eeschema/dialogs/dialog_edit_label_base.cpp:111
 #: eeschema/libedit/symbedit.cpp:227 eeschema/sch_text.cpp:586
 #: gerbview/gerber_file_image.cpp:355 gerbview/gerber_file_image.cpp:359
 #: gerbview/gerber_file_image.cpp:362 pcbnew/class_module.cpp:525
@@ -2781,7 +2781,7 @@ msgstr " Y:"
 msgid "Normal"
 msgstr "Normal"
 
-#: common/eda_text.cpp:460
+#: common/eda_text.cpp:472
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:61
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:330
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:53
@@ -2801,7 +2801,7 @@ msgstr "Normal"
 msgid "Italic"
 msgstr "Italique"
 
-#: common/eda_text.cpp:461
+#: common/eda_text.cpp:473
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:62
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:331
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:54
@@ -2813,7 +2813,7 @@ msgstr "Italique"
 msgid "Bold"
 msgstr "Gras"
 
-#: common/eda_text.cpp:462
+#: common/eda_text.cpp:474
 msgid "Bold+Italic"
 msgstr "Gras+Italique"
 
@@ -3084,13 +3084,13 @@ msgid "Kicad Manager"
 msgstr "Gestionnaire Kicad"
 
 #: common/hotkey_store.cpp:67 eeschema/eeschema_config.cpp:123
-#: eeschema/menubar.cpp:118 eeschema/sch_edit_frame.cpp:1031
-#: eeschema/sch_edit_frame.cpp:1039
+#: eeschema/menubar.cpp:118 eeschema/sch_edit_frame.cpp:1033
+#: eeschema/sch_edit_frame.cpp:1041
 msgid "Eeschema"
 msgstr "Eeschema"
 
 #: common/hotkey_store.cpp:68 pcbnew/menubar_pcb_editor.cpp:196
-#: pcbnew/pcb_edit_frame.cpp:818 pcbnew/pcbnew_config.cpp:76
+#: pcbnew/pcb_edit_frame.cpp:819 pcbnew/pcbnew_config.cpp:66
 msgid "Pcbnew"
 msgstr "Pcbnew"
 
@@ -3103,12 +3103,12 @@ msgstr "Éditeur de Description de Page"
 msgid "Gestures"
 msgstr "Déplacements"
 
-#: common/kiway.cpp:205
+#: common/kiway.cpp:212
 #, c-format
 msgid "Failed to load kiface library \"%s\"."
 msgstr "Impossible de charger la librairie kiface \"%s\"."
 
-#: common/kiway.cpp:214
+#: common/kiway.cpp:221
 #, c-format
 msgid ""
 "Could not read instance name and version symbol form kiface library \"%s\"."
@@ -3116,7 +3116,7 @@ msgstr ""
 "Impossible de lire les symboles nom de l'instance et la version dans la "
 "librairie kiface \"%s\"."
 
-#: common/kiway.cpp:248
+#: common/kiway.cpp:255
 #, c-format
 msgid ""
 "Fatal Installation Bug. File:\n"
@@ -3127,16 +3127,16 @@ msgstr ""
 "\"%s\"\n"
 "n'a pas pu être chargé\n"
 
-#: common/kiway.cpp:252
+#: common/kiway.cpp:259
 msgid "It is missing.\n"
 msgstr "Il est manquant\n"
 
-#: common/kiway.cpp:254
+#: common/kiway.cpp:261
 msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
 msgstr ""
 "Peut-être un fichier bibliothèque partagée (.dll ou .so) est manquant.\n"
 
-#: common/kiway.cpp:256
+#: common/kiway.cpp:263
 msgid ""
 "From command line: argv[0]:\n"
 "'"
@@ -4247,184 +4247,184 @@ msgstr "(double-clic pour éditer)"
 msgid "Hotkey"
 msgstr "Raccourci"
 
-#: common/wildcards_and_files_ext.cpp:133
+#: common/wildcards_and_files_ext.cpp:158
 msgid "All files"
 msgstr "Tous les fichiers"
 
-#: common/wildcards_and_files_ext.cpp:139
+#: common/wildcards_and_files_ext.cpp:164
 msgid "KiCad drawing symbol files"
 msgstr "Fichiers symboles de dessin KiCad"
 
-#: common/wildcards_and_files_ext.cpp:145
+#: common/wildcards_and_files_ext.cpp:170
 msgid "KiCad symbol library files"
 msgstr "Fichier librairie de composant KiCad"
 
-#: common/wildcards_and_files_ext.cpp:151
+#: common/wildcards_and_files_ext.cpp:176
 msgid "KiCad project files"
 msgstr "Fichiers projet KiCad"
 
-#: common/wildcards_and_files_ext.cpp:157
+#: common/wildcards_and_files_ext.cpp:182
 msgid "KiCad schematic files"
 msgstr "Fichiers schématiques KiCad"
 
-#: common/wildcards_and_files_ext.cpp:163
+#: common/wildcards_and_files_ext.cpp:188
 msgid "Eagle XML schematic files"
 msgstr "Fichier schématique Eagle XML"
 
-#: common/wildcards_and_files_ext.cpp:169
+#: common/wildcards_and_files_ext.cpp:194
 msgid "Eagle XML files"
 msgstr "Fichiers Eagle XML"
 
-#: common/wildcards_and_files_ext.cpp:175
+#: common/wildcards_and_files_ext.cpp:200
 msgid "KiCad netlist files"
 msgstr "Fichiers netlistes KiCad"
 
-#: common/wildcards_and_files_ext.cpp:181 gerbview/files.cpp:51
+#: common/wildcards_and_files_ext.cpp:206 gerbview/files.cpp:51
 msgid "Gerber files"
 msgstr "Fichiers Gerber"
 
-#: common/wildcards_and_files_ext.cpp:187
-#: common/wildcards_and_files_ext.cpp:205
+#: common/wildcards_and_files_ext.cpp:212
+#: common/wildcards_and_files_ext.cpp:230
 msgid "KiCad printed circuit board files"
 msgstr "Fichiers circuits imprimés KiCad"
 
-#: common/wildcards_and_files_ext.cpp:193
+#: common/wildcards_and_files_ext.cpp:218
 msgid "Eagle ver. 6.x XML PCB files"
 msgstr "Eagle ver. 6.x fichiers  PCB  XML"
 
-#: common/wildcards_and_files_ext.cpp:199
+#: common/wildcards_and_files_ext.cpp:224
 msgid "P-Cad 200x ASCII PCB files"
 msgstr "Fichiers ASCII P-Cad 200x ASCII"
 
-#: common/wildcards_and_files_ext.cpp:211
+#: common/wildcards_and_files_ext.cpp:236
 msgid "KiCad footprint files"
 msgstr "Fichiers d'empreinte KiCad"
 
-#: common/wildcards_and_files_ext.cpp:217
+#: common/wildcards_and_files_ext.cpp:242
 msgid "KiCad footprint library paths"
 msgstr "Chemin des librairies d'empreintes KiCad"
 
-#: common/wildcards_and_files_ext.cpp:223
+#: common/wildcards_and_files_ext.cpp:248
 msgid "Legacy footprint library files"
 msgstr "Fichiers librairie modules anciens"
 
-#: common/wildcards_and_files_ext.cpp:229
+#: common/wildcards_and_files_ext.cpp:254
 msgid "Eagle ver. 6.x XML library files"
 msgstr "Eagle ver. 6.x fichiers librairie  XML"
 
-#: common/wildcards_and_files_ext.cpp:235
+#: common/wildcards_and_files_ext.cpp:260
 msgid "Geda PCB footprint library files"
 msgstr "Fichiers librairies d'empreintes Geda PCB"
 
-#: common/wildcards_and_files_ext.cpp:241
+#: common/wildcards_and_files_ext.cpp:266
 msgid "Page layout design files"
 msgstr "Fichiers de description de page"
 
-#: common/wildcards_and_files_ext.cpp:248
+#: common/wildcards_and_files_ext.cpp:273
 msgid "KiCad symbol footprint link files"
 msgstr "KiCad fichiers lien d'empreintes"
 
-#: common/wildcards_and_files_ext.cpp:255 gerbview/files.cpp:65
+#: common/wildcards_and_files_ext.cpp:280 gerbview/files.cpp:65
 msgid "Drill files"
 msgstr "Fichiers de perçage"
 
-#: common/wildcards_and_files_ext.cpp:261
+#: common/wildcards_and_files_ext.cpp:286
 msgid "SVG files"
 msgstr "Fichiers SVG"
 
-#: common/wildcards_and_files_ext.cpp:267
+#: common/wildcards_and_files_ext.cpp:292
 msgid "HTML files"
 msgstr "Fichiers HTML"
 
-#: common/wildcards_and_files_ext.cpp:273
+#: common/wildcards_and_files_ext.cpp:298
 msgid "CSV Files"
 msgstr "Fichiers CSV"
 
-#: common/wildcards_and_files_ext.cpp:279
+#: common/wildcards_and_files_ext.cpp:304
 msgid "Portable document format files"
 msgstr "Fichiers \"Portable document format\""
 
-#: common/wildcards_and_files_ext.cpp:285
+#: common/wildcards_and_files_ext.cpp:310
 msgid "PostScript files"
 msgstr "Fichiers PostScript"
 
-#: common/wildcards_and_files_ext.cpp:291
+#: common/wildcards_and_files_ext.cpp:316
 msgid "Report files"
 msgstr "Fichiers rapport"
 
-#: common/wildcards_and_files_ext.cpp:297
+#: common/wildcards_and_files_ext.cpp:322
 msgid "Footprint place files"
 msgstr "Fichiers de placement des empreintes"
 
-#: common/wildcards_and_files_ext.cpp:303
+#: common/wildcards_and_files_ext.cpp:328
 msgid "VRML and X3D files"
 msgstr "Fichiers VRML et X3D"
 
-#: common/wildcards_and_files_ext.cpp:309
+#: common/wildcards_and_files_ext.cpp:334
 msgid "IDFv3 footprint files"
 msgstr "Fichiers IDFv3 de composants"
 
-#: common/wildcards_and_files_ext.cpp:315
+#: common/wildcards_and_files_ext.cpp:340
 msgid "Text files"
 msgstr "Fichiers texte"
 
-#: common/wildcards_and_files_ext.cpp:321
+#: common/wildcards_and_files_ext.cpp:346
 msgid "Legacy footprint export files"
 msgstr "Anciens fichiers d'export d'empreintes"
 
-#: common/wildcards_and_files_ext.cpp:327
+#: common/wildcards_and_files_ext.cpp:352
 msgid "Electronic rule check file"
 msgstr "Fichier contrôle des règles électroniques"
 
-#: common/wildcards_and_files_ext.cpp:333
+#: common/wildcards_and_files_ext.cpp:358
 msgid "Spice library file"
 msgstr "Fichier librairie Spice"
 
-#: common/wildcards_and_files_ext.cpp:339
+#: common/wildcards_and_files_ext.cpp:364
 msgid "SPICE netlist file"
 msgstr "Fichier netliste SPICE"
 
-#: common/wildcards_and_files_ext.cpp:345
+#: common/wildcards_and_files_ext.cpp:370
 msgid "CadStar netlist file"
 msgstr "Fichier netliste CadStar"
 
-#: common/wildcards_and_files_ext.cpp:351
+#: common/wildcards_and_files_ext.cpp:376
 msgid "Symbol footprint association files"
 msgstr "Fichiers association d'empreintes"
 
-#: common/wildcards_and_files_ext.cpp:357
+#: common/wildcards_and_files_ext.cpp:382
 msgid "Zip file"
 msgstr "Fichiers ZIP"
 
-#: common/wildcards_and_files_ext.cpp:363
+#: common/wildcards_and_files_ext.cpp:388
 msgid "GenCAD 1.4 board files"
 msgstr "Fichiers PCB GenCAD"
 
-#: common/wildcards_and_files_ext.cpp:369
+#: common/wildcards_and_files_ext.cpp:394
 msgid "DXF Files"
 msgstr "Fichiers DXF"
 
-#: common/wildcards_and_files_ext.cpp:375
+#: common/wildcards_and_files_ext.cpp:400
 msgid "Gerber job file"
 msgstr "Fichier Gerber job"
 
-#: common/wildcards_and_files_ext.cpp:381
+#: common/wildcards_and_files_ext.cpp:406
 msgid "Specctra DSN file"
 msgstr "Fichier Specctra DSN"
 
-#: common/wildcards_and_files_ext.cpp:387
+#: common/wildcards_and_files_ext.cpp:412
 msgid "IPC-D-356 Test Files"
 msgstr "Fichier de tests  IPC-D-356"
 
-#: common/wildcards_and_files_ext.cpp:393
+#: common/wildcards_and_files_ext.cpp:418
 msgid "Workbook file"
 msgstr "Fichier classeur de travail"
 
-#: common/wildcards_and_files_ext.cpp:399
+#: common/wildcards_and_files_ext.cpp:424
 msgid "PNG file"
 msgstr "Fichiers PNG"
 
-#: common/wildcards_and_files_ext.cpp:405
+#: common/wildcards_and_files_ext.cpp:430
 msgid "Jpeg file"
 msgstr "Fichier Jpeg"
 
@@ -4466,7 +4466,7 @@ msgstr "Avertissement CvPcb"
 msgid "Project file \"%s\" is not writable"
 msgstr "Fichier de projet \"%s\" non inscriptible"
 
-#: cvpcb/cvpcb.cpp:141
+#: cvpcb/cvpcb.cpp:149
 msgid ""
 "You have run CvPcb for the first time using the new footprint library table "
 "method for finding footprints.\n"
@@ -4486,7 +4486,7 @@ msgstr ""
 "Consultez la section « Tables des Librairies d'Empreintes » dans la "
 "documentation CvPcb ou Pcbnew pour plus d'informations."
 
-#: cvpcb/cvpcb.cpp:156
+#: cvpcb/cvpcb.cpp:164
 msgid "An error occurred attempting to load the global footprint library table"
 msgstr ""
 "Une erreur s'est produite lors du chargement de la table globale des "
@@ -8639,7 +8639,7 @@ msgstr ""
 #: eeschema/eeschema_config.cpp:125 gerbview/gerbview_config.cpp:44
 #: pcbnew/dialogs/panel_modedit_settings_base.cpp:43
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:40
-#: pcbnew/footprint_edit_frame.cpp:757 pcbnew/pcbnew_config.cpp:78
+#: pcbnew/footprint_edit_frame.cpp:757 pcbnew/pcbnew_config.cpp:68
 msgid "Editing Options"
 msgstr "Options d'Edition"
 
@@ -8651,7 +8651,7 @@ msgstr "Couleurs"
 msgid "Field Name Templates"
 msgstr "Modèles de Nom de Champs"
 
-#: eeschema/eeschema_config.cpp:222 pcbnew/pcbnew_config.cpp:113
+#: eeschema/eeschema_config.cpp:222 pcbnew/pcbnew_config.cpp:102
 msgid "Save Project File"
 msgstr "Sauver Fichier Projet"
 
@@ -9448,7 +9448,7 @@ msgstr "Fichier librairie de composants \"%s\" sauvé"
 msgid "Symbol library documentation file \"%s\" saved"
 msgstr "Fichier de documentation de composant \"%s\" sauvé"
 
-#: eeschema/libedit/libedit.cpp:855 eeschema/sch_edit_frame.cpp:518
+#: eeschema/libedit/libedit.cpp:855 eeschema/sch_edit_frame.cpp:520
 #: pagelayout_editor/pl_editor_frame.cpp:261
 #: pcbnew/footprint_edit_frame.cpp:444 pcbnew/pcb_edit_frame.cpp:476
 #, c-format
@@ -9872,7 +9872,7 @@ msgstr "Non Trouvé"
 msgid "The following libraries were not found:"
 msgstr "Les librairies suivantes n'ont pas pu être trouvées:"
 
-#: eeschema/sch_edit_frame.cpp:638
+#: eeschema/sch_edit_frame.cpp:640
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the Kicad shell "
@@ -9882,33 +9882,33 @@ msgstr ""
 "mode autonome. Afin de créer/mettre à jour le PCB à partir du schéma, vous "
 "devrez lancer Kicad manager et créez un projet."
 
-#: eeschema/sch_edit_frame.cpp:733
+#: eeschema/sch_edit_frame.cpp:735
 msgid "Schematic"
 msgstr "Schématique"
 
-#: eeschema/sch_edit_frame.cpp:744
+#: eeschema/sch_edit_frame.cpp:746
 msgid "New Schematic"
 msgstr "Nouvelle Schématique"
 
-#: eeschema/sch_edit_frame.cpp:756
+#: eeschema/sch_edit_frame.cpp:758
 #, c-format
 msgid "Schematic file \"%s\" already exists."
 msgstr "Le fichier schématique \"%s\" existe déjà."
 
-#: eeschema/sch_edit_frame.cpp:774
+#: eeschema/sch_edit_frame.cpp:776
 msgid "Open Schematic"
 msgstr "Ouvrir Schématique"
 
-#: eeschema/sch_edit_frame.cpp:855
+#: eeschema/sch_edit_frame.cpp:857
 msgid "Could not open CvPcb"
 msgstr "Ne peut pas ouvrir CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1047 kicad/kicad_manager_frame.cpp:201
-#: pcbnew/pcb_edit_frame.cpp:814
+#: eeschema/sch_edit_frame.cpp:1049 kicad/kicad_manager_frame.cpp:201
+#: pcbnew/pcb_edit_frame.cpp:815
 msgid " [Read Only]"
 msgstr " [Lecture Seule]"
 
-#: eeschema/sch_edit_frame.cpp:1050
+#: eeschema/sch_edit_frame.cpp:1052
 msgid " [no file]"
 msgstr " [pas de fichier]"
 
@@ -12076,7 +12076,7 @@ msgstr "Pas d'éditeur défini.  Veuillez en sélectionner un"
 msgid "No file loaded on the active layer %d"
 msgstr "Pas de fichier chargé sur la couche active %d"
 
-#: gerbview/events_called_functions.cpp:284 pcbnew/pcb_edit_frame.cpp:745
+#: gerbview/events_called_functions.cpp:284 pcbnew/pcb_edit_frame.cpp:746
 msgid "Visibles"
 msgstr "Visibles"
 
@@ -12343,12 +12343,12 @@ msgstr "Couche graphique%d"
 msgid "Gerbview"
 msgstr "GerbView"
 
-#: gerbview/gerbview_frame.cpp:152 pcbnew/footprint_edit_frame.cpp:202
+#: gerbview/gerbview_frame.cpp:150 pcbnew/footprint_edit_frame.cpp:202
 #: pcbnew/footprint_edit_frame.cpp:559 pcbnew/pcb_edit_frame.cpp:249
 msgid "Layers Manager"
 msgstr "Gestionnaire de Couches"
 
-#: gerbview/gerbview_frame.cpp:170 pcbnew/pcb_edit_frame.cpp:273
+#: gerbview/gerbview_frame.cpp:168 pcbnew/pcb_edit_frame.cpp:273
 msgid ""
 "KiCad can use your graphics card to give you a smoother and faster "
 "experience. This option is turned off by default since it is not compatible "
@@ -12368,49 +12368,49 @@ msgstr ""
 "Si vous souhaitez choisir plus tard, sélectionnez le mode graphique Accéléré "
 "dans le menu Affichage."
 
-#: gerbview/gerbview_frame.cpp:177 pcbnew/pcb_edit_frame.cpp:280
+#: gerbview/gerbview_frame.cpp:175 pcbnew/pcb_edit_frame.cpp:280
 msgid "Enable Graphics Acceleration"
 msgstr "Activation Acceleration Graphique"
 
-#: gerbview/gerbview_frame.cpp:179 pcbnew/pcb_edit_frame.cpp:282
+#: gerbview/gerbview_frame.cpp:177 pcbnew/pcb_edit_frame.cpp:282
 msgid "&Enable Acceleration"
 msgstr "&Activer Acceleration"
 
-#: gerbview/gerbview_frame.cpp:179 pcbnew/pcb_edit_frame.cpp:282
+#: gerbview/gerbview_frame.cpp:177 pcbnew/pcb_edit_frame.cpp:282
 msgid "&No Thanks"
 msgstr "&Non, Merci"
 
-#: gerbview/gerbview_frame.cpp:576
+#: gerbview/gerbview_frame.cpp:579
 msgid "D Codes"
 msgstr "D Codes"
 
-#: gerbview/gerbview_frame.cpp:684
+#: gerbview/gerbview_frame.cpp:687
 #, c-format
 msgid "Drawing layer %d not in use"
 msgstr "Couche de dessin %d non utilisée"
 
-#: gerbview/gerbview_frame.cpp:696 gerbview/menubar.cpp:142
+#: gerbview/gerbview_frame.cpp:699 gerbview/menubar.cpp:142
 msgid "GerbView"
 msgstr "GerbView"
 
-#: gerbview/gerbview_frame.cpp:698
+#: gerbview/gerbview_frame.cpp:701
 msgid " (with X2 attributes)"
 msgstr " (avec attributs X2)"
 
-#: gerbview/gerbview_frame.cpp:706
+#: gerbview/gerbview_frame.cpp:709
 #, c-format
 msgid "Image name: \"%s\"  Layer name: \"%s\""
 msgstr "Nom Image: \"%s\"  Nom Layer:  \"%s\""
 
-#: gerbview/gerbview_frame.cpp:722
+#: gerbview/gerbview_frame.cpp:725
 msgid "X2 attr"
 msgstr "Attr X2"
 
-#: gerbview/gerbview_frame.cpp:1192 pcbnew/pcb_base_frame.cpp:796
+#: gerbview/gerbview_frame.cpp:1195 pcbnew/pcb_base_frame.cpp:796
 msgid "Zoom Auto"
 msgstr "Zoom Auto"
 
-#: gerbview/gerbview_frame.cpp:1197 pcbnew/pcb_base_frame.cpp:801
+#: gerbview/gerbview_frame.cpp:1200 pcbnew/pcb_base_frame.cpp:801
 msgid "Zoom "
 msgstr "Zoom "
 
@@ -12912,13 +12912,13 @@ msgstr ""
 "\n"
 "Voulez vous créer un nouveau répertoire vide pour le projet?"
 
-#: kicad/import_project.cpp:138 pcbnew/pcb_edit_frame.cpp:1034
+#: kicad/import_project.cpp:138 pcbnew/pcb_edit_frame.cpp:1035
 msgid "Eeschema failed to load:\n"
 msgstr "Eeschema a échoué pour charger:\n"
 
 #: kicad/import_project.cpp:139 kicad/import_project.cpp:173
-#: kicad/tools/kicad_manager_control.cpp:350 pcbnew/pcb_edit_frame.cpp:1005
-#: pcbnew/pcb_edit_frame.cpp:1035
+#: kicad/tools/kicad_manager_control.cpp:350 pcbnew/pcb_edit_frame.cpp:1006
+#: pcbnew/pcb_edit_frame.cpp:1036
 msgid "KiCad Error"
 msgstr "KiCad erreur"
 
@@ -13791,47 +13791,47 @@ msgstr "Atténuation ajustée à plus que %f dB"
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
 msgid ""
 "### Bridged tee attenuator:\n"
-"__Zin__ desired input impedance in &#x2126<br>\n"
+"__Zin__ desired input impedance in &#x2126;<br>\n"
 "__Zout__ desired output impedance<br>\n"
 "__Z<sub>0</sub> = Zin = Zout__<br><br>\n"
 "\n"
 "* __a__ attenuation in dB\n"
 "* __L = 10<sup>a/20</sup>__ (the loss)<br><br>\n"
-"* ___R1 = Z<sub>0</sub> * (L - 1)___\n"
+"* ___R1 = Z<sub>0</sub> \\* (L - 1)___\n"
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 msgstr ""
 "### Atténuateur en T ponté:\n"
-"__Zin__  impédance d'entrée désirée en  &#x2126<br>\n"
+"__Zin__  impédance d'entrée désirée en  &#x2126;<br>\n"
 "__Zout__  impédance de sortie désirée<br>\n"
 "__Z<sub>0</sub> = Zin = Zout__<br><br>\n"
 "\n"
 "* __a__ atténuation en dB\n"
 "* __L = 10<sup>a/20</sup>__ (l'atténuation)\n"
-"* ___R1 = Z<sub>0</sub> * (L - 1)___\n"
+"* ___R1 = Z<sub>0</sub> \\* (L - 1)___\n"
 "* ___R2 = Z<sub>0</sub> / (L - 1)___"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
 msgid ""
 "## Pi attenuator\n"
-"__Zin__ desired input impedance in &#x2126<br>\n"
+"__Zin__ desired input impedance in &#x2126;<br>\n"
 "__Zout__ desired output impedance<br>\n"
 "__Zin = Zout__<br><br>\n"
 "\n"
 "* __a__ attenuation in dB\n"
 "* __L = 10<sup>a/20</sup>__ (the loss)\n"
 "* __A = (L + 1)/(L - 1)__<br><br>\n"
-"* ___R2 = (L- 1)/2 . &radic ( (Zin . Zout) / L)___\n"
+"* ___R2 = (L- 1)/2 \\* &radic; ( (Zin \\* Zout) / L)___\n"
 "* ___R1 = 1/( A/Zin - 1/R2 )___\n"
 "* ___R3 = 1/ (A/Zout - 1/R2 )___"
 msgstr ""
 "## Atténuateur en PI\n"
-"__Zin__  impédance d'entrée désirée en  &#x2126<br>\n"
+"__Zin__  impédance d'entrée désirée en  &#x2126;<br>\n"
 "__Zout__  impédance de sortie désirée<br>\n"
 "__Zin = Zout__\n"
 "\n"
 "* __a__ atténuation en dB\n"
 "* __L = 10<sup>a/20</sup>__ (l'atténuation)\n"
-"* ___R2 = (L- 1)/2 . &radic ((Zin . Zout)/L)___\n"
+"* ___R2 = (L- 1)/2 \\* &radic; ((Zin \\* Zout)/L)___\n"
 "* ___R1 = 1/( A/Zin - 1/R2)___\n"
 "* ___R3 = 1/ (A/Zout - 1/R2)___"
 
@@ -13839,16 +13839,16 @@ msgstr ""
 msgid ""
 "## Splitted attenuator\n"
 "### Attenuation is 6dB\n"
-"___Z<sub>in</sub>___ desired input impedance in &#x2126<br>\n"
-"___Z<sub>out</sub>___ desired output impedance in &#x2126<br>\n"
+"___Z<sub>in</sub>___ desired input impedance in &#x2126;<br>\n"
+"___Z<sub>out</sub>___ desired output impedance in &#x2126;<br>\n"
 "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
 "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
 msgstr ""
 "## Séparateur résistif\n"
 "### L'atténuation est 6dB\n"
-"___Z<sub>in</sub>___  impédance d'entrée desirée en  &#x2126<br>\n"
-"___Z<sub>out</sub>___ impédance de sortie desirée en  &#x2126<br>\n"
+"___Z<sub>in</sub>___  impédance d'entrée desirée en  &#x2126;<br>\n"
+"___Z<sub>out</sub>___ impédance de sortie desirée en  &#x2126;<br>\n"
 "___Z<sub>in</sub> = Z<sub>out</sub>___\n"
 "\n"
 "___R1 = R2 = R3 = Z<sub>out</sub>/3___\n"
@@ -13856,28 +13856,28 @@ msgstr ""
 #: pcb_calculator/attenuators/tee_formula.h:2
 msgid ""
 "## Tee attenuator\n"
-"__Zin__ desired input impedance in &#x2126<br>\n"
+"__Zin__ desired input impedance in &#x2126;<br>\n"
 "__Zout__ desired output impedance<br>\n"
 "__Zin = Zout__<br><br>\n"
 "\n"
 "* __a__ attenuation in dB\n"
 "* __L = 10<sup>a/20</sup>__ (the loss)\n"
 "* ___A = (L + 1)/(L - 1)___<br><br>\n"
-"* ___R2 = 2&radic (L . Z<sub>in</sub> . Z<sub>out</sub> )/(L - 1)___\n"
-"* ___R1 = Z<sub>in</sub> * A - R2___\n"
-"* ___R3 = Z<sub>out</sub> * A - R2___\n"
+"* ___R2 = 2&radic;(L \\* Z<sub>in</sub> \\* Z<sub>out</sub> )/(L - 1)___\n"
+"* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
+"* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 msgstr ""
 "## Atténuateur en T\n"
-"__Zin__  impédance d'entrée désirée en  &#x2126<br>\n"
+"__Zin__  impédance d'entrée désirée en  &#x2126;<br>\n"
 "__Zout__  impédance de sortie désirée <br>\n"
 "__Zin = Zout__\n"
 "\n"
 "* __a__ atténuation en dB\n"
 "* __L = 10<sup>a/20</sup>__ (l'atténuation)\n"
 "* ___A = (L + 1)/(L - 1)___<br><br>\n"
-"* ___R2 = 2&radic (L . Z<sub>in</sub> . Z<sub>out</sub> )/(L - 1)___\n"
-"* ___R1 = Z<sub>in</sub> * A - R2___\n"
-"* ___R3 = Z<sub>out</sub> * A - R2___\n"
+"* ___R2 = 2&radic; (L \\* Z<sub>in</sub> \\* Z<sub>out</sub> )/(L - 1)___\n"
+"* ___R1 = Z<sub>in</sub> \\* A - R2___\n"
+"* ___R3 = Z<sub>out</sub> \\* A - R2___\n"
 
 #: pcb_calculator/datafile_read_write.cpp:72
 msgid "Data file error."
@@ -14826,61 +14826,49 @@ msgstr "Vref réglé à 0 !"
 msgid "Incorrect value for R1 R2"
 msgstr "Valeur incorrecte pour R1 R2"
 
-#: pcb_calculator/tracks_width_versus_current.cpp:445
+#: pcb_calculator/tracks_width_versus_current_formula.h:2
 msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
-"to suit."
-msgstr ""
-"Si vous spécifiez le courant maximum, alors les largeurs de pistes seront "
-"calculés en fonction de ce courant."
-
-#: pcb_calculator/tracks_width_versus_current.cpp:447
-msgid ""
+"to suit.\n"
+"\n"
 "If you specify one of the trace widths, the maximum current it can handle "
 "will be calculated. The width for the other trace to also handle this "
-"current will then be calculated."
-msgstr ""
-"Si vous spécifiez l'une des largeurs de piste, le courant maximal qu'elle "
-"peut gérer sera calculé. La largeur de  l'autre piste qui  peut  gérer aussi "
-"ce courant sera alors calculée."
-
-#: pcb_calculator/tracks_width_versus_current.cpp:451
-msgid "The controlling value is shown in bold."
-msgstr "La valeur de contrôle est indiqué en gras."
-
-#: pcb_calculator/tracks_width_versus_current.cpp:452
-msgid ""
+"current will then be calculated.\n"
+"\n"
+"The controlling value is shown in bold.\n"
+"\n"
 "The calculations are valid for currents up to 35A (external) or 17.5A "
 "(internal), temperature rises up to 100 deg C, and widths of up to 400mil "
-"(10mm)."
+"(10mm).\n"
+"\n"
+"The formula, from IPC 2221, is\n"
+"<center>__I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup>__</center>\n"
+"where:  \n"
+"__I__ = maximum current in amps  \n"
+"__dt__ = temperature rise above ambient in deg C  \n"
+"__W,H__ = width and thickness in mils  \n"
+"__K__ = 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
-"Les calculs sont valables pour des courants jusqu'à 35A (externe) ou 17,5A "
-"(interne), la température jusqu'à 100 ° C, et des largeurs allant jusqu'à "
-"400mil (10mm)."
-
-#: pcb_calculator/tracks_width_versus_current.cpp:455
-msgid "The formula, from IPC 2221, is"
-msgstr "La formule, à partir de l'IPC 2221, est"
-
-#: pcb_calculator/tracks_width_versus_current.cpp:457
-msgid "where:"
-msgstr "où:"
-
-#: pcb_calculator/tracks_width_versus_current.cpp:458
-msgid "maximum current in amps"
-msgstr "courant maximal en ampères"
-
-#: pcb_calculator/tracks_width_versus_current.cpp:460
-msgid "temperature rise above ambient in deg C"
-msgstr "élévation de la température au-dessus de l'ambiante en deg C"
-
-#: pcb_calculator/tracks_width_versus_current.cpp:462
-msgid "width and thickness in mils"
-msgstr "largeur et épaisseur en mils"
-
-#: pcb_calculator/tracks_width_versus_current.cpp:464
-msgid "0.024 for internal traces or 0.048 for external traces"
-msgstr "0,024  pour pistes internes ou 0,048 pour pistes externes"
+"Si vous spécifiez le courant maximum, les largeurs de piste  seront "
+"calculées en fonction de ce courant.\n"
+"\n"
+"Si vous spécifiez l'une des largeurs de piste, le courant maximum qu'elle "
+"peut gérer sera calculé. La largeur de l'autre piste  qui peut gérer "
+"également ce courant sera alors calculée.\n"
+"\n"
+"La valeur de contrôle est montrée en gras.\n"
+"\n"
+"Les calculs sont valables pour les courants jusqu'à 35A (externe) ou 17.5A "
+"(interne), la température jusqu'à 100 deg C, et les largeurs de jusqu'à "
+"400mil (10mm).\n"
+"\n"
+"La formule, tirée de l'IPC 2221, est\n"
+"<center>__I = K \\* dT<sup>0,44</sup> (WH)<sup>0,725</sup>__</center>\n"
+"où:  \n"
+"__I__ = courant maximum en ampères  \n"
+"__dT__ = élévation de la température au-dessus de l'ambiante en deg C  \n"
+"__W,H__ = largeur et épaisseur en mils  \n"
+"__K__ = 0,024 pour les piste internes ou 0,048 pour les pistes externes  \n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:48 pcb_calculator/via.cpp:87
 msgid "Relative Dielectric Constants"
@@ -15722,14 +15710,14 @@ msgstr "Ceci est la Netclass par défaut."
 msgid "PCB"
 msgstr "PCB"
 
-#: pcbnew/class_board.cpp:832 pcbnew/class_module.cpp:506
+#: pcbnew/class_board.cpp:833 pcbnew/class_module.cpp:506
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:72
 #: pcbnew/netinfo_item.cpp:118 pcbnew/pcb_draw_panel_gal.cpp:356
 #: pcbnew/ratsnest.cpp:55 pcbnew/tools/pcbnew_control.cpp:975
 msgid "Pads"
 msgstr "Pads"
 
-#: pcbnew/class_board.cpp:835
+#: pcbnew/class_board.cpp:836
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:151
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:31
@@ -15739,21 +15727,21 @@ msgstr "Pads"
 msgid "Vias"
 msgstr "Vias"
 
-#: pcbnew/class_board.cpp:838 pcbnew/pcb_draw_panel_gal.cpp:362
+#: pcbnew/class_board.cpp:839 pcbnew/pcb_draw_panel_gal.cpp:362
 msgid "Track Segments"
 msgstr "Segments de Piste"
 
-#: pcbnew/class_board.cpp:841 pcbnew/pcb_draw_panel_gal.cpp:365
+#: pcbnew/class_board.cpp:842 pcbnew/pcb_draw_panel_gal.cpp:365
 msgid "Nodes"
 msgstr "Nœuds"
 
-#: pcbnew/class_board.cpp:844
+#: pcbnew/class_board.cpp:845
 #: pcbnew/dialogs/dialog_select_net_from_list_base.h:59
 #: pcbnew/pcb_draw_panel_gal.cpp:368 pcbnew/ratsnest.cpp:58
 msgid "Nets"
 msgstr "Nets"
 
-#: pcbnew/class_board.cpp:847 pcbnew/pcb_draw_panel_gal.cpp:371
+#: pcbnew/class_board.cpp:848 pcbnew/pcb_draw_panel_gal.cpp:371
 msgid "Unrouted"
 msgstr "Non Routé"
 
@@ -15875,7 +15863,7 @@ msgstr "<pas de référence>"
 msgid "Footprint %s on %s"
 msgstr "Empreinte %s sur %s"
 
-#: pcbnew/class_module.cpp:1400
+#: pcbnew/class_module.cpp:1403
 #, c-format
 msgid "Processing courtyard of \"%s\": %s"
 msgstr "Traitement de la surface réservée de \"%s\": %s"
@@ -16419,7 +16407,7 @@ msgid "No footprint selected"
 msgstr "Aucune empreinte sélectionnée"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:74
-#: pcbnew/dialogs/dialog_netlist.cpp:84 pcbnew/dialogs/dialog_update_pcb.cpp:75
+#: pcbnew/dialogs/dialog_netlist.cpp:85 pcbnew/dialogs/dialog_update_pcb.cpp:75
 msgid "Update PCB"
 msgstr "Mise à jour PCB"
 
@@ -18954,56 +18942,56 @@ msgstr "Utiliser coordonnées polaires"
 msgid "Move Item"
 msgstr "Déplacer Élément"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:79 pcbnew/dialogs/dialog_update_pcb.cpp:65
+#: pcbnew/dialogs/dialog_netlist.cpp:80 pcbnew/dialogs/dialog_update_pcb.cpp:65
 msgid "Changes To Be Applied"
 msgstr "Modifications à Appliquer"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:85
+#: pcbnew/dialogs/dialog_netlist.cpp:86
 msgid "Rebuild Ratsnest"
 msgstr "Regénérer Chevelu"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:126
+#: pcbnew/dialogs/dialog_netlist.cpp:127
 msgid "Select Netlist"
 msgstr "Sélection Netliste"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:143
+#: pcbnew/dialogs/dialog_netlist.cpp:144
 msgid "Please, choose a valid netlist file."
 msgstr "S'il vous plaît, choisissez un fichier netlist valide."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:149 pcbnew/dialogs/dialog_netlist.cpp:214
+#: pcbnew/dialogs/dialog_netlist.cpp:150 pcbnew/dialogs/dialog_netlist.cpp:217
 msgid "The netlist file does not exist."
 msgstr "Le fichier netliste n'existe pas."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:154
+#: pcbnew/dialogs/dialog_netlist.cpp:155
 msgid ""
 "The changes made cannot be undone.  Are you sure you want to update the PCB?"
 msgstr ""
 "Les changements faits ne peuvent être défaits. Êtes vous sûr de vouloir "
 "mettre à jour le C.I.?"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:157
+#: pcbnew/dialogs/dialog_netlist.cpp:158
 #: pcbnew/dialogs/dialog_update_pcb.cpp:149
 msgid "Changes Applied To PCB"
 msgstr "Modifications appliquées au CI"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:169
+#: pcbnew/dialogs/dialog_netlist.cpp:170
 msgid "No footprints."
 msgstr "Pas d'empreinte."
 
-#: pcbnew/dialogs/dialog_netlist.cpp:180
+#: pcbnew/dialogs/dialog_netlist.cpp:181
 msgid "Check footprints"
 msgstr "Test empreintes"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:263
+#: pcbnew/dialogs/dialog_netlist.cpp:266
 #, c-format
 msgid "Reading netlist file \"%s\".\n"
 msgstr "Lecture Netliste <%s>\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:267
+#: pcbnew/dialogs/dialog_netlist.cpp:270
 msgid "Using references to match components and footprints.\n"
 msgstr "Utilisation des références pour associer composants et empreintes.\n"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:269
+#: pcbnew/dialogs/dialog_netlist.cpp:272
 msgid "Using tstamp fields to match components and footprints.\n"
 msgstr ""
 "Utilisation des signatures temporelles pour associer composants et "
@@ -23823,11 +23811,11 @@ msgstr "Editer la grille utilisateur..."
 msgid "The auto save file \"%s\" could not be removed!"
 msgstr "Le fichier d'auto sauvegarde \"%s\" n'a pas pu être supprimé!"
 
-#: pcbnew/pcb_edit_frame.cpp:816
+#: pcbnew/pcb_edit_frame.cpp:817
 msgid " [Unsaved]"
 msgstr " [Non sauvé]"
 
-#: pcbnew/pcb_edit_frame.cpp:937
+#: pcbnew/pcb_edit_frame.cpp:938
 msgid ""
 "Cannot update the PCB because Pcbnew is opened in stand-alone mode. In order "
 "to create or update PCBs from schematics, you must launch the KiCad project "
@@ -23837,16 +23825,16 @@ msgstr ""
 "Afin de créer/mettre à jour le PCB à partir du schéma, vous devrez lancer "
 "Kicad manager et créez un projet."
 
-#: pcbnew/pcb_edit_frame.cpp:972
+#: pcbnew/pcb_edit_frame.cpp:973
 msgid "Eeschema netlist"
 msgstr "Netliste EEschema"
 
-#: pcbnew/pcb_edit_frame.cpp:1004
+#: pcbnew/pcb_edit_frame.cpp:1005
 #, c-format
 msgid "Schematic file \"%s\" not found."
 msgstr "Fichier schématique\"%s\" non trouvé."
 
-#: pcbnew/pcb_edit_frame.cpp:1190
+#: pcbnew/pcb_edit_frame.cpp:1191
 msgid "Export Hyperlynx Layout"
 msgstr "Exporter au Format Hyperlynx"
 
@@ -24208,7 +24196,7 @@ msgstr ""
 "\"%s\"\n"
 "vous devez vérifier et l'éditer (exécuter le test DRC)."
 
-#: pcbnew/pcbnew.cpp:344
+#: pcbnew/pcbnew.cpp:352
 msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
@@ -24218,7 +24206,7 @@ msgstr ""
 "SVP éditer cette table globale des librairies d'empreintes dans le menu "
 "Préférences."
 
-#: pcbnew/pcbnew_config.cpp:80
+#: pcbnew/pcbnew_config.cpp:70
 msgid "Action Plugins"
 msgstr "Plugins d'Action"
 
@@ -24595,14 +24583,19 @@ msgid "Interactive Router"
 msgstr "Routeur Interactif"
 
 #: pcbnew/router/router_tool.cpp:553
-msgid "Blind/buried vias have to be enabled in the design settings."
+msgid ""
+"Blind/buried vias have to be enabled in Board Setup > Design Rules > "
+"Constraints."
 msgstr ""
-"Vias aveugles / enterrées doivent être activées dans les paramètres de "
-"conception."
+"Vias aveugles / enterrées doivent être activées dans Config. CI > Règles de "
+"Conception > Contraintes."
 
 #: pcbnew/router/router_tool.cpp:559
-msgid "Microvias have to be enabled in the design settings."
-msgstr "Les microvias doivent être activées dans les paramètres de conception."
+msgid ""
+"Microvias have to be enabled in Board Setup > Design Rules > Constraints."
+msgstr ""
+"Les microvias doivent être activées dans Config. CI > Règles de Conception > "
+"Contraintes."
 
 #: pcbnew/router/router_tool.cpp:566
 msgid "Only through vias are allowed on 2 layer boards."
@@ -24811,7 +24804,7 @@ msgstr "Via: %s (%s)"
 msgid "+/- to switch"
 msgstr "+/- pour commuter"
 
-#: pcbnew/tools/drawing_tool.cpp:160 pcbnew/tools/drawing_tool.cpp:1076
+#: pcbnew/tools/drawing_tool.cpp:160 pcbnew/tools/drawing_tool.cpp:1077
 msgid "Draw a line segment"
 msgstr "Tracer une ligne"
 
@@ -24827,27 +24820,27 @@ msgstr "Tracer un arc"
 msgid "Place a text"
 msgstr "Placer un texte"
 
-#: pcbnew/tools/drawing_tool.cpp:631
+#: pcbnew/tools/drawing_tool.cpp:632
 msgid "Draw a dimension"
 msgstr "Tracer une cote"
 
-#: pcbnew/tools/drawing_tool.cpp:712
+#: pcbnew/tools/drawing_tool.cpp:713
 msgid "No graphic items found in file to import"
 msgstr "Pas d'éléments graphiques trouvés dans le fichier à importer"
 
-#: pcbnew/tools/drawing_tool.cpp:742 pcbnew/tools/drawing_tool.cpp:822
+#: pcbnew/tools/drawing_tool.cpp:743 pcbnew/tools/drawing_tool.cpp:823
 msgid "Place a DXF_SVG drawing"
 msgstr "Placer un dessin DXF_SVG"
 
-#: pcbnew/tools/drawing_tool.cpp:876
+#: pcbnew/tools/drawing_tool.cpp:877
 msgid "Move the footprint reference anchor"
 msgstr "Déplacer l'ancre de référence de l'empreinte"
 
-#: pcbnew/tools/drawing_tool.cpp:1434
+#: pcbnew/tools/drawing_tool.cpp:1435
 msgid "Self-intersecting polygons are not allowed"
 msgstr "Les polygones auto intersectants ne sont pas autorisés"
 
-#: pcbnew/tools/drawing_tool.cpp:1875
+#: pcbnew/tools/drawing_tool.cpp:1877
 msgid "Place via"
 msgstr "Place via"
 
@@ -26432,6 +26425,52 @@ msgstr "Modifier les propriétés de la zone"
 #, c-format
 msgid "Refill %d Zones"
 msgstr "Remplissage %d Zones"
+
+#~ msgid ""
+#~ "If you specify the maximum current, then the trace widths will be "
+#~ "calculated to suit."
+#~ msgstr ""
+#~ "Si vous spécifiez le courant maximum, alors les largeurs de pistes seront "
+#~ "calculés en fonction de ce courant."
+
+#~ msgid ""
+#~ "If you specify one of the trace widths, the maximum current it can handle "
+#~ "will be calculated. The width for the other trace to also handle this "
+#~ "current will then be calculated."
+#~ msgstr ""
+#~ "Si vous spécifiez l'une des largeurs de piste, le courant maximal qu'elle "
+#~ "peut gérer sera calculé. La largeur de  l'autre piste qui  peut  gérer "
+#~ "aussi ce courant sera alors calculée."
+
+#~ msgid "The controlling value is shown in bold."
+#~ msgstr "La valeur de contrôle est indiqué en gras."
+
+#~ msgid ""
+#~ "The calculations are valid for currents up to 35A (external) or 17.5A "
+#~ "(internal), temperature rises up to 100 deg C, and widths of up to 400mil "
+#~ "(10mm)."
+#~ msgstr ""
+#~ "Les calculs sont valables pour des courants jusqu'à 35A (externe) ou "
+#~ "17,5A (interne), la température jusqu'à 100 ° C, et des largeurs allant "
+#~ "jusqu'à 400mil (10mm)."
+
+#~ msgid "The formula, from IPC 2221, is"
+#~ msgstr "La formule, à partir de l'IPC 2221, est"
+
+#~ msgid "where:"
+#~ msgstr "où:"
+
+#~ msgid "maximum current in amps"
+#~ msgstr "courant maximal en ampères"
+
+#~ msgid "temperature rise above ambient in deg C"
+#~ msgstr "élévation de la température au-dessus de l'ambiante en deg C"
+
+#~ msgid "width and thickness in mils"
+#~ msgstr "largeur et épaisseur en mils"
+
+#~ msgid "0.024 for internal traces or 0.048 for external traces"
+#~ msgstr "0,024  pour pistes internes ou 0,048 pour pistes externes"
 
 #~ msgid "Rotate X Clockwise\tCtrl+Shift+X"
 #~ msgstr "Rotation X Horaire\tCtrl+Maj+X"
