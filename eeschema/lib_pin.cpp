@@ -609,31 +609,15 @@ void LIB_PIN::PrintPinSymbol( wxDC* aDC, const wxPoint& aPos, int aOrient )
         GRMoveTo( MapX1 * radius * 2 + x1, MapY1 * radius * 2 + y1 );
         GRLineTo( nullptr, aDC, posX, posY, width, color );
     }
-    else if( m_shape == PINSHAPE_FALLING_EDGE_CLOCK ) /* an alternative for Inverted Clock */
-    {
-        const int deco_size = InternalPinDecoSize( *this );
-        if( MapY1 == 0 ) /* MapX1 = +- 1 */
-        {
-            GRMoveTo( x1, y1 + deco_size );
-            GRLineTo( nullptr, aDC, x1 + MapX1 * deco_size * 2, y1, width, color );
-            GRLineTo( nullptr, aDC, x1, y1 - deco_size, width, color );
-        }
-        else    /* MapX1 = 0 */
-        {
-            GRMoveTo( x1 + deco_size, y1 );
-            GRLineTo( nullptr, aDC, x1, y1 + MapY1 * deco_size * 2, width, color );
-            GRLineTo( nullptr, aDC, x1 - deco_size, y1, width, color );
-        }
-        GRMoveTo( MapX1 * deco_size * 2 + x1, MapY1 * deco_size * 2 + y1 );
-        GRLineTo( nullptr, aDC, posX, posY, width, color );
-    }
     else
     {
         GRMoveTo( x1, y1 );
         GRLineTo( nullptr, aDC, posX, posY, width, color );
     }
 
-    if( m_shape == PINSHAPE_CLOCK || m_shape == PINSHAPE_INVERTED_CLOCK || m_shape == PINSHAPE_CLOCK_LOW )
+    // Draw the clock shape (>)inside the symbol
+    if( m_shape == PINSHAPE_CLOCK || m_shape == PINSHAPE_INVERTED_CLOCK ||
+        m_shape == PINSHAPE_FALLING_EDGE_CLOCK || m_shape == PINSHAPE_CLOCK_LOW )
     {
         const int clock_size = InternalPinDecoSize( *this );
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
@@ -650,7 +634,9 @@ void LIB_PIN::PrintPinSymbol( wxDC* aDC, const wxPoint& aPos, int aOrient )
         }
     }
 
-    if( m_shape == PINSHAPE_INPUT_LOW || m_shape == PINSHAPE_CLOCK_LOW )
+    // Draw the active low (or H to L active transition)
+    if( m_shape == PINSHAPE_INPUT_LOW ||
+        m_shape == PINSHAPE_FALLING_EDGE_CLOCK || m_shape == PINSHAPE_CLOCK_LOW )
     {
         const int deco_size = ExternalPinDecoSize( *this );
         if( MapY1 == 0 )            /* MapX1 = +- 1 */
@@ -666,7 +652,6 @@ void LIB_PIN::PrintPinSymbol( wxDC* aDC, const wxPoint& aPos, int aOrient )
             GRLineTo( nullptr, aDC, x1, y1, width, color );
         }
     }
-
 
     if( m_shape == PINSHAPE_OUTPUT_LOW )    /* IEEE symbol "Active Low Output" */
     {
