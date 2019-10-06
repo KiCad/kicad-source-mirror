@@ -558,7 +558,6 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool aIsDangling, bool isMovi
     VECTOR2I p0, dir;
 	int len = aPin->GetLength();
 	int width = aPin->GetPenSize();
-	int shape = aPin->GetShape();
     int orient = aPin->GetOrientation();
 
     switch( orient )
@@ -594,82 +593,117 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool aIsDangling, bool isMovi
     const int diam = radius*2;
     const int clock_size = InternalPinDecoSize( *aPin );
 
-	if( shape == PINSHAPE_INVERTED )
-	{
-		m_gal->DrawCircle( p0 + dir * radius, radius );
-		m_gal->DrawLine( p0 + dir * ( diam ), pos );
-	}
-	else if( shape == PINSHAPE_FALLING_EDGE_CLOCK )
-    {
-        pc = p0 + dir * clock_size ;
-
-        triLine( p0 + VECTOR2D( dir.y, -dir.x) * clock_size,
-                 pc,
-                 p0 + VECTOR2D( -dir.y, dir.x) * clock_size );
-
-        m_gal->DrawLine( pos, pc );
-    }
-    else
+    if( aPin->GetType() == PIN_NC )              // Draw a N.C. symbol
     {
         m_gal->DrawLine( p0, pos );
-    }
 
-    if( shape == PINSHAPE_CLOCK )
-    {
-        if (!dir.y)
-        {
-            triLine( p0 + VECTOR2D( 0, clock_size ),
-                     p0 + VECTOR2D( -dir.x * clock_size, 0 ),
-                     p0 + VECTOR2D( 0, -clock_size ) );
-        }
-        else
-        {
-            triLine( p0 + VECTOR2D( clock_size, 0 ),
-                     p0 + VECTOR2D( 0, -dir.y * clock_size ),
-                     p0 + VECTOR2D( -clock_size, 0 ) );
-        }
-    }
-
-    if( shape == PINSHAPE_INPUT_LOW )
-    {
-        if(!dir.y)
-        {
-            triLine( p0 + VECTOR2D(dir.x, 0) * diam,
-                     p0 + VECTOR2D(dir.x, -1) * diam,
-                     p0 );
-        }
-        else    /* MapX1 = 0 */
-        {
-            triLine( p0 + VECTOR2D( 0, dir.y) * diam,
-                     p0 + VECTOR2D(-1, dir.y) * diam,
-                     p0 );
-        }
-    }
-
-    if( shape == PINSHAPE_OUTPUT_LOW )    /* IEEE symbol "Active Low Output" */
-    {
-        if( !dir.y )    // Horizontal pin
-            m_gal->DrawLine( p0 - VECTOR2D( 0, diam ), p0 + VECTOR2D( dir.x, 0 ) * diam );
-        else            // Vertical pin
-            m_gal->DrawLine( p0 - VECTOR2D( diam, 0 ), p0 + VECTOR2D( 0, dir.y ) * diam );
-    }
-
-    if( shape == PINSHAPE_NONLOGIC ) /* NonLogic pin symbol */
-    {
-        m_gal->DrawLine( p0 - VECTOR2D( dir.x + dir.y, dir.y - dir.x ) * radius,
-                         p0 + VECTOR2D( dir.x + dir.y, dir.y - dir.x ) * radius );
-        m_gal->DrawLine( p0 - VECTOR2D( dir.x - dir.y, dir.x + dir.y ) * radius,
-                         p0 + VECTOR2D( dir.x - dir.y, dir.x + dir.y ) * radius );
-    }
-
-    if( aPin->GetType() == PIN_NC )   // Draw a N.C. symbol
-    {
         m_gal->DrawLine( pos + VECTOR2D( -1, -1 ) * TARGET_PIN_RADIUS,
                          pos + VECTOR2D(  1,  1 ) * TARGET_PIN_RADIUS );
         m_gal->DrawLine( pos + VECTOR2D(  1, -1 ) * TARGET_PIN_RADIUS ,
                          pos + VECTOR2D( -1,  1 ) * TARGET_PIN_RADIUS );
 
         aIsDangling = false; // PIN_NC pin type is always not connected and dangling.
+    }
+    else
+    {
+        switch( aPin->GetShape() )
+        {
+        case PINSHAPE_LINE:
+            m_gal->DrawLine( p0, pos );
+            break;
+
+        case PINSHAPE_INVERTED:
+            m_gal->DrawCircle( p0 + dir * radius, radius );
+            m_gal->DrawLine( p0 + dir * ( diam ), pos );
+            break;
+
+       case PINSHAPE_INVERTED_CLOCK:
+            pc = p0 - dir * clock_size ;
+
+            triLine( p0 + VECTOR2D( dir.y, -dir.x) * clock_size,
+                     pc,
+                     p0 + VECTOR2D( -dir.y, dir.x) * clock_size );
+
+            m_gal->DrawCircle( p0 + dir * radius, radius );
+            m_gal->DrawLine( p0 + dir * ( diam ), pos );
+           break;
+
+        case PINSHAPE_CLOCK_LOW:
+        case PINSHAPE_FALLING_EDGE_CLOCK:
+            pc = p0 - dir * clock_size ;
+
+            triLine( p0 + VECTOR2D( dir.y, -dir.x) * clock_size,
+                     pc,
+                     p0 + VECTOR2D( -dir.y, dir.x) * clock_size );
+
+            if(!dir.y)
+            {
+                triLine( p0 + VECTOR2D(dir.x, 0) * diam,
+                         p0 + VECTOR2D(dir.x, -1) * diam,
+                         p0 );
+            }
+            else    /* MapX1 = 0 */
+            {
+                triLine( p0 + VECTOR2D( 0, dir.y) * diam,
+                         p0 + VECTOR2D(-1, dir.y) * diam,
+                         p0 );
+            }
+
+            m_gal->DrawLine( p0, pos );
+            break;
+
+        case PINSHAPE_CLOCK:
+            m_gal->DrawLine( p0, pos );
+
+            if (!dir.y)
+            {
+                triLine( p0 + VECTOR2D( 0, clock_size ),
+                         p0 + VECTOR2D( -dir.x * clock_size, 0 ),
+                         p0 + VECTOR2D( 0, -clock_size ) );
+            }
+            else
+            {
+                triLine( p0 + VECTOR2D( clock_size, 0 ),
+                         p0 + VECTOR2D( 0, -dir.y * clock_size ),
+                         p0 + VECTOR2D( -clock_size, 0 ) );
+            }
+            break;
+
+        case PINSHAPE_INPUT_LOW:
+            m_gal->DrawLine( p0, pos );
+
+            if(!dir.y)
+            {
+                triLine( p0 + VECTOR2D(dir.x, 0) * diam,
+                         p0 + VECTOR2D(dir.x, -1) * diam,
+                         p0 );
+            }
+            else    /* MapX1 = 0 */
+            {
+                triLine( p0 + VECTOR2D( 0, dir.y) * diam,
+                         p0 + VECTOR2D(-1, dir.y) * diam,
+                         p0 );
+            }
+            break;
+
+        case PINSHAPE_OUTPUT_LOW:    // IEEE symbol "Active Low Output"
+            m_gal->DrawLine( p0, pos );
+
+            if( !dir.y )    // Horizontal pin
+                m_gal->DrawLine( p0 - VECTOR2D( 0, diam ), p0 + VECTOR2D( dir.x, 0 ) * diam );
+            else            // Vertical pin
+                m_gal->DrawLine( p0 - VECTOR2D( diam, 0 ), p0 + VECTOR2D( 0, dir.y ) * diam );
+            break;
+
+        case PINSHAPE_NONLOGIC:     // NonLogic pin symbol
+            m_gal->DrawLine( p0, pos );
+
+            m_gal->DrawLine( p0 - VECTOR2D( dir.x + dir.y, dir.y - dir.x ) * radius,
+                             p0 + VECTOR2D( dir.x + dir.y, dir.y - dir.x ) * radius );
+            m_gal->DrawLine( p0 - VECTOR2D( dir.x - dir.y, dir.x + dir.y ) * radius,
+                             p0 + VECTOR2D( dir.x - dir.y, dir.x + dir.y ) * radius );
+            break;
+        }
     }
 
     if( aIsDangling && ( aPin->IsVisible() || aPin->IsPowerConnection() ) )

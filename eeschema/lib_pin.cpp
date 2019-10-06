@@ -729,34 +729,15 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
                   MapY1 * radius * 2 + y1 );
         GRLineTo( clipbox, aDC, posX, posY, width, color );
     }
-    else if( m_shape == PINSHAPE_FALLING_EDGE_CLOCK ) /* an alternative for Inverted Clock */
-    {
-        const int clock_size = InternalPinDecoSize( *this );
-        if( MapY1 == 0 ) /* MapX1 = +- 1 */
-        {
-            GRMoveTo( x1, y1 + clock_size );
-            GRLineTo( clipbox, aDC, x1 + MapX1 * clock_size * 2, y1,
-                      width, color );
-            GRLineTo( clipbox, aDC, x1, y1 - clock_size, width, color );
-        }
-        else    /* MapX1 = 0 */
-        {
-            GRMoveTo( x1 + clock_size, y1 );
-            GRLineTo( clipbox, aDC, x1, y1 + MapY1 * clock_size * 2,
-                      width, color );
-            GRLineTo( clipbox, aDC, x1 - clock_size, y1,
-                      width, color );
-        }
-        GRMoveTo( MapX1 * clock_size * 2 + x1, MapY1 * clock_size * 2 + y1 );
-        GRLineTo( clipbox, aDC, posX, posY, width, color );
-    }
     else
     {
         GRMoveTo( x1, y1 );
         GRLineTo( clipbox, aDC, posX, posY, width, color );
     }
 
-    if( m_shape == PINSHAPE_CLOCK || m_shape == PINSHAPE_INVERTED_CLOCK || m_shape == PINSHAPE_CLOCK_LOW )
+    // Draw the clock shape (>)inside the symbol
+    if( m_shape == PINSHAPE_CLOCK || m_shape == PINSHAPE_INVERTED_CLOCK ||
+        m_shape == PINSHAPE_FALLING_EDGE_CLOCK || m_shape == PINSHAPE_CLOCK_LOW )
     {
         const int clock_size = InternalPinDecoSize( *this );
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
@@ -777,7 +758,9 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
         }
     }
 
-    if( m_shape == PINSHAPE_INPUT_LOW || m_shape == PINSHAPE_CLOCK_LOW )
+    // Draw the active low (or H to L active transition)
+    if( m_shape == PINSHAPE_INPUT_LOW ||
+        m_shape == PINSHAPE_FALLING_EDGE_CLOCK || m_shape == PINSHAPE_CLOCK_LOW )
     {
         const int symbol_size = ExternalPinDecoSize( *this );
         if( MapY1 == 0 )            /* MapX1 = +- 1 */
