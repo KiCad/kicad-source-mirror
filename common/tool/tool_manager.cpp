@@ -355,7 +355,7 @@ bool TOOL_MANAGER::invokeTool( TOOL_BASE* aTool )
     wxASSERT( aTool != NULL );
 
     TOOL_EVENT evt( TC_COMMAND, TA_ACTIVATE, aTool->GetName() );
-    evt.SetMousePosition( m_viewControls->GetCursorPosition() );
+    evt.SetMousePosition( GetCursorPosition() );
     processEvent( evt );
 
     if( TOOL_STATE* active = GetCurrentToolState() )
