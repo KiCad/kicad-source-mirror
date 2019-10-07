@@ -45,7 +45,7 @@ KICAD_BUILD_QA_TESTS
     Default ON.
 
 BUILD_GITHUB_PLUGIN
-    Build the GITHUB_PLUGIN for pcbnew.
+    Build the GITHUB_PLUGIN for pcbnew to allow downloading libraries from Github repo.
     Default ON.
 
 KICAD_SPICE
@@ -65,6 +65,13 @@ BUILD_SMALL_DEBUG_FILES
     This option create binaries using link option -g1 that create much smaller files, but
     there are less info in debug (However the file names and line numbers are available)
     Default OFF.
+
+MAINTAIN_PNGS
+        Allow build/rebuild bitmap icons used in menus from the corresponding .svg file.
+        Set to true if you are a PNG maintainer and have the required tools given
+        in the bitmaps_png/CMakeLists.txt file
+        Default OFF.
+
 
 # Not supported by all platforms (for instance mingw)
 KICAD_SANITIZE
