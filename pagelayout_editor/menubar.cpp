@@ -135,7 +135,10 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
     viewMenu->AddSeparator();
     viewMenu->AddItem( PL_ACTIONS::previewSettings,          SELECTION_CONDITIONS::ShowAlways );
+
+#ifdef __APPLE__
     viewMenu->AddSeparator();
+#endif
 
     viewMenu->Resolve();
 
