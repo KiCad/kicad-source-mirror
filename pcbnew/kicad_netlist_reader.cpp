@@ -83,8 +83,7 @@ void KICAD_NETLIST_PARSER::skipCurrent()
 
 void KICAD_NETLIST_PARSER::Parse()
 {
-    int plevel = 0;     // the count of ')' to read and end of file,
-                        // after parsing all sections
+    int plevel = 0;     // the count of ')' to read at end of file after parsing all sections
 
     while( ( token = NextTok() ) != T_EOF )
     {
@@ -94,8 +93,7 @@ void KICAD_NETLIST_PARSER::Parse()
         switch( token )
         {
         case T_export:  // The netlist starts here.
-            // nothing to do here,
-            // just increment the count of ')' to read and end of file
+            // nothing to do here, just increment the count of ')' to read at end of file
             plevel++;
             break;
 
@@ -106,43 +104,43 @@ void KICAD_NETLIST_PARSER::Parse()
             break;
 
         case T_components:  // The section comp starts here.
-            while( ( token = NextTok() ) != T_RIGHT )
+            while( ( token = NextTok() ) != T_EOF )
             {
-                if( token == T_LEFT )
+                if( token == T_RIGHT )
+                    break;
+                else if( token == T_LEFT )
                     token = NextTok();
 
-                if( token == T_comp )   // A component section found. Read it
+                if( token == T_comp )       // A component section found. Read it
                     parseComponent();
             }
 
             break;
 
         case T_nets:    // The section nets starts here.
-            while( ( token = NextTok() ) != T_RIGHT )
+            while( ( token = NextTok() ) != T_EOF )
             {
-                if( token == T_LEFT )
+                if( token == T_RIGHT )
+                    break;
+                else if( token == T_LEFT )
                     token = NextTok();
 
-                if( token == T_net )
-                {
-                    // A net section if found. Read it
+                if( token == T_net )        // A net section if found. Read it
                     parseNet();
-                }
             }
 
             break;
 
         case T_libparts:    // The section libparts starts here.
-            while( ( token = NextTok() ) != T_RIGHT )
+            while( ( token = NextTok() ) != T_EOF )
             {
-                if( token == T_LEFT )
+                if( token == T_RIGHT )
+                    break;
+                else if( token == T_LEFT )
                     token = NextTok();
 
-                if( token == T_libpart )
-                {
-                    // A libpart section if found. Read it
+                if( token == T_libpart )    // A libpart section if found. Read it
                     parseLibPartList();
-                }
             }
 
             break;
@@ -159,7 +157,6 @@ void KICAD_NETLIST_PARSER::Parse()
             break;
 
         case T_RIGHT:    // The closing parenthesis of the file.
-            // Not used (mainly they are comments), just skip it
             plevel--;
             break;
 
@@ -194,9 +191,11 @@ void KICAD_NETLIST_PARSER::parseNet()
     int        nodecount = 0;
 
     // The token net was read, so the next data is (code <number>)
-    while( (token = NextTok()) != T_RIGHT )
+    while( (token = NextTok()) != T_EOF )
     {
-        if( token == T_LEFT )
+        if( token == T_RIGHT )
+            break;
+        else if( token == T_LEFT )
             token = NextTok();
 
         switch( token )
@@ -218,9 +217,11 @@ void KICAD_NETLIST_PARSER::parseNet()
             break;
 
         case T_node:
-            while( (token = NextTok()) != T_RIGHT )
+            while( (token = NextTok()) != T_EOF )
             {
-                if( token == T_LEFT )
+                if( token == T_RIGHT )
+                    break;
+                else if( token == T_LEFT )
                     token = NextTok();
 
                 switch( token )
@@ -348,7 +349,12 @@ void KICAD_NETLIST_PARSER::parseComponent()
             break;
 
         case T_sheetpath:
-            while( ( token = NextTok() ) != T_tstamps );
+            while( ( token = NextTok() ) != T_EOF )
+            {
+                if( token == T_tstamps )
+                    break;
+            }
+
             NeedSYMBOLorNUMBER();
             pathtimestamp = FROM_UTF8( CurText() );
             NeedRIGHT();
