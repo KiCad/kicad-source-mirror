@@ -108,6 +108,10 @@ option( KICAD_SPICE
     "Build KiCad with internal Spice simulator."
     ON )
 
+option( KICAD_USE_FONT_REDUCED_SET
+    "Build KiCad with a reduced font set, without CKJ font. Avoid out of memory issue with some graphic cards on OpenGL"
+    OFF )
+
 # Not supported by all platforms (for instance mingw)
 option( KICAD_SANITIZE
     "Build KiCad with sanitizer options. WARNING: Not compatible with gold linker"
