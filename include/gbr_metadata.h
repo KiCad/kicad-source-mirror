@@ -82,7 +82,7 @@ public:
         GBR_APERTURE_ATTRIB_NONE,           ///< uninitialized attribute
         GBR_APERTURE_ATTRIB_ETCHEDCMP,      ///< aperture used for etched components
         GBR_APERTURE_ATTRIB_CONDUCTOR,      ///< aperture used for connected items like tracks (not vias)
-        GBR_APERTURE_ATTRIB_CUTOUT,         ///< aperture used for board cutout
+        GBR_APERTURE_ATTRIB_EDGECUT,        ///< aperture used for board outlines (edge.cut layer)
         GBR_APERTURE_ATTRIB_NONCONDUCTOR,   ///< aperture used for not connected items (texts, outlines on copper)
         GBR_APERTURE_ATTRIB_VIAPAD,         ///< aperture used for vias
         GBR_APERTURE_ATTRIB_COMPONENTPAD,   ///< aperture used for through hole component on outer layer

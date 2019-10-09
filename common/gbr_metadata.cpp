@@ -170,8 +170,8 @@ std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribu
         attribute_string = "TA.AperFunction,Conductor";
         break;
 
-    case GBR_APERTURE_ATTRIB_CUTOUT:        // print info associated to a outline
-        attribute_string = "TA.AperFunction,CutOut";
+    case GBR_APERTURE_ATTRIB_EDGECUT:       // print info associated to a board outline (edge.cut layer)
+        attribute_string = "TA.AperFunction,Profile";
         break;
 
     case GBR_APERTURE_ATTRIB_VIAPAD:        // print info associated to a flashed via
