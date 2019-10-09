@@ -675,26 +675,7 @@ static bool footprintIsFromBoard( MODULE* aFootprint )
 
 void DIALOG_FOOTPRINT_FP_EDITOR::OnGridCellChanging( wxGridEvent& event )
 {
-    if( event.GetRow() == 1 && event.GetCol() == TMC_TEXT )
-    {
-        if( !checkFootprintName( event.GetString() ) )
-        {
-            event.Veto();
-
-            if( m_NoteBook->GetSelection() != 0 )
-                m_NoteBook->SetSelection( 0 );
-
-            m_delayedFocusGrid = m_itemsGrid;
-            m_delayedFocusRow = event.GetRow();
-            m_delayedFocusColumn = event.GetCol();
-            m_delayedFocusPage = 0;
-        }
-        else if( !footprintIsFromBoard( m_footprint ) )
-        {
-            // Keep Name and Value of footprints in library in sync
-            m_FootprintNameCtrl->ChangeValue( event.GetString() );
-        }
-    }
+    // Currently: nothing to do
 }
 
 
@@ -702,8 +683,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnFootprintNameText( wxCommandEvent& event )
 {
     if( !footprintIsFromBoard( m_footprint ) )
     {
-        // Keep Name and Value of footprints in library in sync
-        m_itemsGrid->SetCellValue( 1, TMC_TEXT, m_FootprintNameCtrl->GetValue() );
+        // Currently: nothing to do
     }
 }
 
@@ -803,15 +783,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
 
     if( m_itemsGrid->IsCellEditControlShown() )
     {
-        int row = m_itemsGrid->GetGridCursorRow();
-        int col = m_itemsGrid->GetGridCursorCol();
-
-        if( row == 1 && col == TMC_TEXT )
-        {
-            wxGridCellEditor* editor = m_itemsGrid->GetCellEditor( row, col );
-            m_FootprintNameCtrl->ChangeValue( editor->GetValue() );
-            editor->DecRef();
-        }
+        // Currently: nonthing to do
     }
 
     // Handle a delayed focus.  The delay allows us to:
