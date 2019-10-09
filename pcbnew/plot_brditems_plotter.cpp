@@ -475,7 +475,7 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
     }
     else if( aEdge->GetLayer() == Edge_Cuts )   // happens also when plotting copper layers
     {
-        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
+        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_EDGECUT );
     }
 
     switch( type_trace )
@@ -729,7 +729,7 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
     bool isOnCopperLayer = ( m_layerMask & LSET::AllCuMask() ).any();
 
     if( isOnCopperLayer && aSeg->GetLayer() == Edge_Cuts )   // can happens when plotting copper layers
-        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
+        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_EDGECUT );
 
     switch( aSeg->GetShape() )
     {
