@@ -171,7 +171,11 @@ int LIB_EDIT_FRAME::BlockCommand( EDA_KEY key )
     switch( key )
     {
     default:
-        cmd = key & 0xFF;
+        cmd = key & 0xFFFF;
+
+        if( cmd == 0 )      // All not handled values are seen as block move
+            cmd = BLOCK_MOVE;
+
         break;
 
     case EDA_KEY_C( 0xffffffff ):   // -1
@@ -185,6 +189,8 @@ int LIB_EDIT_FRAME::BlockCommand( EDA_KEY key )
         cmd = BLOCK_PRESELECT_MOVE;
         break;
 
+    case GR_KB_ALT:         // Should be BLOCK_ROTATE. Not suported: fall into move
+    case GR_KB_CTRL:        // Should be BLOCK_MIRROR_Y. Not suported: fall into move
     case GR_KEY_NONE:
         cmd = BLOCK_MOVE;
         break;
@@ -193,16 +199,8 @@ int LIB_EDIT_FRAME::BlockCommand( EDA_KEY key )
         cmd = BLOCK_DUPLICATE;
         break;
 
-    case GR_KB_ALT:
-        cmd = BLOCK_ROTATE;
-        break;
-
     case GR_KB_SHIFTCTRL:
         cmd = BLOCK_DELETE;
-        break;
-
-    case GR_KB_CTRL:
-        cmd = BLOCK_MIRROR_Y;
         break;
 
     case MOUSE_MIDDLE:

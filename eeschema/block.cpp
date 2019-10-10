@@ -63,9 +63,14 @@ int SCH_EDIT_FRAME::BlockCommand( EDA_KEY key )
     switch( key )
     {
     default:
-        cmd = key & 0xFF;
+        cmd = key & 0xFFFF;
+
+        if( cmd == 0 )      // All not handled values are seen as block move
+            cmd = BLOCK_MOVE;
+
         break;
 
+    case GR_KB_ALT:         // Should be BLOCK_ROTATE. Not suported: fall into move
     case 0:
         cmd = BLOCK_MOVE;
         break;

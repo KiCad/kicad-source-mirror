@@ -259,6 +259,7 @@ void SCH_BASE_FRAME::UpdateStatusBar()
         locformatter = "dx %f  dy %f  dist %f";
         break;
 
+    case PERCENT:
     case DEGREES:
         wxASSERT( false );
         break;
@@ -525,6 +526,7 @@ bool SCH_BASE_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& a
     case BLOCK_DELETE:              // Delete
     case BLOCK_COPY:                // Copy
     case BLOCK_FLIP:                // Flip
+    case BLOCK_ROTATE:              // Rotate
     case BLOCK_ZOOM:                // Window Zoom
     case BLOCK_MIRROR_X:
     case BLOCK_MIRROR_Y:            // mirror
@@ -574,7 +576,7 @@ bool SCH_BASE_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& a
         break;
 
     default:
-        wxFAIL_MSG( wxString::Format( "SCH_BASE_FRAME::HandleBlockBegin() unknown command: %s",
+        wxFAIL_MSG( wxString::Format( "SCH_BASE_FRAME::HandleBlockBegin() unknown command: %d",
                                       block->GetCommand() ) );
         break;
     }

@@ -472,13 +472,12 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                 {
                     auto cmd = (GetParent()->GetToolId() == ID_ZOOM_SELECTION) ? BLOCK_ZOOM : 0;
 
-                    DBG(printf("start block\n");)
+                    // DBG(printf("start block\n"); fflush(0);)
 
                     if( !GetParent()->HandleBlockBegin( nullptr, cmd_type, m_CursorStartPos, cmd ) )
                     {
                         // should not occur: error
-                        GetParent()->DisplayToolMsg(
-                            wxT( "EDA_DRAW_PANEL::OnMouseEvent() Block Error" ) );
+                        GetParent()->DisplayToolMsg( "SCH_DRAW_PANEL: Block Error" );
                     }
                     else
                     {
