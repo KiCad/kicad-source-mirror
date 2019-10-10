@@ -715,6 +715,8 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
 
             if( uptodate )      // We can add the dielectric variant ("core" "prepreg" ...):
                 note << wxString::Format( " \"Type: %s", layer_name.c_str() );
+            else
+                note << "\"";
 
             note << wxString::Format( " (from %s to %s)\"\n",
                             formatStringFromUTF32( m_pcb->GetLayerName( last_copper_layer ) ),
