@@ -712,10 +712,10 @@ static size_t hashModule( const MODULE* aModule )
 
 
     for( auto i : aModule->GraphicalItems() )
-        ret ^= hash_eda( i, flags );
+        ret += hash_eda( i, flags );
 
     for( auto i : aModule->Pads() )
-        ret ^= hash_eda( i, flags );
+        ret += hash_eda( i, flags );
 
     return ret;
 }

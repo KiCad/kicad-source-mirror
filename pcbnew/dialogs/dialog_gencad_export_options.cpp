@@ -40,12 +40,11 @@ DIALOG_GENCAD_EXPORT_OPTIONS::DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aPar
     : DIALOG_SHIM( aParent, wxID_ANY, _( "Export to GenCAD settings" ), wxDefaultPosition,
                    wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
-    // Create widgets
-    SetSizeHints( wxSize( 500, 200 ), wxDefaultSize );
-
     wxBoxSizer* m_mainSizer= new wxBoxSizer( wxVERTICAL );
 
-    m_filePicker = new wxFilePickerCtrl( this, wxID_ANY, aPath,
+    // Ctreate the file picker. The path will be set later, when the widget size
+    // is set to.
+    m_filePicker = new wxFilePickerCtrl( this, wxID_ANY, "",
                                          _("Select a GenCAD export filename"),
                                          GencadFileWildcard(),
                                          wxDefaultPosition, wxSize( -1,-1 ),
@@ -60,8 +59,13 @@ DIALOG_GENCAD_EXPORT_OPTIONS::DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aPar
     m_mainSizer->Add( stdButtons, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
     SetSizer( m_mainSizer );
-    Layout();
-    m_mainSizer->Fit( this );
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
+
+    // Set the path in m_filePicker, now the size is set
+    // (otherwize the text is truncated)
+    m_filePicker->SetPath( aPath );
 
     Centre( wxBOTH );
 }

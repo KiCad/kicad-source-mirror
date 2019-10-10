@@ -46,7 +46,7 @@ enum HASH_FLAGS
     ALL         = 0xff
 };
 
-/*
+/**
  * Calculates hash of an EDA_ITEM.
  * @param aItem is the item for which the hash will be computed.
  * @return Hash value.
