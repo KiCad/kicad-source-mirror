@@ -50,7 +50,7 @@ DIALOG_GENCAD_EXPORT_OPTIONS::DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aPar
 
     wxBoxSizer* m_fileSizer = new wxBoxSizer( wxHORIZONTAL );
 
-    m_filePath = new wxTextCtrl( this, wxID_ANY, fn.GetFullPath() );
+    m_filePath = new wxTextCtrl( this, wxID_ANY );
     m_fileSizer->Add( m_filePath, 1, wxEXPAND | wxRIGHT, 5 );
 
     wxButton* m_browseBtn = new wxButton( this, wxID_ANY, _( "Browse" ) );
@@ -72,6 +72,10 @@ DIALOG_GENCAD_EXPORT_OPTIONS::DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aPar
     SetSizer( m_mainSizer );
     Layout();
     m_mainSizer->Fit( this );
+
+    // Now the widgets sizes are fixed, we can initialize the m_filePath value.
+    // It will be correctly displayed
+    m_filePath->SetValue( fn.GetFullPath() );
 
     Centre( wxBOTH );
 }

@@ -721,10 +721,10 @@ static size_t hashModule( const MODULE* aModule )
                 | HASH_FLAGS::ROTATION | HASH_FLAGS::LAYER;
 
     for( const BOARD_ITEM* i = aModule->GraphicalItemsList(); i; i = i->Next() )
-        ret ^= hash_eda( i, flags );
+        ret += hash_eda( i, flags );
 
     for( const D_PAD* i = aModule->PadsList(); i; i = i->Next() )
-        ret ^= hash_eda( i, flags );
+        ret += hash_eda( i, flags );
 
     return ret;
 }
