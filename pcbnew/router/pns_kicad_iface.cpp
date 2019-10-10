@@ -1006,6 +1006,23 @@ bool PNS_KICAD_IFACE::IsAnyLayerVisible( const LAYER_RANGE& aLayer )
 }
 
 
+bool PNS_KICAD_IFACE::IsItemVisible( const PNS::ITEM* aItem )
+{
+    if( !m_view )
+        return false;
+
+    auto item = aItem->Parent();
+    auto activeLayers = m_view->GetPainter()->GetSettings()->GetActiveLayers();
+    bool isHighContrast = m_view->GetPainter()->GetSettings()->GetHighContrast();
+
+    if( m_view->IsVisible( item ) && ( !isHighContrast || activeLayers.count( item->GetLayer() ) )
+            && item->ViewGetLOD( item->GetLayer(), m_view ) < m_view->GetScale() )
+        return true;
+
+    return false;
+}
+
+
 void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
 {
     int worstPadClearance = 0;

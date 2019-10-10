@@ -35,12 +35,12 @@ using namespace std::placeholders;
 #include <class_module.h>
 #include <class_zone.h>
 
+#include <gal/graphics_abstraction_layer.h>
+#include <geometry/shape_line_chain.h>
+#include <math/vector2d.h>
 #include <painter.h>
 #include <view/view.h>
 #include <view/view_controls.h>
-#include <gal/graphics_abstraction_layer.h>
-
-#include <geometry/shape_line_chain.h>
 
 #include "grid_helper.h"
 
@@ -52,6 +52,8 @@ GRID_HELPER::GRID_HELPER( PCB_BASE_FRAME* aFrame ) :
     m_enableSnap = true;
     m_enableGrid = true;
     m_snapSize = 100;
+    m_snapItem = nullptr;
+
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
 
     m_viewAxis.SetSize( 20000 );
@@ -243,8 +245,8 @@ std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea,
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
 
         // The item must be visible and on an active layer
-        if( view->IsVisible( item )
-                && ( !isHighContrast || activeLayers.count( it.second ) ) )
+        if( view->IsVisible( item ) && ( !isHighContrast || activeLayers.count( it.second ) )
+                && item->ViewGetLOD( it.second, view ) < view->GetScale() )
             items.insert ( item );
     }
 
@@ -328,6 +330,9 @@ BOARD_ITEM* GRID_HELPER::GetSnapped( void ) const
 void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, const bool aFrom )
 {
     VECTOR2I origin;
+    auto     view = m_frame->GetGalCanvas()->GetView();
+    auto     activeLayers = view->GetPainter()->GetSettings()->GetActiveLayers();
+    bool     isHighContrast = view->GetPainter()->GetSettings()->GetHighContrast();
 
     switch( aItem->Type() )
     {
@@ -337,8 +342,12 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, co
 
             for( auto pad : mod->Pads() )
             {
-                if( ( aFrom || m_frame->Settings().m_magneticPads == CAPTURE_ALWAYS ) &&
-                        pad->GetBoundingBox().Contains( wxPoint( aRefPos.x, aRefPos.y ) ) )
+                // Getting pads from the module requires re-checking that the pad is shown
+                if( ( aFrom || m_frame->Settings().m_magneticPads == CAPTURE_ALWAYS )
+                        && pad->GetBoundingBox().Contains( wxPoint( aRefPos.x, aRefPos.y ) )
+                        && view->IsVisible( pad )
+                        && ( !isHighContrast || activeLayers.count( pad->GetLayer() ) )
+                        && pad->ViewGetLOD( pad->GetLayer(), view ) < view->GetScale() )
                 {
                     addAnchor( pad->GetPosition(), CORNER | SNAPPABLE, pad );
                     break;

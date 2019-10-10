@@ -53,6 +53,7 @@ public:
     void SyncWorld( PNS::NODE* aWorld ) override;
     void EraseView() override;
     bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) override;
+    bool IsItemVisible( const PNS::ITEM* aItem ) override;
     void HideItem( PNS::ITEM* aItem ) override;
     void DisplayItem( const PNS::ITEM* aItem, int aColor = 0, int aClearance = 0, bool aEdit = false ) override;
     void AddItem( PNS::ITEM* aItem ) override;

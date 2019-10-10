@@ -389,7 +389,7 @@ const VECTOR2I TOOL_BASE::snapToItem( bool aEnabled, ITEM* aItem, VECTOR2I aP)
 {
     VECTOR2I anchor;
 
-    if( !aItem || !aEnabled )
+    if( !aItem || !aEnabled || !m_iface->IsItemVisible( aItem ) )
     {
         return m_gridHelper->Align( aP );
     }
