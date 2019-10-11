@@ -1078,7 +1078,8 @@ bool PNS_KICAD_IFACE::IsItemVisible( const PNS::ITEM* aItem )
     auto activeLayers = m_view->GetPainter()->GetSettings()->GetActiveLayers();
     bool isHighContrast = m_view->GetPainter()->GetSettings()->GetHighContrast();
 
-    if( m_view->IsVisible( item ) && ( !isHighContrast || activeLayers.count( item->GetLayer() ) )
+    if( item && m_view->IsVisible( item )
+            && ( !isHighContrast || activeLayers.count( item->GetLayer() ) )
             && item->ViewGetLOD( item->GetLayer(), m_view ) < m_view->GetScale() )
         return true;
 
