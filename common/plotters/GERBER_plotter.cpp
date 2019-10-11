@@ -524,7 +524,10 @@ void GERBER_PLOTTER:: PlotPoly( const std::vector< wxPoint >& aCornerList,
         for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
             LineTo( aCornerList[ii] );
 
-        FinishTo( aCornerList[0] );
+        // If the polygon is not closed, close it:
+        if( aCornerList[0] != aCornerList[aCornerList.size()-1] )
+            FinishTo( aCornerList[0] );
+
         fputs( "G37*\n", outputFile );
     }
 
