@@ -619,14 +619,14 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
                 m_Drawings.Append( gbritem );
                 gbritem->m_Shape = GBR_POLYGON;
                 gbritem->m_Flashed = false;
+                gbritem->m_DCode = 0;   // No DCode for a Polygon (Region in Gerber dialect)
 
-                tool = GetDCODE( m_Current_Tool );
-
-                if( tool )
-                    gbritem->m_DCode = tool->m_Num_Dcode;
 
                 if( gbritem->m_GerberImageFile )
+                {
                     gbritem->SetNetAttributes( gbritem->m_GerberImageFile->m_NetAttributeDict );
+                    gbritem->m_AperFunction = gbritem->m_GerberImageFile->m_AperFunction;
+                }
             }
 
             switch( m_Iterpolation )

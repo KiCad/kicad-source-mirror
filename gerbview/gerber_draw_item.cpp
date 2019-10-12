@@ -662,14 +662,26 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PAN
     msg = ShowGBRShape();
     aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg, DARKCYAN ) );
 
-    // Display D_Code value with its attributes:
-    msg.Printf( _( "D Code %d" ), m_DCode );
-    D_CODE* apertDescr = GetDcodeDescr();
+    // Display D_Code value with its attributes for items using a DCode:
+    if( m_Shape == GBR_POLYGON )    // Has no DCode, but can have an attribute
+    {
+        msg = _( "Attribut" );
 
-    if( !apertDescr || apertDescr->m_AperFunction.IsEmpty() )
-        text = _( "No attribute" );
+        if( m_AperFunction.IsEmpty() )
+            text = _( "No attribute" );
+        else
+            text = m_AperFunction;
+    }
     else
-        text = apertDescr->m_AperFunction;
+    {
+        msg.Printf( _( "D Code %d" ), m_DCode );
+        D_CODE* apertDescr = GetDcodeDescr();
+
+        if( !apertDescr || apertDescr->m_AperFunction.IsEmpty() )
+            text = _( "No attribute" );
+        else
+            text = apertDescr->m_AperFunction;
+    }
 
     aList.push_back( MSG_PANEL_ITEM( msg, text, RED ) );
 

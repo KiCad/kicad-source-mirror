@@ -89,8 +89,14 @@ public:
                                             // Lines : m_Size.x = m_Size.y = line width
     bool               m_Flashed;           // True for flashed items
     int                m_DCode;             // DCode used to draw this item.
-                                            // Allowed values are 10 to 999. 0 when unknown
+                                            // Allowed values are >= 10. 0 when unknown
                                             // values 0 to 9 can be used for special purposes
+                                            // Regions (polygons) doo not use DCode,
+                                            // so it is set to 0
+    wxString           m_AperFunction;      // the aperture function set by a %TA.AperFunction, xxx
+                                            // (stores thre xxx value).
+                                            // used for regions that do not have a attached DCode, but
+                                            // have a TA.AperFunction defined
     GERBER_FILE_IMAGE* m_GerberImageFile;   /* Gerber file image source of this item
                                              * Note: some params stored in this class are common
                                              * to the whole gerber file (i.e) the whole graphic
