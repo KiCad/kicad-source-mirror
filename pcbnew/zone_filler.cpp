@@ -48,6 +48,7 @@
 #include <geometry/convex_hull.h>
 #include <geometry/geometry_utils.h>
 #include <confirm.h>
+#include <convert_to_biu.h>
 
 #include "zone_filler.h"
 
@@ -995,10 +996,15 @@ void ZONE_FILLER::addHatchFillTypeOnZone( const ZONE_CONTAINER* aZone, SHAPE_POL
 {
     // Build grid:
 
-    // obvously line thickness must be > zone min thickness. However, it should be
-    // the case because the zone dialog setup ensure that. However, it can happens
-    // if a board file was edited by hand by a python script
-    int thickness = std::max( aZone->GetHatchFillTypeThickness(), aZone->GetMinThickness()+2 );
+    // obviously line thickness must be > zone min thickness.
+    // It can happens if a board file was edited by hand by a python script
+    // Use 1 micron margin to be *sure* there is no issue in Gerber files
+    // (Gbr file unit = 1 or 10 nm) due to some truncation in coordinates or calculations
+    // This margin also avoid problems due to rounding coordinates in next calculations
+    // that can create incorrect polygons
+    int thickness = std::max( aZone->GetHatchFillTypeThickness(),
+                              aZone->GetMinThickness()+Millimeter2iu( 0.001 ) );
+
     int linethickness = thickness - aZone->GetMinThickness();
     int gridsize = thickness + aZone->GetHatchFillTypeGap();
     double orientation = aZone->GetHatchFillTypeOrientation();
