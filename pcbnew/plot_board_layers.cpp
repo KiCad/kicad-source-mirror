@@ -605,7 +605,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
         if( needFracture )
         {
-            aggregateArea.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            aggregateArea.Unfracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
             aggregateArea.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
         }
 
