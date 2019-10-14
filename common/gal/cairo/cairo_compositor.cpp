@@ -102,10 +102,10 @@ unsigned int CAIRO_COMPOSITOR::CreateBuffer()
                                                         CAIRO_FORMAT_ARGB32, m_width,
                                                         m_height, m_stride );
     cairo_t* context = cairo_create( surface );
-#ifdef __WXDEBUG__
+#ifdef DEBUG
     cairo_status_t status = cairo_status( context );
     wxASSERT_MSG( status == CAIRO_STATUS_SUCCESS, wxT( "Cairo context creation error" ) );
-#endif /* __WXDEBUG__ */
+#endif /* DEBUG */
 
     // Set default settings for the buffer
     cairo_set_antialias( context, m_currentAntialiasingMode );
