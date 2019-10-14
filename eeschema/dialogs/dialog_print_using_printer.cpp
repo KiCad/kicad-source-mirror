@@ -330,7 +330,7 @@ bool SCH_PRINTOUT::OnBeginDocument( int startPage, int endPage )
     if( !wxPrintout::OnBeginDocument( startPage, endPage ) )
         return false;
 
-#ifdef __WXDEBUG__
+#ifdef DEBUG
     wxLogDebug( wxT( "Printer name: " ) +
                 m_parent->GetPageSetupData().GetPrintData().GetPrinterName() );
     wxLogDebug( wxT( "Paper ID: %d" ),

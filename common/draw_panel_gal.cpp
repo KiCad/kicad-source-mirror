@@ -40,7 +40,7 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 
-#ifdef __WXDEBUG__
+#ifdef PROFILE
 #include <profile.h>
 #endif /* PROFILE */
 
@@ -160,7 +160,7 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     if( m_drawing )
         return;
 
-#ifdef __WXDEBUG__
+#ifdef PROFILE
     PROF_COUNTER totalRealTime;
 #endif /* PROFILE */
 
@@ -213,7 +213,7 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
                             wxString( err.what() ) );
     }
 
-#ifdef __WXDEBUG__
+#ifdef PROFILE
     totalRealTime.Stop();
     wxLogTrace( "GAL_PROFILE", "EDA_DRAW_PANEL_GAL::onPaint(): %.1f ms", totalRealTime.msecs() );
 #endif /* PROFILE */

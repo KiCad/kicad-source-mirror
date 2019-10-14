@@ -28,8 +28,8 @@
  * @brief Simple profiling functions for measuring code execution time.
  */
 
-#ifndef __TPROFILE_H
-#define __TPROFILE_H
+#ifndef TPROFILE_H
+#define TPROFILE_H
 
 #include <chrono>
 #include <string>
@@ -207,4 +207,4 @@ private:
  */
 unsigned GetRunningMicroSecs();
 
-#endif
+#endif  // TPROFILE_H
