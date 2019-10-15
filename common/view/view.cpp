@@ -1526,7 +1526,7 @@ bool VIEW::IsVisible( const VIEW_ITEM* aItem ) const
 {
     const auto viewData = aItem->viewPrivData();
 
-    return viewData->m_flags & VISIBLE;
+    return viewData && ( viewData->m_flags & VISIBLE );
 }
 
 
