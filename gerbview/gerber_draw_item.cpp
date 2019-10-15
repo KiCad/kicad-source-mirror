@@ -665,7 +665,7 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PAN
     // Display D_Code value with its attributes for items using a DCode:
     if( m_Shape == GBR_POLYGON )    // Has no DCode, but can have an attribute
     {
-        msg = _( "Attribut" );
+        msg = _( "Attribute" );
 
         if( m_AperFunction.IsEmpty() )
             text = _( "No attribute" );
