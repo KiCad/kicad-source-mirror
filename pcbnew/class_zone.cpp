@@ -76,8 +76,6 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
 ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     BOARD_CONNECTED_ITEM( aZone )
 {
-    // Should the copy be on the same net?
-    SetNetCode( aZone.GetNetCode() );
     m_Poly = new SHAPE_POLY_SET( *aZone.m_Poly );
 
     // For corner moving, corner index to drag, or nullptr if no selection
@@ -115,6 +113,10 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
 
     SetLayerSet( aZone.GetLayerSet() );
     SetLocalFlags( aZone.GetLocalFlags() );
+
+    // Now zone type and layer are set, transfer net info
+    // (has meaning only for copper zones)
+    SetNetCode( aZone.GetNetCode() );
 
     SetNeedRefill( aZone.NeedRefill() );
 }
