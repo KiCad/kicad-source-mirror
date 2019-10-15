@@ -1071,15 +1071,33 @@ bool PNS_KICAD_IFACE::IsAnyLayerVisible( const LAYER_RANGE& aLayer )
 
 bool PNS_KICAD_IFACE::IsItemVisible( const PNS::ITEM* aItem )
 {
-    if( !m_view )
+    if( !m_view || !aItem->Parent() )
         return false;
 
     auto item = aItem->Parent();
-    auto activeLayers = m_view->GetPainter()->GetSettings()->GetActiveLayers();
-    bool isHighContrast = m_view->GetPainter()->GetSettings()->GetHighContrast();
+    bool isOnVisibleLayer = true;
 
-    if( item && m_view->IsVisible( item )
-            && ( !isHighContrast || activeLayers.count( item->GetLayer() ) )
+    if( m_view->GetPainter()->GetSettings()->GetHighContrast() )
+    {
+        int  layers[KIGFX::VIEW::VIEW_MAX_LAYERS];
+        int  layers_count;
+        auto activeLayers = m_view->GetPainter()->GetSettings()->GetActiveLayers();
+
+        isOnVisibleLayer = false;
+        item->ViewGetLayers( layers, layers_count );
+
+        for( int i = 0; i < layers_count; ++i )
+        {
+            // Item is on at least one of the active layers
+            if( activeLayers.count( layers[i] ) > 0 )
+            {
+                isOnVisibleLayer = true;
+                break;
+            }
+        }
+    }
+
+    if( m_view->IsVisible( item ) && isOnVisibleLayer
             && item->ViewGetLOD( item->GetLayer(), m_view ) < m_view->GetScale() )
         return true;
 
