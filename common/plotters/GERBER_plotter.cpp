@@ -781,7 +781,8 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
 
         emitDcode( pos_dev, 3 );
     }
-    else    // Plot pad as a segment.
+    else    // Plot pad as region.
+            // Only regions and flashed items accept a object attribute TO.P for the pin name
     {
         if( size.x > size.y )
         {
@@ -797,7 +798,8 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
         {
             // TODO: use an aperture macro to declare the rotated pad
             // to be able to flash the shape
-            // For now, the pad is painted.
+            // For now, the pad is drawn as polygon (region in Gerber dialect),
+            // with TO attributes of a flased pad
 
             // The pad is reduced to an segment with dy > dx
             int delta = size.y - size.x;
@@ -807,28 +809,30 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
             int y1    = delta / 2;
             RotatePoint( &x0, &y0, orient );
             RotatePoint( &x1, &y1, orient );
-            GBR_METADATA metadata;
 
-            if( gbr_metadata )
+            SHAPE_POLY_SET outline;
+            // Max error to approximate arcs by segments
+            // Currently 2 micrometers give a good approximation
+            double iu_per_micron =  m_IUsPerDecimil / 2.54;
+            int arc_approx_error =  KiROUND( iu_per_micron * 2 );
+
+            TransformOvalToPolygon( outline,
+                                    wxPoint( pos.x + x0, pos.y + y0 ),
+                                    wxPoint( pos.x + x1, pos.y + y1 ),
+                                    size.x, arc_approx_error );
+
+            std::vector<wxPoint> cornerList;
+
+            for( int ii = 0; ii < outline.Outline(0).PointCount(); ++ii )
             {
-                metadata = *gbr_metadata;
-
-#if 0   // See if one can use TO.P attribute in this case (only one segment to draw a pad)
-                // Clear .P attribute, only allowed for flashed items
-                // (not allowed for painted pads)
-                wxString attrname( ".P" );
-                metadata.m_NetlistMetadata.ClearAttribute( &attrname );
-#endif
+                VECTOR2I& point = outline.Outline(0).Point( ii );
+                cornerList.emplace_back( wxPoint( point.x, point.y ) );
             }
 
-            ThickSegment( wxPoint( pos.x + x0, pos.y + y0 ),
-                           wxPoint( pos.x + x1, pos.y + y1 ),
-                           size.x, trace_mode, &metadata );
+            PlotGerberRegion( cornerList, gbr_metadata );
         }
         else
-        {
             sketchOval( pos, size, orient, -1 );
-        }
     }
 }
 
