@@ -167,11 +167,6 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                 << HtmlHyperlink( "https://forum.kicad.info" )
                 << "</li>";
 
-    description << "<li>"
-                <<_(  "KiCad user's group - " )
-                << HtmlHyperlink( "https://groups.yahoo.com/neo/groups/kicad-users/info" )
-                << "</li>";
-
     description << "</ul></p>";
 
     aInfo.SetDescription( description );
