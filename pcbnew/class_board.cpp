@@ -1729,17 +1729,6 @@ D_PAD* BOARD::GetPad( unsigned aIndex ) const
     return nullptr;
 }
 
-void BOARD::ClearAllNetCodes()
-{
-    for( auto zone : Zones() )
-        zone->SetNetCode( 0 );
-
-    for( auto pad : GetPads() )
-        pad->SetNetCode( 0 );
-
-    for( auto track : Tracks() )
-        track->SetNetCode( 0 );
-}
 
 const std::vector<BOARD_CONNECTED_ITEM*> BOARD::AllConnectedItems()
 {
@@ -1767,9 +1756,31 @@ const std::vector<BOARD_CONNECTED_ITEM*> BOARD::AllConnectedItems()
     return items;
 }
 
+
+void BOARD::ClearAllNetCodes()
+{
+    for ( BOARD_CONNECTED_ITEM* item : AllConnectedItems() )
+        item->SetNetCode( 0 );
+}
+
+
+void BOARD::MapNets( const BOARD* aDestBoard )
+{
+    for ( BOARD_CONNECTED_ITEM* item : AllConnectedItems() )
+    {
+        NETINFO_ITEM* netInfo = aDestBoard->FindNet( item->GetNetname() );
+
+        if( netInfo )
+            item->SetNetCode( netInfo->GetNet() );
+        else
+            item->SetNetCode( 0 );
+    }
+}
+
+
 void BOARD::SanitizeNetcodes()
 {
-    for ( auto item : AllConnectedItems() )
+    for ( BOARD_CONNECTED_ITEM* item : AllConnectedItems() )
     {
         if( FindNet( item->GetNetCode() ) == nullptr )
             item->SetNetCode( NETINFO_LIST::ORPHANED );

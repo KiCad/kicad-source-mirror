@@ -584,7 +584,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
         return 0;
 
     if( clipItem->Type() == PCB_T )
-        static_cast<BOARD*>( clipItem )->ClearAllNetCodes();
+        static_cast<BOARD*>( clipItem )->MapNets( m_frame->GetBoard() );
 
     bool editModules = m_editModules || frame()->IsType( FRAME_FOOTPRINT_EDITOR );
 
@@ -608,6 +608,9 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
             }
 
             placeBoardItems( static_cast<BOARD*>( clipItem ), true );
+
+            m_frame->Compile_Ratsnest( true );
+            m_frame->GetBoard()->BuildConnectivity();
             break;
         }
 
