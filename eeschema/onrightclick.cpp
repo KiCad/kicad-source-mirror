@@ -684,10 +684,6 @@ void SCH_EDIT_FRAME::addJunctionMenuEntries( wxMenu* aMenu, SCH_JUNCTION* aJunct
     {
         if( m_collectedItems.IsDraggableJunction() )
             AddMenuItem( aMenu, ID_SCH_DRAG_ITEM, _( "Drag Junction" ), KiBitmap( drag_xpm ) );
-
-        if( screen->GetWire( aJunction->GetPosition(), EXCLUDE_END_POINTS_T ) )
-            AddMenuItem( aMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ),
-                         KiBitmap( break_line_xpm ) );
     }
 
     if( screen->GetWireOrBus( aJunction->GetPosition() ) )
@@ -702,7 +698,6 @@ void SCH_EDIT_FRAME::addJunctionMenuEntries( wxMenu* aMenu, SCH_JUNCTION* aJunct
 
 void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
 {
-    SCH_SCREEN* screen = frame->GetScreen();
     wxPoint     pos    = frame->GetCrossHairPosition();
     wxString    msg;
 
@@ -729,12 +724,7 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
                  KiBitmap( delete_node_xpm ) );
     AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE_CONNECTION, _( "Delete Connection" ),
                  KiBitmap( delete_connection_xpm ) );
-
-    SCH_LINE* line = screen->GetWireOrBus( frame->GetCrossHairPosition() );
-
-    if( line && !line->IsEndPoint( frame->GetCrossHairPosition() ) )
-        AddMenuItem( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ),
-                     KiBitmap( break_line_xpm ) );
+    AddMenuItem( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ), KiBitmap( break_line_xpm ) );
 
     PopMenu->AppendSeparator();
 
@@ -771,7 +761,6 @@ void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
 
     msg = AddHotkeyName( _( "Delete Bus" ), g_Schematic_Hotkeys_Descr, HK_DELETE );
     AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE, msg, KiBitmap( delete_bus_xpm ) );
-
     AddMenuItem( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Bus" ), KiBitmap( break_bus_xpm ) );
 
     PopMenu->AppendSeparator();
