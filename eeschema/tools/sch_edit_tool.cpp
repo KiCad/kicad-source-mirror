@@ -1364,10 +1364,13 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 {
-    VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
+    auto cursorPos = wxPoint( getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) ) );
 
-    if( m_frame->BreakSegments( (wxPoint) cursorPos ) )
+    if( m_frame->BreakSegments( cursorPos ) )
     {
+        if( m_frame->GetScreen()->IsJunctionNeeded( cursorPos, true ) )
+            m_frame->AddJunction( cursorPos, true, false );
+
         m_frame->TestDanglingEnds();
 
         m_frame->OnModify();
