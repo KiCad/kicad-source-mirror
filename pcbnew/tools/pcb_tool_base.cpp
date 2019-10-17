@@ -181,10 +181,8 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
         else if( newItem && evt->Category() == TC_COMMAND )
         {
             /*
-             * Handle any events that can affect the item as we move
-             * it around, eg rotate and flip
+             * Handle any events that can affect the item as we move it around
              */
-
             if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) && ( aOptions & IPO_ROTATE ) )
             {
                 const int rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle( *frame(), *evt );
@@ -194,6 +192,20 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
             else if( evt->IsAction( &PCB_ACTIONS::flip ) && ( aOptions & IPO_FLIP ) )
             {
                 newItem->Flip( newItem->GetPosition(), frame()->Settings().m_FlipLeftRight );
+                view()->Update( &preview );
+            }
+            else if( evt->IsAction( &PCB_ACTIONS::viaSizeInc )
+                    || evt->IsAction( &PCB_ACTIONS::viaSizeDec ) )
+            {
+                // Refresh preview after event runs
+                m_toolMgr->RunAction( ACTIONS::refreshPreview );
+            }
+            else if( evt->IsAction( &ACTIONS::refreshPreview ) )
+            {
+                preview.Clear();
+                newItem.release();
+
+                makeNewItem( controls()->GetCursorPosition() );
                 view()->Update( &preview );
             }
         }
