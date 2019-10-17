@@ -161,6 +161,9 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
         plotter.FlashPadCircle( flash_pos, flash_diam, FILLED, &gbr_metadata );
         gbr_metadata.m_NetlistMetadata.ClearExtraData();
 
+        // Now some extra metadata is output, avoid blindly clearing the full metadata list
+        gbr_metadata.m_NetlistMetadata.m_TryKeepPreviousAttributes = true;
+
         if( footprint->BuildPolyCourtyard() )
         {
             int thickness = Millimeter2iu( 0.1 );   // arbitrary but reasonable value

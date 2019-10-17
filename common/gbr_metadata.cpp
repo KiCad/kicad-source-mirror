@@ -493,17 +493,28 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
     // (only modified or new attributes are stored here):
     std::string short_attribute_string;
 
+    // Attributes have changed: update attribute string, and see if the previous attribute
+    // list (dictionary in Gerber language) must be cleared
     if( aLastNetAttributes != full_attribute_string )
     {
-        // first, remove no more existing attributes.
+        // first, remove no longer existing attributes.
         // Because in Kicad the full attribute list is evaluated for each object,
         // the entire dictionary is cleared
+        // If m_TryKeepPreviousAttributes is true, only the no longer existing attribute
+        // is cleared.
+        // Note: to avoid interaction beteween clear attributes and set attributes
+        // the clear attribute is inserted first.
         bool clearDict = false;
 
         if( aLastNetAttributes.find( "TO.P," ) != std::string::npos )
         {
             if( pad_attribute_string.empty() )  // No more this attribute
-                clearDict = true;
+            {
+                if( aData->m_TryKeepPreviousAttributes )    // Clear only this attribute
+                    short_attribute_string.insert( 0, prepend_string + "TO.P" + eol_string );
+                else
+                    clearDict = true;
+            }
             else if( aLastNetAttributes.find( pad_attribute_string )
                      == std::string::npos )     // This attribute has changed
                 short_attribute_string += pad_attribute_string;
@@ -514,7 +525,12 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
         if( aLastNetAttributes.find( "TO.N," ) != std::string::npos )
         {
             if( net_attribute_string.empty() )  // No more this attribute
-                clearDict = true;
+            {
+                if( aData->m_TryKeepPreviousAttributes )    // Clear only this attribute
+                    short_attribute_string.insert( 0, prepend_string + "TO.N" + eol_string );
+                else
+                    clearDict = true;
+            }
             else if( aLastNetAttributes.find( net_attribute_string )
                      == std::string::npos )     // This attribute has changed
                 short_attribute_string += net_attribute_string;
@@ -525,7 +541,19 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
         if( aLastNetAttributes.find( "TO.C," ) != std::string::npos )
         {
             if( cmp_attribute_string.empty() )  // No more this attribute
-                clearDict = true;
+            {
+                if( aData->m_TryKeepPreviousAttributes )    // Clear only this attribute
+                {
+                    // Refinement:
+                    // the attribute will be cleared only if there is no pad attribute.
+                    // If a pad attribute exists, the component name exists so the old
+                    // TO.C value will be updated, therefore no need to clear it before updating
+                    if( pad_attribute_string.empty() )
+                        short_attribute_string.insert( 0, prepend_string + "TO.C" + eol_string );
+                }
+                else
+                    clearDict = true;
+            }
             else if( aLastNetAttributes.find( cmp_attribute_string )
                      == std::string::npos )     // This attribute has changed
                 short_attribute_string += cmp_attribute_string;

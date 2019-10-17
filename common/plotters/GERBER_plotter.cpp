@@ -574,11 +574,11 @@ void GERBER_PLOTTER::PlotGerberRegion( const std::vector< wxPoint >& aCornerList
     {
         if( m_useX2format )
         {
-            fputs( "%TD,.AperFunction*%\n", outputFile );
+            fputs( "%TD.AperFunction*%\n", outputFile );
         }
         else
         {
-            fputs( "G04 #@! TD,.AperFunction*\n", outputFile );
+            fputs( "G04 #@! TD.AperFunction*\n", outputFile );
         }
     }
 }

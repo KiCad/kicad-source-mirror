@@ -125,9 +125,16 @@ public:
 
     wxString m_ExtraData;       ///< a string to print after %TO object attributes, if not empty
                                 ///< it is printed "as this"
+    /** If true, do not clear all attributes when a atribute has changed
+     *  Usefull when some attributes need to be persistant.
+     *  If false, attributes will be cleared if only one attribute cleared
+     *  This is a more secure way to set attributes, when all attribute changess are not safely managed
+     */
+    bool     m_TryKeepPreviousAttributes;
 
 
-    GBR_NETLIST_METADATA(): m_NetAttribType( GBR_NETINFO_UNSPECIFIED ), m_NotInNet( false )
+    GBR_NETLIST_METADATA(): m_NetAttribType( GBR_NETINFO_UNSPECIFIED ),
+            m_NotInNet( false ), m_TryKeepPreviousAttributes( false )
     {
     }
 
