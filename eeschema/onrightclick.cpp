@@ -148,17 +148,6 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         // If the clarify item selection context menu is aborted, don't show the context menu.
         if( item == NULL && actionCancelled )
             return false;
-
-        if( item )
-        {
-            SCH_LINE* line = dynamic_cast<SCH_LINE*>( item );
-
-            // The schematic lines have two possible points to use
-            if( line )
-                SetCrossHairPosition( line->GetClosestPoint( aPosition ), false );
-            else
-                SetCrossHairPosition( item->GetPosition(), false );
-        }
     }
 
     // If a command is in progress: add "cancel" and "end tool" menu
