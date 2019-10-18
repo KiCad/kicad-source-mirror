@@ -111,7 +111,7 @@ public:
 
     /**
      * Function IsBBoxInside
-     * @brief Tests if the bounding is out, intersects or is complety inside
+     * @brief Tests if the bounding is out, intersects or is completely inside
      * @return INTERSECTION_RESULT
      */
     virtual INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const = 0;
