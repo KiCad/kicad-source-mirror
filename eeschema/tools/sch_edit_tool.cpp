@@ -902,6 +902,9 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
     {
         SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
 
+        if( !sch_item )
+            continue;
+
         if( sch_item->Type() == SCH_JUNCTION_T )
         {
             sch_item->SetFlags( STRUCT_DELETED );

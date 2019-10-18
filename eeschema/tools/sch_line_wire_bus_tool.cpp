@@ -866,10 +866,10 @@ int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( const TOOL_EVENT& aEvent )
 
     for( unsigned ii = 0; ii < aSelection->GetSize(); ii++ )
     {
-        SCH_ITEM*            item = static_cast<SCH_ITEM*>( aSelection->GetItem( ii ) );
+        SCH_ITEM*            item = dynamic_cast<SCH_ITEM*>( aSelection->GetItem( ii ) );
         std::vector<wxPoint> new_pts;
 
-        if( !item->IsConnectable() )
+        if( !item || !item->IsConnectable() )
             continue;
 
         item->GetConnectionPoints( new_pts );
