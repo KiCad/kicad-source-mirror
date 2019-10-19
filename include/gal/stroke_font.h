@@ -42,7 +42,7 @@ namespace KIGFX
 {
 class GAL;
 
-typedef std::deque< std::deque<VECTOR2D> > GLYPH;
+typedef std::vector<std::vector<VECTOR2D>> GLYPH;
 typedef std::vector<GLYPH>                 GLYPH_LIST;
 
 /**
