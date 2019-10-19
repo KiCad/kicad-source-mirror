@@ -117,9 +117,9 @@ SIM_TYPE NETLIST_EXPORTER_PSPICE_SIM::GetSimType()
 SIM_TYPE NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( const wxString& aCmd )
 {
     const std::map<wxString, SIM_TYPE> simCmds = {
-        { ".ac", ST_AC }, { ".dc", ST_DC }, { ".disto", ST_DISTORTION }, { ".noise", ST_NOISE },
-        { ".op", ST_OP }, { ".pz", ST_POLE_ZERO }, { ".sens", ST_SENSITIVITY }, { ".tf", ST_TRANS_FUNC },
-        { ".tran", ST_TRANSIENT }
+        { ".ac ", ST_AC }, { ".dc ", ST_DC }, { ".disto ", ST_DISTORTION }, { ".noise ", ST_NOISE },
+        { ".op ", ST_OP }, { ".pz ", ST_POLE_ZERO }, { ".sens ", ST_SENSITIVITY }, { ".tf ", ST_TRANS_FUNC },
+        { ".tran ", ST_TRANSIENT }
     };
     wxString lcaseCmd = aCmd.Lower();
 
