@@ -60,7 +60,7 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
         double   glyphEndX = 0.0;
         VECTOR2D glyphBoundingX;
 
-        std::deque<VECTOR2D>* pointList = nullptr;
+        std::vector<VECTOR2D>* pointList = nullptr;
 
         int i = 0;
 
@@ -105,7 +105,7 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 
                 if( !pointList )
                 {
-                    glyph.emplace_back( std::deque<VECTOR2D>() );
+                    glyph.emplace_back( std::vector<VECTOR2D>() );
                     pointList = &glyph.back();
                 }
 
@@ -140,17 +140,16 @@ BOX2D STROKE_FONT::computeBoundingBox( const GLYPH& aGLYPH, const VECTOR2D& aGLY
 {
     BOX2D boundingBox;
 
-    std::deque<VECTOR2D> boundingPoints;
+    std::vector<VECTOR2D> boundingPoints;
 
     boundingPoints.emplace_back( VECTOR2D( aGLYPHBoundingX.x, 0 ) );
     boundingPoints.emplace_back( VECTOR2D( aGLYPHBoundingX.y, 0 ) );
 
-    for( GLYPH::const_iterator pointListIt = aGLYPH.begin(); pointListIt != aGLYPH.end(); ++pointListIt )
+    for( const auto& pointList : aGLYPH )
     {
-        for( std::deque<VECTOR2D>::const_iterator pointIt = pointListIt->begin();
-                pointIt != pointListIt->end(); ++pointIt )
+        for( const auto& pt : pointList )
         {
-            boundingPoints.emplace_back( VECTOR2D( aGLYPHBoundingX.x, pointIt->y ) );
+            boundingPoints.emplace_back( aGLYPHBoundingX.x, pt.y );
         }
     }
 
@@ -341,15 +340,13 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
             last_had_overbar = false;
         }
 
-        for( GLYPH::iterator pointListIt = glyph.begin(); pointListIt != glyph.end();
-             ++pointListIt )
+        for( const auto& pointList : glyph )
         {
             std::deque<VECTOR2D> pointListScaled;
 
-            for( std::deque<VECTOR2D>::iterator pointIt = pointListIt->begin();
-                 pointIt != pointListIt->end(); ++pointIt )
+            for( const auto& pt : pointList )
             {
-                VECTOR2D pointPos( pointIt->x * glyphSize.x + xOffset, pointIt->y * glyphSize.y );
+                VECTOR2D pointPos( pt.x * glyphSize.x + xOffset, pt.y * glyphSize.y );
 
                 if( m_gal->IsFontItalic() )
                 {
