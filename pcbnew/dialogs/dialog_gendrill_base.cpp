@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -77,7 +77,7 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 
 	sbSizer6->Add( bSizerExcellonOptions, 1, wxEXPAND|wxLEFT, 12 );
 
-	m_rbGerberX2 = new wxRadioButton( sbSizer6->GetStaticBox(), wxID_ANY, _("Gerber X2 (experimental)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbGerberX2 = new wxRadioButton( sbSizer6->GetStaticBox(), wxID_ANY, _("Gerber X2"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer6->Add( m_rbGerberX2, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
@@ -108,10 +108,10 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	wxString m_Choice_UnitChoices[] = { _("Millimeters"), _("Inches") };
 	int m_Choice_UnitNChoices = sizeof( m_Choice_UnitChoices ) / sizeof( wxString );
 	m_Choice_Unit = new wxRadioBox( this, wxID_ANY, _("Drill Units"), wxDefaultPosition, wxDefaultSize, m_Choice_UnitNChoices, m_Choice_UnitChoices, 1, wxRA_SPECIFY_COLS );
-	m_Choice_Unit->SetSelection( 1 );
+	m_Choice_Unit->SetSelection( 0 );
 	bLeftSizer->Add( m_Choice_Unit, 0, wxALL|wxEXPAND, 5 );
 
-	wxString m_Choice_Zeros_FormatChoices[] = { _("Decimal format"), _("Suppress leading zeros"), _("Suppress trailing zeros"), _("Keep zeros") };
+	wxString m_Choice_Zeros_FormatChoices[] = { _("Decimal format (recommanded)"), _("Suppress leading zeros"), _("Suppress trailing zeros"), _("Keep zeros") };
 	int m_Choice_Zeros_FormatNChoices = sizeof( m_Choice_Zeros_FormatChoices ) / sizeof( wxString );
 	m_Choice_Zeros_Format = new wxRadioBox( this, wxID_ANY, _("Zeros Format"), wxDefaultPosition, wxDefaultSize, m_Choice_Zeros_FormatNChoices, m_Choice_Zeros_FormatChoices, 1, wxRA_SPECIFY_COLS );
 	m_Choice_Zeros_Format->SetSelection( 0 );
