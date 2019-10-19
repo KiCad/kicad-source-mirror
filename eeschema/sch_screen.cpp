@@ -405,19 +405,17 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
         }
     }
 
-    //
-
     // If there are three or more endpoints
-    if( pin_count && pin_count + end_count[0] > 2 )
+    if( pin_count && pin_count + end_count[WIRES] > 2 )
         return true;
 
     // If there is at least one segment that ends on a non-parallel line or
     // junction of two other lines
-    if( has_nonparallel[0] && end_count[0] > 2 )
+    if( has_nonparallel[WIRES] && end_count[WIRES] > 2 )
         return true;
 
     // Check for bus - bus junction requirements
-    if( has_nonparallel[1] && end_count[1] > 2 )
+    if( has_nonparallel[BUSSES] && end_count[BUSSES] > 2 )
         return true;
 
     return false;

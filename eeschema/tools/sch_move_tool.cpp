@@ -146,6 +146,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     EE_SELECTION& selection = m_selectionTool->RequestSelection( movableItems );
     bool          unselect = selection.IsHover();
 
+    // Keep an original copy of the starting points for cleanup after the move
+    std::vector<DANGLING_END_ITEM> internalPoints;
+
     if( selection.Empty() )
         return 0;
 
@@ -181,6 +184,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 // Setup a drag or a move
                 //
                 m_dragAdditions.clear();
+                internalPoints.clear();
 
                 for( SCH_ITEM* it = m_frame->GetScreen()->GetDrawItems(); it; it = it->Next() )
                 {
@@ -218,9 +222,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 else
                 {
                     // Mark the edges of the block with dangling flags for a move.
-                    //
-                    std::vector<DANGLING_END_ITEM> internalPoints;
-
                     for( EDA_ITEM* item : selection )
                         static_cast<SCH_ITEM*>( item )->GetEndPoints( internalPoints );
 
@@ -436,7 +437,16 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     }
     else
     {
+        // If we move items away from a junction, we _may_ want to add a junction there
+        // to denote the state.
+        for( auto it : internalPoints )
+        {
+            if( m_frame->GetScreen()->IsJunctionNeeded( it.GetPosition(), true ) )
+                m_frame->AddJunction( it.GetPosition(), true, false );
+        }
+
         m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selection );
+
         m_frame->SchematicCleanUp();
         m_frame->TestDanglingEnds();
 
