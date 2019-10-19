@@ -41,8 +41,9 @@
 #include <lib_id.h>
 #include <list>
 
-#include <class_text_mod.h>
 #include "zones.h"
+#include <class_text_mod.h>
+#include <class_zone.h>
 
 #include <core/iterators.h>
 
@@ -105,6 +106,7 @@ class MODULE_3D_SETTINGS
 
 DECL_DEQ_FOR_SWIG( PADS, D_PAD* )
 DECL_DEQ_FOR_SWIG( DRAWINGS, BOARD_ITEM* )
+DECL_VEC_FOR_SWIG( ZONE_CONTAINERS, ZONE_CONTAINER* )
 DECL_DEQ_FOR_SWIG( MODULES, MODULE* )
 
 class MODULE : public BOARD_ITEM_CONTAINER
@@ -175,6 +177,11 @@ public:
     DRAWINGS& GraphicalItems()
     {
         return m_drawings;
+    }
+
+    const ZONE_CONTAINERS& Zones() const
+    {
+        return m_zones;
     }
 
     const DRAWINGS& GraphicalItems() const
@@ -662,8 +669,9 @@ public:
 #endif
 
 private:
-    DRAWINGS       m_drawings;          // BOARD_ITEMs for drawings on the board, owned by pointer.
-    PADS           m_pads;              // D_PAD items, owned by pointer
+    DRAWINGS        m_drawings; // BOARD_ITEMs for drawings on the board, owned by pointer.
+    PADS            m_pads;     // D_PAD items, owned by pointer
+    ZONE_CONTAINERS m_zones;    // ZONE items, owned by pointer
     std::list<MODULE_3D_SETTINGS> m_3D_Drawings;  // Linked list of 3D models.
 
     double         m_Orient;            // Orientation in tenths of a degree, 900=90.0 degrees.

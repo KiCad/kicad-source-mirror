@@ -621,9 +621,8 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE_CONTAINER* aZone, SHAPE_
 
     // Add zones outlines having an higher priority and keepout
     //
-    for( int ii = 0; ii < m_board->GetAreaCount(); ii++ )
+    for( ZONE_CONTAINER* zone : m_board->GetZoneList( true ) )
     {
-        ZONE_CONTAINER* zone = m_board->GetArea( ii );
 
         // If the zones share no common layers
         if( !aZone->CommonLayerExists( zone->GetLayerSet() ) )

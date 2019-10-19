@@ -74,6 +74,7 @@ void PCB_PARSER::init()
     }
 
     m_layerMasks[ "*.Cu" ]      = LSET::AllCuMask();
+    m_layerMasks["*In.Cu"] = LSET::InternalCuMask();
     m_layerMasks[ "F&B.Cu" ]    = LSET( 2, F_Cu, B_Cu );
     m_layerMasks[ "*.Adhes" ]   = LSET( 2, B_Adhes, F_Adhes );
     m_layerMasks[ "*.Paste" ]   = LSET( 2, B_Paste, F_Paste );
@@ -590,7 +591,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             break;
 
         case T_zone:
-            m_board->Add( parseZONE_CONTAINER(), ADD_APPEND );
+            m_board->Add( parseZONE_CONTAINER( m_board ), ADD_APPEND );
             break;
 
         case T_target:
@@ -2511,12 +2512,21 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             module->Add3DModel( parse3DModel() );
             break;
 
+        case T_zone:
+        {
+            ZONE_CONTAINER* zone = parseZONE_CONTAINER( module.get() );
+            module->Add( zone, ADD_APPEND );
+        }
+        break;
+
         default:
-            Expecting( "locked, placed, tedit, tstamp, at, descr, tags, path, "
-                       "autoplace_cost90, autoplace_cost180, solder_mask_margin, "
-                       "solder_paste_margin, solder_paste_ratio, clearance, "
-                       "zone_connect, thermal_width, thermal_gap, attr, fp_text, "
-                       "fp_arc, fp_circle, fp_curve, fp_line, fp_poly, pad, or model" );
+            Expecting(
+                    "locked, placed, tedit, tstamp, at, descr, tags, path, "
+                    "autoplace_cost90, autoplace_cost180, solder_mask_margin, "
+                    "solder_paste_margin, solder_paste_ratio, clearance, "
+                    "zone_connect, thermal_width, thermal_gap, attr, fp_text, "
+                    "fp_arc, fp_circle, fp_curve, fp_line, fp_poly, pad, "
+                    "zone, or model" );
         }
     }
 
@@ -3390,7 +3400,7 @@ VIA* PCB_PARSER::parseVIA()
 }
 
 
-ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
+ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
 {
     wxCHECK_MSG( CurTok() == T_zone, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) +
@@ -3407,7 +3417,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
     // bigger scope since each filled_polygon is concatenated in here
     SHAPE_POLY_SET pts;
 
-    std::unique_ptr< ZONE_CONTAINER > zone( new ZONE_CONTAINER( m_board ) );
+    std::unique_ptr<ZONE_CONTAINER> zone( new ZONE_CONTAINER( aParent ) );
 
     zone->SetPriority( 0 );
 

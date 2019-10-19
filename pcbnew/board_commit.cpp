@@ -56,6 +56,30 @@ BOARD_COMMIT::~BOARD_COMMIT()
 {
 }
 
+COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
+{
+    // if aItem belongs a footprint, the full footprint will be saved
+    // because undo/redo does not handle "sub items" modifications
+    if( aItem && aItem->Type() != PCB_MODULE_T && aChangeType == CHT_MODIFY )
+    {
+        EDA_ITEM* item = aItem->GetParent();
+
+        if( item && item->Type() == PCB_MODULE_T ) // means aItem belongs a footprint
+            aItem = item;
+    }
+
+    return COMMIT::Stage( aItem, aChangeType );
+}
+
+COMMIT& BOARD_COMMIT::Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType )
+{
+    return COMMIT::Stage( container, aChangeType );
+}
+
+COMMIT& BOARD_COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO_T aModFlag )
+{
+    return COMMIT::Stage( aItems, aModFlag );
+}
 
 void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool aSetDirtyBit )
 {

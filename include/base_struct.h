@@ -451,6 +451,25 @@ public:
     }
 
     /**
+     * @copydoc SEARCH_RESULT IterateForward( EDA_ITEM*, INSPECTOR, void*, const KICAD_T )
+     *
+     * This changes first parameter to avoid the DList and use std::vector instead
+     */
+    template <class T>
+    static SEARCH_RESULT IterateForward(
+            std::vector<T>& aList, INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
+    {
+        for( auto it : aList )
+        {
+            if( static_cast<EDA_ITEM*>( it )->Visit( inspector, testData, scanTypes )
+                    == SEARCH_QUIT )
+                return SEARCH_QUIT;
+        }
+
+        return SEARCH_CONTINUE;
+    }
+
+    /**
      * Function GetClass
      * returns the class name.
      * @return wxString

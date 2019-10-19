@@ -385,6 +385,38 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         InstallGraphicItemPropertiesDialog( aItem );
         break;
 
+    case PCB_ZONE_AREA_T:
+    {
+        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( aItem );
+        bool success = false;
+        if( zone )
+        {
+            ZONE_SETTINGS zoneSettings;
+            zoneSettings << *zone;
+            if( zone->GetIsKeepout() )
+            {
+                success = InvokeKeepoutAreaEditor( this, &zoneSettings );
+            }
+            else if( zone->IsOnCopperLayer() )
+            {
+                success = InvokeCopperZonesEditor( this, &zoneSettings );
+            }
+            else
+            {
+                success = InvokeNonCopperZonesEditor( this, &zoneSettings );
+            }
+
+            if( success )
+            {
+                BOARD_COMMIT commit( this );
+                commit.Modify( zone );
+                commit.Push( _( "Edit Zone" ) );
+                zoneSettings.ExportSetting( *zone );
+            }
+        }
+    }
+    break;
+
     default:
         break;
     }

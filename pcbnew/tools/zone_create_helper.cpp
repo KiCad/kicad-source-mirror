@@ -51,8 +51,9 @@ ZONE_CREATE_HELPER::~ZONE_CREATE_HELPER()
 
 std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
 {
-    auto& frame = *m_tool.getEditFrame<PCB_BASE_FRAME>();
+    auto&                 frame = *m_tool.getEditFrame<PCB_BASE_EDIT_FRAME>();
     auto& board = *m_tool.getModel<BOARD>();
+    BOARD_ITEM_CONTAINER* parent = m_tool.m_frame->GetModel();
     KIGFX::VIEW_CONTROLS* controls = m_tool.GetManager()->GetViewControls();
 
     // Get the current default settings for zones
@@ -85,7 +86,7 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
         controls->WarpCursor( controls->GetCursorPosition(), true );
     }
 
-    auto newZone = std::make_unique<ZONE_CONTAINER>( &board );
+    auto newZone = std::make_unique<ZONE_CONTAINER>( parent );
 
     // Apply the selected settings
     zoneInfo.ExportSetting( *newZone );

@@ -63,7 +63,7 @@ public:
      */
     typedef enum HATCH_STYLE { NO_HATCH, DIAGONAL_FULL, DIAGONAL_EDGE } HATCH_STYLE;
 
-    ZONE_CONTAINER( BOARD* parent );
+    ZONE_CONTAINER( BOARD_ITEM_CONTAINER* parent );
 
     ZONE_CONTAINER( const ZONE_CONTAINER& aZone );
     ZONE_CONTAINER& operator=( const ZONE_CONTAINER &aOther );

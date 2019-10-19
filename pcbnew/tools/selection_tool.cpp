@@ -1461,6 +1461,14 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
     switch( aItem->Type() )
     {
     case PCB_ZONE_AREA_T:
+    {
+        // Check to see if this keepout is part of a footprint
+        // If it is, and we are not editing the footprint, it should not be selectable
+        const bool zoneInFootprint =
+                aItem->GetParent() != nullptr && aItem->GetParent()->Type() == PCB_MODULE_T;
+        if( zoneInFootprint && !m_editModules && !checkVisibilityOnly )
+            return false;
+
         // Keepout zones can exist on multiple layers!
         {
             auto* zone = static_cast<const ZONE_CONTAINER*>( aItem );
@@ -1481,6 +1489,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
                 return false;
             }
         }
+    }
         break;
 
     case PCB_TRACE_T:
@@ -1540,6 +1549,12 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
         for( auto pad : module->Pads() )
         {
             if( Selectable( pad, true ) )
+                return true;
+        }
+
+        for( auto zone : module->Zones() )
+        {
+            if( Selectable( zone, true ) )
                 return true;
         }
 

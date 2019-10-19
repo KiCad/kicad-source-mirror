@@ -882,10 +882,12 @@ void DRC::testZones()
 
 void DRC::testKeepoutAreas()
 {
+    // Get a list of all zones to inspect, from both board and footprints
+    std::list<ZONE_CONTAINER*> areasToInspect = m_pcb->GetZoneList( true );
+
     // Test keepout areas for vias, tracks and pads inside keepout areas
-    for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
+    for( ZONE_CONTAINER* area : areasToInspect )
     {
-        ZONE_CONTAINER* area = m_pcb->GetArea( ii );
 
         if( !area->GetIsKeepout() )
             continue;

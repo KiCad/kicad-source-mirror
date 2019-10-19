@@ -46,6 +46,10 @@ public:
                        bool aCreateUndoEntry = true, bool aSetDirtyBit = true ) override;
 
     virtual void Revert() override;
+    COMMIT&      Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType ) override;
+    COMMIT&      Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType ) override;
+    COMMIT&      Stage(
+                 const PICKED_ITEMS_LIST& aItems, UNDO_REDO_T aModFlag = UR_UNSPECIFIED ) override;
 
 private:
     TOOL_MANAGER* m_toolMgr;

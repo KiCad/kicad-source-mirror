@@ -228,15 +228,16 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->AddItem( PCB_ACTIONS::placePad,    haveFootprintCondition );
 
     placeMenu->AddSeparator();
-    placeMenu->AddItem( PCB_ACTIONS::placeText,   haveFootprintCondition );
-    placeMenu->AddItem( PCB_ACTIONS::drawArc,     haveFootprintCondition );
-    placeMenu->AddItem( PCB_ACTIONS::drawCircle,  haveFootprintCondition );
-    placeMenu->AddItem( PCB_ACTIONS::drawLine,    haveFootprintCondition );
+    placeMenu->AddItem( PCB_ACTIONS::placeText, haveFootprintCondition );
+    placeMenu->AddItem( PCB_ACTIONS::drawArc, haveFootprintCondition );
+    placeMenu->AddItem( PCB_ACTIONS::drawCircle, haveFootprintCondition );
+    placeMenu->AddItem( PCB_ACTIONS::drawLine, haveFootprintCondition );
     placeMenu->AddItem( PCB_ACTIONS::drawPolygon, haveFootprintCondition );
+    placeMenu->AddItem( PCB_ACTIONS::drawZoneKeepout, haveFootprintCondition );
 
     placeMenu->AddSeparator();
-    placeMenu->AddItem( PCB_ACTIONS::setAnchor,   haveFootprintCondition );
-    placeMenu->AddItem( ACTIONS::gridSetOrigin,   haveFootprintCondition );
+    placeMenu->AddItem( PCB_ACTIONS::setAnchor, haveFootprintCondition );
+    placeMenu->AddItem( ACTIONS::gridSetOrigin, haveFootprintCondition );
 
     placeMenu->Resolve();
 
