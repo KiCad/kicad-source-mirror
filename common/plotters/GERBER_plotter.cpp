@@ -910,10 +910,7 @@ void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
                                      EDA_DRAW_MODE_T aTraceMode, void* aData )
 
 {
-    GBR_METADATA* gbr_metadata;
-
-    if( aData )
-        gbr_metadata = static_cast<GBR_METADATA*>( aData );
+    GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
 
     // Currently, a Pad RoundRect is plotted as polygon.
     // TODO: use Aperture macro and flash it
