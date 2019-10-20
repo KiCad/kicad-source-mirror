@@ -594,9 +594,6 @@ void GERBER_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
     // one should plot outline as thick segments
     GBR_METADATA* gbr_metadata = static_cast<GBR_METADATA*>( aData );
 
-    if( !aFill )
-        SetCurrentLineWidth( aWidth, gbr_metadata );
-
     if( gbr_metadata )
         formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
@@ -617,8 +614,10 @@ void GERBER_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
         fputs( "G37*\n", outputFile );
     }
 
-    if( aWidth > 0 )
+    if( aWidth > 0 )    // Draw the polyline/polygon outline
     {
+        SetCurrentLineWidth( aWidth, gbr_metadata );
+
         MoveTo( aCornerList[0] );
 
         for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
@@ -919,7 +918,10 @@ void GERBER_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
                                  aCornerRadius, 0.0, 0, GetPlotterArcHighDef() );
 
     if( aTraceMode != FILLED )
+    {
+        SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH, &gbr_metadata );
         outline.Inflate( -GetCurrentLineWidth()/2, 16 );
+    }
 
     std::vector< wxPoint > cornerList;
     // TransformRoundRectToPolygon creates only one convex polygon
