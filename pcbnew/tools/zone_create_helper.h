@@ -60,6 +60,9 @@ public:
 
         ///> Zone settings source (for similar and cutout zones)
         ZONE_CONTAINER* m_sourceZone;
+
+        ///> Zone leader mode
+        POLYGON_GEOM_MANAGER::LEADER_MODE m_leaderMode;
     };
 
     /**

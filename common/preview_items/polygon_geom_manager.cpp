@@ -97,9 +97,9 @@ bool POLYGON_GEOM_MANAGER::IsSelfIntersecting( bool aIncludeLeaderPts ) const
 }
 
 
-void POLYGON_GEOM_MANAGER::SetCursorPosition( const VECTOR2I& aPos, LEADER_MODE aModifier )
+void POLYGON_GEOM_MANAGER::SetCursorPosition( const VECTOR2I& aPos )
 {
-    updateLeaderPoints( aPos, aModifier );
+    updateLeaderPoints( aPos );
 }
 
 
@@ -181,7 +181,13 @@ void POLYGON_GEOM_MANAGER::updateLeaderPoints( const VECTOR2I& aEndPoint, LEADER
         m_leaderPts = SHAPE_LINE_CHAIN( lastPt, newEnd );
 
         if( pt )
-            m_leaderPts.Append( *pt );
+        {
+            // This checks for backtracking from the point to intersection
+            if( SEG( lastPt, newEnd ).Collinear( SEG( newEnd, *pt ) ) )
+                m_leaderPts = SHAPE_LINE_CHAIN( lastPt, *pt );
+            else
+                m_leaderPts.Append( *pt );
+        }
     }
     else
     {
