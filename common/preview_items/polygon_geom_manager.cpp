@@ -152,24 +152,28 @@ void POLYGON_GEOM_MANAGER::updateLeaderPoints( const VECTOR2I& aEndPoint, LEADER
         const VECTOR2I lineVector( aEndPoint - lastPt );
         // get a restricted 45/H/V line from the last fixed point to the cursor
         auto newEnd = lastPt + GetVectorSnapped45( lineVector );
+        OPT_VECTOR2I pt;
 
-        SEG first( lastPt, newEnd );
-        SEG test_seg = m_lockedPoints.CSegment( 0 );
-
-        auto pt = first.IntersectLines( m_lockedPoints.CSegment( 0 ) );
-        int  dist = pt ? ( aEndPoint - *pt ).EuclideanNorm() : std::numeric_limits<int>::max();
-
-        for( int i = 1; i < 8; i++ )
+        if( m_lockedPoints.SegmentCount() >0 )
         {
-            test_seg.B = ( test_seg.B - test_seg.A ).Rotate( M_PI_4 ) + test_seg.A;
-            auto pt2 = first.IntersectLines( test_seg );
-            if( pt2 )
+            SEG first( lastPt, newEnd );
+            SEG test_seg = m_lockedPoints.CSegment( 0 );
+
+            pt = first.IntersectLines( m_lockedPoints.CSegment( 0 ) );
+            int  dist = pt ? ( aEndPoint - *pt ).EuclideanNorm() : std::numeric_limits<int>::max();
+
+            for( int i = 1; i < 8; i++ )
             {
-                int dist2 = ( aEndPoint - *pt2 ).EuclideanNorm();
-                if( dist2 < dist )
+                test_seg.B = ( test_seg.B - test_seg.A ).Rotate( M_PI_4 ) + test_seg.A;
+                auto pt2 = first.IntersectLines( test_seg );
+                if( pt2 )
                 {
-                    dist = dist2;
-                    pt = pt2;
+                    int dist2 = ( aEndPoint - *pt2 ).EuclideanNorm();
+                    if( dist2 < dist )
+                    {
+                        dist = dist2;
+                        pt = pt2;
+                    }
                 }
             }
         }
