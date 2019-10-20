@@ -1383,6 +1383,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
     // the geometry manager which handles the zone geometry, and
     // hands the calculated points over to the zone creator tool
     POLYGON_GEOM_MANAGER polyGeomMgr( zoneTool );
+    bool constrainAngle = false;
 
     Activate();    // register for events
 
@@ -1405,6 +1406,11 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
         m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
         VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), layers );
         m_controls->ForceCursorPosition( true, cursorPos );
+
+        if( ( sourceZone && sourceZone->GetHV45() ) || constrainAngle || evt->Modifier( MD_CTRL ) )
+            polyGeomMgr.SetLeaderMode( POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
+        else
+            polyGeomMgr.SetLeaderMode( POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
@@ -1459,6 +1465,8 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
                 if( !started )
                 {
                     started = true;
+                    constrainAngle = ( polyGeomMgr.GetLeaderMode() ==
+                            POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
                     m_controls->SetAutoPan( true );
                     m_controls->CaptureCursor( true );
                 }
@@ -1483,9 +1491,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
         else if( polyGeomMgr.IsPolygonInProgress()
                  && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
         {
-            polyGeomMgr.SetCursorPosition( cursorPos, evt->Modifier( MD_CTRL )
-                                                      ? POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45
-                                                      : POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
+            polyGeomMgr.SetCursorPosition( cursorPos );
 
             if( polyGeomMgr.IsSelfIntersecting( true ) )
             {

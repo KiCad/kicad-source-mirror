@@ -65,6 +65,7 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
     zoneInfo.m_CurrentZone_Layer = m_params.m_layer;
     zoneInfo.m_NetcodeSelection = board.GetHighLightNetCode();
     zoneInfo.SetIsKeepout( m_params.m_keepout );
+    zoneInfo.m_Zone_45_Only = ( m_params.m_leaderMode == POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
 
     if( m_params.m_mode != DRAWING_TOOL::ZONE_MODE::GRAPHIC_POLYGON )
     {
@@ -302,13 +303,17 @@ void ZONE_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
         {
             auto pts = aMgr.GetLeaderLinePoints();
 
-            if( outline->TotalVertices() > 0 )
-                outline->RemoveVertex( outline->TotalVertices() - 1 );
-
             // The first 2 points of the leader are the continuation of the previous segment
             // The third point is where it intersects with the extension from the 0-th segment
-            for( int i = 2; i < pts.PointCount(); i++ )
-                outline->Append( pts.CPoint( i ) );
+            for( int i = 0; i < pts.PointCount(); i++ )
+            {
+                auto pt = pts.CPoint( i );
+
+                // If we have at least 2 points, then we need to check if the leader points
+                // already exist before re-adding them to the finalized polygon
+                if( pts.PointCount() < 2 || ( pts.CPoint( -1 ) != pt && pts.CPoint( -2 ) != pt ) )
+                    outline->Append( pts.CPoint( i ) );
+            }
         }
 
         outline->Outline( 0 ).SetClosed( true );

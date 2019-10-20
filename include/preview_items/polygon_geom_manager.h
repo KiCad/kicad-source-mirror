@@ -128,7 +128,7 @@ public:
     /**
      * Set the current cursor position
      */
-    void SetCursorPosition( const VECTOR2I& aPos, LEADER_MODE aModifier );
+    void SetCursorPosition( const VECTOR2I& aPos );
 
     /**
      * @return true if the polygon in "in progress", i.e. it has at least
