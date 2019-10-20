@@ -492,17 +492,6 @@ public:
         return m_lines.size();
     }
 
-    void SetAllowPoints( bool aAllow = true )
-    {
-        m_allowPoints = aAllow;
-    }
-
-    bool GetAllowPoints() const
-    {
-        return m_allowPoints;
-    }
-
-
     ///> @copydoc VIEW_ITEM::ViewBBox()
     virtual const BOX2I ViewBBox() const override;
 

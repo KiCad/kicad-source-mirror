@@ -200,7 +200,6 @@ public:
             {
                 auto zone = static_cast<const ZONE_CONTAINER*>( aItem );
                 buildForPolyOutline( points, zone->Outline(), aGal );
-                points->SetAllowPoints( !zone->GetHV45() );
                 break;
             }
 
@@ -370,8 +369,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                     snapLayers, { item } ) );
 
             // The alternative constraint limits to 45°
-            bool enableAltConstraint =
-                    ( !!evt->Modifier( MD_CTRL ) || !m_editPoints->GetAllowPoints() );
+            bool enableAltConstraint = !!evt->Modifier( MD_CTRL );
 
             if( enableAltConstraint != (bool) m_altConstraint )  // alternative constraint
                 setAltConstraint( enableAltConstraint );
