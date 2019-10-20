@@ -74,8 +74,11 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
 ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     BOARD_CONNECTED_ITEM( aZone )
 {
-    // Should the copy be on the same net?
+    m_isKeepout = aZone.m_isKeepout;
+    SetLayerSet( aZone.GetLayerSet() );
+
     SetNetCode( aZone.GetNetCode() );
+
     m_Poly = new SHAPE_POLY_SET( *aZone.m_Poly );
 
     // For corner moving, corner index to drag, or nullptr if no selection
@@ -93,7 +96,6 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     m_FilledPolysList.Append( aZone.m_FilledPolysList );
     m_FillSegmList = aZone.m_FillSegmList;      // vector <> copy
 
-    m_isKeepout = aZone.m_isKeepout;
     m_doNotAllowCopperPour = aZone.m_doNotAllowCopperPour;
     m_doNotAllowVias = aZone.m_doNotAllowVias;
     m_doNotAllowTracks = aZone.m_doNotAllowTracks;
@@ -105,7 +107,6 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     m_hatchPitch = aZone.m_hatchPitch;
     m_HatchLines = aZone.m_HatchLines;
 
-    SetLayerSet( aZone.GetLayerSet() );
     SetLocalFlags( aZone.GetLocalFlags() );
 }
 

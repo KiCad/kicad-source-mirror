@@ -66,7 +66,7 @@ bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
         m_netinfo = &NETINFO_LIST::ORPHANED_ITEM;
 
     if( !aNoAssert )
-        assert( m_netinfo );
+        wxASSERT( m_netinfo );
 
     // Add only if it was previously added to the ratsnest
     //if( addRatsnest )
