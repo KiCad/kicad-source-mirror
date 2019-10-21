@@ -427,7 +427,7 @@ const EDA_RECT SCH_TEXT::GetBoundingBox() const
 
     linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
 
-    EDA_RECT rect = GetTextBox( -1, linewidth );
+    EDA_RECT rect = GetTextBox( -1, linewidth, false, GetTextMarkupFlags() );
 
     if( GetTextAngle() != 0 )      // Rotate rect
     {
@@ -694,7 +694,7 @@ bool SCH_LABEL::IsType( const KICAD_T aScanTypes[] )
 const EDA_RECT SCH_LABEL::GetBoundingBox() const
 {
     int         linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
-    EDA_RECT    rect = GetTextBox( -1, linewidth );
+    EDA_RECT    rect = GetTextBox( -1, linewidth, false, GetTextMarkupFlags() );
 
     if( GetTextAngle() != 0.0 )
     {
@@ -850,7 +850,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
 
     aPoints.clear();
 
-    int symb_len = LenSize( GetShownText(), linewidth ) + ( TXT_MARGIN * 2 );
+    int symb_len = LenSize( GetShownText(), linewidth, GetTextMarkupFlags() ) + ( TXT_MARGIN * 2 );
 
     // Create outline shape : 6 points
     int x = symb_len + linewidth + 3;
@@ -947,7 +947,7 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
     height = ( (GetTextHeight() * 15) / 10 ) + width + 2 * TXT_MARGIN;
 
     // text X size add height for triangular shapes(bidirectional)
-    length = LenSize( GetShownText(), width ) + height + DANGLING_SYMBOL_SIZE;
+    length = LenSize( GetShownText(), width, GetTextMarkupFlags() ) + height + DANGLING_SYMBOL_SIZE;
 
     switch( GetLabelSpinStyle() )    // respect orientation
     {
@@ -1109,7 +1109,7 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
     int width = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
 
     height = GetTextHeight() + width + 2 * TXT_MARGIN;
-    length = LenSize( GetShownText(), width )
+    length = LenSize( GetShownText(), width, GetTextMarkupFlags() )
              + height                 // add height for triangular shapes
              + 2 * DANGLING_SYMBOL_SIZE;
 

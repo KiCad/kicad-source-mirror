@@ -41,7 +41,6 @@ set( GAL_SRCS
     gl_context_mgr.cpp
     ${FONT_SRC}
     painter.cpp
-    text_utils.cpp
     gal/color4d.cpp
     gal/gal_display_options.cpp
     gal/graphics_abstraction_layer.cpp

@@ -51,6 +51,7 @@ static int s_defaultBusThickness = DEFAULTBUSTHICKNESS;
 static int s_defaultWireThickness  = DEFAULTDRAWLINETHICKNESS;
 static int s_defaultTextSize = DEFAULT_SIZE_TEXT;
 static int s_drawDefaultLineThickness = -1;
+static int s_textMarkupFlags = 0;
 
 
 int GetDefaultBusThickness()
@@ -92,6 +93,18 @@ void SetDefaultTextSize( int aTextSize )
 int GetDefaultLineThickness()
 {
     return s_drawDefaultLineThickness;
+}
+
+
+void SetTextMarkupFlags( int aMarkupFlags )
+{
+    s_textMarkupFlags = aMarkupFlags;
+}
+
+
+int GetTextMarkupFlags()
+{
+    return s_textMarkupFlags;
 }
 
 
@@ -249,6 +262,7 @@ static const wxChar DefaultJctSizeEntry[] =         wxT( "DefaultJunctionSize" )
 static const wxChar ShowHiddenPinsEntry[] =         wxT( "ShowHiddenPins" );
 static const wxChar HorzVertLinesOnlyEntry[] =      wxT( "HorizVertLinesOnly" );
 static const wxChar FieldNamesEntry[] =             wxT( "FieldNames" );
+static const wxString TextMarkupFlagsEntry =        "TextMarkupFlags";
 static const wxString ShowPageLimitsEntry =         "ShowPageLimits";
 static const wxString UnitsEntry =                  "Units";
 static const wxString PrintMonochromeEntry =        "PrintMonochrome";
@@ -325,6 +339,8 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     SetDefaultWireThickness( (int) tmp );
 
+    SetTextMarkupFlags( (int) aCfg->Read( TextMarkupFlagsEntry, 0L ) );
+
     if( aCfg->Read( DefaultJctSizeEntry, &tmp ) )
         SCH_JUNCTION::SetSymbolSize( (int) tmp );
 
@@ -389,6 +405,8 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
     record.Replace( wxT("  "), wxT(" "), true );  // double space to single
 
     aCfg->Write( FieldNamesEntry, record );
+
+    aCfg->Write( TextMarkupFlagsEntry, GetTextMarkupFlags() );
 }
 
 

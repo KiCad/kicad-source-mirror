@@ -71,6 +71,11 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
     m_wireWidth.SetValue( GetDefaultWireThickness() );
     m_junctionSize.SetValue( SCH_JUNCTION::GetSymbolSize() );
     m_checkShowHiddenPins->SetValue( m_frame->GetShowAllPins() );
+
+    int superSubFlags = KIGFX::ENABLE_SUBSCRIPT_MARKUP | KIGFX::ENABLE_SUPERSCRIPT_MARKUP;
+
+    m_checkSuperSub->SetValue( GetTextMarkupFlags() & superSubFlags );
+
     m_checkPageLimits->SetValue( m_frame->ShowPageLimits() );
 
     m_galOptsPanel->TransferDataToWindow();
@@ -111,6 +116,14 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
 
     // Update canvas
     m_frame->GetRenderSettings()->m_ShowHiddenPins = m_checkShowHiddenPins->GetValue();
+
+    int superSubFlags = KIGFX::ENABLE_SUBSCRIPT_MARKUP | KIGFX::ENABLE_SUPERSCRIPT_MARKUP;
+
+    if( m_checkSuperSub->GetValue() )
+        SetTextMarkupFlags( GetTextMarkupFlags() | superSubFlags );
+    else
+        SetTextMarkupFlags( GetTextMarkupFlags() & ~superSubFlags );
+
     m_frame->GetRenderSettings()->SetShowPageLimits( m_checkPageLimits->GetValue() );
     m_frame->GetCanvas()->GetView()->MarkDirty();
     m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );

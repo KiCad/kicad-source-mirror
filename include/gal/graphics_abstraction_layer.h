@@ -46,6 +46,12 @@ class BITMAP_BASE;
 namespace KIGFX
 {
 
+enum TEXT_MARKUP_FLAGS
+{
+    ENABLE_SUBSCRIPT_MARKUP   = 1 << 0,
+    ENABLE_SUPERSCRIPT_MARKUP = 1 << 1
+};
+
 /**
  * @brief Class GAL is the abstract interface for drawing on a 2D-surface.
  *
@@ -335,11 +341,12 @@ public:
      * @param aText is the text to be drawn.
      * @param aPosition is the text position in world coordinates.
      * @param aRotationAngle is the text rotation angle.
+     * @param aMarkupFlags a bitset of TEXT_MARKUP_FLAGS.
      */
     virtual void StrokeText( const wxString& aText, const VECTOR2D& aPosition,
-                                    double aRotationAngle )
+                                    double aRotationAngle, int aMarkupFlags = 0 )
     {
-        strokeFont.Draw( aText, aPosition, aRotationAngle );
+        strokeFont.Draw( aText, aPosition, aRotationAngle, aMarkupFlags );
     }
 
     /**
@@ -370,9 +377,10 @@ public:
      * a only one line text.
      *
      * @param aText is the text string (one line).
+     * @param aMarkupFlags a bitset of TEXT_MARKUP_FLAGS.
      * @return is the text size.
      */
-    VECTOR2D GetTextLineSize( const UTF8& aText ) const;
+    VECTOR2D GetTextLineSize( const UTF8& aText, int aMarkupFlags = 0 ) const;
 
     /**
      * Compute the vertical position of an overbar, sometimes used in texts.

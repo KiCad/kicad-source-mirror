@@ -303,8 +303,10 @@ public:
      * @param aLine : the line of text to consider.
      * For single line text, this parameter is always m_Text
      * @param aThickness : the stroke width of the text
+     * @param aMarkupFlags a flagset of MARKUP_FLAG enums indicating which markup tokens should
+     *                     be processed
      */
-    int LenSize( const wxString& aLine, int aThickness ) const;
+    int LenSize( const wxString& aLine, int aThickness, int aMarkupFlags ) const;
 
     /**
      * Function GetTextBox
@@ -321,8 +323,11 @@ public:
      * @param aThickness Overrides the current penwidth when greater than 0.
      * This is needed when the current penwidth is 0 and a default penwidth is used.
      * @param aInvertY Invert the Y axis when calculating bounding box.
+     * @param aMarkupFlags a flagset of MARKUP_FLAG enums indicating which markup tokens should
+     *                     be processed
      */
-    EDA_RECT GetTextBox( int aLine = -1, int aThickness = -1, bool aInvertY = false ) const;
+    EDA_RECT GetTextBox( int aLine = -1, int aThickness = -1, bool aInvertY = false,
+                         int aMarkupFlags = 0 ) const;
 
     /**
      * Return the distance between two lines of text.

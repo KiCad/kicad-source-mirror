@@ -273,7 +273,7 @@ const EDA_RECT LIB_TEXT::GetBoundingBox() const
     /* Y coordinates for LIB_ITEMS are bottom to top, so we must invert the Y position when
      * calling GetTextBox() that works using top to bottom Y axis orientation.
      */
-    EDA_RECT rect = GetTextBox( -1, -1, true );
+    EDA_RECT rect = GetTextBox( -1, -1, true, GetTextMarkupFlags() );
     rect.RevertYAxis();
 
     // We are using now a bottom to top Y axis.

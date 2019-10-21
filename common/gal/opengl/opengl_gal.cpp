@@ -31,7 +31,6 @@
 #include <gal/definitions.h>
 #include <gl_context_mgr.h>
 #include <geometry/shape_poly_set.h>
-#include <text_utils.h>
 #include <bitmap_base.h>
 
 #include <macros.h>
@@ -1125,10 +1124,7 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
 {
     wxASSERT_MSG( !IsTextMirrored(), "No support for mirrored text using bitmap fonts." );
 
-    auto processedText = ProcessOverbars( aText );
-    const auto& text = processedText.first;
-    const auto& overbars = processedText.second;
-
+    const UTF8 text( aText );
     // Compute text size, so it can be properly justified
     VECTOR2D textSize;
     float commonOffset;
@@ -1192,14 +1188,25 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
         unsigned int c = *chIt;
         wxASSERT_MSG( c != '\n' && c != '\r', wxT( "No support for multiline bitmap text yet" ) );
 
-        // Handle overbar
-        if( overbars[i] && !overbar )
+        bool wasOverbar = overbar;
+
+        if( *chIt == '~' )
         {
-            overbar = true;     // beginning of an overbar
+            if( ++chIt == end )
+                break;
+
+            if( *chIt == '~' )
+            {
+                // double ~ is really a ~ so go ahead and process the second one
+            }
+            else
+            {
+                overbar = !overbar;
+            }
         }
-        else if( overbar && !overbars[i] )
+
+        if( wasOverbar && !overbar )
         {
-            overbar = false;    // end of an overbar
             drawBitmapOverbar( overbarLength, overbarHeight );
             overbarLength = 0;
         }

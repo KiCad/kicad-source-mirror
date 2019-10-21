@@ -162,14 +162,14 @@ bool EDA_TEXT::Replace( wxFindReplaceData& aSearchData )
 }
 
 
-int EDA_TEXT::LenSize( const wxString& aLine, int aThickness ) const
+int EDA_TEXT::LenSize( const wxString& aLine, int aThickness, int aMarkupFlags ) const
 {
     basic_gal.SetFontItalic( IsItalic() );
     basic_gal.SetFontBold( IsBold() );
     basic_gal.SetLineWidth( (float) aThickness );
     basic_gal.SetGlyphSize( VECTOR2D( GetTextSize() ) );
 
-    VECTOR2D tsize = basic_gal.GetTextLineSize( aLine );
+    VECTOR2D tsize = basic_gal.GetTextLineSize( aLine, aMarkupFlags );
 
     return KiROUND( tsize.x );
 }
@@ -196,7 +196,7 @@ int EDA_TEXT::GetInterline() const
 }
 
 
-EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
+EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY, int aMarkupFlags ) const
 {
     EDA_RECT       rect;
     wxArrayString  strings;
@@ -232,8 +232,10 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
     }
 
     // calculate the H and V size
-    int dx = KiROUND( basic_gal.GetStrokeFont().ComputeStringBoundaryLimits(
-                            text, VECTOR2D( GetTextSize() ), double( thickness ) ).x );
+    const auto& font = basic_gal.GetStrokeFont();
+    VECTOR2D    size( GetTextSize() );
+    double      penWidth( thickness );
+    int dx = KiROUND( font.ComputeStringBoundaryLimits( text, size, penWidth, aMarkupFlags ).x );
     int dy = GetInterline();
 
     // Creates bounding box (rectangle) for an horizontal
@@ -258,9 +260,8 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
     {   // A overbar adds an extra size to the text
         // Height from the base line text of chars like [ or {
         double curr_height = GetTextHeight() * 1.15;
-        int extra_height = KiROUND(
-            basic_gal.GetStrokeFont().ComputeOverbarVerticalPosition( GetTextHeight(), thickness ) - curr_height );
-        extra_height += thickness/2;
+        int extra_height = KiROUND( font.ComputeOverbarVerticalPosition( size.y, penWidth ) - curr_height );
+        extra_height += thickness / 2;
         textsize.y += extra_height;
         rect.Move( wxPoint( 0, -extra_height ) );
     }
@@ -272,9 +273,8 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
         for( unsigned ii = 1; ii < strings.GetCount(); ii++ )
         {
             text = strings.Item( ii );
-            dx   = KiROUND( basic_gal.GetStrokeFont().ComputeStringBoundaryLimits(
-                            text, VECTOR2D( GetTextSize() ), double( thickness ) ).x );
-            textsize.x  = std::max( textsize.x, dx );
+            dx = KiROUND( font.ComputeStringBoundaryLimits( text, size, penWidth, aMarkupFlags ).x );
+            textsize.x = std::max( textsize.x, dx );
             textsize.y += dy;
         }
     }

@@ -208,10 +208,10 @@ const EDA_RECT SCH_FIELD::GetBoundingBox() const
         SCH_FIELD text( *this );    // Make a local copy to change text
                                     // because GetBoundingBox() is const
         text.SetText( GetFullyQualifiedText() );
-        rect = text.GetTextBox( -1, linewidth );
+        rect = text.GetTextBox( -1, linewidth, false, GetTextMarkupFlags() );
     }
     else
-        rect = GetTextBox( -1, linewidth );
+        rect = GetTextBox( -1, linewidth, false, GetTextMarkupFlags() );
 
     // Calculate the bounding box position relative to the component:
     wxPoint origin = parentComponent->GetPosition();

@@ -28,7 +28,6 @@
 
 #include <gal/stroke_font.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <text_utils.h>
 #include <wx/string.h>
 
 
@@ -141,12 +140,10 @@ BOX2D STROKE_FONT::computeBoundingBox( const GLYPH& aGLYPH, const VECTOR2D& aGLY
     boundingPoints.emplace_back( VECTOR2D( aGLYPHBoundingX.x, 0 ) );
     boundingPoints.emplace_back( VECTOR2D( aGLYPHBoundingX.y, 0 ) );
 
-    for( const auto& pointList : aGLYPH )
+    for( const std::vector<VECTOR2D>& pointList : aGLYPH )
     {
-        for( const auto& pt : pointList )
-        {
-            boundingPoints.emplace_back( aGLYPHBoundingX.x, pt.y );
-        }
+        for( const VECTOR2D& point : pointList )
+            boundingPoints.emplace_back( aGLYPHBoundingX.x, point.y );
     }
 
     boundingBox.Compute( boundingPoints );
@@ -155,7 +152,8 @@ BOX2D STROKE_FONT::computeBoundingBox( const GLYPH& aGLYPH, const VECTOR2D& aGLY
 }
 
 
-void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRotationAngle )
+void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRotationAngle,
+                        int markupFlags )
 {
     if( aText.empty() )
         return;
@@ -220,7 +218,7 @@ void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRo
     {
         size_t length = newlinePos - begin;
 
-        drawSingleLineText( aText.substr( begin, length ) );
+        drawSingleLineText( aText.substr( begin, length ), markupFlags );
         m_gal->Translate( VECTOR2D( 0.0, lineHeight ) );
 
         begin = newlinePos + 1;
@@ -229,15 +227,16 @@ void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRo
 
     // Draw the last (or the only one) line
     if( !aText.empty() )
-        drawSingleLineText( aText.substr( begin ) );
+        drawSingleLineText( aText.substr( begin ), markupFlags );
 
     m_gal->Restore();
 }
 
 
-void STROKE_FONT::drawSingleLineText( const UTF8& aText )
+void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
 {
     double      xOffset;
+    double      yOffset;
     VECTOR2D    glyphSize( m_gal->GetGlyphSize() );
     double      overbar_italic_comp = computeOverbarVerticalPosition() * ITALIC_TILT;
 
@@ -245,7 +244,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
         overbar_italic_comp = -overbar_italic_comp;
 
     // Compute the text size
-    VECTOR2D textSize = computeTextLineSize( aText );
+    VECTOR2D textSize = computeTextLineSize( aText, markupFlags );
     double half_thickness = m_gal->GetLineWidth()/2;
 
     // Context needs to be saved before any transformations
@@ -296,13 +295,13 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
     // must not be indented on subsequent letters to ensure that the bar segments
     // overlap.
     bool last_had_overbar = false;
-    auto processedText = ProcessOverbars( aText );
-    const auto& text = processedText.first;
-    const auto& overbars = processedText.second;
-    int         overbar_index = 0;
+    bool in_overbar = false;
 
-    for( UTF8::uni_iter chIt = text.ubegin(), end = text.uend(); chIt < end; ++chIt )
+    yOffset = 0;
+
+    for( UTF8::uni_iter chIt = aText.ubegin(), end = aText.uend(); chIt < end; ++chIt )
     {
+        // Index into bounding boxes table
         int dd = *chIt - ' ';
 
         // Handle tabs as locked to the nearest 4th column (counting in spaces)
@@ -317,6 +316,63 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 
             // Set the character to ' ' instead of the '?' for tab
             dd = 0;
+
+            glyphSize = m_gal->GetGlyphSize();
+            yOffset = 0;
+        }
+        else if( *chIt == '~' )
+        {
+            if( ++chIt == end )
+                break;
+
+            if( *chIt == '~' )
+            {
+                // double ~ is really a ~ so go ahead and process the second one
+            }
+            else
+            {
+                in_overbar = !in_overbar;
+            }
+        }
+        else if( *chIt == '^' && ( markupFlags & ENABLE_SUPERSCRIPT_MARKUP ) )
+        {
+            if( ++chIt == end )
+                break;
+
+            if( *chIt == '^' )
+            {
+                // double ^ is really a ^ so go ahead and process the second one
+            }
+            else
+            {
+                // single ^ starts a superscript
+                dd = *chIt - ' ';
+                glyphSize = m_gal->GetGlyphSize() * 0.8;
+                yOffset = -m_gal->GetGlyphSize().y * 0.3;
+            }
+        }
+        else if( *chIt == '#' && ( markupFlags & ENABLE_SUBSCRIPT_MARKUP ) )
+        {
+            if( ++chIt == end )
+                break;
+
+            if( *chIt == '#' )
+            {
+                // double # is really a # so go ahead and process the second one
+            }
+            else
+            {
+                // single _ starts a subscript
+                dd = *chIt - ' ';
+                glyphSize = m_gal->GetGlyphSize() * 0.8;
+                yOffset = m_gal->GetGlyphSize().y * 0.1;
+            }
+        }
+        else if( *chIt == ' ' )
+        {
+            // space ends a super- or subscript
+            glyphSize = m_gal->GetGlyphSize();
+            yOffset = 0;
         }
 
         if( dd >= (int) m_glyphBoundingBoxes.size() || dd < 0 )
@@ -325,7 +381,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
         GLYPH& glyph = m_glyphs[dd];
         BOX2D& bbox  = m_glyphBoundingBoxes[dd];
 
-        if( overbars[overbar_index] )
+        if( in_overbar )
         {
             double overbar_start_x = xOffset;
             double overbar_start_y = - computeOverbarVerticalPosition();
@@ -350,32 +406,31 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
             last_had_overbar = false;
         }
 
-        for( const auto& pointList : glyph )
+        for( std::vector<VECTOR2D>& ptList : glyph )
         {
-            std::deque<VECTOR2D> pointListScaled;
+            std::deque<VECTOR2D> ptListScaled;
 
-            for( const auto& pt : pointList )
+            for( VECTOR2D& pt : ptList )
             {
-                VECTOR2D pointPos( pt.x * glyphSize.x + xOffset, pt.y * glyphSize.y );
+                VECTOR2D scaledPt( pt.x * glyphSize.x + xOffset, pt.y * glyphSize.y + yOffset );
 
                 if( m_gal->IsFontItalic() )
                 {
                     // FIXME should be done other way - referring to the lowest Y value of point
                     // because now italic fonts are translated a bit
                     if( m_gal->IsTextMirrored() )
-                        pointPos.x += pointPos.y * STROKE_FONT::ITALIC_TILT;
+                        scaledPt.x += scaledPt.y * STROKE_FONT::ITALIC_TILT;
                     else
-                        pointPos.x -= pointPos.y * STROKE_FONT::ITALIC_TILT;
+                        scaledPt.x -= scaledPt.y * STROKE_FONT::ITALIC_TILT;
                 }
 
-                pointListScaled.push_back( pointPos );
+                ptListScaled.push_back( scaledPt );
             }
 
-            m_gal->DrawPolyline( pointListScaled );
+            m_gal->DrawPolyline( ptListScaled );
         }
 
         xOffset += glyphSize.x * bbox.GetEnd().x;
-        ++overbar_index;
     }
 
     m_gal->Restore();
@@ -399,18 +454,22 @@ double STROKE_FONT::computeOverbarVerticalPosition() const
 }
 
 
-VECTOR2D STROKE_FONT::computeTextLineSize( const UTF8& aText ) const
+VECTOR2D STROKE_FONT::computeTextLineSize( const UTF8& aText, int aMarkupFlags ) const
 {
-    return ComputeStringBoundaryLimits( aText, m_gal->GetGlyphSize(), m_gal->GetLineWidth() );
+    return ComputeStringBoundaryLimits( aText, m_gal->GetGlyphSize(), m_gal->GetLineWidth(),
+                                        aMarkupFlags );
 }
 
 
 VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECTOR2D& aGlyphSize,
-                                        double aGlyphThickness ) const
+                                                   double aGlyphThickness, int markupFlags ) const
 {
     VECTOR2D string_bbox;
     int line_count = 1;
     double maxX = 0.0, curX = 0.0;
+
+    double curScale = 1.0;
+    bool   in_overbar = false;
 
     for( UTF8::uni_iter it = aText.ubegin(), end = aText.uend(); it < end; ++it )
     {
@@ -422,12 +481,68 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
             continue;
         }
 
-        // If it is double tilda, then it is displayed as a single tilda
-        // If it is single tilda, then it is toggling overbar, so we need to skip it
-        if( *it == '~' )
+        // Handle tabs as locked to the nearest 4th column (counting in spaces)
+        // The choice of spaces is somewhat arbitrary but sufficient for aligning text
+        if( *it == '\t' )
         {
-            if( ++it >= end )
+            double fourSpaces = 4.0 * m_glyphBoundingBoxes[0].GetEnd().x;
+            double addlSpace = fourSpaces - std::fmod( curX, fourSpaces );
+
+            // Add the remaining space (between 0 and 3 spaces)
+            curX += addlSpace;
+
+            // Tab ends a super- or subscript
+            curScale = 1.0;
+        }
+        else if( *it == '~' )
+        {
+            if( ++it == end )
                 break;
+
+            if( *it == '~' )
+            {
+                // double ~ is really a ~ so go ahead and process the second one
+            }
+            else
+            {
+                // single ~ toggles overbar
+                in_overbar = !in_overbar;
+            }
+        }
+        else if( *it == '^' && ( markupFlags & ENABLE_SUPERSCRIPT_MARKUP ) )
+        {
+            if( ++it == end )
+                break;
+
+            if( *it == '^' )
+            {
+                // double ^ is really a ^ so go ahead and process the second one
+            }
+            else
+            {
+                // single ^ starts a superscript
+                curScale = 0.8;
+            }
+        }
+        else if( *it == '#' && ( markupFlags & ENABLE_SUBSCRIPT_MARKUP ) )
+        {
+            if( ++it == end )
+                break;
+
+            if( *it == '#' )
+            {
+                // double # is really a # so go ahead and process the second one
+            }
+            else
+            {
+                // single _ starts a subscript
+                curScale = 0.8;
+            }
+        }
+        else if( *it == ' ' )
+        {
+            // space ends a super- or subscript
+            curScale = 1.0;
         }
 
         // Index in the bounding boxes table
@@ -437,11 +552,10 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
             dd = '?' - ' ';
 
         const BOX2D& box = m_glyphBoundingBoxes[dd];
-        curX += box.GetEnd().x;
+        curX += box.GetEnd().x * curScale;
     }
 
-    string_bbox.x = std::max( maxX, curX );
-    string_bbox.x *= aGlyphSize.x;
+    string_bbox.x = std::max( maxX, curX ) * aGlyphSize.x;
     string_bbox.x += aGlyphThickness;
     string_bbox.y = line_count * GetInterline( aGlyphSize.y );
 
