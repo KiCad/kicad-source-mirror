@@ -93,7 +93,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
     wxString text;
     text.Printf( "%%TF.FileFunction,Component,L%d,%s*%%",
                  aLayer == B_Cu ? m_pcb->GetCopperLayerCount() : 1,
-                 aLayer == B_Cu ? "Bottom" : "Top" );
+                 aLayer == B_Cu ? "Bot" : "Top" );
     plotter.AddLineToHeader( text );
 
     // Add file polarity (positive)
