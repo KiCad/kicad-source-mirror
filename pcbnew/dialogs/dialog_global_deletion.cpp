@@ -214,7 +214,8 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
                 if( ( track->GetState( TRACK_LOCKED | TRACK_AR ) & track_mask_filter ) != 0 )
                     continue;
 
-                if( ( track->GetState( TRACK_LOCKED | TRACK_AR ) == 0 ) &&
+                if( ( track->Type() == PCB_TRACE_T ) &&
+                    ( track->GetState( TRACK_LOCKED | TRACK_AR ) == 0 ) &&
                     !m_TrackFilterNormal->GetValue() )
                     continue;
 
