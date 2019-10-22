@@ -116,7 +116,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
 
     // Now zone type and layer are set, transfer net info
     // (has meaning only for copper zones)
-    SetNetCode( aZone.GetNetCode() );
+    m_netinfo = aZone.m_netinfo;
 
     SetNeedRefill( aZone.NeedRefill() );
 }
