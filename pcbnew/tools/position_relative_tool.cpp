@@ -74,6 +74,15 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
 
     m_selection = selection;
 
+    // The dialog is not modal and not deleted between calls.
+    // It means some options can have changed since the last call.
+    // Therefore we need to rebuild it in case UI units have changed since the last call.
+    if( m_dialog && m_dialog->GetUserUnits() != editFrame->GetUserUnits() )
+    {
+        m_dialog->Destroy();
+        m_dialog = nullptr;
+    }
+
     if( !m_dialog )
         m_dialog = new DIALOG_POSITION_RELATIVE( editFrame, m_translation, m_anchor );
 
