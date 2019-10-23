@@ -454,7 +454,9 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
                         || couplingK.Matches( line )                      // K## L## L## coupling constant
                         || ( directiveStarted && line.StartsWith( '+' ) ) ) // multiline directives
                 {
-                    m_directives.push_back( line );
+                    // Pad the directive to ensure we distinguish between short directives
+                    // and the start of a longer directive
+                    m_directives.emplace_back( line + " " );
                 }
 
                 // Mark directive as started or continued in case it is a multi-line one
