@@ -393,7 +393,8 @@ void EDA_BASE_FRAME::ShowChangedLanguage()
 
 void EDA_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged )
 {
-    GetToolManager()->GetActionManager()->UpdateHotKeys( false );
+    if( GetToolManager() )
+        GetToolManager()->GetActionManager()->UpdateHotKeys( false );
 
     if( GetMenuBar() )
     {
