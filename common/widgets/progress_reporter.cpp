@@ -114,7 +114,6 @@ WX_PROGRESS_REPORTER::WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& a
 
 WX_PROGRESS_REPORTER::~WX_PROGRESS_REPORTER()
 {
-    Destroy();
 }
 
 
