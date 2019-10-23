@@ -62,6 +62,7 @@ DXF_IMPORT_PLUGIN::DXF_IMPORT_PLUGIN() : DL_CreationAdapter()
     m_yOffset   = 0.0;          // Y coord offset for conversion (in mm)
     m_DXF2mm    = 1.0;          // The scale factor to convert DXF units to mm
     m_version   = 0;            // the dxf version, not yet used
+    m_inBlock   = false;        // Discard blocks
     m_defaultThickness = 0.2;   // default thickness (in mm)
     m_brdLayer = Dwgs_User;     // The default import layer
     m_importAsfootprintGraphicItems = true;
@@ -169,6 +170,9 @@ void DXF_IMPORT_PLUGIN::reportMsg( const char* aMessage )
 
 void DXF_IMPORT_PLUGIN::addSpline( const DL_SplineData& aData )
 {
+    if( m_inBlock )
+        return;
+
     // Called when starting reading a spline
     m_curr_entity.Clear();
     m_curr_entity.m_EntityParseStatus = 1;
@@ -187,6 +191,9 @@ void DXF_IMPORT_PLUGIN::addSpline( const DL_SplineData& aData )
 
 void DXF_IMPORT_PLUGIN::addControlPoint( const DL_ControlPointData& aData )
 {
+    if( m_inBlock )
+        return;
+
     // Called for every spline control point, when reading a spline entity
     m_curr_entity.m_SplineControlPointList.push_back( SPLINE_CTRL_POINT( aData.x , aData.y,
                                                                          aData.w ) );
@@ -195,6 +202,9 @@ void DXF_IMPORT_PLUGIN::addControlPoint( const DL_ControlPointData& aData )
 
 void DXF_IMPORT_PLUGIN::addFitPoint( const DL_FitPointData& aData )
 {
+    if( m_inBlock )
+        return;
+
     // Called for every spline fit point, when reading a spline entity
     // we store only the X,Y coord values in a VECTOR2D
     m_curr_entity.m_SplineFitPointList.push_back( VECTOR2D( aData.x, aData.y ) );
@@ -203,6 +213,9 @@ void DXF_IMPORT_PLUGIN::addFitPoint( const DL_FitPointData& aData )
 
 void DXF_IMPORT_PLUGIN::addKnot( const DL_KnotData& aData)
 {
+    if( m_inBlock )
+        return;
+
     // Called for every spline knot value, when reading a spline entity
     m_curr_entity.m_SplineKnotsList.push_back( aData.k );
 }
@@ -220,6 +233,9 @@ void DXF_IMPORT_PLUGIN::addLayer( const DL_LayerData& aData )
 
 void DXF_IMPORT_PLUGIN::addLine( const DL_LineData& aData )
 {
+    if( m_inBlock )
+        return;
+
     VECTOR2D start( mapX( aData.x1 ), mapY( aData.y1 ) );
     VECTOR2D end( mapX( aData.x2 ), mapY( aData.y2 ) );
     double lineWidth = mapWidth( attributes.getWidth() );
@@ -233,6 +249,9 @@ void DXF_IMPORT_PLUGIN::addLine( const DL_LineData& aData )
 
 void DXF_IMPORT_PLUGIN::addPolyline(const DL_PolylineData& aData )
 {
+    if( m_inBlock )
+        return;
+
     // Convert DXF Polylines into a series of KiCad Lines and Arcs.
     // A Polyline (as opposed to a LWPolyline) may be a 3D line or
     // even a 3D Mesh. The only type of Polyline which is guaranteed
@@ -248,6 +267,9 @@ void DXF_IMPORT_PLUGIN::addPolyline(const DL_PolylineData& aData )
 
 void DXF_IMPORT_PLUGIN::addVertex( const DL_VertexData& aData )
 {
+    if( m_inBlock )
+        return;
+
     if( m_curr_entity.m_EntityParseStatus == 0 )
         return;     // Error
 
@@ -308,8 +330,26 @@ void DXF_IMPORT_PLUGIN::endEntity()
 }
 
 
+void DXF_IMPORT_PLUGIN::addBlock( const DL_BlockData& aData )
+{
+    // The DXF blocks are not useful in our import, so we skip them with the exception
+    // of the main block that is shown when editing the file
+    if( aData.name.compare( "*Model_Space") )
+        m_inBlock = true;
+}
+
+
+void DXF_IMPORT_PLUGIN::endBlock()
+{
+    m_inBlock = false;
+}
+
+
 void DXF_IMPORT_PLUGIN::addCircle( const DL_CircleData& aData )
 {
+    if( m_inBlock )
+        return;
+
     VECTOR2D center( mapX( aData.cx ), mapY( aData.cy ) );
     double lineWidth = mapWidth( attributes.getWidth() );
     m_internalImporter.AddCircle( center, mapDim( aData.radius ), lineWidth );
@@ -323,6 +363,9 @@ void DXF_IMPORT_PLUGIN::addCircle( const DL_CircleData& aData )
 
 void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
 {
+    if( m_inBlock )
+        return;
+
     // Init arc centre:
     VECTOR2D center( mapX( aData.cx ), mapY( aData.cy ) );
 
@@ -353,6 +396,9 @@ void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
 
 void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
 {
+    if( m_inBlock )
+        return;
+
     VECTOR2D refPoint( mapX( aData.ipx ), mapY( aData.ipy ) );
     VECTOR2D secPoint( mapX( aData.apx ), mapY( aData.apy ) );
 
@@ -493,6 +539,9 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
 
 void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
 {
+    if( m_inBlock )
+        return;
+
     wxString    text = toNativeString( wxString::FromUTF8( aData.text.c_str() ) );
     wxString    attrib, tmp;
 
@@ -649,6 +698,9 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
 
 void DXF_IMPORT_PLUGIN::setVariableInt( const std::string& key, int value, int code )
 {
+    if( m_inBlock )
+        return;
+
     // Called for every int variable in the DXF file (e.g. "$INSUNITS").
 
     if( key == "$DWGCODEPAGE" )

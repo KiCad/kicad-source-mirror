@@ -124,6 +124,7 @@ private:
     double m_DXF2mm;            // The scale factor to convert DXF units to mm
     int m_brdLayer;             // The board layer to place imported DXF items
     int m_version;              // the dxf version, not used here
+    bool m_inBlock;             // Are we parsing a block
     std::string m_codePage;     // The code page, not used here
     bool m_importAsfootprintGraphicItems;  // Use module items instead of board items when true.
                                 // true when the items are imported in the footprint editor
@@ -262,6 +263,16 @@ private:
 
     virtual void addLayer( const DL_LayerData& aData ) override;
     virtual void addLine( const DL_LineData& aData) override;
+
+    /**
+     * Called for each BLOCK in the DXF file
+     * These are re-usable elements that may be placed into the model space.  The elements
+     * are dereferenced to the model, so we just need to skip the re-parsing for the block
+     * elements.
+     */
+    virtual void addBlock( const DL_BlockData& ) override;
+    virtual void endBlock() override;
+
     virtual void addCircle( const DL_CircleData& aData ) override;
     virtual void addArc( const DL_ArcData& aData ) override;
     //virtual void addLWPolyline( const DRW_LWPolyline& aData ) override;
@@ -289,54 +300,36 @@ private:
 
     // Not yet handled DXF entities:
     virtual void addDimAlign( const DL_DimensionData&,
-            const DL_DimAlignedData& ) override { reportMsg( "DL_Dimension not managed" ); }
+            const DL_DimAlignedData& ) override {}
     virtual void addDimLinear( const DL_DimensionData&,
-            const DL_DimLinearData& ) override { reportMsg( "DL_Dimension not managed" ); }
+            const DL_DimLinearData& ) override {}
     virtual void addDimRadial( const DL_DimensionData&,
-            const DL_DimRadialData& ) override { reportMsg( "DL_Dimension not managed" ); }
+            const DL_DimRadialData& ) override {}
     virtual void addDimDiametric( const DL_DimensionData&,
-            const DL_DimDiametricData& ) override { reportMsg( "DL_Dimension not managed" ); }
+            const DL_DimDiametricData& ) override {}
     virtual void addDimAngular( const DL_DimensionData&,
-            const DL_DimAngularData& ) override { reportMsg( "DL_Dimension not managed" ); }
+            const DL_DimAngularData& ) override {}
     virtual void addDimAngular3P( const DL_DimensionData&,
-            const DL_DimAngular3PData& ) override { reportMsg( "DL_Dimension not managed" ); }
+            const DL_DimAngular3PData& ) override {}
     virtual void addDimOrdinate( const DL_DimensionData&,
-            const DL_DimOrdinateData& ) override { reportMsg( "DL_Dimension not managed" ); }
-    virtual void addLeader( const DL_LeaderData& ) override
-    {
-        reportMsg( "DL_Leader not managed" );
-    }
+            const DL_DimOrdinateData& ) override {}
+    virtual void addLeader( const DL_LeaderData& ) override {}
 
-    virtual void addLeaderVertex( const DL_LeaderVertexData& ) override
-    {
-        reportMsg( "DL_LeaderVertex not managed" );
-    }
+    virtual void addLeaderVertex( const DL_LeaderVertexData& ) override {}
 
-    virtual void addHatch( const DL_HatchData& ) override { reportMsg( "DL_Hatch not managed" ); }
+    virtual void addHatch( const DL_HatchData& ) override {}
 
-    virtual void addTrace( const DL_TraceData& ) override { reportMsg( "DL_Trace not managed" ); }
-    virtual void add3dFace( const DL_3dFaceData& ) override
-    {
-        reportMsg( "DL_3dFace not managed" );
-    }
+    virtual void addTrace( const DL_TraceData& ) override {}
+    virtual void add3dFace( const DL_3dFaceData& ) override {}
 
-    virtual void addSolid( const DL_SolidData& ) override { reportMsg( "DL_Solid not managed" ); }
+    virtual void addSolid( const DL_SolidData& ) override {}
 
-    virtual void addImage( const DL_ImageData& ) override { reportMsg( "DL_ImageDa not managed" ); }
-    virtual void linkImage( const DL_ImageDefData& ) override
-    {
-        reportMsg( "DL_ImageDef not managed" );
-    }
+    virtual void addImage( const DL_ImageData& ) override {}
+    virtual void linkImage( const DL_ImageDefData& ) override {}
 
-    virtual void addHatchLoop( const DL_HatchLoopData& ) override
-    {
-        reportMsg( "DL_HatchLoop not managed" );
-    }
+    virtual void addHatchLoop( const DL_HatchLoopData& ) override {}
 
-    virtual void addHatchEdge( const DL_HatchEdgeData& ) override
-    {
-        reportMsg( "DL_HatchEdge not managed" );
-    }
+    virtual void addHatchEdge( const DL_HatchEdgeData& ) override {}
 
     /**
      * Convert a native unicode string into a DXF encoded string.
