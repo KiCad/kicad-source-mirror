@@ -43,6 +43,7 @@
 
 #include <wx/log.h>
 #include <X2_gerber_attributes.h>
+#include <macros.h>
 
 /*
  * class X2_ATTRIBUTE
@@ -92,11 +93,11 @@ void X2_ATTRIBUTE::DbgListPrms()
 bool X2_ATTRIBUTE::ParseAttribCmd( FILE* aFile, char *aBuffer, int aBuffSize, char* &aText,
                                    int& aLineNum )
 {
-    // parse a TF command and fill m_Prms by the parameters found.
+    // parse a TF, TA, TO ... command and fill m_Prms by the parameters found.
     // the "%TF" (start of command) is already read by the caller
 
     bool ok = true;
-    wxString data;
+    std::string data;
 
     for( ; ; )
     {
@@ -114,19 +115,19 @@ bool X2_ATTRIBUTE::ParseAttribCmd( FILE* aFile, char *aBuffer, int aBuffSize, ch
                 break;
 
             case '*':       // End of block
-                m_Prms.Add( data );
-                data.Empty();
+                m_Prms.Add( FROM_UTF8( data.c_str() ) );
+                data.clear();
                 aText++;
                 break;
 
             case ',':       // End of parameter (separator)
                 aText++;
-                m_Prms.Add( data );
-                data.Empty();
+                m_Prms.Add( FROM_UTF8( data.c_str() ) );
+                data.clear();
                 break;
 
             default:
-                data.Append( *aText );
+                data += *aText;
                 aText++;
                 break;
             }

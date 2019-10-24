@@ -111,6 +111,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
     plotter.StartPlot();
 
     int cmp_count = 0;
+    bool allowUtf8 = true;
 
     for( MODULE* footprint : fp_list )
     {
@@ -119,7 +120,9 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_POSITION );
 
         // Add object attribute: component reference to flash (mainly usefull for users)
-        wxString ref = footprint->GetReference();
+        // using quoted UTF8 string
+        wxString ref = ConvertNotAllowedCharsInGerber( footprint->GetReference(),
+                                                       allowUtf8, true );
 
         gbr_metadata.SetCmpReference( ref );
         gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
@@ -143,15 +146,15 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
                                 : GBR_CMP_PNP_METADATA::MOUNT_TYPE_TH;
 
         // Add component value info:
-        pnpAttrib.m_Value = FormatStringFromGerber( footprint->GetValue() );
+        pnpAttrib.m_Value = ConvertNotAllowedCharsInGerber( footprint->GetValue(), allowUtf8, true );
 
         // Add component footprint info:
         wxString fp_info = FROM_UTF8( footprint->GetFPID().GetLibItemName().c_str() );
-        pnpAttrib.m_Footprint = FormatStringFromGerber( fp_info );
+        pnpAttrib.m_Footprint = ConvertNotAllowedCharsInGerber( fp_info, allowUtf8, true );
 
         // Add footprint lib name:
         fp_info = FROM_UTF8( footprint->GetFPID().GetLibNickname().c_str() );
-        pnpAttrib.m_LibraryName = FormatStringFromGerber( fp_info );
+        pnpAttrib.m_LibraryName = ConvertNotAllowedCharsInGerber( fp_info, allowUtf8, true );
 
         gbr_metadata.m_NetlistMetadata.SetExtraData( pnpAttrib.FormatCmpPnPMetadata() );
 

@@ -30,6 +30,7 @@
 
 #include <fctsys.h>
 #include <gbr_metadata.h>
+#include <utf8.h>
 
 wxString GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT aFormat )
 {
@@ -314,19 +315,53 @@ std::string GBR_APERTURE_METADATA::FormatAttribute( GBR_APERTURE_ATTRIB aAttribu
     return full_attribute_string;
 }
 
+
+// Helper function to convert a ascii hex char to its integer value
+// If the char is not a hexa char, return -1
+int char2Hex( unsigned aCode )
+{
+    if( aCode >= '0' && aCode <= '9' )
+        return aCode - '0';
+
+    if( aCode >= 'A' && aCode <= 'F' )
+        return aCode - 'A' + 10;
+
+    if( aCode >= 'a' && aCode <= 'f' )
+        return aCode - 'a' + 10;
+
+    return -1;
+}
+
+
 wxString FormatStringFromGerber( const wxString& aString )
 {
-    // make the inverse conversion of formatStringToGerber()
+    // make the inverse conversion of FormatStringToGerber()
     // It converts a "normalized" gerber string and convert it to a 16 bits sequence unicode
     // and return a wxString (unicode 16) from the gerber string
-    wxString txt;
+    wxString txt;           // The string converted from Gerber string
+    wxString uniString;     // the unicode string from UTF8 Gerber string but without converted escape sequence
 
-    for( unsigned ii = 0; ii < aString.Length(); ++ii )
+    unsigned count = aString.Length();
+
+    for( unsigned ii = 0; ii < count; ++ii )
     {
         unsigned code = aString[ii];
 
         if( code == '\\' )
         {
+            // If next char is not a hexadecimal char, just skip the '\'
+            // It is perhaps a escape sequence like \\ or \" or ...
+            if( ii < count-1 )
+            {
+                code = aString[ii+1];
+
+                if( char2Hex( code ) < 0 )
+                {
+                    ++ii;
+                    txt.Append( aString[ii] );
+                    continue;
+                }
+            }
             // Convert 4 hexadecimal digits to a 16 bit unicode
             // (Gerber allows only 4 hexadecimal digits)
             long value = 0;
@@ -335,8 +370,8 @@ wxString FormatStringFromGerber( const wxString& aString )
             {
                 value <<= 4;
                 code = aString[++ii];
-                // Very basic conversion, but it expects a valid gerber file
-                int hexa = (code <= '9' ? code - '0' : code - 'A' + 10) & 0xF;
+                // Basic conversion (with no control), but it expects a valid gerber file
+                int hexa = char2Hex( code );
                 value += hexa;
             }
 
@@ -350,19 +385,20 @@ wxString FormatStringFromGerber( const wxString& aString )
 }
 
 
-std::string formatStringToGerber( const wxString& aString )
+wxString ConvertNotAllowedCharsInGerber( const wxString& aString, bool aAllowUtf8Chars, bool aQuoteString )
 {
-    /* format string means convert any code > 0x7F and unautorized code to a hexadecimal
+    /* format string means convert any code > 0x7E and unautorized codes to a hexadecimal
      * 16 bits sequence unicode
-     * unautorized codes are ',' '*' '%' '\'
+     * unautorized codes are ',' '*' '%' '\' and are used as separators in Gerber files
      */
-    std::string txt;
+    wxString txt;
 
-    txt.reserve( aString.Length() );
+    if( aQuoteString )
+        txt << "\"";
 
     for( unsigned ii = 0; ii < aString.Length(); ++ii )
     {
-        unsigned code = aString[ii];
+        wxChar code = aString[ii];
         bool convert = false;
 
         switch( code )
@@ -378,7 +414,10 @@ std::string formatStringToGerber( const wxString& aString )
             break;
         }
 
-        if( convert || code > 0x7F )
+        if( !aAllowUtf8Chars && code > 0x7F )
+            convert = true;
+
+        if( convert )
         {
             txt += '\\';
 
@@ -389,8 +428,34 @@ std::string formatStringToGerber( const wxString& aString )
             txt += hexa;
         }
         else
-            txt += char( code );
+            txt += code;
     }
+
+    if( aQuoteString )
+        txt << "\"";
+
+    return txt;
+}
+
+
+std::string FormatStringToGerber( const wxString& aString )
+{
+    wxString converted;
+    /* format string means convert any code > 0x7E and unautorized codes to a hexadecimal
+     * 16 bits sequence unicode
+     * unautorized codes are ',' '*' '%' '\'
+     * This conversion is not made for quoted strings, because if the string is
+     * quoted, the conversion is expected to be already made, and the returned string must use
+     * UTF8 encoding
+     */
+    if( aString[0] != '\"' || aString[aString.Len()-1] != '\"' )
+        converted = ConvertNotAllowedCharsInGerber( aString, false, false );
+    else
+        converted = aString;
+
+    // Convert the char string to std::string. Be carefull when converting awxString to
+    // a std::string: using static_cast<const char*> is mandatory
+    std::string txt = static_cast<const char*>( converted.utf8_str() );
 
     return txt;
 }
@@ -437,13 +502,13 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
         // print info associated to a flashed pad (cmpref, pad name)
         // example: %TO.P,R5,3*%
         pad_attribute_string = prepend_string + "TO.P,";
-        pad_attribute_string += formatStringToGerber( aData->m_Cmpref ) + ",";
+        pad_attribute_string += FormatStringToGerber( aData->m_Cmpref ) + ",";
 
         if( aData->m_Padname.IsEmpty() )
             // Happens for "mechanical" or never connected pads
-            pad_attribute_string += formatStringToGerber( NO_PAD_NAME );
+            pad_attribute_string += FormatStringToGerber( NO_PAD_NAME );
         else
-            pad_attribute_string += formatStringToGerber( aData->m_Padname );
+            pad_attribute_string += FormatStringToGerber( aData->m_Padname );
 
         pad_attribute_string += eol_string;
     }
@@ -466,11 +531,11 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
             {
                 // Happens for not connected pads: use a normalized
                 // dummy name
-                net_attribute_string += formatStringToGerber( NO_NET_NAME );
+                net_attribute_string += FormatStringToGerber( NO_NET_NAME );
             }
         }
         else
-            net_attribute_string += formatStringToGerber( aData->m_Netname );
+            net_attribute_string += FormatStringToGerber( aData->m_Netname );
 
         net_attribute_string += eol_string;
     }
@@ -483,7 +548,7 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
         // Because GBR_NETINFO_PAD option already contains this info, it is not
         // created here for a GBR_NETINFO_PAD attribute
         cmp_attribute_string = prepend_string + "TO.C,";
-        cmp_attribute_string += formatStringToGerber( aData->m_Cmpref ) + eol_string;
+        cmp_attribute_string += FormatStringToGerber( aData->m_Cmpref ) + eol_string;
     }
 
     // the full list of requested attributes:
@@ -590,7 +655,7 @@ void GBR_CMP_PNP_METADATA::ClearData()
 /**
  * @return a string containing the formated metadata in X2 syntax.
  * one line by non empty data
- * the orientation is always generated
+ * the orientation (.CRot) and mount type (.CMnt) are always generated
  */
 wxString GBR_CMP_PNP_METADATA::FormatCmpPnPMetadata()
 {

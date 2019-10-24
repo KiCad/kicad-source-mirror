@@ -210,10 +210,24 @@ private:
  * @param aString = the wxString to convert
  * @return a std::string (ASCII7 coded) compliant with a gerber string
  */
-std::string formatStringToGerber( const wxString& aString );
+std::string FormatStringToGerber( const wxString& aString );
+
 
 /**
- * This helper function make the inverse conversion of formatStringToGerber()
+ * Similar to FormatStringToGerber.
+ * "normalize" aString and convert it to a Gerber compatible wxString
+ * Normalisation means unautorized code to a hexadecimal 16 bits sequence unicode
+ * and, on request convert any code > 0x7F.
+ * unautorized codes are ',' '*' '%' '\'
+ * @param aString = the wxString to convert
+ * @param aAllowUtf8Chars = false to convert non ASCII7 values to unicode sequence
+ * @param aQuoteString = true to double quote the returned string
+ * @return a wxString without unautorized chars (and converted non ASCII7 chars on request)
+ */
+wxString ConvertNotAllowedCharsInGerber( const wxString& aString, bool aAllowUtf8Chars, bool aQuoteString );
+
+/**
+ * This helper function make the inverse conversion of FormatStringToGerber()
  * It converts a "normalized" gerber string and convert it to a 16 bits sequence unicode
  * @param aString = the wxString compliant with a gerber string format
  * @return a wxString (unicode 16) from the gerber string
