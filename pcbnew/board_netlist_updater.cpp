@@ -310,7 +310,13 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
                             pad->GetName() );
                 m_reporter->Report( msg, REPORTER::RPT_ACTION );
             }
-
+            else                           // pad has no net
+            {
+                msg.Printf( _( "No net for component %s pin %s." ),
+                            aPcbComponent->GetReference(),
+                            pad->GetName() );
+                m_reporter->Report( msg, REPORTER::RPT_WARNING);
+            }
             if( !m_isDryRun )
             {
                 changed = true;
