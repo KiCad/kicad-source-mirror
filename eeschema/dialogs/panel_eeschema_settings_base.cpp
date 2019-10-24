@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version Oct 24 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -7,7 +7,7 @@
 
 #include "panel_eeschema_settings_base.h"
 
-///////////////////////////////////////////////////////////////////////////
+ ///////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE( PANEL_EESCHEMA_SETTINGS_BASE, wxPanel )
 	EVT_CHOICE( wxID_ANY, PANEL_EESCHEMA_SETTINGS_BASE::_wxFB_OnChooseUnits )
@@ -140,6 +140,10 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 
 	m_footprintPreview = new wxCheckBox( this, wxID_ANY, _("Show footprint previews in symbol chooser"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerPreviewOpt->Add( m_footprintPreview, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
+	m_navigatorStaysOpen = new wxCheckBox( this, wxID_ANY, _("Keep hierarchy navigator open"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_navigatorStaysOpen->SetValue(true);
+	bSizerPreviewOpt->Add( m_navigatorStaysOpen, 0, wxALL, 5 );
 
 
 	bRightColumn->Add( bSizerPreviewOpt, 0, wxALL, 5 );

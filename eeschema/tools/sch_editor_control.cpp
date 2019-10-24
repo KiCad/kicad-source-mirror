@@ -130,6 +130,11 @@ int SCH_EDITOR_CONTROL::FindAndReplace( const TOOL_EVENT& aEvent )
     return UpdateFind( aEvent );
 }
 
+int SCH_EDITOR_CONTROL::NavigateHierarchy( const TOOL_EVENT& aEvent )
+{
+    m_frame->UpdateHierarchyNavigator( true );
+    return 0;
+}
 
 int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
 {
@@ -1132,7 +1137,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     }
 
     if( sheetsPasted )
+    {
         m_frame->SetSheetNumberAndCount();
+        m_frame->UpdateHierarchyNavigator();
+    }
 
     // Now clear the previous selection, select the pasted items, and fire up the "move"
     // tool.
@@ -1273,6 +1281,7 @@ int SCH_EDITOR_CONTROL::EnterSheet( const TOOL_EVENT& aEvent )
 
         g_CurrentSheet->push_back( sheet );
         m_frame->DisplayCurrentSheet();
+        m_frame->UpdateHierarchyNavigator();
     }
 
     return 0;
@@ -1288,6 +1297,7 @@ int SCH_EDITOR_CONTROL::LeaveSheet( const TOOL_EVENT& aEvent )
 
         g_CurrentSheet->pop_back();
         m_frame->DisplayCurrentSheet();
+        m_frame->UpdateHierarchyNavigator();
     }
 
     return 0;

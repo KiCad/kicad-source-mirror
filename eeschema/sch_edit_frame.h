@@ -52,7 +52,7 @@ class DIALOG_SCH_FIND;
 class wxFindDialogEvent;
 class wxFindReplaceData;
 class RESCUER;
-
+class HIERARCHY_NAVIG_DLG;
 
 /// enum used in RotationMiroir()
 enum COMPONENT_ORIENTATION_T {
@@ -133,11 +133,13 @@ private:
     bool                    m_autoplaceJustify;   ///< allow autoplace to change justification
     bool                    m_autoplaceAlign;     ///< align autoplaced fields to the grid
     bool                    m_footprintPreview;   ///< whether to show footprint previews
+    bool                    m_navigatorStaysOpen; ///< whether to keep Navigator open
     bool                    m_showIllegalSymbolLibDialog;
     bool                    m_showSheetFileNameCaseSensitivityDlg;
 
     DIALOG_SCH_FIND*        m_findReplaceDialog;
     STATUS_TEXT_POPUP*      m_findReplaceStatusPopup;
+    HIERARCHY_NAVIG_DLG*    m_hierarchyDialog;
 
     /// Flag to indicate show hidden pins.
     bool        m_showAllPins;
@@ -213,6 +215,15 @@ public:
 
     bool GetShowFootprintPreviews() const { return m_footprintPreview; }
     void SetShowFootprintPreviews( bool aEnable ) { m_footprintPreview = aEnable; }
+
+    bool GetNavigatorStaysOpen() const
+    {
+        return m_navigatorStaysOpen;
+    }
+    void SetNavigatorStaysOpen( bool aEnable )
+    {
+        m_navigatorStaysOpen = aEnable;
+    }
 
     bool GetAutoplaceFields() const { return m_autoplaceFields; }
     void SetAutoplaceFields( bool aEnable ) { m_autoplaceFields = aEnable; }
@@ -344,6 +355,13 @@ public:
      */
     void ShowFindReplaceDialog( bool aReplace );
 
+    /**
+     * Run the Hierarchy Navigator dialog.
+     * @param aForceUpdate When true, creates a new dialog. And if a dialog
+     *                     already exist, it destroys it first.
+     */
+    void UpdateHierarchyNavigator( bool aForceUpdate = false );
+
     void ShowFindReplaceStatus( const wxString& aMsg );
     void ClearFindReplaceStatus();
 
@@ -356,6 +374,11 @@ public:
      * Notification that the Find dialog has closed.
      */
     void OnFindDialogClose();
+
+    /**
+     * Destroy the Hierarchy Navigator dialog.
+     */
+    void CloseHierarchyNavigator();
 
     /**
      * Breaks a single segment into two at the specified point.

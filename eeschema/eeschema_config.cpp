@@ -312,6 +312,7 @@ const wxChar AutoplaceJustifyEntry[] =              wxT( "AutoplaceJustify" );
 const wxChar AutoplaceAlignEntry[] =                wxT( "AutoplaceAlign" );
 static const wxChar DragActionIsMoveEntry[] =       wxT( "DragActionIsMove" );
 static const wxChar FootprintPreviewEntry[] =       wxT( "FootprintPreview" );
+static const wxChar NavigatorStaysOpenEntry[] =     wxT( "NavigatorStaysOpen" );
 static const wxChar DefaultBusWidthEntry[] =        wxT( "DefaultBusWidth" );
 static const wxChar DefaultWireWidthEntry[] =       wxT( "DefaultWireWidth" );
 static const wxChar DefaultDrawLineWidthEntry[] =   wxT( "DefaultDrawLineWidth" );
@@ -424,6 +425,7 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( AutoplaceJustifyEntry, &m_autoplaceJustify, true );
     aCfg->Read( AutoplaceAlignEntry, &m_autoplaceAlign, false );
     aCfg->Read( FootprintPreviewEntry, &m_footprintPreview, false );
+    aCfg->Read( NavigatorStaysOpenEntry, &m_navigatorStaysOpen, false );
 
     wxString templateFieldNames = aCfg->Read( FieldNamesEntry, wxEmptyString );
 
@@ -474,6 +476,7 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( drawSelectedChildren, GetSelectionDrawChildItems() );
     aCfg->Write( selectionFillShapes, GetSelectionFillShapes() );
     aCfg->Write( selectionThickness, GetSelectionThickness() );
+    aCfg->Write( NavigatorStaysOpenEntry, m_navigatorStaysOpen );
 
     // Save template fieldnames
     STRING_FORMATTER sf;
