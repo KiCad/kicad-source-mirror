@@ -75,6 +75,8 @@ private:
 
     ///> polygon fill
     SHAPE_POLY_SET m_polyfill;
+
+    static const double POLY_LINE_WIDTH;
 };
 
 } // PREVIEW
