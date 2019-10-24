@@ -145,46 +145,49 @@ void POLYGON_GEOM_MANAGER::Reset()
 void POLYGON_GEOM_MANAGER::updateLeaderPoints( const VECTOR2I& aEndPoint, LEADER_MODE aModifier )
 {
     wxCHECK( m_lockedPoints.PointCount() > 0, /*void*/ );
-    const VECTOR2I& lastPt = m_lockedPoints.CLastPoint();
+    const VECTOR2I& last_pt = m_lockedPoints.CLastPoint();
 
     if( m_leaderMode == LEADER_MODE::DEG45 || aModifier == LEADER_MODE::DEG45 )
     {
-        const VECTOR2I lineVector( aEndPoint - lastPt );
+        const VECTOR2I line_vec( aEndPoint - last_pt );
         // get a restricted 45/H/V line from the last fixed point to the cursor
-        auto newEnd = lastPt + GetVectorSnapped45( lineVector );
+        auto new_end = last_pt + GetVectorSnapped45( line_vec );
         OPT_VECTOR2I pt;
 
-        if( m_lockedPoints.SegmentCount() >0 )
+        if( m_lockedPoints.SegmentCount() > 1 )
         {
-            SEG first( lastPt, newEnd );
-            SEG test_seg = m_lockedPoints.CSegment( 0 );
+            const VECTOR2I& start_pt = m_lockedPoints.CPoint( 0 );
+            VECTOR2I completed_vec( start_pt - new_end );
 
-            pt = first.IntersectLines( m_lockedPoints.CSegment( 0 ) );
-            int  dist = pt ? ( aEndPoint - *pt ).EuclideanNorm() : std::numeric_limits<int>::max();
-
-            for( int i = 1; i < 8; i++ )
+            if( completed_vec != GetVectorSnapped45( completed_vec ) )
             {
-                test_seg.B = ( test_seg.B - test_seg.A ).Rotate( M_PI_4 ) + test_seg.A;
-                auto pt2 = first.IntersectLines( test_seg );
-                if( pt2 )
+                SEG v_first( new_end, VECTOR2I( new_end.x, start_pt.y ) );
+                SEG h_first( new_end, VECTOR2I( start_pt.x, new_end.y ) );
+
+                SHAPE_LINE_CHAIN::INTERSECTIONS intersections;
+                auto v_hits = m_lockedPoints.Intersect( v_first, intersections );
+                v_hits += m_lockedPoints.Intersect( SEG( v_first.B, start_pt ), intersections );
+                pt = v_first.B;
+
+                if( v_hits > 0 )
                 {
-                    int dist2 = ( aEndPoint - *pt2 ).EuclideanNorm();
-                    if( dist2 < dist )
-                    {
-                        dist = dist2;
-                        pt = pt2;
-                    }
+                    intersections.clear();
+                    auto h_hits = m_lockedPoints.Intersect( h_first, intersections );
+                    h_hits += m_lockedPoints.Intersect( SEG( h_first.B, start_pt ), intersections );
+
+                    if( h_hits < v_hits )
+                        pt = h_first.B;
                 }
             }
         }
 
-        m_leaderPts = SHAPE_LINE_CHAIN( lastPt, newEnd );
+        m_leaderPts = SHAPE_LINE_CHAIN( last_pt, new_end );
 
         if( pt )
         {
             // This checks for backtracking from the point to intersection
-            if( SEG( lastPt, newEnd ).Collinear( SEG( newEnd, *pt ) ) )
-                m_leaderPts = SHAPE_LINE_CHAIN( lastPt, *pt );
+            if( SEG( last_pt, new_end ).Collinear( SEG( new_end, *pt ) ) )
+                m_leaderPts = SHAPE_LINE_CHAIN( last_pt, *pt );
             else
                 m_leaderPts.Append( *pt );
         }
@@ -192,7 +195,7 @@ void POLYGON_GEOM_MANAGER::updateLeaderPoints( const VECTOR2I& aEndPoint, LEADER
     else
     {
         // direct segment
-        m_leaderPts = SHAPE_LINE_CHAIN( lastPt, aEndPoint );
+        m_leaderPts = SHAPE_LINE_CHAIN( last_pt, aEndPoint );
     }
 
     m_client.OnGeometryChange( *this );
