@@ -302,22 +302,13 @@ void ZONE_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
         if( aMgr.GetLeaderMode() == POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 )
         {
             auto pts = aMgr.GetLeaderLinePoints();
-
-            // The first 2 points of the leader are the continuation of the previous segment
-            // The third point is where it intersects with the extension from the 0-th segment
-            for( int i = 0; i < pts.PointCount(); i++ )
-            {
-                auto pt = pts.CPoint( i );
-
-                // If we have at least 2 points, then we need to check if the leader points
-                // already exist before re-adding them to the finalized polygon
-                if( pts.PointCount() < 2 || ( pts.CPoint( -1 ) != pt && pts.CPoint( -2 ) != pt ) )
-                    outline->Append( pts.CPoint( i ) );
-            }
+            for( int i = 1; i < pts.PointCount(); i++ )
+                outline->Append( pts.CPoint( i ) );
         }
 
         outline->Outline( 0 ).SetClosed( true );
         outline->RemoveNullSegments();
+        outline->Simplify( SHAPE_POLY_SET::PM_FAST );
 
         // hand the zone over to the committer
         commitZone( std::move( m_zone ) );
