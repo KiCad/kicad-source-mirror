@@ -67,6 +67,7 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
               m_circAngle( 0.0 ),
               m_circCount( 4 ),
               m_circNumberingStartSet( 1 ), // use specified start
+              m_gridCircNumScheme( 0 ),
               m_circNumberingOffset( "1" ),
               m_circNumberingStep( 1 ),
               m_circRotate( false ),

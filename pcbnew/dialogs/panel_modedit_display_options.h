@@ -30,7 +30,7 @@ class PAGED_DIALOG;
 class PANEL_MODEDIT_DISPLAY_OPTIONS : public wxPanel
 {
 public:
-    PANEL_MODEDIT_DISPLAY_OPTIONS( FOOTPRINT_EDIT_FRAME* aParent, PAGED_DIALOG* aWindow );
+    PANEL_MODEDIT_DISPLAY_OPTIONS( FOOTPRINT_EDIT_FRAME* aFrame, PAGED_DIALOG* aParent );
 
 private:
     bool TransferDataToWindow() override;

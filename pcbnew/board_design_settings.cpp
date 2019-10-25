@@ -495,6 +495,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_MicroViasMinSize    = Millimeter2iu( DEFAULT_MICROVIASMINSIZE );
     m_MicroViasMinDrill   = Millimeter2iu( DEFAULT_MICROVIASMINDRILL );
     m_CopperEdgeClearance = Millimeter2iu( DEFAULT_COPPEREDGECLEARANCE );
+    m_HoleToHoleMin       = Millimeter2iu( DEFAULT_HOLETOHOLEMIN );
 
     m_MaxError            = ARC_HIGH_DEF;
     m_ZoneUseNoOutlineInFill = false;   // Use compatibility mode by default
