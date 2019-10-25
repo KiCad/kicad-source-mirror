@@ -562,27 +562,33 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         break;
 
     case PAD_SHAPE_OVAL:
-    {
-        // An oval pad has the same shape as a segment with rounded ends
-        int     width;
-        wxPoint shape_offset;
 
-        if( dy > dx )   // Oval pad X/Y ratio for choosing translation axis
+        // If the oval is actually a circle (same x/y size), treat it the same
+        if( dx == dy )
         {
-            shape_offset.y = dy - dx;
-            width = dx * 2;
+            TransformCircleToPolygon( aCornerBuffer, padShapePos, dx, aError );
         }
-        else    //if( dy <= dx )
+        else
         {
-            shape_offset.x = dy - dx;
-            width = dy * 2;
+            int width;
+            wxPoint shape_offset;
+            if( dy > dx )   // Oval pad X/Y ratio for choosing translation axis
+            {
+                shape_offset.y = dy - dx;
+                width = dx * 2;
+            }
+            else    //if( dy <= dx )
+            {
+                shape_offset.x = dy - dx;
+                width = dy * 2;
+            }
+
+            RotatePoint( &shape_offset, angle );
+            wxPoint start = padShapePos - shape_offset;
+            wxPoint end = padShapePos + shape_offset;
+            TransformOvalToPolygon( aCornerBuffer, start, end, width, aError );
         }
 
-        RotatePoint( &shape_offset, angle );
-        wxPoint start = padShapePos - shape_offset;
-        wxPoint end = padShapePos + shape_offset;
-        TransformOvalToPolygon( aCornerBuffer, start, end, width, aError );
-    }
         break;
 
     case PAD_SHAPE_TRAPEZOID:
