@@ -211,12 +211,15 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect, bool aAll
 
     static wxString lastComponentName;
 
-    WX_PROGRESS_REPORTER progressReporter( this, _( "Loading Footprint Libraries" ), 3 );
-    GFootprintList.ReadFootprintFiles( fpTable, nullptr, &progressReporter );
-    progressReporter.Show( false );
+    // Load footprint files:
+    WX_PROGRESS_REPORTER* progressReporter = new WX_PROGRESS_REPORTER( this,
+                                                    _( "Loading Footprint Libraries" ), 3 );
+    GFootprintList.ReadFootprintFiles( fpTable, nullptr, progressReporter );
+    bool cancel = progressReporter->WasCancelled();
+    progressReporter->Destroy();
 
-    if( progressReporter.WasCancelled() )
-        return NULL;
+    if( cancel )
+        return nullptr;
 
     if( GFootprintList.GetErrorCount() )
         GFootprintList.DisplayErrors( this );
