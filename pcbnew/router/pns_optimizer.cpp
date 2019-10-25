@@ -711,7 +711,8 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::rectBreakouts( int aWidth,
         const SHAPE* aShape, bool aPermitDiagonal ) const
 {
     const SHAPE_RECT* rect = static_cast<const SHAPE_RECT*>(aShape);
-    VECTOR2I s = rect->GetSize(), c = rect->GetPosition() + VECTOR2I( s.x / 2, s.y / 2 );
+    VECTOR2I s = rect->GetSize();
+    VECTOR2I c = rect->GetPosition() + VECTOR2I( s.x / 2, s.y / 2 );
     BREAKOUT_LIST breakouts;
 
     VECTOR2I d_offset;
@@ -833,7 +834,7 @@ int OPTIMIZER::smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVert
     const int ForbiddenAngles = DIRECTION_45::ANG_ACUTE | DIRECTION_45::ANG_RIGHT |
                                 DIRECTION_45::ANG_HALF_FULL | DIRECTION_45::ANG_UNDEFINED;
 
-    typedef std::pair<int, SHAPE_LINE_CHAIN> RtVariant;
+    typedef std::tuple<int, long long int, SHAPE_LINE_CHAIN> RtVariant;
     std::vector<RtVariant> variants;
 
     SOLID* solid = dyn_cast<SOLID*>( aPad );
@@ -888,9 +889,10 @@ int OPTIMIZER::smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVert
                 if( cc == 0 )
                 {
                     RtVariant vp;
-                    vp.first = p;
-                    vp.second = aEnd ? v.Reverse() : v;
-                    vp.second.Simplify();
+                    std::get<0>( vp ) = p;
+                    std::get<1>( vp ) = breakout.Length();
+                    std::get<2>( vp ) = aEnd ? v.Reverse() : v;
+                    std::get<2>( vp ).Simplify();
                     variants.push_back( vp );
                 }
             }
@@ -902,23 +904,23 @@ int OPTIMIZER::smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVert
     // here is that if the pad is oblong, the track should not exit the shorter side and parallel
     // the pad but should follow the pad's preferential direction before exiting.
     int min_cost = INT_MAX;
-    int max_length = 0;
+    long long int max_length = 0;
     SHAPE_LINE_CHAIN l_best;
     bool found = false;
     int p_best = -1;
 
     for( RtVariant& vp : variants )
     {
-        LINE tmp( *aLine, vp.second );
-        int cost = COST_ESTIMATOR::CornerCost( vp.second );
-        int len = vp.second.Length();
+        LINE tmp( *aLine, std::get<2>( vp ) );
+        int cost = COST_ESTIMATOR::CornerCost( std::get<2>( vp ) );
+        long long int len = std::get<1>( vp );
 
         if( !checkColliding( &tmp ) )
         {
             if( cost < min_cost || ( cost == min_cost && len > max_length ) )
             {
-                l_best = vp.second;
-                p_best = vp.first;
+                l_best = std::get<2>( vp );
+                p_best = std::get<0>( vp );
                 found  = true;
 
                 if( cost <= min_cost )
