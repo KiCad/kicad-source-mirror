@@ -723,25 +723,33 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
     case PAD_SHAPE_OVAL:
         // An oval pad has the same shape as a segment with rounded ends
+        // If the oval is actually a circle (same x/y size), treat it the same
+        if( dx == dy )
         {
-        int width;
-        wxPoint shape_offset;
-        if( dy > dx )   // Oval pad X/Y ratio for choosing translation axis
-        {
-            shape_offset.y = dy - dx;
-            width = dx * 2;
+            dx = KiROUND( dx * aCorrectionFactor );
+            TransformCircleToPolygon( aCornerBuffer, padShapePos, dx,
+                                      aCircleToSegmentsCount );
         }
-        else    //if( dy <= dx )
+        else
         {
-            shape_offset.x = dy - dx;
-            width = dy * 2;
-        }
+            int width;
+            wxPoint shape_offset;
+            if( dy > dx )   // Oval pad X/Y ratio for choosing translation axis
+            {
+                shape_offset.y = dy - dx;
+                width = dx * 2;
+            }
+            else    //if( dy <= dx )
+            {
+                shape_offset.x = dy - dx;
+                width = dy * 2;
+            }
 
-        RotatePoint( &shape_offset, angle );
-        wxPoint start = padShapePos - shape_offset;
-        wxPoint end = padShapePos + shape_offset;
-        TransformOvalClearanceToPolygon( aCornerBuffer, start, end, width,
-                                aCircleToSegmentsCount, aCorrectionFactor );
+            RotatePoint( &shape_offset, angle );
+            wxPoint start = padShapePos - shape_offset;
+            wxPoint end = padShapePos + shape_offset;
+            TransformOvalClearanceToPolygon( aCornerBuffer, start, end, width,
+                                    aCircleToSegmentsCount, aCorrectionFactor );
         }
         break;
 
