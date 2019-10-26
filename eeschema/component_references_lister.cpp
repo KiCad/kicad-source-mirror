@@ -341,7 +341,9 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
 #endif
     for( unsigned ii = 0; ii < componentFlatList.size(); ii++ )
     {
-        if( componentFlatList[ii].m_Flag )
+        auto& ref_unit = componentFlatList[ii];
+
+        if( ref_unit.m_Flag )
             continue;
 
         // Check whether this component is in aLockedUnitMap.
@@ -354,7 +356,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             {
                 SCH_REFERENCE &thisRef = pair.second[thisRefI];
 
-                if( thisRef.IsSameInstance( componentFlatList[ii] ) )
+                if( thisRef.IsSameInstance( ref_unit ) )
                 {
                     lockedList = &pair.second;
                     break;
@@ -363,8 +365,8 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             if( lockedList != NULL ) break;
         }
 
-        if(  ( componentFlatList[first].CompareRef( componentFlatList[ii] ) != 0 )
-          || ( aUseSheetNum && ( componentFlatList[first].m_SheetNum != componentFlatList[ii].m_SheetNum ) )  )
+        if(  ( componentFlatList[first].CompareRef( ref_unit ) != 0 )
+          || ( aUseSheetNum && ( componentFlatList[first].m_SheetNum != ref_unit.m_SheetNum ) )  )
         {
             // New reference found: we need a new ref number for this reference
             first = ii;
@@ -373,14 +375,14 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
 
             // when using sheet number, ensure ref number >= sheet number* aSheetIntervalId
             if( aUseSheetNum )
-                minRefId = componentFlatList[ii].m_SheetNum * aSheetIntervalId;
+                minRefId = ref_unit.m_SheetNum * aSheetIntervalId;
 
             LastReferenceNumber = GetLastReference( ii, minRefId );
 
 #else
             // when using sheet number, ensure ref number >= sheet number* aSheetIntervalId
             if( aUseSheetNum )
-                minRefId = componentFlatList[ii].m_SheetNum * aSheetIntervalId + 1;
+                minRefId = ref_unit.m_SheetNum * aSheetIntervalId + 1;
             else
                 minRefId = aStartNumber + 1;
 
@@ -389,40 +391,40 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
         }
 
         // Annotation of one part per package components (trivial case).
-        if( componentFlatList[ii].GetLibPart()->GetUnitCount() <= 1 )
+        if( ref_unit.GetLibPart()->GetUnitCount() <= 1 )
         {
-            if( componentFlatList[ii].m_IsNew )
+            if( ref_unit.m_IsNew )
             {
 #ifdef USE_OLD_ALGO
                 LastReferenceNumber++;
 #else
                 LastReferenceNumber = CreateFirstFreeRefId( idList, minRefId );
 #endif
-                componentFlatList[ii].m_NumRef = LastReferenceNumber;
+                ref_unit.m_NumRef = LastReferenceNumber;
             }
 
-            componentFlatList[ii].m_Unit  = 1;
-            componentFlatList[ii].m_Flag  = 1;
-            componentFlatList[ii].m_IsNew = false;
+            ref_unit.m_Unit  = 1;
+            ref_unit.m_Flag  = 1;
+            ref_unit.m_IsNew = false;
             continue;
         }
 
         // Annotation of multi-unit parts ( n units per part ) (complex case)
-        NumberOfUnits = componentFlatList[ii].GetLibPart()->GetUnitCount();
+        NumberOfUnits = ref_unit.GetLibPart()->GetUnitCount();
 
-        if( componentFlatList[ii].m_IsNew )
+        if( ref_unit.m_IsNew )
         {
 #ifdef USE_OLD_ALGO
             LastReferenceNumber++;
 #else
             LastReferenceNumber = CreateFirstFreeRefId( idList, minRefId );
 #endif
-            componentFlatList[ii].m_NumRef = LastReferenceNumber;
+            ref_unit.m_NumRef = LastReferenceNumber;
 
-            if( !componentFlatList[ii].IsUnitsLocked() )
-                componentFlatList[ii].m_Unit = 1;
+            if( !ref_unit.IsUnitsLocked() )
+                ref_unit.m_Unit = 1;
 
-            componentFlatList[ii].m_Flag = 1;
+            ref_unit.m_Flag = 1;
         }
 
         // If this component is in aLockedUnitMap, copy the annotation to all
@@ -435,18 +437,18 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             {
                 SCH_REFERENCE &thisRef = (*lockedList)[thisRefI];
 
-                if( thisRef.IsSameInstance( componentFlatList[ii] ) )
+                if( thisRef.IsSameInstance( ref_unit ) )
                 {
                     // This is the component we're currently annotating. Hold the unit!
-                    componentFlatList[ii].m_Unit = thisRef.m_Unit;
+                    ref_unit.m_Unit = thisRef.m_Unit;
                     // lock this new full reference
-                    inUseRefs.insert( buildFullReference( componentFlatList[ii] ) );
+                    inUseRefs.insert( buildFullReference( ref_unit ) );
                 }
 
-                if( thisRef.CompareValue( componentFlatList[ii] ) != 0 )
+                if( thisRef.CompareValue( ref_unit ) != 0 )
                     continue;
 
-                if( thisRef.CompareLibName( componentFlatList[ii] ) != 0 )
+                if( thisRef.CompareLibName( ref_unit ) != 0 )
                     continue;
 
                 // Find the matching component
@@ -455,14 +457,14 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                     if( ! thisRef.IsSameInstance( componentFlatList[jj] ) )
                         continue;
 
-                    wxString ref_candidate = buildFullReference( componentFlatList[ii], thisRef.m_Unit );
+                    wxString ref_candidate = buildFullReference( ref_unit, thisRef.m_Unit );
 
                     // propagate the new reference and unit selection to the "old" component,
                     // if this new full reference is not already used (can happens when initial
                     // multiunits components have duplicate references)
                     if( inUseRefs.find( ref_candidate ) == inUseRefs.end() )
                     {
-                        componentFlatList[jj].m_NumRef = componentFlatList[ii].m_NumRef;
+                        componentFlatList[jj].m_NumRef = ref_unit.m_NumRef;
                         componentFlatList[jj].m_Unit = thisRef.m_Unit;
                         componentFlatList[jj].m_IsNew = false;
                         componentFlatList[jj].m_Flag = 1;
@@ -481,7 +483,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             */
             for( Unit = 1; Unit <= NumberOfUnits; Unit++ )
             {
-                if( componentFlatList[ii].m_Unit == Unit )
+                if( ref_unit.m_Unit == Unit )
                     continue;
 
                 int found = FindUnit( ii, Unit );
@@ -492,29 +494,35 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                 // Search a component to annotate ( same prefix, same value, not annotated)
                 for( unsigned jj = ii + 1; jj < componentFlatList.size(); jj++ )
                 {
-                    if( componentFlatList[jj].m_Flag )    // already tested
+                    auto& cmp_unit = componentFlatList[jj];
+
+                    if( cmp_unit.m_Flag )    // already tested
                         continue;
 
-                    if( componentFlatList[ii].CompareRef( componentFlatList[jj] ) != 0 )
+                    if( cmp_unit.CompareRef( ref_unit ) != 0 )
                         continue;
 
-                    if( componentFlatList[jj].CompareValue( componentFlatList[ii] ) != 0 )
+                    if( cmp_unit.CompareValue( ref_unit ) != 0 )
                         continue;
 
-                    if( componentFlatList[jj].CompareLibName( componentFlatList[ii] ) != 0 )
+                    if( cmp_unit.CompareLibName( ref_unit ) != 0 )
                         continue;
 
-                    if( !componentFlatList[jj].m_IsNew )
+                    if( aUseSheetNum &&
+                            cmp_unit.GetSheetPath().Cmp( ref_unit.GetSheetPath() ) != 0 )
+                        continue;
+
+                    if( !cmp_unit.m_IsNew )
                         continue;
 
                     // Component without reference number found, annotate it if possible
-                    if( !componentFlatList[jj].IsUnitsLocked()
-                        || ( componentFlatList[jj].m_Unit == Unit ) )
+                    if( !cmp_unit.IsUnitsLocked()
+                        || ( cmp_unit.m_Unit == Unit ) )
                     {
-                        componentFlatList[jj].m_NumRef = componentFlatList[ii].m_NumRef;
-                        componentFlatList[jj].m_Unit   = Unit;
-                        componentFlatList[jj].m_Flag   = 1;
-                        componentFlatList[jj].m_IsNew  = false;
+                        cmp_unit.m_NumRef = ref_unit.m_NumRef;
+                        cmp_unit.m_Unit   = Unit;
+                        cmp_unit.m_Flag   = 1;
+                        cmp_unit.m_IsNew  = false;
                         break;
                     }
                 }
