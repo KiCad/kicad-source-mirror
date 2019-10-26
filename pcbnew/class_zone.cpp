@@ -629,21 +629,16 @@ bool ZONE_CONTAINER::HitTest( const EDA_RECT& aRect, bool aContained, int aAccur
 
 int ZONE_CONTAINER::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 {
-    int         myClearance = m_ZoneClearance;
+    int myClearance = m_ZoneClearance;
 
-#if 1   // Maybe the netclass clearance should not come into play for a zone?
-        // At least the policy decision can be controlled by the zone
-        // itself, i.e. here.  On reasons of insufficient documentation,
-        // the user will be less bewildered if we simply respect the
-        // "zone clearance" setting in the zone properties dialog.  (At least
-        // until there is a UI boolean for this.)
-
-    NETCLASSPTR   myClass  = GetNetClass();
+    // The actual zone clearance is the biggest of the zone netclass clearance
+    // and the zone clearance setting in the zone properties dialog.
+    NETCLASSPTR myClass  = GetNetClass();
 
     if( myClass )
         myClearance = std::max( myClearance, myClass->GetClearance() );
-#endif
 
+    // Get the final clearance between me and aItem
     if( aItem )
     {
         int hisClearance = aItem->GetClearance( NULL );
