@@ -50,6 +50,7 @@
 #include <tools/selection_tool.h>
 #include <tools/pcbnew_control.h>
 #include <tools/pcb_actions.h>
+#include "tools/pcbnew_picker_tool.h"
 #include <board_commit.h>
 #include <memory>
 #include <eda_pattern_match.h>
@@ -204,6 +205,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_toolManager->RegisterTool( new SELECTION_TOOL );
     m_toolManager->RegisterTool( new COMMON_TOOLS );    // for std context menus (zoom & grid)
     m_toolManager->RegisterTool( new COMMON_CONTROL );
+    m_toolManager->RegisterTool( new PCBNEW_PICKER_TOOL ); // for setting grid origin
     m_toolManager->InitTools();
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 

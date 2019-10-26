@@ -145,7 +145,7 @@ protected:
     
     PCB_BASE_EDIT_FRAME* frame() const 
     { 
-        return getEditFrame<PCB_BASE_EDIT_FRAME>(); 
+        return getEditFrame<PCB_BASE_EDIT_FRAME>();
     }
     
     BOARD* board() const { return getModel<BOARD>(); }
