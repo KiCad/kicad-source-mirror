@@ -443,6 +443,7 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
         format( static_cast<TRACK*>( aItem ), aNestLevel );
         break;
 
+    case PCB_MODULE_ZONE_AREA_T:
     case PCB_ZONE_AREA_T:
         format( static_cast<ZONE_CONTAINER*>( aItem ), aNestLevel );
         break;

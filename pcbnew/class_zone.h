@@ -51,19 +51,28 @@ typedef std::vector<SEG> ZONE_SEGMENT_FILL;
 /**
  * Class ZONE_CONTAINER
  * handles a list of polygons defining a copper zone.
- * A zone is described by a main polygon, a time stamp, a layer, and a net name.
+ * A zone is described by a main polygon, a time stamp, a layer or a lyer set, and a net name.
  * Other polygons inside the main polygon are holes in the zone.
+ *
+ * a item ZONE_CONTAINER is living in a board
+ * a variant MODULE_ZONE_CONTAINER is living in a footprint
  */
 class ZONE_CONTAINER : public BOARD_CONNECTED_ITEM
 {
 public:
 
-    /**
-     * Zone hatch styles
-     */
+    /// Zone hatch styles
     typedef enum HATCH_STYLE { NO_HATCH, DIAGONAL_FULL, DIAGONAL_EDGE } HATCH_STYLE;
 
-    ZONE_CONTAINER( BOARD_ITEM_CONTAINER* parent );
+    /**
+     * The ctor to build ZONE_CONTAINER, but comaptible with MODULE_ZONE_CONTAINER
+     * requirement.
+     * if aInModule is true, a MODULE_ZONE_CONTAINER is actually built
+     * (same item, but with a specific type id:
+     * The type is PCB_ZONE_AREA_T for a ZONE_CONTAINER
+     * The type is PCB_MODULE_ZONE_AREA_T for a MODULE_ZONE_CONTAINER
+     */
+    ZONE_CONTAINER( BOARD_ITEM_CONTAINER* parent, bool aInModule = false );
 
     ZONE_CONTAINER( const ZONE_CONTAINER& aZone );
     ZONE_CONTAINER& operator=( const ZONE_CONTAINER &aOther );
@@ -699,7 +708,11 @@ public:
 
     virtual void SwapData( BOARD_ITEM* aImage ) override;
 
-private:
+protected:
+    /** Copy aZone data to me
+     */
+    void copyDataFromSrc( const ZONE_CONTAINER& aZone );
+
 
     SHAPE_POLY_SET*       m_Poly;                ///< Outline of the zone.
     int                   m_cornerSmoothingType;
@@ -801,5 +814,27 @@ private:
     bool                  m_hv45;           // constrain edges to horizontal, vertical or 45º
 };
 
+
+/**
+ * MODULE_ZONE_CONTAINER is the same item as ZONE_CONTAINER, but with a specific type id
+ * ZONE_CONTAINER is living in a board
+ * MODULE_ZONE_CONTAINER is living in a footprint
+ * althougt the are similar, these items need a specific type to be easily managed
+ * in many functions using the type id in switches
+ */
+class MODULE_ZONE_CONTAINER : public ZONE_CONTAINER
+{
+public:
+    MODULE_ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent ) :
+                            ZONE_CONTAINER( aParent, true )
+    {
+    }
+    MODULE_ZONE_CONTAINER( const MODULE_ZONE_CONTAINER& aZone );
+    MODULE_ZONE_CONTAINER& operator=( const MODULE_ZONE_CONTAINER &aOther );
+
+//    ~MODULE_ZONE_CONTAINER();
+
+    EDA_ITEM* Clone() const override;
+};
 
 #endif  // CLASS_ZONE_H_

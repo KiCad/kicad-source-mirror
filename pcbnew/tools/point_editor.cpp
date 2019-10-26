@@ -183,6 +183,7 @@ public:
                 break;
             }
 
+            case PCB_MODULE_ZONE_AREA_T:
             case PCB_ZONE_AREA_T:
             {
                 auto zone = static_cast<const ZONE_CONTAINER*>( aItem );
@@ -539,6 +540,7 @@ void POINT_EDITOR::updateItem() const
         break;
     }
 
+    case PCB_MODULE_ZONE_AREA_T:
     case PCB_ZONE_AREA_T:
     {
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
@@ -622,7 +624,7 @@ void POINT_EDITOR::finishItem()
     if( !item )
         return;
 
-    if( item->Type() == PCB_ZONE_AREA_T )
+    if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T )
     {
         auto zone = static_cast<ZONE_CONTAINER*>( item );
 
@@ -723,6 +725,7 @@ void POINT_EDITOR::updatePoints()
         break;
     }
 
+    case PCB_MODULE_ZONE_AREA_T:
     case PCB_ZONE_AREA_T:
     {
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
@@ -791,7 +794,9 @@ void POINT_EDITOR::setAltConstraint( bool aEnabled )
     {
         EDIT_LINE* line = dynamic_cast<EDIT_LINE*>( m_editedPoint );
 
-        if( line && m_editPoints->GetParent()->Type() == PCB_ZONE_AREA_T )
+        if( line &&
+            ( m_editPoints->GetParent()->Type() == PCB_ZONE_AREA_T
+              || m_editPoints->GetParent()->Type() == PCB_MODULE_ZONE_AREA_T ) )
         {
             m_altConstraint.reset( (EDIT_CONSTRAINT<EDIT_POINT>*)( new EC_CONVERGING( *line, *m_editPoints ) ) );
         }
@@ -866,7 +871,7 @@ bool POINT_EDITOR::canAddCorner( const EDA_ITEM& aItem )
     const auto type = aItem.Type();
 
     // Works only for zones and line segments
-    return type == PCB_ZONE_AREA_T ||
+    return type == PCB_ZONE_AREA_T || type == PCB_MODULE_ZONE_AREA_T ||
            ( ( type == PCB_LINE_T || type == PCB_MODULE_EDGE_T ) &&
              ( static_cast<const DRAWSEGMENT&>( aItem ).GetShape() == S_SEGMENT  ||
                static_cast<const DRAWSEGMENT&>( aItem ).GetShape() == S_POLYGON ) );
@@ -907,14 +912,14 @@ bool POINT_EDITOR::removeCornerCondition( const SELECTION& )
 
     EDA_ITEM* item = m_editPoints->GetParent();
 
-    if( !item || !( item->Type() == PCB_ZONE_AREA_T ||
+    if( !item || !( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T ||
             ( ( item->Type() == PCB_MODULE_EDGE_T || item->Type() == PCB_LINE_T ) &&
                    static_cast<DRAWSEGMENT*>( item )->GetShape() == S_POLYGON ) ) )
         return false;
 
     SHAPE_POLY_SET *polyset;
 
-    if( item->Type() == PCB_ZONE_AREA_T )
+    if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T )
         polyset = static_cast<ZONE_CONTAINER*>( item )->Outline();
     else
         polyset = &static_cast<DRAWSEGMENT*>( item )->GetPolyShape();
@@ -957,7 +962,7 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     DRAWSEGMENT* graphicItem = dynamic_cast<DRAWSEGMENT*>( item );
     BOARD_COMMIT commit( frame );
 
-    if( item->Type() == PCB_ZONE_AREA_T ||
+    if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T ||
             ( graphicItem && graphicItem->GetShape() == S_POLYGON ) )
     {
         unsigned int nearestIdx = 0;
@@ -966,7 +971,7 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         unsigned int firstPointInContour = 0;
         SHAPE_POLY_SET* zoneOutline;
 
-        if( item->Type() == PCB_ZONE_AREA_T )
+        if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T )
         {
             ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
             zoneOutline = zone->Outline();
@@ -1022,7 +1027,7 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         zoneOutline->InsertVertex( nextNearestIdx, nearestPoint );
 
         // We re-hatch the filled zones but not polygons
-        if( item->Type() == PCB_ZONE_AREA_T )
+        if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T )
             static_cast<ZONE_CONTAINER*>( item )->Hatch();
 
 
@@ -1078,7 +1083,7 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 
     SHAPE_POLY_SET* polygon = nullptr;
 
-    if( item->Type() == PCB_ZONE_AREA_T)
+    if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T )
     {
         auto zone = static_cast<ZONE_CONTAINER*>( item );
         polygon = zone->Outline();
@@ -1132,7 +1137,7 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
         commit.Push( _( "Remove a zone/polygon corner" ) );
 
         // Refresh zone hatching
-        if( item->Type() == PCB_ZONE_AREA_T)
+        if( item->Type() == PCB_ZONE_AREA_T || item->Type() == PCB_MODULE_ZONE_AREA_T )
             static_cast<ZONE_CONTAINER*>( item )->Hatch();
 
         updatePoints();

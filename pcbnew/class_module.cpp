@@ -110,7 +110,7 @@ MODULE::MODULE( const MODULE& aModule ) :
 
     // Copy auxiliary data: Zones
     for( auto item : aModule.Zones() )
-        Add( static_cast<ZONE_CONTAINER*>( item->Clone() ) );
+        Add( static_cast<MODULE_ZONE_CONTAINER*>( item->Clone() ) );
 
     // Copy auxiliary data: Drawings
     for( auto item : aModule.GraphicalItems() )
@@ -156,10 +156,10 @@ MODULE::~MODULE()
 
     m_pads.clear();
 
-    for( auto p : m_zones )
+    for( auto p : m_fp_zones )
         delete p;
 
-    m_zones.clear();
+    m_fp_zones.clear();
 
     for( auto d : m_drawings )
         delete d;
@@ -207,11 +207,11 @@ MODULE& MODULE::operator=( const MODULE& aOther )
     }
 
     // Copy auxiliary data: Zones
-    m_zones.clear();
+    m_fp_zones.clear();
 
     for( auto item : aOther.Zones() )
     {
-        Add( static_cast<ZONE_CONTAINER*>( item->Clone() ) );
+        Add( static_cast<MODULE_ZONE_CONTAINER*>( item->Clone() ) );
     }
 
     // Copy auxiliary data: Drawings
@@ -278,11 +278,11 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
             m_pads.push_front( static_cast<D_PAD*>( aBoardItem ) );
         break;
 
-    case PCB_ZONE_AREA_T:
+    case PCB_MODULE_ZONE_AREA_T:
         if( aMode == ADD_APPEND )
-            m_zones.push_back( static_cast<ZONE_CONTAINER*>( aBoardItem ) );
+            m_fp_zones.push_back( static_cast<MODULE_ZONE_CONTAINER*>( aBoardItem ) );
         else
-            m_zones.insert( m_zones.begin(), static_cast<ZONE_CONTAINER*>( aBoardItem ) );
+            m_fp_zones.insert( m_fp_zones.begin(), static_cast<MODULE_ZONE_CONTAINER*>( aBoardItem ) );
         break;
 
     default:
@@ -337,12 +337,12 @@ void MODULE::Remove( BOARD_ITEM* aBoardItem )
 
         break;
 
-    case PCB_ZONE_AREA_T:
-        for( auto it = m_zones.begin(); it != m_zones.end(); ++it )
+    case PCB_MODULE_ZONE_AREA_T:
+        for( auto it = m_fp_zones.begin(); it != m_fp_zones.end(); ++it )
         {
-            if( *it == static_cast<ZONE_CONTAINER*>( aBoardItem ) )
+            if( *it == static_cast<MODULE_ZONE_CONTAINER*>( aBoardItem ) )
             {
-                m_zones.erase( it );
+                m_fp_zones.erase( it );
                 break;
             }
         }
@@ -365,7 +365,7 @@ void MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
     for( auto pad : m_pads )
         pad->Print( aFrame, aDC, aOffset );
 
-    for( auto zone : m_zones )
+    for( auto zone : m_fp_zones )
         zone->Print( aFrame, aDC, aOffset );
 
     BOARD* brd = GetBoard();
@@ -424,7 +424,7 @@ EDA_RECT MODULE::GetFootprintRect() const
     for( auto pad : m_pads )
         area.Merge( pad->GetBoundingBox() );
 
-    for( auto zone : m_zones )
+    for( auto zone : m_fp_zones )
         area.Merge( zone->GetBoundingBox() );
 
     return area;
@@ -632,7 +632,7 @@ bool MODULE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) co
                 return true;
         }
 
-        for( auto zone : m_zones )
+        for( auto zone : m_fp_zones )
         {
             if( zone->HitTest( arect, false, 0 ) )
                 return true;
@@ -790,8 +790,8 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
             ++p;
             break;
 
-        case PCB_ZONE_AREA_T:
-            result = IterateForward<ZONE_CONTAINER*>( m_zones, inspector, testData, p );
+        case PCB_MODULE_ZONE_AREA_T:
+            result = IterateForward<MODULE_ZONE_CONTAINER*>( m_fp_zones, inspector, testData, p );
             ++p;
             break;
 
@@ -872,8 +872,8 @@ void MODULE::RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction )
         for( auto pad : m_pads )
             aFunction( static_cast<BOARD_ITEM*>( pad ) );
 
-        for( auto zone : m_zones )
-            aFunction( static_cast<ZONE_CONTAINER*>( zone ) );
+        for( auto zone : m_fp_zones )
+            aFunction( static_cast<MODULE_ZONE_CONTAINER*>( zone ) );
 
         for( auto drawing : m_drawings )
             aFunction( static_cast<BOARD_ITEM*>( drawing ) );
@@ -1080,7 +1080,7 @@ void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         pad->Flip( m_Pos, false );
 
     // Mirror zones to other side of board.
-    for( auto zone : m_zones )
+    for( auto zone : m_fp_zones )
         zone->Flip( m_Pos, aFlipLeftRight );
 
     // Mirror reference and value.
@@ -1128,7 +1128,7 @@ void MODULE::SetPosition( const wxPoint& newpos )
         pad->SetPosition( pad->GetPosition() + delta );
     }
 
-    for( auto zone : m_zones )
+    for( auto zone : m_fp_zones )
         zone->Move( delta );
 
     for( auto item : m_drawings )
@@ -1230,7 +1230,7 @@ void MODULE::SetOrientation( double newangle )
         pad->SetDrawCoord();
     }
 
-    for( auto zone : m_zones )
+    for( auto zone : m_fp_zones )
     {
         zone->Rotate( GetPosition(), angleChange );
     }
@@ -1261,7 +1261,7 @@ BOARD_ITEM* MODULE::Duplicate( const BOARD_ITEM* aItem,
 {
     BOARD_ITEM* new_item = NULL;
     D_PAD* new_pad = NULL;
-    ZONE_CONTAINER* new_zone = NULL;
+    MODULE_ZONE_CONTAINER* new_zone = NULL;
 
     switch( aItem->Type() )
     {
@@ -1276,12 +1276,12 @@ BOARD_ITEM* MODULE::Duplicate( const BOARD_ITEM* aItem,
         break;
     }
 
-    case PCB_ZONE_AREA_T:
+    case PCB_MODULE_ZONE_AREA_T:
     {
-        new_zone = new ZONE_CONTAINER( *static_cast<const ZONE_CONTAINER*>( aItem ) );
+        new_zone = new MODULE_ZONE_CONTAINER( *static_cast<const MODULE_ZONE_CONTAINER*>( aItem ) );
 
         if( aAddToModule )
-            m_zones.push_back( new_zone );
+            m_fp_zones.push_back( new_zone );
 
         new_item = new_zone;
         break;

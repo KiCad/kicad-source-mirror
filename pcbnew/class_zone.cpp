@@ -42,8 +42,8 @@
 #include <polygon_test_point_inside.h>
 
 
-ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
-        : BOARD_CONNECTED_ITEM( aParent, PCB_ZONE_AREA_T )
+ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
+        : BOARD_CONNECTED_ITEM( aParent, aInModule ? PCB_MODULE_ZONE_AREA_T : PCB_ZONE_AREA_T )
 {
     m_CornerSelection = nullptr;                // no corner is selected
     m_IsFilled = false;                         // fill status : true when the zone is filled
@@ -75,6 +75,55 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
 
 ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone )
         : BOARD_CONNECTED_ITEM( aZone.GetParent(), PCB_ZONE_AREA_T )
+{
+    copyDataFromSrc( aZone );
+}
+
+
+ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
+{
+    BOARD_CONNECTED_ITEM::operator=( aOther );
+
+    // Replace the outlines for aOther outlines.
+    delete m_Poly;
+    m_Poly = new SHAPE_POLY_SET( *aOther.m_Poly );
+
+    m_CornerSelection  = nullptr; // for corner moving, corner index to (null if no selection)
+    m_ZoneClearance    = aOther.m_ZoneClearance;            // clearance value
+    m_ZoneMinThickness = aOther.m_ZoneMinThickness;
+    m_FilledPolysUseThickness = aOther.m_FilledPolysUseThickness;
+    m_FillMode = aOther.m_FillMode;                         // filling mode (segments/polygons)
+    m_PadConnection = aOther.m_PadConnection;
+    m_ThermalReliefGap = aOther.m_ThermalReliefGap;
+    m_ThermalReliefCopperBridge = aOther.m_ThermalReliefCopperBridge;
+    SetHatchStyle( aOther.GetHatchStyle() );
+    SetHatchPitch( aOther.GetHatchPitch() );
+    m_HatchLines = aOther.m_HatchLines;     // copy vector <SEG>
+    m_FilledPolysList.RemoveAllContours();
+    m_FilledPolysList.Append( aOther.m_FilledPolysList );
+    m_FillSegmList.clear();
+    m_FillSegmList = aOther.m_FillSegmList;
+
+    m_HatchFillTypeThickness = aOther.m_HatchFillTypeThickness;
+    m_HatchFillTypeGap = aOther.m_HatchFillTypeGap;
+    m_HatchFillTypeOrientation = aOther.m_HatchFillTypeOrientation;
+    m_HatchFillTypeSmoothingLevel = aOther.m_HatchFillTypeSmoothingLevel;
+    m_HatchFillTypeSmoothingValue = aOther.m_HatchFillTypeSmoothingValue;
+
+    SetLayerSet( aOther.GetLayerSet() );
+
+    return *this;
+}
+
+
+ZONE_CONTAINER::~ZONE_CONTAINER()
+{
+    delete m_Poly;
+    delete m_CornerSelection;
+}
+
+
+void ZONE_CONTAINER::copyDataFromSrc( const ZONE_CONTAINER& aZone )
 {
     m_Poly = new SHAPE_POLY_SET( *aZone.m_Poly );
 
@@ -119,49 +168,6 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone )
     m_netinfo = aZone.m_netinfo;
 
     SetNeedRefill( aZone.NeedRefill() );
-}
-
-
-ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
-{
-    BOARD_CONNECTED_ITEM::operator=( aOther );
-
-    // Replace the outlines for aOther outlines.
-    delete m_Poly;
-    m_Poly = new SHAPE_POLY_SET( *aOther.m_Poly );
-
-    m_CornerSelection  = nullptr; // for corner moving, corner index to (null if no selection)
-    m_ZoneClearance    = aOther.m_ZoneClearance;            // clearance value
-    m_ZoneMinThickness = aOther.m_ZoneMinThickness;
-    m_FilledPolysUseThickness = aOther.m_FilledPolysUseThickness;
-    m_FillMode = aOther.m_FillMode;                         // filling mode (segments/polygons)
-    m_PadConnection = aOther.m_PadConnection;
-    m_ThermalReliefGap = aOther.m_ThermalReliefGap;
-    m_ThermalReliefCopperBridge = aOther.m_ThermalReliefCopperBridge;
-    SetHatchStyle( aOther.GetHatchStyle() );
-    SetHatchPitch( aOther.GetHatchPitch() );
-    m_HatchLines = aOther.m_HatchLines;     // copy vector <SEG>
-    m_FilledPolysList.RemoveAllContours();
-    m_FilledPolysList.Append( aOther.m_FilledPolysList );
-    m_FillSegmList.clear();
-    m_FillSegmList = aOther.m_FillSegmList;
-
-    m_HatchFillTypeThickness = aOther.m_HatchFillTypeThickness;
-    m_HatchFillTypeGap = aOther.m_HatchFillTypeGap;
-    m_HatchFillTypeOrientation = aOther.m_HatchFillTypeOrientation;
-    m_HatchFillTypeSmoothingLevel = aOther.m_HatchFillTypeSmoothingLevel;
-    m_HatchFillTypeSmoothingValue = aOther.m_HatchFillTypeSmoothingValue;
-
-    SetLayerSet( aOther.GetLayerSet() );
-
-    return *this;
-}
-
-
-ZONE_CONTAINER::~ZONE_CONTAINER()
-{
-    delete m_Poly;
-    delete m_CornerSelection;
 }
 
 
@@ -1298,4 +1304,24 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon( SHAPE_POLY_SE
 
     polybuffer.Fracture( SHAPE_POLY_SET::PM_FAST );
     aCornerBuffer.Append( polybuffer );
+}
+
+
+MODULE_ZONE_CONTAINER::MODULE_ZONE_CONTAINER( const MODULE_ZONE_CONTAINER& aZone )
+        : ZONE_CONTAINER( aZone.GetParent(), true )
+{
+    copyDataFromSrc( aZone );
+}
+
+
+MODULE_ZONE_CONTAINER& MODULE_ZONE_CONTAINER::operator=( const MODULE_ZONE_CONTAINER& aOther )
+{
+    ZONE_CONTAINER::operator=( aOther );
+    return *this;
+}
+
+
+EDA_ITEM* MODULE_ZONE_CONTAINER::Clone() const
+{
+    return new MODULE_ZONE_CONTAINER( *this );
 }

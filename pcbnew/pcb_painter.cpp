@@ -354,6 +354,10 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         draw( static_cast<const ZONE_CONTAINER*>( item ), aLayer );
         break;
 
+    case PCB_MODULE_ZONE_AREA_T:
+        draw( static_cast<const ZONE_CONTAINER*>( item ), aLayer );
+        break;
+
     case PCB_DIMENSION_T:
         draw( static_cast<const DIMENSION*>( item ), aLayer );
         break;

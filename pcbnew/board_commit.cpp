@@ -64,7 +64,7 @@ COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
     {
         EDA_ITEM* item = aItem->GetParent();
 
-        if( item && item->Type() == PCB_MODULE_T ) // means aItem belongs a footprint
+        if( item && item->Type() == PCB_MODULE_T )  // means aItem belongs a footprint
             aItem = item;
     }
 
@@ -171,6 +171,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_PAD_T:
                 case PCB_MODULE_EDGE_T:
                 case PCB_MODULE_TEXT_T:
+                case PCB_MODULE_ZONE_AREA_T:
                     // This level can only handle module items when editing modules
                     if( !m_editModules )
                         break;
@@ -330,9 +331,15 @@ EDA_ITEM* BOARD_COMMIT::parentObject( EDA_ITEM* aItem ) const
         case PCB_PAD_T:
         case PCB_MODULE_EDGE_T:
         case PCB_MODULE_TEXT_T:
+        case PCB_MODULE_ZONE_AREA_T:
             return aItem->GetParent();
-        default:
+
+        case PCB_ZONE_AREA_T:
+            wxASSERT( !dynamic_cast<MODULE*>( aItem->GetParent() ) );
             return aItem;
+
+        default:
+            break;
     }
 
     return aItem;

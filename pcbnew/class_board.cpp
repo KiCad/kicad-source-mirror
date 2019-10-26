@@ -1532,7 +1532,7 @@ std::list<ZONE_CONTAINER*> BOARD::GetZoneList( bool aIncludeZonesInFootprints )
     {
         for( MODULE* mod : m_modules )
         {
-            for( ZONE_CONTAINER* zone : mod->Zones() )
+            for( MODULE_ZONE_CONTAINER* zone : mod->Zones() )
             {
                 zones.push_back( zone );
             }

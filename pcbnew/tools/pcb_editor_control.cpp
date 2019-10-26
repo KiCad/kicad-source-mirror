@@ -90,8 +90,8 @@ private:
         SELECTION_TOOL* selTool = getToolManager()->GetTool<SELECTION_TOOL>();
 
         // enable zone actions that act on a single zone
-        bool singleZoneActionsEnabled = ( SELECTION_CONDITIONS::Count( 1 )
-                                          && SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T )
+        bool singleZoneActionsEnabled = ( SELECTION_CONDITIONS::Count( 1 ) &&
+                                          SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Zones )
                                         )( selTool->GetSelection() );
 
         Enable( getMenuId( PCB_ACTIONS::zoneDuplicate ), singleZoneActionsEnabled );
@@ -353,7 +353,7 @@ int PCB_EDITOR_CONTROL::ExportSpecctraDSN( const TOOL_EVENT& aEvent )
         fn = fullFileName;
 
     fullFileName = EDA_FILE_SELECTOR( _( "Specctra DSN File" ), fn.GetPath(), fn.GetFullName(),
-                                      SpecctraDsnFileExtension, SpecctraDsnFileWildcard(), 
+                                      SpecctraDsnFileExtension, SpecctraDsnFileWildcard(),
                                       frame(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT, false );
 
     if( !fullFileName.IsEmpty() )
@@ -361,7 +361,7 @@ int PCB_EDITOR_CONTROL::ExportSpecctraDSN( const TOOL_EVENT& aEvent )
         m_frame->SetLastPath( LAST_PATH_SPECCTRADSN, fullFileName );
         getEditFrame<PCB_EDIT_FRAME>()->ExportSpecctraFile( fullFileName );
     }
-    
+
     return 0;
 }
 
@@ -369,7 +369,7 @@ int PCB_EDITOR_CONTROL::ExportSpecctraDSN( const TOOL_EVENT& aEvent )
 int PCB_EDITOR_CONTROL::GenerateFabFiles( const TOOL_EVENT& aEvent )
 {
     wxCommandEvent dummy;
-    
+
     if( aEvent.IsAction( &PCB_ACTIONS::generateGerbers ) )
         m_frame->ToPlotter( ID_GEN_PLOT_GERBER );
     else if( aEvent.IsAction( &PCB_ACTIONS::generateReportFile ) )
@@ -380,7 +380,7 @@ int PCB_EDITOR_CONTROL::GenerateFabFiles( const TOOL_EVENT& aEvent )
         m_frame->RecreateBOMFileFromBoard( dummy );
     else
         wxFAIL_MSG( "GenerateFabFiles(): unexpected request" );
-    
+
     return 0;
 }
 

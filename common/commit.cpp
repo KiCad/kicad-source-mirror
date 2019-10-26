@@ -167,7 +167,7 @@ COMMIT& COMMIT::createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlag
 void COMMIT::makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy )
 {
     // Expect an item copy if it is going to be modified
-    assert( !!aCopy == ( ( aType & CHT_TYPE ) == CHT_MODIFY ) );
+    wxASSERT( !!aCopy == ( ( aType & CHT_TYPE ) == CHT_MODIFY ) );
 
     if( m_changedItems.find( aItem ) != m_changedItems.end() )
     {

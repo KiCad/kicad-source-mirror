@@ -3416,8 +3416,14 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent )
 
     // bigger scope since each filled_polygon is concatenated in here
     SHAPE_POLY_SET pts;
+    bool inModule = false;
 
-    std::unique_ptr<ZONE_CONTAINER> zone( new ZONE_CONTAINER( aParent ) );
+    if( dynamic_cast<MODULE*>( aParent ) )      // The zone belongs a footprint
+        inModule = true;
+
+    std::unique_ptr<ZONE_CONTAINER> zone( inModule ?
+                                          new MODULE_ZONE_CONTAINER( aParent ) :
+                                          new ZONE_CONTAINER( aParent ) );
 
     zone->SetPriority( 0 );
 

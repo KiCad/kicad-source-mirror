@@ -51,7 +51,7 @@ ZONE_CREATE_HELPER::~ZONE_CREATE_HELPER()
 
 std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
 {
-    auto&                 frame = *m_tool.getEditFrame<PCB_BASE_EDIT_FRAME>();
+    auto& frame = *m_tool.getEditFrame<PCB_BASE_EDIT_FRAME>();
     auto& board = *m_tool.getModel<BOARD>();
     BOARD_ITEM_CONTAINER* parent = m_tool.m_frame->GetModel();
     KIGFX::VIEW_CONTROLS* controls = m_tool.GetManager()->GetViewControls();
@@ -86,7 +86,13 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
         controls->WarpCursor( controls->GetCursorPosition(), true );
     }
 
-    auto newZone = std::make_unique<ZONE_CONTAINER>( parent );
+    // The new zone is a ZONE_CONTAINER if created in the board editor
+    // and a MODULE_ZONE_CONTAINER if created in the footprint editor
+    wxASSERT( !m_tool.m_editModules || ( parent->Type() == PCB_MODULE_T ) );
+
+    auto newZone = m_tool.m_editModules ?
+                        std::make_unique<MODULE_ZONE_CONTAINER>( parent ) :
+                        std::make_unique<ZONE_CONTAINER>( parent );
 
     // Apply the selected settings
     zoneInfo.ExportSetting( *newZone );

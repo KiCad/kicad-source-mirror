@@ -106,7 +106,7 @@ class MODULE_3D_SETTINGS
 
 DECL_DEQ_FOR_SWIG( PADS, D_PAD* )
 DECL_DEQ_FOR_SWIG( DRAWINGS, BOARD_ITEM* )
-DECL_VEC_FOR_SWIG( ZONE_CONTAINERS, ZONE_CONTAINER* )
+DECL_VEC_FOR_SWIG( MODULE_ZONE_CONTAINERS, MODULE_ZONE_CONTAINER* )
 DECL_DEQ_FOR_SWIG( MODULES, MODULE* )
 
 class MODULE : public BOARD_ITEM_CONTAINER
@@ -179,9 +179,9 @@ public:
         return m_drawings;
     }
 
-    const ZONE_CONTAINERS& Zones() const
+    const MODULE_ZONE_CONTAINERS& Zones() const
     {
-        return m_zones;
+        return m_fp_zones;
     }
 
     const DRAWINGS& GraphicalItems() const
@@ -669,9 +669,9 @@ public:
 #endif
 
 private:
-    DRAWINGS        m_drawings; // BOARD_ITEMs for drawings on the board, owned by pointer.
-    PADS            m_pads;     // D_PAD items, owned by pointer
-    ZONE_CONTAINERS m_zones;    // ZONE items, owned by pointer
+    DRAWINGS        m_drawings;         // BOARD_ITEMs for drawings on the board, owned by pointer.
+    PADS            m_pads;             // D_PAD items, owned by pointer
+    MODULE_ZONE_CONTAINERS m_fp_zones;  // MODULE_ZONE_CONTAINER items, owned by pointer
     std::list<MODULE_3D_SETTINGS> m_3D_Drawings;  // Linked list of 3D models.
 
     double         m_Orient;            // Orientation in tenths of a degree, 900=90.0 degrees.
@@ -700,11 +700,11 @@ private:
     int            m_CntRot90;          // Horizontal automatic placement cost ( 0..10 ).
     int            m_CntRot180;         // Vertical automatic placement cost ( 0..10 ).
 
-    wxArrayString* m_initial_comments;      ///< leading s-expression comments in the module,
-                                            ///< lazily allocated only if needed for speed
+    wxArrayString* m_initial_comments;  ///< leading s-expression comments in the module,
+                                        ///< lazily allocated only if needed for speed
 
     /// Used in DRC to test the courtyard area (a polygon which can be not basic
-    /// Note also a footprint can have courtyards on bot board sides
+    /// Note also a footprint can have courtyards on both board sides
     SHAPE_POLY_SET m_poly_courtyard_front;
     SHAPE_POLY_SET m_poly_courtyard_back;
 };
