@@ -971,8 +971,12 @@ void EE_SELECTION_TOOL::RebuildSelection()
 
     INSPECTOR_FUNC inspector = [&] ( EDA_ITEM* item, void* testData )
     {
-        if( item->IsSelected() )
+        // If the field and component are selected, only use the component
+        if( item->IsSelected() &&  !( item->Type() == SCH_FIELD_T && item->GetParent()
+                && item->GetParent()->IsSelected() ) )
+        {
             select( item );
+        }
 
         return SEARCH_CONTINUE;
     };
