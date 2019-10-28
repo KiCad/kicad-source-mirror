@@ -246,8 +246,16 @@ void ZONE_CONTAINER::SetLayerSet( LSET aLayerSet )
 
     m_layerSet = aLayerSet;
 
-    // Set the single layer to the first selected layer
+    // Set the single layer parameter.
+    // For keepout zones that can be on many layers, this parameter does not have
+    // really meaning and is a bit arbitrary if more than one layer is set.
+    // But many functions are using it.
+    // So we need to initialize it to a reasonable value.
+    // Priority is F_Cu then B_Cu then to the first selected layer
     m_Layer = aLayerSet.Seq()[0];
+
+    if( m_Layer != F_Cu && aLayerSet[B_Cu] )
+        m_Layer = B_Cu;
 }
 
 
@@ -1324,4 +1332,26 @@ MODULE_ZONE_CONTAINER& MODULE_ZONE_CONTAINER::operator=( const MODULE_ZONE_CONTA
 EDA_ITEM* MODULE_ZONE_CONTAINER::Clone() const
 {
     return new MODULE_ZONE_CONTAINER( *this );
+}
+
+
+unsigned int MODULE_ZONE_CONTAINER::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+{
+    //
+    const int HIDE = std::numeric_limits<unsigned int>::max();
+
+    if( !aView )
+        return 0;
+
+    bool flipped = GetParent() && GetParent()->GetLayer() == B_Cu;
+
+    // Handle Render tab switches
+    if( !flipped && !aView->IsLayerVisible( LAYER_MOD_FR ) )
+        return HIDE;
+
+    if( flipped && !aView->IsLayerVisible( LAYER_MOD_BK ) )
+        return HIDE;
+
+    // Other layers are shown without any conditions
+    return 0;
 }

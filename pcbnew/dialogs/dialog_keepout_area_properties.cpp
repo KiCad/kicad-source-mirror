@@ -32,6 +32,10 @@
 #include <zone_settings.h>
 #include <dialog_keepout_area_properties_base.h>
 
+#define LAYER_LIST_COLUMN_CHECK 0
+#define LAYER_LIST_COLUMN_ICON 1
+#define LAYER_LIST_COLUMN_NAME 2
+#define LAYER_LIST_ROW_ALL_INNER_LAYERS 1
 
 class DIALOG_KEEPOUT_AREA_PROPERTIES : public DIALOG_KEEPOUT_AREA_PROPERTIES_BASE
 {
@@ -69,7 +73,9 @@ DIALOG_KEEPOUT_AREA_PROPERTIES::DIALOG_KEEPOUT_AREA_PROPERTIES( PCB_BASE_FRAME* 
 
     m_ptr = aSettings;
     m_zonesettings = *aSettings;
-    m_zonesettings.SetupLayersList( m_layers, m_parent, true );
+
+    bool fpEditorMode = m_parent->IsType( FRAME_FOOTPRINT_EDITOR );
+    m_zonesettings.SetupLayersList( m_layers, m_parent, true, fpEditorMode );
 
     m_sdbSizerButtonsOK->SetDefault();
 
@@ -106,10 +112,18 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::OnLayerSelection( wxDataViewEvent& event )
 
     int row = m_layers->ItemToRow( event.GetItem() );
     wxVariant layerID;
-    m_layers->GetValue( layerID, row, 2 );
-    bool selected = m_layers->GetToggleValue( row, 0 );
+    m_layers->GetValue( layerID, row, LAYER_LIST_COLUMN_NAME );
+    bool selected = m_layers->GetToggleValue( row, LAYER_LIST_COLUMN_CHECK );
 
-    m_zonesettings.m_Layers.set( ToLAYER_ID( layerID.GetInteger() ), selected );
+    if( row == LAYER_LIST_ROW_ALL_INNER_LAYERS )
+    {
+        if( selected )
+            m_zonesettings.m_Layers |= LSET::InternalCuMask();
+        else
+            m_zonesettings.m_Layers &= ~LSET::InternalCuMask();
+    }
+    else
+        m_zonesettings.m_Layers.set( ToLAYER_ID( layerID.GetInteger() ), selected );
 }
 
 

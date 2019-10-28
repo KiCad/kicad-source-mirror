@@ -821,6 +821,7 @@ protected:
  * MODULE_ZONE_CONTAINER is living in a footprint
  * althougt the are similar, these items need a specific type to be easily managed
  * in many functions using the type id in switches
+ * A few virtual methods are different
  */
 class MODULE_ZONE_CONTAINER : public ZONE_CONTAINER
 {
@@ -832,9 +833,9 @@ public:
     MODULE_ZONE_CONTAINER( const MODULE_ZONE_CONTAINER& aZone );
     MODULE_ZONE_CONTAINER& operator=( const MODULE_ZONE_CONTAINER &aOther );
 
-//    ~MODULE_ZONE_CONTAINER();
-
     EDA_ITEM* Clone() const override;
+
+    unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 };
 
 #endif  // CLASS_ZONE_H_

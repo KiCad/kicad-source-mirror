@@ -263,6 +263,9 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
             goto exit;
         break;
 
+    case PCB_MODULE_ZONE_AREA_T:
+        module = static_cast<MODULE*>( item->GetParent() );
+        // Fall through
     case PCB_ZONE_AREA_T:
         zone = static_cast<ZONE_CONTAINER*>( item );
         break;
@@ -425,7 +428,6 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         }
     }
 
-
     if( m_Guide->IncludeSecondary() )
     {
         // for now, "secondary" means "tolerate any layer".  It has
@@ -439,7 +441,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         // controls for vias, GetLayer() has no meaning, but IsOnLayer() works fine. User
         // text in module *is* sensitive to layer visibility but that was already handled.
 
-        if( via || module || pad || m_Guide->IsLayerVisible( layer )
+        if( via || module || pad || zone || m_Guide->IsLayerVisible( layer )
                 || !m_Guide->IgnoreNonVisibleLayers() )
         {
             if( !m_Guide->IsLayerLocked( layer ) || !m_Guide->IgnoreLockedLayers() )

@@ -125,6 +125,14 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     SetCanvas( drawPanel );
 
     SetBoard( new BOARD() );
+
+    // Enable one internal layer, because footprints support keepout areas that
+    // can be on internal layers only (therefore on the first internal layer)
+    // This is needed to handle these keepout in internal layers only
+    GetBoard()->SetEnabledLayers( GetBoard()->GetEnabledLayers().set( In1_Cu ) );
+    GetBoard()->SetVisibleLayers( GetBoard()->GetEnabledLayers() );
+    GetBoard()->SetLayerName( In1_Cu, _( "Inner layers" ) );
+
     // In modedit, the default net clearance is not known.
     // (it depends on the actual board)
     // So we do not show the default clearance, by setting it to 0

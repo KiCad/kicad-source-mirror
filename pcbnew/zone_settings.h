@@ -116,9 +116,13 @@ public:
 
     /**
      * A helper routine for the various zone dialogs (copper, non-copper, keepout).
+     * @param aList the wxDataViewListCtrl to populate
+     * @param aFrame the parent editor frame
      * @param aShowCopper indicates whether copper or technical layers should be shown
+     * @param aFpEditorMode true to show (when aShowCopper = true) the option: all inner layers
      */
-    void SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* aFrame, bool aShowCopper );
+    void SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* aFrame,
+                          bool aShowCopper, bool aFpEditorMode = false );
 
     /**
      * Function ExportSetting

@@ -170,7 +170,7 @@ const static wxSize LAYER_BITMAP_SIZE( 24, 16 );
 // A helper for setting up a dialog list for specifying zone layers.  Used by all three
 // zone settings dialogs.
 void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* aFrame,
-                                     bool aShowCopper )
+                                     bool aShowCopper, bool aFpEditorMode )
 {
     BOARD* board = aFrame->GetBoard();
     COLOR4D backgroundColor = aFrame->Settings().Colors().GetLayerColor( LAYER_PCB_BACKGROUND );
@@ -187,7 +187,9 @@ void ZONE_SETTINGS::SetupLayersList( wxDataViewListCtrl* aList, PCB_BASE_FRAME* 
     for( LSEQ layer = layers.UIOrder(); layer; ++layer )
     {
         PCB_LAYER_ID layerID = *layer;
-        wxString     layerName = board->GetLayerName( layerID );
+        wxString layerName = board->GetLayerName( layerID );
+        if( aFpEditorMode && layerID == In1_Cu )
+            layerName = _( "Inner layers" );
 
         // wxCOL_WIDTH_AUTOSIZE doesn't work on all platforms, so we calculate width here
         textWidth = std::max( textWidth, GetTextSize( layerName, aList ).x );

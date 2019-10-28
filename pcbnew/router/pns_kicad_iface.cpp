@@ -1145,6 +1145,9 @@ void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
         syncTextItem( aWorld, &module->Reference(), module->Reference().GetLayer() );
         syncTextItem( aWorld, &module->Value(), module->Value().GetLayer() );
 
+        for( MODULE_ZONE_CONTAINER* zone : module->Zones() )
+            syncZone( aWorld, zone );
+
         if( module->IsNetTie() )
             continue;
 
