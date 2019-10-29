@@ -968,24 +968,6 @@ void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-/**
- * Sort a list of schematic items by time stamp and type.
- */
-static bool SortByTimeStamp( const EDA_ITEM* item1, const EDA_ITEM* item2 )
-{
-    int ii = item1->GetTimeStamp() - item2->GetTimeStamp();
-
-    /* If the time stamps are the same, compare type in order to have component objects
-     * before sheet object. This is done because changing the sheet time stamp
-     * before the component time stamp could cause the current annotation to be lost.
-     */
-    if( ( ii == 0 && ( item1->Type() != item2->Type() ) ) && ( item1->Type() == SCH_SHEET_T ) )
-        ii = -1;
-
-    return ii < 0;
-}
-
-
 SCH_SCREENS::SCH_SCREENS( SCH_SHEET* aSheet )
 {
     m_index = 0;
@@ -1115,7 +1097,14 @@ void SCH_SCREENS::ClearAnnotationOfNewSheetPaths( SCH_SHEET_LIST& aInitialSheetP
 int SCH_SCREENS::ReplaceDuplicateTimeStamps()
 {
     EDA_ITEMS items;
-    SCH_ITEM* item;
+    int count = 0;
+
+    auto timestamp_cmp = []( const EDA_ITEM* a, const EDA_ITEM* b ) -> bool
+        {
+            return a->GetTimeStamp() < b->GetTimeStamp();
+        };
+
+    std::set<EDA_ITEM*, decltype( timestamp_cmp )> unique_stamps( timestamp_cmp );
 
     for( size_t i = 0;  i < m_screens.size();  i++ )
         m_screens[i]->GetHierarchicalItems( items );
@@ -1123,24 +1112,18 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
     if( items.size() < 2 )
         return 0;
 
-    sort( items.begin(), items.end(), SortByTimeStamp );
-
-    int count = 0;
-
-    for( size_t ii = 0;  ii < items.size() - 1;  ii++ )
+    for( auto item : items )
     {
-        item = (SCH_ITEM*)items[ii];
+        int failed = 0;
 
-        SCH_ITEM* nextItem = (SCH_ITEM*)items[ii + 1];
-
-        if( item->GetTimeStamp() == nextItem->GetTimeStamp() )
+        while( !unique_stamps.insert( item ).second )
         {
-            count++;
+            failed = 1;
 
             // for a component, update its Time stamp and its paths
             // (m_PathsAndReferences field)
             if( item->Type() == SCH_COMPONENT_T )
-                ( (SCH_COMPONENT*) item )->SetTimeStamp( GetNewTimeStamp() );
+                static_cast<SCH_COMPONENT*>( item )->SetTimeStamp( GetNewTimeStamp() );
 
             // for a sheet, update only its time stamp (annotation of its
             // components will be lost)
@@ -1149,6 +1132,8 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
             else
                 item->SetTimeStamp( GetNewTimeStamp() );
         }
+
+        count += failed;
     }
 
     return count;
