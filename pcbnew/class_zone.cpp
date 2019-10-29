@@ -59,7 +59,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
                                                 // used only if m_HatchFillTypeSmoothingLevel > 0
     m_priority = 0;
     m_cornerSmoothingType = ZONE_SETTINGS::SMOOTHING_NONE;
-    SetIsKeepout( false );
+    SetIsKeepout( aInModule ? true : false );   // Zones living in modules have the keepout option.
     SetDoNotAllowCopperPour( false );           // has meaning only if m_isKeepout == true
     SetDoNotAllowVias( true );                  // has meaning only if m_isKeepout == true
     SetDoNotAllowTracks( true );                // has meaning only if m_isKeepout == true
@@ -76,7 +76,7 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent, bool aInModule )
 ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone )
         : BOARD_CONNECTED_ITEM( aZone.GetParent(), PCB_ZONE_AREA_T )
 {
-    copyDataFromSrc( aZone );
+    initDataFromSrcInCopyCtor( aZone );
 }
 
 
@@ -88,6 +88,7 @@ ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
     delete m_Poly;
     m_Poly = new SHAPE_POLY_SET( *aOther.m_Poly );
 
+    m_isKeepout = aOther.m_isKeepout;
     m_CornerSelection  = nullptr; // for corner moving, corner index to (null if no selection)
     m_ZoneClearance    = aOther.m_ZoneClearance;            // clearance value
     m_ZoneMinThickness = aOther.m_ZoneMinThickness;
@@ -123,8 +124,14 @@ ZONE_CONTAINER::~ZONE_CONTAINER()
 }
 
 
-void ZONE_CONTAINER::copyDataFromSrc( const ZONE_CONTAINER& aZone )
+void ZONE_CONTAINER::initDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
 {
+    // members are expected non initialize in this.
+    // initDataFromSrcInCopyCtor() is expected to be called
+    // only from a copy constructor.
+    m_isKeepout = aZone.m_isKeepout;
+    SetLayerSet( aZone.GetLayerSet() );
+
     m_Poly = new SHAPE_POLY_SET( *aZone.m_Poly );
 
     // For corner moving, corner index to drag, or nullptr if no selection
@@ -142,7 +149,6 @@ void ZONE_CONTAINER::copyDataFromSrc( const ZONE_CONTAINER& aZone )
     m_FilledPolysList.Append( aZone.m_FilledPolysList );
     m_FillSegmList = aZone.m_FillSegmList;      // vector <> copy
 
-    m_isKeepout = aZone.m_isKeepout;
     m_doNotAllowCopperPour = aZone.m_doNotAllowCopperPour;
     m_doNotAllowVias = aZone.m_doNotAllowVias;
     m_doNotAllowTracks = aZone.m_doNotAllowTracks;
@@ -160,12 +166,7 @@ void ZONE_CONTAINER::copyDataFromSrc( const ZONE_CONTAINER& aZone )
     m_HatchFillTypeSmoothingLevel = aZone.m_HatchFillTypeSmoothingLevel;
     m_HatchFillTypeSmoothingValue = aZone.m_HatchFillTypeSmoothingValue;
 
-    SetLayerSet( aZone.GetLayerSet() );
     SetLocalFlags( aZone.GetLocalFlags() );
-
-    // Now zone type and layer are set, transfer net info
-    // (has meaning only for copper zones)
-    m_netinfo = aZone.m_netinfo;
 
     SetNeedRefill( aZone.NeedRefill() );
 }
@@ -647,10 +648,13 @@ int ZONE_CONTAINER::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 
     // The actual zone clearance is the biggest of the zone netclass clearance
     // and the zone clearance setting in the zone properties dialog.
-    NETCLASSPTR myClass  = GetNetClass();
+    if( !m_isKeepout )  // Net class has no meaning for a keepout area.
+    {
+        NETCLASSPTR myClass  = GetNetClass();
 
-    if( myClass )
-        myClearance = std::max( myClearance, myClass->GetClearance() );
+        if( myClass )
+            myClearance = std::max( myClearance, myClass->GetClearance() );
+    }
 
     // Get the final clearance between me and aItem
     if( aItem )
@@ -1314,11 +1318,22 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon( SHAPE_POLY_SE
     aCornerBuffer.Append( polybuffer );
 }
 
+//
+/********* MODULE_ZONE_CONTAINER **************/
+//
+MODULE_ZONE_CONTAINER::MODULE_ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent ) :
+                        ZONE_CONTAINER( aParent, true )
+{
+    // in a footprint, net classes are not managed.
+    // so set the net to NETINFO_LIST::ORPHANED_ITEM
+    SetNetCode( -1, true );
+}
+
 
 MODULE_ZONE_CONTAINER::MODULE_ZONE_CONTAINER( const MODULE_ZONE_CONTAINER& aZone )
         : ZONE_CONTAINER( aZone.GetParent(), true )
 {
-    copyDataFromSrc( aZone );
+    initDataFromSrcInCopyCtor( aZone );
 }
 
 
@@ -1337,7 +1352,6 @@ EDA_ITEM* MODULE_ZONE_CONTAINER::Clone() const
 
 unsigned int MODULE_ZONE_CONTAINER::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    //
     const int HIDE = std::numeric_limits<unsigned int>::max();
 
     if( !aView )

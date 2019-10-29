@@ -133,15 +133,15 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
     if( aFullExport )
     {
         aTarget.SetPriority( m_ZonePriority );
-        aTarget.SetNetCode( m_NetcodeSelection );
 
-        // Keepout zones can have multiple layers
+        // Keepout zones can have multiple layers and have no net
         if( m_isKeepout )
         {
             aTarget.SetLayerSet( m_Layers );
         }
         else
         {
+            aTarget.SetNetCode( m_NetcodeSelection );
             aTarget.SetLayer( m_CurrentZone_Layer );
         }
     }

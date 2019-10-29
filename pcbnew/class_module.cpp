@@ -110,7 +110,15 @@ MODULE::MODULE( const MODULE& aModule ) :
 
     // Copy auxiliary data: Zones
     for( auto item : aModule.Zones() )
+    {
         Add( static_cast<MODULE_ZONE_CONTAINER*>( item->Clone() ) );
+
+        // Ensure the net info is OK and especially uses the net info list
+        // living in the current board
+        // Needed when copying a fp from fp editor that has its own board
+        // Must be NETINFO_LIST::ORPHANED_ITEM for a keepout that has no net.
+        item->SetNetCode( -1 );
+    }
 
     // Copy auxiliary data: Drawings
     for( auto item : aModule.GraphicalItems() )
@@ -212,6 +220,12 @@ MODULE& MODULE::operator=( const MODULE& aOther )
     for( auto item : aOther.Zones() )
     {
         Add( static_cast<MODULE_ZONE_CONTAINER*>( item->Clone() ) );
+
+        // Ensure the net info is OK and especially uses the net info list
+        // living in the current board
+        // Needed when copying a fp from fp editor that has its own board
+        // Must be NETINFO_LIST::ORPHANED_ITEM for a keepout that has no net.
+        item->SetNetCode( -1 );
     }
 
     // Copy auxiliary data: Drawings

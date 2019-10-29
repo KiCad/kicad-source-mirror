@@ -710,9 +710,10 @@ public:
 
 protected:
     /** Copy aZone data to me
+     * members are expected non initialize in this.
+     * copyDataFromSrc() is expected to be called *only* from a copy constructor.
      */
-    void copyDataFromSrc( const ZONE_CONTAINER& aZone );
-
+    void initDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone );
 
     SHAPE_POLY_SET*       m_Poly;                ///< Outline of the zone.
     int                   m_cornerSmoothingType;
@@ -826,10 +827,7 @@ protected:
 class MODULE_ZONE_CONTAINER : public ZONE_CONTAINER
 {
 public:
-    MODULE_ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent ) :
-                            ZONE_CONTAINER( aParent, true )
-    {
-    }
+    MODULE_ZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent );
     MODULE_ZONE_CONTAINER( const MODULE_ZONE_CONTAINER& aZone );
     MODULE_ZONE_CONTAINER& operator=( const MODULE_ZONE_CONTAINER &aOther );
 
