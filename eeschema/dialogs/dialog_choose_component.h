@@ -123,6 +123,25 @@ public:
     LIB_ID GetSelectedLibId( int* aUnit = nullptr ) const;
 
     /**
+     * To be called after this dialog returns from ShowModal()
+     *
+     * In the case of multi-unit symbols, this preferences asks to iterate through
+     * all units of the symbol, one per click
+     * @return The value of the dialog preference checkbox
+     */
+    bool GetUseAllUnits() const { return m_useUnits->GetValue(); }
+
+    /**
+     * To be called after this dialog returns from ShowModal()
+     *
+     * Keeps a new copy of the symbol on the mouse cursor, allowing the user to rapidly
+     * place multiple copies of the same symbol on their schematic
+     *
+     * @return The value of the keep symbol preference checkbox
+     */
+    bool GetKeepSymbol() const { return m_keepSymbol->GetValue(); }
+
+    /**
      * Get a list of fields edited by the user.
      * @return vector of pairs; each.first = field ID, each.second = new value
      */
@@ -191,6 +210,8 @@ protected:
 
     FOOTPRINT_SELECT_WIDGET*  m_fp_sel_ctrl;
     FOOTPRINT_PREVIEW_WIDGET* m_fp_preview;
+    wxCheckBox*               m_keepSymbol;
+    wxCheckBox*               m_useUnits;
     LIB_TREE*                 m_tree;
     wxHtmlWindow*             m_details;
 

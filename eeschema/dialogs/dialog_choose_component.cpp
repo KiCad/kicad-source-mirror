@@ -42,10 +42,12 @@
 #include <wx/clipbrd.h>
 #include <kiface_i.h>
 
-#define SYM_CHOOSER_HSASH       wxT( "SymbolChooserHSashPosition" )
-#define SYM_CHOOSER_VSASH       wxT( "SymbolChooserVSashPosition" )
-#define SYM_CHOOSER_WIDTH_KEY   wxT( "SymbolChooserWidth" )
-#define SYM_CHOOSER_HEIGHT_KEY  wxT( "SymbolChooserHeight" )
+#define SYM_CHOOSER_HSASH           wxT( "SymbolChooserHSashPosition" )
+#define SYM_CHOOSER_VSASH           wxT( "SymbolChooserVSashPosition" )
+#define SYM_CHOOSER_WIDTH_KEY       wxT( "SymbolChooserWidth" )
+#define SYM_CHOOSER_HEIGHT_KEY      wxT( "SymbolChooserHeight" )
+#define SYM_CHOOSER_KEEP_SYM_KEY    wxT( "SymbolChooserKeepSymbol" )
+#define SYM_CHOOSER_USE_UNITS_KEY   wxT( "SymbolChooserUseUnits" )
 
 
 std::mutex DIALOG_CHOOSE_COMPONENT::g_Mutex;
@@ -206,6 +208,9 @@ DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
     m_config->Write( SYM_CHOOSER_WIDTH_KEY, GetSize().x );
     m_config->Write( SYM_CHOOSER_HEIGHT_KEY, GetSize().y );
 
+    m_config->Write( SYM_CHOOSER_KEEP_SYM_KEY, m_keepSymbol->GetValue() );
+    m_config->Write( SYM_CHOOSER_USE_UNITS_KEY, m_useUnits->GetValue() );
+
     m_config->Write( SYM_CHOOSER_HSASH, m_hsplitter->GetSashPosition() );
 
     if( m_vsplitter )
@@ -247,6 +252,27 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
         sizer->Add( m_symbol_preview, 1, wxEXPAND | wxTOP | wxRIGHT, 5 );
     }
 
+    m_keepSymbol = new wxCheckBox( panel, 1000, _("Multi-Symbol Placement"), wxDefaultPosition,
+            wxDefaultSize, wxALIGN_RIGHT );
+    m_keepSymbol->SetValue( m_config->ReadBool( SYM_CHOOSER_KEEP_SYM_KEY, false ) );
+    m_keepSymbol->SetToolTip( _( "Place multiple copies of the symbol." ) );
+
+    m_useUnits = new wxCheckBox( panel, 1000, _("Place all units"), wxDefaultPosition,
+            wxDefaultSize, wxALIGN_RIGHT );
+    m_useUnits->SetValue( m_config->ReadBool( SYM_CHOOSER_USE_UNITS_KEY, true ) );
+    m_useUnits->SetToolTip( _( "Sequentially place all units of the symbol." ) );
+
+    auto fgSizer = new wxFlexGridSizer( 0, 2, 0, 1 );
+    fgSizer->AddGrowableCol( 0 );
+    fgSizer->SetFlexibleDirection( wxBOTH );
+    fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+    fgSizer->Add( 0, 0, 1, wxEXPAND );
+    fgSizer->Add( m_keepSymbol, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+    fgSizer->Add( 0, 0, 1, wxEXPAND );
+    fgSizer->Add( m_useUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+    sizer->Add( fgSizer, 0, wxALL | wxEXPAND, 5 );
     panel->SetSizer( sizer );
     panel->Layout();
     sizer->Fit( panel );

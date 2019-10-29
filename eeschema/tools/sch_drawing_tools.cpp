@@ -188,10 +188,38 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
             }
             else
             {
-                m_frame->AddItemToScreenAndUndoList( component );
-                component = nullptr;
+                SCH_COMPONENT* next_comp = nullptr;
 
                 m_view->ClearPreview();
+                m_frame->AddItemToScreenAndUndoList( component );
+
+                if( m_frame->GetUseAllUnits() || m_frame->GetRepeatComponent() )
+                {
+                    int new_unit = component->GetUnit();
+
+                    if( m_frame->GetUseAllUnits()
+                            && component->GetUnit() < component->GetUnitCount() )
+                        new_unit++;
+                    else
+                        new_unit = 1;
+
+                    // We are either stepping to the next unit or next component
+                    if( m_frame->GetRepeatComponent() || new_unit > 1 )
+                    {
+                        next_comp = static_cast<SCH_COMPONENT*>( component->Duplicate() );
+                        next_comp->SetFlags( IS_NEW | IS_MOVED );
+                        next_comp->SetUnit( new_unit );
+
+                        if( m_frame->GetAutoplaceFields() )
+                            component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
+
+                        m_frame->SaveCopyForRepeatItem( next_comp );
+                        m_view->AddToPreview( next_comp->Clone() );
+                        m_selectionTool->AddItemToSel( next_comp );
+                    }
+                }
+
+                component = next_comp;
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )

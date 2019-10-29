@@ -181,6 +181,9 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree(
                             // but no symbol selected
         return COMPONENT_SELECTION();
 
+    SetUseAllUnits( dlg.GetUseAllUnits() );
+    SetRepeatComponent( dlg.GetKeepSymbol() );
+
     if( sel.Unit == 0 )
         sel.Unit = 1;
 

@@ -93,6 +93,9 @@ protected:
     bool      m_showPinElectricalTypeName;
     bool      m_dragActionIsMove;          // drag action defaults to move, otherwise it's drag
 
+    bool      m_repeatComponent;           // After placing one component, reload a sequential
+    bool      m_useAllUnits;               // After placing unit A, place unit B of the same
+
 public:
     SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
                     FRAME_T aWindowType,
@@ -146,6 +149,28 @@ public:
      * for the repeat command
      */
     void SetRepeatDeltaLabel( int aDelta ) { m_repeatDeltaLabel = aDelta; }
+
+    /**
+     * @return the current setting of placing copies of the same symbol for each click
+     */
+    const bool GetRepeatComponent() { return m_repeatComponent; }
+
+    /**
+     * If true, keep placing new copies of the same symbol on each click
+     * @param aRepeat True to repeat the same symbol, False to only set one
+     */
+    void SetRepeatComponent( bool aRepeat ) { m_repeatComponent = aRepeat; }
+
+    /**
+     * @return the current setting to use all units when placing a component
+     */
+    const bool GetUseAllUnits() { return m_useAllUnits; }
+
+    /**
+     * Sets whether to utilize all units of a component when placing
+     * @param aUseAll True to iterate through Units A, B, ...
+     */
+    void SetUseAllUnits( bool aUseAll ) { m_useAllUnits = aUseAll; }
 
 
     /**
