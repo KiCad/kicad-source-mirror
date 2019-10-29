@@ -214,8 +214,10 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             bool selectionCancelled = false;
 
-            if( m_selection.Empty() )
+            if( m_selection.Empty() ||
+                    !m_selection.GetBoundingBox().Contains( wxPoint( evt->Position() ) ) )
             {
+                ClearSelection();
                 selectPoint( evt->Position(), false, &selectionCancelled );
                 m_selection.SetIsHover( true );
             }
