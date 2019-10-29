@@ -209,6 +209,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                         next_comp = static_cast<SCH_COMPONENT*>( component->Duplicate() );
                         next_comp->SetFlags( IS_NEW | IS_MOVED );
                         next_comp->SetUnit( new_unit );
+                        next_comp->SetTimeStamp( GetNewTimeStamp() );
 
                         if( m_frame->GetAutoplaceFields() )
                             component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
