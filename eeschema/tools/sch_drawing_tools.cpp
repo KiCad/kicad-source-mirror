@@ -33,10 +33,8 @@
 #include <id.h>
 #include <eeschema_id.h>
 #include <confirm.h>
-#include <view/view_group.h>
 #include <view/view_controls.h>
 #include <view/view.h>
-#include <tool/tool_manager.h>
 #include <sch_component.h>
 #include <sch_no_connect.h>
 #include <sch_line.h>
@@ -523,6 +521,35 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
             previewItem->SetPosition( (wxPoint)cursorPos );
             m_view->ClearPreview();
             m_view->AddToPreview( previewItem->Clone() );
+        }
+        else if( evt->Category() == TC_COMMAND )
+        {
+            if( ( type == SCH_BUS_BUS_ENTRY_T || type == SCH_BUS_WIRE_ENTRY_T )
+                    && (   evt->IsAction( &EE_ACTIONS::rotateCW )
+                        || evt->IsAction( &EE_ACTIONS::rotateCCW )
+                        || evt->IsAction( &EE_ACTIONS::mirrorX )
+                        || evt->IsAction( &EE_ACTIONS::mirrorY )
+                        || evt->IsAction( &EE_ACTIONS::toShapeBackslash )
+                        || evt->IsAction( &EE_ACTIONS::toShapeSlash ) ) )
+            {
+                char shape;
+
+                if( evt->IsAction( &EE_ACTIONS::toShapeSlash ) )
+                    shape = '/';
+                else if( evt->IsAction( &EE_ACTIONS::toShapeBackslash ) )
+                    shape = '\\';
+                else // everything else just flips the shape
+                    shape = g_lastBusEntryShape == '/' ? '\\' : '/';
+
+                if( previewItem )
+                {
+                    static_cast<SCH_BUS_ENTRY_BASE*>( previewItem )->SetBusEntryShape( shape );
+                    m_view->ClearPreview();
+                    m_view->AddToPreview( previewItem->Clone() );
+                }
+
+                g_lastBusEntryShape = shape;
+            }
         }
         else
             evt->SetPassEvent();
