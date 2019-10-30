@@ -136,7 +136,7 @@ bool DRAGGER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_currentMode = Settings().Mode();
     m_freeAngleMode = (m_mode & DM_FREE_ANGLE);
 
-    if( m_currentMode != RM_MarkObstacles )
+    if( m_currentMode != RM_MarkObstacles  && !m_freeAngleMode )
         m_shove = std::make_unique<SHOVE>( m_world, Router() );
 
     aStartItem->Unmark( MK_LOCKED );
