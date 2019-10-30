@@ -34,7 +34,12 @@ find_library( NGSPICE_LIBRARY ngspice
 if( WIN32 AND MSYS )
     # NGSPICE_LIBRARY points to libngspice.dll.a on Windows,
     # but the goal is to find out the DLL name.
+    # Note: libngspice-0.dll or libngspice-1.dll must be in a executable path
     find_library( NGSPICE_DLL NAMES libngspice-0.dll libngspice-1.dll )
+
+    if( NGSPICE_DLL STREQUAL "NGSPICE_DLL-NOTFOUND" )
+        message( ERROR ":\n***** libngspice-x.dll not found in any executable path *****\n\n" )
+    endif()
 else()
     set( NGSPICE_DLL "${NGSPICE_LIBRARY}" )
 endif()
