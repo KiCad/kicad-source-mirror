@@ -28,7 +28,6 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>
-#include <class_zone.h>
 #include <collectors.h>
 #include <pcb_edit_frame.h>
 #include <kiway.h>
@@ -500,16 +499,18 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-bool EDIT_TOOL::changeTrackWidthOnClick( const PCBNEW_SELECTION& selection )
+int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
 {
-    if ( selection.Size() == 1 && frame()->Settings().m_EditHotkeyChangesTrackWidth )
+    const auto& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            { EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS ); } );
+
+    for( EDA_ITEM* item : selection )
     {
-        auto item = static_cast<BOARD_ITEM *>( selection[0] );
-
-        m_commit->Modify( item );
-
         if( auto via = dyn_cast<VIA*>( item ) )
         {
+            m_commit->Modify( item );
+
             int new_width;
             int new_drill;
 
@@ -531,16 +532,26 @@ bool EDIT_TOOL::changeTrackWidthOnClick( const PCBNEW_SELECTION& selection )
         }
         else if ( auto track = dyn_cast<TRACK*>( item ) )
         {
+            m_commit->Modify( item );
+
             int new_width = board()->GetDesignSettings().GetCurrentTrackWidth();
             track->SetWidth( new_width );
         }
-
-        m_commit->Push( _("Edit track width/via size") );
-        return true;
     }
 
-    return false;
+    m_commit->Push( _("Edit track width/via size") );
+
+    if( selection.IsHover() )
+    {
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
+        // Notify other tools of the changes -- This updates the visual ratsnest
+        m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
+    }
+
+    return 0;
 }
+
 
 int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
@@ -553,11 +564,8 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     // Tracks & vias are treated in a special way:
     if( ( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) )( selection ) )
     {
-        if ( !changeTrackWidthOnClick( selection ) )
-        {
             DIALOG_TRACK_VIA_PROPERTIES dlg( editFrame, selection, *m_commit );
             dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR
-        }
     }
     else if( selection.Size() == 1 ) // Properties are displayed when there is only one item selected
     {
@@ -1407,6 +1415,7 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::Duplicate,           PCB_ACTIONS::duplicateIncrement.MakeEvent() );
     Go( &EDIT_TOOL::CreateArray,         PCB_ACTIONS::createArray.MakeEvent() );
     Go( &EDIT_TOOL::Mirror,              PCB_ACTIONS::mirror.MakeEvent() );
+    Go( &EDIT_TOOL::ChangeTrackWidth,    PCB_ACTIONS::changeTrackWidth.MakeEvent() );
 
     Go( &EDIT_TOOL::EditFpInFpEditor,    PCB_ACTIONS::editFootprintInFpEditor.MakeEvent() );
     Go( &EDIT_TOOL::MeasureTool,         ACTIONS::measureTool.MakeEvent() );

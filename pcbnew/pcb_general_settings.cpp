@@ -27,7 +27,6 @@
 
 PCB_GENERAL_SETTINGS::PCB_GENERAL_SETTINGS( FRAME_T aFrameType ) :
         m_Use45DegreeGraphicSegments( false ),
-        m_EditHotkeyChangesTrackWidth( false ),
         m_FlipLeftRight( false ),
         m_MagneticPads( CAPTURE_CURSOR_IN_TRACK_TOOL ),
         m_MagneticTracks( CAPTURE_CURSOR_IN_TRACK_TOOL ),
@@ -42,7 +41,6 @@ PCB_GENERAL_SETTINGS::PCB_GENERAL_SETTINGS( FRAME_T aFrameType ) :
         Add( "MagneticPads", reinterpret_cast<int*>( &m_MagneticPads ), CAPTURE_CURSOR_IN_TRACK_TOOL );
         Add( "MagneticTracks", reinterpret_cast<int*>( &m_MagneticTracks ), CAPTURE_CURSOR_IN_TRACK_TOOL );
         Add( "MagneticGraphics", &m_MagneticGraphics, true );
-        Add( "EditActionChangesTrackWidth", &m_EditHotkeyChangesTrackWidth, false );
         Add( "FlipLeftRight", &m_FlipLeftRight, false );
         break;
 

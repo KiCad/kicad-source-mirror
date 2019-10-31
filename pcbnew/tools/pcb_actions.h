@@ -118,6 +118,9 @@ public:
     /// Mirroring of selected items
     static TOOL_ACTION mirror;
 
+    /// Updates selected tracks & vias to the current track & via dimensions
+    static TOOL_ACTION changeTrackWidth;
+
     /// Activation of the edit tool
     static TOOL_ACTION properties;
 

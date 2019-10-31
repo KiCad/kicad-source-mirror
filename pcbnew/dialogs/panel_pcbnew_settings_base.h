@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May 13 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -44,7 +44,6 @@ class PANEL_PCBNEW_SETTINGS_BASE : public wxPanel
 		wxRadioBox* m_PolarDisplay;
 		wxRadioBox* m_UnitsSelection;
 		wxCheckBox* m_Segments_45_Only_Ctrl;
-		wxCheckBox* m_UseEditKeyForWidth;
 		wxCheckBox* m_FlipLeftRight;
 		wxStaticText* m_staticTextRotationAngle;
 		wxTextCtrl* m_RotationAngle;

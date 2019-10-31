@@ -23,10 +23,8 @@
  */
 
 #include <fctsys.h>
-#include <gr_basic.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
-#include <class_board.h>
 #include <class_track.h>
 #include <pcbnew.h>
 #include <tools/drc.h>
@@ -151,23 +149,6 @@ int PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
     }
 
     return return_code;
-}
-
-
-/**
- * Function Edit_TrackSegm_Width
- * Modify one track segment width or one via diameter (using DRC control).
- * @param aTrackItem = the track segment or via to modify
- */
-void PCB_EDIT_FRAME::Edit_TrackSegm_Width( TRACK* aTrackItem )
-{
-    PICKED_ITEMS_LIST itemsListPicker;
-    bool changed = !SetTrackSegmentWidth( aTrackItem, &itemsListPicker, false );
-
-    if( !changed || aTrackItem->GetEditFlags() )
-        return;     // No change
-
-    SaveCopyInUndoList( itemsListPicker, UR_CHANGED );
 }
 
 

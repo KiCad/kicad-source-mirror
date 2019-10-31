@@ -861,13 +861,6 @@ public:
      */
     void OnEditItemRequest( BOARD_ITEM* aItem ) override;
 
-    /**
-     * Function Edit_TrackSegm_Width
-     *  Modify one track segment width or one via diameter (using DRC control).
-     * @param aTrackItem = the track segment or via to modify
-     */
-    void Edit_TrackSegm_Width( TRACK* aTrackItem );
-
     void SwitchLayer( wxDC* DC, PCB_LAYER_ID layer ) override;
 
     /**

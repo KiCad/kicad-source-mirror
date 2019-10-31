@@ -238,6 +238,10 @@ TOOL_ACTION PCB_ACTIONS::mirror( "pcbnew.InteractiveEdit.mirror",
         _( "Mirror" ), _( "Mirrors selected item" ),
         mirror_h_xpm );
 
+TOOL_ACTION PCB_ACTIONS::changeTrackWidth( "pcbnew.InteractiveEdit.changeTrackWidth",
+        AS_GLOBAL, 0, "",
+        _( "Change Track Width" ), _( "Updates selected track & via sizes" ) );
+
 TOOL_ACTION PCB_ACTIONS::deleteFull( "pcbnew.InteractiveEdit.deleteFull",
         AS_GLOBAL,
         WXK_DELETE, LEGACY_HK_NAME( "Delete Full Track" ),

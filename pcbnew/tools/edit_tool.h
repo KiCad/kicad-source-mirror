@@ -113,6 +113,8 @@ public:
      */
     int Mirror( const TOOL_EVENT& aEvent );
 
+    int ChangeTrackWidth( const TOOL_EVENT& aEvent );
+
     /**
      * Function Remove()
      * Deletes currently selected items. The rotation point is the current cursor position.
@@ -181,7 +183,6 @@ private:
     bool invokeInlineRouter( int aDragMode );
     bool isInteractiveDragEnabled() const;
 
-    bool changeTrackWidthOnClick( const PCBNEW_SELECTION& selection );
     bool pickCopyReferencePoint( VECTOR2I& aReferencePoint );
 
 private:

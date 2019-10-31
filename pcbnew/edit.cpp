@@ -139,11 +139,6 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 {
     switch( aItem->Type() )
     {
-    case PCB_TRACE_T:
-    case PCB_VIA_T:
-        Edit_TrackSegm_Width( static_cast<TRACK*>( aItem ) );
-        break;
-
     case PCB_TEXT_T:
         InstallTextOptionsFrame( aItem );
         break;

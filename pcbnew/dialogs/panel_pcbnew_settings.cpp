@@ -60,7 +60,6 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
     m_magneticPadChoice->SetSelection( general_opts.m_MagneticPads );
     m_magneticTrackChoice->SetSelection( general_opts.m_MagneticTracks );
     m_magneticGraphicsChoice->SetSelection( !general_opts.m_MagneticGraphics );
-    m_UseEditKeyForWidth->SetValue( general_opts.m_EditHotkeyChangesTrackWidth );
     m_FlipLeftRight->SetValue( general_opts.m_FlipLeftRight );
 
     m_Show_Page_Limits->SetValue( m_Frame->ShowPageLimits() );
@@ -82,7 +81,6 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataFromWindow()
     m_Frame->Settings().m_MagneticPads = (MAGNETIC_OPTIONS) m_magneticPadChoice->GetSelection();
     m_Frame->Settings().m_MagneticTracks = (MAGNETIC_OPTIONS) m_magneticTrackChoice->GetSelection();
     m_Frame->Settings().m_MagneticGraphics = !m_magneticGraphicsChoice->GetSelection();
-    m_Frame->Settings().m_EditHotkeyChangesTrackWidth = m_UseEditKeyForWidth->GetValue();
     m_Frame->Settings().m_FlipLeftRight = m_FlipLeftRight->GetValue();
 
     m_Frame->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
