@@ -63,31 +63,46 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
         pt0 = pad->ShapePos();
         VECTOR2I pt1 = pt0;
 
-        switch( n )
-        {
-        case 1: pt1.y = m_bbox.GetTop();    break;    // North
-        case 2: pt1.y = m_bbox.GetBottom(); break;    // South
-        case 3: pt1.x = m_bbox.GetLeft();   break;    // East
-        case 4: pt1.x = m_bbox.GetRight();  break;    // West
-        default:                            break;    // Wicked witch
-        }
-
         switch( pad->GetShape() )
         {
         case PAD_SHAPE_RECT:
+        case PAD_SHAPE_CIRCLE:
         case PAD_SHAPE_OVAL:
         case PAD_SHAPE_ROUNDRECT:
         case PAD_SHAPE_CHAMFERED_RECT:
-            return pt1;
+            switch( n )
+            {
+            case 1: pt1.y -= pad->GetSize().y / 2; break;    // North
+            case 2: pt1.y += pad->GetSize().y / 2; break;    // South
+            case 3: pt1.x -= pad->GetSize().x / 2; break;    // East
+            case 4: pt1.x += pad->GetSize().x / 2; break;    // West
+            default:                               break;    // Wicked witch
+            }
 
-        case PAD_SHAPE_CIRCLE:
+            if( pad->GetOrientation() )
+                RotatePoint( pt1, pad->ShapePos(), pad->GetOrientation() );
+
             // Thermal spokes on circular pads form an 'X' instead of a '+'
-            RotatePoint( pt1, pad->ShapePos(), 450 );
+            if( pad->GetShape() == PAD_SHAPE_CIRCLE )
+                RotatePoint( pt1, pad->ShapePos(), 450 );
+
             return pt1;
 
         case PAD_SHAPE_TRAPEZOID:
         case PAD_SHAPE_CUSTOM:
         {
+            switch( n )
+            {
+            case 1: pt1.y = m_bbox.GetTop();    break;    // North
+            case 2: pt1.y = m_bbox.GetBottom(); break;    // South
+            case 3: pt1.x = m_bbox.GetLeft();   break;    // East
+            case 4: pt1.x = m_bbox.GetRight();  break;    // West
+            default:                            break;    // Wicked witch
+            }
+
+            if( pad->GetOrientation() )
+                RotatePoint( pt1, pad->ShapePos(), pad->GetOrientation() );
+
             SHAPE_POLY_SET padPolySet;
             pad->BuildPadShapePolygon( padPolySet, wxSize( 0, 0 ), ARC_LOW_DEF );
             const SHAPE_LINE_CHAIN& padOutline = padPolySet.COutline( 0 );
