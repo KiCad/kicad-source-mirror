@@ -131,6 +131,9 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataToWindow()
 
     Layout();
 
+    m_dimensionUnits->SetSelection( m_BrdSettings->m_DimensionUnits );
+    m_dimensionPrecision->SetSelection( m_BrdSettings->m_DimensionPrecision );
+
     return true;
 }
 
@@ -185,6 +188,9 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataFromWindow()
         m_BrdSettings->m_TextUpright[ i ] =
                 wxGridCellBoolEditor::IsTrueValue( m_grid->GetCellValue( i, COL_TEXT_UPRIGHT ) );
     }
+
+    m_BrdSettings->m_DimensionUnits = m_dimensionUnits->GetSelection();
+    m_BrdSettings->m_DimensionPrecision = m_dimensionPrecision->GetSelection();
 
     return true;
 }

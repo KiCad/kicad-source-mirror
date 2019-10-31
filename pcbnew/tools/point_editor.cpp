@@ -416,6 +416,8 @@ void POINT_EDITOR::updateItem() const
 {
     EDA_ITEM* item = m_editPoints->GetParent();
 
+    const BOARD_DESIGN_SETTINGS& boardSettings = board()->GetDesignSettings();
+
     if( !item )
         return;
 
@@ -571,9 +573,9 @@ void POINT_EDITOR::updateItem() const
             VECTOR2D crossBar( dimension->GetEnd() - dimension->GetOrigin() );
 
             if( featureLine.Cross( crossBar ) > 0 )
-                dimension->SetHeight( -featureLine.EuclideanNorm() );
+                dimension->SetHeight( -featureLine.EuclideanNorm(), boardSettings.m_DimensionPrecision );
             else
-                dimension->SetHeight( featureLine.EuclideanNorm() );
+                dimension->SetHeight( featureLine.EuclideanNorm(), boardSettings.m_DimensionPrecision );
         }
 
         else if( isModified( m_editPoints->Point( DIM_CROSSBARF ) ) )
@@ -582,14 +584,15 @@ void POINT_EDITOR::updateItem() const
             VECTOR2D crossBar( dimension->GetEnd() - dimension->GetOrigin() );
 
             if( featureLine.Cross( crossBar ) > 0 )
-                dimension->SetHeight( -featureLine.EuclideanNorm() );
+                dimension->SetHeight( -featureLine.EuclideanNorm(), boardSettings.m_DimensionPrecision );
             else
-                dimension->SetHeight( featureLine.EuclideanNorm() );
+                dimension->SetHeight( featureLine.EuclideanNorm(), boardSettings.m_DimensionPrecision );
         }
 
         else if( isModified( m_editPoints->Point( DIM_FEATUREGO ) ) )
         {
-            dimension->SetOrigin( wxPoint( m_editedPoint->GetPosition().x, m_editedPoint->GetPosition().y ) );
+            dimension->SetOrigin( wxPoint( m_editedPoint->GetPosition().x, m_editedPoint->GetPosition().y ),
+                                  boardSettings.m_DimensionPrecision );
             m_editPoints->Point( DIM_CROSSBARO ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARO ),
                                                                              m_editPoints->Point( DIM_FEATUREGO ) ) );
             m_editPoints->Point( DIM_CROSSBARF ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARF ),
@@ -598,7 +601,8 @@ void POINT_EDITOR::updateItem() const
 
         else if( isModified( m_editPoints->Point( DIM_FEATUREDO ) ) )
         {
-            dimension->SetEnd( wxPoint( m_editedPoint->GetPosition().x, m_editedPoint->GetPosition().y ) );
+            dimension->SetEnd( wxPoint( m_editedPoint->GetPosition().x, m_editedPoint->GetPosition().y ) ,
+                               boardSettings.m_DimensionPrecision );
             m_editPoints->Point( DIM_CROSSBARO ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARO ),
                                                                              m_editPoints->Point( DIM_FEATUREGO ) ) );
             m_editPoints->Point( DIM_CROSSBARF ).SetConstraint( new EC_LINE( m_editPoints->Point( DIM_CROSSBARF ),

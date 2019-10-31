@@ -446,12 +446,12 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 }
 
 
-void DRAWING_TOOL::constrainDimension( DIMENSION* dimension )
+void DRAWING_TOOL::constrainDimension( DIMENSION* aDim )
 {
-    const VECTOR2I lineVector{ dimension->GetEnd() - dimension->GetOrigin() };
+    const VECTOR2I lineVector{ aDim->GetEnd() - aDim->GetOrigin() };
 
-    dimension->SetEnd( wxPoint(
-        VECTOR2I( dimension->GetOrigin() ) + GetVectorSnapped45( lineVector ) ) );
+    aDim->SetEnd( wxPoint( VECTOR2I( aDim->GetOrigin() ) + GetVectorSnapped45( lineVector ) ),
+                  board()->GetDesignSettings().m_DimensionPrecision );
 }
 
 
@@ -463,7 +463,9 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     POINT_EDITOR* pointEditor = m_toolMgr->GetTool<POINT_EDITOR>();
     DIMENSION*    dimension = NULL;
     BOARD_COMMIT  commit( m_frame );
-    GRID_HELPER  grid( m_frame );
+    GRID_HELPER   grid( m_frame );
+
+    const BOARD_DESIGN_SETTINGS& boardSettings = m_board->GetDesignSettings();
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     PCBNEW_SELECTION preview;
@@ -582,7 +584,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
                 PCB_LAYER_ID layer = getDrawingLayer();
-                const BOARD_DESIGN_SETTINGS& boardSettings = m_board->GetDesignSettings();
 
                 if( layer == Edge_Cuts )        // dimensions are not allowed on EdgeCuts
                     layer = Dwgs_User;
@@ -590,14 +591,15 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 // Init the new item attributes
                 dimension = new DIMENSION( m_board );
                 dimension->SetLayer( layer );
-                dimension->SetOrigin( (wxPoint) cursorPos );
-                dimension->SetEnd( (wxPoint) cursorPos );
+                dimension->SetOrigin( (wxPoint) cursorPos, boardSettings.m_DimensionPrecision );
+                dimension->SetEnd( (wxPoint) cursorPos, boardSettings.m_DimensionPrecision );
                 dimension->Text().SetTextSize( boardSettings.GetTextSize( layer ) );
                 dimension->Text().SetThickness( boardSettings.GetTextThickness( layer ) );
                 dimension->Text().SetItalic( boardSettings.GetTextItalic( layer ) );
                 dimension->SetWidth( boardSettings.GetLineThickness( layer ) );
-                dimension->SetUnits( m_frame->GetUserUnits(), false );
-                dimension->AdjustDimensionDetails();
+                dimension->SetUnits( boardSettings.m_DimensionUnits == 2 ? MILLIMETRES : INCHES,
+                                     boardSettings.m_DimensionUnits == 1 );
+                dimension->AdjustDimensionDetails( boardSettings.m_DimensionPrecision );
 
                 preview.Add( dimension );
                 frame()->SetMsgPanel( dimension );
@@ -608,7 +610,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             break;
 
             case SET_END:
-                dimension->SetEnd( (wxPoint) cursorPos );
+                dimension->SetEnd( (wxPoint) cursorPos, boardSettings.m_DimensionPrecision );
 
                 if( !!evt->Modifier( MD_CTRL ) )
                     constrainDimension( dimension );
@@ -649,7 +651,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             switch( step )
             {
             case SET_END:
-                dimension->SetEnd( (wxPoint) cursorPos );
+                dimension->SetEnd( (wxPoint) cursorPos, boardSettings.m_DimensionPrecision );
 
                 if( !!evt->Modifier( MD_CTRL ) )
                     constrainDimension( dimension );
@@ -663,7 +665,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
                 wxPoint delta( (wxPoint) cursorPos - dimension->m_featureLineDO );
                 double  height = ( delta.x * cos( angle ) ) + ( delta.y * sin( angle ) );
-                dimension->SetHeight( height );
+                dimension->SetHeight( height, boardSettings.m_DimensionPrecision );
             }
             break;
             }

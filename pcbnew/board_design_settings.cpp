@@ -479,6 +479,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_TextItalic[ LAYER_CLASS_OTHERS ] = false;
     m_TextUpright[ LAYER_CLASS_OTHERS ] = false;
 
+    m_DimensionUnits = 0;       // Inches
+    m_DimensionPrecision = 1;   // 0.001mm / 0.1 mil
+
     m_useCustomTrackVia = false;
     m_customTrackWidth  = Millimeter2iu( DEFAULT_CUSTOMTRACKWIDTH );
     m_customViaSize.m_Diameter = Millimeter2iu( DEFAULT_VIASMINSIZE );
@@ -672,6 +675,11 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( BOARD* aBoard, PARAM_CFG_ARRAY* aResu
 
     aResult->push_back( new PARAM_CFG_BOOL( wxT( "OthersTextUpright" ),
           &m_TextUpright[ LAYER_CLASS_OTHERS ], true ) );
+
+    aResult->push_back( new PARAM_CFG_INT( wxT( "DimensionUnits" ),
+          &m_DimensionUnits, 0, 0, 2 ) );
+    aResult->push_back( new PARAM_CFG_INT( wxT( "DimensionPrecision" ),
+          &m_DimensionPrecision, 1, 0, 2 ) );
 
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "SolderMaskClearance" ),
           &m_SolderMaskMargin,
@@ -987,3 +995,5 @@ bool BOARD_DESIGN_SETTINGS::GetTextUpright( PCB_LAYER_ID aLayer ) const
 {
     return m_TextUpright[ GetLayerClass( aLayer ) ];
 }
+
+

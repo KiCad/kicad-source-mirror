@@ -212,7 +212,7 @@ private:
      * Forces the dimension lime to be drawn on multiple of 45 degrees
      * @param aDimension is the dimension element currently being drawn
      */
-    void constrainDimension( DIMENSION* dimension );
+    void constrainDimension( DIMENSION* aDim );
 
     ///> Returns the appropriate width for a segment depending on the settings.
     int getSegmentWidth( PCB_LAYER_ID aLayer ) const;

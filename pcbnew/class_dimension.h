@@ -113,8 +113,9 @@ public:
      * Function SetOrigin
      * Sets a new origin of the crossbar line. All remaining lines are adjusted after that.
      * @param aOrigin is the new point to be used as the new origin of the crossbar line.
+     * @param aPrecision number of decimal places for mils (scaled appropriately for other units).
      */
-    void SetOrigin( const wxPoint& aOrigin );
+    void SetOrigin( const wxPoint& aOrigin, int aPrecision );
 
     /**
      * Function GetOrigin
@@ -129,8 +130,9 @@ public:
      * Function SetEnd
      * Sets a new end of the crossbar line. All remaining lines are adjusted after that.
      * @param aEnd is the new point to be used as the new end of the crossbar line.
+     * @param aPrecision number of decimal places for mils (scaled appropriately for other units).
      */
-    void SetEnd( const wxPoint& aEnd );
+    void SetEnd( const wxPoint& aEnd, int aPrecision );
 
     /**
      * Function GetEnd
@@ -145,8 +147,9 @@ public:
      * Function SetHeight
      * Sets the length of feature lines.
      * @param aHeight is the new height.
+     * @param aPrecision number of decimal places for mils (scaled appropriately for other units).
      */
-    void SetHeight( int aHeight );
+    void SetHeight( int aHeight, int aPrecision );
 
     /**
      * Function GetHeight
@@ -178,8 +181,9 @@ public:
     /**
      * Function AdjustDimensionDetails
      * Calculate coordinates of segments used to draw the dimension.
+     * @param aPrecision number of decimal places for mils (scaled appropriately for other units).
      */
-    void AdjustDimensionDetails();
+    void AdjustDimensionDetails( int aPrecision );
 
     void GetUnits( EDA_UNITS_T& aUnits, bool& aUseMils ) const
     {

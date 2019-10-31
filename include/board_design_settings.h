@@ -228,6 +228,9 @@ public:
     bool       m_TextItalic[ LAYER_CLASS_COUNT ];
     bool       m_TextUpright[ LAYER_CLASS_COUNT ];
 
+    int        m_DimensionUnits;
+    int        m_DimensionPrecision;
+
     // Variables used in footprint editing (default value in item/footprint creation)
 
     wxString   m_RefDefaultText;            ///< Default ref text on fp creation

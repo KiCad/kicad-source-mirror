@@ -191,27 +191,27 @@ void DIMENSION::Mirror( const wxPoint& axis_pos, bool aMirrorLeftRight )
 }
 
 
-void DIMENSION::SetOrigin( const wxPoint& aOrigin )
+void DIMENSION::SetOrigin( const wxPoint& aOrigin, int aPrecision )
 {
     m_featureLineGO = aOrigin;
 
-    AdjustDimensionDetails();
+    AdjustDimensionDetails( aPrecision );
 }
 
 
-void DIMENSION::SetEnd( const wxPoint& aEnd )
+void DIMENSION::SetEnd( const wxPoint& aEnd, int aPrecision )
 {
     m_featureLineDO = aEnd;
 
-    AdjustDimensionDetails();
+    AdjustDimensionDetails( aPrecision );
 }
 
 
-void DIMENSION::SetHeight( int aHeight )
+void DIMENSION::SetHeight( int aHeight, int aPrecision )
 {
     m_Height = aHeight;
 
-    AdjustDimensionDetails();
+    AdjustDimensionDetails( aPrecision );
 }
 
 
@@ -227,7 +227,7 @@ void DIMENSION::UpdateHeight()
 }
 
 
-void DIMENSION::AdjustDimensionDetails()
+void DIMENSION::AdjustDimensionDetails( int aPrecision )
 {
     const int   arrowz = Mils2iu( 50 );             // size of arrows
     int         ii;
@@ -335,7 +335,20 @@ void DIMENSION::AdjustDimensionDetails()
     m_Text.SetTextAngle( newAngle );
 
     m_Value = measure;
-    SetText( MessageTextFromValue( m_Unit, m_Value, m_UseMils ) );
+
+    if( m_Unit == MILLIMETRES )
+        aPrecision += 2;
+    else if( !m_UseMils )
+        aPrecision += 3;
+
+    wxString text;
+    wxString format = wxT( "%." ) + wxString::Format( "%i", aPrecision ) + wxT( "f" );
+
+    text.Printf( format, To_User_Unit( m_Unit, m_Value, m_UseMils ) );
+    text += " ";
+    text += GetAbbreviatedUnitsLabel( m_Unit, m_UseMils );
+
+    SetText( text );
 }
 
 
