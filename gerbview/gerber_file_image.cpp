@@ -202,8 +202,9 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
     m_MirrorB  = false;                             // true: miror / axe B (default = Y)
     m_SwapAxis = false;                             // false if A = X, B = Y; true if A =Y, B = Y
     m_Has_DCode = false;                            // true = DCodes in file
-                                                    // false = no DCode->
-                                                    // search for separate DCode file
+                                                    // false = no DCode-> perhaps deprecated RS274D file
+    m_Has_MissingDCode = false;                     // true = some D_Codes are used, but not defined
+                                                    // perhaps deprecated RS274D file
     m_FmtScale.x = m_FmtScale.y = 4;                // Initialize default format to 3.4 => 4
     m_FmtLen.x   = m_FmtLen.y = 3 + 4;              // Initialize default format len = 3+4
 

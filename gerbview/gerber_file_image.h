@@ -162,7 +162,9 @@ public:
 
     int                m_Selected_Tool;                         // For highlight: current selected Dcode
     bool               m_Has_DCode;                             // true = DCodes in file
-                                                                // (false = no DCode -> separate DCode file
+                                                                // false = no DCode -> perhaps deprecated RS274D file
+    bool               m_Has_MissingDCode;                      // true = some DCodes in file are not defined
+                                                                // (broken file or deprecated RS274D file)
     bool               m_360Arc_enbl;                           // Enbl 360 deg circular interpolation
     bool               m_PolygonFillMode;                       // Enable polygon mode (read coord as a polygon descr)
     int                m_PolygonFillModeState;                  // In polygon mode: 0 = first segm, 1 = next segm

@@ -336,10 +336,11 @@ int char2Hex( unsigned aCode )
 wxString FormatStringFromGerber( const wxString& aString )
 {
     // make the inverse conversion of FormatStringToGerber()
-    // It converts a "normalized" gerber string and convert it to a 16 bits sequence unicode
+    // It converts a "normalized" gerber string containing escape sequences
+    // and convert it to a 16 bits unicode char
     // and return a wxString (unicode 16) from the gerber string
+    // Note the initial gerber string can already contain unicode chars.
     wxString txt;           // The string converted from Gerber string
-    wxString uniString;     // the unicode string from UTF8 Gerber string but without converted escape sequence
 
     unsigned count = aString.Length();
 

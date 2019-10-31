@@ -505,14 +505,17 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
     case GC_SELECT_TOOL:
     {
         int D_commande = DCodeNumber( text );
+
         if( D_commande < FIRST_DCODE )
             return false;
         if( D_commande > (TOOLS_MAX_COUNT - 1) )
             D_commande = TOOLS_MAX_COUNT - 1;
         m_Current_Tool = D_commande;
         D_CODE* pt_Dcode = GetDCODE( D_commande );
+
         if( pt_Dcode )
             pt_Dcode->m_InUse = true;
+
         break;
     }
 
@@ -597,8 +600,11 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
         m_Current_Tool = D_commande;
 
         D_CODE* pt_Dcode = GetDCODE( D_commande );
+
         if( pt_Dcode )
             pt_Dcode->m_InUse = true;
+        else
+            m_Has_MissingDCode = true;
 
         return true;
     }
