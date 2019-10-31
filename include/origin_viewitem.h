@@ -44,7 +44,7 @@ class ORIGIN_VIEWITEM : public BOARD_ITEM
 {
 public:
     ///> Marker symbol styles
-    enum MARKER_STYLE { NONE, CROSS, X, DOT, CIRCLE_CROSS, CIRCLE_X, CIRCLE_DOT };
+    enum MARKER_STYLE { NO_GRAPHIC, CROSS, X, DOT, CIRCLE_CROSS, CIRCLE_X, CIRCLE_DOT };
 
     ORIGIN_VIEWITEM( const COLOR4D& aColor = COLOR4D( 1.0, 1.0, 1.0, 1.0 ),
                      MARKER_STYLE aStyle = CIRCLE_X, int aSize = 16,

@@ -30,14 +30,22 @@ using namespace KIGFX;
 
 ORIGIN_VIEWITEM::ORIGIN_VIEWITEM( const COLOR4D& aColor, MARKER_STYLE aStyle, int aSize, const VECTOR2D& aPosition ) :
     BOARD_ITEM( nullptr, NOT_USED ),   // this item is never added to a BOARD so it needs no type
-    m_position( aPosition ), m_size( aSize ), m_color( aColor ), m_style( aStyle ), m_drawAtZero( false )
+    m_position( aPosition ),
+    m_size( aSize ),
+    m_color( aColor ),
+    m_style( aStyle ),
+    m_drawAtZero( false )
 {
 }
 
 
 ORIGIN_VIEWITEM::ORIGIN_VIEWITEM( const VECTOR2D& aPosition, STATUS_FLAGS flags ) :
     BOARD_ITEM( nullptr, NOT_USED ),   // this item is never added to a BOARD so it needs no type
-    m_position( aPosition ), m_size( NOT_USED ), m_color( UNSPECIFIED_COLOR ), m_style( NONE ), m_drawAtZero( false )
+    m_position( aPosition ),
+    m_size( NOT_USED ),
+    m_color( UNSPECIFIED_COLOR ),
+    m_style( NO_GRAPHIC ),
+    m_drawAtZero( false )
 {
     SetFlags( flags );
 }
@@ -76,7 +84,7 @@ void ORIGIN_VIEWITEM::ViewDraw( int, VIEW* aView ) const
 
     switch( m_style )
     {
-        case NONE:
+        case NO_GRAPHIC:
             break;
 
         case CROSS:
