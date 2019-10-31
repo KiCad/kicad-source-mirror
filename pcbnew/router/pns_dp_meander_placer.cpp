@@ -105,6 +105,10 @@ bool DP_MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_tunedPathP = topo.AssembleTrivialPath( m_originPair.PLine().GetLink( 0 ) );
     m_tunedPathN = topo.AssembleTrivialPath( m_originPair.NLine().GetLink( 0 ) );
 
+    m_padToDieP = GetTotalPadToDieLength( m_originPair.PLine() );
+    m_padToDieN = GetTotalPadToDieLength( m_originPair.NLine() );
+    m_padToDieLenth = std::max( m_padToDieP, m_padToDieN );
+
     m_world->Remove( m_originPair.PLine() );
     m_world->Remove( m_originPair.NLine() );
 
@@ -121,8 +125,8 @@ void DP_MEANDER_PLACER::release()
 
 long long int DP_MEANDER_PLACER::origPathLength() const
 {
-    long long int totalP = 0;
-    long long int totalN = 0;
+    long long int totalP = m_padToDieLenth;
+    long long int totalN = m_padToDieLenth;
 
     for( const ITEM* item : m_tunedPathP.CItems() )
     {

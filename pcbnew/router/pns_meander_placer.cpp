@@ -21,19 +21,19 @@
 
 #include <base_units.h> // God forgive me doing this...
 
-#include "pns_node.h"
-#include "pns_itemset.h"
-#include "pns_topology.h"
-#include "pns_meander_placer.h"
-#include "pns_router.h"
 #include "pns_debug_decorator.h"
+#include "pns_itemset.h"
+#include "pns_meander_placer.h"
+#include "pns_node.h"
+#include "pns_router.h"
+#include "pns_solid.h"
+#include "pns_topology.h"
 
 namespace PNS {
 
 MEANDER_PLACER::MEANDER_PLACER( ROUTER* aRouter ) :
     MEANDER_PLACER_BASE( aRouter )
 {
-    m_world = NULL;
     m_currentNode = NULL;
 
     // Init temporary variables (do not leave uninitialized members)
@@ -77,6 +77,8 @@ bool MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_world = Router()->GetWorld()->Branch();
     m_originLine = m_world->AssembleLine( m_initialSegment );
 
+    m_padToDieLenth = GetTotalPadToDieLength( m_originLine );
+
     TOPOLOGY topo( m_world );
     m_tunedPath = topo.AssembleTrivialPath( m_initialSegment );
 
@@ -91,7 +93,7 @@ bool MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 
 long long int MEANDER_PLACER::origPathLength() const
 {
-    long long int total = 0;
+    long long int total = m_padToDieLenth;
     for( const ITEM* item : m_tunedPath.CItems() )
     {
         if( const LINE* l = dyn_cast<const LINE*>( item ) )

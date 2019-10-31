@@ -63,6 +63,7 @@ public:
         m_minAmplitude = 100000;
         m_maxAmplitude = 1000000;
         m_step = 50000;
+        m_lenPadToDie = 0;
         m_spacing = 600000;
         m_targetLength = 100000000;
         m_targetSkew = 0;
@@ -80,6 +81,8 @@ public:
     int m_spacing;
     ///> amplitude/spacing adjustment step
     int m_step;
+    ///> length PadToDie
+    int m_lenPadToDie;
     ///> desired length of the tuned line/diff pair (this is in nm, so allow more than board width)
     long long int m_targetLength;
     ///> type of corners for the meandered line

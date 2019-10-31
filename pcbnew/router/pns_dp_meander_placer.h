@@ -142,6 +142,8 @@ private:
     SEGMENT* m_initialSegment;
 
     long long int m_lastLength;
+    int           m_padToDieP;
+    int           m_padToDieN;
     TUNING_STATUS m_lastStatus;
 };
 

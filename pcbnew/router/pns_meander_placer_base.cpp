@@ -19,16 +19,19 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "pns_router.h"
-#include "pns_meander.h"
 #include "pns_meander_placer_base.h"
+#include "pns_meander.h"
+#include "pns_router.h"
+#include "pns_solid.h"
 
 namespace PNS {
 
 MEANDER_PLACER_BASE::MEANDER_PLACER_BASE( ROUTER* aRouter ) :
         PLACEMENT_ALGO( aRouter )
 {
+    m_world = NULL;
     m_currentWidth = 0;
+    m_padToDieLenth = 0;
 }
 
 
@@ -171,6 +174,44 @@ void MEANDER_PLACER_BASE::tuneLineLength( MEANDERED_LINE& aTuned, long long int 
             }
         }
     }
+}
+
+
+int MEANDER_PLACER_BASE::GetTotalPadToDieLength( const LINE& aLine ) const
+{
+    int   length = 0;
+    JOINT start;
+    JOINT end;
+
+    m_world->FindLineEnds( aLine, start, end );
+
+    // Extract the length of the pad to die for start and end pads
+    for( auto& link : start.LinkList() )
+    {
+        if( const SOLID* solid = dynamic_cast<const SOLID*>( link.item ) )
+        {
+            // If there are overlapping pads, choose the first with a non-zero length
+            if( solid->GetPadToDie() > 0 )
+            {
+                length += solid->GetPadToDie();
+                break;
+            }
+        }
+    }
+
+    for( auto& link : end.LinkList() )
+    {
+        if( const SOLID* solid = dynamic_cast<const SOLID*>( link.item ) )
+        {
+            if( solid->GetPadToDie() > 0 )
+            {
+                length += solid->GetPadToDie();
+                break;
+            }
+        }
+    }
+
+    return length;
 }
 
 

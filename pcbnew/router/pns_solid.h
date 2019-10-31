@@ -38,6 +38,7 @@ public:
     SOLID() : ITEM( SOLID_T ), m_shape( NULL )
     {
         m_movable = false;
+        m_padToDie = 0;
     }
 
     ~SOLID()
@@ -50,6 +51,7 @@ public:
     {
         m_shape = aSolid.m_shape->Clone();
         m_pos = aSolid.m_pos;
+        m_padToDie = aSolid.m_padToDie;
     }
 
     static inline bool ClassOf( const ITEM* aItem )
@@ -81,6 +83,16 @@ public:
         m_pos = aCenter;
     }
 
+    int GetPadToDie() const
+    {
+        return m_padToDie;
+    }
+
+    void SetPadToDie( int aLen )
+    {
+        m_padToDie = aLen;
+    }
+
     virtual VECTOR2I Anchor( int aN ) const override
     {
         return m_pos;
@@ -105,6 +117,7 @@ private:
     VECTOR2I    m_pos;
     SHAPE*      m_shape;
     VECTOR2I    m_offset;
+    int         m_padToDie;
 };
 
 }

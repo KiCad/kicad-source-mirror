@@ -120,6 +120,8 @@ public:
         return false;
     }
 
+    int GetTotalPadToDieLength( const LINE& aLine ) const;
+
 protected:
 
     /**
@@ -156,6 +158,12 @@ protected:
      */
     int compareWithTolerance(
             long long int aValue, long long int aExpected, long long int aTolerance = 0 ) const;
+
+    ///> pointer to world to search colliding items
+    NODE* m_world;
+
+    ///> total length added by pad to die size
+    int m_padToDieLenth;
 
     ///> width of the meandered trace(s)
     int m_currentWidth;
