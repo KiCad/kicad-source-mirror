@@ -995,7 +995,17 @@ int DRAWSEGMENT::GetPointCount() const
 
 void DRAWSEGMENT::SwapData( BOARD_ITEM* aImage )
 {
-    assert( aImage->Type() == PCB_LINE_T );
+    DRAWSEGMENT* image = dynamic_cast<DRAWSEGMENT*>( aImage );
+    assert( image );
 
-    std::swap( *((DRAWSEGMENT*) this), *((DRAWSEGMENT*) aImage) );
+    std::swap( m_Width, image->m_Width );
+    std::swap( m_Start, image->m_Start );
+    std::swap( m_End, image->m_End );
+    std::swap( m_Shape, image->m_Shape );
+    std::swap( m_Type, image->m_Type );
+    std::swap( m_Angle, image->m_Angle );
+    std::swap( m_BezierC1, image->m_BezierC1 );
+    std::swap( m_BezierC2, image->m_BezierC2 );
+    std::swap( m_BezierPoints, image->m_BezierPoints );
+    std::swap( m_Poly, image->m_Poly );
 }

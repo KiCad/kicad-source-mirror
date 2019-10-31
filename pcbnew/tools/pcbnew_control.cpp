@@ -36,6 +36,7 @@
 #include <class_module.h>
 #include <class_track.h>
 #include <class_zone.h>
+#include <class_edge_mod.h>
 #include <confirm.h>
 #include <connectivity/connectivity_data.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -601,52 +602,109 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
     {
         case PCB_T:
         {
+            BOARD* clipBoard = (BOARD*) clipItem;
+
             if( editModules )
             {
-                wxLogDebug( wxT( "attempting to paste a pcb in the footprint editor\n") );
-                return 0;
+                MODULE* editModule = board()->GetFirstModule();
+                std::vector<BOARD_ITEM*> pastedItems;
+
+                for( MODULE* clipModule : clipBoard->Modules() )
+                {
+                    clipModule->SetParent( board() );
+
+                    for( auto pad : clipModule->Pads() )
+                    {
+                        pad->SetParent( editModule );
+                        pastedItems.push_back( pad );
+                    }
+
+                    clipModule->Pads().clear();
+
+                    for( auto item : clipModule->GraphicalItems() )
+                    {
+                        item->SetParent( editModule );
+                        pastedItems.push_back( item );
+                    }
+
+                    clipModule->GraphicalItems().clear();
+                }
+
+                for( BOARD_ITEM* clipDrawItem : clipBoard->Drawings() )
+                {
+                    if( clipDrawItem->Type() == PCB_LINE_T )
+                    {
+                        DRAWSEGMENT* clipDrawSeg = (DRAWSEGMENT*) clipDrawItem;
+
+                        // Convert to PCB_MODULE_EDGE_T
+                        EDGE_MODULE* pastedDrawSeg = new EDGE_MODULE( editModule );
+                        static_cast<DRAWSEGMENT*>( pastedDrawSeg )->SwapData( clipDrawSeg );
+                        pastedDrawSeg->SetLocalCoord();
+
+                        pastedItems.push_back( pastedDrawSeg );
+                    }
+                    else if( clipDrawItem->Type() == PCB_TEXT_T )
+                    {
+                        TEXTE_PCB* clipTextItem = (TEXTE_PCB*) clipDrawItem;
+
+                        // Convert to PCB_MODULE_TEXT_T
+                        TEXTE_MODULE* pastedTextItem = new TEXTE_MODULE( editModule );
+                        static_cast<EDA_TEXT*>( pastedTextItem )->SwapText( *clipTextItem );
+                        static_cast<EDA_TEXT*>( pastedTextItem )->SwapEffects( *clipTextItem );
+
+                        pastedItems.push_back( pastedTextItem );
+                    }
+                }
+
+                delete clipBoard;
+
+                placeBoardItems( pastedItems, true, true );
+            }
+            else
+            {
+                placeBoardItems( clipBoard, true );
+
+                m_frame->Compile_Ratsnest( true );
+                m_frame->GetBoard()->BuildConnectivity();
             }
 
-            placeBoardItems( static_cast<BOARD*>( clipItem ), true );
-
-            m_frame->Compile_Ratsnest( true );
-            m_frame->GetBoard()->BuildConnectivity();
             break;
         }
 
         case PCB_MODULE_T:
         {
-            std::vector<BOARD_ITEM*> items;
-
-            clipItem->SetParent( board() );
+            MODULE* clipModule = (MODULE*) clipItem;
+            std::vector<BOARD_ITEM*> pastedItems;
 
             if( editModules )
             {
-                auto oldModule = static_cast<MODULE*>( clipItem );
-                auto newModule = board()->GetFirstModule();
+                MODULE* editModule = board()->GetFirstModule();
 
-                for( auto pad : oldModule->Pads() )
+                for( auto pad : clipModule->Pads() )
                 {
-                    pad->SetParent( newModule );
-                    items.push_back( pad );
+                    pad->SetParent( editModule );
+                    pastedItems.push_back( pad );
                 }
 
-                oldModule->Pads().clear();
+                clipModule->Pads().clear();
 
-                for( auto item : oldModule->GraphicalItems() )
+                for( auto item : clipModule->GraphicalItems() )
                 {
-                    item->SetParent( newModule );
-                    items.push_back( item );
+                    item->SetParent( editModule );
+                    pastedItems.push_back( item );
                 }
 
-                oldModule->GraphicalItems().clear();
+                clipModule->GraphicalItems().clear();
+
+                delete clipModule;
             }
             else
             {
-                items.push_back( clipItem );
+                clipModule->SetParent( board() );
+                pastedItems.push_back( clipModule );
             }
 
-            placeBoardItems( items, true, true );
+            placeBoardItems( pastedItems, true, true );
             break;
         }
 
