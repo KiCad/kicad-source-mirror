@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2014-2017 CERN
+ * Copyright (C) 2014-2019 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@
  */
 
 #include <gal/graphics_abstraction_layer.h>
+#include <gal/color4d.h>
 #include "edit_points.h"
 
 bool EDIT_POINT::WithinPoint( const VECTOR2I& aPoint, unsigned int aSize ) const
@@ -241,7 +242,10 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     auto gal = aView->GetGAL();
 
-    gal->SetFillColor( KIGFX::COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
+    if( aView->GetGAL()->GetClearColor().GetBrightness() > 0.5 )
+        gal->SetFillColor( KIGFX::COLOR4D( 0, 0, 0, 1.0 ) );
+    else
+        gal->SetFillColor( KIGFX::COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
     gal->SetIsFill( true );
     gal->SetIsStroke( false );
     gal->PushDepth();
