@@ -523,7 +523,7 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
 
     if( !aField->IsVisible() )
     {
-        if( m_schSettings.m_ShowHiddenText )
+        if( m_schSettings.m_ShowHiddenText || aField->IsBrightened() )
             color = getRenderColor( aField, LAYER_HIDDEN, drawingShadows );
         else
             return;
@@ -568,7 +568,7 @@ void SCH_PAINTER::draw( LIB_TEXT *aText, int aLayer )
 
     if( !aText->IsVisible() )
     {
-        if( m_schSettings.m_ShowHiddenText )
+        if( m_schSettings.m_ShowHiddenText || aText->IsBrightened() )
             color = getRenderColor( aText, LAYER_HIDDEN, drawingShadows );
         else
             return;
@@ -1171,7 +1171,7 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 
     if( !aText->IsVisible() )
     {
-        if( m_schSettings.m_ShowHiddenText )
+        if( m_schSettings.m_ShowHiddenText || aText->IsBrightened() )
             color = getRenderColor( aText, LAYER_HIDDEN, drawingShadows );
         else
             return;
@@ -1335,7 +1335,7 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
 
     if( !aField->IsVisible() )
     {
-        if( m_schSettings.m_ShowHiddenText )
+        if( m_schSettings.m_ShowHiddenText || aField->IsBrightened() )
             color = getRenderColor( aField, LAYER_HIDDEN, drawingShadows );
         else
             return;
