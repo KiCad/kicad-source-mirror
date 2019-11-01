@@ -57,7 +57,7 @@ PLACEFILE_GERBER_WRITER::PLACEFILE_GERBER_WRITER( BOARD* aPcb )
 
 
 int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
-                                              PCB_LAYER_ID aLayer )
+                                              PCB_LAYER_ID aLayer, bool aIncludeBrdEdges )
 {
     m_layer = aLayer;
 
@@ -106,10 +106,28 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
     // We need a BRDITEMS_PLOTTER to plot pads
     PCB_PLOT_PARAMS plotOpts;
     BRDITEMS_PLOTTER brd_plotter( &plotter, m_pcb, plotOpts );
-    brd_plotter.SetLayerSet( LSET( aLayer ) );
 
     plotter.StartPlot();
 
+    if( aIncludeBrdEdges )
+    {
+        brd_plotter.SetLayerSet( LSET( Edge_Cuts ) );
+
+         // Plot edge layer and graphic items
+        brd_plotter.PlotBoardGraphicItems();
+
+        // Draw footprint other graphic items:
+        for( MODULE* footprint : fp_list )
+        {
+            for( auto item : footprint->GraphicalItems() )
+            {
+                if( item->Type() == PCB_MODULE_EDGE_T && item->GetLayer() == Edge_Cuts )
+                    brd_plotter.Plot_1_EdgeModule( (EDGE_MODULE*) item );
+            }
+        }
+    }
+
+    brd_plotter.SetLayerSet( LSET( aLayer ) );
     int cmp_count = 0;
     bool allowUtf8 = true;
 
@@ -167,6 +185,10 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
         // Now some extra metadata is output, avoid blindly clearing the full metadata list
         gbr_metadata.m_NetlistMetadata.m_TryKeepPreviousAttributes = true;
 
+        // We plot the footprint courtyard when possible.
+        // If not, the pads bounding box will be used.
+        bool useFpPadsBbox = true;
+
         if( footprint->BuildPolyCourtyard() )
         {
             int thickness = Millimeter2iu( 0.1 );   // arbitrary but reasonable value
@@ -179,9 +201,38 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
             for( int ii = 0; ii < courtyard.OutlineCount(); ii++ )
             {
                 SHAPE_LINE_CHAIN poly = courtyard.Outline( ii );
+
+                if( !poly.PointCount() )
+                    continue;
+
                 poly.Move( m_offset );
+                useFpPadsBbox = false;
                 plotter.PLOTTER::PlotPoly( poly, NO_FILL, thickness, &gbr_metadata );
             }
+        }
+
+        if( useFpPadsBbox )
+        {
+            int thickness = Millimeter2iu( 0.1 );   // arbitrary but reasonable value
+            gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_FOOTPRINT );
+
+            // bbox of fp pads, pos 0, rot 0, non flipped
+            EDA_RECT bbox = footprint->GetFpPadsLocalBbox();
+
+            // negate bbox Y values if the fp is flipped (always flipped around X axis
+            // in Gerber P&P files).
+            int y_sign = aLayer == B_Cu ? -1 : 1;
+
+            SHAPE_LINE_CHAIN poly;
+            poly.Append( bbox.GetLeft(), y_sign*bbox.GetTop() );
+            poly.Append( bbox.GetLeft(), y_sign*bbox.GetBottom() );
+            poly.Append( bbox.GetRight(), y_sign*bbox.GetBottom() );
+            poly.Append( bbox.GetRight(), y_sign*bbox.GetTop() );
+            poly.SetClosed( true );
+
+            poly.Rotate( -footprint->GetOrientationRadians(), VECTOR2I( 0, 0 ) );
+            poly.Move( footprint->GetPosition() + m_offset );
+            plotter.PLOTTER::PlotPoly( poly, NO_FILL, thickness, &gbr_metadata );
         }
 
         std::vector<D_PAD*>pad_key_list;

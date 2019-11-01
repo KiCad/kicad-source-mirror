@@ -51,6 +51,7 @@
 #define PLACEFILE_UNITS_KEY  wxT( "PlaceFileUnits" )
 #define PLACEFILE_OPT_KEY    wxT( "PlaceFileOpts" )
 #define PLACEFILE_FORMAT_KEY wxT( "PlaceFileFormat" )
+#define PLACEFILE_INCLUDE_BRD_EDGE_KEY wxT( "PlaceFileIncludeBrdEdge" )
 
 
 /**
@@ -89,6 +90,7 @@ private:
     static int m_unitsOpt;
     static int m_fileOpt;
     static int m_fileFormat;
+    static bool m_includeBoardEdge;
 
     void initDialog();
     void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
@@ -102,6 +104,16 @@ private:
 	void onUpdateUIFileOpt( wxUpdateUIEvent& event ) override
     {
         m_radioBoxFilesCount->Enable( m_rbFormat->GetSelection() != 2 );
+    }
+
+	void onUpdateUIforceSMDOpt( wxUpdateUIEvent& event ) override
+    {
+        m_radioBoxFilesCount->Enable( m_rbFormat->GetSelection() != 2 );
+    }
+
+	void onUpdateUIincludeBoardEdge( wxUpdateUIEvent& event ) override
+    {
+        m_cbIncludeBoardEdge->Enable( m_rbFormat->GetSelection() == 2 );
     }
 
     /** Creates files in text or csv format
@@ -139,6 +151,8 @@ private:
 int DIALOG_GEN_FOOTPRINT_POSITION::m_unitsOpt = 0;
 int DIALOG_GEN_FOOTPRINT_POSITION::m_fileOpt = 0;
 int DIALOG_GEN_FOOTPRINT_POSITION::m_fileFormat = 0;
+bool DIALOG_GEN_FOOTPRINT_POSITION::m_includeBoardEdge = false;
+
 
 
 void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
@@ -149,6 +163,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
     m_config->Read( PLACEFILE_UNITS_KEY, &m_unitsOpt, 1 );
     m_config->Read( PLACEFILE_OPT_KEY, &m_fileOpt, 0 );
     m_config->Read( PLACEFILE_FORMAT_KEY, &m_fileFormat, 0 );
+    m_config->Read( PLACEFILE_INCLUDE_BRD_EDGE_KEY, &m_includeBoardEdge, false );
 
     // Output directory
     m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
@@ -157,6 +172,8 @@ void DIALOG_GEN_FOOTPRINT_POSITION::initDialog()
     m_radioBoxUnits->SetSelection( m_unitsOpt );
     m_radioBoxFilesCount->SetSelection( m_fileOpt );
     m_rbFormat->SetSelection( m_fileFormat );
+    m_cbIncludeBoardEdge->SetValue( m_includeBoardEdge );
+
 
     // Update sizes and sizers:
     m_messagesPanel->MsgPanelSetMinSize( wxSize( -1, 160 ) );
@@ -197,11 +214,12 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnGenerate( wxCommandEvent& event )
     m_unitsOpt = m_radioBoxUnits->GetSelection();
     m_fileOpt = m_radioBoxFilesCount->GetSelection();
     m_fileFormat = m_rbFormat->GetSelection();
-
+    m_includeBoardEdge = m_cbIncludeBoardEdge->GetValue();
 
     m_config->Write( PLACEFILE_UNITS_KEY, m_unitsOpt );
     m_config->Write( PLACEFILE_OPT_KEY, m_fileOpt );
     m_config->Write( PLACEFILE_FORMAT_KEY, m_fileFormat );
+    m_config->Write( PLACEFILE_INCLUDE_BRD_EDGE_KEY, m_includeBoardEdge );
 
     // Set output directory and replace backslashes with forward ones
     // (Keep unix convention in cfg files)
@@ -244,14 +262,12 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
     fn = m_parent->GetBoard()->GetFileName();
     fn.SetPath( outputDir.GetPath() );
 
-    // Create the the Front or Top side placement file, or a single file
-
-    // Test for any footprint candidate in list, and display the list of forced footprints
-    // if ForceAllSmd() is true
+    // Create the the Front and Top side placement files. Gerber P&P files are always separated.
+    // Not also they include all footprints
     PLACEFILE_GERBER_WRITER exporter( brd );
     wxString filename = exporter.GetPlaceFileName( fn.GetFullPath(), F_Cu );
 
-    int fpcount = exporter.CreatePlaceFile( filename, F_Cu );
+    int fpcount = exporter.CreatePlaceFile( filename, F_Cu, m_includeBoardEdge );
 
     if( fpcount < 0 )
     {
@@ -272,7 +288,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateGerberFiles()
 
     filename = exporter.GetPlaceFileName( fn.GetFullPath(), B_Cu );
 
-    fpcount = exporter.CreatePlaceFile( filename, B_Cu );
+    fpcount = exporter.CreatePlaceFile( filename, B_Cu, m_includeBoardEdge );
 
     if( fpcount < 0 )
     {

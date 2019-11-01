@@ -60,9 +60,10 @@ public:
      * Creates an pnp gerber file
      * @param aFullFilename = the full filename
      * @param aLayer = layer (F_Cu or B_Cu) to generate
+     * @param aIncludeBrdEdges = true to include board outlines
      * @return component count, or -1 if the file cannot be created
      */
-    int  CreatePlaceFile( wxString& aFullFilename, PCB_LAYER_ID aLayer );
+    int  CreatePlaceFile( wxString& aFullFilename, PCB_LAYER_ID aLayer, bool aIncludeBrdEdges );
 
     /**
      * @return a filename which identify the drill file function.

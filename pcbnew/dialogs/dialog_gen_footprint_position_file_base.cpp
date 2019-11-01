@@ -39,7 +39,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	bSizerdirBrowse->Add( m_browseButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
-	bUpperSizer->Add( bSizerdirBrowse, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
+	bUpperSizer->Add( bSizerdirBrowse, 0, wxEXPAND|wxALL, 5 );
 
 
 	m_MainSizer->Add( bUpperSizer, 0, wxEXPAND, 2 );
@@ -50,7 +50,7 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	wxString m_rbFormatChoices[] = { _("ASCII"), _("CSV"), _("Gerber (very experimental)") };
 	int m_rbFormatNChoices = sizeof( m_rbFormatChoices ) / sizeof( wxString );
 	m_rbFormat = new wxRadioBox( this, wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, m_rbFormatNChoices, m_rbFormatChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbFormat->SetSelection( 0 );
+	m_rbFormat->SetSelection( 2 );
 	bSizerMiddle->Add( m_rbFormat, 0, wxALL, 5 );
 
 	wxString m_radioBoxUnitsChoices[] = { _("Inches"), _("Millimeters") };
@@ -68,13 +68,16 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	bSizerMiddle->Add( m_radioBoxFilesCount, 0, wxALL, 5 );
 
 
-	m_MainSizer->Add( bSizerMiddle, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	m_MainSizer->Add( bSizerMiddle, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizerLower;
 	bSizerLower = new wxBoxSizer( wxVERTICAL );
 
 	m_forceSMDOpt = new wxCheckBox( this, wxID_ANY, _("Include footprints with SMD pads even if not marked Surface Mount"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerLower->Add( m_forceSMDOpt, 0, wxALL, 5 );
+
+	m_cbIncludeBoardEdge = new wxCheckBox( this, wxID_ANY, _("Include board edge layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerLower->Add( m_cbIncludeBoardEdge, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_messagesPanel = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_messagesPanel->SetMinSize( wxSize( 350,300 ) );
@@ -83,6 +86,9 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 
 
 	m_MainSizer->Add( bSizerLower, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+
+	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_MainSizer->Add( m_staticline, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -104,6 +110,8 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::DIALOG_GEN_FOOTPRINT_POSITION_BASE( wxWindow
 	m_rbFormat->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onSelectFormat ), NULL, this );
 	m_radioBoxUnits->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIUnits ), NULL, this );
 	m_radioBoxFilesCount->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIFileOpt ), NULL, this );
+	m_forceSMDOpt->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIforceSMDOpt ), NULL, this );
+	m_cbIncludeBoardEdge->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIincludeBoardEdge ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::OnGenerate ), NULL, this );
 }
 
@@ -114,6 +122,8 @@ DIALOG_GEN_FOOTPRINT_POSITION_BASE::~DIALOG_GEN_FOOTPRINT_POSITION_BASE()
 	m_rbFormat->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onSelectFormat ), NULL, this );
 	m_radioBoxUnits->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIUnits ), NULL, this );
 	m_radioBoxFilesCount->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIFileOpt ), NULL, this );
+	m_forceSMDOpt->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIforceSMDOpt ), NULL, this );
+	m_cbIncludeBoardEdge->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::onUpdateUIincludeBoardEdge ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_FOOTPRINT_POSITION_BASE::OnGenerate ), NULL, this );
 
 }

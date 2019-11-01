@@ -154,6 +154,15 @@ public:
     EDA_RECT GetFootprintRect() const;
 
     /**
+     * Returns the bounding box containing pads when the footprint
+     * is on the front side, orientation 0, position 0,0.
+     * mainly used in Gerber place file to draw a fp outline when the coutyard
+     * is missing or broken
+     * @return EDA_RECT - The rectangle containing the pads for the normalized footprint.
+     */
+    EDA_RECT GetFpPadsLocalBbox() const;
+
+    /**
      * Returns a bounding polygon for the shapes and pads in the module
      * This operation is slower but more accurate than calculating a bounding box
      */

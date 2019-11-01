@@ -446,6 +446,28 @@ EDA_RECT MODULE::GetFootprintRect() const
 }
 
 
+EDA_RECT MODULE::GetFpPadsLocalBbox() const
+{
+    EDA_RECT area;
+
+    // We want the bounding box of the footprint pads at rot 0, not flipped
+    // Create such a image:
+    MODULE dummy( *this );
+
+    dummy.SetPosition( wxPoint( 0, 0 ) );
+    if( dummy.IsFlipped() )
+        dummy.Flip( wxPoint( 0, 0 ) , false );
+
+    if( dummy.GetOrientation() )
+        dummy.SetOrientation( 0 );
+
+    for( auto pad : dummy.Pads() )
+        area.Merge( pad->GetBoundingBox() );
+
+    return area;
+}
+
+
 const EDA_RECT MODULE::GetBoundingBox() const
 {
     EDA_RECT area = GetFootprintRect();

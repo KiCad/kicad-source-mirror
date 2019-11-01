@@ -797,38 +797,16 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
         {
             // TODO: use an aperture macro to declare the rotated pad
             // to be able to flash the shape
-            // For now, the pad is drawn as polygon (region in Gerber dialect),
-            // with TO attributes of a flased pad
+            // For now, the pad is drawn as thick segment (painted with only one segment)
 
             // The pad is reduced to an segment with dy > dx
             int delta = size.y - size.x;
-            int x0    = 0;
-            int y0    = -delta / 2;
-            int x1    = 0;
-            int y1    = delta / 2;
-            RotatePoint( &x0, &y0, orient );
-            RotatePoint( &x1, &y1, orient );
+            wxPoint p0( 0, -delta / 2 );
+            wxPoint p1( 0, delta / 2 );
+            RotatePoint( &p0.x, &p0.y, orient );
+            RotatePoint( &p1.x, &p1.y, orient );
 
-            SHAPE_POLY_SET outline;
-            // Max error to approximate arcs by segments
-            // Currently 2 micrometers give a good approximation
-            double iu_per_micron =  m_IUsPerDecimil / 2.54;
-            int arc_approx_error =  KiROUND( iu_per_micron * 2 );
-
-            TransformOvalToPolygon( outline,
-                                    wxPoint( pos.x + x0, pos.y + y0 ),
-                                    wxPoint( pos.x + x1, pos.y + y1 ),
-                                    size.x, arc_approx_error );
-
-            std::vector<wxPoint> cornerList;
-
-            for( int ii = 0; ii < outline.Outline(0).PointCount(); ++ii )
-            {
-                VECTOR2I& point = outline.Outline(0).Point( ii );
-                cornerList.emplace_back( wxPoint( point.x, point.y ) );
-            }
-
-            PlotGerberRegion( cornerList, gbr_metadata );
+            ThickSegment( pos + p0, pos + p1, size.x, trace_mode, gbr_metadata );
         }
         else
             sketchOval( pos, size, orient, -1 );
