@@ -42,7 +42,8 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
 
 
     def CheckParameters(self):
-        self.Barcode = str(self.parameters['Barcode']['Contents'])
+        # 512 bits maximum in this type of QR code with 2 bytes reserved
+        self.Barcode = str(self.parameters['Barcode']['Contents'])[:61]
         self.X = self.parameters['Barcode']['Qr Pixel Width']
         self.negative = self.parameters['Barcode']['Negative']
         self.UseSilkS = self.parameters['Barcode']['Use SilkS layer']
@@ -70,7 +71,7 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         polygon.SetShape(pcbnew.S_POLYGON)
         polygon.SetWidth( 0 )
         polygon.SetLayer(layer)
-        halfsize = size/2
+        halfsize = int(size/2)
         polygon.GetPolyShape().NewOutline();
         polygon.GetPolyShape().Append( halfsize+xposition, halfsize+yposition )
         polygon.GetPolyShape().Append( halfsize+xposition, -halfsize+yposition )
