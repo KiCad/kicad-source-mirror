@@ -672,10 +672,11 @@ class netlist():
                     for t in re.split( '(\d+)', str ) ]
 
         for g in groups:
-            g = sorted(g, key=lambda g: sortKey(g.getRef()))
+            #g = sorted(g, key=lambda g: sortKey(g.getRef()))
+            g.sort(key=lambda g: sortKey(g.getRef()))
 
         # Finally, sort the groups to order the references alphabetically
-        groups = sorted(groups, key=lambda group: sortKey(group[0].getRef()))
+        groups.sort(key=lambda group: sortKey(group[0].getRef()))
 
         return groups
 
