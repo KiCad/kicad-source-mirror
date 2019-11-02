@@ -446,6 +446,8 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     if( footprintWizard == NULL )
         return;
 
+    m_parameterGrid->Freeze();
+
     m_parameterGrid->ClearGrid();
     m_parameterGridPage = m_pageList->GetSelection();
 
@@ -532,6 +534,8 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     }
 
     ResizeParamColumns();
+
+    m_parameterGrid->Thaw();
 }
 
 void FOOTPRINT_WIZARD_FRAME::ResizeParamColumns()

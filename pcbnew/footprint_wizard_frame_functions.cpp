@@ -278,6 +278,10 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
 
         ReloadFootprint();
         DisplayWizardInfos();
+
+        // The python script can have modified some other parameters.
+        // So rebuild the current parameter list with new values, just in case.
+        ReCreateParameterList();
     }
 }
 
