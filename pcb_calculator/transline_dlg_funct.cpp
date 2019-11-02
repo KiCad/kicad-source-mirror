@@ -42,12 +42,16 @@ extern double DoubleFromString( const wxString& TextValue );
  */
 void PCB_CALCULATOR_FRAME::OnTranslineEpsilonR_Button( wxCommandEvent& event )
 {
-    wxArrayString list = StandardRelativeDielectricConstantList();
+    static int prevChoice = 0;
 
-    wxString value = wxGetSingleChoice( wxEmptyString,
-            _("Relative Dielectric Constants"), list).BeforeFirst( ' ' );
-    if( ! value.IsEmpty() )
-        m_Value_EpsilonR->SetValue( value );
+    wxArrayString list = StandardRelativeDielectricConstantList();
+    int index = wxGetSingleChoiceIndex( wxEmptyString, _("Relative Dielectric Constants"), list,
+            prevChoice, NULL);
+    if( index != -1 )
+    {
+        prevChoice = index;
+        m_Value_EpsilonR->SetValue( list.Item( index ).BeforeFirst( ' ' ) );
+    }
 }
 
 /**
@@ -57,12 +61,16 @@ void PCB_CALCULATOR_FRAME::OnTranslineEpsilonR_Button( wxCommandEvent& event )
  */
 void PCB_CALCULATOR_FRAME::OnTranslineTanD_Button( wxCommandEvent& event )
 {
-    wxArrayString list = StandardLossTangentList();
+    static int prevChoice = 0;
 
-    wxString value = wxGetSingleChoice( wxEmptyString,
-            _("Dielectric Loss Factor"), list).BeforeFirst( ' ' );
-    if( ! value.IsEmpty() )
-        m_Value_TanD->SetValue( value );
+    wxArrayString list = StandardLossTangentList();
+    int index = wxGetSingleChoiceIndex( wxEmptyString, _("Dielectric Loss Factor"), list,
+            prevChoice, NULL);
+    if( index != -1 )
+    {
+        prevChoice = index;
+        m_Value_TanD->SetValue( list.Item( index ).BeforeFirst( ' ' ) );
+    }
 }
 
 /**
@@ -72,12 +80,16 @@ void PCB_CALCULATOR_FRAME::OnTranslineTanD_Button( wxCommandEvent& event )
  */
 void PCB_CALCULATOR_FRAME::OnTranslineRho_Button( wxCommandEvent& event )
 {
-    wxArrayString list = StandardResistivityList();
+    static int prevChoice = 0;
 
-    wxString value = wxGetSingleChoice( wxEmptyString,
-            _("Specific Resistance"), list).BeforeFirst( ' ' );
-    if( ! value.IsEmpty() )
-        m_Value_Rho->SetValue( value );
+    wxArrayString list = StandardResistivityList();
+    int index = wxGetSingleChoiceIndex( wxEmptyString, _("Specific Resistance"), list,
+            prevChoice, NULL);
+    if( index != -1 )
+    {
+        prevChoice = index;
+        m_Value_Rho->SetValue( list.Item( index ).BeforeFirst( ' ' ) );
+    }
 }
 
 // Minor helper struct to handle dialog items for a given parameter
@@ -342,4 +354,5 @@ void PCB_CALCULATOR_FRAME::OnTranslineSelection( wxCommandEvent& event )
     m_panelTransline->GetSizer()->Layout();
     m_panelTransline->Refresh();
 }
+
 
