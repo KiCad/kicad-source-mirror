@@ -435,7 +435,7 @@ class netlist():
 
         self._curr_element = None
 
-        # component blacklist regexs, made from excluded_* above.
+        # component blacklist regexs, made from exluded_* above.
         self.excluded_references = []
         self.excluded_values = []
         self.excluded_footprints = []
@@ -569,7 +569,7 @@ class netlist():
         Omit those that should not, by consulting the blacklists:
         excluded_values, excluded_refs, and excluded_footprints, which hold one
         or more regular expressions.  If any of the the regular expressions match
-        the corresponding field's value in a component, then the component is excluded.
+        the corresponding field's value in a component, then the component is exluded.
         """
 
         # pre-compile all the regex expressions:
@@ -672,10 +672,11 @@ class netlist():
                     for t in re.split( '(\d+)', str ) ]
 
         for g in groups:
-            g = sorted(g, key=lambda g: sortKey(g.getRef()))
+            #g = sorted(g, key=lambda g: sortKey(g.getRef()))
+            g.sort(key=lambda g: sortKey(g.getRef()))
 
         # Finally, sort the groups to order the references alphabetically
-        groups = sorted(groups, key=lambda group: sortKey(group[0].getRef()))
+        groups.sort(key=lambda group: sortKey(group[0].getRef()))
 
         return groups
 
