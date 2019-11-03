@@ -30,6 +30,7 @@
 #include <bitmaps.h>
 #include <tool/action_toolbar.h>
 #include <tools/pcb_actions.h>
+#include <pcb_layer_box_selector.h>
 
 void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 {
@@ -113,6 +114,18 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     updateZoomSelectBox();
     m_mainToolBar->AddControl( m_zoomSelectBox );
 
+    KiScaledSeparator( m_mainToolBar, this );
+
+    // Layer selection choice box.
+    if( m_selLayerBox == nullptr )
+    {
+        m_selLayerBox = new PCB_LAYER_BOX_SELECTOR( m_mainToolBar, ID_TOOLBARH_PCB_SELECT_LAYER );
+        m_selLayerBox->SetBoardFrame( this );
+    }
+
+    ReCreateLayerBox( false );
+    m_mainToolBar->AddControl( m_selLayerBox );
+
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();
 }
@@ -170,6 +183,29 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( PCB_ACTIONS::toggleFootprintTree, ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->Realize();
+}
+
+
+void FOOTPRINT_EDIT_FRAME::ReCreateLayerBox( bool aForceResizeToolbar )
+{
+    if( m_selLayerBox == NULL || m_mainToolBar == NULL )
+        return;
+
+    m_selLayerBox->SetToolTip( _( "+/- to switch" ) );
+    m_selLayerBox->Resync();
+
+    if( aForceResizeToolbar )
+    {
+        // the layer box can have its size changed
+        // Update the aui manager, to take in account the new size
+        m_auimgr.Update();
+    }
+}
+
+
+void FOOTPRINT_EDIT_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
+{
+    m_selLayerBox->SetLayerSelection( GetActiveLayer() );
 }
 
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,10 +19,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file footprint_editor_utils.cpp
  */
 
 #include <fctsys.h>
@@ -43,7 +39,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>
-
+#include <pcb_layer_box_selector.h>
 #include <ratsnest_data.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -55,7 +51,6 @@
 #include <collectors.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-
 #include <dialog_edit_footprint_for_fp_editor.h>
 #include <dialog_move_exact.h>
 #include <dialog_create_array.h>
@@ -311,6 +306,13 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_ADD_FOOTPRINT_TO_BOARD:
         SaveFootprintToBoard( true );
+        break;
+
+    case ID_TOOLBARH_PCB_SELECT_LAYER:
+        SetActiveLayer( ToLAYER_ID( m_selLayerBox->GetLayerSelection() ) );
+
+        if( static_cast<PCB_DISPLAY_OPTIONS*>( GetDisplayOptions() )->m_ContrastModeDisplay )
+            GetCanvas()->Refresh();
         break;
 
     case ID_MODEDIT_CHECK:

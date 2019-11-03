@@ -83,15 +83,16 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, FOOTPRINT_EDIT_FRAME::LoadModuleFromBoard )
     EVT_TOOL( ID_ADD_FOOTPRINT_TO_BOARD, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
 
-    // popup commands
+    // Horizontal toolbar
     EVT_MENU( ID_GRID_SETTINGS, FOOTPRINT_EDIT_FRAME::OnGridSettings )
+    EVT_COMBOBOX( ID_TOOLBARH_PCB_SELECT_LAYER, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
 
     // UI update events.
     EVT_UPDATE_UI( ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
                    FOOTPRINT_EDIT_FRAME::OnUpdateLoadModuleFromBoard )
     EVT_UPDATE_UI( ID_ADD_FOOTPRINT_TO_BOARD,
                    FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard )
-
+    EVT_UPDATE_UI( ID_TOOLBARH_PCB_SELECT_LAYER, FOOTPRINT_EDIT_FRAME::OnUpdateLayerSelectBox )
     EVT_UPDATE_UI( ID_GEN_IMPORT_GRAPHICS_FILE, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
 
 END_EVENT_TABLE()
@@ -108,6 +109,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
     m_canvasType = aBackend;
     m_AboutTitle = "ModEdit";
+    m_selLayerBox = nullptr;
 
     // Give an icon
     wxIcon icon;

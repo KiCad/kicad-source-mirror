@@ -26,6 +26,7 @@
 #include <config_params.h>
 #include <fp_tree_synchronizing_adapter.h>
 
+class PCB_LAYER_BOX_SELECTOR;
 class PCB_LAYER_WIDGET;
 class FP_LIB_TABLE;
 class EDGE_MODULE;
@@ -122,6 +123,17 @@ public:
      * @brief (Re)Create the menubar for the module editor frame
      */
     void ReCreateMenuBar() override;
+
+    /**
+     * Re create the layer Box by clearing the old list, and building
+     * le new one, from the new layers names and cole layers
+     * @param aForceResizeToolbar = true to resize the parent toolbar
+     * false if not needed (mainly in parent toolbar creation,
+     * or when the layers names are not modified)
+     */
+    void ReCreateLayerBox( bool aForceResizeToolbar = true );
+
+    void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
 
     // The Tool Framework initalization, for GAL mode
     void setupTools();
@@ -342,14 +354,12 @@ public:
     DECLARE_EVENT_TABLE()
 
 protected:
-
     /// protected so only friend PCB::IFACE::CreateWindow() can act as sole factory.
     FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent, EDA_DRAW_PANEL_GAL::GAL_TYPE aBackend );
 
-    PCB_LAYER_WIDGET* m_Layers;     ///< the layer manager
-
-    /// List of footprint editor configuration parameters.
-    PARAM_CFG_ARRAY   m_configParams;
+    PCB_LAYER_BOX_SELECTOR* m_selLayerBox;  // a combo box to display and select active layer
+    PCB_LAYER_WIDGET*       m_Layers;       // the layer manager
+    PARAM_CFG_ARRAY         m_configParams; // List of footprint editor configuration parameters.
 
     /**
      * Make sure the footprint info list is loaded (with a progress dialog) and then initialize
