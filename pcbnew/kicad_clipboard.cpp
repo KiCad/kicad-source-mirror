@@ -97,12 +97,15 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
         // make the module safe to transfer to other pcbs
         const MODULE* mod = static_cast<MODULE*>( aSelected.Front() );
         // Do not modify existing board
-        MODULE newModule(*mod);
+        MODULE newModule( *mod );
 
         for( D_PAD* pad = newModule.PadsList().begin(); pad; pad = pad->Next() )
         {
             pad->SetNetCode( 0, 0 );
         }
+
+        // locked means "locked in place"; copied items therefore can't be locked
+        newModule.SetLocked( false );
 
         // locate the reference point at (0, 0) in the copied items
         newModule.Move( wxPoint( -refPoint.x, -refPoint.y ) );
@@ -114,18 +117,15 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
     {
         for( const auto item : aSelected )
         {
-            auto clone = static_cast<BOARD_ITEM*>( item->Clone() );
+            BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( item->Clone() );
 
             // Do not add reference/value - convert them to the common type
             if( TEXTE_MODULE* text = dyn_cast<TEXTE_MODULE*>( clone ) )
                 text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
 
             // If it is only a module, clear the nets from the pads
-            if( clone->Type() == PCB_PAD_T )
-            {
-               D_PAD* pad = static_cast<D_PAD*>( clone );
-               pad->SetNetCode( 0, 0 );
-            }
+            if( D_PAD* pad = dyn_cast<D_PAD*>( clone ) )
+               pad->SetNetCode( 0 );
 
             // Add the pad to the new module before moving to ensure the local coords are correct
             partialModule.Add( clone );
@@ -171,6 +171,12 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
             {
                 auto item = static_cast<BOARD_ITEM*>( i );
                 std::unique_ptr<BOARD_ITEM> clone( static_cast<BOARD_ITEM*> ( item->Clone() ) );
+
+                // locked means "locked in place"; copied items therefore can't be locked
+                if( MODULE* module = dyn_cast<MODULE*>( clone.get() ) )
+                    module->SetLocked( false );
+                else if( TRACK* track = dyn_cast<TRACK*>( clone.get() ) )
+                    track->SetLocked( false );
 
                 // locate the reference point at (0, 0) in the copied items
                 clone->Move( wxPoint(-refPoint.x, -refPoint.y ) );
