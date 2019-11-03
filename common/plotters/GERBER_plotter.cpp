@@ -47,7 +47,7 @@ GERBER_PLOTTER::GERBER_PLOTTER()
 {
     workFile  = NULL;
     finalFile = NULL;
-    currentAperture = apertures.end();
+    m_currentApertureIdx = -1;
     m_apertureAttribute = 0;
 
     // number of digits after the point (number of digits of the mantissa
@@ -65,7 +65,7 @@ GERBER_PLOTTER::GERBER_PLOTTER()
 
 
 void GERBER_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
-				  double aScale, bool aMirror )
+                  double aScale, bool aMirror )
 {
     wxASSERT( aMirror == false );
     m_plotMirror = false;
@@ -101,8 +101,7 @@ void GERBER_PLOTTER::SetGerberCoordinatesFormat( int aResolution, bool aUseInche
 void GERBER_PLOTTER::emitDcode( const DPOINT& pt, int dcode )
 {
 
-    fprintf( outputFile, "X%dY%dD%02d*\n",
-	    KiROUND( pt.x ), KiROUND( pt.y ), dcode );
+    fprintf( outputFile, "X%dY%dD%02d*\n", KiROUND( pt.x ), KiROUND( pt.y ), dcode );
 }
 
 void GERBER_PLOTTER::ClearAllAttributes()
@@ -282,7 +281,7 @@ bool GERBER_PLOTTER::EndPlot()
 void GERBER_PLOTTER::SetDefaultLineWidth( int width )
 {
     defaultPenWidth = width;
-    currentAperture = apertures.end();
+    m_currentApertureIdx = -1;
 }
 
 
@@ -306,23 +305,20 @@ void GERBER_PLOTTER::SetCurrentLineWidth( int width, void* aData )
 }
 
 
-std::vector<APERTURE>::iterator GERBER_PLOTTER::getAperture( const wxSize& aSize,
+int GERBER_PLOTTER::GetOrCreateAperture( const wxSize& aSize,
                         APERTURE::APERTURE_TYPE aType, int aApertureAttribute )
 {
     int last_D_code = 9;
 
     // Search an existing aperture
-    std::vector<APERTURE>::iterator tool = apertures.begin();
-
-    while( tool != apertures.end() )
+    for( int idx = 0; idx < (int)m_apertures.size(); ++idx )
     {
+        APERTURE* tool = &m_apertures[idx];
         last_D_code = tool->m_DCode;
 
         if( (tool->m_Type == aType) && (tool->m_Size == aSize) &&
             (tool->m_ApertureAttribute == aApertureAttribute) )
-            return tool;
-
-        ++tool;
+            return idx;
     }
 
     // Allocate a new aperture
@@ -332,9 +328,9 @@ std::vector<APERTURE>::iterator GERBER_PLOTTER::getAperture( const wxSize& aSize
     new_tool.m_DCode = last_D_code + 1;
     new_tool.m_ApertureAttribute = aApertureAttribute;
 
-    apertures.push_back( new_tool );
+    m_apertures.push_back( new_tool );
 
-    return apertures.end() - 1;
+    return m_apertures.size() - 1;
 }
 
 
@@ -342,20 +338,20 @@ void GERBER_PLOTTER::selectAperture( const wxSize&           aSize,
                                      APERTURE::APERTURE_TYPE aType,
                                      int aApertureAttribute )
 {
-    bool change = ( currentAperture == apertures.end() ) ||
-                  ( currentAperture->m_Type != aType ) ||
-                  ( currentAperture->m_Size != aSize );
+    bool change = ( m_currentApertureIdx < 0 ) ||
+                  ( m_apertures[m_currentApertureIdx].m_Type != aType ) ||
+                  ( m_apertures[m_currentApertureIdx].m_Size != aSize );
 
     if( !m_useNetAttributes )
         aApertureAttribute = 0;
-    else
-        change = change || ( currentAperture->m_ApertureAttribute != aApertureAttribute );
+    else if( !change )
+        change = m_apertures[m_currentApertureIdx].m_ApertureAttribute != aApertureAttribute;
 
     if( change )
     {
         // Pick an existing aperture or create a new one
-        currentAperture = getAperture( aSize, aType, aApertureAttribute );
-        fprintf( outputFile, "D%d*\n", currentAperture->m_DCode );
+        m_currentApertureIdx = GetOrCreateAperture( aSize, aType, aApertureAttribute );
+        fprintf( outputFile, "D%d*\n", m_apertures[m_currentApertureIdx].m_DCode );
     }
 }
 
@@ -387,8 +383,7 @@ void GERBER_PLOTTER::writeApertureList()
         useX1StructuredComment = true;
 
     // Init
-    for( std::vector<APERTURE>::iterator tool = apertures.begin();
-         tool != apertures.end(); ++tool )
+    for( APERTURE& tool : m_apertures )
     {
         // apertude sizes are in inch or mm, regardless the
         // coordinates format
@@ -397,7 +392,7 @@ void GERBER_PLOTTER::writeApertureList()
         if(! m_gerberUnitInch )
             fscale *= 25.4;     // size in mm
 
-        int attribute = tool->m_ApertureAttribute;
+        int attribute = tool.m_ApertureAttribute;
 
         if( attribute != m_apertureAttribute )
         {
@@ -406,7 +401,7 @@ void GERBER_PLOTTER::writeApertureList()
                             useX1StructuredComment ).c_str(), outputFile );
         }
 
-        char* text = cbuf + sprintf( cbuf, "%%ADD%d", tool->m_DCode );
+        char* text = cbuf + sprintf( cbuf, "%%ADD%d", tool.m_DCode );
 
         /* Please note: the Gerber specs for mass parameters say that
            exponential syntax is *not* allowed and the decimal point should
@@ -415,24 +410,24 @@ void GERBER_PLOTTER::writeApertureList()
            can't remove trailing zeros but thats not a problem, since nothing
            forbid it (the file is only slightly longer) */
 
-        switch( tool->m_Type )
+        switch( tool.m_Type )
         {
         case APERTURE::AT_CIRCLE:
-            sprintf( text, "C,%#f*%%\n", tool->GetDiameter() * fscale );
+            sprintf( text, "C,%#f*%%\n", tool.GetDiameter() * fscale );
             break;
 
         case APERTURE::AT_RECT:
-            sprintf( text, "R,%#fX%#f*%%\n", tool->m_Size.x * fscale,
-                                             tool->m_Size.y * fscale );
+            sprintf( text, "R,%#fX%#f*%%\n", tool.m_Size.x * fscale,
+                                             tool.m_Size.y * fscale );
             break;
 
         case APERTURE::AT_PLOTTING:
-            sprintf( text, "C,%#f*%%\n", tool->m_Size.x * fscale );
+            sprintf( text, "C,%#f*%%\n", tool.m_Size.x * fscale );
             break;
 
         case APERTURE::AT_OVAL:
-            sprintf( text, "O,%#fX%#f*%%\n", tool->m_Size.x * fscale,
-                                             tool->m_Size.y * fscale );
+            sprintf( text, "O,%#fX%#f*%%\n", tool.m_Size.x * fscale,
+                                             tool.m_Size.y * fscale );
             break;
 
         case APERTURE::AT_REGULAR_POLY:
@@ -446,8 +441,8 @@ void GERBER_PLOTTER::writeApertureList()
         case APERTURE::AT_REGULAR_POLY10:
         case APERTURE::AT_REGULAR_POLY11:
         case APERTURE::AT_REGULAR_POLY12:
-            sprintf( text, "P,%#fX%dX%#f*%%\n", tool->GetDiameter() * fscale,
-                     tool->GetVerticeCount(), tool->GetRotation() );
+            sprintf( text, "P,%#fX%dX%#f*%%\n", tool.GetDiameter() * fscale,
+                     tool.GetVerticeCount(), tool.GetRotation() );
             break;
         }
 
@@ -695,7 +690,7 @@ void GERBER_PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
         wxPoint offsetp1( p1.x - (width - currentPenWidth) / 2,
                           p1.y - (width - currentPenWidth) / 2 );
         wxPoint offsetp2( p2.x + (width - currentPenWidth) / 2,
-			  p2.y + (width - currentPenWidth) / 2 );
+              p2.y + (width - currentPenWidth) / 2 );
         Rect( offsetp1, offsetp2, NO_FILL, -1 );
         offsetp1.x += (width - currentPenWidth);
         offsetp1.y += (width - currentPenWidth);
@@ -858,27 +853,27 @@ void GERBER_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& aSize,
         break;
 
     default: // plot pad shape as polygon
-	{
-	    // XXX to do: use an aperture macro to declare the rotated pad
-	    wxPoint coord[4];
-	    // coord[0] is assumed the lower left
-	    // coord[1] is assumed the upper left
-	    // coord[2] is assumed the upper right
-	    // coord[3] is assumed the lower right
+    {
+        // XXX to do: use an aperture macro to declare the rotated pad
+        wxPoint coord[4];
+        // coord[0] is assumed the lower left
+        // coord[1] is assumed the upper left
+        // coord[2] is assumed the upper right
+        // coord[3] is assumed the lower right
 
-	    /* Trace the outline. */
-	    coord[0].x = -size.x/2;   // lower left
-	    coord[0].y = size.y/2;
-	    coord[1].x = -size.x/2;   // upper left
-	    coord[1].y = -size.y/2;
-	    coord[2].x = size.x/2;    // upper right
-	    coord[2].y = -size.y/2;
-	    coord[3].x = size.x/2;    // lower right
-	    coord[3].y = size.y/2;
+        /* Trace the outline. */
+        coord[0].x = -size.x/2;   // lower left
+        coord[0].y = size.y/2;
+        coord[1].x = -size.x/2;   // upper left
+        coord[1].y = -size.y/2;
+        coord[2].x = size.x/2;    // upper right
+        coord[2].y = -size.y/2;
+        coord[3].x = size.x/2;    // lower right
+        coord[3].y = size.y/2;
 
-	    FlashPadTrapez( pos, coord, orient, trace_mode, aData );
-	}
-	break;
+        FlashPadTrapez( pos, coord, orient, trace_mode, aData );
+    }
+    break;
     }
 }
 

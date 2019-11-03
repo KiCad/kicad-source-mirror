@@ -109,31 +109,22 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
 
     plotter.StartPlot();
 
-    if( aIncludeBrdEdges )
-    {
-        brd_plotter.SetLayerSet( LSET( Edge_Cuts ) );
-
-         // Plot edge layer and graphic items
-        brd_plotter.PlotBoardGraphicItems();
-
-        // Draw footprint other graphic items:
-        for( MODULE* footprint : fp_list )
-        {
-            for( auto item : footprint->GraphicalItems() )
-            {
-                if( item->Type() == PCB_MODULE_EDGE_T && item->GetLayer() == Edge_Cuts )
-                    brd_plotter.Plot_1_EdgeModule( (EDGE_MODULE*) item );
-            }
-        }
-    }
+    // Some tools in P&P files have the type and size defined.
+    // they are position flash (round), pad1 flash (diamond), other pads flash (round)
+    // and component outline thickness (polyline)
+    int flash_position_shape_diam = Millimeter2iu( 0.3 );   // defined size for position shape (circle)
+    int pad1_mark_size = Millimeter2iu( 0.36 );             // defined size for pad 1 position (diamond)
+    int other_pads_mark_size = 0;                           // defined size for position shape (circle)
+    int line_thickness = Millimeter2iu( 0.1 );              // defined size for component outlines
 
     brd_plotter.SetLayerSet( LSET( aLayer ) );
     int cmp_count = 0;
     bool allowUtf8 = true;
 
+    // Plot components data: position, outlines, pad1 and other pads.
     for( MODULE* footprint : fp_list )
     {
-        // Manage the aperture attributes: in drill files 3 attributes can be used:
+        // Manage the aperture attribute component position:
         GBR_METADATA gbr_metadata;
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_POSITION );
 
@@ -178,8 +169,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
 
         wxPoint flash_pos = footprint->GetPosition() + m_offset;
 
-        int flash_diam = Millimeter2iu( 0.3 );    // arbitrary but reasonable value
-        plotter.FlashPadCircle( flash_pos, flash_diam, FILLED, &gbr_metadata );
+        plotter.FlashPadCircle( flash_pos, flash_position_shape_diam, FILLED, &gbr_metadata );
         gbr_metadata.m_NetlistMetadata.ClearExtraData();
 
         // Now some extra metadata is output, avoid blindly clearing the full metadata list
@@ -191,7 +181,6 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
 
         if( footprint->BuildPolyCourtyard() )
         {
-            int thickness = Millimeter2iu( 0.1 );   // arbitrary but reasonable value
             gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_COURTYARD );
 
             SHAPE_POLY_SET& courtyard = aLayer == B_Cu ?
@@ -207,13 +196,12 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
 
                 poly.Move( m_offset );
                 useFpPadsBbox = false;
-                plotter.PLOTTER::PlotPoly( poly, NO_FILL, thickness, &gbr_metadata );
+                plotter.PLOTTER::PlotPoly( poly, NO_FILL, line_thickness, &gbr_metadata );
             }
         }
 
         if( useFpPadsBbox )
         {
-            int thickness = Millimeter2iu( 0.1 );   // arbitrary but reasonable value
             gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_FOOTPRINT );
 
             // bbox of fp pads, pos 0, rot 0, non flipped
@@ -232,7 +220,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
 
             poly.Rotate( -footprint->GetOrientationRadians(), VECTOR2I( 0, 0 ) );
             poly.Move( footprint->GetPosition() + m_offset );
-            plotter.PLOTTER::PlotPoly( poly, NO_FILL, thickness, &gbr_metadata );
+            plotter.PLOTTER::PlotPoly( poly, NO_FILL, line_thickness, &gbr_metadata );
         }
 
         std::vector<D_PAD*>pad_key_list;
@@ -249,11 +237,9 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
                 gbr_metadata.SetPadName( pad1->GetName() );
                 gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_PAD );
 
-                // Flashes a diamond at pad position: use a slightly bigger size than the
-                // round spot to be able to see these 2 shapes when drawn at the same location
-                int mark_size = (flash_diam*6)/5;
-                plotter.FlashRegularPolygon( pad1->GetPosition() + m_offset, mark_size, 4,
-                                             0.0, FILLED, &gbr_metadata );
+                // Flashes a diamond at pad position:
+                plotter.FlashRegularPolygon( pad1->GetPosition() + m_offset, pad1_mark_size,
+                                             4, 0.0, FILLED, &gbr_metadata );
             }
         }
 
@@ -288,8 +274,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
                 gbr_metadata.SetPadName( pad->GetName() );
 
                 // Flashes a round, 0 sized round shape at pad position
-                int mark_size = 0;
-                plotter.FlashPadCircle( pad->GetPosition() + m_offset, mark_size,
+                plotter.FlashPadCircle( pad->GetPosition() + m_offset, other_pads_mark_size,
                                         FILLED, &gbr_metadata );
             }
         }
@@ -298,6 +283,26 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
 
         cmp_count++;
     }
+
+    // Plot board outlines, if requested
+    if( aIncludeBrdEdges )
+    {
+        brd_plotter.SetLayerSet( LSET( Edge_Cuts ) );
+
+         // Plot edge layer and graphic items
+        brd_plotter.PlotBoardGraphicItems();
+
+        // Draw footprint other graphic items:
+        for( MODULE* footprint : fp_list )
+        {
+            for( auto item : footprint->GraphicalItems() )
+            {
+                if( item->Type() == PCB_MODULE_EDGE_T && item->GetLayer() == Edge_Cuts )
+                    brd_plotter.Plot_1_EdgeModule( (EDGE_MODULE*) item );
+            }
+        }
+    }
+
 
     plotter.EndPlot();
 

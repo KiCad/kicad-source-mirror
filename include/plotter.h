@@ -1281,6 +1281,17 @@ public:
      */
     void ClearAllAttributes();
 
+    /**
+     * @return a index to the aperture in aperture list which meets the size and type of tool
+     * if the aperture does not exist, it is created and entered in aperture list
+     * @param aSize = the size of tool
+     * @param aType = the type ( shape ) of tool
+     * @param aApertureAttribute = an aperture attribute of the tool (a tool can have onlu one attribute)
+     * 0 = no specific attribute
+     */
+    int GetOrCreateAperture( const wxSize& aSize,
+                    APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
+
 protected:
     /**
      * Pick an existing aperture or create a new one, matching the
@@ -1321,20 +1332,8 @@ protected:
      */
     void clearNetAttribute();
 
-    // Remove all attributes from object attributes dictionary (TO. and TA commands)
-    /**
-     * Function getAperture returns a reference to the aperture which meets the size anf type of tool
-     * if the aperture does not exist, it is created and entered in aperture list
-     * @param aSize = the size of tool
-     * @param aType = the type ( shape ) of tool
-     * @param aApertureAttribute = an aperture attribute of the tool (a tool can have onlu one attribute)
-     * 0 = no specific attribute
-     */
-    std::vector<APERTURE>::iterator getAperture( const wxSize& aSize,
-                    APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
-
-    // the attributes dictionary created/modifed by %TO, attached the objects, when they are created
-    // by D01, D03 G36/G37 commands
+    // the attributes dictionary created/modifed by %TO, attached to objects, when they are created
+    // by D01, D03, G36/G37 commands
     // standard attributes are .P, .C and .N
     // this is used by gerber readers when creating a new object. Cleared by %TD command
     // Note: m_objectAttributesDictionnary can store more than one attribute
@@ -1354,8 +1353,8 @@ protected:
      */
     void writeApertureList();
 
-    std::vector<APERTURE>           apertures;
-    std::vector<APERTURE>::iterator currentAperture;
+    std::vector<APERTURE> m_apertures;  // The list of available apertures
+    int m_currentApertureIdx;   // The index of the current aperture in m_apertures
 
     bool     m_gerberUnitInch;  // true if the gerber units are inches, false for mm
     int      m_gerberUnitFmt;   // number of digits in mantissa.
