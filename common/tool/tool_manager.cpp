@@ -837,6 +837,10 @@ TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
     if( tool->GetType() == INTERACTIVE )
         static_cast<TOOL_INTERACTIVE*>( tool )->resetTransitions();
 
+    // Don't move the iterator past the stack beginning
+    if( it == m_activeTools.begin() )
+        return it;
+
     return --it;
 }
 
