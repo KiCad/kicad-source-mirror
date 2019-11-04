@@ -122,9 +122,6 @@ private:
 
     long long int origPathLength() const;
 
-    ///> pointer to world to search colliding items
-    NODE* m_world;
-
     ///> current routing start point (end of tail, beginning of head)
     VECTOR2I m_currentStart;
 
