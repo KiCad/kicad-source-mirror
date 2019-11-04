@@ -35,6 +35,71 @@ extern double DoubleFromString( const wxString& TextValue );
 // Display a selection of usual Er, TanD, Rho  values
 // format is <value><space><comment>
 
+// A helper function to find the choice in a list of values
+// return true if a index in aList that matches aValue is found.
+static bool findMatch(wxArrayString& aList, wxString& aValue, int& aIdx )
+{
+    bool success = false;
+    // Find the previous choice index:
+    aIdx = 0;
+    double curr_value;
+
+    // Calculate the current value (can be in "C" or current locale):
+    if( !aValue.ToDouble( &curr_value ) )
+        aValue.ToCDouble( &curr_value );
+
+    // Some countries use comma instead of point as separator.
+    // use point for comparisons:
+    wxString cvalue = aValue;
+    cvalue.Replace( ',', '.' );
+
+    // First compare strings:
+    for( wxString& text: aList )
+    {
+        if( text.IsEmpty() )    // No match found: select the empty line choice
+            break;
+
+        wxString val_str = text.BeforeFirst( ' ' );
+        val_str.Replace( ',', '.' );
+
+        // compare string values
+        if( val_str == cvalue )
+        {
+            success = true;
+            break;
+        }
+
+        aIdx++;
+    }
+
+    // Due to multiple ways to write a double, if string values
+    // do not match, compare double values
+    if( !success )
+    {
+        aIdx = 0;
+
+        for( wxString& text: aList )
+        {
+            if( text.IsEmpty() )    // No match found: select the empty line choice
+                break;
+
+            double val;
+            text.BeforeFirst( ' ' ).ToDouble( &val );;
+
+            if( curr_value == val )
+            {
+                success = true;
+                break;
+            }
+
+            aIdx++;
+        }
+    }
+
+
+    return success;
+}
+
 /**
  * Function OnEpsilonR_Button
  * Shows a list of current relative dielectric constant(Er)
@@ -42,16 +107,20 @@ extern double DoubleFromString( const wxString& TextValue );
  */
 void PCB_CALCULATOR_FRAME::OnTranslineEpsilonR_Button( wxCommandEvent& event )
 {
-    static int prevChoice = 0;
-
     wxArrayString list = StandardRelativeDielectricConstantList();
-    int index = wxGetSingleChoiceIndex( wxEmptyString, _("Relative Dielectric Constants"), list,
-            prevChoice, NULL);
-    if( index != -1 )
-    {
-        prevChoice = index;
+    list.Add( "" );  // Add an empty line for no selection
+
+    // Find the previous choice index:
+    wxString prevChoiceStr = m_Value_EpsilonR->GetValue();
+    int prevChoice = 0;
+    findMatch( list, prevChoiceStr, prevChoice );
+
+    int index = wxGetSingleChoiceIndex( wxEmptyString,
+                                        _("Relative Dielectric Constants"),
+                                        list, prevChoice );
+
+    if( index >= 0 && !list.Item( index ).IsEmpty() )   // i.e. non canceled.
         m_Value_EpsilonR->SetValue( list.Item( index ).BeforeFirst( ' ' ) );
-    }
 }
 
 /**
@@ -61,16 +130,19 @@ void PCB_CALCULATOR_FRAME::OnTranslineEpsilonR_Button( wxCommandEvent& event )
  */
 void PCB_CALCULATOR_FRAME::OnTranslineTanD_Button( wxCommandEvent& event )
 {
-    static int prevChoice = 0;
-
     wxArrayString list = StandardLossTangentList();
-    int index = wxGetSingleChoiceIndex( wxEmptyString, _("Dielectric Loss Factor"), list,
-            prevChoice, NULL);
-    if( index != -1 )
-    {
-        prevChoice = index;
+    list.Add( "" );  // Add an empty line for no selection
+
+    // Find the previous choice index:
+    wxString prevChoiceStr = m_Value_TanD->GetValue();
+    int prevChoice = 0;
+    findMatch( list, prevChoiceStr, prevChoice );
+
+    int index = wxGetSingleChoiceIndex( wxEmptyString, _("Dielectric Loss Factor"),
+                                        list, prevChoice, NULL);
+
+    if( index >= 0 && !list.Item( index ).IsEmpty() )   // i.e. non canceled.
         m_Value_TanD->SetValue( list.Item( index ).BeforeFirst( ' ' ) );
-    }
 }
 
 /**
@@ -80,16 +152,19 @@ void PCB_CALCULATOR_FRAME::OnTranslineTanD_Button( wxCommandEvent& event )
  */
 void PCB_CALCULATOR_FRAME::OnTranslineRho_Button( wxCommandEvent& event )
 {
-    static int prevChoice = 0;
-
     wxArrayString list = StandardResistivityList();
-    int index = wxGetSingleChoiceIndex( wxEmptyString, _("Specific Resistance"), list,
-            prevChoice, NULL);
-    if( index != -1 )
-    {
-        prevChoice = index;
+    list.Add( "" );  // Add an empty line for no selection
+
+    // Find the previous choice index:
+    wxString prevChoiceStr = m_Value_Rho->GetValue();
+    int prevChoice = 0;
+    findMatch( list, prevChoiceStr, prevChoice );
+
+    int index = wxGetSingleChoiceIndex( wxEmptyString, _("Specific Resistance"),
+                                        list, prevChoice, NULL);
+
+    if( index >= 0 && !list.Item( index ).IsEmpty() )   // i.e. non canceled.
         m_Value_Rho->SetValue( list.Item( index ).BeforeFirst( ' ' ) );
-    }
 }
 
 // Minor helper struct to handle dialog items for a given parameter
