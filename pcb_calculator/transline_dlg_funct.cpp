@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 1992-2011 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,10 +30,9 @@
 extern double DoubleFromString( const wxString& TextValue );
 
 
-// these values come from QucsStudio ( by Michael Margraf )
+// Display a selection of usual Er, TanD, Rho values
+// List format is <value><space><comment>
 
-// Display a selection of usual Er, TanD, Rho  values
-// format is <value><space><comment>
 
 // A helper function to find the choice in a list of values
 // return true if a index in aList that matches aValue is found.
@@ -42,14 +41,10 @@ static bool findMatch(wxArrayString& aList, wxString& aValue, int& aIdx )
     bool success = false;
     // Find the previous choice index:
     aIdx = 0;
-    double curr_value;
-
-    // Calculate the current value (can be in "C" or current locale):
-    if( !aValue.ToDouble( &curr_value ) )
-        aValue.ToCDouble( &curr_value );
 
     // Some countries use comma instead of point as separator.
-    // use point for comparisons:
+    // The value can be enter with pint or comma
+    // use point for string comparisons:
     wxString cvalue = aValue;
     cvalue.Replace( ',', '.' );
 
@@ -76,6 +71,15 @@ static bool findMatch(wxArrayString& aList, wxString& aValue, int& aIdx )
     // do not match, compare double values
     if( !success )
     {
+        struct lconv* lc = localeconv();
+        char localeDecimalSeparator = *lc->decimal_point;
+
+        if( localeDecimalSeparator == ',' )
+            cvalue.Replace( '.', ',' );
+
+        double curr_value;
+        cvalue.ToDouble( &curr_value );
+
         aIdx = 0;
 
         for( wxString& text: aList )
@@ -84,7 +88,12 @@ static bool findMatch(wxArrayString& aList, wxString& aValue, int& aIdx )
                 break;
 
             double val;
-            text.BeforeFirst( ' ' ).ToDouble( &val );;
+            wxString val_str = text.BeforeFirst( ' ' );
+
+            if( localeDecimalSeparator == ',' )
+                val_str.Replace( '.', ',' );
+
+            val_str.ToDouble( &val );;
 
             if( curr_value == val )
             {
