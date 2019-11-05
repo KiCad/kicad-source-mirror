@@ -1881,7 +1881,7 @@
                                                                     <property name="font"></property>
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
-                                                                    <property name="id">ID_MODULE_PROPERTIES_UPDATE</property>
+                                                                    <property name="id">wxID_ANY</property>
                                                                     <property name="label">Update Footprint from Library...</property>
                                                                     <property name="margins"></property>
                                                                     <property name="markup">0</property>
@@ -1954,7 +1954,7 @@
                                                                     <property name="font"></property>
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
-                                                                    <property name="id">ID_MODULE_PROPERTIES_EXCHANGE</property>
+                                                                    <property name="id">wxID_ANY</property>
                                                                     <property name="label">Change Footprint...</property>
                                                                     <property name="margins"></property>
                                                                     <property name="markup">0</property>
@@ -2027,7 +2027,7 @@
                                                                     <property name="font"></property>
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
-                                                                    <property name="id">ID_EDIT_FOOTPRINT</property>
+                                                                    <property name="id">wxID_ANY</property>
                                                                     <property name="label">Edit Footprint...</property>
                                                                     <property name="margins"></property>
                                                                     <property name="markup">0</property>
@@ -2110,7 +2110,7 @@
                                                                     <property name="font"></property>
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
-                                                                    <property name="id">ID_EDIT_LIBRARY_FOOTPRINT</property>
+                                                                    <property name="id">wxID_ANY</property>
                                                                     <property name="label">Edit Library Footprint...</property>
                                                                     <property name="margins"></property>
                                                                     <property name="markup">0</property>

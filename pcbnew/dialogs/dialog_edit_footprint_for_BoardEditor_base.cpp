@@ -252,19 +252,19 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_buttonUpdate = new wxButton( m_PanelGeneral, ID_MODULE_PROPERTIES_UPDATE, _("Update Footprint from Library..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonUpdate = new wxButton( m_PanelGeneral, wxID_ANY, _("Update Footprint from Library..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bButtonsSizer->Add( m_buttonUpdate, 0, wxALL|wxEXPAND, 5 );
 
-	m_buttonExchange = new wxButton( m_PanelGeneral, ID_MODULE_PROPERTIES_EXCHANGE, _("Change Footprint..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonExchange = new wxButton( m_PanelGeneral, wxID_ANY, _("Change Footprint..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bButtonsSizer->Add( m_buttonExchange, 0, wxEXPAND|wxALL, 5 );
 
-	m_buttonModuleEditor = new wxButton( m_PanelGeneral, ID_EDIT_FOOTPRINT, _("Edit Footprint..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonModuleEditor = new wxButton( m_PanelGeneral, wxID_ANY, _("Edit Footprint..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bButtonsSizer->Add( m_buttonModuleEditor, 0, wxEXPAND|wxALL, 5 );
 
 
 	bButtonsSizer->Add( 0, 15, 1, wxEXPAND, 5 );
 
-	m_button5 = new wxButton( m_PanelGeneral, ID_EDIT_LIBRARY_FOOTPRINT, _("Edit Library Footprint..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_button5 = new wxButton( m_PanelGeneral, wxID_ANY, _("Edit Library Footprint..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bButtonsSizer->Add( m_button5, 0, wxALL|wxEXPAND, 5 );
 
 
@@ -382,7 +382,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 
 	sbSizerLocalProperties->Add( m_staticTextInfoCopper, 0, wxEXPAND|wxTOP|wxRIGHT, 10 );
 
-	m_staticTextInfoPaste = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Note: solder paste clearances (absolute and relative) are added to determine final clearance."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextInfoPaste = new wxStaticText( sbSizerLocalProperties->GetStaticBox(), wxID_ANY, _("Note: solder paste clearances (absolute and relative) are added to determine the final clearance."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoPaste->Wrap( -1 );
 	m_staticTextInfoPaste->SetFont( wxFont( 12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 

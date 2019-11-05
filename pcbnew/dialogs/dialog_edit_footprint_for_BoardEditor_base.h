@@ -41,10 +41,6 @@ class WX_GRID;
 ///////////////////////////////////////////////////////////////////////////
 
 #define ID_NOTEBOOK 1000
-#define ID_MODULE_PROPERTIES_UPDATE 1001
-#define ID_MODULE_PROPERTIES_EXCHANGE 1002
-#define ID_EDIT_FOOTPRINT 1003
-#define ID_EDIT_LIBRARY_FOOTPRINT 1004
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE
