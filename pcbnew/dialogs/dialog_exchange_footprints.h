@@ -45,6 +45,7 @@ private:
 public:
     DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent, MODULE* aModule, bool updateMode,
                                 bool selectedMode );
+    ~DIALOG_EXCHANGE_FOOTPRINTS() override;
 
 private:
     void updateMatchModeRadioButtons( wxUpdateUIEvent& event ) override;

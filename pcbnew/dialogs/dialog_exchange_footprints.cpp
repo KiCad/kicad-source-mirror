@@ -50,6 +50,11 @@ int g_matchModeForUpdateSelected   = ID_MATCH_FP_SELECTED;
 int g_matchModeForExchange         = ID_MATCH_FP_REF;
 int g_matchModeForExchangeSelected = ID_MATCH_FP_SELECTED;
 
+bool g_removeExtraTextItems = false;
+bool g_resetTextItemLayers  = false;
+bool g_resetTextItemEffects = false;
+bool g_reset3DModels        = false;
+
 
 DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent, MODULE* aModule,
                                                         bool updateMode, bool selectedMode ) :
@@ -129,6 +134,11 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     default:                                                    break;
     }
 
+    m_removeExtraBox->SetValue( g_removeExtraTextItems );
+    m_resetTextItemLayers->SetValue( g_resetTextItemLayers );
+    m_resetTextItemEffects->SetValue( g_resetTextItemEffects );
+    m_reset3DModels->SetValue( g_reset3DModels );
+
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
     // because the update and change versions of this dialog have different controls.
     m_hash_key = TO_UTF8( GetTitle() );
@@ -141,6 +151,15 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
+}
+
+
+DIALOG_EXCHANGE_FOOTPRINTS::~DIALOG_EXCHANGE_FOOTPRINTS()
+{
+    g_removeExtraTextItems = m_removeExtraBox->GetValue();
+    g_resetTextItemLayers = m_resetTextItemLayers->GetValue();
+    g_resetTextItemEffects = m_resetTextItemEffects->GetValue();
+    g_reset3DModels = m_reset3DModels->GetValue();
 }
 
 
