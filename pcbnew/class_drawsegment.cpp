@@ -627,7 +627,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition ) const
 
         for( unsigned int i= 1; i < m_BezierPoints.size(); i++)
         {
-            if( TestSegmentHit( aPosition, m_BezierPoints[i-1], m_BezierPoints[i-1], m_Width / 2 ) )
+            if( TestSegmentHit( aPosition, m_BezierPoints[i-1], m_BezierPoints[i], m_Width / 2 ) )
                 return true;
         }
         break;
