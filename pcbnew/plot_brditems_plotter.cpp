@@ -452,17 +452,12 @@ void BRDITEMS_PLOTTER::Plot_Edges_Modules()
 //* Plot a graphic item (outline) relative to a footprint
 void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
 {
-    int     type_trace;         // Type of item to plot.
-    int     thickness;          // Segment thickness.
-    int     radius;             // Circle radius.
-
     if( aEdge->Type() != PCB_MODULE_EDGE_T )
         return;
 
     m_plotter->SetColor( getColor( aEdge->GetLayer() ) );
 
-    type_trace = aEdge->GetShape();
-    thickness  = aEdge->GetWidth();
+    int thickness  = aEdge->GetWidth();
 
     wxPoint pos( aEdge->GetStart() );
     wxPoint end( aEdge->GetEnd() );
@@ -484,7 +479,9 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_EDGECUT );
     }
 
-    switch( type_trace )
+    int     radius;             // Circle/arc radius.
+
+    switch( aEdge->GetShape() )
     {
     case S_SEGMENT:
         m_plotter->ThickSegment( pos, end, thickness, GetPlotMode(), &gbr_metadata );
@@ -507,7 +504,7 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
         else
             m_plotter->ThickArc( pos, -endAngle, -startAngle, radius, thickness, GetPlotMode(), &gbr_metadata );
     }
-    break;
+        break;
 
     case S_POLYGON:
         if( aEdge->IsPolyShapeValid() )
@@ -552,7 +549,26 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
                 m_plotter->PlotPoly( cornerList, FILLED_SHAPE, thickness, &gbr_metadata );
             }
         }
-    break;
+        break;
+
+    case S_CURVE:
+        {
+            m_plotter->SetCurrentLineWidth( thickness, &gbr_metadata );
+            int minSegLen = aEdge->GetWidth();  // The segment min length to approximate a bezier curve
+            aEdge->RebuildBezierToSegmentsPointsList( minSegLen );
+            const std::vector<wxPoint>& bezierPoints = aEdge->GetBezierPoints();
+
+            for( unsigned i = 1; i < bezierPoints.size(); i++ )
+            {
+                m_plotter->ThickSegment( bezierPoints[i - 1], bezierPoints[i],
+                                         thickness, GetPlotMode(), &gbr_metadata );
+            }
+        }
+        break;
+
+    default:
+        wxASSERT_MSG( false, "Unhandled EDGE_MODULE type" );
+        break;
     }
 }
 
