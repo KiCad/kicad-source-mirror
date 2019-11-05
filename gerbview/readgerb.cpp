@@ -74,6 +74,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
         dlg.ShowModal();
     }
 
+#if 0   // Outdated warning
     /* if the gerber file is only a RS274D file
      * (i.e. without any aperture information, but with items), warn the user:
      */
@@ -84,6 +85,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
                 "Therefore the size of items is undefined");
         wxMessageBox( msg );
     }
+#endif
 
     auto canvas = GetGalCanvas();
 

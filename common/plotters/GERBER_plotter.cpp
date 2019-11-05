@@ -754,31 +754,12 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
 
             // The pad is reduced to an segment with dy > dx
             int delta = size.y - size.x;
-            int x0    = 0;
-            int y0    = -delta / 2;
-            int x1    = 0;
-            int y1    = delta / 2;
-            RotatePoint( &x0, &y0, orient );
-            RotatePoint( &x1, &y1, orient );
-            GBR_METADATA metadata;
+            wxPoint p0( 0, -delta / 2 );
+            wxPoint p1( 0, delta / 2 );
+            RotatePoint( &p0.x, &p0.y, orient );
+            RotatePoint( &p1.x, &p1.y, orient );
 
-            if( gbr_metadata )
-            {
-                metadata = *gbr_metadata;
-
-                // If the pad is drawn on a copper layer,
-                // set attribute to GBR_APERTURE_ATTRIB_CONDUCTOR
-                if( metadata.IsCopper() )
-                    metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
-
-                // Clear .P attribute, only allowed for flashed items
-                wxString attrname( ".P" );
-                metadata.m_NetlistMetadata.ClearAttribute( &attrname );
-            }
-
-            ThickSegment( wxPoint( pos.x + x0, pos.y + y0 ),
-                           wxPoint( pos.x + x1, pos.y + y1 ),
-                           size.x, trace_mode, &metadata );
+            ThickSegment( pos + p0, pos + p1, size.x, trace_mode, gbr_metadata );
         }
         else
             sketchOval( pos, size, orient, -1 );

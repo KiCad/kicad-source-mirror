@@ -739,9 +739,7 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
 
     GBR_METADATA gbr_metadata;
 
-    bool isOnCopperLayer = ( m_layerMask & LSET::AllCuMask() ).any();
-
-    if( isOnCopperLayer && aSeg->GetLayer() == Edge_Cuts )   // can happens when plotting copper layers
+    if( aSeg->GetLayer() == Edge_Cuts )
     {
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_EDGECUT );
     }
