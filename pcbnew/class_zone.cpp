@@ -168,6 +168,10 @@ void ZONE_CONTAINER::initDataFromSrcInCopyCtor( const ZONE_CONTAINER& aZone )
 
     SetLocalFlags( aZone.GetLocalFlags() );
 
+    // Now zone type and layer are set, transfer net info
+    // (has meaning only for copper zones)
+    m_netinfo = aZone.m_netinfo;
+
     SetNeedRefill( aZone.NeedRefill() );
 }
 
