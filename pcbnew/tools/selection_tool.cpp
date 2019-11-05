@@ -1779,7 +1779,8 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
     }
 
     // All other items are selected only if the layer on which they exist is visible
-    return board()->IsLayerVisible( aItem->GetLayer() );
+    return board()->IsLayerVisible( aItem->GetLayer() )
+            && aItem->ViewGetLOD( aItem->GetLayer(), view() ) < view()->GetScale();
 }
 
 

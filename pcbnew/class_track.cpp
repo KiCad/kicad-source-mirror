@@ -1038,8 +1038,35 @@ unsigned int VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     BOARD* board = GetBoard();
 
     // Only draw the via if at least one of the layers it crosses is being displayed
-    if( board && ( board->GetVisibleLayers() & GetLayerSet() ).any() )
+    if( board && ( board->GetVisibleLayers() & GetLayerSet() ).any()
+            && aView->IsLayerVisible( LAYER_VIAS ) )
+    {
+        switch( m_ViaType )
+        {
+        case VIA_THROUGH:
+            if( !aView->IsLayerVisible( LAYER_VIA_THROUGH ) )
+                return HIDE;
+
+            break;
+
+        case VIA_BLIND_BURIED:
+            if( !aView->IsLayerVisible( LAYER_VIA_BBLIND ) )
+                return HIDE;
+
+            break;
+
+        case VIA_MICROVIA:
+            if( !aView->IsLayerVisible( LAYER_VIA_MICROVIA ) )
+                return HIDE;
+
+            break;
+
+        default:
+            break;
+        }
+
         return 0;
+    }
 
     return HIDE;
 }
