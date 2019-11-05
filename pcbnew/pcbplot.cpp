@@ -132,7 +132,7 @@ const wxString GetGerberFileFunctionAttribute( const BOARD *aBoard, LAYER_NUM aL
         break;
 
     case Dwgs_User:
-        attrib = "Drawing";
+        attrib = "OtherDrawing,Comment";
         break;
 
     case Cmts_User:
