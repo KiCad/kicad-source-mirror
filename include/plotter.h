@@ -232,6 +232,16 @@ public:
                       int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
 
     /**
+     * Generic fallback: Cubic Bezier curve rendered as a polyline
+     * In Kicad the bezier curves have 4 control points:
+     * start ctrl1 ctrl2 end
+     */
+    virtual void BezierCurve( const wxPoint& aStart, const wxPoint& aControl1,
+                              const wxPoint& aControl2, const wxPoint& aEnd,
+                              int aTolerance,
+                              int aLineThickness = USE_DEFAULT_LINE_WIDTH );
+
+    /**
      * moveto/lineto primitive, moves the 'pen' to the specified direction
      * @param pos is the target position
      * @param plume specifies the kind of motion: 'U' only moves the pen,
@@ -945,6 +955,11 @@ public:
                          int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
                       int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
+
+    virtual void BezierCurve( const wxPoint& aStart, const wxPoint& aControl1,
+                              const wxPoint& aControl2, const wxPoint& aEnd,
+                              int aTolerance,
+                              int aLineThickness = USE_DEFAULT_LINE_WIDTH ) override;
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
                            FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,

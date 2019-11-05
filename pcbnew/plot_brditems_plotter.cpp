@@ -475,7 +475,7 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
 
     int     radius;             // Circle/arc radius.
 
-    switch( aEdge->Type() )
+    switch( aEdge->GetShape() )
     {
     case S_SEGMENT:
         m_plotter->ThickSegment( pos, end, thickness, GetPlotMode(), &gbr_metadata );
@@ -558,22 +558,13 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
         break;
 
     case S_CURVE:
-        {
-            m_plotter->SetCurrentLineWidth( thickness, &gbr_metadata );
-            int minSegLen = aEdge->GetWidth();  // The segment min length to approximate a bezier curve
-            aEdge->RebuildBezierToSegmentsPointsList( minSegLen );
-            const std::vector<wxPoint>& bezierPoints = aEdge->GetBezierPoints();
-
-            for( unsigned i = 1; i < bezierPoints.size(); i++ )
-            {
-                m_plotter->ThickSegment( bezierPoints[i - 1], bezierPoints[i],
-                                         thickness, GetPlotMode(), &gbr_metadata );
-            }
-        }
+        m_plotter->BezierCurve( aEdge->GetStart(), aEdge->GetBezControl1(),
+                                aEdge->GetBezControl2(), aEdge->GetEnd(),
+                                0, thickness );
         break;
 
     default:
-        wxASSERT_MSG( false, "Unhandled EDGE_MODULE type" );
+        wxASSERT_MSG( false, "Unhandled EDGE_MODULE shape" );
         break;
     }
 }
@@ -765,17 +756,9 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
         break;
 
     case S_CURVE:
-        {
-            m_plotter->SetCurrentLineWidth( thickness, &gbr_metadata );
-            aSeg->RebuildBezierToSegmentsPointsList( aSeg->GetWidth() );
-            const std::vector<wxPoint>& bezierPoints = aSeg->GetBezierPoints();
-
-            for( unsigned i = 1; i < bezierPoints.size(); i++ )
-            {
-                m_plotter->ThickSegment( bezierPoints[i - 1], bezierPoints[i],
-                                         thickness, GetPlotMode(), &gbr_metadata );
-            }
-        }
+        m_plotter->BezierCurve( aSeg->GetStart(), aSeg->GetBezControl1(),
+                                aSeg->GetBezControl2(), aSeg->GetEnd(),
+                                0, thickness );
         break;
 
     case S_POLYGON:

@@ -50,6 +50,7 @@
 #include <gr_text.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/geometry_utils.h>
+#include <bezier_curves.h>
 
 PLOTTER::PLOTTER( )
 {
@@ -195,6 +196,33 @@ void PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int r
     {
         FinishTo( end );
     }
+}
+
+
+void PLOTTER::BezierCurve( const wxPoint& aStart, const wxPoint& aControl1,
+                           const wxPoint& aControl2, const wxPoint& aEnd,
+                           int aTolerance, int aLineThickness )
+{
+    // Generic fallback: Quadratic Bezier curve plotted as a polyline
+    int minSegLen = aLineThickness;  // The segment min length to approximate a bezier curve
+
+    std::vector<wxPoint> ctrlPoints;
+    ctrlPoints.push_back( aStart );
+    ctrlPoints.push_back( aControl1 );
+    ctrlPoints.push_back( aControl2 );
+    ctrlPoints.push_back( aEnd );
+
+    BEZIER_POLY bezier_converter( ctrlPoints );
+
+    std::vector<wxPoint> approxPoints;
+    bezier_converter.GetPoly( approxPoints, minSegLen );
+
+    MoveTo( aStart );
+
+    for( unsigned ii = 1; ii < approxPoints.size()-1; ii++ )
+        LineTo( approxPoints[ii] );
+
+    FinishTo( aEnd );
 }
 
 

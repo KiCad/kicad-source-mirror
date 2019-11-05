@@ -506,6 +506,29 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
 }
 
 
+void SVG_PLOTTER::BezierCurve( const wxPoint& aStart, const wxPoint& aControl1,
+                           const wxPoint& aControl2, const wxPoint& aEnd,
+                           int aTolerance, int aLineThickness )
+{
+#if 1
+    setFillMode( NO_FILL );
+    SetCurrentLineWidth( aLineThickness );
+
+    DPOINT start  = userToDeviceCoordinates( aStart );
+    DPOINT ctrl1  = userToDeviceCoordinates( aControl1 );
+    DPOINT ctrl2  = userToDeviceCoordinates( aControl2 );
+    DPOINT end  = userToDeviceCoordinates( aEnd );
+
+    // Generate a cubic curve: start point and 3 other control points.
+    fprintf( outputFile, "<path d=\"M%g,%g C%g,%g %g,%g %g,%g\" />\n",
+             start.x, start.y, ctrl1.x, ctrl1.y,
+             ctrl2.x, ctrl2.y, end.x, end.y  );
+#else
+    PLOTTER::BezierCurve( aStart, aControl1,aControl2, aEnd,aTolerance, aLineThickness );
+#endif
+}
+
+
 void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
                             FILL_T aFill, int aWidth, void * aData )
 {
