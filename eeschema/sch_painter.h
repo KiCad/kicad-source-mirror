@@ -35,7 +35,6 @@ class LIB_PIN;
 class LIB_CIRCLE;
 class LIB_ITEM;
 class LIB_PART;
-class LIB_ALIAS;
 class LIB_POLYLINE;
 class LIB_ARC;
 class LIB_FIELD;
@@ -87,7 +86,10 @@ public:
         return luma < 0.5;
     }
 
-    const COLOR4D& GetBackgroundColor() override { return m_layerColors[ LAYER_SCHEMATIC_BACKGROUND ]; }
+    const COLOR4D& GetBackgroundColor() override
+    {
+        return m_layerColors[ LAYER_SCHEMATIC_BACKGROUND ];
+    }
 
     void SetBackgroundColor( const COLOR4D& aColor ) override
     {
@@ -104,7 +106,7 @@ public:
     bool m_ShowHiddenText;
     bool m_ShowHiddenPins;
     bool m_ShowPinsElectricalType;
-
+    bool m_ShowDisabled;
     bool m_ShowUmbilicals;
 };
 
@@ -138,7 +140,6 @@ private:
 	void draw( LIB_PIN* aPin, int aLayer );
 	void draw( LIB_CIRCLE* aCircle, int aLayer );
 	void draw( LIB_PART* aPart, int, bool aDrawFields = true,  int aUnit = 0, int aConvert = 0 );
-    void draw( LIB_ALIAS* aAlias, int aLayer );
     void draw( LIB_ARC* aArc, int aLayer );
     void draw( LIB_POLYLINE* aLine, int aLayer );
     void draw( LIB_FIELD* aField, int aLayer );

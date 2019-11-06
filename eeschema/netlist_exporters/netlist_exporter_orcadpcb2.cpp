@@ -81,13 +81,12 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
 
             item = comp;
 
-            PART_SPTR part = comp->GetPartRef().lock();
-
-            if( part )
+            if( comp->GetPartRef() )
             {
-                if( part->GetFootprints().GetCount() != 0 )    // Put in list
+                if( comp->GetPartRef()->GetFootprints().GetCount() != 0 )    // Put in list
                 {
-                    cmpList.emplace_back( comp, part.get(), sheetList[i] );
+                    cmpList.push_back( SCH_REFERENCE( comp, comp->GetPartRef().get(),
+                                                      sheetList[i] ) );
                 }
             }
 

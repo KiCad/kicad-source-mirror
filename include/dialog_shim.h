@@ -72,28 +72,25 @@ class WX_EVENT_LOOP;
 
 
 /**
- * Class DIALOG_SHIM
- * may sit in the inheritance tree between wxDialog and any class written by
- * wxFormBuilder.  To put it there, use wxFormBuilder tool and set:
+ * Dialog helper object to sit in the inheritance tree between wxDialog and any class written
+ * by wxFormBuilder.
+ *
+ * To put it there, use wxFormBuilder tool and set:
  * <br> subclass name = DIALOG_SHIM
  * <br> subclass header = dialog_shim.h
  * <br>
  * in the dialog window's properties.
- **/
+ */
 class DIALOG_SHIM : public wxDialog, public KIWAY_HOLDER
 {
     /**
-     * Function OnCloseWindow
-     *
-     * properly handles the wxCloseEvent when in the quasimodal mode when not calling
+     * Properly handle the wxCloseEvent when in the quasimodal mode when not calling
      * EndQuasiModal which is possible with any dialog derived from #DIALOG_SHIM.
      */
     void OnCloseWindow( wxCloseEvent& aEvent );
 
     /**
-     * Function OnCloseWindow
-     *
-     * properly handles the default button events when in the quasimodal mode when not
+     * Properly handle the default button events when in the quasimodal mode when not
      * calling EndQuasiModal which is possible with any dialog derived from #DIALOG_SHIM.
      */
     void OnButton( wxCommandEvent& aEvent );
@@ -136,12 +133,14 @@ public:
 
     static bool IsCtrl( int aChar, const wxKeyEvent& e )
     {
-        return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() && !e.ShiftDown() && !e.MetaDown();
+        return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() &&
+                !e.ShiftDown() && !e.MetaDown();
     }
 
     static bool IsShiftCtrl( int aChar, const wxKeyEvent& e )
     {
-        return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() && e.ShiftDown() && !e.MetaDown();
+        return e.GetKeyCode() == aChar && e.ControlDown() && !e.AltDown() &&
+                e.ShiftDown() && !e.MetaDown();
     }
 
 protected:
@@ -181,6 +180,15 @@ protected:
      * wxDialog documentation for more information.
      */
     int VertPixelsFromDU( int y );
+
+    /**
+     * Clear the existing dialog size and position.
+     *
+     * This will cause the dialog size to be clear so the next time the dialog is shown
+     * the sizers will layout the dialog accordingly.  This useful when there are dialog
+     * windows that size changes due to layout dependency hidden controls.
+     */
+    void ResetSize();
 
     EDA_UNITS_T            m_units;        // userUnits for display and parsing
     std::string            m_hash_key;     // alternate for class_map when classname re-used

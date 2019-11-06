@@ -41,12 +41,11 @@ class EDA_RECT;
 class LINE_READER;
 class OUTPUTFORMATTER;
 class PART_LIB;
-class LIB_ALIAS;
 class LIB_PART;
 class LIB_FIELD;
+class TEST_LIB_PART_FIXTURE;
 
 
-typedef std::vector<LIB_ALIAS*>         LIB_ALIASES;
 typedef std::shared_ptr<LIB_PART>       PART_SPTR;      ///< shared pointer to LIB_PART
 typedef std::weak_ptr<LIB_PART>         PART_REF;       ///< weak pointer to LIB_PART
 typedef MULTIVECTOR<LIB_ITEM, LIB_ARC_T, LIB_FIELD_T> LIB_ITEMS_CONTAINER;
@@ -61,135 +60,7 @@ enum  LIBRENTRYOPTIONS
 };
 
 
-/**
- * Part library alias object definition.
- *
- * Part aliases are not really parts.  An alias uses the part definition
- * (graphic, pins...)  but has its own name, keywords and documentation.  Therefore, when
- * the part is modified, alias of this part are modified.  This is a simple
- * method to create parts that have the same physical layout with different names
- * such as 74LS00, 74HC00 ... and many op amps.
- */
-class LIB_ALIAS : public EDA_ITEM, public LIB_TREE_ITEM
-{
-    /**
-     * Actual LIB_PART referenced by [multiple] aliases.
-     *
-     * @note - Do not delete the shared part. The shared part is shared by
-     * all of the aliases associated with it. A shared LIB_PART will
-     * be deleted when all LIB_ALIASes pointing to it are deleted.
-     */
-    LIB_PART*       shared;
-
-protected:
-    wxString        name;
-    wxString        description;    ///< documentation for info
-    wxString        keyWords;       ///< keyword list (used for search for parts by keyword)
-    wxString        docFileName;    ///< Associate doc file name
-
-public:
-    LIB_ALIAS( const wxString& aName, LIB_PART* aRootComponent );
-    LIB_ALIAS( const LIB_ALIAS& aAlias, LIB_PART* aRootComponent = NULL );
-
-    virtual ~LIB_ALIAS();
-
-    virtual wxString GetClass() const override
-    {
-        return wxT( "LIB_ALIAS" );
-    }
-
-    // a LIB_ALIAS does not really have a bounding box.
-    // But because it is derived from EDA_ITEM, returns a dummy bounding box
-    // to avoid useless messages in debug mode
-    const EDA_RECT GetBoundingBox() const override;
-
-    /**
-     * Returns a default bounding box for the alias.  This will be set to the full
-     * bounding size, ensuring that the alias is always drawn when it is used on screen.
-     *
-     * N.B. This is acceptable only because there is typically only a single LIB_ALIAS
-     * element being drawn (e.g. in the symbol browser)
-     * @return a maximum size view bounding box
-     */
-    virtual const BOX2I ViewBBox() const override;
-
-    /**
-     * Get the shared LIB_PART.
-     *
-     * @return LIB_PART* - the LIB_PART shared by
-     * this LIB_ALIAS with possibly other LIB_ALIASes.
-     */
-    LIB_PART* GetPart() const
-    {
-        return shared;
-    }
-
-    PART_LIB* GetLib();
-
-    LIB_ID GetLibId() const override;
-
-    wxString GetLibNickname() const override;
-    const wxString& GetName() const override { return name; }
-
-    void SetName( const wxString& aName );
-
-    void SetDescription( const wxString& aDescription )
-    {
-        description = aDescription;
-    }
-
-    const wxString& GetDescription() override { return description; }
-
-    void SetKeyWords( const wxString& aKeyWords )
-    {
-        keyWords = aKeyWords;
-    }
-
-    const wxString& GetKeyWords() const { return keyWords; }
-
-    void SetDocFileName( const wxString& aDocFileName )
-    {
-        docFileName = aDocFileName;
-    }
-
-    const wxString& GetDocFileName() const { return docFileName; }
-
-    wxString GetSearchText() override;
-
-    /**
-     * For symbols having aliases, IsRoot() indicates the principal item.
-     */
-    bool IsRoot() const override;
-
-    /**
-     * For symbols with units, return the number of units.
-     */
-    int GetUnitCount() override;
-
-    /**
-     * For symbols with units, return an identifier for unit x.
-     */
-    wxString GetUnitReference( int aUnit ) override;
-
-    /**
-     * KEEPCASE sensitive comparison of the part entry name.
-     */
-    bool operator==( const wxChar* aName ) const;
-    bool operator!=( const wxChar* aName ) const
-    {
-        return !( *this == aName );
-    }
-
-    bool operator==( const LIB_ALIAS* aAlias ) const { return this == aAlias; }
-
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
-
-#if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
-#endif
-};
-
-extern bool operator<( const LIB_ALIAS& aItem1, const LIB_ALIAS& aItem2 );
+extern bool operator<( const LIB_PART& aItem1, const LIB_PART& aItem2 );
 
 
 struct PART_DRAW_OPTIONS
@@ -217,10 +88,14 @@ struct PART_DRAW_OPTIONS
  * A library symbol object is typically saved and loaded in a part library file (.lib).
  * Library symbols are different from schematic symbols.
  */
-class LIB_PART : public EDA_ITEM
+class LIB_PART : public EDA_ITEM, public LIB_TREE_ITEM
 {
-    PART_SPTR           m_me;               ///< http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared
+    ///< http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared
+    PART_SPTR           m_me;
+    PART_REF            m_parent;           ///< Use for inherited symbols.
+
     LIB_ID              m_libId;
+
     int                 m_pinNameOffset;    ///< The offset in mils to draw the pin name.  Set to 0
                                             ///< to draw the pin name above the pin.
     bool                m_unitsLocked;      ///< True if part has multiple units and changing
@@ -233,31 +108,35 @@ class LIB_PART : public EDA_ITEM
     LIB_ITEMS_CONTAINER m_drawings;         ///< Drawing items of this part.
     wxArrayString       m_FootprintList;    /**< List of suitable footprint names for the
                                                  part (wild card names accepted). */
-    LIB_ALIASES         m_aliases;          ///< List of alias object pointers associated with the
-                                            ///< part.
     PART_LIB*           m_library;          ///< Library the part belongs to if any.
+    wxString            m_name;             ///< Symbol name.
+    wxString            m_description;      ///< documentation for info
+    wxString            m_keyWords;         ///< keyword list (used for search for parts by keyword)
+    wxString            m_docFileName;      ///< Associate doc file name
 
     static int  m_subpartIdSeparator;       ///< the separator char between
-                                            ///< the subpart id and the reference
-                                            ///< like U1A ( m_subpartIdSeparator = 0 ) or U1.A or U1-A
-    static int  m_subpartFirstId;           ///< the ascii char value to calculate the subpart symbol id
-                                            ///< from the part number: only 'A', 'a' or '1' can be used,
-                                            ///< other values have no sense.
-private:
+                                            ///< the subpart id and the reference like U1A
+                                            ///< ( m_subpartIdSeparator = 0 ) or U1.A or U1-A
+    static int  m_subpartFirstId;           ///< the ASCII char value to calculate the subpart
+                                            ///< symbol id from the part number: only 'A', 'a'
+                                            ///< or '1' can be used, other values have no sense.
     void deleteAllFields();
 
 public:
 
-    LIB_PART( const wxString& aName, PART_LIB* aLibrary = NULL );
+    LIB_PART( const wxString& aName, LIB_PART* aParent = nullptr, PART_LIB* aLibrary = nullptr );
+
+    /**
+     * Copy constructor.
+     */
     LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary = NULL );
 
     virtual ~LIB_PART();
 
-    PART_SPTR    SharedPtr()
-    {
-        // clone a shared pointer
-        return m_me;
-    }
+    PART_SPTR SharedPtr() { return m_me; }
+
+    void SetParent( LIB_PART* aParent = nullptr );
+    PART_REF& GetParent() { return m_parent; }
 
     virtual wxString GetClass() const override
     {
@@ -265,56 +144,54 @@ public:
     }
 
     virtual void SetName( const wxString& aName );
-    const wxString& GetName() const;
+    const wxString GetName() const override { return m_name; }
 
-    const LIB_ID& GetLibId() const { return m_libId; }
+    LIB_ID GetLibId() const override { return m_libId; }
     void SetLibId( const LIB_ID& aLibId ) { m_libId = aLibId; }
 
-    const wxString GetLibraryName();
+    wxString GetLibNickname() const override { return GetLibraryName(); }
+
+    void SetDescription( const wxString& aDescription )
+    {
+        m_description = aDescription;
+    }
+
+    const wxString GetDescription() override { return m_description; }
+
+    void SetKeyWords( const wxString& aKeyWords )
+    {
+        m_keyWords = aKeyWords;
+    }
+
+    const wxString GetKeyWords() const { return m_keyWords; }
+
+    void SetDocFileName( const wxString& aDocFileName )
+    {
+        m_docFileName = aDocFileName;
+    }
+
+    const wxString GetDocFileName() const { return m_docFileName; }
+
+    wxString GetSearchText() override;
+
+    /**
+     * For symbols derived from other symbols, IsRoot() indicates no derivation.
+     */
+    bool IsRoot() const override { return m_parent.use_count() == 0; }
+    bool IsAlias() const { return !IsRoot(); }
+
+    const wxString GetLibraryName() const;
 
     PART_LIB* GetLib()              { return m_library; }
     void SetLib( PART_LIB* aLibrary ) { m_library = aLibrary; }
 
-    wxArrayString GetAliasNames( bool aIncludeRoot = true ) const;
-
-    LIB_ALIASES GetAliases() const  { return m_aliases; }
-
-    size_t GetAliasCount() const    { return m_aliases.size(); }
-
-    LIB_ALIAS* GetAlias( size_t aIndex ) const;
-    LIB_ALIAS* GetAlias( const wxString& aName ) const;
-    LIB_ALIAS* GetRootAlias() const;
-
     timestamp_t GetDateLastEdition() const { return m_dateLastEdition; }
 
-    /**
-     * Add an alias \a aName to the part.
-     *
-     * Duplicate alias names are not added to the alias list.  Debug builds will raise an
-     * assertion.  Release builds will fail silently.
-     *
-     * @param aName - Name of alias to add.
-     */
-    void AddAlias( const wxString& aName );
-
-    void AddAlias( LIB_ALIAS* aAlias );
-
-    /**
-     * Test if alias \a aName is in part alias list.
-     *
-     * Alias name comparisons are case insensitive.
-     *
-     * @param aName - Name of alias.
-     * @return True if alias name in alias list.
-     */
-    bool HasAlias( const wxString& aName ) const;
-
-    void RemoveAlias( const wxString& aName );
-    LIB_ALIAS* RemoveAlias( LIB_ALIAS* aAlias );
-
-    void RemoveAllAliases();
-
-    wxArrayString& GetFootprints() { return m_FootprintList; }
+    wxArrayString GetFootprints() const { return m_FootprintList; }
+    void SetFootprintFilters( const wxArrayString& aFootprintFilters )
+    {
+        m_FootprintList = aFootprintFilters;
+    }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
@@ -384,7 +261,7 @@ public:
     void GetFields( LIB_FIELDS& aList );
 
     /**
-     * Findd a field within this part matching \a aFieldName and returns it or NULL if not found.
+     * Find a field within this part matching \a aFieldName and returns it or NULL if not found.
      */
     LIB_FIELD* FindField( const wxString& aFieldName );
 
@@ -579,10 +456,7 @@ public:
      *
      * @return LIB_ITEMS_CONTAINER& - Reference to the draw item object container.
      */
-    LIB_ITEMS_CONTAINER& GetDrawItems()
-    {
-        return m_drawings;
-    }
+    LIB_ITEMS_CONTAINER& GetDrawItems() { return m_drawings; }
 
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
@@ -597,7 +471,12 @@ public:
      * @param count - Number of units per package.
      */
     void SetUnitCount( int count );
-    int GetUnitCount() const { return m_unitCount; }
+    int GetUnitCount() const override;
+
+    /**
+     * Return an identifier for \a aUnit for symbols with units.
+     */
+    wxString GetUnitReference( int aUnit ) override;
 
     /**
      * @return true if the part has multiple units per part.
@@ -609,7 +488,7 @@ public:
      * @return the sub reference for part having multiple units per part.
      * The sub reference identify the part (or unit)
      * @param aUnit = the part identifier ( 1 to max count)
-     * @param aAddSeparator = true (default) to prpebd the sub ref
+     * @param aAddSeparator = true (default) to prepend the sub ref
      *    by the separator symbol (if any)
      * Note: this is a static function.
      */
@@ -679,7 +558,28 @@ public:
     void SetShowPinNumbers( bool aShow ) { m_showPinNumbers = aShow; }
     bool ShowPinNumbers() { return m_showPinNumbers; }
 
-    bool operator==( const LIB_PART*  aPart ) const { return this == aPart; }
+    /**
+     * Comparison test that can be used for operators.
+     *
+     * @param aRhs is the right hand side symbol used for comparison.
+     *
+     * @return -1 if this symbol is less than \a aRhs
+     *         1 if this symbol is greater than \a aRhs
+     *         0 if this symbol is the same as \a aRhs
+     */
+    int Compare( const LIB_PART& aRhs ) const;
+
+    bool operator==( const LIB_PART* aPart ) const { return this == aPart; }
+    bool operator==( const LIB_PART& aPart ) const { return Compare( aPart ) == 0; }
+
+    /**
+     * Return a flattened symbol inheritance to the caller.
+     *
+     * If the symbol does not inherit from another symbol, a copy of the symbol is returned.
+     *
+     * @return a flattened symbol on the heap
+     */
+    std::unique_ptr< LIB_PART > Flatten() const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }

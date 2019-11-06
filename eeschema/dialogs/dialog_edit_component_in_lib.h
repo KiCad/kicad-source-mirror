@@ -26,7 +26,6 @@
 #define _DIALOG_EDIT_COMPONENT_IN_LIB_H_
 
 #include <fields_grid_table.h>
-#include <class_library.h>
 #include <widgets/unit_binder.h>
 #include <dialog_edit_component_in_lib_base.h>
 
@@ -40,6 +39,14 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY: public DIALOG_EDIT_COMPONENT_IN_LIBRARY_
 {
     static int m_lastOpenedPage;    // To remember the last notebook selection
 
+    enum LAST_LAYOUT {
+        NONE,
+        ALIAS,
+        PARENT
+    };
+
+    static LAST_LAYOUT m_lastLayout;
+
 public:
     wxConfigBase*   m_config;
 
@@ -48,8 +55,6 @@ public:
 
     FIELDS_GRID_TABLE<LIB_FIELD>* m_fields;
 
-    int             m_currentAlias;
-    LIB_ALIASES     m_aliasesBuffer;
     UNIT_BINDER     m_pinNameOffset;
 
     wxControl*      m_delayedFocusCtrl;
@@ -81,27 +86,18 @@ private:
     void OnMoveDown( wxCommandEvent& event ) override;
     void OnSymbolNameKillFocus( wxFocusEvent& event ) override;
     void OnSymbolNameText( wxCommandEvent& event ) override;
-    void OnSelectAlias( wxCommandEvent& event ) override;
-    void OnAddAlias( wxCommandEvent& event ) override;
-    void OnDeleteAlias( wxCommandEvent& event ) override;
     void OnAddFootprintFilter( wxCommandEvent& event ) override;
     void OnDeleteFootprintFilter( wxCommandEvent& event ) override;
     void OnEditFootprintFilter( wxCommandEvent& event ) override;
     void OnSizeGrid( wxSizeEvent& event ) override;
-    void OnSizeAliasGrid( wxSizeEvent& event ) override;
     void OnGridCellChanging( wxGridEvent& event );
-    void OnAliasGridCellChanging( wxGridEvent& event );
-    void OnAliasNameKillFocus( wxFocusEvent& event ) override;
-    void OnAliasNameText( wxCommandEvent& event ) override;
     void OnEditSpiceModel( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnFilterDClick( wxMouseEvent& event ) override;
     void OnCancelButtonClick( wxCommandEvent& event ) override;
 
-    void updateAliasName( bool aFromGrid, const wxString& aName );
-    bool checkAliasName( const wxString& aName );
     void adjustGridColumns( int aWidth );
-    void adjustAliasGridColumns( int aWidth );
+    void syncControlStates( bool aIsAlias );
 };
 
 #endif // _DIALOG_EDIT_COMPONENT_IN_LIB_H_

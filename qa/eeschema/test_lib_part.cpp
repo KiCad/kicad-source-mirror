@@ -30,6 +30,9 @@
 
 // Code under test
 #include <class_libentry.h>
+#include <lib_rectangle.h>
+#include <lib_arc.h>
+#include <lib_pin.h>
 
 #include "lib_field_test_utils.h"
 
@@ -63,7 +66,9 @@ BOOST_AUTO_TEST_CASE( DefaultProperties )
     BOOST_CHECK_EQUAL( m_part_no_data.GetLib(), nullptr );
 
     // only get the root
-    BOOST_CHECK_EQUAL( m_part_no_data.GetAliasCount(), 1 );
+    BOOST_CHECK_EQUAL( m_part_no_data.IsRoot(), true );
+    BOOST_CHECK_EQUAL( m_part_no_data.IsAlias(), false );
+    BOOST_CHECK_EQUAL( m_part_no_data.SharedPtr().use_count(), 2 );
 
     // no sub units
     BOOST_CHECK_EQUAL( m_part_no_data.GetUnitCount(), 1 );
@@ -81,6 +86,7 @@ BOOST_AUTO_TEST_CASE( DefaultDrawings )
 {
     // default drawings exist
     BOOST_CHECK_EQUAL( m_part_no_data.GetDrawItems().size(), 4 );
+    BOOST_CHECK_EQUAL( m_part_no_data.GetNextDrawItem( NULL, LIB_PIN_T ), (LIB_ITEM*)NULL );
 }
 
 
@@ -150,6 +156,14 @@ BOOST_AUTO_TEST_CASE( AddedFields )
 }
 
 
+/**
+ * Test adding draw items to a LIB_PART
+ */
+BOOST_AUTO_TEST_CASE( AddedDrawItems )
+{
+}
+
+
 struct TEST_LIB_PART_SUBREF_CASE
 {
     int         m_index;
@@ -200,6 +214,190 @@ BOOST_AUTO_TEST_CASE( SubReference )
             BOOST_CHECK_EQUAL( subref, c.m_expSubRef );
         }
     }
+}
+
+
+/**
+ * Check the compare method.
+ */
+BOOST_AUTO_TEST_CASE( Compare )
+{
+    // Identical root part to m_part_no_data sans time stamp.
+    LIB_PART testPart( "part_name" );
+
+    // Self comparison test.
+    BOOST_CHECK_EQUAL( m_part_no_data.Compare( m_part_no_data ), 0 );
+
+    // Test for identical LIB_PART.
+    BOOST_CHECK_EQUAL( m_part_no_data.Compare( testPart ), 0 );
+
+    // Test name.
+    testPart.SetName( "tart_name" );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    testPart.SetName( "cart_name" );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    testPart.SetName( "part_name" );
+
+    // LIB_ID comparison tests.
+    LIB_ID id = testPart.GetLibId();
+    id.SetLibItemName( "tart_name" );
+    testPart.SetLibId( id );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    id.SetLibItemName( "cart_name" );
+    testPart.SetLibId( id );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    id.SetLibItemName( "part_name" );
+    testPart.SetLibId( id );
+
+    // Unit count comparison tests.
+    testPart.SetUnitCount( 2 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    testPart.SetUnitCount( 1 );
+    m_part_no_data.SetUnitCount( 2 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    m_part_no_data.SetUnitCount( 1 );
+
+    // Options flag comparison tests.
+    testPart.SetPower();
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    testPart.SetNormal();
+    m_part_no_data.SetPower();
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    m_part_no_data.SetNormal();
+
+    // Draw item list size comparison tests.
+    testPart.AddDrawItem( new LIB_RECTANGLE( &testPart ) );
+    m_part_no_data.AddDrawItem( new LIB_RECTANGLE( &m_part_no_data ) );
+    BOOST_CHECK_EQUAL( m_part_no_data.Compare( testPart ), 0 );
+    m_part_no_data.RemoveDrawItem( m_part_no_data.GetNextDrawItem( nullptr, LIB_RECTANGLE_T ) );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    testPart.RemoveDrawItem( testPart.GetNextDrawItem( nullptr, LIB_RECTANGLE_T ) );
+    m_part_no_data.AddDrawItem( new LIB_RECTANGLE( &m_part_no_data ) );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    m_part_no_data.RemoveDrawItem( m_part_no_data.GetNextDrawItem( nullptr, LIB_RECTANGLE_T ) );
+
+    // Draw item list contents comparison tests.
+    testPart.AddDrawItem( new LIB_RECTANGLE( &testPart ) );
+    m_part_no_data.AddDrawItem( new LIB_ARC( &m_part_no_data ) );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    m_part_no_data.RemoveDrawItem( m_part_no_data.GetNextDrawItem( nullptr, LIB_ARC_T ) );
+    m_part_no_data.AddDrawItem( new LIB_PIN( &m_part_no_data ) );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    m_part_no_data.RemoveDrawItem( m_part_no_data.GetNextDrawItem( nullptr, LIB_PIN_T ) );
+    testPart.RemoveDrawItem( testPart.GetNextDrawItem( nullptr, LIB_RECTANGLE_T ) );
+
+    // Footprint filter array comparison tests.
+    wxArrayString footPrintFilters;
+    BOOST_CHECK( m_part_no_data.GetFootprints() == footPrintFilters );
+    footPrintFilters.Add( "b" );
+    testPart.SetFootprintFilters( footPrintFilters );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    m_part_no_data.SetFootprintFilters( footPrintFilters );
+    footPrintFilters.Clear();
+    testPart.SetFootprintFilters( footPrintFilters );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    footPrintFilters.Clear();
+    m_part_no_data.SetFootprintFilters( footPrintFilters );
+    testPart.SetFootprintFilters( footPrintFilters );
+
+    // Description string tests.
+    m_part_no_data.SetDescription( "b" );
+    testPart.SetDescription( "b" );
+    BOOST_CHECK_EQUAL( m_part_no_data.Compare( testPart ), 0 );
+    m_part_no_data.SetDescription( "a" );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    m_part_no_data.SetDescription( "c" );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    m_part_no_data.SetDescription( wxEmptyString );
+    testPart.SetDescription( wxEmptyString );
+
+    // Key word string tests.
+    m_part_no_data.SetKeyWords( "b" );
+    testPart.SetKeyWords( "b" );
+    BOOST_CHECK_EQUAL( m_part_no_data.Compare( testPart ), 0 );
+    m_part_no_data.SetKeyWords( "a" );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    m_part_no_data.SetKeyWords( "c" );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    m_part_no_data.SetKeyWords( wxEmptyString );
+    testPart.SetKeyWords( wxEmptyString );
+
+    // Documentation file string tests.
+    m_part_no_data.SetDocFileName( "b" );
+    testPart.SetDocFileName( "b" );
+    BOOST_CHECK_EQUAL( m_part_no_data.Compare( testPart ), 0 );
+    m_part_no_data.SetDocFileName( "a" );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    m_part_no_data.SetDocFileName( "c" );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    m_part_no_data.SetDocFileName( wxEmptyString );
+    testPart.SetDocFileName( wxEmptyString );
+
+    // Pin name offset comparison tests.
+    testPart.SetPinNameOffset( testPart.GetPinNameOffset() + 1 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    testPart.SetPinNameOffset( testPart.GetPinNameOffset() - 2 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    testPart.SetPinNameOffset( testPart.GetPinNameOffset() + 1 );
+
+    // Units locked flag comparision tests.
+    testPart.LockUnits( true );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    testPart.LockUnits( false );
+    m_part_no_data.LockUnits( true );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    m_part_no_data.LockUnits( false );
+
+    // Show pin names flag comparison tests.
+    m_part_no_data.SetShowPinNames( false );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    m_part_no_data.SetShowPinNames( true );
+    testPart.SetShowPinNames( false );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    testPart.SetShowPinNames( true );
+
+    // Show pin numbers flag comparison tests.
+    m_part_no_data.SetShowPinNumbers( false );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    m_part_no_data.SetShowPinNumbers( true );
+    testPart.SetShowPinNumbers( false );
+    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    testPart.SetShowPinNumbers( true );
+
+    // Time stamp comparison tests.
+}
+
+
+/**
+ * Check inheritance support.
+ */
+BOOST_AUTO_TEST_CASE( Inheritance )
+{
+    std::unique_ptr< LIB_PART > parent( new LIB_PART( "parent" ) );
+    BOOST_CHECK( parent->IsRoot() );
+    std::unique_ptr< LIB_PART > child1( new LIB_PART( "child1", parent.get() ) );
+    BOOST_CHECK( child1->IsAlias() );
+    PART_SPTR parentRef = child1->GetParent().lock();
+    BOOST_CHECK( parentRef );
+    BOOST_CHECK( parentRef == parent->SharedPtr() );
+    BOOST_CHECK_EQUAL( parent->SharedPtr().use_count(), 3 );
+    BOOST_CHECK_EQUAL( child1->GetUnitCount(), 1 );
+    parent->SetUnitCount( 4 );
+    BOOST_CHECK_EQUAL( child1->GetUnitCount(), 4 );
+    child1->SetParent();
+    BOOST_CHECK_EQUAL( child1->GetUnitCount(), 1 );
+    parentRef.reset();
+    BOOST_CHECK_EQUAL( parent->SharedPtr().use_count(), 2 );
+}
+
+
+/**
+ * Check the copy constructor.
+ */
+BOOST_AUTO_TEST_CASE( CopyConstructor )
+{
+    std::shared_ptr< LIB_PART > copy( new LIB_PART( m_part_no_data ) );
+    BOOST_CHECK( m_part_no_data == *copy.get() );
 }
 
 

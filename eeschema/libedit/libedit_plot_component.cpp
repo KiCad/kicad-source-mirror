@@ -28,6 +28,7 @@
 #include <sch_screen.h>
 #include <general.h>
 #include <lib_edit_frame.h>
+#include <class_libentry.h>
 #include <class_library.h>
 #include <plotter.h>
 
@@ -60,9 +61,7 @@ void LIB_EDIT_FRAME::SVG_PlotComponent( const wxString& aFullFileName )
 
     plotter->StartPlot();
 
-    LIB_PART*      part = GetCurPart();
-
-    if( part )
+    if( m_my_part )
     {
         TRANSFORM   temp;     // Uses default transform
         wxPoint     plotPos;
@@ -70,10 +69,10 @@ void LIB_EDIT_FRAME::SVG_PlotComponent( const wxString& aFullFileName )
         plotPos.x = pageInfo.GetWidthIU() /2;
         plotPos.y = pageInfo.GetHeightIU()/2;
 
-        part->Plot( plotter, GetUnit(), GetConvert(), plotPos, temp );
+        m_my_part->Plot( plotter, GetUnit(), GetConvert(), plotPos, temp );
 
         // Plot lib fields, not plotted by m_component->Plot():
-        part->PlotLibFields( plotter, GetUnit(), GetConvert(), plotPos, temp );
+        m_my_part->PlotLibFields( plotter, GetUnit(), GetConvert(), plotPos, temp );
     }
 
     plotter->EndPlot();
@@ -83,9 +82,7 @@ void LIB_EDIT_FRAME::SVG_PlotComponent( const wxString& aFullFileName )
 
 void LIB_EDIT_FRAME::PrintPage( wxDC* aDC )
 {
-    LIB_PART*      part = GetCurPart();
-
-    if( !part )
+    if( !m_my_part )
         return;
 
     wxSize pagesize = GetScreen()->GetPageSettings().GetSizeIU();
@@ -98,5 +95,5 @@ void LIB_EDIT_FRAME::PrintPage( wxDC* aDC )
     plot_offset.x = pagesize.x / 2;
     plot_offset.y = pagesize.y / 2;
 
-    part->Print( aDC, plot_offset, m_unit, m_convert, PART_DRAW_OPTIONS::Default() );
+    m_my_part->Print( aDC, plot_offset, m_unit, m_convert, PART_DRAW_OPTIONS::Default() );
 }

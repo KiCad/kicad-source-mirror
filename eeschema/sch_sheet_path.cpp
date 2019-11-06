@@ -226,7 +226,7 @@ void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aInclu
             if( !aIncludePowerSymbols && component->GetRef( this )[0] == wxT( '#' ) )
                 continue;
 
-            LIB_PART* part = component->GetPartRef().lock().get();
+            LIB_PART* part = component->GetPartRef().get();
 
             if( part || aForceIncludeOrphanComponents )
             {
@@ -256,7 +256,7 @@ void SCH_SHEET_PATH::GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP& aRefL
         if( !aIncludePowerSymbols && component->GetRef( this )[0] == wxT( '#' ) )
             continue;
 
-        LIB_PART* part = component->GetPartRef().lock().get();
+        LIB_PART* part = component->GetPartRef().get();
 
         if( part && part->GetUnitCount() > 1 )
         {
@@ -551,7 +551,7 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
                 continue;
 
             SCH_COMPONENT*  component = (SCH_COMPONENT*) item;
-            LIB_PART* part = component->GetPartRef().lock().get();
+            LIB_PART* part = component->GetPartRef().get();
 
             if( !part || !part->IsPower() )
                 continue;

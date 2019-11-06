@@ -99,7 +99,7 @@ bool DIALOG_UPDATE_FIELDS::TransferDataToWindow()
     {
         for( auto component : m_components )
         {
-            const auto part = component->GetPartRef().lock();
+            const std::unique_ptr< LIB_PART >&  part = component->GetPartRef();
 
             if( !part )
                 continue;
@@ -145,12 +145,12 @@ void DIALOG_UPDATE_FIELDS::updateFields( SCH_COMPONENT* aComponent )
     std::vector<SCH_FIELD*> oldFields;
     SCH_FIELDS newFields;
 
-    PART_SPTR libPart = aComponent->GetPartRef().lock();
+    std::unique_ptr< LIB_PART >& libPart = aComponent->GetPartRef();
 
-    if( libPart == nullptr )    // the symbol is not found in lib: cannot update fields
+    if( !libPart )    // the symbol is not found in lib: cannot update fields
         return;
 
-    LIB_ALIAS* alias = m_frame->GetLibAlias( aComponent->GetLibId() );
+    LIB_PART* alias = m_frame->GetLibPart( aComponent->GetLibId() );
 
     aComponent->GetFields( oldFields, false );
 

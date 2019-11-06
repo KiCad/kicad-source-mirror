@@ -248,29 +248,12 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
         if( !part )
             return 0;
 
-        if( part->GetAliasCount() > 1 )
-        {
-            ACTION_MENU  popup( true );
-            wxString     msg;
-            int          id = 0;
-
-            for( LIB_ALIAS* alias : part->GetAliases() )
-            {
-                msg.Printf( wxT( "%s (%s)" ), alias->GetName(), alias->GetDocFileName() );
-                popup.Append( id++, msg );
-            }
-
-            m_frame->PopupMenu( &popup );
-
-            if( popup.GetSelected() >= 0 )
-                datasheet = part->GetAlias( (unsigned) popup.GetSelected() )->GetDocFileName();
-        }
-        else
-            datasheet = part->GetAlias( 0 )->GetDocFileName();
+        datasheet = part->GetDocFileName();
     }
     else if( m_frame->IsType( FRAME_SCH_VIEWER ) || m_frame->IsType( FRAME_SCH_VIEWER_MODAL ) )
     {
-        LIB_ALIAS* entry = static_cast<LIB_VIEW_FRAME*>( m_frame )->GetSelectedAlias();
+        std::unique_ptr< LIB_PART > entry =
+                static_cast<LIB_VIEW_FRAME*>( m_frame )->GetSelectedSymbol();
 
         if( !entry )
             return 0;

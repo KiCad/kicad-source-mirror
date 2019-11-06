@@ -633,12 +633,11 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponen
         {
             pin = NULL;
 
-            auto part = component->GetPartRef().lock();
-
-            if( !part )
+            if( !component->GetPartRef() )
                 continue;
 
-            for( pin = part->GetNextPin(); pin; pin = part->GetNextPin( pin ) )
+            for( pin = component->GetPartRef()->GetNextPin(); pin;
+                 pin = component->GetPartRef()->GetNextPin( pin ) )
             {
                 // Skip items not used for this part.
                 if( component->GetUnit() && pin->GetUnit() &&

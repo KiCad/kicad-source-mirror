@@ -124,13 +124,11 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponent( EDA_ITEM* aItem, SCH_SHEET_P
         // (several sheets pointing to 1 screen), this will be erroneously be
         // toggled.
 
-        LIB_PART* part = comp->GetPartRef().lock().get();
-
-        if( !part )
+        if( !comp->GetPartRef() )
             continue;
 
         // If component is a "multi parts per package" type
-        if( part->GetUnitCount() > 1 )
+        if( comp->GetPartRef()->GetUnitCount() > 1 )
         {
             // test if this reference has already been processed, and if so skip
             if( m_ReferencesAlreadyFound.Lookup( ref ) )
@@ -138,7 +136,7 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponent( EDA_ITEM* aItem, SCH_SHEET_P
         }
 
         // record the usage of this library component entry.
-        m_LibParts.insert( part );     // rejects non-unique pointers
+        m_LibParts.insert( comp->GetPartRef().get() );     // rejects non-unique pointers
 
         return comp;
     }
@@ -184,13 +182,11 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponentAndCreatePinList(
         // (several sheets pointing to 1 screen), this will be erroneously be
         // toggled.
 
-        LIB_PART* part = comp->GetPartRef().lock().get();
-
-        if( !part )
+        if( !comp->GetPartRef() )
             continue;
 
         // If component is a "multi parts per package" type
-        if( part->GetUnitCount() > 1 )
+        if( comp->GetPartRef()->GetUnitCount() > 1 )
         {
             // test if this reference has already been processed, and if so skip
             if( m_ReferencesAlreadyFound.Lookup( ref ) )
@@ -199,14 +195,15 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponentAndCreatePinList(
             // Collect all pins for this reference designator by searching
             // the entire design for other parts with the same reference designator.
             // This is only done once, it would be too expensive otherwise.
-            findAllUnitsOfComponent( comp, part, aSheetPath );
+            findAllUnitsOfComponent( comp, comp->GetPartRef().get(), aSheetPath );
         }
 
         else    // entry->GetUnitCount() <= 1 means one part per package
         {
             LIB_PINS pins;      // constructed once here
 
-            part->GetPins( pins, comp->GetUnitSelection( aSheetPath ), comp->GetConvert() );
+            comp->GetPartRef()->GetPins( pins, comp->GetUnitSelection( aSheetPath ),
+                                         comp->GetConvert() );
 
             for( size_t i = 0; i < pins.size(); i++ )
             {
@@ -226,7 +223,7 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponentAndCreatePinList(
         eraseDuplicatePins();
 
         // record the usage of this library component entry.
-        m_LibParts.insert( part );     // rejects non-unique pointers
+        m_LibParts.insert( comp->GetPartRef().get() );     // rejects non-unique pointers
 
         return comp;
     }

@@ -72,7 +72,7 @@ void SCH_PLUGIN::EnumerateSymbolLib( wxArrayString&    aAliasNameList,
 }
 
 
-void SCH_PLUGIN::EnumerateSymbolLib( std::vector<LIB_ALIAS*>& aAliasList,
+void SCH_PLUGIN::EnumerateSymbolLib( std::vector<LIB_PART*>& aSymbolList,
                                      const wxString&   aLibraryPath,
                                      const PROPERTIES* aProperties )
 {
@@ -81,8 +81,8 @@ void SCH_PLUGIN::EnumerateSymbolLib( std::vector<LIB_ALIAS*>& aAliasList,
 }
 
 
-LIB_ALIAS* SCH_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                                   const PROPERTIES* aProperties )
+LIB_PART* SCH_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
+                                  const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
     not_implemented( this, __FUNCTION__ );
@@ -98,15 +98,7 @@ void SCH_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymb
 }
 
 
-void SCH_PLUGIN::DeleteAlias( const wxString& aLibraryPath, const wxString& aAliasName,
-                              const PROPERTIES* aProperties )
-{
-    // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
-    not_implemented( this, __FUNCTION__ );
-}
-
-
-void SCH_PLUGIN::DeleteSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+void SCH_PLUGIN::DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
                                const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.

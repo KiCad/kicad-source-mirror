@@ -41,6 +41,7 @@
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
+#include <sch_legacy_plugin.h>
 #include <netlist_object.h>
 #include <lib_item.h>
 #include <symbol_lib_table.h>
@@ -57,8 +58,7 @@
 
 
 /**
- * Function toUTFTildaText
- * convert a wxString to UTF8 and replace any control characters with a ~,
+ * Convert a wxString to UTF8 and replace any control characters with a ~,
  * where a control character is one of the first ASCII values up to ' ' 32d.
  */
 std::string toUTFTildaText( const wxString& txt )
@@ -130,7 +130,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sh
     m_unit      = unit;
     m_convert   = convert;
     m_lib_id    = aLibId;
-    m_part      = aPart.SharedPtr();
+    m_part.reset( new LIB_PART( aPart ) );
     m_fieldsAutoplaced = AUTOPLACED_NO;
 
     SetTimeStamp( GetNewTimeStamp() );
@@ -171,7 +171,9 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     m_unit      = aComponent.m_unit;
     m_convert   = aComponent.m_convert;
     m_lib_id    = aComponent.m_lib_id;
-    m_part      = aComponent.m_part;
+
+    if( aComponent.m_part )
+        m_part.reset( new LIB_PART( *aComponent.m_part.get() ) );
 
     SetTimeStamp( aComponent.m_TimeStamp );
 
@@ -267,31 +269,33 @@ void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aSymLibTab
     m_lib_id = aLibId;
     SetModified();
 
-    LIB_ALIAS* alias = nullptr;
+    std::unique_ptr< LIB_PART > symbol;
 
     if( aSymLibTable && aSymLibTable->HasLibrary( m_lib_id.GetLibNickname() ) )
-        alias = aSymLibTable->LoadSymbol( m_lib_id.GetLibNickname(), m_lib_id.GetLibItemName() );
+    {
+        LIB_PART* tmp = aSymLibTable->LoadSymbol( m_lib_id );
 
-    if( !alias && aCacheLib )
-        alias = aCacheLib->FindAlias( m_lib_id.Format().wx_str() );
+        if( tmp )
+            symbol = tmp->Flatten();
+    }
 
-    if( alias && alias->GetPart() )
-        m_part = alias->GetPart()->SharedPtr();
-    else
-        m_part.reset();
+    if( !symbol && aCacheLib )
+    {
+        LIB_PART* tmp = aCacheLib->FindPart( m_lib_id.Format().wx_str() );
+
+        if( tmp )
+            symbol.reset( new LIB_PART( *tmp ) );
+    }
+
+    m_part.reset( symbol.release() );
 }
 
 
 wxString SCH_COMPONENT::GetDescription() const
 {
-    if( PART_SPTR part = m_part.lock() )
+    if( m_part )
     {
-        LIB_ALIAS* alias = part->GetAlias( GetLibId().GetLibItemName() );
-
-        if( !alias )
-            return wxEmptyString;
-
-        return alias->GetDescription();
+        return m_part->GetDescription();
     }
 
     return wxEmptyString;
@@ -300,14 +304,9 @@ wxString SCH_COMPONENT::GetDescription() const
 
 wxString SCH_COMPONENT::GetDatasheet() const
 {
-    if( PART_SPTR part = m_part.lock() )
+    if( m_part )
     {
-        LIB_ALIAS* alias = part->GetAlias( GetLibId().GetLibItemName() );
-
-        if( !alias )
-            return wxEmptyString;
-
-        return alias->GetDocFileName();
+        return m_part->GetDocFileName();
     }
 
     return wxEmptyString;
@@ -320,7 +319,7 @@ bool SCH_COMPONENT::Resolve( PART_LIBS* aLibs )
     // flimsy search path ordering.  None-the-less find a part based on that design:
     if( LIB_PART* part = aLibs->FindLibPart( m_lib_id ) )
     {
-        m_part = part->SharedPtr();
+        m_part.reset( part );
         return true;
     }
 
@@ -330,31 +329,44 @@ bool SCH_COMPONENT::Resolve( PART_LIBS* aLibs )
 
 bool SCH_COMPONENT::Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib )
 {
-    LIB_ALIAS* alias = nullptr;
+    std::unique_ptr< LIB_PART > part;
 
     try
     {
+        // We want a full symbol not just the top level child symbol.
+        PROPERTIES props;
+
+        props[ SCH_LEGACY_PLUGIN::PropNoDocFile ] = "";
+
         // LIB_TABLE_BASE::LoadSymbol() throws an IO_ERROR if the the library nickname
         // is not found in the table so check if the library still exists in the table
         // before attempting to load the symbol.
         if( m_lib_id.IsValid() && aLibTable.HasLibrary( m_lib_id.GetLibNickname() ) )
-            alias = aLibTable.LoadSymbol( m_lib_id );
+        {
+            LIB_PART* tmp = aLibTable.LoadSymbol( m_lib_id );
+
+            if( tmp )
+                part = tmp->Flatten();
+        }
 
         // Fall back to cache library.  This is temporary until the new schematic file
         // format is implemented.
-        if( !alias && aCacheLib )
+        if( !part && aCacheLib )
         {
             wxString libId = m_lib_id.Format().wx_str();
             libId.Replace( ":", "_" );
-            alias = aCacheLib->FindAlias( libId );
             wxLogTrace( traceSymbolResolver,
                         "Library symbol %s not found falling back to cache library.",
                         m_lib_id.Format().wx_str() );
+            LIB_PART* tmp = aCacheLib->FindPart( libId );
+
+            if( tmp )
+                part.reset( new LIB_PART( *tmp ) );
         }
 
-        if( alias && alias->GetPart() )
+        if( part )
         {
-            m_part = alias->GetPart()->SharedPtr();
+            m_part.reset( part.release() );
             return true;
         }
     }
@@ -422,7 +434,8 @@ void SCH_COMPONENT::ResolveAll( const EE_COLLECTOR& aComponents, SYMBOL_LIB_TABL
             if( curr_libid != next_cmp->m_lib_id )
                 break;
 
-            next_cmp->m_part = cmp->m_part;
+            if( cmp->m_part )
+                next_cmp->m_part.reset( new LIB_PART( *cmp->m_part.get() ) );
 
             next_cmp->UpdatePins();
 
@@ -446,12 +459,12 @@ void SCH_COMPONENT::UpdatePins( const EE_COLLECTOR& aComponents )
 
 void SCH_COMPONENT::UpdatePins( SCH_SHEET_PATH* aSheet )
 {
-    if( PART_SPTR part = m_part.lock() )
+    if( m_part )
     {
         m_pinMap.clear();
         unsigned i = 0;
 
-        for( LIB_PIN* libPin = part->GetNextPin(); libPin; libPin = part->GetNextPin( libPin ) )
+        for( LIB_PIN* libPin = m_part->GetNextPin(); libPin; libPin = m_part->GetNextPin( libPin ) )
         {
             wxASSERT( libPin->Type() == LIB_PIN_T );
 
@@ -532,10 +545,8 @@ void SCH_COMPONENT::SetTransform( const TRANSFORM& aTransform )
 
 int SCH_COMPONENT::GetUnitCount() const
 {
-    if( PART_SPTR part = m_part.lock() )
-    {
-        return part->GetUnitCount();
-    }
+    if( m_part )
+        return m_part->GetUnitCount();
 
     return 0;
 }
@@ -548,9 +559,9 @@ void SCH_COMPONENT::Print( wxDC* aDC, const wxPoint& aOffset )
     opts.draw_visible_fields = false;
     opts.draw_hidden_fields = false;
 
-    if( PART_SPTR part = m_part.lock() )
+    if( m_part )
     {
-        part->Print( aDC, m_Pos + aOffset, m_unit, m_convert, opts );
+        m_part->Print( aDC, m_Pos + aOffset, m_unit, m_convert, opts );
     }
     else    // Use dummy() part if the actual cannot be found.
     {
@@ -893,11 +904,11 @@ SCH_FIELD* SCH_COMPONENT::FindField( const wxString& aFieldName, bool aIncludeDe
 
 void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
 {
-    if( PART_SPTR part = m_part.lock() )
+    if( m_part )
     {
         wxString symbolName;
         LIB_FIELDS fields;
-        part->GetFields( fields );
+        m_part->GetFields( fields );
 
         for( const LIB_FIELD& field : fields )
         {
@@ -946,8 +957,8 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
                 // Some older libraries may be broken and the alias datasheet information
                 // in the document file for the root part may have been dropped.  This only
                 // happens for the root part.
-                if( schField->GetText().IsEmpty() && symbolName == part->GetName() )
-                    schField->SetText( part->GetField( DATASHEET )->GetText() );
+                if( schField->GetText().IsEmpty() && symbolName == m_part->GetName() )
+                    schField->SetText( m_part->GetField( DATASHEET )->GetText() );
             }
             else
             {
@@ -960,26 +971,19 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
 
 LIB_PIN* SCH_COMPONENT::GetPin( const wxString& number )
 {
-    if( PART_SPTR part = m_part.lock() )
+    if( m_part )
     {
-        return part->GetPin( number, m_unit, m_convert );
+        return m_part->GetPin( number, m_unit, m_convert );
     }
+
     return NULL;
 }
 
 
 void SCH_COMPONENT::GetPins( std::vector<LIB_PIN*>& aPinsList )
 {
-    if( m_part.expired() )
-    {
-        // no pins; nothing to get
-    }
-    else if( PART_SPTR part = m_part.lock() )
-    {
-        part->GetPins( aPinsList, m_unit, m_convert );
-    }
-    else
-        wxFAIL_MSG( "Could not obtain PART_SPTR lock" );
+    if( m_part )
+        m_part->GetPins( aPinsList, m_unit, m_convert );
 }
 
 
@@ -991,7 +995,11 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
     SCH_COMPONENT* component = (SCH_COMPONENT*) aItem;
 
     std::swap( m_lib_id, component->m_lib_id );
-    std::swap( m_part, component->m_part );
+
+    LIB_PART* part = component->m_part.release();
+    component->m_part.reset( m_part.release() );
+    m_part.reset( part );
+
     std::swap( m_Pos, component->m_Pos );
     std::swap( m_unit, component->m_unit );
     std::swap( m_convert, component->m_convert );
@@ -1035,7 +1043,6 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 {
     wxArrayString  reference_fields;
     static const wxChar separators[] = wxT( " " );
-    PART_SPTR part = m_part.lock();
 
     // Build a reference with no annotation,
     // i.e. a reference ended by only one '?'
@@ -1309,9 +1316,9 @@ EDA_RECT SCH_COMPONENT::GetBodyBoundingBox() const
 {
     EDA_RECT    bBox;
 
-    if( PART_SPTR part = m_part.lock() )
+    if( m_part )
     {
-        bBox = part->GetBodyBoundingBox( m_unit, m_convert );
+        bBox = m_part->GetBodyBoundingBox( m_unit, m_convert );
     }
     else
     {
@@ -1366,43 +1373,36 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList 
     wxString msg;
 
     // part and alias can differ if alias is not the root
-    if( PART_SPTR part = m_part.lock() )
+    if( m_part )
     {
-        if( part.get() != dummy() )
+        if( m_part.get() != dummy() )
         {
-            LIB_ALIAS* alias = nullptr;
-
-            if( part->GetLib() && part->GetLib()->IsCache() )
-            {
-                wxString libId = GetLibId().Format();
-                libId.Replace( ":", "_" );
-                alias = part->GetAlias( libId );
-            }
-            else
-            {
-                alias = part->GetAlias( GetLibId().GetLibItemName() );
-            }
-
-            if( !alias )
-                return;
-
             if( g_CurrentSheet )
                 aList.push_back( MSG_PANEL_ITEM( _( "Reference" ), GetRef( g_CurrentSheet ),
                                                  DARKCYAN ) );
 
-            msg = part->IsPower() ? _( "Power symbol" ) : _( "Value" );
+            msg = m_part->IsPower() ? _( "Power symbol" ) : _( "Value" );
 
             aList.push_back( MSG_PANEL_ITEM( msg, GetField( VALUE )->GetShownText(), DARKCYAN ) );
 
             // Display component reference in library and library
             aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetLibId().GetLibItemName(), BROWN ) );
 
-            if( alias->GetName() != part->GetName() )
-                aList.push_back( MSG_PANEL_ITEM( _( "Alias of" ), part->GetName(), BROWN ) );
+            if( !m_part->IsRoot() )
+            {
+                msg = _( "Missing parent" );
 
-            if( part->GetLib() && part->GetLib()->IsCache() )
+                std::shared_ptr< LIB_PART > parent = m_part->GetParent().lock();
+
+                if( parent )
+                    msg = parent->GetName();
+
+                aList.push_back( MSG_PANEL_ITEM( _( "Alias of" ), msg, BROWN ) );
+            }
+
+            if( m_part->GetLib() && m_part->GetLib()->IsCache() )
                 aList.push_back( MSG_PANEL_ITEM( _( "Library" ),
-                                                 part->GetLib()->GetLogicalName(), RED ) );
+                                                 m_part->GetLib()->GetLogicalName(), RED ) );
             else if( !m_lib_id.GetLibNickname().empty() )
                 aList.push_back( MSG_PANEL_ITEM( _( "Library" ), m_lib_id.GetLibNickname(),
                                                  BROWN ) );
@@ -1418,9 +1418,9 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList 
             aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), msg, DARKRED ) );
 
             // Display description of the component, and keywords found in lib
-            aList.push_back( MSG_PANEL_ITEM( _( "Description" ), alias->GetDescription(),
+            aList.push_back( MSG_PANEL_ITEM( _( "Description" ), m_part->GetDescription(),
                                              DARKCYAN ) );
-            aList.push_back( MSG_PANEL_ITEM( _( "Key words" ), alias->GetKeyWords(), DARKCYAN ) );
+            aList.push_back( MSG_PANEL_ITEM( _( "Key words" ), m_part->GetKeyWords(), DARKCYAN ) );
         }
     }
     else
@@ -1520,9 +1520,9 @@ bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 
 void SCH_COMPONENT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 {
-    if( PART_SPTR part = m_part.lock() )
+    if( m_part )
     {
-        for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
+        for( LIB_PIN* pin = m_part->GetNextPin();  pin;  pin = m_part->GetNextPin( pin ) )
         {
             wxASSERT( pin->Type() == LIB_PIN_T );
 
@@ -1609,12 +1609,12 @@ LIB_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
 {
     UpdatePins();
 
-    if( PART_SPTR part = m_part.lock() )
+    if( m_part )
     {
         // Calculate the position relative to the component.
         wxPoint libPosition = aPosition - m_Pos;
 
-        return part->LocateDrawItem( m_unit, m_convert, aType, libPosition, m_transform );
+        return m_part->LocateDrawItem( m_unit, m_convert, aType, libPosition, m_transform );
     }
 
     return NULL;
@@ -1694,9 +1694,9 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
 void SCH_COMPONENT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
                                     SCH_SHEET_PATH*      aSheetPath )
 {
-    if( PART_SPTR part = m_part.lock() )
+    if( m_part )
     {
-        for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
+        for( LIB_PIN* pin = m_part->GetNextPin();  pin;  pin = m_part->GetNextPin( pin ) )
         {
             wxASSERT( pin->Type() == LIB_PIN_T );
 
@@ -1796,7 +1796,10 @@ SCH_COMPONENT& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
         SCH_COMPONENT* c = (SCH_COMPONENT*) &aItem;
 
         m_lib_id    = c->m_lib_id;
-        m_part      = c->m_part;
+
+        LIB_PART* libSymbol = c->m_part ? new LIB_PART( *c->m_part.get() ) : nullptr;
+
+        m_part.reset( libSymbol );
         m_Pos       = c->m_Pos;
         m_unit      = c->m_unit;
         m_convert   = c->m_convert;
@@ -1877,12 +1880,12 @@ void SCH_COMPONENT::Plot( PLOTTER* aPlotter )
 {
     TRANSFORM temp;
 
-    if( PART_SPTR part = m_part.lock() )
+    if( m_part )
     {
         temp = GetTransform();
         aPlotter->StartBlock( nullptr );
 
-        part->Plot( aPlotter, GetUnit(), GetConvert(), m_Pos, temp );
+        m_part->Plot( aPlotter, GetUnit(), GetConvert(), m_Pos, temp );
 
         for( SCH_FIELD field : m_Fields )
             field.Plot( aPlotter );

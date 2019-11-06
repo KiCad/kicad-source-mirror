@@ -1097,16 +1097,16 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
         package = p->second;
     }
 
-    LIB_ALIAS* alias = m_pi->LoadSymbol( getLibFileName().GetFullPath(), kisymbolname,
-                                         m_properties.get() );
+    LIB_PART* part = m_pi->LoadSymbol( getLibFileName().GetFullPath(), kisymbolname,
+                                       m_properties.get() );
 
-    if( !alias || !alias->GetPart() )
+    if( !part )
     {
-        wxLogMessage( wxString::Format( _( "Could not find %s in the imported library" ), kisymbolname ) );
+        wxLogMessage( wxString::Format( _( "Could not find %s in the imported library" ),
+                                        kisymbolname ) );
         return;
     }
 
-    LIB_PART* part = alias->GetPart();
     LIB_ID libId( getLibName(), kisymbolname );
     std::unique_ptr<SCH_COMPONENT> component( new SCH_COMPONENT() );
     component->SetLibId( libId );
@@ -1125,7 +1125,6 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
             component->MirrorY( einstance.x.ToSchUnits() );
         }
     }
-
 
     LIB_FIELDS partFields;
     part->GetFields( partFields );
@@ -1185,7 +1184,6 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     bool valueAttributeFound = false;
     bool nameAttributeFound  = false;
-
 
     wxXmlNode* attributeNode = aInstanceNode->GetChildren();
 
@@ -2582,18 +2580,17 @@ bool SCH_EAGLE_PLUGIN::checkConnections( const SCH_COMPONENT* aComponent, const 
 void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_COMPONENT* aComponent,
         SCH_SCREEN* aScreen, bool aUpdateSet )
 {
-    auto partRef = aComponent->GetPartRef().lock();
-    wxCHECK( partRef, /*void*/ );
+    wxCHECK( aComponent->GetPartRef(), /*void*/ );
 
     // Normally power parts also have power input pins,
     // but they already force net names on the attached wires
-    if( partRef->IsPower() )
+    if( aComponent->GetPartRef()->IsPower() )
         return;
 
     int unit = aComponent->GetUnit();
     const wxString reference = aComponent->GetField( REFERENCE )->GetText();
     std::vector<LIB_PIN*> pins;
-    partRef->GetPins( pins );
+    aComponent->GetPartRef()->GetPins( pins );
     std::set<int> missingUnits;
 
     // Search all units for pins creating implicit connections

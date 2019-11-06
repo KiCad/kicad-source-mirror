@@ -51,152 +51,27 @@ int LIB_PART::m_subpartIdSeparator = 0;
 int LIB_PART::m_subpartFirstId = 'A';
 
 
-LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_PART* aRootPart ) :
-    EDA_ITEM( LIB_ALIAS_T ),
-    shared( aRootPart )
-{
-    SetName( aName );
-}
-
-
-LIB_ALIAS::LIB_ALIAS( const LIB_ALIAS& aAlias, LIB_PART* aRootPart ) :
-    EDA_ITEM( aAlias ),
-    shared( aRootPart )
-{
-    name   = aAlias.name;
-
-    description = aAlias.description;
-    keyWords = aAlias.keyWords;
-    docFileName = aAlias.docFileName;
-}
-
-
-LIB_ALIAS::~LIB_ALIAS()
-{
-    wxLogTrace( traceSchLibMem, wxT( "%s: destroying alias:'%s'" ),
-                GetChars( wxString::FromAscii( __WXFUNCTION__ ) ), GetChars( GetName() ) );
-
-    wxCHECK_RET( shared, wxT( "~LIB_ALIAS() without a LIB_PART" ) );
-
-    if( shared )
-        shared->RemoveAlias( this );
-}
-
-
-wxString LIB_ALIAS::GetLibNickname() const
-{
-    wxASSERT_MSG( shared, wxT( "LIB_ALIAS without a LIB_PART" ) );
-
-    if( shared )
-        return shared->GetLibraryName();
-
-    return wxEmptyString;
-}
-
-
-bool LIB_ALIAS::IsRoot() const
-{
-    return name == shared->GetName();
-}
-
-
-LIB_ID LIB_ALIAS::GetLibId() const
-{
-    LIB_ID id = shared->GetLibId();
-    id.SetLibItemName( name );
-    return id;
-}
-
-
-PART_LIB* LIB_ALIAS::GetLib()
-{
-    return shared->GetLib();
-}
-
-
-void LIB_ALIAS::SetName( const wxString& aName )
-{
-    name = LIB_ID::FixIllegalChars( aName, LIB_ID::ID_SCH );
-}
-
-
-int LIB_ALIAS::GetUnitCount()
-{
-    return shared->GetUnitCount();
-}
-
-
-wxString LIB_ALIAS::GetUnitReference( int aUnit )
-{
-    return LIB_PART::SubReference( aUnit, false );
-}
-
-
-const EDA_RECT LIB_ALIAS::GetBoundingBox() const
-{
-    // a LIB_ALIAS does not really have a bounding box.
-    // return a 0 size rect.
-    EDA_RECT dummy;
-
-    return dummy;
-};
-
-
-const BOX2I LIB_ALIAS::ViewBBox() const
-{
-    // LIB_ALIAS may be displayed in preview windows, so ensure that it is always
-    // selected for drawing.
-    BOX2I bbox;
-    bbox.SetMaximum();
-    return bbox;
-}
-
-
-wxString LIB_ALIAS::GetSearchText()
+wxString LIB_PART::GetSearchText()
 {
     // Matches are scored by offset from front of string, so inclusion of this spacer
     // discounts matches found after it.
     static const wxString discount( wxT( "        " ) );
 
-    wxString text = GetKeyWords() + discount + GetDescription();
+    wxString  text = GetKeyWords() + discount + GetDescription();
+    wxString  footprint = GetFootprintField().GetText();
 
-    // If a footprint is defined for the part, add it to the serach string
-    if( shared )
+    if( !footprint.IsEmpty() )
     {
-        wxString footprint = shared->GetFootprintField().GetText();
-
-        if( !footprint.IsEmpty() )
-            text += discount + footprint;
+        text += discount + footprint;
     }
 
     return text;
 }
 
 
-bool LIB_ALIAS::operator==( const wxChar* aName ) const
-{
-    return name == aName;
-}
-
-
-bool operator<( const LIB_ALIAS& aItem1, const LIB_ALIAS& aItem2 )
+bool operator<( const LIB_PART& aItem1, const LIB_PART& aItem2 )
 {
     return aItem1.GetName() < aItem2.GetName();
-}
-
-
-void LIB_ALIAS::ViewGetLayers( int aLayers[], int& aCount ) const
-{
-    // An alias's fields don't know how to fetch their parent's values so we don't let
-    // them draw themselves.  This means the alias always has to draw them, which means
-    // it has to "own" their layers as well.
-    aCount      = 6;
-    aLayers[0]  = LAYER_DEVICE;
-    aLayers[1]  = LAYER_DEVICE_BACKGROUND;
-    aLayers[2]  = LAYER_REFERENCEPART;
-    aLayers[3]  = LAYER_VALUEPART;
-    aLayers[4]  = LAYER_FIELDS;
-    aLayers[5]  = LAYER_SELECTION_SHADOWS;
 }
 
 
@@ -209,7 +84,7 @@ struct null_deleter
 };
 
 
-LIB_PART::LIB_PART( const wxString& aName, PART_LIB* aLibrary ) :
+LIB_PART::LIB_PART( const wxString& aName, LIB_PART* aParent, PART_LIB* aLibrary ) :
     EDA_ITEM( LIB_PART_T ),
     m_me( this, null_deleter() )
 {
@@ -220,6 +95,9 @@ LIB_PART::LIB_PART( const wxString& aName, PART_LIB* aLibrary ) :
     m_unitsLocked         = false;
     m_showPinNumbers      = true;
     m_showPinNames        = true;
+
+    if( aParent )
+        m_parent = aParent->SharedPtr();
 
     // Add the MANDATORY_FIELDS in RAM only.  These are assumed to be present
     // when the field editors are invoked.
@@ -241,7 +119,9 @@ LIB_PART::LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary ) :
     LIB_ITEM* newItem;
 
     m_library             = aLibrary;
-    m_FootprintList       = aPart.m_FootprintList;
+    m_name                = aPart.m_name;
+    m_parent              = aPart.m_parent;
+    m_FootprintList       = wxArrayString( aPart.m_FootprintList );
     m_unitCount           = aPart.m_unitCount;
     m_unitsLocked         = aPart.m_unitsLocked;
     m_pinNameOffset       = aPart.m_pinNameOffset;
@@ -250,41 +130,197 @@ LIB_PART::LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary ) :
     m_dateLastEdition     = aPart.m_dateLastEdition;
     m_options             = aPart.m_options;
     m_libId               = aPart.m_libId;
+    m_description         = aPart.m_description;
+    m_keyWords            = aPart.m_keyWords;
+    m_docFileName         = aPart.m_docFileName;
 
     for( LIB_ITEM& oldItem : aPart.m_drawings )
     {
-        if( oldItem.HasFlag( IS_NEW ) || oldItem.HasFlag( STRUCT_DELETED ) )
+        if( ( oldItem.GetFlags() & ( IS_NEW | STRUCT_DELETED ) ) != 0 )
             continue;
 
         newItem = (LIB_ITEM*) oldItem.Clone();
         newItem->SetParent( this );
         m_drawings.push_back( newItem );
     }
-
-    for( LIB_ALIAS* alias : aPart.m_aliases )
-        m_aliases.emplace_back( new LIB_ALIAS( *alias, this ) );
 }
 
 
 LIB_PART::~LIB_PART()
 {
-    wxLogTrace( traceSchLibMem,
-                wxT( "%s: destroying symbol with alias list count of %llu" ),
-                GetChars( wxString::FromAscii( __WXFUNCTION__ ) ),
-                (long long unsigned) m_aliases.size() );
-
-    // If the part is being deleted directly rather than through the library,
-    // delete all of the aliases.
-    while( m_aliases.size() )
-    {
-        LIB_ALIAS* alias = m_aliases.back();
-        m_aliases.pop_back();
-        delete alias;
-    }
 }
 
 
-const wxString LIB_PART::GetLibraryName()
+int LIB_PART::Compare( const LIB_PART& aRhs ) const
+{
+    if( m_me == aRhs.m_me )
+        return 0;
+
+    int retv = m_name.Cmp( aRhs.m_name );
+
+    if( retv )
+        return retv;
+
+    retv = m_libId.compare( aRhs.m_libId );
+
+    if( retv )
+        return retv;
+
+    if( m_parent.lock() < aRhs.m_parent.lock() )
+        return -1;
+
+    if( m_parent.lock() > aRhs.m_parent.lock() )
+        return 1;
+
+    if( m_options != aRhs.m_options )
+        return ( m_options == ENTRY_NORMAL ) ? -1 : 1;
+
+    if( m_unitCount != aRhs.m_unitCount )
+        return m_unitCount - aRhs.m_unitCount;
+
+    if( m_drawings.size() != aRhs.m_drawings.size() )
+        return m_drawings.size() - aRhs.m_drawings.size();
+
+    LIB_ITEMS_CONTAINER::CONST_ITERATOR lhsItem = m_drawings.begin();
+    LIB_ITEMS_CONTAINER::CONST_ITERATOR rhsItem = aRhs.m_drawings.begin();
+
+    while( lhsItem != m_drawings.end() )
+    {
+        if( lhsItem->Type() != rhsItem->Type() )
+            return lhsItem->Type() - rhsItem->Type();
+
+        retv = lhsItem->compare( *rhsItem );
+
+        if( retv )
+            return retv;
+
+        ++lhsItem;
+        ++rhsItem;
+    }
+
+    if( m_FootprintList.GetCount() != aRhs.m_FootprintList.GetCount() )
+        return m_FootprintList.GetCount() - aRhs.m_FootprintList.GetCount();
+
+    for( size_t i = 0; i < m_FootprintList.GetCount(); i++ )
+    {
+        retv = m_FootprintList[i].Cmp( aRhs.m_FootprintList[i] );
+
+        if( retv )
+            return retv;
+    }
+
+    retv = m_description.Cmp( aRhs.m_description );
+
+    if( retv )
+        return retv;
+
+    retv = m_keyWords.Cmp( aRhs.m_keyWords );
+
+    if( retv )
+        return retv;
+
+    retv = m_docFileName.Cmp( aRhs.m_docFileName );
+
+    if( retv )
+        return retv;
+
+    if( m_pinNameOffset != aRhs.m_pinNameOffset )
+        return m_pinNameOffset - aRhs.m_pinNameOffset;
+
+    if( m_unitsLocked != aRhs.m_unitsLocked )
+        return ( m_unitsLocked ) ? 1 : -1;
+
+    if( m_showPinNames != aRhs.m_showPinNames )
+        return ( m_showPinNames ) ? 1 : -1;
+
+    if( m_showPinNumbers != aRhs.m_showPinNumbers )
+        return ( m_showPinNumbers ) ? 1 : -1;
+
+    return 0;
+}
+
+
+wxString LIB_PART::GetUnitReference( int aUnit )
+{
+    return LIB_PART::SubReference( aUnit, false );
+}
+
+
+void LIB_PART::SetName( const wxString& aName )
+{
+    wxString validatedName = LIB_ID::FixIllegalChars( aName, LIB_ID::ID_SCH );
+
+    m_name = validatedName;
+    m_libId.SetLibItemName( validatedName, false );
+
+    GetValueField().SetText( validatedName );
+}
+
+
+void LIB_PART::SetParent( LIB_PART* aParent )
+{
+    if( aParent )
+        m_parent = aParent->SharedPtr();
+    else
+        m_parent.reset();
+}
+
+
+std::unique_ptr< LIB_PART > LIB_PART::Flatten() const
+{
+    std::unique_ptr< LIB_PART > retv;
+
+    if( IsAlias() )
+    {
+        PART_SPTR parent = m_parent.lock();
+
+        wxCHECK_MSG( parent, retv,
+                     wxString::Format( "Parent of derived symbol '%s' undefined", m_name ) );
+
+        retv.reset( new LIB_PART( *const_cast< LIB_PART* >( this ) ) );
+
+        // Flattened symbols have no inheritance.
+        retv->SetParent( nullptr );
+
+        // Flatten parent information into the derived symbol.
+        retv->SetUnitCount( parent->GetUnitCount() );
+
+        LIB_ITEM* newItem;
+
+        for( LIB_ITEM& item : parent->GetDrawItems() )
+        {
+            // Only add fields from the parent that are not present in the child.  The child
+            // symbol fields are already set.
+            if( item.Type() == LIB_FIELD_T )
+            {
+                LIB_FIELD* field = (LIB_FIELD*) &item;
+
+                if( retv->GetField( field->GetId() ) )
+                    continue;
+            }
+
+            newItem = (LIB_ITEM*) item.Clone();
+            newItem->SetParent( retv.get() );
+            retv->GetDrawItems().push_back( newItem );
+        }
+
+        if( parent->IsPower() )
+            retv->SetPower();
+        else
+            retv->SetNormal();
+
+        retv->LockUnits( parent->UnitsLocked() );
+    }
+    else
+    {
+        retv.reset( new LIB_PART( *const_cast< LIB_PART* >( this ) ) );
+    }
+
+    return retv;
+}
+
+
+const wxString LIB_PART::GetLibraryName() const
 {
     if( m_library )
         return m_library->GetName();
@@ -322,31 +358,6 @@ wxString LIB_PART::SubReference( int aUnit, bool aAddSeparator )
     }
 
     return subRef;
-}
-
-
-const wxString& LIB_PART::GetName() const
-{
-    static wxString dummy;
-
-    wxCHECK_MSG( m_aliases.size(), dummy, "no aliases defined for symbol" );
-
-    return m_aliases[0]->GetName();
-}
-
-
-void LIB_PART::SetName( const wxString& aName )
-{
-    // The LIB_ALIAS that is the LIB_PART name has to be created so create it.
-    if( m_aliases.empty() )
-        m_aliases.push_back( new LIB_ALIAS( aName, this ) );
-    else
-        m_aliases[0]->SetName( aName );
-
-    wxString validatedName = LIB_ID::FixIllegalChars( aName, LIB_ID::ID_SCH );
-    m_libId.SetLibItemName( validatedName, false );
-
-    GetValueField().SetText( validatedName );
 }
 
 
@@ -457,7 +468,8 @@ void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
         if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
             continue;
 
-        item.Plot( aPlotter, aOffset, fill && ( item.m_Fill != FILLED_WITH_BG_BODYCOLOR ), aTransform );
+        item.Plot( aPlotter, aOffset, fill && ( item.m_Fill != FILLED_WITH_BG_BODYCOLOR ),
+                   aTransform );
     }
 }
 
@@ -481,15 +493,18 @@ void LIB_PART::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
         if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
             continue;
 
+        LIB_FIELD& field = (LIB_FIELD&) item;
+
         // The reference is a special case: we should change the basic text
         // to add '?' and the part id
-        LIB_FIELD& field = (LIB_FIELD&) item;
         wxString tmp = field.GetShownText();
+
         if( field.GetId() == REFERENCE )
         {
             wxString text = field.GetFullText( aUnit );
             field.SetText( text );
         }
+
         item.Plot( aPlotter, aOffset, fill, aTransform );
         field.SetText( tmp );
     }
@@ -541,11 +556,12 @@ void LIB_PART::AddDrawItem( LIB_ITEM* aItem )
 
 LIB_ITEM* LIB_PART::GetNextDrawItem( LIB_ITEM* aItem, KICAD_T aType )
 {
-    if( m_drawings.empty( aType ) )
-        return NULL;
-
     if( aItem == NULL )
-        return &( *( m_drawings.begin( aType ) ) );
+    {
+        LIB_ITEMS_CONTAINER::ITERATOR it1 = m_drawings.begin( aType );
+
+        return (it1 != m_drawings.end( aType ) ) ? &( *( m_drawings.begin( aType ) ) ) : nullptr;
+    }
 
     // Search for the last item, assume aItem is of type aType
     wxASSERT( ( aType == TYPE_NOT_INIT ) || ( aType == aItem->Type() ) );
@@ -569,9 +585,6 @@ LIB_ITEM* LIB_PART::GetNextDrawItem( LIB_ITEM* aItem, KICAD_T aType )
 
 void LIB_PART::GetPins( LIB_PINS& aList, int aUnit, int aConvert )
 {
-    if( m_drawings.empty( LIB_PIN_T ) )
-        return;
-
     /* Notes:
      * when aUnit == 0: no unit filtering
      * when aConvert == 0: no convert (shape selection) filtering
@@ -632,23 +645,24 @@ bool LIB_PART::PinsConflictWith( LIB_PART& aOtherPart, bool aTestNums, bool aTes
                 continue;
 
             // Same number?
-            if( aTestNums && ( eachThisPin->GetNumber() != eachOtherPin->GetNumber() ))
+            if( aTestNums && ( eachThisPin->GetNumber() != eachOtherPin->GetNumber() ) )
                 continue;
 
             // Same name?
-            if( aTestNames && ( eachThisPin->GetName() != eachOtherPin->GetName() ))
+            if( aTestNames && ( eachThisPin->GetName() != eachOtherPin->GetName() ) )
                 continue;
 
             // Same electrical type?
-            if( aTestType && ( eachThisPin->GetType() != eachOtherPin->GetType() ))
+            if( aTestType && ( eachThisPin->GetType() != eachOtherPin->GetType() ) )
                 continue;
 
             // Same orientation?
-            if( aTestOrientation && ( eachThisPin->GetOrientation() != eachOtherPin->GetOrientation() ))
+            if( aTestOrientation
+              && ( eachThisPin->GetOrientation() != eachOtherPin->GetOrientation() ) )
                 continue;
 
             // Same length?
-            if( aTestLength && ( eachThisPin->GetLength() != eachOtherPin->GetLength() ))
+            if( aTestLength && ( eachThisPin->GetLength() != eachOtherPin->GetLength() ) )
                 continue;
 
             foundMatch = true;
@@ -699,10 +713,13 @@ const EDA_RECT LIB_PART::GetUnitBoundingBox( int aUnit, int aConvert ) const
 
 void LIB_PART::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount      = 3;
+    aCount      = 6;
     aLayers[0]  = LAYER_DEVICE;
     aLayers[1]  = LAYER_DEVICE_BACKGROUND;
-    aLayers[2]  = LAYER_SELECTION_SHADOWS;
+    aLayers[2]  = LAYER_REFERENCEPART;
+    aLayers[3]  = LAYER_VALUEPART;
+    aLayers[4]  = LAYER_FIELDS;
+    aLayers[5]  = LAYER_SELECTION_SHADOWS;
 }
 
 
@@ -862,17 +879,20 @@ bool LIB_PART::HasConversion() const
     return false;
 }
 
+
 void LIB_PART::ClearTempFlags()
 {
     for( LIB_ITEM& item : m_drawings )
         item.ClearTempFlags();
 }
 
+
 void LIB_PART::ClearEditFlags()
 {
     for( LIB_ITEM& item : m_drawings )
         item.ClearEditFlags();
 }
+
 
 LIB_ITEM* LIB_PART::LocateDrawItem( int aUnit, int aConvert,
                                     KICAD_T aType, const wxPoint& aPoint )
@@ -976,6 +996,15 @@ void LIB_PART::SetUnitCount( int aCount )
 }
 
 
+int LIB_PART::GetUnitCount() const
+{
+    if( PART_SPTR parent = m_parent.lock() )
+        return parent->GetUnitCount();
+
+    return m_unitCount;
+}
+
+
 void LIB_PART::SetConversion( bool aSetConvert )
 {
     if( aSetConvert == HasConversion() )
@@ -1018,142 +1047,6 @@ void LIB_PART::SetConversion( bool aSetConvert )
                 ++i;
         }
     }
-}
-
-
-wxArrayString LIB_PART::GetAliasNames( bool aIncludeRoot ) const
-{
-    wxArrayString names;
-
-    LIB_ALIASES::const_iterator it;
-
-    for( it=m_aliases.begin();  it != m_aliases.end();  ++it )
-    {
-        if( !aIncludeRoot && (*it)->IsRoot() )
-            continue;
-
-        names.Add( (*it)->GetName() );
-    }
-
-    return names;
-}
-
-
-bool LIB_PART::HasAlias( const wxString& aName ) const
-{
-    wxCHECK2_MSG( !aName.IsEmpty(), return false,
-                  wxT( "Cannot get alias with an empty name, bad programmer." ) );
-
-    for( size_t i = 0; i < m_aliases.size(); i++ )
-    {
-        if( aName == m_aliases[i]->GetName() )
-            return true;
-    }
-
-    return false;
-}
-
-
-void LIB_PART::RemoveAlias( const wxString& aName )
-{
-    LIB_ALIAS* a = GetAlias( aName );
-
-    if( a )
-        RemoveAlias( a );
-}
-
-
-LIB_ALIAS* LIB_PART::RemoveAlias( LIB_ALIAS* aAlias )
-{
-    wxCHECK_MSG( aAlias, NULL, wxT( "Cannot remove alias by NULL pointer." ) );
-
-    LIB_ALIAS* nextAlias = NULL;
-
-    LIB_ALIASES::iterator it = find( m_aliases.begin(), m_aliases.end(), aAlias );
-
-    if( it != m_aliases.end() )
-    {
-        bool rename = aAlias->IsRoot();
-
-        wxLogTrace( traceSchLibMem,
-                    wxT( "%s: symbol:'%s', alias:'%s', alias count %llu, reference count %ld." ),
-                    GetChars( wxString::FromAscii( __WXFUNCTION__ ) ),
-                    GetChars( GetName() ),
-                    GetChars( aAlias->GetName() ),
-                    (long long unsigned) m_aliases.size(),
-                    m_me.use_count() );
-
-        it = m_aliases.erase( it );
-
-        if( !m_aliases.empty() )
-        {
-            if( it == m_aliases.end() )
-                it = m_aliases.begin();
-
-            nextAlias = *it;
-
-            if( rename )
-                SetName( nextAlias->GetName() );
-        }
-    }
-
-    return nextAlias;
-}
-
-
-void LIB_PART::RemoveAllAliases()
-{
-    // Remove all of the aliases except the root alias.
-    while( m_aliases.size() > 1 )
-        m_aliases.pop_back();
-}
-
-
-LIB_ALIAS* LIB_PART::GetAlias( const wxString& aName ) const
-{
-    wxCHECK2_MSG( !aName.IsEmpty(), return NULL,
-                  wxT( "Cannot get alias with an empty name.  Bad programmer!" ) );
-
-    for( LIB_ALIAS* alias : m_aliases)
-    {
-        if( alias->GetName() == aName )
-            return alias;
-    }
-
-    return NULL;
-}
-
-
-LIB_ALIAS* LIB_PART::GetRootAlias() const
-{
-    for( LIB_ALIAS* alias : m_aliases )
-    {
-        if( alias->IsRoot() )
-            return alias;
-    }
-
-    return NULL;
-}
-
-
-LIB_ALIAS* LIB_PART::GetAlias( size_t aIndex ) const
-{
-    wxCHECK2_MSG( aIndex < m_aliases.size(), return NULL,
-                  wxT( "Illegal alias list index, bad programmer." ) );
-
-    return m_aliases[aIndex];
-}
-
-
-void LIB_PART::AddAlias( const wxString& aName )
-{
-    m_aliases.push_back( new LIB_ALIAS( aName, this ) );
-}
-
-
-void LIB_PART::AddAlias( LIB_ALIAS* aAlias )
-{
-    m_aliases.push_back( aAlias );
 }
 
 

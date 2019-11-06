@@ -310,7 +310,7 @@ bool SCH_FIELD::IsReplaceable() const
         return true;
 
     SCH_COMPONENT* component = dynamic_cast<SCH_COMPONENT*>( GetParent() );
-    LIB_PART*      part = component ? component->GetPartRef().lock().get() : nullptr;
+    LIB_PART*      part = component ? component->GetPartRef().get() : nullptr;
     bool           isPower = part ? part->IsPower() : false;
 
     return !isPower;

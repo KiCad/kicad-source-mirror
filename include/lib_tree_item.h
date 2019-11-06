@@ -41,10 +41,10 @@ class APIEXPORT LIB_TREE_ITEM
 public:
     virtual LIB_ID GetLibId() const = 0;
 
-    virtual const wxString& GetName() const = 0;
+    virtual const wxString GetName() const = 0;
     virtual wxString GetLibNickname() const = 0;
 
-    virtual const wxString& GetDescription() = 0;
+    virtual const wxString GetDescription() = 0;
 
     virtual wxString GetSearchText() { return wxEmptyString; }
 
@@ -56,7 +56,7 @@ public:
     /**
      * For items with units, return the number of units.
      */
-    virtual int GetUnitCount() { return 0; }
+    virtual int GetUnitCount() const { return 0; }
 
     /**
      * For items with units, return an identifier for unit x.

@@ -33,7 +33,8 @@
 #include <widgets/wx_grid.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <lib_edit_frame.h>
-#include <class_library.h>
+#include <lib_manager.h>
+#include <class_libentry.h>
 #include <symbol_lib_table.h>
 #include <sch_item.h>
 #include <sch_component.h>
@@ -51,6 +52,8 @@
 #define LibEditFieldsShownColumnsKey   wxT( "LibEditFieldsShownColumns" )
 
 int DIALOG_EDIT_COMPONENT_IN_LIBRARY::m_lastOpenedPage = 0;
+DIALOG_EDIT_COMPONENT_IN_LIBRARY::LAST_LAYOUT
+    DIALOG_EDIT_COMPONENT_IN_LIBRARY::m_lastLayout = DIALOG_EDIT_COMPONENT_IN_LIBRARY::NONE;
 
 
 DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRAME* aParent,
@@ -58,7 +61,6 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
     DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( aParent ),
     m_Parent( aParent ),
     m_libEntry( aLibEntry ),
-    m_currentAlias( wxNOT_FOUND ),
     m_pinNameOffset( aParent, m_nameOffsetLabel, m_nameOffsetCtrl, m_nameOffsetUnits, true ),
     m_delayedFocusCtrl( nullptr ),
     m_delayedFocusGrid( nullptr ),
@@ -71,37 +73,17 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
 
     // Give a bit more room for combobox editors
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
-    m_aliasGrid->SetDefaultRowSize( m_aliasGrid->GetDefaultRowSize() + 4 );
-
-    // Work around a bug in wxWidgets where it fails to recalculate the grid height
-    // after changing the default row size
-    m_aliasGrid->AppendRows( 1 );
-    m_aliasGrid->DeleteRows( m_grid->GetNumberRows() - 1, 1 );
-
     m_fields = new FIELDS_GRID_TABLE<LIB_FIELD>( this, aParent, m_libEntry );
     m_grid->SetTable( m_fields );
-
     m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this ) );
-    m_aliasGrid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this ) );
 
     // Show/hide columns according to the user's preference
     m_config->Read( LibEditFieldsShownColumnsKey, &m_shownColumns, wxT( "0 1 2 3 4 5 6 7" ) );
     m_grid->ShowHideColumns( m_shownColumns );
 
-    // Hide non-overridden rows in aliases grid
-    m_aliasGrid->HideRow( REFERENCE );
-    m_aliasGrid->HideRow( FOOTPRINT );
-
     wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetReadOnly();
-    m_aliasGrid->SetColAttr( FDC_NAME, attr );
-    m_aliasGrid->SetCellValue( VALUE, FDC_NAME, TEMPLATE_FIELDNAME::GetDefaultFieldName( VALUE ) );
-    m_aliasGrid->SetCellValue( DATASHEET, FDC_NAME,
-                               TEMPLATE_FIELDNAME::GetDefaultFieldName( DATASHEET ) );
-
-    attr = new wxGridCellAttr;
     attr->SetEditor( new GRID_CELL_URL_EDITOR( this ) );
-    m_aliasGrid->SetAttr( DATASHEET, FDC_VALUE, attr );
+    m_grid->SetAttr( DATASHEET, FDC_VALUE, attr );
 
     m_SymbolNameCtrl->SetValidator( SCH_FIELD_VALIDATOR( true, VALUE ) );
 
@@ -110,8 +92,6 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
     m_bpDelete->SetBitmap( KiBitmap( trash_xpm ) );
     m_bpMoveUp->SetBitmap( KiBitmap( small_up_xpm ) );
     m_bpMoveDown->SetBitmap( KiBitmap( small_down_xpm ) );
-    m_addAliasButton->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_deleteAliasButton->SetBitmap( KiBitmap( trash_xpm ) );
     m_addFilterButton->SetBitmap( KiBitmap( small_plus_xpm ) );
     m_deleteFilterButton->SetBitmap( KiBitmap( trash_xpm ) );
     m_editFilterButton->SetBitmap( KiBitmap( small_edit_xpm ) );
@@ -126,12 +106,21 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
                      wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnGridCellChanging ),
                      NULL, this );
-    m_aliasGrid->Connect( wxEVT_GRID_CELL_CHANGING,
-                          wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAliasGridCellChanging ),
-                          NULL, this );
+
+    if( m_lastLayout != DIALOG_EDIT_COMPONENT_IN_LIBRARY::NONE )
+    {
+        if( ( m_lastLayout == DIALOG_EDIT_COMPONENT_IN_LIBRARY::ALIAS && aLibEntry->IsRoot() )
+          || ( m_lastLayout == DIALOG_EDIT_COMPONENT_IN_LIBRARY::PARENT && aLibEntry->IsAlias() ) )
+        {
+            ResetSize();
+        }
+    }
+
+    m_lastLayout = ( aLibEntry->IsAlias() ) ? DIALOG_EDIT_COMPONENT_IN_LIBRARY::ALIAS :
+                   DIALOG_EDIT_COMPONENT_IN_LIBRARY::PARENT;
 
     m_grid->GetParent()->Layout();
-    m_aliasGrid->GetParent()->Layout();
+    syncControlStates( m_libEntry->IsAlias() );
     Layout();
 
     FinishDialogSettings();
@@ -150,18 +139,9 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::~DIALOG_EDIT_COMPONENT_IN_LIBRARY()
     m_grid->Disconnect( wxEVT_GRID_CELL_CHANGING,
                         wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnGridCellChanging ),
                         NULL, this );
-    m_aliasGrid->Disconnect( wxEVT_GRID_CELL_CHANGING,
-                             wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAliasGridCellChanging ),
-                             NULL, this );
 
     // Delete the GRID_TRICKS.
     m_grid->PopEventHandler( true );
-    m_aliasGrid->PopEventHandler( true );
-
-    // An OK will have transferred these and cleared the buffer, but we have to delete them
-    // on a Cancel.
-    for( LIB_ALIAS* alias : m_aliasesBuffer )
-        delete alias;
 }
 
 
@@ -170,23 +150,11 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    LIB_ALIAS* rootAlias = m_libEntry->GetAlias( m_libEntry->GetName() );
-
     // Push a copy of each field into m_fields
     m_libEntry->GetFields( *m_fields );
 
-    // The datasheet field is special.  Grab its value from the LIB_ALIAS document file
-    // member except for old libraries that saved the root alias document file in the
-    // datasheet field in the LIB_PART object.
-    if( rootAlias->GetDocFileName().IsEmpty() )
-    {
-        m_fields->at( DATASHEET ).SetText( m_libEntry->GetField( DATASHEET )->GetText() );
-        rootAlias->SetDocFileName( m_libEntry->GetField( DATASHEET )->GetText() );
-    }
-    else
-    {
-        m_fields->at( DATASHEET ).SetText( rootAlias->GetDocFileName() );
-    }
+    // Copy the data sheet field from the old alias document file name.
+    m_fields->at( DATASHEET ).SetText( m_libEntry->GetDocFileName() );
 
     // The Y axis for components in lib is from bottom to top while the screen axis is top
     // to bottom: we must change the y coord sign for editing
@@ -200,13 +168,12 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataToWindow()
     // notify the grid
     wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_fields->GetNumberRows() );
     m_grid->ProcessTableMessage( msg );
-    adjustGridColumns( m_grid->GetRect().GetWidth());
+    adjustGridColumns( m_grid->GetRect().GetWidth() );
 
     m_SymbolNameCtrl->SetValue( m_libEntry->GetName() );
 
-    m_DescCtrl->SetValue( rootAlias->GetDescription() );
-    m_KeywordCtrl->SetValue( rootAlias->GetKeyWords() );
-
+    m_DescCtrl->SetValue( m_libEntry->GetDescription() );
+    m_KeywordCtrl->SetValue( m_libEntry->GetKeyWords() );
     m_SelNumberOfUnits->SetValue( m_libEntry->GetUnitCount() );
     m_OptionPartsLocked->SetValue( m_libEntry->UnitsLocked() && m_libEntry->GetUnitCount() > 1 );
     m_AsConvertButt->SetValue( m_libEntry->HasConversion() );
@@ -217,26 +184,35 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataToWindow()
     m_PinsNameInsideButt->SetValue( m_libEntry->GetPinNameOffset() != 0 );
     m_pinNameOffset.SetValue( Mils2iu( m_libEntry->GetPinNameOffset() ) );
 
-    const LIB_ALIASES aliases = m_libEntry->GetAliases();
+    wxArrayString tmp = m_libEntry->GetFootprints();
+    m_FootprintFilterListBox->Append( tmp );
 
-    for( LIB_ALIAS* alias : aliases )
+    // Populate the list of root parts for inherited objects.
+    if( m_libEntry->IsAlias() )
     {
-        if( alias->IsRoot() )
-            continue;
+        wxArrayString rootSymbolNames;
+        wxString libName = m_Parent->GetCurLib();
 
-        m_aliasesBuffer.push_back( new LIB_ALIAS( *alias, m_libEntry ) );
-        m_aliasListBox->Append( alias->GetName() );
+        // Someone forgot to set the current library in the editor frame window.
+        wxCHECK( !libName.empty(), false );
+
+        m_Parent->GetLibManager().GetRootSymbolNames( libName, rootSymbolNames );
+        m_inheritanceSelectCombo->Append( rootSymbolNames );
+
+        PART_SPTR rootPart = m_libEntry->GetParent().lock();
+
+        wxCHECK( rootPart, false );
+
+        wxString parentName = rootPart->GetName();
+        int selection = m_inheritanceSelectCombo->FindString( parentName );
+
+        wxCHECK( selection != wxNOT_FOUND, false );
+        m_inheritanceSelectCombo->SetSelection( selection );
+
+        // Copy the reference field from the root symbol to prevent validation errors.
+        m_fields->at( REFERENCE ).SetText( rootPart->GetReferenceField().GetText() );
+        m_lastOpenedPage = 0;
     }
-
-    if( m_aliasListBox->GetCount() )
-        m_aliasListBox->SetSelection( 0 );
-
-    wxCommandEvent dummy;
-    OnSelectAlias( dummy );
-
-    adjustAliasGridColumns( m_aliasGrid->GetClientRect().GetWidth() - 4 );
-
-    m_FootprintFilterListBox->Append( m_libEntry->GetFootprints() );
 
     m_NoteBook->SetSelection( (unsigned) m_lastOpenedPage );
 
@@ -246,7 +222,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataToWindow()
 
 bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::Validate()
 {
-    if( !m_grid->CommitPendingChanges() || !m_aliasGrid->CommitPendingChanges() )
+    if( !m_grid->CommitPendingChanges() )
         return false;
 
     if( !SCH_COMPONENT::IsReferenceStringValid( m_fields->at( REFERENCE ).GetText() ) )
@@ -310,7 +286,6 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
-    LIB_ALIAS* rootAlias = m_libEntry->GetAlias( m_libEntry->GetName() );
     // We need to keep the name and the value the same at the moment!
     wxString   newName = m_fields->at( VALUE ).GetText();
 
@@ -329,19 +304,15 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
     }
 
     // Datasheet field is special; copy it to the root alias docfilename
-    rootAlias->SetDocFileName( m_fields->at( DATASHEET ).GetText() );
-
+    m_libEntry->SetDocFileName( m_fields->at( DATASHEET ).GetText() );
     m_libEntry->SetFields( *m_fields );
 
     // We need to keep the name and the value the same at the moment!
     m_libEntry->SetName( newName );
-
-    rootAlias->SetDescription( m_DescCtrl->GetValue() );
-    rootAlias->SetKeyWords( m_KeywordCtrl->GetValue() );
-
+    m_libEntry->SetDescription( m_DescCtrl->GetValue() );
+    m_libEntry->SetKeyWords( m_KeywordCtrl->GetValue() );
     m_libEntry->SetUnitCount( m_SelNumberOfUnits->GetValue() );
     m_libEntry->LockUnits( m_libEntry->GetUnitCount() > 1 && m_OptionPartsLocked->GetValue() );
-
     m_libEntry->SetConversion( m_AsConvertButt->GetValue() );
 
     if( m_OptionPower->GetValue() )
@@ -364,16 +335,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
         m_libEntry->SetPinNameOffset( 0 );   // pin text outside the body (name is on the pin)
     }
 
-    transferAliasDataToBuffer();
-    m_libEntry->RemoveAllAliases();
-
-    for( LIB_ALIAS* alias : m_aliasesBuffer )
-        m_libEntry->AddAlias( alias );       // Transfers ownership; no need to delete
-
-    m_aliasesBuffer.clear();
-
-    m_libEntry->GetFootprints().Clear();
-    m_libEntry->GetFootprints() = m_FootprintFilterListBox->GetStrings();
+    m_libEntry->SetFootprintFilters( m_FootprintFilterListBox->GetStrings() );
 
     return true;
 }
@@ -513,77 +475,6 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnMoveDown( wxCommandEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::updateAliasName( bool aFromGrid, const wxString& aName )
-{
-    int idx = m_aliasListBox->GetSelection();
-
-    if( idx >= 0 )
-    {
-        m_aliasListBox->SetString( (unsigned) idx, aName );
-        m_aliasesBuffer[ idx ]->SetName( aName );
-
-        if( aFromGrid )
-            m_AliasNameCtrl->ChangeValue( aName );
-        else
-            m_aliasGrid->SetCellValue( VALUE, FDC_VALUE, aName );
-    }
-}
-
-
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAliasGridCellChanging( wxGridEvent& event )
-{
-    if( event.GetRow() == VALUE )
-    {
-        int idx = m_aliasListBox->GetSelection();
-        wxString newName = event.GetString();
-
-        if( idx < 0 || !checkAliasName( newName ) )
-        {
-            event.Veto();
-
-            m_delayedFocusGrid = m_aliasGrid;
-            m_delayedFocusRow = event.GetRow();
-            m_delayedFocusColumn = event.GetCol();
-            m_delayedFocusPage = 1;
-        }
-        else
-            updateAliasName( true, newName );
-    }
-}
-
-
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAliasNameText( wxCommandEvent& event )
-{
-    updateAliasName( false, m_AliasNameCtrl->GetValue() );
-}
-
-
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAliasNameKillFocus( wxFocusEvent& event )
-{
-    if( !m_delayedFocusCtrl && !checkAliasName( m_AliasNameCtrl->GetValue() ) )
-    {
-        m_delayedFocusCtrl = m_AliasNameCtrl;
-        m_delayedFocusPage = 1;
-    }
-
-    event.Skip();
-}
-
-
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::transferAliasDataToBuffer()
-{
-    if( m_currentAlias >= 0 )
-    {
-        LIB_ALIAS* alias = m_aliasesBuffer[ m_currentAlias ];
-
-        alias->SetName( m_aliasGrid->GetCellValue( VALUE, FDC_VALUE ) );
-        alias->SetDocFileName( m_aliasGrid->GetCellValue( DATASHEET, FDC_VALUE ) );
-        alias->SetDescription( m_AliasDescCtrl->GetValue() );
-        alias->SetKeyWords( m_AliasKeywordsCtrl->GetValue() );
-    }
-}
-
-
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnEditSpiceModel( wxCommandEvent& event )
 {
 #ifdef KICAD_SPICE
@@ -613,153 +504,6 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnEditSpiceModel( wxCommandEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnSelectAlias( wxCommandEvent& event )
-{
-    if( m_delayedFocusCtrl || !m_aliasGrid->CommitPendingChanges() )
-    {
-        m_aliasListBox->SetSelection( m_currentAlias );  // veto selection change
-        return;
-    }
-
-    // Copy any pending changes back into the buffer
-    transferAliasDataToBuffer();
-
-    LIB_ALIAS* alias = nullptr;
-    int newIdx = m_aliasListBox->GetSelection();
-
-    if( newIdx >= 0 )
-    {
-        alias = m_aliasesBuffer[ newIdx ];
-
-        m_aliasGrid->SetCellValue( VALUE, FDC_VALUE, alias->GetName() );
-        m_aliasGrid->SetCellValue( DATASHEET, FDC_VALUE, alias->GetDocFileName() );
-        m_aliasGrid->Enable( true );
-
-        // Use ChangeValue() so we don't generate events
-        m_AliasNameCtrl->ChangeValue( alias->GetName() );
-        m_AliasNameCtrl->Enable( true );
-        m_AliasDescCtrl->ChangeValue( alias->GetDescription() );
-        m_AliasDescCtrl->Enable( true );
-        m_AliasKeywordsCtrl->ChangeValue( alias->GetKeyWords() );
-        m_AliasKeywordsCtrl->Enable( true );
-    }
-    else
-    {
-        m_aliasGrid->SetCellValue( VALUE, FDC_VALUE, wxEmptyString );
-        m_aliasGrid->SetCellValue( DATASHEET, FDC_VALUE, wxEmptyString );
-        m_aliasGrid->Enable( false );
-
-        // Use ChangeValue() so we don't generate events
-        m_AliasNameCtrl->ChangeValue( wxEmptyString );
-        m_AliasNameCtrl->Enable( false );
-        m_AliasDescCtrl->ChangeValue( wxEmptyString );
-        m_AliasDescCtrl->Enable( false );
-        m_AliasKeywordsCtrl->ChangeValue( wxEmptyString );
-        m_AliasKeywordsCtrl->Enable( false );
-    }
-
-    m_currentAlias = newIdx;
-}
-
-
-bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::checkAliasName( const wxString& aName )
-{
-    if( aName.IsEmpty() )
-        return false;
-
-    if( m_SymbolNameCtrl->GetValue().CmpNoCase( aName ) == 0 )
-    {
-        wxString msg;
-        msg.Printf( _( "Alias can not have same name as symbol." ) );
-        DisplayInfoMessage( this, msg );
-        return false;
-    }
-
-    for( int i = 0; i < (int)m_aliasListBox->GetCount(); ++i )
-    {
-        if( i == m_aliasListBox->GetSelection() )
-            continue;
-
-        if( m_aliasListBox->GetString( i ).CmpNoCase( aName ) == 0 )
-        {
-            wxString msg;
-            msg.Printf( _( "Alias \"%s\" already exists." ), aName );
-            DisplayInfoMessage( this, msg );
-            return false;
-        }
-    }
-
-    wxString  library = m_Parent->GetCurLib();
-
-    if( !library.empty() )
-    {
-        LIB_ALIAS* existing = Prj().SchSymbolLibTable()->LoadSymbol( library, aName );
-
-        if( existing && existing->GetPart()->GetName() != m_libEntry->GetName() )
-        {
-            wxString msg;
-            msg.Printf( _( "Symbol name \"%s\" already exists in library \"%s\"." ),
-                        aName, library );
-            DisplayErrorMessage( this, msg );
-            return false;
-        }
-    }
-
-    return true;
-}
-
-
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAddAlias( wxCommandEvent& event )
-{
-    if( m_delayedFocusCtrl || !m_aliasGrid->CommitPendingChanges() )
-        return;
-
-    wxCommandEvent dummy;
-    wxString       aliasname = _( "untitled" );
-    int            suffix = 1;
-
-    while( m_aliasListBox->FindString( aliasname ) != wxNOT_FOUND )
-        aliasname = wxString::Format( _( "untitled%i" ), suffix++ );
-
-    LIB_ALIAS* alias = new LIB_ALIAS( aliasname, m_libEntry );
-
-    // Initialize with parent's data
-    alias->SetDescription( m_DescCtrl->GetValue() );
-    alias->SetKeyWords( m_KeywordCtrl->GetValue() );
-    alias->SetDocFileName( m_grid->GetCellValue( DATASHEET, FDC_VALUE ) );
-
-    m_aliasesBuffer.push_back( alias );     // transfers ownership of alias to aliasesBuffer
-
-    m_aliasListBox->Append( aliasname );
-    m_aliasListBox->SetSelection( m_aliasListBox->GetCount() - 1 );
-    OnSelectAlias( dummy );
-}
-
-
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnDeleteAlias( wxCommandEvent& event )
-{
-    if( m_delayedFocusCtrl || !m_aliasGrid->CommitPendingChanges() )
-        return;
-
-    int sel = m_aliasListBox->GetSelection();
-
-    if( sel == wxNOT_FOUND )
-        return;
-
-    m_aliasListBox->Delete( (unsigned) sel );
-    m_aliasesBuffer.erase( m_aliasesBuffer.begin() + sel );
-    m_currentAlias = wxNOT_FOUND;
-
-    if( m_aliasListBox->GetCount() == 0 )
-        m_aliasListBox->SetSelection( wxNOT_FOUND );
-    else
-        m_aliasListBox->SetSelection( std::max( 0, sel - 1 ) );
-
-    wxCommandEvent dummy;
-    OnSelectAlias( dummy );
-}
-
-
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnFilterDClick( wxMouseEvent& event)
 {
     int idx = m_FootprintFilterListBox->HitTest( event.GetPosition() );
@@ -783,11 +527,6 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnCancelButtonClick( wxCommandEvent& even
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAddFootprintFilter( wxCommandEvent& event )
 {
     wxString  filterLine;
-    LIB_PART* component = m_Parent->GetCurPart();
-
-    if( component == NULL )
-        return;
-
     WX_TEXT_ENTRY_DIALOG dlg( this, _( "Filter:" ), _( "Add Footprint Filter" ), filterLine );
 
     if( dlg.ShowModal() == wxID_CANCEL || dlg.GetValue().IsEmpty() )
@@ -853,13 +592,6 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::adjustGridColumns( int aWidth )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::adjustAliasGridColumns( int aWidth )
-{
-    m_aliasGrid->AutoSizeColumn( FDC_NAME );
-    m_aliasGrid->SetColSize( FDC_VALUE, aWidth - m_aliasGrid->GetColSize( FDC_NAME ) - 2 );
-}
-
-
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnUpdateUI( wxUpdateUIEvent& event )
 {
     m_OptionPartsLocked->Enable( m_SelNumberOfUnits->GetValue() > 1 );
@@ -876,13 +608,6 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnUpdateUI( wxUpdateUIEvent& event )
             m_SymbolNameCtrl->ChangeValue( editor->GetValue() );
             editor->DecRef();
         }
-    }
-
-    // Synthesize a Select event when the selection is cleared
-    if( m_aliasListBox->GetSelection() == wxNOT_FOUND && m_currentAlias != wxNOT_FOUND )
-    {
-        wxCommandEvent dummy;
-        OnSelectAlias( dummy );
     }
 
     // Handle shown columns changes
@@ -957,9 +682,21 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnSizeGrid( wxSizeEvent& event )
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnSizeAliasGrid( wxSizeEvent& event )
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::syncControlStates( bool aIsAlias )
 {
-    adjustAliasGridColumns( event.GetSize().GetX() );
+    if( aIsAlias )
+        m_PanelFootprintFilter->Hide();
+    else
+        m_PanelFootprintFilter->Show();
 
-    event.Skip();
+    bSizerLowerBasicPanel->Show( !aIsAlias );
+    bButtonSize->Show( !aIsAlias );
+
+#ifdef KICAD_SPICE
+    m_spiceFieldsButton->Show( !aIsAlias );
+#endif
+
+    m_inheritanceSelectCombo->Enable( aIsAlias );
+    m_inheritsStaticText->Enable( aIsAlias );
+    m_grid->ForceRefresh();
 }

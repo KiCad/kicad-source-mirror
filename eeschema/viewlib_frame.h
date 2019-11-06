@@ -32,7 +32,6 @@
 
 class wxListBox;
 class SCHLIB_FILTER;
-class LIB_ALIAS;
 class LIB_PART;
 class SYMBOL_LIB_TABLE_ROW;
 
@@ -138,8 +137,7 @@ public:
     int GetUnit() const { return m_unit; }
     int GetConvert() const { return m_convert; }
 
-    LIB_PART* GetSelectedSymbol() const;
-    LIB_ALIAS* GetSelectedAlias() const;
+    std::unique_ptr< LIB_PART > GetSelectedSymbol() const;
 
     const BOX2I GetDocumentExtents() const override;
 
@@ -192,7 +190,7 @@ private:
      */
     bool m_selection_changed;
 
-    LIB_ALIAS*      m_previewItem;
+    std::unique_ptr< LIB_PART > m_previewItem;
 
     DECLARE_EVENT_TABLE()
 };

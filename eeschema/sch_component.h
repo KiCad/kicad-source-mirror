@@ -93,7 +93,8 @@ private:
     TRANSFORM   m_transform;    ///< The rotation/mirror transformation matrix.
     SCH_FIELDS  m_Fields;       ///< Variable length list of fields.
 
-    PART_REF    m_part;         ///< points into the PROJECT's libraries to the LIB_PART for this component
+    ///< A flattened copy of a LIB_PART found in the PROJECT's libraries to for this component.
+    std::unique_ptr< LIB_PART > m_part;
 
     SCH_PINS    m_pins;         ///< the component's pins
     SCH_PIN_MAP m_pinMap;       ///< the component's pins mapped by LIB_PIN*.
@@ -182,7 +183,7 @@ public:
 
     const LIB_ID& GetLibId() const        { return m_lib_id; }
 
-    PART_REF& GetPartRef() { return m_part; }
+    std::unique_ptr< LIB_PART >& GetPartRef() { return m_part; }
 
     /**
      * Return information about the aliased parts

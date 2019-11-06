@@ -146,10 +146,10 @@ void LIB_VIEW_FRAME::ReCreateMenuBar()
 
 void LIB_VIEW_FRAME::SyncToolbars()
 {
-    LIB_PART*  symbol = GetSelectedSymbol();
-    LIB_ALIAS* alias = GetSelectedAlias();
+    std::unique_ptr< LIB_PART > symbol( GetSelectedSymbol() );
 
-    m_mainToolBar->Toggle( EE_ACTIONS::showDatasheet, alias && !alias->GetDocFileName().IsEmpty() );
+    m_mainToolBar->Toggle( EE_ACTIONS::showDatasheet,
+                           symbol && !symbol->GetDocFileName().IsEmpty() );
     m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganStandard, symbol && symbol->HasConversion(),
                            m_convert == LIB_FIELD::LIB_CONVERT::BASE );
     m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganAlternate, symbol && symbol->HasConversion(),

@@ -286,9 +286,10 @@ SYMBOL_LIB_TABLE_ROW* SYMBOL_LIB_TABLE::FindRow( const wxString& aNickname )
 
     if( !row )
     {
-        wxString msg = wxString::Format(
-            _( "sym-lib-table files contain no library with nickname \"%s\"" ),
-            GetChars( aNickname ) );
+        wxString msg;
+
+        msg.Printf( _( "sym-lib-table files contain no library with nickname \"%s\"" ),
+                    aNickname );
 
         THROW_IO_ERROR( msg );
     }
@@ -303,7 +304,7 @@ SYMBOL_LIB_TABLE_ROW* SYMBOL_LIB_TABLE::FindRow( const wxString& aNickname )
 }
 
 
-void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_ALIAS*>& aAliasList,
+void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_PART*>& aSymbolList,
                                       const wxString& aNickname, bool aPowerSymbolsOnly )
 {
     SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
@@ -314,7 +315,7 @@ void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_ALIAS*>& aAliasList,
     if( aPowerSymbolsOnly )
         row->SetOptions( row->GetOptions() + " " + PropPowerSymsOnly );
 
-    row->plugin->EnumerateSymbolLib( aAliasList, row->GetFullURI( true ), row->GetProperties() );
+    row->plugin->EnumerateSymbolLib( aSymbolList, row->GetFullURI( true ), row->GetProperties() );
 
     if( aPowerSymbolsOnly )
         row->SetOptions( options );
@@ -323,39 +324,40 @@ void SYMBOL_LIB_TABLE::LoadSymbolLib( std::vector<LIB_ALIAS*>& aAliasList,
     // Therefore footprints cannot know their own library nickname when residing in
     // a symbol library.
     // Only at this API layer can we tell the symbol about its actual library nickname.
-    for( LIB_ALIAS* alias : aAliasList )
+    for( LIB_PART* part : aSymbolList )
     {
-        // remove "const"-ness, I really do want to set nickname without
-        // having to copy the LIB_ID and its two strings, twice each.
-        LIB_ID& id = (LIB_ID&) alias->GetPart()->GetLibId();
+        LIB_ID id = part->GetLibId();
 
         id.SetLibNickname( row->GetNickName() );
+        part->SetLibId( id );
     }
 }
 
 
-LIB_ALIAS* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxString& aAliasName )
+LIB_PART* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxString& aSymbolName )
 {
-    const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
+    SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
     wxCHECK( row && row->plugin, nullptr );
 
-    LIB_ALIAS* ret = row->plugin->LoadSymbol( row->GetFullURI( true ), aAliasName,
+    LIB_PART* part = row->plugin->LoadSymbol( row->GetFullURI( true ), aSymbolName,
                                               row->GetProperties() );
+
+    if( part == nullptr )
+        return part;
 
     // The library cannot know its own name, because it might have been renamed or moved.
     // Therefore footprints cannot know their own library nickname when residing in
     // a symbol library.
     // Only at this API layer can we tell the symbol about its actual library nickname.
-    if( ret )
+    if( part )
     {
-        // remove "const"-ness, I really do want to set nickname without
-        // having to copy the LIB_ID and its two strings, twice each.
-        LIB_ID& id = (LIB_ID&) ret->GetPart()->GetLibId();
+        LIB_ID id = part->GetLibId();
 
         id.SetLibNickname( row->GetNickName() );
+        part->SetLibId( id );
     }
 
-    return ret;
+    return part;
 }
 
 
@@ -372,9 +374,9 @@ SYMBOL_LIB_TABLE::SAVE_T SYMBOL_LIB_TABLE::SaveSymbol( const wxString& aNickname
 
         wxString name = aSymbol->GetLibId().GetLibItemName();
 
-        std::unique_ptr< LIB_ALIAS > symbol( row->plugin->LoadSymbol( row->GetFullURI( true ),
-                                                                      name,
-                                                                      row->GetProperties() ) );
+        std::unique_ptr< LIB_PART > symbol( row->plugin->LoadSymbol( row->GetFullURI( true ),
+                                                                     name,
+                                                                     row->GetProperties() ) );
 
         if( symbol.get() )
             return SAVE_SKIPPED;
@@ -392,15 +394,6 @@ void SYMBOL_LIB_TABLE::DeleteSymbol( const wxString& aNickname, const wxString& 
     wxCHECK( row && row->plugin, /* void */ );
     return row->plugin->DeleteSymbol( row->GetFullURI( true ), aSymbolName,
                                       row->GetProperties() );
-}
-
-
-void SYMBOL_LIB_TABLE::DeleteAlias( const wxString& aNickname, const wxString& aAliasName )
-{
-    const SYMBOL_LIB_TABLE_ROW* row = FindRow( aNickname );
-    wxCHECK( row && row->plugin, /* void */ );
-    return row->plugin->DeleteAlias( row->GetFullURI( true ), aAliasName,
-                                     row->GetProperties() );
 }
 
 
@@ -428,7 +421,7 @@ void SYMBOL_LIB_TABLE::CreateSymbolLib( const wxString& aNickname )
 }
 
 
-LIB_ALIAS* SYMBOL_LIB_TABLE::LoadSymbolWithOptionalNickname( const LIB_ID& aLibId )
+LIB_PART* SYMBOL_LIB_TABLE::LoadSymbolWithOptionalNickname( const LIB_ID& aLibId )
 {
     wxString   nickname = aLibId.GetLibNickname();
     wxString   name     = aLibId.GetLibItemName();
@@ -448,13 +441,13 @@ LIB_ALIAS* SYMBOL_LIB_TABLE::LoadSymbolWithOptionalNickname( const LIB_ID& aLibI
         {
             // FootprintLoad() returns NULL on not found, does not throw exception
             // unless there's an IO_ERROR.
-            LIB_ALIAS* ret = LoadSymbol( nicks[i], name );
+            LIB_PART* ret = LoadSymbol( nicks[i], name );
 
             if( ret )
                 return ret;
         }
 
-        return NULL;
+        return nullptr;
     }
 }
 

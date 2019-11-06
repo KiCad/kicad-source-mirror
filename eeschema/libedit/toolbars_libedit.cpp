@@ -30,7 +30,7 @@
 #include <dialog_helpers.h>
 #include <bitmaps.h>
 #include <lib_manager.h>
-#include <class_library.h>
+#include <class_libentry.h>
 #include <tool/action_toolbar.h>
 #include <tools/ee_actions.h>
 
@@ -156,7 +156,7 @@ void LIB_EDIT_FRAME::SyncToolbars()
     LIB_ID libId = getTargetLibId();
     const wxString& libName = libId.GetLibNickname();
     const wxString& partName = libId.GetLibItemName();
-
+    bool isEditable = m_my_part && m_my_part->IsRoot();
     bool modified = m_libMgr->HasModifications();
 
     if( !modified && !partName.IsEmpty() && m_libMgr->IsPartModified( partName, libName ) )
@@ -166,15 +166,16 @@ void LIB_EDIT_FRAME::SyncToolbars()
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::zoomTool, IsCurrentTool( ACTIONS::zoomTool ) );
-    m_mainToolBar->Toggle( EE_ACTIONS::showDatasheet, GetCurPart() != nullptr );
+    m_mainToolBar->Toggle( EE_ACTIONS::showDatasheet, (bool) m_my_part );
     m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganStandard,
                            GetShowDeMorgan(),
                            m_convert == LIB_ITEM::LIB_CONVERT::BASE );
     m_mainToolBar->Toggle( EE_ACTIONS::showDeMorganAlternate,
                            GetShowDeMorgan(),
                            m_convert == LIB_ITEM::LIB_CONVERT::DEMORGAN );
+    m_mainToolBar->Toggle( EE_ACTIONS::pinTable, isEditable );
     m_mainToolBar->Toggle( EE_ACTIONS::toggleSyncedPinsMode,
-                           GetCurPart() && GetCurPart()->IsMulti() && !GetCurPart()->UnitsLocked(),
+                           m_my_part && m_my_part->IsMulti() && !m_my_part->UnitsLocked(),
                            m_SyncPinEdit );
     m_mainToolBar->Refresh();
 
@@ -186,36 +187,19 @@ void LIB_EDIT_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( EE_ACTIONS::showComponentTree,   IsSearchTreeShown() );
     m_optionsToolBar->Refresh();
 
-#define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, true, IsCurrentTool( tool ) )
+#define TOGGLE_TOOL( toolbar, enable, tool ) toolbar->Toggle( tool, enable, IsCurrentTool( tool ) )
 
-    if( !GetCurPart() )
-    {
-        // If no part is loaded for editing, disable the editing tools
-        m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolPin,      false, false );
-        m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolText,     false, false );
-        m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolRectangle, false, false );
-        m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolCircle,    false, false );
-        m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolArc,       false, false );
-        m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolLines,     false, false );
-        m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolAnchor,   false, false );
-        m_drawToolBar->EnableTool( ID_LIBEDIT_IMPORT_BODY_BUTT, false );
-        m_drawToolBar->EnableTool( ID_LIBEDIT_EXPORT_BODY_BUTT, false );
-        m_drawToolBar->Toggle( ACTIONS::deleteTool,             false, false );
-    }
-    else
-    {
-        TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeSymbolPin );
-        TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeSymbolText );
-        TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolRectangle );
-        TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolCircle );
-        TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolArc );
-        TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolLines );
-        TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeSymbolAnchor );
-        m_drawToolBar->EnableTool( ID_LIBEDIT_IMPORT_BODY_BUTT, true );
-        m_drawToolBar->EnableTool( ID_LIBEDIT_EXPORT_BODY_BUTT, true );
-        TOGGLE_TOOL( m_drawToolBar, ACTIONS::deleteTool );
-    }
+    TOGGLE_TOOL( m_drawToolBar, isEditable, ACTIONS::selectionTool );
+    TOGGLE_TOOL( m_drawToolBar, isEditable, EE_ACTIONS::placeSymbolPin );
+    TOGGLE_TOOL( m_drawToolBar, isEditable, EE_ACTIONS::placeSymbolText );
+    TOGGLE_TOOL( m_drawToolBar, isEditable, EE_ACTIONS::drawSymbolRectangle );
+    TOGGLE_TOOL( m_drawToolBar, isEditable, EE_ACTIONS::drawSymbolCircle );
+    TOGGLE_TOOL( m_drawToolBar, isEditable, EE_ACTIONS::drawSymbolArc );
+    TOGGLE_TOOL( m_drawToolBar, isEditable, EE_ACTIONS::drawSymbolLines );
+    TOGGLE_TOOL( m_drawToolBar, isEditable, EE_ACTIONS::placeSymbolAnchor );
+    TOGGLE_TOOL( m_drawToolBar, isEditable, ACTIONS::deleteTool );
+    m_drawToolBar->EnableTool( ID_LIBEDIT_IMPORT_BODY_BUTT, isEditable );
+    m_drawToolBar->EnableTool( ID_LIBEDIT_EXPORT_BODY_BUTT, isEditable );
 
-    TOGGLE_TOOL( m_drawToolBar, ACTIONS::selectionTool );
     m_drawToolBar->Refresh();
 }

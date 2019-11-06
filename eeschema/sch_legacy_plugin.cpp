@@ -473,7 +473,7 @@ class SCH_LEGACY_PLUGIN_CACHE
     wxString        m_fileName;     // Absolute path and file name.
     wxFileName      m_libFileName;  // Absolute path and file name is required here.
     wxDateTime      m_fileModTime;
-    LIB_ALIAS_MAP   m_aliases;      // Map of names of LIB_ALIAS pointers.
+    LIB_PART_MAP    m_symbols;      // Map of names of #LIB_PART pointers.
     bool            m_isWritable;
     bool            m_isModified;
     int             m_versionMajor;
@@ -481,7 +481,8 @@ class SCH_LEGACY_PLUGIN_CACHE
     int             m_libType;      // Is this cache a component or symbol library.
 
     void                  loadHeader( FILE_LINE_READER& aReader );
-    static void           loadAliases( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader );
+    static void           loadAliases( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader,
+                                       LIB_PART_MAP* aMap = nullptr );
     static void           loadField( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader );
     static void           loadDrawEntries( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader,
                                            int aMajorVersion, int aMinorVersion );
@@ -499,8 +500,8 @@ class SCH_LEGACY_PLUGIN_CACHE
     static LIB_BEZIER*    loadBezier( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader );
 
     static FILL_T   parseFillMode( LINE_READER& aReader, const char* aLine,
-                                          const char** aOutput );
-    LIB_ALIAS*      removeAlias( LIB_ALIAS* aAlias );
+                                   const char** aOutput );
+    LIB_PART*       removeSymbol( LIB_PART* aAlias );
 
     void            saveDocFile();
     static void     saveArc( LIB_ARC* aArc, OUTPUTFORMATTER& aFormatter );
@@ -531,9 +532,7 @@ public:
 
     void AddSymbol( const LIB_PART* aPart );
 
-    void DeleteAlias( const wxString& aAliasName );
-
-    void DeleteSymbol( const wxString& aAliasName );
+    void DeleteSymbol( const wxString& aName );
 
     // If m_libFileName is a symlink follow it to the real source file
     wxFileName GetRealFile() const;
@@ -552,8 +551,10 @@ public:
 
     wxString GetFileName() const { return m_libFileName.GetFullPath(); }
 
-    static LIB_PART* LoadPart( LINE_READER& aReader, int aMajorVersion, int aMinorVersion );
-    static void      SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFormatter );
+    static LIB_PART* LoadPart( LINE_READER& aReader, int aMajorVersion, int aMinorVersion,
+                               LIB_PART_MAP* aMap = nullptr );
+    static void      SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFormatter,
+                                 LIB_PART_MAP* aMap = nullptr );
 };
 
 
@@ -2328,22 +2329,13 @@ SCH_LEGACY_PLUGIN_CACHE::SCH_LEGACY_PLUGIN_CACHE( const wxString& aFullPathAndFi
 
 SCH_LEGACY_PLUGIN_CACHE::~SCH_LEGACY_PLUGIN_CACHE()
 {
+    std::vector< LIB_PART* > rootParts;
+
     // When the cache is destroyed, all of the alias objects on the heap should be deleted.
-    for( LIB_ALIAS_MAP::iterator it = m_aliases.begin();  it != m_aliases.end();  ++it )
-    {
-        wxLogTrace( traceSchLegacyPlugin, wxT( "Removing alias %s from library %s." ),
-                    GetChars( it->second->GetName() ), GetChars( GetLogicalName() ) );
-        LIB_PART* part = it->second->GetPart();
-        LIB_ALIAS* alias = it->second;
-        delete alias;
+    for( LIB_PART_MAP::iterator it = m_symbols.begin();  it != m_symbols.end();  ++it )
+        delete it->second;
 
-        // When the last alias of a part is destroyed, the part is no longer required and it
-        // too is destroyed.
-        if( part && part->GetAliasCount() == 0 )
-            delete part;
-    }
-
-    m_aliases.clear();
+    m_symbols.clear();
 }
 
 
@@ -2400,69 +2392,83 @@ bool SCH_LEGACY_PLUGIN_CACHE::IsFileChanged() const
 }
 
 
-LIB_ALIAS* SCH_LEGACY_PLUGIN_CACHE::removeAlias( LIB_ALIAS* aAlias )
+LIB_PART* SCH_LEGACY_PLUGIN_CACHE::removeSymbol( LIB_PART* aPart )
 {
-    wxCHECK_MSG( aAlias != NULL, NULL, "NULL pointer cannot be removed from library." );
+    wxCHECK_MSG( aPart != NULL, NULL, "NULL pointer cannot be removed from library." );
 
-    LIB_ALIAS_MAP::iterator it = m_aliases.find( aAlias->GetName() );
+    LIB_PART* firstChild = NULL;
+    LIB_PART_MAP::iterator it = m_symbols.find( aPart->GetName() );
 
-    if( it == m_aliases.end() )
+    if( it == m_symbols.end() )
         return NULL;
 
     // If the entry pointer doesn't match the name it is mapped to in the library, we
     // have done something terribly wrong.
-    wxCHECK_MSG( *it->second == aAlias, NULL,
-                 "Pointer mismatch while attempting to remove alias entry <" + aAlias->GetName() +
+    wxCHECK_MSG( *it->second == aPart, NULL,
+                 "Pointer mismatch while attempting to remove alias entry <" + aPart->GetName() +
                  "> from library cache <" + m_libFileName.GetName() + ">." );
 
-    LIB_ALIAS*  alias = aAlias;
-    LIB_PART*   part = alias->GetPart();
-
-    alias = part->RemoveAlias( alias );
-
-    if( !alias )
+    // If the symbol is a root symbol used by other symbols find the first alias that uses
+    // the root part and make it the new root.
+    if( aPart->IsRoot() )
     {
-        delete part;
-
-        if( m_aliases.size() > 1 )
+        for( auto entry : m_symbols )
         {
-            LIB_ALIAS_MAP::iterator next = it;
-            next++;
+            if( entry.second->IsAlias()
+              && entry.second->GetParent().lock() == aPart->SharedPtr() )
+            {
+                firstChild = entry.second;
+                break;
+            }
+        }
 
-            if( next == m_aliases.end() )
-                next = m_aliases.begin();
+        if( firstChild )
+        {
+            for( LIB_ITEM& drawItem : aPart->GetDrawItems() )
+            {
+                if( drawItem.Type() == LIB_FIELD_T )
+                {
+                    LIB_FIELD& field = static_cast<LIB_FIELD&>( drawItem );
 
-            alias = next->second;
+                    if( firstChild->FindField( field.GetName() ) )
+                        continue;
+                }
+
+                LIB_ITEM* newItem = (LIB_ITEM*) drawItem.Clone();
+                drawItem.SetParent( firstChild );
+                firstChild->AddDrawItem( newItem );
+            }
+
+            // Reparent the remaining aliases.
+            for( auto entry : m_symbols )
+            {
+                if( entry.second->IsAlias()
+                  && entry.second->GetParent().lock() == aPart->SharedPtr() )
+                    entry.second->SetParent( firstChild );
+            }
         }
     }
 
-    m_aliases.erase( it );
+    m_symbols.erase( it );
+    delete aPart;
     m_isModified = true;
     ++m_modHash;
-    return alias;
+    return firstChild;
 }
 
 
 void SCH_LEGACY_PLUGIN_CACHE::AddSymbol( const LIB_PART* aPart )
 {
     // aPart is cloned in PART_LIB::AddPart().  The cache takes ownership of aPart.
-    wxArrayString aliasNames = aPart->GetAliasNames();
+    wxString name = aPart->GetName();
+    LIB_PART_MAP::iterator it = m_symbols.find( name );
 
-    for( size_t i = 0; i < aliasNames.size(); i++ )
+    if( it != m_symbols.end() )
     {
-        LIB_ALIAS_MAP::iterator it = m_aliases.find( aliasNames[i] );
-
-        if( it != m_aliases.end() )
-            removeAlias( it->second );
-
-        LIB_ALIAS* alias = const_cast< LIB_PART* >( aPart )->GetAlias( aliasNames[i] );
-
-        wxASSERT_MSG( alias != NULL, "No alias <" + aliasNames[i] + "> found in symbol <" +
-                      aPart->GetName() +">." );
-
-        m_aliases[ aliasNames[i] ] = alias;
+        removeSymbol( it->second );
     }
 
+    m_symbols[ name ] = const_cast< LIB_PART* >( aPart );
     m_isModified = true;
     ++m_modHash;
 }
@@ -2538,49 +2544,9 @@ void SCH_LEGACY_PLUGIN_CACHE::Load()
         if( strCompare( "DEF", line ) )
         {
             // Read one DEF/ENDDEF part entry from library:
-            LIB_PART * part = LoadPart( reader, m_versionMajor, m_versionMinor );
+            LIB_PART* part = LoadPart( reader, m_versionMajor, m_versionMinor, &m_symbols );
 
-            // Add aliases to cache
-            for( size_t ii = 0; ii < part->GetAliasCount(); ++ii )
-            {
-                LIB_ALIAS* alias = part->GetAlias( ii );
-                const wxString& aliasName = alias->GetName();
-
-                // This section seems to do a similar job as checkForDuplicates, so
-                // I'm not sure checkForDuplicates needs to be preserved.
-                auto it = m_aliases.find( aliasName );
-
-                if( it != m_aliases.end() )
-                {
-                    // Find a new name for the alias
-                    wxString newName;
-                    int idx = 0;
-                    LIB_ALIAS_MAP::const_iterator jt;
-
-                    do
-                    {
-                        newName = wxString::Format( "%s_%d", aliasName, idx );
-                        jt = m_aliases.find( newName );
-                        ++idx;
-                    }
-                    while( jt != m_aliases.end() );
-
-                    wxLogWarning( "Symbol name conflict in library:\n%s\n"
-                                  "'%s' has been renamed to '%s'",
-                                  m_fileName, aliasName, newName );
-
-                    if( alias->IsRoot() )
-                        part->SetName( newName );
-                    else
-                        alias->SetName( newName );
-
-                    m_aliases[newName] = alias;
-                }
-                else
-                {
-                    m_aliases[aliasName] = alias;
-                }
-            }
+            m_symbols[ part->GetName() ] = part;
         }
     }
 
@@ -2602,7 +2568,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
     wxString    text;
     wxString    aliasName;
     wxFileName  fn = m_libFileName;
-    LIB_ALIAS*  alias = NULL;;
+    LIB_PART*   symbol = NULL;;
 
     fn.SetExt( DOC_EXT );
 
@@ -2639,14 +2605,14 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
         aliasName.Trim();
         aliasName = LIB_ID::FixIllegalChars( aliasName, LIB_ID::ID_SCH );
 
-        LIB_ALIAS_MAP::iterator it = m_aliases.find( aliasName );
+        LIB_PART_MAP::iterator it = m_symbols.find( aliasName );
 
-        if( it == m_aliases.end() )
-            wxLogWarning( "Alias '%s' not found in library:\n\n"
+        if( it == m_symbols.end() )
+            wxLogWarning( "Symbol '%s' not found in library:\n\n"
                           "'%s'\n\nat line %d offset %d", aliasName, fn.GetFullPath(),
                           reader.LineNumber(), (int) (line - reader.Line() ) );
         else
-            alias = it->second;
+            symbol = it->second;
 
         // Read the curent alias associated doc.
         // if the alias does not exist, just skip the description
@@ -2668,18 +2634,21 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
             switch( line[0] )
             {
             case 'D':
-                if( alias )
-                    alias->SetDescription( text );
+                if( symbol )
+                    symbol->SetDescription( text );
                 break;
 
             case 'K':
-                if( alias )
-                    alias->SetKeyWords( text );
+                if( symbol )
+                    symbol->SetKeyWords( text );
                 break;
 
             case 'F':
-                if( alias )
-                    alias->SetDocFileName( text );
+                if( symbol )
+                {
+                    symbol->SetDocFileName( text );
+                    symbol->GetField( DATASHEET )->SetText( text );
+                }
                 break;
 
             case 0:
@@ -2720,7 +2689,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadHeader( FILE_LINE_READER& aReader )
 
 
 LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVersion,
-                                             int aMinorVersion )
+                                             int aMinorVersion, LIB_PART_MAP* aMap )
 {
     const char* line = aReader.Line();
 
@@ -2812,11 +2781,6 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVer
     // Don't set the library alias, this is determined by the symbol library table.
     part->SetLibId( LIB_ID( wxEmptyString, part->GetName() ) );
 
-    // There are some code paths in SetText() that do not set the root alias to the
-    // alias list so add it here if it didn't get added by SetText().
-    if( !part->HasAlias( part->GetName() ) )
-        part->AddAlias( part->GetName() );
-
     LIB_FIELD& reference = part->GetReferenceField();
 
     if( prefix == "~" )
@@ -2873,19 +2837,19 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVer
     // Read lines until "ENDDEF" is found.
     while( line )
     {
-        if( *line == '#' )                               // Comment
+        if( *line == '#' )                                  // Comment
             ;
-        else if( strCompare( "Ti", line, &line ) )       // Modification date is ignored.
+        else if( strCompare( "Ti", line, &line ) )          // Modification date is ignored.
             continue;
-        else if( strCompare( "ALIAS", line, &line ) )    // Aliases
-            loadAliases( part, aReader );
-        else if( *line == 'F' )                          // Fields
+        else if( strCompare( "ALIAS", line, &line ) )       // Aliases
+            loadAliases( part, aReader, aMap );
+        else if( *line == 'F' )                             // Fields
             loadField( part, aReader );
-        else if( strCompare( "DRAW", line, &line ) )     // Drawing objects.
+        else if( strCompare( "DRAW", line, &line ) )        // Drawing objects.
             loadDrawEntries( part, aReader, aMajorVersion, aMinorVersion );
-        else if( strCompare( "$FPLIST", line, &line ) )  // Footprint filter list
+        else if( strCompare( "$FPLIST", line, &line ) )     // Footprint filter list
             loadFootprintFilters( part, aReader );
-        else if( strCompare( "ENDDEF", line, &line ) )   // End of part description
+        else if( strCompare( "ENDDEF", line, &line ) )      // End of part description
         {
             return part.release();
         }
@@ -2897,38 +2861,11 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVer
 }
 
 
-#if 0
-bool SCH_LEGACY_PLUGIN_CACHE::checkForDuplicates( wxString& aAliasName )
-{
-    wxCHECK_MSG( !aAliasName.IsEmpty(), false, "alias name cannot be empty" );
-
-    // The alias name is not a duplicate so don't change it.
-    if( m_aliases.find( aAliasName ) == m_aliases.end() )
-        return false;
-
-    int dupCounter = 1;
-    wxString newAlias = aAliasName;
-
-    // If the alias is already loaded, the library is broken.  It may have been possible in
-    // the past that this could happen so we assign a new alias name to prevent any conflicts
-    // rather than throw an exception.
-    while( m_aliases.find( newAlias ) != m_aliases.end() )
-    {
-        newAlias = aAliasName << dupCounter;
-        dupCounter++;
-    }
-
-    aAliasName = newAlias;
-
-    return true;
-}
-#endif
-
-
 void SCH_LEGACY_PLUGIN_CACHE::loadAliases( std::unique_ptr<LIB_PART>& aPart,
-                                           LINE_READER&                 aReader )
+                                           LINE_READER&               aReader,
+                                           LIB_PART_MAP*              aMap )
 {
-    wxString newAlias;
+    wxString newAliasName;
     const char* line = aReader.Line();
 
     wxCHECK_RET( strCompare( "ALIAS", line, &line ), "Invalid ALIAS section" );
@@ -2939,14 +2876,42 @@ void SCH_LEGACY_PLUGIN_CACHE::loadAliases( std::unique_ptr<LIB_PART>& aPart,
     // Parse the ALIAS list.
     while( tokens.HasMoreTokens() )
     {
-        newAlias = tokens.GetNextToken();
-        aPart->AddAlias( newAlias );
+        newAliasName = tokens.GetNextToken();
+
+        if( aMap )
+        {
+            LIB_PART* newPart = new LIB_PART( newAliasName );
+
+            newPart->SetParent( aPart.get() );
+
+            // Inherit the mandatory field positions and the reference and footprint field
+            // values from the parent symbol.
+            for( LIB_ITEM& item : aPart->GetDrawItems() )
+            {
+                if( item.Type() != LIB_FIELD_T )
+                    continue;
+
+                LIB_FIELD* field = (LIB_FIELD*) &item;
+                wxString tmp = field->GetText();
+
+                if( field->GetId() < MANDATORY_FIELDS )
+                {
+                    *newPart->GetField( field->GetId() ) = *field;
+
+                    if( field->GetId() == REFERENCE || field->GetId() == FOOTPRINT )
+                        newPart->GetField( field->GetId() )->SetText( tmp );
+                }
+            }
+
+            // This will prevent duplicate aliases.
+            (*aMap)[ newPart->GetName() ] = newPart;
+        }
     }
 }
 
 
 void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_PART>& aPart,
-                                         LINE_READER&                 aReader )
+                                         LINE_READER&               aReader )
 {
     const char* line = aReader.Line();
 
@@ -3094,9 +3059,9 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_PART>& aPart,
 
 
 void SCH_LEGACY_PLUGIN_CACHE::loadDrawEntries( std::unique_ptr<LIB_PART>& aPart,
-                                               LINE_READER&                 aReader,
-                                               int                          aMajorVersion,
-                                               int                          aMinorVersion )
+                                               LINE_READER&               aReader,
+                                               int                        aMajorVersion,
+                                               int                        aMinorVersion )
 {
     const char* line = aReader.Line();
 
@@ -3170,7 +3135,7 @@ FILL_T SCH_LEGACY_PLUGIN_CACHE::parseFillMode( LINE_READER& aReader, const char*
 
 
 LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_PART>& aPart,
-                                           LINE_READER&                 aReader )
+                                           LINE_READER&               aReader )
 {
     const char* line = aReader.Line();
 
@@ -3236,7 +3201,7 @@ LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_PART>& aPart,
 
 
 LIB_CIRCLE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr<LIB_PART>& aPart,
-                                                 LINE_READER&                 aReader )
+                                                 LINE_READER&               aReader )
 {
     const char* line = aReader.Line();
 
@@ -3263,9 +3228,9 @@ LIB_CIRCLE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr<LIB_PART>& aPar
 
 
 LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr<LIB_PART>& aPart,
-                                             LINE_READER&                 aReader,
-                                             int                          aMajorVersion,
-                                             int                          aMinorVersion )
+                                             LINE_READER&               aReader,
+                                             int                        aMajorVersion,
+                                             int                        aMinorVersion )
 {
     const char* line = aReader.Line();
 
@@ -3356,7 +3321,7 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr<LIB_PART>& aPart,
 
 
 LIB_RECTANGLE* SCH_LEGACY_PLUGIN_CACHE::loadRectangle( std::unique_ptr<LIB_PART>& aPart,
-                                                       LINE_READER&                 aReader )
+                                                       LINE_READER&               aReader )
 {
     const char* line = aReader.Line();
 
@@ -3388,7 +3353,7 @@ LIB_RECTANGLE* SCH_LEGACY_PLUGIN_CACHE::loadRectangle( std::unique_ptr<LIB_PART>
 
 
 LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
-                                           LINE_READER&                 aReader )
+                                           LINE_READER&               aReader )
 {
     const char* line = aReader.Line();
 
@@ -3570,7 +3535,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
 
 
 LIB_POLYLINE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr<LIB_PART>& aPart,
-                                                     LINE_READER&                 aReader )
+                                                     LINE_READER&               aReader )
 {
     const char* line = aReader.Line();
 
@@ -3601,7 +3566,7 @@ LIB_POLYLINE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr<LIB_PART>& 
 
 
 LIB_BEZIER* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr<LIB_PART>& aPart,
-                                                 LINE_READER&                 aReader )
+                                                 LINE_READER&               aReader )
 {
     const char* line = aReader.Line();
 
@@ -3632,7 +3597,7 @@ LIB_BEZIER* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr<LIB_PART>& aPar
 
 
 void SCH_LEGACY_PLUGIN_CACHE::loadFootprintFilters( std::unique_ptr<LIB_PART>& aPart,
-                                                    LINE_READER&                 aReader )
+                                                    LINE_READER&               aReader )
 {
     const char* line = aReader.Line();
 
@@ -3640,15 +3605,20 @@ void SCH_LEGACY_PLUGIN_CACHE::loadFootprintFilters( std::unique_ptr<LIB_PART>& a
 
     line = aReader.ReadLine();
 
+    wxArrayString footprintFilters;
+
     while( line )
     {
         if( strCompare( "$ENDFPLIST", line, &line ) )
+        {
+            aPart->SetFootprintFilters( footprintFilters );
             return;
+        }
 
         wxString footprint;
 
         parseUnquotedString( footprint, aReader, line, &line );
-        aPart->GetFootprints().Add( footprint );
+        footprintFilters.Add( footprint );
         line = aReader.ReadLine();
     }
 
@@ -3668,12 +3638,12 @@ void SCH_LEGACY_PLUGIN_CACHE::Save( bool aSaveDocFile )
     formatter->Print( 0, "%s %d.%d\n", LIBFILE_IDENT, LIB_VERSION_MAJOR, LIB_VERSION_MINOR );
     formatter->Print( 0, "#encoding utf-8\n");
 
-    for( LIB_ALIAS_MAP::iterator it = m_aliases.begin();  it != m_aliases.end();  it++ )
+    for( LIB_PART_MAP::iterator it = m_symbols.begin();  it != m_symbols.end();  it++ )
     {
         if( !it->second->IsRoot() )
             continue;
 
-        SaveSymbol( it->second->GetPart(), *formatter.get() );
+        SaveSymbol( it->second, *formatter.get(), &m_symbols );
     }
 
     formatter->Print( 0, "#\n#End Library\n" );
@@ -3687,10 +3657,25 @@ void SCH_LEGACY_PLUGIN_CACHE::Save( bool aSaveDocFile )
 }
 
 
-void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol,
-                                          OUTPUTFORMATTER& aFormatter )
+void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFormatter,
+                                          LIB_PART_MAP* aMap )
 {
-    wxCHECK_RET( aSymbol, "Invalid LIB_PART pointer." );
+    wxCHECK_RET( aSymbol && aSymbol->IsRoot(), "Invalid LIB_PART pointer." );
+
+    // LIB_ALIAS objects are deprecated but we still need to gather up the derived symbols
+    // and save their names for the old file format.
+    wxArrayString aliasNames;
+
+    if( aMap )
+    {
+        for( auto entry : *aMap )
+        {
+            LIB_PART* part = entry.second;
+
+            if( part->IsAlias() && part->GetParent().lock() == aSymbol->SharedPtr() )
+                aliasNames.Add( part->GetName() );
+        }
+    }
 
     LIB_FIELD&  value = aSymbol->GetValueField();
 
@@ -3762,18 +3747,14 @@ void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol,
         }
     }
 
-    // Save the alias list: a line starting by "ALIAS".  The first alias is the root
-    // and has the same name as the component.  In the old library file format this
-    // alias does not get added to the alias list.
-    if( aSymbol->GetAliasCount() > 1 )
+    // Save the alias list: a line starting by "ALIAS".
+    if( !aliasNames.IsEmpty() )
     {
-        wxArrayString aliases = aSymbol->GetAliasNames();
-
         aFormatter.Print( 0, "ALIAS" );
 
-        for( unsigned i = 1; i < aliases.size(); i++ )
+        for( unsigned i = 0; i < aliasNames.GetCount(); i++ )
         {
-            aFormatter.Print( 0, " %s", TO_UTF8( aliases[i] ) );
+            aFormatter.Print( 0, " %s", TO_UTF8( aliasNames[i] ) );
         }
 
         aFormatter.Print( 0, "\n" );
@@ -4148,7 +4129,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveDocFile()
 
     formatter.Print( 0, "%s\n", DOCFILE_IDENT );
 
-    for( LIB_ALIAS_MAP::iterator it = m_aliases.begin();  it != m_aliases.end();  it++ )
+    for( LIB_PART_MAP::iterator it = m_symbols.begin();  it != m_symbols.end();  ++it )
     {
         wxString description =  it->second->GetDescription();
         wxString keyWords = it->second->GetKeyWords();
@@ -4175,57 +4156,49 @@ void SCH_LEGACY_PLUGIN_CACHE::saveDocFile()
 }
 
 
-void SCH_LEGACY_PLUGIN_CACHE::DeleteAlias( const wxString& aAliasName )
+void SCH_LEGACY_PLUGIN_CACHE::DeleteSymbol( const wxString& aSymbolName )
 {
-    LIB_ALIAS_MAP::iterator it = m_aliases.find( aAliasName );
+    LIB_PART_MAP::iterator it = m_symbols.find( aSymbolName );
 
-    if( it == m_aliases.end() )
-        THROW_IO_ERROR( wxString::Format( _( "library %s does not contain an alias %s" ),
-                                          m_libFileName.GetFullName(), aAliasName ) );
+    if( it == m_symbols.end() )
+        THROW_IO_ERROR( wxString::Format( _( "library %s does not contain a symbol named %s" ),
+                                          m_libFileName.GetFullName(), aSymbolName ) );
 
-    LIB_ALIAS*  alias = it->second;
-    LIB_PART*   part = alias->GetPart();
+    LIB_PART* part = it->second;
 
-    alias = part->RemoveAlias( alias );
-
-    if( !alias )
+    if( part->IsRoot() )
     {
-        delete part;
+        LIB_PART* rootPart = part;
 
-        if( m_aliases.size() > 1 )
+        // Remove the root symbol and all it's children.
+        m_symbols.erase( it );
+
+        LIB_PART_MAP::iterator it1 = m_symbols.begin();
+
+        while( it1 != m_symbols.end() )
         {
-            LIB_ALIAS_MAP::iterator next = it;
-            next++;
-
-            if( next == m_aliases.end() )
-                next = m_aliases.begin();
-
-            alias = next->second;
+            if( it1->second->IsAlias() && it1->second->GetParent().lock() == rootPart->SharedPtr() )
+            {
+                delete it->second;
+                it = m_symbols.erase( it );
+            }
+            else
+            {
+                it++;
+            }
         }
+
+        delete rootPart;
+    }
+    else
+    {
+        // Just remove the alias.
+        m_symbols.erase( it );
+        delete part;
     }
 
-    m_aliases.erase( it );
     ++m_modHash;
     m_isModified = true;
-}
-
-
-void SCH_LEGACY_PLUGIN_CACHE::DeleteSymbol( const wxString& aAliasName )
-{
-    LIB_ALIAS_MAP::iterator it = m_aliases.find( aAliasName );
-
-    if( it == m_aliases.end() )
-        THROW_IO_ERROR( wxString::Format( _( "library %s does not contain an alias %s" ),
-                                          m_libFileName.GetFullName(), aAliasName ) );
-
-    LIB_ALIAS*  alias = it->second;
-    LIB_PART*   part = alias->GetPart();
-
-    wxArrayString aliasNames = part->GetAliasNames();
-
-    // Deleting all of the aliases deletes the symbol from the library.
-    for( size_t i = 0;  i < aliasNames.Count(); i++ )
-        DeleteAlias( aliasNames[i] );
 }
 
 
@@ -4275,7 +4248,7 @@ int SCH_LEGACY_PLUGIN::GetModifyHash() const
 }
 
 
-void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( wxArrayString&    aAliasNameList,
+void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                                             const wxString&   aLibraryPath,
                                             const PROPERTIES* aProperties )
 {
@@ -4287,17 +4260,17 @@ void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( wxArrayString&    aAliasNameList,
                               aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) != aProperties->end() );
     cacheLib( aLibraryPath );
 
-    const LIB_ALIAS_MAP& aliases = m_cache->m_aliases;
+    const LIB_PART_MAP& symbols = m_cache->m_symbols;
 
-    for( LIB_ALIAS_MAP::const_iterator it = aliases.begin();  it != aliases.end();  ++it )
+    for( LIB_PART_MAP::const_iterator it = symbols.begin();  it != symbols.end();  ++it )
     {
-        if( !powerSymbolsOnly || it->second->GetPart()->IsPower() )
-            aAliasNameList.Add( it->first );
+        if( !powerSymbolsOnly || it->second->IsPower() )
+            aSymbolNameList.Add( it->first );
     }
 }
 
 
-void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( std::vector<LIB_ALIAS*>& aAliasList,
+void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( std::vector<LIB_PART*>& aSymbolList,
                                             const wxString&   aLibraryPath,
                                             const PROPERTIES* aProperties )
 {
@@ -4309,18 +4282,18 @@ void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( std::vector<LIB_ALIAS*>& aAliasList,
                               aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) != aProperties->end() );
     cacheLib( aLibraryPath );
 
-    const LIB_ALIAS_MAP& aliases = m_cache->m_aliases;
+    const LIB_PART_MAP& symbols = m_cache->m_symbols;
 
-    for( LIB_ALIAS_MAP::const_iterator it = aliases.begin();  it != aliases.end();  ++it )
+    for( LIB_PART_MAP::const_iterator it = symbols.begin();  it != symbols.end();  ++it )
     {
-        if( !powerSymbolsOnly || it->second->GetPart()->IsPower() )
-            aAliasList.push_back( it->second );
+        if( !powerSymbolsOnly || it->second->IsPower() )
+            aSymbolList.push_back( it->second );
     }
 }
 
 
-LIB_ALIAS* SCH_LEGACY_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-                                          const PROPERTIES* aProperties )
+LIB_PART* SCH_LEGACY_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
+                                         const PROPERTIES* aProperties )
 {
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
@@ -4328,10 +4301,10 @@ LIB_ALIAS* SCH_LEGACY_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wx
 
     cacheLib( aLibraryPath );
 
-    LIB_ALIAS_MAP::const_iterator it = m_cache->m_aliases.find( aAliasName );
+    LIB_PART_MAP::const_iterator it = m_cache->m_symbols.find( aSymbolName );
 
-    if( it == m_cache->m_aliases.end() )
-        return NULL;
+    if( it == m_cache->m_symbols.end() )
+        return nullptr;
 
     return it->second;
 }
@@ -4351,28 +4324,14 @@ void SCH_LEGACY_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_PART
 }
 
 
-void SCH_LEGACY_PLUGIN::DeleteAlias( const wxString& aLibraryPath, const wxString& aAliasName,
-                                     const PROPERTIES* aProperties )
-{
-    m_props = aProperties;
-
-    cacheLib( aLibraryPath );
-
-    m_cache->DeleteAlias( aAliasName );
-
-    if( !isBuffering( aProperties ) )
-        m_cache->Save( writeDocFile( aProperties ) );
-}
-
-
-void SCH_LEGACY_PLUGIN::DeleteSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+void SCH_LEGACY_PLUGIN::DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
                                       const PROPERTIES* aProperties )
 {
     m_props = aProperties;
 
     cacheLib( aLibraryPath );
 
-    m_cache->DeleteSymbol( aAliasName );
+    m_cache->DeleteSymbol( aSymbolName );
 
     if( !isBuffering( aProperties ) )
         m_cache->Save( writeDocFile( aProperties ) );

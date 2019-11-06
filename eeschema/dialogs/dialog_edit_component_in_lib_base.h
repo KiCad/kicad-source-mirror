@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Aug 15 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,6 +28,7 @@ class WX_GRID;
 #include <wx/statbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/combobox.h>
 #include <wx/checkbox.h>
 #include <wx/spinctrl.h>
 #include <wx/panel.h>
@@ -50,6 +51,7 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 		wxNotebook* m_NoteBook;
 		wxPanel* m_PanelBasic;
 		WX_GRID* m_grid;
+		wxBoxSizer* bButtonSize;
 		wxBitmapButton* m_bpAdd;
 		wxBitmapButton* m_bpMoveUp;
 		wxBitmapButton* m_bpMoveDown;
@@ -58,6 +60,9 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_DescCtrl;
 		wxStaticText* staticKeywordsLabel;
 		wxTextCtrl* m_KeywordCtrl;
+		wxStaticText* m_inheritsStaticText;
+		wxComboBox* m_inheritanceSelectCombo;
+		wxBoxSizer* bSizerLowerBasicPanel;
 		wxCheckBox* m_AsConvertButt;
 		wxCheckBox* m_OptionPower;
 		wxStaticText* m_staticTextNbUnits;
@@ -69,16 +74,6 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 		wxStaticText* m_nameOffsetLabel;
 		wxTextCtrl* m_nameOffsetCtrl;
 		wxStaticText* m_nameOffsetUnits;
-		wxPanel* m_PanelAlias;
-		wxListBox* m_aliasListBox;
-		wxBitmapButton* m_addAliasButton;
-		wxBitmapButton* m_deleteAliasButton;
-		wxStaticText* m_staticText12;
-		WX_GRID* m_aliasGrid;
-		wxTextCtrl* m_AliasNameCtrl;
-		wxTextCtrl* m_AliasDescCtrl;
-		wxStaticText* staticAliasKeywordsLabel;
-		wxTextCtrl* m_AliasKeywordsCtrl;
 		wxPanel* m_PanelFootprintFilter;
 		wxStaticText* m_staticTextFootprints;
 		wxListBox* m_FootprintFilterListBox;
@@ -99,12 +94,6 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 		virtual void OnDeleteField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSymbolNameKillFocus( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnSymbolNameText( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSelectAlias( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnAddAlias( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDeleteAlias( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSizeAliasGrid( wxSizeEvent& event ) { event.Skip(); }
-		virtual void OnAliasNameKillFocus( wxFocusEvent& event ) { event.Skip(); }
-		virtual void OnAliasNameText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFilterDClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnEditFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
@@ -115,7 +104,7 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wxWindow* parent, wxWindowID id = ID_LIBEDIT_NOTEBOOK, const wxString& title = _("Library Symbol Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 855,579 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wxWindow* parent, wxWindowID id = ID_LIBEDIT_NOTEBOOK, const wxString& title = _("Library Symbol Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE();
 
 };

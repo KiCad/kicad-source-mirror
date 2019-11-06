@@ -29,6 +29,7 @@
 #include <gestfich.h>
 #include <tools/ee_actions.h>
 #include <lib_edit_frame.h>
+#include <class_libentry.h>
 #include <class_library.h>
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
@@ -163,7 +164,7 @@ bool LIB_EDIT_FRAME::LoadComponentAndSelectLib( const LIB_ID& aLibId, int aUnit,
 bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, int aUnit,
                                                   int aConvert )
 {
-    LIB_ALIAS* alias = nullptr;
+    LIB_PART* alias = nullptr;
 
     try
     {
@@ -187,7 +188,7 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, in
 
     GetScreen()->ClearUndoRedoList();
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
-    SetShowDeMorgan( GetCurPart()->HasConversion() );
+    SetShowDeMorgan( GetCurPart()->Flatten()->HasConversion() );
 
     if( aUnit > 0 )
         RebuildSymbolUnitsList();
@@ -212,7 +213,7 @@ static void synchronizeLibEditScreenSettings( const SCH_SCREEN& aCurrentScreen,
 }
 
 
-bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& aLibrary,
+bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_PART* aEntry, const wxString& aLibrary,
                                             int aUnit, int aConvert )
 {
     wxString msg, rootName;
@@ -227,7 +228,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& a
     }
 
     LIB_PART* lib_part = m_libMgr->GetBufferedPart( aEntry->GetName(), aLibrary );
-    wxASSERT( lib_part );
+    wxCHECK( lib_part, false );
 
     m_unit = aUnit > 0 ? aUnit : 1;
     m_convert = aConvert > 0 ? aConvert : 1;
@@ -250,7 +251,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& a
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     updateTitle();
     RebuildSymbolUnitsList();
-    SetShowDeMorgan( GetCurPart()->HasConversion() );
+    SetShowDeMorgan( GetCurPart()->Flatten()->HasConversion() );
     SyncToolbars();
 
     // Display the document information based on the entry selected just in
@@ -273,6 +274,8 @@ void LIB_EDIT_FRAME::SaveAll()
 void LIB_EDIT_FRAME::CreateNewPart()
 {
     m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
+
+    wxArrayString rootSymbols;
     wxString lib = getTargetLib();
 
     if( !m_libMgr->LibraryExists( lib ) )
@@ -283,7 +286,9 @@ void LIB_EDIT_FRAME::CreateNewPart()
             return;
     }
 
-    DIALOG_LIB_NEW_COMPONENT dlg( this );
+    m_libMgr->GetRootSymbolNames( lib, rootSymbols );
+
+    DIALOG_LIB_NEW_COMPONENT dlg( this, &rootSymbols );
     dlg.SetMinSize( dlg.GetSize() );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -309,41 +314,53 @@ void LIB_EDIT_FRAME::CreateNewPart()
     }
 
     LIB_PART new_part( name );      // do not create part on the heap, it will be buffered soon
-    new_part.GetReferenceField().SetText( dlg.GetReference() );
-    new_part.SetUnitCount( dlg.GetUnitCount() );
 
-    // Initialize new_part.m_TextInside member:
-    // if 0, pin text is outside the body (on the pin)
-    // if > 0, pin text is inside the body
+    wxString parentSymbolName = dlg.GetParentSymbolName();
 
-    if( dlg.GetPinNameInside() )
+    if( parentSymbolName.IsEmpty() )
     {
-        new_part.SetPinNameOffset( dlg.GetPinTextPosition() );
+        new_part.GetReferenceField().SetText( dlg.GetReference() );
+        new_part.SetUnitCount( dlg.GetUnitCount() );
 
-        if( new_part.GetPinNameOffset() == 0 )
-            new_part.SetPinNameOffset( 1 );
+        // Initialize new_part.m_TextInside member:
+        // if 0, pin text is outside the body (on the pin)
+        // if > 0, pin text is inside the body
+
+        if( dlg.GetPinNameInside() )
+        {
+            new_part.SetPinNameOffset( dlg.GetPinTextPosition() );
+
+            if( new_part.GetPinNameOffset() == 0 )
+                new_part.SetPinNameOffset( 1 );
+        }
+        else
+        {
+            new_part.SetPinNameOffset( 0 );
+        }
+
+        ( dlg.GetPowerSymbol() ) ? new_part.SetPower() : new_part.SetNormal();
+        new_part.SetShowPinNumbers( dlg.GetShowPinNumber() );
+        new_part.SetShowPinNames( dlg.GetShowPinName() );
+        new_part.LockUnits( dlg.GetLockItems() );
+
+        if( dlg.GetUnitCount() < 2 )
+            new_part.LockUnits( false );
+
+        new_part.SetConversion( dlg.GetAlternateBodyStyle() );
+        // must be called after loadPart, that calls SetShowDeMorgan, but
+        // because the symbol is empty,it looks like it has no alternate body
+        SetShowDeMorgan( dlg.GetAlternateBodyStyle() );
     }
     else
     {
-        new_part.SetPinNameOffset( 0 );
+        LIB_PART* parent = m_libMgr->GetAlias( parentSymbolName, lib );
+        wxCHECK( parent, /* void */ );
+        new_part.SetParent( parent );
     }
-
-    ( dlg.GetPowerSymbol() ) ? new_part.SetPower() : new_part.SetNormal();
-    new_part.SetShowPinNumbers( dlg.GetShowPinNumber() );
-    new_part.SetShowPinNames( dlg.GetShowPinName() );
-    new_part.LockUnits( dlg.GetLockItems() );
-
-    if( dlg.GetUnitCount() < 2 )
-        new_part.LockUnits( false );
 
     m_libMgr->UpdatePart( &new_part, lib );
     SyncLibraries( false );
     LoadPart( name, lib, 1 );
-
-    new_part.SetConversion( dlg.GetAlternateBodyStyle() );
-    // must be called after loadPart, that calls SetShowDeMorgan, but
-    // because the symbol is empty,it looks like it has no alternate body
-    SetShowDeMorgan( dlg.GetAlternateBodyStyle() );
 }
 
 
@@ -483,46 +500,32 @@ void LIB_EDIT_FRAME::savePartAs()
 
 void LIB_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName, wxArrayString* aOldAliases )
 {
+    wxCHECK( m_my_part, /* void */ );
+
     wxString  msg;
     wxString  lib = GetCurLib();
-    LIB_PART* part = GetCurPart();
 
-    if( aOldName && *aOldName != part->GetName() )
+    if( aOldName && *aOldName != m_my_part->GetName() )
     {
         // Test the current library for name conflicts
-        if( !lib.empty() && m_libMgr->PartExists( part->GetName(), lib ) )
+        if( !lib.empty() && m_libMgr->PartExists( m_my_part->GetName(), lib ) )
         {
             msg.Printf( _( "The name '%s' conflicts with an existing entry in the library '%s'." ),
-                        part->GetName(),
+                        m_my_part->GetName(),
                         lib );
 
             DisplayErrorMessage( this, msg );
-            part->SetName( *aOldName );
+            m_my_part->SetName( *aOldName );
         }
         else
-            m_libMgr->UpdatePartAfterRename( part, *aOldName, lib );
-    }
-
-    if( aOldAliases && *aOldAliases != part->GetAliasNames( false ) )
-    {
-        // If the number of aliases (or their names) have changed, do a full re-sync
-        SyncLibraries( false );
-    }
-    else
-    {
-        // Otherwise just update each alias
-        for( LIB_ALIAS* alias : part->GetAliases() )
-        {
-            wxDataViewItem item = m_libMgr->GetAdapter()->FindItem( alias->GetLibId() );
-            static_cast<LIB_TREE_NODE_LIB_ID*>( item.GetID() )->Update( alias );
-        }
+            m_libMgr->UpdatePartAfterRename( m_my_part.get(), *aOldName, lib );
     }
 
     // Reselect the renamed part
-    m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, part->GetName() ) );
+    m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, m_my_part->GetName() ) );
 
     RebuildSymbolUnitsList();
-    SetShowDeMorgan( part->HasConversion() );
+    SetShowDeMorgan( GetCurPart()->Flatten()->HasConversion() );
     updateTitle();
     DisplayCmpDoc();
 
@@ -618,7 +621,20 @@ void LIB_EDIT_FRAME::DuplicatePart( bool aFromClipboard )
     else
     {
         srcPart = m_libMgr->GetBufferedPart( libId.GetLibItemName(), lib );
+
+        wxCHECK( srcPart, /* void */ );
+
         newPart = new LIB_PART( *srcPart );
+
+        // Derive from same parent.
+        if( srcPart->IsAlias() )
+        {
+            std::shared_ptr< LIB_PART > srcParent = srcPart->GetParent().lock();
+
+            wxCHECK( srcParent, /* void */ );
+
+            newPart->SetParent( srcParent.get() );
+        }
     }
 
     if( !newPart )
@@ -635,28 +651,13 @@ void LIB_EDIT_FRAME::DuplicatePart( bool aFromClipboard )
 
 void LIB_EDIT_FRAME::fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibrary )
 {
+    wxCHECK( aPart, /* void */ );
+
     wxString newName;
 
-    for( unsigned int i = 0; i < aPart->GetAliasCount(); ++i )
-    {
-        LIB_ALIAS* alias = aPart->GetAlias( i );
-        int sfx = 0;
-        newName = alias->GetName();
+    newName.Printf( "%s_copy", aPart->GetName() );
 
-        while( m_libMgr->PartExists( newName, aLibrary ) )
-        {
-            if( sfx == 0 )
-                newName = wxString::Format( "%s_copy", alias->GetName() );
-            else
-                newName = wxString::Format( "%s_copy%d", alias->GetName(), sfx );
-            ++sfx;
-        }
-
-        if( i == 0 )
-            aPart->SetName( newName );
-        else
-            alias->SetName( newName );
-    }
+    aPart->SetName( newName );
 }
 
 
@@ -664,7 +665,9 @@ void LIB_EDIT_FRAME::Revert( bool aConfirm )
 {
     LIB_ID libId = getTargetLibId();
     const wxString& libName = libId.GetLibNickname();
-    const wxString& partName = libId.GetLibItemName();  // Empty if this is the library itself that is selected
+
+    // Empty if this is the library itself that is selected.
+    const wxString& partName = libId.GetLibItemName();
 
     wxString msg = wxString::Format( _( "Revert \"%s\" to last version saved?" ),
                                      partName.IsEmpty() ? libName : partName );
@@ -688,7 +691,9 @@ void LIB_EDIT_FRAME::Revert( bool aConfirm )
                 curr_partName = curr_libId.GetLibItemName();
         }
         else
+        {
             reload_currentPart = isCurrentPart( libId );
+        }
     }
 
     int unit = m_unit;
@@ -727,15 +732,13 @@ void LIB_EDIT_FRAME::RevertAll()
 
 void LIB_EDIT_FRAME::LoadPart( const wxString& aAlias, const wxString& aLibrary, int aUnit )
 {
-    wxCHECK( m_libMgr->PartExists( aAlias, aLibrary ), /* void */ );
     LIB_PART* part = m_libMgr->GetBufferedPart( aAlias, aLibrary );
-    LIB_ALIAS* alias = part ? part->GetAlias( aAlias ) : nullptr;
 
-    if( !alias )
+    if( !part )
     {
-        wxString msg = wxString::Format( _( "Symbol name \"%s\" not found in library \"%s\"" ),
-                                         GetChars( aAlias ),
-                                         GetChars( aLibrary ) );
+        wxString msg;
+
+        msg.Printf( _( "Symbol name \"%s\" not found in library \"%s\"" ), aAlias, aLibrary );
         DisplayError( this, msg );
         return;
     }
@@ -745,7 +748,7 @@ void LIB_EDIT_FRAME::LoadPart( const wxString& aAlias, const wxString& aLibrary,
     // and if units are interchangeable, graphic items are common to units
     m_DrawSpecificUnit = part->UnitsLocked();
 
-    LoadOneLibraryPartAux( alias, aLibrary, aUnit, 0 );
+    LoadOneLibraryPartAux( part, aLibrary, aUnit, 0 );
 }
 
 
@@ -823,6 +826,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     if( !aNewFile )
         m_libMgr->ClearLibraryModified( aLibrary );
 
+    ClearMsgPanel();
     msg.Printf( _( "Symbol library file \"%s\" saved" ), fn.GetFullPath() );
     wxString msg1;
     msg1.Printf( _( "Symbol library documentation file \"%s\" saved" ), docFileName.GetFullPath() );

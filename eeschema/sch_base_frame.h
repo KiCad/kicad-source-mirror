@@ -42,7 +42,6 @@ class PAGE_INFO;
 class TITLE_BLOCK;
 class LIB_VIEW_FRAME;
 class LIB_EDIT_FRAME;
-class LIB_ALIAS;
 class LIB_PART;
 class PART_LIB;
 class SCHLIB_FILTER;
@@ -64,14 +63,9 @@ class SCH_DRAW_PANEL;
  *
  * @return The symbol found in the library or NULL if the symbol was not found.
  */
-LIB_ALIAS* SchGetLibAlias( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
-                           PART_LIB* aCacheLib = NULL, wxWindow* aParent = NULL,
-                           bool aShowErrorMsg = false );
-
 LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
                          PART_LIB* aCacheLib = NULL, wxWindow* aParent = NULL,
                          bool aShowErrorMsg = false );
-
 
 /**
  * A shim class between EDA_DRAW_FRAME and several derived classes:
@@ -284,11 +278,10 @@ public:
      * @param aShowErrorMessage set to true to show any error messages.
      * @return The symbol found in the library or NULL if the symbol was not found.
      */
-    LIB_ALIAS* GetLibAlias( const LIB_ID& aLibId, bool aUseCacheLib = false,
-                            bool aShowError = false );
-
     LIB_PART* GetLibPart( const LIB_ID& aLibId, bool aUseCacheLib = false,
                           bool aShowErrorMsg = false );
+
+    LIB_PART* GetFlattenedLibPart( const LIB_ID& aLibId, bool aShowErrorMsg = false );
 
     /**
      * Function SelectComponentFromLibBrowser

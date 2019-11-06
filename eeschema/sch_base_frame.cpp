@@ -42,20 +42,21 @@
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
 
-LIB_ALIAS* SchGetLibAlias( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PART_LIB* aCacheLib,
-                           wxWindow* aParent, bool aShowErrorMsg )
+
+LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PART_LIB* aCacheLib,
+                         wxWindow* aParent, bool aShowErrorMsg )
 {
     // wxCHECK_MSG( aLibId.IsValid(), NULL, "LIB_ID is not valid." );
     wxCHECK_MSG( aLibTable, NULL, "Invalid symbol library table." );
 
-    LIB_ALIAS* alias = NULL;
+    LIB_PART* symbol = NULL;
 
     try
     {
-        alias = aLibTable->LoadSymbol( aLibId );
+        symbol = aLibTable->LoadSymbol( aLibId );
 
-        if( !alias && aCacheLib )
-            alias = aCacheLib->FindAlias( aLibId );
+        if( !symbol && aCacheLib )
+            symbol = aCacheLib->FindPart( aLibId );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -68,16 +69,7 @@ LIB_ALIAS* SchGetLibAlias( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PA
         }
     }
 
-    return alias;
-}
-
-
-LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PART_LIB* aCacheLib,
-                         wxWindow* aParent, bool aShowErrorMsg )
-{
-    LIB_ALIAS* alias = SchGetLibAlias( aLibId, aLibTable, aCacheLib, aParent, aShowErrorMsg );
-
-    return ( alias ) ? alias->GetPart() : NULL;
+    return symbol;
 }
 
 
@@ -249,14 +241,6 @@ void SCH_BASE_FRAME::UpdateStatusBar()
 
     // refresh units display
     DisplayUnitsMsg();
-}
-
-
-LIB_ALIAS* SCH_BASE_FRAME::GetLibAlias( const LIB_ID& aLibId, bool aUseCacheLib, bool aShowError )
-{
-    PART_LIB* cache = ( aUseCacheLib ) ? Prj().SchLibs()->GetCacheLibrary() : NULL;
-
-    return SchGetLibAlias( aLibId, Prj().SchSymbolLibTable(), cache, this, aShowError );
 }
 
 

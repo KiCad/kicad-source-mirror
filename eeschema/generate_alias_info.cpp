@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -50,7 +50,7 @@ class FOOTPRINT_INFO_GENERATOR
     wxString m_html;
     SYMBOL_LIB_TABLE* m_sym_lib_table;
     LIB_ID const m_lib_id;
-    LIB_ALIAS* m_module;
+    LIB_PART* m_symbol;
     int m_unit;
 
 public:
@@ -58,7 +58,7 @@ public:
         : m_html( DescriptionFormat ),
           m_sym_lib_table( aSymbolLibTable ),
           m_lib_id( aLibId ),
-          m_module( nullptr ),
+          m_symbol( nullptr ),
           m_unit( aUnit )
     { }
 
@@ -74,7 +74,7 @@ public:
 
         try
         {
-            m_module = const_cast< LIB_ALIAS* >( m_sym_lib_table->LoadSymbol( m_lib_id ) );
+            m_symbol = const_cast< LIB_PART* >( m_sym_lib_table->LoadSymbol( m_lib_id ) );
         }
         catch( const IO_ERROR& ioe )
         {
@@ -86,7 +86,7 @@ public:
             return;
         }
 
-        if( m_module )
+        if( m_symbol )
         {
             SetHtmlName();
             SetHtmlAliasOf();
@@ -107,13 +107,13 @@ public:
 protected:
     void SetHtmlName()
     {
-        m_html.Replace( "__NAME__", EscapedHTML( m_module->GetName() ) );
+        m_html.Replace( "__NAME__", EscapedHTML( m_symbol->GetName() ) );
     }
 
 
     void SetHtmlAliasOf()
     {
-        if( m_module->IsRoot() )
+        if( m_symbol->IsRoot() )
         {
             m_html.Replace( "__ALIASOF__", wxEmptyString );
         }
@@ -122,14 +122,8 @@ protected:
             wxString root_name = _( "Unknown" );
             wxString root_desc = "";
 
-            LIB_PART* root = m_module->GetPart();
-            LIB_ALIAS* root_alias = root ? root->GetAlias( 0 ) : nullptr;
-
-            if( root )
-                root_name = root->GetName();
-
-            if( root_alias )
-                root_desc = root_alias->GetDescription();
+            root_name = m_symbol->SharedPtr()->GetName();
+            root_desc = m_symbol->SharedPtr()->GetDescription();
 
             m_html.Replace(
                 "__ALIASOF__", wxString::Format(
@@ -140,7 +134,7 @@ protected:
 
     void SetHtmlDesc()
     {
-        wxString raw_desc = m_module->GetDescription();
+        wxString raw_desc = m_symbol->GetDescription();
 
         m_html.Replace( "__DESC__", wxString::Format( DescFormat, EscapedHTML( raw_desc ) ) );
     }
@@ -148,7 +142,7 @@ protected:
 
     void SetHtmlKeywords()
     {
-        wxString keywords = m_module->GetKeyWords();
+        wxString keywords = m_symbol->GetKeyWords();
 
         if( keywords.empty() )
             m_html.Replace( "__KEY__", wxEmptyString );
@@ -169,26 +163,25 @@ protected:
         switch( aField.GetId() )
         {
         case DATASHEET:
+            text = m_symbol->GetDocFileName();
+
+            if( text.IsEmpty() || text == wxT( "~" ) )
             {
-                text = m_module->GetDocFileName();
-
-                if( text.IsEmpty() || text == wxT( "~" ) )
-                {
-                    fieldhtml.Replace( "__VALUE__", text );
-                }
-                else
-                {
-                    wxString datasheetlink = DatasheetLinkFormat;
-                    datasheetlink.Replace( "__HREF__", EscapedHTML( text ) );
-
-                    if( text.Length() > 75 )
-                        text = text.Left( 72 ) + wxT( "..." );
-
-                    datasheetlink.Replace( "__TEXT__", EscapedHTML( text ) );
-
-                    fieldhtml.Replace( "__VALUE__", datasheetlink );
-                }
+                fieldhtml.Replace( "__VALUE__", text );
             }
+            else
+            {
+                wxString datasheetlink = DatasheetLinkFormat;
+                datasheetlink.Replace( "__HREF__", EscapedHTML( text ) );
+
+                if( text.Length() > 75 )
+                    text = text.Left( 72 ) + wxT( "..." );
+
+                datasheetlink.Replace( "__TEXT__", EscapedHTML( text ) );
+
+                fieldhtml.Replace( "__VALUE__", datasheetlink );
+            }
+
             break;
 
         case VALUE:
@@ -207,11 +200,32 @@ protected:
     {
         wxString fieldtable;
         LIB_FIELDS fields;
-        m_module->GetPart()->GetFields( fields );
+        m_symbol->GetFields( fields );
 
         for( auto const & field: fields )
         {
             fieldtable += GetHtmlFieldRow( field );
+        }
+
+        if( m_symbol->IsAlias() )
+        {
+            std::shared_ptr< LIB_PART > parent = m_symbol->GetParent().lock();
+
+            // Append all of the unique parent fields if this is an alias.
+            if( parent )
+            {
+                LIB_FIELDS parentFields;
+
+                parent->GetFields( parentFields );
+
+                for( auto const& parentField : parentFields )
+                {
+                    if( m_symbol->FindField( parentField.GetName() ) )
+                        continue;
+
+                    fieldtable += GetHtmlFieldRow( parentField );
+                }
+            }
         }
 
         m_html.Replace( "__FIELDS__", fieldtable );

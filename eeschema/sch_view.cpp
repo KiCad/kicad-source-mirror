@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2018 CERN
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -72,7 +74,7 @@ void SCH_VIEW::SetScale( double aScale, VECTOR2D aAnchor )
 {
     VIEW::SetScale( aScale, aAnchor );
 
-    //Redraw selection halos since their width is dependant on zoom
+    //Redraw selection halos since their width is dependent on zoom
     if( m_frame )
         m_frame->RefreshSelection();
 }
@@ -130,8 +132,43 @@ void SCH_VIEW::DisplayComponent( LIB_PART* aPart )
     if( !aPart )
         return;
 
-    for( auto& item : aPart->GetDrawItems() )
+    std::shared_ptr< LIB_PART > parent;
+    LIB_PART* drawnPart = aPart;
+
+    if( aPart->IsAlias() )
+    {
+        // Draw the alias mandatory fields.
+        for( auto& item : aPart->GetDrawItems() )
+        {
+            if( item.Type() != LIB_FIELD_T )
+                continue;
+
+            LIB_FIELD* field = (LIB_FIELD*) &item;
+
+            if( field->GetId() < MANDATORY_FIELDS )
+                Add( &item );
+        }
+
+        parent = aPart->GetParent().lock();
+
+        wxCHECK( parent, /* void */ );
+
+        drawnPart = parent.get();
+    }
+
+    for( auto& item : drawnPart->GetDrawItems() )
+    {
+        // Do not overwrite the alias mandatory fields with the parent mandatory fields.
+        if( item.Type() == LIB_FIELD_T )
+        {
+            LIB_FIELD* field = (LIB_FIELD*) &item;
+
+            if( aPart->IsAlias() && field->GetId() < MANDATORY_FIELDS )
+                continue;
+        }
+
         Add( &item );
+    }
 
     m_selectionArea.reset( new KIGFX::PREVIEW::SELECTION_AREA() );
     m_preview.reset( new KIGFX::VIEW_GROUP() );
@@ -223,4 +260,3 @@ void SCH_VIEW::HighlightItem( EDA_ITEM *aItem, LIB_PIN* aPin )
 }
 
 }; // namespace KIGFX
-

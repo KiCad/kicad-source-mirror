@@ -81,7 +81,7 @@ public:
         return m_nickname;
     }
 
-    const wxString& GetName() const override
+    const wxString GetName() const override
     {
         return m_fpname;
     }
@@ -91,13 +91,13 @@ public:
         return LIB_ID( m_nickname, m_fpname );
     }
 
-    const wxString& GetDescription() override
+    const wxString GetDescription() override
     {
         ensure_loaded();
         return m_doc;
     }
 
-    const wxString& GetKeywords()
+    const wxString GetKeywords()
     {
         ensure_loaded();
         return m_keywords;

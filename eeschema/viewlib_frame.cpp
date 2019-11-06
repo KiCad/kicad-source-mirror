@@ -207,7 +207,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 LIB_VIEW_FRAME::~LIB_VIEW_FRAME()
 {
     if( m_previewItem )
-        GetCanvas()->GetView()->Remove( m_previewItem );
+        GetCanvas()->GetView()->Remove( m_previewItem.get() );
 }
 
 
@@ -248,24 +248,17 @@ void LIB_VIEW_FRAME::SetUnitAndConvert( int aUnit, int aConvert )
 }
 
 
-LIB_ALIAS* LIB_VIEW_FRAME::GetSelectedAlias() const
+std::unique_ptr< LIB_PART > LIB_VIEW_FRAME::GetSelectedSymbol() const
 {
-    LIB_ALIAS* alias = NULL;
+    std::unique_ptr< LIB_PART > symbol;
 
     if( !m_libraryName.IsEmpty() && !m_entryName.IsEmpty() )
-        alias = Prj().SchSymbolLibTable()->LoadSymbol( m_libraryName, m_entryName );
+    {
+        LIB_PART* tmp = Prj().SchSymbolLibTable()->LoadSymbol( m_libraryName, m_entryName );
 
-    return alias;
-}
-
-
-LIB_PART* LIB_VIEW_FRAME::GetSelectedSymbol() const
-{
-    LIB_PART* symbol = NULL;
-    LIB_ALIAS* alias = GetSelectedAlias();
-
-    if( alias )
-        symbol = alias->GetPart();
+        if( tmp )
+            symbol = tmp->Flatten();
+    }
 
     return symbol;
 }
@@ -273,28 +266,35 @@ LIB_PART* LIB_VIEW_FRAME::GetSelectedSymbol() const
 
 void LIB_VIEW_FRAME::updatePreviewSymbol()
 {
-    LIB_ALIAS* alias = GetSelectedAlias();
+    std::unique_ptr< LIB_PART > symbol = GetSelectedSymbol();
     KIGFX::SCH_VIEW* view = GetCanvas()->GetView();
 
     if( m_previewItem )
     {
-        view->Remove( m_previewItem );
+        view->Remove( m_previewItem.get() );
         m_previewItem = nullptr;
     }
 
     ClearMsgPanel();
 
-    if( alias )
+    if( symbol )
     {
         GetRenderSettings()->m_ShowUnit = m_unit;
         GetRenderSettings()->m_ShowConvert = m_convert;
 
-        view->Add( alias );
-        m_previewItem = alias;
+        m_previewItem.reset( symbol.release() );
+        view->Add( m_previewItem.get() );
 
-        AppendMsgPanel( _( "Name" ), alias->GetName(), BLUE, 6 );
-        AppendMsgPanel( _( "Description" ), alias->GetDescription(), CYAN, 6 );
-        AppendMsgPanel( _( "Key words" ), alias->GetKeyWords(), DARKDARKGRAY );
+        wxString parentName = _( "<none>" );
+        std::shared_ptr< LIB_PART > parent  = m_previewItem->GetParent().lock();
+
+        if( parent )
+            parentName = parent->GetName();
+
+        AppendMsgPanel( _( "Name" ), m_previewItem->GetName(), BLUE, 6 );
+        AppendMsgPanel( _( "Parent" ),  parentName, RED, 6 );
+        AppendMsgPanel( _( "Description" ), m_previewItem->GetDescription(), CYAN, 6 );
+        AppendMsgPanel( _( "Key words" ), m_previewItem->GetKeyWords(), DARKDARKGRAY );
     }
 
     GetCanvas()->ForceRefresh();
@@ -370,7 +370,7 @@ void LIB_VIEW_FRAME::OnSize( wxSizeEvent& SizeEv )
 
 void LIB_VIEW_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
 {
-    LIB_PART* part = GetSelectedSymbol();
+    std::unique_ptr< LIB_PART > part = GetSelectedSymbol();
 
     int unit_count = 1;
 
@@ -701,8 +701,7 @@ void LIB_VIEW_FRAME::SetFilter( const SCHLIB_FILTER* aFilter )
 
 const BOX2I LIB_VIEW_FRAME::GetDocumentExtents() const
 {
-    LIB_ALIAS*  alias = GetSelectedAlias();
-    LIB_PART*   part = alias ? alias->GetPart() : nullptr;
+    std::unique_ptr< LIB_PART > part = GetSelectedSymbol();
 
     if( !part )
     {

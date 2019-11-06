@@ -242,10 +242,8 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
             // "logical" library name, which is in anticipation of a better search
             // algorithm for parts based on "logical_lib.part" and where logical_lib
             // is merely the library name minus path and extension.
-            PART_SPTR part = comp->GetPartRef().lock();
-
-            if( part )
-                xlibsource->AddAttribute( "lib", part->GetLibId().GetLibNickname() );
+            if( comp->GetPartRef() )
+                xlibsource->AddAttribute( "lib", comp->GetPartRef()->GetLibId().GetLibNickname() );
 
             // We only want the symbol name, not the full LIB_ID.
             xlibsource->AddAttribute( "part", comp->GetLibId().GetLibItemName() );
@@ -404,26 +402,12 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
         xlibpart->AddAttribute( "lib", libNickname );
         xlibpart->AddAttribute( "part", lcomp->GetName()  );
 
-        if( lcomp->GetAliasCount() )
-        {
-            wxArrayString aliases = lcomp->GetAliasNames( false );
-            if( aliases.GetCount() )
-            {
-                XNODE* xaliases = node( "aliases" );
-                xlibpart->AddChild( xaliases );
-                for( unsigned i=0;  i<aliases.GetCount();  ++i )
-                {
-                    xaliases->AddChild( node( "alias", aliases[i] ) );
-                }
-            }
-        }
-
         //----- show the important properties -------------------------
-        if( !lcomp->GetAlias( 0 )->GetDescription().IsEmpty() )
-            xlibpart->AddChild( node( "description", lcomp->GetAlias( 0 )->GetDescription() ) );
+        if( !lcomp->GetDescription().IsEmpty() )
+            xlibpart->AddChild( node( "description", lcomp->GetDescription() ) );
 
-        if( !lcomp->GetAlias( 0 )->GetDocFileName().IsEmpty() )
-            xlibpart->AddChild( node( "docs",  lcomp->GetAlias( 0 )->GetDocFileName() ) );
+        if( !lcomp->GetDocFileName().IsEmpty() )
+            xlibpart->AddChild( node( "docs",  lcomp->GetDocFileName() ) );
 
         // Write the footprint list
         if( lcomp->GetFootprints().GetCount() )

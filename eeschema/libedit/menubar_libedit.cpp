@@ -91,13 +91,13 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
 
     auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
-        return GetCurPart() && GetScreen() && GetScreen()->GetUndoCommandCount() != 0;
+        return m_my_part && GetScreen() && GetScreen()->GetUndoCommandCount() != 0;
     };
     auto enableRedoCondition = [ this ] ( const SELECTION& sel ) {
-        return GetCurPart() && GetScreen() && GetScreen()->GetRedoCommandCount() != 0;
+        return m_my_part && GetScreen() && GetScreen()->GetRedoCommandCount() != 0;
     };
     auto havePartCondition = [ this ] ( const SELECTION& sel ) {
-        return GetCurPart();
+        return m_my_part != nullptr;
     };
 
     editMenu->AddItem( ACTIONS::undo,                enableUndoCondition );
@@ -166,14 +166,18 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     //-- Place menu -----------------------------------------------
     //
+    auto enableIsEditableCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_my_part && m_my_part->IsRoot();
+    };
+
     CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
 
-    placeMenu->AddItem( EE_ACTIONS::placeSymbolPin,        EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::placeSymbolText,       EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::drawSymbolRectangle,   EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::drawSymbolCircle,      EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::drawSymbolArc,         EE_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( EE_ACTIONS::drawSymbolLines,       EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::placeSymbolPin,        enableIsEditableCondition );
+    placeMenu->AddItem( EE_ACTIONS::placeSymbolText,       enableIsEditableCondition );
+    placeMenu->AddItem( EE_ACTIONS::drawSymbolRectangle,   enableIsEditableCondition );
+    placeMenu->AddItem( EE_ACTIONS::drawSymbolCircle,      enableIsEditableCondition );
+    placeMenu->AddItem( EE_ACTIONS::drawSymbolArc,         enableIsEditableCondition );
+    placeMenu->AddItem( EE_ACTIONS::drawSymbolLines,       enableIsEditableCondition );
 
     placeMenu->Resolve();
 

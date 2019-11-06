@@ -95,7 +95,8 @@ int LIB_MANAGER::GetLibraryHash( const wxString& aLibrary ) const
     auto row = GetLibrary( aLibrary );
 
     // return -1 if library does not exist or 0 if not modified
-    return row ? std::hash<std::string>{}( aLibrary.ToStdString() + row->GetFullURI( true ).ToStdString() ) : -1;
+    return row ? std::hash<std::string>{}( aLibrary.ToStdString() +
+                                           row->GetFullURI( true ).ToStdString() ) : -1;
 }
 
 
@@ -176,7 +177,34 @@ bool LIB_MANAGER::SaveLibrary( const wxString& aLibrary, const wxString& aFileNa
         properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
 
         for( auto part : getOriginalParts( aLibrary ) )
-            pi->SaveSymbol( aLibrary, new LIB_PART( *part ), &properties );
+        {
+            LIB_PART* newSymbol;
+
+            if( part->IsAlias() )
+            {
+                std::shared_ptr< LIB_PART > oldParent = part->GetParent().lock();
+
+                wxCHECK_MSG( oldParent, false,
+                             wxString::Format( "Derived symbol '%s' found with undefined parent.",
+                                               part->GetName() ) );
+
+                LIB_PART* libParent = pi->LoadSymbol( aLibrary, oldParent->GetName(), &properties );
+
+                if( !libParent )
+                {
+                    libParent = new LIB_PART( *oldParent.get() );
+                    pi->SaveSymbol( aLibrary, libParent, &properties );
+                }
+
+                newSymbol = new LIB_PART( *part );
+                newSymbol->SetParent( libParent );
+                pi->SaveSymbol( aLibrary, newSymbol, &properties );
+            }
+            else if( !pi->LoadSymbol( aLibrary, part->GetName(), &properties ) )
+            {
+                pi->SaveSymbol( aLibrary, new LIB_PART( *part ), &properties );
+            }
+        }
     }
 
     pi->SaveLibrary( aFileName );
@@ -246,9 +274,9 @@ bool LIB_MANAGER::IsLibraryReadOnly( const wxString& aLibrary ) const
 }
 
 
-std::list<LIB_ALIAS*> LIB_MANAGER::GetAliases( const wxString& aLibrary ) const
+std::list<LIB_PART*> LIB_MANAGER::GetAliases( const wxString& aLibrary ) const
 {
-    std::list<LIB_ALIAS*> ret;
+    std::list<LIB_PART*> ret;
     wxCHECK( LibraryExists( aLibrary ), ret );
 
     auto libIt = m_libs.find( aLibrary );
@@ -257,13 +285,12 @@ std::list<LIB_ALIAS*> LIB_MANAGER::GetAliases( const wxString& aLibrary ) const
     {
         for( auto& partBuf : libIt->second.GetBuffers() )
         {
-            for( unsigned int i = 0; i < partBuf->GetPart()->GetAliasCount(); ++i )
-                ret.push_back( partBuf->GetPart()->GetAlias( i ) );
+            ret.push_back( partBuf->GetPart() );
         }
     }
     else
     {
-        std::vector<LIB_ALIAS*> aliases;
+        std::vector<LIB_PART*> aliases;
 
         try
         {
@@ -294,12 +321,36 @@ LIB_PART* LIB_MANAGER::GetBufferedPart( const wxString& aAlias, const wxString& 
         // create a copy of the part
         try
         {
-            LIB_ALIAS* alias = symTable()->LoadSymbol( aLibrary, aAlias );
+            LIB_PART* part = symTable()->LoadSymbol( aLibrary, aAlias );
 
-            if( alias == nullptr )
+            if( part == nullptr )
                 THROW_IO_ERROR( _( "Symbol not found." ) );
 
-            bufferedPart = new LIB_PART( *alias->GetPart(), nullptr );
+            LIB_PART* bufferedParent = nullptr;
+
+            // Create parent symbols on demand so parent symbol can be set.
+            if( part->IsAlias() )
+            {
+                std::shared_ptr< LIB_PART > parent = part->GetParent().lock();
+                wxCHECK_MSG( parent, nullptr,
+                             wxString::Format( "Derived symbol '%s' found with undefined parent.",
+                                               part->GetName() ) );
+
+                // Check if the parent symbol buffer has already be created.
+                bufferedParent = libBuf.GetPart( parent->GetName() );
+
+                if( !bufferedParent )
+                {
+                    bufferedParent = new LIB_PART( *parent.get() );
+                    libBuf.CreateBuffer( bufferedParent, new SCH_SCREEN( &m_frame.Kiway() ) );
+                }
+            }
+
+            bufferedPart = new LIB_PART( *part );
+
+            if( bufferedParent )
+                bufferedPart->SetParent( bufferedParent );
+
             libBuf.CreateBuffer( bufferedPart, new SCH_SCREEN( &m_frame.Kiway() ) );
         }
         catch( const IO_ERROR& e )
@@ -352,13 +403,13 @@ bool LIB_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibrary )
 }
 
 
-bool LIB_MANAGER::UpdatePartAfterRename( LIB_PART* aPart, const wxString& oldAlias,
+bool LIB_MANAGER::UpdatePartAfterRename( LIB_PART* aPart, const wxString& aOldName,
                                          const wxString& aLibrary )
 {
     // This is essentially a delete/update.
 
     LIB_BUFFER& libBuf = getLibraryBuffer( aLibrary );
-    auto partBuf = libBuf.GetBuffer( oldAlias );
+    auto partBuf = libBuf.GetBuffer( aOldName );
     wxCHECK( partBuf, false );
 
     // Save the original record so it is transferred to the new buffer
@@ -366,6 +417,26 @@ bool LIB_MANAGER::UpdatePartAfterRename( LIB_PART* aPart, const wxString& oldAli
 
     // Save the screen object, so it is transferred to the new buffer
     std::unique_ptr<SCH_SCREEN> screen = partBuf->RemoveScreen();
+
+    if( partBuf->GetPart()->IsRoot() && libBuf.HasDerivedSymbols( aOldName ) )
+    {
+        // Reparent derived symbols.
+        for( auto entry : libBuf.GetBuffers() )
+        {
+            if( entry->GetPart()->IsRoot() )
+                continue;
+
+            if( entry->GetPart()->GetParent().lock() == original->SharedPtr() )
+            {
+                if( !libBuf.DeleteBuffer( entry ) )
+                    return false;
+
+                LIB_PART* reparentedPart = new LIB_PART( *entry->GetPart() );
+                reparentedPart->SetParent( original.get() );
+                libBuf.CreateBuffer( reparentedPart, new SCH_SCREEN( &m_frame.Kiway() ) );
+            }
+        }
+    }
 
     if( !libBuf.DeleteBuffer( partBuf ) )
         return false;
@@ -470,14 +541,16 @@ bool LIB_MANAGER::RemovePart( const wxString& aAlias, const wxString& aLibrary )
     auto partBuf = libBuf.GetBuffer( aAlias );
     wxCHECK( partBuf, false );
 
-    bool res = libBuf.DeleteBuffer( partBuf );
+    bool retv = true;
+
+    retv &= libBuf.DeleteBuffer( partBuf );
     m_frame.SyncLibraries( false );
 
-    return res;
+    return retv;
 }
 
 
-LIB_ALIAS* LIB_MANAGER::GetAlias( const wxString& aAlias, const wxString& aLibrary ) const
+LIB_PART* LIB_MANAGER::GetAlias( const wxString& aAlias, const wxString& aLibrary ) const
 {
     // Try the library buffers first
     auto libIt = m_libs.find( aLibrary );
@@ -487,11 +560,11 @@ LIB_ALIAS* LIB_MANAGER::GetAlias( const wxString& aAlias, const wxString& aLibra
         LIB_PART* part = libIt->second.GetPart( aAlias );
 
         if( part )
-            return part->GetAlias( aAlias );
+            return part;
     }
 
     // Get the original part
-    LIB_ALIAS* alias = nullptr;
+    LIB_PART* alias = nullptr;
 
     try
     {
@@ -510,7 +583,7 @@ LIB_ALIAS* LIB_MANAGER::GetAlias( const wxString& aAlias, const wxString& aLibra
 bool LIB_MANAGER::PartExists( const wxString& aAlias, const wxString& aLibrary ) const
 {
     auto libBufIt = m_libs.find( aLibrary );
-    LIB_ALIAS* alias = nullptr;
+    LIB_PART* alias = nullptr;
 
     if( libBufIt != m_libs.end() )
         return !!libBufIt->second.GetBuffer( aAlias );
@@ -557,6 +630,15 @@ wxString LIB_MANAGER::GetUniqueLibraryName() const
 
     wxFAIL;
     return wxEmptyString;
+}
+
+
+void LIB_MANAGER::GetRootSymbolNames( const wxString& aLibraryName,
+                                      wxArrayString& aRootSymbolNames )
+{
+    LIB_BUFFER& libBuf = getLibraryBuffer( aLibraryName );
+
+    libBuf.GetRootSymbolNames( aRootSymbolNames );
 }
 
 
@@ -620,8 +702,8 @@ std::set<LIB_PART*> LIB_MANAGER::getOriginalParts( const wxString& aLibrary )
 
         for( const auto& aliasName : aliases )
         {
-            LIB_ALIAS* alias = symTable()->LoadSymbol( aLibrary, aliasName );
-            parts.insert( alias->GetPart() );
+            LIB_PART* alias = symTable()->LoadSymbol( aLibrary, aliasName );
+            parts.insert( alias );
         }
     }
     catch( const IO_ERROR& e )
@@ -645,7 +727,34 @@ LIB_MANAGER::LIB_BUFFER& LIB_MANAGER::getLibraryBuffer( const wxString& aLibrary
     LIB_BUFFER& buf = ret.first->second;
 
     for( auto part : getOriginalParts( aLibrary ) )
-        buf.CreateBuffer( new LIB_PART( *part, nullptr ), new SCH_SCREEN( &m_frame.Kiway() ) );
+    {
+        LIB_PART* newSymbol;
+
+        if( part->IsAlias() )
+        {
+            std::shared_ptr< LIB_PART > oldParent = part->GetParent().lock();
+
+            wxCHECK_MSG( oldParent, buf,
+                         wxString::Format( "Derived symbol '%s' found with undefined parent.",
+                                           part->GetName() ) );
+
+            LIB_PART* libParent = buf.GetPart( oldParent->GetName() );
+
+            if( !libParent )
+            {
+                libParent = new LIB_PART( *oldParent.get() );
+                buf.CreateBuffer( libParent, new SCH_SCREEN( &m_frame.Kiway() ) );
+            }
+
+            newSymbol = new LIB_PART( *part );
+            newSymbol->SetParent( libParent );
+            buf.CreateBuffer( newSymbol, new SCH_SCREEN( &m_frame.Kiway() ) );
+        }
+        else if( !buf.GetPart( part->GetName() ) )
+        {
+            buf.CreateBuffer( new LIB_PART( *part, nullptr ), new SCH_SCREEN( &m_frame.Kiway() ) );
+        }
+    }
 
     return buf;
 }
@@ -704,19 +813,34 @@ bool LIB_MANAGER::PART_BUFFER::IsModified() const
 }
 
 
+LIB_PART* LIB_MANAGER::LIB_BUFFER::GetPart( const wxString& aAlias ) const
+{
+    auto buf = GetBuffer( aAlias );
+
+    if( !buf )
+        return nullptr;
+
+    LIB_PART* part = buf->GetPart();
+
+    wxCHECK( part, nullptr );
+
+    return  part;
+}
+
+
 bool LIB_MANAGER::LIB_BUFFER::CreateBuffer( LIB_PART* aCopy, SCH_SCREEN* aScreen )
 {
-    wxASSERT( m_aliases.count( aCopy->GetName() ) == 0 );   // only for new parts
+    wxASSERT( aCopy );
     wxASSERT( aCopy->GetLib() == nullptr );
     std::unique_ptr<SCH_SCREEN> screen( aScreen );
     auto partBuf = std::make_shared<PART_BUFFER>( aCopy, std::move( screen ) );
     m_parts.push_back( partBuf );
-    addAliases( partBuf );
 
     // Set the parent library name,
     // otherwise it is empty as no library has been given as the owner during object construction
-    LIB_ID& libId = (LIB_ID&) aCopy->GetLibId();
+    LIB_ID libId = aCopy->GetLibId();
     libId.SetLibNickname( m_libName );
+    aCopy->SetLibId( libId );
     ++m_hash;
 
     return true;
@@ -728,9 +852,7 @@ bool LIB_MANAGER::LIB_BUFFER::UpdateBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartB
 {
     bool ret = true;
 
-    ret &= removeAliases( aPartBuf );
     aPartBuf->SetPart( aCopy );
-    ret &= addAliases( aPartBuf );
     ++m_hash;
 
     return ret;
@@ -741,11 +863,18 @@ bool LIB_MANAGER::LIB_BUFFER::DeleteBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartB
 {
     auto partBufIt = std::find( m_parts.begin(), m_parts.end(), aPartBuf );
     wxCHECK( partBufIt != m_parts.end(), false );
+
+    bool retv = true;
+
+    // Remove all derived symbols to prevent broken inheritance.
+    if( aPartBuf->GetPart()->IsRoot() )
+        retv &= removeChildSymbols( aPartBuf );
+
     m_deleted.emplace_back( *partBufIt );
     m_parts.erase( partBufIt );
     ++m_hash;
 
-    return removeAliases( aPartBuf );
+    return retv;
 }
 
 
@@ -755,10 +884,55 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
     wxCHECK( aPartBuf, false );
     LIB_PART* part = aPartBuf->GetPart();
     wxCHECK( part, false );
-    SYMBOL_LIB_TABLE::SAVE_T result = aLibTable->SaveSymbol( m_libName, new LIB_PART( *part ) );
-    wxCHECK( result == SYMBOL_LIB_TABLE::SAVE_OK, false );
+    SYMBOL_LIB_TABLE::SAVE_T result;
 
-    aPartBuf->SetOriginal( new LIB_PART( *part ) );
+    if( part->IsAlias() )
+    {
+        LIB_PART* originalPart;
+        LIB_PART* newCachedPart = new LIB_PART( *part );
+        std::shared_ptr< LIB_PART > bufferedParent = part->GetParent().lock();
+
+        wxCHECK( bufferedParent, false );
+
+        LIB_PART* cachedParent = aLibTable->LoadSymbol( m_libName, bufferedParent->GetName() );
+
+        if( !cachedParent )
+        {
+            cachedParent = new LIB_PART( *bufferedParent.get() );
+            newCachedPart->SetParent( cachedParent );
+            result = aLibTable->SaveSymbol( m_libName, cachedParent );
+            wxCHECK( result == SYMBOL_LIB_TABLE::SAVE_OK, false );
+            result = aLibTable->SaveSymbol( m_libName, newCachedPart );
+            wxCHECK( result == SYMBOL_LIB_TABLE::SAVE_OK, false );
+
+            LIB_PART* originalParent = new LIB_PART( *bufferedParent.get() );
+            aPartBuf->SetOriginal( originalParent );
+            originalPart = new LIB_PART( *part );
+            originalPart->SetParent( originalParent );
+            aPartBuf->SetOriginal( originalPart );
+        }
+        else
+        {
+            newCachedPart->SetParent( cachedParent );
+            result = aLibTable->SaveSymbol( m_libName, newCachedPart );
+            wxCHECK( result == SYMBOL_LIB_TABLE::SAVE_OK, false );
+
+            LIB_MANAGER::PART_BUFFER::PTR originalBufferedParent =
+                    GetBuffer( bufferedParent->GetName() );
+            wxCHECK( originalBufferedParent, false );
+            originalPart = new LIB_PART( *part );
+            originalPart->SetParent( originalBufferedParent->GetPart() );
+            aPartBuf->SetOriginal( originalPart );
+        }
+    }
+    else if( !aLibTable->LoadSymbol( m_libName, part->GetName() ) )
+    {
+        // TODO there is no way to check if symbol has been successfully saved
+        result = aLibTable->SaveSymbol( m_libName, new LIB_PART( *part ) );
+        wxCHECK( result == SYMBOL_LIB_TABLE::SAVE_OK, false );
+        aPartBuf->SetOriginal( new LIB_PART( *part ) );
+    }
+
     ++m_hash;
     return true;
 }
@@ -775,59 +949,132 @@ bool LIB_MANAGER::LIB_BUFFER::SaveBuffer( LIB_MANAGER::PART_BUFFER::PTR aPartBuf
     PROPERTIES properties;
     properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
 
-    // TODO there is no way to check if symbol has been successfully saved
-    aPlugin->SaveSymbol( m_libName, new LIB_PART( *part ), aBuffer ? &properties : nullptr );
-    aPartBuf->SetOriginal( new LIB_PART( *part ) );
+    if( part->IsAlias() )
+    {
+        LIB_PART* originalPart;
+        LIB_PART* newCachedPart = new LIB_PART( *part );
+        std::shared_ptr< LIB_PART > bufferedParent = part->GetParent().lock();
+
+        wxCHECK( bufferedParent, false );
+
+        LIB_PART* cachedParent = aPlugin->LoadSymbol( m_libName, bufferedParent->GetName() );
+
+        if( !cachedParent )
+        {
+            cachedParent = new LIB_PART( *bufferedParent.get() );
+            newCachedPart->SetParent( cachedParent );
+            aPlugin->SaveSymbol( m_libName, cachedParent, aBuffer ? &properties : nullptr );
+            aPlugin->SaveSymbol( m_libName, newCachedPart, aBuffer ? &properties : nullptr );
+
+            LIB_PART* originalParent = new LIB_PART( *bufferedParent.get() );
+            aPartBuf->SetOriginal( originalParent );
+            originalPart = new LIB_PART( *part );
+            originalPart->SetParent( originalParent );
+            aPartBuf->SetOriginal( originalPart );
+        }
+        else
+        {
+            newCachedPart->SetParent( cachedParent );
+            aPlugin->SaveSymbol( m_libName, newCachedPart, aBuffer ? &properties : nullptr );
+
+            LIB_MANAGER::PART_BUFFER::PTR originalBufferedParent =
+                    GetBuffer( bufferedParent->GetName() );
+            wxCHECK( originalBufferedParent, false );
+            originalPart = new LIB_PART( *part );
+            originalPart->SetParent( originalBufferedParent->GetPart() );
+            aPartBuf->SetOriginal( originalPart );
+        }
+    }
+    else if( !aPlugin->LoadSymbol( m_libName, part->GetName(), aBuffer ? &properties : nullptr ) )
+    {
+        // TODO there is no way to check if symbol has been successfully saved
+        aPlugin->SaveSymbol( m_libName, new LIB_PART( *part ), aBuffer ? &properties : nullptr );
+        aPartBuf->SetOriginal( new LIB_PART( *part ) );
+    }
+
     ++m_hash;
     return true;
 }
 
 
-bool LIB_MANAGER::LIB_BUFFER::addAliases( PART_BUFFER::PTR aPartBuf )
+LIB_MANAGER::PART_BUFFER::PTR LIB_MANAGER::LIB_BUFFER::GetBuffer( const wxString& aAlias ) const
 {
-    LIB_PART* part = aPartBuf->GetPart();
-    wxCHECK( part, false );
-    bool ret = true;        // Assume everything is ok
-
-    for( unsigned int i = 0; i < part->GetAliasCount(); ++i )
+    for( auto entry : m_parts )
     {
-        bool newAlias;
-        std::tie( std::ignore, newAlias ) = m_aliases.emplace( part->GetAlias( i )->GetName(),
-                                                               aPartBuf );
-
-        if( !newAlias )     // Overwrite check
-        {
-            wxFAIL;
-            ret = false;
-        }
+        if( entry->GetPart()->GetName() == aAlias )
+            return entry;
     }
 
-    return ret;
+    return PART_BUFFER::PTR( nullptr );
 }
 
 
-bool LIB_MANAGER::LIB_BUFFER::removeAliases( PART_BUFFER::PTR aPartBuf )
+bool LIB_MANAGER::LIB_BUFFER::HasDerivedSymbols( const wxString& aParentName ) const
 {
-    LIB_PART* part = aPartBuf->GetPart();
-    wxCHECK( part, false );
-    bool ret = true;        // Assume everything is ok
-
-    for( unsigned int i = 0; i < part->GetAliasCount(); ++i )
+    for( auto entry : m_parts )
     {
-        auto aliasIt = m_aliases.find( part->GetAlias( i )->GetName() );
-
-        if( aliasIt == m_aliases.end() )
+        if( entry->GetPart()->IsAlias() )
         {
-            wxFAIL;
-            ret = false;
-            continue;
+            PART_SPTR parent = entry->GetPart()->GetParent().lock();
+
+            // Check for inherited part without a valid parent.
+            wxCHECK( parent, false );
+
+            if( parent->GetName() == aParentName )
+                return true;
         }
-
-        // Be sure the alias belongs to the assigned owner
-        wxASSERT( aliasIt->second.lock() == aPartBuf );
-
-        m_aliases.erase( aliasIt );
     }
 
-    return ret;
+    return false;
+}
+
+
+void LIB_MANAGER::LIB_BUFFER::GetRootSymbolNames( wxArrayString& aRootSymbolNames )
+{
+    for( auto entry : m_parts )
+    {
+        if( entry->GetPart()->IsAlias() )
+            continue;
+
+        aRootSymbolNames.Add( entry->GetPart()->GetName() );
+    }
+}
+
+
+int LIB_MANAGER::LIB_BUFFER::removeChildSymbols( LIB_MANAGER::PART_BUFFER::PTR aPartBuf )
+{
+    wxCHECK( aPartBuf && aPartBuf->GetPart()->IsRoot(), 0 );
+
+    int cnt = 0;
+    std::deque< LIB_MANAGER::PART_BUFFER::PTR >::iterator it = m_parts.begin();
+
+    while( it != m_parts.end() )
+    {
+
+        if( (*it)->GetPart()->IsRoot() )
+        {
+            ++it;
+        }
+        else
+        {
+            PART_SPTR parent = (*it)->GetPart()->GetParent().lock();
+
+            wxCHECK2( parent, ++it; continue );
+
+            if( parent->GetName() == aPartBuf->GetPart()->GetName() )
+            {
+                wxCHECK2( parent == aPartBuf->GetPart()->SharedPtr(), ++it; continue );
+
+                m_deleted.emplace_back( *it );
+                it = m_parts.erase( it );
+                cnt++;
+            }
+            else
+            {
+                ++it;
+            }
+        }
+    }
+
+    return cnt;
 }

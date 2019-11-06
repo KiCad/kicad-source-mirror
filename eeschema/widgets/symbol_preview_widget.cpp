@@ -145,11 +145,14 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit )
 {
     KIGFX::VIEW* view = m_preview->GetView();
     auto settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
-    LIB_ALIAS* alias = nullptr;
+    std::unique_ptr< LIB_PART > symbol;
 
     try
     {
-        alias = m_kiway.Prj().SchSymbolLibTable()->LoadSymbol( aSymbolID );
+        LIB_PART* tmp = m_kiway.Prj().SchSymbolLibTable()->LoadSymbol( aSymbolID );
+
+        if( tmp )
+            symbol = tmp->Flatten();
     }
     catch( const IO_ERROR& ioe )
     {
@@ -166,25 +169,25 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit )
         m_previewItem = nullptr;
     }
 
-    if( alias )
+    if( symbol )
     {
-        LIB_PART* part = alias->GetPart();
+        // This will flatten derived parts so that the correct final symbol can be shown.
+        m_previewItem = symbol.release();
 
         // If unit isn't specified for a multi-unit part, pick the first.  (Otherwise we'll
         // draw all of them.)
-        if( part->IsMulti() && aUnit == 0 )
+        if( m_previewItem->IsMulti() && aUnit == 0 )
             aUnit = 1;
 
         settings->m_ShowUnit = aUnit;
 
         // For symbols having a De Morgan body style, use the first style
-        settings->m_ShowConvert = part->HasConversion() ? 1 : 0;
+        settings->m_ShowConvert = m_previewItem->HasConversion() ? 1 : 0;
 
-        m_previewItem = new LIB_ALIAS( *alias, part );
         view->Add( m_previewItem );
 
         // Get the symbole size, in internal units
-        m_itemBBox = part->GetUnitBoundingBox( aUnit, 0 );
+        m_itemBBox = m_previewItem->GetUnitBoundingBox( aUnit, 0 );
 
         if( !m_preview->IsShown() )
         {
@@ -214,15 +217,16 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_PART* aPart, int aUnit )
 
     if( aPart )
     {
+        m_previewItem = new LIB_PART( *aPart );
+
         // If unit isn't specified for a multi-unit part, pick the first.  (Otherwise we'll
         // draw all of them.)
-        if( aPart->IsMulti() && aUnit == 0 )
+        if( m_previewItem->IsMulti() && aUnit == 0 )
             aUnit = 1;
 
         // For symbols having a De Morgan body style, use the first style
         auto settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
-        settings->m_ShowConvert = aPart->HasConversion() ? 1 : 0;
-        m_previewItem = new LIB_PART( *aPart );
+        settings->m_ShowConvert = m_previewItem->HasConversion() ? 1 : 0;
         view->Add( m_previewItem );
 
         // Get the symbole size, in internal units
@@ -233,7 +237,6 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_PART* aPart, int aUnit )
     }
 
     m_preview->ForceRefresh();
-
     m_preview->Show();
     m_statusSizer->ShowItems( false );
 }
