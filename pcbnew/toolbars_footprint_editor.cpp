@@ -121,6 +121,12 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     {
         m_selLayerBox = new PCB_LAYER_BOX_SELECTOR( m_mainToolBar, ID_TOOLBARH_PCB_SELECT_LAYER );
         m_selLayerBox->SetBoardFrame( this );
+
+        // Some layers cannot be seclect (they are shown in the layer manager
+        // only to set the color and visibility, but not for selection)
+        // Disable them in layer box
+        m_selLayerBox->SetNotAllowedLayerSet( LSET::ForbiddenFootprintLayers() );
+        m_selLayerBox->Resync();
     }
 
     ReCreateLayerBox( false );
