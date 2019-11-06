@@ -143,12 +143,12 @@ class wxFileName;
 class PROJECT_TEMPLATE
 {
 protected:
-    wxFileName templateBasePath;
-    wxFileName templateMetaPath;
-    wxFileName templateMetaHtmlFile;
-    wxFileName templateMetaIconFile;
-    wxBitmap* metaIcon;
-    wxString title;
+    wxFileName m_basePath;
+    wxFileName m_metaPath;
+    wxFileName m_metaHtmlFile;
+    wxFileName m_metaIconFile;
+    wxBitmap*  m_metaIcon;
+    wxString   m_title;
 
 public:
 
