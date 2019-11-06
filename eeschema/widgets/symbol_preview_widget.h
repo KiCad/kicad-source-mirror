@@ -26,9 +26,7 @@
 #include <class_draw_panel_gal.h>
 
 
-class EDA_ITEM;
 class LIB_ID;
-class LIB_ALIAS;
 class LIB_PART;
 class wxStaticText;
 class wxSizer;
@@ -75,9 +73,10 @@ private:
     wxStaticText*              m_status;
     wxSizer*                   m_statusSizer;
 
-    /** a local copy of the LIB_ALIAS or the LIB_PART to display on the canvas
+    /**
+     * A local copy of the #LIB_PART to display on the canvas.
      */
-    EDA_ITEM*                  m_previewItem;
+    LIB_PART*                  m_previewItem;
 
     /// The bounding box of the current item
     BOX2I                      m_itemBBox;

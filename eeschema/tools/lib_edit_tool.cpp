@@ -206,7 +206,6 @@ int LIB_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 static KICAD_T nonFields[] =
 {
         LIB_PART_T,
-        LIB_ALIAS_T,
         LIB_ARC_T,
         LIB_CIRCLE_T,
         LIB_TEXT_T,
@@ -521,7 +520,6 @@ void LIB_EDIT_TOOL::editSymbolProperties()
     LIB_PART*     part = m_frame->GetCurPart();
     bool          partLocked = part->UnitsLocked();
     wxString      oldName = part->GetName();
-    wxArrayString oldAliases = part->GetAliasNames( false );
 
     m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
@@ -535,6 +533,8 @@ void LIB_EDIT_TOOL::editSymbolProperties()
     if( dlg.ShowQuasiModal() != wxID_OK )
         return;
 
+    m_frame->OnModify();
+
     // if m_UnitSelectionLocked has changed, set some edit options or defaults
     // to the best value
     if( partLocked != part->UnitsLocked() )
@@ -546,8 +546,6 @@ void LIB_EDIT_TOOL::editSymbolProperties()
         // and if units are interchangeable, graphic items are common to units
         m_frame->m_DrawSpecificUnit = part->UnitsLocked();
     }
-
-    m_frame->UpdateAfterSymbolProperties( &oldName, &oldAliases );
 }
 
 

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -89,12 +89,12 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 void SYMBOL_TREE_MODEL_ADAPTER::AddLibrary( wxString const& aLibNickname )
 {
     bool                        onlyPowerSymbols = ( GetFilter() == CMP_FILTER_POWER );
-    std::vector<LIB_ALIAS*>     alias_list;
+    std::vector<LIB_PART*>      symbols;
     std::vector<LIB_TREE_ITEM*> comp_list;
 
     try
     {
-        m_libs->LoadSymbolLib( alias_list, aLibNickname, onlyPowerSymbols );
+        m_libs->LoadSymbolLib( symbols, aLibNickname, onlyPowerSymbols );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -104,9 +104,9 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibrary( wxString const& aLibNickname )
         return;
     }
 
-    if( alias_list.size() > 0 )
+    if( symbols.size() > 0 )
     {
-        comp_list.assign( alias_list.begin(), alias_list.end() );
+        comp_list.assign( symbols.begin(), symbols.end() );
         DoAddLibrary( aLibNickname, m_libs->GetDescription( aLibNickname ), comp_list, false );
     }
 }

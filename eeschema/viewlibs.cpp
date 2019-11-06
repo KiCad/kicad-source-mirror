@@ -32,6 +32,7 @@
 
 #include <viewlib_frame.h>
 #include <eeschema_id.h>
+#include <class_libentry.h>
 #include <class_library.h>
 #include <dialog_helpers.h>
 #include <dialog_choose_component.h>
@@ -54,7 +55,7 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
     const auto libNicknames = libs->GetLogicalLibs();
     adapter->AddLibraries( libNicknames, this );
 
-    LIB_ALIAS *current = GetSelectedAlias();
+    std::unique_ptr< LIB_PART > current( GetSelectedSymbol() );
     LIB_ID id;
     int unit = 0;
 

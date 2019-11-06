@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -146,7 +146,7 @@ void PART_LIB::EnableBuffering( bool aEnable )
 }
 
 
-void PART_LIB::GetAliasNames( wxArrayString& aNames ) const
+void PART_LIB::GetPartNames( wxArrayString& aNames ) const
 {
     m_plugin->EnumerateSymbolLib( aNames, fileName.GetFullPath(), m_properties.get() );
 
@@ -154,44 +154,27 @@ void PART_LIB::GetAliasNames( wxArrayString& aNames ) const
 }
 
 
-void PART_LIB::GetAliases( std::vector<LIB_ALIAS*>& aAliases ) const
+void PART_LIB::GetParts( std::vector<LIB_PART*>& aSymbols ) const
 {
-    m_plugin->EnumerateSymbolLib( aAliases, fileName.GetFullPath(), m_properties.get() );
+    m_plugin->EnumerateSymbolLib( aSymbols, fileName.GetFullPath(), m_properties.get() );
 
-    std::sort( aAliases.begin(), aAliases.end(),
-            [](LIB_ALIAS *lhs, LIB_ALIAS *rhs) -> bool
+    std::sort( aSymbols.begin(), aSymbols.end(),
+            [](LIB_PART *lhs, LIB_PART *rhs) -> bool
                 { return lhs->GetName() < rhs->GetName(); });
-}
-
-
-LIB_ALIAS* PART_LIB::FindAlias( const wxString& aName ) const
-{
-    LIB_ALIAS* alias = m_plugin->LoadSymbol( fileName.GetFullPath(), aName, m_properties.get() );
-
-    // Set the library to this even though technically the legacy cache plugin owns the
-    // symbols.  This allows the symbol library table conversion tool to determine the
-    // correct library where the symbol was found.
-    if( alias && alias->GetPart() && !alias->GetPart()->GetLib() )
-        alias->GetPart()->SetLib( const_cast<PART_LIB*>( this ) );
-
-    return alias;
-}
-
-
-LIB_ALIAS* PART_LIB::FindAlias( const LIB_ID& aLibId ) const
-{
-    return FindAlias( aLibId.Format().wx_str() );
 }
 
 
 LIB_PART* PART_LIB::FindPart( const wxString& aName ) const
 {
-    LIB_ALIAS* alias = FindAlias( aName );
+    LIB_PART* symbol = m_plugin->LoadSymbol( fileName.GetFullPath(), aName, m_properties.get() );
 
-    if( alias != NULL )
-        return alias->GetPart();
+    // Set the library to this even though technically the legacy cache plugin owns the
+    // symbols.  This allows the symbol library table conversion tool to determine the
+    // correct library where the symbol was found.
+    if( symbol && !symbol->GetLib() )
+        symbol->SetLib( const_cast<PART_LIB*>( this ) );
 
-    return NULL;
+    return symbol;
 }
 
 
@@ -204,7 +187,8 @@ LIB_PART* PART_LIB::FindPart( const LIB_ID& aLibId ) const
 void PART_LIB::AddPart( LIB_PART* aPart )
 {
     // add a clone, not the caller's copy, the plugin take ownership of the new symbol.
-    m_plugin->SaveSymbol( fileName.GetFullPath(), new LIB_PART( *aPart, this ), m_properties.get() );
+    m_plugin->SaveSymbol( fileName.GetFullPath(), new LIB_PART( *aPart->SharedPtr().get(), this ),
+                          m_properties.get() );
 
     // If we are not buffering, the library file is updated immediately when the plugin
     // SaveSymbol() function is called.
@@ -215,11 +199,11 @@ void PART_LIB::AddPart( LIB_PART* aPart )
 }
 
 
-LIB_ALIAS* PART_LIB::RemoveAlias( LIB_ALIAS* aEntry )
+LIB_PART* PART_LIB::RemovePart( LIB_PART* aEntry )
 {
     wxCHECK_MSG( aEntry != NULL, NULL, "NULL pointer cannot be removed from library." );
 
-    m_plugin->DeleteAlias( fileName.GetFullPath(), aEntry->GetName(), m_properties.get() );
+    m_plugin->DeleteSymbol( fileName.GetFullPath(), aEntry->GetName(), m_properties.get() );
 
     // If we are not buffering, the library file is updated immediately when the plugin
     // SaveSymbol() function is called.
@@ -256,19 +240,18 @@ PART_LIB* PART_LIB::LoadLibrary( const wxString& aFileName )
 {
     std::unique_ptr<PART_LIB> lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName ) );
 
-    std::vector<LIB_ALIAS*> aliases;
+    std::vector<LIB_PART*> parts;
     // This loads the library.
-    lib->GetAliases( aliases );
+    lib->GetParts( parts );
 
     // Now, set the LIB_PART m_library member but it will only be used
     // when loading legacy libraries in the future. Once the symbols in the
     // schematic have a full #LIB_ID, this will not get called.
-    for( size_t ii = 0; ii < aliases.size(); ii++ )
+    for( size_t ii = 0; ii < parts.size(); ii++ )
     {
-        LIB_ALIAS* alias = aliases[ii];
+        LIB_PART* part = parts[ii];
 
-        if( alias->GetPart() )
-            alias->GetPart()->SetLib( lib.get() );
+        part->SetLib( lib.get() );
     }
 
     PART_LIB* ret = lib.release();
@@ -394,26 +377,7 @@ LIB_PART* PART_LIBS::FindLibPart( const LIB_ID& aLibId, const wxString& aLibrary
 }
 
 
-LIB_ALIAS* PART_LIBS::FindLibraryAlias( const LIB_ID& aLibId, const wxString& aLibraryName )
-{
-    LIB_ALIAS* entry = NULL;
-
-    for( PART_LIB& lib : *this )
-    {
-        if( !aLibraryName.IsEmpty() && lib.GetName() != aLibraryName )
-            continue;
-
-        entry = lib.FindAlias( aLibId.GetLibItemName().wx_str() );
-
-        if( entry )
-            break;
-    }
-
-    return entry;
-}
-
-
-void PART_LIBS::FindLibraryNearEntries( std::vector<LIB_ALIAS*>& aCandidates,
+void PART_LIBS::FindLibraryNearEntries( std::vector<LIB_PART*>& aCandidates,
                                         const wxString& aEntryName,
                                         const wxString& aLibraryName )
 {
@@ -422,17 +386,17 @@ void PART_LIBS::FindLibraryNearEntries( std::vector<LIB_ALIAS*>& aCandidates,
         if( !aLibraryName.IsEmpty() && lib.GetName() != aLibraryName )
             continue;
 
-        wxArrayString aliasNames;
+        wxArrayString partNames;
 
-        lib.GetAliasNames( aliasNames );
+        lib.GetPartNames( partNames );
 
-        if( aliasNames.IsEmpty() )
+        if( partNames.IsEmpty() )
             continue;
 
-        for( size_t i = 0;  i < aliasNames.size();  i++ )
+        for( size_t i = 0;  i < partNames.size();  i++ )
         {
-            if( aliasNames[i].CmpNoCase( aEntryName ) == 0 )
-                aCandidates.push_back( lib.FindAlias( aliasNames[i] ) );
+            if( partNames[i].CmpNoCase( aEntryName ) == 0 )
+                aCandidates.push_back( lib.FindPart( partNames[i] ) );
         }
     }
 }

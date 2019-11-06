@@ -34,7 +34,6 @@ class SCH_SCREEN;
 class SCH_PLUGIN;
 class KIWAY;
 class LIB_PART;
-class LIB_ALIAS;
 class PART_LIB;
 class PROPERTIES;
 
@@ -274,8 +273,8 @@ public:
     /**
      * Populate a list of #LIB_PART alias names contained within the library \a aLibraryPath.
      *
-     * @param aAliasNameList is an array to populate with the #LIB_ALIAS names associated with
-     *                       the library.
+     * @param aSymbolNameList is an array to populate with the #LIB_PART names associated with
+     *                        the library.
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
      *                     or URL containing one or more #LIB_PART objects.
@@ -287,15 +286,18 @@ public:
      *
      * @throw IO_ERROR if the library cannot be found, the part library cannot be loaded.
      */
-    virtual void EnumerateSymbolLib( wxArrayString&    aAliasNameList,
+    virtual void EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                                      const wxString&   aLibraryPath,
                                      const PROPERTIES* aProperties = NULL );
 
     /**
      * Populate a list of #LIB_PART aliases contained within the library \a aLibraryPath.
      *
-     * @param aAliasList is an array to populate with the #LIB_ALIAS pointers associated with
-     *                   the library.
+     * @note It is the reponsibility of the caller to delete the returned object from the heap.
+     *       Failure to do this will result in memory leaks.
+     *
+     * @param aSymbolList is an array to populate with the #LIB_PART pointers associated with
+     *                    the library.
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
      *                     or URL containing one or more #LIB_PART objects.
@@ -307,19 +309,18 @@ public:
      *
      * @throw IO_ERROR if the library cannot be found, the part library cannot be loaded.
      */
-    virtual void EnumerateSymbolLib( std::vector<LIB_ALIAS*>& aAliasList,
+    virtual void EnumerateSymbolLib( std::vector<LIB_PART*>& aSymbolList,
                                      const wxString&   aLibraryPath,
                                      const PROPERTIES* aProperties = NULL );
 
     /**
-     * Load a #LIB_ALIAS object having \a aAliasName from the \a aLibraryPath containing
-     * a library format that this #SCH_PLUGIN knows about.  The #LIB_PART should be accessed
-     * indirectly using the #LIB_ALIAS it is associated with.
+     * Load a #LIB_PART object having \a aPartName from the \a aLibraryPath containing
+     * a library format that this #SCH_PLUGIN knows about.
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
      *                     or URL containing several symbols.
      *
-     * @param aAliasName is the alias name of the #LIB_PART to load.
+     * @param aPartName is the name of the #LIB_PART to load.
      *
      * @param aProperties is an associative array that can be used to tell the loader
      *                    implementation to do something special, because it can take
@@ -328,13 +329,13 @@ public:
      *                    (plugin may not delete it), and plugins should expect it to be
      *                    optionally NULL.
      *
-     * @return the alias if found caller shares it or NULL if not found.
+     * @return the part created on the heap if found caller shares it or NULL if not found.
      *
      * @throw IO_ERROR if the library cannot be found or read.  No exception
      *                 is thrown in the case where aAliasName cannot be found.
      */
-    virtual LIB_ALIAS* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-                                   const PROPERTIES* aProperties = NULL );
+    virtual LIB_PART* LoadSymbol( const wxString& aLibraryPath, const wxString& aPartName,
+                                  const PROPERTIES* aProperties = NULL );
 
     /**
      * Write \a aSymbol to an existing library located at \a aLibraryPath.  If a #LIB_PART
@@ -361,38 +362,14 @@ public:
                              const PROPERTIES* aProperties = NULL );
 
     /**
-     * Delete \a aAliasName from the library at \a aLibraryPath.
-     *
-     * If \a aAliasName refers the the root #LIB_PART object, the part is renamed to
-     * the next or previous #LIB_ALIAS in the #LIB_PART if one exists.  If the #LIB_ALIAS
-     * is the last alias referring to the root #LIB_PART, the #LIB_PART is also removed
-     * from the library.
-     *
-     * @param aLibraryPath is a locator for the "library", usually a directory, file,
-     *                     or URL containing several symbols.
-     *
-     * @param aAliasName is the name of a #LIB_ALIAS to delete from the specified library.
-     *
-     * @param aProperties is an associative array that can be used to tell the library
-     *                    delete function anything special, because it can take any number
-     *                    of additional named tuning arguments that the plugin is known to
-     *                    support.  The caller continues to own this object (plugin may not
-     *                    delete it), and plugins should expect it to be optionally NULL.
-     *
-     * @throw IO_ERROR if there is a problem finding the alias or the library or deleting it.
-     */
-    virtual void DeleteAlias( const wxString& aLibraryPath, const wxString& aAliasName,
-                              const PROPERTIES* aProperties = NULL );
-
-    /**
      * Delete the entire #LIB_PART associated with \a aAliasName from the library
      * \a aLibraryPath.
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
      *                     or URL containing several symbols.
      *
-     * @param aAliasName is the name of a #LIB_ALIAS associated with it's root #LIB_PART
-     *                   object to delete from the specified library.
+     * @param aSymbolName is the name of a #LIB_PART associated with it's root #LIB_PART
+     *                    object to delete from the specified library.
      *
      * @param aProperties is an associative array that can be used to tell the library
      *                    delete function anything special, because it can take any number
@@ -402,7 +379,7 @@ public:
      *
      * @throw IO_ERROR if there is a problem finding the alias or the library or deleting it.
      */
-    virtual void DeleteSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+    virtual void DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
                                const PROPERTIES* aProperties = NULL );
 
     /**

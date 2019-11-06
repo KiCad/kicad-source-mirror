@@ -52,7 +52,6 @@ class PROPERTIES;
 class SCH_EAGLE_PLUGIN_CACHE;
 class LIB_PART;
 class PART_LIB;
-class LIB_ALIAS;
 class LIB_CIRCLE;
 class LIB_FIELD;
 class LIB_RECTANGLE;
@@ -106,8 +105,8 @@ public:
     //void EnumerateSymbolLib( wxArrayString& aAliasNameList, const wxString& aLibraryPath,
     //                         const PROPERTIES* aProperties = NULL ) override;
 
-    //LIB_ALIAS* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-    //                       const PROPERTIES* aProperties = NULL ) override;
+    //LIB_PART* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+    //                      const PROPERTIES* aProperties = NULL ) override;
 
     //void SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
     //                 const PROPERTIES* aProperties = NULL ) override;

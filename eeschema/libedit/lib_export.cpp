@@ -27,6 +27,7 @@
 #include <confirm.h>
 #include <symbol_lib_table.h>
 #include <lib_edit_frame.h>
+#include <class_libentry.h>
 #include <class_library.h>
 #include <wildcards_and_files_ext.h>
 #include <lib_manager.h>
@@ -78,7 +79,7 @@ void LIB_EDIT_FRAME::ImportPart()
     }
 
     wxString symbolName = symbols[0];
-    LIB_ALIAS* entry = pi->LoadSymbol( fn.GetFullPath(), symbolName );
+    LIB_PART* entry = pi->LoadSymbol( fn.GetFullPath(), symbolName );
 
     if( m_libMgr->PartExists( symbols[0], libName ) )
     {
@@ -87,7 +88,7 @@ void LIB_EDIT_FRAME::ImportPart()
         return;
     }
 
-    m_libMgr->UpdatePart( entry->GetPart(), libName );
+    m_libMgr->UpdatePart( entry, libName );
     SyncLibraries( false );
     LoadPart( symbolName, libName, 1 );
 }
@@ -126,10 +127,7 @@ void LIB_EDIT_FRAME::ExportPart()
     {
         try
         {
-            LIB_ALIAS* alias = pi->LoadSymbol( fn.GetFullPath(), part->GetName() );
-
-            if( alias )
-                old_part = alias->GetPart();
+            old_part = pi->LoadSymbol( fn.GetFullPath(), part->GetName() );
         }
         catch( const IO_ERROR& ioe )
         {

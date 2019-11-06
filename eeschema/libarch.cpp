@@ -91,7 +91,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 
             try
             {
-                if( archLib->FindAlias( component->GetLibId() ) )
+                if( archLib->FindPart( component->GetLibId() ) )
                     continue;
 
                 part = GetLibPart( component->GetLibId(), true );

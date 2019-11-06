@@ -43,10 +43,9 @@
 void LIB_EDIT_FRAME::LoadOneSymbol()
 {
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
-    LIB_PART*          part = GetCurPart();
 
     // Exit if no library entry is selected or a command is in progress.
-    if( !part || !EE_CONDITIONS::Idle( selTool->GetSelection() ) )
+    if( !m_my_part || !EE_CONDITIONS::Idle( selTool->GetSelection() ) )
         return;
 
     PROJECT&        prj = Prj();
@@ -97,7 +96,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
         wxMessageBox( msg, _( "Warning" ), wxOK | wxICON_EXCLAMATION, this );
     }
 
-    LIB_ALIAS* alias = nullptr;
+    LIB_PART* alias = nullptr;
 
     try
     {
@@ -108,11 +107,11 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
         return;
     }
 
-    wxCHECK_RET( alias && alias->GetPart(), "Invalid symbol." );
+    wxCHECK_RET( alias, "Invalid symbol." );
 
-    SaveCopyInUndoList( part );
+    SaveCopyInUndoList( m_my_part.get() );
 
-    LIB_PART* first = alias->GetPart();
+    LIB_PART* first = alias;
     LIB_ITEMS_CONTAINER& drawList = first->GetDrawItems();
 
     for( LIB_ITEM& item : drawList )
@@ -130,12 +129,12 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
 
         LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
 
-        newItem->SetParent( part );
-        part->AddDrawItem( newItem );
+        newItem->SetParent( m_my_part.get() );
+        m_my_part->AddDrawItem( newItem );
         item.ClearSelected();
     }
 
-    part->RemoveDuplicateDrawItems();
+    m_my_part->RemoveDuplicateDrawItems();
 
     OnModify();
 }
@@ -143,12 +142,12 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
 
 void LIB_EDIT_FRAME::SaveOneSymbol()
 {
+    wxCHECK( m_my_part, /* void */ );
+
     // Export the current part as a symbol (.sym file)
     // this is the current part without its aliases and doc file
     // because a .sym file is used to import graphics in a part being edited
-    LIB_PART*       part = GetCurPart();
-
-    if( !part || part->GetDrawItems().empty() )
+    if( m_my_part->GetDrawItems().empty() )
         return;
 
     PROJECT&        prj = Prj();
@@ -160,7 +159,7 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
         default_path = search->LastVisitedPath();
 
     wxFileDialog dlg( this, _( "Export Symbol" ), default_path,
-                      part->GetName() + "." + SchematicSymbolFileExtension,
+                      m_my_part->GetName() + "." + SchematicSymbolFileExtension,
                       SchematicSymbolFileWildcard(),
                       wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
@@ -189,8 +188,8 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
         nodoc_props[ SCH_LEGACY_PLUGIN::PropNoDocFile ] = "";
         plugin->CreateSymbolLib( fn.GetFullPath(), &nodoc_props );
 
-        LIB_PART* saved_part = new LIB_PART( *part );
-        saved_part->RemoveAllAliases();     // useless in a .sym file
+        // The part gets flattened by the LIB_PART copy constructor.
+        LIB_PART* saved_part = new LIB_PART( *m_my_part.get() );
         plugin->SaveSymbol( fn.GetFullPath(), saved_part, &nodoc_props );
     }
     catch( const IO_ERROR& ioe )
@@ -204,17 +203,22 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
 
 void LIB_EDIT_FRAME::DisplayCmpDoc()
 {
-    LIB_PART* part = GetCurPart();
-
     EDA_DRAW_FRAME::ClearMsgPanel();
 
-    if( !part )
+    if( !m_my_part )
         return;
 
-    LIB_ALIAS* alias = part->GetAlias( part->GetName() );
-    wxString msg = part->GetName();
+    wxString msg = m_my_part->GetName();
 
     AppendMsgPanel( _( "Name" ), msg, BLUE, 8 );
+
+    if( m_my_part->IsAlias() )
+    {
+        PART_SPTR parent = m_my_part->GetParent().lock();
+
+        msg = parent ? parent->GetName() : _( "Undefined!" );
+        AppendMsgPanel( _( "Parent" ), msg, BROWN, 8 );
+    }
 
     static wxChar UnitLetter[] = wxT( "?ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
     msg = UnitLetter[m_unit];
@@ -228,13 +232,13 @@ void LIB_EDIT_FRAME::DisplayCmpDoc()
 
     AppendMsgPanel( _( "Body" ), msg, GREEN, 8 );
 
-    if( part->IsPower() )
+    if( m_my_part->IsPower() )
         msg = _( "Power Symbol" );
     else
         msg = _( "Symbol" );
 
     AppendMsgPanel( _( "Type" ), msg, MAGENTA, 8 );
-    AppendMsgPanel( _( "Description" ), alias->GetDescription(), CYAN, 8 );
-    AppendMsgPanel( _( "Key words" ), alias->GetKeyWords(), DARKDARKGRAY );
-    AppendMsgPanel( _( "Datasheet" ), alias->GetDocFileName(), DARKDARKGRAY );
+    AppendMsgPanel( _( "Description" ), m_my_part->GetDescription(), CYAN, 8 );
+    AppendMsgPanel( _( "Key words" ), m_my_part->GetKeyWords(), DARKDARKGRAY );
+    AppendMsgPanel( _( "Datasheet" ), m_my_part->GetDocFileName(), DARKDARKGRAY );
 }

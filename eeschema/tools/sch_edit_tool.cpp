@@ -88,16 +88,15 @@ private:
         }
 
         int  unit = component->GetUnit();
-        auto partRef = component->GetPartRef().lock();
 
-        if( !partRef || partRef->GetUnitCount() < 2 )
+        if( !component->GetPartRef() || component->GetPartRef()->GetUnitCount() < 2 )
         {
             Append( ID_POPUP_SCH_UNFOLD_BUS, _( "symbol is not multi-unit" ), wxEmptyString );
             Enable( ID_POPUP_SCH_UNFOLD_BUS, false );
             return;
         }
 
-        for( int ii = 0; ii < partRef->GetUnitCount(); ii++ )
+        for( int ii = 0; ii < component->GetPartRef()->GetUnitCount(); ii++ )
         {
             wxString num_unit;
             num_unit.Printf( _( "Unit %s" ), LIB_PART::SubReference( ii + 1, false ) );

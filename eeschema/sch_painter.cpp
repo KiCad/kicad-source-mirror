@@ -2,8 +2,9 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,7 +66,8 @@ namespace KIGFX
 {
 
 SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
-    m_ShowUnit( 0 ), m_ShowConvert( 0 )
+    m_ShowUnit( 0 ),
+    m_ShowConvert( 0 )
 {
     ImportLegacyColors( nullptr );
 
@@ -73,6 +75,7 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
     m_ShowHiddenPins = true;
     m_ShowPinsElectricalType = true;
     m_ShowUmbilicals = true;
+    m_ShowDisabled = false;
 }
 
 
@@ -117,7 +120,7 @@ static LIB_PART* dummy()
 
         LIB_RECTANGLE* square = new LIB_RECTANGLE( part );
 
-        square->MoveTo( wxPoint( -200, 200 ));
+        square->MoveTo( wxPoint( -200, 200 ) );
         square->SetEndPosition( wxPoint( 200, -200 ) );
 
         LIB_TEXT* text = new LIB_TEXT( part );
@@ -134,7 +137,7 @@ static LIB_PART* dummy()
 
 
 SCH_PAINTER::SCH_PAINTER( GAL* aGal ) :
-    KIGFX::PAINTER (aGal)
+    KIGFX::PAINTER( aGal )
 { }
 
 
@@ -144,7 +147,7 @@ SCH_PAINTER::SCH_PAINTER( GAL* aGal ) :
 
 bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 {
-	auto item2 = static_cast<const EDA_ITEM*>( aItem );
+    auto item2 = static_cast<const EDA_ITEM*>( aItem );
     auto item = const_cast<EDA_ITEM*>( item2 );
 
     m_schSettings.ImportLegacyColors( nullptr );
@@ -169,38 +172,37 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 
 #endif
 
-	switch( item->Type() )
-	{
-	HANDLE_ITEM(LIB_ALIAS_T, LIB_ALIAS);
-	HANDLE_ITEM(LIB_PART_T, LIB_PART);
-	HANDLE_ITEM(LIB_RECTANGLE_T, LIB_RECTANGLE);
-    HANDLE_ITEM(LIB_POLYLINE_T, LIB_POLYLINE);
-    HANDLE_ITEM(LIB_CIRCLE_T, LIB_CIRCLE);
-    HANDLE_ITEM(LIB_PIN_T, LIB_PIN);
-    HANDLE_ITEM(LIB_ARC_T, LIB_ARC);
-    HANDLE_ITEM(LIB_FIELD_T, LIB_FIELD);
-    HANDLE_ITEM(LIB_TEXT_T, LIB_TEXT);
-    HANDLE_ITEM(LIB_BEZIER_T, LIB_BEZIER);
-    HANDLE_ITEM(SCH_COMPONENT_T, SCH_COMPONENT);
-    HANDLE_ITEM(SCH_JUNCTION_T, SCH_JUNCTION);
-    HANDLE_ITEM(SCH_LINE_T, SCH_LINE);
-    HANDLE_ITEM(SCH_TEXT_T, SCH_TEXT);
-    HANDLE_ITEM(SCH_LABEL_T, SCH_TEXT);
-    HANDLE_ITEM(SCH_FIELD_T, SCH_FIELD);
-    HANDLE_ITEM(SCH_HIER_LABEL_T, SCH_HIERLABEL);
-    HANDLE_ITEM(SCH_GLOBAL_LABEL_T, SCH_GLOBALLABEL);
-    HANDLE_ITEM(SCH_SHEET_T, SCH_SHEET);
-    HANDLE_ITEM(SCH_SHEET_PIN_T, SCH_HIERLABEL);
-    HANDLE_ITEM(SCH_NO_CONNECT_T, SCH_NO_CONNECT);
-    HANDLE_ITEM(SCH_BUS_WIRE_ENTRY_T, SCH_BUS_ENTRY_BASE);
-    HANDLE_ITEM(SCH_BUS_BUS_ENTRY_T, SCH_BUS_ENTRY_BASE);
-    HANDLE_ITEM(SCH_BITMAP_T, SCH_BITMAP);
-    HANDLE_ITEM(SCH_MARKER_T, SCH_MARKER);
+    switch( item->Type() )
+    {
+    HANDLE_ITEM( LIB_PART_T, LIB_PART );
+    HANDLE_ITEM( LIB_RECTANGLE_T, LIB_RECTANGLE );
+    HANDLE_ITEM( LIB_POLYLINE_T, LIB_POLYLINE );
+    HANDLE_ITEM( LIB_CIRCLE_T, LIB_CIRCLE );
+    HANDLE_ITEM( LIB_PIN_T, LIB_PIN );
+    HANDLE_ITEM( LIB_ARC_T, LIB_ARC );
+    HANDLE_ITEM( LIB_FIELD_T, LIB_FIELD );
+    HANDLE_ITEM( LIB_TEXT_T, LIB_TEXT );
+    HANDLE_ITEM( LIB_BEZIER_T, LIB_BEZIER );
+    HANDLE_ITEM( SCH_COMPONENT_T, SCH_COMPONENT );
+    HANDLE_ITEM( SCH_JUNCTION_T, SCH_JUNCTION );
+    HANDLE_ITEM( SCH_LINE_T, SCH_LINE );
+    HANDLE_ITEM( SCH_TEXT_T, SCH_TEXT );
+    HANDLE_ITEM( SCH_LABEL_T, SCH_TEXT );
+    HANDLE_ITEM( SCH_FIELD_T, SCH_FIELD );
+    HANDLE_ITEM( SCH_HIER_LABEL_T, SCH_HIERLABEL );
+    HANDLE_ITEM( SCH_GLOBAL_LABEL_T, SCH_GLOBALLABEL );
+    HANDLE_ITEM( SCH_SHEET_T, SCH_SHEET );
+    HANDLE_ITEM( SCH_SHEET_PIN_T, SCH_HIERLABEL );
+    HANDLE_ITEM( SCH_NO_CONNECT_T, SCH_NO_CONNECT );
+    HANDLE_ITEM( SCH_BUS_WIRE_ENTRY_T, SCH_BUS_ENTRY_BASE );
+    HANDLE_ITEM( SCH_BUS_BUS_ENTRY_T, SCH_BUS_ENTRY_BASE );
+    HANDLE_ITEM( SCH_BITMAP_T, SCH_BITMAP );
+    HANDLE_ITEM( SCH_MARKER_T, SCH_MARKER );
 
     default: return false;
-	}
+    }
 
-	return false;
+    return false;
 }
 
 
@@ -260,6 +262,9 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
         color = highlightColor;
     }
 
+    if( m_schSettings.m_ShowDisabled )
+        color = color.Darken( 0.5f );
+
     return color;
 }
 
@@ -314,7 +319,16 @@ void SCH_PAINTER::draw( LIB_PART *aPart, int aLayer, bool aDrawFields, int aUnit
     if( !aConvert )
         aConvert = m_schSettings.m_ShowConvert;
 
-    for( auto& item : aPart->GetDrawItems() )
+    std::unique_ptr< LIB_PART > tmpPart;
+    LIB_PART* drawnPart = aPart;
+
+    if( aPart->IsAlias() )
+    {
+        tmpPart = aPart->Flatten();
+        drawnPart = tmpPart.get();
+    }
+
+    for( auto& item : drawnPart->GetDrawItems() )
     {
         if( !aDrawFields && item.Type() == LIB_FIELD_T )
             continue;
@@ -327,26 +341,6 @@ void SCH_PAINTER::draw( LIB_PART *aPart, int aLayer, bool aDrawFields, int aUnit
 
         Draw( &item, aLayer );
     }
-}
-
-
-void SCH_PAINTER::draw( LIB_ALIAS *aAlias, int aLayer )
-{
-    LIB_PART* comp = aAlias->GetPart();
-
-    draw( comp, aLayer, false );
-
-    LIB_FIELDS fields;
-    comp->GetFields( fields );
-
-    if( !aAlias->IsRoot() )
-    {
-        fields[ VALUE ].SetText( aAlias->GetName() );
-        fields[ DATASHEET ].SetText( aAlias->GetDocFileName() );
-    }
-
-    for( LIB_FIELD& field : fields )
-        draw( &field, aLayer );
 }
 
 
@@ -678,11 +672,11 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
 
     VECTOR2I p0;
     VECTOR2I dir;
-	int len = aPin->GetLength();
+    int len = aPin->GetLength();
     int orient = aPin->GetOrientation();
 
     switch( orient )
-	{
+    {
     case PIN_UP:
         p0 = VECTOR2I( pos.x, pos.y - len );
         dir = VECTOR2I(0, 1);
@@ -698,12 +692,12 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
         dir = VECTOR2I(1, 0);
         break;
 
-	default:
+    default:
     case PIN_RIGHT:
         p0 = VECTOR2I( pos.x + len, pos.y );
         dir = VECTOR2I(-1, 0);
         break;
-	}
+    }
 
     VECTOR2D pc;
 
@@ -1319,10 +1313,8 @@ static void orientPart( LIB_PART* part, int orientation )
 
 void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
 {
-    PART_SPTR originalPartSptr = aComp->GetPartRef().lock();
-
     // Use dummy part if the actual couldn't be found (or couldn't be locked).
-    LIB_PART* originalPart = originalPartSptr ? originalPartSptr.get() : dummy();
+    LIB_PART* originalPart = aComp->GetPartRef() ? aComp->GetPartRef().get() : dummy();
 
     // Copy the source so we can re-orient and translate it.
     LIB_PART tempPart( *originalPart );

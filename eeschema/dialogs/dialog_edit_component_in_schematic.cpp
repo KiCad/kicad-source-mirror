@@ -201,15 +201,9 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
     int mirror = m_cmp->GetOrientation() & ( CMP_MIRROR_X | CMP_MIRROR_Y );
 
     if( mirror == CMP_MIRROR_X )
-    {
         m_rbMirror->SetSelection( 1 );
-        DBG( printf( "mirror=X,1\n" ); )
-    }
     else if( mirror == CMP_MIRROR_Y )
-    {
         m_rbMirror->SetSelection( 2 );
-        DBG( printf( "mirror=Y,2\n" ); )
-    }
     else
         m_rbMirror->SetSelection( 0 );
 
@@ -346,7 +340,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::Validate()
     }
     else if( id != m_cmp->GetLibId() )
     {
-        LIB_ALIAS* alias = nullptr;
+        LIB_PART* alias = nullptr;
 
         try
         {

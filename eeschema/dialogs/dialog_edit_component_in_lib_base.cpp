@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Aug 15 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 #include "dialog_edit_component_in_lib_base.h"
 
-///////////////////////////////////////////////////////////////////////////
+ ///////////////////////////////////////////////////////////////////////////
 
 DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
@@ -75,11 +75,10 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 
 	// Cell Defaults
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_grid->SetMinSize( wxSize( -1,180 ) );
+	m_grid->SetMinSize( wxSize( -1,160 ) );
 
-	sbSizer4->Add( m_grid, 1, wxTOP|wxBOTTOM|wxEXPAND, 5 );
+	sbSizer4->Add( m_grid, 1, wxALL|wxEXPAND, 5 );
 
-	wxBoxSizer* bButtonSize;
 	bButtonSize = new wxBoxSizer( wxHORIZONTAL );
 
 	m_bpAdd = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
@@ -113,7 +112,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	sbSizer4->Add( bButtonSize, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
-	bSizerBasicPanel->Add( sbSizer4, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerBasicPanel->Add( sbSizer4, 1, wxALL|wxEXPAND, 5 );
 
 	wxBoxSizer* bSizerMidBasicPanel;
 	bSizerMidBasicPanel = new wxBoxSizer( wxVERTICAL );
@@ -127,10 +126,10 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	wxStaticText* staticNameLabel;
 	staticNameLabel = new wxStaticText( m_PanelBasic, wxID_ANY, _("Symbol name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticNameLabel->Wrap( -1 );
-	fgSizerFPID->Add( staticNameLabel, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerFPID->Add( staticNameLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_SymbolNameCtrl = new wxTextCtrl( m_PanelBasic, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID->Add( m_SymbolNameCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizerFPID->Add( m_SymbolNameCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxStaticText* staticDescriptionLabel;
 	staticDescriptionLabel = new wxStaticText( m_PanelBasic, wxID_ANY, _("Description:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -138,22 +137,30 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	fgSizerFPID->Add( staticDescriptionLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_DescCtrl = new wxTextCtrl( m_PanelBasic, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID->Add( m_DescCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizerFPID->Add( m_DescCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	staticKeywordsLabel = new wxStaticText( m_PanelBasic, wxID_ANY, _("Keywords:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticKeywordsLabel->Wrap( -1 );
 	fgSizerFPID->Add( staticKeywordsLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_KeywordCtrl = new wxTextCtrl( m_PanelBasic, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID->Add( m_KeywordCtrl, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgSizerFPID->Add( m_KeywordCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	m_inheritsStaticText = new wxStaticText( m_PanelBasic, wxID_ANY, _("Derive from symbol:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_inheritsStaticText->Wrap( -1 );
+	fgSizerFPID->Add( m_inheritsStaticText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_inheritanceSelectCombo = new wxComboBox( m_PanelBasic, wxID_ANY, _("<None>"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN|wxCB_READONLY );
+	m_inheritanceSelectCombo->SetToolTip( _("Select symbol to derive this symbol from or select\n<None> for root symbol.\n\nDerived symbols were formerly referred to as aliases.\nThis is no longer the case and all symbols are either\nderived from another symbols or they stand alone as\nroot symbols.") );
+
+	fgSizerFPID->Add( m_inheritanceSelectCombo, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizerMidBasicPanel->Add( fgSizerFPID, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	bSizerBasicPanel->Add( bSizerMidBasicPanel, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizerBasicPanel->Add( bSizerMidBasicPanel, 0, wxEXPAND, 5 );
 
-	wxBoxSizer* bSizerLowerBasicPanel;
 	bSizerLowerBasicPanel = new wxBoxSizer( wxHORIZONTAL );
 
 	wxBoxSizer* bSizerLeftCol;
@@ -261,134 +268,6 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_PanelBasic->Layout();
 	bSizerBasicPanel->Fit( m_PanelBasic );
 	m_NoteBook->AddPage( m_PanelBasic, _("General"), true );
-	m_PanelAlias = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizerMainPanelAlias;
-	bSizerMainPanelAlias = new wxBoxSizer( wxHORIZONTAL );
-
-	wxBoxSizer* bLeftBoxSizerPanelAlias;
-	bLeftBoxSizerPanelAlias = new wxBoxSizer( wxVERTICAL );
-
-	wxStaticText* staticAliasesLabel;
-	staticAliasesLabel = new wxStaticText( m_PanelAlias, wxID_ANY, _("Aliases:"), wxDefaultPosition, wxDefaultSize, 0 );
-	staticAliasesLabel->Wrap( -1 );
-	bLeftBoxSizerPanelAlias->Add( staticAliasesLabel, 0, wxRIGHT|wxLEFT, 5 );
-
-	m_aliasListBox = new wxListBox( m_PanelAlias, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	bLeftBoxSizerPanelAlias->Add( m_aliasListBox, 1, wxEXPAND|wxLEFT, 5 );
-
-	wxBoxSizer* bSizerButtons;
-	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
-
-	m_addAliasButton = new wxBitmapButton( m_PanelAlias, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_addAliasButton->SetToolTip( _("Add alias") );
-	m_addAliasButton->SetMinSize( wxSize( 30,29 ) );
-
-	bSizerButtons->Add( m_addAliasButton, 0, wxALL, 5 );
-
-
-	bSizerButtons->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-
-	m_deleteAliasButton = new wxBitmapButton( m_PanelAlias, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_deleteAliasButton->SetToolTip( _("Delete alias") );
-	m_deleteAliasButton->SetMinSize( wxSize( 30,29 ) );
-
-	bSizerButtons->Add( m_deleteAliasButton, 0, wxALL, 5 );
-
-
-	bLeftBoxSizerPanelAlias->Add( bSizerButtons, 0, wxEXPAND, 5 );
-
-
-	bSizerMainPanelAlias->Add( bLeftBoxSizerPanelAlias, 2, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	wxBoxSizer* bRightBoxSizerPanelAlias;
-	bRightBoxSizerPanelAlias = new wxBoxSizer( wxVERTICAL );
-
-	m_staticText12 = new wxStaticText( m_PanelAlias, wxID_ANY, _("Alias field substitutions:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText12->Wrap( -1 );
-	bRightBoxSizerPanelAlias->Add( m_staticText12, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-
-	m_aliasGrid = new WX_GRID( m_PanelAlias, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-
-	// Grid
-	m_aliasGrid->CreateGrid( 4, 2 );
-	m_aliasGrid->EnableEditing( true );
-	m_aliasGrid->EnableGridLines( true );
-	m_aliasGrid->EnableDragGridSize( false );
-	m_aliasGrid->SetMargins( 0, 0 );
-
-	// Columns
-	m_aliasGrid->SetColSize( 0, 72 );
-	m_aliasGrid->SetColSize( 1, 420 );
-	m_aliasGrid->EnableDragColMove( false );
-	m_aliasGrid->EnableDragColSize( true );
-	m_aliasGrid->SetColLabelSize( 22 );
-	m_aliasGrid->SetColLabelValue( 0, _("Name") );
-	m_aliasGrid->SetColLabelValue( 1, _("Value") );
-	m_aliasGrid->SetColLabelValue( 2, _("Show") );
-	m_aliasGrid->SetColLabelValue( 3, _("H Align") );
-	m_aliasGrid->SetColLabelValue( 4, _("V Align") );
-	m_aliasGrid->SetColLabelValue( 5, _("Italic") );
-	m_aliasGrid->SetColLabelValue( 6, _("Bold") );
-	m_aliasGrid->SetColLabelValue( 7, _("Text Size") );
-	m_aliasGrid->SetColLabelValue( 8, _("Orientation") );
-	m_aliasGrid->SetColLabelValue( 9, _("X Position") );
-	m_aliasGrid->SetColLabelValue( 10, _("Y Position") );
-	m_aliasGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-	// Rows
-	m_aliasGrid->EnableDragRowSize( true );
-	m_aliasGrid->SetRowLabelSize( 0 );
-	m_aliasGrid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-
-	// Label Appearance
-
-	// Cell Defaults
-	m_aliasGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bRightBoxSizerPanelAlias->Add( m_aliasGrid, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-
-	bRightBoxSizerPanelAlias->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
-
-	wxFlexGridSizer* fgSizerFPID1;
-	fgSizerFPID1 = new wxFlexGridSizer( 6, 1, 0, 0 );
-	fgSizerFPID1->AddGrowableCol( 0 );
-	fgSizerFPID1->SetFlexibleDirection( wxBOTH );
-	fgSizerFPID1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	wxStaticText* staticAliasNameLabel;
-	staticAliasNameLabel = new wxStaticText( m_PanelAlias, wxID_ANY, _("Alias name:"), wxDefaultPosition, wxDefaultSize, 0 );
-	staticAliasNameLabel->Wrap( -1 );
-	fgSizerFPID1->Add( staticAliasNameLabel, 0, wxLEFT|wxRIGHT, 5 );
-
-	m_AliasNameCtrl = new wxTextCtrl( m_PanelAlias, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID1->Add( m_AliasNameCtrl, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
-
-	wxStaticText* staticAliasDescLabel;
-	staticAliasDescLabel = new wxStaticText( m_PanelAlias, wxID_ANY, _("Alias description:"), wxDefaultPosition, wxDefaultSize, 0 );
-	staticAliasDescLabel->Wrap( -1 );
-	fgSizerFPID1->Add( staticAliasDescLabel, 0, wxLEFT|wxRIGHT, 5 );
-
-	m_AliasDescCtrl = new wxTextCtrl( m_PanelAlias, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID1->Add( m_AliasDescCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
-
-	staticAliasKeywordsLabel = new wxStaticText( m_PanelAlias, wxID_ANY, _("Alias keywords:"), wxDefaultPosition, wxDefaultSize, 0 );
-	staticAliasKeywordsLabel->Wrap( -1 );
-	fgSizerFPID1->Add( staticAliasKeywordsLabel, 0, wxLEFT|wxRIGHT, 5 );
-
-	m_AliasKeywordsCtrl = new wxTextCtrl( m_PanelAlias, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID1->Add( m_AliasKeywordsCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-
-	bRightBoxSizerPanelAlias->Add( fgSizerFPID1, 1, wxEXPAND, 5 );
-
-
-	bSizerMainPanelAlias->Add( bRightBoxSizerPanelAlias, 7, wxEXPAND|wxRIGHT|wxTOP, 20 );
-
-
-	m_PanelAlias->SetSizer( bSizerMainPanelAlias );
-	m_PanelAlias->Layout();
-	bSizerMainPanelAlias->Fit( m_PanelAlias );
-	m_NoteBook->AddPage( m_PanelAlias, _("Aliases"), false );
 	m_PanelFootprintFilter = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bPanelFpFilterBoxSizer;
 	bPanelFpFilterBoxSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -470,6 +349,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnUpdateUI ) );
@@ -480,12 +360,6 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnDeleteField ), NULL, this );
 	m_SymbolNameCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnSymbolNameKillFocus ), NULL, this );
 	m_SymbolNameCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnSymbolNameText ), NULL, this );
-	m_aliasListBox->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnSelectAlias ), NULL, this );
-	m_addAliasButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnAddAlias ), NULL, this );
-	m_deleteAliasButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnDeleteAlias ), NULL, this );
-	m_aliasGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnSizeAliasGrid ), NULL, this );
-	m_AliasNameCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnAliasNameKillFocus ), NULL, this );
-	m_AliasNameCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnAliasNameText ), NULL, this );
 	m_FootprintFilterListBox->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnFilterDClick ), NULL, this );
 	m_FootprintFilterListBox->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnEditFootprintFilter ), NULL, this );
 	m_addFilterButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnAddFootprintFilter ), NULL, this );
@@ -506,12 +380,6 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::~DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE()
 	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnDeleteField ), NULL, this );
 	m_SymbolNameCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnSymbolNameKillFocus ), NULL, this );
 	m_SymbolNameCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnSymbolNameText ), NULL, this );
-	m_aliasListBox->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnSelectAlias ), NULL, this );
-	m_addAliasButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnAddAlias ), NULL, this );
-	m_deleteAliasButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnDeleteAlias ), NULL, this );
-	m_aliasGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnSizeAliasGrid ), NULL, this );
-	m_AliasNameCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnAliasNameKillFocus ), NULL, this );
-	m_AliasNameCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnAliasNameText ), NULL, this );
 	m_FootprintFilterListBox->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnFilterDClick ), NULL, this );
 	m_FootprintFilterListBox->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnEditFootprintFilter ), NULL, this );
 	m_addFilterButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnAddFootprintFilter ), NULL, this );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -113,7 +113,7 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
     Bind( wxEVT_BUTTON, &DIALOG_SHIM::OnButton, this );
 
 #ifdef __WINDOWS__
-    // On Windows, the app top windows can be brought to the foreground (at least temporarily) 
+    // On Windows, the app top windows can be brought to the foreground (at least temporarily)
     // in certain circumstances such as when calling an external tool in Eeschema BOM generation.
     // So set the parent frame (if exists) to top window to avoid this annoying behavior.
     if( kiwayHolder && kiwayHolder->GetType() == KIWAY_HOLDER::FRAME )
@@ -232,6 +232,31 @@ bool DIALOG_SHIM::Show( bool show )
     }
 
     return ret;
+}
+
+
+void DIALOG_SHIM::ResetSize()
+{
+    const char* hash_key;
+
+    if( m_hash_key.size() )
+    {
+        // a special case like EDA_LIST_DIALOG, which has multiple uses.
+        hash_key = m_hash_key.c_str();
+    }
+    else
+    {
+        hash_key = typeid(*this).name();
+    }
+
+    RECT_MAP::iterator it = class_map.find( hash_key );
+
+    if( it == class_map.end() )
+        return;
+
+    EDA_RECT rect = it->second;
+    rect.SetSize( 0, 0 );
+    class_map[ hash_key ] = rect;
 }
 
 
@@ -406,7 +431,8 @@ void DIALOG_SHIM::EndQuasiModal( int retCode )
 
     if( !IsQuasiModal() )
     {
-        wxFAIL_MSG( wxT( "either DIALOG_SHIM::EndQuasiModal called twice or ShowQuasiModal wasn't called" ) );
+        wxFAIL_MSG( "either DIALOG_SHIM::EndQuasiModal called twice or ShowQuasiModal"
+                    "wasn't called" );
         return;
     }
 
@@ -533,7 +559,6 @@ void DIALOG_SHIM::OnCharHook( wxKeyEvent& aEvt )
 
     aEvt.Skip();
 }
-
 
 
 void DIALOG_SHIM::OnGridEditorShown( wxGridEvent& event )

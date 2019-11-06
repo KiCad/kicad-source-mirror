@@ -153,13 +153,13 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNo
     else if( hashIt->second != m_libMgr->GetLibraryHash( aLibNode.Name ) )
     {
         // update an existing library
-        std::list<LIB_ALIAS*> aliases = m_libMgr->GetAliases( aLibNode.Name );
+        std::list<LIB_PART*> aliases = m_libMgr->GetAliases( aLibNode.Name );
 
         // remove the common part from the aliases list
         for( auto nodeIt = aLibNode.Children.begin(); nodeIt != aLibNode.Children.end(); /**/ )
         {
             auto aliasIt = std::find_if( aliases.begin(), aliases.end(),
-                    [&] ( const LIB_ALIAS* a ) {
+                    [&] ( const LIB_PART* a ) {
                         return a->GetName() == (*nodeIt)->Name;
                     } );
 

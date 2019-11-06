@@ -41,6 +41,7 @@
 #include <widgets/symbol_preview_widget.h>
 #include <wx/clipbrd.h>
 #include <kiface_i.h>
+#include <class_libentry.h>
 
 #define SYM_CHOOSER_HSASH           wxT( "SymbolChooserHSashPosition" )
 #define SYM_CHOOSER_VSASH           wxT( "SymbolChooserVSashPosition" )
@@ -152,7 +153,8 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     m_hsplitter->SetSashPosition( m_config->Read( SYM_CHOOSER_HSASH, HorizPixelsFromDU( 220 ) ) );
 
     if( m_vsplitter )
-        m_vsplitter->SetSashPosition( m_config->Read( SYM_CHOOSER_VSASH, VertPixelsFromDU( 230 ) ) );
+        m_vsplitter->SetSashPosition( m_config->Read( SYM_CHOOSER_VSASH,
+                                                      VertPixelsFromDU( 230 ) ) );
 
     wxSize dlgSize( m_config->Read( SYM_CHOOSER_WIDTH_KEY, HorizPixelsFromDU( 390 ) ),
                     m_config->Read( SYM_CHOOSER_HEIGHT_KEY, VertPixelsFromDU( 300 ) ) );
@@ -353,11 +355,11 @@ void DIALOG_CHOOSE_COMPONENT::ShowFootprintFor( LIB_ID const& aLibId )
     if( !m_fp_preview || !m_fp_preview->IsInitialized() )
         return;
 
-    LIB_ALIAS* alias = nullptr;
+    LIB_PART* symbol = nullptr;
 
     try
     {
-        alias = Prj().SchSymbolLibTable()->LoadSymbol( aLibId );
+        symbol = Prj().SchSymbolLibTable()->LoadSymbol( aLibId );
     }
     catch( const IO_ERROR& ioe )
     {
@@ -367,10 +369,10 @@ void DIALOG_CHOOSE_COMPONENT::ShowFootprintFor( LIB_ID const& aLibId )
                                       ioe.What() ) );
     }
 
-    if( !alias )
+    if( !symbol )
         return;
 
-    LIB_FIELD* fp_field = alias->GetPart()->GetField( FOOTPRINT );
+    LIB_FIELD* fp_field = symbol->GetField( FOOTPRINT );
     wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 
     ShowFootprint( fp_name );
@@ -411,13 +413,13 @@ void DIALOG_CHOOSE_COMPONENT::PopulateFootprintSelector( LIB_ID const& aLibId )
 
     m_fp_sel_ctrl->ClearFilters();
 
-    LIB_ALIAS* alias = nullptr;
+    LIB_PART* symbol = nullptr;
 
     if( aLibId.IsValid() )
     {
         try
         {
-            alias = Prj().SchSymbolLibTable()->LoadSymbol( aLibId );
+            symbol = Prj().SchSymbolLibTable()->LoadSymbol( aLibId );
         }
         catch( const IO_ERROR& ioe )
         {
@@ -429,16 +431,16 @@ void DIALOG_CHOOSE_COMPONENT::PopulateFootprintSelector( LIB_ID const& aLibId )
         }
     }
 
-    if( alias != nullptr )
+    if( symbol != nullptr )
     {
         LIB_PINS   temp_pins;
-        LIB_FIELD* fp_field = alias->GetPart()->GetField( FOOTPRINT );
+        LIB_FIELD* fp_field = symbol->GetField( FOOTPRINT );
         wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 
-        alias->GetPart()->GetPins( temp_pins );
+        symbol->GetPins( temp_pins );
 
         m_fp_sel_ctrl->FilterByPinCount( temp_pins.size() );
-        m_fp_sel_ctrl->FilterByFootprintFilters( alias->GetPart()->GetFootprints(), true );
+        m_fp_sel_ctrl->FilterByFootprintFilters( symbol->GetFootprints(), true );
         m_fp_sel_ctrl->SetDefaultFootprint( fp_name );
         m_fp_sel_ctrl->UpdateList();
         m_fp_sel_ctrl->Enable();

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,15 +31,16 @@
 #ifndef CLASS_LIBRARY_H
 #define CLASS_LIBRARY_H
 
+#include <boost/ptr_container/ptr_vector.hpp>
 #include <wx/filename.h>
 
-#include <class_libentry.h>
 #include <sch_io_mgr.h>
 
 #include <project.h>
 
 #include <map>
 
+class LIB_PART;
 class LIB_ID;
 class LINE_READER;
 class OUTPUTFORMATTER;
@@ -163,9 +164,9 @@ class PART_LIB;
 class wxRegEx;
 
 /**
- * LIB_ALIAS map sorting.
+ * LIB_PART map sorting.
  */
-struct AliasMapSort
+struct LibPartMapSort
 {
     bool operator() ( const wxString& aItem1, const wxString& aItem2 ) const
     {
@@ -173,11 +174,11 @@ struct AliasMapSort
     }
 };
 
-/// Alias map used by part library object.
+/// Part map used by part library object.
 
-typedef std::map< wxString, LIB_ALIAS*, AliasMapSort >  LIB_ALIAS_MAP;
-typedef std::vector< LIB_ALIAS* >                       LIB_ALIASES;
-typedef boost::ptr_vector< PART_LIB >                   PART_LIBS_BASE;
+typedef std::map< wxString, LIB_PART*, LibPartMapSort >  LIB_PART_MAP;
+typedef std::vector< LIB_PART* >                         LIB_PARTS;
+typedef boost::ptr_vector< PART_LIB >                    PART_LIBS_BASE;
 
 
 /**
@@ -276,21 +277,8 @@ public:
     LIB_PART* FindLibPart( const LIB_ID& aLibId, const wxString& aLibraryName = wxEmptyString );
 
     /**
-     * Function FindLibraryEntry
-     * searches all libraries in the list for an entry.
+     * Search all libraries in the list for a #LIB_PART using a case insensitive comparison.
      *
-     * The object can be either a part or an alias.
-     *
-     * @param aLibId - The library indentifaction of entry to search for (case sensitive).
-     * @param aLibraryName - Name of the library to search.
-     * @return The entry object if found, otherwise NULL.
-     */
-    LIB_ALIAS* FindLibraryAlias( const LIB_ID& aLibId,
-                                 const wxString& aLibraryName = wxEmptyString );
-
-    /**
-     * Function FindLibraryNearEntries
-     * Searches all libraries in the list for an entry, using a case insensitive comparison.
      * Helper function used in dialog to find all candidates.
      * During a long time, eeschema was using a case insensitive search.
      * Therefore, for old schematics (<= 2013), or libs, for some components,
@@ -301,7 +289,7 @@ public:
      * @param aLibraryName - Name of the library to search.
      * @param aCandidates - a std::vector to store candidates
      */
-    void FindLibraryNearEntries( std::vector<LIB_ALIAS*>& aCandidates, const wxString& aEntryName,
+    void FindLibraryNearEntries( std::vector<LIB_PART*>& aCandidates, const wxString& aEntryName,
                                  const wxString& aLibraryName = wxEmptyString );
 
     int GetLibraryCount() { return size(); }
@@ -310,6 +298,9 @@ public:
 
 /**
  * Object used to load, save, search, and otherwise manipulate symbol library files.
+ *
+ * @warning This code is obsolete with the exception of the cache library.  All other
+ *          symbol library I/O is managed by the #SCH_IO_MGR object.
  */
 class PART_LIB
 {
@@ -369,33 +360,20 @@ public:
      *
      * @param aNames - String array to place entry names into.
      */
-    void GetAliasNames( wxArrayString& aNames ) const;
+    void GetPartNames( wxArrayString& aNames ) const;
 
     /**
      * Load a vector with all the entries in this library.
      *
-     * @param aAliases - vector to receive the aliases.
+     * @param aParts - vector to receive the aliases.
      */
-    void GetAliases( std::vector<LIB_ALIAS*>& aAliases ) const;
+    void GetParts( std::vector<LIB_PART*>& aPart) const;
 
     /**
-     * Find #LIB_ALIAS by \a aName.
-     *
-     * @param aName - Name of entry, case sensitive.
-     * @return #LIB_ALIAS* if found.  NULL if not found.
-     */
-    LIB_ALIAS* FindAlias( const wxString& aName ) const;
-
-    LIB_ALIAS* FindAlias( const LIB_ID& aLibId ) const;
-
-    /**
-     * Find part by \a aName.
-     *
-     * This is a helper for FindEntry so casting a LIB_ALIAS pointer to
-     * a LIB_PART pointer is not required.
+     * Find #LIB_PART by \a aName.
      *
      * @param aName - Name of part, case sensitive.
-     * @return LIB_PART* - part if found, else NULL.
+     * @return LIB_PART pointer part if found, else NULL.
      */
     LIB_PART* FindPart( const wxString& aName ) const;
 
@@ -422,10 +400,11 @@ public:
      * @param aEntry - Entry to remove from library.
      * @return The next entry in the library or NULL if the library is empty.
      */
-    LIB_ALIAS* RemoveAlias( LIB_ALIAS* aEntry );
+    LIB_PART* RemovePart( LIB_PART* aEntry );
 
     /**
      * Replace an existing part entry in the library.
+     *
      * Note a part can have an alias list,
      * so these alias will be added in library (and previously existing alias removed)
      * @param aOldPart - The part to replace.

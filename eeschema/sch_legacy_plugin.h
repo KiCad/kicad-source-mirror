@@ -46,7 +46,6 @@ class SELECTION;
 class SCH_LEGACY_PLUGIN_CACHE;
 class LIB_PART;
 class PART_LIB;
-class LIB_ALIAS;
 class BUS_ALIAS;
 
 
@@ -79,18 +78,14 @@ public:
     }
 
     /**
-     * const char* PropBuffering
-     *
-     * is a property used internally by the plugin to enable cache buffering which prevents
+     * The property used internally by the plugin to enable cache buffering which prevents
      * the library file from being written every time the cache is changed.  This is useful
      * when writing the schematic cache library file or saving a library to a new file name.
      */
     static const char* PropBuffering;
 
     /**
-     * const char* PropBuffering
-     *
-     * is a property used internally by the plugin to disable writing the library
+     * The property used internally by the plugin to disable writing the library
      * documentation (.dcm) file when saving the library cache.
      */
     static const char* PropNoDocFile;
@@ -98,7 +93,7 @@ public:
     int GetModifyHash() const override;
 
     SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway,
-                     SCH_SHEET* aAppendToMe = nullptr, 
+                     SCH_SHEET* aAppendToMe = nullptr,
                      const PROPERTIES* aProperties = nullptr ) override;
 
     void LoadContent( LINE_READER& aReader, SCH_SCREEN* aScreen,
@@ -111,19 +106,17 @@ public:
 
     void Format( SELECTION* aSelection, OUTPUTFORMATTER* aFormatter );
 
-    void EnumerateSymbolLib( wxArrayString&    aAliasNameList,
+    void EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
                              const wxString&   aLibraryPath,
                              const PROPERTIES* aProperties = nullptr ) override;
-    void EnumerateSymbolLib( std::vector<LIB_ALIAS*>& aAliasList,
+    void EnumerateSymbolLib( std::vector<LIB_PART*>& aSymbolList,
                              const wxString&   aLibraryPath,
                              const PROPERTIES* aProperties = nullptr ) override;
-    LIB_ALIAS* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+    LIB_PART* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
                            const PROPERTIES* aProperties = nullptr ) override;
     void SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
                      const PROPERTIES* aProperties = nullptr ) override;
-    void DeleteAlias( const wxString& aLibraryPath, const wxString& aAliasName,
-                      const PROPERTIES* aProperties = nullptr ) override;
-    void DeleteSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+    void DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
                        const PROPERTIES* aProperties = nullptr ) override;
     void CreateSymbolLib( const wxString& aLibraryPath,
                           const PROPERTIES* aProperties = nullptr ) override;

@@ -105,7 +105,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetShowElectricalType( true );
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
 
-    m_my_part = nullptr;
     m_treePane = nullptr;
     m_libMgr = nullptr;
     m_unit = 1;
@@ -198,7 +197,6 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
     SetScreen( m_dummyScreen );
 
     delete m_libMgr;
-    delete m_my_part;
 }
 
 
@@ -250,16 +248,14 @@ void LIB_EDIT_FRAME::RebuildSymbolUnitsList()
     if( m_unitSelectBox->GetCount() != 0 )
         m_unitSelectBox->Clear();
 
-    LIB_PART* part = GetCurPart();
-
-    if( !part || part->GetUnitCount() <= 1 )
+    if( !m_my_part || m_my_part->GetUnitCount() <= 1 )
     {
         m_unit = 1;
         m_unitSelectBox->Append( wxEmptyString );
     }
     else
     {
-        for( int i = 0; i < part->GetUnitCount(); i++ )
+        for( int i = 0; i < m_my_part->GetUnitCount(); i++ )
         {
             wxString sub  = LIB_PART::SubReference( i+1, false );
             wxString unit = wxString::Format( _( "Unit %s" ), GetChars( sub ) );
@@ -268,7 +264,7 @@ void LIB_EDIT_FRAME::RebuildSymbolUnitsList()
     }
 
     // Ensure the selected unit is compatible with the number of units of the current part:
-    if( part && part->GetUnitCount() < m_unit )
+    if( m_my_part && m_my_part->GetUnitCount() < m_unit )
         m_unit = 1;
 
     m_unitSelectBox->SetSelection(( m_unit > 0 ) ? m_unit - 1 : 0 );
@@ -312,11 +308,9 @@ void LIB_EDIT_FRAME::OnUpdatePartNumber( wxUpdateUIEvent& event )
     if( !m_unitSelectBox )
         return;
 
-    LIB_PART* part = GetCurPart();
-
     // Using the typical event.Enable() call doesn't seem to work with wxGTK
     // so use the pointer to alias combobox to directly enable or disable.
-    m_unitSelectBox->Enable( part && part->GetUnitCount() > 1 );
+    m_unitSelectBox->Enable( m_my_part && m_my_part->GetUnitCount() > 1 );
 }
 
 
@@ -371,39 +365,36 @@ wxString LIB_EDIT_FRAME::SetCurLib( const wxString& aLibNickname )
 
 void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
 {
-    if( !aPart && !m_my_part )
-        return;
-
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
-    if( m_my_part != aPart )
-    {
-        delete m_my_part;
-        m_my_part = aPart;
-
-        // Datasheet field is special; copy it to the root alias docfilename but watch out
-        // for clearing the aPart
-        if( m_my_part )
-        {
-            m_my_part->GetField( DATASHEET )->SetText( aPart->GetRootAlias()->GetDocFileName() );
-        }
-    }
+    m_my_part.reset( aPart );
 
     // select the current component in the tree widget
-    if( aPart )
-        m_treePane->GetLibTree()->SelectLibId( aPart->GetLibId() );
+    if( m_my_part )
+    {
+        m_treePane->GetLibTree()->SelectLibId( m_my_part->GetLibId() );
+        m_my_part->GetField( DATASHEET )->SetText( aPart->GetDocFileName() );
+    }
 
-    wxString partName = aPart ? aPart->GetName() : wxString();
+    wxString partName = m_my_part ? m_my_part->GetName() : wxString();
     m_libMgr->SetCurrentPart( partName );
 
     // retain in case this wxFrame is re-opened later on the same PROJECT
     Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_PART, partName );
 
     // Ensure synchronized pin edit can be enabled only symbols with interchangeable units
-    m_SyncPinEdit = aPart && aPart->IsMulti() && !aPart->UnitsLocked();
+    m_SyncPinEdit = aPart && aPart->IsRoot() && aPart->IsMulti() && !aPart->UnitsLocked();
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     RebuildView();
+    SyncLibraries( false );
+}
+
+
+LIB_MANAGER& LIB_EDIT_FRAME::GetLibManager()
+{
+    wxASSERT( m_libMgr );
+    return *m_libMgr;
 }
 
 
@@ -434,9 +425,7 @@ void LIB_EDIT_FRAME::OnModify()
 
 bool LIB_EDIT_FRAME::SynchronizePins()
 {
-    LIB_PART* part = GetCurPart();
-
-    return m_SyncPinEdit && part && part->IsMulti() && !part->UnitsLocked();
+    return m_SyncPinEdit && m_my_part && m_my_part->IsMulti() && !m_my_part->UnitsLocked();
 }
 
 
@@ -514,11 +503,11 @@ LIB_PART* LIB_EDIT_FRAME::getTargetPart() const
 
     if( libId.IsValid() )
     {
-        LIB_ALIAS* alias = m_libMgr->GetAlias( libId.GetLibItemName(), libId.GetLibNickname() );
-        return alias ? alias->GetPart() : nullptr;
+        LIB_PART* alias = m_libMgr->GetAlias( libId.GetLibItemName(), libId.GetLibNickname() );
+        return alias;
     }
 
-    return GetCurPart();
+    return m_my_part.get();
 }
 
 
@@ -526,8 +515,8 @@ LIB_ID LIB_EDIT_FRAME::getTargetLibId() const
 {
     LIB_ID id = GetTreeLIBID();
 
-    if( id.GetLibNickname().empty() && GetCurPart() )
-        id = GetCurPart()->GetLibId();
+    if( id.GetLibNickname().empty() && m_my_part )
+        id = m_my_part->GetLibId();
 
     return id;
 }
@@ -553,7 +542,8 @@ void LIB_EDIT_FRAME::SyncLibraries( bool aShowProgress )
 
         m_libMgr->Sync( true, [&]( int progress, int max, const wxString& libName )
         {
-            progressDlg.Update( progress, wxString::Format( _( "Loading library \"%s\"" ), libName ) );
+            progressDlg.Update( progress, wxString::Format( _( "Loading library \"%s\"" ),
+                                                            libName ) );
         } );
     }
     else
@@ -588,9 +578,9 @@ void LIB_EDIT_FRAME::SyncLibraries( bool aShowProgress )
         }
 
         // If no selection, see if there's a current part to centre
-        if( !selected.IsValid() && GetCurPart() )
+        if( !selected.IsValid() && m_my_part )
         {
-            LIB_ID current( GetCurLib(), GetCurPart()->GetName() );
+            LIB_ID current( GetCurLib(), m_my_part->GetName() );
             m_treePane->GetLibTree()->CenterLibId( current );
         }
     }
@@ -649,7 +639,7 @@ bool LIB_EDIT_FRAME::backupFile( const wxFileName& aOriginalFile, const wxString
 void LIB_EDIT_FRAME::storeCurrentPart()
 {
     if( m_my_part && !GetCurLib().IsEmpty() && GetScreen()->IsModify() )
-        m_libMgr->UpdatePart( m_my_part, GetCurLib() ); // UpdatePart() makes a copy
+        m_libMgr->UpdatePart( m_my_part.get(), GetCurLib() ); // UpdatePart() makes a copy
 }
 
 
@@ -658,7 +648,7 @@ bool LIB_EDIT_FRAME::isCurrentPart( const LIB_ID& aLibId ) const
     // This will return the root part of any alias
     LIB_PART* part = m_libMgr->GetBufferedPart( aLibId.GetLibItemName(), aLibId.GetLibNickname() );
     // Now we can compare the libId of the current part and the root part
-    return ( part && GetCurPart() && part->GetLibId() == GetCurPart()->GetLibId() );
+    return ( part && m_my_part && part->GetLibId() == m_my_part->GetLibId() );
 }
 
 
@@ -711,8 +701,8 @@ void LIB_EDIT_FRAME::RebuildView()
 {
     GetRenderSettings()->m_ShowUnit = m_unit;
     GetRenderSettings()->m_ShowConvert = m_convert;
-    GetCanvas()->DisplayComponent( m_my_part );
-
+    GetRenderSettings()->m_ShowDisabled = m_my_part && m_my_part->IsAlias();
+    GetCanvas()->DisplayComponent( m_my_part.get() );
     GetCanvas()->GetView()->HideWorksheet();
     GetCanvas()->GetView()->ClearHiddenFlags();
 
@@ -729,16 +719,15 @@ void LIB_EDIT_FRAME::HardRedraw()
 
 const BOX2I LIB_EDIT_FRAME::GetDocumentExtents() const
 {
-    LIB_PART*  part = GetCurPart();
-
-    if( !part )
+    if( !m_my_part )
     {
         return BOX2I( VECTOR2I(-100, -100), VECTOR2I( 200, 200 ) );
     }
     else
     {
-        EDA_RECT boundingBox = part->GetUnitBoundingBox( m_unit, m_convert );
-        return BOX2I( boundingBox.GetOrigin(), VECTOR2I( boundingBox.GetWidth(), boundingBox.GetHeight() ) );
+        EDA_RECT boundingBox = m_my_part->Flatten()->GetUnitBoundingBox( m_unit, m_convert );
+        return BOX2I( boundingBox.GetOrigin(), VECTOR2I( boundingBox.GetWidth(),
+                                                         boundingBox.GetHeight() ) );
     }
 }
 

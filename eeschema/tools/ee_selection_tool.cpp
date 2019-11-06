@@ -74,8 +74,7 @@ SELECTION_CONDITION EE_CONDITIONS::SingleSymbol = [] (const SELECTION& aSel )
 
         if( comp )
         {
-            auto partRef = comp->GetPartRef().lock();
-            return !partRef || !partRef->IsPower();
+            return !comp->GetPartRef() || !comp->GetPartRef()->IsPower();
         }
     }
 
@@ -91,8 +90,7 @@ SELECTION_CONDITION EE_CONDITIONS::SingleDeMorganSymbol = [] ( const SELECTION& 
 
         if( comp )
         {
-            auto partRef = comp->GetPartRef().lock();
-            return partRef && partRef->HasConversion();
+            return comp->GetPartRef() && comp->GetPartRef()->HasConversion();
         }
     }
 
@@ -108,8 +106,7 @@ SELECTION_CONDITION EE_CONDITIONS::SingleMultiUnitSymbol = [] ( const SELECTION&
 
         if( comp )
         {
-            auto partRef = comp->GetPartRef().lock();
-            return partRef && partRef->GetUnitCount() >= 2;
+            return comp->GetPartRef() && comp->GetPartRef()->GetUnitCount() >= 2;
         }
     }
 

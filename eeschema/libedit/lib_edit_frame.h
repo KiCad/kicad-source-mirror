@@ -37,7 +37,6 @@
 class SCH_EDIT_FRAME;
 class SYMBOL_LIB_TABLE;
 class LIB_PART;
-class LIB_ALIAS;
 class LIB_FIELD;
 class DIALOG_LIB_EDIT_TEXT;
 class SYMBOL_TREE_PANE;
@@ -50,12 +49,12 @@ class LIB_MANAGER;
  */
 class LIB_EDIT_FRAME : public SCH_BASE_FRAME
 {
-    LIB_PART*          m_my_part;           // a part I own, it is not in any library, but a copy
+    std::unique_ptr< LIB_PART > m_my_part;  // a part I own, it is not in any library, but a copy
                                             // could be.
     wxComboBox*        m_unitSelectBox;     // a ComboBox to select a unit to edit (if the part
                                             // has multiple units)
     SYMBOL_TREE_PANE*  m_treePane;          // component search tree widget
-    LIB_MANAGER*       m_libMgr;            // manager taking care of temporary modificatoins
+    LIB_MANAGER*       m_libMgr;            // manager taking care of temporary modifications
 
     // The unit number to edit and show
     int m_unit;
@@ -150,12 +149,14 @@ public:
      *
      * This is a LIB_PART that I own, it is at best a copy of one in a library.
      */
-    LIB_PART* GetCurPart() const { return m_my_part; }
+    LIB_PART* GetCurPart() { return m_my_part.get(); }
 
     /**
      * Take ownership of aPart and notes that it is the one currently being edited.
      */
     void SetCurPart( LIB_PART* aPart );
+
+    LIB_MANAGER& GetLibManager();
 
     static int GetPinNumDefaultSize() { return m_textPinNumDefaultSize; }
     static void SetPinNumDefaultSize( int aSize ) { m_textPinNumDefaultSize = aSize; }
@@ -239,7 +240,7 @@ public:
     void RebuildSymbolUnitsList();
 
     void OnCloseWindow( wxCloseEvent& Event );
-    void   OnExitKiCad( wxCommandEvent& event );
+    void OnExitKiCad( wxCommandEvent& event );
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;
     void ReCreateOptToolbar() override;
@@ -331,14 +332,14 @@ private:
     /**
      * Create a copy of \a aLibEntry into memory.
      *
-     * @param aLibEntry A pointer to the LIB_ALIAS object to an already loaded.
+     * @param aLibEntry A pointer to the LIB_PART object to an already loaded symbol.
      * @param aLibrary the path to the library file that \a aLibEntry was loaded from.  This is
      *                 for error messaging purposes only.
      * @param aUnit the initial unit to show.
      * @param aConvert the initial DeMorgan variant to show.
      * @return True if a copy of \a aLibEntry was successfully copied.
      */
-    bool LoadOneLibraryPartAux( LIB_ALIAS* aLibEntry, const wxString& aLibrary, int aUnit,
+    bool LoadOneLibraryPartAux( LIB_PART* aLibEntry, const wxString& aLibrary, int aUnit,
                                 int aConvert );
 
     /**
@@ -446,7 +447,7 @@ private:
     /**
      * Displays a dialog asking the user to select a symbol library table.
      * @param aOptional if set the Cancel button will be relabelled "Skip".
-     * @return Pointer to the selected symbol library table or nullptr if cancelled.
+     * @return Pointer to the selected symbol library table or nullptr if canceled.
      */
     SYMBOL_LIB_TABLE* selectSymLibTable( bool aOptional = false );
 
@@ -464,7 +465,7 @@ private:
     ///> or the library that is currently modified.
     wxString getTargetLib() const;
 
-    /* Returns true when the operation has succeded (all requested libraries have been saved or
+    /* Returns true when the operation has succeeded (all requested libraries have been saved or
      * none was selected and confirmed by OK).
      * @param aRequireConfirmation when true, the user must be asked to confirm.
      */

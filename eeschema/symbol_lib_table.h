@@ -28,8 +28,9 @@
 #include <lib_table_base.h>
 #include <sch_io_mgr.h>
 #include <lib_id.h>
+#include <class_libentry.h>
 
-class LIB_PART;
+//class LIB_PART;
 class SYMBOL_LIB_TABLE_GRID;
 class DIALOG_SYMBOL_LIB_TABLE;
 
@@ -157,25 +158,24 @@ public:
     void EnumerateSymbolLib( const wxString& aNickname, wxArrayString& aAliasNames,
                              bool aPowerSymbolsOnly = false );
 
-    void LoadSymbolLib( std::vector<LIB_ALIAS*>& aAliasList, const wxString& aNickname,
+    void LoadSymbolLib( std::vector<LIB_PART*>& aAliasList, const wxString& aNickname,
                         bool aPowerSymbolsOnly = false );
 
     /**
-     * Load a #LIB_ALIAS having @a aAliasName from the library given by @a aNickname.
-     *
-     * The actual symbol can be retreaved from the LIB_ALIAS::GetPart() method.
+     * Load a #LIB_PART having @a aName from the library given by @a aNickname.
      *
      * @param aNickname is a locator for the "library", it is a "name" in #LIB_TABLE_ROW
-     * @param aAliasName is the name of the #LIB_ALIAS to load.
+     * @param aName is the name of the #LIB_PART to load.
+     * @param aFlatten set to true to flatten derived parts.
      *
      * @return the symbol alias if found or NULL if not found.
      *
      * @throw IO_ERROR if the library cannot be found or read.  No exception
-     *                 is thrown in the case where aAliasName cannot be found.
+     *                 is thrown in the case where \a aNickname cannot be found.
      */
-    LIB_ALIAS* LoadSymbol( const wxString& aNickname, const wxString& aAliasName );
+    LIB_PART* LoadSymbol( const wxString& aNickname, const wxString& aName );
 
-    LIB_ALIAS* LoadSymbol( const LIB_ID& aLibId )
+    LIB_PART* LoadSymbol( const LIB_ID& aLibId )
     {
         return LoadSymbol( aLibId.GetLibNickname(), aLibId.GetLibItemName() );
     }
@@ -222,22 +222,6 @@ public:
     void DeleteSymbol( const wxString& aNickname, const wxString& aSymbolName );
 
     /**
-     * Delete @a aAliasName from the library at @a aLibraryPath.
-     *
-     * If @a aAliasName refers the the root #LIB_PART object, the part is renamed to
-     * the next or previous #LIB_ALIAS in the #LIB_PART if one exists.  If the #LIB_ALIAS
-     * is the last alias referring to the root #LIB_PART, the #LIB_PART is also removed
-     * from the library.
-     *
-     * @param aNickname is a locator for the "library", it is a "name" in LIB_TABLE_ROW
-     *
-     * @param aAliasName is the name of a #LIB_ALIAS to delete from the specified library.
-     *
-     * @throw IO_ERROR if there is a problem finding the alias or the library or deleting it.
-     */
-    void DeleteAlias( const wxString& aNickname, const wxString& aAliasName );
-
-    /**
      * Return true if the library given by @a aNickname is writable.
      *
      * It is possible that some symbols libraries are read only because of where they are
@@ -266,7 +250,7 @@ public:
      *                 is thrown in the case where aId cannot be found.
      * @throw PARSE_ERROR if @a aId is not parsed OK.
      */
-    LIB_ALIAS* LoadSymbolWithOptionalNickname( const LIB_ID& aId );
+    LIB_PART* LoadSymbolWithOptionalNickname( const LIB_ID& aId );
 
     /**
      * Load the global symbol library table into \a aTable.

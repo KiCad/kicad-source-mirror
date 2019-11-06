@@ -23,7 +23,8 @@
 
 #include "dialog_lib_edit_pin_table_base.h"
 
-#include "class_library.h"
+#include <lib_item.h>
+#include <class_library.h>
 
 enum COL_ORDER
 {

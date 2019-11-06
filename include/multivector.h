@@ -204,7 +204,7 @@ public:
         return CONST_ITERATOR( this, operator[]( bucket ).end(), bucket, aType );
     }
 
-    size_t size( int aType = UNDEFINED_TYPE )
+    size_t size( int aType = UNDEFINED_TYPE ) const
     {
         if( aType != UNDEFINED_TYPE )
         {

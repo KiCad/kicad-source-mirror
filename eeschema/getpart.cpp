@@ -136,14 +136,15 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree(
 
     for( auto const& i : aHistoryList )
     {
-        LIB_ALIAS* alias = GetLibAlias( i.LibId );
+        LIB_PART* symbol = GetLibPart( i.LibId );
 
         // This can be null, for example when a symbol has been deleted from a library
-        if( alias )
-            history_list.push_back( alias );
+        if( symbol )
+            history_list.push_back( symbol );
     }
 
-    adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, history_list, true );
+    adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, history_list,
+                           true );
 
     if( !aHistoryList.empty() )
         adapter->SetPreselectNode( aHistoryList[0].LibId, aHistoryList[0].Unit );

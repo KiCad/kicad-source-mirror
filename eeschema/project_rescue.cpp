@@ -139,8 +139,8 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
     candidate_map_t candidate_map;
     // Remember the list of components is sorted by part name.
     // So a search in libraries is made only once by group
-    LIB_ALIAS* case_sensitive_match = nullptr;
-    std::vector<LIB_ALIAS*> case_insensitive_matches;
+    LIB_PART* case_sensitive_match = nullptr;
+    std::vector<LIB_PART*> case_insensitive_matches;
 
     wxString last_part_name;
 
@@ -157,7 +157,7 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
 
             LIB_ID id( wxEmptyString, part_name );
 
-            case_sensitive_match = aRescuer.GetPrj()->SchLibs()->FindLibraryAlias( id );
+            case_sensitive_match = aRescuer.GetPrj()->SchLibs()->FindLibPart( id );
 
             if( !case_sensitive_match )
                 // the case sensitive match failed. Try a case insensitive match
@@ -169,7 +169,7 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
             continue;
 
         RESCUE_CASE_CANDIDATE candidate( part_name, case_insensitive_matches[0]->GetName(),
-                                         case_insensitive_matches[0]->GetPart() );
+                                         case_insensitive_matches[0] );
 
         candidate_map[part_name] = candidate;
     }
@@ -310,7 +310,6 @@ bool RESCUE_CACHE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 
     LIB_PART new_part( *tmp );
     new_part.SetName( m_new_name );
-    new_part.RemoveAllAliases();
     aRescuer->AddPart( &new_part );
 
     for( SCH_COMPONENT* each_component : *aRescuer->GetComponents() )
@@ -446,7 +445,6 @@ bool RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::PerformAction( RESCUER* aRescuer )
     LIB_PART new_part( *tmp );
     new_part.SetLibId( m_new_id );
     new_part.SetName( m_new_id.GetLibItemName() );
-    new_part.RemoveAllAliases();
     aRescuer->AddPart( &new_part );
 
     for( SCH_COMPONENT* each_component : *aRescuer->GetComponents() )
@@ -654,17 +652,14 @@ void LEGACY_RESCUER::OpenRescueLibrary()
     if( rescueLib )
     {
         // For items in the rescue library, aliases are the root symbol.
-        std::vector< LIB_ALIAS* > aliases;
+        std::vector< LIB_PART* > symbols;
 
-        rescueLib->GetAliases( aliases );
+        rescueLib->GetParts( symbols );
 
-        for( auto alias : aliases )
+        for( auto symbol : symbols )
         {
-            LIB_PART* part = alias->GetPart();
-
-            wxCHECK2( part, continue );
-
-            m_rescue_lib->AddPart( new LIB_PART( *part, m_rescue_lib.get() ) );
+            // The LIB_PART copy constructor flattens derived symbols (formerly known as aliases).
+            m_rescue_lib->AddPart( new LIB_PART( *symbol, m_rescue_lib.get() ) );
         }
     }
 }

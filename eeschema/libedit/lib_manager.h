@@ -35,7 +35,6 @@
 #include <symbol_tree_synchronizing_adapter.h>
 #include <sch_screen.h>
 
-class LIB_ALIAS;
 class LIB_PART;
 class PART_LIB;
 class SCH_PLUGIN;
@@ -81,8 +80,8 @@ public:
     {
         if( m_bHasMessages )
         {
-            wxLogMessage( _( "Not all libraries could be loaded.  Use the Manage Symbol Libraries dialog \n"
-                             "to adjust paths and add or remove libraries." ) );
+            wxLogMessage( _( "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
+                             "Libraries dialog to adjust paths and add or remove libraries." ) );
             wxLogGui::Flush();
         }
     }
@@ -130,7 +129,7 @@ public:
      */
     SYMBOL_LIB_TABLE_ROW* GetLibrary( const wxString& aLibrary ) const;
 
-    std::list<LIB_ALIAS*> GetAliases( const wxString& aLibrary ) const;
+    std::list<LIB_PART*> GetAliases( const wxString& aLibrary ) const;
 
     /**
      * Creates an empty library and adds it to the library table. The library file is created.
@@ -172,7 +171,7 @@ public:
      * Returns either an alias of a working LIB_PART copy, or alias of the original part if there
      * is no working copy.
      */
-    LIB_ALIAS* GetAlias( const wxString& aAlias, const wxString& aLibrary ) const;
+    LIB_PART* GetAlias( const wxString& aAlias, const wxString& aLibrary ) const;
 
     /**
      * Returns the part copy from the buffer. In case it does not exist yet, the copy is created.
@@ -186,7 +185,8 @@ public:
     SCH_SCREEN* GetScreen( const wxString& aAlias, const wxString& aLibrary );
 
     /**
-     * Returns true if part with a specific alias exists in library (either original one or buffered).
+     * Returns true if part with a specific alias exists in library (either original one or
+     * buffered).
      */
     bool PartExists( const wxString& aAlias, const wxString& aLibrary ) const;
 
@@ -288,6 +288,8 @@ public:
         return LIB_ID( m_currentLib, m_currentPart );
     }
 
+    void GetRootSymbolNames( const wxString& aLibName, wxArrayString& aRootSymbolNames );
+
 private:
     ///> Extracts library name basing on the file name
     static wxString getLibraryName( const wxString& aFilePath );
@@ -363,12 +365,8 @@ private:
 
         int GetHash() const { return m_hash; }
 
-        ///> Returns the working copy of a LIB_PART object with specified alias
-        LIB_PART* GetPart( const wxString& aAlias ) const
-        {
-            auto buf = GetBuffer( aAlias );
-            return buf ? buf->GetPart() : nullptr;
-        }
+        ///> Returns the working copy of a LIB_PART root object with specified alias.
+        LIB_PART* GetPart( const wxString& aAlias ) const;
 
         ///> Creates a new buffer to store a part. LIB_BUFFER takes ownership of aCopy.
         bool CreateBuffer( LIB_PART* aCopy, SCH_SCREEN* aScreen );
@@ -392,23 +390,38 @@ private:
         bool SaveBuffer( PART_BUFFER::PTR aPartBuf, SCH_PLUGIN* aPlugin, bool aBuffer );
 
         ///> Returns a part buffer with LIB_PART holding a particular alias
-        PART_BUFFER::PTR GetBuffer( const wxString& aAlias ) const
-        {
-            auto it = m_aliases.find( aAlias );
-            return it != m_aliases.end() ? it->second.lock() : PART_BUFFER::PTR( nullptr );
-        }
+        PART_BUFFER::PTR GetBuffer( const wxString& aAlias ) const;
 
         ///> Returns all buffered parts
         const std::deque<PART_BUFFER::PTR>& GetBuffers() const { return m_parts; }
 
+        /**
+         * Checks to see any parts in the buffer are derived from a parent named \a aParentName.
+         *
+         * @param aParentName is the name of the parent to test.
+         *
+         * @return true if any symbols are found derived from a symbol named \a aParent, otherwise
+         *         false.
+         */
+        bool HasDerivedSymbols( const wxString& aParentName ) const;
+
+        /**
+         * Fetchs a list of root symbols names from the library buffer.
+         *
+         * @param aRootSymbolNames is a reference to a list to populate with root symbol names.
+         */
+        void GetRootSymbolNames( wxArrayString& aRootSymbolNames );
+
     private:
-        ///> Creates alias entries for a particular part buffer
-        bool addAliases( PART_BUFFER::PTR aPartBuf );
+        /**
+         * Remove all symbols derived from \a aParent from the library buffer.
+         *
+         * @param aParent is the #PART_BUFFER to check against.
+         *
+         * @return the count of #PART_BUFFER objects removed from the library.
+         */
+        int removeChildSymbols( PART_BUFFER::PTR aPartBuf );
 
-        ///> Removes alias entries for a particular part buffer
-        bool removeAliases( PART_BUFFER::PTR aPartBuf );
-
-        std::map<wxString, PART_BUFFER::WEAK_PTR> m_aliases;
         std::deque<PART_BUFFER::PTR> m_parts;
         std::deque<PART_BUFFER::PTR> m_deleted;  // Buffer for deleted parts until library is saved
         const wxString               m_libName;  // Buffered library name

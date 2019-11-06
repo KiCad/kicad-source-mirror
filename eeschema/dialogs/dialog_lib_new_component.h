@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2105 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015-2019 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,10 +37,12 @@ class DIALOG_LIB_NEW_COMPONENT : public DIALOG_LIB_NEW_COMPONENT_BASE
 {
 public:
     /** Constructor */
-    DIALOG_LIB_NEW_COMPONENT( wxWindow* parent );
+    DIALOG_LIB_NEW_COMPONENT( wxWindow* parent, const wxArrayString* aRootSymbolNames = nullptr );
 
     void SetName( const wxString& name ) override { m_textName->SetValue( name ); }
     wxString GetName( void ) const override { return m_textName->GetValue(); }
+
+    wxString GetParentSymbolName() const { return m_comboInheritanceSelect->GetValue(); }
 
     void SetReference( const wxString& reference )
     {
@@ -92,6 +94,12 @@ public:
         m_checkShowPinNameInside->SetValue( show );
     }
     bool GetPinNameInside( void ) { return m_checkShowPinNameInside->GetValue(); }
+
+protected:
+    virtual void OnParentSymbolSelect( wxCommandEvent& event ) override;
+
+private:
+    void syncControls( bool aIsDerivedPart );
 };
 
 #endif // __dialog_lib_new_component__
