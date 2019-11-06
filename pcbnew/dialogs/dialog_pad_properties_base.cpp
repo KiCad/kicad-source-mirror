@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -62,7 +62,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_staticText44->Wrap( -1 );
 	fgSizerShapeType->Add( m_staticText44, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 3 );
 
-	wxString m_PadTypeChoices[] = { _("Through-hole"), _("SMD"), _("Connector"), _("NPTH, Mechanical"), _("Aperture") };
+	wxString m_PadTypeChoices[] = { _("Through-hole"), _("SMD"), _("Edge Connector"), _("NPTH, Mechanical"), _("Aperture") };
 	int m_PadTypeNChoices = sizeof( m_PadTypeChoices ) / sizeof( wxString );
 	m_PadType = new wxChoice( m_panelGeneral, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_PadTypeNChoices, m_PadTypeChoices, 0 );
 	m_PadType->SetSelection( 0 );
@@ -839,7 +839,7 @@ DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE::DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE( wx
 	bSizermain = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerShapeProperties;
-	fgSizerShapeProperties = new wxFlexGridSizer( 0, 7, 3, 0 );
+	fgSizerShapeProperties = new wxFlexGridSizer( 0, 7, 5, 0 );
 	fgSizerShapeProperties->AddGrowableCol( 2 );
 	fgSizerShapeProperties->AddGrowableCol( 4 );
 	fgSizerShapeProperties->SetFlexibleDirection( wxBOTH );
@@ -871,7 +871,7 @@ DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE::DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE( wx
 	m_startYUnits->Wrap( -1 );
 	fgSizerShapeProperties->Add( m_startYUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_staticTextPosCtrl1 = new wxStaticText( this, wxID_ANY, _("Control Point 1"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPosCtrl1 = new wxStaticText( this, wxID_ANY, _("Control point 1"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPosCtrl1->Wrap( -1 );
 	fgSizerShapeProperties->Add( m_staticTextPosCtrl1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
@@ -880,7 +880,7 @@ DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE::DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE( wx
 	fgSizerShapeProperties->Add( m_ctrl1XLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
 
 	m_ctrl1XCtrl = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeProperties->Add( m_ctrl1XCtrl, 0, wxALL, 5 );
+	fgSizerShapeProperties->Add( m_ctrl1XCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_ctrl1XUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ctrl1XUnits->Wrap( -1 );
@@ -891,13 +891,13 @@ DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE::DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE( wx
 	fgSizerShapeProperties->Add( m_ctrl1YLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
 
 	m_ctrl1YCtrl = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeProperties->Add( m_ctrl1YCtrl, 0, wxALL, 5 );
+	fgSizerShapeProperties->Add( m_ctrl1YCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_ctrl1YUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ctrl1YUnits->Wrap( -1 );
 	fgSizerShapeProperties->Add( m_ctrl1YUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_staticTextPosCtrl2 = new wxStaticText( this, wxID_ANY, _("Control Point 2"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPosCtrl2 = new wxStaticText( this, wxID_ANY, _("Control point 2"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPosCtrl2->Wrap( -1 );
 	fgSizerShapeProperties->Add( m_staticTextPosCtrl2, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
@@ -906,7 +906,7 @@ DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE::DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE( wx
 	fgSizerShapeProperties->Add( m_ctrl2XLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
 
 	m_ctrl2XCtrl = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeProperties->Add( m_ctrl2XCtrl, 0, wxALL, 5 );
+	fgSizerShapeProperties->Add( m_ctrl2XCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_ctrl2XUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ctrl2XUnits->Wrap( -1 );
@@ -917,7 +917,7 @@ DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE::DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE( wx
 	fgSizerShapeProperties->Add( m_ctrl2YLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
 
 	m_ctrl2YCtrl = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerShapeProperties->Add( m_ctrl2YCtrl, 0, wxALL, 5 );
+	fgSizerShapeProperties->Add( m_ctrl2YCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_ctrl2YUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ctrl2YUnits->Wrap( -1 );
