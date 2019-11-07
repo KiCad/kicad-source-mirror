@@ -271,7 +271,7 @@ public:
      * @param aId - Id of field to return.
      * @return The field if found, otherwise NULL.
      */
-    LIB_FIELD* GetField( int aId );
+    LIB_FIELD* GetField( int aId ) const;
 
     /** Return reference to the value field. */
     LIB_FIELD& GetValueField();

@@ -137,7 +137,7 @@ public:
     int GetUnit() const { return m_unit; }
     int GetConvert() const { return m_convert; }
 
-    std::unique_ptr< LIB_PART > GetSelectedSymbol() const;
+    LIB_PART* GetSelectedSymbol() const;
 
     const BOX2I GetDocumentExtents() const override;
 
@@ -190,7 +190,7 @@ private:
      */
     bool m_selection_changed;
 
-    std::unique_ptr< LIB_PART > m_previewItem;
+    LIB_PART* m_previewItem;
 
     DECLARE_EVENT_TABLE()
 };

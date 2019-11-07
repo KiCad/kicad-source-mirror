@@ -207,7 +207,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 LIB_VIEW_FRAME::~LIB_VIEW_FRAME()
 {
     if( m_previewItem )
-        GetCanvas()->GetView()->Remove( m_previewItem.get() );
+        GetCanvas()->GetView()->Remove( m_previewItem );
 }
 
 
@@ -248,17 +248,12 @@ void LIB_VIEW_FRAME::SetUnitAndConvert( int aUnit, int aConvert )
 }
 
 
-std::unique_ptr< LIB_PART > LIB_VIEW_FRAME::GetSelectedSymbol() const
+LIB_PART* LIB_VIEW_FRAME::GetSelectedSymbol() const
 {
-    std::unique_ptr< LIB_PART > symbol;
+    LIB_PART* symbol = nullptr;
 
     if( !m_libraryName.IsEmpty() && !m_entryName.IsEmpty() )
-    {
-        LIB_PART* tmp = Prj().SchSymbolLibTable()->LoadSymbol( m_libraryName, m_entryName );
-
-        if( tmp )
-            symbol = tmp->Flatten();
-    }
+        symbol = Prj().SchSymbolLibTable()->LoadSymbol( m_libraryName, m_entryName );
 
     return symbol;
 }
@@ -266,12 +261,12 @@ std::unique_ptr< LIB_PART > LIB_VIEW_FRAME::GetSelectedSymbol() const
 
 void LIB_VIEW_FRAME::updatePreviewSymbol()
 {
-    std::unique_ptr< LIB_PART > symbol = GetSelectedSymbol();
+    LIB_PART* symbol = GetSelectedSymbol();
     KIGFX::SCH_VIEW* view = GetCanvas()->GetView();
 
     if( m_previewItem )
     {
-        view->Remove( m_previewItem.get() );
+        view->Remove( m_previewItem );
         m_previewItem = nullptr;
     }
 
@@ -282,8 +277,8 @@ void LIB_VIEW_FRAME::updatePreviewSymbol()
         GetRenderSettings()->m_ShowUnit = m_unit;
         GetRenderSettings()->m_ShowConvert = m_convert;
 
-        m_previewItem.reset( symbol.release() );
-        view->Add( m_previewItem.get() );
+        m_previewItem = symbol;
+        view->Add( m_previewItem );
 
         wxString parentName = _( "<none>" );
         std::shared_ptr< LIB_PART > parent  = m_previewItem->GetParent().lock();
@@ -370,7 +365,7 @@ void LIB_VIEW_FRAME::OnSize( wxSizeEvent& SizeEv )
 
 void LIB_VIEW_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
 {
-    std::unique_ptr< LIB_PART > part = GetSelectedSymbol();
+    LIB_PART* part = GetSelectedSymbol();
 
     int unit_count = 1;
 
@@ -701,7 +696,7 @@ void LIB_VIEW_FRAME::SetFilter( const SCHLIB_FILTER* aFilter )
 
 const BOX2I LIB_VIEW_FRAME::GetDocumentExtents() const
 {
-    std::unique_ptr< LIB_PART > part = GetSelectedSymbol();
+    LIB_PART* part = GetSelectedSymbol();
 
     if( !part )
     {
@@ -709,9 +704,14 @@ const BOX2I LIB_VIEW_FRAME::GetDocumentExtents() const
     }
     else
     {
-        EDA_RECT bbox = part->GetUnitBoundingBox( m_unit, m_convert );
-        return BOX2I( bbox.GetOrigin(), VECTOR2I( bbox.GetWidth(), bbox.GetHeight() ) );
+        std::shared_ptr< LIB_PART > tmp;
 
+        tmp = ( part->IsAlias() ) ? part->GetParent().lock() : part->SharedPtr();
+
+        wxCHECK( tmp, BOX2I( VECTOR2I(-200, -200), VECTOR2I( 400, 400 ) ) );
+
+        EDA_RECT bbox = tmp->GetUnitBoundingBox( m_unit, m_convert );
+        return BOX2I( bbox.GetOrigin(), VECTOR2I( bbox.GetWidth(), bbox.GetHeight() ) );
     }
 }
 

@@ -373,7 +373,7 @@ int LIB_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
         }
         else
         {
-            part = viewFrame->GetSelectedSymbol().get();
+            part = viewFrame->GetSelectedSymbol();
             libId = part->GetLibId();
             unit = viewFrame->GetUnit();
             convert = viewFrame->GetConvert();
