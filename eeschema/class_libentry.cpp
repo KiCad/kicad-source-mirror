@@ -277,39 +277,17 @@ std::unique_ptr< LIB_PART > LIB_PART::Flatten() const
         wxCHECK_MSG( parent, retv,
                      wxString::Format( "Parent of derived symbol '%s' undefined", m_name ) );
 
-        retv.reset( new LIB_PART( *const_cast< LIB_PART* >( this ) ) );
+        // Copy the parent.
+        retv.reset( new LIB_PART( *const_cast< LIB_PART* >( parent.get() ) ) );
 
-        // Flattened symbols have no inheritance.
-        retv->SetParent( nullptr );
+        // Now add the inherited part (this) information.
+        retv->SetName( m_name );
 
-        // Flatten parent information into the derived symbol.
-        retv->SetUnitCount( parent->GetUnitCount() );
-
-        LIB_ITEM* newItem;
-
-        for( LIB_ITEM& item : parent->GetDrawItems() )
-        {
-            // Only add fields from the parent that are not present in the child.  The child
-            // symbol fields are already set.
-            if( item.Type() == LIB_FIELD_T )
-            {
-                LIB_FIELD* field = (LIB_FIELD*) &item;
-
-                if( retv->GetField( field->GetId() ) )
-                    continue;
-            }
-
-            newItem = (LIB_ITEM*) item.Clone();
-            newItem->SetParent( retv.get() );
-            retv->GetDrawItems().push_back( newItem );
-        }
-
-        if( parent->IsPower() )
-            retv->SetPower();
-        else
-            retv->SetNormal();
-
-        retv->LockUnits( parent->UnitsLocked() );
+        const LIB_FIELD* datasheetField = GetField( DATASHEET );
+        retv->GetField( DATASHEET )->SetText( datasheetField->GetText() );
+        retv->SetDocFileName( m_docFileName );
+        retv->SetKeyWords( m_keyWords );
+        retv->SetDescription( m_description );
     }
     else
     {
@@ -803,9 +781,9 @@ void LIB_PART::GetFields( LIB_FIELDS& aList )
 }
 
 
-LIB_FIELD* LIB_PART::GetField( int aId )
+LIB_FIELD* LIB_PART::GetField( int aId ) const
 {
-    for( LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    for( const LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
     {
         LIB_FIELD* field = ( LIB_FIELD* ) &item;
 
@@ -874,6 +852,15 @@ bool LIB_PART::HasConversion() const
     {
         if( item.m_Convert > LIB_ITEM::LIB_CONVERT::BASE )
             return true;
+    }
+
+    if( PART_SPTR parent = m_parent.lock() )
+    {
+        for( const LIB_ITEM& item : parent->GetDrawItems() )
+        {
+            if( item.m_Convert > LIB_ITEM::LIB_CONVERT::BASE )
+                return true;
+        }
     }
 
     return false;

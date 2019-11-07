@@ -146,7 +146,7 @@ void LIB_VIEW_FRAME::ReCreateMenuBar()
 
 void LIB_VIEW_FRAME::SyncToolbars()
 {
-    std::unique_ptr< LIB_PART > symbol( GetSelectedSymbol() );
+    LIB_PART* symbol = GetSelectedSymbol();
 
     m_mainToolBar->Toggle( EE_ACTIONS::showDatasheet,
                            symbol && !symbol->GetDocFileName().IsEmpty() );

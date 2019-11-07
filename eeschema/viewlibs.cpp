@@ -55,7 +55,7 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
     const auto libNicknames = libs->GetLogicalLibs();
     adapter->AddLibraries( libNicknames, this );
 
-    std::unique_ptr< LIB_PART > current( GetSelectedSymbol() );
+    LIB_PART* current = GetSelectedSymbol();
     LIB_ID id;
     int unit = 0;
 

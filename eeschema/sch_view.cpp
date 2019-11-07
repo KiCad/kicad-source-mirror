@@ -135,20 +135,21 @@ void SCH_VIEW::DisplayComponent( LIB_PART* aPart )
     std::shared_ptr< LIB_PART > parent;
     LIB_PART* drawnPart = aPart;
 
+    // Draw the mandatory fields for aliases and parent symbols.
+    for( auto& item : aPart->GetDrawItems() )
+    {
+        if( item.Type() != LIB_FIELD_T )
+            continue;
+
+        LIB_FIELD* field = (LIB_FIELD*) &item;
+
+        if( field->GetId() < MANDATORY_FIELDS )
+            Add( &item );
+    }
+
+    // Draw the parent items if the symbol is inherited from another symbol.
     if( aPart->IsAlias() )
     {
-        // Draw the alias mandatory fields.
-        for( auto& item : aPart->GetDrawItems() )
-        {
-            if( item.Type() != LIB_FIELD_T )
-                continue;
-
-            LIB_FIELD* field = (LIB_FIELD*) &item;
-
-            if( field->GetId() < MANDATORY_FIELDS )
-                Add( &item );
-        }
-
         parent = aPart->GetParent().lock();
 
         wxCHECK( parent, /* void */ );
@@ -158,12 +159,12 @@ void SCH_VIEW::DisplayComponent( LIB_PART* aPart )
 
     for( auto& item : drawnPart->GetDrawItems() )
     {
-        // Do not overwrite the alias mandatory fields with the parent mandatory fields.
+        // The mandatory fields are already in place so we only add user defined fields.
         if( item.Type() == LIB_FIELD_T )
         {
             LIB_FIELD* field = (LIB_FIELD*) &item;
 
-            if( aPart->IsAlias() && field->GetId() < MANDATORY_FIELDS )
+            if( field->GetId() < MANDATORY_FIELDS )
                 continue;
         }
 

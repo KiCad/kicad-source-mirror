@@ -2896,9 +2896,13 @@ void SCH_LEGACY_PLUGIN_CACHE::loadAliases( std::unique_ptr<LIB_PART>& aPart,
 
                 if( field->GetId() < MANDATORY_FIELDS )
                 {
+                    // Get all of the parent field information except for the string.
                     *newPart->GetField( field->GetId() ) = *field;
 
-                    if( field->GetId() == REFERENCE || field->GetId() == FOOTPRINT )
+                    // Restore the alias strings that are defined in this file format.
+                    if( field->GetId() == REFERENCE
+                      || field->GetId() == FOOTPRINT
+                      || field->GetId() == VALUE )
                         newPart->GetField( field->GetId() )->SetText( tmp );
                 }
             }

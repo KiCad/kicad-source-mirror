@@ -252,8 +252,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
     }
     else if( m_frame->IsType( FRAME_SCH_VIEWER ) || m_frame->IsType( FRAME_SCH_VIEWER_MODAL ) )
     {
-        std::unique_ptr< LIB_PART > entry =
-                static_cast<LIB_VIEW_FRAME*>( m_frame )->GetSelectedSymbol();
+        LIB_PART* entry = static_cast<LIB_VIEW_FRAME*>( m_frame )->GetSelectedSymbol();
 
         if( !entry )
             return 0;
