@@ -392,10 +392,10 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
 {
     GENERAL_COLLECTORS_GUIDE guide = getCollectorsGuide();
     GENERAL_COLLECTOR        collector;
-    PCB_DISPLAY_OPTIONS*     displayOpts = (PCB_DISPLAY_OPTIONS*) m_frame->GetDisplayOptions();
+    auto&                    displayOpts = m_frame->GetDisplayOptions();
     bool                     cleared = false;
 
-    guide.SetIgnoreZoneFills( displayOpts->m_DisplayZonesMode != 0 );
+    guide.SetIgnoreZoneFills( displayOpts.m_DisplayZonesMode != 0 );
 
     collector.Collect( board(),
         m_editModules ? GENERAL_COLLECTOR::ModuleItems : GENERAL_COLLECTOR::AllBoardItems,

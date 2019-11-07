@@ -96,7 +96,7 @@ int GERBVIEW_CONTROL::DisplayControl( const TOOL_EVENT& aEvent )
 {
     bool state;
     bool needs_refresh = false;
-    GBR_DISPLAY_OPTIONS options = m_frame->m_DisplayOptions;
+    auto options = m_frame->GetDisplayOptions();
 
     if( aEvent.IsAction( &GERBVIEW_ACTIONS::linesDisplayOutlines ) )
     {

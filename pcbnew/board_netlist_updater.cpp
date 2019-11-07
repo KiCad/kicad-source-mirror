@@ -150,7 +150,7 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
     m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
     // Set the pads ratsnest settings to the global settings
-    bool set_ratsnest = ((PCB_DISPLAY_OPTIONS*)m_frame->GetDisplayOptions())->m_ShowGlobalRatsnest;
+    bool set_ratsnest = m_frame->GetDisplayOptions().m_ShowGlobalRatsnest;
     for ( auto pad : footprint->Pads() )
         pad->SetLocalRatsnestVisible( set_ratsnest );
 

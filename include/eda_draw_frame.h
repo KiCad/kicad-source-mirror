@@ -487,13 +487,6 @@ public:
     void SetCanvas( EDA_DRAW_PANEL_GAL* aPanel ) { m_canvas = aPanel; }
 
     /**
-     * A way to pass info to draw functions. the base class has no knowledge about
-     * these options. It is virtual because this function must be overloaded to
-     * pass usefull info.
-     */
-    virtual void* GetDisplayOptions() { return NULL; }
-
-    /**
      * Return a reference to the gal rendering options used by GAL for rendering.
      */
     KIGFX::GAL_DISPLAY_OPTIONS& GetGalDisplayOptions() { return m_galDisplayOptions; }

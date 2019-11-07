@@ -59,7 +59,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     //
     CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, selTool );
     static ACTION_MENU* openRecentMenu;
-    auto disp_opt = static_cast<PCB_DISPLAY_OPTIONS*>( GetDisplayOptions() );
+    auto& disp_opt = GetDisplayOptions();
 
     if( Kiface().IsSingle() )   // not when under a project mgr
     {
@@ -266,35 +266,35 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     auto fullCrosshairCondition = [ this ] ( const SELECTION& aSel ) {
         return GetGalDisplayOptions().m_fullscreenCursor;
     };
-    auto ratsnestShownCondition = [ this, disp_opt ] ( const SELECTION& aSel ) {
-        return disp_opt->m_ShowGlobalRatsnest;
+    auto ratsnestShownCondition = [ this, &disp_opt ] ( const SELECTION& aSel ) {
+        return disp_opt.m_ShowGlobalRatsnest;
     };
-    auto curvedRatsnestCondition = [ this, disp_opt ] ( const SELECTION& aSel ) {
-        return disp_opt->m_DisplayRatsnestLinesCurved;
+    auto curvedRatsnestCondition = [ this, &disp_opt ] ( const SELECTION& aSel ) {
+        return disp_opt.m_DisplayRatsnestLinesCurved;
     };
     auto boardFlippedCondition = [ this ] ( const SELECTION& aSel ) {
         return GetCanvas()->GetView()->IsMirroredX();
     };
-    auto zonesFilledCondition = [ this, disp_opt ] ( const SELECTION& aSel ) {
-        return disp_opt->m_DisplayZonesMode == 0;
+    auto zonesFilledCondition = [ this, &disp_opt ] ( const SELECTION& aSel ) {
+        return disp_opt.m_DisplayZonesMode == 0;
     };
-    auto zonesWireframedCondition = [ this, disp_opt ] ( const SELECTION& aSel ) {
-        return disp_opt->m_DisplayZonesMode == 1;
+    auto zonesWireframedCondition = [ this, &disp_opt ] ( const SELECTION& aSel ) {
+        return disp_opt.m_DisplayZonesMode == 1;
     };
-    auto zonesOutlinedCondition = [ this, disp_opt ] ( const SELECTION& aSel ) {
-        return disp_opt->m_DisplayZonesMode == 2;
+    auto zonesOutlinedCondition = [ this, &disp_opt ] ( const SELECTION& aSel ) {
+        return disp_opt.m_DisplayZonesMode == 2;
     };
-    auto sketchTracksCondition = [ this, disp_opt ] ( const SELECTION& aSel ) {
-        return !disp_opt->m_DisplayPcbTrackFill;
+    auto sketchTracksCondition = [ this, &disp_opt ] ( const SELECTION& aSel ) {
+        return !disp_opt.m_DisplayPcbTrackFill;
     };
-    auto sketchViasCondition = [ this, disp_opt ] ( const SELECTION& aSel ) {
-        return !disp_opt->m_DisplayViaFill;
+    auto sketchViasCondition = [ this, &disp_opt ] ( const SELECTION& aSel ) {
+        return !disp_opt.m_DisplayViaFill;
     };
     auto sketchPadsCondition = [ this, disp_opt ] ( const SELECTION& aSel ) {
-        return !disp_opt->m_DisplayPadFill;
+        return !disp_opt.m_DisplayPadFill;
     };
-    auto contrastModeCondition = [ this, disp_opt ] ( const SELECTION& aSel ) {
-        return !disp_opt->m_ContrastModeDisplay;
+    auto contrastModeCondition = [ this, &disp_opt ] ( const SELECTION& aSel ) {
+        return !disp_opt.m_ContrastModeDisplay;
     };
 
     viewMenu->AddCheckItem( PCB_ACTIONS::showLayersManager,    layersPaletteShownCondition );

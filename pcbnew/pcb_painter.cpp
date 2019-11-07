@@ -127,29 +127,26 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSet
 }
 
 
-void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS* aOptions,
+void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions,
                                               bool aShowPageLimits )
 {
-    if( aOptions == NULL )
-        return;
-
-    m_hiContrastEnabled = aOptions->m_ContrastModeDisplay;
-    m_padNumbers        = aOptions->m_DisplayPadNum;
-    m_sketchBoardGfx    = !aOptions->m_DisplayDrawItemsFill;
-    m_sketchFpGfx       = !aOptions->m_DisplayModEdgeFill;
-    m_sketchFpTxtfx     = !aOptions->m_DisplayModTextFill;
-    m_curvedRatsnestlines = aOptions->m_DisplayRatsnestLinesCurved;
-    m_globalRatsnestlines = aOptions->m_ShowGlobalRatsnest;
+    m_hiContrastEnabled = aOptions.m_ContrastModeDisplay;
+    m_padNumbers        = aOptions.m_DisplayPadNum;
+    m_sketchBoardGfx    = !aOptions.m_DisplayDrawItemsFill;
+    m_sketchFpGfx       = !aOptions.m_DisplayModEdgeFill;
+    m_sketchFpTxtfx     = !aOptions.m_DisplayModTextFill;
+    m_curvedRatsnestlines = aOptions.m_DisplayRatsnestLinesCurved;
+    m_globalRatsnestlines = aOptions.m_ShowGlobalRatsnest;
 
     // Whether to draw tracks, vias & pads filled or as outlines
-    m_sketchMode[LAYER_PADS_TH]      = !aOptions->m_DisplayPadFill;
-    m_sketchMode[LAYER_VIA_THROUGH]  = !aOptions->m_DisplayViaFill;
-    m_sketchMode[LAYER_VIA_BBLIND]   = !aOptions->m_DisplayViaFill;
-    m_sketchMode[LAYER_VIA_MICROVIA] = !aOptions->m_DisplayViaFill;
-    m_sketchMode[LAYER_TRACKS]       = !aOptions->m_DisplayPcbTrackFill;
+    m_sketchMode[LAYER_PADS_TH]      = !aOptions.m_DisplayPadFill;
+    m_sketchMode[LAYER_VIA_THROUGH]  = !aOptions.m_DisplayViaFill;
+    m_sketchMode[LAYER_VIA_BBLIND]   = !aOptions.m_DisplayViaFill;
+    m_sketchMode[LAYER_VIA_MICROVIA] = !aOptions.m_DisplayViaFill;
+    m_sketchMode[LAYER_TRACKS]       = !aOptions.m_DisplayPcbTrackFill;
 
     // Net names display settings
-    switch( aOptions->m_DisplayNetNamesMode )
+    switch( aOptions.m_DisplayNetNamesMode )
     {
     case 0:
         m_netNamesOnPads = false;
@@ -173,7 +170,7 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS* aOption
     }
 
     // Zone display settings
-    switch( aOptions->m_DisplayZonesMode )
+    switch( aOptions.m_DisplayZonesMode )
     {
     case 0:
         m_displayZone = DZ_SHOW_FILLED;
@@ -189,7 +186,7 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS* aOption
     }
 
     // Clearance settings
-    switch( aOptions->m_ShowTrackClearanceMode )
+    switch( aOptions.m_ShowTrackClearanceMode )
     {
         case PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE:
             m_clearance = CL_NONE;
@@ -212,7 +209,7 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS* aOption
             break;
     }
 
-    if( aOptions->m_DisplayPadIsol )
+    if( aOptions.m_DisplayPadIsol )
         m_clearance |= CL_PADS;
 
     m_showPageLimits = aShowPageLimits;

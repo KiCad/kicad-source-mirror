@@ -462,7 +462,7 @@ void GERBVIEW_FRAME::applyDisplaySettingsToGAL()
 {
     auto painter = static_cast<KIGFX::GERBVIEW_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
     KIGFX::GERBVIEW_RENDER_SETTINGS* settings = painter->GetSettings();
-    settings->LoadDisplayOptions( &m_DisplayOptions );
+    settings->LoadDisplayOptions( m_DisplayOptions );
 
     settings->ImportLegacyColors( m_colorsSettings );
 

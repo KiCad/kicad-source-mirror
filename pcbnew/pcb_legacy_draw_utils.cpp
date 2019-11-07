@@ -156,10 +156,11 @@ void BOARD::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
 static void Trace_Pads_Only( PCB_BASE_FRAME* aFrame, wxDC* DC, MODULE* aModule,
                              int ox, int oy, LSET aLayerMask )
 {
-    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*) aFrame->GetDisplayOptions();
-    int                  tmp = displ_opts->m_DisplayPadFill;
+    PCB_DISPLAY_OPTIONS  displ_opts = aFrame->GetDisplayOptions();
+    int                  tmp = displ_opts.m_DisplayPadFill;
 
-    displ_opts->m_DisplayPadFill = false;
+    displ_opts.m_DisplayPadFill = false;
+    aFrame->SetDisplayOptions( displ_opts );
 
     // Draw pads.
     for( auto pad : aModule->Pads() )
@@ -170,5 +171,6 @@ static void Trace_Pads_Only( PCB_BASE_FRAME* aFrame, wxDC* DC, MODULE* aModule,
         pad->Print( aFrame, DC, wxPoint( ox, oy ) );
     }
 
-    displ_opts->m_DisplayPadFill = tmp;
+    displ_opts.m_DisplayPadFill = tmp;
+    aFrame->SetDisplayOptions( displ_opts );
 }

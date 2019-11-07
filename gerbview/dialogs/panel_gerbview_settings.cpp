@@ -38,7 +38,7 @@ bool PANEL_GERBVIEW_SETTINGS::TransferDataToWindow( )
 {
     m_PolarDisplay->SetSelection( m_Parent->GetShowPolarCoords() ? 1 : 0 );
     m_BoxUnits->SetSelection( m_Parent->GetUserUnits() ? 1 : 0 );
-    m_ShowPageLimitsOpt->SetValue( m_Parent->m_DisplayOptions.m_DisplayPageLimits );
+    m_ShowPageLimitsOpt->SetValue( m_Parent->GetDisplayOptions().m_DisplayPageLimits );
 
     for( unsigned i = 0;  i < arrayDim( g_GerberPageSizeList );  ++i )
     {
@@ -57,10 +57,14 @@ bool PANEL_GERBVIEW_SETTINGS::TransferDataFromWindow()
 {
     m_Parent->SetShowPolarCoords( m_PolarDisplay->GetSelection() != 0 );
     m_Parent->SetUserUnits( m_BoxUnits->GetSelection() == 0 ? INCHES : MILLIMETRES );
-    m_Parent->m_DisplayOptions.m_DisplayPageLimits = m_ShowPageLimitsOpt->GetValue();
+
+    auto opts = m_Parent->GetDisplayOptions();
+    opts.m_DisplayPageLimits = m_ShowPageLimitsOpt->GetValue();
 
     PAGE_INFO pageInfo( g_GerberPageSizeList[ m_PageSize->GetSelection() ] );
     m_Parent->SetPageSettings( pageInfo );
+
+    m_Parent->UpdateDisplayOptions( opts );
 
     return true;
 }

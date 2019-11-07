@@ -84,11 +84,12 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     GetScreen()->SetGrid( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 );
 
     // Initialize some display options
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-    displ_opts->m_DisplayPadIsol = false;      // Pad clearance has no meaning here
+    auto displ_opts = GetDisplayOptions();
+    displ_opts.m_DisplayPadIsol = false;      // Pad clearance has no meaning here
 
     // Track and via clearance has no meaning here.
-    displ_opts->m_ShowTrackClearanceMode = PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE;
+    displ_opts.m_ShowTrackClearanceMode = PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE;
+    SetDisplayOptions( displ_opts );
 
     // Create GAL canvas
 #ifdef __WXMAC__
@@ -285,7 +286,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ApplyDisplaySettingsToGAL()
 {
     auto painter = static_cast<KIGFX::PCB_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
 
-    painter->GetSettings()->LoadDisplayOptions( &m_DisplayOptions, false );
+    painter->GetSettings()->LoadDisplayOptions( GetDisplayOptions(), false );
 
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
     GetCanvas()->Refresh();

@@ -45,14 +45,14 @@
  * tests to see if the clearance border is drawn on the given track.
  * @return bool - true if should draw clearance, else false.
  */
-static bool ShowClearance( PCB_DISPLAY_OPTIONS* aDisplOpts, const TRACK* aTrack )
+static bool ShowClearance( const PCB_DISPLAY_OPTIONS& aDisplOpts, const TRACK* aTrack )
 {
     // maybe return true for tracks and vias, not for zone segments
     return IsCopperLayer( aTrack->GetLayer() )
            && ( aTrack->Type() == PCB_TRACE_T || aTrack->Type() == PCB_VIA_T )
-           && ( ( aDisplOpts->m_ShowTrackClearanceMode == PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS
+           && ( ( aDisplOpts.m_ShowTrackClearanceMode == PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS
                   && ( aTrack->IsDragging() || aTrack->IsMoving() || aTrack->IsNew() ) )
-            || ( aDisplOpts->m_ShowTrackClearanceMode == PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_ALWAYS )
+            || ( aDisplOpts.m_ShowTrackClearanceMode == PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_ALWAYS )
             );
 
 }
@@ -467,7 +467,7 @@ void TRACK::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
     if( !brd->IsLayerVisible( m_Layer ) || !brd->IsElementVisible( LAYER_TRACKS ) )
         return;
 
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( aFrame->GetDisplayOptions() );
+    auto displ_opts = aFrame->GetDisplayOptions();
 
     color.a = 0.588;
 
@@ -478,7 +478,7 @@ void TRACK::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
         return;
     }
 
-    if( !displ_opts->m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
+    if( !displ_opts.m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
     {
         GRCSegm( nullptr, aDC, m_Start + aOffset, m_End + aOffset, m_Width, color );
     }
@@ -530,11 +530,11 @@ void VIA::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
     int                  radius;
     int                  fillvia = 0;
     PCB_SCREEN*          screen = aFrame->GetScreen();
-    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*) aFrame->GetDisplayOptions();
+    auto&                displ_opts = aFrame->GetDisplayOptions();
     BOARD*               brd =  GetBoard();
     COLOR4D              color = aFrame->Settings().Colors().GetItemColor( LAYER_VIAS + GetViaType() );
 
-    if( displ_opts->m_DisplayViaFill == FILLED )
+    if( displ_opts.m_DisplayViaFill == FILLED )
         fillvia = 1;
 
     if( !brd->IsElementVisible( LAYER_VIAS + GetViaType() ) )
@@ -667,7 +667,7 @@ void VIA::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
     if( GetNetCode() == NETINFO_LIST::UNCONNECTED )
         return;
 
-    if( displ_opts->m_DisplayNetNamesMode == 0 || displ_opts->m_DisplayNetNamesMode == 1 )
+    if( displ_opts.m_DisplayNetNamesMode == 0 || displ_opts.m_DisplayNetNamesMode == 1 )
         return;
 
     NETINFO_ITEM* net = GetNet();

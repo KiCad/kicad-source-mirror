@@ -290,7 +290,7 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
     std::string          tool = aEvent.GetCommandStr().get();
     PCBNEW_PICKER_TOOL*  picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
     BOARD*               board = getModel<BOARD>();
-    PCB_DISPLAY_OPTIONS* opt = displayOptions();
+    auto&                opt = displayOptions();
 
     // Deactivate other tools; particularly important if another PICKER is currently running
     Activate();
@@ -317,7 +317,7 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
                 for( auto mod : board->Modules() )
                 {
                     for( auto pad : mod->Pads() )
-                        pad->SetLocalRatsnestVisible( opt->m_ShowGlobalRatsnest );
+                        pad->SetLocalRatsnestVisible( opt.m_ShowGlobalRatsnest );
                 }
             }
             else
@@ -351,7 +351,7 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
                 for( auto mod : board->Modules() )
                 {
                     for( auto pad : mod->Pads() )
-                        pad->SetLocalRatsnestVisible( opt->m_ShowGlobalRatsnest );
+                        pad->SetLocalRatsnestVisible( opt.m_ShowGlobalRatsnest );
                 }
             }
         } );
@@ -430,11 +430,11 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest()
         {
             for( auto pad : static_cast<MODULE*>( item )->Pads() )
             {
-                if( pad->GetLocalRatsnestVisible() || displayOptions()->m_ShowModuleRatsnest )
+                if( pad->GetLocalRatsnestVisible() || displayOptions().m_ShowModuleRatsnest )
                     items.push_back( pad );
             }
         }
-        else if( boardItem->GetLocalRatsnestVisible() || displayOptions()->m_ShowModuleRatsnest )
+        else if( boardItem->GetLocalRatsnestVisible() || displayOptions().m_ShowModuleRatsnest )
         {
             items.push_back( boardItem );
         }

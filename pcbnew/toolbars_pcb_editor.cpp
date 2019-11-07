@@ -663,9 +663,9 @@ void PCB_EDIT_FRAME::SyncToolbars()
 {
 #define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, IsCurrentTool( tool ) )
 
-    PCB_DISPLAY_OPTIONS*        opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
+    auto&                       opts = GetDisplayOptions();
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
-    int                         zoneMode = opts->m_DisplayZonesMode;
+    int                         zoneMode = opts.m_DisplayZonesMode;
 
     m_mainToolBar->Toggle( ACTIONS::save, GetScreen() && GetScreen()->IsModify() );
     m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
@@ -687,18 +687,18 @@ void PCB_EDIT_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( ACTIONS::imperialUnits,            GetUserUnits() == INCHES );
     m_optionsToolBar->Toggle( ACTIONS::togglePolarCoords,        GetShowPolarCoords() );
     m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,        !galOpts.m_fullscreenCursor );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::showRatsnest,         opts->m_ShowGlobalRatsnest );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::ratsnestLineMode,     opts->m_DisplayRatsnestLinesCurved );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::showRatsnest,         opts.m_ShowGlobalRatsnest );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::ratsnestLineMode,     opts.m_DisplayRatsnestLinesCurved );
     m_optionsToolBar->Toggle( PCB_ACTIONS::showLayersManager,    LayerManagerShown() );
     m_optionsToolBar->Toggle( PCB_ACTIONS::showMicrowaveToolbar, MicrowaveToolbarShown() );
 
     m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayEnable,    zoneMode == 0 );
     m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayDisable,   zoneMode == 1 );
     m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayOutlines,  zoneMode == 2 );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::trackDisplayMode,     !opts->m_DisplayPcbTrackFill );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::viaDisplayMode,       !opts->m_DisplayViaFill );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,       !opts->m_DisplayPadFill );
-    m_optionsToolBar->Toggle( ACTIONS::highContrastMode,         opts->m_ContrastModeDisplay );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::trackDisplayMode,     !opts.m_DisplayPcbTrackFill );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::viaDisplayMode,       !opts.m_DisplayViaFill );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,       !opts.m_DisplayPadFill );
+    m_optionsToolBar->Toggle( ACTIONS::highContrastMode,         opts.m_ContrastModeDisplay );
     m_optionsToolBar->Refresh();
 
     TOGGLE_TOOL( m_drawToolBar, ACTIONS::selectionTool );

@@ -58,7 +58,7 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery, bool aFinal )
     // Items visibility flags will be set because a new board will be created.
     // Grid and ratsnest can be left to their previous state
     bool showGrid = IsElementVisible( LAYER_GRID );
-    bool showRats = m_DisplayOptions.m_ShowGlobalRatsnest;
+    bool showRats = GetDisplayOptions().m_ShowGlobalRatsnest;
 
     if( !aFinal )
     {

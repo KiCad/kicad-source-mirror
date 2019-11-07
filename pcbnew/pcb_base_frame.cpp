@@ -391,7 +391,7 @@ EDA_3D_VIEWER* PCB_BASE_FRAME::CreateAndShow3D_Frame()
 void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
 {
     PCB_LAYER_ID preslayer = GetActiveLayer();
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto& displ_opts = GetDisplayOptions();
 
     // Check if the specified layer matches the present layer
     if( layer == preslayer )
@@ -425,16 +425,16 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
 
     SetActiveLayer( layer );
 
-    if( displ_opts->m_ContrastModeDisplay )
+    if( displ_opts.m_ContrastModeDisplay )
         GetCanvas()->Refresh();
 }
 
 
 void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 {
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = GetDisplayOptions();
 
-    displ_opts->m_DisplayPadFill = !displ_opts->m_DisplayPadFill;
+    displ_opts.m_DisplayPadFill = !displ_opts.m_DisplayPadFill;
 
     if( GetCanvas() )
     {
@@ -451,22 +451,24 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
         }
     }
 
+    SetDisplayOptions( displ_opts );
     GetCanvas()->Refresh();
 }
 
 
 void PCB_BASE_FRAME::OnToggleGraphicDrawMode( wxCommandEvent& aEvent )
 {
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-    displ_opts->m_DisplayDrawItemsFill = !displ_opts->m_DisplayDrawItemsFill;
+    auto displ_opts = GetDisplayOptions();
+    displ_opts.m_DisplayDrawItemsFill = !displ_opts.m_DisplayDrawItemsFill;
+    SetDisplayOptions( displ_opts );
     GetCanvas()->Refresh();
 }
 
 
 void PCB_BASE_FRAME::OnToggleEdgeDrawMode( wxCommandEvent& aEvent )
 {
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-    displ_opts->m_DisplayModEdgeFill = !displ_opts->m_DisplayModEdgeFill;
+    auto displ_opts = GetDisplayOptions();
+    displ_opts.m_DisplayModEdgeFill = !displ_opts.m_DisplayModEdgeFill;
 
     if( GetCanvas() )
     {
@@ -476,14 +478,15 @@ void PCB_BASE_FRAME::OnToggleEdgeDrawMode( wxCommandEvent& aEvent )
         view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     }
 
+    SetDisplayOptions( displ_opts );
     GetCanvas()->Refresh();
 }
 
 
 void PCB_BASE_FRAME::OnToggleTextDrawMode( wxCommandEvent& aEvent )
 {
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
-    displ_opts->m_DisplayModTextFill = !displ_opts->m_DisplayModTextFill;
+    auto displ_opts = GetDisplayOptions();
+    displ_opts.m_DisplayModTextFill = !displ_opts.m_DisplayModTextFill;
 
     if( GetCanvas() )
     {
@@ -493,6 +496,7 @@ void PCB_BASE_FRAME::OnToggleTextDrawMode( wxCommandEvent& aEvent )
         view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     }
 
+    SetDisplayOptions( displ_opts );
     GetCanvas()->Refresh();
 }
 
@@ -858,7 +862,7 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
     // Transfer latest current display options from legacy to GAL canvas:
     auto painter = static_cast<KIGFX::PCB_PAINTER*>( canvas->GetView()->GetPainter() );
     auto settings = painter->GetSettings();
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
+    auto displ_opts = GetDisplayOptions();
     settings->LoadDisplayOptions( displ_opts, ShowPageLimits() );
 
     canvas->GetView()->RecacheAllItems();

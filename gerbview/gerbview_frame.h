@@ -57,12 +57,26 @@ class REPORTER;
 
 class GERBVIEW_FRAME : public EDA_DRAW_FRAME    // PCB_BASE_FRAME
 {
-    GBR_LAYOUT*     m_gerberLayout;
-    wxPoint         m_grid_origin;
-    PAGE_INFO       m_paper;            // used only to show paper limits to screen
+    GBR_LAYOUT*         m_gerberLayout;
+    wxPoint             m_grid_origin;
+    PAGE_INFO           m_paper;            // used only to show paper limits to screen
+    GBR_DISPLAY_OPTIONS m_DisplayOptions;
 
 public:
-    GBR_DISPLAY_OPTIONS m_DisplayOptions;
+
+    /**
+     * Function GetDisplayOptions
+     * returns the display options current in use
+     */
+    const GBR_DISPLAY_OPTIONS& GetDisplayOptions() const
+    {
+        return m_DisplayOptions;
+    }
+
+    void SetDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions )
+    {
+        m_DisplayOptions = aOptions;
+    }
 
     /**
      * Function SetLayout

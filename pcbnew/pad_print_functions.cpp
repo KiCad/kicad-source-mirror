@@ -98,10 +98,10 @@ void D_PAD::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
         return;
 
 
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( aFrame->GetDisplayOptions() );
+    auto& displ_opts = aFrame->GetDisplayOptions();
     PCB_SCREEN* screen = aFrame->GetScreen();
 
-    if( displ_opts && displ_opts->m_DisplayPadFill == SKETCH )
+    if( displ_opts.m_DisplayPadFill == SKETCH )
         drawInfo.m_ShowPadFilled = false;
     else
         drawInfo.m_ShowPadFilled = true;
@@ -152,7 +152,7 @@ void D_PAD::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
         mask_margin.y = std::max( mask_margin.y, GetSolderMaskMargin() );
     }
 
-    bool DisplayIsol = displ_opts && displ_opts->m_DisplayPadIsol;
+    bool DisplayIsol = displ_opts.m_DisplayPadIsol;
 
     if( !( m_layerMask & LSET::AllCuMask() ).any() )
         DisplayIsol = false;
@@ -185,11 +185,10 @@ void D_PAD::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOffset )
     drawInfo.m_PadClearance = DisplayIsol ? GetClearance() : 0;
 
     // Draw the pad number
-    if( displ_opts && !displ_opts->m_DisplayPadNum )
+    if( !displ_opts.m_DisplayPadNum )
         drawInfo.m_Display_padnum = false;
 
-    if( displ_opts &&
-        (( displ_opts ->m_DisplayNetNamesMode == 0 ) || ( displ_opts->m_DisplayNetNamesMode == 2 )) )
+    if( ( displ_opts.m_DisplayNetNamesMode == 0 ) || ( displ_opts.m_DisplayNetNamesMode == 2 ) )
         drawInfo.m_Display_netname = false;
 
     PrintShape( aDC, drawInfo );

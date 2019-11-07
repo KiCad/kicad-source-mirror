@@ -255,9 +255,9 @@ void PCB_TOOL_BASE::setTransitions()
 }
 
 
-PCB_DISPLAY_OPTIONS* PCB_TOOL_BASE::displayOptions() const
+const PCB_DISPLAY_OPTIONS& PCB_TOOL_BASE::displayOptions() const
 {
-    return static_cast<PCB_DISPLAY_OPTIONS*>( frame()->GetDisplayOptions() );
+    return frame()->GetDisplayOptions();
 }
 
 PCB_DRAW_PANEL_GAL* PCB_TOOL_BASE::canvas() const

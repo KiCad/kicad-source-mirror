@@ -73,9 +73,9 @@ void TEXTE_PCB::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
 
     auto                 color = aFrame->Settings().Colors().GetLayerColor( m_Layer );
     EDA_DRAW_MODE_T      fillmode = FILLED;
-    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*)( aFrame->GetDisplayOptions() );
+    auto&                displ_opts = aFrame->GetDisplayOptions();
 
-    if( displ_opts && displ_opts->m_DisplayDrawItemsFill == SKETCH )
+    if( displ_opts.m_DisplayDrawItemsFill == SKETCH )
         fillmode = SKETCH;
 
     EDA_TEXT::Print( DC, offset, color, fillmode );

@@ -57,7 +57,7 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalTy
 
     if( frame )
     {
-        auto displ_opts = (GBR_DISPLAY_OPTIONS*) frame->GetDisplayOptions();
+        auto& displ_opts = frame->GetDisplayOptions();
         static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() )
                                                      ->LoadDisplayOptions( displ_opts );
         UseColorScheme( frame->m_colorsSettings );
@@ -107,7 +107,7 @@ void GERBVIEW_DRAW_PANEL_GAL::OnShow()
     if( frame )
     {
         SetTopLayer( frame->GetActiveLayer() );
-        GBR_DISPLAY_OPTIONS* displ_opts = (GBR_DISPLAY_OPTIONS*) frame->GetDisplayOptions();
+        auto& displ_opts = frame->GetDisplayOptions();
         static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>(
             m_view->GetPainter()->GetSettings() )->LoadDisplayOptions( displ_opts );
     }

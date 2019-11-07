@@ -46,11 +46,11 @@ bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataToWindow( )
     m_galOptsPanel->TransferDataToWindow();
 
     // Show Option Draw Lines. We use DisplayPcbTrackFill as Lines draw option
-    m_OptDisplayLines->SetValue( !m_Parent->m_DisplayOptions.m_DisplayLinesFill );
-    m_OptDisplayFlashedItems->SetValue( !m_Parent->m_DisplayOptions.m_DisplayFlashedItemsFill );
+    m_OptDisplayLines->SetValue( !m_Parent->GetDisplayOptions().m_DisplayLinesFill );
+    m_OptDisplayFlashedItems->SetValue( !m_Parent->GetDisplayOptions().m_DisplayFlashedItemsFill );
 
     // Show Option Draw polygons
-    m_OptDisplayPolygons->SetValue( !m_Parent->m_DisplayOptions.m_DisplayPolygonsFill );
+    m_OptDisplayPolygons->SetValue( !m_Parent->GetDisplayOptions().m_DisplayPolygonsFill );
 
     m_OptDisplayDCodes->SetValue( m_Parent->IsElementVisible( LAYER_DCODES ) );
 
@@ -60,30 +60,30 @@ bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataToWindow( )
 
 bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
-    auto displayOptions = (GBR_DISPLAY_OPTIONS*) m_Parent->GetDisplayOptions();
+    GBR_DISPLAY_OPTIONS displayOptions = m_Parent->GetDisplayOptions();
 
     bool needs_repaint = false, option;
 
     option = !m_OptDisplayLines->GetValue();
 
-    if( option != m_Parent->m_DisplayOptions.m_DisplayLinesFill )
+    if( option != displayOptions.m_DisplayLinesFill )
         needs_repaint = true;
 
-    m_Parent->m_DisplayOptions.m_DisplayLinesFill = option;
+    displayOptions.m_DisplayLinesFill = option;
 
     option = !m_OptDisplayFlashedItems->GetValue();
 
-    if( option != m_Parent->m_DisplayOptions.m_DisplayFlashedItemsFill )
+    if( option != m_Parent->GetDisplayOptions().m_DisplayFlashedItemsFill )
         needs_repaint = true;
 
-    m_Parent->m_DisplayOptions.m_DisplayFlashedItemsFill = option;
+    displayOptions.m_DisplayFlashedItemsFill = option;
 
     option = !m_OptDisplayPolygons->GetValue();
 
-    if( option != m_Parent->m_DisplayOptions.m_DisplayPolygonsFill )
+    if( option != displayOptions.m_DisplayPolygonsFill )
         needs_repaint = true;
 
-    m_Parent->m_DisplayOptions.m_DisplayPolygonsFill = option;
+    displayOptions.m_DisplayPolygonsFill = option;
 
     m_Parent->SetElementVisibility( LAYER_DCODES, m_OptDisplayDCodes->GetValue() );
 

@@ -122,7 +122,8 @@ int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
 {
     auto opts = displayOptions();
 
-    Flip( opts->m_DisplayPcbTrackFill );
+    Flip( opts.m_DisplayPcbTrackFill );
+    m_frame->SetDisplayOptions( opts );
     view()->UpdateDisplayOptions( opts );
 
     for( auto track : board()->Tracks() )
@@ -144,15 +145,17 @@ int PCBNEW_CONTROL::ToggleRatsnest( const TOOL_EVENT& aEvent )
     if( aEvent.IsAction( &PCB_ACTIONS::showRatsnest ) )
     {
         // N.B. Do not disable the Ratsnest layer here.  We use it for local ratsnest
-        Flip( opts->m_ShowGlobalRatsnest );
+        Flip( opts.m_ShowGlobalRatsnest );
+        m_frame->SetDisplayOptions( opts );
         view()->UpdateDisplayOptions( opts );
         getEditFrame<PCB_EDIT_FRAME>()->SetElementVisibility( LAYER_RATSNEST,
-                opts->m_ShowGlobalRatsnest );
+                opts.m_ShowGlobalRatsnest );
 
     }
     else if( aEvent.IsAction( &PCB_ACTIONS::ratsnestLineMode ) )
     {
-        Flip( opts->m_DisplayRatsnestLinesCurved );
+        Flip( opts.m_DisplayRatsnestLinesCurved );
+        m_frame->SetDisplayOptions( opts );
         view()->UpdateDisplayOptions( opts );
     }
 
@@ -167,7 +170,8 @@ int PCBNEW_CONTROL::PadDisplayMode( const TOOL_EVENT& aEvent )
 {
     auto opts = displayOptions();
 
-    Flip( opts->m_DisplayPadFill );
+    Flip( opts.m_DisplayPadFill );
+    m_frame->SetDisplayOptions( opts );
     view()->UpdateDisplayOptions( opts );
 
     for( auto module : board()->Modules() ) // fixme: move to PCB_VIEW
@@ -186,8 +190,9 @@ int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 {
     auto opts = displayOptions();
 
-    Flip( opts->m_DisplayViaFill );
+    Flip( opts.m_DisplayViaFill );
     view()->UpdateDisplayOptions( opts );
+    m_frame->SetDisplayOptions( opts );
 
     for( auto track : board()->Tracks() )
     {
@@ -205,7 +210,8 @@ int PCBNEW_CONTROL::GraphicDisplayMode( const TOOL_EVENT& aEvent )
 {
     auto opts = displayOptions();
 
-    Flip( opts->m_DisplayDrawItemsFill );
+    Flip( opts.m_DisplayDrawItemsFill );
+    m_frame->SetDisplayOptions( opts );
     view()->UpdateDisplayOptions( opts );
 
     for( auto item : board()->Drawings() )
@@ -223,7 +229,8 @@ int PCBNEW_CONTROL::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
 {
     auto opts = displayOptions();
 
-    Flip( opts->m_DisplayModEdgeFill );
+    Flip( opts.m_DisplayModEdgeFill );
+    m_frame->SetDisplayOptions( opts );
     view()->UpdateDisplayOptions( opts );
 
     for( auto module : board()->Modules() )
@@ -247,16 +254,17 @@ int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 
     // Apply new display options to the GAL canvas
     if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayEnable ) )
-        opts->m_DisplayZonesMode = 0;
+        opts.m_DisplayZonesMode = 0;
     else if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayDisable ) )
-        opts->m_DisplayZonesMode = 1;
+        opts.m_DisplayZonesMode = 1;
     else if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayOutlines ) )
-        opts->m_DisplayZonesMode = 2;
+        opts.m_DisplayZonesMode = 2;
     else if( aEvent.IsAction( &PCB_ACTIONS::zoneDisplayToggle ) )
-        opts->m_DisplayZonesMode = ( opts->m_DisplayZonesMode + 1 ) % 3;
+        opts.m_DisplayZonesMode = ( opts.m_DisplayZonesMode + 1 ) % 3;
     else
         wxFAIL;
 
+    m_frame->SetDisplayOptions( opts );
     view()->UpdateDisplayOptions( opts );
 
     for( int i = 0; i < board()->GetAreaCount(); ++i )
@@ -272,7 +280,8 @@ int PCBNEW_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
 {
     auto opts = displayOptions();
 
-    Flip( opts->m_ContrastModeDisplay );
+    Flip( opts.m_ContrastModeDisplay );
+    m_frame->SetDisplayOptions( opts );
     view()->UpdateDisplayOptions( opts );
     canvas()->SetHighContrastLayer( m_frame->GetActiveLayer() );
 

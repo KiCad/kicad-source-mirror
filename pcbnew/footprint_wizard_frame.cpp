@@ -115,14 +115,16 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     if( caller )
         SetUserUnits( caller->GetUserUnits() );
 
-    auto disp_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+    PCB_DISPLAY_OPTIONS disp_opts = GetDisplayOptions();
     // In viewer, the default net clearance is not known (it depends on the actual board).
     // So we do not show the default clearance, by setting it to 0
     // The footprint or pad specific clearance will be shown
     GetBoard()->GetDesignSettings().GetDefault()->SetClearance(0);
 
-    disp_opts->m_DisplayPadIsol = true;
-    disp_opts->m_DisplayPadNum = true;
+    disp_opts.m_DisplayPadIsol = true;
+    disp_opts.m_DisplayPadNum = true;
+    SetDisplayOptions( disp_opts );
+
     GetBoard()->SetElementVisibility( LAYER_NO_CONNECTS, false );
 
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );

@@ -59,7 +59,7 @@ public:
      * Loads settings related to display options
      * @param aOptions are settings that you want to use for displaying items.
      */
-    void LoadDisplayOptions( const GBR_DISPLAY_OPTIONS* aOptions );
+    void LoadDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions );
 
     /// @copydoc RENDER_SETTINGS::GetColor()
     virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const override;

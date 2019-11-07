@@ -945,7 +945,7 @@ void FOOTPRINT_VIEWER_FRAME::ApplyDisplaySettingsToGAL()
 {
     auto painter = static_cast<KIGFX::PCB_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
-    settings->LoadDisplayOptions( &m_DisplayOptions, false );
+    settings->LoadDisplayOptions( m_DisplayOptions, false );
 
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
     GetCanvas()->Refresh();

@@ -56,15 +56,15 @@ PANEL_PCBNEW_DISPLAY_OPTIONS::PANEL_PCBNEW_DISPLAY_OPTIONS( PCB_EDIT_FRAME* aFra
 
 bool PANEL_PCBNEW_DISPLAY_OPTIONS::TransferDataToWindow()
 {
-    const PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*) m_frame->GetDisplayOptions();
+    auto& displ_opts = m_frame->GetDisplayOptions();
 
     m_OptDisplayTracksClearance->SetSelection( UTIL::GetConfigForVal(
-            traceClearanceSelectMap, displ_opts->m_ShowTrackClearanceMode ) );
+            traceClearanceSelectMap, displ_opts.m_ShowTrackClearanceMode ) );
 
-    m_OptDisplayPadClearence->SetValue( displ_opts->m_DisplayPadIsol );
-    m_OptDisplayPadNumber->SetValue( displ_opts->m_DisplayPadNum );
+    m_OptDisplayPadClearence->SetValue( displ_opts.m_DisplayPadIsol );
+    m_OptDisplayPadNumber->SetValue( displ_opts.m_DisplayPadNum );
     m_OptDisplayPadNoConn->SetValue( m_frame->IsElementVisible( LAYER_NO_CONNECTS ) );
-    m_ShowNetNamesOption->SetSelection( displ_opts->m_DisplayNetNamesMode );
+    m_ShowNetNamesOption->SetSelection( displ_opts.m_DisplayNetNamesMode );
 
     m_galOptsPanel->TransferDataToWindow();
 
@@ -77,17 +77,17 @@ bool PANEL_PCBNEW_DISPLAY_OPTIONS::TransferDataToWindow()
  */
 bool PANEL_PCBNEW_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
-    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*) m_frame->GetDisplayOptions();
+    PCB_DISPLAY_OPTIONS displ_opts = m_frame->GetDisplayOptions();
 
-    displ_opts->m_ShowTrackClearanceMode = UTIL::GetValFromConfig(
+    displ_opts.m_ShowTrackClearanceMode = UTIL::GetValFromConfig(
             traceClearanceSelectMap, m_OptDisplayTracksClearance->GetSelection() );
 
-    displ_opts->m_DisplayPadIsol = m_OptDisplayPadClearence->GetValue();
-    displ_opts->m_DisplayPadNum = m_OptDisplayPadNumber->GetValue();
+    displ_opts.m_DisplayPadIsol = m_OptDisplayPadClearence->GetValue();
+    displ_opts.m_DisplayPadNum = m_OptDisplayPadNumber->GetValue();
 
     m_frame->SetElementVisibility( LAYER_NO_CONNECTS, m_OptDisplayPadNoConn->GetValue() );
 
-    displ_opts->m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
+    displ_opts.m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
 
     m_galOptsPanel->TransferDataFromWindow();
 
@@ -96,8 +96,9 @@ bool PANEL_PCBNEW_DISPLAY_OPTIONS::TransferDataFromWindow()
     KIGFX::PCB_PAINTER* painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
 
+    m_frame->SetDisplayOptions( displ_opts );
     settings->LoadDisplayOptions( displ_opts, m_frame->ShowPageLimits() );
-    m_frame->SetElementVisibility( LAYER_RATSNEST, displ_opts->m_ShowGlobalRatsnest );
+    m_frame->SetElementVisibility( LAYER_RATSNEST, displ_opts.m_ShowGlobalRatsnest );
 
     view->RecacheAllItems();
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );

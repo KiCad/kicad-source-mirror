@@ -155,7 +155,7 @@ protected:
         return board()->GetFirstModule();
     }
     
-    PCB_DISPLAY_OPTIONS* displayOptions() const;
+    const PCB_DISPLAY_OPTIONS& displayOptions() const;
     PCB_DRAW_PANEL_GAL* canvas() const;
     const PCBNEW_SELECTION& selection() const;
     PCBNEW_SELECTION& selection();

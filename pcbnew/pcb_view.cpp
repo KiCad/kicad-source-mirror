@@ -110,7 +110,7 @@ void PCB_VIEW::Update( KIGFX::VIEW_ITEM* aItem )
 }
 
 
-void PCB_VIEW::UpdateDisplayOptions( PCB_DISPLAY_OPTIONS* aOptions )
+void PCB_VIEW::UpdateDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions )
 {
     auto    painter     = static_cast<KIGFX::PCB_PAINTER*>( GetPainter() );
     auto    settings    = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );

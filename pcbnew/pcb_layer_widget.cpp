@@ -409,8 +409,7 @@ void PCB_LAYER_WIDGET::ReFillRender()
             }
 
             if( renderRow.id == LAYER_RATSNEST )
-                renderRow.state =
-                        static_cast<PCB_DISPLAY_OPTIONS*>( myframe->GetDisplayOptions() )->m_ShowGlobalRatsnest;
+                renderRow.state = myframe->GetDisplayOptions().m_ShowGlobalRatsnest;
             else
                 renderRow.state = board->IsElementVisible(
                         static_cast<GAL_LAYER_ID>( renderRow.id ) );
@@ -600,11 +599,10 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
         return false;
 
     myframe->SetActiveLayer( layer );
-    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*)myframe->GetDisplayOptions();
 
     if( m_alwaysShowActiveCopperLayer )
         OnLayerSelected();
-    else if( displ_opts->m_ContrastModeDisplay )
+    else if( myframe->GetDisplayOptions().m_ContrastModeDisplay )
         myframe->GetCanvas()->Refresh();
 
     return true;
@@ -709,8 +707,8 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 
         if( myframe->IsType( FRAME_PCB_EDITOR ) )
         {
-            auto opt = static_cast<PCB_DISPLAY_OPTIONS*>( myframe->GetDisplayOptions() );
-            opt->m_ShowGlobalRatsnest = isEnabled;
+            PCB_DISPLAY_OPTIONS opt = myframe->GetDisplayOptions();
+            opt.m_ShowGlobalRatsnest = isEnabled;
             myframe->GetCanvas()->GetView()->UpdateDisplayOptions( opt );
         }
     }

@@ -1222,30 +1222,27 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aColor, int aClea
     {
         pitem->SetClearance( aClearance );
 
-        if( m_dispOptions )
+        switch( m_dispOptions->m_ShowTrackClearanceMode )
         {
-            switch( m_dispOptions->m_ShowTrackClearanceMode )
-            {
-            case PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE:
-                pitem->ShowTrackClearance( false );
-                pitem->ShowViaClearance( false );
-                break;
-            case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_ALWAYS:
-            case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS:
-                pitem->ShowTrackClearance( true );
-                pitem->ShowViaClearance( true );
-                break;
+        case PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE:
+            pitem->ShowTrackClearance( false );
+            pitem->ShowViaClearance( false );
+            break;
+        case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_ALWAYS:
+        case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS:
+            pitem->ShowTrackClearance( true );
+            pitem->ShowViaClearance( true );
+            break;
 
-            case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS:
-                pitem->ShowTrackClearance( !aEdit );
-                pitem->ShowViaClearance( !aEdit );
-                break;
+        case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS:
+            pitem->ShowTrackClearance( !aEdit );
+            pitem->ShowViaClearance( !aEdit );
+            break;
 
-            case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS:
-                pitem->ShowTrackClearance( !aEdit );
-                pitem->ShowViaClearance( false );
-                break;
-            }
+        case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS:
+            pitem->ShowTrackClearance( !aEdit );
+            pitem->ShowViaClearance( false );
+            break;
         }
     }
 
@@ -1383,7 +1380,7 @@ void PNS_KICAD_IFACE::SetHostTool( PCB_TOOL_BASE* aTool )
     m_commit.reset( new BOARD_COMMIT( m_tool ) );
 }
 
-void PNS_KICAD_IFACE::SetDisplayOptions( PCB_DISPLAY_OPTIONS *aDispOptions )
+void PNS_KICAD_IFACE::SetDisplayOptions( const PCB_DISPLAY_OPTIONS* aDispOptions )
 {
     m_dispOptions = aDispOptions;
 }

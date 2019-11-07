@@ -55,12 +55,12 @@ void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::initDialog()
     /* mandatory to use escape key as cancel under wxGTK. */
     SetFocus();
 
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
+    auto& displ_opts = m_Parent->GetDisplayOptions();
 
-    m_EdgesDisplayOption->SetValue( not displ_opts->m_DisplayModEdgeFill );
-    m_TextDisplayOption->SetValue( not displ_opts->m_DisplayModTextFill );
-    m_ShowPadSketch->SetValue( not displ_opts->m_DisplayPadFill );
-    m_ShowPadNum->SetValue( displ_opts->m_DisplayPadNum );
+    m_EdgesDisplayOption->SetValue( not displ_opts.m_DisplayModEdgeFill );
+    m_TextDisplayOption->SetValue( not displ_opts.m_DisplayModTextFill );
+    m_ShowPadSketch->SetValue( not displ_opts.m_DisplayPadFill );
+    m_ShowPadNum->SetValue( displ_opts.m_DisplayPadNum );
 
     m_autoZoomOption->SetValue( m_Parent->GetAutoZoom() );
 }
@@ -68,13 +68,14 @@ void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::initDialog()
 
 void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::UpdateObjectSettings( void )
 {
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
+    PCB_DISPLAY_OPTIONS displ_opts = m_Parent->GetDisplayOptions();
 
-    displ_opts->m_DisplayModEdgeFill = not m_EdgesDisplayOption->GetValue();
-    displ_opts->m_DisplayModTextFill = not m_TextDisplayOption->GetValue();
-    displ_opts->m_DisplayPadNum  = m_ShowPadNum->GetValue();
-    displ_opts->m_DisplayPadFill = not m_ShowPadSketch->GetValue();
+    displ_opts.m_DisplayModEdgeFill = not m_EdgesDisplayOption->GetValue();
+    displ_opts.m_DisplayModTextFill = not m_TextDisplayOption->GetValue();
+    displ_opts.m_DisplayPadNum  = m_ShowPadNum->GetValue();
+    displ_opts.m_DisplayPadFill = not m_ShowPadSketch->GetValue();
     m_Parent->ApplyDisplaySettingsToGAL();
+    m_Parent->SetDisplayOptions( displ_opts );
 
     m_Parent->SetAutoZoom( m_autoZoomOption->GetValue() );
 }

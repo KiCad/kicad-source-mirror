@@ -51,7 +51,7 @@ public:
     /// @copydoc VIEW::Update()
     virtual void Update( VIEW_ITEM* aItem ) override;
 
-    void UpdateDisplayOptions( PCB_DISPLAY_OPTIONS* aOptions );
+    void UpdateDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions );
 };
 
 }

@@ -376,9 +376,9 @@ void ZONE_CONTAINER::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& off
 
     auto color = aFrame->Settings().Colors().GetLayerColor( draw_layer );
 
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( aFrame->GetDisplayOptions() );
+    auto displ_opts = aFrame->GetDisplayOptions();
 
-    if( displ_opts->m_ContrastModeDisplay )
+    if( displ_opts.m_ContrastModeDisplay )
     {
         if( !IsOnLayer( curr_layer ) )
             color = COLOR4D( DARKDARKGRAY );
@@ -424,13 +424,13 @@ void ZONE_CONTAINER::PrintFilledArea( PCB_BASE_FRAME* aFrame, wxDC* DC, const wx
 
     BOARD*               brd = GetBoard();
     KIGFX::COLOR4D       color = aFrame->Settings().Colors().GetLayerColor( GetLayer() );
-    PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*) aFrame->GetDisplayOptions();
-    bool                 outline_mode = displ_opts->m_DisplayZonesMode == 2;
+    auto&                displ_opts = aFrame->GetDisplayOptions();
+    bool                 outline_mode = displ_opts.m_DisplayZonesMode == 2;
 
     if( DC == NULL )
         return;
 
-    if( displ_opts->m_DisplayZonesMode == 1 )     // Do not show filled areas
+    if( displ_opts.m_DisplayZonesMode == 1 )     // Do not show filled areas
         return;
 
     if( m_FilledPolysList.IsEmpty() )  // Nothing to draw
@@ -473,7 +473,7 @@ void ZONE_CONTAINER::PrintFilledArea( PCB_BASE_FRAME* aFrame, wxDC* DC, const wx
             for( int is = 0, ie = ilim; is <= ilim; ie = is, is++ )
             {
                 // Draw only basic outlines, not extra segments.
-                if( !displ_opts->m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
+                if( !displ_opts.m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
                 {
                     GRCSegm( nullptr, DC, CornersBuffer[is], CornersBuffer[ie],
                              outline_thickness, color );

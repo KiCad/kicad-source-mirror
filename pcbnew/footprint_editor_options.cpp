@@ -34,7 +34,7 @@
 
 PARAM_CFG_ARRAY& FOOTPRINT_EDIT_FRAME::GetConfigurationSettings()
 {
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto& displ_opts = m_DisplayOptions;
     BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
 
     // Update everything
@@ -44,13 +44,13 @@ PARAM_CFG_ARRAY& FOOTPRINT_EDIT_FRAME::GetConfigurationSettings()
     m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorDisplayPolarCoords" ),
                                                     &m_PolarCoords, false ) );
     m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorPadDisplayMode" ),
-                                                    &displ_opts->m_DisplayPadFill, true ) );
+                                                    &displ_opts.m_DisplayPadFill, true ) );
     m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorGraphicLinesDisplayMode" ),
-                                                    &displ_opts->m_DisplayModEdgeFill, FILLED ) );
+                                                    &displ_opts.m_DisplayModEdgeFill, FILLED ) );
     m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorTextsDisplayMode" ),
-                                                    &displ_opts->m_DisplayModTextFill, FILLED ) );
+                                                    &displ_opts.m_DisplayModTextFill, FILLED ) );
     m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorTextsDisplayMode" ),
-                                                    &displ_opts->m_DisplayModTextFill, FILLED ) );
+                                                    &displ_opts.m_DisplayModTextFill, FILLED ) );
     m_configParams.push_back( new PARAM_CFG_WXSTRING( true, wxT( "FpEditorTextsRefDefaultText" ),
                                                     &settings.m_RefDefaultText, wxT( "REF**" ) ) );
 

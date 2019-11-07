@@ -159,13 +159,13 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
         return GetGalDisplayOptions().m_fullscreenCursor;
     };
     auto sketchPadsCondition = [ this ] ( const SELECTION& aSel ) {
-        return !( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_DisplayPadFill;
+        return !GetDisplayOptions().m_DisplayPadFill;
     };
     auto sketchEdgesCondition = [ this ] ( const SELECTION& aSel ) {
-        return !( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_DisplayModEdgeFill;
+        return !GetDisplayOptions().m_DisplayModEdgeFill;
     };
     auto contrastModeCondition = [ this ] ( const SELECTION& aSel ) {
-        return !( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_ContrastModeDisplay;
+        return !GetDisplayOptions().m_ContrastModeDisplay;
     };
     auto searchTreeShownCondition = [ this ] ( const SELECTION& aSel ) {
         return IsSearchTreeShown();

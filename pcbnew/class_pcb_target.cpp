@@ -87,8 +87,8 @@ void PCB_TARGET::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset 
         return;
 
     auto gcolor = aFrame->Settings().Colors().GetLayerColor( m_Layer );
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*) aFrame->GetDisplayOptions();
-    bool filled = displ_opts ? displ_opts->m_DisplayDrawItemsFill : FILLED;
+    auto displ_opts = aFrame->GetDisplayOptions();
+    bool filled = displ_opts.m_DisplayDrawItemsFill;
     width = m_Width;
 
     radius = m_Size / 3;

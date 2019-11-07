@@ -67,16 +67,17 @@ class FP_LIB_TABLE;
 class PCB_BASE_FRAME : public EDA_DRAW_FRAME
 {
 public:
-    PCB_DISPLAY_OPTIONS m_DisplayOptions;
     wxPoint m_UserGridSize;
 
     int m_FastGrid1;                // 1st fast grid setting (index in EDA_DRAW_FRAME::m_gridSelectBox)
     int m_FastGrid2;                // 2nd fast grid setting (index in EDA_DRAW_FRAME::m_gridSelectBox)
 
 protected:
-    BOARD*               m_Pcb;
+    BOARD*                  m_Pcb;
 
-    PCB_GENERAL_SETTINGS m_configSettings;
+    PCB_DISPLAY_OPTIONS     m_DisplayOptions;
+
+    PCB_GENERAL_SETTINGS    m_configSettings;
 
     void updateZoomSelectBox();
     virtual void unitsChangeRefresh() override;
@@ -165,10 +166,16 @@ public:
      * returns the display options current in use
      * Display options are relative to the way tracks, vias, outlines
      * and other things are shown (for instance solid or sketch mode)
-     * Must be overloaded in frames which have display options
-     * (board editor and footprint editor)
      */
-    void* GetDisplayOptions() override { return &m_DisplayOptions; }
+    const PCB_DISPLAY_OPTIONS& GetDisplayOptions() const
+    {
+        return m_DisplayOptions;
+    }
+
+    void SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions )
+    {
+        m_DisplayOptions = aOptions;
+    }
 
     const ZONE_SETTINGS& GetZoneSettings() const;
     void SetZoneSettings( const ZONE_SETTINGS& aSettings );

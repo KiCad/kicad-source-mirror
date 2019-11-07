@@ -512,7 +512,7 @@ bool GERBVIEW_SELECTION_TOOL::selectable( const EDA_ITEM* aItem ) const
     }
 
     // We do not want to select items that are in the background
-    if( frame->m_DisplayOptions.m_HighContrastMode && layer != frame->GetActiveLayer() )
+    if( frame->GetDisplayOptions().m_HighContrastMode && layer != frame->GetActiveLayer() )
         return false;
 
     return frame->IsLayerVisible( layer );

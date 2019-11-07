@@ -96,7 +96,7 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
     m_iface->SetBoard( board() );
     m_iface->SetView( getView() );
     m_iface->SetHostTool( this );
-    m_iface->SetDisplayOptions( (PCB_DISPLAY_OPTIONS*) frame()->GetDisplayOptions() );
+    m_iface->SetDisplayOptions( &( frame()->GetDisplayOptions() ) );
 
     m_router = new ROUTER;
     m_router->SetInterface( m_iface );
@@ -192,7 +192,7 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
     {
         ITEM* item = prioritized[i];
 
-        if( displayOptions()->m_ContrastModeDisplay )
+        if( displayOptions().m_ContrastModeDisplay )
             if( item && !item->Layers().Overlaps( tl ) )
                 item = NULL;
 

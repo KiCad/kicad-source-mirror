@@ -76,20 +76,18 @@ void GERBVIEW_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS*
 }
 
 
-void GERBVIEW_RENDER_SETTINGS::LoadDisplayOptions( const GBR_DISPLAY_OPTIONS* aOptions )
+void GERBVIEW_RENDER_SETTINGS::LoadDisplayOptions( const GBR_DISPLAY_OPTIONS& aOptions )
 {
-    if( aOptions == NULL )
-        return;
 
-    m_spotFill          = aOptions->m_DisplayFlashedItemsFill;
-    m_lineFill          = aOptions->m_DisplayLinesFill;
-    m_polygonFill       = aOptions->m_DisplayPolygonsFill;
-    m_showNegativeItems = aOptions->m_DisplayNegativeObjects;
-    m_showCodes         = aOptions->m_DisplayDCodes;
-    m_diffMode          = aOptions->m_DiffMode;
-    m_hiContrastEnabled = aOptions->m_HighContrastMode;
-    m_showPageLimits    = aOptions->m_DisplayPageLimits;
-    m_backgroundColor   = aOptions->m_BgDrawColor;
+    m_spotFill          = aOptions.m_DisplayFlashedItemsFill;
+    m_lineFill          = aOptions.m_DisplayLinesFill;
+    m_polygonFill       = aOptions.m_DisplayPolygonsFill;
+    m_showNegativeItems = aOptions.m_DisplayNegativeObjects;
+    m_showCodes         = aOptions.m_DisplayDCodes;
+    m_diffMode          = aOptions.m_DiffMode;
+    m_hiContrastEnabled = aOptions.m_HighContrastMode;
+    m_showPageLimits    = aOptions.m_DisplayPageLimits;
+    m_backgroundColor   = aOptions.m_BgDrawColor;
 
     update();
 }

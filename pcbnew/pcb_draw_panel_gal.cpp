@@ -124,13 +124,11 @@ PCB_DRAW_PANEL_GAL::PCB_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     // Load display options (such as filled/outline display of items).
     // Can be made only if the parent window is an EDA_DRAW_FRAME (or a derived class)
     // which is not always the case (namely when it is used from a wxDialog like the pad editor)
-    EDA_DRAW_FRAME* frame = GetParentEDAFrame();
+    PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() );
 
     if( frame )
-    {
-        auto opts = (PCB_DISPLAY_OPTIONS*) frame->GetDisplayOptions();
-        static_cast<KIGFX::PCB_VIEW*>( m_view )->UpdateDisplayOptions( opts );
-    }
+        static_cast<KIGFX::PCB_VIEW*>( m_view )->UpdateDisplayOptions(
+                frame->GetDisplayOptions() );
 }
 
 
@@ -394,10 +392,9 @@ void PCB_DRAW_PANEL_GAL::OnShow()
     if( frame )
     {
         SetTopLayer( frame->GetActiveLayer() );
-        PCB_DISPLAY_OPTIONS* displ_opts = (PCB_DISPLAY_OPTIONS*) frame->GetDisplayOptions();
         KIGFX::PAINTER* painter = m_view->GetPainter();
         auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
-        settings->LoadDisplayOptions( displ_opts, frame->ShowPageLimits() );
+        settings->LoadDisplayOptions( frame->GetDisplayOptions(), frame->ShowPageLimits() );
     }
 }
 

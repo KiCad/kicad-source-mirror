@@ -46,7 +46,7 @@ public:
 
     void SetRouter( PNS::ROUTER* aRouter ) override;
     void SetHostTool( PCB_TOOL_BASE* aTool );
-    void SetDisplayOptions( PCB_DISPLAY_OPTIONS* aDispOptions );
+    void SetDisplayOptions( const PCB_DISPLAY_OPTIONS* aDispOptions );
 
     void SetBoard( BOARD* aBoard );
     void SetView( KIGFX::VIEW* aView );
@@ -84,7 +84,7 @@ private:
     BOARD* m_board;
     PCB_TOOL_BASE* m_tool;
     std::unique_ptr<BOARD_COMMIT> m_commit;
-    PCB_DISPLAY_OPTIONS* m_dispOptions;
+    const PCB_DISPLAY_OPTIONS* m_dispOptions;
 };
 
 #endif

@@ -362,8 +362,8 @@ void DIMENSION::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset )
     m_Text.Print( aFrame, DC, offset );
 
     auto gcolor = aFrame->Settings().Colors().GetLayerColor( m_Layer );
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( aFrame->GetDisplayOptions() );
-    bool filled = displ_opts ? displ_opts->m_DisplayDrawItemsFill : FILLED;
+    auto displ_opts = aFrame->GetDisplayOptions();
+    bool filled = displ_opts.m_DisplayDrawItemsFill;
     int  width   = m_Width;
 
     if( filled )

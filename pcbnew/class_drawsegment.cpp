@@ -357,7 +357,7 @@ void DRAWSEGMENT::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& aOffse
         return;
 
     auto color = aFrame->Settings().Colors().GetLayerColor( GetLayer() );
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*) aFrame->GetDisplayOptions();
+    auto displ_opts = aFrame->GetDisplayOptions();
 
     l_trace = m_Width >> 1;         // half trace width
 
@@ -369,7 +369,7 @@ void DRAWSEGMENT::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& aOffse
     dx = m_End.x + aOffset.x;
     dy = m_End.y + aOffset.y;
 
-    bool filled = displ_opts ? displ_opts->m_DisplayDrawItemsFill : FILLED;
+    bool filled = displ_opts.m_DisplayDrawItemsFill;
 
     if( m_Flags & FORCE_SKETCH )
         filled = SKETCH;

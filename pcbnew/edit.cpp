@@ -50,7 +50,7 @@
 void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
     int  id = event.GetId();
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = GetDisplayOptions();
 
     switch( id )   // Execute command
     {
@@ -60,7 +60,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_TOOLBARH_PCB_SELECT_LAYER:
         SetActiveLayer( ToLAYER_ID( m_SelLayerBox->GetLayerSelection() ) );
 
-        if( displ_opts->m_ContrastModeDisplay )
+        if( displ_opts.m_ContrastModeDisplay )
             GetCanvas()->Refresh();
         break;
 
@@ -82,7 +82,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
 {
     PCB_LAYER_ID curLayer = GetActiveLayer();
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
+    auto displ_opts = GetDisplayOptions();
 
     // Check if the specified layer matches the present layer
     if( layer == curLayer )
@@ -118,7 +118,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
 
     SetActiveLayer( layer );
 
-    if( displ_opts->m_ContrastModeDisplay )
+    if( displ_opts.m_ContrastModeDisplay )
         GetCanvas()->Refresh();
 }
 

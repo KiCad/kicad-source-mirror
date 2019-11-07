@@ -127,7 +127,7 @@ void EDGE_MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset
         return;
 
     auto color = aFrame->Settings().Colors().GetLayerColor( m_Layer );
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( aFrame->GetDisplayOptions() );
+    auto displ_opts = aFrame->GetDisplayOptions();
 
     ux0 = m_Start.x - offset.x;
     uy0 = m_Start.y - offset.y;
@@ -135,10 +135,10 @@ void EDGE_MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& offset
     dx = m_End.x - offset.x;
     dy = m_End.y - offset.y;
 
-    bool filled = displ_opts ? displ_opts->m_DisplayModEdgeFill : FILLED;
+    bool filled = displ_opts.m_DisplayModEdgeFill;
 
     if( IsCopperLayer( m_Layer ) )
-        filled = displ_opts ? displ_opts->m_DisplayPcbTrackFill : FILLED;
+        filled = displ_opts.m_DisplayPcbTrackFill;
 
     switch( m_Shape )
     {

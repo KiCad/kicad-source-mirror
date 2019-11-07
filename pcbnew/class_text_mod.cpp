@@ -287,12 +287,10 @@ void TEXTE_MODULE::Print( PCB_BASE_FRAME* aFrame, wxDC* aDC, const wxPoint& aOff
         color = aFrame->Settings().Colors().GetItemColor( LAYER_MOD_TEXT_INVISIBLE );
     }
 
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( aFrame->GetDisplayOptions() );
-
     // Draw mode compensation for the width
     int width = GetThickness();
 
-    if( displ_opts && displ_opts->m_DisplayModTextFill == SKETCH )
+    if( aFrame->GetDisplayOptions().m_DisplayModTextFill == SKETCH )
         width = -width;
 
     wxPoint pos = GetTextPos() - aOffset;

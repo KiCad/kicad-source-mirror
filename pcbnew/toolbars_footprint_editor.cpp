@@ -219,7 +219,7 @@ void FOOTPRINT_EDIT_FRAME::SyncToolbars()
 {
 #define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, IsCurrentTool( tool ) )
 
-    PCB_DISPLAY_OPTIONS* opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
+    auto& opts = GetDisplayOptions();
 
     if( IsCurrentFPFromBoard() )
         m_mainToolBar->Toggle( PCB_ACTIONS::saveToBoard,   GetScreen() && GetScreen()->IsModify() );
@@ -236,9 +236,9 @@ void FOOTPRINT_EDIT_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( ACTIONS::metricUnits,             GetUserUnits() != INCHES );
     m_optionsToolBar->Toggle( ACTIONS::imperialUnits,           GetUserUnits() == INCHES );
     m_optionsToolBar->Toggle( ACTIONS::togglePolarCoords,       GetShowPolarCoords() );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,      !opts->m_DisplayPadFill );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::moduleEdgeOutlines,  !opts->m_DisplayModEdgeFill );
-    m_optionsToolBar->Toggle( ACTIONS::highContrastMode,        opts->m_ContrastModeDisplay );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,      !opts.m_DisplayPadFill );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::moduleEdgeOutlines,  !opts.m_DisplayModEdgeFill );
+    m_optionsToolBar->Toggle( ACTIONS::highContrastMode,        opts.m_ContrastModeDisplay );
     m_optionsToolBar->Toggle( PCB_ACTIONS::toggleFootprintTree, IsSearchTreeShown() );
     m_optionsToolBar->Refresh();
 
