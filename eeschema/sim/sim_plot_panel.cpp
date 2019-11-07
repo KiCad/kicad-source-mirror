@@ -369,8 +369,9 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
     LimitView( true );
     SetMargins( 50, 80, 50, 80 );
 
-    wxColour grey( 96, 96, 96 );
-    SetColourTheme( *wxBLACK, *wxWHITE, grey );
+    wxColour grey( 130, 130, 130 );
+    wxColour dark( 10, 10, 10 );
+    SetColourTheme( dark, *wxWHITE, grey );
     EnableDoubleBuffer( true );
     UpdateAll();
 
@@ -432,7 +433,7 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
     m_legend->SetVisible( false );
     AddLayer( m_legend );
     m_topLevel.push_back( m_legend );
-    SetColourTheme( *wxBLACK, *wxWHITE, grey );
+    SetColourTheme( dark, *wxWHITE, grey );
 
     EnableDoubleBuffer( true );
     UpdateAll();
@@ -632,7 +633,10 @@ wxColour SIM_PLOT_PANEL::generateColor()
     /// http://stanford.edu/~mwaskom/software/seaborn/tutorial/color_palettes.html
     /// https://github.com/Gnuplotting/gnuplot-palettes
 
-    const unsigned long colors[] = { 0x0000ff, 0x00ff00, 0xff0000, 0x00ffff, 0xff00ff, 0xffff000, 0xffffff };
+    // const unsigned long colors[] = { 0x0000ff, 0x00ff00, 0xff0000, 0x00ffff, 0xff00ff, 0xffff000, 0xffffff };
+
+    const unsigned long colors[] = { 0xE41A1C, 0x377EB8, 0x4DAF4A, 0x984EA3, 0xFF7F00, 0xFFFF33, 0xA65628, 0xF781BF,
+                                     0x66C2A5, 0xFC8D62, 0x8DA0CB, 0xE78AC3, 0xA6D854, 0xFFD92F, 0xE5C494, 0xB3B3B3 };
 
     //const unsigned long colors[] = { 0xe3cea6, 0xb4781f, 0x8adfb2, 0x2ca033, 0x999afb, 0x1c1ae3, 0x6fbffd, 0x007fff, 0xd6b2ca, 0x9a3d6a };
 
@@ -644,8 +648,23 @@ wxColour SIM_PLOT_PANEL::generateColor()
 
     const unsigned int colorCount = sizeof(colors) / sizeof(unsigned long);
 
-    /// @todo generate shades to avoid repeating colors
-    return wxColour( colors[m_colorIdx++ % colorCount] );
+    for( int i = 0; i < colorCount - 1; i++ )
+    {
+        const wxColour color = wxColour( colors[i] );
+        bool hasColor = false;
+        for( auto& t : m_traces )
+        {
+            TRACE* trace = t.second;
+            if( trace->GetTraceColour() == color )
+            {
+                hasColor = true;
+                break;
+            }
+        }
+        if( !hasColor )
+            return color;
+    }
+    return wxColour( colors[m_traces.size() % colorCount] );
 }
 
 wxDEFINE_EVENT( EVT_SIM_CURSOR_UPDATE, wxCommandEvent );
