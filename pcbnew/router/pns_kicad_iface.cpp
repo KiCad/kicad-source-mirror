@@ -1319,6 +1319,7 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
 
     if( newBI )
     {
+        newBI->SetLocalRatsnestVisible( m_dispOptions->m_ShowGlobalRatsnest );
         aItem->SetParent( newBI );
         newBI->ClearFlags();
 
