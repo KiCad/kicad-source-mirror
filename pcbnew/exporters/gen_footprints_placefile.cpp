@@ -108,7 +108,7 @@ private:
 
 	void onUpdateUIforceSMDOpt( wxUpdateUIEvent& event ) override
     {
-        m_radioBoxFilesCount->Enable( m_rbFormat->GetSelection() != 2 );
+        m_forceSMDOpt->Enable( m_rbFormat->GetSelection() != 2 );
     }
 
 	void onUpdateUIincludeBoardEdge( wxUpdateUIEvent& event ) override
