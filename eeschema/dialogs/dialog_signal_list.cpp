@@ -86,6 +86,37 @@ bool DIALOG_SIGNAL_LIST::TransferDataToWindow()
 }
 
 
+bool DIALOG_SIGNAL_LIST::addSignalToPlotFrame( const wxString& aPlotName )
+{
+
+    // Get the part in the parentheses
+    wxString name = aPlotName.AfterFirst( '(' ).BeforeLast( ')' );
+
+    if( !name.IsEmpty() )
+    {
+        wxUniChar firstChar = aPlotName[0];
+        if( firstChar == 'V' || firstChar == 'v' )
+        {
+            m_plotFrame->AddVoltagePlot( name );
+        }
+        else if( firstChar == 'I' || firstChar == 'i' )
+        {
+            m_plotFrame->AddCurrentPlot( name, aPlotName.BeforeFirst( '(' ) );
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
 void DIALOG_SIGNAL_LIST::addSelectionToPlotFrame()
 {
     for( unsigned int i = 0; i < m_signals->GetCount(); ++i )
@@ -93,22 +124,19 @@ void DIALOG_SIGNAL_LIST::addSelectionToPlotFrame()
         if( m_signals->IsSelected( i ) )
         {
             const wxString& plotName = m_signals->GetString( i );
-
-            // Get the part in the parentheses
-            wxString name = plotName.AfterFirst( '(' ).BeforeLast( ')' );
-
-            if( plotName[0] == 'V' )
-            {
-                m_plotFrame->AddVoltagePlot( name );
-            }
-            else if( plotName[0] == 'I' )
-            {
-                m_plotFrame->AddCurrentPlot( name, plotName.BeforeFirst( '(' ) );
-            }
-            else
-            {
+            if( !addSignalToPlotFrame( plotName ) )
                 wxASSERT_MSG( false, "Unhandled plot type" );
-            }
         }
+    }
+
+    // Add manually entered signal, if any
+    const wxString& plotName = m_signalEntry->GetValue();
+
+    if( !plotName.IsEmpty() )
+    {
+        if( !addSignalToPlotFrame( plotName ) )
+            m_plotFrame->AddVoltagePlot( plotName ); // Assume it's a V plot by default
+
+        m_signalEntry->SetSelection( -1, -1 );
     }
 }

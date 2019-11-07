@@ -45,6 +45,7 @@ private:
     }
 
     void addSelectionToPlotFrame();
+    bool addSignalToPlotFrame( const wxString& aPlotName );
 
     SIM_PLOT_FRAME* m_plotFrame;
     NETLIST_EXPORTER_PSPICE_SIM* m_exporter;
