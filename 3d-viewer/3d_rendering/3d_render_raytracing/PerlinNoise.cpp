@@ -74,7 +74,9 @@ PerlinNoise::PerlinNoise()
         138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180 };
 
     // Duplicate the permutation vector
-    p.insert(p.end(), p.begin(), p.end());
+    auto oldsize = p.size();
+    p.resize( 2 * p.size() );
+    std::copy_n( p.begin(), oldsize, p.begin() + oldsize );
 }
 
 // Generate a new permutation vector based on the value of seed
@@ -92,7 +94,9 @@ PerlinNoise::PerlinNoise( unsigned int seed )
     std::shuffle( p.begin(), p.end(), engine );
 
     // Duplicate the permutation vector
-    p.insert( p.end(), p.begin(), p.end() );
+    auto oldsize = p.size();
+    p.resize( 2 * p.size() );
+    std::copy_n( p.begin(), oldsize, p.begin() + oldsize );
 }
 
 float PerlinNoise::noise( float x, float y, float z ) const
