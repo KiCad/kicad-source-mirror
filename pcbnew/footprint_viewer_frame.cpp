@@ -259,6 +259,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame
     {
+        ReCreateFootprintList();
         Raise();            // On some window managers, this is needed
         Show( true );
     }
@@ -370,10 +371,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
     m_fpList->Clear();
 
     if( !getCurNickname() )
-    {
         setCurFootprintName( wxEmptyString );
-        return;
-    }
 
     auto fp_info_list = FOOTPRINT_LIST::GetInstance( Kiway() );
 
@@ -822,16 +820,18 @@ bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent 
             }
             else
             {
+                // Update last selection:
                 setCurNickname( nickname );
                 setCurFootprintName( fpid.GetLibItemName() );
-
                 m_libList->SetStringSelection( nickname );
-                ReCreateFootprintList();
             }
-
-            SelectAndViewFootprint( NEW_PART );
         }
     }
+
+    // Rebuild the fp list from the last selected library,
+    // and show the last selected footprint
+    ReCreateFootprintList();
+    SelectAndViewFootprint( NEW_PART );
 
     bool retval = KIWAY_PLAYER::ShowModal( aFootprint, aParent );
 
