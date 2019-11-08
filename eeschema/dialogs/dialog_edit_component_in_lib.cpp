@@ -684,10 +684,11 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnSizeGrid( wxSizeEvent& event )
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::syncControlStates( bool aIsAlias )
 {
+    // Remove the not wanted notebook page.
+    // *Do not use* Hide(), it is suitable to hide a widget,
+    // but it is not suitable to hide a notebook page (that is not a widget)
     if( aIsAlias )
-        m_PanelFootprintFilter->Hide();
-    else
-        m_PanelFootprintFilter->Show();
+        m_NoteBook->RemovePage( 1 );
 
     bSizerLowerBasicPanel->Show( !aIsAlias );
     bButtonSize->Show( !aIsAlias );
