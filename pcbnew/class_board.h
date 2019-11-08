@@ -530,8 +530,8 @@ public:
      */
     BOARD_DESIGN_SETTINGS& GetDesignSettings() const
     {
-        // remove const-ness with cast.
-        return (BOARD_DESIGN_SETTINGS&) m_designSettings;
+        // remove const-ness with cast. TODO(snh): Make GetDesignSettings const
+        return const_cast<BOARD_DESIGN_SETTINGS&>( m_designSettings );
     }
 
     /**
