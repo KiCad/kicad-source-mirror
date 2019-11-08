@@ -201,17 +201,9 @@ private:
 
     // The default copy constructor & operator= are inadequate,
     // either write one or do not use it at all
-    BOARD( const BOARD& aOther ) :
-        BOARD_ITEM_CONTAINER( aOther ), m_NetInfo( this )
-    {
-        assert( false );
-    }
+    BOARD( const BOARD& aOther ) = delete;
 
-    BOARD& operator=( const BOARD& aOther )
-    {
-        assert( false );
-        return *this;       // just to mute warning
-    }
+    BOARD& operator=( const BOARD& aOther ) = delete;
 
 public:
     static inline bool ClassOf( const EDA_ITEM* aItem )
