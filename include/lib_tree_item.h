@@ -41,10 +41,10 @@ class APIEXPORT LIB_TREE_ITEM
 public:
     virtual LIB_ID GetLibId() const = 0;
 
-    virtual const wxString GetName() const = 0;
+    virtual wxString GetName() const = 0;
     virtual wxString GetLibNickname() const = 0;
 
-    virtual const wxString GetDescription() = 0;
+    virtual wxString GetDescription() = 0;
 
     virtual wxString GetSearchText() { return wxEmptyString; }
 

@@ -112,7 +112,7 @@ LIB_PART::LIB_PART( const wxString& aName, LIB_PART* aParent, PART_LIB* aLibrary
 }
 
 
-LIB_PART::LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary ) :
+LIB_PART::LIB_PART( const LIB_PART& aPart, PART_LIB* aLibrary ) :
     EDA_ITEM( aPart ),
     m_me( this, null_deleter() )
 {
@@ -134,7 +134,7 @@ LIB_PART::LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary ) :
     m_keyWords            = aPart.m_keyWords;
     m_docFileName         = aPart.m_docFileName;
 
-    for( LIB_ITEM& oldItem : aPart.m_drawings )
+    for( const LIB_ITEM& oldItem : aPart.m_drawings )
     {
         if( ( oldItem.GetFlags() & ( IS_NEW | STRUCT_DELETED ) ) != 0 )
             continue;
@@ -278,7 +278,7 @@ std::unique_ptr< LIB_PART > LIB_PART::Flatten() const
                      wxString::Format( "Parent of derived symbol '%s' undefined", m_name ) );
 
         // Copy the parent.
-        retv.reset( new LIB_PART( *const_cast< LIB_PART* >( parent.get() ) ) );
+        retv.reset( new LIB_PART( *parent.get() ) );
 
         // Now add the inherited part (this) information.
         retv->SetName( m_name );
@@ -291,7 +291,7 @@ std::unique_ptr< LIB_PART > LIB_PART::Flatten() const
     }
     else
     {
-        retv.reset( new LIB_PART( *const_cast< LIB_PART* >( this ) ) );
+        retv.reset( new LIB_PART( *this ) );
     }
 
     return retv;

@@ -141,7 +141,7 @@ void SCH_VIEW::DisplayComponent( LIB_PART* aPart )
         if( item.Type() != LIB_FIELD_T )
             continue;
 
-        LIB_FIELD* field = (LIB_FIELD*) &item;
+        LIB_FIELD* field = dynamic_cast< LIB_FIELD* >( &item );
 
         if( field->GetId() < MANDATORY_FIELDS )
             Add( &item );
@@ -162,7 +162,7 @@ void SCH_VIEW::DisplayComponent( LIB_PART* aPart )
         // The mandatory fields are already in place so we only add user defined fields.
         if( item.Type() == LIB_FIELD_T )
         {
-            LIB_FIELD* field = (LIB_FIELD*) &item;
+            LIB_FIELD* field = dynamic_cast< LIB_FIELD* >( &item );
 
             if( field->GetId() < MANDATORY_FIELDS )
                 continue;

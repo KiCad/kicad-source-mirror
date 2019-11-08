@@ -129,7 +129,7 @@ public:
     /**
      * Copy constructor.
      */
-    LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary = NULL );
+    LIB_PART( const LIB_PART& aPart, PART_LIB* aLibrary = NULL );
 
     virtual ~LIB_PART();
 
@@ -144,7 +144,7 @@ public:
     }
 
     virtual void SetName( const wxString& aName );
-    const wxString GetName() const override { return m_name; }
+    wxString GetName() const override { return m_name; }
 
     LIB_ID GetLibId() const override { return m_libId; }
     void SetLibId( const LIB_ID& aLibId ) { m_libId = aLibId; }
@@ -156,21 +156,21 @@ public:
         m_description = aDescription;
     }
 
-    const wxString GetDescription() override { return m_description; }
+    wxString GetDescription() override { return m_description; }
 
     void SetKeyWords( const wxString& aKeyWords )
     {
         m_keyWords = aKeyWords;
     }
 
-    const wxString GetKeyWords() const { return m_keyWords; }
+    wxString GetKeyWords() const { return m_keyWords; }
 
     void SetDocFileName( const wxString& aDocFileName )
     {
         m_docFileName = aDocFileName;
     }
 
-    const wxString GetDocFileName() const { return m_docFileName; }
+    wxString GetDocFileName() const { return m_docFileName; }
 
     wxString GetSearchText() override;
 
