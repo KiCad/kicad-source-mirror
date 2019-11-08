@@ -4183,12 +4183,12 @@ void SCH_LEGACY_PLUGIN_CACHE::DeleteSymbol( const wxString& aSymbolName )
         {
             if( it1->second->IsAlias() && it1->second->GetParent().lock() == rootPart->SharedPtr() )
             {
-                delete it->second;
-                it = m_symbols.erase( it );
+                delete it1->second;
+                it1 = m_symbols.erase( it1 );
             }
             else
             {
-                it++;
+                it1++;
             }
         }
 
