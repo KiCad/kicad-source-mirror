@@ -69,7 +69,7 @@ void PCB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     book->AddSubPage( new PANEL_PCBNEW_ACTION_PLUGINS( this, aParent ), _( "Action Plugins" ) );
 #endif
-    
+
     aHotkeysPanel->AddHotKeys( GetToolManager() );
 }
 
@@ -150,7 +150,7 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetProjectFileParameters()
 
 PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
 {
-    auto displ_opts = m_DisplayOptions;
+    PCB_DISPLAY_OPTIONS& displ_opts = m_DisplayOptions;
 
     if( m_configParams.empty() )
     {
