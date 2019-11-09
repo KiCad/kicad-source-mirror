@@ -122,6 +122,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     if( aFrameType == FRAME_FOOTPRINT_VIEWER_MODAL )
         SetModal( true );
 
+    m_AboutTitle = "Footprint Library Viewer";
+
     // Force the frame name used in config. the footprint viewer frame has a name
     // depending on aFrameType (needed to identify the frame by wxWidgets),
     // but only one configuration is preferable.
@@ -153,9 +155,10 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_fpFilter = new wxTextCtrl( fpPanel, ID_MODVIEW_FOOTPRINT_FILTER, wxEmptyString,
                                  wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
     m_fpFilter->SetHint( _( "Filter" ) );
-    m_fpFilter->SetToolTip( _( "Filter on footprint name, keywords, description and pad count.\n"
-                               "Search terms are separated by spaces.  All search terms must match.\n"
-                               "A term which is a number will also match against the pad count." ) );
+    m_fpFilter->SetToolTip(
+            _( "Filter on footprint name, keywords, description and pad count.\n"
+               "Search terms are separated by spaces.  All search terms must match.\n"
+               "A term which is a number will also match against the pad count." ) );
     fpSizer->Add( m_fpFilter, 0, wxEXPAND, 5 );
 
     m_fpList = new wxListBox( fpPanel, ID_MODVIEW_FOOTPRINT_LIST, wxDefaultPosition, wxDefaultSize,
@@ -279,7 +282,7 @@ void FOOTPRINT_VIEWER_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     // A workaround to avoid flicker, in modal mode when modview frame is destroyed,
     // when the aui toolbar is not docked (i.e. shown in a miniframe)
-    // (usefull on windows only)
+    // (useful on windows only)
     m_mainToolBar->SetFocus();
 
     GetCanvas()->StopDrawing();

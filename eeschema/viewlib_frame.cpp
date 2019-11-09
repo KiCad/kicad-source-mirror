@@ -102,6 +102,8 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     if( aFrameType == FRAME_SCH_VIEWER_MODAL )
         SetModal( true );
 
+    m_AboutTitle = "Symbol Library Viewer";
+
     // Force the frame name used in config. the lib viewer frame has a name
     // depending on aFrameType (needed to identify the frame by wxWidgets),
     // but only one configuration is preferable.
