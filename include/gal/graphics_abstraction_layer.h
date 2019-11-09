@@ -179,9 +179,13 @@ public:
      * @param controlPointA is the first control point.
      * @param controlPointB is the second control point.
      * @param endPoint      is the end point of the spline.
+     * @param aFilterValue  is used by Bezier to segments approximation, if
+     * the Bezier curve is not supported and needs a curve to polyline conversion.
+     * aFilterValue = 0 means no filtering.
      */
     virtual void DrawCurve( const VECTOR2D& startPoint,    const VECTOR2D& controlPointA,
-                            const VECTOR2D& controlPointB, const VECTOR2D& endPoint ) {};
+                            const VECTOR2D& controlPointB, const VECTOR2D& endPoint,
+                            double aFilterValue = 0.0 ) {};
 
     /**
      * @brief Draw a bitmap image.

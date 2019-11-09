@@ -1016,10 +1016,12 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
         m_gal->SetLineWidth( thickness );
+        // Use thickness as filter value to convert the curve to polyline
+        // when the curve is not supported
         m_gal->DrawCurve( VECTOR2D( aSegment->GetStart() ),
                           VECTOR2D( aSegment->GetBezControl1() ),
                           VECTOR2D( aSegment->GetBezControl2() ),
-                          VECTOR2D( aSegment->GetEnd() ) );
+                          VECTOR2D( aSegment->GetEnd() ), thickness );
         break;
 
     case S_LAST:

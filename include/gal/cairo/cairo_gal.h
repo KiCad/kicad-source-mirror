@@ -101,7 +101,8 @@ public:
 
     /// @copydoc GAL::DrawCurve()
     virtual void DrawCurve( const VECTOR2D& startPoint, const VECTOR2D& controlPointA,
-                            const VECTOR2D& controlPointB, const VECTOR2D& endPoint ) override;
+                            const VECTOR2D& controlPointB, const VECTOR2D& endPoint,
+                            double aFilterValue = 0.0 ) override;
 
     /// @copydoc GAL::DrawBitmap()
     virtual void DrawBitmap( const BITMAP_BASE& aBitmap ) override;

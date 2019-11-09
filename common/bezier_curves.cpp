@@ -59,7 +59,7 @@ void BEZIER_POLY::GetPoly( std::vector<VECTOR2D>& aOutput, double aMinSegLen )
     aOutput.clear();
     aOutput.push_back( m_ctrlPts[0] );
 
-    // If the Bezier curve is degenerated (straight line), skip that:
+    // If the Bezier curve is degenerated (straight line), skip intermediate points:
     bool degenerated = m_ctrlPts[0] == m_ctrlPts[1] && m_ctrlPts[2] == m_ctrlPts[3];
 
     if( !degenerated )
