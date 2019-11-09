@@ -53,10 +53,9 @@ DIALOG_FP_BROWSER_DISPLAY_OPTIONS::~DIALOG_FP_BROWSER_DISPLAY_OPTIONS( )
 
 void DIALOG_FP_BROWSER_DISPLAY_OPTIONS::initDialog()
 {
-    /* mandatory to use escape key as cancel under wxGTK. */
-    SetFocus();
+    SetFocus();     // mandatory to use escape key as cancel under wxGTK.
 
-    auto displ_opts = m_frame->GetDisplayOptions();
+    const PCB_DISPLAY_OPTIONS& displ_opts = m_frame->GetDisplayOptions();
 
     m_EdgesDisplayOption->SetValue( not displ_opts.m_DisplayModEdgeFill );
     m_TextDisplayOption->SetValue( not displ_opts.m_DisplayModTextFill );
@@ -69,12 +68,13 @@ void DIALOG_FP_BROWSER_DISPLAY_OPTIONS::initDialog()
 
 void DIALOG_FP_BROWSER_DISPLAY_OPTIONS::UpdateObjectSettings()
 {
-    auto displ_opts = m_frame->GetDisplayOptions();
+    PCB_DISPLAY_OPTIONS displ_opts = m_frame->GetDisplayOptions();
 
     displ_opts.m_DisplayModEdgeFill = not m_EdgesDisplayOption->GetValue();
     displ_opts.m_DisplayModTextFill = not m_TextDisplayOption->GetValue();
     displ_opts.m_DisplayPadNum  = m_ShowPadNum->GetValue();
     displ_opts.m_DisplayPadFill = not m_ShowPadSketch->GetValue();
+    m_frame->SetDisplayOptions( displ_opts );
     m_frame->ApplyDisplaySettingsToGAL();
 
     m_frame->SetAutoZoom( m_autoZoomOption->GetValue() );
