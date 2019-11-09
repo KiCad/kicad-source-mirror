@@ -1148,45 +1148,16 @@ void ClipAndDrawPoly( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aPoints[], int n )
 }
 
 
-void GRBezier( EDA_RECT* ClipBox,
-               wxDC*     DC,
-               int       x1,
-               int       y1,
-               int       x2,
-               int       y2,
-               int       x3,
-               int       y3,
-               int       width,
-               COLOR4D   Color )
+void GRBezier( EDA_RECT* aClipBox, wxDC* aDC,
+               std::vector<wxPoint>& aPoint,
+               int aWidth, COLOR4D aColor )
 {
-    std::vector<wxPoint> points;
+    std::vector<wxPoint> output;
 
-    BEZIER_POLY converter( x1, y1, x2, y2, x3, y3 );
-    converter.GetPoly( points );
+    BEZIER_POLY converter( aPoint );
+    converter.GetPoly( output, aWidth );
 
-    GRPoly( ClipBox, DC, points.size(), &points[0], false, width, Color, Color );
-}
-
-
-void GRBezier( EDA_RECT* ClipBox,
-               wxDC*     DC,
-               int       x1,
-               int       y1,
-               int       x2,
-               int       y2,
-               int       x3,
-               int       y3,
-               int       x4,
-               int       y4,
-               int       width,
-               COLOR4D   Color )
-{
-    std::vector<wxPoint> points;
-
-    BEZIER_POLY converter( x1, y1, x2, y2, x3, y3, x4, y4 );
-    converter.GetPoly( points );
-
-    GRPoly( ClipBox, DC, points.size(), &points[0], false, width, Color, Color );
+    GRPoly( aClipBox, aDC, output.size(), &output[0], false, aWidth, aColor, aColor );
 }
 
 

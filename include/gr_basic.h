@@ -124,10 +124,10 @@ void GRLineTo( EDA_RECT* ClipBox, wxDC* DC,
 void GRPoly( EDA_RECT* ClipBox, wxDC* DC, int n, wxPoint Points[], bool Fill,
              int width, COLOR4D Color, COLOR4D BgColor );
 
-void GRBezier( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
-               int x3, int y3, int width, COLOR4D Color );
-void GRBezier( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
-               int x3, int y3, int x4, int y4, int width, COLOR4D Color );
+/** Draw cubic (4 points: start control1, control2, end) bezier curve
+ */
+void GRBezier( EDA_RECT* aClipBox, wxDC* aDC, std::vector<wxPoint>& aPoints,
+               int aWidth, COLOR4D aColor );
 
 /**
  * Function GRClosedPoly
