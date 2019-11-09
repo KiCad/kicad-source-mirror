@@ -32,7 +32,6 @@
 #include <sch_edit_frame.h>
 #include <lib_edit_frame.h>
 #include <viewlib_frame.h>
-#include <eda_text.h>
 #include <general.h>
 #include <class_libentry.h>
 #include <transform.h>
@@ -42,6 +41,9 @@
 #include <dialogs/panel_sym_lib_table.h>
 #include <kiway.h>
 #include <sim/sim_plot_frame.h>
+#include <kiface_ids.h>
+#include <libs/sexpr/include/sexpr/sexpr.h>
+#include <libs/sexpr/include/sexpr/sexpr_parser.h>
 
 // The main sheet of the project
 SCH_SHEET*  g_RootSheet = NULL;
@@ -126,6 +128,16 @@ static struct IFACE : public KIFACE_I
     {
         return NULL;
     }
+
+    /**
+     * Function SaveFileAs
+     * Saving a file under a different name is delegated to the various KIFACEs because
+     * the project doesn't know the internal format of the various files (which may have
+     * paths in them that need updating).
+     */
+    void SaveFileAs( const std::string& aProjectBasePath, const std::string& aProjectName,
+                     const std::string& aNewProjectBasePath, const std::string& aNewProjectName,
+                     const std::string& aSrcFilePath, std::string& aErrors ) override;
 
 } kiface( "eeschema", KIWAY::FACE_SCH );
 
@@ -291,3 +303,149 @@ void IFACE::OnKifaceEnd()
     wxConfigSaveSetups( KifaceSettings(), cfg_params() );
     end_common();
 }
+
+static void traverseSEXPR( SEXPR::SEXPR* aNode,
+                           const std::function<void( SEXPR::SEXPR* )>& aVisitor )
+{
+    aVisitor( aNode );
+
+    if( aNode->IsList() )
+    {
+        for( int i = 0; i < aNode->GetNumberOfChildren(); i++ )
+            traverseSEXPR( aNode->GetChild( i ), aVisitor );
+    }
+}
+
+
+void IFACE::SaveFileAs( const std::string& aProjectBasePath, const std::string& aProjectName,
+                        const std::string& aNewProjectBasePath, const std::string& aNewProjectName,
+                        const std::string& aSrcFilePath, std::string& aErrors )
+{
+    wxFileName destFile( aSrcFilePath );
+    wxString   destPath = destFile.GetPath();
+    wxString   ext = destFile.GetExt();
+
+    if( destPath.StartsWith( aProjectBasePath ) )
+    {
+        destPath.Replace( aProjectBasePath, aNewProjectBasePath, false );
+        destFile.SetPath( destPath );
+    }
+
+    if( ext == "sch" || ext == "sch-bak" )
+    {
+        if( destFile.GetName() == aProjectName )
+            destFile.SetName( aNewProjectName  );
+
+        // JEY TODO: need to update at least sheet-paths...
+
+        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+    }
+    else if( ext == "sym" )
+    {
+        // Symbols are not project-specific.  Keep their source names.
+        wxCopyFile( aSrcFilePath, destFile.GetFullPath() );
+    }
+    else if( ext == "lib" )
+    {
+        if( destFile.GetName() == aProjectName )
+            destFile.SetName( aNewProjectName  );
+        else if( destFile.GetName() == aProjectName + "-cache" )
+            destFile.SetName( aNewProjectName + "-cache"  );
+        else if( destFile.GetName() == aProjectName + "-rescue" )
+            destFile.SetName( aNewProjectName + "-rescue"  );
+
+        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+    }
+    else if( ext == "net" )
+    {
+        bool success = false;
+
+        if( destFile.GetName() == aProjectName )
+            destFile.SetName( aNewProjectName  );
+
+        try
+        {
+            SEXPR::PARSER parser;
+            std::unique_ptr<SEXPR::SEXPR> sexpr( parser.ParseFromFile( aSrcFilePath ) );
+
+            traverseSEXPR( sexpr.get(), [&]( SEXPR::SEXPR* node )
+                {
+                    if( node->IsList() && node->GetNumberOfChildren() > 1
+                            && node->GetChild( 0 )->IsSymbol()
+                            && node->GetChild( 0 )->GetSymbol() == "source" )
+                    {
+                        auto pathNode = dynamic_cast<SEXPR::SEXPR_STRING*>( node->GetChild( 1 ) );
+                        wxString path( pathNode->m_value );
+
+                        if( path == aProjectName + ".sch" )
+                            path = aNewProjectName + ".sch";
+                        else if( path == aProjectBasePath + "/" + aProjectName + ".sch" )
+                            path = aNewProjectBasePath + "/" + aNewProjectName + ".sch";
+                        else if( path.StartsWith( aProjectBasePath ) )
+                            path.Replace( aProjectBasePath, aNewProjectBasePath, false );
+
+                        pathNode->m_value = path;
+                    }
+                } );
+
+            wxFile destNetList( destFile.GetFullPath(), wxFile::write );
+
+            if( destNetList.IsOpened() )
+                success = destNetList.Write( sexpr->AsString( 0 ) );
+
+            // wxFile dtor will close the file
+        }
+        catch( ... )
+        {
+            success = false;
+        }
+
+        if( !success )
+        {
+            wxString msg;
+
+            if( !aErrors.empty() )
+                aErrors += "\n";
+
+            msg.Printf( _( "Cannot copy file \"%s\"." ), destFile.GetFullPath() );
+            aErrors += msg;
+        }
+    }
+    else if( destFile.GetName() == "sym-lib-table" )
+    {
+        SYMBOL_LIB_TABLE symbolLibTable;
+        symbolLibTable.Load( aSrcFilePath );
+
+        for( int i = 0; i < symbolLibTable.GetCount(); i++ )
+        {
+            LIB_TABLE_ROW& row = symbolLibTable.At( i );
+            wxString       uri = row.GetFullURI();
+
+            uri.Replace( "/" + aProjectName + "-cache.lib", "/" + aNewProjectName + "-cache.lib" );
+            uri.Replace( "/" + aProjectName + "-rescue.lib", "/" + aNewProjectName + "-rescue.lib" );
+            uri.Replace( "/" + aProjectName + ".lib", "/" + aNewProjectName + ".lib" );
+
+            row.SetFullURI( uri );
+        }
+
+        try
+        {
+            symbolLibTable.Save( destFile.GetFullPath() );
+        }
+        catch( ... )
+        {
+            wxString msg;
+
+            if( !aErrors.empty() )
+                aErrors += "\n";
+
+            msg.Printf( _( "Cannot copy file \"%s\"." ), destFile.GetFullPath() );
+            aErrors += msg;
+        }
+    }
+    else
+    {
+        wxFAIL_MSG( "Unexpected filetype for Eeschema::SaveFileAs()" );
+    }
+}
+

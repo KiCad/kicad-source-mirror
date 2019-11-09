@@ -156,7 +156,7 @@ namespace SEXPR
                 result = "\n";
             }
 
-            result.append( aLevel* 4, ' ' );
+            result.append( aLevel * 2, ' ' );
             aLevel++;
             result += "(";
 

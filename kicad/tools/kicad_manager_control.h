@@ -49,6 +49,7 @@ public:
     int NewProject( const TOOL_EVENT& aEvent );
     int NewFromTemplate( const TOOL_EVENT& aEvent );
     int OpenProject( const TOOL_EVENT& aEvent );
+    int SaveProjectAs( const TOOL_EVENT& aEvent );
 
     int Refresh( const TOOL_EVENT& aEvent );
     int UpdateMenu( const TOOL_EVENT& aEvent );

@@ -208,8 +208,24 @@ struct KIFACE
      *  and old school cast.  dynamic_cast is problematic since it needs typeinfo probably
      *  not contained in the caller's link image.
      */
-    VTBL_ENTRY  wxWindow* CreateWindow( wxWindow* aParent, int aClassId,
-            KIWAY* aKIWAY, int aCtlBits = 0 ) = 0;
+    VTBL_ENTRY wxWindow* CreateWindow( wxWindow* aParent, int aClassId,
+                                       KIWAY* aKIWAY, int aCtlBits = 0 ) = 0;
+
+    /**
+     * Function SaveFileAs
+     * Saving a file under a different name is delegated to the various KIFACEs because
+     * the project doesn't know the internal format of the various files (which may have
+     * paths in them that need updating).
+     */
+    VTBL_ENTRY void SaveFileAs( const std::string& srcProjectBasePath,
+                                const std::string& srcProjectName,
+                                const std::string& newProjectBasePath,
+                                const std::string& newProjectName,
+                                const std::string& srcFilePath,
+                                std::string& aErrors )
+    {
+        // If a KIFACE owns files then it needs to implement this....
+    }
 
     /**
      * Function IfaceOrAddress

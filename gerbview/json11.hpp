@@ -148,6 +148,8 @@ public:
     // Return the enclosed string if this is a string, "" otherwise.
     const std::string& string_value() const;
 
+    void set_string_value( std::string value ) const;
+
     // Return the enclosed std::vector if this is an array, or an empty vector otherwise.
     const array& array_items() const;
 
@@ -161,13 +163,13 @@ public:
     const Json& operator[]( const std::string& key ) const;
 
     // Serialize.
-    void dump( std::string& out ) const;
+    void dump( int level, std::string& out ) const;
 
-    std::string dump() const
+    std::string dump( int level ) const
     {
         std::string out;
 
-        dump( out );
+        dump( level, out );
         return out;
     }
 
@@ -236,11 +238,12 @@ protected:
     virtual Json::Type          type() const = 0;
     virtual bool                equals( const JsonValue* other ) const = 0;
     virtual bool                less( const JsonValue* other ) const = 0;
-    virtual void                dump( std::string& out ) const = 0;
+    virtual void                dump( int level, std::string& out ) const = 0;
     virtual double              number_value() const;
     virtual int                 int_value() const;
     virtual bool                bool_value() const;
     virtual const std::string&  string_value() const;
+    virtual void                set_string_value( std::string value ) const;
     virtual const Json::array&  array_items() const;
     virtual const Json&         operator[]( size_t i ) const;
     virtual const Json::object& object_items() const;

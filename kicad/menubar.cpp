@@ -67,6 +67,9 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     fileMenu->AddMenu( openRecentMenu,                         SELECTION_CONDITIONS::ShowAlways );
 
     fileMenu->AddSeparator();
+    fileMenu->AddItem( ACTIONS::saveAs,                        SELECTION_CONDITIONS::ShowAlways );
+
+    fileMenu->AddSeparator();
     fileMenu->AddItem( ID_IMPORT_EAGLE_PROJECT,
                        _( "Import EAGLE Project..." ),
                        _( "Import EAGLE CAD XML schematic and board" ),

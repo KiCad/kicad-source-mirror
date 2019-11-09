@@ -28,6 +28,7 @@ include_directories(
     ./tools
     ../common
     ../common/dialogs
+    ../libs/sexpr/include
     ${INC_AFTER}
     )
 
@@ -353,6 +354,7 @@ target_include_directories( eeschema_kiface PUBLIC
 
 target_link_libraries( eeschema_kiface
     common
+    sexpr
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     )

@@ -86,6 +86,16 @@ static struct IFACE : public KIFACE_I
         return NULL;
     }
 
+    /**
+     * Function SaveFileAs
+     * Saving a file under a different name is delegated to the various KIFACEs because
+     * the project doesn't know the internal format of the various files (which may have
+     * paths in them that need updating).
+     */
+    void SaveFileAs( const std::string& aProjectBasePath, const std::string& aSrcProjectName,
+                     const std::string& aNewProjectBasePath, const std::string& aNewProjectName,
+                     const std::string& aSrcFilePath, std::string& aErrors ) override;
+
 } kiface( "pl_editor", KIWAY::FACE_PL_EDITOR );
 
 } // namespace
@@ -124,3 +134,32 @@ void IFACE::OnKifaceEnd()
 {
     end_common();
 }
+
+
+void IFACE::SaveFileAs( const std::string& aProjectBasePath, const std::string& aSrcProjectName,
+                        const std::string& aNewProjectBasePath, const std::string& aNewProjectName,
+                        const std::string& aSrcFilePath, std::string& aErrors )
+{
+    wxFileName destFile( aSrcFilePath );
+    wxString   destPath = destFile.GetPath();
+    wxString   ext = destFile.GetExt();
+
+    if( destPath.StartsWith( aProjectBasePath ) )
+    {
+        destPath.Replace( aProjectBasePath, aNewProjectBasePath, false );
+        destFile.SetPath( destPath );
+    }
+
+    if( ext == "kicad_wks" )
+    {
+        if( destFile.GetName() == aSrcProjectName )
+            destFile.SetName( aNewProjectName );
+
+        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+    }
+    else
+    {
+        wxFAIL_MSG( "Unexpected filetype for Pcbnew::SaveFileAs()" );
+    }
+}
+

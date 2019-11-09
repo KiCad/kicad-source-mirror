@@ -60,6 +60,14 @@ void PrintFile( const wxString& file );
 bool CanPrintFile( const wxString& file );
 
 /**
+ * Function CopyFile
+ * @param aSrcPath
+ * @param aDestPath
+ * @param aErrors a string to *append* any errors to
+ */
+void CopyFile( const wxString& aSrcPath, const wxString& aDestPath, std::string& aErrors );
+
+/**
  * Function EDA_FILE_SELECTOR
  *
  * is a helper function that wraps a call to wxFileSelector.

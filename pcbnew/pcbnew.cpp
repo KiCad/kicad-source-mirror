@@ -40,13 +40,10 @@
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <eda_dde.h>
-#include <wx/stdpaths.h>
 #include <wx/file.h>
 #include <wx/snglinst.h>
-#include <wx/dir.h>
 #include <gestfich.h>
 #include <pcbnew.h>
-#include <wildcards_and_files_ext.h>
 #include <class_board.h>
 #include <class_draw_panel_gal.h>
 #include <fp_lib_table.h>
@@ -55,7 +52,6 @@
 #include <footprint_wizard_frame.h>
 #include <footprint_preview_panel.h>
 #include <footprint_info_impl.h>
-#include <gl_context_mgr.h>
 #include <dialog_configure_paths.h>
 #include "invoke_pcb_dialog.h"
 #include "dialog_global_fp_lib_table_config.h"
@@ -164,6 +160,16 @@ static struct IFACE : public KIFACE_I
             return nullptr;
         }
     }
+
+    /**
+     * Function SaveFileAs
+     * Saving a file under a different name is delegated to the various KIFACEs because
+     * the project doesn't know the internal format of the various files (which may have
+     * paths in them that need updating).
+     */
+    void SaveFileAs( const std::string& aProjectBasePath, const std::string& aSrcProjectName,
+                     const std::string& aNewProjectBasePath, const std::string& aNewProjectName,
+                     const std::string& aSrcFilePath, std::string& aErrors ) override;
 
 } kiface( "pcbnew", KIWAY::FACE_PCB );
 
@@ -378,3 +384,90 @@ void IFACE::OnKifaceEnd()
 
     end_common();
 }
+
+
+void IFACE::SaveFileAs( const std::string& aProjectBasePath, const std::string& aSrcProjectName,
+                        const std::string& aNewProjectBasePath, const std::string& aNewProjectName,
+                        const std::string& aSrcFilePath, std::string& aErrors )
+{
+    wxFileName destFile( aSrcFilePath );
+    wxString   destPath = destFile.GetPath();
+    wxString   ext = destFile.GetExt();
+
+    if( destPath.StartsWith( aProjectBasePath ) )
+    {
+        destPath.Replace( aProjectBasePath, aNewProjectBasePath, false );
+        destFile.SetPath( destPath );
+    }
+
+    if( ext == "kicad_pcb" || ext == "kicad_pcb-bak" )
+    {
+        if( destFile.GetName() == aSrcProjectName )
+            destFile.SetName( aNewProjectName );
+
+        // JEY TODO: are there filepaths in a PCB file that need updating?
+
+        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+    }
+    else if( ext == "brd" )
+    {
+        if( destFile.GetName() == aSrcProjectName )
+            destFile.SetName( aNewProjectName );
+
+        // JEY TODO: are there filepaths in a legacy PCB file that need updating?
+
+        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+    }
+    else if( ext == "mod" || ext == "kicad_mod" )
+    {
+        // Footprints are not project-specific.  Keep their source names.
+        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+    }
+    else if( ext == "cmp" )
+    {
+        // JEY TODO
+    }
+    else if( ext == "rpt" )
+    {
+        // DRC must be the "gold standard".  Since we can't gaurantee that there aren't
+        // any non-deterministic cases in the save-as algorithm, we don't want to certify
+        // the result with the source's DRC report.  Therefore copy it under the old
+        // name.
+        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+    }
+    else if( destFile.GetName() == "fp-lib-table" )
+    {
+        try
+        {
+            FP_LIB_TABLE fpLibTable;
+            fpLibTable.Load( aSrcFilePath );
+
+            for( int i = 0; i < fpLibTable.GetCount(); i++ )
+            {
+                LIB_TABLE_ROW& row = fpLibTable.At( i );
+                wxString       uri = row.GetFullURI();
+
+                uri.Replace( "/" + aSrcProjectName + ".pretty", "/" + aNewProjectName + ".pretty" );
+
+                row.SetFullURI( uri );
+            }
+
+            fpLibTable.Save( destFile.GetFullPath() );
+        }
+        catch( ... )
+        {
+            wxString msg;
+
+            if( !aErrors.empty() )
+                aErrors += "\n";
+
+            msg.Printf( _( "Cannot copy file \"%s\"." ), destFile.GetFullPath() );
+            aErrors += msg;
+        }
+    }
+    else
+    {
+        wxFAIL_MSG( "Unexpected filetype for Pcbnew::SaveFileAs()" );
+    }
+}
+

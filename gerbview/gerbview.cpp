@@ -31,6 +31,8 @@
 #include <pgm_base.h>
 #include <gerbview.h>
 #include <gerbview_frame.h>
+#include <gestfich.h>
+#include "json11.hpp"
 
 const wxChar* g_GerberPageSizeList[] =
 {
@@ -92,6 +94,16 @@ static struct IFACE : public KIFACE_I
         return NULL;
     }
 
+    /**
+     * Function SaveFileAs
+     * Saving a file under a different name is delegated to the various KIFACEs because
+     * the project doesn't know the internal format of the various files (which may have
+     * paths in them that need updating).
+     */
+    void SaveFileAs( const std::string& aProjectBasePath, const std::string& aProjectName,
+                     const std::string& aNewProjectBasePath, const std::string& aNewProjectName,
+                     const std::string& aSrcFilePath, std::string& aErrors ) override;
+
 } kiface( "gerbview", KIWAY::FACE_GERBVIEW );
 
 } // namespace
@@ -130,3 +142,114 @@ void IFACE::OnKifaceEnd()
 {
     end_common();
 }
+
+
+void IFACE::SaveFileAs( const std::string& aProjectBasePath, const std::string& aProjectName,
+                        const std::string& aNewProjectBasePath, const std::string& aNewProjectName,
+                        const std::string& aSrcFilePath, std::string& aErrors )
+{
+    wxFileName destFile( aSrcFilePath );
+    wxString   destPath = destFile.GetPath();
+    wxString   ext = destFile.GetExt();
+
+    if( destPath.StartsWith( aProjectBasePath ) )
+    {
+        destPath.Replace( aProjectBasePath, aNewProjectBasePath, false );
+        destFile.SetPath( destPath );
+    }
+
+    if( ext == "gbr" )
+    {
+        wxString destFileName = destFile.GetName();
+
+        if( destFileName.StartsWith( aProjectName + "-" ) )
+        {
+            destFileName.Replace( aProjectName, aNewProjectName, false );
+            destFile.SetName( destFileName );
+        }
+
+        wxCopyFile( aSrcFilePath, destFile.GetFullPath() );
+    }
+    else if( ext == "gbrjob" )
+    {
+        if( destFile.GetName() == aProjectName + "-job" )
+            destFile.SetName( aNewProjectName + "-job"  );
+
+         FILE_LINE_READER jobfileReader( aSrcFilePath );
+
+         char*    line;
+         wxString data;
+
+         while( ( line = jobfileReader.ReadLine() ) )
+            data << line << '\n';
+
+        // detect the file format: old (deprecated) gerber format or official JSON format
+        if( !data.Contains( "{" ) )
+        {
+            CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+            return;
+        }
+
+        bool success = false;
+
+        try
+        {
+            std::string  err;
+            json11::Json json = json11::Json::parse(TO_UTF8( data ), err );
+
+            if( err.empty() )
+            {
+                for( auto& entry : json[ "FilesAttributes" ].array_items() )
+                {
+                    wxString path = entry[ "Path" ].string_value();
+
+                    if( path.StartsWith( aProjectName + "-" ) )
+                    {
+                        path.Replace( aProjectName, aNewProjectName, false );
+                        entry[ "Path" ].set_string_value( path.ToStdString() );
+                    }
+                }
+
+                wxFile destJobFile( destFile.GetFullPath(), wxFile::write );
+
+                if( destJobFile.IsOpened() )
+                    success = destJobFile.Write( json.dump( 0 ) );
+
+                // wxFile dtor will close the file
+            }
+        }
+        catch( ... )
+        {
+            success = false;
+        }
+
+        if( !success )
+        {
+            wxString msg;
+
+            if( !aErrors.empty() )
+                aErrors += "\n";
+
+            msg.Printf( _( "Cannot copy file \"%s\"." ), destFile.GetFullPath() );
+            aErrors += msg;
+        }
+    }
+    else if( ext == "drl" )
+    {
+        wxString destFileName = destFile.GetName();
+
+        if( destFileName == aProjectName )
+            destFileName = aNewProjectName;
+        else if( destFileName.StartsWith( aProjectName + "-" ) )
+            destFileName.Replace( aProjectName, aNewProjectName, false );
+
+        destFile.SetName( destFileName );
+
+        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
+    }
+    else
+    {
+        wxFAIL_MSG( "Unexpected filetype for GerbView::SaveFileAs()" );
+    }
+}
+

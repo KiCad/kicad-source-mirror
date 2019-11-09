@@ -313,6 +313,242 @@ int KICAD_MANAGER_CONTROL::OpenProject( const TOOL_EVENT& aEvent )
 }
 
 
+class SAVE_AS_TRAVERSER : public wxDirTraverser
+{
+private:
+    KICAD_MANAGER_FRAME* m_frame;
+
+    wxString             m_projectDirPath;
+    wxString             m_projectName;
+    wxString             m_newProjectDirPath;
+    wxString             m_newProjectName;
+
+    wxFileName           m_newProjectFile;
+    std::string          m_errors;
+
+public:
+    SAVE_AS_TRAVERSER( KICAD_MANAGER_FRAME* aFrame,
+                       const std::string& aSrcProjectDirPath,
+                       const std::string& aSrcProjectName,
+                       const std::string& aNewProjectDirPath,
+                       const std::string& aNewProjectName ) :
+            m_frame( aFrame ),
+            m_projectDirPath( aSrcProjectDirPath ),
+            m_projectName( aSrcProjectName ),
+            m_newProjectDirPath( aNewProjectDirPath ),
+            m_newProjectName( aNewProjectName )
+    {
+    }
+
+    virtual wxDirTraverseResult OnFile( const wxString& aSrcFilePath )
+    {
+        wxFileName destFile( aSrcFilePath );
+        wxString   ext = destFile.GetExt();
+        bool       atRoot = destFile.GetPath() == m_projectDirPath;
+
+        if( ext == "pro" )
+        {
+            wxString destPath = destFile.GetPath();
+
+            if( destPath.StartsWith( m_projectDirPath ) )
+            {
+                destPath.Replace( m_projectDirPath, m_newProjectDirPath, false );
+                destFile.SetPath( destPath );
+            }
+
+            if( destFile.GetName() == m_projectName )
+            {
+                destFile.SetName( m_newProjectName );
+
+                if( atRoot )
+                    m_newProjectFile = destFile;
+            }
+
+            // Currently all paths in the settings file are relative, so we can just do a
+            // straight copy
+            CopyFile( aSrcFilePath, destFile.GetFullPath(), m_errors );
+        }
+        else if( ext == "sch"
+              || ext == "sch-bak"
+              || ext == "sym"
+              || ext == "lib"
+              || ext == "net"
+              || destFile.GetName() == "sym-lib-table" )
+        {
+            KIFACE* eeschema = m_frame->Kiway().KiFACE( KIWAY::FACE_SCH );
+            eeschema->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
+                                  m_newProjectName, aSrcFilePath, m_errors );
+        }
+        else if( ext == "kicad_pcb"
+              || ext == "kicad_pcb-bak"
+              || ext == "brd"
+              || ext == "kicad_mod"
+              || ext == "mod"
+              || ext == "cmp"
+              || destFile.GetName() == "fp-lib-table" )
+        {
+            KIFACE* pcbnew = m_frame->Kiway().KiFACE( KIWAY::FACE_PCB );
+            pcbnew->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
+                                m_newProjectName, aSrcFilePath, m_errors );
+        }
+        else if( ext == "kicad_wks" )
+        {
+            KIFACE* pleditor = m_frame->Kiway().KiFACE( KIWAY::FACE_PL_EDITOR );
+            pleditor->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
+                                  m_newProjectName, aSrcFilePath, m_errors );
+        }
+        else if( ext == "gbr"
+              || ext == "gbrjob"
+              || ext == "drl" )
+        {
+            KIFACE* gerbview = m_frame->Kiway().KiFACE( KIWAY::FACE_GERBVIEW );
+            gerbview->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
+                                  m_newProjectName, aSrcFilePath, m_errors );
+        }
+        else
+        {
+            // Everything we don't recognize just gets a straight copy
+            wxString destPath = destFile.GetPath();
+
+            if( destPath.StartsWith( m_projectDirPath ) )
+            {
+                destPath.Replace( m_projectDirPath, m_newProjectDirPath, false );
+                destFile.SetPath( destPath );
+            }
+
+            if( destFile.GetName() == m_projectName )
+                destFile.SetName( m_newProjectName );
+
+            CopyFile( aSrcFilePath, destFile.GetFullPath(), m_errors );
+        }
+
+        /* TODO: what about these?
+        MacrosFileExtension;
+        FootprintPlaceFileExtension;
+        KiCadFootprintLibPathExtension;
+        GedaPcbFootprintLibFileExtension;
+        EagleFootprintLibPathExtension;
+        KiCadLib3DShapesPathExtension;
+        SpecctraDsnFileExtension;
+        IpcD356FileExtension;
+         */
+
+        return wxDIR_CONTINUE;
+    }
+
+    virtual wxDirTraverseResult OnDir( const wxString& dirPath )
+    {
+        wxFileName destDir( dirPath );
+        wxString   destDirPath = destDir.GetPath(); // strips off last directory
+
+        if( destDirPath.StartsWith( m_projectDirPath ) )
+        {
+            destDirPath.Replace( m_projectDirPath, m_newProjectDirPath, false );
+            destDir.SetPath( destDirPath );
+        }
+
+        if( destDir.GetName() == m_projectName )
+            destDir.SetName( m_newProjectName );
+
+        if( !wxMkdir( destDir.GetFullPath() ) )
+        {
+            wxString msg;
+
+            if( !m_errors.empty() )
+                m_errors += "\n";
+
+            msg.Printf( _( "Cannot copy file \"%s\"." ), destDir.GetFullPath() );
+            m_errors += msg;
+        }
+
+        return wxDIR_CONTINUE;
+    }
+
+    wxString GetErrors() { return m_errors; }
+
+    wxFileName GetNewProjectFile() { return m_newProjectFile; }
+};
+
+
+int KICAD_MANAGER_CONTROL::SaveProjectAs( const TOOL_EVENT& aEvent )
+{
+    wxString     msg;
+
+    wxFileName   currentProjectFile( Prj().GetProjectFullName() );
+    wxString     currentProjectDirPath = currentProjectFile.GetPath();
+    wxString     currentProjectName = Prj().GetProjectName();
+
+    wxString     default_dir = m_frame->GetMruPath();
+
+    if( default_dir == currentProjectDirPath
+            || default_dir == currentProjectDirPath + wxFileName::GetPathSeparator() )
+    {
+        // Don't start within the current project
+        wxFileName default_dir_fn( default_dir );
+        default_dir_fn.RemoveLastDir();
+        default_dir = default_dir_fn.GetPath();
+    }
+
+    wxFileDialog dlg( m_frame, _( "Save Project To" ), default_dir, wxEmptyString, wxEmptyString,
+                      wxFD_SAVE );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return -1;
+
+    wxFileName newProjectDir( dlg.GetPath() );
+
+    if( !newProjectDir.IsAbsolute() )
+        newProjectDir.MakeAbsolute();
+
+    if( wxDirExists( newProjectDir.GetFullPath() ) )
+    {
+        msg.Printf( _( "\"%s\" already exists." ), newProjectDir.GetFullPath() );
+        DisplayErrorMessage( m_frame, msg );
+        return -1;
+    }
+
+    if( !wxMkdir( newProjectDir.GetFullPath() ) )
+    {
+        msg.Printf( _( "Directory \"%s\" could not be created.\n\n"
+                       "Please make sure you have write permissions and try again." ),
+                    newProjectDir.GetPath() );
+        DisplayErrorMessage( m_frame, msg );
+        return -1;
+    }
+
+    if( !newProjectDir.IsDirWritable() )
+    {
+        msg.Printf( _( "Cannot write to folder \"%s\"." ), newProjectDir.GetFullPath() );
+        wxMessageDialog msgDlg( m_frame, msg, _( "Error!" ), wxICON_ERROR | wxOK | wxCENTER );
+        msgDlg.SetExtendedMessage( _( "Please check your access permissions to this folder "
+                                      "and try again." ) );
+        msgDlg.ShowModal();
+        return -1;
+    }
+
+    const wxString&   newProjectDirPath = newProjectDir.GetFullPath();
+    const wxString&   newProjectName = newProjectDir.GetName();
+    wxDir             currentProjectDir( currentProjectDirPath );
+
+    SAVE_AS_TRAVERSER traverser( m_frame,
+                                 currentProjectDirPath, currentProjectName,
+                                 newProjectDirPath, newProjectName );
+
+    currentProjectDir.Traverse( traverser );
+
+    if( !traverser.GetErrors().empty() )
+        DisplayErrorMessage( m_frame, traverser.GetErrors() );
+
+    if( traverser.GetNewProjectFile().FileExists() )
+    {
+        m_frame->CreateNewProject( traverser.GetNewProjectFile() );
+        m_frame->LoadProject( traverser.GetNewProjectFile() );
+    }
+
+    return 0;
+}
+
+
 int KICAD_MANAGER_CONTROL::Refresh( const TOOL_EVENT& aEvent )
 {
     m_frame->RefreshProjectTree();
@@ -492,6 +728,7 @@ void KICAD_MANAGER_CONTROL::setTransitions()
     Go( &KICAD_MANAGER_CONTROL::NewProject,    KICAD_MANAGER_ACTIONS::newProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::NewFromTemplate, KICAD_MANAGER_ACTIONS::newFromTemplate.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::OpenProject,   KICAD_MANAGER_ACTIONS::openProject.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::SaveProjectAs, ACTIONS::saveAs.MakeEvent() );
 
     Go( &KICAD_MANAGER_CONTROL::Refresh,       ACTIONS::zoomRedraw.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::UpdateMenu,    ACTIONS::updateMenu.MakeEvent() );

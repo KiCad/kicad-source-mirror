@@ -50,18 +50,27 @@ struct NullStruct
  * Serialization
  */
 
-static void dump( NullStruct, string& out )
+static void indent( int level, string& out )
+{
+    for( int i = 0; i < level * 2; i++ )
+        out += " ";
+}
+
+
+static void dump( NullStruct, int level, string& out )
 {
     out += "null";
 }
 
 
-static void dump( double value, string& out )
+static void dump( double value, int level, string& out )
 {
+    indent( level, out );
+
     if( std::isfinite( value ) )
     {
         char buf[32];
-        snprintf( buf, sizeof buf, "%.17g", value );
+        snprintf( buf, sizeof buf, "%.3f", value );
         out += buf;
     }
     else
@@ -71,8 +80,10 @@ static void dump( double value, string& out )
 }
 
 
-static void dump( int value, string& out )
+static void dump( int value, int level, string& out )
 {
+    indent( level, out );
+
     char buf[32];
 
     snprintf( buf, sizeof buf, "%d", value );
@@ -80,14 +91,18 @@ static void dump( int value, string& out )
 }
 
 
-static void dump( bool value, string& out )
+static void dump( bool value, int level, string& out )
 {
+    indent( level, out );
+
     out += value ? "true" : "false";
 }
 
 
-static void dump( const string& value, string& out )
+static void dump( const string& value, int level, string& out )
 {
+    indent( level, out );
+
     out += '"';
 
     for( size_t i = 0; i < value.length(); i++ )
@@ -150,49 +165,71 @@ static void dump( const string& value, string& out )
 }
 
 
-static void dump( const Json::array& values, string& out )
+static void dump( const Json::array& values, int level, string& out )
 {
     bool first = true;
 
-    out += "[";
+    indent( level, out );
+    out += "[\n";
 
     for( const auto& value : values )
     {
         if( !first )
-            out += ", ";
+            out += ",\n";
 
-        value.dump( out );
+        value.dump( level + 1, out );
         first = false;
     }
 
+    out += "\n";
+    indent( level, out );
     out += "]";
 }
 
 
-static void dump( const Json::object& values, string& out )
+static void dump( const Json::object& values, int level, string& out )
 {
     bool first = true;
 
-    out += "{";
+    indent( level, out );
+    out += "{\n";
 
-    for( const auto& kv : values )
+    for( int i : { 1, 2 } )
     {
-        if( !first )
-            out += ", ";
+        for( const auto& kv : values )
+        {
+            if( i == 1 && kv.first != "Header" )
+                continue;
+            else if( i == 2 && kv.first == "Header" )
+                continue;
 
-        dump( kv.first, out );
-        out += ": ";
-        kv.second.dump( out );
-        first = false;
+            if( !first )
+                out += ",\n";
+
+            dump( kv.first, level + 1, out );
+            out += ": ";
+            if( kv.second.is_object() || kv.second.is_array() )
+            {
+                out += "\n";
+                kv.second.dump( level + 1, out );
+            }
+            else
+            {
+                kv.second.dump( 1, out );
+            }
+            first = false;
+        }
     }
 
+    out += "\n";
+    indent( level, out );
     out += "}";
 }
 
 
-void Json::dump( string& out ) const
+void Json::dump( int level, string& out ) const
 {
-    m_ptr->dump( out );
+    m_ptr->dump( level, out );
 }
 
 
@@ -226,8 +263,8 @@ protected:
         return m_value < static_cast<const Value<tag, T>*>(other)->m_value;
     }
 
-    const T m_value;
-    void dump( string& out ) const override { json11::dump( m_value, out ); }
+    T m_value;
+    void dump( int level, string& out ) const override { json11::dump( m_value, level, out ); }
 };
 
 class JsonDouble final : public Value<Json::NUMBER, double>
@@ -275,6 +312,11 @@ public:
 class JsonString final : public Value<Json::STRING, string>
 {
     const string& string_value() const override { return m_value; }
+
+    void set_string_value( string value ) const override
+    {
+        const_cast<JsonString*>( this )->m_value = value;
+    }
 
 public:
     explicit JsonString( const string& value ) : Value( value ) {}
@@ -436,6 +478,12 @@ const string& Json::string_value()               const
 }
 
 
+void Json::set_string_value( string value ) const
+{
+    m_ptr->set_string_value( value );
+}
+
+
 const vector<Json>& Json::array_items()          const
 {
     return m_ptr->array_items();
@@ -481,6 +529,10 @@ bool JsonValue::bool_value()                const
 const string& JsonValue::string_value()              const
 {
     return statics().empty_string;
+}
+
+void JsonValue::set_string_value( string value ) const
+{
 }
 
 
@@ -1135,7 +1187,7 @@ bool Json::has_shape( const shape& types, string& err ) const
 {
     if( !is_object() )
     {
-        err = "expected JSON object, got " + dump();
+        err = "expected JSON object, got " + dump( 0 );
         return false;
     }
 
@@ -1143,7 +1195,7 @@ bool Json::has_shape( const shape& types, string& err ) const
     {
         if( (*this)[item.first].type() != item.second )
         {
-            err = "bad type for " + item.first + " in " + dump();
+            err = "bad type for " + item.first + " in " + dump( 0 );
             return false;
         }
     }

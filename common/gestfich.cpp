@@ -359,6 +359,21 @@ bool CanPrintFile( const wxString& file )
 }
 
 
+void CopyFile( const wxString& aSrcPath, const wxString& aDestPath, std::string& aErrors )
+{
+    if( !wxCopyFile( aSrcPath, aDestPath ) )
+    {
+        wxString msg;
+
+        if( !aErrors.empty() )
+            aErrors += "\n";
+
+        msg.Printf( _( "Cannot copy file \"%s\"." ), aDestPath );
+        aErrors += msg;
+    }
+}
+
+
 wxString QuoteFullPath( wxFileName& fn, wxPathFormat format )
 {
     return wxT( "\"" ) + fn.GetFullPath( format ) + wxT( "\"" );

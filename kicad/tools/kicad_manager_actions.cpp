@@ -51,7 +51,7 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::openProject( "kicad.Control.openProject",
         AS_GLOBAL,
         MD_CTRL + 'O', LEGACY_HK_NAME( "Open Project" ),
         _( "Open Project..." ), _( "Open an existing project" ),
-        open_project_xpm );
+        directory_xpm );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editSchematic( "kicad.Control.editSchematic",
         AS_GLOBAL,
