@@ -1034,7 +1034,8 @@ void OPENGL_GAL::DrawPolygon( const SHAPE_LINE_CHAIN& aPolygon )
 
 
 void OPENGL_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aControlPointA,
-                            const VECTOR2D& aControlPointB, const VECTOR2D& aEndPoint )
+                            const VECTOR2D& aControlPointB, const VECTOR2D& aEndPoint,
+                            double aFilterValue )
 {
     std::vector<VECTOR2D> output;
     std::vector<VECTOR2D> pointCtrl;
@@ -1045,7 +1046,7 @@ void OPENGL_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aContro
     pointCtrl.push_back( aEndPoint );
 
     BEZIER_POLY converter( pointCtrl );
-    converter.GetPoly( output, GetLineWidth() );
+    converter.GetPoly( output, aFilterValue );
 
     DrawPolyline( &output[0], output.size() );
 }

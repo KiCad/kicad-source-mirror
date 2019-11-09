@@ -424,8 +424,11 @@ void CAIRO_GAL_BASE::DrawPolygon( const SHAPE_LINE_CHAIN& aPolygon )
 
 
 void CAIRO_GAL_BASE::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aControlPointA,
-                           const VECTOR2D& aControlPointB, const VECTOR2D& aEndPoint )
+                                const VECTOR2D& aControlPointB, const VECTOR2D& aEndPoint,
+                                double aFilterValue )
 {
+    // Note: aFilterValue is not used because the cubic Bezier curve is
+    // supported by Cairo.
     syncLineWidth();
 
     const auto sp = roundp( xform( aStartPoint ) );
