@@ -243,6 +243,29 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
 
         if( item->Type() == PCB_MARKER_T )
             return m_layerColors[aLayer];
+
+        // For vias, some layers depend on other layers in high contrast mode
+        if( m_hiContrastEnabled && item->Type() == PCB_VIA_T &&
+                ( aLayer == LAYER_VIAS_HOLES   ||
+                  aLayer == LAYER_VIA_THROUGH  ||
+                  aLayer == LAYER_VIA_MICROVIA ||
+                  aLayer == LAYER_VIA_BBLIND ) )
+        {
+            const VIA*   via = static_cast<const VIA*>( item );
+            const BOARD* pcb = static_cast<const BOARD*>( item->GetParent() );
+            bool         viaActiveLayer = false;
+
+            for( auto activeLayer : m_activeLayers )
+            {
+                auto lay_id = static_cast<PCB_LAYER_ID>( activeLayer );
+                viaActiveLayer |= via->IsOnLayer( lay_id ) && pcb->IsLayerVisible( lay_id );
+            }
+
+            if( viaActiveLayer )
+                return m_layerColors[aLayer];
+            else
+                return m_hiContrastColor[aLayer];
+        }
     }
 
     // Single net highlight mode
