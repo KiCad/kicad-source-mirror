@@ -237,7 +237,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
 {
     double      xOffset;
     double      yOffset;
-    VECTOR2D    glyphSize( m_gal->GetGlyphSize() );
+    VECTOR2D    baseGlyphSize( m_gal->GetGlyphSize() );
     double      overbar_italic_comp = computeOverbarVerticalPosition() * ITALIC_TILT;
 
     if( m_gal->IsTextMirrored() )
@@ -284,7 +284,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
         // (m_glyphSize.x) and start drawing from the position where text normally should end
         // (textSize.x)
         xOffset = textSize.x - m_gal->GetLineWidth();
-        glyphSize.x = -glyphSize.x;
+        baseGlyphSize.x = -baseGlyphSize.x;
     }
     else
     {
@@ -294,8 +294,9 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
     // The overbar is indented inward at the beginning of an italicized section, but
     // must not be indented on subsequent letters to ensure that the bar segments
     // overlap.
-    bool last_had_overbar = false;
-    bool in_overbar = false;
+    bool     last_had_overbar = false;
+    bool     in_overbar = false;
+    VECTOR2D glyphSize = baseGlyphSize;
 
     yOffset = 0;
 
@@ -317,7 +318,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
             // Set the character to ' ' instead of the '?' for tab
             dd = 0;
 
-            glyphSize = m_gal->GetGlyphSize();
+            glyphSize = baseGlyphSize;
             yOffset = 0;
         }
         else if( *chIt == '~' )
@@ -328,6 +329,18 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
             if( *chIt == '~' )
             {
                 // double ~ is really a ~ so go ahead and process the second one
+
+                // so what's a triple ~?  It could be a real ~ followed by an overbar, or
+                // it could be an overbar followed by a real ~.  The old algorithm did the
+                // later so we will too....
+                auto tempIt = chIt;
+
+                if( ++tempIt < end && *tempIt == '~' )
+                {
+                    // eat the first two, toggle overbar, and then process the third
+                    ++chIt;
+                    in_overbar = !in_overbar;
+                }
             }
             else
             {
@@ -347,8 +360,8 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
             {
                 // single ^ starts a superscript
                 dd = *chIt - ' ';
-                glyphSize = m_gal->GetGlyphSize() * 0.8;
-                yOffset = -m_gal->GetGlyphSize().y * 0.3;
+                glyphSize = baseGlyphSize * 0.8;
+                yOffset = -baseGlyphSize.y * 0.3;
             }
         }
         else if( *chIt == '#' && ( markupFlags & ENABLE_SUBSCRIPT_MARKUP ) )
@@ -364,14 +377,14 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
             {
                 // single _ starts a subscript
                 dd = *chIt - ' ';
-                glyphSize = m_gal->GetGlyphSize() * 0.8;
-                yOffset = m_gal->GetGlyphSize().y * 0.1;
+                glyphSize = baseGlyphSize * 0.8;
+                yOffset = baseGlyphSize.y * 0.1;
             }
         }
         else if( *chIt == ' ' )
         {
             // space ends a super- or subscript
-            glyphSize = m_gal->GetGlyphSize();
+            glyphSize = baseGlyphSize;
             yOffset = 0;
         }
 
@@ -502,6 +515,18 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
             if( *it == '~' )
             {
                 // double ~ is really a ~ so go ahead and process the second one
+
+                // so what's a triple ~?  It could be a real ~ followed by an overbar, or
+                // it could be an overbar followed by a real ~.  The old algorithm did the
+                // later so we will too....
+                auto tempIt = it;
+
+                if( ++tempIt < end && *tempIt == '~' )
+                {
+                    // eat the first two, toggle overbar, and then process the third
+                    ++it;
+                    in_overbar = !in_overbar;
+                }
             }
             else
             {
