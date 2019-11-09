@@ -35,6 +35,7 @@
 #include <sch_text.h>
 #include <eeschema_id.h>
 #include <sch_view.h>
+#include <sch_iref.h>
 
 #include <wx/tokenzr.h>
 
@@ -211,6 +212,14 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aNewType )
         txt.Replace( "\r", "_" );
         txt.Replace( "\t", "_" );
         txt.Replace( " ", "_" );
+    }
+
+    if( oldType == SCH_GLOBAL_LABEL_T )
+    {
+        SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( aText );
+        SCH_IREF*        iref = label->GetIref();
+        if( iref )
+            RemoveFromScreen( iref );
     }
 
     // label strings are "escaped" i.e. a '/' is replaced by "{slash}"

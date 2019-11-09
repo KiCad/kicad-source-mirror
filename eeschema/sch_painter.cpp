@@ -58,6 +58,7 @@
 #include <connection_graph.h>
 #include <geometry/shape_line_chain.h>
 #include <bezier_curves.h>
+#include <sch_iref.h>
 
 #include "sch_painter.h"
 
@@ -196,6 +197,7 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
     HANDLE_ITEM(SCH_BUS_BUS_ENTRY_T, SCH_BUS_ENTRY_BASE);
     HANDLE_ITEM(SCH_BITMAP_T, SCH_BITMAP);
     HANDLE_ITEM(SCH_MARKER_T, SCH_MARKER);
+    HANDLE_ITEM(SCH_IREF_T, SCH_TEXT);
 
     default: return false;
 	}
@@ -1194,6 +1196,7 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
     case SCH_SHEET_PIN_T:     aLayer = LAYER_SHEETLABEL; break;
     case SCH_HIER_LABEL_T:    aLayer = LAYER_HIERLABEL;  break;
     case SCH_GLOBAL_LABEL_T:  aLayer = LAYER_GLOBLABEL;  break;
+    case SCH_IREF_T:          aLayer = LAYER_GLOBLABEL;  break;
     case SCH_LABEL_T:         aLayer = LAYER_LOCLABEL;   break;
     default:                  aLayer = LAYER_NOTES;      break;
     }
@@ -1264,6 +1267,20 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 
     if( aText->IsDangling() )
         drawDanglingSymbol( aText->GetTextPos(), drawingShadows );
+
+    // Draw the umbilical line
+    if( aText->IsMoving() && ( aText->Type() == SCH_IREF_T ) )
+    {
+        EDA_RECT boundaryBox = aText->GetBoundingBox();
+        wxPoint  textpos = boundaryBox.Centre();
+
+        SCH_IREF* iref = static_cast<SCH_IREF*>( aText );
+
+        m_gal->SetLineWidth( m_schSettings.m_outlineWidth );
+        m_gal->SetStrokeColor( COLOR4D( 0.0, 0.0, 1.0, 1.0 ) );
+        m_gal->DrawLine( textpos, iref->GetParent()->GetPosition() );
+    }
+
 }
 
 

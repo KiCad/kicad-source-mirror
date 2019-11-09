@@ -140,6 +140,8 @@ public:
     static LIB_PART* ParsePart( LINE_READER& aReader, int majorVersion = 0, int minorVersion = 0 );
     static void FormatPart( LIB_PART* aPart, OUTPUTFORMATTER& aFormatter );
 
+    bool SchHasIref() { return m_schHasIref; }
+
 private:
     void loadHierarchy( SCH_SHEET* aSheet );
     void loadHeader( LINE_READER& aReader, SCH_SCREEN* aScreen );
@@ -183,6 +185,7 @@ protected:
     SCH_SHEET*           m_rootSheet;  ///< The root sheet of the schematic being loaded..
     OUTPUTFORMATTER*     m_out;        ///< The output formatter for saving SCH_SCREEN objects.
     SCH_LEGACY_PLUGIN_CACHE* m_cache;
+    bool                 m_schHasIref;
 
     /// initialize PLUGIN like a constructor would.
     void init( KIWAY* aKiway, const PROPERTIES* aProperties = nullptr );

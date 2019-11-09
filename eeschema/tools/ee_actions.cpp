@@ -587,6 +587,11 @@ TOOL_ACTION EE_ACTIONS::navigateHierarchy( "eeschema.EditorControl.navigateHiera
         _( "Show Hierarchy Navigator" ), "",
         hierarchy_nav_xpm );
 
+TOOL_ACTION EE_ACTIONS::intersheetRefs( "eeschema.EditorControl.intersheetRefs",
+        AS_GLOBAL, 0, "",
+        _( "Add/Update intersheets references" ), "",
+        intersheets_refs_xpm );
+
 TOOL_ACTION EE_ACTIONS::explicitCrossProbe( "eeschema.EditorControl.explicitCrossProbe",
         AS_GLOBAL, 0, "",
         _( "Highlight on PCB" ), _( "Highlight corresponding items in PCBNew" ),

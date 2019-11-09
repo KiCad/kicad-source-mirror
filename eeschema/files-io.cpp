@@ -51,6 +51,7 @@
 #include <ws_data_model.h>
 #include <connection_graph.h>
 #include <tool/actions.h>
+#include <ee_actions.h>
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
                                  bool aCreateBackupFile )
@@ -407,6 +408,12 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
 
         GetScreen()->m_Initialized = true;
+
+        if( pi->GetName().IsSameAs( "Eeschema-Legacy" ) )
+        {
+            if( static_cast<SCH_LEGACY_PLUGIN*>( (SCH_PLUGIN*) pi )->SchHasIref() )
+                m_toolManager->RunAction( EE_ACTIONS::intersheetRefs, true );
+        }
     }
 
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );

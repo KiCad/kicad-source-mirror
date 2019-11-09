@@ -38,6 +38,7 @@
 #include <sch_bitmap.h>
 #include <sch_view.h>
 #include <sch_line.h>
+#include <sch_iref.h>
 #include <sch_bus_entry.h>
 #include <sch_edit_frame.h>
 #include <eeschema_id.h>
@@ -50,7 +51,6 @@
 #include <dialogs/dialog_edit_sheet_pin.h>
 #include <dialogs/dialog_edit_one_field.h>
 #include "sch_drawing_tools.h"
-
 
 char g_lastBusEntryShape = '/';
 
@@ -380,11 +380,22 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
             case SCH_TEXT_T:
             case SCH_LABEL_T:
-            case SCH_GLOBAL_LABEL_T:
             case SCH_HIER_LABEL_T:
             {
                 SCH_TEXT* textItem = static_cast<SCH_TEXT*>( item );
                 textItem->SetLabelSpinStyle( ( textItem->GetLabelSpinStyle() + 1 ) & 3 );
+                break;
+            }
+
+            case SCH_GLOBAL_LABEL_T:
+            {
+                SCH_TEXT* textItem = static_cast<SCH_TEXT*>( item );
+                textItem->SetLabelSpinStyle( ( textItem->GetLabelSpinStyle() + 1 ) & 3 );
+
+                SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( item );
+                SCH_IREF*        iref = label->GetIref();
+                if( iref )
+                    iref->CopyParentStyle();
                 break;
             }
 
@@ -550,9 +561,29 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             break;
         }
 
+        case SCH_GLOBAL_LABEL_T:
+        {
+            SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( item );
+            SCH_IREF*        iref = label->GetIref();
+            int              spin = label->GetLabelSpinStyle();
+
+            if( xAxis && spin % 2 )
+            {
+                label->SetLabelSpinStyle( ( spin + 2 ) % 4 );
+                if( iref )
+                    iref->CopyParentStyle();
+            }
+            else if( !xAxis && !( spin % 2 ) )
+            {
+                label->SetLabelSpinStyle( ( spin + 2 ) % 4 );
+                if( iref )
+                    iref->CopyParentStyle();
+            }
+            break;
+        }
+
         case SCH_TEXT_T:
         case SCH_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
         {
             SCH_TEXT* textItem = static_cast<SCH_TEXT*>( item );
@@ -742,13 +773,21 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
         switch( newItem->Type() )
         {
+        case SCH_GLOBAL_LABEL_T:
+        {
+            SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( newItem );
+            label->SetIref( nullptr );
+            newItem->SetParent( m_frame->GetScreen() );
+            m_frame->AddToScreen( newItem );
+            break;
+        }
+
         case SCH_JUNCTION_T:
         case SCH_LINE_T:
         case SCH_BUS_BUS_ENTRY_T:
         case SCH_BUS_WIRE_ENTRY_T:
         case SCH_TEXT_T:
         case SCH_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
         case SCH_NO_CONNECT_T:
             newItem->SetParent( m_frame->GetScreen() );
@@ -929,6 +968,15 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
                 SCH_SHEET*     sheet = pin->GetParent();
 
                 sheet->RemovePin( pin );
+            }
+            else if( sch_item->Type() == SCH_GLOBAL_LABEL_T )
+            {
+                SCH_GLOBALLABEL* label = (SCH_GLOBALLABEL*) sch_item;
+                SCH_IREF*        iref = label->GetIref();
+
+                m_frame->RemoveFromScreen( sch_item );
+                if( iref )
+                    m_frame->RemoveFromScreen( iref );
             }
             else
                 m_frame->RemoveFromScreen( sch_item );

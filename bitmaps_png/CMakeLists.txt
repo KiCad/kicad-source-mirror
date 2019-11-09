@@ -255,6 +255,7 @@ set( BMAPS_MID
     help
     hidden_pin
     hierarchy_nav
+    intersheets_refs
     highlight_remove
     hotkeys
     html

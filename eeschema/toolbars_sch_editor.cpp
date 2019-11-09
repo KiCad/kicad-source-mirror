@@ -83,6 +83,9 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( EE_ACTIONS::leaveSheet );
 
     m_mainToolBar->AddSeparator();
+    m_mainToolBar->Add( EE_ACTIONS::intersheetRefs );
+
+    m_mainToolBar->AddSeparator();
     m_mainToolBar->Add( ACTIONS::showSymbolEditor );
     m_mainToolBar->Add( ACTIONS::showSymbolBrowser );
     m_mainToolBar->Add( ACTIONS::showFootprintEditor );

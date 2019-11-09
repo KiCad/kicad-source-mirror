@@ -65,7 +65,7 @@
 #include <symbol_lib_table.h>  // for PropPowerSymsOnly definintion.
 #include <confirm.h>
 #include <tool/selection.h>
-
+#include <sch_iref.h>
 
 // Must be the first line of part library document (.dcm) files.
 #define DOCFILE_IDENT     "EESchema-DOCLIB  Version 2.0"
@@ -577,6 +577,7 @@ void SCH_LEGACY_PLUGIN::init( KIWAY* aKiway, const PROPERTIES* aProperties )
     m_kiway = aKiway;
     m_cache = NULL;
     m_out = NULL;
+    m_schHasIref = false;
 }
 
 
@@ -1430,6 +1431,19 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
         // so calling parseInt will be made only if the EOL is not reached.
         if( *line >= ' ' )
             thickness = parseInt( aReader, line, &line );
+
+        if( text->Type() == SCH_GLOBAL_LABEL_T )
+        {
+            SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( text.get() );
+            wxPoint          iref_position;
+            if( *line >= ' ' )
+            {
+                iref_position.x = parseInt( aReader, line, &line );
+                iref_position.y = parseInt( aReader, line, &line );
+                label->SetIrefSavedPosition( iref_position );
+                m_schHasIref = true;
+            }
+        }
     }
 
     text->SetBold( thickness != 0 );
@@ -2285,17 +2299,33 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
                       aText->GetTextWidth(),
                       italics, aText->GetThickness(), TO_UTF8( text ) );
     }
-    else if( layer == LAYER_GLOBLABEL || layer == LAYER_HIERLABEL )
+    else if( layer == LAYER_HIERLABEL )
     {
-        textType = ( layer == LAYER_GLOBLABEL ) ? "GLabel" : "HLabel";
-
-        m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %s %d\n%s\n", textType,
+        m_out->Print( 0, "Text HLabel %-4d %-4d %-4d %-4d %s %s %d\n%s\n",
                       aText->GetPosition().x, aText->GetPosition().y,
                       aText->GetLabelSpinStyle(),
                       aText->GetTextWidth(),
                       SheetLabelType[aText->GetShape()],
                       italics,
                       aText->GetThickness(), TO_UTF8( text ) );
+    }
+    else if( layer == LAYER_GLOBLABEL )
+    {
+        m_out->Print( 0, "Text GLabel %-4d %-4d %-4d %-4d %s %s %d",
+                      aText->GetPosition().x, aText->GetPosition().y,
+                      aText->GetLabelSpinStyle(),
+                      aText->GetTextWidth(),
+                      SheetLabelType[aText->GetShape()],
+                      italics,
+                      aText->GetThickness());
+
+        SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( aText );
+        SCH_IREF*        iref = label->GetIref();
+
+        if( iref )
+            m_out->Print( 0, " %d %d", iref->GetPosition().x, iref->GetPosition().y );
+
+        m_out->Print( 0, "\n%s\n", TO_UTF8( text ) );
     }
 }
 
