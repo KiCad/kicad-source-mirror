@@ -32,6 +32,7 @@
 #include <gl_context_mgr.h>
 #include <geometry/shape_poly_set.h>
 #include <bitmap_base.h>
+#include <bezier_curves.h>
 
 #include <macros.h>
 
@@ -1035,32 +1036,18 @@ void OPENGL_GAL::DrawPolygon( const SHAPE_LINE_CHAIN& aPolygon )
 void OPENGL_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aControlPointA,
                             const VECTOR2D& aControlPointB, const VECTOR2D& aEndPoint )
 {
-    // FIXME The drawing quality needs to be improved
-    // FIXME Perhaps choose a quad/triangle strip instead?
-    // FIXME Brute force method, use a better (recursive?) algorithm
+    std::vector<VECTOR2D> output;
+    std::vector<VECTOR2D> pointCtrl;
 
-    std::deque<VECTOR2D> pointList;
+    pointCtrl.push_back( aStartPoint );
+    pointCtrl.push_back( aControlPointA );
+    pointCtrl.push_back( aControlPointB );
+    pointCtrl.push_back( aEndPoint );
 
-    double t  = 0.0;
-    double dt = 1.0 / (double) CURVE_POINTS;
+    BEZIER_POLY converter( pointCtrl );
+    converter.GetPoly( output, GetLineWidth() );
 
-    for( int i = 0; i <= CURVE_POINTS; i++ )
-    {
-        double omt  = 1.0 - t;
-        double omt2 = omt * omt;
-        double omt3 = omt * omt2;
-        double t2   = t * t;
-        double t3   = t * t2;
-
-        VECTOR2D vertex = omt3 * aStartPoint + 3.0 * t * omt2 * aControlPointA
-                          + 3.0 * t2 * omt * aControlPointB + t3 * aEndPoint;
-
-        pointList.push_back( vertex );
-
-        t += dt;
-    }
-
-    DrawPolyline( pointList );
+    DrawPolyline( &output[0], output.size() );
 }
 
 

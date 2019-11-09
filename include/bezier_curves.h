@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +26,7 @@
 
 #include <vector>
 #include <wx/gdicmn.h>
+#include <math/vector2d.h>
 
 /**
  * Bezier curves to polygon converter.
@@ -35,32 +35,12 @@
 class BEZIER_POLY
 {
 public:
-    /** cubic Bezier curve */
-    BEZIER_POLY( int x1, int y1, int x2, int y2, int x3, int y3 )
-    {
-        m_ctrlPts.emplace_back( x1, y1 );
-        m_ctrlPts.emplace_back( x2, y2 );
-        m_ctrlPts.emplace_back( x3, y3 );
-        m_output = nullptr;
-        m_minSegLen = 0;
-    }
+    BEZIER_POLY( const std::vector<wxPoint>& aControlPoints );
 
-    /** Quadratic and cubic Bezier curve */
-    BEZIER_POLY( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4 )
-    {
-        m_ctrlPts.emplace_back( x1, y1 );
-        m_ctrlPts.emplace_back( x2, y2 );
-        m_ctrlPts.emplace_back( x3, y3 );
-        m_ctrlPts.emplace_back( x4, y4 );
-        m_output = nullptr;
-        m_minSegLen = 0;
-    }
-
-    BEZIER_POLY( const std::vector<wxPoint>& aControlPoints )
+    BEZIER_POLY( const std::vector<VECTOR2D>& aControlPoints )
         : m_ctrlPts( aControlPoints )
     {
-        m_output = nullptr;
-        m_minSegLen = 0;
+        m_minSegLen = 0.0;
     }
 
     /**
@@ -71,40 +51,13 @@ public:
      * (the last point is always generated)
      */
     void GetPoly( std::vector<wxPoint>& aOutput, int aMinSegLen = 0 );
+    void GetPoly( std::vector<VECTOR2D>& aOutput, double aMinSegLen = 0.0 );
 
 private:
-    int m_minSegLen;
+    double m_minSegLen;
 
     ///> Control points
-    std::vector<wxPoint> m_ctrlPts;
-
-    ///> Pointer to the output vector
-    std::vector<wxPoint>* m_output;
-
-    void addSegment( const wxPoint& aSegment )
-    {
-        int seglen = std::abs( m_output->back().x - aSegment.x )
-                     + std::abs( m_output->back().y - aSegment.y );
-
-        // m_minSegLen is always > 0, so never store a 0 len segment
-        if( seglen >= m_minSegLen )
-            m_output->push_back( aSegment );
-    }
-
-    void recursiveBezier( int x1, int y1, int x2, int y2, int x3, int y3, unsigned int level );
-    void recursiveBezier( int x1, int y1, int x2, int y2,
-            int x3, int y3, int x4, int y4, unsigned int level );
-
-
-    // Conversion parameters
-    constexpr static double angle_tolerance     = 0.0;
-    constexpr static double cusp_limit          = 0.0;
-    constexpr static unsigned int recursion_limit     = 12;
-    constexpr static double approximation_scale = 0.5;  // 1
-    constexpr static double distance_tolerance_square = ( 0.5 / approximation_scale ) * ( 0.5 / approximation_scale );
-
-    constexpr static double curve_collinearity_epsilon    = 1e-30;
-    constexpr static double curve_angle_tolerance_epsilon = 0.0001;
+    std::vector<VECTOR2D> m_ctrlPts;
 };
 
 #endif  // BEZIER_CURVES_H
