@@ -87,9 +87,87 @@ public:
         int           backSideQty;
     };
 
+    struct drillType_t
+    {
+        enum COL_ID
+        {
+            COL_COUNT,
+            COL_SHAPE,
+            COL_X_SIZE,
+            COL_Y_SIZE,
+            COL_PLATED,
+            COL_VIA_PAD,
+            COL_START_LAYER,
+            COL_STOP_LAYER
+        };
+        drillType_t( int aXSize, int aYSize, PAD_DRILL_SHAPE_T aShape, bool aIsPlated, bool aIsPad,
+                PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aStopLayer, int aQty = 0 )
+                : xSize( aXSize ),
+                  ySize( aYSize ),
+                  shape( aShape ),
+                  isPlated( aIsPlated ),
+                  isPad( aIsPad ),
+                  startLayer( aStartLayer ),
+                  stopLayer( aStopLayer ),
+                  qty( aQty )
+        {
+        }
+        bool operator==( const drillType_t& other )
+        {
+            return xSize == other.xSize && ySize == other.ySize && shape == other.shape
+                   && isPlated == other.isPlated && isPad == other.isPad
+                   && startLayer == other.startLayer && stopLayer == other.stopLayer;
+        }
+        struct COMPARE
+        {
+            COMPARE( COL_ID aColId, bool aAscending ) : colId( aColId ), ascending( aAscending )
+            {
+            }
+            bool operator()( const drillType_t& aLeft, const drillType_t& aRight )
+            {
+                switch( colId )
+                {
+                case COL_COUNT:
+                    return compareDrillParameters( aLeft.qty, aRight.qty );
+                case COL_SHAPE:
+                    return compareDrillParameters( aLeft.shape, aRight.shape );
+                case COL_X_SIZE:
+                    return compareDrillParameters( aLeft.xSize, aRight.xSize );
+                case COL_Y_SIZE:
+                    return compareDrillParameters( aLeft.ySize, aRight.ySize );
+                case COL_PLATED:
+                    return ascending ? aLeft.isPlated : aRight.isPlated;
+                case COL_VIA_PAD:
+                    return ascending ? aLeft.isPad : aRight.isPad;
+                case COL_START_LAYER:
+                    return compareDrillParameters( aLeft.startLayer, aRight.startLayer );
+                case COL_STOP_LAYER:
+                    return compareDrillParameters( aLeft.stopLayer, aRight.stopLayer );
+                }
+
+                return false;
+            }
+            bool compareDrillParameters( int aLeft, int aRight )
+            {
+                return ascending ? aLeft < aRight : aLeft > aRight;
+            }
+            COL_ID colId;
+            bool   ascending;
+        };
+        int               xSize;
+        int               ySize;
+        PAD_DRILL_SHAPE_T shape;
+        bool              isPlated;
+        bool              isPad;
+        PCB_LAYER_ID      startLayer;
+        PCB_LAYER_ID      stopLayer;
+        int               qty;
+    };
+
     using componentsTypeList_t = std::deque<componentsType_t>;
     using padsTypeList_t = std::deque<padsType_t>;
     using viasTypeList_t = std::deque<viasType_t>;
+    using drillTypeList_t = std::deque<drillType_t>;
 
     DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame );
     ~DIALOG_BOARD_STATISTICS();
@@ -97,17 +175,9 @@ public:
     ///> Get data from the PCB board and print it to dialog
     bool TransferDataToWindow() override;
 
-    ///> Function to fill up all items types to be shown in the dialog.
-    void refreshItemsTypes();
-
-    ///> Gets data from board
-    void getDataFromPCB();
-
-    ///> Applies data to dialog widgets
-    void updateWidets();
-
 private:
     PCB_EDIT_FRAME* m_parentFrame;
+
     int             m_boardWidth;
     int             m_boardHeight;
     double          m_boardArea;
@@ -124,9 +194,35 @@ private:
     ///> Holds all vias types to be shown in the dialog
     viasTypeList_t m_viasTypes;
 
+    ///> Holds all drill hole types to be shown in the dialog
+    drillTypeList_t m_drillTypes;
+
+    ///> Function to fill up all items types to be shown in the dialog.
+    void refreshItemsTypes();
+
+    ///> Gets data from board
+    void getDataFromPCB();
+
+    ///> Applies data to dialog widgets
+    void updateWidets();
+
+    ///> Updates drills grid
+    void updateDrillGrid();
+
+    ///> Prints grid to string in tabular format
+    void printGridToStringAsTable( wxGrid* aGrid, wxString& aStr, bool aUseRowLabels,
+            bool aUseColLabels, bool aUseFirstColAsLabel );
+
+    void adjustDrillGridColumns();
+
+    void checkboxClicked( wxCommandEvent& aEvent ) override;
+
     ///> Save board statistics to a file
-    void saveReportClicked( wxCommandEvent& event ) override;
-    void checkboxClicked( wxCommandEvent& event ) override;
+    void saveReportClicked( wxCommandEvent& aEvent ) override;
+
+    void drillGridSize( wxSizeEvent& aEvent ) override;
+
+    void drillGridSort( wxGridEvent& aEvent );
 };
 
 #endif // __DIALOG_BOARD_STATISTICS_H

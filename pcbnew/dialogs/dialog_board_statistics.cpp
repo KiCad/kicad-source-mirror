@@ -75,6 +75,9 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
 {
     m_parentFrame = aParentFrame;
 
+    m_gridDrills->UseNativeColHeader();
+    m_gridDrills->Connect( wxEVT_GRID_COL_SORT, wxGridEventHandler( drillGridSort ), NULL, this );
+
     m_checkBoxExcludeComponentsNoPins->SetValue( s_savedDialogState.excludeNoPins );
     m_checkBoxSubtractHoles->SetValue( s_savedDialogState.subtractHoles );
 
@@ -94,7 +97,6 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
     m_gridBoard->SetCellAlignment( 1, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
     m_gridBoard->SetCellValue( 2, 0, _( "Area:" ) );
     m_gridBoard->SetCellAlignment( 2, 0, wxALIGN_LEFT, wxALIGN_CENTRE );
-
 
     wxGrid* grids[] = { m_gridComponents, m_gridPads, m_gridVias, m_gridBoard };
     for( auto& grid : grids )
@@ -168,6 +170,7 @@ bool DIALOG_BOARD_STATISTICS::TransferDataToWindow()
     getDataFromPCB();
     updateWidets();
     Layout();
+    drillsPanel->Layout();
     FinishDialogSettings();
     return true;
 }
@@ -209,10 +212,48 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
                     break;
                 }
             }
+
+            if( pad->GetDrillSize().x > 0 && pad->GetDrillSize().y > 0 )
+            {
+                PCB_LAYER_ID top, bottom;
+
+                if( pad->GetLayerSet().CuStack().empty() )
+                {
+                    // The pad is not on any copper layer
+                    top = UNDEFINED_LAYER;
+                    bottom = UNDEFINED_LAYER;
+                }
+                else
+                {
+                    top = pad->GetLayerSet().CuStack().front();
+                    bottom = pad->GetLayerSet().CuStack().back();
+                }
+
+                drillType_t drill( pad->GetDrillSize().x, pad->GetDrillSize().y,
+                        pad->GetDrillShape(), pad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED,
+                        true, top, bottom );
+
+                auto it = m_drillTypes.begin();
+                for( ; it != m_drillTypes.end(); it++ )
+                {
+                    if( *it == drill )
+                    {
+                        it->qty++;
+                        break;
+                    }
+                }
+
+                if( it == m_drillTypes.end() )
+                {
+                    drill.qty = 1;
+                    m_drillTypes.push_back( drill );
+                    m_gridDrills->InsertRows();
+                }
+            }
         }
     }
 
-    // Get vias count
+    // Get via counts
     for( auto& track : board->Tracks() )
     {
         if( auto via = dyn_cast<VIA*>( track ) )
@@ -225,8 +266,31 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
                     break;
                 }
             }
+
+            drillType_t drill( via->GetDrillValue(), via->GetDrillValue(), PAD_DRILL_SHAPE_CIRCLE,
+                    true, false, via->TopLayer(), via->BottomLayer() );
+
+            auto it = m_drillTypes.begin();
+            for( ; it != m_drillTypes.end(); it++ )
+            {
+                if( *it == drill )
+                {
+                    it->qty++;
+                    break;
+                }
+            }
+
+            if( it == m_drillTypes.end() )
+            {
+                drill.qty = 1;
+                m_drillTypes.push_back( drill );
+                m_gridDrills->InsertRows();
+            }
         }
     }
+
+    sort( m_drillTypes.begin(), m_drillTypes.end(),
+            drillType_t::COMPARE( drillType_t::COL_COUNT, false ) );
 
     bool           boundingBoxCreated = false; //flag if bounding box initialized
     BOX2I          bbox;
@@ -337,6 +401,7 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
         totalBack += type.backSideQty;
         currentRow++;
     }
+
     m_gridComponents->SetCellValue( currentRow, COL_LABEL, _( "Total:" ) );
     m_gridComponents->SetCellValue( currentRow, COL_FRONT_SIDE,
                                     wxString::Format( "%i ", totalFront ) );
@@ -363,14 +428,188 @@ void DIALOG_BOARD_STATISTICS::updateWidets()
         m_gridBoard->SetCellValue( ROW_BOARD_AREA, COL_AMOUNT, _( "unknown" ) );
     }
 
+    updateDrillGrid();
+
     m_gridComponents->AutoSize();
     m_gridPads->AutoSize();
     m_gridBoard->AutoSize();
     m_gridVias->AutoSize();
+    m_gridDrills->AutoSize();
+
+    adjustDrillGridColumns();
+}
+
+void DIALOG_BOARD_STATISTICS::updateDrillGrid()
+{
+    BOARD* board = m_parentFrame->GetBoard();
+    int    currentRow = 0;
+
+    for( auto& type : m_drillTypes )
+    {
+        wxString shapeStr;
+        wxString startLayerStr;
+        wxString stopLayerStr;
+
+        switch( type.shape )
+        {
+        case PAD_DRILL_SHAPE_CIRCLE:
+            shapeStr = _( "Round" );
+            break;
+        case PAD_DRILL_SHAPE_OBLONG:
+            shapeStr = _( "Slot" );
+            break;
+        default:
+            shapeStr = _( "???" );
+            break;
+        }
+
+        if( type.startLayer == UNDEFINED_LAYER )
+            startLayerStr = _( "N/A" );
+        else
+            startLayerStr = board->GetLayerName( type.startLayer );
+
+        if( type.stopLayer == UNDEFINED_LAYER )
+            stopLayerStr = _( "N/A" );
+        else
+            stopLayerStr = board->GetLayerName( type.stopLayer );
+
+        m_gridDrills->SetCellValue(
+                currentRow, drillType_t::COL_COUNT, wxString::Format( "%i", type.qty ) );
+        m_gridDrills->SetCellValue( currentRow, drillType_t::COL_SHAPE, shapeStr );
+        m_gridDrills->SetCellValue( currentRow, drillType_t::COL_X_SIZE,
+                MessageTextFromValue( GetUserUnits(), type.xSize ) );
+        m_gridDrills->SetCellValue( currentRow, drillType_t::COL_Y_SIZE,
+                MessageTextFromValue( GetUserUnits(), type.ySize ) );
+        m_gridDrills->SetCellValue(
+                currentRow, drillType_t::COL_PLATED, type.isPlated ? _( "PTH" ) : _( "NPTH" ) );
+        m_gridDrills->SetCellValue(
+                currentRow, drillType_t::COL_VIA_PAD, type.isPad ? _( "Pad" ) : _( "Via" ) );
+        m_gridDrills->SetCellValue( currentRow, drillType_t::COL_START_LAYER, startLayerStr );
+        m_gridDrills->SetCellValue( currentRow, drillType_t::COL_STOP_LAYER, stopLayerStr );
+
+        currentRow++;
+    }
+}
+
+void DIALOG_BOARD_STATISTICS::printGridToStringAsTable( wxGrid* aGrid, wxString& aStr,
+        bool aUseRowLabels, bool aUseColLabels, bool aUseFirstColAsLabel )
+{
+    std::vector<int> widths( aGrid->GetNumberCols(), 0 );
+    int              rowLabelsWidth = 0;
+
+    // Determine column widths.
+
+    if( aUseColLabels )
+    {
+        for( int col = 0; col < aGrid->GetNumberCols(); col++ )
+            widths[col] = aGrid->GetColLabelValue( col ).length();
+    }
+
+    for( int row = 0; row < aGrid->GetNumberRows(); row++ )
+    {
+        rowLabelsWidth = std::max<int>( rowLabelsWidth, aGrid->GetRowLabelValue( row ).length() );
+
+        for( int col = 0; col < aGrid->GetNumberCols(); col++ )
+            widths[col] = std::max<int>( widths[col], aGrid->GetCellValue( row, col ).length() );
+    }
+
+    // Print the cells.
+
+    wxString tmp;
+
+    // Print column labels.
+
+    aStr << "|";
+
+    if( aUseRowLabels )
+    {
+        aStr.Append( ' ', rowLabelsWidth );
+        aStr << " |";
+    }
+
+    for( int col = 0; col < aGrid->GetNumberCols(); col++ )
+    {
+        if( aUseColLabels )
+            tmp.Printf( " %*s |", widths[col], aGrid->GetColLabelValue( col ) );
+        else
+            tmp.Printf( " %*s |", widths[col], aGrid->GetCellValue( 0, col ) );
+        aStr << tmp;
+    }
+
+    aStr << "\n";
+
+    // Print column label horizontal separators.
+
+    aStr << "|";
+
+    if( aUseRowLabels )
+    {
+        aStr.Append( '-', rowLabelsWidth );
+        aStr << "-|";
+    }
+
+    for( int col = 0; col < aGrid->GetNumberCols(); col++ )
+    {
+        aStr << "-";
+        aStr.Append( '-', widths[col] );
+        aStr << "-|";
+    }
+
+    aStr << "\n";
+
+    // Print regular cells.
+
+    int firstRow = 0, firstCol = 0;
+
+    if( !aUseColLabels )
+        firstRow = 1;
+
+    if( !aUseRowLabels && aUseFirstColAsLabel )
+        firstCol = 1;
+
+    for( int row = firstRow; row < aGrid->GetNumberRows(); row++ )
+    {
+        if( aUseRowLabels )
+            tmp.Printf( "|%-*s |", rowLabelsWidth, aGrid->GetRowLabelValue( row ) );
+        else if( aUseFirstColAsLabel )
+            tmp.Printf( "|%-*s  |", widths[0], aGrid->GetCellValue( row, 0 ) );
+        else
+            tmp.Printf( "|" );
+        aStr << tmp;
+
+        for( int col = firstCol; col < aGrid->GetNumberCols(); col++ )
+        {
+            tmp.Printf( " %*s |", widths[col], aGrid->GetCellValue( row, col ) );
+            aStr << tmp;
+        }
+        aStr << "\n";
+    }
+}
+
+void DIALOG_BOARD_STATISTICS::adjustDrillGridColumns()
+{
+    int newTotalWidth = m_gridDrills->GetClientSize().GetWidth();
+    int curTotalWidth = 0;
+
+    // Find the total current width
+    for( int i = 0; i < m_gridDrills->GetNumberCols(); i++ )
+    {
+        if( i != drillType_t::COL_START_LAYER && i != drillType_t::COL_STOP_LAYER )
+            curTotalWidth += m_gridDrills->GetColSize( i );
+    }
+
+    // Resize the last two columns to fill all available space
+
+    int remainingWidth = newTotalWidth - curTotalWidth;
+
+    m_gridDrills->SetColSize( drillType_t::COL_START_LAYER, remainingWidth / 2 );
+    m_gridDrills->SetColSize( drillType_t::COL_STOP_LAYER, remainingWidth - remainingWidth / 2 );
+
+    m_gridDrills->Refresh();
 }
 
 // If any checkbox clicked, we have to refresh dialog data
-void DIALOG_BOARD_STATISTICS::checkboxClicked( wxCommandEvent& event )
+void DIALOG_BOARD_STATISTICS::checkboxClicked( wxCommandEvent& aEvent )
 {
     s_savedDialogState.excludeNoPins = m_checkBoxExcludeComponentsNoPins->GetValue();
     s_savedDialogState.subtractHoles = m_checkBoxSubtractHoles->GetValue();
@@ -378,10 +617,10 @@ void DIALOG_BOARD_STATISTICS::checkboxClicked( wxCommandEvent& event )
     getDataFromPCB();
     updateWidets();
     Layout();
-    Fit();
+    drillsPanel->Layout();
 }
 
-void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& event )
+void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
 {
     FILE*    outFile;
     wxString msg;
@@ -411,93 +650,87 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& event )
     }
 
     msg << _( "PCB statistics report" ) << "\n";
-    msg << _( "Date: " ) << wxDateTime::Now().Format() << "\n";
-    msg << _( "Project: " ) << Prj().GetProjectName() << "\n";
-    msg << _( "Board name: " ) << boardName << "\n";
+    msg << _( "=====================" ) << "\n";
+    msg << _( "- Date: " ) << wxDateTime::Now().Format() << "\n";
+    msg << _( "- Project: " ) << Prj().GetProjectName() << "\n";
+    msg << _( "- Board name: " ) << boardName << "\n";
 
     msg << "\n";
-    msg << "Board\n";
+    msg << _( "Board" ) << "\n";
+    msg << _( "-----" ) << "\n";
 
     if( m_hasOutline )
     {
-        msg << _( "Width: " ) << MessageTextFromValue( GetUserUnits(), m_boardWidth ) << "\n";
-        msg << _( "Height: " ) << MessageTextFromValue( GetUserUnits(), m_boardHeight ) << "\n";
-        msg << _( "Area: " ) << wxString::Format( wxT( "%.3f %s²" ), m_boardArea,
-                                                  GetAbbreviatedUnitsLabel( GetUserUnits() ) ) << "\n";
+        msg << _( "- Width: " ) << MessageTextFromValue( GetUserUnits(), m_boardWidth ) << "\n";
+        msg << _( "- Height: " ) << MessageTextFromValue( GetUserUnits(), m_boardHeight ) << "\n";
+        msg << _( "- Area: " )
+            << wxString::Format(
+                       wxT( "%.3f %s²" ), m_boardArea, GetAbbreviatedUnitsLabel( GetUserUnits() ) )
+            << "\n";
     }
     else
     {
-        msg << _( "Width: " ) << _( "unknown" ) << "\n";
-        msg << _( "Height: " ) << _( "unknown" ) << "\n";
-        msg << _( "Area: " ) << _( "unknown" ) << "\n";
+        msg << _( "- Width: " ) << _( "unknown" ) << "\n";
+        msg << _( "- Height: " ) << _( "unknown" ) << "\n";
+        msg << _( "- Area: " ) << _( "unknown" ) << "\n";
     }
 
     msg << "\n";
-    msg << "Pads\n";
+    msg << _( "Pads" ) << "\n";
+    msg << _( "----" ) << "\n";
 
     for( auto& type : m_padsTypes )
-        msg << type.title << " " << type.qty << "\n";
+        msg << "- " << type.title << " " << type.qty << "\n";
 
     msg << "\n";
-    msg << "Vias\n";
+    msg << _( "Vias" ) << "\n";
+    msg << _( "----" ) << "\n";
 
     for( auto& type : m_viasTypes )
-        msg << type.title << " " << type.qty << "\n";
+        msg << "- " << type.title << " " << type.qty << "\n";
 
     // We will save data about components in the table.
     // We have to calculate column widths
-    int      colsWidth[4];
-    wxString columns[4] = { "", _( "Front Side" ), _( "Back Side" ), _( "Total" ) };
+    std::vector<int>      widths;
+    std::vector<wxString> labels{ _( "" ), _( "Front Side" ), _( "Back Side" ), _( "Total" ) };
     wxString tmp;
 
-    for( int i = 0; i < 4; i++ )
-        colsWidth[i] = columns[i].size();
+    for( auto label : labels )
+        widths.push_back( label.size() );
 
     int frontTotal = 0;
     int backTotal = 0;
 
-    for( auto& type : m_componentsTypes )
+    for( auto type : m_componentsTypes )
     {
         // Get maximum width for left label column
-        colsWidth[0] = std::max<int>( type.title.size(), colsWidth[0] );
+        widths[0] = std::max<int>( type.title.size(), widths[0] );
         frontTotal += type.frontSideQty;
         backTotal += type.backSideQty;
     }
 
     // Get maximum width for other columns
-    tmp.Printf( "%d", frontTotal );
-    colsWidth[1] = std::max<int>( tmp.size(), colsWidth[1] );
-    tmp.Printf( "%d", backTotal );
-    colsWidth[2] = std::max<int>( tmp.size(), colsWidth[2] );
-    tmp.Printf( "%d", frontTotal + backTotal );
-    colsWidth[3] = std::max<int>( tmp.size(), colsWidth[3] );
+    tmp.Printf( "%i", frontTotal );
+    widths[1] = std::max<int>( tmp.size(), widths[1] );
+    tmp.Printf( "%i", backTotal );
+    widths[2] = std::max<int>( tmp.size(), widths[2] );
+    tmp.Printf( "%i", frontTotal + backTotal );
+    widths[3] = std::max<int>( tmp.size(), widths[3] );
 
     //Write components amount to file
     msg << "\n";
     msg << _( "Components" ) << "\n";
-    tmp.Printf( "%-*s | %*s | %*s | %*s |\n",
-                colsWidth[0], columns[0],
-                colsWidth[1], columns[1],
-                colsWidth[2], columns[2],
-                colsWidth[3], columns[3] );
-    msg += tmp;
+    msg << _( "----------" ) << "\n";
+    msg << "\n";
 
-    for( auto& type : m_componentsTypes )
-    {
-        tmp.Printf( "%-*s | %*d | %*d | %*d |\n",
-                    colsWidth[0], type.title,
-                    colsWidth[1], type.frontSideQty,
-                    colsWidth[2], type.backSideQty,
-                    colsWidth[3], type.backSideQty + type.frontSideQty );
-        msg += tmp;
-    }
+    printGridToStringAsTable( m_gridComponents, msg, false, false, true );
 
-    tmp.Printf( "%-*s | %*d | %*d | %*d |\n",
-                colsWidth[0], _( "Total:" ),
-                colsWidth[1], frontTotal,
-                colsWidth[2], backTotal,
-                colsWidth[3], frontTotal + backTotal );
-    msg += tmp;
+    msg << "\n";
+    msg << _( "Drill holes" ) << "\n";
+    msg << _( "-----------" ) << "\n";
+    msg << "\n";
+
+    printGridToStringAsTable( m_gridDrills, msg, false, true, false );
 
     if( fprintf( outFile, "%s", TO_UTF8( msg ) ) < 0 )
     {
@@ -506,6 +739,23 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& event )
     }
 
     fclose( outFile );
+}
+
+void DIALOG_BOARD_STATISTICS::drillGridSize( wxSizeEvent& aEvent )
+{
+    aEvent.Skip();
+    adjustDrillGridColumns();
+}
+
+void DIALOG_BOARD_STATISTICS::drillGridSort( wxGridEvent& aEvent )
+{
+    drillType_t::COL_ID colId = static_cast<drillType_t::COL_ID>( aEvent.GetCol() );
+    bool                ascending =
+            !( m_gridDrills->IsSortingBy( colId ) && m_gridDrills->IsSortOrderAscending() );
+
+    sort( m_drillTypes.begin(), m_drillTypes.end(), drillType_t::COMPARE( colId, ascending ) );
+
+    updateDrillGrid();
 }
 
 DIALOG_BOARD_STATISTICS::~DIALOG_BOARD_STATISTICS()
