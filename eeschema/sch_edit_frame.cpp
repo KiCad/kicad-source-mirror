@@ -623,7 +623,7 @@ void SCH_EDIT_FRAME::OnModify()
     GetScreen()->SetSave();
 
     if( ADVANCED_CFG::GetCfg().m_realTimeConnectivity && CONNECTION_GRAPH::m_allowRealTime )
-        RecalculateConnections( false );
+        RecalculateConnections( NO_CLEANUP );
 
     GetCanvas()->Refresh();
 }
@@ -987,7 +987,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
 
         // Update connectivity info for new item
         if( !aItem->IsMoving() )
-            RecalculateConnections();
+            RecalculateConnections( LOCAL_CLEANUP );
     }
     else
     {
@@ -1056,14 +1056,17 @@ void SCH_EDIT_FRAME::UpdateTitle()
 }
 
 
-void SCH_EDIT_FRAME::RecalculateConnections( bool aDoCleanup )
+void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 {
     SCH_SHEET_LIST list( g_RootSheet );
-
-    PROF_COUNTER timer;
+    PROF_COUNTER   timer;
 
     // Ensure schematic graph is accurate
-    if( aDoCleanup )
+    if( aCleanupFlags == LOCAL_CLEANUP )
+    {
+        SchematicCleanUp( GetScreen() );
+    }
+    else if( aCleanupFlags == GLOBAL_CLEANUP )
     {
         for( const auto& sheet : list )
             SchematicCleanUp( sheet.LastScreen() );

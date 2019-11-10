@@ -515,7 +515,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     TestConflictingBusAliases();
 
     // The connection graph has a whole set of ERC checks it can run
-    m_parent->RecalculateConnections();
+    m_parent->RecalculateConnections( NO_CLEANUP );
     g_ConnectionGraph->RunERC( m_settings );
 
     // Test is all units of each multiunit component have the same footprint assigned.

@@ -94,6 +94,13 @@ enum SCH_SEARCH_T {
 };
 
 
+enum SCH_CLEANUP_FLAGS {
+    NO_CLEANUP,
+    LOCAL_CLEANUP,
+    GLOBAL_CLEANUP
+};
+
+
 /**
  * Schematic editor (Eeschema) main window.
  */
@@ -1004,7 +1011,7 @@ public:
     /**
      * Generates the connection data for the entire schematic hierarchy.
      */
-    void RecalculateConnections( bool aDoCleanup = true );
+    void RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags );
 
     /**
      * Allows Eeschema to install its preferences panels into the preferences dialog.

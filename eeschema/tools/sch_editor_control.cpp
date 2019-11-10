@@ -782,7 +782,7 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 {
     // TODO(JE) remove once real-time connectivity is a given
     if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
-        m_frame->RecalculateConnections();
+        m_frame->RecalculateConnections( NO_CLEANUP );
 
     std::string  tool = aEvent.GetCommandStr().get();
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();

@@ -251,18 +251,6 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
 }
 
 
-void SCH_EDIT_FRAME::NormalizeSchematicOnFirstLoad( bool recalculateConnections )
-{
-    SCH_SHEET_LIST list( g_RootSheet );
-
-    for( const auto& sheet : list )
-        SchematicCleanUp( sheet.LastScreen() );
-
-    if( recalculateConnections )
-        RecalculateConnections( false );
-}
-
-
 bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint,
                                    SCH_LINE** aNewSegment, SCH_SCREEN* aScreen )
 {
