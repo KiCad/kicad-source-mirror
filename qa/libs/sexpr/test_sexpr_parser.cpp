@@ -220,7 +220,7 @@ BOOST_AUTO_TEST_CASE( StringRoundtrip )
         },
         {
             "nested list", // REVIEW space after 42?
-            "(42 \n    (1 2))",
+            "(42 \n  (1 2))",
         },
     };
 

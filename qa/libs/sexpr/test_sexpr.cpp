@@ -103,7 +103,7 @@ BOOST_AUTO_TEST_CASE( AsStringList )
     // REVIEW: should there be a space at the end of the "symbol"?
     BOOST_CHECK_PREDICATE( KI_TEST::SexprConvertsToString,
             ( (SEXPR::SEXPR&) s_list )( "(symbol \n"
-                                        "    (2 42.42 \"substring\") 1 3.14 \"string\")" ) );
+                                        "  (2 42.42 \"substring\") 1 3.14 \"string\")" ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
