@@ -35,15 +35,13 @@
 #include <general.h>
 #include <class_libentry.h>
 #include <transform.h>
-#include <wildcards_and_files_ext.h>
 #include <symbol_lib_table.h>
 #include <dialogs/dialog_global_sym_lib_table_config.h>
 #include <dialogs/panel_sym_lib_table.h>
 #include <kiway.h>
 #include <sim/sim_plot_frame.h>
-#include <kiface_ids.h>
-#include <../libs/sexpr/include/sexpr/sexpr.h>
-#include <../libs/sexpr/include/sexpr/sexpr_parser.h>
+#include <sexpr/sexpr.h>
+#include <sexpr/sexpr_parser.h>
 
 // The main sheet of the project
 SCH_SHEET*  g_RootSheet = NULL;
@@ -115,13 +113,10 @@ static struct IFACE : public KIFACE_I
 
     /**
      * Function IfaceOrAddress
-     * return a pointer to the requested object.  The safest way to use this
-     * is to retrieve a pointer to a static instance of an interface, similar to
-     * how the KIFACE interface is exported.  But if you know what you are doing
-     * use it to retrieve anything you want.
-     *
+     * return a pointer to the requested object.  The safest way to use this is to retrieve
+     * a pointer to a static instance of an interface, similar to how the KIFACE interface
+     * is exported.  But if you know what you are doing use it to retrieve anything you want.
      * @param aDataId identifies which object you want the address of.
-     *
      * @return void* - and must be cast into the know type.
      */
     void* IfaceOrAddress( int aDataId ) override
@@ -179,8 +174,7 @@ COLOR4D GetLayerColor( SCH_LAYER_ID aLayer )
 void SetLayerColor( COLOR4D aColor, SCH_LAYER_ID aLayer )
 {
     // Do not allow non-background layers to be completely white.
-    // This ensures the BW printing recognizes that the colors should be
-    // printed black.
+    // This ensures the BW printing recognizes that the colors should be printed black.
     if( aColor == COLOR4D::WHITE && aLayer != LAYER_SCHEMATIC_BACKGROUND )
         aColor.Darken( 0.01 );
 
@@ -246,14 +240,12 @@ static PARAM_CFG_ARRAY& cfg_params()
 
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
-    // This is process level, not project level, initialization of the DSO.
-
+    // This is process-level-initialization, not project-level-initialization of the DSO.
     // Do nothing in here pertinent to a project!
 
     start_common( aCtlBits );
 
-    // Give a default colour for all layers
-    // (actual color will be initialized by config)
+    // Give a default colour for all layers (actual color will be initialized by config)
     for( SCH_LAYER_ID ii = SCH_LAYER_ID_START; ii < SCH_LAYER_ID_END; ++ii )
         SetLayerColor( COLOR4D( DARKGRAY ), ii );
 
@@ -336,14 +328,21 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
         if( destFile.GetName() == aProjectName )
             destFile.SetName( aNewProjectName  );
 
-        // JEY TODO: need to update at least sheet-paths...
+        // Sheet paths when auto-generated are relative to the root, so those will stay
+        // pointing to whatever they were pointing at.
+        // The author can create their own absolute and relative sheet paths.  Absolute
+        // sheet paths aren't an issue, and relative ones will continue to work as long
+        // as the author didn't include any '..'s.  If they did, it's still not clear
+        // whether they should be adjusted or not (as the author may be duplicating an
+        // entire tree with several projects within it), so we leave this as an exercise
+        // to the author.
 
         CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
     else if( ext == "sym" )
     {
         // Symbols are not project-specific.  Keep their source names.
-        wxCopyFile( aSrcFilePath, destFile.GetFullPath() );
+        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
     else if( ext == "lib" )
     {

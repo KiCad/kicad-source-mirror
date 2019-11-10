@@ -131,13 +131,10 @@ static struct IFACE : public KIFACE_I
 
     /**
      * Function IfaceOrAddress
-     * return a pointer to the requested object.  The safest way to use this
-     * is to retrieve a pointer to a static instance of an interface, similar to
-     * how the KIFACE interface is exported.  But if you know what you are doing
-     * use it to retrieve anything you want.
-     *
+     * return a pointer to the requested object.  The safest way to use this is to retrieve
+     * a pointer to a static instance of an interface, similar to how the KIFACE interface
+     * is exported.  But if you know what you are doing use it to retrieve anything you want.
      * @param aDataId identifies which object you want the address of.
-     *
      * @return void* - and must be cast into the know type.
      */
     void* IfaceOrAddress( int aDataId ) override
@@ -199,8 +196,7 @@ PGM_BASE& Pgm()
     return *process;
 }
 
-// Similar to PGM_BASE& Pgm(), but return nullptr when a *.ki_face
-// is run from a python script, mot from a Kicad application
+// Similar to PGM_BASE& Pgm(), but return nullptr when a *.ki_face is run from a python script.
 PGM_BASE* PgmOrNull()
 {
     return process;
@@ -292,17 +288,15 @@ static bool scriptingSetup()
 void PythonPluginsReloadBase()
 {
 #if defined( KICAD_SCRIPTING )
-    // Reload plugin list: reload Python plugins if they are newer than
-    // the already loaded, and load new plugins
+    // Reload plugin list: reload Python plugins if they are newer than the already loaded,
+    // and load new plugins
     char cmd[1024];
 
-    snprintf( cmd, sizeof( cmd ),
-              "pcbnew.LoadPlugins(\"%s\")", TO_UTF8( PyScriptingPath() ) );
+    snprintf( cmd, sizeof( cmd ), "pcbnew.LoadPlugins(\"%s\")", TO_UTF8( PyScriptingPath() ) );
 
     PyLOCK lock;
 
-    // ReRun the Python method pcbnew.LoadPlugins
-    // (already called when starting Pcbnew)
+    // ReRun the Python method pcbnew.LoadPlugins (already called when starting Pcbnew)
     int retv = PyRun_SimpleString( cmd );
 
     if( retv != 0 )
@@ -325,8 +319,7 @@ FOOTPRINT_LIST_IMPL   GFootprintList;
 
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
 {
-    // This is process level, not project level, initialization of the DSO.
-
+    // This is process-level-initialization, not project-level-initialization of the DSO.
     // Do nothing in here pertinent to a project!
 
     start_common( aCtlBits );
@@ -405,16 +398,12 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcPr
         if( destFile.GetName() == aSrcProjectName )
             destFile.SetName( aNewProjectName );
 
-        // JEY TODO: are there filepaths in a PCB file that need updating?
-
         CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
     else if( ext == "brd" )
     {
         if( destFile.GetName() == aSrcProjectName )
             destFile.SetName( aNewProjectName );
-
-        // JEY TODO: are there filepaths in a legacy PCB file that need updating?
 
         CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }

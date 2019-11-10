@@ -80,13 +80,10 @@ static struct IFACE : public KIFACE_I
 
     /**
      * Function IfaceOrAddress
-     * return a pointer to the requested object.  The safest way to use this
-     * is to retrieve a pointer to a static instance of an interface, similar to
-     * how the KIFACE interface is exported.  But if you know what you are doing
-     * use it to retrieve anything you want.
-     *
+     * return a pointer to the requested object.  The safest way to use this is to retrieve
+     * a pointer to a static instance of an interface, similar to how the KIFACE interface
+     * is exported.  But if you know what you are doing use it to retrieve anything you want.
      * @param aDataId identifies which object you want the address of.
-     *
      * @return void* - and must be cast into the know type.
      */
     void* IfaceOrAddress( int aDataId ) override
@@ -144,7 +141,7 @@ void IFACE::OnKifaceEnd()
 }
 
 
-void GERBV::IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProjectName,
+void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProjectName,
                         const wxString& aNewProjectBasePath, const wxString& aNewProjectName,
                         const wxString& aSrcFilePath, wxString& aErrors )
 {
@@ -168,7 +165,7 @@ void GERBV::IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString&
             destFile.SetName( destFileName );
         }
 
-        wxCopyFile( aSrcFilePath, destFile.GetFullPath() );
+        CopyFile( aSrcFilePath, destFile.GetFullPath(), aErrors );
     }
     else if( ext == "gbrjob" )
     {
