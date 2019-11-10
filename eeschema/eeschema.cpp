@@ -42,8 +42,8 @@
 #include <kiway.h>
 #include <sim/sim_plot_frame.h>
 #include <kiface_ids.h>
-#include <libs/sexpr/include/sexpr/sexpr.h>
-#include <libs/sexpr/include/sexpr/sexpr_parser.h>
+#include <../libs/sexpr/include/sexpr/sexpr.h>
+#include <../libs/sexpr/include/sexpr/sexpr_parser.h>
 
 // The main sheet of the project
 SCH_SHEET*  g_RootSheet = NULL;
@@ -135,9 +135,9 @@ static struct IFACE : public KIFACE_I
      * the project doesn't know the internal format of the various files (which may have
      * paths in them that need updating).
      */
-    void SaveFileAs( const std::string& aProjectBasePath, const std::string& aProjectName,
-                     const std::string& aNewProjectBasePath, const std::string& aNewProjectName,
-                     const std::string& aSrcFilePath, std::string& aErrors ) override;
+    void SaveFileAs( const wxString& aProjectBasePath, const wxString& aProjectName,
+                     const wxString& aNewProjectBasePath, const wxString& aNewProjectName,
+                     const wxString& aSrcFilePath, wxString& aErrors ) override;
 
 } kiface( "eeschema", KIWAY::FACE_SCH );
 
@@ -311,15 +311,15 @@ static void traverseSEXPR( SEXPR::SEXPR* aNode,
 
     if( aNode->IsList() )
     {
-        for( int i = 0; i < aNode->GetNumberOfChildren(); i++ )
+        for( unsigned i = 0; i < aNode->GetNumberOfChildren(); i++ )
             traverseSEXPR( aNode->GetChild( i ), aVisitor );
     }
 }
 
 
-void IFACE::SaveFileAs( const std::string& aProjectBasePath, const std::string& aProjectName,
-                        const std::string& aNewProjectBasePath, const std::string& aNewProjectName,
-                        const std::string& aSrcFilePath, std::string& aErrors )
+void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProjectName,
+                        const wxString& aNewProjectBasePath, const wxString& aNewProjectName,
+                        const wxString& aSrcFilePath, wxString& aErrors )
 {
     wxFileName destFile( aSrcFilePath );
     wxString   destPath = destFile.GetPath();
@@ -366,7 +366,7 @@ void IFACE::SaveFileAs( const std::string& aProjectBasePath, const std::string& 
         try
         {
             SEXPR::PARSER parser;
-            std::unique_ptr<SEXPR::SEXPR> sexpr( parser.ParseFromFile( aSrcFilePath ) );
+            std::unique_ptr<SEXPR::SEXPR> sexpr( parser.ParseFromFile( TO_UTF8( aSrcFilePath ) ) );
 
             traverseSEXPR( sexpr.get(), [&]( SEXPR::SEXPR* node )
                 {
@@ -416,7 +416,7 @@ void IFACE::SaveFileAs( const std::string& aProjectBasePath, const std::string& 
         SYMBOL_LIB_TABLE symbolLibTable;
         symbolLibTable.Load( aSrcFilePath );
 
-        for( int i = 0; i < symbolLibTable.GetCount(); i++ )
+        for( unsigned i = 0; i < symbolLibTable.GetCount(); i++ )
         {
             LIB_TABLE_ROW& row = symbolLibTable.At( i );
             wxString       uri = row.GetFullURI();

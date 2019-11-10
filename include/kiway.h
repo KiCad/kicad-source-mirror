@@ -217,12 +217,12 @@ struct KIFACE
      * the project doesn't know the internal format of the various files (which may have
      * paths in them that need updating).
      */
-    VTBL_ENTRY void SaveFileAs( const std::string& srcProjectBasePath,
-                                const std::string& srcProjectName,
-                                const std::string& newProjectBasePath,
-                                const std::string& newProjectName,
-                                const std::string& srcFilePath,
-                                std::string& aErrors )
+    VTBL_ENTRY void SaveFileAs( const wxString& srcProjectBasePath,
+                                const wxString& srcProjectName,
+                                const wxString& newProjectBasePath,
+                                const wxString& newProjectName,
+                                const wxString& srcFilePath,
+                                wxString& aErrors )
     {
         // If a KIFACE owns files then it needs to implement this....
     }

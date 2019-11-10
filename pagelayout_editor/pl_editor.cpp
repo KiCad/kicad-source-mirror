@@ -92,9 +92,9 @@ static struct IFACE : public KIFACE_I
      * the project doesn't know the internal format of the various files (which may have
      * paths in them that need updating).
      */
-    void SaveFileAs( const std::string& aProjectBasePath, const std::string& aSrcProjectName,
-                     const std::string& aNewProjectBasePath, const std::string& aNewProjectName,
-                     const std::string& aSrcFilePath, std::string& aErrors ) override;
+    void SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcProjectName,
+                     const wxString& aNewProjectBasePath, const wxString& aNewProjectName,
+                     const wxString& aSrcFilePath, wxString& aErrors ) override;
 
 } kiface( "pl_editor", KIWAY::FACE_PL_EDITOR );
 
@@ -136,9 +136,9 @@ void IFACE::OnKifaceEnd()
 }
 
 
-void IFACE::SaveFileAs( const std::string& aProjectBasePath, const std::string& aSrcProjectName,
-                        const std::string& aNewProjectBasePath, const std::string& aNewProjectName,
-                        const std::string& aSrcFilePath, std::string& aErrors )
+void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aSrcProjectName,
+                        const wxString& aNewProjectBasePath, const wxString& aNewProjectName,
+                        const wxString& aSrcFilePath, wxString& aErrors )
 {
     wxFileName destFile( aSrcFilePath );
     wxString   destPath = destFile.GetPath();

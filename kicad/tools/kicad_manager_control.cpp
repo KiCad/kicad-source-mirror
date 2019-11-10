@@ -18,7 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <gestfich.h>
 #include <wildcards_and_files_ext.h>
 #include <executable_names.h>
 #include <pgm_base.h>
@@ -32,6 +31,7 @@
 #include <tools/kicad_manager_actions.h>
 #include <tools/kicad_manager_control.h>
 #include <dialogs/dialog_template_selector.h>
+#include <gestfich.h>
 
 ///> Helper widget to select whether a new directory should be created for a project
 class DIR_CHECKBOX : public wxPanel
@@ -134,7 +134,7 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
 
     m_frame->CreateNewProject( pro );
     m_frame->LoadProject( pro );
-    
+
     return 0;
 }
 
@@ -179,7 +179,7 @@ int KICAD_MANAGER_CONTROL::NewFromTemplate( const TOOL_EVENT& aEvent )
     // Get project destination folder and project file name.
     wxString        default_dir = wxFileName( Prj().GetProjectFullName() ).GetPathWithSep();
     wxString        title = _( "New Project Folder" );
-    wxFileDialog    dlg( m_frame, title, default_dir, wxEmptyString, ProjectFileWildcard(), 
+    wxFileDialog    dlg( m_frame, title, default_dir, wxEmptyString, ProjectFileWildcard(),
                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     // Add a "Create a new directory" checkbox
@@ -324,14 +324,14 @@ private:
     wxString             m_newProjectName;
 
     wxFileName           m_newProjectFile;
-    std::string          m_errors;
+    wxString             m_errors;
 
 public:
     SAVE_AS_TRAVERSER( KICAD_MANAGER_FRAME* aFrame,
-                       const std::string& aSrcProjectDirPath,
-                       const std::string& aSrcProjectName,
-                       const std::string& aNewProjectDirPath,
-                       const std::string& aNewProjectName ) :
+                       const wxString& aSrcProjectDirPath,
+                       const wxString& aSrcProjectName,
+                       const wxString& aNewProjectDirPath,
+                       const wxString& aNewProjectName ) :
             m_frame( aFrame ),
             m_projectDirPath( aSrcProjectDirPath ),
             m_projectName( aSrcProjectName ),
@@ -340,7 +340,7 @@ public:
     {
     }
 
-    virtual wxDirTraverseResult OnFile( const wxString& aSrcFilePath )
+    virtual wxDirTraverseResult OnFile( const wxString& aSrcFilePath ) override
     {
         wxFileName destFile( aSrcFilePath );
         wxString   ext = destFile.GetExt();
@@ -436,7 +436,7 @@ public:
         return wxDIR_CONTINUE;
     }
 
-    virtual wxDirTraverseResult OnDir( const wxString& dirPath )
+    virtual wxDirTraverseResult OnDir( const wxString& dirPath ) override
     {
         wxFileName destDir( dirPath );
         wxString   destDirPath = destDir.GetPath(); // strips off last directory
@@ -591,7 +591,7 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
     if( !player->IsVisible() )   // A hidden frame might not have the document loaded.
     {
         wxString filepath;
-        
+
         if( playerType == FRAME_SCH )
         {
             filepath = m_frame->SchFileName();
@@ -600,7 +600,7 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
         {
             wxFileName  kicad_board( m_frame->PcbFileName() );
             wxFileName  legacy_board( m_frame->PcbLegacyFileName() );
-            
+
             if( !legacy_board.FileExists() || kicad_board.FileExists() )
                 filepath = kicad_board.GetFullPath();
             else
