@@ -666,7 +666,7 @@ wxString GBR_CMP_PNP_METADATA::FormatCmpPnPMetadata()
 
     wxString mounType[] =
     {
-        "Other", "SMD", "BGA", "TH"
+        "Other", "SMD", "TH"
     };
 
     if( !m_Manufacturer.IsEmpty() )

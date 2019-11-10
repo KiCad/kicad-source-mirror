@@ -41,7 +41,7 @@
  * %TO.CMPN,<string>     Manufacturer part number
  * %TO.Cpkg,<string>     Package, as per IPC-7351
  * %TO.CVal,<string>     Value, a string. E.g. 220nF
- * %TO.CMnt,<string>     Mount type: (SMD|BGA|TH|Other)
+ * %TO.CMnt,<string>     Mount type: (SMD|TH|Other)
  * %TO.CFtp,<string>     Footprint name, a string. E.g. LQFP-100_14x14mm_P0.5mm
                          This is the footprint name coming from the CAD tool libraries.
  * %TO.CPgN,<string>     Package name, like the JEDEC JEP95 standard.
@@ -59,7 +59,6 @@ public:
     {
         MOUNT_TYPE_UNSPECIFIED,
         MOUNT_TYPE_SMD,
-        MOUNT_TYPE_BGA,
         MOUNT_TYPE_TH
     };
 
