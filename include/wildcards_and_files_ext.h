@@ -109,10 +109,6 @@ wxString AddFileExtListToFilter( const std::vector<std::string>& aExts );
  */
 wxString formatWildcardExt( const wxString& aWildcard );
 
-// Do NOT use wxString for these.  wxStrings are not thread-safe, even when const.  (For the
-// curious the UTF8 cacheing strategy puts iterators in a linked list.  Insertion and removal
-// from the linked list is not thread-safe.)
-
 extern const std::string SchematicSymbolFileExtension;
 extern const std::string SchematicLibraryFileExtension;
 extern const std::string SchematicBackupFileExtension;
