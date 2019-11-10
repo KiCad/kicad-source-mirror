@@ -643,8 +643,10 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
 
         case BS_ITEM_TYPE_DIELECTRIC:
             layer_type = "Dielectric";
-            layer_name = formatStringFromUTF32( wxString::Format( "dielectric layer %d (%s)",
-                                               item->m_DielectricLayerId, item->m_TypeName ) );
+            // The option core or prepreg is not added here, as it creates constraints
+            // in build process, not necessary wanted.
+            layer_name = formatStringFromUTF32( wxString::Format( "dielectric layer %d",
+                                               item->m_DielectricLayerId ) );
             break;
 
         default:
@@ -704,19 +706,15 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
                 next_copper_layer = B_Cu;
 
 
-            addJSONObject( wxString::Format( "\"Name\":  \"%s %s/%s\",\n",
-                                formatStringFromUTF32( item->m_TypeName ),     // core or prepreg
+            addJSONObject( wxString::Format( "\"Name\":  \"%s/%s\",\n",
                                 formatStringFromUTF32( m_pcb->GetLayerName( last_copper_layer ) ),
                                 formatStringFromUTF32( m_pcb->GetLayerName( next_copper_layer ) ) )
                          );
 
             // Add a comment ("Notes"):
-            wxString note = "\"Notes\":  ";
+            wxString note = "\"Notes\": ";
 
-            if( uptodate )      // We can add the dielectric variant ("core" "prepreg" ...):
-                note << wxString::Format( " \"Type: %s", layer_name.c_str() );
-            else
-                note << "\"";
+            note << wxString::Format( " \"Type: %s", layer_name.c_str() );
 
             note << wxString::Format( " (from %s to %s)\"\n",
                             formatStringFromUTF32( m_pcb->GetLayerName( last_copper_layer ) ),
