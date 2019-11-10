@@ -33,7 +33,6 @@
 
 
 #include <vector>
-#include <boost/interprocess/exceptions.hpp>
 
 #include <eda_draw_frame.h>
 #include <base_struct.h>

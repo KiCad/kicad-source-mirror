@@ -28,7 +28,6 @@
 
 #include <map>
 
-#include <boost/interprocess/exceptions.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
 
