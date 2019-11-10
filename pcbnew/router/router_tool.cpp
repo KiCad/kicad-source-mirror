@@ -540,6 +540,9 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
 
         targetLayer = frame()->SelectLayer( static_cast<PCB_LAYER_ID>( currentLayer ),
                 LSET::AllNonCuMask(), dlgPosition );
+
+        // Reset the cursor to the position where the event occured
+        controls()->SetCursorPosition( aEvent.HasPosition() ? aEvent.Position() : dlgPosition );
     }
 
     // fixme: P&S supports more than one fixed layer pair. Update the dialog?
