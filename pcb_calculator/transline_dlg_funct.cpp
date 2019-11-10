@@ -440,3 +440,16 @@ void PCB_CALCULATOR_FRAME::OnTranslineSelection( wxCommandEvent& event )
 }
 
 
+/**
+ * Function OnTransLineResetButtonClick
+ * Called when the user clicks the reset button. This sets
+ * the parameters to their default values.
+*/
+void PCB_CALCULATOR_FRAME::OnTransLineResetButtonClick( wxCommandEvent& event )
+{
+    TranslineTypeSelection( DEFAULT_TYPE );
+    m_TranslineSelection->SetSelection( DEFAULT_TYPE );
+
+    m_panelTransline->GetSizer()->Layout();
+    m_panelTransline->Refresh();
+}

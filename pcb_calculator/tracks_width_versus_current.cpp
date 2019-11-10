@@ -221,6 +221,24 @@ void PCB_CALCULATOR_FRAME::OnTWCalculateFromIntWidth( wxCommandEvent& event )
 }
 
 
+void PCB_CALCULATOR_FRAME::OnTWResetButtonClick( wxCommandEvent& event )
+{
+    m_TrackCurrentValue->SetValue( wxT( "1.0" ) );
+    m_TrackDeltaTValue->SetValue( wxT( "10.0" ) );
+    m_TrackLengthValue->SetValue( wxT( "20" ) );
+    m_TW_CuLength_choiceUnit->SetSelection( 0 );
+    m_TWResistivity->SetValue( wxT( "1.72e-8" ) );
+    m_ExtTrackWidthValue->SetValue( wxT( "0.2" ) );
+    m_TW_ExtTrackWidth_choiceUnit->SetSelection( 0 );
+    m_ExtTrackThicknessValue->SetValue( wxT( "0.035" ) );
+    m_ExtTrackThicknessUnit->SetSelection( 0 );
+    m_IntTrackWidthValue->SetValue( wxT( "0.2" ) );
+    m_TW_IntTrackWidth_choiceUnit->SetSelection( 0 );
+    m_IntTrackThicknessValue->SetValue( wxT( "0.035" ) );
+    m_IntTrackThicknessUnit->SetSelection( 0 );
+}
+
+
 void PCB_CALCULATOR_FRAME::TWDisplayValues( double aCurrent, double aExtWidth,
         double aIntWidth, double aExtThickness, double aIntThickness )
 {

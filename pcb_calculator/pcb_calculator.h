@@ -144,6 +144,13 @@ private:
     void OnTWCalculateFromIntWidth( wxCommandEvent& event ) override;
 
     /**
+     * Function OnTWResetButtonClick
+     * Called when the user clicks the reset button. This sets
+     * the parameters to their default values.
+     */
+    void OnTWResetButtonClick( wxCommandEvent& event ) override;
+
+    /**
      * Function TWCalculateWidth
      * Calculate track width required based on given current and temperature rise.
      */
@@ -205,7 +212,14 @@ private:
     /**
      * Update the Error message in Via calculation panel
      */
-	void onUpdateViaCalcErrorText( wxUpdateUIEvent& event ) override;
+    void onUpdateViaCalcErrorText( wxUpdateUIEvent& event ) override;
+
+    /**
+    * Function OnViaResetButtonClick
+    * Called when the user clicks the reset button. This sets
+    * the parameters to their default values.
+    */
+    void OnViaResetButtonClick( wxCommandEvent& event ) override;
 
     /**
      * Function VSDisplayValues
@@ -226,6 +240,13 @@ private:
      * Called on new transmission line selection
     */
     void OnTranslineSelection( wxCommandEvent& event ) override;
+
+    /**
+     * Function OnTransLineResetButtonClick
+     * Called when the user clicks the reset button. This sets
+     * the parameters to their default values.
+    */
+    void OnTransLineResetButtonClick( wxCommandEvent& event ) override;
 
     /**
      * Function OnTranslineAnalyse
@@ -293,6 +314,7 @@ private:
 
     // Regulators Panel
     void OnRegulatorCalcButtonClick( wxCommandEvent& event ) override;
+    void OnRegulatorResetButtonClick( wxCommandEvent& event ) override;
     void OnRegulTypeSelection( wxCommandEvent& event ) override;
     void OnRegulatorSelection( wxCommandEvent& event ) override;
     void OnDataFileSelection( wxCommandEvent& event ) override;

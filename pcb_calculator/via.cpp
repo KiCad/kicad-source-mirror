@@ -108,13 +108,37 @@ void PCB_CALCULATOR_FRAME::onUpdateViaCalcErrorText( wxUpdateUIEvent& event )
 {
     // Update the Error message if a via has a external diameter
     // bigger than the clearance area diameter
-    // (therefore the via is inside a copper zone and some parameters connot be calculated)
+    // (therefore the via is inside a copper zone and some parameters cannot be calculated)
     double clearanceDia = std::abs( DoubleFromString( m_textCtrlClearanceDia->GetValue() ) );
     clearanceDia *= m_choiceClearanceDia->GetUnitScale();
     double padDia = std::abs( DoubleFromString( m_textCtrlViaPadDia->GetValue() ) );
     padDia *= m_choiceViaPadDia->GetUnitScale();
 
     m_staticTextWarning->Show( clearanceDia <= padDia );
+}
+
+
+void PCB_CALCULATOR_FRAME::OnViaResetButtonClick( wxCommandEvent& event )
+{
+    #define DEFAULT_UNIT_SEL_MM 0
+
+    m_textCtrlHoleDia->SetValue( wxT( "0.4" ) );
+    m_choiceHoleDia->SetSelection( DEFAULT_UNIT_SEL_MM );
+    m_textCtrlPlatingThickness->SetValue( wxT( "0.035" ) );
+    m_choicePlatingThickness->SetSelection( DEFAULT_UNIT_SEL_MM );
+    m_textCtrlViaLength->SetValue( wxT( "1.6" ) );
+    m_choiceViaLength->SetSelection( DEFAULT_UNIT_SEL_MM );
+    m_textCtrlViaPadDia->SetValue( wxT( "0.6" ) );
+    m_choiceViaPadDia->SetSelection( DEFAULT_UNIT_SEL_MM );
+    m_textCtrlClearanceDia->SetValue( wxT( "1.0" ) );
+    m_choiceClearanceDia->SetSelection( DEFAULT_UNIT_SEL_MM );
+    m_textCtrlImpedance->SetValue( wxT( "50" ) );
+    m_choiceImpedance->SetSelection( DEFAULT_UNIT_SEL_MM );
+    m_textCtrlAppliedCurrent->SetValue( wxT( "1" ) );
+    m_textCtrlPlatingResistivity->SetValue( wxT( "1.72e-8" ) );
+    m_textCtrlPlatingPermittivity->SetValue( wxT( "4.5" ) );
+    m_textCtrlTemperatureDiff->SetValue( wxT( "10" ) );
+    m_textCtrlRiseTime->SetValue( wxT( "1" ) );
 }
 
 

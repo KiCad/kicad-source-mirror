@@ -157,6 +157,19 @@ void PCB_CALCULATOR_FRAME::OnRegulatorCalcButtonClick( wxCommandEvent& event )
     RegulatorsSolve();
 }
 
+void PCB_CALCULATOR_FRAME::OnRegulatorResetButtonClick( wxCommandEvent& event )
+{
+    m_RegulR1Value->SetValue( wxT( "10" ) );
+    m_RegulR2Value->SetValue( wxT( "10" ) );
+    m_RegulVrefValue->SetValue( wxT( "3" ) );
+    m_RegulVoutValue->SetValue( wxT( "12" ) );
+    m_choiceRegType->SetSelection( 0 );
+    m_rbRegulR1->SetValue(1);
+    m_rbRegulR2->SetValue(0);
+    m_rbRegulVout->SetValue(0);
+    RegulatorPageUpdate();
+}
+
 void PCB_CALCULATOR_FRAME::RegulatorPageUpdate()
 {
     switch( m_choiceRegType->GetSelection() )
