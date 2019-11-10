@@ -93,11 +93,11 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
         {
             switch( n )
             {
-            case 1: pt1.y = m_bbox.GetTop();    break;    // North
-            case 2: pt1.y = m_bbox.GetBottom(); break;    // South
-            case 3: pt1.x = m_bbox.GetLeft();   break;    // East
-            case 4: pt1.x = m_bbox.GetRight();  break;    // West
-            default:                            break;    // Wicked witch
+            case 1: pt1.y = INT_MIN / 2; break;    // North
+            case 2: pt1.y = INT_MAX / 2; break;    // South
+            case 3: pt1.x = INT_MIN / 2; break;    // East
+            case 4: pt1.x = INT_MAX / 2; break;    // West
+            default:                     break;    // Wicked witch
             }
 
             if( pad->GetOrientation() )
@@ -112,7 +112,8 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
 
             if( intersections.empty() )
             {
-                // There should always be at least some copper outside the hole
+                // There should always be at least some copper outside the hole and/or
+                // shapePos center
                 assert( false );
                 return pt0;
             }
