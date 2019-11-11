@@ -214,8 +214,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
-    GetCanvas()->GetGAL()->SetAxesEnabled( true );
-    GetCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
     GetCanvas()->GetView()->SetScale( GetZoomLevelCoeff() / GetScreen()->GetZoom() );
     ActivateGalCanvas();
 
@@ -814,8 +812,13 @@ void FOOTPRINT_EDIT_FRAME::ActivateGalCanvas()
 {
     PCB_BASE_EDIT_FRAME::ActivateGalCanvas();
 
-    // Be sure the axis are enabled:
+    // Be sure the axis are enabled
     GetCanvas()->GetGAL()->SetAxesEnabled( true );
+
+    // Setup the grid
+    GetCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
+    GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
+
     updateView();
 
     // Ensure the m_Layers settings are using the canvas type:
