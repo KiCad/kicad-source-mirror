@@ -76,7 +76,7 @@ DIALOG_BOARD_STATISTICS::DIALOG_BOARD_STATISTICS( PCB_EDIT_FRAME* aParentFrame )
     m_parentFrame = aParentFrame;
 
     m_gridDrills->UseNativeColHeader();
-    m_gridDrills->Connect( wxEVT_GRID_COL_SORT, wxGridEventHandler( drillGridSort ), NULL, this );
+    m_gridDrills->Connect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_BOARD_STATISTICS::drillGridSort ), NULL, this );
 
     m_checkBoxExcludeComponentsNoPins->SetValue( s_savedDialogState.excludeNoPins );
     m_checkBoxSubtractHoles->SetValue( s_savedDialogState.subtractHoles );
