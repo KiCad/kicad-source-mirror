@@ -302,9 +302,6 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
 
     for( UTF8::uni_iter chIt = aText.ubegin(), end = aText.uend(); chIt < end; ++chIt )
     {
-        // Index into bounding boxes table
-        int dd = *chIt - ' ';
-
         // Handle tabs as locked to the nearest 4th column (counting in spaces)
         // The choice of spaces is somewhat arbitrary but sufficient for aligning text
         if( *chIt == '\t' )
@@ -314,9 +311,6 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
 
             // Add the remaining space (between 0 and 3 spaces)
             xOffset += addlSpace;
-
-            // Set the character to ' ' instead of the '?' for tab
-            dd = 0;
 
             glyphSize = baseGlyphSize;
             yOffset = 0;
@@ -359,7 +353,6 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
             else
             {
                 // single ^ starts a superscript
-                dd = *chIt - ' ';
                 glyphSize = baseGlyphSize * 0.8;
                 yOffset = -baseGlyphSize.y * 0.3;
             }
@@ -376,7 +369,6 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
             else
             {
                 // single _ starts a subscript
-                dd = *chIt - ' ';
                 glyphSize = baseGlyphSize * 0.8;
                 yOffset = baseGlyphSize.y * 0.1;
             }
@@ -388,8 +380,14 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
             yOffset = 0;
         }
 
+        // Index into bounding boxes table
+        int dd = (signed) *chIt - ' ';
+
         if( dd >= (int) m_glyphBoundingBoxes.size() || dd < 0 )
-            dd = '?' - ' ';
+        {
+            int substitute = *chIt == '\t' ? ' ' : '?';
+            dd = substitute - ' ';
+        }
 
         GLYPH& glyph = m_glyphs[dd];
         BOX2D& bbox  = m_glyphBoundingBoxes[dd];
@@ -571,7 +569,7 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
         }
 
         // Index in the bounding boxes table
-        int dd = *it - ' ';
+        int dd = (signed) *it - ' ';
 
         if( dd >= (int) m_glyphBoundingBoxes.size() || dd < 0 )
             dd = '?' - ' ';
