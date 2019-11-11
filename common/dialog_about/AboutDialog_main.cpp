@@ -77,6 +77,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
             << " build";
 
     aInfo.SetBuildVersion( version );
+    aInfo.SetBuildDate( GetBuildDate() );
 
     /* wxWidgets version */
     wxString libVersion;

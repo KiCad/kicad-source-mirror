@@ -98,6 +98,9 @@ public:
     void SetBuildVersion( const wxString& version ) { buildVersion = version; }
     wxString& GetBuildVersion() { return buildVersion; }
 
+    void SetBuildDate( const wxString& date ) { buildDate = date; }
+    wxString& GetBuildDate() { return buildDate; }
+
     void SetLibVersion( const wxString& version ) { libVersion = version; }
     wxString& GetLibVersion() { return libVersion; }
 
@@ -124,6 +127,7 @@ private:
     wxString     copyright;
     wxString     appName;
     wxString     buildVersion;
+    wxString     buildDate;
     wxString     libVersion;
 
     wxIcon       m_appIcon;

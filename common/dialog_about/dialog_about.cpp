@@ -466,7 +466,7 @@ void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
          << platform.GetPortIdName() << eol;
 
     aMsg << "Build Info:" << eol;
-    aMsg << indent4 << "Build date: " << __DATE__ << " " << __TIME__ << eol;
+    aMsg << indent4 << "Build date: " << m_info.GetBuildDate() << eol;
     aMsg << indent4 << "wxWidgets: " << wxVERSION_NUM_DOT_STRING << " (";
     aMsg << __WX_BO_UNICODE __WX_BO_STL __WX_BO_WXWIN_COMPAT_2_8 ")";
 

@@ -36,4 +36,10 @@ class wxString;
  */
 wxString GetBuildVersion();
 
+/**
+ * Function GetBuildDate
+ * @return the build date string
+ */
+wxString GetBuildDate();
+
 #endif	// KICAD_BUILD_VERSION_H
