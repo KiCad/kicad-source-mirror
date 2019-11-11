@@ -148,6 +148,9 @@ extern const std::string IpcD356FileExtension;
 extern const std::string PngFileExtension;
 extern const std::string JpegFileExtension;
 
+
+bool IsProtelExtension( const wxString& ext );
+
 /**
  * @}
  */

@@ -32,6 +32,7 @@
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gestfich.h>
+#include <wildcards_and_files_ext.h>
 #include "json11.hpp"
 
 const wxChar* g_GerberPageSizeList[] =
@@ -155,7 +156,7 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
         destFile.SetPath( destPath );
     }
 
-    if( ext == "gbr" )
+    if( ext == "gbr" || IsProtelExtension( ext ) )
     {
         wxString destFileName = destFile.GetName();
 

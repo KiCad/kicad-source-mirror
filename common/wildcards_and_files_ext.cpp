@@ -29,7 +29,7 @@
  */
 #include <regex>
 #include <wildcards_and_files_ext.h>
-
+#include <wx/regex.h>
 
 bool compareFileExtensions( const std::string& aExtension,
         const std::vector<std::string>& aReference, bool aCaseSensitive )
@@ -151,6 +151,14 @@ const std::string IpcD356FileExtension( "d356" );
 
 const std::string PngFileExtension( "png" );
 const std::string JpegFileExtension( "jpg" );
+
+
+bool IsProtelExtension( const wxString& ext )
+{
+    static wxRegEx protelRE( wxT( "(gm1)|(g[tb][lapos])|(g\\d\\d*)" ), wxRE_ICASE );
+
+    return protelRE.Matches( ext );
+}
 
 
 wxString AllFilesWildcard()

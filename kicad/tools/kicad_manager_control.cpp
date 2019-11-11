@@ -399,7 +399,8 @@ public:
         }
         else if( ext == "gbr"
               || ext == "gbrjob"
-              || ext == "drl" )
+              || ext == "drl"
+              || IsProtelExtension( ext ) )
         {
             KIFACE* gerbview = m_frame->Kiway().KiFACE( KIWAY::FACE_GERBVIEW );
             gerbview->SaveFileAs( m_projectDirPath, m_projectName, m_newProjectDirPath,
@@ -409,6 +410,7 @@ public:
         {
             // Everything we don't recognize just gets a straight copy
             wxString destPath = destFile.GetPath();
+            wxString destName = destFile.GetName();
 
             if( destPath.StartsWith( m_projectDirPath ) )
             {
@@ -416,8 +418,15 @@ public:
                 destFile.SetPath( destPath );
             }
 
-            if( destFile.GetName() == m_projectName )
+            if( destName == m_projectName )
+            {
                 destFile.SetName( m_newProjectName );
+            }
+            else if( destName.StartsWith( m_projectName + "-" ) )
+            {
+                destName.Replace( m_projectName, m_newProjectName, false );
+                destFile.SetName( destName );
+            }
 
             CopyFile( aSrcFilePath, destFile.GetFullPath(), m_errors );
         }

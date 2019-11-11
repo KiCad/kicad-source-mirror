@@ -374,7 +374,13 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
                             && node->GetChild( 0 )->GetSymbol() == "source" )
                     {
                         auto pathNode = dynamic_cast<SEXPR::SEXPR_STRING*>( node->GetChild( 1 ) );
-                        wxString path( pathNode->m_value );
+                        auto symNode = dynamic_cast<SEXPR::SEXPR_SYMBOL*>( node->GetChild( 1 ) );
+                        wxString path;
+
+                        if( pathNode )
+                            path = pathNode->m_value;
+                        else if( symNode )
+                            path = symNode->m_value;
 
                         if( path == aProjectName + ".sch" )
                             path = aNewProjectName + ".sch";
@@ -383,7 +389,10 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
                         else if( path.StartsWith( aProjectBasePath ) )
                             path.Replace( aProjectBasePath, aNewProjectBasePath, false );
 
-                        pathNode->m_value = path;
+                        if( pathNode )
+                            pathNode->m_value = path;
+                        else if( symNode )
+                            symNode->m_value = path;
                     }
                 } );
 
