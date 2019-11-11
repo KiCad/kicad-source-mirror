@@ -614,31 +614,31 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
     for( int ii = 0; ii < brd_stackup.GetCount(); ++ii )
     {
         BOARD_STACKUP_ITEM* item = brd_stackup.GetStackupLayer( ii );
-        double thickness = item->m_Thickness*m_conversionUnits; // layer thickness is always in mm
+        double thickness = item->GetThickness()*m_conversionUnits; // layer thickness is always in mm
         wxString layer_type;
         std::string layer_name;     // for comment
 
-        switch( item->m_Type )
+        switch( item->GetType() )
         {
         case BS_ITEM_TYPE_COPPER:
             layer_type = "Copper";
-            layer_name = formatStringFromUTF32( m_pcb->GetLayerName( item->m_LayerId ) );
-            last_copper_layer = item->m_LayerId;
+            layer_name = formatStringFromUTF32( m_pcb->GetLayerName( item->GetBrdLayerId() ) );
+            last_copper_layer = item->GetBrdLayerId();
             break;
 
         case BS_ITEM_TYPE_SILKSCREEN:
             layer_type = "Legend";
-            layer_name = formatStringFromUTF32( item->m_TypeName );
+            layer_name = formatStringFromUTF32( item->GetTypeName() );
             break;
 
         case BS_ITEM_TYPE_SOLDERMASK:
             layer_type = "SolderMask";
-            layer_name = formatStringFromUTF32( item->m_TypeName );
+            layer_name = formatStringFromUTF32( item->GetTypeName() );
             break;
 
         case BS_ITEM_TYPE_SOLDERPASTE:
             layer_type = "SolderPaste";
-            layer_name = formatStringFromUTF32( item->m_TypeName );
+            layer_name = formatStringFromUTF32( item->GetTypeName() );
             break;
 
         case BS_ITEM_TYPE_DIELECTRIC:
@@ -646,7 +646,7 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
             // The option core or prepreg is not added here, as it creates constraints
             // in build process, not necessary wanted.
             layer_name = formatStringFromUTF32( wxString::Format( "dielectric layer %d",
-                                               item->m_DielectricLayerId ) );
+                                               item->GetDielectricLayerId() ) );
             break;
 
         default:
@@ -658,9 +658,9 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
 
         if( item->IsColorEditable() && uptodate )
         {
-            if( IsPrmSpecified( item->m_Color ) )
+            if( IsPrmSpecified( item->GetColor() ) )
             {
-                wxString colorName = item->m_Color;
+                wxString colorName = item->GetColor();
 
                 if( colorName.StartsWith( "#" ) )     // This is a user defined color.
                 {
@@ -676,11 +676,11 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
         if( item->IsThicknessEditable() && uptodate )
             addJSONObject( wxString::Format( "\"Thickness\":  %.3f,\n", thickness ) );
 
-        if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
+        if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
         {
             if( item->HasMaterialValue() )
             {
-                addJSONObject( wxString::Format( "\"Material\":  \"%s\",\n", item->m_Material ) );
+                addJSONObject( wxString::Format( "\"Material\":  \"%s\",\n", item->GetMaterial() ) );
 
                 // These constrains are only written if the board has impedance controlled tracks.
                 // If the board is not impedance controlled,  they are useless.
@@ -689,13 +689,15 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
                 {
                     // Generate Epsilon R if > 1.0 (value <= 1.0 means not specified: it is not
                     // a possible value
-                    if( item->m_EpsilonR > 1.0 )
-                        addJSONObject( wxString::Format( "\"DielectricConstant\":  %s,\n", item->FormatEpsilonR() ) );
+                    if( item->GetEpsilonR() > 1.0 )
+                        addJSONObject( wxString::Format( "\"DielectricConstant\":  %s,\n",
+                                            item->FormatEpsilonR() ) );
 
                     // Generate LossTangent > 0.0 (value <= 0.0 means not specified: it is not
                     // a possible value
-                    if( item->m_LossTangent > 0.0 )
-                        addJSONObject( wxString::Format( "\"LossTangent\":  %s,\n", item->FormatLossTangent() ) );
+                    if( item->GetLossTangent() > 0.0 )
+                        addJSONObject( wxString::Format( "\"LossTangent\":  %s,\n",
+                                            item->FormatLossTangent() ) );
                 }
             }
 
@@ -722,11 +724,11 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
 
             addJSONObject( note );
         }
-        else if( item->m_Type == BS_ITEM_TYPE_SOLDERMASK || item->m_Type == BS_ITEM_TYPE_SILKSCREEN )
+        else if( item->GetType() == BS_ITEM_TYPE_SOLDERMASK || item->GetType() == BS_ITEM_TYPE_SILKSCREEN )
         {
             if( item->HasMaterialValue() )
             {
-                addJSONObject( wxString::Format( "\"Material\":  \"%s\",\n", item->m_Material ) );
+                addJSONObject( wxString::Format( "\"Material\":  \"%s\",\n", item->GetMaterial() ) );
 
                 // These constrains are only written if the board has impedance controlled tracks.
                 // If the board is not impedance controlled,  they are useless.
@@ -735,13 +737,15 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
                 {
                     // Generate Epsilon R if > 1.0 (value <= 1.0 means not specified: it is not
                     // a possible value
-                    if( item->m_EpsilonR > 1.0 )
-                        addJSONObject( wxString::Format( "\"DielectricConstant\":  %s,\n", item->FormatEpsilonR() ) );
+                    if( item->GetEpsilonR() > 1.0 )
+                        addJSONObject( wxString::Format( "\"DielectricConstant\":  %s,\n",
+                                            item->FormatEpsilonR() ) );
 
                     // Generate LossTangent > 0.0 (value <= 0.0 means not specified: it is not
                     // a possible value
-                    if( item->m_LossTangent > 0.0 )
-                        addJSONObject( wxString::Format( "\"LossTangent\":  %s,\n", item->FormatLossTangent() ) );
+                    if( item->GetLossTangent() > 0.0 )
+                        addJSONObject( wxString::Format( "\"LossTangent\":  %s,\n",
+                                                item->FormatLossTangent() ) );
                 }
             }
 

@@ -102,6 +102,10 @@ PANEL_SETUP_BOARD_STACKUP::PANEL_SETUP_BOARD_STACKUP( PAGED_DIALOG* aParent, PCB
 
     buildLayerStackPanel();
     synchronizeWithBoard( true );
+
+    // Currently: disable not yet usable buttons:
+    m_buttonAddDielectricLayer->Hide();
+    m_buttonRemoveDielectricLayer->Hide();
 }
 
 
@@ -137,6 +141,98 @@ void PANEL_SETUP_BOARD_STACKUP::disconnectEvents()
                                   wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP::onThicknessChange ),
                                   NULL, this );
     }
+}
+
+
+void PANEL_SETUP_BOARD_STACKUP::onAddDielectricLayer( wxCommandEvent& event )
+{
+    // Build Dielectric layers list:
+    wxArrayString d_list;
+
+    for( BOARD_STACKUP_ROW_UI_ITEM& item : m_rowUiItemsList )
+    {
+        if( !item.m_isEnabled )
+            continue;
+
+        if( item.m_Item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+           d_list.Add( item.m_LayerName->GetLabel() );
+    }
+
+    // Show list
+    int index = wxGetSingleChoiceIndex( wxEmptyString, _("Dielectric Layers List"),
+                                        d_list);
+
+    if( index < 0 )
+        return;
+}
+
+
+void PANEL_SETUP_BOARD_STACKUP::onRemoveDielectricLayer( wxCommandEvent& event )
+{
+    // Build deletable Dielectric layers list.
+    // A lyer can be deleted if there are 2 (or more) dielectric layers
+    // between 2 copper layers
+    wxArrayString d_list;
+    wxString previousD_Layer;
+    int dielectric_layer_count = 0;
+
+    for( auto item : m_stackup.GetList() )
+    {
+        if( !item->IsEnabled() )
+            continue;
+
+        if( item->GetType() == BS_ITEM_TYPE_COPPER )
+           dielectric_layer_count = 0;
+        else if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+        {
+            dielectric_layer_count++;
+
+            if( dielectric_layer_count == 1 )
+                previousD_Layer = item->FormatDielectricLayerName();
+
+            if( dielectric_layer_count == 2 )
+                d_list.Add( previousD_Layer );
+
+            if( dielectric_layer_count >= 2 )
+              d_list.Add( item->FormatDielectricLayerName() );
+        }
+    }
+
+    // Show list
+    int index = wxGetSingleChoiceIndex( wxEmptyString, _("Dielectric Layers List"),
+                                        d_list);
+
+    if( index < 0 )
+        return;
+}
+
+
+void PANEL_SETUP_BOARD_STACKUP::onRemoveDielUI( wxUpdateUIEvent& event )
+{
+    // The m_buttonRemoveDielectricLayer wxButton is enabled only if a dielectric
+    // layer can be removed, i.e. if 2 (or more) dielectric layers are found
+    // between 3 copper layers
+    int dielectric_layer_count = 0;
+
+    for( auto item : m_stackup.GetList() )
+    {
+        if( !item->IsEnabled() )
+            continue;
+
+        if( item->GetType() == BS_ITEM_TYPE_COPPER )
+           dielectric_layer_count = 0;
+
+        if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+           dielectric_layer_count++;
+
+        if( dielectric_layer_count >= 2 )
+        {
+            m_buttonRemoveDielectricLayer->Enable( true );
+            return;
+        }
+    }
+
+    m_buttonRemoveDielectricLayer->Enable( false );
 }
 
 
@@ -178,8 +274,8 @@ void PANEL_SETUP_BOARD_STACKUP::onUpdateThicknessValue( wxUpdateUIEvent& event )
 
     for( auto item : m_stackup.GetList() )
     {
-        if( item->IsThicknessEditable() && item->m_Enabled )
-           thickness += item->m_Thickness;
+        if( item->IsThicknessEditable() && item->IsEnabled() )
+           thickness += item->GetThickness();
     }
 
     m_tcCTValue->SetValue( StringFromValue( m_units, thickness, true, true ) );
@@ -239,16 +335,16 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
         // test for existing stackup items in board:
         for( BOARD_STACKUP_ITEM* brd_item : brd_stackup.GetList() )
         {
-            if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
+            if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
             {
                 // Compare only BS_ITEM_TYPE_DIELECTRIC items
-                if( brd_item->m_Type != BS_ITEM_TYPE_DIELECTRIC )
+                if( brd_item->GetType() != BS_ITEM_TYPE_DIELECTRIC )
                     continue;
 
-                if( item->m_DielectricLayerId  == brd_item->m_DielectricLayerId )
+                if( item->GetDielectricLayerId()  == brd_item->GetDielectricLayerId() )
                     brd_stack_item = brd_item;
             }
-            else if( item->m_LayerId == brd_item->m_LayerId )
+            else if( item->GetBrdLayerId() == brd_item->GetBrdLayerId() )
                 brd_stack_item = brd_item;
 
             if( brd_stack_item )
@@ -267,8 +363,8 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
 
                 if( matName )
                 {
-                    if( IsPrmSpecified( item->m_Material ) )
-                        matName->SetValue( item->m_Material );
+                    if( IsPrmSpecified( item->GetMaterial() ) )
+                        matName->SetValue( item->GetMaterial() );
                     else
                         matName->SetValue( wxGetTranslation( NotSpecifiedPrm() ) );
                 }
@@ -279,14 +375,14 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
                 wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( ui_row_item.m_ThicknessCtrl );
 
                 if( textCtrl )
-                    textCtrl->SetValue( StringFromValue( m_units, item->m_Thickness, true, true ) );
+                    textCtrl->SetValue( StringFromValue( m_units, item->GetThickness(), true, true ) );
 
-                if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
+                if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
                 {
                     wxCheckBox* cb_box = dynamic_cast<wxCheckBox*> ( ui_row_item.m_ThicknessLockCtrl );
 
                     if( cb_box )
-                        cb_box->SetValue( item->m_ThicknessLocked );
+                        cb_box->SetValue( item->IsThicknessLocked() );
                 }
             }
 
@@ -295,9 +391,9 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
                 auto bm_combo = dynamic_cast<wxBitmapComboBox*>( ui_row_item.m_ColorCtrl );
                 int  color_idx = 0;
 
-                if( item->m_Color.StartsWith( "#" ) )  // User defined color
+                if( item->GetColor().StartsWith( "#" ) )  // User defined color
                 {
-                    wxColour color( item->m_Color );
+                    wxColour color( item->GetColor() );
                     m_UserColors[row] = color;
                     color_idx = GetColorUserDefinedListIdx();
 
@@ -315,7 +411,7 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
 
                     for( int ii = 0; ii < GetColorStandardListCount(); ii++ )
                     {
-                        if( color_list[ii].m_ColorName == item->m_Color )
+                        if( color_list[ii].m_ColorName == item->GetColor() )
                         {
                             color_idx = ii;
                             break;
@@ -330,7 +426,7 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
             if( item->HasEpsilonRValue() )
             {
                 wxString txt;
-                txt.Printf( "%.1f", item->m_EpsilonR );
+                txt.Printf( "%.1f", item->GetEpsilonR() );
                 wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( ui_row_item.m_EpsilonCtrl );
 
                 if( textCtrl )
@@ -340,7 +436,7 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
             if( item->HasLossTangentValue() )
             {
                 wxString txt;
-                txt.Printf( "%g", item->m_LossTangent );
+                txt.Printf( "%g", item->GetLossTangent() );
                 wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( ui_row_item.m_LossTgCtrl );
 
                 if( textCtrl )
@@ -351,13 +447,13 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
         // Now enable/disable stackup items, according to the m_enabledLayers config
         bool show_item;
 
-        if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
+        if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
             // the m_DielectricLayerId is not a copper layer id, it is a dielectric idx from 1
-            show_item = item->m_DielectricLayerId < copperLayersCount;
+            show_item = item->GetDielectricLayerId() < copperLayersCount;
         else
-            show_item = m_enabledLayers[item->m_LayerId];
+            show_item = m_enabledLayers[item->GetBrdLayerId()];
 
-        item->m_Enabled = show_item;
+        item->SetEnabled( show_item );
 
         ui_row_item.m_isEnabled = show_item;
 
@@ -440,9 +536,9 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
 
     const FAB_LAYER_COLOR* color_list = GetColorStandardList();
 
-    for( auto item : m_stackup.GetList() )
+    for( BOARD_STACKUP_ITEM* item : m_stackup.GetList() )
     {
-        BOARD_STACKUP_ROW_UI_ITEM ui_row_item;
+        BOARD_STACKUP_ROW_UI_ITEM ui_row_item( item );
 
         bool show_item = true;//false;
         ui_row_item.m_isEnabled = true;
@@ -456,35 +552,34 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
         m_fgGridSizer->Add( bitmap, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT );
         ui_row_item.m_Icon = bitmap;
 
-        if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
+        if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
         {
-            wxString lname;
-            lname.Printf( _( "Dielectric %d" ), item->m_DielectricLayerId );
+            wxString lname = item->FormatDielectricLayerName();
             wxStaticText* st_text = new wxStaticText( m_scGridWin, wxID_ANY, lname );
             m_fgGridSizer->Add( st_text, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
             ui_row_item.m_LayerName = st_text;
 
             wxChoice* choice = new wxChoice( m_scGridWin, wxID_ANY, wxDefaultPosition,
                                              wxDefaultSize, m_core_prepreg_choice );
-            choice->SetSelection( item->m_TypeName == KEY_CORE ? 0 : 1 );
+            choice->SetSelection( item->GetTypeName() == KEY_CORE ? 0 : 1 );
             m_fgGridSizer->Add( choice, 0, wxEXPAND|wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
 
             ui_row_item.m_LayerTypeCtrl = choice;
         }
         else
         {
-            item->m_LayerName = m_board->GetLayerName( item->m_LayerId );
-            wxStaticText* st_text =  new wxStaticText( m_scGridWin, wxID_ANY, item->m_LayerName );
+            item->GetLayerName() = m_board->GetLayerName( item->GetBrdLayerId() );
+            wxStaticText* st_text =  new wxStaticText( m_scGridWin, wxID_ANY, item->GetLayerName() );
             m_fgGridSizer->Add( st_text, 0, wxALL|wxALIGN_CENTER_VERTICAL, 1 );
             st_text->Show( show_item );
             ui_row_item.m_LayerName = st_text;
 
             wxString lname;
 
-            if( item->m_TypeName == KEY_COPPER )
+            if( item->GetTypeName() == KEY_COPPER )
                 lname = _( "Copper" );
             else
-                lname = wxGetTranslation( item->m_TypeName );
+                lname = wxGetTranslation( item->GetTypeName() );
 
             st_text = new wxStaticText( m_scGridWin, wxID_ANY, lname );
             m_fgGridSizer->Add( st_text, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
@@ -493,7 +588,8 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
 
         if( item->IsMaterialEditable() )
         {
-            addMaterialChooser( ID_ITEM_MATERIAL+row, &item->m_Material, ui_row_item );
+            wxString matName = item->GetMaterial();
+            addMaterialChooser( ID_ITEM_MATERIAL+row, &matName, ui_row_item );
         }
         else
         {
@@ -504,7 +600,7 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
         {
             wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, ID_ITEM_THICKNESS+row );
             textCtrl->SetMinSize( m_numericTextCtrlSize );
-            textCtrl->SetValue( StringFromValue( m_units, item->m_Thickness, true, true ) );
+            textCtrl->SetValue( StringFromValue( m_units, item->GetThickness(), true, true ) );
             m_fgGridSizer->Add( textCtrl, 0, wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 2 );
             m_controlItemsList.push_back( textCtrl );
             textCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED,
@@ -512,11 +608,11 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
                                NULL, this );
             ui_row_item.m_ThicknessCtrl = textCtrl;
 
-            if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
+            if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
             {
                 wxCheckBox* cb_box = new wxCheckBox( m_scGridWin, ID_ITEM_THICKNESS_LOCKED+row,
                                                      wxEmptyString );
-                cb_box->SetValue( item->m_ThicknessLocked );
+                cb_box->SetValue( item->IsThicknessLocked() );
                 m_fgGridSizer->Add( cb_box, 0, wxALIGN_CENTER_VERTICAL, 2 );
                 ui_row_item.m_ThicknessLockCtrl = cb_box;
             }
@@ -535,9 +631,9 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
         {
             int color_idx = 0;
 
-            if( item->m_Color.StartsWith( "#" ) )  // User defined color
+            if( item->GetColor().StartsWith( "#" ) )  // User defined color
             {
-                wxColour color( item->m_Color );
+                wxColour color( item->GetColor() );
                 m_UserColors[row] = color;
                 color_idx = GetColorUserDefinedListIdx();
             }
@@ -545,7 +641,7 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
             {
                 for( int ii = 0; ii < GetColorStandardListCount(); ii++ )
                 {
-                    if( color_list[ii].m_ColorName == item->m_Color )
+                    if( color_list[ii].m_ColorName == item->GetColor() )
                     {
                         color_idx = ii;
                         break;
@@ -568,7 +664,7 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
         if( item->HasEpsilonRValue() )
         {
             wxString txt;
-            txt.Printf( "%.1f", item->m_EpsilonR );
+            txt.Printf( "%.1f", item->GetEpsilonR() );
             wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, wxID_ANY, wxEmptyString,
                                                    wxDefaultPosition, m_numericFieldsSize );
             textCtrl->SetValue( txt );
@@ -583,7 +679,7 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
         if( item->HasLossTangentValue() )
         {
             wxString txt;
-            txt.Printf( "%g", item->m_LossTangent );
+            txt.Printf( "%g", item->GetLossTangent() );
             wxTextCtrl* textCtrl = new wxTextCtrl( m_scGridWin, wxID_ANY, wxEmptyString,
                                                    wxDefaultPosition, m_numericFieldsSize );
             textCtrl->SetValue( txt );
@@ -635,11 +731,11 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
 
     for( auto item : m_stackup.GetList() )
     {
-        if( item->IsThicknessEditable() && item->m_Enabled )
+        if( item->IsThicknessEditable() && item->IsEnabled() )
         {
-            stackup_thickness += item->m_Thickness;
+            stackup_thickness += item->GetThickness();
 
-            if( item->m_Thickness < 0 )
+            if( item->GetThickness() < 0 )
                 thickness_error = true;
         }
     }
@@ -680,13 +776,13 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
     for( auto item : m_stackup.GetList() )
     {
         // Skip stackup items useless for the current board
-        if( !item->m_Enabled )
+        if( !item->IsEnabled() )
         {
             row++;
             continue;
         }
 
-        item->m_LayerName = m_rowUiItemsList[row].m_LayerName->GetLabel();
+        item->SetLayerName( m_rowUiItemsList[row].m_LayerName->GetLabel() );
 
         if( item->HasEpsilonRValue() )
         {
@@ -694,9 +790,9 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
             txt = textCtrl->GetValue();
 
             if( txt.ToDouble( &value ) && value >= 0.0 )
-                item->m_EpsilonR = value;
+                item->SetEpsilonR( value );
             else if( txt.ToCDouble( &value ) && value >= 0.0 )
-                item->m_EpsilonR = value;
+                item->SetEpsilonR( value );
             else
             {
                 success = false;
@@ -710,9 +806,9 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
             txt = textCtrl->GetValue();
 
             if( txt.ToDouble( &value ) && value >= 0.0 )
-                item->m_LossTangent = value;
+                item->SetLossTangent( value );
             else if( txt.ToCDouble( &value ) && value >= 0.0 )
-                item->m_LossTangent = value;
+                item->SetLossTangent( value );
             else
             {
                 success = false;
@@ -725,15 +821,15 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
         if( item->IsMaterialEditable() )
         {
             wxTextCtrl* textCtrl = static_cast<wxTextCtrl*>(  m_rowUiItemsList[row].m_MaterialCtrl );
-            item->m_Material = textCtrl->GetValue();
+            item->SetMaterial( textCtrl->GetValue() );
 
             // Ensure the not specified mat name is the keyword, not its translation
             // to avoid any issue is the language setting changes
-            if( !IsPrmSpecified( item->m_Material ) )
-                item->m_Material = NotSpecifiedPrm();
+            if( !IsPrmSpecified( item->GetMaterial() ) )
+                item->SetMaterial( NotSpecifiedPrm() );
         }
 
-        if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
+        if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
         {
             // Choice is Core or Prepreg:
             wxChoice* choice = static_cast<wxChoice*>( m_rowUiItemsList[row].m_LayerTypeCtrl );
@@ -741,9 +837,9 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
             int idx = choice->GetSelection();
 
             if( idx == 0 )
-                item->m_TypeName = KEY_CORE;
+                item->SetTypeName( KEY_CORE );
             else
-                item->m_TypeName = KEY_PREPREG;
+                item->SetTypeName( KEY_PREPREG );
         }
 
         if( item->IsThicknessEditable() )
@@ -751,14 +847,14 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
             wxTextCtrl* textCtrl = static_cast<wxTextCtrl*>( m_rowUiItemsList[row].m_ThicknessCtrl );
             txt = textCtrl->GetValue();
 
-            item->m_Thickness = ValueFromString( m_frame->GetUserUnits(), txt, true );
+            item->SetThickness( ValueFromString( m_frame->GetUserUnits(), txt, true ) );
 
-            if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
+            if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
             {
                 // Dielectric thickness layer can have a locked thickness:
                 wxCheckBox* cb_box = static_cast<wxCheckBox*>
                                         ( m_rowUiItemsList[row].m_ThicknessLockCtrl );
-                item->m_ThicknessLocked = cb_box && cb_box->GetValue();
+                item->SetThicknessLocked( cb_box && cb_box->GetValue() );
             }
         }
 
@@ -770,9 +866,9 @@ bool PANEL_SETUP_BOARD_STACKUP::transferDataFromUIToStackup()
             int idx = choice->GetSelection();
 
             if( idx == GetColorUserDefinedListIdx() )
-                item->m_Color = m_UserColors[row].GetAsString( wxC2S_HTML_SYNTAX );
+                item->SetColor( m_UserColors[row].GetAsString( wxC2S_HTML_SYNTAX ) );
             else
-                item->m_Color = color_list[idx].m_ColorName;
+                item->SetColor( color_list[idx].m_ColorName );
         }
         row++;
     }
@@ -813,7 +909,7 @@ bool PANEL_SETUP_BOARD_STACKUP::TransferDataFromWindow()
 
     for( auto item : m_stackup.GetList() )
     {
-        if( item->m_Enabled )
+        if( item->IsEnabled() )
         brd_stackup.Add( new BOARD_STACKUP_ITEM( *item ) );
     }
 
@@ -872,13 +968,13 @@ void PANEL_SETUP_BOARD_STACKUP::onCalculateDielectricThickness( wxCommandEvent& 
     int row = 0;
     for( auto item : m_stackup.GetList() )
     {
-        if( !item->IsThicknessEditable() || !item->m_Enabled )
+        if( !item->IsThicknessEditable() || !item->IsEnabled() )
         {
             row++;
             continue;
         }
 
-        if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
+        if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
         {
             wxCheckBox* checkBox = static_cast<wxCheckBox*>( m_rowUiItemsList[row].m_ThicknessLockCtrl );
 
@@ -891,12 +987,12 @@ void PANEL_SETUP_BOARD_STACKUP::onCalculateDielectricThickness( wxCommandEvent& 
             {
                 fixed_thickness_cnt++;
 
-                if( item->m_Thickness < 0 )
+                if( item->GetThickness() < 0 )
                     thickness_error = true;
             }
         }
 
-        thickness += item->m_Thickness;
+        thickness += item->GetThickness();
         row++;
     }
 
@@ -936,15 +1032,15 @@ void PANEL_SETUP_BOARD_STACKUP::onCalculateDielectricThickness( wxCommandEvent& 
     row = 0;
     for( auto item : m_stackup.GetList() )
     {
-        if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC && item->m_Enabled  )
+        if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC && item->IsEnabled() )
         {
             wxCheckBox* checkBox = static_cast<wxCheckBox*>( m_rowUiItemsList[row].m_ThicknessLockCtrl );
 
             if( !checkBox->GetValue() )  // Not locked thickness: can be modified
             {
-                item->m_Thickness = dielectric_thickness;
+                item->SetThickness( dielectric_thickness );
                 wxTextCtrl* textCtrl = static_cast<wxTextCtrl*>( m_rowUiItemsList[row].m_ThicknessCtrl );
-                textCtrl->SetValue( StringFromValue( m_units, item->m_Thickness, true, true ) );
+                textCtrl->SetValue( StringFromValue( m_units, item->GetThickness(), true, true ) );
             }
         }
 
@@ -995,27 +1091,27 @@ void PANEL_SETUP_BOARD_STACKUP::onMaterialChange( wxCommandEvent& event )
     {
         DIELECTRIC_SUBSTRATE_LIST* mat_list = nullptr;
 
-        if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
+        if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
             mat_list = &m_delectricMatList;
-        else if( item->m_Type == BS_ITEM_TYPE_SOLDERMASK )
+        else if( item->GetType() == BS_ITEM_TYPE_SOLDERMASK )
             mat_list = &m_solderMaskMatList;
-        else if( item->m_Type == BS_ITEM_TYPE_SILKSCREEN )
+        else if( item->GetType() == BS_ITEM_TYPE_SILKSCREEN )
             mat_list = &m_silkscreenMatList;
 
         else
             continue;
 
-        int idx = mat_list->FindSubstrate( item->m_Material,
-                                           item->m_EpsilonR,
-                                           item->m_LossTangent );
+        int idx = mat_list->FindSubstrate( item->GetMaterial(),
+                                           item->GetEpsilonR(),
+                                           item->GetLossTangent() );
 
-        if( idx < 0 && !item->m_Material.IsEmpty() )
+        if( idx < 0 && !item->GetMaterial().IsEmpty() )
         {
             // This material is not in list: add it
             DIELECTRIC_SUBSTRATE new_mat;
-            new_mat.m_Name = item->m_Material;
-            new_mat.m_EpsilonR = item->m_EpsilonR;
-            new_mat.m_LossTangent = item->m_LossTangent;
+            new_mat.m_Name = item->GetMaterial();
+            new_mat.m_EpsilonR = item->GetEpsilonR();
+            new_mat.m_LossTangent = item->GetLossTangent();
             mat_list->AppendSubstrate( new_mat );
         }
     }
@@ -1024,7 +1120,7 @@ void PANEL_SETUP_BOARD_STACKUP::onMaterialChange( wxCommandEvent& event )
     BOARD_STACKUP_ITEM* item = GetStackupItem( row );
     DIELECTRIC_SUBSTRATE_LIST* item_mat_list = nullptr;
 
-    switch( item->m_Type )
+    switch( item->GetType() )
     {
     case BS_ITEM_TYPE_DIELECTRIC:
         item_mat_list = &m_delectricMatList;
@@ -1054,13 +1150,13 @@ void PANEL_SETUP_BOARD_STACKUP::onMaterialChange( wxCommandEvent& event )
         return;
 
     // Update Name, Epsilon R and Loss tg
-    item->m_Material = substrate.m_Name;
-    item->m_EpsilonR = substrate.m_EpsilonR;
-    item->m_LossTangent = substrate.m_LossTangent;
+    item->SetMaterial( substrate.m_Name );
+    item->SetEpsilonR( substrate.m_EpsilonR );
+    item->SetLossTangent( substrate.m_LossTangent );
 
     wxTextCtrl* textCtrl;
     textCtrl = static_cast<wxTextCtrl*>( m_rowUiItemsList[row].m_MaterialCtrl );
-    textCtrl->SetValue( item->m_Material );
+    textCtrl->SetValue( item->GetMaterial() );
 
     // some layers have a material choice but not EpsilonR ctrl
     if( item->HasEpsilonRValue() )
@@ -1088,7 +1184,7 @@ void PANEL_SETUP_BOARD_STACKUP::onThicknessChange( wxCommandEvent& event )
     wxString value = event.GetString();
 
     BOARD_STACKUP_ITEM* item = GetStackupItem( row );
-    item->m_Thickness = ValueFromString( m_frame->GetUserUnits(), value, true );
+    item->SetThickness( ValueFromString( m_frame->GetUserUnits(), value, true ) );
 }
 
 
@@ -1103,7 +1199,7 @@ wxColor PANEL_SETUP_BOARD_STACKUP::getColorIconItem( int aRow )
     BOARD_STACKUP_ITEM* layer = GetStackupItem( aRow );
     wxColor color;
 
-    switch( layer->m_Type )
+    switch( layer->GetType() )
     {
     case BS_ITEM_TYPE_COPPER:
         color = copperColor;
@@ -1176,10 +1272,10 @@ wxBitmapComboBox* PANEL_SETUP_BOARD_STACKUP::createBmComboBox( BOARD_STACKUP_ITE
             label = wxGetTranslation( item.m_ColorName );
         else    // Append the user color, if specified, else add a default user color
         {
-            if( aStackupItem && aStackupItem->m_Color.StartsWith( "#" ) )
+            if( aStackupItem && aStackupItem->GetColor().StartsWith( "#" ) )
             {
-                curr_color = wxColour( aStackupItem->m_Color );
-                label = aStackupItem->m_Color;
+                curr_color = wxColour( aStackupItem->GetColor() );
+                label = aStackupItem->GetColor();
             }
             else
                 label = curr_color.GetAsString( wxC2S_HTML_SYNTAX );

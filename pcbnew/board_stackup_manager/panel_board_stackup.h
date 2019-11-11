@@ -48,6 +48,7 @@ class PANEL_SETUP_LAYERS;
 // row by row
 struct BOARD_STACKUP_ROW_UI_ITEM
 {
+    BOARD_STACKUP_ITEM* m_Item;         // The BOARD_STACKUP_ITEM managed by this BOARD_STACKUP_ROW_UI_ITEM
     bool            m_isEnabled;        // True if the row is in board
                                         // false if not (this row is not shown on the panel)
     wxStaticBitmap* m_Icon;             // Color icon in first column (column 1)
@@ -61,7 +62,8 @@ struct BOARD_STACKUP_ROW_UI_ITEM
     wxControl*      m_EpsilonCtrl;      // control shown in column 8
     wxControl*      m_LossTgCtrl;       // control shown in column 9
 
-    BOARD_STACKUP_ROW_UI_ITEM() :
+    BOARD_STACKUP_ROW_UI_ITEM( BOARD_STACKUP_ITEM* aItem ) :
+        m_Item( aItem ),
         m_isEnabled( true ), m_Icon( nullptr ), m_LayerName( nullptr ),
         m_LayerTypeCtrl( nullptr ),
         m_MaterialCtrl( nullptr ),m_MaterialButt( nullptr ),
@@ -141,13 +143,16 @@ private:
      */
     bool transferDataFromUIToStackup();
 
-	void onUpdateThicknessValue( wxUpdateUIEvent& event ) override;
-	void onCalculateDielectricThickness( wxCommandEvent& event ) override;
+    void onUpdateThicknessValue( wxUpdateUIEvent& event ) override;
+    void onCalculateDielectricThickness( wxCommandEvent& event ) override;
 
     void onColorSelected( wxCommandEvent& event );
-	void onMaterialChange( wxCommandEvent& event );
-	void onThicknessChange( wxCommandEvent& event );
-	void onExportToClipboard( wxCommandEvent& event ) override;
+    void onMaterialChange( wxCommandEvent& event );
+    void onThicknessChange( wxCommandEvent& event );
+    void onExportToClipboard( wxCommandEvent& event ) override;
+    void onAddDielectricLayer( wxCommandEvent& event ) override;
+    void onRemoveDielectricLayer( wxCommandEvent& event ) override;
+    void onRemoveDielUI( wxUpdateUIEvent& event ) override;
 
     /** Update the icons color (swatches in first grid column)
      * @param aRow is the row (index in m_rowUiItemsList) that manages the icon to update.

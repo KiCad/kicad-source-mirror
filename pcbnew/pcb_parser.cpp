@@ -1065,10 +1065,10 @@ void PCB_PARSER::parseBoardStackup()
         if( type != BS_ITEM_TYPE_UNDEFINED )
         {
             item = new BOARD_STACKUP_ITEM( type );
-            item->m_LayerId = layerId;
+            item->SetBrdLayerId( layerId );
 
             if( type == BS_ITEM_TYPE_DIELECTRIC )
-                item->m_DielectricLayerId = dielectric_idx++;
+                item->SetDielectricLayerId( dielectric_idx++ );
 
             stackup.Add( item );
         }
@@ -1088,15 +1088,17 @@ void PCB_PARSER::parseBoardStackup()
                 {
                 case T_type:
                     NeedSYMBOL();
-                    item->m_TypeName = FromUTF8();
+                    item->SetTypeName( FromUTF8() );
                     NeedRIGHT();
                     break;
 
                 case T_thickness:
-                    item->m_Thickness = parseBoardUnits( T_thickness );
+                    item->SetThickness( parseBoardUnits( T_thickness ) );
                     token = NextTok();
+
                     if( token == T_LEFT )
                         break;
+
                     if( token == T_locked )
                     {
                         thickness_locked = true;
@@ -1106,25 +1108,25 @@ void PCB_PARSER::parseBoardStackup()
 
                 case T_material:
                     NeedSYMBOL();
-                    item->m_Material = FromUTF8();
+                    item->SetMaterial( FromUTF8() );
                     NeedRIGHT();
                     break;
 
                 case T_epsilon_r:
                     NextTok();
-                    item->m_EpsilonR = parseDouble();
+                    item->SetEpsilonR( parseDouble() );
                     NeedRIGHT();
                     break;
 
                 case T_loss_tangent:
                     NextTok();
-                    item->m_LossTangent = parseDouble();
+                    item->SetLossTangent( parseDouble() );
                     NeedRIGHT();
                     break;
 
                 case T_color:
                     NeedSYMBOL();
-                    item->m_Color = FromUTF8();
+                    item->SetColor( FromUTF8() );
                     NeedRIGHT();
                     break;
 
@@ -1138,7 +1140,7 @@ void PCB_PARSER::parseBoardStackup()
         }
 
         if( type == BS_ITEM_TYPE_DIELECTRIC && thickness_locked )
-            item->m_ThicknessLocked = true;
+            item->SetThicknessLocked( true );
     }
 
     if( token != T_RIGHT )

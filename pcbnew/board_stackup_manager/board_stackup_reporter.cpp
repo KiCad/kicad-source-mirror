@@ -48,13 +48,13 @@ wxString BuildStackupReport( BOARD_STACKUP& aStackup, EDA_UNITS_T aUnits )
     for( const auto item : aStackup.GetList() )
     {
         // Skip stackup items useless for the current board
-        if( !item->m_Enabled )
+        if( !item->IsEnabled() )
         {
             row++;
             continue;
         }
 
-        txt.Printf( "layer \"%s\" type \"%s\"", item->m_LayerName, item->m_TypeName );
+        txt.Printf( "layer \"%s\" type \"%s\"", item->GetLayerName(), item->GetTypeName() );
         report << txt;
 
         if( item->HasEpsilonRValue() )
@@ -71,23 +71,23 @@ wxString BuildStackupReport( BOARD_STACKUP& aStackup, EDA_UNITS_T aUnits )
 
         if( item->IsMaterialEditable() )
         {
-            txt.Printf( " Material \"%s\"", item->m_Material );
+            txt.Printf( " Material \"%s\"", item->GetMaterial() );
             report << txt;
         }
 
-        if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC )
+        if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
         {
-            txt.Printf( " \"%s\"", item->m_TypeName );
+            txt.Printf( " \"%s\"", item->GetTypeName() );
             report << txt;
         }
 
         if( item->IsThicknessEditable() )
         {
             txt.Printf( " Thickness %s",
-                        StringFromValue( aUnits, item->m_Thickness, true, true ) );
+                        StringFromValue( aUnits, item->GetThickness(), true, true ) );
             report << txt;
 
-            if( item->m_Type == BS_ITEM_TYPE_DIELECTRIC && item->m_ThicknessLocked )
+            if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC && item->IsThicknessLocked() )
             {
                 txt.Printf( " Locked" );
                 report << txt;
@@ -96,7 +96,7 @@ wxString BuildStackupReport( BOARD_STACKUP& aStackup, EDA_UNITS_T aUnits )
 
         if( item->IsColorEditable() )
         {
-            txt.Printf( " Color \"%s\"", item->m_Color );
+            txt.Printf( " Color \"%s\"", item->GetColor() );
             report << txt;
         }
         row++;

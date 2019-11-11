@@ -61,6 +61,9 @@ class PANEL_SETUP_BOARD_STACKUP_BASE : public wxPanel
 		wxStaticText* m_staticTextEpsilonR;
 		wxStaticText* m_staticTextLossTg;
 		wxRadioBox* m_rbDielectricConstraint;
+		wxButton* m_buttonAddDielectricLayer;
+		wxButton* m_buttonRemoveDielectricLayer;
+		wxStaticLine* m_staticline2;
 		wxCheckBox* m_cbCastellatedPads;
 		wxCheckBox* m_cbEgdesPlated;
 		wxStaticText* m_staticTextFinish;
@@ -72,12 +75,15 @@ class PANEL_SETUP_BOARD_STACKUP_BASE : public wxPanel
 		// Virtual event handlers, overide them in your derived class
 		virtual void onUpdateThicknessValue( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onCalculateDielectricThickness( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onAddDielectricLayer( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onRemoveDielectricLayer( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onRemoveDielUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onExportToClipboard( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 670,420 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_SETUP_BOARD_STACKUP_BASE();
 
 };

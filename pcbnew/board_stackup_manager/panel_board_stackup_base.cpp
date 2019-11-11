@@ -130,11 +130,20 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 
 	bSizerRight->Add( m_rbDielectricConstraint, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
+	m_buttonAddDielectricLayer = new wxButton( this, wxID_ANY, _("Add Dielectric Layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerRight->Add( m_buttonAddDielectricLayer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+
+	m_buttonRemoveDielectricLayer = new wxButton( this, wxID_ANY, _("Remove Dielectric Layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerRight->Add( m_buttonRemoveDielectricLayer, 0, wxTOP|wxBOTTOM|wxRIGHT|wxEXPAND, 5 );
+
+	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerRight->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+
 	wxStaticBoxSizer* sbSizerBrdOptions;
 	sbSizerBrdOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Board Finish") ), wxVERTICAL );
 
 	m_cbCastellatedPads = new wxCheckBox( sbSizerBrdOptions->GetStaticBox(), wxID_ANY, _("Has castellated pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizerBrdOptions->Add( m_cbCastellatedPads, 0, wxBOTTOM, 5 );
+	sbSizerBrdOptions->Add( m_cbCastellatedPads, 0, wxTOP|wxBOTTOM, 5 );
 
 	m_cbEgdesPlated = new wxCheckBox( sbSizerBrdOptions->GetStaticBox(), wxID_ANY, _("Plated board edge"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerBrdOptions->Add( m_cbEgdesPlated, 0, wxBOTTOM, 5 );
@@ -161,7 +170,10 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 	sbSizerBrdOptions->Add( m_choiceEdgeConn, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 
-	bSizerRight->Add( sbSizerBrdOptions, 1, wxEXPAND|wxRIGHT, 5 );
+	bSizerRight->Add( sbSizerBrdOptions, 0, wxEXPAND|wxTOP|wxRIGHT, 5 );
+
+
+	bSizerRight->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_buttonExport = new wxButton( this, wxID_ANY, _("Export to Clipboard"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerRight->Add( m_buttonExport, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
@@ -175,11 +187,13 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 
 	// Connect Events
 	m_thicknessCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onUpdateThicknessValue ), NULL, this );
 	m_buttonSetDielectricThickness->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onCalculateDielectricThickness ), NULL, this );
+	m_buttonAddDielectricLayer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onAddDielectricLayer ), NULL, this );
+	m_buttonRemoveDielectricLayer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onRemoveDielectricLayer ), NULL, this );
+	m_buttonRemoveDielectricLayer->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onRemoveDielUI ), NULL, this );
 	m_buttonExport->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onExportToClipboard ), NULL, this );
 }
 
@@ -188,6 +202,9 @@ PANEL_SETUP_BOARD_STACKUP_BASE::~PANEL_SETUP_BOARD_STACKUP_BASE()
 	// Disconnect Events
 	m_thicknessCtrl->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onUpdateThicknessValue ), NULL, this );
 	m_buttonSetDielectricThickness->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onCalculateDielectricThickness ), NULL, this );
+	m_buttonAddDielectricLayer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onAddDielectricLayer ), NULL, this );
+	m_buttonRemoveDielectricLayer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onRemoveDielectricLayer ), NULL, this );
+	m_buttonRemoveDielectricLayer->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onRemoveDielUI ), NULL, this );
 	m_buttonExport->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_BOARD_STACKUP_BASE::onExportToClipboard ), NULL, this );
 
 }

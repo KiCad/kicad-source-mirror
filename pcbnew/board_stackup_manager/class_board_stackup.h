@@ -56,6 +56,33 @@ enum BS_EDGE_CONNECTOR_CONSTRAINTS
     BS_EDGE_CONNECTOR_BEVELLED  // Some connector in board, and the connector must be bevelled
 };
 
+
+/**
+ * A helper class to manage a dielectric parameters
+ */
+class DIELECTRIC_PRMS
+{
+    friend class BOARD_STACKUP_ITEM;
+
+private:
+    int m_DielectricLayerId;/// the "layer" id for dielectric layers,
+                            /// from 1 (top) to 31 (bottom)
+    wxString m_Material;    /// type of material (for dielectric and solder mask)
+    int m_Thickness;        /// the physical layer thickness in internal units
+    bool m_ThicknessLocked; /// true for dielectric layers with a fixed thickness
+                            /// (for impendace controled purposes), unused for other layers
+    double m_EpsilonR;      /// For dielectric (and solder mask) the dielectric constant
+    double m_LossTangent;   /// For dielectric (and solder mask) the dielectric loss
+
+public:
+    DIELECTRIC_PRMS() :
+        m_DielectricLayerId(-1),
+        m_Thickness(0), m_ThicknessLocked( false ),
+        m_EpsilonR( 1.0 ), m_LossTangent( 0.0 )
+    {}
+};
+
+
 /**
  * this class manage one layer needed to make a physical board
  * it can be a solder mask, silk screen, copper or a dielectric
@@ -66,24 +93,25 @@ public:
     BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType );
     BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM& aOther );
 
+
+private:
     BOARD_STACKUP_ITEM_TYPE m_Type;
-    bool m_Enabled;         /// true if this stackup item must be taken in account,
-                            /// false to ignore it. Mainly used in dialog stackup editor.
     wxString m_LayerName;   /// name of layer as shown in layer manager. Usefull to create reports
     wxString m_TypeName;    /// type name of layer (copper, silk screen, core, prepreg ...)
-    wxString m_Material;    /// type of material (has meaning only for dielectric and solder mask)
-    int m_DielectricLayerId;/// the "layer" id for dielectric layers,
-                            /// from 1 (top) to 31 (bottom)
     wxString m_Color;       /// mainly for silkscreen and solder mask
-    int m_Thickness;        /// the physical layer thickness in internal units
-    bool m_ThicknessLocked; /// true for dielectric layers with a fixed thickness
-                            /// (for impendace controled purposes), unused for other layers
-    double m_EpsilonR;      /// For dielectric (and solder mask) the dielectric constant
-    double m_LossTangent;   /// For dielectric (and solder mask) the dielectric loss
     PCB_LAYER_ID m_LayerId; /// the layer id (F.Cu to B.Cu, F.Silk, B.silk, F.Mask, B.Mask)
                             /// and UNDEFINED_LAYER (-1) for dielectic layers that are not
                             /// really layers for the board editor
+    /// List of dielectric parameters
+    /// usually only one item, but in complex (microwave) boards, one can have
+    /// more than one dielectic layer between 2 copper layers, and therfore
+    /// more than one item in list
+    std::vector<DIELECTRIC_PRMS> m_DielectricPrmsList;
 
+    bool m_enabled;         /// true if this stackup item must be taken in account,
+                            /// false to ignore it. Mainly used in dialog stackup editor.
+
+public:
     /// @return true if the layer has a meaningfull Epsilon R parameter
     /// namely dielectric layers: dielectric and solder mask
     bool HasEpsilonRValue();
@@ -115,6 +143,39 @@ public:
 
     /// @return a wxString to print/display Loss Tangent
     wxString FormatLossTangent();
+
+    /// @return a wxString to print/display a dielectric name
+    wxString FormatDielectricLayerName();
+
+    // Getters:
+    bool IsEnabled() {return m_enabled; }
+
+    BOARD_STACKUP_ITEM_TYPE GetType() { return m_Type; }
+    PCB_LAYER_ID GetBrdLayerId() { return m_LayerId; }
+    wxString GetColor(){ return m_Color; }
+    wxString GetLayerName() { return m_LayerName; }
+    wxString GetTypeName() { return m_TypeName; }
+
+    int GetThickness( int aDielectricSubLayer = 0 );
+    bool IsThicknessLocked( int aDielectricSubLayer = 0 );
+    double GetEpsilonR( int aDielectricSubLayer = 0 );
+    double GetLossTangent( int aDielectricSubLayer = 0 );
+    int GetDielectricLayerId( int aDielectricSubLayer = 0 );
+    wxString GetMaterial( int aDielectricSubLayer = 0 );
+
+    // Setters:
+    void SetEnabled( bool aEnable) { m_enabled = aEnable; }
+    void SetBrdLayerId( PCB_LAYER_ID aBrdLayerId ) { m_LayerId = aBrdLayerId; }
+    void SetColor( const wxString& aColorName ){ m_Color = aColorName; }
+    void SetLayerName( const wxString& aName ) { m_LayerName = aName; }
+    void SetTypeName( const wxString& aName ) { m_TypeName = aName; }
+
+    void SetThickness( int aThickness, int aDielectricSubLayer = 0 );
+    void SetThicknessLocked( bool aLocked, int aDielectricSubLayer = 0 );
+    void SetEpsilonR( double aEpsilon, int aDielectricSubLayer = 0 );
+    void SetLossTangent( double aTg, int aDielectricSubLayer = 0 );
+    void SetDielectricLayerId( int aLayerId, int aDielectricSubLayer = 0 );
+    void SetMaterial( const wxString& aName, int aDielectricSubLayer = 0 );
 };
 
 
