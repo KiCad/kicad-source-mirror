@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -220,7 +220,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	m_gridDrills->EnableEditing( false );
 	m_gridDrills->EnableGridLines( true );
 	m_gridDrills->EnableDragGridSize( true );
-	m_gridDrills->SetMargins( 0, 0 );
+	m_gridDrills->SetMargins( 10, 0 );
 
 	// Columns
 	m_gridDrills->AutoSizeColumns();
@@ -249,7 +249,7 @@ DIALOG_BOARD_STATISTICS_BASE::DIALOG_BOARD_STATISTICS_BASE( wxWindow* parent, wx
 	m_gridDrills->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_TOP );
 	m_gridDrills->SetMaxSize( wxSize( -1,300 ) );
 
-	bDrillsSizer->Add( m_gridDrills, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bDrillsSizer->Add( m_gridDrills, 1, wxALL|wxEXPAND, 5 );
 
 
 	drillsPanel->SetSizer( bDrillsSizer );
