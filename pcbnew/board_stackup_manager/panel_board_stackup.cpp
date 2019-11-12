@@ -341,7 +341,7 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
                 if( brd_item->GetType() != BS_ITEM_TYPE_DIELECTRIC )
                     continue;
 
-                if( item->GetDielectricLayerId()  == brd_item->GetDielectricLayerId() )
+                if( item->GetDielectricLayerId() == brd_item->GetDielectricLayerId() )
                     brd_stack_item = brd_item;
             }
             else if( item->GetBrdLayerId() == brd_item->GetBrdLayerId() )
@@ -356,6 +356,14 @@ void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
         if( brd_stack_item != nullptr && aFullSync )
         {
             *item = *brd_stack_item;
+
+            if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+            {
+                wxChoice* choice = dynamic_cast<wxChoice*>( ui_row_item.m_LayerTypeCtrl );
+
+                if( choice )
+                    choice->SetSelection( item->GetTypeName() == KEY_CORE ? 0 : 1 );
+            }
 
             if( item->IsMaterialEditable() )
             {
