@@ -684,8 +684,8 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
         newItem->SetParent( part );
         newItem->SetFlags( IS_NEW | IS_PASTED | SELECTED );
 
-        newItem->SetUnit( m_frame->m_DrawSpecificUnit ? m_frame->GetUnit() : 0 );
-        newItem->SetConvert( m_frame->m_DrawSpecificConvert ? m_frame->GetConvert() : 0 );
+        newItem->SetUnit( newItem->GetUnit() ? m_frame->GetUnit() : 0 );
+        newItem->SetConvert( newItem->GetConvert() ? m_frame->GetConvert() : 0 );
 
         part->GetDrawItems().push_back( newItem );
         getView()->Add( newItem );
