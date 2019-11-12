@@ -715,13 +715,13 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
 
     //Write components amount to file
     msg << "\n";
-    msg << _( "Components\n----------" << "\n";
+    msg << _( "Components\n----------" ) << "\n";
     msg << "\n";
 
     printGridToStringAsTable( m_gridComponents, msg, false, false, true );
 
     msg << "\n";
-    msg << _( "Drill holes\n-----------" << "\n";
+    msg << _( "Drill holes\n-----------" ) << "\n";
     msg << "\n";
 
     printGridToStringAsTable( m_gridDrills, msg, false, true, false );
