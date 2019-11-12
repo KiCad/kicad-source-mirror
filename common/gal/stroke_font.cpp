@@ -577,7 +577,10 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
         int dd = (signed) *it - ' ';
 
         if( dd >= (int) m_glyphBoundingBoxes.size() || dd < 0 )
-            dd = '?' - ' ';
+        {
+            int substitute = *it == '\t' ? ' ' : '?';
+            dd = substitute - ' ';
+        }
 
         const BOX2D& box = m_glyphBoundingBoxes[dd];
         curX += box.GetEnd().x * curScale;
