@@ -170,7 +170,7 @@ void PANEL_SETUP_BOARD_STACKUP::onAddDielectricLayer( wxCommandEvent& event )
 void PANEL_SETUP_BOARD_STACKUP::onRemoveDielectricLayer( wxCommandEvent& event )
 {
     // Build deletable Dielectric layers list.
-    // A lyer can be deleted if there are 2 (or more) dielectric layers
+    // A layer can be deleted if there are 2 (or more) dielectric layers
     // between 2 copper layers
     wxArrayString d_list;
     wxString previousD_Layer;
@@ -576,7 +576,7 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel()
         }
         else
         {
-            item->GetLayerName() = m_board->GetLayerName( item->GetBrdLayerId() );
+            item->SetLayerName( m_board->GetLayerName( item->GetBrdLayerId() ) );
             wxStaticText* st_text =  new wxStaticText( m_scGridWin, wxID_ANY, item->GetLayerName() );
             m_fgGridSizer->Add( st_text, 0, wxALL|wxALIGN_CENTER_VERTICAL, 1 );
             st_text->Show( show_item );

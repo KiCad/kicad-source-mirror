@@ -57,6 +57,12 @@ wxString BuildStackupReport( BOARD_STACKUP& aStackup, EDA_UNITS_T aUnits )
         txt.Printf( "layer \"%s\" type \"%s\"", item->GetLayerName(), item->GetTypeName() );
         report << txt;
 
+        if( item->IsMaterialEditable() )
+        {
+            txt.Printf( " Material \"%s\"", item->GetMaterial() );
+            report << txt;
+        }
+
         if( item->HasEpsilonRValue() )
         {
             txt.Printf( " EpsilonR %s", item->FormatEpsilonR() );
@@ -66,18 +72,6 @@ wxString BuildStackupReport( BOARD_STACKUP& aStackup, EDA_UNITS_T aUnits )
         if( item->HasLossTangentValue() )
         {
             txt.Printf( " LossTg %s", item->FormatLossTangent() );
-            report << txt;
-        }
-
-        if( item->IsMaterialEditable() )
-        {
-            txt.Printf( " Material \"%s\"", item->GetMaterial() );
-            report << txt;
-        }
-
-        if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
-        {
-            txt.Printf( " \"%s\"", item->GetTypeName() );
             report << txt;
         }
 
