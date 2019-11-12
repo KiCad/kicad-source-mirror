@@ -306,10 +306,15 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
         // The choice of spaces is somewhat arbitrary but sufficient for aligning text
         if( *chIt == '\t' )
         {
-            double fourSpaces = 4.0 * glyphSize.x * m_glyphBoundingBoxes[0].GetEnd().x;
-            double addlSpace = fourSpaces - std::fmod( xOffset, fourSpaces );
+            double space = glyphSize.x * m_glyphBoundingBoxes[0].GetEnd().x;
+
+            // We align to the 4th column (fmod) but only need to account for 3 of
+            // the four spaces here with the extra.  This ensures that we have at
+            // least 1 space for the \t character
+            double addlSpace = 3.0 * space - std::fmod( xOffset, 4.0 * space );
 
             // Add the remaining space (between 0 and 3 spaces)
+            // The fourth space is added by the 'dd' character
             xOffset += addlSpace;
 
             glyphSize = baseGlyphSize;
@@ -496,8 +501,8 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
         // The choice of spaces is somewhat arbitrary but sufficient for aligning text
         if( *it == '\t' )
         {
-            double fourSpaces = 4.0 * m_glyphBoundingBoxes[0].GetEnd().x;
-            double addlSpace = fourSpaces - std::fmod( curX, fourSpaces );
+            double spaces = m_glyphBoundingBoxes[0].GetEnd().x;
+            double addlSpace = 3.0 * spaces - std::fmod( curX, 4.0 * spaces );
 
             // Add the remaining space (between 0 and 3 spaces)
             curX += addlSpace;
