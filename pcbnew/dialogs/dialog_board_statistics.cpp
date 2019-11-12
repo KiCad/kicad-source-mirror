@@ -649,15 +649,13 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
         return;
     }
 
-    msg << _( "PCB statistics report" ) << "\n";
-    msg << _( "=====================" ) << "\n";
+    msg << _( "PCB statistics report\n=====================" ) << "\n";
     msg << _( "- Date: " ) << wxDateTime::Now().Format() << "\n";
     msg << _( "- Project: " ) << Prj().GetProjectName() << "\n";
     msg << _( "- Board name: " ) << boardName << "\n";
 
     msg << "\n";
-    msg << _( "Board" ) << "\n";
-    msg << _( "-----" ) << "\n";
+    msg << _( "Board\n-----" ) << "\n";
 
     if( m_hasOutline )
     {
@@ -665,7 +663,7 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
         msg << _( "- Height: " ) << MessageTextFromValue( GetUserUnits(), m_boardHeight ) << "\n";
         msg << _( "- Area: " )
             << wxString::Format(
-                       wxT( "%.3f %s²" ), m_boardArea, GetAbbreviatedUnitsLabel( GetUserUnits() ) )
+                       wxT( "%.3f %s^2" ), m_boardArea, GetAbbreviatedUnitsLabel( GetUserUnits() ) )
             << "\n";
     }
     else
@@ -676,15 +674,13 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
     }
 
     msg << "\n";
-    msg << _( "Pads" ) << "\n";
-    msg << _( "----" ) << "\n";
+    msg << _( "Pads\n----" ) << "\n";
 
     for( auto& type : m_padsTypes )
         msg << "- " << type.title << " " << type.qty << "\n";
 
     msg << "\n";
-    msg << _( "Vias" ) << "\n";
-    msg << _( "----" ) << "\n";
+    msg << _( "Vias\n----" ) << "\n";
 
     for( auto& type : m_viasTypes )
         msg << "- " << type.title << " " << type.qty << "\n";
@@ -692,7 +688,7 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
     // We will save data about components in the table.
     // We have to calculate column widths
     std::vector<int>      widths;
-    std::vector<wxString> labels{ _( "" ), _( "Front Side" ), _( "Back Side" ), _( "Total" ) };
+    std::vector<wxString> labels{ "", _( "Front Side" ), _( "Back Side" ), _( "Total" ) };
     wxString tmp;
 
     for( auto label : labels )
@@ -719,15 +715,13 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
 
     //Write components amount to file
     msg << "\n";
-    msg << _( "Components" ) << "\n";
-    msg << _( "----------" ) << "\n";
+    msg << _( "Components\n----------" << "\n";
     msg << "\n";
 
     printGridToStringAsTable( m_gridComponents, msg, false, false, true );
 
     msg << "\n";
-    msg << _( "Drill holes" ) << "\n";
-    msg << _( "-----------" ) << "\n";
+    msg << _( "Drill holes\n-----------" << "\n";
     msg << "\n";
 
     printGridToStringAsTable( m_gridDrills, msg, false, true, false );
@@ -750,7 +744,7 @@ void DIALOG_BOARD_STATISTICS::drillGridSize( wxSizeEvent& aEvent )
 void DIALOG_BOARD_STATISTICS::drillGridSort( wxGridEvent& aEvent )
 {
     drillType_t::COL_ID colId = static_cast<drillType_t::COL_ID>( aEvent.GetCol() );
-    bool                ascending =
+    bool ascending =
             !( m_gridDrills->IsSortingBy( colId ) && m_gridDrills->IsSortOrderAscending() );
 
     sort( m_drillTypes.begin(), m_drillTypes.end(), drillType_t::COMPARE( colId, ascending ) );
