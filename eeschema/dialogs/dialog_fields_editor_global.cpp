@@ -346,7 +346,15 @@ public:
         else if( rhGroup.m_Refs.size() == 0 )
             return false;
 
-        bool retVal;
+        // N.B. To meet the iterator sort conditions, we cannot simply invert the truth
+        // to get the opposite sort.  i.e. ~(a<b) != (a>b)
+        auto local_cmp = [ ascending ]( const auto a, const auto b )
+        {
+            if( ascending )
+                return a < b;
+            else
+                return a > b;
+        };
 
         // Primary sort key is sortCol; secondary is always REFERENCE (column 0)
 
@@ -357,15 +365,10 @@ public:
         {
             wxString lhRef = lhGroup.m_Refs[ 0 ].GetRef() + lhGroup.m_Refs[ 0 ].GetRefNumber();
             wxString rhRef = rhGroup.m_Refs[ 0 ].GetRef() + rhGroup.m_Refs[ 0 ].GetRefNumber();
-            retVal = UTIL::RefDesStringCompare( lhRef, rhRef ) < 0;
+            return local_cmp( UTIL::RefDesStringCompare( lhRef, rhRef ), 0 );
         }
         else
-            retVal = ValueStringCompare( lhs, rhs ) < 0;
-
-        if( ascending )
-            return retVal;
-        else
-            return !retVal;
+            return local_cmp( ValueStringCompare( lhs, rhs ), 0 );
     }
 
 
@@ -997,6 +1000,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnColSort( wxGridEvent& aEvent )
         ascending = true;
 
     m_dataModel->Sort( sortCol, ascending );
+    m_grid->ForceRefresh();
 }
 
 
