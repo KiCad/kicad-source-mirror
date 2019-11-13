@@ -699,8 +699,15 @@ void TREE_PROJECT_FRAME::OnRenameFile( wxCommandEvent& )
     if( buffer.IsEmpty() )
         return; // empty file name not allowed
 
+    wxString oldDir = tree_data->GetDir();
+
     if( tree_data->Rename( buffer, true ) )
-        m_TreeProject->SetItemText( curr_item, buffer );
+    {
+        if( tree_data->GetDir() != oldDir )
+            ReCreateTreePrj();
+        else
+            m_TreeProject->SetItemText( curr_item, buffer );
+    }
 }
 
 
