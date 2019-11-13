@@ -246,29 +246,40 @@ public:
             rhStr = GetValue( rhs, sortCol, units );
         }
 
-        bool cmp;
+        bool res;
+
+        // N.B. To meet the iterator sort conditions, we cannot simply invert the truth
+        // to get the opposite sort.  i.e. ~(a<b) != (a>b)
+        auto cmp = [ ascending ]( const auto a, const auto b )
+        {
+            if( ascending )
+                return a < b;
+            else
+                return b < a;
+        };
 
         switch( sortCol )
         {
         case COL_NUMBER:
         case COL_NAME:
-            cmp = PinNumbers::Compare( lhStr, rhStr ) < 0;
+            res = cmp( PinNumbers::Compare( lhStr, rhStr ), 0 );
             break;
         case COL_NUMBER_SIZE:
         case COL_NAME_SIZE:
-            cmp = ValueFromString( units, lhStr, true ) < ValueFromString( units, rhStr, true );
+            res = cmp( ValueFromString( units, lhStr, true ),
+                    ValueFromString( units, rhStr, true ) );
             break;
         case COL_LENGTH:
         case COL_POSX:
         case COL_POSY:
-            cmp = ValueFromString( units, lhStr ) < ValueFromString( units, rhStr );
+            res = cmp( ValueFromString( units, lhStr ), ValueFromString( units, rhStr ) );
             break;
         default:
-            cmp = StrNumCmp( lhStr, rhStr ) < 0;
+            res = cmp( StrNumCmp( lhStr, rhStr ), 0 );
             break;
         }
 
-        return ascending == cmp;
+        return res;
     }
 
     void RebuildRows( LIB_PINS& aPins, bool groupByName )
@@ -325,7 +336,7 @@ public:
     void SortRows( int aSortCol, bool ascending )
     {
         std::sort( m_rows.begin(), m_rows.end(),
-                   [ aSortCol, ascending, this ]( LIB_PINS& lhs, LIB_PINS& rhs ) -> bool
+                   [ aSortCol, ascending, this ]( const LIB_PINS& lhs, const LIB_PINS& rhs ) -> bool
                    {
                        return compare( lhs, rhs, aSortCol, ascending, m_userUnits );
                    } );
