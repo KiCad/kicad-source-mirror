@@ -614,150 +614,173 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
     for( int ii = 0; ii < brd_stackup.GetCount(); ++ii )
     {
         BOARD_STACKUP_ITEM* item = brd_stackup.GetStackupLayer( ii );
-        double thickness = item->GetThickness()*m_conversionUnits; // layer thickness is always in mm
-        wxString layer_type;
-        std::string layer_name;     // for comment
 
-        switch( item->GetType() )
+        int sub_layer_count = item->GetType() == BS_ITEM_TYPE_DIELECTRIC
+                                    ? item->GetSublayersCount() : 1;
+
+        for( int sub_idx = 0; sub_idx < sub_layer_count; sub_idx++ )
         {
-        case BS_ITEM_TYPE_COPPER:
-            layer_type = "Copper";
-            layer_name = formatStringFromUTF32( m_pcb->GetLayerName( item->GetBrdLayerId() ) );
-            last_copper_layer = item->GetBrdLayerId();
-            break;
+            // layer thickness is always in mm
+            double thickness = item->GetThickness( sub_idx )*m_conversionUnits;
+            wxString layer_type;
+            std::string layer_name;     // for comment
 
-        case BS_ITEM_TYPE_SILKSCREEN:
-            layer_type = "Legend";
-            layer_name = formatStringFromUTF32( item->GetTypeName() );
-            break;
-
-        case BS_ITEM_TYPE_SOLDERMASK:
-            layer_type = "SolderMask";
-            layer_name = formatStringFromUTF32( item->GetTypeName() );
-            break;
-
-        case BS_ITEM_TYPE_SOLDERPASTE:
-            layer_type = "SolderPaste";
-            layer_name = formatStringFromUTF32( item->GetTypeName() );
-            break;
-
-        case BS_ITEM_TYPE_DIELECTRIC:
-            layer_type = "Dielectric";
-            // The option core or prepreg is not added here, as it creates constraints
-            // in build process, not necessary wanted.
-            layer_name = formatStringFromUTF32( wxString::Format( "dielectric layer %d",
-                                               item->GetDielectricLayerId() ) );
-            break;
-
-        default:
-            break;
-        }
-
-        openBlock();
-        addJSONObject( wxString::Format( "\"Type\":  \"%s\",\n", layer_type ) );
-
-        if( item->IsColorEditable() && uptodate )
-        {
-            if( IsPrmSpecified( item->GetColor() ) )
+            switch( item->GetType() )
             {
-                wxString colorName = item->GetColor();
+            case BS_ITEM_TYPE_COPPER:
+                layer_type = "Copper";
+                layer_name = formatStringFromUTF32( m_pcb->GetLayerName( item->GetBrdLayerId() ) );
+                last_copper_layer = item->GetBrdLayerId();
+                break;
 
-                if( colorName.StartsWith( "#" ) )     // This is a user defined color.
+            case BS_ITEM_TYPE_SILKSCREEN:
+                layer_type = "Legend";
+                layer_name = formatStringFromUTF32( item->GetTypeName() );
+                break;
+
+            case BS_ITEM_TYPE_SOLDERMASK:
+                layer_type = "SolderMask";
+                layer_name = formatStringFromUTF32( item->GetTypeName() );
+                break;
+
+            case BS_ITEM_TYPE_SOLDERPASTE:
+                layer_type = "SolderPaste";
+                layer_name = formatStringFromUTF32( item->GetTypeName() );
+                break;
+
+            case BS_ITEM_TYPE_DIELECTRIC:
+                layer_type = "Dielectric";
+                // The option core or prepreg is not added here, as it creates constraints
+                // in build process, not necessary wanted.
+                if( sub_layer_count > 1 )
                 {
-                    // In job file a color can be given by its RGB values (0...255)
-                    wxColor color( colorName );
-                    colorName.Printf( "R%dG%dB%d", color.Red(), color.Green(), color.Blue() );
+                    layer_name = formatStringFromUTF32(
+                                    wxString::Format( "dielectric layer %d - %d/%d",
+                                                      item->GetDielectricLayerId(),
+                                                      sub_idx+1, sub_layer_count ) );
                 }
+                else
+                    layer_name = formatStringFromUTF32(
+                                    wxString::Format( "dielectric layer %d",
+                                    item->GetDielectricLayerId() ) );
+                break;
 
-                addJSONObject( wxString::Format( "\"Color\":  \"%s\",\n", colorName ) );
+            default:
+                break;
             }
-        }
 
-        if( item->IsThicknessEditable() && uptodate )
-            addJSONObject( wxString::Format( "\"Thickness\":  %.3f,\n", thickness ) );
+            openBlock();
+            addJSONObject( wxString::Format( "\"Type\":  \"%s\",\n", layer_type ) );
 
-        if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
-        {
-            if( item->HasMaterialValue() )
+            if( item->IsColorEditable() && uptodate )
             {
-                addJSONObject( wxString::Format( "\"Material\":  \"%s\",\n", item->GetMaterial() ) );
-
-                // These constrains are only written if the board has impedance controlled tracks.
-                // If the board is not impedance controlled,  they are useless.
-                // Do not add constrains that create more expensive boards.
-                if( brd_stackup.m_HasDielectricConstrains )
+                if( IsPrmSpecified( item->GetColor() ) )
                 {
-                    // Generate Epsilon R if > 1.0 (value <= 1.0 means not specified: it is not
-                    // a possible value
-                    if( item->GetEpsilonR() > 1.0 )
-                        addJSONObject( wxString::Format( "\"DielectricConstant\":  %s,\n",
-                                            item->FormatEpsilonR() ) );
+                    wxString colorName = item->GetColor();
 
-                    // Generate LossTangent > 0.0 (value <= 0.0 means not specified: it is not
-                    // a possible value
-                    if( item->GetLossTangent() > 0.0 )
-                        addJSONObject( wxString::Format( "\"LossTangent\":  %s,\n",
-                                            item->FormatLossTangent() ) );
+                    if( colorName.StartsWith( "#" ) )     // This is a user defined color.
+                    {
+                        // In job file a color can be given by its RGB values (0...255)
+                        wxColor color( colorName );
+                        colorName.Printf( "R%dG%dB%d", color.Red(), color.Green(), color.Blue() );
+                    }
+
+                    addJSONObject( wxString::Format( "\"Color\":  \"%s\",\n", colorName ) );
                 }
             }
 
-            PCB_LAYER_ID next_copper_layer = (PCB_LAYER_ID) (last_copper_layer+1);
+            if( item->IsThicknessEditable() && uptodate )
+                addJSONObject( wxString::Format( "\"Thickness\":  %.3f,\n", thickness ) );
 
-            // If the next_copper_layer is the last copper layer, the next layer id is B_Cu
-            if( next_copper_layer >= m_pcb->GetCopperLayerCount()-1 )
-                next_copper_layer = B_Cu;
+            if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+            {
+                if( item->HasMaterialValue() )
+                {
+                    addJSONObject( wxString::Format( "\"Material\":  \"%s\",\n",
+                                   item->GetMaterial( sub_idx ) ) );
 
+                    // These constrains are only written if the board has impedance controlled tracks.
+                    // If the board is not impedance controlled,  they are useless.
+                    // Do not add constrains that create more expensive boards.
+                    if( brd_stackup.m_HasDielectricConstrains )
+                    {
+                        // Generate Epsilon R if > 1.0 (value <= 1.0 means not specified: it is not
+                        // a possible value
+                        if( item->GetEpsilonR() > 1.0 )
+                            addJSONObject( wxString::Format( "\"DielectricConstant\":  %s,\n",
+                                                item->FormatEpsilonR( sub_idx ) ) );
 
-            addJSONObject( wxString::Format( "\"Name\":  \"%s/%s\",\n",
+                        // Generate LossTangent > 0.0 (value <= 0.0 means not specified: it is not
+                        // a possible value
+                        if( item->GetLossTangent() > 0.0 )
+                            addJSONObject( wxString::Format( "\"LossTangent\":  %s,\n",
+                                                item->FormatLossTangent( sub_idx ) ) );
+                    }
+                }
+
+                PCB_LAYER_ID next_copper_layer = (PCB_LAYER_ID) (last_copper_layer+1);
+
+                // If the next_copper_layer is the last copper layer, the next layer id is B_Cu
+                if( next_copper_layer >= m_pcb->GetCopperLayerCount()-1 )
+                    next_copper_layer = B_Cu;
+
+                wxString subLayerName;
+
+                if( sub_layer_count > 1 )
+                    subLayerName.Printf( " (%d/%d)",sub_idx+1, sub_layer_count );
+
+                addJSONObject( wxString::Format( "\"Name\":  \"%s/%s%s\",\n",
+                                    formatStringFromUTF32( m_pcb->GetLayerName( last_copper_layer ) ),
+                                    formatStringFromUTF32( m_pcb->GetLayerName( next_copper_layer ) ),
+                                    subLayerName )
+                             );
+
+                // Add a comment ("Notes"):
+                wxString note = "\"Notes\": ";
+
+                note << wxString::Format( " \"Type: %s", layer_name.c_str() );
+
+                note << wxString::Format( " (from %s to %s)\"\n",
                                 formatStringFromUTF32( m_pcb->GetLayerName( last_copper_layer ) ),
-                                formatStringFromUTF32( m_pcb->GetLayerName( next_copper_layer ) ) )
-                         );
+                                formatStringFromUTF32( m_pcb->GetLayerName( next_copper_layer ) ) );
 
-            // Add a comment ("Notes"):
-            wxString note = "\"Notes\": ";
-
-            note << wxString::Format( " \"Type: %s", layer_name.c_str() );
-
-            note << wxString::Format( " (from %s to %s)\"\n",
-                            formatStringFromUTF32( m_pcb->GetLayerName( last_copper_layer ) ),
-                            formatStringFromUTF32( m_pcb->GetLayerName( next_copper_layer ) ) );
-
-            addJSONObject( note );
-        }
-        else if( item->GetType() == BS_ITEM_TYPE_SOLDERMASK || item->GetType() == BS_ITEM_TYPE_SILKSCREEN )
-        {
-            if( item->HasMaterialValue() )
+                addJSONObject( note );
+            }
+            else if( item->GetType() == BS_ITEM_TYPE_SOLDERMASK || item->GetType() == BS_ITEM_TYPE_SILKSCREEN )
             {
-                addJSONObject( wxString::Format( "\"Material\":  \"%s\",\n", item->GetMaterial() ) );
-
-                // These constrains are only written if the board has impedance controlled tracks.
-                // If the board is not impedance controlled,  they are useless.
-                // Do not add constrains that create more expensive boards.
-                if( brd_stackup.m_HasDielectricConstrains )
+                if( item->HasMaterialValue() )
                 {
-                    // Generate Epsilon R if > 1.0 (value <= 1.0 means not specified: it is not
-                    // a possible value
-                    if( item->GetEpsilonR() > 1.0 )
-                        addJSONObject( wxString::Format( "\"DielectricConstant\":  %s,\n",
-                                            item->FormatEpsilonR() ) );
+                    addJSONObject( wxString::Format( "\"Material\":  \"%s\",\n", item->GetMaterial() ) );
 
-                    // Generate LossTangent > 0.0 (value <= 0.0 means not specified: it is not
-                    // a possible value
-                    if( item->GetLossTangent() > 0.0 )
-                        addJSONObject( wxString::Format( "\"LossTangent\":  %s,\n",
-                                                item->FormatLossTangent() ) );
+                    // These constrains are only written if the board has impedance controlled tracks.
+                    // If the board is not impedance controlled,  they are useless.
+                    // Do not add constrains that create more expensive boards.
+                    if( brd_stackup.m_HasDielectricConstrains )
+                    {
+                        // Generate Epsilon R if > 1.0 (value <= 1.0 means not specified: it is not
+                        // a possible value
+                        if( item->GetEpsilonR() > 1.0 )
+                            addJSONObject( wxString::Format( "\"DielectricConstant\":  %s,\n",
+                                                item->FormatEpsilonR() ) );
+
+                        // Generate LossTangent > 0.0 (value <= 0.0 means not specified: it is not
+                        // a possible value
+                        if( item->GetLossTangent() > 0.0 )
+                            addJSONObject( wxString::Format( "\"LossTangent\":  %s,\n",
+                                                    item->FormatLossTangent() ) );
+                    }
                 }
+
+                addJSONObject( wxString::Format( "\"Name\":  \"%s\",\n", layer_name.c_str() ) );
+            }
+            else
+            {
+                addJSONObject( wxString::Format( "\"Name\":  \"%s\",\n", layer_name.c_str() ) );
             }
 
-            addJSONObject( wxString::Format( "\"Name\":  \"%s\",\n", layer_name.c_str() ) );
+            removeJSONSepararator();
+            closeBlockWithSep();
         }
-        else
-        {
-            addJSONObject( wxString::Format( "\"Name\":  \"%s\",\n", layer_name.c_str() ) );
-        }
-
-        removeJSONSepararator();
-        closeBlockWithSep();
     }
 
     removeJSONSepararator();

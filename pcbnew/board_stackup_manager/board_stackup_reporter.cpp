@@ -42,58 +42,76 @@ wxString BuildStackupReport( BOARD_STACKUP& aStackup, EDA_UNITS_T aUnits )
     wxString report;
 
     wxString txt;
-    int row = 0;
     LOCALE_IO toggle;   // toggles on the C locale to write floating values, then off.
 
-    for( const auto item : aStackup.GetList() )
+    for( const BOARD_STACKUP_ITEM* item : aStackup.GetList() )
     {
         // Skip stackup items useless for the current board
         if( !item->IsEnabled() )
-        {
-            row++;
             continue;
-        }
 
-        txt.Printf( "layer \"%s\" type \"%s\"", item->GetLayerName(), item->GetTypeName() );
+        if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+        {
+            wxString sublayer_text;
+
+            if( item->GetSublayersCount() )
+                sublayer_text.Printf( "\n  sublayer \"1/%d\"", item->GetSublayersCount() );
+
+            txt.Printf( "layer \"%s\" type \"%s\"%s",
+                            item->FormatDielectricLayerName(),
+                            item->GetTypeName(), sublayer_text );
+        }
+        else
+            txt.Printf( "layer \"%s\" type \"%s\"", item->GetLayerName(),
+                        item->GetTypeName() );
+
         report << txt;
-
-        if( item->IsMaterialEditable() )
-        {
-            txt.Printf( " Material \"%s\"", item->GetMaterial() );
-            report << txt;
-        }
-
-        if( item->HasEpsilonRValue() )
-        {
-            txt.Printf( " EpsilonR %s", item->FormatEpsilonR() );
-            report << txt;
-        }
-
-        if( item->HasLossTangentValue() )
-        {
-            txt.Printf( " LossTg %s", item->FormatLossTangent() );
-            report << txt;
-        }
-
-        if( item->IsThicknessEditable() )
-        {
-            txt.Printf( " Thickness %s",
-                        StringFromValue( aUnits, item->GetThickness(), true, true ) );
-            report << txt;
-
-            if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC && item->IsThicknessLocked() )
-            {
-                txt.Printf( " Locked" );
-                report << txt;
-            }
-        }
 
         if( item->IsColorEditable() )
         {
             txt.Printf( " Color \"%s\"", item->GetColor() );
             report << txt;
         }
-        row++;
+
+        for( int idx = 0; idx < item->GetSublayersCount(); idx++ )
+        {
+            if( idx )    // not printed for the main (first) layer.
+            {
+                txt.Printf( "\n  sublayer \"%d/%d\"", idx+1, item->GetSublayersCount() );
+                report << txt;
+            }
+
+            if( item->IsThicknessEditable() )
+            {
+                txt.Printf( " Thickness %s",
+                            StringFromValue( aUnits, item->GetThickness( idx ), true, true ) );
+                report << txt;
+
+                if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC && item->IsThicknessLocked( idx ) )
+                {
+                    txt.Printf( " Locked" );
+                    report << txt;
+                }
+            }
+
+            if( item->IsMaterialEditable() )
+            {
+                txt.Printf( " Material \"%s\"", item->GetMaterial( idx ) );
+                report << txt;
+            }
+
+            if( item->HasEpsilonRValue() )
+            {
+                txt.Printf( " EpsilonR %s", item->FormatEpsilonR( idx ) );
+                report << txt;
+            }
+
+            if( item->HasLossTangentValue() )
+            {
+                txt.Printf( " LossTg %s", item->FormatLossTangent( idx ) );
+                report << txt;
+            }
+        }
 
         report << '\n';
     }

@@ -35,6 +35,7 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
     m_DielectricPrmsList.emplace_back( item_prms );
     m_LayerId = UNDEFINED_LAYER;
     m_Type = aType;
+    SetDielectricLayerId( 1 );
     SetEnabled( true );
 
     // Initialize parameters to a usual value for allowed types:
@@ -48,7 +49,6 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
     case BS_ITEM_TYPE_DIELECTRIC:
         m_TypeName = KEY_CORE;      // or prepreg
         SetMaterial( "FR4" );       // or other dielectric name
-        SetDielectricLayerId( 1 );
         SetLossTangent( 0.02 );     // for FR4
         SetEpsilonR( 4.5 );         // for FR4
         break;
@@ -81,6 +81,7 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
 BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM& aOther )
 {
     m_LayerId = aOther.m_LayerId;
+    m_DielectricLayerId = aOther.m_DielectricLayerId;
     m_Type = aOther.m_Type;
     m_enabled = aOther.m_enabled;
     m_DielectricPrmsList = aOther.m_DielectricPrmsList;
@@ -88,6 +89,28 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM& aOther )
     m_LayerName = aOther.m_LayerName;
     m_Color = aOther.GetColor();
 }
+
+
+void BOARD_STACKUP_ITEM::AddDielectricPrms( int aDielectricPrmsIdx )
+{
+    // add a DIELECTRIC_PRMS item to m_DielectricPrmsList
+    DIELECTRIC_PRMS new_prms;
+
+    m_DielectricPrmsList.emplace( m_DielectricPrmsList.begin() + aDielectricPrmsIdx,
+                                  new_prms );
+}
+
+
+void BOARD_STACKUP_ITEM::RemoveDielectricPrms( int aDielectricPrmsIdx )
+{
+    // Remove a DIELECTRIC_PRMS item from m_DielectricPrmsList if possible
+
+    if( GetSublayersCount() < 2 || aDielectricPrmsIdx < 0 || aDielectricPrmsIdx >= GetSublayersCount() )
+        return;
+
+    m_DielectricPrmsList.erase( m_DielectricPrmsList.begin() + aDielectricPrmsIdx );
+}
+
 
 
 int BOARD_STACKUP_ITEM::GetCopperDefaultThickness()
@@ -104,38 +127,42 @@ int BOARD_STACKUP_ITEM::GetMaskDefaultThickness()
 }
 
 // Getters:
-int BOARD_STACKUP_ITEM::GetThickness( int aDielectricSubLayer )
+int BOARD_STACKUP_ITEM::GetThickness( int aDielectricSubLayer ) const
 {
+    wxASSERT( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() );
+
     return m_DielectricPrmsList[aDielectricSubLayer].m_Thickness;
 }
 
 
-double BOARD_STACKUP_ITEM::GetLossTangent( int aDielectricSubLayer )
+double BOARD_STACKUP_ITEM::GetLossTangent( int aDielectricSubLayer ) const
 {
+    wxASSERT( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() );
+
     return m_DielectricPrmsList[aDielectricSubLayer].m_LossTangent;
 }
 
 
-double BOARD_STACKUP_ITEM::GetEpsilonR( int aDielectricSubLayer )
+double BOARD_STACKUP_ITEM::GetEpsilonR( int aDielectricSubLayer ) const
 {
+    wxASSERT( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() );
+
     return m_DielectricPrmsList[aDielectricSubLayer].m_EpsilonR;
 }
 
 
-bool BOARD_STACKUP_ITEM::IsThicknessLocked( int aDielectricSubLayer )
+bool BOARD_STACKUP_ITEM::IsThicknessLocked( int aDielectricSubLayer ) const
 {
+    wxASSERT( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() );
+
     return m_DielectricPrmsList[aDielectricSubLayer].m_ThicknessLocked;
 }
 
 
-int BOARD_STACKUP_ITEM::GetDielectricLayerId( int aDielectricSubLayer )
+wxString BOARD_STACKUP_ITEM::GetMaterial( int aDielectricSubLayer ) const
 {
-    return m_DielectricPrmsList[aDielectricSubLayer].m_DielectricLayerId;
-}
+    wxASSERT( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() );
 
-
-wxString BOARD_STACKUP_ITEM::GetMaterial( int aDielectricSubLayer )
-{
     return m_DielectricPrmsList[aDielectricSubLayer].m_Material;
 }
 
@@ -143,41 +170,50 @@ wxString BOARD_STACKUP_ITEM::GetMaterial( int aDielectricSubLayer )
 // Setters:
 void BOARD_STACKUP_ITEM::SetThickness( int aThickness, int aDielectricSubLayer )
 {
-    m_DielectricPrmsList[aDielectricSubLayer].m_Thickness = aThickness;
+    wxASSERT( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() );
+
+    if( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() )
+        m_DielectricPrmsList[aDielectricSubLayer].m_Thickness = aThickness;
 }
 
 
 void BOARD_STACKUP_ITEM::SetLossTangent( double aTg, int aDielectricSubLayer )
 {
-    m_DielectricPrmsList[aDielectricSubLayer].m_LossTangent = aTg;
+    wxASSERT( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() );
+
+    if( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() )
+        m_DielectricPrmsList[aDielectricSubLayer].m_LossTangent = aTg;
 }
 
 
 void BOARD_STACKUP_ITEM::SetEpsilonR( double aEpsilon, int aDielectricSubLayer )
 {
-    m_DielectricPrmsList[aDielectricSubLayer].m_EpsilonR = aEpsilon;
+    wxASSERT( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() );
+
+    if( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() )
+        m_DielectricPrmsList[aDielectricSubLayer].m_EpsilonR = aEpsilon;
 }
 
 
 void BOARD_STACKUP_ITEM::SetThicknessLocked( bool aLocked, int aDielectricSubLayer )
 {
-    m_DielectricPrmsList[aDielectricSubLayer].m_ThicknessLocked = aLocked;
-}
+    wxASSERT( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() );
 
-
-void BOARD_STACKUP_ITEM::SetDielectricLayerId( int aLayerId, int aDielectricSubLayer )
-{
-    m_DielectricPrmsList[aDielectricSubLayer].m_DielectricLayerId = aLayerId;
+    if( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() )
+        m_DielectricPrmsList[aDielectricSubLayer].m_ThicknessLocked = aLocked;
 }
 
 
 void BOARD_STACKUP_ITEM::SetMaterial( const wxString& aName, int aDielectricSubLayer )
 {
-    m_DielectricPrmsList[aDielectricSubLayer].m_Material = aName;
+    wxASSERT( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() );
+
+    if( aDielectricSubLayer >= 0 && aDielectricSubLayer < GetSublayersCount() )
+        m_DielectricPrmsList[aDielectricSubLayer].m_Material = aName;
 }
 
 
-bool BOARD_STACKUP_ITEM::HasEpsilonRValue()
+bool BOARD_STACKUP_ITEM::HasEpsilonRValue() const
 {
     return m_Type == BS_ITEM_TYPE_DIELECTRIC
            || m_Type == BS_ITEM_TYPE_SOLDERMASK
@@ -186,23 +222,21 @@ bool BOARD_STACKUP_ITEM::HasEpsilonRValue()
 };
 
 
-bool BOARD_STACKUP_ITEM::HasLossTangentValue()
+bool BOARD_STACKUP_ITEM::HasLossTangentValue() const
 {
     return m_Type == BS_ITEM_TYPE_DIELECTRIC
-           || m_Type == BS_ITEM_TYPE_SOLDERMASK
-           //|| m_Type == BS_ITEM_TYPE_SILKSCREEN
-            ;
+           || m_Type == BS_ITEM_TYPE_SOLDERMASK;
 };
 
 
-bool BOARD_STACKUP_ITEM::HasMaterialValue()
+bool BOARD_STACKUP_ITEM::HasMaterialValue( int aDielectricSubLayer ) const
 {
     // return true if the material is specified
-    return IsMaterialEditable() && IsPrmSpecified( GetMaterial() );
+    return IsMaterialEditable() && IsPrmSpecified( GetMaterial( aDielectricSubLayer ) );
 }
 
 
-bool BOARD_STACKUP_ITEM::IsMaterialEditable()
+bool BOARD_STACKUP_ITEM::IsMaterialEditable() const
 {
     // The material is editable only for dielectric
     return m_Type == BS_ITEM_TYPE_DIELECTRIC ||
@@ -211,13 +245,13 @@ bool BOARD_STACKUP_ITEM::IsMaterialEditable()
 }
 
 
-bool BOARD_STACKUP_ITEM::IsColorEditable()
+bool BOARD_STACKUP_ITEM::IsColorEditable() const
 {
     return m_Type == BS_ITEM_TYPE_SOLDERMASK || m_Type == BS_ITEM_TYPE_SILKSCREEN;
 }
 
 
-bool BOARD_STACKUP_ITEM::IsThicknessEditable()
+bool BOARD_STACKUP_ITEM::IsThicknessEditable() const
 {
     switch( m_Type )
     {
@@ -244,25 +278,25 @@ bool BOARD_STACKUP_ITEM::IsThicknessEditable()
 }
 
 
-wxString BOARD_STACKUP_ITEM::FormatEpsilonR()
+wxString BOARD_STACKUP_ITEM::FormatEpsilonR( int aDielectricSubLayer ) const
 {
     // return a wxString to print/display Epsilon R
     wxString txt;
-    txt.Printf( "%.1f", GetEpsilonR() );
+    txt.Printf( "%.1f", GetEpsilonR( aDielectricSubLayer ) );
     return txt;
 }
 
 
-wxString BOARD_STACKUP_ITEM::FormatLossTangent()
+wxString BOARD_STACKUP_ITEM::FormatLossTangent( int aDielectricSubLayer ) const
 {
     // return a wxString to print/display Loss Tangent
     wxString txt;
-    txt.Printf( "%g", GetLossTangent() );
+    txt.Printf( "%g", GetLossTangent( aDielectricSubLayer ) );
     return txt;
 }
 
 
-wxString BOARD_STACKUP_ITEM::FormatDielectricLayerName()
+wxString BOARD_STACKUP_ITEM::FormatDielectricLayerName() const
 {
     // return a wxString to print/display a dielectriv name
     wxString lname;
@@ -364,17 +398,31 @@ bool BOARD_STACKUP::SynchronizeWithBoard( BOARD_DESIGN_SETTINGS* aSettings )
     BOARD_STACKUP stackup;
     stackup.BuildDefaultStackupList( aSettings );
 
-    // First test for removed layers:
-    for( BOARD_STACKUP_ITEM* old_item: m_list )
+    // First, find removed layers:
+    for( BOARD_STACKUP_ITEM* curr_item: m_list )
     {
         bool found = false;
 
         for( BOARD_STACKUP_ITEM* item: stackup.GetList() )
         {
-            if( item->GetBrdLayerId() == old_item->GetBrdLayerId() )
+            if( curr_item->GetBrdLayerId() != UNDEFINED_LAYER )
             {
-                found = true;
-                break;
+                if( item->GetBrdLayerId() == curr_item->GetBrdLayerId() )
+                {
+                    found = true;
+                    break;
+                }
+            }
+            else    // curr_item = dielectric layer
+            {
+                if( item->GetBrdLayerId() != UNDEFINED_LAYER )
+                    continue;
+
+                if( item->GetDielectricLayerId() == curr_item->GetDielectricLayerId() )
+                {
+                    found = true;
+                    break;
+                }
             }
         }
 
@@ -403,6 +451,10 @@ bool BOARD_STACKUP::SynchronizeWithBoard( BOARD_DESIGN_SETTINGS* aSettings )
             }
             else    // dielectric layer: see m_DielectricLayerId for identification
             {
+                // Compare dielectric layer with dielectric layer
+                if( initial_item->GetBrdLayerId() != UNDEFINED_LAYER )
+                    continue;
+
                 if( item->GetDielectricLayerId() == initial_item->GetDielectricLayerId() )
                 {
                     *item = *initial_item;
@@ -413,7 +465,9 @@ bool BOARD_STACKUP::SynchronizeWithBoard( BOARD_DESIGN_SETTINGS* aSettings )
         }
 
         if( !found )
+        {
             change = true;
+        }
     }
 
     // Transfer other stackup settings from aSettings
@@ -586,30 +640,39 @@ void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
                            aFormatter->Quotew( layer_name ).c_str(),
                            aFormatter->Quotew( item->GetTypeName() ).c_str() );
 
-        if( item->IsThicknessEditable() )
-        {
-            if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC && item->IsThicknessLocked() )
-                aFormatter->Print( 0, " (thickness %s locked)",
-                                   FormatInternalUnits( item->GetThickness() ).c_str() );
-            else
-                aFormatter->Print( 0, " (thickness %s)",
-                                   FormatInternalUnits( item->GetThickness() ).c_str() );
-        }
-
-        if( item->HasMaterialValue() )
-            aFormatter->Print( 0, " (material %s)",
-                               aFormatter->Quotew( item->GetMaterial() ).c_str() );
-
-        if( item->HasEpsilonRValue() && item->HasMaterialValue() )
-            aFormatter->Print( 0, " (epsilon_r %g)", item->GetEpsilonR() );
-
-        if( item->HasLossTangentValue() && item->HasMaterialValue() )
-            aFormatter->Print( 0, " (loss_tangent %s)",
-                               Double2Str(item->GetLossTangent() ).c_str() );
-
         if( item->IsColorEditable() && IsPrmSpecified( item->GetColor() ) )
             aFormatter->Print( 0, " (color %s)",
                                aFormatter->Quotew( item->GetColor() ).c_str() );
+
+        for( int idx = 0; idx < item->GetSublayersCount(); idx++ )
+        {
+            if( idx )    // not for the main (first) layer.
+            {
+                aFormatter->Print( 0, "\n" );
+                aFormatter->Print( nest_level+1, "addsublayer" );
+            }
+
+            if( item->IsThicknessEditable() )
+            {
+                if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC && item->IsThicknessLocked( idx ) )
+                    aFormatter->Print( 0, " (thickness %s locked)",
+                                       FormatInternalUnits( item->GetThickness( idx ) ).c_str() );
+                else
+                    aFormatter->Print( 0, " (thickness %s)",
+                                       FormatInternalUnits( item->GetThickness( idx ) ).c_str() );
+            }
+
+            if( item->HasMaterialValue( idx ) )
+                aFormatter->Print( 0, " (material %s)",
+                                   aFormatter->Quotew( item->GetMaterial( idx ) ).c_str() );
+
+            if( item->HasEpsilonRValue() && item->HasMaterialValue( idx ) )
+                aFormatter->Print( 0, " (epsilon_r %g)", item->GetEpsilonR( idx ) );
+
+            if( item->HasLossTangentValue() && item->HasMaterialValue( idx ) )
+                aFormatter->Print( 0, " (loss_tangent %s)",
+                                   Double2Str(item->GetLossTangent( idx ) ).c_str() );
+        }
 
         aFormatter->Print( 0, ")\n" );
     }

@@ -25,6 +25,7 @@
 # These are the keywords for the Pcbnew s-expression file format.
 
 add_net
+addsublayer
 allowed
 anchor
 angle

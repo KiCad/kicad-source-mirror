@@ -58,15 +58,13 @@ enum BS_EDGE_CONNECTOR_CONSTRAINTS
 
 
 /**
- * A helper class to manage a dielectric parameters
+ * A helper class to manage a dielectric layer set of parameters
  */
 class DIELECTRIC_PRMS
 {
     friend class BOARD_STACKUP_ITEM;
 
 private:
-    int m_DielectricLayerId;/// the "layer" id for dielectric layers,
-                            /// from 1 (top) to 31 (bottom)
     wxString m_Material;    /// type of material (for dielectric and solder mask)
     int m_Thickness;        /// the physical layer thickness in internal units
     bool m_ThicknessLocked; /// true for dielectric layers with a fixed thickness
@@ -76,7 +74,6 @@ private:
 
 public:
     DIELECTRIC_PRMS() :
-        m_DielectricLayerId(-1),
         m_Thickness(0), m_ThicknessLocked( false ),
         m_EpsilonR( 1.0 ), m_LossTangent( 0.0 )
     {}
@@ -102,6 +99,9 @@ private:
     PCB_LAYER_ID m_LayerId; /// the layer id (F.Cu to B.Cu, F.Silk, B.silk, F.Mask, B.Mask)
                             /// and UNDEFINED_LAYER (-1) for dielectic layers that are not
                             /// really layers for the board editor
+    int m_DielectricLayerId;/// the "layer" id for dielectric layers,
+                            /// from 1 (top) to 31 (bottom)
+                            /// (only 31 dielectric layers for 32 copper layers)
     /// List of dielectric parameters
     /// usually only one item, but in complex (microwave) boards, one can have
     /// more than one dielectic layer between 2 copper layers, and therfore
@@ -112,25 +112,40 @@ private:
                             /// false to ignore it. Mainly used in dialog stackup editor.
 
 public:
+    /**
+     * add (insert) a DIELECTRIC_PRMS item to m_DielectricPrmsList
+     * all values are set to default
+     * @param aDielectricPrmsIdx is a index in m_DielectricPrmsList
+     * the new item will be inserted at this position
+     */
+    void AddDielectricPrms( int aDielectricPrmsIdx );
+
+    /**
+     * Remove a DIELECTRIC_PRMS item from m_DielectricPrmsList
+     * @param aDielectricPrmsIdx is the index of the parameters set
+     * to remove in m_DielectricPrmsList
+     */
+    void RemoveDielectricPrms( int aDielectricPrmsIdx );
+
     /// @return true if the layer has a meaningfull Epsilon R parameter
     /// namely dielectric layers: dielectric and solder mask
-    bool HasEpsilonRValue();
+    bool HasEpsilonRValue() const;
 
     /// @return true if the layer has a meaningfull Dielectric Loss parameter
     /// namely dielectric layers: dielectric and solder mask
-    bool HasLossTangentValue();
+    bool HasLossTangentValue() const;
 
     /// @return true if the material is specified
-    bool HasMaterialValue();
+    bool HasMaterialValue( int aDielectricSubLayer = 0 ) const;
 
     /// @return true if the material is editable
-    bool IsMaterialEditable();
+    bool IsMaterialEditable() const;
 
     /// @return true if the color is editable
-    bool IsColorEditable();
+    bool IsColorEditable() const;
 
     /// @return true if Thickness is editable
-    bool IsThicknessEditable();
+    bool IsThicknessEditable() const;
 
     /// @return a reasonable default value for a copper layer thickness
     static int GetCopperDefaultThickness();
@@ -138,30 +153,34 @@ public:
     /// @return a reasonable default value for a solder mask layer thickness
     static int GetMaskDefaultThickness();
 
+    /// @return a the number of sublayers in a dielectric layer.
+    /// the count is >= 1 (there is at least one layer)
+    int GetSublayersCount() const { return m_DielectricPrmsList.size(); }
+
     /// @return a wxString to print/display Epsilon R
-    wxString FormatEpsilonR();
+    wxString FormatEpsilonR( int aDielectricSubLayer = 0 ) const;
 
     /// @return a wxString to print/display Loss Tangent
-    wxString FormatLossTangent();
+    wxString FormatLossTangent( int aDielectricSubLayer = 0 ) const;
 
     /// @return a wxString to print/display a dielectric name
-    wxString FormatDielectricLayerName();
+    wxString FormatDielectricLayerName() const;
 
     // Getters:
-    bool IsEnabled() {return m_enabled; }
+    bool IsEnabled() const {return m_enabled; }
 
-    BOARD_STACKUP_ITEM_TYPE GetType() { return m_Type; }
-    PCB_LAYER_ID GetBrdLayerId() { return m_LayerId; }
-    wxString GetColor(){ return m_Color; }
-    wxString GetLayerName() { return m_LayerName; }
-    wxString GetTypeName() { return m_TypeName; }
+    BOARD_STACKUP_ITEM_TYPE GetType() const { return m_Type; }
+    PCB_LAYER_ID GetBrdLayerId() const { return m_LayerId; }
+    wxString GetColor() const { return m_Color; }
+    wxString GetLayerName() const { return m_LayerName; }
+    wxString GetTypeName() const { return m_TypeName; }
+    int GetDielectricLayerId() const { return m_DielectricLayerId; }
 
-    int GetThickness( int aDielectricSubLayer = 0 );
-    bool IsThicknessLocked( int aDielectricSubLayer = 0 );
-    double GetEpsilonR( int aDielectricSubLayer = 0 );
-    double GetLossTangent( int aDielectricSubLayer = 0 );
-    int GetDielectricLayerId( int aDielectricSubLayer = 0 );
-    wxString GetMaterial( int aDielectricSubLayer = 0 );
+    int GetThickness( int aDielectricSubLayer = 0 ) const;
+    bool IsThicknessLocked( int aDielectricSubLayer = 0 ) const;
+    double GetEpsilonR( int aDielectricSubLayer = 0 ) const;
+    double GetLossTangent( int aDielectricSubLayer = 0 ) const;
+    wxString GetMaterial( int aDielectricSubLayer = 0 ) const;
 
     // Setters:
     void SetEnabled( bool aEnable) { m_enabled = aEnable; }
@@ -169,12 +188,12 @@ public:
     void SetColor( const wxString& aColorName ){ m_Color = aColorName; }
     void SetLayerName( const wxString& aName ) { m_LayerName = aName; }
     void SetTypeName( const wxString& aName ) { m_TypeName = aName; }
+    void SetDielectricLayerId( int aLayerId ) { m_DielectricLayerId = aLayerId; }
 
     void SetThickness( int aThickness, int aDielectricSubLayer = 0 );
     void SetThicknessLocked( bool aLocked, int aDielectricSubLayer = 0 );
     void SetEpsilonR( double aEpsilon, int aDielectricSubLayer = 0 );
     void SetLossTangent( double aTg, int aDielectricSubLayer = 0 );
-    void SetDielectricLayerId( int aLayerId, int aDielectricSubLayer = 0 );
     void SetMaterial( const wxString& aName, int aDielectricSubLayer = 0 );
 };
 

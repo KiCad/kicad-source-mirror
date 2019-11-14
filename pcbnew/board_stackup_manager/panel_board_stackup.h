@@ -49,6 +49,9 @@ class PANEL_SETUP_LAYERS;
 struct BOARD_STACKUP_ROW_UI_ITEM
 {
     BOARD_STACKUP_ITEM* m_Item;         // The BOARD_STACKUP_ITEM managed by this BOARD_STACKUP_ROW_UI_ITEM
+    int             m_SubItem;          // For multilayer dielectric, the index in sublayer list.
+                                        // Must be >= 0 and < m_Item sublayer count. Used only for dielectic
+                                        // 0 is the base list of parameters (always existing)
     bool            m_isEnabled;        // True if the row is in board
                                         // false if not (this row is not shown on the panel)
     wxStaticBitmap* m_Icon;             // Color icon in first column (column 1)
@@ -62,8 +65,8 @@ struct BOARD_STACKUP_ROW_UI_ITEM
     wxControl*      m_EpsilonCtrl;      // control shown in column 8
     wxControl*      m_LossTgCtrl;       // control shown in column 9
 
-    BOARD_STACKUP_ROW_UI_ITEM( BOARD_STACKUP_ITEM* aItem ) :
-        m_Item( aItem ),
+    BOARD_STACKUP_ROW_UI_ITEM( BOARD_STACKUP_ITEM* aItem, int aSubItem = 1 ) :
+        m_Item( aItem ), m_SubItem( aSubItem ),
         m_isEnabled( true ), m_Icon( nullptr ), m_LayerName( nullptr ),
         m_LayerTypeCtrl( nullptr ),
         m_MaterialCtrl( nullptr ),m_MaterialButt( nullptr ),
@@ -92,13 +95,16 @@ public:
      */
     void OnLayersOptionsChanged( LSET aNewLayerSet );
 
-    BOARD_STACKUP_ITEM* GetStackupItem( int aIndex );
+    /// @return the BOARD_STACKUP_ITEM managed by the row aRow
+    BOARD_STACKUP_ITEM* GetStackupItem( int aRow );
+    /// @return the BOARD_STACKUP_ITEM sublayermanaged by the row aRow
+    int GetSublayerId( int aRow );
 
     /// Return the color currently selected for the row aRow
     wxColor GetSelectedColor( int aRow ) const;
 
     BOARD_STACKUP&  GetStackup() { return m_stackup; }
-    int GetPcbTickness();
+    int GetPcbThickness();
 
     // Called by wxWidgets: transfer current settings stored in m_stackup to the board
     bool TransferDataFromWindow() override;
@@ -106,6 +112,18 @@ public:
     std::vector<wxColor> m_UserColors;  // the list of user colors for each grid row
                                         // other colors are defined colors, and are not stored
 private:
+    /** Creates a BOARD_STACKUP_ROW_UI_ITEM relative to the aStackupItem.
+     * @return a BOARD_STACKUP_ROW_UI_ITEM filled with corresponding widgets
+     * @param aRow is the row index in the row list
+     * @param aStackupItem is the stackup item controlled by the created
+     * BOARD_STACKUP_ROW_UI_ITEM.
+     * @param aSublayerIdx is used only for BS_ITEM_TYPE_DIELECTRIC stackup items.
+     * this is the index of the sublayer to used inside aStackupItem
+     * (from 0 to sub layer count - 1)
+     */
+    BOARD_STACKUP_ROW_UI_ITEM createRowData( int aRow, BOARD_STACKUP_ITEM* aStackupItem,
+                                             int aSublayerIdx );
+
     /** add a Spacer in m_fgGridSizer when a empty cell is needed
      */
     wxControl* addSpacer();
@@ -124,20 +142,31 @@ private:
      * all copper layers and all tech layers that are supported by the stackup
      * items not in the current board stackup will be not shown, but they are
      * existing in list
+     * @param aCreatedInitialStackup = true to create a initial stackup list for the dialog
+     * false to build the stackup panel from the existing stackup list.
      */
-    void buildLayerStackPanel();
+    void buildLayerStackPanel( bool aCreatedInitialStackup );
 
-    /** Show or do not show items in m_fgGridSizer according to the stackup of the
+    /** Synchronize the full stackup shown in m_fgGridSizer according to the stackup of the
      * current board and optionally update the stackup params (thickness, color ... )
      * @param aFullSync = true to update stackup params, false to only update the list
      * of shown items
      */
     void synchronizeWithBoard( bool aFullSync );
 
+    /** Show or do not show items in m_fgGridSizer according to the stackup of the
+     * current board.
+     * The panel stackup stores all posible layers (because the number of layers is set
+     * from an other panel), but only some of them must be actually shown on screen
+     */
+    void showOnlyActiveLayers();
+
     /** Populate m_fgGridSizer with items to handle stackup parameters
      * If previous items are in list, remove old items
+     * New prms are added
+     * must be called after adding or deleting a dielectric parameter set
      */
-    void RebuildLayerStackPanel();
+    void rebuildLayerStackPanel();
 
     /** Transfer current UI settings to m_stackup but not to the board
      */

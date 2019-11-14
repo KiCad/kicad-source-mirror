@@ -1075,72 +1075,90 @@ void PCB_PARSER::parseBoardStackup()
         else
             Expecting( "layer_name" );
 
-        // Dielectric thickness can be locked (for impedance controled layers)
-        bool thickness_locked = false;
+        bool has_next_sublayer = true;
+        int sublayer_idx = 0;       // the index of dielectric sub layers
+                                    // sublayer 0 is always existing (main sublayer)
 
-        for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+        while( has_next_sublayer )
         {
-            if( token == T_LEFT )
+            has_next_sublayer = false;
+
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
             {
-                token = NextTok();
-
-                switch( token )
+                if( token == T_addsublayer )
                 {
-                case T_type:
-                    NeedSYMBOL();
-                    item->SetTypeName( FromUTF8() );
-                    NeedRIGHT();
+                    has_next_sublayer = true;
                     break;
+                }
 
-                case T_thickness:
-                    item->SetThickness( parseBoardUnits( T_thickness ) );
+                if( token == T_LEFT )
+                {
                     token = NextTok();
 
-                    if( token == T_LEFT )
+                    switch( token )
+                    {
+                    case T_type:
+                        NeedSYMBOL();
+                        item->SetTypeName( FromUTF8() );
+                        NeedRIGHT();
                         break;
 
-                    if( token == T_locked )
-                    {
-                        thickness_locked = true;
+                    case T_thickness:
+                        item->SetThickness( parseBoardUnits( T_thickness ), sublayer_idx );
+                        token = NextTok();
+
+                        if( token == T_LEFT )
+                            break;
+
+                        if( token == T_locked )
+                        {
+                            // Dielectric thickness can be locked (for impedance controled layers)
+                            if( type == BS_ITEM_TYPE_DIELECTRIC )
+                                item->SetThicknessLocked( true, sublayer_idx );
+
+                            NeedRIGHT();
+                        }
+                        break;
+
+                    case T_material:
+                        NeedSYMBOL();
+                        item->SetMaterial( FromUTF8(), sublayer_idx );
                         NeedRIGHT();
+                        break;
+
+                    case T_epsilon_r:
+                        NextTok();
+                        item->SetEpsilonR( parseDouble(), sublayer_idx );
+                        NeedRIGHT();
+                        break;
+
+                    case T_loss_tangent:
+                        NextTok();
+                        item->SetLossTangent( parseDouble(), sublayer_idx );
+                        NeedRIGHT();
+                        break;
+
+                    case T_color:
+                        NeedSYMBOL();
+                        item->SetColor( FromUTF8() );
+                        NeedRIGHT();
+                        break;
+
+                    default:
+                        // Currently, skip this item if not defined, because the stackup def
+                        // is a moving target
+                        //Expecting( "type, thickness, material, epsilon_r, loss_tangent, color" );
+                        skipCurrent();
                     }
-                    break;
-
-                case T_material:
-                    NeedSYMBOL();
-                    item->SetMaterial( FromUTF8() );
-                    NeedRIGHT();
-                    break;
-
-                case T_epsilon_r:
-                    NextTok();
-                    item->SetEpsilonR( parseDouble() );
-                    NeedRIGHT();
-                    break;
-
-                case T_loss_tangent:
-                    NextTok();
-                    item->SetLossTangent( parseDouble() );
-                    NeedRIGHT();
-                    break;
-
-                case T_color:
-                    NeedSYMBOL();
-                    item->SetColor( FromUTF8() );
-                    NeedRIGHT();
-                    break;
-
-                default:
-                    // Currently, skip this item if not defined, because the stackup def
-                    // is a moving target
-                    //Expecting( "type, thickness, material, epsilon_r, loss_tangent, color" );
-                    skipCurrent();
                 }
             }
-        }
 
-        if( type == BS_ITEM_TYPE_DIELECTRIC && thickness_locked )
-            item->SetThicknessLocked( true );
+            if( has_next_sublayer )     // Prepare reading the next sublayer description
+            {
+                sublayer_idx++;
+                item->AddDielectricPrms( sublayer_idx );
+            }
+        }
     }
 
     if( token != T_RIGHT )
