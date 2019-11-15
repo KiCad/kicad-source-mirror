@@ -105,41 +105,68 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
 
     if( aType != LAYER_NOTES )
     {
-        wxString          delimiters = wxT( " {}[]\t\r\n" );
-        wxStringTokenizer tok( textItem->GetText(), delimiters, wxTOKEN_STRTOK );
+        UTF8 text( textItem->GetText() );
+        int  brace_count = 0;
+        int  bracket_count = 0;
+        bool last_space = false;
+        UTF8 token;
 
-        while( tok.HasMoreTokens() )
+        for( auto chIt = text.ubegin(); chIt != text.uend(); chIt++ )
         {
-            wxString term = tok.GetNextToken();
-
-            // Consume bus definitions as single terms
-            if( tok.GetLastDelimiter() == L'{' )
+            switch( *chIt )
             {
-                term << tok.GetLastDelimiter();
+            case '{':
+                brace_count++;
+                last_space = false;
+                break;
 
-                while( tok.HasMoreTokens() )
+            case '[':
+                bracket_count++;
+                last_space = false;
+                break;
+
+            case '}':
+                brace_count = std::max( 0, brace_count - 1 );
+                last_space = false;
+                break;
+
+            case ']':
+                bracket_count = std::max( 0, bracket_count - 1 );
+                last_space = false;
+                break;
+
+            case ' ':
+            case '\n':
+            case '\r':
+            case '\t':
+                if( !token.empty() && bracket_count == 0 && brace_count == 0 )
                 {
-                    term << tok.GetNextToken() << tok.GetLastDelimiter();
-
-                    if( tok.GetLastDelimiter() == L'}' )
-                        break;
+                    std::unique_ptr<SCH_TEXT> nextitem( static_cast<SCH_TEXT*>( textItem->Clone() ) );
+                    nextitem->SetText( token.wx_str() );
+                    s_queuedTexts.push_back( std::move( nextitem ) );
+                    token.clear();
+                    continue;
                 }
+
+                // Skip leading whitespace
+                if( token.empty() || last_space )
+                    continue;
+
+                last_space = true;
+                break;
+
+            default:
+                last_space = false;
+                break;
             }
-            else if( tok.GetLastDelimiter() == L'[' )
-            {
-                term << tok.GetLastDelimiter();
 
-                while( tok.HasMoreTokens() )
-                {
-                    term << tok.GetNextToken() << tok.GetLastDelimiter();
+            token += *chIt;
+        }
 
-                    if( tok.GetLastDelimiter() == L']' )
-                        break;
-                }
-            }
-
+        if( !token.empty() )
+        {
             std::unique_ptr<SCH_TEXT> nextitem( static_cast<SCH_TEXT*>( textItem->Clone() ) );
-            nextitem->SetText( term );
+            nextitem->SetText( token.wx_str() );
             s_queuedTexts.push_back( std::move( nextitem ) );
         }
 
