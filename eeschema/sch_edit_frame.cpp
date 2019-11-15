@@ -233,8 +233,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     g_ConnectionGraph = new CONNECTION_GRAPH( this );
 
     m_showBorderAndTitleBlock = true;   // true to show sheet references
-    m_DefaultSchematicFileName = NAMELESS_PROJECT;
-    m_DefaultSchematicFileName += wxT( ".sch" );
     m_showAllPins = false;
     m_printMonochrome = true;
     m_printSheetReference = true;
@@ -435,7 +433,7 @@ void SCH_EDIT_FRAME::CreateScreens()
         SetScreen( g_RootSheet->GetScreen() );
     }
 
-    g_RootSheet->GetScreen()->SetFileName( m_DefaultSchematicFileName );
+    g_RootSheet->GetScreen()->SetFileName( wxEmptyString );
 
     g_CurrentSheet->clear();
     g_CurrentSheet->push_back( g_RootSheet );
@@ -1002,10 +1000,9 @@ void SCH_EDIT_FRAME::UpdateTitle()
 {
     wxString title;
 
-    if( GetScreen()->GetFileName() == m_DefaultSchematicFileName )
+    if( GetScreen()->GetFileName().IsEmpty() )
     {
-        title.Printf( _( "Eeschema" ) + wxT( " \u2014 %s" ),
-                      GetScreen()->GetFileName() );
+        title.Printf( _( "Eeschema" ) + wxT( " \u2014" ) + _( " [no file]" ) );
     }
     else
     {

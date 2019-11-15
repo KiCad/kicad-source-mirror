@@ -107,7 +107,6 @@ enum SCH_CLEANUP_FLAGS {
 class SCH_EDIT_FRAME : public SCH_BASE_FRAME
 {
 private:
-    wxString                m_DefaultSchematicFileName;
     wxString                m_SelectedNetName;
 
     PARAM_CFG_ARRAY         m_projectFileParams;
