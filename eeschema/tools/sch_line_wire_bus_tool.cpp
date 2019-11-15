@@ -450,6 +450,10 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
 
     Activate();
 
+    // Add the new label to the selection so the rotate command operates on it
+    if( m_busUnfold.label )
+        m_selectionTool->AddItemToSel( m_busUnfold.label, true );
+
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
     {
@@ -470,6 +474,9 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
 
             if( m_busUnfold.entry )
                 m_frame->RemoveFromScreen( m_busUnfold.entry );
+
+            if( m_busUnfold.label && !m_busUnfold.label_placed )
+                m_selectionTool->RemoveItemFromSel( m_busUnfold.label, true );
 
             if( m_busUnfold.label && m_busUnfold.label_placed )
                 m_frame->RemoveFromScreen( m_busUnfold.label );
@@ -533,6 +540,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
                 wxASSERT( aType == LAYER_WIRE );
 
                 m_frame->AddToScreen( m_busUnfold.label );
+                m_selectionTool->RemoveItemFromSel( m_busUnfold.label, true );
                 m_busUnfold.label_placed = true;
             }
 
