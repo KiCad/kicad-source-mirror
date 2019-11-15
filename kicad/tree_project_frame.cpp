@@ -292,8 +292,8 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
 }
 
 
-bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
-                                               wxTreeItemId& aRoot, bool aRecurse )
+wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName, wxTreeItemId& aRoot,
+                                                       bool aRecurse )
 {
     wxTreeItemId    cellule;
     TreeFileType    type = TREE_UNKNOWN;
@@ -302,7 +302,7 @@ bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
     // Files/dirs names starting by "." are not visible files under unices.
     // Skip them also under Windows
     if( fn.GetName().StartsWith( wxT( "." ) ) )
-        return false;
+        return 0;
 
     if( wxDirExists( aName ) )
     {
@@ -333,7 +333,7 @@ bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
         }
 
         if( !addFile )
-            return false;
+            return 0;
 
         // only show the schematic if it is a top level schematic.  Eeschema
         // cannot open a schematic and display it properly unless it starts
@@ -365,7 +365,7 @@ bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
                 fp = wxFopen( fullFileName, wxT( "rt" ) );
 
                 if( fp == NULL )
-                    return false;
+                    return 0;
 
                 addFile = false;
 
@@ -385,7 +385,7 @@ bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
                 fclose( fp );
 
                 if( !addFile )
-                    return false; // it is a non-top-level schematic
+                    return 0; // it is a non-top-level schematic
             }
         }
 
@@ -418,7 +418,7 @@ bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
         if( itemData )
         {
             if( itemData->GetFileName() == aName )
-                return true;    // well, we would have added it, but it is already here!
+                return kid;
         }
 
         kid = m_TreeProject->GetNextChild( aRoot, cookie );
@@ -467,7 +467,7 @@ bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
         m_TreeProject->SortChildren( cellule );
     }
 
-    return true;
+    return data->GetId();
 }
 
 
@@ -704,9 +704,27 @@ void TREE_PROJECT_FRAME::OnRenameFile( wxCommandEvent& )
     if( tree_data->Rename( buffer, true ) )
     {
         if( tree_data->GetDir() != oldDir )
-            ReCreateTreePrj();
+        {
+            wxFileName filename( tree_data->GetFileName() );
+            filename.Normalize();
+
+            wxTreeItemId parent = findSubdirTreeItem( filename.GetPath() );
+            m_TreeProject->SelectItem( tree_data->GetId(), false );
+            m_TreeProject->Delete( tree_data->GetId() );
+
+            wxTreeItemId new_item = AddItemToTreeProject( filename.GetFullPath(), parent, false );
+
+            if( new_item )
+            {
+                m_TreeProject->SortChildren( parent );
+                m_TreeProject->ScrollTo( new_item );
+                m_TreeProject->SelectItem( new_item, true );
+            }
+        }
         else
+        {
             m_TreeProject->SetItemText( curr_item, buffer );
+        }
     }
 }
 
