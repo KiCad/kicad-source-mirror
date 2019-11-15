@@ -50,7 +50,7 @@
 void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
     int  id = event.GetId();
-    auto displ_opts = GetDisplayOptions();
+    const PCB_DISPLAY_OPTIONS& displ_opts = GetDisplayOptions();
 
     switch( id )   // Execute command
     {

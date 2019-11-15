@@ -20,23 +20,6 @@
 #include <string>
 #include <macros.h>
 
-#if USE_MADDY_CONVERTER
-#include <memory>
-#include <iostream>
-#include "md2html/parser.h"
-
-
-void ConvertMarkdown2Html( const wxString& aMarkdownInput, wxString& aHtmlOutput )
-{
-    std::stringstream markdownInput( TO_UTF8( aMarkdownInput ) );
-
-    std::shared_ptr<maddy::Parser> parser = std::make_shared<maddy::Parser>();
-    std::string htmlOutput = parser->Parse(markdownInput);
-
-    aHtmlOutput = FROM_UTF8( htmlOutput.c_str() );
-}
-
-#else
 #include "markdown.h"
 #include "html.h"
 #include "buffer.h"
@@ -66,4 +49,3 @@ void ConvertMarkdown2Html( const wxString& aMarkdownInput, wxString& aHtmlOutput
     bufrelease( ob );
 
 }
-#endif

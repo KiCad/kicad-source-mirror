@@ -648,7 +648,7 @@ wxColour SIM_PLOT_PANEL::generateColor()
 
     const unsigned int colorCount = sizeof(colors) / sizeof(unsigned long);
 
-    for( int i = 0; i < colorCount - 1; i++ )
+    for( int i = 0; i < (int)colorCount - 1; i++ )
     {
         const wxColour color = wxColour( colors[i] );
         bool hasColor = false;

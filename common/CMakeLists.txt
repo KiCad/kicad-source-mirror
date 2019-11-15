@@ -28,18 +28,12 @@ if( NOT APPLE )     # windows and linux use openssl under curl
     find_package( OpenSSL REQUIRED )
 endif()
 
-if( KICAD_USE_FONT_REDUCED_SET )
-    set( FONT_SRC "newstroke_font_without_CJK.cpp" )
-else()
-    set( FONT_SRC "newstroke_font.cpp" )
-endif()
-
 set( GAL_SRCS
     # Common part
     basic_gal.cpp
     draw_panel_gal.cpp
     gl_context_mgr.cpp
-    ${FONT_SRC}
+    newstroke_font.cpp
     painter.cpp
     gal/color4d.cpp
     gal/gal_display_options.cpp
