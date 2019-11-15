@@ -152,4 +152,21 @@ wxString FindKicadFile( const wxString& shortname );
  */
 extern wxString QuoteFullPath( wxFileName& fn, wxPathFormat format = wxPATH_NATIVE );
 
+/**
+ * Delete a directory and all of its contents recursively.
+ * This function ensures that all contents of subdirectories are deleted before deleting
+ * the directory. If recursion is disabled, then the existence of subdirectories will
+ * cause the deletion to fail and the function to return false.
+ *
+ * Note that if hidden files/folders exist in the directory, and aIncludeHidden is false,
+ * then the directory may not be deleted.
+ *
+ * @param aRecurse specifies if subdirectories should also be deleted
+ * @param aIncludeHidden specifies if hidden files/directories should be deleted as well
+ * @return true if the directory could be deleted
+ *
+ */
+bool DeleteDirectory( const wxString& aDirName, bool aRecurse = true, bool aIncludeHidden = true );
+
+
 #endif /* __INCLUDE__GESTFICH_H__ */

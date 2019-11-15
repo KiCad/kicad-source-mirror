@@ -378,3 +378,67 @@ wxString QuoteFullPath( wxFileName& fn, wxPathFormat format )
 {
     return wxT( "\"" ) + fn.GetFullPath( format ) + wxT( "\"" );
 }
+
+
+bool DeleteDirectory( const wxString& aDirName, bool aRecurse, bool aIncludeHidden )
+{
+    int   hiddenFlag = ( aIncludeHidden ? wxDIR_HIDDEN : 0 );
+    wxDir mainDir( aDirName );
+
+    if( !mainDir.IsOpened() )
+        return false;
+
+    if( mainDir.HasSubDirs() && !aRecurse )
+    {
+        mainDir.Close();
+        return false;
+    }
+
+    // Get the name from wxWidgets so that we are sure all the separators are correct
+    wxString fullDirName = mainDir.GetNameWithSep();
+
+    wxString dir;
+    bool     valid = mainDir.GetFirst( &dir, wxEmptyString, wxDIR_DIRS | hiddenFlag );
+
+    // Iterate over the subdirectories to recursively delete them and their contents
+    while( valid )
+    {
+        dir.Prepend( fullDirName );
+
+        // This call will also delete the actual directory, so we don't have to
+        if( !DeleteDirectory( dir, true, aIncludeHidden ) )
+        {
+            mainDir.Close();
+            return false;
+        }
+        valid = mainDir.GetNext( &dir );
+    }
+
+
+    wxString file;
+    valid = mainDir.GetFirst( &file, wxEmptyString, wxDIR_FILES | hiddenFlag );
+
+    // Iterate over the files to remove all of them from the directory
+    while( valid )
+    {
+        file.Prepend( fullDirName );
+
+        if( !wxRemoveFile( file ) )
+        {
+            mainDir.Close();
+            return false;
+        }
+        valid = mainDir.GetNext( &dir );
+    }
+
+    mainDir.Close();
+
+    // Now delete the actual directory
+    if( !wxRmdir( aDirName ) )
+    {
+        mainDir.Close();
+        return false;
+    }
+
+    return true;
+}

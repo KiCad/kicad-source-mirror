@@ -115,7 +115,7 @@ bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
 
     if( !wxRenameFile( GetFileName(), newFile, false ) )
     {
-        wxMessageDialog( m_parent, _( "Unable to rename file ... " ), _( "Permission error?" ), 
+        wxMessageDialog( m_parent, _( "Unable to rename file ... " ), _( "Permission error?" ),
                          wxICON_ERROR | wxOK );
         return false;
     }
@@ -138,16 +138,7 @@ void TREEPROJECT_ITEM::Delete()
         if( !wxDirExists( GetFileName() ) )
             success = wxRemoveFile( GetFileName() );
         else
-        {
-            wxArrayString filelist;
-
-            wxDir::GetAllFiles( GetFileName(), &filelist );
-
-            for( unsigned int i = 0; i < filelist.Count(); i++ )
-                wxRemoveFile( filelist[i] );
-
-            success = wxRmdir( GetFileName() );
-        }
+            success = DeleteDirectory( GetFileName() );
 
         if( success )
             m_parent->Delete( GetId() );
