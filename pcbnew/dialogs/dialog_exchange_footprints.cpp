@@ -139,6 +139,8 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     m_resetTextItemEffects->SetValue( g_resetTextItemEffects );
     m_reset3DModels->SetValue( g_reset3DModels );
 
+    m_MessageWindow->SetLazyUpdate( true );
+
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
     // because the update and change versions of this dialog have different controls.
     m_hash_key = TO_UTF8( GetTitle() );
@@ -287,13 +289,15 @@ void DIALOG_EXCHANGE_FOOTPRINTS::OnApplyClicked( wxCommandEvent& event )
     wxBusyCursor dummy;
 
     m_MessageWindow->Clear();
-    m_MessageWindow->Flush( true );
+    m_MessageWindow->Flush( false );
 
     if( processMatchingModules() )
     {
         m_parent->Compile_Ratsnest( true );
         m_parent->GetCanvas()->Refresh();
     }
+
+    m_MessageWindow->Flush( false );
 
     m_commit.Push( wxT( "Changed footprint" ) );
 }
@@ -346,7 +350,6 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processMatchingModules()
 bool DIALOG_EXCHANGE_FOOTPRINTS::processModule( MODULE* aModule, const LIB_ID& aNewFPID )
 {
     LIB_ID    oldFPID = aModule->GetFPID();
-    REPORTER& reporter = m_MessageWindow->Reporter();
     wxString  msg;
 
     // Load new module.
@@ -361,7 +364,7 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processModule( MODULE* aModule, const LIB_ID& a
     if( !newModule )
     {
         msg << ": " << _( "*** footprint not found ***" );
-        reporter.Report( msg, REPORTER::RPT_ERROR );
+        m_MessageWindow->Report( msg, REPORTER::RPT_ERROR );
         return false;
     }
 
@@ -375,7 +378,7 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processModule( MODULE* aModule, const LIB_ID& a
         m_currentModule = newModule;
 
     msg += ": OK";
-    reporter.Report( msg, REPORTER::RPT_ACTION );
+    m_MessageWindow->Report( msg, REPORTER::RPT_ACTION );
 
     return true;
 }
