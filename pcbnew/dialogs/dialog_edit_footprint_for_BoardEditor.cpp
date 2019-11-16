@@ -116,8 +116,6 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
     m_allow90Label->SetFont( infoFont );
     m_allow180Label->SetFont( infoFont );
-    m_libraryIDLabel->SetFont( infoFont );
-    m_staticLibraryID->SetFont( infoFont );
     m_staticTextInfoCopper->SetFont( infoFont );
     m_staticTextInfoPaste->SetFont( infoFont );
 
@@ -377,7 +375,7 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
     m_PreviewPane->UpdateDummyModule();
 
     // Show the footprint's ID.
-    m_staticLibraryID->SetLabel( m_footprint->GetFPID().Format() );
+    m_tcLibraryID->SetValue( m_footprint->GetFPID().Format() );
 
     for( int col = 0; col < m_itemsGrid->GetNumberCols(); col++ )
     {

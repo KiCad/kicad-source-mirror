@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -500,24 +500,22 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
 
 	wxFlexGridSizer* fgSizerSymbolRef;
-	fgSizerSymbolRef = new wxFlexGridSizer( 2, 2, 1, 0 );
+	fgSizerSymbolRef = new wxFlexGridSizer( 0, 2, 1, 0 );
+	fgSizerSymbolRef->AddGrowableCol( 1 );
 	fgSizerSymbolRef->SetFlexibleDirection( wxBOTH );
 	fgSizerSymbolRef->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_libraryIDLabel = new wxStaticText( this, wxID_ANY, _("Library reference:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_libraryIDLabel = new wxStaticText( this, wxID_ANY, _("Library Id:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_libraryIDLabel->Wrap( -1 );
-	m_libraryIDLabel->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_libraryIDLabel->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	fgSizerSymbolRef->Add( m_libraryIDLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT, 3 );
+	fgSizerSymbolRef->Add( m_libraryIDLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 3 );
 
-	m_staticLibraryID = new wxStaticText( this, wxID_ANY, _("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticLibraryID->Wrap( -1 );
-	m_staticLibraryID->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
-	fgSizerSymbolRef->Add( m_staticLibraryID, 0, wxBOTTOM, 3 );
+	m_tcLibraryID = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	fgSizerSymbolRef->Add( m_tcLibraryID, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	bSizerButtons->Add( fgSizerSymbolRef, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	bSizerButtons->Add( fgSizerSymbolRef, 1, wxALIGN_CENTER_VERTICAL, 10 );
 
 	m_sdbSizerStdButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerStdButtonsOK = new wxButton( this, wxID_OK );
