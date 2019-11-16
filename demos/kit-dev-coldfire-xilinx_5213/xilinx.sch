@@ -1,5 +1,4 @@
 EESchema Schematic File Version 5
-LIBS:kit-dev-coldfire-xilinx_5213-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268

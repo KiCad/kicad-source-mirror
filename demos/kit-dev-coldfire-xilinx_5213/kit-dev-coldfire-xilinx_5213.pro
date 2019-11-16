@@ -1,4 +1,4 @@
-update=16/09/2019 11:43:30
+update=16/11/2019 15:34:10
 last_client=kicad
 [general]
 version=1
@@ -49,7 +49,8 @@ MinMicroViaDrill=0.09999999999999999
 MinHoleToHole=0.25
 CopperEdgeClearance=0.01
 TrackWidth1=0.2
-TrackWidth2=0.4
+TrackWidth2=0.3
+TrackWidth3=0.4
 ViaDiameter1=0.6
 ViaDrill1=0.4
 dPairWidth1=0.2
@@ -75,6 +76,8 @@ OthersTextSizeH=1
 OthersTextSizeThickness=0.15
 OthersTextItalic=0
 OthersTextUpright=1
+DimensionUnits=0
+DimensionPrecision=1
 SolderMaskClearance=0.2
 SolderMaskMinWidth=0
 SolderPasteClearance=0

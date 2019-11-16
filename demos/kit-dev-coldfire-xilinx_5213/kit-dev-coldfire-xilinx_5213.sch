@@ -1,5 +1,4 @@
 EESchema Schematic File Version 5
-LIBS:kit-dev-coldfire-xilinx_5213-cache
 EELAYER 30 0
 EELAYER END
 $Descr A3 16535 11693
@@ -1215,7 +1214,7 @@ U 1 1 462383E5
 P 1250 3050
 F 0 "LV101" H 1250 3350 60  0000 C CNN
 F 1 "DS1818" H 1250 3250 60  0000 C CNN
-F 2 "TO_SOT_Packages_THT:TO-92_Molded_Narrow" H 1250 3050 60  0001 C CNN
+F 2 "Package_TO_SOT_THT:TO-92_Molded_Narrow" H 1250 3050 60  0001 C CNN
 F 3 "" H 1250 3050 60  0001 C CNN
 	1    1250 3050
 	1    0    0    -1  
