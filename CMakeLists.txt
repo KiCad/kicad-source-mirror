@@ -468,7 +468,7 @@ endif()
 if( KICAD_USE_OCC )
     add_definitions( -DKICAD_USE_OCC )
     remove_definitions( -DKICAD_USE_OCE )
-    unset( KICAD_USE_OCE )
+    unset( KICAD_USE_OCE CACHE )
 endif()
 
 if( KICAD_USE_CUSTOM_PADS )
