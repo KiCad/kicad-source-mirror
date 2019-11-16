@@ -27,6 +27,7 @@
 #include <kiface_i.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
+#include <footprint_edit_frame.h>
 #include <class_zone.h>
 #include <zones.h>
 #include <zone_settings.h>
@@ -48,6 +49,7 @@ private:
     ZONE_SETTINGS   m_zonesettings;         ///< the working copy of zone settings
     ZONE_SETTINGS*  m_ptr;                  ///< the pointer to the zone settings
                                             ///< of the zone to edit
+    bool            m_isFpEditor;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -73,6 +75,8 @@ DIALOG_KEEPOUT_AREA_PROPERTIES::DIALOG_KEEPOUT_AREA_PROPERTIES( PCB_BASE_FRAME* 
 
     m_ptr = aSettings;
     m_zonesettings = *aSettings;
+
+    m_isFpEditor = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( aParent ) != nullptr;
 
     bool fpEditorMode = m_parent->IsType( FRAME_FOOTPRINT_EDITOR );
     m_zonesettings.SetupLayersList( m_layers, m_parent, true, fpEditorMode );
@@ -115,7 +119,10 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::OnLayerSelection( wxDataViewEvent& event )
     m_layers->GetValue( layerID, row, LAYER_LIST_COLUMN_NAME );
     bool selected = m_layers->GetToggleValue( row, LAYER_LIST_COLUMN_CHECK );
 
-    if( row == LAYER_LIST_ROW_ALL_INNER_LAYERS )
+    // In footprint editor, we have only 3 possible layer selection: C_Cu, inner layers, B_Cu.
+    // So row LAYER_LIST_ROW_ALL_INNER_LAYERS selection is fp editor specific.
+    // in board editor, this row is a normal selection
+    if( m_isFpEditor && row == LAYER_LIST_ROW_ALL_INNER_LAYERS )
     {
         if( selected )
             m_zonesettings.m_Layers |= LSET::InternalCuMask();
