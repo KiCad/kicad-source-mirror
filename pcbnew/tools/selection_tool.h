@@ -116,6 +116,7 @@ public:
 
     ///> Item unselection event handler.
     int UnselectItem( const TOOL_EVENT& aEvent );
+    void RemoveItemFromSel( BOARD_ITEM* aItem, bool aQuietMode = false );
 
     ///> Multiple item unselection event handler
     int UnselectItems( const TOOL_EVENT& aEvent );

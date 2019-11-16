@@ -84,13 +84,14 @@ COMMIT& BOARD_COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO_T aModFl
 void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool aSetDirtyBit )
 {
     // Objects potentially interested in changes:
-    PICKED_ITEMS_LIST undoList;
-    KIGFX::VIEW*      view = m_toolMgr->GetView();
-    BOARD*            board = (BOARD*) m_toolMgr->GetModel();
-    PCB_BASE_FRAME*   frame = (PCB_BASE_FRAME*) m_toolMgr->GetEditFrame();
-    auto              connectivity = board->GetConnectivity();
-    std::set<EDA_ITEM*>      savedModules;
-    std::vector<BOARD_ITEM*> itemsToDeselect;
+    PICKED_ITEMS_LIST   undoList;
+    KIGFX::VIEW*        view = m_toolMgr->GetView();
+    BOARD*              board = (BOARD*) m_toolMgr->GetModel();
+    PCB_BASE_FRAME*     frame = (PCB_BASE_FRAME*) m_toolMgr->GetEditFrame();
+    auto                connectivity = board->GetConnectivity();
+    std::set<EDA_ITEM*> savedModules;
+    SELECTION_TOOL*     selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    bool                itemsDeselected = false;
 
     if( Empty() )
         return;
@@ -165,6 +166,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 if( !m_editModules && aCreateUndoEntry )
                     undoList.PushItem( ITEM_PICKER( boardItem, UR_DELETED ) );
 
+                if( boardItem->IsSelected() )
+                {
+                    selTool->RemoveItemFromSel( boardItem, true /* quiet mode */ );
+                    itemsDeselected = true;
+                }
+
                 switch( boardItem->Type() )
                 {
                 // Module items
@@ -173,8 +180,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_MODULE_TEXT_T:
                 case PCB_MODULE_ZONE_AREA_T:
                     // This level can only handle module items when editing modules
-                    if( !m_editModules )
-                        break;
+                    wxASSERT( m_editModules );
 
                     if( boardItem->Type() == PCB_MODULE_TEXT_T )
                     {
@@ -205,8 +211,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_TARGET_T:              // a target (graphic item)
                 case PCB_MARKER_T:              // a marker used to show something
                 case PCB_ZONE_AREA_T:
-                    itemsToDeselect.push_back( boardItem );
-
                     view->Remove( boardItem );
 
                     if( !( changeFlags & CHT_DONE ) )
@@ -216,8 +220,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
                 case PCB_MODULE_T:
                 {
-                    itemsToDeselect.push_back( boardItem );
-
                     // There are no modules inside a module yet
                     wxASSERT( !m_editModules );
 
@@ -267,12 +269,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
         }
     }
 
-    // Removing an item should trigger the unselect action
-    // but only after all items are removed otherwise we can get
-    // flickering depending on the system
-    if( itemsToDeselect.size() > 0 )
-        m_toolMgr->RunAction( PCB_ACTIONS::unselectItems, true, &itemsToDeselect );
-
     if ( !m_editModules )
     {
         size_t num_changes = m_changes.size();
@@ -312,8 +308,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     if( !m_editModules && aCreateUndoEntry )
         frame->SaveCopyInUndoList( undoList, UR_UNSPECIFIED );
 
-    if( TOOL_MANAGER* toolMgr = frame->GetToolManager() )
-        toolMgr->PostEvent( { TC_MESSAGE, TA_MODEL_CHANGE, AS_GLOBAL } );
+    m_toolMgr->PostEvent( { TC_MESSAGE, TA_MODEL_CHANGE, AS_GLOBAL } );
+
+    if( itemsDeselected )
+        m_toolMgr->PostEvent( EVENTS::UnselectedEvent );
 
     if( aSetDirtyBit )
         frame->OnModify();

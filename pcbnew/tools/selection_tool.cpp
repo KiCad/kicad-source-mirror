@@ -724,18 +724,20 @@ int SELECTION_TOOL::UnselectItems( const TOOL_EVENT& aEvent )
 
 int SELECTION_TOOL::UnselectItem( const TOOL_EVENT& aEvent )
 {
-    // Check if there is an item to be selected
-    BOARD_ITEM* item = aEvent.Parameter<BOARD_ITEM*>();
+    RemoveItemFromSel( aEvent.Parameter<BOARD_ITEM*>() );
+    return 0;
+}
 
-    if( item )
+
+void SELECTION_TOOL::RemoveItemFromSel( BOARD_ITEM* aItem, bool aQuietMode )
+{
+    if( aItem )
     {
-        unselect( item );
+        unselect( aItem );
 
         // Inform other potentially interested tools
         m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
     }
-
-    return 0;
 }
 
 
