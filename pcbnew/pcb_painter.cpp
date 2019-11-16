@@ -552,61 +552,45 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
         break;
     }
 
-    if( aVia->GetViaType() == VIA_BLIND_BURIED )
+    m_gal->SetIsFill( !sketchMode );
+    m_gal->SetIsStroke( sketchMode );
+
+    if( sketchMode )
+    {
+        // Outline mode
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+        m_gal->SetStrokeColor( color );
+    }
+    else
+    {
+        // Filled mode
+        m_gal->SetFillColor( color );
+    }
+
+    if( aVia->GetViaType() == VIA_BLIND_BURIED && aLayer != LAYER_VIAS_HOLES )
     {
         // Buried vias are drawn in a special way to indicate the top and bottom layers
+        // Holes however are always drawn in the same way
         PCB_LAYER_ID layerTop, layerBottom;
         aVia->LayerPair( &layerTop, &layerBottom );
 
-        if( aLayer == LAYER_VIAS_HOLES )
-        {                                                               // TODO outline mode
-            m_gal->SetIsFill( true );
-            m_gal->SetIsStroke( false );
-            m_gal->SetFillColor( color );
-            m_gal->DrawCircle( center, radius );
-        }
-        else
+        if ( !sketchMode )
+            m_gal->SetLineWidth( ( aVia->GetWidth() - aVia->GetDrillValue() ) / 2.0 );
+
+        if ( aLayer == layerTop )
+            m_gal->DrawArc( center, radius, 0.0, M_PI / 2.0 );
+
+        else if ( aLayer == layerBottom )
+            m_gal->DrawArc( center, radius, M_PI, 3.0 * M_PI / 2.0 );
+
+        else if ( aLayer == LAYER_VIA_BBLIND )
         {
-            double width = ( aVia->GetWidth() - aVia->GetDrillValue() ) / 2.0;
-
-            m_gal->SetLineWidth( width );
-            m_gal->SetIsFill( true );
-            m_gal->SetIsStroke( false );
-            m_gal->SetFillColor( color );
-
-            if( aLayer == layerTop )
-            {
-                m_gal->DrawArc( center, radius, 0.0, M_PI / 2.0 );
-            }
-            else if( aLayer == layerBottom )
-            {
-                m_gal->DrawArc( center, radius, M_PI, 3.0 * M_PI / 2.0 );
-            }
-            else if( aLayer == LAYER_VIA_BBLIND )
-            {
-                m_gal->DrawArc( center, radius, M_PI / 2.0, M_PI );
-                m_gal->DrawArc( center, radius, 3.0 * M_PI / 2.0, 2.0 * M_PI );
-            }
+            m_gal->DrawArc( center, radius, M_PI / 2.0, M_PI );
+            m_gal->DrawArc( center, radius, 3.0 * M_PI / 2.0, 2.0 * M_PI );
         }
     }
     else
     {
-        // Regular vias
-        m_gal->SetIsFill( !sketchMode );
-        m_gal->SetIsStroke( sketchMode );
-
-        if( sketchMode )
-        {
-            // Outline mode
-            m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-            m_gal->SetStrokeColor( color );
-        }
-        else
-        {
-            // Filled mode
-            m_gal->SetFillColor( color );
-        }
-
         m_gal->DrawCircle( center, radius );
     }
 
