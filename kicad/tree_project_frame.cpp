@@ -897,6 +897,7 @@ void TREE_PROJECT_FRAME::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
     case wxFSW_EVENT_RENAME :
         {
             const wxFileName& newpath = event.GetNewPath();
+            wxString newdir = newpath.GetPath();
             wxString newfn = newpath.GetFullPath();
 
             while( kid.IsOk() )
@@ -912,7 +913,8 @@ void TREE_PROJECT_FRAME::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
                 kid = m_TreeProject->GetNextChild( root_id, cookie );
             }
 
-            AddItemToTreeProject( newfn, root_id, false );
+            wxTreeItemId newroot_id = findSubdirTreeItem( newdir );
+            AddItemToTreeProject( newfn, newroot_id, false );
         }
         break;
     }

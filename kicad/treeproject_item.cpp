@@ -120,8 +120,6 @@ bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
         return false;
     }
 
-    SetFileName( newFile );
-
     return true;
 }
 
