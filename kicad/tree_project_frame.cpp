@@ -879,6 +879,8 @@ void TREE_PROJECT_FRAME::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
             wxTreeItemId newitem = AddItemToTreeProject( pathModified.GetFullPath(), root_id, false );
 
             // If we are in the process of renaming a file, select the new one
+            // This is needed for MSW and OSX, since we don't get RENAME events from them, just a
+            // pair of DELETE and CREATE events.
             if( m_isRenaming && newitem.IsOk() )
             {
                 m_TreeProject->SelectItem( newitem );
@@ -926,6 +928,8 @@ void TREE_PROJECT_FRAME::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
             // If the item exists, select it
             if( newitem.IsOk() )
                 m_TreeProject->SelectItem( newitem );
+
+            m_isRenaming = false;
         }
         break;
     }
