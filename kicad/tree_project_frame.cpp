@@ -136,6 +136,7 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
 {
     m_Parent = parent;
     m_TreeProject = NULL;
+    m_isRenaming = false;
 
     m_watcher = NULL;
     Connect( wxEVT_FSWATCHER,
@@ -292,17 +293,17 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
 }
 
 
-bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
+wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
                                                wxTreeItemId& aRoot, bool aRecurse )
 {
-    wxTreeItemId    cellule;
-    TreeFileType    type = TREE_UNKNOWN;
-    wxFileName      fn( aName );
+    wxTreeItemId newItemId;
+    TreeFileType type = TREE_UNKNOWN;
+    wxFileName   fn( aName );
 
     // Files/dirs names starting by "." are not visible files under unices.
     // Skip them also under Windows
     if( fn.GetName().StartsWith( wxT( "." ) ) )
-        return false;
+        return newItemId;
 
     if( wxDirExists( aName ) )
     {
@@ -333,7 +334,7 @@ bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
         }
 
         if( !addFile )
-            return false;
+            return newItemId;
 
         // only show the schematic if it is a top level schematic.  Eeschema
         // cannot open a schematic and display it properly unless it starts
@@ -365,7 +366,7 @@ bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
                 fp = wxFopen( fullFileName, wxT( "rt" ) );
 
                 if( fp == NULL )
-                    return false;
+                    return newItemId;
 
                 addFile = false;
 
@@ -385,7 +386,7 @@ bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
                 fclose( fp );
 
                 if( !addFile )
-                    return false; // it is a non-top-level schematic
+                    return newItemId; // it is a non-top-level schematic
             }
         }
 
@@ -418,7 +419,7 @@ bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
         if( itemData )
         {
             if( itemData->GetFileName() == aName )
-                return true;    // well, we would have added it, but it is already here!
+                return itemData->GetId();    // well, we would have added it, but it is already here!
         }
 
         kid = m_TreeProject->GetNextChild( aRoot, cookie );
@@ -426,10 +427,10 @@ bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
 
     // Append the item (only appending the filename not the full path):
     wxString            file = wxFileNameFromPath( aName );
-    cellule = m_TreeProject->AppendItem( aRoot, file );
+    newItemId = m_TreeProject->AppendItem( aRoot, file );
     TREEPROJECT_ITEM*   data = new TREEPROJECT_ITEM( type, aName, m_TreeProject );
 
-    m_TreeProject->SetItemData( cellule, data );
+    m_TreeProject->SetItemData( newItemId, data );
     data->SetState( 0 );
 
     // Mark root files (files which have the same aName as the project)
@@ -458,16 +459,16 @@ bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
                 do    // Add name in tree, but do not recurse
                 {
                     wxString path = aName + wxFileName::GetPathSeparator() + dir_filename;
-                    AddItemToTreeProject( path, cellule, false );
+                    AddItemToTreeProject( path, newItemId, false );
                 } while( dir.GetNext( &dir_filename ) );
             }
         }
 
         // Sort filenames by alphabetic order
-        m_TreeProject->SortChildren( cellule );
+        m_TreeProject->SortChildren( newItemId );
     }
 
-    return true;
+    return newItemId;
 }
 
 
@@ -699,8 +700,8 @@ void TREE_PROJECT_FRAME::OnRenameFile( wxCommandEvent& )
     if( buffer.IsEmpty() )
         return; // empty file name not allowed
 
-    if( tree_data->Rename( buffer, true ) )
-        m_TreeProject->SetItemText( curr_item, buffer );
+    tree_data->Rename( buffer, true );
+    m_isRenaming = true;
 }
 
 
@@ -877,7 +878,16 @@ void TREE_PROJECT_FRAME::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
     switch( event.GetChangeType() )
     {
     case wxFSW_EVENT_CREATE:
-        AddItemToTreeProject( pathModified.GetFullPath(), root_id, false );
+        {
+            wxTreeItemId newitem = AddItemToTreeProject( pathModified.GetFullPath(), root_id, false );
+
+            // If we are in the process of renaming a file, select the new one
+            if( m_isRenaming && newitem.IsOk() )
+            {
+                m_TreeProject->SelectItem( newitem );
+                m_isRenaming = false;
+            }
+        }
         break;
 
     case wxFSW_EVENT_DELETE:
@@ -914,7 +924,11 @@ void TREE_PROJECT_FRAME::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
             }
 
             wxTreeItemId newroot_id = findSubdirTreeItem( newdir );
-            AddItemToTreeProject( newfn, newroot_id, false );
+            wxTreeItemId newitem = AddItemToTreeProject( newfn, newroot_id, false );
+
+            // If the item exists, select it
+            if( newitem.IsOk() )
+                m_TreeProject->SelectItem( newitem );
         }
         break;
     }

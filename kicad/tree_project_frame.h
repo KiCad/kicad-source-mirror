@@ -52,6 +52,7 @@ public:
     TREEPROJECTFILES*       m_TreeProject;
 
 private:
+    bool                    m_isRenaming; // Are we in the process of renaming a file
     wxTreeItemId            m_root;
     std::vector<wxString>   m_filters;
     wxFileSystemWatcher*    m_watcher; // file system watcher (since wxWidgets 2.9.2)
@@ -158,9 +159,9 @@ private:
      * @param aRoot = the wxTreeItemId item where to add sub tree items
      * @param aRecurse = true to add file or subdir names to the current tree item
      *                   false to stop file add.
-     * @return true if the file (or directory) is added.
+     * @return the Id for the new tree item
      */
-    bool AddItemToTreeProject( const wxString& aName, wxTreeItemId& aRoot, bool aRecurse = true );
+    wxTreeItemId AddItemToTreeProject( const wxString& aName, wxTreeItemId& aRoot, bool aRecurse = true );
 
     /**
      * Function findSubdirTreeItem
