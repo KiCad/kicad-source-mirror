@@ -55,7 +55,7 @@ private:
     bool                    m_isRenaming; // Are we in the process of renaming a file
     wxTreeItemId            m_root;
     std::vector<wxString>   m_filters;
-    wxFileSystemWatcher*    m_watcher; // file system watcher (since wxWidgets 2.9.2)
+    wxFileSystemWatcher*    m_watcher; // file system watcher
 
 public:
     TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent );

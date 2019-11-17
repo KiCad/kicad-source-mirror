@@ -37,8 +37,6 @@
  */
 class TREEPROJECT_ITEM : public wxTreeItemData
 {
-    //friend class KICAD_MANAGER_FRAME;
-
 public:
 
     TREEPROJECT_ITEM( TreeFileType type, const wxString& data,

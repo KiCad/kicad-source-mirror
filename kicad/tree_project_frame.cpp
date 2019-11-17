@@ -257,11 +257,8 @@ void TREE_PROJECT_FRAME::OnCreateNewDirectory( wxCommandEvent& event )
 
     wxString full_dirname = prj_dir + wxFileName::GetPathSeparator() + subdir;
 
-    if( wxMkdir( full_dirname ) )
-    {
-        // the new item will be added by the file watcher
-        // AddItemToTreeProject( subdir, root );
-    }
+    // Make the new item and let the file watcher add it to the tree
+    wxMkdir( full_dirname );
 }
 
 
@@ -450,7 +447,7 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
 
         if( dir.IsOpened() )    // protected dirs will not open properly.
         {
-            wxString        dir_filename;
+            wxString dir_filename;
 
             data->SetPopulated( true );
 
@@ -821,7 +818,7 @@ wxTreeItemId TREE_PROJECT_FRAME::findSubdirTreeItem( const wxString& aSubDir )
                 subdirs_id.pop();
                 kid = m_TreeProject->GetFirstChild( root_id, cookie );
 
-                if( ! kid.IsOk() )
+                if( !kid.IsOk() )
                     continue;
             }
         }
