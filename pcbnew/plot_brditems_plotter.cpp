@@ -79,7 +79,14 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
         gbr_metadata.SetCopper( true );
 
         if( isOnExternalCopperLayer )
-            gbr_metadata.SetPadName( aPad->GetName() );
+        {
+            const bool useUTF8 = false;
+            const bool useQuoting = false;
+            gbr_metadata.SetPadName( aPad->GetName(), useUTF8, useQuoting );
+
+            if( !aPad->GetName().IsEmpty() )
+                gbr_metadata.SetPadPinFunction( aPad->GetPinFunction(), useUTF8, useQuoting );
+        }
 
         gbr_metadata.SetNetName( aPad->GetNetname() );
 

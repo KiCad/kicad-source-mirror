@@ -57,9 +57,15 @@ PLACEFILE_GERBER_WRITER::PLACEFILE_GERBER_WRITER( BOARD* aPcb )
 
 
 int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
-                                              PCB_LAYER_ID aLayer, bool aIncludeBrdEdges )
+                                              PCB_LAYER_ID aLayer, bool aIncludeBrdEdges
+)
 {
     m_layer = aLayer;
+
+    PCB_PLOT_PARAMS plotOpts = m_pcb->GetPlotOptions();
+
+    if( plotOpts.GetUseAuxOrigin() )
+        m_offset = m_pcb->GetAuxOrigin();
 
     // Collect footprints on the right layer
     std::vector<MODULE*> fp_list;
@@ -73,7 +79,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
            fp_list.push_back( footprint );
     }
 
-    LOCALE_IO dummy_io;     // Use the standard notation for double numbers
+    LOCALE_IO dummy_io;     // Use the standard notation for float numbers
 
     GERBER_PLOTTER plotter;
 
@@ -104,7 +110,6 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
         return -1;
 
     // We need a BRDITEMS_PLOTTER to plot pads
-    PCB_PLOT_PARAMS plotOpts;
     BRDITEMS_PLOTTER brd_plotter( &plotter, m_pcb, plotOpts );
 
     plotter.StartPlot();
@@ -167,7 +172,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
 
         gbr_metadata.m_NetlistMetadata.SetExtraData( pnpAttrib.FormatCmpPnPMetadata() );
 
-        wxPoint flash_pos = footprint->GetPosition() + m_offset;
+        wxPoint flash_pos = footprint->GetPosition();
 
         plotter.FlashPadCircle( flash_pos, flash_position_shape_diam, FILLED, &gbr_metadata );
         gbr_metadata.m_NetlistMetadata.ClearExtraData();
@@ -194,7 +199,6 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
                 if( !poly.PointCount() )
                     continue;
 
-                poly.Move( m_offset );
                 useFpPadsBbox = false;
                 plotter.PLOTTER::PlotPoly( poly, NO_FILL, line_thickness, &gbr_metadata );
             }
@@ -219,7 +223,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
             poly.SetClosed( true );
 
             poly.Rotate( -footprint->GetOrientationRadians(), VECTOR2I( 0, 0 ) );
-            poly.Move( footprint->GetPosition() + m_offset );
+            poly.Move( footprint->GetPosition() );
             plotter.PLOTTER::PlotPoly( poly, NO_FILL, line_thickness, &gbr_metadata );
         }
 
@@ -234,11 +238,15 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
                 gbr_metadata.SetApertureAttrib(
                         GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_PAD1_POSITION );
 
-                gbr_metadata.SetPadName( pad1->GetName() );
+                gbr_metadata.SetPadName( pad1->GetName(), allowUtf8, true );
+
+                gbr_metadata.SetPadPinFunction( pad1->GetPinFunction(), allowUtf8, true );
+
                 gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_PAD );
 
                 // Flashes a diamond at pad position:
-                plotter.FlashRegularPolygon( pad1->GetPosition() + m_offset, pad1_mark_size,
+                plotter.FlashRegularPolygon( pad1->GetPosition(),
+                                             pad1_mark_size,
                                              4, 0.0, FILLED, &gbr_metadata );
             }
         }
@@ -271,10 +279,13 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename,
                 if( !pad->IsOnLayer( aLayer ) )
                     continue;
 
-                gbr_metadata.SetPadName( pad->GetName() );
+                gbr_metadata.SetPadName( pad->GetName(), allowUtf8, true );
+
+                gbr_metadata.SetPadPinFunction( pad->GetPinFunction(), allowUtf8, true );
 
                 // Flashes a round, 0 sized round shape at pad position
-                plotter.FlashPadCircle( pad->GetPosition() + m_offset, other_pads_mark_size,
+                plotter.FlashPadCircle( pad->GetPosition(),
+                                        other_pads_mark_size,
                                         FILLED, &gbr_metadata );
             }
         }

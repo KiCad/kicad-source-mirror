@@ -1399,8 +1399,16 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         StrPrintf( &output, " (net %d %s)", m_mapping->Translate( aPad->GetNetCode() ),
                    m_out->Quotew( aPad->GetNetname() ).c_str() );
 
+    // Add pinfunction, if exists.
+    // Pin function is closely related to nets, so if CTL_OMIT_NETS is set,
+    // omit also pin function (for instance when saved from library editor)
+    if( !(m_ctl & CTL_OMIT_NETS) && !aPad->GetPinFunction().IsEmpty() )
+        StrPrintf( &output, " (pinfunction %s)",
+                   m_out->Quotew( aPad->GetPinFunction() ).c_str() );
+
     if( aPad->GetPadToDieLength() != 0 )
-        StrPrintf( &output, " (die_length %s)", FormatInternalUnits( aPad->GetPadToDieLength() ).c_str() );
+        StrPrintf( &output, " (die_length %s)",
+                   FormatInternalUnits( aPad->GetPadToDieLength() ).c_str() );
 
     if( aPad->GetLocalSolderMaskMargin() != 0 )
         StrPrintf( &output, " (solder_mask_margin %s)",

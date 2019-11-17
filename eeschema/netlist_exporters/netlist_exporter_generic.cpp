@@ -565,6 +565,14 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( bool aUseGraph )
                         xnet->AddChild( xnode = node( "node" ) );
                         xnode->AddAttribute( "ref", refText );
                         xnode->AddAttribute( "pin", pinText );
+
+                        wxString pinName;
+
+                        if( pin->GetName() != "~" ) //  ~ is a char used to code empty strings in libs.
+                            pinName = pin->GetName();
+
+                        if( !pinName.IsEmpty() )
+                            xnode->AddAttribute( "pinfunction", pinName );
                     }
                 }
             }
@@ -610,6 +618,9 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( bool aUseGraph )
             xnet->AddChild( xnode = node( "node" ) );
             xnode->AddAttribute( "ref", ref );
             xnode->AddAttribute( "pin",  nitem->GetPinNumText() );
+
+            if( !nitem->GetPinNameText().IsEmpty() )
+                xnode->AddAttribute( "pinfunction", nitem->GetPinNameText() );
         }
     }
 

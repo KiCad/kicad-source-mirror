@@ -458,3 +458,19 @@ void NETLIST_OBJECT::SetNetNameCandidate( NETLIST_OBJECT* aCandidate )
             break;
     }
 }
+
+
+const wxString NETLIST_OBJECT::GetPinNameText() const
+{
+    wxString name;
+    // returns the pin name, for NET_PIN (usual pin) item.
+    if( m_Type == NET_PIN )
+    {
+        name = static_cast<LIB_PIN*>( m_Comp )->GetName();
+
+        if( name == "~" )   //empty name
+            name = wxEmptyString;
+    }
+
+    return name;
+}

@@ -766,8 +766,12 @@ void D_PAD::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM>& a
     if( module )
     {
         aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), module->GetReference(), DARKCYAN ) );
-        aList.push_back( MSG_PANEL_ITEM( _( "Pad" ), m_name, BROWN ) );
     }
+
+    aList.push_back( MSG_PANEL_ITEM( _( "Pad" ), m_name, BROWN ) );
+
+    if( !GetPinFunction().IsEmpty() )
+        aList.push_back( MSG_PANEL_ITEM( _( "Pin fct" ), GetPinFunction(), BROWN ) );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Net" ), UnescapeString( GetNetname() ), DARKCYAN ) );
 

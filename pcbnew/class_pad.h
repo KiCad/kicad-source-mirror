@@ -190,11 +190,27 @@ public:
     }
 
     /**
+     * Set the pad function (pin name in schematic)
+     */
+    void SetPinFunction( const wxString& aName )
+    {
+        m_pinFunction = aName;
+    }
+
+    /**
      * @return the pad name
      */
     const wxString& GetName() const
     {
         return m_name;
+    }
+
+    /**
+     * @return the pad function (pin name in schematic)
+     */
+    const wxString& GetPinFunction() const
+    {
+        return m_pinFunction;
     }
 
     /**
@@ -818,9 +834,11 @@ private:
 private:    // Private variable members:
 
     // Actually computed and cached on demand by the accessor
-    mutable int m_boundingRadius;  ///< radius of the circle containing the pad shape
+    mutable int m_boundingRadius;   ///< radius of the circle containing the pad shape
 
-    wxString    m_name;
+    wxString    m_name;             ///< pad name (pin number in schematic)
+
+    wxString    m_pinFunction;      ///< pin function in schematic
 
     // TODO: Remove m_Pos from Pad or make private.  View positions calculated from m_Pos0
     wxPoint     m_Pos;              ///< pad Position on board

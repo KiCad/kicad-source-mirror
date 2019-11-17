@@ -439,6 +439,21 @@ wxString ConvertNotAllowedCharsInGerber( const wxString& aString, bool aAllowUtf
 }
 
 
+std::string GBR_DATA_FIELD::GetGerberString()
+{
+    wxString converted;
+
+    if( !m_field.IsEmpty() )
+        converted = ConvertNotAllowedCharsInGerber( m_field, m_useUTF8, m_escapeString );
+
+    // Convert the char string to std::string. Be carefull when converting awxString to
+    // a std::string: using static_cast<const char*> is mandatory
+    std::string txt = static_cast<const char*>( converted.utf8_str() );
+
+    return txt;
+}
+
+
 std::string FormatStringToGerber( const wxString& aString )
 {
     wxString converted;
@@ -500,8 +515,9 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
 
     if( ( aData->m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_PAD ) )
     {
-        // print info associated to a flashed pad (cmpref, pad name)
-        // example: %TO.P,R5,3*%
+        // print info associated to a flashed pad (cmpref, pad name, and optionally pin function)
+        // example1: %TO.P,R5,3*%
+        // example2: %TO.P,R5,3,reset*%
         pad_attribute_string = prepend_string + "TO.P,";
         pad_attribute_string += FormatStringToGerber( aData->m_Cmpref ) + ",";
 
@@ -509,7 +525,17 @@ bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttribu
             // Happens for "mechanical" or never connected pads
             pad_attribute_string += FormatStringToGerber( NO_PAD_NAME );
         else
-            pad_attribute_string += FormatStringToGerber( aData->m_Padname );
+        {
+            pad_attribute_string += aData->m_Padname.GetGerberString();
+
+            // In Pcbnew, the pin function comes from the schematic.
+            // so it exists only for named pads
+            if( !aData->m_PadPinFunction.IsEmpty() )
+            {
+                pad_attribute_string += ',';
+                pad_attribute_string += aData->m_PadPinFunction.GetGerberString();
+            }
+        }
 
         pad_attribute_string += eol_string;
     }

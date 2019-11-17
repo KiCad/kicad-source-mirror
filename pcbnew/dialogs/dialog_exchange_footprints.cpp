@@ -449,6 +449,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aSrc, MODULE* aDest, BOARD_COMMIT&
         {
             pad->SetLocalRatsnestVisible( oldPad->GetLocalRatsnestVisible() );
             pad->SetNetCode( oldPad->GetNetCode() );
+            pad->SetPinFunction( oldPad->GetPinFunction() );
         }
     }
 

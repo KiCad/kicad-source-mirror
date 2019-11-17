@@ -731,9 +731,15 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PAN
 
     if( ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_PAD ) )
     {
-        cmp_pad_msg.Printf( _( "Cmp: %s;  Pad: %s" ),
+        if( m_netAttributes.m_PadPinFunction.IsEmpty() )
+            cmp_pad_msg.Printf( _( "Cmp: %s  Pad: %s" ),
                                 m_netAttributes.m_Cmpref,
-                                m_netAttributes.m_Padname );
+                                m_netAttributes.m_Padname.GetValue() );
+        else
+            cmp_pad_msg.Printf( _( "Cmp: %s  Pad: %s  Fct %s" ),
+                                m_netAttributes.m_Cmpref,
+                                m_netAttributes.m_Padname.GetValue(),
+                                m_netAttributes.m_PadPinFunction.GetValue() );
     }
 
     else if( ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_CMP ) )

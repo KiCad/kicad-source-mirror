@@ -171,8 +171,21 @@ public:
     }
 
     void SetNetName( const wxString& aNetname ) { m_NetlistMetadata.m_Netname = aNetname; }
-    void SetPadName( const wxString& aPadname ) { m_NetlistMetadata.m_Padname = aPadname; }
-    void SetCmpReference( const wxString& aComponentRef ) { m_NetlistMetadata.m_Cmpref = aComponentRef; }
+
+    void SetPadName( const wxString& aPadname, bool aUseUTF8 = false, bool aEscapeString = false )
+    {
+        m_NetlistMetadata.m_Padname.SetField( aPadname, aUseUTF8, aEscapeString );
+    }
+
+    void SetPadPinFunction( const wxString& aPadPinFunction, bool aUseUTF8, bool aEscapeString )
+    {
+        m_NetlistMetadata.m_PadPinFunction.SetField( aPadPinFunction, aUseUTF8, aEscapeString );
+    }
+
+    void SetCmpReference( const wxString& aComponentRef )
+    {
+        m_NetlistMetadata.m_Cmpref = aComponentRef;
+    }
 
     /**
      * Allowed attributes are not the same on board copper layers and on other layers

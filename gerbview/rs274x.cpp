@@ -419,7 +419,13 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
         {
             m_NetAttributeDict.m_NetAttribType |= GBR_NETLIST_METADATA::GBR_NETINFO_PAD;
             m_NetAttributeDict.m_Cmpref = FormatStringFromGerber( dummy.GetPrm( 1 ) );
-            m_NetAttributeDict.m_Padname = FormatStringFromGerber( dummy.GetPrm( 2 ) );
+            m_NetAttributeDict.m_Padname.SetField( FormatStringFromGerber( dummy.GetPrm( 2 ) ), true, true );
+
+            if( dummy.GetPrmCount() > 3 )
+                m_NetAttributeDict.m_PadPinFunction.SetField(
+                        FormatStringFromGerber( dummy.GetPrm( 3 ) ), true, true );
+            else
+                m_NetAttributeDict.m_PadPinFunction.Clear();
         }
         }
         break;

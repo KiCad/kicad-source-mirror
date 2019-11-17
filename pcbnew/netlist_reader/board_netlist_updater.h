@@ -64,8 +64,9 @@ class PCB_EDIT_FRAME;
  *     the time stamp is updated from the #NETLIST.
  * - After each footprint is added or update as described above, each footprint pad net
  *   name is compared and updated to the value defined in the #NETLIST.
- * - After all of the footprints have been added, updated, and net names properly set,
- *   any extra unlock footprints are removed from the #BOARD.
+ * - After all of the footprints have been added, updated, and net names and
+ *    pin function properly set, any extra unlock footprints are removed
+ *    from the #BOARD.
  *
  */
 class BOARD_NETLIST_UPDATER
@@ -136,6 +137,9 @@ private:
     void cacheNetname( D_PAD* aPad, const wxString& aNetname );
     wxString getNetname( D_PAD* aPad );
 
+    void cachePinFunction( D_PAD* aPad, const wxString& aPinFunction );
+    wxString getPinFunction( D_PAD* aPad );
+
     wxPoint estimateComponentInsertionPosition();
     MODULE* addNewComponent( COMPONENT* aComponent );
     MODULE* replaceComponent( NETLIST& aNetlist, MODULE* aPcbComponent, COMPONENT* aNewComponent );
@@ -155,6 +159,7 @@ private:
     std::map< ZONE_CONTAINER*, std::vector<D_PAD*> > m_zoneConnectionsCache;
     std::map< wxString, wxString> m_oldToNewNets;
     std::map< D_PAD*, wxString > m_padNets;
+    std::map< D_PAD*, wxString > m_padPinFunctions;
     std::vector<MODULE*> m_addedComponents;
     std::map<wxString, NETINFO_ITEM*> m_addedNets;
 

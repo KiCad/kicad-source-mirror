@@ -178,7 +178,6 @@ public:
     bool HasNetNameCandidate() { return m_netNameCandidate != NULL; }
 
     /**
-     * Function GetPinNum
      * returns a pin number in wxString form.  Pin numbers are not always
      * numbers.  \"A23\" would be a valid pin number.
      */
@@ -186,6 +185,11 @@ public:
     {
         return m_PinNum;
     }
+
+    /**
+     * returns the pin name, for NET_PIN (usual pin) item.
+     */
+    const wxString GetPinNameText() const;
 
     /**  For Pins (NET_PINS):
      * @return the schematic component which contains this pin

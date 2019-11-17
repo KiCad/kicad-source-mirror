@@ -85,6 +85,49 @@ public:
     wxString FormatCmpPnPMetadata();
 };
 
+/**
+ * This class handle a Gerber data field.
+ * this is a unicode string with some chars converted in escaped Hexa sequence
+ * when creating the file
+ * Chars always escaped because they are separator in Gerber files: * , \ %
+ * non ascii 7 chars can be converted to UTF8 or escaped.
+ */
+class GBR_DATA_FIELD
+{
+public:
+    GBR_DATA_FIELD() : m_useUTF8( false ), m_escapeString( false )
+    {}
+
+    void clear()
+    {
+        m_field.clear();
+        m_useUTF8 = false;
+        m_escapeString = false;
+    }
+
+    void Clear() { clear(); }
+
+    const wxString& GetValue() { return m_field; }
+
+    void SetField( const wxString& aField, bool aUseUTF8, bool aEscapeString )
+    {
+        m_field = aField;
+        m_useUTF8 = aUseUTF8;
+        m_escapeString = aEscapeString;
+    }
+
+    bool IsEmpty() { return m_field.IsEmpty(); }
+
+    std::string GetGerberString();
+
+
+private:
+    wxString m_field;       ///< the unicade text to print in Gbr file
+                            ///< (after escape and quoting)
+    bool m_useUTF8;         ///< true to use UTF8, false to escape non ascii7 chars
+    bool m_escapeString;    ///< true to quote the field in gbr file
+};
+
 
 /** this class handle info which can be added in a gerber file as attribute
  * of an object
@@ -98,6 +141,7 @@ public:
  * for other copper layer items (pads on internal layers, tracks ... ), only .N and .C
  * can be used
  */
+
 class GBR_NETLIST_METADATA
 {
 public:
@@ -118,9 +162,10 @@ public:
     bool     m_NotInNet;        ///< true if a pad of a footprint cannot be connected
                                 ///< (for instance a mechanical NPTH, ot a not named pad)
                                 ///< in this case the pad net name is empty in gerber file
-    wxString m_Padname;         ///< for a flashed pad: the pad name ((TO.P attribute)
-    wxString m_Cmpref;          ///< the component reference parent of the data
-    wxString m_Netname;         ///< for items associated to a net: the netname
+    GBR_DATA_FIELD m_Padname;   ///< for a flashed pad: the pad name ((TO.P attribute)
+    GBR_DATA_FIELD m_PadPinFunction;  ///< for a pad: the pin function (defined in schematic)
+    wxString m_Cmpref;    ///< the component reference parent of the data
+    wxString m_Netname;   ///< for items associated to a net: the netname
 
     wxString m_ExtraData;       ///< a string to print after %TO object attributes, if not empty
                                 ///< it is printed "as this"
@@ -161,6 +206,7 @@ public:
         if( m_NetAttribType == GBR_NETINFO_UNSPECIFIED )
         {
             m_Padname.clear();
+            m_PadPinFunction.clear();
             m_Cmpref.clear();
             m_Netname.clear();
             return;
@@ -170,6 +216,7 @@ public:
         {
             m_NetAttribType = GBR_NETINFO_UNSPECIFIED;
             m_Padname.clear();
+            m_PadPinFunction.clear();
             m_Cmpref.clear();
             m_Netname.clear();
             return;
@@ -193,6 +240,7 @@ public:
         {
             m_NetAttribType &= ~GBR_NETINFO_PAD;
             m_Padname.clear();
+            m_PadPinFunction.clear();
             return;
         }
     }

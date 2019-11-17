@@ -3032,6 +3032,12 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
             NeedRIGHT();
             break;
 
+        case T_pinfunction:
+            NeedSYMBOLorNUMBER();
+            pad->SetPinFunction( FromUTF8() );
+            NeedRIGHT();
+            break;
+
         case T_die_length:
             pad->SetPadToDieLength( parseBoardUnits( T_die_length ) );
             NeedRIGHT();

@@ -178,16 +178,17 @@ void KICAD_NETLIST_PARSER::parseNet()
 {
     /* Parses a section like
      * (net (code 20) (name /PC-A0)
-     *  (node (ref BUS1) (pin 62))
-     *  (node (ref U3) (pin 3))
-     *  (node (ref U9) (pin M6)))
+     *  (node (ref "BUS1") (pin "62)")
+     *  (node (ref "U3") ("pin 3") (pin_function "clock"))
+     *  (node (ref "U9") (pin "M6") (pin_function "reset")))
      */
 
     COMPONENT* component = NULL;
     wxString   code;
     wxString   name;
     wxString   reference;
-    wxString   pin;
+    wxString   pin_number;
+    wxString   pin_function;
     int        nodecount = 0;
 
     // The token net was read, so the next data is (code <number>)
@@ -217,6 +218,8 @@ void KICAD_NETLIST_PARSER::parseNet()
             break;
 
         case T_node:
+            pin_function.Clear();   // By default: no pin function.
+
             while( (token = NextTok()) != T_EOF )
             {
                 if( token == T_RIGHT )
@@ -234,7 +237,13 @@ void KICAD_NETLIST_PARSER::parseNet()
 
                 case T_pin:
                     NeedSYMBOLorNUMBER();
-                    pin = FROM_UTF8( CurText() );
+                    pin_number = FROM_UTF8( CurText() );
+                    NeedRIGHT();
+                    break;
+
+                case T_pinfunction:
+                    NeedSYMBOLorNUMBER();
+                    pin_function = FROM_UTF8( CurText() );
                     NeedRIGHT();
                     break;
 
@@ -257,7 +266,7 @@ void KICAD_NETLIST_PARSER::parseNet()
                                    m_lineReader->LineNumber(), m_lineReader->Length() );
             }
 
-            component->AddNet( pin, name );
+            component->AddNet( pin_number, name, pin_function );
             nodecount++;
             break;
 

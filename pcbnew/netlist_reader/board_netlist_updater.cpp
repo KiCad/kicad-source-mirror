@@ -82,12 +82,28 @@ void BOARD_NETLIST_UPDATER::cacheNetname( D_PAD* aPad, const wxString& aNetname 
     m_padNets[ aPad ] = aNetname;
 }
 
+
 wxString BOARD_NETLIST_UPDATER::getNetname( D_PAD* aPad )
 {
     if( m_isDryRun && m_padNets.count( aPad ) )
         return m_padNets[ aPad ];
     else
         return aPad->GetNetname();
+}
+
+
+void BOARD_NETLIST_UPDATER::cachePinFunction( D_PAD* aPad, const wxString& aPinFunction )
+{
+    m_padPinFunctions[ aPad ] = aPinFunction;
+}
+
+
+wxString BOARD_NETLIST_UPDATER::getPinFunction( D_PAD* aPad )
+{
+    if( m_isDryRun && m_padPinFunctions.count( aPad ) )
+        return m_padPinFunctions[ aPad ];
+    else
+        return aPad->GetPinFunction();
 }
 
 
@@ -299,7 +315,23 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
     // At this point, the component footprint is updated.  Now update the nets.
     for( auto pad : aPcbComponent->Pads() )
     {
-        COMPONENT_NET net = aNewComponent->GetNet( pad->GetName() );
+        const COMPONENT_NET& net = aNewComponent->GetNet( pad->GetName() );
+
+        wxString pinFunction;
+
+        if( net.IsValid() )     // i.e. the pad has a name
+            pinFunction = net.GetPinFunction();
+
+        if( !m_isDryRun )
+        {
+            if( pad->GetPinFunction() != pinFunction )
+            {
+                changed = true;
+                pad->SetPinFunction( pinFunction );
+            }
+        }
+        else
+            cachePinFunction( pad, pinFunction );
 
         // Test if new footprint pad has no net (pads not on copper layers have no net).
         if( !net.IsValid() || !pad->IsOnCopperLayer() )
@@ -319,10 +351,17 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
                             pad->GetName() );
                 m_reporter->Report( msg, REPORTER::RPT_WARNING);
             }
+
             if( !m_isDryRun )
             {
                 changed = true;
                 pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+
+                // If the pad has no net from netlist (i.e. not in netlist
+                // it cannot have a pin function
+                if( pad->GetNetname().IsEmpty() )
+                    pad->SetPinFunction( wxEmptyString );
+
             }
             else
                 cacheNetname( pad, wxEmptyString );

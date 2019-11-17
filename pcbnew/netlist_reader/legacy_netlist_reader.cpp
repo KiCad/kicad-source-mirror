@@ -207,7 +207,7 @@ void LEGACY_NETLIST_READER::loadNet( char* aText, COMPONENT* aComponent )
     if( (char) netName[0] == '?' )       // ? indicates no net connected to pin.
         netName = wxEmptyString;
 
-    aComponent->AddNet( pinName, netName );
+    aComponent->AddNet( pinName, netName, wxEmptyString );
 }
 
 

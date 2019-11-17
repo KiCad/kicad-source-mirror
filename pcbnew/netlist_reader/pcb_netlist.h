@@ -43,24 +43,27 @@ class REPORTER;
 
 /**
  * Class COMPONENT_NET
- * is used to store the component pin name to net name associations stored in a netlist.
+ * is used to store the component pin name to net name (and pin function)
+ * associations stored in a netlist.
  */
 class COMPONENT_NET
 {
     wxString m_pinName;
     wxString m_netName;
+    wxString m_pinFunction;
 
 public:
     COMPONENT_NET() {}
 
-    COMPONENT_NET( const wxString& aPinName, const wxString& aNetName ) :
-        m_pinName( aPinName ), m_netName( aNetName )
+    COMPONENT_NET( const wxString& aPinName, const wxString& aNetName,
+                   const wxString& aPinFunction ) :
+        m_pinName( aPinName ), m_netName( aNetName ), m_pinFunction( aPinFunction )
     {
     }
 
     const wxString& GetPinName() const { return m_pinName; }
-
     const wxString& GetNetName() const { return m_netName; }
+    const wxString& GetPinFunction() const { return m_pinFunction; }
 
     bool IsValid() const { return !m_pinName.IsEmpty(); }
 
@@ -75,21 +78,20 @@ public:
 
 typedef std::vector< COMPONENT_NET > COMPONENT_NETS;
 
-
 /**
  * Class COMPONENT
  * is used to store components and all of their related information found in a netlist.
  */
 class COMPONENT
 {
-    COMPONENT_NETS m_nets;
-    wxArrayString  m_footprintFilters; ///< Footprint filters found in netlist.
-    int            m_pinCount;         ///< Number of pins found in netlist.
-    wxString       m_reference;        ///< The component reference designator found in netlist.
-    wxString       m_value;            ///< The component value found in netlist.
+    COMPONENT_NETS m_nets;              ///< list of nets shared by the component pins
+    wxArrayString  m_footprintFilters;  ///< Footprint filters found in netlist.
+    int            m_pinCount;          ///< Number of pins found in netlist.
+    wxString       m_reference;         ///< The component reference designator found in netlist.
+    wxString       m_value;             ///< The component value found in netlist.
 
     // ZZZ This timestamp is string, not time_t
-    wxString       m_timeStamp;        ///< The component full time stamp found in netlist.
+    wxString       m_timeStamp;         ///< The component full time stamp found in netlist.
 
     /// The name of the component in #m_library used when it was placed on the schematic..
     wxString       m_name;
@@ -99,6 +101,7 @@ class COMPONENT
 
     /// The #LIB_ID of the footprint assigned to the component.
     LIB_ID         m_fpid;
+
 
     /// The alt LIB_ID of the footprint, when there are 2 different assigned footprints,
     /// One from the netlist, the other from the .cmp file.
@@ -129,9 +132,9 @@ public:
 
     virtual ~COMPONENT() { };
 
-    void AddNet( const wxString& aPinName, const wxString& aNetName )
+    void AddNet( const wxString& aPinName, const wxString& aNetName, const wxString& aPinFunction )
     {
-        m_nets.push_back( COMPONENT_NET( aPinName, aNetName ) );
+        m_nets.push_back( COMPONENT_NET( aPinName, aNetName, aPinFunction ) );
     }
 
     unsigned GetNetCount() const { return m_nets.size(); }
