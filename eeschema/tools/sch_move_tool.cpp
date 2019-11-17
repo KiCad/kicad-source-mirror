@@ -473,7 +473,9 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
         if( test->IsSelected() || !test->IsConnectable() || !test->CanConnect( aOriginalItem ) )
             continue;
 
-        switch( test->Type() )
+        KICAD_T testType = test->Type();
+
+        switch( testType )
         {
         case SCH_LINE_T:
         {
@@ -548,10 +550,27 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
                     {
                         test->SetFlags( TEMP_SELECTED );
                         aList.push_back( test );
+
+                        // A bus entry needs its wire & label as well
+                        if( testType == SCH_BUS_WIRE_ENTRY_T || testType == SCH_BUS_BUS_ENTRY_T )
+                        {
+                            std::vector<wxPoint> ends;
+                            wxPoint              otherEnd;
+
+                            test->GetConnectionPoints( ends );
+
+                            if( ends[0] == point )
+                                otherEnd = ends[1];
+                            else
+                                otherEnd = ends[0];
+
+                            getConnectedDragItems( (SCH_ITEM*) test, otherEnd, m_dragAdditions );
+                        }
                         break;
                     }
                 }
             }
+
             break;
 
         default:

@@ -211,24 +211,22 @@ bool SCH_BUS_WIRE_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aI
         switch( each_item.GetType() )
         {
         case WIRE_START_END:
-        case BUS_START_END:
-            seg_start = each_item.GetPosition();
-            break;
-
         case WIRE_END_END:
-            if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_pos ) )
+            if( m_pos == each_item.GetPosition() )
                 has_wire[0] = true;
-
-            if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_End() ) )
+            else if( m_End() == each_item.GetPosition() )
                 has_wire[1] = true;
 
+            break;
+
+        case BUS_START_END:
+            seg_start = each_item.GetPosition();
             break;
 
         case BUS_END_END:
             if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_pos ) )
                 has_bus[0] = true;
-
-            if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_End() ) )
+            else if( IsPointOnSegment( seg_start, each_item.GetPosition(), m_End() ) )
                 has_bus[1] = true;
 
             break;
@@ -238,10 +236,8 @@ bool SCH_BUS_WIRE_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aI
         }
     }
 
-    /**
-     * A bus-wire entry is connected at both ends if it has a bus and a wire on its
-     * ends.  Otherwise, we connect only one end (in the case of a wire-wire or bus-bus)
-     */
+    // A bus-wire entry is connected at both ends if it has a bus and a wire on its
+    // ends.  Otherwise, we connect only one end (in the case of a wire-wire or bus-bus)
     if( ( has_wire[0] && has_bus[1] ) || ( has_wire[1] && has_bus[0] ) )
         m_isDanglingEnd = m_isDanglingStart = false;
     else if( has_wire[0] || has_bus[0] )
