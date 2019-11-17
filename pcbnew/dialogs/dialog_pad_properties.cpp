@@ -78,7 +78,9 @@ static PAD_ATTR_T code_type[] =
     PAD_ATTRIB_SMD,
     PAD_ATTRIB_CONN,
     PAD_ATTRIB_HOLE_NOT_PLATED,
-    PAD_ATTRIB_CONN                 // Aperture pad (type CONN with no copper layers)
+    PAD_ATTRIB_SMD                  // Aperture pad :type SMD with no copper layers,
+                                    // only on tech layers (usually only on paste layer)
+                                    // used when selecting "Aperture pad" to predefine the pad layers
 };
 
 // Default mask layers setup for pads according to the pad type
