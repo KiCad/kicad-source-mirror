@@ -151,6 +151,7 @@ private:
     bool                    m_autoplaceAlign;     ///< align autoplaced fields to the grid
     bool                    m_footprintPreview;   ///< whether to show footprint previews
     bool                    m_showIllegalSymbolLibDialog;
+    bool                    m_showSheetFileNameCaseSensitivityDlg;
 
     /// An index to the last find item in the found items list #m_foundItems.
     int         m_foundItemIndex;
@@ -984,6 +985,19 @@ private:
      *  @param aFileType SCH_FILE_T value for file type
      */
     bool importFile( const wxString& aFileName, int aFileType );
+
+    /**
+     * Check \a aSchematicFileName for a potential file name case sensitivity clashes.
+     *
+     * On platforms where file names are case sensitive, it is possible to schematic sheet
+     * file names that would cause issues on platforms where file name are case insensitive.
+     * File names foo.sch and Foo.sch are unique files on Linux and MacOS but on Windows
+     * this would result in a broken schematic.
+     *
+     * @param aSchematicFileName is the absolute path and file name of the file to test.
+     * @return true if the user accepts the potential file name clase risk.
+     */
+    bool allowCaseSensitiveFileNameClashes( const wxString& aSchematicFileName );
 
 public:
     /**

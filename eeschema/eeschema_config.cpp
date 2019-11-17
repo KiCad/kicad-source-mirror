@@ -357,6 +357,7 @@ static const wxString RepeatStepXEntry =            "RepeatStepX";
 static const wxString RepeatStepYEntry =            "RepeatStepY";
 static const wxString RepeatLabelIncrementEntry =   "RepeatLabelIncrement";
 static const wxString ShowIllegalSymboLibDialog =   "ShowIllegalSymbolLibDialog";
+static const wxString showSheetFileNameCaseSensitivityDlg = "ShowSheetFileNameCaseSensitivityDlg";
 
 // Library editor wxConfig entry names.
 static const wxChar defaultLibWidthEntry[] =        wxT( "LibeditLibWidth" );
@@ -401,7 +402,9 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings()
                                                    -10, +10 ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, ShowIllegalSymboLibDialog,
                                                     &m_showIllegalSymbolLibDialog, true ) );
-
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, showSheetFileNameCaseSensitivityDlg,
+                                                    &m_showSheetFileNameCaseSensitivityDlg,
+                                                    true ) );
     return m_configSettings;
 }
 
@@ -547,6 +550,7 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
     record.Replace( wxT("  "), wxT(" "), true );  // double space to single
 
     aCfg->Write( FieldNamesEntry, record );
+    aCfg->Write( showSheetFileNameCaseSensitivityDlg, m_showSheetFileNameCaseSensitivityDlg );
 }
 
 
