@@ -96,6 +96,13 @@ public:
         m_deleteSinglePadNets = aEnabled;
     }
 
+    ///> Enables warning option if a connectable pad is not found in netlist
+    ///> connectable = pad with a name and on a copper layer
+    void SetWarnPadNoNetInNetlist( bool aEnabled )
+    {
+        m_warnForNoNetPads = aEnabled;
+    }
+
     ///> Enables dry run mode (just report, no changes to PCB)
     void SetIsDryRun( bool aEnabled )
     {
@@ -156,6 +163,7 @@ private:
     bool m_isDryRun;
     bool m_replaceFootprints;
     bool m_lookupByTimestamp;
+    bool m_warnForNoNetPads;    //Warn if a connectable pad has no net in netlist (not found).
 
     int m_warningCount;
     int m_errorCount;

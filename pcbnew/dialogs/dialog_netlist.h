@@ -43,6 +43,7 @@ private:
     wxConfigBase*   m_config;
     bool            m_initialized;
     bool            m_runDragCommand;
+    static bool     m_warnForNoNetPads;
 
 public:
     DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullFilename );

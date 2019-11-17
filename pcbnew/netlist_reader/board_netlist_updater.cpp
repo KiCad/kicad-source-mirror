@@ -61,6 +61,7 @@ BOARD_NETLIST_UPDATER::BOARD_NETLIST_UPDATER( PCB_EDIT_FRAME* aFrame, BOARD* aBo
     m_isDryRun = false;
     m_replaceFootprints = true;
     m_lookupByTimestamp = false;
+    m_warnForNoNetPads = false;
 
     m_warningCount = 0;
     m_errorCount = 0;
@@ -310,8 +311,9 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
                             pad->GetName() );
                 m_reporter->Report( msg, REPORTER::RPT_ACTION );
             }
-            else                           // pad has no net
+            else if( m_warnForNoNetPads && pad->IsOnCopperLayer() && !pad->GetName().IsEmpty() )
             {
+                // pad is connectable but has no net found in netlist
                 msg.Printf( _( "No net for component %s pin %s." ),
                             aPcbComponent->GetReference(),
                             pad->GetName() );

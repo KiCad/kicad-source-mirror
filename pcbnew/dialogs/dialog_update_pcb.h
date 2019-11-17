@@ -37,6 +37,7 @@ private:
     wxConfigBase*   m_config;
     bool            m_initialized;
     bool            m_runDragCommand;
+    static bool     m_warnForNoNetPads;
 
 public:
     DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST *aNetlist );

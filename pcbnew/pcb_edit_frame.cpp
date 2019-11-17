@@ -990,6 +990,7 @@ void PCB_EDIT_FRAME::DoUpdatePCBFromNetlist( NETLIST& aNetlist, bool aUseTimesta
     updater.SetDeleteUnusedComponents( false );
     updater.SetReplaceFootprints( true );
     updater.SetDeleteSinglePadNets( false );
+    updater.SetWarnPadNoNetInNetlist( false );
     updater.UpdateNetlist( aNetlist );
 }
 

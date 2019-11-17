@@ -54,6 +54,7 @@ class DIALOG_NETLIST_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbDeleteShortingTracks;
 		wxCheckBox* m_cbDeleteExtraFootprints;
 		wxCheckBox* m_cbDeleteSinglePadNets;
+		wxCheckBox* m_cbWarnNoNetPad;
 		WX_HTML_REPORT_PANEL* m_MessageWindow;
 		wxBoxSizer* m_buttonsSizer;
 		wxButton* m_buttonFPTest;

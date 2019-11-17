@@ -59,6 +59,8 @@ void PCB_EDIT_FRAME::InstallNetlistFrame()
     SetLastPath( LAST_PATH_NETLIST, netlistName );
 }
 
+bool DIALOG_NETLIST::m_warnForNoNetPads = false;
+
 
 DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullFilename )
     : DIALOG_NETLIST_BASE( aParent ),
@@ -76,6 +78,7 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullF
     m_cbDeleteShortingTracks->SetValue( m_config->Read( NETLIST_DELETESHORTINGTRACKS_KEY, 0l ) );
     m_cbDeleteExtraFootprints->SetValue( m_config->Read( NETLIST_DELETEEXTRAFOOTPRINTS_KEY, 0l ) );
     m_cbDeleteSinglePadNets->SetValue( m_config->Read( NETLIST_DELETESINGLEPADNETS_KEY, 0l ) );
+    m_cbWarnNoNetPad->SetValue( m_warnForNoNetPads );
 
     m_MessageWindow->SetLabel( _("Changes To Be Applied") );
     m_MessageWindow->SetVisibleSeverities( m_config->Read( NETLIST_FILTER_MESSAGES_KEY, -1l ) );
@@ -96,6 +99,8 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullF
 
 DIALOG_NETLIST::~DIALOG_NETLIST()
 {
+    m_warnForNoNetPads = m_cbWarnNoNetPad->GetValue();
+
     m_config->Write( NETLIST_UPDATEFOOTPRINTS_KEY, m_cbUpdateFootprints->GetValue() );
     m_config->Write( NETLIST_DELETESHORTINGTRACKS_KEY, m_cbDeleteShortingTracks->GetValue() );
     m_config->Write( NETLIST_DELETEEXTRAFOOTPRINTS_KEY, m_cbDeleteExtraFootprints->GetValue() );
@@ -290,6 +295,8 @@ void DIALOG_NETLIST::loadNetlist( bool aDryRun )
     updater.SetDeleteUnusedComponents ( m_cbDeleteExtraFootprints->GetValue() );
     updater.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
     updater.SetDeleteSinglePadNets( m_cbDeleteSinglePadNets->GetValue() );
+    m_warnForNoNetPads = m_cbWarnNoNetPad->GetValue();
+    updater.SetWarnPadNoNetInNetlist( m_warnForNoNetPads );
     updater.UpdateNetlist( netlist );
 
     // The creation of the report was made without window update: the full page must be displayed

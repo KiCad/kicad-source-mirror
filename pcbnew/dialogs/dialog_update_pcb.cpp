@@ -49,6 +49,8 @@ using namespace std::placeholders;
 #define NETLIST_DELETEEXTRAFOOTPRINTS_KEY wxT("NetlistDeleteExtraFootprints")
 #define NETLIST_DELETESINGLEPADNETS_KEY wxT("NetlistDeleteSinglePadNets")
 
+bool DIALOG_UPDATE_PCB::m_warnForNoNetPads = false;
+
 
 DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist ) :
     DIALOG_UPDATE_PCB_BASE( aParent ),
@@ -61,6 +63,7 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
     m_cbUpdateFootprints->SetValue( m_config->Read( NETLIST_UPDATEFOOTPRINTS_KEY, 0l ) );
     m_cbDeleteExtraFootprints->SetValue( m_config->Read( NETLIST_DELETEEXTRAFOOTPRINTS_KEY, 0l ) );
     m_cbDeleteSinglePadNets->SetValue( m_config->Read( NETLIST_DELETESINGLEPADNETS_KEY, 0l ) );
+    m_cbWarnNoNetPad->SetValue( m_warnForNoNetPads );
 
     m_messagePanel->SetLabel( _("Changes To Be Applied") );
     m_messagePanel->SetLazyUpdate( true );
@@ -86,6 +89,8 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
 
 DIALOG_UPDATE_PCB::~DIALOG_UPDATE_PCB()
 {
+    m_warnForNoNetPads = m_cbWarnNoNetPad->GetValue();
+
     m_config->Write( NETLIST_UPDATEFOOTPRINTS_KEY, m_cbUpdateFootprints->GetValue() );
     m_config->Write( NETLIST_DELETEEXTRAFOOTPRINTS_KEY, m_cbDeleteExtraFootprints->GetValue() );
     m_config->Write( NETLIST_DELETESINGLEPADNETS_KEY, m_cbDeleteSinglePadNets->GetValue() );
@@ -119,6 +124,8 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     updater.SetDeleteUnusedComponents ( m_cbDeleteExtraFootprints->GetValue() );
     updater.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
     updater.SetDeleteSinglePadNets( m_cbDeleteSinglePadNets->GetValue() );
+    m_warnForNoNetPads = m_cbWarnNoNetPad->GetValue();
+    updater.SetWarnPadNoNetInNetlist( m_warnForNoNetPads );
     updater.UpdateNetlist( *m_netlist );
 
     m_messagePanel->Flush( true );
