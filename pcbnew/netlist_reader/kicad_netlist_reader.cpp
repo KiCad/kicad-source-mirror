@@ -29,8 +29,8 @@
 #include <netlist_lexer.h>  // netlist_lexer is common to Eeschema and Pcbnew
 #include <macros.h>
 
-#include <pcb_netlist.h>
-#include <netlist_reader.h>
+#include "pcb_netlist.h"
+#include "netlist_reader.h"
 
 using namespace NL_T;
 

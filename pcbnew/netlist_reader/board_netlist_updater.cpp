@@ -40,11 +40,11 @@
 #include <class_pad.h>
 #include <class_zone.h>
 
-#include <pcb_netlist.h>
+#include "pcb_netlist.h"
 #include <connectivity/connectivity_data.h>
 #include <reporter.h>
 
-#include <board_netlist_updater.h>
+#include "board_netlist_updater.h"
 
 #include <pcb_edit_frame.h>
 

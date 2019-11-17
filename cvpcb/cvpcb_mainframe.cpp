@@ -30,7 +30,7 @@
 #include <kiface_i.h>
 #include <kiway_express.h>
 #include <macros.h>
-#include <netlist_reader.h>
+#include <netlist_reader/netlist_reader.h>
 #include <numeric>
 #include <tool/action_toolbar.h>
 #include <tool/common_control.h>

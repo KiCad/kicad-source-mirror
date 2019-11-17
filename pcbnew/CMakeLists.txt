@@ -232,11 +232,17 @@ set( PCBNEW_DRC_SRCS
     drc/drc_provider.cpp
     )
 
+set( PCBNEW_NETLIST_SRCS
+    netlist_reader/board_netlist_updater.cpp
+    netlist_reader/netlist.cpp
+    )
+
 set( PCBNEW_CLASS_SRCS
     ${PCBNEW_DIALOGS}
     ${PCBNEW_EXPORTERS}
-    ${PCBNEW_IMPORT_GFX}
     ${PCBNEW_DRC_SRCS}
+    ${PCBNEW_IMPORT_GFX}
+    ${PCBNEW_NETLIST_SRCS}
     ${PCBNEW_BRDSTACKUP_MGR}
 
     autorouter/rect_placement/rect_placement.cpp
@@ -248,7 +254,6 @@ set( PCBNEW_CLASS_SRCS
     action_plugin.cpp
     array_creator.cpp
     array_pad_name_provider.cpp
-    board_netlist_updater.cpp
     build_BOM_from_board.cpp
     cross-probing.cpp
     tools/drc.cpp
@@ -274,7 +279,6 @@ set( PCBNEW_CLASS_SRCS
     menubar_footprint_editor.cpp
     menubar_pcb_editor.cpp
     microwave.cpp
-    netlist.cpp
     pad_naming.cpp
     pcb_base_edit_frame.cpp
     pcb_layer_box_selector.cpp

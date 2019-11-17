@@ -462,17 +462,17 @@ set( PCB_COMMON_SRCS
     ../pcbnew/gpcb_plugin.cpp
     ../pcbnew/io_mgr.cpp
     ../pcbnew/kicad_clipboard.cpp
-    ../pcbnew/kicad_netlist_reader.cpp
+    ../pcbnew/netlist_reader/kicad_netlist_reader.cpp
     ../pcbnew/kicad_plugin.cpp
-    ../pcbnew/legacy_netlist_reader.cpp
+    ../pcbnew/netlist_reader/legacy_netlist_reader.cpp
     ../pcbnew/legacy_plugin.cpp
-    ../pcbnew/netlist_reader.cpp
+    ../pcbnew//netlist_reader/netlist_reader.cpp
     ../pcbnew/pad_custom_shape_functions.cpp
     ../pcbnew/pad_print_functions.cpp
     ../pcbnew/pcb_display_options.cpp
     ../pcbnew/pcb_draw_panel_gal.cpp
     ../pcbnew/pcb_general_settings.cpp
-    ../pcbnew/pcb_netlist.cpp
+    ../pcbnew/netlist_reader/pcb_netlist.cpp
     ../pcbnew/pcb_painter.cpp
     ../pcbnew/pcb_parser.cpp
     ../pcbnew/pcb_plot_params.cpp

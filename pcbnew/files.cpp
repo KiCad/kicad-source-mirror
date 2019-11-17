@@ -40,7 +40,7 @@
 #include <kiway_player.h>
 #include <trace_helpers.h>
 #include <lockfile.cpp>
-#include <pcb_netlist.h>
+#include <netlist_reader/pcb_netlist.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <io_mgr.h>

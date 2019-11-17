@@ -47,7 +47,7 @@
 #include <view/view_controls.h>
 #include <origin_viewitem.h>
 #include <dialogs/dialog_page_settings.h>
-#include <pcb_netlist.h>
+#include <netlist_reader/pcb_netlist.h>
 #include <dialogs/dialog_update_pcb.h>
 #include <gestfich.h>
 #include <wildcards_and_files_ext.h>

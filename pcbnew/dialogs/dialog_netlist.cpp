@@ -28,7 +28,6 @@
 #include <macros.h>
 #include <html_messagebox.h>
 #include <pcb_edit_frame.h>
-#include <pcb_netlist.h>
 #include <reporter.h>
 #include <bitmaps.h>
 #include <tool/tool_manager.h>
@@ -37,9 +36,10 @@
 #include <class_board.h>
 #include <connectivity/connectivity_data.h>
 #include <wildcards_and_files_ext.h>
-#include <board_netlist_updater.h>
-
+#include <netlist_reader/pcb_netlist.h>
+#include <netlist_reader/board_netlist_updater.h>
 #include <dialog_netlist.h>
+
 #include <wx_html_report_panel.h>
 
 #define NETLIST_FILTER_MESSAGES_KEY wxT("NetlistReportFilterMsg")

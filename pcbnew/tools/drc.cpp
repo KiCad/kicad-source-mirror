@@ -48,7 +48,7 @@
 #include <kiface_i.h>
 #include <pcbnew.h>
 #include <tools/drc.h>
-#include <pcb_netlist.h>
+#include <netlist_reader/pcb_netlist.h>
 
 #include <dialog_drc.h>
 #include <wx/progdlg.h>

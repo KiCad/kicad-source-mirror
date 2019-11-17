@@ -45,7 +45,7 @@
 #include <class_zone.h>
 #include <collectors.h>
 #include <pcbnew.h>
-#include <pcb_netlist.h>
+#include <netlist_reader/pcb_netlist.h>
 #include <tools/pcb_actions.h>
 #include <tool/tool_manager.h>
 #include <tools/selection_tool.h>

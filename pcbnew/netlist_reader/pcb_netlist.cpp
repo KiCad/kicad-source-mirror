@@ -31,7 +31,7 @@
 #include <refdes_utils.h>
 #include <reporter.h>
 
-#include <pcb_netlist.h>
+#include "pcb_netlist.h"
 #include <class_module.h>
 #include <eda_pattern_match.h>
 

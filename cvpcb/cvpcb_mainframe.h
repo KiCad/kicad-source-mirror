@@ -27,7 +27,7 @@
 
 #include <config_params.h>
 #include <kiway_player.h>
-#include <pcb_netlist.h>
+#include <netlist_reader/pcb_netlist.h>
 
 #include <auto_associate.h>
 #include <cvpcb_association.h>

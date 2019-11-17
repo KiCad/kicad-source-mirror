@@ -36,8 +36,8 @@ using namespace std::placeholders;
 #include <confirm.h>
 #include <dialog_helpers.h>
 #include <pcb_edit_frame.h>
-#include <pcb_netlist.h>
-#include <netlist_reader.h>
+#include "pcb_netlist.h"
+#include "netlist_reader.h"
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <lib_id.h>
@@ -47,7 +47,7 @@ using namespace std::placeholders;
 #include <ratsnest_data.h>
 #include <pcbnew.h>
 #include <io_mgr.h>
-#include <board_netlist_updater.h>
+#include "board_netlist_updater.h"
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>

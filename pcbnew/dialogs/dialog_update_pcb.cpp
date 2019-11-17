@@ -27,10 +27,10 @@
 
 #include <common.h>
 #include <pcb_edit_frame.h>
-#include <pcb_netlist.h>
 #include <dialog_update_pcb.h>
 #include <wx_html_report_panel.h>
-#include <board_netlist_updater.h>
+#include <netlist_reader/pcb_netlist.h>
+#include <netlist_reader/board_netlist_updater.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
