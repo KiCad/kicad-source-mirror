@@ -569,6 +569,9 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
 
     if( aSheet->GetScreen() == NULL )                 // New sheet.
     {
+        if( !allowCaseSensitiveFileNameClashes( newFilename ) )
+            return false;
+
         if( useScreen || loadFromFile )               // Load from existing file.
         {
             clearAnnotation = true;
@@ -597,6 +600,9 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
 
         isExistingSheet = true;
 
+        if( !allowCaseSensitiveFileNameClashes( newFilename ) )
+            return false;
+
         // Changing the filename of a sheet can modify the full hierarchy structure
         // and can be not always undoable.
         // So prepare messages for user notifications:
@@ -619,7 +625,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
         wxString oldFilename = aSheet->GetScreen()->GetFileName();
         oldFilename.Replace( wxT( "\\" ), wxT( "/" ) );
 
-        if( newFilename.CmpNoCase( oldFilename ) != 0 )
+        if( newFilename.Cmp( oldFilename ) != 0 )
         {
             // Sheet file name changes cannot be undone.
             isUndoable = false;
@@ -833,10 +839,6 @@ SCH_HIERLABEL* SCH_EDIT_FRAME::ImportHierLabel( SCH_SHEET* aSheet )
 }
 
 
-/*
- * Copy the current page or block to the clipboard, to export drawings to other applications
- * (word processing ...) This is not suitable for copy command within Eeschema or Pcbnew.
- */
 void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 {
     wxRect  DrawArea;
@@ -909,3 +911,35 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 }
 
 
+bool SCH_EDIT_FRAME::allowCaseSensitiveFileNameClashes( const wxString& aSchematicFileName )
+{
+    wxString msg;
+    SCH_SCREENS screens;
+    wxFileName fn = aSchematicFileName;
+
+    wxCHECK( fn.IsAbsolute(), false );
+
+    if( m_showSheetFileNameCaseSensitivityDlg
+      && screens.CanCauseCaseSensitivityIssue( aSchematicFileName ) )
+    {
+        msg.Printf( _( "The file name \"%s\" can cause issues with an existing file name\n"
+                       "already defined in the schematic on systems that support case\n"
+                       "insensitive file names.  This will cause issues if you copy this\n"
+                       "project to an operating system that supports case insensitive file\n"
+                       "names.\n\nDo you wish to continue?" ),
+                    fn.GetName() );
+
+        wxRichMessageDialog dlg( this, msg, _( "Warning" ),
+                                 wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION );
+        dlg.ShowCheckBox( _( "Do not show this message again." ) );
+        dlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Create New Sheet" ) ),
+                                wxMessageDialog::ButtonLabel( _( "Discard New Sheet" ) ) );
+
+        if( dlg.ShowModal() == wxID_NO )
+            return false;
+
+        m_showSheetFileNameCaseSensitivityDlg = !dlg.IsCheckBoxChecked();
+    }
+
+    return true;
+}

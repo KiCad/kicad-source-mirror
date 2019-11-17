@@ -558,8 +558,24 @@ int SCH_SHEET::ComponentCount()
 
 bool SCH_SHEET::SearchHierarchy( const wxString& aFilename, SCH_SCREEN** aScreen )
 {
+    SCH_SHEET*  sheet = nullptr;
+    SCH_SCREEN* screen = nullptr;
+
     if( m_screen )
     {
+        // Only check the root sheet once and don't recurse.
+        if( !GetParent() )
+        {
+            sheet = this;
+            screen = m_screen;
+
+            if( screen && screen->GetFileName().Cmp( aFilename ) == 0 )
+            {
+                *aScreen = screen;
+                return true;
+            }
+        }
+
         EDA_ITEM* item = m_screen->GetDrawItems();
 
         while( item )
@@ -568,11 +584,10 @@ bool SCH_SHEET::SearchHierarchy( const wxString& aFilename, SCH_SCREEN** aScreen
             {
                 // Must use the screen's path (which is always absolute) rather than the
                 // sheet's (which could be relative).
+                sheet = static_cast< SCH_SHEET* >( item );
+                screen = sheet->m_screen;
 
-                SCH_SHEET*  sheet = (SCH_SHEET*) item;
-                SCH_SCREEN* screen = sheet->m_screen;
-
-                if( screen && screen->GetFileName().CmpNoCase( aFilename ) == 0 )
+                if( screen && screen->GetFileName().Cmp( aFilename ) == 0 )
                 {
                     *aScreen = screen;
                     return true;

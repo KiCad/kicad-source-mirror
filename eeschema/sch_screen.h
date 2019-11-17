@@ -606,6 +606,19 @@ public:
     void BuildClientSheetPathList();
 
 
+    /**
+     * Check \a aSchematicFileName for a potential file name case sensitivity issue.
+     *
+     * On platforms where file names are case sensitive, it is possible to schematic sheet
+     * file names that would cause issues on platforms where file name are case insensitive.
+     * File names foo.sch and Foo.sch are unique files on Linux and MacOS but on Windows
+     * this would result in a broken schematic.
+     *
+     * @param aSchematicFileName is the absolute path and file name of the file to test.
+     * @return true if \a aSchematicFileName would cause an issue.
+     */
+    bool CanCauseCaseSensitivityIssue( const wxString& aSchematicFileName ) const;
+
 private:
     void addScreenToList( SCH_SCREEN* aScreen );
     void buildScreenList( SCH_SHEET* aSheet);

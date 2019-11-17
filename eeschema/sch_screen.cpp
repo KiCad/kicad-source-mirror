@@ -1350,6 +1350,29 @@ bool SCH_SCREENS::HasSchematic( const wxString& aSchematicFileName )
 }
 
 
+bool SCH_SCREENS::CanCauseCaseSensitivityIssue( const wxString& aSchematicFileName ) const
+{
+    wxFileName lhs;
+    wxFileName rhs = aSchematicFileName;
+
+    wxCHECK( rhs.IsAbsolute(), false );
+
+    for( const SCH_SCREEN* screen : m_screens )
+    {
+        lhs = screen->GetFileName();
+
+        if( lhs.GetPath() != rhs.GetPath() )
+            continue;
+
+        if( lhs.GetName().CmpNoCase( rhs.GetName() )
+          && lhs.GetName() != rhs.GetName() )
+            return true;
+    }
+
+    return false;
+}
+
+
 void SCH_SCREENS::BuildClientSheetPathList()
 {
     SCH_SHEET_LIST sheetList( g_RootSheet );
