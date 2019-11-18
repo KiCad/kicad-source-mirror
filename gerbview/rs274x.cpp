@@ -1006,7 +1006,8 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
             break;
 
         case AMP_OUTLINE:
-            paramCount = 4;
+            paramCount = 4; // partial count. other parameters are vertices and rotation
+                            // Second parameter is vertice (coordinate pairs) count.
             break;
 
         case AMP_POLYGON:
@@ -1052,10 +1053,11 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
         if( ii < paramCount )
         {
             // maybe some day we can throw an exception and track a line number
-            msg.Printf( wxT( "RS274X: read macro descr type %d: read %d parameters, insufficient parameters\n" ),
+            msg.Printf( "RS274X: read macro descr type %d: read %d parameters, insufficient parameters\n",
                         prim.primitive_id, ii );
             AddMessageToList( msg );
         }
+
         // there are more parameters to read if this is an AMP_OUTLINE
         if( prim.primitive_id == AMP_OUTLINE )
         {
@@ -1081,6 +1083,14 @@ bool GERBER_FILE_IMAGE::ReadApertureMacro( char *aBuff, unsigned int aBuffSize,
 
                 param.ReadParam( aText );
             }
+        }
+
+        // AMP_CIRCLE can have a optional parameter (rotation)
+        if( prim.primitive_id == AMP_CIRCLE && aText && *aText != '*' )
+        {
+            prim.params.push_back( AM_PARAM() );
+            AM_PARAM& param = prim.params.back();
+            param.ReadParam( aText );
         }
 
         am.primitives.push_back( prim );
