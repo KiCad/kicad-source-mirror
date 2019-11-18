@@ -569,21 +569,21 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
     if( aVia->GetViaType() == VIA_BLIND_BURIED && aLayer != LAYER_VIAS_HOLES )
     {
-        // Buried vias are drawn in a special way to indicate the top and bottom layers
-        // Holes however are always drawn in the same way
+        // Outer circles of blind/buried vias are drawn in a special way to indicate the
+        // top and bottom layers
         PCB_LAYER_ID layerTop, layerBottom;
         aVia->LayerPair( &layerTop, &layerBottom );
 
-        if ( !sketchMode )
+        if( !sketchMode )
             m_gal->SetLineWidth( ( aVia->GetWidth() - aVia->GetDrillValue() ) / 2.0 );
 
-        if ( aLayer == layerTop )
+        if( aLayer == layerTop )
             m_gal->DrawArc( center, radius, 0.0, M_PI / 2.0 );
 
-        else if ( aLayer == layerBottom )
+        else if( aLayer == layerBottom )
             m_gal->DrawArc( center, radius, M_PI, 3.0 * M_PI / 2.0 );
 
-        else if ( aLayer == LAYER_VIA_BBLIND )
+        else if( aLayer == LAYER_VIA_BBLIND )
         {
             m_gal->DrawArc( center, radius, M_PI / 2.0, M_PI );
             m_gal->DrawArc( center, radius, 3.0 * M_PI / 2.0, 2.0 * M_PI );
@@ -591,6 +591,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
     }
     else
     {
+        // Draw the outer circles of normal vias and the inner circles for all vias
         m_gal->DrawCircle( center, radius );
     }
 
