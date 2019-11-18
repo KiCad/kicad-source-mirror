@@ -1178,14 +1178,28 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
 
         bool wasOverbar = overbar;
 
-        if( *chIt == '~' )
+        if( c == '~' )
         {
             if( ++chIt == end )
                 break;
 
-            if( *chIt == '~' )
+            c = *chIt;
+
+            if( c == '~' )
             {
                 // double ~ is really a ~ so go ahead and process the second one
+
+                // so what's a triple ~?  It could be a real ~ followed by an overbar, or
+                // it could be an overbar followed by a real ~.  The old algorithm did the
+                // later so we will too....
+                auto tempIt = chIt;
+
+                if( ++tempIt < end && *tempIt == '~' )
+                {
+                    // eat the first two, toggle overbar, and then process the third
+                    ++chIt;
+                    overbar = !overbar;
+                }
             }
             else
             {

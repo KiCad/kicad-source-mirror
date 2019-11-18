@@ -980,7 +980,9 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
          */
 
         bool overlining = false;
+
         fputs( "  1\n", outputFile );
+
         for( unsigned i = 0; i < aText.length(); i++ )
         {
             /* Here I do a bad thing: writing the output one byte at a time!
@@ -990,6 +992,7 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
                Atleast stdio is *supposed* to do output buffering, so there is
                hope is not too slow */
             wchar_t ch = aText[i];
+
             if( ch > 255 )
             {
                 // I can't encode this...
@@ -999,14 +1002,35 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
             {
                 if( ch == '~' )
                 {
-                    // Handle the overline toggle
-                    fputs( overlining ? "%%o" : "%%O", outputFile );
-                    overlining = !overlining;
+                    if( ++i == aText.length() )
+                        break;
+
+                    ch = aText[i];
+
+                    if( ch == '~' )
+                    {
+                        // double ~ is really a ~ so go ahead and process the second one
+
+                        // so what about a triple ~?  It could be a real ~ followed by an
+                        // overbar, or it could be an overbar followed by a real ~.  The old
+                        // eeschema algorithm did the later so we will too....
+                        if( i + i < aText.length() && aText[i + 1] == '~' )
+                        {
+                            // eat the first two and toggle overbar
+                            ++i;
+                            fputs( overlining ? "%%o" : "%%O", outputFile );
+                            overlining = !overlining;
+                        }
+                    }
+                    else
+                    {
+                        // Handle the overline toggle
+                        fputs( overlining ? "%%o" : "%%O", outputFile );
+                        overlining = !overlining;
+                    }
                 }
-                else
-                {
-                    putc( ch, outputFile );
-                }
+
+                putc( ch, outputFile );
             }
         }
         putc( '\n', outputFile );
