@@ -264,7 +264,7 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
             if( viaActiveLayer )
                 return m_layerColors[aLayer];
             else
-                return m_hiContrastColor[aLayer];
+                return m_hiContrastColor;
         }
     }
 
