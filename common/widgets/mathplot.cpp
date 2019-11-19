@@ -696,8 +696,8 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
         }
         else
         {
-            wxCoord x0, y0;
-            bool first = true;
+            wxPoint* points = new wxPoint[GetCount()];
+            int      count = 0;
 
             while( GetNextXY( x, y ) )
             {
@@ -707,30 +707,13 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
                 wxCoord x1 = w.x2p( px );
                 wxCoord y1 = w.y2p( py );
 
-                if( first )
-                {
-                    first = false;
-                    x0 = x1;
-                    y0 = y1;
-                    continue;
-                }
-
-//                This gives disastrous results with very high-frequency plots where the
-//                X coordinate may not increment until several waves later
-//
-//                if( x0 == x1 )      // continue until a new X coordinate is reached
-//                    continue;
-
-                bool outDown = ( y0 > maxYpx ) && ( y1 > maxYpx );
-                bool outUp = ( y0 < minYpx ) && ( y1 < minYpx );
-                bool outLeft = ( x1 < startPx ) && ( x0 < startPx );
-                bool outRight = ( x1 > endPx ) && ( x0 > endPx );
-                if( !( outUp || outDown || outLeft || outRight ) )
-                    dc.DrawLine( x0, y0, x1, y1 );
-
-                x0 = x1;
-                y0 = y1;
+                points[count++] = wxPoint( x1, y1 );
             }
+
+            if( count > 0 )
+                dc.DrawLines( count, points );
+
+            delete[] points;
         }
 
         if( !m_name.IsEmpty() && m_showName )
@@ -3375,6 +3358,11 @@ IMPLEMENT_DYNAMIC_CLASS( mpFSemiLogXVector, mpFXYVector )
 void mpFXYVector::Rewind()
 {
     m_index = 0;
+}
+
+size_t mpFXYVector::GetCount()
+{
+    return m_xs.size();
 }
 
 
