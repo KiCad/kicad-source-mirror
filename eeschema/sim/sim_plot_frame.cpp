@@ -395,6 +395,9 @@ SIM_PLOT_PANEL* SIM_PLOT_FRAME::NewPlotPanel( SIM_TYPE aSimType )
 {
     SIM_PLOT_PANEL* plotPanel = new SIM_PLOT_PANEL( aSimType, m_plotNotebook, wxID_ANY );
 
+    plotPanel->EnableMouseWheelPan(
+            m_schematicFrame->GetCanvas()->GetViewControls()->IsMousewheelPanEnabled() );
+
     if( m_welcomePanel )
     {
         m_plotNotebook->DeletePage( 0 );

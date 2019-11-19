@@ -1208,6 +1208,10 @@ public:
      */
     void EnableMousePanZoom( bool enabled ) { m_enableMouseNavigation = enabled; }
 
+    /** Enable/disable trackpad friendly panning (2-axis scroll wheel)
+     */
+    void EnableMouseWheelPan( bool enabled ) { m_enableMouseWheelPan = enabled; }
+
     /** Enable or disable X/Y scale aspect locking for the view.
      *  @note Explicit calls to mpWindow::SetScaleX and mpWindow::SetScaleY will set
      *  an unlocked aspect, but any other action changing the view scale will
@@ -1241,12 +1245,14 @@ public:
      * position on the screen after the zoom (by default, the center of the mpWindow).
      */
     void ZoomIn( const wxPoint& centerPoint = wxDefaultPosition );
+    void ZoomIn( const wxPoint& centerPoint, double zoomFactor );
 
     /** Zoom out current view and refresh display
      * @param centerPoint The point (pixel coordinates) that will stay in the same
      * position on the screen after the zoom (by default, the center of the mpWindow).
      */
     void ZoomOut( const wxPoint& centerPoint = wxDefaultPosition );
+    void ZoomOut( const wxPoint& centerPoint, double zoomFactor );
 
     /** Zoom in current view along X and refresh display */
     void ZoomInX();
@@ -1433,6 +1439,7 @@ protected:
     void    OnZoomOut( wxCommandEvent& event );             // !< Context menu handler
     void    OnLockAspect( wxCommandEvent& event );          // !< Context menu handler
     void    OnMouseWheel( wxMouseEvent& event );            // !< Mouse handler for the wheel
+    void    OnMagnify( wxMouseEvent& event );               // !< Pinch zoom handler
     void    OnMouseMove( wxMouseEvent& event );             // !< Mouse handler for mouse motion (for pan)
     void    OnMouseLeftDown( wxMouseEvent& event );         // !< Mouse left click (for rect zoom)
     void    OnMouseLeftRelease( wxMouseEvent& event );      // !< Mouse left click (for rect zoom)
@@ -1516,6 +1523,7 @@ protected:
     wxBitmap*   m_buff_bmp;                 // !< For double buffering
     bool    m_enableDoubleBuffer;           // !< For double buffering
     bool    m_enableMouseNavigation;        // !< For pan/zoom with the mouse.
+    bool    m_enableMouseWheelPan;          // !< Trackpad pan/zoom
     bool    m_enableLimitedView;
     wxPoint m_mouseMClick;                  // !< For the middle button "drag" feature
     wxPoint m_mouseLClick;                  // !< Starting coords for rectangular zoom selection

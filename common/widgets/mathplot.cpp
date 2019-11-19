@@ -61,7 +61,7 @@
 #define mpSCROLL_NUM_PIXELS_PER_LINE 10
 
 // See doxygen comments.
-double mpWindow::zoomIncrementalFactor = 1.5;
+double mpWindow::zoomIncrementalFactor = 1.1;
 
 // -----------------------------------------------------------------------------
 // mpLayer
@@ -1716,6 +1716,9 @@ EVT_SCROLLWIN_BOTTOM( mpWindow::OnScrollBottom )
 EVT_MIDDLE_DOWN( mpWindow::OnMouseMiddleDown )  // JLB
 EVT_RIGHT_UP( mpWindow::OnShowPopupMenu )
 EVT_MOUSEWHEEL( mpWindow::OnMouseWheel )        // JLB
+#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
+EVT_MAGNIFY( mpWindow::OnMagnify )
+#endif
 EVT_MOTION( mpWindow::OnMouseMove )             // JLB
 EVT_LEFT_DOWN( mpWindow::OnMouseLeftDown )
 EVT_LEFT_UP( mpWindow::OnMouseLeftRelease )
@@ -1797,6 +1800,23 @@ void mpWindow::OnMouseMiddleDown( wxMouseEvent& event )
     m_mouseMClick.y = event.GetY();
 }
 
+#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
+void mpWindow::OnMagnify( wxMouseEvent& event )
+{
+    if( !m_enableMouseNavigation )
+    {
+        event.Skip();
+        return;
+    }
+
+    float   zoom = event.GetMagnification() + 1.0f;
+    wxPoint pos( event.GetX(), event.GetY() );
+    if( zoom > 1.0f )
+        ZoomIn( pos, zoom );
+    else if( zoom < 1.0f )
+        ZoomOut( pos, 1.0f / zoom );
+}
+#endif
 
 // Process mouse wheel events
 // JLB
@@ -1808,22 +1828,35 @@ void mpWindow::OnMouseWheel( wxMouseEvent& event )
         return;
     }
 
-    // Scroll vertically or horizontally (this is SHIFT is hold down).
-    int change = -event.GetWheelRotation();    // Opposite direction (More intuitive)!
-    double  changeUnitsX    = change / m_scaleX;
-    double  changeUnitsY    = change / m_scaleY;
+    int       change = event.GetWheelRotation();
+    const int axis = event.GetWheelAxis();
+    double    changeUnitsX = change / m_scaleX;
+    double    changeUnitsY = change / m_scaleY;
 
-    if( event.m_controlDown )
+    if( ( !m_enableMouseWheelPan && ( event.ControlDown() || event.ShiftDown() ) )
+            || ( m_enableMouseWheelPan && !event.ControlDown() ) )
     {
-        // horizontal scroll
-        SetXView( m_posX + changeUnitsX, m_desiredXmax + changeUnitsX,
-                m_desiredXmin + changeUnitsX );
-    }
-    else if( event.m_shiftDown )
-    {
-        // vertical scroll
-        SetYView( m_posY - changeUnitsY, m_desiredYmax - changeUnitsY,
-                m_desiredYmin - changeUnitsY );
+        // Scrolling
+        if( m_enableMouseWheelPan )
+        {
+            if( axis == wxMOUSE_WHEEL_HORIZONTAL || event.ShiftDown() )
+                SetXView( m_posX + changeUnitsX, m_desiredXmax + changeUnitsX,
+                        m_desiredXmin + changeUnitsX );
+            else
+                SetYView( m_posY + changeUnitsY, m_desiredYmax + changeUnitsY,
+                        m_desiredYmin + changeUnitsY );
+        }
+        else
+        {
+            if( event.ControlDown() )
+                SetXView( m_posX + changeUnitsX, m_desiredXmax + changeUnitsX,
+                        m_desiredXmin + changeUnitsX );
+            else
+                SetYView( m_posY + changeUnitsY, m_desiredYmax + changeUnitsY,
+                        m_desiredYmin + changeUnitsY );
+        }
+
+        UpdateAll();
     }
     else
     {
@@ -1834,9 +1867,9 @@ void mpWindow::OnMouseWheel( wxMouseEvent& event )
             ZoomIn( clickPt );
         else
             ZoomOut( clickPt );
-    }
 
-    UpdateAll();
+        return;
+    }
 }
 
 
@@ -2242,6 +2275,12 @@ bool mpWindow::SetYView( double pos, double desiredMax, double desiredMin )
 
 void mpWindow::ZoomIn( const wxPoint& centerPoint )
 {
+    ZoomIn( centerPoint, zoomIncrementalFactor );
+}
+
+
+void mpWindow::ZoomIn( const wxPoint& centerPoint, double zoomFactor )
+{
     wxPoint c( centerPoint );
 
     if( c == wxDefaultPosition )
@@ -2264,8 +2303,8 @@ void mpWindow::ZoomIn( const wxPoint& centerPoint )
 
     // Zoom in:
     const double MAX_SCALE = 1e6;
-    double  newScaleX   = m_scaleX * zoomIncrementalFactor;
-    double  newScaleY   = m_scaleY * zoomIncrementalFactor;
+    double       newScaleX = m_scaleX * zoomFactor;
+    double       newScaleY = m_scaleY * zoomFactor;
 
     // Baaaaad things happen when you zoom in too much..
     if( newScaleX <= MAX_SCALE && newScaleY <= MAX_SCALE )
@@ -2299,6 +2338,12 @@ void mpWindow::ZoomIn( const wxPoint& centerPoint )
 
 void mpWindow::ZoomOut( const wxPoint& centerPoint )
 {
+    ZoomOut( centerPoint, zoomIncrementalFactor );
+}
+
+
+void mpWindow::ZoomOut( const wxPoint& centerPoint, double zoomFactor )
+{
     wxPoint c( centerPoint );
 
     if( c == wxDefaultPosition )
@@ -2313,8 +2358,8 @@ void mpWindow::ZoomOut( const wxPoint& centerPoint )
     double  prior_layer_y   = p2y( c.y );
 
     // Zoom out:
-    m_scaleX    = m_scaleX / zoomIncrementalFactor;
-    m_scaleY    = m_scaleY / zoomIncrementalFactor;
+    m_scaleX = m_scaleX / zoomFactor;
+    m_scaleY = m_scaleY / zoomFactor;
 
     // Adjust the new m_posx/y:
     m_posX  = prior_layer_x - c.x / m_scaleX;
