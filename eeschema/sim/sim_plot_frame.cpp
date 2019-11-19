@@ -1084,6 +1084,23 @@ void SIM_PLOT_FRAME::menuShowLegendUpdate( wxUpdateUIEvent& event )
 }
 
 
+void SIM_PLOT_FRAME::menuShowDotted( wxCommandEvent& event )
+{
+    SIM_PLOT_PANEL* plot = CurrentPlot();
+
+    if( plot )
+        plot->SetDottedCurrentPhase( !plot->GetDottedCurrentPhase() );
+}
+
+
+void SIM_PLOT_FRAME::menuShowDottedUpdate( wxUpdateUIEvent& event )
+{
+    SIM_PLOT_PANEL* plot = CurrentPlot();
+
+    event.Check( plot ? plot->GetDottedCurrentPhase() : false );
+}
+
+
 void SIM_PLOT_FRAME::onPlotClose( wxAuiNotebookEvent& event )
 {
     int idx = event.GetSelection();

@@ -242,6 +242,23 @@ public:
         return m_legend->IsVisible();
     }
 
+    void SetDottedCurrentPhase( bool aEnable )
+    {
+        m_dotted_cp = aEnable;
+
+        for( const auto& tr : m_traces )
+        {
+            UpdateTraceStyle( tr.second );
+        }
+
+        UpdateAll();
+    }
+
+    bool GetDottedCurrentPhase() const
+    {
+        return m_dotted_cp;
+    }
+
     ///> Returns true if the trace has cursor shown.
     bool HasCursorEnabled( const wxString& aName ) const;
 
@@ -250,6 +267,9 @@ public:
 
     ///> Resets scale ranges to fit the current traces
     void ResetScales();
+
+    ///> Update trace line style
+    void UpdateTraceStyle( TRACE* trace );
 
 private:
     ///> Returns a new color from the palette
@@ -265,6 +285,8 @@ private:
     mpScaleY* m_axis_y1;
     mpScaleY* m_axis_y2;
     mpInfoLegend* m_legend;
+
+    bool m_dotted_cp;
 
     std::vector<mpLayer*> m_topLevel;
 
