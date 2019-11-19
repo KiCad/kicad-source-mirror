@@ -428,7 +428,7 @@ bool DeleteDirectory( const wxString& aDirName, bool aRecurse, bool aIncludeHidd
             mainDir.Close();
             return false;
         }
-        valid = mainDir.GetNext( &dir );
+        valid = mainDir.GetNext( &file );
     }
 
     mainDir.Close();

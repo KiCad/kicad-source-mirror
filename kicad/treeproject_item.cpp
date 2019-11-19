@@ -126,14 +126,17 @@ bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
 
 void TREEPROJECT_ITEM::Delete()
 {
+    bool isDirectory = wxDirExists( GetFileName() );
+
     wxString msg = wxString::Format( _( "Are you sure you want to delete '%s'?" ), GetFileName() );
-    wxMessageDialog dialog( m_parent, msg, _( "Delete File" ), wxYES_NO | wxICON_QUESTION );
+    wxMessageDialog dialog( m_parent, msg, isDirectory ?  _( "Delete Directory" ) : _( "Delete File" ),
+                            wxYES_NO | wxICON_QUESTION );
 
     if( dialog.ShowModal() == wxID_YES )
     {
         bool success;
 
-        if( !wxDirExists( GetFileName() ) )
+        if( !isDirectory )
             success = wxRemoveFile( GetFileName() );
         else
             success = DeleteDirectory( GetFileName() );
