@@ -1352,6 +1352,8 @@ bool SCH_SCREENS::HasSchematic( const wxString& aSchematicFileName )
 
 bool SCH_SCREENS::CanCauseCaseSensitivityIssue( const wxString& aSchematicFileName ) const
 {
+    wxString   lhsLower;
+    wxString   rhsLower;
     wxFileName lhs;
     wxFileName rhs = aSchematicFileName;
 
@@ -1364,8 +1366,10 @@ bool SCH_SCREENS::CanCauseCaseSensitivityIssue( const wxString& aSchematicFileNa
         if( lhs.GetPath() != rhs.GetPath() )
             continue;
 
-        if( lhs.GetName().CmpNoCase( rhs.GetName() )
-          && lhs.GetName() != rhs.GetName() )
+        lhsLower = lhs.GetName().Lower();
+        rhsLower = rhs.GetName().Lower();
+
+        if( lhsLower == rhsLower )
             return true;
     }
 
