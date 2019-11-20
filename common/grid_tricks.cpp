@@ -500,7 +500,7 @@ void GRID_TRICKS::onUpdateUI( wxUpdateUIEvent& event )
             }
         }
 
-        if( !cursorInSelectedRow )
+        if( !cursorInSelectedRow && cursorRow >= 0 )
             m_grid->SelectRow( cursorRow );
     }
 }
