@@ -81,6 +81,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
     m_checkSelTextBox->SetValue( GetSelectionTextAsBox() );
     m_checkSelDrawChildItems->SetValue( GetSelectionDrawChildItems() );
     m_checkSelFillShapes->SetValue( GetSelectionFillShapes() );
+    m_selWidthCtrl->SetValue( GetSelectionThickness() );
 
     m_galOptsPanel->TransferDataToWindow();
 
@@ -120,6 +121,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
     SetSelectionTextAsBox( m_checkSelTextBox->GetValue() );
     SetSelectionDrawChildItems( m_checkSelDrawChildItems->GetValue() );
     SetSelectionFillShapes( m_checkSelFillShapes->GetValue() );
+    SetSelectionThickness( m_selWidthCtrl->GetValue() );
 
     // Update canvas
     m_frame->GetRenderSettings()->m_ShowHiddenPins = m_checkShowHiddenPins->GetValue();
