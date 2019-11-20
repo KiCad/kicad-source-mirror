@@ -21,6 +21,7 @@
 #include <wx/statbox.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
+#include <wx/spinctrl.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -51,6 +52,8 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public wxPanel
 		wxCheckBox* m_checkSelTextBox;
 		wxCheckBox* m_checkSelDrawChildItems;
 		wxCheckBox* m_checkSelFillShapes;
+		wxStaticText* m_selWidthLabel;
+		wxSpinCtrlDouble* m_selWidthCtrl;
 
 	public:
 
