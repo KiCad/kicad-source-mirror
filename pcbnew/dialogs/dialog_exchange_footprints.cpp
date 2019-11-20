@@ -110,7 +110,8 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     m_specifiedIDBrowseButton->SetBitmap( KiBitmap( small_library_xpm ) );
 
     m_upperSizer->SetEmptyCellSize( wxSize( 0, 0 ) );
-    m_upperSizer->RecalcSizes();
+    // The upper sizer has its content modified: re-layout it:
+    m_upperSizer->Layout();
 
     // initialize match-mode
     if( m_updateMode )
