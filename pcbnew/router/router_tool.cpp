@@ -580,9 +580,8 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
     }
 
     // Convert blind/buried via to a through hole one, if it goes through all layers
-    if( viaType == VIA_BLIND_BURIED && ( ( currentLayer == B_Cu ) || ( currentLayer == F_Cu ) )
-                                    && ( ( pairTop == B_Cu && pairBottom == F_Cu )
-                                      || ( pairTop == F_Cu && pairBottom == B_Cu ) ) )
+    if( viaType == VIA_BLIND_BURIED   && ( ( targetLayer == B_Cu && currentLayer == F_Cu )
+                                      || (   targetLayer == F_Cu && currentLayer == B_Cu ) ) )
     {
         viaType = VIA_THROUGH;
     }
