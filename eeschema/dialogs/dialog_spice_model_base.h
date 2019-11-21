@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_SPICE_MODEL_BASE_H__
-#define __DIALOG_SPICE_MODEL_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -27,6 +26,7 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/stc/stc.h>
 #include <wx/statbox.h>
 #include <wx/listctrl.h>
 #include <wx/notebook.h>
@@ -43,7 +43,7 @@
 class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxNotebook* m_notebook;
 		wxPanel* m_passive;
@@ -91,7 +91,7 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 		wxComboBox* m_modelName;
 		wxStaticText* m_staticText4;
 		wxComboBox* m_modelType;
-		wxTextCtrl* m_libraryContents;
+		wxStyledTextCtrl* m_libraryContents;
 		wxPanel* m_power;
 		wxStaticText* m_staticText10;
 		wxTextCtrl* m_genDc;
@@ -184,20 +184,19 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void onInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void onSelectLibrary( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onModelSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPwlAdd( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPwlRemove( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Spice Model Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Spice Model Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 494,604 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_SPICE_MODEL_BASE();
-	
+
 };
 
-#endif //__DIALOG_SPICE_MODEL_BASE_H__
