@@ -95,8 +95,7 @@ add_test( NAME fp_lib_loader_table
         -t ${QA_FP_TEST_DATA_DIR}/fp-lib-table
         Battery
         # again, make sure we can load from the same lib concurrently
-        # this currently is broken (lp:1853380).
-        # Battery
+        Battery
 )
 
 # set the KISYSMOD for tests that use it (e.g.  tests using an

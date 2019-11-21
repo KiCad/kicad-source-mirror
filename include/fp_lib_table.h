@@ -26,8 +26,11 @@
 #ifndef FP_LIB_TABLE_H_
 #define FP_LIB_TABLE_H_
 
+#include <single_access.h>
+
 #include <lib_table_base.h>
 #include <io_mgr.h>
+
 
 class MODULE;
 class FP_LIB_TABLE_GRID;
@@ -95,6 +98,35 @@ private:
         plugin.set( aPlugin );
     }
 
+    /**
+     * Get a locked plugin. As long as the SINGLE_ACCESS returned object
+     * exists, the calling code has exclusive access to the plugin.
+     */
+    SINGLE_ACCESS<PLUGIN> getPlugin() const
+    {
+        // Lock the plugin and return a RAII locked object
+        return SINGLE_ACCESS<PLUGIN>{ plugin, m_plugin_mutex };
+    }
+
+    /**
+     * Mutex to protect the row's plugin from concurrent access
+     *
+     * This is required because the plugins are generally not thread safe,
+     * but the global FP_LIB_TABLE is shared between multiple threads. This means
+     * that concurrent access to the same row's plugin is possible.
+     *
+     * Even read access to (say) the PCB_IO plugin can trigger a cache
+     * invalidation and delete cached footprints, to which calling code might
+     * have a reference.
+     */
+    mutable std::mutex m_plugin_mutex;
+
+    /**
+     * The plugin instance that provides this row's footprint IO.
+     *
+     * Note: this is unsafe to use concurrently - use getPlugin() to obtain
+     * a lock on this object.
+     */
     PLUGIN::RELEASER  plugin;
     LIB_T             type;
 };
