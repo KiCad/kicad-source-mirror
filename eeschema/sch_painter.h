@@ -169,6 +169,7 @@ private:
     float getTextThickness( const SCH_TEXT* aItem, bool aDrawingShadows );
 
     bool setDeviceColors( const LIB_ITEM* aItem, int aLayer );
+    void fillIfSelection( int aLayer );
 
     void triLine ( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c );
     void strokeText( const wxString& aText, const VECTOR2D& aPosition, double aRotationAngle );

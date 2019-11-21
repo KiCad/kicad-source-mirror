@@ -48,6 +48,9 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public wxPanel
 		wxCheckBox* m_checkShowHiddenPins;
 		wxCheckBox* m_checkSuperSub;
 		wxCheckBox* m_checkPageLimits;
+		wxCheckBox* m_checkSelTextBox;
+		wxCheckBox* m_checkSelDrawChildItems;
+		wxCheckBox* m_checkSelFillShapes;
 
 	public:
 

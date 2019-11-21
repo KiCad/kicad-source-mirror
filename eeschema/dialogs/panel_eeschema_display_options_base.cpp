@@ -68,10 +68,10 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	sbSizer2->Add( fgSizer32, 0, wxBOTTOM|wxRIGHT|wxEXPAND, 5 );
 
 
-	bRightColumn->Add( sbSizer2, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bRightColumn->Add( sbSizer2, 0, wxEXPAND|wxTOP, 5 );
 
 	wxStaticBoxSizer* sbSizer1;
-	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Annotations") ), wxVERTICAL );
+	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Appearance") ), wxVERTICAL );
 
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
@@ -96,14 +96,29 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	sbSizer1->Add( m_checkShowHiddenPins, 0, wxEXPAND|wxALL, 5 );
 
 	m_checkSuperSub = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Enable superscript/subscript markup"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer1->Add( m_checkSuperSub, 0, wxALL, 5 );
+	sbSizer1->Add( m_checkSuperSub, 0, wxALL|wxEXPAND, 5 );
 
 	m_checkPageLimits = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Show page limi&ts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkPageLimits->SetValue(true);
 	sbSizer1->Add( m_checkPageLimits, 0, wxEXPAND|wxALL, 5 );
 
 
-	bRightColumn->Add( sbSizer1, 1, wxEXPAND|wxTOP|wxRIGHT, 5 );
+	bRightColumn->Add( sbSizer1, 1, wxEXPAND|wxTOP, 5 );
+
+	wxStaticBoxSizer* sbSizer3;
+	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Selection") ), wxVERTICAL );
+
+	m_checkSelTextBox = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Draw selected text items as box"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer3->Add( m_checkSelTextBox, 0, wxALL|wxEXPAND, 5 );
+
+	m_checkSelDrawChildItems = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Draw selected child items"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer3->Add( m_checkSelDrawChildItems, 0, wxALL|wxEXPAND, 5 );
+
+	m_checkSelFillShapes = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Fill selected shapes"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer3->Add( m_checkSelFillShapes, 0, wxALL|wxEXPAND, 5 );
+
+
+	bRightColumn->Add( sbSizer3, 1, wxEXPAND|wxTOP, 5 );
 
 
 	bPanelSizer->Add( bRightColumn, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );

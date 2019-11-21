@@ -374,6 +374,7 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
             m_gal->SetIsStroke( true );
             m_gal->SetLineWidth( getLineWidth( aItem, true ) );
             m_gal->SetStrokeColor( getRenderColor( aItem, LAYER_DEVICE, true ) );
+            m_gal->SetFillColor( getRenderColor( aItem, LAYER_DEVICE, true ) );
             return true;
         }
 
@@ -411,14 +412,23 @@ bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer )
 }
 
 
+void SCH_PAINTER::fillIfSelection( int aLayer )
+{
+    if( aLayer == LAYER_SELECTION_SHADOWS && GetSelectionFillShapes() )
+        m_gal->SetIsFill( true );
+}
+
+
 void SCH_PAINTER::draw( LIB_RECTANGLE *aRect, int aLayer )
 {
     if( !isUnitAndConversionShown( aRect ) )
         return;
 
     if( setDeviceColors( aRect, aLayer ) )
+    {
+        fillIfSelection( aLayer );
         m_gal->DrawRectangle( mapCoords( aRect->GetPosition() ), mapCoords( aRect->GetEnd() ) );
-
+    }
 }
 
 
@@ -428,7 +438,10 @@ void SCH_PAINTER::draw( LIB_CIRCLE *aCircle, int aLayer )
         return;
 
     if( setDeviceColors( aCircle, aLayer ) )
+    {
+        fillIfSelection( aLayer );
         m_gal->DrawCircle( mapCoords( aCircle->GetPosition() ), aCircle->GetRadius() );
+    }
 }
 
 
@@ -487,6 +500,7 @@ void SCH_PAINTER::draw( LIB_POLYLINE *aLine, int aLayer )
         for( auto p : pts )
             vtx.push_back( mapCoords( p ) );
 
+        fillIfSelection( aLayer );
         m_gal->DrawPolygon( vtx );
     }
 }
@@ -533,16 +547,33 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
-    m_gal->SetGlyphSize( VECTOR2D( aField->GetTextSize() ) );
-    m_gal->SetFontItalic( aField->IsItalic() );
-
-    m_gal->SetHorizontalJustify( aField->GetHorizJustify( ) );
-    m_gal->SetVerticalJustify( aField->GetVertJustify( ) );
 
     auto pos = mapCoords( aField->GetPosition() );
-    double orient = aField->GetTextAngleRadians();
 
-    strokeText( aField->GetText(), pos, orient );
+    if( drawingShadows && GetSelectionTextAsBox() )
+    {
+        EDA_RECT boundaryBox = aField->GetBoundingBox();
+
+        m_gal->SetIsFill( true );
+        m_gal->SetFillColor( color );
+        m_gal->SetLineWidth( m_gal->GetLineWidth() * 0.5 );
+        boundaryBox.RevertYAxis();
+
+        m_gal->DrawRectangle(
+                mapCoords( boundaryBox.GetPosition() ), mapCoords( boundaryBox.GetEnd() ) );
+    }
+    else
+    {
+        m_gal->SetGlyphSize( VECTOR2D( aField->GetTextSize() ) );
+        m_gal->SetFontItalic( aField->IsItalic() );
+
+        m_gal->SetHorizontalJustify( aField->GetHorizJustify() );
+        m_gal->SetVerticalJustify( aField->GetVertJustify() );
+
+        double orient = aField->GetTextAngleRadians();
+
+        strokeText( aField->GetText(), pos, orient );
+    }
 
     // Draw the umbilical line
     if( aField->IsMoving() && m_schSettings.m_ShowUmbilicals )
@@ -804,9 +835,13 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
     if( aPin->HasFlag( IS_DANGLING ) && ( aPin->IsVisible() || aPin->IsPowerConnection() ) )
         drawPinDanglingSymbol( pos, drawingShadows );
 
-    // Draw the labels
-
     LIB_PART* libEntry = aPin->GetParent();
+
+    // Draw the labels
+    if( drawingShadows && ( libEntry->Type() == LIB_PART_T || libEntry->IsSelected() )
+            && !GetSelectionDrawChildItems() )
+        return;
+
     int textOffset = libEntry->GetPinNameOffset();
 
     float nameLineWidth = getLineWidth( aPin, drawingShadows );
@@ -1188,6 +1223,19 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 
     if( drawingShadows )
     {
+        if( GetSelectionTextAsBox() )
+        {
+            EDA_RECT bBox = aText->GetBoundingBox();
+
+            m_gal->SetIsFill( true );
+            m_gal->SetFillColor( color );
+            m_gal->SetLineWidth( m_gal->GetLineWidth() * 0.5 );
+            bBox.RevertYAxis();
+
+            m_gal->DrawRectangle( mapCoords( bBox.GetPosition() ), mapCoords( bBox.GetEnd() ) );
+            return;
+        }
+
         switch( aText->GetLabelSpinStyle() )
         {
         case 0:
@@ -1344,8 +1392,12 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
     if( aField->IsVoid() )
         return;
 
-    // Calculate the text orientation according to the component orientation.
     SCH_COMPONENT* parentComponent = (SCH_COMPONENT*) aField->GetParent();
+
+    if( drawingShadows && parentComponent->IsSelected() && !GetSelectionDrawChildItems() )
+        return;
+
+    // Calculate the text orientation according to the component orientation.
     int            orient = (int) aField->GetTextAngle();
 
     if( parentComponent->GetTransform().y1 )  // Rotate component 90 degrees.
@@ -1369,17 +1421,33 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
     EDA_RECT boundaryBox = aField->GetBoundingBox();
     wxPoint textpos = boundaryBox.Centre();
 
-    m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
-    m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
     m_gal->SetStrokeColor( color );
-    m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
-    m_gal->SetGlyphSize( VECTOR2D( aField->GetTextSize() ) );
-    m_gal->SetFontBold( aField->IsBold() );
-    m_gal->SetFontItalic( aField->IsItalic() );
-    m_gal->SetTextMirrored( aField->IsMirrored() );
     m_gal->SetLineWidth( getLineWidth( aField, drawingShadows ) );
-    strokeText( aField->GetFullyQualifiedText(), textpos, orient == TEXT_ANGLE_VERT ? M_PI/2 : 0 );
+
+    if( drawingShadows && GetSelectionTextAsBox() )
+    {
+        m_gal->SetIsFill( true );
+        m_gal->SetFillColor( color );
+        m_gal->SetLineWidth( m_gal->GetLineWidth() * 0.5 );
+        boundaryBox.RevertYAxis();
+
+        m_gal->DrawRectangle(
+                mapCoords( boundaryBox.GetPosition() ), mapCoords( boundaryBox.GetEnd() ) );
+    }
+    else
+    {
+        m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
+        m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+        m_gal->SetIsFill( false );
+        m_gal->SetGlyphSize( VECTOR2D( aField->GetTextSize() ) );
+        m_gal->SetFontBold( aField->IsBold() );
+        m_gal->SetFontItalic( aField->IsItalic() );
+        m_gal->SetTextMirrored( aField->IsMirrored() );
+
+        strokeText( aField->GetFullyQualifiedText(), textpos,
+                orient == TEXT_ANGLE_VERT ? M_PI / 2 : 0 );
+    }
 
     // Draw the umbilical line
     if( aField->IsMoving() )
@@ -1462,6 +1530,9 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
             if( drawingShadows && !aSheet->IsSelected() && !sheetPin.IsSelected() )
                 continue;
 
+            if( drawingShadows && !GetSelectionDrawChildItems() && aSheet->IsSelected() )
+                break;
+
             int     width = aSheet->GetPenSize();
             wxPoint initial_pos = sheetPin.GetTextPos();
             wxPoint offset_pos = initial_pos;
@@ -1505,7 +1576,8 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
         else
         {
             // Could be modified later, when sheets can have their own fill color
-            m_gal->SetIsFill( false );
+            m_gal->SetFillColor( getRenderColor( aSheet, LAYER_SHEET_BACKGROUND, true ) );
+            m_gal->SetIsFill( aSheet->IsSelected() && GetSelectionFillShapes() );
         }
 
         m_gal->DrawRectangle( pos, pos + size );
@@ -1529,6 +1601,9 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
 
         if( drawingShadows )
         {
+            if( !GetSelectionDrawChildItems() )
+                return;
+
             if( aSheet->IsVerticalOrientation() )
             {
                 pos_sheetname.y += getShadowWidth() / 2;

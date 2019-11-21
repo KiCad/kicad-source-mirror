@@ -120,6 +120,25 @@ void SetDefaultBusThickness( int aThickness );
 int GetDefaultWireThickness();
 void SetDefaultWireThickness( int aThickness );
 
+/**
+ * Draw selected text items as box
+ */
+bool GetSelectionTextAsBox();
+void SetSelectionTextAsBox( bool aBool );
+
+/**
+ * Draw selected child items or not
+ */
+bool GetSelectionDrawChildItems();
+void SetSelectionDrawChildItems( bool aBool );
+
+/**
+ * Draw selected shapes as filled or not
+ */
+bool GetSelectionFillShapes();
+void SetSelectionFillShapes( bool aBool );
+
+
 int GetTextMarkupFlags();
 void SetTextMarkupFlags( int aMarkupFlags );
 

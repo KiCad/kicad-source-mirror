@@ -52,6 +52,9 @@ static int s_defaultWireThickness  = DEFAULTDRAWLINETHICKNESS;
 static int s_defaultTextSize = DEFAULT_SIZE_TEXT;
 static int s_drawDefaultLineThickness = -1;
 static int s_textMarkupFlags = 0;
+static bool s_selectTextAsBox = false;
+static bool s_selectDrawChildren = true;
+static bool s_selectFillShapes = false;
 
 
 int GetDefaultBusThickness()
@@ -111,6 +114,42 @@ int GetTextMarkupFlags()
 void SetDefaultLineThickness( int aThickness )
 {
     s_drawDefaultLineThickness = std::max( 1, aThickness );
+}
+
+
+bool GetSelectionTextAsBox()
+{
+    return s_selectTextAsBox;
+}
+
+
+void SetSelectionTextAsBox( bool aBool )
+{
+    s_selectTextAsBox = aBool;
+}
+
+
+bool GetSelectionDrawChildItems()
+{
+    return s_selectDrawChildren;
+}
+
+
+void SetSelectionDrawChildItems( bool aBool )
+{
+    s_selectDrawChildren = aBool;
+}
+
+
+bool GetSelectionFillShapes()
+{
+    return s_selectFillShapes;
+}
+
+
+void SetSelectionFillShapes( bool aBool )
+{
+    s_selectFillShapes = aBool;
 }
 
 
@@ -284,6 +323,10 @@ static const wxChar repeatLibStepXEntry[] =         wxT( "LibeditRepeatStepX" );
 static const wxChar repeatLibStepYEntry[] =         wxT( "LibeditRepeatStepY" );
 static const wxChar showPinElectricalType[] =       wxT( "LibeditShowPinElectricalType" );
 
+static const wxChar boxedSelectedText[] =           wxT( "SelectionTextAsBox" );
+static const wxChar drawSelectedChildren[] =        wxT( "SelectionDrawChildItems" );
+static const wxChar selectionFillShapes[] =         wxT( "SelectionFillShapes" );
+
 ///@}
 
 PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings()
@@ -342,6 +385,10 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     SetDefaultWireThickness( (int) tmp );
 
+    SetSelectionTextAsBox( aCfg->ReadBool( boxedSelectedText, false ) );
+    SetSelectionDrawChildItems( aCfg->ReadBool( drawSelectedChildren, true ) );
+    SetSelectionFillShapes( aCfg->ReadBool( selectionFillShapes, false ) );
+
     SetTextMarkupFlags( (int) aCfg->Read( TextMarkupFlagsEntry, 0L ) );
 
     if( aCfg->Read( DefaultJctSizeEntry, &tmp ) )
@@ -372,8 +419,7 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
         }
     }
 
-    auto painter = static_cast<KIGFX::SCH_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
-    KIGFX::SCH_RENDER_SETTINGS* settings = painter->GetSettings();
+    KIGFX::SCH_RENDER_SETTINGS* settings = GetRenderSettings();
     settings->m_ShowPinsElectricalType = false;
     settings->m_ShowHiddenText = false;
     settings->m_ShowHiddenPins = m_showAllPins;
@@ -398,6 +444,9 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( AutoplaceJustifyEntry, m_autoplaceJustify );
     aCfg->Write( AutoplaceAlignEntry, m_autoplaceAlign );
     aCfg->Write( FootprintPreviewEntry, m_footprintPreview );
+    aCfg->Write( boxedSelectedText, GetSelectionTextAsBox() );
+    aCfg->Write( drawSelectedChildren, GetSelectionDrawChildItems() );
+    aCfg->Write( selectionFillShapes, GetSelectionFillShapes() );
 
     // Save template fieldnames
     STRING_FORMATTER sf;

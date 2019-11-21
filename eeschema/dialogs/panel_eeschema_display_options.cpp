@@ -78,6 +78,10 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
 
     m_checkPageLimits->SetValue( m_frame->ShowPageLimits() );
 
+    m_checkSelTextBox->SetValue( GetSelectionTextAsBox() );
+    m_checkSelDrawChildItems->SetValue( GetSelectionDrawChildItems() );
+    m_checkSelFillShapes->SetValue( GetSelectionFillShapes() );
+
     m_galOptsPanel->TransferDataToWindow();
 
     return true;
@@ -113,6 +117,9 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
     SCH_JUNCTION::SetSymbolSize( m_junctionSize.GetValue() );
     m_frame->SetShowAllPins( m_checkShowHiddenPins->GetValue() );
     m_frame->SetShowPageLimits( m_checkPageLimits->GetValue() );
+    SetSelectionTextAsBox( m_checkSelTextBox->GetValue() );
+    SetSelectionDrawChildItems( m_checkSelDrawChildItems->GetValue() );
+    SetSelectionFillShapes( m_checkSelFillShapes->GetValue() );
 
     // Update canvas
     m_frame->GetRenderSettings()->m_ShowHiddenPins = m_checkShowHiddenPins->GetValue();
