@@ -677,12 +677,14 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
     file.Open( filePath.GetFullPath() );
     int line_nr = 0;
 
+    // Stores the libray content. It will be displayed after reading the full library
+    wxString fullText;
+
     // Process the file, looking for components
     while( !file.Eof() )
     {
         const wxString& line = line_nr == 0 ? file.GetFirstLine() : file.GetNextLine();
-        m_libraryContents->AppendText( line );
-        m_libraryContents->AppendText( "\n" );
+        fullText << line << '\n';
 
         wxStringTokenizer tokenizer( line );
 
@@ -728,6 +730,9 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
 
         ++line_nr;
     }
+
+    // display the full library content:
+    m_libraryContents->AppendText( fullText );
 
     wxArrayString modelsList;
 
