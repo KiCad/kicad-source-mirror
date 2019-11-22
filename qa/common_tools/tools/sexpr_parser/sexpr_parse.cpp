@@ -27,9 +27,9 @@
  * for benchmarking, testing, etc.
  */
 
-#include "sexpr_parse.h"
-
 #include <sexpr/sexpr_parser.h>
+
+#include <qa_utils/utility_registry.h>
 
 #include <common.h>
 #include <profile.h>
@@ -154,8 +154,8 @@ int sexpr_parser_func( int argc, char* argv[] )
 }
 
 
-KI_TEST::UTILITY_PROGRAM sexpr_parser_tool = {
-    "sexpr_parser",
-    "Benchmark s-expression parsing",
-    sexpr_parser_func,
-};
+static bool registered = UTILITY_REGISTRY::Register( {
+        "sexpr_parser",
+        "Benchmark s-expression parsing",
+        sexpr_parser_func,
+} );

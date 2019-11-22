@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "pcb_parser_tool.h"
+#include <qa_utils/utility_registry.h>
 
 #include <cstdio>
 #include <string>
@@ -39,6 +39,8 @@
 #include <wx/cmdline.h>
 
 #include <qa_utils/stdstream_line_reader.h>
+#include <qa_utils/utility_registry.h>
+
 
 using PARSE_DURATION = std::chrono::microseconds;
 
@@ -163,11 +165,5 @@ int pcb_parser_main_func( int argc, char** argv )
 }
 
 
-/*
- * Define the tool interface
- */
-KI_TEST::UTILITY_PROGRAM pcb_parser_tool = {
-    "pcb_parser",
-    "Parse a KiCad PCB file",
-    pcb_parser_main_func,
-};
+static bool registered = UTILITY_REGISTRY::Register(
+        { "pcb_parser", "Parse a KiCad PCB file", pcb_parser_main_func } );

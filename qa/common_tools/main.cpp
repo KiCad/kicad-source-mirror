@@ -21,28 +21,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <qa_utils/utility_program.h>
-
-#include "tools/coroutines/coroutine_tools.h"
-#include "tools/io_benchmark/io_benchmark.h"
-#include "tools/sexpr_parser/sexpr_parse.h"
-
-/**
- * List of registered tools.
- *
- * This is a pretty rudimentary way to register, but for a simple purpose,
- * it's effective enough. When you have a new tool, add it to this list.
- */
-const static std::vector<KI_TEST::UTILITY_PROGRAM*> known_tools = {
-    &coroutine_tool,
-    &io_benchmark_tool,
-    &sexpr_parser_tool,
-};
+#include <qa_utils/utility_registry.h>
 
 
 int main( int argc, char** argv )
 {
-    KI_TEST::COMBINED_UTILITY c_util( known_tools );
-
+    KI_TEST::COMBINED_UTILITY c_util;
     return c_util.HandleCommandLine( argc, argv );
 }

@@ -21,8 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "drc_tool.h"
-
 #include <cstdio>
 #include <string>
 
@@ -38,6 +36,7 @@
 #include <drc/drc_marker_factory.h>
 
 #include <qa_utils/stdstream_line_reader.h>
+#include <qa_utils/utility_registry.h>
 
 
 using DRC_DURATION = std::chrono::microseconds;
@@ -332,11 +331,5 @@ int drc_main_func( int argc, char** argv )
 }
 
 
-/*
- * Define the tool interface
- */
-KI_TEST::UTILITY_PROGRAM drc_tool = {
-    "drc",
-    "Run selected DRC function on a PCB",
-    drc_main_func,
-};
+static bool registered = UTILITY_REGISTRY::Register(
+        { "drc", "Run selected DRC function on a PCB", drc_main_func } );

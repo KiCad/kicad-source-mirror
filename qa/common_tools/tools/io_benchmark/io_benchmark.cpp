@@ -21,8 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "io_benchmark.h"
-
 #include <wx/wx.h>
 #include <richio.h>
 
@@ -37,6 +35,7 @@
 #include <wx/filename.h>
 
 #include <qa_utils/stdstream_line_reader.h>
+#include <qa_utils/utility_registry.h>
 
 
 using CLOCK = std::chrono::steady_clock;
@@ -423,8 +422,8 @@ int io_benchmark_func( int argc, char* argv[] )
 }
 
 
-KI_TEST::UTILITY_PROGRAM io_benchmark_tool = {
-    "io_benchmark",
-    "Benchmark various kinds of IO methods",
-    io_benchmark_func,
-};
+static bool registered = UTILITY_REGISTRY::Register( {
+        "io_benchmark",
+        "Benchmark various kinds of IO methods",
+        io_benchmark_func,
+} );

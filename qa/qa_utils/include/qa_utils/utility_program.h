@@ -70,6 +70,15 @@ struct UTILITY_PROGRAM
     /// A function that provides the program for a given command line
     using FUNC = std::function<int( int argc, char** argv )>;
 
+    UTILITY_PROGRAM( const std::string& aName, const std::string& aDesc, FUNC aMainFunc )
+            : m_name( aName ), m_desc( aDesc ), m_func( aMainFunc )
+    {
+    }
+
+    UTILITY_PROGRAM() : m_func( nullptr )
+    {
+    }
+
     /// The name of the program (this is used to select one)
     std::string m_name;
 
@@ -88,9 +97,6 @@ struct UTILITY_PROGRAM
 class COMBINED_UTILITY
 {
 public:
-    using UTIL_LIST = std::vector<UTILITY_PROGRAM*>;
-
-    COMBINED_UTILITY( const UTIL_LIST& aSubUtils );
 
     /**
      * Take in a a command line and:
@@ -125,9 +131,6 @@ private:
      * @param os   stream to print to
      */
     void printUsage( char* name, std::ostream& os ) const;
-
-    /// List of known sub-utils
-    const UTIL_LIST& m_subUtils;
 };
 
 } // namespace KI_TEST

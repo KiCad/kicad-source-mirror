@@ -23,13 +23,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "polygon_generator.h"
-
 #include <geometry/shape_file_io.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
 
 #include <pcbnew_utils/board_file_utils.h>
+
+#include <qa_utils/utility_registry.h>
 
 #include <class_board.h>
 #include <class_drawsegment.h>
@@ -102,11 +102,9 @@ int polygon_gererator_main( int argc, char* argv[] )
     return KI_TEST::RET_CODES::OK;
 }
 
-/*
- * Define the tool interface
- */
-KI_TEST::UTILITY_PROGRAM polygon_generator_tool = {
-    "polygon_generator",
-    "Dump board geometry as a set of polygons",
-    polygon_gererator_main,
-};
+
+static bool registered = UTILITY_REGISTRY::Register( {
+        "polygon_generator",
+        "Dump board geometry as a set of polygons",
+        polygon_gererator_main,
+} );

@@ -21,32 +21,35 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 #include <qa_utils/utility_program.h>
+#include <qa_utils/utility_registry.h>
 
 #include <wx/msgout.h>
 
 namespace KI_TEST
 {
 
-COMBINED_UTILITY::COMBINED_UTILITY( const UTIL_LIST& aSubUtils ) : m_subUtils( aSubUtils )
-{
-}
-
-
 void COMBINED_UTILITY::showSubUtilityList( std::ostream& os ) const
 {
-    for( const auto& tool : m_subUtils )
+    for( const auto& it : UTILITY_REGISTRY::GetInfoMap() )
     {
-        os << tool->m_name << ": \t" << tool->m_desc << std::endl;
+        const UTILITY_PROGRAM& prog = it.second;
+
+        os << "Reg: " << prog.m_name << ": \t" << prog.m_desc << std::endl;
     }
 }
 
 
 UTILITY_PROGRAM::FUNC* COMBINED_UTILITY::findSubUtility( const std::string& aName ) const
 {
-    for( const auto& tool : m_subUtils )
+    try
     {
-        if( tool->m_name == aName )
-            return &tool->m_func;
+        UTILITY_PROGRAM& prog = UTILITY_REGISTRY::GetInfoMap().at( aName );
+
+        return &prog.m_func;
+    }
+    catch( const std::out_of_range& e )
+    {
+        // not found in map
     }
 
     return nullptr;

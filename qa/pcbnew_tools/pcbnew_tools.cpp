@@ -23,28 +23,9 @@
 
 #include <qa_utils/utility_program.h>
 
-#include "tools/drc_tool/drc_tool.h"
-#include "tools/pcb_parser/pcb_parser_tool.h"
-#include "tools/polygon_generator/polygon_generator.h"
-#include "tools/polygon_triangulation/polygon_triangulation.h"
-
-/**
- * List of registered tools.
- *
- * This is a pretty rudimentary way to register, but for a simple purpose,
- * it's effective enough. When you have a new tool, add it to this list.
- */
-const static std::vector<KI_TEST::UTILITY_PROGRAM*> known_tools = {
-    &drc_tool,
-    &pcb_parser_tool,
-    &polygon_generator_tool,
-    &polygon_triangulation_tool,
-};
-
-
 int main( int argc, char** argv )
 {
-    KI_TEST::COMBINED_UTILITY c_util( known_tools );
+    KI_TEST::COMBINED_UTILITY c_util;
 
     return c_util.HandleCommandLine( argc, argv );
 }
