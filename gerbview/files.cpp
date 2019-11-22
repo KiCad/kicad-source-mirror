@@ -298,12 +298,12 @@ bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
             progress = std::make_unique<WX_PROGRESS_REPORTER>( this,
                             _( "Loading Gerber files..." ), 1, false );
             progress->SetMaxProgress( aFilenameList.GetCount() - 1 );
-            progress->Report( wxString::Format( _("Loading %d/%d %s" ), ii+1,
+            progress->Report( wxString::Format( _("Loading %u/%lu %s" ), ii+1,
                                             aFilenameList.GetCount(), m_lastFileName ) );
         }
         else if( progress )
         {
-            progress->Report( wxString::Format( _("Loading %d/%d %s" ), ii+1,
+            progress->Report( wxString::Format( _("Loading %u/%lu %s" ), ii+1,
                                             aFilenameList.GetCount(), m_lastFileName ) );
             progress->KeepRefreshing();
         }
