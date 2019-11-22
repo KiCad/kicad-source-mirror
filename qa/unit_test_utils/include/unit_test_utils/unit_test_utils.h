@@ -24,7 +24,6 @@
 #ifndef UNIT_TEST_UTILS__H
 #define UNIT_TEST_UTILS__H
 
-#include <boost/test/test_case_template.hpp>
 #include <boost/test/unit_test.hpp>
 
 #include <unit_test_utils/wx_assert.h>
