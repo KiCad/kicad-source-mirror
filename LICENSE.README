@@ -19,5 +19,6 @@ Licensed under MIT:
 - tinyspline_lib in dxflib_qcad/tinyspline_lib
 Licensed under CC-BY-SA-4.0:
 - All the demo files provided in demos/*
+- All the QA test data under qa/data/footprints
 Licensed under GPLv3 (or later):
 - All remaining code not listed above

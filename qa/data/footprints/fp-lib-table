@@ -1,0 +1,4 @@
+  (fp_lib_table
+    (lib (name Battery)(type KiCad)(uri ${KISYSMOD}/Battery.pretty)(options "")(descr ""))
+  )
+
