@@ -21,8 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <boost/test/test_case_template.hpp>
-#include <boost/test/unit_test.hpp>
+#include <unit_test_utils/unit_test_utils.h>
 
 #include <view/zoom_controller.h>
 
