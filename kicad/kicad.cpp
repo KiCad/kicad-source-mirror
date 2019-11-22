@@ -159,9 +159,14 @@ bool PGM_KICAD::OnPgmInit()
     }
 
     // Do not attempt to load a non-existent project file.
-    if( !projToLoad.empty() && wxFileExists( projToLoad ) )
+    if( !projToLoad.empty() )
     {
-        frame->LoadProject( projToLoad );
+        wxFileName fn( projToLoad );
+        if( fn.Exists() )
+        {
+            fn.MakeAbsolute();
+            frame->LoadProject( fn );
+        }
     }
 
     frame->Show( true );
