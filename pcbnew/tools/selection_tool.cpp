@@ -782,25 +782,23 @@ int SELECTION_TOOL::selectConnection( const TOOL_EVENT& aEvent )
 int SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 {
     // copy the selection, since we're going to iterate and modify
-    auto selection = m_selection.GetItems();
+    std::deque<EDA_ITEM*> selectedItems = m_selection.GetItems();
 
     // We use the BUSY flag to mark connections
-    for( auto item : selection )
+    for( EDA_ITEM* item : selectedItems )
         item->SetState( BUSY, false );
 
-    for( auto item : selection )
+    for( EDA_ITEM* item : selectedItems )
     {
         TRACK* trackItem = dynamic_cast<TRACK*>( item );
 
         // Track items marked BUSY have already been visited
-        //  therefore their connections have already been marked
         if( trackItem && !trackItem->GetState( BUSY ) )
         {
-            if( aEvent.GetCommandId()
-                    && *aEvent.GetCommandId() == PCB_ACTIONS::expandSelectedConnection.GetId() )
-                selectAllItemsConnectedToItem( *trackItem );
+            if( aEvent.IsAction( &PCB_ACTIONS::selectConnection ) )
+                selectConnectedTracks( *trackItem, SCH_JUNCTION_T );
             else
-                selectAllItemsConnectedToTrack( *trackItem );
+                selectConnectedTracks( *trackItem, PCB_PAD_T );
         }
     }
 
@@ -845,14 +843,18 @@ int SELECTION_TOOL::selectCopper( const TOOL_EVENT& aEvent )
         selectCursor( true, connectedItemFilter );
 
     // copy the selection, since we're going to iterate and modify
-    auto selection  = m_selection.GetItems();
+    std::deque<EDA_ITEM*> selectedItems  = m_selection.GetItems();
 
-    for( auto item : selection )
+    // We use the BUSY flag to mark connections
+    for( EDA_ITEM* item : selectedItems )
+        item->SetState( BUSY, false );
+
+    for( EDA_ITEM* item : selectedItems )
     {
         BOARD_CONNECTED_ITEM* connItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( item );
 
-        if( connItem )
-            selectAllItemsConnectedToItem( *connItem );
+        if( connItem && !connItem->GetState( BUSY ) )
+            selectConnectedTracks( *connItem, EOT );
     }
 
     // Inform other potentially interested tools
@@ -863,29 +865,112 @@ int SELECTION_TOOL::selectCopper( const TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::selectAllItemsConnectedToTrack( TRACK& aSourceTrack )
-{
-    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
-    auto              connectivity = board()->GetConnectivity();
-
-    for( auto item : connectivity->GetConnectedItems(
-                 static_cast<BOARD_CONNECTED_ITEM*>( &aSourceTrack ), types ) )
-        select( item );
-}
-
-
-void SELECTION_TOOL::selectAllItemsConnectedToItem( BOARD_CONNECTED_ITEM& aSourceItem )
+void SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
+                                            KICAD_T aStopCondition )
 {
     constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, PCB_PAD_T, EOT };
-    auto connectivity = board()->GetConnectivity();
 
-    for( auto item : connectivity->GetConnectedItems( &aSourceItem, types ) )
+    auto connectivity = board()->GetConnectivity();
+    auto connectedItems = connectivity->GetConnectedItems( &aStartItem, types );
+
+    std::map<wxPoint, std::vector<TRACK*>> trackMap;
+    std::map<wxPoint, VIA*>                viaMap;
+    std::map<wxPoint, D_PAD*>              padMap;
+
+    // Build maps of connected items
+    for( BOARD_CONNECTED_ITEM* item : connectedItems )
     {
-        // We want to select items connected through pads but not pads
-        // otherwise, the common use case of "Select Copper"->Delete will
-        // remove footprints in addition to traces and vias
-        if( item->Type() != PCB_PAD_T )
-            select( item );
+        switch( item->Type() )
+        {
+        case PCB_TRACE_T:
+        {
+            TRACK* track = static_cast<TRACK*>( item );
+            trackMap[ track->GetStart() ].push_back( track );
+            trackMap[ track->GetEnd() ].push_back( track );
+        }
+            break;
+        case PCB_VIA_T:
+        {
+            VIA* via = static_cast<VIA*>( item );
+            viaMap[ via->GetStart() ] = via;
+        }
+            break;
+        case PCB_PAD_T:
+        {
+            D_PAD* pad = static_cast<D_PAD*>( item );
+            padMap[ pad->GetPosition() ] = pad;
+        }
+            break;
+        default:
+            break;
+        }
+
+        item->SetState( SKIP_STRUCT, false );
+    }
+
+    std::vector<wxPoint> activePts;
+
+    // Set up the initial active points
+    switch( aStartItem.Type() )
+    {
+    case PCB_TRACE_T:
+        activePts.push_back( static_cast<TRACK*>( &aStartItem )->GetStart() );
+        activePts.push_back( static_cast<TRACK*>( &aStartItem )->GetEnd() );
+        break;
+    case PCB_VIA_T:
+        activePts.push_back( static_cast<TRACK*>( &aStartItem )->GetStart() );
+        break;
+    case PCB_PAD_T:
+        activePts.push_back( aStartItem.GetPosition() );
+        break;
+    default:
+        break;
+    }
+
+    bool expand = true;
+
+    // Iterative push from all active points
+    while( expand )
+    {
+        expand = false;
+
+        for( int i = activePts.size() - 1; i >= 0; --i )
+        {
+            wxPoint pt = activePts[i];
+
+            if( trackMap[ pt ].size() > 2 && aStopCondition == SCH_JUNCTION_T )
+            {
+                activePts.erase( activePts.begin() + i );
+                continue;
+            }
+
+            if( padMap.count( pt ) && aStopCondition != EOT )
+            {
+                activePts.erase( activePts.begin() + i );
+                continue;
+            }
+
+            for( TRACK* track : trackMap[ pt ] )
+            {
+                if( track->GetState( SKIP_STRUCT ) )
+                    continue;
+
+                track->SetState( SKIP_STRUCT, true );
+                select( track );
+
+                if( track->GetStart() == pt )
+                    activePts.push_back( track->GetEnd() );
+                else
+                    activePts.push_back( track->GetStart() );
+
+                expand = true;
+            }
+
+            if( viaMap.count( pt ) && !viaMap[ pt ]->IsSelected() )
+                select( viaMap[ pt ] );
+
+            activePts.erase( activePts.begin() + i );
+        }
     }
 }
 
@@ -895,7 +980,7 @@ void SELECTION_TOOL::selectAllItemsOnNet( int aNetCode )
     constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
     auto connectivity = board()->GetConnectivity();
 
-    for( auto item : connectivity->GetNetItems( aNetCode, types ) )
+    for( BOARD_CONNECTED_ITEM* item : connectivity->GetNetItems( aNetCode, types ) )
         select( item );
 }
 
@@ -908,17 +993,12 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
     // copy the selection, since we're going to iterate and modify
     auto selection = m_selection.GetItems();
 
-    for( auto i : selection )
+    for( EDA_ITEM* i : selection )
     {
-        auto item = static_cast<BOARD_ITEM*>( i );
+        BOARD_CONNECTED_ITEM* connItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( i );
 
-        // only connected items get a net code
-        if( item->IsConnected() )
-        {
-            auto& connItem = static_cast<BOARD_CONNECTED_ITEM&>( *item );
-
-            selectAllItemsOnNet( connItem.GetNetCode() );
-        }
+        if( connItem )
+            selectAllItemsOnNet( connItem->GetNetCode() );
     }
 
     // Inform other potentially interested tools
@@ -934,20 +1014,18 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
     std::list<MODULE*> modList;
 
     // store all modules that are on that sheet
-    for( auto mitem : board()->Modules() )
+    for( MODULE* module : board()->Modules() )
     {
-        if( mitem != NULL && mitem->GetPath().Contains( aSheetpath ) )
-        {
-            modList.push_back( mitem );
-        }
+        if( module != NULL && module->GetPath().Contains( aSheetpath ) )
+            modList.push_back( module );
     }
 
     //Generate a list of all pads, and of all nets they belong to.
     std::list<int> netcodeList;
-    std::list<BOARD_CONNECTED_ITEM*> padList;
+    std::list<D_PAD*> padList;
     for( MODULE* mmod : modList )
     {
-        for( auto pad : mmod->Pads() )
+        for( D_PAD* pad : mmod->Pads() )
         {
             if( pad->IsConnected() )
             {
@@ -963,10 +1041,8 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
     // auto select trivial connections segments which are launched from the pads
     std::list<TRACK*> launchTracks;
 
-    for( auto pad : padList )
-    {
-        selectAllItemsConnectedToItem( *pad );
-    }
+    for( D_PAD* pad : padList )
+        selectConnectedTracks( *pad, EOT );
 
     // now we need to find all modules that are connected to each of these nets
     // then we need to determine if these modules are in the list of modules
@@ -980,8 +1056,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
         {
             if( mitem->Type() == PCB_PAD_T)
             {
-                bool found = ( std::find( modList.begin(), modList.end(),
-                                    mitem->GetParent() ) != modList.end() );
+                bool found = std::find( modList.begin(), modList.end(), mitem->GetParent() ) != modList.end();
 
                 if( !found )
                 {
@@ -1010,9 +1085,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
     for( int netCode : netcodeList )
     {
         for( BOARD_CONNECTED_ITEM* item : board()->GetConnectivity()->GetNetItems( netCode, trackViaType ) )
-        {
             localConnectionList.push_back( item );
-        }
     }
 
     for( BOARD_ITEM* i : modList )

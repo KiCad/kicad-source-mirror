@@ -224,16 +224,11 @@ private:
     int selectNet( const TOOL_EVENT& aEvent );
 
     /**
-     * Selects all items connected by copper tracks to the given TRACK
-     * This selects tracks and vias but stops at pads
+     * Selects connecteed tracks and vias.
+     *
+     * @param aStopCondition must be one of JUNCTION_T, PAD_T, or EOT.
      */
-    void selectAllItemsConnectedToTrack( TRACK& aSourceTrack );
-
-    /**
-     * Selects all items connected (by copper) to the given item
-     * This selects tracks and vias _and_ continues through pads without selecting
-     */
-    void selectAllItemsConnectedToItem( BOARD_CONNECTED_ITEM& aSourceItem );
+    void selectConnectedTracks( BOARD_CONNECTED_ITEM& aSourceItem, KICAD_T aStopCondition );
 
     /**
      * Selects all items with the given net code
