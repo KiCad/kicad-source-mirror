@@ -61,14 +61,12 @@ namespace AC_KEYS
 {
 
 /**
- * SVG needs some enhancements.
- *
- * Especially, all SVG shapes are imported as curves and converted to a lot of segments.
- * A better approach is to convert to polylines (not yet existing in Pcbnew) and keep
- * arcs and circles as primitives (not yet possible with tinysvg library.
- * So, until these issues are solved, keep disabling SVG import option available.
+ * In Pcbnew, pads can handle a pin function info (this is the schematic pin name)
+ * Because this feature needs some fixes (how to retrieve the info in netlist)
+ * and because it adds a new keyword in *.kicad_pcb files, this is an advanced feature
+ * until it is fully finalized
  */
-static const wxChar EnableSvgImport[] = wxT( "EnableSvgImport" );
+static const wxChar UsePinFunction[] = wxT( "UsePinFunction" );
 
 /**
  * Testing mode for new connectivity algorithm.  Setting this to on will cause all modifications
@@ -167,7 +165,7 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     // Init defaults - this is done in case the config doesn't exist,
     // then the values will remain as set here.
-    m_enableSvgImport = false;
+    m_EnableUsePinFunction = false;
     m_allowLegacyCanvasInGtk3 = false;
     m_realTimeConnectivity = true;
     m_coroutineStackSize = AC_STACK::default_stack;
@@ -205,7 +203,7 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     PARAM_CFG_ARRAY configParams;
 
     configParams.push_back(
-            new PARAM_CFG_BOOL( true, AC_KEYS::EnableSvgImport, &m_enableSvgImport, false ) );
+            new PARAM_CFG_BOOL( true, AC_KEYS::UsePinFunction, &m_EnableUsePinFunction, false ) );
 
     configParams.push_back( new PARAM_CFG_BOOL(
             true, AC_KEYS::AllowLegacyCanvasInGtk3, &m_allowLegacyCanvasInGtk3, false ) );

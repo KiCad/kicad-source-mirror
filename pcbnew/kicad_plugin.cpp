@@ -52,6 +52,8 @@
 #include <convert_basic_shapes_to_polygon.h>    // for enum RECT_CHAMFER_POSITIONS definition
 #include <kiface_i.h>
 
+#include <advanced_config.h>    // for pad pin function feature management
+
 using namespace PCB_KEYS_T;
 
 
@@ -1399,12 +1401,15 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
         StrPrintf( &output, " (net %d %s)", m_mapping->Translate( aPad->GetNetCode() ),
                    m_out->Quotew( aPad->GetNetname() ).c_str() );
 
-    // Add pinfunction, if exists.
-    // Pin function is closely related to nets, so if CTL_OMIT_NETS is set,
-    // omit also pin function (for instance when saved from library editor)
-    if( !(m_ctl & CTL_OMIT_NETS) && !aPad->GetPinFunction().IsEmpty() )
-        StrPrintf( &output, " (pinfunction %s)",
-                   m_out->Quotew( aPad->GetPinFunction() ).c_str() );
+    if( ADVANCED_CFG::GetCfg().m_EnableUsePinFunction )
+    {
+        // Add pinfunction, if exists.
+        // Pin function is closely related to nets, so if CTL_OMIT_NETS is set,
+        // omit also pin function (for instance when saved from library editor)
+        if( !(m_ctl & CTL_OMIT_NETS) && !aPad->GetPinFunction().IsEmpty() )
+            StrPrintf( &output, " (pinfunction %s)",
+                       m_out->Quotew( aPad->GetPinFunction() ).c_str() );
+    }
 
     if( aPad->GetPadToDieLength() != 0 )
         StrPrintf( &output, " (die_length %s)",

@@ -69,9 +69,9 @@ public:
     static const ADVANCED_CFG& GetCfg();
 
     /**
-     * Enable SVG import.
+     * Enable pad pin function handling in pcbnew.
      */
-    bool m_enableSvgImport;
+    bool m_EnableUsePinFunction;
 
     /**
      * Do real-time connectivity
