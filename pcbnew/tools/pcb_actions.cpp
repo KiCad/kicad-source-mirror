@@ -1015,21 +1015,9 @@ TOOL_ACTION PCB_ACTIONS::selectionMenu( "pcbnew.InteractiveSelection.SelectionMe
 TOOL_ACTION PCB_ACTIONS::selectConnection( "pcbnew.InteractiveSelection.SelectConnection",
         AS_GLOBAL,
         'U', LEGACY_HK_NAME( "Select Single Track" ),
-        _( "Select Single Track" ),
-        _( "Selects all track segments & vias between two junctions." ),
+        _( "Select/Expand Connection" ),
+        _( "Selects a connection or expands an existing selection to junctions, pads, or entire connections" ),
         add_tracks_xpm );
-
-TOOL_ACTION PCB_ACTIONS::selectCopper( "pcbnew.InteractiveSelection.SelectCopper",
-        AS_GLOBAL,
-        'I', LEGACY_HK_NAME( "Select Connected Tracks" ),
-        _( "Select Connected Tracks" ),
-        _( "Selects all connected tracks & vias." ),
-        net_highlight_xpm );
-
-TOOL_ACTION PCB_ACTIONS::expandSelectedConnection( "pcbnew.InteractiveSelection.ExpandConnection",
-        AS_GLOBAL, 0, "",
-        _( "Expand Selected Connection" ),
-        _( "Expands the current selection to select a connection between two junctions." ) );
 
 TOOL_ACTION PCB_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",
         AS_GLOBAL, 0, "",

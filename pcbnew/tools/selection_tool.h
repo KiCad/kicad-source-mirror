@@ -208,14 +208,10 @@ private:
      */
     bool doSelectionMenu( GENERAL_COLLECTOR* aItems, const wxString& aTitle );
 
-    ///> Selects a trivial connection (between two junctions) of items in selection
-    int selectConnection( const TOOL_EVENT& aEvent );
-
-    ///> Expands the current selection to select a connection between two junctions
+    /**
+     * Expands the current track selection to the next boundary (junctions, pads, or all)
+     */
     int expandConnection( const TOOL_EVENT& aEvent );
-
-    ///> Selects items with a continuous copper connection to items in selection
-    int selectCopper( const TOOL_EVENT& aEvent );
 
     /**
      * Selects all copper connections belonging to the same net(s) as the

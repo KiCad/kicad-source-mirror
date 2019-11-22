@@ -83,14 +83,9 @@ public:
     /// Runs a selection menu to select from a list of items
     static TOOL_ACTION selectionMenu;
 
-    /// Selects a connection between junctions.
+    /// Selects tracks between junctions or expands an existing selection to pads or the
+    /// entire connection.
     static TOOL_ACTION selectConnection;
-
-    /// Expands the current selection to select a connection between two junctions
-    static TOOL_ACTION expandSelectedConnection;
-
-    /// Selects whole copper connection.
-    static TOOL_ACTION selectCopper;
 
     /// Selects all connections belonging to a single net.
     static TOOL_ACTION selectNet;

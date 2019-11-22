@@ -839,7 +839,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     if( isAlt && isHover
             && ( selectionCopy.HasType( PCB_TRACE_T ) || selectionCopy.HasType( PCB_VIA_T ) ) )
     {
-        m_toolMgr->RunAction( PCB_ACTIONS::expandSelectedConnection, true );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectConnection, true );
     }
 
     if( selectionCopy.Empty() )

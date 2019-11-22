@@ -70,7 +70,6 @@ public:
         AppendSeparator();
 
         Add( PCB_ACTIONS::selectConnection );
-        Add( PCB_ACTIONS::selectCopper );
         Add( PCB_ACTIONS::selectNet );
         Add( PCB_ACTIONS::selectSameSheet );
     }
@@ -87,7 +86,6 @@ private:
         bool sheetSelEnabled = ( S_C::OnlyType( PCB_MODULE_T ) )( selection );
 
         Enable( getMenuId( PCB_ACTIONS::selectNet ), connItem );
-        Enable( getMenuId( PCB_ACTIONS::selectCopper ), connItem );
         Enable( getMenuId( PCB_ACTIONS::selectConnection ), connItem );
         Enable( getMenuId( PCB_ACTIONS::selectSameSheet ), sheetSelEnabled );
     }
@@ -753,63 +751,6 @@ void SELECTION_TOOL::UnbrightenItem( BOARD_ITEM* aItem )
 }
 
 
-void connectedTrackFilter( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-{
-    // Narrow the collection down to a single TRACK item for a trivial connection, or
-    // multiple TRACK items for non-trivial connections.
-    for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
-    {
-        if( !dynamic_cast<TRACK*>( aCollector[i] ) )
-            aCollector.Remove( i );
-    }
-
-    ROUTER_TOOL::NeighboringSegmentFilter( aPt, aCollector );
-}
-
-
-int SELECTION_TOOL::selectConnection( const TOOL_EVENT& aEvent )
-{
-    if( !m_selection.HasType( PCB_TRACE_T ) && !m_selection.HasType( PCB_VIA_T ) )
-        selectCursor( true, connectedTrackFilter );
-
-    if( !m_selection.HasType( PCB_TRACE_T ) && !m_selection.HasType( PCB_VIA_T ) )
-        return 0;
-
-    return expandConnection( aEvent );
-}
-
-
-int SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
-{
-    // copy the selection, since we're going to iterate and modify
-    std::deque<EDA_ITEM*> selectedItems = m_selection.GetItems();
-
-    // We use the BUSY flag to mark connections
-    for( EDA_ITEM* item : selectedItems )
-        item->SetState( BUSY, false );
-
-    for( EDA_ITEM* item : selectedItems )
-    {
-        TRACK* trackItem = dynamic_cast<TRACK*>( item );
-
-        // Track items marked BUSY have already been visited
-        if( trackItem && !trackItem->GetState( BUSY ) )
-        {
-            if( aEvent.IsAction( &PCB_ACTIONS::selectConnection ) )
-                selectConnectedTracks( *trackItem, SCH_JUNCTION_T );
-            else
-                selectConnectedTracks( *trackItem, PCB_PAD_T );
-        }
-    }
-
-    // Inform other potentially interested tools
-    if( m_selection.Size() > 0 )
-        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-
-    return 0;
-}
-
-
 void connectedItemFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
 {
     // Narrow the collection down to a single BOARD_CONNECTED_ITEM for each represented net.
@@ -829,32 +770,39 @@ void connectedItemFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
 }
 
 
-int SELECTION_TOOL::selectCopper( const TOOL_EVENT& aEvent )
+int SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 {
-    bool haveCopper = false;
+    int initialCount = 0;
 
     for( auto item : m_selection.GetItems() )
     {
         if( dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
-            haveCopper = true;;
+            initialCount++;
     }
 
-    if( !haveCopper )
+    if( initialCount == 0 )
         selectCursor( true, connectedItemFilter );
 
-    // copy the selection, since we're going to iterate and modify
-    std::deque<EDA_ITEM*> selectedItems  = m_selection.GetItems();
-
-    // We use the BUSY flag to mark connections
-    for( EDA_ITEM* item : selectedItems )
-        item->SetState( BUSY, false );
-
-    for( EDA_ITEM* item : selectedItems )
+    for( KICAD_T stopCondition : { SCH_JUNCTION_T, PCB_PAD_T, EOT } )
     {
-        BOARD_CONNECTED_ITEM* connItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( item );
+        // copy the selection, since we're going to iterate and modify
+        std::deque<EDA_ITEM*> selectedItems = m_selection.GetItems();
 
-        if( connItem && !connItem->GetState( BUSY ) )
-            selectConnectedTracks( *connItem, EOT );
+        // We use the BUSY flag to mark connections
+        for( EDA_ITEM* item : selectedItems )
+            item->SetState( BUSY, false );
+
+        for( EDA_ITEM* item : selectedItems )
+        {
+            TRACK* trackItem = dynamic_cast<TRACK*>( item );
+
+            // Track items marked BUSY have already been visited
+            if( trackItem && !trackItem->GetState( BUSY ) )
+                selectConnectedTracks( *trackItem, stopCondition );
+        }
+
+        if( m_selection.GetItems().size() > initialCount )
+            break;
     }
 
     // Inform other potentially interested tools
@@ -2300,9 +2248,7 @@ void SELECTION_TOOL::setTransitions()
     Go( &SELECTION_TOOL::find,                ACTIONS::find.MakeEvent() );
 
     Go( &SELECTION_TOOL::filterSelection,     PCB_ACTIONS::filterSelection.MakeEvent() );
-    Go( &SELECTION_TOOL::selectConnection,    PCB_ACTIONS::selectConnection.MakeEvent() );
-    Go( &SELECTION_TOOL::expandConnection,    PCB_ACTIONS::expandSelectedConnection.MakeEvent() );
-    Go( &SELECTION_TOOL::selectCopper,        PCB_ACTIONS::selectCopper.MakeEvent() );
+    Go( &SELECTION_TOOL::expandConnection,    PCB_ACTIONS::selectConnection.MakeEvent() );
     Go( &SELECTION_TOOL::selectNet,           PCB_ACTIONS::selectNet.MakeEvent() );
     Go( &SELECTION_TOOL::selectSameSheet,     PCB_ACTIONS::selectSameSheet.MakeEvent() );
     Go( &SELECTION_TOOL::selectSheetContents, PCB_ACTIONS::selectOnSheetFromEeschema.MakeEvent() );
