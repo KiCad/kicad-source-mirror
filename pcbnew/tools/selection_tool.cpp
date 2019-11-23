@@ -772,7 +772,7 @@ void connectedItemFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
 
 int SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 {
-    int initialCount = 0;
+    unsigned initialCount = 0;
 
     for( auto item : m_selection.GetItems() )
     {
