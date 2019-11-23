@@ -102,8 +102,6 @@ class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
     ACTION_TOOLBAR*   m_microWaveToolBar;
 
 protected:
-    PCB_LAYER_WIDGET* m_Layers;
-
     PARAM_CFG_ARRAY   m_configParams;           // List of Pcbnew configuration settings.
     PARAM_CFG_ARRAY   m_projectFileParams;
 
@@ -347,20 +345,6 @@ public:
 
     void UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, bool aEdit = true );
     void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool aEdit = true );
-
-    /**
-     * Function IsGridVisible() , virtual
-     * @return true if the grid must be shown
-     */
-    bool IsGridVisible() const override;
-
-    /**
-     * Function SetGridVisibility() , virtual
-     * It may be overloaded by derived classes
-     * if you want to store/retrieve the grid visibility in configuration.
-     * @param aVisible = true if the grid must be shown
-     */
-    void SetGridVisibility( bool aVisible ) override;
 
     /**
      * Function GetGridColor() , virtual

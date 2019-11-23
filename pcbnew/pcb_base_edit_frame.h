@@ -28,6 +28,7 @@
 #include <pcb_base_frame.h>
 
 class BOARD_ITEM_CONTAINER;
+class PCB_LAYER_WIDGET;
 
 /**
  * Common, abstract interface for edit frames.
@@ -158,6 +159,15 @@ public:
     }
 
     /**
+     * Function SetGridVisibility()
+     *
+     * Override this function in the PCB_BASE_EDIT_FRAME to refill the layer widget
+     *
+     * @param aVisible = true if the grid must be shown
+     */
+    void SetGridVisibility( bool aVisible ) override;
+
+    /**
      * Function GetRotationAngle()
      * Returns the angle used for rotate operations.
      */
@@ -188,6 +198,9 @@ protected:
     bool m_undoRedoBlocked;
 
     void unitsChangeRefresh() override;
+
+    /// Layer manager. It is the responsibility of the child frames to instantiate this
+    PCB_LAYER_WIDGET* m_Layers;
 };
 
 #endif

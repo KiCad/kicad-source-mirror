@@ -543,8 +543,6 @@ void PCB_EDIT_FRAME::ActivateGalCanvas()
     PCB_BASE_EDIT_FRAME::ActivateGalCanvas();
     COLORS_DESIGN_SETTINGS& cds = Settings().Colors();
 
-    GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
-    GetCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
     GetCanvas()->GetGAL()->SetGridColor( cds.GetLayerColor( LAYER_GRID ) );
     GetCanvas()->GetView()->GetPainter()->GetSettings()->ImportLegacyColors( &cds );
     GetCanvas()->Refresh();
@@ -618,18 +616,6 @@ void PCB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 }
 
 
-bool PCB_EDIT_FRAME::IsGridVisible() const
-{
-    return IsElementVisible( LAYER_GRID );
-}
-
-
-void PCB_EDIT_FRAME::SetGridVisibility(bool aVisible)
-{
-    SetElementVisibility( LAYER_GRID, aVisible );
-}
-
-
 COLOR4D PCB_EDIT_FRAME::GetGridColor()
 {
     return Settings().Colors().GetItemColor( LAYER_GRID );
@@ -671,6 +657,7 @@ void PCB_EDIT_FRAME::onBoardLoaded()
     syncRenderStates();
 
     SetElementVisibility( LAYER_RATSNEST, GetDisplayOptions().m_ShowGlobalRatsnest );
+
     // Update the tracks / vias available sizes list:
     ReCreateAuxiliaryToolbar();
 

@@ -79,19 +79,6 @@ public:
     void SetAutoZoom( bool aEnable ) { m_autoZoom = aEnable; }
 
     /**
-     * Function IsGridVisible() , virtual
-     * @return true if the grid must be shown
-     */
-    bool IsGridVisible() const override;
-
-    /**
-     * Function SetGridVisibility() , virtual
-     * It may be overloaded by derived classes
-     * if you want to store/retrieve the grid visibility in configuration.
-     * @param aVisible = true if the grid must be shown
-     */
-    void SetGridVisibility( bool aVisible ) override;
-    /**
      * Function GetGridColor() , virtual
      * @return the color of the grid
      */

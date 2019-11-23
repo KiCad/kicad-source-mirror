@@ -27,7 +27,6 @@
 #include <fp_tree_synchronizing_adapter.h>
 
 class PCB_LAYER_BOX_SELECTOR;
-class PCB_LAYER_WIDGET;
 class FP_LIB_TABLE;
 class EDGE_MODULE;
 class FOOTPRINT_TREE_PANE;
@@ -280,18 +279,6 @@ public:
     void SetElementVisibility( GAL_LAYER_ID aElement, bool aNewState );
 
     /**
-     * @return true if the grid must be shown
-     */
-    bool IsGridVisible() const override;
-
-    /**
-     * It may be overloaded by derived classes
-     * if you want to store/retrieve the grid visibility in configuration.
-     * @param aVisible = true if the grid must be shown
-     */
-    void SetGridVisibility( bool aVisible ) override;
-
-    /**
      * @return the color of the grid
      */
     COLOR4D GetGridColor() override;
@@ -358,7 +345,6 @@ protected:
     FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent, EDA_DRAW_PANEL_GAL::GAL_TYPE aBackend );
 
     PCB_LAYER_BOX_SELECTOR* m_selLayerBox;  // a combo box to display and select active layer
-    PCB_LAYER_WIDGET*       m_Layers;       // the layer manager
     PARAM_CFG_ARRAY         m_configParams; // List of footprint editor configuration parameters.
 
     /**

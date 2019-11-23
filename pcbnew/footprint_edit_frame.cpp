@@ -723,18 +723,6 @@ void FOOTPRINT_EDIT_FRAME::FocusOnLibID( const LIB_ID& aLibID )
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::IsGridVisible() const
-{
-    return IsElementVisible( LAYER_GRID );
-}
-
-
-void FOOTPRINT_EDIT_FRAME::SetGridVisibility(bool aVisible)
-{
-    SetElementVisibility( LAYER_GRID, aVisible );
-}
-
-
 bool FOOTPRINT_EDIT_FRAME::IsElementVisible( GAL_LAYER_ID aElement ) const
 {
     return GetBoard()->IsElementVisible( aElement );
@@ -814,10 +802,6 @@ void FOOTPRINT_EDIT_FRAME::ActivateGalCanvas()
 
     // Be sure the axis are enabled
     GetCanvas()->GetGAL()->SetAxesEnabled( true );
-
-    // Setup the grid
-    GetCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
-    GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
 
     updateView();
 

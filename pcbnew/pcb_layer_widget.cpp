@@ -410,6 +410,8 @@ void PCB_LAYER_WIDGET::ReFillRender()
 
             if( renderRow.id == LAYER_RATSNEST )
                 renderRow.state = myframe->GetDisplayOptions().m_ShowGlobalRatsnest;
+            else if( renderRow.id == LAYER_GRID )
+                renderRow.state = myframe->IsGridVisible();
             else
                 renderRow.state = board->IsElementVisible(
                         static_cast<GAL_LAYER_ID>( renderRow.id ) );
@@ -692,14 +694,13 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
             myframe->OnModify();
     }
 
-    brd->SetElementVisibility( static_cast<GAL_LAYER_ID>( aId ), isEnabled );
-
+    // Grid is not set through the board visibility
     if( aId == LAYER_GRID )
-    {
-        myframe->GetCanvas()->GetGAL()->SetGridVisibility( myframe->IsGridVisible() );
-        myframe->GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-    }
-    else if( aId == LAYER_RATSNEST )
+        myframe->SetGridVisibility( isEnabled );
+    else
+        brd->SetElementVisibility( static_cast<GAL_LAYER_ID>( aId ), isEnabled );
+
+    if( aId == LAYER_RATSNEST )
     {
         // don't touch the layers. ratsnest is enabled on per-item basis.
         myframe->GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
@@ -712,7 +713,7 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
             myframe->GetCanvas()->GetView()->UpdateDisplayOptions( opt );
         }
     }
-    else
+    else if( aId != LAYER_GRID )
         myframe->GetCanvas()->GetView()->SetLayerVisible( aId, isEnabled );
 
     myframe->GetCanvas()->Refresh();

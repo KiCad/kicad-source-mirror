@@ -84,6 +84,7 @@ public:
     int  m_MaxLinksShowed;              // in track creation: number of hairwires shown
     bool m_ShowModuleRatsnest;          // When moving a footprint: allows displaying a ratsnest
     bool m_ShowGlobalRatsnest;          // If true, show all
+    bool m_ShowGrid;                    // Show the grid on the canvas
     bool m_DisplayRatsnestLinesCurved;  // Airwires can be drawn as straight lines (false)
                                         // or curved lines (true)
 

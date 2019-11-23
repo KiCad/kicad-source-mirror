@@ -55,5 +55,6 @@ PCB_DISPLAY_OPTIONS::PCB_DISPLAY_OPTIONS()
     m_MaxLinksShowed          = 3;        // in track creation: number of hairwires shown
     m_ShowModuleRatsnest      = true;     // When moving a footprint: allows displaying a ratsnest
     m_DisplayRatsnestLinesCurved = false;
-    m_ShowGlobalRatsnest = true;
+    m_ShowGlobalRatsnest      = true;
+    m_ShowGrid                = true;
 }

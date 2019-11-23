@@ -25,6 +25,7 @@
 #include <pcb_base_edit_frame.h>
 #include <tool/tool_manager.h>
 #include <pcb_draw_panel_gal.h>
+#include <pcb_layer_widget.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <class_board.h>
 #include <view/view.h>
@@ -113,3 +114,21 @@ void PCB_BASE_EDIT_FRAME::unitsChangeRefresh()
 }
 
 
+void PCB_BASE_EDIT_FRAME::SetGridVisibility( bool aVisible )
+{
+    PCB_BASE_FRAME::SetGridVisibility( aVisible );
+
+    // We must notify the layer widget to refill the render view to update the grid checkbox
+    if( m_Layers )
+    {
+        m_Layers->Freeze();
+
+        // TODO (ISM): Implement a SyncRenderState handler inside the layer widget to use instead
+        // This current method redraws the entire render panel and looks bad
+        m_Layers->ReFillRender();
+        m_Layers->Thaw();
+    }
+
+    // TODO (ISM): Remove this by changing toolbars to use the EVT_UPDATE_UI to get the state
+    SyncToolbars();
+}

@@ -415,6 +415,23 @@ public:
     void SetFastGrid2();
 
     /**
+     * Function IsGridVisible()
+     *
+     * @return true if the grid is shown
+     */
+    virtual bool IsGridVisible() const override;
+
+    /**
+     * Function SetGridVisibility()
+     * Turn the display of the canvas grid on/off
+     *
+     * Note: After calling, the view must be refreshed to update the grid display
+     *
+     * @param aVisible = true if the grid is shown
+     */
+    virtual void SetGridVisibility( bool aVisible ) override;
+
+    /**
      * Function DisplayGridMsg()
      *
      * Display the current grid pane on the status bar.

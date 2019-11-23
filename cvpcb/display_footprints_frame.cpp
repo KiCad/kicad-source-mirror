@@ -304,18 +304,6 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER&, int )
 }
 
 
-bool DISPLAY_FOOTPRINTS_FRAME::IsGridVisible() const
-{
-    return m_drawGrid;
-}
-
-
-void DISPLAY_FOOTPRINTS_FRAME::SetGridVisibility(bool aVisible)
-{
-    m_drawGrid = aVisible;
-}
-
-
 COLOR4D DISPLAY_FOOTPRINTS_FRAME::GetGridColor()
 {
     return COLOR4D( DARKGRAY );
@@ -444,9 +432,10 @@ void DISPLAY_FOOTPRINTS_FRAME::SyncToolbars()
     m_mainToolBar->Toggle( ACTIONS::zoomTool, IsCurrentTool( ACTIONS::zoomTool ) );
     m_mainToolBar->Refresh();
 
+    m_optionsToolBar->Toggle( ACTIONS::toggleGrid,    IsGridVisible() );
     m_optionsToolBar->Toggle( ACTIONS::selectionTool, IsCurrentTool( ACTIONS::selectionTool ) );
-    m_optionsToolBar->Toggle( ACTIONS::measureTool, IsCurrentTool( ACTIONS::measureTool ) );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::measureTool,   IsCurrentTool( ACTIONS::measureTool ) );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits,   GetUserUnits() != INCHES );
     m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == INCHES );
     m_optionsToolBar->Refresh();
 }

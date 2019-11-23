@@ -219,6 +219,9 @@ void FOOTPRINT_EDIT_FRAME::SyncToolbars()
 {
 #define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, IsCurrentTool( tool ) )
 
+    if( !m_mainToolBar || !m_optionsToolBar || !m_drawToolBar )
+        return;
+
     auto& opts = GetDisplayOptions();
 
     if( IsCurrentFPFromBoard() )

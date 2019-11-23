@@ -663,6 +663,9 @@ void PCB_EDIT_FRAME::SyncToolbars()
 {
 #define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, IsCurrentTool( tool ) )
 
+    if( !m_mainToolBar || !m_optionsToolBar || !m_drawToolBar || !m_microWaveToolBar )
+        return;
+
     auto&                       opts = GetDisplayOptions();
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
     int                         zoneMode = opts.m_DisplayZonesMode;

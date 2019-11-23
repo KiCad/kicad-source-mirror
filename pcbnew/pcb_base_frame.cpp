@@ -836,6 +836,32 @@ void PCB_BASE_FRAME::SetFastGrid2()
 }
 
 
+bool PCB_BASE_FRAME::IsGridVisible() const
+{
+    return m_DisplayOptions.m_ShowGrid;
+}
+
+
+void PCB_BASE_FRAME::SetGridVisibility( bool aVisible )
+{
+    m_DisplayOptions.m_ShowGrid = aVisible;
+
+    // Update the display with the new grid
+    if( GetCanvas() )
+    {
+        // Check to ensure these exist, since this function could be called before
+        // the GAL and View have been created
+        if( GetCanvas()->GetGAL() )
+            GetCanvas()->GetGAL()->SetGridVisibility( aVisible );
+
+        if( GetCanvas()->GetView() )
+            GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+
+        GetCanvas()->Refresh();
+    }
+}
+
+
 PCB_DRAW_PANEL_GAL* PCB_BASE_FRAME::GetCanvas() const
 {
     return static_cast<PCB_DRAW_PANEL_GAL*>( EDA_DRAW_FRAME::GetCanvas() );
@@ -868,5 +894,9 @@ void PCB_BASE_FRAME::ActivateGalCanvas()
     canvas->GetView()->RecacheAllItems();
     canvas->SetEventDispatcher( m_toolDispatcher );
     canvas->StartDrawing();
+
+    // Initialize the grid settings
+    GetCanvas()->GetGAL()->SetGridSize( VECTOR2D( GetScreen()->GetGridSize() ) );
+    GetCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
 }
 
