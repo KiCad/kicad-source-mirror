@@ -74,7 +74,7 @@ void PCB_PARSER::init()
     }
 
     m_layerMasks[ "*.Cu" ]      = LSET::AllCuMask();
-    m_layerMasks["*In.Cu"] = LSET::InternalCuMask();
+    m_layerMasks[ "*In.Cu" ]    = LSET::InternalCuMask();
     m_layerMasks[ "F&B.Cu" ]    = LSET( 2, F_Cu, B_Cu );
     m_layerMasks[ "*.Adhes" ]   = LSET( 2, B_Adhes, F_Adhes );
     m_layerMasks[ "*.Paste" ]   = LSET( 2, B_Paste, F_Paste );
