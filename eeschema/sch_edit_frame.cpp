@@ -317,6 +317,12 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
     g_CurrentSheet = nullptr;
     g_ConnectionGraph = nullptr;
     g_RootSheet = NULL;
+
+    // Since the file menu contains file history menus, we must ensure that the menu
+    // destructor is called before the file history objects are deleted since their destructor
+    // unregisters the menu from the history.
+    wxMenu* fileMenu = GetMenuBar()->Remove( 0 );
+    delete fileMenu;
 }
 
 

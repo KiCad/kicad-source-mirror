@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <filehistory.h>
 #include <kiface_i.h>
 #include <menus_helpers.h>
 #include <pgm_base.h>
@@ -47,28 +48,26 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
         return GetScreen() && GetScreen()->IsModify();
     };
 
-    static ACTION_MENU* openRecentMenu;  // Open Recent submenu, static to remember this menu
+    static FILE_HISTORY_MENU* openRecentMenu;  // Open Recent submenu, static to remember this menu
+    FILE_HISTORY&             recentFiles = Kiface().GetFileHistory();
 
-    // Before deleting, remove the menus managed by m_fileHistory
-    // (the file history will be updated when adding/removing files in history
-    if( openRecentMenu )
-        Kiface().GetFileHistory().RemoveMenu( openRecentMenu );
+    // Create the menu if it does not exist. Adding a file to/from the history
+    // will automatically refresh the menu.
+    if( !openRecentMenu )
+    {
+        openRecentMenu = new FILE_HISTORY_MENU( recentFiles );
+        openRecentMenu->SetTool( selTool );
+        openRecentMenu->SetTitle( _( "Open Recent" ) );
+        openRecentMenu->SetIcon( recent_xpm );
+    }
 
     //-- File menu -------------------------------------------------------
     //
     CONDITIONAL_MENU* fileMenu = new CONDITIONAL_MENU( false, selTool );
 
-    openRecentMenu = new ACTION_MENU( false );
-    openRecentMenu->SetTool( selTool );
-    openRecentMenu->SetTitle( _( "Open Recent" ) );
-    openRecentMenu->SetIcon( recent_xpm );
-
-    Kiface().GetFileHistory().UseMenu( openRecentMenu );
-    Kiface().GetFileHistory().AddFilesToMenu();
-
     fileMenu->AddItem( ACTIONS::doNew,         SELECTION_CONDITIONS::ShowAlways );
     fileMenu->AddItem( ACTIONS::open,          SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddMenu( openRecentMenu,         SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddMenu( openRecentMenu,         FILE_HISTORY::FileHistoryNotEmpty( recentFiles ) );
 
     fileMenu->AddSeparator();
     fileMenu->AddItem( ACTIONS::save,          modifiedDocumentCondition );

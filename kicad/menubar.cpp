@@ -25,6 +25,7 @@
  */
 
 #include <bitmaps.h>
+#include <filehistory.h>
 #include <menus_helpers.h>
 #include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>
@@ -45,26 +46,25 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     //-- File menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, controlTool );
-    static ACTION_MENU* openRecentMenu;
+    CONDITIONAL_MENU*         fileMenu = new CONDITIONAL_MENU( false, controlTool );
+    FILE_HISTORY&             fileHistory = PgmTop().GetFileHistory();
+    static FILE_HISTORY_MENU* openRecentMenu;
 
-    // Before deleting, remove the menus managed by m_fileHistory
-    // (the file history will be updated when adding/removing files in history)
-    if( openRecentMenu )
-        PgmTop().GetFileHistory().RemoveMenu( openRecentMenu );
-
-    openRecentMenu = new ACTION_MENU( false );
-    openRecentMenu->SetTool( controlTool );
-    openRecentMenu->SetTitle( _( "Open Recent" ) );
-    openRecentMenu->SetIcon( recent_xpm );
-
-    PgmTop().GetFileHistory().UseMenu( openRecentMenu );
-    PgmTop().GetFileHistory().AddFilesToMenu( openRecentMenu );
+    // Create the menu if it does not exist. Adding a file to/from the history
+    // will automatically refresh the menu.
+    if( !openRecentMenu )
+    {
+        openRecentMenu = new FILE_HISTORY_MENU( fileHistory, _( "Clear Recent Projects" ) );
+        openRecentMenu->SetTool( controlTool );
+        openRecentMenu->SetTitle( _( "Open Recent" ) );
+        openRecentMenu->SetIcon( recent_xpm );
+    }
 
     fileMenu->AddItem( KICAD_MANAGER_ACTIONS::newProject,      SELECTION_CONDITIONS::ShowAlways );
     fileMenu->AddItem( KICAD_MANAGER_ACTIONS::newFromTemplate, SELECTION_CONDITIONS::ShowAlways );
     fileMenu->AddItem( KICAD_MANAGER_ACTIONS::openProject,     SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddMenu( openRecentMenu,                         SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddMenu( openRecentMenu,
+                       FILE_HISTORY::FileHistoryNotEmpty( fileHistory ) );
 
     fileMenu->AddSeparator();
     fileMenu->AddItem( ACTIONS::saveAs,                        SELECTION_CONDITIONS::ShowAlways );

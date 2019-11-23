@@ -46,80 +46,77 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     //-- File menu -------------------------------------------------------
     //
-    CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, selTool );
-    static ACTION_MENU* openRecentGbrMenu;
-    static ACTION_MENU* openRecentDrlMenu;
-    static ACTION_MENU* openRecentJobMenu;
-    static ACTION_MENU* openRecentZipMenu;
+    CONDITIONAL_MENU*         fileMenu = new CONDITIONAL_MENU( false, selTool );
+    static FILE_HISTORY_MENU* openRecentGbrMenu;
+    static FILE_HISTORY_MENU* openRecentDrlMenu;
+    static FILE_HISTORY_MENU* openRecentJobMenu;
+    static FILE_HISTORY_MENU* openRecentZipMenu;
+    FILE_HISTORY&             recentGbrFiles = Kiface().GetFileHistory();
 
-    // Add this menu to list menu managed by m_fileHistory
-    // (the file history will be updated when adding/removing files in history)
-    if( openRecentGbrMenu )
-        Kiface().GetFileHistory().RemoveMenu( openRecentGbrMenu );
 
-    openRecentGbrMenu = new ACTION_MENU( false );
-    openRecentGbrMenu->SetTool( selTool );
-    openRecentGbrMenu->SetTitle( _( "Open Recent Gerber" ) );
-    openRecentGbrMenu->SetIcon( recent_xpm );
+    // Create the gerber file menu if it does not exist. Adding a file to/from the history
+    // will automatically refresh the menu.
+    if( !openRecentGbrMenu )
+    {
+        openRecentGbrMenu =
+                new FILE_HISTORY_MENU( recentGbrFiles, _( "Clear Recent Gerber Files" ) );
+        openRecentGbrMenu->SetTool( selTool );
+        openRecentGbrMenu->SetTitle( _( "Open Recent Gerber File" ) );
+        openRecentGbrMenu->SetIcon( recent_xpm );
+    }
 
-    Kiface().GetFileHistory().UseMenu( openRecentGbrMenu );
-    Kiface().GetFileHistory().AddFilesToMenu();
+    // Create the drill file menu if it does not exist. Adding a file to/from the history
+    // will automatically refresh the menu.
+    if( !openRecentDrlMenu )
+    {
+        openRecentDrlMenu =
+                new FILE_HISTORY_MENU( m_drillFileHistory, _( "Clear Recent Drill Files" ) );
+        openRecentDrlMenu->SetTool( selTool );
+        openRecentDrlMenu->SetTitle( _( "Open Recent Drill File" ) );
+        openRecentDrlMenu->SetIcon( recent_xpm );
+    }
 
-    // Add drill file menu and the drill file history
-    if( openRecentDrlMenu )
-        m_drillFileHistory.RemoveMenu( openRecentDrlMenu );
+    // Create the job file menu if it does not exist. Adding a file to/from the history
+    // will automatically refresh the menu.
+    if( !openRecentJobMenu )
+    {
+        openRecentJobMenu =
+                new FILE_HISTORY_MENU( m_jobFileHistory, _( "Clear Recent Job Files" ) );
+        openRecentJobMenu->SetTool( selTool );
+        openRecentJobMenu->SetTitle( _( "Open Recent Job File" ) );
+        openRecentJobMenu->SetIcon( recent_xpm );
+    }
 
-    openRecentDrlMenu = new ACTION_MENU( false );
-    openRecentDrlMenu->SetTool( selTool );
-    openRecentDrlMenu->SetTitle( _( "Open Recent Drill File" ) );
-    openRecentDrlMenu->SetIcon( recent_xpm );
-
-    m_drillFileHistory.UseMenu( openRecentDrlMenu );
-    m_drillFileHistory.AddFilesToMenu( );
-
-    // Add job file menu and the job file history
-    if( openRecentJobMenu )
-        m_jobFileHistory.RemoveMenu( openRecentJobMenu );
-
-    openRecentJobMenu = new ACTION_MENU( false );
-    openRecentJobMenu->SetTool( selTool );
-    openRecentJobMenu->SetTitle( _( "Open Recent Job" ) );
-
-    openRecentJobMenu->SetIcon( recent_xpm );
-    m_jobFileHistory.UseMenu( openRecentJobMenu );
-    m_jobFileHistory.AddFilesToMenu( );
-
-    // Add zip file menu and the zip file history
-    if( openRecentZipMenu )
-        m_zipFileHistory.RemoveMenu( openRecentZipMenu );
-
-    openRecentZipMenu = new ACTION_MENU( false );
-    openRecentZipMenu->SetTool( selTool );
-    openRecentZipMenu->SetTitle( _( "Open Recent Zip" ) );
-    openRecentZipMenu->SetIcon( recent_xpm );
-
-    m_zipFileHistory.UseMenu( openRecentZipMenu );
-    m_zipFileHistory.AddFilesToMenu( );
+    // Create the zip file menu if it does not exist. Adding a file to/from the history
+    // will automatically refresh the menu.
+    if( !openRecentZipMenu )
+    {
+        openRecentZipMenu =
+                new FILE_HISTORY_MENU( m_zipFileHistory, _( "Clear Recent Zip Files" ) );
+        openRecentZipMenu->SetTool( selTool );
+        openRecentZipMenu->SetTitle( _( "Open Recent Zip File" ) );
+        openRecentZipMenu->SetIcon( recent_xpm );
+    }
 
     fileMenu->AddItem( wxID_FILE, _( "Open &Gerber File(s)..." ),
                        _( "Open Gerber file(s) on the current layer. Previous data will be deleted" ),
                        load_gerber_xpm,            SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddMenu( openRecentGbrMenu,          SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddMenu( openRecentGbrMenu,          FILE_HISTORY::FileHistoryNotEmpty( recentGbrFiles ) );
 
     fileMenu->AddItem( ID_GERBVIEW_LOAD_DRILL_FILE, _( "Open &Excellon Drill File(s)..." ),
                        _( "Open Excellon drill file(s) on the current layer. Previous data will be deleted" ),
                        gerbview_drill_file_xpm,    SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddMenu( openRecentDrlMenu,          SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddMenu( openRecentDrlMenu,          FILE_HISTORY::FileHistoryNotEmpty( m_drillFileHistory ) );
 
     fileMenu->AddItem( ID_GERBVIEW_LOAD_JOB_FILE, _( "Open Gerber &Job File..." ),
                        _( "Open a Gerber job file and its associated gerber files" ),
                        gerber_job_file_xpm,        SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddMenu( openRecentJobMenu,          SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddMenu( openRecentJobMenu,          FILE_HISTORY::FileHistoryNotEmpty( m_jobFileHistory ) );
 
     fileMenu->AddItem( ID_GERBVIEW_LOAD_ZIP_ARCHIVE_FILE, _( "Open &Zip Archive File..." ),
                        _( "Open a zipped archive (Gerber and Drill) file" ),
                        zip_xpm,                    SELECTION_CONDITIONS::ShowAlways );
-    fileMenu->AddMenu( openRecentZipMenu,          SELECTION_CONDITIONS::ShowAlways );
+    fileMenu->AddMenu( openRecentZipMenu,          FILE_HISTORY::FileHistoryNotEmpty( m_zipFileHistory ) );
 
     fileMenu->AddSeparator();
     fileMenu->AddItem( ID_GERBVIEW_ERASE_ALL,  _( "Clear &All Layers" ),

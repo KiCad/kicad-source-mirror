@@ -75,6 +75,7 @@ class ACTIONS;
 class PAGED_DIALOG;
 class DIALOG_EDIT_LIBRARY_TABLES;
 class PANEL_HOTKEYS_EDITOR;
+class FILE_HISTORY;
 
 
 enum id_librarytype {
@@ -328,7 +329,7 @@ public:
     virtual void SaveSettings( wxConfigBase* aCfg );
 
     /**
-     * @return a base name prefix used in Load/Save settings to build the full name of keys 
+     * @return a base name prefix used in Load/Save settings to build the full name of keys
      * used in config.
      * This is usually the name of the frame set by CTOR, except for frames shown in multiple
      * modes in which case the m_configName must be set to the base name so that a single
@@ -365,27 +366,27 @@ public:
      * Fetches the file name from the file history list.
      *
      * This removes the selected file, if this file does not exist.  The menu is also updated,
-     * if wxFileHistory::UseMenu was called at init time
+     * if FILE_HISTORY::UseMenu was called at init time
      *
      * @param cmdId The command ID associated with the \a aFileHistory object.
      * @param type Please document me!
-     * @param aFileHistory The wxFileHistory in use. If null, the main application file
+     * @param aFileHistory The FILE_HISTORY in use. If null, the main application file
      *                     history is used
      * @return a wxString containing the selected filename
      */
     wxString GetFileFromHistory( int cmdId, const wxString& type,
-                                 wxFileHistory* aFileHistory = NULL );
+                                 FILE_HISTORY* aFileHistory = NULL );
 
     /**
      * Update the list of recently opened files.
      *
-     * The menu is also updated, if wxFileHistory::UseMenu was called at init time.
+     * The menu is also updated, if FILE_HISTORY::UseMenu was called at init time.
      *
      * @param FullFileName The full file name including the path.
-     * @param aFileHistory The wxFileHistory in use.
+     * @param aFileHistory The FILE_HISTORY in use.
      * If NULL, the main application file history is used.
      */
-    void UpdateFileHistory( const wxString& FullFileName, wxFileHistory * aFileHistory = NULL );
+    void UpdateFileHistory( const wxString& FullFileName, FILE_HISTORY* aFileHistory = NULL );
 
     void SetMruPath( const wxString& aPath ) { m_mruPath = aPath; }
 
@@ -436,14 +437,14 @@ public:
     /**
      * Update the status bar information.
      *
-     * The status bar can draw itself.  This is not a drawing function per se, but rather 
-     * updates lines of text held by the components within the status bar which is owned 
+     * The status bar can draw itself.  This is not a drawing function per se, but rather
+     * updates lines of text held by the components within the status bar which is owned
      * by the wxFrame.
      */
     virtual void UpdateStatusBar() { }
 
     /**
-     * Update the toolbars (mostly settings/check buttons/checkboxes) with the current 
+     * Update the toolbars (mostly settings/check buttons/checkboxes) with the current
      * controller state.
      */
     virtual void SyncToolbars() { };
@@ -458,7 +459,7 @@ public:
      * Update menus, toolbars, local variables, etc.
      */
     virtual void CommonSettingsChanged( bool aEnvVarsChanged );
-    
+
     /**
      * Notification to refresh the drawing canvas (if any).
      */

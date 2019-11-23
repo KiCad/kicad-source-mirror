@@ -29,6 +29,7 @@
 #include <bitmaps.h>
 #include <build_version.h>
 #include <executable_names.h>
+#include <filehistory.h>
 #include <gestfich.h>
 #include <kiway.h>
 #include <kiway_express.h>
@@ -173,6 +174,12 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
     delete m_toolManager;
 
     m_auimgr.UnInit();
+
+    // Since the file menu contains file history menus, we must ensure that the menu
+    // destructor is called before the file history objects are deleted since their destructor
+    // unregisters the menu from the history.
+    wxMenu* fileMenu = GetMenuBar()->Remove( 0 );
+    delete fileMenu;
 }
 
 

@@ -110,24 +110,6 @@ LANGUAGE_DESCR LanguagesList[] =
 #define _(s) wxGetTranslation((s))
 
 
-FILE_HISTORY::FILE_HISTORY( size_t aMaxFiles, int aBaseFileId ) :
-        wxFileHistory( std::min( aMaxFiles, (size_t) MAX_FILE_HISTORY_SIZE ) )
-{
-    SetBaseId( aBaseFileId );
-}
-
-
-void FILE_HISTORY::SetMaxFiles( size_t aMaxFiles )
-{
-    m_fileMaxFiles = std::min( aMaxFiles, (size_t) MAX_FILE_HISTORY_SIZE );
-
-    size_t numFiles = m_fileHistory.size();
-
-    while( numFiles > m_fileMaxFiles )
-        RemoveFileFromHistory( --numFiles );
-}
-
-
 PGM_BASE::PGM_BASE()
 {
     m_pgm_checker = NULL;

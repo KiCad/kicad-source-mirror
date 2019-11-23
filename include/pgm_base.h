@@ -34,7 +34,6 @@
 #include <map>
 #include <memory>
 #include <wx/filename.h>
-#include <wx/filehistory.h>
 #include <search_stack.h>
 #include <wx/gdicmn.h>
 #include <bitmaps_png/bitmap_def.h>
@@ -91,15 +90,6 @@ struct LANGUAGE_DESCR
 
     /// Set to true if the m_Lang_Label must not be translated
     bool        m_DoNotTranslate;
-};
-
-
-class FILE_HISTORY : public wxFileHistory
-{
-public:
-    FILE_HISTORY( size_t aMaxFiles, int aBaseFileId );
-
-    void SetMaxFiles( size_t aMaxFiles );
 };
 
 

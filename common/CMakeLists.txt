@@ -289,6 +289,7 @@ set( COMMON_SRCS
     exceptions.cpp
     executable_names.cpp
     filename_resolver.cpp
+    filehistory.cpp
     filter_reader.cpp
     footprint_filter.cpp
     footprint_info.cpp

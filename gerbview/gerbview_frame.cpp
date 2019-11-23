@@ -226,6 +226,12 @@ GERBVIEW_FRAME::~GERBVIEW_FRAME()
 
     GetGerberLayout()->GetImagesList()->DeleteAllImages();
     delete m_gerberLayout;
+
+    // Since the file menu contains file history menus, we must ensure that the menu
+    // destructor is called before the file history objects are deleted since their destructor
+    // unregisters the menu from the history.
+    wxMenu* fileMenu = GetMenuBar()->Remove( 0 );
+    delete fileMenu;
 }
 
 

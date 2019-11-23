@@ -34,11 +34,12 @@
 #include <wx/string.h>
 
 #include <common.h>
+#include <filehistory.h>
 #include <hotkeys_basic.h>
 #include <kiway.h>
 #include <richio.h>
-#include <wildcards_and_files_ext.h>
 #include <systemdirsappend.h>
+#include <wildcards_and_files_ext.h>
 
 #include <stdexcept>
 

@@ -66,7 +66,7 @@ private:
 
 public:
     PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent );
-    ~PL_EDITOR_FRAME() {}
+    ~PL_EDITOR_FRAME();
 
     PROPERTIES_FRAME* GetPropertiesFrame() { return m_propertiesPagelayout; }
 

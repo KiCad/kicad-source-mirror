@@ -42,6 +42,7 @@
 #include <tool/action_manager.h>
 #include <menus_helpers.h>
 #include <tool/actions.h>
+#include <filehistory.h>
 
 
 /// The default auto save interval is 10 minutes.
@@ -561,10 +562,9 @@ void EDA_BASE_FRAME::PrintMsg( const wxString& text )
 }
 
 
-void EDA_BASE_FRAME::UpdateFileHistory( const wxString& FullFileName,
-                                        wxFileHistory* aFileHistory )
+void EDA_BASE_FRAME::UpdateFileHistory( const wxString& FullFileName, FILE_HISTORY* aFileHistory )
 {
-    wxFileHistory* fileHistory = aFileHistory;
+    FILE_HISTORY* fileHistory = aFileHistory;
 
     if( !fileHistory )
         fileHistory = &Kiface().GetFileHistory();
@@ -574,9 +574,9 @@ void EDA_BASE_FRAME::UpdateFileHistory( const wxString& FullFileName,
 
 
 wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
-                                             wxFileHistory* aFileHistory )
+                                             FILE_HISTORY* aFileHistory )
 {
-    wxFileHistory* fileHistory = aFileHistory;
+    FILE_HISTORY* fileHistory = aFileHistory;
 
     if( !fileHistory )
         fileHistory = &Kiface().GetFileHistory();

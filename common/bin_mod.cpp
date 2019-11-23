@@ -24,8 +24,9 @@
 
 #include <bin_mod.h>
 #include <common.h>
-#include <pgm_base.h>
+#include <filehistory.h>
 #include <id.h>         // for ID_FILE1 and FILE_HISTORY_SIZE
+#include <pgm_base.h>
 
 
 BIN_MOD::BIN_MOD( const char* aName ) :

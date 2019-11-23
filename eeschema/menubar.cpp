@@ -24,6 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <filehistory.h>
 #include <kiface_i.h>
 #include <menus_helpers.h>
 #include <pgm_base.h>
@@ -52,27 +53,26 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     //-- File menu -----------------------------------------------------------
     //
-    CONDITIONAL_MENU*   fileMenu = new CONDITIONAL_MENU( false, selTool );
-    static ACTION_MENU* openRecentMenu;
+    CONDITIONAL_MENU*         fileMenu = new CONDITIONAL_MENU( false, selTool );
+    static FILE_HISTORY_MENU* openRecentMenu;
 
     if( Kiface().IsSingle() )   // not when under a project mgr
     {
-        // Add this menu to list menu managed by m_fileHistory
-        // (the file history will be updated when adding/removing files in history)
-        if( openRecentMenu )
-            Kiface().GetFileHistory().RemoveMenu( openRecentMenu );
+        FILE_HISTORY& fileHistory = Kiface().GetFileHistory();
 
-        openRecentMenu = new ACTION_MENU( false );
-        openRecentMenu->SetTool( selTool );
-        openRecentMenu->SetTitle( _( "Open Recent" ) );
-        openRecentMenu->SetIcon( recent_xpm );
-
-        Kiface().GetFileHistory().UseMenu( openRecentMenu );
-        Kiface().GetFileHistory().AddFilesToMenu( openRecentMenu );
+        // Create the menu if it does not exist. Adding a file to/from the history
+        // will automatically refresh the menu.
+        if( !openRecentMenu )
+        {
+            openRecentMenu = new FILE_HISTORY_MENU( fileHistory );
+            openRecentMenu->SetTool( selTool );
+            openRecentMenu->SetTitle( _( "Open Recent" ) );
+            openRecentMenu->SetIcon( recent_xpm );
+        }
 
         fileMenu->AddItem( ACTIONS::doNew,         EE_CONDITIONS::ShowAlways );
         fileMenu->AddItem( ACTIONS::open,          EE_CONDITIONS::ShowAlways );
-        fileMenu->AddMenu( openRecentMenu,         EE_CONDITIONS::ShowAlways );
+        fileMenu->AddMenu( openRecentMenu,         FILE_HISTORY::FileHistoryNotEmpty( fileHistory ) );
         fileMenu->AddSeparator();
     }
 

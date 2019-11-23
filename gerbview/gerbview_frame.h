@@ -22,7 +22,7 @@
 #ifndef  WX_GERBER_STRUCT_H
 #define  WX_GERBER_STRUCT_H
 
-
+#include <filehistory.h>
 #include <pgm_base.h>
 #include <config_params.h>
 #include <eda_draw_frame.h>

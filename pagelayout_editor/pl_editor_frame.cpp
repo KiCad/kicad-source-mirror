@@ -198,6 +198,15 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 }
 
 
+PL_EDITOR_FRAME::~PL_EDITOR_FRAME()
+{
+    // Since the file menu contains file history menus, we must ensure that the menu
+    // destructor is called before the file history objects are deleted since their destructor
+    // unregisters the menu from the history.
+    wxMenu* fileMenu = GetMenuBar()->Remove( 0 );
+    delete fileMenu;
+}
+
 void PL_EDITOR_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
