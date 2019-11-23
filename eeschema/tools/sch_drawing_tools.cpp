@@ -420,22 +420,6 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     wxPoint   cursorPos;
     KICAD_T   type = aEvent.Parameter<KICAD_T>();
 
-    auto itemFactory = [&] () -> SCH_ITEM* {
-        switch( type )
-        {
-        case SCH_NO_CONNECT_T:
-            return new SCH_NO_CONNECT( cursorPos );
-        case SCH_JUNCTION_T:
-            return new SCH_JUNCTION( cursorPos );
-        case SCH_BUS_WIRE_ENTRY_T:
-            return new SCH_BUS_WIRE_ENTRY( cursorPos, g_lastBusEntryShape );
-        case SCH_BUS_BUS_ENTRY_T:
-            return new SCH_BUS_BUS_ENTRY( cursorPos, g_lastBusEntryShape );
-        default:
-            return nullptr;
-        }
-    };
-
     if( type == SCH_JUNCTION_T && aEvent.HasPosition() )
     {
         EE_SELECTION& selection = m_selectionTool->GetSelection();
@@ -450,14 +434,30 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         }
     }
 
-    if( aEvent.IsAction( &EE_ACTIONS::placeSheetPin ) )
-        type = SCH_SHEET_PIN_T;
-
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
     getViewControls()->SetSnapping( true );
 
-    SCH_ITEM* previewItem = itemFactory();
+    SCH_ITEM* previewItem;
+    switch( type )
+    {
+    case SCH_NO_CONNECT_T:
+        previewItem = new SCH_NO_CONNECT( cursorPos );
+        break;
+    case SCH_JUNCTION_T:
+        previewItem = new SCH_JUNCTION( cursorPos );
+        break;
+    case SCH_BUS_WIRE_ENTRY_T:
+        previewItem = new SCH_BUS_WIRE_ENTRY( cursorPos, g_lastBusEntryShape );
+        break;
+    case SCH_BUS_BUS_ENTRY_T:
+        previewItem = new SCH_BUS_BUS_ENTRY( cursorPos, g_lastBusEntryShape );
+        break;
+    default:
+        wxASSERT_MSG( false, "Unknown item type in SCH_DRAWING_TOOLS::SingleClickPlace" );
+        return 0;
+    }
+
     m_view->ClearPreview();
     m_view->AddToPreview( previewItem->Clone() );
 
@@ -501,7 +501,8 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                     m_frame->AddJunction( cursorPos );
                 else
                 {
-                    SCH_ITEM* newItem = itemFactory();
+                    SCH_ITEM* newItem = static_cast<SCH_ITEM*>( previewItem->Clone() );
+                    newItem->SetPosition( cursorPos );
                     newItem->SetFlags( IS_NEW );
 
                     m_frame->AddItemToScreenAndUndoList( newItem );
@@ -533,23 +534,28 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                         || evt->IsAction( &EE_ACTIONS::toShapeBackslash )
                         || evt->IsAction( &EE_ACTIONS::toShapeSlash ) ) )
             {
-                char shape;
-
+                // Update the shape of the bus entry
                 if( evt->IsAction( &EE_ACTIONS::toShapeSlash ) )
-                    shape = '/';
+                    g_lastBusEntryShape = '/';
                 else if( evt->IsAction( &EE_ACTIONS::toShapeBackslash ) )
-                    shape = '\\';
-                else // everything else just flips the shape
-                    shape = g_lastBusEntryShape == '/' ? '\\' : '/';
+                    g_lastBusEntryShape = '\\';
 
-                if( previewItem )
-                {
-                    static_cast<SCH_BUS_ENTRY_BASE*>( previewItem )->SetBusEntryShape( shape );
-                    m_view->ClearPreview();
-                    m_view->AddToPreview( previewItem->Clone() );
-                }
+                SCH_BUS_ENTRY_BASE* busItem = static_cast<SCH_BUS_ENTRY_BASE*>( previewItem );
 
-                g_lastBusEntryShape = shape;
+                // The bus entries only rotate in one direction
+                if( evt->IsAction( &EE_ACTIONS::rotateCW )
+                        || evt->IsAction( &EE_ACTIONS::rotateCCW ) )
+                    busItem->Rotate( busItem->GetPosition() );
+                else if( evt->IsAction( &EE_ACTIONS::mirrorX ) )
+                    busItem->MirrorX( busItem->GetPosition().x );
+                else if( evt->IsAction( &EE_ACTIONS::mirrorY ) )
+                    busItem->MirrorY( busItem->GetPosition().y );
+                else if( evt->IsAction( &EE_ACTIONS::toShapeBackslash )
+                         || evt->IsAction( &EE_ACTIONS::toShapeSlash ) )
+                    busItem->SetBusEntryShape( g_lastBusEntryShape );
+
+                m_view->ClearPreview();
+                m_view->AddToPreview( previewItem->Clone() );
             }
         }
         else
@@ -843,7 +849,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 m_frame->AddItemToScreenAndUndoList( sheet );
                 m_selectionTool->AddItemToSel( sheet );
             }
-            else 
+            else
             {
                 delete sheet;
             }
