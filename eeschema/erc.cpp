@@ -664,7 +664,7 @@ void NETLIST_OBJECT_LIST::TestforNonOrphanLabel( unsigned aNetItemRef, unsigned 
 // the full text is "sheetpath+label" for local labels and "label" for global labels
 struct compare_labels
 {
-    bool operator() ( const NETLIST_OBJECT* lab1, const NETLIST_OBJECT* lab2 )
+    bool operator() ( const NETLIST_OBJECT* lab1, const NETLIST_OBJECT* lab2 ) const
     {
         wxString str1 = lab1->m_SheetPath.Path() + lab1->m_Label;
         wxString str2 = lab2->m_SheetPath.Path() + lab2->m_Label;
@@ -675,7 +675,7 @@ struct compare_labels
 
 struct compare_label_names
 {
-    bool operator() ( const NETLIST_OBJECT* lab1, const NETLIST_OBJECT* lab2 )
+    bool operator() ( const NETLIST_OBJECT* lab1, const NETLIST_OBJECT* lab2 ) const
     {
         return lab1->m_Label.Cmp( lab2->m_Label ) < 0;
     }
@@ -683,7 +683,7 @@ struct compare_label_names
 
 struct compare_paths
 {
-    bool operator() ( const NETLIST_OBJECT* lab1, const NETLIST_OBJECT* lab2 )
+    bool operator() ( const NETLIST_OBJECT* lab1, const NETLIST_OBJECT* lab2 ) const
     {
         return lab1->m_SheetPath.Path().Cmp( lab2->m_SheetPath.Path() ) < 0;
     }
