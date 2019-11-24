@@ -44,7 +44,7 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery, bool aFinal )
     if( aQuery && !GetBoard()->IsEmpty() )
     {
         if( !IsOK( this,
-                   _( "Current Board will be lost and this operation cannot be undone. Continue ?" ) ) )
+                   _( "Current Board will be lost and this operation cannot be undone. Continue?" ) ) )
             return false;
     }
 

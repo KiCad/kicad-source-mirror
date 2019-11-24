@@ -277,17 +277,29 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
 
     case ID_NEW_BOARD:
     {
-        if( !Clear_Pcb( true ) )
+        if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
+        {
+            wxFileName fileName = GetBoard()->GetFileName();
+            wxString   saveMsg =
+                    _( "Current board will be closed, save changes to \"%s\" before continuing?" );
+
+            if( !HandleUnsavedChanges( this, wxString::Format( saveMsg, fileName.GetFullName() ),
+                                       [&]()->bool { return Files_io_from_id( ID_SAVE_BOARD ); } ) )
+                return false;
+        }
+        else if( !GetBoard()->IsEmpty() )
+        {
+            if( !IsOK( this, _( "Current Board will be closed. Continue?" ) ) )
+                return false;
+        }
+
+        if( !Clear_Pcb( false ) )
             return false;
 
         wxFileName fn( wxStandardPaths::Get().GetDocumentsDir(), wxT( "noname" ),
                        ProjectFileExtension );
 
         Prj().SetProjectFullName( fn.GetFullPath() );
-
-        fn.SetExt( PcbFileExtension );
-
-        GetBoard()->SetFileName( fn.GetFullPath() );
 
         onBoardLoaded();
 
