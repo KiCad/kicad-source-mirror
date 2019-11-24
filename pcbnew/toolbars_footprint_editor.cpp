@@ -217,7 +217,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
 
 void FOOTPRINT_EDIT_FRAME::SyncToolbars()
 {
-#define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, IsCurrentTool( tool ) )
+#define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, true, IsCurrentTool( tool ) )
 
     if( !m_mainToolBar || !m_optionsToolBar || !m_drawToolBar )
         return;
@@ -245,17 +245,36 @@ void FOOTPRINT_EDIT_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( PCB_ACTIONS::toggleFootprintTree, IsSearchTreeShown() );
     m_optionsToolBar->Refresh();
 
+    if( GetLoadedFPID().empty() )
+    {
+        // If there is no footprint loaded, disable the editing tools
+        m_drawToolBar->Toggle( PCB_ACTIONS::placePad,        false, false );
+        m_drawToolBar->Toggle( PCB_ACTIONS::drawLine,        false, false );
+        m_drawToolBar->Toggle( PCB_ACTIONS::drawCircle,      false, false );
+        m_drawToolBar->Toggle( PCB_ACTIONS::drawArc,         false, false );
+        m_drawToolBar->Toggle( PCB_ACTIONS::drawPolygon,     false, false );
+        m_drawToolBar->Toggle( PCB_ACTIONS::drawZoneKeepout, false, false );
+        m_drawToolBar->Toggle( PCB_ACTIONS::placeText,       false, false );
+        m_drawToolBar->Toggle( ACTIONS::deleteTool,          false, false );
+        m_drawToolBar->Toggle( PCB_ACTIONS::setAnchor,       false, false );
+        m_drawToolBar->Toggle( PCB_ACTIONS::gridSetOrigin,   false, false );
+        m_drawToolBar->Toggle( ACTIONS::measureTool,         false, false );
+    }
+    else
+    {
+        TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::placePad );
+        TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawLine );
+        TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawCircle );
+        TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawArc );
+        TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawPolygon );
+        TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawZoneKeepout );
+        TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::placeText );
+        TOGGLE_TOOL( m_drawToolBar, ACTIONS::deleteTool );
+        TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::setAnchor );
+        TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::gridSetOrigin );
+        TOGGLE_TOOL( m_drawToolBar, ACTIONS::measureTool );
+    }
+
     TOGGLE_TOOL( m_drawToolBar, ACTIONS::selectionTool );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::placePad );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawLine );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawCircle );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawArc );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawPolygon );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::drawZoneKeepout );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::placeText );
-    TOGGLE_TOOL( m_drawToolBar, ACTIONS::deleteTool );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::setAnchor );
-    TOGGLE_TOOL( m_drawToolBar, PCB_ACTIONS::gridSetOrigin );
-    TOGGLE_TOOL( m_drawToolBar, ACTIONS::measureTool );
     m_drawToolBar->Refresh();
 }
