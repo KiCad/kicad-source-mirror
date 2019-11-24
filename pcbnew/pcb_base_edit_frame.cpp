@@ -118,16 +118,9 @@ void PCB_BASE_EDIT_FRAME::SetGridVisibility( bool aVisible )
 {
     PCB_BASE_FRAME::SetGridVisibility( aVisible );
 
-    // We must notify the layer widget to refill the render view to update the grid checkbox
+    // Update the grid checkbox in the layer widget
     if( m_Layers )
-    {
-        m_Layers->Freeze();
-
-        // TODO (ISM): Implement a SyncRenderState handler inside the layer widget to use instead
-        // This current method redraws the entire render panel and looks bad
-        m_Layers->ReFillRender();
-        m_Layers->Thaw();
-    }
+        m_Layers->SetRenderState( LAYER_GRID, aVisible );
 
     // TODO (ISM): Remove this by changing toolbars to use the EVT_UPDATE_UI to get the state
     SyncToolbars();
