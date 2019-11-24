@@ -201,7 +201,19 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
 
         void*   addr = NULL;
 
-        if( !dso.Load( dname, wxDL_VERBATIM | wxDL_NOW | wxDL_GLOBAL ) )
+        // For some reason wxDynamicLibrary::Load() crashes in some languages
+        // (chinese for instance) when loading the dynamic library.
+        // The crash happens for Eeschema.
+        // So switch to "C" locale during loading (LC_COLLATE is enough).
+        int lc_new_type = LC_COLLATE;
+        std::string user_locale = setlocale( lc_new_type, nullptr );
+        setlocale( lc_new_type, "C" );
+
+        bool success = dso.Load( dname, wxDL_VERBATIM | wxDL_NOW | wxDL_GLOBAL );
+
+        setlocale( lc_new_type, user_locale.c_str() );
+
+        if( !success )
         {
             // Failure: error reporting UI was done via wxLogSysError().
             // No further reporting required here.  Apparently this is not true on all
@@ -209,7 +221,7 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
             // here and catching it in the KiCad launcher resolves the crash issue.  See bug
             // report https://bugs.launchpad.net/kicad/+bug/1577786.
 
-            msg.Printf( _( "Failed to load kiface library \"%s\"." ), GetChars( dname ) );
+            msg.Printf( _( "Failed to load kiface library \"%s\"." ), dname );
             THROW_IO_ERROR( msg );
         }
         else if( ( addr = dso.GetSymbol( wxT( KIFACE_INSTANCE_NAME_AND_VERSION ) ) ) == NULL )
@@ -219,7 +231,7 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
             // above with the Load() call.  This has not been tested.
             msg.Printf(
                 _( "Could not read instance name and version symbol form kiface library \"%s\"." ),
-                GetChars( dname ) );
+                dname );
             THROW_IO_ERROR( msg );
         }
         else
@@ -253,7 +265,7 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
 
         msg = wxString::Format( _(
             "Fatal Installation Bug. File:\n"
-            "\"%s\"\ncould not be loaded\n" ), GetChars( dname ) );
+            "\"%s\"\ncould not be loaded\n" ), dname );
 
         if( ! wxFileExists( dname ) )
             msg << _( "It is missing.\n" );
