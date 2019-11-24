@@ -106,6 +106,10 @@ enum SCH_CLEANUP_FLAGS {
  */
 class SCH_EDIT_FRAME : public SCH_BASE_FRAME
 {
+    // The schematic editor control class should be able to access some internal
+    // functions of the editor frame.
+    friend class SCH_EDITOR_CONTROL;
+
 private:
     wxString                m_SelectedNetName;
 

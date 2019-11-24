@@ -167,6 +167,7 @@ int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
 
     getView()->UpdateItems();
     m_frame->GetCanvas()->Refresh();
+    m_frame->UpdateTitle();
 
     return 0;
 }
