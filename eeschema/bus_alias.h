@@ -22,8 +22,8 @@
 #define _BUS_ALIAS_H
 
 #include <memory>
-#include <vector>
 #include <wx/string.h>
+#include <wx/arrstr.h>
 
 
 class SCH_SCREEN;
@@ -66,7 +66,7 @@ public:
         return m_members.size();
     }
 
-    std::vector< wxString >& Members()
+    wxArrayString& Members()
     {
         return m_members;
     }
@@ -87,7 +87,7 @@ protected:
 
     wxString m_name;
 
-    std::vector< wxString > m_members;
+    wxArrayString m_members;
 
     /**
      * The bus alias editor dialog can edit aliases from all open sheets.
