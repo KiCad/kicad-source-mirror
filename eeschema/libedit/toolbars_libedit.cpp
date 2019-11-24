@@ -185,15 +185,36 @@ void LIB_EDIT_FRAME::SyncToolbars()
     m_optionsToolBar->Toggle( EE_ACTIONS::showComponentTree,   IsSearchTreeShown() );
     m_optionsToolBar->Refresh();
 
-#define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, IsCurrentTool( tool ) )
+#define TOGGLE_TOOL( toolbar, tool ) toolbar->Toggle( tool, true, IsCurrentTool( tool ) )
+
+    if( !GetCurPart() )
+    {
+        // If no part is loaded for editing, disable the editing tools
+        m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolPin,      false, false );
+        m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolText,     false, false );
+        m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolRectangle, false, false );
+        m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolCircle,    false, false );
+        m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolArc,       false, false );
+        m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolLines,     false, false );
+        m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolAnchor,   false, false );
+        m_drawToolBar->EnableTool( ID_LIBEDIT_IMPORT_BODY_BUTT, false );
+        m_drawToolBar->EnableTool( ID_LIBEDIT_EXPORT_BODY_BUTT, false );
+        m_drawToolBar->Toggle( ACTIONS::deleteTool,             false, false );
+    }
+    else
+    {
+        TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeSymbolPin );
+        TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeSymbolText );
+        TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolRectangle );
+        TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolCircle );
+        TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolArc );
+        TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolLines );
+        TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeSymbolAnchor );
+        m_drawToolBar->EnableTool( ID_LIBEDIT_IMPORT_BODY_BUTT, true );
+        m_drawToolBar->EnableTool( ID_LIBEDIT_EXPORT_BODY_BUTT, true );
+        TOGGLE_TOOL( m_drawToolBar, ACTIONS::deleteTool );
+    }
 
     TOGGLE_TOOL( m_drawToolBar, ACTIONS::selectionTool );
-    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeSymbolPin );
-    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::placeSymbolText );
-    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolRectangle );
-    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolCircle );
-    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolArc );
-    TOGGLE_TOOL( m_drawToolBar, EE_ACTIONS::drawSymbolLines );
-    TOGGLE_TOOL( m_drawToolBar, ACTIONS::deleteTool );
     m_drawToolBar->Refresh();
 }
