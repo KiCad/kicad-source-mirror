@@ -678,7 +678,7 @@ elseif( KICAD_USE_OCC )
     find_package(OpenCASCADE)
     if( NOT OCC_FOUND )
         MESSAGE( FATAL_ERROR "================================================================\n"
-                             " KICAD_USE_OCC=True but OpenCASCADE was no found!\n"
+                             " KICAD_USE_OCC=True but OpenCASCADE was not found!\n"
                              "================================================================\n")
     endif()
     if( OCC_VERSION_STRING VERSION_LESS 6.8.0 )
