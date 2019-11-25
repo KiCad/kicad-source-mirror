@@ -738,7 +738,10 @@ void PANEL_SETUP_BOARD_STACKUP::rebuildLayerStackPanel()
     // Delete widgets (handled by the wxPanel parent)
     for( BOARD_STACKUP_ROW_UI_ITEM ui_item: m_rowUiItemsList )
     {
-        wxSizer* sizerMat = ui_item.m_MaterialCtrl->GetSizer();
+        // This remove and delete the current ui_item.m_MaterialCtrl sizer
+        ui_item.m_MaterialCtrl->SetSizer( nullptr );
+
+        // Delete other widgets
         delete ui_item.m_Icon;             // Color icon in first column (column 1)
         delete ui_item.m_LayerName;        // string shown in column 2
         delete ui_item.m_LayerTypeCtrl;    // control shown in column 3
@@ -749,7 +752,6 @@ void PANEL_SETUP_BOARD_STACKUP::rebuildLayerStackPanel()
         delete ui_item.m_ColorCtrl;        // control shown in column 7
         delete ui_item.m_EpsilonCtrl;      // control shown in column 8
         delete ui_item.m_LossTgCtrl;       // control shown in column 9
-        delete sizerMat;
     }
 
     m_rowUiItemsList.clear();
@@ -758,22 +760,26 @@ void PANEL_SETUP_BOARD_STACKUP::rebuildLayerStackPanel()
     // In order to recreate a clean grid layer list, we have to delete and
     // recreate the sizer m_fgGridSizer (just deleting items in this size is not enough)
     // therefore we also have to add the "old" title items to the newly recreated m_fgGridSizer:
-    delete m_fgGridSizer;
+	m_scGridWin->SetSizer( nullptr );   // This remove and delete the current m_fgGridSizer
+
     m_fgGridSizer = new wxFlexGridSizer( 0, 9, 0, 2 );
 	m_fgGridSizer->SetFlexibleDirection( wxHORIZONTAL );
 	m_fgGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	m_scGridWin->SetSizer( m_fgGridSizer );
 
     // Re-add "old" title items:
-	m_fgGridSizer->Add( m_staticTextLayer, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 2 );
-	m_fgGridSizer->Add( m_staticTextType, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 2 );
-	m_fgGridSizer->Add( m_staticTextLayerId, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	m_fgGridSizer->Add( m_staticTextMaterial, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 2 );
-	m_fgGridSizer->Add( m_staticTextThickness, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 2 );
-	m_fgGridSizer->Add( m_bitmapLockThickness, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
-	m_fgGridSizer->Add( m_staticTextColor, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 2 );
-	m_fgGridSizer->Add( m_staticTextEpsilonR, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 2 );
-	m_fgGridSizer->Add( m_staticTextLossTg, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 2 );
+    const int sizer_flags = wxALIGN_CENTER_VERTICAL | wxTOP|wxBOTTOM |
+                            wxLEFT | wxALIGN_CENTER_HORIZONTAL;
+	m_fgGridSizer->Add( m_staticTextLayer, 0, sizer_flags, 2 );
+	m_fgGridSizer->Add( m_staticTextType, 0, sizer_flags, 2 );
+	m_fgGridSizer->Add( m_staticTextLayerId, 0, wxALL|sizer_flags, 5 );
+	m_fgGridSizer->Add( m_staticTextMaterial, 0, sizer_flags, 2 );
+	m_fgGridSizer->Add( m_staticTextThickness, 0, sizer_flags, 2 );
+	m_fgGridSizer->Add( m_bitmapLockThickness, 0,
+                        wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	m_fgGridSizer->Add( m_staticTextColor, 0, sizer_flags, 2 );
+	m_fgGridSizer->Add( m_staticTextEpsilonR, 0, sizer_flags, 2 );
+	m_fgGridSizer->Add( m_staticTextLossTg, 0, sizer_flags, 2 );
 
 
     // Now, rebuild the widget list from the new m_stackup items:
