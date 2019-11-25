@@ -204,40 +204,41 @@ void PANEL_SETUP_BOARD_STACKUP::onRemoveDielectricLayer( wxCommandEvent& event )
     wxArrayString d_list;
     std::vector<int> rows;  // indexes of row values for each selectable item
 
-    int row = -1;
+    int ui_row = 0;     // The row index in m_rowUiItemsList of items in choice list
 
+    // Build the list of dielectric layers:
     for( auto item : m_stackup.GetList() )
     {
-        row++;
-
-        if( !item->IsEnabled() || item->GetType() != BS_ITEM_TYPE_DIELECTRIC )
+        if( !item->IsEnabled() || item->GetType() != BS_ITEM_TYPE_DIELECTRIC ||
+            item->GetSublayersCount() <= 1 )
+        {
+            ui_row++;
             continue;
-
-        if( item->GetSublayersCount() <= 1 )
-            continue;
+        }
 
         for( int ii = 0; ii < item->GetSublayersCount(); ii++ )
         {
             d_list.Add( wxString::Format( "Layer \"%s\" sublayer %d/%d",
-                            item->FormatDielectricLayerName(), ii+1, item->GetSublayersCount() ) );
+                            item->FormatDielectricLayerName(), ii+1,
+                            item->GetSublayersCount() ) );
 
-            rows.push_back( row );
+            rows.push_back( ui_row++ );
         }
     }
 
-    // Show list
+    // Show choice list
     int index = wxGetSingleChoiceIndex( wxEmptyString, _("Dielectric Layers List"),
                                         d_list );
 
     if( index < 0 )
         return;
 
-    row = rows[index];
+    ui_row = rows[index];
 
-    BOARD_STACKUP_ITEM* brd_stackup_item = m_rowUiItemsList[row].m_Item;
-    int sublayer = m_rowUiItemsList[row].m_SubItem;
+    BOARD_STACKUP_ITEM* brd_stackup_item = m_rowUiItemsList[ui_row].m_Item;
+    int sublayer = m_rowUiItemsList[ui_row].m_SubItem;
 
-    // Insert a new item after the selected item
+    // Remove the selected sub item for the selected dielectric layer
     brd_stackup_item->RemoveDielectricPrms( sublayer );
 
     rebuildLayerStackPanel();
