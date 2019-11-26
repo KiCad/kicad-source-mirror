@@ -191,6 +191,9 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                 m_view->ClearPreview();
                 m_frame->AddItemToScreenAndUndoList( component );
 
+                m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, component );
+                m_frame->OnModify();
+
                 if( m_frame->GetUseAllUnits() || m_frame->GetRepeatComponent() )
                 {
                     int new_unit = component->GetUnit();
