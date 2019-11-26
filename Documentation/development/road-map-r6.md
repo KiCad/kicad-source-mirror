@@ -36,10 +36,6 @@ Create perspectives to allow users to arrange dockable windows as they prefer.
 **Task:**
 - Take advantage of the advanced UI features in wxAui such as detaching and
   hiding.
-- Study ergonomics of various commercial/proprietary PCB applications (when
-  in doubt about any particular UI solution, check how it has been done in a
-  certain proprietary app that is very popular among OSHW folks and do exactly
-  opposite).
 - Clean up menu structure. Menus must allow access to all features of the
   program in a clear and logical way. Currently some functions of Pcbnew are
   accessible only through tool bars
