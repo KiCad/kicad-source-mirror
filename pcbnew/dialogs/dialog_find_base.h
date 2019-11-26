@@ -1,16 +1,14 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov 22 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_FIND_BASE_H__
-#define __DIALOG_FIND_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
-#include <wx/intl.h>
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -22,7 +20,12 @@
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
-#include <wx/dialog.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/textctrl.h>
+#include <wx/gauge.h>
+#include <wx/frame.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -33,31 +36,39 @@
 class DIALOG_FIND_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
-		wxStaticText* m_staticText1;
-		wxComboBox* m_SearchCombo;
+		wxStaticText* staticText1;
+		wxComboBox* m_searchCombo;
 		wxCheckBox* m_matchCase;
 		wxCheckBox* m_matchWords;
 		wxCheckBox* m_wildcards;
-		wxButton* m_button1;
-		wxButton* m_button2;
-		wxButton* m_button3;
-		
+		wxCheckBox* m_wrap;
+		wxStaticText* staticText2;
+		wxCheckBox* m_includeTexts;
+		wxCheckBox* m_includeValues;
+		wxCheckBox* m_includeReferences;
+		wxCheckBox* m_includeVias;
+		wxButton* m_findNext;
+		wxButton* m_findPrevious;
+		wxButton* m_searchAgain;
+		wxTextCtrl* m_status;
+		wxButton* m_cancel;
+		wxGauge* m_gauge;
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void onClose( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
-		virtual void OnTextEnter( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onButtonFindItemClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onButtonFindMarkerClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onButtonCloseClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+		virtual void onTextEnter( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onFindNextClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onFindPreviousClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSearchAgainClick( wxCommandEvent& event ) { event.Skip(); }
+
+
 	public:
-		
-		DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Find"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Find"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 504,213 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+
 		~DIALOG_FIND_BASE();
-	
+
 };
 
-#endif //__DIALOG_FIND_BASE_H__

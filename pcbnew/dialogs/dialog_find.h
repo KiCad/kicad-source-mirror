@@ -26,36 +26,45 @@
 #ifndef DIALOG_FIND_BASE_H
 #define DIALOG_FIND_BASE_H
 
-#include <dialog_find_base.h>
 #include <boost/function.hpp>
+#include <dialog_find_base.h>
+#include <dlist.h>
+#include <iterator>
+#include <vector>
+
+using namespace std;
 
 class DIALOG_FIND : public DIALOG_FIND_BASE
 {
 public:
     DIALOG_FIND( PCB_BASE_FRAME* aParent );
 
-    inline BOARD_ITEM* GetItem() const { return m_foundItem; }
+    inline BOARD_ITEM* GetItem() const
+    {
+        return m_foundItem;
+    }
 
-    void SetCallback( boost::function<void (BOARD_ITEM*)> aCallback )
+    void SetCallback( boost::function<void( BOARD_ITEM* )> aCallback )
     {
         m_highlightCallback = aCallback;
     }
 
-    void OnTextEnter( wxCommandEvent& event ) override;
 
 private:
-    PCB_BASE_FRAME* m_frame;
+    PCB_BASE_FRAME*    m_frame;
+    int                m_itemCount;
+    BOARD_ITEM*        m_foundItem;
+    DLIST<BOARD_ITEM>* m_hitList;
+    bool               isUpToDate;
 
-    int             m_itemCount;
-    int             m_markerCount;
-    BOARD_ITEM*     m_foundItem;
+    boost::function<void( BOARD_ITEM* )> m_highlightCallback;
 
-    boost::function<void (BOARD_ITEM*)> m_highlightCallback;
-
-    void onButtonFindItemClick( wxCommandEvent& event ) override;
-    void onButtonFindMarkerClick( wxCommandEvent& event ) override;
-    void onButtonCloseClick( wxCommandEvent& event ) override;
+    void onTextEnter( wxCommandEvent& event ) override;
+    void onFindNextClick( wxCommandEvent& event ) override;
+    void onFindPreviousClick( wxCommandEvent& event ) override;
+    void onSearchAgainClick( wxCommandEvent& event ) override;
     void onClose( wxCloseEvent& event ) override;
+    void search( bool direction );
 };
 
 #endif /* DIALOG_FIND_BASE_H */

@@ -216,7 +216,7 @@ public:
 
     //-----< STL like functions >---------------------------------------
     T* begin() const { return GetFirst(); }
-    T* end() const { return NULL; }
+    T* end() const { return GetLast(); }
 
     T* PopFront()
     {

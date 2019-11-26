@@ -23,167 +23,310 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
+#include <class_board.h>
+#include <class_marker_pcb.h>
+#include <class_module.h>
+#include <class_pcb_text.h>
+#include <class_text_mod.h>
 #include <confirm.h>
+#include <dialog_find.h>
+#include <fctsys.h>
 #include <kicad_string.h>
 #include <pcb_edit_frame.h>
-#include <tool/tool_manager.h>
-#include <tools/pcb_actions.h>
-#include <class_board.h>
-#include <class_module.h>
-#include <class_marker_pcb.h>
-#include <class_text_mod.h>
-#include <class_pcb_text.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
-#include <dialog_find.h>
+#include <string>
+#include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
 #include <wx/fdrepdlg.h>
 
+//Defined as global because these values have to survive the destructor
 
-DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aFrame ) :
-        DIALOG_FIND_BASE( aFrame )
+bool FindOptionCase = false;
+bool FindOptionWords = false;
+bool FindOptionWildcards = false;
+bool FindOptionWrap = true;
+
+bool FindIncludeTexts = true;
+bool FindIncludeValues = true;
+bool FindIncludeReferences = true;
+//bool findIncludeVias = false;
+
+DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aFrame ) : DIALOG_FIND_BASE( aFrame )
 {
     m_frame = aFrame;
     m_foundItem = NULL;
     GetSizer()->SetSizeHints( this );
 
-    m_SearchCombo->Append( m_frame->GetFindHistoryList() );
+    m_searchCombo->Append( m_frame->GetFindHistoryList() );
 
-    if( m_SearchCombo->GetCount() )
+    while( m_searchCombo->GetCount() > 10 )
     {
-        m_SearchCombo->SetSelection( 0 );
-        m_SearchCombo->SelectAll();
+        m_frame->GetFindHistoryList().pop_back();
+        m_searchCombo->Delete( 9 );
     }
 
-    m_matchCase->SetValue( ( m_frame->GetFindReplaceData().GetFlags() & wxFR_MATCHCASE ) > 0 );
-    m_matchWords->SetValue( ( m_frame->GetFindReplaceData().GetFlags() & wxFR_WHOLEWORD ) > 0 );
-    m_wildcards->SetValue( ( m_frame->GetFindReplaceData().GetFlags() & FR_MATCH_WILDCARD ) > 0 );
+    if( m_searchCombo->GetCount() )
+    {
+        m_searchCombo->SetSelection( 0 );
+        m_searchCombo->SelectAll();
+    }
 
-    m_itemCount = m_markerCount = 0;
+    m_matchCase->SetValue( FindOptionCase );
+    m_matchWords->SetValue( FindOptionWords );
+    m_wildcards->SetValue( FindOptionWildcards );
+    m_wrap->SetValue( FindOptionWrap );
 
-    SetInitialFocus( m_SearchCombo );
+    m_includeTexts->SetValue( FindIncludeTexts );
+    m_includeValues->SetValue( FindIncludeValues );
+    m_includeReferences->SetValue( FindIncludeReferences );
+
+    m_cancel->Show( false );
+    m_gauge->Show( false );
+    m_status->Show( true );
+    m_gauge->SetRange( 100 );
+    m_hitList = new DLIST<BOARD_ITEM>;
+    m_hitList->SetOwnership( false );
+    m_itemCount = 0;
+    isUpToDate = false;
+    SetInitialFocus( m_searchCombo );
 
     Center();
 }
 
-
-void DIALOG_FIND::OnTextEnter( wxCommandEvent& aEvent )
+void DIALOG_FIND::onTextEnter( wxCommandEvent& aEvent )
 {
-    onButtonFindItemClick( aEvent );
+    search( true );
 }
 
-
-void DIALOG_FIND::onButtonCloseClick( wxCommandEvent& aEvent )
+void DIALOG_FIND::onFindNextClick( wxCommandEvent& aEvent )
 {
-    Close( true );
+    search( true );
 }
 
+void DIALOG_FIND::onFindPreviousClick( wxCommandEvent& aEvent )
+{
+    search( false );
+}
 
-void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
+void DIALOG_FIND::onSearchAgainClick( wxCommandEvent& aEvent )
+{
+    isUpToDate = false;
+    search( true );
+}
+
+void DIALOG_FIND::search( bool aDirection )
 {
     PCB_SCREEN* screen = m_frame->GetScreen();
-    int         flags = 0;
+    int         flags;
+    int         index;
     wxString    msg;
-    wxString    searchString = m_SearchCombo->GetValue();
-    int         index = m_SearchCombo->FindString( searchString, true );
+    wxString    searchString;
 
-    if( m_matchCase->GetValue() )
-        flags |= wxFR_MATCHCASE;
-
-    if( m_matchWords->GetValue() )
-        flags |= wxFR_WHOLEWORD;
-
-    if( m_wildcards->GetValue() )
-        flags |= FR_MATCH_WILDCARD;
+    // Add/move the search string to the top of the list if it isn't already there
+    searchString = m_searchCombo->GetValue();
+    index = m_searchCombo->FindString( searchString, true );
 
     if( index == wxNOT_FOUND )
     {
-        m_SearchCombo->Insert( searchString, 0 );
+        m_searchCombo->Insert( searchString, 0 );
+        m_searchCombo->SetSelection( 0 );
+        isUpToDate = false;
+        m_frame->GetFindHistoryList().Insert( searchString, 0 );
+        if( m_searchCombo->GetCount() > 10 )
+        {
+            m_frame->GetFindHistoryList().pop_back();
+            m_searchCombo->Delete( 10 );
+        }
     }
     else if( index != 0 )
     {
-        /* Move the search string to the top of the list if it isn't already there. */
-        m_SearchCombo->Delete( index );
-        m_SearchCombo->Insert( searchString, 0 );
-        m_SearchCombo->SetSelection( 0 );
+        m_searchCombo->Delete( index );
+        m_searchCombo->Insert( searchString, 0 );
+        m_searchCombo->SetSelection( 0 );
+        isUpToDate = false;
+
+        if( m_frame->GetFindHistoryList().Index( searchString ) )
+            m_frame->GetFindHistoryList().Remove( searchString );
+        m_frame->GetFindHistoryList().Insert( searchString, 0 );
     }
+    // Update search flags
+    flags = 0;
 
-    wxString last;
-
-    if( !m_frame->GetFindHistoryList().empty() )
-        last = m_frame->GetFindHistoryList().back();
-
-    if( !searchString.IsSameAs( last, false ) )
+    if( FindOptionCase != m_matchCase->GetValue() )
     {
-        m_itemCount = 0;
-        m_foundItem = NULL;
-        m_frame->GetFindHistoryList().push_back( searchString );
+        FindOptionCase = m_matchCase->GetValue();
+        isUpToDate = false;
     }
+    if( FindOptionWords != m_matchWords->GetValue() )
+    {
+        FindOptionWords = m_matchWords->GetValue();
+        isUpToDate = false;
+    }
+    if( FindOptionWildcards != m_wildcards->GetValue() )
+    {
+        FindOptionWildcards = m_wildcards->GetValue();
+        isUpToDate = false;
+    }
+    FindOptionWrap = m_wrap->GetValue();
+    if( FindIncludeTexts != m_includeTexts->GetValue() )
+    {
+        FindIncludeTexts = m_includeTexts->GetValue();
+        isUpToDate = false;
+    }
+    if( FindIncludeValues != m_includeValues->GetValue() )
+    {
+        FindIncludeValues = m_includeValues->GetValue();
+        isUpToDate = false;
+    }
+    if( FindIncludeReferences != m_includeReferences->GetValue() )
+    {
+        FindIncludeReferences = m_includeReferences->GetValue();
+        isUpToDate = false;
+    }
+    if( FindOptionCase )
+        flags |= wxFR_MATCHCASE;
 
+    if( FindOptionWords )
+        flags |= wxFR_WHOLEWORD;
+
+    if( FindOptionWildcards )
+        flags |= FR_MATCH_WILDCARD;
+
+    // Search parameters
     m_frame->GetFindReplaceData().SetFindString( searchString );
     m_frame->GetFindReplaceData().SetFlags( flags );
 
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
     m_frame->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
+    // Refresh the list of results
 
-    int count = 0;
-
-    for( MODULE* module : m_frame->GetBoard()->Modules() )
+    if( !isUpToDate )
     {
-        if( module->Reference().Matches( m_frame->GetFindReplaceData(), nullptr )
-            || module->Value().Matches( m_frame->GetFindReplaceData(), nullptr ) )
+        m_status->SetValue( "Searching..." );
+        while( m_hitList->GetCount() > 0 )
+            m_hitList->PopBack();
+        m_foundItem = NULL;
+
+        if( FindIncludeTexts || FindIncludeValues || FindIncludeReferences )
         {
-            count++;
-
-            if( count > m_itemCount )
+            for( MODULE* module : m_frame->GetBoard()->Modules() )
             {
-                m_foundItem = module;
-                m_itemCount++;
-                break;
-            }
-        }
-
-        for( BOARD_ITEM* item : module->GraphicalItems() )
-        {
-            TEXTE_MODULE* textItem = dynamic_cast<TEXTE_MODULE*>( item );
-
-            if( textItem && textItem->Matches( m_frame->GetFindReplaceData(), nullptr ) )
-            {
-                count++;
-
-                if( count > m_itemCount )
+                if( ( module->Reference().Matches( m_frame->GetFindReplaceData(), nullptr )
+                            && FindIncludeReferences )
+                        || ( module->Value().Matches( m_frame->GetFindReplaceData(), nullptr )
+                                   && FindIncludeValues ) )
                 {
-                    m_foundItem = module;
-                    m_itemCount++;
-                    break;
+                    m_hitList->Append( module );
+                }
+
+                if( m_includeTexts->GetValue() )
+                {
+                    for( BOARD_ITEM* item : module->GraphicalItems() )
+                    {
+                        TEXTE_MODULE* textItem = dynamic_cast<TEXTE_MODULE*>( item );
+
+                        if( textItem
+                                && textItem->Matches( m_frame->GetFindReplaceData(), nullptr ) )
+                        {
+                            m_hitList->Append( module );
+                        }
+                    }
+                }
+            }
+            if( FindIncludeTexts )
+            {
+                for( BOARD_ITEM* item : m_frame->GetBoard()->Drawings() )
+                {
+                    TEXTE_PCB* textItem = dynamic_cast<TEXTE_PCB*>( item );
+
+                    if( textItem && textItem->Matches( m_frame->GetFindReplaceData(), nullptr ) )
+                    {
+                        m_hitList->Append( textItem );
+                    }
                 }
             }
         }
+        m_cancel->Show( false );
+        m_gauge->Show( false );
+        m_status->Show( true );
+        m_gauge->SetValue( 100 );
+        m_itemCount = -1;
     }
+    // Do we want a sorting algorithm ? If so, implement it here.
 
-    for( BOARD_ITEM* item : m_frame->GetBoard()->Drawings() )
+    // Get the item to display
+    if( m_hitList->begin() == NULL )
     {
-        TEXTE_PCB* textItem = dynamic_cast<TEXTE_PCB*>( item );
-
-        if( textItem && textItem->Matches( m_frame->GetFindReplaceData(), nullptr ) )
+        m_frame->SetStatusText( wxEmptyString );
+        m_itemCount = 0;
+        m_foundItem = NULL;
+    }
+    else if( m_itemCount == -1 )
+    {
+        m_foundItem = aDirection ? m_hitList->begin() : m_hitList->end();
+        m_itemCount = aDirection ? 0 : m_hitList->GetCount() - 1;
+        isUpToDate = true;
+    }
+    else
+    {
+        if( aDirection )
         {
-            count++;
-
-            if( count > m_itemCount )
+            if( m_itemCount >= static_cast<int>( m_hitList->GetCount() - 1 ) )
             {
-                m_foundItem = textItem;
+                if( m_wrap->GetValue() )
+                {
+                    m_itemCount = 0;
+                    m_foundItem = m_hitList->begin();
+                }
+                else
+                {
+                    m_frame->SetStatusText( wxEmptyString );
+                    msg.Printf( _( "No more item to show" ), GetChars( searchString ) );
+                    DisplayError( this, msg, 10 );
+                    return;
+                }
+            }
+            else
+            {
                 m_itemCount++;
-                break;
+                m_foundItem = dynamic_cast<BOARD_ITEM*>( m_foundItem->Next() );
+            }
+        }
+        else
+        {
+            if( m_itemCount <= 0 )
+            {
+                if( m_wrap->GetValue() )
+                {
+                    m_itemCount = m_hitList->GetCount() - 1;
+                    m_foundItem = m_hitList->end();
+                }
+                else
+                {
+                    m_frame->SetStatusText( wxEmptyString );
+                    msg.Printf( _( "No more item to show" ), GetChars( searchString ) );
+                    DisplayError( this, msg, 10 );
+                    return;
+                }
+            }
+            else
+            {
+                m_itemCount--;
+                m_foundItem = dynamic_cast<BOARD_ITEM*>( m_foundItem->Back() );
             }
         }
     }
-
+    // Display the item
     if( m_foundItem )
     {
         m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, m_foundItem );
         m_frame->FocusOnLocation( m_foundItem->GetPosition(), true );
         msg.Printf( _( "\"%s\" found" ), GetChars( searchString ) );
         m_frame->SetStatusText( msg );
+        msg = wxEmptyString;
+        msg = msg << "Hit(s): " << m_itemCount + 1 << " / " << m_hitList->GetCount();
+        m_status->SetValue( msg );
     }
     else
     {
@@ -191,64 +334,26 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
         msg.Printf( _( "\"%s\" not found" ), GetChars( searchString ) );
         DisplayError( this, msg, 10 );
         m_itemCount = 0;
+        m_status->SetValue( "No hit" );
     }
 
     if( m_highlightCallback )
         m_highlightCallback( m_foundItem );
 }
-
-
-void DIALOG_FIND::onButtonFindMarkerClick( wxCommandEvent& aEvent )
-{
-    PCB_SCREEN* screen = m_frame->GetScreen();
-    wxString    msg;
-
-    m_foundItem = nullptr;
-
-    m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
-    m_frame->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
-
-    MARKER_PCB* marker = m_frame->GetBoard()->GetMARKER( m_markerCount++ );
-
-    if( marker )
-        m_foundItem = marker;
-
-    if( m_foundItem )
-    {
-        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, m_foundItem );
-        m_frame->FocusOnLocation( m_foundItem->GetPosition() );
-        msg = _( "Marker found" );
-        m_frame->SetStatusText( msg );
-    }
-    else
-    {
-        m_frame->SetStatusText( wxEmptyString );
-        msg = _( "No marker found" );
-        DisplayError( this, msg, 10 );
-        m_markerCount = 0;
-    }
-
-    if( m_highlightCallback )
-        m_highlightCallback( m_foundItem );
-}
-
 
 void DIALOG_FIND::onClose( wxCloseEvent& aEvent )
 {
-    int flags = 0;
+    FindOptionCase = m_matchCase->GetValue();
+    FindOptionWords = m_matchWords->GetValue();
+    FindOptionWildcards = m_wildcards->GetValue();
+    FindOptionWrap = m_wrap->GetValue();
 
-    if( m_matchCase->GetValue() )
-        flags |= wxFR_MATCHCASE;
+    FindIncludeTexts = m_includeTexts->GetValue();
+    FindIncludeValues = m_includeValues->GetValue();
+    FindIncludeReferences = m_includeReferences->GetValue();
 
-    if( m_matchWords->GetValue() )
-        flags |= wxFR_WHOLEWORD;
-
-    if( m_wildcards->GetValue() )
-        flags |= FR_MATCH_WILDCARD;
-
-    m_frame->GetFindReplaceData().SetFlags( flags );
-
+    while( m_hitList->GetCount() > 0 )
+        m_hitList->PopBack();
+    delete m_hitList;
     EndModal( 1 );
 }
-
-

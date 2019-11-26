@@ -150,30 +150,27 @@ DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aParent ) : DIALOG_FIND_BASE( aParent 
 {
     // these members are initialized to avoid warnings about non initialized vars
     m_frame = aParent;
-    m_itemCount = m_markerCount = 0;
+    m_itemCount = 0;
     m_foundItem = nullptr;
+    m_hitList = nullptr;
+    isUpToDate = false;
 }
 
-
-void DIALOG_FIND::OnTextEnter( wxCommandEvent& event )
+void DIALOG_FIND::onFindNextClick( wxCommandEvent& aEvent )
 {
 }
 
-
-void DIALOG_FIND::onButtonCloseClick( wxCommandEvent& aEvent )
+void DIALOG_FIND::onFindPreviousClick( wxCommandEvent& aEvent )
 {
 }
 
-
-void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
+void DIALOG_FIND::onSearchAgainClick( wxCommandEvent& aEvent )
 {
 }
 
-
-void DIALOG_FIND::onButtonFindMarkerClick( wxCommandEvent& aEvent )
+void DIALOG_FIND::onTextEnter( wxCommandEvent& event )
 {
 }
-
 
 void DIALOG_FIND::onClose( wxCloseEvent& aEvent )
 {
@@ -188,11 +185,13 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent,
         long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
     // these members are initialized only to avoid warnings about non initialized vars
+    /*
     m_staticText1 = nullptr;
     m_SearchCombo = nullptr;
     m_button1 = nullptr;
     m_button2 = nullptr;
     m_button3 = nullptr;
+    */
 }
 
 
