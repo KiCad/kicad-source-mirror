@@ -65,12 +65,18 @@ bool PAD_TOOL::Init()
         // Add context menu entries that are displayed when selection tool is active
         CONDITIONAL_MENU& menu = selTool->GetToolMenu().GetMenu();
 
-        auto padSel = SELECTION_CONDITIONS::HasType( PCB_PAD_T );
-        auto singlePadSel = SELECTION_CONDITIONS::Count( 1 ) && SELECTION_CONDITIONS::OnlyType( PCB_PAD_T );
+        SELECTION_CONDITION padSel = SELECTION_CONDITIONS::HasType( PCB_PAD_T );
+        SELECTION_CONDITION singlePadSel = SELECTION_CONDITIONS::Count( 1 ) &&
+                                           SELECTION_CONDITIONS::OnlyType( PCB_PAD_T );
 
         menu.AddSeparator( 400 );
-        menu.AddItem( PCB_ACTIONS::createPadFromShapes,  SELECTION_CONDITIONS::NotEmpty, 400 );
-        menu.AddItem( PCB_ACTIONS::explodePadToShapes,   singlePadSel, 400 );
+
+        if( m_editModules )
+        {
+            menu.AddItem( PCB_ACTIONS::createPadFromShapes,  SELECTION_CONDITIONS::NotEmpty, 400 );
+            menu.AddItem( PCB_ACTIONS::explodePadToShapes,   singlePadSel, 400 );
+        }
+
         menu.AddItem( PCB_ACTIONS::copyPadSettings,      singlePadSel, 400 );
         menu.AddItem( PCB_ACTIONS::applyPadSettings,     padSel, 400 );
         menu.AddItem( PCB_ACTIONS::pushPadSettings,      singlePadSel, 400 );
@@ -418,6 +424,6 @@ void PAD_TOOL::setTransitions()
     Go( &PAD_TOOL::pastePadProperties, PCB_ACTIONS::applyPadSettings.MakeEvent() );
     Go( &PAD_TOOL::copyPadSettings,    PCB_ACTIONS::copyPadSettings.MakeEvent() );
     Go( &PAD_TOOL::pushPadSettings,    PCB_ACTIONS::pushPadSettings.MakeEvent() );
-    
+
     Go( &PAD_TOOL::EnumeratePads,      PCB_ACTIONS::enumeratePads.MakeEvent() );
 }
