@@ -189,7 +189,7 @@ void LIB_TREE::Regenerate( bool aKeepState )
 
     // Store the state
     if( aKeepState )
-        m_unfilteredState = getState();
+        current = getState();
 
     wxString filter = m_query_ctrl->GetValue();
     m_adapter->UpdateSearchString( filter );
@@ -197,7 +197,18 @@ void LIB_TREE::Regenerate( bool aKeepState )
 
     // Restore the state
     if( aKeepState )
-        setState( m_unfilteredState );
+        setState( current );
+}
+
+
+void LIB_TREE::RefreshLibTree()
+{
+    // Yes, this is an enormous hack.  It should be replaced if anyone can figure out a better
+    // way to get the OSX version to re-fetch the text and attributes from the dataModel for
+    // each visible item.
+    int width = m_tree_ctrl->GetColumn( 0 )->GetWidth();
+    m_tree_ctrl->GetColumn( 0 )->SetWidth( width + 1 );
+    m_tree_ctrl->GetColumn( 0 )->SetWidth( width );
 }
 
 

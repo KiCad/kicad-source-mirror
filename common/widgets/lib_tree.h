@@ -96,6 +96,11 @@ public:
      */
     void Regenerate( bool aKeepState );
 
+    /**
+     * Refreshes the tree (mainly to update highlighting and asterisking)
+     */
+    void RefreshLibTree();
+
     void SetFocus() override;
 
 protected:
@@ -164,8 +169,6 @@ protected:
     wxTextCtrl*                 m_query_ctrl;
     wxDataViewCtrl*             m_tree_ctrl;
     wxHtmlWindow*               m_details_ctrl;
-
-    STATE                       m_unfilteredState;
 };
 
 ///> Custom event sent when a new component is preselected

@@ -428,7 +428,7 @@ void LIB_EDIT_FRAME::OnModify()
     GetScreen()->SetModify();
     storeCurrentPart();
 
-    m_treePane->GetLibTree()->Refresh();
+    m_treePane->GetLibTree()->RefreshLibTree();
 }
 
 

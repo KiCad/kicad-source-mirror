@@ -581,7 +581,7 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
 {
     PCB_BASE_FRAME::OnModify();
     Update3DView( false );
-    m_treePane->GetLibTree()->Refresh();
+    m_treePane->GetLibTree()->RefreshLibTree();
 }
 
 

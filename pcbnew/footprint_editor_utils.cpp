@@ -127,7 +127,7 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
 
     m_treePane->GetLibTree()->ExpandLibId( aFPID );
     m_treePane->GetLibTree()->CenterLibId( aFPID );
-    m_treePane->GetLibTree()->Refresh();        // update highlighting
+    m_treePane->GetLibTree()->RefreshLibTree();        // update highlighting
 }
 
 
@@ -264,7 +264,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             }
         }
 
-        m_treePane->GetLibTree()->Refresh();
+        m_treePane->GetLibTree()->RefreshLibTree();
         break;
 
     case ID_MODEDIT_SAVE_AS:
@@ -301,7 +301,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 SyncLibraryTree( true );
         }
 
-        m_treePane->GetLibTree()->Refresh();
+        m_treePane->GetLibTree()->RefreshLibTree();
         break;
 
     case ID_ADD_FOOTPRINT_TO_BOARD:
@@ -357,7 +357,7 @@ void FOOTPRINT_EDIT_FRAME::editFootprintProperties( MODULE* aModule )
                             // therefore not yet in tree.
     {
         static_cast<LIB_TREE_NODE_LIB_ID*>( treeItem.GetID() )->Update( &footprintInfo );
-        m_treePane->GetLibTree()->Refresh();
+        m_treePane->GetLibTree()->RefreshLibTree();
     }
 
     updateTitle();      // in case of a name change...

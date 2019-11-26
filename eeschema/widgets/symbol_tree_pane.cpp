@@ -67,6 +67,10 @@ void SYMBOL_TREE_PANE::Regenerate()
 void SYMBOL_TREE_PANE::onComponentSelected( wxCommandEvent& aEvent )
 {
     m_libEditFrame->GetToolManager()->RunAction( EE_ACTIONS::editSymbol, true );
+
     // Make sure current-part highlighting doesn't get lost in selection highlighting
     m_tree->Unselect();
+
+    // Turn off any previous current-part highlighting
+    m_tree->RefreshLibTree();
 }

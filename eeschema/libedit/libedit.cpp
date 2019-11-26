@@ -266,7 +266,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& a
 void LIB_EDIT_FRAME::SaveAll()
 {
     saveAllLibraries( false );
-    m_treePane->Refresh();
+    m_treePane->GetLibTree()->RefreshLibTree();
     refreshSchematic();
 }
 
@@ -365,7 +365,7 @@ void LIB_EDIT_FRAME::Save()
             m_libMgr->ClearPartModified( partName, libName );
     }
 
-    m_treePane->Refresh();
+    m_treePane->GetLibTree()->RefreshLibTree();
     refreshSchematic();
 }
 
@@ -381,7 +381,7 @@ void LIB_EDIT_FRAME::SaveAs()
     else
         savePartAs();
 
-    m_treePane->Refresh();
+    m_treePane->GetLibTree()->RefreshLibTree();
     refreshSchematic();
 }
 
