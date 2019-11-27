@@ -419,6 +419,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         }
 
         dimension->SetWidth( m_linesThickness.GetValue() );
+        dimension->AdjustDimensionDetails(
+                m_Parent->GetBoard()->GetDesignSettings().m_DimensionPrecision );
     }
 
     m_item->SetLayer( ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) );
