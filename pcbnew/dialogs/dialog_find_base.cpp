@@ -24,22 +24,28 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bSizer131;
 	bSizer131 = new wxBoxSizer( wxVERTICAL );
 
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
+
 	staticText1 = new wxStaticText( this, wxID_ANY, wxT("Search for :"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticText1->Wrap( -1 );
 	staticText1->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT ) );
 
-	bSizer131->Add( staticText1, 0, wxALL, 5 );
+	bSizer8->Add( staticText1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_searchCombo = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER );
 	m_searchCombo->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT ) );
 	m_searchCombo->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_APPWORKSPACE ) );
 
-	bSizer131->Add( m_searchCombo, 0, wxALL|wxEXPAND, 5 );
+	bSizer8->Add( m_searchCombo, 1, wxALL|wxEXPAND, 5 );
+
+
+	bSizer131->Add( bSizer8, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* sizerOptions;
 	sizerOptions = new wxBoxSizer( wxHORIZONTAL );
 
-	m_matchCase = new wxCheckBox( this, wxID_ANY, wxT("Case"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_matchCase = new wxCheckBox( this, wxID_ANY, wxT("Match case"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_matchCase->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT ) );
 
 	sizerOptions->Add( m_matchCase, 0, wxALL, 5 );
@@ -63,32 +69,32 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	bSizer131->Add( sizerOptions, 1, wxALL|wxEXPAND, 0 );
 
-	staticText2 = new wxStaticText( this, wxID_ANY, wxT("Include :"), wxDefaultPosition, wxDefaultSize, 0 );
-	staticText2->Wrap( -1 );
-	staticText2->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT ) );
-
-	bSizer131->Add( staticText2, 0, wxALL, 5 );
-
 	wxBoxSizer* sizerInclude;
-	sizerInclude = new wxBoxSizer( wxHORIZONTAL );
+	sizerInclude = new wxBoxSizer( wxVERTICAL );
 
-	m_includeTexts = new wxCheckBox( this, wxID_ANY, wxT("Texts"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_includeTexts = new wxCheckBox( this, wxID_ANY, wxT("Search for texts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeTexts->SetValue(true);
 	m_includeTexts->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT ) );
 
 	sizerInclude->Add( m_includeTexts, 0, wxALL, 5 );
 
-	m_includeValues = new wxCheckBox( this, wxID_ANY, wxT("Values"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_includeValues = new wxCheckBox( this, wxID_ANY, wxT("Search for item values"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeValues->SetValue(true);
 	m_includeValues->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT ) );
 
 	sizerInclude->Add( m_includeValues, 0, wxALL, 5 );
 
-	m_includeReferences = new wxCheckBox( this, wxID_ANY, wxT("References"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_includeReferences = new wxCheckBox( this, wxID_ANY, wxT("Search for item references"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeReferences->SetValue(true);
 	m_includeReferences->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT ) );
 
 	sizerInclude->Add( m_includeReferences, 0, wxALL, 5 );
+
+	m_includeMarkers = new wxCheckBox( this, wxID_ANY, wxT("Search for DRC markers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_includeMarkers->SetValue(true);
+	m_includeMarkers->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT ) );
+
+	sizerInclude->Add( m_includeMarkers, 0, wxALL, 5 );
 
 	m_includeVias = new wxCheckBox( this, wxID_ANY, wxT("Vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_includeVias->SetValue(true);
@@ -112,7 +118,7 @@ DIALOG_FIND_BASE::DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_findPrevious = new wxButton( this, wxID_ANY, wxT("Find Previous"), wxDefaultPosition, wxDefaultSize, 0 );
 	sizerButtons->Add( m_findPrevious, 0, wxALIGN_LEFT|wxALL|wxEXPAND, 5 );
 
-	m_searchAgain = new wxButton( this, wxID_ANY, wxT("Search Again"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_searchAgain = new wxButton( this, wxID_ANY, wxT("Restart Search"), wxDefaultPosition, wxDefaultSize, 0 );
 	sizerButtons->Add( m_searchAgain, 0, wxALIGN_RIGHT|wxALL|wxEXPAND, 5 );
 
 

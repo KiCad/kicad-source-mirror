@@ -17,8 +17,8 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/combobox.h>
-#include <wx/checkbox.h>
 #include <wx/sizer.h>
+#include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -44,10 +44,10 @@ class DIALOG_FIND_BASE : public DIALOG_SHIM
 		wxCheckBox* m_matchWords;
 		wxCheckBox* m_wildcards;
 		wxCheckBox* m_wrap;
-		wxStaticText* staticText2;
 		wxCheckBox* m_includeTexts;
 		wxCheckBox* m_includeValues;
 		wxCheckBox* m_includeReferences;
+		wxCheckBox* m_includeMarkers;
 		wxCheckBox* m_includeVias;
 		wxButton* m_findNext;
 		wxButton* m_findPrevious;
@@ -66,7 +66,7 @@ class DIALOG_FIND_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Find"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 504,213 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Find"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 648,305 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 
 		~DIALOG_FIND_BASE();
 

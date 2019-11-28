@@ -105,6 +105,11 @@ public:
 
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override
+     {
+         return BOARD_ITEM::Matches( m_drc.GetErrorText(), aSearchData );
+     }
+
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;

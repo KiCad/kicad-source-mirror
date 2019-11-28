@@ -50,6 +50,7 @@ bool FindOptionWrap = true;
 bool FindIncludeTexts = true;
 bool FindIncludeValues = true;
 bool FindIncludeReferences = true;
+bool FindIncludeMarkers = true;
 //bool findIncludeVias = false;
 
 DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aFrame ) : DIALOG_FIND_BASE( aFrame )
@@ -80,6 +81,7 @@ DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aFrame ) : DIALOG_FIND_BASE( aFrame )
     m_includeTexts->SetValue( FindIncludeTexts );
     m_includeValues->SetValue( FindIncludeValues );
     m_includeReferences->SetValue( FindIncludeReferences );
+    m_includeMarkers->SetValue( FindIncludeMarkers );
 
     m_cancel->Show( false );
     m_gauge->Show( false );
@@ -184,6 +186,11 @@ void DIALOG_FIND::search( bool aDirection )
         FindIncludeReferences = m_includeReferences->GetValue();
         isUpToDate = false;
     }
+    if( FindIncludeMarkers != m_includeMarkers->GetValue() )
+    {
+        FindIncludeMarkers = m_includeMarkers->GetValue();
+        isUpToDate = false;
+    }
     if( FindOptionCase )
         flags |= wxFR_MATCHCASE;
 
@@ -245,6 +252,16 @@ void DIALOG_FIND::search( bool aDirection )
                         m_hitList->Append( textItem );
                     }
                 }
+            }
+        }
+        if( FindIncludeMarkers )
+        {
+            int i;
+            for( i = 0; i < m_frame->GetBoard()->GetMARKERCount(); ++i )
+            {
+                MARKER_PCB* marker = m_frame->GetBoard()->GetMARKER( i );
+                if( marker->Matches( m_frame->GetFindReplaceData(), nullptr ) )
+                    m_hitList->Append( marker );
             }
         }
         m_cancel->Show( false );
@@ -350,6 +367,7 @@ void DIALOG_FIND::onClose( wxCloseEvent& aEvent )
 
     FindIncludeTexts = m_includeTexts->GetValue();
     FindIncludeValues = m_includeValues->GetValue();
+    FindIncludeMarkers = m_includeMarkers->GetValue();
     FindIncludeReferences = m_includeReferences->GetValue();
 
     while( m_hitList->GetCount() > 0 )
