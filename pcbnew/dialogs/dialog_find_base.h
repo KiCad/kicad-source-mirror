@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov 22 2019)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,11 +19,10 @@
 #include <wx/combobox.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
-#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/textctrl.h>
+#include <wx/button.h>
 #include <wx/gauge.h>
 #include <wx/frame.h>
 
@@ -52,7 +51,7 @@ class DIALOG_FIND_BASE : public DIALOG_SHIM
 		wxButton* m_findNext;
 		wxButton* m_findPrevious;
 		wxButton* m_searchAgain;
-		wxTextCtrl* m_status;
+		wxStaticText* m_status;
 		wxButton* m_cancel;
 		wxGauge* m_gauge;
 

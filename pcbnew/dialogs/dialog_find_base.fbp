@@ -14,7 +14,6 @@
         <property name="file">dialog_find_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">0</property>
         <property name="name">MyProject2</property>
@@ -26,20 +25,19 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
-        <property name="use_array_enum">0</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Frame" expanded="1">
             <property name="aui_managed">0</property>
             <property name="aui_manager_style">wxAUI_MGR_DEFAULT</property>
-            <property name="bg">wxSYS_COLOUR_ACTIVEBORDER</property>
+            <property name="bg">wxSYS_COLOUR_WINDOW</property>
             <property name="center">wxBOTH</property>
             <property name="context_help"></property>
             <property name="context_menu">1</property>
             <property name="enabled">1</property>
             <property name="event_handler">impl_virtual</property>
             <property name="extra_style"></property>
-            <property name="fg">wxSYS_COLOUR_APPWORKSPACE</property>
+            <property name="fg"></property>
             <property name="font"></property>
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
@@ -115,7 +113,7 @@
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
                                                 <property name="enabled">1</property>
-                                                <property name="fg">wxSYS_COLOUR_WINDOWTEXT</property>
+                                                <property name="fg"></property>
                                                 <property name="floatable">1</property>
                                                 <property name="font"></property>
                                                 <property name="gripper">0</property>
@@ -164,7 +162,7 @@
                                                 <property name="aui_position"></property>
                                                 <property name="aui_row"></property>
                                                 <property name="best_size"></property>
-                                                <property name="bg">wxSYS_COLOUR_APPWORKSPACE</property>
+                                                <property name="bg">wxSYS_COLOUR_WINDOW</property>
                                                 <property name="caption"></property>
                                                 <property name="caption_visible">1</property>
                                                 <property name="center_pane">0</property>
@@ -177,7 +175,7 @@
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
                                                 <property name="enabled">1</property>
-                                                <property name="fg">wxSYS_COLOUR_WINDOWTEXT</property>
+                                                <property name="fg"></property>
                                                 <property name="floatable">1</property>
                                                 <property name="font"></property>
                                                 <property name="gripper">0</property>
@@ -254,7 +252,7 @@
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
                                                 <property name="enabled">1</property>
-                                                <property name="fg">wxSYS_COLOUR_WINDOWTEXT</property>
+                                                <property name="fg"></property>
                                                 <property name="floatable">1</property>
                                                 <property name="font"></property>
                                                 <property name="gripper">0</property>
@@ -318,7 +316,7 @@
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
                                                 <property name="enabled">1</property>
-                                                <property name="fg">wxSYS_COLOUR_WINDOWTEXT</property>
+                                                <property name="fg"></property>
                                                 <property name="floatable">1</property>
                                                 <property name="font"></property>
                                                 <property name="gripper">0</property>
@@ -382,7 +380,7 @@
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
                                                 <property name="enabled">1</property>
-                                                <property name="fg">wxSYS_COLOUR_WINDOWTEXT</property>
+                                                <property name="fg"></property>
                                                 <property name="floatable">1</property>
                                                 <property name="font"></property>
                                                 <property name="gripper">0</property>
@@ -446,7 +444,7 @@
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
                                                 <property name="enabled">1</property>
-                                                <property name="fg">wxSYS_COLOUR_WINDOWTEXT</property>
+                                                <property name="fg"></property>
                                                 <property name="floatable">1</property>
                                                 <property name="font"></property>
                                                 <property name="gripper">0</property>
@@ -521,7 +519,7 @@
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
                                                 <property name="enabled">1</property>
-                                                <property name="fg">wxSYS_COLOUR_WINDOWTEXT</property>
+                                                <property name="fg"></property>
                                                 <property name="floatable">1</property>
                                                 <property name="font"></property>
                                                 <property name="gripper">0</property>
@@ -585,7 +583,7 @@
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
                                                 <property name="enabled">1</property>
-                                                <property name="fg">wxSYS_COLOUR_WINDOWTEXT</property>
+                                                <property name="fg"></property>
                                                 <property name="floatable">1</property>
                                                 <property name="font"></property>
                                                 <property name="gripper">0</property>
@@ -649,7 +647,7 @@
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
                                                 <property name="enabled">1</property>
-                                                <property name="fg">wxSYS_COLOUR_WINDOWTEXT</property>
+                                                <property name="fg"></property>
                                                 <property name="floatable">1</property>
                                                 <property name="font"></property>
                                                 <property name="gripper">0</property>
@@ -713,7 +711,7 @@
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
                                                 <property name="enabled">1</property>
-                                                <property name="fg">wxSYS_COLOUR_WINDOWTEXT</property>
+                                                <property name="fg"></property>
                                                 <property name="floatable">1</property>
                                                 <property name="font"></property>
                                                 <property name="gripper">0</property>
@@ -777,7 +775,7 @@
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
                                                 <property name="enabled">1</property>
-                                                <property name="fg">wxSYS_COLOUR_WINDOWTEXT</property>
+                                                <property name="fg"></property>
                                                 <property name="floatable">1</property>
                                                 <property name="font"></property>
                                                 <property name="gripper">0</property>
@@ -840,7 +838,6 @@
                                         <property name="aui_name"></property>
                                         <property name="aui_position"></property>
                                         <property name="aui_row"></property>
-                                        <property name="auth_needed">0</property>
                                         <property name="best_size"></property>
                                         <property name="bg"></property>
                                         <property name="bitmap"></property>
@@ -914,7 +911,6 @@
                                         <property name="aui_name"></property>
                                         <property name="aui_position"></property>
                                         <property name="aui_row"></property>
-                                        <property name="auth_needed">0</property>
                                         <property name="best_size"></property>
                                         <property name="bg"></property>
                                         <property name="bitmap"></property>
@@ -988,7 +984,6 @@
                                         <property name="aui_name"></property>
                                         <property name="aui_position"></property>
                                         <property name="aui_row"></property>
-                                        <property name="auth_needed">0</property>
                                         <property name="best_size"></property>
                                         <property name="bg"></property>
                                         <property name="bitmap"></property>
@@ -1062,11 +1057,11 @@
                         <property name="name">sizerStatus</property>
                         <property name="orient">wxHORIZONTAL</property>
                         <property name="permission">none</property>
-                        <object class="sizeritem" expanded="0">
+                        <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALL|wxEXPAND</property>
+                            <property name="flag">wxALL</property>
                             <property name="proportion">0</property>
-                            <object class="wxTextCtrl" expanded="0">
+                            <object class="wxStaticText" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
                                 <property name="RightDockable">1</property>
@@ -1076,7 +1071,7 @@
                                 <property name="aui_position"></property>
                                 <property name="aui_row"></property>
                                 <property name="best_size"></property>
-                                <property name="bg">wxSYS_COLOUR_WINDOWFRAME</property>
+                                <property name="bg"></property>
                                 <property name="caption"></property>
                                 <property name="caption_visible">1</property>
                                 <property name="center_pane">0</property>
@@ -1088,16 +1083,17 @@
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
                                 <property name="enabled">1</property>
-                                <property name="fg">wxSYS_COLOUR_WINDOWTEXT</property>
+                                <property name="fg"></property>
                                 <property name="floatable">1</property>
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
+                                <property name="label">Status</property>
+                                <property name="markup">0</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
-                                <property name="maxlength"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
                                 <property name="minimum_size"></property>
@@ -1116,14 +1112,10 @@
                                 <property name="subclass">; ; forward_declare</property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
-                                <property name="validator_data_type"></property>
-                                <property name="validator_style">wxFILTER_NONE</property>
-                                <property name="validator_type">wxDefaultValidator</property>
-                                <property name="validator_variable"></property>
-                                <property name="value">No hit</property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
-                                <property name="window_style">wxBORDER_NONE</property>
+                                <property name="window_style"></property>
+                                <property name="wrap">-1</property>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
@@ -1139,7 +1131,6 @@
                                 <property name="aui_name"></property>
                                 <property name="aui_position"></property>
                                 <property name="aui_row"></property>
-                                <property name="auth_needed">0</property>
                                 <property name="best_size"></property>
                                 <property name="bg"></property>
                                 <property name="bitmap"></property>

@@ -135,6 +135,7 @@ void DIALOG_FIND::search( bool aDirection )
         m_searchCombo->SetSelection( 0 );
         isUpToDate = false;
         m_frame->GetFindHistoryList().Insert( searchString, 0 );
+
         if( m_searchCombo->GetCount() > 10 )
         {
             m_frame->GetFindHistoryList().pop_back();
@@ -150,6 +151,7 @@ void DIALOG_FIND::search( bool aDirection )
 
         if( m_frame->GetFindHistoryList().Index( searchString ) )
             m_frame->GetFindHistoryList().Remove( searchString );
+
         m_frame->GetFindHistoryList().Insert( searchString, 0 );
     }
     // Update search flags
@@ -160,37 +162,45 @@ void DIALOG_FIND::search( bool aDirection )
         FindOptionCase = m_matchCase->GetValue();
         isUpToDate = false;
     }
+
     if( FindOptionWords != m_matchWords->GetValue() )
     {
         FindOptionWords = m_matchWords->GetValue();
         isUpToDate = false;
     }
+
     if( FindOptionWildcards != m_wildcards->GetValue() )
     {
         FindOptionWildcards = m_wildcards->GetValue();
         isUpToDate = false;
     }
+
     FindOptionWrap = m_wrap->GetValue();
+
     if( FindIncludeTexts != m_includeTexts->GetValue() )
     {
         FindIncludeTexts = m_includeTexts->GetValue();
         isUpToDate = false;
     }
+
     if( FindIncludeValues != m_includeValues->GetValue() )
     {
         FindIncludeValues = m_includeValues->GetValue();
         isUpToDate = false;
     }
+
     if( FindIncludeReferences != m_includeReferences->GetValue() )
     {
         FindIncludeReferences = m_includeReferences->GetValue();
         isUpToDate = false;
     }
+
     if( FindIncludeMarkers != m_includeMarkers->GetValue() )
     {
         FindIncludeMarkers = m_includeMarkers->GetValue();
         isUpToDate = false;
     }
+
     if( FindOptionCase )
         flags |= wxFR_MATCHCASE;
 
@@ -210,9 +220,11 @@ void DIALOG_FIND::search( bool aDirection )
 
     if( !isUpToDate )
     {
-        m_status->SetValue( "Searching..." );
+        m_status->SetLabel( _( "Searching..." ) );
+
         while( m_hitList->GetCount() > 0 )
             m_hitList->PopBack();
+
         m_foundItem = NULL;
 
         if( FindIncludeTexts || FindIncludeValues || FindIncludeReferences )
@@ -241,6 +253,7 @@ void DIALOG_FIND::search( bool aDirection )
                     }
                 }
             }
+
             if( FindIncludeTexts )
             {
                 for( BOARD_ITEM* item : m_frame->GetBoard()->Drawings() )
@@ -254,16 +267,18 @@ void DIALOG_FIND::search( bool aDirection )
                 }
             }
         }
+
         if( FindIncludeMarkers )
         {
-            int i;
-            for( i = 0; i < m_frame->GetBoard()->GetMARKERCount(); ++i )
+            for( int i = 0; i < m_frame->GetBoard()->GetMARKERCount(); ++i )
             {
                 MARKER_PCB* marker = m_frame->GetBoard()->GetMARKER( i );
+
                 if( marker->Matches( m_frame->GetFindReplaceData(), nullptr ) )
                     m_hitList->Append( marker );
             }
         }
+
         m_cancel->Show( false );
         m_gauge->Show( false );
         m_status->Show( true );
@@ -282,7 +297,7 @@ void DIALOG_FIND::search( bool aDirection )
     else if( m_itemCount == -1 )
     {
         m_foundItem = aDirection ? m_hitList->begin() : m_hitList->end();
-        m_itemCount = aDirection ? 0 : m_hitList->GetCount() - 1;
+        m_itemCount = aDirection ? 0 : (int) m_hitList->GetCount() - 1;
         isUpToDate = true;
     }
     else
@@ -299,8 +314,7 @@ void DIALOG_FIND::search( bool aDirection )
                 else
                 {
                     m_frame->SetStatusText( wxEmptyString );
-                    msg.Printf( _( "No more item to show" ), GetChars( searchString ) );
-                    DisplayError( this, msg, 10 );
+                    DisplayError( this, _( "No more item to show" ), 10 );
                     return;
                 }
             }
@@ -316,14 +330,13 @@ void DIALOG_FIND::search( bool aDirection )
             {
                 if( m_wrap->GetValue() )
                 {
-                    m_itemCount = m_hitList->GetCount() - 1;
+                    m_itemCount = (int) m_hitList->GetCount() - 1;
                     m_foundItem = m_hitList->end();
                 }
                 else
                 {
                     m_frame->SetStatusText( wxEmptyString );
-                    msg.Printf( _( "No more item to show" ), GetChars( searchString ) );
-                    DisplayError( this, msg, 10 );
+                    DisplayError( this, _( "No more item to show" ), 10 );
                     return;
                 }
             }
@@ -334,24 +347,28 @@ void DIALOG_FIND::search( bool aDirection )
             }
         }
     }
+
     // Display the item
     if( m_foundItem )
     {
         m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, m_foundItem );
         m_frame->FocusOnLocation( m_foundItem->GetPosition(), true );
-        msg.Printf( _( "\"%s\" found" ), GetChars( searchString ) );
+
+        msg.Printf( _( "\"%s\" found" ), searchString );
         m_frame->SetStatusText( msg );
-        msg = wxEmptyString;
-        msg = msg << "Hit(s): " << m_itemCount + 1 << " / " << m_hitList->GetCount();
-        m_status->SetValue( msg );
+
+        msg.Printf( _( "Hit(s): %i / %i" ), m_itemCount + 1, m_hitList->GetCount() );
+        m_status->SetLabel( msg );
     }
     else
     {
         m_frame->SetStatusText( wxEmptyString );
-        msg.Printf( _( "\"%s\" not found" ), GetChars( searchString ) );
+
+        msg.Printf( _( "\"%s\" not found" ), searchString );
         DisplayError( this, msg, 10 );
+
         m_itemCount = 0;
-        m_status->SetValue( "No hit" );
+        m_status->SetLabel( _( "No hits" ) );
     }
 
     if( m_highlightCallback )
@@ -372,6 +389,7 @@ void DIALOG_FIND::onClose( wxCloseEvent& aEvent )
 
     while( m_hitList->GetCount() > 0 )
         m_hitList->PopBack();
+
     delete m_hitList;
     EndModal( 1 );
 }
