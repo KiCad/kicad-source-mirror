@@ -288,6 +288,9 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
 
     UpdateTitle();
 
-    GetToolManager()->RunAction( EE_ACTIONS::updateNetHighlighting, true );
+    SCH_EDITOR_CONTROL* editTool = m_toolManager->GetTool<SCH_EDITOR_CONTROL>();
+    TOOL_EVENT dummy;
+    editTool->UpdateNetHighlighting( dummy );
+
     HardRedraw();   // Ensure any item has its view updated, especially the worksheet items
 }
