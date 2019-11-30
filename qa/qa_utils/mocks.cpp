@@ -172,7 +172,7 @@ void DIALOG_FIND::onTextEnter( wxCommandEvent& event )
 {
 }
 
-void DIALOG_FIND::onClose( wxCloseEvent& aEvent )
+void DIALOG_FIND::onClose( wxCommandEvent& aEvent )
 {
 }
 

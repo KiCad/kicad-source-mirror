@@ -23,8 +23,8 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
-#include <wx/gauge.h>
-#include <wx/frame.h>
+#include <wx/statline.h>
+#include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -37,36 +37,34 @@ class DIALOG_FIND_BASE : public DIALOG_SHIM
 	private:
 
 	protected:
-		wxStaticText* staticText1;
+		wxStaticText* searchStringLabel;
 		wxComboBox* m_searchCombo;
 		wxCheckBox* m_matchCase;
 		wxCheckBox* m_matchWords;
 		wxCheckBox* m_wildcards;
 		wxCheckBox* m_wrap;
-		wxCheckBox* m_includeTexts;
 		wxCheckBox* m_includeValues;
 		wxCheckBox* m_includeReferences;
+		wxCheckBox* m_includeTexts;
 		wxCheckBox* m_includeMarkers;
 		wxCheckBox* m_includeVias;
 		wxButton* m_findNext;
 		wxButton* m_findPrevious;
 		wxButton* m_searchAgain;
+		wxButton* m_closeButton;
 		wxStaticText* m_status;
-		wxButton* m_cancel;
-		wxGauge* m_gauge;
 
 		// Virtual event handlers, overide them in your derived class
-		virtual void onClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void onTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFindNextClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFindPreviousClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSearchAgainClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onClose( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Find"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 648,305 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
-
+		DIALOG_FIND_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
 		~DIALOG_FIND_BASE();
 
 };

@@ -83,14 +83,13 @@ DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aFrame ) : DIALOG_FIND_BASE( aFrame )
     m_includeReferences->SetValue( FindIncludeReferences );
     m_includeMarkers->SetValue( FindIncludeMarkers );
 
-    m_cancel->Show( false );
-    m_gauge->Show( false );
-    m_status->Show( true );
-    m_gauge->SetRange( 100 );
+    m_status->SetLabel( wxEmptyString);
     m_hitList = new DLIST<BOARD_ITEM>;
     m_hitList->SetOwnership( false );
     m_itemCount = 0;
     isUpToDate = false;
+
+    m_findNext->SetDefault();
     SetInitialFocus( m_searchCombo );
 
     Center();
@@ -154,6 +153,7 @@ void DIALOG_FIND::search( bool aDirection )
 
         m_frame->GetFindHistoryList().Insert( searchString, 0 );
     }
+
     // Update search flags
     flags = 0;
 
@@ -216,8 +216,8 @@ void DIALOG_FIND::search( bool aDirection )
 
     m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
     m_frame->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
-    // Refresh the list of results
 
+    // Refresh the list of results
     if( !isUpToDate )
     {
         m_status->SetLabel( _( "Searching..." ) );
@@ -279,12 +279,9 @@ void DIALOG_FIND::search( bool aDirection )
             }
         }
 
-        m_cancel->Show( false );
-        m_gauge->Show( false );
-        m_status->Show( true );
-        m_gauge->SetValue( 100 );
         m_itemCount = -1;
     }
+
     // Do we want a sorting algorithm ? If so, implement it here.
 
     // Get the item to display
@@ -375,7 +372,7 @@ void DIALOG_FIND::search( bool aDirection )
         m_highlightCallback( m_foundItem );
 }
 
-void DIALOG_FIND::onClose( wxCloseEvent& aEvent )
+void DIALOG_FIND::onClose( wxCommandEvent& aEvent )
 {
     FindOptionCase = m_matchCase->GetValue();
     FindOptionWords = m_matchWords->GetValue();

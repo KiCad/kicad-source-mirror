@@ -63,7 +63,7 @@ private:
     void onFindNextClick( wxCommandEvent& event ) override;
     void onFindPreviousClick( wxCommandEvent& event ) override;
     void onSearchAgainClick( wxCommandEvent& event ) override;
-    void onClose( wxCloseEvent& event ) override;
+    void onClose( wxCommandEvent& event ) override;
     void search( bool direction );
 };
 
