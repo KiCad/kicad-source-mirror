@@ -25,9 +25,10 @@ Some of these tools are required to build from source and some are optional.
 
 ## GIT Version Control System ## {#git}
 
-The official source code repository is hosted on [Launchpad][] and requires [git][] to get
+The official source code repository is hosted on [GitLab][] and requires [git][] to get
 the latest source. If you prefer to use [GitHub][] there is a read only mirror of the official
-KiCad repository. Do not submit pull requests to GitHub. Changes should be sent to the KiCad
+KiCad repository. The previous official hosting location at [Launchpad][] is still active as
+a mirror only. Do not submit pull requests to GitHub. Changes should be sent to the KiCad
 developer's [mailing list][] using `git format-patch` and attaching the patch with [PATCH] at
 the beginning of the subject or using `git send-email` to send your commit directly to the
 developer's [mailing list][].
@@ -282,22 +283,22 @@ This is set by specifying the KICAD_CONFIG_DIR string at compile time.
 # Getting the KiCad Source Code ## {#getting_src}
 
 There are several ways to get the KiCad source.  If you want to build the stable version you
-can down load the source archive from the [KiCad Launchpad][] developers page.  Use tar or some
+can down load the source archive from the [GitLab][] repository.  Use tar or some
 other archive program to extract the source on your system.  If you are using tar, use the
 following command:
 
     tar -xaf kicad_src_archive.tar.xz
 
-If you are contributing directly to the KiCad project on Launchpad, you can create a local
+If you are contributing directly to the KiCad project on GitLab, you can create a local
 copy on your machine by using the following command:
 
-    git clone -b master https://git.launchpad.net/kicad
+    git clone https://gitlab.com/kicad/code/kicad.git
 
 Here is a list of source links:
 
-Stable release archive: https://launchpad.net/kicad/5.0/5.0.2/+download/kicad-5.0.2.tar.xz
+Stable release archives: https://kicad-pcb.org/download/source/
 
-Development branch: https://code.launchpad.net/~kicad-product-committers/kicad/+git/product-git/+ref/master
+Development branch: https://gitlab.com/kicad/code/kicad/tree/master
 
 GitHub mirror: https://github.com/KiCad/kicad-source-mirror
 
@@ -517,13 +518,13 @@ you will have to apply the Boost patches in the KiCad source [patches folder][].
 
 [download]: http://kicad-pcb.org/download/
 [KiCad website]: http://kicad-pcb.org/
-[KiCad Launchpad]: https://launchpad.net/kicad
 [GNU GCC]: https://gcc.gnu.org/
 [Clang]: http://clang.llvm.org/
 [CMake]: https://cmake.org/
 [Launchpad]: https://code.launchpad.net/kicad/
 [GIT]: https://git-scm.com/
 [GitHub]: https://github.com/KiCad/kicad-source-mirror
+[GitLab]: https://gitlab.com/kicad/code/kicad
 [ngspice]: http://ngspice.sourceforge.net/
 [Doxygen]: http://www.doxygen.nl
 [mailing list]: https://launchpad.net/~kicad-developers
