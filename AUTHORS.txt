@@ -47,8 +47,8 @@ Seth Hillbrand <hillbrand[at]ucdavis-dot-edu>
 Jeff Young <jeff[at]rokeby-dot-ie>
 Kevin Cozens <kevin[at]ve3syb-dot-ca>
 
-See git repo on launchpad for contributors at
-https://code.launchpad.net/~kicad-product-committers/kicad/+git/product-git/+ref/master.
+See git repo on GitLab for contributors at
+https://gitlab.com/kicad/code/kicad/-/graphs/master
 
 
 == Document Writers
