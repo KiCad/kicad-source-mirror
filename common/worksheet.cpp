@@ -31,7 +31,7 @@
 
 
 #include <fctsys.h>
-#include <pgm_base.h>
+#include <kiface_i.h>
 #include <gr_basic.h>
 #include <common.h>
 #include <base_screen.h>
@@ -94,7 +94,7 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                 break;
 
             case 'K':
-                msg += productName + Pgm().App().GetAppName();
+                msg += productName + Kiface().Name();
                 msg += wxT( " " ) + GetBuildVersion();
                 break;
 
