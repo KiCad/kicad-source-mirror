@@ -509,111 +509,111 @@ if(wxWidgets_FIND_STYLE STREQUAL "win32")
     else()
       set(WX_LIB_DIR_PREFIX vc)
     endif()
-	
-	if(VCPKG_TOOLCHAIN)
-		set(wxWidgets_FOUND TRUE)
-	    find_path(wxWidgets_ROOT_DIR
-			NAMES include/wx/wx.h
-			PATHS
-			ENV wxWidgets_ROOT_DIR
-			DOC "wxWidgets base/installation directory"
-			)
-		if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-			set(wxWidgets_LIB_DIR ${wxWidgets_ROOT_DIR}/debug/lib)
-			set(wxWidgets_CONFIGURATION mswud)
-		else()
-			set(wxWidgets_LIB_DIR ${wxWidgets_ROOT_DIR}/lib)
-			set(wxWidgets_CONFIGURATION mswu)
-		endif()
+  
+  if(VCPKG_TOOLCHAIN)
+    set(wxWidgets_FOUND TRUE)
+      find_path(wxWidgets_ROOT_DIR
+      NAMES include/wx/wx.h
+      PATHS
+      ENV wxWidgets_ROOT_DIR
+      DOC "wxWidgets base/installation directory"
+      )
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+      set(wxWidgets_LIB_DIR ${wxWidgets_ROOT_DIR}/debug/lib)
+      set(wxWidgets_CONFIGURATION mswud)
+    else()
+      set(wxWidgets_LIB_DIR ${wxWidgets_ROOT_DIR}/lib)
+      set(wxWidgets_CONFIGURATION mswu)
+    endif()
 
-		set(wxWidgets_BIN_DIR ${wxWidgets_ROOT_DIR}/bin)
-		set(wxWidgets_INCLUDE_DIR ${wxWidgets_ROOT_DIR}/include)
-		file(GLOB DLL ${wxWidgets_BIN_DIR}/wxmsw*.dll)
-		if (DLL)
-			set(wxWidgets_DEFINITIONS WXUSINGDLL)
-			DBG_MSG_V("detected SHARED/DLL tree wxWidgets_LIB_DIR=${wxWidgets_LIB_DIR}")
-		endif ()
-		set(WX_ROOT_DIR ${wxWidgets_ROOT_DIR})
-		set(WX_LIB_DIR ${wxWidgets_LIB_DIR})  # needed by macro
-		set(WX_CONFIGURATION_LIST ${wxWidgets_CONFIGURATION})
+    set(wxWidgets_BIN_DIR ${wxWidgets_ROOT_DIR}/bin)
+    set(wxWidgets_INCLUDE_DIR ${wxWidgets_ROOT_DIR}/include)
+    file(GLOB DLL ${wxWidgets_BIN_DIR}/wxmsw*.dll)
+    if (DLL)
+      set(wxWidgets_DEFINITIONS WXUSINGDLL)
+      DBG_MSG_V("detected SHARED/DLL tree wxWidgets_LIB_DIR=${wxWidgets_LIB_DIR}")
+    endif ()
+    set(WX_ROOT_DIR ${wxWidgets_ROOT_DIR})
+    set(WX_LIB_DIR ${wxWidgets_LIB_DIR})  # needed by macro
+    set(WX_CONFIGURATION_LIST ${wxWidgets_CONFIGURATION})
 
-		# Set wxWidgets lib setup include directory.
-		if (EXISTS ${wxWidgets_INCLUDE_DIR}/wx/setup.h)
-			set(wxWidgets_INCLUDE_DIRS ${wxWidgets_INCLUDE_DIR})
-		else ()
-			DBG_MSG("wxWidgets_FOUND FALSE because ${wxWidgets_INCLUDE_DIR}/wx/setup.h does not exists.")
-			set(wxWidgets_FOUND FALSE)
-		endif ()
+    # Set wxWidgets lib setup include directory.
+    if (EXISTS ${wxWidgets_INCLUDE_DIR}/wx/setup.h)
+      set(wxWidgets_INCLUDE_DIRS ${wxWidgets_INCLUDE_DIR})
+    else ()
+      DBG_MSG("wxWidgets_FOUND FALSE because ${wxWidgets_INCLUDE_DIR}/wx/setup.h does not exists.")
+      set(wxWidgets_FOUND FALSE)
+    endif ()
 
-		# Set wxWidgets main include directory.
-		if (EXISTS ${wxWidgets_ROOT_DIR}/include/wx/wx.h)
-			list(APPEND wxWidgets_INCLUDE_DIRS ${wxWidgets_ROOT_DIR}/include)
-		else ()
-			DBG_MSG("wxWidgets_FOUND FALSE because wxWidgets_ROOT_DIR=${wxWidgets_ROOT_DIR} has no ${wxWidgets_ROOT_DIR}/include/wx/wx.h")
-			set(wxWidgets_FOUND FALSE)
-		endif ()
+    # Set wxWidgets main include directory.
+    if (EXISTS ${wxWidgets_ROOT_DIR}/include/wx/wx.h)
+      list(APPEND wxWidgets_INCLUDE_DIRS ${wxWidgets_ROOT_DIR}/include)
+    else ()
+      DBG_MSG("wxWidgets_FOUND FALSE because wxWidgets_ROOT_DIR=${wxWidgets_ROOT_DIR} has no ${wxWidgets_ROOT_DIR}/include/wx/wx.h")
+      set(wxWidgets_FOUND FALSE)
+    endif ()
 
-		DBG_MSG_V("WX_CONFIGURATION_LIST=${WX_CONFIGURATION_LIST}")
-
-
-		# Get configuration parameters from the name.
-		WX_GET_NAME_COMPONENTS(${wxWidgets_CONFIGURATION} UNV UCD DBG)
+    DBG_MSG_V("WX_CONFIGURATION_LIST=${WX_CONFIGURATION_LIST}")
 
 
-		# Find wxWidgets libraries.
-		WX_FIND_LIBS("${UNV}" "${UCD}" "${DBG}")
-		if (WX_USE_REL_AND_DBG)
-			WX_FIND_LIBS("${UNV}" "${UCD}" "d")
-		endif ()
+    # Get configuration parameters from the name.
+    WX_GET_NAME_COMPONENTS(${wxWidgets_CONFIGURATION} UNV UCD DBG)
 
-		# Settings for requested libs (i.e., include dir, libraries, etc.).
-		WX_SET_LIBRARIES(wxWidgets_FIND_COMPONENTS "${DBG}")
 
-		# Add necessary definitions for unicode builds
-		if ("${UCD}" STREQUAL "u")
-			list(APPEND wxWidgets_DEFINITIONS UNICODE _UNICODE)
-		endif ()
+    # Find wxWidgets libraries.
+    WX_FIND_LIBS("${UNV}" "${UCD}" "${DBG}")
+    if (WX_USE_REL_AND_DBG)
+      WX_FIND_LIBS("${UNV}" "${UCD}" "d")
+    endif ()
 
-		# Add necessary definitions for debug builds
-		set(wxWidgets_DEFINITIONS_DEBUG _DEBUG __WXDEBUG__)
+    # Settings for requested libs (i.e., include dir, libraries, etc.).
+    WX_SET_LIBRARIES(wxWidgets_FIND_COMPONENTS "${DBG}")
 
-	else()
-		if(BUILD_SHARED_LIBS)
-		  find_path(wxWidgets_LIB_DIR
-			NAMES
-			  msw/wx/setup.h
-			  mswd/wx/setup.h
-			  mswu/wx/setup.h
-			  mswud/wx/setup.h
-			  mswuniv/wx/setup.h
-			  mswunivd/wx/setup.h
-			  mswunivu/wx/setup.h
-			  mswunivud/wx/setup.h
-			PATHS
-			${WX_ROOT_DIR}/lib/${WX_LIB_DIR_PREFIX}_dll   # prefer shared
-			${WX_ROOT_DIR}/lib/${WX_LIB_DIR_PREFIX}_lib
-			DOC "Path to wxWidgets libraries"
-			NO_DEFAULT_PATH
-			)
-		else()
-		  find_path(wxWidgets_LIB_DIR
-			NAMES
-			  msw/wx/setup.h
-			  mswd/wx/setup.h
-			  mswu/wx/setup.h
-			  mswud/wx/setup.h
-			  mswuniv/wx/setup.h
-			  mswunivd/wx/setup.h
-			  mswunivu/wx/setup.h
-			  mswunivud/wx/setup.h
-			PATHS
-			${WX_ROOT_DIR}/lib/${WX_LIB_DIR_PREFIX}_lib   # prefer static
-			${WX_ROOT_DIR}/lib/${WX_LIB_DIR_PREFIX}_dll
-			DOC "Path to wxWidgets libraries"
-			NO_DEFAULT_PATH
-			)
-		endif()
-	endif()
+    # Add necessary definitions for unicode builds
+    if ("${UCD}" STREQUAL "u")
+      list(APPEND wxWidgets_DEFINITIONS UNICODE _UNICODE)
+    endif ()
+
+    # Add necessary definitions for debug builds
+    set(wxWidgets_DEFINITIONS_DEBUG _DEBUG __WXDEBUG__)
+
+  else()
+    if(BUILD_SHARED_LIBS)
+      find_path(wxWidgets_LIB_DIR
+      NAMES
+        msw/wx/setup.h
+        mswd/wx/setup.h
+        mswu/wx/setup.h
+        mswud/wx/setup.h
+        mswuniv/wx/setup.h
+        mswunivd/wx/setup.h
+        mswunivu/wx/setup.h
+        mswunivud/wx/setup.h
+      PATHS
+      ${WX_ROOT_DIR}/lib/${WX_LIB_DIR_PREFIX}_dll   # prefer shared
+      ${WX_ROOT_DIR}/lib/${WX_LIB_DIR_PREFIX}_lib
+      DOC "Path to wxWidgets libraries"
+      NO_DEFAULT_PATH
+      )
+    else()
+      find_path(wxWidgets_LIB_DIR
+      NAMES
+        msw/wx/setup.h
+        mswd/wx/setup.h
+        mswu/wx/setup.h
+        mswud/wx/setup.h
+        mswuniv/wx/setup.h
+        mswunivd/wx/setup.h
+        mswunivu/wx/setup.h
+        mswunivud/wx/setup.h
+      PATHS
+      ${WX_ROOT_DIR}/lib/${WX_LIB_DIR_PREFIX}_lib   # prefer static
+      ${WX_ROOT_DIR}/lib/${WX_LIB_DIR_PREFIX}_dll
+      DOC "Path to wxWidgets libraries"
+      NO_DEFAULT_PATH
+      )
+    endif()
+  endif()
 
     # If wxWidgets_LIB_DIR changed, clear all libraries.
     if(NOT WX_LIB_DIR STREQUAL wxWidgets_LIB_DIR)
