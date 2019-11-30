@@ -116,7 +116,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
 
     try
     {
-        pi->Save( schematicFileName.GetFullPath(), aScreen, &Kiway() );
+        pi->Save( schematicFileName.GetFullPath(), aScreen, Kiway().Prj() );
         success = true;
     }
     catch( const IO_ERROR& ioe )
@@ -294,7 +294,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         try
         {
-            g_RootSheet = pi->Load( fullFileName, &Kiway() );
+            g_RootSheet = pi->Load( fullFileName, Kiway().Prj() );
             m_CurrentSheet->clear();
             m_CurrentSheet->push_back( g_RootSheet );
 
@@ -601,7 +601,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             delete g_RootSheet;
             g_RootSheet = nullptr;
             SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ) );
-            g_RootSheet = pi->Load( aFileName, &Kiway() );
+            g_RootSheet = pi->Load( aFileName, Kiway().Prj() );
 
             // Eagle sheets do not use a worksheet frame by default, so set it to an empty one
             WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();

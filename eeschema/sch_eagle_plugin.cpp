@@ -21,7 +21,6 @@
  */
 
 #include <properties.h>
-#include <kiway.h>
 
 #include <wx/filename.h>
 #include <memory>
@@ -123,7 +122,7 @@ wxString SCH_EAGLE_PLUGIN::getLibName()
     if( m_libName.IsEmpty() )
     {
         // Try to come up with a meaningful name
-        m_libName = m_kiway->Prj().GetProjectName();
+        m_libName = m_project->GetProjectName();
 
         if( m_libName.IsEmpty() )
         {
@@ -144,7 +143,7 @@ wxString SCH_EAGLE_PLUGIN::getLibName()
 
 wxFileName SCH_EAGLE_PLUGIN::getLibFileName()
 {
-    wxFileName fn( m_kiway->Prj().GetProjectPath(), getLibName(), SchematicLibraryFileExtension );
+    wxFileName fn( m_project->GetProjectPath(), getLibName(), SchematicLibraryFileExtension );
 
     return fn;
 }
@@ -340,7 +339,7 @@ static void eagleToKicadAlignment( EDA_TEXT* aText, int aEagleAlignment,
 
 SCH_EAGLE_PLUGIN::SCH_EAGLE_PLUGIN()
 {
-    m_kiway = nullptr;
+    m_project = nullptr;
     m_rootSheet = nullptr;
     m_currentSheet = nullptr;
 }
@@ -369,17 +368,17 @@ int SCH_EAGLE_PLUGIN::GetModifyHash() const
 }
 
 
-SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
+SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, PROJECT& aProject,
         SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
 {
-    wxASSERT( !aFileName || aKiway != NULL );
+    wxASSERT( !aFileName );
     LOCALE_IO toggle;     // toggles on, then off, the C locale.
 
     // Load the document
     wxXmlDocument xmlDocument;
 
     m_filename = aFileName;
-    m_kiway = aKiway;
+    m_project = &aProject;
 
     if( !xmlDocument.Load( m_filename.GetFullPath() ) )
         THROW_IO_ERROR( wxString::Format( _( "Unable to read file \"%s\"" ),
@@ -400,12 +399,12 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
 
     if( !m_rootSheet->GetScreen() )
     {
-        SCH_SCREEN* screen = new SCH_SCREEN( aKiway );
+        SCH_SCREEN* screen = new SCH_SCREEN( *m_project );
         screen->SetFileName( aFileName );
         m_rootSheet->SetScreen( screen );
     }
 
-    SYMBOL_LIB_TABLE* libTable = m_kiway->Prj().SchSymbolLibTable();
+    SYMBOL_LIB_TABLE* libTable = m_project->SchSymbolLibTable();
 
     wxCHECK_MSG( libTable, NULL, "Could not load symbol lib table." );
 
@@ -426,7 +425,7 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
                                                        wxString( "Legacy" ) ) );
 
         // Save project symbol library table.
-        wxFileName fn( m_kiway->Prj().GetProjectPath(),
+        wxFileName fn( m_project->GetProjectPath(),
                        SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
 
         // So output formatter goes out of scope and closes the file before reloading.
@@ -436,8 +435,8 @@ SCH_SHEET* SCH_EAGLE_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
         }
 
         // Relaod the symbol library table.
-        m_kiway->Prj().SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
-        m_kiway->Prj().SchSymbolLibTable();
+        m_project->SetElem( PROJECT::ELEM_SYMBOL_LIB_TABLE, NULL );
+        m_project->SchSymbolLibTable();
     }
 
     // Retrieve the root as current node
@@ -574,7 +573,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
         {
             wxPoint pos = wxPoint( x * 1000, y * 1000 );
             std::unique_ptr<SCH_SHEET> sheet( new SCH_SHEET( pos ) );
-            SCH_SCREEN* screen = new SCH_SCREEN( m_kiway );
+            SCH_SCREEN* screen = new SCH_SCREEN( *m_project );
 
             sheet->SetTimeStamp( GetNewTimeStamp() - i );    // minus the sheet index to make it unique.
             sheet->SetParent( m_rootSheet->GetScreen() );
@@ -1265,7 +1264,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
 
     // Save the pin positions
-    auto& schLibTable = *m_kiway->Prj().SchSymbolLibTable();
+    auto& schLibTable = *m_project->SchSymbolLibTable();
     wxCHECK( component->Resolve( schLibTable ), /*void*/ );
     component->UpdatePinCache();
     std::vector<LIB_PIN*> pins;

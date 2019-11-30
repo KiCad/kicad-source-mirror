@@ -91,7 +91,7 @@ public:
 
     int GetModifyHash() const override;
 
-    SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway, SCH_SHEET* aAppendToMe = NULL,
+    SCH_SHEET* Load( const wxString& aFileName, PROJECT& aProject, SCH_SHEET* aAppendToMe = NULL,
                      const PROPERTIES* aProperties = NULL ) override;
 
     bool CheckHeader( const wxString& aFileName ) override;
@@ -177,7 +177,7 @@ private:
     wxString        getLibName();
     wxFileName      getLibFileName();
 
-    KIWAY* m_kiway;      ///< For creating sub sheets.
+    PROJECT* m_project;      ///< For creating sub sheets.
     SCH_SHEET* m_rootSheet; ///< The root sheet of the schematic being loaded..
     SCH_SHEET* m_currentSheet; ///< The current sheet of the schematic being loaded..
     wxString m_version; ///< Eagle file version.

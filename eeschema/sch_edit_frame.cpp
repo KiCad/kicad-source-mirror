@@ -556,7 +556,7 @@ void SCH_EDIT_FRAME::CreateScreens()
 
     if( g_RootSheet->GetScreen() == NULL )
     {
-        SCH_SCREEN* screen = new SCH_SCREEN( &Kiway() );
+        SCH_SCREEN* screen = new SCH_SCREEN( Kiway().Prj() );
         screen->SetMaxUndoItems( m_UndoRedoCountMax );
         g_RootSheet->SetScreen( screen );
         SetScreen( g_RootSheet->GetScreen() );
@@ -569,7 +569,7 @@ void SCH_EDIT_FRAME::CreateScreens()
 
     if( GetScreen() == NULL )
     {
-        SCH_SCREEN* screen = new SCH_SCREEN( &Kiway() );
+        SCH_SCREEN* screen = new SCH_SCREEN( Kiway().Prj() );
         screen->SetMaxUndoItems( m_UndoRedoCountMax );
         SetScreen( screen );
     }
