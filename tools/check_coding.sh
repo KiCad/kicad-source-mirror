@@ -32,6 +32,7 @@ usage='usage: check_coding.sh [<options>] [--]
 
      --cached                   Re-format changes currently staged for commit (default)
      --amend                    Re-format changes made in the previous commit
+     --commit <commit-rev>      Re-format changes made since commit-rev
 '
 
 help="$usage"'
@@ -55,6 +56,10 @@ while test "$#" != 0; do
     --diff) diff=true ;;
     --amend) mode='amend' ;;
     --cached) mode='cached' ;;
+    --commit) mode='commit'
+        format_ref_commit="$2"
+        shift 
+        ;;
     --) shift ; break ;;
     -*) die "$usage" ;;
     *) break ;;
@@ -73,6 +78,11 @@ format_commit='HEAD'
 # Select the git file list command and the commit to check
 case "${mode}" in
     '')       echo "$usage"; exit 0 ;;
+    commit)
+        # Files changed since listed commit
+        git_list_files="git diff-tree  --diff-filter=ACM --name-only HEAD ${format_ref_commit} -r --no-commit-id"
+        format_commit=${format_ref_commit}
+        ;;
     amend)
         # Files changed by the last commit
         git_list_files='git diff-tree  --diff-filter=ACM --name-only HEAD -r --no-commit-id'
@@ -104,4 +114,4 @@ ${git_list_files} |
     cut -d: -f1 |
 
     # Apply the formatting command
-    xargs -d '\n' ${format_command}
+    xargs ${format_command}

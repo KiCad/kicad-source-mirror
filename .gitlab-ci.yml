@@ -1,0 +1,9 @@
+before_script:
+  - apt-get update -qq -y && apt-get install -y -qq clang-format git 
+
+test_formatting:
+  stage: test
+  script: 
+    - ./tools/check_coding.sh --diff --commit $CI_COMMIT_BEFORE_SHA
+  only:
+  - merge_requests
