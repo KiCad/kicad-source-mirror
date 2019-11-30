@@ -124,30 +124,6 @@ typedef long time_t;
 %template(intVector) std::vector<int>;
 %template(str_utf8_Map) std::map< std::string,UTF8 >;
 
-// wrapper of BASE_SEQ (see typedef std::vector<PCB_LAYER_ID> BASE_SEQ;)
-%template(base_seqVect) std::vector<enum PCB_LAYER_ID>;
-
-// TODO: wrapper of BASE_SET (see std::bitset<PCB_LAYER_ID_COUNT> BASE_SET;)
-
-
-// KiCad plugin handling
-%include "kicadplugins.i"
-
-#include <geometry/shape.h>
-%include <geometry/shape.h>
-
-// Contains VECTOR2I
-%include math.i
-
-// ignore warning from nested classes
-#pragma SWIG nowarn=325
-%ignore SHAPE_LINE_CHAIN::convertFromClipper;
-#include <geometry/shape_line_chain.h>
-%include <geometry/shape_line_chain.h>
-
-#include <geometry/shape_poly_set.h>
-%include <geometry/shape_poly_set.h>
-
 // ignore warning relative to operator = and operator ++:
 #pragma SWIG nowarn=362,383
 

@@ -3,8 +3,6 @@
 %module kiway
 
 
-%import(module="wx")  wx_kiway_player_hierarchy.h
-
 %include ki_exception.i     // affects all that follow it
 
 /*
@@ -16,6 +14,8 @@ throw and add them here, before the class declarations.
 
 */
 HANDLE_EXCEPTIONS(KIWAY::Player)
+
+%ignore PgmOrNull;
 
 %include pgm_base.h
 %include frame_type.h
@@ -30,38 +30,18 @@ HANDLE_EXCEPTIONS(KIWAY::Player)
 
 %constant KIWAY    Kiway;
 
-%pythoncode
-%{
-#import wx
-%}
-
 
 %{
 #include <kiway.h>
 #include <kiway_express.h>
 #include <pgm_base.h>
 
-#include <wx/app.h>
 #include <wx/stdpaths.h>
-#include <wx/wxPython/wxPython_int.h>
 
 
 // Only a single KIWAY is supported in this single_top top level component,
 // which is dedicated to loading only a single DSO.
 KIWAY    Kiway( &Pgm(), KFCTL_PY_PROJECT_SUITE );
-
-
-// a dummy to quiet linking with EDA_BASE_FRAME::config();
-#include <kiface_i.h>
-KIFACE_I& Kiface()
-{
-    // This function should never be called.  It is only referenced from
-    // EDA_BASE_FRAME::config() and this is only provided to satisfy the linker,
-    // not to be actually called.
-    wxLogFatalError( wxT( "Unexpected call to Kiface() in kicad/kicad.cpp" ) );
-
-    return (KIFACE_I&) *(KIFACE_I*) 0;
-}
 
 
 /**
@@ -200,12 +180,11 @@ static struct PGM_PYTHON : public PGM_BASE
 
 } program;
 
+%}
 
-PGM_BASE& Pgm()
-{
-    return program;
-}
-
+%init %{
+    int kiface_version = KIFACE_VERSION;
+    KIFACE_GETTER( &kiface_version, KIFACE_VERSION, &program );
 %}
 
 /*
@@ -246,4 +225,3 @@ if os.path.exists(libcef_so):
         return frame
     %}
 };
-
