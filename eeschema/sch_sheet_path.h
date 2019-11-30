@@ -288,16 +288,6 @@ public:
      */
     SCH_SHEET* FindSheetByName( const wxString& aSheetName );
 
-    /**
-     * Function FindSheetByPageNumber
-     *
-     * searches the #SCH_SHEET_LIST for a sheet with \a aPageNumber.
-     *
-     * @param aPageNumber is the number of the sheet to find.
-     * @return a pointer to a #SCH_SHEET object page \a aPageNumber if found or NULL if not found.
-     */
-    SCH_SHEET* FindSheetByPageNumber( int aPageNumber );
-
     bool operator==( const SCH_SHEET_PATH& d1 ) const;
 
     bool operator!=( const SCH_SHEET_PATH& d1 ) const { return !( *this == d1 ) ; }
