@@ -148,11 +148,6 @@ SEARCH_STACK* PROJECT::SchSearchS()
 
         // append all paths from aSList
         add_search_paths( ss, Kiface().KifaceSearch(), -1 );
-
-        // addLibrarySearchPaths( SEARCH_STACK* aSP, wxConfigBase* aCfg )
-        // This is undocumented, but somebody wanted to store !schematic!
-        // library search paths in the .kicad_common file?
-        add_search_paths( ss, Pgm().CommonSettings(), -1 );
     }
 
     return ss;
