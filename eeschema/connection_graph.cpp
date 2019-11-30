@@ -1481,6 +1481,8 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
                         wxLogTrace( "CONN", "%lu: found child %lu (%s)", aParent->m_code,
                                     candidate->m_code, candidate->m_driver_connection->Name() );
 
+                        candidate->m_hier_parent = aParent;
+
                         search_list.push_back( candidate );
                         break;
                     }
@@ -2268,6 +2270,18 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph,
         if( m_net_name_to_subgraphs_map.count( name )
                 && m_net_name_to_subgraphs_map.at( name ).size() > 1 )
             has_other_connections = true;
+    }
+    else if (text->Type() == SCH_HIER_LABEL_T)
+    {
+        // For a hier label, check if the parent pin is connected
+        if (aSubgraph->m_hier_parent &&
+            (aSubgraph->m_hier_parent->m_strong_driver ||
+                aSubgraph->m_hier_parent->m_drivers.size() > 1))
+        {
+            // For now, a simple check: if there is more than one driver, the parent is probably
+            // connected elsewhere (because at least one driver will be the hier pin itself)
+            has_other_connections = true;
+        }
     }
     else
     {

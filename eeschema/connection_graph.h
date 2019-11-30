@@ -72,7 +72,7 @@ public:
         m_dirty( false ), m_absorbed( false ), m_absorbed_by( nullptr ), m_code( -1 ),
         m_multiple_drivers( false ), m_strong_driver( false ), m_local_driver( false ),
         m_no_connect( nullptr ), m_bus_entry( nullptr ), m_driver( nullptr ), m_frame( aFrame ),
-        m_driver_connection( nullptr )
+        m_driver_connection( nullptr ), m_hier_parent( nullptr )
     {}
     /**
      * Determines which potential driver should drive the subgraph.
@@ -188,6 +188,9 @@ public:
 
     // Cache for lookup of any hierarchical ports on this subgraph (for referring up)
     std::vector<SCH_HIERLABEL*> m_hier_ports;
+
+    // If not null, this indicates the subgraph on a higher level sheet that is linked to this one
+    CONNECTION_SUBGRAPH* m_hier_parent;
 };
 
 
