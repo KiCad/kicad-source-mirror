@@ -251,7 +251,8 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
 
         if( alias )
         {
-            bus_contents_vec = alias->Members();
+            for( const auto& member : alias->Members() )
+                bus_contents_vec.emplace_back( member );
         }
         else
         {
