@@ -33,7 +33,6 @@ using namespace TFIELD_T;
 
 const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
 {
-    static void* locale = nullptr;
     static wxString referenceDefault;
     static wxString valueDefault;
     static wxString footprintDefault;
@@ -42,14 +41,13 @@ const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
 
     // Fetching translations can take a surprising amount of time when loading libraries,
     // so only do it when necessary.
-    if( Pgm().GetLocale() != locale )
+    if( referenceDefault.empty() )
     {
         referenceDefault = _( "Reference" );
         valueDefault     = _( "Value" );
         footprintDefault = _( "Footprint" );
         datasheetDefault = _( "Datasheet" );
         fieldDefault     = _( "Field" );
-        locale = Pgm().GetLocale();
     }
 
     // Fixed values for the first few default fields used by EESCHEMA
@@ -233,4 +231,3 @@ const TEMPLATE_FIELDNAME* TEMPLATES::GetFieldName( const wxString& aName ) const
 
     return nullptr;
 }
-
