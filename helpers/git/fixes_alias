@@ -1,13 +1,13 @@
 [alias]
 	# Alias to simplify marking commits as bug fixes
-	# When the script is enabled, you may commit a change and run 'git fixes 123456' to mark the commit as a fix to bug lp:123456
+	# Once the script is enabled, commit your changes and run 'git fixes 123456' to mark the last commit as a fix for issue #123456
 
 	# Enable by executing in the source root directory:
 	# git config --add include.path $(pwd)/helpers/git/fixes_alias
 
 	fixes = "!f() { \
 		COMMIT_MSG=$(git log -1 --format=medium | tail -n +5 | sed -e 's/^    //'); \
-		git commit --amend -m \"${COMMIT_MSG}\n\nFixes: lp:$1\n* https://bugs.launchpad.net/kicad/+bug/$1\"; \
+		git commit --amend -m \"${COMMIT_MSG}\n\nFixes #$1 | https://gitlab.com/kicad/code/kicad/issues/$1\"; \
 	}; f"
 
 

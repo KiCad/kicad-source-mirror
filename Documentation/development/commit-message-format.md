@@ -8,18 +8,20 @@ from the subject line by a blank line and wrapped at 72 characters. The body
 of a commit message should explain what the commit does and why.  Do not
 explain *how* the changes work as the code itself should do that.
 
-# Linking a commit to a bug report # {#commit_bug_link}
+# Linking a commit to an issue # {#commit_bug_link}
 
-If your commit fixes a bug that has been reported in the [Launchpad bug
-tracker](https://bugs.launchpad.net/kicad/+bugs), end your commit with the
-following lines to mark it as fixed, where `1234567` represents the actual
-bug ID.  A bot will automatically set the bug status to "Fix Committed" and
-link to the commit once it is merged.
+If your commit fixes an issue that has been reported in the [issue
+tracker](https://gitlab.com/kicad/code/kicad/issues), add a line indicating the
+fixed issue number to your commit message. In such case, Gitlab will
+automatically close the issue and add a link to your commit in the issue.
 
-    Fixes: lp:1234567
-    https://bugs.launchpad.net/kicad/+bug/1234567
+For example, the following line will automatically close issue #1234567:
+
+    Fixes #1234567 | https://gitlab.com/kicad/code/kicad/issues/1234567
 
 There is an [alias](#commit_fixes_alias) to simplify this step.
+You can read more about automatic issue closing in the
+[Gitlab documentation](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically).
 
 # Changelog tags {#commit_changelog_tag}
 
@@ -68,11 +70,8 @@ Following is an example of a properly formatted commit message:
     CHANGED: "Wire" lines now optionally include data on the line style,
     width and color if they differ from the default.
 
-    Fixes: lp:594059
-    * https://bugs.launchpad.net/kicad/+bug/594059
-
-    Fixes: lp:1405026
-    * https://bugs.launchpad.net/kicad/+bug/1405026
+    Fixes #594059 | https://gitlab.com/kicad/code/kicad/issues/594059
+    Fixes #1405026 | https://gitlab.com/kicad/code/kicad/issues/1405026
 
 # Git aliases file # {#commit_git_aliases}
 
@@ -88,10 +87,9 @@ most recent commit to include the bug report link:
 
     git fixes 1234567
 
-The example command would add the following lines to the last commit message:
+For example, the command below will append a line to the last commit message:
 
-    Fixes: lp:1234567
-    * https://bugs.launchpad.net/kicad/+bug/1234567
+    Fixes #1234567 | https://gitlab.com/kicad/code/kicad/issues/1234567
 
 ## 'changelog' alias # {#commit_changelog_alias}
 
