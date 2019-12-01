@@ -138,7 +138,7 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef )
 
         try
         {
-            wxString fname = m_parent->GetUniqueFilenameForCurrentSheet();
+            wxString fname = m_parent->GetCurrentSheet().GetUniqueFilename();
             wxString ext = HPGL_PLOTTER::GetDefaultFileExtension();
             wxFileName plotFileName = createPlotFileName( m_outputDirectoryName, fname,
                                                           ext, &reporter );

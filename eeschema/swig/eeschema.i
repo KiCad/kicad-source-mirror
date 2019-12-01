@@ -44,27 +44,40 @@
 %include kiway.i
 
 //%include project.h
-%include plotter.h
 
 %{
 #include <project.h>
-#include <plotter.h>
 #include <general.h>
+#include <reporter.h>
 #include <sch_text.h>
 #include <sch_sheet_path.h>
 #include <sch_sheet.h>
 #include <sch_legacy_plugin.h>
 #include <sch_io_mgr.h>
 #include <sch_screen.h>
+#include <plot.h>
 %}
 
 %include general.h
+
+%feature("ignore"); // ignore all
+%feature("ignore", "0") WX_STRING_REPORTER;
+%feature("ignore", "0") WX_STRING_REPORTER::WX_STRING_REPORTER;
+%feature("ignore", "0") WX_STRING_REPORTER::SEVERITY;
+%feature("ignore", "0") WX_STRING_REPORTER::Report;
+%feature("ignore", "0") WX_STRING_REPORTER::HasMessage;
+%feature("ignore", "0") WX_STRING_REPORTER::GetMessage;
+%feature("ignore", "0") WX_STRING_REPORTER::GetSeverity;
+%include reporter.h
+%feature("ignore", "0"); // unignore all
+
+%include sch_item_struct.h
 %include sch_text.h
 
 %ignore SCH_SHEET::ChangeFileName;
 
-%include sch_sheet_path.h
 %include sch_sheet.h
+%include sch_sheet_path.h
 %include enum_vector.h
 %include import_export.h
 %include sch_io_mgr.h
@@ -72,3 +85,4 @@
 
 %include base_screen.h
 %include sch_screen.h
+%include plot.h

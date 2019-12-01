@@ -164,18 +164,22 @@ public:
  */
 class WX_STRING_REPORTER : public REPORTER
 {
-    wxString* m_string;
+    wxString m_string;
+    SEVERITY m_severity;
 
 public:
-    WX_STRING_REPORTER( wxString* aString ) :
+    WX_STRING_REPORTER() :
         REPORTER(),
-        m_string( aString )
+        m_severity(RPT_UNDEFINED)
     {
     }
 
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
 
     bool HasMessage() const override;
+
+    wxString GetMessage() const;
+    SEVERITY GetSeverity() const;
 };
 
 

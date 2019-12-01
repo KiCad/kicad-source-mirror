@@ -62,7 +62,7 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
 
         try
         {
-            wxString fname = m_parent->GetUniqueFilenameForCurrentSheet();
+            wxString fname = m_parent->GetCurrentSheet().GetUniqueFilename();
             wxString ext = SVG_PLOTTER::GetDefaultFileExtension();
             wxFileName plotFileName = createPlotFileName( m_outputDirectoryName,
                                                           fname, ext, &reporter );

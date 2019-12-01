@@ -66,13 +66,15 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
     // Use as second ranked place.
     maybe.AddPaths( wxT( DEFAULT_INSTALL_PATH ) );
 
-    // Add the directory for the user-dependent, program specific data files.
-    // According to wxWidgets documentation:
-    // Unix: ~/.appname
-    // Windows: C:\Documents and Settings\username\Application Data\appname
-    maybe.AddPaths( wxStandardPaths::Get().GetUserDataDir() );
-
+    // Skip these paths if we are running without wxApp
+    if( wxApp::GetInstance() )
     {
+        // Add the directory for the user-dependent, program specific data files.
+        // According to wxWidgets documentation:
+        // Unix: ~/.appname
+        // Windows: C:\Documents and Settings\username\Application Data\appname
+        maybe.AddPaths( wxStandardPaths::Get().GetUserDataDir() );
+
         // Should be full path to this program executable.
         wxString   bin_dir = Pgm().GetExecutablePath();
 

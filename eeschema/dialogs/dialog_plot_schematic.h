@@ -95,8 +95,6 @@ private:
 
     // PDF
     void    createPDFFile( bool aPlotAll, bool aPlotFrameRef );
-    void    plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen, bool aPlotFrameRef);
-    void    setupPlotPagePDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen );
 
     /**
     * Everything done, close the plot and restore the environment

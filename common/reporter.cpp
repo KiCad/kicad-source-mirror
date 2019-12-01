@@ -52,16 +52,24 @@ bool WX_TEXT_CTRL_REPORTER::HasMessage() const
 
 REPORTER& WX_STRING_REPORTER::Report( const wxString& aText, REPORTER::SEVERITY aSeverity )
 {
-    wxCHECK_MSG( m_string != NULL, *this,
-                 wxT( "No wxString object defined in WX_STRING_REPORTER." ) );
-
-    *m_string << aText;
+    m_string << aText;
+    m_severity = (SEVERITY)((int)m_severity | (int)aSeverity);
     return *this;
 }
 
 bool WX_STRING_REPORTER::HasMessage() const
 {
-    return !m_string->IsEmpty();
+    return m_string.IsEmpty();
+}
+
+wxString WX_STRING_REPORTER::GetMessage() const
+{
+    return m_string;
+}
+
+WX_STRING_REPORTER::SEVERITY WX_STRING_REPORTER::GetSeverity() const
+{
+    return m_severity;
 }
 
 REPORTER& WX_HTML_PANEL_REPORTER::Report( const wxString& aText, SEVERITY aSeverity )

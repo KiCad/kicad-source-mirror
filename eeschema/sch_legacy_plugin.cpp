@@ -583,7 +583,7 @@ void SCH_LEGACY_PLUGIN::init( const PROPERTIES* aProperties )
 SCH_SHEET* SCH_LEGACY_PLUGIN::Load( const wxString& aFileName, PROJECT& aProject,
                                     SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
 {
-    wxASSERT( !aFileName );
+    wxASSERT( aFileName );
 
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
     SCH_SHEET*  sheet;

@@ -191,6 +191,19 @@ public:
     wxString PathHumanReadable() const;
 
     /**
+     * Function GetUniqueFilename
+     * @return a filename that can be used in plot and print functions
+     * for the current screen and sheet path.
+     * This filename is unique and must be used instead of the screen filename
+     * (or screen filename) when one must creates file for each sheet in the
+     * hierarchy.  because in complex hierarchies a sheet and a SCH_SCREEN is
+     * used more than once
+     * Name is &ltroot sheet filename&gt-&ltsheet path&gt and has no extension.
+     * However if filename is too long name is &ltsheet filename&gt-&ltsheet number&gt
+     */
+    wxString GetUniqueFilename( void ) const;
+
+    /**
      * Function UpdateAllScreenReferences
      * updates the reference and the m_Multi parameter (part selection) for all
      * components on a screen depending on the actual sheet path.
@@ -200,6 +213,12 @@ public:
      * displayed sheet
      */
     void UpdateAllScreenReferences();
+
+    /**
+     * Function UpdatePageNumber
+     * recalculates the page number of the sheet.
+     */
+    void UpdatePageNumber();
 
     /**
      * Function GetComponents
