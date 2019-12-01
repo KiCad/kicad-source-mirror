@@ -43,6 +43,10 @@
 
 %include kiway.i
 
+%init %{
+        SetDefaultLineThickness( DEFAULTDRAWLINETHICKNESS );
+%}
+
 //%include project.h
 
 %{
