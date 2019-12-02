@@ -324,10 +324,10 @@ public:
     void SortRows( int aSortCol, bool ascending )
     {
         std::sort( m_rows.begin(), m_rows.end(),
-                   [ aSortCol, ascending, this ]( LIB_PINS& lhs, LIB_PINS& rhs ) -> bool
-                   {
-                       return compare( lhs, rhs, aSortCol, ascending, m_userUnits );
-                   } );
+               [ aSortCol, ascending, this ]( const LIB_PINS& lhs, const LIB_PINS& rhs ) -> bool
+               {
+                   return compare( lhs, rhs, aSortCol, ascending, m_userUnits );
+               } );
     }
 
     void SortPins( LIB_PINS& aRow )
