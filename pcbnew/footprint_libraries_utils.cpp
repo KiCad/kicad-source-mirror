@@ -874,6 +874,9 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
     std::vector<wxArrayString> itemsToDisplay;
     std::vector<wxString>      nicknames = tbl->GetLogicalLibs();
 
+    headers.Add( _( "Nickname" ) );
+    headers.Add( _( "Description" ) );
+
     for( const wxString& nickname : nicknames )
     {
         wxArrayString item;
