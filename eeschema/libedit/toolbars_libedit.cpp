@@ -156,9 +156,10 @@ void LIB_EDIT_FRAME::SyncToolbars()
     LIB_ID libId = getTargetLibId();
     const wxString& libName = libId.GetLibNickname();
     const wxString& partName = libId.GetLibItemName();
-    bool modified = m_libMgr->IsLibraryModified( libName );
 
-    if( !partName.IsEmpty() && m_libMgr->IsPartModified( partName, libName ) )
+    bool modified = m_libMgr->HasModifications();
+
+    if( !modified && !partName.IsEmpty() && m_libMgr->IsPartModified( partName, libName ) )
         modified = true;
 
     m_mainToolBar->Toggle( ACTIONS::saveAll, modified );

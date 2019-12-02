@@ -550,6 +550,7 @@ void LIB_EDIT_FRAME::DeletePartFromLibrary()
 
     m_libMgr->RemovePart( libId.GetLibItemName(), libId.GetLibNickname() );
 
+    m_treePane->GetLibTree()->RefreshLibTree();
     refreshSchematic();
 }
 
