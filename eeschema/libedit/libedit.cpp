@@ -399,6 +399,9 @@ void LIB_EDIT_FRAME::savePartAs()
         std::vector< wxArrayString > itemsToDisplay;
         std::vector< wxString > libNicknames = tbl->GetLogicalLibs();
 
+        headers.Add( _( "Nickname" ) );
+        headers.Add( _( "Description" ) );
+
         for( const auto& name : libNicknames )
         {
             wxArrayString item;

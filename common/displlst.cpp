@@ -53,9 +53,6 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
 
     initDialog( aItemHeaders, aSelection );
 
-    if( aItemHeaders.IsEmpty() )
-        m_listBox->SetSingleStyle( wxLC_NO_HEADER, true );
-
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
     // because so many dialogs share this same class, with different numbers of
     // columns, different column names, and column widths.
@@ -108,6 +105,7 @@ void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders, const wxStr
 void EDA_LIST_DIALOG::SetListLabel( const wxString& aLabel )
 {
     m_listLabel->SetLabel( aLabel );
+    m_listBox->SetSingleStyle( wxLC_NO_HEADER, true );
 }
 
 
