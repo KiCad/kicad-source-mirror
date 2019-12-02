@@ -372,7 +372,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::SelectFootprintFromBoard( BOARD* aPcb )
         itemsToDisplay.push_back( item );
     }
 
-    EDA_LIST_DIALOG dlg( this, msg, headers, itemsToDisplay, wxEmptyString, NULL, NULL, SORT_LIST );
+    EDA_LIST_DIALOG dlg( this, msg, headers, itemsToDisplay, wxEmptyString );
 
     if( dlg.ShowModal() == wxID_OK )
         fpname = dlg.GetTextSelection();
