@@ -337,6 +337,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
     m_busUnfold.label->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
     m_busUnfold.label->SetLabelSpinStyle( 0 );
     m_busUnfold.label->SetParent( m_frame->GetScreen() );
+    m_busUnfold.label->SetFlags( IS_NEW | IS_MOVED );
 
     m_busUnfold.in_progress = true;
     m_busUnfold.origin = pos;
@@ -585,7 +586,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
         //------------------------------------------------------------------------
         // Handle motion:
         //
-        else if( evt->IsMotion() )
+        else if( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             m_view->ClearPreview();
 
@@ -806,6 +807,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
 
         itemList.PushItem( ITEM_PICKER( m_busUnfold.entry, UR_NEW ) );
         itemList.PushItem( ITEM_PICKER( m_busUnfold.label, UR_NEW ) );
+        m_busUnfold.label->ClearEditFlags();
     }
 
     // Get the last non-null wire (this is the last created segment).
