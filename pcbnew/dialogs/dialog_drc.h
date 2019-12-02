@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2011 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2009 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,6 +91,10 @@ private:
     void DisplayDRCValues( );
 
     void SetDRCParameters( );
+
+    /// @return the selection on a right click on a DRCLISTBOX
+    /// return wxNOT_FOUND if no selection
+    int rightUpClicSelection( DRCLISTBOX* aListBox, wxMouseEvent& event );
 
     /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_CHECKBOX_RPT_FILE
     void OnReportCheckBoxClicked( wxCommandEvent& event ) override;

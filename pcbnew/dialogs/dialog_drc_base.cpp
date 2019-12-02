@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version Jul 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -150,7 +150,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 
 	m_ClearanceListBox = new DRCLISTBOX( m_panelViolations, ID_CLEARANCE_LIST, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
 	m_ClearanceListBox->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-	m_ClearanceListBox->SetToolTip( _("Left-click to center on problem marker.  Right-click to highlight items.") );
+	m_ClearanceListBox->SetToolTip( _("Left-click to center on problem marker. \nRight-click to highlight items.") );
 
 	bSizerViolationsBox->Add( m_ClearanceListBox, 1, wxEXPAND|wxALL, 5 );
 
@@ -158,13 +158,13 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	m_panelViolations->SetSizer( bSizerViolationsBox );
 	m_panelViolations->Layout();
 	bSizerViolationsBox->Fit( m_panelViolations );
-	m_Notebook->AddPage( m_panelViolations, _("Violations / Markers (%d)"), true );
+	m_Notebook->AddPage( m_panelViolations, _("Violations / Markers (%d)"), false );
 	m_panelUnconnectedItems = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerUnconnectedBox;
 	bSizerUnconnectedBox = new wxBoxSizer( wxVERTICAL );
 
 	m_UnconnectedListBox = new DRCLISTBOX( m_panelUnconnectedItems, ID_UNCONNECTED_LIST, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	m_UnconnectedListBox->SetToolTip( _("Left-click to center on unconnected pair.  Right-click to highlight unconnected items.") );
+	m_UnconnectedListBox->SetToolTip( _("Left-click to center on unconnected pair. \nRight-click to highlight unconnected items.") );
 
 	bSizerUnconnectedBox->Add( m_UnconnectedListBox, 1, wxALL|wxEXPAND, 5 );
 
@@ -172,7 +172,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	m_panelUnconnectedItems->SetSizer( bSizerUnconnectedBox );
 	m_panelUnconnectedItems->Layout();
 	bSizerUnconnectedBox->Fit( m_panelUnconnectedItems );
-	m_Notebook->AddPage( m_panelUnconnectedItems, _("Unconnected Items (%d)"), false );
+	m_Notebook->AddPage( m_panelUnconnectedItems, _("Unconnected Items (%d)"), true );
 	m_panelFootprintWarnings = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerFootprintsBox;
 	bSizerFootprintsBox = new wxBoxSizer( wxVERTICAL );
