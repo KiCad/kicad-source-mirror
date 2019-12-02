@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,19 +21,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file librairi.cpp
- * @brief Manage module (footprint) libraries.
- */
-
 #include <wx/ffile.h>
-#include <wx/stdpaths.h>
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <confirm.h>
 #include <kicad_string.h>
-#include <gestfich.h>
 #include <pcb_edit_frame.h>
 #include <dialog_helpers.h>
 #include <filter_reader.h>
@@ -46,7 +39,6 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <board_commit.h>
-#include <pcbnew.h>
 #include <footprint_edit_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <kicad_plugin.h>
@@ -890,19 +882,15 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
     std::vector<wxArrayString> itemsToDisplay;
     std::vector<wxString>      nicknames = tbl->GetLogicalLibs();
 
-    headers.Add( _( "Nickname" ) );
-    headers.Add( _( "Description" ) );
-
-    for( unsigned i = 0; i < nicknames.size(); i++ )
+    for( const wxString& nickname : nicknames )
     {
         wxArrayString item;
-        item.Add( nicknames[i] );
-        item.Add( tbl->GetDescription( nicknames[i] ) );
+        item.Add( nickname );
+        item.Add( tbl->GetDescription( nickname ) );
         itemsToDisplay.push_back( item );
     }
 
-    EDA_LIST_DIALOG dlg( this, FMT_SAVE_MODULE, headers, itemsToDisplay, libraryName,
-                         nullptr, nullptr, /* sort */ false, /* show headers */ false );
+    EDA_LIST_DIALOG dlg( this, FMT_SAVE_MODULE, headers, itemsToDisplay, libraryName );
     dlg.SetListLabel( _( "Save in library:" ) );
     dlg.SetOKLabel( _( "Save" ) );
 

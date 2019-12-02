@@ -39,8 +39,6 @@ void ConvertMarkdown2Html( const wxString& aMarkdownInput, wxString& aHtmlOutput
 
 class EDA_DRAW_FRAME;
 
-#define SORT_LIST true
-
 /**
  * class EDA_LIST_DIALOG
  *
@@ -58,25 +56,21 @@ public:
      * Constructor:
      * @param aParent Pointer to the parent window.
      * @param aTitle = The title shown on top.
-     * @param aItemHeaders is an array containing the column header names for the dialog.
+     * @param aItemHeaders an optional array containing the column header names for the dialog.
      * @param aItemList = A wxArrayString of the list of elements.
      * @param aRefText = An item name if an item must be preselected.
      * @param aCallBackFunction = callback function to display comments
      * @param aCallBackFunctionData = a pointer to pass to @a aCallBackFunction
-     * @param aSortList = true to sort list items by alphabetic order.
-     * @param aShowHeaders = true if the list should have headers.
      */
     EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
                      const wxArrayString& aItemHeaders,
                      const std::vector<wxArrayString>& aItemList,
                      const wxString& aRefText,
                      void (* aCallBackFunction)( wxString& text, void* data ) = NULL,
-                     void* aCallBackFunctionData = NULL,
-                     bool aSortList = false, bool aShowHeaders = true );
+                     void* aCallBackFunctionData = NULL );
 
     // ~EDA_LIST_DIALOG() {}
 
-    void     SetFilterHint( const wxString& aHint );
     void     SetListLabel( const wxString& aLabel );
     void     SetOKLabel( const wxString& aLabel );
 
@@ -100,7 +94,6 @@ private:
     void    initDialog( const wxArrayString& aItemHeaders,
                         const wxString& aSelection);
     void    sortList();
-    bool    m_sortList;
     void    (* m_cb_func)( wxString& text, void* data );
     void*   m_cb_data;
     const   std::vector<wxArrayString>* m_itemsListCp;

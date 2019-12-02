@@ -97,25 +97,24 @@ wxString LIB_EDIT_FRAME::SelectLibraryFromList()
         itemsToDisplay.push_back( item );
     }
 
-    wxString old_lib_name = prj.GetRString( PROJECT::SCH_LIB_SELECT );
+    wxString oldLibName = prj.GetRString( PROJECT::SCH_LIB_SELECT );
 
-    EDA_LIST_DIALOG dlg( this, _( "Select Symbol Library" ), headers, itemsToDisplay,
-                         old_lib_name );
+    EDA_LIST_DIALOG dlg( this, _( "Select Symbol Library" ), headers, itemsToDisplay, oldLibName );
 
     if( dlg.ShowModal() != wxID_OK )
         return wxEmptyString;
 
-    wxString libname = dlg.GetTextSelection();
+    wxString libName = dlg.GetTextSelection();
 
-    if( !libname.empty() )
+    if( !libName.empty() )
     {
-        if( prj.SchSymbolLibTable()->HasLibrary( libname ) )
-            prj.SetRString( PROJECT::SCH_LIB_SELECT, libname );
+        if( prj.SchSymbolLibTable()->HasLibrary( libName ) )
+            prj.SetRString( PROJECT::SCH_LIB_SELECT, libName );
         else
-            libname = wxEmptyString;
+            libName = wxEmptyString;
     }
 
-    return libname;
+    return libName;
 }
 
 
@@ -400,9 +399,6 @@ void LIB_EDIT_FRAME::savePartAs()
         std::vector< wxArrayString > itemsToDisplay;
         std::vector< wxString > libNicknames = tbl->GetLogicalLibs();
 
-        headers.Add( _( "Nickname" ) );
-        headers.Add( _( "Description" ) );
-
         for( const auto& name : libNicknames )
         {
             wxArrayString item;
@@ -411,8 +407,7 @@ void LIB_EDIT_FRAME::savePartAs()
             itemsToDisplay.push_back( item );
         }
 
-        EDA_LIST_DIALOG dlg( this, _( "Save Copy of Symbol" ), headers, itemsToDisplay, old_lib,
-                             nullptr, nullptr, /* sort */ false, /* show headers */ false );
+        EDA_LIST_DIALOG dlg( this, _( "Save Copy of Symbol" ), headers, itemsToDisplay, old_lib );
         dlg.SetListLabel( _( "Save in library:" ) );
         dlg.SetOKLabel( _( "Save" ) );
 

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +21,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file displlst.cpp
  */
 
 #include <fctsys.h>
@@ -46,11 +42,9 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
                                   const std::vector<wxArrayString>& aItemList,
                                   const wxString& aSelection,
                                   void( *aCallBackFunction )( wxString&, void* ),
-                                  void* aCallBackFunctionData,
-                                  bool aSortList, bool aShowHeaders ) :
+                                  void* aCallBackFunctionData ) :
     EDA_LIST_DIALOG_BASE( aParent, wxID_ANY, aTitle )
 {
-    m_sortList    = aSortList;
     m_cb_func     = aCallBackFunction;
     m_cb_data     = aCallBackFunctionData;
     m_itemsListCp = &aItemList;
@@ -59,7 +53,7 @@ EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitl
 
     initDialog( aItemHeaders, aSelection );
 
-    if( !aShowHeaders )
+    if( aItemHeaders.IsEmpty() )
         m_listBox->SetSingleStyle( wxLC_NO_HEADER, true );
 
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
@@ -111,12 +105,6 @@ void EDA_LIST_DIALOG::initDialog( const wxArrayString& aItemHeaders, const wxStr
 }
 
 
-void EDA_LIST_DIALOG::SetFilterHint( const wxString& aHint )
-{
-    m_filterBox->SetHint( aHint );
-}
-
-
 void EDA_LIST_DIALOG::SetListLabel( const wxString& aLabel )
 {
     m_listLabel->SetLabel( aLabel );
@@ -148,8 +136,7 @@ void EDA_LIST_DIALOG::textChangeInFilterBox( wxCommandEvent& event )
         }
     }
 
-    if( m_sortList )
-        sortList();
+    sortList();
 }
 
 
@@ -219,8 +206,7 @@ void EDA_LIST_DIALOG::InsertItems( const std::vector< wxArrayString >& itemList,
         }
     }
 
-    if( m_sortList )
-        sortList();
+    sortList();
 }
 
 
