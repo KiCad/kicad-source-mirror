@@ -1048,6 +1048,9 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         // Move the end of the line to the break point..
         graphicItem->SetEnd( wxPoint( nearestPoint.x, nearestPoint.y ) );
 
+        if( graphicItem->Type() == PCB_MODULE_EDGE_T )
+            static_cast<EDGE_MODULE*>( graphicItem )->SetLocalCoord();
+
         // and add another one starting from the break point
         DRAWSEGMENT* newSegment;
 
@@ -1065,6 +1068,9 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         newSegment->ClearSelected();
         newSegment->SetStart( wxPoint( nearestPoint.x, nearestPoint.y ) );
         newSegment->SetEnd( wxPoint( seg.B.x, seg.B.y ) );
+
+        if( newSegment->Type() == PCB_MODULE_EDGE_T )
+            static_cast<EDGE_MODULE*>( newSegment )->SetLocalCoord();
 
         commit.Add( newSegment );
         commit.Push( _( "Split segment" ) );
