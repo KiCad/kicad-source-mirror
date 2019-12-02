@@ -23,15 +23,13 @@ Some of these tools are required to build from source and some are optional.
 [CMake][] is the build configuration and makefile generation tool used by KiCad.  It is required.
 
 
-## GIT Version Control System ## {#git}
+## Git Version Control System ## {#git}
 
 The official source code repository is hosted on [GitLab][] and requires [git][] to get
 the latest source. If you prefer to use [GitHub][] there is a read only mirror of the official
 KiCad repository. The previous official hosting location at [Launchpad][] is still active as
-a mirror only. Do not submit pull requests to GitHub. Changes should be sent to the KiCad
-developer's [mailing list][] using `git format-patch` and attaching the patch with [PATCH] at
-the beginning of the subject or using `git send-email` to send your commit directly to the
-developer's [mailing list][].
+a mirror. Changes should be submitted as [merge requests][] via GitLab.  The development team
+will not review changes submitted on GitHub or Launchpad as those platforms are mirrors only.
 
 ## Doxygen Code Documentation Generator ## {#doxygen_section}
 
@@ -537,6 +535,7 @@ you will have to apply the Boost patches in the KiCad source [patches folder][].
 [Cairo]: http://cairographics.org/
 [Python]: https://www.python.org/
 [wxPython]: http://wxpython.org/
+[merge requests]: https://gitlab.com/kicad/code/kicad/merge_requests
 [MSYS2]: http://www.msys2.org/
 [MSYS2 32-bit Installer]: http://repo.msys2.org/distrib/i686/msys2-i686-20161025.exe
 [MSYS2 64-bit Installer]: http://repo.msys2.org/distrib/x86_64/msys2-x86_64-20161025.exe
