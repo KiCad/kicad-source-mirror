@@ -120,9 +120,9 @@ public:
 
 
 private:
-    GAL*                m_gal;                  ///< Pointer to the GAL
-    GLYPH_LIST          m_glyphs;               ///< Glyph list
-    std::vector<BOX2D>  m_glyphBoundingBoxes;   ///< Bounding boxes of the glyphs
+    GAL*                      m_gal;                  ///< Pointer to the GAL
+    const GLYPH_LIST*         m_glyphs;               ///< Glyph list
+    const std::vector<BOX2D>* m_glyphBoundingBoxes;   ///< Bounding boxes of the glyphs
 
     /**
      * @brief Compute the X and Y size of a given text. The text is expected to be
@@ -145,10 +145,10 @@ private:
      * @brief Compute the bounding box of a given glyph.
      *
      * @param aGlyph is the glyph.
-     * @param aGlyphBoundingX is the x-component of the bounding box size.
+     * @param aGlyphWidth is the x-component of the bounding box size.
      * @return is the complete bounding box size.
      */
-    BOX2D computeBoundingBox( const GLYPH& aGlyph, const VECTOR2D& aGlyphBoundingX ) const;
+    BOX2D computeBoundingBox( const GLYPH& aGlyph, double aGlyphWidth ) const;
 
     /**
      * @brief Draws a single line of text. Multiline texts should be split before using the
