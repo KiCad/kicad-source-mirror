@@ -10,6 +10,6 @@ test_formatting:
     - git fetch -n origin
     - "TARGET_SHA=$(git rev-parse origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME)"
     - echo "Testing formatting from commit $TARGET_SHA"
-    - ./tools/check_coding.sh --diff --commit $TARGET_SHA
+    - ./tools/check_coding.sh --diff --ci --commit $TARGET_SHA
   only:
   - merge_requests
