@@ -55,7 +55,7 @@ static int s_textMarkupFlags = 0;
 static bool s_selectTextAsBox = false;
 static bool s_selectDrawChildren = true;
 static bool s_selectFillShapes = false;
-static float s_selectThickness = DEFAULTSELECTIONTHICKNESS;
+static int  s_selectThickness = DEFAULTSELECTIONTHICKNESS;
 
 int GetDefaultBusThickness()
 {
@@ -153,15 +153,15 @@ void SetSelectionFillShapes( bool aBool )
 }
 
 
-float GetSelectionThickness()
+int GetSelectionThickness()
 {
     return s_selectThickness;
 }
 
 
-void SetSelectionThickness( float aFloat )
+void SetSelectionThickness( int aThickness )
 {
-    s_selectThickness = aFloat;
+    s_selectThickness = aThickness;
 }
 
 // Color to draw selected items
@@ -401,7 +401,7 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     SetSelectionDrawChildItems( aCfg->ReadBool( drawSelectedChildren, true ) );
     SetSelectionFillShapes( aCfg->ReadBool( selectionFillShapes, false ) );
     SetSelectionThickness(
-            (float) aCfg->ReadDouble( selectionThickness, DEFAULTSELECTIONTHICKNESS ) );
+            static_cast<int>( aCfg->Read( selectionThickness, DEFAULTSELECTIONTHICKNESS ) ) );
 
     SetTextMarkupFlags( (int) aCfg->Read( TextMarkupFlagsEntry, 0L ) );
 

@@ -127,8 +127,8 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	m_selWidthLabel->Wrap( -1 );
 	fgSizer321->Add( m_selWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
-	m_selWidthCtrl = new wxSpinCtrlDouble( sbSizer3->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0.5, 50, 0, 0.5 );
-	m_selWidthCtrl->SetDigits( 1 );
+	m_selWidthCtrl = new wxSpinCtrlDouble( sbSizer3->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 50, 0, 1 );
+	m_selWidthCtrl->SetDigits( 0 );
 	fgSizer321->Add( m_selWidthCtrl, 0, wxEXPAND, 5 );
 
 
