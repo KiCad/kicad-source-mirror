@@ -39,6 +39,11 @@ const double STROKE_FONT::BOLD_FACTOR = 1.3;
 const double STROKE_FONT::STROKE_FONT_SCALE = 1.0 / 21.0;
 const double STROKE_FONT::ITALIC_TILT = 1.0 / 8;
 
+
+GLYPH_LIST*         g_newStrokeFontGlyphs = nullptr;     ///< Glyph list
+std::vector<BOX2D>* g_newStrokeFontGlyphBoundingBoxes;   ///< Bounding boxes of the glyphs
+
+
 STROKE_FONT::STROKE_FONT( GAL* aGal ) :
     m_gal( aGal )
 {
@@ -47,41 +52,63 @@ STROKE_FONT::STROKE_FONT( GAL* aGal ) :
 
 bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNewStrokeFontSize )
 {
-    m_glyphs.clear();
-    m_glyphBoundingBoxes.clear();
-    m_glyphs.resize( aNewStrokeFontSize );
-    m_glyphBoundingBoxes.resize( aNewStrokeFontSize );
+    if( g_newStrokeFontGlyphs )
+    {
+        m_glyphs = g_newStrokeFontGlyphs;
+        m_glyphBoundingBoxes = g_newStrokeFontGlyphBoundingBoxes;
+        return true;
+    }
+
+    g_newStrokeFontGlyphs = new GLYPH_LIST;
+    g_newStrokeFontGlyphs->resize( aNewStrokeFontSize );
+
+    g_newStrokeFontGlyphBoundingBoxes = new std::vector<BOX2D>;
+    g_newStrokeFontGlyphBoundingBoxes->resize( aNewStrokeFontSize );
 
     for( int j = 0; j < aNewStrokeFontSize; j++ )
     {
-        GLYPH&   glyph = m_glyphs[j];
+        GLYPH&   glyph = g_newStrokeFontGlyphs->at( j );
         double   glyphStartX = 0.0;
         double   glyphEndX = 0.0;
-        VECTOR2D glyphBoundingX;
+        double   glyphWidth;
 
         std::vector<VECTOR2D>* pointList = nullptr;
 
+        int strokes = 0;
         int i = 0;
+
+        while( aNewStrokeFont[j][i] )
+        {
+            if( aNewStrokeFont[j][i] == ' ' && aNewStrokeFont[j][i+1] == 'R' )
+                strokes++;
+
+            i += 2;
+        }
+
+        glyph.reserve( strokes + 1 );
+
+        i = 0;
 
         while( aNewStrokeFont[j][i] )
         {
             VECTOR2D    point( 0.0, 0.0 );
             char        coordinate[2] = { 0, };
 
-            for( int k = 0; k < 2; k++ )
-            {
+            for( int k : { 0, 1 } )
                 coordinate[k] = aNewStrokeFont[j][i + k];
-            }
 
             if( i < 2 )
             {
                 // The first two values contain the width of the char
-                glyphStartX     = ( coordinate[0] - 'R' ) * STROKE_FONT_SCALE;
-                glyphEndX       = ( coordinate[1] - 'R' ) * STROKE_FONT_SCALE;
-                glyphBoundingX  = VECTOR2D( 0, glyphEndX - glyphStartX );
+                glyphStartX = ( coordinate[0] - 'R' ) * STROKE_FONT_SCALE;
+                glyphEndX   = ( coordinate[1] - 'R' ) * STROKE_FONT_SCALE;
+                glyphWidth  = glyphEndX - glyphStartX;
             }
             else if( ( coordinate[0] == ' ' ) && ( coordinate[1] == 'R' ) )
             {
+                if( pointList )
+                    pointList->resize( pointList->size() );
+
                 // Raise pen
                 pointList = nullptr;
             }
@@ -97,14 +124,14 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
                 //  * a few shapes have a height slightly bigger than 1.0 ( like '{' '[' )
                 point.x = (double) ( coordinate[0] - 'R' ) * STROKE_FONT_SCALE - glyphStartX;
                 #define FONT_OFFSET -10
-				// FONT_OFFSET is here for historical reasons, due to the way the stroke font
+                // FONT_OFFSET is here for historical reasons, due to the way the stroke font
                 // was built. It allows shapes coordinates like W M ... to be >= 0
                 // Only shapes like j y have coordinates < 0
                 point.y = (double) ( coordinate[1] - 'R' + FONT_OFFSET ) * STROKE_FONT_SCALE;
 
                 if( !pointList )
                 {
-                    glyph.emplace_back( std::vector<VECTOR2D>() );
+                    glyph.emplace_back();
                     pointList = &glyph.back();
                 }
 
@@ -114,10 +141,15 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
             i += 2;
         }
 
+        if( pointList )
+            pointList->resize( pointList->size() );
+
         // Compute the bounding box of the glyph
-        m_glyphBoundingBoxes[j] = computeBoundingBox( glyph, glyphBoundingX );
+        g_newStrokeFontGlyphBoundingBoxes->at( j ) = computeBoundingBox( glyph, glyphWidth );
     }
 
+    m_glyphs = g_newStrokeFontGlyphs;
+    m_glyphBoundingBoxes = g_newStrokeFontGlyphBoundingBoxes;
     return true;
 }
 
@@ -131,24 +163,21 @@ double STROKE_FONT::GetInterline( double aGlyphHeight )
 }
 
 
-BOX2D STROKE_FONT::computeBoundingBox( const GLYPH& aGLYPH, const VECTOR2D& aGLYPHBoundingX ) const
+BOX2D STROKE_FONT::computeBoundingBox( const GLYPH& aGLYPH, double aGlyphWidth ) const
 {
-    BOX2D boundingBox;
-
-    std::vector<VECTOR2D> boundingPoints;
-
-    boundingPoints.emplace_back( VECTOR2D( aGLYPHBoundingX.x, 0 ) );
-    boundingPoints.emplace_back( VECTOR2D( aGLYPHBoundingX.y, 0 ) );
+    VECTOR2D min( 0, 0 );
+    VECTOR2D max( aGlyphWidth, 0 );
 
     for( const std::vector<VECTOR2D>& pointList : aGLYPH )
     {
         for( const VECTOR2D& point : pointList )
-            boundingPoints.emplace_back( aGLYPHBoundingX.x, point.y );
+        {
+            min.y = std::min( min.y, point.y );
+            max.y = std::max( max.y, point.y );
+        }
     }
 
-    boundingBox.Compute( boundingPoints );
-
-    return boundingBox;
+    return BOX2D( min, max - min );
 }
 
 
@@ -306,7 +335,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
         // The choice of spaces is somewhat arbitrary but sufficient for aligning text
         if( *chIt == '\t' )
         {
-            double space = glyphSize.x * m_glyphBoundingBoxes[0].GetEnd().x;
+            double space = glyphSize.x * m_glyphBoundingBoxes->at( 0 ).GetEnd().x;
 
             // We align to the 4th column (fmod) but only need to account for 3 of
             // the four spaces here with the extra.  This ensures that we have at
@@ -388,14 +417,14 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
         // Index into bounding boxes table
         int dd = (signed) *chIt - ' ';
 
-        if( dd >= (int) m_glyphBoundingBoxes.size() || dd < 0 )
+        if( dd >= (int) m_glyphBoundingBoxes->size() || dd < 0 )
         {
             int substitute = *chIt == '\t' ? ' ' : '?';
             dd = substitute - ' ';
         }
 
-        GLYPH& glyph = m_glyphs[dd];
-        BOX2D& bbox  = m_glyphBoundingBoxes[dd];
+        const GLYPH& glyph = m_glyphs->at( dd );
+        const BOX2D& bbox  = m_glyphBoundingBoxes->at( dd );
 
         if( in_overbar )
         {
@@ -422,11 +451,11 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText, int markupFlags )
             last_had_overbar = false;
         }
 
-        for( std::vector<VECTOR2D>& ptList : glyph )
+        for( const std::vector<VECTOR2D>& ptList : glyph )
         {
             std::deque<VECTOR2D> ptListScaled;
 
-            for( VECTOR2D& pt : ptList )
+            for( const VECTOR2D& pt : ptList )
             {
                 VECTOR2D scaledPt( pt.x * glyphSize.x + xOffset, pt.y * glyphSize.y + yOffset );
 
@@ -501,7 +530,7 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
         // The choice of spaces is somewhat arbitrary but sufficient for aligning text
         if( *it == '\t' )
         {
-            double spaces = m_glyphBoundingBoxes[0].GetEnd().x;
+            double spaces = m_glyphBoundingBoxes->at( 0 ).GetEnd().x;
             double addlSpace = 3.0 * spaces - std::fmod( curX, 4.0 * spaces );
 
             // Add the remaining space (between 0 and 3 spaces)
@@ -576,13 +605,13 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
         // Index in the bounding boxes table
         int dd = (signed) *it - ' ';
 
-        if( dd >= (int) m_glyphBoundingBoxes.size() || dd < 0 )
+        if( dd >= (int) m_glyphBoundingBoxes->size() || dd < 0 )
         {
             int substitute = *it == '\t' ? ' ' : '?';
             dd = substitute - ' ';
         }
 
-        const BOX2D& box = m_glyphBoundingBoxes[dd];
+        const BOX2D& box = m_glyphBoundingBoxes->at( dd );
         curX += box.GetEnd().x * curScale;
     }
 
