@@ -2078,9 +2078,27 @@ TRACK* BOARD::MarkTrace( TRACK* aTrackList, TRACK*  aTrace, int* aCount,
                 dist_fromend = dist;
                 e_pad = pad_on_start;
             }
-            else    // Should not occur, at least for basic pads
+            else    // If we have a via in a pad in the middle of a trace
             {
-                wxLogWarning( "Unexpected BOARD::MarkTrace: multiple pad_on_start" );
+                // In this case, we want the distance between the farthest pads
+                // Forgive me this anti-pattern.  This is a v5-only fix, so complete refactor is
+                // a non-starter.
+                if( dist_fromend < dist_fromstart )
+                {
+                    if( dist > dist_fromend )
+                    {
+                        dist_fromend = dist;
+                        e_pad = pad_on_start;
+                    }
+                }
+                else
+                {
+                    if( dist > dist_fromstart )
+                    {
+                        dist_fromstart = dist;
+                        s_pad = pad_on_start;
+                    }
+                }
             }
         }
 
@@ -2099,9 +2117,27 @@ TRACK* BOARD::MarkTrace( TRACK* aTrackList, TRACK*  aTrace, int* aCount,
                 dist_fromend = dist;
                 e_pad = pad_on_end;
             }
-            else    // Should not occur, at least for basic pads
+            else    // If we have a via in a pad in the middle of a trace
             {
-                wxLogWarning( "Unexpected BOARD::MarkTrace: multiple pad_on_end" );
+                // In this case, we want the distance between the farthest pads
+                // Forgive me this anti-pattern.  This is a v5-only fix, so complete refactor is
+                // a non-starter.
+                if( dist_fromend < dist_fromstart )
+                {
+                    if( dist > dist_fromend )
+                    {
+                        dist_fromend = dist;
+                        e_pad = pad_on_start;
+                    }
+                }
+                else
+                {
+                    if( dist > dist_fromstart )
+                    {
+                        dist_fromstart = dist;
+                        s_pad = pad_on_start;
+                    }
+                }
             }
         }
     }
