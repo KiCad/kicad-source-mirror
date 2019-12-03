@@ -53,7 +53,7 @@ ${prefix}/share/kicad/demos              - Sample schematics and printed boards.
 ${prefix}/share/kicad/internat           - Dictionaries for interface localization.
 ${prefix}/share/kicad/library            - Interface localization files.
 ${prefix}/share/kicad/modules            - Module libraries for printed boards.
-${prefix}/share/kicad/modules/packages3d - 3D component models (.wrl and .wings format).
+${prefix}/share/kicad/modules/packages3d - 3D component models (.wrl and .step format).
 
 KiCad searches for the libraries, templates, 3D models, etc. bin/../share.
 
