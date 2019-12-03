@@ -3,184 +3,166 @@ KiCad installation
 
 The parts of KiCad
 ------------------
-KiCad consists of 3 packages:
 
-kicad         - KiCad programs and core files.
-kicad-doc     - Documentation and interactive help (optional package).
-kicad-library - KiCad schematic, pcb & 3D-model libraries (optional package).
+  KiCad consists of 3 components:
+
+  kicad         - KiCad programs and core files.
+  kicad-doc     - Documentation and interactive help (optional package).
+  kicad-library - KiCad schematic, pcb & 3D-model libraries (optional package).
+
+  This repository contains the source code for the main KiCad programs. The documentation
+  and library sources are available at https://gitlab.com/kicad
 
 
 Installation from binary packages
 ---------------------------------
 
-   KiCad binary packages exist for Linux and Windows (XP, 2000).
+ Compiled KiCad binaries exist for Windows (7, 8.1, 10), Mac OS (10.12+) and several
+ Linux distributions (Fedora, Debian, Ubuntu, Arch). These are available from the
+ main KiCad website: https://kicad-pcb.org/download/
 
-   Data files (schematic, boards, libraries) are compatible with all platforms.
-
-*.zip  - KiCad packages for Windows.
-*.tbz2 - KiCad for Linux.
+ Data files (schematic, boards, libraries) are compatible with all platforms.
 
 
 Installation from binary packages for Windows
 ---------------------------------------------
 
-The KiCad binary archive can be installed anywhere on the system that as long as the user
-has write privileges.
-
-You can create a shortcut to '${prefix}\bin\kicad.exe' where ${prefix} is the install path.
+  KiCad can be installed anywhere on the system as long as the user has write privileges.
+  Pre-made installers are available on the KiCad website: https://kicad-pcb.org/download/windows/
 
 
 Installation from binary packages for Linux
 -------------------------------------------
 
-KiCad can be installed in '/usr' or '/usr/local'.  You must have "root" access for installation.
-
-cd /
-tar -xjf kicad-{version}.tbz2
-tar -xjf kicad-doc-{version}.tbz2
-tar -xjf kicad-library-{version}.tbz2
-
-The main program is '/usr/bin/kicad'.
+  KiCad comes packaged on many Linux platforms including Debian, Fedora, Ubuntu and Arch,
+  and is available in their respective package repositories. More information can be found on
+  the platform's page at https://kicad-pcb.org/download/
 
 
-Linux and Windows KiCad install tree
+Linux install tree
 -------------------------------------
 
-${prefix}/bin                            - Binaries (executable files).
-${prefix}/share/doc/kicad/               - Various documentation.
-${prefix}/share/doc/kicad/help           - Interactive help.
-${prefix}/share/kicad/demos              - Sample schematics and printed boards.
-${prefix}/share/kicad/internat           - Dictionaries for interface localization.
-${prefix}/share/kicad/library            - Interface localization files.
-${prefix}/share/kicad/modules            - Module libraries for printed boards.
-${prefix}/share/kicad/modules/packages3d - 3D component models (.wrl and .step format).
+  The default locations KiCad uses to install its components on Linux are:
 
-KiCad searches for the libraries, templates, 3D models, etc. bin/../share.
+  ${prefix}/bin                            - Binaries (executable files).
+  ${prefix}/lib/kicad                      - Shared libraries
+  ${prefix}/share/doc/kicad/               - Various documentation.
+  ${prefix}/share/doc/kicad/help           - Interactive help.
+  ${prefix}/share/kicad/demos              - Sample schematics and printed boards.
+  ${prefix}/share/kicad/template           - Template projects and sheets.
+  ${prefix}/share/kicad/library            - Symbol libraries.
+  ${prefix}/share/kicad/modules            - Module libraries for printed boards.
+  ${prefix}/share/kicad/modules/packages3d - 3D component models (.wrl and .step format).
 
-Warning:
-Do not change the KiCad tree, or the location of binary files.  Otherwise
-KiCad may not be able to find some or all of its required files.
+  KiCad searches for the libraries, templates, 3D models, etc. bin/../share.
+
+  Warning:
+  Do not change the KiCad tree, or the location of binary files.  Otherwise
+  KiCad may not be able to find some or all of its required files.
 
 
 Mac OS X KiCad tree
 -------------------
 
-System wide files
+  System wide files
 
-/Library/Application Support/kicad/demos
-/Library/Application Support/kicad/internat
-/Library/Application Support/kicad/library
-/Library/Application Support/kicad/modules
-/Library/Application Support/kicad/modules/packages3d
+  /Library/Application Support/kicad/demos
+  /Library/Application Support/kicad/internat
+  /Library/Application Support/kicad/library
+  /Library/Application Support/kicad/modules
+  /Library/Application Support/kicad/modules/packages3d
 
-User files can be the same as the system wide files but only inside the users home directory.
+  User files can be the same as the system wide files but only inside the users home directory.
 
-$HOME/Library/Application Support/kicad
+  $HOME/Library/Application Support/kicad
 
-Warning:
-These paths are hardcoded into KiCad, if you put them somewhere else KiCad will not find
-them when a new project is created.
+  Warning:
+  These paths are hardcoded into KiCad, if you put them somewhere else KiCad will not find
+  them when a new project is created.
+
 
 Installation from source code
 -----------------------------
 
-Currently the only supported compilers are GCC on linux and windows and clang on OS X.
+  Currently the only supported compilers are GCC on linux and windows and clang on OS X.
 
-Some dependencies must be satisfied for the correct installation of KiCad:
+  Some dependencies must be satisfied for the correct installation of KiCad:
 
-wxWidgets            >= 3.0.0           http://www.wxwidgets.org/
+  wxWidgets            >= 3.0.0           http://www.wxwidgets.org/
 
-CMake                >= 2.8.4           http://www.cmake.org/
+  CMake                >= 3.0.2           http://www.cmake.org/
 
-Boost C++ Libraries: >= 1.54            http://www.boost.org/
-    files used by kicad are autmatically downloaded and patched if needed
-    from boost site.
+  Boost C++ Libraries: >= 1.59            http://www.boost.org/
 
-OpenGL               >= 2.1
-  Linux:   Mesa 3D Graphics Library     http://www.mesa3d.org/
-  Windows: built-in
+  OpenGL               >= 2.1
+    Linux:   Mesa 3D Graphics Library     http://www.mesa3d.org/
+    Windows: built-in
 
-Zlib Compression Library                http://www.zlib.net/
+  Zlib Compression Library                http://www.zlib.net/
 
-cairo                                   http://cairographics.org/
+  cairo                >= 1.12            http://cairographics.org/
 
-GLEW                                    http://glew.sourceforge.net/
+  GLEW                                    http://glew.sourceforge.net/
 
-libcurl                                 http://curl.haxx.se/
+  libcurl                                 http://curl.haxx.se/
 
-OpenMP               (optional)         http://openmp.org/
+  OpenMP               (optional)         http://openmp.org/
 
-GLM                  >= 9.5.4           http://glm.g-truc.net/
+  GLM                  >= 9.5.4           http://glm.g-truc.net/
 
-pkg-config                              http://pkgconfig.freedesktop.org/
+  pkg-config                              http://pkgconfig.freedesktop.org/
 
-Doxygen              (optional)         http://www.doxygen.nl
+  Doxygen              (optional)         http://www.doxygen.nl
 
-python               >= 2.6 (optional)  http://python.org/
+  python               >= 2.6 (optional)  http://python.org/
 
-wxPython             (optional)         http://www.wxpython.org/
+  wxPython             (optional)         http://www.wxpython.org/
 
-SWIG                 >= 3.0 (optional)  http://swig.org/
+  SWIG                 >= 3.0 (optional)  http://swig.org/
 
-libngspice           (optional)         http://ngspice.sourceforge.net/
+  libngspice           (optional)         http://ngspice.sourceforge.net/
 
-OCE                  >= 0.16 (optional) https://github.com/tpaviot/oce
+  One of:
+    OCE                >= 0.16 (optional) https://github.com/tpaviot/oce
 
-In source-tree-build are mostly unwanted, so make a subdir called "build" and
-change to it.
+    OCC                >= 6.8.0 (optiona) https://www.opencascade.com/content/latest-release
 
-Call cmake with the path to KiCad. E.g., when your build-folder is "build"
-within source-tree, type "cmake ../".
-
-Now your system get checked if it is able compiling KiCad and cmake generates
-the Makefiles.
-
-   After calling cmake just type "make" and build begins.
-
-   It is easy to build only a specific binary such as pcbnew alone:
-    make pcbnew
-
-   After "make" type "make install" and install begins.
-
-   You may install to a temporary-root with
-    make install DESTDIR=<temproot>
-
-   If you want to uninstall KiCad again type "make uninstall" from within the
-build directory.
+  Complete documentation for building from source can be found in the developer
+  documentation located in Documentation/development/compiling.md
 
 
 Important parameters to cmake
 -----------------------------
 
-See Documentation/development/compiling.md for a list of all CMake options
-available when compiling KiCad.
+  See Documentation/development/compiling.md for a list of all CMake options
+  available when compiling KiCad.
 
--DCMAKE_BUILD_TYPE=<buildtype>
-<buildtype> may current one of "Debug" and "Release".
+  -DCMAKE_BUILD_TYPE=<buildtype>
+  <buildtype> may current one of "Debug" and "Release".
 
--DCMAKE_INSTALL_PREFIX=<prefix>
-Default to "/usr/local".
+  -DCMAKE_INSTALL_PREFIX=<prefix>
+  Default to "/usr/local".
 
--DwxWidgets_ROOT_DIR=<wxInstallDir>
-Required for Windows platform.
+  -DwxWidgets_ROOT_DIR=<wxInstallDir>
+  Required for Windows platform.
 
--DwxWidgets_USE_DEBUG=ON
-Can be used only with -DCMAKE_BUILD_TYPE=Debug
+  -DwxWidgets_USE_DEBUG=ON
+  Can be used only with -DCMAKE_BUILD_TYPE=Debug
 
--DCMAKE_CXX_FLAGS=<some extra flags>
-Extra flags for the c++ compiler for your system required.
+  -DCMAKE_CXX_FLAGS=<some extra flags>
+  Extra flags for the c++ compiler for your system required.
 
--DCMAKE_VERBOSE_MAKEFILE=ON
-When more output is wanted use this cmake parameter or call "make VERBOSE=1".
+  -DCMAKE_VERBOSE_MAKEFILE=ON
+  When more output is wanted use this cmake parameter or call "make VERBOSE=1".
 
 
 Extra CFLAGS and linker flags
 -----------------------------
 
-If you require extra flags for compiler and linker you may give them via
-environment variables
-  "CXXFLAGS" (c++ compiler)
-  "LDFLAGS"  (for linker)
-  "CFLAGS"   (for c-compiler, not needed in kdesvn build)
+    If you require extra flags for compiler and linker you may give them via
+    environment variables
+      "CXXFLAGS" (c++ compiler)
+      "LDFLAGS"  (for linker)
+      "CFLAGS"   (for c-compiler, not needed in kdesvn build)
 
-eg., it may usefull on 64bit systems "-m64" to CXXFLAGS and LDFLAGS.
+    eg., it may usefull on 64bit systems "-m64" to CXXFLAGS and LDFLAGS.

@@ -33,6 +33,7 @@ usage='usage: check_coding.sh [<options>] [--]
      --cached                   Re-format changes currently staged for commit (default)
      --amend                    Re-format changes made in the previous commit
      --commit <commit-rev>      Re-format changes made since commit-rev
+     --ci                       Run in CI mode to return non-zero when there are formatting errors
 '
 
 help="$usage"'
@@ -48,6 +49,7 @@ die() {
 }
 
 # Parse command-line arguments.
+ci=false
 diff=false
 mode='cached'
 
@@ -58,8 +60,9 @@ while test "$#" != 0; do
     --cached) mode='cached' ;;
     --commit) mode='commit'
         format_ref_commit="$2"
-        shift 
+        shift
         ;;
+    --ci) ci=true ;;
     --) shift ; break ;;
     -*) die "$usage" ;;
     *) break ;;
@@ -104,14 +107,47 @@ else
     format_command="git clang-format ${format_commit}"
 fi
 
-${git_list_files} |
 
-    # Filter sources with the formatting attribute set
-    git check-attr ${format_attribute} --stdin |
+if [ "${ci}" = true ]; then
+    # In CI mode we want to set the return value based on modifications (1 = modifications
+    # needed, 0 = no modifications). We must capture the output to do this (since git clang-format
+    # will always return 0). By capturing the output, we break the terminal coloring, so we hide
+    # this inside a special CI mode.
 
-    # output only the file names
-    grep ": set$" |
-    cut -d: -f1 |
+    format_results="$( \
+    ${git_list_files} |
 
-    # Apply the formatting command
-    xargs ${format_command}
+        # Filter sources with the formatting attribute set
+        git check-attr ${format_attribute} --stdin |
+
+        # output only the file names
+        grep ": set$" |
+        cut -d: -f1 |
+
+        # Apply the formatting command
+        xargs ${format_command}
+    )"
+
+    echo "$format_results"
+
+    # Read the results to see if modifications have been requested
+    if [[ $format_results == "no modified files to format" ]] \
+        || [[ $format_results == "clang-format did not modify any files" ]];
+    then
+        true
+    else
+        false
+    fi
+else
+    ${git_list_files} |
+
+        # Filter sources with the formatting attribute set
+        git check-attr ${format_attribute} --stdin |
+
+        # output only the file names
+        grep ": set$" |
+        cut -d: -f1 |
+
+        # Apply the formatting command
+        xargs ${format_command}
+fi
