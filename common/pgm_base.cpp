@@ -256,8 +256,15 @@ const wxString PGM_BASE::AskUserForPreferredEditor( const wxString& aDefaultEdit
                               true );
 }
 
-
 bool PGM_BASE::InitPgm()
+{
+    bool fail = false;
+    fail = fail || InitPgmSettings();
+    fail = fail || InitPgmApp();
+    return fail;
+}
+
+bool PGM_BASE::InitPgmApp()
 {
     wxFileName pgm_name( App().argv[0] );
 
@@ -277,19 +284,6 @@ bool PGM_BASE::InitPgm()
 
         if( !IsOK( NULL, quiz ) )
             return false;
-    }
-
-    // Init KiCad environment
-    // the environment variable KICAD (if exists) gives the kicad path:
-    // something like set KICAD=d:\kicad
-    bool isDefined = wxGetEnv( "KICAD", &m_kicad_env );
-
-    if( isDefined )    // ensure m_kicad_env ends by "/"
-    {
-        m_kicad_env.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
-
-        if( !m_kicad_env.IsEmpty() && m_kicad_env.Last() != '/' )
-            m_kicad_env += UNIX_STRING_DIR_SEP;
     }
 
     // Init parameters for configuration
@@ -312,6 +306,31 @@ bool PGM_BASE::InitPgm()
     setExecutablePath();
 
     SetLanguagePath();
+
+    SetLanguage( true );
+
+#ifdef __WXMAC__
+    // Always show filters on Open dialog to be able to choose plugin
+    wxSystemOptions::SetOption( wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES, 1 );
+#endif
+
+    return true;
+}
+
+bool PGM_BASE::InitPgmSettings()
+{
+    // Init KiCad environment
+    // the environment variable KICAD (if exists) gives the kicad path:
+    // something like set KICAD=d:\kicad
+    bool isDefined = wxGetEnv( "KICAD", &m_kicad_env );
+
+    if( isDefined )    // ensure m_kicad_env ends by "/"
+    {
+        m_kicad_env.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
+
+        if( !m_kicad_env.IsEmpty() && m_kicad_env.Last() != '/' )
+            m_kicad_env += UNIX_STRING_DIR_SEP;
+    }
 
     // OS specific instantiation of wxConfigBase derivative:
     m_common_settings = GetNewConfig( KICAD_COMMON );
@@ -474,17 +493,15 @@ bool PGM_BASE::InitPgm()
 
     ReadPdfBrowserInfos();      // needs m_common_settings
 
-    // Init user language *before* calling loadCommonSettings, because
+    // Init locale now *before* calling loadCommonSettings, because
     // env vars could be incorrectly initialized on Linux
     // (if the value contains some non ASCII7 chars, the env var is not initialized)
-    SetLanguage( true );
+    // However, do not load translations, because we might be running without wxApp.
+    delete m_locale;
+    m_locale = new wxLocale;
+    m_locale->Init(wxLANGUAGE_DEFAULT, wxLOCALE_DONT_LOAD_DEFAULT);
 
     loadCommonSettings();
-
-#ifdef __WXMAC__
-    // Always show filters on Open dialog to be able to choose plugin
-    wxSystemOptions::SetOption( wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES, 1 );
-#endif
 
     return true;
 }

@@ -162,6 +162,47 @@ wxString SCH_SHEET_PATH::PathHumanReadable() const
 }
 
 
+wxString SCH_SHEET_PATH::GetUniqueFilename() const
+{
+    wxFileName fn = LastScreen()->GetFileName();
+
+    // Name is <root sheet filename>-<sheet path> and has no extension.
+    // However if filename is too long name is <sheet filename>-<sheet number>
+
+    #define FN_LEN_MAX 80   // A reasonable value for the short filename len
+
+    wxString filename = fn.GetName();
+    wxString sheetFullName =  PathHumanReadable();
+
+    if( sheetFullName == "<root sheet>" || sheetFullName == "/" )
+    {
+        // For the root sheet, use root schematic file name.
+        sheetFullName.clear();
+    }
+    else
+    {
+        if( filename.Last() != '-' || filename.Last() != '_' )
+            filename += '-';
+
+        // Remove the first and last '/' of the path human readable
+        sheetFullName.RemoveLast();
+        sheetFullName.Remove( 0, 1 );
+        sheetFullName.Trim( true );
+        sheetFullName.Trim( false );
+
+        // Convert path human readable separator to '-'
+        sheetFullName.Replace( "/", "-" );
+    }
+
+    if( ( filename.Len() + sheetFullName.Len() ) < FN_LEN_MAX )
+        filename += sheetFullName;
+    else
+        filename << wxT( "-" ) << LastScreen()->m_ScreenNumber;
+
+    return filename;
+}
+
+
 void SCH_SHEET_PATH::UpdateAllScreenReferences()
 {
     EDA_ITEM* t = LastDrawList();
@@ -179,6 +220,23 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
     }
 }
 
+
+void SCH_SHEET_PATH::UpdatePageNumber()
+{
+    SCH_SHEET_LIST sheetList( GetSheet(0) );
+    int            SheetNumber = 1;
+
+    for( auto& sheetpath : sheetList )
+    {
+        if( sheetpath == *this )
+            break;
+
+        SheetNumber++;
+    }
+
+    SetPageNumber( SheetNumber );
+    LastScreen()->m_NumberOfScreens = sheetList.size();
+}
 
 
 void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols,

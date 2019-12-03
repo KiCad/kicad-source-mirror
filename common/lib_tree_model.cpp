@@ -127,15 +127,13 @@ LIB_TREE_NODE::LIB_TREE_NODE()
 
 LIB_TREE_NODE_UNIT::LIB_TREE_NODE_UNIT( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* aItem, int aUnit )
 {
-    static void* locale = nullptr;
     static wxString namePrefix;
 
     // Fetching translations can take a surprising amount of time when loading libraries,
     // so only do it when necessary.
-    if( Pgm().GetLocale() != locale )
+    if( namePrefix.empty() )
     {
         namePrefix = _( "Unit" );
-        locale = Pgm().GetLocale();
     }
 
     Parent = aParent;
@@ -334,4 +332,3 @@ void LIB_TREE_NODE_ROOT::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
     for( auto& child: Children )
         child->UpdateScore( aMatcher );
 }
-

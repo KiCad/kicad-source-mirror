@@ -657,18 +657,6 @@ public:
     bool SetCurrentSheetHighlightFlags( std::vector<EDA_ITEM*>* aItemsToRedrawList );
 
     /**
-     * @return a filename that can be used in plot and print functions
-     * for the current screen and sheet path.
-     * This filename is unique and must be used instead of the screen filename
-     * (or screen filename) when one must creates file for each sheet in the
-     * hierarchy.  because in complex hierarchies a sheet and a SCH_SCREEN is
-     * used more than once
-     * Name is &ltroot sheet filename&gt-&ltsheet path&gt and has no extension.
-     * However if filename is too long name is &ltsheet filename&gt-&ltsheet number&gt
-     */
-    wxString GetUniqueFilenameForCurrentSheet();
-
-    /**
      * Set the m_ScreenNumber and m_NumberOfScreens members for screens.
      *
      * @note This must be called after deleting or adding a sheet and when entering a sheet.

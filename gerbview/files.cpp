@@ -269,8 +269,7 @@ bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
     LSET visibility = GetVisibleLayers();
 
     // Manage errors when loading files
-    wxString msg;
-    WX_STRING_REPORTER reporter( &msg );
+    WX_STRING_REPORTER reporter;
 
     // Show progress dialog after 1 second of loading
     static const long long progressShowDelay = 1000;
@@ -357,7 +356,7 @@ bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
         wxSafeYield();  // Allows slice of time to redraw the screen
                         // to refresh widgets, before displaying messages
         HTML_MESSAGE_BOX mbox( this, _( "Errors" ) );
-        mbox.ListSet( msg );
+        mbox.ListSet( reporter.GetMessage() );
         mbox.ShowModal();
     }
 
@@ -428,8 +427,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
     int layer = GetActiveLayer();
 
     // Manage errors when loading files
-    wxString msg;
-    WX_STRING_REPORTER reporter( &msg );
+    WX_STRING_REPORTER reporter;
 
     for( unsigned ii = 0; ii < filenamesList.GetCount(); ii++ )
     {
@@ -472,7 +470,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
     if( !success )
     {
         HTML_MESSAGE_BOX mbox( this, _( "Errors" ) );
-        mbox.ListSet( msg );
+        mbox.ListSet( reporter.GetMessage() );
         mbox.ShowModal();
     }
 
@@ -672,8 +670,7 @@ bool GERBVIEW_FRAME::LoadZipArchiveFile( const wxString& aFullFileName )
         m_mruPath = currentPath;
     }
 
-    wxString msg;
-    WX_STRING_REPORTER reporter( &msg );
+    WX_STRING_REPORTER reporter;
 
     if( filename.IsOk() )
         unarchiveFiles( filename.GetFullPath(), &reporter );
@@ -686,12 +683,12 @@ bool GERBVIEW_FRAME::LoadZipArchiveFile( const wxString& aFullFileName )
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();
 
-    if( !msg.IsEmpty() )
+    if( reporter.HasMessage() )
     {
         wxSafeYield();  // Allows slice of time to redraw the screen
                         // to refresh widgets, before displaying messages
         HTML_MESSAGE_BOX mbox( this, _( "Messages" ) );
-        mbox.ListSet( msg );
+        mbox.ListSet( reporter.GetMessage() );
         mbox.ShowModal();
     }
 

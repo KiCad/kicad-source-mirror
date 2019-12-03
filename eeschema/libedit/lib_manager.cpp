@@ -380,7 +380,7 @@ LIB_PART* LIB_MANAGER::GetBufferedPart( const wxString& aAlias, const wxString& 
                 THROW_IO_ERROR( _( "Symbol not found." ) );
 
             bufferedPart = new LIB_PART( *alias->GetPart(), nullptr );
-            libBuf.CreateBuffer( bufferedPart, new SCH_SCREEN( &m_frame.Kiway() ) );
+            libBuf.CreateBuffer( bufferedPart, new SCH_SCREEN( m_frame.Kiway().Prj() ) );
         }
         catch( const IO_ERROR& e )
         {
@@ -426,7 +426,7 @@ bool LIB_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibrary )
     }
     else    // New entry
     {
-        SCH_SCREEN* screen = new SCH_SCREEN( &m_frame.Kiway() );
+        SCH_SCREEN* screen = new SCH_SCREEN( m_frame.Kiway().Prj() );
         libBuf.CreateBuffer( partCopy, screen );
         screen->SetModify();
     }
@@ -750,7 +750,7 @@ LIB_MANAGER::LIB_BUFFER& LIB_MANAGER::getLibraryBuffer( const wxString& aLibrary
     LIB_BUFFER& buf = ret.first->second;
 
     for( auto part : getOriginalParts( aLibrary ) )
-        buf.CreateBuffer( new LIB_PART( *part, nullptr ), new SCH_SCREEN( &m_frame.Kiway() ) );
+        buf.CreateBuffer( new LIB_PART( *part, nullptr ), new SCH_SCREEN( m_frame.Kiway().Prj() ) );
 
     return buf;
 }

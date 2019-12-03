@@ -139,7 +139,7 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromLibPath( const wxString& a
 }
 
 
-SCH_SHEET* SCH_IO_MGR::Load( SCH_FILE_T aFileType, const wxString& aFileName, KIWAY* aKiway,
+SCH_SHEET* SCH_IO_MGR::Load( SCH_FILE_T aFileType, const wxString& aFileName, PROJECT& aProject,
                              SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
 {
     // release the SCH_PLUGIN even if an exception is thrown.
@@ -147,7 +147,7 @@ SCH_SHEET* SCH_IO_MGR::Load( SCH_FILE_T aFileType, const wxString& aFileName, KI
 
     if( (SCH_PLUGIN*) pi )  // test pi->plugin
     {
-        return pi->Load( aFileName, aKiway, aAppendToMe, aProperties );  // virtual
+        return pi->Load( aFileName, aProject, aAppendToMe, aProperties );  // virtual
     }
 
     THROW_IO_ERROR( wxString::Format( FMT_NOTFOUND, ShowType( aFileType ).GetData() ) );
@@ -155,14 +155,14 @@ SCH_SHEET* SCH_IO_MGR::Load( SCH_FILE_T aFileType, const wxString& aFileName, KI
 
 
 void SCH_IO_MGR::Save( SCH_FILE_T aFileType, const wxString& aFileName,
-                       SCH_SCREEN* aSchematic, KIWAY* aKiway, const PROPERTIES* aProperties )
+                       SCH_SCREEN* aSchematic, PROJECT& aProject, const PROPERTIES* aProperties )
 {
     // release the SCH_PLUGIN even if an exception is thrown.
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( FindPlugin( aFileType ) );
 
     if( (SCH_PLUGIN*) pi )  // test pi->plugin
     {
-        pi->Save( aFileName, aSchematic, aKiway, aProperties );  // virtual
+        pi->Save( aFileName, aSchematic, aProject, aProperties );  // virtual
         return;
     }
 

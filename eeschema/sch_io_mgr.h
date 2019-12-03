@@ -32,7 +32,7 @@
 class SCH_SHEET;
 class SCH_SCREEN;
 class SCH_PLUGIN;
-class KIWAY;
+class PROJECT;
 class LIB_PART;
 class LIB_ALIAS;
 class PART_LIB;
@@ -119,8 +119,7 @@ public:
      *
      * @param aFileName is the name of the file to load.
      *
-     * @param aKiway is the #KIWAY object used to access the component libraries loaded
-     *               by the project.
+     * @param aProject is the #PROJECT object used to access  component libraries.
      *
      * @param aAppendToMe is an existing #SCH_SHEET to append to, use NULL if a new
      *                    #SCH_SHEET load is wanted.
@@ -134,7 +133,7 @@ public:
      * @throw IO_ERROR if the #SCH_PLUGIN cannot be found, file cannot be found
      *                 or file cannot be loaded.
      */
-    static SCH_SHEET* Load( SCH_FILE_T aFileType, const wxString& aFileName, KIWAY* aKiway,
+    static SCH_SHEET* Load( SCH_FILE_T aFileType, const wxString& aFileName, PROJECT& aProject,
                             SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL );
 
     /**
@@ -148,8 +147,7 @@ public:
      *
      * @param aSchematic is the #SCH_SCREEN document (data tree) to save or export to disk.
      *
-     * @param aKiway is the #KIWAY object used to access the component libraries loaded
-     *               by the project.
+     * @param aProject is the #PROJECT object used to access the component libraries.
      *
      * @param aProperties is an associative array that can be used to tell the
      *                    saver how to save the file, because it can take any number of
@@ -160,7 +158,7 @@ public:
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
     static void Save( SCH_FILE_T aFileType, const wxString& aFileName,
-                      SCH_SCREEN* aSchematic, KIWAY* aKiway, const PROPERTIES* aProperties = NULL );
+                      SCH_SCREEN* aSchematic, PROJECT& aProject, const PROPERTIES* aProperties = NULL );
 };
 
 
@@ -222,8 +220,7 @@ public:
      * @param aFileName is the name of the file to use as input and may be foreign in
      *                  nature or native in nature.
      *
-     * @param aKiway is the #KIWAY object used to access the component libraries loaded
-     *               by the project.
+     * @param aProject is the #PROJECT object used to access the component libraries loaded.
      *
      * @param aAppendToMe is an existing #SCH_SHEET to append to, but if NULL then this means
      *                    "do not append, rather load anew".
@@ -242,7 +239,7 @@ public:
      *                 wrong, using line number and character offsets of the input file if
      *                 possible.
      */
-    virtual SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway,
+    virtual SCH_SHEET* Load( const wxString& aFileName, PROJECT& aProject,
                              SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL );
 
     /**
@@ -257,8 +254,7 @@ public:
      *                   own the SCHEMATIC, and the plugin should refrain from modifying the
      *                   SCHEMATIC if possible.
      *
-     * @param aKiway is the #KIWAY object used to access the component libraries loaded
-     *               by the project.
+     * @param aProject is the #PROJECT object used to access the component libraries loaded.
      *
      * @param aProperties is an associative array that can be used to tell the saver how to
      *                    save the file, because it can take any number of additional named
@@ -268,7 +264,7 @@ public:
      *
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
-    virtual void Save( const wxString& aFileName, SCH_SCREEN* aSchematic, KIWAY* aKiway,
+    virtual void Save( const wxString& aFileName, SCH_SCREEN* aSchematic, PROJECT& aProject,
                        const PROPERTIES* aProperties = NULL );
 
     virtual size_t GetSymbolLibCount( const wxString&   aLibraryPath,

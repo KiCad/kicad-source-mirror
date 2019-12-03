@@ -95,7 +95,7 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef )
 
         try
         {
-            wxString fname = m_parent->GetUniqueFilenameForCurrentSheet();
+            wxString fname = m_parent->GetCurrentSheet().GetUniqueFilename();
             wxString ext = PS_PLOTTER::GetDefaultFileExtension();
             wxFileName plotFileName = createPlotFileName( m_outputDirectoryName,
                                                           fname, ext, &reporter );

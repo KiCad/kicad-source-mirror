@@ -68,7 +68,7 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
 
         try
         {
-            wxString fname = schframe->GetUniqueFilenameForCurrentSheet();
+            wxString fname = schframe->GetCurrentSheet().GetUniqueFilename();
             wxString ext = DXF_PLOTTER::GetDefaultFileExtension();
             wxFileName plotFileName = createPlotFileName( m_outputDirectoryName, fname,
                                                           ext, &reporter );

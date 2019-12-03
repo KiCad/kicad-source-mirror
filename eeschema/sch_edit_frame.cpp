@@ -148,11 +148,6 @@ SEARCH_STACK* PROJECT::SchSearchS()
 
         // append all paths from aSList
         add_search_paths( ss, Kiface().KifaceSearch(), -1 );
-
-        // addLibrarySearchPaths( SEARCH_STACK* aSP, wxConfigBase* aCfg )
-        // This is undocumented, but somebody wanted to store !schematic!
-        // library search paths in the .kicad_common file?
-        add_search_paths( ss, Pgm().CommonSettings(), -1 );
     }
 
     return ss;
@@ -556,7 +551,7 @@ void SCH_EDIT_FRAME::CreateScreens()
 
     if( g_RootSheet->GetScreen() == NULL )
     {
-        SCH_SCREEN* screen = new SCH_SCREEN( &Kiway() );
+        SCH_SCREEN* screen = new SCH_SCREEN( Kiway().Prj() );
         screen->SetMaxUndoItems( m_UndoRedoCountMax );
         g_RootSheet->SetScreen( screen );
         SetScreen( g_RootSheet->GetScreen() );
@@ -569,7 +564,7 @@ void SCH_EDIT_FRAME::CreateScreens()
 
     if( GetScreen() == NULL )
     {
-        SCH_SCREEN* screen = new SCH_SCREEN( &Kiway() );
+        SCH_SCREEN* screen = new SCH_SCREEN( Kiway().Prj() );
         screen->SetMaxUndoItems( m_UndoRedoCountMax );
         SetScreen( screen );
     }
@@ -728,47 +723,6 @@ double SCH_EDIT_FRAME::BestZoom()
     double margin_scale_factor = 1.05;
 
     return bestZoom( sizeX, sizeY, margin_scale_factor, centre );
-}
-
-
-wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
-{
-    wxFileName fn = GetScreen()->GetFileName();
-
-    // Name is <root sheet filename>-<sheet path> and has no extension.
-    // However if filename is too long name is <sheet filename>-<sheet number>
-
-    #define FN_LEN_MAX 80   // A reasonable value for the short filename len
-
-    wxString filename = fn.GetName();
-    wxString sheetFullName =  m_CurrentSheet->PathHumanReadable();
-
-    if( sheetFullName == "<root sheet>" || sheetFullName == "/" )
-    {
-        // For the root sheet, use root schematic file name.
-        sheetFullName.clear();
-    }
-    else
-    {
-        if( filename.Last() != '-' || filename.Last() != '_' )
-            filename += '-';
-
-        // Remove the first and last '/' of the path human readable
-        sheetFullName.RemoveLast();
-        sheetFullName.Remove( 0, 1 );
-        sheetFullName.Trim( true );
-        sheetFullName.Trim( false );
-
-        // Convert path human readable separator to '-'
-        sheetFullName.Replace( "/", "-" );
-    }
-
-    if( ( filename.Len() + sheetFullName.Len() ) < FN_LEN_MAX )
-        filename += sheetFullName;
-    else
-        filename << wxT( "-" ) << GetScreen()->m_ScreenNumber;
-
-    return filename;
 }
 
 

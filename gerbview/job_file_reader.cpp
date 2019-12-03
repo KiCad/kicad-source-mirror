@@ -202,8 +202,7 @@ bool GERBVIEW_FRAME::LoadGerberJobFile( const wxString& aFullFileName )
         m_mruPath = currentPath;
     }
 
-    wxString msg;
-    WX_STRING_REPORTER reporter( &msg );
+    WX_STRING_REPORTER reporter;
 
     if( filename.IsOk() )
     {
@@ -227,16 +226,14 @@ bool GERBVIEW_FRAME::LoadGerberJobFile( const wxString& aFullFileName )
 
     SetActiveLayer( 0 );
 
-    if( !msg.IsEmpty() )
+    if( reporter.HasMessage() )
     {
         wxSafeYield();  // Allows slice of time to redraw the screen
                         // to refresh widgets, before displaying messages
         HTML_MESSAGE_BOX mbox( this, _( "Messages" ) );
-        mbox.ListSet( msg );
+        mbox.ListSet( reporter.GetMessage() );
         mbox.ShowModal();
     }
 
     return success;
 }
-
-

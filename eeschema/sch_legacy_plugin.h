@@ -27,7 +27,6 @@
 #include <stack>
 
 
-class KIWAY;
 class LINE_READER;
 class SCH_SCREEN;
 class SCH_SHEET;
@@ -93,10 +92,10 @@ public:
 
     int GetModifyHash() const override;
 
-    SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway,
+    SCH_SHEET* Load( const wxString& aFileName, PROJECT& aProject,
                      SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL ) override;
 
-    void Save( const wxString& aFileName, SCH_SCREEN* aScreen, KIWAY* aKiway,
+    void Save( const wxString& aFileName, SCH_SCREEN* aScreen, PROJECT& aProject,
                const PROPERTIES* aProperties = NULL ) override;
 
     void Format( SCH_SCREEN* aScreen );
@@ -129,7 +128,7 @@ public:
     const wxString& GetError() const override { return m_error; }
 
 private:
-    void loadHierarchy( SCH_SHEET* aSheet );
+    void loadHierarchy( SCH_SHEET* aSheet, PROJECT& aProject );
     void loadHeader( FILE_LINE_READER& aReader, SCH_SCREEN* aScreen );
     void loadPageSettings( FILE_LINE_READER& aReader, SCH_SCREEN* aScreen );
     void loadFile( const wxString& aFileName, SCH_SCREEN* aScreen );
@@ -165,13 +164,12 @@ protected:
     wxString          m_path;       ///< Root project path for loading child sheets.
     std::stack<wxString>  m_currentPath;    ///< Stack to maintain nested sheet paths
     const PROPERTIES* m_props;      ///< Passed via Save() or Load(), no ownership, may be NULL.
-    KIWAY*            m_kiway;      ///< Required for path to legacy component libraries.
     SCH_SHEET*        m_rootSheet;  ///< The root sheet of the schematic being loaded..
     FILE_OUTPUTFORMATTER* m_out;    ///< The output formatter for saving SCH_SCREEN objects.
     SCH_LEGACY_PLUGIN_CACHE* m_cache;
 
     /// initialize PLUGIN like a constructor would.
-    void init( KIWAY* aKiway, const PROPERTIES* aProperties = NULL );
+    void init( const PROPERTIES* aProperties = NULL );
 };
 
 #endif  // _SCH_LEGACY_PLUGIN_H_

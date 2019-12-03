@@ -65,9 +65,10 @@ enum SCH_LINE_TEST_T
 #define NB_MAX_SHEET    500
 
 
-class SCH_SCREEN : public BASE_SCREEN, public KIWAY_HOLDER
+class SCH_SCREEN : public BASE_SCREEN
 {
 private:
+    PROJECT&    m_project;      ///< Project this screen belongs to.
 
     wxString    m_fileName;     ///< File used to load the screen.
 
@@ -112,7 +113,7 @@ public:
     /**
      * Constructor
      */
-    SCH_SCREEN( KIWAY* aKiway );
+    SCH_SCREEN( PROJECT& aProject );
 
     ~SCH_SCREEN();
 

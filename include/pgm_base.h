@@ -316,8 +316,28 @@ public:
     static const wxChar workingDirKey[];
 
     /**
-     * Function initPgm
-     * initializes this program (process) in a KiCad standard way,
+     * Function InitPgmSettings
+     * initializes settings only, suitable for headless code:
+     *  - Default paths (help, libs, bin) and configuration file names
+     *  - Language and locale
+     *  - fonts
+     * <p>
+     * But nothing relating to DSOs or projects.
+     * @return bool - true if success, false if failure and program is to terminate.
+     */
+    bool InitPgmSettings();
+
+    /**
+     * Function InitPgmApp
+     * initializes WX or App from settings.  Call InitPgmSettings before.
+     * @return bool - true if success, false if failure and program is to terminate.
+     */
+    bool InitPgmApp();
+
+    /**
+     * Function InitPgm
+     * Calls InitPgmSettings and InitPgmApp to initialize this
+     * program (process) in a KiCad standard way,
      * using some generalized techniques.
      *  - Default paths (help, libs, bin) and configuration file names
      *  - Language and locale
@@ -327,6 +347,7 @@ public:
      * @return bool - true if success, false if failure and program is to terminate.
      */
     bool InitPgm();
+
 
     // The PGM_* classes can have difficulties at termination if they
     // are not destroyed soon enough.  Relying on a static destructor can be

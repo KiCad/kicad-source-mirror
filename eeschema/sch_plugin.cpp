@@ -47,7 +47,7 @@ void SCH_PLUGIN::SaveLibrary( const wxString& aFileName, const PROPERTIES* aProp
 }
 
 
-SCH_SHEET* SCH_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway, SCH_SHEET* aAppendToMe,
+SCH_SHEET* SCH_PLUGIN::Load( const wxString& aFileName, PROJECT& aProject, SCH_SHEET* aAppendToMe,
                              const PROPERTIES* aProperties )
 {
     not_implemented( this, __FUNCTION__ );
@@ -55,7 +55,7 @@ SCH_SHEET* SCH_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway, SCH_SHEET
 }
 
 
-void SCH_PLUGIN::Save( const wxString& aFileName, SCH_SCREEN* aSchematic, KIWAY* aKiway,
+void SCH_PLUGIN::Save( const wxString& aFileName, SCH_SCREEN* aSchematic, PROJECT& aProject,
                        const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
