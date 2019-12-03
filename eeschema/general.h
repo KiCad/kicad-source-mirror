@@ -73,7 +73,7 @@ class SCH_SHEET_PATH;
 #define DEFAULTLIBWIDTH 250
 
 ///< The default selection highlight thickness
-#define DEFAULTSELECTIONTHICKNESS 1.5
+#define DEFAULTSELECTIONTHICKNESS 3
 
 /* Rotation, mirror of graphic items in components bodies are handled by a
  * transform matrix.  The default matrix is useful to draw lib entries with
@@ -144,8 +144,8 @@ void SetSelectionFillShapes( bool aBool );
 /**
  * Selection highlight thickness
  */
-float GetSelectionThickness();
-void  SetSelectionThickness( float aFloat );
+int  GetSelectionThickness();
+void SetSelectionThickness( int aThickness );
 
 int GetTextMarkupFlags();
 void SetTextMarkupFlags( int aMarkupFlags );
