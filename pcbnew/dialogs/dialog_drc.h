@@ -94,6 +94,10 @@ private:
 
     void SetDrcParmeters( );
 
+    /// @return the selection on a right click on a DRCLISTBOX
+    /// return wxNOT_FOUND if no selection
+    int rightUpClicSelection( DRCLISTBOX* aListBox, wxMouseEvent& event );
+
     /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_CHECKBOX_RPT_FILE
     void OnReportCheckBoxClicked( wxCommandEvent& event ) override;
 

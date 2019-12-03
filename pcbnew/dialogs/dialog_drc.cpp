@@ -86,19 +86,6 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFra
 
     InitValues();
 
-    // Connect events
-    m_ClearanceListBox->Connect( ID_CLEARANCE_LIST, wxEVT_LEFT_DCLICK,
-                                 wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickClearance ),
-                                 NULL, this );
-    m_ClearanceListBox->Connect( ID_CLEARANCE_LIST, wxEVT_RIGHT_UP,
-                                 wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpClearance ),
-                                 NULL, this );
-    m_UnconnectedListBox->Connect( ID_UNCONNECTED_LIST, wxEVT_LEFT_DCLICK,
-                                   wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickUnconnected ),
-                                   NULL, this );
-    m_UnconnectedListBox->Connect( ID_UNCONNECTED_LIST, wxEVT_RIGHT_UP,
-                                   wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpUnconnected ),                                    NULL, this );
-
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 }
@@ -108,20 +95,6 @@ DIALOG_DRC_CONTROL::~DIALOG_DRC_CONTROL()
 {
     m_config->Write( RefillZonesBeforeDrcKey, m_cbRefillZones->GetValue() );
     m_config->Write( DrcTrackToZoneTestKey, m_cbReportTracksToZonesErrors->GetValue() );
-
-    // Disconnect events
-    m_ClearanceListBox->Disconnect( ID_CLEARANCE_LIST, wxEVT_LEFT_DCLICK,
-                                    wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickClearance ),
-                                    NULL, this );
-    m_ClearanceListBox->Disconnect( ID_CLEARANCE_LIST, wxEVT_RIGHT_UP,
-                                    wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpClearance ),
-                                    NULL, this );
-    m_UnconnectedListBox->Disconnect( ID_UNCONNECTED_LIST, wxEVT_LEFT_DCLICK,
-                                      wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickUnconnected ),
-                                      NULL, this );
-    m_UnconnectedListBox->Disconnect( ID_UNCONNECTED_LIST, wxEVT_RIGHT_UP,
-                                      wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpUnconnected ),
-                                      NULL, this );
 }
 
 
@@ -436,16 +409,33 @@ bool DIALOG_DRC_CONTROL::focusOnItem( const DRC_ITEM* aItem )
 }
 
 
+int DIALOG_DRC_CONTROL::rightUpClicSelection( DRCLISTBOX* aListBox, wxMouseEvent& event )
+{
+#if wxCHECK_VERSION( 3, 1, 3 )
+    // wxWidgets 3.1.3 has a bug in HitTest(): one cannot have the item selection
+    // on a right click: the returned value is always 10 so do not try to select
+    // an item on the right click. Just use the current selection (if any)
+    int selection = aListBox->GetSelection();
+#else
+    // Check if user right-clicked on a different item, and select the right clicked item
+    int selection = aListBox->HitTest( event.GetPosition() );
+
+    if( selection >= (int)aListBox->GetItemCount() )    // Should not happen.
+        selection = wxNOT_FOUND;
+#endif
+    if( selection == wxNOT_FOUND )
+        selection = aListBox->GetSelection();
+    else if( aListBox->GetSelection() != selection )
+        aListBox->SetSelection( selection );
+
+    return selection;
+}
+
+
 void DIALOG_DRC_CONTROL::OnRightUpUnconnected( wxMouseEvent& event )
 {
     // popup menu to go to either of the items listed in the DRC_ITEM.
-    // Check if user right-clicked on a different item
-    int selection = m_UnconnectedListBox->HitTest( event.GetPosition() );
-
-    if( selection == wxNOT_FOUND )
-        selection = m_UnconnectedListBox->GetSelection();
-    else
-        m_UnconnectedListBox->SetSelection( selection );
+    int selection = rightUpClicSelection( m_UnconnectedListBox, event );
 
     if( selection != wxNOT_FOUND )
         doSelectionMenu( m_UnconnectedListBox->GetItem( selection ) );
@@ -455,13 +445,7 @@ void DIALOG_DRC_CONTROL::OnRightUpUnconnected( wxMouseEvent& event )
 void DIALOG_DRC_CONTROL::OnRightUpClearance( wxMouseEvent& event )
 {
     // popup menu to go to either of the items listed in the DRC_ITEM.
-    // Check if user right-clicked on a different item
-    int selection = m_ClearanceListBox->HitTest( event.GetPosition() );
-
-    if( selection == wxNOT_FOUND )
-        selection = m_ClearanceListBox->GetSelection();
-    else
-        m_ClearanceListBox->SetSelection( selection );
+    int selection = rightUpClicSelection( m_ClearanceListBox, event );
 
     if( selection != wxNOT_FOUND )
         doSelectionMenu( m_ClearanceListBox->GetItem( selection ) );
@@ -675,11 +659,11 @@ void DIALOG_DRC_CONTROL::OnDeleteOneClick( wxCommandEvent& event )
             m_brdEditor->SetCurItem( NULL );
             m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
-            size_t newIndex = wxNOT_FOUND;
+            ssize_t newIndex = wxNOT_FOUND;
 
             if( m_ClearanceListBox->GetItemCount() > 1 )
             {
-                newIndex = ( selectedIndex == m_ClearanceListBox->GetItemCount() - 1 ) ?
+                newIndex = ( selectedIndex == (ssize_t)m_ClearanceListBox->GetItemCount() - 1 ) ?
                            selectedIndex - 1 : selectedIndex;
             }
 
