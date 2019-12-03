@@ -1,9 +1,15 @@
 before_script:
-  - apt-get update -qq -y && apt-get install -y -qq clang-format git 
+  - apt-get update -qq -y && apt-get install -y -qq clang-format git
 
+# The variable CI_COMMIT_BEFORE_SHA is not available in normal merge requests
+# so we must build the commit hash ourselves, see:
+# https://gitlab.com/gitlab-org/gitlab/issues/12850
 test_formatting:
   stage: test
-  script: 
-    - ./tools/check_coding.sh --diff --commit $CI_COMMIT_BEFORE_SHA
+  script:
+    - git fetch -n origin
+    - "TARGET_SHA=$(git rev-parse origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME)"
+    - echo "Testing formatting from commit $TARGET_SHA"
+    - ./tools/check_coding.sh --diff --commit $TARGET_SHA
   only:
   - merge_requests
