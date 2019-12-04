@@ -60,14 +60,14 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
     }
 
     g_newStrokeFontGlyphs = new GLYPH_LIST;
-    g_newStrokeFontGlyphs->resize( aNewStrokeFontSize );
+    g_newStrokeFontGlyphs->reserve( aNewStrokeFontSize );
 
     g_newStrokeFontGlyphBoundingBoxes = new std::vector<BOX2D>;
-    g_newStrokeFontGlyphBoundingBoxes->resize( aNewStrokeFontSize );
+    g_newStrokeFontGlyphBoundingBoxes->reserve( aNewStrokeFontSize );
 
     for( int j = 0; j < aNewStrokeFontSize; j++ )
     {
-        GLYPH&   glyph = g_newStrokeFontGlyphs->at( j );
+        GLYPH    glyph;
         double   glyphStartX = 0.0;
         double   glyphEndX = 0.0;
         double   glyphWidth;
@@ -79,6 +79,7 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 
         while( aNewStrokeFont[j][i] )
         {
+
             if( aNewStrokeFont[j][i] == ' ' && aNewStrokeFont[j][i+1] == 'R' )
                 strokes++;
 
@@ -145,7 +146,8 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
             pointList->resize( pointList->size() );
 
         // Compute the bounding box of the glyph
-        g_newStrokeFontGlyphBoundingBoxes->at( j ) = computeBoundingBox( glyph, glyphWidth );
+        g_newStrokeFontGlyphBoundingBoxes->emplace_back( computeBoundingBox( glyph, glyphWidth ) );
+        g_newStrokeFontGlyphs->push_back( glyph );
     }
 
     m_glyphs = g_newStrokeFontGlyphs;
