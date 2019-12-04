@@ -908,6 +908,10 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE_CONTAINER* aZone,
             spoke_w = std::min( spoke_w, pad->GetSize().x );
             spoke_w = std::min( spoke_w, pad->GetSize().y );
 
+            // Cannot create stubs having a width < zone min thickness
+            if( spoke_w <= aZone->GetMinThickness() )
+                continue;
+
             int spoke_half_w = spoke_w / 2;
 
             // Quick test here to possibly save us some work
