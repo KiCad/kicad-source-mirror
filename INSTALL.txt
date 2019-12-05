@@ -1,4 +1,4 @@
-KiCad installation
+KiCad Installation
 ==================
 
 The parts of KiCad
