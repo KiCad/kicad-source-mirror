@@ -352,7 +352,7 @@ public:
         outline.SetClosed( true );
         outline.Simplify();
 
-        m_cachedPoly.reset( new POLY_GRID_PARTITION( outline, 16 ) );
+        m_cachedPoly = std::make_unique<POLY_GRID_PARTITION>( outline, 16 );
     }
 
     int SubpolyIndex() const

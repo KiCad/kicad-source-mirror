@@ -32,6 +32,8 @@
 #include <class_edge_mod.h>
 #include <class_text_mod.h>
 
+#include <memory>
+
 // Configuration path (group) to store entry keys below.
 #define IMPORT_GFX_GROUP                        "ImportGraphics"
 
@@ -61,9 +63,9 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
     m_parent = aParent;
 
     if( aImportAsFootprintGraphic )
-        m_importer.reset( new GRAPHICS_IMPORTER_MODULE( m_parent->GetBoard()->GetFirstModule() ) );
+        m_importer = std::make_unique<GRAPHICS_IMPORTER_MODULE>( m_parent->GetBoard()->GetFirstModule() );
     else
-        m_importer.reset( new GRAPHICS_IMPORTER_BOARD( m_parent->GetBoard() ) );
+        m_importer = std::make_unique<GRAPHICS_IMPORTER_BOARD>( m_parent->GetBoard() );
 
     // construct an import manager with options from config
     {

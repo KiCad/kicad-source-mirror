@@ -29,6 +29,7 @@
 #include <class_edge_mod.h>
 #include <class_pcb_text.h>
 #include <class_text_mod.h>
+#include <memory>
 #include <tuple>
 
 #include "convert_to_biu.h"
@@ -175,7 +176,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D
 
 unique_ptr<DRAWSEGMENT> GRAPHICS_IMPORTER_BOARD::createDrawing()
 {
-    return unique_ptr<DRAWSEGMENT>( new DRAWSEGMENT( m_board ) );
+    return std::make_unique<DRAWSEGMENT>( m_board );
 }
 
 

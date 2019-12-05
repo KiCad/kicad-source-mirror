@@ -49,6 +49,7 @@
 #include <connectivity/connectivity_data.h>
 
 #include <io_mgr.h>
+#include <memory>
 #include <set>
 
 #include <tool/actions.h>
@@ -180,8 +181,8 @@ PCB_TEST_FRAME::PCB_TEST_FRAME( wxFrame* frame, const wxString& title, const wxP
 
     options.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::NONE; //SUPERSAMPLING_X4;
 
-    m_galPanel.reset( new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0,
-                            0 ), wxDefaultSize, options, aGalType ) );
+    m_galPanel = std::make_unique<PCB_DRAW_PANEL_GAL>( this, -1, wxPoint( 0,
+                            0 ), wxDefaultSize, options, aGalType );
 
     m_galPanel->SetEvtHandlerEnabled( true );
     m_galPanel->SetFocus();
@@ -201,12 +202,12 @@ PCB_TEST_FRAME::PCB_TEST_FRAME( wxFrame* frame, const wxString& title, const wxP
     m_galPanel->GetViewControls()->ShowCursor( true );
 
 #ifdef USE_TOOL_MANAGER
-    m_toolManager.reset( new TOOL_MANAGER );
+    m_toolManager = std::make_unique<TOOL_MANAGER>( );
     m_toolManager->SetEnvironment( m_board.get(), m_galPanel->GetView(),
             m_galPanel->GetViewControls(), nullptr );
 
-    m_pcbActions.reset( new TEST_ACTIONS() );
-    m_toolDispatcher.reset( new TOOL_DISPATCHER( m_toolManager.get(), m_pcbActions.get() ) );
+    m_pcbActions = std::make_unique<TEST_ACTIONS>( );
+    m_toolDispatcher = std::make_unique<TOOL_DISPATCHER>( m_toolManager.get(), m_pcbActions.get() );
 
     m_toolManager->RegisterTool( new SELECTION_TOOL );
 

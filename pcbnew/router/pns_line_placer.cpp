@@ -32,6 +32,8 @@
 
 #include <class_board_item.h>
 
+#include <memory>
+
 namespace PNS {
 
 LINE_PLACER::LINE_PLACER( ROUTER* aRouter ) :
@@ -947,7 +949,7 @@ void LINE_PLACER::initPlacement()
 
     if( m_currentMode == RM_Shove || m_currentMode == RM_Smart )
     {
-        m_shove.reset( new SHOVE( m_world->Branch(), Router() ) );
+        m_shove = std::make_unique<SHOVE>( m_world->Branch(), Router() );
     }
 }
 

@@ -33,6 +33,8 @@
 #include <tools/global_edit_tool.h>
 #include <board_commit.h>
 
+#include <memory>
+
 
 GLOBAL_EDIT_TOOL::GLOBAL_EDIT_TOOL() :
     PCB_TOOL_BASE( "pcbnew.GlobalEdit" )
@@ -43,7 +45,7 @@ GLOBAL_EDIT_TOOL::GLOBAL_EDIT_TOOL() :
 void GLOBAL_EDIT_TOOL::Reset( RESET_REASON aReason )
 {
     if( aReason != RUN )
-        m_commit.reset( new BOARD_COMMIT( this ) );
+        m_commit = std::make_unique<BOARD_COMMIT>( this );
 }
 
 
