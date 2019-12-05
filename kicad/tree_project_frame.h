@@ -83,13 +83,13 @@ protected:
      * Note this is not necessary the "clicked" item,
      * because when expanding, collapsing an item this item is not selected
      */
-    TREEPROJECT_ITEM* GetSelectedData();
+    std::vector<TREEPROJECT_ITEM*> GetSelectedData();
 
     /**
      * Function GetItemIdData
      * return the item data corresponding to a wxTreeItemId identifier
      * @param  aId = the wxTreeItemId identifier.
-     * @return a TREEPROJECT_ITEM pointer correspondinfg to item id aId
+     * @return a TREEPROJECT_ITEM pointer corresponding to item id aId
      */
     TREEPROJECT_ITEM* GetItemIdData( wxTreeItemId aId );
 

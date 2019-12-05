@@ -39,11 +39,9 @@
 IMPLEMENT_ABSTRACT_CLASS( TREEPROJECTFILES, wxTreeCtrl )
 
 
-TREEPROJECTFILES::TREEPROJECTFILES( TREE_PROJECT_FRAME* parent ) :
-    wxTreeCtrl( parent, ID_PROJECT_TREE,
-                wxDefaultPosition, wxDefaultSize,
-                wxTR_HAS_BUTTONS, wxDefaultValidator,
-                wxT( "EDATreeCtrl" ) )
+TREEPROJECTFILES::TREEPROJECTFILES( TREE_PROJECT_FRAME* parent )
+        : wxTreeCtrl( parent, ID_PROJECT_TREE, wxDefaultPosition, wxDefaultSize,
+                wxTR_HAS_BUTTONS | wxTR_MULTIPLE, wxDefaultValidator, wxT( "EDATreeCtrl" ) )
 {
     m_Parent = parent;
 

@@ -63,37 +63,36 @@
 // list of files extensions listed in the tree project window
 // *.sch files are always allowed, do not add here
 // Add extensions in a compatible regex format to see others files types
-static const wxChar* s_allowedExtensionsToList[] =
-{
+static const wxChar* s_allowedExtensionsToList[] = {
     wxT( "^.*\\.pro$" ),
     wxT( "^.*\\.pdf$" ),
-    wxT( "^[^$].*\\.brd$" ),        // Legacy Pcbnew files
-    wxT( "^[^$].*\\.kicad_pcb$" ),  // S format Pcbnew board files
-    wxT( "^[^$].*\\.kicad_wks$" ),  // S format kicad page layout descr files
-    wxT( "^[^$].*\\.kicad_mod$" ),  // S format kicad footprint files, currently not listed
-    wxT( "^.*\\.net$" ),            // pcbnew netlist file
-    wxT( "^.*\\.cir$" ),            // Spice netlist file
-    wxT( "^.*\\.lib$" ),            // Schematic library file
+    wxT( "^[^$].*\\.brd$" ),       // Legacy Pcbnew files
+    wxT( "^[^$].*\\.kicad_pcb$" ), // S format Pcbnew board files
+    wxT( "^[^$].*\\.kicad_wks$" ), // S format kicad page layout help_textr files
+    wxT( "^[^$].*\\.kicad_mod$" ), // S format kicad footprint files, currently not listed
+    wxT( "^.*\\.net$" ),           // pcbnew netlist file
+    wxT( "^.*\\.cir$" ),           // Spice netlist file
+    wxT( "^.*\\.lib$" ),           // Schematic library file
     wxT( "^.*\\.txt$" ),
-    wxT( "^.*\\.pho$" ),            // Gerber file (Old Kicad extension)
-    wxT( "^.*\\.gbr$" ),            // Gerber file
-    wxT( "^.*\\.gbrjob$" ),         // Gerber job file
-    wxT( "^.*\\.gb[alops]$" ),      // Gerber back (or bottom) layer file (deprecated Protel ext)
-    wxT( "^.*\\.gt[alops]$" ),      // Gerber front (or top) layer file (deprecated Protel ext)
-    wxT( "^.*\\.g[0-9]{1,2}$" ),    // Gerber inner layer file (deprecated Protel ext)
+    wxT( "^.*\\.pho$" ),           // Gerber file (Old Kicad extension)
+    wxT( "^.*\\.gbr$" ),           // Gerber file
+    wxT( "^.*\\.gbrjob$" ),        // Gerber job file
+    wxT( "^.*\\.gb[alops]$" ),     // Gerber back (or bottom) layer file (deprecated Protel ext)
+    wxT( "^.*\\.gt[alops]$" ),     // Gerber front (or top) layer file (deprecated Protel ext)
+    wxT( "^.*\\.g[0-9]{1,2}$" ),   // Gerber inner layer file (deprecated Protel ext)
     wxT( "^.*\\.odt$" ),
     wxT( "^.*\\.htm$" ),
     wxT( "^.*\\.html$" ),
-    wxT( "^.*\\.rpt$" ),            // Report files
-    wxT( "^.*\\.csv$" ),            // Report files in comma separated format
-    wxT( "^.*\\.pos$" ),            // Footprint position files
-    wxT( "^.*\\.cmp$" ),            // Cvpcb cmp/footprint link files
-    wxT( "^.*\\.drl$" ),            // Excellon drill files
-    wxT( "^.*\\.nc$" ),             // Excellon NC drill files (alternate file ext)
-    wxT( "^.*\\.xnc$" ),            // Excellon NC drill files (alternate file ext)
-    wxT( "^.*\\.svg$" ),            // SVG print/plot files
-    wxT( "^.*\\.ps$" ),             // Postscript plot files
-    NULL                            // end of list
+    wxT( "^.*\\.rpt$" ),           // Report files
+    wxT( "^.*\\.csv$" ),           // Report files in comma separated format
+    wxT( "^.*\\.pos$" ),           // Footprint position files
+    wxT( "^.*\\.cmp$" ),           // Cvpcb cmp/footprint link files
+    wxT( "^.*\\.drl$" ),           // Excellon drill files
+    wxT( "^.*\\.nc$" ),            // Excellon NC drill files (alternate file ext)
+    wxT( "^.*\\.xnc$" ),           // Excellon NC drill files (alternate file ext)
+    wxT( "^.*\\.svg$" ),           // SVG print/plot files
+    wxT( "^.*\\.ps$" ),            // Postscript plot files
+    NULL                           // end of list
 };
 
 
@@ -172,12 +171,12 @@ TREE_PROJECT_FRAME::~TREE_PROJECT_FRAME()
 
 void TREE_PROJECT_FRAME::OnSwitchToSelectedProject( wxCommandEvent& event )
 {
-    TREEPROJECT_ITEM* tree_data = GetSelectedData();
+    std::vector<TREEPROJECT_ITEM*> tree_data = GetSelectedData();
 
-    if( !tree_data )
+    if( tree_data.size() != 1 )
         return;
 
-    wxString prj_filename = tree_data->GetFileName();
+    wxString prj_filename = tree_data[0]->GetFileName();
 
     m_Parent->LoadProject( prj_filename );
 }
@@ -186,79 +185,80 @@ void TREE_PROJECT_FRAME::OnSwitchToSelectedProject( wxCommandEvent& event )
 void TREE_PROJECT_FRAME::OnOpenDirectory( wxCommandEvent& event )
 {
     // Get the root directory name:
-    TREEPROJECT_ITEM* treeData = GetSelectedData();
+    std::vector<TREEPROJECT_ITEM*> tree_data = GetSelectedData();
 
-    if( !treeData )
-        return;
-
-    // Ask for the new sub directory name
-    wxString curr_dir = treeData->GetDir();
-
-    if( curr_dir.IsEmpty() )
+    for( TREEPROJECT_ITEM* item_data : tree_data )
     {
-        // Use project path if the tree view path was empty.
-        curr_dir = wxPathOnly( m_Parent->GetProjectFileName() );
+        // Ask for the new sub directory name
+        wxString curr_dir = item_data->GetDir();
 
-        // As a last resort use the user's documents folder.
-        if( curr_dir.IsEmpty() || !wxFileName::DirExists( curr_dir ) )
-            curr_dir = wxStandardPaths::Get().GetDocumentsDir();
+        if( curr_dir.IsEmpty() )
+        {
+            // Use project path if the tree view path was empty.
+            curr_dir = wxPathOnly( m_Parent->GetProjectFileName() );
 
-        if( !curr_dir.IsEmpty() )
-            curr_dir += wxFileName::GetPathSeparator();
-    }
+            // As a last resort use the user's documents folder.
+            if( curr_dir.IsEmpty() || !wxFileName::DirExists( curr_dir ) )
+                curr_dir = wxStandardPaths::Get().GetDocumentsDir();
+
+            if( !curr_dir.IsEmpty() )
+                curr_dir += wxFileName::GetPathSeparator();
+        }
 
 #ifdef __WXMAC__
-    wxString msg;
+        wxString msg;
 
-    // Quote in case there are spaces in the path.
-    msg.Printf( "open \"%s\"", curr_dir );
+        // Quote in case there are spaces in the path.
+        msg.Printf( "open \"%s\"", curr_dir );
 
-    system( msg.c_str() );
+        system( msg.c_str() );
 #else
-    // Quote in case there are spaces in the path.
-    AddDelimiterString( curr_dir );
+        // Quote in case there are spaces in the path.
+        AddDelimiterString( curr_dir );
 
-    wxLaunchDefaultApplication( curr_dir );
+        wxLaunchDefaultApplication( curr_dir );
 #endif
+    }
 }
 
 
 void TREE_PROJECT_FRAME::OnCreateNewDirectory( wxCommandEvent& event )
 {
     // Get the root directory name:
-    TREEPROJECT_ITEM* treeData = GetSelectedData();
+    std::vector<TREEPROJECT_ITEM*> tree_data = GetSelectedData();
 
-    if( !treeData )
-        return;
-
-    wxString prj_dir = wxPathOnly( m_Parent->GetProjectFileName() );
-
-    // Ask for the new sub directory name
-    wxString curr_dir = treeData->GetDir();
-
-    if( !curr_dir.IsEmpty() )    // A subdir is selected
+    for( TREEPROJECT_ITEM* item_data : tree_data )
     {
-        // Make this subdir name relative to the current path.
-        // It will be more easy to read by the user, in the next dialog
-        wxFileName fn;
-        fn.AssignDir( curr_dir );
-        fn.MakeRelativeTo( prj_dir );
-        curr_dir = fn.GetPath();
+        wxString prj_dir = wxPathOnly( m_Parent->GetProjectFileName() );
 
-        if( !curr_dir.IsEmpty() )
-            curr_dir += wxFileName::GetPathSeparator();
-    }
+        // Ask for the new sub directory name
+        wxString curr_dir = item_data->GetDir();
 
-    wxString msg = wxString::Format( _( "Current project directory:\n%s" ), GetChars( prj_dir ) );
-    wxString subdir = wxGetTextFromUser( msg, _( "Create New Directory" ), curr_dir );
+        if( !curr_dir.IsEmpty() ) // A subdir is selected
+        {
+            // Make this subdir name relative to the current path.
+            // It will be more easy to read by the user, in the next dialog
+            wxFileName fn;
+            fn.AssignDir( curr_dir );
+            fn.MakeRelativeTo( prj_dir );
+            curr_dir = fn.GetPath();
 
-    if( subdir.IsEmpty() )
-        return;
+            if( !curr_dir.IsEmpty() )
+                curr_dir += wxFileName::GetPathSeparator();
+        }
 
-    wxString full_dirname = prj_dir + wxFileName::GetPathSeparator() + subdir;
+        wxString msg =
+                wxString::Format( _( "Current project directory:\n%s" ), GetChars( prj_dir ) );
+        wxString subdir = wxGetTextFromUser( msg, _( "Create New Directory" ), curr_dir );
+
+        if( subdir.IsEmpty() )
+            return;
+
+        wxString full_dirname = prj_dir + wxFileName::GetPathSeparator() + subdir;
 
     // Make the new item and let the file watcher add it to the tree
     wxMkdir( full_dirname );
+    }
 }
 
 
@@ -294,8 +294,8 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
                                                wxTreeItemId& aRoot, bool aRecurse )
 {
     wxTreeItemId newItemId;
-    TreeFileType type = TREE_UNKNOWN;
-    wxFileName   fn( aName );
+    TreeFileType    type = TREE_UNKNOWN;
+    wxFileName      fn( aName );
 
     // Files/dirs names starting by "." are not visible files under unices.
     // Skip them also under Windows
@@ -447,7 +447,7 @@ wxTreeItemId TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
 
         if( dir.IsOpened() )    // protected dirs will not open properly.
         {
-            wxString dir_filename;
+            wxString        dir_filename;
 
             data->SetPopulated( true );
 
@@ -536,155 +536,211 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
 
 void TREE_PROJECT_FRAME::OnRight( wxTreeEvent& Event )
 {
-    int                 tree_id;
-    TREEPROJECT_ITEM*   tree_data;
-    wxString            fullFileName;
     wxTreeItemId        curr_item = Event.GetItem();
 
     // Ensure item is selected (Under Windows right click does not select the item)
     m_TreeProject->SelectItem( curr_item );
 
-    tree_data = GetSelectedData();
+    std::vector<TREEPROJECT_ITEM*> tree_data = GetSelectedData();
 
-    if( !tree_data )
+    bool can_switch_to_project = true;
+    bool can_create_new_directory = true;
+    bool can_open_this_directory = true;
+    bool can_edit = true;
+    bool can_rename = true;
+    bool can_delete = true;
+    bool can_print = true;
+
+    if( tree_data.size() == 0 )
         return;
 
-    tree_id = tree_data->GetType();
-    fullFileName = tree_data->GetFileName();
-
-    wxMenu popupMenu;
-
-    switch( tree_id )
+    if( tree_data.size() != 1 )
     {
-    case TREE_PROJECT:
-        // Add a swith to an other project option only if the selected item
-        // is not the root item (current project)
-        if( curr_item != m_TreeProject->GetRootItem() )
-        {
-            AddMenuItem( &popupMenu, ID_PROJECT_SWITCH_TO_OTHER,
-                         _( "&Switch to this Project" ),
-                         _( "Close all editors, and switch to the selected project" ),
-                         KiBitmap( open_project_xpm ) );
-            popupMenu.AppendSeparator();
-        }
-
-        AddMenuItem( &popupMenu, ID_PROJECT_NEWDIR,
-                     _( "New D&irectory..." ),
-                     _( "Create a New Directory" ),
-                     KiBitmap( directory_xpm ) );
-
-        AddMenuItem( &popupMenu, ID_PROJECT_OPEN_DIR,
-#ifdef __APPLE__
-                     _( "Reveal in Finder" ),
-                     _( "Reveals the directory in a Finder window" ),
-#else
-                     _( "&Open Directory in File Explorer" ),
-                     _( "Opens the directory in the default system file manager" ),
-#endif
-                     KiBitmap( directory_browser_xpm ) );
-        break;
-
-    case TREE_DIRECTORY:
-        AddMenuItem( &popupMenu, ID_PROJECT_NEWDIR,
-                     _( "New D&irectory..." ),
-                     _( "Create a New Directory" ),
-                     KiBitmap( directory_xpm ) );
-        AddMenuItem( &popupMenu, ID_PROJECT_OPEN_DIR,
-#ifdef __APPLE__
-                     _( "Reveal in Finder" ),
-                     _( "Reveals the directory in a Finder window" ),
-#else
-                     _( "&Open Directory in File Explorer" ),
-                     _( "Opens the directory in the default system file manager" ),
-#endif
-                     KiBitmap( directory_browser_xpm ) );
-
-        popupMenu.AppendSeparator();
-        AddMenuItem( &popupMenu,  ID_PROJECT_DELETE,
-                     _( "&Delete Directory" ),
-                     _( "Delete the Directory and its content" ),
-                     KiBitmap( delete_xpm ) );
-        break;
-
-    default:
-        AddMenuItem( &popupMenu, ID_PROJECT_TXTEDIT,
-                     _( "&Edit in a Text Editor" ),
-                     _( "Open the file in a Text Editor" ),
-                     KiBitmap( editor_xpm ) );
-        AddMenuItem( &popupMenu, ID_PROJECT_RENAME,
-                     _( "&Rename File..." ),
-                     _( "Rename file" ),
-                     KiBitmap( right_xpm ) );
-
-        popupMenu.AppendSeparator();
-        AddMenuItem( &popupMenu,  ID_PROJECT_DELETE,
-                     _( "&Delete File" ),
-                     _( "Delete the file and its content" ),
-                     KiBitmap( delete_xpm ) );
-
-        if( CanPrintFile( fullFileName ) )
-        {
-            popupMenu.AppendSeparator();
-            AddMenuItem( &popupMenu, ID_PROJECT_PRINT,
-#ifdef __APPLE__
-                         _( "Print..." ),
-#else
-                         _( "&Print" ),
-#endif
-                         _( "Print the contents of the file" ),
-                         KiBitmap( print_button_xpm ) );
-        }
-        break;
+        can_switch_to_project = false;
+        can_create_new_directory = false;
+        can_rename = false;
+        can_print = false;
     }
 
-    PopupMenu( &popupMenu );
+    if( curr_item == m_TreeProject->GetRootItem() )
+        can_switch_to_project = false;
+
+    for( TREEPROJECT_ITEM* item_data : tree_data )
+    {
+        int      tree_id = item_data->GetType();
+        wxString full_file_name = item_data->GetFileName();
+
+        switch( tree_id )
+        {
+        case TREE_PROJECT:
+            can_edit = false;
+            can_rename = false;
+            can_delete = false;
+            can_print = false;
+            break;
+        case TREE_DIRECTORY:
+            can_switch_to_project = false;
+            can_edit = false;
+            can_rename = false;
+            can_print = false;
+            break;
+        default:
+            can_switch_to_project = false;
+            can_create_new_directory = false;
+            can_open_this_directory = false;
+            if( !CanPrintFile( full_file_name ) )
+                can_print = false;
+            break;
+        }
+    }
+
+    wxMenu   popup_menu;
+    wxString text;
+    wxString help_text;
+
+    if( can_switch_to_project )
+    {
+        AddMenuItem( &popup_menu, ID_PROJECT_SWITCH_TO_OTHER, _( "&Switch to this Project" ),
+                _( "Close all editors, and switch to the selected project" ),
+                KiBitmap( open_project_xpm ) );
+        popup_menu.AppendSeparator();
+    }
+
+    if( can_create_new_directory )
+    {
+        AddMenuItem( &popup_menu, ID_PROJECT_NEWDIR, _( "New D&irectory..." ),
+                _( "Create a New Directory" ), KiBitmap( directory_xpm ) );
+    }
+
+    if( can_open_this_directory )
+    {
+        if( tree_data.size() == 1 )
+        {
+#ifdef __APPLE__
+            text = _( "Reveal in Finder" );
+            help_text = _( "Reveals the directory in a Finder window" );
+#else
+            text = _( "&Open Directory in File Explorer" );
+            help_text = _( "Opens the directory in the default system file manager" );
+#endif
+        }
+        else
+        {
+#ifdef __APPLE__
+            text = _( "Reveal in Finder" );
+            help_text = _( "Reveals the directories in a Finder window" );
+#else
+            text = _( "&Open Directories in File Explorer" );
+            help_text = _( "Opens the directories in the default system file manager" );
+#endif
+        }
+
+        AddMenuItem( &popup_menu, ID_PROJECT_OPEN_DIR, text, help_text,
+                KiBitmap( directory_browser_xpm ) );
+    }
+
+    if( can_edit )
+    {
+        if( tree_data.size() == 1 )
+            help_text = _( "Open the file in a Text Editor" );
+        else
+            help_text = _( "Open the files in a Text Editor" );
+
+        AddMenuItem( &popup_menu, ID_PROJECT_TXTEDIT, _( "&Edit in a Text Editor" ), help_text,
+                KiBitmap( editor_xpm ) );
+    }
+
+    if( can_rename )
+    {
+        if( tree_data.size() == 1 )
+        {
+            text = _( "&Rename File..." );
+            help_text = _( "Rename file" );
+        }
+        else
+        {
+            text = _( "&Rename Files..." );
+            help_text = _( "Rename files" );
+        }
+
+        AddMenuItem( &popup_menu, ID_PROJECT_RENAME, text, help_text, KiBitmap( right_xpm ) );
+    }
+
+    if( can_delete )
+    {
+        if( tree_data.size() == 1 )
+            help_text = _( "Delete the file and its content" );
+        else
+            help_text = _( "Delete the files and their contents" );
+
+        if( can_switch_to_project || can_create_new_directory || can_open_this_directory || can_edit
+                || can_rename )
+            popup_menu.AppendSeparator();
+        AddMenuItem(
+                &popup_menu, ID_PROJECT_DELETE, _( "&Delete" ), help_text, KiBitmap( delete_xpm ) );
+    }
+
+    if( can_print )
+    {
+        popup_menu.AppendSeparator();
+        AddMenuItem( &popup_menu, ID_PROJECT_PRINT,
+#ifdef __APPLE__
+                _( "Print..." ),
+#else
+                _( "&Print" ),
+#endif
+                _( "Print the contents of the file" ), KiBitmap( print_button_xpm ) );
+    }
+
+    PopupMenu( &popup_menu );
 }
 
 
 void TREE_PROJECT_FRAME::OnOpenSelectedFileWithTextEditor( wxCommandEvent& event )
 {
-    TREEPROJECT_ITEM* tree_data = GetSelectedData();
+    std::vector<TREEPROJECT_ITEM*> tree_data = GetSelectedData();
 
-    if( !tree_data || tree_data->GetType() == TREE_DIRECTORY )
-        return;
+    for( TREEPROJECT_ITEM* item_data : tree_data )
+    {
+        wxString fullFileName = item_data->GetFileName();
+        AddDelimiterString( fullFileName );
+        wxString editorname = Pgm().GetEditorName();
 
-    wxString    fullFileName = tree_data->GetFileName();
-    AddDelimiterString( fullFileName );
-    wxString    editorname = Pgm().GetEditorName();
-
-    if( !editorname.IsEmpty() )
-        ExecuteFile( this, editorname, fullFileName );
+        if( !editorname.IsEmpty() )
+            ExecuteFile( this, editorname, fullFileName );
+    }
 }
 
 
 void TREE_PROJECT_FRAME::OnDeleteFile( wxCommandEvent& )
 {
-    TREEPROJECT_ITEM* tree_data = GetSelectedData();
+    std::vector<TREEPROJECT_ITEM*> tree_data = GetSelectedData();
 
-    if( tree_data )
-        tree_data->Delete();
+    for( TREEPROJECT_ITEM* item_data : tree_data )
+        item_data->Delete();
 }
 
 
 void TREE_PROJECT_FRAME::OnPrintFile( wxCommandEvent& )
 {
-    TREEPROJECT_ITEM* tree_data = GetSelectedData();
+    std::vector<TREEPROJECT_ITEM*> tree_data = GetSelectedData();
 
-    if( tree_data )
-        tree_data->Print();
+    for( TREEPROJECT_ITEM* item_data : tree_data )
+        item_data->Print();
 }
 
 
 void TREE_PROJECT_FRAME::OnRenameFile( wxCommandEvent& )
 {
-    wxTreeItemId        curr_item   = m_TreeProject->GetSelection();
-    TREEPROJECT_ITEM*   tree_data   = GetSelectedData();
+    wxTreeItemId                   curr_item = m_TreeProject->GetFocusedItem();
+    std::vector<TREEPROJECT_ITEM*> tree_data = GetSelectedData();
 
-    if( !tree_data )
+    // XXX: Unnecessary?
+    if( tree_data.size() != 1 )
         return;
 
     wxString buffer = m_TreeProject->GetItemText( curr_item );
-    wxString msg = wxString::Format( _( "Change filename: \"%s\"" ), tree_data->GetFileName() );
+    wxString msg = wxString::Format( _( "Change filename: \"%s\"" ), tree_data[0]->GetFileName() );
     wxTextEntryDialog dlg( this, msg, _( "Change filename" ), buffer );
 
     if( dlg.ShowModal() != wxID_OK )
@@ -697,19 +753,19 @@ void TREE_PROJECT_FRAME::OnRenameFile( wxCommandEvent& )
     if( buffer.IsEmpty() )
         return; // empty file name not allowed
 
-    tree_data->Rename( buffer, true );
+    tree_data[0]->Rename( buffer, true );
     m_isRenaming = true;
 }
 
 
 void TREE_PROJECT_FRAME::OnSelect( wxTreeEvent& Event )
 {
-    TREEPROJECT_ITEM* selected_item = GetSelectedData();
+    std::vector<TREEPROJECT_ITEM*> tree_data = GetSelectedData();
 
-    if( !selected_item )
+    if( tree_data.size() != 1 )
         return;
 
-    selected_item->Activate( this );
+    tree_data[0]->Activate( this );
 }
 
 
@@ -775,9 +831,17 @@ void TREE_PROJECT_FRAME::OnExpand( wxTreeEvent& Event )
 }
 
 
-TREEPROJECT_ITEM* TREE_PROJECT_FRAME::GetSelectedData()
+std::vector<TREEPROJECT_ITEM*> TREE_PROJECT_FRAME::GetSelectedData()
 {
-    return GetItemIdData( m_TreeProject->GetSelection() );
+    wxArrayTreeItemIds             selection;
+    std::vector<TREEPROJECT_ITEM*> data;
+
+    m_TreeProject->GetSelections( selection );
+
+    for( auto it = selection.begin(); it != selection.end(); it++ )
+        data.push_back( GetItemIdData( *it ) );
+
+    return data;
 }
 
 
@@ -818,7 +882,7 @@ wxTreeItemId TREE_PROJECT_FRAME::findSubdirTreeItem( const wxString& aSubDir )
                 subdirs_id.pop();
                 kid = m_TreeProject->GetFirstChild( root_id, cookie );
 
-                if( !kid.IsOk() )
+                if( ! kid.IsOk() )
                     continue;
             }
         }
