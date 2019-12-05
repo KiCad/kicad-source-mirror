@@ -33,7 +33,7 @@
 #include <richio.h>
 */
 
-#include <assert.h>
+#include <cassert>
 
 
 /*

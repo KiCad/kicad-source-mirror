@@ -28,7 +28,7 @@
 #ifndef _EAGLE_PARSER_H_
 #define _EAGLE_PARSER_H_
 
-#include <errno.h>
+#include <cerrno>
 #include <unordered_map>
 
 #include <wx/xml/xml.h>

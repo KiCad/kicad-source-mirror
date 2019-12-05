@@ -27,9 +27,9 @@
  * @brief methods to add scripting capabilities inside pcbnew
  */
 
+#include <cstdlib>
+#include <cstring>
 #include <python_scripting.h>
-#include <stdlib.h>
-#include <string.h>
 #include <sstream>
 
 #include <fctsys.h>

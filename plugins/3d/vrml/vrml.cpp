@@ -31,16 +31,16 @@
  *  #VRML V2.0 utf8
  */
 
-#include <locale.h>
-#include <wx/log.h>
-#include <wx/filename.h>
-#include "richio.h"
 #include "plugins/3d/3d_plugin.h"
 #include "plugins/3dapi/ifsg_all.h"
-#include "wrlproc.h"
+#include "richio.h"
 #include "vrml1_base.h"
 #include "vrml2_base.h"
+#include "wrlproc.h"
 #include "x3d.h"
+#include <clocale>
+#include <wx/filename.h>
+#include <wx/log.h>
 
 
 #define PLUGIN_VRML_MAJOR 1

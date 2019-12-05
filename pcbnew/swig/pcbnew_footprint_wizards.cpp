@@ -28,9 +28,9 @@
  */
 
 #include "pcbnew_footprint_wizards.h"
-#include <python_scripting.h>
-#include <stdio.h>
+#include <cstdio>
 #include <macros.h>
+#include <python_scripting.h>
 
 
 PYTHON_FOOTPRINT_WIZARD::PYTHON_FOOTPRINT_WIZARD( PyObject* aWizard )

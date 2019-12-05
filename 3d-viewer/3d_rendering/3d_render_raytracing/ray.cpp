@@ -30,7 +30,7 @@
 
 #include "ray.h"
 #include "../../3d_fastmath.h"
-#include <stdio.h>
+#include <cstdio>
 #include <wx/debug.h>
 
 #include <cmath>

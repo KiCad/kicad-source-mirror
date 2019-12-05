@@ -26,7 +26,7 @@
 #ifndef __MATH_UTIL_H
 #define __MATH_UTIL_H
 
-#include <stdint.h>
+#include <cstdint>
 
 /**
  * Function rescale()

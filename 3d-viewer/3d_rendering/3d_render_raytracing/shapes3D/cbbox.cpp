@@ -29,7 +29,7 @@
 #include "3d_fastmath.h"
 
 #include "cbbox.h"
-#include <stdio.h>
+#include <cstdio>
 #include <wx/debug.h>   // For the wxASSERT
 
 

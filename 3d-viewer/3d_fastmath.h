@@ -30,9 +30,9 @@
 #ifndef _3D_FASTMATH_H
 #define _3D_FASTMATH_H
 
-#include <string.h>
-#include <stdint.h>
 #include <cmath>
+#include <cstdint>
+#include <cstring>
 
 
 // Define this flag to use fast math optimizations

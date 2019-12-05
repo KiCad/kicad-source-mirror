@@ -26,10 +26,10 @@
  * Based on the original microstrip.c by Gopal Narayanan
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
 #include <units.h>
 #include <transline.h>

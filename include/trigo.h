@@ -28,9 +28,9 @@
  * @file trigo.h
  */
 
-#include <math.h>
-#include <wx/gdicmn.h> // For wxPoint
+#include <cmath>
 #include <math/vector2d.h>
+#include <wx/gdicmn.h> // For wxPoint
 
 /**
  * Function IsPointOnSegment

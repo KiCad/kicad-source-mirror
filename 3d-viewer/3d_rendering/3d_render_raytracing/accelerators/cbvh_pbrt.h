@@ -71,8 +71,8 @@
 #define _CBVH_PBRT_H_
 
 #include "caccelerator.h"
+#include <cstdint>
 #include <list>
-#include <stdint.h>
 
 // Forward Declarations
 struct BVHBuildNode;

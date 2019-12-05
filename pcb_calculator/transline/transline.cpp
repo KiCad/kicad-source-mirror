@@ -118,7 +118,7 @@ double TRANSLINE::getProperty( enum PRMS_ID aPrmId )
 /*
  * skin_depth - calculate skin depth
  */
-#include <stdio.h>
+#include <cstdio>
 double TRANSLINE::skin_depth()
 {
     double depth;

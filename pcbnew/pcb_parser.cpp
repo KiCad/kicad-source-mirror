@@ -27,12 +27,12 @@
  * @brief Pcbnew s-expression file format parser implementation.
  */
 
-#include <errno.h>
+#include <cerrno>
 #include <common.h>
 #include <confirm.h>
 #include <macros.h>
-#include <trigo.h>
 #include <title_block.h>
+#include <trigo.h>
 
 #include <class_board.h>
 #include <class_dimension.h>

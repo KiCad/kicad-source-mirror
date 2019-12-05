@@ -17,9 +17,9 @@
 #ifndef __LIBCONTEXT_H
 #define __LIBCONTEXT_H
 
-#include <stdint.h>
-#include <stdio.h>
-#include <stddef.h>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
 
 
 #if defined(__GNUC__) || defined(__APPLE__) || defined(__FreeBSD__)

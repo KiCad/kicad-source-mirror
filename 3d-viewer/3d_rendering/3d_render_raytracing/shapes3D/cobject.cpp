@@ -28,7 +28,7 @@
  */
 
 #include "cobject.h"
-#include <stdio.h>
+#include <cstdio>
 
 
 COBJECT3D_STATS *COBJECT3D_STATS::s_instance = 0;

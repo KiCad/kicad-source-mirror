@@ -3,10 +3,10 @@
 */
 /* First off, code is included that follows the "include" declaration
 ** in the input grammar file. */
-#include <stdio.h>
+#include <cstdio>
 #line 28 "grammar.lemon"
 
-#include <assert.h>
+#include <cassert>
 #include <libeval/numeric_evaluator.h>
 #line 12 "grammar.c"
 /* Next is all token values, in a form suitable for use by makeheaders.
@@ -236,7 +236,7 @@ struct yyParser {
 typedef struct yyParser yyParser;
 
 #ifndef NDEBUG
-#include <stdio.h>
+#include <cstdio>
 static FILE *yyTraceFILE = 0;
 static char *yyTracePrompt = 0;
 #endif /* NDEBUG */

@@ -24,7 +24,7 @@
 #ifndef GEOM_TEST_UTILS_H
 #define GEOM_TEST_UTILS_H
 
-#include <math.h>
+#include <cmath>
 
 #include <geometry/seg.h>
 #include <geometry/shape_line_chain.h>

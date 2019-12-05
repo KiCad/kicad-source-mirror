@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <cmath>
 #include <math/vector2d.h>
-#include <math.h>
 
 #include <geometry/shape.h>
 #include <geometry/shape_arc.h>
