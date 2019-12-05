@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-05 09:08+0100\n"
-"PO-Revision-Date: 2019-12-05 09:11+0100\n"
+"POT-Creation-Date: 2019-12-05 15:22+0100\n"
+"PO-Revision-Date: 2019-12-05 15:26+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -25816,7 +25816,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:448
 msgid "Push Pad Properties to Other Pads..."
-msgstr "Exporter Propriétés du Pad aux Autres"
+msgstr "Exporter Propriétés du Pad aux Autres..."
 
 #: pcbnew/tools/pcb_actions.cpp:449
 msgid "Copy the current pad's properties to other pads"
@@ -26364,7 +26364,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1021
 msgid "Select/Expand Connection"
-msgstr " Sélectionner/Expandre Connexion"
+msgstr "Sélectionner/Expandre Connexion"
 
 #: pcbnew/tools/pcb_actions.cpp:1022
 msgid ""
