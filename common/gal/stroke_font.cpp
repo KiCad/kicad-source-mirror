@@ -108,7 +108,7 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
             else if( ( coordinate[0] == ' ' ) && ( coordinate[1] == 'R' ) )
             {
                 if( pointList )
-                    pointList->resize( pointList->size() );
+                    pointList->shrink_to_fit();
 
                 // Raise pen
                 pointList = nullptr;
@@ -143,7 +143,7 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
         }
 
         if( pointList )
-            pointList->resize( pointList->size() );
+            pointList->shrink_to_fit();
 
         // Compute the bounding box of the glyph
         g_newStrokeFontGlyphBoundingBoxes->emplace_back( computeBoundingBox( glyph, glyphWidth ) );
