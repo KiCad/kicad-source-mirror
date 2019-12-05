@@ -476,7 +476,7 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
         {
             bool hasVoltageTraces = false;
 
-            for( auto tr : m_traces )
+            for( const auto& tr : m_traces )
             {
                 if( !( tr.second->GetFlags() & SPT_CURRENT ) )
                 {

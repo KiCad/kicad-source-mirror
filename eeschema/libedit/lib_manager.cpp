@@ -446,12 +446,12 @@ bool LIB_MANAGER::RevertAll()
     if( GetHash() == 0 )
         return true;
 
-    for( auto lib : m_libs )
+    for( const auto& lib : m_libs )
     {
         if( !lib.second.IsModified() )
             continue;
 
-        for( auto buffer : lib.second.GetBuffers() )
+        for( const auto& buffer : lib.second.GetBuffers() )
         {
             if( !buffer->IsModified() )
                 continue;

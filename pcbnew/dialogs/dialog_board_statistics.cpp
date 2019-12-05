@@ -691,13 +691,14 @@ void DIALOG_BOARD_STATISTICS::saveReportClicked( wxCommandEvent& aEvent )
     std::vector<wxString> labels{ "", _( "Front Side" ), _( "Back Side" ), _( "Total" ) };
     wxString tmp;
 
-    for( auto label : labels )
+    widths.reserve( labels.size() );
+    for( const auto& label : labels )
         widths.push_back( label.size() );
 
     int frontTotal = 0;
     int backTotal = 0;
 
-    for( auto type : m_componentsTypes )
+    for( const auto& type : m_componentsTypes )
     {
         // Get maximum width for left label column
         widths[0] = std::max<int>( type.title.size(), widths[0] );

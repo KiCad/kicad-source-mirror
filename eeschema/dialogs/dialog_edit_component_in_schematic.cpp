@@ -148,7 +148,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
     }
 
     // Add in any template fieldnames not yet defined:
-    for( TEMPLATE_FIELDNAME templateFieldname : GetParent()->GetTemplateFieldNames() )
+    for( const TEMPLATE_FIELDNAME& templateFieldname : GetParent()->GetTemplateFieldNames() )
     {
         if( defined.count( templateFieldname.m_Name ) <= 0 )
         {
@@ -456,7 +456,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
     {
         SCH_FIELD& field = m_fields->at( i );
 
-        for( auto fieldname : templateFieldnames )
+        for( const auto& fieldname : templateFieldnames )
         {
             if( field.GetName() == fieldname.m_Name && field.GetText().IsEmpty() )
             {
@@ -664,7 +664,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::UpdateFieldsFromLibrary( wxCommandEvent
     }
 
     // Add in any template fieldnames not yet defined:
-    for( TEMPLATE_FIELDNAME templateFieldname : GetParent()->GetTemplateFieldNames() )
+    for( const TEMPLATE_FIELDNAME& templateFieldname : GetParent()->GetTemplateFieldNames() )
     {
         if( defined.count( templateFieldname.m_Name ) <= 0 )
         {

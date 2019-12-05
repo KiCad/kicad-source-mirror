@@ -574,7 +574,8 @@ void PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width,
 void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill,
                        int aWidth, void * aData )
 {
-    std::vector< wxPoint > cornerList;
+    std::vector<wxPoint> cornerList;
+    cornerList.reserve( aCornerList.PointCount() );
 
     for( int ii = 0; ii < aCornerList.PointCount(); ii++ )
         cornerList.emplace_back( aCornerList.CPoint( ii ) );
@@ -582,7 +583,7 @@ void PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aCornerList, FILL_T aFill,
     if( aCornerList.IsClosed() && cornerList.front() != cornerList.back() )
         cornerList.emplace_back( aCornerList.CPoint( 0 ) );
 
-    PlotPoly( cornerList , aFill, aWidth, aData );
+    PlotPoly( cornerList, aFill, aWidth, aData );
 }
 
 

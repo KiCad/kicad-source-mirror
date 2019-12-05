@@ -347,7 +347,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aItem, int aKindMask,
 
             viaHull.Intersect( hull, isect_list );
 
-            for( SHAPE_LINE_CHAIN::INTERSECTION isect : isect_list )
+            for( const SHAPE_LINE_CHAIN::INTERSECTION& isect : isect_list )
             {
                 int dist = aLine.CLine().Length() +
                            ( isect.p - aLine.Via().Pos() ).EuclideanNorm();
@@ -373,7 +373,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aItem, int aKindMask,
 
         hull.Intersect( aLine.CLine(), isect_list );
 
-        for( SHAPE_LINE_CHAIN::INTERSECTION isect : isect_list )
+        for( const SHAPE_LINE_CHAIN::INTERSECTION& isect : isect_list )
         {
             int dist = aLine.CLine().PathLength( isect.p );
 

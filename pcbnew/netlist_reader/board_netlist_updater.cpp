@@ -844,7 +844,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
     if( m_isDryRun )
     {
-        for( auto it : m_addedNets )
+        for( const auto& it : m_addedNets )
             delete it.second;
 
         m_addedNets.clear();

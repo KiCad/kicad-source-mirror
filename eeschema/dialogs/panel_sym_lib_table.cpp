@@ -642,7 +642,7 @@ void PANEL_SYM_LIB_TABLE::populateEnvironReadOnlyTable()
     unique.insert( PROJECT_VAR_NAME );
     unique.insert( SYMBOL_LIB_TABLE::GlobalPathEnvVariableName() );
 
-    for( wxString evName : unique )
+    for( const wxString& evName : unique )
     {
         int row = m_path_subs_grid->GetNumberRows();
         m_path_subs_grid->AppendRows( 1 );

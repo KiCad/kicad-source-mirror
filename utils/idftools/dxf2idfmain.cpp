@@ -89,7 +89,7 @@ int main( int argc, char **argv )
         line.clear();
         std::getline( cin, line );
 
-        if( line.find( "\"" ) != string::npos )
+        if( line.find( '\"' ) != string::npos )
         {
             cerr << "[INFO] geometry name may not contain quotation marks\n";
             line.clear();
@@ -104,7 +104,7 @@ int main( int argc, char **argv )
         line.clear();
         std::getline( cin, line );
 
-        if( line.find( "\"" ) != string::npos )
+        if( line.find( '\"' ) != string::npos )
         {
             cerr << "[INFO] part name may not contain quotation marks\n";
             line.clear();

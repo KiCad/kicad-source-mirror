@@ -962,10 +962,7 @@ void GERBER_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos,  const wxPoint* aCo
     // TODO: use Aperture macro and flash it
 
     // polygon corners list
-    std::vector< wxPoint > cornerList;
-
-    for( int ii = 0; ii < 4; ii++ )
-        cornerList.push_back( aCorners[ii] );
+    std::vector<wxPoint> cornerList = { aCorners[0], aCorners[1], aCorners[2], aCorners[3] };
 
     // Draw the polygon and fill the interior as required
     for( unsigned ii = 0; ii < 4; ii++ )

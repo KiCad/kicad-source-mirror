@@ -251,7 +251,7 @@ const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart )
         if( !jt->IsNonFanoutVia() )
             return ITEM_SET();
 
-        for( auto entry : jt->Links().Items() )
+        for( const auto& entry : jt->Links().Items() )
             if( ( seg = dyn_cast<SEGMENT*>( entry.item ) ) )
                 break;
     }

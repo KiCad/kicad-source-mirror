@@ -1846,7 +1846,7 @@ void SCH_LEGACY_PLUGIN::Format( SCH_SCREEN* aScreen )
     m_out->Print( 0, "Comment9 %s\n", EscapedUTF8( tb.GetComment( 8 ) ).c_str() );
     m_out->Print( 0, "$EndDescr\n" );
 
-    for( auto alias : aScreen->GetBusAliases() )
+    for( const auto& alias : aScreen->GetBusAliases() )
     {
         saveBusAlias( alias );
     }

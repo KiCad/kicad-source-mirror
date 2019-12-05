@@ -175,7 +175,7 @@ void CONNECTIVITY_DATA::RecalculateRatsnest( BOARD_COMMIT* aCommit  )
         }
     }
 
-    for( auto c : clusters )
+    for( const auto& c : clusters )
     {
         int net = c->OriginNet();
 
@@ -208,13 +208,13 @@ void CONNECTIVITY_DATA::BlockRatsnestItems( const std::vector<BOARD_ITEM*>& aIte
         }
     }
 
-    for( auto item : citems )
+    for( const auto& item : citems )
     {
         if ( m_connAlgo->ItemExists( item ) )
         {
             auto& entry = m_connAlgo->ItemEntry( item );
 
-            for( auto cnItem : entry.GetItems() )
+            for( const auto& cnItem : entry.GetItems() )
             {
                 for( auto anchor : cnItem->Anchors() )
                     anchor->SetNoLine( true );
@@ -592,7 +592,7 @@ void CONNECTIVITY_DATA::GetUnconnectedEdges( std::vector<CN_EDGE>& aEdges) const
     {
         if( rnNet )
         {
-            for( auto edge : rnNet->GetEdges() )
+            for( const auto& edge : rnNet->GetEdges() )
             {
                 aEdges.push_back( edge );
             }
@@ -666,7 +666,7 @@ void CONNECTIVITY_DATA::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForComponent( MODULE* aComponent, bool aSkipInternalConnections )
 {
     std::set<int> nets;
-    std::set<D_PAD*> pads;
+    std::set<const D_PAD*> pads;
     std::vector<CN_EDGE> edges;
 
     for( auto pad : aComponent->Pads() )
@@ -675,17 +675,17 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForComponent( MODULE* a
         pads.insert( pad );
     }
 
-    for ( auto netcode : nets )
+    for( const auto& netcode : nets )
     {
-        auto net = GetRatsnestForNet( netcode );
+        const auto& net = GetRatsnestForNet( netcode );
 
-        for ( auto edge : net->GetEdges() )
+        for( const auto& edge : net->GetEdges() )
         {
             auto srcNode = edge.GetSourceNode();
             auto dstNode = edge.GetTargetNode();
 
-            auto srcParent = static_cast<D_PAD*>( srcNode->Parent() );
-            auto dstParent = static_cast<D_PAD*>( dstNode->Parent() );
+            auto srcParent = static_cast<const D_PAD*>( srcNode->Parent() );
+            auto dstParent = static_cast<const D_PAD*>( dstNode->Parent() );
 
             bool srcFound = ( pads.find(srcParent) != pads.end() );
             bool dstFound = ( pads.find(dstParent) != pads.end() );

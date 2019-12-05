@@ -37,7 +37,7 @@ bool compareFileExtensions( const std::string& aExtension,
     // Form the regular expression string by placing all possible extensions into it as alternatives
     std::string regexString = "(";
     bool        first = true;
-    for( auto ext : aReference )
+    for( const auto& ext : aReference )
     {
         // The | separate goes between the extensions
         if( !first )

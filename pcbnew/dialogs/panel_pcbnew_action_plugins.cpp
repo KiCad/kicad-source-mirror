@@ -138,6 +138,7 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataFromWindow()
 {
     std::vector< std::pair<wxString, wxString> > pluginSettings;
 
+    pluginSettings.reserve( m_grid->GetNumberRows() );
     for( int ii = 0; ii < m_grid->GetNumberRows(); ii++ )
     {
         pluginSettings.emplace_back(

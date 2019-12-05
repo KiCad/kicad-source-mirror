@@ -266,7 +266,7 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
         std::list<wxString> bus_contents( bus_contents_vec.begin(),
                                           bus_contents_vec.end() );
 
-        for( auto bus_member : bus_contents )
+        for( const auto& bus_member : bus_contents )
         {
             // Nested bus vector inside a bus group
             if( conn.IsBusVectorLabel( bus_member ) )
@@ -295,7 +295,7 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
             else if( auto nested_alias = SCH_SCREEN::GetBusAlias( bus_member ) )
             {
                 // Nested alias inside a group
-                for( auto alias_member : nested_alias->Members() )
+                for( const auto& alias_member : nested_alias->Members() )
                 {
                     bus_contents.push_back( alias_member );
                 }

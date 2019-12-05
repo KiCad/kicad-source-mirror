@@ -285,7 +285,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataToWindow()
     wxString origPath, alias, shortPath;
     FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
 
-    for( MODULE_3D_SETTINGS model : m_footprint->Models() )
+    for( const MODULE_3D_SETTINGS& model : m_footprint->Models() )
     {
         m_shapes3D_list.push_back( model );
         origPath = model.m_Filename;
