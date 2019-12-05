@@ -1117,6 +1117,7 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_P
         // TransformRoundChamferedRectToPolygon creates only one convex polygon
         SHAPE_LINE_CHAIN poly( polySet.Outline( 0 ) );
 
+        cornerList.reserve( poly.PointCount() );
         for( int ii = 0; ii < poly.PointCount(); ++ii )
             cornerList.emplace_back( poly.Point( ii ).x * BOARD_SCALE,
                                                -poly.Point( ii ).y * BOARD_SCALE );

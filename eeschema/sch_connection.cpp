@@ -89,7 +89,7 @@ void SCH_CONNECTION::SetDriver( SCH_ITEM* aItem )
 {
     m_driver = aItem;
 
-    for( auto member : m_members )
+    for( const auto& member : m_members )
         member->SetDriver( aItem );
 }
 
@@ -98,7 +98,7 @@ void SCH_CONNECTION::SetSheet( SCH_SHEET_PATH aSheet )
 {
     m_sheet = aSheet;
 
-    for( auto member : m_members )
+    for( const auto& member : m_members )
         member->SetSheet( aSheet );
 }
 
@@ -289,7 +289,7 @@ void SCH_CONNECTION::SetPrefix( const wxString& aPrefix )
 {
     m_prefix = aPrefix;
 
-    for( auto m : Members() )
+    for( const auto& m : Members() )
         m->SetPrefix( aPrefix );
 }
 
@@ -298,7 +298,7 @@ void SCH_CONNECTION::SetSuffix( const wxString& aSuffix )
 {
     m_suffix = aSuffix;
 
-    for( auto m : Members() )
+    for( const auto& m : Members() )
         m->SetSuffix( aSuffix );
 }
 
@@ -325,14 +325,14 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
 
         wxString members;
 
-        for( auto member : alias->Members() )
+        for( const auto& member : alias->Members() )
             members << member << " ";
 
         aList.push_back( MSG_PANEL_ITEM( msg, members, RED ) );
     }
     else if( ParseBusGroup( m_name, &group_name, group_members ) )
     {
-        for( auto group_member : group_members )
+        for( const auto& group_member : group_members )
         {
             if( auto group_alias = g_ConnectionGraph->GetBusAlias( group_member ) )
             {
@@ -340,7 +340,7 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
 
                 wxString members;
 
-                for( auto member : group_alias->Members() )
+                for( const auto& member : group_alias->Members() )
                     members << member << " ";
 
                 aList.push_back( MSG_PANEL_ITEM( msg, members, RED ) );
@@ -521,10 +521,10 @@ bool SCH_CONNECTION::IsSubsetOf( SCH_CONNECTION* aOther ) const
 
     std::vector<wxString> mine, theirs;
 
-    for( auto m : Members() )
+    for( const auto& m : Members() )
         mine.push_back( m->Name( true ) );
 
-    for( auto m : aOther->Members() )
+    for( const auto& m : aOther->Members() )
         theirs.push_back( m->Name( true ) );
 
     std::set<wxString> subset;
@@ -544,7 +544,7 @@ bool SCH_CONNECTION::IsMemberOfBus( SCH_CONNECTION* aOther ) const
 
     auto me = Name( true );
 
-    for( auto m : aOther->Members() )
+    for( const auto& m : aOther->Members() )
         if( m->Name( true ) == me )
             return true;
 

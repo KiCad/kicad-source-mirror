@@ -398,7 +398,7 @@ void CVPCB_MAINFRAME::UndoAssociation()
     m_undoList.pop_back();
 
     // Iterate over the entries to undo
-    for( auto assoc : curEntry )
+    for( const auto& assoc : curEntry )
     {
         AssociateFootprint( assoc, true, false );
         redoEntries.emplace_back( assoc.Reverse() );
@@ -419,7 +419,7 @@ void CVPCB_MAINFRAME::RedoAssociation()
 
     // Iterate over the entries to undo
     bool firstAssoc = true;
-    for( auto assoc : curEntry )
+    for( const auto& assoc : curEntry )
     {
         AssociateFootprint( assoc, firstAssoc );
         firstAssoc = false;

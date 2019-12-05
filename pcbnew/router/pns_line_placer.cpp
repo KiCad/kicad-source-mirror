@@ -130,7 +130,7 @@ bool LINE_PLACER::handleSelfIntersections()
 
     // if there is more than one intersection, find the one that is
     // closest to the beginning of the tail.
-    for( SHAPE_LINE_CHAIN::INTERSECTION i : ips )
+    for( const SHAPE_LINE_CHAIN::INTERSECTION& i : ips )
     {
         if( i.our.Index() < n )
         {

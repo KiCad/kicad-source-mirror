@@ -615,11 +615,12 @@ void DXF_PLOTTER::ThickSegment( const wxPoint& aStart, const wxPoint& aEnd, int 
     {
         std::vector<wxPoint> cornerList;
         SHAPE_POLY_SET outlineBuffer;
-        TransformOvalToPolygon( outlineBuffer, aStart, aEnd, aWidth, GetPlotterArcHighDef());
-        const SHAPE_LINE_CHAIN& path = outlineBuffer.COutline(0 );
+        TransformOvalToPolygon( outlineBuffer, aStart, aEnd, aWidth, GetPlotterArcHighDef() );
+        const SHAPE_LINE_CHAIN& path = outlineBuffer.COutline( 0 );
 
+        cornerList.reserve( path.PointCount() );
         for( int jj = 0; jj < path.PointCount(); jj++ )
-            cornerList.emplace_back( path.CPoint( jj ).x , path.CPoint( jj ).y );
+            cornerList.emplace_back( path.CPoint( jj ).x, path.CPoint( jj ).y );
 
         // Ensure the polygon is closed
         if( cornerList[0] != cornerList[cornerList.size() - 1] )

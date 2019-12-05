@@ -199,7 +199,7 @@ public:
 
     void GetDirtyClusters( CLUSTERS& aClusters )
     {
-        for( auto cl : m_ratsnestClusters )
+        for( const auto& cl : m_ratsnestClusters )
         {
             int net = cl->OriginNet();
 

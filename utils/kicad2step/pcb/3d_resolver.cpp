@@ -862,7 +862,7 @@ wxString S3D_RESOLVER::expandVars( const wxString& aPath )
 
     wxString result;
 
-    for( auto i: m_EnvVars )
+    for( const auto& i : m_EnvVars )
     {
         if( !aPath.compare( 2, i.first.length(), i.first ) )
         {

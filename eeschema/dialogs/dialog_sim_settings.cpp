@@ -296,7 +296,7 @@ int DIALOG_SIM_SETTINGS::ShowModal()
     for( auto c : cmbNet )
         c.first->Clear();
 
-    for( auto net : m_exporter->GetNetIndexMap() )
+    for( const auto& net : m_exporter->GetNetIndexMap() )
     {
         for( auto c : cmbNet )
             c.first->Append( net.first );
@@ -322,7 +322,7 @@ int DIALOG_SIM_SETTINGS::ShowModal()
     for( auto c : cmbSrc )
         c.first->Clear();
 
-    for( auto item : m_exporter->GetSpiceItems() )
+    for( const auto& item : m_exporter->GetSpiceItems() )
     {
         if( item.m_primitive == 'V' )
         {

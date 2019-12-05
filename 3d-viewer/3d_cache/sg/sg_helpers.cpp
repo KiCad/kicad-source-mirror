@@ -49,7 +49,7 @@ void S3D::FormatFloat( std::string& result, double value )
 
     result = out.str();
 
-    size_t p = result.find( "." );
+    size_t p = result.find( '.' );
 
     // trim trailing 0 if appropriate
 

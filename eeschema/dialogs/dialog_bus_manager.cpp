@@ -209,7 +209,7 @@ bool DIALOG_BUS_MANAGER::TransferDataToWindow()
 
     // clone into a temporary working set
     int idx = 0;
-    for( auto alias : original_aliases )
+    for( const auto& alias : original_aliases )
     {
         m_aliases.push_back( alias->Clone() );
         auto text = getAliasDisplayText( alias );
@@ -249,7 +249,7 @@ bool DIALOG_BUS_MANAGER::TransferDataFromWindow()
 
     std::unordered_set< SCH_SCREEN* > cleared_list;
 
-    for( auto alias : m_aliases )
+    for( const auto& alias : m_aliases )
     {
         auto screen = alias->GetParent();
 
@@ -348,7 +348,7 @@ void DIALOG_BUS_MANAGER::OnAddBus( wxCommandEvent& aEvent )
         return;
     }
 
-    for( auto alias : m_aliases )
+    for( const auto& alias : m_aliases )
     {
         if( alias->GetName() == new_name )
         {

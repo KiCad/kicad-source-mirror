@@ -779,7 +779,7 @@ void PANEL_FP_LIB_TABLE::populateEnvironReadOnlyTable()
     // This special environment variable is used to locate 3d shapes
     unique.insert( KISYS3DMOD );
 
-    for( wxString evName : unique )
+    for( const wxString& evName : unique )
     {
         int row = m_path_subs_grid->GetNumberRows();
         m_path_subs_grid->AppendRows( 1 );

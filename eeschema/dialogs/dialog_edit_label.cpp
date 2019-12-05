@@ -204,7 +204,7 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
 
         wxArrayString existingLabelArray;
 
-        for( wxString label : existingLabels )
+        for( const wxString& label : existingLabels )
             existingLabelArray.push_back( label );
 
         // existingLabelArray.Sort();

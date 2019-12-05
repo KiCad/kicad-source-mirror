@@ -364,7 +364,7 @@ void TOOL_BASE::deleteTraces( ITEM* aStartItem, bool aWholeTrack )
         TOPOLOGY topo( node );
         ITEM_SET path = topo.AssembleTrivialPath( aStartItem );
 
-        for( auto ent : path.Items() )
+        for( const auto& ent : path.Items() )
             node->Remove( ent.item );
     }
 

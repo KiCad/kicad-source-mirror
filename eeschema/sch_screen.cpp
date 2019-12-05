@@ -921,7 +921,7 @@ bool SCH_SCREEN::IsBusAlias( const wxString& aLabel )
     SCH_SHEET_LIST aSheets( g_RootSheet );
     for( unsigned i = 0; i < aSheets.size(); i++ )
     {
-        for( auto alias : aSheets[i].LastScreen()->GetBusAliases() )
+        for( const auto& alias : aSheets[i].LastScreen()->GetBusAliases() )
         {
             if( alias->GetName() == aLabel )
             {

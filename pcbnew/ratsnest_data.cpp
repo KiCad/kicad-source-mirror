@@ -230,12 +230,12 @@ public:
         CN_ANCHOR_PTR prev, last;
         int id = 0;
 
-        for( auto n : m_allNodes )
+        for( const auto& n : m_allNodes )
         {
             anchorChains.emplace_back( );
         }
 
-        for( auto n : m_allNodes )
+        for( const auto& n : m_allNodes )
         {
             if( !prev || prev->Pos() != n->Pos() )
             {
@@ -251,7 +251,7 @@ public:
 
         int prevId = 0;
 
-        for( auto n : triNodes )
+        for( const auto& n : triNodes )
         {
             for( int i = prevId; i < n->Id(); i++ )
                 anchorChains[prevId].push_back( m_allNodes[ i ] );
@@ -284,7 +284,7 @@ public:
             triangulator.CreateDelaunay( triNodes.begin(), triNodes.end() );
             triangulator.GetEdges( triangEdges );
 
-            for( auto e : triangEdges )
+            for( const auto& e : triangEdges )
             {
                 auto    src = m_allNodes[ e->GetSourceNode()->Id() ];
                 auto    dst = m_allNodes[ e->GetTargetNode()->Id() ];
@@ -348,7 +348,7 @@ void RN_NET::compute()
         else
         {
             // Set tags to m_nodes as connected
-            for( auto node : m_nodes )
+            for( const auto& node : m_nodes )
                 node->SetTag( 0 );
         }
 
@@ -358,7 +358,7 @@ void RN_NET::compute()
 
     m_triangulator->Clear();
 
-    for( auto n : m_nodes )
+    for( const auto& n : m_nodes )
     {
         m_triangulator->AddNode( n );
     }
@@ -445,9 +445,9 @@ bool RN_NET::NearestBicoloredPair( const RN_NET& aOtherNet, CN_ANCHOR_PTR& aNode
 
     VECTOR2I::extended_type distMax = VECTOR2I::ECOORD_MAX;
 
-    for( auto nodeA : m_nodes )
+    for( const auto& nodeA : m_nodes )
     {
-        for( auto nodeB : aOtherNet.m_nodes )
+        for( const auto& nodeB : aOtherNet.m_nodes )
         {
             if( !nodeA->GetNoLine() )
             {

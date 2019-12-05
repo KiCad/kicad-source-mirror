@@ -1167,7 +1167,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     component->GetField( REFERENCE )->SetVisible( part->GetField( REFERENCE )->IsVisible() );
     component->GetField( VALUE )->SetVisible( part->GetField( VALUE )->IsVisible() );
 
-    for( auto a:epart->attribute )
+    for( const auto& a : epart->attribute )
     {
         auto field = component->AddField( *component->GetField( VALUE ) );
         field->SetName( a.first );
@@ -1175,7 +1175,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
         field->SetVisible( false );
     }
 
-    for( auto a:epart->variant )
+    for( const auto& a : epart->variant )
     {
         auto field = component->AddField( *component->GetField( VALUE ) );
         field->SetName( "VARIANT_" + a.first );
@@ -1437,7 +1437,7 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_P
 
             if( aDevice->connects.size() != 0 )
             {
-                for( auto connect : aDevice->connects )
+                for( const auto& connect : aDevice->connects )
                 {
                     if( connect.gate == aGateName && pin->GetName() == connect.pin )
                     {

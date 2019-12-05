@@ -267,7 +267,7 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
         // Do not modify the existing value, just add missing fields with default values
         if( m_useSchFields && m_schfields )
         {
-            for( auto field : *m_schfields )
+            for( const auto& field : *m_schfields )
             {
                 if( field.GetName() == spiceField  && !field.GetText().IsEmpty() )
                 {
@@ -279,7 +279,7 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
         else if( m_libfields)
         {
             // TODO: There must be a good way to template out these repetitive calls
-            for( auto field : *m_libfields )
+            for( const auto& field : *m_libfields )
             {
                 if( field.GetName() == spiceField  && !field.GetText().IsEmpty() )
                 {

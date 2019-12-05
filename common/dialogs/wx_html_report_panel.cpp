@@ -104,13 +104,13 @@ void WX_HTML_REPORT_PANEL::Flush( bool aSort )
                 });
     }
 
-    for( auto line : m_reportHead )
+    for( const auto& line : m_reportHead )
         html += generateHtml( line );
 
-    for( auto line : m_report )
+    for( const auto& line : m_report )
         html += generateHtml( line );
 
-    for( auto line : m_reportTail )
+    for( const auto& line : m_reportTail )
         html += generateHtml( line );
 
     m_htmlView->SetPage( addHeader( html ) );
